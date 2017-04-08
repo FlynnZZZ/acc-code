@@ -1,0 +1,13 @@
+  更改过的系统文件  C:\Windows\System32\drivers\etc
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  注意:
+    使用 jQuery 的AJAX 时
+    在URL 后添加 ?

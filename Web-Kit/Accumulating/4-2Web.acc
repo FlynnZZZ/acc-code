@@ -1,0 +1,1172 @@
+SVN 
+  说明篇
+    下载网址 https://tortoisesvn.net/downloads.html
+    介绍
+      TortoiseSVN 是一个 Windows 下的版本控制系统 Apache™ Subversion® 的客户端工具。
+      文件存储于一个中央版本库中。
+      版本库就像一个常见的文件服务器,保存对文件和目录所有的改变。
+      Subversion 是一个通用系统,可以管理任何类型的文件集,包括源代码。
+    TortoiseSVN 的特性
+      外壳集成
+        TortoiseSVN 无缝地整合进 Windows 的外壳(例如资源管理器)。
+        即可以继续使用已经熟悉的工具,而且当需要版本控制功能时不用切换到不同的应用程序。
+        而且并没有被限制在 Windows 资源管理器中; 
+        TortoiseSVN 的右键菜单可以在很多其它文件管理器中以及标准 Windows 程序的 文件/打开 对话框中被调出。
+        不过,TortoiseSVN 是专 门作为 Windows 资源管理器的扩展进行开发的。有可能在其它程序中整合的不那么完整,例 如重载图标可能不显示。
+      重载图标
+        每个版本控制的文件和目录的状态使用小的重载图标表示,可以让你立刻看出工作副本的状态。
+      图形用户界面
+        当你列出文件或文件夹的更改时,你可以点击任意版本查看提交注释。
+        也可以看到更改过的文件列 表 - 只要双击文件就可以查看更改内容。
+        提交对话框列出了本次提交将要包括的条目,每一个条目有一个复选框,所以你可以选择包括哪些 条目。
+        未版本控制的文件也会被列出,以防你忘记添加新文件。
+      Subversion 命令的简便访问
+        PS:TortoiseSVN 是一个 Subversion 客户端,包含一些 Subversion 本身的特性:
+        所有的 Subversion 命令存在于资源管理器的右键菜单,TortoiseSVN 在那里添加子菜单。
+        目录版本控制
+          CVS 只能追踪单个文件的历史,
+          但是 Subversion 实现了一个“虚拟”文件系统,可以追踪整个目 录树的修改,文件和目录都是版本控制的,
+          结果就是可以在客户端对文件和目录执行移动和复制命
+          令。
+        原子提交
+          提交要么完全进入版本库,要么一点都没有,这允许开发者以一个逻辑块提交修改。
+        版本控制的元数据
+          每个文件和目录都有一组附加的“属性”,你可以发明和保存任意的键/值对,
+          属性是版本控制 的,就像文件内容。
+        可选的网络层
+          Subversion 在版本库访问方面有一个抽象概念,
+          利于人们去实现新的网络机制,Subversion 的“高级”服务器是 Apache 网络服务器的一个模块,
+          使用 HTTP 的变种协议 WebDAV/DeltaV 通讯,这给了 Subversion 在稳定性和交互性方面很大的好处,
+          可以直接使用服务器的特性,例如认 证、授权、传输压缩和版本库浏览等等。
+          也有一个轻型的,单独运行的 Subversion 服务器,这个 服务器使用自己的协议,可以轻松的用 SSH 封装。
+        一致的数据处理
+          Subversion 使用二进制文件差异算法展现文件的区别,
+          对于文本(人类可读)和二进制(人类不可 读)文件具备一致的操作方式,
+          两种类型的文件都压缩存放在版本库中,差异在网络上双向传递。
+        高效的分支和标签
+          分支与标签的代价不与工程的大小成比例,
+          Subversion 建立分支与标签时只是复制项目,使用了 一种类似于硬链接的机制,
+          因而这类操作通常只会花费很少并且相对固定的时间,以及很小的版本 库空间。
+Git 
+GitHub 
+  Git : 分布式版本控制系统
+  GitHub 
+    名词解释
+      commits 版本的意思
+      Merging 合并分支
+      Pull Request 发起讨论
+      
+      collaborators 协作者
+      
+      wiki
+      issues 事务卡片
+      
+      GitHub Pages 项目展示为网站
+    快捷键 (网页上)
+      t    搜索文件
+--------------------------------------------------------------------------------
+PhotoShop 
+  界面设置
+    新建 设置 初始化
+      新建(快捷键Ctrl+N)
+      预设:自定义
+      宽度:1920(像素)
+      高度:2000(像素)
+      分辨率:72(像素/英寸)(现在比较常用的)
+      背景内容:透明
+        PS:可将上述设置设定为 存储预设
+        
+    设置
+      通过新建设置 单位为pixels 背景设置为透明 并储存预设,设为默认的新建样式.
+      在 信息 栏选项中更改其显示的单位为像素
+      图像-首选项-单位与标尺 设置单位为像素
+    
+      视图-工作区-新建工作区 保存自己自定义后的界面环境,方便环境的切换.
+        
+    移动工具设置
+      移动工具 快捷键 V
+      默认设置为选择的是图层
+      
+    视图设置
+      视图-显示-智能参考线 勾选
+      打开 视图-标尺  快捷键:Ctrl+R
+      窗口 取消勾选(web切图一般不用的) 库、颜色
+        打开  信息、字符
+
+  基本操作
+    选区工具 快捷键M
+    缩放  Alt+滚轮
+    移动  空格+左键
+    套索工具  L
+
+  参考线
+    隐藏参考线   Ctrl+;
+
+  切片
+    根据图层来切片
+      将背景切下
+        选中该图层-图层菜单-新建基于图层的切片
+      只将图案切下(背景为透明)
+        选中图层-在右边的图层列表中 右键-编辑图层(若没有则创建智能对象)
+        打开新窗口-文件-储存为web所用格式 [快捷键 Ctrl+Shift+S]
+
+  图片周围有光晕
+    设置PS中的matte,蒙版或杂边属性,将其设置为和图片相接的背景色.
+    
+  快捷键
+    标尺————Ctrl+R
+    后退一步————Ctrl+Z+Alt
+    前进一步————Ctrl+Z+Shift
+    根据图层选区————Ctrl+左键在图层栏中选中图层
+    取消选区————Ctrl+D(或者使用选区工具)
+Zeplin 
+  标注与线上协作平台,不同平台的设计师和开发者沟通起来更加轻松便捷
+--------------------------------------------------------------------------------
+Atom 
+  ◆软件设置 
+    编辑器设置
+      悬挂缩进 设置为2
+      字体设置  Consolas,楷体
+        PS:consolas为atom默认字体
+          字体间使用逗号隔开,第一个定义英文字体,第二个定义中文字体.
+      取消勾选 ctrl+滚轮 调整字体大小
+      忽略的文件
+        .git, .hg, *.svn, .dS_Store, ._*, thumbs.db,
+        *.docx, *.doc, *.pdf,*.jpg,*.project,*.lnk,*.ini,*.exe
+      editor 
+        Non Word Characters 「非实体字符」
+          /\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-「」【】〖〗『』《》
+    自定义样式设置
+      文件-用户样式设置
+        // 目录树
+        .tree-view { padding: 0; margin: 0; }
+        .list-tree.has-collapsable-children .list-nested-item > { // 目录树 缩进
+          .list-tree > li{ padding-left: 6px; }
+          }
+          
+        // 文档主体
+        atom-text-editor {
+          // background-color:  rgba(255, 255, 255, 0.1)  ;
+          // color: black;
+          //备选颜色   #EfEfDf #E5E5E6  rgb(199, 237, 204) rgba(199, 237, 204, 0.5)
+          &.editor .cursor { // 光标
+            // border-color: red;  // 亮色
+            border-color: #fbf215; // 暗色
+          }
+          // &::shadow .cursor { // 光标
+          //   border-color: red;
+          // }
+        }
+
+        // 设置页
+        .settings-view { 
+          font-size: 14px; 
+        }
+
+        // 文件标题
+        // [theme-one-light-ui-tabsizing="auto"] .tab .title {
+        //   font-size: 12px;
+        //   color: #d54940 ;
+        // }
+        [theme-one-dark-ui-tabsizing="auto"] .tab .title {
+          font-size: 12px;
+          // color: #d54940 ;  // 亮色背景
+          color: gold ;        // 暗色背景
+        }
+
+        // 匹配括号的 高亮样式
+        atom-text-editor.editor .bracket-matcher .region {
+          border-bottom: 3px solid #ff09c9;
+          // background-color: rgba(121, 99, 23, 0.3) ;   // 亮色背景方案 
+          background-color: rgba(238, 14, 200, 0.3);      // 深色背景方案
+        }
+
+        // minimap
+        atom-text-editor atom-text-editor-minimap {
+          background-color: rgba(78, 180, 230, 0.1); // 背景色
+          .minimap-visible-area::after {
+            background-color: rgba(60, 91, 167, 0.3); // 可视区背景色
+          }
+        }
+        .minimap .highlight-selected {
+          // 缩略图选中高亮
+          background: red !important;
+        }
+        atom-text-editor[with-minimap] .vertical-scrollbar { // 隐藏滚动条
+          opacity: 0;
+          width: 0;
+        }
+
+        // 所在行高亮  Highlight-line 插件样式设置
+        atom-text-editor.editor {
+          .line.highlight-line {
+            background: rgba(85, 97, 171, 0.1) !important;
+          }
+        }
+
+        // 选中高亮 [非插件功能]
+        .highlights>.selection>.region{
+          background-color: rgba(16, 59, 157, 0.5) !important;
+        }
+  ◆快捷键 
+    默认快捷键
+      ◆常用
+      ctrl-alt-↑/↓        光标多选
+      ctr-→/←             单词单位移动光标
+      ctrl+↑/↓            上下移动
+      f2                  跳到当前文件的下一条书签
+      ctrl-f2             列出当前工程所有书签
+      ctrl-d              选取和当前单词相同的下一处
+      ctrl/alt-left/right 移动到单词开始/末尾
+      ctrl-Enter          在当前行的末尾回车
+      ctrl-shift-Enter    在当前行的末尾回车
+      alt-f3              选中选择文件中的所有匹配项
+      ctrl+o              打开文件
+      ctrl-shift-o        打开目录
+      ctrl-shift-f        在整个工程中查找 [需将光标位于文件树中]
+      ctrl-g              跳转到指定的行
+      ctrl-r              当前文档中查询变量、符号
+      ctrl-w              关闭当前标签
+      ctrl-click          增加新光标
+      ctrl-\              显示/隐藏目录树
+      ctrl-f              在buffer中查找
+      ctrl-.	            key-binding-resolver:toggle,激活 查看键位的绑定情况
+      ◆其他
+        ctrl-shift-s      保存所有打开的文件
+        ctrl-t/ctrl-p     查找文件
+        ctrl-shift-u      调出切换编码选项
+        a/m/delete        增加/修改/删除  [文件目录树下]
+    自定义快捷键
+      默认快捷键          取消/替换为    描述
+      ◆取消快捷键
+      alt-1-9             unset!     切换到第几个标签页 「unset! 使快捷键不起作用」
+      ctrl-tab            unset!     文档切换        
+      ctrl-e              unset!     搜索选中词和ctrl-f功能类似
+      ctrl-n              unset!     新建文件
+      ctrl-m              unset!     括号间跳转
+      ctrl-u              unset!     取消选中 「等价与ctrl-e」 「find-and-replace」
+      ctrl-j              unset!     合并行 「等价alt-z」
+      ctrl-l              unset!     选中行 「等价alt-c」
+      ◆自定义更改
+      backspace           f1            删除
+      enter               ctrl-`        换行
+      ctrl+home           ctrl-1        移到文档开始
+      ctrl+end            ctrl-2        移到文档结束
+      ctrl+/              ctrl-q        添加取消注释
+      shift-f3            f4            查找时到上一个
+      ctrl-alt-shift-[    alt-1         折叠所有
+      ctrl-alt-shift-]    alt-2         展开所有
+      ctrl-alt-[          alt-3         折叠当前
+      ctrl-alt-]          alt-4         展开当前
+      ctrl-]              alt-a         取消行缩进
+      ctrl-[              alt-s         行缩进          「 ctrl-[ ,不能缩进空行」
+      ctrl-shift-k        alt-d         删除行
+      ctrl-j              alt-z         合并下一行到当前行
+      ctrl+alt+f2         alt-x         在当前行行增加书签
+      ctrl-l              alt-c         选取当前行,继续执行选取下一行
+      ctrl-u              ctrl-e        取消选取和当前单词相同的下一处
+      ctrl+shift+d        alt-v         复制当前行
+      ctrl+alt+o          alt+m         添加项目文件夹 「原快捷键和其他有冲突,故更改」
+      ctrl+o              alt+o         打开文件
+      ctrl+shift+n        alt-n         打开新窗口
+      ctrl-k+ ctrl-u      alt-u         使当前字符大写
+      ctrl-k+ ctrl-l      alt-i         使当前字符小写
+      ctrl-shift-t        alt-l         打开最近关闭的文件
+      ◆插件快捷键
+      ctrl-shift-\        alt-\    在文件目录中定位    「tree view」
+      ctrl+alt+o          alt-b    在浏览器中打开文件  「Open in browsers」
+      ctrl-alt-m          alt-q    选中括号内的内容    「bracket matcher 」
+      ctrl-m              alt-f    标签跳转           「bracket matcher 」
+      ctrl-alt-backspace  alt-t    删除匹配的括号      「bracket matcher 」
+      ctrl-sapce          alt-e    激活提示           「autocomplete-plus」
+      unkow               alt-p    补全选中的CSS       「autoprefixer」 
+        「perfection」
+    未占用键汇总
+      ◆左
+      alt-f1 f2
+      alt-`
+      alt-r
+      alt-g
+      ctrl-3 4
+      ◆右
+      alt- f7 f8 f9 f10
+      alt-6 7 8 9 0 - =
+      alt-y [ ]
+      alt-h j k l ; '
+      alt-, . /
+      ctrl-u i
+      ctrl-j k ; '
+      ctrl-n m , . /
+    其他说明
+      unset!  取消设置
+        e.g.:
+        取消 ctrl-e 在 find-and-replace 插件下的快捷键设置
+        '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
+          'ctrl-e': 'unset!'
+  ◆插件 
+    自带插件
+      about                  关于Atom的信息查看 [help-about Atom]
+      autocomplete-atom-api  功能未知
+      autocomplete-plus      完善自带 autocomplete,有二度设置
+        勾选 allowed backspace to trigger autocomplete   当删除时也会激活可选列表选项
+        'autocomplete-plus:activate' 将其快捷键 从 ctrl-space 改为 alt-e
+          默认的ctrl-space 快捷键未生效
+      autocomplete-Snippets  
+      autoflow               功能未知
+      autosave               失焦或关闭时自动保存
+      bookmarks              书签功能支持
+      bracket-matcher        括号匹配功能
+        设置
+          autocomplete characters 「激活括号特性匹配的字符对」
+            (), [], {}, "", '', ``, “”, ‘’, «», ‹›,<>,《》,（）,「」,『』,【】,〖〗,><
+          pairs with extra newline「在其中间换行时,自动多添加一行」
+            (), [], {}
+      command-palette        命令面板 
+        快捷键  ctrl-shift-p
+      settings-view          设置页面
+        快捷键
+          ctrl-,    打开设置页
+          ctrl-.    打开快捷键绑定页 [self]
+            '.platform-win32, .platform-linux':
+              'ctrl-.': 'settings-view:show-keybindings'
+      snippets
+        通过关键词来扩展为代码块——tab/enter
+          使用alt+shift+s来查看所有的扩展 (?)
+        Atom-自定义自动填充代码 Snippets(在这里我把 snippet 理解为代码块。)
+          打开定义的文件
+            打开 snippets.cson 文件,windows 平台的路径为 C:\users\用户名\.atom\snippets.cson。
+          具体定义的方式
+            输入snip,回车,就得到一个 snippet 模板。如下
+              '.source.js':
+              'Snippet Name':
+              'prefix': 'Snippet trigger'
+              'body': 'hello World!'
+              解读
+                '.source.js' 目标文件类型为 .js
+                'Snippet Name' 要新建的 snippet 的名称
+                'prefix' 触发当前 snippet 的代码
+                'body' 要填充的代码
+          e.g. 例如给 C 语言的 if 写一个 snippet。
+            '.source.c':
+            'if':
+              'prefix': 'if'
+              'body': 'if($1){$2}'
+            $1 表示光标的默认位置
+            $2 按下 tab 键,光标跳到的第二个位置,以此类推
+            另外,使用${1:'replaced'}替换$1即可转换光标到选定状态,选定内容为replaced
+
+            在要填充的代码中使用回车并不能使代码填充以后自动换行,自动换行要使用\n,或者用"""将要填充的代码包起来。
+            '.source.c':
+            'if':
+              'prefix': 'if'
+              'body': """
+                if($1)
+                {
+                    $2\n}
+              """
+            要给 C 语言文件定义多个 snippet ,只需在.source.c下从添加新的 snippet 名称写起。
+            '.source.c':
+            'if':
+              'prefix': 'if'
+              'body': """
+                if($1)
+                {
+                    $2\n}
+              """
+            'while':
+              'prefix': 'while'
+              'body':"""
+                while($1)
+                {
+                    $2
+                }
+              """
+              //注:使用"""创建长模板
+        自定义Snippets的扩展词时,定义的格式的确定
+          在要定义的文档类型下,ctrl-shift-p   输入代码Editor: log Cursor Scope
+          弹出字符如 txt格式的为 text.plain ,则.text.plain类似于.source.js表示一种文件格式
+      symbols-view          查看变量
+        变量、函数 查找快捷键 ctrl-r
+      tabs                  标签栏
+        勾选 add new tabs at end  始终在最后打开文件
+      timecop               统计加载时间
+      tree-view             文件目录
+        设置
+          focus on reveal  激活文件时,在文件目录定位
+        快捷键
+          ctrl-\         toggle,开关文件目录
+          ctrl-shift-\   reveal active file,在目录中定位到当前文件
+      wrap-guide            标尺线
+      markdown-preview      在编辑器中以markdown展示
+        快捷键 ctrl-shift-m
+      可禁用列表
+        about
+        archive-view
+        background-tips
+        git-diff                 对比差异
+        image-view
+        link
+        open-on-github
+        spell-check
+        Welcome
+        whitespace   [可禁用]
+          取消勾选
+            Ensure Single trailing Newline      自动去掉文档最后的空行
+            ignore Whitespace On Current line
+            remove trailing Whitespace          自动删除行末空格
+    社区扩展
+      atom-beautify              代码格式美化
+      autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
+        自定义快捷键 alt-m
+      autocomplete-project-paths 路径补全
+        Question: 路径补全应为/而非\
+      color-picker               快捷颜色选择
+        颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
+        或直接使用快捷键ctrl+alt+c进行颜色值的选择插入.
+      highlight-line             当前行高亮
+        styles.less 中可设置的样式
+          atom-text-editor::shadow {
+            .line.highlight-line {
+              background: rgba(85, 97, 171, 0.1) !important;
+            }
+          }
+          // 所在行高亮  highlight-line 插件样式设置
+          atom-text-editor.editor {
+            .line.highlight-line {
+              background: rgba(75, 97, 212, 0.1) !important;
+            }
+
+            .line.highlight-line-multi-line-solid-bottom {
+              border-bottom-color: red ;
+            }
+
+            .line.highlight-line-multi-line-solid-top {
+              border-top-color: red;
+            }
+          }
+      highlight-selected         高亮选中词
+      minimap                    缩略图
+        样式设置
+          atom-text-editor atom-text-editor-minimap {
+            background-color: rgba(78, 180, 230, 0.05); // 背景色
+            .minimap-visible-area::after {
+              background-color: rgba(60, 91, 167, 0.15); // 可视区背景色
+            }
+          }
+          .minimap .highlight-selected {
+            background: black !important;
+          }
+          atom-text-editor[with-minimap] .vertical-scrollbar { // 隐藏滚动条
+            opacity: 0;
+            width: 0;
+          }
+        absolute-mode     在缩略图下方显示代码      取消勾选
+      minimap-highlight-selected 缩略图高亮
+      open-in-browsers           在浏览器中快捷打开html
+        安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
+      pigments                   根据颜色值显示颜色
+      remember-folds             记录折叠的状态
+      选用插件
+        restore-windows            启动时加载之前的多窗口
+          最早关的窗口加载时最后加载
+          统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
+            若无项目文件夹,则默认不加载
+          记录状态 如 标签等
+        atom-wrap-in-tag           在选中字符外增加标签
+          (该快捷键有bug,不起效,使用 'alt-w': 'unset!' 命令来解决)
+          自定义默认开始的标签
+            设置 open-config-folder 
+            找到   atom-wrap-in-tag 下的 wrap-in-tag.coffee 文件
+            修改 代码
+              tag = 'div'
+
+              start:
+                from: [tagrangePos.start.row, tagrangePos.start.column+1]
+                to: [tagrangePos.start.row, tagrangePos.start.column+4]
+              end:
+                from: [tagrangePos.end.row, tagrangePos.end.column+7],
+                to: [tagrangePos.end.row, tagrangePos.end.column+10]
+        autocomplete-paths         路径补全
+        file-icons                 显示文件图标
+        simplified-chinese-menu    菜单汉化
+        Symbols-tree-View          快速定位到函数、变量的位置等等
+          设置默认不显示的类别:number string undefined unknown array object
+  ◆使用经验总结
+    使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
+    正则查找
+      将查找内容的部分进行替换
+        e.g.:
+          查找 1122 将其替换为 11AA
+          (11)22;
+          $1AA;
+          
+          查找大写字符,在其前加上换行
+          ([A-Z])
+          \n$1
+      清除空行      \r\n\r\n   替换为 \r\n
+      在字符后换行  a          替换为 a\n\t
+  ◆Suggestion&Question 
+    优点总结
+      折叠功能优秀
+      选中字符后直接增加括号,则选中的内容被包括在括号内
+      可无限回退,上次编辑过的文档在关闭后,下次仍可以回退
+    上下移动多行会改变缩进
+      解决方法:使用剪切代替行移动操作.
+      相对的,可以使用此特性用于格式化代码
+    无 块注释 功能?
+    折叠功能
+      html格式文件 行内标签折叠不能达到块便签的效果
+    snippets 插件的自定义提示词,激活的关键字不能有重复
+Notepad2 
+  PS:一个用来取代Notepad的免费程序,绿色软件,安装完毕后只有一个主程序;
+    具有显示行号、内建各种程序语法的高亮度显示、改变背景颜色、支持Unicode与UTF-8的功能,
+    具有「行列功能」,可以进行区块模式选取的编辑。
+  编辑器设置
+    PS：
+      在更改设置后需要进行 设置-立即保存设置,
+      软件会在其存放的位置生成一配置文件,后续设置才会生效。
+    '查看'
+      '自定义方案': 可对不同类型的文档(如txt、html等)进行字体、字体颜色、背景等设置
+        点击所选类目进行展开进行各项设置.
+        'current line background(color)'  当前行背景颜色
+      '默认字体'
+        '楷体' '常规' '13'
+      '语法方案' : 使打开的文本默认有折叠功能
+        选择 'Python Script'
+        勾选 '设置选中的方案为默认'
+      勾选 '自动换行'
+      勾选 '显示缩进栏线'   
+      勾选 '显示空格'   
+      勾选 '显示配对括号'   
+      勾选 '高亮当前行'   
+      勾选 '行号'           
+      勾选 '代码折叠'           
+    '设置'
+      勾选 '将制表符作为空格插入'
+      '自动换行设置'
+        '+1缩进' '无' '无' '任意符号换行'
+      勾选 '自动缩进文本'
+      勾选 '自动完成单词'
+      '保存窗口位置': 开启文档时的默认窗口位置及窗口大小设置
+      勾选 '显示工具栏'
+      勾选 '显示状态栏'
+      勾选 '退出时保存设置'
+  快捷键
+    Ctrl+W                   开关自动换行
+    Ctrl+↑↓                  上下滚动显示,在屏幕显示范围内光标位置不动
+    Ctrl+left/right          单词跳转
+    Shift+up/down/left/right 文本选择
+    Ctrl+Shift+up/down       行文移动
+    Ctrl/Alt+D               复制当前行
+    Ctrl+F2                  行标记
+    Ctrl+Shift+D             删除行
+    Tab                      行缩进
+    Shift+Tab                取消行缩进
+    Insert                   光标样式切换, _和∣            
+    Alt+Q                    在选定文本的前后插入字符
+    Alt+Z/U                  移除行首/尾字符
+    Alt+M                    行首/尾 增加/删除字符
+    Alt+leftmouse            多行单列操作
+    Alt+r                    删除选中区域空行
+    Alt+x                    插入html标签
+      将所需包括的内容选中,Alt+X完成输入.
+    Ctrl+Shift+s             将选中区域的制表符转换为空格
+    Ctrl+Shift+t             将选中区域的空格转换为制表符
+  使用技巧
+    将光标移到行的最左端（显示行号的位置）,点击或拖动进行行选择。
+  Suggestion
+    中文字体及非中文字体单独设置
+    将打开的多个文件放在一个窗口中,通过标签切换.
+    自定义快捷键
+Hbuilder 
+  设置
+Notepad++ 
+  ◆设置
+  ◆快捷键  [参照Atom快捷键设置] 
+    设置-管理快捷键 进行修改
+    快键键文件为 C:\Users\Fan\AppData\Roaming\Notepad++\shortcuts.xml
+      <NotepadPlus>
+          <InternalCommands>  <!-- 软件默认快捷键 对应 main menu --> 
+              <Shortcut id="43034" Ctrl="no" Alt="no" Shift="no" Key="0" />
+          </InternalCommands>
+          <Macros>   <!-- 录制宏 对应 macros --> 
+              <Macro name="copy-line" Ctrl="no" Alt="yes" Shift="no" Key="86">
+                  <Action type="0" message="2469" wParam="0" lParam="0" sParam="" />
+              </Macro>
+          </Macros>
+          <UserDefinedCommands> 
+              <Command name="Send via Outlook" Ctrl="yes" Alt="yes" Shift="yes" Key="79">outlook /a &quot;$(FULL_CURRENT_PATH)&quot;</Command>
+          </UserDefinedCommands>
+          <PluginCommands />
+          <ScintillaKeys>   <!-- 对应 scintilla commands -->
+              <ScintKey ScintID="2469" menuCmdID="42010" Ctrl="no" Alt="yes" Shift="no" Key="86" />
+          </ScintillaKeys>
+      </NotepadPlus>
+      注:其中 快捷键优先级依次为:InternalCommands > Macros > UserDefinedCommands >
+        PluginCommands > ScintillaKeys
+        故当InternalCommands和自定义的快捷键有冲突时,在InternalCommands中对应的删除.
+    原始快捷键          修改为           功能
+      ◆无修改
+      ctrl-b                               括号间跳转
+      alt-h                                隐藏行  
+      alt-d                                打开的文件比较      
+      alt-S                                跟上次保存的文件比较   
+      alt-b                                跟SVN的文件比较    
+      ctrl-u                               转为小写 
+      ctrl-h                               查找/替换对话框
+      ctrl-t                               当行向上移动一行
+      ctrl-f2                              切换书签
+      ctrl-f3                              选定并找下一个
+      ctrl-delete                          删除结束词
+      ctrl-backSpace                       删除开始词
+      ctrl-PageuP                          上一个差异地方      
+      ctrl-Pagedown                        下一个差异地方      
+      ctrl-alt-S                           另存为
+      ctrl-alt-d                           关闭文件比较       
+      ctrl-shift-f                         在文件中搜索 
+      ctrl-shift-u                         转为大写  
+      ctrl-shift-f3                        查找（volatil）上一页
+      ctrl-shift-i                         组合增量搜索
+      ctrl-shift-s                         保存所有文件
+      ctrl-shift-leftMouse                 选取多行
+      ctrl-shift-Pageup                    第一个差异地方      
+      ctrl-shift-Pagedown                  最后一个差异地方     
+      ctrl-shift-delete                    删除至行尾
+      ctrl-shift-backSpace                 删除至行
+      shift-f3                             查找上一个 
+      shift-f2                             上一书签
+      ◆同Atom相同
+      f2                                   下一书签 
+      f3                                   查找下一个 
+      ctrl-leftmouse                       多光标操作
+      ctrl-g                               行定位 
+      shift-tab                            删除缩进
+      ◆参照Atom修改
+      ctrl-shift-up      ctrl-up           上移行
+      ctrl-shift-down    ctrl-down         下移行
+      ctrl-l             alt-d             剪切行 [约等于删除行]
+      ctrl-j             alt-z             合并行 [不同于Atom,需要选取多行才能操作]
+      ctrl-b             alt-f             转到匹配的括号
+      alt-0              alt-1             折叠所有层次  
+      alt-shift-0        alt-2             展开所有层次  
+      ctrl-alt-f         alt-3             折叠当前层次
+      ctrl-alt-shift-f   alt-4             展开当前层次
+      unknow             ctrl-q            设置单行注释
+      ctrl-alt-b         alt-q             选中括号内的字符 [需要在括号边缘可用]
+      alt-shift-up/down  ctrl-alt-up/down  光标多选
+      alt-b              alt-u             转换大写
+      alt-b              alt-i             转换小写
+      ctrl-f2            alt-x             设置/取消书签 [alt-x 默认为关闭当前标签]
+      ctrl-f3            ctrl-d            选取并寻找下一个
+      dimness            ctrl-e            快速寻找上一个
+      ◆录制宏 
+      ctrl-d             alt-v             复制当前行  
+      backspace          f1                删除   [原f1为查看Notepad++详情]
+      未知               alt-s              缩进
+      未知               alt-a              取消缩进
+      未知               alt-c              选中行
+      ◆其他更改
+      alt-c              alt-r             列编辑     [和Atom定义冲突]
+      ctrl-alt-space     alt-e             路径补全
+      dimness            ctrl-shift-q      取消注释
+      unknow             ctrl-/            区块注释 
+      unknow             alt-/             清除区块注释 
+      unknow             ctrl-,            设置-首选项 
+      unknow             ctrl-.            管理快捷键 
+      ◆未知
+      选中当前行
+  ◆插件
+    autosave
+  ◆其他
+  ◆Suggestion&Question 
+    如何设置将所有文件默认作为Python格式  [Notepad++ python格式文件可以折叠]
+      设置-语言格式设置-选择python 
+      在自定义扩展名中填入需要的格式后缀 如 txt rec
+    取消代码折叠后的下划线
+    自定义扩展词 [snippet?]
+VSCode 
+  ◆设置 
+    文件 首选项 用户设置
+
+    文件 首选项 键盘快捷方式
+  ◆快捷键 [参照Atom快捷键设置]
+  ◆插件 
+    view in browser 
+      快捷键 ctrl-f1
+    vscode-icons  文件图标主题
+    open in browser 
+      快捷键 alt-b
+  ◆其他 
+    如何在折叠后的文字后新增新的文字
+  ◆Suggestion&Question 
+    折叠功能
+      折叠后将后面所用的空行也折叠进去了,无法在折叠状态下,再在接着的后一行添加内容
+Sublime text3 
+  ◆设置 
+    缩进宽度         查看   缩进 标签宽度:2
+    自动换行         查看   自动换行
+    分屏             查看   窗口布局
+    失焦自动保存     首选项 设置-用户  "save_on_focus_lost": true,
+    字体设置                           "font_face": "consolas", (或楷体)
+    一直显示折叠图标                    "fade_fold_buttons": false,
+  ◆快捷键 [参照Atom快捷键设置] 
+    首选项 按键绑定-用户 中设置
+    默认快捷键
+      ctrl+x         未选中文字的情况下,剪切光标所在行
+      ctrl+shift+m   选择括号内的内容
+      ctrl+shift+`   选择文本的包裹标签   [需要Emmet插件]
+      ctrl+shift+a   类似于ctrl+d,向上一层扩展选中 [需要Emmet插件]
+      ctrl+shift+d   复制行或选中项,若已选中文本则复制,否则复制光标所在行
+      ctrl+shift+v   粘贴并复制格式
+      alt+shift+w    选中项外包裹的标签
+      ctrl+shift+;   删除包裹的标签
+      ctrl+J         选择标签内容
+      ctrl+f         查找内容
+      ctrl+shift+f   查找并替换
+      ctrl+h         替换
+      ctrl+r         前往 method
+      ctrl+k+b       开关侧栏
+      ctrl+m 光标移动至括号内结束或开始的位置。
+      ctrl+shift+m   选中当前括号内容,重复可选着括号本身
+      ctrl+f2 设置/删除标记
+      ctrl+shift+/ 当前位置插入注释
+      ctrl+alt+/：块注释,并focus到首行,写注释说明用的
+      ctrl+shift+A：选择当前标签前后,修改标签用的
+      alt+.：闭合标签
+      alt+shift+数字：分屏显示
+      alt+数字：切换打开第N个文件
+      shift+右键拖动：光标多不,用来更改或插入列内容
+      按ctrl,依次点击或选取,可需要编辑的多个位置
+      按ctrl+shift+上下键,可替换行
+      ctrl+shift+l 先选中多行,再按下快捷键,会在每行行尾插入光标
+        即可同时编辑这些行。
+      ctrl+← 向左单位性地移动光标
+      ctrl+→ 向右单位性地移动光标
+      shift+方向键  选中内容
+      ctrl+shift+左右键  向单位性地选中文本。
+      ctrl+shift+上下键  将光标所在行和上/下一行代码互换（
+        将光标所在行插入到上一行之前
+      ctrl+alt+上下键    向上/下添加多行光标,可同时编辑多行。
+      ctrl+shift+d 复制光标所在整行,插入到下一行。
+      ctrl+k+k 从光标处开始删除代码至行尾。
+      ctrl+shift+k 删除整行。
+      ctrl+k+u 转换大写。
+      ctrl+k+l 转换小写。
+      ctrl+t 左右字母互换。
+      f6 单词检测拼写
+      ctrl+P 打开搜索框。
+        举个栗子：1、输入当前项目中的文件名,快速搜索文件,
+        2、输入@和关键字,查找文件中函数名,
+        3、输入：和数字,跳转到文件中该行代码,
+        4、输入#和关键字,查找变量名。
+      ctrl+g 打开搜索框,自动带：,输入数字跳转到该行代码。
+        举个栗子：在页面代码比较长的文件中快速定位。
+      ctrl+r 打开搜索框,自动带@,输入关键字,查找文件中的函数名。
+        举个栗子：在函数较多的页面快速查找某个函数。
+      ctrl+： 打开搜索框,自动带#,输入关键字,查找文件中的变量名、属性名等。
+      ctrl+shift+P 打开命令框。
+        场景栗子：打开命名框,输入关键字,调用sublime text或插件的功能,
+        例如使用package安装插件。
+  ◆插件 
+    convertutf8 在保存后会自动重载。
+      使用convertutf8之后,保存大文件时会乱码或卡顿
+      当时对St还有点热情,所以去把convertutf8的代码改了,禁止保存后重载就行了。
+    bufferScroll-st
+      保存折叠状态的插件
+   --------------------------------------------------------------------------------
+  ◆Suggestion&Question 
+    折叠功能
+      文本状态下,全部折叠可能不会全部折叠起来
+      全部折叠不会将所有可折叠的都折叠起来
+      一行缩进的格式不会折叠如以下格式:
+        1 
+          2
+    不可分别设置 中、英文字体
+键盘的键值码 
+  ◆字母和数字键的键码值
+    A	65
+    B	66
+    C	67
+    D	68
+    E	69
+    F	70
+    G	71
+    H	72
+    I	73
+    J	74
+    K	75
+    L	76
+    M	77
+    N	78
+    O	79
+    P	80
+    Q	81
+    R	82
+    S	83
+    T	84
+    U	85
+    V	86
+    W	87
+    X	88
+    Y	89
+    Z	90
+    0	48
+    1	49
+    2	50
+    3	51
+    4	52
+    5	53
+    6	54
+    7	55
+    8	56
+    9	57
+  ◆数字键盘上的键的键码值
+    0	96	
+    1	97	
+    2	98	
+    3	99	
+    4	100	
+    5	101	
+    6	102	
+    7	103	
+    8	104	
+    9	105	
+    *	106	
+    +	107	
+    Enter	
+    -	109	
+    .	110	 	 	 	 
+    /	111	 	 	 	 
+  ◆功能键键码值(keyCode)
+    F1	112	
+    F2	113	
+    F3	114	
+    F4	115	
+    108	F5	
+    F6	117	
+    F7	118
+    F8	119
+    F9	120
+    F10	121
+    116	F11	122
+    F12	123 
+  ◆控制键键码值(keyCode)
+    BackSpace	  8	  
+    Tab	        9	  
+    Clear	      12	
+    Enter	      13	
+    Shift	      16	
+    Control	    17	
+    Alt	        18	
+    Cape Lock	  20	
+    Esc	        27	
+    Spacebar	  32	
+    Page Up	    33	
+    Page Down	  34	
+    End	        35	
+    Home	      36	
+    Left Arrow  37	
+    Up A        38
+    Right Arrow	39	
+    Down Arrow	40	
+    Insert	    45	
+    Delete	    46	
+    Num Lock	  144	
+    ;:	        186	
+    =+	        187	
+    -_	        189
+    .>	        190
+    /?	        191
+    `~	        192
+    [{	        219
+    /|	        220
+    ]}	        221
+--------------------------------------------------------------------------------
+自我设定
+起步_基础
+  在统计到的128985个单词中,以字母开头的个数  
+  X < Y < Z < Q < J < K < V < N < W < O < I
+    X - 122
+    Y - 608
+    Z - 624
+    Q - 720
+    J - 1287
+    K - 1577
+    V - 2364
+    N - 2522
+    W - 3147
+    O - 3681
+    I - 3685
+    
+    L - 4126
+    U - 4425
+    H - 4500
+    G - 4747
+    E - 5151
+    F - 5389
+    R - 6794
+    M - 6891
+    D - 7217
+    B - 7272 
+    T - 7289
+    A - 7296 
+    P - 10278
+    C - 11382
+    S - 15917
+自定义命名 
+  无意义的模块名称
+    so
+    as
+    wa
+    fr
+    is
+    are
+    ft  工具函数
+    sv  自定义变量
+    db  数据结构块
+  变量名
+    aoo
+    boo
+    coo
+    doo
+    eoo
+
+    aux
+    bux
+    cux
+    dux
+    eux
+
+    axx
+    bxx
+    cxx
+    dxx
+    exx
+  函数名
+    是否 is
+      e.g.:
+        判断是否最小 isMin
+    foo
+    goo
+    hoo
+    ioo
+    joo
+    koo
+
+    faz
+    gaz
+    haz
+    iaz
+    jaz
+    kaz
+
+    fux
+    gux
+    hux
+    iux
+    jux
+    kux
+  常用词语缩写
+    ◆描述类
+      colo    颜色
+      bg      背景
+      center  居中
+    ◆动作类
+      op      操作
+      sech    搜索 search
+      set     设置
+      hint    提示
+      pop     弹出
+      assist  帮助,助攻
+      direct  指导 direction
+    ◆位置类
+      side    侧边
+      menu    菜单
+      submeu  子菜单 submenu
+      main    主要区
+      hpage   首页
+      header  头部
+      footer  底部
+      nav     导航条
+      title   标题栏
+      column  栏目
+      locat   位置 location
+      layout  布局
+    ◆状态类
+      suc     成功
+    ◆名称表示
+      material 素材
+      plugin   插件
+      acty     活动 activity 如 Promotional Activities,促销活动
+      extd     扩展 extend
+      sort     类别
+      defi     定义 definition
+      pw       密码
+      tx       文本
+      bor      边框
+      bt       按钮
+      icon     图标
+      art      文章
+      logo     标志
+      bar      条
+      tool     工具
+      side     侧边
+      banner   广告条
+      potr     头像 portrait
+      cont     内容 content
+      wrap     外套
+      conter   容器 container
+      tag      标签
+      tips     小技巧
+      msg      信息 message
+      sumry    摘要 summary
+      brand    商标 branding
+      coprt    版权信息 copyright
+      resu     结果 results
+      hot      热点
+      sit      站点 site
+      info     信息
+      partner  合作伙伴
+      guild    指南
+      map      地图
+      list     列表
+      statu    状态 status
+      tab      标签页
+      news     新闻
+      prodct   产品 products
+      prices   价格
+      dscrip   描述 description
+      pbli     生产,出版 publish
+      screhot  缩略图 screenshot
+      faqs     常见问题
+      kwd      关键词 keyword
+      blog     博客
+      forum    论坛
+      drop     下拉
+      rvw      评论 review
+      link     连接
+      login    登录
+      joinus   加入我们
+      serv     服务 service
+      regst    注册 regsiter
+      scroll   滚动
+      dload    下载 download
+      retr     后退/返回 retreat
+      top      上
+      bottom   下
+      left     左
+      right    右
+      mid      中 middle
+      front    前
+      behind   后
+      fst      第一 first
+      sec      第二 second
+      thd      第三 third
+      fth      第四 fourth
+      fifth    第五
+      sixth    第六
+      seventh  第七
+      eighth   第八
+      ninth    第九
+      tenth    第十
+      master   主要的
+      font     文字
+      print    打印
+      themes   主题
+    e.g.:
+      文本输入框 .input_tx
+      密码输入框 .input_pw
+      登录密码输入框 .input_pw_login
+      日志设置成功提示 .hint_suc_blogset
+      相册弹出的设置层 .pop_set_photo
+      公共提示 .hint_bg
+      文本颜色 .c_tx
+      段落文本颜色 .c_tx_p
+短语_符号 
+  ◆短语
+  bool      布尔值
+  num       数值
+  str       字符串
+  arr       数组
+  indx      数组的下标
+  elem      数组成员/DOM对象
+  obj       对象
+  key       对象的键
+  val       对象的值/值
+  foo       「无属性」函数
+  cfoo      「回调型」函数
+  arg       「无属性」参数
+  param     「配置项」参数
+  retn      返回值
+  exp       表达式
+  Jelem     jQuery对象
+  DiBs      在浏览器中有差异 Different in browsers
+  more      其他的,更多的
+  moIn      更多参见 more in
+  macro     总体,宏观
+  micro     小的,微观
+  detail    详细
+  acc       总结,积累
+  rec       记录
+  todo      待处理,待整理
+  temp      暂时,临时
+  xxx+      表示其及其后续
+    如 IE9+ 表示IE9和IE9以后
+    CSS3+ CSS3及以后
+    HTML5 HTML5及以后
+    ES5+  ES5新增
+    ES6+  ES6新增
+    ...
+  folder    文件夹
+  file      文件
+  self      自己的,自定义的
+  selfPoint 自我观点、认为
+  ◆符号
+  「一般其中的内容为补充说明,注释,解释,注意项等」   
+  ◆、★、■    标题和内容处于同一层级状态时,给标题添加起到醒目的作用
+自定义规范 
+  文件夹及文件名: 采用 xx-xxx-xx 的形式
+  命名方法
+    zzz 作为自己的标识
+    使用前缀z ,如 zAoo
+      zaBoo
+        zabCoo
+          ZcDoo  zabcDoo 改为
+            ZcdEoo
+              ZEFoo  ZcdeFoo 改为
+                ZEFGoo
+                  Z1gHoo  ZEFgHoo 改为
+                    Z2hIoo  Z1ghIoo 改为
+                      Z3IJoo  Z2hiJoo 改为
+                        ...
+      若前缀产生重复:则使用增加数值方式以示区别,如 zc1 表示
+学习计划 
+  设计模式 代码的组织
+  前端学习总结
+    学会归纳 整理 将知识条理清楚的记录下来(而非死记硬背)
+    项目驱动 学习分析别人的代码 或自己做一些小项目
+  整理笔记&完善知识
+  精通jQuery
+  完善框架/库 jQuery Bootstrap
+  学习新框架 vue Angular React;
+  less sass 学习
+  个人博客网站
+  网站布局 学习
+  个人小项目
+    整理 fontawesome 图标
+  NodeJS
+  Python
+  C
+  ...
+  做一个类似炉石传说的卡牌游戏
+Question & Idea
+----------------------------------------------------------------------以下待整理
+
+
+
+
+ 
+
+
+
+

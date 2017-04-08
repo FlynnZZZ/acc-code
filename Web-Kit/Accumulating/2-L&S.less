@@ -1,0 +1,937 @@
+Less 
+介绍_概念_说明_定义 
+  Less CSS 是一种动态样式语言,属于CSS预处理语言的一种,
+    使用类似CSS的语法,为CSS赋予了动态语言的特性,
+    如变量,继承,运算,函数等,更方便CSS的编写和维护. 
+    起始一般加上 @charset"utf-8"; 
+    作为 CSS 的一种扩展，Less 不仅完全兼容 CSS 语法，而且连新增的特性也是使用 CSS 语法。
+  使用
+    编译成CSS
+      命令行用法
+        PS:LESSCSS官方有一款基于Node.js的库，用于编译.less文件。
+          使用时，首先全局安装less（部分系统下可能需要在前面加上sudo切换为超级管理员权限）：
+        通过 npm （node.js 的包管理器）安装编译器
+          $ npm install -g less
+        安装 Less 后，在命令行上调用 Less 编译器了
+          $ lessc styles.less
+          这将输出编译之后的 CSS 代码到 stdout，你可以将输出重定向到一个文件：
+          $ lessc styles.less > styles.css
+          若要输出压缩过的 CSS，只需添加 -x 选项。
+          如果希望获得更好的压缩效果，还可以通过 --clean-css 选项启用 Clean CSS 进行压缩。
+        执行 lessc 且不带任何参数，就会在命令行上输出所有可用选项的列表
+      GUI编译工具
+        为方便起见，建议初学者使用GUI编译工具来编译.less文件
+        以下是一些可选GUI编译工具：
+          koala(Win/Mac/Linux)
+            国人开发的LESSCSS/SASS编译工具。下载地址：http://koala-app.com/index-zh.html
+          Codekit(Mac)
+            一款自动编译Less/Sass/Stylus/CoffeeScript/Jade/Haml的工具，
+            含语法检查、图片优化、自动刷新等附加功能。
+            下载地址http://incident57.com/codekit/
+          WinLess(Win)
+            一款LESS编译软件。下载地址http://winless.org/
+          SimpleLess(Win/Mac/Linux)
+            一款LESS编译软件。下载地址http://wearekiss.com/simpless
+    客户端用法
+      PS:在浏览器上跑 less.js 非常方便开发，但是不推荐用于生产环境。
+        因为在生产环境中，性能和可靠性非常重要，
+        我们建议最好使用 node.js 或其它第三方工具进行预编译。
+      使用link标签引入less文件,但将 rel 属性设置为 "stylesheet/less"
+        <link rel="stylesheet/less" type="text/css" href="styles.less" />
+      然后通过script标签引入 less.js 放置于页面的 <head> 元素内且在less文件之后：
+        <script src="less.js" type="text/javascript"></script>
+      Remarks:
+        如果加载多个 .less 样式表文件，每个文件都会被单独编译。
+        因此，一个文件中所定义的任何变量、mixin 或命名空间都无法在其它文件中访问。
+        部分服务器（以IIS居多）会对未知后缀的文件返回404， 导致无法正常读取.less文件。
+        解决方案是在服务器中为.less文件配置MIME值为text/css（具体方法请搜索）。
+        或者还有一种更简单的方法，即是直接将.less文件改名为.css文件即可。
+  引入
+    PS:在less文件中导入一个 .less 文件，此文件中的所有变量就可以全部使用了。
+      如果导入的文件是 .less 扩展名，则可以将扩展名省略.
+      被导入的LESS文件会被复制到含导入语句的文件中，然后一起编译。
+      导入和被导入的文件共享所有的混合、命名空间、变量以及其它结构。
+    @import "XXX" 或 @import "XXX.css" 导入less 或CSS文件.
+    @import (less) "XXX.css" 则将CSS文件作为Less文件导入.
+    如果导入语句是通过media query指定的，那么导入的语句编译之后会被包裹在@Media声明中。
+      e.g.:
+        被导入的文件library.less：
+          @imported-color: red;
+          h1 { color: green; }
+        主样式文件导入了上面的library.less：
+          @import "library.less" screen and (max-width: 400px); // 通过media query指定的import
+          @import "library.less"; // 无media query的import
+        使用导入的变量
+          .class { color: @importedColor; } 
+        将会编译出：
+        // 对应通过media query指定的import
+        @media screen and (max-width: 400px) { h1 { color: green; } }
+        // 对应无media query的import
+        h1 { color: green; }
+        .class { color: #ff0000; }     // 使用导入的变量
+    LESS文件的导入语句并不强制要求在顶部，它可以被入在规则内部、混合中或者其它的结构中。
+      e.g.:
+        例如放在规则内部：
+        pre { @import "library.less"; color: @importedColor; }
+        在library.less中定义的变量和规则都会被投篮到pre的规则中：
+        pre { color: #ff0000; }   // 定义在library.less中的变量可用
+        pre h1 { color: green; }  // 定义在library.less中的样式规则被嵌套到pre中
+    e.g.:
+      @import "library"; // library.less
+      @import "typo.css";
+      @import "../../publicCSS/public.less";
+  注释:  /*会被编译到CSS中*/  ;   // 不会被编译到CSS中
+@name 变量 
+  PS:由于变量只能定义一次，其本质就是“常量”.
+    变量的作用就是把值定义在一个地方，然后在各处使用，让代码更易维护.
+    定义的变量有作用域的限制,以大括号为分割,子域可访问父域,相反则不可.  [?]
+  @name 定义变量
+    数值型变量
+      @wid:300px; /*定义变量*/
+      .box{ width: @wid; } /*使用变量*/
+    颜色值
+      @nice-blue: #5B83AD;
+      @light-blue: @nice-blue + #111;
+      #header { color: @light-blue; }
+    字符串插值
+      PS:变量可以用像 @{name} 这样的结构，以类似 ruby 和 php 的方式嵌入到字符串中：
+      e.g.:
+        @fnord:  "I am fnord.";
+        @var:    "fnord";
+        content: @@var;
+        compiles to(编译为):
+        content: "I am fnord.";
+
+        @base-url: "http://assets.fnord.com";
+        background-image: url("@{base-url}/images/bg.png");
+      ◆属性    [Version: 1.6.0]
+        e.g.:
+          @property: color;
+          .widget {
+            @{property}: #0ee;
+            background-@{property}: #999;
+          }
+          编译为:
+          .widget {
+            color: #0ee;
+            background-color: #999;
+          }
+      ◆Selectors 选择器插值 [Version: 1.4.0]
+        @mySelector: banner;
+        .@{mySelector} { font-weight: bold; line-height: 40px; margin: 0 auto; }
+        编译为
+        .banner { font-weight: bold; line-height: 40px; margin: 0 auto; }
+      ◆URLs
+        @images: "../img";
+        body {
+         color: #444;
+          background: url("@{images}/white-sand.png");
+        }
+      ◆Import statements  [Version: 1.4.0]
+        Syntax: @import "@{themes}/tidal-wave.less";
+        e.g.:
+          @themes: "../../src/themes";
+          @import "@{themes}/tidal-wave.less";
+运算 
+  PS:表达式中至少要有一个数值或变量带有单位.
+    任何数字、颜色或者变量都可以参与运算
+  @aoo:100px;
+  .box{ width: (@aoo +20)*3; background-color:#ccc - 10; }
+函数 
+  Less 内置了多种函数用于转换颜色、处理字符串、算术运算等
+  e.g.:
+    将 0.5 转换为 50%，将颜色饱和度增加 5%，
+    以及颜色亮度降低 25% 并且色相值增加 8 等用法：
+      @base: #f04615;
+      @width: 0.5;
+      .class {
+        width: percentage(@width); // returns `50%`
+        color: saturate(@base, 5%);
+        background-color: spin(lighten(@base, 25%), 8);
+      }
+  函数汇总
+    ◆String functions,字符串函数 
+      escape(@string);  使用URL-encoding的方式编码字符串。
+        PS:以下字符不会被编码：, / / / ? / @ / & / + / ' / ~ / ! / $。
+          最常见的被编码的字符串包括： / # / ^ / ( / ) / { / } / | / : / > / < / ; / ] / [ / =。
+          注意：如果参数不是字符串的话，函数行为是不可预知的。
+          目前传入颜色值的话会返回undefined，其它的值会原样返回。
+          写代码时不应该依赖这个特性，而且这个特性在未来有可能改变。
+        参数:   字符串：需要转义的字符串
+        返回值： 字符串 (string)
+        e.g.:
+          escape('a=1')
+          输出： a%3D1
+      e(@string); // 对字符串转义
+        PS:用于对CSS的转义，与~"value"类似。
+          它接受一个字符串作为参数，并原样返回内容（不含引号）。
+          它可用于输出一些不合法的CSS语法，或者是使用LESS不能识别的属性。
+          注意：也接受经~""转义的值或者是数字作为参数。其它的值将产生错误。
+        参数：  字符串：需要转义的字符串
+        返回值：字符串的内容，不含引号
+        e.g.:
+          filter:e("ms:alwaysHasItsOwnSyntax.For.Stuff()");
+          输出：
+          filter: ms:alwaysHasItsOwnSyntax.For.Stuff();
+      %(@string, values...); // 格式化字符串
+      PS:第一个参数是一个包含占位符的字符串。
+        占位符以百分号%开头，后面接字母s / S / d / D / a / A。后续的参数用于替换这些占位符。
+        如果你需要输出百分号，可以多用一个百分号来转义%%。
+        使用大写的占位符可以将特殊字符按照UTF-8进行转义，函数将会对所有的特殊字符进行转义，
+        除了( / ) / ' / ~ /!。空格会被转义为%20。小写的占位符将原样保持特殊字符，不进行转义。
+        占位符说明：d / D / a / A 可以被任意类型的参数替换（颜色、数字、转义的字符串、表达式等）。
+        如果将它们和字符串一起使用，则整个字符串都会被使用，包含引号。
+        但是，引号将会原样放在字符串中，不会被转义。
+        s / S 可以被除了颜色的之外的任何类型参数替换。
+        如果你将它们和字符串一起使用，则只有字符串的值会被使用，引号会被忽略。
+      参数： 
+        字符串：带有占位符的格式化字符串
+        任意值：用于替换占位符的值
+      返回值：格式化后的字符串
+      e.g.:
+        使用a/d格式化：%("repetitions: %a file: %d", 1 + 2, "directory/file.less");
+        使用大写的a/d格式化：%('repetitions: %A file: %D', 1 + 2, "directory/file.less");
+        使用s格式化：%("repetitions: %s file: %s", 1 + 2, "directory/file.less");
+        使用大写s格式化：%('repetitions: %S file: %S', 1 + 2, "directory/file.less");
+        分别输出如下：
+        使用a/d格式化："repetitions: 3 file: "directory/file.less"";
+        使用大写的a/d格式化："repetitions: 3 file: %22directory%2Ffile.less%22";
+        使用s格式化："repetitions: 3 file: directory/file.less";
+        使用大写s格式化："repetitions: 3 file: directory%2Ffile.less";
+    ◆Misc functions,综合类函数 
+      unit(@dimension, [@unit: ""]); // 移除或替换属性值的单位
+        移除或替换属性值 (dimension) 的单位。
+        参数: @dimension: 数字，带或不带单位
+        @unit: 可选，将要替换成的单位，如果省略则移除原单位
+        e.g.:
+          unit(5, px)
+          输出： 5px
+          
+          unit(5em)
+          输出： 5
+      color(@string); // 将字符串解析为颜色值
+        解析颜色，将代表颜色的字符串转换为颜色值，参数必须是16进制表示的颜色或者缩写写法。
+        参数: @字符串：代表颜色值的字符串
+        e.g.:
+          color("#445566")
+          color(~"#123")
+          输出：
+          #445566
+          #112233
+      data-uri([mimetype,] url); // * 将资源内嵌到css中，可能回退到url()
+        PS:将一个资源使用BASE64编码嵌入到样式文件，
+          如果开启了ieCompat选项，而且资源文件的体积过大或者是在浏览器中使用，则会使用url()进行回退。
+          如果没有指定MIME，则Node.js会使用MIME包来决定正确的MIME。
+        参数： mimetype: MIME字符串，可选参数
+        url: 需要内嵌的文件的url
+        e.g.:
+          data-uri('../data/image.jpg');
+          输出：
+          url('data:image/jpeg;base64,bm90IGFjdHVhbGx5IGEganBlZyBmaWxlCg==');
+          在浏览器中会输出：
+          url('../data/image.jpg');
+
+          data-uri('image/jpeg;base64', '../data/image.jpg');
+          会输出：
+          url('data:image/jpeg;base64,bm90IGFjdHVhbGx5IGEganBlZyBmaWxlCg==');
+    ◆Math functions,算数函数 
+      ceil(@number); // 向上取整
+      floor(@number); // 向下取整
+      percentage(@number); // 将数字转换为百分比，例如 0.5 -> 50%
+      round(number, [places: 0]); // 四舍五入取整
+      sqrt(number); // * 计算数字的平方根
+      abs(number); // * 数字的绝对值
+      sin(number); // * sin函数
+      asin(number); // * arcsin函数
+      cos(number); // * cos函数
+      acos(number); // * arccos函数
+      tan(number); // * tan函数
+      atan(number); // * arctan函数
+      pi(); // * 返回PI
+      pow(@base, @exponent); // * 返回@base的@exponent次方
+      mod(number, number); // * 第一个参数对第二个参数取余
+      convert(number, units); // * 在数字之间转换
+      unit(number, units); // * 不转换的情况下替换数字的单位
+    ◆Color functions,颜色函数 
+      color(string); // 将字符串或者转义后的值转换成颜色
+      rgb(@r, @g, @b); // 转换为颜色值
+      rgba(@r, @g, @b, @a); // 转换为颜色值
+      argb(@color); // 创建 #AARRGGBB 格式的颜色值
+      hsl(@hue, @saturation, @lightness); // 创建颜色值
+      hsla(@hue, @saturation, @lightness, @alpha); // 创建颜色值
+      hsv(@hue, @saturation, @value); // 创建颜色值
+      hsva(@hue, @saturation, @value, @alpha); // 创建颜色值
+      hue(@color); // 从颜色值中提取 hue 值（色相）
+      saturation(@color); // 从颜色值中提取 saturation 值（饱和度）
+      lightness(@color); // 从颜色值中提取 'lightness' 值（亮度）
+      hsvhue(@color); // * 从颜色中提取 hue 值，以HSV色彩空间表示（色相）
+      hsvsaturation(@color); // * 从颜色中提取 saturation 值，以HSV色彩空间表示（饱和度）
+      hsvvalue(@color); // * 从颜色中提取 value 值，以HSV色彩空间表示（色调）
+      red(@color); // 从颜色值中提取 'red' 值（红色）
+      green(@color); // 从颜色值中提取 'green' 值（绿色）
+      blue(@color); // 从颜色值中提取 'blue' 值（蓝色）
+      alpha(@color); // 从颜色值中提取 'alpha' 值（透明度）
+      luma(@color); // 从颜色值中提取 'luma' 值（亮度的百分比表示法）
+      saturate(@color, 10%); // 饱和度增加 10%
+      desaturate(@color, 10%); // 饱和度降低 10%
+      lighten(@color, 10%); // 亮度增加 10%
+      darken(@color, 10%); // 亮度降低 10%
+      fadein(@color, 10%); // 透明度增加 10%
+      fadeout(@color, 10%); // 透明度降低 10%
+      fade(@color, 50%); // 设定透明度为 50%
+      spin(@color, 10); // 色相值增加 10
+      mix(@color1, @color2, [@weight: 50%]); // 混合两种颜色
+      greyscale(@color); // 完全移除饱和度，输出灰色
+      contrast(@color1, [@darkcolor: black], [@lightcolor: white], [@threshold: 43%]); // 如果 @color1 的 luma 值 > 43% 输出 @darkcolor，否则输出 @lightcolor
+    ◆Color blending,颜色混合 
+      multiply(@color1, @color2);
+      screen(@color1, @color2);
+      overlay(@color1, @color2);
+      softlight(@color1, @color2);
+      hardlight(@color1, @color2);
+      difference(@color1, @color2);
+      exclusion(@color1, @color2);
+      average(@color1, @color2);
+      negation(@color1, @color2);
+    ◆isxx 判断 
+      iscolor(@colorOrAnything); // 判断一个值是否是颜色
+      isnumber(@numberOrAnything); // 判断一个值是否是数字（可含单位）
+      isstring(@stringOrAnything); // 判断一个值是否是字符串
+      iskeyword(@keywordOrAnything); // 判断一个值是否是关键字
+      isurl(@urlOrAnything); // 判断一个值是否是url
+      ispixel(@pixelOrAnything); // 判断一个值是否是以px为单位的数值
+      ispercentage(@percentageOrAnything); // 判断一个值是否是百分数
+      isem(@emOrAnything); // 判断一个值是否是以em为单位的数值
+      isunit(@numberOrAnything, "rem"); // * 判断一个值是否是指定单位的数值
+    含*号的函数只在1.4.0 beta以上版本中可用
+选择器传参 
+  .foo(@aoo){ key:@aoo; }
+  默认参数
+    .foo(@aoo:10px){ key:@aoo; }
+    .goo{ .foo(); }
+    .hoo{ .foo(20px); }
+  匹配模式
+    .triangle(top,@w:5px,@c:#ab8162){
+      border-width: @w;
+      border-color: @c transparent transparent transparent;
+      border-style: solid dashed dashed dashed;
+    }
+    .triangle(right,@w:5px,@c:#ab8162){
+      border-width: @w;
+      border-color: transparent @c transparent transparent;
+      border-style: dashed solid dashed dashed;
+    }
+    .triangle(bottom,@w:5px,@c:#ab8162){
+      border-width: @w;
+      border-color: transparent transparent @c transparent;
+      border-style: dashed dashed solid dashed;
+    }
+    .triangle(left,@w:5px,@c:#ab8162){
+      border-width: @w;
+      border-color: transparent transparent transparent @c;
+      border-style: dashed dashed dashed solid;
+    }
+    /*始终会有该项*/
+    .triangle-pub(@_,@w:5px,@c:#ab8162){ 
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    调用
+    .aoo{ .triangle(lef); }
+  @arguments 包含了所有传递进来的参数
+    .aoo(@w:30px,@c:blue,@style:solid){
+      border: @arguments;
+    }
+Mixin,混合 
+  PS:将一class引入到另一个class中,从而实现class的属性继承.
+  !important 使选择器所包含的所有样式都产生效果
+    .aoo{ color: pink; background-color: pink; }
+    .boo{ .aoo !important; }
+    
+    .mixin (@a: 0) { border: @a; boxer: @a; }
+    .unimportant { .mixin(1); }
+    .important { .mixin(2) !important; }
+    编译成：
+    .unimportant { border: 1; boxer: 1; }
+    .important { border: 2 !important; boxer: 2 !important; }
+  带参数混合
+    .boo(@wid){ border: solid blue @wid; }
+    .aoo{ .boo(30px); }
+  定义不带参数属性集合
+    定义的选择器不会暴露到 CSS 中去，但是能在其他的属性集合中引用.
+    e.g.:
+      .wrap () {
+      text-wrap: wrap;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        word-wrap: break-word;
+      }
+      pre { .wrap }
+      输出：
+      pre {
+        text-wrap: wrap;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        word-wrap: break-word;
+      }
+  多参数混合
+    PS:多个参数可以使用分号或者逗号分隔，推荐使用分号分隔，
+      因为逗号有两重含义：它既可以表示混合的参数，也可以表示一个参数中一组值的分隔符。
+      使用分号作为参数分隔符意味着可以将逗号分隔的一组值作为一个变量处理。
+        换句话说，如果编译器在混合的定义或者是调用中找到至少一个分号，
+        就会假设参数是使用分号分隔的，所有的逗号都属于参数中的一组值的分隔符。
+        2个参数，每个参数都含有通过逗号分隔的一组值的情况：.name(1, 2, 3; something, else)。
+        3个参数，每个参数只含一个数字的情况：.name(1, 2, 3)。
+        使用一个象征性的分号可以创建一个只含一个参数，但参数包含一组值的混合：.name(1, 2, 3;)。
+        逗号分隔的一组值参数的默认值：.name(@param1: red, blue;)。
+    使用同样的名字和同样数量的参数定义多个混合是合法的。
+    在被调用时，LESS会应用到所有可以应用的混合上。
+    e.g.:
+      比如你调用混合时只传了一个参数.mixin(green)，
+      那么所有只强制要求一个参数的混合都会被调用：
+      .mixin(@color) { color-1: @color; }
+      .mixin(@color; @padding:2) {
+        color-2: @color;
+        padding-2: @padding;
+      }
+      .mixin(@color; @padding; @margin: 2) {
+        color-3: @color;
+        padding-3: @padding;
+        margin: @margin @margin @margin @margin;
+      }
+      .some .selector div {
+        .mixin(#008000);
+      }
+      编译结果：
+      .some .selector div {
+        color-1: #008000;
+        color-2: #008000;
+        padding-2: 2;
+      }
+  @arguments 变量,包含了所有传递进来的参数
+    如果你不想单独处理每一个参数的话就可以像这样写：
+    .box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+      box-shadow: @arguments;
+      -moz-box-shadow: @arguments;
+      -webkit-box-shadow: @arguments;
+    }
+    .box-shadow(2px, 5px);
+    将会输出：
+    box-shadow: 2px 5px 1px #000;
+    -moz-box-shadow: 2px 5px 1px #000;
+     -webkit-box-shadow: 2px 5px 1px #000;
+  @rest 变量 与 ... 不限制参数
+    如果需要在 mixin 中不限制参数的数量，可以在变量名后添加 ...，表示这里可以使用 N 个参数。
+    .mixin (...) {        // 接受 0-N 个参数
+    .mixin () {           // 不接受任何参数
+    .mixin (@a: 1) {      // 接受 0-1 个参数
+    .mixin (@a: 1, ...) { // 接受 0-N 个参数
+    .mixin (@a, ...) {    // 接受 1-N 个参数
+    此外：
+    .mixin (@a, @rest...) {
+      // @rest 表示 @a 之后的参数
+      // @arguments 表示所有参数
+    }
+  参数模式匹配 与Guard表达式
+    PS:LESS 提供了通过参数值控制 mixin 行为的功能
+      只有满足匹配要求的混合才会被使用。
+      混合中的变量可以匹配任何值，非变量形式的值只有与传入的值完全相等时才可以匹配成功。
+    通过变量来匹配
+      如果要根据 @switch 的值控制 .mixin 行为，只需按照下面的方法定义 .mixin：
+      .mixin (dark, @color) { color: darken(@color, 10%); }
+      .mixin (light, @color) { color: lighten(@color, 10%); }
+      .mixin (@_, @color) { display: block; }
+      然后调用：
+      @switch: light;
+      .class { .mixin(@switch, #888); }
+      将会得到以下 CSS：
+      .class { color: #a2a2a2; display: block; }
+      传给 .mixin 的颜色将执行 lighten 函数，
+      如果 @switch 的值是 dark，那么则会执行 darken 函数输出颜色。
+      以下是整个过程如何发生的：
+        第一个 .mixin 没有匹配，因为不满足 dark 条件；
+        第二个 .mixin 可以被匹配，因为它满足了 light 条件；
+        第三个 .mixin 也可以被匹配，因为它接受任何参数。
+    通过参数的数量来匹配
+      我们也可以根据参数的数量进行匹配，比如：
+      .mixin (@a) { color: @a; }
+      .mixin (@a, @b) { color: fade(@a, @b); }
+      调用 .mixin 时，如果使用了一个参数，输出第一个 .mixin，使用了两个参数，则输出第二个。
+    Guards
+      PS:Guards 被用来匹配表达式 (expressions)。
+        为了尽可能地符合 CSS 的语言结构，
+        LESS 选择使用 guard混合,guarded mixins（类似于 @media 的工作方式）执行条件判断，
+        而不是加入 if/else 声明。
+        Guards 支持的运算符包括：> >= = =< <。
+      e.g.:
+        .mixin (@a) when (lightness(@a) >= 50%) { background-color: black; }
+        .mixin (@a) when (lightness(@a) < 50%) { background-color: white; }
+        .mixin (@a) { color: @a; }
+        要点在于关键词 when，它引入了一个 guard 条件 （这里只用到一个 guard）。
+        现在如果运行下面的代码：
+        .class1 { .mixin(#ddd) }
+        .class2 { .mixin(#555) }
+        将会得到以下输出结果：
+        .class1 { background-color: black; color: #ddd; }
+        .class2 { background-color: white; color: #555; }
+        
+        使用关键词 and 在 guard 中加入额外的条件:
+        .mixin (@a) when (isnumber(@a)) and (@a > 0) { ... }
+        或者，使用关键词 not 否定条件：
+        .mixin (@b) when not (@b > 0) { ... }
+      true关键字是唯一被判断为真的值
+        也就是这两个混合是相等的：
+        .truth (@a) when (@a) { ... }
+        .truth (@a) when (@a = true) { ... }
+        其他不为 true 的值都判为假：
+        .class {
+          .truth(40); // 不会匹配上面的 mixin
+        }
+      不同的参数之间也可以比较，而参与比较的也可以一个参数都没有：
+        @media: mobile;
+        .mixin (@a) when (@media = mobile) { ... }
+        .mixin (@a) when (@media = desktop) { ... }
+        .max (@a, @b) when (@a > @b) { width: @a }
+        .max (@a, @b) when (@a < @b) { width: @b }
+      多个Guards可以通过逗号表示分隔，如果其中任意一个结果为 true，则匹配成功：
+        .mixin (@a) when (@a > 10), (@a < -10) { ... }
+      is* 函数 根据值的类型匹配混合
+        .mixin (@a, @b: 0) when (isnumber(@b)) { ... }
+        .mixin (@a, @b: black) when (iscolor(@b)) { ... }
+        ◆检查基本类型的函数：
+        iscolor
+        isnumber
+        isstring
+        iskeyword
+        isurl
+        ◆检查一个值（数字）的单位
+        ispixel
+        ispercentage
+        isem
+      and 关键词 加入额外的条件
+        .mixin (@a) when (isnumber(@a)) and (@a > 0) { ... }
+      not 关键词 否定条件：
+        .mixin (@b) when not (@b > 0) { ... }
+  e.g. :
+    .aoo{ width: 10px; .boo; } /* 直接在aoo中使用boo*/
+    .boo{ height: 10px; }
+    
+    /* 给参数默认值 */
+    .rounded-corners (@radius: 5px) { border-radius: @radius; }
+    #header { .rounded-corners; }
+    #footer { .rounded-corners(10px); }
+    编译后的CSS：
+    #header { border-radius: 5px; }
+    #footer { border-radius: 10px; }
+嵌套 
+  PS:一个选择器中嵌套另一个选择器来实现继承,
+    减少了代码量，并且代码看起来更加的清晰。
+  & 表示其上一层选择器
+    e.g.:
+      ul{
+        width: 300px;
+        list-style: none;
+        li{  /*此时li{} 相当于CSS中的 ul li{}*/
+          height: 10px;
+          line-height: 10px;
+          background-color: #8886a8;
+          &:hover{ /*& 表示为其上一层选择器*/
+            /*此时 &:hover 相当于 li:hover{}*/
+            background-color:#c8c299;
+          }
+        }
+      }
+      
+      .bordered {
+        &.float { float: left; }
+        .top { margin: 5px; }
+      }
+      会输出：
+      .bordered.float { float: left; }
+      .bordered .top { margin: 5px; }
+  & 的高级用法
+    用在选择器中的&还可以反转嵌套的顺序并且可以应用到多个类名上。
+    e.g.:
+      .child, .sibling {
+        .parent & { color: black; }
+        & + & { color: red; }
+      }
+      输出：
+      .parent .child, .parent .sibling { color: black; }
+      .child + .child, .child + .sibling, .sibling + .child, .sibling + .sibling {
+        color: red;
+      }
+    &也可以用在混合中用于指示嵌套这个混合的父选择器。
+      
+  Media Queries 嵌套 
+    Media query也可以使用同样的方式进行嵌套。
+    e.g.:
+      .one {
+        @media (width: 400px) {
+          font-size: 1.2em;
+          @media print and color { color: blue; }
+        }
+      }
+      输出：
+      @media (width: 400px) {
+        .one { font-size: 1.2em; }
+      }
+      @media (width: 400px) and print and color {
+        .one { color: blue; }
+      }
+      
+  e.g.:
+    #header {
+      color: black;
+      .navigation { font-size: 12px; }
+      .logo { width: 300px; }
+    }
+    编译为
+    #header { color: black; }
+    #header .navigation { font-size: 12px; }
+    #header .logo { width: 300px; }
+作用域 
+  PS:LESS 中的作用域跟其他编程语言非常类似，首先会从本地查找变量或者混合模块，
+    如果没找到的话会去父级作用域中查找，直到找到为止。
+  e.g.:
+    @var: red;
+    #page {
+      @var: white;
+      #header { color: @var;  /*white*/ }
+    }
+    #footer { color: @var; /* red */ }
+避免编译 ~"XXX" 
+  PS:比如当有Less不认识的新语法,可避免编译
+  .aoo{ width: ~"calc(200px - 10px)"; }
+命名空间 
+  为了更好组织 CSS 或者单纯是为了更好的封装，将一些变量或者混合模块打包起来，
+  定义一些属性集之后可以重复使用.
+  e.g.:
+    #bundle {
+      .button () {
+        display: block;
+        border: 1px solid black;
+        background-color: grey;
+        &:hover { background-color: white }
+      }
+      .tab { ... }
+      .citation { ... }
+    }
+    你只需要在 #header a 中像这样引入 .button：
+    #header a { color: orange; #bundle > .button; }
+版本
+  1.4.0 引入了一些新特性,如派生（extends）、data-uri函数以及更多的数学函数。
+  单位的运算功能已完成，所以(4px * 3em) / 4px以前结果是3px，但现在是3em
+--------------------------------------------------------------------------------
+sass 
+介绍_概念_说明_定义 
+  PS:Sass 是最早的 CSS 预处理语言,有比 LESS 更为强大的功能,
+    不过其一开始的缩进式语法(Sass 老版本语法)并不能被大众接受,
+    不过由于其强大的功能,还是有很多开发者选择了 Sass。
+    Sass 是采用 Ruby 语言编写的一款 CSS 预处理语言,
+    它诞生于2007年,是最大的成熟的 CSS 预处理语言。
+    最初它是为了配合 HAML(一种缩进式 HTML 预编译器)而设计的,
+    因此有着和 HTML 一样的缩进式风格。
+  注释
+    /* 会在编译出来的 CSS 显示 */ 
+    // 不会在编译出来的 CSS 显示
+  Sass 和 SCSS 的区别
+    Sass 和 SCSS 其实是同一种东西,我们平时都称之为 Sass,
+    SCSS 是 Sass 的新语法格式,从外形上来判断他和 CSS 长得几乎是一模一样,
+    代码都包裹在一对大括号里,并且末尾结束处都有一个分号。
+    其文件名格式常常以“.scss”为扩展名。
+    两者之间不同之处有以下两点：
+      文件扩展名不同,Sass 是以“.sass”后缀为扩展名,而 SCSS 是以“.scss”后缀为扩展名
+      语法书写方式不同,Sass 是以严格的缩进式语法规则来书写,不带大括号({})和分号(;),
+      而 SCSS 的语法书写和我们的 CSS 语法书写方式非常类似。
+      e.g. :
+      Sass 语法
+      $font-stack: Helvetica, sans-serif  //定义变量
+      $primary-color: #333                //定义变量
+      body
+        font: 100% $font-stack
+        color: $primary-color
+        
+      SCSS 语法
+      $font-stack: Helvetica, sans-serif;
+      $primary-color: #333;
+      body {
+        font: 100% $font-stack;
+        color: $primary-color;
+      }
+  Sass 的编译错误
+    而最为常见的一个错误就是字符编译引起的。
+    在Sass的编译的过程中,是不是支持“GBK”编码的。
+    所以在创建 Sass 文件时,就需要将文件编码设置为“utf-8”。
+    另外一个错误就是路径中的中文字符引起的。
+    建议在项目中文件命名或者文件目录命名不要使用中文字符。
+  输出不同样式风格的CSS
+    在 Sass 中编译出来的样式风格也可以按不同的样式风格显示。
+    其主要包括以下几种样式风格：
+    嵌套输出方式 nested
+      a {
+        display: block;
+        padding: 6px 12px;
+        text-decoration: none; }
+    展开输出方式 expanded
+      a {
+        display: block;
+        padding: 6px 12px;
+        text-decoration: none;
+      }
+    紧凑输出方式 compact 
+      a { display: block; padding: 6px 12px; text-decoration: none; }
+    压缩输出方式 compressed
+变量
+  $变量名:值; 声明变量
+  $变量名 来调用变量
+  默认变量
+    PS:如果该变量已经被赋值, 就不会再次赋值,
+      但是,如果还没有被赋值,就会被指定一个值,
+      变量的值如果是 null 的话,会被 !default 当做没有值
+    在变量值的后面加 !default
+嵌套
+  选择器嵌套 :嵌套的层级越深,编译出来的 CSS 代码的选择器层级将越深.
+  属性嵌套 
+    CSS 有一些属性前缀相同,只是后缀不一样,
+    比如：border-top/border-right,margin、padding、font 等属性。
+    .box {
+      border-top: 1px solid red;
+      border-bottom: 1px solid green;
+    }
+    在 Sass 中我们可以这样写：
+    .box {
+      border: {
+       top: 1px solid red;
+       bottom: 1px solid green;
+      }
+    }
+  伪类嵌套
+    伪类嵌套和属性嵌套非常类似,只不过需要借助`&`符号一起配合使用。
+    clearfix:before, .clearfix:after {
+      content: "";
+      display: table;
+    }
+    .clearfix:after { clear: both; overflow: hidden; }
+    Sass写法
+    .clearfix{
+      &:before, &:after { content:""; display: table; }
+      &:after { clear:both; overflow: hidden; }
+    }
+  避免选择器嵌套：
+    选择器嵌套最大的问题是将使最终的代码难以阅读。
+    开发者需要花费巨大精力计算不同缩进级别下的选择器具体的表现效果。
+    选择器越具体则声明语句越冗长,而且对最近选择器的引用(&)也越频繁。
+    在某些时候,出现混淆选择器路径和探索下一级选择器的错误率很高,这非常不值得。
+    为了防止此类情况,我们应该尽可能避免选择器嵌套。
+    然而,显然只有少数情况适应这一措施。
+混合宏
+  声明混合宏
+  不带参数混合宏：
+  使用 @mixin 关键词来声明一个混合宏
+    e.g. :
+    @mixin aoo{ -webkit-border-radius: 5px; border-radius: 5px; }
+  带参数混合宏：
+    除了声明一个不带参数的混合宏之外,还可以在定义混合宏时带有参数,如：
+    @mixin aoo($radius:5px){
+      -webkit-border-radius: $radius;
+      border-radius: $radius;
+    }
+  复杂的混合宏：
+    Sass 中的混合宏还提供更为复杂的,可以在大括号里面写上带有逻辑关系
+    @mixin box-shadow($shadow...) {
+      @if length($shadow) >= 1 {
+        @include prefixer(box-shadow, $shadow);
+      } @else{
+        $shadow:0 0 4px rgba(0,0,0,.3);
+        @include prefixer(box-shadow, $shadow);
+      }
+    }
+    这个 box-shadow 的混合宏,带有多个参数,这个时候可以使用“ … ”来替代。
+    当 $shadow 的参数数量值大于或等于“ 1 ”时,表示有多个阴影值,
+    反之调用默认的参数值“ 0 0 4px rgba(0,0,0,.3) ”。
+  调用混合宏
+    使用关键词 @include 来调用声明好的混合宏
+    @mixin border-radius{
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+    }
+    button { @include border-radius; }
+    编译出来的 CSS 为:
+    button {
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+    }
+  混合宏传参
+    e.g. :
+    在调用的时候可以给这个混合宏传一个参数值：
+      @mixin border-radius($radius){
+        -webkit-border-radius: $radius;
+        border-radius: $radius;
+      }
+      .box { @include border-radius(3px); }
+      编译出来的 CSS:
+      .box {
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+      }
+    参数默认值
+      @mixin border-radius($radius:3px){
+        -webkit-border-radius: $radius;
+        border-radius: $radius;
+      }
+      .btn { @include border-radius; }
+      编译出来的 CSS:
+      .btn {
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+      }
+      改变默认值
+      .box { @include border-radius(50%); }
+      编译出来的 CSS:
+      .box {
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+      }
+    多参数传递
+      e.g. :
+        @mixin center($width,$height){
+          width: $width;
+          height: $height;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -($height) / 2;
+          margin-left: -($width) / 2;
+        }
+        .box-center { @include center(500px,300px); }
+        编译出来 CSS:
+        .box-center {
+          width: 500px;
+          height: 300px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -150px;
+          margin-left: -250px;
+        }
+      特别的参数“…” :当混合宏传的参数过多之时,可以使用该参数来替代.
+        @mixin box-shadow($shadows...){
+          @if length($shadows) >= 1 {
+            -webkit-box-shadow: $shadows;
+            box-shadow: $shadows;
+          } @else {
+            $shadows: 0 0 2px rgba(#000,.25);
+            -webkit-box-shadow: $shadow;
+            box-shadow: $shadow;
+          }
+        }
+        .box {
+          @include box-shadow(0 0 1px rgba(#000,.5),0 0 2px rgba(#000,.2));
+        }
+        编译出来的CSS:
+        .box {
+          -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 1px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+        }
+扩展/继承 
+  通过关键词 @extend 来继承已存在的类样式块,从而实现代码的继承
+  .btn { border: 1px solid #ccc; padding: 6px 10px; font-size: 14px; }
+  .btn-1 { background-color: #f36; color: #fff; @extend .btn; }
+  .btn-2 { background-color: orange; color: #fff; @extend .btn; }
+  编译出来之后的CSS:
+  .btn, .btn-1, .btn-2 { border: 1px solid #ccc; padding: 6px 10px;
+  font-size: 14px; }
+  .btn-1 { background-color: #f36; color: #fff; }
+  .btn-2 { background-clor: orange; color: #fff; }
+占位符 %placeholder 
+  %placeholder 声明的代码,如果不被 @extend 调用则不会产生任何代码
+  %mt5 { margin-top: 5px; }
+  %pt5 { padding-top: 5px; }
+  这段代码没有被 @extend 调用,他并没有产生任何代码块,
+  只是静静的躺在你的某个 SCSS 文件中。
+  只有通过 @extend 调用才会产生代码：
+  %mt5 { margin-top: 5px; }
+  %pt5 { padding-top: 5px; }
+  .btn { @extend %mt5; @extend %pt5; }
+  .block { @extend %mt5; span { @extend %pt5; } }
+  编译出来的CSS
+  .btn, .block { margin-top: 5px; }
+  .btn, .block span { padding-top: 5px; }
+  通过 @extend 调用的占位符,编译出来的代码会将相同的代码合并在一起。
+混合宏 继承 占位符 的比较 
+  混合宏使用 :可以传参
+    编译的出CSS不会自动合并相同的样式代码,
+    如果在样式文件中调用同一个混合宏,会产生多个对应的样式代码,造成代码的冗余,
+  继承
+    编译出的 CSS 会将使用继承的代码块合并到一起,通过组合选择器的方式展现,
+    这样编译出来的代码相对于混合宏来说要干净的多。
+    但是不能传变量参数。
+  占位符
+    编译出的 CSS 代码和使用继承基本上是相同,
+    且不会在CSS代码中生成占位符的选择器。
+    占位符是独立定义,不调用的时候是不会在 CSS 中产生任何代码;
+    继承是首先有一个基类存在,不管调用与不调用,
+    基类的样式都将会出现在编译出来的 CSS 代码中。
+插值 #{} 
+  e.g. :
+    @mixin generate-sizes($class, $small, $medium, $big) {
+      .#{$class}-small { font-size: $small; }
+      .#{$class}-medium { font-size: $medium; }
+      .#{$class}-big { font-size: $big; }
+    }
+    @include generate-sizes("header-text", 12px, 20px, 40px);
+    编译出来的 CSS:
+    .header-text-small { font-size: 12px; }
+    .header-text-medium { font-size: 20px; }
+    .header-text-big { font-size: 40px; }
+  #{}语法并不是随处可用,也不能在 mixin 中调用：
+    $margin-big: 40px;
+    $margin-medium: 20px;
+    $margin-small: 12px;
+    @mixin set-value($size) { margin-top: $margin-#{$size}; }
+    .login-box { @include set-value(big); }
+    编译会得到下面的信息：
+    error style.scss (Line 5: Undefined variable: "$margin-".)
+
+    @mixin updated-status { margin-top: 20px; background: #F00; }
+    $flag: "status";
+    .navigation { @include updated-#{$flag}; }
+    编译时会报错：
+    error style.scss (Line 7: Invalid CSS after "...nclude updated-": expected "}", was "#{$flag};")
+  可以使用 @extend 中使用插值
+    %updated-status { margin-top: 20px; background: #F00; }
+    .selected-status { font-weight: bold; }
+    $flag: "status";
+    .navigation { @extend %updated-#{$flag}; @extend .selected-#{$flag}; }
+    编译出来的 CSS:
+    .navigation { margin-top: 20px; background: #F00; }
+    .selected-status, .navigation { font-weight: bold; }
+数据类型 
+  Sass 和 JavaScript 语言类似,也具有自己的数据类型,
+  数字: 如,1、 2、 13、 10px
+  字符串：有引号字符串或无引号字符串,如,"foo"、 'bar'、 baz
+    SassScript 支持 CSS 的两种字符串类型：
+    有引号字符串 (quoted strings),如 "Lucida Grande" 、'http://sass-lang.com'；
+    无引号字符串 (unquoted strings),如 sans-serifbold。
+    在编译 CSS 文件时不会改变其类型。
+    只有一种情况例外,使用 #{ }插值语句 (interpolation) 时,
+    有引号字符串将被编译为无引号字符串,这样方便了在混合指令 (mixin) 中引用选择器名。
+    e.g. :
+      @mixin firefox-message($selector) {
+        body.firefox #{$selector}:before {
+          content: "Hi, Firefox users!";
+        }
+      }
+      @include firefox-message(".header");
+      编译为：
+      body.firefox .header:before { content: "Hi, Firefox users!"; }
+      需要注意的是：当 deprecated = property syntax 时 (暂时不理解是怎样的情况),所有的字符串都将被编译为无引号字符串,不论是否使用了引号。
+  颜色：如,blue、 #04a3f9、 rgba(255,0,0,0.5)
+  布尔型：如,true、 false
+  空值：如,null
+  值列表：用空格或者逗号分开,如,1.5em 1em 0 2em 、 Helvetica, Arial, sans-serif。
+
+
+

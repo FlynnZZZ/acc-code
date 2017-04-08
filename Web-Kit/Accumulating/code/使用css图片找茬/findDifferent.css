@@ -1,0 +1,60 @@
+*{margin:0;padding;0}
+
+
+#img2{
+  position:absolute;
+  left:-458px;
+  top:0;
+mix-blend-mode: difference;
+
+}
+
+#img1{
+
+}
+
+#img3{
+  position:absolute;
+  left:458px;
+  top:0;
+-webkit-filter:invert(100%) opacity(50%);
+filter:invert(100%) opacity(50%);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

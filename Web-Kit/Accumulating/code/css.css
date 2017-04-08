@@ -1,0 +1,43 @@
+/*五角星绘制*/
+<div class="wraper">
+  <div class="a aoo"> </div>
+  <div class="a boo"> </div>
+  <div class="a coo"> </div>
+  <div class="a doo"> </div>
+  <div class="a eoo"> </div>
+</div>
+:root{ --len:30px; }
+.wraper{
+  width: var(--len);
+  height: var(--len);
+  position: relative;
+  overflow: hidden;
+}
+.a{
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+  height: 32.3%;
+  top: 37.4%;
+  border-top: 5px solid red;
+}
+.aoo{ }
+.boo{ transform:rotate(72deg); }
+.coo{ transform:rotate(144deg); }
+.doo{ transform:rotate(216deg); }
+.eoo{ transform:rotate(288deg); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -26,6 +26,7 @@
       <!-- 表示网页文件的主体部分 -->
       </body>
       </html>
+    特点: 字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
   XHTML 介绍 
     XHTML是一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性.
     2000年底,W3C组织公布发行了XHTML 1.0版本
@@ -35,11 +36,55 @@
     但面对成千上万已有的基于HTML语言设计的网站,直接采用XML还为时过早.
     因此,在HTML4.0的基础上,用XML的规则对其进行扩展,得到了XHTML.
     所以,建立XHTML的目的就是实现HTML向XML的过渡.
+  URL,Uniform Resource Locator 也叫网址或'统一资源定位符'
+    PS:可以由单词组成,或者是因特网协议「IP」地址如:162.168.1.253;
+      用于定位万维网上的文档或其他数据
+    scheme://host.domain:port/path/fileName  语法规则
+      scheme  定义因特网服务的类型
+        http   超文本传输协议,以'http://'开头的普通网页,不加密
+        https  安全超文本传输协议,安全网页,加密所有信息交换
+        ftp    文件传输协议,用于将文件下载或上传至网站
+        file   本地计算机上的文件
+      host    定义域主机,http的默认主机是www
+      domain  定义因特网域名,如W3school.com.cn
+      port    定义主机上的端口号,http的默认端口号是80
+      path    定义服务器上的路径,若省略,则文档必须位于网站的根目录中
+      fileName  定义文档/资源的名称
+    HTML URL字符编码: 将字符转换为可通过因特网传输的格式
+      URL只能使用ASCII字符集来通过因特网进行发送,
+      由于URL常常会包含ASCII集合之外的字符,URL必须转换为有效的ASCII格式。
+      URL编码使用%其后跟随两位的十六进制数来替换非ASCII字符。
+      URL不能包含空格,URL编码通常使用+来替换空格
 说明 
   <!-- 注释内容  -->
-  标签大小写:大小写不敏感,推荐统一使用小写,<p>等同于<P>
-HTML特点 
-  在字符的最开头加空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
+  标签大小写:大小写不敏感,推荐统一使用小写,'<p>'等同于'<P>'
+  Web图片格式
+    gif  图形交换格式  :  最多256种颜色,支持透明色、动画
+    png  网络可移植格式:  最多1670万种 ,支持透明色,不支持动画
+    jpeg 联合图像专家组:  最多1670万种 ,不支持透明色、动画
+  浏览器解析HTML方式
+    PS:一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
+      HTML5提供的<DOCTYPE html>是标准模式，向后兼容的, 等同于开启了标准模式;
+      IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
+      如 当去掉html文档中的声明则进入怪异模式.
+    standards mode,标准模式: 按照 HTML 与 CSS 的定义渲染
+    quirks mode,怪异模式: 尝试模拟更旧的浏览器的行为 
+    部分怪异模式「近乎标准」
+      一些浏览器,例如，那些基于 Mozilla 的 Gecko 渲染引擎的，
+      或者 Internet Explorer 8 在 strict mode 下,
+      也使用一种尝试于这两者之间妥协的almost standards,“近乎标准”模式，
+      实施了一种表单元格尺寸的怪异行为，除此之外符合标准定义。
+    ◆方法/属性
+    document.compatMode   识别文档模式 
+      标准模式为: CSS1Compat ; 混杂模式: BackCompat.
+    document.documentMode 识别文档模式 「IE专属」「IE8+」
+      IE8可以以不同的模式渲染一个页面,主要依赖于!DOCTYPE或者当前的某一个HTML元素.
+      如果没有定义!DOCTYPE,IE8以IE5的模式来渲染页面
+      按照下列的值返回：
+      5   ----- in IE5 mode
+      7   ----- in IE7 mode
+      8   ----- in IE8 mode
+      9   ----- in IE9 mode
 --------------------------------------------------------------------------------
 ◆标签-属性 
   PS:HTML tag 标签/元素/标记 
@@ -56,12 +101,12 @@ HTML特点
       如 name=‘Bill“hellwoword”Gates’
 声明类 
   <！DOCTYPE> 声明
-    PS:<！DOCTYPE>声明必须是HTML文档的第一行,位于<HTML>标签之前.
-      不是HTML标签,是指示web浏览器关于页面使用那个HTML版本进行编写的指令.
+    PS:必须是HTML文档的第一行,位于<HTML>标签之前.
+      不是HTML标签,告知浏览器页面使用的HTML版本;
       没有结束标签,对大小写不敏感
       请始终向HTML文档添加<！DOCTYPE>声明,这样浏览器才能获知文档类型.
-      DOCTYPE文档类型,用于引入DTD(说明当前html版本),告知浏览器解析器HTML的文档标准.
-      DOCTYPE不存在或格式不正确会导致文档以兼容模式(怪异模式)呈现.
+      DOCTYPE文档类型,用于引入DTD「说明当前html版本」,告知浏览器解析器HTML的文档标准.
+      DOCTYPE不存在或格式不正确会导致文档以兼容模式「怪异模式」呈现.
     标准模式与兼容模式的区别
       标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
       在兼容模式中,页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作.
@@ -73,31 +118,31 @@ HTML特点
         是W3C所发布的一个文档类型定义,
         源于XML规范,用于定义当前文档中的元素、元素的属性、元素之间的结构关系等基本规则.
       在HTML4.01中有3种<！DOCTYPE>声明.在HTML5中只有一种.
-      HTML5 不基于 SGML，所以不需要引用 DTD。
+      HTML5 不基于 SGML,所以不需要引用 DTD。
     HTML5 声明: <!doctype html>
       HTML5不基于SGML,因此不需要对DTD进行引用,
       但是需要doctype来规范浏览器的行为,让浏览器按照它们应该的方式来运行
     常用的 DOCTYPE 声明
       HTML 4.01 Strict
-        该 DTD 包含所有 HTML 元素和属性，但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
+        该 DTD 包含所有 HTML 元素和属性,但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
       HTML 4.01 Transitional
-        该 DTD 包含所有 HTML 元素和属性，包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
+        该 DTD 包含所有 HTML 元素和属性,包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
       HTML 4.01 Frameset
-        该 DTD 等同于 HTML 4.01 Transitional，但允许框架集内容。
+        该 DTD 等同于 HTML 4.01 Transitional,但允许框架集内容。
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
       XHTML 1.0 Strict
-        该 DTD 包含所有 HTML 元素和属性，但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
+        该 DTD 包含所有 HTML 元素和属性,但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       XHTML 1.0 Transitional
-        该 DTD 包含所有 HTML 元素和属性，包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
+        该 DTD 包含所有 HTML 元素和属性,包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       XHTML 1.0 Frameset
-        该 DTD 等同于 XHTML 1.0 Transitional，但允许框架集内容。
+        该 DTD 等同于 XHTML 1.0 Transitional,但允许框架集内容。
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
       XHTML 1.1
-        该 DTD 等同于 XHTML 1.0 Strict，但允许添加模型(例如提供对东亚语系的 ruby 支持)。
+        该 DTD 等同于 XHTML 1.0 Strict,但允许添加模型(例如提供对东亚语系的 ruby 支持)。
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
       HTML 5
         <!DOCTYPE html>
@@ -112,10 +157,11 @@ HTML特点
     头部元素有<title>、<script>、<style>、<link>、<meta>等标签.
   <title>标题</title>
     标签用于显示该网页的主题,显示在浏览器的标题栏上.
-  <meta >  提供有关页面的元信息meta-information
+  <meta >  提供有关页面的meta-information,元信息
     PS:用于设置一些头信息,对网页文件进行说明,
       如便于搜索引擎查找.放置于<head></head>之间
-    ◆name    可选,content值所属的的类型
+      元数据不会显示在页面上，但是对于机器是可读的。
+    ◆name       可选,content值所属的的类型
       description 对网页描述
         <meta name="description" content="描述1,描述2...">
       referrer    控制http请求中的referrer
@@ -147,7 +193,7 @@ HTML特点
             yes;no
           minimum-scale        允许用户缩放的最小比例
           maximum-scale        允许用户缩放的最大比例
-    ◆content 可选,定义与 http-equiv 或 name 属性相关的元信息
+    ◆content    可选,定义与 http-equiv 或 name 属性相关的元信息
     ◆http-equiv 可选,把 content 属性关联到 HTTP 头部.
       refresh 定时跳转/刷新
         e.g.:
@@ -158,50 +204,50 @@ HTML特点
       expires 设置缓存时间
         <meta http-equiv="expires" content="0"/>
         此设置表示不缓存,方便代码调试
-        expires 期限,0为缓存的时间(过期的时间);
+        expires 期限,0 为缓存的时间,过期的时间;
       pragma  代理服务器缓存设置
         <meta http-equiv="pragma" content="no-cache"/>
       set-cookie
       content-type
       X-UA-Compatible 从IE8新加的一个设置
         对于IE8以下的浏览器是不识别 
-        通过在meta中设置X-UA-Compatible的值，可以指定网页的兼容性模式设置。
+        通过在meta中设置X-UA-Compatible的值,可以指定网页的兼容性模式设置。
         在网页中指定的模式优先权高于服务器中(通过HTTP Header)所指定的模式
       
         <meta http-equiv="X-UA-Compatible" content="IE=7">  
-        #以上代码告诉IE浏览器，无论是否用DTD声明文档标准，IE8/9 都会以IE7引擎来渲染页面。  
+        #以上代码告诉IE浏览器,无论是否用DTD声明文档标准,IE8/9 都会以IE7引擎来渲染页面。  
         <meta http-equiv="X-UA-Compatible" content="IE=edge">  
-        #以上代码告诉IE浏览器，IE8/9 及以后的版本都会以最高版本IE来渲染页面。  
+        #以上代码告诉IE浏览器,IE8/9 及以后的版本都会以最高版本IE来渲染页面。  
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-        #以上代码IE=edge告诉IE使用最新的引擎渲染网页，chrome=1 则可以激活Chrome Frame.
+        #以上代码IE=edge告诉IE使用最新的引擎渲染网页,chrome=1 则可以激活Chrome Frame.
         
         Google Chrome Frame 百科
-          “IE=Edge,chrome=1″这样简单快捷，但是弊端是代码将无法通过W3C验证。
-          其实这并不是问题，毕竟标准只是标准，如果只有这一个“错误”完全不会有任何不良的影响。
+          “IE=Edge,chrome=1″这样简单快捷,但是弊端是代码将无法通过W3C验证。
+          其实这并不是问题,毕竟标准只是标准,如果只有这一个“错误”完全不会有任何不良的影响。
         IE文档兼容性模式所有可能的值：
           Emulate IE8 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
             Standards mode指令会显示成IE8 Standards mode而quirks mode会显示成IE5 mode。
-            不同于IE8 mode，Emulate IE8 mode重视<!DOCTYPE>指令。
+            不同于IE8 mode,Emulate IE8 mode重视<!DOCTYPE>指令。
           Emulate IE7 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
             Standards mode指令会显示成IE7 Standards mode而quirks mode会显示成IE5 mode。
-            不同于IE7 mode，Emulate IE7 mode重视<!DOCTYPE>指令。
+            不同于IE7 mode,Emulate IE7 mode重视<!DOCTYPE>指令。
             对于许多网页来说这是最推荐的兼容性模式。
-          IE5 mode #编译内容如同IE7的quirks mode之显示状况，和IE5中显示的非常类似。
-          IE7 mode #编译内容如同IE7的standards mode之显示状况，无论网页是否含有<!DOCTYPE>指令。
-          IE8 mode #提供对业界标准的最高支持，
-            包含 W3C Cascading Style Sheets Level 2.1 Specification和W3C Selectors API，
+          IE5 mode #编译内容如同IE7的quirks mode之显示状况,和IE5中显示的非常类似。
+          IE7 mode #编译内容如同IE7的standards mode之显示状况,无论网页是否含有<!DOCTYPE>指令。
+          IE8 mode #提供对业界标准的最高支持,
+            包含 W3C Cascading Style Sheets Level 2.1 Specification和W3C Selectors API,
             并有限的支持 W3C Cascading Style Sheets Level 3 Specification(Working Draft)。
           Edge mode #指示IE以目前可用的最高模式显示内容。
-            当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE，
+            当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE,
             使用Edge mode的页面会使用该版本能支持的最高模式来显示内容。
             同样的那些页面在使用IE8浏览时仍会照常显示。
         注意事项：
-          1，根据官网定义X-UA-compatible 标头不区分大小写；
-            不过，它必须显示在网页中除 title 元素和其他 meta 元素以外的所有其他元素之前。
-            如果不是的话，它不起作用
-          2，content的内容是IE=8，或者IE=edge等值，
-            注意不是IE8或者直接写个edge的值，否则不起作用
-          如果对WEb服务器了解，可以直接配置一下VirtualHost: Apache:
+          1,根据官网定义X-UA-compatible 标头不区分大小写；
+            不过,它必须显示在网页中除 title 元素和其他 meta 元素以外的所有其他元素之前。
+            如果不是的话,它不起作用
+          2,content的内容是IE=8,或者IE=edge等值,
+            注意不是IE8或者直接写个edge的值,否则不起作用
+          如果对WEb服务器了解,可以直接配置一下VirtualHost: Apache:
             <IfModule mod_setenvif.c>
               <IfModule mod_headers.c>
                 BrowserMatch MSIE ie
@@ -224,7 +270,7 @@ HTML特点
             add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
       e.g.:
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    ◆charset 可选,设置字符集
+    ◆charset    可选,设置字符集
       e.g.:
       <meta charset="UTF-8">
       <meta http-equiv="content-type" content="text/html;charset=gb2312"/>
@@ -720,8 +766,8 @@ HTML特点
           readonly: 元素可被选中和复制;
       ◆HTML5+
       autocomplete  规定form或input域应该拥有自动完成功能
-        PS: 当用户在自动完成域中开始输入时，浏览器应该在该域中显示填写的选项;
-          适用于 <form> 标签，以及以下类型的 <input> 标签,
+        PS: 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项;
+          适用于 <form> 标签,以及以下类型的 <input> 标签,
           type= text, search, url, telephone, email, 
             password, datepickers, range 以及 color;
       autofocus  当页面加载完自动获得焦点
@@ -729,7 +775,7 @@ HTML特点
       form       规定输入域所属的一个或多个表单
         PS:适用于所有 <input> 标签的类型;
           form 属性必须引用所属表单的 id,
-          如需引用一个以上的表单，请使用空格分隔的列表;
+          如需引用一个以上的表单,请使用空格分隔的列表;
         e.g.:
           <form action="demo_form.asp" method="get" id="user_form">
             First name:<input type="text" name="fname" />
@@ -788,9 +834,9 @@ HTML特点
         min、max 和 step 属性用于为包含数字或日期的 input 类型规定限定(约束)。
         max 属性规定输入域所允许的最大值。
         min 属性规定输入域所允许的最小值。
-        step 属性为输入域规定合法的数字间隔(如果 step="3"，则合法的数是 -3,0,3,6 等)。
+        step 属性为输入域规定合法的数字间隔(如果 step="3",则合法的数是 -3,0,3,6 等)。
         注释：min、max 和 step 属性适用于以下类型的 <input> 标签：date pickers、number 以及 range。
-        下面的例子显示一个数字域，该域接受介于 0 到 10 之间的值，且步进为 3(即合法的值为 0、3、6 和 9)：
+        下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9)：
         实例
         Points: <input type="number" name="points" min="0" max="10" step="3" />
         亲自试一试
@@ -821,9 +867,9 @@ HTML特点
           只能在文本框中输入数值
           <input type="text" pattern="\d+" name="xx"/>
       placeholder 提示文本
-        placeholder 属性提供一种提示(hint)，描述输入域所期待的值。
+        placeholder 属性提供一种提示(hint),描述输入域所期待的值。
         注释：placeholder 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
-        提示(hint)会在输入域为空时显示出现，会在输入域获得焦点时消失：
+        提示(hint)会在输入域为空时显示出现,会在输入域获得焦点时消失：
         实例
         <input type="search" name="user_search"  placeholder="Search W3School" />
         亲自试一试
@@ -920,54 +966,52 @@ HTML特点
       注:align、space及hspace为处理图片和周围文字的关系.
     通过 base64码[例如为 xxxxx] 来加载图片
       <img src="data:image/png;base64,xxxxx" alt="">
-  <a>  anchor(锚点)元素
+  <a>   anchor,锚点元素
     可以用来链接到外部地址实现页面跳转功能,也可以链接到当前页面的某部分实现内部导航功能
     <a href="#">超链接</a>
-    属性
-      href 链接地址
-        网址:链接到指定网页
-        锚点:链接网页指定部位
-          格式:href="#id名称" 或 href="#另一个a元素的name属性的值"
-        锚点:链接到指定网页的指定部位.
-          格式:href="网页地址/#id名称"
-      target 定义链接打开的位置
-        _self    在自身窗口中打开(默认值)
-        _blank   在新窗口中打开
-        _parent  父窗口(本窗口的上一级窗口),框架会经常使用
-        _top     在浏览器的整个窗口中打开,忽略任何框架
-        框架的名称
-    链接分类
-      站点链接
-        当前文档与目标文档在同一站点内
-          可使用<a href=目标文档位置及全称>
-        站外链接
-          <a href=URL>
-      html文档链接
-        HTML文档名称(e.g. href="a.HTML")
-      E-mail链接
-        允许访问者向指定的地址发送邮件
-        e.g. href="mailto:fanshenglin163@163.com"
-        邮箱地址:<a href="mailto:邮箱地址">...</a>
-         抄送地址:<a href="mailto:邮箱地址?cc=邮箱地址">...</a>
-         密件抄送地址:将cc换为bcc即可.
-         多个收件人、抄送、密抄:地址之间使用分号;隔开.
-         邮件主题:<a href="mailto:邮件地址?subject=邮件主题"></a>
-         邮件内容:<a href="mailto:邮件地址?body=邮件内容">...</a>
-         注意：如果mailto后面同时有多个参数的话,第一个参数必须以“?”开头,后面的参数每一个都以“&”分隔.
-         e.g. <a href="mailto:邮件地址?cc=邮件地址＆bcc=邮件地址＆subject=主题＆body=内容">...</a>
-      锚点链接:可跳转到某个页面的某个位置
-        创建锚点:
-          <a name="锚点名称">显示内容</a>
-        链接锚点:
-          <a href="＃锚点名称">显示内容</a>
-      空链接
-        没有目标端点的链接.
-        格式<a href="＃">显示内容</a>
-        e.g.
-          设为首页
-          <a href="＃" onclick="this.style.behavior='url(＃default＃homepage)'; this.sethomepage('http:WWW.sohu.com')"> 设为首页</a>
-      脚本链接
-        是一种特殊的链接,当单击设置脚本链接的文本或图像时,可以运行相应的javascript语句.
+    ◆属性
+    href   链接地址
+      网址:链接到指定网页
+      锚点:链接网页指定部位
+        格式:href="#id名称" 或 href="#另一个a元素的name属性的值"
+      锚点:链接到指定网页的指定部位.
+        格式:href="网页地址/#id名称"
+    target 定义链接打开的位置
+      _self    在自身窗口中打开(默认值)
+      _blank   在新窗口中打开
+      _parent  父窗口(本窗口的上一级窗口),框架会经常使用
+      _top     在浏览器的整个窗口中打开,忽略任何框架
+      框架的名称
+    ◆链接分类
+    站点链接
+      当前文档与目标文档在同一站点内
+        可使用<a href=目标文档位置及全称>
+      站外链接
+        <a href=URL>
+    html文档链接
+      HTML文档名称(e.g. href="a.HTML")
+    href='mailto:address1?key=value'     E-mail 链接
+      PS:各个键值对间使用&连接;value可选多个,之间使用分号;隔开;
+      address1       必须,收件人邮箱
+      key=value      可选,其他可选参数
+        subject=title  title为邮件标题
+        body=content   content为邮件内容
+        cc=address2    address2为抄送人邮箱
+        bcc=address3   address3为密抄人邮箱
+      e.g.    <a href="mailto:example@gmail.com?subject=测试用标题&body=测试内容&cc=example2@qq.com&bcc=example3@163.com">click me</a>
+    锚点链接:可跳转到某个页面的某个位置
+      创建锚点:
+        <a name="锚点名称">显示内容</a>
+      链接锚点:
+        <a href="＃锚点名称">显示内容</a>
+    空链接
+      没有目标端点的链接.
+      格式<a href="＃">显示内容</a>
+      e.g.
+        设为首页
+        <a href="＃" onclick="this.style.behavior='url(＃default＃homepage)'; this.sethomepage('http:WWW.sohu.com')"> 设为首页</a>
+    脚本链接
+      是一种特殊的链接,当单击设置脚本链接的文本或图像时,可以运行相应的javascript语句.
   <ul> 无序列表
     <ul>无序列表</ul>
     属性:
@@ -1031,18 +1075,18 @@ HTML特点
     <embed>标签定义外部(非HTML)内容的容器.(一HTML5标签,HTML4中非法,但所用浏览器中都有效)
     <object>标签也可以定义外部(非HTML)内容的容器.
     可使用此元素向 HTML 页面添加多媒体。
-    <object> 标签用于包含对象，比如图像、音频、视频、Java applets、ActiveX、PDF 以及 Flash。
-    object 的初衷是取代 img 和 applet 元素。不过由于漏洞以及缺乏浏览器支持，这一点并未实现。
-    如果未显示 object 元素，就会执行位于 <object> 和 </object> 之间的代码。
-    通过这种方式，我们能够嵌套多个 object 元素(每个对应一个浏览器)。
+    <object> 标签用于包含对象,比如图像、音频、视频、Java applets、ActiveX、PDF 以及 Flash。
+    object 的初衷是取代 img 和 applet 元素。不过由于漏洞以及缺乏浏览器支持,这一点并未实现。
+    如果未显示 object 元素,就会执行位于 <object> 和 </object> 之间的代码。
+    通过这种方式,我们能够嵌套多个 object 元素(每个对应一个浏览器)。
     可选参数
       archive URL 由空格分隔的指向档案文件的 URL 列表。这些档案文件包含了与对象相关的资源。 STF
       border pixels 定义对象周围的边框。 TF
-      classid class ID 定义嵌入 Windows Registry 中或某个 URL 中的类的 ID 值，此属性可用来指定浏览器中包含的对象的位置，通常是一个 Java 类。 STF
-      codebase URL 定义在何处可找到对象所需的代码，提供一个基准 URL。 STF
+      classid class ID 定义嵌入 Windows Registry 中或某个 URL 中的类的 ID 值,此属性可用来指定浏览器中包含的对象的位置,通常是一个 Java 类。 STF
+      codebase URL 定义在何处可找到对象所需的代码,提供一个基准 URL。 STF
       codetype MIME type 通过 classid 属性所引用的代码的 MIME 类型。 STF
       data     URL 定义引用对象数据的 URL。如果有需要对象处理的数据文件,要用 data 属性来指定这些数据文件。 STF
-      declare   declare 可定义此对象仅可被声明，但不能被创建或例示，直到此对象得到应用为止。 STF
+      declare   declare 可定义此对象仅可被声明,但不能被创建或例示,直到此对象得到应用为止。 STF
       height pixels 定义对象的高度。 STF
       hspace pixels 定义对象周围水平方向的空白。 TF
       name unique_name 为对象定义唯一的名称(以便在脚本中使用)。 STF
@@ -1053,7 +1097,7 @@ HTML特点
       width pixels 定义对象的宽度。 STF
   <param> 为object嵌入的对象规定 run-time 设置
     此标签可为包含它的 <object> 或者 <applet> 标签提供参数。
-    HTML 中，<param> 标签没有结束标签,XHTML 中，<param> 标签必须被正确地关闭。
+    HTML 中,<param> 标签没有结束标签,XHTML 中,<param> 标签必须被正确地关闭。
     e.g.::
       <object classid="clsid:F08DF954-8592-11D1-B16A-00C0F0283628" >
         <param name="BorderStyle" value="1" />
@@ -1072,7 +1116,7 @@ HTML特点
       data
       ref
       object 规定值的 MIME 类型。 STF      
-  marquee 滚动
+  <marquee> 滚动
     <marquee behavior="" direction="">滚动的文字</marquee>  滚动字幕
     属性
       滚动方向direction="left/right/up/down"
@@ -1080,7 +1124,7 @@ HTML特点
       循环次数loop="数字"(若未指定则一直循环infinite)
       速度scrollamount="数字"(数值越大速度越快)
       scrolldelay="延时"(走一步,停一停)
-  frame 框架(HTML5 已废弃)
+  <frame> 框架 「HTML5废弃」
     <frameset frameborder="边框大小" cols="列窗口百分比分割" rows="行窗口百分比分割" framespacing=number bordercolor=颜色名称>
       <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
       <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
@@ -1094,7 +1138,7 @@ HTML特点
       scrolling定义该区域是否显示滚轴
     注:使用框架结构则至少需要两个HTML文件,在总的HTML文件中,frameset不可嵌套在<body>元素中
       在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置.
-  iframe 行内框架
+  <iframe> 行内框架
     iframe 元素会创建包含另外一个文档的内联框架(即行内框架).
     iframe 与 frame 的区别
       iframe标记又叫浮动帧标记,可以用它将一个HTML文档嵌入在一个HTML中显示.
@@ -1102,7 +1146,9 @@ HTML特点
       而<Frame></Frame>所包含的内容是一个独立的个体,是可以独立显示的.
       另外,应用Iframe还可以在同一个页面中多次显示同一内容,而不必重复这段内容的代码.
     iframe的缺点:iframe会阻塞主页面的Onload事件
-  canvas 画布
+  <embed>   在HTML页面中嵌入多媒体元素
+  <Object>  在HTML页面中嵌入多媒体元素
+  <canvas> 画布
     <canvas></canvas>画布标签,定义图形,比如图表和其他图像(HTML5新标签)
     canvas标签提供一块画布,可以访问画布中的像素点
     canvas标签只是图形容器,图形必须使用脚本来绘制.
@@ -1118,7 +1164,27 @@ HTML特点
     属性:
       height=pixels,定义canvas的高度.
       width=pixels,定义canvas的宽度.
-  video  视频
+  <video>  视频 「HTML5+」 
+    属性
+    controls 可选,是否添加浏览器自带的播放控制条
+    autoplay 可选,当网页加载完成之后是否自动播放
+    preload  可选,是否对数据进行预加载
+      如果是的话,浏览器会将视频数据或者音频数据进行缓冲,这样做可以加快播放的速度.
+      auto    (默认值)让浏览器做决定,一般预加载全部的视频或音频.
+      none     表示不进行加载
+      metadata 只预加载媒体的元数据 预加载
+    poster   可选,图片展示替换方案
+      PS:当视频不可播放或者未播放的时候,使用该属性向用户展示一张图片代替视频
+      e.g. poster="XXX.png"  视频图片显示方案
+    loop     可选,是否循环播放
+    error
+      读取过程中一旦发生错误,返回一个media error对象,这个对象的code返回对应的错误状态,
+      默认情况下video和audio的error属性都是null.
+      1 取回过程被用户终止
+      2 下载时发生错误
+      3 解码发生错误
+      4 媒体不可用或者不支持音频/视频
+    src      可选,可通过src或source标签来指定
     e.g. 
       <video width="750" height="500" src="XXX.mp4">(您的浏览器不支持video元素)</video>
       设定好长和宽和src属性就可以了.
@@ -1127,28 +1193,7 @@ HTML特点
         <source src='movie.mp4'/>
         <source src='movie.ogv'/>
       </video>
-    属性
-      controls 是否为视频或音频数据添加浏览器自带的播放控制条
-      autoplay 当网页加载完成之后是否自动播放
-      preload  是否对数据进行预加载
-        如果是的话,浏览器会将视频数据或者音频数据进行缓冲,这样做可以加快播放的速度.
-        auto    (默认值)让浏览器做决定,一般预加载全部的视频或音频.
-        none     表示不进行加载
-        metadata 只预加载媒体的元数据 预加载
-      poster
-        当视频不可播放或者未播放的时候,使用poster元素向用户展示一张图片代替视频.
-        video元素的属性
-        e.g. poster="XXX.png"  视频图片显示方案
-      loop     是否循环播放视频或者音频数据.
-      error
-        读取过程中一旦发生错误,返回一个media error对象,这个对象的code返回对应的错误状态,
-        默认情况下video和audio的error属性都是null.
-        1 取回过程被用户终止
-        2 下载时发生错误
-        3 解码发生错误
-        4 媒体不可用或者不支持音频/视频
-      src      可选属性,可通过src或source标签来指定
-  audio  音频
+  <audio>  音频
     <audio>元素是一个HTML5元素
     e.g. 
       <audio src="XXX.mp3" controls="controls"></audio>
@@ -1165,7 +1210,7 @@ HTML特点
       autoplay 自动播放,可选属性
       controls 带播放控制条,可选属性
       src      可选属性,可通过src或source标签来指定
-  source 视/音频的链接
+  <source> 视/音频的链接
     为video或audio指定多个播放格式与编码;
     为同一个媒体数据指定多个播放格式与编码方式,以确保浏览器可以从中选择一种自己支持的播放格式进行播放.
     按顺序选择,直到选择到所支持的格式为止.
@@ -1192,7 +1237,7 @@ HTML特点
       value=num 定义进程的当前值,表示已经完成了多少
       value和max的属性值必须大于0,且max的值大于等于value的值.
       单位时随意的.
-  meter    条状份额显示
+  <meter>    条状份额显示
     <meter></meter> 所占份额的条状显示
     e.g. <meter value="40" max="100" min="0" low="50" high="70" optimum="60">(PS:此处不影响显示)</meter>
     属性:
@@ -1208,7 +1253,7 @@ HTML特点
       optimum=num 定义最佳份额值.
         若该值高于 "high" 属性,则意味着值越高越好.若该值低于 "low" 属性的值,则意味着值越低越好.
         最佳值属性值必须在min属性值和max属性值之间
-  canvas   画布
+  <canvas>   画布
     canvas是html5中新增的一个重要元素,专门用来绘制图形.
     创建一个画布
       指定id、width(画布宽度)、height(画布高度).
@@ -1223,7 +1268,7 @@ HTML特点
       dl元素在html5中进行了重新定义.
       每一项包含一条或者多条带名字的dt元素用来表示术语,
       dt元素后面紧跟一个或者多个dd元素用来表示定义.
-  keygen 标签规定用于表单的密钥对生成器字段.
+  <keygen> 标签规定用于表单的密钥对生成器字段.
     当提交表单时,私钥存储在本地,公钥发送到服务器.
     autofocus        使 keygen 字段在页面加载时获得焦点.
     challenge        如果使用,则将 keygen 的值设置为在提交时询问.
@@ -1232,7 +1277,7 @@ HTML特点
     keytype   rsa    定义 keytype.rsa 生成 RSA 密钥.
     name  fieldname  定义 keygen 元素的唯一名称.
       name 属性用于在提交表单时搜集字段的值.
-  frameset 框架
+  <frameset> 框架
     PS:通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
       每份HTML文档称为一个框架,并且每个框架都独立于其他的框架.
       使用框架的坏处:开发人员必须同时跟踪更多的HTML文档；很难打印整张页面
@@ -1246,7 +1291,7 @@ HTML特点
     Remarks:使用框架结构则至少需要两个HTML文件,在总的HTML文件中
       在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置
       重要提示：不能将<body></body>标签与<frameset></frameset>标签同时使用.
-  frame    框架
+  <frame>    框架
     注:不需要body
     属性
       noresize 表示不可改变分割比例(默认情况下,用户可以对分割比例进行拖拽从而改变比例)
@@ -1265,7 +1310,7 @@ HTML特点
         <frame name="middle" src="02.html" ></frame>
         <frame name="right" src="03.html"></frame>
       </frameset>
-  iframe   内联框架
+  <iframe>   内联框架
     iframe用于在网页内显示网页
     height和width属性用于规定iframe的高度和宽度.属性值的默认单位像素,但也可以用百分比来设定.
     frameborder属性规定是否显示iframe周围的边框.设置属性值为“0”就可以移除边框.
@@ -1313,19 +1358,19 @@ HTML特点
   使用id属性创建锚点
     在相对链接或url后面添加#id名称即可链接到锚点.
 ◆character entities,字符实体 
-  PS:HTML 中,某些字符是预留的,如小于号(<)和大于号(>)可能导致浏览器会误认为标签。
+  PS:HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
     若希望正确地显示预留字符,可在 HTML 源代码中使用字符实体;
     实体名称比实体编号好记,但浏览器可能并不支持所有实体名称,而支持所有实体数字;
     实体名称对大小写敏感;
     HTML 4.01 支持 ISO 8859-1(Latin-1)字符集,
     ISO-8859-1 的较低部分(从 1 到 127 之间的代码)是最初的 7 比特 ASCII,
     ISO-8859-1 的较高部分(从 160 到 255 之间的代码)全都有实体名称;
-    这些符号中的大多数都可以在不进行实体引用的情况下使用，
+    这些符号中的大多数都可以在不进行实体引用的情况下使用,
     但是实体名称或实体编号为那些不容易通过键盘键入的符号提供了表达的方法;
   non-breaking space,不间断空格  &nbsp;
     浏览器总是会截短 HTML 页面中的空格。
-    如在文本中写 10 个空格，在显示该页面之前，浏览器会删除它们中的 9 个。
-    如需在页面中增加空格的数量，需要使用 &nbsp; 字符实体。
+    如在文本中写 10 个空格,在显示该页面之前,浏览器会删除它们中的 9 个。
+    如需在页面中增加空格的数量,需要使用 &nbsp; 字符实体。
   实体名称   实体编号   显示结果  描述           备注
     &nbsp;   &#160;    ' '     空格
     &quot;   &#34;     '" '    双引号 
@@ -1419,9 +1464,11 @@ HTML特点
 --------------------------------------------------------------------------------
 ◆HTML5 
   介绍
-    PS:HTML5是最新版本的HTML,它引入了简化的标记、新的语义和媒体元素,
+    PS:HTML5 是对 HTML 标准的第五次修订,HTML5是最新版本的HTML,
+      引入了简化的标记、新的语义和媒体元素,
       另外还有一组支持Web应用的JavaScript库
       HTML5 = 标记 + JavaScript API + CSS
+      HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持
     变化
       声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了
       meta标记
@@ -1431,6 +1478,7 @@ HTML特点
         <link rel="stylesheet" href=""/>
       script标记 JavaScript成为HTML的默认脚本语言,除去原先的type属性
         简化为: <script src=""></script> 或 <script> </script>
+      新的解析顺序：不再基于SGML。
     优点
       html5让网页结构变得更加清楚明了,增加了语义化的结构标签
       HTML/xhtml在各个浏览器上存在不兼容的问题,html5的出现就是为了解决这一个问题
@@ -1458,7 +1506,7 @@ HTML特点
         <input type="checkbox" checked=""/>
         <input type="checkbox" checked="false"/>
         以上的复选框均被选中,js中通过移除该属性控制其状态
-    自闭合标签不一定要以 /> 结尾，比如 <input > <img >
+    自闭合标签不一定要以 /> 结尾,比如 <input > <img >
     HTML 5 文档里可以不写 <html> <head> 和 <body> 标签
     HTML5 规定开发者可以自定义设置任何标签 [?]
       然后定义其display即可(默认display为inline)
@@ -1619,9 +1667,54 @@ HTML特点
     4 表单事件
       oninput 用户输入内容时触发,可用于移动端输入字数统计
       oninvalid 验证不通过时触发
+  新的元素：
+    section
+    video
+    progress
+    nav
+    meter
+    time
+    aside
+    canvas
+    command
+    datalist
+    details
+    embed
+    figcaption
+    figure
+    footer
+    header
+    hgroup
+    keygen
+    mark
+    output
+    rp
+    rt
+    ruby
+    source
+    summary
+    wbr
+  input元素的新类型：date, email, url等等。
+  新的属性：ping（用于a与area）, charset（用于meta）, async（用于script）。
+  全域属性：id, tabindex, repeat。
+  新的全域属性：contenteditable, contextmenu, draggable, dropzone, hidden, spellcheck。
+  移除元素：
+    acronym
+    applet
+    basefont
+    big
+    center
+    dir
+    font
+    frame
+    frameset
+    isindex
+    noframes
+    strike
+    tt
 移动端HTML 
-  让普通移动网页被添加到主屏幕后，拥有一些类native的功能，
-    就是类似隐藏ios的上下状态栏，实现全屏，禁止弹性拖拽，全屏，修改顶部颜色等。
+  让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
+    就是类似隐藏ios的上下状态栏,实现全屏,禁止弹性拖拽,全屏,修改顶部颜色等。
     <meta name="apple-mobile-web-app-capable" content="yes">
   清除缓存
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -1648,7 +1741,6 @@ Collection
 习题及精解
 Question & idea 
 ----------------------------------------------------------------------以下待整理
-
 
 
 

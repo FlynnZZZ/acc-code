@@ -2775,7 +2775,7 @@ Viewport 视口
     user-scalable: 是否允许用户缩放
   e.g.:.
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
-navigator.geolocation 地理定位
+navigator.geolocation 地理定位 「HTML5」
   PS:在地理定位API中,使用小数值来表示经纬度(西经和南纬都用负数表示)
   单位转换
     可使用一下函数将使用度、分、秒表示的经纬度转换为小数
@@ -2838,6 +2838,7 @@ navigator.geolocation 地理定位
     引入 API 放置在 HTML head中
       <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
       sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
+SSE 「HTML5」
 navigator.vibrate     设备震动
   PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
     显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
@@ -3112,7 +3113,7 @@ Web Socket 网络通信协议
     ActiveX HTMLFile(IE) 、
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
-Web Storage 网页本地存储
+Local Storage 网页本地存储 「HTML5」
   PS:
     JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage.
@@ -3158,7 +3159,7 @@ Web Storage 网页本地存储
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-application cache,简称appcache  应用缓存  
+application cache,简称appcache  应用缓存  「HTML5」
   PS:专门为开发离线Web应用设计
     appcache就是从浏览器的缓存中分出来的一块缓存区
     使用一个描述文件(manifest file)在该缓存中保存数据
@@ -3579,7 +3580,7 @@ Web Notifications 浏览器通知接口 [可能存在兼容性问题]
   }
   
   上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
-drag 拖放 
+drag|drop 拖放 「HTML5」
   PS:Web开发人员一直在用jQuery完成拖放,现在这个功能已经内置于HTML5中 [IE9=+支持]
     IE4最早加入拖放功能,只能拖放文本框
   定义拖放元素和目标元素

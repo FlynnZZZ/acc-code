@@ -391,6 +391,8 @@ JS代码引入、执行
       但是有时我们会希望,根据页面本身的协议来决定加载协议,这时可以采用下面的写法。
       
       <script src="//example.js"></script>    
+    方法一: window.onload = function(){ }
+    方法二: 将script标签放在body的结尾处
   Remarks: 
     原则上,将其放在html头部,但视情况可以将其放在网页的任何部分.
     一个html文件可以有几个<script>...</script>,且可以共享方法和变量.

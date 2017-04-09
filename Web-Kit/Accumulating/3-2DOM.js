@@ -1,29 +1,32 @@
 DOM,Document Object Model 文档对象模型 
-  PS:DOM的标准由W3C组织规定.
+  PS:DOM的标准由W3C组织规定 
     DOM 是为了操作文档出现的 API,document 是其的一个对象；
     DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计 .
-    其次要清楚并不是只有JavaScript有DOM API,其他的程序设计语言如Java也有对应的DOM API.
-    是浏览器对html文件的描述方式.
+    并不是只有JavaScript有DOM API,其他的程序设计语言如Java也有对应的DOM API.
+    浏览器对html文件的描述方式.
     给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式 .
     DOM是给HTML和XML文件使用的一组API.它提供了文件的结构表述,让你可以改变其中的內容.
-    DOM即文档对象模型,针对HTML和XML文档的API(应用程序接口).
     DOM是将整个html文件、标签看成一个由对象组成的树.
     每个DOM最上面都有一个document对象,然后是html及其他元素.
     document 表示浏览器中的整个页面,包含完整的DOM.
     IE中所有DOM对象都是以COM对象的形式实现的,使用object来表示获取到的元素.
     意味着IE中DOM对象与原生JS对象有差异.
     对DOM的任何修改都会在浏览器呈现DOM时立即反映出来.
-  DOM 的分类
-    DOM core  DOM核心  如 document.getElementById('#aoo');
-    HTML-DOM  如: document.forms
-    CSS-DOM   如: elem.style.color = "red"
+  W3C DOM 标准
+    分为 3 个不同的部分
+    DOM core,DOM核心:   针对任何结构化文档的标准模型
+    XML DOM:            针对 XML 文档的标准模型
+    HTML DOM:           针对 HTML 文档的标准模型
+      HTML的标准编程接口,关于如何获取、修改、添加或删除 HTML 元素的标准
+      HTML 文档中的所有内容都是节点：
+      整个文档是一个文档节点
+      每个 HTML 元素是元素节点
+      HTML 元素内的文本是文本节点
+      每个 HTML 属性是属性节点
+      注释是注释节点
   DOM标准的目标
     让“任何一种程序设计语言”能操控使用“任何一种标记语言”编写出的“任何一份文档”
     “操控”具体含义为能通过DOM提供的API对文档的内容、结构、样式进行访问和修改
-  HTML DOM 介绍
-    HTML的标准对象模型;HTML的标准编程接口
-    HTML DOM 定义了所有HTML元素的对象和属性,以及访问它们的方法
-    换言之,HTML DOM 是关于如何获取、修改、添加或删除 HTML 元素的标准
   DOM API 介绍
     用于操作DOM的API
     浏览器提供给JavaScript操作html页面内元素的方式.
@@ -72,12 +75,6 @@ DOM,Document Object Model 文档对象模型
       但是,只有上面列出的几种语言是W3C的推荐标准
     DOM模块版本检测
       可使用 document.implementation.hasFeature() 方法来检测(详见: Document)
-  执行代码的时机
-    若使用script标签将代码放在head中,则JS代码会在页面加载前执行
-    导致有些对后面的元素操作失败(因为获取元素时,元素还没加载)
-    使JS代码在页面加载后执行的方法
-      方法一: window.onload = function(){ }
-      方法二: 将script标签放在body的结尾处
 ◆Node 节点 
   PS:DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构
     节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
@@ -90,7 +87,7 @@ DOM,Document Object Model 文档对象模型
     JS中所有节点类型都继承自Node类型,都有一个 nodeType 属性表明节点的类型
     并非所有节点类型都受到Web浏览器的支持,最常用的节点类型为 元素节点 和 文本节点
     后续使用 nod 来表示一个 Node类型 的实例 (SelfSet)
-节点说明
+节点说明 
   ◆共有12种
   PS:IE没有公开Node类型的构造函数,因此IE中不可使用如 Node.DOCUMENT_NODE 来进行判断,
     为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
@@ -114,7 +111,7 @@ DOM,Document Object Model 文档对象模型
   同一类型节点间的关系可类比为家族关系,
   HTML 的子元素中有 body,body 的同胞元素有 head.
   虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
-属性、方法
+属性、方法 
   nod.nodeName;   名称(具体定义取决于节点的类型)
     元素节点返回元素名称(大写字母)
     属性节点返回属性名称;
@@ -178,7 +175,7 @@ DOM,Document Object Model 文档对象模型
     设置与获取额外数据
     document.body.setUserData("aoo","boo",function(){});
     var aoo =document.body.getUserData("aoo");
-类型&详解
+类型&详解 
   Document 文档根节点
     PS: JS中通过 Document 类型表示文档.
       document 对象是 HTMLDocument(继承自Document类型)的一个实例.
@@ -694,7 +691,7 @@ DOM,Document Object Model 文档对象模型
     elem.contentWindow 返回框架的window对象 [所有都支持]
       然后.document 再获取到document对象
     实践:iframe 修改其跨域的内容,浏览器限制修改?
-扩展
+扩展 
   DOM扩展
     PS:DOM的两个主要扩展是 selector API(选择符API)和 HTML5,此外还有一些其他扩展
     ◆选择符 API
@@ -1860,7 +1857,7 @@ e.g.:
       }
 --------------------------------------------------------------------------------
 ◆专题 
-表单及表单字段脚本
+表单及表单字段脚本 
   PS:HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
     HTMLFormElement 继承了 HTMLElement ,因而与其他HTML元素具有相同的默认属性;
     表单字段为表单中的元素,如input button textarea select 等等
@@ -2053,7 +2050,7 @@ e.g.:
         Chrome: 清空当前页面,显示出返回的字符串
         <a href="Javascript:'aaa'" target="_blank">11111111</a>  
         javascript:"aaa"   // 在浏览器地址栏中键入
-  <script src="" charset="utf-8"></script>  脚本引入 [间 脚本引入]
+  <script src="" charset="utf-8"></script>  脚本引入 
 富文本编辑 
   PS:又称为WYSIWYG(what you see is what you get,所见即所得)
     由IE引入,虽然没有规范,已经称为了事实标准
@@ -2081,7 +2078,7 @@ e.g.:
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
  (详参 JavaScript高级程序设计 440页)
-Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+」
+Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+」「HTML5」
   PS:画布默认是透明的.
     在css中指定画布宽、高,会导致画布中的所有内容进行相应的缩放.
     <canvas> 标签只有两个属性—— width和height.
@@ -2892,7 +2889,7 @@ File API,文件和二进制数据的操作 「HTML5+」
       video.src = obj_url;
       video.play()
       window.URL.revokeObjectURL(obj_url);  
-跨文档消息传递,cross-document messaging
+跨文档消息传递,cross-document messaging 
   PS:简称为XDM,指在不同域的页面间传递消息,
     XDM机制出现之前,要稳妥的实现这种通信需花很多功夫
   postMessage(str,URL); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.
@@ -2911,7 +2908,7 @@ File API,文件和二进制数据的操作 「HTML5+」
     e.origin
     e.source
  (详参 JavaScript高级程序设计 481页)
-audio/video  [详见 JavaScript高级程序设计 486 页]
+audio/video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
   var audio =document.querySelector('audio'); 获取audio元素对象
   var video =document.querySelector('video'); 获取video元素对象
   方法
@@ -2981,7 +2978,7 @@ audio/video  [详见 JavaScript高级程序设计 486 页]
     playing         当媒介数据正在播放时运行脚本
   Remarks:
     直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
-Web Workers 工作线程
+Web Workers 工作线程 「HTML5」
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.
   通过 window["Worker"] 来查看是否支持Web工作线程.
@@ -3264,7 +3261,7 @@ XML 命名空间
   HTML不支持XML命名空间,但XHTML支持XML命名空间
  (更多详情参见 JavaScript高级程序设计 306页)
  (只有在使用XML和XHTML文档时才有用)
-动态加载脚本和样式
+动态加载脚本和样式 
   动态脚本
     当引入太多的js脚本而降低了整站的性能,所以就出现了动态脚本的概念,
     动态脚本就是在适当的时候加载相应的脚本.
@@ -3272,7 +3269,7 @@ XML 命名空间
     动态加载的外部JavaScript文件能够立即运行
   动态样式
     与动态脚本类似,是指在页面刚加载时不存在的样式,后续添加到页面中的.
-HTML DOM
+HTML DOM 
   使用HTML DOM操作,可查询 HTML DOM手册
   e.g. :
   使用HTML DOM来获取和创建表格
@@ -3298,23 +3295,8 @@ HTML DOM
   tr.insertCell(2).innerHTML ="数据2"
   tr.insertCell(3).innerHTML ="数据3"
   document.body.appendChild(table);
-呈现模式
-  IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
-  IE为document对象添加了一个名为 compatMode 属性,
-  这个属性可以识别浏览器的文档处于什么模式,
-  若是标准模式,CSS1Compat ; 混杂模式,BackCompat.
-  如 当去掉html文档中的声明则进入怪异模式.
-  document.documentMode 返回浏览器渲染当前文档所用的模式 [IE8+] [IE专属]
-    IE8可以以不同的模式渲染一个页面,主要依赖于!DOCTYPE或者当前的某一个HTML元素.
-    如果没有定义!DOCTYPE,IE8以IE5的模式来渲染页面
-    按照下列的值返回：
-    5   ----- in IE5 mode
-    7   ----- in IE7 mode
-    8   ----- in IE8 mode
-    9   ----- in IE9 mode
-  document.compatMode 
 JavaScript&XML (详参 JavaScript高级程序设计 552 页)
-XSS,Cross SiteScript 跨站脚本攻击
+XSS,Cross SiteScript 跨站脚本攻击 
   PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
     理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
   原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
@@ -3341,14 +3323,13 @@ XSS,Cross SiteScript 跨站脚本攻击
       最终存储的会是：
       '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
       在展现时浏览器会对这些字符转换成文本内容显示，而不是一段可执行的代码。
-Web Components 组件化
+Web Components 组件化 
   Custom Elements  自定义HTML元素,包括特定的组成、样式和行为
     支持该标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素,或者扩展现有元素
-    registerElement：
     document.registerElement('x-aoo', {      注册标签
       prototype: Object.create(HTMLElement.prototype, {
-        createdCallback: {      
-          value: function() { ... }         
+        createdCallback: { 
+          value: function() { ... } 
         },
         ...     
       }) })
@@ -3363,25 +3344,18 @@ Web Components 组件化
   HTML Imports
   HTML Templates
   Shadow DOM     隔离组件间代码的冲突和影响
-  
-
-
-
-
-
-
-生命周期和回调：
-  Web Components 标准提供一系列控制自定义元素的方法
-  一个自定义元素会经历以下生命周期：
-    注册前创建
-    注册自定义元素定义
-    在注册后创建元素实例
-    元素**到 document 中
-    元素从 document 中移除
-  回调: 
-    PS:元素的属性变化时
-      在注册新的自定义元素时指定对应的生命周期回调，为自定义元素添加各种自定义的行为
-      生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
+  生命周期和回调：
+    Web Components 标准提供一系列控制自定义元素的方法
+    一个自定义元素会经历以下生命周期：
+      注册前创建
+      注册自定义元素定义
+      在注册后创建元素实例
+      元素**到 document 中
+      元素从 document 中移除
+    ◆回调: 
+      PS:元素的属性变化时
+        在注册新的自定义元素时指定对应的生命周期回调，为自定义元素添加各种自定义的行为
+        生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
     createdCallback(constructor in class)  自定义元素注册后，在实例化之后会调用
       (多用于做元素的初始化：如**子元素，绑定事件等)
     attachedCallback(connectedCallback)    元素**到 document 时触发
@@ -3393,49 +3367,35 @@ Web Components 组件化
       设置属性时，参数列表是：属性名称，null，值，命名空间
       修改属性时，参数列表是：属性名称，旧值，新值，命名空间
       删除属性时，参数列表是：属性名称，旧值，null，命名空间
-    adoptedCallback：使用 document.adoptNode(node) 时触发
-  e.g.: 
-    创建一个自定义的 button-hello 按钮，点击时会 alert('hello world')：
-    document.registerElement('button-hello', {
-      prototype: Object.create(HTMLButtonElement.prototype, {
-        createdCallback: {
-          value: function createdCallback() {
-            this.innerHTML = '<button>hello world</button>'
-            this.addEventListener('click', () => { alert('hello world') })
+    adoptedCallback：              使用 document.adoptNode(node) 时触发
+    e.g.: 
+      创建一个自定义的 button-hello 按钮，点击时会 alert('hello world')：
+      document.registerElement('button-hello', {
+        prototype: Object.create(HTMLButtonElement.prototype, {
+          createdCallback: {
+            value: function createdCallback() {
+              this.innerHTML = '<button>hello world</button>'
+              this.addEventListener('click', () => { alert('hello world') })
+            }
           }
-        }
+        })
       })
+      注：上述代码执行之后才能使用 <button-hello></button-hello>
+  扩展原有元素：
+    Web Components 标准提供了一种扩展现有标签的方式
+    class ButtonHelloElement extends HTMLButtonElement {
+      constructor() {
+        super() ,
+        this.addEventListener('click', () => {
+          alert('hello world') 
+        }) 
+      } 
+    } 
+    customElements.define('button-hello', ButtonHelloElement, {
+      extends: 'button' 
     })
-
-注：上述代码执行之后才能使用 <button-hello></button-hello>
-
-(4)扩展原有元素：
-
-Web Components 标准提供了一种扩展现有标签的方式(Custom Elements 2016.07.21)：
-
-class ButtonHelloElement extends HTMLButtonElement {
-
-    constructor() {         super()    
-
-        this.addEventListener('click', () => { alert('hello world') })     } } customElements.define('button-hello', ButtonHelloElement, { extends: 'button' })
-
-使用 is 属性来声明一个扩展的类型
-
-生命周期和自定义元素标签的保持一致
-
-使用场景：
-
-需要多个标签组合成新的元素时：使用自定义的元素标签
-
-需要在原有的 HTML 标签上进行扩展：使用 is 扩展
-
-在 Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
-
-const hello = document.createElement('button', 'button-hello')
-  
+    使用 is 属性来声明一个扩展的类型
+    Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
+      const hello = document.createElement('button', 'button-hello')
 -------------------------------------------------------------------------待整理
   套接字
-
-
-
-

@@ -396,7 +396,7 @@ window 的六大属性对象
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
       每次修改location的属性(hash除外),页面都会以新URL重新加载,且生成一条历史记录
-    location.href  取/设整个url
+    location.href      取/设整个url
       返回值为当前的位置
       e.g. :
       location.href = 'https://www.baidu.com'; //当前网页跳转到百度

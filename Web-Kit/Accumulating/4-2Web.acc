@@ -1090,6 +1090,8 @@ Sublime text3
       段落文本颜色 .c_tx_p
 短语_符号 
   ◆短语
+  tag       标签
+  attr      属性
   bool      布尔值
   num       数值
   str       字符串

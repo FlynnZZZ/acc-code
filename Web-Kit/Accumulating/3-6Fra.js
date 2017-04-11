@@ -196,34 +196,46 @@
     npm run dev  // 启动Vue,默认执行package.json中script属性的配置
 new Vue(vParamsObj)   创建vueObj,Vue对象
   vParamsObj   用于配置vueObj的参数对象
-    'data'     可选,对象,数据
+    'el'    : selector   指定Vue接管的元素         
+    'data'    : {}       可选,数据
       在vParamsObj中 this 表示的即是'data'对象
-    'methods'  可选,对象,方法
-    'watch'    可选,对象,监听
+    'methods' : {}       可选,方法
+    'watch'   : {}       可选,监听
+    'components' : {}    可选,导入组件
+      e.g.: 'components': {App}    // 加载标签为App的组件
+    ...
 v-xx  Directives指令系统
   PS:用于将vueObj和 HTML DOM 进行关联
     做为HTML标签的属性,可以让 Vue.js 对一个 DOM 元素做各种处理;
     指令带有前缀 v-,以表示它们是 Vue.js 提供的特殊属性;
-  // ▼数据渲染: 其值对应的为 vParamsObj.data 对象中的值
-  v-text 文本,如将<a>做为字符串而非HTML标签
-  v-html HTML文本,会将<a>做为HTML标签而非字符串
-  {{}}  模版字符
-  // ▼显示控制
-  v-if/v-else : v-if用于条件判断,和v-else是一对. 控制显示 
-  v-show      : 作用与v-if类似 
-    不同的是v-show的元素会始终渲染并保持在 DOM 中「使用的是display:none」,
-    且v-show不支持<template>标签
+  ▼数据渲染: 其值对应的为 vParamsObj.data 对象中的值
+    v-text 文本,如将<a>做为字符串而非HTML标签
+    v-html HTML文本,会将<a>做为HTML标签而非字符串
+    {{}}  模版字符
+  ▼显示控制
+    v-if/v-else : v-if用于条件判断,和v-else是一对. 控制显示 
+    v-show      : 作用与v-if类似 
+      不同的是v-show的元素会始终渲染并保持在 DOM 中「使用的是display:none」,
+      且v-show不支持<template>标签
   v-for='val in obj'   渲染循环列表
     其中obj是 vParamsObj.data 中的一属性
     val 为自定义的占位符,obj的一属性,便于后续使用
+  v-on:eventName='foo' 事件处理与绑定 「可使用@进行缩写」
+    foo    为 vParamsObj.methods 中的方法
+    e.g.: v-on:click='foo' 简写为 @click='foo'
+  v-bind:attrName='val'  属性赋值 「可使用冒号:进行简写」
+    val   可为str、obj、arr等
+      当为str时,表示属性attrName的值为str
+      当为arr时,表示该属性的值为该数组中的多个 
+        其中数组中的值和 vParamsObj.data 中的
+      当为obj时,obj中的key为该属性的名称,obj中的val为该属性的值或函数判断
+        <div :class="{aoo : isRed}"> </div>
+        该class的名称为aoo,值为isRed函数的判断
+    e.g.: <img v-bing:src='imgSrc' alt="">
+      简写为 <img :src='imgSrc' alt="">
   v-model : 用于一些表单元素,常见的input,checkbox,radio,select:
-  : 循环渲染
-  v-on : 事件处理与绑定
-    可使用@进行缩写
   v-attr
   v-repeat
-  v-bind
-    简写使用冒号:
   HTML代码
     PS:双大括号会将数据解释为纯文本,而非 HTML 。
       为了输出真正的 HTML,需要使用 v-html 指令：

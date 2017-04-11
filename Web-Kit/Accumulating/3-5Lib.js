@@ -313,8 +313,7 @@ DOM 操作
           e.g.:
             Jelem.css(["color","font-size"]); 
         Jelem.css(attrObj);  设置多个属性
-          e.g.:
-            Jelem.css({"background-color":"red",color:"yellow"});  
+          e.g.:  Jelem.css({"background-color":"red",color:"yellow"});  
         Jelem.css("color",function(index,oldValue){ }); 传入函数
           // 设置返回值(即 return的值)为属性值.
       Jelem.attr();  读写属性值

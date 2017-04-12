@@ -1952,63 +1952,63 @@ Layout   布局
       容器的所有子元素,称为Flex项目(flex item),简称"项目"。
       display:flex; 容器元素独占一行
       display:inline-flex; 容器元素类似于inline-block
-    flex容器 可用属性
-      flex-flow       flex-direction & flex-wrap 简写方式
-      flex-direction  定义横向或纵向排列或排列的样式
-        row             默认值,水平方向,从左向右排列
-        row-reverse     水平方向,从右向左排列
-        column          垂直方向,从上向下排列
-        column-reverse  垂直方向,从下向上排列
-      flex-wrap       定义是否及如何换行
-        nowrap  默认值,不换行
-        wrap    (一行放不下时)换行,后面的项目从下一行开始排列
-        wrap-reverse  (一行放不下时)换行,后面的项目从上一行开始排列(初始行移到下面)
-      justify-content 行内水平/垂直对齐方式 
-        当flex-direction定义为列排列时,表示为垂直方向上的对齐方式
-        flex-start    默认值,左对齐
-        flex-end      右对齐
-        center        居中
-        space-between 两端对齐,项目之间的间隔都相等。
-        space-around  每个项目两侧的间隔相等。
-          即项目之间的间隔比项目与边框的间隔大一倍。
-      align-items     行内竖直方向对齐方式
-        stretch     默认值,如果项目未设置高度或设为auto,将占满整个容器的高度。
-        flex-start  行内的元素上部对齐
-        flex-end    行内的元素底部对齐
-        center      行内的元素中部对齐
-        baseline    后续项目的第一行文字的基线与第一个项目的第一行的文字的基线对齐。
-      align-content   多行在垂直方向对齐方式。
-        如果项目只排一行,该属性不起作用。
-        stretch       默认值,多个行占满父元素的高度.
-        flex-start    多行向上堆积,第一行与父元素的顶部对齐.
-        flex-end      多行向下堆积,最后一行与父元素的底部对齐
-        center        多行向中间堆积,多行处于父元素的中间位置
-        space-between 上下行与父元素的两端对齐,行之间的间隔平均分布。
-        space-around  每行的上下间距都相等。所以,行之间的间隔比行与父元素上下边的间隔大一倍。
-    flex项目 可用属性
-      order 定义项目的排列顺序
-        num  数值越小,排列越靠前,默认为0。
-      flex  flex-grow、flex-shrink和flex-basis的简写 (后两个属性可选)
-        flex:0 1 auto; 默认值
-        有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)
-          建议优先使用这个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值。
-      flex-grow:num    项目宽度 (相对于其他项目进行对比)
-        默认值为0,即如果存在剩余空间,也不放大
-        如果一个项目的 flex-grow  属性为1,其他为默认0,则该项目自动占满剩余的.
-        如果所有项目的 flex-grow 属性都为1,则它们将等分剩余空间,如果有的话
-        如果一个项目的 flex-grow 属性为2,其他项目都为 1,
-          则前者占据的剩余空间将比其他项多一倍。
-      flex-shrink:num   定义了项目的缩小比例,默认为1,即如果空间不足,该项目将缩小。
-        如果所有项目的flex-shrink属性都为1,当空间不足时,都将等比例缩小
-        如果一个项目的flex-shrink属性为0,其他项目都为1,则空间不足时,前者不缩小。
-        负值对该属性无效。
-      flex-basis:length|auto 定义了在分配多余空间之前,项目占据的水平方向的空间。
-        浏览器根据这个属性,计算行内水平方向是否有多余空间.默认值为auto,即项目的本来大小。
-        它可以设为跟width或height属性一样的值(比如350px),则项目将占据固定空间。
-      align-self 允许单个项目与其他项目不一样的对齐方式,可覆盖align-items属性
-         auto | flex-start | flex-end | center | baseline | stretch;
-        默认值为auto,表示继承父元素的align-items属性,如果没有父元素,则等同于stretch。
-        该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
+    ◆flex容器 可用属性
+    flex-flow       flex-direction & flex-wrap 简写方式
+    flex-direction  定义横向或纵向排列或排列的样式
+      row             默认值,水平方向,从左向右排列
+      row-reverse     水平方向,从右向左排列
+      column          垂直方向,从上向下排列
+      column-reverse  垂直方向,从下向上排列
+    flex-wrap       定义是否及如何换行
+      nowrap  默认值,不换行
+      wrap    (一行放不下时)换行,后面的项目从下一行开始排列
+      wrap-reverse  (一行放不下时)换行,后面的项目从上一行开始排列(初始行移到下面)
+    justify-content 行内水平/垂直对齐方式 
+      当flex-direction定义为列排列时,表示为垂直方向上的对齐方式
+      flex-start    默认值,左对齐
+      flex-end      右对齐
+      center        居中
+      space-between 两端对齐,项目之间的间隔都相等。
+      space-around  每个项目两侧的间隔相等。
+        即项目之间的间隔比项目与边框的间隔大一倍。
+    align-items     行内竖直方向对齐方式
+      stretch     默认值,如果项目未设置高度或设为auto,将占满整个容器的高度。
+      flex-start  行内的元素上部对齐
+      flex-end    行内的元素底部对齐
+      center      行内的元素中部对齐
+      baseline    后续项目的第一行文字的基线与第一个项目的第一行的文字的基线对齐。
+    align-content   多行在垂直方向对齐方式。
+      如果项目只排一行,该属性不起作用。
+      stretch       默认值,多个行占满父元素的高度.
+      flex-start    多行向上堆积,第一行与父元素的顶部对齐.
+      flex-end      多行向下堆积,最后一行与父元素的底部对齐
+      center        多行向中间堆积,多行处于父元素的中间位置
+      space-between 上下行与父元素的两端对齐,行之间的间隔平均分布。
+      space-around  每行的上下间距都相等。所以,行之间的间隔比行与父元素上下边的间隔大一倍。
+    ◆flex项目 可用属性
+    order 定义项目的排列顺序
+      num  数值越小,排列越靠前,默认为0。
+    flex  flex-grow、flex-shrink和flex-basis的简写 (后两个属性可选)
+      flex:0 1 auto; 默认值
+      有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)
+        建议优先使用这个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值。
+    flex-grow:num    项目宽度 (相对于其他项目进行对比)
+      默认值为0,即如果存在剩余空间,也不放大
+      如果一个项目的 flex-grow  属性为1,其他为默认0,则该项目自动占满剩余的.
+      如果所有项目的 flex-grow 属性都为1,则它们将等分剩余空间,如果有的话
+      如果一个项目的 flex-grow 属性为2,其他项目都为 1,
+        则前者占据的剩余空间将比其他项多一倍。
+    flex-shrink:num   定义了项目的缩小比例,默认为1,即如果空间不足,该项目将缩小。
+      如果所有项目的flex-shrink属性都为1,当空间不足时,都将等比例缩小
+      如果一个项目的flex-shrink属性为0,其他项目都为1,则空间不足时,前者不缩小。
+      负值对该属性无效。
+    flex-basis:length|auto 定义了在分配多余空间之前,项目占据的水平方向的空间。
+      浏览器根据这个属性,计算行内水平方向是否有多余空间.默认值为auto,即项目的本来大小。
+      它可以设为跟width或height属性一样的值(比如350px),则项目将占据固定空间。
+    align-self 允许单个项目与其他项目不一样的对齐方式,可覆盖align-items属性
+       auto | flex-start | flex-end | center | baseline | stretch;
+      默认值为auto,表示继承父元素的align-items属性,如果没有父元素,则等同于stretch。
+      该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
   column 多栏布局 「CSS3新增」 
     column-count  显示栏目数
       number 元素内容将被划分的列数

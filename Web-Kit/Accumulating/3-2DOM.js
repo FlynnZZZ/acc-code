@@ -2751,14 +2751,6 @@ File API,文件和二进制数据的操作 「HTML5+」
     fil.size;  文件的字节大小
     fil.lastModified      文件的上次修改时间,格式为时间戳。
     fil.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-    e.g.: 
-      <input type="file" id="myFile" />
-      var myFile = document.getElementById('myFile');
-      myFile.onchange = function(event) {
-        var selectedFile = event.target.files[0];
-        var reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
-      }
     e.g.: 采用拖放方式,也可以得到FileList对象。
       var dropZone = document.getElementById('drop_zone');
       dropZone.addEventListener('drop', handleFileSelect, false);
@@ -2774,17 +2766,17 @@ File API,文件和二进制数据的操作 「HTML5+」
     var fr =new FileReader(); 创建fr对象
     fr.result;  文件的URI数据,其他操作的结果都存放在该属性中
       当是图片数据时,可作为图片的src
-    fr.readAsText(Blob|File,encoding)  以纯文本的形式读取文件
+    fr.readAsText(Blob|File,encoding)  返回纯文本的形式
       返回文本字符串,并保存在result属性中 [?]
       encoding   前一个参数的编码方法,可选 默认情况下,文本编码格式是’UTF-8’,
         可以通过可选的格式参数,指定其他编码格式的文本。
       该方法是异步方法,一般监听onload件,用来确定文件是否加载结束,
       方法是判断FileReader实例的result属性是否有值。
-    fr.readAsDataURL(Blob|File);  得到一个基于Base64编码的data-uri对象     
+    fr.readAsDataURL(Blob|File);       得到一个基于Base64编码的data-uri对象     
       返回一个data URL,它的作用基本上是将文件数据进行Base64编码。
       可以将返回值设为图像的src属性。
       读取文件以数据URI的形式保存在result属性中 
-    fr.readAsBinaryString(Blob|File) 得到二进制字符串
+    fr.readAsBinaryString(Blob|File)   得到二进制字符串
       该字符串每个字节包含一个0到255之间的整数。
       可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容。
       与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器。     
@@ -2793,7 +2785,7 @@ File API,文件和二进制数据的操作 「HTML5+」
         var rawData = reader.result;
       }
       reader.readAsBinaryString(file);
-    fr.readAsArrayBuffer(Blob|File)  得到一个ArrayBuffer对象
+    fr.readAsArrayBuffer(Blob|File)    得到一个ArrayBuffer对象
       返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
       在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
       var reader = new FileReader();
@@ -2812,6 +2804,7 @@ File API,文件和二进制数据的操作 「HTML5+」
       var reader = new FileReader();
       reader.onload = function(e) {
         document.createElement('img').src = e.target.result;
+        // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
       };
       reader.readAsDataURL(f);
     progress  进度事件,每过50ms左右,就会触发一次
@@ -3399,3 +3392,21 @@ Web Components 组件化
       const hello = document.createElement('button', 'button-hello')
 -------------------------------------------------------------------------待整理
   套接字
+  
+  <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>
+  <input type="text" name="" value="" id="test1">
+  <input type="text" name="" value="" id="test2">
+  // 准备在ios上测试
+  $.subscribe('evtname',function(ev){
+     $('#test2').focus();
+  });
+  $('#test1').on('input',function(){
+    $.publish('evtname');
+  });
+  // 或者
+  setTimeout(function(){
+    $('#test1').focus();
+  },10000);
+
+
+

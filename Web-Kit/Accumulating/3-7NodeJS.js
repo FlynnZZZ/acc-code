@@ -1442,7 +1442,7 @@ npm,node package manager node包管理器
       安装完后最好查看其版本号cnpm -v或关闭命令提示符重新打开，安装完直接使用有可能会出现错误；
       cnpm跟npm用法完全一致，只是在执行命令时将npm改为cnpm（以下操作将以cnpm代替npm）。
     安装,命令提示符执行 
-      npm install cnpm -g --registry=https://registry.npm.taobao.org 
+      npm install -g cnpm --registry=https://registry.npm.taobao.org
   已安装
     npm install lodash   [在命令操作符中执行]
     npm install express -g    # 全局安装

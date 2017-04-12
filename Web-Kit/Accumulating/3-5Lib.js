@@ -376,7 +376,7 @@ DOM 操作
       ◆尺寸位置信息
       Jelem.position()  定位(非static)元素的定位尺寸信息(top和left) [只读?]
         PS:只对可见元素有效
-      Jelem.offset()    读写元素相对可视区左上角的top和left
+      Jelem.offset()    可读写,元素相对可视区左上角的top和left
         PS:此方法只对可见元素有效
         RetValue:包含top和left属性的一个对象
         e.g.:
@@ -529,7 +529,7 @@ DOM 操作
       })
 Event 事件 
   PS:Jelem绑定事件,则为列表中的每个对象进行了绑定
-  事件绑定与取消
+  ◆事件绑定与取消
     PS:bind,live,delegate,on
       其中 elem.eventName 为bind的简写.
       对应解除为 unbind、die、undelegate、off
@@ -538,79 +538,79 @@ Event 事件
       bind 在 1.7 版本前比较受推崇之后已不推荐
       on 是 1.7 版本新添加的,也推荐使用，
       live 在 1.9 版本已经删除
-    Jelem.on()      绑定事件 
-      一般事件绑定
-        Jelem.on("事件名",function(e){}) 
-          jq对象为多个元素的数组时,此操作则给每个元素都绑定了事件
-      同时绑定多事件
-        Jelem.on("mouseover mouseout",foo)  
-      绑定多组事件
-        Jelem.on({ mouseover：foo1， mouseout：foo2， click：foo3, })
-      绑定自定义事件
-        Jelem.on("myOwnEvent",function(event,showName){  
-          $(this).text(showName + "! What a beautiful name!").show()；
-        })；
-        $("button").click(function(){
-          $("p").trigger("myOwnEvent"，["Anja"])；
-        })；
-      事件传递信息
-        Jelem.on("click",{msg:"You just clicked me!"},foo);
-        function foo (event){ alert(event.data.msg); }
-      事件代理 [可对未来元素进行绑定]
-        Jelem.on('事件a',"selector",function(){
-          // 其中 this 表示的为 selector表示的DOM元素
-        }) 
-          对selector对应的元素上执行事件,才会执行响应函数(相当于将函数中的判断外置了)
-          PS-Self: 仍需符合冒泡原理,响应元素需为绑定元素的子元素?
-    Jelem.off()     取消绑定 
-      PS:
-        移除元素上绑定的一个或多个事件的事件处理函数
-        off()函数主要用于解除由on()函数绑定的事件处理函数 
-      Jelem.off(events,selector,handler)
-        events   可选,String类型,一个或多个用空格分隔的事件或可选的命名空间
-          例如"click"、"focus click"、"keydown.myPlugin" 
-        selector 可选,String类型,jQuery选择器,用于Jelem 
-          如果该参数为null或被省略,则表示当前元素自身绑定事件
-          (实际触发者也可能是后代元素,只要事件流能到达当前元素即可) 
-        handler  可选,Function类型,指定的事件处理函数 
-      Jelem.off(eventsMap,selector)
-        Arguments:
-          eventsMap  Object类型,event:handler 对象
-            如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
-          selector 指定的对象(属于Jelem的后代元素)
-            如果省略参数selector,则移除Jelem及后代的所用响应函数
-            selector 必须与通过on()函数添加绑定时传入的选择器一致 
-          如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
-          实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
-          参数越多,限定条件就越多,被移除的范围就越小
-        RetValue:
-          返回值为jQuery类型,返回当前jQuery对象本身 
-    Jelem.unbind()  取消绑定
-      规定从指定元素上删除的一个或多个事件处理程序 
-      如果没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
+  Jelem.on()      绑定事件 
+    一般事件绑定
+      Jelem.on("事件名",function(e){}) 
+        jq对象为多个元素的数组时,此操作则给每个元素都绑定了事件
+    同时绑定多事件
+      Jelem.on("mouseover mouseout",foo)  
+    绑定多组事件
+      Jelem.on({ mouseover：foo1， mouseout：foo2， click：foo3, })
+    绑定自定义事件
+      Jelem.on("myOwnEvent",function(event,showName){  
+        $(this).text(showName + "! What a beautiful name!").show()；
+      })；
+      $("button").click(function(){
+        $("p").trigger("myOwnEvent"，["Anja"])；
+      })；
+    事件传递信息
+      Jelem.on("click",{msg:"You just clicked me!"},foo);
+      function foo (event){ alert(event.data.msg); }
+    事件代理 [可对未来元素进行绑定]
+      Jelem.on('事件a',"selector",function(){
+        // 其中 this 表示的为 selector表示的DOM元素
+      }) 
+        对selector对应的元素上执行事件,才会执行响应函数(相当于将函数中的判断外置了)
+        PS-Self: 仍需符合冒泡原理,响应元素需为绑定元素的子元素?
+  Jelem.off()     取消绑定 
+    PS:
+      移除元素上绑定的一个或多个事件的事件处理函数
+      off()函数主要用于解除由on()函数绑定的事件处理函数 
+    Jelem.off(events,selector,handler)
+      events   可选,String类型,一个或多个用空格分隔的事件或可选的命名空间
+        例如"click"、"focus click"、"keydown.myPlugin" 
+      selector 可选,String类型,jQuery选择器,用于Jelem 
+        如果该参数为null或被省略,则表示当前元素自身绑定事件
+        (实际触发者也可能是后代元素,只要事件流能到达当前元素即可) 
+      handler  可选,Function类型,指定的事件处理函数 
+    Jelem.off(eventsMap,selector)
+      Arguments:
+        eventsMap  Object类型,event:handler 对象
+          如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
+        selector 指定的对象(属于Jelem的后代元素)
+          如果省略参数selector,则移除Jelem及后代的所用响应函数
+          selector 必须与通过on()函数添加绑定时传入的选择器一致 
+        如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
+        实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
+        参数越多,限定条件就越多,被移除的范围就越小
+      RetValue:
+        返回值为jQuery类型,返回当前jQuery对象本身 
+  Jelem.unbind()  取消绑定
+    规定从指定元素上删除的一个或多个事件处理程序 
+    如果没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
+    语法
+      $(selector).unbind(event,function)
+      event    可选,规定删除元素的一个或多个事件 由空格分隔多个事件值.
+      function 可选,规定从元素的指定事件取消绑定的函数名.若未设置该参数,则会删除绑定到指定事件的所有函数 
+    使用 Event 对象来取消绑定事件处理程序 unbind
+      规定要删除的事件对象 
+      用于对自身内部的事件取消绑定(比如当事件已被触发一定次数之后,删除事件处理程序) 
+      如果未规定参数,则 unbind() 方法会删除指定元素的所有事件处理程序 
       语法
-        $(selector).unbind(event,function)
-        event    可选,规定删除元素的一个或多个事件 由空格分隔多个事件值.
-        function 可选,规定从元素的指定事件取消绑定的函数名.若未设置该参数,则会删除绑定到指定事件的所有函数 
-      使用 Event 对象来取消绑定事件处理程序 unbind
-        规定要删除的事件对象 
-        用于对自身内部的事件取消绑定(比如当事件已被触发一定次数之后,删除事件处理程序) 
-        如果未规定参数,则 unbind() 方法会删除指定元素的所有事件处理程序 
-        语法
-          $(selector).unbind(eventObj)
-          eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
-    Jelem.eventName(foo) 快捷绑定
-      Jelem.click(foo)    点击事件绑定
-      $(document).ready(foo)  DOM结构加载完后执行
-        简写方式: $(function(){/*jQuery代码*/})
-      Jelem.change(foo)      元素的值或内容发生变化时响应
-      Jelem.hover()  「JS 中无hover事件,所以其他绑定方法无法绑定 ?」 
-        可以有退出状态时的回调函数
-          Jelem.hover(foo1,foo2)
-          如click事件则无 
-            Jelem.click(foo1,foo2)
-            始终不会执行foo1,代替的是执行foo2
-      Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
+        $(selector).unbind(eventObj)
+        eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
+  Jelem.eventName(foo)   快捷绑定
+    Jelem.click(foo)    点击事件绑定
+    $(document).ready(foo)  DOM结构加载完后执行
+      简写方式: $(function(){/*jQuery代码*/})
+    Jelem.change(foo)      元素的值或内容发生变化时响应
+    Jelem.hover()  「JS 中无hover事件,所以无法使用on方法来绑定 ?」 
+      可以有退出状态时的回调函数
+        Jelem.hover(foo1,foo2)
+        如click事件则无 
+          Jelem.click(foo1,foo2)
+          始终不会执行foo1,代替的是执行foo2
+    Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
   触发事件 
     Jelem.trigger("event",[param1,param2,...]); 
       event	 必需,规定指定元素要触发的事件

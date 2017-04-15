@@ -434,6 +434,7 @@ ECMAScript JS核心 语法部分
       ◆字符串修改
       str1.replace(regexp/str2,replacement)  字符替换
         返回值为 使用replacement替换str1中第一个str2后的 结果字符串
+        e.g.: 'abcde'.replace('ab','11'); // "11cde"
       str1.split(str2)    通过字符分割成数组
         与 join 或互为反操作
         str.split("字符x") 将str字符串通过其中的字符x作为分割,返回字符串数组
@@ -1864,9 +1865,9 @@ ECMAScript JS核心 语法部分
           [1, 2, 3].includes(4);     // false
           [1, 2, 3].includes(3, 3);  // false
       arr.indexOf(elem[,begin]);   查找数组中元素对应的下标 [ES5+]
-        Arguments:begin表示开始的下标位置,默认为0,
+        begin表示开始的下标位置,默认为0,
           若为负,则-1 表示最后一个元素,依次类推.
-        RetValue:返回值为下标值,若找不到则返回-1
+        返回值为下标值,若找不到则返回-1
       arr.lastIndexOf(elem); 从右到左查找 [ES5+]
       Array.isArray(arr) 表示是否为数组的布尔值 [ES5+]
     ◆以元素为单位操作

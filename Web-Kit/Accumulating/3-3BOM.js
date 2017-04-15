@@ -389,13 +389,13 @@ window 的六大属性对象
       为字符串时,跳转到历史记录中包含该字符串的第一个位置
         可能前进也可能后退,决定于那个位置最近
         若历史记录中不包含该字符串则什么也不做
-    popstate事件 改变url时触发
+    popstate 事件 改变url时触发
       event.state 为pushState的第一个参数
   window.location  管理URL
     PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
-      每次修改location的属性(hash除外),页面都会以新URL重新加载,且生成一条历史记录
+      每次修改location的属性「hash除外」,页面都会以新URL重新加载,且生成一条历史记录
     location.href      取/设整个url
       返回值为当前的位置
       e.g. :

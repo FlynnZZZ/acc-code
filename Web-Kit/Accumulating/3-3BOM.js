@@ -389,11 +389,7 @@ window 的六大属性对象
       为字符串时,跳转到历史记录中包含该字符串的第一个位置
         可能前进也可能后退,决定于那个位置最近
         若历史记录中不包含该字符串则什么也不做
-<<<<<<< HEAD
-    popstate 事件 改变url时触发
-=======
     popstate 事件 改变url时在window上触发
->>>>>>> origin/master
       event.state 为pushState的第一个参数
   window.location  管理URL
     PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能

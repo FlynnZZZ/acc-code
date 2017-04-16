@@ -1045,6 +1045,11 @@ ueditor 百度编辑器
       changeFont();
       window.addEventListener('resize', changeFont, false); //注册 resize事件
     </script>
+  spa 页面通信及状态维持
+    不同页面间通过 sessionStorage 或 localStorage 实现消息传递
+    同一页面内 刷新保持状态 分享链接可获取状态
+      如上 情景 前提都是URL未变化同样要保持当前状态,故通过添加自定义的hash决解,
+      通过hash来添加、解析状态,从而到达要求的效果
 Question & Idea
 ----------------------------------------------------------------------以下待整理
   Web Server

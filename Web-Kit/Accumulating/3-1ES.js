@@ -3457,7 +3457,13 @@ ECMAScript JS核心 语法部分
       e.g.:
         JSON.stringify("aoo"); // ""aoo""
         JSON.stringify("aoo") === "\"aoo\"";  // true
+        JSON.stringify("aoo") === ""aoo"";    // 报错
         引号使用\转义, 将来还原时,双引号让JS引擎知道aoo为字符串而非变量名
+        
+        { "aoo" : "style="color:red;"" }
+        格式错误,可改为
+        { "aoo" : "style=\"color:red;\"" }
+        或 { "aoo" : "style='color:red;'" }
     ◆JSON对象 的两个方法
       PS:ECMAScript5 对解析 JSON 的行为进行了规范,定义了全局对象 JSON对象
       e.g.

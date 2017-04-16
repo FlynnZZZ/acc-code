@@ -388,7 +388,7 @@ Atom
       symbols-view          查看变量
         变量、函数 查找快捷键 ctrl-r
       tabs                  标签栏
-        勾选 add new tabs at end  始终在最后打开文件
+        add new tabs at end  始终在最后打开文件
       timecop               统计加载时间
       tree-view             文件目录
         设置

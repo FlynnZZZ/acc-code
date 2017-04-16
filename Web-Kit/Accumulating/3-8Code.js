@@ -458,7 +458,7 @@ PC端
       
     })
 自我实现
-  滚动条滑动到底端的判断
+  滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>
     function isScrollBottom(wrap,content,callback,arg1){
       var elem = $(wrap);
@@ -477,7 +477,7 @@ PC端
       scrollTop    滚动条的滑动距离
       clientHeight 可视的高度
       scrollHeight  总高度,即可视高度和隐藏高度的和.
-  多行文本省略显示
+  多行文本省略显示 
     <div class="wrap"> 文字 </div>
     // 文字容器必须为非static定位元素
     function linesEndOmit(elem,linesNum){
@@ -896,6 +896,15 @@ PC端
       })
     }
     slider();
+--------------------------------------------------------------------------------
+◆功能逻辑
+  一container中多个宽度相等item,多个item的总高度大于container的,
+    当在item中滑动时, 判断那个item在container的可视范围中,显示的面积最大?
+    注:可获取的到的参数有container的高度H,item的高度h,
+    item顶部到container的顶部的距离top,item之间的间距m
+    self: 判断显示面积最大,则判断item的中线和container中线的偏差值x,
+      若多个偏差值相同,则取第一个.
+      则 |x| = |(H-h)/2 - t|    「绝对值」
 --------------------------------------------------------------------------------
 Question & Idea
   整理文档的代码,将HTML中的内联样式分离出来转换为内联样式

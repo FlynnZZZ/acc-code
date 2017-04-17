@@ -2749,6 +2749,27 @@ Collection
       bottom: -1ex;
     }
     
+  .pay{
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    .title{
+      height: 50*@wu;
+      line-height: 50*@wu;
+      color: #999;
+      background-color: #F4F4F4;
+      .cancel-btn{
+        float:left;
+        margin-left: 10vw;
+        /**此处导致title-txt 不能居中/
+      }
+      .title-txt{
+        font-size: 18*@wu;
+        text-align: center;
+        width: 100%;
+      }
+    }
+  }
 
 
 

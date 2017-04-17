@@ -1939,6 +1939,50 @@ vue-resource : 作为vue插件的形式存在
   create-react-ap helloworld「项目名称」  创建React项目并初始化\
   cd helloworld
   npm start   「npm run start的缩写」
+--------------------------------------------------------------------------------
+★orage  「self」
+  功能: 轻量、简洁、功能--多模块化自由组合、待续...
+  简写符号:
+    pa   parents
+    pu   public
+    el   elements
+    me   method
+    da   data
+    op   operation
+    ms   message
+  思想
+    通过JS管控HTML元素
+    var o1 = new Org( {
+      el : '#app',
+      da : {
+        
+      },
+      me : {
+        
+      },
+      ms : {
+        o2 : {data:value},
+      },
+      op   : {
+        '#app-btn1' : me.foo1,
+        '#app-btn1' : {
+          'click' : me.foo1
+        },
+        '#app-btn1' : [
+          { 'click' : me.foo1 },
+          { 'hover,mouseout' : me.foo2 },
+          { 'hover' : {  
+            is  : me.foo2 ,
+            aoo : foo 
+          }  
+          },
+        ],
+        '#app-btn2' : function(data){
+          console.log(data);
+          me.foo2(data)
+        },
+      }
+    } )
 ---------------------------------------------------------------------以下待整理
 
 

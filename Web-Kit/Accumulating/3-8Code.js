@@ -896,6 +896,72 @@ PC端
       })
     }
     slider();
+  水平方向滑动
+    .wrapper{
+      overflow: hidden;
+      position: relative;
+      height: 270*@wu;
+      .content{
+        position: absolute;
+        top: 0;left: 0;
+        white-space: nowrap;
+        font-size: 0;
+        .item2{
+          width: 250*@wu;
+          height: 270*@wu;
+          background-color: #fff;
+          display: inline-flex;
+          flex-direction: column;
+          margin-right: 10*@wu;
+          .top{
+            height: 165*@wu;
+            overflow: hidden;
+            position: relative;
+          }
+          .btm{
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding-left: 15*@wu;
+            color: #999;
+          }
+        }
+      }
+    }
+    function slider(){
+      var clickLocation = 0;
+      var len = 0;
+      var originLocation = 0;
+      var margin = $('.content>.item2').css('margin-right').slice(0,-2)*1 ;
+      var selfWid = $('.content>.item2').width()*1;
+      var width = selfWid + margin ; // 条目高度
+      var totlWid = $('.wrapper').width()*1; 
+      // 页面高度,用于确定到底部的位置,因为没有offset.bottom
+      var num = $('.content>.item2').length; // 条目的总个数
+      var orginLeft = $('.wrapper>.content').css('left').slice(0,-2)*1;
+      $('.wrapper>.content').on('touchstart',function(e){
+        clickLocation = e.originalEvent.changedTouches[0].pageX;
+        $(this).stop(true,true);  // 高频滑动时取消动画
+      })
+      $('.wrapper>.content').on('touchmove',function(e){
+        len = e.originalEvent.changedTouches[0].pageX - clickLocation;
+        $(this).css('left',originLocation + len);
+      })
+      $('.wrapper>.content').on('touchend',function(e){
+        var topVal = $(this).css('left').slice(0,-2)*1;
+        if (topVal > orginLeft) { 
+          topVal = orginLeft;
+         }
+        if (topVal < -(num-1)*width + margin ) { 
+          topVal = -(num-1)*width + margin; 
+        }
+        originLocation = parseInt(topVal);
+        $(this).animate({left : originLocation },200);
+        
+      })
+    }
+    slider();
 --------------------------------------------------------------------------------
 ◆功能逻辑
   一container中多个宽度相等item,多个item的总高度大于container的,

@@ -1963,7 +1963,7 @@ Layout   布局
       nowrap  默认值,不换行
       wrap    (一行放不下时)换行,后面的项目从下一行开始排列
       wrap-reverse  (一行放不下时)换行,后面的项目从上一行开始排列(初始行移到下面)
-    justify-content 行内水平/垂直对齐方式 
+    justify-content 行内水平/垂直对齐方式 「和flex-direction定义有关」 
       当flex-direction定义为列排列时,表示为垂直方向上的对齐方式
       flex-start    默认值,左对齐
       flex-end      右对齐
@@ -1988,7 +1988,7 @@ Layout   布局
     ◆flex项目 可用属性
     order 定义项目的排列顺序
       num  数值越小,排列越靠前,默认为0。
-    flex  flex-grow、flex-shrink和flex-basis的简写 (后两个属性可选)
+    flex:  flex-grow、flex-shrink和flex-basis的简写 (后两个属性可选)
       flex:0 1 auto; 默认值
       有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)
         建议优先使用这个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值。
@@ -2770,6 +2770,8 @@ Collection
       }
     }
   }
+  
+  flex 布局如何指定单一一元素在水平方向上的对齐方式
 
 
 

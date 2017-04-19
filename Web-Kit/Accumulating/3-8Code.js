@@ -899,56 +899,67 @@ PC端
   水平方向滑动
     .wrapper{
       overflow: hidden;
+      height: 80*@wu;
       position: relative;
-      height: 270*@wu;
+      color: #fff;
       .content{
         position: absolute;
         top: 0;left: 0;
         white-space: nowrap;
         font-size: 0;
-        .item2{
-          width: 250*@wu;
-          height: 270*@wu;
-          background-color: #fff;
+        .item{
+          width: 160*@wu;
+          height: 80*@wu;
           display: inline-flex;
           flex-direction: column;
+          align-items: center;
           margin-right: 10*@wu;
+          background-color: #b89981;
+          padding: 3.8*@wu;
+          box-sizing: border-box;
+          outline: solid 0.5px #bbb;
+          outline-offset: -4*@wu;
+          &:last-child{
+            margin-right: 100vw;
+          }
           .top{
-            height: 165*@wu;
-            overflow: hidden;
-            position: relative;
+            height: 50*@wu;
+            line-height: 50*@wu;
+            border-bottom: 0.1px dashed #bbb;
+            font-size: 17*@wu;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
           }
           .btm{
-            flex-grow: 1;
+            height: 100%;
+            font-size: 12*@wu;
             display: flex;
-            justify-content: center;
-            flex-direction: column;
-            padding-left: 15*@wu;
-            color: #999;
+            align-items: center;
           }
         }
       }
     }
-    function slider(){
+    function slider(wrapper,content,item){
       var clickLocation = 0;
       var len = 0;
       var originLocation = 0;
-      var margin = $('.content>.item2').css('margin-right').slice(0,-2)*1 ;
-      var selfWid = $('.content>.item2').width()*1;
+      var margin = item.css('margin-right').slice(0,-2)*1 ;
+      var selfWid = item.width()*1;
       var width = selfWid + margin ; // 条目高度
-      var totlWid = $('.wrapper').width()*1; 
+      var totlWid = wrapper.width()*1; 
       // 页面高度,用于确定到底部的位置,因为没有offset.bottom
-      var num = $('.content>.item2').length; // 条目的总个数
-      var orginLeft = $('.wrapper>.content').css('left').slice(0,-2)*1;
-      $('.wrapper>.content').on('touchstart',function(e){
+      var num = item.length; // 条目的总个数
+      var orginLeft = content.css('left').slice(0,-2)*1;
+      content.on('touchstart',function(e){
         clickLocation = e.originalEvent.changedTouches[0].pageX;
         $(this).stop(true,true);  // 高频滑动时取消动画
       })
-      $('.wrapper>.content').on('touchmove',function(e){
+      content.on('touchmove',function(e){
         len = e.originalEvent.changedTouches[0].pageX - clickLocation;
         $(this).css('left',originLocation + len);
       })
-      $('.wrapper>.content').on('touchend',function(e){
+      content.on('touchend',function(e){
         var topVal = $(this).css('left').slice(0,-2)*1;
         if (topVal > orginLeft) { 
           topVal = orginLeft;
@@ -961,7 +972,10 @@ PC端
         
       })
     }
-    slider();
+    var wrapper1 = $('.member .wrapper');
+    var content1 = $('.member .wrapper>.content');
+    var item1 = $('.member .content>.item');
+    slider(wrapper1,content1,item1);
 --------------------------------------------------------------------------------
 ◆功能逻辑
   一container中多个宽度相等item,多个item的总高度大于container的,

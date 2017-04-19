@@ -24,59 +24,62 @@
         可以传播事件,类似DOM事件,可以向上也可以向下.
         不仅是MVC的基础,也是实现双向数据绑定的基础.
         可以使用angular.element($0).scope()进行调试.
-模块化 
-  PS:一切由模块开始
-  路由
-    使用ngRoute进行视图之间的路由
-    e.g. :
-    $routeProvider.when('/hello',{
-      templateUrl:'tpls/hello.html',
-      controller:'HelloCtrl'
-    }).when("/list",{
-      templateUrl:"tpls/bookList.html",
-      controller:"BookListCtrl"
-    }).otherwise({
-      redirectTo:'/hello'
-    })
-  模块
-    定义模块 
-      var mod =angular.module("modName",[]); // 创建模块
-      // 创建控制器
-      mod.controller("contrName",["$scope",function($scope){
-      };])
-  依赖注入
-    模块之间有依赖,使用依赖注入来决解
-    e.g. :
-    var bookStoreApp =angular.module("bookStoreApp",[
-      'ngRoute',"ngAnimate","bookStoreCtrls","bookStoreFilters"
-    ])
-指令系统 
-  AngularJS内置指令 共63个
-    ng-app
-    
-    ng-controller
-    
-    ng-class
-    ng-show
-    ng-hide
-    
-    ng-click
-    
-    ng-view
-双向数据绑定 
-  数据模型到视图,视图到数据模型.
-  取值表达式 {{}}
-components 组件
+主要概念
+◆components 组件 
   全生命周期支持
-metadata 元数据
-templates 模板
-data binding 数据绑定
-services 服务
-directives 指令
+◆directives 指令
+  PS:指令可以自定义
   属性指令: 改变组件模板的外观或行为,如样式等
   结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
-dependency injection 依赖注入
-modules 模块
+◆services 服务 : 实现专一目的的逻辑单元,如日志服务
+◆dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
+◆metadata 元数据
+◆templates 模板
+◆data binding 数据绑定
+◆modules 模块
+todo
+  模块化 
+    PS:一切由模块开始
+    路由
+      使用ngRoute进行视图之间的路由
+      e.g. :
+      $routeProvider.when('/hello',{
+        templateUrl:'tpls/hello.html',
+        controller:'HelloCtrl'
+      }).when("/list",{
+        templateUrl:"tpls/bookList.html",
+        controller:"BookListCtrl"
+      }).otherwise({
+        redirectTo:'/hello'
+      })
+    模块
+      定义模块 
+        var mod =angular.module("modName",[]); // 创建模块
+        // 创建控制器
+        mod.controller("contrName",["$scope",function($scope){
+        };])
+    依赖注入
+      模块之间有依赖,使用依赖注入来决解
+      e.g. :
+      var bookStoreApp =angular.module("bookStoreApp",[
+        'ngRoute',"ngAnimate","bookStoreCtrls","bookStoreFilters"
+      ])
+  指令系统 
+    AngularJS内置指令 共63个
+      ng-app
+      
+      ng-controller
+      
+      ng-class
+      ng-show
+      ng-hide
+      
+      ng-click
+      
+      ng-view
+  双向数据绑定 
+    数据模型到视图,视图到数据模型.
+    取值表达式 {{}}
 --------------------------------------------------------------------------------
 ★VueJS :轻巧、高性能、可组件化的MVVM库 
 介绍_概念_说明_定义

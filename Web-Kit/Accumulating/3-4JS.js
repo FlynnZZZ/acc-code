@@ -766,14 +766,14 @@ Hybrid App 混合开发
   这样的效果就是原生代码(相对于 js 而言的
   官方开发语言)实现功能并且提供 js 函数
   js 代码用别人提供的功能写逻辑
-shim 和 polyfill
+shim 和 polyfill 
   shim 是将不同 api 封装成一种,
     比如 jQuery 的 $.ajax 封装了 XMLHttpRequest,
     IE 用 ActiveXObject 方式创建 xhr 对象.
   polyfill 是 shim 的一种.
     polyfill 特指 shim 成的 api 是遵循标准的,
     其典型做法是在IE浏览器中增加 window.XMLHttpRequest ,内部实现使用 ActiveXObject.
-数据结构
+数据结构 
   数据结构就是存储数据的方式
   队列
   栈
@@ -804,7 +804,7 @@ shim 和 polyfill
   集合
   图
     如 点 线 互联 求路线
-算法
+算法 
   复杂度 :对一个操作复杂程度的大致估计
     五种常见时间复杂度 : 消耗的时间
     O(1)     常数复杂度,比如读取数组中的某一个元素
@@ -817,7 +817,7 @@ shim 和 polyfill
     O(N)     复制一个数组并返回
 --------------------------------------------------------------------------------
 浏览器差异
-back-forward cache简称bfcache,往返缓存
+back-forward cache简称bfcache,往返缓存 
   Firefox和Opera独有特性,可在用户使用浏览器的“后退”和“前进”按钮时加快页面的转换速度。
   该缓存中不仅保存着页面数据,还保存了DOM和JavaScript的状态；
   实际上是将整个页面都保存在了内存里。

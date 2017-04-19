@@ -31,10 +31,22 @@
   PS:指令可以自定义
   属性指令: 改变组件模板的外观或行为,如样式等
   结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
-◆services 服务 : 实现专一目的的逻辑单元,如日志服务
+◆services   服务 : 实现专一目的的逻辑单元,如日志服务
 ◆dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
 ◆metadata 元数据
 ◆templates 模板
+  框架代码以模块形式组织 「文件模块」
+    core    核心模块
+    common  通用模块
+    forms   表单模块
+    http    网络模块
+    ... 
+    模块的引入
+      e.g.: 
+        import {Http} from "@angular/http"
+        import {Component} from "@angular/core" // @Component 装饰器
+        import {Directive} from "@angular/core" // @Directive 装饰器
+  功能单元以模块形式组织 「应用模块」
 ◆data binding 数据绑定
 ◆modules 模块
 todo
@@ -1913,14 +1925,14 @@ component 组件系统
   组件形式
     使用一个 .vue 格式文件将 HTML+CSS+JS 装起来,
     <template>HTML代码<template/>,<style>CSS代码<style/>,<script>JS代码<script/>
-视图 (View) 被 Vue 实例管理的 DOM 节点 
+View,视图  被 Vue 实例管理的 DOM 节点 
   当一个 Vue 实例被创建时,它会递归遍历根元素的所有子结点,同时完成必要的数据绑定。
   当这个视图被编译之后,它就会自动响应数据的变化。
   在使用 Vue.js 时,除了自定义指令 (稍后会有解释),几乎不必直接接触 DOM。
   当数据发生变化时,视图将会自动触发更新。
   这些更新的粒度精确到一个文字节点。
   同时为了更好的性能,这些更新是批量异步执行的。
-模型 (Model) 一个轻微改动过的原生 JavaScript 对象 
+Model,模型 一个轻微改动过的原生 JavaScript 对象 
   Vue.js 中的模型就是普通的 JavaScript 对象——也可以称为数据对象。
   一旦某对象被作为 Vue 实例中的数据,它就成为一个 “反应式” 的对象了。
   你可以操作它们的属性,同时正在观察它的 Vue 实例也会收到提示。

@@ -875,9 +875,85 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       微信支付开发文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
 --------------------------------------------------------------------------------
 webpack 模块加载器兼打包工具 
-  介绍
-    它能把各种资源,例如JS（含JSX）、coffee、样式（含less/sass）、图片等都作为模块来使用和处理。
-    Webpack的工作方式是：把你的项目当做一个整体,通过一个给定的主文件（如：index.js）,Webpack将从这个文件开始找到你的项目的所有依赖文件,使用loaders处理它们,最后打包为一个浏览器可识别的JavaScript文件。
+  介绍 
+    把各种资源,如JS「含JSX」、coffee、样式「含less/sass」、图片等都作为模块来使用和处理,
+    Webpack的工作方式是：把你的项目当做一个整体,通过一个给定的主文件（如：index.js）,
+      Webpack将从这个文件开始找到你的项目的所有依赖文件,使用loaders处理它们,
+      最后打包为一个浏览器可识别的JavaScript文件。
+    支持3种引入方式: AMD commonjs ES6模块化
+  命令行 命令
+    webpack aoo.js boo.js // 将aoo.js文件打包成boo.js文件
+    其他命令参数
+    --watch 当文件更改时,自动打包
+    --display-modules 打包完后显示依赖的文件
+  webpack.config.js 配置文件  
+    通过配置文件 webpack.config.js 来进行相应的配置
+    目的: 在命令行中,当前文件夹下执行 webpack 命令,默认按照该配置文件来执行进行打包
+    entry   str,arr,obj,入口文件 
+      val1 : str,指定单一的入口文件
+      val2 : arr,将多个文件打包在一起 
+        如 [ './entry1.js' , 'entry2.js' ] 
+      val3 : obj,key-val形式,对象的val可为val1、val2 的表现形式
+        输出的打包后的文件和output参数有关,若output.filename 仍指定为一个值,
+        则最后打包后的文件只有一个,结果是两个同名的文件产生覆盖的结果,
+        output.filename 可采用占位符的形式来指定来打包成多个文件
+        如 {
+          page1 : './aoo.js',
+          page2 : [ './entry1.js' , 'entry2.js' ] 
+        }
+    output  obj,指定打包的文件 
+      path 指定打包后的文件的存放路径
+      filename 指定打包后的文件的名称
+        val1 : str,指定一固定的文件名称
+        val2 : str+占位符,当穿在多个输出的文件时用于指定名称「如entry的val为obj时」
+          [name]  表示entry的obj的key
+          [hash]  表示打包时产生的hash值
+          [chunkhash] chunk的hash值,相当于文件的MD5值「MD5值为了保证每个文件的唯一性」
+          e.g.: filename : '[name]-[hash].js'
+    plugins arr,使用插件,arr的元素为插件的初始化
+      e.g.:
+      var htmlWebpackPlugin = require("html-webpack-plugin");
+        module.exports ={
+          plugins: [
+            new htmlWebpackPlugin(arg);
+          ]
+        }
+    e.g.:  配置文件
+      module.exports = {  // commonjs 模块化 输出
+        entry : './src/main.js',   // 入口文件
+        // 入口文件: 表示有将其他的文件通过AMD或commonjs等引入,且将该文件做为执行的入口
+        output: {                  // 指定打包后的文件
+          path : './dist/js',         // 指定路径
+          filename : './bundle.js'    // 打包输出的文件名,「也可定义路径,会接着path后」
+        },
+        resolve : {
+          root : [path.join(__dirname,'src')],
+          extensions : ['','.ts','.js']
+        },
+        module : {
+          loaders : [
+            {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
+          ]
+        }
+      } 
+  webpack 安装 
+  loader,解释器 用于编译解释相应的文件 
+  插件 
+    html-webpack--plugin  在HTML文件中自动引入打包后的文件
+      npm install html-webpack-plugin --save-dev // 安装插件
+      webpack.config.js 中引用
+        var htmlWebpackPlugin = require("html-webpack-plugin");
+        module.exports = {
+          plugins : [
+            new htmlWebpackPlugin({ // 实例化
+              template : './index.html' ,
+              // 指定html文件做为模版,
+              // 按照output的path路径中生成引入打包文件的该模版
+              filename : 'index-[hash].html', // 指定生成的HTML的名称
+              injection : 'head'  // 指定打包后的文件插入的位置,如 head中
+            }),
+          ]
+        }
 Gulp 
   PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；

@@ -941,22 +941,69 @@ webpack 模块加载器兼打包工具
       } 
   webpack 安装 
   loader,解释器 用于编译解释相应的文件 
-  插件 
-    html-webpack--plugin  在HTML文件中自动引入打包后的文件
+  plugins,插件 
+    html-webpack-plugin  在HTML文件中自动引入打包后的文件
       npm install html-webpack-plugin --save-dev // 安装插件
       webpack.config.js 中引用
         var htmlWebpackPlugin = require("html-webpack-plugin");
         module.exports = {
+          entry : {
+            main : './src/main.js',
+            a : './src/a.js',
+          },  
+          output: {                
+            path : './dist/js',       
+            filename : './bundle.js',
+            publicPath : 'http://cdn.com/' // 代替 path 添加在 filename值的前面
+          },
+          resolve : {
+            root : [path.join(__dirname,'src')],
+            extensions : ['','.ts','.js']
+          },
+          module : {
+            loaders : [
+              {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
+            ]
+          },
           plugins : [
             new htmlWebpackPlugin({ // 实例化
               template : './index.html' ,
               // 指定html文件做为模版,
               // 按照output的path路径中生成引入打包文件的该模版
               filename : 'index-[hash].html', // 指定生成的HTML的名称
-              injection : 'head'  // 指定打包后的文件插入的位置,如 head中
+              inject : 'head' ,  // 指定打包后的文件插入的位置,如 head中
+              // false 则表示不放入到指定模版生成的文件中
+              aoo : 'boo',   // 可以在模版文件中引用
+              // 方式为 <?= htmlWebpackPlugin.options.aoo ?>
+              minify : {  // 对按照模版生成的文件进行压缩
+                removeComments : true , // 删除注释
+                collapseWhitespace : true , // 删除空格 
+              } , 
             }),
           ]
         }
+
+        
+        在模版文件中引用 htmlWebpackPlugin
+          遍历取值
+          遍历 htmlWebpackPlugin 
+            <? for(key in htmlWebpackPlugin){?>
+              <?= key ?>
+            <? } ?>
+            得到 files 和 options 两个对象
+          遍历 htmlWebpackPlugin.files 和 htmlWebpackPlugin.options
+            <? for(key in htmlWebpackPlugin.files){?>
+              <?= key ?> : <?= JSON.stringify(htmlWebpackPlugin.files[key])?> 
+              // 通过 json.stringify 将对象字符串化
+            <? } ?>
+            <? for(key in htmlWebpackPlugin.options){?>
+              <?= key ?> : <?= JSON.stringify(htmlWebpackPlugin.options[key])?> 
+              // 通过 json.stringify 将对象字符串化
+            <? } ?>
+          e.g.: 在模版中引入打包后的文件
+            <script src="<?= htmlWebpackPlugin.files.chunk.xx.entry ?>" charset="utf-8"></script>
+            其中 xx 为 webpack.config.js 文件中 module.exports.entry 中定义的文件 
+          
 Gulp 
   PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；

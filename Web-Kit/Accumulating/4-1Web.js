@@ -873,6 +873,9 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       备注：prepay_id 通过微信支付统一下单接口拿到,paySign 采用统一的微信支付 Sign 签名生成方法,注意这里 appId 也要参与签名,appId 与 config 中传入的 appId 一致,即最后参与签名的参数有appId, timeStamp, nonceStr, package, signType。
       请注意该接口只能在你配置的支付目录下调用,同时需确保支付目录在JS接口安全域名下。
       微信支付开发文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
+遇到的问题
+  ios 
+    滑动当前
 --------------------------------------------------------------------------------
 webpack 模块加载器兼打包工具 
   介绍 

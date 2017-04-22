@@ -1099,7 +1099,7 @@ Sublime text3
   indx      数组的下标
   elem      数组成员/DOM对象
   obj       对象
-  key       对象的键
+  key       对象的键,或属性等
   val       对象的值/值
   foo       「无属性」函数
   cfoo      「回调型」函数

@@ -1651,7 +1651,7 @@ ECMAScript JS核心 语法部分
           console.log("" + i  + j  );
         }
       return 处理之后返回: 在返回值前处理一些操作
-        有最后一个表达式被返回，其他的都只是被求值
+        有最后一个表达式被返回,其他的都只是被求值
         function foo () {
           var x = 0;
           return x++, x;
@@ -4291,7 +4291,7 @@ const 定义是常量  「ES6+」
           var debug = {hello: "world"};
           var blob = new Blob([JSON.stringify(debug, null, 2)],
             {type : 'application/json'});
-        e.g.: 利用Blob对象，生成可下载文件
+        e.g.: 利用Blob对象,生成可下载文件
           var blob = new Blob(["Hello World"]);
           var a = document.createElement("a");
           a.href = window.URL.createObjectURL(blob);
@@ -4300,7 +4300,7 @@ const 定义是常量  「ES6+」
           document.body.appendChild(a);
           最终 HTML中显示为:
           <a href="blob:http://localhuarun.qilaiwan.com/377b41e4-d95f-4bf0-8e5e-c493d24fc2f4" download="hello-world.txt">Download Hello World!</a>
-          点击后提示下载文本文件 hello-world.txt ， 文件内容为“Hello World”。
+          点击后提示下载文本文件 hello-world.txt , 文件内容为“Hello World”。
       blob.slice() 使用blob对象创建blob对象
     BlobBuilder 接口提供了另外一种创建Blob对象的方式 [已废弃]
       var builder = new BlobBuilder();
@@ -4332,7 +4332,7 @@ const 定义是常量  「ES6+」
         Safari 中的 blob.webkitSlice()
         slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时。 
         使用Firefox 30 删除了对 blob.mozSlice() 的支持。
-      e.g.:  使用XMLHttpRequest对象，将大文件分割上传
+      e.g.:  使用XMLHttpRequest对象,将大文件分割上传
         var inputElem = document.querySelector('input[type="file"]');
         function upload(blobOrFile) {
           var xhr = new XMLHttpRequest();
@@ -4357,7 +4357,7 @@ const 定义是常量  「ES6+」
     blob.size 只读, Blob对象中所包含数据的大小,单位为字节
     blob.type 只读,字符串,表明该Blob对象所包含数据的MIME类型
       如果类型未知,则该值为空字符串。
-      在Ajax操作中，如果 xhr.responseType 设为 blob，接收的就是二进制数据。
+      在Ajax操作中,如果 xhr.responseType 设为 blob,接收的就是二进制数据。
     blob.close() 关闭 Blob 对象,以便能释放底层资源。 
 块级绑定,Block Bindings 
   var 声明与变量提升
@@ -4700,14 +4700,14 @@ export import：  module模块化
       服务器端规范主要是 CommonJS,
       node.js 用的就是 CommonJS 规范。
     AMD 异步模块定义,依赖前置,实现主要有 RequireJS, RequireJS在国外用的比较多
-      PS:制定了定义模块的规则，这样模块和模块的依赖可以被异步加载。
+      PS:制定了定义模块的规则,这样模块和模块的依赖可以被异步加载。
         这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。
       模块名的格式
-        模块名用来唯一标识定义中模块，它们同样在依赖数组中使用。
+        模块名用来唯一标识定义中模块,它们同样在依赖数组中使用。
         AMD的模块名规范是CommonJS模块名规范的超集。引用如下：
         模块名是由一个或多个单词以正斜杠为分隔符拼接成的字符串
-        单词须为驼峰形式，或者"."，".."
-        模块名不允许文件扩展名的形式，如".js"
+        单词须为驼峰形式,或者".",".."
+        模块名不允许文件扩展名的形式,如".js"
         模块名可以为 "相对的" 或 "顶级的"。如果首字符为"."或".."则为"相对的"模块名
         顶级的模块名从根命名空间的概念模块解析
         相对的模块名从 "require" 书写和调用的模块解析
@@ -4715,34 +4715,34 @@ export import：  module模块化
         相对模块名解析示例：
         如果模块 "a/b/c" 请求 "../d", 则解析为"a/d"
         如果模块 "a/b/c" 请求 "./e", 则解析为"a/b/e"
-        如果AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名，大多数字符都允许在插件资源名使用。
+        如果AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名,大多数字符都允许在插件资源名使用。
       API说明
         define(id?, dependencies?, factory);
           id  可选,字符串,指的是定义中模块的名字.
-            如果没有提供该参数，模块的名字应该默认为模块加载器请求的指定脚本的名字。
-            如果提供了该参数，模块名必须是“顶级”的和绝对的（不允许相对名字）。
-          dependencies，是个定义中模块所依赖模块的数组。
-            依赖模块必须根据模块的工厂方法优先级执行，并且执行的结果应该按照依赖数组中的位置顺序以参数的形式传入（定义中模块的）工厂方法中。
-            依赖的模块名如果是相对的，应该解析为相对定义中的模块。
-            换句话来说，相对名解析为相对于模块的名字，并非相对于寻找该模块的名字的路径。
+            如果没有提供该参数,模块的名字应该默认为模块加载器请求的指定脚本的名字。
+            如果提供了该参数,模块名必须是“顶级”的和绝对的（不允许相对名字）。
+          dependencies,是个定义中模块所依赖模块的数组。
+            依赖模块必须根据模块的工厂方法优先级执行,并且执行的结果应该按照依赖数组中的位置顺序以参数的形式传入（定义中模块的）工厂方法中。
+            依赖的模块名如果是相对的,应该解析为相对定义中的模块。
+            换句话来说,相对名解析为相对于模块的名字,并非相对于寻找该模块的名字的路径。
             本规范定义了三种特殊的依赖关键字。
-            如果"require","exports", 或 "module"出现在依赖列表中，
+            如果"require","exports", 或 "module"出现在依赖列表中,
             参数应该按照CommonJS模块规范自由变量去解析。
-            依赖参数是可选的，如果忽略此参数，它应该默认为["require", "exports", "module"]。
-            然而，如果工厂方法的形参个数小于3，加载器会选择以函数指定的参数个数调用工厂方法。
-          factory，为模块初始化要执行的函数或对象。
-            如果为函数，它应该只被执行一次。如果是对象，此对象应该为模块的输出值。
-            如果工厂方法返回一个值（对象，函数，或任意强制类型转换为true的值），应该为设置为模块的输出值。
+            依赖参数是可选的,如果忽略此参数,它应该默认为["require", "exports", "module"]。
+            然而,如果工厂方法的形参个数小于3,加载器会选择以函数指定的参数个数调用工厂方法。
+          factory,为模块初始化要执行的函数或对象。
+            如果为函数,它应该只被执行一次。如果是对象,此对象应该为模块的输出值。
+            如果工厂方法返回一个值（对象,函数,或任意强制类型转换为true的值）,应该为设置为模块的输出值。
           简单的 CommonJS 转换
-            如果依赖性参数被忽略，模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
-            在某些情况下，因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法），模块加载器可以选择扫描不扫描依赖性。
-            如果有依赖参数，模块加载器不应该在工厂方法中扫描依赖性。
+            如果依赖性参数被忽略,模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
+            在某些情况下,因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法）,模块加载器可以选择扫描不扫描依赖性。
+            如果有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
         define.amd 属性
-          PS:为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口，
-            任何全局函数应该有一个"amd"的属性，它的值为一个对象。
+          PS:为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
+            任何全局函数应该有一个"amd"的属性,它的值为一个对象。
             这样可以防止与现有的定义了define函数但不遵从AMD编程接口的代码相冲突。
-          当前，define.amd对象的属性没有包含在本规范中。实现本规范的作者，可以用它通知超出本规范编程接口基本实现的额外能力。
-          define.amd的存在表明函数遵循本规范。如果有另外一个版本的编程接口，那么应该定义另外一个属性，如define.amd2，表明实现只遵循该版本的编程接口。
+          当前,define.amd对象的属性没有包含在本规范中。实现本规范的作者,可以用它通知超出本规范编程接口基本实现的额外能力。
+          define.amd的存在表明函数遵循本规范。如果有另外一个版本的编程接口,那么应该定义另外一个属性,如define.amd2,表明实现只遵循该版本的编程接口。
           e.g.:
             一个如何定义同一个环境中允许多次加载同一个版本的模块的实现：
             define.amd = {
@@ -4751,10 +4751,10 @@ export import：  module模块化
             最简短的定义：
             define.amd = {};
           一次输出多个模块
-            在一个脚本中可以使用多次define调用。这些define调用的顺序不应该是重要的。早一些的模块定义中所指定的依赖，可以在同一脚本中晚一些定义。模块加载器负责延迟加载未解决的依赖，直到全部脚本加载完毕，防止没必要的请求。
+            在一个脚本中可以使用多次define调用。这些define调用的顺序不应该是重要的。早一些的模块定义中所指定的依赖,可以在同一脚本中晚一些定义。模块加载器负责延迟加载未解决的依赖,直到全部脚本加载完毕,防止没必要的请求。
         e.g.:
           使用 require 和 exports
-          创建一个名为"alpha"的模块，使用了require，exports，和名为"beta"的模块:
+          创建一个名为"alpha"的模块,使用了require,exports,和名为"beta"的模块:
           define("alpha", ["require", "exports", "beta"], function (require, exports, beta) {
                exports.verb = function() {
                    return beta.verb();
@@ -4787,78 +4787,78 @@ export import：  module模块化
           本规范保留全局变量"define"以用来实现本规范。包额外信息异步定义编程接口是为将来的CommonJS API保留的。模块加载器不应在此函数添加额外的方法或属性。
           本规范保留全局变量"require"被模块加载器使用。模块加载器可以在合适的情况下自由地使用该全局变量。它可以使用这个变量或添加任何属性以完成模块加载器的特定功能。它同样也可以选择完全不使用"require"。
         使用注意
-          为了使静态分析工具（如build工具）可以正常工作，推荐使用字面上形如的'define(...)'。
+          为了使静态分析工具（如build工具）可以正常工作,推荐使用字面上形如的'define(...)'。
         与CommonJS的关系
-          一个关于本API的wiki开始在CommonJS wiki中创建了，作为中转的格式，模块中转。但是为了包含模块定义接口，随着时间而不断改变。在CommonJS列表中关于推荐本API作为模块定义API尚未达成一致。本API被转移到它自己的wiki和讨论组中。
+          一个关于本API的wiki开始在CommonJS wiki中创建了,作为中转的格式,模块中转。但是为了包含模块定义接口,随着时间而不断改变。在CommonJS列表中关于推荐本API作为模块定义API尚未达成一致。本API被转移到它自己的wiki和讨论组中。
           AMD可以作为CommonJS模块一个中转的版本只要CommonJS没有被用来同步的require调用。使用同步require调用的CommonJS代码可以被转换为使用回调风格的AMD模块加载器。
     CMD,Common Module Definition 通用模块定义,依赖就近
       PS:主要实现有 SeaJS, SeaJS的创始人为阿里的玉伯
         SeaJS在阿里系用的非常广泛,包括京东等也在用SeaJS
         但是SeaJS已经停止维护了,因为在ES6中已经有了模块化的实现,
         该规范明确了模块的基本书写格式和基本交互规则。
-        在 CMD 规范中，一个模块就是一个文件。 代码的书写格式如下： define(factory);
+        在 CMD 规范中,一个模块就是一个文件。 代码的书写格式如下： define(factory);
       define Function
-        define 是一个全局函数，用来定义模块。
+        define 是一个全局函数,用来定义模块。
       define define(factory)
-        define 接受 factory 参数，factory 可以是一个函数，也可以是一个对象或字符串。
-        factory 为对象、字符串时，表示模块的接口就是该对象、字符串。
+        define 接受 factory 参数,factory 可以是一个函数,也可以是一个对象或字符串。
+        factory 为对象、字符串时,表示模块的接口就是该对象、字符串。
         比如可以如下定义一个 JSON 数据模块：
         define({ "foo": "bar" });
         也可以通过字符串定义模板模块：
         define('I am a template. My name is {{name}}.');
-        factory 为函数时，表示是模块的构造方法。执行该构造方法，可以得到模块向外提供的接口。factory 方法在执行时，默认会传入三个参数：require、exports 和 module：
+        factory 为函数时,表示是模块的构造方法。执行该构造方法,可以得到模块向外提供的接口。factory 方法在执行时,默认会传入三个参数：require、exports 和 module：
         define(function(require, exports, module) { /*模块代码*/ });
       define define(id?, deps?, factory)
-        define 也可以接受两个以上参数。字符串 id 表示模块标识，数组 deps 是模块依赖。比如：
+        define 也可以接受两个以上参数。字符串 id 表示模块标识,数组 deps 是模块依赖。比如：
         define('hello', ['jquery'], function(require, exports, module) { /*模块代码*/ });
-        id 和 deps 参数可以省略。省略时，可以通过构建工具自动生成。
-        注意：带 id 和 deps 参数的 define 用法不属于 CMD 规范，而属于 Modules/Transport 规范。
+        id 和 deps 参数可以省略。省略时,可以通过构建工具自动生成。
+        注意：带 id 和 deps 参数的 define 用法不属于 CMD 规范,而属于 Modules/Transport 规范。
       define.cmd Object
-        一个空对象，可用来判定当前页面是否有 CMD 模块加载器：
+        一个空对象,可用来判定当前页面是否有 CMD 模块加载器：
         if (typeof define === "function" && define.cmd) {
           /*有 Sea.js 等 CMD 模块加载器存在*/
         }
       require Function
         require 是 factory 函数的第一个参数。
       require require(id)
-        require 是一个方法，接受 模块标识 作为唯一参数，用来获取其他模块提供的接口。
+        require 是一个方法,接受 模块标识 作为唯一参数,用来获取其他模块提供的接口。
         define(function(require, exports) {
           // 获取模块 a 的接口
           var a = require('./a');
           // 调用模块 a 的方法
           a.doSomething();
         });
-        注意：在开发时，require 的书写需要遵循一些 简单约定。
+        注意：在开发时,require 的书写需要遵循一些 简单约定。
       require.async require.async(id, callback?)
-        require.async 方法用来在模块内部异步加载模块，并在加载完成后执行指定回调。callback 参数可选。
+        require.async 方法用来在模块内部异步加载模块,并在加载完成后执行指定回调。callback 参数可选。
         define(function(require, exports, module) {
-          // 异步加载一个模块，在加载完成时，执行回调
+          // 异步加载一个模块,在加载完成时,执行回调
           require.async('./b', function(b) {
             b.doSomething();
           });
-          // 异步加载多个模块，在加载完成时，执行回调
+          // 异步加载多个模块,在加载完成时,执行回调
           require.async(['./c', './d'], function(c, d) {
             c.doSomething();
             d.doSomething();
           });
         });
-        注意：require 是同步往下执行，require.async 则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
+        注意：require 是同步往下执行,require.async 则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
       require.resolve require.resolve(id)
-        使用模块系统内部的路径解析机制来解析并返回模块路径。该函数不会加载模块，只返回解析后的绝对路径。
+        使用模块系统内部的路径解析机制来解析并返回模块路径。该函数不会加载模块,只返回解析后的绝对路径。
         define(function(require, exports) {
           console.log(require.resolve('./b'));
           // ==> http://example.com/path/to/b.js
         });
-        这可以用来获取模块路径，一般用在插件环境或需动态拼接模块路径的场景下。
+        这可以用来获取模块路径,一般用在插件环境或需动态拼接模块路径的场景下。
       exports Object
-        exports 是一个对象，用来向外提供模块接口。
+        exports 是一个对象,用来向外提供模块接口。
         define(function(require, exports) {
           // 对外提供 foo 属性
           exports.foo = 'bar';
           // 对外提供 doSomething 方法
           exports.doSomething = function() {};
         });
-        除了给 exports 对象增加成员，还可以使用 return 直接向外提供接口。
+        除了给 exports 对象增加成员,还可以使用 return 直接向外提供接口。
         define(function(require) {
           // 通过 return 直接提供接口
           return {
@@ -4866,7 +4866,7 @@ export import：  module模块化
             doSomething: function() {}
           };
         });
-        如果 return 语句是模块中的唯一代码，还可简化为：
+        如果 return 语句是模块中的唯一代码,还可简化为：
         define({
           foo: 'bar',
           doSomething: function() {}
@@ -4888,9 +4888,9 @@ export import：  module模块化
             doSomething: function() {}
           };
         });
-        提示：exports 仅仅是 module.exports 的一个引用。在 factory 内部给 exports 重新赋值时，并不会改变 module.exports 的值。因此给 exports 赋值是无效的，不能用来更改模块接口。
+        提示：exports 仅仅是 module.exports 的一个引用。在 factory 内部给 exports 重新赋值时,并不会改变 module.exports 的值。因此给 exports 赋值是无效的,不能用来更改模块接口。
       module Object
-        module 是一个对象，上面存储了与当前模块相关联的一些属性和方法。
+        module 是一个对象,上面存储了与当前模块相关联的一些属性和方法。
       module.id String
     
         模块的唯一标识。
@@ -4900,7 +4900,7 @@ export import：  module模块化
           // 模块代码
     
         });
-        上面代码中，define 的第一个参数就是模块标识。
+        上面代码中,define 的第一个参数就是模块标识。
       module.uri String
         根据模块系统的路径解析规则得到的模块绝对路径。
     
@@ -4910,13 +4910,13 @@ export import：  module模块化
           // ==> http://example.com/path/to/this/file.js
     
         });
-        一般情况下（没有在 define 中手写 id 参数时），module.id 的值就是 module.uri，两者完全相同。
+        一般情况下（没有在 define 中手写 id 参数时）,module.id 的值就是 module.uri,两者完全相同。
       module.dependencies Array
-        dependencies 是一个数组，表示当前模块的依赖。
+        dependencies 是一个数组,表示当前模块的依赖。
       module.exports Object
         当前模块对外提供的接口。
     
-        传给 factory 构造方法的 exports 参数是 module.exports 对象的一个引用。只通过 exports 参数来提供接口，有时无法满足开发者的所有需求。 比如当模块的接口是某个类的实例时，需要通过 module.exports 来实现：
+        传给 factory 构造方法的 exports 参数是 module.exports 对象的一个引用。只通过 exports 参数来提供接口,有时无法满足开发者的所有需求。 比如当模块的接口是某个类的实例时,需要通过 module.exports 来实现：
     
         define(function(require, exports, module) {
     
@@ -4930,7 +4930,7 @@ export import：  module模块化
           console.log(module.exports === exports); // false
     
         });
-        注意：对 module.exports 的赋值需要同步执行，不能放在回调函数里。下面这样是不行的：
+        注意：对 module.exports 的赋值需要同步执行,不能放在回调函数里。下面这样是不行的：
     
         // x.js
         define(function(require, exports, module) {
@@ -4953,8 +4953,8 @@ export import：  module模块化
     
         });
       小结
-        这就是 CMD 模块定义规范的所有内容。经常使用的 API 只有 define, require, require.async, exports, module.exports 这五个。其他 API 有个印象就好，在需要时再来查文档，不用刻意去记。
-        与 RequireJS 的 AMD 规范相比，CMD 规范尽量保持简单，并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性。通过 CMD 规范书写的模块，可以很容易在 Node.js 中运行，后续会介绍。
+        这就是 CMD 模块定义规范的所有内容。经常使用的 API 只有 define, require, require.async, exports, module.exports 这五个。其他 API 有个印象就好,在需要时再来查文档,不用刻意去记。
+        与 RequireJS 的 AMD 规范相比,CMD 规范尽量保持简单,并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性。通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行,后续会介绍。
     SeaJs
       PS:是一基于 CMD 规范实现的模块化开发解决方案.
         作者：Alibaba 玉伯

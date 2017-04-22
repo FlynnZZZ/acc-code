@@ -2915,18 +2915,18 @@ deviceorientation  设备摆放方向变化事件「竖放或横放」
 移动端JS 
   event 事件
     理解click的300ms的延迟响应
-      Click事件在移动手机开发中有300ms的延迟，
-      因为在手机早期，浏览器系统有放大和缩放功能，
-      用户在屏幕上点击两次之后，系统会触发放大或者缩放功能，
-      因此系统做了一个处理，当触摸一次后，在300ms这段时间内有没有触摸第二次则为点击点击事件，
-      如果触摸了第二次的话，说明是触发放大或缩放功能。
-      因此当click时候，所有用户必须等待于300ms后才会触发click事件。
-      所以当在移动端使用click事件的时候，会感觉到有300ms的迟钝。
+      Click事件在移动手机开发中有300ms的延迟,
+      因为在手机早期,浏览器系统有放大和缩放功能,
+      用户在屏幕上点击两次之后,系统会触发放大或者缩放功能,
+      因此系统做了一个处理,当触摸一次后,在300ms这段时间内有没有触摸第二次则为点击点击事件,
+      如果触摸了第二次的话,说明是触发放大或缩放功能。
+      因此当click时候,所有用户必须等待于300ms后才会触发click事件。
+      所以当在移动端使用click事件的时候,会感觉到有300ms的迟钝。
     Touch 触摸事件
       PS: 由于触摸会导致屏幕滚动,在事件函数内使用event.preventDefault()阻止掉默认事件(默认滚动)
       ◆在规范中列出并获得跨移动设备广泛实现的基本触摸事件
       touchstart  当手指放在屏幕上触发;
-      touchmove   当手指在屏幕上滑动时，连续地触发;
+      touchmove   当手指在屏幕上滑动时,连续地触发;
         e.g.:
           指定滑动一定距离执行动作 [self]
           var flagYear =true; // 用于记录滑动起始点的 布尔值
@@ -2993,7 +2993,7 @@ deviceorientation  设备摆放方向变化事件「竖放或横放」
       e.touches          当前位于屏幕上的所有手指的一个列表
         event.touches.length  表示屏幕上触摸的手指个数
       e.targetTouches    位于当前DOM元素上的手指的一个列表
-        PS:touch事件会冒泡，所以我们可以使用这个属性指出目标对象.
+        PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
         event.touches.length  表示元素上触摸的手指个数
       e.originalEvent.changedTouches   
         e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
@@ -3005,20 +3005,20 @@ deviceorientation  设备摆放方向变化事件「竖放或横放」
         e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
         e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
       event.preventDefault();  阻止滚动 [?]
-        一些移动设备有缺省的touchmove行为，比如说经典的iOSoverscroll效果，
+        一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
         当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
     Gestures 触摸事件
       PS:该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
-      Gesturestart  当一个手指已经按在屏幕上，而另一个手指又触摸在屏幕时触发。
+      Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
       Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
       Gestureend    当任何一个手指从屏幕上面移开时触发。
     触摸事件和手势事件的关系：
-      当一个手指放在屏幕上时，会触发touchstart事件，
-      而另一个手指触摸在屏幕上时触发gesturestart事件，随后触发基于该手指的touchstart事件。
-      如果一个或两个手指在屏幕上滑动时，将会触发gesturechange事件，
-      但是只要有一个手指移开时候，则会触发gestureend事件，紧接着会触发touchend事件。
+      当一个手指放在屏幕上时,会触发touchstart事件,
+      而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
+      如果一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
+      但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
       手势的专有属性：
-        rotation 表示手指变化引起的旋转角度，负值表示逆时针，正值表示顺时针，从0开始；
+        rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
         scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
     其他
       navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
@@ -3026,7 +3026,7 @@ deviceorientation  设备摆放方向变化事件「竖放或横放」
         <input type="text" autocapitalize="off" autocorrect="off" />
       -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
       -webkit-user-select:none      禁止用户选中文字
-      关于 iOS 系统中，中文输入法输入英文时，字母之间可能会出现一个六分之一空格
+      关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
         this.value = this.value.replace(/\u2006/g, ‘‘);
       input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
       判断是否为微信浏览器；
@@ -3061,10 +3061,10 @@ deviceorientation  设备摆放方向变化事件「竖放或横放」
       可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
       不支持进行跳转到上一步url中带有参数 的url地址  [?]
         比如：一个查询列表页的url是： http://someweb?city=beijing
-        当从这个页面跳到第二个页面比如详细页， 在详细页再执行返回上一页如： 
+        当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如： 
         location.href=document.referrer的时候   
         跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
-        解决：微信开发中 不要用 带url参数的地址，都用/ ../ ，
+        解决：微信开发中 不要用 带url参数的地址,都用/ ../ ,
         把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
     event 事件
       click 无延迟 [?]

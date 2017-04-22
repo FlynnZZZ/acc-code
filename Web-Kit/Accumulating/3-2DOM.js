@@ -3312,10 +3312,10 @@ XSS,Cross SiteScript 跨站脚本攻击
   XSS防御 
     永远不相信用户的输入,输入验证
     Html encode,对标签进行转换
-      比如输入：'<script>window.location.href=”http://www.baidu.com”;</script>'，
+      比如输入：'<script>window.location.href=”http://www.baidu.com”;</script>',
       最终存储的会是：
       '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
-      在展现时浏览器会对这些字符转换成文本内容显示，而不是一段可执行的代码。
+      在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
 Web Components 组件化 
   Custom Elements  自定义HTML元素,包括特定的组成、样式和行为
     支持该标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素,或者扩展现有元素
@@ -3347,22 +3347,22 @@ Web Components 组件化
       元素从 document 中移除
     ◆回调: 
       PS:元素的属性变化时
-        在注册新的自定义元素时指定对应的生命周期回调，为自定义元素添加各种自定义的行为
+        在注册新的自定义元素时指定对应的生命周期回调,为自定义元素添加各种自定义的行为
         生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
-    createdCallback(constructor in class)  自定义元素注册后，在实例化之后会调用
-      (多用于做元素的初始化：如**子元素，绑定事件等)
+    createdCallback(constructor in class)  自定义元素注册后,在实例化之后会调用
+      (多用于做元素的初始化：如**子元素,绑定事件等)
     attachedCallback(connectedCallback)    元素**到 document 时触发
     detachedCallback(disconnectedCallback) 元素从 document 中移除时触发
       (用于做类似 destroy 之类的事情)
     attributeChangedCallback               元素属性变化时触发
       (可以用于从外到内的通信：外部通过修改元素的属性来让内部获取相关的数据并且执行对应的操作)
       这个回调在不同情况下有对应不同的参数：
-      设置属性时，参数列表是：属性名称，null，值，命名空间
-      修改属性时，参数列表是：属性名称，旧值，新值，命名空间
-      删除属性时，参数列表是：属性名称，旧值，null，命名空间
+      设置属性时,参数列表是：属性名称,null,值,命名空间
+      修改属性时,参数列表是：属性名称,旧值,新值,命名空间
+      删除属性时,参数列表是：属性名称,旧值,null,命名空间
     adoptedCallback：              使用 document.adoptNode(node) 时触发
     e.g.: 
-      创建一个自定义的 button-hello 按钮，点击时会 alert('hello world')：
+      创建一个自定义的 button-hello 按钮,点击时会 alert('hello world')：
       document.registerElement('button-hello', {
         prototype: Object.create(HTMLButtonElement.prototype, {
           createdCallback: {

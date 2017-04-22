@@ -365,10 +365,10 @@ PC端
     strReplace(originStr,replaceRgep,rule); 
     // style="width:720vw height:494vw720vw494vw"
   显示用户选取的本地图片
-    假设有一个表单，用于用户选取图片。
+    假设有一个表单,用于用户选取图片。
 
     <input type="file" name="picture" accept="image/png, image/jpeg"/>
-    一旦用户选中图片，将其显示在canvas的函数可以这样写：
+    一旦用户选中图片,将其显示在canvas的函数可以这样写：
 
     document.querySelector('input[name=picture]').onchange = function(e){
          readFile(e.target.files[0]);
@@ -384,7 +384,7 @@ PC端
 
       reader.reaAsDataURL(file);
     }
-    还可以在canvas上面定义拖放事件，允许用户直接拖放图片到上面。
+    还可以在canvas上面定义拖放事件,允许用户直接拖放图片到上面。
 
     // stop FireFox from replacing the whole page with the file.
     canvas.ondragover = function () { return false; };
@@ -399,7 +399,7 @@ PC端
         readFile(files[0]);
       }
     };
-    所有的拖放事件都有一个dataTransfer属性，它包含拖放过程涉及的二进制数据。
+    所有的拖放事件都有一个dataTransfer属性,它包含拖放过程涉及的二进制数据。
 
     还可以让canvas显示剪贴板中的图片。
 

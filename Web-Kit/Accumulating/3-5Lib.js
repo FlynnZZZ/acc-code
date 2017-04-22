@@ -135,7 +135,7 @@ DOM 操作
         :eq(n) 下标指定选择器
           e.g. $("p:eq(1)"); 选择第二个 p元素
           Exp:选取带有指定 index 值的元素。index 值从 0 开始
-            经常与其他元素/选择器一起使用，来选择指定的组中特定序号的元素(如上面的例子)。
+            经常与其他元素/选择器一起使用,来选择指定的组中特定序号的元素(如上面的例子)。
           语法 $(":eq(index)")            
         :gt(n) 下标大于n的
         :lt(n) 下标小于n的
@@ -233,7 +233,7 @@ DOM 操作
       Jelem.prevAll("selector")  同级前所有元素
       Jelem.next(["selector"])   同级后元素 [无参时,为同级后一元素]
       Jelem.nextAll("selector")  同级后所有元素
-      Jelem.andSelf("selector")  获取指定元素后边的所有同级元素，之后加上指定的元素
+      Jelem.andSelf("selector")  获取指定元素后边的所有同级元素,之后加上指定的元素
       Jelem.find('selector')        从后代元素中获取Jelem
         自身Jelem若find自己则获取不到
       Jelem.children(['selector'])  和find类似,只是从子元素中获取
@@ -242,8 +242,8 @@ DOM 操作
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
       ★其他条件筛选
       Jelem.eq(index) 通过下标选取Jelem
-        index为整数，指示元素的位置[从0开始]
-        如果是负数，则从集合中的最后一个元素往回计数。
+        index为整数,指示元素的位置[从0开始]
+        如果是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem
         Jelem.not(function(index)); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
     通过elem获取
@@ -536,7 +536,7 @@ Event 事件
       bind 只能针对已经存在的元素进行事件的设置；
       live on delegate 均支持未来新添加元素的事件绑定 [使用委托的方式才会生效]
       bind 在 1.7 版本前比较受推崇之后已不推荐
-      on 是 1.7 版本新添加的,也推荐使用，
+      on 是 1.7 版本新添加的,也推荐使用,
       live 在 1.9 版本已经删除
   Jelem.on()      绑定事件 
     一般事件绑定
@@ -545,13 +545,13 @@ Event 事件
     同时绑定多事件
       Jelem.on("mouseover mouseout",foo)  
     绑定多组事件
-      Jelem.on({ mouseover：foo1， mouseout：foo2， click：foo3, })
+      Jelem.on({ mouseover：foo1, mouseout：foo2, click：foo3, })
     绑定自定义事件
       Jelem.on("myOwnEvent",function(event,showName){  
         $(this).text(showName + "! What a beautiful name!").show()；
       })；
       $("button").click(function(){
-        $("p").trigger("myOwnEvent"，["Anja"])；
+        $("p").trigger("myOwnEvent",["Anja"])；
       })；
     事件传递信息
       Jelem.on("click",{msg:"You just clicked me!"},foo);
@@ -614,7 +614,7 @@ Event 事件
   触发事件 
     Jelem.trigger("event",[param1,param2,...]); 
       event	 必需,规定指定元素要触发的事件
-        可以使自定义事件(使用 bind() 函数来附加)，或者任何标准事件
+        可以使自定义事件(使用 bind() 函数来附加),或者任何标准事件
       [param1,param2,...]	 可选,传递到事件处理程序的额外参数
         PS:额外的参数对自定义事件特别有用
       Remarks:
@@ -634,12 +634,12 @@ Event 事件
         以上代码运行后会返回：“click”。
     event.preventDefault()  阻止默认的事件行为
       PS:JavaScript中符合W3C规范的preventDefault()方法在IE浏览器中无效。
-        jQuery对其进行了封装，使之能兼容各种浏览器。
+        jQuery对其进行了封装,使之能兼容各种浏览器。
     event.stopPropagation() 阻止事件的冒泡
       PS:JavaScript中符合W3C规范的stopPropagation()方法在IE浏览器中无效。
-        jQuery对其进行封装，使之能兼容各种浏览器。
+        jQuery对其进行封装,使之能兼容各种浏览器。
     event.target 获取到触发事件的元素
-      PS:jQuery对其封装后，避免了W3C、IE和safari浏览器不同标准的差异.
+      PS:jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
       e.g.:
         $("a[href=http://www.jb51.net]").click(function(event){
           alert(event.target.href); //获取触发事件的<a>元素的href属性值
@@ -648,17 +648,17 @@ Event 事件
         })
     event.relatedTarget 
       PS:
-        标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取，
+        标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
         相关元素通过 event.relatedTarget 属性来获取.
         event.relatedTarget 在 mouseover 中相当于IE浏览器的 event.fromElement,
         在 mouseout 中相当于IE浏览器的 event.toElement,
-        jQuery对其进行了封装，使之能兼容各种浏览器。
+        jQuery对其进行了封装,使之能兼容各种浏览器。
     event.pageX 获取到光标相对页面的x坐标
     event.pageY 获取到光标相对页面的y坐标
       PS:
-        如果没有使用jQuery时，那么IE浏览器中是用 event.x/event.y,
+        如果没有使用jQuery时,那么IE浏览器中是用 event.x/event.y,
         而在Firefox浏览器中用 event.pageX/event.pageY,
-        如果页上有滚动条，则还要加上滚动条的宽度和高度。
+        如果页上有滚动条,则还要加上滚动条的宽度和高度。
         在IE浏览器中还应该减去默认的2px的边框。
       e.g.:
         $(function() {
@@ -675,10 +675,10 @@ Event 事件
             alert(e.which); //1 = 鼠标左键；2 = 鼠标中键；3 = 鼠标右键。
           })
         })
-        以上代码加载到页面中，用鼠标单击页面时，单击左、中、右键分别返回1、2、3.
+        以上代码加载到页面中,用鼠标单击页面时,单击左、中、右键分别返回1、2、3.
     event.metaKey 属性
       PS:
-        针对不同浏览器对键盘中的<ctrl>按键解释不同，jQuery也进行了封装，
+        针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
         规定 event.metaKey() 为键盘事件中获取<ctrl>按键.
     event.originalEvent 指向原始的事件对象
   window.onload 与 $(document).ready(function () {}) 的区别
@@ -699,22 +699,22 @@ Event 事件
     自动修改破损图像
       如果碰巧在网站上发现了破碎的图像链接,可以用一个被替换的图像来代替。
       添加这个简单的代码可以节省很多麻烦：
-      即使你的网站没有破碎的图像链接，添加这段代码也没有任何害处。
+      即使你的网站没有破碎的图像链接,添加这段代码也没有任何害处。
       $('img').on('error', function () {
         $(this).prop('src', 'img/broken.png');
       });
     鼠标悬停(hover)切换 class 属性
-      假如当用户鼠标悬停在一个可点击的元素上时，你希望改变其效果，下面这段代码可以在其悬停在元素上时添加 class 属性，当用户鼠标离开时，则自动取消该 class 属性：
+      假如当用户鼠标悬停在一个可点击的元素上时,你希望改变其效果,下面这段代码可以在其悬停在元素上时添加 class 属性,当用户鼠标离开时,则自动取消该 class 属性：
       $('.btn').hover(function () {
         $(this).addClass('hover');
         }, function () {
           $(this).removeClass('hover');
         });
-      你只需要添加必要的CSS代码即可。如果你想要更简洁的代码，可以使用 toggleClass 方法：
+      你只需要添加必要的CSS代码即可。如果你想要更简洁的代码,可以使用 toggleClass 方法：
       $('.btn').hover(function () { 
         $(this).toggleClass('hover'); 
       });
-      注：直接使用CSS实现该效果可能是更好的解决方案，但你仍然有必要知道该方法。
+      注：直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
 AJAX 
   PS: jQuery 最常用的 AJAX API 可以为分三类:
   ◆方法型 
@@ -966,16 +966,16 @@ Bootstrap :快速开发 Web 应用程序和网站的前端框架
 CSS
   核心思想:通过给HTML标签引入 Bootstrap 定义的class属性,来控制标签的样式.
   移动设备优先
-    之前 Bootstrap 版本(直到 2.x)，您需要手动引用另一个 CSS，才能让整个项目友好的支持移动设备。
+    之前 Bootstrap 版本(直到 2.x),您需要手动引用另一个 CSS,才能让整个项目友好的支持移动设备。
     Bootstrap 3 默认的 CSS 本身就对移动设备友好支持
-    Bootstrap 3 的设计目标是移动设备优先，然后才是桌面设备。
+    Bootstrap 3 的设计目标是移动设备优先,然后才是桌面设备。
   网格系统(Grid System)
     使用说明:
       网格系统是通过指定您想要横跨的十二个可用的列来创建的。
-        例如，要创建三个相等的列，可使用三个 .col-xs-4。(若和小于等于12 则在一行显示,否则换行)
+        例如,要创建三个相等的列,可使用三个 .col-xs-4。(若和小于等于12 则在一行显示,否则换行)
       网格的基本结构
         <div class="container">       // 网格 块 
-          // 行必须放置在 class="container" 内，以便获得适当的对齐(alignment)和内边距(padding)。
+          // 行必须放置在 class="container" 内,以便获得适当的对齐(alignment)和内边距(padding)。
           <div class="row">           // 网格 行 
             <div class="col-*-*">     // 网格 单元 
               <div class="row">                  // 网格嵌套 行
@@ -1001,18 +1001,18 @@ CSS
       小屏  (≥768px)  .col-sm-
       中屏  (≥992px)  .col-md-
       大屏  (≥1200px) .col-lg-
-      在中型设备中，Bootstrap 会查找带有 md 的类，并使用它们。
-      在大型设备中，会查找带有 lg 的类，并使用它们。
+      在中型设备中,Bootstrap 会查找带有 md 的类,并使用它们。
+      在大型设备中,会查找带有 lg 的类,并使用它们。
       小屏会兼容大屏(保持比例)(当只定义了小屏时)
       可以同时添加不同屏的列宽,可在不同尺寸时获取不同的宽度比例
     列偏移 col-*-offset-*
       大屏幕显示器上使用偏移 .col-md-offset-* 类,
-      则该列列的左外边距(margin)增加 * 列，其中 * 范围是从 1 到 11。
+      则该列列的左外边距(margin)增加 * 列,其中 * 范围是从 1 到 11。
       在 网格单元 标签中添加该属性class
     列嵌套
       在需要嵌套的 网格单元 中,添加 网格行,然后再在 网格行 中添加 网格单元.
     列排序 col-*-push-* / col-*-pull-*
-      改变带有 .col-md-push-* 和 .col-md-pull-* 类的内置网格列的顺序，其中 * 范围是从 1 到 11
+      改变带有 .col-md-push-* 和 .col-md-pull-* 类的内置网格列的顺序,其中 * 范围是从 1 到 11
       在 网格单元 上添加上此类,push 相当于右移,数字表示移动的列数;pull相当于左移.
     清楚浮动 clearfix visible-*
       在需要清除浮动的单元后添加 <div class="clearfix visible-*"></div>
@@ -1083,7 +1083,7 @@ CSS
       .warning 给 行或单元格 添加 背景色#FCF8E3 表示一个警告的操作
       .danger  给 行或单元格 添加 背景色#F2DEDE 表示一个危险的操作
     表格尺寸自适应/响应式
-      把 .table 放置在 .table-responsive 内，
+      把 .table 放置在 .table-responsive 内,
       可以让表格水平滚动以适应小型设备(小于 768px)
       当在大于 768px 宽的大型设备上查看时,看不到任何的差别
   表单
@@ -1104,7 +1104,7 @@ CSS
   按钮
     PS:任何带有 class .btn 的元素都会继承圆角灰色按钮的默认外观
       <a>、<button> 或 <input> 元素可使用按钮 class。
-      但建议在 <button> 元素上使用，避免跨浏览器不一致
+      但建议在 <button> 元素上使用,避免跨浏览器不一致
     .btn         为按钮添加基本样式,必须
     
     .btn-default 默认/标准按钮
@@ -1209,57 +1209,57 @@ JS插件
 Idea 
   视图-控制器-数据存储-模块 app
 收集 
-  一个页面从输入 URL 到页面加载显示完成，这个过程中都发生了什么？（流程说的越详细越好）
+  一个页面从输入 URL 到页面加载显示完成,这个过程中都发生了什么？（流程说的越详细越好）
     详细版：
-      1、浏览器会开启一个线程来处理这个请求，对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
-      2、调用浏览器内核中的对应方法，比如 WebView 中的 loadUrl 方法;
-      3、通过DNS解析获取网址的IP地址，设置 UA 等信息发出第二个GET请求;
-      4、进行HTTP协议会话，客户端发送报头(请求报头);
-      5、进入到web服务器上的 Web Server，如 Apache、Tomcat、Node.JS 等服务器;
-      6、进入部署好的后端应用，如 PHP、Java、JavaScript、Python 等，找到对应的请求处理;
-      7、处理结束回馈报头，此处如果浏览器访问过，缓存上有对应资源，会与服务器最后修改时间对比，一致则返回304;
-      8、浏览器开始下载html文档(响应报头，状态码200)，同时使用缓存;
-      9、文档树建立，根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
-      10、页面开始渲染DOM，JS根据DOM API操作DOM,执行事件绑定等，页面显示完成。
+      1、浏览器会开启一个线程来处理这个请求,对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
+      2、调用浏览器内核中的对应方法,比如 WebView 中的 loadUrl 方法;
+      3、通过DNS解析获取网址的IP地址,设置 UA 等信息发出第二个GET请求;
+      4、进行HTTP协议会话,客户端发送报头(请求报头);
+      5、进入到web服务器上的 Web Server,如 Apache、Tomcat、Node.JS 等服务器;
+      6、进入部署好的后端应用,如 PHP、Java、JavaScript、Python 等,找到对应的请求处理;
+      7、处理结束回馈报头,此处如果浏览器访问过,缓存上有对应资源,会与服务器最后修改时间对比,一致则返回304;
+      8、浏览器开始下载html文档(响应报头,状态码200),同时使用缓存;
+      9、文档树建立,根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
+      10、页面开始渲染DOM,JS根据DOM API操作DOM,执行事件绑定等,页面显示完成。
     简洁版：
-      浏览器根据请求的URL交给DNS域名解析，找到真实IP，向服务器发起请求；
-      服务器交给后台处理完成后返回数据，浏览器接收文件（HTML、JS、CSS、图象等）；
-      浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析，建立相应的内部数据结构（如HTML的DOM）；
-      载入解析到的资源文件，渲染页面，完成。
+      浏览器根据请求的URL交给DNS域名解析,找到真实IP,向服务器发起请求；
+      服务器交给后台处理完成后返回数据,浏览器接收文件（HTML、JS、CSS、图象等）；
+      浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析,建立相应的内部数据结构（如HTML的DOM）；
+      载入解析到的资源文件,渲染页面,完成。
 
   网页多语言支持
     采用统一编码UTF-8方式编码
-      所以对提供了多语言版本的网站来说，Unicode字符集应该是最理想的选择。
-      它是一种双字节编码机制的字符集，不管是东方文字还是西方文字，在Unicode中一律用两个字节来表示，
-      因而至少可以定义65536个不同的字符，几乎可以涵盖世界上目前所有通用的语言的每一种字符。
-      所以在设计和开发多语言网站时，一定要注意先把非中文页面的字符集定义为“utf-8”格式，
-      这一步非常重要，原因在于若等页面做好之后再更改字符集设置，可说是一件非常非常吃力不讨好的工作，
-      有时候甚至可能需要从头再来，重新输入网站的文字内容。
+      所以对提供了多语言版本的网站来说,Unicode字符集应该是最理想的选择。
+      它是一种双字节编码机制的字符集,不管是东方文字还是西方文字,在Unicode中一律用两个字节来表示,
+      因而至少可以定义65536个不同的字符,几乎可以涵盖世界上目前所有通用的语言的每一种字符。
+      所以在设计和开发多语言网站时,一定要注意先把非中文页面的字符集定义为“utf-8”格式,
+      这一步非常重要,原因在于若等页面做好之后再更改字符集设置,可说是一件非常非常吃力不讨好的工作,
+      有时候甚至可能需要从头再来,重新输入网站的文字内容。
     多语言网站实现计划 ：
-      静态：就是为每种语言分辨准备一套页面文件，
-        通过文件后缀名来区分不同语言，
-          例如对于首页文件index_en.htm供给英语界面，index_gb.htm供给简体中文界面，index_big.htm供给繁体中文界面
+      静态：就是为每种语言分辨准备一套页面文件,
+        通过文件后缀名来区分不同语言,
+          例如对于首页文件index_en.htm供给英语界面,index_gb.htm供给简体中文界面,index_big.htm供给繁体中文界面
         通过子目录来区分不同语言。
-          或者是en/index.htm供给英语界面，gb/index.htm供给简体中文界面，big/index.htm供给繁体中文界面
-        一旦用户选择了需要的语言后，主动跳转到相应的页面，首页以下其他链接也是按照同样方法处理。
-        从保护的角度来看，通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
-      动态：站点内所有页面文件都是动态页面文件（PHP，ASP等）而不是静态页面文件，
-       在需要输出语言文字的处所同一采用语言变量来表现，这些语言变量可以根据用户选择不同的语言赋予不同的值，
+          或者是en/index.htm供给英语界面,gb/index.htm供给简体中文界面,big/index.htm供给繁体中文界面
+        一旦用户选择了需要的语言后,主动跳转到相应的页面,首页以下其他链接也是按照同样方法处理。
+        从保护的角度来看,通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
+      动态：站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
+       在需要输出语言文字的处所同一采用语言变量来表现,这些语言变量可以根据用户选择不同的语言赋予不同的值,
        从而实现在不同的语言环境下输出不同的文字。
-        例如：语言变量ln_name，当用户选择的语言是英语时赋值为“Name”，
-        当用户选择的语言是简体中文时赋值为“姓名”，这样就可以适应不同语言时的输出。
+        例如：语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
+        当用户选择的语言是简体中文时赋值为“姓名”,这样就可以适应不同语言时的输出。
       优缺点
-        采用静态方法的长处是页面直接输出到客户端，不需要在服务器上运行，占用服务器的资源比拟少，
-          系统能够支撑的并发连接数较多，
-          毛病是要为每种语言制作一套页面文件，很多内容即使是和语言无关的也要分不同语言来存储，占用的存储空间较多。
-        采用动态方法和静态方法的优毛病正好相反，它的长处是动态页面文件只有一套，不同语言的文字应用语言变量来存储，
-          和语言无关的内容只存储一份，占用的存储空间较少，并且扩大新语言比拟轻易，
-          毛病需要在服务器上运行，然后把成果输进到客户端，占用服务器的资源比拟多，系统能够支撑的并发连接数较少。
+        采用静态方法的长处是页面直接输出到客户端,不需要在服务器上运行,占用服务器的资源比拟少,
+          系统能够支撑的并发连接数较多,
+          毛病是要为每种语言制作一套页面文件,很多内容即使是和语言无关的也要分不同语言来存储,占用的存储空间较多。
+        采用动态方法和静态方法的优毛病正好相反,它的长处是动态页面文件只有一套,不同语言的文字应用语言变量来存储,
+          和语言无关的内容只存储一份,占用的存储空间较少,并且扩大新语言比拟轻易,
+          毛病需要在服务器上运行,然后把成果输进到客户端,占用服务器的资源比拟多,系统能够支撑的并发连接数较少。
 
     根据navigator.language我们可以获取到浏览器的语言设置
     如果是中文的话返回的是zh-CN, 英文的话返回的可能是en,en-US等其它的
-    一般情况下（一般系统和浏览器的语言一致的。当操作系统是中文，浏览器是英文,只能用服务器脚本去判断）是没有问题啦。
-    navigator.language对IE的支持不是很好，IE的话可以选用navigator.userLanguage判断操作系统的语言
+    一般情况下（一般系统和浏览器的语言一致的。当操作系统是中文,浏览器是英文,只能用服务器脚本去判断）是没有问题啦。
+    navigator.language对IE的支持不是很好,IE的话可以选用navigator.userLanguage判断操作系统的语言
     
   代码功能实现
     表单中不允许输入中文(输入中文自动消失)
@@ -1449,26 +1449,26 @@ Question And Answer
     二叉树
     使用过的jQuery组件
     json格式有什么优缺点？
-    css的盒模型， width和height指定的是什么
+    css的盒模型, width和height指定的是什么
     介绍下http协议
       http的header有哪些内容
       402.402等状态码什么含义
-      get与post方法的区别是什么？除了get与post，还有哪些方式？
+      get与post方法的区别是什么？除了get与post,还有哪些方式？
     bootstrap
     anjularJS
 
     ES6的object.assign()
-    window.onclick与addEventListener的区别。同时用他们注册监听器的话，触发顺序是什么；
+    window.onclick与addEventListener的区别。同时用他们注册监听器的话,触发顺序是什么；
     如何进行页面加载优化；
     算法： 求3的平方根；
     CSS实现一个圆环形loading效果
     CSS3 实现一个立方体
-    如果网页内容需要支持多语言，你会怎么做？
+    如果网页内容需要支持多语言,你会怎么做？
     模块式开发
-    ajax的回调函数，（答success, error，complete）还有其他几种?
+    ajax的回调函数,（答success, error,complete）还有其他几种?
     ajax 的ContentType 和 datatype 的区别（答了之后又问了 datatype有哪些类型）
-    一个div width = 12px, 里面有个p元素是1.5em， 现在把浏览器窗口放大2倍，div和p的width是多少
-    给了几个个字符串，有的里面有双引号，有的是单引号，有的没引号，判断哪个是合法有效的JSON格式数据
+    一个div width = 12px, 里面有个p元素是1.5em, 现在把浏览器窗口放大2倍,div和p的width是多少
+    给了几个个字符串,有的里面有双引号,有的是单引号,有的没引号,判断哪个是合法有效的JSON格式数据
     MVVM
 
     写出页面中超链接href中包含"/ system/"字符的CSS选择器

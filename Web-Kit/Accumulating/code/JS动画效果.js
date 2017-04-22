@@ -242,7 +242,7 @@ var cloud = function() {
   this.outerY = this.container.offsetTop + document.body.scrollTop;
 }
 cloud.prototype.rotateX = function() {
-  // 元素在x轴上的移动，也就是更改y坐标
+  // 元素在x轴上的移动,也就是更改y坐标
   var cos = Math.cos(this.angleX);
   var sin = Math.sin(this.angleX);
   this.tagObjs.forEach(function(e) {
@@ -277,7 +277,7 @@ cloud.prototype.animate = function() {
 }
 cloud.prototype.init = function() {
   for(var i = 0; i < this.tags.length; i++) {
-    // 为了初始化得更加均匀，像一个球，不随机生成参数，而是与元素序号相关
+    // 为了初始化得更加均匀,像一个球,不随机生成参数,而是与元素序号相关
     var t = ((i + 1) * 2 - 1) / this.tags.length - 1;
     var a = Math.acos(t);
     var b = a * Math.sqrt(this.tags.length * Math.PI);

@@ -28,7 +28,7 @@ function curlPost($url, $data = array(), $timeout = 30, $CA = true){
     if ($SSL && $CA) {  
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);   // 只信任CA颁布的证书  
         curl_setopt($ch, CURLOPT_CAINFO, $cacert); // CA根证书（用来验证的网站证书是否是CA颁布）  
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); // 检查证书中是否设置域名，并且是否与提供的主机名匹配  
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); // 检查证书中是否设置域名,并且是否与提供的主机名匹配  
     } else if ($SSL && !$CA) {  
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书  
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1); // 检查证书中是否设置域名  

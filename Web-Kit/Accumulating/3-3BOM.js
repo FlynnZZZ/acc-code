@@ -515,7 +515,7 @@ window 的六大属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-AJAX,Asynchronous JavaScript and XML 异步的JS和XML 
+AJAX,Asynchronous JavaScript and XML  异步的JS和XML 
   介绍
     PS: 浏览器提供了使用http协议收发数据的接口,名为 AJAX;
       可用JS动态抓取内容构建页面;
@@ -2010,7 +2010,7 @@ XMLHttpRequest Level2 [HTML5新增] [IE10+支持]
   需要在服务器端进行相关的改动
     header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
     header("Access-Control-Allow-Methods:GET,POST");
-Comet  一种更高级的AJAX技术
+Comet  一种更高级的AJAX技术 
   PS:由Alex Russell 发明的一个词,也有人称为"服务器推送".
     Comet是一种服务器向页面推送数据的技术
     Comet能够让信息近乎实时的被推送到页面上,非常适合处理体育比赛的分数和股票报价
@@ -2545,7 +2545,7 @@ WebRTC,Web Real Time Communication  网络实时通信
       conn.on('open', function(){
         conn.send('hi!');
       });
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 ◆HTML5 及 新增API
 ★BOM 内容增加 
 window.history
@@ -2775,6 +2775,7 @@ Viewport 视口
     user-scalable: 是否允许用户缩放
   e.g.:.
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
+SSE 「HTML5」
 navigator.geolocation 地理定位 「HTML5」
   PS:在地理定位API中,使用小数值来表示经纬度(西经和南纬都用负数表示)
   单位转换
@@ -2838,7 +2839,6 @@ navigator.geolocation 地理定位 「HTML5」
     引入 API 放置在 HTML head中
       <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
       sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
-SSE 「HTML5」
 navigator.vibrate     设备震动
   PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
     显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
@@ -2876,7 +2876,7 @@ navigator.vibrate     设备震动
       		startVibrate(duration);
       	}, interval);
       }
-devicelight        设备屏幕亮度变化事件
+devicelight           设备屏幕亮度变化事件
   PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
   var DLRun = function(event) { }
   window.addEventListener('devicelight',DLRun);
@@ -2898,7 +2898,7 @@ devicelight        设备屏幕亮度变化事件
     @media (light-level: dim) { /* 暗光环境 */ }
     @media (light-level: normal) { /* 正常光环境 */ }
     @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation  设备摆放方向变化事件「竖放或横放」
+deviceorientation     设备摆放方向变化事件「竖放或横放」
   PS:一旦设备的方向发生变化触发
   检测浏览器是否支持该API
     if (window.DeviceOrientationEvent) { /*  支持 */ } 
@@ -3113,7 +3113,7 @@ Web Socket 网络通信协议
     ActiveX HTMLFile(IE) 、
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
-Local Storage 网页本地存储 「HTML5」
+Local Storage                   网页本地存储 「HTML5」
   PS:
     JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage.
@@ -3198,7 +3198,7 @@ application cache,简称appcache  应用缓存  「HTML5」
       progress  在文件下载应用缓存的过程中持续不断的触发
       updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
       cached    在应用缓存完整可用时触发
-IndexedDB         浏览器端数据库 
+IndexedDB                       浏览器端数据库 
   概述
   随着浏览器的处理能力不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,这样可以减少用户等待从服务器获取数据的时间。
   
@@ -3760,6 +3760,102 @@ drag|drop 拖放 「HTML5」
       result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
+    }
+Fullscreen API 全屏操作
+  PS：全屏API可以控制浏览器的全屏显示,让一个Element节点「以及子节点」占满用户的整个屏幕
+    目前各大浏览器的最新版本都支持这个API「包括IE11」,但是使用的时候需要加上浏览器前缀
+    放大一个节点时,Firefox和Chrome在行为上略有不同。
+    Firefox自动为该节点增加一条CSS规则,将该元素放大至全屏状态,width:100%; height:100%,
+    而Chrome则是将该节点放在屏幕的中央,保持原来大小,其他部分变黑。
+    用户手动按下ESC键或F11键,也可以退出全屏键;
+    加载新页面,或切换tab,或从浏览器转向其他应用「按下Alt-Tab」,也会导致退出全屏状态;
+  elem.requestFullscreen() 使该节点全屏
+    PS：在Chrome/Firefox等浏览器中直接使用直接使元素节点全屏,会被拒绝
+    function requestFullscreen(element) {
+      if(element.requestFullscreen) {
+        element.requestFullscreen();
+      } 
+      else if(element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } 
+      else if(element.msRequestFullscreen){
+        element.msRequestFullscreen();
+      } 
+      else if(element.webkitRequestFullscreen) {
+        element.webkitRequestFullScreen();
+      }
+      else {
+        alert('该浏览器不支持全屏');
+      }
+    }
+    requestFullscreen(document.documentElement);
+    requestFullscreen(document.getElementById("videoElement"));
+    为了让Chrome的行为与Firefox保持一致,可以自定义一条CSS规则。
+      :-webkit-full-screen #myvideo {
+        width: 100%;
+        height: 100%;
+      }
+  document.exitFullscreen()  用于取消全屏「该方法也带有浏览器前缀」
+    function exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } 
+      else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } 
+      else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } 
+      else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+    exitFullscreen();
+  document.fullscreenElement 返回正处于全屏状态的Element节点,
+    PS：如果当前没有节点处于全屏状态,则返回null。
+    var fullscreenElement = document.fullscreenElement 
+    || document.mozFullScreenElement 
+    || document.webkitFullscreenElement;
+  document.fullscreenEnabled 表示当前文档是否可以切换到全屏状态的布尔值
+    var fullscreenEnabled = document.fullscreenEnabled 
+    || document.mozFullScreenEnabled 
+    || document.webkitFullscreenEnabled 
+    || document.msFullscreenEnabled;
+  fullscreenchange  浏览器进入或离开全屏时在document上触发事件
+    document.addEventListener("fullscreenchange", function( event ) {
+      if (document.fullscreenElement) {
+        console.log('进入全屏');
+      } 
+      else {
+        console.log('退出全屏');
+      }
+    });
+  fullscreenerror   浏览器无法进入全屏时触发事件,可能是技术原因,也可能是用户拒绝
+  全屏状态的CSS
+    全屏状态下,大多数浏览器的CSS支持:full-screen伪类,只有IE11支持:fullscreen伪类。
+    使用这个伪类,可以对全屏状态设置单独的CSS属性。
+    :-webkit-full-screen {
+      /* properties */
+    }
+    :-moz-full-screen {
+      /* properties */
+    }
+
+    :-ms-fullscreen {
+      /* properties */
+    }
+
+    :full-screen { /*pre-spec */
+      /* properties */
+    }
+
+    :fullscreen { /* spec */
+      /* properties */
+    }
+    /* deeper elements */
+    :-webkit-full-screen video {
+      width: 100%;
+      height: 100%;
     }
 -------------------------------------------------------------------------待整理
 

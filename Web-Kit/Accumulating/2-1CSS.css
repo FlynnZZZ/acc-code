@@ -628,6 +628,7 @@ Style    样式
           background-image: -webkit-linear-gradient( #fff 30%,  #000  60% );
           /*等价: -webkit-linear-gradient( #fff,#fff 30%,  #000  60% ,#000);*/
         }
+      Remarks： 
     radial-gradient 径向渐变
       -webkit-radial-gradient([origin],[shape],<color position>+)
         PS:该方法需增加厂商前缀
@@ -953,6 +954,8 @@ Style    样式
       list-style 
     input 表单
       padding 
+    textarea 文本域
+      resize: none;  禁止缩放
   配件样式
     ::-webkit-scrollbar       滚动条样式
       .aoo ::-webkit-scrollbar {
@@ -2835,7 +2838,7 @@ Collection
   在文字超出部分部分使用...显示
 
 
-
+ 
 
 
 

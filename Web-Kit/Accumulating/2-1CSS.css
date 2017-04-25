@@ -5,6 +5,20 @@
     CSS1在1996年成为推荐标准.包含内容如字体、颜色、空白边等内容.
     CSS2在1998年成为推荐标准,增加了浮动定位、高级选择器等.
     CSS2.1在2002年启动开发,是对CSS2的修订版.
+  CSS3  
+    CSS版本说明
+      CSS 分为不同等级,CSS1 现已废弃, CSS2.1 是推荐标准, 
+      CSS3 分成多个小模块,正在标准化中。
+    颜色模式新增 RGBA HSLA 
+    text-shadow [见文本样式]
+    background-size background-origin background-clip
+    box-sizing box-shadow border-radius border-image (见盒模型)
+    @media
+    多栏布局
+    ::selection 伪元素
+    transition 过渡 (可实现动画)
+    animation  自定义动画
+    linear-gradient radial-gradient 线性/圆形渐变
 概念：  
   replaced element,替换元素
     指用来替换元素内容的部分并非由文档内容直接表示
@@ -629,6 +643,9 @@ Style    样式
           /*等价: -webkit-linear-gradient( #fff,#fff 30%,  #000  60% ,#000);*/
         }
       Remarks： 
+        在Chrome中
+          linear-gradient(to bottom, #feb26e, #e79248);          不用加前缀
+          --webkit-linear-gradient(bottom, #feb26e, #e79248); 需加前缀
     radial-gradient 径向渐变
       -webkit-radial-gradient([origin],[shape],<color position>+)
         PS:该方法需增加厂商前缀
@@ -1013,6 +1030,10 @@ Style    样式
       优先级就近原则,同权重情况下样式定义最近者为准;
       载入样式以最后载入的定位为准;
       !important >内联 >  id > class > tag
+    元素覆盖的优先级
+      背景
+        默认的后面的元素覆盖前面的元素,
+        子元素覆盖父元素,
 Selector 选择器 
   PS: css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
     selector{
@@ -1965,7 +1986,7 @@ Layout   布局
       top
       middle
       bottom
-  flex 布局   「CSS3+」 「IE10+」 
+  flex 布局   「CSS3+ IE10+」 
     PS:常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
@@ -2022,10 +2043,11 @@ Layout   布局
       如果一个项目的 flex-grow 属性为2,其他项目都为 1,
         则前者占据的剩余空间将比其他项多一倍。
     flex-shrink:num   定义了项目的缩小比例 
-      如果所有项目的flex-shrink属性都为1,当空间不足时,都将等比例缩小
-      默认为1,即如果空间不足,该项目将缩小。
-      如果一个项目的flex-shrink属性为0,其他项目都为1,则空间不足时,前者不缩小。
-      负值对该属性无效。
+      PS: 负值对该属性无效
+      1   默认值,即当空间不足,该项目将缩小;
+        如果所有项目的flex-shrink属性都为1,当空间不足时,都将等比例缩小
+      num 其他缩放比例;
+      0   当空间不足时,该项不缩小;
       Remarks: 
         bug: 使用 flex-shrink:0; 决解左右布局时,一边某一个宽度与其他不同
         .item{
@@ -2079,7 +2101,7 @@ Layout   布局
        auto | flex-start | flex-end | center | baseline | stretch;
       默认值为auto,表示继承父元素的align-items属性,如果没有父元素,则等同于stretch。
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
-  column 多栏布局 「CSS3新增」 
+  column 多栏布局 「CSS3+」   
     column-count  显示栏目数
       number 元素内容将被划分的列数
       auto   由其他属性决定列数,比如 "column-width"。
@@ -2131,11 +2153,6 @@ Layout   布局
       .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
       .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
       /*使用 overflow: hidden 生成 BFC*/
-  优先级
-    元素覆盖的优先级
-      背景
-        默认的后面的元素覆盖前面的元素,
-        子元素覆盖父元素,
   已废弃
     弹性盒模型  display:box
       已被 display:flex 取代
@@ -2160,20 +2177,6 @@ Layout   布局
         值为数值,不同子元素间通过该数值的比例来进行宽度分割.
       box-ordinal-group  子元素排列顺序
         属性值为非负数值,根据数值的大小决定子元素的排列顺序
-CSS3  
-  CSS版本说明
-    CSS 分为不同等级,CSS1 现已废弃, CSS2.1 是推荐标准, 
-    CSS3 分成多个小模块,正在标准化中。
-  颜色模式新增 RGBA HSLA 
-  text-shadow [见文本样式]
-  background-size background-origin background-clip
-  box-sizing box-shadow border-radius border-image (见盒模型)
-  @media
-  多栏布局
-  ::selection 伪元素
-  transition 过渡 (可实现动画)
-  animation  自定义动画
-  linear-gradient radial-gradient 线性/圆形渐变
 --------------------------------------------------------------------------------
 移动端
 ios 微信 

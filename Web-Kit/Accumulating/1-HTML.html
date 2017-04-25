@@ -864,7 +864,7 @@
   <label for="">内容</label>                表单标签  // todo
     PS:标签为input元素定义标注,标记.
       label元素不会向用户呈现特殊效果.
-    点击label,使关联表单控件获得焦点.
+    点击label,使关联表单控件获得焦点,使关联的按钮被点击
       PS:产生效果的前提:使用"for"属性把label绑定到另外一个元素,
         即把"for"属性的值设置为相关元素的id属性的值.
       显示方式关联
@@ -1538,21 +1538,21 @@ Web图片
       <![endif]-->
   结构化 语义化标签
     结构化标签
-      header     页眉
+      <header>     页眉
         <header></header>页眉
         header元素是一种具有引导和导航作用的结构元素
         通常用来放置整个页面或页面内某个内容区块的标题等,没有个数限制
         但也可以包含其他的内容,比如在header里面放置logo图片、搜索表单等等.
-      article    文章
+      <article>    文章
         <article></article>
         表示页面中的一块与上下文不相关的独立内容,比如一篇文章中的文章.
-      section    区块
+      <section>    区块
         <section></section>区域
         表示页面中的一块内容区块
-      aside      侧边栏
+      <aside>      侧边栏
         <aside></aside>侧边栏
         表示article内容外的和内容相关的辅助信息
-      footer     页脚
+      <footer>     页脚
         <footer></footer>页脚
         作为其上层父级内容区块或是一个根区块的注脚.
     语义化标签
@@ -1666,33 +1666,44 @@ Web图片
     4 表单事件
       oninput 用户输入内容时触发,可用于移动端输入字数统计
       oninvalid 验证不通过时触发
-  新的元素：
-    section
-    video
-    progress
-    nav
-    meter
-    time
-    aside
-    canvas
-    command
-    datalist
-    details
-    embed
-    figcaption
-    figure
-    footer
-    header
-    hgroup
-    keygen
-    mark
-    output
-    rp
-    rt
-    ruby
-    source
-    summary
-    wbr
+  新的标签：
+    <article>  一篇文章
+    <aside>    侧边栏
+    <audio>
+    <canvas>
+    <command>   定义一个命令按钮 「存在兼容性问题」
+    <datalist>  下拉列表
+    <details>   详细内容
+    <dialog>    对话框,会话框 「只有Chrome和Safari支持」
+      <dialog open>这是打开的对话窗口</dialog>
+    <embed>     外部可交互的内容或插件
+    <figcaption>
+    <figure>
+    <footer>
+    <header>
+    <hgroup>
+    <keygen>   用于表单的密钥对生成器字段,当提交表单时,私钥存储在本地,公钥发送到服务器
+      属性             值          描述
+      autofocus  autofocus   使 keygen 字段在页面加载时获得焦点。
+      challenge  challenge   如果使用，则将 keygen 的值设置为在提交时询问。
+      disabled   disabled    禁用 keytag 字段。
+      form       formname    定义该 keygen 字段所属的一个或多个表单。
+      keytype    rsa         定义 keytype。rsa 生成 RSA 密钥。
+      name       fieldname   定义 keygen 元素的唯一名称。name 属性用于在提交表单时搜集字段的值。
+    <mark>     标记文本
+    <meter>
+    <nav>
+    <output>
+    <progress>
+    <rp>
+    <rt>
+    <ruby>
+    <section>
+    <source>
+    <summary>
+    <time>
+    <video>
+    <wbr>
   input元素的新类型：date, email, url等等。
   新的属性：ping（用于a与area）, charset（用于meta）, async（用于script）。
   全域属性：id, tabindex, repeat。

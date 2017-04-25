@@ -2491,6 +2491,25 @@ var() CSS变量
           margin-left: -50%;
           /*参考其父元素*/
         }
+        
+        <div class="pages">
+          <span>首页</span>
+          <span> 1 </span>
+          <span> 2 </span>
+          <span> 3 </span>
+          <span> 4 </span>
+          <span>尾页</span>
+        </div>
+        .pages{
+          float: left;
+          position: relative;
+          left: 50%;
+        }
+        .pages span{
+          float: left;
+          position: relative;
+          left: -50%;
+        }
       margin + inline-block
         使用display:inline-block属性替换float未定义宽度的非替换元素的特性.
       margin + transform:translateX(-50%)
@@ -2724,6 +2743,22 @@ var() CSS变量
     方法二:使用单位vw
       统一使用vw作为尺寸单位,或设置rem等于1vw,使用rem作为单位
   文本超出显示为省略号 [见 text-overflow 属性]
+  
+  将元素隐藏的方法
+    .none{ display: none; }
+    .none{ visibility: hidden; }
+    .none{
+      display: block;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    .none{
+      position: absolute;
+      top: -99000px;
+      left: -99999px;
+    }
+    ...
 Question & Idea:  
   左右两个元素,右元素左浮动,如何使左元素不被挤走?
 Collection        

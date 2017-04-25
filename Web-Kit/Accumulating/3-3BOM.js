@@ -2266,14 +2266,244 @@ same-origin policy,同源政策
   CORS是跨源资源分享(Cross-Origin Resource Sharing)的缩写。它是W3C标准,是跨源AJAX请求的根本解决方法。相比JSONP只能发GET请求,CORS允许任何类型的请求。  
 跨文档消息传递API 
   iframe元素
+-------------------------------------------------------------------------------
+◆HTML5 及 新增API
+★BOM 内容增加 
+window.history
+  检查当前浏览器是否支持 history.pushState
+    if (!!(window.history && history.pushState)){
+      // 支持History API
+      console.log('支持');
+    } 
+    else {
+      // 不支持
+      console.log('不支持');
+    }
+  history.pushState(对象,'title',path); 增加历史记录 
+    PS:只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
+      前进或后退 网页不跳转,url有变化;
+      如可把当前地址发送个其他人而访问该页面的当前状态,
+      只能改路径而不能改域名
+      只能增加当前域名下的url
+    三个参数:
+      自定义对象
+      新页面的标题(现在还没有浏览器实现该功能,有没有都一样)
+      新页面的地址
+        即在当前网址后添加的值
+        可以是路径,如:/box
+        也可以是字符串,如:?c=1&b=2
+    e.g.
+      history.pushState(null,'a','/abcd')
+  history.replaceState 替换当前状态 
+    和 pushState类似,但不是增加而是替换
+  Todo: 
+    history.pushState方法接受三个参数,依次为：
+    
+    state：一个与指定网址相关的状态对象,popstate事件触发时,该对象会传入回调函数。如果不需要这个对象,此处可以填null。
+    title：新页面的标题,但是所有浏览器目前都忽略这个值,因此这里可以填null。
+    url：新的网址,必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址。
+    假定当前网址是example.com/1.html,我们使用pushState方法在浏览记录(history对象)中添加一个新记录。
+    
+    var stateObj = { foo: 'bar' };
+    history.pushState(stateObj, 'page 2', '2.html');
+    添加上面这个新记录后,浏览器地址栏立刻显示example.com/2.html,但并不会跳转到2.html,甚至也不会检查2.html是否存在,它只是成为浏览历史中的最新记录。假定这时你访问了google.com,然后点击了倒退按钮,页面的url将显示2.html,但是内容还是原来的1.html。你再点击一次倒退按钮,url将显示1.html,内容不变。
+    
+    总之,pushState方法不会触发页面刷新,只是导致history对象发生变化,地址栏会有反应。
+    
+    如果pushState的url参数,设置了一个新的锚点值(即hash),并不会触发hashchange事件。如果设置了一个跨域网址,则会报错。
+    
+    // 报错
+    history.pushState(null, null, 'https://twitter.com/hello');
+    上面代码中,pushState想要插入一个跨域的网址,导致报错。这样设计的目的是,防止恶意代码让用户以为他们是在另一个网站上。
+    
+    history.replaceState()
+    history.replaceState方法的参数与pushState方法一模一样,区别是它修改浏览历史中当前纪录。
+    
+    假定当前网页是example.com/example.html。
+    
+    history.pushState({page: 1}, 'title 1', '?page=1');
+    history.pushState({page: 2}, 'title 2', '?page=2');
+    history.replaceState({page: 3}, 'title 3', '?page=3');
+    
+    history.back()
+    // url显示为http://example.com/example.html?page=1
+    
+    history.back()
+    // url显示为http://example.com/example.html
+    
+    history.go(2)
+    // url显示为http://example.com/example.html?page=3
+    history.state属性
+    history.state属性返回当前页面的state对象。
+    
+    history.pushState({page: 1}, 'title 1', '?page=1');
+    
+    history.state
+    // { page: 1 }
+    popstate事件
+    每当同一个文档的浏览历史(即history对象)出现变化时,就会触发popstate事件。
+    
+    需要注意的是,仅仅调用pushState方法或replaceState方法 ,并不会触发该事件,只有用户点击浏览器倒退按钮和前进按钮,或者使用JavaScript调用back、forward、go方法时才会触发。另外,该事件只针对同一个文档,如果浏览历史的切换,导致加载不同的文档,该事件也不会触发。
+    
+    使用的时候,可以为popstate事件指定回调函数。这个回调函数的参数是一个event事件对象,它的state属性指向pushState和replaceState方法为当前URL所提供的状态对象(即这两个方法的第一个参数)。
+    
+    window.onpopstate = function (event) {
+      console.log('location: ' + document.location);
+      console.log('state: ' + JSON.stringify(event.state));
+    };
+    
+    // 或者
+    
+    window.addEventListener('popstate', function(event) {
+      console.log('location: ' + document.location);
+      console.log('state: ' + JSON.stringify(event.state));
+    });
+    上面代码中的event.state,就是通过pushState和replaceState方法,为当前URL绑定的state对象。
+    
+    这个state对象也可以直接通过history对象读取。
+    
+    var currentState = history.state;
+    注意,页面第一次加载的时候,在load事件发生后,Chrome和Safari浏览器(Webkit核心)会触发popstate事件,而Firefox和IE浏览器不会。
+    
+    URLSearchParams API
+    URLSearchParams API用于处理URL之中的查询字符串,即问号之后的部分。没有部署这个API的浏览器,可以用url-search-params这个垫片库。
+    
+    var paramsString = 'q=URLUtils.searchParams&topic=api';
+    var searchParams = new URLSearchParams(paramsString);
+    URLSearchParams有以下方法,用来操作某个参数。
+    
+    has()：返回一个布尔值,表示是否具有某个参数
+    get()：返回指定参数的第一个值
+    getAll()：返回一个数组,成员是指定参数的所有值
+    set()：设置指定参数
+    delete()：删除指定参数
+    append()：在查询字符串之中,追加一个键值对
+    toString()：返回整个查询字符串
+    var paramsString = 'q=URLUtils.searchParams&topic=api';
+    var searchParams = new URLSearchParams(paramsString);
+    
+    searchParams.has('topic') // true
+    searchParams.get('topic') // "api"
+    searchParams.getAll('topic') // ["api"]
+    
+    searchParams.get('foo') // null,注意Firefox返回空字符串
+    searchParams.set('foo', 2);
+    searchParams.get('foo') // 2
+    
+    searchParams.append('topic', 'webdev');
+    searchParams.toString() // "q=URLUtils.searchParams&topic=api&foo=2&topic=webdev"
+    
+    searchParams.append('foo', 3);
+    searchParams.getAll('foo') // [2, 3]
+    
+    searchParams.delete('topic');
+    searchParams.toString() // "q=URLUtils.searchParams&foo=2&foo=3"
+    URLSearchParams还有三个方法,用来遍历所有参数。
+    
+    keys()：遍历所有参数名
+    values()：遍历所有参数值
+    entries()：遍历所有参数的键值对
+    上面三个方法返回的都是Iterator对象。
+    
+    var searchParams = new URLSearchParams('key1=value1&key2=value2');
+    
+    for (var key of searchParams.keys()) {
+      console.log(key);
+    }
+    // key1
+    // key2
+    
+    for (var value of searchParams.values()) {
+      console.log(value);
+    }
+    // value1
+    // value2
+    
+    for (var pair of searchParams.entries()) {
+      console.log(pair[0]+ ', '+ pair[1]);
+    }
+    // key1, value1
+    // key2, value2
+    在Chrome浏览器之中,URLSearchParams实例本身就是Iterator对象,与entries方法返回值相同。所以,可以写成下面的样子。
+    
+    for (var p of searchParams) {
+      console.log(p);
+    }
+    下面是一个替换当前URL的例子。
+    
+    // URL: https://example.com?version=1.0
+    var params = new URLSearchParams(location.search.slice(1));
+    params.set('version', 2.0);
+    
+    window.history.replaceState({}, '', `${location.pathname}?${params}`);
+    // URL: https://example.com?version=2.0
+    URLSearchParams实例可以当作POST数据发送,所有数据都会URL编码。
+    
+    let params = new URLSearchParams();
+    params.append('api_key', '1234567890');
+    
+    fetch('https://example.com/api', {
+      method: 'POST',
+      body: params
+    }).then(...)
+    DOM的a元素节点的searchParams属性,就是一个URLSearchParams实例。
+    
+    var a = document.createElement('a');
+    a.href = 'https://example.com?filter=api';
+    a.searchParams.get('filter') // "api"
+    URLSearchParams还可以与URL接口结合使用。
+    
+    var url = new URL(location);
+    var foo = url.searchParams.get('foo') || 'somedefault';      
+★针对移动设备的API 
+navigator.permissions.query( )   许可查询
+  PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
+    Permissions API就是用来查询某个接口的许可情况.
+  // 查询地理位置接口的许可情况
+  navigator.permissions.query({ name: 'geolocation' })
+  .then(function(result) {
+    // 状态为 prompt,表示查询地理位置时,
+    // 用户会得到提示,是否许可本次查询
+    /* result.status = "prompt" */
+
+    // 状态为 granted,表示用户已经给予了许可
+    /* result.status = "granted" */
+  });
+  有了这个API,就可以自动查询用户的态度.
+  当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
+Viewport 视口
+  PS:Viewport指的是网页的显示区域,
+    也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
+    正常情况下,viewport和浏览器的显示窗口是一样大小的.
+    但是,在移动设备上,两者可能不是一样大小.
+    比如,手机浏览器的窗口宽度可能是640像素,这时viewport宽度就是640像素,
+    但是网页宽度有950像素,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个像素.
+    另一种方法则是,将viewport设成950像素,也就是说,浏览器的显示宽度还是640像素,
+    但是网页的显示区域达到950像素,整个网页缩小了,在浏览器中可以看清楚全貌.
+    这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
+  viewport缩放规则 「在HTML网页的head部分指定」 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    上面代码指定,viewport的缩放规则: 
+      缩放到当前设备的屏幕宽度「device-width」,
+      初始缩放比例「initial-scale」为1倍,
+      禁止用户缩放「user-scalable」;
+  viewport 全部属性:
+    width: viewport宽度
+    height: viewport高度
+    initial-scale: 初始缩放比例
+    maximum-scale: 最大缩放比例
+    minimum-scale: 最小缩放比例
+    user-scalable: 是否允许用户缩放
+  e.g.:.
+    <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
+SSE 「HTML5」
 WebRTC,Web Real Time Communication  网络实时通信 
-  PS:
-    最初是为了解决浏览器上视频通话而提出的,
+  PS: 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
     Google是WebRTC的主要支持者和开发者,它最初在Gmail上推出了视频聊天,
     后来在2011年推出了Hangouts,允许在浏览器中打电话。推动了WebRTC标准的确立。
-  MediaStream,又称 getUserMedia  获取音频和视频
+  MediaStream,又称 getUserMedia  获取音频和视频 「HTML5」   
     PS: navigator.getUserMedia  在浏览器中获取音频(通过麦克风)和视频(通过摄像头)
       将来可以用于获取任意数据流,比如光盘和传感器
     检查浏览器是否支持getUserMedia方法
@@ -2545,296 +2775,59 @@ WebRTC,Web Real Time Communication  网络实时通信
       conn.on('open', function(){
         conn.send('hi!');
       });
--------------------------------------------------------------------------------
-◆HTML5 及 新增API
-★BOM 内容增加 
-window.history
-  检查当前浏览器是否支持 history.pushState
-    if (!!(window.history && history.pushState)){
-      // 支持History API
-      console.log('支持');
-    } 
-    else {
-      // 不支持
-      console.log('不支持');
-    }
-  history.pushState(对象,'title',path); 增加历史记录 
-    PS:只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
-      前进或后退 网页不跳转,url有变化;
-      如可把当前地址发送个其他人而访问该页面的当前状态,
-      只能改路径而不能改域名
-      只能增加当前域名下的url
-    三个参数:
-      自定义对象
-      新页面的标题(现在还没有浏览器实现该功能,有没有都一样)
-      新页面的地址
-        即在当前网址后添加的值
-        可以是路径,如:/box
-        也可以是字符串,如:?c=1&b=2
-    e.g.
-      history.pushState(null,'a','/abcd')
-  history.replaceState 替换当前状态 
-    和 pushState类似,但不是增加而是替换
-  Todo: 
-    history.pushState方法接受三个参数,依次为：
-    
-    state：一个与指定网址相关的状态对象,popstate事件触发时,该对象会传入回调函数。如果不需要这个对象,此处可以填null。
-    title：新页面的标题,但是所有浏览器目前都忽略这个值,因此这里可以填null。
-    url：新的网址,必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址。
-    假定当前网址是example.com/1.html,我们使用pushState方法在浏览记录(history对象)中添加一个新记录。
-    
-    var stateObj = { foo: 'bar' };
-    history.pushState(stateObj, 'page 2', '2.html');
-    添加上面这个新记录后,浏览器地址栏立刻显示example.com/2.html,但并不会跳转到2.html,甚至也不会检查2.html是否存在,它只是成为浏览历史中的最新记录。假定这时你访问了google.com,然后点击了倒退按钮,页面的url将显示2.html,但是内容还是原来的1.html。你再点击一次倒退按钮,url将显示1.html,内容不变。
-    
-    总之,pushState方法不会触发页面刷新,只是导致history对象发生变化,地址栏会有反应。
-    
-    如果pushState的url参数,设置了一个新的锚点值(即hash),并不会触发hashchange事件。如果设置了一个跨域网址,则会报错。
-    
-    // 报错
-    history.pushState(null, null, 'https://twitter.com/hello');
-    上面代码中,pushState想要插入一个跨域的网址,导致报错。这样设计的目的是,防止恶意代码让用户以为他们是在另一个网站上。
-    
-    history.replaceState()
-    history.replaceState方法的参数与pushState方法一模一样,区别是它修改浏览历史中当前纪录。
-    
-    假定当前网页是example.com/example.html。
-    
-    history.pushState({page: 1}, 'title 1', '?page=1');
-    history.pushState({page: 2}, 'title 2', '?page=2');
-    history.replaceState({page: 3}, 'title 3', '?page=3');
-    
-    history.back()
-    // url显示为http://example.com/example.html?page=1
-    
-    history.back()
-    // url显示为http://example.com/example.html
-    
-    history.go(2)
-    // url显示为http://example.com/example.html?page=3
-    history.state属性
-    history.state属性返回当前页面的state对象。
-    
-    history.pushState({page: 1}, 'title 1', '?page=1');
-    
-    history.state
-    // { page: 1 }
-    popstate事件
-    每当同一个文档的浏览历史(即history对象)出现变化时,就会触发popstate事件。
-    
-    需要注意的是,仅仅调用pushState方法或replaceState方法 ,并不会触发该事件,只有用户点击浏览器倒退按钮和前进按钮,或者使用JavaScript调用back、forward、go方法时才会触发。另外,该事件只针对同一个文档,如果浏览历史的切换,导致加载不同的文档,该事件也不会触发。
-    
-    使用的时候,可以为popstate事件指定回调函数。这个回调函数的参数是一个event事件对象,它的state属性指向pushState和replaceState方法为当前URL所提供的状态对象(即这两个方法的第一个参数)。
-    
-    window.onpopstate = function (event) {
-      console.log('location: ' + document.location);
-      console.log('state: ' + JSON.stringify(event.state));
-    };
-    
-    // 或者
-    
-    window.addEventListener('popstate', function(event) {
-      console.log('location: ' + document.location);
-      console.log('state: ' + JSON.stringify(event.state));
-    });
-    上面代码中的event.state,就是通过pushState和replaceState方法,为当前URL绑定的state对象。
-    
-    这个state对象也可以直接通过history对象读取。
-    
-    var currentState = history.state;
-    注意,页面第一次加载的时候,在load事件发生后,Chrome和Safari浏览器(Webkit核心)会触发popstate事件,而Firefox和IE浏览器不会。
-    
-    URLSearchParams API
-    URLSearchParams API用于处理URL之中的查询字符串,即问号之后的部分。没有部署这个API的浏览器,可以用url-search-params这个垫片库。
-    
-    var paramsString = 'q=URLUtils.searchParams&topic=api';
-    var searchParams = new URLSearchParams(paramsString);
-    URLSearchParams有以下方法,用来操作某个参数。
-    
-    has()：返回一个布尔值,表示是否具有某个参数
-    get()：返回指定参数的第一个值
-    getAll()：返回一个数组,成员是指定参数的所有值
-    set()：设置指定参数
-    delete()：删除指定参数
-    append()：在查询字符串之中,追加一个键值对
-    toString()：返回整个查询字符串
-    var paramsString = 'q=URLUtils.searchParams&topic=api';
-    var searchParams = new URLSearchParams(paramsString);
-    
-    searchParams.has('topic') // true
-    searchParams.get('topic') // "api"
-    searchParams.getAll('topic') // ["api"]
-    
-    searchParams.get('foo') // null,注意Firefox返回空字符串
-    searchParams.set('foo', 2);
-    searchParams.get('foo') // 2
-    
-    searchParams.append('topic', 'webdev');
-    searchParams.toString() // "q=URLUtils.searchParams&topic=api&foo=2&topic=webdev"
-    
-    searchParams.append('foo', 3);
-    searchParams.getAll('foo') // [2, 3]
-    
-    searchParams.delete('topic');
-    searchParams.toString() // "q=URLUtils.searchParams&foo=2&foo=3"
-    URLSearchParams还有三个方法,用来遍历所有参数。
-    
-    keys()：遍历所有参数名
-    values()：遍历所有参数值
-    entries()：遍历所有参数的键值对
-    上面三个方法返回的都是Iterator对象。
-    
-    var searchParams = new URLSearchParams('key1=value1&key2=value2');
-    
-    for (var key of searchParams.keys()) {
-      console.log(key);
-    }
-    // key1
-    // key2
-    
-    for (var value of searchParams.values()) {
-      console.log(value);
-    }
-    // value1
-    // value2
-    
-    for (var pair of searchParams.entries()) {
-      console.log(pair[0]+ ', '+ pair[1]);
-    }
-    // key1, value1
-    // key2, value2
-    在Chrome浏览器之中,URLSearchParams实例本身就是Iterator对象,与entries方法返回值相同。所以,可以写成下面的样子。
-    
-    for (var p of searchParams) {
-      console.log(p);
-    }
-    下面是一个替换当前URL的例子。
-    
-    // URL: https://example.com?version=1.0
-    var params = new URLSearchParams(location.search.slice(1));
-    params.set('version', 2.0);
-    
-    window.history.replaceState({}, '', `${location.pathname}?${params}`);
-    // URL: https://example.com?version=2.0
-    URLSearchParams实例可以当作POST数据发送,所有数据都会URL编码。
-    
-    let params = new URLSearchParams();
-    params.append('api_key', '1234567890');
-    
-    fetch('https://example.com/api', {
-      method: 'POST',
-      body: params
-    }).then(...)
-    DOM的a元素节点的searchParams属性,就是一个URLSearchParams实例。
-    
-    var a = document.createElement('a');
-    a.href = 'https://example.com?filter=api';
-    a.searchParams.get('filter') // "api"
-    URLSearchParams还可以与URL接口结合使用。
-    
-    var url = new URL(location);
-    var foo = url.searchParams.get('foo') || 'somedefault';      
-★针对移动设备的API 
-navigator.permissions.query( )   许可查询
-  PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
-    Permissions API就是用来查询某个接口的许可情况.
-  // 查询地理位置接口的许可情况
-  navigator.permissions.query({ name: 'geolocation' })
-  .then(function(result) {
-    // 状态为 prompt,表示查询地理位置时,
-    // 用户会得到提示,是否许可本次查询
-    /* result.status = "prompt" */
-
-    // 状态为 granted,表示用户已经给予了许可
-    /* result.status = "granted" */
-  });
-  有了这个API,就可以自动查询用户的态度.
-  当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
-Viewport 视口
-  PS:Viewport指的是网页的显示区域,
-    也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
-    正常情况下,viewport和浏览器的显示窗口是一样大小的.
-    但是,在移动设备上,两者可能不是一样大小.
-    比如,手机浏览器的窗口宽度可能是640像素,这时viewport宽度就是640像素,
-    但是网页宽度有950像素,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个像素.
-    另一种方法则是,将viewport设成950像素,也就是说,浏览器的显示宽度还是640像素,
-    但是网页的显示区域达到950像素,整个网页缩小了,在浏览器中可以看清楚全貌.
-    这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
-  viewport缩放规则 「在HTML网页的head部分指定」 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    上面代码指定,viewport的缩放规则: 
-      缩放到当前设备的屏幕宽度「device-width」,
-      初始缩放比例「initial-scale」为1倍,
-      禁止用户缩放「user-scalable」;
-  viewport 全部属性:
-    width: viewport宽度
-    height: viewport高度
-    initial-scale: 初始缩放比例
-    maximum-scale: 最大缩放比例
-    minimum-scale: 最小缩放比例
-    user-scalable: 是否允许用户缩放
-  e.g.:.
-    <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
-SSE 「HTML5」
 navigator.geolocation 地理定位 「HTML5」
-  PS:在地理定位API中,使用小数值来表示经纬度(西经和南纬都用负数表示)
+  PS:在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
+  浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
   单位转换
     可使用一下函数将使用度、分、秒表示的经纬度转换为小数
       function degreesToDecimal(degrees,minutes,seconds){
         return degrees +(minutes / 60 ) +(seconds / 3600);
       }
-  定位方式
-    浏览器通过一下任意一种途径来获取位置信息
-    蜂窝电话
-    Wi-Fi
-    GPS(Global Positioning System)
-    ip地址
-  navigator.geolocation 对象
-    检查是否支持该接口
-      if (navigator.geolocation) {
-        // 支持
-      }
-      else {
-        // 不支持
-      }
-      该API兼容性较好,IE9及以前都支持
-    e.g.
-      navigator.geolocation.getCurrentPosition(function(position){
-      var latitude = position.coords.latitude;
-      // 维度值
-      var longitude = position.coords.longitude;
-      // 经度值
-    })
-    包含整个地理定位 API
-    navigator.geolocation.getCurrentPosition(suc,err,options)  是否同意授权后回调
-      var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
-        event.coords.latitude    纬度
-        event.coords.longitude   经度
-        event.coords.accuracy    精度
-        以下属性支持与否取决于设备,桌面浏览器一般没有
-        event.coords.altitude          海拔
-        event.coords.altitudeAccuracy  海拔精度「m」
-        event.coords.heading           以360度表示的方向
-        event.coords.speed             速度 「m/s」
-        event.timestamp 事件戳,表示获取位置时的时间
-      var err = function(event){ }  回调函数,无法确定位置「如用户拒绝授权时」,调用
-        event.code    错误码
-          0  Unknown error,相当于 event.UNKNOWN_ERROR
-          1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
-          2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
-          3  超时响应      ,相当于 event.TIMEOUT
-        event.message 错误信息
-      options                       可选,对象,设置定位的参数
-        var options = {
-            enableHighAccuracy:true, // 是否高精度,默认为false
-            timeout:5000,            // 超时时限,默认为Infinity,单位ms
-            maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
-          }
-    var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
-      PS:位置改变时重复调用成功处理程序,
-        回调函数传入的event对象和getCurrentPosition用法类似
-    navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
-  Google Maps API (非HTML5规范)
+  检查是否支持该接口
+    if (navigator.geolocation) {
+      // 支持
+    }
+    else {
+      // 不支持
+    }
+    该API兼容性较好,IE9及以前都支持
+  e.g.
+    navigator.geolocation.getCurrentPosition(function(position){
+    var latitude = position.coords.latitude;
+    // 维度值
+    var longitude = position.coords.longitude;
+    // 经度值
+  })
+  包含整个地理定位 API
+  navigator.geolocation.getCurrentPosition(suc,err,options)  是否同意授权后回调
+    var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
+      event.coords.latitude    纬度
+      event.coords.longitude   经度
+      event.coords.accuracy    精度
+      以下属性支持与否取决于设备,桌面浏览器一般没有
+      event.coords.altitude          海拔
+      event.coords.altitudeAccuracy  海拔精度「m」
+      event.coords.heading           以360度表示的方向
+      event.coords.speed             速度 「m/s」
+      event.timestamp 事件戳,表示获取位置时的时间
+    var err = function(event){ }  回调函数,无法确定位置「如用户拒绝授权时」,调用
+      event.code    错误码
+        0  Unknown error,相当于 event.UNKNOWN_ERROR
+        1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
+        2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
+        3  超时响应      ,相当于 event.TIMEOUT
+      event.message 错误信息
+    options                       可选,对象,设置定位的参数
+      var options = {
+          enableHighAccuracy:true, // 是否高精度,默认为false
+          timeout:5000,            // 超时时限,默认为Infinity,单位ms
+          maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
+        }
+  var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
+    PS:位置改变时重复调用成功处理程序,
+      回调函数传入的event对象和getCurrentPosition用法类似
+  navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
+  Google Maps API 「非HTML5规范」
     该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
     引入 API 放置在 HTML head中
       <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -2912,6 +2905,47 @@ deviceorientation     设备摆放方向变化事件「竖放或横放」
     event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
     event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
     event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
+orientationchange     在屏幕发生翻转时触发 
+  window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
+navigator.battery     电池API,针对移动设备的API,用于检测设备的电池信息
+  var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+  battery.charging;
+  battery.level;
+  battery.dischargingTime;
+  battery.addEventListener("chargingchange",function(e){
+  })
+rel='perfetch'       预加载网页内容,为浏览者提供一个平滑的浏览体验
+  <link rel="prefetch" href="url">
+  url可为一网页地址或图片地址
+document.hidden  网页可见性API
+  页面不可见时播放中的视频暂停，可见时视频继续播放
+    <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
+    var video = document.getElementById('video') ;
+    var Prefix = null;
+    getHidden();
+    //获取当前浏览器的hidden属性
+    function getHidden(){
+      ['webkit','ms','moz','o'].forEach(function(prefix){
+        if((prefix+'Hidden') in document){
+          Prefix = prefix;
+        }
+      });
+      if(Prefix == null){
+        alert('你的浏览器不支持Page Visibility API');
+      }
+    }
+    //为visibilitychange事件绑定处理程序
+    document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
+    function handleVisibilityChange(){
+      switch (document.hidden){
+        case true: //返回hidden = true，页面不可见
+          video.pause();
+          break;
+        case false: //返回hidden = false，页面可见
+          video.play();
+          break;
+      }
+    }
 移动端JS 
   event 事件
     理解click的300ms的延迟响应

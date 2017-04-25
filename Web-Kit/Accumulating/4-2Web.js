@@ -218,7 +218,7 @@ windows环境
       net stop messenger-----停止信使服务
       net start messenger----开始信使服务
 浏览器
-  介绍_概念_说明_定义
+  介绍_概念_说明_定义 
     说明
       浏览器从同一个域同时下载文件的数量有限,当同时下载多个文件,会比相同大小的单个文件慢.
       浏览器在遇到<body>标签时才开始呈现内容
@@ -343,6 +343,14 @@ windows环境
       e.g. 
         var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
         在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
+  小技巧
+    通过浏览器地址栏运行HTML代码 「非IE浏览器内核」
+      e.g.:  
+      在浏览器地址栏直接输入 data:text/html,<a href=''> 13 </a>
+      通过JS操作也可
+        setTimeout(function(){
+          location.href = 'data:text/html,<a href=""> 13 </a>';
+        },1000);
   Todo: 
     浏览器的组成
     浏览器的核心是两部分：渲染引擎和JavaScript解释器（又称JavaScript引擎）。

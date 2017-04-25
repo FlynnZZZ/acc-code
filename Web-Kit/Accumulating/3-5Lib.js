@@ -376,7 +376,7 @@ DOM 操作
       ◆尺寸位置信息
       Jelem.position()  定位(非static)元素的定位尺寸信息(top和left) [只读?]
         PS:只对可见元素有效
-      Jelem.offset()    可读写,元素相对可视区左上角的top和left
+      Jelem.offset()    可读写,元素相对document「可视区左上角」的top和left
         PS:此方法只对可见元素有效
         RetValue:包含top和left属性的一个对象
         e.g.:

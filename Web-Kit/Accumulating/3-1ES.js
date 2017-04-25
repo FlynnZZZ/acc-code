@@ -209,10 +209,8 @@ ECMAScript JS核心 语法部分
           obj.valueOf =function(){ return 100; };
           +obj; // 100
         Number(val);  返回转换为的数值
-          Number(true)       // 1;
-          Number(false)      // 0
-          Number(undefined)  // NaN
-          Number(null)       // 0
+          Number(true);  /* 1 */   Number(false);     /* 0  */
+          Number(null);  /* 0 */   Number(undefined)  /* NaN */
           Number(number)     // 对应的值
           Number("")         // 0
           其他规则:
@@ -233,6 +231,7 @@ ECMAScript JS核心 语法部分
             从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略(.也被忽略)
             若第一个字符不是数字字符或负号,则返回NaN(空字符返回NaN)
             可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
+            es5不再具备解析八进制,需指定基数
           Arguments:
             str   被转换的字符串(支持科学计数法形式的转换)
             radix 可选,用于解决各种进制的转换
@@ -260,9 +259,10 @@ ECMAScript JS核心 语法部分
             parseInt("070");  // ECMAScript 3 认为是 56(八进制)
             parseInt("070");  // ECMAScript 5 认为是 70(十进制)
         parseFloat(str);     把字符串转换成浮点数值
-          和parseInt()类似,区别是数字中可以包含一个点.
+          和 parseInt() 类似,区别是数字中可以包含一个点.
           只能解析为10进制数
           如果字符串包含的是一个可解析为整数的数(没有小数点,或小数点后都是零),则返回整数
+          十六进制始终转成零
           e.g.
           parseFloat('123abc');  //123,去掉不识别的部分
           parseFloat('0xA');     //0,不识别十六进制
@@ -284,8 +284,7 @@ ECMAScript JS核心 语法部分
       num.toExponential(x); 以科学计数法表示并保留x位小数.并转换成字符串.
       num.toPrecision(x);   以指数或点形式来表示(根据x的长度来决定形式)
     String  字符串
-      PS:
-        用于表示由零或多个16位Unicode字符组成的字符序列.
+      PS: 用于表示由零或多个16位Unicode字符组成的字符序列.
         表示显示的字符,使用引号引起来,无特殊含义.
         几乎任何字符都可以放在引号里,JS会将它解析成string.
         双引号或单引号,两种表示方法没有任何区别,但必须成对出现.
@@ -446,7 +445,7 @@ ECMAScript JS核心 语法部分
 
           var aoo = '1020304';
           aoo.split('0').join(''); // "1234"
-      str.concat(str1,str2,...);  字符串拼接
+      str.concat(str1,str2,...);  字符串拼接,返回新串
       str.trim() 去除字符串开始和结束的空格
       ◆字符串转换
         PS:只有几种语言(如土耳其语)具有地方特有的大小写本地性,
@@ -1952,16 +1951,19 @@ ECMAScript JS核心 语法部分
           var arr2 = [6,7,8,9];
           arr.concat(arr1,arr2);
           // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      arr.sort([func]); 在原数组上递增排序并返回数组
-        func 可选,用来指定按某种顺序进行排列的函数.
+      arr.sort([foo]); 在原数组上递增排序并返回数组
+        foo 可选,用来指定按某种顺序进行排列的函数.
           如果省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
-          e.g. :
+        e.g. :
           var arr =[31,1,2,5,4]
           arr.sort(); // [1, 2, 31, 4, 5]
+          
           传入func定义函数
-          function compare(val1,val2){ return val1-val2; }
           var box=[5,2,4,17];
-          console.log(box.sort(compare)); // [2, 4, 5, 17]
+          var aoo = box.sort(function(val1,val2){
+            return val1-val2;
+          })
+          console.log(aoo); // [2, 4, 5, 17]
     ◆其他操作
       arr.join(str);   使用str串连每个元素,返回结果字符串
         str 可选,表示用于连接的字符串,默认为逗号,

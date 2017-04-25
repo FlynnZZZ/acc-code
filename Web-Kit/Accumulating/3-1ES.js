@@ -59,8 +59,8 @@ ECMAScript JS核心 语法部分
       var box;  // 但未初始化,系统会设定默认值 undefined(表示未定义)
 
       var a = b =1;
-      相当于
-      var a =1; b =1;
+      // 相当于
+      var a =1; b =1; 
     重复的var声明 : 相当于一个赋值操作并不会报错,但不推荐使用
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";
@@ -5699,7 +5699,7 @@ ECMAScript 7
   PS:ECMAScript 7 即为 ECMAScript 2017
 -------------------------------------------------------------------------待整理
 
- 
+
 
 
 

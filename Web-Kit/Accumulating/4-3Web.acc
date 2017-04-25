@@ -327,6 +327,12 @@ Atom
             (), [], {}
       command-palette        命令面板 
         快捷键  ctrl-shift-p
+      language-css           css语言支持
+        将'.'号从'非实体字符'中去除
+      language-less          less语言支持
+        将'.'号从'非实体字符'中去除
+      language-sass          sass语言支持
+        将'.'号从'非实体字符'中去除
       settings-view          设置页面
         快捷键
           ctrl-,    打开设置页

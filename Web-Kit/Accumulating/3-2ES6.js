@@ -1,5 +1,8 @@
 ECMAScript 6 
 变量扩展 
+  lexical scopes,词法作用域,即块作用域,会在函数内部、代码块「即 {}」内部创建 
+    块级作用域是很多类C语言的工作机制, ES6引入块级声明的目的是增强JS的灵活性,
+    同时又能与其它编程语言保持一致.
   let   定义块级变量 「ES6+」 
     块级作用域限制,只在定义的块级作用域中存在;
       PS：任何一对花括号{}中的语句都属于一个块,称之为块级作用域;
@@ -46,100 +49,101 @@ ECMAScript 6
       arr;         // [1, 2, 3, 4, 5]
       const obj = {key1 : 1}
       obj.key1 = 2; // 允许
-Destructuring,解构赋值 
-  PS：ES6允许按照一定模式,从数组和对象中提取值,对变量进行赋值,这被称为解构
-  e.g.:
-    传统的变量赋值
-    var arr = [1,2,3];//把数组的值分别赋给下面的变量；
-    var a = arr[0];
-    var b = arr[1];
-    var c = arr[2];
-    console.log(a);// 1
-    console.log(b);// 2
-    console.log(c);// 3
-    变量的解构赋值
-    var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
-    console.log(a);// 1
-    console.log(b);// 2
-    console.log(c);// 3
-  结构赋值可以嵌套
-    var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
-    console.log(c1); // 3.1
-    console.log(c2); // 3.2
-  不完全解构
-    var [a,b,c] = [1,2];
-    console.log(a);//结果：a的值为1
-    console.log(b);//结果：b的值为2
-    赋值不成功,变量的值为undefined
-    var [a,b,c] = [1,2];
-    console.log(a);//结果：a的值为1
-    console.log(b);//结果：b的值为2
-    console.log(c);//结果：c的值为undefined
-  允许设定默认值
-    var [a,b,c=3] = [1,2];
-    console.log(a);//结果:a的值为1
-    console.log(b);//结果:b的值为2
-    console.log(c);//结果:c的值为3
-    覆盖默认值「当新的值为undefined的时候,是不会覆盖默认值的」
-    var [a,b,c=3] =[1,2,4];
-    console.log(a);//结果:a的值为1
-    console.log(b);//结果:b的值为2
-    console.log(c);//结果:c的值为4
-  对象的解构赋值：对象的解构赋值不会受到属性的排列次序影响,是跟属性名关联起来的
-    PS：变量名要和属性名一致,才会成功赋值。
-      如果变量找不到与其名字相同的属性,就会赋值不成功
+操作符扩展   
+  Destructuring,解构赋值 
+    PS：ES6允许按照一定模式,从数组和对象中提取值,对变量进行赋值,这被称为解构
     e.g.:
-      var { a,b,c} = {"a":1,"b":2,"c":3};
-      console.log(a); // 1 
-      console.log(b); // 2
-      console.log(c); // 3
-      改变顺序
-      var { a,b,c } = {"a":1,"c":3,"b":2};
+      传统的变量赋值
+      var arr = [1,2,3];//把数组的值分别赋给下面的变量；
+      var a = arr[0];
+      var b = arr[1];
+      var c = arr[2];
+      console.log(a);// 1
+      console.log(b);// 2
+      console.log(c);// 3
+      变量的解构赋值
+      var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
+      console.log(a);// 1
+      console.log(b);// 2
+      console.log(c);// 3
+    结构赋值可以嵌套
+      var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
+      console.log(c1); // 3.1
+      console.log(c2); // 3.2
+    不完全解构
+      var [a,b,c] = [1,2];
+      console.log(a);//结果：a的值为1
+      console.log(b);//结果：b的值为2
+      赋值不成功,变量的值为undefined
+      var [a,b,c] = [1,2];
+      console.log(a);//结果：a的值为1
+      console.log(b);//结果：b的值为2
+      console.log(c);//结果：c的值为undefined
+    允许设定默认值
+      var [a,b,c=3] = [1,2];
+      console.log(a);//结果:a的值为1
+      console.log(b);//结果:b的值为2
+      console.log(c);//结果:c的值为3
+      覆盖默认值「当新的值为undefined的时候,是不会覆盖默认值的」
+      var [a,b,c=3] =[1,2,4];
+      console.log(a);//结果:a的值为1
+      console.log(b);//结果:b的值为2
+      console.log(c);//结果:c的值为4
+    对象的解构赋值：对象的解构赋值不会受到属性的排列次序影响,是跟属性名关联起来的
+      PS：变量名要和属性名一致,才会成功赋值。
+        如果变量找不到与其名字相同的属性,就会赋值不成功
+      e.g.:
+        var { a,b,c} = {"a":1,"b":2,"c":3};
+        console.log(a); // 1 
+        console.log(b); // 2
+        console.log(c); // 3
+        改变顺序
+        var { a,b,c } = {"a":1,"c":3,"b":2};
+        console.log(a); // 1
+        console.log(b); // 2
+        console.log(c); // 3
+        
+        var { a } = {"b":2};
+        console.log(a);//结果：a的值为undefined
+      给一个变量名与属性名不一样的变量解构赋值
+        var { b:a,} = {"b":2};
+        console.log(a); // 2
+    对象解构赋值嵌套
+      var {a:{b}} = {"a":{"b":1}};
+      console.log(b);//结果：b的值为1
+    对象解构指定默认值
+      var {a,b=2} = {"a":1};
+      console.log(b);//结果：b的值为默认值2
+    字符串的解构赋值
+      PS：解构赋值的过程中,字符串被转换成了一个类似数组的对象
+      var [a,b,c,d,e,f] = "123456";
       console.log(a); // 1
       console.log(b); // 2
       console.log(c); // 3
-      
-      var { a } = {"b":2};
-      console.log(a);//结果：a的值为undefined
-    给一个变量名与属性名不一样的变量解构赋值
-      var { b:a,} = {"b":2};
-      console.log(a); // 2
-  对象解构赋值嵌套
-    var {a:{b}} = {"a":{"b":1}};
-    console.log(b);//结果：b的值为1
-  对象解构指定默认值
-    var {a,b=2} = {"a":1};
-    console.log(b);//结果：b的值为默认值2
-  字符串的解构赋值
-    PS：解构赋值的过程中,字符串被转换成了一个类似数组的对象
-    var [a,b,c,d,e,f] = "123456";
-    console.log(a); // 1
-    console.log(b); // 2
-    console.log(c); // 3
-    console.log(d); // 4
-    console.log(e); // 5
-    console.log(f); // 6
-  解构赋值的用途
-    交换变量的值
-      传统做法
-      var x = 1;
-      var y = 2;
-      var z = x;//第三个变量临时存放x的值
-      x = y;  //把y的值赋给x；
-      y = z;  //把z的值赋值给y；
-      console.log(x); //结果：x为2
-      console.log(y); //结果：y为1
-      使用解构
-      var x = 1;
-      var y = 2;
-      [x,y] = [y,x];
-    定义函数参数
-      function foo({a,b,c}){ console.log(a,b,c); }
-      foo({a:1,b:2,c:3,d:4}); // 1 2 3 
-    函数参数的默认值
-      function demo({aoo=1}){ console.log(aoo); }
-      demo({});
-标准库的扩展、新增 
+      console.log(d); // 4
+      console.log(e); // 5
+      console.log(f); // 6
+    解构赋值的用途
+      交换变量的值
+        传统做法
+        var x = 1;
+        var y = 2;
+        var z = x;//第三个变量临时存放x的值
+        x = y;  //把y的值赋给x；
+        y = z;  //把z的值赋值给y；
+        console.log(x); //结果：x为2
+        console.log(y); //结果：y为1
+        使用解构
+        var x = 1;
+        var y = 2;
+        [x,y] = [y,x];
+      定义函数参数
+        function foo({a,b,c}){ console.log(a,b,c); }
+        foo({a:1,b:2,c:3,d:4}); // 1 2 3 
+      函数参数的默认值
+        function demo({aoo=1}){ console.log(aoo); }
+        demo({});
+标准库的扩展 
   string字符串扩展
     `a${1+2}b` 模版字符串  [ES6+] 
       PS：又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
@@ -721,63 +725,8 @@ Destructuring,解构赋值
       如果类型未知,则该值为空字符串。
       在Ajax操作中,如果 xhr.responseType 设为 blob,接收的就是二进制数据。
     blob.close() 关闭 Blob 对象,以便能释放底层资源。 
-块级绑定,Block Bindings 
-  var 声明与变量提升
-    function getValue(condition) {
-      // value 可以被访问到,其值为 undefined
-      console.log(value); // undefined
-      if(condition) {
-        var value = "blue";
-        // 其它代码
-        return value;
-      } else {
-        console.log(value); // undefined
-        // value 可以被访问到,其值为 undefined
-        return null;
-      }
-    }
-    getValue(false);
-    相当于
-    function getValue(condition) {
-      var value;
-      if(condition) {
-        value = "blue";
-        // 其它代码
-        return value;
-      } else {
-        return null;
-      }
-    }
-  块级声明(Block-Level Declarations)
-    块级声明指的是该声明的变量无法被代码块外部访问.
-    块作用域,又被称为词法作用域(lexical scopes),可以在如下的条件下创建：
-      函数内部
-      在代码块(即 { 和 })内部
-    块级作用域是很多类C语言的工作机制,
-    ECMAScript 6 引入块级声明的目的是增强 JavaScript 的灵活性,
-    同时又能与其它编程语言保持一致.
-  let 声明
-    let 声明的语法和 var 完全一致.
-    但是变量的作用域会限制在当前的代码块中.
-    let 声明不会将变量提升至当前作用域的顶部.
-      function foo() {
-        console.log(aoo); // undefined
-        console.log(boo); // 报错,没有变量提升
-        var aoo =2;
-        let boo =1;
-      }
-      foo();
-    禁止重复声明
-      如果一个标识符在当前作用域里已经存在,那么再用 let 声明相同的标识符或抛出错误
-      var count = 30;
-      let count = 40; // 报错,语法错误
-  const 声明(Constant Declarations)
-    在 ECMAScript 6 中也可使用常量(const)语法来声明变量.
-    该种方式声明的变量会被视为常量,这意味着它们不能再次被赋值.
-    所以所有的 const 声明的变量都必须在声明处初始化.
-    e.g.:
-    const maxItems = 30; // 合法的声明
-    const aoo; // 语法错误：未初始化
+    
+    
   const 声明 vs let 声明(Constants vs Let Declarations)
     const 和 let 都是块级声明,意味着执行流跳出声明所在的代码块后就没有办法在访问它们,
     同样 const 变量也不会被提升
@@ -838,7 +787,7 @@ Destructuring,解构赋值
       let RegExp = "Hello!";
       console.log(RegExp);           // "Hello!"
       console.log(window.RegExp);    // function RegExp() { [native code] }
-Promise 对象 
+Promise 异步模式 
   PS:
     采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
     将原来异步函数的嵌套关系转变为'同步'的链式关系.
@@ -934,7 +883,7 @@ Promise 对象
 ASYNC : 用来取代回调函数、解决异步操作的一种方法 
   async 函数与 Promise、Generator 函数类似, 它本质上是 Generator 函数的语法糖。
   async 函数并不属于 ES6,而是被列入了 ES7。
-export import：  module模块化 
+export import： module模块化 
   介绍
     JS一直没有模块体系,无法将一大程序拆分成互相依赖的小文件, 再简单的拼装起来。
     其他语言都有这项功能,比如 Ruby 的require、Python 的import,
@@ -2013,3 +1962,5 @@ export import：  module模块化
 ECMAScript 7 
   PS:ECMAScript 7 即为 ECMAScript 2017
 -------------------------------------------------------------------------待整理 
+
+

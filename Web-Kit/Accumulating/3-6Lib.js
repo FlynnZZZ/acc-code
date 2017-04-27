@@ -867,6 +867,150 @@ AJAX
   $.parseJSON(jsonStr) 解析JSON字符串
   $.inArray(item, array) 判断元素是否在数组内
   $.isArray(arr) 判断是否为数组
+Deferred 对象 
+  PS：Deferred 对象是在 jQuery 1.5 中引入的,
+    该对象提供了一系列的方法,可以将多个回调函数注册进一个回调队列里、调用回调队列,
+    以及将同步或异步函数执行结果的成功还是失败传递给对应的处理函数。
+    Promise 对象是和 Deferred 对象一起作为 jQuery 对 Promise 的一种实现。
+    在 jQuery1.x 和 2.x 版本中, Deferred 对象遵守的是《CommonJS Promises 提案》中的约定,
+    而 原生 promises 方法的建立基础《Promises/A+ 提案》也是以这一提案书为根基衍生而来。
+    之所以 Deferred 对象没有遵循《Promises/A+ 提案》,是因为那时后者根本还没被构想出来。
+    由于 jQuery 扮演的先驱者的角色以及后向兼容性问题,
+    jQuery1.x 和 2.x 里 promises 的使用方式和原生 Javascript 的用法并不一致。
+    此外,由于 jQuery 自己在 promises 方面遵循了另外一套提案,
+    这导致它无法兼容其他实现 promises 的库,比如 Q library。
+    不过即将到来的 jQuery 3 改进了 同原生 promises「ES6+」的互操作性。
+    虽然为了向后兼容,Deferred 对象的主要方法之一（then()）的方法签名仍然会有些不同,
+    但行为方面它已经同 ECMAScript 2015 标准更加一致。
+  Deferred和Promise对象 
+    PS： Deferred 对象可以被用来执行异步操作,例如 Ajax 请求和动画的实现。
+      在 jQuery 中,Promise对象是只能由Deferred对象或 jQuery 对象创建。
+      它拥有 Deferred 对象的一部分方法：always(),done(), fail(), state()和then()。
+      jQuery 文档和 ECMAScript 标准在术语上的不同:
+      在 ECMAScript 中, 不论一个 promise 被完成 (fulfilled) 还是被拒绝 (rejected),
+      我们都说它被解析 (resolved) 了。
+      然而在 jQuery 的文档中,被解析这个词指的是 ECMAScript 标准中的完成 (fulfilled) 状态。
+    var deferred = jQuery.Deferred(); 创建deferred对象
+      或者,使用 $ 作为 jQuery 的简写： var deferred = $.Deferred();
+    deferred.always(callbacks[, callbacks, ..., callbacks])
+       添加在该 Deferred 对象被解析或被拒绝时调用的处理函数
+    deferred.done(callbacks[, callbacks, ..., callbacks])
+      添加在该 Deferred 对象被解析时调用的处理函数
+    deferred.fail(callbacks[, callbacks, ..., callbacks])
+      添加在该 Deferred 对象被拒绝时调用的处理函数
+    deferred.notify([argument, ..., argument]):
+      调用 Deferred 对象上的 progressCallbacks 处理函数并传递制定的参数
+    deferred.notifyWith(context[, argument, ..., argument])
+      在制定的上下文中调用 progressCallbacks 处理函数并传递制定的参数。
+    deferred.progress(callbacks[, callbacks, ..., callbacks])
+      添加在该 Deferred 对象产生进展通知时被调用的处理函数。
+    deferred.promise([target])  返回 Deferred 对象的 promise 对象
+    deferred.reject([argument, ..., argument]) 
+      拒绝一个 Deferred 对象并以指定的参数调用所有的failCallbacks处理函数。
+    deferred.rejectWith(context[, argument, ..., argument])
+      拒绝一个 Deferred 对象并在指定的上下文中以指定参数调用所有的failCallbacks处理函数。
+    deferred.resolve([argument, ..., argument])
+      解析一个 Deferred 对象并以指定的参数调用所有的 doneCallbackswith 处理函数。
+    deferred.resolveWith(context[, argument, ..., argument])
+      解析一个 Deferred 对象并在指定的上下文中以指定参数调用所有的doneCallbacks处理函数。
+    deferred.state()    返回当前 Deferred 对象的状态。
+    deferred.then(resolvedCallback[, rejectedCallback[, progressCallback]])
+      添加在该 Deferred 对象被解析、拒绝或收到进展通知时被调用的处理函数
+      可用 done() 也可以通过 then() 来处理操作成功的情况;
+      区别是then能够把接收到的值通过参数传递给后续的then,done,fail或progress调用
+    e.g.: 
+      利用 Deferred 依次执行 Ajax 请求
+      var username = 'testuser';
+      var fileToSearch = 'README.md';
+      $.getJSON('https://api.github.com/user/' + username + '/repositories')
+      .then(function(repositories) {
+        return repositories[0].name;
+      })
+      .then(function(lastUpdatedRepository) {
+        return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/files');
+      })
+      .then(function(files) {
+        var README = null;
+        for (var i = 0; i < files.length; i++) {
+          if (files[i].name.indexOf(fileToSearch) >= 0) {
+            README = files[i].path;
+            break;
+          }
+        }
+        return README;
+      })
+      .then(function(README) {
+        return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/file/' + README + '/content');
+      })
+      .then(function(content) {
+        console.log(content);
+      });
+      
+      创建一个基于 Promise 的 setTimeout 函数
+      function timeout(milliseconds) {
+        var deferred = $.Deferred(); //创建一个新Deferred
+        setTimeout(deferred.resolve, milliseconds); // 在指定时间后解析Deferred对象
+        return deferred.promise(); // 返回Deferred对象的Promise对象
+      }
+      timeout(1000).then(function() {
+        console.log('等待了1秒钟！');
+      });
+    jQuery1.x/2.x 同 jQuery3 的区别 
+      var deferred = $.Deferred();
+      deferred.then(function() {
+        throw new Error('一条错误信息');
+      })
+      .then( 
+        function() {
+          console.log('第一个成功条件函数');
+        },
+        function() {
+          console.log('第一个失败条件函数');
+        }
+      )
+      .then(
+        function() {
+          console.log('第二个成功条件函数');
+        },
+        function() {
+          console.log('第二个失败条件函数');
+        }
+      );
+      deferred.resolve();
+      jQuery 3.x 中, 这段代码会在控制台输出“第一个失败条件函数” 和 “第二个成功条件函数”。
+      原因就像我前面提到的,抛出异常后的状态会被转换成拒绝操作进而失败条件回调函数一定会被执行。
+      此外,一旦异常被处理（在这个例子里被失败条件回调函数传给了第二个then()）,
+      后面的成功条件函数就会被执行（这里是第三个 then() 里的成功条件函数）。
+      在 jQuery 1.x 和 2.x 中,除了第一个函数（抛出错误异常的那个）之外没有其他函数会被执行,
+      所以你只会在控制台里看到“未处理的异常：一条错误信息。”
+      为了更好的改善它同 ECMAScript2015 的兼容性,
+      jQuery3.x 还给 Deferred 和 Promise 对象增加了一个叫做 catch() 的新方法。
+      它可以用来定义当 Deferred 对象被拒绝或 Promise 对象处于拒绝态时的处理函数。
+      它的函数签名如下：
+      deferred.catch(rejectedCallback)
+      可以看出,这个方法不过是 then(null, rejectedCallback) 的一个快捷方式罢了。
+  e.g.:  在ajax中使用 「self」 
+    var deferred = $.Deferred();
+    $.ajax({
+      type : 'get',
+      url  : './source/test-json.json',
+      // url  : './source/test-json.json1', // 测试错误时使用
+      data : {
+      }, 
+      dataType : 'json',
+      success  : function(backData,textStatus,obj){
+        deferred.resolve(backData);
+      }, 
+      error    : function (xhr,status,errorTrown){
+        deferred.reject(status);
+      }, 
+    });
+    deferred.then(function(data){
+      console.log(data,1);
+    })
+    .catch(function(data){
+      console.log(data,2);
+    })
 扩展 
   扩展工具方法(或者叫静态方法)
   e.g. 

@@ -3,6 +3,15 @@ ECMAScript 6
   lexical scopes,词法作用域,即块作用域,会在函数内部、代码块「即 {}」内部创建 
     块级作用域是很多类C语言的工作机制, ES6引入块级声明的目的是增强JS的灵活性,
     同时又能与其它编程语言保持一致.
+  Global Block Bindings,全局块级绑定
+    全局作用域使用 var 声明全局变量,相当于给全局对象「浏览器环境下是 window」添加属性
+      这意味着全局对象的属性可能会意外地被重写覆盖
+      var RegExp = "Hello!";
+      console.log(window.RegExp);     // "Hello!"
+    若在全局作用域使用 let 或 const,绑定也发生在全局作用域内,但不会向全局对象添加属性
+      let RegExp = "Hello!";
+      console.log(RegExp);           // "Hello!"
+      console.log(window.RegExp);    // function RegExp() { [native code] }
   let   定义块级变量 「ES6+」 
     块级作用域限制,只在定义的块级作用域中存在;
       PS：任何一对花括号{}中的语句都属于一个块,称之为块级作用域;
@@ -33,6 +42,27 @@ ECMAScript 6
         let aoo = 2;  //报错,Identifier 'aoo' has already been declared
         console.log(aoo);
       }
+    Let Declarations in Loops,循环中的 let 声明
+      var arr =[];
+      for(var i = 0; i < 10; i++) { arr.push(i); }
+      console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      var funArr =[];
+      for(var i = 0; i < 10; i++) {
+        funArr.push(function(){console.log(i); });
+      }
+      console.log(funArr[0]); // function(){console.log(i); }
+      // i 是以引用的方式存在函数中的
+      console.log(funArr[0]()); // 10
+      使用let的声明方式
+      var funArr =[];
+      for(let i = 0; i < 10; i++) {
+        funArr.push(function(){console.log(i); });
+      }
+      console.log(funArr[0]); // function(){console.log(i); }
+      // i 是以引用的方式存在函数中的
+      console.log(funArr[0]()); // 0
+      注:let 声明在上述循环内部中的表现是在规范中特别定义的,
+        实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的.
   const 定义块级常量 「ES6+」 
     PS：只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
     const aoo =2;
@@ -49,6 +79,14 @@ ECMAScript 6
       arr;         // [1, 2, 3, 4, 5]
       const obj = {key1 : 1}
       obj.key1 = 2; // 允许
+      
+      不能限制对于值的类型为对象的变量的修改,阻止的是绑定的修改,而不是绑定值的修改
+      const person = { name: "Nicholas" };
+      person.name = "Greg"; // 正常
+      person = { name: "Greg" }; // 抛出错误
+      person 变量一开始已经和包含一个属性的对象绑定.
+      修改 person.name 是被允许的因为 person 的值(地址)未发生改变,
+      但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
 操作符扩展   
   Destructuring,解构赋值 
     PS：ES6允许按照一定模式,从数组和对象中提取值,对变量进行赋值,这被称为解构
@@ -725,161 +763,87 @@ ECMAScript 6
       如果类型未知,则该值为空字符串。
       在Ajax操作中,如果 xhr.responseType 设为 blob,接收的就是二进制数据。
     blob.close() 关闭 Blob 对象,以便能释放底层资源。 
-    
-    
-  const 声明 vs let 声明(Constants vs Let Declarations)
-    const 和 let 都是块级声明,意味着执行流跳出声明所在的代码块后就没有办法在访问它们,
-    同样 const 变量也不会被提升
-    const 也不能对已存在的标识符重复定义,
-      不论该标识符由 var(全局或函数级作用域)还是 let (块级作用域)定义.例如以下的代码：
-      var message = "Hello!";
-      let age = 25;
-      const message = "Goodbye!"; // 报错
-      const age = 30; // 报错
-    将对象赋值给 const 变量(Declaring Objects with Const)
-      const 变量的值如果是个对象,那么这个对象本身可以被修改
-      const 声明只是阻止变量和值的再次绑定而不是值本身的修改.
-      意味着 const 不能限制对于值的类型为对象的变量的修改
-        const person = { name: "Nicholas" };
-        // 正常
-        person.name = "Greg";
-        // 抛出错误
-        person = { name: "Greg" };
-        person 变量一开始已经和包含一个属性的对象绑定.
-        修改 person.name 是被允许的因为 person 的值(地址)未发生改变,
-        但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
-        这个微妙之处会导致很多误解.
-        只需记住：const 阻止的是绑定的修改,而不是绑定值的修改.
-  循环中的 let 声明(Let Declarations in Loops)
-    e.g.:
-    for(let i = 0; i < 10; i++) { }
-    console.log(i); // 在这里访问 i 会抛出错误
-    变量 i 只存在于 for 循环代码块中,一旦循环完毕变量 i 将不复存在.
-
-    var arr =[];
-    for(var i = 0; i < 10; i++) { arr.push(i); }
-    console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    var funArr =[];
-    for(var i = 0; i < 10; i++) {
-      funArr.push(function(){console.log(i); });
-    }
-    console.log(funArr[0]); // function(){console.log(i); }
-    // i 是以引用的方式存在函数中的
-    console.log(funArr[0]()); // 10
-    该为let的声明的方式
-    var funArr =[];
-    for(let i = 0; i < 10; i++) {
-      funArr.push(function(){console.log(i); });
-    }
-    console.log(funArr[0]); // function(){console.log(i); }
-    // i 是以引用的方式存在函数中的
-    console.log(funArr[0]()); // 0
-    注:let 声明在上述循环内部中的表现是在规范中特别定义的,
-      实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的.
-  全局块级绑定(Global Block Bindings)
-    当在全局作用域内使用 var 声明时会创建一个全局变量,
-    同时也是全局对象(浏览器环境下是 window)的一个属性.
-    这意味着全局对象的属性可能会意外地被重写覆盖.
-      var RegExp = "Hello!";
-      console.log(window.RegExp);     // "Hello!"
-    如果在全局作用域内使用 let 或 const,那么绑定就会发生在全局作用域内,
-    但是不会向全局对象内部添加任何属性.
-      let RegExp = "Hello!";
-      console.log(RegExp);           // "Hello!"
-      console.log(window.RegExp);    // function RegExp() { [native code] }
 Promise 异步模式 
-  PS:
-    采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
+  PS: 采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
     将原来异步函数的嵌套关系转变为'同步'的链式关系.
-  Summary:
     Promise 对象是一个代理对象,代理了最终返回的值,可以在后期使用.
     将异步操作封装成 Promise 对象.
     然后使用 Promise 对象的 then catch 等方法,进行链式的形似同步的写法完成异步操作.
-  Details:
     Promise有以下几种状态:
-      pending: 初始状态, 初始状态,未完成或拒绝。
-      fulfilled: 意味着操作成功完成。
-      rejected: 意味着操作失败。
+    pending: 初始状态, 初始状态,未完成或拒绝。
+    fulfilled: 意味着操作成功完成。
+    rejected: 意味着操作失败。
+    只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态。
+    一旦状态改变,就不会再变,任何时候都可以得到这个结果。
+    这与事件(Event)完全不同,事件的特点是,如果你错过了它,再去监听,是得不到结果的。
+    Promise 的缺点
+    首先,无法取消 Promise,一旦新建它就会立即执行,无法中途取消。
+    其次,如果不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
+    第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
   new Promise(foo) 创建Promise对象
-    PS:
-      Promise在创建时,参数函数就执行
-    var pms = new Promise(function(rs,rj){
-      rs(arg1); // 用于 异步成功后 传递数据 arg1
-      rj(arg2); // 用于 异步失败后 传递数据 arg2
-      // rs rj函数根据逻辑需要进行相应的执行
-    })
-    Details:
-      参数为一个[执行异步操作的]与参数 resolve 和 reject一起传递的函数executor
-      在参数函数内部,如果 resolve 被调用,代表该Promise被成功解析(resolve);
-      而当reject被调用时,代表该Promise的值不能用于后续处理了,也就是被拒绝(reject)了.
+    PS: Promise在创建时,参数函数就会执行
+      参数为一「执行异步操作的」函数, resolve 和 reject 传递给函数的参数「executor」
+      参数函数内,若 resolve 被调用,代表该Promise被成功解析「resolve」;
+      若 reject 被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
       executor主要用于初始化异步代码,一旦异步代码调用完成,
       要么调用 resolve 方法来表示Promise被成功解析,
       或是调用 reject 方法,表示初始化的异步代码调用失败,整个promise被拒绝。
       如果在executor 方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
       即相当于reject方法被调用,executor 的返回值也就会被忽略。
-  pms对象的方法
-    pms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2
-      Details:
-        foo2 可选,在rj后执行,若不存在则忽略;
-        其中rs的参数为foo1的参数,
-        rj的参数为foo2的参数;
-        foo1 默认会返回一个Promise值,也可以自定义返回值,
-        该值会传递到下一个then的foo1方法参数中;
-        若 foo1 返回一个新 Promise,
-        则then之后再调用的then就是新Promise中的逻辑了;
+    var pms = new Promise(function(rs,rj){
+      rs(arg1); // 用于 异步成功后 传递数据 arg1
+      rj(arg2); // 用于 异步失败后 传递数据 arg2
+      // rs rj函数根据逻辑需要进行相应的执行
+    })
+  pms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2
+    foo2 可选,在rj后执行,若不存在则忽略;
+    其中rs将其参数传递给foo1作为参数,rj将其参数传递给foo2作为参数;
+    foo1 默认会返回一个Promise值,也可以自定义返回值,
+    该值会传递到下一个then的foo1方法参数中;
+    若 foo1 返回一个新 Promise,
+    则then之后再调用的then就是新Promise中的逻辑了;
+  Promise.resolve()
+  Promise.reject()
+  Promise.prototype.then()
+  Promise.prototype.catch()
+  Promise.all() // 所有的完成
+  var p = Promise.all([p1,p2,p3]);
+  Promise.race() // 竞速,完成一个即可
+  finally
+  bind
+  all
+  joinprops
+  any
+  some
+  race
+  .map(Function mapper [, Object options])
+  .reduce(Function reducer [, dynamic initialValue]) 
   Question:
     使用 Promise 监控 点击时间 , 使用Promise 改变事件的执行方式 [?] 
-  Todo:  JS 异步编程的 Promise 模式
-    PS:异步模式在JS中实现起来不是很利索,
-      为了降低异步编程的复杂性,寻找简便的方法来处理异步操作,其中一种处理模式称为promise,
-      使用 XMLHttpRequest2 或者 Web Workers 可实现promise模式.
-      这种模式不会阻塞和等待长时间的操作完成,而是返回一个代表了承诺的(promised)结果的对象。
-      ES6 原生提供了 Promise 对象。
-      回调函数真正的问题在于他剥夺了我们使用 return 和 throw 这些关键字的能力。
-      而 Promise 很好地解决了这一切。
-    Promise 对象
-      PS:用来传递异步操作的消息,代表了某个未来才会知道结果的事件,通常是一个异步操作,
-        并且这个事件提供统一的 API,可供进一步处理。
-      Promise 对象的特点
-        对象的状态不受外界影响。 Promise 对象代表一个异步操作,
-        有三种状态:Pending(进行中) Resolved(已完成,也叫 Fulfilled) Rejected(已失败).
-          只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态。
-          这也是 Promise 这个名字的由来,它的英语意思就是「承诺」,表示其他手段无法改变。
-        一旦状态改变,就不会再变,任何时候都可以得到这个结果。
-          Promise 对象的状态改变,只有两种可能：
-          从 Pending 变为 Resolved 和从 Pending 变为 Rejected。
-          只要这两种情况发生,状态就凝固了,不会再变了,会一直保持这个结果。
-          就算改变已经发生了,你再对 Promise 对象添加回调函数,也会立即得到这个结果。
-          这与事件(Event)完全不同,事件的特点是,如果你错过了它,再去监听,是得不到结果的。
-        Promise 对象可将异步操作以同步操作的流程表达出来,避免了层层嵌套的回调函数。
-        此外,Promise 对象提供统一的接口,使得控制异步操作更加容易。
-        Promise 的缺点
-          首先,无法取消 Promise,一旦新建它就会立即执行,无法中途取消。
-          其次,如果不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
-          第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
-      new Promise() 构造函数创建 Promise 对象
-        构造函数接受一个函数作为参数,该函数的两个参数分别是 resolve 方法和 reject 方法。
-        如果异步操作成功,则用 resolve 方法,
-          将 Promise 对象的状态,从「未完成」变为「成功」(即从 pending 变为 resolved)；
-        如果异步操作失败,则用 reject 方法,
-          将 Promise 对象的状态,从「未完成」变为「失败」(即从 pending 变为 rejected)。
-    api
-      Promise.resolve()
-      Promise.reject()
-      Promise.prototype.then()
-      Promise.prototype.catch()
-      Promise.all() // 所有的完成
-      var p = Promise.all([p1,p2,p3]);
-      Promise.race() // 竞速,完成一个即可
-      finally
-      bind
-      all
-      joinprops
-      any
-      some
-      race
-      .map(Function mapper [, Object options])
-      .reduce(Function reducer [, dynamic initialValue]) 
+  e.g.:
+    通过Promise来调用AJAX 「self」
+    var pms = new Promise(function(rs , rj){
+      $.ajax({
+        type : 'get',
+        url  : 'url',
+        data : {
+          key : val,
+        }, 
+        dataType : 'json',
+        success  : function(backData,textStatus,obj){
+          rs(backData);
+        }, 
+        error    : function (xhr,status,errorTrown){
+          rj(status);
+        }, 
+      });
+    })
+    pms.then(function(data){
+      console.log(data); // 打印出AJAX获取到的数据
+    })
+    .catch(function(data){
+      console.log(data); // 打印出出错的信息
+    })
 ASYNC : 用来取代回调函数、解决异步操作的一种方法 
   async 函数与 Promise、Generator 函数类似, 它本质上是 Generator 函数的语法糖。
   async 函数并不属于 ES6,而是被列入了 ES7。

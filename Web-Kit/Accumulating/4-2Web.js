@@ -850,8 +850,7 @@ ueditor 百度编辑器
 网络收集 
 接口
   百度分类图片api
-    PS： GET提交,返回JSON
-      sort可以为0和1,作用。。未知
+    PS： GET提交,返回JSON; sort可以为0和1,作用。。未知
     URL：'http://image.baidu.com/data/imgs'
     参数：
       col  : '大类' // 如 美女

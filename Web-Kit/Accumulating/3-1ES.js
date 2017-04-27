@@ -71,7 +71,7 @@ ECMAScript JS核心,语法部分
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";
       console.log(box); // abc
-    不使用var定义变量 :相当于给window对象添加属性
+    不使用var定义变量 :相当于给window对象添加属性 
       使用var声明的变量不可delete,无var修饰的变量则可以,因为delete用于删除对象属性
       var aoo =1; boo = 2;
       delete aoo;

@@ -401,713 +401,769 @@ Stream 流
     var aoo = require(str);  通过模块名引入
       e.g.:
       var fs = require('fs'); // 引入fs模块
-  核心模块
-    events 事件模块
-      PS:Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
-      Node.js 里面的许多对象都会分发事件：
-        一个 net.Server 对象会在每次有新连接时分发一个事件,
-        一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-        所有这些产生事件的对象都是 events.EventEmitter 的实例.
-      var events = require('events');   引入 events 模块
-      var event = new events.EventEmitter(); 创建事件功能对象
-        EventEmitter 对象如果在实例化时发生错误,会触发 'error' 事件.
-        当添加新的监听器时,'newListener' 事件会触发,
-        当监听器被移除时,'removeListener' 事件被触发.
-      event.on(eName,function([arg1,arg2...]){ }); 给指定事件添加监听器
-        PS:事件名为字符串,可自定义.一个事件可以绑定多次
-        回调函数的传入的参数为手动触发时指定的值
-      event.emit(eName[,val1,val2...]); 手动触发事件
-        当事件触发时,注册到这个事件的事件监听器被依次调用
-      event.addListener(eName,listener) 给指定事件添加监听器
-      event.once(eName,listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-      event.removeListener(eName,listener)  移除指定事件的指定监听器
-        此操作将会改变处于被删监听器之后的那些监听器的索引
-        e.g.:
-          var callback = function(stream) { };
-          server.on('connection', callback);
-          server.removeListener('connection', callback);
-      event.removeAllListeners([eName])  移除所有监听器,若指定事件,则移除该事件的所有监听器
-      event.setMaxListeners(num)   提高监听器的默认限制的数量
-        默认情况下,单个事件允许绑定不超过 10 监听器函数否则就会输出警告信息
-      event.listeners(eName)     返回指定事件的监听器数组
-      event.emit(eName[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值
-      events.EventEmitter.listenerCount(event,eName)  返回指定事件功能对象的事件的监听器数量
+  ◆核心模块
+  events 事件模块
+    PS:Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
+    Node.js 里面的许多对象都会分发事件：
+      一个 net.Server 对象会在每次有新连接时分发一个事件,
+      一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
+      所有这些产生事件的对象都是 events.EventEmitter 的实例.
+    var events = require('events');   引入 events 模块
+    var event = new events.EventEmitter(); 创建事件功能对象
+      EventEmitter 对象如果在实例化时发生错误,会触发 'error' 事件.
+      当添加新的监听器时,'newListener' 事件会触发,
+      当监听器被移除时,'removeListener' 事件被触发.
+    event.on(eName,function([arg1,arg2...]){ }); 给指定事件添加监听器
+      PS:事件名为字符串,可自定义.一个事件可以绑定多次
+      回调函数的传入的参数为手动触发时指定的值
+    event.emit(eName[,val1,val2...]); 手动触发事件
+      当事件触发时,注册到这个事件的事件监听器被依次调用
+    event.addListener(eName,listener) 给指定事件添加监听器
+    event.once(eName,listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+    event.removeListener(eName,listener)  移除指定事件的指定监听器
+      此操作将会改变处于被删监听器之后的那些监听器的索引
       e.g.:
-        var events = require('events');
-        var event = new events.EventEmitter();
-        var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
-        var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
-        // 绑定 connection 事件,处理函数为 listener1 
-        event.addListener('connection', listener1);
-        // 绑定 connection 事件,处理函数为 listener2
-        event.on('connection', listener2);
-        var eventListeners = events.EventEmitter.listenerCount(event,'connection');
-        console.log(eventListeners + " 个监听器监听连接事件");
-        event.emit('connection'); // 激活事件
-        event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
-        console.log("listener1 不再受监听");
-        event.emit('connection'); // 触发事件
-        eventListeners = events.EventEmitter.listenerCount(event,'connection');
-        console.log(eventListeners + " 个监听器监听连接事件");
-        console.log("程序执行完毕");
-        执行结果
-          2 个监听器监听连接事件
-          监听器 listener1 执行
-          监听器 listener2 执行
-          listener1 不再受监听
-          监听器 listener2 执行
-          1 个监听器监听连接事件
-          程序执行完毕
-      继承 EventEmitter
-        大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
-        包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-        为什么要这样做呢？原因有两点：
-        首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
-        其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
-        继承 EventEmitter 不会打乱对象原有的继承关系.
-    http http服务模块
-      PS: Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
-        1024 以下的端口是系统保留端口,需要管理员权限才能使用;
-        http 模块主要用于搭建 HTTP 服务端和客户端,
-        使用 HTTP 服务器或客户端功能必须调用 http 模块.
-      Web服务器
-        Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
-        Web服务器的基本功能就是提供Web信息浏览服务.
-        它只需支持HTTP协议、HTML文档格式及URL,与客户端的网络浏览器配合.
-        大多数 web 服务器都支持服务端的脚本语言(php、python、ruby)等,
-        并通过脚本语言从数据库获取数据,将结果返回给客户端浏览器.
-        目前最主流的三个Web服务器是Apache、Nginx、IIS.
-      Web 应用架构
-        Client   客户端,一般指浏览器,浏览器可以通过 HTTP 协议向服务器请求数据.
-        Server   服务端,一般指 Web 服务器,可以接收客户端请求,并向客户端发送响应数据.
-        Business 业务层,通过 Web 服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等.
-        Data     数据层,一般由数据库组成.
-      var http =require("http"); 引入 http 模块
-      var server =http.createServer(function(req,res){}); 创建服务器
-        Arguments:
-          req 请求
-          req.url  请求的地址
-          req.setEncoding("utf8"); 设置请求的格式为UTF-8
-          req.addListener("data",function(dataPart){}); data事件,当接收请求信息时触发
-            会触发多次,dataPart为每次信息,将所有dataPart串起来就是,请求传送的信息了
-          req.addListener("end",function(){}); end事件,请求信息传送完毕后触发
-          res 响应
-          res.writeHead(状态码,obj); 设置响应头
-            obj  设置响应头信息的对象
-            e.g.:
-            res.writeHead(200,{"Content-Type":"text/plain"})
-          res.write(str); 定义响应信息
-          res.end([str]); 完成响应,参数可选,存在会将其发送
-        server.listen(端口[,url]);  监听网址及端口
-        e.g. :
-          var http =require("http"); // 引入 http 模块
-          //创建Web服务器,传入一回调函数,用于处理请求
-          var server =http.createServer(function(req,res){ 
-            res.writeHead(200,{"Content-Type":"text/plain"});
-            res.write("haha! ");
-            res.end("hello word\n");
+        var callback = function(stream) { };
+        server.on('connection', callback);
+        server.removeListener('connection', callback);
+    event.removeAllListeners([eName])  移除所有监听器,若指定事件,则移除该事件的所有监听器
+    event.setMaxListeners(num)   提高监听器的默认限制的数量
+      默认情况下,单个事件允许绑定不超过 10 监听器函数否则就会输出警告信息
+    event.listeners(eName)     返回指定事件的监听器数组
+    event.emit(eName[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值
+    events.EventEmitter.listenerCount(event,eName)  返回指定事件功能对象的事件的监听器数量
+    e.g.:
+      var events = require('events');
+      var event = new events.EventEmitter();
+      var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
+      var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
+      // 绑定 connection 事件,处理函数为 listener1 
+      event.addListener('connection', listener1);
+      // 绑定 connection 事件,处理函数为 listener2
+      event.on('connection', listener2);
+      var eventListeners = events.EventEmitter.listenerCount(event,'connection');
+      console.log(eventListeners + " 个监听器监听连接事件");
+      event.emit('connection'); // 激活事件
+      event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
+      console.log("listener1 不再受监听");
+      event.emit('connection'); // 触发事件
+      eventListeners = events.EventEmitter.listenerCount(event,'connection');
+      console.log(eventListeners + " 个监听器监听连接事件");
+      console.log("程序执行完毕");
+      执行结果
+        2 个监听器监听连接事件
+        监听器 listener1 执行
+        监听器 listener2 执行
+        listener1 不再受监听
+        监听器 listener2 执行
+        1 个监听器监听连接事件
+        程序执行完毕
+    继承 EventEmitter
+      大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
+      包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
+      为什么要这样做呢？原因有两点：
+      首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
+      其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
+      继承 EventEmitter 不会打乱对象原有的继承关系.
+  http   http服务模块
+    PS: Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
+      1024 以下的端口是系统保留端口,需要管理员权限才能使用;
+      http 模块主要用于搭建 HTTP 服务端和客户端,
+      使用 HTTP 服务器或客户端功能必须调用 http 模块.
+    Web服务器
+      Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
+      Web服务器的基本功能就是提供Web信息浏览服务.
+      它只需支持HTTP协议、HTML文档格式及URL,与客户端的网络浏览器配合.
+      大多数 web 服务器都支持服务端的脚本语言(php、python、ruby)等,
+      并通过脚本语言从数据库获取数据,将结果返回给客户端浏览器.
+      目前最主流的三个Web服务器是Apache、Nginx、IIS.
+    Web 应用架构
+      Client   客户端,一般指浏览器,浏览器可以通过 HTTP 协议向服务器请求数据.
+      Server   服务端,一般指 Web 服务器,可以接收客户端请求,并向客户端发送响应数据.
+      Business 业务层,通过 Web 服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等.
+      Data     数据层,一般由数据库组成.
+    var http =require("http"); 引入 http 模块
+    var server =http.createServer(function(req,res){}); 创建服务器
+      Arguments:
+        req 请求
+        req.url  请求的地址
+        req.setEncoding("utf8"); 设置请求的格式为UTF-8
+        req.addListener("data",function(dataPart){}); data事件,当接收请求信息时触发
+          会触发多次,dataPart为每次信息,将所有dataPart串起来就是,请求传送的信息了
+        req.addListener("end",function(){}); end事件,请求信息传送完毕后触发
+        res 响应
+        res.writeHead(状态码,obj); 设置响应头
+          obj  设置响应头信息的对象
+          e.g.:
+          res.writeHead(200,{"Content-Type":"text/plain"})
+        res.write(str); 定义响应信息
+        res.end([str]); 完成响应,参数可选,存在会将其发送
+      server.listen(端口[,url]);  监听网址及端口
+      e.g. :
+        var http =require("http"); // 引入 http 模块
+        //创建Web服务器,传入一回调函数,用于处理请求
+        var server =http.createServer(function(req,res){ 
+          res.writeHead(200,{"Content-Type":"text/plain"});
+          res.write("haha! ");
+          res.end("hello word\n");
+        });
+        server.listen(1337,"127.0.0.1"); // 监听请求
+        // 通过监听 http://127.0.0.1:1337 来调用回调函数
+        console.log("server running at http://127.0.0.1:1337");
+        Node环境中运行该文件
+        打开浏览器输入地址 "http://127.0.0.1:1337" 
+        出现 haha! hello word
+    http.get(url,function(res){}); 使用get方法请求指定url的数据
+      res.on('data',function(data){ }); 监听请求的数据下载事件,会不断的触发
+        PS:将回调函数中所有的data数据串起来就是完整的响应数据了
+      res.on('end',function(){ }); 请求数据下载完毕触发
+    e.g.:
+      创建Web服务器
+      创建 server.js 文件,代码如下所示：
+        var http = require('http');
+        var fs = require('fs');
+        var url = require('url');
+        // 创建服务器
+        http.createServer( function (request, response) {  
+          // 解析请求,包括文件名
+          var pathname = url.parse(request.url).pathname;
+          // 输出请求的文件名
+          console.log("Request for " + pathname + " received.");
+          // 从文件系统中读取请求的文件内容
+          fs.readFile(pathname.substr(1), function (err, data) {
+            if (err) {
+              console.log(err);
+              // HTTP 状态码: 404 : NOT FOUND
+              // Content Type: text/plain
+              response.writeHead(404, {'Content-Type': 'text/html'});
+            }else{	         
+              // HTTP 状态码: 200 : OK
+              // Content Type: text/plain
+              response.writeHead(200, {'Content-Type': 'text/html'});	
+              // 响应文件内容
+              response.write(data.toString());		
+            }
+            //  发送响应数据
+            response.end();
+          });   
+        }).listen(8081);
+        // 控制台会输出以下信息
+        console.log('Server running at http://127.0.0.1:8081/');
+      在该目录下创建一个 index.htm 文件,代码如下：
+        <html>
+        <head>
+        <title>Sample Page</title>
+        </head>
+        <body>
+        Hello World!
+        </body>
+        </html>
+      执行 server.js 文件：
+      
+      创建Web客户端
+      创建 client.js 文件,代码如下所示：
+        var http = require('http');
+        // 用于请求的选项
+        var options = {
+          host: 'localhost',
+          port: '8081',
+          path: '/index.htm'  
+        };
+        // 处理响应的回调函数
+        var callback = function(response){
+          // 不断更新数据
+          var body = '';
+          response.on('data', function(data) {
+            body += data;
           });
-          server.listen(1337,"127.0.0.1"); // 监听请求
-          // 通过监听 http://127.0.0.1:1337 来调用回调函数
-          console.log("server running at http://127.0.0.1:1337");
-          Node环境中运行该文件
-          打开浏览器输入地址 "http://127.0.0.1:1337" 
-          出现 haha! hello word
-      http.get(url,function(res){}); 使用get方法请求指定url的数据
-        res.on('data',function(data){ }); 监听请求的数据下载事件,会不断的触发
-          PS:将回调函数中所有的data数据串起来就是完整的响应数据了
-        res.on('end',function(){ }); 请求数据下载完毕触发
+          response.on('end', function() {
+            // 数据接收完成
+            console.log(body);
+          });
+        }
+        // 向服务端发送请求
+        var req = http.request(options, callback);
+        req.end();
+      新开一个终端,执行 client.js 文件,输出结果如下：
+        <html>
+        <head>
+        <title>Sample Page</title>
+        </head>
+        <body>
+        Hello World!
+        </body>
+        </html>
+  fs     文件系统模块file system
+    PS:fs模块可用于对系统文件及目录进行读写操作.
+      Node.js 提供一组类似 UNIX(POSIX)标准的文件操作API.
+      也可使用 fs.read 和 fs.write 读写文件,
+      fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
+      但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
+      使用 fs.read 和 fs.write 读写文件需要使用 fs.open 打开文件和 fs.close 关闭文件.
+    模块中所有方法都有同步和异步两种形式
+      PS:建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
+        异步的方法函数最后一个参数为回调函数,回调函数的第一个参数包含了错误信息 error.
+      异步写法demo:有一个回调函数
+        var fs = require('fs'); // 载入fs模块
+        fs.unlink('/tmp/shiyanlou', function(err) {
+            if (err) { throw err; }
+            console.log('成功删除了 /tmp/shiyanlou');
+        });
+        异步方法中回调函数的第一个参数总是留给异常参数(exception),
+        如果方法成功完成,该参数为null或undefined
+      同步写法demo:
+        var fs = require('fs');
+        fs.unlinkSync('/tmp/shiyanlou'); // Sync 表示是同步方法
+        console.log('成功删除了 /tmp/shiyanlou');
+        同步方法执行完并返回结果后,才能执行后续的代码 
+        而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
+    var fs = require('fs'); 引入文件系统模块
+    fs.writeFile(path,data,[options],callback); 写内容到文件中
+      PS: 写入文件内容,如果文件不存在会创建一个文件,但不会主动创建目录
+        写入时会先清空文件
+      Arguments:
+        path    字符串,路径及文件名
+        data    字符串,写入的内容
+        option  对象,用于控制写入,包含{encoding,mode,flag}
+          encoding 默认编码为 utf8
+          mode     模式为 0666
+          flag     默认值为 "w",表示重写,会清空文件之前的内容
+            'a'  增加,在文件原有的基础上增加
+        callback 回调函数,传入参数 err
       e.g.:
-        创建Web服务器
-        创建 server.js 文件,代码如下所示：
-          var http = require('http');
-          var fs = require('fs');
-          var url = require('url');
-          // 创建服务器
-          http.createServer( function (request, response) {  
-            // 解析请求,包括文件名
-            var pathname = url.parse(request.url).pathname;
-            // 输出请求的文件名
-            console.log("Request for " + pathname + " received.");
-            // 从文件系统中读取请求的文件内容
-            fs.readFile(pathname.substr(1), function (err, data) {
-              if (err) {
-                console.log(err);
-                // HTTP 状态码: 404 : NOT FOUND
-                // Content Type: text/plain
-                response.writeHead(404, {'Content-Type': 'text/html'});
-              }else{	         
-                // HTTP 状态码: 200 : OK
-                // Content Type: text/plain
-                response.writeHead(200, {'Content-Type': 'text/html'});	
-                // 响应文件内容
-                response.write(data.toString());		
-              }
-              //  发送响应数据
-              response.end();
-            });   
-          }).listen(8081);
-          // 控制台会输出以下信息
-          console.log('Server running at http://127.0.0.1:8081/');
-        在该目录下创建一个 index.htm 文件,代码如下：
-          <html>
-          <head>
-          <title>Sample Page</title>
-          </head>
-          <body>
-          Hello World!
-          </body>
-          </html>
-        执行 server.js 文件：
-        
-        创建Web客户端
-        创建 client.js 文件,代码如下所示：
-          var http = require('http');
-          // 用于请求的选项
-          var options = {
-            host: 'localhost',
-            port: '8081',
-            path: '/index.htm'  
-          };
-          // 处理响应的回调函数
-          var callback = function(response){
-            // 不断更新数据
-            var body = '';
-            response.on('data', function(data) {
-              body += data;
-            });
-            response.on('end', function() {
-              // 数据接收完成
-              console.log(body);
-            });
-          }
-          // 向服务端发送请求
-          var req = http.request(options, callback);
-          req.end();
-        新开一个终端,执行 client.js 文件,输出结果如下：
-          <html>
-          <head>
-          <title>Sample Page</title>
-          </head>
-          <body>
-          Hello World!
-          </body>
-          </html>
-    fs 文件系统模块file system
-      PS:fs模块可用于对系统文件及目录进行读写操作.
-        Node.js 提供一组类似 UNIX(POSIX)标准的文件操作API.
-        也可使用 fs.read 和 fs.write 读写文件,
-        fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
-        但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
-        使用 fs.read 和 fs.write 读写文件需要使用 fs.open 打开文件和 fs.close 关闭文件.
-      模块中所有方法都有同步和异步两种形式
-        PS:建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
-          异步的方法函数最后一个参数为回调函数,回调函数的第一个参数包含了错误信息 error.
-        异步写法demo:有一个回调函数
-          var fs = require('fs'); // 载入fs模块
-          fs.unlink('/tmp/shiyanlou', function(err) {
-              if (err) { throw err; }
-              console.log('成功删除了 /tmp/shiyanlou');
+        var fs = require('fs'); // 引入fs模块
+        fs.writeFile('./test2.txt', '生当做人杰', function(err) {
+          if (err) { throw err; }
+          console.log('Saved.');
+          fs.readFile('./test2.txt', 'utf-8', function(err, data) {
+            if (err) { throw err; }
+            console.log(data); // 写入成功后读取测试
           });
-          异步方法中回调函数的第一个参数总是留给异常参数(exception),
-          如果方法成功完成,该参数为null或undefined
-        同步写法demo:
-          var fs = require('fs');
-          fs.unlinkSync('/tmp/shiyanlou'); // Sync 表示是同步方法
-          console.log('成功删除了 /tmp/shiyanlou');
-          同步方法执行完并返回结果后,才能执行后续的代码 
-          而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
-      var fs = require('fs'); 引入文件系统模块
-      fs.writeFile(path,data,[options],callback); 写内容到文件中
-        PS: 写入文件内容,如果文件不存在会创建一个文件,但不会主动创建目录
-          写入时会先清空文件
-        Arguments:
-          path    字符串,路径及文件名
-          data    字符串,写入的内容
-          option  对象,用于控制写入,包含{encoding,mode,flag}
-            encoding 默认编码为 utf8
-            mode     模式为 0666
-            flag     默认值为 "w",表示重写,会清空文件之前的内容
-              'a'  增加,在文件原有的基础上增加
-          callback 回调函数,传入参数 err
-        e.g.:
+        });
+
+        默认flag='w'是重写,会清空文件,想要追加,可以设置 flag 参数 
           var fs = require('fs'); // 引入fs模块
-          fs.writeFile('./test2.txt', '生当做人杰', function(err) {
+          // 传递了追加参数 { 'flag': 'a' }
+          fs.writeFile('./test2.txt', '至死不渝', { 'flag': 'a' }, function(err) {
             if (err) { throw err; }
             console.log('Saved.');
             fs.readFile('./test2.txt', 'utf-8', function(err, data) {
+              // 写入成功后读取测试
               if (err) { throw err; }
-              console.log(data); // 写入成功后读取测试
+              console.log(data);
             });
           });
 
-          默认flag='w'是重写,会清空文件,想要追加,可以设置 flag 参数 
-            var fs = require('fs'); // 引入fs模块
-            // 传递了追加参数 { 'flag': 'a' }
-            fs.writeFile('./test2.txt', '至死不渝', { 'flag': 'a' }, function(err) {
-              if (err) { throw err; }
-              console.log('Saved.');
-              fs.readFile('./test2.txt', 'utf-8', function(err, data) {
-                // 写入成功后读取测试
-                if (err) { throw err; }
-                console.log(data);
-              });
-            });
-
-            flag传值,r代表读取文件,w代表写文件,a代表追加 
-      fs.readFile(path,[option],callback); 读取文件内容
-        Arguments:
-          path   字符串,路径及文件名
-          option   对象
-            encoding String |null default=null
-            flag  默认为 'r'
-          callback 回调函数,传入两个参数 err 和 data
-            err是读取文件出错时触发的错误对象,
-            data是从文件读取的数据 
-        e.g.:
-          一个文本文件: text.txt 内容如下:
-            line one
-            line two
-          readfile.js 内容如下 [和 text.txt 在相同目录中] 
-            var fs = require('fs'); // 引入fs模块
+          flag传值,r代表读取文件,w代表写文件,a代表追加 
+    fs.readFile(path,[option],callback); 读取文件内容
+      Arguments:
+        path   字符串,路径及文件名
+        option   对象
+          encoding String |null default=null
+          flag  默认为 'r'
+        callback 回调函数,传入两个参数 err 和 data
+          err是读取文件出错时触发的错误对象,
+          data是从文件读取的数据 
+      e.g.:
+        一个文本文件: text.txt 内容如下:
+          line one
+          line two
+        readfile.js 内容如下 [和 text.txt 在相同目录中] 
+          var fs = require('fs'); // 引入fs模块
+          fs.readFile('./test.txt', function(err, data) {
+            if (err) { throw err; }// 读取文件失败/错误
+            // console.log(data.toString());
+            console.log(data);  
+          });
+        node readfile.js 运行结果
+          <Buffer 6c 69 6e 65 20 6f 6e 65 0a 6c 69 6e 65 20 74 77 6f 0a>
+          // 这是原始二进制数据在缓冲区中的内容 
+          要显示文件内容可以使用 toString() 或 指定编码输出
+            toString()写法：
             fs.readFile('./test.txt', function(err, data) {
-              if (err) { throw err; }// 读取文件失败/错误
-              // console.log(data.toString());
-              console.log(data);  
+              if (err) { throw err; }
+              console.log(data.toString());
             });
-          node readfile.js 运行结果
-            <Buffer 6c 69 6e 65 20 6f 6e 65 0a 6c 69 6e 65 20 74 77 6f 0a>
-            // 这是原始二进制数据在缓冲区中的内容 
-            要显示文件内容可以使用 toString() 或 指定编码输出
-              toString()写法：
-              fs.readFile('./test.txt', function(err, data) {
-                if (err) { throw err; }
-                console.log(data.toString());
-              });
-              设置utf-8 编码写法：
-              fs.readFile('./test.txt', 'utf-8', function(err, data) {
-                if (err) { throw err; }
-                console.log('utf-8: ', data);
-              });
+            设置utf-8 编码写法：
+            fs.readFile('./test.txt', 'utf-8', function(err, data) {
+              if (err) { throw err; }
+              console.log('utf-8: ', data);
+            });
 
-          readFile 同步的写法就是没有回调函数:fs.readFileSync(filename,[options])
-      fs.unlink(path,callback); 删除文件
-        Arguments:
-          path 字符串,路径及文件名
-          callback 回调函数,传入参数 err
-        e.g. 
-          var file ='message.txt'
-          fs.unlink(file,(err) =>{
-            if (err) { throw err }
-            console.log(`${file} 成功删除`)
-          })
-      fs.mkdir(path,[mode],callback); 创建目录
-        PS:当创建的文件夹和已存在的文件夹重名时会报错
-        Arguments:
-          path     路径和目录名称
-          mode     可选,设置目录的权限,默认为 0777
-          callback 回调函数,传入参数 err 
-        e.g.:
-          var fs = require('fs'); // 引入fs模块
-          fs.mkdir('./newdir', function(err) { // 创建 newdir 目录
-            if (err) { throw err; }
-            console.log('make dir success.');
-          });
-      fs.readdir(path,callback);  读取文件目录
-        Arguments:
-          path 路径和目录名称
-          callback 回调函数,传入两个参数 err files
-            files是一个数组,每个元素是此目录下的文件或文件夹的名称
-        e.g.:
-          结果输出当前目录下的所有文件及文件夹
-          var fs = require('fs'); // 引入fs模块
-          fs.readdir('./', function(err, files) {
-            if (err) { throw err; }
-            console.log(files);
-          });
-      fs.rmdir(path,callback);   删除目录
-        Arguments:
-          path      文件路径.
-          callback  回调函数,没有参数.
-        e.g.:
-        fs.rmdir("./新建文件夹",function(err){
-          if (err) {
-            console.log(err);
-          }else {
-            console.log("删除文件夹成功");
-          }
+        readFile 同步的写法就是没有回调函数:fs.readFileSync(filename,[options])
+    fs.unlink(path,callback); 删除文件
+      Arguments:
+        path 字符串,路径及文件名
+        callback 回调函数,传入参数 err
+      e.g. 
+        var file ='message.txt'
+        fs.unlink(file,(err) =>{
+          if (err) { throw err }
+          console.log(`${file} 成功删除`)
         })
-      fs.open(path,flags[,mode],callback); 打开文件
-        Arguments:
-          path     文件的路径
-          flags    文件打开的行为
-            r   以读取模式打开文件.如果文件不存在抛出异常.
-            r+  以读写模式打开文件.如果文件不存在抛出异常.
-            rs  以同步的方式读取文件.
-            rs+ 以同步的方式读取和写入文件.
-            w   以写入模式打开文件,如果文件不存在则创建.
-            wx  类似 'w',但是如果文件路径存在,则文件写入失败.
-            w+  以读写模式打开文件,如果文件不存在则创建.
-            wx+ 类似 'w+', 但是如果文件路径存在,则文件读写失败.
-            a   以追加模式打开文件,如果文件不存在则创建.
-            ax  类似 'a', 但是如果文件路径存在,则文件追加失败.
-            a+  以读取追加模式打开文件,如果文件不存在则创建.
-            ax+ 类似 'a+', 但是如果文件路径存在,则文件读取追加失败.          
-          mode     设置文件模式(权限),文件创建默认权限为 0666,可读写)
-          callback 回调函数,带有两个参数如：callback(err, fd)      
-      fs.stat(path,callback); 获取文件信息
-        Arguments:
-          path     文件路径.
-          callback 回调函数,带有两个参数如：(err, stats), stats 是 fs.Stats 对象. 
-        e.g.:
-          fs.stat(path)执行后,会将stats类的实例返回给其回调函数.
-          可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件：
-          var fs = require('fs');
-          fs.stat('/Users/liuht/code/itbilu/demo/fs.js', function (err, stats) {
-            console.log(stats.isFile()); 		//true
-          })      
-        stats对象的方法
-          stats.isFile(); 如果是文件返回 true,否则返回 false.
-          stats.isDirectory(); 如果是目录返回 true,否则返回 false.
-          stats.isBlockDevice(); 如果是块设备返回 true,否则返回 false.
-          stats.isCharacterDevice(); 如果是字符设备返回 true,否则返回 false.
-          stats.isSymbolicLink(); 如果是软链接返回 true,否则返回 false.
-          stats.isFIFO(); 如果是FIFO,返回true,否则返回 false.
-            FIFO是UNIX中的一种特殊类型的命令管道.
-          stats.isSocket(); 如果是 Socket 返回 true,否则返回 false.      
-      fs.read(fd,buffer,offset,length,position,callback); 读取文件
-        Arguments:
-          fd      通过 fs.open() 方法返回的文件描述符.
-          buffer  数据写入的缓冲区
-          offset  缓冲区写入的写入偏移量
-          length  要从文件中读取的字节数
-          position  文件读取的起始位置,如果 position 的值为 null,则会从当前文件指针的位置读取
-          callback  回调函数,有三个参数err, bytesRead, buffer
-            err 为错误信息, bytesRead 表示读取的字节数,buffer 为缓冲区对象
-        e.g.:
-          input.txt 文件内容为：
-            菜鸟教程官网地址：www.runoob.com
-          接下来我们创建 file.js 文件,代码如下所示：
-            var fs = require("fs");
-            var buf = new Buffer(1024);
-            console.log("准备打开已存在的文件！");
-            fs.open('input.txt', 'r+', function(err, fd) {
-              if (err) { return console.error(err); }
-              console.log("文件打开成功！");
-              console.log("准备读取文件：");
-              fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
-                if (err){ console.log(err); }
-                console.log(bytes + "  字节被读取");
-                if(bytes > 0){ // 仅输出读取的字节
-                  console.log(buf.slice(0, bytes).toString());
-                }
+    fs.mkdir(path,[mode],callback); 创建目录
+      PS:当创建的文件夹和已存在的文件夹重名时会报错
+      Arguments:
+        path     路径和目录名称
+        mode     可选,设置目录的权限,默认为 0777
+        callback 回调函数,传入参数 err 
+      e.g.:
+        var fs = require('fs'); // 引入fs模块
+        fs.mkdir('./newdir', function(err) { // 创建 newdir 目录
+          if (err) { throw err; }
+          console.log('make dir success.');
+        });
+    fs.readdir(path,callback);  读取文件目录
+      Arguments:
+        path 路径和目录名称
+        callback 回调函数,传入两个参数 err files
+          files是一个数组,每个元素是此目录下的文件或文件夹的名称
+      e.g.:
+        结果输出当前目录下的所有文件及文件夹
+        var fs = require('fs'); // 引入fs模块
+        fs.readdir('./', function(err, files) {
+          if (err) { throw err; }
+          console.log(files);
+        });
+    fs.rmdir(path,callback);   删除目录
+      Arguments:
+        path      文件路径.
+        callback  回调函数,没有参数.
+      e.g.:
+      fs.rmdir("./新建文件夹",function(err){
+        if (err) {
+          console.log(err);
+        }else {
+          console.log("删除文件夹成功");
+        }
+      })
+    fs.open(path,flags[,mode],callback); 打开文件
+      Arguments:
+        path     文件的路径
+        flags    文件打开的行为
+          r   以读取模式打开文件.如果文件不存在抛出异常.
+          r+  以读写模式打开文件.如果文件不存在抛出异常.
+          rs  以同步的方式读取文件.
+          rs+ 以同步的方式读取和写入文件.
+          w   以写入模式打开文件,如果文件不存在则创建.
+          wx  类似 'w',但是如果文件路径存在,则文件写入失败.
+          w+  以读写模式打开文件,如果文件不存在则创建.
+          wx+ 类似 'w+', 但是如果文件路径存在,则文件读写失败.
+          a   以追加模式打开文件,如果文件不存在则创建.
+          ax  类似 'a', 但是如果文件路径存在,则文件追加失败.
+          a+  以读取追加模式打开文件,如果文件不存在则创建.
+          ax+ 类似 'a+', 但是如果文件路径存在,则文件读取追加失败.          
+        mode     设置文件模式(权限),文件创建默认权限为 0666,可读写)
+        callback 回调函数,带有两个参数如：callback(err, fd)      
+    fs.stat(path,callback); 获取文件信息
+      Arguments:
+        path     文件路径.
+        callback 回调函数,带有两个参数如：(err, stats), stats 是 fs.Stats 对象. 
+      e.g.:
+        fs.stat(path)执行后,会将stats类的实例返回给其回调函数.
+        可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件：
+        var fs = require('fs');
+        fs.stat('/Users/liuht/code/itbilu/demo/fs.js', function (err, stats) {
+          console.log(stats.isFile()); 		//true
+        })      
+      stats对象的方法
+        stats.isFile(); 如果是文件返回 true,否则返回 false.
+        stats.isDirectory(); 如果是目录返回 true,否则返回 false.
+        stats.isBlockDevice(); 如果是块设备返回 true,否则返回 false.
+        stats.isCharacterDevice(); 如果是字符设备返回 true,否则返回 false.
+        stats.isSymbolicLink(); 如果是软链接返回 true,否则返回 false.
+        stats.isFIFO(); 如果是FIFO,返回true,否则返回 false.
+          FIFO是UNIX中的一种特殊类型的命令管道.
+        stats.isSocket(); 如果是 Socket 返回 true,否则返回 false.      
+    fs.read(fd,buffer,offset,length,position,callback); 读取文件
+      Arguments:
+        fd      通过 fs.open() 方法返回的文件描述符.
+        buffer  数据写入的缓冲区
+        offset  缓冲区写入的写入偏移量
+        length  要从文件中读取的字节数
+        position  文件读取的起始位置,如果 position 的值为 null,则会从当前文件指针的位置读取
+        callback  回调函数,有三个参数err, bytesRead, buffer
+          err 为错误信息, bytesRead 表示读取的字节数,buffer 为缓冲区对象
+      e.g.:
+        input.txt 文件内容为：
+          菜鸟教程官网地址：www.runoob.com
+        接下来我们创建 file.js 文件,代码如下所示：
+          var fs = require("fs");
+          var buf = new Buffer(1024);
+          console.log("准备打开已存在的文件！");
+          fs.open('input.txt', 'r+', function(err, fd) {
+            if (err) { return console.error(err); }
+            console.log("文件打开成功！");
+            console.log("准备读取文件：");
+            fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
+              if (err){ console.log(err); }
+              console.log(bytes + "  字节被读取");
+              if(bytes > 0){ // 仅输出读取的字节
+                console.log(buf.slice(0, bytes).toString());
+              }
+            });
+          });
+          以上代码执行结果如下：
+            准备打开已存在的文件！
+            文件打开成功！
+            准备读取文件：
+            42  字节被读取
+            菜鸟教程官网地址：www.runoob.com      
+    fs.close(fd,callback); 关闭文件
+      Arguments:
+        fd   通过 fs.open() 方法返回的文件描述符
+        callback   回调函数,没有参数
+      e.g.:
+        input.txt 文件内容为：
+          菜鸟教程官网地址：www.runoob.com
+        接下来我们创建 file.js 文件,代码如下所示：
+          var fs = require("fs");
+          var buf = new Buffer(1024);
+          console.log("准备打开文件！");
+          fs.open('input.txt', 'r+', function(err, fd) {
+            if (err) { return console.error(err); }
+            console.log("文件打开成功！");
+            console.log("准备读取文件！");
+            fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
+              if (err){ console.log(err); }
+              // 仅输出读取的字节
+              if(bytes > 0){ console.log(buf.slice(0, bytes).toString()); }
+              fs.close(fd, function(err){// 关闭文件
+                if (err){ console.log(err); } 
+                console.log("文件关闭成功");
               });
             });
-            以上代码执行结果如下：
-              准备打开已存在的文件！
-              文件打开成功！
-              准备读取文件：
-              42  字节被读取
-              菜鸟教程官网地址：www.runoob.com      
-      fs.close(fd,callback); 关闭文件
-        Arguments:
-          fd   通过 fs.open() 方法返回的文件描述符
-          callback   回调函数,没有参数
-        e.g.:
-          input.txt 文件内容为：
-            菜鸟教程官网地址：www.runoob.com
-          接下来我们创建 file.js 文件,代码如下所示：
-            var fs = require("fs");
-            var buf = new Buffer(1024);
-            console.log("准备打开文件！");
-            fs.open('input.txt', 'r+', function(err, fd) {
-              if (err) { return console.error(err); }
-              console.log("文件打开成功！");
-              console.log("准备读取文件！");
+          });
+        以上代码执行结果如下：
+          准备打开文件！
+          文件打开成功！
+          准备读取文件！
+          菜鸟教程官网地址：www.runoob.com
+          文件关闭成功          
+    fs.ftruncate(fd,len,callback); 截取文件          
+      Arguments:
+        fd  通过 fs.open() 方法返回的文件描述符.
+        len  文件内容截取的长度.
+        callback  回调函数,没有参数.
+      e.g.:
+        input.txt 文件内容为：
+          site:www.runoob.com
+        接下来我们创建 file.js 文件,代码如下所示：
+          var fs = require("fs");
+          var buf = new Buffer(1024);
+          console.log("准备打开文件！");
+          fs.open('input.txt', 'r+', function(err, fd) {
+            if (err) { return console.error(err); }
+            console.log("文件打开成功！");
+            console.log("截取10字节后的文件内容.");
+            fs.ftruncate(fd, 10, function(err){ // 截取文件
+              if (err){ console.log(err); } 
+              console.log("文件截取成功.");
+              console.log("读取相同的文件"); 
               fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
                 if (err){ console.log(err); }
                 // 仅输出读取的字节
                 if(bytes > 0){ console.log(buf.slice(0, bytes).toString()); }
-                fs.close(fd, function(err){// 关闭文件
+                fs.close(fd, function(err){ // 关闭文件
                   if (err){ console.log(err); } 
-                  console.log("文件关闭成功");
+                  console.log("文件关闭成功！");
                 });
               });
             });
-          以上代码执行结果如下：
-            准备打开文件！
-            文件打开成功！
-            准备读取文件！
-            菜鸟教程官网地址：www.runoob.com
-            文件关闭成功          
-      fs.ftruncate(fd,len,callback); 截取文件          
-        Arguments:
-          fd  通过 fs.open() 方法返回的文件描述符.
-          len  文件内容截取的长度.
-          callback  回调函数,没有参数.
-        e.g.:
-          input.txt 文件内容为：
-            site:www.runoob.com
-          接下来我们创建 file.js 文件,代码如下所示：
-            var fs = require("fs");
-            var buf = new Buffer(1024);
-            console.log("准备打开文件！");
-            fs.open('input.txt', 'r+', function(err, fd) {
-              if (err) { return console.error(err); }
-              console.log("文件打开成功！");
-              console.log("截取10字节后的文件内容.");
-              fs.ftruncate(fd, 10, function(err){ // 截取文件
-                if (err){ console.log(err); } 
-                console.log("文件截取成功.");
-                console.log("读取相同的文件"); 
-                fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
-                  if (err){ console.log(err); }
-                  // 仅输出读取的字节
-                  if(bytes > 0){ console.log(buf.slice(0, bytes).toString()); }
-                  fs.close(fd, function(err){ // 关闭文件
-                    if (err){ console.log(err); } 
-                    console.log("文件关闭成功！");
-                  });
-                });
-              });
-            });
-          以上代码执行结果如下：
-            准备打开文件！
-            文件打开成功！
-            截取10字节后的文件内容.
-            文件截取成功.
-            读取相同的文件
-            site:www.r
-            文件关闭成功          
-      fs.rename(oldPath, newPath, callback)
-        回调函数没有参数,但可能抛出异常          
-    url
-      PS:URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
-      var url = require("url"); 引入url模块
-      url.parse("url"[,boolean][,boolean]); 解析url为一个对象
-        e.g. :
-          url.parse("https://www.baidu.com");
-          返回如下的对象
-          {
-            protocol: 'https:',  // 使用协议
-            slashes: true,       // 是否有协议的双斜线
-            auth: null,
-            host: 'www.baidu.com', // ip地址或域名
-            port: null,       // 端口,默认为80
-            hostname: 'www.baidu.com', // 主机名
-            hash: null,   // hash值,锚点
-            search: null, // 查询字符串参数
-            query: null,  // 发送给服务器的数据,使用=的键值对表示
-            pathname: '/', // 路径名,
-            path: '/',     // 路径
-            href: 'https://www.baidu.com/' // 完整超链接
-          }
-      url.format(url对象); 将url对象格式化为url字符串
-        e.g. :
-        var obj =url.parse("https://www.baidu.com");
-        url.format(obj); // 'https://www.baidu.com/'
-      url.resolve(str1,str2); 拼接为URL
-        e.g. :
-        url.resolve("https://imooc.com","/course/list");
-        // 'https://imooc.com/course/list'
-    querystring
-      PS:
-      var querystring = require("querystring"); 引入querystring模块
-      querystring.stringify(obj,连接符,键值对=的替换符号); 序列化
-        e.g. :
-        querystring.stringify({name:"Scott",course:["Java","Node"],from:""})
-        // 'name=Scott&course=Java&course=Node&from='
-      querystring.parse(str);  解析为对象格式
-        e.g. :
-        querystring.parse('name=Scott&course=Java&course=Node&from=');
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-      querystring.escape(str); 转义为URL可用的字符串
-        e.g. :
-        querystring.escape("哈哈>._.<");
-        // '%E5%93%88%E5%93%88%3E._.%3C'
-      querystring.unescape(str); 反转义
-        e.g. :
-        querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C');
-        // '哈哈>._.<'
-      querystring.unescapeBuffer()
-      querystring.encode()
-      querystring.decode()
-    util 提供常用函数的集合
-      PS:用于弥补核心JavaScript 的功能 过于精简的不足
-      util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
-        PS:JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
-          JavaScript 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
-          handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
-        e.g.:
-          var util = require('util'); 
-          function Base() { 
-          	this.name = 'base'; 
-          	this.base = 1991; 
-          	this.sayHello = function() { console.log('Hello ' + this.name); }; 
-          } 
-          Base.prototype.showName = function() { console.log(this.name); }; 
-          function Sub() { this.name = 'sub'; } 
-          util.inherits(Sub, Base); 
-          var objBase = new Base(); 
-          objBase.showName();  // base 
-          objBase.sayHello();  // Hello base 
-          console.log(objBase); // { name: 'base', base: 1991, sayHello: [Function] } 
-          var objSub = new Sub(); 
-          objSub.showName(); // sub
-          objSub.sayHello(); // 报错,继承不到
-          console.log(objSub); // { name: 'sub' }
-          定义了一个基础对象Base 和一个继承自Base 的Sub,
-      util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
-        PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
-          util.inspect 并不会简单地直接把对象转换为字符串,
-          即使该对象定义了toString方法也不会调用.
-        Arguments:
-          showHidden 可选,如果值为 true,将会输出更多隐藏信息
-          depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
-            指定为 null 表示将不限递归层数完整遍历对象. 
-            如果color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
-        e.g.:
-          var util = require('util'); 
-          function Person() { 
-          	this.name = 'abc'; 
-          	this.toString = function() { return this.name; }; 
-          } 
-          var obj = new Person(); 
-          console.log(util.inspect(obj)); // Person { name: 'abc', toString: [Function] }
-          console.log(util.inspect(obj, true)); 
-          // Person {
-          //   name: 'abc',
-          //   toString: 
-          //    { [Function]
-          //      [length]: 0,
-          //      [name]: '',
-          //      [arguments]: null,
-          //      [caller]: null,
-          //      [prototype]: { [constructor]: [Circular] } } }
-      util.isArray(val); 返回表示参数是否为数组的布尔值
-      util.isRegExp(val); 返回表示参数是否为正则表达式的布尔值
-        e.g.:
-          var util = require('util');
-          util.isRegExp(/some regexp/) // true
-          util.isRegExp(new RegExp('another regexp')) // true
-          util.isRegExp({}) // false
-      util.isDate(val);  返回表示参数是否为日期对象的布尔值
-        e.g.:
-          var util = require('util');
-          util.isDate(new Date()) // true
-          util.isDate(Date()) // false (without 'new' returns a String)
-          util.isDate({}) // false
-      util.isError(val); 返回表示参数是否为错误对象的布尔值
-        e.g.:
-          var util = require('util');
-          util.isError(new Error()) // true
-          util.isError(new TypeError()) // true
-          util.isError({ name: 'Error', message: 'an error occurred' }) // false      
-    os 模块提供了一些基本的系统操作函数
-      PS:
-      var os = require("os"); 引入os模块
-      os.tmpdir() 返回操作系统的默认临时文件夹.
-      os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
-      os.hostname() 返回操作系统的主机名.
-      os.type() 返回操作系统名
-      os.platform() 返回操作系统名
-      os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
-      os.release() 返回操作系统的发行版本.
-      os.uptime() 返回操作系统运行的时间,以秒为单位.
-      os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
-      os.totalmem() 返回系统内存总量,单位为字节.
-      os.freemem() 返回操作系统空闲内存量,单位是字节.
-      os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
-        型号、速度(单位 MHz)、
-        时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
-      os.networkInterfaces() 获得网络接口列表.
+          });
+        以上代码执行结果如下：
+          准备打开文件！
+          文件打开成功！
+          截取10字节后的文件内容.
+          文件截取成功.
+          读取相同的文件
+          site:www.r
+          文件关闭成功          
+    fs.rename(oldPath, newPath, callback)
+      回调函数没有参数,但可能抛出异常          
+  url    
+    PS:URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
+    var url = require("url"); 引入url模块
+    url.parse("url"[,boolean][,boolean]); 解析url为一个对象
+      e.g. :
+        url.parse("https://www.baidu.com");
+        返回如下的对象
+        {
+          protocol: 'https:',  // 使用协议
+          slashes: true,       // 是否有协议的双斜线
+          auth: null,
+          host: 'www.baidu.com', // ip地址或域名
+          port: null,       // 端口,默认为80
+          hostname: 'www.baidu.com', // 主机名
+          hash: null,   // hash值,锚点
+          search: null, // 查询字符串参数
+          query: null,  // 发送给服务器的数据,使用=的键值对表示
+          pathname: '/', // 路径名,
+          path: '/',     // 路径
+          href: 'https://www.baidu.com/' // 完整超链接
+        }
+    url.format(url对象); 将url对象格式化为url字符串
+      e.g. :
+      var obj =url.parse("https://www.baidu.com");
+      url.format(obj); // 'https://www.baidu.com/'
+    url.resolve(str1,str2); 拼接为URL
+      e.g. :
+      url.resolve("https://imooc.com","/course/list");
+      // 'https://imooc.com/course/list'
+  querystring
+    PS:
+    var querystring = require("querystring"); 引入querystring模块
+    querystring.stringify(obj,连接符,键值对=的替换符号); 序列化
+      e.g. :
+      querystring.stringify({name:"Scott",course:["Java","Node"],from:""})
+      // 'name=Scott&course=Java&course=Node&from='
+    querystring.parse(str);  解析为对象格式
+      e.g. :
+      querystring.parse('name=Scott&course=Java&course=Node&from=');
+      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+    querystring.escape(str); 转义为URL可用的字符串
+      e.g. :
+      querystring.escape("哈哈>._.<");
+      // '%E5%93%88%E5%93%88%3E._.%3C'
+    querystring.unescape(str); 反转义
+      e.g. :
+      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C');
+      // '哈哈>._.<'
+    querystring.unescapeBuffer()
+    querystring.encode()
+    querystring.decode()
+  util 提供常用函数的集合
+    PS:用于弥补核心JavaScript 的功能 过于精简的不足
+    util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
+      PS:JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
+        JavaScript 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
+        handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
       e.g.:
-        创建 main.js 文件,代码如下所示：
-          var os = require("os");
-          console.log('endianness : ' + os.endianness());// CPU 的字节序
-          console.log('type : ' + os.type()); // 操作系统名
-          console.log('platform : ' + os.platform()); // 操作系统名
-          console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
-          console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
-        代码执行结果如下：
-          endianness : LE
-          type : Linux
-          platform : linux
-          total memory : 25103400960 bytes.
-          free memory : 20676710400 bytes.
-    path 模块提供了一些用于处理文件路径的小工具
-      PS:
-      var path = require("path"); 引入path模块
-      path.normalize(p) 规范化路径,注意'..' 和 '.'.
-      path.join([path1][, path2][, ...]) 用于连接路径
-        该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
-      path.resolve([from ...], to) 将 to 参数解析为绝对路径.
-      path.isAbsolute(path) 判断参数 path 是否是绝对路径.
-      path.relative(from, to) 用于将相对路径转为绝对路径.
-      path.dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
-      path.basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
-      path.extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
-        如果一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
-      path.parse(pathString) 返回路径字符串的对象.
-      path.format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
-      path.sep 平台的文件路径分隔符,'\\' 或 '/'
-      path.delimiter 平台的分隔符, ; or ':'.
-      path.posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
-      path.win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
+        var util = require('util'); 
+        function Base() { 
+        	this.name = 'base'; 
+        	this.base = 1991; 
+        	this.sayHello = function() { console.log('Hello ' + this.name); }; 
+        } 
+        Base.prototype.showName = function() { console.log(this.name); }; 
+        function Sub() { this.name = 'sub'; } 
+        util.inherits(Sub, Base); 
+        var objBase = new Base(); 
+        objBase.showName();  // base 
+        objBase.sayHello();  // Hello base 
+        console.log(objBase); // { name: 'base', base: 1991, sayHello: [Function] } 
+        var objSub = new Sub(); 
+        objSub.showName(); // sub
+        objSub.sayHello(); // 报错,继承不到
+        console.log(objSub); // { name: 'sub' }
+        定义了一个基础对象Base 和一个继承自Base 的Sub,
+    util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
+      PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
+        util.inspect 并不会简单地直接把对象转换为字符串,
+        即使该对象定义了toString方法也不会调用.
+      Arguments:
+        showHidden 可选,如果值为 true,将会输出更多隐藏信息
+        depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
+          指定为 null 表示将不限递归层数完整遍历对象. 
+          如果color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
       e.g.:
-        创建 main.js 文件,代码如下所示：
-          var path = require("path");
-          // 格式化路径
-          console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
-          // 连接路径
-          console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
-          // 转换为绝对路径
-          console.log('resolve:'+path.resolve('main.js'));
-          // 路径中文件的后缀名
-          console.log('ext name:'+path.extname('main.js'));
-        代码执行结果如下：
-          normalization : /test/test1/2slashes/1slash
-          joint path : /test/test1/2slashes/1slash
-          resolve : /web/com/1427176256_27423/main.js
-          ext name : .js    
-    net 模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法
-      var net = require("net"); 引入 net模块
-    dns 模块用于解析域名
-      PS:
-      var dns = require("dns"); 引入dns模块
-    domain,域 简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
-      PS:
-        domain模块,把处理多个不同的IO的操作作为一个组.
-        注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
-        domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
-        与process.on('uncaughtException')不同.
-        Domain 模块可分为隐式绑定和显式绑定：
-          隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
-          显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
-      var domain = require("domain"); 引入domain模块
+        var util = require('util'); 
+        function Person() { 
+        	this.name = 'abc'; 
+        	this.toString = function() { return this.name; }; 
+        } 
+        var obj = new Person(); 
+        console.log(util.inspect(obj)); // Person { name: 'abc', toString: [Function] }
+        console.log(util.inspect(obj, true)); 
+        // Person {
+        //   name: 'abc',
+        //   toString: 
+        //    { [Function]
+        //      [length]: 0,
+        //      [name]: '',
+        //      [arguments]: null,
+        //      [caller]: null,
+        //      [prototype]: { [constructor]: [Circular] } } }
+    util.isArray(val); 返回表示参数是否为数组的布尔值
+    util.isRegExp(val); 返回表示参数是否为正则表达式的布尔值
+      e.g.:
+        var util = require('util');
+        util.isRegExp(/some regexp/) // true
+        util.isRegExp(new RegExp('another regexp')) // true
+        util.isRegExp({}) // false
+    util.isDate(val);  返回表示参数是否为日期对象的布尔值
+      e.g.:
+        var util = require('util');
+        util.isDate(new Date()) // true
+        util.isDate(Date()) // false (without 'new' returns a String)
+        util.isDate({}) // false
+    util.isError(val); 返回表示参数是否为错误对象的布尔值
+      e.g.:
+        var util = require('util');
+        util.isError(new Error()) // true
+        util.isError(new TypeError()) // true
+        util.isError({ name: 'Error', message: 'an error occurred' }) // false      
+  os 模块提供了一些基本的系统操作函数
+    PS:
+    var os = require("os"); 引入os模块
+    os.tmpdir() 返回操作系统的默认临时文件夹.
+    os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
+    os.hostname() 返回操作系统的主机名.
+    os.type() 返回操作系统名
+    os.platform() 返回操作系统名
+    os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
+    os.release() 返回操作系统的发行版本.
+    os.uptime() 返回操作系统运行的时间,以秒为单位.
+    os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
+    os.totalmem() 返回系统内存总量,单位为字节.
+    os.freemem() 返回操作系统空闲内存量,单位是字节.
+    os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
+      型号、速度(单位 MHz)、
+      时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
+    os.networkInterfaces() 获得网络接口列表.
+    e.g.:
+      创建 main.js 文件,代码如下所示：
+        var os = require("os");
+        console.log('endianness : ' + os.endianness());// CPU 的字节序
+        console.log('type : ' + os.type()); // 操作系统名
+        console.log('platform : ' + os.platform()); // 操作系统名
+        console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
+        console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
+      代码执行结果如下：
+        endianness : LE
+        type : Linux
+        platform : linux
+        total memory : 25103400960 bytes.
+        free memory : 20676710400 bytes.
+  path 模块提供了一些用于处理文件路径的小工具
+    PS:
+    var path = require("path"); 引入path模块
+    path.normalize(p) 规范化路径,注意'..' 和 '.'.
+    path.join([path1][, path2][, ...]) 用于连接路径
+      该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
+    path.resolve([from ...], to) 将 to 参数解析为绝对路径.
+    path.isAbsolute(path) 判断参数 path 是否是绝对路径.
+    path.relative(from, to) 用于将相对路径转为绝对路径.
+    path.dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
+    path.basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
+    path.extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
+      如果一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
+    path.parse(pathString) 返回路径字符串的对象.
+    path.format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
+    path.sep 平台的文件路径分隔符,'\\' 或 '/'
+    path.delimiter 平台的分隔符, ; or ':'.
+    path.posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
+    path.win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
+    e.g.:
+      创建 main.js 文件,代码如下所示：
+        var path = require("path");
+        // 格式化路径
+        console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
+        // 连接路径
+        console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
+        // 转换为绝对路径
+        console.log('resolve:'+path.resolve('main.js'));
+        // 路径中文件的后缀名
+        console.log('ext name:'+path.extname('main.js'));
+      代码执行结果如下：
+        normalization : /test/test1/2slashes/1slash
+        joint path : /test/test1/2slashes/1slash
+        resolve : /web/com/1427176256_27423/main.js
+        ext name : .js    
+  net  模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法
+    创建客户端
+      const net = require("net");     // 引入 net模块
+      const host = '59.111.160.197';  // 指定host,只能填写 ip,而不能为网址
+      const port = 80;                // 指定 端口
+      const client = new net.Socket();   // 创建客户端
+      client.connect(port, host, () => { // 建立连接,完成后执行操作
+        const request = 'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n';
+        client.write(request); // 向服务器发送一个消息
+        
+        // 如果 server destroy 之后, 再调用下面的代码会报错
+        // setInterval(() => {
+        //   client.write('hello in interval')
+        // }, 100)
+      } );
+      client.on('data', (dat) => {   // 接收服务器的响应数据,触发 data 事件
+        // 参数 dat 默认情况下是 buffer 类型
+        // 可用 dat.toString() 将 buffer 转成字符串
+        console.log('dat:', dat.toString());
+        client.destroy(); // 关闭 client 连接
+      } );        
+      client.on('close', function() { }) // 连接关闭时触发 close 事件
+    创建服务端
+      const net = require('net');
+      const host = ''; // 字符串,表示接受任意 ip 地址的连接
+      const port = 2000; // 1024-65535之间, 1024以下端口需管理员权限才能使用
+      const server = new net.Server(); // 创建服务器
+      server.listen(port, host, () => { // 在指定端口监听指定客户端请求
+        // server.address(); 返回绑定的服务器的 ip 地址、ip 协议、端口号
+        console.log('listening.', server.address()); // 以 ipv6 格式显示
+      })
+      server.on('connection', (socket) => { // 有连接建立时,触发 connection 事件
+        // socket.io 是对 websocket 的封装
+        // socket的一些属性表示连接的客户端的信息
+        const address = socket.remoteAddress;
+        const port = socket.remotePort; // remotePort 是操作系统分配给客户端的
+        const family = socket.remoteFamily;
+        console.log('connected client info', address, port, family)
+        socket.on('data', (dat) => { // 当 socket 接收到数据时,触发 data 事件
+          // dat 是一个 Buffer 类型
+          // Buffer 是 node 中的特殊类型, 用来处理二进制数据
+          const r = dat.toString(); // 调用 toString() 将二进制数据转成字符串
+          console.log('接受到的原始数据', r, typeof(r));
+          
+          const response = 'HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!';
+          // Content-Length,可选,告诉浏览器响应数据量,避免一直等待
+          // 参数可以是 string 类型, 也可以是 buffer 类型
+          socket.write(response);  // 发送数据
+          socket.destroy(); // 用于结束本次服务器的响应
+          // 若不结束,浏览器会一直等待,也就是会一直 loading
+        })
+      })
+      server.on('error', (error) => {       // 服务器出错时触发事件
+        console.log('server error', error)
+      })
+      server.on('close', () => {            // 服务器关闭时触发
+        console.log('server closed')
+      })
+  dns  模块用于解析域名
+    PS:
+    var dns = require("dns"); 引入dns模块
+  domain,域 简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
+    PS:
+      domain模块,把处理多个不同的IO的操作作为一个组.
+      注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
+      domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
+      与process.on('uncaughtException')不同.
+      Domain 模块可分为隐式绑定和显式绑定：
+        隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
+        显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
+    var domain = require("domain"); 引入domain模块
   本地模块
-  第三方模块
-    cheerio html文件源码操作模块
-      PS:像使用jquery一样方便快捷地操作抓取到的源码
-      var cheerio =require("cheerio"); 引入cheerio模块
-      var $ =cheerio.load(data); 将传入的数据生成DOM,并返回选择器API用于获取DOM元素
-        $(selector)  获取selector对应的元素组成的类数组对象
-          $($(selector)[0]).html();  获取第一个元素的HTML字符
-          $($(selector)[0]).text();  获取第一个元素的文本
-            当同时存在多个元素该方法会将多个文本合并返回
-          $($(selector)[0]).attr(属性名);  获取第一个元素指定属性的值
-          $($(selector)[0]).find(selector);  获取第一个元素中对应selector的子元素
-        e.g.:
-        var $ =cheerio.load(data);
-        var a =$('a'); // 获取所有的a元素对象,操作类似与jQuery
-    request 请求模块
-      var request =require('request'); 引入request模块
-      request(url,function(err,response,data){ }); 向URL发送请求
-        回调函数传入err response data三个参数
-          err      当报错时err参数被填充,默认为null
-          response 请求
-            response.statusCode   http响应状态码,如200为成功
-          data     响应的数据
+  ◆第三方模块
+  cheerio html文件源码操作模块
+    PS:像使用jquery一样方便快捷地操作抓取到的源码
+    var cheerio =require("cheerio"); 引入cheerio模块
+    var $ =cheerio.load(data); 将传入的数据生成DOM,并返回选择器API用于获取DOM元素
+      $(selector)  获取selector对应的元素组成的类数组对象
+        $($(selector)[0]).html();  获取第一个元素的HTML字符
+        $($(selector)[0]).text();  获取第一个元素的文本
+          当同时存在多个元素该方法会将多个文本合并返回
+        $($(selector)[0]).attr(属性名);  获取第一个元素指定属性的值
+        $($(selector)[0]).find(selector);  获取第一个元素中对应selector的子元素
+      e.g.:
+      var $ =cheerio.load(data);
+      var a =$('a'); // 获取所有的a元素对象,操作类似与jQuery
+  request 请求模块
+    var request =require('request'); 引入request模块
+    request(url,function(err,response,data){ }); 向URL发送请求
+      回调函数传入err response data三个参数
+        err      当报错时err参数被填充,默认为null
+        response 请求
+          response.statusCode   http响应状态码,如200为成功
+        data     响应的数据
 路由 
   PS:我们要为路由提供请求的URL和其他需要的GET及POST参数,
     随后路由需要根据这些数据来执行相应的代码.

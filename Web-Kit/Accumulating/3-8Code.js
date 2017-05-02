@@ -457,6 +457,38 @@ PC端
       $('input').setCaretPosition(4);
       
     })
+  鼠标拖动图片
+    function dragElem(jelem,wrap = jelem.parent()){
+      obj = {};
+      var leftMax = wrap.width()-jelem.width();
+      var topMax = wrap.height()-jelem.height();
+      jelem[0].onmousedown = function(ev){
+        var e = window.event|| ev;
+        var oX=e.clientX - jelem[0].offsetLeft;
+        var oY=e.clientY - jelem[0].offsetTop;
+        document.onmousemove=function(ev){
+          var e = window.event|| ev;
+          e.preventDefault();
+          var left = e.clientX-oX;
+          var top = e.clientY-oY;
+          if (left <0) { left = 0; }
+          if (left > leftMax) { left = leftMax; }
+          if (top < 0) { top = 0; }
+          if (top > topMax) { top = topMax; }
+          jelem[0].style.left = left +"px";
+          jelem[0].style.top =  top +"px";
+          obj.left = left;
+          obj.top = top;
+        }
+        document.onmouseup=function(){
+          document.onmousemove = null;
+          document.onmouseup  = null;
+          console.log(obj);
+        }
+      }
+    }
+    var img1 = $('.phone .logo');
+    dragElem(img1);
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

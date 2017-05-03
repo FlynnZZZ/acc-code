@@ -129,7 +129,7 @@ ECMAScript 6
       console.log(c);//结果:c的值为4
     对象的解构赋值：对象的解构赋值不会受到属性的排列次序影响,是跟属性名关联起来的
       PS：变量名要和属性名一致,才会成功赋值。
-        如果变量找不到与其名字相同的属性,就会赋值不成功
+        若变量找不到与其名字相同的属性,就会赋值不成功
       e.g.:
         var { a,b,c} = {"a":1,"b":2,"c":3};
         console.log(a); // 1 
@@ -181,8 +181,78 @@ ECMAScript 6
       函数参数的默认值
         function demo({aoo=1}){ console.log(aoo); }
         demo({});
-标准库的扩展 
-  string字符串扩展
+标准库的扩展
+  Number 数值
+    PS：ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上
+      目的是减少全局性的函数,把全局函数合理地规划到其他对象下,渐渐实现语言的模块化。
+    Number.isNaN()      判断是否为非数值
+      传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
+      而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
+      isNaN('abc'); // true,'abc'无法转为一个数值,返回true
+      Number.isNaN('abc'); // false,Number.isNaN不做类型转换,直接返回false
+    Number.isFinite()   判断数值是否非无穷
+      只是对数值类型有效,对非数值类型的参数一律返回false。
+      Number.isFinite(1);        // true,数值1是有穷,即非无穷
+      Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
+      Number.isFinite('abc');    // false
+    Number.parseInt()   解析字符串,返回整数     「等价于 window.parseInt()」 
+    Number.parseFloat() 解析字符串,并返回浮点数 「等价于 window.parseFloat()」 
+    ◆新特性：
+    Number.isInteger()  判断是否是整数
+      PS：JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
+      Number.isInteger(3.2);  // false
+      Number.isInteger(3);    // true
+      Number.isInteger(3.0);  // true
+      Number.isInteger(3.00); // true
+    Number.EPSILON 常量,定义一个极小的数值
+      PS：Number.EPSILON 的出现是用来判断浮点数的计算误差,
+        若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
+      console.log(Number.EPSILON); // 2.220446049250313e-16
+      2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
+    Number.isSafeInteger() 判断是否为安全整数
+      Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 安全整数
+      ES6为引入了安全整数的概念。
+      原来JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间,
+      超过这个范围,无法精确表示这个值。故称之为不安全。
+      为此,ES6定义了两个常量来表示这个范围的最大值和最小值：
+      Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER
+      此外,若给你一个数值,你不知道它是否超出了这个安全范围,
+      可以使用ES6给我们新增的一个函数 Number.isSafeInteger 来进行判断
+      Number.isSafeInteger(Number.MAX_SAFE_INTEGER);   // true
+      Number.isSafeInteger(Number.MAX_SAFE_INTEGER+1); // false
+  Math   对象扩展
+    PS： ES6给Math对象新增了共17个函数
+    Math.trunc()  去除一个数的小数部分,返回整数部分。
+      PS：若传入的参数是整数,就直接返回整数,若是小数,就去除了小数部分,返回整数部分
+      Math.trunc(3);   // 3
+      Math.trunc(3.1); // 3
+    Math.sign()   判断一个值到底是正数、负数、零还是NaN
+      参数若是正数,结果返回1；
+      若是负数,结果返回-1；
+      若是0,结果返回0；
+      若是一个非数值类型的参数,结果返回：NaN。
+      Math.sign(3); //结果：1
+      Math.sign(-3); //结果：-1
+      Math.sign(0); //结果：0
+      Math.sign('abc'); //结果：NaN
+    Math.cbrt()   计算一个数的立方根
+      Math.cbrt(8);  //2
+      Math.cbrt(27); //3
+    Math.acosh(x) 返回 x 的反双曲余弦。
+    Math.asinh(x) 返回 x 的反双曲正弦。
+    Math.atanh(x) 返回 x 的反双曲正切。
+    Math.clz32(x) 返回 x 的 32 位二进制整数表示形式的前导 0 的个数。
+    Math.sinh(x)  返回x的双曲正弦。
+    Math.cosh(x)  返回 x 的双曲余弦。
+    Math.expm1(x) 返回 eˆx - 1。
+    Math.fround(x) 返回 x 的单精度浮点数形式。
+    Math.hypot(...values) 返回所有参数的平方和的平方根。
+    Math.imul(x, y) 返回两个参数以 32 位整数形式相乘的结果。
+    Math.log1p(x)   返回 1 + x 的自然对数。
+    Math.log10(x)   返回以 10 为底的x的对数。
+    Math.log2(x)    返回以 2 为底的 x 的对数。
+    Math.tanh(x)    返回 x 的双曲正切。
+  String 字符串扩展
     `a${1+2}b` 模版字符串  [ES6+] 
       PS：又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
       e.g.
@@ -248,7 +318,7 @@ ECMAScript 6
       console.log(`hello\tworld`); // hello	world
       \t会被识别为制表符,实现空格效果
       console.log(String.raw`hello\twolrd`); //输出：hello\twolrd
-  RegExp正则的扩展
+  RegExp 正则的扩展
     RegExp构造函数
       在ES5中,RegExp构造函数的参数有两种情况。
       第一种情况是,参数是字符串,这时第二个参数表示正则表达式的修饰符(flag)。
@@ -262,7 +332,7 @@ ECMAScript 6
       但是,ES5不允许此时使用第二个参数,添加修饰符,否则会报错。
       var regex = new RegExp(/xyz/, 'i');
       // Uncaught TypeError: Cannot supply flags when constructing one RegExp from another
-      ES6改变了这种行为。如果RegExp构造函数第一个参数是一个正则对象,
+      ES6改变了这种行为。若RegExp构造函数第一个参数是一个正则对象,
       那么可以使用第二个参数指定修饰符。
       而且,返回的正则表达式会忽略原有的正则表达式的修饰符,只使用新指定的修饰符。
       new RegExp(/abc/ig, 'i').flags // "i"
@@ -293,13 +363,13 @@ ECMAScript 6
         var s = '𠮷';
         /^.$/.test(s) // false
         /^.$/u.test(s) // true
-        上面代码表示,如果不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败。
+        上面代码表示,若不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败。
       (2)Unicode字符表示法
         ES6新增了使用大括号表示Unicode字符,这种表示法在正则表达式中必须加上u修饰符,才能识别。
         /\u{61}/.test('a') // false
         /\u{61}/u.test('a') // true
         /\u{20BB7}/u.test('𠮷') // true
-        上面代码表示,如果不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u。
+        上面代码表示,若不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u。
       (3)量词
         使用u修饰符后,所有量词都会正确识别码点大于0xFFFF的Unicode字符。
 
@@ -347,7 +417,7 @@ ECMAScript 6
       r1.exec(s) // ["aa"]
       r2.exec(s) // null
       上面代码有两个正则表达式,一个使用g修饰符,另一个使用y修饰符。这两个正则表达式各执行了两次,第一次执行的时候,两者行为相同,剩余字符串都是_aa_a。由于g修饰没有位置要求,所以第二次执行会返回结果,而y修饰符要求匹配必须从头部开始,所以返回null。
-      如果改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了。
+      若改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了。
       var s = 'aaa_aa_a';
       var r = /a+_/y;
 
@@ -441,7 +511,7 @@ ECMAScript 6
         }
         return result;
       }
-      上面代码中,如果字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的。但是,一旦出现非法字符,两者的行为就不一样了。
+      上面代码中,若字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的。但是,一旦出现非法字符,两者的行为就不一样了。
 
       tokenize(TOKEN_Y, '3x + 4')
       // [ '3' ]
@@ -537,7 +607,7 @@ ECMAScript 6
 
       /\d+(?=%)/.exec('100% of US presidents have been male')  // ["100"]
       /\d+(?!%)/.exec('that’s all 44 of them')                 // ["44"]
-      上面两个字符串,如果互换正则表达式,就会匹配失败。另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的。
+      上面两个字符串,若互换正则表达式,就会匹配失败。另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的。
 
       “后行断言”正好与“先行断言”相反,x只有在y后面才匹配,必须写成/(?<=y)x/。比如,只匹配美元符号之后的数字,要写成/(?<=\$)\d+/。”后行否定断言“则与”先行否定断言“相反,x只有不在y后面才匹配,必须写成/(?<!y)x/。比如,只匹配不在美元符号后面的数字,要写成/(?<!\$)\d+/。
 
@@ -557,7 +627,7 @@ ECMAScript 6
 
       /(?<=(o)d\1)r/.exec('hodor')  // null
       /(?<=\1d(o))r/.exec('hodor')  // ["r", "o"]
-      上面代码中,如果后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以。
+      上面代码中,若后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以。
     Unicode属性类
       目前,有一个提案,引入了一种新的类的写法\p{...}和\P{...},允许正则表达式匹配符合Unicode某种属性的所有字符。
 
@@ -573,7 +643,7 @@ ECMAScript 6
       \p{UnicodePropertyName}
       \P{…}是\p{…}的反向匹配,即匹配不满足条件的字符。
 
-      注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符。如果不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类。
+      注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符。若不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类。
 
       由于Unicode的各种属性非常多,所以这种新的类的表达能力非常强。
 
@@ -645,6 +715,260 @@ ECMAScript 6
       e.g.:
         使用给定的代码点来产生相应的单个字符
         console.log(String.fromCodePoint(134071));  // "𠮷"
+  Array 数组扩展
+    ◆静态方法
+    Array.of();  将一组值,转换成数组 
+      PS：Array.of() 函数的出现是源于Array构造函数的缺陷
+      Array.of(1,2,3,4,5); // [1,2,3,4,5]
+    Array.from( ) 将类似数组的对象或者可遍历的对象转换成真正的数组 
+      PS：最常见的类数组对象就是调用getElementsByTagName方法得到的结果
+      let ele = document.getElementsByTagName('a');
+      ele instanceof Array;  // false,非数组
+      ele instanceof Object; // true,对象
+      Array.from(ele) instanceof Array; // true,数组
+      e.g.:将字符串分割成数组
+        let str = 'hello';
+        Array.from(str); // ["h", "e", "l", "l", "o"]
+    ◆实例方法
+    arr.find(foo)      返回数组中符合条件的第一个元素 
+      foo 参数分别为数组中的每个元素
+        每个元素都会进入函数执行,直到结果为true,find函数就会返回该元素的值;
+        倘若所有元素都不符合匿名函数的条件,最终返回undefind
+      let arr = [1,2,3,4,5,6];
+      var aoo = arr.find(function(value){ return value > 2; });
+      console.log(aoo); // 3
+      
+      let arr = [1,2,3,4,5,6];
+      arr.find(function(value){ return value > 7; }); // undefined
+    arr.findIndex(foo) 返回数组中符合条件的第一个元素的位置
+      若所有元素都不符合匿名函数的条件,函数返回-1
+      let arr = [7,8,9,10];
+      arr.findIndex(function(value){ return value > 8; }); // 2
+    arr.fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组
+      let arr = [1,2,3];
+      arr.fill(4); // [4,4,4]
+      
+      let arr = [1,2,3];
+      arr.fill(4,1,3); // [1,4,4],从位置2到到位置4被覆盖
+    arr.entries() 对数组的键值对进行遍历,返回一个遍历器,可以用for..of 对其进行遍历
+      for..of 也是ES6的新增特性 
+      for(let [i,v] of ['a', 'b'].entries()) {
+        console.log(i,v);
+      }
+      //0 "a"
+      //1 "b"
+      用 entries() 函数返回的一个遍历器,用for...of进行遍历,
+      能得到数组的键值：0 和 1,以及对应的数组元素：‘a‘和’b‘
+    arr.keys() 对数组的索引键进行遍历,返回一个遍历器 
+      for(let index of ['a', 'b'].keys()) {
+        console.log(index);
+      }
+      //0
+      //1
+    arr.values()  对数组的元素进行遍历,返回一个遍历器。
+      for(let value of ['a', 'b'].values()) {
+        console.log(value);
+      }
+      //a
+      //b
+    数组推导：用简洁的写法,直接通过现有的数组生成新数组
+      e.g.: 将数组的每个元素乘以2,得到一个新数组
+      传统的实现方法：
+      var arr1 = [1,2,3,4];
+      var arr2 = [];
+      for(let i=0;i<arr1.length;i++){
+        arr2.push(arr1[i]*2); //每个元素乘以2后,push到数组arr2
+      }
+      console.log(arr2); // [2,4,6,8]
+      
+      var arr1 = [1, 2, 3, 4];
+      var arr2 = [for(i of arr1) i * 2];
+      console.log(arr2); // [ 2, 4, 6, 8 ]
+      
+      在数组推导中,for..of 后面还可以加上if语句
+      var array1 = [1, 2, 3, 4];
+      var array2 = [for(i of array1)  if(i>3) i];
+      console.log(array2); //  [4]
+  Object 对象扩展
+    属性的简写
+      var name = "Zhangsan";
+      var age = 12;
+      //传统的属性写法
+      var person = {
+        "name":name,
+        "age":age
+      };
+      console.log(person); // {name: "Zhangsan", age: 12}
+      //ES6的简洁写法
+      var person = {name,age};
+      console.log(person); // {name: "Zhangsan", age: 12}
+    方法的简写
+      //传统的表示法
+      var person = {
+        say:function(){
+          alert('这是传统的表示法');
+        }
+      };
+      //ES6的表示法
+      var person = {
+        say(){
+          alert('这是ES6的表示法');
+        }
+      };
+    属性名可以是表达式 
+      用字面量定义一个对象的时候,可以用表达式作为对象的属性名或者方法名
+      var f = "first";
+      var n = "Name";
+      var s = "say";
+      var h = "Hello";
+      var person = {
+        [ f+n ] : "Zhang",
+        [ s+h ](){
+          return "你好吗？";
+        }
+      };
+      console.log(person.firstName); // Zhang
+      console.log(person.sayHello()); // 你好吗？
+    ◆新增的函数
+    Object.is() 比较两个值是否严格相等,或者说全等
+      var str = '12';
+      var num = 12;
+      var num2 = 12;
+      Object.is(str,num);  // false
+      Object.is(num2,num); // true
+    Object.assign() 将源对象的属性赋值到目标对象上
+      PS：参数可以是多个「至少是两个」
+      let origin = {"b":2,"c":3}; //这个充当源对象
+      let target = {"a":1};       //这个充当目标对象
+      Object.assign(target,origin);
+      console.log(target); // {a: 1, b: 2, c: 3}
+      
+      若赋值过程中,对象的属性出现了相同的名字,则后面的属性值就会覆盖前面的属性值
+      let target = {"a":1};
+      let origin1 = {"a":2};
+      let origin2 = {"a":3};
+      Object.assign(target,origin1,origin2);
+      console.log(target); //  {a: 3}
+    Object.getPrototypeOf() 获取对象的prototype属性
+      function Person(){ //自定义一个Person类（函数）
+      } 
+      Person.prototype = { //函数都有一个预属性prototype对象
+        //给prototype对象添加一个say方法
+        say(){
+          console.log('hello');
+        }
+      };
+      let allen = new Person(); //实例化Person对象,赋值给变量allen
+      allen.say(); // hello,调用类的say方法
+      Object.getPrototypeOf(allen); //{say:function(){.....}}
+      // 获取allen对象的prototype属性
+    Object.setPrototypeOf() 设置对象的prototype属性
+      function Person(){ }
+      Person.prototype = {
+        say(){
+          console.log('hello');
+        }
+      };
+      let allen = new Person();
+      allen.say(); // hello
+      Object.setPrototypeOf( allen, {
+        say(){
+          console.log('hi')
+        } 
+      });
+      allen.say(); // hi
+      javascript的面向对象
+        Javascript本身不是一种面向对象的编程语言,
+        在ES5中,它的语法中也没有class（类的关键字）,
+        但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发。
+        function Dog(name){ //构造函数模拟创建一个Dog类
+          this.name = name;
+        }
+        Dog.prototype = { //把一些属性和方法,定义在prototype对象上
+          "type":"动物",
+          "say":function(){
+            alert("名字叫"+this.name);
+          }
+        };
+        var dog = new Dog('旺财'); //实例化
+        //调用say方法
+        dog.say(); // 名字叫旺财
+        模拟面向对象编程有几个关键步骤：
+        1、构造函数；
+        2、给prototype对象添加属性和方法；
+        3、实例化；
+        4、通过实例化后的对象调用类的方法或者属性。
+        注意：面向对象是一种编程思想,并不是具体的工具。
+  Function 函数的扩展
+    参数的默认值
+      传统的实现方式
+        function person(n,a){
+          var name = n || 'Zhangsan';
+          var age  = a ||  25;
+        }
+      ES6实现
+        function person(name = 'Zhangsan',age = 25){
+          console.log(name,age);
+        }
+        person();//结果：Zhangsan  25
+        person('Lisi',18);//结果：Lisi  18
+      只有当传入的参数为undefined,才会触发默认值赋值
+        function person(age = 12){
+          console.log(age);
+        }
+        person();          // 12
+        person(undefined); // 12
+        person(0);         // 0
+        person(null);      // null
+      函数的参数是默认声明的,不能再次声明,否则会报错的
+        function person(age = 12){
+          var age = 25;//错误,再次声明age
+          let age = 25;//错误,再次声明age
+        }
+        person();
+    ...aoo  获取函数剩下部分的参数,类型为数组
+      在实参中,除了指定参数以外,剩余的参数都会被...values获取到
+        function sum(result,...values){ //求和函数,得到的结果赋值到result 
+          console.log(values); // [1,2,3,4]
+          values.forEach(function (v,i) { //进行求和
+            result += v; //求和得到的结果存到result
+          });
+          console.log(result); // 10
+        }
+        var res = 0; // 存储求和结果的变量res
+        sum(res,1,2,3,4);  //调用sum函数
+      rest参数必须是函数的最后一个参数,后面不能再跟其他参数
+        //错误写法
+        function sum(result, ...values, mult){
+          //rest参数...values后面还有一个参数mult
+        }
+        //正确的写法
+        function sum(result, mult, ...values){
+          //rest参数...values放在最后
+        }
+    ... 扩展运算符
+      PS：除了用在rest参数中,还有其他用途
+      结合数组使用,把数组的元素用逗号分隔开来,组成一个序列
+        function sum(a,b) {
+          return  a+b ;
+        }
+        let arr = [2,3];
+        // ...arr  // 报错
+        sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
+        // ,sum( ...arr ) 的效果相当于sum( 2,3 ) 
+    => 箭头函数
+      写法 
+        //传统写法
+        var sum = function(a) {
+          return  a ;
+        };
+        //箭头函数写法
+        var sum = a => a;
+      传入多个参数使用括号(),复杂的操作使用{}
+        若参数超过1个的话,需要用小括号（）括起来,
+        函数体语句超过1条的时候,需要用大括号{ }括起来。
+        var sum = (a,b) => {return a+b}
+        sum(1,2);//结果：3
   Set   集合 
      PS:和数组类似,区别是Set中的元素都是不重复的.
        会自动去掉重复的元素
@@ -730,7 +1054,7 @@ ECMAScript 6
     blob.slice()  创建一个包含另一个blob的数据子集的blob
       blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
       slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数。
-      如果设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据。
+      若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据。
       slice 方法在某些浏览器和版本上仍带有供应商前缀：
         Firefox 12 及更早版本的 blob.mozSlice() 
         Safari 中的 blob.webkitSlice()
@@ -760,8 +1084,8 @@ ECMAScript 6
       关闭的 blob 对象不可读。
     blob.size 只读, Blob对象中所包含数据的大小,单位为字节
     blob.type 只读,字符串,表明该Blob对象所包含数据的MIME类型
-      如果类型未知,则该值为空字符串。
-      在Ajax操作中,如果 xhr.responseType 设为 blob,接收的就是二进制数据。
+      若类型未知,则该值为空字符串。
+      在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据。
     blob.close() 关闭 Blob 对象,以便能释放底层资源。 
 Promise 异步模式 
   PS: 采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
@@ -775,10 +1099,10 @@ Promise 异步模式
     rejected: 意味着操作失败。
     只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态。
     一旦状态改变,就不会再变,任何时候都可以得到这个结果。
-    这与事件(Event)完全不同,事件的特点是,如果你错过了它,再去监听,是得不到结果的。
+    这与事件(Event)完全不同,事件的特点是,若你错过了它,再去监听,是得不到结果的。
     Promise 的缺点
     首先,无法取消 Promise,一旦新建它就会立即执行,无法中途取消。
-    其次,如果不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
+    其次,若不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
     第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
   new Promise(foo) 创建Promise对象
     PS: Promise在创建时,参数函数就会执行
@@ -788,7 +1112,7 @@ Promise 异步模式
       executor主要用于初始化异步代码,一旦异步代码调用完成,
       要么调用 resolve 方法来表示Promise被成功解析,
       或是调用 reject 方法,表示初始化的异步代码调用失败,整个promise被拒绝。
-      如果在executor 方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
+      若在executor 方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
       即相当于reject方法被调用,executor 的返回值也就会被忽略。
     var pms = new Promise(function(rs,rj){
       rs(arg1); // 用于 异步成功后 传递数据 arg1
@@ -944,41 +1268,41 @@ export import： module模块化
         模块名是由一个或多个单词以正斜杠为分隔符拼接成的字符串
         单词须为驼峰形式,或者".",".."
         模块名不允许文件扩展名的形式,如".js"
-        模块名可以为 "相对的" 或 "顶级的"。如果首字符为"."或".."则为"相对的"模块名
+        模块名可以为 "相对的" 或 "顶级的"。若首字符为"."或".."则为"相对的"模块名
         顶级的模块名从根命名空间的概念模块解析
         相对的模块名从 "require" 书写和调用的模块解析
         上文引用的CommonJS模块id属性常被用于JavaScript模块。
         相对模块名解析示例：
-        如果模块 "a/b/c" 请求 "../d", 则解析为"a/d"
-        如果模块 "a/b/c" 请求 "./e", 则解析为"a/b/e"
-        如果AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名,大多数字符都允许在插件资源名使用。
+        若模块 "a/b/c" 请求 "../d", 则解析为"a/d"
+        若模块 "a/b/c" 请求 "./e", 则解析为"a/b/e"
+        若AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名,大多数字符都允许在插件资源名使用。
       API说明
         define(id?, dependencies?, factory);
           id  可选,字符串,指的是定义中模块的名字.
-            如果没有提供该参数,模块的名字应该默认为模块加载器请求的指定脚本的名字。
-            如果提供了该参数,模块名必须是“顶级”的和绝对的（不允许相对名字）。
+            若没有提供该参数,模块的名字应该默认为模块加载器请求的指定脚本的名字。
+            若提供了该参数,模块名必须是“顶级”的和绝对的（不允许相对名字）。
           dependencies,是个定义中模块所依赖模块的数组。
             依赖模块必须根据模块的工厂方法优先级执行,并且执行的结果应该按照依赖数组中的位置顺序以参数的形式传入（定义中模块的）工厂方法中。
-            依赖的模块名如果是相对的,应该解析为相对定义中的模块。
+            依赖的模块名若是相对的,应该解析为相对定义中的模块。
             换句话来说,相对名解析为相对于模块的名字,并非相对于寻找该模块的名字的路径。
             本规范定义了三种特殊的依赖关键字。
-            如果"require","exports", 或 "module"出现在依赖列表中,
+            若"require","exports", 或 "module"出现在依赖列表中,
             参数应该按照CommonJS模块规范自由变量去解析。
-            依赖参数是可选的,如果忽略此参数,它应该默认为["require", "exports", "module"]。
-            然而,如果工厂方法的形参个数小于3,加载器会选择以函数指定的参数个数调用工厂方法。
+            依赖参数是可选的,若忽略此参数,它应该默认为["require", "exports", "module"]。
+            然而,若工厂方法的形参个数小于3,加载器会选择以函数指定的参数个数调用工厂方法。
           factory,为模块初始化要执行的函数或对象。
-            如果为函数,它应该只被执行一次。如果是对象,此对象应该为模块的输出值。
-            如果工厂方法返回一个值（对象,函数,或任意强制类型转换为true的值）,应该为设置为模块的输出值。
+            若为函数,它应该只被执行一次。若是对象,此对象应该为模块的输出值。
+            若工厂方法返回一个值（对象,函数,或任意强制类型转换为true的值）,应该为设置为模块的输出值。
           简单的 CommonJS 转换
-            如果依赖性参数被忽略,模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
+            若依赖性参数被忽略,模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
             在某些情况下,因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法）,模块加载器可以选择扫描不扫描依赖性。
-            如果有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
+            若有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
         define.amd 属性
           PS:为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
             任何全局函数应该有一个"amd"的属性,它的值为一个对象。
             这样可以防止与现有的定义了define函数但不遵从AMD编程接口的代码相冲突。
           当前,define.amd对象的属性没有包含在本规范中。实现本规范的作者,可以用它通知超出本规范编程接口基本实现的额外能力。
-          define.amd的存在表明函数遵循本规范。如果有另外一个版本的编程接口,那么应该定义另外一个属性,如define.amd2,表明实现只遵循该版本的编程接口。
+          define.amd的存在表明函数遵循本规范。若有另外一个版本的编程接口,那么应该定义另外一个属性,如define.amd2,表明实现只遵循该版本的编程接口。
           e.g.:
             一个如何定义同一个环境中允许多次加载同一个版本的模块的实现：
             define.amd = {
@@ -1102,7 +1426,7 @@ export import： module模块化
             doSomething: function() {}
           };
         });
-        如果 return 语句是模块中的唯一代码,还可简化为：
+        若 return 语句是模块中的唯一代码,还可简化为：
         define({
           foo: 'bar',
           doSomething: function() {}
@@ -1386,7 +1710,7 @@ export import： module模块化
         exports 等价于 module.exports
         可以通过多次给exports 挂载属性向外暴露
         不能直接给 exports 赋值
-        如果想暴露单个变量、函数或对象可以通过直接给module.exports 赋值 即可
+        若想暴露单个变量、函数或对象可以通过直接给module.exports 赋值 即可
       exports exports是一个对象,用来向外提供模块接口。
         define(function(require, exports) {
         // 对外提供 foo 属性
@@ -1404,7 +1728,7 @@ export import： module模块化
           doSomething: function() {}
         };
         });
-        　　如果 return语句是模块中的唯一代码,还可简化为：
+        　　若 return语句是模块中的唯一代码,还可简化为：
 
         define({
         foo: 'bar',
@@ -1615,7 +1939,7 @@ export import： module模块化
         CommonJS 模块输出的是值的缓存,不存在动态更新。
       export命令必须在模块顶层作用域定义
         export命令可以出现在模块的任何位置,只要处于模块顶层就可以;
-        如果处于块级作用域内,就会报错。
+        若处于块级作用域内,就会报错。
         因为处于条件代码块之中,就没法做静态优化了,违背了ES6模块的设计初衷。
         function foo() { export default 'bar' } // SyntaxError
         foo();
@@ -1796,7 +2120,7 @@ export import： module模块化
         上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
     跨模块常量
       const声明的常量只在当前代码块有效。
-      如果想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
+      若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
       可以采用下面的写法。
       // constants.js 模块
       export const A = 1;
@@ -1810,7 +2134,7 @@ export import： module模块化
       import {A, B} from './constants';
       console.log(A); // 1
       console.log(B); // 3
-      如果要使用的常量非常多,可以建一个专门的constants目录,
+      若要使用的常量非常多,可以建一个专门的constants目录,
       将各种常量写在不同的文件里面,保存在该目录下。
       // constants/db.js
       export const db = {
@@ -1839,7 +2163,7 @@ export import： module模块化
           
         这样的设计,固然有利于编译器提高效率,但也导致无法在运行时加载模块。
         从语法上,条件加载就不可能实现。
-        如果import命令要取代 Node 的require方法,这就形成了一个障碍。
+        若import命令要取代 Node 的require方法,这就形成了一个障碍。
         因为require是运行时加载模块,import命令无法取代require的动态加载功能。
         const path = './' + fileName;
         const myModual = require(path);
@@ -1877,7 +2201,7 @@ export import： module模块化
         else {
           import('moduleB').then(...);
         }
-        上面代码中,如果满足条件,就加载模块 A,否则加载模块 B。
+        上面代码中,若满足条件,就加载模块 A,否则加载模块 B。
         (3)动态的模块路径
         import()允许模块路径动态生成。
         import(f())
@@ -1891,7 +2215,7 @@ export import： module模块化
           // ...·
         });
         上面代码中,export1 和 export2 都是 myModule.js 的输出接口,可以解构获得。
-        如果模块有default输出接口,可以用参数直接获得。
+        若模块有default输出接口,可以用参数直接获得。
         import('./myModule.js')
         .then(myModule => {
           console.log(myModule.default);
@@ -1901,7 +2225,7 @@ export import： module模块化
         .then(({default: theDefault}) => {
           console.log(theDefault);
         });
-        如果想同时加载多个模块,可以采用下面的写法。
+        若想同时加载多个模块,可以采用下面的写法。
         Promise.all([
           import('./module1.js'),
           import('./module2.js'),
@@ -1922,7 +2246,7 @@ export import： module模块化
             ]);
         }
         main();    
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 ECMAScript 7 
   PS:ECMAScript 7 即为 ECMAScript 2017
 -------------------------------------------------------------------------待整理 

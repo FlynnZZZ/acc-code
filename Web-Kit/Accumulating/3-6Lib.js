@@ -381,7 +381,7 @@ DOM 操作
         RetValue:包含top和left属性的一个对象
         e.g.:
           $(".a").offset(); // {top: 24, left: 0}
-          $(".a").offset().left =20; 
+          $(".a").offset().left = 20; // ? 
           $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
       Jelem.width([num]); 设置或返回元素content的width
       Jelem.height([num]); 设置或返回元素content的height
@@ -413,6 +413,8 @@ DOM 操作
       Jelem.focus();   获得焦点
       Jelem.blur();    失焦
       Jelem.click();   点击元素 「会触发事件」
+      Jelem.select();  选中文字
+        不可选中因增加contenteditable属性而可编辑的元素的文字
   Animation 动画
     speed 速度         可选,规定元素从可见到隐藏的时间,默认为 "0",单位毫秒
       number (比如 1500)

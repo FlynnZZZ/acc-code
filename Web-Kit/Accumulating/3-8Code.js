@@ -536,6 +536,7 @@ PC端
     }
     var elem = document.querySelector(".wrap");
     linesEndOmit(elem,1);
+  图片缩放、部分显示
 --------------------------------------------------------------------------------
 移动端
 网络收集
@@ -1022,365 +1023,500 @@ Question & Idea
   整理文档的代码,将HTML中的内联样式分离出来转换为内联样式
 ------------------------------------------------------------------------待整理 
   左右滑动
-  <div class="wrap">
-    <div class="num">
-      <span class="page">1</span>/
-      <span class="total">9</span>
+    <div class="wrap">
+      <div class="num">
+        <span class="page">1</span>/
+        <span class="total">9</span>
+      </div>
+      <div class="imgs">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图31.png" alt="" class="img ">
+        <img src="../publicImg/地图1.png" alt="" class="img ">
+        <img src="../publicImg/地图31.png" alt="" class="img ">
+        <img src="../publicImg/地图1.png" alt="" class="img ">
+        <img src="../publicImg/地图31.png" alt="" class="img ">
+        <img src="../publicImg/地图1.png" alt="" class="img ">
+        <img src="../publicImg/地图31.png" alt="" class="img ">
+        <img src="../publicImg/地图1.png" alt="" class="img ">
+      </div>
     </div>
-    <div class="imgs">
-      <img src="../publicImg/地图1.png" alt="" class="img">
-      <img src="../publicImg/地图31.png" alt="" class="img ">
-      <img src="../publicImg/地图1.png" alt="" class="img ">
-      <img src="../publicImg/地图31.png" alt="" class="img ">
-      <img src="../publicImg/地图1.png" alt="" class="img ">
-      <img src="../publicImg/地图31.png" alt="" class="img ">
-      <img src="../publicImg/地图1.png" alt="" class="img ">
-      <img src="../publicImg/地图31.png" alt="" class="img ">
-      <img src="../publicImg/地图1.png" alt="" class="img ">
-    </div>
-  </div>
-  .wrap{
-    height: 100vh;
-    width: 100vw;
-    background-color: #646464;
-    position: relative;
-    overflow-x: hidden;
-    .num{
-      font-size: 16*@wu;;
-      width: 100%;
-      color: white;
-      position: absolute;
-      text-align: center;
-      bottom: 15*@wu;
-    }
-    .imgs{
-      font-size: 0;
-      white-space: nowrap;
-      position: absolute;
-      left: 0;
-      top: 0;
-      margin-top: 20%;
-      img{
-        outline: 1px solid gray;
-        width: 100vw;
+    .wrap{
+      height: 100vh;
+      width: 100vw;
+      background-color: #646464;
+      position: relative;
+      overflow-x: hidden;
+      .num{
+        font-size: 16*@wu;;
+        width: 100%;
+        color: white;
+        position: absolute;
+        text-align: center;
+        bottom: 15*@wu;
+      }
+      .imgs{
+        font-size: 0;
+        white-space: nowrap;
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin-top: 20%;
+        img{
+          outline: 1px solid gray;
+          width: 100vw;
+        }
       }
     }
-  }
-  !function(){
-    var clickLocation = 0; originLocation = 0 , len = 0 , lef = 0 ;
-    var num1 = 1 ;  // 展示的条目个数
-    var num = $('.imgs>.img').length;     // 条目的总个数
-    var width = $('.imgs>.img').width();  //  条目宽度
-    var totalwidth = $(document).width(); // 总宽度
-    $('.imgs').on('touchstart',function(e){
-      clickLocation = e.originalEvent.changedTouches[0].pageX;
-      $(this).stop(true,true);  // 高频滑动时取消动画
-      lef = parseInt($(this).css('left').slice(0,-2));
-    })
-    $('.imgs').on('touchmove',function(e){
-      len = e.originalEvent.changedTouches[0].pageX - clickLocation;
-      $(this).css('left',lef + len)
-    })
-    $('.imgs').on('touchend',function(e){
-      var finalLeft = 0;
-      var endX = e.originalEvent.changedTouches[0].pageX
-      var leftVal = $(this).css('left').slice(0,-2);
-      
-      // 超过范围时
-      if ((leftVal > (num1-1)*width) || (leftVal < -(num-1)*width)) {
-        if (leftVal > (num1-1)*width) { 
-          leftVal = (num1-1)*width; 
+    !function(){
+      var clickLocation = 0; originLocation = 0 , len = 0 , lef = 0 ;
+      var num1 = 1 ;  // 展示的条目个数
+      var num = $('.imgs>.img').length;     // 条目的总个数
+      var width = $('.imgs>.img').width();  //  条目宽度
+      var totalwidth = $(document).width(); // 总宽度
+      $('.imgs').on('touchstart',function(e){
+        clickLocation = e.originalEvent.changedTouches[0].pageX;
+        $(this).stop(true,true);  // 高频滑动时取消动画
+        lef = parseInt($(this).css('left').slice(0,-2));
+      })
+      $('.imgs').on('touchmove',function(e){
+        len = e.originalEvent.changedTouches[0].pageX - clickLocation;
+        $(this).css('left',lef + len)
+      })
+      $('.imgs').on('touchend',function(e){
+        var finalLeft = 0;
+        var endX = e.originalEvent.changedTouches[0].pageX
+        var leftVal = $(this).css('left').slice(0,-2);
+        
+        // 超过范围时
+        if ((leftVal > (num1-1)*width) || (leftVal < -(num-1)*width)) {
+          if (leftVal > (num1-1)*width) { 
+            leftVal = (num1-1)*width; 
+          }
+          if (leftVal < -(num-1)*width) { 
+            leftVal = -(num-1)*width; 
+          }
+          originLocation = parseInt(leftVal);
+          $(this).animate({left : originLocation },200);
+          finalLeft = originLocation;
         }
-        if (leftVal < -(num-1)*width) { 
-          leftVal = -(num-1)*width; 
-        }
-        originLocation = parseInt(leftVal);
-        $(this).animate({left : originLocation },200);
-        finalLeft = originLocation;
-      }
-      else {
-        if (endX > clickLocation) { // 右滑
-          finalLeft = lef + width;
-        }
-        else if (endX < clickLocation) { 
-          finalLeft = lef - width;
-        } 
         else {
-          finalLeft = lef ; // 点击时执行
+          if (endX > clickLocation) { // 右滑
+            finalLeft = lef + width;
+          }
+          else if (endX < clickLocation) { 
+            finalLeft = lef - width;
+          } 
+          else {
+            finalLeft = lef ; // 点击时执行
+          }
+          $(this).animate({left : finalLeft },200);
         }
-        $(this).animate({left : finalLeft },200);
-      }
-      
-      var finalNum = -Math.round(finalLeft/375) + 1
-      console.log(finalNum);
-      $('.wrap>.num>.page').text(finalNum)
-      
-    })
-  }();
+        
+        var finalNum = -Math.round(finalLeft/375) + 1
+        console.log(finalNum);
+        $('.wrap>.num>.page').text(finalNum)
+        
+      })
+    }();
 
   上下滑动1
-  <div class="card-choose">
-      <div class="choose">
-        <span>取消</span>
-        <span>确定</span>
-      </div>
-      <div class="showDiv">
+    <div class="card-choose">
+        <div class="choose">
+          <span>取消</span>
+          <span>确定</span>
+        </div>
+        <div class="showDiv">
+          
+        </div>
+        <div class="wrap" style="top: -160px;">
+          <div class="card-item">军官证 </div>
+          <div class="card-item">驾驶证 </div>
+          <div class="card-item">身份证 </div>
+          <div class="card-item">护照 </div>
+          <div class="card-item">港澳台身份证 </div>
+          <div class="card-item">警官证 </div>
+          <div class="card-item activeColor">会员卡卡号 </div>
+        </div>
+    </div>  
+    .card-choose {
+      background-color: #fff;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 53.33333333vw;
+      overflow: hidden;
+    }
+    .card-choose .choose {
+      background-color: #eee;
+      z-index: 10;
+      position: fixed;
+      bottom: 53.33333333vw;
+      width: 100%;
+      font-size: 0;
+    }
+    .card-choose .choose span:nth-child(1) {
+      box-sizing: border-box;
+      font-size: 4.8vw;
+      display: inline-block;
+      width: 50%;
+      line-height: 12vw;
+      text-align: left;
+      padding-left: 6%;
+    }
+    .card-choose .choose span:nth-child(2) {
+      box-sizing: border-box;
+      font-size: 4.8vw;
+      display: inline-block;
+      width: 50%;
+      line-height: 12vw;
+      text-align: right;
+      padding-right: 6%;
+      color: #fe8a3d;
+    }
+    .card-choose .showDiv {
+      position: absolute;
+      top: 21.33333333vw;
+      width: 100%;
+      height: 10.66666667vw;
+      border-top: 1px solid gray;
+      border-bottom: 1px solid gray;
+      overflow: visible;
+    }
+    .card-choose .wrap {
+      font-size: 4.8vw;
+      text-align: center;
+      width: 100%;
+      position: absolute;
+    }
+    .card-choose .wrap .card-item {
+      line-height: 10.66666667vw;
+      height: 10.66666667vw;
+      color: #999;
+    }
+    .activeOutline {
+      outline: solid 0.26666667vw #ff0000 !important;
+    }
+    .activeColor {
+      color: #000 !important;
+      font-size: 22px !important;
+    }
+    .rolate {
+      transform: rotate(180deg) !important;
+    }
+    
+    function slider(){
+      var clickLocation = 0;
+      var len = 0;
+      var originLocation = 0;
+      var height = $('.card-item').height(); // 条目高度
+      var totalHeight = $(document).height(); 
+      // 页面高度,用于确定到底部的位置,因为没有offset.bottom
+      var num = $('.card-item').length; // 条目的总个数
+      var num1 = 5;  // 展示的条目个数
+      $('.wrap').on('touchstart',function(e){
+        clickLocation = e.originalEvent.changedTouches[0].pageY;
+        $(this).stop(true,true);  // 高频滑动时取消动画
+      })
+      $('.wrap').on('touchmove',function(e){
+        len = e.originalEvent.changedTouches[0].pageY - clickLocation;
+        $(this).css('top',originLocation + len)
         
-      </div>
-      <div class="wrap" style="top: -160px;">
-        <div class="card-item">军官证 </div>
-        <div class="card-item">驾驶证 </div>
-        <div class="card-item">身份证 </div>
-        <div class="card-item">护照 </div>
-        <div class="card-item">港澳台身份证 </div>
-        <div class="card-item">警官证 </div>
-        <div class="card-item activeColor">会员卡卡号 </div>
-      </div>
-  </div>  
-  .card-choose {
-    background-color: #fff;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 53.33333333vw;
-    overflow: hidden;
-  }
-  .card-choose .choose {
-    background-color: #eee;
-    z-index: 10;
-    position: fixed;
-    bottom: 53.33333333vw;
-    width: 100%;
-    font-size: 0;
-  }
-  .card-choose .choose span:nth-child(1) {
-    box-sizing: border-box;
-    font-size: 4.8vw;
-    display: inline-block;
-    width: 50%;
-    line-height: 12vw;
-    text-align: left;
-    padding-left: 6%;
-  }
-  .card-choose .choose span:nth-child(2) {
-    box-sizing: border-box;
-    font-size: 4.8vw;
-    display: inline-block;
-    width: 50%;
-    line-height: 12vw;
-    text-align: right;
-    padding-right: 6%;
-    color: #fe8a3d;
-  }
-  .card-choose .showDiv {
-    position: absolute;
-    top: 21.33333333vw;
-    width: 100%;
-    height: 10.66666667vw;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    overflow: visible;
-  }
-  .card-choose .wrap {
-    font-size: 4.8vw;
-    text-align: center;
-    width: 100%;
-    position: absolute;
-  }
-  .card-choose .wrap .card-item {
-    line-height: 10.66666667vw;
-    height: 10.66666667vw;
-    color: #999;
-  }
-  .activeOutline {
-    outline: solid 0.26666667vw #ff0000 !important;
-  }
-  .activeColor {
-    color: #000 !important;
-    font-size: 22px !important;
-  }
-  .rolate {
-    transform: rotate(180deg) !important;
-  }
-  
-  function slider(){
-    var clickLocation = 0;
-    var len = 0;
-    var originLocation = 0;
-    var height = $('.card-item').height(); // 条目高度
-    var totalHeight = $(document).height(); 
-    // 页面高度,用于确定到底部的位置,因为没有offset.bottom
-    var num = $('.card-item').length; // 条目的总个数
-    var num1 = 5;  // 展示的条目个数
-    $('.wrap').on('touchstart',function(e){
-      clickLocation = e.originalEvent.changedTouches[0].pageY;
-      $(this).stop(true,true);  // 高频滑动时取消动画
-    })
-    $('.wrap').on('touchmove',function(e){
-      len = e.originalEvent.changedTouches[0].pageY - clickLocation;
-      $(this).css('top',originLocation + len)
-      
-      for (var i = 0; i < $('.card-item').length ; i++) {
-        var ttt = $('.card-item').eq(i).offset().top;
-        if (totalHeight -2.5*height >= ttt && ttt >totalHeight - 3.5* height ) {
-          $('.card-item').removeClass('activeColor');
-          $('.card-item').eq(i).addClass('activeColor');
-          break;
+        for (var i = 0; i < $('.card-item').length ; i++) {
+          var ttt = $('.card-item').eq(i).offset().top;
+          if (totalHeight -2.5*height >= ttt && ttt >totalHeight - 3.5* height ) {
+            $('.card-item').removeClass('activeColor');
+            $('.card-item').eq(i).addClass('activeColor');
+            break;
+          }
         }
-      }
-    })
-    $('.wrap').on('touchend',function(e){
-      var topVal = $(this).css('top').slice(0,-2)
-      if (topVal > (num1-3)*height) { topVal = (num1-3)*height; }
-      if (topVal < -(num-3)*height) { topVal = -(num-3)*height; }
-      originLocation = parseInt(topVal);
-      $(this).animate({top : originLocation },200);
-      
-      for (var i = 0; i < $('.card-item').length ; i++) {
-        var ttt = $('.card-item').eq(i).offset().top;
-        if (totalHeight -2.5*height >= ttt && ttt >totalHeight - 3.5* height ) {
-          $('.wrap').animate({top : -(i-2)*height },222);
-          originLocation =  -(i-2)*height ;
-          $('.card-item').removeClass('activeColor');
-          $('.card-item').eq(i).addClass('activeColor');
-          break;
+      })
+      $('.wrap').on('touchend',function(e){
+        var topVal = $(this).css('top').slice(0,-2)
+        if (topVal > (num1-3)*height) { topVal = (num1-3)*height; }
+        if (topVal < -(num-3)*height) { topVal = -(num-3)*height; }
+        originLocation = parseInt(topVal);
+        $(this).animate({top : originLocation },200);
+        
+        for (var i = 0; i < $('.card-item').length ; i++) {
+          var ttt = $('.card-item').eq(i).offset().top;
+          if (totalHeight -2.5*height >= ttt && ttt >totalHeight - 3.5* height ) {
+            $('.wrap').animate({top : -(i-2)*height },222);
+            originLocation =  -(i-2)*height ;
+            $('.card-item').removeClass('activeColor');
+            $('.card-item').eq(i).addClass('activeColor');
+            break;
+          }
         }
-      }
-    })
-  }
-  slider();
+      })
+    }
+    slider();
   
-
-
-
   上下滑动2
-  <div class = "time-choose">
-    <div class = "choose " >
-      <span class = "time-cancel " > 取消 < /span> 
-      <span class = "time-confirm " > 确认 < /span> 
-    </div> 
-    <div class = "showDiv" > < /div> 
-    <div class = "zWrap" >
-      <div class = "zPadding" > < /div>
-      <div class = "wrap " id = "eventSessionIdList"  >
-      <div class = "time-item select-session" >
-        2017 - 03 - 27 00: 00 - 2017 - 03 - 27 23: 59 
+    <div class = "time-choose">
+      <div class = "choose " >
+        <span class = "time-cancel " > 取消 < /span> 
+        <span class = "time-confirm " > 确认 < /span> 
       </div> 
-      <div class = "time-item select-session" > 
-        2017 - 03 - 28 00: 00 - 2017 - 03 - 30 23: 59 
+      <div class = "showDiv" > < /div> 
+      <div class = "zWrap" >
+        <div class = "zPadding" > < /div>
+        <div class = "wrap " id = "eventSessionIdList"  >
+        <div class = "time-item select-session" >
+          2017 - 03 - 27 00: 00 - 2017 - 03 - 27 23: 59 
+        </div> 
+        <div class = "time-item select-session" > 
+          2017 - 03 - 28 00: 00 - 2017 - 03 - 30 23: 59 
+        </div> 
+        <div class = "time-item select-session activeColor" > 
+          2017 - 03 - 31 00: 00 - 2017 - 04 - 08 23: 59 
+        </div>
       </div> 
-      <div class = "time-item select-session activeColor" > 
-        2017 - 03 - 31 00: 00 - 2017 - 04 - 08 23: 59 
-      </div>
+      <div class = "zPadding" > < /div> 
     </div> 
-    <div class = "zPadding" > < /div> 
-  </div> 
-  .time-choose {
-    background-color: #ddd;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  .time-choose .choose {
-    background-color: #eee;
-    width: 100%;
-    font-size: 0;
-    height: 11vw;
-    border-bottom: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  .time-choose .choose span {
-    font-size: 4.8vw;
-    display: inline-block;
-    width: 50%;
-    line-height: 11vw;
-    text-align: center;
-  }
-  .time-choose .showDiv {
-    position: absolute;
-    top: 22vw;
-    width: 100%;
-    height: 11vw;
-    background-color: #eee;
-  }
-  .time-choose .zWrap{
-    height: 33vw;
-    position: relative;
-    overflow: hidden;
-  }
-  .time-choose .zWrap .wrap {
-    font-size: 4.8vw;
-    text-align: center;
-    width: 100%;
-    position: absolute;
-    height: 33vw;
-  }
-  .time-choose .zWrap .zPadding {
-    height: 11vw;
-  }
-  .time-choose .zWrap .wrap .time-item {
-    line-height: 11vw;
-    height: 11vw;
-    color: #999;
-  }
-  .activeColor {
-    color: #000 !important;
-    font-size: 4vw !important;
-  }
-  function slider() {
-    var clickLocation = 0;
-    var len = 0;
-    var height = $('#eventSessionIdList>.time-item').height();
-    var originLocation = height ;
-    var totalHeight = $(document).height();
-    var num = $('#eventSessionIdList>.time-item').length;
-    var num1 = 3; // 展示的条目个数
-    $('.zWrap').on('touchstart', function(e) {
-      clickLocation = e.originalEvent.changedTouches[0].pageY ;
-      $(this).find('.wrap').stop(true, true);
-    })
-    $('.zWrap').on('touchmove', function(e) {
-      len = e.originalEvent.changedTouches[0].pageY - clickLocation;
-      $(this).find('.wrap').css('top', originLocation + len);
-      console.log(originLocation ,len);
-      
-      for (var i = 0; i < $('.time-item').length; i++) {
-        var ttt = $('.time-item').eq(i).offset().top;
-        if (totalHeight - 1.5 * height >= ttt && ttt > totalHeight - 2.5 * height) {
-          $('.activeColor').removeClass('activeColor');
-          $('.time-item').eq(i).addClass('activeColor');
-          break;
+    .time-choose {
+      background-color: #ddd;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .time-choose .choose {
+      background-color: #eee;
+      width: 100%;
+      font-size: 0;
+      height: 11vw;
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .time-choose .choose span {
+      font-size: 4.8vw;
+      display: inline-block;
+      width: 50%;
+      line-height: 11vw;
+      text-align: center;
+    }
+    .time-choose .showDiv {
+      position: absolute;
+      top: 22vw;
+      width: 100%;
+      height: 11vw;
+      background-color: #eee;
+    }
+    .time-choose .zWrap{
+      height: 33vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .time-choose .zWrap .wrap {
+      font-size: 4.8vw;
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      height: 33vw;
+    }
+    .time-choose .zWrap .zPadding {
+      height: 11vw;
+    }
+    .time-choose .zWrap .wrap .time-item {
+      line-height: 11vw;
+      height: 11vw;
+      color: #999;
+    }
+    .activeColor {
+      color: #000 !important;
+      font-size: 4vw !important;
+    }
+    function slider() {
+      var clickLocation = 0;
+      var len = 0;
+      var height = $('#eventSessionIdList>.time-item').height();
+      var originLocation = height ;
+      var totalHeight = $(document).height();
+      var num = $('#eventSessionIdList>.time-item').length;
+      var num1 = 3; // 展示的条目个数
+      $('.zWrap').on('touchstart', function(e) {
+        clickLocation = e.originalEvent.changedTouches[0].pageY ;
+        $(this).find('.wrap').stop(true, true);
+      })
+      $('.zWrap').on('touchmove', function(e) {
+        len = e.originalEvent.changedTouches[0].pageY - clickLocation;
+        $(this).find('.wrap').css('top', originLocation + len);
+        console.log(originLocation ,len);
+        
+        for (var i = 0; i < $('.time-item').length; i++) {
+          var ttt = $('.time-item').eq(i).offset().top;
+          if (totalHeight - 1.5 * height >= ttt && ttt > totalHeight - 2.5 * height) {
+            $('.activeColor').removeClass('activeColor');
+            $('.time-item').eq(i).addClass('activeColor');
+            break;
+          }
+        }
+      })
+      $('.zWrap').on('touchend', function(e) {
+        var topVal = $(this).find('.wrap').css('top').slice(0, -2)
+        if (topVal > (num1 - 2) * height) {
+          topVal = (num1 - 2) * height;
+        }
+        if (topVal < -(num - 2) * height) {
+          topVal = -(num - 2) * height;
+        }
+        originLocation = parseInt(topVal) ;
+        $(this).find('.wrap').animate({ top: originLocation }, 200);
+               
+        for (var i = 0; i < $('.time-item').length; i++) {
+          var ttt = $('.time-item').eq(i).offset().top;
+          if (totalHeight - 1.5 * height >= ttt && ttt > totalHeight - 2.5 * height) {
+            $('.wrap').animate({ top: -(i -2) * height }, 222);
+            originLocation =  -(i-2)*height ;
+            $('.activeColor').removeClass('activeColor');
+            $('.time-item').eq(i).addClass('activeColor');
+            break;
+          }
+        }
+      })
+    }
+    slider();
+
+  拖动图片
+    function dragElem(Jactiv,Jmover,Jwrap){
+      var obj = {};
+      Jactiv[0].onmousedown = function(ev){
+        var leftMax = Jwrap.width()- 9 ;
+        var topMax = Jwrap.height()- 9 ;
+        var leftMin = -Jactiv.width() + 9;
+        var topMin = -Jactiv.height() + 9;
+        var e = window.event|| ev;
+        var oX=e.clientX - Jmover[0].offsetLeft;
+        var oY=e.clientY - Jmover[0].offsetTop;
+        document.onmousemove=function(ev){
+          var e = window.event|| ev;
+          e.preventDefault();
+          var left = e.clientX-oX;
+          var top = e.clientY-oY;
+          if (left < leftMin) { left = leftMin; }
+          if (left > leftMax) { left = leftMax; }
+          if (top < topMin) { top = topMin; }
+          if (top > topMax) { top = topMax; }
+          Jmover[0].style.left = left +"px";
+          Jmover[0].style.top =  top +"px";
+          obj.left = left;
+          obj.top = top;
+        }
+        document.onmouseup=function(){
+          document.onmousemove = null;
+          document.onmouseup  = null;
+          console.log(obj);
         }
       }
-    })
-    $('.zWrap').on('touchend', function(e) {
-      var topVal = $(this).find('.wrap').css('top').slice(0, -2)
-      if (topVal > (num1 - 2) * height) {
-        topVal = (num1 - 2) * height;
-      }
-      if (topVal < -(num - 2) * height) {
-        topVal = -(num - 2) * height;
-      }
-      originLocation = parseInt(topVal) ;
-      $(this).find('.wrap').animate({ top: originLocation }, 200);
-             
-      for (var i = 0; i < $('.time-item').length; i++) {
-        var ttt = $('.time-item').eq(i).offset().top;
-        if (totalHeight - 1.5 * height >= ttt && ttt > totalHeight - 2.5 * height) {
-          $('.wrap').animate({ top: -(i -2) * height }, 222);
-          originLocation =  -(i-2)*height ;
-          $('.activeColor').removeClass('activeColor');
-          $('.time-item').eq(i).addClass('activeColor');
-          break;
+    }
+    var Jactiv1 = $('.phone .img img');
+    var Jmover1 = $('.phone .img');
+    var Jwrap1 = $('.phone');
+    dragElem(Jactiv1,Jmover1,Jwrap1);
+    
+  缩放图片及部分显示图片
+    function scaleElem(Jactiv,Jscaler,Jwrap,param){
+      var obj = {};
+      var oWidth , oHeight , width , height ;
+      var oTop , oLeft , top , left;
+      var img = Jscaler.find('img');
+      Jactiv[0].onmousedown = function(ev){
+        var e = window.event|| ev , 
+        ox = e.clientX , 
+        oy = e.clientY ;
+        oWidth = Jscaler.width();
+        oHeight = Jscaler.height();
+        wid1 = img.width();
+        heit1 = img.height();
+        oTop = Jscaler[0].offsetTop;
+        top1 = img[0].offsetTop;
+        oLeft = Jscaler[0].offsetLeft;
+        lft1 = img[0].offsetLeft;
+        document.onmousemove=function(ev){
+          var e = window.event|| ev;
+          e.preventDefault();
+          cx = e.clientX - ox;
+          cy = e.clientY - oy;
+          width = oWidth + cx;
+          height = oHeight + cy;
+          switch (param.direction) {
+            case 'right':
+              img[0].style.width = wid1 +"px";
+              break;
+            case 'top':
+              height = oHeight - cy ;
+              Jscaler[0].style.top = oTop + cy +"px";
+              img[0].style.top = top1 - cy +"px";
+              break;
+            case 'left':
+              width = oWidth - cx ;
+              Jscaler[0].style.left = oLeft + cx +"px";
+              img[0].style.width = wid1 +"px";
+              img[0].style.left = lft1 - cx +"px";
+              break;
+            case 'rb':
+              img[0].style.width = wid1 + cx +"px";
+              img[0].style.height = heit1 + cy +"px";
+              break;
+            case 'rt':
+              width = oWidth + cx;
+              height = oHeight - cy;
+              img[0].style.width = wid1 + cx +"px";
+              img[0].style.height = heit1 - cy +"px";
+              Jscaler[0].style.top = oTop + cy +"px";
+              break;
+            case 'lb':
+              width = oWidth - cx;
+              height = oHeight + cy;
+              img[0].style.width = wid1 - cx +"px";
+              img[0].style.height = heit1 + cy +"px";
+              Jscaler[0].style.left = oLeft + cx +"px";
+              break;
+            case 'lt':
+              width = oWidth - cx;
+              height = oHeight - cy;
+              img[0].style.width = wid1 - cx +"px";
+              img[0].style.height = heit1 - cy +"px";
+              Jscaler[0].style.left = oLeft + cx +"px";
+              Jscaler[0].style.top = oTop + cy +"px";
+              break;
+            default:  // bottom
+          }
+          if (param.width) {
+            Jscaler[0].style.width = width +"px";
+            obj.width = width;
+          }
+          if (param.height) {
+            Jscaler[0].style.height =  height +"px";
+            obj.height = height;
+          }
+        }
+        document.onmouseup=function(){
+          document.onmousemove = null;
+          document.onmouseup  = null;
+          console.log(obj);
         }
       }
-    })
-  }
-  slider();
-
-
+    }
+    var Jactiv1 = $('.phone .img .top-resize');
+    var Jactiv2 = $('.phone .img .rit-resize');
+    var Jactiv3 = $('.phone .img .btm-resize');
+    var Jactiv4 = $('.phone .img .lft-resize');
+    var Jactiv5 = $('.phone .img .lt-resize');
+    var Jactiv6 = $('.phone .img .lb-resize');
+    var Jactiv7 = $('.phone .img .rt-resize');
+    var Jactiv8 = $('.phone .img .rb-resize');
+    var Jscaler1 = $('.phone .img');
+    var Jwrap1 = $('.phone');
+    scaleElem(Jactiv1,Jscaler1,Jwrap1,{width:false,height:true,direction:'top'});
+    scaleElem(Jactiv2,Jscaler1,Jwrap1,{width:true,height:false,direction:'right'});
+    scaleElem(Jactiv4,Jscaler1,Jwrap1,{width:true,height:false,direction:'left'});
+    scaleElem(Jactiv3,Jscaler1,Jwrap1,{width:false,height:true,direction:'bottom'});
+    scaleElem(Jactiv5,Jscaler1,Jwrap1,{width:true,height:true,direction:'lt'});
+    scaleElem(Jactiv6,Jscaler1,Jwrap1,{width:true,height:true,direction:'lb'});
+    scaleElem(Jactiv7,Jscaler1,Jwrap1,{width:true,height:true,direction:'rt'});
+    scaleElem(Jactiv8,Jscaler1,Jwrap1,{width:true,height:true,direction:'rb'});
 
 
 

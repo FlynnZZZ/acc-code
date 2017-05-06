@@ -450,23 +450,6 @@ ECMAScript JS核心,语法部分
       var str ="123456";
       var s ="-";
       Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
-  Symbols  符号 [ES6+]
-    一个不可变的数据类型,用来产生唯一的标识,也无法直接访问这个标识
-    创建符号
-      e.g. :
-        var sym = Symbol("some optional description");
-        console.log(typeof sym); // symbol
-      ES6 开始不再支持构造函数创建一个显式包装器对象
-        现有原始包装器对象,遗留原因仍可创建.(如new Boolean new String new Number)
-        var sym = new Symbol();  // TypeError,报错
-      但仍可以使用 Object() 函数创建一个符号包装对象(Symbol wrapper object)
-        var sym = Symbol("foo");
-        typeof sym;     // "symbol"
-        var symObj = Object(sym);
-        typeof symObj;  // "object"
-
-      Symbol("foo") === Symbol("foo"); // false
-      Symbol("foo") == Symbol("foo");  // false
 引用类型： Object 对象 
   PS:JS中所有对象都为引用类型,引用类型只包含有对象.(即1对1的等价关系)
     访问对象的不存在的属性,不会报错,返回值为undefined
@@ -573,53 +556,6 @@ ECMAScript JS核心,语法部分
           Car._initialized=true;
         }
         该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
-    class 类 [ES6新增]
-      ES6提供了更接近传统语言的写法,引入了Class(类)这个概念,作为对象的模板.
-      创建类
-        通过 class 关键字定义类
-          class Cla{
-            constructor(aoo,boo){ this.aoo =aoo; this.boo =boo; },
-            toString() { return '('+this.x+', '+this.y+')'; }
-          }
-          var cla1 =new Cla(1,2);
-          cla1; // Cla {aoo: 1, boo: 2}
-        constructor 方法:类的默认方法,通过new命令生成对象实例时,自动调用该方法.
-      类的特点
-        继承 : 通过 extends 关键字实现继承
-          子类继承父类的属性和方法
-            class Point {
-              constructor(x, y) {
-                this.x = x;
-                this.y = y;
-              }
-            }
-            class ColorPoint extends Point {
-              constructor(x, y, color) {
-                // this.color = color; // 错误
-                super(x, y);
-                this.color = color; // 正确
-              }
-            }
-            上面代码中,子类的constructor方法没有调用super之前,就使用this关键字,结果报错,
-            而放在super方法之后就是正确的.
-            var cp = new ColorPoint(25, 8, 'green');
-            cp instanceof ColorPoint // true
-            cp instanceof Point // true
-        class的取值函数(getter)和存值函数(setter)
-          在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数.
-          class MyClass {
-            get prop() {
-              return 'getter';
-            }
-            set prop(value) {
-              console.log("setter:" + value);
-            }
-          }
-          var inst = new MyClass();
-          inst.prop = 123; // setter: 123
-          inst.prop ;      // 'getter'
-      // 相关操作
-      Cla.name;  获取类的名字
   创建对象
     PS: ECMA-262 的定义为:无序的名值的合集
       对象一般没有长度,具有多种属性的内容结构 .

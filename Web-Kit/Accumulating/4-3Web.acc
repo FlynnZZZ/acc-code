@@ -440,6 +440,7 @@ Atom
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
     社区扩展
+      autocomplete-cocos2d-js    cocos的补全插件
       atom-beautify              代码格式美化
       autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
         自定义快捷键 alt-m
@@ -1203,4 +1204,3 @@ Question & Idea
 
 
 
-1

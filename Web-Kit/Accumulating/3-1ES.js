@@ -44,7 +44,7 @@ ECMAScript JS核心,语法部分
   单行注释 // c风格的注释
   语句使用分号结尾,若省略分号,则由解析器确定语句的结尾
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
-关键字   
+关键字 
   var 变量声明
     var 与 逗号,运算符 「moIn 逗号运算符,变量声明」       
       (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
@@ -1245,11 +1245,10 @@ ECMAScript JS核心,语法部分
           一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
 -------------------------------------------------------------------------------
 ◆操作符/运算符 
-  PS:ECMA-262 描述了一组用于操作数据值的运算符.
-    ECMAScript操作符的特点是能够适用于很多值
-    进行运算时会将不同的类型进行隐式转换.
-    运用于对象时,通常会调用对象的valueOf()和toString()方法,以便取得相应的值.
-    前面讲的typeof操作符、new操作符,也称为typeof运算符、new运算符.
+  PS:ECMA-262 描述了一组用于操作数据值的运算符;
+    ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
+    运用于对象时,通常会调用对象的valueOf()和toString()方法,以便取得相应的值;
+    typeof、new 操作符,也称为 typeof 、new 运算符;
 ★一元运算符 
   只能操作一个值得运算符叫做一元运算符
   ++、-- 自增、自减
@@ -1592,7 +1591,7 @@ ECMAScript JS核心,语法部分
       var foo =function(aoo,...boo){ console.log(aoo,boo); }
       foo(1,2,3,4);  // 1 [2, 3, 4]
       //  将其余的参数放在数组 boo 中
-★运算符优先级 
+★运算优先级 
   一般运算中,不必考虑运算符的优先级,因为可以通过圆括号来解决这种问题.
   简易版
     . []()            对象成员 数组存取 函数调用或表达式分组
@@ -1679,7 +1678,7 @@ ECMAScript JS核心,语法部分
     可以在后面加括号,并立即执行函数的代码。
     加括号是最安全的做法,因为！、+、-等运算符会和函数的返回值进行运算,有时造成不必要的麻烦。
   val/exp , function(){ }() 
-表达式|语句 
+表达式|语句  
   ECMA-262 规定了一组语句,也称为流程控制语句;
   表达式
     解释器会通过计算将表达式转换为一个值.
@@ -2948,7 +2947,7 @@ Date     日期时间对象
   日期的比较(使用变量名比较时,对象的变量名指向的是地址)
     通过getTime()转换为毫秒数进行比较
     将时间对象通过JSON格式转化后进行比较
-RegExp   正则对象
+RegExp   正则对象 
   PS:Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
     正则表达式是一个描述字符模式的对象.
     ECMAScript的RegExp类型表示正则表达式.
@@ -3302,7 +3301,7 @@ RegExp   正则对象
       var pattern=/^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
       var str="123abc.com@aaa.com";
       alert(pattern.test(str));
-Error    错误对象
+Error    错误对象 
   PS:JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
     然后整个程序就中断在发生错误的地方,不再往下执行.
     JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例。
@@ -3354,21 +3353,18 @@ Error    错误对象
     //    at catchIt (~/examples/throwcatch.js:3:9)
     //    at repl:1:5
     代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
-★单体内置对象
+★单体内置对象 
   PS:ECMA-262 的定义:有ECMAScript实现提供的、不依赖宿主环境的对象,
     这些对象在ECMAScript程序执行之前就已经存在了.
-Global 全局对象 
-  PS: JS继承于ECMAScript,在浏览器中使用JS,全局对象为window
-    Web浏览器将Global作为window对象的一部分加以实现
-    Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象
-    不属于任何其他对象的属性和方法,最终都是它的属性和方法
-    所有全局作用域中定义的变量和函数,都是Global对象的属性和方法;
-    诸如前面的 isNaN isFinite paresInt等等
-    Global对象没有办法直接访问,在浏览器中使用window对象来实现全局访问.
-  间接获取Global对象
-    var global =function(){
-      return this;
-    }
+global|window 全局对象 
+  PS: JS继承于ECMAScript,浏览器中,JS的全局对象为window,
+    Web浏览器将window作为global对象的一部分加以实现;
+    Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象,
+    不属于任何其他对象的属性和方法,最终都是它的属性和方法;
+    所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
+    诸如前面的 isNaN isFinite paresInt等等;
+    Global对象没有办法直接访问,在浏览器中可使用window对象实现全局访问;
+  var global =function(){ return this; }  间接获取Global对象
   其他内置属性/方法:
     URI 编码方法
       PS:URI编码可以对URI(链接)进行编码,以便发送给浏览器
@@ -3390,7 +3386,6 @@ Global 全局对象
         eval('var box =100');
         console.log(box);       //100
   Global对象属性
-    如下为 Global 的所有属性
     undefined  特殊值undefined
     NaN        特殊值NaN
     Infinity   特殊值Infinity
@@ -3487,7 +3482,7 @@ Math   数学对象
     Math.asin(x)      返回x的反正弦值
     Math.atan(x)      返回x的反正切值
     Math.atan2(x,y)   返回x/y的反正切值
-JSON:  "JavaScript Object Notation",JS对象表示法 [ES5+]
+JSON:  "JavaScript Object Notation",JS对象表示法 
   PS: 一种基于文本、独立于语言的轻量级数据交换格式,
     利用 JS 中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.
@@ -3640,7 +3635,7 @@ JSON:  "JavaScript Object Notation",JS对象表示法 [ES5+]
   应用:
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
-Performance 当前页面加载相关的性能信息  「ES5+」
+Performance 当前页面加载相关的性能信息 
   PS: ECMAScript 5 引入“高精度时间戳”这个API,部署在performance对象上。
     用于精确度量、控制、增强浏览器的性能表现;为测量网站性能,提供以前没有办法做到的精度。
     它的精度可以达到1毫秒的千分之一,这对于衡量的程序的细微差别,提高程序运行速度很有好处,
@@ -3771,5 +3766,8 @@ Performance 当前页面加载相关的性能信息  「ES5+」
   
   该属性表示当前网页经过了多少次重定向跳转。  
 -----------------------------------------------------------------------待整理 
+
+
+
 
 

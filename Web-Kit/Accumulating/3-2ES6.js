@@ -182,7 +182,7 @@ const 定义块级常量
     函数参数的默认值
       function demo({aoo=1}){ console.log(aoo); }
       demo({});
-for...of 一种用于遍历数据结构的方法
+for-of 一种用于遍历数据结构的方法 
   可遍历的对象包括数组,对象,字符串,set和map结构等具有iterator接口的数据结构
   数组遍历
     方式一:for      缺点：代码不够简洁。
@@ -677,7 +677,8 @@ RegExp 正则的扩展
     // "\/path\/to\/resource\.html\?search=query"
     上面代码中,str是一个正常字符串,必须使用反斜杠对其中的特殊字符转义,才能用来作为一个正则匹配的模式。
 
-    已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7。2015年7月31日,TC39认为,这个方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求。
+    已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7。
+    2015 年7月,TC39认为,该方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求。
 
     RegExp.escape('The Quick Brown Fox');
     // "The Quick Brown Fox"
@@ -1038,7 +1039,7 @@ Object 对象扩展
       3、实例化；
       4、通过实例化后的对象调用类的方法或者属性。
       注意：面向对象是一种编程思想,并不是具体的工具。
-Function 函数的扩展
+Function 函数的扩展 
   参数的默认值
     传统的实现方式
       function person(n,a){
@@ -1489,7 +1490,7 @@ Symbol  符号,标志,记号
     Symbol.KeyFor(sym1); // aoo
     Symbol.KeyFor(sym2); // undefined
 --------------------------------------------------------------------------------
-class 类
+class 类 
   PS：ES6以前,都是使用函数function和原型prototype来模拟类class实现面向对象的编程;
     实际上,class本质上还是基于原型prototype的实现做的进一步封装,使使用起来更简单明了。
     也就是说它实际上也是函数function和原型prototype实现。
@@ -1952,7 +1953,7 @@ Promise 异步模式
 ASYNC   用来取代回调函数、解决异步操作的一种方法 
   async 函数与 Promise、Generator 函数类似, 它本质上是 Generator 函数的语法糖。
   async 函数并不属于 ES6,而是被列入了 ES7。
-模块化历史
+module 模块化历史 
   介绍
     ES6之前,JS不支持原生的模块化。
     若要实现模块化,要借助一些框架,比如：requireJS或者seaJS等;
@@ -2609,7 +2610,7 @@ ASYNC   用来取代回调函数、解决异步操作的一种方法
         查询模块绝对路径 require.resolve('./test.js');
         查看单个的模块缓存 require.cache[require.resolve('./test.js')]
         删除模块缓存 delete require.cache[require.resolve('./test.js')];
-export import ES6模块化规范
+export import ES6模块化规范 
   PS: export 命令用于定义模块的对外接口,即提供接口,
     import 命令用于引入其他模块提供的功能,即引入接口;
   ES6 模块的设计思想: 尽量的静态化

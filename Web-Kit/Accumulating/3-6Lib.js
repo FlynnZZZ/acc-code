@@ -1089,7 +1089,7 @@ jQuery UI
         表示选中type值为checkbox的input元素.
 --------------------------------------------------------------------------------
 Bootstrap :快速开发 Web 应用程序和网站的前端框架 
-介绍_概念_说明_定义
+介绍_概念_说明_定义 
   PS:Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
     简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)
     Bootstrap 的响应式 CSS 能够自适应于台式机、平板电脑和手机
@@ -1108,7 +1108,7 @@ Bootstrap :快速开发 Web 应用程序和网站的前端框架
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-CSS
+CSS 
   核心思想:通过给HTML标签引入 Bootstrap 定义的class属性,来控制标签的样式.
   移动设备优先
     之前 Bootstrap 版本(直到 2.x),您需要手动引用另一个 CSS,才能让整个项目友好的支持移动设备。
@@ -1580,13 +1580,6 @@ Question And Answer
 
   怎样避免用户在留言或发帖等在网页中添加字符时,加入html标签等会影响网页的因素?(不一定是问题的问题)
     使用 innerText 而非 innerHTML
-自我总结、心得
-  跨页面消息传递
-    window.opener 表示打开新窗口的原窗口的window对象
-    localStorage
-
-  使用 vw 或 display:flex 可能存在的bug
-    尺寸有时未按照要求的显示.
 ---------------------------------------------------------------------以下待整理
   面试题
     pushstate

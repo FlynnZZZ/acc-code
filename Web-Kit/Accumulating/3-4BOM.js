@@ -1093,7 +1093,8 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
           console.log('state change', xhr, xhr.status, xhr.response);
           var response = JSON.parse(xhr.response);
           console.log('response', response);
-        } else {
+        } 
+        else {
           console.log('change');
         }
       }
@@ -1116,7 +1117,8 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
           xhr.setRequestHeader("Content-Type",headers);
           var da =JSON.stringify(data);
           xhr.send(da);
-        }else {
+        }
+        else {
           xhr.onreadystatechange =function(){
             if(xhr.readyState == 4) {
               reseponseCallback(xhr.response);

@@ -1010,7 +1010,7 @@ PC端
     var item1 = $('.member .content>.item');
     slider(wrapper1,content1,item1);
 --------------------------------------------------------------------------------
-◆功能逻辑 
+功能逻辑 
   一container中多个宽度相等item,多个item的总高度大于container的,
     当在item中滑动时, 判断那个item在container的可视范围中,显示的面积最大?
     注:可获取的到的参数有container的高度H,item的高度h,
@@ -1018,6 +1018,41 @@ PC端
     self: 判断显示面积最大,则判断item的中线和container中线的偏差值x,
       若多个偏差值相同,则取第一个.
       则 |x| = |(H-h)/2 - t|    「绝对值」
+技巧方式总结
+  在本地开起service服务时,可创建一个 *.json 文件,可用于AJAX获取模拟
+    e.g.： 在页面中插入一张图
+      目录结构 
+      index.html
+      source
+      |--ajax-test.json
+      文件内容
+      // index.html 文件中
+      <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', './source/ajax-test.json', true);
+        xhr.onreadystatechange = function() {
+          if(xhr.readyState === 4) {
+            console.log('state change end', xhr);
+            console.log(xhr.status);
+            console.log(xhr.response);
+            var response = JSON.parse(xhr.response);
+            console.log(response);
+            addImg(response.img)
+          } 
+          else {
+            console.log('change');
+          }
+        }
+        xhr.send(null); 
+        function addImg(url){
+          document.body.insertAdjacentHTML("beforeend",`<img src=${url}>`);
+        }
+      </script>
+      // ajax-test.json 文件中
+      {
+        "txt" : "这是一段用于测试的文字",
+        "img" : "http://pic.58pic.com/58pic/17/48/00/59858PICQgT_1024.jpg"
+      }
 --------------------------------------------------------------------------------
 Question & Idea 
   整理文档的代码,将HTML中的内联样式分离出来转换为内联样式
@@ -1517,8 +1552,6 @@ Question & Idea
     scaleElem(Jactiv6,Jscaler1,Jwrap1,{width:true,height:true,direction:'lb'});
     scaleElem(Jactiv7,Jscaler1,Jwrap1,{width:true,height:true,direction:'rt'});
     scaleElem(Jactiv8,Jscaler1,Jwrap1,{width:true,height:true,direction:'rb'});
-
-
 
 
 

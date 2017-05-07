@@ -93,8 +93,8 @@ todo
     数据模型到视图,视图到数据模型.
     取值表达式 {{}}
 --------------------------------------------------------------------------------
-★VueJS :轻巧、高性能、可组件化的MVVM库 
-介绍_概念_说明_定义
+★VueJS: 轻巧、高性能、可组件化的MVVM库 
+介绍_概念_说明_定义 
   介绍
     主要用于实现响应的数据绑定和组合的视图组件.
   说明
@@ -208,7 +208,7 @@ todo
           /* `this` 指向 vm 实例 */
         })
         // "a is: 1"
-安装|启动
+安装|启动 
   方法一: 使用<script>标签直接引用VueJS文件
     Vue 会被注册为一个全局变量
     e.g. : <script src="./vue.min.js" charset="utf-8"></script>
@@ -220,7 +220,7 @@ todo
     cd my-vue-project
     npm install  // 安装依赖,默认会根据 package.json 文件中配置的依赖文件进行安装
     npm run dev  // 启动Vue,默认执行package.json中script属性的配置
-new Vue(vParamsObj)   创建vueObj,Vue对象
+new Vue(vParamsObj)   创建vueObj,Vue对象 
   vParamsObj   用于配置vueObj的参数对象
     'el'    : selector   指定Vue接管的元素         
     'data'    : {}       可选,数据

@@ -1991,6 +1991,7 @@ Layout   布局
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
       子元素变成类似inline-block的状态
+      子元素默认高度为100% ??
     指定为Flex布局
       采用Flex布局的元素,称为Flex容器(flex container),简称"容器"。
       容器的所有子元素,称为Flex项目(flex item),简称"项目"。

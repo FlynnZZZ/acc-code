@@ -363,74 +363,72 @@
     当浏览器不支持js,或没有启用时--有些浏览器可能禁止使用JS了--时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>
 文本、字体 
-  p 段落
+  <p>       段落
     <p>段落标记</p>
-  h1-h6 标题
-    <h1-h6>标题</h1-h6>
-    字体默认为粗体
-    属性
-      align=left(默认)/center/right
-      face='楷体'   客户端字体(font face)
-  hr 标尺线
-    <hr/>  水平直线
-    属性
-      align   水平位置.默认为居中
-      width   控制线的长度
-      size    线宽度,默认为0,当size不为0时为一线框,通过颜色来填充
-  code 格式化文本
+  <h1>-<h6> 标题,字体默认为粗体
+    e.g.: <h1>标题</h1>
+    align = 
+      left 默认
+      center
+      right
+    face = '楷体'   font face,客户端字体
+  <hr/>     标尺线,水平直线
+    align   水平位置.默认为居中
+    size    线宽度,默认为0,当size不为0时为一线框,通过颜色来填充
+    width   控制线的长度
+  <code>    格式化文本
     <code></code> 当代码为一行时可使用该标签进行插入.若是多行代码,则需使用pre
-  pre 格式化文本
+  <pre>     格式化文本
     <pre>文本</pre> 格式化文本(preformatted text):保留包含内容的格式.
     被包围在pre元素中的文本通常会保留空格和换行符.文本也会呈现为等宽字体.
     该标签的一个常用应用就是用来表示计算机的源代码.
-  br 换行
-    <br>
-  nobr 不换行
+  <br>      换行
+  <nobr>    不换行
     <nobr></nobr>
-  q 引用
+  <q>          引用
     <q>标签,进行引用,要引用的文本不用加双引号,浏览器会对q标签自动添加双引号.
     注意这里用<q>标签的真正关键点不是它的默认样式双引号(如果这样我们不如自己在键盘上输入双引号就行了),
     而是它的语义：引用别人的话.
     有些浏览器会将q内的内容加引号括起来,有些则没有.
-  blockquote 长文本引用
+  <blockquote> 长文本引用
     <blockquote>标签,长文本引用.作用是引用别人的文本,
     它是对长文本的引用,如在文章中引入大段某知名作家的文字,这时需要这个标签.
     <q>标签是对简短文本的引用,比如说引用一句话就用到<q>标签.
     表现形式类似于段落加缩进,并无引号出现,从周围内容分离出来比较长的部分(通常显示为缩进的块)
-  block 引用
+  <block>      引用 
     <block></block> 块引用
-  blink 闪烁文字
-  <blink>内容</blink>  效果:内容文字闪烁
-    闪烁(部分浏览器识别)
-  marquee 移动内容
-    <marquee direction="left/right" >文字</marquee>
-    移动的文字/图片(IE8之前有用)
-    属性:
-      direction    定义移动方向
-      behaviour    移动方式
-  sup 上标
-    <sup>上标</sup>
-    字体缩小,整体上移
-  sub 下标
-    <sub>下标</sub>
-    字体缩小,整体下移
-  b 加粗
-    <b>加粗</b>
-  strong 加粗
-    <strong>加强语气(加粗)</strong>
-  i 倾斜
-    <i>倾斜</i>
-  em 倾斜
-    <em>加强语气(倾斜)</em>
-  u 下划线
-    <u></u> 下划线
-  ins 下划线
-    <ins></ins> 增加下划线
-  s 删除线
-    <s>删除线</s>
-  del 删除线
-    <del></del> 增加删除线
-  Remarks:可组合使用,如表示加粗倾斜同时使用两个标签
+  样式标签「建议使用CSS开控制」
+    PS：可组合使用,如表示加粗倾斜同时使用两个标签
+    <blink> 闪烁文字「DiBs」
+      <blink>内容</blink>  效果:内容文字闪烁 
+    <marquee> 移动内容
+      <marquee direction="left/right" >文字</marquee>
+      移动的文字/图片(IE8之前有用)
+      属性:
+        direction    定义移动方向
+        behaviour    移动方式
+    <sup> 上标
+      <sup>上标</sup>
+      字体缩小,整体上移
+    <sub> 下标
+      <sub>下标</sub>
+      字体缩小,整体下移
+    <b> 加粗
+      <b>加粗</b>
+    <strong> 加粗
+      <strong>加强语气(加粗)</strong>
+    <i> 倾斜
+      <i>倾斜</i>
+    <em> 倾斜
+      <em>加强语气(倾斜)</em>
+    <u> 下划线
+      <u></u> 下划线
+    <ins> 下划线
+      <ins></ins> 增加下划线
+    <s> 删除线
+      <s>删除线</s>
+    <del> 删除线
+      <del></del> 增加删除线
 表格 
   PS:
     在一些浏览器中,没有内容的表格单元显示的不太好.

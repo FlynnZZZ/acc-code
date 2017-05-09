@@ -2078,7 +2078,7 @@ WYSIWYG,富文本编辑
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
  (详参 JavaScript高级程序设计 440页)
-Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+」「HTML5」
+Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」 
   PS:画布默认是透明的.
     在css中指定画布宽、高,会导致画布中的所有内容进行相应的缩放.
     <canvas> 标签只有两个属性—— width和height.

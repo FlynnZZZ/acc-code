@@ -539,7 +539,20 @@ PC端
   图片缩放、部分显示
 --------------------------------------------------------------------------------
 移动端
-网络收集
+网络收集 
+  通过rem开实现比例缩放的前提
+    (function (d, w) {
+      var docEl = d.documentElement,
+      resizeEvt = 'orientationchange' in w ? 'orientationchange' : 'resize',
+      recalc = function () {
+        var clientWidth = docEl.clientWidth;
+        if (!clientWidth) return;
+        docEl.style.fontSize = 100 * (clientWidth / 1080) + 'px';
+      };
+      if (!d.addEventListener) return;
+      w.addEventListener(resizeEvt, recalc, false);
+      d.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
 自我实现 
   滑动轮播插件
     .imgs{

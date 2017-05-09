@@ -416,30 +416,30 @@ DOM 操作
       Jelem.select();  选中文字
         不可选中因增加contenteditable属性而可编辑的元素的文字
   Animation 动画
-    speed 速度         可选,规定元素从可见到隐藏的时间,默认为 "0",单位毫秒
+    speed    数值,速度,过渡的时间,默认为0「单位毫秒」
       number (比如 1500)
       "normal"
       "slow"
       "fast"
       "swing"    
       "linear"   匀速
-    callback 回调函数  可选,会在动画执行完毕后执行.
+    cfoo 回调函数,在动画执行完后调用 
     ◆可见性变化
-    Jelem.hide([speed,callback]);   隐藏元素
-      callback 可选,hide之后执行的函数 (前提为设置了speed,否则不可选)
-    Jelem.show([speed,callback]);   显示元素
-    Jelem.fadeIn(speed,callback)        元素的淡入
-    Jelem.fadeOut(speed,callback)       元素的淡出
-    Jelem.fadeToggle(speed,callback);   开/关淡入淡出
-    Jelem.fadeTo(speed,opacity,callback)   元素透明度变化到opacity
+    Jelem.hide([speed,cfoo]);   隐藏元素
+      cfoo 可选,hide之后执行的函数 (前提为设置了speed,否则不可选)
+    Jelem.show([speed,cfoo]);   显示元素
+    Jelem.fadeIn(speed,cfoo)        元素的淡入
+    Jelem.fadeOut(speed,cfoo)       元素的淡出
+    Jelem.fadeToggle(speed,cfoo);   开/关淡入淡出
+    Jelem.fadeTo(speed,opacity,cfoo)   元素透明度变化到opacity
       opacity 透明度,0-1 之间取值
     ◆尺寸变化
-    Jelem.slideDown(speed,callback)   高度变化
-    Jelem.slideUp(speed,callback)     高度变化
-    Jelem.slideToggle(speed,callback) 开/关高度变化
-    Jelem.toggle([speed][,callback]);     开/关长宽尺寸变化
+    Jelem.slideDown(speed,cfoo)   高度变化
+    Jelem.slideUp(speed,cfoo)     高度变化
+    Jelem.slideToggle(speed,cfoo) 开/关高度变化
+    Jelem.toggle([speed][,cfoo]);     开/关长宽尺寸变化
     ◆自定义变化
-    Jelem.animate(params,duration,speed,callback)  定义变化及变化的过程
+    Jelem.animate(params,duration,speed,cfoo)  定义变化及变化的过程
       params   必须,表示元素的最终样式状态
       duration 可选,执行时间
         "normal" ,默认值
@@ -605,6 +605,7 @@ Event 事件
     $(document).ready(foo)  DOM结构加载完后执行
       简写方式: $(function(){/*jQuery代码*/})
     Jelem.change(foo)      元素的值或内容发生变化时响应
+    Jelem.scroll(fuoo)     元素滚动条滑动事件
     Jelem.hover()  「JS 中无hover事件,所以无法使用on方法来绑定 ?」 
       可以有退出状态时的回调函数
         Jelem.hover(foo1,foo2)
@@ -721,7 +722,7 @@ AJAX
   ◆方法型 
   $.get(url,[data],[function(backData,textStatus){}]) get请求
     PS:get方法会把data添加到url上(故可直接改变url而省略data)
-    callback 载入成功时调用回调函数
+    cfoo 载入成功时调用回调函数
       PS:只有当Response的返回状态为success才执行该函数
       backData   返回的数据
       textStatus 字符串形式表示的响应的状态
@@ -731,9 +732,9 @@ AJAX
   Jelem.load(url,[data],[function(bD,tS){}])  载入远程HTML文件代码并插入至元素中
     url      请求的地址
     data     可选,发送到服务器的数据
-    callback 可选,请求完成时(不需是success)的回调函数
-  $.getScript(url,[callback])      通过get方法请求并执行一个JavaScript文件
-    callback 在获取到JS文件并执行获取到的JS文件后,再执行
+    cfoo 可选,请求完成时(不需是success)的回调函数
+  $.getScript(url,[cfoo])      通过get方法请求并执行一个JavaScript文件
+    cfoo 在获取到JS文件并执行获取到的JS文件后,再执行
   $.getJSON()
   ◆通用型
   $.ajax({
@@ -770,7 +771,7 @@ AJAX
     url:'/uploads/tags/json',
     data:{}, 
     dataType:'jsonp',
-    jsonp:"callback123", // 需要在后端有相应的改动,名称需一致
+    jsonp:"cfoo123", // 需要在后端有相应的改动,名称需一致
     beforeSend:function(){ }, 
     success:function(backData,textStatus,功能性的对象){ },
     error:function (xhr,status,errorTrown){ },
@@ -893,17 +894,17 @@ Deferred 对象
       然而在 jQuery 的文档中,被解析这个词指的是 ECMAScript 标准中的完成 (fulfilled) 状态。
     var deferred = jQuery.Deferred(); 创建deferred对象
       或者,使用 $ 作为 jQuery 的简写： var deferred = $.Deferred();
-    deferred.always(callbacks[, callbacks, ..., callbacks])
+    deferred.always(cfoos[, cfoos, ..., cfoos])
        添加在该 Deferred 对象被解析或被拒绝时调用的处理函数
-    deferred.done(callbacks[, callbacks, ..., callbacks])
+    deferred.done(cfoos[, cfoos, ..., cfoos])
       添加在该 Deferred 对象被解析时调用的处理函数
-    deferred.fail(callbacks[, callbacks, ..., callbacks])
+    deferred.fail(cfoos[, cfoos, ..., cfoos])
       添加在该 Deferred 对象被拒绝时调用的处理函数
     deferred.notify([argument, ..., argument]):
       调用 Deferred 对象上的 progressCallbacks 处理函数并传递制定的参数
     deferred.notifyWith(context[, argument, ..., argument])
       在制定的上下文中调用 progressCallbacks 处理函数并传递制定的参数。
-    deferred.progress(callbacks[, callbacks, ..., callbacks])
+    deferred.progress(cfoos[, cfoos, ..., cfoos])
       添加在该 Deferred 对象产生进展通知时被调用的处理函数。
     deferred.promise([target])  返回 Deferred 对象的 promise 对象
     deferred.reject([argument, ..., argument]) 
@@ -1965,8 +1966,6 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
-
-
 
 
 

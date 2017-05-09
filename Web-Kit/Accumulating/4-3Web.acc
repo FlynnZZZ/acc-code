@@ -1133,7 +1133,7 @@ GitHub
   retn      返回值
   exp       表达式
   Jelem     jQuery对象
-  DiBs      在浏览器中有差异 Different in browsers
+  DiBs      在浏览器中有差异,有兼容性问题  Different in browsers
   more      其他的,更多的
   moIn      更多参见 more in
   macro     总体,宏观

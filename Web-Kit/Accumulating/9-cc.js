@@ -254,28 +254,633 @@ toolbar,工具栏
         生成的大图将会放在 构建目录 下的 res/raw-assets 相对于项目中 assets 目录结构下的对应的目录中,
         以 AutoAtlas-xx.png 结构命名。 
         生成项目后可以到对应的目录下检查对应的图集资源是否生成成功了。
-  创建、添加脚本 
-    通常在assets下创建一个script文件夹来存放JS脚本
-    脚本名称就是组件的名称,且大小写敏感
-    
+  脚本资源 
+    PS： 在 Cocos Creator 中,脚本也是资源的一部分;
+      可在资源编辑器中创建 JavaScript 或者 CoffeeScript 脚本资源
+      脚本名称就是组件的名称,且大小写敏感;
+      通常在assets下创建一script文件夹来存放JS脚本;
     编写脚本 
-      打开的脚本里已经有了预先设置好的一些代码块,这些代码就是编写一个组件脚本所需的结构。
-      具有这样结构的脚本就是 Cocos Creator 中的组件（Component）,
-      他们能够挂载到场景中的节点上,提供控制节点的各种功能。
-        properties: {
-            // 主角跳跃高度
-            jumpHeight: 0,
-            // 主角跳跃持续时间
-            jumpDuration: 0,
-            // 最大移动速度
-            maxMoveSpeed: 0,
-            // 加速度
-            accel: 0,
-        },
-        代码中不需关心这些数值是多少,因为之后会直接在属性检查器中设置这些数值,
+      PS：打开的脚本里会预置一些代码,这些代码就是编写一个组件脚本所需的结构,
+        具有这样结构的脚本就是 Cocos Creator 中的组件,
+        能够挂载到场景中的节点上,提供控制节点的各种功能;
+        代码中不需关心 properties 中数值是多少,因为之后可直接在属性检查器中设置;
+        当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
+        一份简单的组件脚本如下：
+        cc.Class({
+            extends: cc.Component,
+            properties: { },
+            onLoad: function () { },
+            update: function (dt) { },
+        });
+      使用 cc.Class 声明类型
+        PS：cc.Class 是一个很常用的 API,用于声明 Cocos Creator 中的类,
+          为了方便区分,把使用 cc.Class 声明的类叫做 CCClass。
+      定义 CCClass 
+        调用 cc.Class,传入一个原型对象,
+        在原型对象中以键值对的形式设定所需的类型参数,就能创建出所需要的类。
+        e.g.: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量
+          同时还将类名设为 "sprite",类名用于序列化,一般可以省略。
+          var Sprite = cc.Class({
+            name: "sprite"
+          });
+      实例化 直接 new 一个对象：
+        var obj = new Sprite();
+      判断类型 可用 JavaScript 的 instanceof：
+        cc.log(obj instanceof Sprite);       // true
+      使用 ctor 声明构造函数：
+        var Sprite = cc.Class({
+          ctor: function () {
+            cc.log(this instanceof Sprite);    // true
+          }
+        });
+      实例方法
+        var Sprite = cc.Class({
+          // 声明一个名叫 "print" 的实例方法
+          print: function () { }
+        });
+      使用 extends 实现继承：
+        var Shape = cc.Class(); // 父类
+        var Rect = cc.Class({ // 子类
+          extends: Shape
+        });
+      父构造函数
+        继承后,CCClass 会统一自动调用父构造函数,你不需要显式调用。
+        var Shape = cc.Class({
+          ctor: function () {  // 实例化时,父构造函数会自动调用,
+            cc.log("Shape");    
+          }
+        });
+        var Rect = cc.Class({
+          extends: Shape
+        });
+        var Square = cc.Class({
+          extends: Rect,
+          ctor: function () {  // 再调用子构造函数
+            cc.log("Square");   
+          }
+        });
+        var square = new Square();
+        依次输出 "Shape" 和 "Square"。
+      声明属性
+        PS：通过在脚本中声明的属性,可将脚本组件中的字段可视化地展示在 属性检查器 中,
+          从而方便地在场景中调整属性值。
+          要声明属性,仅需要在 cc.Class 定义的 properties 字段中,
+          填写属性名字和属性参数即可
+        e.g.：
+          cc.Class({
+            extends: cc.Component,
+            properties: {
+              userID: 20,
+              userName: "Foobar"
+            }
+          });
+        cc中两种形式的属性声明方法
+          简单声明 在多数情况下,都可以使用简单声明。
+            当声明的属性为基本 JavaScript 类型时,可以直接赋予默认值：
+            properties: {
+              height: 20,       // number
+              type: "actor",    // string
+              loaded: false,    // boolean                
+              target: null,     // object
+            }
+            当声明的属性具备类型时（如：cc.Node,cc.Vec2 等）,
+            可在声明处填写他们的构造函数来完成声明,
+            properties: {
+              target: cc.Node,
+              pos: cc.Vec2,
+            }
+            当声明属性的类型继承自 cc.ValueType 时（如：cc.Vec2,cc.Color 或 cc.Rect）,
+            除了上面的构造函数,还可以直接使用实例作为默认值：
+            properties: {
+              pos: new cc.Vec2(10, 20),
+              color: new cc.Color(255, 255, 255, 128),
+            }
+            当声明属性是一个数组时,可以在声明处填写他们的类型或构造函数来完成声明,如：
+            properties: {
+              any: [],      // 不定义具体类型的数组
+              bools: [cc.Boolean],
+              strings: [cc.String],
+              floats: [cc.Float],
+              ints: [cc.Integer],
+              
+              values: [cc.Vec2],
+              nodes: [cc.Node],
+              frames: [cc.SpriteFrame],
+            }
+            除了以上几种情况,其他类型我们都需要使用完整声明的方式来进行书写。
+          完整声明
+            有时,需为属性声明添加参数,控制属性在 属性检查器 中的显示方式,
+            以及属性在场景序列化过程中的行为;
+            properties: {
+              score: {
+                default: 0, // 默认值为 0
+                displayName: "Score (player)",
+                // 在 属性检查器 里,其属性名将显示为：“Score (player)”,
+                tooltip: "The score of player",
+                // 当鼠标移到参数上时,显示对应的 Tooltip。
+              }
+            }
+            ◆常用参数：
+              更多的属性参数,查阅 属性参数
+            default 设置属性的默认值,仅在组件第一次添加到节点上时才会用到
+            type    限定属性的数据类型,详见 CCClass 进阶参考：type 参数
+            visible 设为 false 则不在 属性检查器 面板中显示该属性
+            serializable 设为 false 则不序列化（保存）该属性
+            displayName  在 属性检查器 面板中显示成指定名字
+            tooltip      在 属性检查器 面板中添加属性的 Tooltip
+          数组声明
+            数组的 default 必须设置为 [],
+            如果要在 属性检查器 中编辑,还需要设置 type 为构造函数,枚举,
+            或者 cc.Integer,cc.Float,cc.Boolean 和 cc.String。
+            properties: {
+              names: {
+                default: [],
+                type: [cc.String]   // 用 type 指定数组的每个元素都是字符串类型
+              },
+              enemies: {
+                default: [],
+                type: [cc.Node]     // type 同样写成数组,提高代码可读性
+              },
+            }
+          get/set 声明
+            在属性中设置了 get 或 set 以后,访问属性的时候,
+            就能触发预定义的 get 或 set 方法。
+            若只定义 get 方法,那相当于属性只读。
+            properties: {
+              width: {
+                get: function () {
+                  return this._width;
+                },
+                set: function (value) {
+                  this._width = value;
+                }
+              }
+            }
+      访问节点和组件
+        PS：可在 属性检查器 里修改节点和组件,也能在脚本中动态修改。
+          动态修改的好处是能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
+          脚本还能够响应玩家输入,能够修改、创建和销毁节点或组件,实现各种各样的游戏逻辑。
+          要实现这些效果,你需要先在脚本中获得你要修改的节点或组件。
+        获得组件所在的节点：在组件方法里访问 this.node 变量：1
+          start: function () {
+            var node = this.node;
+            node.x = 100;
+          }
+        getComponent 获得同一个节点上的其它组件
+          start: function () {
+            var label = this.getComponent(cc.Label);
+            var text = this.name + ' started';
+            label.string = text;  // Change the text in Label Component
+          }
+          也可为 getComponent 传入一个类名
+          var label = this.getComponent("cc.Label");
+          对用户定义的组件而言,类名就是脚本的文件名,并且区分大小写。
+          例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
+          var rotate = this.getComponent("SinRotate");
+          在节点上也有一个 getComponent 方法,它们的作用是一样的：
+          start: function () {
+            var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
+            cc.log(bool);  // true
+          }
+          如果在节点上找不到指定的组件,getComponent 将返回 null,
+          如果你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
+          因此如果你不确定组件是否存在,请记得判断一下：
+          start: function () {
+            var label = this.getComponent(cc.Label);
+            if (label) {
+              label.string = "Hello";
+            }
+            else {
+              cc.error("Something wrong?");
+            }
+          }
+        获得其它节点及其组件
+          PS：仅仅能访问节点自己的组件通常是不够的,脚本通常还需要进行多个节点之间的交互。
+            例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
+            Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
+          利用属性检查器设置节点
+            最直接的方式就是在 属性检查器 中设置你需要的对象。
+            以节点为例,这只需要在脚本中声明一个 type 为 cc.Node 的属性：
+            // Cannon.js
+            cc.Class({
+              extends: cc.Component,
+              properties: {
+                player: {  // 声明 player 属性
+                  default: null,
+                  type: cc.Node
+                }
+              }
+            });
+            这段代码在 properties 里面声明了一个 player 属性,默认值为 null,
+            并且指定它的对象类型为 cc.Node。
+            这就相当于在其它语言里声明了 public cc.Node player = null;
+            接着就可以将层级管理器上的任意一个节点拖到这个 Player 控件;
+            这样一来它的 player 属性就会被设置成功,你可以直接在脚本里访问 player：
+            // Cannon.js
+            var Player = require("Player");
+            cc.Class({
+              extends: cc.Component,
+              properties: {
+                player: { // 声明 player 属性
+                  default: null,
+                  type: cc.Node
+                }
+              },
+              start: function () {
+                var playerComp = this.player.getComponent(Player);
+                this.checkPlayer(playerComp);
+              },
+              // ...
+            });
+          利用属性检查器设置组件
+            在上面的例子中,将属性的 type 声明为 Player 组件,
+            当你拖动节点 "Player Node" 到 属性检查器,
+            player 属性就会被设置为这个节点里面的 Player 组件。
+            这样就不需要再自己调用 getComponent 啦。
+            // Cannon.js
+            var Player = require("Player");
+            cc.Class({
+              extends: cc.Component,
+              properties: {
+                player: {   // 声明 player 属性,这次直接是组件类型
+                  default: null,
+                  type: Player
+                }
+              },
+              start: function () {
+                var playerComp = this.player;
+                this.checkPlayer(playerComp);
+              },
+              // ...
+            });
+            还可以将属性的默认值由 null 改为数组[],这样就能在 属性检查器 中同时设置多个对象。
+            不过如果需要在运行时动态获取其它对象,还需要用到下面介绍的查找方法。
+        查找子节点 
+          PS：有时候,游戏场景中会有很多个相同类型的对象,像是炮塔、敌人和特效,
+            它们通常都有一个全局的脚本来统一管理。
+            如果用 属性检查器 来一个一个将它们关联到这个脚本上,那工作就会很繁琐。
+            为了更好地统一管理这些对象,我们可以把它们放到一个统一的父物体下,
+            然后通过父物体来获得所有的子物体：
+          getChildren  cc.Node 原有的一个 API,可以获得一个包含所有子节点的数组。
+            // CannonManager.js
+            cc.Class({
+              extends: cc.Component,
+              start: function () {
+                this.cannons = [];
+                this.cannons = this.node.getChildren();
+              }
+            });
+          getChildByName() 
+            this.node.getChildByName("Cannon 01");
+          cc.find  根据传入的路径进行逐级查找 
+            如果子节点的层次较深,可使用 cc.find 
+            cc.find("Cannon 01/Barrel/SFX", this.node);
+            当 cc.find 只传入第一个参数时,将从场景根节点开始逐级查找：
+            this.backNode = cc.find("Canvas/Menu/Back");
+      访问已有变量里的值
+        如果你已经在一个地方保存了节点或组件的引用,你也可以直接访问它们,一般有两种方式：
+        通过全局变量访问
+          PS：谨慎地使用全局变量,并不推荐滥用全局变量,即使要用也最好保证全局变量只读 
+            由于所有脚本都强制声明为 "use strict",因此定义全局变量时的 window. 不可省略;
+            访问全局变量时,如果变量未定义将会抛出异常。
+            添加全局变量时,请小心不要和系统已有的全局变量重名。
+            你需要小心确保全局变量使用之前都已初始化和赋值。
+          定义一个全局对象 window.Global
+          // Globals.js, this file can have any name
+          window.Global = {
+            // 包含了 backNode 和 backLabel 两个属性
+            backNode: null,
+            backLabel: null,
+          };
+          可在合适的地方直接访问并初始化 Global:
+          // Back.js
+          cc.Class({
+            extends: cc.Component,
+            onLoad: function () {
+              Global.backNode = this.node;
+              Global.backLabel = this.getComponent(cc.Label);
+            }
+          });
+          初始化后,你就能在任何地方访问到 Global 里的值：
+          // AnyScript.js
+          cc.Class({
+            extends: cc.Component,
+            
+            // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
+            start: function () {
+              var text = 'Back';
+              Global.backLabel.string = text;
+            }
+          });
+        通过模块访问
+          可使用 require 来实现脚本的跨文件操作
+          每个脚本都能用 require + 文件名「不含路径」 来获取到对方 export 的对象
+          更详细内容,请参考 模块化。
+          // Global.js, now the filename matters
+          module.exports = {
+            backNode: null,
+            backLabel: null,
+          };
+          // Back.js
+          // this feels more safe since you know where the object comes from
+          var Global = require("Global");
+          cc.Class({
+            extends: cc.Component,
+            onLoad: function () {
+              Global.backNode = this.node;
+              Global.backLabel = this.getComponent(cc.Label);
+            }
+          });
+          // AnyScript.js
+          // this feels more safe since you know where the object comes from
+          var Global = require("Global");
+          cc.Class({
+            extends: cc.Component,
+            // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
+            start: function () {
+              var text = "Back";
+              Global.backLabel.string = text;
+            }
+          });
+      常用节点和组件接口
+        节点状态和层级操作
+          假设我们在一个组件脚本中,通过 this.node 访问当前脚本所在节点。
+          this.node.active = false;  关闭节点 
+            该操作会关闭节点,当该节点的所有父节点都激活,将意味着：
+            在场景中隐藏该节点和所有子节点
+            该节点和所有子节点上的所有组件都将被禁用,
+            也就是不会再执行这些组件中的 update 中的代码
+            这些组件上如果有 onDisable 方法,这些方法将被执行
+          this.node.active = true;   激活节点 
+            该操作会激活节点,当该节点的所有父节点都激活,将意味着：
+            在场景中重新激活该节点和所有子节点,除非子节点单独设置过关闭
+            该节点和所有 active 的子节点上的所有 enabled 的组件都会被启用,
+            他们中的 update 方法之后每帧会执行
+            这些组件上如果有 onEnable 方法,这些方法将被执行
+          更改节点的父节点
+            假设父节点为 parentNode,子节点为 this.node
+            parentNode.addChild(this.node)
+            或
+            this.node.parent = parentNode
+            这两种方法是等价的。
+            注意,通过 创建和销毁节点 介绍的方法创建出新节点后,
+            要为节点设置一个父节点才能正确完成节点的初始化。
+        索引节点的子节点
+          this.node.children 将返回节点的所有子节点数组。
+          this.node.childrenCount 将返回节点的子节点数量。
+          注意 以上两个 API 都只会返回节点的直接子节点,不会返回子节点的子节点。
+        更改节点位置
+          分别对 x 轴和 y 轴坐标赋值：
+          this.node.x = 100; this.node.y = 50;
+        设置 position 变量：
+          this.node.position = cc.p(0, 0);
+          使用 setPosition 方法：
+          node.setPosition(cc.p(0, 0)); node.setPosition(0, 0);
+          以上两种用法等价。
+        更改节点旋转
+          this.node.rotation = 90;
+          或
+          this.node.setRotation(90);
+        更改节点缩放
+          this.node.scaleX = 2; this.node.scaleY = 2;
+          或
+          this.node.setScale(2); this.node.setScale(2, 2);
+          以上两种方法等价。setScale 传入单个参数时,会同时修改 scaleX 和 scaleY。
+        更改节点尺寸
+          this.node.setContentSize(100, 100); 
+          this.node.setContentSize(cc.p(100, 100));
+          或
+          this.node.width = 100; 
+          this.node.height = 100;
+          以上两种方式等价。
+        更改节点锚点位置
+          this.node.anchorX = 1; 
+          this.node.anchorY = 0;
+          或
+          this.node.setAnchorPoint(1, 0);
+          注意以上这些修改变换的方法会影响到节点上挂载的渲染组件,
+          比如 Sprite 图片的尺寸、旋转等等。
+        颜色和不透明度
+          在使用 Sprite, Label 这些基本的渲染组件时,要
+          注意修改颜色和不透明度的操作只能在节点的实例上进行,
+          因为这些渲染组件本身并没有设置颜色和不透明度的接口。
+          
+          假如我们有一个 Sprite 的实例为 mySprite,如果需要设置它的颜色：
+          mySprite.node.color = cc.Color.RED;
+          设置不透明度：
+          mySprite.node.opacity = 128;
+      cc.Component 所有组件的基类
+        任何组件都包括如下的常见接口「假设我们在该组件的脚本中,以 this 指代本组件」
+        this.node    该组件所属的节点实例
+        this.enabled 是否每帧执行该组件的 update 方法,同时也用来控制渲染组件是否显示
+        update(dt)   作为组件的成员方法,在组件的 enabled 属性为 true 时,其中的代码会每帧执行
+        onLoad()     组件所在节点进行初始化时（创建之后通过设置父节点添加到节点树）执行
+        start()      会在该组件第一次update前执行,通常用于需要在onLoad初始化完毕后执行的逻辑。
+        更多组件成员方法请继续参考 生命周期回调 文档。          
+      生命周期回调
+        Cocos Creator 为组件脚本提供了生命周期的回调函数。
+        只要指定回调函数,Creator 就会在特定的时期自动执行相关 脚本,不需要手动调用。
+        onLoad 回调会在这个组件所在的场景被载入 的时候触发,
+          组件脚本的初始化阶段,我们提供了 onLoad 回调函数。
+          在 onLoad 阶段,保证了你可以获取到场景中的其他节点,以及节点关联的资源数据。
+          通常 我们会在 onLoad 阶段去做一些初始化相关的操作。
+          例如：
+          cc.Class({
+            extends: cc.Component,
+            properties: {
+              bulletSprite: cc.SpriteFrame,
+              gun: cc.Node,
+            },
+            onLoad: function () {
+              this._bulletRect = this.bulletSprite.getRect();
+              this.gun = cc.find('hand/weapon', this.node);
+            },
+          });
+        start 回调函数会在组件第一次激活前
+          也就是第一次执行 update 之前触发。
+          start 通常用于 初始化一些中间状态的数据,
+          这些数据可能在 update 时会发生改变,并且被频繁的 enable 和 disable。
+          cc.Class({
+            extends: cc.Component,
+            
+            start: function () {
+              this._timer = 0.0;
+            },
+            
+            update: function (dt) {
+              this._timer += dt;
+              if ( this._timer >= 10.0 ) {
+                console.log('I am done!');
+                this.enabled = false;
+              }
+            },
+          });
+        update  游戏开发的一个关键点是在每一帧渲染前更新物体的行为,状态和方位。
+          这些更新操作通常都放在 update 回调中。
+          cc.Class({
+            extends: cc.Component,
+            
+            update: function (dt) {
+              this.node.setPosition( 0.0, 40.0 * dt );
+            }
+          });
+        lateUpdate  在所有组件的 update 都执行完之后才进行操作
+          update 会在所有动画更新前执行,但如果我们要在动画更新之后才进行一些额外操作,
+          那就需要用到 lateUpdate 回调。
+          cc.Class({
+            extends: cc.Component,
+            
+            lateUpdate: function (dt) {
+              this.node.rotation = 20;
+            }
+          });
+        onEnable   当组件的 enabled 属性从 false 变为 true 时,会激活 onEnable 回调。
+          倘若节点第一次被 创建且 enabled 为 true,则会在 onLoad 之后,start 之前被调用。
+        onDisable 当组件的 enabled 属性从 true 变为 false 时,会激活 onDisable 回调。
+        onDestroy 当组件调用了 destroy(),会在该帧结束被统一回收,此时会调用 onDestroy 回调。
+      创建和销毁节点
+        创建新节点
+          除了通过场景编辑器创建节点外,我们也可以在脚本中动态创建节点。
+          通过 new cc.Node() 并将它加入 到场景中,可以实现整个创建过程。
+          以下是一个简单的例子:
+          cc.Class({
+            extends: cc.Component,
+            properties: {
+              sprite: {
+                default: null,
+                type: cc.SpriteFrame,
+              },
+            },
+            start: function () {
+              var node = new cc.Node('sprite ' + this.count);
+              var sp = node.addComponent(cc.Sprite);
+              
+              sp.spriteFrame = this.sprite;
+              node.parent = this.node;
+              node.setPosition(0,0);
+            },
+          });
+        克隆已有节点
+          有时我们希望动态的克隆场景中的已有节点,我们可以通过 cc.instantiate 方法完成。
+          cc.Class({
+            extends: cc.Component,
+            
+            properties: {
+              target: {
+                default: null,
+                type: cc.Node,
+              },
+            },
+            
+            start: function () {
+              var scene = cc.director.getScene();
+              var node = cc.instantiate(this.target);
+              
+              node.parent = scene;
+              node.setPosition(0,0);
+            },
+          });
+        创建预制节点
+          和克隆已有节点相似,你也设置你的预制（prefab）节点并通过 cc.instantiate 生成。
+          cc.Class({
+            extends: cc.Component,
+            
+            properties: {
+              target: {
+                default: null,
+                type: cc.Prefab,
+              },
+            },
+            
+            start: function () {
+              var scene = cc.director.getScene();
+              var node = cc.instantiate(this.target);
+              
+              node.parent = scene;
+              node.setPosition(0,0);
+            },
+          });
+        销毁节点
+          通过 node.destroy() 函数,可以销毁节点。
+          销毁节点并不会立刻发生,而是在当前 帧逻辑更新结束后,统一执行。
+          当一个节点销毁后,该节点就处于无效状态,
+          可以通过 cc.isValid 判断 当前节点是否已经被销毁。
+          cc.Class({
+            extends: cc.Component,
+            
+            properties: {
+              target: cc.Node,
+            },
+            
+            start: function () {
+              setTimeout(function () {
+                this.target.destroy();
+              }.bind(this), 5000);
+            },
+            
+            update: function (dt) {
+              if ( !cc.isValid(this.target) ) {
+                this.enabled = false;
+                return;
+              }
+              
+              this.target.rotation += dt * 10.0;
+            },
+          });
+      加载和切换场景
+          在 Cocos Creator 中,我们使用场景文件名「可不包含扩展名」来索引指代场景。
+          cc.director.loadScene('MyScene'); 通过常驻节点进行场景资源管理和参数传递
+          常驻节点
+            通常我们同时只会加载运行一个场景,当切换场景时,默认会将场景内所有节点和其他实例销毁。
+            如果我们需要用一个组件控制所有场景的加载,或在场景之间传递参数数据,
+            就需要将该组件所在节点标记为「常驻节点」,使它在场景切换时不被自动销毁,常驻内存。
+            cc.game.addPersistRootNode(myNode);
+          
+          上面的接口会将 myNode 变为常驻节点,这样挂在上面的组件都可以在场景之间持续作用,我们可以用这样的方法来储存玩家信息,或下一个场景初始化时需要的各种数据。
+          
+          如果要取消一个节点的常驻属性：
+          
+          cc.game.removePersistRootNode(myNode)
+          
+          使用全局变量
+          
+          除此之外,简单的数值类数据传递也可以使用全局变量的方式进行,详见通过全局变量跨组件访问值。
+          
+          场景加载回调
+          
+          加载场景时,可以附加一个参数用来指定场景加载后的回调函数：
+          
+          cc.director.loadScene('MyScene', onSceneLaunched);
+          
+          上一行里 onSceneLaunched 就是声明在本脚本中的一个回调函数,在场景加载后可以用来进一步的进行初始化或数据传递的操作。
+          
+          由于回调函数只能写在本脚本中,所以场景加载回调通常用来配合常驻节点,在常驻节点上挂载的脚本中使用。
+          
+          预加载场景
+          
+          cc.director.loadScene 会在加载场景之后自动切换运行新场景,有些时候我们需要在后台静默加载新场景,并在加载完成后手动进行切换。
+          
+          可以预先使用 preloadScene 接口对场景进行预加载:
+          
+          cc.director.preloadScene('table', function () {
+              cc.log('Next scene preloaded');
+          });
+          之后在合适的时间调用 loadScene, 就可以立即切换场景
+          
+          cc.director.loadScene('table');
+          实战例子可以参考 21点演示项目
+          
+          注意 使用预加载场景资源配合 runScene 的方式进行预加载场景的方法已被废除:
+          
+          // 请不要再使用下面的方法预加载场景!
+          cc.loader.loadRes('MyScene.fire', function(err, res) {
+              cc.director.runScene(res.scene); 
+          });        
+          
     把脚本组件添加到需要控制的节点上 
-      在 层级编辑器 中选中对应的节点,然后在 属性检查器 中点击 添加组件 按钮,
-      选择 添加用户脚本组件 对应的JS脚本,为节点添加 JS脚本组件。    
+      将脚本添加到场景节点中,实际上就是为这个节点添加一份组件;
+      在层级编辑器中选中节点,在属性检查器中添加 用户脚本组件 并引用对应的JS脚本;
+      也可以通过直接拖拽脚本资源到 属性检查器 的方式来添加脚本;
   LabelAtlas,艺术数字资源 
     一种用户自定义的资源,它可以用来配置艺术数字字体的属性。
     创建艺术数字资源
@@ -916,7 +1521,7 @@ Console,控制台
     在信息旁边会以黄色数字提示有多少条同类信息被合并了。    
 动画编辑器 
 --------------------------------------------------------------------------------
-UI 系统 
+UI系统 
   ◆渲染节点
   Sprite         精灵图,场景图像
   Sprite         单色
@@ -1070,17 +1675,387 @@ UI 系统
     注意前面步骤中添加 Layout 组件并不是必须的,Layout 能够帮助您自动排列列表中的节点元素,但您也可以用脚本程序来控制节点的排列。我们通常还会配合 ScrollView 滚动视图组件一起使用,以便在有限的空间内展示大量内容。可以配合自动布局和滚动视图一起学习。
     
     继续前往下一章 动画系统 说明文档。
-动画系统
+动画系统 
+  功能 
+    具有标准的位移、旋转、缩放动画和序列帧动画,
+    支持任意组件属性和用户自定义属性的驱动,
+    可任意编辑时间曲线和创新的移动轨迹编辑功能,
+    能不写一行代码就制作出复杂而细腻的各种动态效果。
+  动画根节点
+  Animation 组件
+    PS：也是节点上的一个组件
+    动画编辑器划分 
+      1、main 常用按钮区域
+        显示一些常用功能按钮,从左到右依次为：
+        开关录制状态、返回第一帧、上一帧、播放/暂停、下一帧、新建动画剪辑、插入动画事件
+      2、时间轴与事件 显示时间轴,添加的自定义事件也会在这里显示。
+      3、层级管理「节点树」  当前动画剪辑可以影响到的节点数据。
+      4、节点内动画帧的预览区域  是显示各个节点上的所有帧的预览时间轴。
+      5、属性列表 显示当前选中的节点在选中的动画剪辑中已经包含了的属性列表。
+      6、关键帧   每个属性相对应的帧都会显示在这里
+      7、动画剪辑的基本属性 选择动画剪辑后,基本数据都在这里显示以及更改。
+    Clip 动画剪辑
+      就是一份动画的声明数据,将其挂载到 Animation 组件上,将动画数据应用到节点上
+    节点数据的索引方式
+      数据中索引节点的方式是以挂载 Animation 组件的节点为根节点的相对路径。 
+      所以在同个父节点下的同名节点,只能够产生一份动画数据,并且只能应用到第一个同名节点上。
+    clip文件的参数
+      sample 定义当前动画数据每秒的帧率,默认为 60
+        这个参数会影响时间轴上每两个整数秒刻度之间的帧数量「也就是两秒之内有多少格」。
+      speed 当前动画的播放速度,默认为 1
+      duration 当动画播放速度为 1 的时候,动画的持续时间
+      real time 动画从开始播放到结束,真正持续的时间
+      wrap mode 循环模式
+    动画编辑模式 
+      动画在普通模式下是不允许编辑的,只有在动画编辑模式下,才能够编辑动画文件。
+      但是在编辑模式下,无法对节点进行 增加 / 删除 / 改名 操作。
+      打开编辑模式：
+      选中一个包含 Animation 组件,并且包含有一个以上 clip 文件的节点。
+      然后在动画编辑器左上角点击唯一的按钮。
+      退出编辑模式：
+      点击动画编辑器上点击左上角的编辑按钮,或者在场景编辑器左上角的关闭按钮
+    时间轴的刻度单位表示方式
+      时间轴上刻度的表示法是 1:05。该数值由两部分组成,冒号前面的是表示当前秒数,
+      冒号后面的表示在当前这一秒里的第几帧。
+      1:05 表示该刻度在时间轴上位于从动画开始经过了 1 秒又 5 帧 的时间。
+      因为动画帧率（sample）可以随时调整,因此同一个刻度表示的时间点也会随着帧率变化而有所不同。
+      当帧率为 30 时,1:05 表示动画开始后 1 + 5/30 = 1.1667 秒。
+      当帧率为 10 时,1:05 表示动画开始后 1 + 5/10 = 1.5 秒。
+      虽然当前刻度表示的时间点会随着帧率变化,但一旦在一个位置添加了关键帧,该关键帧所在的总帧数是不会改变的, 假如我们在帧率 30 时向 1:05 刻度上添加了关键帧,该关键帧位于动画开始后总第 35 帧。之后把帧率修改为 10,该关键帧仍然处在动画开始后第 35 帧,而此时关键帧所在位置的刻度读数为 3:05。换算成时间以后正好是之前的 3 倍。
+    相关操作
+      移动显示区域  空格 + 左键 左右拖动「适用于 2、4、6 区域」
+    快捷键
+      left：向前移动一帧,如果已经在第 0 帧,则忽略当前操作
+      right：向后移动一帧
+      up：跳转到上一个关键帧
+      down：跳转到下一个关键帧
+      delete：删除当前所选中的关键帧
+      k：正向的播放动画,抬起后停止
+      j：反向播放动画,抬起后停止
+      ctrl + left：跳转到第 0 帧
+      ctrl + right：跳转到有效的最后一帧
+  创建Animation组件和动画剪辑 
+    创建 Animation 组件 
+      若想在一节点上创建动画,必须为它新建一个 Animation 组件
+    创建与挂载动画剪辑
+      资源管理器中创建 Animation Clip,默认名为 'New AnimationClip' 的剪辑文件。 
+      选中节点,在属性检查器将 Animation 组件的 Clips 改成 1;
+      将创建的节点拖入 clip 选择框 内。
+    编辑动画曲线 
+      动画属性包括了节点自有的position,rotation等属性,
+      也包含了组件Component中自定义的属性。 
+      组件包含的属性前会加上组件的名字,比如cc.Sprite.spriteFrame。
+    添加一个新的属性轨道
+      选中节点,然后在属性区域点击 add property,选择想要添加的属性
+      也可以在编辑模式下直接更改节点的对应轨道的属性
+        如直接在场景编辑器中拖动当前选中的节点,
+        position 轨道上就会在当前的时间上增加一个关键帧。
+    添加动画帧
+      刚刚我们说到在录制状态下直接更改对应属性可以自动添加对应的属性和帧。 也可以直接在属性列表中点击对应属性右侧的+号,这样会在当前选中的时间点上增加一帧。
+    选择动画帧
+      点击我们创建的序列帧后序列帧会显示成选中状态,此时序列帧由蓝变白,如果需要多选,可以按住ctrl再次选择其他序列帧。或者直接在属性区域拖拽框选。
+    移动动画帧
+      此时我们将鼠标移动到任意一个选中的节点上,鼠标会显示出左右箭头,这时候按下鼠标左键就可以拖拽所有被选中的节点了。
+    更改动画帧
+      点击需要修改的动画帧,此时时间轴上选中的帧也会跳到这一帧,然后确保打开了录制状态,直接在属性检查器内修改对应的属性即可。
+    删除动画帧
+      
+      选中序列帧后,点击属性区域的-,此时当前属性被选中的序列帧会被删除。或者直接按下键盘上的 delete 按键,则所有被选中的节点都会被删除。
+      
+      继续前往 编辑序列帧动画。      
+  编辑序列帧动画
+    我们刚刚了解了属性帧的操作,现在来看看具体怎么创建一个帧动画。
+
+    为节点新增Sprite组件
+
+    首先我们需要让节点正常显示纹理,所以需要为节点增加Sprite组件。 选中节点后在属性检查器中通过 添加组件 按钮,选择 添加渲染组件->Sprite。
+
+    在属性列表中添加 cc.Sprite.spriteFrame
+
+    节点可以正常显示纹理后,还需要为纹理创建一个动画轨道。 在动画编辑器中点击add property,然后选择cc.Sprite.spriteFrame
+
+    添加帧
+
+    从资源管理器中,将纹理拖拽到属性帧区域,放在 cc.Sprite.spriteFrame 轨道上。 再将下一帧需要显示的纹理拖到指定位置,然后点击播放就可以预览刚刚创建的动画了。
+  编辑时间曲线 
+    我们已经创建了基本的动画了。 但有时候我们会需要在两帧之间实现EaseInOut等缓动效果,那么在动画编辑器中怎么实现呢？
+    
+    我们首先需要在一条轨道上创建两个不相等的帧,比如在position上创建两帧,从 0,0 到 100,100,这时候两帧之间会出现一根连接线,双击连接线,则可以打开时间曲线编辑器。
+    
+    main
+    
+    使用预设曲线
+    
+    我们在曲线编辑器左侧可以选择预设的各种效果。比如说 Ease In 等。 选中后右侧上方还会出现一些预设的参数,可以根据需求选择。
+    
+    自定义曲线
+    
+    有时候预设的不能够满足动画需求,我们也可以自己修改曲线。 右侧下方预览图内,有两个灰色的控制点,拖拽控制点可以更改曲线的轨迹。 如果控制点需要拖出视野外,则可以使用鼠标滚轮或者右上角的小比例尺缩放预览图,支持的比例从 0.1 到 1。
+  添加动画事件
+    在游戏中,经常需要在动画结束或者某一帧的特定时刻,执行一些函数方法。那么在动画编辑器中怎么实现呢？
+    
+    添加事件
+    
+    首先选中某个位置,然后点击按钮区域最左侧的按钮（add event）,这时候在时间轴上会出现一个白色的矩形,这就是我们添加的事件。
+    
+    button
+    
+    删除事件
+    
+    双击刚刚出现的白色矩形,打开事件编辑器后点击 function 后面的回收图标,会提示是否删除这个 event,点击确认则删除。
+    
+    delete
+    
+    也可以在动画编辑器中右键点击 event,选择delete。
+    
+    指定事件触发函数以及传入参数
+    
+    双击刚刚出现的白色矩形,可以打开事件编辑器,在编辑器内,我们可以手动输入需要出发的function名字,触发的时候会根据这个函数名,去各个组件内匹配相应的方法。
+    
+    如果需要添加传入的参数,则在 Params 旁点击 + 或者 - ,只支持Boolean,String,Number三种类型的参数。
+  使用脚本控制动画
+    Animation 组件
+    
+    Animation 组件提供了一些常用的动画控制函数,如果只是需要简单的控制动画,可以通过获取节点的 Animation 组件来做一些操作。
+    
+    播放
+    
+    var anim = this.getComponent(cc.Animation);
+    
+    // 如果没有指定播放哪个动画,并且有设置 defaultClip 的话,则会播放 defaultClip 动画
+    anim.play();
+    
+    // 指定播放 test 动画
+    anim.play('test');
+    
+    // 指定从 1s 开始播放 test 动画
+    anim.play('test', 1);
+    
+    // 使用 play 接口播放一个动画时,如果还有其他的动画正在播放,则会先停止其他动画
+    anim.play('test2');
+    Animation 对一个动画进行播放的时候会判断这个动画之前的播放状态来进行下一步操作。 如果动画处于：
+    
+    停止 状态,则 Animation 会直接重新播放这个动画
+    暂停 状态,则 Animation 会恢复动画的播放,并从当前时间继续播放下去
+    播放 状态,则 Animation 会先停止这个动画,再重新播放动画
+    var anim = this.getComponent(cc.Animation);
+    
+    // 播放第一个动画
+    anim.playAdditive('position-anim');
+    
+    // 播放第二个动画
+    // 使用 playAdditive 播放动画时,不会停止其他动画的播放。如果还有其他动画正在播放,则同时会有多个动画进行播放
+    anim.playAdditive('rotation-anim');
+    Animation 是支持同时播放多个动画的,播放不同的动画并不会影响其他的动画的播放状态,这对于做一些复合动画比较有帮助。
+    
+    暂停 恢复 停止
+    
+    var anim = this.getComponent(cc.Animation);
+    
+    anim.play('test');
+    
+    // 指定暂停 test 动画
+    anim.pause('test');
+    
+    // 暂停所有动画
+    // anim.pause();
+    
+    // 指定恢复 test 动画
+    anim.resume('test');
+    
+    // 恢复所有动画
+    // anim.resume();
+    
+    // 指定停止 test 动画
+    anim.stop('test');
+    
+    // 停止所有动画
+    // anim.stop();
+    暂停,恢复, 停止 几个函数的调用比较接近。
+    
+    暂停 会暂时停止动画的播放,当 恢复 动画的时候,动画会继续从当前时间往下播放。 而 停止 则会终止动画的播放,再对这个动画进行播放的时候会重新从开始播放动画。
+    
+    设置动画的当前时间
+    
+    var anim = this.getComponent(cc.Animation);
+    
+    anim.play('test');
+    
+    // 设置 test 动画的当前播放时间为 1s
+    anim.setCurrentTime(1, 'test');
+    
+    // 设置所有动画的当前播放时间为 1s
+    // anim.setCurrentTime(1);
+    你可以在任何时候对动画设置当前时间,但是动画不会立刻根据设置的时间进行状态的更改,需要在下一个动画的 update 中才会根据这个时间重新计算播放状态。
+    
+    AnimationState
+    
+    Animation 只提供了一些简单的控制函数,希望得到更多的动画信息和控制的话,需要使用到 AnimationState。
+    
+    AnimationState 是什么？
+    
+    如果说 AnimationClip 作为动画数据的承载,那么 AnimationState 则是 AnimationClip 在运行时的实例,它将动画数据解析为方便程序中做计算的数值。 Animation 在播放一个 AnimationClip 的时候,会将 AnimationClip 解析成 AnimationState。 Animation 的播放状态实际都是由 AnimationState 来计算的,包括动画是否循环,怎么循环,播放速度 等。
+    
+    获取 AnimationState
+    
+    var anim = this.getComponent(cc.Animation);
+    // play 会返回关联的 AnimationState
+    var animState = anim.play('test');
+    
+    // 或是直接获取
+    var animState = anim.getAnimationState('test');
+    获取动画信息
+    
+    var anim = this.getComponent(cc.Animation);
+    var animState = anim.play('test');
+    
+    // 获取动画关联的clip
+    var clip = animState.clip;
+    
+    // 获取动画的名字
+    var name = animState.name;
+    
+    // 获取动画的播放速度
+    var speed = animState.speed;
+    
+    // 获取动画的播放总时长
+    var duration = animState.duration;
+    
+    // 获取动画的播放时间
+    var time = animState.time;
+    
+    // 获取动画的重复次数
+    var repeatCount = animState.repeatCount;
+    
+    // 获取动画的循环模式
+    var wrapMode = animState.wrapMode
+    
+    // 获取动画是否正在播放
+    var playing = animState.isPlaying;
+    
+    // 获取动画是否已经暂停
+    var paused = animState.isPaused;
+    
+    // 获取动画的帧率
+    var frameRate = animState.frameRate;
+    从 AnimationState 中可以获取到所有动画的信息,你可以利用这些信息来判断需要做哪些事情。
+    
+    设置动画播放速度
+    
+    var anim = this.getComponent(cc.Animation);
+    var animState = anim.play('test');
+    
+    // 使动画播放速度加速
+    animState.speed = 2;
+    
+    // 使动画播放速度减速
+    animState.speed = 0.5;
+    speed 值越大速度越快,值越小则速度越慢
+    
+    设置动画 循环模式 与 循环次数
+    
+    var anim = this.getComponent(cc.Animation);
+    var animState = anim.play('test');
+    
+    // 设置循环模式为 Normal
+    animState.wrapMode = cc.WrapMode.Normal;
+    
+    // 设置循环模式为 Loop
+    animState.wrapMode = cc.WrapMode.Loop;
+    
+    // 设置动画循环次数为2次
+    animState.repeatCount = 2;
+    
+    // 设置动画循环次数为无限次
+    animState.repeatCount = Infinity;
+    AnimationState 允许动态设置循环模式,目前提供了多种循环模式,这些循环模式可以从 cc.WrapMode 中获取到。 如果动画的循环类型为 Loop 类型的话,需要与 repeatCount 配合使用才能达到效果。 默认在解析动画剪辑的时候,如果动画循环类型为：
+    
+    Loop 类型,repeatCount 将被设置为 Infinity, 即无限循环
+    Normal 类型,repeatCount 将被设置为 1
+    动画事件
+    
+    在动画编辑器里支持可视化编辑帧事件 (如何编辑请参考 这里 ),在脚本里书写动画事件的回调也非常简单。 动画事件的回调其实就是一个普通的函数,在动画编辑器里添加的帧事件会映射到动画根节点的组件上。
+    
+    实例：
+    
+    假设在动画的结尾添加了一个帧事件,如下图： animation event
+    
+    那么在脚本中可以这么写：
+    
+    cc.Class({
+        extends: cc.Component,
+    
+        onAnimCompleted: function (num, string) {
+            console.log('onAnimCompleted: param1[%s], param2[%s]', num, string);
+        }
+    });
+    将上面的组件加到动画的 根节点 上,当动画播放到结尾时,动画系统会自动调用脚本中的 onAnimCompleted 函数。 动画系统会搜索动画根节点中的所有组件,如果组件中有实现动画事件中指定的函数的话,就会对它进行调用,并传入事件中填的参数。
+    
+    注册动画回调
+    
+    除了动画编辑器中的帧事件提供了回调外,动画系统还提供了动态注册回调事件的方式。
+    目前支持的回调事件有：
+    
+    play : 开始播放时
+    stop : 停止播放时
+    pause : 暂停播放时
+    resume : 恢复播放时
+    lastframe : 假如动画循环次数大于 1,当动画播放到最后一帧时
+    finished : 动画播放完成时
+    当在 cc.Animation 注册了一个回调函数后,它会在播放一个动画时,对相应的 cc.AnimationState 注册这个回调,在 cc.AnimationState 停止播放时,对 cc.AnimationState 取消注册这个回调。
+    
+    cc.AnimationState 其实才是动画回调的发送方,如果希望对单个 cc.AnimationState 注册回调的话,那么可以获取到这个 cc.AnimationState 再单独对它进行注册。
+    
+    实例
+    
+    var animation = this.node.getComponent(cc.Animation);
+    
+    // 注册
+    animation.on('play',      this.onPlay,        this);
+    animation.on('stop',      this.onStop,        this);
+    animation.on('lastframe', this.onLastFrame,   this);
+    animation.on('finished',  this.onFinished,    this);
+    animation.on('pause',     this.onPause,       this);
+    animation.on('resume',    this.onResume,      this);
+    
+    // 取消注册
+    animation.off('play',      this.onPlay,        this);
+    animation.off('stop',      this.onStop,        this);
+    animation.off('lastframe', this.onLastFrame,   this);
+    animation.off('finished',  this.onFinished,    this);
+    animation.off('pause',     this.onPause,       this);
+    animation.off('resume',    this.onResume,      this);
+    
+    // 对单个 cc.AnimationState 注册回调
+    var anim1 = animation.getAnimationState('anim1');
+    anim1.on('lastframe',    this.onLastFrame,      this);
+    动态创建 Animation Clip
+    
+        var animation = this.node.getComponent(cc.Animation);
+        // frames 这是一个 SpriteFrame 的数组.
+        var clip = cc.AnimationClip.createWithSpriteFrames(frames, 17);
+        clip.name = "anim_run";
+        clip.wrapMode = cc.WrapMode.Loop;
+    
+        // 添加帧事件
+        clip.events.push({
+            frame: 1,               // 准确的时间,以秒为单位。这里表示将在动画播放到 1s 时触发事件
+            func: "frameEvent",     // 回调函数名称
+            params: [1, "hello"]    // 回调参数
+        });
+    
+        animation.addClip(clip);
+        animation.play('anim_run');    
+碰撞系统  
+  本章将介绍 Cocos Creator 的碰撞系统,目前 Cocos Creator 内置了一个简单易用的碰撞检测系统,支持 圆形,矩形 以及 多边形 相互间的碰撞检测。
+  下面会分成几个小节来介绍碰撞系统的细节内容。
+  
+  编辑碰撞组件
+  碰撞分组管理
+  碰撞系统脚本控制
 --------------------------------------------------------------------------------
 构建打包发布
 --------------------------------------------------------------------------------
-动画 
-  动画根节点
-序列帧动画
-曲线动画
-运行时自动播放动画
-
-
 
 
 

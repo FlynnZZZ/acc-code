@@ -1286,7 +1286,7 @@ Selector 选择器
           <div class="b">
             2222
           </div>
-          .a:hover+.b{ color: red; }
+          .a:hover~.b{ color: red; }
     :focus     元素获得焦点时
       主要是在文本框控件获得聚焦并进行文字输入使用
       e.g.  去除所有元素鼠标点击时出现的外边框

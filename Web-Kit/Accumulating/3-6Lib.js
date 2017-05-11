@@ -612,6 +612,8 @@ Event 事件
         如click事件则无 
           Jelem.click(foo1,foo2)
           始终不会执行foo1,代替的是执行foo2
+    Jelem.focus(foo)
+    Jelem.blur(foo)
     Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
   触发事件 
     Jelem.trigger("event",[param1,param2,...]); 

@@ -537,6 +537,50 @@ PC端
     var elem = document.querySelector(".wrap");
     linesEndOmit(elem,1);
   图片缩放、部分显示
+  京东商品预览效果
+    function imgHover(){
+      var ihWraper = $('.dTop2');
+      var mask = ihWraper.find('.dt2Mask');
+      var img = ihWraper.find('.dImgShow img');
+      var imgWrapW = ihWraper.find('.dImgShow').width();
+      var maskW = mask.width() , maskH = mask.height();
+      var wraperW = ihWraper.width();
+      var left = 0 , top = 0;
+      var length1 = wraperW - maskW;
+      var length2 = img.width() - imgWrapW;
+      var rate = length1/length2;
+      console.log(rate);
+      ihWraper.mouseover(function(ev){
+        var pLeft = ihWraper.offset().left , pTop = ihWraper.offset().top;
+        var e = window.event|| ev;
+        var oX = e.clientX , oY = e.clientY;
+        var oPX = e.pageX , oPY = e.pageY;
+        console.log(pLeft,pTop,oPX,oPY);
+        mask[0].style.left = oPX - pLeft - maskW/2 +"px";
+        mask[0].style.top =  oPY - pTop - maskH/2 +"px";
+        var oLeft = mask[0].offsetLeft , oTop = mask[0].offsetTop;
+        document.onmousemove=function(ev){
+          var e = window.event|| ev;
+          var cX = e.clientX , cY = e.clientY;
+          e.preventDefault();
+          left = oLeft + cX - oX ;
+          top = oTop + cY - oY;
+          if (left<0) { left = 0; }
+          if (left>200) {left = 200 }
+          if (top<0) { top = 0; }
+          if (top>200) { top = 200; }
+          mask[0].style.left = left +"px";
+          mask[0].style.top =  top +"px";
+          img[0].style.left = -left/rate +"px";
+          img[0].style.top =  -top/rate +"px";
+        }
+      })
+      ihWraper.mouseout(function(){
+        console.log(3);
+        document.onmousemove = null;
+      })
+    }
+    imgHover();
 --------------------------------------------------------------------------------
 移动端
 网络收集 

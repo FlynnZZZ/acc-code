@@ -293,7 +293,7 @@ toolbar,工具栏
             cc.log(this instanceof Sprite);    // true
           }
         });
-      实例方法
+      实例方法 
         var Sprite = cc.Class({
           // 声明一个名叫 "print" 的实例方法
           print: function () { }
@@ -421,7 +421,8 @@ toolbar,工具栏
           动态修改的好处是能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
           脚本还能够响应玩家输入,能够修改、创建和销毁节点或组件,实现各种各样的游戏逻辑。
           要实现这些效果,你需要先在脚本中获得你要修改的节点或组件。
-        获得组件所在的节点：在组件方法里访问 this.node 变量：1
+        this.node 获得组件所在的节点
+          在组件方法里访问  
           start: function () {
             var node = this.node;
             node.x = 100;
@@ -432,50 +433,48 @@ toolbar,工具栏
             var text = this.name + ' started';
             label.string = text;  // Change the text in Label Component
           }
-          也可为 getComponent 传入一个类名
-          var label = this.getComponent("cc.Label");
-          对用户定义的组件而言,类名就是脚本的文件名,并且区分大小写。
-          例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
-          var rotate = this.getComponent("SinRotate");
+          也可为 getComponent 传入一个类名「脚本文件名」
+            var label = this.getComponent("cc.Label");
+            对用户定义的组件而言,类名就是脚本文件名,并且区分大小写。
+            例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
+            var rotate = this.getComponent("SinRotate");
           在节点上也有一个 getComponent 方法,它们的作用是一样的：
-          start: function () {
-            var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
-            cc.log(bool);  // true
-          }
+            start: function () {
+              var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
+              cc.log(bool);  // true
+            }
           如果在节点上找不到指定的组件,getComponent 将返回 null,
-          如果你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
-          因此如果你不确定组件是否存在,请记得判断一下：
-          start: function () {
-            var label = this.getComponent(cc.Label);
-            if (label) {
-              label.string = "Hello";
+            如果你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
+            因此如果不确定组件是否存在,可判断一下：
+            start: function () {
+              var label = this.getComponent(cc.Label);
+              if (label) {
+                label.string = "Hello";
+              }
+              else {
+                cc.error("Something wrong?");
+              }
             }
-            else {
-              cc.error("Something wrong?");
-            }
-          }
-        获得其它节点及其组件
-          PS：仅仅能访问节点自己的组件通常是不够的,脚本通常还需要进行多个节点之间的交互。
+        获得其它节点及其组件  --todo
+          PS：脚本通常还需要进行多个节点之间的交互。
             例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
             Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
           利用属性检查器设置节点
             最直接的方式就是在 属性检查器 中设置你需要的对象。
-            以节点为例,这只需要在脚本中声明一个 type 为 cc.Node 的属性：
+            以节点为例,只需要在脚本中声明一个 type 为 cc.Node 的属性：
             // Cannon.js
             cc.Class({
               extends: cc.Component,
               properties: {
-                player: {  // 声明 player 属性
-                  default: null,
-                  type: cc.Node
+                player: {  // 声明一个 player 属性
+                  default: null, // 默认值为 null
+                  type: cc.Node  // 对象类型为 cc.Node
                 }
               }
             });
-            这段代码在 properties 里面声明了一个 player 属性,默认值为 null,
-            并且指定它的对象类型为 cc.Node。
-            这就相当于在其它语言里声明了 public cc.Node player = null;
-            接着就可以将层级管理器上的任意一个节点拖到这个 Player 控件;
-            这样一来它的 player 属性就会被设置成功,你可以直接在脚本里访问 player：
+            // 相当于在其它语言里声明了 public cc.Node player = null;
+            接着就可将层级管理器上的任意一个节点拖到该 Player 控件;
+            建立引用后,就可直接在脚本里访问 player 节点了.
             // Cannon.js
             var Player = require("Player");
             cc.Class({
@@ -493,8 +492,7 @@ toolbar,工具栏
               // ...
             });
           利用属性检查器设置组件
-            在上面的例子中,将属性的 type 声明为 Player 组件,
-            当你拖动节点 "Player Node" 到 属性检查器,
+            拖动节点 "Player Node" 到 属性检查器,
             player 属性就会被设置为这个节点里面的 Player 组件。
             这样就不需要再自己调用 getComponent 啦。
             // Cannon.js
@@ -828,55 +826,39 @@ toolbar,工具栏
             },
           });
       加载和切换场景
-          在 Cocos Creator 中,我们使用场景文件名「可不包含扩展名」来索引指代场景。
+          在 Cocos Creator 中,使用场景文件名「可不包含扩展名」来索引指代场景。
           cc.director.loadScene('MyScene'); 通过常驻节点进行场景资源管理和参数传递
-          常驻节点
-            通常我们同时只会加载运行一个场景,当切换场景时,默认会将场景内所有节点和其他实例销毁。
-            如果我们需要用一个组件控制所有场景的加载,或在场景之间传递参数数据,
+          cc.game.addPersistRootNode(myNode) 常驻节点
+            通常同时只会加载运行一个场景,当切换场景时,默认会将场景内所有节点和其他实例销毁。
+            如果需要用一个组件控制所有场景的加载,或在场景之间传递参数数据,
             就需要将该组件所在节点标记为「常驻节点」,使它在场景切换时不被自动销毁,常驻内存。
-            cc.game.addPersistRootNode(myNode);
-          
-          上面的接口会将 myNode 变为常驻节点,这样挂在上面的组件都可以在场景之间持续作用,我们可以用这样的方法来储存玩家信息,或下一个场景初始化时需要的各种数据。
-          
-          如果要取消一个节点的常驻属性：
-          
-          cc.game.removePersistRootNode(myNode)
-          
-          使用全局变量
-          
-          除此之外,简单的数值类数据传递也可以使用全局变量的方式进行,详见通过全局变量跨组件访问值。
-          
+            将 myNode 变为常驻节点,这样挂在上面的组件都可以在场景之间持续作用,
+            可以用这样的方法来储存玩家信息,或下一个场景初始化时需要的各种数据。
+          cc.game.removePersistRootNode(myNode) 取消一个节点的常驻属性
+          除此之外,简单的数值类数据传递也可以使用全局变量的方式进行,
+            详见通过全局变量跨组件访问值。
           场景加载回调
-          
-          加载场景时,可以附加一个参数用来指定场景加载后的回调函数：
-          
-          cc.director.loadScene('MyScene', onSceneLaunched);
-          
-          上一行里 onSceneLaunched 就是声明在本脚本中的一个回调函数,在场景加载后可以用来进一步的进行初始化或数据传递的操作。
-          
-          由于回调函数只能写在本脚本中,所以场景加载回调通常用来配合常驻节点,在常驻节点上挂载的脚本中使用。
-          
+            加载场景时,可以附加一个参数用来指定场景加载后的回调函数：
+            cc.director.loadScene('MyScene', cfoo);
+            cfoo 就是声明在本脚本中的一个回调函数,
+            在场景加载后可以用来进一步的进行初始化或数据传递的操作。
+            由于回调函数只能写在本脚本中,所以场景加载回调通常用来配合常驻节点,
+            在常驻节点上挂载的脚本中使用。
           预加载场景
+            有些时候我们需要在后台静默加载新场景,并在加载完成后手动进行切换。
+            cc.director.preloadScene 对场景进行预加载
+              cc.director.preloadScene('table', function () {
+                cc.log('Next scene preloaded');
+              });
+            之后在合适的时间调用 loadScene, 就可以立即切换场景
+            cc.director.loadScene  在加载场景之后自动切换运行新场景,
+            cc.director.loadScene('table');
           
-          cc.director.loadScene 会在加载场景之后自动切换运行新场景,有些时候我们需要在后台静默加载新场景,并在加载完成后手动进行切换。
-          
-          可以预先使用 preloadScene 接口对场景进行预加载:
-          
-          cc.director.preloadScene('table', function () {
-              cc.log('Next scene preloaded');
-          });
-          之后在合适的时间调用 loadScene, 就可以立即切换场景
-          
-          cc.director.loadScene('table');
-          实战例子可以参考 21点演示项目
-          
-          注意 使用预加载场景资源配合 runScene 的方式进行预加载场景的方法已被废除:
-          
-          // 请不要再使用下面的方法预加载场景!
-          cc.loader.loadRes('MyScene.fire', function(err, res) {
+            注意 使用预加载场景资源配合 runScene 的方式进行预加载场景的方法已被废除:
+            // 请不要再使用下面的方法预加载场景!
+            cc.loader.loadRes('MyScene.fire', function(err, res) {
               cc.director.runScene(res.scene); 
-          });        
-          
+            });        
     把脚本组件添加到需要控制的节点上 
       将脚本添加到场景节点中,实际上就是为这个节点添加一份组件;
       在层级编辑器中选中节点,在属性检查器中添加 用户脚本组件 并引用对应的JS脚本;
@@ -1441,20 +1423,33 @@ Properties,属性检查器：查看并编辑当前选中节点的组件属性的
     Auto Hide Time   自动隐藏时间,需配合设置Enable Auto Hide
   Mask 遮罩
   Button 按钮
-    由带有 Button 组件的父节点和一个带有 Label 组件的子节点组成。
-    Button 父节点提供交互功能和按钮背景图显示,
-    Label 子节点提供按钮上标签文字的渲染。
-    Button 的 Transition 属性用于设置当按钮所处的状态,
-    如普通（Normal）、按下（Pressed）、悬停（Hover）、禁用（Disabled）四种状态
-    Target 属性引用的背景图节点的表现。
-    可以从以下三种模式中选择：
-    NONE（无 Transtion）,这个模式下按钮不会自动响应交互事件来改变自身外观,但您可以在按钮上加入自定义的脚本来精确控制交互的表现行为。
-    COLOR（颜色变化）,选择这个模式后,能看到四种状态属性并可以为每一种状态设置一个颜色叠加,在按钮转换到对应状态时,设置的状态颜色会和按钮背景图的颜色进行相乘作为展示的颜色。这个模式还允许通过 Duration 属性设置颜色变化过程的时间长度,实现颜色渐变的效果。
-    SPRITE（图片切换）,选择这个模式后,可以为四种状态分别指定一个 SpriteFrame 图片资源,当对应的状态被激活后,按钮背景图就会被替换为对应的图片资源。要注意如果设置了 Normal 状态的图片资源,按钮背景的 Sprite 属性中的 SpriteFrame 会被覆盖。
-    Click Events 点击事件
-      Click Events 属性是一个数组类型,将它的容量改为 1 或更多就可以为按钮按下（鼠标或触摸）事件添加一个或多个响应回调方法。新建 Click Events 后,就可以拖拽响应回调方法所在组件的节点到 Click Event 的 Target 属性上,然后选择节点上的一个组件,并从列表中选择组件里的某个方法作为回调方法。
-
-      Button 上的点击事件是为了方便设计师在制作 UI 界面时可以自行指定按钮功能而设置的,要让按钮按照自定义的方式响应更多样化的事件,可以参考 系统内置事件文档,手动在按钮节点上监听这些交互事件并做出处理。
+    PS：由带有 Button 组件的父节点和一个带有 Label 组件的子节点组成;
+      Button 父节点提供交互功能和按钮背景图显示,Label 子节点提供按钮上文字渲染;
+    Target      按钮「用来显示背景」
+    Transition  用于设置当按钮按下时的状态变化
+      None   无,按钮不会响应交互事件来改变自身外观
+        但可以在按钮上加入自定义的脚本来精确控制交互的表现行为
+      Color  颜色变化,为四种状态分别设置颜色叠加
+        在按钮转换到对应状态时,设置的状态颜色会和按钮背景图的颜色进行相乘作为展示的颜色;
+        通过 Duration 属性设置颜色变化过程的时间长度,实现颜色渐变的效果;
+      Sprite 图片变化,为四种状态分别指定一个 SpriteFrame 图片资源
+        当对应的状态被激活后,按钮背景图就会被替换为对应的图片资源;
+        设置 Normal 状态的图片会覆盖按钮背景的 Sprite 属性中的 SpriteFrame;
+      scale  尺寸变化,点击是尺寸缩放到一个比例后再恢复
+      ◆子选项
+      Normal,普通状态
+      Pressed,按下时
+      Hover,悬停状态
+      Disabled,禁用状态
+      Duration,过渡时间
+      Zoom_Scale,缩放比例「可为负」
+    Click_Events 点击事件 
+      PS：Button 上的点击事件是为了方便设计师在制作UI界面时可以自行指定按钮功能而设置的,
+        要让按钮按照自定义的方式响应更多样化的事件,可以参考 系统内置事件文档,
+        手动在按钮节点上监听这些交互事件并做出处理。
+        一个数组类型,将它的容量改成多个就可为点击事件添加对应多个响应回调方法;
+      依次指定响应回调方法所在组件的节点->节点上的脚本组件->脚本中的方法到数组元素上,
+      则该方法即为响应的回调方法;
   ProgressBar 进度条
     进度条是由 ProgressBar 组件驱动一个 Sprite 节点的属性来实现根据设置的数值显示不同长度或角度的进度。ProgressBar 有三种基本工作模式（由 Mode 属性设置）：
     
@@ -1506,7 +1501,7 @@ Properties,属性检查器：查看并编辑当前选中节点的组件属性的
     标签上显示的是资源的类型,如sprite-frame,prefab,font等。
     只要从资源管理器中拖拽相应类型的资源过来就可以完成赋值。
     脚本文件也是一种资源,组件使用的脚本资源引用属性也是用黄色标签表示的。
-Console,控制台
+Console,控制台 
   PS：控制台会显示报错、警告或其他编辑器和引擎生成的日志信息。
     不同重要级别的信息会以不同颜色显示：
     Log,日志： 灰色文字,通常用来显示正在进行的操作。
@@ -2046,7 +2041,7 @@ UI系统
     
         animation.addClip(clip);
         animation.play('anim_run');    
-碰撞系统  
+碰撞系统 
   本章将介绍 Cocos Creator 的碰撞系统,目前 Cocos Creator 内置了一个简单易用的碰撞检测系统,支持 圆形,矩形 以及 多边形 相互间的碰撞检测。
   下面会分成几个小节来介绍碰撞系统的细节内容。
   
@@ -2056,6 +2051,12 @@ UI系统
 --------------------------------------------------------------------------------
 构建打包发布
 --------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 

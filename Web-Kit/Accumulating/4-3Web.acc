@@ -1158,23 +1158,44 @@ GitHub
   「一般其中的内容为补充说明,注释,解释,注意项等」   
   ◆、★、■    标题和内容处于同一层级状态时,给标题添加起到醒目的作用
 自定义规范 
-  文件夹及文件名: 可包含小写英文字母、数字和下划线
+  PS：zzz 作为自己的标识,使用前缀z ,如 zAoo
+  文件夹及文件名: 包含 小写字母 、数字 和 下划线_
     Windows, OSX下文件名不区分大小写,linux区分大小写,
     linux系统文件推荐的文件命名一般是下划线
-  命名方法 
-    zzz 作为自己的标识
-    使用前缀z ,如 zAoo
-      zaBoo
-        zabCoo
-          ZcDoo  zabcDoo 改为
-            ZcdEoo
-              ZEFoo  ZcdeFoo 改为
-                ZEFGoo
-                  Z1gHoo  ZEFgHoo 改为
-                    Z2hIoo  Z1ghIoo 改为
-                      Z3IJoo  Z2hiJoo 改为
-                        ...
-      若前缀产生重复:则使用增加数值方式以示区别,如 zc1 表示
+  html及CSS 中id和class命名规范
+    PS： 使用 大小写字母、数字 和 下划线_;驼峰法用于间隔;
+      以数字或_开头可能存在兼容性问题
+    层级间   字母+数字 区分「当数字取到两位时,如10,改用两位字母+数字」 
+      一般将id的第一个首字母后带数字用于表示到该id元素的层级
+      aoo 
+        aBoo aCoo aDoo ...
+          a1Aoo ...
+            ...
+            a9Xoo
+              ax1Aoo
+    同级间   单词+数字/字母 区分 
+      同分支同级 单词+_数字 
+      异分支同级 单词+_分支首字母
+      最后使用直接+数字的方法表示 同分支和异分支同时重名的情况
+      aoo
+      |-------aBoo
+      |-------aCoo 
+        |--a1Xoo  a1Foo  a1Foo_1「同分支同级重名」 a1Xoo_1 a1Xoo_2
+        |--a1Xoo_c「异分支同级重名」  a1Soo  a1Xoo_c_1 a1Xoo_c_2
+          |--a2Aoo a2Boo
+          |--a2A00_f a2Coo
+          |--a2Aoo_f1 a2Coo1
+          |--a2Aoo3 a2Coo2
+          |--a2Aoo4 a2Coo3
+          ----------------
+          |--a2AooX
+          |--
+          |--
+    下标从0零开始,且0默认省略
+    // todo 
+    top rit btm lft mid cnt up dwn 
+    ttl ctt bdy wrp item i s 
+    
 学习计划 
   设计模式 代码的组织
   前端学习总结

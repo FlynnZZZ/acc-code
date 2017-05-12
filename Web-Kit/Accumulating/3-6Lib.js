@@ -397,7 +397,8 @@ DOM 操作
         此处的Jelem为拥有滚动条的元素
       ◆其他信息
       Jelem.size();        元素个数
-      Jelem.index(Jelem);  获取元素在其父元素Jelem中的下标「从1开始」
+      Jelem.index([Jelem]);  获取元素在其父元素Jelem中的下标「从1开始」
+        jelem.index();   无参数,返回该元素在同级元素中的索引位置
         e.g.:
           点击获取当前为第几个li
           $("li").click(function(){ console.log( $(this).index()); });

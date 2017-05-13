@@ -125,7 +125,7 @@ window 对象
         否则打开新窗口并命名
       Arguments: 一般使用3个参数
         url:     可选,将要导航到的URL;
-          如果省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
+          若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
         窗口目标: 可选,被打开窗口的名称/位置
           _self   在当前窗口显示目标网页
           _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
@@ -367,10 +367,94 @@ window 对象
       全局变量与window属性的差异:
       全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
       访问未声明的变量会报错,而未声明window对象的属性则为undefined.
-window 的六大属性对象 
-  这6个对象本身也是window的属性
-  window.document  文档对象 [其余详见 DOM document对象]
-    document.cookie   现在多数网站使用Cookie来识别用户.
+window的属性对象 
+  对象本身也是window的属性
+  window.document  文档对象 「更多详见 DOM document对象」
+    document.cookie  读写当前网页的cookie
+      PS:网站为了标示用户身份而储存在Client Side「用户本地终端」上的数据,通常经过加密;
+        可访问的前提下,http请求中cookie始终会被携带,
+        即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
+        在子域名中设置的cookie会始终在该子域名的http请求中携带;
+        客户端的磁盘上,每个域名大小在4kb以内;
+        每个特定的域名下最多生成 20 个cookie「DiBs」;
+        重要数据不建议保存在cookie中,
+        cookie同源政策不要求传输协议,即http和https之间读写无限制
+      cookie之间使用分号分割,需手动取出每一个cookie 
+        var cookie = document.cookie.split(';');
+        for (var i = 0; i < cookie.length; i++) {
+          console.log(cookie[i]);
+        }
+      document.cookie = str; 写入cookie 
+        PS：不会对原有的cookie进行覆盖,只会进行增加
+          分号、逗号、空格不可作为cookie的值,可使用encodeURIComponent方法进行转义;
+        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'
+        key=val  必须,cookie的内容
+        expires  可选,过期时间,即过了该时间,cookie被清理
+          PS:使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,
+            若未设置或设置为null,当窗口关闭时Cookie被清理;
+          e.g. 设置7天后cookie过期
+            var date =new Date();
+            date.setDate((date,getDate()-1));
+            document.cookie ='user='+encodeURIComponent('张三')+';expires='+date;
+            decodeURICompinent(document.cookie);
+        domain   可选,限制域名访问,必须为当前发送Cookie域名的一部分
+          PS:只有访问的域名匹配domain属性,Cookie才会发送到服务器
+          e.g.:
+            example.com
+            .example.com    // 对所有子域名生效
+            subdomain.example.com
+        path     可选,限制路径访问,只有在该路径及其下才可访问该cookie
+        secure   可选,指定是否使用https协议
+          该属性为一个开关,不需指定值,若通信为https协议,则其自动打开
+        max-age  指定Cookie有效期,如 60*60*24*365 「一年31536000秒」
+        HttpOnly 设置Cookie是否被JS读取,主要为了防止XSS攻击盗取Cookie
+          Set-Cookie: key = value;HttpOnly
+          该Cookie JS无法获取;AJAX操作也无法获取
+      document.cookie 一次只能写入一个cookie;向浏览器发送时,将全部发送
+        服务器在浏览器储存cookie时分行指定
+        HTTP/1.0 200 OK
+        Content-type: text/html
+        Set-Cookie  : key1 = value1 
+        Set-Cookie  : key2 = value2
+        Set-Cookie字段用于服务器向浏览器写入Cookie,一行一个
+      browser对Cookie的限制 
+        Firefox中每个域名限制Cookie数量为50,Safari和Chrome无数量限制;
+        Cookie累加长度限制为4kb,超过部分被忽略;
+          通过使用其他符号分割,避免Cookie的数量限制,读取时再自行解析
+          e.g.: name=a&b=c&d=e&f=g
+      修改cookie
+        若服务器想改变一个已存在的cookie,则修改时key、domain、path、secure需都匹配,
+        否则,则是新建一cookie;
+      设置Cookie的expires为0或者过期时间 删除cookie
+    document.hidden  网页可见性API 「HTML5」 
+      页面不可见时播放中的视频暂停，可见时视频继续播放
+        <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
+        var video = document.getElementById('video') ;
+        var Prefix = null;
+        getHidden();
+        //获取当前浏览器的hidden属性
+        function getHidden(){
+          ['webkit','ms','moz','o'].forEach(function(prefix){
+            if((prefix+'Hidden') in document){
+              Prefix = prefix;
+            }
+          });
+          if(Prefix == null){
+            alert('你的浏览器不支持Page Visibility API');
+          }
+        }
+        //为visibilitychange事件绑定处理程序
+        document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
+        function handleVisibilityChange(){
+          switch (document.hidden){
+            case true: //返回hidden = true，页面不可见
+              video.pause();
+              break;
+            case false: //返回hidden = false，页面可见
+              video.play();
+              break;
+          }
+        }
   window.history   保存着用户上网的记录,从窗口被打开的那一刻算起
     PS:每个浏览器窗口、标签页及每个框架,都有自己的history对象与特定的window对象关联
       处于安全考虑,开发人员不再到用户浏览过的URL,
@@ -389,6 +473,192 @@ window 的六大属性对象
       为字符串时,跳转到历史记录中包含该字符串的第一个位置
         可能前进也可能后退,决定于那个位置最近
         若历史记录中不包含该字符串则什么也不做
+    history.pushState  「HTML5」 
+      检查当前浏览器是否支持
+        if (!!(window.history && history.pushState)){
+          // 支持History API
+          console.log('支持');
+        } 
+        else {
+          // 不支持
+          console.log('不支持');
+        }
+      history.pushState(对象,'title',path); 增加历史记录 
+        PS:只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
+          前进或后退 网页不跳转,url有变化;
+          如可把当前地址发送个其他人而访问该页面的当前状态,
+          只能改路径而不能改域名
+          只能增加当前域名下的url
+        三个参数:
+          自定义对象
+          新页面的标题(现在还没有浏览器实现该功能,有没有都一样)
+          新页面的地址
+            即在当前网址后添加的值
+            可以是路径,如:/box
+            也可以是字符串,如:?c=1&b=2
+        e.g.
+          history.pushState(null,'a','/abcd')
+      history.replaceState 替换当前状态 
+        和 pushState类似,但不是增加而是替换
+      Todo: 
+        history.pushState方法接受三个参数,依次为：
+        
+        state：一个与指定网址相关的状态对象,popstate事件触发时,该对象会传入回调函数。若不需要这个对象,此处可以填null。
+        title：新页面的标题,但是所有浏览器目前都忽略这个值,因此这里可以填null。
+        url：新的网址,必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址。
+        假定当前网址是example.com/1.html,我们使用pushState方法在浏览记录(history对象)中添加一个新记录。
+        
+        var stateObj = { foo: 'bar' };
+        history.pushState(stateObj, 'page 2', '2.html');
+        添加上面这个新记录后,浏览器地址栏立刻显示example.com/2.html,但并不会跳转到2.html,甚至也不会检查2.html是否存在,它只是成为浏览历史中的最新记录。假定这时你访问了google.com,然后点击了倒退按钮,页面的url将显示2.html,但是内容还是原来的1.html。你再点击一次倒退按钮,url将显示1.html,内容不变。
+        
+        总之,pushState方法不会触发页面刷新,只是导致history对象发生变化,地址栏会有反应。
+        
+        若pushState的url参数,设置了一个新的锚点值(即hash),并不会触发hashchange事件。若设置了一个跨域网址,则会报错。
+        
+        // 报错
+        history.pushState(null, null, 'https://twitter.com/hello');
+        上面代码中,pushState想要插入一个跨域的网址,导致报错。这样设计的目的是,防止恶意代码让用户以为他们是在另一个网站上。
+        
+        history.replaceState()
+        history.replaceState方法的参数与pushState方法一模一样,区别是它修改浏览历史中当前纪录。
+        
+        假定当前网页是example.com/example.html。
+        
+        history.pushState({page: 1}, 'title 1', '?page=1');
+        history.pushState({page: 2}, 'title 2', '?page=2');
+        history.replaceState({page: 3}, 'title 3', '?page=3');
+        
+        history.back()
+        // url显示为http://example.com/example.html?page=1
+        
+        history.back()
+        // url显示为http://example.com/example.html
+        
+        history.go(2)
+        // url显示为http://example.com/example.html?page=3
+        history.state属性
+        history.state属性返回当前页面的state对象。
+        
+        history.pushState({page: 1}, 'title 1', '?page=1');
+        
+        history.state
+        // { page: 1 }
+        popstate事件
+        每当同一个文档的浏览历史(即history对象)出现变化时,就会触发popstate事件。
+        
+        需要注意的是,仅仅调用pushState方法或replaceState方法 ,并不会触发该事件,只有用户点击浏览器倒退按钮和前进按钮,或者使用JavaScript调用back、forward、go方法时才会触发。另外,该事件只针对同一个文档,若浏览历史的切换,导致加载不同的文档,该事件也不会触发。
+        
+        使用的时候,可以为popstate事件指定回调函数。这个回调函数的参数是一个event事件对象,它的state属性指向pushState和replaceState方法为当前URL所提供的状态对象(即这两个方法的第一个参数)。
+        
+        window.onpopstate = function (event) {
+          console.log('location: ' + document.location);
+          console.log('state: ' + JSON.stringify(event.state));
+        };
+        
+        // 或者
+        
+        window.addEventListener('popstate', function(event) {
+          console.log('location: ' + document.location);
+          console.log('state: ' + JSON.stringify(event.state));
+        });
+        上面代码中的event.state,就是通过pushState和replaceState方法,为当前URL绑定的state对象。
+        
+        这个state对象也可以直接通过history对象读取。
+        
+        var currentState = history.state;
+        注意,页面第一次加载的时候,在load事件发生后,Chrome和Safari浏览器(Webkit核心)会触发popstate事件,而Firefox和IE浏览器不会。
+        
+        URLSearchParams API
+        URLSearchParams API用于处理URL之中的查询字符串,即问号之后的部分。没有部署这个API的浏览器,可以用url-search-params这个垫片库。
+        
+        var paramsString = 'q=URLUtils.searchParams&topic=api';
+        var searchParams = new URLSearchParams(paramsString);
+        URLSearchParams有以下方法,用来操作某个参数。
+        
+        has()：返回一个布尔值,表示是否具有某个参数
+        get()：返回指定参数的第一个值
+        getAll()：返回一个数组,成员是指定参数的所有值
+        set()：设置指定参数
+        delete()：删除指定参数
+        append()：在查询字符串之中,追加一个键值对
+        toString()：返回整个查询字符串
+        var paramsString = 'q=URLUtils.searchParams&topic=api';
+        var searchParams = new URLSearchParams(paramsString);
+        
+        searchParams.has('topic') // true
+        searchParams.get('topic') // "api"
+        searchParams.getAll('topic') // ["api"]
+        
+        searchParams.get('foo') // null,注意Firefox返回空字符串
+        searchParams.set('foo', 2);
+        searchParams.get('foo') // 2
+        
+        searchParams.append('topic', 'webdev');
+        searchParams.toString() // "q=URLUtils.searchParams&topic=api&foo=2&topic=webdev"
+        
+        searchParams.append('foo', 3);
+        searchParams.getAll('foo') // [2, 3]
+        
+        searchParams.delete('topic');
+        searchParams.toString() // "q=URLUtils.searchParams&foo=2&foo=3"
+        URLSearchParams还有三个方法,用来遍历所有参数。
+        
+        keys()：遍历所有参数名
+        values()：遍历所有参数值
+        entries()：遍历所有参数的键值对
+        上面三个方法返回的都是Iterator对象。
+        
+        var searchParams = new URLSearchParams('key1=value1&key2=value2');
+        
+        for (var key of searchParams.keys()) {
+          console.log(key);
+        }
+        // key1
+        // key2
+        
+        for (var value of searchParams.values()) {
+          console.log(value);
+        }
+        // value1
+        // value2
+        
+        for (var pair of searchParams.entries()) {
+          console.log(pair[0]+ ', '+ pair[1]);
+        }
+        // key1, value1
+        // key2, value2
+        在Chrome浏览器之中,URLSearchParams实例本身就是Iterator对象,与entries方法返回值相同。所以,可以写成下面的样子。
+        
+        for (var p of searchParams) {
+          console.log(p);
+        }
+        下面是一个替换当前URL的例子。
+        
+        // URL: https://example.com?version=1.0
+        var params = new URLSearchParams(location.search.slice(1));
+        params.set('version', 2.0);
+        
+        window.history.replaceState({}, '', `${location.pathname}?${params}`);
+        // URL: https://example.com?version=2.0
+        URLSearchParams实例可以当作POST数据发送,所有数据都会URL编码。
+        
+        let params = new URLSearchParams();
+        params.append('api_key', '1234567890');
+        
+        fetch('https://example.com/api', {
+          method: 'POST',
+          body: params
+        }).then(...)
+        DOM的a元素节点的searchParams属性,就是一个URLSearchParams实例。
+        
+        var a = document.createElement('a');
+        a.href = 'https://example.com?filter=api';
+        a.searchParams.get('filter') // "api"
+        URLSearchParams还可以与URL接口结合使用。
+        
+        var url = new URL(location);
+        var foo = url.searchParams.get('foo') || 'somedefault';      
     popstate 事件 改变url时在window上触发
       event.state 为pushState的第一个参数
   window.location  管理URL
@@ -400,7 +670,7 @@ window 的六大属性对象
       返回值为当前的位置
       e.g. :
       location.href = 'https://www.baidu.com'; //当前网页跳转到百度
-    location.hash      取/设URL锚点部分(如果该部分存在,否则返回空字符串)(#后面的部分)
+    location.hash      取/设URL锚点部分(若该部分存在,否则返回空字符串)(#后面的部分)
     location.host      主机名:端口名(域名+端口(默认端口就不写出))
     location.hostname  取/设 主机名/服务器名
     location.pathname  取/设 路径名(URL中的目录和文件名)
@@ -423,8 +693,7 @@ window 的六大属性对象
       Remarks:
         位于reload调用之后的代码可能会也可能不执行,取决于网络延迟或系统资源等因素
   window.navigator 浏览器检测
-    PS:
-      最早由Netscape 引入的navigator对象,现在已成为识别客户端浏览器的事实标准
+    PS: 最早由Netscape引入,现在已成为识别客户端浏览器的事实标准 
       与其他BOM对象一样,每个浏览器所包含的内容并不完全相同
     // 浏览器
     navigator.appCodeName;  浏览器名称,通常为Mozilla(即使非Mozilla浏览器也如此)
@@ -467,8 +736,8 @@ window 的六大属性对象
     navigator.preference(); 设置用户的首选项
     navigator.userProfile; 借以访问用户个人信息的对象
     navigator.mimeTypes; 在浏览器中注册的MIME类型数组
-    navigator.onLine;   表示浏览器是否链接到了因特网的布尔值(HTML5新增)
-    navigator.cookieEnabled;  返回浏览器是否支持(启用)cookie的布尔值
+    navigator.onLine;   返回浏览器是否链接到了因特网的布尔值 「HTML5」
+    navigator.cookieEnabled;  返回浏览器是否支持「启用」cookie的布尔值
       启用cookie返回true,否则返回false
       cookieEnabled属性说明
         通常可以在浏览器的临时文件夹中保存一个文件,
@@ -484,7 +753,122 @@ window 的六大属性对象
     navigator.registerContentHandler()
     navigator.registerProtocolHandler()
 
-    navigator.geolocation; 地理定位 对象
+    navigator.geolocation 地理定位 「HTML5」
+      PS:在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
+      浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
+      单位转换
+        可使用一下函数将使用度、分、秒表示的经纬度转换为小数
+          function degreesToDecimal(degrees,minutes,seconds){
+            return degrees +(minutes / 60 ) +(seconds / 3600);
+          }
+      检查是否支持该接口
+        if (navigator.geolocation) {
+          // 支持
+        }
+        else {
+          // 不支持
+        }
+        该API兼容性较好,IE9及以前都支持
+      e.g.
+        navigator.geolocation.getCurrentPosition(function(position){
+        var latitude = position.coords.latitude;
+        // 维度值
+        var longitude = position.coords.longitude;
+        // 经度值
+      })
+      包含整个地理定位 API
+      navigator.geolocation.getCurrentPosition(suc,err,options)  是否同意授权后回调
+        var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
+          event.coords.latitude    纬度
+          event.coords.longitude   经度
+          event.coords.accuracy    精度
+          以下属性支持与否取决于设备,桌面浏览器一般没有
+          event.coords.altitude          海拔
+          event.coords.altitudeAccuracy  海拔精度「m」
+          event.coords.heading           以360度表示的方向
+          event.coords.speed             速度 「m/s」
+          event.timestamp 事件戳,表示获取位置时的时间
+        var err = function(event){ }  回调函数,无法确定位置「如用户拒绝授权时」,调用
+          event.code    错误码
+            0  Unknown error,相当于 event.UNKNOWN_ERROR
+            1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
+            2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
+            3  超时响应      ,相当于 event.TIMEOUT
+          event.message 错误信息
+        options                       可选,对象,设置定位的参数
+          var options = {
+              enableHighAccuracy:true, // 是否高精度,默认为false
+              timeout:5000,            // 超时时限,默认为Infinity,单位ms
+              maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
+            }
+      var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
+        PS:位置改变时重复调用成功处理程序,
+          回调函数传入的event对象和getCurrentPosition用法类似
+      navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
+      Google Maps API 「非HTML5规范」
+        该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
+        引入 API 放置在 HTML head中
+          <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+          sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
+    navigator.vibrate     设备震动 「HTML5」 
+      PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
+        显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
+        由于振动操作很耗电,在低电量时最好取消该操作.
+      使用下面的代码检查该接口是否可用.
+        目前,只有Chrome和Firefox的Android平台最新版本支持它.
+        navigator.vibrate = navigator.vibrate
+          || navigator.webkitVibrate
+          || navigator.mozVibrate
+          || navigator.msVibrate;
+        if (navigator.vibrate) {
+          // 支持
+        }
+      navigator.vibrate(num/arr);  震动
+        num 数值,振动持续的毫秒数
+        arr 数组,间时震动,表示振动的模式.
+          偶数位置的数组成员表示振动的毫秒数,奇数位置的数组成员表示等待的毫秒数.
+          navigator.vibrate([500, 300, 100]);
+          表示,设备先振动500毫秒,然后等待300毫秒,再接着振动100毫秒.
+        vibrate是一个非阻塞式的操作,即手机振动的同时,JavaScript代码继续向下运行.
+        停止振动: 将0毫秒或者一个空数组传入vibrate方法.
+          navigator.vibrate(0);
+          navigator.vibrate([]);
+        持续震动: 可使用setInterval不断调用vibrate.
+          var vibrateInterval;
+          function startVibrate(duration) {
+          	navigator.vibrate(duration);
+          }
+          function stopVibrate() {
+          	if(vibrateInterval) clearInterval(vibrateInterval);
+          	navigator.vibrate(0);
+          }
+          function startPeristentVibrate(duration, interval) {
+          	vibrateInterval = setInterval(function() {
+          		startVibrate(duration);
+          	}, interval);
+          }
+    navigator.permissions.query()   许可查询 「HTML5」 
+      PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
+        Permissions API就是用来查询某个接口的许可情况.
+      // 查询地理位置接口的许可情况
+      navigator.permissions.query({ name: 'geolocation' })
+      .then(function(result) {
+        // 状态为 prompt,表示查询地理位置时,
+        // 用户会得到提示,是否许可本次查询
+        /* result.status = "prompt" */
+    
+        // 状态为 granted,表示用户已经给予了许可
+        /* result.status = "granted" */
+      });
+      有了这个API,就可以自动查询用户的态度.
+      当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
+    navigator.battery     电池API,针对移动设备用于检测设备的电池信息 「HTML5」 
+      var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+      battery.charging;
+      battery.level;
+      battery.dischargingTime;
+      battery.addEventListener("chargingchange",function(e){
+      })
   window.screen    管理屏幕
     PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一.
       screen对象基本上只用来表明客户端的能力
@@ -574,7 +958,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     ◆请求 request
     xhr.open(method,url[,async]); 建立请求,以备(数据)发送(而未发送数据)
       PS:open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
-        如果对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
+        若对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
       method      GET、POST或PUT等 发送请求的类型
       url         请求的地址(即向哪个地方发送请求,向谁请求)
         可使用相对地址或绝对地址.
@@ -585,7 +969,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       passWord    可选,密码,默认为空字符串
     xhr.setRequestHeader(key,val); 设定请求头信息
       PS:该方法必须在 open 方法之后,send 方法之前使用.
-        如果该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
+        若该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
       e.g.:
         设置头信息Content-Type,表示发送JSON格式的数据；
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -604,8 +988,8 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     xhr.withCredentials  跨域请求时,用户信息是否会包含在请求之中的布尔值
       用户信息,比如Cookie和认证的HTTP头信息,
       默认为false,即向example.com 发出跨域请求时,
-      不会发送example.com 设置在本机上的Cookie(如果有的话);
-      如果你需要通过跨域AJAX发送Cookie,需要打开withCredentials.
+      不会发送example.com 设置在本机上的Cookie(若有的话);
+      若你需要通过跨域AJAX发送Cookie,需要打开withCredentials.
       xhr.withCredentials = true;
       为了让该属性生效,服务器必须显式返回Access-Control-Allow-Credentials这个头信息.
       Access-Control-Allow-Credentials: true
@@ -615,8 +999,8 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     xhr.send(data); 发送请求(数据)
       data 发送的数据,类型可为 ArrayBufferView Blob Document String FormData
         可以为空,即发送请求但不发送数据内容,可写作 xhr.send(null) 或 xhr.send()
-        如果不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
-        如果带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
+        若不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
+        若带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
       e.g.:
         发送get请求
           ajax.open('GET',
@@ -687,10 +1071,10 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         上面的代码中,
         event.total 是需要传输的总字节,
         event.loaded 是已经传输的字节.
-        如果 event.lengthComputable 不为真,则 event.total 等于0.
+        若 event.lengthComputable 不为真,则 event.total 等于0.
     xhr.onabort   请求被中止,比如用户调用了abort()方法   [Level2]
     xhr.onerror   请求失败   [Level2]
-      如果发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
+      若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
     xhr.onload    接收到完整的响应数据时触发(IE不支持) [Level2]
       Firefox中引入的load事件,用于代替readystatechange事件
       该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
@@ -741,7 +1125,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     xhr.statusText  只读,HTTP响应的文本描述,比如”200 OK“
     ◆响应 response
     xhr.responseText 只读,获取字符串形式的响应数据
-      PS:如果本次请求没有成功或者数据不完整,该属性就会等于null.
+      PS:若本次请求没有成功或者数据不完整,该属性就会等于null.
         若服务器返回的数据格式是JSON,则该属性为JSON字符串.
     xhr.response     只读,返回接收到的数据体,即body部分
       PS:其类型可以是ArrayBuffer、Blob、Document、JSON对象、或者一个字符串,
@@ -751,7 +1135,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       ''            默认值,字符串
       'text'        字符串,适合大多数情况
       'json'        JSON对象
-        如果将这个属性设为“json”,支持JSON的浏览器(Firefox>9,chrome>30),
+        若将这个属性设为“json”,支持JSON的浏览器(Firefox>9,chrome>30),
         就会自动对返回数据调用JSON.parse()方法.
         也就是说,从xhr.response 属性得到的不是文本,而是一个JSON对象.
       'blob'        Blob对象,适合读取二进制数据,比如图片文件等
@@ -782,11 +1166,11 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       e.g.:
       xhr.getResponseHeader('Content-Type');
     xhr.getAllResponseHeader(); 获取整个响应头信息,格式为字符串
-      每个头信息之间使用CRLF分隔,如果没有收到服务器回应,该属性返回null.
+      每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
     ◆终止
     xhr.timeout  超时设定,值为一整数,单位默认为毫秒 [可能存在兼容性] [Level2]
-      PS:表示多少毫秒后,如果请求仍然没有得到结果,就会自动终止.
-        如果该属性等于0,就表示没有时间限制.
+      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
+        若该属性等于0,就表示没有时间限制.
         在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
         Opera、Firefox 和 IE 10 支持该属性,
         IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
@@ -795,7 +1179,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       调用该方法后,xhr对象会停止触发事件,
       而且也不再允许访问任何与响应有关的对象属性
       在终止请求后,还应该对xhr对象进行解引用操作.
-      如果请求已经被发送,则立刻中止请求.
+      若请求已经被发送,则立刻中止请求.
     ◆其他
     FormData 用于模拟表单   [HTML5新增]
       PS:为序列化表单及创建与表单格式相同的数据(用于通过xhr传输)提供了便利.
@@ -844,7 +1228,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         原因是浏览器解读字符的时候,会把字符自动解读成Unicode的 0xF700-0xF7ff 区段.
       responseType 属性 [新方法]
         PS:从服务器取回二进制数据,较新的方法是使用新增的 responseType 属性.
-          如果服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
+          若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
           较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
           把 responseType 设为 blob,表示服务器传回的是二进制对象.
           e.g.:
@@ -1038,12 +1422,12 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       OPTIONS 查询Web服务器的性能
       GET 和 POST 的区别
         大体上讲,向服务器发送客户端数据有两种方式：查询字符串和请求正文.
-        通常,如果是使用查询字符串,就发起了一个GET请求；
-        如果是使用请求正文,就发起了一个POST请求
-       (如果你反过来做,HTTP协议并不会阻止你,但这是没有必要的：最好在这里坚持标准实践).
+        通常,若是使用查询字符串,就发起了一个GET请求；
+        若是使用请求正文,就发起了一个POST请求
+       (若你反过来做,HTTP协议并不会阻止你,但这是没有必要的：最好在这里坚持标准实践).
         有一种普遍的误解是POST请求是安全的,而GET请求不安全.
-        事实上如果使用HTTPS协议,两者都是安全的；如果不使用,则都不安全.
-        如果不使用HTTPS协议,入侵者会像查看GET请求的查询字符串一样,轻松查看POST请求的报文数据.
+        事实上若使用HTTPS协议,两者都是安全的；若不使用,则都不安全.
+        若不使用HTTPS协议,入侵者会像查看GET请求的查询字符串一样,轻松查看POST请求的报文数据.
         使用GET请求,用户会在查询字符串中看到所有的输入数据(包括隐藏域),这是丑陋而且凌乱的.
         浏览器会限制查询字符串的长度(对请求正文没有长度限制).
         基于这些原因,一般推荐使用POST进行表单提交.
@@ -1321,279 +1705,13 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-Cookie 
-  PS:网站为了标示用户身份而储存在用户本地终端,Client Side 上的数据,通常经过加密.
-    cookie数据始终在同源的http请求中携带,即使不需要,也会在浏览器和服务器间来回传递.
-    有效期有时间限制;
-    在本地的客户端的磁盘上以很小的文件形式保存数据,大小在4kb以内;
-    每个特定的域名下最多生成 20 个cookie(不同的浏览器可能有不同)
-    重要数据不建议保存在cookie中,
-    Cookie同源政策不要求传输协议,即http和https之间读写无限制
-  window.navigator.cookieEnabled  读写是否打开Cookie功能
-  document.cookie  读写当前网页的Cookie
-    read   获取
-      PS:Cookie之间使用分号分割,需手动取出每一个cookie
-      var cookie = document.cookie.split(';');
-      for (var i = 0; i < cookie.length; i++) {
-        console.log(cookie[i]);
-      }
-    write  写入
-      PS:分号、逗号、空格不允许作为cookie的值,需进行转义,
-        可使用encodeURIComponent方法;
-      document.cookie='key=value;expires=失效时间;domain=域名访问;path=路径访问;secure'
-        key=value  必须,cookie的内容
-        expires    可选,过期时间,即过了该时间,cookie被清理
-          PS:使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,
-            若未设置或设置为null,当窗口关闭时Cookie被清理;
-          e.g. 设置7天后cookie过期
-            var date =new Date();
-            date.setDate((date,getDate()-1));
-            document.cookie ='user='+encodeURIComponent('张三')+';expires='+date;
-            decodeURICompinent(document.cookie);
-        domain     可选,限制域名访问,必须为当前发送Cookie域名的一部分
-          PS:只有访问的域名匹配domain属性,Cookie才会发送到服务器
-          e.g.:
-            example.com
-            .example.com    // 对所有子域名生效
-            subdomain.example.com
-        path       可选,限制路径访问,只有在该路径及其下才可访问该cookie
-        secure     可选,指定是否使用https协议
-          该属性为一个开关,不需指定值,若通信为https协议,则其自动打开
-        max-age    指定Cookie有效期,如 60*60*24*365 「一年31536000秒」
-        HttpOnly   设置Cookie是否被JS读取,主要为了防止XSS攻击盗取Cookie
-          Set-Cookie: key = value;HttpOnly
-          该Cookie JS无法获取;AJAX操作也无法获取
-      document.cookie 一次只能写入一个cookie;向浏览器发送时,将全部发送
-        服务器在浏览器储存cookie时分行指定
-        HTTP/1.0 200 OK
-        Content-type: text/html
-        Set-Cookie  : key1 = value1 
-        Set-Cookie  : key2 = value2
-        Set-Cookie字段用于服务器向浏览器写入Cookie,一行一个
-      browser对Cookie的限制
-        Firefox中每个域名限制Cookie数量为50,Safari和Chrome无数量限制
-        Cookie累加长度限制为4kb,超过部分被忽略
-          通过使用其他符号分割,避免Cookie的数量限制,读取时再自行解析
-            e.g.: name=a&b=c&d=e&f=g
-    change 修改
-      若服务器想改变一个已存在的Cookie,则设置修改时key、domain、path、secure需都匹配,
-      若有一项不同,则是新建一Cookie
-    delete 删除
-      设置Cookie的expires为0或者一过期的时间
-CORS,Cross-Origin Resource Sharing    跨源资源共享 
-  PS:
-    CORS是一个W3C标准,全称是“跨域资源共享”,
-    允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
-    定义了访问跨源资源时,浏览器与服务器的沟通;
-    新版本的 XMLHttpRequest 对象,可以向不同域名的服务器发出 HTTP 请求.
-    使用"跨域资源共享"的前提,是浏览器必须支持这个功能,而且服务器端必须同意这种"跨域".
-    需要改动服务器端代码.
-    如果能够满足上面的条件,则代码的写法与不跨域的请求完全一样.
-    xhr.open ('GET', 'http://other.server/and/path/to/script');
-    目前,除了 IE 8 和 IE 9,主流浏览器都支持 CORS,IE 10 也将支持这个功能.
-    整个CORS通信过程,都是浏览器自动完成,不需要用户参与。
-    对于开发者来说,CORS通信与同源的AJAX通信没有差别,代码完全一样。
-    浏览器一旦发现AJAX请求跨源,就会自动添加一些附加的头信息,有时还会多出一次附加的请求;
-    因此,实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可以跨源通信。
-    浏览器将CORS请求分成:简单请求,simple request和非简单请求,not-so-simple request, 
-    浏览器对这两种请求的处理不同;
-  简单请求
-    需同时满足以下两大条件
-      (1)请求方法是以下三种方法之一。
-      HEAD
-      GET
-      POST
-      (2)HTTP的头信息不超出以下几种字段。
-      Accept
-      Accept-Language
-      Content-Language
-      Last-Event-ID
-      Content-Type：只限于三个值
-        application/x-www-form-urlencoded、multipart/form-data、text/plain
-      凡是不同时满足上面两个条件,就属于非简单请求。
-    基本流程
-      对于简单请求,浏览器直接发出CORS请求。
-      具体来说,就是在头信息之中,增加一个Origin字段。
-    
-      下面是一个例子,浏览器发现这次跨源AJAX请求是简单请求,就自动在头信息之中,添加一个Origin字段。
-    
-      GET /cors HTTP/1.1
-      Origin: http://api.bob.com
-      Host: api.alice.com
-      Accept-Language: en-US
-      Connection: keep-alive
-      User-Agent: Mozilla/5.0...
-      上面的头信息中,Origin字段用来说明,本次请求来自哪个源(协议 + 域名 + 端口)。服务器根据这个值,决定是否同意这次请求。
-      
-      如果Origin指定的源,不在许可范围内,服务器会返回一个正常的HTTP回应。浏览器发现,这个回应的头信息没有包含Access-Control-Allow-Origin字段(详见下文),就知道出错了,从而抛出一个错误,被XMLHttpRequest的onerror回调函数捕获。注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200。
-      
-      如果Origin指定的域名在许可范围内,服务器返回的响应,会多出几个头信息字段。
-      
-      Access-Control-Allow-Origin: http://api.bob.com
-      Access-Control-Allow-Credentials: true
-      Access-Control-Expose-Headers: FooBar
-      Content-Type: text/html; charset=utf-8
-      上面的头信息之中,有三个与CORS请求相关的字段,都以Access-Control-开头。
-      
-      (1)Access-Control-Allow-Origin
-      
-      该字段是必须的。它的值要么是请求时Origin字段的值,要么是一个*,表示接受任意域名的请求。
-    
-      (2)Access-Control-Allow-Credentials
-      
-      该字段可选。它的值是一个布尔值,表示是否允许发送Cookie。默认情况下,Cookie不包括在CORS请求之中。设为true,即表示服务器明确许可,Cookie可以包含在请求中,一起发给服务器。这个值也只能设为true,如果服务器不要浏览器发送Cookie,删除该字段即可。
-      
-      (3)Access-Control-Expose-Headers
-      
-      该字段可选。CORS请求时,XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。如果想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定。上面的例子指定,getResponseHeader('FooBar')可以返回FooBar字段的值。
-      
-      withCredentials 属性
-      上面说到,CORS请求默认不包含Cookie信息(以及HTTP认证信息等)。如果需要包含Cookie信息,一方面要服务器同意,指定Access-Control-Allow-Credentials字段。
-      
-      Access-Control-Allow-Credentials: true
-      另一方面,开发者必须在AJAX请求中打开withCredentials属性。
-      
-      var xhr = new XMLHttpRequest();
-      xhr.withCredentials = true;
-      否则,即使服务器同意发送Cookie,浏览器也不会发送。或者,服务器要求设置Cookie,浏览器也不会处理。
-      
-      但是,如果省略withCredentials设置,有的浏览器还是会一起发送Cookie。这时,可以显式关闭withCredentials。
-      
-      xhr.withCredentials = false;
-      需要注意的是,如果要发送Cookie,Access-Control-Allow-Origin就不能设为星号,必须指定明确的、与请求网页一致的域名。同时,Cookie依然遵循同源政策,只有用服务器域名设置的Cookie才会上传,其他域名的Cookie并不会上传,且(跨源)原网页代码中的document.cookie也无法读取服务器域名下的Cookie。
-  非简单请求
-    预检请求
-    非简单请求是那种对服务器有特殊要求的请求,比如请求方法是PUT或DELETE,或者Content-Type字段的类型是application/json。
-    
-    非简单请求的CORS请求,会在正式通信之前,增加一次HTTP查询请求,称为“预检”请求(preflight)。
-    
-    浏览器先询问服务器,当前网页所在的域名是否在服务器的许可名单之中,以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则就报错。
-    
-    下面是一段浏览器的JavaScript脚本。
-    
-    var url = 'http://api.alice.com/cors';
-    var xhr = new XMLHttpRequest();
-    xhr.open('PUT', url, true);
-    xhr.setRequestHeader('X-Custom-Header', 'value');
-    xhr.send();
-    上面代码中,HTTP请求的方法是PUT,并且发送一个自定义头信息X-Custom-Header。
-    
-    浏览器发现,这是一个非简单请求,就自动发出一个“预检”请求,要求服务器确认可以这样请求。下面是这个“预检”请求的HTTP头信息。
-    
-    OPTIONS /cors HTTP/1.1
-    Origin: http://api.bob.com
-    Access-Control-Request-Method: PUT
-    Access-Control-Request-Headers: X-Custom-Header
-    Host: api.alice.com
-    Accept-Language: en-US
-    Connection: keep-alive
-    User-Agent: Mozilla/5.0...
-    “预检”请求用的请求方法是OPTIONS,表示这个请求是用来询问的。头信息里面,关键字段是Origin,表示请求来自哪个源。
-    
-    除了Origin字段,“预检”请求的头信息包括两个特殊字段。
-    
-    (1)Access-Control-Request-Method
-    
-    该字段是必须的,用来列出浏览器的CORS请求会用到哪些HTTP方法,上例是PUT。
-    
-    (2)Access-Control-Request-Headers
-    
-    该字段是一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段,上例是X-Custom-Header。
-    
-    预检请求的回应
-    服务器收到“预检”请求以后,检查了Origin、Access-Control-Request-Method和Access-Control-Request-Headers字段以后,确认允许跨源请求,就可以做出回应。
-    
-    HTTP/1.1 200 OK
-    Date: Mon, 01 Dec 2008 01:15:39 GMT
-    Server: Apache/2.0.61 (Unix)
-    Access-Control-Allow-Origin: http://api.bob.com
-    Access-Control-Allow-Methods: GET, POST, PUT
-    Access-Control-Allow-Headers: X-Custom-Header
-    Content-Type: text/html; charset=utf-8
-    Content-Encoding: gzip
-    Content-Length: 0
-    Keep-Alive: timeout=2, max=100
-    Connection: Keep-Alive
-    Content-Type: text/plain
-    上面的HTTP回应中,关键的是Access-Control-Allow-Origin字段,表示http://api.bob.com可以请求数据。该字段也可以设为星号,表示同意任意跨源请求。
-    
-    Access-Control-Allow-Origin: *
-    如果服务器否定了“预检”请求,会返回一个正常的HTTP回应,但是没有任何CORS相关的头信息字段。这时,浏览器就会认定,服务器不同意预检请求,因此触发一个错误,被XMLHttpRequest对象的onerror回调函数捕获。控制台会打印出如下的报错信息。
-    
-    XMLHttpRequest cannot load http://api.alice.com.
-    Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
-    服务器回应的其他CORS相关字段如下。
-    
-    Access-Control-Allow-Methods: GET, POST, PUT
-    Access-Control-Allow-Headers: X-Custom-Header
-    Access-Control-Allow-Credentials: true
-    Access-Control-Max-Age: 1728000
-    (1)Access-Control-Allow-Methods
-    
-    该字段必需,它的值是逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法。注意,返回的是所有支持的方法,而不单是浏览器请求的那个方法。这是为了避免多次“预检”请求。
-    
-    (2)Access-Control-Allow-Headers
-    
-    如果浏览器请求包括Access-Control-Request-Headers字段,则Access-Control-Allow-Headers字段是必需的。它也是一个逗号分隔的字符串,表明服务器支持的所有头信息字段,不限于浏览器在“预检”中请求的字段。
-    
-    (3)Access-Control-Allow-Credentials
-    
-    该字段与简单请求时的含义相同。
-    
-    (4)Access-Control-Max-Age
-    
-    该字段可选,用来指定本次预检请求的有效期,单位为秒。上面结果中,有效期是20天(1728000秒),即允许缓存该条回应1728000秒(即20天),在此期间,不用发出另一条预检请求。
-    
-    浏览器的正常请求和回应
-    一旦服务器通过了“预检”请求,以后每次浏览器正常的CORS请求,就都跟简单请求一样,会有一个Origin头信息字段。服务器的回应,也都会有一个Access-Control-Allow-Origin头信息字段。
-    
-    下面是“预检”请求之后,浏览器的正常CORS请求。
-    
-    PUT /cors HTTP/1.1
-    Origin: http://api.bob.com
-    Host: api.alice.com
-    X-Custom-Header: value
-    Accept-Language: en-US
-    Connection: keep-alive
-    User-Agent: Mozilla/5.0...
-    上面头信息的Origin字段是浏览器自动添加的。
-    
-    下面是服务器正常的回应。
-    
-    Access-Control-Allow-Origin: http://api.bob.com
-    Content-Type: text/html; charset=utf-8
-    上面头信息中,Access-Control-Allow-Origin字段是每次回应都必定包含的。
-    
-    与JSONP的比较
-    CORS与JSONP的使用目的相同,但是比JSONP更强大。
-    
-    JSONP只支持GET请求,CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据。      
-  具体操作 (?)
-    在发送请求时,需附加一个额外的Origin头部,包含请求页面的源信息(协议 域名 端口),
-    便于服务器根据该头信息来决定是否给予响应
-    e.g. : Origin:'https://www.baidu.com'
-    若服务器认可该请求,就在Access-Control-Allow-Origin 头部中回发相同的源信息
-    若是公共资源,可以回发"*"
-    若没有该头部,或者该头部与源信息不匹配,浏览器会驳回请求
-    注:IE11 中没有该头部信息也允许显示信息,Chrome则不可以.
-    e.g. : Access-Control-Allow-Origin:'https://www.baidu.com'
-    Remarks:请求和响应都不包含cookie信息
-  IE对CORS的实现
-    IE8中引入了 XDR(XDomainRequest)类型,与XHR类似,但可以实现跨域通信
-  其他浏览器对CORS的实现
-    通过XMLHttpRequest对象实现对CORS的原生支持
-    请求另一个域中的资源,使用标准的XHR对象并在 open()方法中传入绝对URL即可
-    跨域XHR对象为了安全有如下限制:
-    不能使用 setRequestHeader()设置自定义头部
-    不能发送和接收cookie
-    调用 getAllResponseHeaders()方法总会返回空字符串
-    由于无论同源请求还是跨域请求都使用相同的接口,
-    因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
-    如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
-Fetch API 
-  PS: Fetch API是一种新规范,用来取代XMLHttpRequest对象.
-    Ajax操作所用的XMLHttpRequest对象,已经有十多年的历史,它的API设计并不是很好,
-    输入、输出、状态都在同一个接口管理,容易写出非常混乱的代码.
+XMLHttpRequest Level2 「IE10+ HTML5」 
+  IE10以下的版本不支持.它有自己相关的方法来实现.
+  需要在服务器端进行相关的改动
+    header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
+    header("Access-Control-Allow-Methods:GET,POST");
+Fetch 用来取代XMLHttpRequest的一种新规范 
+  PS: Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
     而Fetch是将它们分散在几个不同的对象上,设计更合理；
     二是Fetch操作返回Promise对象,避免了嵌套的回调函数.
@@ -1646,7 +1764,7 @@ Fetch API
       contentLength = response.headers.get('Content-Length');
       var getStream = function (reader) {
         return reader.read().then(function (result) {
-          // 如果数据已经读取完毕,直接返回
+          // 若数据已经读取完毕,直接返回
           if (result.done) { return; }
           
           // 取出本段数据(二进制格式)
@@ -1685,7 +1803,7 @@ Fetch API
     Fetch方法返回一个Promise对象,并将一个response对象传给回调函数。
     response 对象
       response.ok 属性
-        如果返回的状态码在200到299之间(即请求成功),这个属性为true,否则为false。
+        若返回的状态码在200到299之间(即请求成功),这个属性为true,否则为false。
         因此,判断请求是否成功的代码可以写成下面这样。
     
     fetch('./api/some.json').then(function (response) {
@@ -1716,7 +1834,7 @@ Fetch API
     basic：正常的同域请求
     cors：CORS机制下的跨域请求
     opaque：非CORS机制下的跨域请求,这时无法读取返回的数据,也无法判断是否请求成功
-    如果需要在CORS机制下发出跨域请求,需要指明状态。
+    若需要在CORS机制下发出跨域请求,需要指明状态。
     fetch('http://some-site.com/cors-enabled/some.json', {mode: 'cors'})
     .then(function(response) {
       return response.text();
@@ -1836,7 +1954,7 @@ Fetch API
     });
     上面代码中,指定请求方法为GET,并且要求浏览器不得缓存response。
     
-    Request对象实例有两个属性是只读的,不能手动设置。一个是referrer属性,表示请求的来源,由浏览器设置,有可能是空字符串。另一个是context属性,表示请求发出的上下文,如果是image,表示是从img标签发出,如果是worker,表示是从worker脚本发出,如果是fetch,表示是从fetch函数发出的。
+    Request对象实例有两个属性是只读的,不能手动设置。一个是referrer属性,表示请求的来源,由浏览器设置,有可能是空字符串。另一个是context属性,表示请求发出的上下文,若是image,表示是从img标签发出,若是worker,表示是从worker脚本发出,若是fetch,表示是从fetch函数发出的。
     
     Request对象实例的mode属性,用来设置是否跨域,合法的值有以下三种：same-origin、no-cors(默认值)、cors。当设置为same-origin时,只能向同域的URL发出请求,否则会报错。
     
@@ -1846,9 +1964,9 @@ Fetch API
     }, function(e) {
       console.log("Please enter a same-origin URL!");
     });
-    上面代码中,如果用户输入的URL不是同域的,将会报错,否则就会发出请求。
+    上面代码中,若用户输入的URL不是同域的,将会报错,否则就会发出请求。
     
-    如果mode属性为no-cors,就与默认的浏览器行为没有不同,类似script标签加载外部脚本文件、img标签加载外部图片。如果mode属性为cors,就可以向部署了CORS机制的服务器,发出跨域请求。
+    若mode属性为no-cors,就与默认的浏览器行为没有不同,类似script标签加载外部脚本文件、img标签加载外部图片。若mode属性为cors,就可以向部署了CORS机制的服务器,发出跨域请求。
     
     var u = new URLSearchParams();
     u.append('method', 'flickr.interestingness.getList');
@@ -1932,7 +2050,7 @@ Fetch API
     
     这是因为body属性是一个stream对象,数据只能单向传送一次。这样的设计是为了允许JavaScript处理视频、音频这样的大型文件。
     
-    如果希望多次使用body属性,可以使用Response对象和Request对象的clone方法。它必须在body还没有读取前调用,返回一个新的body,也就是说,需要使用几次body,就要调用几次clone方法。
+    若希望多次使用body属性,可以使用Response对象和Request对象的clone方法。它必须在body还没有读取前调用,返回一个新的body,也就是说,需要使用几次body,就要调用几次clone方法。
     
     addEventListener('fetch', function(evt) {
       var sheep = new Response("Dolly");
@@ -1948,10 +2066,6 @@ Fetch API
         return sheep;
       });
     });    
-跨域 
-  PS:JavaScript处于安全方面的考虑,同源策略的限制,不允许跨域调用其他页面的对象.
-    协议 域名 端口号 等任一一个不相同,都算作跨域.
-服务器代理跨域 : 从服务器后端访问其他域进行中间代理
 JSONP,JSON with Padding 填充式JSON或参数式JSON 
   PS:可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
@@ -2007,15 +2121,9 @@ JSONP,JSON with Padding 填充式JSON或参数式JSON
         document.getElementsByTagName("head")[0].appendChild(script);
       }
     </script>
-XMLHttpRequest Level2 [HTML5新增] [IE10+支持] 
-  IE10以下的版本不支持.它有自己相关的方法来实现.
-  需要在服务器端进行相关的改动
-    header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
-    header("Access-Control-Allow-Methods:GET,POST");
-Comet  一种更高级的AJAX技术 
-  PS:由Alex Russell 发明的一个词,也有人称为"服务器推送".
-    Comet是一种服务器向页面推送数据的技术
-    Comet能够让信息近乎实时的被推送到页面上,非常适合处理体育比赛的分数和股票报价
+comet  服务器推送,一种更高级的AJAX技术 
+  PS: 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上;
+    非常适合处理体育比赛的分数和股票报价
   长轮询和流
     PS:实现Comet的一种方式,是传统轮询(也叫短轮询)的一个翻版,
     传统轮询:浏览器定时向服务器发送请求,看有没有更新的数据,
@@ -2025,455 +2133,417 @@ Comet  一种更高级的AJAX技术
   HTTP流
     PS:页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-same-origin policy,同源政策 
+CORS,Cross-Origin Resource Sharing    跨源资源共享 
   PS:
-    浏览器安全的基石是“同源政策”;
-    1995 年,同源政策由 Netscape 公司引入浏览器。目前,所有浏览器都实行这个政策。
-    最初,它的含义是指,A网页设置的 Cookie,B网页不能打开,除非这两个网页“同源”。
-    所谓“同源”指的是: 协议相同; 域名相同; 端口相同
-    目的: 为了保证用户信息的安全,防止恶意的网站窃取数据。
-    提交表单不受同源政策的限制。
-  e.g.:
-    举例来说,'http://www.example.com/dir/page.html'这个网址,
-    协议是' http://',
-    域名是 'www.example.com',
-    端口是 '80' ,默认端口可以省略
-    它的同源情况如下:
-    'http://example.com/dir/other.html'       不同源,域名不同
-    'http://v2.www.example.com/dir/other.html'不同源,域名不同
-    'http://www.example.com:81/dir/other.html'不同源,端口不同
-    'https://www.example.com/dir/page.html'   不同源,协议不同
-    'http://www.example.com/dir2/other.html'  同源
+    CORS是一个W3C标准,全称是“跨域资源共享”,
+    允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
+    定义了访问跨源资源时,浏览器与服务器的沟通;
+    新版本的 XMLHttpRequest 对象,可以向不同域名的服务器发出 HTTP 请求.
+    使用"跨域资源共享"的前提,是浏览器必须支持这个功能,而且服务器端必须同意这种"跨域".
+    需要改动服务器端代码.
+    若能够满足上面的条件,则代码的写法与不跨域的请求完全一样.
+    xhr.open ('GET', 'http://other.server/and/path/to/script');
+    目前,除了 IE 8 和 IE 9,主流浏览器都支持 CORS,IE 10 也将支持这个功能.
+    整个CORS通信过程,都是浏览器自动完成,不需要用户参与。
+    对于开发者来说,CORS通信与同源的AJAX通信没有差别,代码完全一样。
+    浏览器一旦发现AJAX请求跨源,就会自动添加一些附加的头信息,有时还会多出一次附加的请求;
+    因此,实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可以跨源通信。
+    浏览器将CORS请求分成:简单请求,simple request和非简单请求,not-so-simple request, 
+    浏览器对这两种请求的处理不同;
+  简单请求
+    需同时满足以下两大条件
+      (1)请求方法是以下三种方法之一。
+      HEAD
+      GET
+      POST
+      (2)HTTP的头信息不超出以下几种字段。
+      Accept
+      Accept-Language
+      Content-Language
+      Last-Event-ID
+      Content-Type：只限于三个值
+        application/x-www-form-urlencoded、multipart/form-data、text/plain
+      凡是不同时满足上面两个条件,就属于非简单请求。
+    基本流程
+      对于简单请求,浏览器直接发出CORS请求。
+      具体来说,就是在头信息之中,增加一个Origin字段。
+    
+      下面是一个例子,浏览器发现这次跨源AJAX请求是简单请求,就自动在头信息之中,添加一个Origin字段。
+    
+      GET /cors HTTP/1.1
+      Origin: http://api.bob.com
+      Host: api.alice.com
+      Accept-Language: en-US
+      Connection: keep-alive
+      User-Agent: Mozilla/5.0...
+      上面的头信息中,Origin字段用来说明,本次请求来自哪个源(协议 + 域名 + 端口)。服务器根据这个值,决定是否同意这次请求。
+      
+      若Origin指定的源,不在许可范围内,服务器会返回一个正常的HTTP回应。浏览器发现,这个回应的头信息没有包含Access-Control-Allow-Origin字段(详见下文),就知道出错了,从而抛出一个错误,被XMLHttpRequest的onerror回调函数捕获。注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200。
+      
+      若Origin指定的域名在许可范围内,服务器返回的响应,会多出几个头信息字段。
+      
+      Access-Control-Allow-Origin: http://api.bob.com
+      Access-Control-Allow-Credentials: true
+      Access-Control-Expose-Headers: FooBar
+      Content-Type: text/html; charset=utf-8
+      上面的头信息之中,有三个与CORS请求相关的字段,都以Access-Control-开头。
+      
+      (1)Access-Control-Allow-Origin
+      
+      该字段是必须的。它的值要么是请求时Origin字段的值,要么是一个*,表示接受任意域名的请求。
+    
+      (2)Access-Control-Allow-Credentials
+      
+      该字段可选。它的值是一个布尔值,表示是否允许发送Cookie。默认情况下,Cookie不包括在CORS请求之中。设为true,即表示服务器明确许可,Cookie可以包含在请求中,一起发给服务器。这个值也只能设为true,若服务器不要浏览器发送Cookie,删除该字段即可。
+      
+      (3)Access-Control-Expose-Headers
+      
+      该字段可选。CORS请求时,XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。若想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定。上面的例子指定,getResponseHeader('FooBar')可以返回FooBar字段的值。
+      
+      withCredentials 属性
+      上面说到,CORS请求默认不包含Cookie信息(以及HTTP认证信息等)。若需要包含Cookie信息,一方面要服务器同意,指定Access-Control-Allow-Credentials字段。
+      
+      Access-Control-Allow-Credentials: true
+      另一方面,开发者必须在AJAX请求中打开withCredentials属性。
+      
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+      否则,即使服务器同意发送Cookie,浏览器也不会发送。或者,服务器要求设置Cookie,浏览器也不会处理。
+      
+      但是,若省略withCredentials设置,有的浏览器还是会一起发送Cookie。这时,可以显式关闭withCredentials。
+      
+      xhr.withCredentials = false;
+      需要注意的是,若要发送Cookie,Access-Control-Allow-Origin就不能设为星号,必须指定明确的、与请求网页一致的域名。同时,Cookie依然遵循同源政策,只有用服务器域名设置的Cookie才会上传,其他域名的Cookie并不会上传,且(跨源)原网页代码中的document.cookie也无法读取服务器域名下的Cookie。
+  非简单请求
+    预检请求
+    非简单请求是那种对服务器有特殊要求的请求,比如请求方法是PUT或DELETE,或者Content-Type字段的类型是application/json。
+    
+    非简单请求的CORS请求,会在正式通信之前,增加一次HTTP查询请求,称为“预检”请求(preflight)。
+    
+    浏览器先询问服务器,当前网页所在的域名是否在服务器的许可名单之中,以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则就报错。
+    
+    下面是一段浏览器的JavaScript脚本。
+    
+    var url = 'http://api.alice.com/cors';
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('X-Custom-Header', 'value');
+    xhr.send();
+    上面代码中,HTTP请求的方法是PUT,并且发送一个自定义头信息X-Custom-Header。
+    
+    浏览器发现,这是一个非简单请求,就自动发出一个“预检”请求,要求服务器确认可以这样请求。下面是这个“预检”请求的HTTP头信息。
+    
+    OPTIONS /cors HTTP/1.1
+    Origin: http://api.bob.com
+    Access-Control-Request-Method: PUT
+    Access-Control-Request-Headers: X-Custom-Header
+    Host: api.alice.com
+    Accept-Language: en-US
+    Connection: keep-alive
+    User-Agent: Mozilla/5.0...
+    “预检”请求用的请求方法是OPTIONS,表示这个请求是用来询问的。头信息里面,关键字段是Origin,表示请求来自哪个源。
+    
+    除了Origin字段,“预检”请求的头信息包括两个特殊字段。
+    
+    (1)Access-Control-Request-Method
+    
+    该字段是必须的,用来列出浏览器的CORS请求会用到哪些HTTP方法,上例是PUT。
+    
+    (2)Access-Control-Request-Headers
+    
+    该字段是一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段,上例是X-Custom-Header。
+    
+    预检请求的回应
+    服务器收到“预检”请求以后,检查了Origin、Access-Control-Request-Method和Access-Control-Request-Headers字段以后,确认允许跨源请求,就可以做出回应。
+    
+    HTTP/1.1 200 OK
+    Date: Mon, 01 Dec 2008 01:15:39 GMT
+    Server: Apache/2.0.61 (Unix)
+    Access-Control-Allow-Origin: http://api.bob.com
+    Access-Control-Allow-Methods: GET, POST, PUT
+    Access-Control-Allow-Headers: X-Custom-Header
+    Content-Type: text/html; charset=utf-8
+    Content-Encoding: gzip
+    Content-Length: 0
+    Keep-Alive: timeout=2, max=100
+    Connection: Keep-Alive
+    Content-Type: text/plain
+    上面的HTTP回应中,关键的是Access-Control-Allow-Origin字段,表示http://api.bob.com可以请求数据。该字段也可以设为星号,表示同意任意跨源请求。
+    
+    Access-Control-Allow-Origin: *
+    若服务器否定了“预检”请求,会返回一个正常的HTTP回应,但是没有任何CORS相关的头信息字段。这时,浏览器就会认定,服务器不同意预检请求,因此触发一个错误,被XMLHttpRequest对象的onerror回调函数捕获。控制台会打印出如下的报错信息。
+    
+    XMLHttpRequest cannot load http://api.alice.com.
+    Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
+    服务器回应的其他CORS相关字段如下。
+    
+    Access-Control-Allow-Methods: GET, POST, PUT
+    Access-Control-Allow-Headers: X-Custom-Header
+    Access-Control-Allow-Credentials: true
+    Access-Control-Max-Age: 1728000
+    (1)Access-Control-Allow-Methods
+    
+    该字段必需,它的值是逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法。注意,返回的是所有支持的方法,而不单是浏览器请求的那个方法。这是为了避免多次“预检”请求。
+    
+    (2)Access-Control-Allow-Headers
+    
+    若浏览器请求包括Access-Control-Request-Headers字段,则Access-Control-Allow-Headers字段是必需的。它也是一个逗号分隔的字符串,表明服务器支持的所有头信息字段,不限于浏览器在“预检”中请求的字段。
+    
+    (3)Access-Control-Allow-Credentials
+    
+    该字段与简单请求时的含义相同。
+    
+    (4)Access-Control-Max-Age
+    
+    该字段可选,用来指定本次预检请求的有效期,单位为秒。上面结果中,有效期是20天(1728000秒),即允许缓存该条回应1728000秒(即20天),在此期间,不用发出另一条预检请求。
+    
+    浏览器的正常请求和回应
+    一旦服务器通过了“预检”请求,以后每次浏览器正常的CORS请求,就都跟简单请求一样,会有一个Origin头信息字段。服务器的回应,也都会有一个Access-Control-Allow-Origin头信息字段。
+    
+    下面是“预检”请求之后,浏览器的正常CORS请求。
+    
+    PUT /cors HTTP/1.1
+    Origin: http://api.bob.com
+    Host: api.alice.com
+    X-Custom-Header: value
+    Accept-Language: en-US
+    Connection: keep-alive
+    User-Agent: Mozilla/5.0...
+    上面头信息的Origin字段是浏览器自动添加的。
+    
+    下面是服务器正常的回应。
+    
+    Access-Control-Allow-Origin: http://api.bob.com
+    Content-Type: text/html; charset=utf-8
+    上面头信息中,Access-Control-Allow-Origin字段是每次回应都必定包含的。
+    
+    与JSONP的比较
+    CORS与JSONP的使用目的相同,但是比JSONP更强大。
+    
+    JSONP只支持GET请求,CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据。      
+  具体操作 (?)
+    在发送请求时,需附加一个额外的Origin头部,包含请求页面的源信息(协议 域名 端口),
+    便于服务器根据该头信息来决定是否给予响应
+    e.g. : Origin:'https://www.baidu.com'
+    若服务器认可该请求,就在Access-Control-Allow-Origin 头部中回发相同的源信息
+    若是公共资源,可以回发"*"
+    若没有该头部,或者该头部与源信息不匹配,浏览器会驳回请求
+    注:IE11 中没有该头部信息也允许显示信息,Chrome则不可以.
+    e.g. : Access-Control-Allow-Origin:'https://www.baidu.com'
+    Remarks:请求和响应都不包含cookie信息
+  IE对CORS的实现
+    IE8中引入了 XDR(XDomainRequest)类型,与XHR类似,但可以实现跨域通信
+  其他浏览器对CORS的实现
+    通过XMLHttpRequest对象实现对CORS的原生支持
+    请求另一个域中的资源,使用标准的XHR对象并在 open()方法中传入绝对URL即可
+    跨域XHR对象为了安全有如下限制:
+    不能使用 setRequestHeader()设置自定义头部
+    不能发送和接收cookie
+    调用 getAllResponseHeaders()方法总会返回空字符串
+    由于无论同源请求还是跨域请求都使用相同的接口,
+    因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
+    如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
+same-origin_policy,同源政策 
+  PS: 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
+    “同源”指的是: 协议、域名、端口 均相同;
+    目的为了保证用户信息的安全,防止恶意的网站窃取数据;
+    提交表单不受同源政策的限制;
+    同源政策规定,AJAX请求只能发给同源的网址,否则就报错。
   限制范围
-    随着互联网的发展,“同源政策”越来越严格。目前,如果非同源,共有三种行为受到限制。
-    (1) Cookie、LocalStorage 和 IndexedDB 无法读取。
-    (2) DOM 无法获得。
-    (3) AJAX 请求不能发送。
+    随着互联网的发展,“同源政策”越来越严格。目前,若非同源,有三种行为受到限制:
+    1、Cookie、LocalStorage 和 IndexedDB 无法读取。
+    2、DOM 无法获得。
+    3、AJAX 请求不能发送。
     虽然这些限制是必要的,但是有时很不方便,合理的用途也受到影响。
-  下面,我将详细介绍,如何规避上面三种限制。
+  服务器代理跨域 : 从服务器后端访问其他域进行中间代理
+  Cookie 服务器写入浏览器的一小段信息
+    document.domain 共享Cookie
+      两个网页一级域名相同,只是二级域名不同,浏览器允许通过该设置共享cookies
+      e.g.：
+        A网页 'http://w1.example.com/a.html'
+        B网页 'http://w2.example.com/b.html',
+        那么只要设置相同的document.domain,两个网页就可以共享Cookie。
+        document.domain = 'example.com';
+        
+        A网页通过脚本设置一cookie document.cookie = "test1=hello";
+        B网页中读取该cookie       var allCookie = document.cookie;
+        这种方法只适用于Cookie和iframe窗口,
+        LocalStorage 和 IndexedDB 无法通过这种方法,规避同源政策,
+    服务器设置Cookie时,指定其所属域名为一级域名,如.example.com
+      Set-Cookie: key=value; domain=.example.com; path=/
+      这样的话,二级域名和三级域名不用做任何设置,都可以读取这个Cookie;
+  iframe 可在当前网页之中,嵌入其他网页
+    每个iframe元素形成自己的窗口,即有自己的window对象。
+    iframe窗口之中的脚本,可以获得父窗口和子窗口。
+    但是,只有在同源的情况下,父窗口和子窗口才能通信；
+    若跨域,就无法拿到对方的DOM。
+    比如,父窗口运行下面的命令,若iframe窗口不是同源,就会报错。
+    document.getElementById("myIFrame").contentWindow.document
+    // Uncaught DOMException: Blocked a frame from accessing a cross-origin frame.
+    上面命令中,父窗口想获取子窗口的DOM,因为跨域导致报错。
+    反之亦然,子窗口获取主窗口的DOM也会报错。
+    window.parent.document.body  // 报错
+    这种情况不仅适用于iframe窗口,还适用于 window.open 方法打开的窗口,
+    只要跨域,父窗口与子窗口之间就无法通信。
+    若两个窗口一级域名相同,只是二级域名不同,那么设置上一节介绍的 document.domain 属性,就可以规避同源政策,拿到DOM。
+    
+    对于完全不同源的网站,目前有两种方法,可以解决跨域窗口的通信问题。
+  fragment_identifier 片段识别符
+    片段标识符指的是,URL的#号后面的部分,
+    比如 'http://example.com/x.html#fragment'的#fragment。
+    若只是改变片段标识符,页面不会重新刷新。
+    父窗口可以把信息,写入子窗口的片段标识符。
+    var src = originURL + '#' + data;
+    document.getElementById('myIFrame').src = src;
+    子窗口通过监听hashchange事件得到通知。
+    window.onhashchange = checkMessage;
+    function checkMessage() {
+      var message = window.location.hash;
+      // ...
+    }r
+    同样的,子窗口也可以改变父窗口的片段标识符。
+    parent.location.href= target + “#” + hash;
+    window.postMessage
+  Cross-document_messaging 跨文档通信API
+    为window对象新增了一个 window.postMessage 方法,
+    允许跨窗口通信,不论这两个窗口是否同源。
   
-  Cookie
-  Cookie 是服务器写入浏览器的一小段信息,只有同源的网页才能共享。但是,两个网页一级域名相同,只是二级域名不同,浏览器允许通过设置document.domain共享 Cookie。
-  
-  举例来说,A网页是http://w1.example.com/a.html,B网页是http://w2.example.com/b.html,那么只要设置相同的document.domain,两个网页就可以共享Cookie。
-  
-  document.domain = 'example.com';
-  现在,A网页通过脚本设置一个 Cookie。
-  
-  document.cookie = "test1=hello";
-  B网页就可以读到这个 Cookie。
-  
-  var allCookie = document.cookie;
-  注意,这种方法只适用于 Cookie 和 iframe 窗口,LocalStorage 和 IndexedDB 无法通过这种方法,规避同源政策,而要使用下文介绍的PostMessage API。
-  
-  另外,服务器也可以在设置Cookie的时候,指定Cookie的所属域名为一级域名,比如.example.com。
-  
-  Set-Cookie: key=value; domain=.example.com; path=/
-  这样的话,二级域名和三级域名不用做任何设置,都可以读取这个Cookie。
-  
-  iframe
-  iframe元素可以在当前网页之中,嵌入其他网页。每个iframe元素形成自己的窗口,即有自己的window对象。iframe窗口之中的脚本,可以获得父窗口和子窗口。但是,只有在同源的情况下,父窗口和子窗口才能通信；如果跨域,就无法拿到对方的DOM。
-  
-  比如,父窗口运行下面的命令,如果iframe窗口不是同源,就会报错。
-  
-  document.getElementById("myIFrame").contentWindow.document
-  // Uncaught DOMException: Blocked a frame from accessing a cross-origin frame.
-  上面命令中,父窗口想获取子窗口的DOM,因为跨域导致报错。
-  
-  反之亦然,子窗口获取主窗口的DOM也会报错。
-  
-  window.parent.document.body
-  // 报错
-  这种情况不仅适用于iframe窗口,还适用于window.open方法打开的窗口,只要跨域,父窗口与子窗口之间就无法通信。
-  
-  如果两个窗口一级域名相同,只是二级域名不同,那么设置上一节介绍的document.domain属性,就可以规避同源政策,拿到DOM。
-  
-  对于完全不同源的网站,目前有两种方法,可以解决跨域窗口的通信问题。
-  
-  片段识别符(fragment identifier)
-  跨文档通信API(Cross-document messaging)
-  片段识别符
-  片段标识符(fragment identifier)指的是,URL的#号后面的部分,比如http://example.com/x.html#fragment的#fragment。如果只是改变片段标识符,页面不会重新刷新。
-  
-  父窗口可以把信息,写入子窗口的片段标识符。
-  
-  var src = originURL + '#' + data;
-  document.getElementById('myIFrame').src = src;
-  子窗口通过监听hashchange事件得到通知。
-  
-  window.onhashchange = checkMessage;
-  
-  function checkMessage() {
-    var message = window.location.hash;
-    // ...
-  }r
-  同样的,子窗口也可以改变父窗口的片段标识符。
-  
-  parent.location.href= target + “#” + hash;
-  window.postMessage
-  上面两种方法都属于破解,HTML5为了解决这个问题,引入了一个全新的API：跨文档通信 API(Cross-document messaging)。
-  
-  这个API为window对象新增了一个window.postMessage方法,允许跨窗口通信,不论这两个窗口是否同源。
-  
-  举例来说,父窗口aaa.com向子窗口bbb.com发消息,调用postMessage方法就可以了。
-  
-  var popup = window.open('http://bbb.com', 'title');
-  popup.postMessage('Hello World!', 'http://bbb.com');
-  postMessage方法的第一个参数是具体的信息内容,第二个参数是接收消息的窗口的源(origin),即“协议 + 域名 + 端口”。也可以设为*,表示不限制域名,向所有窗口发送。
-  
-  子窗口向父窗口发送消息的写法类似。
-  
-  window.opener.postMessage('Nice to see you', 'http://aaa.com');
-  父窗口和子窗口都可以通过message事件,监听对方的消息。
-  
-  window.addEventListener('message', function(e) {
-    console.log(e.data);
-  },false);
-  message事件的事件对象event,提供以下三个属性。
-  
-  event.source：发送消息的窗口
-  event.origin: 消息发向的网址
-  event.data: 消息内容
-  下面的例子是,子窗口通过event.source属性引用父窗口,然后发送消息。
-  
-  window.addEventListener('message', receiveMessage);
-  function receiveMessage(event) {
-    event.source.postMessage('Nice to see you!', '*');
-  }
-  上面代码有几个地方需要注意。首先,receiveMessage函数里面没有过滤信息的来源,任意网址发来的信息都会被处理。其次,postMessage方法中指定的目标窗口的网址是一个星号,表示该信息可以向任意网址发送。通常来说,这两种做法是不推荐的,因为不够安全,可能会被恶意利用。
-  
-  event.origin属性可以过滤不是发给本窗口的消息。
-  
-  window.addEventListener('message', receiveMessage);
-  function receiveMessage(event) {
-    if (event.origin !== 'http://aaa.com') return;
-    if (event.data === 'Hello World') {
-        event.source.postMessage('Hello', event.origin);
-    } else {
-      console.log(event.data);
+    postMessage 父窗口 aaa.com 向子窗口 bbb.com 发消息
+      var popup = window.open('http://bbb.com', 'title');
+      popup.postMessage('Hello World!', 'http://bbb.com');
+      postMessage方法的第一个参数是具体的信息内容,
+      第二个参数是接收消息的窗口的源(origin),即“协议 + 域名 + 端口”。
+      也可以设为*,表示不限制域名,向所有窗口发送。
+      子窗口向父窗口发送消息的写法类似。
+      window.opener.postMessage('Nice to see you', 'http://aaa.com');
+    message事件 父窗口和子窗口监听对方的消息
+      window.addEventListener('message', function(e) {
+        console.log(e.data);
+      },false);
+      message事件的事件对象event,提供以下三个属性。
+      event.source：发送消息的窗口
+      event.origin: 消息发向的网址
+      event.data: 消息内容
+      下面的例子是,子窗口通过event.source属性引用父窗口,然后发送消息。
+      window.addEventListener('message', receiveMessage);
+      function receiveMessage(event) {
+        event.source.postMessage('Nice to see you!', '*');
+      }
+      首先,receiveMessage函数里面没有过滤信息的来源,任意网址发来的信息都会被处理。
+      其次,postMessage方法中指定的目标窗口的网址是一个星号,表示该信息可以向任意网址发送。
+      通常来说,这两种做法是不推荐的,因为不够安全,可能会被恶意利用。
+      event.origin 属性可以过滤不是发给本窗口的消息。
+      window.addEventListener('message', receiveMessage);
+      function receiveMessage(event) {
+        if (event.origin !== 'http://aaa.com') return;
+        if (event.data === 'Hello World') {
+          event.source.postMessage('Hello', event.origin);
+        } else {
+          console.log(event.data);
+        }
+      }
+      通过 window.postMessage,读写其他窗口的 LocalStorage 
+        主窗口写入iframe子窗口的localStorage。
+        window.onmessage = function(e) {
+          if (e.origin !== 'http://bbb.com') {
+            return;
+          }
+          var payload = JSON.parse(e.data);
+          localStorage.setItem(payload.key, JSON.stringify(payload.data));
+        };
+        上面代码中,子窗口将父窗口发来的消息,写入自己的LocalStorage。
+        
+        父窗口发送消息的代码如下。
+        
+        var win = document.getElementsByTagName('iframe')[0].contentWindow;
+        var obj = { name: 'Jack' };
+        win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
+        加强版的子窗口接收消息的代码如下。
+        window.onmessage = function(e) {
+          if (e.origin !== 'http://bbb.com') return;
+          var payload = JSON.parse(e.data);
+          switch (payload.method) {
+            case 'set':
+              localStorage.setItem(payload.key, JSON.stringify(payload.data));
+              break;
+            case 'get':
+              var parent = window.parent;
+              var data = localStorage.getItem(payload.key);
+              parent.postMessage(data, 'http://aaa.com');
+              break;
+            case 'remove':
+              localStorage.removeItem(payload.key);
+              break;
+          }
+        };
+        加强版的父窗口发送消息代码如下。
+        
+        var win = document.getElementsByTagName('iframe')[0].contentWindow;
+        var obj = { name: 'Jack' };
+        // 存入对象
+        win.postMessage(JSON.stringify({key: 'storage', method: 'set', data: obj}), 'http://bbb.com');
+        // 读取对象
+        win.postMessage(JSON.stringify({key: 'storage', method: "get"}), "*");
+        window.onmessage = function(e) {
+          if (e.origin != 'http://aaa.com') return;
+          // "Jack"
+          console.log(JSON.parse(e.data).name);
+        };
+  JSONP 服务器与客户端跨源通信的常用方法
+    特点就是简单适用,老式浏览器全部支持,服务器改造非常小。
+    它的基本思想是,网页通过添加一个<script>元素,向服务器请求JSON数据,
+    这种做法不受同源政策限制；服务器收到请求后,将数据放在一个指定名字的回调函数里传回来。
+    首先,网页动态插入<script>元素,由它向跨源网址发出请求。
+    
+    function addScriptTag(src) {
+      var script = document.createElement('script');
+      script.setAttribute("type","text/javascript");
+      script.src = src;
+      document.body.appendChild(script);
     }
-  }
-  LocalStorage
-  通过window.postMessage,读写其他窗口的 LocalStorage 也成为了可能。
-  
-  下面是一个例子,主窗口写入iframe子窗口的localStorage。
-  
-  window.onmessage = function(e) {
-    if (e.origin !== 'http://bbb.com') {
-      return;
+    
+    window.onload = function () {
+      addScriptTag('http://example.com/ip?callback=foo');
     }
-    var payload = JSON.parse(e.data);
-    localStorage.setItem(payload.key, JSON.stringify(payload.data));
-  };
-  上面代码中,子窗口将父窗口发来的消息,写入自己的LocalStorage。
-  
-  父窗口发送消息的代码如下。
-  
-  var win = document.getElementsByTagName('iframe')[0].contentWindow;
-  var obj = { name: 'Jack' };
-  win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
-  加强版的子窗口接收消息的代码如下。
-  
-  window.onmessage = function(e) {
-    if (e.origin !== 'http://bbb.com') return;
-    var payload = JSON.parse(e.data);
-    switch (payload.method) {
-      case 'set':
-        localStorage.setItem(payload.key, JSON.stringify(payload.data));
-        break;
-      case 'get':
-        var parent = window.parent;
-        var data = localStorage.getItem(payload.key);
-        parent.postMessage(data, 'http://aaa.com');
-        break;
-      case 'remove':
-        localStorage.removeItem(payload.key);
-        break;
-    }
-  };
-  加强版的父窗口发送消息代码如下。
-  
-  var win = document.getElementsByTagName('iframe')[0].contentWindow;
-  var obj = { name: 'Jack' };
-  // 存入对象
-  win.postMessage(JSON.stringify({key: 'storage', method: 'set', data: obj}), 'http://bbb.com');
-  // 读取对象
-  win.postMessage(JSON.stringify({key: 'storage', method: "get"}), "*");
-  window.onmessage = function(e) {
-    if (e.origin != 'http://aaa.com') return;
-    // "Jack"
-    console.log(JSON.parse(e.data).name);
-  };
-  AJAX
-  同源政策规定,AJAX请求只能发给同源的网址,否则就报错。
-  
-  除了架设服务器代理(浏览器请求同源服务器,再由后者请求外部服务),有三种方法规避这个限制。
-  
-  JSONP
-  WebSocket
-  CORS
-  JSONP
-  JSONP是服务器与客户端跨源通信的常用方法。最大特点就是简单适用,老式浏览器全部支持,服务器改造非常小。
-  
-  它的基本思想是,网页通过添加一个<script>元素,向服务器请求JSON数据,这种做法不受同源政策限制；服务器收到请求后,将数据放在一个指定名字的回调函数里传回来。
-  
-  首先,网页动态插入<script>元素,由它向跨源网址发出请求。
-  
-  function addScriptTag(src) {
-    var script = document.createElement('script');
-    script.setAttribute("type","text/javascript");
-    script.src = src;
-    document.body.appendChild(script);
-  }
-  
-  window.onload = function () {
-    addScriptTag('http://example.com/ip?callback=foo');
-  }
-  
-  function foo(data) {
-    console.log('Your public IP address is: ' + data.ip);
-  };
-  上面代码通过动态添加<script>元素,向服务器example.com发出请求。注意,该请求的查询字符串有一个callback参数,用来指定回调函数的名字,这对于JSONP是必需的。
-  
-  服务器收到这个请求以后,会将数据放在回调函数的参数位置返回。
-  
-  foo({
-    "ip": "8.8.8.8"
-  });
-  由于<script>元素请求的脚本,直接作为代码运行。这时,只要浏览器定义了foo函数,该函数就会立即调用。作为参数的JSON数据被视为JavaScript对象,而不是字符串,因此避免了使用JSON.parse的步骤。
-  
-  WebSocket
-  WebSocket是一种通信协议,使用ws://(非加密)和wss://(加密)作为协议前缀。该协议不实行同源政策,只要服务器支持,就可以通过它进行跨源通信。
-  
-  下面是一个例子,浏览器发出的WebSocket请求的头信息(摘自维基百科)。
-  
-  GET /chat HTTP/1.1
-  Host: server.example.com
-  Upgrade: websocket
-  Connection: Upgrade
-  Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
-  Sec-WebSocket-Protocol: chat, superchat
-  Sec-WebSocket-Version: 13
-  Origin: http://example.com
-  上面代码中,有一个字段是Origin,表示该请求的请求源(origin),即发自哪个域名。
-  
-  正是因为有了Origin这个字段,所以WebSocket才没有实行同源政策。因为服务器可以根据这个字段,判断是否许可本次通信。如果该域名在白名单内,服务器就会做出如下回应。
-  
-  HTTP/1.1 101 Switching Protocols
-  Upgrade: websocket
-  Connection: Upgrade
-  Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
-  Sec-WebSocket-Protocol: chat
-  CORS
-  CORS是跨源资源分享(Cross-Origin Resource Sharing)的缩写。它是W3C标准,是跨源AJAX请求的根本解决方法。相比JSONP只能发GET请求,CORS允许任何类型的请求。  
-跨文档消息传递API 
-  iframe元素
--------------------------------------------------------------------------------
-◆HTML5 及 新增API
-★BOM 内容增加 
-window.history
-  检查当前浏览器是否支持 history.pushState
-    if (!!(window.history && history.pushState)){
-      // 支持History API
-      console.log('支持');
-    } 
-    else {
-      // 不支持
-      console.log('不支持');
-    }
-  history.pushState(对象,'title',path); 增加历史记录 
-    PS:只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
-      前进或后退 网页不跳转,url有变化;
-      如可把当前地址发送个其他人而访问该页面的当前状态,
-      只能改路径而不能改域名
-      只能增加当前域名下的url
-    三个参数:
-      自定义对象
-      新页面的标题(现在还没有浏览器实现该功能,有没有都一样)
-      新页面的地址
-        即在当前网址后添加的值
-        可以是路径,如:/box
-        也可以是字符串,如:?c=1&b=2
-    e.g.
-      history.pushState(null,'a','/abcd')
-  history.replaceState 替换当前状态 
-    和 pushState类似,但不是增加而是替换
-  Todo: 
-    history.pushState方法接受三个参数,依次为：
     
-    state：一个与指定网址相关的状态对象,popstate事件触发时,该对象会传入回调函数。如果不需要这个对象,此处可以填null。
-    title：新页面的标题,但是所有浏览器目前都忽略这个值,因此这里可以填null。
-    url：新的网址,必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址。
-    假定当前网址是example.com/1.html,我们使用pushState方法在浏览记录(history对象)中添加一个新记录。
-    
-    var stateObj = { foo: 'bar' };
-    history.pushState(stateObj, 'page 2', '2.html');
-    添加上面这个新记录后,浏览器地址栏立刻显示example.com/2.html,但并不会跳转到2.html,甚至也不会检查2.html是否存在,它只是成为浏览历史中的最新记录。假定这时你访问了google.com,然后点击了倒退按钮,页面的url将显示2.html,但是内容还是原来的1.html。你再点击一次倒退按钮,url将显示1.html,内容不变。
-    
-    总之,pushState方法不会触发页面刷新,只是导致history对象发生变化,地址栏会有反应。
-    
-    如果pushState的url参数,设置了一个新的锚点值(即hash),并不会触发hashchange事件。如果设置了一个跨域网址,则会报错。
-    
-    // 报错
-    history.pushState(null, null, 'https://twitter.com/hello');
-    上面代码中,pushState想要插入一个跨域的网址,导致报错。这样设计的目的是,防止恶意代码让用户以为他们是在另一个网站上。
-    
-    history.replaceState()
-    history.replaceState方法的参数与pushState方法一模一样,区别是它修改浏览历史中当前纪录。
-    
-    假定当前网页是example.com/example.html。
-    
-    history.pushState({page: 1}, 'title 1', '?page=1');
-    history.pushState({page: 2}, 'title 2', '?page=2');
-    history.replaceState({page: 3}, 'title 3', '?page=3');
-    
-    history.back()
-    // url显示为http://example.com/example.html?page=1
-    
-    history.back()
-    // url显示为http://example.com/example.html
-    
-    history.go(2)
-    // url显示为http://example.com/example.html?page=3
-    history.state属性
-    history.state属性返回当前页面的state对象。
-    
-    history.pushState({page: 1}, 'title 1', '?page=1');
-    
-    history.state
-    // { page: 1 }
-    popstate事件
-    每当同一个文档的浏览历史(即history对象)出现变化时,就会触发popstate事件。
-    
-    需要注意的是,仅仅调用pushState方法或replaceState方法 ,并不会触发该事件,只有用户点击浏览器倒退按钮和前进按钮,或者使用JavaScript调用back、forward、go方法时才会触发。另外,该事件只针对同一个文档,如果浏览历史的切换,导致加载不同的文档,该事件也不会触发。
-    
-    使用的时候,可以为popstate事件指定回调函数。这个回调函数的参数是一个event事件对象,它的state属性指向pushState和replaceState方法为当前URL所提供的状态对象(即这两个方法的第一个参数)。
-    
-    window.onpopstate = function (event) {
-      console.log('location: ' + document.location);
-      console.log('state: ' + JSON.stringify(event.state));
+    function foo(data) {
+      console.log('Your public IP address is: ' + data.ip);
     };
+    上面代码通过动态添加<script>元素,向服务器example.com发出请求。注意,该请求的查询字符串有一个callback参数,用来指定回调函数的名字,这对于JSONP是必需的。
     
-    // 或者
-    
-    window.addEventListener('popstate', function(event) {
-      console.log('location: ' + document.location);
-      console.log('state: ' + JSON.stringify(event.state));
+    服务器收到这个请求以后,会将数据放在回调函数的参数位置返回。
+    foo({
+      "ip": "8.8.8.8"
     });
-    上面代码中的event.state,就是通过pushState和replaceState方法,为当前URL绑定的state对象。
+    由于<script>元素请求的脚本,直接作为代码运行。这时,只要浏览器定义了foo函数,该函数就会立即调用。作为参数的JSON数据被视为JavaScript对象,而不是字符串,因此避免了使用JSON.parse的步骤。
+  WebSocket 一种通信协议,使用'ws://'(非加密)和'wss://'(加密)作为协议前缀
+    该协议不实行同源政策,只要服务器支持,就可以通过它进行跨源通信。
+    下面是一个例子,浏览器发出的WebSocket请求的头信息(摘自维基百科)。
     
-    这个state对象也可以直接通过history对象读取。
+    GET /chat HTTP/1.1
+    Host: server.example.com
+    Upgrade: websocket
+    Connection: Upgrade
+    Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+    Sec-WebSocket-Protocol: chat, superchat
+    Sec-WebSocket-Version: 13
+    Origin: http://example.com
+    上面代码中,有一个字段是Origin,表示该请求的请求源(origin),即发自哪个域名。
     
-    var currentState = history.state;
-    注意,页面第一次加载的时候,在load事件发生后,Chrome和Safari浏览器(Webkit核心)会触发popstate事件,而Firefox和IE浏览器不会。
+    正是因为有了Origin这个字段,所以WebSocket才没有实行同源政策。因为服务器可以根据这个字段,判断是否许可本次通信。若该域名在白名单内,服务器就会做出如下回应。
     
-    URLSearchParams API
-    URLSearchParams API用于处理URL之中的查询字符串,即问号之后的部分。没有部署这个API的浏览器,可以用url-search-params这个垫片库。
-    
-    var paramsString = 'q=URLUtils.searchParams&topic=api';
-    var searchParams = new URLSearchParams(paramsString);
-    URLSearchParams有以下方法,用来操作某个参数。
-    
-    has()：返回一个布尔值,表示是否具有某个参数
-    get()：返回指定参数的第一个值
-    getAll()：返回一个数组,成员是指定参数的所有值
-    set()：设置指定参数
-    delete()：删除指定参数
-    append()：在查询字符串之中,追加一个键值对
-    toString()：返回整个查询字符串
-    var paramsString = 'q=URLUtils.searchParams&topic=api';
-    var searchParams = new URLSearchParams(paramsString);
-    
-    searchParams.has('topic') // true
-    searchParams.get('topic') // "api"
-    searchParams.getAll('topic') // ["api"]
-    
-    searchParams.get('foo') // null,注意Firefox返回空字符串
-    searchParams.set('foo', 2);
-    searchParams.get('foo') // 2
-    
-    searchParams.append('topic', 'webdev');
-    searchParams.toString() // "q=URLUtils.searchParams&topic=api&foo=2&topic=webdev"
-    
-    searchParams.append('foo', 3);
-    searchParams.getAll('foo') // [2, 3]
-    
-    searchParams.delete('topic');
-    searchParams.toString() // "q=URLUtils.searchParams&foo=2&foo=3"
-    URLSearchParams还有三个方法,用来遍历所有参数。
-    
-    keys()：遍历所有参数名
-    values()：遍历所有参数值
-    entries()：遍历所有参数的键值对
-    上面三个方法返回的都是Iterator对象。
-    
-    var searchParams = new URLSearchParams('key1=value1&key2=value2');
-    
-    for (var key of searchParams.keys()) {
-      console.log(key);
-    }
-    // key1
-    // key2
-    
-    for (var value of searchParams.values()) {
-      console.log(value);
-    }
-    // value1
-    // value2
-    
-    for (var pair of searchParams.entries()) {
-      console.log(pair[0]+ ', '+ pair[1]);
-    }
-    // key1, value1
-    // key2, value2
-    在Chrome浏览器之中,URLSearchParams实例本身就是Iterator对象,与entries方法返回值相同。所以,可以写成下面的样子。
-    
-    for (var p of searchParams) {
-      console.log(p);
-    }
-    下面是一个替换当前URL的例子。
-    
-    // URL: https://example.com?version=1.0
-    var params = new URLSearchParams(location.search.slice(1));
-    params.set('version', 2.0);
-    
-    window.history.replaceState({}, '', `${location.pathname}?${params}`);
-    // URL: https://example.com?version=2.0
-    URLSearchParams实例可以当作POST数据发送,所有数据都会URL编码。
-    
-    let params = new URLSearchParams();
-    params.append('api_key', '1234567890');
-    
-    fetch('https://example.com/api', {
-      method: 'POST',
-      body: params
-    }).then(...)
-    DOM的a元素节点的searchParams属性,就是一个URLSearchParams实例。
-    
-    var a = document.createElement('a');
-    a.href = 'https://example.com?filter=api';
-    a.searchParams.get('filter') // "api"
-    URLSearchParams还可以与URL接口结合使用。
-    
-    var url = new URL(location);
-    var foo = url.searchParams.get('foo') || 'somedefault';      
-★针对移动设备的API 
-navigator.permissions.query( )   许可查询
-  PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
-    Permissions API就是用来查询某个接口的许可情况.
-  // 查询地理位置接口的许可情况
-  navigator.permissions.query({ name: 'geolocation' })
-  .then(function(result) {
-    // 状态为 prompt,表示查询地理位置时,
-    // 用户会得到提示,是否许可本次查询
-    /* result.status = "prompt" */
-
-    // 状态为 granted,表示用户已经给予了许可
-    /* result.status = "granted" */
-  });
-  有了这个API,就可以自动查询用户的态度.
-  当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
-Viewport 视口
+    HTTP/1.1 101 Switching Protocols
+    Upgrade: websocket
+    Connection: Upgrade
+    Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+    Sec-WebSocket-Protocol: chat
+  CORS
+    CORS是跨源资源分享 Cross-Origin Resource Sharing 的缩写。
+    它是W3C标准,是跨源AJAX请求的根本解决方法。
+    相比JSONP只能发GET请求,CORS允许任何类型的请求。  
+  跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
+  协议 域名 端口号 等任一一个不相同,都算作跨域.
+Viewport 视口 「HTML5」
   PS:Viewport指的是网页的显示区域,
     也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
     正常情况下,viewport和浏览器的显示窗口是一样大小的.
@@ -2499,7 +2569,7 @@ Viewport 视口
   e.g.:.
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
 SSE 「HTML5」
-WebRTC,Web Real Time Communication  网络实时通信 
+WebRTC,Web Real Time Communication  网络实时通信 「HTML5」  
   PS: 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
@@ -2533,7 +2603,7 @@ WebRTC,Web Real Time Communication  网络实时通信
         stream.getAudioTracks 方法和 stream.getVideoTracks 方法,
         分别返回一个数组,其成员是数据流包含的音轨和视轨(track)。
         使用的声音源和摄影头的数量,决定音轨和视轨的数量。
-        比如,如果只使用一个摄像头获取视频,且不获取音频,那么视轨的数量为1,音轨的数量为0。
+        比如,若只使用一个摄像头获取视频,且不获取音频,那么视轨的数量为1,音轨的数量为0。
         每个音轨和视轨,有一个kind属性,表示种类(video或者audio),
         和一个label属性(比如FaceTime HD Camera (Built-in))。
       onError    回调函数,在取多媒体设备失败时调用。
@@ -2567,8 +2637,8 @@ WebRTC,Web Real Time Communication  网络实时通信
           vide.src = 'somevideo.mp4';
         }
         网页使用getUserMedia方法,浏览器就会询问用户,是否同意调用麦克风或摄像头;
-        如果用户同意,就调用回调函数onSuccess；
-        如果用户拒绝,就调用回调函数onError。
+        若用户同意,就调用回调函数onSuccess；
+        若用户拒绝,就调用回调函数onError。
         浏览器兼容性
           Chrome中需使用https协议;
           Firefox中需使用mozGetUserMedia;
@@ -2636,7 +2706,7 @@ WebRTC,Web Real Time Communication  网络实时通信
       };
       navigator.getUserMedia(vgaConstraints, onSuccess, onError);
     MediaStreamTrack.getSources() 使用指定的媒体设备
-      如果本机有多个摄像头/麦克风,就需要使用 MediaStreamTrack.getSources 方法指定,
+      若本机有多个摄像头/麦克风,就需要使用 MediaStreamTrack.getSources 方法指定,
       到底使用哪一个摄像头/麦克风。
       function sourceSelected(audioSource, videoSource) {
         var constraints = {
@@ -2777,106 +2847,12 @@ WebRTC,Web Real Time Communication  网络实时通信
       conn.on('open', function(){
         conn.send('hi!');
       });
-navigator.geolocation 地理定位 「HTML5」
-  PS:在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
-  浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
-  单位转换
-    可使用一下函数将使用度、分、秒表示的经纬度转换为小数
-      function degreesToDecimal(degrees,minutes,seconds){
-        return degrees +(minutes / 60 ) +(seconds / 3600);
-      }
-  检查是否支持该接口
-    if (navigator.geolocation) {
-      // 支持
-    }
-    else {
-      // 不支持
-    }
-    该API兼容性较好,IE9及以前都支持
-  e.g.
-    navigator.geolocation.getCurrentPosition(function(position){
-    var latitude = position.coords.latitude;
-    // 维度值
-    var longitude = position.coords.longitude;
-    // 经度值
-  })
-  包含整个地理定位 API
-  navigator.geolocation.getCurrentPosition(suc,err,options)  是否同意授权后回调
-    var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
-      event.coords.latitude    纬度
-      event.coords.longitude   经度
-      event.coords.accuracy    精度
-      以下属性支持与否取决于设备,桌面浏览器一般没有
-      event.coords.altitude          海拔
-      event.coords.altitudeAccuracy  海拔精度「m」
-      event.coords.heading           以360度表示的方向
-      event.coords.speed             速度 「m/s」
-      event.timestamp 事件戳,表示获取位置时的时间
-    var err = function(event){ }  回调函数,无法确定位置「如用户拒绝授权时」,调用
-      event.code    错误码
-        0  Unknown error,相当于 event.UNKNOWN_ERROR
-        1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
-        2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
-        3  超时响应      ,相当于 event.TIMEOUT
-      event.message 错误信息
-    options                       可选,对象,设置定位的参数
-      var options = {
-          enableHighAccuracy:true, // 是否高精度,默认为false
-          timeout:5000,            // 超时时限,默认为Infinity,单位ms
-          maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
-        }
-  var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
-    PS:位置改变时重复调用成功处理程序,
-      回调函数传入的event对象和getCurrentPosition用法类似
-  navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
-  Google Maps API 「非HTML5规范」
-    该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
-    引入 API 放置在 HTML head中
-      <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-      sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
-navigator.vibrate     设备震动
-  PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
-    显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
-    由于振动操作很耗电,在低电量时最好取消该操作.
-  使用下面的代码检查该接口是否可用.
-    目前,只有Chrome和Firefox的Android平台最新版本支持它.
-    navigator.vibrate = navigator.vibrate
-      || navigator.webkitVibrate
-      || navigator.mozVibrate
-      || navigator.msVibrate;
-    if (navigator.vibrate) {
-      // 支持
-    }
-  navigator.vibrate(num/arr);  震动
-    num 数值,振动持续的毫秒数
-    arr 数组,间时震动,表示振动的模式.
-      偶数位置的数组成员表示振动的毫秒数,奇数位置的数组成员表示等待的毫秒数.
-      navigator.vibrate([500, 300, 100]);
-      表示,设备先振动500毫秒,然后等待300毫秒,再接着振动100毫秒.
-    vibrate是一个非阻塞式的操作,即手机振动的同时,JavaScript代码继续向下运行.
-    停止振动: 将0毫秒或者一个空数组传入vibrate方法.
-      navigator.vibrate(0);
-      navigator.vibrate([]);
-    持续震动: 可使用setInterval不断调用vibrate.
-      var vibrateInterval;
-      function startVibrate(duration) {
-      	navigator.vibrate(duration);
-      }
-      function stopVibrate() {
-      	if(vibrateInterval) clearInterval(vibrateInterval);
-      	navigator.vibrate(0);
-      }
-      function startPeristentVibrate(duration, interval) {
-      	vibrateInterval = setInterval(function() {
-      		startVibrate(duration);
-      	}, interval);
-      }
-devicelight           设备屏幕亮度变化事件
+devicelight    设备屏幕亮度变化事件 「HTML5」
   PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
   var DLRun = function(event) { }
   window.addEventListener('devicelight',DLRun);
   event.value  亮度的流明值
-  e.g.:  如果亮度变强,网页显示黑底白字,如果亮度变弱,网页显示白底黑字
+  e.g.:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
     window.addEventListener('devicelight', function(e) {
       var lux = e.value;
       if(lux < 50) {
@@ -2893,7 +2869,7 @@ devicelight           设备屏幕亮度变化事件
     @media (light-level: dim) { /* 暗光环境 */ }
     @media (light-level: normal) { /* 正常光环境 */ }
     @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation     设备摆放方向变化事件「竖放或横放」
+deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5」
   PS:一旦设备的方向发生变化触发
   检测浏览器是否支持该API
     if (window.DeviceOrientationEvent) { /*  支持 */ } 
@@ -2907,47 +2883,11 @@ deviceorientation     设备摆放方向变化事件「竖放或横放」
     event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
     event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
     event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
-orientationchange     在屏幕发生翻转时触发 
+orientationchange  在屏幕发生翻转时触发「HTML5」 
   window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
-navigator.battery     电池API,针对移动设备的API,用于检测设备的电池信息
-  var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
-  battery.charging;
-  battery.level;
-  battery.dischargingTime;
-  battery.addEventListener("chargingchange",function(e){
-  })
-rel='perfetch'       预加载网页内容,为浏览者提供一个平滑的浏览体验
+rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
   <link rel="prefetch" href="url">
   url可为一网页地址或图片地址
-document.hidden  网页可见性API
-  页面不可见时播放中的视频暂停，可见时视频继续播放
-    <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
-    var video = document.getElementById('video') ;
-    var Prefix = null;
-    getHidden();
-    //获取当前浏览器的hidden属性
-    function getHidden(){
-      ['webkit','ms','moz','o'].forEach(function(prefix){
-        if((prefix+'Hidden') in document){
-          Prefix = prefix;
-        }
-      });
-      if(Prefix == null){
-        alert('你的浏览器不支持Page Visibility API');
-      }
-    }
-    //为visibilitychange事件绑定处理程序
-    document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
-    function handleVisibilityChange(){
-      switch (document.hidden){
-        case true: //返回hidden = true，页面不可见
-          video.pause();
-          break;
-        case false: //返回hidden = false，页面可见
-          video.play();
-          break;
-      }
-    }
 移动端JS 
   event 事件
     理解click的300ms的延迟响应
@@ -2955,7 +2895,7 @@ document.hidden  网页可见性API
       因为在手机早期,浏览器系统有放大和缩放功能,
       用户在屏幕上点击两次之后,系统会触发放大或者缩放功能,
       因此系统做了一个处理,当触摸一次后,在300ms这段时间内有没有触摸第二次则为点击点击事件,
-      如果触摸了第二次的话,说明是触发放大或缩放功能。
+      若触摸了第二次的话,说明是触发放大或缩放功能。
       因此当click时候,所有用户必须等待于300ms后才会触发click事件。
       所以当在移动端使用click事件的时候,会感觉到有300ms的迟钝。
     Touch 触摸事件
@@ -3051,7 +2991,7 @@ document.hidden  网页可见性API
     触摸事件和手势事件的关系：
       当一个手指放在屏幕上时,会触发touchstart事件,
       而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
-      如果一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
+      若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
       但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
       手势的专有属性：
         rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
@@ -3109,8 +3049,7 @@ document.hidden  网页可见性API
         $(document).on('touchmove',function(e){
           e.preventDefault();
         })
-★其他API
-Web Socket 网络通信协议
+Web_Socket 网络通信协议「HTML5」 
   PS:目标是在一个单独的持久连接上提供全双工、双向通信
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给你 [且你的代码会得到通知]
@@ -3149,28 +3088,25 @@ Web Socket 网络通信协议
     ActiveX HTMLFile(IE) 、
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
-Local Storage                   网页本地存储 「HTML5」
-  PS:
-    JS提供了sessionStorage和globalStorage,
-    在HTML5中提供了localStorage来取代globalStorage.
+Web_Storage    网页本地存储 「IE8+ HTML5」
+  PS: JS提供了sessionStorage和globalStorage,
+    在HTML5中提供了localStorage来取代globalStorage;
   localStorage   本地存储
-    PS:主要用于:保存网页状态,刷新后还是和前面一样
-      将数据保存在客户端硬件设备上,不管它是什么,意思就是下次打开计算机时候数据还在
-      永久存储,永不失效除非手动删除
-      有容量限制,每个域(包括各个网页) 5 M 左右
+    PS: 永久存储,永不失效除非手动删除
+      有容量限制,每个域「包括各个网页」 5 M 左右「DiBs」;
+      子域名间或子域名和主域名间localStorage不共享;
       本质是在读写文件,数据多的话会比较卡,firefox会一次性将数据导入内存,
       不能被爬虫爬取,不要用它完全取代URL传参,
-      是HTML5本地存储web storage特性的API之一,
       各浏览器间,数据是独立的,在firefox中的localstorage数据,在chrome上无法读取.
-      可以在相同域名下的不同的页面间访问localStorage;
-      只能保存字符串 「?」,
       只能存储字符串,当存取的内容比较复杂时,使用JSON函数辅助处理
     localStorage.XX = str;               自定义属性进行读/写
       e.g.
       localStorage.XX;   //"abc"
       localStorage;       //Storage {name: "abc", length: 1}
     localStorage.length;                 localStorage的数据项个数
-    localStorage.key(num);               获取localStorage中第num+1 个键值对的值
+    localStorage.key(num);               获取localStorage中第num+1 个key对的值
+      console.log(localStorage); // Storage {aoo: "a", boo: "b", length: 2}
+      localStorage.key(0); // "aoo"
     localStorage.setItem("name", str);   键值对形式存值
     localStorage.getItem("name");        获取对应键的值
     localStorage.removeItem('name');     删除键值对
@@ -3195,29 +3131,82 @@ Local Storage                   网页本地存储 「HTML5」
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-application cache,简称appcache  应用缓存  「HTML5」
-  PS:专门为开发离线Web应用设计
-    appcache就是从浏览器的缓存中分出来的一块缓存区
-    使用一个描述文件(manifest file)在该缓存中保存数据
-    manifest 缓存整个页面,在没有网络的时候可以来回的跳转
-    使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本.
-    每个指定了 manifest 的页面在用户对其访问时都会被缓存.
-    如果未指定 manifest 属性,则页面不会被缓存(除非在 manifest 文件中直接指定了该页面).
-    manifest 文件需要配置正确的 MIME-type,即 "text/cache-manifest".必须在 web 服务器上进行配置.
-    如需启用应用程序缓存,请在文档的 <html> 标签中包含 manifest 属性.
-    manifest 文件的建议的文件扩展名是：".appcache".
-    manifest 文件可分为三个部分：
-    CACHE MANIFEST - 在此标题下列出的文件将在首次下载后进行缓存
-    NETWORK - 在此标题下列出的文件需要与服务器的连接,且不会被缓存
-    FALLBACK - 在此标题下列出的文件规定当页面无法访问时的回退页面(比如 404 页面)
-  e.g. :
-    描述文件
+application_cache,简称appcache  应用离线缓存 「HTML5」
+  PS:让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
+    使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
+    每个指定了 manifest 的页面在用户对其访问时都会被缓存;
+    若未指定 manifest 属性,则页面不会被缓存,除非在 manifest 文件中直接指定了该页面;
+    manifest 文件需要配置正确的 MIME-type,即 "text/cache-manifest";
+    必须在 web 服务器上进行配置;
+    如需启用应用程序缓存,需在文档的 <html> 标签中包含 manifest 属性;
+    manifest 文件的建议的文件扩展名是：".appcache";
+    移动端支持度比较好;
+  manifest 文件可分为三个部分：
+    CACHE MANIFEST //此标题下列出的文件将在首次下载后进行缓存
+    NETWORK        //此标题下列出的文件需要与服务器的连接,且不会被缓存
+    FALLBACK       //此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面
+    e.g.：
       CACHE MANIFEST
-      #Comment
-      file.js
-      file.css
-    将描述文件与页面关联起来:在<html>中指定manifest属性为文件的路径
-      <html manifest="XXX.appcache">
+      #version n.n
+      
+      CACHE:
+      #需要缓存的文件
+      /css/sample.css
+      /img/image.png
+      
+      NETWORK:
+      #每次重新拉取的文件
+      * 「表示除 CACHE 中指定的文件其他全部」
+      
+      FALLBACK
+      #离线状态下代替文件
+      /offline.html
+  e.g. :
+    // manifest文件中
+    CACHE MANIFEST
+    #version 1.1
+    CACHE:
+      img/1.jpg
+      img/2.jpg
+      css/assets.css
+    NETWORK:
+      *
+    // html中
+    <!DOCTYPE html>
+    <html manifest="./manifest.appcache"> 
+      <head>
+        <meta charset="utf-8">
+        <title>app cache demo</title>
+      </head>
+      <body>
+        <h1>app cache demo</h1>
+        <ul>
+          <li><img src="img/1,jpg" alt=""></li>
+          <li><img src="img/2,jpg" alt=""></li>
+        </ul>
+      </body>
+      <script type="text/javascript">
+      window.addEventListener("load",function(e){
+        window.applicationCache.addEventListener("updateready",function(e){
+          console.log(window.applicationCache.status);
+          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            window.applicationCache.swapCache();
+            if (confirm('a new version of this site is available,load it?')) {
+              window.location.reload();
+            }
+          }
+          else {
+            console.log('manifest don\'t change');
+          }
+        },false)
+      },false)
+        
+      </script>
+    </html>
+    
+    在服务器添加mime-types text/cache-manifest
+      如在 xampp->apache->conf->mime.types 中
+      添加 text/cache-manifest  appcache
   applicationCache 核心对象
     applicationCache.status; 表示应用缓存的状态值
       0  无缓存,没有与页面相关的应用缓存
@@ -3226,299 +3215,275 @@ application cache,简称appcache  应用缓存  「HTML5」
       3  下载中,应用缓存正在下载描述文件中指定的资源
       4  更新完成,应用缓存已经更新了资源,且所有资源都已下载完毕,可通过swapCache()来使用了
       5  废弃,应用缓存的描述文件已经不存在了,此页面无法再访问应用缓存
-    事件
-      checking  在浏览器为应用缓存查找更新时触发
-      error     在检查更新或下载资源期间发生错误时触发
-      noupdate  在检查描述文件发现文件无变化时触发
-      downloading 在开始下载应用缓存资源时触发
-      progress  在文件下载应用缓存的过程中持续不断的触发
-      updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
-      cached    在应用缓存完整可用时触发
-IndexedDB                       浏览器端数据库 
-  概述
-  随着浏览器的处理能力不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,这样可以减少用户等待从服务器获取数据的时间。
-  
-  现有的浏览器端数据储存方案,都不适合储存大量数据：cookie不超过4KB,且每次请求都会发送回服务器端；Window.name属性缺乏安全性,且没有统一的标准；localStorage在2.5MB到10MB之间(各家浏览器不同)。所以,需要一种新的解决方案,这就是IndexedDB诞生的背景。
-  
-  通俗地说,IndexedDB就是浏览器端数据库,可以被网页脚本程序创建和操作。它允许储存大量数据,提供查找接口,还能建立索引。这些都是localStorage所不具备的。就数据库类型而言,IndexedDB不属于关系型数据库(不支持SQL查询语句),更接近NoSQL数据库。
-  
-  IndexedDB具有以下特点。
-  
-  (1)键值对储存。 IndexedDB内部采用对象仓库(object store)存放数据。所有类型的数据都可以直接存入,包括JavaScript对象。在对象仓库中,数据以“键值对”的形式保存,每一个数据都有对应的键名,键名是独一无二的,不能有重复,否则会抛出一个错误。
-  
-  (2)异步。 IndexedDB操作时不会锁死浏览器,用户依然可以进行其他操作,这与localStorage形成对比,后者的操作是同步的。异步设计是为了防止大量数据的读写,拖慢网页的表现。
-  
-  (3)支持事务。 IndexedDB支持事务(transaction),这意味着一系列操作步骤之中,只要有一步失败,整个事务就都取消,数据库回到事务发生之前的状态,不存在只改写一部分数据的情况。
-  
-  (4)同域限制 IndexedDB也受到同域限制,每一个数据库对应创建该数据库的域名。来自不同域名的网页,只能访问自身域名下的数据库,而不能访问其他域名下的数据库。
-  
-  (5)储存空间大 IndexedDB的储存空间比localStorage大得多,一般来说不少于250MB。IE的储存上限是250MB,Chrome和Opera是剩余空间的某个百分比,Firefox则没有上限。
-  
-  (6)支持二进制储存。 IndexedDB不仅可以储存字符串,还可以储存二进制数据。
-  
-  目前,Chrome 27+、Firefox 21+、Opera 15+和IE 10+支持这个API,但是Safari完全不支持。
-  
-  下面的代码用来检查浏览器是否支持这个API。
-  
-  if("indexedDB" in window) {
-      // 支持
-  } else {
-      // 不支持
-  }
-  indexedDB.open方法
-  浏览器原生提供indexedDB对象,作为开发者的操作接口。indexedDB.open方法用于打开数据库。
-  
-  var openRequest = indexedDB.open("test",1);
-  open方法的第一个参数是数据库名称,格式为字符串,不可省略；第二个参数是数据库版本,是一个大于0的正整数(0将报错)。上面代码表示,打开一个名为test、版本为1的数据库。如果该数据库不存在,则会新建该数据库。如果省略第二个参数,则会自动创建版本为1的该数据库。
-  
-  打开数据库的结果是,有可能触发4种事件。
-  
-  success：打开成功。
-  error：打开失败。
-  upgradeneeded：第一次打开该数据库,或者数据库版本发生变化。
-  blocked：上一次的数据库连接还未关闭。
-  第一次打开数据库时,会先触发upgradeneeded事件,然后触发success事件。
-  
-  根据不同的需要,对上面4种事件设立回调函数。
-  
-  var openRequest = indexedDB.open("test",1);
-  var db;
-  
-  openRequest.onupgradeneeded = function(e) {
-      console.log("Upgrading...");
-  }
-   
-  openRequest.onsuccess = function(e) {
-      console.log("Success!");
-      db = e.target.result;
-  }
-   
-  openRequest.onerror = function(e) {
-      console.log("Error");
-      console.dir(e);
-  }
-  上面代码有两个地方需要注意。首先,open方法返回的是一个对象(IDBOpenDBRequest),回调函数定义在这个对象上面。其次,回调函数接受一个事件对象event作为参数,它的target.result属性就指向打开的IndexedDB数据库。
-  
-  indexedDB实例对象的方法
-  获得数据库实例以后,就可以用实例对象的方法操作数据库。
-  
-  createObjectStore方法
-  createObjectStore方法用于创建存放数据的“对象仓库”(object store),类似于传统关系型数据库的表格。
-  
-  db.createObjectStore("firstOS");
-  上面代码创建了一个名为firstOS的对象仓库,如果该对象仓库已经存在,就会抛出一个错误。为了避免出错,需要用到下文的objectStoreNames属性,检查已有哪些对象仓库。
-  
-  createObjectStore方法还可以接受第二个对象参数,用来设置“对象仓库”的属性。
-  
-  db.createObjectStore("test", { keyPath: "email" }); 
-  db.createObjectStore("test2", { autoIncrement: true });
-  上面代码中的keyPath属性表示,所存入对象的email属性用作每条记录的键名(由于键名不能重复,所以存入之前必须保证数据的email属性值都是不一样的),默认值为null；autoIncrement属性表示,是否使用自动递增的整数作为键名(第一个数据为1,第二个数据为2,以此类推),默认为false。一般来说,keyPath和autoIncrement属性只要使用一个就够了,如果两个同时使用,表示键名为递增的整数,且对象不得缺少指定属性。
-  
-  objectStoreNames属性
-  objectStoreNames属性返回一个DOMStringList对象,里面包含了当前数据库所有“对象仓库”的名称。可以使用DOMStringList对象的contains方法,检查数据库是否包含某个“对象仓库”。
-  
-  if(!db.objectStoreNames.contains("firstOS")) {
-       db.createObjectStore("firstOS");
-  }
-  上面代码先判断某个“对象仓库”是否存在,如果不存在就创建该对象仓库。
-  
-  transaction方法
-  transaction方法用于创建一个数据库事务。向数据库添加数据之前,必须先创建数据库事务。
-  
-  var t = db.transaction(["firstOS"],"readwrite");
-  transaction方法接受两个参数：第一个参数是一个数组,里面是所涉及的对象仓库,通常是只有一个；第二个参数是一个表示操作类型的字符串。目前,操作类型只有两种：readonly(只读)和readwrite(读写)。添加数据使用readwrite,读取数据使用readonly。
-  
-  transaction方法返回一个事务对象,该对象的objectStore方法用于获取指定的对象仓库。
-  
-  var t = db.transaction(["firstOS"],"readwrite");
-  
-  var store = t.objectStore("firstOS");
-  transaction方法有三个事件,可以用来定义回调函数。
-  
-  abort：事务中断。
-  complete：事务完成。
-  error：事务出错。
-  var transaction = db.transaction(["note"], "readonly");  
-  
-  transaction.oncomplete = function(event) {
-        // some code
-  };
-  事务对象有以下方法,用于操作数据。
-  
-  (1)添加数据：add方法
-  
-  获取对象仓库以后,就可以用add方法往里面添加数据了。
-  
-  var store = t.objectStore("firstOS");
-  
-  var o = {p: 123};
-  
-  var request = store.add(o,1);
-  add方法的第一个参数是所要添加的数据,第二个参数是这条数据对应的键名(key),上面代码将对象o的键名设为1。如果在创建数据仓库时,对键名做了设置,这里也可以不指定键名。
-  
-  add方法是异步的,有自己的success和error事件,可以对这两个事件指定回调函数。
-  
-  var request = store.add(o,1);
-  
-  request.onerror = function(e) {
-       console.log("Error",e.target.error.name);
-      // error handler
-  }
-  
-  request.onsuccess = function(e) {
-      console.log("数据添加成功！");
-  }
-  (2)读取数据：get方法
-  
-  读取数据使用get方法,它的参数是数据的键名。
-  
-  var t = db.transaction(["test"], "readonly");
-  var store = t.objectStore("test");
-  
-  var ob = store.get(x);
-  get方法也是异步的,会触发自己的success和error事件,可以对它们指定回调函数。
-  
-  var ob = store.get(x);
-   
-  ob.onsuccess = function(e) {
-  	// ...
-  }
+    ◆事件
+    checking  在浏览器为应用缓存查找更新时触发
+    error     在检查更新或下载资源期间发生错误时触发
+    noupdate  在检查描述文件发现文件无变化时触发
+    downloading 在开始下载应用缓存资源时触发
+    progress  在文件下载应用缓存的过程中持续不断的触发
+    updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
+    cached    在应用缓存完整可用时触发
+IndexedDB   浏览器端数据库 「HTML5」 
+  PS： IE 10+支持,但是Safari完全不支持「?」;
+    能够在客户端持久的储存结构化数据的数据库,并且提供了丰富的查询能力;
+    按域名分配独立空间「如a.qq.com 和 b.qq.com」,一个域名下可以创建多个数据库,
+    每个数据库可以创建多个对象储存空间「表」,
+    一个对象储存空间可以储存多个对象数据
+  概述 
+    随着浏览器的处理能力不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,
+    这样可以减少用户等待从服务器获取数据的时间。
+    现有的浏览器端数据储存方案,都不适合储存大量数据;
+    cookie不超过4KB,且每次请求都会发送回服务器端;
+    Window.name 属性缺乏安全性,且没有统一的标准;
+    localStorage在 2.5 M 到 10 MB 之间「DiBs」;
+    可以被网页脚本程序创建和操作,它允许储存大量数据,提供查找接口,还能建立索引。
+    IndexedDB不属于关系型数据库「不支持SQL查询语句」,更接近NoSQL数据库。
+  特点 
+    1、键值对储存 
+      IndexedDB内部采用对象仓库「object store」存放数据。
+      所有类型的数据都可以直接存入,包括JavaScript对象。
+      在对象仓库中,数据以“键值对”的形式保存,
+      每一个数据都有对应的键名,键名是独一无二的,不能有重复,否则会抛出一个错误。
+    2、异步
+      IndexedDB操作时不会锁死浏览器,用户依然可以进行其他操作,
+      这与localStorage形成对比,后者的操作是同步的。
+      异步设计是为了防止大量数据的读写,拖慢网页的表现。
+    3、支持事务。 
+      IndexedDB支持事务「transaction」,
+      意味着一系列操作步骤之中,只要有一步失败,整个事务就都取消,
+      数据库回到事务发生之前的状态,不存在只改写一部分数据的情况。
+    4、同域限制 
+      IndexedDB也受到同域限制,每一个数据库对应创建该数据库的域名。
+      来自不同域名的网页,只能访问自身域名下的数据库,而不能访问其他域名下的数据库。
+    5、储存空间大 
+      IndexedDB的储存空间比localStorage大得多,一般来说不少于250MB。
+      IE的储存上限是250MB,Chrome和Opera是剩余空间的某个百分比,Firefox则没有上限。
+    6、支持二进制储存。
+       IndexedDB不仅可以储存字符串,还可以储存二进制数据。
+  检查浏览器是否支持该API及兼容写法 
+    if("indexedDB" in window) {
+      console.log('支持');
+    } 
+    else {
+      console.log('不支持');
+    }
+    兼容写法
+    var indexedDB = window.indexedDB || window.webkitIndexedDB 
+    || window.mozIndexedDB || window.msIndexedDB;
+  var openRequest = indexedDB.open(str[,num]);  打开数据库,不存在则创建
+    str   字符串,数据库名称
+    num   大于 0 的正整数「0 将报错」,数据库版本,可选,默认为1
+  打开数据库事件 
+    PS：open方法返回的是一个对象「IDBOpenDBRequest」,事件在该对象上触发
+    success 打开成功
+    error   打开失败
+    upgradeneeded 第一次打开该数据库,或者数据库版本发生变化时 
+      第一次打开数据库时,会先触发upgradeneeded事件,然后触发success事件。
+    blocked       上一次的数据库连接还未关闭 
+    event,事件对象
+      event.target.result 指向打开的IndexedDB数据库
+    e.g.：
+      var openRequest = indexedDB.open("test",1);
+      var db;
+      openRequest.onupgradeneeded = function(e) {
+        console.log("Upgrading...");
+      }
+      openRequest.onsuccess = function(e) {
+        console.log("Success!");
+        db = e.target.result;
+      }
+      openRequest.onerror = function(e) {
+        console.log("Error");
+        console.dir(e);
+      }
+  ◆数据库对象实例的方法、属性
+    PS：获得数据库实例以后,就可以用实例对象的方法操作数据库。
+  db.createObjectStore(str[,obj]); 用于创建存放数据的“对象仓库” 
+    PS：类似于传统关系型数据库的表格;若该对象仓库已经存在,就会抛出一个错误;
+    str 字符串,对象仓库的名称
+    obj 对象,用于设置对象仓库的属性
+      db.createObjectStore("test", { keyPath: "email" }); 
+      db.createObjectStore("test2", { autoIncrement: true });
+      keyPath 表示所存入对象的email属性用作每条记录的键名
+        「由于键名不能重复,所以存入之前必须保证数据的email属性值都是不一样的」,默认值为null；
+      autoIncrement 表示是否使用自动递增的整数作为键名「第一个数据为1,第二个数据为2,以此类推」
+        默认为false。 一般来说,keyPath和autoIncrement属性只要使用一个就够了,
+        若两个同时使用,表示键名为递增的整数,且对象不得缺少指定属性。
+  db.objectStoreNames  返回一个DOMStringList对象 
+    里面包含了当前数据库所有“对象仓库”的名称。
+    db.objectStoreNames.contains(str)  检查数据库是否包含某个“对象仓库”
+      if(!db.objectStoreNames.contains("firstOS")) {
+        db.createObjectStore("firstOS");
+      }
+      判断某个“对象仓库”是否存在,若不存在就创建该对象仓库。
+  ◆数据库事务对象
+  var dbt = db.transaction(arr,option);  返回一个事务对象 
+    PS：向数据库添加数据之前,必须先创建数据库事务。
+    arr     数组,里面是所涉及的对象仓库,通常是只有一个
+    option  字符串,表示操作类型,目前,操作类型只有两种
+      添加数据使用readwrite,读取数据使用readonly。
+      readonly  只读
+      readwrite 读写
+  var store = dbt.objectStore("firstOS");  用于获取指定的对象仓库
+  事务对象的三个事件,可以用来定义回调函数
+    abort    事务中断
+    complete 事务完成
+    error    事务出错
+    var dbt = db.transaction(["note"], "readonly");  
+    dbt.oncomplete = function(event) {
+      // some code
+    };
+  ◆事务对象的方法,用于操作数据。
+  var request = store.add(o,1); 添加数据
+    获取对象仓库以后,就可以用add方法往里面添加数据了。
+    var store = dbt.objectStore("firstOS");
+    var o = {p: 123};
+    var request = store.add(o,1);
+    add方法的第一个参数是所要添加的数据,
+    第二个参数是这条数据对应的键名(key),上面代码将对象o的键名设为1。
+    若在创建数据仓库时,对键名做了设置,这里也可以不指定键名。
+    success和error事件
+      add方法是异步的,有自己的success和error事件
+      var request = store.add(o,1);
+      request.onerror = function(e) {
+        // error handler
+        console.log("Error",e.target.error.name); 
+      }
+      request.onsuccess = function(e) {
+        console.log("数据添加成功！");
+      }
+  var ob = store.get(x); 读取数据
+    参数是数据的键名
+    var t = db.transaction(["test"], "readonly");
+    var store = dbt.objectStore("test");
+    var ob = store.get(x);
+    get方法也是异步的,会触发自己的success和error事件,可以对它们指定回调函数。
+      var ob = store.get(x);
+      ob.onsuccess = function(e) {
+        // ...
+      }
   从创建事务到读取数据,所有操作方法也可以写成下面这样链式形式。
-  
-  db.transaction(["test"], "readonly")
+    db.transaction(["test"], "readonly")
     .objectStore("test")
     .get(X)
     .onsuccess = function(e){}
-  (3)更新记录：put方法
-  
-  put方法的用法与add方法相近。
-  
-  var o = { p:456 };
-  var request = store.put(o, 1);
-  (4)删除记录：delete方法
-  
-  删除记录使用delete方法。
-  
-  var t = db.transaction(["people"], "readwrite");
-  var request = t.objectStore("people").delete(thisId);
-  delete方法的参数是数据的键名。另外,delete也是一个异步操作,可以为它指定回调函数。
-  
-  (5)遍历数据：openCursor方法
-  
-  如果想要遍历数据,就要openCursor方法,它在当前对象仓库里面建立一个读取光标(cursor)。
-  
-  var t = db.transaction(["test"], "readonly");
-  var store = t.objectStore("test");
-  
-  var cursor = store.openCursor();
-  openCursor方法也是异步的,有自己的success和error事件,可以对它们指定回调函数。
-  
-  cursor.onsuccess = function(e) {
-      var res = e.target.result;
-      if(res) {
+  var request = store.put(o, 1); 更新记录
+    put方法的用法与add方法相近。
+    var o = { p:456 };
+    var request = store.put(o, 1);
+  var request = store.delete(thisId); 删除记录
+    var t = db.transaction(["people"], "readwrite");
+    var request = dbt.objectStore("people").delete(thisId);
+    delete方法的参数是数据的键名。另外,delete也是一个异步操作,可以为它指定回调函数。
+  var cursor = store.openCursor(); 遍历数据
+    若想要遍历数据,就要openCursor方法,它在当前对象仓库里面建立一个读取光标(cursor)。
+    var t = db.transaction(["test"], "readonly");
+    var store = dbt.objectStore("test");
+    var cursor = store.openCursor();
+    openCursor方法也是异步的,有自己的success和error事件,可以对它们指定回调函数。
+      cursor.onsuccess = function(e) {
+        var res = e.target.result;
+        if(res) {
           console.log("Key", res.key);
           console.dir("Data", res.value);
           res.continue();
+        }
       }
-  }
-  回调函数接受一个事件对象作为参数,该对象的target.result属性指向当前数据对象。当前数据对象的key和value分别返回键名和键值(即实际存入的数据)。continue方法将光标移到下一个数据对象,如果当前数据对象已经是最后一个数据了,则光标指向null。
-  
-  openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,其他可能的值为prev、nextunique和prevunique。后两个值表示如果遇到重复值,会自动跳过。
-  
-  createIndex方法
-  createIndex方法用于创建索引。
-  
-  假定对象仓库中的数据对象都是下面person类型的。
-  
-  var person = {
+      回调函数接受一个事件对象作为参数,该对象的 target.result 属性指向当前数据对象。
+      当前数据对象的 key 和 value 分别返回键名和键值「即实际存入的数据」。
+      continue 方法将光标移到下一个数据对象,
+      若当前数据对象已经是最后一个数据了,则光标指向null。
+    openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,
+      其他可能的值为prev、nextunique和prevunique。
+      后两个值表示若遇到重复值,会自动跳过。
+  store.createIndex 用于创建索引
+    假定对象仓库中的数据对象都是下面person类型的。
+    var person = {
       name:name,
       email:email,
       created:new Date()
-  }
-  可以指定这个数据对象的某个属性来建立索引。
-  
-  var store = db.createObjectStore("people", { autoIncrement:true });
-  
-  store.createIndex("name","name", {unique:false});
-  store.createIndex("email","email", {unique:true});
-  createIndex方法接受三个参数,第一个是索引名称,第二个是建立索引的属性名,第三个是参数对象,用来设置索引特性。unique表示索引所在的属性是否有唯一值,上面代码表示name属性不是唯一值,email属性是唯一值。
-  
-  index方法
-  有了索引以后,就可以针对索引所在的属性读取数据。index方法用于从对象仓库返回指定的索引。
-  
-  
-  var t = db.transaction(["people"],"readonly");
-  var store = t.objectStore("people");
-  var index = store.index("name");
-  
-  var request = index.get(name);
-  
-  上面代码打开对象仓库以后,先用index方法指定索引在name属性上面,然后用get方法读取某个name属性所在的数据。如果没有指定索引的那一行代码,get方法只能按照键名读取数据,而不能按照name属性读取数据。需要注意的是,这时get方法有可能取回多个数据对象,因为name属性没有唯一值。
-  
-  另外,get是异步方法,读取成功以后,只能在success事件的回调函数中处理数据。
-  
+    }
+    可以指定这个数据对象的某个属性来建立索引。
+    var store = db.createObjectStore("people", { autoIncrement:true });
+    store.createIndex("name","name", {unique:false});
+    store.createIndex("email","email", {unique:true});
+    createIndex方法接受三个参数,
+    第一个是索引名称,
+    第二个是建立索引的属性名,
+    第三个是参数对象,用来设置索引特性。
+    unique表示索引所在的属性是否有唯一值,上面代码表示name属性不是唯一值,email属性是唯一值。
+  var request = index.get(name); 从对象仓库返回指定的索引
+    有了索引以后,就可以针对索引所在的属性读取数据。
+    var t = db.transaction(["people"],"readonly");
+    var store = dbt.objectStore("people");
+    var index = store.index("name");
+    var request = index.get(name);
+    上面代码打开对象仓库以后,先用index方法指定索引在name属性上面,
+    然后用get方法读取某个name属性所在的数据。
+    若没有指定索引的那一行代码,get方法只能按照键名读取数据,
+    而不能按照name属性读取数据。
+    需要注意的是,这时get方法有可能取回多个数据对象,因为name属性没有唯一值。
+    另外,get是异步方法,读取成功以后,只能在success事件的回调函数中处理数据。
   IDBKeyRange对象
-  索引的有用之处,还在于可以指定读取数据的范围。这需要用到浏览器原生的IDBKeyRange对象。
-  
-  IDBKeyRange对象的作用是生成一个表示范围的Range对象。生成方法有四种：
-  
-  lowerBound方法：指定范围的下限。
-  upperBound方法：指定范围的上限。
-  bound方法：指定范围的上下限。
-  only方法：指定范围中只有一个值。
-  下面是一些代码实例：
-  
-  // All keys ≤ x	
-  var r1 = IDBKeyRange.upperBound(x);
-  
-  // All keys < x	
-  var r2 = IDBKeyRange.upperBound(x, true);
-  
-  // All keys ≥ y	
-  var r3 = IDBKeyRange.lowerBound(y);
-  
-  // All keys > y	
-  var r4 = IDBKeyRange.lowerBound(y, true);
-  
-  // All keys ≥ x && ≤ y	
-  var r5 = IDBKeyRange.bound(x, y);
-  
-  // All keys > x &&< y	
-  var r6 = IDBKeyRange.bound(x, y, true, true);
-  
-  // All keys > x && ≤ y	
-  var r7 = IDBKeyRange.bound(x, y, true, false);
-  
-  // All keys ≥ x &&< y	
-  var r8 = IDBKeyRange.bound(x, y, false, true);
-  
-  // The key = z	
-  var r9 = IDBKeyRange.only(z);
-  前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性。
-  
-  生成Range对象以后,将它作为参数输入openCursor方法,就可以在所设定的范围内读取数据。
-  
-  var t = db.transaction(["people"],"readonly");
-  var store = t.objectStore("people");
-  var index = store.index("name");
-  
-  var range = IDBKeyRange.bound('B', 'D');
-  
-  index.openCursor(range).onsuccess = function(e) {
-          var cursor = e.target.result;
-          if(cursor) {
-              console.log(cursor.key + ":");
-              for(var field in cursor.value) {
-                  console.log(cursor.value[field]);
-              }
-              cursor.continue();
-          }
-  }  
-Web Notifications 浏览器通知接口 [可能存在兼容性问题] 
+    索引的有用之处,还在于可以指定读取数据的范围。
+    这需要用到浏览器原生的IDBKeyRange对象。
+    IDBKeyRange对象的作用是生成一个表示范围的Range对象。生成方法有四种：
+    lowerBound方法：指定范围的下限。
+    upperBound方法：指定范围的上限。
+    bound方法：指定范围的上下限。
+    only方法：指定范围中只有一个值。
+    下面是一些代码实例：
+    // All keys ≤ x	
+    var r1 = IDBKeyRange.upperBound(x);
+    
+    // All keys < x	
+    var r2 = IDBKeyRange.upperBound(x, true);
+    
+    // All keys ≥ y	
+    var r3 = IDBKeyRange.lowerBound(y);
+    
+    // All keys > y	
+    var r4 = IDBKeyRange.lowerBound(y, true);
+    
+    // All keys ≥ x && ≤ y	
+    var r5 = IDBKeyRange.bound(x, y);
+    
+    // All keys > x &&< y	
+    var r6 = IDBKeyRange.bound(x, y, true, true);
+    
+    // All keys > x && ≤ y	
+    var r7 = IDBKeyRange.bound(x, y, true, false);
+    
+    // All keys ≥ x &&< y	
+    var r8 = IDBKeyRange.bound(x, y, false, true);
+    
+    // The key = z	
+    var r9 = IDBKeyRange.only(z);
+    前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性。
+    
+    生成Range对象以后,将它作为参数输入openCursor方法,就可以在所设定的范围内读取数据。
+    var t = db.transaction(["people"],"readonly");
+    var store = dbt.objectStore("people");
+    var index = store.index("name");
+    
+    var range = IDBKeyRange.bound('B', 'D');
+    
+    index.openCursor(range).onsuccess = function(e) {
+      var cursor = e.target.result;
+      if(cursor) {
+        console.log(cursor.key + ":");
+        for(var field in cursor.value) {
+          console.log(cursor.value[field]);
+        }
+        cursor.continue();
+      }
+    }  
+  e.g.：
+Web Notifications 浏览器通知接口 「DiBs」「HTML5」  
   概述
   Notification API是浏览器的通知接口,用于在用户的桌面(而不是网页上)显示通知信息,桌面电脑和手机都适用,比如通知用户收到了一封Email。具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
   
-  如果网页代码调用这个API,浏览器会询问用户是否接受。只有在用户同意的情况下,通知信息才会显示。
+  若网页代码调用这个API,浏览器会询问用户是否接受。只有在用户同意的情况下,通知信息才会显示。
   
   下面的代码用于检查浏览器是否支持这个API。
   
@@ -3559,7 +3524,7 @@ Web Notifications 浏览器通知接口 [可能存在兼容性问题]
     }
   });
   
-  上面代码表示,如果用户拒绝接收通知,可以用alert方法代替。
+  上面代码表示,若用户拒绝接收通知,可以用alert方法代替。
   
   Notification实例对象
   Notification构造函数
@@ -3616,13 +3581,13 @@ Web Notifications 浏览器通知接口 [可能存在兼容性问题]
   }
   
   上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
-drag|drop 拖放 「HTML5」
-  PS:Web开发人员一直在用jQuery完成拖放,现在这个功能已经内置于HTML5中 [IE9=+支持]
+drag|drop 拖放 「HTML5」 
+  PS:Web开发人员一直在用jQuery完成拖放,现已原生支持 「IE9+ HTML5」
     IE4最早加入拖放功能,只能拖放文本框
   定义拖放元素和目标元素
     定义拖放元素
       在HTML中将要拖放的标签其draggable属性设置为true,即draggable="true",
-      如果是图片则图片需加载进来,当图片加载失败则不可拖放.
+      若是图片则图片需加载进来,当图片加载失败则不可拖放.
     定义目标元素
       默认的所有的元素都不能做为放置的目标元素,
       通过阻止拖放时触发事件的默认行为来达到可放置的效果,
@@ -3693,7 +3658,7 @@ drag|drop 拖放 「HTML5」
     e.dataTransfer.addElement(elem); 为拖动操作添加一个元素
     e.dataTransfer.types  当前保存的数据类型,如'text'
     e.dataTransfer.items  返回 DataTransferItemList 对象
-    e.dataTransfer.files　存放一些拖放的本地文件,如果没有拖放文件,则此列表为空
+    e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
   兼容
     IE9-不支持draggable属性,但可通过mousedown事件来模拟
       e.g.:
@@ -3797,7 +3762,7 @@ drag|drop 拖放 「HTML5」
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
     }
-Fullscreen API 全屏操作
+Fullscreen 全屏操作 「HTML5」 
   PS：全屏API可以控制浏览器的全屏显示,让一个Element节点「以及子节点」占满用户的整个屏幕
     目前各大浏览器的最新版本都支持这个API「包括IE11」,但是使用的时候需要加上浏览器前缀
     放大一个节点时,Firefox和Chrome在行为上略有不同。
@@ -3848,7 +3813,7 @@ Fullscreen API 全屏操作
     }
     exitFullscreen();
   document.fullscreenElement 返回正处于全屏状态的Element节点,
-    PS：如果当前没有节点处于全屏状态,则返回null。
+    PS：若当前没有节点处于全屏状态,则返回null。
     var fullscreenElement = document.fullscreenElement 
     || document.mozFullScreenElement 
     || document.webkitFullscreenElement;
@@ -3894,8 +3859,6 @@ Fullscreen API 全屏操作
       height: 100%;
     }
 -------------------------------------------------------------------------待整理
-
-
 
 
 

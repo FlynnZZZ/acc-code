@@ -214,7 +214,7 @@ windows环境
       logoff---------注销命令
       net stop messenger-----停止信使服务
       net start messenger----开始信使服务
-浏览器
+浏览器 
   介绍_概念_说明_定义 
     说明
       浏览器从同一个域同时下载文件的数量有限,当同时下载多个文件,会比相同大小的单个文件慢.
@@ -889,7 +889,6 @@ Question & Idea
   Web Server
       如果希望向世界发布网站,则必须把它存放在web服务器上。
     e.g.: 网址如 'http://www.W3school.com.cn/html/index.asp'
-
 
 
 

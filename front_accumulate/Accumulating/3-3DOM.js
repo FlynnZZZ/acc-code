@@ -878,7 +878,7 @@ DOM,Document Object Model 文档对象模型
       elem.getBoundingClientRect();
       返回一个对象,包含left top right bottom4个属性,表示元素相对于视口的位置
   DOM2遍历和范围  [更多详见 JavaScript高级程序设计 327 页]
-DOM操作自我归纳总结
+DOM操作自我归纳总结 
   创建 elem
     var img =new Image(); 创建图片对象
       e.g. img.src="图片地址"
@@ -2077,7 +2077,7 @@ WYSIWYG,富文本编辑
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
  (详参 JavaScript高级程序设计 440页)
-Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」 
+Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」 
   PS:画布默认是透明的.
     在css中指定画布宽、高,会导致画布中的所有内容进行相应的缩放.
     <canvas> 标签只有两个属性—— width和height.
@@ -2086,6 +2086,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
     如果CSS的尺寸与初始画布的比例不一致,它会出现扭曲.
   限制
     出于安全考虑,浏览器不允许处理跨域图像,但利用特殊的手段可以突破该限制 「?」
+    可通过设置 Access-Control-Allow-Origin 来跨域
     解决处理跨域图像出现的安全警告的方法是使用CORS;
     为了阻止欺骗,浏览器会追踪 image data,
     当把跟canvas域不同的图片放到canvas上,canvas就成为“tainted”「被污染的,脏的」,
@@ -2099,14 +2100,13 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
     通过canvas,JS可以对图像进行像素级的操作,
     可以直接处理图像的二进制原始数据,为图像的签名技术提供了支持.
     canvas提供了常用的图像格式转换功能,可使用JS更改图像的编码方式.
-  添加画布标签
-    <canvas width="600" height="200">您的浏览器不支持画布,请升级</canvas>
-      在HTML中添加一个宽600px,高200px的画布.
-      当不支持画布的浏览器,会显示出标签中的内容.支持的会忽略:
-    检测浏览器是否支持画布:检测是否存在getContext方法
-      if(canvas.getContext) {  }else {  }
+  <canvas width="600" height="200">您的浏览器不支持画布,请升级</canvas> 添加画布标签
+    在HTML中添加一个宽600px,高200px的画布,推荐使用CSS来控制宽高
+    当不支持画布的浏览器,会显示出标签中的内容.支持的会忽略:
+  检测浏览器是否支持画布:检测是否存在getContext方法
+    if(canvas.getContext) {  }else {  }
   var cvs = document.querySelector('canvas');  canvas对象
-    cvs.toDataURL(type,quality); 返回一个包含图片展示的 data URI
+    cvs.toDataURL(type,quality); 返回包含图片的 data URI「需将图片预先放入canvas」
       PS:如果画布的高度或宽度是0,那么会返回字符串“data:,”;
       type     可选,返回的图片类型,默认为 PNG
         图片的分辨率为96dpi;
@@ -2559,7 +2559,6 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
                   ctx.drawImage(document.getElementById('frame'),0,0);
                 }
               }
-              
     Path2D 对象 用来缓存或记录绘画命令,这样就能快速地回顾路径
       PS:为了简化代码和提高性能,Path2D对象已可以在较新版本的浏览器中使用
         所有的路径方法比如 moveTo, rect, arc 或 quadraticCurveTo等,都可以在Path2D中使用
@@ -2594,7 +2593,6 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
           这条路径将先移动到点 (M10 10) 然后再水平移动80个单位 (h 80),
           然后下移80个单位 (v 80),接着左移80个单位 (h -80),再回到起点处 (z).
           var p = new Path2D("M10 10 h 80 v 80 h -80 Z");
-
     ◆边框
       ctx.strokeText(str,x,y,maxwidth); 边框文字
     ◆文字绘制
@@ -2716,8 +2714,6 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
         e.g.:
         color.addColorStop(0.3,"orange");
         color.addColorStop(0.5,"yellow");
-
-
     e.g.
       使用 translate rotate save restore 绘制图案
         <canvas id="canvas" width="400" height="400"></canvas>
@@ -2734,7 +2730,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+,HTML5」
           context.rotate(degrees*Math.PI/180);
         }
         context.restore();
-SVG,Scalable Vector Graphics    可缩放矢量图 
+SVG,Scalable_Vector_Graphics    可缩放矢量图 
   PS:一种描述向量图形的XML格式的标记化语言。
     也就是说,SVG本质上是文本文件,格式采用XML,可以在浏览器中显示出矢量图像。
     由于结构是XML格式,使得它可以插入HTML文档,成为DOM的一部分,
@@ -3157,7 +3153,7 @@ audio/video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
     playing         当媒介数据正在播放时运行脚本
   Remarks:
     直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
-Web Workers 工作线程 「HTML5」
+Web_Workers 工作线程 「HTML5」
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.
   通过 window["Worker"] 来查看是否支持Web工作线程.
@@ -3294,7 +3290,7 @@ XSS,Cross SiteScript 跨站脚本攻击
     理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
   原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
     当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
-    如,盗取用户Cookie、破坏页面结构、重定向到其它网站等。
+    如盗取用户Cookie、破坏页面结构、重定向到其它网站等。
   DOM Based XSS 漏洞: 基于网页DOM结构的攻击,特点是中招的人是少数人
     e.g.:
       如一个获取他人Cookie的超链接,
@@ -3316,7 +3312,7 @@ XSS,Cross SiteScript 跨站脚本攻击
       最终存储的会是：
       '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
       在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
-Web Components 组件化 
+Web_Components 组件化 
   Custom Elements  自定义HTML元素,包括特定的组成、样式和行为
     支持该标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素,或者扩展现有元素
     document.registerElement('x-aoo', {      注册标签

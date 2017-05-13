@@ -1165,37 +1165,100 @@ GitHub
   html及CSS 中id和class命名规范
     PS： 使用 大小写字母、数字 和 下划线_;驼峰法用于间隔;
       以数字或_开头可能存在兼容性问题
-    层级间   字母+数字 区分「当数字取到两位时,如10,改用两位字母+数字」 
+    层级间   字母+数字 使用数字来定位层级「当数字取到两位时,如10,改用两位字母+数字」 
       一般将id的第一个首字母后带数字用于表示到该id元素的层级
       aoo 
         aBoo aCoo aDoo ...
-          a1Aoo ...
+          a1aoo ...
             ...
-            a9Xoo
-              ax1Aoo
+            a9xoo
+              ax1aoo
     同级间   单词+数字/字母 区分 
-      同分支同级 单词+_数字 
-      异分支同级 单词+_分支首字母
-      最后使用直接+数字的方法表示 同分支和异分支同时重名的情况
-      aoo
-      |-------aBoo
-      |-------aCoo 
-        |--a1Xoo  a1Foo  a1Foo_1「同分支同级重名」 a1Xoo_1 a1Xoo_2
-        |--a1Xoo_c「异分支同级重名」  a1Soo  a1Xoo_c_1 a1Xoo_c_2
-          |--a2Aoo a2Boo
-          |--a2A00_f a2Coo
-          |--a2Aoo_f1 a2Coo1
-          |--a2Aoo3 a2Coo2
-          |--a2Aoo4 a2Coo3
-          ----------------
-          |--a2AooX
-          |--
-          |--
+      同分支同级重名 _数字 
+        aCoo
+        a1xoo | a1xoo_1
+      异分支同级重名 _分支首字母 
+        aAoo
+        a1aoo | a1aoo_1 | a1boo
+        a2aoo a2aoo_1 | a2aoo_a a2aoo_a_1 | a2aoo_b a2aoo_b_1
+      当用于区分的两异分支也重名时 _分支首字母+数字 
+        aAoo
+        a1aoo | a1aoo_1 | a1aoo_2
+        |--a2aoo a2aoo_1 
+        |--a2aoo_a a2aoo_a_1 
+        |--a2aoo_a1「a2aoo_a仍重名故改用a2aoo_a1」 a2aoo_a1_1
     下标从0零开始,且0默认省略
-    // todo 
-    top rit btm lft mid cnt up dwn 
-    ttl ctt bdy wrp item i s 
-    
+    常用短语 
+      top rit btm lft mid cnt up dwn frt bck
+      ttl ctt bdy wrp item i special s  
+    复杂级别「所有使用同一个名字」
+      aoo  通过数字来定位和_num来区分
+      a_0 | a_1 | a_2
+      a0_0 a0_1 a0_2 | a1_0 a1_1 a1_2 a1_3 | a2_0 a2_1 a2_2
+      |--a00_0 a00_1 a00_2 a00_3
+      |--a01_0 a01_2 a01_3 
+      |--a02_0 a02_1
+      -----
+      |--a10_0 a10_1 a10_2 
+      |--a11_0 a11_1 a11_2 a11_3
+      |--a12_0 a12_1 a12_2
+      |--a13_0 a13_1 a13_2 a13_3 
+      -----
+      |--a20_0 a20_1 a20_2
+      |--a21_0 a21_1 
+      |--a22_0 a22_1 a22_2 a22_3
+        |--a000 
+        |--a001 
+        |--a002 
+        |--a003 
+        -----
+        |--a010 
+        |--a011 
+        |--a012 
+        |--a013 
+        -----
+        |--a020 
+        |--a021 
+        --------
+        |--
+        |--
+        |--
+        ----
+        |--
+        |--
+        |--
+        |--
+        ----
+        |--
+        |--
+        |--
+        ----
+        |--
+        |--
+        |--
+        |--
+        --------
+        |--
+        |--
+        |--
+        ----
+        |--
+        |--
+        ----
+        |--
+        |--
+        |--
+        |--
+        
+      
+      或者 
+      aoo  通过字母定位和_num来区分
+      aLft | aCnt | aRit
+      alLft alCnt alRit | acTop acMid acBtm | arTop arMid arBtm
+      |--allTop allMid allBtm
+      |--alcAoo alcBoo alcAoo_1 alcAoo_2 
+      |--
+      -----
 学习计划 
   设计模式 代码的组织
   前端学习总结

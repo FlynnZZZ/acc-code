@@ -193,8 +193,8 @@ DOM,Document Object Model 文档对象模型
         document.documentElement.clientHeight; 获取视口的宽度
         document.documentElement.textContent;  获取整个文档的文本以及CDATA数据
       document.body; 表示<body>元素,得到body标签及其包含的所有内容
-        document.body.clientWidth;  获取视口宽度
-        document.body.clientHeight; 获取视口高度
+        document.body === document.querySelector("body"); // true
+        「其他属性详见 DOM操作归纳总结->elem」
       document.title; 取/设网页标题,类型为字符串
         e.g. :
         PS-Self:通过中间量赋值方法更改网页标题失败
@@ -878,8 +878,8 @@ DOM,Document Object Model 文档对象模型
       elem.getBoundingClientRect();
       返回一个对象,包含left top right bottom4个属性,表示元素相对于视口的位置
   DOM2遍历和范围  [更多详见 JavaScript高级程序设计 327 页]
-DOM操作自我归纳总结 
-  创建 elem
+DOM操作归纳总结 
+  创建 elem 
     var img =new Image(); 创建图片对象
       e.g. img.src="图片地址"
     var opt =new Options(["文本","值",bool,bool]); 创建option对象
@@ -895,7 +895,7 @@ DOM操作自我归纳总结
     document.createElement("元素名a"); 创建元素对象,创建一个空元素a
       (详见: 节点类型&详解 Document 创建)
     nod.cloneNode(bool); 复制节点(详见: Node节点)
-  获取 elem
+  获取 elem 
     快捷方法获取
       document.documentElement  表示整个HTML
       document.head HTML的head节点
@@ -941,8 +941,8 @@ DOM操作自我归纳总结
           若无定位元素,则为最近的 table 元素对象或根元素
             (标准模式下为 html；quirks 模式下为 body).
           当元素的 style.display 设置为 "none" 时,offsetParent 返回 null.
-  操作 elem
-    元素增删查改
+  操作 elem 
+    元素增删查改 
       Nod.hasChildNodes(nod); 是否包含节点
       elem.insertAdjacentHTML("位置",`html字符串`); 插入HTML代码
        (详见: DOM扩展 HTML5)
@@ -956,6 +956,63 @@ DOM操作自我归纳总结
         (详见: Node操作部分)
       Nod.replaceChild(); 替换子元素 (详见: Node操作部分)
       elem.remove();     删除元素 [可能有兼容问题] [IE11不支持]
+    元素的尺寸、位置
+      elem.offsetHeight 元素的高度,content+padding+border+scrollbar [DiBs]
+        和元素内部的内容是否超出元素无关,只和width和border有关
+      elem.offsetWidth  元素的宽度,content+padding+border+scrollbar [DiBs]
+      elem.offsetTop    元素相对其offsetParent「定位的父元素」的top
+      elem.offsetLeft   元素相对其offsetParent「定位的父元素」的left
+      elem.clientWidth    只读,边内宽,content+padding 
+        不包括边框(IE下包括)、滚动条部分
+          windows 中出现滚动条时为 content+padding-滚动条的宽度
+          mac 中滚动条在未拖动时自动隐藏,因此不影响 
+        无padding和滚动条时 clientWidth 等于 style.width
+        e.g. : 获取浏览器窗口的高和宽
+          function getViewport(){
+            var obj = {};
+            if(document.compatMode == "BackCompat"){
+              obj.width = document.body.clientWidth;
+              obj.height = document.body.clientHeight;
+            } 
+            else {
+              obj.width =  document.documentElement.clientWidth;
+              obj.height = document.documentElement.clientHeight;
+            }
+            return obj;
+          }
+          大多数情况下,都是document.documentElement.clientWidth 返回正确值.
+          但在IE6的quirks模式中,document.body.clientWidth 返回正确的值,
+          因此函数中加入了对文档模式的判断.
+      elem.clientHeight   只读,边内高,content+padding
+      elem.clientTop      border-top的宽度
+      elem.clientLeft     border-left的宽度
+      elem.scrollWidth      元素可视部分及滚动隐藏部分的宽度和
+      elem.scrollHeight     元素可视部分及滚动隐藏部分的高度和
+        包括元素的padding,但不包括元素的margin.
+      elem.scrollTop        读写元素滚动到的视口的高度位置
+      elem.scrollLeft       读写元素滚动到的视口的宽度位置
+      elem.scrollIntoView() 将指定的节点设置为默认在可视窗口内
+      elem.style.left 读写相对于具有定位属性父元素对象的边距
+        获取或设置相对于具有定位属性(position定义为relative)的父对象的左边距;
+        子元素对象.style.left
+        子元素对象.style.top
+        返回值为字符串,如20px,
+        Remarks:
+          style.left的值需要事先定义在html里(对象的标签里),否则取到的值为空.若定义在css里,style.left的值仍然为空,仍取不到值
+      elem.getBoundingClientRect() 获取元素位置对象
+        返回一个对象,用于获得元素相对视口的位置 [可能存在兼容问题]
+        有6个属性：top,lef,right,bottom,width,height
+          width、height是元素自身的宽高
+          right是指元素右边界距窗口最左边的距离,
+          bottom是指元素下边界距窗口最上面的距离.
+        elem.getBoundingClientRect().width;
+        elem.getBoundingClientRect().height;
+        elem.getBoundingClientRect().top;
+        elem.getBoundingClientRect().right;
+        elem.getBoundingClientRect().bottom;
+        elem.getBoundingClientRect().left;
+      window.innerWidth || document.documentElement.clientWidth   视口宽度
+      window.innerHeight || document.documentElement.clientHeight 视口高度
     元素的属性
       elem.attributes 元素所有属性的集合
         (详见 HTMLElement 类型)
@@ -1028,59 +1085,6 @@ DOM操作自我归纳总结
         在ios中该方法存在限制,
           直接调用失效; load、input等事件cfoo中失效,click事件cfoo中成功;
           当click中的cfoo可执行时,而通过其他方法或事件触发click,则无法获取焦点;
-    元素的尺寸、位置
-      elem.offsetHeight 元素的高度,content+padding+border+scrollbar [DiBs]
-      elem.offsetWidth  元素的宽度,content+padding+border+scrollbar [DiBs]
-      elem.offsetTop    元素相对于其offsetParent(定位的父元素)的top
-      elem.offsetLeft   元素相对于其offsetParent(定位的父元素)的left
-      elem.clientHeight   只读,边内高,content+padding
-      elem.clientWidth    只读,边内宽,content+padding
-        不包括边框(IE下包括)、外边距、滚动条部分
-        e.g. :
-          获取浏览器窗口的高和宽
-          function getViewport(){
-            var obj = {};
-            if(document.compatMode == "BackCompat"){
-              obj.width = document.body.clientWidth;
-              obj.height = document.body.clientHeight;
-            } else {
-              obj.width =  document.documentElement.clientWidth;
-              obj.height = document.documentElement.clientHeight;
-            }
-            return obj;
-          }
-          大多数情况下,都是document.documentElement.clientWidth 返回正确值.
-          但在IE6的quirks模式中,document.body.clientWidth 返回正确的值,
-          因此函数中加入了对文档模式的判断.
-      elem.clientTop      上边框宽度,border-top
-      elem.clientLeft     左边框宽度,border-left
-      elem.scrollWidth      元素可视部分及滚动隐藏部分的宽度和
-      elem.scrollHeight     元素可视部分及滚动隐藏部分的高度和
-        包括元素的padding,但不包括元素的margin.
-      elem.scrollTop        读写元素滚动到的视口的高度位置
-      elem.scrollLeft       读写元素滚动到的视口的宽度位置
-      elem.scrollIntoView() 将指定的节点设置为默认在可视窗口内
-      elem.style.left 读写相对于具有定位属性父元素对象的边距
-        获取或设置相对于具有定位属性(position定义为relative)的父对象的左边距;
-        子元素对象.style.left
-        子元素对象.style.top
-        返回值为字符串,如20px,
-        Remarks:
-          style.left的值需要事先定义在html里(对象的标签里),否则取到的值为空.若定义在css里,style.left的值仍然为空,仍取不到值
-      elem.getBoundingClientRect() 获取元素位置对象
-        返回一个对象,用于获得元素相对视口的位置 [可能存在兼容问题]
-        有6个属性：top,lef,right,bottom,width,height
-          width、height是元素自身的宽高
-          right是指元素右边界距窗口最左边的距离,
-          bottom是指元素下边界距窗口最上面的距离.
-        elem.getBoundingClientRect().width;
-        elem.getBoundingClientRect().height;
-        elem.getBoundingClientRect().top;
-        elem.getBoundingClientRect().right;
-        elem.getBoundingClientRect().bottom;
-        elem.getBoundingClientRect().left;
-      window.innerWidth || document.documentElement.clientWidth   视口宽度
-      window.innerHeight || document.documentElement.clientHeight 视口高度
     操作style样式
       方法一:通过给元素添加class来操作样式
       方法二:直接操作内联样式 elem.style.XX = XXX

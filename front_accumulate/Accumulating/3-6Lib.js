@@ -20,7 +20,9 @@ Framework 框架
 --------------------------------------------------------------------------------
 ★jQuery 
 说明篇 :快速简洁的JavaScript库 
-  PS:jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能.
+  PS:jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
+  版本
+    2.0 版本不支持ie 6/7/8
   核心特性总结：
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
@@ -245,10 +247,40 @@ DOM 操作
         index为整数,指示元素的位置[从0开始]
         如果是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem
-        Jelem.not(function(index)); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
-    通过elem获取
+        Jelem.not(function(index){}); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
+    通过elem获取 
       $(elem);  返回Jelem
         e.g. $(document); // 获取整个文档
+    性能优化
+      关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器。
+      因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是;
+      
+      $('#nav').find('a.home'); //3 
+      $('#nav a.home'); //2 
+      $('.home'); //1 
+      推荐优先使用前两种
+      
+      为选择器指定上下文
+        默认情况下,当把一个选择器传递给jQuery时,它将遍历整个DOM,
+        jQuery方法还具有一个未充分利用的参数,既可以将一个上下文参数传入jQuery,
+        以限制它只搜索DOM中特定的一部分。
+        //糟糕,会遍历整个DOM
+        $(".class");
+        //建议,只搜索#id元素内
+        $(".class","#id");
+        
+        jQuery选择器的性能比较：
+        $(".class","#id") > $("#id .class") > $(".class")
+        
+      缓存jQuery对象
+        // 糟糕 
+        var $container = $('#container'), 
+        $containerLi = $('#container li'), 
+        $containerLiSpan = $('#container li span'); 
+        // 建议 (高效) 
+        var $container = $('#container '), 
+        $containerLi = $container.find('li'), 
+        $containerLiSpan= $containerLi.find('span');
   Jelem 操作 
     PS:若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
     Jelem 转换为 elem
@@ -275,12 +307,12 @@ DOM 操作
       Jelem.after('htmlCode'/Jelem)      外部尾部插入
       Jelem.insertAfter("selector"/Jelem) 被插入到外部尾部 [与after相反]
         将元素/内容content插入到元素外部尾部  
-      Jelem.html(str/function); 设置/获取元素内容
+      Jelem.html(str/foo); 设置/获取元素内容
         无参数:以字符串形式返回元素内容,包括HTML标签
         有参数:参数为字符串,将元素中内容替换为字符串,会将HTML标记转换为HTML元素
         当 Jelem 包含多个 elem时,则默认将其获取的每个元素的字符串合并为一个字符串.
         和JS中的.innerHTML 相似
-      Jelem.text(str/function); 设置/获取元素文本
+      Jelem.text(str/foo); 设置/获取元素文本
         无参数:获取元素的内容文本
         有参数:设置元素内容文本
       Jelem.wrap("HTML代码"/Jelem)          每个元素外包裹元素
@@ -292,18 +324,18 @@ DOM 操作
         删除该元素和其子元素及以下的所有内容(包括自身标签)
         所有与元素相关的数据也会被删除(event handlers、internally cached data)
         返回值为删除的元素
-      Jelem.detach()   删除元素 [同remove类似]
-        保留了绑定事件、附加数据等
+      Jelem.detach()   删除元素「保留绑定事件、附加数据等」
         detach 后的返回值(元素)再添加到其他地方,元素的event事件仍存在.
       Jelem.empty()    清空内容
         删除该元素的子元素及以下的所有内容(不包括自身标签)
         返回值为清空后的元素
-    替换
+      Jelem.removeAttr('属性名'); 删除属性
+        e.g.:
+          Jelem.removeAttr('class'); 
+    改
       Jelem1.replaceWith("HTML代码"/Jelem); 元素1代替为元素2
       Jelem1.replaceAll("selector"/Jelem2); 元素2代替为元素1 [与replaceWith相反]
         $("HTML代码")/Jelem1.replaceAll("selector"/Jelem2); 
-    元素属性
-      ◆添加属性
       Jelem.css() 设置/获取元素的style样式 [设置为行内样式] [获取为计算后的属性]
         e.g. 
           Jelem.css('height'); //获取元素的高度
@@ -316,6 +348,8 @@ DOM 操作
           e.g.:  Jelem.css({"background-color":"red",color:"yellow"});  
         Jelem.css("color",function(index,oldValue){ }); 传入函数
           // 设置返回值(即 return的值)为属性值.
+    元素属性
+      ◆添加属性
       Jelem.attr();  读写属性值
         Jelem.attr('属性名')     返回选定属性的属性值
         Jelem.attr('属性名',str/boolean) 设定选定属性的属性值
@@ -341,10 +375,7 @@ DOM 操作
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})
-      Jelem.removeAttr('属性名'); 删除属性
-        e.g.:
-          Jelem.removeAttr('class'); 
-      Jelem.val(str/function);  读写值 [实时动态的]
+      Jelem.val(str/foo); 读写值 [实时动态的]
         使用元素
           input元素的value的值 
           textarea 的内容
@@ -416,6 +447,23 @@ DOM 操作
       Jelem.click();   点击元素 「会触发事件」
       Jelem.select();  选中文字
         不可选中因增加contenteditable属性而可编辑的元素的文字
+    性能优化
+      繁重的操作中分离元素
+        如果你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
+        建议首先分离元素然后在添加。
+        // 糟糕
+        var $container = $("#container"),
+        $containerLi = $("#container li"),
+        $element = null;
+        $element = $containerLi.first();
+        //... 许多复杂的操作
+        // better
+        var $container = $("#container"),
+        $containerLi = $container.find("li"),
+        $element = null;
+        $element = $containerLi.first().detach();
+        //... 许多复杂的操作
+        $container.append($element);
   Animation 动画
     speed    数值,速度,过渡的时间,默认为0「单位毫秒」
       number (比如 1500)
@@ -616,6 +664,22 @@ Event 事件
     Jelem.focus(foo)
     Jelem.blur(foo)
     Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
+  事件绑定性能优化
+    正确使用事件委托
+      $('#t').find('td').on('click', function () {  
+        $(this).css({ 
+          'color': 'red', 
+          'background': 'yellow' 
+        });  
+      });
+      这样会为每个td绑上事件,在为100个单元格绑定click事件的测试中,
+      两者性能相差7倍之多,好的做法应该是下边写法：
+      $('#t').on('click', 'td', function () {  
+        $(this).css({ 
+          'color': 'red', 
+          'background': 'yellow' 
+        });  
+      }); 
   触发事件 
     Jelem.trigger("event",[param1,param2,...]); 
       event	 必需,规定指定元素要触发的事件
@@ -723,50 +787,79 @@ Event 事件
 AJAX 
   PS: jQuery 最常用的 AJAX API 可以为分三类:
   ◆方法型 
-  $.get(url,[data],[function(backData,textStatus){}]) get请求
-    PS:get方法会把data添加到url上(故可直接改变url而省略data)
+  $.get(url[,data][,cfoo][,type]) get请求 
+    url  请求的地址
+    data 可选,get方法会把data添加到url上,故可直接改变url而省略data;
     cfoo 载入成功时调用回调函数
       PS:只有当Response的返回状态为success才执行该函数
+      参数
       backData   返回的数据
       textStatus 字符串形式表示的响应的状态
-  $.post(url,[data],[function(backData,textStatus){}],[type]) post请求
-    type 客户端请求的数据类型(如 JSON、XML 等等)
+    type 请求的数据类型,如'json'
+  $.post(url[,data][,cfoo][,type])  post请求 
+    type 客户端请求的数据类型,如 JSON、XML 等等
   ◆捷径型 
-  Jelem.load(url,[data],[function(bD,tS){}])  载入远程HTML文件代码并插入至元素中
+  Jelem.load(url[,data][,cfoo])  获取数据并将内容插入Jelem元素中 
     url      请求的地址
-    data     可选,发送到服务器的数据
-    cfoo 可选,请求完成时(不需是success)的回调函数
-  $.getScript(url,[cfoo])      通过get方法请求并执行一个JavaScript文件
-    cfoo 在获取到JS文件并执行获取到的JS文件后,再执行
-  $.getJSON()
+    data     可选,发送的数据
+    cfoo     可选,请求成功时执行的回调函数
+  $.getJSON(url[,data][,cfoo])   获取数据并解析
+    url    请求加载json格式文件的服务器地址
+    data   可选,请求时发送的数据
+    cfoo   可选,数据请求成功后执行的回调函数,获取的数据作为参数传入
+  $.getScript(url[,cfoo])      请求并执行获取到的JavaScript格式文件 
+    $.getScript('http://www.imooc.com/data/sport_f.js',function() { 
+      console.log("获取成功,自动执行JS");
+    });
   ◆通用型
+  $.ajaxSetup([options])    设置全局Ajax默认选项 
+    PS：可以设置Ajax请求的一些全局性选项值,
+      设置完成后,后面的Ajax请求将不需要再添加这些选项值,它的调用格式为：
+    options 可选,对象,通过该对象设置Ajax请求时的全局选项值。
+      {
+        dataType : 'xxx',
+        success  : function(data){
+        }
+        ...
+      }
+    e.g.：
+      $.ajaxSetup({
+        url : 'xx'
+      });
+      $.ajax({
+        type : 'get',
+        // url 可省略,已经在 ajaxSetup 中设置
+        data : {
+          key : val,
+        }, 
+        dataType : 'json',
+        success  : function(backData,textStatus,obj){
+        }, 
+      });
   $.ajax({
-    // 如 'GET'
-    type:'请求方法',
     // 可选,发送的数据,若为get则会被附在url上;post则 作为postBody传出
+    type:'请求方法', // 默认为get
     url:'/uploads/tags/json',
-    // 一般get发送String,post发送Object [?]
+    // get请求,将键值对改为 &key1=val1&key2=val2 附在URL上
     data:{
-      key:val,
+      key1:val1,
+      key2:val2,
+      ...
     }, 
-    // 请求的数据类型,若不指定,jQuery将根据HTTP包MIME信息来智能判断
-    // 一般采用JSON格式,可设置为 'json'
-    dataType:'json',
+    // 服务器返回的数据类型,若不指定,jQuery将根据HTTP包MIME信息来智能判断
+    dataType:'json', // 常用JSON格式,设置为 'json',其他如'text'
     // 常用的回调函数
     // contentType:'application/json',
-    beforeSend:function(){ }, 
-    // 发送请求前执行
-    success:function(backData,textStatus,功能性的对象){
-      // 请求成功后执行
+    beforeSend:function(){ // 发送请求前执行
     }, 
-    error:function (xhr,status,errorTrown){
-      // 请求失败后执行
+    success:function(backData,textStatus,功能性的对象){ // 请求成功后执行
     }, 
-    complete:function(jqxhr,status){
-      // 请求完成完后(无论成功与否)执行
+    error:function (xhr,status,errorTrown){ // 请求失败后执行
+    }, 
+    complete:function(jqxhr,status){ // 请求完成完后执行,无论成功与否
     }, 
     // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
-    cache:true / false 
+    cache:true / false ,
   });
   ◆JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已
   $.ajax({
@@ -827,8 +920,16 @@ AJAX
 
       )
     在服务端循环遍历这个数组就可以上传文件了 
+  ◆其他方法
+  $(selector).serialize()   序列化表单元素值 
+    PS：可将表单中有name属性的元素值进行序列化,生成标准URL编码文本字符串,直接用于ajax请求;
+    selector  一个或多个表单中的元素或表单form元素本身
+    e.g.：var aoo = $('form').serialize();
+  绑定Ajax事件
+  Jelem.ajaxStart(cfoo)  在Ajax请求发出前触发函数
+  Jelem.ajaxStop(cfoo)   在Ajax请求完成后触发函数
 方法 
-  Jelem.each(foo)     为每个匹配成员规定执行的函数 
+  Jelem.each(foo)    为每个匹配成员规定执行的函数 
     foo 指定的执行函数,参数为 index下标 和element成员值
     返回 'false' 将停止循环,就像在普通的循环中使用 'break'
     返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
@@ -846,7 +947,7 @@ AJAX
       $.each(obj, function(key, val) { console.log(key,val); });
       // one,1,two,2,three,four,4
       // 当obj为数组时,key表示下标
-  $.map(arr,foo)      对每个数组中的元素调用函数得到返回值组成新的数组
+  $.map(arr,foo)     对每个数组中的元素调用函数得到返回值组成新的数组
     arr    用于遍历的数组
     foo    遍历执行的函数,传入 value值和下标index;
     retn   一个新数组
@@ -856,7 +957,7 @@ AJAX
         return v*v
       })
       a;    //[1, 4, 9, 16]
-  $.grep(arr,foo)  对数组中每个元素进行筛选,返回符合条件的成员
+  $.grep(arr,foo)    对数组中每个元素进行筛选,返回符合条件的成员
     arr  用于筛选的数组
     foo  筛选函数,传入每个数组的元素作为参数
     e.g.
@@ -865,13 +966,86 @@ AJAX
         return a%2 == 0;
       })
       bar;      //[2, 4]
-  $.trim(str)  去除字符串中开始和结尾的空格
+  $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
     e.g.:
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
   $.parseJSON(jsonStr) 解析JSON字符串
+  $.param (obj)  使对象或数组按照key/value格式进行序列化编码
+    PS：该编码后的值常用于向服务端发送URL请求
+    obj  表示需要进行序列化的对象
+      该对象也可以是一个数组,整个函数返回一个经过序列化编码后的字符串
+  $.isArray(arr)         判断是否为数组
   $.inArray(item, array) 判断元素是否在数组内
-  $.isArray(arr) 判断是否为数组
+  $.isEmptyObject(obj)   检测一对象的内容是否为空
+    如果为空,则该函数返回true,否则,返回false值;
+    obj  需要检测的对象名称
+  $.isPlainObject(obj)   检测对象是否为原始对象
+    检测对象是否为通过{}或new Object()关键字创建的原始对象的布尔值;
+  $.contains(elem1,elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
+    elem1  一个DOM对象节点元素,用于包含其他节点的容器
+    elem2  另一个DOM对象节点元素,用于被其他容器所包含 
+  $.extend (options)  可对原有的工具函数进行扩展,自定义类级别的jQuery插件
+    PS：扩展工具方法或者叫静态方法
+    options 对象,表示自定义插件的函数内容
+      $.extend({
+        foo:function(){
+          console.log(1);
+        }
+      });
+      $.foo(); //1
+    e.g.：
+      自定义一个用于返回两个数中最大值的插件
+      $.extend({
+        'maxNum' : function(num1,num2){
+          return (num1 > num2) ? num1 : num2 ;
+        }
+      })
+      var maxNum = $.maxNum(1,2);
+      console.log(maxNum); // 2
+      
+      扩展自己的选择器
+      $.extend($.expr[':'], {
+        moreThen1000px: function(a) {
+          return $(a).width() > 1000;
+        }
+      });
+      $('.box:moreThen1000px').click(function() { 
+        console.log(1); 
+      });
+  $.extend(obj1,obj2,...objn)  扩展原有的Object对象
+    PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者
+    obj1至objN  表示需要合并的各个原有对象
+    e.g.：对两个已有的对象进行合并
+      var obj1 = {
+        aoo : 1 ,
+        boo : 2 
+      }
+      var obj2 = {
+        aoo : 3 ,
+        coo : 2 
+      }
+      var obj = $.extend(obj1,obj2);
+      console.log(obj); // Object {aoo: 3, boo: 2, coo: 2}
+  $.fn.extend() 扩展实例方法
+    e.g. 
+      $.fn.extend({
+        foo : function(){
+          console.log(2);
+        }
+      });
+      $("div").foo(); //2
+  已废弃 
+    $.browser 对象 获取浏览器的名称与版本信息 「1.9-可用」
+      PS：已在jQuery 1.9 中被移除,因为识别方法不准确
+      $.browser.chrome  为 true 表示当前为Chrome浏览器
+      $.browser.mozilla 为 true 表示当前为火狐浏览器
+      $.browser.msie    为 true 表示当前为IE浏览器
+      $.browser.version 获取浏览器版本信息
+    $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
+      PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
+        两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
+        w3c盒子模型不包含,IE盒子模型则包含,
 Deferred 对象 
   PS：Deferred 对象是在 jQuery 1.5 中引入的,
     该对象提供了一系列的方法,可以将多个回调函数注册进一个回调队列里、调用回调队列,
@@ -1016,24 +1190,70 @@ Deferred 对象
     .catch(function(data){
       console.log(data,2);
     })
-扩展 
-  扩展工具方法(或者叫静态方法)
-  e.g. 
-    $.extend({foo:function(){console.log(1);}});
-    $.foo(); //1
-    
-    扩展自己的选择器
-    $.extend($.expr[':'], {
-      moreThen1000px: function(a) {
-        return $(a).width() > 1000;
+jQuery插件 
+  $(form).validate({options})  插件自带包含必填、数字、URL在内容的验证规则 
+    即时显示异常信息,允许自定义验证规则
+    form    表单元素
+    options 调用方法时的配置对象 
+      所有的验证规则和异常信息显示的位置都在该对象中进行设置。
+    e.g.：
+      $('#myform').validate({
+        // 自定义验证规则
+        rules : {
+          email : {
+            require : true ,
+            email : true 
+          }
+        }
+        // 错误提示位置
+        errorPlacement : function(error,elem){
+          error.appendTo('.tip');
+        }
+      })
+  $(form).ajaxForm ({options}) 实现ajax方式向服务器提交表单数据 
+    form     表单元素
+    options  配置对象,设置发送ajax的数据和参数
+    e.g.：
+      var options = {
+        url : 'xxx/xx.php',
+        target : '.tip'
       }
-    });
-    $('.box:moreThen1000px').click(function() { console.log(1); });
-  扩展实例方法
-    e.g. 
-      $.fn.extend({foo:function(){console.log(2);}});
-      $("div").foo(); //2
-jQuery UI 
+      $('#myForm').ajaxForm(options); 
+  $(linkimage).lightBox({options}) 图片灯箱插件
+    PS：该插件可以用圆角的方式展示选择中的图片,使用按钮查看上下张图片,
+      在加载图片时自带进度条,还能以自动播放的方式浏览图片
+    linkimage 为包含图片的<a>元素名称
+    options   为插件方法的配置对象
+    e.g.：
+      $('.imgs a').lightBox({
+        overlayBgColor : "#666" , // 图片浏览时的背景色
+        overlayOpacity : 0.5, // 背景色透明度
+        containsResizeSpeed : 600 // 图片切换时的速度
+      })
+  $(linkimage).jqzoom({options})  图片放大镜插件
+  cookie插件 方便地通过cookie对象保存、读取、删除用户的信息,
+    还能通过cookie插件保存用户的浏览记录
+    $.cookie(key,value) 保存
+    $.cookie(key)       读取
+    $.cookie(key,null)  删除
+  $(textbox).autocomplete(urlData,[options]);  搜索插件
+    PS：搜索插件的功能是通过插件的 autocomplete() 方法与文本框相绑定,
+      当文本框输入字符时,绑定后的插件将返回与字符相近的字符串提示选择
+    textbox  为文本框元素名称
+    urlData  为插件返回的相近字符串数据,可选项参数options为调用插件方法时的配置对象。
+      其中参数key为保存cookie对象的名称,value为名称对应的cookie值。
+  $(selector).contextMenu(menuId,{options}); 右键菜单插件
+    PS：右键菜单插件可以绑定页面中的任意元素,
+      绑定后,选中元素,点击右键,便通过该插件弹出一个快捷菜单,
+      点击菜单各项名称执行相应操作
+    Selector 参数为绑定插件的元素
+    meunId   为快捷菜单元素,options为配置对象
+  $(selector).focusColor(color)  自定义对象级插件
+    PS：可以在<ul>元素中,鼠标在表项<li>元素移动时,自定义其获取焦点时的背景色, 
+      即定义<li>元素选中时的背景色
+    selector 表示<ul>元素
+    color    表示<li>元素选中时的
+jQuery UI插件
   PS:jQuery UI则是在jQuery的基础上,利用jQuery的扩展性,设计的插件。
     提供了一些常用的界面元素,诸如对话框、拖动行为、改变大小行为等等
   jQuery UI 引入
@@ -1044,27 +1264,131 @@ jQuery UI
       // 需jQuery支持
       <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
       // 引入jQuery UI
-  Jelem.draggable({  // 使元素可拖动
-    // 参数可选
-    helper:"clone",  // 拖动复制副本
-    opacity:number,  // 0-1 的数值,定义拖动的元素的透明度
-  });  
-  Jelem.droppable({  // 定义元素可放置
-    accept: ".block",    // 限定Jelem为块元素
-    activeClass:"XX"     // 可放置元素放置后添加的class
-    hoverClass: "XX"     // 鼠标悬浮可放置元素上时,添加的class
-    drop:function(e,u){} // 定义放置后,执行的操作
-  });  
-  Jelem.sortable({   //定义元素的子元素可进行拖动排序
-    axis:         // 拖动排序时,可移动的方向
+  Jelem.draggable(options); 使元素可拖动 
+    options 配置参数对象 
+    { // 参数可选
+      helper  : "clone",  // 拖动复制副本
+      opacity : number,   // 0-1 的数值,定义拖动的元素的透明度
+      axis : "x" | "y",   // 属性设置拖曳时的坐标方向
+      containment : 属性指定拖曳区域
+      ...
+    }  
+  Jelem.droppable(options); 定义元素可放置 
+    options 配置参数对象    
+    {  
+      accept: ".block",    // 限定Jelem为块元素
+      activeClass:"XX"     // 可放置元素放置后添加的class
+      hoverClass: "XX"     // 鼠标悬浮可放置元素上时,添加的class
+      drop:function(e,u){  // 定义放置后,执行的操作
+        // 表示当被接收的拖曳元素完全进入接收元素的容器时,触发该函数的调用
+      } 
+    } 
+  Jelem.sortable(options);  定义元素的子元素可进行拖动排序
+    PS：将序列元素实现拖曳排序的功能
+      如<option>、<li>按任意位置进行拖曳从而形成一个新的元素序列
+    options 配置参数对象    
+    {  
+      axis:         // 拖动排序时,可移动的方向
       "x"
       "y"
-  }); 
+    }
+    e.g.： <ul>中的各个<li>元素则能指定的透明度进行任意的拖曳排序
+      $('ul').sortable({
+        delay : 2 ,   // 为防止与点击事件冲突,延时两秒
+        opacity : 0.5 // 拖动时透明度为0.5
+      })
   Jelem.selectable(obj);   其子元素可选 (Ctrl多选)
   Jelem.resizable()   改变大小
-  Jelem.accordion()   折叠菜单
-  Jelem.dialog()      对话框
+  Jelem.accordion(options)   折叠菜单
+    PS：实现页面中指定区域类似“手风琴”的折叠效果,
+      即点击标题时展开内容,再点另一标题时,关闭已展开的内容
+    Jelem   整个面板元素
+    options 方法对应的配置对象
+  Jelem.dialog(options)      对话框
+    PS：对话框插件可以用动画的效果弹出多种类型的对话框,
+      实现js代码中 alert() 和 confirm() 函数的功能
+    Jelem   显示弹出对话框的元素
+    options 方法的配置对象 
+      在对象中可以设置对话框类型、“确定”、“取消”按钮执行的代码等。
+    e.g.：
+      $("#aoo").dialog({
+        height : 140 ,
+        modal  : true ,
+        title  : '系统提示',
+        hide   : 'explode',
+        buttons:{
+          '确定': function () {
+            $("#spnName").remove();
+            $(this).dialog("close");
+          },
+          '取消': function () {
+            $(this).dialog("close");
+          }
+        },
+        open : function(e , u){
+          $(this).html('');
+          $(this).append('<p>' + content + '<p>');
+        }
+      })
   Jelem.slider()      滑动条
+  Jelem.tabs(options)  选项卡插件
+    PS：使用选项卡插件可以将<ul>中的<li>选项定义为选项标题,
+      在标题中,再使用<a>元素的“href”属性设置选项标题对应的内容
+    Jelem   为选项卡整体外围元素,该元素包含选项卡标题与内容
+    options 方法的配置对象,通过该对象还能以ajax方式加载选项卡的内容
+    e.g.：
+      $('#tabs').tabs({
+        fx : { // 设置各选项卡在切换时的动画效果
+          opacity : 'toggle',
+          height  : 'toggle'
+        },
+        event : 'mousemove' // 通过鼠标移动事件切换选项卡
+      })
+  Jelem.menu(options)  菜单工具插件
+    PS：菜单工具插件可以通过<ul>创建多级内联或弹出式菜单,
+      支持通过键盘方向键控制菜单滑动,允许为菜单的各个选项添加图标;
+    Jelem   为菜单列表中最外层<ul>元素
+    options 方法的配置对象
+  Jelem.spinner([options]) 微调按钮插件 
+    PS：微调按钮插件不仅能在文本框中直接输入数值,
+      还可以通过点击输入框右侧的上下按钮修改输入框的值,
+      还支持键盘的上下方向键改变输入值
+    Jelem   为文本输入框元素
+    options 可选,方法的配置对象
+      在该对象中,可以设置输入的最大、最小值,获取改变值和设置对应事件
+      在对象的方法中 
+        $(this).spinner('value')      获取到当前的值
+        $(this).spinner('value',num)  设置当前的值
+      max 
+      min 
+      spin : function(event , ui){ // 微调递增/递减事件
+      }
+      change : function(){ // 微调值改变事件
+        
+      }
+  Jelem.tooltip([options]) 工具提示插件 
+    PS：工具提示插件可以定制元素的提示外观,提示内容支持变量、Ajax远程获取,
+      还可以自定义提示内容显示的位置
+    Jelem   需要显示提示信息的元素
+    options 可选,方法的配置对象
+      在该对象中,可以设置提示信息的弹出、隐藏时的效果和所在位置
+    e.g.：
+      给各个<a>元素都绑定工具提示插件,
+      将在指定的位置并以动画效果展示各个<a>元素中title属性所对应的内容。
+      $('a').tooltip({
+        show : {
+          effect : 'slideDown',
+          delay  : 350
+        },
+        hide : {
+          effect : 'explode',
+          delay  : 350
+        },
+        position : {
+          my : 'left top',
+          at : 'left bottom'
+        }
+      })
   jQuery UI Events事件 
     slidechange   滑条改变事件
 其他 
@@ -1969,6 +2293,5 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
-
 
 

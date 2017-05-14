@@ -24,7 +24,8 @@ window 对象
     PS:若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
       在frames集合中,可通过数值索引(从0开始,从左至右,从上至下),
       或者框架名称来访问相应的window对象
-      window.name  表示窗口/框架的名称
+    window.name  表示窗口/框架的名称
+    window.frames
     e.g. :
       下面是一个包含框架的页面
       <html>
@@ -43,57 +44,46 @@ window 对象
       可通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
    (更多内容参见 JavaScript高级程序设计 196页)
   位置与尺寸
-    screenLeft/Top 浏览器窗口相对于电脑屏幕左边和上边的位置 [可以为负]
-    screenX/Y      浏览器窗口相对于电脑屏幕左边和上边的位置 [可以为负]
-      返回值为数值,单位为px
+    ◆浏览器位置
+      返回值类型为数值,单位都为px
+    screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
       screenLeft/Top  火狐不支持
         ie 浏览器的内边缘距离屏幕边缘的距离
         chrome 浏览器的外边缘距离屏幕边缘的距离
-      screenX/Y       IE不支持
-      e.g.
-      typeof screenLeft; // "number"
-      跨浏览器兼容方法:
-        var leftX=(typeof screenLeft=="number")?screenLeft:screenX;
-        var topY=(typeof screenTop=="number")?screenTop:screenY;
-    innerWidth/Height outerWidth/Height 浏览器窗口尺寸
-      PS:谷歌浏览器中innerWidth 和 outerWidth 相同,都为视口大小
-      innerWidth/innerHeight   浏览器内尺寸
-        浏览器可见区域的内宽度、高度(不含浏览器的工具栏、边框,但包含滚动条)
-        支持IE9及以上
-        e.g.
-          alert(window.innerWidth);       //浏览器可视窗口大小,单位像素
-          alert(window.innerHeight);
-      outerWidth/outerHeight   浏览器外宽、高
-        浏览器外宽、高(包含浏览器的工具栏、边框、滚动条)
-        IE不支持
-        e.g.
-          alert(window.outerWidth);       //窗口+边框大小
-          alert(window.outerHeight);
-      IE 下可使用 DOM 方法获取(其他浏览器也支持)
-        PS:DOM操作比原生方法差一些,优先使用原生属性/方法
-        document.documentElement.clientWidth
-        document.documentElement.clientHeight
-    moveTo moveBy 调整浏览器位置
+    screenTop  浏览器窗口相对于电脑屏幕上边的距离,可为负
+    screenX    浏览器窗口相对于电脑屏幕左边的距离,可为负
+      IE不支持
+      e.g.  typeof screenLeft; // "number"
+    screenY    浏览器窗口相对于电脑屏幕上边的距离,可以负
+    跨浏览器兼容方法:
+      var leftX=(typeof screenLeft=="number")?screenLeft:screenX;
+      var topY=(typeof screenTop=="number")?screenTop:screenY;
+    ◆浏览器宽高
+      返回值类型为数值,单位都为px;
+      谷歌浏览器中 innerWidth 和 outerWidth 相同,都为视口大小;
+    outerWidth 浏览器窗口外侧宽「包含浏览器的工具栏、边框、滚动条」「IE9+」
+    outerWidth 浏览器窗口外侧高「包含浏览器的工具栏、边框、滚动条」
+    innerWidth  浏览器显示窗口宽「不包含page_tab和工具栏等,但包含滚动条」「IE9+」
+    innerHeight 浏览器显示窗口高「不包含page_tab和工具栏等,但包含滚动条」
+    moveTo(x,y) 调整浏览器位置,移动到x,y坐标 
       PS:不适用于框架,只能对最完成的window对象使用
-      moveTo(x,y) 移动到x,y坐标
-      moveBy(x,y) 向下移动x像素,向右移动y像素
-    resizeTo resizeBy 调整浏览器窗口大小
-      PS:IE7(及更高版本)中默认是被禁止的
-        不适用于框架,只能对最外层的window对象使用
-      resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
-      resizeBy(num1,num2) 扩展/收缩大小(正数为扩大,负数为缩小)
-    PS:moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
-    scroll(x,y)   滚动到
-      x 值表示你想要置于左上角的像素点的横坐标
-      y 值表示你想要置于左上角的像素点的纵坐标
+    moveBy(x,y) 调整浏览器位置,向下移动xpx,向右移动ypx
+      PS:不适用于框架,只能对最完成的window对象使用
+    resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
+      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
+    resizeBy(num1,num2) 缩放大小「正数为放大,负数为缩小」
+      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
+      PS:moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
+    scroll(x,y)   滚动到 
+      x 值表示你想要置于左上角的px点的横坐标
+      y 值表示你想要置于左上角的px点的纵坐标
     scrollTo(x,y) 同scroll
-    scrollBy(x,y) 滚动距离
+    scrollBy(x,y) 滚动距离 
       PS:要使此方法工作 window 滚动条的可见属性必须设置为true
-      x 把文档向右滚动的像素数
-      y 把文档向下滚动的像素数
-    screen.width  设备宽度,单位是像素
-    screen.height 设备宽度,单位是像素
-    pageXOffset/pageYOffset 页面的水平/垂直滚动距离,单位为像素
+      x 把文档向右滚动的px数
+      y 把文档向下滚动的px数
+    pageXOffset 页面水平滚动距离,单位px
+    pageYOffset 页面垂直滚动距离,单位px
     window.matchMedia(str); 返回一个MediaQueryList对象
       PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
       str 一个mediaQuery语句的字符串
@@ -139,8 +129,8 @@ window 对象
           PS:字符串中不可出现空格
           width   数值,窗口宽度,不能小于100
           height  数值,窗口高度,不能小于100
-          top     数值,窗口顶部距屏幕顶部的像素值(不能是负值)
-          left    数值,窗口左端距屏幕左端的像素值(不能是负值)
+          top     数值,窗口顶部距屏幕顶部的px值(不能是负值)
+          left    数值,窗口左端距屏幕左端的px值(不能是负值)
           menubar    yes/no,菜单栏显示,默认为no
           scrollbars yes/no,滚动条显示,默认为no
           toolbar    yes/no,工具栏显示,默认为no
@@ -368,9 +358,13 @@ window 对象
       全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
       访问未声明的变量会报错,而未声明window对象的属性则为undefined.
 window的属性对象 
-  对象本身也是window的属性
   window.document  文档对象 「更多详见 DOM document对象」
-    document.cookie  读写当前网页的cookie
+    document.location 等价于 window.location
+    document.documentElement.clientWidth
+      IE 下可使用 DOM 方法获取(其他浏览器也支持)
+      DOM操作比原生方法差一些,优先使用原生属性/方法
+    document.documentElement.clientHeight
+    document.cookie  读写当前网页的cookie 
       PS:网站为了标示用户身份而储存在Client Side「用户本地终端」上的数据,通常经过加密;
         可访问的前提下,http请求中cookie始终会被携带,
         即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
@@ -869,15 +863,13 @@ window的属性对象
       battery.dischargingTime;
       battery.addEventListener("chargingchange",function(e){
       })
-  window.screen    管理屏幕
-    PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一.
-      screen对象基本上只用来表明客户端的能力
-      每个浏览器中的screen对象包含的属性不尽相同
-    screen.width;    设备屏幕的宽
-    screen.height;   
-    screen.availHeight; 屏幕的可用宽度
-      availHeight与height区别在于availHeight除去了任务栏高度
-    screen.availWidth;
+  window.screen    用户屏幕相关
+    PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一;
+      基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
+    screen.height 设备屏幕高,单位px
+    screen.width  设备屏幕宽,单位px
+    screen.availHeight; 屏幕可用高度「不包含任务栏高度」
+    screen.availWidth;  屏幕可用宽度「当任务栏在上下时,和 screen.width 相等」
     screen.availLeft;
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
@@ -2548,10 +2540,10 @@ Viewport 视口 「HTML5」
     也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
     正常情况下,viewport和浏览器的显示窗口是一样大小的.
     但是,在移动设备上,两者可能不是一样大小.
-    比如,手机浏览器的窗口宽度可能是640像素,这时viewport宽度就是640像素,
-    但是网页宽度有950像素,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个像素.
-    另一种方法则是,将viewport设成950像素,也就是说,浏览器的显示宽度还是640像素,
-    但是网页的显示区域达到950像素,整个网页缩小了,在浏览器中可以看清楚全貌.
+    比如,手机浏览器的窗口宽度可能是640px,这时viewport宽度就是640px,
+    但是网页宽度有950px,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个px.
+    另一种方法则是,将viewport设成950px,也就是说,浏览器的显示宽度还是640px,
+    但是网页的显示区域达到950px,整个网页缩小了,在浏览器中可以看清楚全貌.
     这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
   viewport缩放规则 「在HTML网页的head部分指定」 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -3858,7 +3850,7 @@ Fullscreen 全屏操作 「HTML5」
       width: 100%;
       height: 100%;
     }
--------------------------------------------------------------------------待整理
+-------------------------------------------------------------------------待整理 
 
 
 

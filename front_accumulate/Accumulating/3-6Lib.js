@@ -372,6 +372,14 @@ DOM 操作
           e.g.:
             Jelem.prop('checked',false);//  html中仍显示为checked,但实际上改变了
             Jelem.attr('checked',false); // html 中会去掉checked属性
+            
+            <button type="button" name="button">点击我</button>
+            $('button').click(function(){
+              $(this).css('display','none');
+              console.log($(this).attr('style')); // display: none;
+              console.log($(this).prop('style'));
+              //  CSSStyleDeclaration {0: "display", alignContent: "", alignItems: "", alignSelf: "", alignmentBaseline: "", all: ""…}
+            })
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})

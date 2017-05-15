@@ -89,6 +89,117 @@ API
     ccNode.parent  节点的父节点
     ◆创建节点
     cc.instantiate(prefa)  返回通过预置资源创建的节点
+  ◆cc 模块
+  cc.director  一个管理游戏逻辑流程的单例对象,创建和处理主窗口并管理执行场景
+    PS：由于该对象是一单例,不需要调用任何构造函数或创建函数来创建该对象,
+      cc.director 还负责：
+      - 初始化 OpenGL 环境。
+      - 设置OpenGL像素格式。(默认是 RGB565)
+      - 设置OpenGL缓冲区深度 (默认是 0-bit)
+      - 设置空白场景的颜色 (默认是 黑色)
+      - 设置投影 (默认是 3D)
+      - 设置方向 (默认是 Portrait)
+    cc.director.methodName();  标准使用方法 
+    ◆方法
+    convertToUI(glPoint)  将触摸点的 WebGL View 坐标转换为屏幕坐标
+    getWinSize()          获取视图的大小,以点为单位
+    getWinSizeInPixels()  获取视图大小,以像素为单位
+    getVisibleSize()      获取运行场景的可见大小
+    getVisibleOrigin()          获取视图在游戏内容中的坐标原点
+    pause ()  暂停正在运行的场景,该暂停只会停止游戏逻辑执行,但是不会停止渲染和 UI 响应。 如果想要更彻底得暂停游戏,包含渲染,音频和事件,请使用 Game.pause。
+    runSceneImmediate ( scene  [onBeforeLoadScene ]  [onLaunched ] )
+          立刻切换指定场景。
+    loadScene ( sceneName  [onLaunched ] )  Boolean
+      通过场景名称进行加载场景。
+    preloadScene ( sceneName  [onLoaded ] )
+      预加载场景,你可以在任何时候调用这个方法。 调用完后,你仍然需要通过 cc.director.loadScene 来启动场景,因为这个方法不会执行场景加载操作。 就算预加载还没完成,你也可以直接调用 cc.director.loadScene,加载完成后场景就会启动。
+    resume ( )  恢复暂停场景的游戏逻辑,如果当前场景没有暂停将没任何事情发生。
+    setDepthTest ( on )  启用/禁用深度测试（在 Canvas 渲染模式下不会生效）。
+    setClearColor ( clearColor ) 设置场景的默认擦除颜色（支持白色全透明,但不支持透明度为中间值）。
+    setProjection ( projection ) 设置 OpenGL 投影。
+    setViewport ( ) 设置视窗（请不要主动调用这个接口,除非你知道你在做什么）。
+    getProjection ( )  Number 获取 OpenGL 投影。
+    setAlphaBlending ( on ) 启用/禁用 透明度融合。
+    isSendCleanupToScene ( )  Boolean 更换场景时是否接收清理消息。 如果新场景是采用 push 方式进入的,那么旧的场景将不会接收到 “cleanup” 消息。 如果新场景取代旧的场景,它将会接收到 “cleanup” 消息。
+    getScene ( )  Scene 获取当前逻辑场景。
+      // This will help you to get the Canvas node in scene
+      cc.director.getScene().getChildByName('Canvas');
+    getAnimationInterval ( )  Number 获取单位帧执行时间。
+    isDisplayStats ( )  Boolean 获取是否显示 FPS 信息。
+    setDisplayStats ( displayStats ) 设置是否在左下角显示 FPS。
+    getSecondsPerFrame ( )  Number 获取实际记录的上一帧执行时间,可能与单位帧执行时间（AnimationInterval）有出入。
+    isNextDeltaTimeZero ( )  Boolean 返回下一个 “delta time” 是否等于零。
+    isPaused ( )  Boolean 是否处于暂停状态。
+    getTotalFrames ( )  Number 获取 director 启动以来游戏运行的总帧数。
+    getScheduler ( )  Scheduler 获取和 director 相关联的 cc.Scheduler。
+    setScheduler ( scheduler ) 设置和 director 相关联的 cc.Scheduler。
+    getActionManager ( )  ActionManager 获取和 director 相关联的 cc.ActionManager（动作管理器）。
+    setActionManager ( actionManager ) 设置和 director 相关联的 cc.ActionManager（动作管理器）。
+    getCollisionManager ( )  CollisionManager Returns the cc.CollisionManager associated with this director.
+    getDeltaTime ( )  Number 获取上一帧的 “delta time”。
+    ◆事件
+    cc.Director.EVENT_PROJECTION_CHANGED
+    cc.Director 投影变化的事件。
+
+    Event Payload:
+    event Event
+    示例:
+    cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+       cc.log("Projection changed.");
+    });
+    cc.Director.EVENT_BEFORE_SCENE_LOADING
+    加载新场景之前所触发的事件。
+
+    Event Payload:
+    event Event
+    detail Vec2
+    The loading scene name
+    cc.Director.EVENT_AFTER_SCENE_LAUNCH
+    运行新场景之后所触发的事件。
+
+    Event Payload:
+    event Event
+    detail Vec2
+    New scene which is launched
+    cc.Director.EVENT_BEFORE_UPDATE
+    每个帧的开始时所触发的事件。
+
+    Event Payload:
+    event Event
+    cc.Director.EVENT_COMPONENT_UPDATE
+    组件 “update” 时所触发的事件。
+
+    Event Payload:
+    event Event
+    detail Vec2
+    The delta time from last frame
+    cc.Director.EVENT_COMPONENT_LATE_UPDATE
+    组件 “late update” 时所触发的事件。
+
+    Event Payload:
+    event Event
+    detail Vec2
+    The delta time from last frame
+    cc.Director.EVENT_AFTER_UPDATE
+    将在引擎和组件 “update” 逻辑之后所触发的事件。
+
+    Event Payload:
+    event Event
+    cc.Director.EVENT_BEFORE_VISIT
+    访问渲染场景树之前所触发的事件。
+
+    Event Payload:
+    event Event
+    cc.Director.EVENT_AFTER_VISIT
+    访问渲染场景图之后所触发的事件,渲染队列已准备就绪,但在这一时刻还没有呈现在画布上。
+
+    Event Payload:
+    event Event
+    cc.Director.EVENT_AFTER_DRAW
+    渲染过程之后所触发的事件。
+
+    Event Payload:
+    event Event
 Cocos2d-js API
 --------------------------------------------------------------------------------
 菜单栏

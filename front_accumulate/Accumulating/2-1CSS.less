@@ -1703,9 +1703,10 @@ Layout   布局
           margin:0 auto; 使元素在其父盒子中水平居中
             但该方法无法使元素垂直居中
       border  边框
-        border(-top/right/left/bottom) 边框 「简写方式」
-          PS: 缩写中 border-style 属性是必须的
-            css中的color属性控制文本字体颜色和盒子边框颜色
+        border  边框 「简写方式」
+          PS: 缩写中 border-style 属性是必须的;
+            css中的 color 属性控制文本字体颜色和盒子边框颜色,
+            当 border-color 未指定时使用color定义的值;
           border(-top/right/bottom/left)-width 边框宽度
             PS: 可分别设置每条边 
             pixels
@@ -1732,8 +1733,13 @@ Layout   布局
                 border-color:red green blue gray;
               }
               /*注意需将border-Color 放置在后面,否则会被border的默认黑色覆盖*/
+          -moz-border-color  火狐专有样式 
+            在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
+            每种颜色显示1px的宽度。
+            若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
+            e.g.： -moz-border-bottom-colors: red orange yellow green blue purple ;
           e.g. border：solid 2px red；
-        border-radius 边框圆角「简写方式」「CSS3+」
+        border-radius 边框圆角「简写方式」「CSS3」
           PS:当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态.
             使用 -webkit 和-moz 前缀兼容浏览器
           border-radius: (length|%){1,4} / (length|%){0,4}；
@@ -1749,8 +1755,44 @@ Layout   布局
             border-bottom-right-radius: 4em 0.5em;
             border-bottom-left-radius: 1em 3em;
           border-top/bottom-left/right-radius:水平半径 垂直半径;  定义单个圆角
-        border-image  边框图片「CSS3+」 
-          border-image:url() 上边距 右边距 下边距 左边距/上 右 下 左边框宽度 repeat/stretch/round repeat/stretch/round;
+        border-image  边框图片「简写方式」「CSS3」 
+          PS： 使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式。
+            虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点。
+            可分别设置的属性有：
+            border-top-img
+            border-bottom-img
+            border-left-img
+            border-right-img
+            border-corner-image
+            border-top-left-image
+            border-top-right-image
+            border-bottom-left-image
+            border-bottom-right-image
+            border-image-source
+            border-image-slice
+            border-image-width
+            border-image-outse
+            border-image-repeat
+          border-image-outset  定义边框图像可超出边框盒的大小
+          默认值 
+            border-image-source: none
+            border-image-slice: 100%
+            border-image-width: 1
+            border-image-outset: 0s
+            border-image-repeat: stretch
+          border-image:source num{1,4} style style;
+          ◆source 资源
+          none  默认值,无背景
+          img   使用绝对或相对 url 地址指定背景图像
+          ◆num{1,4}  上 右 下 左「边框宽度」
+          num   固定像素值表示
+          %     百分比表示
+          ◆style 样式
+          stretch 默认值,拉伸
+          repeat  重复
+          round   平铺
+          e.g.：
+            border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
         border:none 与 border:0 的区别
           border:0 相当于 border-width:0,
           浏览器依然对border-width、border-color 进行了渲染占用了内存
@@ -1986,7 +2028,7 @@ Layout   布局
       top
       middle
       bottom
-  flex 布局   「CSS3+ IE10+」 
+  flex 布局   「CSS3 IE10」 
     PS:常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
@@ -2106,7 +2148,7 @@ Layout   布局
        baseline
        stretch;
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
-  column 多栏布局 「CSS3+」   
+  column 多栏布局 「CSS3」   
     column-count  显示栏目数
       number 元素内容将被划分的列数
       auto   由其他属性决定列数,比如 "column-width"。

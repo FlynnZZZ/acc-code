@@ -864,31 +864,10 @@ Properties,属性检查器：查看并编辑当前选中节点的组件属性的
     Fit Width     适配宽度「一般当实际宽高比小于设计宽高比时使用」
     同时开启,无裁剪模式「有黑边」,优先按设备中能出现全部场景的方式选择其中一种适配方式;
     同时不开启,无黑边模式「出现裁剪的情况」,则优先使用无黑边的一种适配方式;
-  ◆其他组件
-  脚本组件
-    脚本组件属性是组件脚本中声明的公开并可被序列化存储在场景和动画数据中的变量。
-    通过属性检查器我们可以快捷的修改属性设置,达到不需要编程就可以调整游戏数据和玩法的目的。
-    通常可以根据变量使用内存位置不同将属性分为值类型和引用类型两大类。
-    值类型属性:包括数字、字符串、枚举等简单的占用很少内存的变量类型：
-    数值（Number）：可以直接使用键盘输入,也可以按输入框旁边的上下箭头逐步增减属性值。
-    向量（Vec2）：向量的控件是两个数值输入组合在一起,并且输入框上会以x,y标识每个数值对应的子属性名。
-    字符串（String）：直接在文本框里用键盘输入字符串,字符串输入控件分为单行和多行两种,多行文本框可以按回车换行。
-    布尔（Boolean）：以复选框的形式来编辑,选中状态表示属性值为true,非选中状态表示false。
-    枚举（Enum）：以下拉菜单的形式编辑,点击枚举菜单,然后从弹出的菜单列表里选择一项,即可完成枚举值的修改。
-    颜色（Color）：点击颜色属性预览框,会弹出颜色选择器窗口,在这个窗口里可以用鼠标直接点选需要的颜色,或在下面的 RGBA 颜色输入框中直接输入指定的颜色。点击颜色选择器窗口以外的任何位置会关闭窗口并以最后选定的颜色作为属性颜色。
-    引用类型属性
-    引用类型包括更复杂的对象,比如节点、组件或资源。
-    和值类型各式各样的编辑方式不同,
-    引用类型通常只有一种编辑方式：拖拽节点或资源到属性栏中。
-    引用类型的属性在初始化后会显示None,因为无法通过脚本为引用类型的属性设置初始值。
-    这时可以根据属性的类型将相应类型的节点或资源拖拽上去,即可完成引用赋值。
-    需要拖拽节点来赋值的属性栏上会显示绿色的标签,
-    标签上可能会显示Node, 表示任意节点都可以拖拽上去,
-    或者标签显示组件名如Sprite,Animation等,这时需要拖拽挂载了相应组件的节点才行。
-    需要拖拽资源赋值的属性栏上会显示黄色的标签,
-    标签上显示的是资源的类型,如sprite-frame,prefab,font等。
-    只要从资源管理器中拖拽相应类型的资源过来就可以完成赋值。
+  ◆用户脚本组件 
+    PS：脚本组件属性是组件脚本中声明的公开并可被序列化存储在场景和动画数据中的变量。
     脚本文件也是一种资源,组件使用的脚本资源引用属性也是用黄色标签表示的。
+  ◆其他组件
 Console,控制台 
   PS：控制台会显示报错、警告或其他编辑器和引擎生成的日志信息。
     不同重要级别的信息会以不同颜色显示：
@@ -1512,633 +1491,597 @@ JS脚本
           disallowMultiple: true
         }
       });
-      类名 
-        可以是任意字符串,但不允许重复。
-        可以使用 cc.js.getClassName 来获得类名,
-        使用 cc.js.getClassByName 来查找对应的类。
-        对在项目脚本里定义的组件来说,序列化其实并不使用类名,因此不需要指定类名。
-        对其他类来说,类名用于序列化,如果不需要序列化,类名可以省略。
-      静态变量和静态方法
-        静态变量或静态方法可以在原型对象的 statics 中声明
-        var Sprite = cc.Class({
-          statics: {
-            // 声明静态变量
-            count: 0,
-            // 声明静态方法
-            getBounds: function (spriteList) {
-              // ...
-            }
-          }
-        });
-        // 上面的代码等价于：
-        var Sprite = cc.Class({ ... });
-        Sprite.count = 0; // 声明静态变量
+  类名 
+    可以是任意字符串,但不允许重复。
+    可以使用 cc.js.getClassName 来获得类名,
+    使用 cc.js.getClassByName 来查找对应的类。
+    对在项目脚本里定义的组件来说,序列化其实并不使用类名,因此不需要指定类名。
+    对其他类来说,类名用于序列化,如果不需要序列化,类名可以省略。
+  静态变量和静态方法
+    静态变量或静态方法可以在原型对象的 statics 中声明
+    var Sprite = cc.Class({
+      statics: {
+        // 声明静态变量
+        count: 0,
         // 声明静态方法
-        Sprite.getBounds = function (spriteList) {
+        getBounds: function (spriteList) {
           // ...
-        };
+        }
+      }
+    });
+    // 上面的代码等价于：
+    var Sprite = cc.Class({ ... });
+    Sprite.count = 0; // 声明静态变量
+    // 声明静态方法
+    Sprite.getBounds = function (spriteList) {
+      // ...
+    };
+    
+    静态成员会被子类继承,继承时会将父类的静态变量浅拷贝给子类
+    var Aoo = cc.Class({
+      statics: {
+        count: 11,
+        range: { w: 100, h: 100 }
+      }
+    });
+    var Boo = cc.Class({
+      extends: Aoo
+    });
+    cc.log(Boo.count);   //  11, count 继承自 Aoo 类
+    Boo.range.w = 200;
+    cc.log(Aoo.range.w); //  200, Boo.range 和 Aoo.range 指向同一个对象
+    
+    如果不需要考虑继承,私有的静态成员也可以直接定义在类的外面：
+    // 局部方法
+    function doLoad (sprite) {
+      // ...
+    };
+    // 局部变量
+    var url = "foo.png";
+    var Sprite = cc.Class({
+      load: function () {
+        this.url = url;
+        doLoad(this);
+      };
+    });
+  ctor 构造函数 
+    为了保证反序列化能始终正确运行,CCClass 的构造函数不允许定义构造参数。
+    开发者如果确实需要使用构造参数,可以通过 arguments 获取,
+    但要记得如果这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
+    var Sprite = cc.Class({
+      ctor : function () {
+        cc.log(this instanceof Sprite);    // true
+      }
+    });
+  实例变量 声明
+    在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看。
+    如果是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
+    var Sprite = cc.Class({
+      ctor: function () {
+        // 声明实例变量并赋默认值
+        this.url = "";
+        this.id = 0;
+      }
+    });
+  实例方法 声明 
+    直接在原型对象中声明实例方法
+    var Sprite = cc.Class({
+      // 声明一个名叫 "foo" 的实例方法
+      foo : function() { 
+      }
+    });
+    
+    var Sprite = cc.Class({
+      ctor: function () {
+        this.text = "this is sprite";
+      },
+      // 声明一个名叫 "print" 的实例方法
+      print: function () {
+        cc.log(this.text);
+      }
+    });
+    var obj = new Sprite();
+    obj.print(); // 调用实例方法
+  extends 实现继承 
+    var Shape = cc.Class(); // 父类
+    var Rect = cc.Class({   // 子类
+      extends : Shape
+    });
+    
+    继承后,CCClass 会统一自动调用父构造函数,不需显式调用
+    var Shape = cc.Class({
+      ctor: function () {  // 实例化时,父构造函数会自动调用,
+        cc.log("Shape");    
+      }
+    });
+    var Rect = cc.Class({
+      extends: Shape
+    });
+    var Square = cc.Class({
+      extends: Rect,
+      ctor: function () {  // 再调用子构造函数
+        cc.log("Square");   
+      }
+    });
+    var square = new Square(); // 依次输出 "Shape" 和 "Square"
+    
+    所有成员方法都是虚方法,子类方法可以直接重写父类方法：
+    var Shape = cc.Class({
+      getName: function () {
+        return "shape";
+      }
+    });
+    var Rect = cc.Class({
+      extends: Shape,
+      getName: function () {
+        return "rect";
+      }
+    });
+    var obj = new Rect();
+    cc.log(obj.getName());    // "rect"
+    
+    在子类中调用父类的成员方法
+    方法一：使用 CCClass 封装的 this._super：
+    var Shape = cc.Class({
+      getName: function () {
+        return "shape";
+      }
+    });
+    var Rect = cc.Class({
+      extends: Shape,
+      getName: function () {
         
-        静态成员会被子类继承,继承时会将父类的静态变量浅拷贝给子类
-        var Aoo = cc.Class({
-          statics: {
-            count: 11,
-            range: { w: 100, h: 100 }
-          }
-        });
-        var Boo = cc.Class({
-          extends: Aoo
-        });
-        cc.log(Boo.count);   //  11, count 继承自 Aoo 类
-        Boo.range.w = 200;
-        cc.log(Aoo.range.w); //  200, Boo.range 和 Aoo.range 指向同一个对象
+        var baseName = this._super();
         
-        如果不需要考虑继承,私有的静态成员也可以直接定义在类的外面：
-        // 局部方法
-        function doLoad (sprite) {
-          // ...
-        };
-        // 局部变量
-        var url = "foo.png";
-        var Sprite = cc.Class({
-          load: function () {
-            this.url = url;
-            doLoad(this);
-          };
-        });
-      ctor 构造函数 
-        为了保证反序列化能始终正确运行,CCClass 的构造函数不允许定义构造参数。
-        开发者如果确实需要使用构造参数,可以通过 arguments 获取,
-        但要记得如果这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
-        var Sprite = cc.Class({
-          ctor : function () {
-            cc.log(this instanceof Sprite);    // true
-          }
-        });
-      实例变量 声明
-        在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看。
-        如果是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
-        var Sprite = cc.Class({
-          ctor: function () {
-            // 声明实例变量并赋默认值
-            this.url = "";
-            this.id = 0;
-          }
-        });
-      实例方法 声明 
-        直接在原型对象中声明实例方法
-        var Sprite = cc.Class({
-          // 声明一个名叫 "foo" 的实例方法
-          foo : function() { 
-          }
-        });
+        return baseName + " rect";
+      }
+    });
+    var obj = new Rect();
+    cc.log(obj.getName());    // "shape rect"
+    
+    方法二：使用 JavaScript 原生写法：
+    var Shape = cc.Class({
+      getName: function () {
+        return "shape";
+      }
+    });
+    var Rect = cc.Class({
+      extends: Shape,
+      getName: function () {
         
-        var Sprite = cc.Class({
-          ctor: function () {
-            this.text = "this is sprite";
-          },
-          // 声明一个名叫 "print" 的实例方法
-          print: function () {
-            cc.log(this.text);
-          }
-        });
-        var obj = new Sprite();
-        obj.print(); // 调用实例方法
-      extends 实现继承 
-        var Shape = cc.Class(); // 父类
-        var Rect = cc.Class({   // 子类
-          extends : Shape
-        });
+        var baseName = Shape.prototype.getName.call(this);
         
-        继承后,CCClass 会统一自动调用父构造函数,不需显式调用
-        var Shape = cc.Class({
-          ctor: function () {  // 实例化时,父构造函数会自动调用,
-            cc.log("Shape");    
-          }
-        });
-        var Rect = cc.Class({
-          extends: Shape
-        });
-        var Square = cc.Class({
-          extends: Rect,
-          ctor: function () {  // 再调用子构造函数
-            cc.log("Square");   
-          }
-        });
-        var square = new Square(); // 依次输出 "Shape" 和 "Square"
-      properties 声明属性 
-        PS：在脚本中声明的属性,将可视化地展示在 属性检查器 中,
-          可方便地在场景中调整属性值;
-          在 cc.Class 的 properties 字段中声明属性,填写属性名字和属性参数即可
-        e.g.：
-          cc.Class({
-            extends: cc.Component,
-            properties: {
-              userID: 20,
-              userName: "Foobar"
-            }
-          });
-        简单声明 
-          PS：在多数情况下,都可以使用简单声明 
-          当声明的属性为基本 JavaScript 类型时,可以直接赋予默认值：
-            properties: {
-              height: 20,       // number
-              type: "actor",    // string
-              loaded: false,    // boolean                
-              target: null,     // object
-            }
-          当声明的属性具备类型时「如：cc.Node,cc.Vec2 等」,填写其构造函数来完成简单声明
-            properties: {
-              target: cc.Node,
-              pos: cc.Vec2,
-            }
-          当声明属性的类型继承自 cc.ValueType 时（如：cc.Vec2,cc.Color 或 cc.Rect）,
-            除了上面的构造函数,还可以直接使用实例作为默认值：
-            properties: {
-              pos: new cc.Vec2(10, 20),
-              color: new cc.Color(255, 255, 255, 128),
-            }
-          当声明属性是一个数组时,可以在声明处填写他们的类型或构造函数来完成声明,如：
-            properties: {
-              any: [],      // 不定义具体类型的数组
-              bools: [cc.Boolean],
-              strings: [cc.String],
-              floats: [cc.Float],
-              ints: [cc.Integer],
-              
-              values: [cc.Vec2],
-              nodes: [cc.Node],
-              frames: [cc.SpriteFrame],
-            }
-          除了以上几种情况,其他类型我们都需要使用完整声明的方式来进行书写 
-        完整声明 
-          有时需为属性声明添加参数,控制属性在 属性检查器 中的显示方式,
-          以及属性在场景序列化过程中的行为;
+        return baseName + " rect";
+      }
+    });
+    var obj = new Rect();
+    cc.log(obj.getName());    // "shape rect"
+  cc.js.extend 更底层第继承API
+    如果实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,
+    可以使用该API来实现;
+  properties 声明属性 
+    PS：特殊的实例变量,能够显示在 属性检查器 中,也能被序列化;
+      在 cc.Class 的 properties 字段中声明属性,填写属性名字和属性参数即可;
+    值类型 和 引用类型 属性
+      根据变量使用内存位置不同分类
+      值类型属性：包括数字、字符串、枚举等简单的占用很少内存的变量类型
+        数值,Number：可直接使用键盘输入,也可以按输入框旁边的上下箭头逐步增减
+        向量,Vec2  ：向量的控件是两个数值输入组合在一起
+          输入框上会以x,y标识每个数值对应的子属性名。
+        字符串,String ：直接在文本框里用键盘输入字符串
+          分为单行和多行两种,多行文本框可以按回车换行
+        布尔值,Boolean：以复选框的形式来编辑
+          选中状态表示属性值为true,非选中状态表示false。
+        枚举,Enum  ：以下拉菜单的形式编辑
+          点击枚举菜单,然后从弹出的菜单列表里选择一项,即可完成枚举值的修改。
+        颜色,Color ：通过颜色属性预览框选择,或直接输入指定的颜色
+      引用类型属性：引用类型包括更复杂的对象,比如节点、组件或资源。
+        只有一种编辑方式：拖拽节点或资源到属性栏中。
+        初始化后会显示None,因为无法通过脚本为引用类型的属性设置初始值。
+        根据属性的类型将相应类型的节点或资源拖拽上去,即可完成引用赋值。
+        需要拖拽节点来赋值的属性栏上会显示绿色的标签,
+        标签上可能会显示Node, 表示任意节点都可以拖拽上去,
+        或显示组件名如Sprite,Animation等,需要拖拽挂载了相应组件的节点才行;
+        需要拖拽资源赋值的属性栏上会显示黄色的标签,
+        标签上显示的是资源的类型,如sprite-frame,prefab,font等。
+        只要从资源管理器中拖拽相应类型的资源过来就可以完成赋值。
+    e.g.：
+      cc.Class({
+        extends: cc.Component,
+        properties: {
+          userID: 20,
+          userName: "Foobar"
+        }
+      });
+    属性参数 
+      PS：所有属性参数都是可选的,但至少必须声明 default, get, set 参数中的其中一个。
+        用来给已定义的属性附加元数据,
+        类似于脚本语言的 Decorator 或者 C# 的 Attribute。
+      default 参数 用于声明属性的默认值
+        PS：声明了默认值的属性会被 CCClass 实现为成员变量。
+          默认值只有在第一次创建对象的时候才会用到,
+          也就是说修改默认值时,并不会改变已添加到场景里的组件的当前值。
+          当在编辑器中添加了一个组件以后,再回到脚本中修改一个默认值的话,
+          属性检查器 里面是看不到变化的。
+          因为属性的当前值已经序列化到了场景中,不再是第一次创建时用到的默认值了。
+          如果要强制把所有属性设回默认值,可以在 属性检查器 的组件菜单中选择 Reset。
+        default的值类型： 
+        1、number, string 或 boolean 类型的值
+        2、null 或 undefined
+        3、继承自 cc.ValueType 的子类,
+          如 cc.Vec2, cc.Color 或 cc.Rect 的实例化对象：
           properties: {
-            score: {
-              default: 0, // 默认值为 0
-              displayName: "Score player",
-              // 在 属性检查器 里,属性名将显示为：“Score player”
-              tooltip: "The score of player",
-              // 当鼠标移到参数上时,显示对应的 Tooltip。
+            pos: {
+              default: new cc.Vec2(),
             }
           }
-          ◆常用参数：
-            用来给已定义的属性附加元数据,
-            类似于脚本语言的 Decorator 或者 C# 的 Attribute。
-          type    限定属性数据类型
-          default 属性的默认值,仅在组件第一次添加到节点上时才会用到
-          serializable 布尔值,序列化（保存）该属性
-          visible   布尔值,属性检查器 面板中显示该属性
-          displayName  属性检查器 面板中显示成指定名字
-          tooltip      属性检查器 面板中添加属性的 Tooltip
-          multiline	   布尔值,属性检视器 面板中使用多行文本框
-          readonly	   布尔值,属性检视器 面板中只读
-          min	         number,限定数值在编辑器中输入的最小值
-          max	         number,限定数值在编辑器中输入的最大值 
-          step	       number,指定数值在编辑器中调节的步长 
-          range	       [min, max, step],一次性设置 min, max, step,step 值可选
-          slide	       布尔值,属性检视器 面板中显示为滑动条 
-          序列化相关属性
-            这些属性不能用于 get 方法
-            参数名	说明	类型	默认值	备注
-            serializable	序列化该属性	boolean	true	详见 serializable 参数
-            editorOnly	  在导出项目前剔除该属性	boolean	false	
-          其它属性
-            参数名	说明	类型	默认值	备注
-            default	定义属性的默认值	(Any)	undefined	详见 default 参数
-            url	该属性为指定资源的 url	function 
-            (继承自 cc.RawAsset 的构造函数)	undefined	详见 获取和加载资源: Raw Asset
-            notify	当属性被赋值时触发指定方法	function (oldValue) {}	undefined	需要定义 default 属性并且不能用于数组
-            override	当重写父类属性时需要定义该参数为 true	boolean	false	详见 override 参数
-            animatable	该属性是否能被动画修改	boolean	true	
-            注1: visible 的默认值取决于属性名。当属性名以下划线 _ 开头时,默认隐藏,否则默认显示。
-
-
-      1
-
-
-
-
-
-        所有成员方法都是虚方法,子类方法可以直接重写父类方法：
-        var Shape = cc.Class({
-            getName: function () {
-                return "shape";
+        4、空数组 [] 或空对象 {}
+        5、一个允许返回任意类型值的 function
+          该 function 会在每次实例化该类时重新调用,并且以返回值作为新的默认值：
+          properties: {
+            pos: {
+              default: function () {
+                return [1, 2, 3];
+              },
             }
-        });
-        var Rect = cc.Class({
-            extends: Shape,
-            getName: function () {
-                return "rect";
-            }
-        });
-        var obj = new Rect();
-        cc.log(obj.getName());    // "rect"
+          }
+      visible 参数
+        PS：默认情况下,是否显示在 属性检查器 取决于属性名是否以下划线 _ 开头。
+          如果以下划线开头,则默认不显示在 属性检查器,否则默认显示。
+          如果要强制显示在 属性检查器,可以设置 visible 参数为 true:
+        properties: {
+          _id: {      // 下划线开头原本会隐藏
+            default: 0,
+            visible: true
+          }
+        }
         
-        在子类中调用父类的成员方法
-
-        方法一：使用 CCClass 封装的 this._super：
-
-        var Shape = cc.Class({
-            getName: function () {
-                return "shape";
-            }
-        });
-        var Rect = cc.Class({
-            extends: Shape,
-            getName: function () {
-
-                var baseName = this._super();
-
-                return baseName + " rect";
-            }
-        });
-        var obj = new Rect();
-        cc.log(obj.getName());    // "shape rect"
-        方法二：使用 JavaScript 原生写法：
-
-        var Shape = cc.Class({
-            getName: function () {
-                return "shape";
-            }
-        });
-        var Rect = cc.Class({
-            extends: Shape,
-            getName: function () {
-
-                var baseName = Shape.prototype.getName.call(this);
-
-                return baseName + " rect";
-            }
-        });
-        var obj = new Rect();
-        cc.log(obj.getName());    // "shape rect"
-        如果你想实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,你可以用更底层的 API cc.js.extend 来实现。
-        属性
-
-        属性是特殊的实例变量,能够显示在 属性检查器 中,也能被序列化。
-
-        属性和构造函数
-
-        属性不用在构造函数里定义,在构造函数被调用前,属性已经被赋为默认值了,可以在构造函数内访问到。如果属性的默认值无法在定义 CCClass 时提供,需要在运行时才能获得,你也可以在构造函数中重新给属性赋默认值。
-
-        var Sprite = cc.Class({
-            ctor: function () {
-                this.img = LoadImage();
-            },
-            properties: {
-                img: {
-                    default: null,
-                    type: Image
-                }
-            }
-        });
-        不过要注意的是,属性被反序列化的过程紧接着发生在构造函数执行之后,因此构造函数中只能获得和修改属性的默认值,还无法获得和修改之前保存的值。
-
-        属性参数
-
-        所有属性参数都是可选的,但至少必须声明 default, get, set 参数中的其中一个。
-
-        default 参数
-
-        default 用于声明属性的默认值,声明了默认值的属性会被 CCClass 实现为成员变量。默认值只有在第一次创建对象的时候才会用到,也就是说修改默认值时,并不会改变已添加到场景里的组件的当前值。
-
-        当你在编辑器中添加了一个组件以后,再回到脚本中修改一个默认值的话,属性检查器 里面是看不到变化的。因为属性的当前值已经序列化到了场景中,不再是第一次创建时用到的默认值了。如果要强制把所有属性设回默认值,可以在 属性检查器 的组件菜单中选择 Reset。
-        default 允许设置为以下几种值类型：
-
-        任意 number, string 或 boolean 类型的值
-        null 或 undefined
-        继承自 cc.ValueType 的子类,如 cc.Vec2, cc.Color 或 cc.Rect 的实例化对象：
-         properties: {
-             pos: {
-                 default: new cc.Vec2(),
-             }
-         }
-        空数组 [] 或空对象 {}
-        一个允许返回任意类型值的 function,这个 function 会在每次实例化该类时重新调用,并且以返回值作为新的默认值：
-         properties: {
-             pos: {
-                 default: function () {
-                     return [1, 2, 3];
-                 },
-             }
-         }
-        visible 参数
-
-        默认情况下,是否显示在 属性检查器 取决于属性名是否以下划线 _ 开头。如果以下划线开头,则默认不显示在 属性检查器,否则默认显示。
-
-        如果要强制显示在 属性检查器,可以设置 visible 参数为 true:
-
-        properties: {
-            _id: {      // 下划线开头原本会隐藏
-                default: 0,
-                visible: true
-            }
-        }
         如果要强制隐藏,可以设置 visible 参数为 false:
-
         properties: {
-            id: {       // 非下划线开头原本会显示
-                default: 0,
-                visible: false
-            }
+          id: {       // 非下划线开头原本会显示
+            default: 0,
+            visible: false
+          }
         }
-        serializable 参数
-
-        指定了 default 默认值的属性默认情况下都会被序列化,如果不想序列化,可以设置serializable: false。
-
+      serializable 参数
+        指定了 default 默认值的属性默认情况下都会被序列化,
+        如果不想序列化,可以设置serializable: false。
+        
         temp_url: {
-            default: "",
-            serializable: false
+          default: "",
+          serializable: false
         }
-        type 参数
-
-        当 default 不能提供足够详细的类型信息时,为了能在 属性检查器 显示正确的输入控件,就要用 type 显式声明具体的类型：
-
-        当默认值为 null 时,将 type 设置为指定类型的构造函数,这样 属性检查器 才知道应该显示一个 Node 控件。
-
-          enemy: {
-              default: null,
-              type: cc.Node
-          }
-        当默认值为数值（number）类型时,将 type 设置为 cc.Integer,用来表示这是一个整数,这样属性在 属性检查器 里就不能输入小数点。
-
-          score: {
-              default: 0,
-              type: cc.Integer
-          }
-        当默认值是一个枚举（cc.Enum）时,由于枚举值本身其实也是一个数字（number）,所以要将 type 设置为枚举类型,才能在 属性检查器 中显示为枚举下拉框。
-
-          wrap: {
-              default: Texture.WrapMode.Clamp,
-              type: Texture.WrapMode
-          }
-        url 参数
-
-        如果属性是用来访问 Raw Asset 资源的 url,为了能在 属性检查器 中选取资源,或者能正确序列化,你需要指定 url 参数：
-
+      type 参数
+        当 default 不能提供足够详细的类型信息时,
+        为了能在 属性检查器 显示正确的输入控件,就要用 type 显式声明具体的类型：
+        
+        当默认值为 null 时,将 type 设置为指定类型的构造函数,
+        这样 属性检查器 才知道应该显示一个 Node 控件。
+        enemy: {
+          default: null,
+          type: cc.Node
+        }
+        
+        当默认值为 Number 类型时,将 type 设置为 cc.Integer,
+        用来表示这是一个整数,这样属性在 属性检查器 里就不能输入小数点。
+        score: {
+          default: 0,
+          type: cc.Integer
+        }
+        
+        当默认值是一个枚举「cc.Enum」时,由于枚举值本身其实也是一个数字,
+        所以要将 type 设置为枚举类型,才能在 属性检查器 中显示为枚举下拉框。
+        wrap: {
+          default: Texture.WrapMode.Clamp,
+          type: Texture.WrapMode
+        }
+      url 参数
+        如果属性是用来访问 Raw Asset 资源的 url,为了能在 属性检查器 中选取资源,
+        或者能正确序列化,你需要指定 url 参数：
+        继承自 cc.RawAsset 的构造函数	详见 获取和加载资源: Raw Asset
         texture: {
-            default: "",
-            url: cc.Texture2D
+          default: "",
+          url: cc.Texture2D
         },
         可参考 获取和加载资源: Raw Asset
-
-        override 参数
-
-        所有属性都将被子类继承,如果子类要覆盖父类同名属性,需要显式设置 override 参数,否则会有重名警告：
-
+      override 参数
+        所有属性都将被子类继承,如果子类要覆盖父类同名属性,
+        需显式设置 override 参数,否则会有重名警告：
         _id: {
-            default: "",
-            tooltip: "my id",
-            override: true
+          default: "",
+          tooltip: "my id",
+          override: true
         },
         name: {
-            get: function () {
-                return this._name;
-            },
-            displayName: "Name",
-            override: true
+          get: function () {
+            return this._name;
+          },
+          displayName: "Name",
+          override: true
         }
-        更多参数内容请查阅 属性参数。
-
-        属性延迟定义
-
-        如果两个类相互引用,脚本加载阶段就会出现循环引用,循环引用将导致脚本加载出错：
-
-        Game.js
-
-         var Item = require("Item");
-
-         var Game = cc.Class({
-             properties: {
-                 item: {
-                     default: null,
-                     type: Item
-                 }
-             }
-         });
-
-         module.exports = Game;
-        Item.js
-
-         var Game = require("Game");
-
-         var Item = cc.Class({
-             properties: {
-                 game: {
-                     default: null,
-                     type: Game
-                 }
-             }
-         });
-
-         module.exports = Item;
-        上面两个脚本加载时,由于它们在 require 的过程中形成了闭环,因此加载会出现循环引用的错误,循环引用时 type 就会变为 undefined。 因此我们提倡使用以下的属性定义方式：
-
-        Game.js
-
-         var Game = cc.Class({
-             properties: () => ({
-                 item: {
-                     default: null,
-                     type: require("Item")
-                 }
-             })
-         });
-
-         module.exports = Game;
-        Item.js
-
-         var Item = cc.Class({
-             properties: () => ({
-                 game: {
-                     default: null,
-                     type: require("Game")
-                 }
-             })
-         });
-
-         module.exports = Item;
-        这种方式就是将 properties 指定为一个 ES6 的箭头函数（lambda 表达式）,箭头函数的内容在脚本加载过程中并不会同步执行,而是会被 CCClass 以异步的形式在所有脚本加载成功后才调用。因此加载过程中并不会出现循环引用,属性都可以正常初始化。
-
-        箭头函数的用法符合 JavaScript 的 ES6 标准,并且 Creator 会自动将 ES6 转义为 ES5,用户不用担心浏览器的兼容问题。
-        你可以这样来理解箭头函数：
-
-
-        // 箭头函数支持省略掉 `return` 语句,我们推荐的是这种省略后的写法：
-
-        properties: () => ({    // <- 箭头右边的括号 "(" 不可省略
-            game: {
-                default: null,
-                type: require("Game")
-            }
+      displayName  属性检查器 面板中显示成指定名字
+      tooltip      属性检查器 面板中添加属性的 Tooltip
+      multiline	   布尔值,属性检视器 面板中使用多行文本框
+      readonly	   布尔值,属性检视器 面板中只读
+      min	         number,限定数值在编辑器中输入的最小值
+      max	         number,限定数值在编辑器中输入的最大值 
+      step	       number,指定数值在编辑器中调节的步长 
+      range	       [min, max, step],一次性设置 min, max, step,step 值可选
+      slide	       布尔值,属性检视器 面板中显示为滑动条 
+      serializable	序列化该属性	boolean	true	详见 serializable 参数
+        不能用于 get 方法
+      editorOnly	  在导出项目前剔除该属性	boolean	false	
+        不能用于 get 方法
+      notify	当属性被赋值时触发指定方法	function (oldValue) {}	
+        需要定义 default 属性并且不能用于数组
+      animatable	该属性是否能被动画修改	boolean	true	
+    简单声明 
+      PS：在多数情况下,都可以使用简单声明 
+      当声明的属性为基本 JavaScript 类型时,可以直接赋予默认值：
+        properties: {
+          height: 20,       // number
+          type: "actor",    // string
+          loaded: false,    // boolean                
+          target: null,     // object
+        }
+      当声明的属性具备类型时「如：cc.Node,cc.Vec2 等」,填写其构造函数来完成简单声明
+        properties: {
+          target: cc.Node,
+          pos: cc.Vec2,
+        }
+      当声明属性的类型继承自 cc.ValueType 时（如：cc.Vec2,cc.Color 或 cc.Rect）,
+        除了上面的构造函数,还可以直接使用实例作为默认值：
+        properties: {
+          pos: new cc.Vec2(10, 20),
+          color: new cc.Color(255, 255, 255, 128),
+        }
+      当声明属性是一个数组时,可以在声明处填写他们的类型或构造函数来完成声明,如：
+        properties: {
+          any: [],      // 不定义具体类型的数组
+          bools: [cc.Boolean],
+          strings: [cc.String],
+          floats: [cc.Float],
+          ints: [cc.Integer],
+          
+          values: [cc.Vec2],
+          nodes: [cc.Node],
+          frames: [cc.SpriteFrame],
+        }
+      除了以上几种情况,其他类型我们都需要使用完整声明的方式来进行书写 
+    完整声明 
+      有时需为属性声明添加参数,控制属性在 属性检查器 中的显示方式,
+      以及属性在场景序列化过程中的行为;
+      properties: {
+        score: {
+          default: 0, // 默认值为 0
+          displayName: "Score player",
+          // 在 属性检查器 里,属性名将显示为：“Score player”
+          tooltip: "The score of player",
+          // 当鼠标移到参数上时,显示对应的 Tooltip。
+        }
+      }
+    属性和构造函数 
+      不在构造函数里定义,构造函数被调用前,属性已被赋为默认值了,可在构造函数内访问到;
+      若属性默认值无法在定义 CCClass 时提供,需在运行时获得,
+      也可在构造函数中重新给属性赋默认值。
+      属性被反序列化的过程紧接着发生在构造函数执行之后,
+      因此构造函数中只能获得和修改属性的默认值,而无法获得和修改之前保存的值。
+      var Sprite = cc.Class({
+        ctor: function () {
+          this.img = LoadImage();
+        },
+        properties: {
+          img: {
+            default: null,
+            type: Image
+          }
+        }
+      });
+    属性延迟定义
+      如果两个类相互引用,脚本加载阶段就会出现循环引用,循环引用将导致脚本加载出错：
+      // Game.js
+      var Item = require("Item");
+      var Game = cc.Class({
+        properties: {
+          item: {
+            default: null,
+            type: Item
+          }
+        }
+      });
+      module.exports = Game;
+      // Item.js
+      var Game = require("Game");
+      var Item = cc.Class({
+        properties: {
+          game: {
+            default: null,
+            type: Game
+          }
+        }
+      });
+      module.exports = Item;
+      两个脚本相互引用,在 require 的过程中形成了闭环,
+      因此加载会出现循环引用的错误,循环引用时 type 就会变为 undefined。 
+      
+      因此提倡使用以下的属性定义方式：
+      // Game.js
+      var Game = cc.Class({
+        properties: () => ({
+          item: {
+            default: null,
+            type: require("Item")
+          }
         })
-
-        // 如果要完整写出 `return`,那么上面的写法等价于：
-
-        properties: () => {
-            return {
-                game: {
-                    default: null,
-                    type: require("Game")
-                }
-            };      // <- 这里 return 的内容,就是原先箭头右边括号里的部分
+      });
+      module.exports = Game;
+      // Item.js
+      var Item = cc.Class({
+        properties: () => ({
+          game: {
+            default: null,
+            type: require("Game")
+          }
+        })
+      });
+      module.exports = Item;
+      这种方式就是将 properties 指定为一个 ES6 的箭头函数「lambda 表达式」,
+      箭头函数的内容在脚本加载过程中并不会同步执行,
+      而是会被 CCClass 以异步的形式在所有脚本加载成功后才调用。
+      因此加载过程中并不会出现循环引用,属性都可以正常初始化。
+      箭头函数的用法符合 JavaScript 的 ES6 标准,
+      并且 Creator 会自动将 ES6 转义为 ES5,而不用担心浏览器的兼容问题。
+    Get Set 方法
+      PS：在属性中设置 get 或 set 后,访问属性的时候,就能触发预定义的 get 或 set 方法
+      在属性中设置 get 方法：
+        get 方法可以返回任意类型的值。且同样能显示在 属性检查器 中,
+        并且可以在包括构造函数内的所有代码里直接访问。
+        properties: {
+          width: {
+            get: function () {
+              return this.__width;
+            }
+          }
         }
-
-        // 我们也可以不用箭头函数,而是用普通的匿名函数：
-
-        properties: function () {
-            return {
-                game: {
-                    default: null,
-                    type: require("Game")
-                }
-            };
+      
+        var Sprite = cc.Class({
+          ctor: function () {
+            this.__width = 128;
+            cc.log(this.width);    // 128
+          },
+          properties: {
+            width: {
+              get: function () {
+                return this.__width;
+              }
+            }
+          }
+        });
+        设定了 get 以后,这个属性就不能被序列化,也不能指定默认值,
+        但仍然可附带除了 default, serializable 外的大部分参数。
+      
+      
+      width: {
+        get: function () {
+          return this.__width;
+        },
+        type: cc.Integer,
+        tooltip: "The width of sprite"
+      }
+      get 属性本身是只读的,但返回的对象并不是只读的。用户使用代码依然可以修改对象内部的属性,例如：
+      
+      var Sprite = cc.Class({
+        ...
+        position: {
+          get: function () {
+            return this._position;
+          },
         }
-        GetSet 方法
+        ...
+      });
+      var obj = new Sprite();
+      obj.position = new cc.Vec2(10, 20);   // 失败！position 是只读的！
+      obj.position.x = 100;                 // 允许！position 返回的 _position 对象本身可以修改！
+      set
+      
+      在属性中设置 set 方法：
+      
+      width: {
+        set: function (value) {
+          this._width = value;
+        }
+      }
+      set 方法接收一个传入参数,这个参数可以是任意类型。
+      
+      set 一般和 get 一起使用：
+      
+      width: {
+        get: function () {
+          return this._width;
+        },
+        set: function (value) {
+          this._width = value;
+        },
+        type: cc.Integer,
+        tooltip: "The width of sprite"
+      }
+      如果没有和 get 一起定义,则 set 自身不能附带任何参数。 和 get 一样,设定了 set 以后,这个属性就不能被序列化,也不能指定默认值。
+      editor 参数
+      
+      editor 只能定义在 cc.Component 的子类。
+      
+      cc.Class({
+        extends: cc.Component,
+        
+        editor: {
+          
+          // requireComponent 参数用来指定当前组件的依赖组件。
+          // 当组件添加到节点上时,如果依赖的组件不存在,引擎将会自动将依赖组件添加到同一个节点,防止脚本出错。
+          // 该选项在运行时同样有效。
+          // 
+          // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+          // 默认值：null
+          requireComponent: null,
+          
+          // 当本组件添加到节点上后,禁止 disallowMultiple 所指定类型（极其子类）的组件再添加到同一个节点,
+          // 防止逻辑发生冲突。
+          // 
+          // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+          // 默认值：null
+          disallowMultiple: null,
+          
+          // menu 用来将当前组件添加到组件菜单中,方便用户查找。
+          // 
+          // 值类型：String （如 "Rendering/Camera"）
+          // 默认值：""
+          menu: "",
+          
+          // 允许当前组件在编辑器模式下运行。
+          // 默认情况下,所有组件都只会在运行时执行,也就是说它们的生命周期回调在编辑器模式下并不会触发。
+          // 
+          // 值类型：Boolean
+          // 默认值：false
+          executeInEditMode: false,
+          
+          // 当设置了 "executeInEditMode" 以后,playOnFocus 可以用来设定选中当前组件所在的节点时,
+          // 编辑器的场景刷新频率。
+          // playOnFocus 如果设置为 true,场景渲染将保持 60 FPS,如果为 false,场景就只会在必要的时候进行重绘。
+          // 
+          // 值类型：Boolean
+          // 默认值：false
+          playOnFocus: false,
+          
+          // 自定义当前组件在 **属性检查器** 中渲染时所用的网页 url。
+          // 
+          // 值类型：String
+          // 默认值：""
+          inspector: "",
+          
+          // 自定义当前组件在编辑器中显示的图标 url。
+          // 
+          // 值类型：String
+          // 默认值：""
+          icon: "",
+          
+          // 指定当前组件的帮助文档的 url,设置过后,在 **属性检查器** 中就会出现一个帮助图标,
+          // 用户点击将打开指定的网页。
+          // 
+          // 值类型：String
+          // 默认值：""
+          help: "",
+        }
+      });        
+  1
 
-        在属性中设置了 get 或 set 以后,访问属性的时候,就能触发预定义的 get 或 set 方法。
+
+
+
+
+
+
 
         get
 
-        在属性中设置 get 方法：
-
-        properties: {
-            width: {
-                get: function () {
-                    return this.__width;
-                }
-            }
-        }
-        get 方法可以返回任意类型的值。 这个属性同样能显示在 属性检查器 中,并且可以在包括构造函数内的所有代码里直接访问。
-
-        var Sprite = cc.Class({
-            ctor: function () {
-                this.__width = 128;
-                cc.log(this.width);    // 128
-            },
-            properties: {
-                width: {
-                    get: function () {
-                        return this.__width;
-                    }
-                }
-            }
-        });
-        请注意：
-
-        设定了 get 以后,这个属性就不能被序列化,也不能指定默认值,但仍然可附带除了 default, serializable 外的大部分参数。
-
-          width: {
-              get: function () {
-                  return this.__width;
-              },
-              type: cc.Integer,
-              tooltip: "The width of sprite"
-          }
-        get 属性本身是只读的,但返回的对象并不是只读的。用户使用代码依然可以修改对象内部的属性,例如：
-
-          var Sprite = cc.Class({
-              ...
-              position: {
-                  get: function () {
-                      return this._position;
-                  },
-              }
-              ...
-          });
-          var obj = new Sprite();
-          obj.position = new cc.Vec2(10, 20);   // 失败！position 是只读的！
-          obj.position.x = 100;                 // 允许！position 返回的 _position 对象本身可以修改！
-        set
-
-        在属性中设置 set 方法：
-
-        width: {
-            set: function (value) {
-                this._width = value;
-            }
-        }
-        set 方法接收一个传入参数,这个参数可以是任意类型。
-
-        set 一般和 get 一起使用：
-
-        width: {
-            get: function () {
-                return this._width;
-            },
-            set: function (value) {
-                this._width = value;
-            },
-            type: cc.Integer,
-            tooltip: "The width of sprite"
-        }
-        如果没有和 get 一起定义,则 set 自身不能附带任何参数。 和 get 一样,设定了 set 以后,这个属性就不能被序列化,也不能指定默认值。
-        editor 参数
-
-        editor 只能定义在 cc.Component 的子类。
-
-        cc.Class({
-          extends: cc.Component,
-
-          editor: {
-
-            // requireComponent 参数用来指定当前组件的依赖组件。
-            // 当组件添加到节点上时,如果依赖的组件不存在,引擎将会自动将依赖组件添加到同一个节点,防止脚本出错。
-            // 该选项在运行时同样有效。
-            // 
-            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
-            // 默认值：null
-            requireComponent: null,
-
-            // 当本组件添加到节点上后,禁止 disallowMultiple 所指定类型（极其子类）的组件再添加到同一个节点,
-            // 防止逻辑发生冲突。
-            // 
-            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
-            // 默认值：null
-            disallowMultiple: null,
-
-            // menu 用来将当前组件添加到组件菜单中,方便用户查找。
-            // 
-            // 值类型：String （如 "Rendering/Camera"）
-            // 默认值：""
-            menu: "",
-
-            // 允许当前组件在编辑器模式下运行。
-            // 默认情况下,所有组件都只会在运行时执行,也就是说它们的生命周期回调在编辑器模式下并不会触发。
-            // 
-            // 值类型：Boolean
-            // 默认值：false
-            executeInEditMode: false,
-
-            // 当设置了 "executeInEditMode" 以后,playOnFocus 可以用来设定选中当前组件所在的节点时,
-            // 编辑器的场景刷新频率。
-            // playOnFocus 如果设置为 true,场景渲染将保持 60 FPS,如果为 false,场景就只会在必要的时候进行重绘。
-            // 
-            // 值类型：Boolean
-            // 默认值：false
-            playOnFocus: false,
-
-            // 自定义当前组件在 **属性检查器** 中渲染时所用的网页 url。
-            // 
-            // 值类型：String
-            // 默认值：""
-            inspector: "",
-
-            // 自定义当前组件在编辑器中显示的图标 url。
-            // 
-            // 值类型：String
-            // 默认值：""
-            icon: "",
-
-            // 指定当前组件的帮助文档的 url,设置过后,在 **属性检查器** 中就会出现一个帮助图标,
-            // 用户点击将打开指定的网页。
-            // 
-            // 值类型：String
-            // 默认值：""
-            help: "",
-          }
-        });        
         
       数组声明 
         数组的 default 必须设置为 [],

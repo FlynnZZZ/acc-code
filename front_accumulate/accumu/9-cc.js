@@ -80,7 +80,7 @@ Cocos Creator
     });
 --------------------------------------------------------------------------------
 菜单栏
-toolbar,工具栏 
+Toolbar,工具栏 
   PS：包括了场景编辑工具和预览游戏时的操作按钮;
     左边为场景编辑的相关工具,如移动、旋转、缩放等工具按钮
     右边显示了远程测试和调试时使用访问地址,以及连接中的设备数;
@@ -1496,7 +1496,7 @@ JS脚本
     可以使用 cc.js.getClassName 来获得类名,
     使用 cc.js.getClassByName 来查找对应的类。
     对在项目脚本里定义的组件来说,序列化其实并不使用类名,因此不需要指定类名。
-    对其他类来说,类名用于序列化,如果不需要序列化,类名可以省略。
+    对其他类来说,类名用于序列化,若不需要序列化,类名可以省略。
   静态变量和静态方法
     静态变量或静态方法可以在原型对象的 statics 中声明
     var Sprite = cc.Class({
@@ -1531,7 +1531,7 @@ JS脚本
     Boo.range.w = 200;
     cc.log(Aoo.range.w); //  200, Boo.range 和 Aoo.range 指向同一个对象
     
-    如果不需要考虑继承,私有的静态成员也可以直接定义在类的外面：
+    若不需要考虑继承,私有的静态成员也可以直接定义在类的外面：
     // 局部方法
     function doLoad (sprite) {
       // ...
@@ -1546,8 +1546,8 @@ JS脚本
     });
   ctor 构造函数 
     为了保证反序列化能始终正确运行,CCClass 的构造函数不允许定义构造参数。
-    开发者如果确实需要使用构造参数,可以通过 arguments 获取,
-    但要记得如果这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
+    开发者若确实需要使用构造参数,可以通过 arguments 获取,
+    但要记得若这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
     var Sprite = cc.Class({
       ctor : function () {
         cc.log(this instanceof Sprite);    // true
@@ -1555,7 +1555,7 @@ JS脚本
     });
   实例变量 声明
     在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看。
-    如果是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
+    若是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
     var Sprite = cc.Class({
       ctor: function () {
         // 声明实例变量并赋默认值
@@ -1582,7 +1582,7 @@ JS脚本
     });
     var obj = new Sprite();
     obj.print(); // 调用实例方法
-  extends 实现继承 
+  extends 继承 
     var Shape = cc.Class(); // 父类
     var Rect = cc.Class({   // 子类
       extends : Shape
@@ -1657,9 +1657,9 @@ JS脚本
     var obj = new Rect();
     cc.log(obj.getName());    // "shape rect"
   cc.js.extend 更底层第继承API
-    如果实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,
+    若实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,
     可以使用该API来实现;
-  properties 声明属性 
+  properties 属性声明 
     PS：特殊的实例变量,能够显示在 属性检查器 中,也能被序列化;
       在 cc.Class 的 properties 字段中声明属性,填写属性名字和属性参数即可;
     值类型 和 引用类型 属性
@@ -1704,7 +1704,7 @@ JS脚本
           当在编辑器中添加了一个组件以后,再回到脚本中修改一个默认值的话,
           属性检查器 里面是看不到变化的。
           因为属性的当前值已经序列化到了场景中,不再是第一次创建时用到的默认值了。
-          如果要强制把所有属性设回默认值,可以在 属性检查器 的组件菜单中选择 Reset。
+          若要强制把所有属性设回默认值,可以在 属性检查器 的组件菜单中选择 Reset。
         default的值类型： 
         1、number, string 或 boolean 类型的值
         2、null 或 undefined
@@ -1725,10 +1725,9 @@ JS脚本
               },
             }
           }
-      visible 参数
-        PS：默认情况下,是否显示在 属性检查器 取决于属性名是否以下划线 _ 开头。
-          如果以下划线开头,则默认不显示在 属性检查器,否则默认显示。
-          如果要强制显示在 属性检查器,可以设置 visible 参数为 true:
+      visible 布尔值,是否在 属性检查器 中显示
+        默认情况下,若属性名以下划线 _ 开头,则不显示在 属性检查器,否则显示。
+        若要强制显示在 属性检查器,可设置 visible 为 true
         properties: {
           _id: {      // 下划线开头原本会隐藏
             default: 0,
@@ -1736,7 +1735,7 @@ JS脚本
           }
         }
         
-        如果要强制隐藏,可以设置 visible 参数为 false:
+        若要强制隐藏,可设置 visible 为 false
         properties: {
           id: {       // 非下划线开头原本会显示
             default: 0,
@@ -1745,7 +1744,7 @@ JS脚本
         }
       serializable 参数
         指定了 default 默认值的属性默认情况下都会被序列化,
-        如果不想序列化,可以设置serializable: false。
+        若不想序列化,可以设置serializable: false。
         
         temp_url: {
           default: "",
@@ -1776,7 +1775,7 @@ JS脚本
           type: Texture.WrapMode
         }
       url 参数
-        如果属性是用来访问 Raw Asset 资源的 url,为了能在 属性检查器 中选取资源,
+        若属性是用来访问 Raw Asset 资源的 url,为了能在 属性检查器 中选取资源,
         或者能正确序列化,你需要指定 url 参数：
         继承自 cc.RawAsset 的构造函数	详见 获取和加载资源: Raw Asset
         texture: {
@@ -1785,7 +1784,7 @@ JS脚本
         },
         可参考 获取和加载资源: Raw Asset
       override 参数
-        所有属性都将被子类继承,如果子类要覆盖父类同名属性,
+        所有属性都将被子类继承,若子类要覆盖父类同名属性,
         需显式设置 override 参数,否则会有重名警告：
         _id: {
           default: "",
@@ -1799,8 +1798,9 @@ JS脚本
           displayName: "Name",
           override: true
         }
-      displayName  属性检查器 面板中显示成指定名字
-      tooltip      属性检查器 面板中添加属性的 Tooltip
+      displayName  '属性检查器'中显示的名字
+      tooltip      '属性检查器'中停留此属性名称显示的提示文字
+        属性检查器 面板中添加属性的 Tooltip 
       multiline	   布尔值,属性检视器 面板中使用多行文本框
       readonly	   布尔值,属性检视器 面板中只读
       min	         number,限定数值在编辑器中输入的最小值
@@ -1808,7 +1808,8 @@ JS脚本
       step	       number,指定数值在编辑器中调节的步长 
       range	       [min, max, step],一次性设置 min, max, step,step 值可选
       slide	       布尔值,属性检视器 面板中显示为滑动条 
-      serializable	序列化该属性	boolean	true	详见 serializable 参数
+      serializable	布尔值,序列化该属性,设置false就是临时变量
+        详见 serializable 参数
         不能用于 get 方法
       editorOnly	  在导出项目前剔除该属性	boolean	false	
         不能用于 get 方法
@@ -1878,7 +1879,7 @@ JS脚本
         }
       });
     属性延迟定义
-      如果两个类相互引用,脚本加载阶段就会出现循环引用,循环引用将导致脚本加载出错：
+      若两个类相互引用,脚本加载阶段就会出现循环引用,循环引用将导致脚本加载出错：
       // Game.js
       var Item = require("Item");
       var Game = cc.Class({
@@ -1934,7 +1935,7 @@ JS脚本
     Get Set 方法
       PS：在属性中设置 get 或 set 后,访问属性的时候,就能触发预定义的 get 或 set 方法
       在属性中设置 get 方法：
-        get 方法可以返回任意类型的值。且同样能显示在 属性检查器 中,
+        get 方法可以返回任意类型的值,且同样能显示在 属性检查器 中,
         并且可以在包括构造函数内的所有代码里直接访问。
         properties: {
           width: {
@@ -1945,7 +1946,7 @@ JS脚本
         }
       
         var Sprite = cc.Class({
-          ctor: function () {
+          ctor : function () {
             this.__width = 128;
             cc.log(this.width);    // 128
           },
@@ -1959,161 +1960,143 @@ JS脚本
         });
         设定了 get 以后,这个属性就不能被序列化,也不能指定默认值,
         但仍然可附带除了 default, serializable 外的大部分参数。
-      
-      
-      width: {
-        get: function () {
-          return this.__width;
-        },
-        type: cc.Integer,
-        tooltip: "The width of sprite"
-      }
-      get 属性本身是只读的,但返回的对象并不是只读的。用户使用代码依然可以修改对象内部的属性,例如：
-      
-      var Sprite = cc.Class({
-        ...
-        position: {
+        width: {
           get: function () {
-            return this._position;
+            return this.__width;
           },
+          type: cc.Integer,
+          tooltip: "The width of sprite"
         }
-        ...
-      });
-      var obj = new Sprite();
-      obj.position = new cc.Vec2(10, 20);   // 失败！position 是只读的！
-      obj.position.x = 100;                 // 允许！position 返回的 _position 对象本身可以修改！
-      set
-      
-      在属性中设置 set 方法：
-      
-      width: {
-        set: function (value) {
-          this._width = value;
-        }
-      }
-      set 方法接收一个传入参数,这个参数可以是任意类型。
-      
-      set 一般和 get 一起使用：
-      
-      width: {
-        get: function () {
-          return this._width;
-        },
-        set: function (value) {
-          this._width = value;
-        },
-        type: cc.Integer,
-        tooltip: "The width of sprite"
-      }
-      如果没有和 get 一起定义,则 set 自身不能附带任何参数。 和 get 一样,设定了 set 以后,这个属性就不能被序列化,也不能指定默认值。
-      editor 参数
-      
-      editor 只能定义在 cc.Component 的子类。
-      
-      cc.Class({
-        extends: cc.Component,
         
-        editor: {
-          
-          // requireComponent 参数用来指定当前组件的依赖组件。
-          // 当组件添加到节点上时,如果依赖的组件不存在,引擎将会自动将依赖组件添加到同一个节点,防止脚本出错。
-          // 该选项在运行时同样有效。
-          // 
-          // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
-          // 默认值：null
-          requireComponent: null,
-          
-          // 当本组件添加到节点上后,禁止 disallowMultiple 所指定类型（极其子类）的组件再添加到同一个节点,
-          // 防止逻辑发生冲突。
-          // 
-          // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
-          // 默认值：null
-          disallowMultiple: null,
-          
-          // menu 用来将当前组件添加到组件菜单中,方便用户查找。
-          // 
-          // 值类型：String （如 "Rendering/Camera"）
-          // 默认值：""
-          menu: "",
-          
-          // 允许当前组件在编辑器模式下运行。
-          // 默认情况下,所有组件都只会在运行时执行,也就是说它们的生命周期回调在编辑器模式下并不会触发。
-          // 
-          // 值类型：Boolean
-          // 默认值：false
-          executeInEditMode: false,
-          
-          // 当设置了 "executeInEditMode" 以后,playOnFocus 可以用来设定选中当前组件所在的节点时,
-          // 编辑器的场景刷新频率。
-          // playOnFocus 如果设置为 true,场景渲染将保持 60 FPS,如果为 false,场景就只会在必要的时候进行重绘。
-          // 
-          // 值类型：Boolean
-          // 默认值：false
-          playOnFocus: false,
-          
-          // 自定义当前组件在 **属性检查器** 中渲染时所用的网页 url。
-          // 
-          // 值类型：String
-          // 默认值：""
-          inspector: "",
-          
-          // 自定义当前组件在编辑器中显示的图标 url。
-          // 
-          // 值类型：String
-          // 默认值：""
-          icon: "",
-          
-          // 指定当前组件的帮助文档的 url,设置过后,在 **属性检查器** 中就会出现一个帮助图标,
-          // 用户点击将打开指定的网页。
-          // 
-          // 值类型：String
-          // 默认值：""
-          help: "",
-        }
-      });        
-  1
-
-
-
-
-
-
-
-
-        get
-
-        
-      数组声明 
-        数组的 default 必须设置为 [],
-        若要在 属性检查器 中编辑,还需要设置 type 为构造函数,枚举,
-        或者 cc.Integer,cc.Float,cc.Boolean 和 cc.String。
-        properties: {
-          names: {
-            default: [],
-            type: [cc.String]   // 用 type 指定数组的每个元素都是字符串类型
-          },
-          enemies: {
-            default: [],
-            type: [cc.Node]     // type 同样写成数组,提高代码可读性
-          },
-        }
-      get/set 声明
-        在属性中设置了 get 或 set 以后,访问属性的时候,
-        就能触发预定义的 get 或 set 方法。
-        若只定义 get 方法,那相当于属性只读。
-        properties: {
-          width: {
+        属性本身是只读的,但返回的对象并不是只读的。
+        用户使用代码依然可以修改对象内部的属性,例如：
+        var Sprite = cc.Class({
+          ...
+          position: {
             get: function () {
-              return this._width;
+              return this._position;
             },
-            set: function (value) {
-              this._width = value;
-            }
+          }
+          ...
+        });
+        var obj = new Sprite();
+        obj.position = new cc.Vec2(10, 20); // 失败！position 是只读的！
+        obj.position.x = 100;   // 允许！position 返回的 _position 对象本身可以修改！
+      在属性中设置 set 方法：
+        width: {
+          set: function (value) {
+            this._width = value;
           }
         }
+        set 方法接收一个传入参数,这个参数可以是任意类型。
+        
+        set 一般和 get 一起使用：
+        width: {
+          get: function () {
+            return this._width;
+          },
+          set: function (value) {
+            this._width = value;
+          },
+          type: cc.Integer,
+          tooltip: "The width of sprite"
+        }
+        若没有和 get 一起定义,则 set 自身不能附带任何参数。 
+        和 get 一样,设定了 set 以后,这个属性就不能被序列化,也不能指定默认值。
+        
+        editor 参数
+        editor 只能定义在 cc.Component 的子类
+        cc.Class({
+          extends: cc.Component,
+          editor: {
+            
+            // requireComponent 参数用来指定当前组件的依赖组件。
+            // 当组件添加到节点上时,若依赖的组件不存在,引擎将会自动将依赖组件添加到同一个节点,防止脚本出错。
+            // 该选项在运行时同样有效。
+            // 
+            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+            // 默认值：null
+            requireComponent: null,
+            
+            // 当本组件添加到节点上后,禁止 disallowMultiple 所指定类型（极其子类）的组件再添加到同一个节点,
+            // 防止逻辑发生冲突。
+            // 
+            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+            // 默认值：null
+            disallowMultiple: null,
+            
+            // menu 用来将当前组件添加到组件菜单中,方便用户查找。
+            // 
+            // 值类型：String （如 "Rendering/Camera"）
+            // 默认值：""
+            menu: "",
+            
+            // 允许当前组件在编辑器模式下运行。
+            // 默认情况下,所有组件都只会在运行时执行,也就是说它们的生命周期回调在编辑器模式下并不会触发。
+            // 
+            // 值类型：Boolean
+            // 默认值：false
+            executeInEditMode: false,
+            
+            // 当设置了 "executeInEditMode" 以后,playOnFocus 可以用来设定选中当前组件所在的节点时,
+            // 编辑器的场景刷新频率。
+            // playOnFocus 若设置为 true,场景渲染将保持 60 FPS,若为 false,场景就只会在必要的时候进行重绘。
+            // 
+            // 值类型：Boolean
+            // 默认值：false
+            playOnFocus: false,
+            
+            // 自定义当前组件在 **属性检查器** 中渲染时所用的网页 url。
+            // 
+            // 值类型：String
+            // 默认值：""
+            inspector: "",
+            
+            // 自定义当前组件在编辑器中显示的图标 url。
+            // 
+            // 值类型：String
+            // 默认值：""
+            icon: "",
+            
+            // 指定当前组件的帮助文档的 url,设置过后,在 **属性检查器** 中就会出现一个帮助图标,
+            // 用户点击将打开指定的网页。
+            // 
+            // 值类型：String
+            // 默认值：""
+            help: "",
+          }
+        });        
+    数组声明 
+      数组的 default 必须设置为 [],
+      若要在 属性检查器 中编辑,还需要设置 type 为构造函数,枚举,
+      或者 cc.Integer,cc.Float,cc.Boolean 和 cc.String。
+      properties: {
+        names: {
+          default: [],
+          type: [cc.String]   // 用 type 指定数组的每个元素都是字符串类型
+        },
+        enemies: {
+          default: [],
+          type: [cc.Node]     // type 同样写成数组,提高代码可读性
+        },
+      }
+    get/set 声明
+      在属性中设置了 get 或 set 以后,访问属性的时候,
+      就能触发预定义的 get 或 set 方法。
+      若只定义 get 方法,那相当于属性只读。
+      properties: {
+        width: {
+          get: function () {
+            return this._width;
+          },
+          set: function (value) {
+            this._width = value;
+          }
+        }
+      }
   cc.isChildClassOf(cla1,cla2) 判断两个类的继承关系
     两个传入参数都必须是类的构造函数,而不是类的对象实例。
-    如果传入的两个类相等,isChildClassOf 同样会返回 true。
+    若传入的两个类相等,isChildClassOf 同样会返回 true。
     var Texture = cc.Class();
     var Texture2D = cc.Class({
         extends: Texture
@@ -2391,7 +2374,7 @@ JS脚本
     onLoad()     组件所在节点进行初始化时（创建之后通过设置父节点添加到节点树）执行
     start()      会在该组件第一次update前执行,通常用于需要在onLoad初始化完毕后执行的逻辑。
     更多组件成员方法请继续参考 生命周期回调 文档。          
-  生命周期回调
+  生命周期回调 
     Cocos Creator 为组件脚本提供了生命周期的回调函数。
     只要指定回调函数,Creator 就会在特定的时期自动执行相关 脚本,不需要手动调用。
     onLoad 回调会在这个组件所在的场景被载入 的时候触发,
@@ -2453,7 +2436,7 @@ JS脚本
     onDisable 当组件的 enabled 属性从 true 变为 false 时,会激活 onDisable 回调。
     onDestroy 当组件调用了 destroy(),会在该帧结束被统一回收,此时会调用 onDestroy 回调。
   创建和销毁节点
-    创建新节点
+    创建新节点 
       除了通过场景编辑器创建节点外,我们也可以在脚本中动态创建节点。
       通过 new cc.Node() 并将它加入 到场景中,可以实现整个创建过程。
       以下是一个简单的例子:
@@ -2474,7 +2457,7 @@ JS脚本
           node.setPosition(0,0);
         },
       });
-    克隆已有节点
+    克隆已有节点 
       有时我们希望动态的克隆场景中的已有节点,我们可以通过 cc.instantiate 方法完成。
       cc.Class({
         extends: cc.Component,
@@ -2494,7 +2477,7 @@ JS脚本
           node.setPosition(0,0);
         },
       });
-    创建预制节点
+    创建预制节点 
       和克隆已有节点相似,你也设置你的预制（prefab）节点并通过 cc.instantiate 生成。
       cc.Class({
         extends: cc.Component,
@@ -2514,9 +2497,8 @@ JS脚本
           node.setPosition(0,0);
         },
       });
-    销毁节点
-      通过 node.destroy() 函数,可以销毁节点。
-      销毁节点并不会立刻发生,而是在当前 帧逻辑更新结束后,统一执行。
+    node.destroy() 销毁节点
+      销毁节点并不会立刻发生,而是在当前帧逻辑更新结束后,统一执行。
       当一个节点销毁后,该节点就处于无效状态,
       可以通过 cc.isValid 判断 当前节点是否已经被销毁。
       cc.Class({

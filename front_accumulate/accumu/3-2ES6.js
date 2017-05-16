@@ -1135,6 +1135,21 @@ Function 函数的扩展
       obj.show(); // 100
       定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
       而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
+    todo -----箭头函数 (ES6新增)
+      PS:匿名函数的简化版
+        箭头函数的this值是绑定了的
+        箭头函数没有arguments对象,若要多参数,则需用...
+      创建箭头函数
+       (arg1,arg2) =>{语句};
+          相当于: function(参数1,参数2){ return 语句 }
+        arg => {语句};  若只有一个参数,可省略圆括号
+       ( ) => {语句};  若没有参数,则不可省略圆括号
+       e.g.
+         var a1 =[1,2,3]
+         var a2 =a1.map(function(n){ return n*n });
+         console.log(a2); // [1, 4, 9]
+         /*等价于*/ var a3 =a1.map(n => n*n);
+         console.log(a3); // [1, 4, 9]
 Set   集合 
   PS:ES6新增的一种新的数据结构,可以理解为值的集合;
     Set中的元素无重复项「会自动去掉重复的元素」;
@@ -1596,9 +1611,8 @@ class 类
     }(1, 2);
     console.log(point.toString()); // 3
   static 关键字,声明类的静态方法 
-    PS：自定义方法是实例方法,也就是实例化后的对象才可以调用的方法;
-      还可以定义一种直接使用类名即可访问的方法,我们称之为“静态方法”;
-      静态方法通过类名来的调用;
+    PS：自定义方法是实例方法,需通过实例化后的对象来调用的方法;
+      静态方法是类的方法,不用实例化对象,通过类本身来调用;
     class Animal {
       constructor(name){
         this.name = name;

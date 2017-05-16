@@ -78,129 +78,6 @@ Cocos Creator
         
       },
     });
-API 
-  节点相关 
-    ◆节点类型
-    cc.Label  文本
-    cc.Node   节点
-    cc.SpriteFrame 图片资源
-    ◆节点属性
-    ccNode.string  可读写,节点的文本值
-    ccNode.parent  节点的父节点
-    ◆创建节点
-    cc.instantiate(prefa)  返回通过预置资源创建的节点
-  ◆cc 模块
-  cc.director  一个管理游戏逻辑流程的单例对象,创建和处理主窗口并管理执行场景
-    PS：由于该对象是一单例,不需要调用任何构造函数或创建函数来创建该对象,
-      cc.director 还负责：
-      - 初始化 OpenGL 环境。
-      - 设置OpenGL像素格式。(默认是 RGB565)
-      - 设置OpenGL缓冲区深度 (默认是 0-bit)
-      - 设置空白场景的颜色 (默认是 黑色)
-      - 设置投影 (默认是 3D)
-      - 设置方向 (默认是 Portrait)
-    cc.director.methodName();  标准使用方法 
-    ◆方法
-    convertToUI(glPoint)  将触摸点的 WebGL View 坐标转换为屏幕坐标
-    getWinSize()          获取视图的大小,以点为单位
-    getWinSizeInPixels()  获取视图大小,以像素为单位
-    getVisibleSize()      获取运行场景的可见大小
-    getVisibleOrigin()          获取视图在游戏内容中的坐标原点
-    pause ()  暂停正在运行的场景,该暂停只会停止游戏逻辑执行,但是不会停止渲染和 UI 响应。 如果想要更彻底得暂停游戏,包含渲染,音频和事件,请使用 Game.pause。
-    runSceneImmediate ( scene  [onBeforeLoadScene ]  [onLaunched ] )
-          立刻切换指定场景。
-    loadScene ( sceneName  [onLaunched ] )  Boolean
-      通过场景名称进行加载场景。
-    preloadScene ( sceneName  [onLoaded ] )
-      预加载场景,你可以在任何时候调用这个方法。 调用完后,你仍然需要通过 cc.director.loadScene 来启动场景,因为这个方法不会执行场景加载操作。 就算预加载还没完成,你也可以直接调用 cc.director.loadScene,加载完成后场景就会启动。
-    resume ( )  恢复暂停场景的游戏逻辑,如果当前场景没有暂停将没任何事情发生。
-    setDepthTest ( on )  启用/禁用深度测试（在 Canvas 渲染模式下不会生效）。
-    setClearColor ( clearColor ) 设置场景的默认擦除颜色（支持白色全透明,但不支持透明度为中间值）。
-    setProjection ( projection ) 设置 OpenGL 投影。
-    setViewport ( ) 设置视窗（请不要主动调用这个接口,除非你知道你在做什么）。
-    getProjection ( )  Number 获取 OpenGL 投影。
-    setAlphaBlending ( on ) 启用/禁用 透明度融合。
-    isSendCleanupToScene ( )  Boolean 更换场景时是否接收清理消息。 如果新场景是采用 push 方式进入的,那么旧的场景将不会接收到 “cleanup” 消息。 如果新场景取代旧的场景,它将会接收到 “cleanup” 消息。
-    getScene ( )  Scene 获取当前逻辑场景。
-      // This will help you to get the Canvas node in scene
-      cc.director.getScene().getChildByName('Canvas');
-    getAnimationInterval ( )  Number 获取单位帧执行时间。
-    isDisplayStats ( )  Boolean 获取是否显示 FPS 信息。
-    setDisplayStats ( displayStats ) 设置是否在左下角显示 FPS。
-    getSecondsPerFrame ( )  Number 获取实际记录的上一帧执行时间,可能与单位帧执行时间（AnimationInterval）有出入。
-    isNextDeltaTimeZero ( )  Boolean 返回下一个 “delta time” 是否等于零。
-    isPaused ( )  Boolean 是否处于暂停状态。
-    getTotalFrames ( )  Number 获取 director 启动以来游戏运行的总帧数。
-    getScheduler ( )  Scheduler 获取和 director 相关联的 cc.Scheduler。
-    setScheduler ( scheduler ) 设置和 director 相关联的 cc.Scheduler。
-    getActionManager ( )  ActionManager 获取和 director 相关联的 cc.ActionManager（动作管理器）。
-    setActionManager ( actionManager ) 设置和 director 相关联的 cc.ActionManager（动作管理器）。
-    getCollisionManager ( )  CollisionManager Returns the cc.CollisionManager associated with this director.
-    getDeltaTime ( )  Number 获取上一帧的 “delta time”。
-    ◆事件
-    cc.Director.EVENT_PROJECTION_CHANGED
-    cc.Director 投影变化的事件。
-
-    Event Payload:
-    event Event
-    示例:
-    cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
-       cc.log("Projection changed.");
-    });
-    cc.Director.EVENT_BEFORE_SCENE_LOADING
-    加载新场景之前所触发的事件。
-
-    Event Payload:
-    event Event
-    detail Vec2
-    The loading scene name
-    cc.Director.EVENT_AFTER_SCENE_LAUNCH
-    运行新场景之后所触发的事件。
-
-    Event Payload:
-    event Event
-    detail Vec2
-    New scene which is launched
-    cc.Director.EVENT_BEFORE_UPDATE
-    每个帧的开始时所触发的事件。
-
-    Event Payload:
-    event Event
-    cc.Director.EVENT_COMPONENT_UPDATE
-    组件 “update” 时所触发的事件。
-
-    Event Payload:
-    event Event
-    detail Vec2
-    The delta time from last frame
-    cc.Director.EVENT_COMPONENT_LATE_UPDATE
-    组件 “late update” 时所触发的事件。
-
-    Event Payload:
-    event Event
-    detail Vec2
-    The delta time from last frame
-    cc.Director.EVENT_AFTER_UPDATE
-    将在引擎和组件 “update” 逻辑之后所触发的事件。
-
-    Event Payload:
-    event Event
-    cc.Director.EVENT_BEFORE_VISIT
-    访问渲染场景树之前所触发的事件。
-
-    Event Payload:
-    event Event
-    cc.Director.EVENT_AFTER_VISIT
-    访问渲染场景图之后所触发的事件,渲染队列已准备就绪,但在这一时刻还没有呈现在画布上。
-
-    Event Payload:
-    event Event
-    cc.Director.EVENT_AFTER_DRAW
-    渲染过程之后所触发的事件。
-
-    Event Payload:
-    event Event
-Cocos2d-js API
 --------------------------------------------------------------------------------
 菜单栏
 toolbar,工具栏 
@@ -220,7 +97,7 @@ toolbar,工具栏
     连接同一局域网的移动设备可以访问这个地址来预览和调试游戏。
   open project,打开项目文件夹
     在操作系统的文件管理器（Explorer 或 Finder）打开项目所在的文件夹。  
-资源管理器：访问和管理项目资源的工作区域
+资源管理器：访问和管理项目资源的工作区域 
   PS：显示了项目资源文件夹「assets」中的所有资源,
     包括项目中所有的资源和脚本文件;为每个资源分配UUID,解决改名和移动时的索引问题;
     项目中只有 assets 目录下的资源才会被 Cocos Creator 导入项目并进行管理;
@@ -307,7 +184,7 @@ toolbar,工具栏
         可供 Cocos Creator 使用的图集资源由 plist 和 png 文件组成。
         在游戏中使用多张图片合成的图集作为美术资源,有以下优势：
         合成图集时会去除每张图片周围的空白区域,加上可以在整体上实施各种优化算法,合成图集后可以大大减少游戏包体和内存占用
-        多个 Sprite 如果渲染的是来自同一张图集的图片时,这些 Sprite 可以使用同一个渲染批次来处理,大大减少 CPU 的运算时间,提高运行效率。
+        多个 Sprite 若渲染的是来自同一张图集的图片时,这些 Sprite 可以使用同一个渲染批次来处理,大大减少 CPU 的运算时间,提高运行效率。
       制作图集资源
         要生成图集,首先您应该准备好一组原始图片：
         接下来可以使用专门的软件生成图集,我们推荐的图集制作软件包括：
@@ -327,7 +204,7 @@ toolbar,工具栏
       目前我们提供了一个简单的小工具来完成场景中对图片资源引用从碎图或老图集到新图集的重定向。
         生成新图集：不管是从碎图合并,还是将原来的图集重新拆分或合并,您都需要先使用 TexturePacker 生成完整的新图集。然后将新图集导入到项目资源文件夹中。
         双击打开您需要重定向资源引用的场景或 Prefab
-        点击主菜单的「开发者->在当前场景使用指定图集替换 spriteFrame...」,在打开的对话框里选择您新生成的图集,等待替换操作完成。（如果新图集有多张,应该重复这一步直到所有相关新图集都替换完毕） 4.如果您有多个场景或 prefab,需要重复执行 2-3 步,遍历每个相关的场景或 Prefab
+        点击主菜单的「开发者->在当前场景使用指定图集替换 spriteFrame...」,在打开的对话框里选择您新生成的图集,等待替换操作完成。（若新图集有多张,应该重复这一步直到所有相关新图集都替换完毕） 4.若您有多个场景或 prefab,需要重复执行 2-3 步,遍历每个相关的场景或 Prefab
         确认所有相关图片资源的引用都已经替换成了新图集后,现在可以删除原有的碎图或旧图集了。      
     Auto_Atlas,自动图集资源
       cc自带的合图功能,可将指定的一系列碎图打包成一张大图,
@@ -336,7 +213,7 @@ toolbar,工具栏
         右键 -> 新建 -> 自动图集配置,点击新建一个类似 AutoAtlas.pac 的资源。
         自动图集资源 将会以当前文件夹下的所有 SpriteFrame 作为碎图资源,
         以后会增加其他的选择碎图资源的方式。 
-        如果碎图资源 SpriteFrame 有进行配置过,在打包后重新生成的 SpriteFrame 将会保留这些配置。
+        若碎图资源 SpriteFrame 有进行配置过,在打包后重新生成的 SpriteFrame 将会保留这些配置。
       配置自动图集资源
         PS：在资源管理器中选中一个 自动图集资源 后,
           属性检查器 面板将会显示 自动图集资源 的所有可配置项。
@@ -357,7 +234,7 @@ toolbar,工具栏
           按照当前自动图集配置生成的相关结果将会展示在 属性检查器 下面的区域。
           需要注意的是每次配置过后,需要重新点击 预览 才会重新生成预览信息。
         结果：
-        Packed Textures, 显示打包后的图集图片以及图片相关的信息,如果会生成的图片有多张,则会往下在 属性检查器 中列出来。
+        Packed Textures, 显示打包后的图集图片以及图片相关的信息,若会生成的图片有多张,则会往下在 属性检查器 中列出来。
         Unpacked Textures,显示不能打包进图集的碎图资源,造成的原因有可能是这些碎图资源的大小比图集资源的大小还大导致的,这时候可能需要调整下图集的配置或者碎图的大小了。
       生成图集
         预览项目或者在 Cocos Creator 中使用碎图的时候都是直接使用的碎图资源,
@@ -370,606 +247,6 @@ toolbar,工具栏
       可在资源编辑器中创建 JavaScript 或者 CoffeeScript 脚本资源
       脚本名称就是组件的名称,且大小写敏感;
       通常在assets下创建一script文件夹来存放JS脚本;
-    编写脚本 
-      PS：打开的脚本里会预置一些代码,这些代码就是编写一个组件脚本所需的结构,
-        具有这样结构的脚本就是 Cocos Creator 中的组件,
-        能够挂载到场景中的节点上,提供控制节点的各种功能;
-        代码中不需关心 properties 中数值是多少,因为之后可直接在属性检查器中设置;
-        当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
-        一份简单的组件脚本如下：
-        cc.Class({
-            extends: cc.Component,
-            properties: { },
-            onLoad: function () { },
-            update: function (dt) { },
-        });
-      使用 cc.Class 声明类型
-        PS：cc.Class 是一个很常用的 API,用于声明 Cocos Creator 中的类,
-          为了方便区分,把使用 cc.Class 声明的类叫做 CCClass。
-      定义 CCClass 
-        调用 cc.Class,传入一个原型对象,
-        在原型对象中以键值对的形式设定所需的类型参数,就能创建出所需要的类。
-        e.g.: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量
-          同时还将类名设为 "sprite",类名用于序列化,一般可以省略。
-          var Sprite = cc.Class({
-            name: "sprite"
-          });
-      实例化 直接 new 一个对象：
-        var obj = new Sprite();
-      判断类型 可用 JavaScript 的 instanceof：
-        cc.log(obj instanceof Sprite);       // true
-      使用 ctor 声明构造函数：
-        var Sprite = cc.Class({
-          ctor: function () {
-            cc.log(this instanceof Sprite);    // true
-          }
-        });
-      实例方法 
-        var Sprite = cc.Class({
-          // 声明一个名叫 "print" 的实例方法
-          print: function () { }
-        });
-      使用 extends 实现继承：
-        var Shape = cc.Class(); // 父类
-        var Rect = cc.Class({ // 子类
-          extends: Shape
-        });
-      父构造函数
-        继承后,CCClass 会统一自动调用父构造函数,你不需要显式调用。
-        var Shape = cc.Class({
-          ctor: function () {  // 实例化时,父构造函数会自动调用,
-            cc.log("Shape");    
-          }
-        });
-        var Rect = cc.Class({
-          extends: Shape
-        });
-        var Square = cc.Class({
-          extends: Rect,
-          ctor: function () {  // 再调用子构造函数
-            cc.log("Square");   
-          }
-        });
-        var square = new Square();
-        依次输出 "Shape" 和 "Square"。
-      声明属性
-        PS：通过在脚本中声明的属性,可将脚本组件中的字段可视化地展示在 属性检查器 中,
-          从而方便地在场景中调整属性值。
-          要声明属性,仅需要在 cc.Class 定义的 properties 字段中,
-          填写属性名字和属性参数即可
-        e.g.：
-          cc.Class({
-            extends: cc.Component,
-            properties: {
-              userID: 20,
-              userName: "Foobar"
-            }
-          });
-        cc中两种形式的属性声明方法
-          简单声明 在多数情况下,都可以使用简单声明。
-            当声明的属性为基本 JavaScript 类型时,可以直接赋予默认值：
-            properties: {
-              height: 20,       // number
-              type: "actor",    // string
-              loaded: false,    // boolean                
-              target: null,     // object
-            }
-            当声明的属性具备类型时（如：cc.Node,cc.Vec2 等）,
-            可在声明处填写他们的构造函数来完成声明,
-            properties: {
-              target: cc.Node,
-              pos: cc.Vec2,
-            }
-            当声明属性的类型继承自 cc.ValueType 时（如：cc.Vec2,cc.Color 或 cc.Rect）,
-            除了上面的构造函数,还可以直接使用实例作为默认值：
-            properties: {
-              pos: new cc.Vec2(10, 20),
-              color: new cc.Color(255, 255, 255, 128),
-            }
-            当声明属性是一个数组时,可以在声明处填写他们的类型或构造函数来完成声明,如：
-            properties: {
-              any: [],      // 不定义具体类型的数组
-              bools: [cc.Boolean],
-              strings: [cc.String],
-              floats: [cc.Float],
-              ints: [cc.Integer],
-              
-              values: [cc.Vec2],
-              nodes: [cc.Node],
-              frames: [cc.SpriteFrame],
-            }
-            除了以上几种情况,其他类型我们都需要使用完整声明的方式来进行书写。
-          完整声明
-            有时,需为属性声明添加参数,控制属性在 属性检查器 中的显示方式,
-            以及属性在场景序列化过程中的行为;
-            properties: {
-              score: {
-                default: 0, // 默认值为 0
-                displayName: "Score (player)",
-                // 在 属性检查器 里,其属性名将显示为：“Score (player)”,
-                tooltip: "The score of player",
-                // 当鼠标移到参数上时,显示对应的 Tooltip。
-              }
-            }
-            ◆常用参数：
-              更多的属性参数,查阅 属性参数
-            default 设置属性的默认值,仅在组件第一次添加到节点上时才会用到
-            type    限定属性的数据类型,详见 CCClass 进阶参考：type 参数
-            visible 设为 false 则不在 属性检查器 面板中显示该属性
-            serializable 设为 false 则不序列化（保存）该属性
-            displayName  在 属性检查器 面板中显示成指定名字
-            tooltip      在 属性检查器 面板中添加属性的 Tooltip
-          数组声明
-            数组的 default 必须设置为 [],
-            如果要在 属性检查器 中编辑,还需要设置 type 为构造函数,枚举,
-            或者 cc.Integer,cc.Float,cc.Boolean 和 cc.String。
-            properties: {
-              names: {
-                default: [],
-                type: [cc.String]   // 用 type 指定数组的每个元素都是字符串类型
-              },
-              enemies: {
-                default: [],
-                type: [cc.Node]     // type 同样写成数组,提高代码可读性
-              },
-            }
-          get/set 声明
-            在属性中设置了 get 或 set 以后,访问属性的时候,
-            就能触发预定义的 get 或 set 方法。
-            若只定义 get 方法,那相当于属性只读。
-            properties: {
-              width: {
-                get: function () {
-                  return this._width;
-                },
-                set: function (value) {
-                  this._width = value;
-                }
-              }
-            }
-      访问节点和组件
-        PS：可在 属性检查器 里修改节点和组件,也能在脚本中动态修改。
-          动态修改的好处是能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
-          脚本还能够响应玩家输入,能够修改、创建和销毁节点或组件,实现各种各样的游戏逻辑。
-          要实现这些效果,你需要先在脚本中获得你要修改的节点或组件。
-        this.node 获得组件所在的节点
-          在组件方法里访问  
-          start: function () {
-            var node = this.node;
-            node.x = 100;
-          }
-        getComponent 获得同一个节点上的其它组件
-          start: function () {
-            var label = this.getComponent(cc.Label);
-            var text = this.name + ' started';
-            label.string = text;  // Change the text in Label Component
-          }
-          也可为 getComponent 传入一个类名「脚本文件名」
-            var label = this.getComponent("cc.Label");
-            对用户定义的组件而言,类名就是脚本文件名,并且区分大小写。
-            例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
-            var rotate = this.getComponent("SinRotate");
-          在节点上也有一个 getComponent 方法,它们的作用是一样的：
-            start: function () {
-              var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
-              cc.log(bool);  // true
-            }
-          如果在节点上找不到指定的组件,getComponent 将返回 null,
-            如果你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
-            因此如果不确定组件是否存在,可判断一下：
-            start: function () {
-              var label = this.getComponent(cc.Label);
-              if (label) {
-                label.string = "Hello";
-              }
-              else {
-                cc.error("Something wrong?");
-              }
-            }
-        获得其它节点及其组件  --todo
-          PS：脚本通常还需要进行多个节点之间的交互。
-            例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
-            Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
-          利用属性检查器设置节点
-            最直接的方式就是在 属性检查器 中设置你需要的对象。
-            以节点为例,只需要在脚本中声明一个 type 为 cc.Node 的属性：
-            // Cannon.js
-            cc.Class({
-              extends: cc.Component,
-              properties: {
-                player: {  // 声明一个 player 属性
-                  default: null, // 默认值为 null
-                  type: cc.Node  // 对象类型为 cc.Node
-                }
-              }
-            });
-            // 相当于在其它语言里声明了 public cc.Node player = null;
-            接着就可将层级管理器上的任意一个节点拖到该 Player 控件;
-            建立引用后,就可直接在脚本里访问 player 节点了.
-            // Cannon.js
-            var Player = require("Player");
-            cc.Class({
-              extends: cc.Component,
-              properties: {
-                player: { // 声明 player 属性
-                  default: null,
-                  type: cc.Node
-                }
-              },
-              start: function () {
-                var playerComp = this.player.getComponent(Player);
-                this.checkPlayer(playerComp);
-              },
-              // ...
-            });
-          利用属性检查器设置组件
-            拖动节点 "Player Node" 到 属性检查器,
-            player 属性就会被设置为这个节点里面的 Player 组件。
-            这样就不需要再自己调用 getComponent 啦。
-            // Cannon.js
-            var Player = require("Player");
-            cc.Class({
-              extends: cc.Component,
-              properties: {
-                player: {   // 声明 player 属性,这次直接是组件类型
-                  default: null,
-                  type: Player
-                }
-              },
-              start: function () {
-                var playerComp = this.player;
-                this.checkPlayer(playerComp);
-              },
-              // ...
-            });
-            还可以将属性的默认值由 null 改为数组[],这样就能在 属性检查器 中同时设置多个对象。
-            不过如果需要在运行时动态获取其它对象,还需要用到下面介绍的查找方法。
-        查找子节点 
-          PS：有时候,游戏场景中会有很多个相同类型的对象,像是炮塔、敌人和特效,
-            它们通常都有一个全局的脚本来统一管理。
-            如果用 属性检查器 来一个一个将它们关联到这个脚本上,那工作就会很繁琐。
-            为了更好地统一管理这些对象,我们可以把它们放到一个统一的父物体下,
-            然后通过父物体来获得所有的子物体：
-          getChildren  cc.Node 原有的一个 API,可以获得一个包含所有子节点的数组。
-            // CannonManager.js
-            cc.Class({
-              extends: cc.Component,
-              start: function () {
-                this.cannons = [];
-                this.cannons = this.node.getChildren();
-              }
-            });
-          getChildByName() 
-            this.node.getChildByName("Cannon 01");
-          cc.find  根据传入的路径进行逐级查找 
-            如果子节点的层次较深,可使用 cc.find 
-            cc.find("Cannon 01/Barrel/SFX", this.node);
-            当 cc.find 只传入第一个参数时,将从场景根节点开始逐级查找：
-            this.backNode = cc.find("Canvas/Menu/Back");
-      访问已有变量里的值
-        如果你已经在一个地方保存了节点或组件的引用,你也可以直接访问它们,一般有两种方式：
-        通过全局变量访问
-          PS：谨慎地使用全局变量,并不推荐滥用全局变量,即使要用也最好保证全局变量只读 
-            由于所有脚本都强制声明为 "use strict",因此定义全局变量时的 window. 不可省略;
-            访问全局变量时,如果变量未定义将会抛出异常。
-            添加全局变量时,请小心不要和系统已有的全局变量重名。
-            你需要小心确保全局变量使用之前都已初始化和赋值。
-          定义一个全局对象 window.Global
-          // Globals.js, this file can have any name
-          window.Global = {
-            // 包含了 backNode 和 backLabel 两个属性
-            backNode: null,
-            backLabel: null,
-          };
-          可在合适的地方直接访问并初始化 Global:
-          // Back.js
-          cc.Class({
-            extends: cc.Component,
-            onLoad: function () {
-              Global.backNode = this.node;
-              Global.backLabel = this.getComponent(cc.Label);
-            }
-          });
-          初始化后,你就能在任何地方访问到 Global 里的值：
-          // AnyScript.js
-          cc.Class({
-            extends: cc.Component,
-            
-            // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
-            start: function () {
-              var text = 'Back';
-              Global.backLabel.string = text;
-            }
-          });
-        通过模块访问
-          可使用 require 来实现脚本的跨文件操作
-          每个脚本都能用 require + 文件名「不含路径」 来获取到对方 export 的对象
-          更详细内容,请参考 模块化。
-          // Global.js, now the filename matters
-          module.exports = {
-            backNode: null,
-            backLabel: null,
-          };
-          // Back.js
-          // this feels more safe since you know where the object comes from
-          var Global = require("Global");
-          cc.Class({
-            extends: cc.Component,
-            onLoad: function () {
-              Global.backNode = this.node;
-              Global.backLabel = this.getComponent(cc.Label);
-            }
-          });
-          // AnyScript.js
-          // this feels more safe since you know where the object comes from
-          var Global = require("Global");
-          cc.Class({
-            extends: cc.Component,
-            // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
-            start: function () {
-              var text = "Back";
-              Global.backLabel.string = text;
-            }
-          });
-      常用节点和组件接口
-        节点状态和层级操作
-          假设我们在一个组件脚本中,通过 this.node 访问当前脚本所在节点。
-          this.node.active = false;  关闭节点 
-            该操作会关闭节点,当该节点的所有父节点都激活,将意味着：
-            在场景中隐藏该节点和所有子节点
-            该节点和所有子节点上的所有组件都将被禁用,
-            也就是不会再执行这些组件中的 update 中的代码
-            这些组件上如果有 onDisable 方法,这些方法将被执行
-          this.node.active = true;   激活节点 
-            该操作会激活节点,当该节点的所有父节点都激活,将意味着：
-            在场景中重新激活该节点和所有子节点,除非子节点单独设置过关闭
-            该节点和所有 active 的子节点上的所有 enabled 的组件都会被启用,
-            他们中的 update 方法之后每帧会执行
-            这些组件上如果有 onEnable 方法,这些方法将被执行
-          更改节点的父节点
-            假设父节点为 parentNode,子节点为 this.node
-            parentNode.addChild(this.node)
-            或
-            this.node.parent = parentNode
-            这两种方法是等价的。
-            注意,通过 创建和销毁节点 介绍的方法创建出新节点后,
-            要为节点设置一个父节点才能正确完成节点的初始化。
-        索引节点的子节点
-          this.node.children 将返回节点的所有子节点数组。
-          this.node.childrenCount 将返回节点的子节点数量。
-          注意 以上两个 API 都只会返回节点的直接子节点,不会返回子节点的子节点。
-        更改节点位置
-          分别对 x 轴和 y 轴坐标赋值：
-          this.node.x = 100; this.node.y = 50;
-        设置 position 变量：
-          this.node.position = cc.p(0, 0);
-          使用 setPosition 方法：
-          node.setPosition(cc.p(0, 0)); node.setPosition(0, 0);
-          以上两种用法等价。
-        更改节点旋转
-          this.node.rotation = 90;
-          或
-          this.node.setRotation(90);
-        更改节点缩放
-          this.node.scaleX = 2; this.node.scaleY = 2;
-          或
-          this.node.setScale(2); this.node.setScale(2, 2);
-          以上两种方法等价。setScale 传入单个参数时,会同时修改 scaleX 和 scaleY。
-        更改节点尺寸
-          this.node.setContentSize(100, 100); 
-          this.node.setContentSize(cc.p(100, 100));
-          或
-          this.node.width = 100; 
-          this.node.height = 100;
-          以上两种方式等价。
-        更改节点锚点位置
-          this.node.anchorX = 1; 
-          this.node.anchorY = 0;
-          或
-          this.node.setAnchorPoint(1, 0);
-          注意以上这些修改变换的方法会影响到节点上挂载的渲染组件,
-          比如 Sprite 图片的尺寸、旋转等等。
-        颜色和不透明度
-          在使用 Sprite, Label 这些基本的渲染组件时,要
-          注意修改颜色和不透明度的操作只能在节点的实例上进行,
-          因为这些渲染组件本身并没有设置颜色和不透明度的接口。
-          
-          假如我们有一个 Sprite 的实例为 mySprite,如果需要设置它的颜色：
-          mySprite.node.color = cc.Color.RED;
-          设置不透明度：
-          mySprite.node.opacity = 128;
-      cc.Component 所有组件的基类
-        任何组件都包括如下的常见接口「假设我们在该组件的脚本中,以 this 指代本组件」
-        this.node    该组件所属的节点实例
-        this.enabled 是否每帧执行该组件的 update 方法,同时也用来控制渲染组件是否显示
-        update(dt)   作为组件的成员方法,在组件的 enabled 属性为 true 时,其中的代码会每帧执行
-        onLoad()     组件所在节点进行初始化时（创建之后通过设置父节点添加到节点树）执行
-        start()      会在该组件第一次update前执行,通常用于需要在onLoad初始化完毕后执行的逻辑。
-        更多组件成员方法请继续参考 生命周期回调 文档。          
-      生命周期回调
-        Cocos Creator 为组件脚本提供了生命周期的回调函数。
-        只要指定回调函数,Creator 就会在特定的时期自动执行相关 脚本,不需要手动调用。
-        onLoad 回调会在这个组件所在的场景被载入 的时候触发,
-          组件脚本的初始化阶段,我们提供了 onLoad 回调函数。
-          在 onLoad 阶段,保证了你可以获取到场景中的其他节点,以及节点关联的资源数据。
-          通常 我们会在 onLoad 阶段去做一些初始化相关的操作。
-          例如：
-          cc.Class({
-            extends: cc.Component,
-            properties: {
-              bulletSprite: cc.SpriteFrame,
-              gun: cc.Node,
-            },
-            onLoad: function () {
-              this._bulletRect = this.bulletSprite.getRect();
-              this.gun = cc.find('hand/weapon', this.node);
-            },
-          });
-        start 回调函数会在组件第一次激活前
-          也就是第一次执行 update 之前触发。
-          start 通常用于 初始化一些中间状态的数据,
-          这些数据可能在 update 时会发生改变,并且被频繁的 enable 和 disable。
-          cc.Class({
-            extends: cc.Component,
-            
-            start: function () {
-              this._timer = 0.0;
-            },
-            
-            update: function (dt) {
-              this._timer += dt;
-              if ( this._timer >= 10.0 ) {
-                console.log('I am done!');
-                this.enabled = false;
-              }
-            },
-          });
-        update  游戏开发的一个关键点是在每一帧渲染前更新物体的行为,状态和方位。
-          这些更新操作通常都放在 update 回调中。
-          cc.Class({
-            extends: cc.Component,
-            
-            update: function (dt) {
-              this.node.setPosition( 0.0, 40.0 * dt );
-            }
-          });
-        lateUpdate  在所有组件的 update 都执行完之后才进行操作
-          update 会在所有动画更新前执行,但如果我们要在动画更新之后才进行一些额外操作,
-          那就需要用到 lateUpdate 回调。
-          cc.Class({
-            extends: cc.Component,
-            
-            lateUpdate: function (dt) {
-              this.node.rotation = 20;
-            }
-          });
-        onEnable   当组件的 enabled 属性从 false 变为 true 时,会激活 onEnable 回调。
-          倘若节点第一次被 创建且 enabled 为 true,则会在 onLoad 之后,start 之前被调用。
-        onDisable 当组件的 enabled 属性从 true 变为 false 时,会激活 onDisable 回调。
-        onDestroy 当组件调用了 destroy(),会在该帧结束被统一回收,此时会调用 onDestroy 回调。
-      创建和销毁节点
-        创建新节点
-          除了通过场景编辑器创建节点外,我们也可以在脚本中动态创建节点。
-          通过 new cc.Node() 并将它加入 到场景中,可以实现整个创建过程。
-          以下是一个简单的例子:
-          cc.Class({
-            extends: cc.Component,
-            properties: {
-              sprite: {
-                default: null,
-                type: cc.SpriteFrame,
-              },
-            },
-            start: function () {
-              var node = new cc.Node('sprite ' + this.count);
-              var sp = node.addComponent(cc.Sprite);
-              
-              sp.spriteFrame = this.sprite;
-              node.parent = this.node;
-              node.setPosition(0,0);
-            },
-          });
-        克隆已有节点
-          有时我们希望动态的克隆场景中的已有节点,我们可以通过 cc.instantiate 方法完成。
-          cc.Class({
-            extends: cc.Component,
-            
-            properties: {
-              target: {
-                default: null,
-                type: cc.Node,
-              },
-            },
-            
-            start: function () {
-              var scene = cc.director.getScene();
-              var node = cc.instantiate(this.target);
-              
-              node.parent = scene;
-              node.setPosition(0,0);
-            },
-          });
-        创建预制节点
-          和克隆已有节点相似,你也设置你的预制（prefab）节点并通过 cc.instantiate 生成。
-          cc.Class({
-            extends: cc.Component,
-            
-            properties: {
-              target: {
-                default: null,
-                type: cc.Prefab,
-              },
-            },
-            
-            start: function () {
-              var scene = cc.director.getScene();
-              var node = cc.instantiate(this.target);
-              
-              node.parent = scene;
-              node.setPosition(0,0);
-            },
-          });
-        销毁节点
-          通过 node.destroy() 函数,可以销毁节点。
-          销毁节点并不会立刻发生,而是在当前 帧逻辑更新结束后,统一执行。
-          当一个节点销毁后,该节点就处于无效状态,
-          可以通过 cc.isValid 判断 当前节点是否已经被销毁。
-          cc.Class({
-            extends: cc.Component,
-            
-            properties: {
-              target: cc.Node,
-            },
-            
-            start: function () {
-              setTimeout(function () {
-                this.target.destroy();
-              }.bind(this), 5000);
-            },
-            
-            update: function (dt) {
-              if ( !cc.isValid(this.target) ) {
-                this.enabled = false;
-                return;
-              }
-              
-              this.target.rotation += dt * 10.0;
-            },
-          });
-      加载和切换场景
-          在 Cocos Creator 中,使用场景文件名「可不包含扩展名」来索引指代场景。
-          cc.director.loadScene('MyScene'); 通过常驻节点进行场景资源管理和参数传递
-          cc.game.addPersistRootNode(myNode) 常驻节点
-            通常同时只会加载运行一个场景,当切换场景时,默认会将场景内所有节点和其他实例销毁。
-            如果需要用一个组件控制所有场景的加载,或在场景之间传递参数数据,
-            就需要将该组件所在节点标记为「常驻节点」,使它在场景切换时不被自动销毁,常驻内存。
-            将 myNode 变为常驻节点,这样挂在上面的组件都可以在场景之间持续作用,
-            可以用这样的方法来储存玩家信息,或下一个场景初始化时需要的各种数据。
-          cc.game.removePersistRootNode(myNode) 取消一个节点的常驻属性
-          除此之外,简单的数值类数据传递也可以使用全局变量的方式进行,
-            详见通过全局变量跨组件访问值。
-          场景加载回调
-            加载场景时,可以附加一个参数用来指定场景加载后的回调函数：
-            cc.director.loadScene('MyScene', cfoo);
-            cfoo 就是声明在本脚本中的一个回调函数,
-            在场景加载后可以用来进一步的进行初始化或数据传递的操作。
-            由于回调函数只能写在本脚本中,所以场景加载回调通常用来配合常驻节点,
-            在常驻节点上挂载的脚本中使用。
-          预加载场景
-            有些时候我们需要在后台静默加载新场景,并在加载完成后手动进行切换。
-            cc.director.preloadScene 对场景进行预加载
-              cc.director.preloadScene('table', function () {
-                cc.log('Next scene preloaded');
-              });
-            之后在合适的时间调用 loadScene, 就可以立即切换场景
-            cc.director.loadScene  在加载场景之后自动切换运行新场景,
-            cc.director.loadScene('table');
-          
-            注意 使用预加载场景资源配合 runScene 的方式进行预加载场景的方法已被废除:
-            // 请不要再使用下面的方法预加载场景!
-            cc.loader.loadRes('MyScene.fire', function(err, res) {
-              cc.director.runScene(res.scene); 
-            });        
     把脚本组件添加到需要控制的节点上 
       将脚本添加到场景节点中,实际上就是为这个节点添加一份组件;
       在层级编辑器中选中节点,在属性检查器中添加 用户脚本组件 并引用对应的JS脚本;
@@ -987,7 +264,7 @@ toolbar,工具栏
       Item Width       指定每一个字符的宽度
       Item Height      指定每一个字符的高度
       Start Char       指定艺术数字字体里面的第一个字符
-        如果字符是 Space,也需要在这个属性里面输入空格字符
+        若字符是 Space,也需要在这个属性里面输入空格字符
     使用艺术数字资源
       新建一个 Label 组件,然后把新建好的艺术数字资源拖到 Label 组件的 Font 属性即可。
   Prefab,预制资源 
@@ -1028,13 +305,13 @@ toolbar,工具栏
       将字体资源拖拽到创建的 Label 组件中的 File 属性栏中
       这时场景中的字体会立刻用刚才指定的字体资源进行渲染。
       切换字体文件时,Label 组件的其他属性不受影响。
-      如果要恢复使用系统字体,可以点击 Use System Font 的属性复选框,
+      若要恢复使用系统字体,可以点击 Use System Font 的属性复选框,
       来清除 File 属性中指定的字体文件。
       另外一种快捷使用指定资源创建字体节点的方法,
       是直接从 资源管理器 中拖拽字体文件（TTF 或位图字体都可以）到 层级管理器 中。
       使用拖拽方式创建的文字节点会自动使用拖拽的字体资源来设置 Label 组件的 File 属性。
     位图字体合并渲染
-      如果位图字体使用的贴图和其他 Sprite 使用的贴图是同一张,
+      若位图字体使用的贴图和其他 Sprite 使用的贴图是同一张,
       而且位图字体和 Sprite 之间没有插入使用其他贴图的渲染对象时,
       位图字体就可以和 Sprite 合并渲染批次。
       在放置位图字体资源时,请把 .fnt 文件、.png 文件和 Sprite 所使用的贴图文件放在一个文件夹下,
@@ -1046,7 +323,7 @@ toolbar,工具栏
     渲染错误解决方法
       粒子使用的 png 贴图文件或 base64 格式的内置图片文件可能会有不正确的预乘信息,
       导致渲染出的粒子不能正确显示透明区域。
-      如果出现这种情况,请手动修改粒子 plist 文件中的 blendFuncSource 属性到下面的值：
+      若出现这种情况,请手动修改粒子 plist 文件中的 blendFuncSource 属性到下面的值：
       <key>blendFuncSource</key>
       <integer>770</integer>
   声音资源: 就是简单的音频文件 
@@ -1067,7 +344,7 @@ toolbar,工具栏
         其中只需要定义一个 useDom 参数,使其有一个非空的值。 
         cc.load.load('raw-assets/resources/background.mp3?useDom=1', callback);
         这样在 audioDownloader 中,就会强制使用 DOM element 的方式加载播放这个音频。
-        需要注意的是,如果使用 dom element 加载的音频,在 cc.load 的 cache 中,
+        需要注意的是,若使用 dom element 加载的音频,在 cc.load 的 cache 中,
         缓存的 url 也会带有 ?useDom=1 建议不要直接填写资源的 url 
         尽量在脚本内定义一个 AudioClip,然后从编辑器内定义。
       手动选择按某种解析方式加载音频
@@ -1344,7 +621,7 @@ Properties,属性检查器：查看并编辑当前选中节点的组件属性的
       文字节点的锚点和文字在约束框中的对齐模式是需要区分的两个概念。
       在需要靠文字内容将约束框撑大的排版模式中（如 Resize Height）,
       要正确设置锚点位置,才能让约束框向我们期望的方向延伸。
-      如果希望文字约束框向下延伸,需要将锚点（Anchor）的 y 属性设为 1。
+      若希望文字约束框向下延伸,需要将锚点（Anchor）的 y 属性设为 1。
   Particle,粒子 
   ◆布局组件
   Widget 对齐挂件,布局组件,实现多分辨率自适应排版 
@@ -1386,7 +663,7 @@ Properties,属性检查器：查看并编辑当前选中节点的组件属性的
       Horizontal 水平
         Layout Type 设为 Horizontal 时,所有子节点都会自动横向排列,并根据子节点的宽度（Width）总和设置 Layout 节点的宽度。上图中 Layout 包括的两个 Label 节点就自动被横向排列。
         
-        水平布局模式下,Layout 组件不会干涉节点在 y 轴上的位置或高度属性,子节点甚至可以放置在 Layout 节点的约束框高度范围之外。如果需要子节点在 y 轴向上对齐,可以在子节点上添加 Widget 组件,并开启 Top 或 Bottom 的对齐模式。
+        水平布局模式下,Layout 组件不会干涉节点在 y 轴上的位置或高度属性,子节点甚至可以放置在 Layout 节点的约束框高度范围之外。若需要子节点在 y 轴向上对齐,可以在子节点上添加 Widget 组件,并开启 Top 或 Bottom 的对齐模式。
       Vertical   垂直
         Layout Type 设为 Vertical 时,所有子节点都会自动纵向排列,并根据子节点的高度（Height）总和设置 Layout 节点的高度。
         
@@ -1660,7 +937,7 @@ UI系统
       物品名称
       出售价格
       ...
-    下面我们将会结合脚本介绍如何定义和使用数据,如果您对 Cocos Creator 的脚本系统还不熟悉,可以先从 脚本开发工作流程一章开始学习。
+    下面我们将会结合脚本介绍如何定义和使用数据,若您对 Cocos Creator 的脚本系统还不熟悉,可以先从 脚本开发工作流程一章开始学习。
     
     自定义数据类
     
@@ -1693,7 +970,7 @@ UI系统
     
     item list
     
-    这样我们最基本的数据就准备好了,如果您在制作有很多内容的游戏,请务必使用 excel、数据库等更专业的系统来管理您的数据,将外部数据格式转化为 Cocos Creator 可以使用的 JavaScript 和 JSON 格式都非常容易。
+    这样我们最基本的数据就准备好了,若您在制作有很多内容的游戏,请务必使用 excel、数据库等更专业的系统来管理您的数据,将外部数据格式转化为 Cocos Creator 可以使用的 JavaScript 和 JSON 格式都非常容易。
     
     制作表现：Prefab 模板
     
@@ -1831,7 +1108,7 @@ UI系统
     相关操作
       移动显示区域  空格 + 左键 左右拖动「适用于 2、4、6 区域」
     快捷键
-      left：向前移动一帧,如果已经在第 0 帧,则忽略当前操作
+      left：向前移动一帧,若已经在第 0 帧,则忽略当前操作
       right：向后移动一帧
       up：跳转到上一个关键帧
       down：跳转到下一个关键帧
@@ -1859,7 +1136,7 @@ UI系统
     添加动画帧
       刚刚我们说到在录制状态下直接更改对应属性可以自动添加对应的属性和帧。 也可以直接在属性列表中点击对应属性右侧的+号,这样会在当前选中的时间点上增加一帧。
     选择动画帧
-      点击我们创建的序列帧后序列帧会显示成选中状态,此时序列帧由蓝变白,如果需要多选,可以按住ctrl再次选择其他序列帧。或者直接在属性区域拖拽框选。
+      点击我们创建的序列帧后序列帧会显示成选中状态,此时序列帧由蓝变白,若需要多选,可以按住ctrl再次选择其他序列帧。或者直接在属性区域拖拽框选。
     移动动画帧
       此时我们将鼠标移动到任意一个选中的节点上,鼠标会显示出左右箭头,这时候按下鼠标左键就可以拖拽所有被选中的节点了。
     更改动画帧
@@ -1896,7 +1173,7 @@ UI系统
     
     自定义曲线
     
-    有时候预设的不能够满足动画需求,我们也可以自己修改曲线。 右侧下方预览图内,有两个灰色的控制点,拖拽控制点可以更改曲线的轨迹。 如果控制点需要拖出视野外,则可以使用鼠标滚轮或者右上角的小比例尺缩放预览图,支持的比例从 0.1 到 1。
+    有时候预设的不能够满足动画需求,我们也可以自己修改曲线。 右侧下方预览图内,有两个灰色的控制点,拖拽控制点可以更改曲线的轨迹。 若控制点需要拖出视野外,则可以使用鼠标滚轮或者右上角的小比例尺缩放预览图,支持的比例从 0.1 到 1。
   添加动画事件
     在游戏中,经常需要在动画结束或者某一帧的特定时刻,执行一些函数方法。那么在动画编辑器中怎么实现呢？
     
@@ -1918,17 +1195,17 @@ UI系统
     
     双击刚刚出现的白色矩形,可以打开事件编辑器,在编辑器内,我们可以手动输入需要出发的function名字,触发的时候会根据这个函数名,去各个组件内匹配相应的方法。
     
-    如果需要添加传入的参数,则在 Params 旁点击 + 或者 - ,只支持Boolean,String,Number三种类型的参数。
+    若需要添加传入的参数,则在 Params 旁点击 + 或者 - ,只支持Boolean,String,Number三种类型的参数。
   使用脚本控制动画
     Animation 组件
     
-    Animation 组件提供了一些常用的动画控制函数,如果只是需要简单的控制动画,可以通过获取节点的 Animation 组件来做一些操作。
+    Animation 组件提供了一些常用的动画控制函数,若只是需要简单的控制动画,可以通过获取节点的 Animation 组件来做一些操作。
     
     播放
     
     var anim = this.getComponent(cc.Animation);
     
-    // 如果没有指定播放哪个动画,并且有设置 defaultClip 的话,则会播放 defaultClip 动画
+    // 若没有指定播放哪个动画,并且有设置 defaultClip 的话,则会播放 defaultClip 动画
     anim.play();
     
     // 指定播放 test 动画
@@ -1937,9 +1214,9 @@ UI系统
     // 指定从 1s 开始播放 test 动画
     anim.play('test', 1);
     
-    // 使用 play 接口播放一个动画时,如果还有其他的动画正在播放,则会先停止其他动画
+    // 使用 play 接口播放一个动画时,若还有其他的动画正在播放,则会先停止其他动画
     anim.play('test2');
-    Animation 对一个动画进行播放的时候会判断这个动画之前的播放状态来进行下一步操作。 如果动画处于：
+    Animation 对一个动画进行播放的时候会判断这个动画之前的播放状态来进行下一步操作。 若动画处于：
     
     停止 状态,则 Animation 会直接重新播放这个动画
     暂停 状态,则 Animation 会恢复动画的播放,并从当前时间继续播放下去
@@ -1950,7 +1227,7 @@ UI系统
     anim.playAdditive('position-anim');
     
     // 播放第二个动画
-    // 使用 playAdditive 播放动画时,不会停止其他动画的播放。如果还有其他动画正在播放,则同时会有多个动画进行播放
+    // 使用 playAdditive 播放动画时,不会停止其他动画的播放。若还有其他动画正在播放,则同时会有多个动画进行播放
     anim.playAdditive('rotation-anim');
     Animation 是支持同时播放多个动画的,播放不同的动画并不会影响其他的动画的播放状态,这对于做一些复合动画比较有帮助。
     
@@ -2000,7 +1277,7 @@ UI系统
     
     AnimationState 是什么？
     
-    如果说 AnimationClip 作为动画数据的承载,那么 AnimationState 则是 AnimationClip 在运行时的实例,它将动画数据解析为方便程序中做计算的数值。 Animation 在播放一个 AnimationClip 的时候,会将 AnimationClip 解析成 AnimationState。 Animation 的播放状态实际都是由 AnimationState 来计算的,包括动画是否循环,怎么循环,播放速度 等。
+    若说 AnimationClip 作为动画数据的承载,那么 AnimationState 则是 AnimationClip 在运行时的实例,它将动画数据解析为方便程序中做计算的数值。 Animation 在播放一个 AnimationClip 的时候,会将 AnimationClip 解析成 AnimationState。 Animation 的播放状态实际都是由 AnimationState 来计算的,包括动画是否循环,怎么循环,播放速度 等。
     
     获取 AnimationState
     
@@ -2074,7 +1351,7 @@ UI系统
     
     // 设置动画循环次数为无限次
     animState.repeatCount = Infinity;
-    AnimationState 允许动态设置循环模式,目前提供了多种循环模式,这些循环模式可以从 cc.WrapMode 中获取到。 如果动画的循环类型为 Loop 类型的话,需要与 repeatCount 配合使用才能达到效果。 默认在解析动画剪辑的时候,如果动画循环类型为：
+    AnimationState 允许动态设置循环模式,目前提供了多种循环模式,这些循环模式可以从 cc.WrapMode 中获取到。 若动画的循环类型为 Loop 类型的话,需要与 repeatCount 配合使用才能达到效果。 默认在解析动画剪辑的时候,若动画循环类型为：
     
     Loop 类型,repeatCount 将被设置为 Infinity, 即无限循环
     Normal 类型,repeatCount 将被设置为 1
@@ -2095,7 +1372,7 @@ UI系统
             console.log('onAnimCompleted: param1[%s], param2[%s]', num, string);
         }
     });
-    将上面的组件加到动画的 根节点 上,当动画播放到结尾时,动画系统会自动调用脚本中的 onAnimCompleted 函数。 动画系统会搜索动画根节点中的所有组件,如果组件中有实现动画事件中指定的函数的话,就会对它进行调用,并传入事件中填的参数。
+    将上面的组件加到动画的 根节点 上,当动画播放到结尾时,动画系统会自动调用脚本中的 onAnimCompleted 函数。 动画系统会搜索动画根节点中的所有组件,若组件中有实现动画事件中指定的函数的话,就会对它进行调用,并传入事件中填的参数。
     
     注册动画回调
     
@@ -2110,7 +1387,7 @@ UI系统
     finished : 动画播放完成时
     当在 cc.Animation 注册了一个回调函数后,它会在播放一个动画时,对相应的 cc.AnimationState 注册这个回调,在 cc.AnimationState 停止播放时,对 cc.AnimationState 取消注册这个回调。
     
-    cc.AnimationState 其实才是动画回调的发送方,如果希望对单个 cc.AnimationState 注册回调的话,那么可以获取到这个 cc.AnimationState 再单独对它进行注册。
+    cc.AnimationState 其实才是动画回调的发送方,若希望对单个 cc.AnimationState 注册回调的话,那么可以获取到这个 cc.AnimationState 再单独对它进行注册。
     
     实例
     
@@ -2159,6 +1436,1285 @@ UI系统
   编辑碰撞组件
   碰撞分组管理
   碰撞系统脚本控制
+--------------------------------------------------------------------------------
+JS脚本 
+  PS：打开的脚本里会预置一些代码,也是编写一个组件脚本所需的结构,
+    具有该结构的脚本就是 Cocos Creator 中的脚本组件,
+    能够挂载到场景中的节点上,提供控制节点的各种功能;
+    代码中 properties 的数值可之后直接在属性检查器中设置;
+    当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
+  一份简单的组件脚本如下：
+    cc.Class({
+        extends: cc.Component,
+        properties: { },
+        onLoad: function () { },
+        update: function (dt) { },
+    });
+  cc.Class(paramsObj) 声明 Cocos Creator 中的类
+    PS：后续将 cc.Class 声明的类叫做 CCClass; 
+      原型对象：调用 cc.Class 时传入的字面量参数
+      实例成员：包含“成员变量”和“成员方法” 
+      静态成员：包含“静态变量”和“类方法”
+      运行时  ：项目脱离编辑器独立运行时,或者在模拟器和浏览器里预览的时候
+      序列化  ：解析对象,将其信息编码为特殊的字符串,以便保存到硬盘上或传输到其它地方
+      静态变量：static variable
+      类方法  ：static method,也叫静态方法
+      实例成员：instance member
+      成员变量：member variable
+      成员方法：instance method
+    e.g.: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量 
+      同时还将类名设为 "sprite",类名用于序列化,一般可以省略。
+      var Sprite = cc.Class({
+        name: "sprite"
+      });
+    paramsObj   原型对象 
+      PS：在原型对象中以键值对的形式设定所需的类型参数,就能创建出所需要的类;
+        所有原型对象的参数都可以省略,只需要声明用得到的部分即可;
+      cc.Class({
+        
+        // 类名,用于序列化
+        // 值类型：String
+        name: "Character",
+        
+        // 基类,可以是任意创建好的 cc.Class
+        // 值类型：Function
+        extends: cc.Component,
+        
+        // 构造函数
+        // 值类型：Function
+        ctor: function () {},
+        
+        // 属性定义（方式一,直接定义）
+        properties: {
+          text: ""
+        },
+        
+        // 属性定义（方式二,使用 ES6 的箭头函数,详见下文）
+        properties: () => ({
+          text: ""
+        }),
+        
+        // 实例方法
+        print: function () {
+          cc.log(this.text);
+        },
+        
+        // 静态成员定义
+        // 值类型：Object
+        statics: {
+          _count: 0,
+          getCount: function () {}
+        },
+        
+        // 提供给 Component 的子类专用的参数字段
+        // 值类型：Object
+        editor: {
+          disallowMultiple: true
+        }
+      });
+      类名 
+        可以是任意字符串,但不允许重复。
+        可以使用 cc.js.getClassName 来获得类名,
+        使用 cc.js.getClassByName 来查找对应的类。
+        对在项目脚本里定义的组件来说,序列化其实并不使用类名,因此不需要指定类名。
+        对其他类来说,类名用于序列化,如果不需要序列化,类名可以省略。
+      静态变量和静态方法
+        静态变量或静态方法可以在原型对象的 statics 中声明
+        var Sprite = cc.Class({
+          statics: {
+            // 声明静态变量
+            count: 0,
+            // 声明静态方法
+            getBounds: function (spriteList) {
+              // ...
+            }
+          }
+        });
+        // 上面的代码等价于：
+        var Sprite = cc.Class({ ... });
+        Sprite.count = 0; // 声明静态变量
+        // 声明静态方法
+        Sprite.getBounds = function (spriteList) {
+          // ...
+        };
+        
+        静态成员会被子类继承,继承时会将父类的静态变量浅拷贝给子类
+        var Aoo = cc.Class({
+          statics: {
+            count: 11,
+            range: { w: 100, h: 100 }
+          }
+        });
+        var Boo = cc.Class({
+          extends: Aoo
+        });
+        cc.log(Boo.count);   //  11, count 继承自 Aoo 类
+        Boo.range.w = 200;
+        cc.log(Aoo.range.w); //  200, Boo.range 和 Aoo.range 指向同一个对象
+        
+        如果不需要考虑继承,私有的静态成员也可以直接定义在类的外面：
+        // 局部方法
+        function doLoad (sprite) {
+          // ...
+        };
+        // 局部变量
+        var url = "foo.png";
+        var Sprite = cc.Class({
+          load: function () {
+            this.url = url;
+            doLoad(this);
+          };
+        });
+      ctor 构造函数 
+        为了保证反序列化能始终正确运行,CCClass 的构造函数不允许定义构造参数。
+        开发者如果确实需要使用构造参数,可以通过 arguments 获取,
+        但要记得如果这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
+        var Sprite = cc.Class({
+          ctor : function () {
+            cc.log(this instanceof Sprite);    // true
+          }
+        });
+      实例变量 声明
+        在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看。
+        如果是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
+        var Sprite = cc.Class({
+          ctor: function () {
+            // 声明实例变量并赋默认值
+            this.url = "";
+            this.id = 0;
+          }
+        });
+      实例方法 声明 
+        直接在原型对象中声明实例方法
+        var Sprite = cc.Class({
+          // 声明一个名叫 "foo" 的实例方法
+          foo : function() { 
+          }
+        });
+        
+        var Sprite = cc.Class({
+          ctor: function () {
+            this.text = "this is sprite";
+          },
+          // 声明一个名叫 "print" 的实例方法
+          print: function () {
+            cc.log(this.text);
+          }
+        });
+        var obj = new Sprite();
+        obj.print(); // 调用实例方法
+      extends 实现继承 
+        var Shape = cc.Class(); // 父类
+        var Rect = cc.Class({   // 子类
+          extends : Shape
+        });
+        
+        继承后,CCClass 会统一自动调用父构造函数,不需显式调用
+        var Shape = cc.Class({
+          ctor: function () {  // 实例化时,父构造函数会自动调用,
+            cc.log("Shape");    
+          }
+        });
+        var Rect = cc.Class({
+          extends: Shape
+        });
+        var Square = cc.Class({
+          extends: Rect,
+          ctor: function () {  // 再调用子构造函数
+            cc.log("Square");   
+          }
+        });
+        var square = new Square(); // 依次输出 "Shape" 和 "Square"
+      properties 声明属性 
+        PS：在脚本中声明的属性,将可视化地展示在 属性检查器 中,
+          可方便地在场景中调整属性值;
+          在 cc.Class 的 properties 字段中声明属性,填写属性名字和属性参数即可
+        e.g.：
+          cc.Class({
+            extends: cc.Component,
+            properties: {
+              userID: 20,
+              userName: "Foobar"
+            }
+          });
+        简单声明 
+          PS：在多数情况下,都可以使用简单声明 
+          当声明的属性为基本 JavaScript 类型时,可以直接赋予默认值：
+            properties: {
+              height: 20,       // number
+              type: "actor",    // string
+              loaded: false,    // boolean                
+              target: null,     // object
+            }
+          当声明的属性具备类型时「如：cc.Node,cc.Vec2 等」,填写其构造函数来完成简单声明
+            properties: {
+              target: cc.Node,
+              pos: cc.Vec2,
+            }
+          当声明属性的类型继承自 cc.ValueType 时（如：cc.Vec2,cc.Color 或 cc.Rect）,
+            除了上面的构造函数,还可以直接使用实例作为默认值：
+            properties: {
+              pos: new cc.Vec2(10, 20),
+              color: new cc.Color(255, 255, 255, 128),
+            }
+          当声明属性是一个数组时,可以在声明处填写他们的类型或构造函数来完成声明,如：
+            properties: {
+              any: [],      // 不定义具体类型的数组
+              bools: [cc.Boolean],
+              strings: [cc.String],
+              floats: [cc.Float],
+              ints: [cc.Integer],
+              
+              values: [cc.Vec2],
+              nodes: [cc.Node],
+              frames: [cc.SpriteFrame],
+            }
+          除了以上几种情况,其他类型我们都需要使用完整声明的方式来进行书写 
+        完整声明 
+          有时需为属性声明添加参数,控制属性在 属性检查器 中的显示方式,
+          以及属性在场景序列化过程中的行为;
+          properties: {
+            score: {
+              default: 0, // 默认值为 0
+              displayName: "Score player",
+              // 在 属性检查器 里,属性名将显示为：“Score player”
+              tooltip: "The score of player",
+              // 当鼠标移到参数上时,显示对应的 Tooltip。
+            }
+          }
+          ◆常用参数：
+            用来给已定义的属性附加元数据,
+            类似于脚本语言的 Decorator 或者 C# 的 Attribute。
+          type    限定属性数据类型
+          default 属性的默认值,仅在组件第一次添加到节点上时才会用到
+          serializable 布尔值,序列化（保存）该属性
+          visible   布尔值,属性检查器 面板中显示该属性
+          displayName  属性检查器 面板中显示成指定名字
+          tooltip      属性检查器 面板中添加属性的 Tooltip
+          multiline	   布尔值,属性检视器 面板中使用多行文本框
+          readonly	   布尔值,属性检视器 面板中只读
+          min	         number,限定数值在编辑器中输入的最小值
+          max	         number,限定数值在编辑器中输入的最大值 
+          step	       number,指定数值在编辑器中调节的步长 
+          range	       [min, max, step],一次性设置 min, max, step,step 值可选
+          slide	       布尔值,属性检视器 面板中显示为滑动条 
+          序列化相关属性
+            这些属性不能用于 get 方法
+            参数名	说明	类型	默认值	备注
+            serializable	序列化该属性	boolean	true	详见 serializable 参数
+            editorOnly	  在导出项目前剔除该属性	boolean	false	
+          其它属性
+            参数名	说明	类型	默认值	备注
+            default	定义属性的默认值	(Any)	undefined	详见 default 参数
+            url	该属性为指定资源的 url	function 
+            (继承自 cc.RawAsset 的构造函数)	undefined	详见 获取和加载资源: Raw Asset
+            notify	当属性被赋值时触发指定方法	function (oldValue) {}	undefined	需要定义 default 属性并且不能用于数组
+            override	当重写父类属性时需要定义该参数为 true	boolean	false	详见 override 参数
+            animatable	该属性是否能被动画修改	boolean	true	
+            注1: visible 的默认值取决于属性名。当属性名以下划线 _ 开头时,默认隐藏,否则默认显示。
+
+
+      1
+
+
+
+
+
+        所有成员方法都是虚方法,子类方法可以直接重写父类方法：
+        var Shape = cc.Class({
+            getName: function () {
+                return "shape";
+            }
+        });
+        var Rect = cc.Class({
+            extends: Shape,
+            getName: function () {
+                return "rect";
+            }
+        });
+        var obj = new Rect();
+        cc.log(obj.getName());    // "rect"
+        
+        在子类中调用父类的成员方法
+
+        方法一：使用 CCClass 封装的 this._super：
+
+        var Shape = cc.Class({
+            getName: function () {
+                return "shape";
+            }
+        });
+        var Rect = cc.Class({
+            extends: Shape,
+            getName: function () {
+
+                var baseName = this._super();
+
+                return baseName + " rect";
+            }
+        });
+        var obj = new Rect();
+        cc.log(obj.getName());    // "shape rect"
+        方法二：使用 JavaScript 原生写法：
+
+        var Shape = cc.Class({
+            getName: function () {
+                return "shape";
+            }
+        });
+        var Rect = cc.Class({
+            extends: Shape,
+            getName: function () {
+
+                var baseName = Shape.prototype.getName.call(this);
+
+                return baseName + " rect";
+            }
+        });
+        var obj = new Rect();
+        cc.log(obj.getName());    // "shape rect"
+        如果你想实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,你可以用更底层的 API cc.js.extend 来实现。
+        属性
+
+        属性是特殊的实例变量,能够显示在 属性检查器 中,也能被序列化。
+
+        属性和构造函数
+
+        属性不用在构造函数里定义,在构造函数被调用前,属性已经被赋为默认值了,可以在构造函数内访问到。如果属性的默认值无法在定义 CCClass 时提供,需要在运行时才能获得,你也可以在构造函数中重新给属性赋默认值。
+
+        var Sprite = cc.Class({
+            ctor: function () {
+                this.img = LoadImage();
+            },
+            properties: {
+                img: {
+                    default: null,
+                    type: Image
+                }
+            }
+        });
+        不过要注意的是,属性被反序列化的过程紧接着发生在构造函数执行之后,因此构造函数中只能获得和修改属性的默认值,还无法获得和修改之前保存的值。
+
+        属性参数
+
+        所有属性参数都是可选的,但至少必须声明 default, get, set 参数中的其中一个。
+
+        default 参数
+
+        default 用于声明属性的默认值,声明了默认值的属性会被 CCClass 实现为成员变量。默认值只有在第一次创建对象的时候才会用到,也就是说修改默认值时,并不会改变已添加到场景里的组件的当前值。
+
+        当你在编辑器中添加了一个组件以后,再回到脚本中修改一个默认值的话,属性检查器 里面是看不到变化的。因为属性的当前值已经序列化到了场景中,不再是第一次创建时用到的默认值了。如果要强制把所有属性设回默认值,可以在 属性检查器 的组件菜单中选择 Reset。
+        default 允许设置为以下几种值类型：
+
+        任意 number, string 或 boolean 类型的值
+        null 或 undefined
+        继承自 cc.ValueType 的子类,如 cc.Vec2, cc.Color 或 cc.Rect 的实例化对象：
+         properties: {
+             pos: {
+                 default: new cc.Vec2(),
+             }
+         }
+        空数组 [] 或空对象 {}
+        一个允许返回任意类型值的 function,这个 function 会在每次实例化该类时重新调用,并且以返回值作为新的默认值：
+         properties: {
+             pos: {
+                 default: function () {
+                     return [1, 2, 3];
+                 },
+             }
+         }
+        visible 参数
+
+        默认情况下,是否显示在 属性检查器 取决于属性名是否以下划线 _ 开头。如果以下划线开头,则默认不显示在 属性检查器,否则默认显示。
+
+        如果要强制显示在 属性检查器,可以设置 visible 参数为 true:
+
+        properties: {
+            _id: {      // 下划线开头原本会隐藏
+                default: 0,
+                visible: true
+            }
+        }
+        如果要强制隐藏,可以设置 visible 参数为 false:
+
+        properties: {
+            id: {       // 非下划线开头原本会显示
+                default: 0,
+                visible: false
+            }
+        }
+        serializable 参数
+
+        指定了 default 默认值的属性默认情况下都会被序列化,如果不想序列化,可以设置serializable: false。
+
+        temp_url: {
+            default: "",
+            serializable: false
+        }
+        type 参数
+
+        当 default 不能提供足够详细的类型信息时,为了能在 属性检查器 显示正确的输入控件,就要用 type 显式声明具体的类型：
+
+        当默认值为 null 时,将 type 设置为指定类型的构造函数,这样 属性检查器 才知道应该显示一个 Node 控件。
+
+          enemy: {
+              default: null,
+              type: cc.Node
+          }
+        当默认值为数值（number）类型时,将 type 设置为 cc.Integer,用来表示这是一个整数,这样属性在 属性检查器 里就不能输入小数点。
+
+          score: {
+              default: 0,
+              type: cc.Integer
+          }
+        当默认值是一个枚举（cc.Enum）时,由于枚举值本身其实也是一个数字（number）,所以要将 type 设置为枚举类型,才能在 属性检查器 中显示为枚举下拉框。
+
+          wrap: {
+              default: Texture.WrapMode.Clamp,
+              type: Texture.WrapMode
+          }
+        url 参数
+
+        如果属性是用来访问 Raw Asset 资源的 url,为了能在 属性检查器 中选取资源,或者能正确序列化,你需要指定 url 参数：
+
+        texture: {
+            default: "",
+            url: cc.Texture2D
+        },
+        可参考 获取和加载资源: Raw Asset
+
+        override 参数
+
+        所有属性都将被子类继承,如果子类要覆盖父类同名属性,需要显式设置 override 参数,否则会有重名警告：
+
+        _id: {
+            default: "",
+            tooltip: "my id",
+            override: true
+        },
+        name: {
+            get: function () {
+                return this._name;
+            },
+            displayName: "Name",
+            override: true
+        }
+        更多参数内容请查阅 属性参数。
+
+        属性延迟定义
+
+        如果两个类相互引用,脚本加载阶段就会出现循环引用,循环引用将导致脚本加载出错：
+
+        Game.js
+
+         var Item = require("Item");
+
+         var Game = cc.Class({
+             properties: {
+                 item: {
+                     default: null,
+                     type: Item
+                 }
+             }
+         });
+
+         module.exports = Game;
+        Item.js
+
+         var Game = require("Game");
+
+         var Item = cc.Class({
+             properties: {
+                 game: {
+                     default: null,
+                     type: Game
+                 }
+             }
+         });
+
+         module.exports = Item;
+        上面两个脚本加载时,由于它们在 require 的过程中形成了闭环,因此加载会出现循环引用的错误,循环引用时 type 就会变为 undefined。 因此我们提倡使用以下的属性定义方式：
+
+        Game.js
+
+         var Game = cc.Class({
+             properties: () => ({
+                 item: {
+                     default: null,
+                     type: require("Item")
+                 }
+             })
+         });
+
+         module.exports = Game;
+        Item.js
+
+         var Item = cc.Class({
+             properties: () => ({
+                 game: {
+                     default: null,
+                     type: require("Game")
+                 }
+             })
+         });
+
+         module.exports = Item;
+        这种方式就是将 properties 指定为一个 ES6 的箭头函数（lambda 表达式）,箭头函数的内容在脚本加载过程中并不会同步执行,而是会被 CCClass 以异步的形式在所有脚本加载成功后才调用。因此加载过程中并不会出现循环引用,属性都可以正常初始化。
+
+        箭头函数的用法符合 JavaScript 的 ES6 标准,并且 Creator 会自动将 ES6 转义为 ES5,用户不用担心浏览器的兼容问题。
+        你可以这样来理解箭头函数：
+
+
+        // 箭头函数支持省略掉 `return` 语句,我们推荐的是这种省略后的写法：
+
+        properties: () => ({    // <- 箭头右边的括号 "(" 不可省略
+            game: {
+                default: null,
+                type: require("Game")
+            }
+        })
+
+        // 如果要完整写出 `return`,那么上面的写法等价于：
+
+        properties: () => {
+            return {
+                game: {
+                    default: null,
+                    type: require("Game")
+                }
+            };      // <- 这里 return 的内容,就是原先箭头右边括号里的部分
+        }
+
+        // 我们也可以不用箭头函数,而是用普通的匿名函数：
+
+        properties: function () {
+            return {
+                game: {
+                    default: null,
+                    type: require("Game")
+                }
+            };
+        }
+        GetSet 方法
+
+        在属性中设置了 get 或 set 以后,访问属性的时候,就能触发预定义的 get 或 set 方法。
+
+        get
+
+        在属性中设置 get 方法：
+
+        properties: {
+            width: {
+                get: function () {
+                    return this.__width;
+                }
+            }
+        }
+        get 方法可以返回任意类型的值。 这个属性同样能显示在 属性检查器 中,并且可以在包括构造函数内的所有代码里直接访问。
+
+        var Sprite = cc.Class({
+            ctor: function () {
+                this.__width = 128;
+                cc.log(this.width);    // 128
+            },
+            properties: {
+                width: {
+                    get: function () {
+                        return this.__width;
+                    }
+                }
+            }
+        });
+        请注意：
+
+        设定了 get 以后,这个属性就不能被序列化,也不能指定默认值,但仍然可附带除了 default, serializable 外的大部分参数。
+
+          width: {
+              get: function () {
+                  return this.__width;
+              },
+              type: cc.Integer,
+              tooltip: "The width of sprite"
+          }
+        get 属性本身是只读的,但返回的对象并不是只读的。用户使用代码依然可以修改对象内部的属性,例如：
+
+          var Sprite = cc.Class({
+              ...
+              position: {
+                  get: function () {
+                      return this._position;
+                  },
+              }
+              ...
+          });
+          var obj = new Sprite();
+          obj.position = new cc.Vec2(10, 20);   // 失败！position 是只读的！
+          obj.position.x = 100;                 // 允许！position 返回的 _position 对象本身可以修改！
+        set
+
+        在属性中设置 set 方法：
+
+        width: {
+            set: function (value) {
+                this._width = value;
+            }
+        }
+        set 方法接收一个传入参数,这个参数可以是任意类型。
+
+        set 一般和 get 一起使用：
+
+        width: {
+            get: function () {
+                return this._width;
+            },
+            set: function (value) {
+                this._width = value;
+            },
+            type: cc.Integer,
+            tooltip: "The width of sprite"
+        }
+        如果没有和 get 一起定义,则 set 自身不能附带任何参数。 和 get 一样,设定了 set 以后,这个属性就不能被序列化,也不能指定默认值。
+        editor 参数
+
+        editor 只能定义在 cc.Component 的子类。
+
+        cc.Class({
+          extends: cc.Component,
+
+          editor: {
+
+            // requireComponent 参数用来指定当前组件的依赖组件。
+            // 当组件添加到节点上时,如果依赖的组件不存在,引擎将会自动将依赖组件添加到同一个节点,防止脚本出错。
+            // 该选项在运行时同样有效。
+            // 
+            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+            // 默认值：null
+            requireComponent: null,
+
+            // 当本组件添加到节点上后,禁止 disallowMultiple 所指定类型（极其子类）的组件再添加到同一个节点,
+            // 防止逻辑发生冲突。
+            // 
+            // 值类型：Function （必须是继承自 cc.Component 的构造函数,如 cc.Sprite）
+            // 默认值：null
+            disallowMultiple: null,
+
+            // menu 用来将当前组件添加到组件菜单中,方便用户查找。
+            // 
+            // 值类型：String （如 "Rendering/Camera"）
+            // 默认值：""
+            menu: "",
+
+            // 允许当前组件在编辑器模式下运行。
+            // 默认情况下,所有组件都只会在运行时执行,也就是说它们的生命周期回调在编辑器模式下并不会触发。
+            // 
+            // 值类型：Boolean
+            // 默认值：false
+            executeInEditMode: false,
+
+            // 当设置了 "executeInEditMode" 以后,playOnFocus 可以用来设定选中当前组件所在的节点时,
+            // 编辑器的场景刷新频率。
+            // playOnFocus 如果设置为 true,场景渲染将保持 60 FPS,如果为 false,场景就只会在必要的时候进行重绘。
+            // 
+            // 值类型：Boolean
+            // 默认值：false
+            playOnFocus: false,
+
+            // 自定义当前组件在 **属性检查器** 中渲染时所用的网页 url。
+            // 
+            // 值类型：String
+            // 默认值：""
+            inspector: "",
+
+            // 自定义当前组件在编辑器中显示的图标 url。
+            // 
+            // 值类型：String
+            // 默认值：""
+            icon: "",
+
+            // 指定当前组件的帮助文档的 url,设置过后,在 **属性检查器** 中就会出现一个帮助图标,
+            // 用户点击将打开指定的网页。
+            // 
+            // 值类型：String
+            // 默认值：""
+            help: "",
+          }
+        });        
+        
+      数组声明 
+        数组的 default 必须设置为 [],
+        若要在 属性检查器 中编辑,还需要设置 type 为构造函数,枚举,
+        或者 cc.Integer,cc.Float,cc.Boolean 和 cc.String。
+        properties: {
+          names: {
+            default: [],
+            type: [cc.String]   // 用 type 指定数组的每个元素都是字符串类型
+          },
+          enemies: {
+            default: [],
+            type: [cc.Node]     // type 同样写成数组,提高代码可读性
+          },
+        }
+      get/set 声明
+        在属性中设置了 get 或 set 以后,访问属性的时候,
+        就能触发预定义的 get 或 set 方法。
+        若只定义 get 方法,那相当于属性只读。
+        properties: {
+          width: {
+            get: function () {
+              return this._width;
+            },
+            set: function (value) {
+              this._width = value;
+            }
+          }
+        }
+  cc.isChildClassOf(cla1,cla2) 判断两个类的继承关系
+    两个传入参数都必须是类的构造函数,而不是类的对象实例。
+    如果传入的两个类相等,isChildClassOf 同样会返回 true。
+    var Texture = cc.Class();
+    var Texture2D = cc.Class({
+        extends: Texture
+    });
+    cc.log(cc.isChildClassOf(Texture2D, Texture));   // true
+  new ccClass() 实例化
+    var obj = new Sprite();
+  instanceof 判断类型「原生JS方法」
+    cc.log(obj instanceof Sprite);       // true
+    
+    var Sub = cc.Class({
+      extends: Base
+    });
+    var sub = new Sub();
+    cc.log(sub instanceof Sub);       // true
+    cc.log(sub instanceof Base);      // true
+    var base = new Base();
+    cc.log(base instanceof Sub);      // false
+  访问节点和组件
+    PS：可在 属性检查器 里修改节点和组件,也能在脚本中动态修改。
+      动态修改的好处是能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
+      脚本还能够响应玩家输入,能够修改、创建和销毁节点或组件,实现各种各样的游戏逻辑。
+      要实现这些效果,你需要先在脚本中获得你要修改的节点或组件。
+    this.node 获得组件所在的节点
+      在组件方法里访问  
+      start: function () {
+        var node = this.node;
+        node.x = 100;
+      }
+    getComponent 获得同一个节点上的其它组件
+      start: function () {
+        var label = this.getComponent(cc.Label);
+        var text = this.name + ' started';
+        label.string = text;  // Change the text in Label Component
+      }
+      也可为 getComponent 传入一个类名「脚本文件名」
+        var label = this.getComponent("cc.Label");
+        对用户定义的组件而言,类名就是脚本文件名,并且区分大小写。
+        例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
+        var rotate = this.getComponent("SinRotate");
+      在节点上也有一个 getComponent 方法,它们的作用是一样的：
+        start: function () {
+          var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
+          cc.log(bool);  // true
+        }
+      若在节点上找不到指定的组件,getComponent 将返回 null,
+        若你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
+        因此若不确定组件是否存在,可判断一下：
+        start: function () {
+          var label = this.getComponent(cc.Label);
+          if (label) {
+            label.string = "Hello";
+          }
+          else {
+            cc.error("Something wrong?");
+          }
+        }
+    获得其它节点及其组件  --todo
+      PS：脚本通常还需要进行多个节点之间的交互。
+        例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
+        Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
+      利用属性检查器设置节点
+        最直接的方式就是在 属性检查器 中设置你需要的对象。
+        以节点为例,只需要在脚本中声明一个 type 为 cc.Node 的属性：
+        // Cannon.js
+        cc.Class({
+          extends: cc.Component,
+          properties: {
+            player: {  // 声明一个 player 属性
+              default: null, // 默认值为 null
+              type: cc.Node  // 对象类型为 cc.Node
+            }
+          }
+        });
+        // 相当于在其它语言里声明了 public cc.Node player = null;
+        接着就可将层级管理器上的任意一个节点拖到该 Player 控件;
+        建立引用后,就可直接在脚本里访问 player 节点了.
+        // Cannon.js
+        var Player = require("Player");
+        cc.Class({
+          extends: cc.Component,
+          properties: {
+            player: { // 声明 player 属性
+              default: null,
+              type: cc.Node
+            }
+          },
+          start: function () {
+            var playerComp = this.player.getComponent(Player);
+            this.checkPlayer(playerComp);
+          },
+          // ...
+        });
+      利用属性检查器设置组件
+        拖动节点 "Player Node" 到 属性检查器,
+        player 属性就会被设置为这个节点里面的 Player 组件。
+        这样就不需要再自己调用 getComponent 啦。
+        // Cannon.js
+        var Player = require("Player");
+        cc.Class({
+          extends: cc.Component,
+          properties: {
+            player: {   // 声明 player 属性,这次直接是组件类型
+              default: null,
+              type: Player
+            }
+          },
+          start: function () {
+            var playerComp = this.player;
+            this.checkPlayer(playerComp);
+          },
+          // ...
+        });
+        还可以将属性的默认值由 null 改为数组[],这样就能在 属性检查器 中同时设置多个对象。
+        不过若需要在运行时动态获取其它对象,还需要用到下面介绍的查找方法。
+    查找子节点 
+      PS：有时候,游戏场景中会有很多个相同类型的对象,像是炮塔、敌人和特效,
+        它们通常都有一个全局的脚本来统一管理。
+        若用 属性检查器 来一个一个将它们关联到这个脚本上,那工作就会很繁琐。
+        为了更好地统一管理这些对象,我们可以把它们放到一个统一的父物体下,
+        然后通过父物体来获得所有的子物体：
+      getChildren  cc.Node 原有的一个 API,可以获得一个包含所有子节点的数组。
+        // CannonManager.js
+        cc.Class({
+          extends: cc.Component,
+          start: function () {
+            this.cannons = [];
+            this.cannons = this.node.getChildren();
+          }
+        });
+      getChildByName() 
+        this.node.getChildByName("Cannon 01");
+      cc.find  根据传入的路径进行逐级查找 
+        若子节点的层次较深,可使用 cc.find 
+        cc.find("Cannon 01/Barrel/SFX", this.node);
+        当 cc.find 只传入第一个参数时,将从场景根节点开始逐级查找：
+        this.backNode = cc.find("Canvas/Menu/Back");
+  访问已有变量里的值
+    若你已经在一个地方保存了节点或组件的引用,你也可以直接访问它们,一般有两种方式：
+    通过全局变量访问
+      PS：谨慎地使用全局变量,并不推荐滥用全局变量,即使要用也最好保证全局变量只读 
+        由于所有脚本都强制声明为 "use strict",因此定义全局变量时的 window. 不可省略;
+        访问全局变量时,若变量未定义将会抛出异常。
+        添加全局变量时,请小心不要和系统已有的全局变量重名。
+        你需要小心确保全局变量使用之前都已初始化和赋值。
+      定义一个全局对象 window.Global
+      // Globals.js, this file can have any name
+      window.Global = {
+        // 包含了 backNode 和 backLabel 两个属性
+        backNode: null,
+        backLabel: null,
+      };
+      可在合适的地方直接访问并初始化 Global:
+      // Back.js
+      cc.Class({
+        extends: cc.Component,
+        onLoad: function () {
+          Global.backNode = this.node;
+          Global.backLabel = this.getComponent(cc.Label);
+        }
+      });
+      初始化后,你就能在任何地方访问到 Global 里的值：
+      // AnyScript.js
+      cc.Class({
+        extends: cc.Component,
+        
+        // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
+        start: function () {
+          var text = 'Back';
+          Global.backLabel.string = text;
+        }
+      });
+    通过模块访问
+      可使用 require 来实现脚本的跨文件操作
+      每个脚本都能用 require + 文件名「不含路径」 来获取到对方 export 的对象
+      更详细内容,请参考 模块化。
+      // Global.js, now the filename matters
+      module.exports = {
+        backNode: null,
+        backLabel: null,
+      };
+      // Back.js
+      // this feels more safe since you know where the object comes from
+      var Global = require("Global");
+      cc.Class({
+        extends: cc.Component,
+        onLoad: function () {
+          Global.backNode = this.node;
+          Global.backLabel = this.getComponent(cc.Label);
+        }
+      });
+      // AnyScript.js
+      // this feels more safe since you know where the object comes from
+      var Global = require("Global");
+      cc.Class({
+        extends: cc.Component,
+        // start 会在 onLoad 之后执行,所以这时 Global 已经初始化过了
+        start: function () {
+          var text = "Back";
+          Global.backLabel.string = text;
+        }
+      });
+  常用节点和组件接口
+    节点状态和层级操作
+      假设我们在一个组件脚本中,通过 this.node 访问当前脚本所在节点。
+      this.node.active = false;  关闭节点 
+        该操作会关闭节点,当该节点的所有父节点都激活,将意味着：
+        在场景中隐藏该节点和所有子节点
+        该节点和所有子节点上的所有组件都将被禁用,
+        也就是不会再执行这些组件中的 update 中的代码
+        这些组件上若有 onDisable 方法,这些方法将被执行
+      this.node.active = true;   激活节点 
+        该操作会激活节点,当该节点的所有父节点都激活,将意味着：
+        在场景中重新激活该节点和所有子节点,除非子节点单独设置过关闭
+        该节点和所有 active 的子节点上的所有 enabled 的组件都会被启用,
+        他们中的 update 方法之后每帧会执行
+        这些组件上若有 onEnable 方法,这些方法将被执行
+      更改节点的父节点
+        假设父节点为 parentNode,子节点为 this.node
+        parentNode.addChild(this.node)
+        或
+        this.node.parent = parentNode
+        这两种方法是等价的。
+        注意,通过 创建和销毁节点 介绍的方法创建出新节点后,
+        要为节点设置一个父节点才能正确完成节点的初始化。
+    索引节点的子节点
+      this.node.children 将返回节点的所有子节点数组。
+      this.node.childrenCount 将返回节点的子节点数量。
+      注意 以上两个 API 都只会返回节点的直接子节点,不会返回子节点的子节点。
+    更改节点位置
+      分别对 x 轴和 y 轴坐标赋值：
+      this.node.x = 100; this.node.y = 50;
+    设置 position 变量：
+      this.node.position = cc.p(0, 0);
+      使用 setPosition 方法：
+      node.setPosition(cc.p(0, 0)); node.setPosition(0, 0);
+      以上两种用法等价。
+    更改节点旋转
+      this.node.rotation = 90;
+      或
+      this.node.setRotation(90);
+    更改节点缩放
+      this.node.scaleX = 2; this.node.scaleY = 2;
+      或
+      this.node.setScale(2); this.node.setScale(2, 2);
+      以上两种方法等价。setScale 传入单个参数时,会同时修改 scaleX 和 scaleY。
+    更改节点尺寸
+      this.node.setContentSize(100, 100); 
+      this.node.setContentSize(cc.p(100, 100));
+      或
+      this.node.width = 100; 
+      this.node.height = 100;
+      以上两种方式等价。
+    更改节点锚点位置
+      this.node.anchorX = 1; 
+      this.node.anchorY = 0;
+      或
+      this.node.setAnchorPoint(1, 0);
+      注意以上这些修改变换的方法会影响到节点上挂载的渲染组件,
+      比如 Sprite 图片的尺寸、旋转等等。
+    颜色和不透明度
+      在使用 Sprite, Label 这些基本的渲染组件时,要
+      注意修改颜色和不透明度的操作只能在节点的实例上进行,
+      因为这些渲染组件本身并没有设置颜色和不透明度的接口。
+      
+      假如我们有一个 Sprite 的实例为 mySprite,若需要设置它的颜色：
+      mySprite.node.color = cc.Color.RED;
+      设置不透明度：
+      mySprite.node.opacity = 128;
+  cc.Component 所有组件的基类
+    任何组件都包括如下的常见接口「假设我们在该组件的脚本中,以 this 指代本组件」
+    this.node    该组件所属的节点实例
+    this.enabled 是否每帧执行该组件的 update 方法,同时也用来控制渲染组件是否显示
+    update(dt)   作为组件的成员方法,在组件的 enabled 属性为 true 时,其中的代码会每帧执行
+    onLoad()     组件所在节点进行初始化时（创建之后通过设置父节点添加到节点树）执行
+    start()      会在该组件第一次update前执行,通常用于需要在onLoad初始化完毕后执行的逻辑。
+    更多组件成员方法请继续参考 生命周期回调 文档。          
+  生命周期回调
+    Cocos Creator 为组件脚本提供了生命周期的回调函数。
+    只要指定回调函数,Creator 就会在特定的时期自动执行相关 脚本,不需要手动调用。
+    onLoad 回调会在这个组件所在的场景被载入 的时候触发,
+      组件脚本的初始化阶段,我们提供了 onLoad 回调函数。
+      在 onLoad 阶段,保证了你可以获取到场景中的其他节点,以及节点关联的资源数据。
+      通常 我们会在 onLoad 阶段去做一些初始化相关的操作。
+      例如：
+      cc.Class({
+        extends: cc.Component,
+        properties: {
+          bulletSprite: cc.SpriteFrame,
+          gun: cc.Node,
+        },
+        onLoad: function () {
+          this._bulletRect = this.bulletSprite.getRect();
+          this.gun = cc.find('hand/weapon', this.node);
+        },
+      });
+    start 回调函数会在组件第一次激活前
+      也就是第一次执行 update 之前触发。
+      start 通常用于 初始化一些中间状态的数据,
+      这些数据可能在 update 时会发生改变,并且被频繁的 enable 和 disable。
+      cc.Class({
+        extends: cc.Component,
+        
+        start: function () {
+          this._timer = 0.0;
+        },
+        
+        update: function (dt) {
+          this._timer += dt;
+          if ( this._timer >= 10.0 ) {
+            console.log('I am done!');
+            this.enabled = false;
+          }
+        },
+      });
+    update  游戏开发的一个关键点是在每一帧渲染前更新物体的行为,状态和方位。
+      这些更新操作通常都放在 update 回调中。
+      cc.Class({
+        extends: cc.Component,
+        
+        update: function (dt) {
+          this.node.setPosition( 0.0, 40.0 * dt );
+        }
+      });
+    lateUpdate  在所有组件的 update 都执行完之后才进行操作
+      update 会在所有动画更新前执行,但若我们要在动画更新之后才进行一些额外操作,
+      那就需要用到 lateUpdate 回调。
+      cc.Class({
+        extends: cc.Component,
+        
+        lateUpdate: function (dt) {
+          this.node.rotation = 20;
+        }
+      });
+    onEnable   当组件的 enabled 属性从 false 变为 true 时,会激活 onEnable 回调。
+      倘若节点第一次被 创建且 enabled 为 true,则会在 onLoad 之后,start 之前被调用。
+    onDisable 当组件的 enabled 属性从 true 变为 false 时,会激活 onDisable 回调。
+    onDestroy 当组件调用了 destroy(),会在该帧结束被统一回收,此时会调用 onDestroy 回调。
+  创建和销毁节点
+    创建新节点
+      除了通过场景编辑器创建节点外,我们也可以在脚本中动态创建节点。
+      通过 new cc.Node() 并将它加入 到场景中,可以实现整个创建过程。
+      以下是一个简单的例子:
+      cc.Class({
+        extends: cc.Component,
+        properties: {
+          sprite: {
+            default: null,
+            type: cc.SpriteFrame,
+          },
+        },
+        start: function () {
+          var node = new cc.Node('sprite ' + this.count);
+          var sp = node.addComponent(cc.Sprite);
+          
+          sp.spriteFrame = this.sprite;
+          node.parent = this.node;
+          node.setPosition(0,0);
+        },
+      });
+    克隆已有节点
+      有时我们希望动态的克隆场景中的已有节点,我们可以通过 cc.instantiate 方法完成。
+      cc.Class({
+        extends: cc.Component,
+        
+        properties: {
+          target: {
+            default: null,
+            type: cc.Node,
+          },
+        },
+        
+        start: function () {
+          var scene = cc.director.getScene();
+          var node = cc.instantiate(this.target);
+          
+          node.parent = scene;
+          node.setPosition(0,0);
+        },
+      });
+    创建预制节点
+      和克隆已有节点相似,你也设置你的预制（prefab）节点并通过 cc.instantiate 生成。
+      cc.Class({
+        extends: cc.Component,
+        
+        properties: {
+          target: {
+            default: null,
+            type: cc.Prefab,
+          },
+        },
+        
+        start: function () {
+          var scene = cc.director.getScene();
+          var node = cc.instantiate(this.target);
+          
+          node.parent = scene;
+          node.setPosition(0,0);
+        },
+      });
+    销毁节点
+      通过 node.destroy() 函数,可以销毁节点。
+      销毁节点并不会立刻发生,而是在当前 帧逻辑更新结束后,统一执行。
+      当一个节点销毁后,该节点就处于无效状态,
+      可以通过 cc.isValid 判断 当前节点是否已经被销毁。
+      cc.Class({
+        extends: cc.Component,
+        
+        properties: {
+          target: cc.Node,
+        },
+        
+        start: function () {
+          setTimeout(function () {
+            this.target.destroy();
+          }.bind(this), 5000);
+        },
+        
+        update: function (dt) {
+          if (!cc.isValid(this.target) ) {
+            this.enabled = false;
+            return;
+          }
+          
+          this.target.rotation += dt * 10.0;
+        },
+      });
+  加载和切换场景
+      在 Cocos Creator 中,使用场景文件名「可不包含扩展名」来索引指代场景。
+      cc.director.loadScene('MyScene'); 通过常驻节点进行场景资源管理和参数传递
+      cc.game.addPersistRootNode(myNode) 常驻节点
+        通常同时只会加载运行一个场景,当切换场景时,默认会将场景内所有节点和其他实例销毁。
+        若需要用一个组件控制所有场景的加载,或在场景之间传递参数数据,
+        就需要将该组件所在节点标记为「常驻节点」,使它在场景切换时不被自动销毁,常驻内存。
+        将 myNode 变为常驻节点,这样挂在上面的组件都可以在场景之间持续作用,
+        可以用这样的方法来储存玩家信息,或下一个场景初始化时需要的各种数据。
+      cc.game.removePersistRootNode(myNode) 取消一个节点的常驻属性
+      除此之外,简单的数值类数据传递也可以使用全局变量的方式进行,
+        详见通过全局变量跨组件访问值。
+      场景加载回调
+        加载场景时,可以附加一个参数用来指定场景加载后的回调函数：
+        cc.director.loadScene('MyScene', cfoo);
+        cfoo 就是声明在本脚本中的一个回调函数,
+        在场景加载后可以用来进一步的进行初始化或数据传递的操作。
+        由于回调函数只能写在本脚本中,所以场景加载回调通常用来配合常驻节点,
+        在常驻节点上挂载的脚本中使用。
+      预加载场景
+        有些时候我们需要在后台静默加载新场景,并在加载完成后手动进行切换。
+        cc.director.preloadScene 对场景进行预加载
+          cc.director.preloadScene('table', function () {
+            cc.log('Next scene preloaded');
+          });
+        之后在合适的时间调用 loadScene, 就可以立即切换场景
+        cc.director.loadScene  在加载场景之后自动切换运行新场景,
+        cc.director.loadScene('table');
+      
+        注意 使用预加载场景资源配合 runScene 的方式进行预加载场景的方法已被废除:
+        // 请不要再使用下面的方法预加载场景!
+        cc.loader.loadRes('MyScene.fire', function(err, res) {
+          cc.director.runScene(res.scene); 
+        });        
+API 
+  节点相关 
+    ◆节点类型
+    cc.Label  文本
+    cc.Node   节点
+    cc.SpriteFrame 图片资源
+    ◆节点属性
+    ccNode.string  可读写,节点的文本值
+    ccNode.parent  节点的父节点
+    ◆创建节点
+    cc.instantiate(prefa)  返回通过预置资源创建的节点
+  ◆cc 模块
+  cc.director  管理游戏逻辑流程的单例对象,创建和处理主窗口并管理执行场景 
+    PS：由于该对象是一单例,不需要调用任何构造函数或创建函数来创建该对象,
+      cc.director 还负责：
+      - 初始化 OpenGL 环境。
+      - 设置OpenGL像素格式。(默认是 RGB565)
+      - 设置OpenGL缓冲区深度 (默认是 0-bit)
+      - 设置空白场景的颜色 (默认是 黑色)
+      - 设置投影 (默认是 3D)
+      - 设置方向 (默认是 Portrait)
+    cc.director.methodName();  标准使用方法 
+    ◆方法
+    convertToUI(glPoint)  将触摸点的 WebGL View 坐标转换为屏幕坐标
+    getWinSize()          获取视图的大小,以点为单位
+    getWinSizeInPixels()  获取视图大小,单位px
+    getVisibleSize()      获取运行场景的可见大小
+    getVisibleOrigin()    获取视图在游戏内容中的坐标原点
+    pause()  暂停正在运行的场景「只会停止游戏逻辑执行,但是不会停止渲染和 UI 响应」
+      若想要更彻底得暂停游戏,包含渲染,音频和事件,请使用 Game.pause。
+    runSceneImmediate(scene[onBeforeLoadScene][onLaunched]) 立刻切换指定场景
+    loadScene(sceneName[onLaunched]) 通过场景名称进行加载场景
+    preloadScene(sceneName[cfoo]) 预加载场景,可以在任何时候调用该方法 
+      PS：调用完后,仍需要通过 cc.director.loadScene 来启动场景,
+        因为该方法不会执行场景加载操作。 
+        就算预加载还没完成,也可以直接调用 cc.director.loadScene,加载完成后场景就会启动。
+      sceneName  场景文件的文件名「不包含后缀名」
+      cfoo       预加载完后执行的回调
+    resume()  恢复暂停场景的游戏逻辑,若当前场景没有暂停将无操作
+    setDepthTest(on)  启用/禁用深度测试「在 Canvas 渲染模式下不会生效」
+    setClearColor(clearColor)  设置场景的默认擦除颜色
+      支持白色全透明,但不支持透明度为中间值
+    setProjection(projection)  设置 OpenGL 投影
+    setViewport() 设置视窗
+      请不要主动调用这个接口,除非你知道你在做什么
+    getProjection()      获取 OpenGL 投影。
+    setAlphaBlending(on) 启用/禁用 透明度融合
+    isSendCleanupToScene() 更换场景时是否接收清理消息
+      若新场景是采用 push 方式进入的,那么旧的场景将不会接收到 “cleanup” 消息。 
+      若新场景取代旧的场景,它将会接收到 “cleanup” 消息。
+    getScene()   获取当前逻辑场景 
+      // This will help you to get the Canvas node in scene
+      cc.director.getScene().getChildByName('Canvas');
+    getAnimationInterval()  获取单位帧执行时间
+    isDisplayStats()   获取是否显示 FPS 信息
+    setDisplayStats(displayStats) 设置是否在左下角显示 FPS。
+    getSecondsPerFrame()  获取实际记录的上一帧执行时间
+      可能与单位帧执行时间「AnimationInterval」有出入
+    isNextDeltaTimeZero()  返回下一个 “delta time” 是否等于零
+    isPaused()   是否处于暂停状态
+    getTotalFrames()  获取 director 启动以来游戏运行的总帧数
+    getScheduler()   获取和 director 相关联的 cc.Scheduler
+    setScheduler(scheduler) 设置和 director 相关联的 cc.Scheduler
+    getActionManager()   获取和 director 相关联的 cc.ActionManager（动作管理器）。
+    setActionManager(actionManager) 设置和director相关联的 cc.ActionManager
+    getCollisionManager()  获取 cc.CollisionManager 
+    getDeltaTime()  获取上一帧的 “delta time”
+    ◆事件
+    cc.Director.EVENT_PROJECTION_CHANGED  投影变化的事件。
+      cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+         cc.log("Projection changed.");
+      });
+    cc.Director.EVENT_BEFORE_SCENE_LOADING  加载新场景之前触发事件
+    cc.Director.EVENT_AFTER_SCENE_LAUNCH    运行新场景之后触发事件
+    cc.Director.EVENT_BEFORE_UPDATE         每个帧的开始时触发事件
+    cc.Director.EVENT_COMPONENT_UPDATE      组件 “update” 时触发事件
+    cc.Director.EVENT_COMPONENT_LATE_UPDATE 组件 “late update” 时触发事件
+    cc.Director.EVENT_AFTER_UPDATE  将在引擎和组件 “update” 逻辑之后所触发的事件
+    cc.Director.EVENT_BEFORE_VISIT  访问渲染场景树之前所触发的事件
+    cc.Director.EVENT_AFTER_VISIT   访问渲染场景图之后所触发的事件,
+      渲染队列已准备就绪,但在这一时刻还没有呈现在画布上。
+    cc.Director.EVENT_AFTER_DRAW    渲染过程之后所触发的事件
+Cocos2d-js API
 --------------------------------------------------------------------------------
 构建打包发布
 --------------------------------------------------------------------------------

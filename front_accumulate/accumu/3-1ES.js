@@ -1,23 +1,22 @@
 ECMAScript JS核心,语法部分 
   ECMAscript: JS的 语法核心,提供核心语言功能.
-    由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守它的约定
-    是宿主环境中脚本语言的国际 Web 标准.
-    本身并不是一种脚本语言.
-    实现它的语言有JavaScript、JScript、ActionScript等等.
-    ECMA-262 第五版发布于2009年
-    ECMA-262 要求支持Unicode标准「从而支持多语言开发」,而且对象也变成了平台无关的
+    由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
+    是宿主环境中脚本语言的国际 Web 标准;
+    本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
+    ECMA-262 要求支持Unicode标准「从而支持多语言开发」,第五版发布于2009年;
     ECMA-262 中对象的行为不一定适用于JS中其他对象,
-    浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义,
+    浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
     JavaScript和ECMAScript的关系
-      通常JavaScript和ECMAscript被人们用来表达相同的含义,
-      但JS的内容却比 ECMA-262 中规定的要多,ECMA-262 的大部分组成JS的一部分.
+      JS的内容比 ECMA-262 中规定的要多,ECMA-262 的大部分是组成JS的一部分;
       Web浏览器只是ECMAscript实现可能的宿主环境之一,
-      还有其他环境如Node「一种服务端JavaScript平台」和Adobe Flash 等等
+      还有其他环境如Node「一种服务端JavaScript平台」和Adobe Flash 等;
   ECMA-262 大致规定了如下部分: 
     语法 类型 语句 关键字 保留字 操作符 对象 正则表达式 
     try-catch「ES3+」 JSON对象「ES5+」
 语法 
-  PS: 区分大小写,如变量、函数名和操作符.
+  PS: 区分大小写,如变量、函数名和操作符;
+    语法源自于Java,基于原型的继承来自于Self;
+    一等函数「first-class function」来自于 Scheme,
   标识符: 指变量、函数、属性或函数的参数的名字
     标识符的组合规则:
     第一个字符必须是字母、下划线或美元符号$
@@ -25,33 +24,23 @@ ECMAScript JS核心,语法部分
     可以一个或多个字符
     不能把关键字、保留字、true、false和null等作为标识符
     标识符中的字母也可以包含扩展的 ASCII 或 Unicode字母字符,但不推荐使用
-  关键字和保留字
+  关键字和保留字 
     有些名称有特殊意义,不可作为变量名
     关键字: 是程序中已经开始使用的字符
-      PS:ECMAscript-262 描述了一组具有特定用途的关键字
-        一般用于控制语句的开始或结束,或者用于执行特定的操作等.
       ECMAScript全部关键字: 
-      break case catch continue default delete do else finally
-      for function if in inseanceof new return switch this
-      throw try typeof var void while with
+      // break case catch continue default delete do else finally
+      // for function if in inseanceof new return switch this
+      // throw try typeof var void while with
     保留字: 还没有特定的用途,但可能在将来被用作关键字
       ECMAScript-262 第3版 定义的全部保留字
-      abstract boolean byte char class const debugger double
-      enum export extends final float goto implements import int
-      interface long native package private protected public
-      short static super synchronized throws transient volatile
-  多行注释 /* 注释内容 */ 
-  单行注释 // c风格的注释
-  语句使用分号结尾,若省略分号,则由解析器确定语句的结尾
+      // abstract boolean byte char class const debugger double
+      // enum export extends final float goto implements import int
+      // interface long native package private protected public
+      // short static super synchronized throws transient volatile
+  多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
+  语句使用分号结尾,若省略分号,则由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
-关键字 
-  var 变量声明
-    var 与 逗号,运算符 「moIn 逗号运算符,变量声明」       
-      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
-      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
-      (var aoo);           // Uncaught SyntaxError: Unexpected token var
-      var aoo = 1, window.boo = 2; // Unexpected token .
-变量 
+变量|常量|字面量 
   PS: Undefined Boolean Number String Object Null
     ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一「ES6可以了」
     变量就是一指向一个值的名称.
@@ -59,7 +48,7 @@ ECMAScript JS核心,语法部分
     虽然 JS 可以不定义直接使用变量,但建议先定义再使用.
     一个值可由多个变量指向,但一个变量只能指向一个值.
   var valName   定义变量
-    PS:变量定义但未赋值,默认为undefined
+    PS：变量定义但未赋值,默认为 undefined
     e.g. :
       定义变量box
       var box;  // 但未初始化,系统会设定默认值 undefined(表示未定义)
@@ -67,19 +56,28 @@ ECMAScript JS核心,语法部分
       var a = b =1;
       // 相当于
       var a =1; b =1; 
+    使用var声明相当于给 window 添加属性
+      但使用var声明的变量不可 delete 删除
+      不使用var定义变量可以使用 delete 删除
+      var aoo =1; 
+      boo = 2;
+      console.log(window.aoo); // 1
+      console.log(window.boo); // 2
+      delete aoo;
+      delete boo;
+      console.log(aoo); // 1
+      console.log(boo); // 报错 boo 未定义, 因为boo已被删除而无法访问
     重复的var声明 : 相当于一个赋值操作并不会报错,但不推荐使用
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";
       console.log(box); // abc
-    不使用var定义变量 :相当于给window对象添加属性 
-      使用var声明的变量不可delete,无var修饰的变量则可以,因为delete用于删除对象属性
-      var aoo =1; boo = 2;
-      delete aoo;
-      delete boo;
-      console.log(aoo); // 1
-      console.log(boo); // 报错 boo 未定义
-    连续定义多个变量 : 中间用逗号隔开
+    连续定义多个变量 : 中间用逗号隔开 
       var box="A", age="20", height="175";
+    var 与 逗号,运算符 「moIn 逗号运算符,变量声明」       
+      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
+      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
+      (var aoo);           // Uncaught SyntaxError: Unexpected token var
+      var aoo = 1, window.boo = 2; // Unexpected token .
   literal,字面量: 也叫常量或直接量,即直接显示出来的数据值
     100            //数字字面量
     "abc"          //字符串字面量
@@ -451,14 +449,14 @@ ECMAScript JS核心,语法部分
       var s ="-";
       Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
 引用类型： Object 对象 
-  PS:JS中所有对象都为引用类型,引用类型只包含有对象.(即1对1的等价关系)
-    访问对象的不存在的属性,不会报错,返回值为undefined
-  引用类型值的读、写
-    自我总结
+  PS:JS中所有对象都为引用类型,引用类型只包含有对象,即1对1的等价关系;
+    访问对象的不存在的属性,不会报错,返回值为undefined;
+  引用类型值的读、写 
+    自我总结 
       按引用访问,传递的是指针(引用),一个对象可由多个指针访问.
       覆盖时,则改变指针的指向;
       修改时,改变的是指针指向的实际值.
-    权威说法
+    权威说法 
       引用访问:先从栈中读取内存地址,再通过地址找到堆中的值.
       对象在栈内存中保存一个指向堆(heap)内存中对象位置的指针,由堆内存保存对象
       引用类型赋值时,在堆内存中为这个值分配空间.由于这种值大小不固定、一般占用空间较多
@@ -466,23 +464,25 @@ ECMAScript JS核心,语法部分
       如果存储在栈中,将会影响程序运行的性能；
       保存在堆内存中,
       包含引用类型值的变量实际上包含的并不是对象本身,而是一个指向该对象的指针.
-      从一个变量向另一个变量复制引用类型的值,复制的其实是指针,因此两个变量最终都指向同一个对象.
-    e.g.:
-    引用类型值按引用地址来比较
+      从一个变量向另一个变量复制引用类型的值,复制的其实是指针,
+      因此两个变量最终都指向同一个对象.
+    e.g.: 
+      引用类型值按引用地址来比较
       var aoo={a:1};
       var boo={a:1};
       var coo =boo;
       console.log(aoo == boo);  // fasle,值相同但地址不同
       console.log(aoo === boo); // fasle,值相同但地址不同
       console.log(coo === boo); // true,引用地址相同
-    修改引用类型的值&改变变量的指向
-      var aoo ={ name:'abc', age:19 };
-      var boo =aoo; // aoo 和 boo 指向同一对象
-      boo;      //{name: "abc", age: 19}
-      boo.name ="aaa";//修改堆内存中的对象
-      aoo.name; //aaa
-      aoo =1;   //改变 aoo,不再指向对象
-      boo;      // {name: "aaa", age: 19},boo仍指向对象
+      
+      修改引用类型的值 和 改变变量的指向 
+      var aoo = { name:'abc', age:19 }; // 让 aoo 指向推内存中的一个对象
+      var boo = aoo;   // 使 aoo 和 boo 指向同一对象
+      console.log(boo); // {name: "abc", age: 19}
+      boo.name = "changed"; // 修改堆内存中的对象
+      console.log(aoo.name); // changed,boo的值也随着变化了
+      aoo = 1;          //改变 aoo,不再指向对象
+      console.log(boo);      // {name: "changed", age: 19},boo仍指向对象
     函数是对象
       var foo =function(){ console.log(1); }
       var goo =foo; //表示变量 aoo 和 boo 指向同一函数
@@ -502,61 +502,7 @@ ECMAScript JS核心,语法部分
       obj1和obj3是两个变量名,指向的相同的值---内存中的一个实际对象
       因此修改了obj1的值的同时也改变了obj3的值;
       变量obj2指向的是另外一个对象,只是和obj1有相同的属性而已
-  类: 语言提供的自定义数据类型的机制,用于自定义对象.
-    PS:通过类来定义对象.
-      面向对象语言中 class 关键字声明类,ECMAScript中没有类 [ES6中新增]
-      对象的数据类型是类,对象就是类的具象化.
-    仿造类的实现方式：
-      工厂模式 : 一个返回特定对象类型的函数
-        每次调用工厂函数,都会创建一个新对象
-        e.g. :
-        function createCar(name,color) {
-          var car=new Object();
-          car.name=name;
-          car.color=color;
-          car.showColor=function() { console.log(car.color+" is beautiful"); }
-          return car;
-        }
-        var car1=createCar('法拉利',400,"red");
-        car1;              //{name: "法拉利", color: "red"}
-        car1.showColor();  //red is beautiful
-        问题:创建的多个对象之间无共享内容
-      构造函数方式 : 相当于JS的类(也叫做伪类)
-        e.g. :
-        function Car(name,money,color) {
-          this.name=name;
-          this.money=money;
-          this.color=color;
-          this.showColor=function() { console.log(this.color+' is beautiful'); }
-        }
-        var car1 =new Car('法拉利',400,"red");
-        car1;                    //Car {name: "法拉利", money: 400, color: "red"}
-        car1.showColor();         //red is beautiful
-        特点:在构造函数中,内部无创建对象,而是使用this关键字;
-          使用new运算符调用构造函数时,创建对象实例
-      原型方式(也叫混合的构造函数)
-        用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
-        e.g. :
-        function Car(name,color) { this.name=name; this.color=color; }
-        Car.prototype.showColor=function() {
-          console.log(this.color+" is beautiful");
-        }
-        var car1=new Car("aoo","red");
-        var car2=new Car("boo","blue");
-        console.log(car1.color);  //red
-        console.log(car2.color);  //blue
-      动态原型方式 : 和原型方式相同,唯一不同之处在于对原型方式的优化
-        e.g. :
-        function Car(color,name) {
-          this.color=color;
-          this.name=name;
-          if(typeof Car._initialized=="undefined") {
-            Car.prototype.showColor=function(){ alert(this.color); }
-          }
-          Car._initialized=true;
-        }
-        该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
-  创建对象
+  创建对象 
     PS: ECMA-262 的定义为:无序的名值的合集
       对象一般没有长度,具有多种属性的内容结构 .
       与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类.
@@ -565,7 +511,7 @@ ECMAScript JS核心,语法部分
       对象其实就是一组数据和功能的集合.
       概念类似的有:python的字典,C/C++的散列表,Java的HashMap,PHP的关联数组等.
       对象的种类: JS内置对象(如 Number)、宿主环境(如 window)、自定义(如 {}).
-    对象的表现形式:  键-值(key-value)对
+    对象的表现形式:  键-值「key-value」对
       { 键1:值1, 键2:值2, ... }
       键key: 叫做属性名或方法名;值value:为属性值或方法(函数).
       属性名key 的使用规范
@@ -604,7 +550,6 @@ ECMAScript JS核心,语法部分
             voo2 = 'b' ,
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
-        
     new Object(value); 创建对象
       PS:即使用原生构造函数Object来创建对象
         使用构造函数创建对象需使用new操作符
@@ -638,9 +583,9 @@ ECMAScript JS核心,语法部分
         因此,建议使用Object.create()命令,替代new命令。
         如果不得不使用new,为了防止出错,最好在视觉上把构造函数与其他函数区分开来。
         比如,构造函数的函数名,采用首字母大写(InitialCap),其他函数名一律首字母小写。      
-    自定义构造函数 创建对象
+    自定义构造函数 创建对象 
       function Foo(aoo,boo){ this.azz=aoo; this.bzz=boo; }
-      var obj=new Foo(2,3);
+      var obj = new Foo(2,3);
       obj; //Foo {azz: 2, bzz: 3}
       Remarks:
         和工厂模式比较,构造函数创建的对象可以将其标识为一种特定的类型
@@ -650,7 +595,7 @@ ECMAScript JS核心,语法部分
           var obj= Foo(2,3);
           console.log(azz);
           console.log(bzz);
-    工厂模式  创建对象
+    工厂模式  创建对象 
       PS:工厂模式时软件领域一种广为人知的设计模式
       function createObject(name,age){    // 创建工厂函数
         var obj=new Object();             //创建对象
@@ -668,7 +613,7 @@ ECMAScript JS核心,语法部分
       缺点:
         无法继承
         无法识别对象(获取对象的类型)
-    Object.create() 创建对象(ES5新增)
+    Object.create() 创建对象(ES5新增) 
       var obj =Object.create(obj.__proto__,{新增属性/方法 及特性});
       e.g.
         var aoo = {x:1};
@@ -686,7 +631,7 @@ ECMAScript JS核心,语法部分
 
         var obj=Object.create(Object.prototype);
         obj;  // {} ,创建一个空对象
-   (详参 类)
+    (详参 类)
     e.g.:
       var box=new Object(); //创建一个对象
       box.name='abc';           //给box对象添加name属性并赋值.
@@ -1243,6 +1188,70 @@ ECMAScript JS核心,语法部分
         Number(obj); // 1 2 报错
         分析:调用Number方法时,先调用对象的valueOf方法,再调用其toString方法
           一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
+◆ECMAScript的两种开发模式
+OOP,面向对象 
+  PS：面向对象的编程语言最大的特色就是可以编写自己所需的数据类型,以更好的解决问题
+    从世界观的角度可以认为：
+    面向对象的基本哲学是认为世界是由各种各样具有自己的运动规律和内部状态的对象所组成的；
+    不同对象之间的相互作用和通讯构成了完整的现实世界
+    语言自带的数据类型有限,要表示复杂的数据,需要有复杂的数据类型.则可使用对象表示复杂类型.
+    传统面向对象语言有一个标志,就是类的概念,通过类可以创建任意多个具有相同属性和方法的对象
+  Class 类: 语言提供的自定义数据类型的机制,用于创建对象 
+    PS: 面向对象语言中 class 关键字声明类,ECMAScript中没有类[ES6中新增] 
+      对象的数据类型是类,对象就是类的具象化.
+    仿造类的实现方式：
+    工厂模式 : 一个返回特定对象类型的函数
+      每次调用工厂函数,都会创建一个新对象
+      e.g. :
+      function createCar(name,color) {
+        var car = new Object();
+        car.name = name;
+        car.color = color;
+        car.showColor = function() { 
+          console.log(car.color+" is beautiful"); 
+        }
+        return car;
+      }
+      var car1 = createCar('法拉利',400,"red");
+      car1;              //{name: "法拉利", color: "red"}
+      car1.showColor();  //red is beautiful
+      问题:创建的多个对象之间无共享内容
+    构造函数 : 相当于JS的类,也叫做伪类 
+      e.g. :
+      function Car(name,money,color) {
+        this.name=name;
+        this.money=money;
+        this.color=color;
+        this.showColor=function() { console.log(this.color+' is beautiful'); }
+      }
+      var car1 =new Car('法拉利',400,"red");
+      car1;                    //Car {name: "法拉利", money: 400, color: "red"}
+      car1.showColor();         //red is beautiful
+      特点:在构造函数中,内部无创建对象,而是使用this关键字;
+        使用new运算符调用构造函数时,创建对象实例
+    原型方式,也叫混合的构造函数
+      用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
+      e.g. :
+      function Car(name,color) { this.name=name; this.color=color; }
+      Car.prototype.showColor=function() {
+        console.log(this.color+" is beautiful");
+      }
+      var car1=new Car("aoo","red");
+      var car2=new Car("boo","blue");
+      console.log(car1.color);  //red
+      console.log(car2.color);  //blue
+    动态原型 : 和原型方式相同,唯一不同之处在于对原型方式的优化
+      e.g. :
+      function Car(color,name) {
+        this.color=color;
+        this.name=name;
+        if(typeof Car._initialized=="undefined") {
+          Car.prototype.showColor=function(){ alert(this.color); }
+        }
+        Car._initialized=true;
+      }
+      该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
+函数式,过程化
 -------------------------------------------------------------------------------
 操作符/运算符 
   PS:ECMA-262 描述了一组用于操作数据值的运算符;
@@ -1678,7 +1687,7 @@ ECMAScript JS核心,语法部分
       可以在后面加括号,并立即执行函数的代码。
       加括号是最安全的做法,因为！、+、-等运算符会和函数的返回值进行运算,有时造成不必要的麻烦。
     val/exp , function(){ }() 
-表达式|语句  
+表达式|语句 
   ECMA-262 规定了一组语句,也称为流程控制语句;
   表达式
     解释器会通过计算将表达式转换为一个值.
@@ -1825,7 +1834,7 @@ ECMAScript JS核心,语法部分
       eoo =4
 -------------------------------------------------------------------------------
 ◆标准库--对象  
-数据封装类对象
+数据封装类对象 
   Object  对象,JS中所有对象的父对象
   Boolean 布尔对象:处理布尔值的包装对象
   Number  数值对象:处理数值的包装对象
@@ -2209,7 +2218,7 @@ ECMAScript JS核心,语法部分
       Uint32    4     unsigned int     32 位不带符号的整数             
       Float32   4     float            32 位浮点数                    
       Float64   8     double           64 位浮点数                    
-功能类对象
+功能类对象 
   Function 函数对象
     PS:函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能.
       在 JS 中,“一切皆对象”,数组和函数本质上都是对象.
@@ -2503,10 +2512,14 @@ ECMAScript JS核心,语法部分
           aoo.constructor; //function Number() { [native code] }
         公有属性和私有属性
           function Foo(a){
-            var age =100;    //私有
-            this.name =a;        //公有
-            function goo(){console.log(this.name);} //私有函数
-            this.joo =function(){goo();} //公有方法
+            var age = 100;    //私有
+            function goo(){   //私有函数
+              console.log(this.name);
+            } 
+            this.name = a;        //公有
+            this.joo =function(){ //公有方法
+              goo();
+            } 
           }
           var name ='global';
           var obj =new Foo("abc");
@@ -2584,21 +2597,6 @@ ECMAScript JS核心,语法部分
         Remarks:
           一般递归效率较低,
           一些需要探测或者处理多分支(可能分支又产生分支)的问题,则递归效率较高
-      箭头函数 (ES6新增)
-        PS:匿名函数的简化版
-          箭头函数的this值是绑定了的
-          箭头函数没有arguments对象,若要多参数,则需用...
-        创建箭头函数
-         (arg1,arg2) =>{语句};
-            相当于: function(参数1,参数2){ return 语句 }
-          arg => {语句};  若只有一个参数,可省略圆括号
-         ( ) => {语句};  若没有参数,则不可省略圆括号
-         e.g.
-           var a1 =[1,2,3]
-           var a2 =a1.map(function(n){ return n*n });
-           console.log(a2); // [1, 4, 9]
-           /*等价于*/ var a3 =a1.map(n => n*n);
-           console.log(a3); // [1, 4, 9]
     不具备函数重载
       即当函数名相同时会被覆盖掉(不会因为参数不同而进行区分)
       ECMAScript中的函数,没有像其他高级语言那种函数重载功能.
@@ -3767,7 +3765,7 @@ ECMAScript JS核心,语法部分
     该属性表示当前网页经过了多少次重定向跳转。  
 -------------------------------------------------------------------------------
 其他
-Scope,作用域
+Scope,作用域 
   PS：作用域是在运行时代码中的某些特定部分中变量,函数和对象的可访问性。
     即作用域决定了代码区块中变量和其他资源的可见性。
     作用域还解决了命名问题,在不同作用域中变量名称可以相同。
@@ -4015,7 +4013,7 @@ Scope,作用域
       // Hi! I'm Hammad and I like Cosmology.
       // The value of this is [object Window].
       .bind() 就像.call()函数一样,它允许你传递其余的参数,用逗号分隔;
-JavaScript 核心概念之作用域和闭包
+JavaScript 核心概念之作用域和闭包 
   function_scope 函数对象作用域
     JavaScript 中每个函数都表示为一个函数对象（函数实例）,
     既然是对象,就有相关的属性和方法。

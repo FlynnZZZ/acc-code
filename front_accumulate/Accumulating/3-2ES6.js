@@ -182,7 +182,7 @@ Destructuring,解构赋值
     函数参数的默认值
       function demo({aoo=1}){ console.log(aoo); }
       demo({});
-... 扩展运算符
+... 扩展运算符 
   PS：除了用在rest参数中,还有其他用途
   结合数组使用,把数组的元素用逗号分隔开来,组成一个序列
     function sum(a,b) {

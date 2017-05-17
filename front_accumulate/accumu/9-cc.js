@@ -6,7 +6,7 @@ Cocos Creator
   并且将所有的功能和工具链都整合在了一个统一的应用程序里;
   目前支持发布游戏到Web、Android和iOS,以及点开即玩原生性能的Cocos Play手机页游平台;
   以数据驱动和组件化作为核心的游戏开发方式
-  场景中的内容按照工作流分别呈现在 资源管理器、层级管理器、场景编辑器、属性检查器 四个核心面板中
+  场景中的内容按照工作流分别呈现在'资源管理器''层级管理器''场景编辑器''属性检查器'四个核心面板中
 说明 
   默认单位 
     时间 s,秒
@@ -45,7 +45,21 @@ Cocos Creator
       只有包括了这两个内容的文件夹才能作为 Cocos Creator 项目打开。
       而 project.json 本身目前只用来规定当前使用的引擎类型和插件存储位置,不需要用户关心其内容。
       这个文件也应该纳入版本控制。
-  术语
+  概念_术语_说明_自定义 
+    原型对象：调用 cc.Class 时传入的字面量参数
+    实例成员：包含“成员变量”和“成员方法” 
+    静态成员：包含“静态变量”和“类方法”
+    运行时  ：项目脱离编辑器独立运行时,或者在模拟器和浏览器里预览的时候
+    序列化  ：解析对象,将其信息编码为特殊的字符串,以便保存到硬盘上或传输到其它地方 
+      编译?
+    静态变量：static variable
+    类方法  ：static method,也叫静态方法
+    实例成员：instance member
+    成员变量：member variable
+    成员方法：instance method
+    self
+    ccNode  cc中的节点
+    ccClass cc.Class 声明的类
 组件化开发 
   PS：脚本以组件的形式添加到节点上
   脚本的一般形式
@@ -1417,11 +1431,11 @@ UI系统
   碰撞系统脚本控制
 --------------------------------------------------------------------------------
 JS脚本 
-  PS：打开的脚本里会预置一些代码,也是编写一个组件脚本所需的结构,
-    具有该结构的脚本就是 Cocos Creator 中的脚本组件,
-    能够挂载到场景中的节点上,提供控制节点的各种功能;
-    代码中 properties 的数值可之后直接在属性检查器中设置;
-    当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
+  ◆结构 
+    PS：打开的脚本里会预置一些代码,也是编写一个组件脚本所需的结构,
+      具有该结构的脚本就是 Cocos Creator 中的脚本组件,
+      能够挂载到场景中的节点上,提供控制节点的各种功能;
+      当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
   一份简单的组件脚本如下：
     cc.Class({
         extends: cc.Component,
@@ -1429,18 +1443,8 @@ JS脚本
         onLoad: function () { },
         update: function (dt) { },
     });
-  cc.Class(paramsObj) 声明 Cocos Creator 中的类
-    PS：后续将 cc.Class 声明的类叫做 CCClass; 
-      原型对象：调用 cc.Class 时传入的字面量参数
-      实例成员：包含“成员变量”和“成员方法” 
-      静态成员：包含“静态变量”和“类方法”
-      运行时  ：项目脱离编辑器独立运行时,或者在模拟器和浏览器里预览的时候
-      序列化  ：解析对象,将其信息编码为特殊的字符串,以便保存到硬盘上或传输到其它地方
-      静态变量：static variable
-      类方法  ：static method,也叫静态方法
-      实例成员：instance member
-      成员变量：member variable
-      成员方法：instance method
+  ◆类
+  cc.Class(paramsObj) 声明cc中的类 
     e.g.: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量 
       同时还将类名设为 "sprite",类名用于序列化,一般可以省略。
       var Sprite = cc.Class({
@@ -1491,29 +1495,24 @@ JS脚本
           disallowMultiple: true
         }
       });
-  类名 
-    可以是任意字符串,但不允许重复。
-    可以使用 cc.js.getClassName 来获得类名,
-    使用 cc.js.getClassByName 来查找对应的类。
+  class_name 类名 
+    cc.js.getClassName   获取类名 
+    cc.js.getClassByName 通过类名来查找类
     对在项目脚本里定义的组件来说,序列化其实并不使用类名,因此不需要指定类名。
     对其他类来说,类名用于序列化,若不需要序列化,类名可以省略。
-  静态变量和静态方法
-    静态变量或静态方法可以在原型对象的 statics 中声明
+  statics 静态变量和静态方法声明
     var Sprite = cc.Class({
       statics: {
-        // 声明静态变量
-        count: 0,
-        // 声明静态方法
-        getBounds: function (spriteList) {
+        count: 0, // 声明静态变量
+        getBounds : function(spriteList){ // 声明静态方法
           // ...
         }
       }
     });
-    // 上面的代码等价于：
+    // 相当于 ：
     var Sprite = cc.Class({ ... });
     Sprite.count = 0; // 声明静态变量
-    // 声明静态方法
-    Sprite.getBounds = function (spriteList) {
+    Sprite.getBounds = function(spriteList) { // 声明静态方法
       // ...
     };
     
@@ -1545,29 +1544,30 @@ JS脚本
       };
     });
   ctor 构造函数 
-    为了保证反序列化能始终正确运行,CCClass 的构造函数不允许定义构造参数。
+    为了保证反序列化能始终正确运行,ccClass 的构造函数不允许定义构造参数。
     开发者若确实需要使用构造参数,可以通过 arguments 获取,
-    但要记得若这个类会被序列化,必须保证构造参数都缺省的情况下仍然能 new 出对象。
+    但要记得若这个类会被序列化,必须保证构造参数都缺省的情况下仍然能new出对象
     var Sprite = cc.Class({
       ctor : function () {
         cc.log(this instanceof Sprite);    // true
       }
     });
-  实例变量 声明
-    在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看。
+  实例变量 在构造函数中声明 
+    在构造函数中定义的实例变量不能被序列化,也不能在 属性检查器 中查看 
     若是私有的变量,建议在变量名前面添加下划线 _ 以示区分。
     var Sprite = cc.Class({
-      ctor: function () {
+      ctor : function () {
         // 声明实例变量并赋默认值
         this.url = "";
         this.id = 0;
       }
     });
-  实例方法 声明 
-    直接在原型对象中声明实例方法
+  实例方法 原型对象中声明 
     var Sprite = cc.Class({
+      // 直接在原型对象中声明实例方法
       // 声明一个名叫 "foo" 的实例方法
       foo : function() { 
+        // ...
       }
     });
     
@@ -1588,7 +1588,7 @@ JS脚本
       extends : Shape
     });
     
-    继承后,CCClass 会统一自动调用父构造函数,不需显式调用
+    继承后,ccClass 会统一自动调用父构造函数,不需显式调用
     var Shape = cc.Class({
       ctor: function () {  // 实例化时,父构造函数会自动调用,
         cc.log("Shape");    
@@ -1621,7 +1621,7 @@ JS脚本
     cc.log(obj.getName());    // "rect"
     
     在子类中调用父类的成员方法
-    方法一：使用 CCClass 封装的 this._super：
+    方法一：使用 ccClass 封装的 this._super：
     var Shape = cc.Class({
       getName: function () {
         return "shape";
@@ -1656,12 +1656,13 @@ JS脚本
     });
     var obj = new Rect();
     cc.log(obj.getName());    // "shape rect"
-  cc.js.extend 更底层第继承API
-    若实现继承的父类和子类都不是 CCClass,只是原生的 JavaScript 构造函数,
+  cc.js.extend 更底层的继承API 
+    若实现继承的父类和子类都不是 ccClass,只是原生的 JavaScript 构造函数,
     可以使用该API来实现;
   properties 属性声明 
     PS：特殊的实例变量,能够显示在 属性检查器 中,也能被序列化;
       在 cc.Class 的 properties 字段中声明属性,填写属性名字和属性参数即可;
+      代码中 properties 的数值可之后直接在属性检查器中设置;
     值类型 和 引用类型 属性
       根据变量使用内存位置不同分类
       值类型属性：包括数字、字符串、枚举等简单的占用很少内存的变量类型
@@ -1698,7 +1699,7 @@ JS脚本
         用来给已定义的属性附加元数据,
         类似于脚本语言的 Decorator 或者 C# 的 Attribute。
       default 参数 用于声明属性的默认值
-        PS：声明了默认值的属性会被 CCClass 实现为成员变量。
+        PS：声明了默认值的属性会被 ccClass 实现为成员变量。
           默认值只有在第一次创建对象的时候才会用到,
           也就是说修改默认值时,并不会改变已添加到场景里的组件的当前值。
           当在编辑器中添加了一个组件以后,再回到脚本中修改一个默认值的话,
@@ -1863,7 +1864,7 @@ JS脚本
       }
     属性和构造函数 
       不在构造函数里定义,构造函数被调用前,属性已被赋为默认值了,可在构造函数内访问到;
-      若属性默认值无法在定义 CCClass 时提供,需在运行时获得,
+      若属性默认值无法在定义 ccClass 时提供,需在运行时获得,
       也可在构造函数中重新给属性赋默认值。
       属性被反序列化的过程紧接着发生在构造函数执行之后,
       因此构造函数中只能获得和修改属性的默认值,而无法获得和修改之前保存的值。
@@ -1928,7 +1929,7 @@ JS脚本
       module.exports = Item;
       这种方式就是将 properties 指定为一个 ES6 的箭头函数「lambda 表达式」,
       箭头函数的内容在脚本加载过程中并不会同步执行,
-      而是会被 CCClass 以异步的形式在所有脚本加载成功后才调用。
+      而是会被 ccClass 以异步的形式在所有脚本加载成功后才调用。
       因此加载过程中并不会出现循环引用,属性都可以正常初始化。
       箭头函数的用法符合 JavaScript 的 ES6 标准,
       并且 Creator 会自动将 ES6 转义为 ES5,而不用担心浏览器的兼容问题。
@@ -2094,7 +2095,7 @@ JS脚本
           }
         }
       }
-  cc.isChildClassOf(cla1,cla2) 判断两个类的继承关系
+  cc.isChildClassOf(cla1,cla2) 判断两个类的继承关系 
     两个传入参数都必须是类的构造函数,而不是类的对象实例。
     若传入的两个类相等,isChildClassOf 同样会返回 true。
     var Texture = cc.Class();
@@ -2102,7 +2103,7 @@ JS脚本
         extends: Texture
     });
     cc.log(cc.isChildClassOf(Texture2D, Texture));   // true
-  new ccClass() 实例化
+  new ccClass() 实例化 
     var obj = new Sprite();
   instanceof 判断类型「原生JS方法」
     cc.log(obj instanceof Sprite);       // true
@@ -2116,125 +2117,123 @@ JS脚本
     var base = new Base();
     cc.log(base instanceof Sub);      // false
   访问节点和组件
-    PS：可在 属性检查器 里修改节点和组件,也能在脚本中动态修改。
-      动态修改的好处是能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
+    PS：可在 属性检查器 里修改节点和组件,也能在脚本中动态修改,
+      动态修改则能够在一段时间内连续地修改属性、过渡属性,实现渐变效果。
       脚本还能够响应玩家输入,能够修改、创建和销毁节点或组件,实现各种各样的游戏逻辑。
-      要实现这些效果,你需要先在脚本中获得你要修改的节点或组件。
-    this.node 获得组件所在的节点
-      在组件方法里访问  
+  this.node 「在组件方法里访问」获得组件所在的节点 
+    start : function () {
+      var node = this.node;
+      node.x = 100;
+    }
+  getComponent() 获得同一个节点上的其它组件 
+    start : function () {
+      var label = this.getComponent(cc.Label);
+      var text = this.name + ' started';
+      label.string = text;  // Change the text in Label Component
+    }
+    也可为 getComponent 传入一个类名「脚本文件名」
+      var label = this.getComponent("cc.Label");
+      对用户定义的组件而言,类名就是脚本文件名,并且区分大小写。
+      例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
+      var rotate = this.getComponent("SinRotate");
+    在节点上也有一个 getComponent 方法,它们的作用是一样的：
       start: function () {
-        var node = this.node;
-        node.x = 100;
+        var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
+        cc.log(bool);  // true
       }
-    getComponent 获得同一个节点上的其它组件
+    若在节点上找不到指定的组件,getComponent 将返回 null,
+      若你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
+      因此若不确定组件是否存在,可判断一下：
       start: function () {
         var label = this.getComponent(cc.Label);
-        var text = this.name + ' started';
-        label.string = text;  // Change the text in Label Component
+        if (label) {
+          label.string = "Hello";
+        }
+        else {
+          cc.error("Something wrong?");
+        }
       }
-      也可为 getComponent 传入一个类名「脚本文件名」
-        var label = this.getComponent("cc.Label");
-        对用户定义的组件而言,类名就是脚本文件名,并且区分大小写。
-        例如 "SinRotate.js" 里声明的组件,类名就是 "SinRotate"。
-        var rotate = this.getComponent("SinRotate");
-      在节点上也有一个 getComponent 方法,它们的作用是一样的：
-        start: function () {
-          var bool = this.node.getComponent(cc.Label) === this.getComponent(cc.Label)
-          cc.log(bool);  // true
+  获得其它节点及其组件 
+    PS：脚本通常还需要进行多个节点之间的交互。
+      例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
+      Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
+  通过'属性检查器'设置节点
+    最直接的方式就是在 属性检查器 中设置你需要的对象。
+    以节点为例,只需要在脚本中声明一个 type 为 cc.Node 的属性：
+    // Cannon.js
+    cc.Class({
+      extends: cc.Component,
+      properties: {
+        player: {  // 声明一个 player 属性
+          default: null, // 默认值为 null
+          type: cc.Node  // 对象类型为 cc.Node
         }
-      若在节点上找不到指定的组件,getComponent 将返回 null,
-        若你尝试访问 null 的值,将会在运行时抛出 "TypeError" 这个错误。
-        因此若不确定组件是否存在,可判断一下：
-        start: function () {
-          var label = this.getComponent(cc.Label);
-          if (label) {
-            label.string = "Hello";
-          }
-          else {
-            cc.error("Something wrong?");
-          }
+      }
+    });
+    // 相当于在其它语言里声明了 public cc.Node player = null;
+    接着就可将层级管理器上的任意一个节点拖到该 Player 控件;
+    建立引用后,就可直接在脚本里访问 player 节点了.
+    // Cannon.js
+    var Player = require("Player");
+    cc.Class({
+      extends: cc.Component,
+      properties: {
+        player: { // 声明 player 属性
+          default: null,
+          type: cc.Node
         }
-    获得其它节点及其组件  --todo
-      PS：脚本通常还需要进行多个节点之间的交互。
-        例如,一门自动瞄准玩家的大炮,就需要不断获取玩家的最新位置。
-        Cocos Creator 提供了一些不同的方法来获得其它节点或组件。
-      利用属性检查器设置节点
-        最直接的方式就是在 属性检查器 中设置你需要的对象。
-        以节点为例,只需要在脚本中声明一个 type 为 cc.Node 的属性：
-        // Cannon.js
-        cc.Class({
-          extends: cc.Component,
-          properties: {
-            player: {  // 声明一个 player 属性
-              default: null, // 默认值为 null
-              type: cc.Node  // 对象类型为 cc.Node
-            }
+      },
+      start: function () {
+        var playerComp = this.player.getComponent(Player);
+        this.checkPlayer(playerComp);
+      },
+      // ...
+    });
+    利用属性检查器设置组件
+      拖动节点 "Player Node" 到 属性检查器,
+      player 属性就会被设置为这个节点里面的 Player 组件。
+      这样就不需要再自己调用 getComponent 啦。
+      // Cannon.js
+      var Player = require("Player");
+      cc.Class({
+        extends: cc.Component,
+        properties: {
+          player: {   // 声明 player 属性,这次直接是组件类型
+            default: null,
+            type: Player
           }
-        });
-        // 相当于在其它语言里声明了 public cc.Node player = null;
-        接着就可将层级管理器上的任意一个节点拖到该 Player 控件;
-        建立引用后,就可直接在脚本里访问 player 节点了.
-        // Cannon.js
-        var Player = require("Player");
-        cc.Class({
-          extends: cc.Component,
-          properties: {
-            player: { // 声明 player 属性
-              default: null,
-              type: cc.Node
-            }
-          },
-          start: function () {
-            var playerComp = this.player.getComponent(Player);
-            this.checkPlayer(playerComp);
-          },
-          // ...
-        });
-      利用属性检查器设置组件
-        拖动节点 "Player Node" 到 属性检查器,
-        player 属性就会被设置为这个节点里面的 Player 组件。
-        这样就不需要再自己调用 getComponent 啦。
-        // Cannon.js
-        var Player = require("Player");
-        cc.Class({
-          extends: cc.Component,
-          properties: {
-            player: {   // 声明 player 属性,这次直接是组件类型
-              default: null,
-              type: Player
-            }
-          },
-          start: function () {
-            var playerComp = this.player;
-            this.checkPlayer(playerComp);
-          },
-          // ...
-        });
-        还可以将属性的默认值由 null 改为数组[],这样就能在 属性检查器 中同时设置多个对象。
-        不过若需要在运行时动态获取其它对象,还需要用到下面介绍的查找方法。
-    查找子节点 
-      PS：有时候,游戏场景中会有很多个相同类型的对象,像是炮塔、敌人和特效,
-        它们通常都有一个全局的脚本来统一管理。
-        若用 属性检查器 来一个一个将它们关联到这个脚本上,那工作就会很繁琐。
-        为了更好地统一管理这些对象,我们可以把它们放到一个统一的父物体下,
-        然后通过父物体来获得所有的子物体：
-      getChildren  cc.Node 原有的一个 API,可以获得一个包含所有子节点的数组。
-        // CannonManager.js
-        cc.Class({
-          extends: cc.Component,
-          start: function () {
-            this.cannons = [];
-            this.cannons = this.node.getChildren();
-          }
-        });
-      getChildByName() 
-        this.node.getChildByName("Cannon 01");
-      cc.find  根据传入的路径进行逐级查找 
-        若子节点的层次较深,可使用 cc.find 
-        cc.find("Cannon 01/Barrel/SFX", this.node);
-        当 cc.find 只传入第一个参数时,将从场景根节点开始逐级查找：
-        this.backNode = cc.find("Canvas/Menu/Back");
-  访问已有变量里的值
+        },
+        start: function () {
+          var playerComp = this.player;
+          this.checkPlayer(playerComp);
+        },
+        // ...
+      });
+      可将属性的默认值由 null 改为数组[],则可在'属性检查器'中同时设置多个对象
+      不过若需要在运行时动态获取其它对象,还需要用到其他的查找方法
+  查找子节点 
+    PS：有时候,游戏场景中会有很多个相同类型的对象,像是炮塔、敌人和特效,
+      它们通常都有一个全局的脚本来统一管理。
+      若用 属性检查器 来一个一个将它们关联到这个脚本上,那工作就会很繁琐。
+      为了更好地统一管理这些对象,我们可以把它们放到一个统一的父物体下,
+      然后通过父物体来获得所有的子物体：
+  getChildren  cc.Node 原有的一个 API,可以获得一个包含所有子节点的数组。
+    // CannonManager.js
+    cc.Class({
+      extends: cc.Component,
+      start: function () {
+        this.cannons = [];
+        this.cannons = this.node.getChildren();
+      }
+    });
+  ccNode.getChildByName()  通过节点名称查找子节点
+    this.node.getChildByName("Cannon 01");
+  cc.find  根据传入的路径进行逐级查找 
+    若子节点的层次较深,可使用 cc.find 
+    cc.find("Cannon 01/Barrel/SFX", this.node);
+    当 cc.find 只传入第一个参数时,将从场景根节点开始逐级查找：
+    this.backNode = cc.find("Canvas/Menu/Back");
+  访问已有变量里的值 
     若你已经在一个地方保存了节点或组件的引用,你也可以直接访问它们,一般有两种方式：
     通过全局变量访问
       PS：谨慎地使用全局变量,并不推荐滥用全局变量,即使要用也最好保证全局变量只读 
@@ -2299,7 +2298,7 @@ JS脚本
           Global.backLabel.string = text;
         }
       });
-  常用节点和组件接口
+  常用节点和组件接口 
     节点状态和层级操作
       假设我们在一个组件脚本中,通过 this.node 访问当前脚本所在节点。
       this.node.active = false;  关闭节点 
@@ -2366,7 +2365,7 @@ JS脚本
       mySprite.node.color = cc.Color.RED;
       设置不透明度：
       mySprite.node.opacity = 128;
-  cc.Component 所有组件的基类
+  cc.Component 所有组件的基类 
     任何组件都包括如下的常见接口「假设我们在该组件的脚本中,以 this 指代本组件」
     this.node    该组件所属的节点实例
     this.enabled 是否每帧执行该组件的 update 方法,同时也用来控制渲染组件是否显示

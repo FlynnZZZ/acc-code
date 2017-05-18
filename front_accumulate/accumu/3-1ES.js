@@ -1834,17 +1834,17 @@ OOP,面向对象
       eoo =4
 -------------------------------------------------------------------------------
 ◆标准库--对象  
-数据封装类对象 
+数据封装类对象  
   Object  对象,JS中所有对象的父对象
   Boolean 布尔对象:处理布尔值的包装对象
   Number  数值对象:处理数值的包装对象
   String  字符对象:处理字符串的包装对象
   Array   数组对象 
-    PS:数组是JS内置的一种特殊类型的对象
+    PS:数组是JS内置的一种特殊类型的对象 
        可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象
        JS中的Array类型和其他语言中的数组区别很大,数组的元素可以保存任何类型
        数组是一种特殊的对象,凡是对象有的性质,数组都有
-    创建数组
+    创建数组 
       [] 字面量创建
          空数组:var arr=[];
          带有元素的数组:var arr=[1,2,3,3,2]
@@ -1897,7 +1897,7 @@ OOP,面向对象
         console.log(arr2); // []
         console.log(0 in arr1); // true
         console.log(0 in arr2); // false
-    ◆信息查询
+    ◆信息查询 
       arr.length; 读写长度
         返回值类型为数值,表示arr元素的个数
         设置数组长度
@@ -1923,7 +1923,7 @@ OOP,面向对象
         返回值为下标值,若找不到则返回-1
       arr.lastIndexOf(elem); 从右到左查找 [ES5+]
       Array.isArray(arr) 表示是否为数组的布尔值 [ES5+]
-    ◆以元素为单位操作
+    ◆以元素为单位操作 
       arr[i-1]  取/设数组元素
         下标从0开始
       arr.push(元素1,元素1,...);  末尾添加新元素,会改变原数组
@@ -1950,7 +1950,7 @@ OOP,面向对象
         delete aoo[1];
         console.log(aoo);  //[1, undefined, 3]
         aoo.length; // 3
-    ◆以数组为单位操作元素
+    ◆以数组为单位操作元素 
       arr.splice(begin,num[,item1[,item2[,...]]]); 删除替换原数组
         PS:删除num个元素,使用用参数列表中声明的一个或多个值从被删除的元素处插入
           该方法会改变原数组
@@ -2018,7 +2018,7 @@ OOP,面向对象
             return val1-val2;
           })
           console.log(aoo); // [2, 4, 5, 17]
-    ◆其他操作
+    ◆其他操作 
       arr.join(str);   使用str串连每个元素,返回结果字符串
         str 可选,表示用于连接的字符串,默认为逗号,
         e.g.
@@ -2029,7 +2029,7 @@ OOP,面向对象
           function repeatStr(str,n){ return new Array(n+1).join(str); };
           repeatStr("a",6); // "aaaaaa"
     ◆修改数组
-    ◆获取部分
+    ◆获取部分 
       var newArr=arr.filter(function(v,i,arr){}[,thisArg]); 过滤数组 [ES5+]
         Arguments:
           func 调用的函数,参数为: val元素 index下标 arr原数组
@@ -2041,7 +2041,7 @@ OOP,面向对象
         var arr=[10,2,34,4,11,12];
         var res=arr.filter(function(x){return x<12;});
         console.log(res); // [10, 2, 4, 11]
-    ◆获取其他
+    ◆获取其他 
       arr.reduce(func[,initialValue]); 条件缩减,返回一个新数组 [ES5+]
         PS:接收一个函数作为累加器,数组中的每个值(从左到右)开始缩减,最终为一个值
           为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素
@@ -2066,37 +2066,48 @@ OOP,面向对象
           console.log(arr); // [1, 2, 3, 4, 5]
           console.log(res); // 15
       arr.reduceRight(); 和reduce类似,只是从右到左遍历 [ES5+]
-    ◆遍历数组元素: 循环访问元素叫遍历
-      arr.forEach(cfoo[, thisArg]); 对数组的每个元素执行操作
+    ◆遍历数组元素: 循环访问元素叫遍历 
+      arr.forEach(cfoo[, thisArr]); 对数组的每个元素执行操作 「ES5+」
         PS:forEach 方法按顺序为数组中含有效值的每一项执行一次cfoo 函数,
           那些已删除(使用delete方法等情况)或者从未赋值的项将被跳过
          (而值为 undefined 的项则不会被跳过).
           无法中止或跳出forEach循环,除非报错.
-         (ES5新增)
-        Arguments:
-          cfoo 函数为每个元素执行,接收三个参数：
-            value 可选,元素
-            index 可选,元素的索引
-            arr   可选,数组对象本身
-          thisArg 可选,表示数组本身,当执行回调函数时用作this的值(参考对象).
-            如果给forEach传递了thisArg 参数,它将作为 cfoo 函数的执行上下文,
-            类似执行如下函数cfoo.call(thisArg, element, index, array).
-            如果 thisArg 值为 undefined 或 null,
-            函数的 this 值取决于当前执行环境是否为严格模式,
-            严格模式下为 undefined,非严格模式下为全局对象.
+        cfoo    函数为每个元素执行,接收三个参数：
+          value 可选,元素
+          index 可选,元素的索引
+          arr   可选,数组对象本身
+        thisArr 可选,表示数组本身,当执行回调函数时用作this的值「参考对象」.
+          如果给forEach传递了thisArg 参数,它将作为 cfoo 函数的执行上下文,
+          类似执行如下函数cfoo.call(thisArg, element, index, array).
+          如果 thisArg 值为 undefined 或 null,
+          函数的 this 值取决于当前执行环境是否为严格模式,
+          严格模式下为 undefined,非严格模式下为全局对象.
+          function Counter() {
+            this.sum = 0;
+            this.count = 0;
+          }
+          Counter.prototype.add = function(array) {
+            array.forEach(function(entry) {
+              this.sum += entry;
+              ++this.count;
+            }, this);
+            console.log(this); // Counter {sum: 16, count: 4}
+          };
+          var obj = new Counter();
+          obj.add([1, 3, 5, 7]);
+          console.log(obj.count); // 4
+          console.log(obj.sum);   // 16
         Remarks:
           forEach 遍历的范围在第一次调用 cfoo 前就会确定,
           调用forEach 后添加到数组中的项不会被 cfoo 访问到,
           如果已经存在的值被改变,则传递给 cfoo 的值是 forEach 遍历到他们那一刻的值,
           已删除的项不会被遍历到.
-      arr.map(func[,thisArg]);  元素遍历调用方法,返回新数组 [ES5新增]
-        Arguments:
-          func   对数组arr的每个元素调用函数 func
-            currVal  数组中当前被传递的元素
-            index    数组中当前被传递的元素的索引
-            arr      调用 map 方法的数组
-          thisArg 可选,数组本身
-            执行 callback 函数时 this 指向的对象.
+      arr.map(cfoo[,thisArg]);  元素遍历调用方法,返回新数组「ES5+」 
+        cfoo   对数组arr的每个元素调用函数 cfoo
+          val    数组中当前被传递的元素
+          indx   数组中当前被传递的元素的索引
+          arr    调用 map 方法的数组
+        thisArg 可选,数组本身, 执行 callback 函数时 this 指向的对象.
         RetValue:由回调函数的返回值组成的一个新数组
         e.g.
           arr = [1,2,3];
@@ -2181,7 +2192,7 @@ OOP,面向对象
       而第二维才是实际存放他们的内容
       使用JSON 序列化与反序列化来复制(?)
   ArrayBuffer 二进制数组 
-    PS:JavaScript操作二进制数据的接口;
+    PS:JavaScript操作二进制数据的接口; 
       二进制数组由三个对象组成,这些对象早就存在,属于独立的规格,
       ES6将它们纳入了ECMAScript规格,并增加了新的方法;
       这些对象原始的设计目的,与WebGL项目有关。
@@ -2205,7 +2216,7 @@ OOP,面向对象
       比如 Uint8Array (无符号8位整数)数组视图, 
       Int16Array (16 位整数)数组视图, 
       Float32Array (32 位浮点数)数组视图等等
-    DataView    用来生成内存的视图,可以自定义格式和字节序
+    DataView    用来生成内存的视图,可以自定义格式和字节序 
       比如第一个字节是Uint8(无符号8位整数)、第二个字节是Int16(16 位整数)、
       第三个字节是Float32(32 位浮点数)等等。
     数据类型 字节长度  对应的C语言类型    含义 

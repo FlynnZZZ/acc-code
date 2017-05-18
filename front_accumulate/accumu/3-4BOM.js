@@ -660,26 +660,28 @@ window的属性对象
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
       每次修改location的属性「hash除外」,页面都会以新URL重新加载,且生成一条历史记录
-    location.href      取/设整个url
+    location.href      读写整个url
       返回值为当前的位置
       e.g. :
       location.href = 'https://www.baidu.com'; //当前网页跳转到百度
-    location.hash      取/设URL锚点部分(若该部分存在,否则返回空字符串)(#后面的部分)
-    location.host      主机名:端口名(域名+端口(默认端口就不写出))
-    location.hostname  取/设 主机名/服务器名
-    location.pathname  取/设 路径名(URL中的目录和文件名)
-    location.port      取/设 端口号(若url中不包含端口号则返回空字符串)
-    location.protocol  协议(通常是 http: 或 https:)
-    location.search    取/设URL的查询字符串(以问号?开头)
-    location.assign(url);  跳转到指定页面
+    location.hash      读写URL锚点部分「#后面的部分」「若无返回''」
+    location.host      主机名:端口名「省略默认的80端口」
+    location.hostname  读写 主机名/服务器名
+    location.pathname  读写 路径名(URL中的目录和文件名)
+    location.port      读写 端口号「若url中不包含端口号则返回''」
+    location.protocol  协议「通常是 http: 或 https:」
+    location.search    读写URL的查询字符串「以问号?开头的部分,包括?」
+      'https://www.baidu.com/?aoo=2&boo=c'
+      location.search;   //  "?aoo=2&boo=c"
+    location.assign(url)   跳转到指定页面
       location.assign('https://www.baidu.com')    //跳转到百度主页
       以下两行代码与显示调用assign()方法效果完全一样(会调用assign方法)
       window.location ="https://www.baidu.com";
       location.href ="https://www.baidu.com";
-    location.replace(url); 跳转到指定页面,无历史记录,不可后退
+    location.replace(url)  跳转到指定页面,无历史记录,不可后退
       e.g. :
       location.replace('https://www.baidu.com'); // 跳转到百度
-    location.reload();     重载当前url
+    location.reload()      重载当前url
       location.reload();
       最有效的重新加载,有可能从缓存加载(即页面自从上次请求以来并没有改变过)
       location.reload(true);
@@ -872,7 +874,7 @@ window的属性对象
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
   window.frames    包含窗口所有框架的一个数组
-  客户端检测(详细见 JavaScript高级程序设计 228 页) 
+  客户端检测「详细见 JavaScript高级程序设计 228 页」 
     PS:
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
       更是一种很难过行之有效的开发策略;

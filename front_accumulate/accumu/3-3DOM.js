@@ -1169,10 +1169,12 @@ DOM操作归纳总结
       事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡.
     Netscape的事件流是事件捕获,从外向内传递
       事件从最外层浏览器向内(从外向内)传递,直到传递到触发事件的该元素为止.
-事件支持检测
-  var div = document.createElement('div'),
-  supportTouch = 'ontouchstart' in div,   //是否支持触摸事件
-  supportOtc = 'onorientationchange' in window; //是否支持方向转换事件
+事件支持检测 
+  var div = document.createElement('div');
+  //是否支持触摸事件
+  console.log('ontouchstart' in div);            // false
+  //是否支持方向转换事件
+  console.log('onorientationchange' in window);  // false
 事件绑定、解绑及触发 
   PS:响应某个事件的函数就叫做事件处理程序(或事件侦听器)
     事件处理程序的名字以"on"开头加上事件名

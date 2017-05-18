@@ -87,34 +87,28 @@ DOM,Document Object Model 文档对象模型
     JS中所有节点类型都继承自Node类型,都有一个 nodeType 属性表明节点的类型
     并非所有节点类型都受到Web浏览器的支持,最常用的节点类型为 元素节点 和 文本节点
     后续使用 nod 来表示一个 Node类型 的实例 (SelfSet)
-节点说明 
-  ◆共有12种
-  PS:IE没有公开Node类型的构造函数,因此IE中不可使用如 Node.DOCUMENT_NODE 来进行判断,
-    为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
-  Node.DOCUMENT_NODE;     9,表示文档的根节点
-  Node.ELEMENT_NODE;      1,元素节点,用于表示HTML元素
-  Node.TEXT_NODE;         3,元素的文本内容
-  Node.PROCESSING_INSETUCTION_NODE; 7,文档处理程序使用的特有指令
-  Node.COMMENT_NODE;                8,表示一个注释,形式为<!-- comment text -->
-  Node.DOCUMENT_TYPE_NODE;          10,文档类型的定义
-  Node.DOCUMENT_FRAGMENT_NODE;      11,文档片段
-  DOM4已弃用的节点类型
-    Node.ATTRIBUTE_NODE;  // 2,元素的耦合属性
-    Node.CDATA_SECTION_NODE;  // 4,在XML文档中表示Character Data(字符数据)部分
-    Node.ENTITY_REFERENCE_NODE; // 5,表示一个实体引用
-    Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
-    Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
-  e.g. :  document.nodeType == Node.DOCUMENT_NODE;  // true
-  ◆节点关系:
-  文档中所有的节点之间都存在则关系.
-  同一类型节点间的关系可类比为家族关系,
-  HTML 的子元素中有 body,body 的同胞元素有 head.
-  虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
-属性、方法 
-  nod.nodeName;   名称(具体定义取决于节点的类型)
-    元素节点返回元素名称(大写字母)
-    属性节点返回属性名称;
-    文本节点返回 #text
+    文档中所有的节点之间都存在着关系,同一类型节点间的关系可类比为家族关系,
+    HTML 的子元素中有 body,body 的同胞元素有 head ... 等等
+    虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
+  nod.nodeType  节点类型「共12种」
+    PS:IE中不可使用如 Node.DOCUMENT_NODE 来进行判断「IE没有公开Node类型的构造函数」,
+      为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
+    Node.DOCUMENT_NODE     9,文档的根节点
+    Node.ELEMENT_NODE      1,元素节点 
+    Node.TEXT_NODE         3,文本节点,元素的文本内容
+    Node.PROCESSING_INSETUCTION_NODE; 7,文档处理程序使用的特有指令
+    Node.COMMENT_NODE;     8,注释节点,表示一个注释,形式为<!-- comment text -->
+    Node.DOCUMENT_TYPE_NODE;       10,文档类型的定义
+    Node.DOCUMENT_FRAGMENT_NODE;   11,文档片段
+    DOM4已弃用的节点类型
+      Node.ATTRIBUTE_NODE;  // 2,元素的耦合属性
+      Node.CDATA_SECTION_NODE;  // 4,在XML文档中表示Character Data(字符数据)部分
+      Node.ENTITY_REFERENCE_NODE; // 5,表示一个实体引用
+      Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
+      Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
+    e.g. :  document.nodeType == Node.DOCUMENT_NODE;  // true
+  nod.nodeName  节点名称「不同类型节点返回的形式不同」
+    元素节点返回大写字母表示的元素名称; 属性节点返回属性名称; 文本节点返回 #text;
   nod.nodeValue;  值(具体定义取决于节点的类型)
     元素节点无value值,返回null;
     属性节点返回属性值;
@@ -123,7 +117,7 @@ DOM,Document Object Model 文档对象模型
     使用下标访问属性节点,遍历时是从后向前的.
     使用属性名直接得到对应的属性节点
     e.g. box.attributes['title']
-  ◆节点关系 属性/方法
+  ◆节点关系类
   nod.childNodes; 返回值为 NodeList 类数组对象,保存着一组有序的节点
     当nod为元素节点时,其子节点有可能是元素、文本节点、注释或处理指令.
       且不同的浏览器在看待这些节点方面存在显著的不同
@@ -138,7 +132,7 @@ DOM,Document Object Model 文档对象模型
   nod.firstChild;    第一个子节点(若没有子节点则为null)
   nod.lastChild;     最后一个子节点(若没有子节点则为null)
   nod.ownerDocument;   表示整个文档的文档节点即document
-  ◆父 子 节点操作
+  ◆节点操作
   Nod.hasChildNodes(nod); 是否包含节点
   Nod.appendChild(nod); 在父节点 Nod 内的最后位置添加一个子节点 nod
     若子nod为文档中的节点,则是移动操作(原位置消失,在插入位置出现)
@@ -887,9 +881,10 @@ DOM操作归纳总结
     nod.cloneNode(bool); 复制节点「详见: Node节点」 
   获取 elem 
     快捷方法获取
-      document.documentElement  表示整个HTML
-      document.head HTML的head节点
+      document.documentElement  HTML元素
       document.body HTML的body
+        等价于 document.querySelector("body");
+      document.head HTML的head节点
       id名称 JS中直接使用元素的id名称即代表该元素
         前提是id名称是一符合标准的变量名称
         e.g.:
@@ -930,11 +925,11 @@ DOM操作归纳总结
         PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
   操作 elem 
     元素增删查改 
-      Nod.hasChildNodes(nod); 是否包含节点
+      nod1.hasChildNodes(nod2); nod1是否包含nod2
       elem.insertAdjacentHTML("位置",`html字符串`); 插入HTML代码
        (详见: DOM扩展 HTML5)
-      Elem.insertAdjacentElement("位置",elem);
-        RetValue:返回插入的元素
+      elem1.insertAdjacentElement("位置",elem2);  在elem1中插入elem2
+        PS：返回值为elem2
       Nod.appendChild(子元素a);  在父元素b内的最后位置添加一个子元素a
         (详见:节点 Node节点)
       Nod.insertBefore(); 在父元素b内添加一个子元素a
@@ -986,32 +981,25 @@ DOM操作归纳总结
       elem.scrollTop    读写,元素垂直滚动距离
       elem.scrollLeft   读写,元素水平滚动距离
       elem.scrollIntoView() 将节点滚动到可视窗口中 
-      elem.style.left    读写,相对于具有定位属性父元素对象的边距 
-        获取或设置相对于具有定位属性(position定义为relative)的父对象的左边距;
-        子元素对象.style.left
-        子元素对象.style.top
-        返回值为字符串,如20px,
-        Remarks:
-          style.left的值需要事先定义在html里(对象的标签里),否则取到的值为空.若定义在css里,style.left的值仍然为空,仍取不到值
-      elem.getBoundingClientRect() 获取元素位置对象
-        返回一个对象,用于获得元素相对视口的位置 「DiBs」
-        有6个属性：top,lef,right,bottom,width,height
-          width、height是元素自身的宽高
-          right是指元素右边界距窗口最左边的距离,
-          bottom是指元素下边界距窗口最上面的距离.
-        elem.getBoundingClientRect().width;
-        elem.getBoundingClientRect().height;
-        elem.getBoundingClientRect().top;
-        elem.getBoundingClientRect().right;
-        elem.getBoundingClientRect().bottom;
-        elem.getBoundingClientRect().left;
-      window.innerWidth || document.documentElement.clientWidth   视口宽度
-      window.innerHeight || document.documentElement.clientHeight 视口高度
+      elem.getBoundingClientRect() 返回一对象,用于获得元素相对视口的位置「DiBs」
+        elem.getBoundingClientRect().width  元素宽
+        elem.getBoundingClientRect().height 元素高
+        elem.getBoundingClientRect().top    元素顶部到可视区顶部的距离
+        elem.getBoundingClientRect().bottom 元素底部到可视区顶部的距离
+        elem.getBoundingClientRect().left   元素左侧到可视区左侧的距离
+        elem.getBoundingClientRect().right  元素右侧到可视区左侧的距离
+      可视区域宽高兼容写法
+        var width = window.innerWidth || document.body.clientWidth || document.documentElement.clientWidth;
+        var height = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight ;
     元素的属性
       elem.attributes 元素所有属性的集合
         (详见 HTMLElement 类型)
-      elem.style 行内样式
-        elem.style.cursor 显示的指针(光标)的类型
+      elem.style   一个元素样式的对象,行内样式 
+        PS：style.xx 的值需要事先定义在html标签里「CSS中也不行」,否则获取不到,
+          返回值为字符串,如 style.left 返回 '20px';
+        elem.style.left   读写,相对于具有定位属性父元素的left 
+        elem.style.width  读写,元素宽
+        elem.style.cursor 显示的指针「光标」的类型
       elem.classList 元素所有class的集合
         PS: firefox 和 Chrome 支持该属性
         elem.classList.length  获取类的个数
@@ -1247,7 +1235,7 @@ event 事件对象
     所有浏览器都支持event对象,但支持的方式不一定相同.
     event会被作为参数传到执行函数中.
     event对象与创建的事件有关,触发的事件类型不一样可用的属性/方法也不同
-    只有在事件处理程序执行期间,event对象才存在(一旦执行完则会被销毁).
+    只有在事件处理程序执行期间,event对象才存在「一旦执行完则会被销毁」
   e.g. 验证隐藏的参数
     //普通空参函数
     function box(){console.log(arguments.length);}
@@ -1267,7 +1255,7 @@ event 事件对象
   ◆公有属性/方法
   e.target;      事件的目标
     目标元素在文档中是事件冒泡的前提(即删除目标元素也会阻止事件冒泡)
-  e.currentTarget;  表示绑定的那个元素(即在函数中的this)
+  e.currentTarget;  表示绑定的元素「即在函数中的this」
     若直接将事件绑定在目标元素上,则this currentTarget target 相同
   e.type;        返回事件类型
   e.preventDefault();  阻止事件的默认行为
@@ -1300,10 +1288,29 @@ event 事件对象
       console.log(e.eventPhase);  // 3
     }
     当eventphase等于2是,this target currentTarget 是相等的
-  e.stopImmediatePropagation(); 取消事件传递,并阻止处理程序调用
+  e.stopImmediatePropagation()  取消事件传递,并阻止处理程序调用
    (DOM3新增)
   e.trusted;    表示事件是否为浏览器生成的布尔值(DOM3级新增)
   e.view;       与事件关联的抽象视图,等同于发生事件的window对象
+  ◆鼠标事件的位置信息
+  e.screenX     相对于设备屏幕左上角的坐标
+  e.clientX     相对浏览器可视区左上角的坐标
+    不含浏览器的工具栏、边框和滚动条
+    返回值类型为数值,但默认是以px为单位返回的数值.
+  e.pageX       相对于整个网页左上角的坐标
+    页面没滚动时 clientX 和 pageX 相等
+  e.offsetX     相对于事件源左上角的坐标
+    如点击一div,则表示到该div左上叫的坐标
+  e.x           相对于CSS定位的最内层包容元素的左上角
+    IE最先引入,现在主流浏览器基本都支持;
+    在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
+  ◆修改键「鼠标、键盘事件」
+    在按下鼠标时键盘上某些键的状态也可以影响到所要采取的操作
+    修改键如:Shift Ctrl Alt Meta(Windows中为Windows键,Mac中为Cmd键)
+  e.shiftKey 布尔值,表示该键是否被按下
+  e.ctrlKey  布尔值,表示该键是否被按下
+  e.altKey   布尔值,表示该键是否被按下
+  e.metaKey  布尔值,表示该键是否被按下
   IE中的事件对象
     ◆DOM1级中,event作为window对象的属性存在,IE8及之前
       e.g. :
@@ -1375,22 +1382,6 @@ event 事件对象
       IE的处理方式:
        e.toElement;
        e.fromElement;
-    位置信息
-      鼠标事件都是在浏览器的特定位置上发生的,置信息保存在事件对象的属性中
-      e.clientX 事件发生时光标到视口左边的距离「无滚动条的滚动距离」
-        不含浏览器的工具栏、边框和滚动条
-        返回值类型为数值,但默认是以px为单位返回的数值.
-      e.clientY 事件发生时光标到视口上边的距离
-      e.pageX   页面中光标的x坐标值
-        页面没滚动时 clientX 和 pageX 相等
-      e.pageY   页面中光标的y坐标值
-      e.screenX 光标相对于屏幕的位置
-      e.screenY 光标相对于屏幕的位置
-    修改键
-      在按下鼠标时键盘上某些键的状态也可以影响到所要采取的操作
-      修改键如:Shift Ctrl Alt Meta(Windows中为Windows键,Mac中为Cmd键)
-      DOM中规定了4个属性表示这些修改键的状态
-      e.shiftKey、e.ctrlKey、e.altKey、e.metaKey 若被按下则为true,否则为false
     mousewheel 使用鼠标滚轮或类似设备时触发
       event 对象除了包含鼠标事件的所有标准信息外还有一个wheelDelta属性
       e.wheelDelta; 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
@@ -1426,7 +1417,6 @@ event 事件对象
     keypress   按下字符键时触发,按住不放会一直触发
       任何获得焦点的元素都可以触发keypress事件
     keyup      释放按键时触发
-    修改键: 同鼠标事件一样
     键码
       e.keyCode; 属性值与ASCII码中对应小写字母或数值的编码相同
         Backspace   8
@@ -1543,10 +1533,6 @@ event 事件对象
      而当我们要避免这种情况时就可以使用该事件
      e.g. <div onselectstart="return false">该文字不可被选中</div>
     change:当文本框(input或textarea)内容改变且失去焦点后触发
-    scroll:当用户滚动带滚动条的元素时触发
-     window.onscroll =function(){
-       alert('abc')
-     }
     error  任何没通过try-catch处理的错误都会触发window对象的error事件
      和其他事件不同的是,error事件不会创建event对象,
      取而代之的是三个参数:错误消息、错误所在的URL和行号
@@ -1793,7 +1779,12 @@ event 事件对象
       this.className="blue";
       this.onclick=toRed;
     }
-事件的自我归纳总结 
+事件归纳总结 
+  事件枚举及分类
+    scroll  当滚动带滚动条的元素时在该元素上触发,网页滚动在window上触发
+      window.onscroll =function(){
+        console.log('网页滚动');
+      }
   事件绑定
     var addEvent = function(elem, type, handle, capture) {
       if(elem.addEventListener) {
@@ -3072,7 +3063,7 @@ File API,文件和二进制数据的操作 「HTML5+」
       video.src = obj_url;
       video.play()
       window.URL.revokeObjectURL(obj_url);  
-跨文档消息传递,cross-document messaging 
+跨文档消息传递,cross-document_messaging 
   PS:简称为XDM,指在不同域的页面间传递消息,
     XDM机制出现之前,要稳妥的实现这种通信需花很多功夫
   postMessage(str,URL); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.

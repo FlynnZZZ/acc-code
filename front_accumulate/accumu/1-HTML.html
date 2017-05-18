@@ -27,13 +27,7 @@
     特点: 字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
   XHTML 介绍 
     XHTML是一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性.
-    2000年底,W3C组织公布发行了XHTML 1.0版本
-    XHTML 1.0是一种在HTML 4.0基础上优化和改进的的新语言,目的是基于XML应用
-    XHTML是一种增强了的HTML,XHTML 是更严谨更纯净的 HTML 版本.
-    XML虽然数据转换能力强大,完全可以替代HTML,
-    但面对成千上万已有的基于HTML语言设计的网站,直接采用XML还为时过早.
-    因此,在HTML4.0的基础上,用XML的规则对其进行扩展,得到了XHTML.
-    所以,建立XHTML的目的就是实现HTML向XML的过渡.
+    2000年底,W3C发布XHTML 1.0版本,是一种在HTML 4.0基础上优化和改进的的新语言
   URL,Uniform Resource Locator 也叫网址或'统一资源定位符'
     PS:可以由单词组成,或者是因特网协议「IP」地址如:162.168.1.253;
       用于定位万维网上的文档或其他数据
@@ -55,7 +49,7 @@
       URL不能包含空格,URL编码通常使用+来替换空格
 说明 
   <!-- 注释内容  -->
-  标签大小写:大小写不敏感,推荐统一使用小写,'<p>'等同于'<P>'
+  标签大小写:大小写不敏感,但推荐统一使用小写,'<p>'等同于'<P>'
   浏览器解析HTML方式
     PS:一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
       HTML5提供的<DOCTYPE html>是标准模式,向后兼容的, 等同于开启了标准模式;
@@ -81,18 +75,14 @@
       9   ----- in IE9 mode
 --------------------------------------------------------------------------------
 ◆标签-属性 
-  PS:HTML tag 标签/元素/标记 
-    用于标记html,用于浏览器识别
-    HTML元素 是指从开始标签(start)到结束标签(end tag)的所有代码.
-    元素的内容 是开始标签与结束标签之间的内容
-    自闭合(self-closing)标签,无需闭合,例如:img input br hr 等,
-    HTML5 规范,在使用<!doctype html>的HTML5声明时,最好如此,当使用其他声明时另当别论.
+  PS:HTML tag,标签/元素/标记 ,用于标记html,用于浏览器识别;
+    HTML元素指从开始标签「start tag」到结束标签「end tag」的所有代码;
+    自闭合「self-closing」标签,无需闭合,例如:img input br hr 等;
   HTML属性添加要求
-    属性为HTML元素提供附加信息
-    使用小写,始终为属性值加引号,双引号或单引号都可以,但必须成对使用
-    html5中 属性值可不加引号,除了有空格等特殊情况
-    某些个别的情况下,比如属性值本身就含有双引号,则必须使用单引号
-      如 name=‘Bill“hellwoword”Gates’
+    属性为HTML元素提供附加信息,小写字母,用引号括起来「双引号或单引号但须成对使用」;
+    html5中,属性值可不加引号,除了有空格等特殊情况;
+    某些个别的情况下,比如属性值本身就含有双引号,则必须使用单引号,
+    如 name=‘Bill“hellwoword”Gates’;
 声明类 
   <！DOCTYPE>   声明
     PS:必须是HTML文档的第一行,位于<HTML>标签之前.
@@ -105,7 +95,7 @@
       标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
       在兼容模式中,页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作.
         简单的说,就是尽可能的显示能显示的东西给用户看.
-    HTML4.01中
+    HTML4.01中 
       HTML4.01基于SGML,<！DOCTYPE>声明需引用DTD告知浏览器文档所使用的文档类型
       DTD规定了标记语言的规则,这样浏览器才能正确地呈现内容.
         DTD 全称 “Document Type Definition” 即文档类型定义,
@@ -113,10 +103,10 @@
         源于XML规范,用于定义当前文档中的元素、元素的属性、元素之间的结构关系等基本规则.
       在HTML4.01中有3种<！DOCTYPE>声明.在HTML5中只有一种.
       HTML5 不基于 SGML,所以不需要引用 DTD。
-    HTML5 声明: <!doctype html>
+    HTML5 声明: <!doctype html> 
       HTML5不基于SGML,因此不需要对DTD进行引用,
       但是需要doctype来规范浏览器的行为,让浏览器按照它们应该的方式来运行
-    常用的 DOCTYPE 声明
+    常用的 DOCTYPE 声明 
       HTML 4.01 Strict
         该 DTD 包含所有 HTML 元素和属性,但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -126,32 +116,16 @@
       HTML 4.01 Frameset
         该 DTD 等同于 HTML 4.01 Transitional,但允许框架集内容。
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
-      XHTML 1.0 Strict
-        该 DTD 包含所有 HTML 元素和属性,但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-      XHTML 1.0 Transitional
-        该 DTD 包含所有 HTML 元素和属性,包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。必须以格式正确的 XML 来编写标记。
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      XHTML 1.0 Frameset
-        该 DTD 等同于 XHTML 1.0 Transitional,但允许框架集内容。
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-      XHTML 1.1
-        该 DTD 等同于 XHTML 1.0 Strict,但允许添加模型(例如提供对东亚语系的 ruby 支持)。
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-      HTML 5
-        <!DOCTYPE html>
-  <html></html> 称为根标签,所有的网页标签都在其中
-    block元素,默认高度为0;
-    定义 height:100%; 则会将网页占满;
+      HTML 5 使用 <!DOCTYPE html>
+  <html>   根标签,所有的网页标签都在其中 
+    block元素,默认高度为0; 定义 height:100%; 则会将网页占满;
     背景色会向上渲染将整个浏览器铺满
-  <body>        所有HTML标签的wraper 
-    block元素,默认高度为0;
-    背景色会向上渲染将整个浏览器铺满
+  <body>   所有HTML标签的wraper 
+    block元素,默认高度为0; 背景色会向上渲染将整个浏览器铺满
     self(?):建议不要对body进行样式控制,使用一个其他的盒子代替.
   </body>
-  <head></head> 标签用于定义文档的头部,所有头部元素的容器
-    头部元素有<title>、<script>、<style>、<link>、<meta>等标签.
-  <title>标题</title> 网页标题
+  <head>   用于定义文档的头部,所有头部元素的容器 
+    头部元素有<title> <script> <style> <link> <meta>等标签;
   <meta >  提供有关页面的meta-information,元信息
     PS:用于设置一些头信息,对网页文件进行说明,
       如便于搜索引擎查找.放置于<head></head>之间
@@ -272,21 +246,21 @@
     ◆rel
       e.g.:
       <link rel="stylesheet" type="text/css" href="XXX.css" />
-       // type在html5中可以不用写
+      // type在html5中可以不用写
+  <title>  网页标题
 引入类 
   <style>  嵌入样式
-    PS:style标签也可以添加class属性
-      html 中可同时添加多个style标签
-      对于CSS文档,正确的type属性值是"text/css"
+    PS:style标签也可以添加class属性,网页中可同时添加多个style标签;
+      对于CSS文档,正确的type属性值是"text/css";
   <link>   外部样式
-    rel 属性规定当前文档与被链接文档/资源之间的关系.
+    rel  规定当前文档与被链接文档/资源之间的关系;
       只有当使用 href 属性时,才能使用 rel 属性.
       只有 rel 属性的 "stylesheet" 值得到了所有浏览器的支持.其他值只得到了部分地支持.
       stylesheet 文档的外部样式表
       icon       表示该文档的图标
         IE的格式: <link rel="shortcut icon" href="XX.ico" />
         W3C的格式: <link rel="icon" href="XX.gif" type="image/gif" />
-      bookmark     相关文档
+      bookmark   相关文档
       search     链接到针对文档的搜索工具
       author     链接到该文档的作者
       prefetch   规定应该对目标文档进行缓存
@@ -316,7 +290,7 @@
       projection 用于投影媒体
       tv    电视
       ...
-  <script>   JS引入
+  <script> JS引入
     PS:用于引进JS代码
       一个script标签不可同时使用内部和外部JS代码.(否则只执行外部JS)
       存在多个script引入标签时(且不存defer和async属性),代码执行顺序按照标签的先后顺序.
@@ -360,40 +334,31 @@
       </script>
       </head>
   <noscript> 未启用JS
-    当浏览器不支持js,或没有启用时--有些浏览器可能禁止使用JS了--时会被激活.
+    当浏览器不支持js,或没有启用「如禁止使用JS」时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>
 文本、字体 
   <p>       段落
-    <p>段落标记</p>
   <h1>-<h6> 标题,字体默认为粗体
-    e.g.: <h1>标题</h1>
-    align = 
-      left 默认
-      center
-      right
-    face = '楷体'   font face,客户端字体
   <hr/>     标尺线,水平直线
     align   水平位置.默认为居中
     size    线宽度,默认为0,当size不为0时为一线框,通过颜色来填充
     width   控制线的长度
   <code>    格式化文本
-    <code></code> 当代码为一行时可使用该标签进行插入.若是多行代码,则需使用pre
-  <pre>     格式化文本
-    <pre>文本</pre> 格式化文本(preformatted text):保留包含内容的格式.
-    被包围在pre元素中的文本通常会保留空格和换行符.文本也会呈现为等宽字体.
-    该标签的一个常用应用就是用来表示计算机的源代码.
+    当代码为一行时可使用该标签进行插入.若是多行代码,则需使用pre
+  <pre>     preformatted_text,格式化文本,保留内容包含的格式
+    被包围在pre元素中的文本通常会保留空格和换行符,文本呈现为等宽字体;
+    常用来展示计算机源代码;
   <br>      换行
   <nobr>    不换行
-    <nobr></nobr>
+    <nobr>这是一段很长的文字但不会换行</nobr>
+    建议使用white-space: nowrap;属性代替;
   <q>          引用
-    <q>标签,进行引用,要引用的文本不用加双引号,浏览器会对q标签自动添加双引号.
-    注意这里用<q>标签的真正关键点不是它的默认样式双引号(如果这样我们不如自己在键盘上输入双引号就行了),
-    而是它的语义：引用别人的话.
-    有些浏览器会将q内的内容加引号括起来,有些则没有.
+    浏览器会对q标签自动添加双引号
+    语义：引用别人的话
+    有些浏览器会将q内的内容加引号括起来,有些则没有
   <blockquote> 长文本引用
-    <blockquote>标签,长文本引用.作用是引用别人的文本,
-    它是对长文本的引用,如在文章中引入大段某知名作家的文字,这时需要这个标签.
-    <q>标签是对简短文本的引用,比如说引用一句话就用到<q>标签.
+    如在文章中引入大段某知名作家的文字,这时可用这个标签;
+    <q>标签是对简短文本的引用,比如引用一句话;
     表现形式类似于段落加缩进,并无引号出现,从周围内容分离出来比较长的部分(通常显示为缩进的块)
   <block>      引用 
     <block></block> 块引用

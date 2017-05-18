@@ -1,10 +1,10 @@
 介绍_概念_说明_定义
 介绍：  
-  css,cascading style sheets,层叠样式表
-    是一种用来表现html或XML等文件样式的计算机语言.
-    CSS1在1996年成为推荐标准.包含内容如字体、颜色、空白边等内容.
-    CSS2在1998年成为推荐标准,增加了浮动定位、高级选择器等.
-    CSS2.1在2002年启动开发,是对CSS2的修订版.
+  css「cascading_style_sheets」,层叠样式表
+    一种用来表现html或XML等文件样式的计算机语言;
+    CSS1在1996年成为推荐标准.包含内容如字体、颜色、空白边等内容;
+    CSS2在1998年成为推荐标准,增加了浮动定位、高级选择器等;
+    CSS2.1在2002年启动开发,是对CSS2的修订版;
   CSS3  
     CSS版本说明
       CSS 分为不同等级,CSS1 现已废弃, CSS2.1 是推荐标准, 
@@ -20,12 +20,12 @@
     animation  自定义动画
     linear-gradient radial-gradient 线性/圆形渐变
 概念：  
-  replaced element,替换元素
+  replaced_element,替换元素
     指用来替换元素内容的部分并非由文档内容直接表示
     如img元素,它由文档本身之外的一个图像文件来替换
-  nonreplaced element,非替换元素
+  nonreplaced_element,非替换元素
     大多数HTML元素都是非替换元素,其内容由用户代理(通常是一个浏览器)在元素本身生成的框中显示.
-  流式布局
+  流式布局 
     使用非固定像素来定义网页内容,也叫百分比布局
     通过盒子的宽度设置成百分比来根据屏幕的宽度来进行伸缩
   CSS层叠/覆盖原理
@@ -127,32 +127,35 @@ Style    样式
         normal   默认值,等价于0
         <length> 正值增加间距,负值减少间距
         inherit
-      word-spacing    字间距
-        PS：
-          英文单词之间的间距使用word-spacing,当汉字之间存在空格时,该属性也能起作用.
+      word-spacing    字间距 
+        PS：单词间的间距使用word-spacing,当汉字之间存在空格时,该属性也能起作用.
         normal   默认值,等价于0
-        <length> 正值增加间距,负值减少间距
+        length   正值增加间距,负值减少间距
         inherit
-      word-wrap       文本换行
-        PS:默认情况下一个足够长的单词不会在其内部换行,即使其长度大于一行宽,
-          会默认超出到容器的外部.
-          只有英文文本,或者连续的一连串数字才会出现不能自动换行的情况,而中文不存在,
-          原因是因为英文文本之间没有加空格,浏览器会认为这是一个特别长的单词；
+      word-wrap       文本换行「CSS3」
+        PS:默认情况下不会在单词内部换行,即单词长度大于一行宽,会超出到容器外;
+          如连续的一连串数字会出现不能自动换行的情况,而中文不存在,
+          原因是因为英文文本或数字间没有加空格,浏览器会认为这是一个特别长的单词;
         normal     默认值,只在半角空格或连字符的地方换行
-        break-word [只有在一行放不下一个单词时才会]在单词或url地址内部进行换行
-        解决方法：
-          1 在文本适当位置加空格,
-          2 css代码中加上这行：word-wrap:break-word;
-      word-break      文本换行
-        normal    使用浏览器默认规则
-        keep-all  只能在半角空格或连字符如逗号处换行,否则在一行显示
+        break-word 「当一个单词长度大于行宽时才会」在单词或url地址内部进行换行
+      word-break      文本换行「CSS3」
+        normal    默认
+        keep-all  只能在半角空格或连字符如逗号处换行「否则在一行显示」
         break-all 尽可能的在单词内换行
       word-wrap:break-word 和 word-break:break-all 的区别
         总的来说,后者更彻底
-        word-wrap:break-word;一般处理情况为在单词间换行
+        word-wrap:break-word  一般处理情况为在单词间换行
           当出现一行内放不下一个单词时才会在单词内换行.
-        word-break:break-all;默认为单词内部换行.
-      line-height     行高
+        word-break:break-all  默认为单词内部换行
+      white-space  如何处理元素内的空白/元素的换行处理 
+        normal   默认,空白会被浏览器忽略
+          换行符、多个连续的空格会转换为一个空格
+        nowrap   文本不会换行,文本会在在同一行上继续,直到遇到 <br> 标签为止。
+        pre      空白会被浏览器保留,其行为方式类似 HTML 中的 <pre> 标签。
+        pre-wrap 保留空白符序列,但是正常地进行换行
+        pre-line 合并空白符序列,但是保留换行符
+        inherit  规定应该从父元素继承 white-space 属性的值。            
+      line-height     行高 
         PS:设置行间的距离(行高)
           行高是指上下文本行基线间的垂直距离.
           行距是指一行底线到下一行顶线的垂直距离.行距也可以这么算：(行高-字体size)/2.
@@ -163,7 +166,7 @@ Style    样式
         length      设置固定的行间距。
         %           基于当前字体尺寸的百分比行间距。
         inherit     规定从父元素继承line-height属性的值。
-      text-indent     缩进
+      text-indent     缩进 
         PS: 
           允许使用负值。若使用负值,那么首行会被缩进到左边,产生一种“悬挂缩进”的效果。
           无法将该属性应用到行内元素.
@@ -171,7 +174,7 @@ Style    样式
         em      文字大小的倍数
         %       父元素 width 的百分比
         inherit 规定应该从父元素继承text-indent属性的值。
-      text-decoration 文本修饰
+      text-decoration 文本修饰 
         PS:没有继承属性
         none         标准文本,默认值
         underline    下划线,链接文本的默认样式
@@ -180,8 +183,8 @@ Style    样式
         blink        定义闪烁的文本 (可能存在兼容性问题)
         e.g. 
         同时定义多个文本修饰,使用空格隔开
-          text-decoration:underline overline;
-      text-transform  文本大小写转换
+          text-decoration:underline overline
+      text-transform  文本大小写转换 
         uppercase   
         lowercase   
         capitalize  单词首字母大写
@@ -192,25 +195,34 @@ Style    样式
         right
         center
         justify 两端对齐
-      text-transform  文本大小写
+      text-transform  文本大小写 
         capitalize 单词首字母大写
         uppercase  字母大写
         lowercase  小写字母
         inherit    继承
-      text-overflow   文本溢出显示方式
+      text-shadow     文字阴影 
+        PS:css2.1中被删除,在css3.0中又恢复了使用.
+        text-shadow:length1 length2 length3 color;
+          length1 横向方向距离
+          length2 纵向方向距离
+          length3 可选,阴影模糊半径
+          color   阴影的颜色,默认使用当前字体颜色
+        指定多个阴影
+          text-shadow:length1 length2 length3 color,length4 length5 length6 color,...;
+      text-overflow   文本溢出显示方式 
         PS:该属性只在当盒子中的文本在水平方向上超出时有效.
           若将white-space的属性值设为nowrap,使得盒子的右端不能换行显示,达到水平方向溢出的效果
         ellipsis  单行文本溢出显示为省略号
           单行溢出显示
-            width:xxx; [也可以使用 max-width 代替 width]
-            overflow:hidden;
-            white-space: nowrap;
+            width:xxx [也可以使用 max-width 代替 width]
+            overflow:hidden
+            white-space: nowrap
             /*前三个为前提条件*/
-            text-overflow:ellipsis;
+            text-overflow:ellipsis
           多行溢出显示
             不支持多行文本溢出显示省略号
             可使用:after 来模拟
-            e.g.:
+            e.g.：
             <div class="wrap">
               很多年以后,奥雷连诺上校站在行刑队面前,准会想起父亲带他去参观冰块的那个遥远的下午。当时,马孔多是个二十户人家的村庄,一座座土房都盖在河岸上,河水清澈,沿着遍布石头的河床流去,河里的石头光滑、洁白,活像史前的巨蛋。----加西亚·马尔克斯
               knowing something of everything and everything of something.
@@ -218,8 +230,8 @@ Style    样式
             .wrap{
               width: 300px;
               height: 54px;
+              text-overflow : ellipsis;
               overflow: hidden;
-              text-overflow: ellipsis;
               position: relative;
             }
             .wrap:after{
@@ -231,16 +243,7 @@ Style    样式
               width: 30px;
               height: 20px;
             }
-      text-shadow     文字阴影
-        PS:css2.1中被删除,在css3.0中又恢复了使用.
-        text-shadow:length1 length2 length3 color;
-          length1 横向方向距离
-          length2 纵向方向距离
-          length3 可选,阴影模糊半径
-          color   阴影的颜色,默认使用当前字体颜色
-        指定多个阴影
-          text-shadow:length1 length2 length3 color,length4 length5 length6 color,...;
-      unicode-bidi    设置文本方向
+      unicode-bidi    设置文本方向 
         normal
         embed
         bidi-override
@@ -249,18 +252,10 @@ Style    样式
         ltr     默认,文本方向从左到右
         rtl     文本方向从右到左,从右向左的文本默认为rtl
         inherit 继承
-      white-space  如何处理元素内的空白/元素的换行处理
-        normal   默认,空白会被浏览器忽略
-          换行符、多个连续的空格会转换为一个空格
-        nowrap   文本不会换行,文本会在在同一行上继续,直到遇到 <br> 标签为止。
-        pre      空白会被浏览器保留,其行为方式类似 HTML 中的 <pre> 标签。
-        pre-wrap 保留空白符序列,但是正常地进行换行
-        pre-line 合并空白符序列,但是保留换行符
-        inherit  规定应该从父元素继承 white-space 属性的值。            
     font   字体样式「简写」 
       PS:font-size 和 font-family 属性必选 ,其他属性可选   
         缩写时没有固定的顺序   
-      font- family    字体风格     
+      font- family    字体风格 
         PS:不要设置不常用的字体,若用户电脑上没有安装该字体,会显示浏览器默认的字体
           尽量选用通用的字体,当使用很特殊的字体时,可采用图片的形式决解. 可定义多个字体,字体用引号引起来,使用逗号隔开 (当为多个单词时使用引号) ?
           当前一个字体不支持时直接使用下一个 绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
@@ -303,7 +298,7 @@ Style    样式
           华文隶书: STLiti   
           华文行楷: STXingkai   
           华文新魏: STXinwei   
-      font-size       字号     
+      font-size       字号 
         PS:该属性设置元素的字体大小.实际上它设置的是字体中字符框的高度;
           实际的字符字形可能比这些框高或矮（通常会矮）。     
         %      参考对象为其父元素的 font-size     
@@ -314,7 +309,19 @@ Style    样式
           xx-small     x-small small medium
           默认值 large x-large xx-large     
           inherit     继承父元素的大小 (子元素会默认继承)   
-      font-size-adjust  
+      font-size-adjust  规定元素的aspect值「IE不支持」 
+        PS：字体的小写字母 "x" 的高度与 "font-size" 高度之间的比率被称为一个字体的 aspect 值。
+          当字体拥有高的 aspect 值时,那么当此字体被设置为很小的尺寸时会更易阅读。
+          举例：Verdana 的 aspect 值是 0.58
+          （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
+          Times New Roman 的 aspect 值是 0.46。
+          这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
+        none   默认。如果此字体不可用,则不保持此字体的 x-height。
+        number 定义字体的 aspect 值比率。
+        e.g.：
+          如果 14px 的 Verdana（aspect 值是 0.58）不可用，
+          但是某个可用的字体的 aspect 值是 0.46，
+          那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
       font- weight    字重     
         number    100-900的整百数(其中400=normal,700=bold)
         normal     
@@ -331,7 +338,7 @@ Style    样式
         small-caps  小型大写文字     
         inherit    
       font-stretch    字体水平拉伸  (CSS2.1 已删除该属性)     
-      e.g.  
+      e.g.：  
         p{   
           font-style:italic;   
           font-variant:small-caps;   
@@ -355,7 +362,7 @@ Style    样式
         message-box 用于对话框     
         small-caption 用于对小控件加标签     
         status-bar 用于窗口状态条     
-        e.g.:
+        e.g.：
           .aoo{font:caption;} 
       自定义服务器端字体   
         PS:@font-face 已经从CSS2.1中去除   
@@ -365,7 +372,7 @@ Style    样式
           src:url(字体文件地址)     
           ...
         }   
-        e.g.:   
+        e.g.：   
           @font-face {     
             font-family: 'MyFont';
             src: url('myfont.eot'); /* IE6+ */     
@@ -558,7 +565,7 @@ Style    样式
           为了获得最佳的浏览器支持,应该始终定义 0% 和 100% .
           @-webkit-keyframes 兼容写法
         @keyframes 名称{0%-100%关键帧代码}
-        e.g.:
+        e.g.：
           @keyframes mymove {
             from {top:0px; background:red; width:100px;}
             25%  {top:200px;}
@@ -600,7 +607,7 @@ Style    样式
         e.g. transform:rotate(90deg) 旋转90度
         顺时针旋转,deg是css3中的角度单位
       rotate3d  3d旋转
-        e.g.:transform: rotate3d(1, 0, 0, 60deg);
+        e.g.：transform: rotate3d(1, 0, 0, 60deg);
       scale     缩放:指定对象的2D缩放
         语法:transform:scale(num1,num2)
           num表示缩放的倍数(不可为负),若num2未指定,则默认等于num1;
@@ -630,7 +637,7 @@ Style    样式
             如270deg「默认值,等同于top」
         <color position>+   若干个位置及颜色,控制渐变的过程, 如: red 20% 
           position 可为像素值或百分比
-      e.g.:
+      e.g.：
         .linearGradientTest { 
           background: -webkit-linear-gradient( top,#fff,#000); 
           /*从上到下,颜色由白到黑*/
@@ -671,7 +678,7 @@ Style    样式
             closest-corner  渐变的边缘形状与容器距离渐变中心点最近的一个角相交
             farthest-corner 渐变的边缘形状与容器距离渐变中心点最远的一个角相交
             contaner     刚好填充满整个容器
-          e.g.:
+          e.g.：
             background-image: radial-gradient(
               ellipse farthest-corner at 45px 45px ,
               #00FFFF 0%, rgba(0, 0, 255, 0) 50%, #0000FF 95%);
@@ -687,7 +694,7 @@ Style    样式
               rgba(0, 0, 0, 0.3) 18px, 
               rgba(0, 0, 0, 0) 19px);
         <color position>+ 若干个颜色值及位置
-        e.g.:
+        e.g.：
           background-image:radial-gradient( 
             150px 100px at 50% 50% ,
             #c792b3 0%, #ac8671 30%, #d42cb3 50%, #7ac67a 100%
@@ -696,7 +703,7 @@ Style    样式
       有两种方式可以重复背景图片
       background-repeat
       -webkit-repeating-radial-gradient和-webkit-repeating-linear-gradient 
-      e.g.:
+      e.g.：
         background: -webkit-repeating-radial-gradient(
           #ace, #ace 5px, #f96 5px, #f96 10px);  
     color  颜色值
@@ -706,7 +713,7 @@ Style    样式
       rgb|rgba 
         rgb(num%, num%, num%) 
           num 范围 0-100,若小于0则为0,大于100则为100;
-          e.g.: rgb(100%,0,0)
+          e.g.： rgb(100%,0,0)
         rgb(num, num, num) 
           num 范围 0-255, 若小于0则为0,大于255则为255
         rgba(num, num, num, opacity) 
@@ -803,7 +810,7 @@ Style    样式
         pointer   光标呈现为指示链接的指针(一只手)
         url       需使用的自定义光标的 URL
           PS:在列表的末端始终定义一种普通的光标,当自定义光标不起作用时备用
-          e.g.:
+          e.g.：
           a{cursor: url(aa.png),pointer;}
         crosshair 光标呈现为十字线
         move      此光标指示某对象可被移动
@@ -897,7 +904,7 @@ Style    样式
         url(图片地址)
         none
         inherit
-        e.g.:
+        e.g.：
           ul li{list-style-image: url(aaa.png);}
       list-style-position 标记位置
         outset 默认值
@@ -998,7 +1005,7 @@ Style    样式
       circle 圆圈 
       disc   圆形 
       square 正方形
-      e.g.:
+      e.g.：
         <input type="text"   name="" value="">
         input{ -webkit-text-security:disc; text-security:disc; }
         
@@ -1013,7 +1020,7 @@ Style    样式
       PS:该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 , 「CSS3+」
         可设置-webkit-tap-highlight-color的颜色;
       禁用高亮: 设置颜色的alpha值为0即可
-      e.g.:
+      e.g.：
         设置高亮色为50%透明的红色:
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  「iOS」
@@ -1088,7 +1095,7 @@ Selector 选择器
       [attribute*=value] 包含指定字符串的元素
       [attribute^=value] 以指定字符串开头的元素
       [attribute$=value] 以指定字符串结尾的元素
-      e.g.:
+      e.g.：
         [title] { color:red; }
         [title='W3School'] { border:5px solid blue; }
         [title~='hello'] { color:red; }
@@ -1173,13 +1180,13 @@ Selector 选择器
           '\00BB'  双右箭头
         content:url(图片地址)    加入图片
         content:attr(属性名)    将元素的指定属性的属性值插入
-          e.g.:
+          e.g.：
           在链接后增加 (链接地址)
           a:after {content: " (" attr(href) ")";}
         配合属性:定义符号 quotes 
           PS:quote字符类型(使用双引号""的时候需要使用转义字符\)
             open-quote开始字符;close-quote结尾字符
-          e.g.:
+          e.g.：
             给h1元素内容使用()括起来.
             h1{ quotes:"(" ")" }  /*定义 open-quote 和 close-quote*/
             h1:before{ content:open-quote; }
@@ -1192,7 +1199,7 @@ Selector 选择器
           counter-reset:计数器名称 重置编号;  计数器重置为"重置编号"
           counter-increment:计数器名称 num;  变化间隔
             当num为 -2 则,每次减少2个,若为3则每次增加3个
-          e.g.:
+          e.g.：
             <body>
               <h1>HTML tutorials</h1>
                 <h2>HTML Tutorial</h2>
@@ -1229,7 +1236,7 @@ Selector 选择器
       e.g. 
         ::before{content:"加在每个元素前面的文字,包括未显示的"}
     ::after    匹配已选中元素的一个虚拟的最后子元素,这个虚拟元素默认是行内元素
-      e.g.:
+      e.g.：
         纯CSS提示工具
         <p> 
           <span>鼠标悬浮查看提示信息</span>
@@ -1269,7 +1276,7 @@ Selector 选择器
         这个样式可能会被后声明的其他链接相关的伪类覆盖,这些伪类包括 :link,:hover和 :visited。
         为了正常加上样式,需要把 :active的样式放在所有链接相关的样式后,
         这种链接伪类先后顺序被称为LVHA顺序: :link — :visited — :hover — :active。
-      e.g.:
+      e.g.：
         <a href="#">这个链接在鼠标按下和松开的这段时间内会变成绿色</a>
         body { background-color: #ffffc9 }
         a:link { color: blue } /* 未访问链接 */
@@ -1454,7 +1461,7 @@ Selector 选择器
           该值必须合法,且不能包含另一个attr()表达式。
           若attr()不是所在CSS属性值的唯一值,其<fallback>值必须为<type-or-unit>所指定的类型,
           否则CSS会使用相应<type-or-unit>定义的默认值（见上表）。
-      e.g.:
+      e.g.：
         <p data-foo="hello">world</p>
         p:before { content:attr(data-foo) " "; }
   选择器的特性
@@ -1512,14 +1519,14 @@ Selector 选择器
         PS:若使用了 not 或 only 操作符,必须明确指定一个媒体类型。
       and  组合多个媒体属性,合并到同一条媒体查询中
         只有当每个属性都为真时,这条查询的结果才为真
-        e.g.:
+        e.g.：
           @media (min-width: 700px) { ... }
           若你只想在横屏时应用这个,你可以使用 and 操作符合并媒体属性：
           @media (min-width: 700px) and (orientation: landscape) { ... }
       not  对一条媒体查询的结果进行取反
         PS:not 关键字仅能应用于整个查询,而不能单独应用于一个独立的查询
           在逗号媒体查询列表中 not 仅会否定它应用到的媒体查询上而不影响其它的媒体查询。
-        e.g.:
+        e.g.：
           not 在下面的查询中最后被计算： @media not all and (monochrome) { ... }
           等价于： @media not (all and (monochrome)) { ... }
           而不是： @media (not all) and (monochrome) { ... }
@@ -1536,7 +1543,7 @@ Selector 选择器
       width         描述了输出设备渲染区域,如可视区域的宽度或打印机纸盒的宽度
         PS:可接受 min/max 前缀
           注意：用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
-        e.g.:
+        e.g.：
           若你想向最小宽度20em的手持设备或屏幕应用样式表,你可以使用这样的查询：
           @media handheld and (min-width: 20em), screen and (min-width: 20em) { ... }
           
@@ -1551,7 +1558,7 @@ Selector 选择器
           注意：用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
       device-height 描述了输出设备的高度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
         PS:可否接受 min/max 前缀
-        e.g.:
+        e.g.：
           向显示在最大宽度800px的屏幕上的文档应用样式表,你可以这样做：
           <link rel="stylesheet" media="screen and (max-device-width: 799px)" />
       device-width  描述了输出设备的宽度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
@@ -1560,7 +1567,7 @@ Selector 选择器
         PS:可接受 min/max 前缀
           该值包含两个以“/”分隔的正整数。
           代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        e.g.:
+        e.g.：
           下面为显示区域宽高至少为一比一的设备选择了一个特殊的样式表。
           这指定了宽高比或者1：1或者更大。换句话说,可视区域或者是正方形或者是宽屏。
           @media screen and (min-aspect-ratio: 1/1) { ... }
@@ -1568,18 +1575,18 @@ Selector 选择器
         PS:可否接受 min/max 前缀
           该值包含两个以“/”分隔的正整数。
           代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        e.g.:
+        e.g.：
           下面为宽屏设备选择了一个特殊的样式表。
           宽高比或者16：9或者16：10。    
           @media screen and (device-aspect-ratio: 16/9), screen and (device-aspect-ratio: 16/10) { ... }
       orientation   指定了设备处于横屏(宽度大于高度)模式还是竖屏(高度大于宽度)模式。
-        e.g.:
+        e.g.：
           向竖屏设备应用样式表：
           @media all and (orientation: portrait) { ... }
       resolution    指定输出设备的分辨率(像素密度)
         PS:可接受 min/max 前缀：是
           分辨率可以用每英寸（dpi）或每厘米（dpcm）的点数来表示。
-        e.g.:
+        e.g.：
           为每英寸至多300点的打印机应用样式：
           @media print and (min-resolution: 300dpi) { ... }
           
@@ -1591,7 +1598,7 @@ Selector 选择器
             例如,若显示器为蓝色和红色提供5比特,而为绿色提供6比特,
             则认为每个颜色单元有5比特。
           若设备使用索引颜色,则使用颜色表中颜色单元的最小比特数。
-        e.g.:
+        e.g.：
           向所有能显示颜色的设备应用样式表：
           @media all and (color) { ... }
           
@@ -1599,7 +1606,7 @@ Selector 选择器
           @media all and (min-color: 4) { ... }
       color-index   指定了输出设备中颜色查询表中的条目数量。
         PS:可接受 min/max 前缀
-        e.g.:
+        e.g.：
           向所有使用索引颜色的设备应用样式表,你可以这么做：
           @media all and (color-index) { ... }
           
@@ -1607,21 +1614,21 @@ Selector 选择器
           <link rel="stylesheet" media="all and (min-color-index: 256)" href="http://foo.bar.com/stylesheet.css" />    
       grid          判断输出设备是网格设备还是位图设备
         PS:若设备是基于网格的（例如电传打字机终端或只能显示一种字形的电话）,该值为1,否则为0。
-        e.g.:
+        e.g.：
           向一个15字符宽度或更窄的手持设备应用样式：
           @media handheld and (grid) and (max-width: 15em) { ... }
           注意：“em” 在网格设备中有不同的意义；
           一个“em”的实际宽度不得而知,假设1em相当于一个网格单元的宽高。
       monochrome    指定了一个黑白（灰度）设备每个像素的比特数。若不是黑白设备,值为0。
         PS:可接受 min/max 前缀：是
-        e.g.:
+        e.g.：
           向所有黑白设备应用样式表：
           @media all and (monochrome) { ... }
           
           向每个像素至少8比特的黑白设备应用样式表：
           @media all and (min-monochrome: 8) { ... }
       scan          描述了电视输出设备的扫描过程。
-        e.g.:
+        e.g.：
           向以顺序方式扫描的电视机上应用样式表：
           @media tv and (scan: progressive) { ... }
     主要功能
@@ -1633,7 +1640,7 @@ Selector 选择器
         orientation:portrait | landscape  定义输出设备中的页面可见区域高度是否大于或等于宽度
           portrait： 指定输出设备中的页面可见区域高度大于或等于宽度
           landscape： 除portrait值情况外,都是landscape
-        e.g.:
+        e.g.：
           @media screen and (orientation:portrait){ … }
           @import url(example.css) screen and (orientation:landscape);
     e.g. 
@@ -1901,7 +1908,7 @@ Layout   布局
           非浮动的子元素
           非浮动的非同分支元素:会将targeElem中的文字挤开,但不会'围绕'
             只会位于floatElem下方,而不会位于floatElem右边
-            e.g.:
+            e.g.：
               <div class="container">
                 <span class="part1">
                   我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意, 要这众生,都明白我意, 
@@ -1966,7 +1973,7 @@ Layout   布局
             rect(top, right, bottom, left)
             auto    默认值,不应用任何剪裁。
             inherit 规定应该从父元素继承 clip 属性的值。
-          e.g.:
+          e.g.：
           img{position:absolute;clip:rect(0px 50px 200px 0px);}
       fixed    相对于浏览器窗口的定位.
         表现形式与absolute类似,其定位的参照为视窗本身 (不会随浏览器窗口的滚动条滚动而变化)
@@ -2207,7 +2214,7 @@ Layout   布局
         position为absolute 或fixed
         display为inline-block table-cell table-caption flex inline-flex 
           display：table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
-    e.g.:
+    e.g.：
       使用BFC将浮动元素和block元素同行且不会影响到block元素(即浮动元素不会浮在block元素上)
       <div class="aoo"> 1111 </div>
       <div class="boo"> 222222 </div>
@@ -2316,7 +2323,7 @@ size,尺寸
     设备独立像素(Device independent Pixel) 也称为逻辑像素,简称dip。
       根据上述设备像素与CSS像素之间的关系、及DPR的官方定义,我们可以推断出：
       CSS像素 =设备独立像素 = 逻辑像素
-      e.g.:
+      e.g.：
         在Retina屏的iphone上,devicePixelRatio的值为2,
         也就是说1个css像素相当于2个物理像素。
         但是要注意的是,devicePixelRatio 在不同的浏览器中还存在些许的兼容性问题
@@ -2348,7 +2355,7 @@ size,尺寸
     ideal viewport(理想视口)
       ideal viewport并没有一个固定的尺寸,不同的设备拥有有不同的ideal viewport
       ideal viewport的宽度 = 屏幕的逻辑像素宽度
-      e.g.:
+      e.g.：
         iphone5的ideal viewport宽度是320px,
           也就是说在iphone5中,css中的320px就代表iphone屏幕的宽度
         安卓设备比较复杂,有320px的,有360px的,有384px的等等
@@ -2404,7 +2411,7 @@ var() CSS变量
     语法是：--*,变量使用语法是：var(--*),其中*表示我们的变量名称。
     命名要求
       不能包含$,[,^,(,%等字符,但是可以是中文、日文或者韩文
-      e.g.:
+      e.g.：
         :root { --1: #369; }
         body { background-color: var(--1); }
   
@@ -2627,7 +2634,7 @@ var() CSS变量
       父元素的line-height和其height相等,子元素使用vertical-aligh:middle;使子元素居中
     vertical-align:middle + 辅助子元素
       父子元素搭配使其其他子元素垂直居中;
-      e.g.:
+      e.g.：
         在父元素中,借助一高度等于父元素的子元素a定义其vertical-align:middle,
         其他的子元素定义vertical-align:middle,则都相对于a元素居中(处于a元素中部)
         <div id="wrapper">
@@ -2669,7 +2676,7 @@ var() CSS变量
     position + margin:auto
       父元素relative定位,子元素left=right,top=bottom,margin:auto;
     position + margin    百分比偏移
-      e.g.:
+      e.g.：
         #parent {position: relative;}
         #child {
           position: absolute;

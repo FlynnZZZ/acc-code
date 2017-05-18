@@ -2238,7 +2238,7 @@ OOP,面向对象
         function goo(){}
         goo.a =1;
         console.log(goo.a); //1
-    创建函数
+    创建函数 
       PS:函数的创建有 函数声明 和 函数表达式 两种常用方法.
         变量名可以使用中文字符来进行命名而不会报错,但最好不要使用中文.
       function funcName(参数){执行语句} function关键字创建函数
@@ -2293,54 +2293,56 @@ OOP,面向对象
         }else {
           foo =function foo(){ }
         }
-      函数的参数
-        传入的参数可多可少,多则舍去,少则使用undefined来补充
+    函数的参数 
+      传入的参数可多可少,多则舍去,少则使用undefined来补充
+        function foo(){ 
+          console.log(arguments[0],arguments[1]); 
+        };
+        foo(1); // 1 undefined
+      默认参数:在定义函数时,可先将将参数赋值 「ES6+」
+        function foo(b,c=3){ 
+          console.log(b,c); 
+        }
+        foo();           //undefined 3
+        foo(1);          //1 3,当未传参时默认参数
+        foo(1,4);        //1 4,当传入参数时则使用传入的值
+        foo(1,c=5);      //1 5
+      arguments 类数组 : 在函数体内,表示实际传入函数的参数组成的数组
+        arguments.length; 在函数体内表示实际传入参数的数量
           e.g. :
-          function foo(){ console.log(arguments[0],arguments[1]); };
-          foo(1); // 1 undefined
-        默认参数:在定义函数时,可先将将参数赋值(ES6新增)
-          function foo(b,c=3){ console.log(b,c); }
-          foo();           //undefined 3
-          foo(1);          //1 3,当未传参时默认参数
-          foo(1,4);        //1 4,当传入参数时则使用传入的值
-          foo(1,c=5);      //1 5
-        arguments 类数组 : 在函数体内,表示实际传入函数的参数组成的数组
-          arguments.length; 在函数体内表示实际传入参数的数量
-            e.g. :
-            function box(){ return arguments.length; }
-            console.log(box(1,2,3,4,5));  // 5
-          arguments.callee; 在函数体内表示函数本身
-            该属性是一个指针,指向拥有这个arguments对象的函数.
-            e.g.
-            递归-阶乘
-            function sum(num){
-              if(num<=1){
-                return 1;
-              }else{
-                return num*sum(num-1);
-              }
-            }
-            对于阶乘函数一般要用到递归算法,所以函数内部一定会调用自身;
-            如果函数名不改变是没有问题的,一旦改变函数名,内部的自身调用需要逐一修改
-            为了解决这个问题,我们可以使用arguments.callee来代替.
-            function box(sum){
-              if(num<=1){
-                return 1;
-              }else{
-                return num*arguments.callee(num-1);
-                //此时arguments.callee等价于box
-              }
-            }
+          function box(){ return arguments.length; }
+          console.log(box(1,2,3,4,5));  // 5
+        arguments.callee; 在函数体内表示函数本身
+          该属性是一个指针,指向拥有这个arguments对象的函数.
           e.g.
-          对若干个数值进行累加
-          function foo(){
-            var sum=0;
-            for(var i=0;i<arguments.length;i++){
-              sum=sum+arguments[i];
+          递归-阶乘
+          function sum(num){
+            if(num<=1){
+              return 1;
+            }else{
+              return num*sum(num-1);
             }
-            return sum;
           }
-          foo(5,6,1); // 12
+          对于阶乘函数一般要用到递归算法,所以函数内部一定会调用自身;
+          如果函数名不改变是没有问题的,一旦改变函数名,内部的自身调用需要逐一修改
+          为了解决这个问题,我们可以使用arguments.callee来代替.
+          function box(sum){
+            if(num<=1){
+              return 1;
+            }else{
+              return num*arguments.callee(num-1);
+              //此时arguments.callee等价于box
+            }
+          }
+        e.g. 对若干个数值进行累加
+        function foo(){
+          var sum = 0;
+          for(var i=0;i<arguments.length;i++){
+            sum=sum+arguments[i];
+          }
+          return sum;
+        }
+        foo(5,6,1); // 12
     return 函数的返回值
       函数使用 return 关键字返回值,如果没有 return 默认返回undefined.
       当执行到 return 后直接返回值,后面代码不再执行,

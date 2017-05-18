@@ -1108,29 +1108,44 @@ Selector 选择器
         注:当单独使用 body{ background-color: :pink; } 整个文档也被渲染了,
           是因为 单独指定body影响到了上面的样式 或许就是一个bug (?)
     ◆子选择器
-    :nth-child(n)  指定任意元素的第几个子元素的样式 (CSS3新增)
-      :nth-child(n)      匹配正数下来的第N个子元素
-        e.g.  :nth-child(2){ outline:dashed 1px red; }
-          /*为其属于父元素中的第二个子元素的元素添加边线*/
-      :nth-child(odd)    匹配正数奇数个子元素
-        或:nth-child(2n)
-      :nth-child(even)   匹配正数偶数个子元素
-      :nth-child(An+B)
-        表示符合第 An+B 个的子元素
-        e.g. 
-          :nth-child(4n+1){
-            outline:dashed 1px red;
-          }
-      /*倒数*/
-      :nth-last-child(n)
-      :nth-last-child(odd)
-      :nth-last-child(even)
-      e.g.  组合使用
+    :nth-child(An+B)   当元素为其父元素的第An+B「如 4n+1」个子元素时「CSS3+」
+      :nth-child(B)    当元素为其父元素的第B个子元素时「即n为0时」
+      :nth-child(odd)  当元素为其父元素的第奇数个子元素时 
+        也可以写做 :nth-child(2n)
+      :nth-child(even) 当元素为其父元素的第偶数个子元素时
+      e.g：  
+        为所有属于第二个子元素的元素添加边线
+        :nth-child(2){ outline:dashed 1px red; }
+        <div>
+          <span></span>
+          <p>有边线</p>
+        </div>
+        <div>
+          有边线
+          <span></span>
+          <i>有边线</i>
+          <p></p>
+        </div>
+        
+        所有属于第偶数个子元素的p元素添加背景
         p:nth-child(2n){background-color:red;}
-        /*为属于偶数子元素的p元素添加背景色.*/
-    :last-child    指定任意元素的最后一个子元素的样式
+        <div>
+          <span></span>
+          <p>有背景</p>
+        </div>
+        <div>
+          有背景
+          <span></span>
+          <i>有背景</i>
+          <p></p>
+          <p>有背景</p>
+        </div>
+    :nth-last-child(n) 当元素为倒数第n个子元素时 
+      :nth-last-child(odd)  奇数
+      :nth-last-child(even) 偶数
+    :last-child    当元素为最后一个子元素时 
       e.g.  :last-child {outline:dashed 1px red;}
-    :only-child    当任意元素仅有一个子元素时,此一个子元素的样式
+    :only-child    当元素仅有一个子元素时 
       e.g.  :only-child{ outline:dashed 1px red; }
     :first-of-type 指定同一级别中,任意一类元素中的第一个的样式
       e.g. 
@@ -2140,12 +2155,12 @@ Layout   布局
       auto   默认值,即项目的本来大小。
       length 项目将占据固定空间「如350px」
     align-self 允许单个项目与其他项目不一样的对齐方式 「可覆盖align-items属性」
-       auto 默认值,表示继承父元素的align-items属性,若无父元素,则等同于stretch
-       flex-start
-       flex-end
-       center
-       baseline
-       stretch;
+      auto 默认值,表示继承父元素的align-items属性,若无父元素,则等同于stretch
+      flex-start
+      flex-end
+      center
+      baseline
+      stretch  占满父元素
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
   column 多栏布局 「CSS3」   
     column-count  显示栏目数

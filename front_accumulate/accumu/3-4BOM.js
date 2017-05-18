@@ -358,7 +358,7 @@ window 对象
       全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
       访问未声明的变量会报错,而未声明window对象的属性则为undefined.
 window的属性对象 
-  window.document  文档对象 「更多详见 DOM document对象」
+  window.document  文档对象 「更多详见 DOM document对象」 
     document.location 等价于 window.location
     document.documentElement.clientWidth
       IE 下可使用 DOM 方法获取(其他浏览器也支持)
@@ -449,7 +449,7 @@ window的属性对象
               break;
           }
         }
-  window.history   保存着用户上网的记录,从窗口被打开的那一刻算起
+  window.history   保存着用户上网的记录,从窗口被打开的那一刻算起 
     PS:每个浏览器窗口、标签页及每个框架,都有自己的history对象与特定的window对象关联
       处于安全考虑,开发人员不再到用户浏览过的URL,
       但借由用户访问过的页面列表,可在不知道实际url的情况下实现后退和前进;
@@ -655,7 +655,7 @@ window的属性对象
         var foo = url.searchParams.get('foo') || 'somedefault';      
     popstate 事件 改变url时在window上触发
       event.state 为pushState的第一个参数
-  window.location  管理URL
+  window.location  管理URL 
     PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
@@ -686,23 +686,22 @@ window的属性对象
       强制加载,从服务器重新加载
       Remarks:
         位于reload调用之后的代码可能会也可能不执行,取决于网络延迟或系统资源等因素
-  window.navigator 浏览器检测
-    PS: 最早由Netscape引入,现在已成为识别客户端浏览器的事实标准 
+  window.navigator 浏览器检测 
+    PS: 由Netscape引入,现在已成为识别客户端浏览器的事实标准 
       与其他BOM对象一样,每个浏览器所包含的内容并不完全相同
-    // 浏览器
-    navigator.appCodeName;  浏览器名称,通常为Mozilla(即使非Mozilla浏览器也如此)
+    ◆浏览器相关
+    navigator.appCodeName;  浏览器名称,通常为Mozilla「即使非Mozilla浏览器也如此」
     navigator.appName;      浏览器名称,该属性不能精确区分出浏览器
       navigator.appName; //"Netscape",谷歌浏览器中的返回值
     navigator.appVersion;      浏览器版本.一般不与实际版本对应.
     navigator.appMinorVersion; 次版本信息
     navigator.buildID;         浏览器编译版本
-    navigator.product;         产品名称(如 Gecko)
-    navigator.productSub;      产品的次要信息(如 Gecko的版本)
+    navigator.product;         产品名称「如 Gecko」
+    navigator.productSub;      产品的次要信息「如 Gecko的版本」
     navigator.vendor;      浏览器的品牌
     navigator.vendorSub;   有关供应商的次要信息
-    navigator.userAgent;  用户代理字符串,显示浏览器的信息(也将兼容的浏览器的信息列出)
-      navigator.userAgent;
-      //"Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
+    navigator.userAgent; 用户代理字符串,显示浏览器的信息「也将兼容的浏览器的信息列出」
+      navigator.userAgent;  //"Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
     navigator.plugins;  返回浏览器安装插件的信息,类型为数组
       navigator.plugins[i].name;        //插件名
       navigator.plugins[i].filename;    //插件的磁盘文件名
@@ -739,11 +738,10 @@ window的属性对象
         这个文件被称作cookie,
         通过cookieEnabled属性可以判断浏览器是否启用了此功能
     navigator.javaEnabled();  浏览器是否启用Java
-    // 系统
-    navigator.platform   所在系统平台(如 "Win32")
-    navigator.cpuClass; 客户端计算机使用的CPU类型(x86、68K、Alpha、PPC或Other)
-    navigator.oscup;  客户端计算机的操作系统或使用的CPU
-    //
+    ◆系统相关
+    navigator.platform  所在系统平台,如 "Win32"
+    navigator.cpuClass; 客户端计算机使用的CPU类型「'x86''68K''Alpha'、PPC或Other」
+    navigator.oscpu;    客户端计算机的操作系统或使用的CPU「chrome和IE不支持」
     navigator.registerContentHandler()
     navigator.registerProtocolHandler()
 
@@ -863,7 +861,7 @@ window的属性对象
       battery.dischargingTime;
       battery.addEventListener("chargingchange",function(e){
       })
-  window.screen    用户屏幕相关
+  window.screen    用户屏幕相关 
     PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一;
       基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
     screen.height 设备屏幕高,单位px
@@ -874,7 +872,7 @@ window的属性对象
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
   window.frames    包含窗口所有框架的一个数组
-  客户端检测(详细见 JavaScript高级程序设计 228 页)
+  客户端检测(详细见 JavaScript高级程序设计 228 页) 
     PS:
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
       更是一种很难过行之有效的开发策略;
@@ -2125,7 +2123,7 @@ comet  服务器推送,一种更高级的AJAX技术
   HTTP流
     PS:页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-CORS,Cross-Origin Resource Sharing    跨源资源共享 
+CORS,Cross-Origin Resource Sharing 跨源资源共享 
   PS:
     CORS是一个W3C标准,全称是“跨域资源共享”,
     允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
@@ -2563,7 +2561,7 @@ Viewport 视口 「HTML5」
   e.g.:.
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
 SSE 「HTML5」
-WebRTC,Web Real Time Communication  网络实时通信 「HTML5」  
+WebRTC,Web Real Time Communication  网络实时通信 「HTML5」 
   PS: 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。

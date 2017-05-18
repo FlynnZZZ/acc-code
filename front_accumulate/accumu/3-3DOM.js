@@ -736,16 +736,7 @@ DOM,Document Object Model 文档对象模型
       e.g. :
       获取所有类中包含 "user" 和 "name" 的元素(类名的先后顺序无所谓)
       var aoo =document.getElementsByClassName("user name");
-    elem.classList; 返回 DOMTokenList 集合类型的一个实例
-      PS: firefox 和 Chrome 支持该属性
-      elem.classList.length 获取元素个数
-      elem.classList[] 或 elem.classList.item(); 获取元素
-      elem.classList.contains("类名"); 返回是否包含指定类的布尔值
-      elem.classList.add("类名");  将指定类加到元素的类列表中
-        若存在类b,则不添加,否则添加(即始终只存在一个类b)
-      elem.classList.remove("类名"); 从元素的类列表中删除指定类
-        若存在类b则删除,否则无动作
-      elem.classList.toggle("类名"); 元素列表中若有该类则删除,没有则加上
+    elem.classList; 返回 DOMTokenList 集合类型的一个实例 「详见 归纳总结」
     document.activeElement; 始终引用DOM中当前获得焦点的元素
       PS:
         默认情况下,文档刚加载完,document.activeElement 中保存的是document.body元素
@@ -1022,8 +1013,16 @@ DOM操作归纳总结
       elem.style 行内样式
         elem.style.cursor 显示的指针(光标)的类型
       elem.classList 元素所有class的集合
-        [详见 DOM扩展>HTML5]
-      elem.className 元素class属性的值,以字符串形式返回,包括空格
+        PS: firefox 和 Chrome 支持该属性
+        elem.classList.length  获取类的个数
+        elem.classList[] 或 elem.classList.item();  获取元素
+        elem.classList.contains("类名"); 返回是否包含指定类的布尔值
+        elem.classList.add("类名");      将指定类加到元素的类列表中
+          若存在类b,则不添加,否则添加(即始终只存在一个类b)
+        elem.classList.remove("类名");   从元素的类列表中删除指定类
+          若存在类b则删除,否则无动作
+        elem.classList.toggle("类名");   元素列表中若有该类则删除,没有则加上
+      elem.className 读写元素的class字符串形式包括空格
       elem.hasAttributes() 元素是否有属性的布尔值
       elem.hasAttribute("属性名") 元素是否有指定属性的布尔值
       elem.getAttribute("属性名"); 获取元素指定属性的值  [详见: HTMLElement]

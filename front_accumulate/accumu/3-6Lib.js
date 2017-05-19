@@ -1055,20 +1055,12 @@ AJAX
         两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
         w3c盒子模型不包含,IE盒子模型则包含,
 Deferred 对象 
-  PS：Deferred 对象是在 jQuery 1.5 中引入的,
-    该对象提供了一系列的方法,可以将多个回调函数注册进一个回调队列里、调用回调队列,
-    以及将同步或异步函数执行结果的成功还是失败传递给对应的处理函数。
-    Promise 对象是和 Deferred 对象一起作为 jQuery 对 Promise 的一种实现。
-    在 jQuery1.x 和 2.x 版本中, Deferred 对象遵守的是《CommonJS Promises 提案》中的约定,
-    而 原生 promises 方法的建立基础《Promises/A+ 提案》也是以这一提案书为根基衍生而来。
-    之所以 Deferred 对象没有遵循《Promises/A+ 提案》,是因为那时后者根本还没被构想出来。
-    由于 jQuery 扮演的先驱者的角色以及后向兼容性问题,
-    jQuery1.x 和 2.x 里 promises 的使用方式和原生 Javascript 的用法并不一致。
-    此外,由于 jQuery 自己在 promises 方面遵循了另外一套提案,
-    这导致它无法兼容其他实现 promises 的库,比如 Q library。
-    不过即将到来的 jQuery 3 改进了 同原生 promises「ES6+」的互操作性。
-    虽然为了向后兼容,Deferred 对象的主要方法之一（then()）的方法签名仍然会有些不同,
-    但行为方面它已经同 ECMAScript 2015 标准更加一致。
+  PS：jQuery 1.5 中引入; 和 Promise 对象一起作为 jQuery 对 Promise 的一种实现;
+    在 jQuery1.x 和2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
+    不同于原生promises遵守 Promises/A+ 提案「从CommonJS Promises 衍生而来」的约定,
+    导致其无法兼容其他实现promises的库,比如 Q library;
+    jQ3改进了同原生 promises的互操作性,但Deferred的 then 方法签名仍然会有些不同,
+    但行为方面它已经同 ECMAScript 2015 标准更加一致;
   Deferred和Promise对象 
     PS： Deferred 对象可以被用来执行异步操作,例如 Ajax 请求和动画的实现。
       在 jQuery 中,Promise对象是只能由Deferred对象或 jQuery 对象创建。
@@ -1077,8 +1069,9 @@ Deferred 对象
       在 ECMAScript 中, 不论一个 promise 被完成 (fulfilled) 还是被拒绝 (rejected),
       我们都说它被解析 (resolved) 了。
       然而在 jQuery 的文档中,被解析这个词指的是 ECMAScript 标准中的完成 (fulfilled) 状态。
-    var deferred = jQuery.Deferred(); 创建deferred对象
-      或者,使用 $ 作为 jQuery 的简写： var deferred = $.Deferred();
+    var deferred = $.Deferred()    创建deferred对象
+    deferred.resolve([argument,...]) 解析Deferred,以指定参数执行所有回调
+    deferred.reject([argument,...])  拒绝Deferred,以指定参数执行所有回调
     deferred.always(cfoos[, cfoos, ..., cfoos])
        添加在该 Deferred 对象被解析或被拒绝时调用的处理函数
     deferred.done(cfoos[, cfoos, ..., cfoos])
@@ -1092,12 +1085,8 @@ Deferred 对象
     deferred.progress(cfoos[, cfoos, ..., cfoos])
       添加在该 Deferred 对象产生进展通知时被调用的处理函数。
     deferred.promise([target])  返回 Deferred 对象的 promise 对象
-    deferred.reject([argument, ..., argument]) 
-      拒绝一个 Deferred 对象并以指定的参数调用所有的failCallbacks处理函数。
     deferred.rejectWith(context[, argument, ..., argument])
       拒绝一个 Deferred 对象并在指定的上下文中以指定参数调用所有的failCallbacks处理函数。
-    deferred.resolve([argument, ..., argument])
-      解析一个 Deferred 对象并以指定的参数调用所有的 doneCallbackswith 处理函数。
     deferred.resolveWith(context[, argument, ..., argument])
       解析一个 Deferred 对象并在指定的上下文中以指定参数调用所有的doneCallbacks处理函数。
     deferred.state()    返回当前 Deferred 对象的状态。
@@ -1142,7 +1131,7 @@ Deferred 对象
       timeout(1000).then(function() {
         console.log('等待了1秒钟！');
       });
-    jQuery1.x/2.x 同 jQuery3 的区别 
+    jQ1.x-2.x 同 jQ3 的区别 
       var deferred = $.Deferred();
       deferred.then(function() {
         throw new Error('一条错误信息');

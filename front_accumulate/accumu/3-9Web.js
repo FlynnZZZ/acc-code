@@ -18,7 +18,7 @@ web标准的构成
       上一级,书写为:folderName/fileName;
       ../ 表示上一级目录; ./ 表示当前目录; / 表示相对根路径
   HSL色彩模式 工业界的一种颜色标准
-    PS:
+    PS：
       通过对色相(H) 饱和度(S) 明度(L)三个颜色通道的变化及其相互叠加来得到各式各样的颜色的,
       HSL即是代表色相,饱和度,明度三个通道的颜色,这个标准几乎包括了人类视力所能感知的所有颜色,
       是目前运用最广的颜色系统之一。
@@ -54,7 +54,7 @@ web标准的构成
     Controller,控制层: 数据处理,实现业务逻辑
     View,视图层:       展示数据,提供用户界面
   MVVM 模式
-    PS:用 View Model 代替 Controller.
+    PS：用 View Model 代替 Controller.
       本质：view 绑定 view-model,视图与数据模型强耦合,
       数据的变化实时反映在 view 上,不需要手动处理.
     Model
@@ -111,7 +111,7 @@ web标准的构成
   命令提示符是在操作系统中,提示进行命令输入的一种工作提示符。
   在不同的操作系统环境下,命令提示符各不相同。
 windows环境 
-  PS:命令行程序为cmd.exe,是一个32位的命令行程序,
+  PS：命令行程序为cmd.exe,是一个32位的命令行程序,
     微软Windows系统基于Windows上的命令解释程序,类似于微软的DOS操作系统。
     输入一些命令,cmd.exe可以执行,比如输入shutdown -s就会在30秒后关机。
     打开方法：开始-所有程序-附件 或 开始-寻找-输入：cmd/cmd.exe 回车。
@@ -119,7 +119,7 @@ windows环境
     它可以实现用户与操作系统的直接交流,并负责用户输入的所有命令的解释和支持。
     命令提示符进行的操作往往更具有专业性——实际上很多Windows中的操作只能通过命令来实现
   命令 快捷键 操作
-    PS:
+    PS：
       命令码无大小写区分 (文件夹的名称也无大小写区分)     
     快捷键
       rightmouse      粘贴
@@ -221,7 +221,7 @@ windows环境
       浏览器在遇到<body>标签时才开始呈现内容
     主要组成
       渲染引擎: 将网页代码渲染成图像呈现,也叫浏览器内核
-        PS:浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
+        PS：浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
           负责对网页语法的解释,如HTML、JavaScript并渲染（显示）网页。
           渲染引擎决定了浏览器如何显示网页的内容以及页面的格式信息。
           不同的浏览器内核对网页编写语法的解释也有不同,
@@ -280,7 +280,7 @@ windows环境
         flow  : 渲染树到网页布局,称为"布局流"
         paint : 布局到网页显示为"绘制"
         reflow 和 repaint
-          PS:页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
+          PS：页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
             reflow必然要repaint,反之则不然,
             如改变颜色只会repaint,改变元素的布局则会reflow和repaint,
             通常,浏览器browser会智能的将reflow和repaint限制在相关子树上, 以减小开销
@@ -308,7 +308,7 @@ windows环境
               }
               allElems.forEach(addHeight);
       JS引擎: 主要作用将网页中的JS代码读取、处理并运行,也叫JS解释器
-        PS:JS为解释型语言,不需编译,由解释器运行
+        PS：JS为解释型语言,不需编译,由解释器运行
           好处: 运行和修改方便
           缺点: 每次运行需要调用解释器,系统开销大,运行速度慢于编译型语言
           为了提高运行速度,目前浏览器都将JS进行一定程度的编译,
@@ -713,7 +713,7 @@ Webpack 模块加载器兼打包工具
               <%= compilation.asserts[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
             </script>
 Gulp 
-  PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
+  PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
     使用她,我们不仅可以很愉快的编写代码,而且大大提高我们的工作效率。
     gulp是基于Nodejs的自动任务运行器,
@@ -725,12 +725,12 @@ Gulp
     gulp 和 grunt 非常类似,但相比于 grunt 的频繁 IO 操作,
     gulp 的流操作,能更快地更便捷地完成构建工作。
   全局安装gulp
-    PS:全局安装gulp目的是为了通过她执行gulp任务；
+    PS：全局安装gulp目的是为了通过她执行gulp任务；
     cnpm install gulp -g   安装
     gulp -v     查看是否正确安装,出现版本号即为正确安装
       //  CLI version 3.9.1
   新建 package.json 文件
-    PS:package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
+    PS：package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
     手动新建配置文件
       它是这样一个json文件（注意：json文件内是不能写注释的,复制下列内容请删除注释）：
       {
@@ -774,7 +774,7 @@ Gulp
       全局安装了gulp,项目也安装了gulp,
       全局安装gulp是为了执行gulp任务,本地安装gulp则是为了调用gulp插件的功能。
   新建 gulpfile.js 文件（重要）
-    PS:gulpfile.js 是gulp项目的配置文件,
+    PS：gulpfile.js 是gulp项目的配置文件,
       是位于项目根目录的普通js文件（其实将 gulpfile.js 放入其他文件夹下亦可）。
     大概是这样一个js文件,主要配置:
       //导入工具包 require('node_modules里对应模块')
@@ -813,7 +813,7 @@ Anythere 将当前目录变成一个静态文件服务器的根目录
       anywhere  8000 
     -s 静默执行不会自动打开浏览器,默认自动打开网页
 Weinre,Web Inspector Remote  一种远程调试工具 
-  PS:功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
+  PS：功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
     由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
     所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
   三个端的含义：
@@ -862,7 +862,7 @@ ueditor 百度编辑器
 --------------------------------------------------------------------------------
 技巧 实现 
   动态 rem 自适应布局.
-    PS:rem 单位在做移动端的h5开发的时候是最经常使用的单位。
+    PS：rem 单位在做移动端的h5开发的时候是最经常使用的单位。
       采用js动态计算给文档的根节点 font-size 赋值,并以此为尺寸参考进行网页布局.
       可参考淘宝的布局.
     使用的时,将下面的代码放到页面的顶部（head标签内）；

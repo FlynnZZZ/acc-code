@@ -1,5 +1,5 @@
 ★AngularJS 
-  PS:诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
+  PS：诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
     最为核心的是：MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
   概念类
     指令: 通过被称为指令的新属性来扩展HTML,为应用添加功能,允许自定义指令.
@@ -9,12 +9,12 @@
       ng-model 指把元素值(比如输入域的值)绑定到应用程序
   ◆四大核心特性
   MVC (Model Controller View)
-    PS:MVC 只是手段,目的是模块化和复用
+    PS：MVC 只是手段,目的是模块化和复用
       model :数据模型层;
       view :视图层,负责展示;
       controller:业务逻辑和控制逻辑.
     $scope 
-      PS:MVC 是借助$scope实现的.
+      PS：MVC 是借助$scope实现的.
         是一个POJO,Plain Old JavaScript Object.
         提供了一些工具方法 $watch() $apply().
         是表达式的执行环境,也叫作用域.
@@ -28,7 +28,7 @@
 ◆components 组件 
   全生命周期支持
 ◆directives 指令
-  PS:指令可以自定义
+  PS：指令可以自定义
   属性指令: 改变组件模板的外观或行为,如样式等
   结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
 ◆services   服务 : 实现专一目的的逻辑单元,如日志服务
@@ -51,7 +51,7 @@
 ◆modules 模块
 todo 
   模块化 
-    PS:一切由模块开始
+    PS：一切由模块开始
     路由
       使用ngRoute进行视图之间的路由
       e.g. :
@@ -151,7 +151,7 @@ todo
         实例中 {{message}} 会根据输入框 input 的改变而改变
   Vue实例
     var vm = new Vue({ /* options */ });  构造器 
-      PS:VueJS应用都是通过构造函数 Vue 创建一个 Vue 的根实例 启动的：
+      PS：VueJS应用都是通过构造函数 Vue 创建一个 Vue 的根实例 启动的：
         实例化 Vue,需传入一对象参数,
         参数可包含数据、模板、挂载元素、方法、生命周期钩子等选项。
         注:文档中经常会使用 vm 这个变量名表示 Vue 实例。
@@ -165,7 +165,7 @@ todo
           // 所有的 `MyComponent` 实例都将以预定义的扩展选项被创建
           var myComponentInstance = new MyComponent()
     data、methods、watch 属性
-      PS:最重要的三个属性
+      PS：最重要的三个属性
       data     代表vue对象的数据
         每个 Vue 实例都会代理其 data 对象里所有的属性：
           var data = { a: 1 }
@@ -194,7 +194,7 @@ todo
         因为箭头函数绑定父上下文,所以 this 不会像预想的一样是 Vue 实例,
         而是 this.myMethod 未被定义。
     钩子 某个阶段开始或者结束之前、之后等过程中被触发的函数
-      PS:每个 Vue 实例在被创建之前都要经过一系列的初始化过程。
+      PS：每个 Vue 实例在被创建之前都要经过一系列的初始化过程。
         如实例需要配置数据观测、编译模版、挂载实例到 DOM,然后在数据变化时更新DOM.
         在这个过程中,实例也会调用一些生命周期钩子,给我们提供了执行自定义逻辑的机会。
         钩子的 this 指向调用它的 Vue 实例。
@@ -231,7 +231,7 @@ new Vue(vParamsObj)   创建vueObj,Vue对象
       e.g.: 'components': {App}    // 加载标签为App的组件
     ...
 v-xx  Directives指令系统
-  PS:用于将vueObj和 HTML DOM 进行关联
+  PS：用于将vueObj和 HTML DOM 进行关联
     做为HTML标签的属性,可以让 Vue.js 对一个 DOM 元素做各种处理;
     指令带有前缀 v-,以表示它们是 Vue.js 提供的特殊属性;
   ▼数据渲染: 其值对应的为 vParamsObj.data 对象中的值
@@ -264,7 +264,7 @@ v-xx  Directives指令系统
   v-attr
   v-repeat
   HTML代码
-    PS:双大括号会将数据解释为纯文本,而非 HTML 。
+    PS：双大括号会将数据解释为纯文本,而非 HTML 。
       为了输出真正的 HTML,需要使用 v-html 指令：
       站点上动态渲染的任意 HTML 可能会非常危险,因为它很容易导致 XSS 攻击。
       请只对可信内容使用 HTML 插值,绝不要对用户提供的内容插值。
@@ -274,7 +274,7 @@ v-xx  Directives指令系统
       注意,不能使用 v-html 来复合局部模板,因为 Vue 不是基于字符串的模板引擎。
       组件更适合担任 UI 重用与复合的基本单元。
   属性
-    PS:Mustache 不能在 HTML 属性中使用,应使用 v-bind 指令：
+    PS：Mustache 不能在 HTML 属性中使用,应使用 v-bind 指令：
     <div v-bind:id="dynamicId"></div>
     这对布尔值的属性也有效 —— 如果条件被求值为 false 的话该属性会被移除：
     <button v-bind:disabled="someDynamicCondition">Button</button>        
@@ -317,7 +317,7 @@ v-xx  Directives指令系统
     在所有支持 Vue.js 的浏览器都能被正确地解析。而且,它们不会出现在最终渲染的标记。
     缩写语法是完全可选的,但随着你更深入地了解它们的作用,你会庆幸拥有它们。        
   Class 与 Style 绑定
-    PS:数据绑定一个常见需求是操作元素的 class 列表和它的内联样式。
+    PS：数据绑定一个常见需求是操作元素的 class 列表和它的内联样式。
       因为它们都是属性 ,我们可以用v-bind 处理它们：只需要计算出表达式最终的字符串。
       不过,字符串拼接麻烦又易错。
       因此,在 v-bind 用于 class 和 style 时, Vue.js 专门增强了它。
@@ -634,7 +634,7 @@ v-xx  Directives指令系统
               <button v-on:click="$emit(\'remove\')">X</button>\
             </li>\
           ',
-          props: ['title']
+          proPS： ['title']
         })
         new Vue({
           el: '#todo-list-example',
@@ -1144,7 +1144,7 @@ v-xx  Directives指令系统
         prop 是父组件用来传递数据的一个自定义属性。子组件需要显式地用 props 选项声明 “prop”：
         Vue.component('child', {
           // 声明 props
-          props: ['message'],
+          proPS： ['message'],
           // 就像 data 一样,prop 可以用在模板内
           // 同样也可以在 vm 实例中像 “this.message” 这样使用
           template: '<span>{{ message }}</span>'
@@ -1158,7 +1158,7 @@ v-xx  Directives指令系统
         HTML 特性不区分大小写。当使用非字符串模版时,prop的名字形式会从 camelCase 转为 kebab-case（短横线隔开）：
         Vue.component('child', {
           // camelCase in JavaScript
-          props: ['myMessage'],
+          proPS： ['myMessage'],
           template: '<span>{{ myMessage }}</span>'
         })
         <!-- kebab-case in HTML -->
@@ -1196,12 +1196,12 @@ v-xx  Directives指令系统
         prop 作为需要被转变的原始值传入。
         更确切的说这两种情况是：
         定义一个局部 data 属性,并将 prop 的初始值作为局部数据的初始值。
-        props: ['initialCounter'],
+        proPS： ['initialCounter'],
         data: function () {
           return { counter: this.initialCounter }
         }
         定义一个 computed 属性,此属性从 prop 的值计算得出。
-        props: ['size'],
+        proPS： ['size'],
         computed: {
           normalizedSize: function () {
             return this.size.trim().toLowerCase()
@@ -1214,7 +1214,7 @@ v-xx  Directives指令系统
         组件可以为 props 指定验证要求。如果未指定验证要求,Vue 会发出警告。当组件给其他人使用时这很有用。
         prop 是一个对象而不是字符串数组时,它包含验证要求：
         Vue.component('example', {
-          props: {
+          proPS： {
             // 基础类型检测 （`null` 意思是任何类型都可以）
             propA: Number,
             // 多种类型
@@ -1326,7 +1326,7 @@ v-xx  Directives指令系统
               >\
             </span>\
           ',
-          props: ['value'],
+          proPS： ['value'],
           methods: {
             // 不是直接更新值,而是使用此方法来对输入值进行格式化和位数限制
             updateValue: function (value) {
@@ -1684,13 +1684,13 @@ v-xx  Directives指令系统
           '
         })
 {{}} 模板语法 
-  PS:Vue.js 使用了基于 HTML 的模版语法,可声明式地将 DOM 绑定至底层 Vue 实例的数据.
+  PS：Vue.js 使用了基于 HTML 的模版语法,可声明式地将 DOM 绑定至底层 Vue 实例的数据.
     所有 Vue.js 的模板都是合法的 HTML ,所以能被遵循规范的浏览器和 HTML 解析器解析。
     在底层的实现上, Vue 将模板编译成虚拟 DOM 渲染函数。
     结合响应系统,在应用状态改变时,Vue 能够智能地计算出重新渲染组件的最小代价并应用到 DOM 操作上。
     也可以不用模板,直接写渲染（render）函数,使用可选的 JSX 语法。  
   {{}} 插值
-    PS:{{value}}的形式就能取到value的值,并与value进行绑定
+    PS：{{value}}的形式就能取到value的值,并与value进行绑定
     文本数据绑定
       最常见的形式就是使用 Mustache 语法--双大括号--的文本插值.
       e.g.:
@@ -1700,7 +1700,7 @@ v-xx  Directives指令系统
         通过使用 v-once 指令,你也能执行一次性地插值,当数据改变时,插值处的内容不会更新。
         但请留心这会影响到该节点上所有的数据绑定：
     配合JavaScript表达式使用
-      PS:实际上,对于所有的数据绑定, Vue.js 都提供了完全的 JavaScript 表达式支持。
+      PS：实际上,对于所有的数据绑定, Vue.js 都提供了完全的 JavaScript 表达式支持。
         模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date 。
         不应该在模板表达式中试图访问用户定义的全局变量。
       e.g.:
@@ -1716,7 +1716,7 @@ v-xx  Directives指令系统
         <!-- 流控制也不会生效,请使用三元表达式 -->
         {{ if (ok) { return message } }}
     过滤器
-      PS:Vue.js 允许你自定义过滤器,被用作一些常见的文本格式化。
+      PS：Vue.js 允许你自定义过滤器,被用作一些常见的文本格式化。
         Vue 2.x 中,过滤器只能在 mustache 绑定和 v-bind 表达式（从 2.1.0 开始支持）中使用,
         因为过滤器设计目的就是用于文本转换。
         为了在其他指令中实现更复杂的数据变换,你应该使用计算属性。
@@ -1745,7 +1745,7 @@ v-xx  Directives指令系统
       这里,字符串 'arg1' 将传给过滤器作为第二个参数,
       arg2 表达式的值将被求值然后传给过滤器作为第三个参数.
   计算属性
-    PS:在模板中绑定表达式是非常便利的,但是它们实际上只用于简单的操作。
+    PS：在模板中绑定表达式是非常便利的,但是它们实际上只用于简单的操作。
       可以像绑定普通属性一样在模板中绑定计算属性。
     在模板中放入太多的逻辑会让模板过重且难以维护。
       例如：
@@ -1916,7 +1916,7 @@ v-xx  Directives指令系统
         限制我们执行该操作的频率,并在我们得到最终结果前,设置中间状态。这是计算属性无法做到的。
         除了 watch 选项之外,您还可以使用 vm.$watch API 命令。          
 component 组件系统 
-  PS:Vue.js 的一重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用;
+  PS：Vue.js 的一重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用;
     几乎任意类型的应用的界面都可以抽象为一个组件树;
     在一个大型应用中,为了使得开发过程可控,有必要将应用整体分割成一个个的组件.
     Vue.js 组件类似于自定义元素.

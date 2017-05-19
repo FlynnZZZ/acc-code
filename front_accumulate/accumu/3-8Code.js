@@ -333,6 +333,19 @@ PC端
       // console.log(elem1);
       elem.animate({scrollTop: 0}, 800); 
     }); 
+  滚动到顶部和底部
+    window.onscroll = function(){
+      var client = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      // 可视区高度
+      var scrollTop = document.body.scrollTop; // 滚动距离
+      var wholeHeight = document.body.scrollHeight; // 总高度
+      if (scrollTop == 0) {
+        console.log('scroll to top');
+      }
+      if (scrollTop + client >= wholeHeight) {
+        console.log('scroll to bottom');
+      }
+    }
   图片预加载
     $.preloadImages = function () { 
       for (var i = 0; i < arguments.length; i++) {

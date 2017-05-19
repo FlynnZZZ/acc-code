@@ -810,7 +810,7 @@ RegExp 正则的扩展
     const regexArrows = /^\p{Block=Arrows}+$/u;
     regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
 Strings and Regular Expressions,字符串与正则表达式 
-  PS:ECMAScript 6 诞生之前,JavaScript 字符串(string)由 16 位编码的字符组成(UTF-16).
+  PS：ECMAScript 6 诞生之前,JavaScript 字符串(string)由 16 位编码的字符组成(UTF-16).
     每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
     所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
     曾经,16 位的容量对于任意字符的存放都是足够的,
@@ -850,7 +850,7 @@ Strings and Regular Expressions,字符串与正则表达式
       console.log(is32Bit("𠮷"));    // true
       console.log(is32Bit("a"));     // false
   String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
-    PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
+    PS：可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
       针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
     e.g.:
       使用给定的代码点来产生相应的单个字符
@@ -1136,7 +1136,7 @@ Function 函数的扩展
       定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
       而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
     todo -----箭头函数 (ES6新增)
-      PS:匿名函数的简化版
+      PS：匿名函数的简化版
         箭头函数的this值是绑定了的
         箭头函数没有arguments对象,若要多参数,则需用...
       创建箭头函数
@@ -1151,7 +1151,7 @@ Function 函数的扩展
          /*等价于*/ var a3 =a1.map(n => n*n);
          console.log(a3); // [1, 4, 9]
 Set   集合 
-  PS:ES6新增的一种新的数据结构,可以理解为值的集合;
+  PS：ES6新增的一种新的数据结构,可以理解为值的集合;
     Set中的元素无重复项「会自动去掉重复的元素」;
     Set集合中,key和val为同一个值;
   new Set([arr])  创建set
@@ -1339,14 +1339,14 @@ Map   字典
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
       若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失。
 Blob  二进制数据的基本对象 
-  PS:一个 Blob对象表示一个不可变的,原始数据的类似文件对象。
+  PS：一个 Blob对象表示一个不可变的,原始数据的类似文件对象。
     Blob表示的数据不一定是一个JavaScript原生格式。 
     File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件。
     要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档。
     接受Blob对象的APIs也被列在 File 文档中。
   创建blob对象
     Blob(blobParts[, options])  返回创建的 Blob 对象
-      PS:其内容由参数中给定的数组串联组成。
+      PS：其内容由参数中给定的数组串联组成。
       blobParts 一个包含实际数据的数组
       options   数据的类型
       使用其它对象创建一个 Blob 对象
@@ -1899,7 +1899,7 @@ Generator 生成器函数
     ite.next(); // {value: "gen2 end", done: false}
     ite.next(); // {value: "end", done: false}
 Promise 异步模式 
-  PS: 采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
+  PS： 采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
     将原来异步函数的嵌套关系转变为'同步'的链式关系.
     Promise 对象是一个代理对象,代理了最终返回的值,可以在后期使用.
     将异步操作封装成 Promise 对象.
@@ -1916,7 +1916,7 @@ Promise 异步模式
     其次,若不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
     第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
   new Promise(foo) 创建Promise对象
-    PS: Promise在创建时,参数函数就会执行
+    PS： Promise在创建时,参数函数就会执行
       参数为一「执行异步操作的」函数, resolve 和 reject 传递给函数的参数「executor」
       参数函数内,若 resolve 被调用,代表该Promise被成功解析「resolve」;
       若 reject 被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
@@ -2079,7 +2079,7 @@ module 模块化历史
     JavaScript模块化正式为了解决这一需求而诞生。
     目前还没有浏览器支持ES6的module模块。
   模块化演化
-    PS:模块化开发是一种生产效率高,维护成本低的生产方式
+    PS：模块化开发是一种生产效率高,维护成本低的生产方式
       从软件开发角度来说,模块化开发是一种开发模式,写代码的一种方式;
       非模块化开发可能遇到的问题: 命名冲突、文件依赖
       模块化优点: 提升开发效率、方便后期维护.
@@ -2153,11 +2153,11 @@ module 模块化历史
         本例中使用的jQuery,而当要使用zepto的时候,只要更换传入的参数即可。
         原则：高内聚低耦合,模块内相关性高,模块间关联低。
   模块化规范
-    PS:客户端规范主要有：AMD 和 CMD
+    PS：客户端规范主要有：AMD 和 CMD
       服务器端规范主要是 CommonJS,
       node.js 用的就是 CommonJS 规范。
     AMD 异步模块定义,依赖前置,实现主要有 RequireJS, RequireJS在国外用的比较多
-      PS:制定了定义模块的规则,这样模块和模块的依赖可以被异步加载。
+      PS：制定了定义模块的规则,这样模块和模块的依赖可以被异步加载。
         这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。
       模块名的格式
         模块名用来唯一标识定义中模块,它们同样在依赖数组中使用。
@@ -2195,7 +2195,7 @@ module 模块化历史
             在某些情况下,因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法）,模块加载器可以选择扫描不扫描依赖性。
             若有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
         define.amd 属性
-          PS:为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
+          PS：为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
             任何全局函数应该有一个"amd"的属性,它的值为一个对象。
             这样可以防止与现有的定义了define函数但不遵从AMD编程接口的代码相冲突。
           当前,define.amd对象的属性没有包含在本规范中。实现本规范的作者,可以用它通知超出本规范编程接口基本实现的额外能力。
@@ -2249,7 +2249,7 @@ module 模块化历史
           一个关于本API的wiki开始在CommonJS wiki中创建了,作为中转的格式,模块中转。但是为了包含模块定义接口,随着时间而不断改变。在CommonJS列表中关于推荐本API作为模块定义API尚未达成一致。本API被转移到它自己的wiki和讨论组中。
           AMD可以作为CommonJS模块一个中转的版本只要CommonJS没有被用来同步的require调用。使用同步require调用的CommonJS代码可以被转换为使用回调风格的AMD模块加载器。
     CMD,Common Module Definition 通用模块定义,依赖就近
-      PS:主要实现有 SeaJS, SeaJS的创始人为阿里的玉伯
+      PS：主要实现有 SeaJS, SeaJS的创始人为阿里的玉伯
         SeaJS在阿里系用的非常广泛,包括京东等也在用SeaJS
         但是SeaJS已经停止维护了,因为在ES6中已经有了模块化的实现,
         该规范明确了模块的基本书写格式和基本交互规则。
@@ -2413,14 +2413,14 @@ module 模块化历史
         这就是 CMD 模块定义规范的所有内容。经常使用的 API 只有 define, require, require.async, exports, module.exports 这五个。其他 API 有个印象就好,在需要时再来查文档,不用刻意去记。
         与 RequireJS 的 AMD 规范相比,CMD 规范尽量保持简单,并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性。通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行,后续会介绍。
     SeaJs
-      PS:是一基于 CMD 规范实现的模块化开发解决方案.
+      PS：是一基于 CMD 规范实现的模块化开发解决方案.
         作者：Alibaba 玉伯
         简单友好的模块化定义规范。
         自然直观的代码组织方式。
       使用步骤
         引入sea.js库
         define 定义模块
-          PS:在CMD规范中,一个模块就是一个js文件
+          PS：在CMD规范中,一个模块就是一个js文件
             define 是一个全局函数,用来定义模块
           define(factory)
             参数 factory可为字符串、对象或函数
@@ -2539,7 +2539,7 @@ module 模块化历史
             </body>
             </html>
       定义模块define
-        PS:先有规范,后有实现
+        PS：先有规范,后有实现
           在CMD规范中,一个模块就是一个js文件
         define(factory)   define是一个全局函数,用来定义模块
           对象{}     外部会直接获取到该对象
@@ -2703,7 +2703,7 @@ module 模块化历史
         并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性.
         通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行
     CommonJs
-      PS:SeaJs 和 CommonJs 规范非常的相似,并且在 node.js 中使用起来更简单。
+      PS：SeaJs 和 CommonJs 规范非常的相似,并且在 node.js 中使用起来更简单。
         在 node.js 中直接使用require引包,直接使用 exports 和 module.exports 暴露公开成员,
         并且npm基于CommonJs实现了自动加载和安装依赖。
       同样的 CommonJs 让 node.js 变得：
@@ -2721,7 +2721,7 @@ module 模块化历史
         查看单个的模块缓存 require.cache[require.resolve('./test.js')]
         删除模块缓存 delete require.cache[require.resolve('./test.js')];
 export import ES6模块化规范 
-  PS: export 命令用于定义模块的对外接口,即提供接口,
+  PS： export 命令用于定义模块的对外接口,即提供接口,
     import 命令用于引入其他模块提供的功能,即引入接口;
   ES6 模块的设计思想: 尽量的静态化
     使得编译时就能确定模块的依赖关系,以及输入和输出的变量。
@@ -2775,7 +2775,7 @@ export import ES6模块化规范
       增加了保留字(比如 protected static 和 interface )
     ES6 模块之中,顶层的this指向undefined,即不应该在顶层代码使用this。
   export 输出变量
-    PS:一个模块就是一个独立的文件,
+    PS：一个模块就是一个独立的文件,
       该文件内部的所有变量,外部无法获取。
       若希望外部能读取模块内的变量,须使用export关键字输出变量。
     export var aoo = val;  单个变量输出
@@ -2788,7 +2788,7 @@ export import ES6模块化规范
         对外输出一个函数 foo
         export function foo(x, y) { };
     export {aoo,boo};      {} 封装后输出
-      PS:使用大括号指定所要输出的一组变量;
+      PS：使用大括号指定所要输出的一组变量;
         与前一种写法(直接放置在var语句前)是等价的,
         但是应该优先考虑使用这种写法。
         因为这样就可以在脚本尾部,一眼看清楚输出了哪些变量。
@@ -2842,7 +2842,7 @@ export import ES6模块化规范
       foo();
       上面代码中,export语句放在函数之中,结果报错。
   export default 默认输出
-    PS:通过默认输出,和指定名称的引入,完成模块变量的引入;
+    PS：通过默认输出,和指定名称的引入,完成模块变量的引入;
     e.g.:
       // export-default.js
       默认输出一个函数
@@ -2877,7 +2877,7 @@ export import ES6模块化规范
       export function foo() { }; // 输出
       import {goo} from 'xx';    // 输入
     一个模块只能有一个默认输出,export default 命令只能使用一次
-      PS:本质上,export default 就是输出一个叫做default的变量或方法,
+      PS：本质上,export default 就是输出一个叫做default的变量或方法,
         然后输入时,系统允许你为它取任意名字。
       // modules.js
       function foo(x, y) { return x * y; }
@@ -2885,7 +2885,7 @@ export import ES6模块化规范
       // app.js
       import { default as xxx } from 'modules';
     export default 后不能跟变量声明语句
-      PS:因为export default命令其实只是输出一个叫做default的变量
+      PS：因为export default命令其实只是输出一个叫做default的变量
         export default 本质是将该命令后面的值,赋给default变量以后再默认
       export var a = 1; // 正确
       
@@ -2903,7 +2903,7 @@ export import ES6模块化规范
         export default function (obj) { }         
         export function each(obj, iterator, context) { }
   import 命令
-    PS:export定义模块的对外接口后,其他 JS 文件就可通过import加载这个模块;
+    PS：export定义模块的对外接口后,其他 JS 文件就可通过import加载这个模块;
     import {} from './xx' 加载JS文件,并从中输入变量
       // main.js
       import {firstName, lastName, year} from './profile';
@@ -2952,7 +2952,7 @@ export import ES6模块化规范
       import { foo, bar } from 'my_module';
       上面代码中,虽然foo和bar在两个语句中加载,但是它们对应的是同一个my_module实例。
     import * as aoo from './xx';  模块的整体加载
-      PS:除了指定加载某个输出值,还可以使用整体加载,即用星号(*)指定一个对象,
+      PS：除了指定加载某个输出值,还可以使用整体加载,即用星号(*)指定一个对象,
         所有输出值都加载在这个对象上面。
       e.g.:
         // circle.js
@@ -2973,7 +2973,7 @@ export import ES6模块化规范
         circle.foo = 'hello';
         circle.area = function () {};
   export  from  复合写法
-    PS:若在一个模块之中,先后输入输出同一个模块,import语句可与export语句写在一起。
+    PS：若在一个模块之中,先后输入输出同一个模块,import语句可与export语句写在一起。
     e.g.:
       export { foo, bar } from 'my_module';
       // 等同于
@@ -3049,7 +3049,7 @@ export import ES6模块化规范
     // script.js
     import {db, users} from './constants';
   import(specifier)
-    PS:前面介绍过,import命令会被 JavaScript 引擎静态分析,
+    PS：前面介绍过,import命令会被 JavaScript 引擎静态分析,
       先于模块内的其他模块执行(叫做”连接“更合适)。所以,下面的代码会报错。
       // 报错
       if (x === 2) { import MyModual from './myModual'; }

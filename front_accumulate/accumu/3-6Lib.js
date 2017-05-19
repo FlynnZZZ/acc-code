@@ -20,7 +20,7 @@ Framework 框架
 --------------------------------------------------------------------------------
 ★jQuery 
 说明篇 :快速简洁的JavaScript库 
-  PS:jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
+  PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
   版本
     2.0 版本不支持ie 6/7/8
   核心特性总结：
@@ -114,7 +114,7 @@ Framework 框架
       // 此作用域中 J 等价于 jQuery
     })(jQuery);
 DOM 操作 
-  PS:使用JQ方法获取的HTML元素,为JQ DOM元素对象,
+  PS：使用JQ方法获取的HTML元素,为JQ DOM元素对象,
     jQuery对象是通过jQuery包装DOM对象产生的对象,
     Jelem 类似于数组,未获取到元素则为空数组,
     数组中每个元素为原生JS的DOM元素对象;
@@ -125,7 +125,7 @@ DOM 操作
       bool   布尔值,默认为false,若为true,则复制 Event 和 Data
   Jelem 获取 
     $("selector"); 通过选择器获取Jelem 
-      PS:等价于 jQuery("selector");
+      PS：等价于 jQuery("selector");
         selector 可为组合选择器
         CSS选择器几乎可全部适用 
       ◆层级关系
@@ -282,12 +282,12 @@ DOM 操作
         $containerLi = $container.find('li'), 
         $containerLiSpan= $containerLi.find('span');
   Jelem 操作 
-    PS:若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
+    PS：若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
     Jelem 转换为 elem
-      PS: 而Jelem对象 使用原生JS的方法时,需转换为elem对象
+      PS： 而Jelem对象 使用原生JS的方法时,需转换为elem对象
       Jelem[index];     下标获取对应的元素
       Jelem.get(index); get取下标获取elem
-        PS:使用get取下标,index的可能性更多
+        PS：使用get取下标,index的可能性更多
         参数为负时:0 表示第一个,-1 表示最后一个,-2 表示倒数第二个,依此类推...
         无参数时,将jQ对象数组转换为可用JS操作的常规数组.
     增
@@ -414,9 +414,9 @@ DOM 操作
     元素信息
       ◆尺寸位置信息
       Jelem.position()  定位(非static)元素的定位尺寸信息(top和left) [只读?]
-        PS:只对可见元素有效
+        PS：只对可见元素有效
       Jelem.offset()    可读写,元素相对document「可视区左上角」的top和left
-        PS:此方法只对可见元素有效
+        PS：此方法只对可见元素有效
         RetValue:包含top和left属性的一个对象
         e.g.:
           $(".a").offset(); // {top: 24, left: 0}
@@ -587,9 +587,9 @@ DOM 操作
         },1000);
       })
 Event 事件 
-  PS:Jelem绑定事件,则为列表中的每个对象进行了绑定
+  PS：Jelem绑定事件,则为列表中的每个对象进行了绑定
   ◆事件绑定与取消
-    PS:bind,live,delegate,on
+    PS：bind,live,delegate,on
       其中 elem.eventName 为bind的简写.
       对应解除为 unbind、die、undelegate、off
       bind 只能针对已经存在的元素进行事件的设置；
@@ -622,7 +622,7 @@ Event 事件
         对selector对应的元素上执行事件,才会执行响应函数(相当于将函数中的判断外置了)
         PS-Self: 仍需符合冒泡原理,响应元素需为绑定元素的子元素?
   Jelem.off()     取消绑定 
-    PS: 移除元素上绑定的一个或多个事件的事件处理函数
+    PS： 移除元素上绑定的一个或多个事件的事件处理函数
       off()函数主要用于解除由on()函数绑定的事件处理函数 
     Jelem.off(events,selector,handler)
       events   可选,String类型,一个或多个用空格分隔的事件或可选的命名空间
@@ -693,14 +693,14 @@ Event 事件
       event	 必需,规定指定元素要触发的事件
         可以使自定义事件(使用 bind() 函数来附加),或者任何标准事件
       [param1,param2,...]	 可选,传递到事件处理程序的额外参数
-        PS:额外的参数对自定义事件特别有用
+        PS：额外的参数对自定义事件特别有用
       Remarks:
         使用 val() 改变 select 的值,不会触发其 change 事件
     Jelem.eventName();   快捷触发
       Jelem.click();  触发点击 
-        PS:不会产生鼠标点击的效果,如下拉选项不会弹出
+        PS：不会产生鼠标点击的效果,如下拉选项不会弹出
   Event 对象
-    PS:jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
+    PS：jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
       使得事件处理在各大浏览器下都可以正常的运行而不需要进行浏览器类型判断。
     event.type 获取事件的类型
       e.g.:
@@ -710,13 +710,13 @@ Event 事件
         })
         以上代码运行后会返回：“click”。
     event.preventDefault()  阻止默认的事件行为
-      PS:JavaScript中符合W3C规范的preventDefault()方法在IE浏览器中无效。
+      PS：JavaScript中符合W3C规范的preventDefault()方法在IE浏览器中无效。
         jQuery对其进行了封装,使之能兼容各种浏览器。
     event.stopPropagation() 阻止事件的冒泡
-      PS:JavaScript中符合W3C规范的stopPropagation()方法在IE浏览器中无效。
+      PS：JavaScript中符合W3C规范的stopPropagation()方法在IE浏览器中无效。
         jQuery对其进行封装,使之能兼容各种浏览器。
     event.target 获取到触发事件的元素
-      PS:jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
+      PS：jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
       e.g.:
         $("a[href=http://www.jb51.net]").click(function(event){
           alert(event.target.href); //获取触发事件的<a>元素的href属性值
@@ -724,7 +724,7 @@ Event 事件
           return false; //阻止链接跳转
         })
     event.relatedTarget 
-      PS:
+      PS：
         标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
         相关元素通过 event.relatedTarget 属性来获取.
         event.relatedTarget 在 mouseover 中相当于IE浏览器的 event.fromElement,
@@ -732,7 +732,7 @@ Event 事件
         jQuery对其进行了封装,使之能兼容各种浏览器。
     event.pageX 获取到光标相对页面的x坐标
     event.pageY 获取到光标相对页面的y坐标
-      PS:
+      PS：
         如果没有使用jQuery时,那么IE浏览器中是用 event.x/event.y,
         而在Firefox浏览器中用 event.pageX/event.pageY,
         如果页上有滚动条,则还要加上滚动条的宽度和高度。
@@ -754,7 +754,7 @@ Event 事件
         })
         以上代码加载到页面中,用鼠标单击页面时,单击左、中、右键分别返回1、2、3.
     event.metaKey 属性
-      PS:
+      PS：
         针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
         规定 event.metaKey() 为键盘事件中获取<ctrl>按键.
     event.originalEvent 指向原始的事件对象
@@ -793,13 +793,13 @@ Event 事件
       });
       注：直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
 AJAX 
-  PS: jQuery 最常用的 AJAX API 可以为分三类:
+  PS： jQuery 最常用的 AJAX API 可以为分三类:
   ◆方法型 
   $.get(url[,data][,cfoo][,type]) get请求 
     url  请求的地址
     data 可选,get方法会把data添加到url上,故可直接改变url而省略data;
     cfoo 载入成功时调用回调函数
-      PS:只有当Response的返回状态为success才执行该函数
+      PS：只有当Response的返回状态为success才执行该函数
       参数
       backData   返回的数据
       textStatus 字符串形式表示的响应的状态
@@ -1251,7 +1251,7 @@ jQuery插件
     selector 表示<ul>元素
     color    表示<li>元素选中时的
 jQuery UI插件
-  PS:jQuery UI则是在jQuery的基础上,利用jQuery的扩展性,设计的插件。
+  PS：jQuery UI则是在jQuery的基础上,利用jQuery的扩展性,设计的插件。
     提供了一些常用的界面元素,诸如对话框、拖动行为、改变大小行为等等
   jQuery UI 引入
     e.g. 
@@ -1415,7 +1415,7 @@ jQuery UI插件
 --------------------------------------------------------------------------------
 Bootstrap :快速开发 Web 应用程序和网站的前端框架 
 介绍_概念_说明_定义 
-  PS:Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
+  PS：Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
     简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)
     Bootstrap 的响应式 CSS 能够自适应于台式机、平板电脑和手机
     一套丰富的预定义样式表
@@ -1428,7 +1428,7 @@ Bootstrap :快速开发 Web 应用程序和网站的前端框架
       为让Bootstrap开发的网站对移动设备友好,确保适当的绘制和触屏缩放
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     引入 jQuery、Bootstrap CSS、Bootstrap JS 
-      PS:Bootstrap中的JS插件依赖于jQuery,因此jQuery需在Bootstrap前引入
+      PS：Bootstrap中的JS插件依赖于jQuery,因此jQuery需在Bootstrap前引入
       e.g. 
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -1572,7 +1572,7 @@ CSS
     控件状态
     表单小图标 校验状态
   按钮
-    PS:任何带有 class .btn 的元素都会继承圆角灰色按钮的默认外观
+    PS：任何带有 class .btn 的元素都会继承圆角灰色按钮的默认外观
       <a>、<button> 或 <input> 元素可使用按钮 class。
       但建议在 <button> 元素上使用,避免跨浏览器不一致
     .btn         为按钮添加基本样式,必须
@@ -1661,7 +1661,7 @@ CSS
       </nav>
 组件
 JS插件
-  PS:一组基于jQuery的JS插件集 (故需要引入jQuery库)
+  PS：一组基于jQuery的JS插件集 (故需要引入jQuery库)
   使用方法:给元素添加 data-xx="xxx" 属性 或再配合jQuery 使用.
   动画效果
   下拉菜单
@@ -2056,7 +2056,7 @@ Question And Answer
         }
     知识点综合
       length
-        PS:字符串和数组 有length属性
+        PS：字符串和数组 有length属性
           String的length属性不可手动更改
           Array的length属性可以手动更改
         e.g.
@@ -2290,5 +2290,4 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
-
 

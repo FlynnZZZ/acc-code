@@ -1,4 +1,4 @@
-// PS:自定义的JS函数库
+// PS：自定义的JS函数库
 console.log("folsJS 准备就绪!");
 
 // 数学库

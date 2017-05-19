@@ -1,8 +1,8 @@
-BOM,Browser Object Model 浏览器对象模型 
-  PS:
-    访问和操作浏览器窗口(显示的页面以外的部分)
+BOM：Browser_Object_Model浏览器对象模型 
+  PS： 访问和操作浏览器窗口「显示的页面以外的部分」,
     BOM由一系列相关的对象构成,并且每个对象都提供了很多方法与属性,用来访问浏览器功能
-    BOM缺少规范,每个浏览器提供商又按照自己想法去扩展他,那么浏览器共有对象就成了事实的标准
+    BOM只是ECMAScript的一个扩展,没有任何相关标准
+    各个浏览器提供商又按照自己想法去扩展他,那么浏览器共有对象就成了事实的标准
     W3C已将DOM的主要内容纳入了HTML5规范中
   BOM部分包括:
     从根本上讲,BOM只处理浏览器窗口和框架,但习惯上帮所有针对浏览器的js扩展算作BOM的一部分如,
@@ -14,14 +14,14 @@ BOM,Browser Object Model 浏览器对象模型
     对cookies的支持
     像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
 window 对象 
-  PS:BOM 是为了操作浏览器出现的 API,window 是其的一个对象.
+  PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象.
     核心对象是window,表示浏览器的一个实例.
     window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
     双重角色:既是JS访问浏览器窗口的一个接口,也是ECMAScript规定的Global对象
     在网页中定义的任何对象 变量和函数,都以window作为其Global对象
     若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
   窗口与框架
-    PS:若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
+    PS：若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
       在frames集合中,可通过数值索引(从0开始,从左至右,从上至下),
       或者框架名称来访问相应的window对象
     window.name  表示窗口/框架的名称
@@ -66,26 +66,26 @@ window 对象
     innerWidth  浏览器显示窗口宽「不包含page_tab和工具栏等,但包含滚动条」「IE9+」
     innerHeight 浏览器显示窗口高「不包含page_tab和工具栏等,但包含滚动条」
     moveTo(x,y) 调整浏览器位置,移动到x,y坐标 
-      PS:不适用于框架,只能对最完成的window对象使用
+      PS：不适用于框架,只能对最完成的window对象使用
     moveBy(x,y) 调整浏览器位置,向下移动xpx,向右移动ypx
-      PS:不适用于框架,只能对最完成的window对象使用
+      PS：不适用于框架,只能对最完成的window对象使用
     resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
-      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
+      PS：IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
     resizeBy(num1,num2) 缩放大小「正数为放大,负数为缩小」
-      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
-      PS:moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
+      PS：IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
+      PS：moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
     scroll(x,y)   滚动到 
       x 值表示你想要置于左上角的px点的横坐标
       y 值表示你想要置于左上角的px点的纵坐标
     scrollTo(x,y) 同scroll
     scrollBy(x,y) 滚动距离 
-      PS:要使此方法工作 window 滚动条的可见属性必须设置为true
+      PS：要使此方法工作 window 滚动条的可见属性必须设置为true
       x 把文档向右滚动的px数
       y 把文档向下滚动的px数
     pageXOffset 页面水平滚动距离,单位px
     pageYOffset 页面垂直滚动距离,单位px
     window.matchMedia(str); 返回一个MediaQueryList对象
-      PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
+      PS：若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
       str 一个mediaQuery语句的字符串
       window.matchMedia(str).media; 返回所查询的mediaQuery语句字符串.
       window.matchMedia(str).matches; 布尔值,表示当前环境是否匹配查询语句
@@ -110,7 +110,7 @@ window 对象
         }
   导航和打开/关闭窗口
     window.open([url],[窗口目标],[参数str],[boolean]);   打开/新建窗口
-      PS:查找一个已经存在的窗口或者新建的浏览器窗口
+      PS：查找一个已经存在的窗口或者新建的浏览器窗口
         若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
         否则打开新窗口并命名
       Arguments: 一般使用3个参数
@@ -126,7 +126,7 @@ window 对象
             相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
             name 不能包含有空格
         参数str:  可选,设置窗口参数,各参数用逗号隔开
-          PS:字符串中不可出现空格
+          PS：字符串中不可出现空格
           width   数值,窗口宽度,不能小于100
           height  数值,窗口高度,不能小于100
           top     数值,窗口顶部距屏幕顶部的px值(不能是负值)
@@ -141,10 +141,10 @@ window 对象
           fullscreen yes/no,浏览器窗口是否最大化(仅限IE)
         boolean: 表示新页面是否取代浏览器记录中当前加载页面的布尔值
       RetValue: 返回打开窗口的window对象
-        PS:有些浏览器默认情况下不允许我们调整主浏览器窗口或位置
+        PS：有些浏览器默认情况下不允许我们调整主浏览器窗口或位置
           但允许调整创建的窗口
       window.opener   表示打开它的原始窗口window对象.
-        PS:
+        PS：
           打开的窗口(新窗口)关联着原始窗口(老窗口);
           打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
           在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
@@ -264,7 +264,7 @@ window 对象
         box();
       </script>
     var rafId =requestAnimationFrame(函数);
-      PS:原理跟setTimeout/setInterval类似,
+      PS：原理跟setTimeout/setInterval类似,
         通过递归调用同一方法来不断更新画面以达到动起来的效果,
         它优于setTimeout/setInterval的地方在于它是由浏览器专门为动画提供的API,
         浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
@@ -272,7 +272,7 @@ window 对象
       常用操作:在函数体内使用 requestAnimationFrame 来调用该函数来实现效果.
     cancelAnimationFrame(rafId); 通过返回ID值取消动画.
   系统对话框
-    PS:系统对话框与浏览器中显示的网页没有关系,也不包含HTML
+    PS：系统对话框与浏览器中显示的网页没有关系,也不包含HTML
       他们的外观由操作系统或浏览器设置决定
       显示这些对话框的时候代码会停止执行,关掉后恢复
     alert("abc");   警告对话框,显示一条信息
@@ -312,7 +312,7 @@ window 对象
     方法
     window.btoa()  将ascii字符串或二进制数据转换成一base64编码过的字符串
     window.atob()  解码
-      PS:该方法不能直接作用于Unicode字符串.
+      PS：该方法不能直接作用于Unicode字符串.
         由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
         接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
         DOM Level 0 规范
@@ -336,7 +336,7 @@ window 对象
         所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
   文本相关
     var selecText = window.getSelection();  返回一个 Selection 对象,表示选中的文字
-      PS:可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串.
+      PS：可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串.
         当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
         对象的toString()方法会被自动调用,而不用手动转换.
       e.g.:
@@ -365,7 +365,7 @@ window的属性对象
       DOM操作比原生方法差一些,优先使用原生属性/方法
     document.documentElement.clientHeight
     document.cookie  读写当前网页的cookie 
-      PS:网站为了标示用户身份而储存在Client Side「用户本地终端」上的数据,通常经过加密;
+      PS：网站为了标示用户身份而储存在Client Side「用户本地终端」上的数据,通常经过加密;
         可访问的前提下,http请求中cookie始终会被携带,
         即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
         在子域名中设置的cookie会始终在该子域名的http请求中携带;
@@ -384,7 +384,7 @@ window的属性对象
         document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'
         key=val  必须,cookie的内容
         expires  可选,过期时间,即过了该时间,cookie被清理
-          PS:使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,
+          PS：使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,
             若未设置或设置为null,当窗口关闭时Cookie被清理;
           e.g. 设置7天后cookie过期
             var date =new Date();
@@ -392,7 +392,7 @@ window的属性对象
             document.cookie ='user='+encodeURIComponent('张三')+';expires='+date;
             decodeURICompinent(document.cookie);
         domain   可选,限制域名访问,必须为当前发送Cookie域名的一部分
-          PS:只有访问的域名匹配domain属性,Cookie才会发送到服务器
+          PS：只有访问的域名匹配domain属性,Cookie才会发送到服务器
           e.g.:
             example.com
             .example.com    // 对所有子域名生效
@@ -450,7 +450,7 @@ window的属性对象
           }
         }
   window.history   保存着用户上网的记录,从窗口被打开的那一刻算起 
-    PS:每个浏览器窗口、标签页及每个框架,都有自己的history对象与特定的window对象关联
+    PS：每个浏览器窗口、标签页及每个框架,都有自己的history对象与特定的window对象关联
       处于安全考虑,开发人员不再到用户浏览过的URL,
       但借由用户访问过的页面列表,可在不知道实际url的情况下实现后退和前进;
     history.length      历史记录数量
@@ -478,7 +478,7 @@ window的属性对象
           console.log('不支持');
         }
       history.pushState(对象,'title',path); 增加历史记录 
-        PS:只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
+        PS：只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态;
           前进或后退 网页不跳转,url有变化;
           如可把当前地址发送个其他人而访问该页面的当前状态,
           只能改路径而不能改域名
@@ -656,7 +656,7 @@ window的属性对象
     popstate 事件 改变url时在window上触发
       event.state 为pushState的第一个参数
   window.location  管理URL 
-    PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
+    PS：提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
       每次修改location的属性「hash除外」,页面都会以新URL重新加载,且生成一条历史记录
@@ -689,7 +689,7 @@ window的属性对象
       Remarks:
         位于reload调用之后的代码可能会也可能不执行,取决于网络延迟或系统资源等因素
   window.navigator 浏览器检测 
-    PS: 由Netscape引入,现在已成为识别客户端浏览器的事实标准 
+    PS： 由Netscape引入,现在已成为识别客户端浏览器的事实标准 
       与其他BOM对象一样,每个浏览器所包含的内容并不完全相同
     ◆浏览器相关
     navigator.appCodeName;  浏览器名称,通常为Mozilla「即使非Mozilla浏览器也如此」
@@ -748,7 +748,7 @@ window的属性对象
     navigator.registerProtocolHandler()
 
     navigator.geolocation 地理定位 「HTML5」
-      PS:在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
+      PS：在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
       浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
       单位转换
         可使用一下函数将使用度、分、秒表示的经纬度转换为小数
@@ -796,7 +796,7 @@ window的属性对象
               maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
             }
       var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
-        PS:位置改变时重复调用成功处理程序,
+        PS：位置改变时重复调用成功处理程序,
           回调函数传入的event对象和getCurrentPosition用法类似
       navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
       Google Maps API 「非HTML5规范」
@@ -805,7 +805,7 @@ window的属性对象
           <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
           sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
     navigator.vibrate     设备震动 「HTML5」 
-      PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
+      PS：Vibration接口用于在浏览器中发出命令,使得设备振动.
         显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
         由于振动操作很耗电,在低电量时最好取消该操作.
       使用下面的代码检查该接口是否可用.
@@ -842,7 +842,7 @@ window的属性对象
           	}, interval);
           }
     navigator.permissions.query()   许可查询 「HTML5」 
-      PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
+      PS：很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
         Permissions API就是用来查询某个接口的许可情况.
       // 查询地理位置接口的许可情况
       navigator.permissions.query({ name: 'geolocation' })
@@ -864,7 +864,7 @@ window的属性对象
       battery.addEventListener("chargingchange",function(e){
       })
   window.screen    用户屏幕相关 
-    PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一;
+    PS：JS中有几个对象在编程中用处不大,而screen对象就是其中之一;
       基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
     screen.height 设备屏幕高,单位px
     screen.width  设备屏幕宽,单位px
@@ -875,7 +875,7 @@ window的属性对象
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
   window.frames    包含窗口所有框架的一个数组
   客户端检测「详细见 JavaScript高级程序设计 228 页」 
-    PS:
+    PS：
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
       更是一种很难过行之有效的开发策略;
       先设计最通用的方案,在使用特定于浏览器的技术增强方案.
@@ -893,7 +893,7 @@ window的属性对象
       饱受争议的原因是因为它具有一定的欺骗性.
 AJAX,Asynchronous JavaScript and XML  异步的JS和XML 
   介绍
-    PS: 浏览器提供了使用http协议收发数据的接口,名为 AJAX;
+    PS： 浏览器提供了使用http协议收发数据的接口,名为 AJAX;
       可用JS动态抓取内容构建页面;
       file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
       还支持通过其他协议传送,比如File和FTP 
@@ -923,7 +923,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       AJAX 不能跨域访问;不能跨端口(即需在同一域及同一端口下)
         浏览器安全策略不允许向不同的域发送请求,请求被拒绝,而未发出.
   XMLHttpRequest 对象
-    PS:XMLHttpRequest对象是AJAX技术实现的核心.
+    PS：XMLHttpRequest对象是AJAX技术实现的核心.
       通过调用该对象的属性和方法实现各种功能.
       IE5最先引入XMLHttpRequest对象到浏览器,通过MSXML库中的一个ActiveX对象实现.
       XMLHttpRequest Level2 是XMLHttpRequest的最新版本.
@@ -949,7 +949,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         level2兼容level1.
     ◆请求 request
     xhr.open(method,url[,async]); 建立请求,以备(数据)发送(而未发送数据)
-      PS:open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
+      PS：open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
         若对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
       method      GET、POST或PUT等 发送请求的类型
       url         请求的地址(即向哪个地方发送请求,向谁请求)
@@ -960,7 +960,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       userName    可选,用户名,默认为空字符串
       passWord    可选,密码,默认为空字符串
     xhr.setRequestHeader(key,val); 设定请求头信息
-      PS:该方法必须在 open 方法之后,send 方法之前使用.
+      PS：该方法必须在 open 方法之后,send 方法之前使用.
         若该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
       e.g.:
         设置头信息Content-Type,表示发送JSON格式的数据；
@@ -968,7 +968,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         然后设置Content-Length,表示数据长度；
         xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
     xhr.overrideMimeType() 重写由服务器返回的 MIME type [IE不支持] [Level2]
-      PS:该方法需在send方法之前调用
+      PS：该方法需在send方法之前调用
         Firefox最早引入该方法用于重写xhr响应的MIME类型
         该方法被XMLHttpRequest2级纳入规范中
       e.g. :
@@ -1032,9 +1032,9 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
             <input type='submit' onclick='return sendForm(this.form);'>
           </form>
     ◆事件
-      PS:所有XMLHttpRequest的监听事件,都必须在send()方法调用之前设定
+      PS：所有XMLHttpRequest的监听事件,都必须在send()方法调用之前设定
     xhr.onreadystatechange  readyState值改变时触发该事件
-      PS:异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
+      PS：异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
         只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
       e.g. :
       xhr.onreadystatechange =function(){
@@ -1042,7 +1042,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       };
     xhr.ontimeout  超时事件,当响应时间超过指定时间触发 [Level2]
     xhr.onprogress  在接收响应期间持续不断的触发   [Level2]
-      PS:它分成上传和下载两种情况.
+      PS：它分成上传和下载两种情况.
         下载的 progress 事件属于 XMLHttpRequest 对象,
         上传的 progress 事件属于 XMLHttpRequest.upload 对象
         需在open方法前添加progress事件处理程序
@@ -1096,7 +1096,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     xhr.timeout  当请求时间超过设定值后触发
     ◆响应状态
     xhr.readyState 只读,请求的状态码,异步时检测使用
-      PS:在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
+      PS：在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
       0   未初始化  尚未调用open()方法
       1   启动      已调用open() 连接已建立,但未调用send()方法
       2   发送      已调用send(),尚未接收响应
@@ -1117,10 +1117,10 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
     xhr.statusText  只读,HTTP响应的文本描述,比如”200 OK“
     ◆响应 response
     xhr.responseText 只读,获取字符串形式的响应数据
-      PS:若本次请求没有成功或者数据不完整,该属性就会等于null.
+      PS：若本次请求没有成功或者数据不完整,该属性就会等于null.
         若服务器返回的数据格式是JSON,则该属性为JSON字符串.
     xhr.response     只读,返回接收到的数据体,即body部分
-      PS:其类型可以是ArrayBuffer、Blob、Document、JSON对象、或者一个字符串,
+      PS：其类型可以是ArrayBuffer、Blob、Document、JSON对象、或者一个字符串,
         由 responseType 属性的值决定.
         若请求没有成功或者数据不完整,该属性就会等于null
     xhr.responseType 用来指定服务器返回数据(xhr.response)的类型
@@ -1150,7 +1150,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       xhr.send();
     xhr.responseBody 服务器返回的主体(非文本格式)
     xhr.responseXML  只读,获取XML形式的响应数据,若响应数据为XML格式.
-      PS:若响应的内容类型为text/xml或application/xml,
+      PS：若响应的内容类型为text/xml或application/xml,
         则该属性保存着响应数据的XML DOM文档,
         否则该属性的值为null.
     xhr.responseStream   服务器返回的数据流
@@ -1161,7 +1161,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
     ◆终止
     xhr.timeout  超时设定,值为一整数,单位默认为毫秒 [可能存在兼容性] [Level2]
-      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
+      PS：表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
         若该属性等于0,就表示没有时间限制.
         在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
         Opera、Firefox 和 IE 10 支持该属性,
@@ -1174,7 +1174,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       若请求已经被发送,则立刻中止请求.
     ◆其他
     FormData 用于模拟表单   [HTML5新增]
-      PS:为序列化表单及创建与表单格式相同的数据(用于通过xhr传输)提供了便利.
+      PS：为序列化表单及创建与表单格式相同的数据(用于通过xhr传输)提供了便利.
         不用明确的设置请求头信息,
         xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
       var foda =new FormData([formElem]); 创建FormData对象
@@ -1182,7 +1182,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         通过表单元素创建
         var foda =new FormData(document.forms[0]);
       foda.append("key","value"); 向FormData对象中添加信息
-        PS:当信息添加完后就可直接使用 xhr.send(foda) 进行发送
+        PS：当信息添加完后就可直接使用 xhr.send(foda) 进行发送
         第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
       e.g.:
         模拟File控件,进行文件上传
@@ -1205,7 +1205,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
           var blob = new Blob([content], { type: "text/xml"});
           formData.append("webmasterfile", blob);
     接收二进制数据
-      PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
+      PS：老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
       改写 MIMEType [老方法]
         改写数据的MIMEType,将服务器返回的二进制数据伪装成文本数据.
         xhr.overrideMimeType ("text/plain; charset=x-user-defined");
@@ -1219,7 +1219,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         最后一行的位运算"c & 0xff",表示在每个字符的两个字节之中,只保留后一个字节,将前一个字节扔掉.
         原因是浏览器解读字符的时候,会把字符自动解读成Unicode的 0xF700-0xF7ff 区段.
       responseType 属性 [新方法]
-        PS:从服务器取回二进制数据,较新的方法是使用新增的 responseType 属性.
+        PS：从服务器取回二进制数据,较新的方法是使用新增的 responseType 属性.
           若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
           较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
           把 responseType 设为 blob,表示服务器传回的是二进制对象.
@@ -1281,7 +1281,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       xhr.open('get','demo.php',true)    //准备发送请求
       xhr.send();                        //发送请求
   HTTP 协议
-    PS:计算机通过网络进行通信的规则
+    PS：计算机通过网络进行通信的规则
       是一种无状态协议,不建立持久的连接
       使客户(浏览器)能够向web服务器请求信息和服务
     HTTP 请求 一般由四部分组成:
@@ -1294,7 +1294,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       响应头: 和请求头类似,包含许多的信息,如服务器类型、日期时间、内容类型和长度等.
       响应体: 响应正文.
     HTTP 头信息
-      PS:每个http请求和响应都会带有相应的头部信息
+      PS：每个http请求和响应都会带有相应的头部信息
         xhr对象提供了操作头信息(请求头信息和响应头信息)的方法
         有的浏览器允许重写默认头信息,而有的浏览器则不允许.
         头信息中必须使用ASCII码.
@@ -1363,7 +1363,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
       url编码:encodeURIComponent('字符')
       url解码:decodeURIComponent('字符')
     HTTP状态码
-      PS:由三位数值组成,第一位表示其类别
+      PS：由三位数值组成,第一位表示其类别
       1XX 表示请求已接收
       2XX 成功
       3XX 重定向,表示没有成功,客户必须采取进一步的动作
@@ -1389,7 +1389,7 @@ AJAX,Asynchronous JavaScript and XML  异步的JS和XML
         303 See Other    临时性重定向,且总是使用 GET 请求新的 URI.
         401 Unauthorized      请求未授权.
     HTTP请求方法 :发送请求的类型
-      PS:http 1.0 定义了8种方法
+      PS：http 1.0 定义了8种方法
         主要使用“GET”和“POST”
       GET  请求
         最常见的请求类型,常用于向服务器查询信息.
@@ -1703,7 +1703,7 @@ XMLHttpRequest Level2 「IE10+ HTML5」
     header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
     header("Access-Control-Allow-Methods:GET,POST");
 Fetch 用来取代XMLHttpRequest的一种新规范 
-  PS: Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
+  PS： Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
     而Fetch是将它们分散在几个不同的对象上,设计更合理；
     二是Fetch操作返回Promise对象,避免了嵌套的回调函数.
@@ -2059,7 +2059,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
       });
     });    
 JSONP,JSON with Padding 填充式JSON或参数式JSON 
-  PS:可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
+  PS：可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
     决解AJAX不能跨域访问的问题.
@@ -2114,19 +2114,19 @@ JSONP,JSON with Padding 填充式JSON或参数式JSON
       }
     </script>
 comet  服务器推送,一种更高级的AJAX技术 
-  PS: 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上;
+  PS： 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上;
     非常适合处理体育比赛的分数和股票报价
   长轮询和流
-    PS:实现Comet的一种方式,是传统轮询(也叫短轮询)的一个翻版,
+    PS：实现Comet的一种方式,是传统轮询(也叫短轮询)的一个翻版,
     传统轮询:浏览器定时向服务器发送请求,看有没有更新的数据,
     长轮询:页面发起一个到服务器的请求,然后服务器一直保持连接打开,直到有数据可发送,
       发送完数据之后,浏览器关闭连接,随即又发起一个到服务器的新请求,...一直循环
     优势:所有浏览器都支持,使用XHR对象和setTimeout()就能实现
   HTTP流
-    PS:页面的整个生命周期内只使用一个HTTP链接,
+    PS：页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
 CORS,Cross-Origin Resource Sharing 跨源资源共享 
-  PS:
+  PS：
     CORS是一个W3C标准,全称是“跨域资源共享”,
     允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
     定义了访问跨源资源时,浏览器与服务器的沟通;
@@ -2336,7 +2336,7 @@ CORS,Cross-Origin Resource Sharing 跨源资源共享
     因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
     如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
 same-origin_policy,同源政策 
-  PS: 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
+  PS： 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
     目的为了保证用户信息的安全,防止恶意的网站窃取数据;
     提交表单不受同源政策的限制;
@@ -2538,7 +2538,7 @@ same-origin_policy,同源政策
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
 Viewport 视口 「HTML5」
-  PS:Viewport指的是网页的显示区域,
+  PS：Viewport指的是网页的显示区域,
     也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
     正常情况下,viewport和浏览器的显示窗口是一样大小的.
     但是,在移动设备上,两者可能不是一样大小.
@@ -2564,16 +2564,16 @@ Viewport 视口 「HTML5」
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
 SSE 「HTML5」
 WebRTC,Web Real Time Communication  网络实时通信 「HTML5」 
-  PS: 最初是为了解决浏览器上视频通话而提出的,
+  PS： 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
     Google是WebRTC的主要支持者和开发者,它最初在Gmail上推出了视频聊天,
     后来在2011年推出了Hangouts,允许在浏览器中打电话。推动了WebRTC标准的确立。
   MediaStream,又称 getUserMedia  获取音频和视频 「HTML5」   
-    PS: navigator.getUserMedia  在浏览器中获取音频(通过麦克风)和视频(通过摄像头)
+    PS： navigator.getUserMedia  在浏览器中获取音频(通过麦克风)和视频(通过摄像头)
       将来可以用于获取任意数据流,比如光盘和传感器
     检查浏览器是否支持getUserMedia方法
-      PS:Chrome 21, Opera 18 和Firefox 17,支持该方法。
+      PS：Chrome 21, Opera 18 和Firefox 17,支持该方法。
         目前,IE还不支持,上面代码中的msGetUserMedia,只是为了确保将来的兼容。
       navigator.getUserMedia  = navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -2644,7 +2644,7 @@ WebRTC,Web Real Time Communication  网络实时通信 「HTML5」
             有些浏览器:
             媒体数据流可以直接作为src属性的值。
     Canvas API  ctx.drawImage(video, 0, 0)  可将视频的一个帧转为canvas元素
-      PS:使得截屏变得非常容易。
+      PS：使得截屏变得非常容易。
       <video autoplay></video>
       <img src="">
       <canvas style="display:none;"></canvas>
@@ -2842,7 +2842,7 @@ WebRTC,Web Real Time Communication  网络实时通信 「HTML5」
         conn.send('hi!');
       });
 devicelight    设备屏幕亮度变化事件 「HTML5」
-  PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
+  PS：移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
   var DLRun = function(event) { }
   window.addEventListener('devicelight',DLRun);
   event.value  亮度的流明值
@@ -2864,14 +2864,14 @@ devicelight    设备屏幕亮度变化事件 「HTML5」
     @media (light-level: normal) { /* 正常光环境 */ }
     @media (light-level: washed) { /* 明亮环境 */ }
 deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5」
-  PS:一旦设备的方向发生变化触发
+  PS：一旦设备的方向发生变化触发
   检测浏览器是否支持该API
     if (window.DeviceOrientationEvent) { /*  支持 */ } 
     else { /* 不支持 */ }
   window.addEventListener("deviceorientation", DORun);
   function DORun(event){ }
   event 
-    PS:分别对应手机摆放的三维倾角变化.要理解它们,就要理解手机的方向模型.
+    PS：分别对应手机摆放的三维倾角变化.要理解它们,就要理解手机的方向模型.
       当手机水平摆放时,使用三个轴标示它的空间位置：x轴代表横轴、y轴代表竖轴、z轴代表垂直轴.
       event对象的三个属性就对应这三根轴的旋转角度.
     event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
@@ -2893,7 +2893,7 @@ rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体�
       因此当click时候,所有用户必须等待于300ms后才会触发click事件。
       所以当在移动端使用click事件的时候,会感觉到有300ms的迟钝。
     Touch 触摸事件
-      PS: 由于触摸会导致屏幕滚动,在事件函数内使用event.preventDefault()阻止掉默认事件(默认滚动)
+      PS： 由于触摸会导致屏幕滚动,在事件函数内使用event.preventDefault()阻止掉默认事件(默认滚动)
       ◆在规范中列出并获得跨移动设备广泛实现的基本触摸事件
       touchstart  当手指放在屏幕上触发;
       touchmove   当手指在屏幕上滑动时,连续地触发;
@@ -2963,7 +2963,7 @@ rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体�
       e.touches          当前位于屏幕上的所有手指的一个列表
         event.touches.length  表示屏幕上触摸的手指个数
       e.targetTouches    位于当前DOM元素上的手指的一个列表
-        PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
+        PS：touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
         event.touches.length  表示元素上触摸的手指个数
       e.originalEvent.changedTouches   
         e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
@@ -2978,7 +2978,7 @@ rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体�
         一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
         当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
     Gestures 触摸事件
-      PS:该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
+      PS：该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
       Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
       Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
       Gestureend    当任何一个手指从屏幕上面移开时触发。
@@ -3044,7 +3044,7 @@ rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体�
           e.preventDefault();
         })
 Web_Socket 网络通信协议「HTML5」 
-  PS:目标是在一个单独的持久连接上提供全双工、双向通信
+  PS：目标是在一个单独的持久连接上提供全双工、双向通信
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给你 [且你的代码会得到通知]
     在JS中创建Web Socket之后,会有一个HTTP请求发送来连接
@@ -3083,10 +3083,10 @@ Web_Socket 网络通信协议「HTML5」
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
 Web_Storage    网页本地存储 「IE8+ HTML5」
-  PS: JS提供了sessionStorage和globalStorage,
+  PS： JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
   localStorage   本地存储
-    PS: 永久存储,永不失效除非手动删除
+    PS： 永久存储,永不失效除非手动删除
       有容量限制,每个域「包括各个网页」 5 M 左右「DiBs」;
       子域名间或子域名和主域名间localStorage不共享;
       本质是在读写文件,数据多的话会比较卡,firefox会一次性将数据导入内存,
@@ -3126,7 +3126,7 @@ Web_Storage    网页本地存储 「IE8+ HTML5」
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
 application_cache,简称appcache  应用离线缓存 「HTML5」
-  PS:让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
+  PS：让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;
     若未指定 manifest 属性,则页面不会被缓存,除非在 manifest 文件中直接指定了该页面;
@@ -3576,7 +3576,7 @@ Web Notifications 浏览器通知接口 「DiBs」「HTML5」
   
   上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
 drag|drop 拖放 「HTML5」 
-  PS:Web开发人员一直在用jQuery完成拖放,现已原生支持 「IE9+ HTML5」
+  PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 「IE9+ HTML5」
     IE4最早加入拖放功能,只能拖放文本框
   定义拖放元素和目标元素
     定义拖放元素
@@ -3605,7 +3605,7 @@ drag|drop 拖放 「HTML5」
     dragleave  被拖放元素离开目标元素的范围时触发
     drop       被拖放元素放置到目标元素后触发
   dataTransfer 拖放事件的属性对象
-    PS:IE5最早引入的对象.
+    PS：IE5最早引入的对象.
       是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
     ◆数据传递
       为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
@@ -3613,14 +3613,14 @@ drag|drop 拖放 「HTML5」
       为了兼容,HTML5也支持'text'和'URL',但会被映射为'text/plain'和'text/uri-list'.
       dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL.
     e.dataTransfer.setData('text',str);  设置传递数据及数据类型
-      PS:拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
+      PS：拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
         将拖动的文本以"text"格式保存在dataTransfer对象中.
         在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
         这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
         也可以自定义保存的信息.
       str 字符串,表示保存的数据类型,取值为'text'或'URL'
     e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
-      PS:保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
+      PS：保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
       e.g.:
       设置和接收文本数据
       e.dataTransfer.setData('text','some text');
@@ -3635,7 +3635,7 @@ drag|drop 拖放 「HTML5」
       'copy'    把拖放的元素复制到目标位置
       'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
     e.dataTransfer.effectAllowed 操控dropEffect属性
-      PS:必须在ondragstart事件处理程序中设置effectAllowed属性
+      PS：必须在ondragstart事件处理程序中设置effectAllowed属性
       'uninitialized'  没有给拖放元素设置任何放置行为
       'none'           被拖放的元素不能有任何行为
       'copy'           只允许值为'copy'的dropEffect

@@ -1,5 +1,5 @@
 ECMAScript JS核心,语法部分 
-  ECMAscript: JS的 语法核心,提供核心语言功能.
+  ECMAscript: JS的语法核心,提供核心语言功能; 
     由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际 Web 标准;
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
@@ -10,13 +10,12 @@ ECMAScript JS核心,语法部分
       JS的内容比 ECMA-262 中规定的要多,ECMA-262 的大部分是组成JS的一部分;
       Web浏览器只是ECMAscript实现可能的宿主环境之一,
       还有其他环境如Node「一种服务端JavaScript平台」和Adobe Flash 等;
-  ECMA-262 大致规定了如下部分: 
-    语法 类型 语句 关键字 保留字 操作符 对象 正则表达式 
-    try-catch「ES3+」 JSON对象「ES5+」
+  JS的核心语法ECMAScript包括两个部分：
+    基本的语法构造,如操作符、控制结构、语句等
+    标准库,如Array、Date、Math等
 语法 
-  PS: 区分大小写,如变量、函数名和操作符;
-    语法源自于Java,基于原型的继承来自于Self;
-    一等函数「first-class function」来自于 Scheme,
+  PS： 区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
+    一等函数「first-class_function」来自于 Scheme;
   标识符: 指变量、函数、属性或函数的参数的名字
     标识符的组合规则:
     第一个字符必须是字母、下划线或美元符号$
@@ -28,34 +27,40 @@ ECMAScript JS核心,语法部分
     有些名称有特殊意义,不可作为变量名
     关键字: 是程序中已经开始使用的字符
       ECMAScript全部关键字: 
-      // break case catch continue default delete do else finally
-      // for function if in inseanceof new return switch this
-      // throw try typeof var void while with
+      'var' 'function' 'return' 'if' 'else' 'for' 'while' 'continue' 'break' 
+      'case' 'catch'  'default' 'delete' 'do'  'finally' 'in' 'inseanceof' 
+      'new' 'switch' 'this' 'throw' 'try' 'typeof'  'void'  'with'
     保留字: 还没有特定的用途,但可能在将来被用作关键字
       ECMAScript-262 第3版 定义的全部保留字
-      // abstract boolean byte char class const debugger double
-      // enum export extends final float goto implements import int
-      // interface long native package private protected public
-      // short static super synchronized throws transient volatile
+      'abstract' 'boolean' 'byte' 'char' 'class' 'const' 'debugger' 'double'
+      'enum' 'export' 'extends' 'final' 'float' 'goto' 'implements' 'import' 'int'
+      'interface' 'long' 'native' 'package' 'private' 'protected' 'public'
+      'short' 'static' 'super' 'synchronized' 'throws' 'transient' 'volatile'
   多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
   语句使用分号结尾,若省略分号,则由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
+  \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
+    PS：大部分js引擎都支持,但并非ECMAScript的规定;
+    var str = "string \
+    is broken \
+    across multiple\
+    lines";
+    console.log(str);   // string is broken across multiplelines.
 变量|常量|字面量 
-  PS: Undefined Boolean Number String Object Null
-    ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一「ES6可以了」
-    变量就是一指向一个值的名称.
-    JS变量是松散类型的,不必定义其类型可保存任何类型数据「类似于PHP」
-    虽然 JS 可以不定义直接使用变量,但建议先定义再使用.
-    一个值可由多个变量指向,但一个变量只能指向一个值.
+  PS： Undefined Boolean Number String Object Null
+    ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一「ES6可以了」;
+    变量就是一指向一个值的名称;
+    JS变量是松散类型的,不必定义类型可保存任何类型数据「类似于PHP」,但建议先定义再使用;
+    一个值可由多个变量指向,但一个变量只能指向一个值;
   var valName   定义变量
     PS：变量定义但未赋值,默认为 undefined
     e.g. :
-      定义变量box
-      var box;  // 但未初始化,系统会设定默认值 undefined(表示未定义)
+      var box;  // 定义变量box
+      console.log(box); // undefined,未初始化,系统设定默认值为 undefined
 
-      var a = b =1;
+      var a = b = 1; // 不推荐的写法
       // 相当于
-      var a =1; b =1; 
+      var a = 1; b = 1; 
     使用var声明相当于给 window 添加属性
       但使用var声明的变量不可 delete 删除
       不使用var定义变量可以使用 delete 删除
@@ -67,18 +72,18 @@ ECMAScript JS核心,语法部分
       delete boo;
       console.log(aoo); // 1
       console.log(boo); // 报错 boo 未定义, 因为boo已被删除而无法访问
-    重复的var声明 : 相当于一个赋值操作并不会报错,但不推荐使用
+    重复的var声明：相当于一个赋值操作并不会报错,不推荐使用 
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";
       console.log(box); // abc
-    连续定义多个变量 : 中间用逗号隔开 
+    连续定义多个变量：中间用逗号隔开 
       var box="A", age="20", height="175";
     var 与 逗号,运算符 「moIn 逗号运算符,变量声明」       
       (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
       (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
       (var aoo);           // Uncaught SyntaxError: Unexpected token var
       var aoo = 1, window.boo = 2; // Unexpected token .
-  literal,字面量: 也叫常量或直接量,即直接显示出来的数据值
+  literal,字面量：也叫常量或直接量,即直接显示出来的数据值 
     100            //数字字面量
     "abc"          //字符串字面量
     false          //布尔字面量
@@ -88,12 +93,12 @@ ECMAScript JS核心,语法部分
     [1,2,3,4,5]    //数组字面量表达式
 -------------------------------------------------------------------------------
 ◆数据类型 
-基本类型/原始类型/基本包装类型 
-  基本类型:直接存储在栈「stack」中的简单数据段;
+基本类型|基本包装类型 
+  基本类型：也叫原始类型,直接存储在stack栈中的简单数据段;
     占据空间小、大小固定,属于被频繁使用的数据;
     在某些语言中,字符串以对象的形式来表示,因此是引用类型,但ECMAScript中不是
   基本包装类型 :三种基本类型的变体,在一定条件下,拥有对象的性质
-    PS:如可调用方法、设置属性等对象拥有的操作「只有对象才能调用方法」
+    PS：如可调用方法、设置属性等对象拥有的操作「只有对象才能调用方法」
     隐式创建的包装对象和显式创建的包装对象及区别
       区别1:基本包装对象和对象一样按引用进行比较
         var a1 = "test";
@@ -119,14 +124,14 @@ ECMAScript JS核心,语法部分
     typeof a;         //"undefined"
     console.log(a);   //报错,a未定义
   Null   表示一个空对象指针,表示什么都没有,相当于一个占位符
-    PS::将来用于保存对象的变量,可初始化为null.
+    PS：:将来用于保存对象的变量,可初始化为null.
     e.g. :
     console.log(null==undefined);//true ,undefined派生于null
     var box= null;
     console.log(typeof box);  // object
     console.log(typeof null); // object
   Boolean 布尔值
-    PS:Boolean类型有两个值(字面量): true 和 false
+    PS：Boolean类型有两个值(字面量): true 和 false
       ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值.
     隐式转换为布尔值
       转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
@@ -147,12 +152,12 @@ ECMAScript JS核心,语法部分
       var a=Boolean('');        // 转换为false
       其余皆转换为true
   Number  数值
-    PS:
+    PS：
       Number类型包含两种数值:整型和浮点型
       JS中整数相除可以到浮点数(不同于C语言)
       可以保存+0 和 -0,且 +0 ===-0;
     数值进制
-      PS:在进行算术计算时,所有以八进制和十六进制表示的数值最终都将被转换成十进制数值
+      PS：在进行算术计算时,所有以八进制和十六进制表示的数值最终都将被转换成十进制数值
       十进制
       八进制     使用0开头,且最大数值不超过7
         若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
@@ -166,7 +171,7 @@ ECMAScript JS核心,语法部分
       2e3;  //2000
       0.000000005; //5e-9
     浮点类型
-      PS:浮点数值中必须包含一个小数点,并且小数点后面至少有一位数字.
+      PS：浮点数值中必须包含一个小数点,并且小数点后面至少有一位数字.
       浮点数可省略前导0,但不推荐使用
         var box=3.8;
         var box=.8;  //有效,但不推荐此写法
@@ -186,7 +191,7 @@ ECMAScript JS核心,语法部分
         Number.NEGATIVE_INFINITY  // 负无穷
         Number.POSITIVE_INFINITY  // 正无穷
       NaN 非数值(not a number)
-        PS:该数值用于表示一个本来要返回数值的操作数未返回数值的情况(而不会报错)
+        PS：该数值用于表示一个本来要返回数值的操作数未返回数值的情况(而不会报错)
           在其他语言中,任何数值除以零都会导致错误而终止程序执行,
           但在ECMAScript中会返回特殊的值,不会影响程序执行.
           任何与NaN进行运算的结果均为 NaN
@@ -231,7 +236,7 @@ ECMAScript JS核心,语法部分
             如果转换的结果是NaN,则改用toString()方法,
             然后再依次按照前面的规则转换返回的字符串值.
       parseInt(str,radix); 把字符串转换成整数值
-        PS:由于Number()转换字符串时比较复杂且不够合理,更常用的是parseInt()
+        PS：由于Number()转换字符串时比较复杂且不够合理,更常用的是parseInt()
           忽略字符串前面的空格,直至找到第一个非空格字符
           从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略(.也被忽略)
           若第一个字符不是数字字符或负号,则返回NaN(空字符返回NaN)
@@ -289,18 +294,16 @@ ECMAScript JS核心,语法部分
     num.toExponential(x); 以科学计数法表示并保留x位小数.并转换成字符串.
     num.toPrecision(x);   以指数或点形式来表示(根据x的长度来决定形式)
   String  字符串
-    PS: 用于表示由零或多个16位Unicode字符组成的字符序列.
+    PS： 用于表示由零或多个16位Unicode字符组成的字符序列.
       表示显示的字符,使用引号引起来,无特殊含义.
       几乎任何字符都可以放在引号里,JS会将它解析成string.
       双引号或单引号,两种表示方法没有任何区别,但必须成对出现.
       数字使用引号引起来也表示字符,数字字符
     特殊字符:作为一般字符的扩展,可以在字符串中使用特殊字符
-      PS:
-        String类型包含了一些可能引起歧义的特殊的字符字面量,也叫转义序列.
+      PS： String类型包含了一些可能引起歧义的特殊的字符字面量,也叫转义序列.
         有些符号不便放在引号中(如引号,换号符等),需要进行转义.
         在引号中发现的\,其后面的字符有特殊意义.
-        可出现在字符串的任何位置.
-        被作为一个字符来解释.
+        可出现在字符串的任何位置. 被作为一个字符来解释.
       常用特殊字符:
         \0 Null字节
         \b 退格符
@@ -380,7 +383,7 @@ ECMAScript JS核心,语法部分
       'abc'.charCodeAt(0)  //97
     ◆字符串获取
     str.slice(begin,end);    字符截取
-      PS:截取的内容不包括end下标对应的字符.
+      PS：截取的内容不包括end下标对应的字符.
         即截取的长度为:结束下标-开始下标
         该方法也可对数组进行截取
       begin:开始下标;end:结束下标,可选,省略表示到最后
@@ -432,7 +435,7 @@ ECMAScript JS核心,语法部分
     str.concat(str1,str2,...);  字符串拼接,返回新串
     str.trim() 去除字符串开始和结束的空格
     ◆字符串转换
-      PS:只有几种语言(如土耳其语)具有地方特有的大小写本地性,
+      PS：只有几种语言(如土耳其语)具有地方特有的大小写本地性,
         一般是否本地化效果是一致的
     str.toUpperCase(); 转换为大写,返回转换后的值
     str.toLowerCase(); 转换为小写,返回转换后的值
@@ -449,7 +452,7 @@ ECMAScript JS核心,语法部分
       var s ="-";
       Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
 引用类型： Object 对象 
-  PS:JS中所有对象都为引用类型,引用类型只包含有对象,即1对1的等价关系;
+  PS：JS中所有对象都为引用类型,引用类型只包含有对象,即1对1的等价关系;
     访问对象的不存在的属性,不会报错,返回值为undefined;
   引用类型值的读、写 
     自我总结 
@@ -503,7 +506,7 @@ ECMAScript JS核心,语法部分
       因此修改了obj1的值的同时也改变了obj3的值;
       变量obj2指向的是另外一个对象,只是和obj1有相同的属性而已
   创建对象 
-    PS: ECMA-262 的定义为:无序的名值的合集
+    PS： ECMA-262 的定义为:无序的名值的合集
       对象一般没有长度,具有多种属性的内容结构 .
       与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类.
       对象由属性和值构成,值可以为基本值、对象或函数等任何类型.
@@ -551,7 +554,7 @@ ECMAScript JS核心,语法部分
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
     new Object(value); 创建对象
-      PS:即使用原生构造函数Object来创建对象
+      PS：即使用原生构造函数Object来创建对象
         使用构造函数创建对象需使用new操作符
       Arguments:括号里可以任意传参,可以传数值、字符串、布尔值等,而且还可以进行相应的计算.
         若无参数可省略括号:var obj =new Object; 有效,但不推荐使用.
@@ -596,7 +599,7 @@ ECMAScript JS核心,语法部分
           console.log(azz);
           console.log(bzz);
     工厂模式  创建对象 
-      PS:工厂模式时软件领域一种广为人知的设计模式
+      PS：工厂模式时软件领域一种广为人知的设计模式
       function createObject(name,age){    // 创建工厂函数
         var obj=new Object();             //创建对象
         obj.name=name;                    //添加属性
@@ -666,7 +669,7 @@ ECMAScript JS核心,语法部分
   对象属性&对象操作
     对象属性的属性或特性
       数据属性:  包含4个描述属性行为的特性
-        PS:后3个只能通过函数来设定
+        PS：后3个只能通过函数来设定
         value        属性的值.默认为 undefined
         writable     默认true,表示能否修改属性的值
         enumerable   默认true,能否枚举(即是否可通过for in 枚举)
@@ -736,7 +739,7 @@ ECMAScript JS核心,语法部分
           类似的只指定set则属性不能读 ?.
       ◆定义/修改
       Object.defineProperty(obj,"key",obj1); 定义属性及其特性
-        PS:通过该方法创建的属性,其3个特性未设置时默认为false
+        PS：通过该方法创建的属性,其3个特性未设置时默认为false
           不能同时定义数据属性和访问器属性(要分开定义)
         obj  为属性所在的对象
         key  为所在对象的属性的名字
@@ -783,7 +786,7 @@ ECMAScript JS核心,语法部分
         obj.hasOwnProperty("name"); //true
       obj.propertyIsEnumerable("propName"); 表示对象属性是否可以枚举的布尔值
       Object.getOwnPropertyDescriptor(obj,"propName"); 返回对象指定属性的特性描述对象
-        PS:可对DOM或BOM对象使用该方法.
+        PS：可对DOM或BOM对象使用该方法.
           若查询的属性不存在则返回undefined.
         var obj ={aoo:"a"};
         Object.getOwnPropertyDescriptor(obj,"aoo");
@@ -805,11 +808,11 @@ ECMAScript JS核心,语法部分
         既不可扩展,又是密封的,且属性值也不可修改
         只是对对象操作,对其原型链无影响
     ◆操作对象的属性
-      PS: 访问对象不存在的属性,不会报错,返回值为undefined
+      PS： 访问对象不存在的属性,不会报错,返回值为undefined
         对象的属性可以手动赋值,进行覆盖修改.
         对象默认是可扩展的,可以向对象中添加、删除属性和方法
     obj.属性名 或 obj["属性名"]  读、写对象的属性值
-      PS:属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问.
+      PS：属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问.
         括号内的部分可以为任意表达式,系统自动将其转化为字符串来判断是否有该属性
         即也可以使用变量名当成属性名调用
       e.g.
@@ -832,7 +835,7 @@ ECMAScript JS核心,语法部分
       "content" in box.content.content.content; //true
       PS-Self:box.content = box ,则始终将其带入box.content.content.content;运算?
     delete obj.key 或 delete obj["key"] 删除属性
-      PS: 对于数组可以删除键值对,但仍会保留位置(该处显示为undefined);对象中不会
+      PS： 对于数组可以删除键值对,但仍会保留位置(该处显示为undefined);对象中不会
       若删除成功返回 true,否则返回 false
       若删除不存在的值也会返回true
       不能删除继承的属性,否则不会删除,返回false
@@ -864,7 +867,7 @@ ECMAScript JS核心,语法部分
       // {name: "abc", height: 180, sex: "man"}
   对象的 原型&继承&多态
     对象的构造原型 :构造函数的原型对象
-      PS:函数对象的属性prototype也是一个对象,
+      PS：函数对象的属性prototype也是一个对象,
         只有函数对象才有prototype(原型)属性
       原型的 作用原理&执行流程
         创建的每一个函数都有一个prototype(原型)属性,
@@ -893,7 +896,7 @@ ECMAScript JS核心,语法部分
             run:function(){return 1;}
           }
         动态原型模式: 将原型封装到构造函数里
-          PS:原型的初始化只要第一次初始化就可以了.
+          PS：原型的初始化只要第一次初始化就可以了.
             没必要每次构造函数实例化的时候都初始化
             并同时解决了封装问题
           function Box(name){
@@ -918,7 +921,7 @@ ECMAScript JS核心,语法部分
             e.g. :
             obj.__proto__.aoo =12;
       原型的 修改&重设 的区别
-        PS:当重新定义构造函数的原型时(即改变其整个原型时,而非修改其部分),
+        PS：当重新定义构造函数的原型时(即改变其整个原型时,而非修改其部分),
           已创建的对象其指向的原型仍然不变,
           但会影响到更改后再创建的对象的原型.
         e.g. :
@@ -960,7 +963,7 @@ ECMAScript JS核心,语法部分
       delete obj.属性                删除实例属性
       构造函数.prototype.属性 ='XX'   覆盖原型属性
     原型链继承
-      PS:JS中的面向对象继承机制基于原型,将原型链作为实现继承的主要方法
+      PS：JS中的面向对象继承机制基于原型,将原型链作为实现继承的主要方法
         基本思想:利用原型让一个引用类型继承另一个引用类型的属性和方法
         通过实现原型链,本质上扩展了原型搜索机制
       ◆相关操作
@@ -984,7 +987,7 @@ ECMAScript JS核心,语法部分
         var c1=new C();
         c1.name;        //"abc"
       其他方法的继承
-        PS:ECMAScript只支持继承,不支持接口实现
+        PS：ECMAScript只支持继承,不支持接口实现
           其他正统面向对象语言都会用两种方式实现继承:一个是接口实现,一个是继承.
           被继承的函数叫做超类型(父类或基类),被继承的函数叫做子类型(子类或派生类)
           JS中所有的构造函数都继承自Object [系统设定]
@@ -1034,7 +1037,7 @@ ECMAScript JS核心,语法部分
             console.log(child.name); //abc
         构造继承
         对象冒充(也叫借用构造函数、伪造对象或经典继承)
-          PS: 对象冒充只能继承父类构造函数里的属性或方法
+          PS： 对象冒充只能继承父类构造函数里的属性或方法
             父类原型中的方法或属性不可被继承
           共享的属性或方法放不要放在被继承的构造函数中,否则造成浪费
             解决方法:直接定义子类构造函数的原型即可
@@ -1104,7 +1107,7 @@ ECMAScript JS核心,语法部分
       box.toLocaleString();//"a,18,js"
       上面显示一致,当出现如时间的属性时,则返回字符串格式参照本地时间格式.
     Object 类型是所有它的实例的基础
-      PS:Object类型所具有的任何属性和方法同样存在于更具体的对象中
+      PS：Object类型所具有的任何属性和方法同样存在于更具体的对象中
         ECMA-262 中对象的行为不一定适用于JavaScript中的其他对象,
         比如BOM和DOM中的对象都属于宿主对象,由宿主实现提供和定义的,
         ECMA-262 不负责定义宿主对象,因此宿主对象可能不会继承Object.
@@ -1113,7 +1116,7 @@ ECMAScript JS核心,语法部分
     val.isPrototypeOf(obj);    见上文
     val.propertyIsEnumerable(str);  见上文
     val.toString([num]);   转换为字符串
-      PS:数值 布尔值 对象和字符串都有 toString() 方法.(null和undefined没有)
+      PS：数值 布尔值 对象和字符串都有 toString() 方法.(null和undefined没有)
       Arguments: num 可选,为表示进制的数值,一般为2、8、16 等
         未填写,num默认为10进制
       foo.toString(); 返回定义该函数对象的字符串(函数的源代码)
@@ -1197,7 +1200,7 @@ OOP,面向对象
     语言自带的数据类型有限,要表示复杂的数据,需要有复杂的数据类型.则可使用对象表示复杂类型.
     传统面向对象语言有一个标志,就是类的概念,通过类可以创建任意多个具有相同属性和方法的对象
   Class 类: 语言提供的自定义数据类型的机制,用于创建对象 
-    PS: 面向对象语言中 class 关键字声明类,ECMAScript中没有类[ES6中新增] 
+    PS： 面向对象语言中 class 关键字声明类,ECMAScript中没有类[ES6中新增] 
       对象的数据类型是类,对象就是类的具象化.
     仿造类的实现方式：
     工厂模式 : 一个返回特定对象类型的函数
@@ -1254,7 +1257,7 @@ OOP,面向对象
 函数式,过程化
 -------------------------------------------------------------------------------
 操作符/运算符 
-  PS:ECMA-262 描述了一组用于操作数据值的运算符;
+  PS：ECMA-262 描述了一组用于操作数据值的运算符;
     ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
     运用于对象时,通常会调用对象的valueOf()和toString()方法,以便取得相应的值;
     typeof、new 操作符,也称为 typeof 、new 运算符;
@@ -1274,7 +1277,7 @@ OOP,面向对象
       typeof box;         //String类型
       typeof -box;        //Number类型
     typeof val; 返回操作数的数据类型字符串
-      PS:typeof是操作符而非函数,因此后面的括号可有可无.
+      PS：typeof是操作符而非函数,因此后面的括号可有可无.
         操作数 val 可以是变量,也可以是字面量
       返回值为如下6种之一
       'undefined' 未定义
@@ -1297,7 +1300,7 @@ OOP,面向对象
     new Foo();
     this
     void 运算符: 运行表达式,始终返回 undefined
-      PS:无论void后的表达式是什么,void操作符始终返回 undefined
+      PS：无论void后的表达式是什么,void操作符始终返回 undefined
       使用void的目的
         undefined 在JS中不是保留字。
         如执行以下代码:
@@ -1358,7 +1361,7 @@ OOP,面向对象
         console.log(void 0);  // undefined
         console.log(void(0)); // undefined
   ★算术运算符 
-    PS:若算术运算的值不是数值,后台会先使用Number()转型函数将其隐式转换为数值.
+    PS：若算术运算的值不是数值,后台会先使用Number()转型函数将其隐式转换为数值.
     +  和运算/字符串连接
       var box=Infinity+-Infinity; //NaN,正负无穷相加为NaN
       var box=100+'100'; //100100,字符串连接先于和运算
@@ -1394,7 +1397,7 @@ OOP,面向对象
       var boo =2;
       console.log(aoo**boo); // 9
   ★关系运算符 
-    PS:用于进行比较的运算符称作为关系运算符.
+    PS：用于进行比较的运算符称作为关系运算符.
      包括:<、>、<=、>=、==、!=、全等(恒等)===、不全等!==
      关系运算符大多返回的为布尔值.
     <、>、<=、>=的运算规则:
@@ -1413,7 +1416,7 @@ OOP,面向对象
       1===true;   //false
       NaN==NaN;   //false
     obj instanceof 构造函数; 返回表示构造函数是否处于对象的原型链上的布尔值
-      PS: 检测的对象必须和构造函数处于同一个全局作用域,即同一个iframe和window中,
+      PS： 检测的对象必须和构造函数处于同一个全局作用域,即同一个iframe和window中,
         若一数组arr在另一个框架中定义则在其他框架中arr instanceof Array;返回false
       e.g.
       function Foo(name){ this.name=name;}
@@ -1456,7 +1459,7 @@ OOP,面向对象
         "make" in mycar  // 返回true
         "model" in mycar // 返回true
   ★逻辑运算符 
-    PS:逻辑运算符通常用于布尔值的操作,一般和关系运算符配合使用.
+    PS：逻辑运算符通常用于布尔值的操作,一般和关系运算符配合使用.
       逻辑运算符有三个:与&&(AND)、或||(OR)、非!(NOT)
     && 逻辑与
       第一个操作数为false时,不执行第二个操作数,直接返回false.
@@ -1470,7 +1473,7 @@ OOP,面向对象
             var box =(5>3)&&{}  //box为对象{}
           有一个操作数为null或undefined,则返回null或undefined(除去第一个操作数为false时的情况)
     || 逻辑或
-      PS:返回值不一定为布尔值;
+      PS：返回值不一定为布尔值;
       返回值:
         规则如下:
         第一个操作数为对象,则返回该对象
@@ -1491,7 +1494,7 @@ OOP,面向对象
         console.log(num);  // 11
         console.log(boo2); // foo函数
     !  逻辑非
-      PS:逻辑非可以用于任何值,无论这个值是什么类型,该运算都会返回一个布尔值.
+      PS：逻辑非可以用于任何值,无论这个值是什么类型,该运算都会返回一个布尔值.
         执行原理:先将这个值转换成布尔值,然后取反.
         使用两次逻辑运算符相当于对值进行Boolean()转型函数处理.
       规则如下:
@@ -1503,7 +1506,7 @@ OOP,面向对象
       使用&&时,第一个值为false后面的就不再做运算了;
       使用||时,第一个值为true,则后面的也不做运算了.
   ★位运算符   
-   PS:一般应用中,基本用不到位运算符.
+   PS：一般应用中,基本用不到位运算符.
      比较基于底层,性能和速度会非常好.
      ECMAScript中的所有数值都以IEEE-754 64 位格式存储,
      但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
@@ -1525,7 +1528,7 @@ OOP,面向对象
       三元条件运算符其实就是if语句的简写形式.
       var box=5>4?'对':'错';    //对,5>4赋值第一个'对'给box.否则第二个.
     +  字符串连接符
-      PS:进行字符的拼接操作(只要需要有一个操作数是字符串即可)
+      PS：进行字符的拼接操作(只要需要有一个操作数是字符串即可)
         当有字符串和数值进行+操作时,则默认将数值转换为字符串形式进行拼接操作.
       e.g. :
         3+6+"3a";      //"93a",先进行算术运算然后再进行字符串的连接操作.
@@ -1698,7 +1701,7 @@ OOP,面向对象
     typeOf(box); //查看数据类型的表达式
     box>3;         //逻辑运算表达式
   语句 :比表达式更大的单位叫语句.
-    PS: 程序由语句组成.
+    PS： 程序由语句组成.
       最简单的语句由一个表达式和表达式后的分号组成.
       语句通常有一个或多个关键字来完成给定的任务.如:判断、循环、退出等.
       在ECMAScript中,所有的代码都是有语句来构成的.
@@ -1723,7 +1726,7 @@ OOP,面向对象
         }
         可以使用if或else作为最后一个判断,当使用else时至少会执行一个
     switch(value) 多重条件判断,用于多个值相等的比较.
-      PS:传入值和对比值需是全等关系才会相应的执行.
+      PS：传入值和对比值需是全等关系才会相应的执行.
       switch(传入值){
         case 对比值1:
           控制执行的语句1;
@@ -1745,7 +1748,7 @@ OOP,面向对象
     do{ }while(条件);
       先执行后判断,至少会执行一次.
     for(var key in obj) 无序遍历对象属性/数组元素 等等(?)
-      PS: ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测
+      PS： ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测
         若原型链上的属性设置为可遍历,则也会将其遍历出来.
       e.g.
         var obj ={ name:"abc", age:19 }
@@ -1772,7 +1775,7 @@ OOP,面向对象
       value 类型无要求
       在遇到throw操作时,代码会立即停止执行
     try-catch 异常捕获与处理 (ECMA-262 第3版引入)
-      PS:与Java中的 try-catch 语句完全相同
+      PS：与Java中的 try-catch 语句完全相同
         catch 和 finally 可二选一
         IE7存在bug:除非有catch否则不执行finally
       try{
@@ -1840,7 +1843,7 @@ OOP,面向对象
   Number  数值对象:处理数值的包装对象
   String  字符对象:处理字符串的包装对象
   Array   数组对象 
-    PS:数组是JS内置的一种特殊类型的对象 
+    PS：数组是JS内置的一种特殊类型的对象 
        可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象
        JS中的Array类型和其他语言中的数组区别很大,数组的元素可以保存任何类型
        数组是一种特殊的对象,凡是对象有的性质,数组都有
@@ -1856,7 +1859,7 @@ OOP,面向对象
          foo.length;          //2
          console.log(foo)     //[1, 2, name: "fan"]
       var arr =new Array(); 内置构造函数创建
-        PS:可省略 new 关键字(不推荐使用)
+        PS：可省略 new 关键字(不推荐使用)
         无参数 : 创建空数组 []
         一个参数:作为数组的元素或指定数组的长度
           var arr1=new Array("a");
@@ -1927,7 +1930,7 @@ OOP,面向对象
       arr[i-1]  取/设数组元素
         下标从0开始
       arr.push(元素1,元素1,...);  末尾添加新元素,会改变原数组
-        PS:在原arr的最后增加新元素,添加多个元素使用逗号隔开
+        PS：在原arr的最后增加新元素,添加多个元素使用逗号隔开
           相当于arr[arr.length] =XX;
         返回值:新数组长度的数值表示
         e.g.
@@ -1952,7 +1955,7 @@ OOP,面向对象
         aoo.length; // 3
     ◆以数组为单位操作元素 
       arr.splice(begin,num[,item1[,item2[,...]]]); 删除替换原数组
-        PS:删除num个元素,使用用参数列表中声明的一个或多个值从被删除的元素处插入
+        PS：删除num个元素,使用用参数列表中声明的一个或多个值从被删除的元素处插入
           该方法会改变原数组
         Arguments:
           begin 从数组的哪一位开始修改内容.
@@ -2043,7 +2046,7 @@ OOP,面向对象
         console.log(res); // [10, 2, 4, 11]
     ◆获取其他 
       arr.reduce(func[,initialValue]); 条件缩减,返回一个新数组 [ES5+]
-        PS:接收一个函数作为累加器,数组中的每个值(从左到右)开始缩减,最终为一个值
+        PS：接收一个函数作为累加器,数组中的每个值(从左到右)开始缩减,最终为一个值
           为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素
         Arguments:
           func 执行数组中每个值的函数,包含四个参数
@@ -2068,7 +2071,7 @@ OOP,面向对象
       arr.reduceRight(); 和reduce类似,只是从右到左遍历 [ES5+]
     ◆遍历数组元素: 循环访问元素叫遍历 
       arr.forEach(cfoo[, thisArr]); 对数组的每个元素执行操作 「ES5+」
-        PS:forEach 方法按顺序为数组中含有效值的每一项执行一次cfoo 函数,
+        PS：forEach 方法按顺序为数组中含有效值的每一项执行一次cfoo 函数,
           那些已删除(使用delete方法等情况)或者从未赋值的项将被跳过
          (而值为 undefined 的项则不会被跳过).
           无法中止或跳出forEach循环,除非报错.
@@ -2120,7 +2123,7 @@ OOP,面向对象
           }
           ["1", "2", "3"].map(returnInt); // [1,2,3]
       arr.every(callback[,thisArg]); 条件判断,返回布尔值 [ES5新增]
-        PS: every 方法为数组中的每个元素执行一次 callback 函数,
+        PS： every 方法为数组中的每个元素执行一次 callback 函数,
           直到它找到一个使 callback 返回 false(表示可转换为布尔值 false 的值)的元素。
           如果发现了一个这样的元素,every 方法将会立即返回 false。
           否则,callback 为每一个元素返回 true,every 就会返回 true。
@@ -2143,7 +2146,7 @@ OOP,面向对象
         var res=arr.every(function(x){return x>18;});
         console.log(res); // true
       arr.some(func[,thisArg]);  条件判断,返回布尔值 [ES5新增]
-        PS:some 为数组中的每一个元素执行一次 callback 函数,
+        PS：some 为数组中的每一个元素执行一次 callback 函数,
           直到找到一个使得 callback 返回一个“真值”(即可转换为布尔值 true 的值).
           如果找到了这样一个值,some 将会立即返回 true.
           否则,some 返回 false.
@@ -2171,7 +2174,7 @@ OOP,面向对象
           thisArg 可选,执行 mapFn 函数时 this 的值
     数组的复制
       通过arr.slice(0)来复制
-        PS:使用slice为浅拷贝,只能将第一层完全复制(更深层是引用)
+        PS：使用slice为浅拷贝,只能将第一层完全复制(更深层是引用)
         e.g.
         当arr中的元素为数组时,修改它仍然会改变复制后的数组.
         var a =[[1],2];
@@ -2192,7 +2195,7 @@ OOP,面向对象
       而第二维才是实际存放他们的内容
       使用JSON 序列化与反序列化来复制(?)
   ArrayBuffer 二进制数组 
-    PS:JavaScript操作二进制数据的接口; 
+    PS：JavaScript操作二进制数据的接口; 
       二进制数组由三个对象组成,这些对象早就存在,属于独立的规格,
       ES6将它们纳入了ECMAScript规格,并增加了新的方法;
       这些对象原始的设计目的,与WebGL项目有关。
@@ -2231,13 +2234,13 @@ OOP,面向对象
       Float64   8     double           64 位浮点数                    
 功能类对象 
   Function 函数对象
-    PS:函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能.
+    PS：函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能.
       在 JS 中,“一切皆对象”,数组和函数本质上都是对象.
       函数是定义一次但却可以调用或执行任意多次的一段代码.
       若函数名称重复会产生覆盖.
       JS中代码块(大括号之间)里不会产生作用域,函数是唯一能创建新作用域的地方.
     Function 类型
-      PS:函数也是一个值,类型为函数,
+      PS：函数也是一个值,类型为函数,
         在ECMAScript中, Function类型 实际上是对象
         每个函数都是 Function构造器 的实例,而且都与其他引用类型一样具有属性和方法.
         由于函数是对象,因此函数名实际上也是一个指向函数对象的指针
@@ -2250,10 +2253,10 @@ OOP,面向对象
         goo.a =1;
         console.log(goo.a); //1
     创建函数 
-      PS:函数的创建有 函数声明 和 函数表达式 两种常用方法.
+      PS：函数的创建有 函数声明 和 函数表达式 两种常用方法.
         变量名可以使用中文字符来进行命名而不会报错,但最好不要使用中文.
       function funcName(参数){执行语句} function关键字创建函数
-        PS:ECMAScript中的函数使用function关键字来声明,后跟一组参数以及函数体.
+        PS：ECMAScript中的函数使用function关键字来声明,后跟一组参数以及函数体.
           该方法创建的函数,调用可在声明(位置)前进行(函数声明提升)
           函数声明后,函数不调用不执行
         函数的调用 : 函数名(参数);
@@ -2271,7 +2274,7 @@ OOP,面向对象
           等价于
          (function bar(){ alert(1); })();
       new Function(); 构造函数创建函数
-        PS: 该方法不推荐使用,会导致解析两次代码,影响性能,
+        PS： 该方法不推荐使用,会导致解析两次代码,影响性能,
           第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串.
         var foo =new Function('arg1',...,"函数体");
         e.g. :
@@ -2399,7 +2402,7 @@ OOP,面向对象
           }
           console.log(box()());  //abc.
       闭包closure: 可访问一个函数作用域里变量的函数
-        PS: 或者说闭包是函数中创建的函数.
+        PS： 或者说闭包是函数中创建的函数.
           闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存.
           过度使用闭包可能会导致内存占用过多.
           虽然V8等优化后的JS引擎会尝试回收被闭包占用的内存,但还是要慎重使用.
@@ -2509,7 +2512,7 @@ OOP,面向对象
           }
           foo();  // 1
       构造函数
-        PS:
+        PS：
           构造器函数首字母大写(约定写法),区别其他的一般函数.
           构造器用于生成对象(类似于 类)
          (构造器及构造器的prototype一起,相当于类)
@@ -2569,7 +2572,7 @@ OOP,面向对象
           obj.age; //undefined
           obj.aoo; //
       高阶函数(回调函数)
-        PS:将函数名作为另一函数的参数进行传入,则后者为高阶函数.
+        PS：将函数名作为另一函数的参数进行传入,则后者为高阶函数.
           将函数b的功能传入,而非将函数b的执行值传入,
           所以是将函数b的函数名作为a的一个参数,
           b也可以是匿名函数.
@@ -2588,7 +2591,7 @@ OOP,面向对象
         (function(){console.log("hello");})()  //hello
         (function(a,b){console.log(a+b);})(2,3); //5
       递归 :一个函数调用本身或者两个函数相互调用
-        PS:递归必须要定义终止条件,否则无限递归.
+        PS：递归必须要定义终止条件,否则无限递归.
         e.g.
         用递归求斐波那契数
         斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
@@ -2618,7 +2621,7 @@ OOP,面向对象
       function box(num){ return num+2; }
       console.log(box(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
     this 执行函数时的上下文对象
-      PS:函数内部另一个特殊对象.
+      PS：函数内部另一个特殊对象.
         在JS中函数的this关键字的行为与其他语言相比有很多不同.
         this引用的是函数据以执行操作的对象.
         是JavaScript的一个关键字,表示一个对象.
@@ -2739,7 +2742,7 @@ OOP,面向对象
         function foo(){ console.log(Object.prototype.toString.call(this)); };
         foo.call(7); // [object Number]
       fun.apply(thisArg[,argsArray])        改变this指向
-        PS:使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
+        PS：使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
           都是函数对象的方法,区别在于接收参数的形式不同.
         Arguments:
           thisArg  在fun函数运行时指定的 this 值.
@@ -2799,7 +2802,7 @@ OOP,面向对象
               console.log(p1); //Person {name: "aoo", age: 19}
               console.log(p2); //Person {name: "boo", age: 18}
       fun.bind(thisArg[,arg1[,arg2[,...]]]) 创建新函数并改变this指向 [ES5新增]
-        PS:bind()方法会创建一个新函数.
+        PS：bind()方法会创建一个新函数.
           当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
           之后的一序列参数将会在传递的实参前传入作为它的参数.
         Arguments:
@@ -2883,14 +2886,14 @@ OOP,面向对象
       goo(); // function goo(){ foo(); }
     foo.prototype(构造)函数的原型属性对象(参见 对象原型)
   Date     日期时间对象
-    PS:ECMAScript提供了Date类型来处理时间和日期.
+    PS：ECMAScript提供了Date类型来处理时间和日期.
       Date 对象内置一系列获取和设置日期时间信息的方法.
       ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的.
       Date对象基于1970年1月1日0时世界协调时间开始的毫秒数.
       UTC(coordinated universeal time,国际协调时间,又称世界统一时间)
       UTC 日期值得是在没有时区偏差的情况下的日期值(UTC和北京时间相差8个小时,北京属于东八区)
     创建时间对象:Date 构造函数(没有字面量格式)
-      PS:
+      PS：
         以常规函数调用他(即不加new操作符)将会返回一个字符串,而不是时间对象.
         当时间数值超过合理范围值时,会被调整为相邻值,
         如new Date(2013,13,1)等于new Date(2014,1,1)
@@ -2959,20 +2962,20 @@ OOP,面向对象
       通过getTime()转换为毫秒数进行比较
       将时间对象通过JSON格式转化后进行比较
   RegExp   正则对象 
-    PS:Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
+    PS：Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
       正则表达式是一个描述字符模式的对象.
       ECMAScript的RegExp类型表示正则表达式.
       String 和 RegExp 都定义了使用正则表达式进行强大的模式匹配和文本检索与替换的函数.
       常用于表单的本地验证.
     创建正则表达式
       /pattern/attr 字面量方式创建
-        PS:正则表达式字面量在脚本加载后编译.
+        PS：正则表达式字面量在脚本加载后编译.
           若需创建的正则表达式是常量,使用这种方式可以获得更好的性能.
         e.g. :
           var rgep1=/fan/;
           var rgep2=/fan/ig;
       new RegExp(str,attr); 通过字符串创建
-        PS:
+        PS：
           当创建的正则表达式的模式会发生改变,
           或者事先并不了解它的模式,
           或者是从其他地方(比如用户的输入)得到的,
@@ -2986,7 +2989,7 @@ OOP,面向对象
       g   global,全局匹配
       m   multiple lines,多行匹配
     Metacharacter 元符号 :包含特殊含义的字符
-      PS: 可以控制匹配模式的方式.
+      PS： 可以控制匹配模式的方式.
         第二个反斜杠"/"后的元字符将失去其特殊含义(用于放置模式修饰符的)
       ◇字符元字符
       .   表示(除换行符和回车符外的)任意字符,等价于[^\r\n]
@@ -3061,7 +3064,7 @@ OOP,面向对象
       /(abc){3}/  表示需要匹配abc 三次以上
       (red|blue|green)  查找任何指定的选项(| 或)
     捕获匹配分组 
-      PS:获取之前需要有匹配操作;
+      PS：获取之前需要有匹配操作;
         RegExp.$num 或 \num 表示匹配第num个分组中的内容;
       replace方法中 
         实现将str中两个单词位置替换.
@@ -3267,7 +3270,7 @@ OOP,面向对象
       str.split(rgep);
       //["this is a box", ",thatis a box", ""]
     Str.replace(rgep,str); 返回指定字符串替换正则后的新字符串 [未改变原字符串]
-      PS:全局则替换字符串中所有符合的字符,否则替换第一个,
+      PS：全局则替换字符串中所有符合的字符,否则替换第一个,
         非全局连续多次替换时,后一次从上一次匹配结束的位置开始匹配
       var rgep=/Box/ig;
       var Str="this is a Box,that is a box!";
@@ -3313,11 +3316,11 @@ OOP,面向对象
         var str="123abc.com@aaa.com";
         alert(pattern.test(str));
   Error    错误对象 
-    PS:JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
+    PS：JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
       然后整个程序就中断在发生错误的地方,不再往下执行.
       JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例。
     错误类型
-      PS:ECMA-262 定义了7种错误类型
+      PS：ECMA-262 定义了7种错误类型
         Error是基类型,是其他六种的父类型,其他类型继承自它;
         其他六种派生错误,连同原始的Error对象,都是构造函数。
         开发者可以使用它们,人为生成错误对象的实例。
@@ -3365,10 +3368,10 @@ OOP,面向对象
       //    at repl:1:5
       代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
 单体内置对象 
-  PS:ECMA-262 的定义:有ECMAScript实现提供的、不依赖宿主环境的对象,
+  PS：ECMA-262 的定义:有ECMAScript实现提供的、不依赖宿主环境的对象,
     这些对象在ECMAScript程序执行之前就已经存在了.
   Global|Window 全局对象 
-    PS: JS继承于ECMAScript,浏览器中,JS的全局对象为window,
+    PS： JS继承于ECMAScript,浏览器中,JS的全局对象为window,
       Web浏览器将window作为global对象的一部分加以实现;
       Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象,
       不属于任何其他对象的属性和方法,最终都是它的属性和方法;
@@ -3378,7 +3381,7 @@ OOP,面向对象
     var global =function(){ return this; }  间接获取Global对象
     其他内置属性/方法:
       URI 编码方法
-        PS:URI编码可以对URI(链接)进行编码,以便发送给浏览器
+        PS：URI编码可以对URI(链接)进行编码,以便发送给浏览器
           URI(Uniform Rescurce Identifiers),通用资源标识符
           有效的URI中不能包含某些字符,如空格
           采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
@@ -3416,7 +3419,7 @@ OOP,面向对象
       TypeError      构造函数TypeError
       URIError       构造函数URIError
     window 对象
-      PS:
+      PS：
         ECMAScript中不能直接访问Global对象,当Web浏览器都将这个全局对象作为window对象的一部分加以实现
         window为JS(而非ECMAScript)最顶层的对象
         全局作用域中声明的所有变量和函数,都为window对象的属性和方法.
@@ -3447,7 +3450,7 @@ OOP,面向对象
         String()把对象的值转换为字符串
           String()函数返回与字符串对象的toString()方法值一样.
   Math   数学对象 
-    PS:
+    PS：
       为数学常量和数学函数提供了属性和方法
       Math的所有属性/方法都是静态的
     数学值
@@ -3494,7 +3497,7 @@ OOP,面向对象
       Math.atan(x)      返回x的反正切值
       Math.atan2(x,y)   返回x/y的反正切值
   JSON:  "JavaScript Object Notation",JS对象表示法 
-    PS: 一种基于文本、独立于语言的轻量级数据交换格式,
+    PS： 一种基于文本、独立于语言的轻量级数据交换格式,
       利用 JS 中的一些模式来表示结构化数据.
       对于整个Web,广泛用于数据的传送和数据的交换.
       JSON是独立于语言的,也就是说不管什么语言,都可以解析JSON,只需要按照JSON的规则来就行.
@@ -3518,14 +3521,14 @@ OOP,面向对象
         { "aoo" : "style=\"color:red;\"" }
         或 { "aoo" : "style='color:red;'" }
     ◆JSON对象 的两个方法
-      PS:ECMAScript5 对解析 JSON 的行为进行了规范,定义了全局对象 JSON对象
+      PS：ECMAScript5 对解析 JSON 的行为进行了规范,定义了全局对象 JSON对象
       e.g.
         var s = JSON.stringify([1,2,3,4]);
         //"[1,2,3,4]",为string类型
         var a = JSON.parse(s);
         //[1,2,3,4],object类型(数组为object类型)
     JSON.stringify(val[,arr/func,num/str]); 序列化,将JS值转换为JSON字符串
-      PS:序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中
+      PS：序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中
         值为undefined的任何属性也都会被跳过
       val       需序列化的值
       arr/func  可选,过滤器,数组或函数
@@ -3598,7 +3601,7 @@ OOP,面向对象
         });
         JSON.stringify(obj); // "{"aoo":1}"
       对象中使用 toJSON 指定序列化的规则
-        PS:若 JSON.stringify 的参数对象有自定义的toJSON方法,
+        PS：若 JSON.stringify 的参数对象有自定义的toJSON方法,
           则其使用该方法的返回值代替参数对象.
         Date 对象有一个自己的toJSON 方法
           var date = new Date('2015-01-01');
@@ -3640,14 +3643,14 @@ OOP,面向对象
         RegExp.prototype.toJSON = RegExp.prototype.toString;
         JSON.stringify(/aoo/); // ""/aoo/""
     JSON.parse(JSONstr[,func]);     反序列化,将 JSON字符 串转换为JS值
-      PS:若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
+      PS：若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
       JSONstr 需要解析的JSON字符串
       func    可选,函数的参数传入 属性名 和 属性值
     应用:
       使用 JSON 的函数进行序列化和反序列化来本地保存
       JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
   Performance 当前页面加载相关的性能信息 
-    PS: ECMAScript 5 引入“高精度时间戳”这个API,部署在performance对象上。
+    PS： ECMAScript 5 引入“高精度时间戳”这个API,部署在performance对象上。
       用于精确度量、控制、增强浏览器的性能表现;为测量网站性能,提供以前没有办法做到的精度。
       它的精度可以达到1毫秒的千分之一,这对于衡量的程序的细微差别,提高程序运行速度很有好处,
       而且还可以获取后台事件的时间进度。
@@ -3666,7 +3669,7 @@ OOP,面向对象
         局限,这种写法只能获取代码运行过程中的时间进度,无法知道一些后台事件的时间进度,
           比如浏览器用了多少时间从服务器加载网页。
     performance.timing  包含了各种与浏览器性能有关的时间数据
-      PS:提供浏览器处理网页各个阶段的耗时。
+      PS：提供浏览器处理网页各个阶段的耗时。
       以下属性全部为只读
       navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳。
         如果没有前一个网页,则等于fetchStart属性。

@@ -33,7 +33,7 @@
     则可以解决部分安卓机型,（但不是全部的）,有些机型依然不行。
     这个和微信客户端有关。目前没有找到满意的解决办法。
 WeUI：专为开发微信HTML5应用的开源Web UI组件库
-  PS:WeUI是一套同微信原生视觉体验一致的基础样式库,
+  PS：WeUI是一套同微信原生视觉体验一致的基础样式库,
     为微信Web开发量身设计,可以令用户的使用感知更加统一。
     包含button、cell、dialog、toast、article、icon等各式元素。
   说明篇
@@ -48,7 +48,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
   将需要调试的网页的地址「不可使用file协议,即需要开启本地服务器」发送到微信上,
   在微信上打开从电脑上发来的链接即可看到调试页的效果了
 微信JS-SDK
-  PS:微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
+  PS：微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
     通过微信JS-SDK,网页开发者可使用拍照、选图、语音、位置等手机系统的能力,
     同时可以直接使用微信分享、扫一扫、卡券、支付等微信特有的能力。
   ?
@@ -94,7 +94,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
         // 也可以在返回的res参数中查看,对于SPA可以在这里更新签名。
       });    
   接口调用说明
-    PS:所有接口通过wx对象(也可使用jWeixin对象)来调用,参数是一个对象,
+    PS：所有接口通过wx对象(也可使用jWeixin对象)来调用,参数是一个对象,
     除了每个接口本身需要传的参数之外,还有以下通用参数：
       success  接口调用成功时执行的回调函数。
       fail     接口调用失败时执行的回调函数。
@@ -204,7 +204,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     上传图片接口
       wx.uploadImage({
           localId: '', // 需要上传的图片的本地ID,由chooseImage接口获得
-          isShowProgressTips: 1, // 默认为1,显示进度提示
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
           success: function (res) {
               var serverId = res.serverId; // 返回图片的服务器端ID
           }
@@ -213,7 +213,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     下载图片接口
       wx.downloadImage({
           serverId: '', // 需要下载的图片的服务器端ID,由uploadImage接口获得
-          isShowProgressTips: 1, // 默认为1,显示进度提示
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
           success: function (res) {
               var localId = res.localId; // 返回图片下载后的本地ID
           }
@@ -255,7 +255,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     上传语音接口
       wx.uploadVoice({
           localId: '', // 需要上传的音频的本地ID,由stopRecord接口获得
-          isShowProgressTips: 1, // 默认为1,显示进度提示
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
               success: function (res) {
               var serverId = res.serverId; // 返回音频的服务器端ID
           }
@@ -264,7 +264,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     下载语音接口
       wx.downloadVoice({
           serverId: '', // 需要下载的音频的服务器端ID,由uploadVoice接口获得
-          isShowProgressTips: 1, // 默认为1,显示进度提示
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
           success: function (res) {
               var localId = res.localId; // 返回音频的本地ID
           }
@@ -272,7 +272,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
   识别音频并返回识别结果接口
     wx.translateVoice({
        localId: '', // 需要识别的音频的本地Id,由录音相关接口获得
-        isShowProgressTips: 1, // 默认为1,显示进度提示
+        isShowProgressTiPS： 1, // 默认为1,显示进度提示
         success: function (res) {
             alert(res.translateResult); // 语音识别的结果
         }
@@ -468,6 +468,19 @@ ios
 --------------------------------------------------------------------------------
 android
 -------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

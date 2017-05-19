@@ -25,7 +25,7 @@
       node 文件名  执行该文件
     需要将执行的文件放在引用库的文件夹下(自带的库则不用)
     Node.js REPL 交互式解释器
-      PS:Node.js REPL,Read Eval Print Loop, 表示一个电脑的环境,
+      PS：Node.js REPL,Read Eval Print Loop, 表示一个电脑的环境,
         类似 Window 系统的终端或 Unix/Linux shell,我们可以在终端中输入命令,并接收系统的响应.
         Node 的交互式解释器可以很好的调试 Javascript 代码.
         通过输入 node 命令来启动 Node 的终端
@@ -47,7 +47,7 @@
         .load filename  载入当前 Node REPL 会话的文件内容.
         
   Node.js 回调函数
-    PS:Node.js 异步编程的直接体现就是回调.
+    PS：Node.js 异步编程的直接体现就是回调.
       异步编程依托于回调来实现,但不能说使用了回调后程序就异步化了.
       回调函数在完成任务后就会被调用,Node 使用了大量的回调函数,Node 所有 API 都支持回调函数.
       例如,我们可以一边读取文件,一边执行其他命令,在文件读取完成后,
@@ -92,7 +92,7 @@
       Node.js 单线程类似进入一个while(true)的事件循环,直到没有事件观察者后退出,
       每个异步事件都生成一个事件观察者,如果有事件发生就调用该回调函数.
     事件驱动程序
-      PS:Node.js 使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
+      PS：Node.js 使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
         然后去服务下一个web请求.
         当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
         这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
@@ -151,7 +151,7 @@
       testThis();
       console.log(this.foo); // foo
 Buffer 缓冲区 
-  PS:JavaScript 语言自身只有字符串数据类型,没有二进制数据类型.
+  PS：JavaScript 语言自身只有字符串数据类型,没有二进制数据类型.
     但在处理像TCP流或文件流时,必须使用到二进制数据.
     因此在 Node.js中,定义了一个 Buffer 类,该类用来创建一个专门存放二进制数据的缓存区.
     在 Node.js 中,Buffer 类是随 Node 内核一起发布的核心库.
@@ -174,7 +174,7 @@ Buffer 缓冲区
       console.log(buf1.length); // 7
       console.log(buf2.length); // 8
   buf.write(str[,index[,length]][,encoding]); 将字符串写入buf缓冲区,返回实际写入的长度
-    PS:如果 buffer 空间不足, 则只会写入部分字符串.
+    PS：如果 buffer 空间不足, 则只会写入部分字符串.
     Arguments: 
       string   写入缓冲区的字符串.
       index    缓冲区开始写入的索引值,默认为 0 .
@@ -241,7 +241,7 @@ Buffer 缓冲区
       var buf3 = Buffer.concat([buf1,buf2]);
       console.log(buf3.toString());   // 1122
 Stream 流 
-  PS:Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     例如,对http 服务器发起请求的request 对象就是一个 Stream,还有stdout,标准输出.
     所有的 Stream 对象都是 EventEmitter 的实例
   Stream 有四种流类型：
@@ -290,7 +290,7 @@ Stream 流
       查看 output.txt 文件的内容：
         菜鸟教程官网地址：www.runoob.com
   管道流 
-    PS:管道提供了一个输出流到输入流的机制.
+    PS：管道提供了一个输出流到输入流的机制.
       通常我们用于从一个流中获取数据并将数据传递到另外一个流中
     e.g.:
       读取一文件内容并将数据写入到另外一文件中
@@ -306,7 +306,7 @@ Stream 流
       程序执行完毕,查看 output.txt 文件的内容：
         菜鸟教程官网地址：www.runoob.com
   链式流
-    PS:链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
+    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
       链式流一般用于管道操作.
     e.g.:
       用管道和链式来压缩和解压文件
@@ -333,12 +333,12 @@ Stream 流
         代码执行结果如下：
         文件解压完成.
 模块系统 
-  PS:为了让NodeJS的文件可以相互调用,NodeJS提供了一个简单的模块系统.
+  PS：为了让NodeJS的文件可以相互调用,NodeJS提供了一个简单的模块系统.
     模块是Node.js 应用程序的基本组成部分,文件和模块是一一对应的.
     换言之,一个 Node.js 文件就是一个模块,
     这个文件可能是JavaScript 代码、JSON 或者编译过的C/C++ 扩展.
   模块的引用和创建
-    PS:Node.js 提供了exports 和 require 两个对象,
+    PS：Node.js 提供了exports 和 require 两个对象,
       其中 exports 是模块公开的接口,
       require 用于从外部获取一个模块的接口,即所获取模块的 exports 对象.
     exports.foo = function(){ }
@@ -403,7 +403,7 @@ Stream 流
       var fs = require('fs'); // 引入fs模块
   ◆核心模块
   events 事件模块
-    PS:Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
+    PS：Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
     Node.js 里面的许多对象都会分发事件：
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
@@ -414,7 +414,7 @@ Stream 流
       当添加新的监听器时,'newListener' 事件会触发,
       当监听器被移除时,'removeListener' 事件被触发.
     event.on(eName,function([arg1,arg2...]){ }); 给指定事件添加监听器
-      PS:事件名为字符串,可自定义.一个事件可以绑定多次
+      PS：事件名为字符串,可自定义.一个事件可以绑定多次
       回调函数的传入的参数为手动触发时指定的值
     event.emit(eName[,val1,val2...]); 手动触发事件
       当事件触发时,注册到这个事件的事件监听器被依次调用
@@ -466,7 +466,7 @@ Stream 流
       其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
       继承 EventEmitter 不会打乱对象原有的继承关系.
   http   http服务模块
-    PS: Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
+    PS： Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
       1024 以下的端口是系统保留端口,需要管理员权限才能使用;
       http 模块主要用于搭建 HTTP 服务端和客户端,
       使用 HTTP 服务器或客户端功能必须调用 http 模块.
@@ -515,7 +515,7 @@ Stream 流
         出现 haha! hello word
     http.get(url,function(res){}); 使用get方法请求指定url的数据
       res.on('data',function(data){ }); 监听请求的数据下载事件,会不断的触发
-        PS:将回调函数中所有的data数据串起来就是完整的响应数据了
+        PS：将回调函数中所有的data数据串起来就是完整的响应数据了
       res.on('end',function(){ }); 请求数据下载完毕触发
     e.g.:
       创建Web服务器
@@ -594,14 +594,14 @@ Stream 流
         </body>
         </html>
   fs     文件系统模块file system
-    PS:fs模块可用于对系统文件及目录进行读写操作.
+    PS：fs模块可用于对系统文件及目录进行读写操作.
       Node.js 提供一组类似 UNIX(POSIX)标准的文件操作API.
       也可使用 fs.read 和 fs.write 读写文件,
       fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
       但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
       使用 fs.read 和 fs.write 读写文件需要使用 fs.open 打开文件和 fs.close 关闭文件.
     模块中所有方法都有同步和异步两种形式
-      PS:建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
+      PS：建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
         异步的方法函数最后一个参数为回调函数,回调函数的第一个参数包含了错误信息 error.
       异步写法demo:有一个回调函数
         var fs = require('fs'); // 载入fs模块
@@ -619,7 +619,7 @@ Stream 流
         而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
     var fs = require('fs'); 引入文件系统模块
     fs.writeFile(path,data,[options],callback); 写内容到文件中
-      PS: 写入文件内容,如果文件不存在会创建一个文件,但不会主动创建目录
+      PS： 写入文件内容,如果文件不存在会创建一个文件,但不会主动创建目录
         写入时会先清空文件
       Arguments:
         path    字符串,路径及文件名
@@ -702,7 +702,7 @@ Stream 流
           console.log(`${file} 成功删除`)
         })
     fs.mkdir(path,[mode],callback); 创建目录
-      PS:当创建的文件夹和已存在的文件夹重名时会报错
+      PS：当创建的文件夹和已存在的文件夹重名时会报错
       Arguments:
         path     路径和目录名称
         mode     可选,设置目录的权限,默认为 0777
@@ -882,7 +882,7 @@ Stream 流
     fs.rename(oldPath, newPath, callback)
       回调函数没有参数,但可能抛出异常          
   url    
-    PS:URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
+    PS：URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
     var url = require("url"); 引入url模块
     url.parse("url"[,boolean][,boolean]); 解析url为一个对象
       e.g. :
@@ -911,7 +911,7 @@ Stream 流
       url.resolve("https://imooc.com","/course/list");
       // 'https://imooc.com/course/list'
   querystring
-    PS:
+    PS：
     var querystring = require("querystring"); 引入querystring模块
     querystring.stringify(obj,连接符,键值对=的替换符号); 序列化
       e.g. :
@@ -933,9 +933,9 @@ Stream 流
     querystring.encode()
     querystring.decode()
   util 提供常用函数的集合
-    PS:用于弥补核心JavaScript 的功能 过于精简的不足
+    PS：用于弥补核心JavaScript 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
-      PS:JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
+      PS：JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
         JavaScript 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
         handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
       e.g.:
@@ -958,7 +958,7 @@ Stream 流
         console.log(objSub); // { name: 'sub' }
         定义了一个基础对象Base 和一个继承自Base 的Sub,
     util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
-      PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
+      PS：通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
         util.inspect 并不会简单地直接把对象转换为字符串,
         即使该对象定义了toString方法也不会调用.
       Arguments:
@@ -1004,7 +1004,7 @@ Stream 流
         util.isError(new TypeError()) // true
         util.isError({ name: 'Error', message: 'an error occurred' }) // false      
   os 模块提供了一些基本的系统操作函数
-    PS:
+    PS：
     var os = require("os"); 引入os模块
     os.tmpdir() 返回操作系统的默认临时文件夹.
     os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
@@ -1036,7 +1036,7 @@ Stream 流
         total memory : 25103400960 bytes.
         free memory : 20676710400 bytes.
   path 模块提供了一些用于处理文件路径的小工具
-    PS:
+    PS：
     var path = require("path"); 引入path模块
     path.normalize(p) 规范化路径,注意'..' 和 '.'.
     path.join([path1][, path2][, ...]) 用于连接路径
@@ -1129,10 +1129,10 @@ Stream 流
         console.log('server closed')
       })
   dns  模块用于解析域名
-    PS:
+    PS：
     var dns = require("dns"); 引入dns模块
   domain,域 简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
-    PS:
+    PS：
       domain模块,把处理多个不同的IO的操作作为一个组.
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
       domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
@@ -1144,7 +1144,7 @@ Stream 流
   本地模块
   ◆第三方模块
   cheerio html文件源码操作模块
-    PS:像使用jquery一样方便快捷地操作抓取到的源码
+    PS：像使用jquery一样方便快捷地操作抓取到的源码
     var cheerio =require("cheerio"); 引入cheerio模块
     var $ =cheerio.load(data); 将传入的数据生成DOM,并返回选择器API用于获取DOM元素
       $(selector)  获取selector对应的元素组成的类数组对象
@@ -1165,7 +1165,7 @@ Stream 流
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
 路由 
-  PS:我们要为路由提供请求的URL和其他需要的GET及POST参数,
+  PS：我们要为路由提供请求的URL和其他需要的GET及POST参数,
     随后路由需要根据这些数据来执行相应的代码.
     因此,我们需要查看HTTP请求,从中提取出请求的URL以及GET/POST参数.
     这一功能应当属于路由还是服务器(甚至作为一个模块自身的功能)确实值得探讨,
@@ -1233,7 +1233,7 @@ Stream 流
   以上输出已经去掉了比较烦人的/favicon.ico请求相关的部分.
   浏览器访问 http://127.0.0.1:8888/,输出结果如下：
 全局对象 
-  PS:JavaScript 中有一个特殊的对象,称为全局对象(Global Object),
+  PS：JavaScript 中有一个特殊的对象,称为全局对象(Global Object),
     它及其所有属性都可以在程序的任何地方访问,即全局变量.
     在浏览器 JavaScript 中,通常 window 是全局对象, 而 Node.js 中的全局对象是 global,
     所有全局变量(除了 global 本身以外)都是 global 对象的属性.
@@ -1250,7 +1250,7 @@ Stream 流
       注意： 永远使用 var 定义变量以避免引入全局变量,
       因为全局变量会污染 命名空间,提高代码的耦合风险.
   __filename 表示当前正在执行的脚本的文件名
-    PS: 它将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同. 
+    PS： 它将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同. 
       如果在模块中,返回的值是模块文件的路径.
     e.g.:
       创建文件 main.js ,代码如下所示：
@@ -1292,7 +1292,7 @@ Stream 流
     返回一个代表定时器的句柄值.可以使用 clearInterval(t) 函数来清除定时器.
     setInterval() 方法会不停地调用函数,直到 clearInterval() 被调用或窗口被关闭.
   console 用于提供控制台标准输出
-    PS:它是由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
+    PS：它是由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
       Node.js 沿用了这个标准,提供与习惯行为一致的 console 对象,
       用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
     console.log([data][, ...]) 向标准输出流打印字符并以换行符结束
@@ -1314,7 +1314,7 @@ Stream 流
       接收两个参数,第一个参数是表达式,第二个参数是字符串.
       只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
   process global对象的属性对象,用于描述当前 Nodejs 进程状态
-    PS:提供了一个与操作系统的简单接口
+    PS：提供了一个与操作系统的简单接口
     ◆事件
     exit   当进程准备退出时触发.
     beforeExit 当 node 清空事件循环,并且没有其他安排时触发这个事件.
@@ -1443,7 +1443,7 @@ Stream 流
       { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
 --------------------------------------------------------------------------------
 npm,node package manager node包管理器 
-  PS:随同NodeJS一起安装的包管理工具.
+  PS：随同NodeJS一起安装的包管理工具.
     用于node插件管理（包括安装、卸载、管理依赖等）；
     package 就是我们之前说的库,比如jQuery.
     允许用户从NPM服务器下载别人编写的第三方包到本地使用.
@@ -1452,7 +1452,7 @@ npm,node package manager node包管理器
   命令
     ◆安装 卸载 模块 
     npm install <name> [-g] [--save-dev]  使用npm安装插件
-      PS:命令提示符执行
+      PS：命令提示符执行
       <name>：node插件名称。例：npm install gulp-less --save-dev
       -g：全局安装。将会安装在C:\Users\Administrator\AppData\Roaming\npm,并且写入系统环境变量；
         非全局安装：将会安装在当前定位目录；
@@ -1490,7 +1490,7 @@ npm,node package manager node包管理器
     npm update express   更新模块
     npm search express   搜索模块
   选装cnpm
-    PS:说明：因为npm安装插件是从国外服务器下载,受网络影响大,可能出现异常,
+    PS：说明：因为npm安装插件是从国外服务器下载,受网络影响大,可能出现异常,
       如果npm的服务器在中国就好了,所以我们乐于分享的淘宝团队干了这事。
       来自官网：“这是一个完整 npmjs.org 镜像,你可以用此代替官方版本(只读),
       同步频率目前为 10 分钟 一次以保证尽量与官方服务同步。”；
@@ -1511,7 +1511,7 @@ npm,node package manager node包管理器
     npm -g install weinre     安装weinre,用于调试手机页面
   package.json npm配置文件
 express 后端开发框架 
-  PS: Express 是一个简洁而灵活的 node.js Web应用框架
+  PS： Express 是一个简洁而灵活的 node.js Web应用框架
     提供了一系列强大特性帮助你创建各种 Web 应用,和丰富的 HTTP 工具 
     使用 Express 可以快速地搭建一个完整功能的网站.
   Express 框架核心特性：
@@ -1837,7 +1837,7 @@ express 后端开发框架
     现在你可以访问 http://127.0.0.1:8081 并查看终端信息的输出
 --------------------------------------------------------------------------------
 RESTful API 
-  PS: REST即表述性状态传递(英文：Representational State Transfer,简称REST),
+  PS： REST即表述性状态传递(英文：Representational State Transfer,简称REST),
     是Roy Fielding博士在2000年他的博士论文中提出来的一种软件架构风格.
     表述性状态转移是一组架构约束条件和原则.满足这些约束条件和原则的应用程序或设计就是RESTful.
     需要注意的是,REST是设计风格而不是标准.
@@ -2056,7 +2056,7 @@ RESTful API
         id: 3 } 
       }  
 多进程 
-  PS:Node.js 是以单线程的模式运行的,但它使用的是事件驱动来处理并发,
+  PS：Node.js 是以单线程的模式运行的,但它使用的是事件驱动来处理并发,
     这样有助于我们在多核 cpu 的系统上创建多个子进程,从而提高性能.
     每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
     他们可能会共享父进程的 stdio 流,或者也可以是独立的被导流的流对象.
@@ -2148,7 +2148,7 @@ RESTful API
       stdout: 进程 2 执行.
       子进程已退出,退出码 0    
   child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
-    PS:如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
+    PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
       与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
     Arguments:
       modulePath： String,将要在子进程中运行的模块

@@ -1955,10 +1955,9 @@ vue-resource : 作为vue插件的形式存在
 --------------------------------------------------------------------------------
 ★React 
 介绍_概念_说明_定义
-  起源于Facebook,
-  因公司对市场上所有JS MVC 框架都不满意而写的一套JS库,用来架设Instagram网站 
-  React 的设计思想极其独特,属于革命性创新,性能出众,代码逻辑却非常简单;
-  该框架有自己的语言jsx,自己一整套完整的工具链「工具集合」
+  起源于Facebook,用来架设Instagram网站,
+  设计思想独特,属于革命性创新,性能出众,代码逻辑却非常简单;
+  框架使用语言jsx和自己一整套完整的工具链「工具集合」
   声明式,组件化
 使用
   npm install -g  create-react-app       安装React 
@@ -1976,7 +1975,7 @@ vue-resource : 作为vue插件的形式存在
     da   data
     op   operation
     ms   message
-  思想
+  思想 
     通过JS管控HTML元素
     var o1 = new Org( {
       el : '#app',

@@ -240,7 +240,7 @@ DOM 操作
         自身Jelem若find自己则获取不到
       Jelem.children(['selector'])  和find类似,只是从子元素中获取
       ★属性筛选
-      Jelem.offsetParent() 最近的祖先定位元素
+      Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
       ★其他条件筛选
       Jelem.eq(index) 通过下标选取Jelem
@@ -290,7 +290,7 @@ DOM 操作
         PS：使用get取下标,index的可能性更多
         参数为负时:0 表示第一个,-1 表示最后一个,-2 表示倒数第二个,依此类推...
         无参数时,将jQ对象数组转换为可用JS操作的常规数组.
-    增
+    增删改
       Jelem.prepend('htmlCode'/Jelem)    内部头部插入
       Jelem.prependTo("selector"/Jelem)  被插入到内部头部 [与prepend相反]
         将元素/内容content插入到元素内部头部
@@ -319,7 +319,6 @@ DOM 操作
       Jelem.wrapAll("HTML代码"/Jelem)       所有元素整体外包裹元素
       Jelem.unwrap("HTML代码"/Jelem)        元素外包裹的元素去除
       Jelem.wrapInner("HTML代码"/Jelem)     将每个元素的内容包裹
-    删
       Jelem.remove()   删除元素
         删除该元素和其子元素及以下的所有内容(包括自身标签)
         所有与元素相关的数据也会被删除(event handlers、internally cached data)
@@ -329,12 +328,11 @@ DOM 操作
       Jelem.empty()    清空内容
         删除该元素的子元素及以下的所有内容(不包括自身标签)
         返回值为清空后的元素
-      Jelem.removeAttr('属性名'); 删除属性
+      Jelem.removeAttr('属性名')  删除属性
         e.g.:
           Jelem.removeAttr('class'); 
-    改
-      Jelem1.replaceWith("HTML代码"/Jelem); 元素1代替为元素2
-      Jelem1.replaceAll("selector"/Jelem2); 元素2代替为元素1 [与replaceWith相反]
+      Jelem1.replaceWith("HTML代码"/Jelem)  元素1代替为元素2
+      Jelem1.replaceAll("selector"/Jelem2)  元素2代替为元素1 [与replaceWith相反]
         $("HTML代码")/Jelem1.replaceAll("selector"/Jelem2); 
       Jelem.css() 设置/获取元素的style样式 [设置为行内样式] [获取为计算后的属性]
         e.g. 
@@ -413,27 +411,42 @@ DOM 操作
         若有,则删除;没有,则加上
     元素信息
       ◆尺寸位置信息
-      Jelem.position()  定位(非static)元素的定位尺寸信息(top和left) [只读?]
-        PS：只对可见元素有效
-      Jelem.offset()    可读写,元素相对document「可视区左上角」的top和left
-        PS：此方法只对可见元素有效
-        RetValue:包含top和left属性的一个对象
+        PS：对于$(window)和$(document)其 width() innerWidth() outerWidth() 相同
+          且为只读,也和其 margin border padding 无关 ,
+          推荐使用width来代替innerWidth、outerWidth获取; 高度同理;
+          其中$(window)表示的为可视区,而$(document)为网页的总高度;
+      Jelem.width([num/foo])   读写元素content的width 
+        num      用于设置元素的宽度值,单位px
+        foo(indx,oldWidth){} 
+      Jelem.height([num/foo])  读写元素content的height 
+        需要设置 height 的值,如单行文字只设置line-height则该方法获取不到数值;
+      Jelem.innerWidth([num/foo])  读写元素宽,content+padding 
+      Jelem.innerHeight([num/foo]) 读写元素高,content+padding
+      Jelem.outerWidth([bool])   元素宽,content+padding+border[+margin] 
+        bool  可选,默认为false,是否包括margin的布尔值
+      Jelem.outerHeight([bool])  元素高,content+padding+border[+margin] 
+      Jelem.scrollTop()   读写元素相对滚动条顶部的偏移
+        PS：此处的Jelem为拥有滚动条的元素;
+      Jelem.scrollLeft()  读写元素相对滚动条左侧的偏移
+      Jelem.offset()    读写元素相对document「可视区左上角」的top和left 
+        PS：此方法只对可见元素有效;返回包含top和left属性的对象
         e.g.:
           $(".a").offset(); // {top: 24, left: 0}
           $(".a").offset().left = 20; // ? 
           $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
-      Jelem.width([num]); 设置或返回元素content的width
-      Jelem.height([num]); 设置或返回元素content的height
-        需要设置 height的值,如单行文字只设置line-height则该方法获取不到数值.
-      Jelem.innerWidth(); 返回元素的宽度,包括内边距
-      Jelem.innerHeight(); 返回元素的高度,包括内边距
-      Jelem.outerWidth([bool]) 方法返回元素的宽度,包括padding和border
-        bool  可选,布尔值参数,默认为false,设置true时,计算外边距在内
-      Jelem.outerHeight([bool]) 方法返回元素的高度,包括padding和border
-        bool  可选,布尔值参数,默认为false,设置true时,计算外边距在内
-      Jelem.scrollTop()   读写元素相对滚动条顶部的偏移
-      Jelem.scrollLeft()  读写元素相对滚动条左侧的偏移
-        此处的Jelem为拥有滚动条的元素
+      Jelem.position()  元素相对于其offsetParent的top和left [只读?]
+        PS：只对可见元素有效
+        e.g.：
+          .parent{
+            position: relative;
+          }
+          .child{
+            position: absolute;
+            top: 10px;left: 20px;
+          }
+          <div class="parent"> <div class="child"></div> </div>
+          var pos = $('.child').position();
+          console.log(pos); //  Object {top: 10, left: 20}
       ◆其他信息
       Jelem.size();        元素个数
       Jelem.index([Jelem]);  获取元素在其父元素Jelem中的下标「从1开始」
@@ -1250,7 +1263,7 @@ jQuery插件
       即定义<li>元素选中时的背景色
     selector 表示<ul>元素
     color    表示<li>元素选中时的
-jQuery UI插件
+jQuery UI插件 
   PS：jQuery UI则是在jQuery的基础上,利用jQuery的扩展性,设计的插件。
     提供了一些常用的界面元素,诸如对话框、拖动行为、改变大小行为等等
   jQuery UI 引入

@@ -13,8 +13,44 @@ ECMAScript JS核心,语法部分
   JS的核心语法ECMAScript包括两个部分：
     基本的语法构造,如操作符、控制结构、语句等
     标准库,如Array、Date、Math等
-语法 
-  PS： 区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
+说明、定义
+  函数和方法的区别 
+    方法就是对象的函数
+    方法基于对象,调用写法：obj.foo()
+    函数基于过程,写法：foo()
+  静态 公有 私有 特权 属性和方法 
+    PS：静态、公有、私有属性/方法 是相对于类来说的.
+    静态方法/属性 : 给类或构造函数定义的属性/方法,无需实例化通过类来访问
+    公有属性 : 实例化后通过对象来访问
+    公有方法 : 实例化后通过对象来调用,一般把共用的方法,都放在'原型对象'当中
+      若放在构造函数中,会重复创建共同的方法
+    私有属性 : 函数内部定义的属性,外部无法访问
+    私有方法 : 函数内部定义的方法,外部无法调用
+    特权方法 : 有权访问私有变量和私有函数的 公有方法
+      利用的闭包原理,即通过作用域链,
+      让内部函数能够访问上层函数的变量对象(即该类的私有变量、私有方法).
+      
+    function Foo(arg1,arg2){ // 构造函数
+      var name = arg1;   // 私有属性
+      function goo(){};  // 私有方法
+      this.age = arg2;                // 公有属性,通过实例对象来访问
+      Foo.prototype.do1 =function(){  // 公有方法,通过实例对象来调用
+        console.log(name);
+      }
+      this.do2 = function(){  // 特权方法
+        console.log(name); // 访问了私有属性
+      }
+    }
+    Foo.name ="abc";        // 静态属性
+    Foo.say =function(){};  // 静态方法
+    var aoo =new Foo(1,2);
+
+    var box = 100;
+    box.MAX_VALUE;    //undefined , 属性
+    Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
+  实例：类型的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
+语法规则
+  PS：区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
     一等函数「first-class_function」来自于 Scheme;
   标识符: 指变量、函数、属性或函数的参数的名字
     标识符的组合规则:
@@ -36,8 +72,11 @@ ECMAScript JS核心,语法部分
       'enum' 'export' 'extends' 'final' 'float' 'goto' 'implements' 'import' 'int'
       'interface' 'long' 'native' 'package' 'private' 'protected' 'public'
       'short' 'static' 'super' 'synchronized' 'throws' 'transient' 'volatile'
+  单、双引号需交错、成对使用 
+    正确使用： '1"2"3'   "1'2'3" 
+    错误使用： "1"2"3"   '1'2'3' 
   多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
-  语句使用分号结尾,若省略分号,则由解析器确定语句的结尾 
+  ; 语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
   \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
     PS：大部分js引擎都支持,但并非ECMAScript的规定;
@@ -865,6 +904,31 @@ ECMAScript JS核心,语法部分
       var obj3 ={sex:"man"};
       Object.assign(obj1,obj2,obj3);
       // {name: "abc", height: 180, sex: "man"}
+    Exp:
+      通过val获取对应的key
+        var getKey = function(val,bool = true){
+          var arr = [];
+          var str = '';
+          for(var key in obj){
+            if (obj[key] === val ) {
+              arr.push(key);
+            }
+          };
+          if (bool) {
+            return arr;
+          }
+          else {
+            return arr[0];
+          }
+        }
+        var obj = {
+          aoo : 'a',
+          boo : 'a',
+          coo : 1,
+          doo : 2
+        }
+        getKey('a');       // (2) ["aoo", "boo"]
+        getKey('a',false); // "aoo"
   对象的 原型&继承&多态
     对象的构造原型 :构造函数的原型对象
       PS：函数对象的属性prototype也是一个对象,
@@ -1692,7 +1756,7 @@ OOP,面向对象
     val/exp , function(){ }() 
 表达式|语句 
   ECMA-262 规定了一组语句,也称为流程控制语句;
-  表达式
+  表达式 
     解释器会通过计算将表达式转换为一个值.
     最简单的表达式是字面量或变量名.
     通过合并简单的表达式来创建复杂的表达式.
@@ -1700,7 +1764,7 @@ OOP,面向对象
     box+5;    //加法运算的表达式
     typeOf(box); //查看数据类型的表达式
     box>3;         //逻辑运算表达式
-  语句 :比表达式更大的单位叫语句.
+  语句：比表达式更大的单位 
     PS： 程序由语句组成.
       最简单的语句由一个表达式和表达式后的分号组成.
       语句通常有一个或多个关键字来完成给定的任务.如:判断、循环、退出等.
@@ -1712,20 +1776,14 @@ OOP,面向对象
     ◆声明语句 :变量声明
     ◆表达式语句 :赋值 与 调用
     ◆分支语句
-    if(boo){}
-      if语句括号的的表达式若为true,只会执行后面一条语句
-      括号中的若不为布尔值,系统会调用Boolean()函数进行转换.
-      如果需要控制多条语句,那么就需使用{}把多条语句包含在内.(推荐都加{})
-      if分支语句: if(){ }else{ }
-      if 多重分支语句
-        if(){
-        }else if{
-        }else if{
-        }...{
-        }else{
-        }
-        可以使用if或else作为最后一个判断,当使用else时至少会执行一个
-    switch(value) 多重条件判断,用于多个值相等的比较.
+    if(boo){}  括号的表达式为true时执行语句 
+      括号中的若不为布尔值,系统会调用 Boolean() 函数进行转换;
+      如果需要控制多条语句,那么就需使用{}把多条语句包含在内,推荐都加{}
+      if分支语句 if(){}else{}
+      if多重分支语句 if(){}else if{}else{}
+        else if 的数量为任意个
+        可以使用if或else if作为最后一个判断,当使用else时至少会执行一个
+    switch(value){} 多重条件判断,用于多个值相等的比较 
       PS：传入值和对比值需是全等关系才会相应的执行.
       switch(传入值){
         case 对比值1:
@@ -1739,59 +1797,75 @@ OOP,面向对象
           控制执行语句n;
       }
     ◆循环语句
-    for 语句
-      具有在执行循环之前初始化变量和定义循环后执行代码的能力.
-      for(初始变量;判断语句;其他语句;){执行语句}
-        注:其他语句 在 执行语句 后运行.
-    while(条件){ }
-      while语句先判断再运行.
-    do{ }while(条件);
-      先执行后判断,至少会执行一次.
-    for(var key in obj) 无序遍历对象属性/数组元素 等等(?)
+    for(初始变量;判断语句;其他语句;){};  for循环 
+      具有在执行循环之前初始化变量和定义循环后执行代码的能力;
+      其他语句 在 执行语句 后运行;
+    while(条件){};  先判断再运行
+    do{}while(条件); 先执行后判断,至少会执行一次 
+    for(var key in obj){} 无序遍历 
       PS： ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测
         若原型链上的属性设置为可遍历,则也会将其遍历出来.
-      e.g.
-        var obj ={ name:"abc", age:19 }
-        for(var key in obj){ console.log(key,obj[key]) }
-        // name abc ,age 19
+      e.g. 对象 数组 字符串的遍历
+        var obj ={ 
+          aoo : "a", 
+          boo : 11 
+        }
+        for(var key in obj){ 
+          console.log(key,':',obj[key]) 
+        }
+        // aoo : a
+        // boo : 11
 
-        var obj={ "a":"01", "b":"02", "c":"03","d":"04" };
-        for(var k in obj){console.log(k);} // a b c d
-
-        var arr=[1,2,3,4,5]
-        for(var k in arr){console.log(k);} // 1 2 3 4 5
-    for(var val of obj) 遍历对象属性值/数组元素/字符串字符等集合的元素或值
-      e.g. :
-      str ="123456";
-      for(var val of str) { console.log(val); }
-      // 1 2 3 4 5 6
+        var arr = [1,2,3,4,5]
+        for(var indx in arr){
+          console.log(indx,'-',arr[indx]);
+        } 
+        // 0 - 1
+        // 1 - 2
+        // 2 - 3
+        // 3 - 4
+        // 4 - 5
+        
+        var str = 'abcdef';
+        for(var key in str){
+          console.log(key,'-',str[key]);
+        };
+        // 0 - a
+        // 1 - b
+        // 2 - c
+        // 3 - d
+        // 4 - e
+        // 5 - f
     ◆控制结构
-    break 和 continue 语句
-      只能用于循环语句中,用于精确控制代码的执行
-      continue 继续下一次循环(跳出当前循环).
-      break    跳出循环,执行循环后的语句.
+    break 和 continue  只能用于循环语句中,精确控制代码的执行 
+      continue 「跳出当前循环」继续下一次循环
+      break    跳出整个循环「执行循环后的语句」
     return   函数返回
-    throw value; 异常触发 :用于随之抛出自定义错误
+    throw val  异常触发,用于随之抛出自定义错误 
       value 类型无要求
       在遇到throw操作时,代码会立即停止执行
-    try-catch 异常捕获与处理 (ECMA-262 第3版引入)
+    try{}catch(err){} 异常捕获与处理「ECMA-262 第3版增加」 
       PS：与Java中的 try-catch 语句完全相同
         catch 和 finally 可二选一
         IE7存在bug:除非有catch否则不执行finally
       try{
         // 可能会导致错误的代码
-      } catch(error){
+      } 
+      catch(error){
         // 发生错误时执行的代码
         // 当try中代码出错,catch会接收到一个包含错误信息的 error 对象
-      } finally{
+      } 
+      finally{
         // 该部分可选
         // 一定会执行的代码,即使前面包含return语句
       }
       e.g. :
-      function foo(){
-        try {return 0;}catch(e){return 1;}finally{return 2;}
-      }
-      foo(); // 2
+        function foo(){
+          try {return 0;}
+          catch(e){return 1;}
+          finally{return 2;}
+        }
+        foo(); // 2
     ◆其他语句
     with(){};
       e.g. :
@@ -1807,11 +1881,9 @@ OOP,面向对象
       aoo.toUpperCase(); // HELLO
       with(aoo){console.log(toUpperCase());}
       Remarks:with 语句运行缓慢,尤其是在已设置了属性值时.尽量少使用
-    label 语句
-      使用label语句可以在代码中添加标签,以便将来使用
-      e.g.
+    label 使用label语句可以在代码中添加标签,以便将来使用
       var num = 0;
-      lab: for(var i = 0 ; i < 10 ; i++){
+      lab : for(var i = 0 ; i < 10 ; i++){
         for(var j = 0 ; j < 10 ; j++){
           if( i == 2 && j == 2 ){
             break lab;
@@ -1820,8 +1892,8 @@ OOP,面向对象
         }
       }
       console.log(num); // 22,2*10+2
-        该例子中定义的lab标签可以在将来由break或continue语句引用.
-        加标签的语句一般都要与for语句等循环语句配合使用.
+      该例子中定义的lab标签可以在将来由break或continue语句引用.
+      加标签的语句一般都要与for语句等循环语句配合使用.
     Remarks:
       while、for 和 if 等无作用域区间(只有函数才有作用域),
       e.g. :

@@ -192,7 +192,7 @@ Destructuring,解构赋值
     // ...arr  // 报错
     sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
     // ,sum( ...arr ) 的效果相当于sum( 2,3 ) 
-for-of 一种用于遍历数据结构的方法 
+for(var val of aoo){} 「有序?」遍历 
   可遍历的对象包括数组,对象,字符串,set和map结构等具有iterator接口的数据结构
   数组遍历
     方式一:for      缺点：代码不够简洁。
@@ -2720,7 +2720,7 @@ module 模块化历史
         查询模块绝对路径 require.resolve('./test.js');
         查看单个的模块缓存 require.cache[require.resolve('./test.js')]
         删除模块缓存 delete require.cache[require.resolve('./test.js')];
-export import ES6模块化规范 
+export&import ES6模块化规范 
   PS： export 命令用于定义模块的对外接口,即提供接口,
     import 命令用于引入其他模块提供的功能,即引入接口;
   ES6 模块的设计思想: 尽量的静态化

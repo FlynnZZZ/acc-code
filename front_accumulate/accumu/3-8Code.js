@@ -346,6 +346,18 @@ PC端
         console.log('scroll to bottom');
       }
     }
+    // jQuery写法
+    $(window).scroll(function(){
+      var client = $(window).height();
+      var scrollTop = $(window).scrollTop();
+      var wholeHeight = $(document).height();
+      if (scrollTop == 0) {
+        console.log('scroll to top');
+      }
+      if (scrollTop + client >= wholeHeight) {
+        console.log('scroll to bottom');
+      }
+    })
   图片预加载
     $.preloadImages = function () { 
       for (var i = 0; i < arguments.length; i++) {

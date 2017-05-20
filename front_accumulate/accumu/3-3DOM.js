@@ -1,4 +1,4 @@
-DOM：Document_Object_Model文档对象模型 
+DOM,Document_Object_Model文档对象模型 
   PS：DOM的标准由W3C组织规定 
     DOM 是为了操作文档出现的 API,document 是其的一个对象；
     DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计 .
@@ -228,7 +228,7 @@ DOM：Document_Object_Model文档对象模型
         sheet.parentStyleSheet
           因为CSS的@import命令允许在样式表中加载其他样式表,就有了parentStyleSheet属性,
           它返回包括了当前样式表的那张样式表.
-          如果当前样式表是顶层样式表,则该属性返回null
+          若当前样式表是顶层样式表,则该属性返回null
         sheet.title  返回StyleSheet对象的title值；
         sheet.type  返回StyleSheet对象的type值,通常是text/css
         sheet.insertRule(str,index)  向样式表中插入一条新规则 [IE9-为addRule]
@@ -255,7 +255,7 @@ DOM：Document_Object_Model文档对象模型
           // "body { background-color: red; margin: 20px; }"
         rule.parentStyleSheet; 返回定义当前规则的样式表对象
         rule.parentRule; 返回包含当前规则的那条CSS规则
-          如果当前规则是顶层规则,则该属性返回null.
+          若当前规则是顶层规则,则该属性返回null.
         rule.media; [当一条规则为@media代码块]返回@media代码块的media规则
         e.g.:
           假设这条规则位于页面中的第一个样式表中,且样式表中只有这一条规则
@@ -332,9 +332,9 @@ DOM：Document_Object_Model文档对象模型
             创建的element的nodeName会被初始化为tagName的值.
             该方法不接受带条件的元素名字(例如: html:a).
           options 是一个可选的 ElementCreationOptions 对象.
-            如果这个对象被定义并赋予了一个 is 特性,
+            若这个对象被定义并赋予了一个 is 特性,
             则创建的element的 is 属性会被初始化为这个特性的值.
-            如果这个对象没有 is 特性,则值为空.
+            若这个对象没有 is 特性,则值为空.
         IE中可传入HTML代码来创建HTML元素
           e.g. :
           var div =document.createElement("<div class="a" id="b"></div>");
@@ -691,23 +691,23 @@ DOM：Document_Object_Model文档对象模型
       众多JavaScript库中最常用的一项功能,根据CSS选择符来匹配DOM元素
       jQuery的核心就是通过CSS选择符查询DOM文档获得元素的引用
       由W3C发起指定的一个标准,致力于让浏览器原生支持CSS查询,
-    elem.querySelector("selector"); 表示选择器对应的第一个html元素对象
+    elem.querySelector(slt); 表示选择器对应的第一个html元素对象
       PS：没有则为null
         Document类型调用该方法时,会在文档元素的范围内查找匹配元素
         而通过Element类型调用该方法时,只会在该元素的后代元素内查找匹配的元素
       Arguments:
-        selector可以为标签、类、id等等,也可以为组合选择器如 div.wrap
-        selector 中的字符不可包含括号"()"字符
+        slt可以为标签、类、id等等,也可以为组合选择器如 div.wrap
+        slt 中的字符不可包含括号"()"字符
         若传入了不被支持的选择符,querySelector会抛出错误
       e.g.
         获取div内的span
         <div id="div"> <span id="span">1</span> </div>
         var div =document.querySelector("#div")
         var span =div.querySelector("#span");
-    elem.querySelectorAll("selector"); 得到一个该选择器对应的所有html元素组成的一个数组
+    elem.querySelectorAll(slt); 得到一个该选择器对应的所有html元素组成的一个数组
       返回值为一个"静态"(不会自动更新自己)的只包含元素的NodeList,无匹配项则为空 NodeList
       可通过下标或item()方法来获取单个元素
-    elem.matchSelector("selector"); 返回布尔值,表示该元素是否与该选择符匹配
+    elem.matchSelector(slt); 返回布尔值,表示该元素是否与该选择符匹配
       Selector API Level 2 规范为 Element类型新增的一个方法
     ◆Element Traversal 规范
       对于元素间的空格,IE9及之前版本不会返回文本节点,
@@ -826,13 +826,13 @@ DOM：Document_Object_Model文档对象模型
     nod.textContent; 取/设元素中包含的所有文本内容  [DOM Level3] [IE9=+支持]
       PS：innerText 返回值会忽略行内样式和脚本,但textContent则会返回行内样式和脚本代码.
         对象为 Document,DocumentType 或者 Notation 类型节点,则 textContent 返回 null
-        如果你要获取整个文档的文本以及CDATA数据,
+        若你要获取整个文档的文本以及CDATA数据,
         可以使用 document.documentElement.textContent.
-        如果节点是个CDATA片段,注释,ProcessingInstruction节点或一个文本节点,
+        若节点是个CDATA片段,注释,ProcessingInstruction节点或一个文本节点,
         textContent 返回节点内部的文本内容(即 nodeValue).
         对于其他节点类型,textContent 将所有子节点的 textContent 合并后返回,
         除了注释、ProcessingInstruction节点.
-        如果该节点没有子节点的话,返回一个空字符串.
+        若该节点没有子节点的话,返回一个空字符串.
         在节点上设置 textContent 属性的话,会删除它的所有子节点,并替换为给定的文本节点.
     elem.outerText;  取/设元素及其包含的所有文本内容
       PS：读取文本时,innerText等价于outerText
@@ -891,9 +891,9 @@ DOM操作归纳总结
           <div id="box"> </div>
           box.innerHTML = '直接使用id名称就可以了';
     选择器获取
-      elem.querySelector("selector")  获取元素对象
+      elem.querySelector(slt)  获取元素对象
         (详见:扩展 DOM扩展)
-      elem.querySelectorAll("selector") 获取一组元素,返回值为数组
+      elem.querySelectorAll(slt) 获取一组元素,返回值为数组
         (详见: DOM扩展)
       elem.getElementById("idname") id获取元素对象
         (详见: DOM>document)
@@ -905,10 +905,10 @@ DOM操作归纳总结
         (详见: DOM扩展 HTML5)
     通过元素
       ◆DOM结构层级关系
-      elem.closest(selectors) 获取元素最近的祖先元素
+      elem.closest(slt) 获取元素最近的祖先元素
         (也可以是当前元素本身)
         [IE11不支持]
-        如果匹配不到,则返回 null
+        若匹配不到,则返回 null
       elem.parentElement 父元素
         返回值为子元素elem 的父元素对象(包括elem的兄弟元素及后代元素)
       nod.parentNode 父节点
@@ -925,20 +925,20 @@ DOM操作归纳总结
         PS： 若无定位元素,则为body;当元素display:none,其offsetParent为null;
   操作 elem 
     元素增删查改 
-      nod1.hasChildNodes(nod2); nod1是否包含nod2
-      elem.insertAdjacentHTML("位置",`html字符串`); 插入HTML代码
+      nod1.hasChildNodes(nod2) nod1是否包含nod2
+      elem.insertAdjacentHTML("位置",`html字符串`) 插入HTML代码
        (详见: DOM扩展 HTML5)
-      elem1.insertAdjacentElement("位置",elem2);  在elem1中插入elem2
+      elem1.insertAdjacentElement("位置",elem2)  在elem1中插入elem2
         PS：返回值为elem2
-      Nod.appendChild(子元素a);  在父元素b内的最后位置添加一个子元素a
+      Nod.appendChild(子元素a)  在父元素b内的最后位置添加一个子元素a
         (详见:节点 Node节点)
-      Nod.insertBefore(); 在父元素b内添加一个子元素a
+      Nod.insertBefore() 在父元素b内添加一个子元素a
         (详见:节点 Node节点)
-      Nod.removeChild();  删除子元素
+      Nod.removeChild()  删除子元素 
         (详见: Node操作部分)
-      Nod.replaceChild(); 替换子元素 (详见: Node操作部分)
-      elem.remove();     删除元素 [可能有兼容问题] [IE11不支持]
-    元素的尺寸、位置 
+      Nod.replaceChild() 替换子元素「详见Node操作部分」 
+      elem.remove()      删除元素「IE11不支持?」
+    元素尺寸、位置 
       PS：为方便描述,设定 元素的边界宽为content+padding+border+margin,
         元素布局宽为content+padding+border,元素内宽为content+padding,
         元素宽为content的宽度「在box-sizing:content-box的默认条件下」
@@ -951,10 +951,10 @@ DOM操作归纳总结
       elem.offsetTop    元素相对其offsetParent「定位的父元素」的top
       elem.offsetLeft   元素相对其offsetParent「定位的父元素」的left
       elem.clientWidth    只读,元素内宽 
-        不包括边框(IE下包括)、滚动条部分
+        不包括边框「IE包括」、滚动条部分
           windows 中出现滚动条时为 content+padding-滚动条的宽度
           mac 中滚动条在未拖动时自动隐藏,因此不影响 
-        无padding和滚动条时 clientWidth 等于 style.width
+        无padding和滚动条时clientWidth等于元素设置的宽度
         e.g. : 获取浏览器窗口的高和宽
           function getViewport(){
             var obj = {};
@@ -968,9 +968,9 @@ DOM操作归纳总结
             }
             return obj;
           }
-          大多数情况下,都是document.documentElement.clientWidth 返回正确值.
-          但在IE6的quirks模式中,document.body.clientWidth 返回正确的值,
-          因此函数中加入了对文档模式的判断.
+          大多数情况下 document.documentElement.clientWidth 返回正确值,
+          但IE6的quirks模式中,document.body.clientWidth 返回正确的值,
+          因此函数中加入了对文档模式的判断;
       elem.clientHeight   只读,元素内高 
       elem.clientTop      'border-top-width'的值
       elem.clientLeft     'border-left-width'的值
@@ -991,7 +991,7 @@ DOM操作归纳总结
       可视区域宽高兼容写法
         var width = window.innerWidth || document.body.clientWidth || document.documentElement.clientWidth;
         var height = window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight ;
-    元素的属性 
+    元素属性 
       elem.attributes 元素所有属性的集合
         (详见 HTMLElement 类型)
       elem.style   一个元素样式的对象,行内样式 
@@ -1032,7 +1032,7 @@ DOM操作归纳总结
       elem.属性名;  读写元素属性值
         contentEditable  是否可编辑
         value  设置/获取input的值,即输入框中的字符,实时动态的值
-    元素的信息 
+    元素信息 
       elem.tagName;  元素/标签名称,类型为字符串
         返回值如 DIV
         或使用: elem.nodeName
@@ -1058,9 +1058,9 @@ DOM操作归纳总结
         CSS规则的简写形式无效
           比如,想读取margin属性的值,不能直接读,
           只能读marginLeft、marginTop等属性.
-        如果一个元素不是绝对定位,top和left属性总是返回auto.
+        若一个元素不是绝对定位,top和left属性总是返回auto.
         该方法返回的样式对象的cssText属性无效,返回undefined.
-        该方法返回的样式对象是只读的,如果想设置样式,应该使用元素节点的style属性.
+        该方法返回的样式对象是只读的,若想设置样式,应该使用元素节点的style属性.
         兼容写法
           getComputedStyle方法在IE8以及更早的版本中没有实现,
           但是IE中每个元素有自己的currentStyle属性.
@@ -1069,80 +1069,92 @@ DOM操作归纳总结
       elem.childElementCount 子元素数量
       elem1 === elem2 判断两个元素节点是否相同
       elem.naturalWidth/naturalHeight 只读,表示image对象真实的宽、高
-    元素的状态 
+    元素状态 
       elem.blur();   使元素失去焦点
       elem.focus();  使元素获得焦点
         在ios中该方法存在限制,
           直接调用失效; load、input等事件cfoo中失效,click事件cfoo中成功;
           当click中的cfoo可执行时,而通过其他方法或事件触发click,则无法获取焦点;
-    操作style样式 
-      方法一:通过给元素添加class来操作样式
-      方法二:直接操作内联样式 elem.style.XX = XXX
-        PS：CSS中使用"-"进行连接的属选采用驼峰命名法来代替,
-          如background-image,改写为backgroundImage
-        elem.style.cssText;   取/设整个style
-        e.g. :
-          添加背景图片
-          elem.style.backgroundImage= `url(${img.src})`;
-      操作 CSS
-        elem.style.属性名;  读写行内样式
-          style属性仅仅只能读写行内的CSS样式.对于内联和链接方式则无法获取.
-          elem.style;         CSSStyleDeclaration,样式对象
-          elem.style.color;          样式的颜色值
-          elem.style.fontSize;       //20px,font-size需改写为fontSize.
-          elem.style.cssFloat;       //非IE浏览器调用方法
-          elem.style.styleFloat;     //IE浏览器调用方法
-          //总结为(跨浏览器兼容)
-          elem.style.cssFloat||elem.style.styleFloat;
-          typeof box.style.cssFloat!="undefined"?box.style.cssFloat="right":box.style.styleFloat="right";
-          elem.style.cssText;         //查看CSS文本.
-          elem.style.background="#ccc";  背景色
-        链接样式
-          var link =document.getElementsByTagName('link')[0]
-          var sheet =link.sheet;      //IE有问题
-          var sheet =link.stylesheet; //IE的方法
-        内联或链接样式获取
+    操作CSS样式 
+      通过给元素添加class来操作样式
+      elem.style.xxx  读写行内样式
+        PS：style属性仅能读写在标签内的CSS样式,对于内联和链接方式则无法获取;
+        elem.style          CSSStyleDeclaration,样式对象
+        elem.style.cssText  读写整个style文本
+        elem.style.xxx      读写xxx样式
+          PS：当设置的值为非正常的值时,则不生效,设置为 null/'' 时可清除该样式
+            使用"-"连接的属选采用驼峰命名法来代替,如font-size,改写为fontSize;
+          elem.style.color;          读写字体颜色
+          elem.style.fontSize;       读写字体大小
+            font-size需改写为fontSize,返回值如'20px'
+          ...
+          elem.style.cssFloat;       非IE浏览器调用方法
+          elem.style.styleFloat;     IE浏览器调用方法
+          跨浏览器兼容总结
+            elem.style.cssFloat || elem.style.styleFloat;
+            typeof elem.style.cssFloat!="undefined" ? 
+            elem.style.cssFloat="right" : elem.style.styleFloat="right";
+        e.g. : 
+          elem.style.backgroundImage = `url(${img.src})`; // 添加背景图片
+          elem.style.background = "#ccc";                 // 设置背景色
+      链接样式
+        var link =document.getElementsByTagName('link')[0]
+        var sheet =link.sheet;      //IE有问题
+        var sheet =link.stylesheet; //IE的方法
+      内联或链接样式获取
+        var sheet =document.styleSheets[0];
+        // 返回值为样式表的集合.
+        sheet.disabled    若样式被禁用返回true,否则为false.
+        sheet.disabled =true ;  禁用该样式
+        sheet.href;   返回值为样式的路径.
+      css的样式规则
+        sheet.cssRules[x];               得到第x+1 个规则
+        sheet.cssRules[0].cssText;       得到第一个规则的css文本
+        sheet.cssRules[0].selectorText;  得掉第一个规则的选择符
+        sheet.deleteRule(0);             删除第一条规则
+        sheet.insertRule("body{background-color:red}",0);
+        //在第0+1个位置上添加一条规则
+        IE获取rules方法
+          sheet.rules;
+          sheet.removeRules(0);
+          sheet.addRule("body","background-color:red",0);
+        window.onload =function(){
           var sheet =document.styleSheets[0];
-          // 返回值为样式表的集合.
-          sheet.disabled    若样式被禁用返回true,否则为false.
-          sheet.disabled =true ;  禁用该样式
-          sheet.href;   返回值为样式的路径.
-        css的样式规则
-          sheet.cssRules[x];               得到第x+1 个规则
-          sheet.cssRules[0].cssText;       得到第一个规则的css文本
-          sheet.cssRules[0].selectorText;  得掉第一个规则的选择符
-          sheet.deleteRule(0);             删除第一条规则
-          sheet.insertRule("body{background-color:red}",0);
-          //在第0+1个位置上添加一条规则
-          IE获取rules方法
-            sheet.rules;
-            sheet.removeRules(0);
-            sheet.addRule("body","background-color:red",0);
-          window.onload =function(){
-            var sheet =document.styleSheets[0];
-            var rules =sheet.cssRules||sheet.rules;
-            var rule1 =rules[0];
-            rule1.style.color ='red';
-          }
-        获取计算后的样式
-          e.g.:
-            //可获取计算后的样式(计算后的样式包括设置后的样式和默认样式)
-            var box=document.getElementById("box");
-            var style=window.getComputedStyle(box,null);
-            console.log(style.color);
-            //IE的计算样式获取
-            var style=box.currentStyle;
-            console.log(style.color);
-            // 兼容写法
-            var style = window.getComputedStyle?
-              window.getComputedStyle(box,null)||box.currentStyle;
-            style.fontSize;
-          获取样式的兼容写法函数
-          var getStyle = function(elem, attr) {
-            return elem.currentStyle ? elem.currentStyle[attr] : getComputedStyle(elem, false)[attr];
-          };
-          getStyle(document.getElementById('test'), 'height');
-    其他操作
+          var rules =sheet.cssRules||sheet.rules;
+          var rule1 =rules[0];
+          rule1.style.color ='red';
+        }
+      获取计算后的样式
+        e.g.:
+          //可获取计算后的样式(计算后的样式包括设置后的样式和默认样式)
+          var box=document.getElementById("box");
+          var style=window.getComputedStyle(box,null);
+          console.log(style.color);
+          //IE的计算样式获取
+          var style=box.currentStyle;
+          console.log(style.color);
+          // 兼容写法
+          var style = window.getComputedStyle?
+            window.getComputedStyle(box,null)||box.currentStyle;
+          style.fontSize;
+        获取样式的兼容写法函数
+        var getStyle = function(elem, attr) {
+          return elem.currentStyle ? elem.currentStyle[attr] : getComputedStyle(elem, false)[attr];
+        };
+        getStyle(document.getElementById('test'), 'height');
+  其他相关
+    scrollbar  滚动轴
+      PS：在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度「为0」;
+      获取滚动轴宽度scrollbarWidth
+        方法一  var scrollbarWidth = elem.offsetWidth - elem.clientWidth;
+        方法二  
+          elem.style.overflow = 'hidden';
+          var width1 = elem.clientWidth; // 没有滚动轴时的宽度
+          elem.style.overflow = 'scroll';
+          var width2 = elem.clientWidth; // 有滚动轴时的宽度
+          var scrollbarWidth = width1 - width2;
+          elem.style.overflow = null; // 清除该内联样式
+          console.log(scrollbarWidth);
 --------------------------------------------------------------------------------
 ◆Event 事件 
   PS：
@@ -1157,12 +1169,12 @@ DOM操作归纳总结
       事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡.
     Netscape的事件流是事件捕获,从外向内传递
       事件从最外层浏览器向内(从外向内)传递,直到传递到触发事件的该元素为止.
-事件支持检测 
-  var div = document.createElement('div');
-  //是否支持触摸事件
-  console.log('ontouchstart' in div);            // false
-  //是否支持方向转换事件
-  console.log('onorientationchange' in window);  // false
+  事件支持检测 
+    var div = document.createElement('div');
+    //是否支持触摸事件
+    console.log('ontouchstart' in div);            // false
+    //是否支持方向转换事件
+    console.log('onorientationchange' in window);  // false
 事件绑定、解绑及触发 
   PS：响应某个事件的函数就叫做事件处理程序(或事件侦听器)
     事件处理程序的名字以"on"开头加上事件名
@@ -1505,21 +1517,10 @@ event 事件对象
       loaded 对象加载数据完成
       interactive  可以操作对象了,但还没有完全加载
       complete 对象已经加载完毕
-  hashchange URL变化时在window上触发 [IE8+]
-    PS：当#值发生变化时也会触发这个事件
-    e.oldURL; 变化前的URL
-    e.newURL; 变化后的URL
+  hashchange URL变化时在window上触发「IE8+」 
   // 设备相关事件
   (详参 JavaScript高级程序设计 395 页)
   ◆其他事件:
-    popstate   网页前进、后退
-     当用户点击历史记录的前进或后退时,会触发window的popstate事件
-     e.g.
-       window.addEventListener("popstate",function(e){
-         var state1 =e.state;
-         // state1 就是 pushState 的第一个参数,详情常见BOM history
-         console.log(state1)
-       })
     propertychange [IE专有] 
      不管js操作还是键盘鼠标手动操作,只要HTML元素属性发生改变即可立即捕获到.
     input    监听表单值改变 (IE9+支持)
@@ -1544,12 +1545,12 @@ event 事件对象
      图像的error事件:只要图像加载失败或显示失败就会触发error事件,会生成event对象
     online 网络从离线变成在线时触发 (HTML5新增)
     offline 网络从在线变成离线时触发(HTML5新增)
-    transitionEnd  CSS的过渡效果(transition)结束后触发
+    transitionEnd  CSS的过渡效果transition结束后触发
      事件对象的属性
        propertyName：发生transition效果的CSS属性名.
        elapsedTime： transition效果持续的秒数,不含transition-delay的时间.
-       pseudoElement：如果transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
-         如果不发生在伪元素上,则返回一个空字符串.
+       pseudoElement：若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
+         若不发生在伪元素上,则返回一个空字符串.
      e.g.:
      elem.addEventListener('transitionend',function(){},false);
      实际使用transitionend事件时,可能需要添加浏览器前缀.
@@ -1557,7 +1558,7 @@ event 事件对象
     animationstart 动画开始时触发
     animationend   动画结束时触发
     animationiteration 开始新一轮动画循环时触发
-     如果animation-iteration-count属性等于1,该事件不触发,
+     若animation-iteration-count属性等于1,该事件不触发,
      即只播放一轮的CSS动画,不会触发animationiteration事件.
      这三个事件的事件对象
        都有animationName属性(返回产生过渡效果的CSS属性名)
@@ -1594,7 +1595,7 @@ event 事件对象
        当页面首次加载完成时,showCount的值为0
        若离开包含以上代码的页面后,又“后退”到该页面,showCount就会递增;
        因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
-       如果刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
+       若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
      event.persisted  返回表示页面是否来自bfcache的布尔值
     pagehide  在浏览器卸载页面的时候触发 「unload事件之前」
      PS：与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
@@ -1709,7 +1710,7 @@ event 事件对象
 
     var t = document.getElementById('test');
     trigger(t, 'click');
-自定义事件 「DOM3+」「IE8+ ?」
+自定义事件 「DOM3」「IE8+ ?」
   var evt =document.createEvent("CustomEvent");    创建事件
   evt.initEvent('customEvent',true,true);          定义事件类型
   evt.initCustomEvent(str,boo,boo,obj);
@@ -1781,10 +1782,30 @@ event 事件对象
     }
 事件归纳总结 
   事件枚举及分类
-    scroll  当滚动带滚动条的元素时在该元素上触发,网页滚动在window上触发
+    // ◆会在window上触发的事件
+    scroll   滚动「带滚动条的」元素时在该元素上触发「网页滚动在window上触发」
       window.onscroll =function(){
         console.log('网页滚动');
       }
+    popstate   当活动历史记录条目更改时,在window上触发  「HTML5 IE10+」
+      PS：调用history.pushState()或history.replaceState()不会触发该事件,
+        只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
+        或者在JS代码中调用 history.back();
+        不同的浏览器在加载页面时处理popstate事件的形式存在差异。
+        页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
+        若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
+        或者受到对 history.replaceState() 的调用的影响,
+        e.state 属性为包含历史条目的状态对象的副本,为pushState的第一个参数;
+      e.g.
+        window.addEventListener("popstate",function(e){
+          var state1 = e.state;
+          // state1 就是 pushState 的第一个参数,详情常见BOM history
+          console.log(state1)
+        })
+    hashchange URL变化时在window上触发「IE8+」 
+      PS：当#值发生变化时也会触发这个事件
+      e.oldURL; 变化前的URL
+      e.newURL; 变化后的URL
   事件绑定
     var addEvent = function(elem, type, handle, capture) {
       if(elem.addEventListener) {
@@ -1889,7 +1910,7 @@ e.g.:
       可以不需要提交按钮存在
     formElem.target   发送请求和接收响应的窗口名称,等价于HTML的target特性
     formElem.checkValidity()   检测表单是否有无效字段(值不符合要求),若有则返回false
-      如果验证通过返回true。如果验证失败,则会触发一个invalid事件。
+      若验证通过返回true。若验证失败,则会触发一个invalid事件。
       使用该方法以后,会设置validity对象的值。
     formElem.noValidate = true;    将原生的表单验证关闭
       原生的表单验证不完全符合需要,而且出错信息无法指定样式。
@@ -1900,20 +1921,20 @@ e.g.:
         form.onsubmit = validateForm;
     formElem.validity      返回一个包含字段有效信息的对象 (详参 js高级程序设计 430 页)
       每一个表单元素都有一个validity对象,有以下属性:
-      valid         如果该元素通过验证,则返回true。
-      valueMissing  如果用户没填必填项,则返回true。
-      typeMismatch  如果填入的格式不正确(比如Email地址),则返回true。
-      patternMismatch 如果不匹配指定的正则表达式,则返回true。
-      tooLong       如果超过最大长度,则返回true。
-      tooShort      如果小于最短长度,则返回true。
-      rangeUnderFlow  如果小于最小值,则返回true。
-      rangeOverflow   如果大于最大值,则返回true。
-      stepMismatch    如果不匹配步长(step),则返回true。
-      badInput      如果不能转为值,则返回true。
-      customError   如果该栏有自定义错误,则返回true。
+      valid         若该元素通过验证,则返回true。
+      valueMissing  若用户没填必填项,则返回true。
+      typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
+      patternMismatch 若不匹配指定的正则表达式,则返回true。
+      tooLong       若超过最大长度,则返回true。
+      tooShort      若小于最短长度,则返回true。
+      rangeUnderFlow  若小于最小值,则返回true。
+      rangeOverflow   若大于最大值,则返回true。
+      stepMismatch    若不匹配步长(step),则返回true。
+      badInput      若不能转为值,则返回true。
+      customError   若该栏有自定义错误,则返回true。
     formElem.setCustomValidity 用于自定义错误信息
       该提示信息也反映在该输入框的validationMessage属性中。
-      如果将setCustomValidity设为空字符串,则意味该项目验证通过。        
+      若将setCustomValidity设为空字符串,则意味该项目验证通过。        
     ◆表单事件
     submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发
       submit 和 click 事件:不同的浏览器触发的先后顺序不一样
@@ -2036,7 +2057,7 @@ e.g.:
           // 用户选中了某个选项
         }
         </script>
-        如果用户未做任何选择,则selected就为undefined。
+        若用户未做任何选择,则selected就为undefined。
 其他标签脚本 
   <a href="#"></a> 超链接
     URL 协议
@@ -2049,7 +2070,7 @@ e.g.:
         <a href="Javascript:'aaa'" target="_blank">11111111</a>  
         javascript:"aaa"   // 在浏览器地址栏中键入
   <script src="" charset="utf-8"></script>  脚本引入 
-WYSIWYG,富文本编辑 
+WYSIWYG 富文本编辑 
   PS：即what you see is what you get,所见即所得
     由IE引入,虽然没有规范,已经称为了事实标准
     技术本质为在页面中嵌入一个包含空HTML页面的iframe,
@@ -2076,15 +2097,12 @@ WYSIWYG,富文本编辑
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
  (详参 JavaScript高级程序设计 440页)
-Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」 
-  PS：画布默认是透明的.
-    在css中指定画布宽、高,会导致画布中的所有内容进行相应的缩放.
-    <canvas> 标签只有两个属性—— width和height.
-    当没有设置宽度和高度的时候,canvas会初始化宽度为300像素和高度为150像素.
-    该元素可以使用CSS来定义大小,但在绘制时图像会伸缩以适应它的框架尺寸：
-    如果CSS的尺寸与初始画布的比例不一致,它会出现扭曲.
+Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」 
+  PS：画布默认为透明; 在css中指定画布宽高,会导致画布的所有内容进行相应的缩放;
+    canvas标签只有width和height两个属性,默认为宽度300px和高度150px;
+    若CSS的尺寸与初始画布的比例不一致,它会出现扭曲;
   限制
-    出于安全考虑,浏览器不允许处理跨域图像,但利用特殊的手段可以突破该限制 「?」
+    出于安全考虑,浏览器不允许处理跨域图像「利用特殊的手段可以突破该限制?」
     可通过设置 Access-Control-Allow-Origin 来跨域
     解决处理跨域图像出现的安全警告的方法是使用CORS;
     为了阻止欺骗,浏览器会追踪 image data,
@@ -2106,7 +2124,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
     if(canvas.getContext) {  }else {  }
   var cvs = document.querySelector('canvas');  canvas对象
     cvs.toDataURL(type,quality); 返回包含图片的 data URI「需将图片预先放入canvas」
-      PS：如果画布的高度或宽度是0,那么会返回字符串“data:,”;
+      PS：若画布的高度或宽度是0,那么会返回字符串“data:,”;
       type     可选,返回的图片类型,默认为 PNG
         图片的分辨率为96dpi;
         若传入非“image/png”,但返回的以“data:image/png”开头,则传入类型是不支持的;
@@ -2114,7 +2132,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
       quality  可选,设置得到图片的质量
         在指定图片格式为 image/jpeg 或 image/webp的情况下,
         可以从 0 到 1 的区间内选择图片的质量。
-        如果超出取值范围,将会使用默认值 0.92。其他参数会被忽略。
+        若超出取值范围,将会使用默认值 0.92。其他参数会被忽略。
   var ctx =cvs.getContext("2d");   ctx对象:'2d' 上下文
     PS：使用上下文的属性和方法来操作画布,是画布的核心对象
       目前只支持2D绘图,将来可能还会有其他上下文类型
@@ -2154,7 +2172,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
       ctx.closePath(); 闭合路径,之后图形绘制命令又重新指向到上下文中 [无参数]
         就是闭合路径closePath(),不是必需的.
         这个方法会通过绘制一条从当前点到开始点的直线来闭合图形.
-        如果图形是已经闭合了的,即当前点为开始点,该函数什么也不做.
+        若图形是已经闭合了的,即当前点为开始点,该函数什么也不做.
         当你调用fill()函数时,所有没有闭合的形状都会自动闭合,
         所以你不需要调用closePath()函数.
         但是调用stroke()时不会自动闭合.
@@ -2167,7 +2185,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
         ◆颜色
           PS：默认情况下,线条和填充颜色都是黑色(CSS 颜色值 #000000)
             一旦设置了strokeStyle或者fillStyle的值,那么该值就会成为新绘制的图形的默认值.
-            如果要给每个图形上不同的颜色,需要重新设置 fillStyle 或 strokeStyle 的值.
+            若要给每个图形上不同的颜色,需要重新设置 fillStyle 或 strokeStyle 的值.
         ctx.fillStyle    设置图形填充颜色
           可使用颜色名、十六进制或RGB来设置
           e.g. : ctx.fillStyle = "blue"
@@ -2448,7 +2466,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
           document.getElementById() 等方法
         使用其它域名下的图片
           在 HTMLImageElement上使用crossOrigin属性,你可以请求加载其它域名上的图片.
-          如果图片的服务器允许跨域访问这个图片,那么你可以使用这个图片而不污染canvas,
+          若图片的服务器允许跨域访问这个图片,那么你可以使用这个图片而不污染canvas,
           否则,使用这个图片将会污染canvas.
         使用其它 canvas 元素
           和引用页面内的图片类似地,用 document.getElementsByTagName 或
@@ -2469,7 +2487,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
               // 执行drawImage语句
             }
             img.src = 'myImage.png'; // 设置图片源地址
-            如果你只用到一张图片的话,这已经够了.
+            若你只用到一张图片的话,这已经够了.
             但一旦需要不止一张图片,那就需要更加复杂的处理方法,
             但图片预装载策略超出本教程的范围,感兴趣的话可以参考JavaScript Image Preloader.
         通过 data: url 方式嵌入图像
@@ -2483,7 +2501,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
         使用视频帧
           你还可以使用<video> 中的视频帧(即便视频是不可见的).
           e.g.:
-            例如,如果你有一个ID为“myvideo”的<video> 元素,你可以这样做：
+            例如,若你有一个ID为“myvideo”的<video> 元素,你可以这样做：
             var canvas = document.getElementById('canvas');
             if (canvas.getContext) {
               var ctx = canvas.getContext('2d');
@@ -2511,7 +2529,7 @@ Canvas,画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
             }
         ctx.drawImage(image,x,y,width,height) 增加缩放
           PS：注意：图像可能会因为大幅度的缩放而变得起杂点或者模糊.
-            如果您的图像里面有文字,那么最好还是不要进行缩放,
+            若您的图像里面有文字,那么最好还是不要进行缩放,
             因为那样处理之后很可能图像里的文字就会变得无法辨认了.
           drawImage 方法的又一变种是增加了两个用于控制图像在 canvas 中缩放的参数.
           这个方法多了2个参数：width 和 height,
@@ -2824,7 +2842,7 @@ SVG,Scalable_Vector_Graphics    可缩放矢量图
       preserveAspectRatio等于xMidYMid slice,
       告诉浏览器置中图片,并且删去溢出的部分,更多参数可以参考MDN。
   DOM 操作
-    如果SVG代码直接写在HTML网页之中,它就成为网页DOM的一部分,可以直接用DOM操作。
+    若SVG代码直接写在HTML网页之中,它就成为网页DOM的一部分,可以直接用DOM操作。
     <svg id="mysvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" >
       <circle id="mycircle" cx="400" cy="300" r="50" />
     <svg>
@@ -2844,10 +2862,10 @@ SVG,Scalable_Vector_Graphics    可缩放矢量图
       console.log('circle clicked - enlarging');
       mycircle.setAttributeNS(null, 'r', 60);
     }, false);
-    上面代码指定,如果点击图形,就改写circle元素的r属性。
+    上面代码指定,若点击图形,就改写circle元素的r属性。
   JavaScript操作
     获取SVG DOM
-      如果使用<img>标签插入SVG文件,就无法获取SVG DOM。
+      若使用<img>标签插入SVG文件,就无法获取SVG DOM。
       使用<object>、<iframe>、<embed>标签,可以获取SVG DOM。
       var svgObject = document.getElementById('object').contentDocument;
       var svgIframe = document.getElementById('iframe').contentDocument;
@@ -2916,7 +2934,7 @@ SVG,Scalable_Vector_Graphics    可缩放矢量图
         </g>
       </svg>
 webgl
-File API,文件和二进制数据的操作 「HTML5+」
+File_API,文件和二进制数据的操作 「HTML5+」
   PS： HTML5在DOM中为文件输入元素添加了一个files集合,
     文件输入元素如 <input type="file" id="myFile" />,
     通过文件输入字段选择文件时,files集合中将包含一组File对象.
@@ -3082,9 +3100,9 @@ File API,文件和二进制数据的操作 「HTML5+」
     e.origin
     e.source
  (详参 JavaScript高级程序设计 481页)
-audio/video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
-  var audio =document.querySelector('audio'); 获取audio元素对象
-  var video =document.querySelector('video'); 获取video元素对象
+audio&video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
+  var audio = document.querySelector(slt); 获取audio元素对象
+  var video = document.querySelector(slt); 获取video元素对象
   方法
     a.play()         播放
     a.pause()        暂停
@@ -3188,7 +3206,7 @@ Web_Workers 工作线程 「HTML5」
     使用一个onmessage定义一个 接到消息后进行 处理的程序
       e.g. onmessage = PP;
         function PP(event){
-          // 如果主程序发来"ping",则工作线程JS 回复"pong"
+          // 若主程序发来"ping",则工作线程JS 回复"pong"
           if(event.data =="ping"){
             postMessage("pong")
           }
@@ -3405,6 +3423,9 @@ Web_Workers 工作线程 「HTML5」
   setTimeout(function(){
     $('#test1').focus();
   },10000);
+
+
+
 
 
 

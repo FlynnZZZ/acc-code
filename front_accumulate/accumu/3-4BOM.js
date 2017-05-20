@@ -450,9 +450,8 @@ window的属性对象
           }
         }
   window.history   保存着用户上网的记录,从窗口被打开的那一刻算起 
-    PS：每个浏览器窗口、标签页及每个框架,都有自己的history对象与特定的window对象关联
-      处于安全考虑,开发人员不再到用户浏览过的URL,
-      但借由用户访问过的页面列表,可在不知道实际url的情况下实现后退和前进;
+    PS：每个浏览器窗口、标签页及框架,都有自己特定的window对象及其history对象;
+      安全考虑,得不到用户浏览过的URL,但可在用户访问过的页面列表中进行选择;
     history.length      历史记录数量
       对于加载到窗口、标签页或框架中的第一个页面而言,history.length 为 0;
       当页面的URL改变时(包括hash的改变),就会生成一条历史记录,
@@ -653,8 +652,6 @@ window的属性对象
         
         var url = new URL(location);
         var foo = url.searchParams.get('foo') || 'somedefault';      
-    popstate 事件 改变url时在window上触发
-      event.state 为pushState的第一个参数
   window.location  管理URL 
     PS：提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
@@ -891,7 +888,7 @@ window的属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-AJAX,Asynchronous JavaScript and XML  异步的JS和XML 
+AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML 
   介绍
     PS： 浏览器提供了使用http协议收发数据的接口,名为 AJAX;
       可用JS动态抓取内容构建页面;
@@ -2058,7 +2055,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
         return sheep;
       });
     });    
-JSONP,JSON with Padding 填充式JSON或参数式JSON 
+JSONP,JSON_with_Padding 填充式JSON或参数式JSON 
   PS：可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
@@ -2563,7 +2560,7 @@ Viewport 视口 「HTML5」
   e.g.:.
     <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
 SSE 「HTML5」
-WebRTC,Web Real Time Communication  网络实时通信 「HTML5」 
+WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」 
   PS： 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
@@ -3473,7 +3470,7 @@ IndexedDB   浏览器端数据库 「HTML5」
       }
     }  
   e.g.：
-Web Notifications 浏览器通知接口 「DiBs」「HTML5」  
+Web_Notifications 浏览器通知接口 「DiBs」「HTML5」  
   概述
   Notification API是浏览器的通知接口,用于在用户的桌面(而不是网页上)显示通知信息,桌面电脑和手机都适用,比如通知用户收到了一封Email。具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
   
@@ -3575,7 +3572,7 @@ Web Notifications 浏览器通知接口 「DiBs」「HTML5」
   }
   
   上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
-drag|drop 拖放 「HTML5」 
+drag&drop 拖放 「HTML5」 
   PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 「IE9+ HTML5」
     IE4最早加入拖放功能,只能拖放文本框
   定义拖放元素和目标元素
@@ -3852,6 +3849,7 @@ Fullscreen 全屏操作 「HTML5」
       width: 100%;
       height: 100%;
     }
+WebGL
 -------------------------------------------------------------------------待整理 
 
 

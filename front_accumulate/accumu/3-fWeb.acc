@@ -45,11 +45,17 @@ Atom
         //   font-size: 12px;
         //   color: #d54940 ;
         // }
-        [theme-one-dark-ui-tabsizing="auto"] .tab .title {
-          font-size: 12px;
-          // color: #d54940 ;  // 亮色背景
-          color: gold ;        // 暗色背景
-        }
+        // [theme-one-dark-ui-tabsizing="auto"] .tab .title {
+        //   font-size: 12px;
+        //   // color: #d54940 ;  // 亮色背景
+        //   color: gold ;        // 暗色背景
+        // }
+        // 升级到 1.17.0 的样式设置
+        // .tab-bar .title {
+        //   font-size: 12px;
+        //   // color: #d54940 ;  // 亮色背景
+        //   color: gold ;        // 暗色背景
+        // }
 
         // 匹配括号的 高亮样式
         atom-text-editor.editor .bracket-matcher .region {
@@ -85,6 +91,29 @@ Atom
         .highlights>.selection>.region{
           background-color: rgba(16, 59, 157, 0.5) !important;
         }
+        
+        atom-text-editor::shadow {
+          .line.highlight-line {
+            background: rgba(85, 97, 171, 0.1) !important;
+          }
+        }
+        // 所在行高亮  highlight-line 插件样式设置
+        atom-text-editor.editor {
+          .line.highlight-line {
+            background: rgba(75, 97, 212, 0.1) !important;
+          }
+
+          .line.highlight-line-multi-line-solid-bottom {
+            border-bottom-color: red ;
+          }
+
+          .line.highlight-line-multi-line-solid-top {
+            border-top-color: red;
+          }
+        }
+        
+        // 设置技巧
+        // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
   ◆快捷键 
     默认快捷键
       ◆常用
@@ -183,6 +212,7 @@ Atom
   ◆插件 
     自带插件
       about                  关于Atom的信息查看 [help-about Atom]
+        禁止后可能影响软件的自动升级
       autocomplete-atom-api  功能未知
       autocomplete-plus      完善自带 autocomplete,有二度设置
         勾选 allowed backspace to trigger autocomplete   当删除时也会激活可选列表选项
@@ -300,34 +330,12 @@ Atom
     社区扩展
       autocomplete-cocos2d-js    cocos的补全插件
       atom-beautify              代码格式美化
-      autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
-        自定义快捷键 alt-m
       autocomplete-project-paths 路径补全
         Question: 路径补全应为/而非\
       color-picker               快捷颜色选择
         颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
         或直接使用快捷键ctrl+alt+c进行颜色值的选择插入.
-      highlight-line             当前行高亮
-        styles.less 中可设置的样式
-          atom-text-editor::shadow {
-            .line.highlight-line {
-              background: rgba(85, 97, 171, 0.1) !important;
-            }
-          }
-          // 所在行高亮  highlight-line 插件样式设置
-          atom-text-editor.editor {
-            .line.highlight-line {
-              background: rgba(75, 97, 212, 0.1) !important;
-            }
-
-            .line.highlight-line-multi-line-solid-bottom {
-              border-bottom-color: red ;
-            }
-
-            .line.highlight-line-multi-line-solid-top {
-              border-top-color: red;
-            }
-          }
+      file-icons                 显示文件图标
       highlight-selected         高亮选中词
       minimap                    缩略图
         样式设置
@@ -351,11 +359,9 @@ Atom
       pigments                   根据颜色值显示颜色
       remember-folds             记录折叠的状态
       选用插件
-        restore-windows            启动时加载之前的多窗口
-          最早关的窗口加载时最后加载
-          统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
-            若无项目文件夹,则默认不加载
-          记录状态 如 标签等
+        autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
+          自定义快捷键 alt-m
+        simplified-chinese-menu    菜单汉化
         atom-wrap-in-tag           在选中字符外增加标签
           (该快捷键有bug,不起效,使用 'alt-w': 'unset!' 命令来解决)
           自定义默认开始的标签
@@ -370,11 +376,15 @@ Atom
               end:
                 from: [tagrangePos.end.row, tagrangePos.end.column+7],
                 to: [tagrangePos.end.row, tagrangePos.end.column+10]
+        restore-windows            启动时加载之前的多窗口
+          最早关的窗口加载时最后加载
+          统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
+            若无项目文件夹,则默认不加载
+          记录状态 如 标签等
         autocomplete-paths         路径补全
-        file-icons                 显示文件图标
-        simplified-chinese-menu    菜单汉化
         Symbols-tree-View          快速定位到函数、变量的位置等等
           设置默认不显示的类别:number string undefined unknown array object
+        highlight-line             当前行高亮
   ◆使用经验总结
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
@@ -1117,6 +1127,7 @@ GitHub
   ◆短语
   tag       标签
   attr      属性
+  slt       选择器 selector
   bool      布尔值
   num       数值
   str       字符串
@@ -1131,7 +1142,6 @@ GitHub
   arg       「无属性」参数
   param     「配置项」参数
   retn      返回值
-  exp       表达式
   Jelem     jQuery对象
   DiBs      在浏览器中有差异,有兼容性问题  Different in Browsers
   more      其他的,更多的
@@ -1154,6 +1164,11 @@ GitHub
   file      文件
   self      自己的,自定义的
   selfPoint 自我观点、认为
+  文档描述相关
+  PS：      说明
+  e.g.：    举例子
+  Exp:      经验积累
+  Self：    自己相关
   ◆符号
   「一般其中的内容为补充说明,注释,解释,注意项等」   
   ◆、★、■    标题和内容处于同一层级状态时,给标题添加起到醒目的作用

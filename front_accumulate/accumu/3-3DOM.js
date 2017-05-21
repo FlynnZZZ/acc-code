@@ -1157,8 +1157,7 @@ DOM操作归纳总结
           console.log(scrollbarWidth);
 --------------------------------------------------------------------------------
 ◆Event 事件 
-  PS：
-    JS与HTML的交互时通过事件实现的
+  PS： JS与HTML的交互时通过事件实现的
     事件是用来处理响应的一个机制.当用户执行某些操作的时候,在去执行一些列代码
     响应可以来自于用户(鼠标点击等),也可以来自浏览器(如文件下载完了).
     浏览器会默认给事件的响应函数添加一个参数,该参数表示该事件对象本身.
@@ -1710,7 +1709,7 @@ event 事件对象
 
     var t = document.getElementById('test');
     trigger(t, 'click');
-自定义事件 「DOM3」「IE8+ ?」
+自定义事件 「DOM3」「IE8+?」
   var evt =document.createEvent("CustomEvent");    创建事件
   evt.initEvent('customEvent',true,true);          定义事件类型
   evt.initCustomEvent(str,boo,boo,obj);
@@ -1874,6 +1873,160 @@ e.g.:
           a.classList.remove("xx")
         }
       }
+--------------------------------------------------------------------------------
+移动端
+event 事件 
+  Touch 触摸事件
+    PS：由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
+    ◆基本触摸事件「在规范中列出并获得跨移动设备广泛实现」
+    touchstart  当手指放在屏幕上触发;
+    touchmove   当手指在屏幕上滑动时,连续地触发;
+      e.g.:
+        指定滑动一定距离执行动作 [self]
+        var flagYear =true; // 用于记录滑动起始点的 布尔值
+        year.on('touchmove',function(e){
+          if (flagYear) {   // 仅记录滑动初始的位置
+            starty =e.originalEvent.changedTouches[0].pageY;
+            flagYear =false;
+          }
+          var endy = e.originalEvent.changedTouches[0].pageY;
+          if (endy - starty < -20 ) { // 下滑距离20执行动作
+            // 执行的代码
+            
+            starty =endy;
+          }
+          if (endy - starty > 20 ) {   // 上滑距离20执行动作
+            // 执行的代码
+            
+            starty =endy;
+          }
+        })
+        year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
+          flagYear =true;
+        })
+    touchend    当手指从屏幕上离开时触发;
+    ◆额外的三个触摸事件「DiBs」
+    touchenter   移动的手指进入一个DOM元素
+    touchleave   移动手指离开一个DOM元素
+    touchcancel  触摸被中断
+    e.g.:
+      var EventUtil = {
+        addHandler: function(element,type,handler) {
+          if(element.addEventListener) {
+            element.addEventListener(type,handler,false);
+          }else if(element.attachEvent) {
+            element.attachEvent("on"+type,handler);
+          }else {
+            element["on" +type] = handler;
+          }
+        },
+        removeHandler: function(element,type,handler){
+          if(element.removeEventListener) {
+            element.removeEventListener(type,handler,false);
+          }else if(element.detachEvent) {
+            element.detachEvent("on"+type,handler);
+          }else {
+            element["on" +type] = null;
+          }
+        }
+      };
+      var touch = document.getElementById("touch");
+      EventUtil.addHandler(touch,"touchstart",function(event){
+        console.log(event);
+      })；
+      
+      // 连续滑动触发
+      EventUtil.addHandler(window,"touchmove",function(event){
+        alert(1);
+      })；
+      //当手指从屏幕上离开时触发;
+      EventUtil.addHandler(window,"touchend",function(event){
+        alert(1);
+      })
+  TouchEvent 事件对象  
+    e.touches          当前位于屏幕上的所有手指的一个列表
+      event.touches.length  表示屏幕上触摸的手指个数
+    e.targetTouches    位于当前DOM元素上的手指的一个列表
+      PS：touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
+      event.touches.length  表示元素上触摸的手指个数
+    e.originalEvent.changedTouches   
+      e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
+      e.originalEvent.changedTouches[0].clientX     触摸目标在视口中的X坐标
+      e.originalEvent.changedTouches[0].clientY     触摸目标在视口中的Y坐标
+      e.originalEvent.changedTouches[0].pageX    页面中的X坐标
+      e.originalEvent.changedTouches[0].pageY    页面中的Y坐标
+      e.originalEvent.changedTouches[0].screenX     触摸目标在屏幕中的X坐标
+      e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
+      e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
+    event.preventDefault();  阻止滚动 [?]
+      一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
+      当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
+  Gestures 触摸事件
+    PS：该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
+    Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
+    Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
+    Gestureend    当任何一个手指从屏幕上面移开时触发。
+  触摸事件和手势事件的关系 
+    当一个手指放在屏幕上时,会触发touchstart事件,
+    而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
+    若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
+    但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
+    手势的专有属性：
+      rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
+      scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
+  其他 
+    navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
+    autocapitalize  autocorrect   自动大写与自动修正
+      <input type="text" autocapitalize="off" autocorrect="off" />
+    -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
+    -webkit-user-select:none      禁止用户选中文字
+    关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
+      this.value = this.value.replace(/\u2006/g, ‘‘);
+    input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
+    判断是否为微信浏览器；
+      function is_weixn(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+  屏幕旋转事件 orientationchange
+  键盘调出与关闭事件: 使用resize间接实现
+    var wh1 = window.innerHeight; 
+    //获取初始可视窗口高度
+    $(window).resize(function() {      
+      //监测窗口大小的变化事件
+      var wh2 = window.innerHeight;    
+      //当前可视窗口高度
+      var viewTop = $(window).scrollTop();   
+      //可视窗口高度顶部距离网页顶部的距离
+      if(wh1 > wh2){          
+        //可作为虚拟键盘弹出事件
+      }
+      else{                      
+        //可作为虚拟键盘关闭事件
+      }
+    });
+微信  
+  不支持的功能
+    模板字符串  ios中支持,android中不支持「20170124」
+    可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
+    不支持进行跳转到上一步url中带有参数 的url地址  [?]
+      比如：一个查询列表页的url是： http://someweb?city=beijing
+      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如： 
+      location.href=document.referrer的时候   
+      跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
+      解决：微信开发中 不要用 带url参数的地址,都用/ ../ ,
+      把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
+  event 事件
+    click 无延迟 [?]
+    touchend 、 touchstar 始终会触发(而不管是否改为滑动)
+    禁止下滑显示网址 
+      $(document).on('touchmove',function(e){
+        e.preventDefault();
+      })
 --------------------------------------------------------------------------------
 ◆专题 
 表单及表单字段脚本 
@@ -2933,7 +3086,6 @@ SVG,Scalable_Vector_Graphics    可缩放矢量图
           </g>
         </g>
       </svg>
-webgl
 File_API,文件和二进制数据的操作 「HTML5+」
   PS： HTML5在DOM中为文件输入元素添加了一个files集合,
     文件输入元素如 <input type="file" id="myFile" />,
@@ -3081,7 +3233,7 @@ File_API,文件和二进制数据的操作 「HTML5+」
       video.src = obj_url;
       video.play()
       window.URL.revokeObjectURL(obj_url);  
-跨文档消息传递,cross-document_messaging 
+cross-document_messaging 跨文档消息传递 
   PS：简称为XDM,指在不同域的页面间传递消息,
     XDM机制出现之前,要稳妥的实现这种通信需花很多功夫
   postMessage(str,URL); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.

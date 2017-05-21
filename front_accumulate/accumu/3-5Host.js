@@ -491,9 +491,9 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       微信支付开发文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
 遇到的问题
   ios 
-    滑动当前
+    滑动当前div使其他div产生滚动效果
 ios
-  iOS 10.3 以后可以通过给 input[type='file'] 的标签里指定 capture="user" 来调用手机前置摄像头
+  iOS 10.3+ 可通过给 input[type='file'] 的标签里指定 capture="user" 来调用手机前置摄像头
 android
 ---------------------------------------------------------------------------todo
 

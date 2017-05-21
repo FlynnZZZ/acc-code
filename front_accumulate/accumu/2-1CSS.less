@@ -2247,11 +2247,8 @@ Layout   布局
         属性值为非负数值,根据数值的大小决定子元素的排列顺序
 --------------------------------------------------------------------------------
 移动端
-ios 微信 
-  滚动不顺畅 
-    解决办法: 添加属性  -webkit-overflow-scrolling: touch;
 CSS样式说明 
-  cursor: pointer;
+  cursor: pointer; 
     点击时会有蓝色背景一闪的效果,表示被点击了
 font,字体  
   1. - 各个手机系统有自己的默认字体,且都不支持微软雅黑 「?」
@@ -2403,6 +2400,10 @@ size,尺寸
         -webkit-box-orient:vertical;
         -moz-box-orient:vertical;
         box-orient:vertical;
+ios 
+  微信 
+    滑动不流畅 
+      解决办法: 添加属性  -webkit-overflow-scrolling: touch;
 --------------------------------------------------------------------------------
 新内容 「可能存在兼容性问题」
 var() CSS变量 

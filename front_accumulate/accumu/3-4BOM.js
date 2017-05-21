@@ -2122,7 +2122,7 @@ comet  服务器推送,一种更高级的AJAX技术
   HTTP流
     PS：页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-CORS,Cross-Origin Resource Sharing 跨源资源共享 
+CORS,Cross-Origin_Resource_Sharing 跨源资源共享 
   PS：
     CORS是一个W3C标准,全称是“跨域资源共享”,
     允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
@@ -2332,7 +2332,7 @@ CORS,Cross-Origin Resource Sharing 跨源资源共享
     由于无论同源请求还是跨域请求都使用相同的接口,
     因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
     如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
-same-origin_policy,同源政策 
+same-origin_policy 同源政策 
   PS： 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
     目的为了保证用户信息的安全,防止恶意的网站窃取数据;
@@ -2838,209 +2838,10 @@ WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」
       conn.on('open', function(){
         conn.send('hi!');
       });
-devicelight    设备屏幕亮度变化事件 「HTML5」
-  PS：移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
-  var DLRun = function(event) { }
-  window.addEventListener('devicelight',DLRun);
-  event.value  亮度的流明值
-  e.g.:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
-    window.addEventListener('devicelight', function(e) {
-      var lux = e.value;
-      if(lux < 50) {
-        document.body.className = 'dim';
-      }
-      if(lux >= 50 && lux <= 1000) {
-        document.body.className = 'normal';
-      }
-      if(lux > 1000)  {
-        document.body.className = 'bright';
-      } 
-    });
-    CSS下一个版本的Media Query可以单独设置亮度,一旦浏览器支持,就可以用来取代Luminosity API.
-    @media (light-level: dim) { /* 暗光环境 */ }
-    @media (light-level: normal) { /* 正常光环境 */ }
-    @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5」
-  PS：一旦设备的方向发生变化触发
-  检测浏览器是否支持该API
-    if (window.DeviceOrientationEvent) { /*  支持 */ } 
-    else { /* 不支持 */ }
-  window.addEventListener("deviceorientation", DORun);
-  function DORun(event){ }
-  event 
-    PS：分别对应手机摆放的三维倾角变化.要理解它们,就要理解手机的方向模型.
-      当手机水平摆放时,使用三个轴标示它的空间位置：x轴代表横轴、y轴代表竖轴、z轴代表垂直轴.
-      event对象的三个属性就对应这三根轴的旋转角度.
-    event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
-    event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
-    event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
-orientationchange  在屏幕发生翻转时触发「HTML5」 
-  window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
   <link rel="prefetch" href="url">
   url可为一网页地址或图片地址
-移动端JS 
-  event 事件
-    理解click的300ms的延迟响应
-      Click事件在移动手机开发中有300ms的延迟,
-      因为在手机早期,浏览器系统有放大和缩放功能,
-      用户在屏幕上点击两次之后,系统会触发放大或者缩放功能,
-      因此系统做了一个处理,当触摸一次后,在300ms这段时间内有没有触摸第二次则为点击点击事件,
-      若触摸了第二次的话,说明是触发放大或缩放功能。
-      因此当click时候,所有用户必须等待于300ms后才会触发click事件。
-      所以当在移动端使用click事件的时候,会感觉到有300ms的迟钝。
-    Touch 触摸事件
-      PS： 由于触摸会导致屏幕滚动,在事件函数内使用event.preventDefault()阻止掉默认事件(默认滚动)
-      ◆在规范中列出并获得跨移动设备广泛实现的基本触摸事件
-      touchstart  当手指放在屏幕上触发;
-      touchmove   当手指在屏幕上滑动时,连续地触发;
-        e.g.:
-          指定滑动一定距离执行动作 [self]
-          var flagYear =true; // 用于记录滑动起始点的 布尔值
-          year.on('touchmove',function(e){
-            if (flagYear) {   // 仅记录滑动初始的位置
-              starty =e.originalEvent.changedTouches[0].pageY;
-              flagYear =false;
-            }
-            var endy = e.originalEvent.changedTouches[0].pageY;
-            if (endy - starty < -20 ) { // 下滑距离20执行动作
-              // 执行的代码
-              
-              starty =endy;
-            }
-            if (endy - starty > 20 ) {   // 上滑距离20执行动作
-              // 执行的代码
-              
-              starty =endy;
-            }
-          })
-          year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
-            flagYear =true;
-          })
-      touchend    当手指从屏幕上离开时触发;
-      ◆规范提供了额外的三个触摸事件,但兼容性可能不太好.
-      touchenter   移动的手指进入一个DOM元素。
-      touchleave   移动手指离开一个DOM元素。
-      touchcancel  触摸被中断（实现规范）。
-      e.g.:
-        var EventUtil = {
-          addHandler: function(element,type,handler) {
-            if(element.addEventListener) {
-              element.addEventListener(type,handler,false);
-            }else if(element.attachEvent) {
-              element.attachEvent("on"+type,handler);
-            }else {
-              element["on" +type] = handler;
-            }
-          },
-          removeHandler: function(element,type,handler){
-            if(element.removeEventListener) {
-              element.removeEventListener(type,handler,false);
-            }else if(element.detachEvent) {
-              element.detachEvent("on"+type,handler);
-            }else {
-              element["on" +type] = null;
-            }
-          }
-        };
-        var touch = document.getElementById("touch");
-        EventUtil.addHandler(touch,"touchstart",function(event){
-          console.log(event);
-        })；
-        
-        // 连续滑动触发
-        EventUtil.addHandler(window,"touchmove",function(event){
-          alert(1);
-        })；
-        //当手指从屏幕上离开时触发;
-        EventUtil.addHandler(window,"touchend",function(event){
-          alert(1);
-        })
-    事件对象 TouchEvent 
-      e.touches          当前位于屏幕上的所有手指的一个列表
-        event.touches.length  表示屏幕上触摸的手指个数
-      e.targetTouches    位于当前DOM元素上的手指的一个列表
-        PS：touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
-        event.touches.length  表示元素上触摸的手指个数
-      e.originalEvent.changedTouches   
-        e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
-        e.originalEvent.changedTouches[0].clientX     触摸目标在视口中的X坐标
-        e.originalEvent.changedTouches[0].clientY     触摸目标在视口中的Y坐标
-        e.originalEvent.changedTouches[0].pageX    页面中的X坐标
-        e.originalEvent.changedTouches[0].pageY    页面中的Y坐标
-        e.originalEvent.changedTouches[0].screenX     触摸目标在屏幕中的X坐标
-        e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
-        e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
-      event.preventDefault();  阻止滚动 [?]
-        一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
-        当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
-    Gestures 触摸事件
-      PS：该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
-      Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
-      Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
-      Gestureend    当任何一个手指从屏幕上面移开时触发。
-    触摸事件和手势事件的关系：
-      当一个手指放在屏幕上时,会触发touchstart事件,
-      而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
-      若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
-      但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
-      手势的专有属性：
-        rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
-        scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
-    其他
-      navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
-      autocapitalize  autocorrect   自动大写与自动修正
-        <input type="text" autocapitalize="off" autocorrect="off" />
-      -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
-      -webkit-user-select:none      禁止用户选中文字
-      关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
-        this.value = this.value.replace(/\u2006/g, ‘‘);
-      input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
-      判断是否为微信浏览器；
-        function is_weixn(){
-          var ua = navigator.userAgent.toLowerCase();
-          if(ua.match(/MicroMessenger/i)=="micromessenger") {
-            return true;
-          } else {
-            return false;
-          }
-        }
-    屏幕旋转事件 orientationchange
-    键盘调出与关闭事件: 使用resize间接实现
-      var wh1 = window.innerHeight; 
-      //获取初始可视窗口高度
-      $(window).resize(function() {      
-        //监测窗口大小的变化事件
-        var wh2 = window.innerHeight;    
-        //当前可视窗口高度
-        var viewTop = $(window).scrollTop();   
-        //可视窗口高度顶部距离网页顶部的距离
-        if(wh1 > wh2){          
-          //可作为虚拟键盘弹出事件
-        }
-        else{                      
-          //可作为虚拟键盘关闭事件
-        }
-      });
-  微信  
-    不支持的功能
-      模板字符串  ios中支持,android中不支持. [20170124]
-      可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
-      不支持进行跳转到上一步url中带有参数 的url地址  [?]
-        比如：一个查询列表页的url是： http://someweb?city=beijing
-        当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如： 
-        location.href=document.referrer的时候   
-        跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
-        解决：微信开发中 不要用 带url参数的地址,都用/ ../ ,
-        把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
-    event 事件
-      click 无延迟 [?]
-      touchend 、 touchstar 始终会触发(而不管是否改为滑动)
-      禁止下滑显示网址
-        $(document).on('touchmove',function(e){
-          e.preventDefault();
-        })
-Web_Socket 网络通信协议「HTML5」 
+Web_Socket     网络通信协议「HTML5」 
   PS：目标是在一个单独的持久连接上提供全双工、双向通信
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给你 [且你的代码会得到通知]
@@ -3122,7 +2923,7 @@ Web_Storage    网页本地存储 「IE8+ HTML5」
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-application_cache,简称appcache  应用离线缓存 「HTML5」
+application_cache,appcache  应用离线缓存 「HTML5」
   PS：让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;
@@ -3850,6 +3651,46 @@ Fullscreen 全屏操作 「HTML5」
       height: 100%;
     }
 WebGL
+--------------------------------------------------------------------------------
+移动端
+devicelight    设备屏幕亮度变化事件 「HTML5」
+  PS：移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
+  var DLRun = function(event) { }
+  window.addEventListener('devicelight',DLRun);
+  event.value  亮度的流明值
+  e.g.:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
+    window.addEventListener('devicelight', function(e) {
+      var lux = e.value;
+      if(lux < 50) {
+        document.body.className = 'dim';
+      }
+      if(lux >= 50 && lux <= 1000) {
+        document.body.className = 'normal';
+      }
+      if(lux > 1000)  {
+        document.body.className = 'bright';
+      } 
+    });
+    CSS下一个版本的Media Query可以单独设置亮度,一旦浏览器支持,就可以用来取代Luminosity API.
+    @media (light-level: dim) { /* 暗光环境 */ }
+    @media (light-level: normal) { /* 正常光环境 */ }
+    @media (light-level: washed) { /* 明亮环境 */ }
+deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5」
+  PS：一旦设备的方向发生变化触发
+  检测浏览器是否支持该API
+    if (window.DeviceOrientationEvent) { /*  支持 */ } 
+    else { /* 不支持 */ }
+  window.addEventListener("deviceorientation", DORun);
+  function DORun(event){ }
+  event 
+    PS：分别对应手机摆放的三维倾角变化.要理解它们,就要理解手机的方向模型.
+      当手机水平摆放时,使用三个轴标示它的空间位置：x轴代表横轴、y轴代表竖轴、z轴代表垂直轴.
+      event对象的三个属性就对应这三根轴的旋转角度.
+    event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
+    event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
+    event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
+orientationchange  在屏幕发生翻转时触发「HTML5」 
+  window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 -------------------------------------------------------------------------待整理 
 
 

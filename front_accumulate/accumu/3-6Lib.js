@@ -467,7 +467,8 @@ DOM 操作
       Jelem.blur();    失焦
       Jelem.click();   点击元素 「会触发事件」
       Jelem.select();  选中文字
-        不可选中因增加contenteditable属性而可编辑的元素的文字
+        选中如input、textarea等元素类的文字,
+        不可选中因增加contenteditable属性而可编辑的元素的文字;
     性能优化
       繁重的操作中分离元素
         如果你打算对DOM元素做大量操作（连续设置多个属性或css样式）,

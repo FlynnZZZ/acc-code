@@ -951,7 +951,7 @@ AJAX
   Jelem.ajaxStop(cfoo)   在Ajax请求完成后触发函数
 方法 
   Jelem.each(foo)    为每个匹配成员规定执行的函数 
-    foo 指定的执行函数,参数为 index下标 和element成员值
+    foo  function(indx,jelem){ }
     返回 'false' 将停止循环,就像在普通的循环中使用 'break'
     返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
     e.g.

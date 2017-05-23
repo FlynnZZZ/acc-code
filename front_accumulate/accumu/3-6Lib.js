@@ -1307,7 +1307,7 @@ jQuery UI插件
         delay : 2 ,   // 为防止与点击事件冲突,延时两秒
         opacity : 0.5 // 拖动时透明度为0.5
       })
-  Jelem.selectable(obj);   其子元素可选 (Ctrl多选)
+  Jelem.selectable(obj);   其子元素可选「Ctrl多选」 
   Jelem.resizable()   改变大小
   Jelem.accordion(options)   折叠菜单
     PS：实现页面中指定区域类似“手风琴”的折叠效果,
@@ -1340,7 +1340,7 @@ jQuery UI插件
           $(this).append('<p>' + content + '<p>');
         }
       })
-  Jelem.slider()      滑动条
+  Jelem.slider()       滑动条
   Jelem.tabs(options)  选项卡插件
     PS：使用选项卡插件可以将<ul>中的<li>选项定义为选项标题,
       在标题中,再使用<a>元素的“href”属性设置选项标题对应的内容

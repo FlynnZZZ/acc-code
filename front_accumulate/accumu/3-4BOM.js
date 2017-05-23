@@ -421,7 +421,7 @@ window的属性对象
         否则,则是新建一cookie;
       设置Cookie的expires为0或者过期时间 删除cookie
     document.hidden  网页可见性API 「HTML5」 
-      页面不可见时播放中的视频暂停，可见时视频继续播放
+      页面不可见时播放中的视频暂停,可见时视频继续播放
         <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
         var video = document.getElementById('video') ;
         var Prefix = null;
@@ -441,10 +441,10 @@ window的属性对象
         document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
         function handleVisibilityChange(){
           switch (document.hidden){
-            case true: //返回hidden = true，页面不可见
+            case true: //返回hidden = true,页面不可见
               video.pause();
               break;
-            case false: //返回hidden = false，页面可见
+            case false: //返回hidden = false,页面可见
               video.play();
               break;
           }
@@ -890,7 +890,7 @@ window的属性对象
       饱受争议的原因是因为它具有一定的欺骗性.
 AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML 
   介绍
-    PS： 浏览器提供了使用http协议收发数据的接口,名为 AJAX;
+    PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX;
       可用JS动态抓取内容构建页面;
       file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
       还支持通过其他协议传送,比如File和FTP 
@@ -919,6 +919,47 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       对搜索引擎的支持比较弱
       AJAX 不能跨域访问;不能跨端口(即需在同一域及同一端口下)
         浏览器安全策略不允许向不同的域发送请求,请求被拒绝,而未发出.
+  Content-Type 编码类型
+    PS：请求头中Content-Type决定编码类型,不同的值对应不同的提交和回调处理方式;
+    XMLHttpRequest对象用常见的五种'Content-Type'发送数据的方式
+      PS：method都是POST方式,若是GET方式是没有请求数据体的,数据直接加在URL后面;
+      接收请求时的解析方式
+        text/xml：用responseXML
+        application/json：需先JSON解析,JSON.parse( responseText )
+        其他直接用 responseText
+      text/plain 默认值 
+        若请求头部没有设定'Content-Type',且数据不是 FormData 和 XML Document,
+        则'Content-Type'默认为'text/plain';
+      application/x-www-form-urlencoded 
+        要求数据按照key1=value1&key2=value2的格式发送,
+        且其中的特殊字符需要转义成%HH的形式;
+      multipart/form-data 多用来提交文件 
+        采用HTML5的FormData对象来构建提交的数据;
+        不设置请求头部的Content-Type,交给浏览器来处理「设定Boundary等工作」;
+      application/json 传输JSON格式的数据
+        使用该MIME类型时,需要将数据对象转换成JSON串,
+        再设定请求头部的Content-Type,就可以发数据了
+      text/xml XML格式传输 
+        首先,构建XML文档对象,存入表单数据
+        /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
+        var dataToSend = document.implementation.createDocument("", "formdata", null);
+        var tempData = dataToSend.documentElement;
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            var keyElement = doc.createElement(key);
+            keyElement.appendChild(doc.createTextNode(data[key]));
+            tempData.appendChild(keyElement);
+          }
+        }
+        /*
+        xml文档格式示意：
+        <formdata>
+        <key1> value1 </key1>
+        <key2> value2 </key2>
+        </formdata>
+        */
+        发送数据「不需设置Content-Type」
+        req.send(dataToSend);
   XMLHttpRequest 对象
     PS：XMLHttpRequest对象是AJAX技术实现的核心.
       通过调用该对象的属性和方法实现各种功能.
@@ -959,10 +1000,9 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
     xhr.setRequestHeader(key,val); 设定请求头信息
       PS：该方法必须在 open 方法之后,send 方法之前使用.
         若该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
-      e.g.:
-        设置头信息Content-Type,表示发送JSON格式的数据；
+      设置头信息'Content-Type',表示发送的数据格式 
         xhr.setRequestHeader('Content-Type', 'application/json');
-        然后设置Content-Length,表示数据长度；
+      设置'Content-Length',表示数据长度 
         xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
     xhr.overrideMimeType() 重写由服务器返回的 MIME type [IE不支持] [Level2]
       PS：该方法需在send方法之前调用
@@ -1170,7 +1210,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       在终止请求后,还应该对xhr对象进行解引用操作.
       若请求已经被发送,则立刻中止请求.
     ◆其他
-    FormData 用于模拟表单   [HTML5新增]
+    FormData 用于模拟表单「HTML5」
       PS：为序列化表单及创建与表单格式相同的数据(用于通过xhr传输)提供了便利.
         不用明确的设置请求头信息,
         xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
@@ -1201,7 +1241,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
           var content = '<a id="a"><b id="b">hey!</b></a>';
           var blob = new Blob([content], { type: "text/xml"});
           formData.append("webmasterfile", blob);
-    接收二进制数据
+    接收二进制数据 
       PS：老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
       改写 MIMEType [老方法]
         改写数据的MIMEType,将服务器返回的二进制数据伪装成文本数据.

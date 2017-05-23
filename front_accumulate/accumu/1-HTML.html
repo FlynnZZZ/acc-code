@@ -534,18 +534,19 @@
   <fieldset></fieldset> 表单信息分组
     PS：默认有一个细线边框,可设置border属性为none关闭它.
     e.g. 
-    <fieldset>
-      <legend>框线上显示的文字</legend>
-      <form action="">...</form>
-    </fieldset>
+      <fieldset>
+        <legend>框线上显示的文字</legend>
+        <form action="">
+        // 其他字段
+        </form>
+      </fieldset>
   <legend></legend>     显示fieldset边框上的信息文字
     PS：legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
   <form></form>         表单区
-    PS：用于为用户输入创建html表单,表单用于向服务器传输数据.
-      获取访问站点的用户的信息.客户端与服务器端进行信息交流的途径之一.
-      它是一个容器,用于包含其他表单元素,如文本框、单选框等
-      所有表单控件都必须放在<form></form>标签中,否则用户输入的信息提交不到服务器上
+    PS：为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
+      用于包含其他表单元素「如文本框、单选框等」的容器,
+      所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
     action="url"  表单提交的地址,即数据交给服务器端的哪个程序进行处理
     method=   规定用于发送 form-data 的 HTTP 方法
       get  默认值  get方法将值附加到请求该页的URL中
@@ -558,10 +559,23 @@
     novalidate   表示表单不进行验证
     enctype      在发送到服务器之前应该如何对表单数据进行编码
       PS：规定了对表单提交给服务器时表单数据编码的内容类型「Content Type」
-      "application/x-www-form-urlencoded" 默认值
-        所有字符都会进行编码,空格转换为 "+" 加号,特殊符号转换为 ASCII HEX 值
+        可认为是表单数据的'content type'「MIME type」,
+        只不过其取值只能为以下三种之一,否则会转换成默认的编码。
+      "application/x-www-form-urlencoded" 默认值,所有字符都会进行编码
+        空格转换为 "+" 加号,特殊符号转换为 ASCII HEX 值;
+        将表单数据中非字母数字的字符转换成转义字符,如"%HH",
+        然后组合成 key1=value1&key2=value2 的形式;
       'multipart/form-data' 不对字符编码,在使用包含文件上传控件的表单时,必须使用该值
+        用于高效传输文件、非ASCII数据和二进制数据,
+        将表单数据逐项地分成不同的部分,用指定的分割符分割每一部分。
+        每一部分都拥有Content-Disposition头部,指定了该表单项的键名和一些其他信息;
+        并且每一部分都有可选的Content-Type,不特殊指定就为text/plain。
+        一般来说,method和enctype是两个不同的互不影响的属性,
+        但在传文件时,method必须要指定为POST,否则文件只剩下filename了；
+        当没有传文件时,enctype会改回默认的application/x-www-form-urlencoded
       'text/plain'	  空格转换为 "+" 加号,但不对特殊字符编码
+        按照键值对排列表单数据 key1=value1\r\nkey2=value2,不进行转义;
+        若表单中有文件,则只留文件名；
       Exp:
         表单发送超过100个具有相同name的字段时,服务器收不到数据 「20170518」
           添加 enctype='multipart/form-data' 解决

@@ -807,7 +807,106 @@ Event 事件
       });
       注：直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
 AJAX 
-  PS： jQuery 最常用的 AJAX API 可以为分三类:
+  PS： jQuery 最常用的 AJAX API 可以为分三类;
+  contentType 数据格式
+    application/x-www-form-urlencoded 默认方式,表单提交
+      数据的URL方式编码,由jQuery来做,
+      只需在$.ajax({})参数中设置 processData = true「也是默认,可省略」;
+      e.g.：
+        $.ajax({
+          method: 'POST',
+          url: '...',
+          data: dataToSend, 
+          /* dataToSend为Object类型的表单数据,否则jQuery会抛出异常 */
+          contentType: 'application/x-www-form-urlencoded',  // 可省略
+          processData: true,        // 可省略
+          success: function() {}
+        });
+    multipart/form-data  适合用于上传文件
+      首先,对表单数据构建成FormData的HTML5对象,代码如下。
+      /* dataToSend 是FormData对象,可直接作为数据传输到后端 */
+      var dataToSend= new FormData();      // HTML5对象, IE11以下不支持
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          dataToSend.append(key, data[key]);
+        }
+      }
+      用$.ajax()方法传输数据
+        processData与contentType必须设定为false,避免FormData对象被转换成URL编码
+      $.ajax({
+        method: 'POST',
+        url: '...',
+        data: dataToSend,          // dataToSend 是FormData对象
+        
+        contentType: false,        // contentType 必须设置为false
+        processData: false,        // processData 必须设置为false
+        
+        success: function() { ... }
+      });
+    text/plain  传输字符串
+      $.ajax({
+        method: 'POST',
+        url: '...',
+        data: dataToSend,         
+        
+        contentType: 'text/plain',       
+        processData: false,      // processData 设置为false则不会转换成URL编码
+        
+        success: function() { ... }
+      });
+    application/json  传输JSON字符串
+      要用函数JSON.stringify()处理表单数据
+      /* data 为表单Object类型的数据 */
+      dataToSend = JSON.stringify(data);
+      $.ajax({
+        method: 'POST',
+        url: '...',
+        data: dataToSend,         
+        
+        contentType: 'application/json',       
+        processData: false,     // processData 设置为false则不会转换成URL编码
+        
+        success: function() { ... }
+      });
+      若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
+      需要转换成Object类型「而Angular不需要」;
+      $.ajax({
+        ...
+        success: function(data) {
+          var jsonData = JSON.parse(data);
+          ...
+        }
+      });
+    text/xml  传输XML
+      首先,构建XML文档对象,存入表单数据,代码如下。
+      /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
+      var dataToSend = document.implementation.createDocument("", "formdata", null);
+      var tempData = dataToSend.documentElement;
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          var keyElement = doc.createElement(key);
+          keyElement.appendChild(doc.createTextNode(data[key]));
+          tempData.appendChild(keyElement);
+        }
+      }
+      /*
+      xml文档格式示意：
+      <formdata>
+      <key1> value1 </key1>
+      <key2> value2 </key2>
+      </formdata>
+      */
+      发送数据dataToSend
+      $.ajax({
+        method: 'POST',
+        url: '...',
+        data: dataToSend,
+        
+        contentType: false,  // contentType 可设为false也可写成具体的'text/xml'等    
+        processData: false,  // processData 必须设为false
+        
+        success: function() { ... }
+      });
   ◆方法型 
   $.get(url[,data][,cfoo][,type]) get请求 
     url  请求的地址

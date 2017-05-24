@@ -13,7 +13,7 @@ ECMAScript JS核心,语法部分
   JS的核心语法ECMAScript包括两个部分：
     基本的语法构造,如操作符、控制结构、语句等
     标准库,如Array、Date、Math等
-说明、定义
+说明、定义 
   函数和方法的区别 
     方法就是对象的函数
     方法基于对象,调用写法：obj.foo()
@@ -49,7 +49,7 @@ ECMAScript JS核心,语法部分
     box.MAX_VALUE;    //undefined , 属性
     Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
   实例：类型的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
-语法规则
+语法规则 
   PS：区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
     一等函数「first-class_function」来自于 Scheme;
   标识符: 指变量、函数、属性或函数的参数的名字
@@ -1985,19 +1985,19 @@ OOP,面向对象
           var foo=[];
           foo[100]=3;
           foo.length;   //101
-      arr.includes(elem,index);  返回表示元素是否存在的布尔值
-        elem  需要查找的元素值;
+      arr.includes(val,index);  返回表示元素是否存在的布尔值
+        val  需要查找的元素值;
         index 可选,从该索引处开始向后查找,默认为 0
         e.g.
           [1, 2, 3].includes(2);     // true
           [1, 2, 3].includes(4);     // false
           [1, 2, 3].includes(3, 3);  // false
-      arr.indexOf(elem[,begin]);   查找数组中元素对应的下标 [ES5+]
+      arr.indexOf(val[,begin]);   查找数组中元素对应的下标 「ES5」
         begin表示开始的下标位置,默认为0,
           若为负,则-1 表示最后一个元素,依次类推.
         返回值为下标值,若找不到则返回-1
-      arr.lastIndexOf(elem); 从右到左查找 [ES5+]
-      Array.isArray(arr) 表示是否为数组的布尔值 [ES5+]
+      arr.lastIndexOf(val); 从右到左查找 「ES5」
+      Array.isArray(arr) 表示是否为数组的布尔值 「ES5」
     ◆以元素为单位操作 
       arr[i-1]  取/设数组元素
         下标从0开始
@@ -2065,7 +2065,7 @@ OOP,面向对象
         var myArray = ['one', 'two', 'three'];
         myArray.reverse();
         console.log(myArray) // ['three', 'two', 'one']
-      arr.concat(elem/arr1);  拼接若干个数组/元素,返回一个新数组
+      arr.concat(val/arr1);  拼接若干个数组/元素,返回一个新数组
         连接元素
           var a = [1,2,3];
           console.log(a.concat(4,5)); // [1, 2, 3, 4, 5]
@@ -2105,7 +2105,7 @@ OOP,面向对象
           repeatStr("a",6); // "aaaaaa"
     ◆修改数组
     ◆获取部分 
-      var newArr=arr.filter(function(v,i,arr){}[,thisArg]); 过滤数组 [ES5+]
+      var newArr=arr.filter(function(v,i,arr){}[,thisArg]); 过滤数组 「ES5」
         Arguments:
           func 调用的函数,参数为: val元素 index下标 arr原数组
             用来测试数组的每个元素的函数。
@@ -2117,7 +2117,7 @@ OOP,面向对象
         var res=arr.filter(function(x){return x<12;});
         console.log(res); // [10, 2, 4, 11]
     ◆获取其他 
-      arr.reduce(func[,initialValue]); 条件缩减,返回一个新数组 [ES5+]
+      arr.reduce(func[,initialValue]); 条件缩减,返回一个新数组 「ES5」
         PS：接收一个函数作为累加器,数组中的每个值(从左到右)开始缩减,最终为一个值
           为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素
         Arguments:
@@ -2140,9 +2140,9 @@ OOP,面向对象
           var res=arr.reduce(function(a,b){ return a+b; });
           console.log(arr); // [1, 2, 3, 4, 5]
           console.log(res); // 15
-      arr.reduceRight(); 和reduce类似,只是从右到左遍历 [ES5+]
+      arr.reduceRight(); 和reduce类似,只是从右到左遍历 「ES5」
     ◆遍历数组元素: 循环访问元素叫遍历 
-      arr.forEach(cfoo[, thisArr]); 对数组的每个元素执行操作 「ES5+」
+      arr.forEach(cfoo[, thisArr]); 对数组的每个元素执行操作 「ES5」
         PS：forEach 方法按顺序为数组中含有效值的每一项执行一次cfoo 函数,
           那些已删除(使用delete方法等情况)或者从未赋值的项将被跳过
          (而值为 undefined 的项则不会被跳过).
@@ -2177,7 +2177,7 @@ OOP,面向对象
           调用forEach 后添加到数组中的项不会被 cfoo 访问到,
           如果已经存在的值被改变,则传递给 cfoo 的值是 forEach 遍历到他们那一刻的值,
           已删除的项不会被遍历到.
-      arr.map(cfoo[,thisArg]);  元素遍历调用方法,返回新数组「ES5+」 
+      arr.map(cfoo[,thisArg]);  元素遍历调用方法,返回新数组「ES5」 
         cfoo   对数组arr的每个元素调用函数 cfoo
           val    数组中当前被传递的元素
           indx   数组中当前被传递的元素的索引
@@ -2194,7 +2194,7 @@ OOP,面向对象
             return parseInt(element,10);
           }
           ["1", "2", "3"].map(returnInt); // [1,2,3]
-      arr.every(callback[,thisArg]); 条件判断,返回布尔值 [ES5新增]
+      arr.every(callback[,thisArg]); 条件判断,返回布尔值 「ES5」
         PS： every 方法为数组中的每个元素执行一次 callback 函数,
           直到它找到一个使 callback 返回 false(表示可转换为布尔值 false 的值)的元素。
           如果发现了一个这样的元素,every 方法将会立即返回 false。
@@ -2217,7 +2217,7 @@ OOP,面向对象
         var arr =[19,20,22];
         var res=arr.every(function(x){return x>18;});
         console.log(res); // true
-      arr.some(func[,thisArg]);  条件判断,返回布尔值 [ES5新增]
+      arr.some(func[,thisArg]);  条件判断,返回布尔值 「ES5」
         PS：some 为数组中的每一个元素执行一次 callback 函数,
           直到找到一个使得 callback 返回一个“真值”(即可转换为布尔值 true 的值).
           如果找到了这样一个值,some 将会立即返回 true.
@@ -2239,7 +2239,7 @@ OOP,面向对象
         var res=arr.some(function(x){return x>18;});
         console.log(res); // true
     ◆转换为数组
-      Array.from(arrLike,mapFn,thisArg); 对象转换为数组,并返回新数组(ES6新增)
+      Array.from(arrLike,mapFn,thisArg); 对象转换为数组,并返回新数组「ES5」
         Arguments:
           arrLike 想要转换成数组的类数组或可遍历对象
           mapFn   可选,最后生成的数组会经过该函数的加工处理后再返回
@@ -2873,7 +2873,7 @@ OOP,面向对象
               var p2 =New(Person)("boo",18); //使用仿造的new
               console.log(p1); //Person {name: "aoo", age: 19}
               console.log(p2); //Person {name: "boo", age: 18}
-      fun.bind(thisArg[,arg1[,arg2[,...]]]) 创建新函数并改变this指向 [ES5新增]
+      fun.bind(thisArg[,arg1[,arg2[,...]]]) 创建新函数并改变this指向 「ES5」
         PS：bind()方法会创建一个新函数.
           当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
           之后的一序列参数将会在传递的实参前传入作为它的参数.

@@ -1734,7 +1734,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-XMLHttpRequest Level2 「IE10+ HTML5」 
+XMLHttpRequest_Level2 「IE10+ HTML5」 
   IE10以下的版本不支持.它有自己相关的方法来实现.
   需要在服务器端进行相关的改动
     header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/

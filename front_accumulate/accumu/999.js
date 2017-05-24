@@ -20,8 +20,14 @@ fileNum : 21
     });
     console.log(obj);
 
-
-
+  整理fontawesome
+    分类
+    手势
+    方向指示
+    logo
+    状态表示
+    
+  一个图标多个标签按标签组合来查找
 
 
 

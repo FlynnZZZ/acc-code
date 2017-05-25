@@ -601,7 +601,7 @@
     PS：input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
       type 属性和 name 属性是必需的
       ios平台的微信中,input默认有圆角;
-    type 属性
+    type 属性 
       规定input元素的类型,该属性不是必需的,但是最好始终使用该属性;
       text     默认,单行文本框
         默认是 20 个字符
@@ -865,20 +865,19 @@
         <label><input type='radio' name='sex' value='男'/>男</label>
   <textarea name="" >文本内容</textarea>    多行的文本区 
     PS：文本区中可以容纳无限数量的文本.
-    属性:
-      cols       值为数字,规定文本区内的可见宽度
-      row        值为数字,规定文本区内的可见行数.
-        更好的办法是使用css的height和width来控制尺寸.
-        在css中不可设置rows或cols的值.
-      name       规定文本区的名称.
-      disabled   禁用该文本区.
-      readonly   规定文本区只读.
-        PS：disabled和readonly功能类似,主要区别如下
-          1.readonly属性只针对标段元素的文本框,密码框或多行文本框有效,而disabled属性可对所有的表单元素都会有效
-          2.设置两个属性的外观不一样
-          3.设置readonly的表单元素依然会被提交,而设置disabled的值不会被提交.
-      maxlength  值为数值,规定文本区域的最大字符数.
-      wrap='off' 在文本域中输入文字时不自动换行,默认为自动换行
+    cols       数字,规定文本区内的可见宽度
+    row        数字,规定文本区内的可见行数 
+      更好的办法是使用css的height和width来控制尺寸.
+      在css中不可设置rows或cols的值.
+    name       规定文本区的名称.
+    disabled   禁用该文本区
+    readonly   规定文本区只读 
+      PS：disabled和readonly功能类似,主要区别如下
+        1.readonly属性只针对标段元素的文本框,密码框或多行文本框有效,而disabled属性可对所有的表单元素都会有效
+        2.设置两个属性的外观不一样
+        3.设置readonly的表单元素依然会被提交,而设置disabled的值不会被提交.
+    maxlength  值为数值,规定文本区域的最大字符数.
+    wrap='off' 在文本域中输入文字时不自动换行,默认为自动换行
   <select></select>           下拉列表
     创建单选或多选菜单
     属性值:

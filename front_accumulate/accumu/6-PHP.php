@@ -1,5 +1,5 @@
 介绍 说明 概念 
-  PS：PHP,Hypertext Preprocessor 超文本预处理器 
+  PS：PHP,Hypertext Preprocessor 超文本预处理器,名称来源 Personal_Home_Pages  
     一种创建动态交互性站点的服务器端脚本语言,用于服务器端的存取;
     HTML和js是客户端语言,用于实现页面呈现、特效;
   功能

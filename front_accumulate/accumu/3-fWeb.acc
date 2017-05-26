@@ -668,12 +668,19 @@ Sublime text3
         场景栗子：打开命名框,输入关键字,调用sublime text或插件的功能,
         例如使用package安装插件。
   ◆插件 
-    convertutf8 在保存后会自动重载。
+    convertutf8 在保存后会自动重载 
       使用convertutf8之后,保存大文件时会乱码或卡顿
       当时对St还有点热情,所以去把convertutf8的代码改了,禁止保存后重载就行了。
-    bufferScroll-st
+    bufferScroll-st 
       保存折叠状态的插件
-   --------------------------------------------------------------------------------
+    Alignment：代码对齐插件，快捷键：Ctrl+Alt+A
+    ConvertToUTF8：支持GBK查看与编辑插件
+    Emmet：HTML/CSS代码快速编写插件
+    JsFormat：JS格式化插件，快捷键：Ctrl+Alt+F
+    KeymapManager：快捷键管理插件，快捷键：Ctrl+Alt+K
+    Package Control：插件安装
+    SideBarEnhancements：侧边栏插件
+    Theme - Nil：SideBarEnhancements皮肤
   ◆Suggestion&Question 
     折叠功能
       文本状态下,全部折叠可能不会全部折叠起来
@@ -682,6 +689,19 @@ Sublime text3
         1 
           2
     不可分别设置 中、英文字体
+  ◆其他 
+    注册密钥：
+      LiuFengQingYin
+      Unlimited User License
+      EA7E-19762
+      9916F04082CF9BE66CF22672F5E5003D
+      473E7A66546048B6A68EE51BA52A13E2
+      3DDE5CE64F1E3E389EEA012D40AE0B8D
+      60FA83CD784771F5D0512FB346D10945
+      D6338C5EA7A4D98B000E04C5FC0D9B0D
+      53BD0E0957882DC55B87E77C4131B14F
+      BD045138673EA9B3F3A28D84A8F9C3AE
+      0312B06CB39656D268F6F81C9586DFDF
 键盘的键值码 
   ◆字母和数字键的键码值
     A	65
@@ -1303,5 +1323,9 @@ Question & Idea
 
 
 
+  
+  
+  
+  
 
 

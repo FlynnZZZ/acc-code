@@ -1,56 +1,49 @@
 介绍_概念_说明_定义
 介绍 
   HTML  介绍
-    PS：HTML全称Hyper Text Markup Language,超文本标记语言,
-      是一种标记语言,markup language;
-      标记语言通过使用一套标记标签「markup tag」来描述网页
-      HTML文档=网页,HTML文档描述网页,包含HTML标签绘和纯文本.
-      Web浏览器的作用是读取HTML文档,并以网页的形式显示出他们.
-      浏览器不会显示HTML标签,而是使用标签来解释页面的内容.
-    运行
-      本地运行: 使用浏览器打开HTML文件
-      远程访问: 将HTML文件存放于服务器,并启动服务器,通过http/https协议进行访问
-    语法
-      PS：标记与属性、属性与属性之间以空格分隔;属性无先后顺序;且属性不是必需的
-      双标记: <开始标记>内容</结束标记>
-      单标记: <标记/>
-      标记的属性: <标记 属性1=参数1 属性2=参数2...>内容</标记>
-    文档结构
-      所有的网页文件,通常有四对标记来构成文档的骨架
-      <html> <!-- 标识网页文件的开始与结束,所有html元素都要放在这对标记中 -->
-      <head> <!-- 标识网页文件的头部信息,如标题、搜索引擎关键字等 -->
-        <title> 标题 </title> <!-- 标识网页文件的标题  -->
-      </head>
-      <body> <!-- 表示网页文件的主体部分 -->
-      </body>
-      </html>
-    特点: 字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
+    PS：全称 Hyper_Text_Markup_Language 超文本标记语言,
+      标记语言「markup_language」通过使用一套标记标签「markup_tag」来描述网页;
+      HTML文档=网页,HTML文档描述网页,包含HTML标签绘和纯文本;
+      Web浏览器的作用是读取HTML文档,并以网页的形式显示,
+      不会显示HTML标签,而是用标签来解释页面的内容;
   XHTML 介绍 
     XHTML是一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性.
     2000年底,W3C发布XHTML 1.0版本,是一种在HTML 4.0基础上优化和改进的的新语言
-  URL,Uniform Resource Locator 也叫网址或'统一资源定位符'
-    PS：可以由单词组成,或者是因特网协议「IP」地址如:162.168.1.253;
-      用于定位万维网上的文档或其他数据
-    scheme://host.domain:port/path/fileName  语法规则
-      scheme  定义因特网服务的类型
-        http   超文本传输协议,以'http://'开头的普通网页,不加密
-        https  安全超文本传输协议,安全网页,加密所有信息交换
-        ftp    文件传输协议,用于将文件下载或上传至网站
-        file   本地计算机上的文件
-      host    定义域主机,http的默认主机是www
-      domain  定义因特网域名,如W3school.com.cn
-      port    定义主机上的端口号,http的默认端口号是80
-      path    定义服务器上的路径,若省略,则文档必须位于网站的根目录中
-      fileName  定义文档/资源的名称
-    HTML URL字符编码: 将字符转换为可通过因特网传输的格式
-      URL只能使用ASCII字符集来通过因特网进行发送,
-      由于URL常常会包含ASCII集合之外的字符,URL必须转换为有效的ASCII格式。
-      URL编码使用%其后跟随两位的十六进制数来替换非ASCII字符。
-      URL不能包含空格,URL编码通常使用+来替换空格
+语法规则 
+  文档结构 
+    所有的网页文件,通常有四对标记来构成文档的骨架
+    <html> <!-- 标识网页文件的开始与结束,所有html元素都要放在这对标记中 -->
+    <head> <!-- 标识网页文件的头部信息,如标题、搜索引擎关键字等 -->
+      <title> 标题 </title> <!-- 标识网页文件的标题  -->
+    </head>
+    <body> <!-- 表示网页文件的主体部分 -->
+    </body>
+    </html>
+  标签 
+    PS：标签「HTML_tag」也叫标记、元素,标记html,用于浏览器识别;
+      标签大小写:大小写不敏感「'<p>'等同于'<P>'」,推荐使用小写;
+      「SlSt」标签使用Mark表示,属性使用Attr表示
+      HTML元素指从开始标签「start tag」到结束标签「end tag」的所有代码;
+    双标记: <Mark>内容</Mark>
+    单标记: <Mark/>
+      自闭合「self-closing」标签,无需闭合,例如:img input br hr 等;
+    标记的属性: <Mark Attr1='参数1' Attr2='参数2' ...>内容</Mark> 
+      标记与属性、属性与属性之间以空格分隔;属性无先后顺序;且属性不是必需的
+      属性为HTML元素提供附加信息,小写字母,用引号括起来「双引号或单引号但须成对使用」;
+      html5中,属性值可不加引号,除了有空格等特殊情况;
+      某些个别的情况下,比如属性值本身就含有双引号,则必须使用单引号,
+      如 name=‘Bill“hellwoword”Gates’;
+    标签内容 
+      字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
+  其他 
+    <!-- 注释内容  -->
 说明 
-  <!-- 注释内容  -->
-  标签大小写:大小写不敏感,但推荐统一使用小写,'<p>'等同于'<P>'
-  浏览器解析HTML方式
+  运行HTML 
+    本地运行: 使用浏览器打开HTML文件
+      通过本地文件系统打开：功能可能受限
+      通过本地服务模拟服务器打开：和服务器的访问类似
+    远程访问: 将HTML文件存放于服务器,并启动服务器,通过http/https协议进行访问
+  浏览器解析HTML方式 
     PS：一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
       HTML5提供的<DOCTYPE html>是标准模式,向后兼容的, 等同于开启了标准模式;
       IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
@@ -75,14 +68,6 @@
       9   ----- in IE9 mode
 --------------------------------------------------------------------------------
 ◆标签-属性 
-  PS：HTML tag,标签/元素/标记 ,用于标记html,用于浏览器识别;
-    HTML元素指从开始标签「start tag」到结束标签「end tag」的所有代码;
-    自闭合「self-closing」标签,无需闭合,例如:img input br hr 等;
-  HTML属性添加要求
-    属性为HTML元素提供附加信息,小写字母,用引号括起来「双引号或单引号但须成对使用」;
-    html5中,属性值可不加引号,除了有空格等特殊情况;
-    某些个别的情况下,比如属性值本身就含有双引号,则必须使用单引号,
-    如 name=‘Bill“hellwoword”Gates’;
 声明类 
   <！DOCTYPE>   声明
     PS：必须是HTML文档的第一行,位于<HTML>标签之前.
@@ -395,10 +380,9 @@
     <del> 删除线
       <del></del> 增加删除线
 表格 
-  PS：
-    在一些浏览器中,没有内容的表格单元显示的不太好.
-    如果某个单元格是空的(没有内容),浏览器可能无法显示出这个单元格的边框.
-    为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来.
+  PS： 在一些浏览器中,没有内容的表格单元显示的不太好,
+    如果某个单元格是空的「没有内容」,浏览器可能无法显示出这个单元格的边框,
+    为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来;
   <table></table> 表格,整个表格以其开始和结束
     PS：单独使用没有意义,需配合其他表格元素使用.
       表格属于display:table,特点:单独一行
@@ -530,7 +514,7 @@
       valign 竖直对齐方式
         top/middle/bottom
 表单类 
-  PS：表单字段也叫表单控件,如input、button等元素 「self」
+  PS：表单字段也叫表单控件,如input、button等元素「self」 
   <fieldset></fieldset> 表单信息分组
     PS：默认有一个细线边框,可设置border属性为none关闭它.
     e.g. 
@@ -543,7 +527,7 @@
   <legend></legend>     显示fieldset边框上的信息文字
     PS：legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
-  <form></form>         表单区
+  <form></form>         表单区 
     PS：为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
       用于包含其他表单元素「如文本框、单选框等」的容器,
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
@@ -579,24 +563,34 @@
       Exp:
         表单发送超过100个具有相同name的字段时,服务器收不到数据 「20170518」
           添加 enctype='multipart/form-data' 解决
-    可以提交表单的按钮
+    可以提交表单的按钮 
       PS：用于提交表单的按钮需放置在表单<form>内,
         以下三种任意一按钮都可用于提交表单
         点击提交按钮或「获得焦点时」在表单字段中回车可提交表单,
         <textarea>字段例外,在文本区中回车会换行,
         若表单中无提交按钮,回车不会提交表单;
         若一个表单中有多个提交按钮,指定按钮可通过设置 formnovalidate 属性表示使用该按钮提交不需验证表单
-      <!-- 通用提交按钮 -->
-      <input type="submit" name="xx" value="xxx">
-      <!-- 自定义提交按钮 -->
-      <button type="submit" name="xx">xxx</button>
-      <!-- 图像按钮 -->
-      <input type="image" src="xx">
-    可以重置表单的按钮
+      <input type="submit" name="xx" value="xxx">  通用提交按钮
+      <input type="image" src="xx">  图像按钮
+      <button type="submit" name="xx">xxx</button> 自定义提交按钮
+    可以重置表单的按钮 
       <!-- 通用重置按钮 -->
       <input type="submit" name="xx" value="xxx">
       <!-- 自定义重置按钮 -->
       <button type="submit" name="xx">xxx</button>
+  <label for="">内容</label>                表单标签  // todo
+    PS：标签为input元素定义标注,标记; 
+      label元素不会向用户呈现特殊效果;
+    点击label,使关联表单控件获得焦点,使关联的按钮被点击 
+      PS：产生效果的前提:使用"for"属性把label绑定到另外一个元素,
+        即把"for"属性的值设置为相关元素的id属性的值.
+      显示方式关联
+        label和input进行了关联,点击label会选中input
+        <label for="man">男</label>
+        <input id="man" type='radio' name='sex' value='男'/>
+      隐式方式关联
+        将input标签放在label中也可达到如上效果「需去掉 for="" 」
+        <label><input type='radio' name='sex' value='男'/>男</label>
   <input type="类型" name="name" value="">  表单控件 
     PS：input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
       type 属性和 name 属性是必需的
@@ -850,19 +844,6 @@
     type 
       可选,IE的默认为 "button",而其他浏览器中(包括 W3C 规范)的默认值是 "submit"
       其他值和input表示按钮的type值相同
-  <label for="">内容</label>                表单标签  // todo
-    PS：标签为input元素定义标注,标记.
-      label元素不会向用户呈现特殊效果.
-    点击label,使关联表单控件获得焦点,使关联的按钮被点击
-      PS：产生效果的前提:使用"for"属性把label绑定到另外一个元素,
-        即把"for"属性的值设置为相关元素的id属性的值.
-      显示方式关联
-        label和input进行了关联,点击label会选中input
-        <label for="man">男</label>
-        <input id="man" type='radio' name='sex' value='男'/>
-      隐式方式关联
-        将input标签放在label中也可达到如上效果「需去掉 for="" 」
-        <label><input type='radio' name='sex' value='男'/>男</label>
   <textarea name="" >文本内容</textarea>    多行的文本区 
     PS：文本区中可以容纳无限数量的文本.
     cols       数字,规定文本区内的可见宽度
@@ -910,7 +891,7 @@
         <option></option>
         ...
       </optgroup>
-  表单通用属性
+  表单通用属性 
     name 
       当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式
   Remarks:
@@ -1323,7 +1304,7 @@
     e.g. <div lang="en"></div>
   使用id属性创建锚点
     在相对链接或url后面添加#id名称即可链接到锚点.
-◆character entities,字符实体 
+◆character_entities 字符实体 
   PS：HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
     若希望正确地显示预留字符,可在 HTML 源代码中使用字符实体;
     实体名称比实体编号好记,但浏览器可能并不支持所有实体名称,而支持所有实体数字;
@@ -1714,17 +1695,18 @@ Web图片
     strike
     tt
 移动端HTML 
-  让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
-    就是类似隐藏ios的上下状态栏,实现全屏,禁止弹性拖拽,全屏,修改顶部颜色等。
-    <meta name="apple-mobile-web-app-capable" content="yes">
-  清除缓存
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-  点击拨号  <a href="tel: 123456789"> </a>
-  默认调出数字键盘  
-    <input type="tel" name="" value="">     显示数字键盘
-    <input type="number" name="" value="">  显示数字键盘,且只能输入数字
+  ★meta
+  <meta name="apple-mobile-web-app-capable" content="yes">  
+    让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
+    就是类似隐藏ios的上下状态栏, 实现全屏,禁止弹性拖拽,修改顶部颜色等
+  ▼清除缓存
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <a href="tel: 123456789"> </a> 点击拨号  
+  ★默认调出数字键盘  
+  <input type="tel" name="" value="">     显示数字键盘
+  <input type="number" name="" value="">  显示数字键盘,且只能输入数字
 XML 
   XML技术一度成为存储和传输结构化数据的标准
   XPath
@@ -1741,9 +1723,28 @@ Collection
         添加属性disabled="disabled"不可更改文本、cols&rows 属性
 习题及精解
 Question & idea 
-----------------------------------------------------------------------以下待整理
+--------------------------------------------------------------------以下待整理 
 
 
+  URL,Uniform Resource Locator 也叫网址或'统一资源定位符'
+    PS：可以由单词组成,或者是因特网协议「IP」地址如:162.168.1.253;
+      用于定位万维网上的文档或其他数据
+    scheme://host.domain:port/path/fileName  语法规则
+      scheme  定义因特网服务的类型
+        http   超文本传输协议,以'http://'开头的普通网页,不加密
+        https  安全超文本传输协议,安全网页,加密所有信息交换
+        ftp    文件传输协议,用于将文件下载或上传至网站
+        file   本地计算机上的文件
+      host    定义域主机,http的默认主机是www
+      domain  定义因特网域名,如W3school.com.cn
+      port    定义主机上的端口号,http的默认端口号是80
+      path    定义服务器上的路径,若省略,则文档必须位于网站的根目录中
+      fileName  定义文档/资源的名称
+    HTML URL字符编码: 将字符转换为可通过因特网传输的格式
+      URL只能使用ASCII字符集来通过因特网进行发送,
+      由于URL常常会包含ASCII集合之外的字符,URL必须转换为有效的ASCII格式。
+      URL编码使用%其后跟随两位的十六进制数来替换非ASCII字符。
+      URL不能包含空格,URL编码通常使用+来替换空格
 
 
 

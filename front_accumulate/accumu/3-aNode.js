@@ -884,7 +884,10 @@ Stream 流
   url    
     PS：URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
     var url = require("url"); 引入url模块
-    url.parse("url"[,boolean][,boolean]); 解析url为一个对象
+    url.parse(url [,bool1] [,bool2]); 将URL解析为对象「方便后续其他操作」
+      url   字符串,传入需要解析的URL字符串
+      bool1 布尔值,可选,默认false,是否将query字段转换为对象表示
+      bool2 布尔值,可选,默认false,当URL不全时更智能的识别
       e.g. :
         url.parse("https://www.baidu.com");
         返回如下的对象
@@ -893,11 +896,11 @@ Stream 流
           slashes: true,       // 是否有协议的双斜线
           auth: null,
           host: 'www.baidu.com', // ip地址或域名
-          port: null,       // 端口,默认为80
+          port: null,       // 端口,默认为80,否则会指明
           hostname: 'www.baidu.com', // 主机名
           hash: null,   // hash值,锚点
           search: null, // 查询字符串参数
-          query: null,  // 发送给服务器的数据,使用=的键值对表示
+          query: null,  // 发送给服务器的数据,使用=的键值对表示,参数串
           pathname: '/', // 路径名,
           path: '/',     // 路径
           href: 'https://www.baidu.com/' // 完整超链接
@@ -910,17 +913,34 @@ Stream 流
       e.g. :
       url.resolve("https://imooc.com","/course/list");
       // 'https://imooc.com/course/list'
-  querystring
+  querystring 
     PS：
     var querystring = require("querystring"); 引入querystring模块
-    querystring.stringify(obj,连接符,键值对=的替换符号); 序列化
+    querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
+      obj  需序列化的对象
+      str1 字符串,可选,默认为'&',用于键值对间的连接
+      str2 字符串,可选,默认为'=',用于键值对的键值连接
       e.g. :
-      querystring.stringify({name:"Scott",course:["Java","Node"],from:""})
-      // 'name=Scott&course=Java&course=Node&from='
-    querystring.parse(str);  解析为对象格式
+        querystring.stringify({
+          name:"Scott",
+          course:["Java","Node"],
+          from:""
+        })
+        // 'name=Scott&course=Java&course=Node&from='
+    querystring.parse(str [,str1] [,str2])   解析为对象格式  
+      str  字符串,需要解析的字符串
+      str1 字符串,可选,默认为'&',指定键值对间的连接符号
+        e.g.：
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      str2 字符串,可选,默认为'=',指定键值对的键值连接符号
       e.g. :
-      querystring.parse('name=Scott&course=Java&course=Node&from=');
-      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+        querystring.parse('name=Scott&course=Java&course=Node&from=');
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
     querystring.escape(str); 转义为URL可用的字符串
       e.g. :
       querystring.escape("哈哈>._.<");
@@ -1449,7 +1469,7 @@ npm,node package manager node包管理器
     允许用户从NPM服务器下载别人编写的第三方包到本地使用.
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用.
     允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用.
-  命令
+  命令 
     ◆安装 卸载 模块 
     npm install <name> [-g] [--save-dev]  使用npm安装插件
       PS：命令提示符执行

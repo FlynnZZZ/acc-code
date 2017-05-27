@@ -2150,15 +2150,15 @@ JSONP,JSON_with_Padding 填充式JSON或参数式JSON
         document.getElementsByTagName("head")[0].appendChild(script);
       }
     </script>
-comet  服务器推送,一种更高级的AJAX技术 
-  PS： 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上;
+Comet  服务器推送,一种更高级的AJAX技术 
+  PS： 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上; 
     非常适合处理体育比赛的分数和股票报价
   长轮询和流
     PS：实现Comet的一种方式,是传统轮询(也叫短轮询)的一个翻版,
     传统轮询:浏览器定时向服务器发送请求,看有没有更新的数据,
     长轮询:页面发起一个到服务器的请求,然后服务器一直保持连接打开,直到有数据可发送,
       发送完数据之后,浏览器关闭连接,随即又发起一个到服务器的新请求,...一直循环
-    优势:所有浏览器都支持,使用XHR对象和setTimeout()就能实现
+    优势:所有浏览器都支持,使用 XHR 对象和 setTimeout() 就能实现
   HTTP流
     PS：页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
@@ -2372,7 +2372,7 @@ CORS,Cross-Origin_Resource_Sharing 跨源资源共享
     由于无论同源请求还是跨域请求都使用相同的接口,
     因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
     如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
-same-origin_policy 同源政策 
+Same-Origin_Policy 同源政策 
   PS： 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
     目的为了保证用户信息的安全,防止恶意的网站窃取数据;
@@ -2881,37 +2881,45 @@ WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」
 rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
   <link rel="prefetch" href="url">
   url可为一网页地址或图片地址
-Web_Socket     网络通信协议「HTML5」 
-  PS：目标是在一个单独的持久连接上提供全双工、双向通信
+Web_Socket     网络通信协议「HTML5」 「IE10+」
+  PS：目标是在一个单独的持久连接上提供全双工、双向通信, 
     允许与一个Web服务的连接保持打开,
-    只要有新数据,Web服务就可以把数据发送给你 [且你的代码会得到通知]
-    在JS中创建Web Socket之后,会有一个HTTP请求发送来连接
-    建立的连接会使用HTTP升级,从HTTP协议交换为Web Socket协议
-    标准的HTTP服务器无法实现Web Socket,需使用支持ws或wss协议的服务器才能正常工作
-    允许跨域通信
-  缺点:
+    只要有新数据,Web服务就可以把数据发送给客户端[且客户端代码会得到通知];
+    在JS中创建Web Socket之后,会有一个HTTP请求发送来连接,
+    建立的连接会使用HTTP升级,从HTTP协议交换为Web Socket协议,
+    标准的HTTP服务器无法实现Web Socket,需使用支持ws或wss协议的服务器才能正常工作;
+    允许跨域通信;
+    基于TCP;
+  缺点 
     Web Socket使用了自定义的协议,而制定协议的时间比制定JS API的事件还要长
     可能存在安全隐患
-  创建Web Socket:使用 WebSocket 构造函数
-    var ws =new WebSocket("ws://yourdomain/yourservice");
+  兼容性检测 
+    支持IE10及以上
+    if(window.WebSocket){
+      console.log('This browser supports WebSocket');
+    }
+    else{
+      alert('browser not supports ws');
+    }
+  var ws = new WebSocket("ws://yourdomain/yourservice")  创建Web Socket
     必须给构造函数传入绝对URL
     实例化ws对象后,浏览器就会马上尝试创建连接
   属性 方法
-    ws.readyState;  表示当前的连接状态值
+    ws.readyState;  表示当前的连接状态值 
       0  正在建立连接
       1  已经建立连接
       2  正在关闭连接
       3  已经关闭连接
-    ws.close();  关闭Web Socket连接
-    ws.send("message"); 发送数据(任意字符)
+    ws.close();  关闭连接
+    ws.send("message"); 发送数据「任意字符」
       Web Socket只能通过连接发送纯文本数据,对于复杂的数据结构,需转换为JSON字符串再发送
-  事件
-    WebSocket对象不支持DOM2级事件绑定,需使用DOM1级来定义(使用on+事件名)
-    message 当服务器向客户端发来消息时触发事件,生成event对象
-      e.data  值为返回的数据(字符串格式,需要手工解析)
-    open 在成功建立连接时触发事件
-    error 在发生错误时触发,连接不能持续
-    close 在连接关闭时触发
+  事件 
+    PS：WebSocket对象不支持DOM2级事件绑定,需使用DOM1级来定义「使用on+事件名」
+    open    在成功建立连接时触发事件
+    message 当服务器向客户端发来消息时触发事件 
+      e.data  值为返回的数据「字符串格式,需要手工解析」
+    error   在发生错误时触发,连接不能持续
+    close   在连接关闭时触发 
       e.wasClean  表示连接是否已明确关闭的布尔值
       e.code      服务器返回的数值状态码
       e.reason    服务器发回的消息,类型为字符串
@@ -2920,6 +2928,25 @@ Web_Socket     网络通信协议「HTML5」
     ActiveX HTMLFile(IE) 、
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
+  todo 
+    除了发送字符串，也可以使用 Blob 或 ArrayBuffer 对象发送二进制数据。
+    // 使用ArrayBuffer发送canvas图像数据 
+    var img = canvas_context.getImageData(0, 0, 400, 320); 
+    var binary = new Uint8Array(img.data.length); 
+    for (var i = 0; i < img.data.length; i++) { 
+      binary[i] = img.data[i]; 
+    } 
+    connection.send(binary.buffer);
+    
+    // 使用Blob发送文件 
+    var file = document.querySelector(‘input[type=”file”]’).files[0]; 
+    connection.send(file);
+    
+    如果接收的是二进制数据，需要将连接对象的格式设为blob或arraybuffer。
+    connection.binaryType = 'arraybuffer';
+    connection.onmessage = function(e) {
+      console.log(e.data.byteLength); // ArrayBuffer对象有byteLength属性
+    };
 Web_Storage    网页本地存储 「IE8+ HTML5」
   PS： JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
@@ -2963,7 +2990,7 @@ Web_Storage    网页本地存储 「IE8+ HTML5」
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-application_cache,appcache  应用离线缓存 「HTML5」
+Application_Cache,appcache  应用离线缓存 「HTML5」
   PS：让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;

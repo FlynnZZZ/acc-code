@@ -1050,7 +1050,11 @@ Selector 选择器
     selector「也叫选择器」:指明该组样式所要针对的对象,可以是一个html标签,
     也可以是自定义的id或class标签「然后再在xhtml中进行指定,进行控制即可」
     key: 选择符的样式属性,如颜色、大小、定位、浮动方式等.
-    val: 即为属性的值
+    val: 即为属性的值;
+    选择器命名大小写敏感;
+  命名规范「SlSt」
+    使用大小写字母、_、-和数字组成,
+    驼峰法间隔单词,数字和_一般用来排序区分;
   单体选择器 
     *        通配符选择器
       用于定义所有的html元素的样式.
@@ -1385,11 +1389,6 @@ Selector 选择器
       <div class="boo">字体变红 </div>
       <div class="coo">123 </div>
       .aoo~.boo{color:red;}
-    A-B  同级后序获取 
-      <div class="boo">字体未变红 </div>
-      <div class="aoo">123 </div>
-      <div class="boo">字体变红 </div>
-      .aoo-.boo{color: red;}
     A+B  同级相邻获取 
       <div class="boo">字体变红 </div>
       <div class="aoo">123 </div>

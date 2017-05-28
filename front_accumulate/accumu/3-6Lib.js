@@ -348,7 +348,7 @@ DOM 操作
           // 设置返回值(即 return的值)为属性值.
     元素属性
       ◆添加属性
-      Jelem.attr();  读写属性值 
+      Jelem.attr();  读写属性值
         Jelem.attr('属性名')     返回选定属性的属性值
         Jelem.attr('属性名',str/boolean) 设定选定属性的属性值
           e.g.:
@@ -360,8 +360,8 @@ DOM 操作
           Jelem.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
           $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      Jelem.prop();  读写属性值「和attr类似 1.6 新增」 
-        prop 和 attr 的区别 
+      Jelem.prop();  读写属性值,和attr类似  [1.6 中新增]
+        prop 和 attr 的区别
           有的属性写法要求不同,如disabled 和 checked,可写成 disabled = "disabled",
           或单独 disabled 或 disabled=true [HTML5规定,可等于任何字符,最终都为true]
           Jelem.attr('disabled') 返回 disabled
@@ -370,10 +370,6 @@ DOM 操作
           e.g.:
             Jelem.prop('checked',false);//  html中仍显示为checked,但实际上改变了
             Jelem.attr('checked',false); // html 中会去掉checked属性
-            反复切换选中状态时,
-            attr在HTML文档中有'checked'属性开关显示,但在网页视图中无切换显示,
-            prop在HTML文档中无'checked'属性开关显示,但在网页视图中有切换显示
-            
             
             <button type="button" name="button">点击我</button>
             $('button').click(function(){

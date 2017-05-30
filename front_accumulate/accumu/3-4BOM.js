@@ -271,12 +271,12 @@ window 对象
       接收一个函数作为回调,返回一个ID值
       常用操作:在函数体内使用 requestAnimationFrame 来调用该函数来实现效果.
     cancelAnimationFrame(rafId); 通过返回ID值取消动画.
-  系统对话框
+  系统对话框 
     PS：系统对话框与浏览器中显示的网页没有关系,也不包含HTML
       他们的外观由操作系统或浏览器设置决定
       显示这些对话框的时候代码会停止执行,关掉后恢复
-    alert("abc");   警告对话框,显示一条信息
-    confirm("abc"); 需要用户确认的对话框,返回一个布尔值
+    alert("abc");   警告对话框,显示一条信息 
+    confirm("abc"); 需要用户确认的对话框,返回一个布尔值 
       有确定和取消按钮,点击确定返回true,点击取消返回false
       e.g.
       if(confirm("请选择")){
@@ -889,8 +889,8 @@ window的属性对象
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
 AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML 
-  介绍
-    PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX;
+  介绍 
+    PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
       可用JS动态抓取内容构建页面;
       file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
       还支持通过其他协议传送,比如File和FTP 
@@ -898,7 +898,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       该技术能够向服务器请求额外的数据而无须刷新页面
       虽然Ajax中的x代表的是XML,但Ajax通信和数据格式无关,即该技术不一定使用XML.
       W3C也在2006年发布了AJAX的国际标准.
-    AJAX 的组成
+    AJAX 的组成 
       并非一种新的技术,而是几种原有技术的结合体.
       它由下列技术组合而成.
       使用CSS和XHTML来表示.
@@ -907,7 +907,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       使用javascript来绑定和调用.
       在上面技术中,除了XmlHttpRequest对象以外,
       其它所有的技术都是基于web标准并且已经得到了广泛使用的.
-    AJAX 运行原理:
+    AJAX 运行原理: 
       通过XmlHttpRequest对象来向服务器发http请求,
       从服务器获得数据,然后用javascript来操作DOM而更新页面.
       可以把服务器端看成一个数据接口,它返回的是一个纯文本流,
@@ -919,9 +919,14 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       对搜索引擎的支持比较弱
       AJAX 不能跨域访问;不能跨端口(即需在同一域及同一端口下)
         浏览器安全策略不允许向不同的域发送请求,请求被拒绝,而未发出.
-  Content-Type 编码类型
+    Level1 的限制
+      仅支持文本数据传输,无法传输二进制数据.
+      传输数据时,没有进度信息提示, 只能提示是否完成.
+      受浏览器 同源策略 限制,只能请求同域资源.
+      没有超时机制,不方便掌控ajax请求节奏.
+  Content-Type 编码类型 
     PS：请求头中Content-Type决定编码类型,不同的值对应不同的提交和回调处理方式;
-    XMLHttpRequest对象用常见的五种'Content-Type'发送数据的方式
+    XMLHttpRequest对象用常见的五种'Content-Type'发送数据的方式 
       PS：method都是POST方式,若是GET方式是没有请求数据体的,数据直接加在URL后面;
       接收请求时的解析方式
         text/xml：用responseXML
@@ -960,7 +965,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         */
         发送数据「不需设置Content-Type」
         req.send(dataToSend);
-  XMLHttpRequest 对象
+  XMLHttpRequest 对象 
     PS：XMLHttpRequest对象是AJAX技术实现的核心.
       通过调用该对象的属性和方法实现各种功能.
       IE5最先引入XMLHttpRequest对象到浏览器,通过MSXML库中的一个ActiveX对象实现.
@@ -969,7 +974,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       var xhr = new XMLHttpRequest();
       请求发送到服务器端,在收到响应后,响应的数据会自动填充XMLHttpRequest对象的属性
       即调用XMLHttpRequest的属性可以得到响应的信息
-    level版本说明
+    level版本说明 
       Level1
         只支持文本数据的传送,无法用来读取和上传二进制文件
         传送和接收数据时,没有进度信息,只能提示有没有完成
@@ -985,8 +990,8 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
           可以获得数据传输的进度信息
         并非所有浏览器都完整的实现了XMLHttpRequest2级规范,但都实现了其规定的部分内容
         level2兼容level1.
-    ◆请求 request
-    xhr.open(method,url[,async]); 建立请求,以备(数据)发送(而未发送数据)
+    ◆请求 request 
+    xhr.open(method,url[,async]); 建立请求,以备「数据」发送「而未发送数据」 
       PS：open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
         若对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
       method      GET、POST或PUT等 发送请求的类型
@@ -1078,7 +1083,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         if(xhr.readyState ===4 && xhr.status === 200) { }
       };
     xhr.ontimeout  超时事件,当响应时间超过指定时间触发 [Level2]
-    xhr.onprogress  在接收响应期间持续不断的触发   [Level2]
+    xhr.onprogress  在接收响应期间持续不断的触发 [Level2]
       PS：它分成上传和下载两种情况.
         下载的 progress 事件属于 XMLHttpRequest 对象,
         上传的 progress 事件属于 XMLHttpRequest.upload 对象
@@ -1101,38 +1106,40 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         event.total 是需要传输的总字节,
         event.loaded 是已经传输的字节.
         若 event.lengthComputable 不为真,则 event.total 等于0.
-    xhr.onabort   请求被中止,比如用户调用了abort()方法   [Level2]
-    xhr.onerror   请求失败   [Level2]
+    xhr.onabort   请求被中止,比如用户调用了 abort() 方法 [Level2]
+    xhr.onerror   请求失败 [Level2]
       若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
     xhr.onload    接收到完整的响应数据时触发(IE不支持) [Level2]
       Firefox中引入的load事件,用于代替readystatechange事件
       该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
-    xhr.onloadstart 在接收到响应数据的第一个字节时触发   [Level2]
-    xhr.onloadend 通信完成或触发error、abort或load事件后触发   [Level2]
-    xhr.upload   监听上传 [Level2]
-      e.g.:
-        上传文件时,XMLHTTPRequest对象的upload属性有一个progress,会不断返回上传的进度.
-          <progress min="0" max="100" value="0">0% complete</progress>
-          文件上传时,对upload属性指定progress事件回调函数,即可获得上传的进度.
-          function upload(blobOrFile) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/server', true);
-            xhr.onload = function(e) { ... };
-            // Listen to the upload progress.
-            var progressBar = document.querySelector('progress');
-            xhr.upload.onprogress = function(e) {
-              if(e.lengthComputable) {
-                progressBar.value =(e.loaded / e.total) * 100;
-                // Fallback for unsupported browsers.
-                progressBar.textContent = progressBar.value;
-              }
-            };
-            xhr.send(blobOrFile);
-          }
-          upload(new Blob(['hello world'], {type: 'text/plain'}));
-    xhr.timeout  当请求时间超过设定值后触发
+    xhr.onloadstart 在接收到响应数据的第一个字节时触发 [Level2]
+    xhr.onloadend 通信完成或触发error、abort或load事件后触发 [Level2]
+    xhr.ontimeout  当请求时间超过设定值后触发 
+    xhr.upload.onprogress  上传的进度 
+      上传文件时,会不断返回上传的进度
+      xhr.upload.onprogress 在上传阶段,每50ms触发一次,
+      文件太小网络环境好的时候是直接到100%的;
+      在 xhr.send() 之后,xhr.readystate=2 之前触发;
+      e.g.：显示上传进度
+        <progress min="0" max="100" value="0">0% complete</progress>
+        function upload(blobOrFile) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/server', true);
+          xhr.onload = function(e) { ... };
+          // Listen to the upload progress.
+          var progressBar = document.querySelector('progress');
+          xhr.upload.onprogress = function(e) {
+            if(e.lengthComputable) {
+              progressBar.value = (e.loaded / e.total) * 100;
+              // Fallback for unsupported browsers.
+              progressBar.textContent = progressBar.value;
+            }
+          };
+          xhr.send(blobOrFile);
+        }
+        upload(new Blob(['hello world'], {type: 'text/plain'}));
     ◆响应状态
-    xhr.readyState 只读,请求的状态码,异步时检测使用
+    xhr.readyState  只读,请求的状态码,异步时检测使用 
       PS：在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
       0   未初始化  尚未调用open()方法
       1   启动      已调用open() 连接已建立,但未调用send()方法
@@ -1141,7 +1148,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       4   完成      已经接收到全部响应数据,或者本次接收已失败
       Remarks:
         xhr.onreadystatechange =function(e){}, 此时 e.target 即为 xhr
-    xhr.status      只读,HTTP响应的状态码
+    xhr.status      只读,HTTP响应的状态码 
       200, OK,访问正常
       301, Moved Permanently,永久移动
       302, Move temporarily,暂时移动
@@ -1151,7 +1158,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       403, Forbidden,禁止访问
       404, Not Found,未发现指定网址
       500, Internal Server Error,服务器发生错误
-    xhr.statusText  只读,HTTP响应的文本描述,比如”200 OK“
+    xhr.statusText  只读,HTTP响应的文本描述,比如'200 OK' 
     ◆响应 response
     xhr.responseText 只读,获取字符串形式的响应数据
       PS：若本次请求没有成功或者数据不完整,该属性就会等于null.
@@ -1210,37 +1217,6 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       在终止请求后,还应该对xhr对象进行解引用操作.
       若请求已经被发送,则立刻中止请求.
     ◆其他
-    FormData 用于模拟表单「HTML5」
-      PS：为序列化表单及创建与表单格式相同的数据(用于通过xhr传输)提供了便利.
-        不用明确的设置请求头信息,
-        xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
-      var foda =new FormData([formElem]); 创建FormData对象
-        e.g.:
-        通过表单元素创建
-        var foda =new FormData(document.forms[0]);
-      foda.append("key","value"); 向FormData对象中添加信息
-        PS：当信息添加完后就可直接使用 xhr.send(foda) 进行发送
-        第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
-      e.g.:
-        模拟File控件,进行文件上传
-          function uploadFiles(url, files) {
-            var formData = new FormData();
-            for(var i = 0; i< files.length; i++) {
-              formData.append(files[i].name, files[i]);
-            }
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.onload = function(e) { ... };
-            xhr.send(formData);  // multipart/form-data
-          }
-          var inputFile =document.querySelector('input[type="file"]')
-          inputFile.addEventListener('change', function(e) {
-            uploadFiles('/server', this.files);
-          }, false);
-        加入JavaScript生成的文件
-          var content = '<a id="a"><b id="b">hey!</b></a>';
-          var blob = new Blob([content], { type: "text/xml"});
-          formData.append("webmasterfile", blob);
     接收二进制数据 
       PS：老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
       改写 MIMEType [老方法]
@@ -1260,25 +1236,25 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
           若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
           较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
           把 responseType 设为 blob,表示服务器传回的是二进制对象.
-          e.g.:
-            var xhr = new XMLHttpRequest ();
-            xhr.open ('GET', '/path/to/image.png');
-            xhr.responseType = 'blob';
-            接收数据的时候,用浏览器自带的 Blob 对象即可.
-            var blob = new Blob ([xhr.response], {type: 'image/png'});
-            注意,是读取 xhr.response,而不是 xhr.responseText.
-            你还可以将 responseType 设为 arraybuffer,把二进制数据装在一个数组里.
-            var xhr = new XMLHttpRequest ();
-            xhr.open ('GET', '/path/to/image.png');
-            xhr.responseType = "arraybuffer";
-            接收数据的时候,需要遍历这个数组.
-            var arrayBuffer = xhr.response;
-            if (arrayBuffer) {
-              var byteArray = new Uint8Array (arrayBuffer);
-              for (var i = 0; i < byteArray.byteLength; i++) {
-                // do something
-              }
+        e.g.:
+          var xhr = new XMLHttpRequest ();
+          xhr.open ('GET', '/path/to/image.png');
+          xhr.responseType = 'blob';
+          接收数据的时候,用浏览器自带的 Blob 对象即可.
+          var blob = new Blob ([xhr.response], {type: 'image/png'});
+          注意,是读取 xhr.response,而不是 xhr.responseText.
+          你还可以将 responseType 设为 arraybuffer,把二进制数据装在一个数组里.
+          var xhr = new XMLHttpRequest ();
+          xhr.open ('GET', '/path/to/image.png');
+          xhr.responseType = "arraybuffer";
+          接收数据的时候,需要遍历这个数组.
+          var arrayBuffer = xhr.response;
+          if (arrayBuffer) {
+            var byteArray = new Uint8Array (arrayBuffer);
+            for (var i = 0; i < byteArray.byteLength; i++) {
+              // do something
             }
+          }
     e.g.:
       使用FormData接口上传文件
         <form id="file-form" action="handler.php" method="POST">
@@ -1305,7 +1281,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         xhr.open('POST', 'myserver/uploads');
         xhr.setRequestHeader('Content-Type', file.type);
         xhr.send(file);
-  同步&异步
+  同步&异步 
     同步需等待服务器响应后,才能执行后续代码;
     异步:设置响应函数,等待响应后在处理,从而可继续执行后续代码
     使用同步方式
@@ -1317,7 +1293,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       xhr.onreadystatechange =function(){}; //设置响应事件程序
       xhr.open('get','demo.php',true)    //准备发送请求
       xhr.send();                        //发送请求
-  HTTP 协议
+  HTTP 协议 
     PS：计算机通过网络进行通信的规则
       是一种无状态协议,不建立持久的连接
       使客户(浏览器)能够向web服务器请求信息和服务
@@ -1736,9 +1712,40 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         t.delete("709")
 XMLHttpRequest_Level2 「IE10+ HTML5」 
   IE10以下的版本不支持.它有自己相关的方法来实现.
-  需要在服务器端进行相关的改动
+  需要在服务器端进行相关的改动 
     header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
     header("Access-Control-Allow-Methods:GET,POST");
+FormData 用于模拟表单「HTML5」
+  PS：为序列化表单及创建与表单格式相同的数据,用于通过xhr传输提供了便利.
+    不用明确的设置请求头信息,
+    xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
+  var fData = new FormData([formElem]); 创建FormData对象
+    e.g.:
+    通过表单元素创建
+    var fData = new FormData(document.forms[0]);
+  fData.append("key","value"); 向FormData对象中添加信息
+    PS：当信息添加完后就可直接使用 xhr.send(fData) 进行发送
+    第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
+  e.g.:
+    模拟File控件,进行文件上传 
+      function uploadFiles(url, files) {
+        var formData = new FormData();
+        for(var i = 0; i< files.length; i++) {
+          formData.append(files[i].name, files[i]);
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.onload = function(e) { };
+        xhr.send(formData);  // multipart/form-data
+      }
+      var inputFile = document.querySelector('input[type="file"]');
+      inputFile.addEventListener('change', function(e) {
+        uploadFiles('/server', this.files);
+      }, false);
+    加入JavaScript生成的文件 
+      var content = '<a id="a"><b id="b">hey!</b></a>';
+      var blob = new Blob([content], { type: "text/xml"});
+      formData.append("webmasterfile", blob);
 Fetch 用来取代XMLHttpRequest的一种新规范 
   PS： Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
@@ -2881,7 +2888,7 @@ WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」
 rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
   <link rel="prefetch" href="url">
   url可为一网页地址或图片地址
-Web_Socket     网络通信协议「HTML5」 「IE10+」
+WebSocket     网络通信协议「HTML5」 「IE10+」
   PS：目标是在一个单独的持久连接上提供全双工、双向通信, 
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给客户端[且客户端代码会得到通知];
@@ -2890,11 +2897,14 @@ Web_Socket     网络通信协议「HTML5」 「IE10+」
     标准的HTTP服务器无法实现Web Socket,需使用支持ws或wss协议的服务器才能正常工作;
     允许跨域通信;
     基于TCP;
+    HTTP 协议,通信只能由客户端发起,做不到服务器主动向客户端推送信息;
+    可以发送文本,也可以发送二进制数据;
+    没有同源限制,客户端可以与任意服务器通信;
   缺点 
     Web Socket使用了自定义的协议,而制定协议的时间比制定JS API的事件还要长
     可能存在安全隐患
   兼容性检测 
-    支持IE10及以上
+    PS：2008 年诞生,2011 年成为国际标准; 支持IE10及以上
     if(window.WebSocket){
       console.log('This browser supports WebSocket');
     }
@@ -2904,12 +2914,34 @@ Web_Socket     网络通信协议「HTML5」 「IE10+」
   var ws = new WebSocket("ws://yourdomain/yourservice")  创建Web Socket
     必须给构造函数传入绝对URL
     实例化ws对象后,浏览器就会马上尝试创建连接
-  属性 方法
-    ws.readyState;  表示当前的连接状态值 
+  属性 方法 
+    ws.readyState; 表示当前的连接状态值 
       0  正在建立连接
       1  已经建立连接
       2  正在关闭连接
       3  已经关闭连接
+    ws.binaryType  指定收到的二进制数据类型 
+      除了动态判断收到的数据类型,也可以使用binaryType属性指定
+      // 收到的是 blob 数据
+      ws.binaryType = "blob";
+      ws.onmessage = function(e) {
+        console.log(e.data.size);
+      };
+      // 收到的是 ArrayBuffer 数据
+      ws.binaryType = "arraybuffer";
+      ws.onmessage = function(e) {
+        console.log(e.data.byteLength);
+      };
+    ws.bufferedAmount  表示还有多少字节的二进制数据没有发送出去
+      可以用来判断发送是否结束
+      var data = new ArrayBuffer(10000000);
+      ws.send(data);
+      if (ws.bufferedAmount === 0) {
+        // 发送完毕
+      } 
+      else {
+        // 发送还没结束
+      }
     ws.close();  关闭连接
     ws.send("message"); 发送数据「任意字符」
       Web Socket只能通过连接发送纯文本数据,对于复杂的数据结构,需转换为JSON字符串再发送
@@ -2929,7 +2961,7 @@ Web_Socket     网络通信协议「HTML5」 「IE10+」
     基于 multipart 编码发送 XHR 、
     基于长轮询的 XHR
   todo 
-    除了发送字符串，也可以使用 Blob 或 ArrayBuffer 对象发送二进制数据。
+    除了发送字符串,也可以使用 Blob 或 ArrayBuffer 对象发送二进制数据。
     // 使用ArrayBuffer发送canvas图像数据 
     var img = canvas_context.getImageData(0, 0, 400, 320); 
     var binary = new Uint8Array(img.data.length); 
@@ -2942,7 +2974,7 @@ Web_Socket     网络通信协议「HTML5」 「IE10+」
     var file = document.querySelector(‘input[type=”file”]’).files[0]; 
     connection.send(file);
     
-    如果接收的是二进制数据，需要将连接对象的格式设为blob或arraybuffer。
+    如果接收的是二进制数据,需要将连接对象的格式设为blob或arraybuffer。
     connection.binaryType = 'arraybuffer';
     connection.onmessage = function(e) {
       console.log(e.data.byteLength); // ArrayBuffer对象有byteLength属性

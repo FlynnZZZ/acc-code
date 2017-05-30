@@ -21,9 +21,9 @@ Framework 框架
 ★jQuery 
 说明篇 :快速简洁的JavaScript库 
   PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
-  版本
+  版本 
     2.0 版本不支持ie 6/7/8
-  核心特性总结：
+  核心特性总结： 
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
     拥有便捷的插件扩展机制和丰富的插件.
@@ -34,10 +34,10 @@ Framework 框架
       且$("#aoo")仍为一个对象,
       if ($("#aoo")) { } 不可用来做为节点是否存在的判断,
       可使用$("#aoo").length 或 $("#aoo")[0] 来判断
-  封装库方法
+  封装库方法 
     函数式封装
     对象式封装
-  封装库-连缀 :一条语句同时设置一个或多个节点两个或两个以上的操作
+  封装库-连缀 :一条语句同时设置一个或多个节点两个或两个以上的操作 
       实现连缀操作,需要改写库函数的封装方式,使用函数式对象写法
       e.g.
         <div id="box"> 123 </div>
@@ -82,7 +82,7 @@ Framework 框架
           }
           return this;
         }
-  jQuery 引入
+  jQuery 引入 
     本地引入
       下载jQuery的JS文件到本地,通过script标签引入
     引入网络文件
@@ -104,7 +104,7 @@ Framework 框架
     $ 或 jQuery 符号冲突决解
       var $jq = jQuery.noConflict(); 
       $jq('#id').show();
-  jQuery 配置
+  jQuery 配置 
     jQuery.noConflict()   移交$的控制权
       var J = jQuery.noConflict(); 自定义快捷方式为J
     jQuery(function(J){
@@ -121,7 +121,7 @@ DOM 操作
     在jQuery中 $ 等价于 jQuery,$为快捷方式;
   Jelem 创建 
     $('<div>') 创建一个div Jelem
-    Jelem.clone(bool) 复制元素
+    Jelem.clone([bool]) 复制元素
       bool   布尔值,默认为false,若为true,则复制 Event 和 Data
   Jelem 获取 
     $("selector"); 通过选择器获取Jelem 
@@ -395,7 +395,7 @@ DOM 操作
       Jelem.data(key,value) 绑定自定义数据 [DOM中无任何变化]
         e.g.:
           $('#box').data('name', 'TG'); 
-      Jelem.data(key) 读取自定义数据
+      Jelem.data(key) 读取自定义数据 
         e.g.:
           <div class="aoo" data-id='111'> 23423 </div>
           var Jelem = $('.aoo');
@@ -432,7 +432,7 @@ DOM 操作
       Jelem.scrollTop()   读写元素相对滚动条顶部的偏移
         PS：此处的Jelem为拥有滚动条的元素;
       Jelem.scrollLeft()  读写元素相对滚动条左侧的偏移
-      Jelem.offset()    读写元素相对document「可视区左上角」的top和left 
+      Jelem.offset([{top:num1,left:num2}]) 读写元素相对document「可视区左上角」的top和left 
         PS：此方法只对可见元素有效;返回包含top和left属性的对象
         e.g.:
           $(".a").offset(); // {top: 24, left: 0}
@@ -452,17 +452,18 @@ DOM 操作
           var pos = $('.child').position();
           console.log(pos); //  Object {top: 10, left: 20}
       ◆其他信息
-      Jelem.size();        元素个数
-      Jelem.index([Jelem]);  获取元素在其父元素Jelem中的下标「从1开始」
+      Jelem.size()         元素个数
+      Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
-        e.g.:
-          点击获取当前为第几个li
-          $("li").click(function(){ console.log( $(this).index()); });
+        e.g.: 点击获取当前为第几个li 
           <ul>
             <li>aaaaa</li>
             <li>bbbbb</li>
             <li>ccccc</li>
           </ul>
+          $("li").click(function(){ 
+            console.log( $(this).index()); 
+          });
       Jelem1.is(Jelem2) 判断
         Jelem1.is(Jelem2) 判断两个节点是否相同
         Jelem1.is(":checked") 判断是否被选中
@@ -470,7 +471,7 @@ DOM 操作
       Jelem.focus();   获得焦点
       Jelem.blur();    失焦
       Jelem.click();   点击元素 「会触发事件」
-      Jelem.select();  选中文字
+      Jelem.select();  选中文字 
         选中如input、textarea等元素类的文字,
         不可选中因增加contenteditable属性而可编辑的元素的文字;
     性能优化
@@ -491,7 +492,7 @@ DOM 操作
         //... 许多复杂的操作
         $container.append($element);
   Animation 动画
-    speed    数值,速度,过渡的时间,默认为0「单位毫秒」
+    time 数值,速度,过渡的时间,默认为0「单位毫秒」
       number (比如 1500)
       "normal"
       "slow"
@@ -500,23 +501,23 @@ DOM 操作
       "linear"   匀速
     cfoo 回调函数,在动画执行完后调用 
     ◆可见性变化
-    Jelem.hide([speed,cfoo]);   隐藏元素
-      cfoo 可选,hide之后执行的函数 (前提为设置了speed,否则不可选)
-    Jelem.show([speed,cfoo]);   显示元素
-    Jelem.fadeIn(speed,cfoo)        元素的淡入
-    Jelem.fadeOut(speed,cfoo)       元素的淡出
-    Jelem.fadeToggle(speed,cfoo);   开/关淡入淡出
-    Jelem.fadeTo(speed,opacity,cfoo)   元素透明度变化到opacity
+    Jelem.hide([time,cfoo]);   隐藏元素
+      cfoo 可选,hide之后执行的函数「前提为设置了time,否则不可选」
+    Jelem.show([time,cfoo]);   显示元素
+    Jelem.fadeIn(time,cfoo)        元素的淡入
+    Jelem.fadeOut(time,cfoo)       元素的淡出
+    Jelem.fadeToggle(time,cfoo);   开/关淡入淡出
+    Jelem.fadeTo(time,opacity,cfoo)   元素透明度变化到opacity 
       opacity 透明度,0-1 之间取值
     ◆尺寸变化
-    Jelem.slideDown(speed,cfoo)   高度变化
-    Jelem.slideUp(speed,cfoo)     高度变化
-    Jelem.slideToggle(speed,cfoo) 开/关高度变化
-    Jelem.toggle([speed][,cfoo]);     开/关长宽尺寸变化
+    Jelem.slideDown(time,cfoo)   高度变化
+    Jelem.slideUp(time,cfoo)     高度变化
+    Jelem.slideToggle(time,cfoo) 开/关高度变化
+    Jelem.toggle([time][,cfoo]);     开/关长宽尺寸变化
     ◆自定义变化
-    Jelem.animate(params,duration,speed,cfoo)  定义变化及变化的过程
-      params   必须,表示元素的最终样式状态
-      duration 可选,执行时间
+    Jelem.animate(params,time[,duration][,cfoo])  定义变化及变化的过程
+      params 必须,表示元素的最终样式状态
+      time   可选,执行时间 
         "normal" ,默认值
         毫秒 （比如 1500）
         "slow"
@@ -539,9 +540,9 @@ DOM 操作
           }
         }
       );
-    Jelem.stop(bool1,bool2)             停止动画
+    Jelem.stop[(bool1][,bool2])             停止动画
       bool1 可选,默认为false,表示当元素有多个动画时只停止第一个动画;true则停止所用动画
-      bool2 可选,表示停止后的动画位置,默认false表示在执行到的位置,true表示到最后
+      bool2 可选,默认false表示在执行到的位置,表示停止后的动画位置,true表示到最后
     ◆其他
     jQuery.fx.off = true   禁用jQuery动画效果
     e.g.:
@@ -606,7 +607,7 @@ DOM 操作
       })
 Event 事件 
   PS：Jelem绑定事件,则为列表中的每个对象进行了绑定
-  ◆事件绑定与取消
+  ◆事件绑定与取消 
     PS：bind,live,delegate,on
       其中 elem.eventName 为bind的简写.
       对应解除为 unbind、die、undelegate、off
@@ -742,8 +743,7 @@ Event 事件
           return false; //阻止链接跳转
         })
     event.relatedTarget 
-      PS：
-        标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
+      PS： 标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
         相关元素通过 event.relatedTarget 属性来获取.
         event.relatedTarget 在 mouseover 中相当于IE浏览器的 event.fromElement,
         在 mouseout 中相当于IE浏览器的 event.toElement,
@@ -772,8 +772,7 @@ Event 事件
         })
         以上代码加载到页面中,用鼠标单击页面时,单击左、中、右键分别返回1、2、3.
     event.metaKey 属性
-      PS：
-        针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
+      PS： 针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
         规定 event.metaKey() 为键盘事件中获取<ctrl>按键.
     event.originalEvent 指向原始的事件对象
   window.onload 与 $(document).ready(function () {}) 的区别
@@ -2407,8 +2406,5 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
-
-
-
 
 

@@ -1091,6 +1091,225 @@ PC端
     var content1 = $('.member .wrapper>.content');
     var item1 = $('.member .content>.item');
     slider(wrapper1,content1,item1);
+  水平轮播
+    <section class="wrapper">
+      <div class="content">
+        <!-- 最少4张图 -->
+        <div class="item"> <img src="./imgs/001.jpg" alt=""> </div>
+        <div class="item"> <img src="./imgs/002.jpg" alt=""> </div>
+        <div class="item"> <img src="./imgs/003.jpg" alt=""> </div>
+        <div class="item"> <img src="./imgs/004.jpg" alt=""> </div>
+        <!-- <div class="item"> <img src="./imgs/004.jpg" alt=""> </div> -->
+        <!-- <div class="item"> <img src="./imgs/004.jpg" alt=""> </div> -->
+      </div>
+      <div class="indicate">
+        <!-- <span>1</span> -->
+      </div>
+    </section>
+    .wrapper{
+      overflow: hidden;
+      height: 350*2px;
+      position: relative;
+      color: #fff;
+      .content{
+        position: absolute;
+        top: 0;
+        left: -99999px; right: -99999px;
+        // width: 100%;
+        height: 100%;
+        margin: auto;
+        text-align: center;
+        white-space: nowrap;
+        font-size: 0;
+        margin-top: 30px;
+        margin-left: -10*2px;
+        // transition:all 1s ease;
+        .item{
+          vertical-align: middle;
+          width: 300*2px;
+          height: 300*2px;
+          display: inline-block;
+          margin-left: 10*2px;
+          background-color: #b89981;
+          box-sizing: border-box;
+          overflow: hidden;
+          position: relative;
+          img{ 
+            height: 100%;
+            position: absolute;
+            top: 0;left: 0;
+           }
+        }
+      }
+      .indicate{
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        text-align: center;
+        span{
+          line-height: 3em;
+          margin: 0 5px;
+          font-size: 20px;
+          color: #000;
+          display: inline-block;
+          width: 50px;height: 10px;
+          background-color: #4a889e;
+        }
+        
+      }
+    }
+    .current{
+      background-color: #be788a !important;
+    }
+
+    var moveTime = 250;
+    var resizeTime = 200; 
+    var showTime = 2500;
+    var rate = 0.5;
+    
+    var wrapper1 = $('.wrapper');
+    var content1 = $('.wrapper>.content');
+    var item1 = $('.content>.item');
+    var itemNum = item1.length;
+    var indicate = $('.indicate');
+    
+    var cal = 0;
+    var wrapperWidth = wrapper1.width();
+    var itemWidth = item1.width();
+    var itemHeight = item1.height();
+    var itemBigWidth = itemWidth*(1 + rate);
+    var itemBigHeight = itemHeight*(1 + rate);
+    var halfDif = (itemBigWidth - itemWidth)/2;
+    var itemMargin = item1.outerWidth(true) - item1.innerWidth();
+    var itemOuerwith = itemWidth + itemMargin;
+    var sideWidth = (wrapperWidth - itemBigWidth)/2
+    var onceStepLeft = itemOuerwith -  sideWidth ;
+    var onceStepRight = 0;
+    var left = 0;
+    
+    
+    // 初始化
+    function midBig(){
+      if (itemNum % 2 == 0) {
+        content1.css('margin-left',-itemOuerwith - sideWidth/2);
+      }
+      
+      var htm = '<span></span>';
+      var html = '';
+      for (var i = 0; i < itemNum; i++) {
+        html +=htm;
+      }
+      indicate.append(html);
+      indicate.find('span').eq(cal).addClass('current');
+      
+      var num = Math.floor(itemNum/2) + 1 ;
+      content1.find('.item').eq(num-1).css({
+        'width': itemBigWidth,
+        "height" : itemBigHeight
+      });
+    };
+    midBig();
+    var left ,right ;
+    var direction , direction1;
+    var over = true;
+    
+    function moveLeft(){
+      over = false;
+      function ml(){
+        cal = (cal+1)%itemNum;
+        var elem = content1.find('.item').eq(0);
+        var elem1 = elem.clone().css({
+          'width' : 0,
+          'margin-left':0,
+        });
+        content1.find('.item').animate({
+          'width': itemWidth,
+          "height" : itemHeight
+        },resizeTime);
+        content1.append(elem1);
+        
+        elem.animate({
+          'width' : 0,
+          'margin-left':0,
+        },moveTime,"linear",
+        function(){
+          elem.remove();
+          elem1.animate({
+            'width' : itemWidth,
+            'margin-left':itemMargin
+          },moveTime,"linear",function(){
+            var num = Math.floor(itemNum/2) + 1 ;
+            content1.find('.item').eq(num-1).animate({
+              'width': itemBigWidth,
+              "height" : itemBigHeight
+            },resizeTime,function(){
+              over = true;
+            });
+            indicate.find('span').removeClass('current');
+            indicate.find('span').eq(cal).addClass('current');
+          })
+        });
+      }
+      ml();
+      left = setInterval(ml,showTime);
+    }
+    function moveRight(){
+      function mr(){
+        cal = (cal-1+itemNum)%itemNum;
+        var elem = content1.find('.item').eq(itemNum-1);
+        var elem1 = elem.clone().css({
+          'width' : 0,
+          'margin-left':0,
+        });
+        content1.find('.item').animate({
+          'width': itemWidth,
+          "height" : itemHeight
+        },resizeTime);
+        content1.prepend(elem1);
+        
+        elem.animate({
+          'width' : 0,
+          'margin-left':0,
+        },moveTime,"linear",
+        function(){
+          elem.remove();
+          elem1.animate({
+            'width' : itemWidth,
+            'margin-left':itemMargin
+          },moveTime,"linear",function(){
+            var num = Math.floor(itemNum/2) + 1 ;
+            content1.find('.item').eq(num-1).animate({
+              'width': itemBigWidth,
+              "height" : itemBigHeight
+            },resizeTime);
+            indicate.find('span').removeClass('current');
+            indicate.find('span').eq(cal).addClass('current');
+          })
+        });
+      }
+      mr();
+      right = setInterval(mr,showTime);
+    }
+    moveLeft();
+    
+    content1.on("touchstart",function(e){
+       direction = e.originalEvent.changedTouches[0].pageX
+      clearInterval(left);
+      clearInterval(right);
+    })
+    content1.on("touchend",function(e){
+      if (over) {
+        direction1 = e.originalEvent.changedTouches[0].pageX
+        var dif = direction1 - direction;
+        if (dif>0) {
+          moveRight();
+        }
+        else {
+          moveLeft();
+        }
+        
+      }
+    })
 --------------------------------------------------------------------------------
 功能逻辑 
   一container中多个宽度相等item,多个item的总高度大于container的,
@@ -1634,7 +1853,6 @@ Question & Idea
     scaleElem(Jactiv6,Jscaler1,Jwrap1,{width:true,height:true,direction:'lb'});
     scaleElem(Jactiv7,Jscaler1,Jwrap1,{width:true,height:true,direction:'rt'});
     scaleElem(Jactiv8,Jscaler1,Jwrap1,{width:true,height:true,direction:'rb'});
-
 
 
 

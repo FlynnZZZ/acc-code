@@ -174,7 +174,7 @@ DOM,Document_Object_Model文档对象模型
       document 对象是 HTMLDocument(继承自Document类型)的一个实例.
       表示整个 HTML 页面.
       document 对象也是window对象的一个属性,因此可以作为全局对象来访问
-    ◆节点属性
+    ◆节点属性 
       document.nodeType;       // 9
       document.nodeName;       // "#document"
       document.nodeValue;      // null
@@ -2130,7 +2130,7 @@ event 事件
       change 和 blur 事件的关系:在不同的浏览器中触发的先后顺序不一致
     select  选中文本框的文本松开鼠标时触发
       使用 elem.select()也会触发
-  表单发送的规则
+  表单发送的规则 
     对表单字段的名称和值进行URL编码,使用&分割
     不发送禁用的表单字段
     只发送勾选的复选框和单选按钮
@@ -2192,7 +2192,7 @@ event 事件
     optElem.value  选项的值,等价于HTML中的value特性
   checkbox 多选框控件
     checkboxElem.checked  可写,返回一个布尔值,表示用户是否选中
-  radio 单选框控件
+  radio 单选框控件 
     radioElem.checked 
       e.g.:只有通过遍历,才能获得用户选中的那个选择框的value。
         <input type="radio" name="gender" value="Male"> Male </input>
@@ -2211,6 +2211,61 @@ event 事件
         }
         </script>
         若用户未做任何选择,则selected就为undefined。
+  Extend：利用iframe让form的submit不刷新页面进行上传
+    form的submit会导致页面的刷新,把form的target指定到一个看不见的iframe,
+    那么返回的数据就会被这个iframe接受,于是乎就只有这个iframe会刷新。
+    而它又是看不见的,用户自然就感知不到了。
+    
+    window.__iframeCount = 0;
+    var hiddenframe = document.createElement("iframe");
+    var frameName = "upload-iframe" + ++window.__iframeCount;
+    hiddenframe.name = frameName;
+    hiddenframe.id = frameName;
+    hiddenframe.setAttribute("style", "width:0;height:0;display:none");
+    document.body.appendChild(hiddenframe);
+    
+    var form = document.getElementById("myForm");
+    form.target = frameName;
+    然后响应iframe的onload事件,获取response
+    hiddenframe.onload = function(){
+      // 获取iframe的内容,即服务返回的数据
+      var resData = this.contentDocument.body.textContent || this.contentWindow.document.body.textContent;
+      // 处理数据 。。。
+      
+      //删除iframe
+      setTimeout(function(){
+        var _frame = document.getElementById(frameName);
+        _frame.parentNode.removeChild(_frame);
+      }, 100);
+    }
+    
+    JSONP 实现跨域
+      若文件上传的地址与当前页面不在同一个域下就会出现跨域问题,
+      导致iframe的onload回调里的访问服务返回的数据失败。
+      首先在上传之前注册一个全局的函数,把函数名发给服务器。
+      服务器需要配合在response里让浏览器直接调用这个函数。
+      // 生成全局函数名,避免冲突
+      var CALLBACK_NAME = 'CALLBACK_NAME';
+      var genCallbackName = (function () {
+        var i = 0;
+        return function () {
+          return CALLBACK_NAME + ++i;
+        };
+      })();
+      
+      var curCallbackName = genCallbackName();
+      window[curCallbackName] = function(res) {
+        // 处理response 。。。
+        
+        // 删除iframe
+        var _frame = document.getElementById(frameName);
+        _frame.parentNode.removeChild(_frame);
+        // 删除全局函数本身
+        window[curCallbackName] = undefined;
+      }
+      
+      // 如果已有其他参数,这里需要判断一下,改为拼接 &callback=
+      form.action = form.action + '?callback=' + curCallbackName;        
 其他标签脚本 
   <a href="#"></a> 超链接
     URL 协议
@@ -3086,7 +3141,7 @@ SVG,Scalable_Vector_Graphics    可缩放矢量图
           </g>
         </g>
       </svg>
-File_API,文件和二进制数据的操作 「HTML5+」
+File_API 文件和二进制数据的操作 「HTML5+」
   PS： HTML5在DOM中为文件输入元素添加了一个files集合,
     文件输入元素如 <input type="file" id="myFile" />,
     通过文件输入字段选择文件时,files集合中将包含一组File对象.
@@ -3205,6 +3260,25 @@ File_API,文件和二进制数据的操作 「HTML5+」
         console.log(e.target.result);
       }
       reader.readAsText(blob);
+      
+      读取文件内容后直接以二进制格式上传
+      var reader = new FileReader();
+      reader.onload = function(){
+        xhr.sendAsBinary(this.result);
+      }
+      // 把从input里读取的文件内容,放到fileReader的result字段里
+      reader.readAsBinaryString(file);
+      不过chrome已经把XMLHttpRequest的sendAsBinary方法移除了,所以自行实现
+      XMLHttpRequest.prototype.sendAsBinary = function(text){
+        var data = new ArrayBuffer(text.length);
+        var ui8a = new Uint8Array(data, 0);
+        for (var i = 0; i < text.length; i++){ 
+          ui8a[i] = (text.charCodeAt(i) & 0xff);
+        }
+        this.send(ui8a);
+      }
+      将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
+      再把整个数组发送出去。
   URL 对象         用于对二进制数据生成URL
     PS：用于生成指向File对象或Blob对象的URL,
       同样的二进制数据, 每调用一次URL.createObjectURL方法,就会得到一个不一样的URL,
@@ -3558,7 +3632,7 @@ Web_Workers 工作线程 「HTML5」
       使用 is 属性来声明一个扩展的类型
       Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
         const hello = document.createElement('button', 'button-hello')
--------------------------------------------------------------------------待整理
+------------------------------------------------------------------------待整理 
   套接字
   
   <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>

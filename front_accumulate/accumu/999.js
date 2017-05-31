@@ -578,7 +578,14 @@ fileNum : 21
 
 
 
-
+'-echo($1)':
+  'prefix': 'echokh'
+  'body': 'echo($1)'
+'-<?php 换行 ?>':
+  'prefix': 'phpNextLine'
+  'body': """<?php 
+    $1
+  ?>"""
 
 
 

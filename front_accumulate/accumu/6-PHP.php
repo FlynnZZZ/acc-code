@@ -53,6 +53,9 @@
       下载地址：https://www.apachefriends.org/zh_cn/index.html。
 ---------------------------------------------------------------------------
 数据类型 
+  PS：由于变量占用的空间单元不一样,分成几种数据类型;
+    8种原始类型,其中包括四种标量类型、两种复合类型和两种特殊类型;
+  ◆标量类型
   NULL    空值
     表示变量没有值,
     NULL 是数据类型为 NULL 的值。
@@ -63,35 +66,39 @@
       $x = null;
       var_dump($x); // NULL
       ?>
-  Boolean 布尔型
-    布尔型可以是 true 或 false
-    布尔型通常用于条件判断;
-    $x=true;
-    $y=false;
-  Integer 整型
-    PS：整数是一个没有小数的数字。
-    整数规则:
-      整数必须至少有一个数字 (0-9),
-      整数不能包含逗号或空格,
-      整数是没有小数点的,
-      整数可以是正数或负数,
-      整型可用三种格式来指定：十进制、十六进制(以 0x 为前缀)或八进制(前缀为 0);
-    e.g.:
-      <?php 
-      $x = 5985;
-      var_dump($x); // int(5985)
-      echo "<br>"; 
-      $x = -345; 
-      var_dump($x); // int(-345)
-      echo "<br>"; 
-      $x = 0x8C;    // 十六进制数
-      var_dump($x); // int(140) 
-      echo "<br>";
-      $x = 047;     // 八进制数
-      var_dump($x); // int(39)
-      ?>
+  Boolean 布尔型 
+    不区分大小写,可以是 true 和 false「或者 TRUE 和 FALSE」, 通常用于条件判断;
+    <?php 
+    $x = TRUE;
+    $y = false;
+    $man = '男';
+    echo $bool = $man == '男'; // 1
+    echo $x; // 1
+    echo $y; // 无输出
+    ?>
+  Integer 整型 
+    PS：整数是一个没有小数的数字; 
+      可用三种格式来指定：十进制、十六进制(以 0x 为前缀)或八进制(前缀为 0);
+    规则 
+      必须至少有一个数字 (0-9),
+      不能包含逗号或空格,
+      没有小数点,
+      可以是正数或负数,
+    <?php 
+    $x = 5985;
+    var_dump($x); // int(5985)
+    echo "<br>"; 
+    $x = -345; 
+    var_dump($x); // int(-345)
+    echo "<br>"; 
+    $x = 0x8C;    // 十六进制数
+    var_dump($x); // int(140) 
+    echo "<br>";
+    $x = 047;     // 八进制数
+    var_dump($x); // int(39)
+    ?>
   Float   浮点型
-    浮点数是带小数部分的数字,或是指数形式。
+    带小数部分的数字,或是指数形式「使用e或E来表示,E的英文是exponent,指数的意思」
     <?php 
     $x = 10.365;
     var_dump($x); // float(10.365) 
@@ -218,26 +225,22 @@
       }
       ?>
       this指向当前对象实例的指针
-  相关函数和运算符
-    var_dump()  返回变量的数据类型和值
-数据 
+数据量 
   变量: 用于存储信息的"容器"
-    PS：PHP 是一门弱类型语言
-      PHP 会根据变量的值,自动把变量转换为正确的数据类型。
-    命名规则：
+    PS：PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
+    命名规则 
       以 $ 符号开始,后面跟着变量的名称,
-      变量必须以字母或者下划线字符开始,
-      只能包含字母数字字符以及下划线 [A-z、0-9 和 _],不能包含空格,
-      变量名区分大小写 [$y 和 $Y 是两个不同的变量] ;
-    创建变量
+      只能包含'字母'、'数字'、汉字及下划线"_" [A-z、0-9 和 _] [不能包含空格],
+      只能以'字母'或者下划线'_'开始,
+      区分大小写 [$y 和 $Y 是两个不同的变量] ;
+    创建变量 
       PHP 没有声明变量的命令,在第一次赋值时被创建;
-      e.g.:
-        <?php
-          $txt = "Hello world!" ;
-          $x = 5 ;
-          $y = 10.5 ;
-          echo '这是一个  $x';
-        ?>
+      <?php
+        $txt = "Hello world!" ;
+        $x = 5 ;
+        $y = 10.5 ;
+        echo '这是一个 '.$x;
+      ?>
     作用域
       有四种不同的变量作用域：    
       global 全局变量: 在所有函数外部定义的变量
@@ -1024,7 +1027,7 @@ OOP,Object-oriented_programming 面向对象
     // BaseClass 类中构造方法
     ?>
 运算符 
-  .   并置运算符,用于把两个字符串值连接起来
+  .   并置运算符,用于连接字符串 
     PHP 中,只有一个字符串运算符
     e.g.:
       <?php 
@@ -1032,31 +1035,31 @@ OOP,Object-oriented_programming 面向对象
       $txt2 = "bb!"; 
       echo $txt1 . " " . $txt2;  // aa bb!
       ?>
-  .=  连接赋值
+  .=  连接赋值 
     a .= b 等价于 a = a . b 连接两个字符串
-  !=  不等于
+  !=  不等于 
     5 != 8 ; //  true
-  <>  不等于
+  <>  不等于 
     5 <> 8 ; // true
   !== 不恒等于
     x !== y  如果 x 不等于 y,或它们类型不相同,则返回 true
     5!=="5" 返回 true
   ◆逻辑运算
-    and 与
-    &&  与
-    or  或
-    ||  或
-    !   非
-    xor 异或
+  and 与
+  &&  与
+  or  或
+  ||  或
+  !   非
+  xor 异或
   ◆数组运算符
-    +     集合
-    ==    相等  
-      具有相同的键/值对,则返回 true
-    ===   恒等  
-      具有相同的键/值对,且顺序相同类型相同,则返回 true
-    !=    不相等
-    <>    不相等
-    !== y 不恒等
+  +     集合
+  ==    相等  
+    具有相同的键/值对,则返回 true
+  ===   恒等  
+    具有相同的键/值对,且顺序相同类型相同,则返回 true
+  !=    不相等
+  <>    不相等
+  !== y 不恒等
   <=> 组合比较符 [PHP7+]
     大于 返回1;等于 返回0;小于 返回-1;
     <?php
@@ -1075,13 +1078,14 @@ OOP,Object-oriented_programming 面向对象
     echo "a" <=> "b"; // -1
     echo "b" <=> "a"; // 1
     ?>  
-  intdiv()  整除  [PHP7+]
-    e.g.:
-      <?php
-      var_dump(intdiv(10, 3)); // int(3)
-      ?>
-语句 
+全局函数与语句 
   PS：语句间使用分号;分割,且不可省略
+  var_dump(val); 返回变量的数据类型和值
+  intdiv(val1,val2);  返回val1整除val2的值  [PHP7+]
+    <?php
+    var_dump(intdiv(10, 3)); // int(3)
+    ?>
+  memory_get_usage()-val1-val2 ..; 获取当前PHP消耗的内存
   echo val1[,val2 ...]; 文本输出
     echo 语言结构,使用的时可不加括号,也可以加上： echo 或 echo()
     当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
@@ -1120,10 +1124,9 @@ OOP,Object-oriented_programming 面向对象
       // two
       // three
 函数 
-  PS： PHP的真正威力源自于它的函数
-    PHP提供了超过 1000 个内建的函数
-    页面加载时执行脚本可以放到函数里。
-  创建函数
+  PS： PHP的真正威力源自于它的函数,提供了超过 1000 个内建的函数;
+    页面加载时执行脚本可以放到函数里;
+  创建函数 
     函数的名称应该提示出它的功能, 函数名称以字母或下划线开头,不能以数字开头
     function functionName() { }
     e.g.:
@@ -1139,7 +1142,7 @@ OOP,Object-oriented_programming 面向对象
       
       </body>
       </html>
-  函数参数
+  函数参数 
     PS：添加参数可以给函数添加更多的功能;参数类似变量。
       参数就在函数名称后面有一个括号内指定
     e.g.:
@@ -1163,7 +1166,7 @@ OOP,Object-oriented_programming 面向对象
       </body>
       </html>
       输出：
-  函数返回值
+  函数返回值 
     使用 return 语句让函数返回一个值
     <html>
     <body>
@@ -1597,7 +1600,7 @@ WAMPServer集成环境
     在 Apache 的配置文件 httpd.conf 中进行配置
     DocumentRoot "E:/project/test"  
     <Directory "E:/project/test">
-  多站点配置
+  多站点配置 
     首先 在 Apache 的 httpd-vhosts.conf 「虚拟目录配置」文件中进行配置,且可配置多个
       <VirtualHost *:80>
         ServerAdmin webmaster@dummy-host2.example.com  
@@ -1617,15 +1620,13 @@ WAMPServer集成环境
         Apache2.4.9版本的httpd.conf文件为：
         #   onlineoffline tag - don't remove
         Require local
-        将“Require local”前面加上#，在下面加上一句：
+        将“Require local”前面加上#,在下面加上一句：
         Require all granted
         保存重启就OK了
     最后 在系统中配置 hosts 文件
       127.0.0.1  test01.com
       127.0.0.1  test02.com
       ... 「可配置多个」
-
-
 
 
 

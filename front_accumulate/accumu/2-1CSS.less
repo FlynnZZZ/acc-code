@@ -2043,7 +2043,7 @@ Layout   布局
           故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
         text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
         text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
-    vertical-align  定义display:table-cell元素(典型的就是td),决定其内容垂直位置
+    vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置
       baseline
       top
       middle
@@ -2633,11 +2633,10 @@ var() CSS变量
       行高具有继承性
     line-height = height ; + vertical-align:middle 垂直居中行内元素
       父元素的line-height和其height相等,子元素使用vertical-aligh:middle;使子元素居中
-    vertical-align:middle + 辅助子元素
-      父子元素搭配使其其他子元素垂直居中;
-      e.g.：
-        在父元素中,借助一高度等于父元素的子元素a定义其vertical-align:middle,
-        其他的子元素定义vertical-align:middle,则都相对于a元素居中(处于a元素中部)
+    vertical-align:middle + 辅助子元素  使其他子元素垂直居中 
+      在父元素中,借助高度等于父元素的actor元素定义其 vertical-align:middle,
+      其他子元素也定义 vertical-align:middle,
+      则其他元素都相对于actor元素居中,处于actor元素中部; 
         <div id="wrapper">
           我是wrapper1
           <div id="content">
@@ -2664,15 +2663,23 @@ var() CSS变量
           height: 400px;
           border:solid 1px red;
         }
-    vertical-align:middle + table-cell元素
+    vertical-align:middle + table-cell 元素
       使用插入 table (包括tbody、tr、td)标签嵌套.
         定义父元素属性:display:table;
         子元素属性:display: table-cell;vertical-align: middle;
         css中有一个用于竖直居中的属性vertical-align,
         在父元素设置此样式时,会对inline-block类型的子元素都有用.
         PS：子元素会占满父元素;
-      设置块元素的display:table-cell,vertical-align:middle.
-        注:该方法兼容性有问题,IE6、7并不支持该样式
+      设置块元素的 display:table-cell,vertical-align:middle 
+        PS：该方法兼容性有问题,IE6、7并不支持该样式
+        .box{
+          display:table-cell;
+          vertical-align:middle;
+          text-align:center;
+          width:120px;
+          height:120px;
+          background:purple;
+        }
     ◆定位法
     position + margin:auto
       父元素relative定位,子元素left=right,top=bottom,margin:auto;

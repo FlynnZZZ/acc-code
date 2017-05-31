@@ -1187,7 +1187,7 @@ OOP,Object-oriented_programming 面向对象
       在HTML中为 
         <div>1
         1</div>
-命名空间     [PHP 5.3新增] 
+命名空间     [PHP5.3新增] 
   PS： 所有非 PHP 代码包括空白符都不能出现在命名空间的声明之前
   作用:决解命名冲突; 为(很长的)标识符名称创建一个(简短)别名的名称; 提高源代码的可读性;
   namespace  定义命名空间
@@ -1587,8 +1587,43 @@ OOP,Object-oriented_programming 面向对象
       尝试自动装载类 A\B\D\E。
       为了引用全局命名空间中的全局类,必须使用完全限定名称 new \C()。
 --------------------------------------------------------------------------------  
-
-
+WAMPServer集成环境
+  PS：
+    W : windows
+    A : Apache
+    M : MySQL
+    P : PHP
+  配置网站根目录 
+    在 Apache 的配置文件 httpd.conf 中进行配置
+    DocumentRoot "E:/project/test"  
+    <Directory "E:/project/test">
+  多站点配置
+    首先 在 Apache 的 httpd-vhosts.conf 「虚拟目录配置」文件中进行配置,且可配置多个
+      <VirtualHost *:80>
+        ServerAdmin webmaster@dummy-host2.example.com  
+        <!-- 设置管理员邮箱地址,可不用配置 -->
+        DocumentRoot "E:/project/test"
+        <!-- 网站根目录 -->
+        ServerName  xxx.com
+        <!--  主机名-->
+        ErrorLog "logs/localhuarun.hkbao.com-error.log"
+        <!--  错误日志,可不用配置-->
+        CustomLog "logs/localhuarun.hkbao.com-access.log" common
+        <!--  日常日志,可不用配置-->
+      </VirtualHost>
+    然后 配置完后在 httpd.conf 文件中
+      将 Include conf/extra/httpd-vhosts.conf 取消注释「默认是被注释掉的」
+      并设置 将'只有本机IP可访问本地资源'改为所有域名都可访问
+        Apache2.4.9版本的httpd.conf文件为：
+        #   onlineoffline tag - don't remove
+        Require local
+        将“Require local”前面加上#，在下面加上一句：
+        Require all granted
+        保存重启就OK了
+    最后 在系统中配置 hosts 文件
+      127.0.0.1  test01.com
+      127.0.0.1  test02.com
+      ... 「可配置多个」
 
 
 

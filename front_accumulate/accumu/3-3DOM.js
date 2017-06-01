@@ -1287,7 +1287,7 @@ event 事件对象
   e.defaultPrevented; 表示是否已经调用了preventDefault()的布尔值
     DOM3级事件中新增
   e.detail;     与事件相关的细节信息
-  e.eventPhase; 调用事件处理程序阶段的描述数值
+  e.eventPhase; 调用事件处理程序阶段的描述数值 
     1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
     e.g. :
     var btn =document.getElementById("myBtn");
@@ -1367,8 +1367,10 @@ event 事件对象
       无法加载图像时在<img>元素触发,
       无法加载嵌入内容在<object>元素上触发,
       有框架无法加载时在框架集上触发
-    select  当用户选择文本框(input 或 textarea)中的字符时触发
+    select  当用户选择文本框「input或textarea,且disabled为false时」中的字符时触发
       支持该事件的标签:<input type="text">, <textarea>
+      e.target.selectionStart 选中字符的indx
+      e.target.selectionEnd   选中字符的indx
   焦点事件 当元素获得或失去焦点时触发
     blur  元素失去焦点时触发,该事件不会冒泡
     focus 元素获得焦点时触发,该事件不会冒泡
@@ -3326,7 +3328,7 @@ cross-document_messaging 跨文档消息传递
     e.origin
     e.source
  (详参 JavaScript高级程序设计 481页)
-audio&video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
+Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
   var audio = document.querySelector(slt); 获取audio元素对象
   var video = document.querySelector(slt); 获取video元素对象
   方法

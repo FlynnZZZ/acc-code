@@ -514,6 +514,23 @@ PC端
     }
     var img1 = $('.phone .logo');
     dragElem(img1);
+  选中文字
+    <input type="text" name="" value="12312312312312">
+    function selectText(textbox, startIndex, stopIndex) {
+      if (textbox.setSelectionRange) {
+        textbox.setSelectionRange(startIndex, stopIndex);
+      } else if (textbox.createTextRange) {
+        var range = textbox.createTextRange();
+        range.collapse(true);
+        range.moveStart('character', startIndex);
+        range.moveEnd('character', stopIndex - startIndex);
+        range.select();
+      }
+      textbox.focus();
+    }
+    var obj = $("input")[0];
+    selectText(obj, 4, 7);
+
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

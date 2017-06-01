@@ -420,6 +420,7 @@ DOM 操作
           推荐使用width来代替innerWidth、outerWidth获取; 高度同理;
           其中$(window)表示的为可视区,而$(document)为网页的总高度;
       Jelem.width([num/foo])   读写元素content的width 
+        PS：当元素display:none;时宽度为0;
         num      用于设置元素的宽度值,单位px
         foo(indx,oldWidth){} 
       Jelem.height([num/foo])  读写元素content的height 
@@ -785,7 +786,7 @@ Event 事件
     简化写法
     window.onload 没有简化写法
     $(document).ready(function(){}) 可以简写成 $(function(){})
-  todo
+  todo 
     禁止右键点击
       $(document).bind("contextmenu",function(e){
         return false;
@@ -809,6 +810,7 @@ Event 事件
         $(this).toggleClass('hover'); 
       });
       注：直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
+  Exp:
 AJAX 
   PS： jQuery 最常用的 AJAX API 可以为分三类;
   contentType 数据格式

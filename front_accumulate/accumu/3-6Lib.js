@@ -1,4 +1,4 @@
-介绍_概念_说明_定义
+介绍_概念_说明_定义 
   其他库
     Modernizr 检测浏览器的支持情况
       要想检测浏览器对一个API的支持,并没有一个统一的方法.
@@ -1055,25 +1055,40 @@ AJAX
   Jelem.ajaxStart(cfoo)  在Ajax请求发出前触发函数
   Jelem.ajaxStop(cfoo)   在Ajax请求完成后触发函数
 方法 
-  Jelem.each(foo)    为每个匹配成员规定执行的函数 
-    foo  function(indx,jelem){ }
-    返回 'false' 将停止循环,就像在普通的循环中使用 'break'
-    返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
+  Jelem.each(foo)    为每个匹配成员规定执行的函数,返回 
+    foo  回调函数,依次传入参数 (indx,elem) 
+      其中 elem 为DOMElem,通过 $(elem) 转换为 Jelem
+      返回 'false' 将停止循环,就像在普通的循环中使用 'break'
+      返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
     e.g.
-      输出每个dom元素
-      Jelem.each(function(){ console.log(this); })
-      输入每个Jelem
-      Jelem.each(function(){ console.log($(this)); })
+      Jelem.each(function(){ 
+        // 输出每个dom元素
+        console.log(this); 
+        // 输入每个Jelem
+        console.log($(this)); 
+      })
       
-      $('.todo-cell').each(function()){ console.log(arguments) }
+      $('.todo-cell').each(function()){ 
+        console.log(arguments) 
+      }
       或写成
-      $('.todo-cell').each(function(i,e)){ console.log(i,e) }
-      
-      var obj = { one:1, two:2, three:3, four:4};
-      $.each(obj, function(key, val) { console.log(key,val); });
-      // one,1,two,2,three,four,4
-      // 当obj为数组时,key表示下标
-  $.map(arr,foo)     对每个数组中的元素调用函数得到返回值组成新的数组
+      $('.todo-cell').each(function(i,e)){ 
+        console.log(i,e) 
+      }
+  $.each(obj, foo)  对象遍历
+    foo 参数依次传入obj的 key,val 
+    当obj为数组时,key表示下标
+    var obj = { 
+      one : 1, 
+      two : 2, 
+      three : 3, 
+      four : 4
+    };
+    $.each(obj, function(key, val) { 
+      console.log(key, val); 
+    });
+    // one,1,two,2,three,four,4
+  $.map(arr, foo)     对每个数组中的元素调用函数得到返回值组成新的数组
     arr    用于遍历的数组
     foo    遍历执行的函数,传入 value值和下标index;
     retn   一个新数组
@@ -1083,15 +1098,15 @@ AJAX
         return v*v
       })
       a;    //[1, 4, 9, 16]
-  $.grep(arr,foo)    对数组中每个元素进行筛选,返回符合条件的成员
+  $.grep(arr, foo)    对数组中每个元素进行筛选,返回符合条件的成员 
     arr  用于筛选的数组
-    foo  筛选函数,传入每个数组的元素作为参数
+    foo  筛选函数,依次传入arr的 val,indx 
     e.g.
-      var foo =[1,2,3,4,5]
-      var bar =$.grep(foo,function(a){
-        return a%2 == 0;
+      var foo =[1,2,3,4,5];
+      var arr =$.grep(foo,function(val,indx){
+        return val % 2 == 0;
       })
-      bar;      //[2, 4]
+      arr;      //[2, 4]
   $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
     e.g.:
       $.trim('a bc '); // "a bc"
@@ -1108,7 +1123,7 @@ AJAX
     obj  需要检测的对象名称
   $.isPlainObject(obj)   检测对象是否为原始对象
     检测对象是否为通过{}或new Object()关键字创建的原始对象的布尔值;
-  $.contains(elem1,elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
+  $.contains(elem1, elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
     elem1  一个DOM对象节点元素,用于包含其他节点的容器
     elem2  另一个DOM对象节点元素,用于被其他容器所包含 
   $.extend (options)  可对原有的工具函数进行扩展,自定义类级别的jQuery插件
@@ -1139,7 +1154,7 @@ AJAX
       $('.box:moreThen1000px').click(function() { 
         console.log(1); 
       });
-  $.extend(obj1,obj2,...objn)  扩展原有的Object对象
+  $.extend(obj1, obj2, ...objn)  扩展原有的Object对象
     PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者
     obj1至objN  表示需要合并的各个原有对象
     e.g.：对两个已有的对象进行合并
@@ -2408,5 +2423,7 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
+
+
 
 

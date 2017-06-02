@@ -1786,6 +1786,17 @@ OOP,面向对象
       if多重分支语句 if(){}else if{}else{}
         else if 的数量为任意个
         可以使用if或else if作为最后一个判断,当使用else时至少会执行一个
+        短路执行,即只会有一个分支被执行
+          if (true) {
+            console.log(1);
+          }
+          else if (true) {
+            console.log(2);
+          }
+          else {
+            console.log(3);
+          }
+          // 1
     switch(value){} 多重条件判断,用于多个值相等的比较 
       PS：传入值和对比值需是全等关系才会相应的执行.
       switch(传入值){
@@ -3125,11 +3136,11 @@ OOP,面向对象
           var rgep = new RegExp('fan-\\d','ig')
           console.log(rgep); //  /fan-\d/gi
       new RegExp(/ab/,'g'); 通过正则创建 [ES6新增]
-    attributes 模式修饰符
+    attributes 模式修饰符 
       i   ignore case,忽略大小写
       g   global,全局匹配
       m   multiple lines,多行匹配
-    Metacharacter 元符号 :包含特殊含义的字符
+    Metacharacter 元符号 :包含特殊含义的字符 
       PS： 可以控制匹配模式的方式.
         第二个反斜杠"/"后的元字符将失去其特殊含义(用于放置模式修饰符的)
       ◇字符元字符
@@ -3417,7 +3428,7 @@ OOP,面向对象
       var Str="this is a Box,that is a box!";
       var str ='tom';
       Str.replace(rgep,str); // "this is a tom,that is a tom!"
-    常用的正则
+    常用的正则 
       检查邮政编码
         规则六位数字,第一位不是0
         var pattern=/[1-9][0-9]{5}/;

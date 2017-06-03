@@ -1,4 +1,4 @@
-BOM：Browser_Object_Model浏览器对象模型 
+BOM,Browser_Object_Model 浏览器对象模型 
   PS： 访问和操作浏览器窗口「显示的页面以外的部分」,
     BOM由一系列相关的对象构成,并且每个对象都提供了很多方法与属性,用来访问浏览器功能
     BOM只是ECMAScript的一个扩展,没有任何相关标准
@@ -889,108 +889,60 @@ window的属性对象
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
 AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML 
-  介绍 
-    PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
-      可用JS动态抓取内容构建页面;
-      file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
-      还支持通过其他协议传送,比如File和FTP 
-      Ajax提供与服务器异步通信的能力
-      该技术能够向服务器请求额外的数据而无须刷新页面
-      虽然Ajax中的x代表的是XML,但Ajax通信和数据格式无关,即该技术不一定使用XML.
-      W3C也在2006年发布了AJAX的国际标准.
-    AJAX 的组成 
-      并非一种新的技术,而是几种原有技术的结合体.
-      它由下列技术组合而成.
-      使用CSS和XHTML来表示.
-      使用DOM模型来交互和动态显示.
-      使用XMLHttpRequest来和服务器进行异步通信.
-      使用javascript来绑定和调用.
-      在上面技术中,除了XmlHttpRequest对象以外,
-      其它所有的技术都是基于web标准并且已经得到了广泛使用的.
-    AJAX 运行原理: 
-      通过XmlHttpRequest对象来向服务器发http请求,
-      从服务器获得数据,然后用javascript来操作DOM而更新页面.
-      可以把服务器端看成一个数据接口,它返回的是一个纯文本流,
-      这个文本流可以是XML格式、HTML、Javascript代码、JSON格式,也可以只是一个字符串.
-      普通的web开发流程:向服务器端请求这个页面,客户端将文本的结果写入页面.
-      使用Ajax:客户端在异步获取这个结果后,先由 JS 来处理,然后再显示在页面.
-    AJAX 的缺点:
-      不支持使用后退功能
-      对搜索引擎的支持比较弱
-      AJAX 不能跨域访问;不能跨端口(即需在同一域及同一端口下)
-        浏览器安全策略不允许向不同的域发送请求,请求被拒绝,而未发出.
-    Level1 的限制
-      仅支持文本数据传输,无法传输二进制数据.
-      传输数据时,没有进度信息提示, 只能提示是否完成.
-      受浏览器 同源策略 限制,只能请求同域资源.
-      没有超时机制,不方便掌控ajax请求节奏.
-  Content-Type 编码类型 
-    PS：请求头中Content-Type决定编码类型,不同的值对应不同的提交和回调处理方式;
-    XMLHttpRequest对象用常见的五种'Content-Type'发送数据的方式 
-      PS：method都是POST方式,若是GET方式是没有请求数据体的,数据直接加在URL后面;
-      接收请求时的解析方式
-        text/xml：用responseXML
-        application/json：需先JSON解析,JSON.parse( responseText )
-        其他直接用 responseText
-      text/plain 默认值 
-        若请求头部没有设定'Content-Type',且数据不是 FormData 和 XML Document,
-        则'Content-Type'默认为'text/plain';
-      application/x-www-form-urlencoded 
-        要求数据按照key1=value1&key2=value2的格式发送,
-        且其中的特殊字符需要转义成%HH的形式;
-      multipart/form-data 多用来提交文件 
-        采用HTML5的FormData对象来构建提交的数据;
-        不设置请求头部的Content-Type,交给浏览器来处理「设定Boundary等工作」;
-      application/json 传输JSON格式的数据
-        使用该MIME类型时,需要将数据对象转换成JSON串,
-        再设定请求头部的Content-Type,就可以发数据了
-      text/xml XML格式传输 
-        首先,构建XML文档对象,存入表单数据
-        /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
-        var dataToSend = document.implementation.createDocument("", "formdata", null);
-        var tempData = dataToSend.documentElement;
-        for (var key in data) {
-          if (data.hasOwnProperty(key)) {
-            var keyElement = doc.createElement(key);
-            keyElement.appendChild(doc.createTextNode(data[key]));
-            tempData.appendChild(keyElement);
-          }
-        }
-        /*
-        xml文档格式示意：
-        <formdata>
-        <key1> value1 </key1>
-        <key2> value2 </key2>
-        </formdata>
-        */
-        发送数据「不需设置Content-Type」
-        req.send(dataToSend);
-  XMLHttpRequest 对象 
-    PS：XMLHttpRequest对象是AJAX技术实现的核心.
-      通过调用该对象的属性和方法实现各种功能.
-      IE5最先引入XMLHttpRequest对象到浏览器,通过MSXML库中的一个ActiveX对象实现.
-      XMLHttpRequest Level2 是XMLHttpRequest的最新版本.
-    XMLHttpRequest 对象创建: 使用XMLHttpRequest构造函数
-      var xhr = new XMLHttpRequest();
-      请求发送到服务器端,在收到响应后,响应的数据会自动填充XMLHttpRequest对象的属性
-      即调用XMLHttpRequest的属性可以得到响应的信息
-    level版本说明 
-      Level1
-        只支持文本数据的传送,无法用来读取和上传二进制文件
-        传送和接收数据时,没有进度信息,只能提示有没有完成
-        受到"同域限制"(Same Origin Policy),只能向同一域名的服务器请求数据
-      XMLHttpRequest2级进一步发展了xhr
-        xhr已经广发支持,成了事实标准,W3C开始着手制定相应的标准以规范其行为
-        增加的新功能
-          可以设置 HTTP 请求的时限
-          可以使用 FormData 对象管理表单数据
-          可以上传文件
-          可以请求不同域名下的数据(跨域请求)
-          可以获取服务器端的二进制数据
-          可以获得数据传输的进度信息
-        并非所有浏览器都完整的实现了XMLHttpRequest2级规范,但都实现了其规定的部分内容
-        level2兼容level1.
-    ◆请求 request 
+  PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
+    可用JS动态抓取内容构建页面;
+    file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
+    还支持通过其他协议传送,比如File和FTP 
+    Ajax提供与服务器异步通信的能力
+    该技术能够向服务器请求额外的数据而无须刷新页面
+    虽然Ajax中的x代表的是XML,但Ajax通信和数据格式无关,即该技术不一定使用XML.
+    W3C也在2006年发布了AJAX的国际标准.
+  AJAX 的组成 
+    并非一种新技术,而是几种原有技术的结合体,
+    使用CSS和XHTML来表示,DOM模型来交互和动态显示,
+    使用XMLHttpRequest来和服务器进行异步通信,
+    使用javascript来绑定和调用;
+    除了XmlHttpRequest对象外,其它技术都基于web标准且已广泛使用;
+  AJAX 运行原理 
+    普通的web开发流程:向服务器端请求这个页面,客户端将文本的结果写入页面;
+    使用Ajax: 客户端在异步获取这个结果后,先由 JS 来处理,然后再显示在页面;
+    通过xhr对象向服务器发http请求,从服务器获得数据,然后用JS操作DOM而更新页面;
+    可以把服务器端看成一个数据接口,它返回的是一个纯文本流,
+    该文本流可以是XML格式、HTML、Javascript代码、JSON格式,也可以只是一个字符串;
+  AJAX 的缺点 
+    不支持使用后退功能, 对搜索引擎的支持比较弱
+    ◆Level1 的限制
+    受浏览器'同源策略'限制,只能请求同域资源「否则请求被拒绝,而未发出」;
+    仅支持文本数据传输,无法读取和上传二进制文件数据;
+    传输数据时,没有进度信息提示, 只能提示是否完成;
+    没有超时机制,不方便掌控ajax请求节奏;
+  XMLHttpRequest_Level2 「IE10+ HTML5」 
+    PS： XMLHttpRequest Level2 是XMLHttpRequest的最新版本.
+      IE10以下的版本不支持,它有自己相关的方法来实现; 
+      需要在服务器端进行相关的改动 
+      header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
+      header("Access-Control-Allow-Methods:GET,POST");
+      XMLHttpRequest2级进一步发展了xhr,并已经广发支持,成了事实标准,
+      W3C开始着手制定相应的标准以规范其行为,
+      并非所有浏览器都完整的实现了XMLHttpRequest2级规范,但都实现了其规定的部分内容,
+      level2兼容level1;
+    新增功能 
+      可设置 HTTP 请求的时限 timeout; 
+      可使用 FormData 对象管理表单数据;
+      可上传文件,可获取服务器端的二进制数据; 
+      可跨域请求; 
+      可获得数据传输的进度信息;
+  接收请求时的解析方式 
+    text/xml          用responseXML
+    application/json  需先JSON解析,JSON.parse(responseText);
+    其他直接用 responseText
+  XMLHttpRequest 构造函数 
+    IE5最先引入XMLHttpRequest对象到浏览器,通过MSXML库中的一个ActiveX对象实现.
+  var xhr = new XMLHttpRequest(); xhr对象创建 
+    PS：xhr对象是AJAX技术实现的核心,通过调用该对象的属性和方法实现各种功能;
+      请求发送到服务器端,在收到响应后,响应的数据会自动填充xhr对象的属性,
+      即调用xhr的属性可以得到响应的信息;
+  ◆请求 request 
     xhr.open(method,url[,async]); 建立请求,以备「数据」发送「而未发送数据」 
       PS：open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
         若对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
@@ -1003,23 +955,51 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       userName    可选,用户名,默认为空字符串
       passWord    可选,密码,默认为空字符串
     xhr.setRequestHeader(key,val); 设定请求头信息
-      PS：该方法必须在 open 方法之后,send 方法之前使用.
+      PS：该方法必须在 open 方法之后,send 方法之前使用; 
         若该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
-      设置头信息'Content-Type',表示发送的数据格式 
-        xhr.setRequestHeader('Content-Type', 'application/json');
-      设置'Content-Length',表示数据长度 
-        xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
-    xhr.overrideMimeType() 重写由服务器返回的 MIME type [IE不支持] [Level2]
-      PS：该方法需在send方法之前调用
-        Firefox最早引入该方法用于重写xhr响应的MIME类型
-        该方法被XMLHttpRequest2级纳入规范中
-      e.g. :
-      var xhr =new XMLHttpRequest();
-      xhr.open("get","URL",true);
-      xhr.overrideMimeType("text/XML");
-      xhr.send(null);
-      强制使xhr对象将响应当作XML而非纯文本来处理
-    xhr.withCredentials  跨域请求时,用户信息是否会包含在请求之中的布尔值
+      ★key 
+      'Content-Type'   发送的数据格式「编码类型」 
+        PS：请求头中Content-Type决定发送数据的编码类型,
+          不同的值对应不同的提交和回调处理方式;
+          有常见的五种'Content-Type'发送数据的方式; 
+          method都是POST方式,若是GET方式是没有请求数据体的,数据直接加在URL后面;
+        'text/plain' 默认值 
+          若未设定且数据不是 FormData 和 XML Document,则默认为'text/plain';
+        'application/json' JSON格式的数据
+          使用该MIME类型时,需要将数据对象转换成JSON串,
+          再设定请求头部的Content-Type,就可以发数据了
+          xhr.setRequestHeader('Content-Type', 'application/json');
+        'application/x-www-form-urlencoded' 
+          要求数据按照key1=value1&key2=value2的格式发送,
+          且其中的特殊字符需要转义成%HH的形式;
+        'multipart/form-data' 多用来提交文件 
+          采用HTML5的FormData对象来构建提交的数据;
+          不设置请求头部的Content-Type,交给浏览器来处理「设定Boundary等工作」;
+        'text/xml' XML格式传输 
+          首先,构建XML文档对象,存入表单数据
+          /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
+          var dataToSend = document.implementation.createDocument("", "formdata", null);
+          var tempData = dataToSend.documentElement;
+          for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+              var keyElement = doc.createElement(key);
+              keyElement.appendChild(doc.createTextNode(data[key]));
+              tempData.appendChild(keyElement);
+            }
+          }
+          /*
+          xml文档格式示意：
+          <formdata>
+          <key1> value1 </key1>
+          <key2> value2 </key2>
+          </formdata>
+          */
+          发送数据「不需设置Content-Type」
+          req.send(dataToSend);
+      'Content-Length' 发送的数据长度
+        num  
+          xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
+    xhr.withCredentials  跨域请求时,用户信息是否会包含在请求之中的布尔值 
       用户信息,比如Cookie和认证的HTTP头信息,
       默认为false,即向example.com 发出跨域请求时,
       不会发送example.com 设置在本机上的Cookie(若有的话);
@@ -1030,8 +1010,8 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       withCredentials属性打开的话,不仅会发送Cookie,还会设置远程主机指定的Cookie.
       注意,此时你的脚本还是遵守同源政策,
       无法 从document.cookie 或者HTTP回应的头信息之中,读取这些Cookie.
-    xhr.send(data); 发送请求(数据)
-      data 发送的数据,类型可为 ArrayBufferView Blob Document String FormData
+    xhr.send(data); 发送请求「数据」
+      data 发送的数据,类型可为 ArrayBufferView Blob Document String FormData 
         可以为空,即发送请求但不发送数据内容,可写作 xhr.send(null) 或 xhr.send()
         若不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
         若带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
@@ -1073,17 +1053,17 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
             <input type='number' name='birthDate' value='1940'>
             <input type='submit' onclick='return sendForm(this.form);'>
           </form>
-    ◆事件
-      PS：所有XMLHttpRequest的监听事件,都必须在send()方法调用之前设定
-    xhr.onreadystatechange  readyState值改变时触发该事件
+  ◆事件 
+    PS：所有XMLHttpRequest的监听事件,都必须在 send() 方法调用之前设定
+    xhr.onreadystatechange  readyState值改变时触发该事件 
       PS：异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
         只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
       e.g. :
       xhr.onreadystatechange =function(){
         if(xhr.readyState ===4 && xhr.status === 200) { }
       };
-    xhr.ontimeout  超时事件,当响应时间超过指定时间触发 [Level2]
-    xhr.onprogress  在接收响应期间持续不断的触发 [Level2]
+    xhr.ontimeout  超时事件,当响应时间超过指定时间触发 「level2」
+    xhr.onprogress  在接收响应期间持续不断的触发「level2」
       PS：它分成上传和下载两种情况.
         下载的 progress 事件属于 XMLHttpRequest 对象,
         上传的 progress 事件属于 XMLHttpRequest.upload 对象
@@ -1106,16 +1086,15 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         event.total 是需要传输的总字节,
         event.loaded 是已经传输的字节.
         若 event.lengthComputable 不为真,则 event.total 等于0.
-    xhr.onabort   请求被中止,比如用户调用了 abort() 方法 [Level2]
-    xhr.onerror   请求失败 [Level2]
+    xhr.onabort   请求被中止,比如用户调用了 abort() 方法「level2」
+    xhr.onerror   请求失败「level2」
       若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
-    xhr.onload    接收到完整的响应数据时触发(IE不支持) [Level2]
+    xhr.onload    接收到完整的响应数据时触发(IE不支持) 「level2」
       Firefox中引入的load事件,用于代替readystatechange事件
       该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
-    xhr.onloadstart 在接收到响应数据的第一个字节时触发 [Level2]
-    xhr.onloadend 通信完成或触发error、abort或load事件后触发 [Level2]
-    xhr.ontimeout  当请求时间超过设定值后触发 
-    xhr.upload.onprogress  上传的进度 
+    xhr.onloadstart 在接收到响应数据的第一个字节时触发 「level2」
+    xhr.onloadend 通信完成或触发error、abort或load事件后触发 「level2」
+    xhr.upload.onprogress  上传的进度「level2」 
       上传文件时,会不断返回上传的进度
       xhr.upload.onprogress 在上传阶段,每50ms触发一次,
       文件太小网络环境好的时候是直接到100%的;
@@ -1138,7 +1117,7 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
           xhr.send(blobOrFile);
         }
         upload(new Blob(['hello world'], {type: 'text/plain'}));
-    ◆响应状态
+  ◆响应状态 
     xhr.readyState  只读,请求的状态码,异步时检测使用 
       PS：在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
       0   未初始化  尚未调用open()方法
@@ -1159,7 +1138,19 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       404, Not Found,未发现指定网址
       500, Internal Server Error,服务器发生错误
     xhr.statusText  只读,HTTP响应的文本描述,比如'200 OK' 
-    ◆响应 response
+    xhr.timeout  超时设定,值为一整数,单位默认为毫秒 [可能存在兼容性] 「level2」
+      PS：表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
+        若该属性等于0,就表示没有时间限制.
+        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
+        Opera、Firefox 和 IE 10 支持该属性,
+        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
+        而 Chrome 和 Safari 还不支持
+    xhr.abort();   终止连接
+      调用该方法后,xhr对象会停止触发事件,
+      而且也不再允许访问任何与响应有关的对象属性
+      在终止请求后,还应该对xhr对象进行解引用操作.
+      若请求已经被发送,则立刻中止请求.
+  ◆响应 response 
     xhr.responseText 只读,获取字符串形式的响应数据
       PS：若本次请求没有成功或者数据不完整,该属性就会等于null.
         若服务器返回的数据格式是JSON,则该属性为JSON字符串.
@@ -1203,20 +1194,17 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       xhr.getResponseHeader('Content-Type');
     xhr.getAllResponseHeader(); 获取整个响应头信息,格式为字符串
       每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
-    ◆终止
-    xhr.timeout  超时设定,值为一整数,单位默认为毫秒 [可能存在兼容性] [Level2]
-      PS：表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
-        若该属性等于0,就表示没有时间限制.
-        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
-        Opera、Firefox 和 IE 10 支持该属性,
-        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
-        而 Chrome 和 Safari 还不支持
-    xhr.abort();   终止连接
-      调用该方法后,xhr对象会停止触发事件,
-      而且也不再允许访问任何与响应有关的对象属性
-      在终止请求后,还应该对xhr对象进行解引用操作.
-      若请求已经被发送,则立刻中止请求.
-    ◆其他
+    xhr.overrideMimeType() 重写由服务器返回的 MIME type [IE不支持] 「level2」
+      PS：该方法需在send方法之前调用
+        Firefox最早引入该方法用于重写xhr响应的MIME类型
+        该方法被XMLHttpRequest2级纳入规范中
+      e.g. :
+      var xhr =new XMLHttpRequest();
+      xhr.open("get","URL",true);
+      xhr.overrideMimeType("text/XML");
+      xhr.send(null);
+      强制使xhr对象将响应当作XML而非纯文本来处理
+  ◆其他
     接收二进制数据 
       PS：老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
       改写 MIMEType [老方法]
@@ -1293,178 +1281,6 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
       xhr.onreadystatechange =function(){}; //设置响应事件程序
       xhr.open('get','demo.php',true)    //准备发送请求
       xhr.send();                        //发送请求
-  HTTP 协议 
-    PS：计算机通过网络进行通信的规则
-      是一种无状态协议,不建立持久的连接
-      使客户(浏览器)能够向web服务器请求信息和服务
-    HTTP 请求 一般由四部分组成:
-      请求方法,如GET或POST请求
-      请求的URL
-      请求头,包含一些客户端环境信息,身份验证信息等
-      请求体,即请求正文,其中可以包含客户提交的查询字符串信息,表单信息等等.
-    HTTP 响应 一般由三部分组成:
-      状态码: 一个数字和文字组成的,用于表示请求的状态(是成功还是失败等)
-      响应头: 和请求头类似,包含许多的信息,如服务器类型、日期时间、内容类型和长度等.
-      响应体: 响应正文.
-    HTTP 头信息
-      PS：每个http请求和响应都会带有相应的头部信息
-        xhr对象提供了操作头信息(请求头信息和响应头信息)的方法
-        有的浏览器允许重写默认头信息,而有的浏览器则不允许.
-        头信息中必须使用ASCII码.
-      默认情况下,发送xhr请求的同时,还会发送下列头信息
-        虽然不同浏览器发送的头部信息会有所不同,以下为共有的信息
-        Accept          浏览器能够处理的内容类型
-        Accept-Charset  浏览器能够显示的字符集
-        Accept-Encoding 浏览器能够处理的压缩编码
-        Accept-language 浏览器当前设置的语言
-        Connection      浏览器父服务器之间连接的类型
-        Cookie          当前页面设置的任何Cookie
-        Host            发出请求的页面所在的域
-        Referer         发出请求页面的URI
-          注意,HTTP规范将这个头部字段拼写错了,
-          为了保证与规范一致,只能将错就错
-         (该英文的正确拼法为referrer)
-        User-Agent      浏览器的用户代理字符串
-    网址的组成
-      协议 http、https(https为加密的https) 超文本传输协议(收发的信息是文本信息)
-      主机/域名/ip地址
-        ip地址 32位2进制的数字(4个八位的数字)
-        电脑通信靠ip地址,ip地址不好记使用域名
-        进入DOS环境 输入 ping 域名来进行查询ip地址.
-        e.g. :
-        WWW.baidu.com 等网址
-        WWW       子域名
-        baidu.com 主域名
-      端口 端口是一个16位的数字,范围0-65535
-        http协议默认为80,因此一般不用填写.
-        服务器的服务程序在启动的时候会向系统注册一个端口
-      路径 /.../...等
-      # hash
-        #代表网页中的一个位置.在第一个#后面出现的任何字符,都会被浏览器解读为位置标识符
-          e.g.:
-          'http://www.example.com/index.html#print' 就代表网页index.html 的print位置.
-          浏览器读取这个URL后,会自动将print位置滚动至可视区域.
-          为网页位置指定标识符,有两个方法:
-          一是使用锚点,比如<a name="print"></a>
-          二是使用id属性,比如<div id="print">
-        #是用来指导浏览器动作的,对服务器端完全无用.所以,HTTP请求中不包括#.
-          比如,访问下面的网址,'http://www.example.com/index.html#print',
-          浏览器实际发出的请求是这样的：
-          GET /index.html HTTP/1.1
-          Host: www.example.com
-        单单改变#后的部分,浏览器只会滚动到相应位置,不会重新加载网页.若无该锚点则也无滚动
-        改变#会改变浏览器的访问历史
-          每一次改变#后的部分,都会在浏览器的访问历史中增加一个记录,
-          使用"后退"按钮,就可以回到上一个位置.
-          这对于ajax应用程序特别有用,可以用不同的#值,表示不同的访问状态,
-          然后向用户给出可以访问某个状态的链接.
-          值得注意的是,上述规则对IE6和IE7不成立,它们不会因为#的改变而增加历史记录.
-      ? 查询字符串
-        传递参数时用于连接
-          & 不同参数的间隔符
-          = 参数中名和值的连接
-          e.g.:
-          'http://www.xxx.com/Show.asp?id=77&nameid=2905210001&page=1'
-        清除缓存
-          e.g.:
-          'http://www.xxxxx.com/index.html '
-          'http://www.xxxxx.com/index.html?test123123'
-          两个url打开的页面一样,但是后面这个有问号,说明不调用缓存的内容,
-          而认为是一个新地址,重新读取.
-    URL地址字符转换
-      url的可用字符： 0-9,a-z,A-Z ,其他用十六进制表示,并在每个字节前加%
-      url编码:encodeURIComponent('字符')
-      url解码:decodeURIComponent('字符')
-    HTTP状态码
-      PS：由三位数值组成,第一位表示其类别
-      1XX 表示请求已接收
-      2XX 成功
-      3XX 重定向,表示没有成功,客户必须采取进一步的动作
-      4XX 客户端错误
-      5XX 服务器端错误
-      ◆常用状态码
-      200 OK      正常返回信息
-      304 Not Modified 自从上次请求后,请求的网页未修改过
-      400 Bad Request  请求错误,不符合要求
-        服务器无法理解请求的格式,客户端不应再次使用相同的内容发起请求
-      403 Forbidden    禁止访问
-      404 Not Found    找不到匹配的资源
-      500 Internal Server Error  最常见的服务器端错误
-      503 Service Unavailable    服务器端暂时无法处理请求(可能是过载或维护)
-      其他状态码及说明
-        100 Continue     继续,
-          一般在发送post请求时,已发送了http header之后服务端将返回此信息,
-          表示确认,之后发送具体参数信息
-        201 Created   请求成功并且服务器创建了新的资源
-        202 Accepted  服务器已接受请求,但尚未处理
-        301 Moved Permanently  请求的网页已永久移动到新位置.
-        302 Found        临时性重定向.
-        303 See Other    临时性重定向,且总是使用 GET 请求新的 URI.
-        401 Unauthorized      请求未授权.
-    HTTP请求方法 :发送请求的类型
-      PS：http 1.0 定义了8种方法
-        主要使用“GET”和“POST”
-      GET  请求
-        最常见的请求类型,常用于向服务器查询信息.
-        一般用于信息获取.
-        使用URL传递参数.(发送的信息可见)
-        对发送信息的数量有限制,一般在2000个字符内.
-        必要时可将查询字符串参数追加到URL的末尾以便将信息发送给服务器.
-        对于xhr而言,位于open方法的URL末尾的查询字符串必须经过正确的编码才行,
-        查询字符串中每个参数的名称和值都需使用encodeURIComponent()进行编码,
-        名值对必须由&分割.
-      POST 请求
-        通常用于向服务器发送应该被保存的数据.
-        一般用于修改服务器上的资源.
-        对发送信息的数量无限制.
-        Remarks:
-          表单提交时 Content-Type 为 application/x-www-form-urlencoded
-      PUT  请求更新服务器端数据
-      HEAD 检查一个对象是否存在
-      DELETE  请求删除数据
-      CONNECT 对通道提供支持
-      TRACE   跟踪到服务器的路径
-      OPTIONS 查询Web服务器的性能
-      GET 和 POST 的区别
-        大体上讲,向服务器发送客户端数据有两种方式：查询字符串和请求正文.
-        通常,若是使用查询字符串,就发起了一个GET请求；
-        若是使用请求正文,就发起了一个POST请求
-       (若你反过来做,HTTP协议并不会阻止你,但这是没有必要的：最好在这里坚持标准实践).
-        有一种普遍的误解是POST请求是安全的,而GET请求不安全.
-        事实上若使用HTTPS协议,两者都是安全的；若不使用,则都不安全.
-        若不使用HTTPS协议,入侵者会像查看GET请求的查询字符串一样,轻松查看POST请求的报文数据.
-        使用GET请求,用户会在查询字符串中看到所有的输入数据(包括隐藏域),这是丑陋而且凌乱的.
-        浏览器会限制查询字符串的长度(对请求正文没有长度限制).
-        基于这些原因,一般推荐使用POST进行表单提交.
-    HTTP 和 TCP 的区别
-      TPC/IP 协议是传输层协议
-        主要解决数据如何在网络中传输,是一种“经过三次握手”的可靠的传输方式
-      HTTP 协议即超文本传送协议(Hypertext Transfer Protocol ),应用层协议,
-        是 Web 联网的基础,也是手机联网常用的协议之一
-        HTTP 协议是建立在 TCP 协议之上的一种应用.
-    HTTP 传输过程
-      建立TCP连接
-        输入地址,然后回车
-        Chrome搜索自身的DNS缓存 ,当没有找到或缓存失效时
-        Chrome搜索操作系统自身的DNS缓存,若仍没找到,
-        Chrome读取本地的HOST文件,若仍没找到,
-        Chrome 发起一个DNS的一个系统调用 ,一般向宽带运营商查询DNS,
-        宽带运营商服务器查找自身缓存,若未成功,
-        运营商服务器发起一个迭代DNS解析的请求 ,逐层向上查询,
-        运营商服务器把结果返回操作系统内核,同时缓存起来,
-        操作系统内核把结果返回浏览器
-        最终,浏览器得到 www.baidu.com 对应的ip地址,
-        获取ip地址后,浏览器发起HTTP "三次握手",建立 TCP/IP 连接,
-      浏览器就可以向服务器发送HTTP请求了,如get方法发送请求
-        Web浏览器向Web服务器发送请求命令
-        Web浏览器发送请求头信息
-      服务器端接收到请求,根据路径参数,经过后端的处理之后,把结果数据发送给浏览器,如请求页面
-        Web服务器发送应答信息
-        Web服务器向浏览器发送数据
-        Web服务器关闭TCP连接
-      浏览器拿到完整的HTML页面代码,解析和渲染该页面,
-      同时其中的JS、CSS、图片等静态资源,同样也是一个个HTTP请求都需要经过上面的步骤来获取.
-      最终浏览器渲染成功呈现页面.
   e.g.:
     使用范例
       var xhr = new XMLHttpRequest(); // 创建 Ajax 对象
@@ -1710,21 +1526,15 @@ AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-XMLHttpRequest_Level2 「IE10+ HTML5」 
-  IE10以下的版本不支持.它有自己相关的方法来实现.
-  需要在服务器端进行相关的改动 
-    header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
-    header("Access-Control-Allow-Methods:GET,POST");
 FormData 用于模拟表单「HTML5」
   PS：为序列化表单及创建与表单格式相同的数据,用于通过xhr传输提供了便利.
     不用明确的设置请求头信息,
     xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
-  var fData = new FormData([formElem]); 创建FormData对象
-    e.g.:
-    通过表单元素创建
-    var fData = new FormData(document.forms[0]);
-  fData.append("key","value"); 向FormData对象中添加信息
-    PS：当信息添加完后就可直接使用 xhr.send(fData) 进行发送
+  var fmDt = new FormData([formElem]); 创建FormData对象
+    e.g.: 通过表单元素创建
+      var fmDt = new FormData(document.forms[0]);
+  fmDt.append("key","value"); 向FormData对象中添加信息
+    PS：当信息添加完后就可直接使用 xhr.send(fmDt) 进行发送
     第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
   e.g.:
     模拟File控件,进行文件上传 
@@ -2379,6 +2189,20 @@ CORS,Cross-Origin_Resource_Sharing 跨源资源共享
     由于无论同源请求还是跨域请求都使用相同的接口,
     因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
     如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
+Img_Ping 跨域 
+  PS：网页可从任何网页中加载图像而无跨域问题,也是在线广告跟踪浏览量的主要方式;
+    动态的创建图像,使用load和error事件来处理响应
+    图像Ping时与服务器进行简单、单向的跨域通信的一种方式
+    请求的数据是通过查询字符串形式发送,响应可以是任意内容,请求从设置src属性时发生;
+    只能发送 GET 请求,无法访问服务器的响应文本,只能由从浏览器到服务器间的单向通信;
+  e.g. :
+    var img = new Image();
+    img.onload = img.onerror =function(){
+      console.log(1);
+    }
+    img.src ="https://www.baidu.com?name=abc"; // 请求中发送了一个name参数
+    onload 和 onerror 事件处理程序指定为同一个函数,
+    则无论什么响应,请求完成都能得到通知
 Same-Origin_Policy 同源政策 
   PS： 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
@@ -2387,7 +2211,7 @@ Same-Origin_Policy 同源政策
     同源政策规定,AJAX请求只能发给同源的网址,否则就报错。
     脚本运行时会进行同源检查,只有同源的脚本才能被执行
     script标签里的src属性里的路径不受同源策略的限制
-  限制范围
+  限制范围 
     随着互联网的发展,“同源政策”越来越严格。目前,若非同源,有三种行为受到限制:
     1、Cookie、LocalStorage 和 IndexedDB 无法读取。
     2、DOM 无法获得。
@@ -2581,31 +2405,6 @@ Same-Origin_Policy 同源政策
     相比JSONP只能发GET请求,CORS允许任何类型的请求。  
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
-Viewport 视口 「HTML5」
-  PS：Viewport指的是网页的显示区域,
-    也就是不借助滚动条的情况下,用户可以看到的部分网页大小, 中文译为“视口”.
-    正常情况下,viewport和浏览器的显示窗口是一样大小的.
-    但是,在移动设备上,两者可能不是一样大小.
-    比如,手机浏览器的窗口宽度可能是640px,这时viewport宽度就是640px,
-    但是网页宽度有950px,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个px.
-    另一种方法则是,将viewport设成950px,也就是说,浏览器的显示宽度还是640px,
-    但是网页的显示区域达到950px,整个网页缩小了,在浏览器中可以看清楚全貌.
-    这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
-  viewport缩放规则 「在HTML网页的head部分指定」 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    上面代码指定,viewport的缩放规则: 
-      缩放到当前设备的屏幕宽度「device-width」,
-      初始缩放比例「initial-scale」为1倍,
-      禁止用户缩放「user-scalable」;
-  viewport 全部属性:
-    width: viewport宽度
-    height: viewport高度
-    initial-scale: 初始缩放比例
-    maximum-scale: 最大缩放比例
-    minimum-scale: 最小缩放比例
-    user-scalable: 是否允许用户缩放
-  e.g.:.
-    <meta name = "viewport" content = "width = 320, initial-scale = 2.3, user-scalable = no">
 SSE 「HTML5」
 WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」 
   PS： 最初是为了解决浏览器上视频通话而提出的,
@@ -2885,9 +2684,6 @@ WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」
       conn.on('open', function(){
         conn.send('hi!');
       });
-rel='perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
-  <link rel="prefetch" href="url">
-  url可为一网页地址或图片地址
 WebSocket     网络通信协议「HTML5」 「IE10+」
   PS：目标是在一个单独的持久连接上提供全双工、双向通信, 
     允许与一个Web服务的连接保持打开,
@@ -3723,7 +3519,7 @@ Fullscreen 全屏操作 「HTML5」
       }
     });
   fullscreenerror   浏览器无法进入全屏时触发事件,可能是技术原因,也可能是用户拒绝
-  全屏状态的CSS
+  全屏状态的CSS 
     全屏状态下,大多数浏览器的CSS支持:full-screen伪类,只有IE11支持:fullscreen伪类。
     使用这个伪类,可以对全屏状态设置单独的CSS属性。
     :-webkit-full-screen {
@@ -3749,7 +3545,7 @@ Fullscreen 全屏操作 「HTML5」
       width: 100%;
       height: 100%;
     }
-WebGL
+WebGL 
 --------------------------------------------------------------------------------
 移动端
 devicelight    设备屏幕亮度变化事件 「HTML5」

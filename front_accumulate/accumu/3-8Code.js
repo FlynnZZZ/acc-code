@@ -366,13 +366,6 @@ PC端
       } 
     }; 
     $.preloadImages('img/hover1.png', 'img/hover2.png');
-  自动修改破损图像
-    若网站上有许多破碎的图像链接,可用一个不易被替换的图像来代替.
-    添加这个简单的代码可以节省很多麻烦：
-    即使网站没有破碎的图像链接,添加这段代码也没有任何害处。
-    $('img').on('error', function () {
-      $(this).prop('src', 'img/broken.png');
-    });
   将指定字符替换为其变形后的字符
     function rule(str){ return str.slice(1,-3)*2 + 'vw'; }
     function strReplace(originStr,rgep,rule){
@@ -514,23 +507,23 @@ PC端
     }
     var img1 = $('.phone .logo');
     dragElem(img1);
-  选中文字
+  选中文字 
     <input type="text" name="" value="12312312312312">
-    function selectText(textbox, startIndex, stopIndex) {
+    function selectText(textbox, startIndex, stopIndex) {
       if (textbox.setSelectionRange) {
-        textbox.setSelectionRange(startIndex, stopIndex);
-      } else if (textbox.createTextRange) {
-        var range = textbox.createTextRange();
+        textbox.setSelectionRange(startIndex, stopIndex);
+      } 
+      else if (textbox.createTextRange) {
+        var range = textbox.createTextRange();
         range.collapse(true);
         range.moveStart('character', startIndex);
-        range.moveEnd('character', stopIndex - startIndex);
+        range.moveEnd('character', stopIndex - startIndex);
         range.select();
       }
       textbox.focus();
     }
-    var obj = $("input")[0];
-    selectText(obj, 4, 7);
-
+    var textElem = $("input")[0];
+    selectText(textElem, 4, 7);
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>
@@ -1336,7 +1329,7 @@ PC端
     self: 判断显示面积最大,则判断item的中线和container中线的偏差值x,
       若多个偏差值相同,则取第一个.
       则 |x| = |(H-h)/2 - t|    「绝对值」
-技巧方式总结
+技巧方式总结 
   在本地开起service服务时,可创建一个 *.json 文件,可用于AJAX获取模拟
     e.g.： 在页面中插入一张图
       目录结构 

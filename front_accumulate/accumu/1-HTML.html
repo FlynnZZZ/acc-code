@@ -111,59 +111,87 @@
   </body>
   <head>   用于定义文档的头部,所有头部元素的容器 
     头部元素有<title> <script> <style> <link> <meta>等标签;
-  <meta >  提供有关页面的meta-information,元信息
+  <meta/>  提供有关页面的meta-information,元信息 
     PS：用于设置一些头信息,对网页文件进行说明,
       如便于搜索引擎查找.放置于<head></head>之间
       元数据不会显示在页面上,但是对于机器是可读的。
-    ◆name       可选,content值所属的的类型
-      description 对网页描述
-        <meta name="description" content="描述1,描述2...">
-      referrer    控制http请求中的referrer
+    ◆name=       可选,content值所属的的类型
+      'viewport'    视口,设置不同设备下的显示属性「HTML5」
+        PS：Viewport指的是网页的显示区域,
+          也就是不借助滚动条的情况下,用户可以看到的部分网页大小,中文译为'视口';
+          正常情况下,viewport和浏览器的显示窗口是一样大小的.
+          但是,在移动设备上,两者可能不是一样大小.
+          比如,手机浏览器的窗口宽度可能是640px,这时viewport宽度就是640px,
+          但是网页宽度有950px,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个px.
+          另一种方法则是,将viewport设成950px,也就是说,浏览器的显示宽度还是640px,
+          但是网页的显示区域达到950px,整个网页缩小了,在浏览器中可以看清楚全貌.
+          这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
         ★content 对应的值 
-        never     不发送referrer「删除http head中的referer」
-        always    始终发送referrer
+          "key1=val1,key2=val2,..."  一串由多个键值对组成的字符串 
+          ▼key的值可为
+          width   viewport宽度 
+            num    单位为像素
+            device-width 设备宽度
+          height  viewport高度 
+            num  单位为像素
+            device-height 设备高度
+          initial-scale 初始缩放比例 
+            num   缩放比例值,范围为 0.01-10
+          maximum-scale 最大缩放比例 
+            num  缩放比例值
+          minimum-scale 最小缩放比例 
+            num  缩放比例值
+          user-scalable 是否允许用户缩放 
+            yes
+            no
+        e.g.：
+          viewport缩放规则 「在HTML网页的head部分指定」 
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+          上面代码指定,viewport的缩放规则: 
+          缩放到当前设备的屏幕宽度「device-width」,
+          初始缩放比例「initial-scale」为1倍,
+          禁止用户缩放「user-scalable」;
+          
+          <meta name="viewport" content="width=320, initial-scale=2.3, user-scalable=no">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, user-scalable=yes">
+      'description' 对网页描述
+        ★content 对应的值
+        'str1,str2,..' 用于描述的字符,使用','分割多个描述词 
+          <meta name="description" content="描述1,描述2...">
+      'referrer'    控制http请求中的referrer 
+        ★content 对应的值 
+        'never'     不发送referrer「删除http head中的referer」
+        'always'    始终发送referrer 
           不改变http header 中的 referer 的值
           即使当前页使用https协议,且加载资源使用http,加载资源的请求头中仍带referer
-        origin    只发送origin部分
-        default   若前页面使用https,而加载资源使用http,则不发送referrer
-      author      设置作者
+        'origin'    只发送origin部分
+        'default'   若前页面使用https,而加载资源使用http,则不发送referrer
+      'author'      设置作者 
         <meta name="author" content="作者名">
-      copyright   版权声明
+      'copyright'   版权声明 
         <meta name="copyright" content="声明内容"/>
-      generator   代码生成软件说明
+      'generator'   代码生成软件说明 
         表示该文件使用什么软件生成的.
         <meta name="generator" content="Notepad2"/>
         注:http-equiv指明下面要设置的项目
         content指明该项目设置的内容
-      viewport    设置不同设备下的显示属性「HTML5+」
-        <meta name="viewport" content="width=device-width, initial-scale=1.0,height=device-height,user-scalable=yes">
-          width=device-width   宽度等于设备宽度
-            像素值
-          height=device-height 高度等于设备高度
-            像素值
-          initial-scale        初始缩放比例
-            0.01-10 范围
-          user-scalable        是否允许用户缩放
-            yes;no
-          minimum-scale        允许用户缩放的最小比例
-          maximum-scale        允许用户缩放的最大比例
-    ◆content    可选,定义与 http-equiv 或 name 属性相关的元信息
-    ◆http-equiv 可选,把 content 属性关联到 HTTP 头部.
-      refresh 定时跳转/刷新
+    ◆content=    可选,定义与 http-equiv 或 name 属性相关的元信息
+    ◆http-equiv= 可选,把 content 属性关联到 HTTP 头部.
+      'refresh' 定时跳转/刷新
         e.g.:
           <meta http-equiv="refresh" content="2";URL=网址>
           content="2"表示2秒后刷新;URL可选,当无URL时则默认刷新当前页面,
           每隔时间2s 进行刷新(有url时则是等待时间t后刷新到url地址为止,
           且后续刷新该跳转后的页面)
-      expires 设置缓存时间
+      'expires' 设置缓存时间
         <meta http-equiv="expires" content="0"/>
         此设置表示不缓存,方便代码调试
         expires 期限,0 为缓存的时间,过期的时间;
-      pragma  代理服务器缓存设置
+      'pragma'  代理服务器缓存设置
         <meta http-equiv="pragma" content="no-cache"/>
-      set-cookie
-      content-type
-      X-UA-Compatible 从IE8新加的一个设置
+      'set-cookie'
+      'content-type'
+      'X-UA-Compatible' IE8新加的设置 
         对于IE8以下的浏览器是不识别 
         通过在meta中设置X-UA-Compatible的值,可以指定网页的兼容性模式设置。
         在网页中指定的模式优先权高于服务器中(通过HTTP Header)所指定的模式
@@ -224,14 +252,18 @@
             add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
       e.g.:
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    ◆charset    可选,设置字符集
+    ◆charset=    可选,设置字符集
+      "UTF-8"
       e.g.:
-      <meta charset="UTF-8">
-      <meta http-equiv="content-type" content="text/html;charset=gb2312"/>
-    ◆rel
+        <meta charset="UTF-8">
+        <meta http-equiv="content-type" content="text/html;charset=gb2312"/>
+    ◆rel=        可选,
+      'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
+        <link rel="prefetch" href="url">
+        url可为一网页地址或图片地址
       e.g.:
-      <link rel="stylesheet" type="text/css" href="XXX.css" />
-      // type在html5中可以不用写
+        <link rel="stylesheet" type="text/css" href="XXX.css" />
+        // type在html5中可以不用写
   <title>  网页标题
 引入类 
   <style>  嵌入样式
@@ -1717,8 +1749,8 @@ Collection
     将整个页面进行结构性的划分,使用结构性的标签来构建
     对每个结构或区块进行细致的划分
     对有语义的内容,使用语义化的标签来组建,如时间 地址等
-  在保留格式的情况下,在网页中显示出html代码
-    实现方法一
+  在保留格式的情况下,在网页中显示出html代码 
+    实现方法一 
       使用文本域标签<textarea></textarea>
         添加属性disabled="disabled"不可更改文本、cols&rows 属性
 习题及精解
@@ -1726,25 +1758,6 @@ Question & idea
 --------------------------------------------------------------------以下待整理 
 
 
-  URL,Uniform Resource Locator 也叫网址或'统一资源定位符'
-    PS：可以由单词组成,或者是因特网协议「IP」地址如:162.168.1.253;
-      用于定位万维网上的文档或其他数据
-    scheme://host.domain:port/path/fileName  语法规则
-      scheme  定义因特网服务的类型
-        http   超文本传输协议,以'http://'开头的普通网页,不加密
-        https  安全超文本传输协议,安全网页,加密所有信息交换
-        ftp    文件传输协议,用于将文件下载或上传至网站
-        file   本地计算机上的文件
-      host    定义域主机,http的默认主机是www
-      domain  定义因特网域名,如W3school.com.cn
-      port    定义主机上的端口号,http的默认端口号是80
-      path    定义服务器上的路径,若省略,则文档必须位于网站的根目录中
-      fileName  定义文档/资源的名称
-    HTML URL字符编码: 将字符转换为可通过因特网传输的格式
-      URL只能使用ASCII字符集来通过因特网进行发送,
-      由于URL常常会包含ASCII集合之外的字符,URL必须转换为有效的ASCII格式。
-      URL编码使用%其后跟随两位的十六进制数来替换非ASCII字符。
-      URL不能包含空格,URL编码通常使用+来替换空格
 
 
 

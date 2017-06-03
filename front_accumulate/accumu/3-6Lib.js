@@ -18,12 +18,10 @@ Framework 框架
   Mobile开发可以用jQueryMobile,
   MVC解决方案用backbone.
 --------------------------------------------------------------------------------
-★jQuery 
-说明篇 :快速简洁的JavaScript库 
+jQuery 快速简洁的JavaScript库 
   PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
-  版本 
     2.0 版本不支持ie 6/7/8
-  核心特性总结： 
+  核心特性总结 
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
     拥有便捷的插件扩展机制和丰富的插件.
@@ -1521,32 +1519,24 @@ jQuery UI插件
       })
   jQuery UI Events事件 
     slidechange   滑条改变事件
-其他 
-  Collection
-    在新窗口中打开链接
-      // Links with the rel="external" attribute will only open in a new window
-       $('a[@rel$='external']').click(function(){
-          this.target = "_blank";
-       });
-      // how to use
-      <a href="http://www.opensourcehunter.com" rel=external>open link</a>
-  Suggestion:
-    增强功能
-      由此启发
-      var form = document.getElementById('form');
-      var input = form.getElementsByTagName('input');
-      实现类似如此的功能(现在还没有?)
-      var form =$(".form")
-      var input =form.$('input')
-
-      实现类似如下功能:在获取的元素中进行筛选,如筛选出type='checkbox'的input.
-      $('input').$('type',"checkbox")
-  特殊用法
-    PS-Self:
-      $(":checkbox") 
-        表示选中type值为checkbox的input元素.
+Exp: 
+  在新窗口中打开链接 
+    <a href="http://www.opensourcehunter.com" rel='openNew'>link1</a>
+    <a href="http://www.opensourcehunter.com" rel='openNew'>link2</a>
+    ...
+     $('a[rel$="openNew"]').click(function(){ 
+        this.target = "_blank";
+     });
+  自动修改破损图像 
+    若网站上有许多破碎的图像链接,可用一个不易被替换的图像来代替.
+    添加这个简单的代码可以节省很多麻烦：
+    即使网站没有破碎的图像链接,添加这段代码也没有任何害处。
+    $('img').on('error', function () {
+      $(this).prop('src', 'img/broken.png');
+    });
+Suggestion:
 --------------------------------------------------------------------------------
-Bootstrap :快速开发 Web 应用程序和网站的前端框架 
+Bootstrap 快速开发Web应用程序和网站的前端框架 
 介绍_概念_说明_定义 
   PS：Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
     简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)

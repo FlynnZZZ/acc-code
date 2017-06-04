@@ -108,7 +108,7 @@ window 对象
         } else {
           console.log('页面宽度大于700px');
         }
-  导航和打开/关闭窗口
+  导航和打开/关闭窗口 
     window.open([url],[窗口目标],[参数str],[boolean]);   打开/新建窗口
       PS：查找一个已经存在的窗口或者新建的浏览器窗口
         若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
@@ -288,7 +288,7 @@ window 对象
       点击确定,则返回值为用户输入的值;点击取消,则返回null.
     find();    调出查找对话框,异步显示
     print();   调出打印对话框,异步显示
-  其他属性方法
+  其他属性方法 
     onload
     closed          当窗口关闭时返回true
     frame           窗口中的框架对象数组
@@ -311,7 +311,7 @@ window 对象
     focus()       将焦点移至窗口
     方法
     window.btoa()  将ascii字符串或二进制数据转换成一base64编码过的字符串
-    window.atob()  解码
+    window.atob()  解码 
       PS：该方法不能直接作用于Unicode字符串.
         由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
         接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
@@ -334,17 +334,105 @@ window 对象
         b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
         在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
         所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
-  文本相关
-    var selecText = window.getSelection();  返回一个 Selection 对象,表示选中的文字
-      PS：可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串.
-        当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
-        对象的toString()方法会被自动调用,而不用手动转换.
-      e.g.:
-        打印出文档中被选中的的文字
-        $(document).mouseup(function (e) {
-          var txt = window.getSelection();
-          if (txt.toString().length >= 1) { alert(txt); }
+  ◆其他接口 
+  window.Notification 浏览器通知接口「DiBs HTML5」 
+    PS：用于在用户的桌面,而非网页上显示通知信息, 
+      桌面电脑和手机都适用,比如通知用户收到了一封Email。
+      具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
+      若网页代码调用这个API,浏览器会询问用户是否接受。
+      只有在用户同意的情况下,通知信息才会显示。
+    浏览器兼容性检测 
+      目前,Chrome和Firefox在桌面端部署了这个API,
+      Firefox和Blackberry在手机端部署了这个API; 
+      if (window.Notification) {
+        console.log('该浏览器支持Notification接口');
+      } 
+      else {
+        console.log('该浏览器不支持Notification接口');
+      }
+    e.g.：
+      当前浏览器支持Notification对象,并当前用户准许使用该对象,
+      然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
+      if(window.Notification && Notification.permission !== "denied") {
+        Notification.requestPermission(function(status) {
+          var n = new Notification('通知标题', { body: '这里是通知内容!'}); 
         });
+      }
+    ◆Notification对象的属性和方法
+    Notification.permission  只读,用户给予的权限 
+      'default' 用户还没有做出许可,因此不会弹出通知 
+      'granted' 用户明确同意接收通知 
+      'denied'  用户明确拒绝接收通知 
+    Notification.requestPermission(foo)  获取用户授权
+      foo  回调函数,参数为 status「用户授权状态」 
+      e.g.： 若用户拒绝接收通知,用alert方法代替 
+        Notification.requestPermission(function (status) {
+          if (status === "granted") {
+            var n = new Notification("Hi!");
+          } 
+          else {
+            alert("Hi!");
+          }
+        });
+    var notice = new Notification(title [,options]);  生成一条通知
+      title   字符串,必须,用来指定通知的标题
+      options 对象,可选,用来设定各种设置
+        属性都是可读写的
+        dir   文字方向,
+          'auto'
+          'ltr'  从左到右
+          'rtl'  从右到左
+        lang  使用的语种
+          'en-US'
+          'zh-CN'
+          ...
+        body  通知内容,值为字符串,用来进一步说明通知的目的
+        tag   通知的ID,值为字符串 
+          一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示。
+        icon  图表的URL,用来显示在通知上
+      e.g.：
+        var notice = new Notification('收到新邮件', {
+          body: '您总共有3封未读邮件。'
+        });
+        notice.title // "收到新邮件"
+        notice.body // "您总共有3封未读邮件。"
+      notice.title  通知标题
+      notice.body   通知内容
+    notice.close();    关闭通知
+      var n = new Notification("Hi!");
+      // 手动关闭
+      n.close();
+      // 自动关闭
+      n.onshow = function () { 
+        setTimeout(n.close.bind(n), 5000); 
+      }
+      上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
+    notice_event 通知对象的事件
+      show  通知显示给用户时触发
+      click 用户点击通知时触发
+      close 用户关闭通知时触发
+      error 通知出错时触发,大多数发生在通知无法正确显示时 
+      e.g.：
+        notice.onshow = function() {
+          console.log('Notification shown');
+        };
+  window.getSelection();  返回表示选中的文字的Selection对象 
+    PS：可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串.
+      当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
+      对象的toString()方法会被自动调用,而不用手动转换.
+    var selectText = window.getSelection();  
+    selectText + ''         获取选中的字符串
+    selectText.toString();  获取选中的字符串
+    e.g.: 打印出文档中被选中的的文字 
+      $(document).mouseup(function (e) {
+        var txt = window.getSelection();
+        if (txt.toString().length >= 1) { 
+          console.log(txt);  // 返回一个对象
+          console.log(txt+''); // 返回选中的文字
+          console.log(txt.toString()); // 返回选中的文字
+          alert(txt); // 返回选中的文字
+        }
+      });
   Remarks:
     由于window是顶层对象,因此调用它的子对象/属性/方法时可以不显示的指明window对象
       例如window.alert()和alert()是一个意思.
@@ -827,16 +915,16 @@ window的属性对象
         持续震动: 可使用setInterval不断调用vibrate.
           var vibrateInterval;
           function startVibrate(duration) {
-          	navigator.vibrate(duration);
+            navigator.vibrate(duration);
           }
           function stopVibrate() {
-          	if(vibrateInterval) clearInterval(vibrateInterval);
-          	navigator.vibrate(0);
+            if(vibrateInterval) clearInterval(vibrateInterval);
+            navigator.vibrate(0);
           }
           function startPeristentVibrate(duration, interval) {
-          	vibrateInterval = setInterval(function() {
-          		startVibrate(duration);
-          	}, interval);
+            vibrateInterval = setInterval(function() {
+              startVibrate(duration);
+            }, interval);
           }
     navigator.permissions.query()   许可查询 「HTML5」 
       PS：很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
@@ -2656,7 +2744,7 @@ WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」
         sendChannel.send(data);
       };
       Chrome 25、Opera 18 和Firefox 22 支持RTCDataChannel。
-  外部函数库
+  外部函数库 
     由于API比较复杂,一般采用外部函数库进行操作。
     目前,视频聊天的函数库有 SimpleWebRTC easyRTC webRTC.io,
     点对点通信的函数库有PeerJS、Sharefest。
@@ -2707,10 +2795,10 @@ WebSocket     网络通信协议「HTML5」 「IE10+」
     else{
       alert('browser not supports ws');
     }
-  var ws = new WebSocket("ws://yourdomain/yourservice")  创建Web Socket
-    必须给构造函数传入绝对URL
-    实例化ws对象后,浏览器就会马上尝试创建连接
-  属性 方法 
+  var ws = new WebSocket("url");  创建WebSocket 
+    PS：实例化ws对象后,浏览器就会马上尝试创建连接
+    url   绝对URL
+  属性_方法 
     ws.readyState; 表示当前的连接状态值 
       0  正在建立连接
       1  已经建立连接
@@ -2741,7 +2829,7 @@ WebSocket     网络通信协议「HTML5」 「IE10+」
     ws.close();  关闭连接
     ws.send("message"); 发送数据「任意字符」
       Web Socket只能通过连接发送纯文本数据,对于复杂的数据结构,需转换为JSON字符串再发送
-  事件 
+  Event事件 
     PS：WebSocket对象不支持DOM2级事件绑定,需使用DOM1级来定义「使用on+事件名」
     open    在成功建立连接时触发事件
     message 当服务器向客户端发来消息时触发事件 
@@ -3120,31 +3208,31 @@ IndexedDB   浏览器端数据库 「HTML5」
     bound方法：指定范围的上下限。
     only方法：指定范围中只有一个值。
     下面是一些代码实例：
-    // All keys ≤ x	
+    // All keys ≤ x  
     var r1 = IDBKeyRange.upperBound(x);
     
-    // All keys < x	
+    // All keys < x  
     var r2 = IDBKeyRange.upperBound(x, true);
     
-    // All keys ≥ y	
+    // All keys ≥ y  
     var r3 = IDBKeyRange.lowerBound(y);
     
-    // All keys > y	
+    // All keys > y  
     var r4 = IDBKeyRange.lowerBound(y, true);
     
-    // All keys ≥ x && ≤ y	
+    // All keys ≥ x && ≤ y  
     var r5 = IDBKeyRange.bound(x, y);
     
-    // All keys > x &&< y	
+    // All keys > x &&< y  
     var r6 = IDBKeyRange.bound(x, y, true, true);
     
-    // All keys > x && ≤ y	
+    // All keys > x && ≤ y  
     var r7 = IDBKeyRange.bound(x, y, true, false);
     
-    // All keys ≥ x &&< y	
+    // All keys ≥ x &&< y  
     var r8 = IDBKeyRange.bound(x, y, false, true);
     
-    // The key = z	
+    // The key = z  
     var r9 = IDBKeyRange.only(z);
     前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性。
     
@@ -3166,128 +3254,25 @@ IndexedDB   浏览器端数据库 「HTML5」
       }
     }  
   e.g.：
-Web_Notifications 浏览器通知接口 「DiBs」「HTML5」  
-  概述
-  Notification API是浏览器的通知接口,用于在用户的桌面(而不是网页上)显示通知信息,桌面电脑和手机都适用,比如通知用户收到了一封Email。具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
-  
-  若网页代码调用这个API,浏览器会询问用户是否接受。只有在用户同意的情况下,通知信息才会显示。
-  
-  下面的代码用于检查浏览器是否支持这个API。
-  
-  
-  if (window.Notification) {
-    // 支持
-  } else {
-    // 不支持
-  }
-  
-  目前,Chrome和Firefox在桌面端部署了这个API,Firefox和Blackberry在手机端部署了这个API。
-  
-  
-  if(window.Notification && Notification.permission !== "denied") {
-  	Notification.requestPermission(function(status) {
-  		var n = new Notification('通知标题', { body: '这里是通知内容！' }); 
-  	});
-  }
-  
-  上面代码检查当前浏览器是否支持Notification对象,并且当前用户准许使用该对象,然后调用Notification.requestPermission方法,向用户弹出一条通知。
-  
-  Notification对象的属性和方法
-  Notification.permission
-  Notification.permission属性,用于读取用户给予的权限,它是一个只读属性,它有三种状态。
-  
-  default：用户还没有做出任何许可,因此不会弹出通知。
-  granted：用户明确同意接收通知。
-  denied：用户明确拒绝接收通知。
-  Notification.requestPermission()
-  Notification.requestPermission方法用于让用户做出选择,到底是否接收通知。它的参数是一个回调函数,该函数可以接收用户授权状态作为参数。
-  
-  
-  Notification.requestPermission(function (status) {
-    if (status === "granted") {
-      var n = new Notification("Hi!");
-    } else {
-      alert("Hi!");
-    }
-  });
-  
-  上面代码表示,若用户拒绝接收通知,可以用alert方法代替。
-  
-  Notification实例对象
-  Notification构造函数
-  Notification对象作为构造函数使用时,用来生成一条通知。
-  
-  
-  var notification = new Notification(title, options);
-  
-  Notification构造函数的title属性是必须的,用来指定通知的标题,格式为字符串。options属性是可选的,格式为一个对象,用来设定各种设置。该对象的属性如下：
-  
-  dir：文字方向,可能的值为auto、ltr(从左到右)和rtl(从右到左),一般是继承浏览器的设置。
-  lang：使用的语种,比如en-US、zh-CN。
-  body：通知内容,格式为字符串,用来进一步说明通知的目的。。
-  tag：通知的ID,格式为字符串。一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示。
-  icon：图表的URL,用来显示在通知上。
-  上面这些属性,都是可读写的。
-  
-  下面是一个生成Notification实例对象的例子。
-  
-  
-  var notification = new Notification('收到新邮件', {
-    body: '您总共有3封未读邮件。'
-  });
-  
-  notification.title // "收到新邮件"
-  notification.body // "您总共有3封未读邮件。"
-  
-  实例对象的事件
-  Notification实例会触发以下事件。
-  
-  show：通知显示给用户时触发。
-  click：用户点击通知时触发。
-  close：用户关闭通知时触发。
-  error：通知出错时触发(大多数发生在通知无法正确显示时)。
-  这些事件有对应的onshow、onclick、onclose、onerror方法,用来指定相应的回调函数。addEventListener方法也可以用来为这些事件指定回调函数。
-  
-  
-  notification.onshow = function() {
-    console.log('Notification shown');
-  };
-  
-  close方法
-  Notification实例的close方法用于关闭通知。
-  
-  
-  var n = new Notification("Hi!");
-  
-  // 手动关闭
-  n.close();
-  
-  // 自动关闭
-  n.onshow = function () { 
-    setTimeout(n.close.bind(n), 5000); 
-  }
-  
-  上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
-drag&drop 拖放 「HTML5」 
-  PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 「IE9+ HTML5」
+drag&drop 拖放「IE9+ HTML5」 
+  PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 
     IE4最早加入拖放功能,只能拖放文本框
-  定义拖放元素和目标元素
-    定义拖放元素
-      在HTML中将要拖放的标签其draggable属性设置为true,即draggable="true",
-      若是图片则图片需加载进来,当图片加载失败则不可拖放.
-    定义目标元素
-      默认的所有的元素都不能做为放置的目标元素,
+  定义拖动元素 
+    PS：若是图片则需加载后拖放,当图片加载失败则不可拖放.
+    HTML中,在要拖动元素的标签中,添加属性 draggable="true",
+  定义目标元素 
+    PS：默认的所有的元素都不能做为放置的目标元素,
       通过阻止拖放时触发事件的默认行为来达到可放置的效果,
       仅仅是光标的显示不同,DOM结构的变化还需自己设置.
-      e.g.:
-      var dropTarget =document.querySelector("#aoo");
+    e.g.:
+      var dropTarget = document.querySelector("#aoo");
       dropTarget.ondragover =function(e){
         e.preventDefault();
       }
       dropTarget.ondragenter =function(e){
         e.preventDefault();
       }
-  拖放事件
+  Event拖放事件 
     ◆在拖放元素上触发
     dragstart 开始拖动
     drag      拖放期间持续触发
@@ -3297,55 +3282,54 @@ drag&drop 拖放 「HTML5」
     dragover   被拖放元素处于目标元素上方时触发
     dragleave  被拖放元素离开目标元素的范围时触发
     drop       被拖放元素放置到目标元素后触发
-  dataTransfer 拖放事件的属性对象
-    PS：IE5最早引入的对象.
-      是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
-    ◆数据传递
-      为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
-      IE自定义了'text'和'URL'两种有效的数据类型,而HTML5对此扩展,允许指定MIME类型.
-      为了兼容,HTML5也支持'text'和'URL',但会被映射为'text/plain'和'text/uri-list'.
-      dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL.
-    e.dataTransfer.setData('text',str);  设置传递数据及数据类型
-      PS：拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
-        将拖动的文本以"text"格式保存在dataTransfer对象中.
-        在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
-        这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
-        也可以自定义保存的信息.
-      str 字符串,表示保存的数据类型,取值为'text'或'URL'
-    e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
-      PS：保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
-      e.g.:
-      设置和接收文本数据
-      e.dataTransfer.setData('text','some text');
-      var text =e.dataTransfer.getData('text');
-      设置和接收URL
-      e.dataTransfer.setData('URL','https://www.baidu.com');
-      var url =e.dataTransfer.getData('URL');
-    ◆改变拖放的光标显示
-    e.dataTransfer.dropEffect   操作拖放元素
-      'none'    不能把拖放元素放在这,文本框外的默认值
-      'move'    把拖放的元素移动到目标位置
-      'copy'    把拖放的元素复制到目标位置
-      'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
-    e.dataTransfer.effectAllowed 操控dropEffect属性
-      PS：必须在ondragstart事件处理程序中设置effectAllowed属性
-      'uninitialized'  没有给拖放元素设置任何放置行为
-      'none'           被拖放的元素不能有任何行为
-      'copy'           只允许值为'copy'的dropEffect
-      'link'           只允许值为'link'的dropEffect
-      'move'           只允许值为'move'的dropEffect
-      'copyLink'       允许值为'copy'和'link'的dropEffect
-      'copyMove'       允许值为'link'和'move'的dropEffect
-      'linkMove'       允许值为'link'和'move'的dropEffect
-      'all'            允许任意dropEffect
-    ◆其他
-    e.dataTransfer.clearData(format); 清除以特定格式保存的数据
-    e.dataTransfer.setDrageImage(elem,x,y); 指定图像,在拖动时,显示在光标下方. [兼容问题]
-      其中elem可以时图像也可以是其他元素,若为图像则显示图像,其他元素则显示渲染后的元素.
-    e.dataTransfer.addElement(elem); 为拖动操作添加一个元素
-    e.dataTransfer.types  当前保存的数据类型,如'text'
-    e.dataTransfer.items  返回 DataTransferItemList 对象
-    e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
+    e.dataTransfer 拖放事件的属性对象
+      PS：IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
+      ◆数据传递
+        为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
+        IE自定义了'text'和'URL'两种有效的数据类型,而HTML5对此扩展,允许指定MIME类型.
+        为了兼容,HTML5也支持'text'和'URL',但会被映射为'text/plain'和'text/uri-list'.
+        dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL.
+      e.dataTransfer.setData('text',str);  设置传递数据及数据类型
+        PS：拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
+          将拖动的文本以"text"格式保存在dataTransfer对象中.
+          在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
+          这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
+          也可以自定义保存的信息.
+        str 字符串,表示保存的数据类型,取值为'text'或'URL'
+      e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
+        PS：保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
+        e.g.:
+        设置和接收文本数据
+        e.dataTransfer.setData('text','some text');
+        var text =e.dataTransfer.getData('text');
+        设置和接收URL
+        e.dataTransfer.setData('URL','https://www.baidu.com');
+        var url =e.dataTransfer.getData('URL');
+      ◆改变拖放的光标显示
+      e.dataTransfer.dropEffect   操作拖放元素
+        'none'    不能把拖放元素放在这,文本框外的默认值
+        'move'    把拖放的元素移动到目标位置
+        'copy'    把拖放的元素复制到目标位置
+        'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
+      e.dataTransfer.effectAllowed 操控dropEffect属性
+        PS：必须在ondragstart事件处理程序中设置effectAllowed属性
+        'uninitialized'  没有给拖放元素设置任何放置行为
+        'none'           被拖放的元素不能有任何行为
+        'copy'           只允许值为'copy'的dropEffect
+        'link'           只允许值为'link'的dropEffect
+        'move'           只允许值为'move'的dropEffect
+        'copyLink'       允许值为'copy'和'link'的dropEffect
+        'copyMove'       允许值为'link'和'move'的dropEffect
+        'linkMove'       允许值为'link'和'move'的dropEffect
+        'all'            允许任意dropEffect
+      ◆其他
+      e.dataTransfer.clearData(format); 清除以特定格式保存的数据
+      e.dataTransfer.setDrageImage(elem,x,y); 指定图像,在拖动时,显示在光标下方. [兼容问题]
+        其中elem可以时图像也可以是其他元素,若为图像则显示图像,其他元素则显示渲染后的元素.
+      e.dataTransfer.addElement(elem); 为拖动操作添加一个元素
+      e.dataTransfer.types  当前保存的数据类型,如'text'
+      e.dataTransfer.items  返回 DataTransferItemList 对象
+      e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
   兼容
     IE9-不支持draggable属性,但可通过mousedown事件来模拟
       e.g.:
@@ -3355,8 +3339,18 @@ drag&drop 拖放 「HTML5」
   e.g.:
     <div id="dragElem" draggable="true">拖放元素</div>
     <div id="targetElem" >放置目标元素</div>
-    #dragElem{ height:30px; width:130px; background:pink; float:left; }
-    #targetElem{ float:right; height: 200px; width:200px; background:lightblue; }
+    #dragElem{ 
+      height:30px; 
+      width:130px; 
+      background:pink; 
+      float:left; 
+    }
+    #targetElem{ 
+      float:right; 
+      height: 200px; 
+      width:200px; 
+      background:lightblue; 
+    }
     dragElem.onmousedown = function(){
       //兼容IE8-浏览器
       if(this.dragDrop){ this.dragDrop(); }
@@ -3449,7 +3443,7 @@ drag&drop 拖放 「HTML5」
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
     }
-Fullscreen 全屏操作 「HTML5」 
+Fullscreen 全屏操作「HTML5」 
   PS：全屏API可以控制浏览器的全屏显示,让一个Element节点「以及子节点」占满用户的整个屏幕
     目前各大浏览器的最新版本都支持这个API「包括IE11」,但是使用的时候需要加上浏览器前缀
     放大一个节点时,Firefox和Chrome在行为上略有不同。

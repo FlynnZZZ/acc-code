@@ -1783,7 +1783,7 @@ CSS
         </ul> -->
       </nav>
 组件
-JS插件
+JS插件 
   PS：一组基于jQuery的JS插件集 (故需要引入jQuery库)
   使用方法:给元素添加 data-xx="xxx" 属性 或再配合jQuery 使用.
   动画效果

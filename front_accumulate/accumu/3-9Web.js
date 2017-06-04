@@ -1,5 +1,5 @@
 介绍_概念_说明_定义
-web标准的构成
+web标准的构成 
   主要有三部分:结构「structure」、表现「presentation」和行为「behavior」
   结构标准对应的主要语言是html
   表现标准对应的主要语言是css

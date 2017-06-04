@@ -1140,35 +1140,33 @@ ECMAScript JS核心,语法部分
         JS中:会产生覆盖,只有最后一个定义的函数有用.
 数据类型相关的方法、功能 
   ◆类型检测
-    typeof val;               [详参 一元运算符]
-    obj instanceof Object;    [详参 关系运算符]
-    Object.prototype.toString.call(val); 获取值类型
-      e.g. 判断值是否为数组
-      var a ="1";
-      var b =1;
-      var c =[1];
-      var d ={age:1}
-      Object.prototype.toString.call(a);  //"[object String]"
-      Object.prototype.toString(a);      // "[object Object]"
-      Object.prototype.toString.call(b);  //"[object Number]"
-      Object.prototype.toString.call(c);  //"[object Array]"
-      Object.prototype.toString.call(d);  //"[object Object]"
-    obj.constructor
-    duck type
+  typeof val;               [详参 一元运算符]
+  obj instanceof Object;    [详参 关系运算符]
+  Object.prototype.toString.call(val); 获取值类型
+    e.g. 判断值是否为数组
+    var a ="1";
+    var b =1;
+    var c =[1];
+    var d ={age:1}
+    Object.prototype.toString.call(a);  //"[object String]"
+    Object.prototype.toString(a);      // "[object Object]"
+    Object.prototype.toString.call(b);  //"[object Number]"
+    Object.prototype.toString.call(c);  //"[object Array]"
+    Object.prototype.toString.call(d);  //"[object Object]"
+  obj.constructor
+  duck type
   ◆数据通用属性/方法
-    Remarks:
-      Date实例的toLocaleString toString valueOf 方法,返回值有不同
-        var box=new Date(2007,10,15,17,22,45,15);
-        console.log(box);
-        //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
-        console.log(box.toString());
-        //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
-        console.log(box.toLocaleString()); //2007/11/15 下午5:22:45
-        console.log(box.valueOf());        //1195118565015
-        注:toLocaleString 和 toString 方法在不同浏览器显示的效果可能不一样,
-          一般调试使用.
+    Date实例的toLocaleString toString valueOf 方法,返回值有不同 
+      var box=new Date(2007,10,15,17,22,45,15);
+      console.log(box);
+      //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
+      console.log(box.toString());
+      //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
+      console.log(box.toLocaleString()); //2007/11/15 下午5:22:45
+      console.log(box.valueOf());        //1195118565015
+      toLocaleString 和 toString 方法在不同浏览器显示的效果可能不一样,一般调试使用;
       e.g.
-      var box=["a",18,"js"];  //字面量数组
+      var box = ["a",18,"js"];  //字面量数组
       box.valueOf();  // ["a", 18, "js"]
       box.toString(); // "a,18,js"
       box.toLocaleString();//"a,18,js"
@@ -1258,9 +1256,9 @@ ECMAScript JS核心,语法部分
         Number(obj); // 1 2 报错
         分析:调用Number方法时,先调用对象的valueOf方法,再调用其toString方法
           一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
-◆ECMAScript的两种开发模式
-OOP,面向对象 
-  PS：面向对象的编程语言最大的特色就是可以编写自己所需的数据类型,以更好的解决问题
+◆ECMAScript的两种开发模式 
+OOP 面向对象 
+  PS：面向对象的编程语言最大特色为可编写自己所需的数据类型,以更好的解决问题; 
     从世界观的角度可以认为：
     面向对象的基本哲学是认为世界是由各种各样具有自己的运动规律和内部状态的对象所组成的；
     不同对象之间的相互作用和通讯构成了完整的现实世界
@@ -1321,7 +1319,7 @@ OOP,面向对象
         Car._initialized=true;
       }
       该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
-函数式,过程化
+函数式,过程化 
 -------------------------------------------------------------------------------
 操作符/运算符 
   PS：ECMA-262 描述了一组用于操作数据值的运算符;
@@ -2386,12 +2384,12 @@ OOP,面向对象
     创建函数 
       PS：函数的创建有 函数声明 和 函数表达式 两种常用方法.
         变量名可以使用中文字符来进行命名而不会报错,但最好不要使用中文.
-      function funcName(参数){执行语句} function关键字创建函数
+      function foo(arg){} function关键字创建函数 
         PS：ECMAScript中的函数使用function关键字来声明,后跟一组参数以及函数体.
           该方法创建的函数,调用可在声明(位置)前进行(函数声明提升)
           函数声明后,函数不调用不执行
         函数的调用 : 函数名(参数);
-      var foo=function(参数){执行语句}  变量初始化创建函数
+      var foo = function(arg){}  变量初始化创建函数
         函数的创建需在调用前完成
         e.g.
         var foo =function bar(){ alert(1); }
@@ -2404,15 +2402,14 @@ OOP,面向对象
           var foo =(function bar(){ alert(1); })();
           等价于
          (function bar(){ alert(1); })();
-      new Function(); 构造函数创建函数
-        PS： 该方法不推荐使用,会导致解析两次代码,影响性能,
+      var foo = new Function('arg1',...,"函数体"); 构造函数创建函数
+        PS：不推荐使用该方法,会导致解析两次代码,影响性能,
           第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串.
-        var foo =new Function('arg1',...,"函数体");
         e.g. :
-          var foo =function(){}
+          var foo = function(){}
           foo.constructor;  // Function() { [native code] }
 
-          var foo =new Function("a","b","console.log(a+b);");
+          var foo = new Function("a","b","console.log(a+b);");
           foo(1,3); // 4
       不同声明的差异
         关键字声明法:函数的调用可在声明之前或之后无影响,函数在代码运行之前有预加载.

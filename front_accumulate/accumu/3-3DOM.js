@@ -1337,11 +1337,10 @@ event 事件对象
       e.returnValue =false; 阻止事件默认行为
 事件分类 
   ◆DOM3级规定了一下几类事件
-  UI(User Interface,用户界面)事件  当用户与页面上的元素交互时触发
-    PS：不一定与用户操作有关
-      除DOMActivate之外,其他事件在DOM2中都归为HTML事件
-    DOMActivate 表示元素已经被用户操作(通过鼠标或键盘)激活 (DOM3级中废弃)
-    load    加载完后触发
+  User_Interface「用户界面」,UI事件 当用户与页面上的元素交互时触发 
+    PS：不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
+    DOMActivate 表示元素已经被用户操作「通过鼠标或键盘」激活 「DOM3级中废弃」
+    load    加载完后触发 
       当页面完全加载后(包括所有图像、JS文件、CSS文件等外部资源)在window上触发,
       在所有框架都加载完毕时在框架集上面触发,
       当图片加载完后在<img>元素上触发,
@@ -1351,23 +1350,23 @@ event 事件对象
             console.log('image load successful');
           });
       当嵌入内容加载完后在<object>元素上触发
-    unload  卸载时触发
+    unload  卸载时触发 
       只要用户从一个页面切换到另一个页面就会发生unload事件
       当页面完全卸载后在window上触发,
       所有框架都卸载后在框架集上触发,
       嵌入的内容卸载完毕后在<object>元素上触发
-    resize  当窗口或框架的大小变化时在window或框架上触发
+    resize  当窗口或框架的大小变化时在window或框架上触发 
       Firefox只会在用户停止调整窗口大小时才触发事件
       IE Safari Chrome Opera 会在浏览器窗口变化了1px时就触发
       浏览器窗口在最小化或最大化时,也会触发resize事件
     scroll  当用户滚动带滚动条的元素中的内容时,在该元素上触发
     abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发
-    error   发生错误时触发
+    error   发生错误时触发 
       当发生JS错误时在window上面触发,
       无法加载图像时在<img>元素触发,
       无法加载嵌入内容在<object>元素上触发,
       有框架无法加载时在框架集上触发
-    select  当用户选择文本框「input或textarea,且disabled为false时」中的字符时触发
+    select  当用户选择文本框「input或textarea,且disabled为false时」中的字符时触发 
       支持该事件的标签:<input type="text">, <textarea>
       e.target.selectionStart 选中字符的indx
       e.target.selectionEnd   选中字符的indx
@@ -1627,7 +1626,7 @@ event 事件对象
    touchstart
    touchend
    touchmove
-  Remarks:
+  Exp： 
     页面加载时只执行 onload
     页面刷新时先执行 onbeforeunload,然后 onunload,最后 onload
     页面关闭时先执行 onbeforeunload,最后 onunload
@@ -3312,18 +3311,18 @@ File_API 文件和二进制数据的操作 「HTML5」
 cross-document_messaging 跨文档消息传递 
   PS：简称为XDM,指在不同域的页面间传递消息,
     XDM机制出现之前,要稳妥的实现这种通信需花很多功夫
-  postMessage(str,URL); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.
-    PS： XDM的核心方法
-    Arguments:接收两个参数,一条消息和表示域名的字符串
-      表示中的文档必须来源于指定的域,若匹配,消息会传递到框架中,否则无动作.
+  postMessage(mes,url); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.
+    PS：XDM的核心方法
+    mes 字符串,发送的消息
+    url 字符串,域名
+      url指向的文档必须来源于指定的域,若匹配,消息会传递到框架中,否则无动作.
       若把第二个参数设置为"*",则表示可以把消息发送给来自任何域的文档
     e.g. :
-    var iframew =document.getElementById("myframe").contentWindow;
-    // 所有支持XDM的浏览器也支持iframe的 contentWindow属性
-    iframew.postMessage("a secret","https://www.baidu.com")
-  message 事件
-    PS：接收到XDM消息时,会触发window对象的message事件
-      该事件以异步形式触发
+      var iframew = document.getElementById("myframe").contentWindow;
+      // 所有支持XDM的浏览器也支持iframe的 contentWindow属性
+      iframew.postMessage("a secret","https://www.baidu.com");
+  window.message 事件 
+    PS：接收到XDM消息时,会触发window对象的message事件 
     e.data
     e.origin
     e.source

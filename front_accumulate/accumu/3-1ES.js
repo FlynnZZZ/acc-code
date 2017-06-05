@@ -2220,7 +2220,7 @@ OOP 面向对象
           val    数组中当前被传递的元素
           indx   数组中当前被传递的元素的索引
           arr    调用 map 方法的数组
-        thisArg 可选,数组本身, 执行 foo 函数时 this 指向的对象.
+        thisArg 可选,数组本身, 执行 foo 函数时 this 指向的对象 
         e.g.
           arr = [1, 2, 3];
           arr.map(String);  // ["1", "2", "3"]
@@ -2435,7 +2435,7 @@ OOP 面向对象
         }else {
           foo =function foo(){ }
         }
-    函数的参数 
+    Argument函数的参数 
       传入的参数可多可少,多则舍去,少则使用undefined来补充
         function foo(){ 
           console.log(arguments[0],arguments[1]); 

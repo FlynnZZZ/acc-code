@@ -194,7 +194,7 @@ Destructuring,解构赋值
     // ,sum( ...arr ) 的效果相当于sum( 2,3 ) 
 for(var val of aoo){} 「有序?」遍历 
   可遍历的对象包括数组,对象,字符串,set和map结构等具有iterator接口的数据结构
-  数组遍历
+  数组遍历 
     方式一:for      缺点：代码不够简洁。
       var arr = [1,2,3,4,5];
       for(let i = 0;i<arr.length;i++){
@@ -251,7 +251,7 @@ for(var val of aoo){} 「有序?」遍历
     // <p>2</p>
     // <p>3</p>
   支持set和map解构的遍历
-  for...of 不能遍历Object对象
+  for...of 不能遍历Object对象 
     PS：要能够被for...of正常遍历的,都需要实现一个遍历器Iterator。
       而数组,Set和Map结构,早就内置好了遍历器Iterator「又叫迭代器」,
       它们的原型中都有一个 Symbol.iterator 方法；

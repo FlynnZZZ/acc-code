@@ -484,14 +484,13 @@ Stream 流
       Data     数据层,一般由数据库组成.
     var http =require("http"); 引入 http 模块
     var server =http.createServer(function(req,res){}); 创建服务器
-      Arguments:
-        req 请求
+      req 请求
         req.url  请求的地址
         req.setEncoding("utf8"); 设置请求的格式为UTF-8
         req.addListener("data",function(dataPart){}); data事件,当接收请求信息时触发
           会触发多次,dataPart为每次信息,将所有dataPart串起来就是,请求传送的信息了
         req.addListener("end",function(){}); end事件,请求信息传送完毕后触发
-        res 响应
+      res 响应
         res.writeHead(状态码,obj); 设置响应头
           obj  设置响应头信息的对象
           e.g.:
@@ -536,7 +535,8 @@ Stream 流
               // HTTP 状态码: 404 : NOT FOUND
               // Content Type: text/plain
               response.writeHead(404, {'Content-Type': 'text/html'});
-            }else{	         
+            }
+            else{	         
               // HTTP 状态码: 200 : OK
               // Content Type: text/plain
               response.writeHead(200, {'Content-Type': 'text/html'});	

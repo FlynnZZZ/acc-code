@@ -168,7 +168,7 @@ DOM 操作
             $("li:not(li:first)") 
             $('.mask-selected:not(.none)')
         :has(selector)  元素包含后代元素selector对应的元素
-          e.g.:
+          e.g.：
             <div class="aoo "> 1</div>
             <div class="aoo boo"> 2
               <div class="boo">
@@ -295,7 +295,7 @@ DOM 操作
       Jelem.append('htmlCode'/Jelem)     内部尾部插入
         也可以将style标签内的css代码添加到head中
       Jelem1.appendTo("selector"/Jelem2) 被插入到内部尾部 [与append顺序相反]
-        e.g.:
+        e.g.：
           .aoo{ background-color:pink;}
           $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
           // 在所有的p标签中添加粗体的Hello,且背景为pink
@@ -327,7 +327,7 @@ DOM 操作
         删除该元素的子元素及以下的所有内容(不包括自身标签)
         返回值为清空后的元素
       Jelem.removeAttr('属性名')  删除属性
-        e.g.:
+        e.g.：
           Jelem.removeAttr('class'); 
       Jelem1.replaceWith("HTML代码"/Jelem)  元素1代替为元素2
       Jelem1.replaceAll("selector"/Jelem2)  元素2代替为元素1 [与replaceWith相反]
@@ -338,10 +338,10 @@ DOM 操作
           Jelem.css("color");  // 获取元素的字体颜色
           Jelem.css("color","red"); // 设置元素的字体颜色为红色
         Jelem.css(attrArr);  获取多个属性值
-          e.g.:
+          e.g.：
             Jelem.css(["color","font-size"]); 
         Jelem.css(attrObj);  设置多个属性
-          e.g.:  Jelem.css({"background-color":"red",color:"yellow"});  
+          e.g.：  Jelem.css({"background-color":"red",color:"yellow"});  
         Jelem.css("color",function(index,oldValue){ }); 传入函数
           // 设置返回值(即 return的值)为属性值.
     元素属性
@@ -349,40 +349,65 @@ DOM 操作
       Jelem.attr();  读写属性值 
         Jelem.attr('属性名')     返回选定属性的属性值
         Jelem.attr('属性名',str/boolean) 设定选定属性的属性值
-          e.g.:
+          e.g.：
             Jelem.attr('disabled',false); // 取消表单禁用
         Jelem.attr(attribute,function(index,oldvalue){...}) 通过函数来操作属性
         Jelem.attr({attribute:value, attribute:value ...})  同时设置多组属性值
-        e.g.:
+        e.g.：
           Jelem.attr('class'); // 获取class属性的值
           Jelem.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
           $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      Jelem.prop();  读写属性值「和attr类似 1.6 新增」 
-        prop 和 attr 的区别 
-          有的属性写法要求不同,如disabled 和 checked,可写成 disabled = "disabled",
-          或单独 disabled 或 disabled=true [HTML5规定,可等于任何字符,最终都为true]
-          Jelem.attr('disabled') 返回 disabled
-          Jelem.prop('disabled') 返回 true
-          使用prop不会在DOM中反应出来
-          e.g.:
-            Jelem.prop('checked',false);//  html中仍显示为checked,但实际上改变了
-            Jelem.attr('checked',false); // html 中会去掉checked属性
-            反复切换选中状态时,
-            attr在HTML文档中有'checked'属性开关显示,但在网页视图中无切换显示,
-            prop在HTML文档中无'checked'属性开关显示,但在网页视图中有切换显示
-            
-            
-            <button type="button" name="button">点击我</button>
-            $('button').click(function(){
-              $(this).css('display','none');
-              console.log($(this).attr('style')); // display: none;
-              console.log($(this).prop('style'));
-              //  CSSStyleDeclaration {0: "display", alignContent: "", alignItems: "", alignSelf: "", alignmentBaseline: "", all: ""…}
-            })
+      Jelem.prop();  读写属性值,和attr类似 「1.6 新增」 
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})
+      prop 和 attr 的区别 
+        有的属性写法要求不同,如disabled 和 checked,可写成 disabled = "disabled",
+        或单独 disabled 或 disabled=true [HTML5规定,可等于任何字符,最终都为true]
+        Jelem.attr('disabled') 返回 disabled
+        Jelem.prop('disabled') 返回 true
+        使用prop不会在DOM中反应出来
+        e.g.：
+          <input type="checkbox" name="" value="">
+          $('#checkbox').on("click",function(e){
+            var aoo = $(this).prop('checked');
+            var boo = $(this).attr('checked');
+            console.log(aoo,boo);
+          })
+          // true undefined
+          // false undefined
+          // true undefined
+          // false undefined
+          // ...
+          
+          反复切换选中状态
+          <input type="text" name="" value="" class="checkbox1">
+          <input type="text" name="" value="" class="checkbox2">
+          var checkbox1 = $('.checkbox1');
+          var checkbox2 = $('.checkbox2');
+          var cal = 0;
+          var aoo = setInterval(function(){
+            if (cal % 2 == 0) {
+              checkbox1.prop('checked',true);
+              checkbox2.prop('checked',true);
+            }
+            else {
+              checkbox1.prop('checked',false);
+              checkbox2.prop('checked',false);
+            }
+            cal++;
+          },1000);
+          attr在HTML文档中有'checked'属性开关显示,但在网页视图中无切换显示,
+          prop在HTML文档中无'checked'属性开关显示,但在网页视图中有切换显示
+          
+          <button type="button" name="button">点击我</button>
+          $('button').click(function(){
+            $(this).css('display','none');
+            console.log($(this).attr('style')); // display: none;
+            console.log($(this).prop('style'));
+            //  CSSStyleDeclaration {0: "display", alignContent: "", alignItems: "", alignSelf: "", alignmentBaseline: "", all: ""…}
+          })
       Jelem.val(str/foo); 读写值 [实时动态的]
         使用元素
           input元素的value的值 
@@ -391,16 +416,16 @@ DOM 操作
         返回第一个匹配元素的 value 属性的值 
       ◆自定义数据
       Jelem.data(key,value) 绑定自定义数据 [DOM中无任何变化]
-        e.g.:
+        e.g.：
           $('#box').data('name', 'TG'); 
       Jelem.data(key) 读取自定义数据 
-        e.g.:
+        e.g.：
           <div class="aoo" data-id='111'> 23423 </div>
           var Jelem = $('.aoo');
           var id = Jelem.data('id');
           console.log(id); // 111
       Jelem.removeDate(key) 移除自定义数据
-        e.g.:
+        e.g.：
           $('#box').removeDate('name');
       ◆class相关
       Jelem.hasClass('class名');    检测class类
@@ -412,7 +437,7 @@ DOM 操作
       Jelem.toggleClass('class名'); 开关class类
         若有,则删除;没有,则加上
     元素信息
-      ◆尺寸位置信息
+      ◆尺寸位置信息 
         PS：对于$(window)和$(document)其 width() innerWidth() outerWidth() 相同
           且为只读,也和其 margin border padding 无关 ,
           推荐使用width来代替innerWidth、outerWidth获取; 高度同理;
@@ -431,9 +456,11 @@ DOM 操作
       Jelem.scrollTop()   读写元素相对滚动条顶部的偏移
         PS：此处的Jelem为拥有滚动条的元素;
       Jelem.scrollLeft()  读写元素相对滚动条左侧的偏移
-      Jelem.offset([{top:num1,left:num2}]) 读写元素相对document「可视区左上角」的top和left 
-        PS：此方法只对可见元素有效;返回包含top和left属性的对象
-        e.g.:
+      Jelem.offset([{top:num1,left:num2}]) 读写元素相对可视区左上角的top和left 
+        PS：返回包含top和left属性的对象;
+          元素相对与document的top和left;
+          此方法只对可见元素有效;
+        e.g.：
           $(".a").offset(); // {top: 24, left: 0}
           $(".a").offset().left = 20; // ? 
           $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
@@ -454,7 +481,7 @@ DOM 操作
       Jelem.size()         元素个数
       Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
-        e.g.: 点击获取当前为第几个li 
+        e.g.： 点击获取当前为第几个li 
           <ul>
             <li>aaaaa</li>
             <li>bbbbb</li>
@@ -544,7 +571,7 @@ DOM 操作
       bool2 可选,默认false表示在执行到的位置,表示停止后的动画位置,true表示到最后
     ◆其他
     jQuery.fx.off = true   禁用jQuery动画效果
-    e.g.:
+    e.g.：
       左右滑动效果
       <div class="wrap">
         <div class="num">
@@ -721,7 +748,7 @@ Event 事件
     PS：jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
       使得事件处理在各大浏览器下都可以正常的运行而不需要进行浏览器类型判断。
     event.type 获取事件的类型
-      e.g.:
+      e.g.：
         $("a").click(function(event){
           alert(event.type); //获取时间类型
           return false;  //阻止链接跳转
@@ -735,7 +762,7 @@ Event 事件
         jQuery对其进行封装,使之能兼容各种浏览器。
     event.target 获取到触发事件的元素
       PS：jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
-      e.g.:
+      e.g.：
         $("a[href=http://www.jb51.net]").click(function(event){
           alert(event.target.href); //获取触发事件的<a>元素的href属性值
           alert(event.target.tagName); //获取触发事件的元素的标签名称
@@ -754,7 +781,7 @@ Event 事件
         而在Firefox浏览器中用 event.pageX/event.pageY,
         如果页上有滚动条,则还要加上滚动条的宽度和高度。
         在IE浏览器中还应该减去默认的2px的边框。
-      e.g.:
+      e.g.：
         $(function() {
           $("a").click(function(event) {
             alert("Current mouse position:" + event.pageX + "," + event.pageY);
@@ -763,7 +790,7 @@ Event 事件
           });
         })
     event.which 在鼠标单击事件中获取到鼠标的左、中、右键,在键盘事件中获取键盘的按钮
-      e.g.:
+      e.g.：
         $(function() {
           $("body").mousedown(function(e) {
             alert(e.which); //1 = 鼠标左键；2 = 鼠标中键；3 = 鼠标右键。
@@ -1106,7 +1133,7 @@ AJAX
       })
       arr;      //[2, 4]
   $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
-    e.g.:
+    e.g.：
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
   $.parseJSON(jsonStr) 解析JSON字符串
@@ -1225,7 +1252,7 @@ Deferred 对象
       添加在该 Deferred 对象被解析、拒绝或收到进展通知时被调用的处理函数
       可用 done() 也可以通过 then() 来处理操作成功的情况;
       区别是then能够把接收到的值通过参数传递给后续的then,done,fail或progress调用
-    e.g.: 
+    e.g.： 
       利用 Deferred 依次执行 Ajax 请求
       var username = 'testuser';
       var fileToSearch = 'README.md';
@@ -1296,7 +1323,7 @@ Deferred 对象
       它的函数签名如下：
       deferred.catch(rejectedCallback)
       可以看出,这个方法不过是 then(null, rejectedCallback) 的一个快捷方式罢了。
-  e.g.:  在ajax中使用 「self」 
+  e.g.：  在ajax中使用 「self」 
     var deferred = $.Deferred();
     $.ajax({
       type : 'get',

@@ -578,93 +578,35 @@ fileNum : 21
 
 
 ◆DeskTop
+  editor 
+    snippets
+    '-function':
+      'prefix': 'function'
+      'body': 'function'
+    '-function($1){$2\n};':
+      'prefix': 'function1'
+      'body': 'function($1){$2\n};'
+    '-function $1($2){$3\n};':
+      'prefix': 'function2'
+      'body': 'function $1($2){$3\n};'
+    '-(function(){})()':
+      'prefix': 'function3'
+      'body': '(function ($1){$3\n})($2);'
+
+
+  QQInput
+    自定义短语
+
 
 
 ◆NoteBook 
   editor 
-    language-less 
-      non word characters   增加 p
     snippets
-      '.text.html.basic':
-        '<?php $1 ?>':
-          'prefix': 'php'
-          'body': '<?php $1 ?>'
-        '-<div >$1</div>':
-          'prefix': 'divNoClass'
-          'body': '<div >$1</div>'
-        '-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">':
-          'prefix': 'metaViewport'
-          'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
-        '-<script src="$1" charset="utf-8"></script>':
-          'prefix': 'scriptSrc'
-          'body': '<script src="$1" charset="utf-8"></script>'
-        '-<section id="$1" class="">$2</section>':
-          'prefix': 'section'
-          'body': """<section id="$1" class="">
-            $2
-          </section>"""
-        '-<span class="">$1</span>':
-          'prefix': 'spanClass'
-          'body': '<span class="">$1</span>'
-        '-<style>$1</style>':
-          'prefix': 'styleSelf'
-          'body': '<style>\n\t$1\n</style>'
-        '-html':
-          'prefix': 'htmlSelf'
-          'body': """
-          <!DOCTYPE html>
-          <html>
-          
-          <head>
-            <meta charset="utf-8">
-            <title>$1</title>
-            <link rel="stylesheet" href="../css.css">
-          </head>
-          
-          <body>
-            
-          </body>
-          
-          </html>"""
-        '-html-mobile':
-          'prefix': 'htmlMobile'
-          'body': """
-          <!DOCTYPE html>
-          <html>
-          
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-            <title>$1</title>
-            <link rel="stylesheet" href="../css.css">
-          </head>
-          
-          <body>
-            
-          </body>
-          
-          </html>"""
-        '-class="$1"':
-          'prefix': 'class'
-          'body': 'class="$1"'
-        '-id="$1"':
-          'prefix': 'id'
-          'body': 'id="$1"'
-        '-placeholder="$1"':
-          'prefix': 'placeholder'
-          'body': 'placeholder="$1"'
-      '-<input type="text" name="" value="">':
-        'prefix': 'input'
-        'body': '<input type="text" name="" value="">'
-      '-function()':
-        'prefix': 'functionaAnonym'
-        'body': 'function($1){$2\n}'
 
 
 
 
   QQInput
-
 
 
 

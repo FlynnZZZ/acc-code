@@ -3515,7 +3515,7 @@ OOP 面向对象
       //    at repl:1:5
       代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
 单体内置对象 
-  PS：ECMA-262 的定义:有ECMAScript实现提供的、不依赖宿主环境的对象,
+  PS：ECMA-262 的定义为由ECMAScript实现提供的、不依赖宿主环境的对象,
     这些对象在ECMAScript程序执行之前就已经存在了.
   Global|Window 全局对象 
     PS： JS继承于ECMAScript,浏览器中,JS的全局对象为window,
@@ -3528,7 +3528,7 @@ OOP 面向对象
     var global =function(){ return this; }  间接获取Global对象
     其他内置属性/方法:
       URI 编码方法
-        PS：URI编码可以对URI(链接)进行编码,以便发送给浏览器
+        PS：URI编码可以对URI(链接)进行编码,以便发送给浏览器 
           URI(Uniform Rescurce Identifiers),通用资源标识符
           有效的URI中不能包含某些字符,如空格
           采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
@@ -3565,70 +3565,66 @@ OOP 面向对象
       SyntaxError    构造函数SyntaxError
       TypeError      构造函数TypeError
       URIError       构造函数URIError
-    window 对象
-      PS：
-        ECMAScript中不能直接访问Global对象,当Web浏览器都将这个全局对象作为window对象的一部分加以实现
-        window为JS(而非ECMAScript)最顶层的对象
-        全局作用域中声明的所有变量和函数,都为window对象的属性和方法.
-      var a =1;
-      window.a; //1 ,a就是window.a
-      方法 :全局函数
-        parseInt(string,radix)
-        parseFloat(string)
-        isFinite(value)检测是否是不是无穷值,
+    window 对象 
+      PS：ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
+        window为JS「而非ECMAScript」最顶层的对象, 
+      全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
+        var a =1;
+        window.a; //1 ,a就是window.a
+      全局函数/方法
+        parseInt(str,radix) 
+        parseFloat(str) 
+        isFinite(val)  检测是否是不是无穷值 
           若值是NaN、+Infinity或-Infinity,返回false,其余返回true
-        isNaN(value);检测值是否为NaN
-          若值为NaN返回true,否则返回false
-        encodeURI(URI)将字符串编码为URI
+        isNaN(val);    若值为NaN返回true,否则返回false
+        encodeURI(URI) 将字符串编码为URI 
           通用资源标识符简称为URI
-          ,/?:@&=+$#等具有特殊含义的ASCII标点符号,不会进行转义(可使用decodeURIComponent(URI)进行编码)
+          ",/?:@&=+$#" 等有特殊含义的ASCII标点符号,不会进行转义
         decodeURI():解码某个编码的URI
-        encodeURIComponent(URI)将字符串编码为URI
-          //不会对ASCII字母、数字及-_.!～*'()等进行编码.
-        decodeURIComponent()解码一个编码的URI
-        escape()对字符串进行编码
+        encodeURIComponent(URI) 将字符串编码为URI
+          不会对ASCII字母、数字及"-_.!～*'()"等进行编码 
+        decodeURIComponent()    解码一个编码的URI
+        escape()   对字符串进行编码
           不要编码URI
-          不会对*@-_+./ 等ASCII标点符号进行编码
-        unescape()解码由escape()编码的字符串
-        eval()将JavaScript字符串当作脚本来执行.
-          若参数是一个表达式,eval()函数执行表达式.若参数是JavaScript语句,eval()将执行JavaScript语句.
-          eval()函数是一种由函数执行的动态代码,比直接执行脚本慢很多
-        Number(Object)把对象值转换为数字.
-        String()把对象的值转换为字符串
-          String()函数返回与字符串对象的toString()方法值一样.
+          不会对"*@-_+./"等ASCII标点符号进行编码
+        unescape() 解码由 escape() 编码的字符串
+        eval()     将JavaScript字符串当作脚本来执行 
+          若参数是一个表达式,eval()函数执行表达式,
+          若参数是js语句,eval()将执行js语句;
+          是一种由函数执行的动态代码,比直接执行脚本慢很多;
+        Number(obj)   把对象值转换为数字.
+        String(val)   把对象的值转换为字符串
+          String() 函数返回与字符串对象的 toString() 方法值一样 
   Math   数学对象 
-    PS：
-      为数学常量和数学函数提供了属性和方法
-      Math的所有属性/方法都是静态的
-    数学值
-      Math.PI         π的值
-        Math.PI;  //3.141592653589793
-      Math.SQRT2      2 的平方根
-      Math.SQRT1_2    1/2 的平方根
-      Math.E          自然对数的底数,即常量e的值「也叫欧拉参数」
-      Math.LN10        10 的自然对数
-      Math.LN2         2 的自然对数
-      Math.LOG2E       以2为底e的对数
-      Math.LOG10E      以10为底e的对数
-      Math.random();   随机数
-        得到一个介于0到1之间的随机数,不包括0和1.
-        不需要参数,添加参数不起作用,也不会报错.
-        应用：若需要某个范围,可套用以下公式:
-          值=Math.floor(Math.random()*总数+第一个值)
-          Math.floor(Math,random()*6+5);
-          //随机产生5-10之间的任意整数
-    求极值
-      Math.min(num1,num2,..)和Math.max(num1,num2,..) 返回一组数值中的最小值和最大值.
-      e.g. :
-      Math.max(2,3,5,6,76,8,7);   //76
-      Math.min(2,3,5,6,76,8,7);   //2
-      Math.min.apply(null,[2,3,5,6,76,8,7]);   //2
-      Math.min.apply(null,[0,0,0]);   //2
-    取整
-      Math.round(num)   四舍五入取整            「round  圆；循环；一回合；圆形物」
-      Math.ceil(num)    向上舍入取整,数值将变大; 「ceil  天花板」
-      Math.floor(num)   向下舍入取整,数值将变小; 「floor 地板  」
-      e.g. Math.floor(1.1)    //1
+    PS：为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
+    ◆数学值
+    Math.PI         π的值
+      Math.PI;  //3.141592653589793
+    Math.SQRT2      2 的平方根
+    Math.SQRT1_2    1/2 的平方根
+    Math.E          自然对数的底数,即常量e的值「也叫欧拉参数」
+    Math.LN10        10 的自然对数
+    Math.LN2         2 的自然对数
+    Math.LOG2E       以2为底e的对数
+    Math.LOG10E      以10为底e的对数
+    Math.random();   返回一个介于0到1之间不包括0和1的随机数 
+      PS：不需要参数,添加参数不起作用,也不会报错 
+      若需要某个范围,可套用的公式 
+        值 = Math.floor(Math.random()*总数 + 第一个值)
+        Math.floor(Math,random()*6 + 5);
+        //随机产生5-10之间的任意整数
+    ◆求极值 
+    Math.min(num1,num2,..) 返回一组数值中的最小值 
+    Math.max(num1,num2,..) 返回一组数值中的最大值 
+      Math.max(2,3,5,6,76,8,7);   // 76
+      Math.min(2,3,5,6,76,8,7);   // 2
+      Math.min.apply(null,[2,3,5,6,76,8,7]);   // 2
+      Math.min.apply(null,[0,0,0]);   // 2
+    ◆取整
+    Math.round(num)   四舍五入取整            「round 圆；循环；一回合；圆形物」
+    Math.ceil(num)    向上舍入取整,数值将变大; 「ceil  天花板」
+    Math.floor(num)   向下舍入取整,数值将变小; 「floor 地板  」
+      Math.floor(1.1)    //1
     其他方法
       Math.abs(num)       返回num的绝对值
       Math.pow(num,power) 返回num的power次幂

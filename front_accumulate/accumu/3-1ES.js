@@ -2362,7 +2362,7 @@ OOP 面向对象
       Float32   4     float            32 位浮点数                    
       Float64   8     double           64 位浮点数                    
 功能类对象 
-  Function 函数对象
+  Function 函数对象 
     PS：函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能.
       在 JS 中,“一切皆对象”,数组和函数本质上都是对象.
       函数是定义一次但却可以调用或执行任意多次的一段代码.
@@ -3034,37 +3034,37 @@ OOP 面向对象
       };
       goo(); // function goo(){ foo(); }
     foo.prototype(构造)函数的原型属性对象(参见 对象原型)
-  Date     日期时间对象
-    PS：ECMAScript提供了Date类型来处理时间和日期.
+  Date     日期时间对象 
+    PS：ECMAScript提供了Date类型来处理时间和日期 
       Date 对象内置一系列获取和设置日期时间信息的方法.
       ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的.
       Date对象基于1970年1月1日0时世界协调时间开始的毫秒数.
       UTC(coordinated universeal time,国际协调时间,又称世界统一时间)
       UTC 日期值得是在没有时区偏差的情况下的日期值(UTC和北京时间相差8个小时,北京属于东八区)
-    创建时间对象:Date 构造函数(没有字面量格式)
-      PS：
-        以常规函数调用他(即不加new操作符)将会返回一个字符串,而不是时间对象.
+    Date 构造函数「无字面量格式」 创建时间对象 
+      PS： 以常规函数调用他(即不加new操作符)将会返回一个字符串,而不是时间对象.
         当时间数值超过合理范围值时,会被调整为相邻值,
         如new Date(2013,13,1)等于new Date(2014,1,1)
-      var time =new Date();
-      无参数     : 则根据系统当前的时间来创建时间对象
-      单数值参数 : 创建参数数值(自世界协调时间到现在经过的毫秒数)对应的时间
-        var time =new Date(1000);
+      var time = new Date();     则根据系统当前的时间来创建时间对象
+      var time = new Date(num);  创建根据自世界协调时间到现在经过的毫秒数对应的时间
+        var time = new Date(1000);
         console.log(time); // Thu Jan 01 1970 08:00:01 GMT+0800(中国标准时间)
-      字符串参数 : 创建字符串被Date.parse()解析后对应的时间
+      var time = new Date(str);  创建字符串被 Date.parse() 解析后对应的时间
         var box=new Date("4/12/2007");
         等价于
         var box=new Date(Date.parse("4/12/2007"));
         console.log(box);
         // Thu Apr 12 2007 00:00:00 GMT+0800(中国标准时间)
-      多数值参数 : 最少指定前两个(否则为单数值情况),不指定默认为第一天.
-        var time =new Date(y,m,d,h,m,s,ms);
-        var t1 = new Date(2016,1,1); // 2月
-        var t2 = new Date(2016,1,0); // 1月 ,根据此特性可求出某月份的天数
-        var t3 = new Date(2016,1);   // 2月
-        console.log(t1); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
-        console.log(t2); //Sun Jan 31 2016 00:00:00 GMT+0800(中国标准时间)
-        console.log(t3); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
+      var time = new Date(y,m[,d,h,m,s,ms]);  最少指定年月
+        m   表示'月'的参数,从0开始表示1月 
+        d   表示'天'的参数,默认为1,为0时表示上一个月的最后一天
+        e.g.： 
+          var t1 = new Date(2016,1,1); // 2月
+          var t2 = new Date(2016,1,0); // 1月 ,根据此特性可求出某月份的天数
+          var t3 = new Date(2016,1);   // 2月
+          console.log(t1); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
+          console.log(t2); //Sun Jan 31 2016 00:00:00 GMT+0800(中国标准时间)
+          console.log(t3); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
     ◆静态方法
     Date.now();      返回自世界协调时间至今所经过的毫秒数
     Date.parse(str/date); 接收表示日期的字符串参数,返回相应的毫秒数.
@@ -3084,31 +3084,29 @@ OOP 面向对象
     dat.getSeconds()      得到 秒 数值, 0-59 表示.
     dat.getMilliseconds() 得到毫秒数值, 0-999 表示.
     dat.getTime()         得到从1970年1月1日到当前时间的毫秒数值
-    以上get方法都有对应的set方法,用于改变日期对象的各项值,都具有UTC功能,
+    以上'get'方法都有对应的'set'方法,用于改变日期对象的各项值,都具有'UTC'功能,
       如: setDate() setUTCDate()
     dat.getTimezoneOffset() 得到当前时区的时间和格林威治时间(GMT)相差分钟数值.
       e.g.
       dat.getTimezoneOffset(); //-480 ,相差8个小时
       若在柏林,则 new Date().getTimezoneOffset();    //-60
     ◆日期格式化 : 将日期按不同的格式转化为字符串
-    new Date(0);  默认显示格式
-      //Thu Jan 01 1970 08:00:00 GMT+0800(中国标准时间)
-    dat.toDateString()  星期 月 日 年
+      new Date(0) 默认显示格式'Thu Jan 01 1970 08:00:00 GMT+0800(中国标准时间)'
+    dat.toDateString()  星期 月 日 年 
       // Thu Jan 01 1970
-    dat.toTimeString()  时:分:秒 时区 [e.g.: 08:00:00 GMT+0800(中国标准时间)]
-      e.g.:
-        var time = new Date(1970,0,1,71,20,20); // 71:20:20
-        time.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
-    dat.toLocaleDateString()  年/月/日
+    dat.toTimeString()  时:分:秒 时区 
+      var time = new Date(1970,0,1,71,20,20); // 71:20:20
+      time.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
+    dat.toLocaleDateString()  年/月/日 
       // "2016/12/23"(Chrome下)
       // "‎2016‎年‎12‎月‎23‎日"(IE11下)
       // "2016/12/23"(Firefox下)
-    dat.toLocaleTimeString()  时 分 秒 时区
+    dat.toLocaleTimeString()  时 分 秒 时区 
       // 上午8:00:00
-    dat.toUTCString();        完整的UTC日期格式
+    dat.toUTCString();        完整的UTC日期格式 
       // Thu, 01 Jan 1970 00:00:00 GMT
-    日期的比较(使用变量名比较时,对象的变量名指向的是地址)
-      通过getTime()转换为毫秒数进行比较
+    日期的比较：使用变量名比较时,对象的变量名指向的是地址
+      通过 getTime() 转换为毫秒数进行比较
       将时间对象通过JSON格式转化后进行比较
   RegExp   正则对象 
     PS：Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串

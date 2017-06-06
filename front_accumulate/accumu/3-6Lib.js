@@ -244,7 +244,7 @@ DOM 操作
       Jelem.eq(index) 通过下标选取Jelem
         index为整数,指示元素的位置[从0开始]
         如果是负数,则从集合中的最后一个元素往回计数。
-      Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem
+      Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem 
         Jelem.not(function(index){}); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
     通过elem获取 
       $(elem);  返回Jelem

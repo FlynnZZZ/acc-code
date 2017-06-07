@@ -2093,7 +2093,7 @@ Form 表单及表单字段脚本
     submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发
       submit 和 click 事件:不同的浏览器触发的先后顺序不一样
     reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发
-  表单字段  [self: 使用inputElem表示表单字段元素]
+  表单字段  [self: 使用inputElem表示表单字段元素] 
     ◆获取表单字段
     form.inputElemName  通过表单元素中表单字段的name属性来获取表单字段
     ◆属性&方法
@@ -2212,6 +2212,10 @@ Form 表单及表单字段脚本
         }
         </script>
         若用户未做任何选择,则selected就为undefined。
+  label 元素
+    Exp:
+      该元素绑定'click'事件会触发两次[使用的jQuery绑定],
+      使用'mouseup'事件来代替'click'事件来使用;
   Extend：利用iframe让form的submit不刷新页面进行上传
     form的submit会导致页面的刷新,把form的target指定到一个看不见的iframe,
     那么返回的数据就会被这个iframe接受,于是乎就只有这个iframe会刷新。

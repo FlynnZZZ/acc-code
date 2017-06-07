@@ -231,6 +231,7 @@ DOM 操作
       Jelem.siblings(["selector"]) 从同级元素中获取Jelem [无参,为所有同级元素]
       Jelem.prev(["selector"])   同级前一个元素 [无参时,为同级前一元素]
       Jelem.prevAll("selector")  同级前所有元素
+        获取到的元素在集合中为从后向前排列;
       Jelem.next(["selector"])   同级后元素 [无参时,为同级后一元素]
       Jelem.nextAll("selector")  同级后所有元素
       Jelem.andSelf("selector")  获取指定元素后边的所有同级元素,之后加上指定的元素
@@ -241,7 +242,7 @@ DOM 操作
       Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
       ★其他条件筛选
-      Jelem.eq(index) 通过下标选取Jelem
+      Jelem.eq(index) 通过下标选取Jelem 
         index为整数,指示元素的位置[从0开始]
         如果是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem 
@@ -992,6 +993,9 @@ AJAX
     type:'请求方法', // 默认为get
     url:'/uploads/tags/json',
     // get请求,将键值对改为 &key1=val1&key2=val2 附在URL上
+    xhrFields: {
+      withCredentials: true // 请求带上cookie
+    },
     data:{
       key1:val1,
       key2:val2,
@@ -2440,6 +2444,8 @@ Question And Answer
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
+
+
 
 
 

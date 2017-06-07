@@ -580,18 +580,6 @@ fileNum : 21
 ◆DeskTop
   editor 
     snippets
-    '-function':
-      'prefix': 'function'
-      'body': 'function'
-    '-function($1){$2\n};':
-      'prefix': 'function1'
-      'body': 'function($1){$2\n};'
-    '-function $1($2){$3\n};':
-      'prefix': 'function2'
-      'body': 'function $1($2){$3\n};'
-    '-(function(){})()':
-      'prefix': 'function3'
-      'body': '(function ($1){$3\n})($2);'
 
 
   QQInput
@@ -602,6 +590,11 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
+    '-jq-on("${1:click}","selector",cfoo);':
+      'prefix': 'on1'
+      'body': """on("${1:click}","selector",function(e){
+          $2
+        });"""
 
 
 

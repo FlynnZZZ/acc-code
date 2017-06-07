@@ -756,9 +756,10 @@ window的属性对象
     location.port      读写 端口号「若url中不包含端口号则返回''」
     location.protocol  协议「通常是 http: 或 https:」
     location.search    读写URL的查询字符串「以问号?开头的部分,包括?」
+      设置查询字符串会刷新网页
       'https://www.baidu.com/?aoo=2&boo=c'
       location.search;   //  "?aoo=2&boo=c"
-    location.assign(url)   跳转到指定页面
+    location.assign(url)   跳转到指定页面 
       location.assign('https://www.baidu.com')    //跳转到百度主页
       以下两行代码与显示调用assign()方法效果完全一样(会调用assign方法)
       window.location ="https://www.baidu.com";

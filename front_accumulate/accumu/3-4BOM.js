@@ -14,13 +14,13 @@ BOM,Browser_Object_Model 浏览器对象模型
     对cookies的支持
     像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
 window 对象 
-  PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象.
+  PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
     核心对象是window,表示浏览器的一个实例.
     window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
     双重角色:既是JS访问浏览器窗口的一个接口,也是ECMAScript规定的Global对象
     在网页中定义的任何对象 变量和函数,都以window作为其Global对象
     若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
-  窗口与框架
+  窗口与框架 
     PS：若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
       在frames集合中,可通过数值索引(从0开始,从左至右,从上至下),
       或者框架名称来访问相应的window对象
@@ -43,7 +43,7 @@ window 对象
       </html>
       可通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
    (更多内容参见 JavaScript高级程序设计 196页)
-  位置与尺寸
+  位置与尺寸 
     ◆浏览器位置
       返回值类型为数值,单位都为px
     screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
@@ -417,12 +417,12 @@ window 对象
           console.log('Notification shown');
         };
   window.getSelection();  返回表示选中的文字的Selection对象 
-    PS：可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串.
+    PS：可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串, 
       当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
-      对象的toString()方法会被自动调用,而不用手动转换.
+      对象的 toString() 方法会被自动调用,而不用手动转换.
     var selectText = window.getSelection();  
-    selectText + ''         获取选中的字符串
-    selectText.toString();  获取选中的字符串
+    var str1 = selectText + ''         获取选中的字符串
+    var str2 = selectText.toString();  获取选中的字符串
     e.g.: 打印出文档中被选中的的文字 
       $(document).mouseup(function (e) {
         var txt = window.getSelection();

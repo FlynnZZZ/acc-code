@@ -577,30 +577,53 @@ fileNum : 21
     })(jQuery);
 
 
-◆DeskTop
+◆DeskTop 
   editor 
     snippets
-
-
+    '-console':
+      'prefix': 'console'
+      'body': 'console'
+    '-console.dir($1);':
+      'prefix': 'consoleDir'
+      'body': 'console.dir($1);'
+    '-console.error($1);':
+      'prefix': 'consoleError'
+      'body': 'console.error($1);'
+    '-console.group($1);':
+      'prefix': 'consoleGroup'
+      'body': 'console.group($1);'
+    '-console.groupEnd();':
+      'prefix': 'consoleGroupEnd'
+      'body': 'console.groupEnd();'
+    '-console.log("|" + "$1" + "|" );':
+      'prefix': 'consolelog'
+      'body': 'console.log("|" + "$1" + "|" );'
+    '-console.log("%c"+$1,"color:red;font-family:vijaya,kaiti;");':
+      'prefix': 'consoleLogColor'
+      'body': 'console.log("%c"+$1,"color:red;");'
+    '-console.table($1);':
+      'prefix': 'consoleTable'
+      'body': 'console.table($1);'
+    '-console.time();':
+      'prefix': 'consoleTime'
+      'body': 'console.time();'
+    '-console.timeEnd($1);':
+      'prefix': 'consoleTimeEnd'
+      'body': 'console.timeEnd($1);'
+    '-console.warn($1);':
+      'prefix': 'consoleWarn'
+      'body': 'console.warn($1);'
+      
   QQInput
     自定义短语
-
-
-
+    
 ◆NoteBook 
   editor 
     snippets
-    '-jq-on("${1:click}","selector",cfoo);':
-      'prefix': 'on1'
-      'body': """on("${1:click}","selector",function(e){
-          $2
-        });"""
-
-
-
-
+    
   QQInput
-
+    自定义短语
+    
 
 
 

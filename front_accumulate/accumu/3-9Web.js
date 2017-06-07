@@ -228,7 +228,7 @@ HTTP 协议
     浏览器拿到完整的HTML页面代码,解析和渲染该页面,
     同时其中的JS、CSS、图片等静态资源,同样也是一个个HTTP请求都需要经过上面的步骤来获取.
     最终浏览器渲染成功呈现页面.
-网页的显示过程
+网页的显示过程 
   浏览器加载网页过程
     一个网页的加载依赖于脚本文件、CSS样式文件。浏览器加载网页的过程如下:
     首先,浏览器下载 HTML 并开始解析。如果浏览器发现外部CSS资源链接则发送下载请求。
@@ -237,7 +237,7 @@ HTTP 协议
     脚本文件完成下载并且执行后,浏览器可以继续解析HTML工作,
     如果遇到非阻塞资源浏览器会发送下载请求并且继续解析。
     即使浏览器可以并行执行多个请求,但是无法与针对脚本文件的操作并行执行。
-名称解释类汇总
+名称解释类汇总 
   IDE: 集成开发环境,Integrated Development Environment
   MVC 模式
     Model,模型层:      提供/保存数据
@@ -406,7 +406,7 @@ windows环境
       net start messenger----开始信使服务
 浏览器 
   介绍_概念_说明_定义 
-    说明
+    说明 
       浏览器从同一个域同时下载文件的数量有限,当同时下载多个文件,会比相同大小的单个文件慢.
       浏览器在遇到<body>标签时才开始呈现内容
     主要组成
@@ -530,7 +530,7 @@ windows环境
       e.g. 
         var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
         在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
-  小技巧
+  小技巧 
     通过浏览器地址栏运行HTML代码 「非IE浏览器内核」
       e.g.:  
       在浏览器地址栏直接输入 data:text/html,<a href=''> 13 </a>
@@ -538,6 +538,192 @@ windows环境
         setTimeout(function(){
           location.href = 'data:text/html,<a href=""> 13 </a>';
         },1000);
+  浏览器调试 
+    说明 
+      在调试页,选中的当前元素,可用 $0 表示'可在控制台使用$0查找到'
+      IE是唯一一个在浏览器的界面显示JS错误信息的浏览器  [IE11已不再如此]
+    自定义测试函数 
+      // 待测试的函数
+      var sum = function(array) {
+        var s = 0;
+        for(var i = 0; i < array.length; i++) {
+          var n = array[i];
+          s = s + n;
+        }
+        return s;
+      }
+      // 定义测试函数
+      var ensure = function(condition) {
+        if(!condition) {
+          console.log("Wrong")
+        }else{
+          console.log("Pass");
+        }
+      }
+      // 测试
+      var testFunction = function() {
+        var numbers = [1, 2, 3, 4]
+        var value = 10
+        ensure(value == sum(numbers))
+        ensure(1 == sum([1]))
+      }
+      // 测试结果
+      testFunction()
+    控制台命令行: 控制台自带的命令行方法 
+      $_     返回上一个表达式的值
+      $0
+      $1
+      $2
+      $3
+      $4
+      clear()  清空控制台
+      copy()
+      dir()
+      dirxml()
+      $(selector)   <=>  document.querySelectorAll(selector)
+      $$(selector)  <=>  document.querySelector(selector)
+      $x(path)  匹配特定Xpath表达式的所有DOM元素的数组
+        e.g.:$x("//p[a]")  所有包含a元素的p元素
+      inspect(obj)  在相关面板显示对象
+        DOM元素在Elements面板中显示对象
+        JS对象在Profiles面板中显示
+      keys(obj)        返回对象的所有key
+      values(obj)      返回对象的所有value
+      getEventListeners(obj)   显示事件
+      monitorEvents(obj[,events])    监听对象的事件
+      unmonitorEvents(obj[,events])  取消监听对象的事件
+        允许监听同一大类的事件,所有事件可以分成4大类
+        mouse : mousedown mouseup click dbclick mousemove mouseover mouseout mousewheel
+        key   : keydown keyup keypress textInput 
+        touch : touchstart touchmove touchend touchcancel
+        control : resize scroll zoom focus blur select change submit reset
+    console 对象 
+      PS：console对象为浏览器的实现,包含在浏览器自带的开发工具中, 
+        虽然还不是标准,但各大浏览器都原生支持,已成为事实上的标准;
+      console.log(val1,val2,...);     将一般消息记录到控制台 
+        PS：自动在输出的最后一个值后添加换行符 
+        格式占位符
+          PS：log方法将占位符替换以后的内容,显示在console窗口
+          %s     字符串
+          %d     整数
+          %i     整数
+          %f     浮点数
+          %o     对象的链接
+          %c     CSS格式字符串
+            对输出的内容进行CSS渲染
+            console.log('%c this text is styled!','color:red;font-size:24px;');
+            输出的内容将显示为红色的24px的字体
+          e.g.:
+            console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
+            上面代码的 %s 表示字符串的占位符
+    
+            两种参数格式,可以结合在一起使用.
+            console.log(" %s + %s ", 1, 1, "= 2")
+            // 1 + 1  = 2
+      console.debug(val)     
+      console.dir()                输出对象的信息,用于显示一个对象的所有属性.
+        可读性较好,一般用于输出显示DOM节点
+        Node中可指定以高亮形式输出
+          console.dir(obj,{color:true})
+      console.dirxml()             主要用于以目录树形式显示DOM节点
+        若参数不是DOM节点,则等同于dir
+      console.table()              对于某些复合类型的数据将其转为表格显示
+        e.g. :
+        var languages = [
+          { name: "JavaScript", fileExtension: ".js" },
+          { name: "TypeScript", fileExtension: ".ts" },
+          { name: "CoffeeScript", fileExtension: ".coffee" }
+        ];
+        console.table(languages);
+        上面代码的language,转为表格显示如下.
+       (index) name fileExtension
+        0 "JavaScript" ".js"
+        1 "TypeScript" ".ts"
+        2 "CoffeeScript" ".coffee"
+        复合型数据转为表格显示的条件是,必须拥有主键.
+          对于上面的数组来说,主键就是数字键.对于对象来说,主键就是它的最外层键.
+          var languages = {
+            csharp: { name: "C#", paradigm: "object-oriented" },
+            fsharp: { name: "F#", paradigm: "functional" }
+          };
+          console.table(languages);
+          上面代码的language,转为表格显示如下.
+         (index) name paradigm
+          csharp "C#" "object-oriented"
+          fsharp "F#" "functional"
+      console.trace()              当前执行的代码在堆栈中的调用路径.
+      console.assert([bool][,val]) 条件验证,为假时以错误的形式输出,为真时无输出 
+        bool  布尔值,默认为false 
+        e.g.:
+          若为假,则显示一条事先指定的错误信息
+          console.assert(true === false,"判断条件不成立")
+          // Assertion failed: 判断条件不成立
+          判断子节点的个数是否大于等于500.
+          console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+      console.count([val])         用于计数,输出被调用的次数 
+        接收一个参数作为标签,进行相应的次数统计
+        e.g.:
+          console.count('a');  // a: 1
+          console.count('a');  // a: 2
+        
+          for (var i = 0; i < 5; i++) { 
+            console.count(); 
+          }
+          // : 1
+          // : 2
+          // : 3
+          // : 4
+          // : 5
+      console.info(val)      将信息记录到控制台
+      console.warn(val)      将警告消息记录到控制台
+      console.error(val)     将错误消息记录到控制台
+      console.clear()         清空控制台,光标回到第一行
+      ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
+      console.time()         计时开始
+      console.timeEnd(val)   计时结束
+        val 为计时器的名称
+        e.g.:
+          console.time();
+          var array = new Array(1000000);
+          for(var i = array.length - 1; i >= 0; i--) {
+            array[i] = new Object();
+          };
+          console.timeEnd("aoo"); 
+          // aoo: 242ms
+        调用timeEnd方法之后,console窗口会显示'计时器名称: 所耗费的时间'.
+      ◆性能测试
+      console.profile() 
+      console.profileEnd()   
+      ◆分组显示
+      console.group(val)   '组'的开始
+      console.groupEnd()   '组'的结束
+        str  作为'组'的名称
+        在group和groupEnd之间打印的信息可作为一个'组'进行展开或折叠,在输出大量信息时有用
+      修改/定义console方法 
+        因为console对象的所有方法,都可以被覆盖
+        
+        使用自定义的console.log方法,在显示结果添加当前时间
+        ["log", "info", "error"].forEach(function(method) {
+          console[method] = console[method].bind(console,new Date().toISOString());
+        });
+        console.log("出错了！");
+        // 2014-05-18T09:00.000Z 出错了！
+    断点调试 [Chrome浏览器下] 
+      f12 - Sources 进入断点调试界面
+      在程序中添加语句 debuger; 相当于在语句处添加断点
+    Exp： 
+      不可见符号及空格
+        var i = String.fromCharCode(0) +'1'; //"1"
+        // ASCII码 0 对应的是null 控制符 不可写的也不显示的符号
+        console.log(i,typeof i,i.length); //1 string 2
+  
+        var a ='2 '
+        console.log(a);         //2
+        console.log(`(${a})`);  //(2 )
+        // 方便查看出字符中的空格
+      在手机等不可打开控制台的设备上调试时 
+        console.log()不可见,而 alert阻塞运行, 
+        使用在页面中相应的改变元素来达到感知的效果 
   Todo: 
     浏览器的组成
     浏览器的核心是两部分：渲染引擎和JavaScript解释器（又称JavaScript引擎）。

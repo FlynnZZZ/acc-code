@@ -20,7 +20,16 @@ window 对象
     双重角色:既是JS访问浏览器窗口的一个接口,也是ECMAScript规定的Global对象
     在网页中定义的任何对象 变量和函数,都以window作为其Global对象
     若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
-  窗口与框架 
+  使用说明 
+    加上window.和不加window.的区别:
+      不加window.情况,当某个浏览器识别不了该属性/方法时,就当作变量使用了
+      加window则是强制性的操作,不会产生误会.
+      当所有浏览器都支持的属性或方法,可不用加window.
+    全局环境中的变量、函数都是window对象的属性和方法.
+      全局变量与window属性的差异:
+      全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
+      访问未声明的变量会报错,而未声明window对象的属性则为undefined.
+  窗口与框架  
     PS：若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
       在frames集合中,可通过数值索引(从0开始,从左至右,从上至下),
       或者框架名称来访问相应的window对象
@@ -43,7 +52,7 @@ window 对象
       </html>
       可通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
    (更多内容参见 JavaScript高级程序设计 196页)
-  位置与尺寸 
+  位置与尺寸  
     ◆浏览器位置
       返回值类型为数值,单位都为px
     screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
@@ -176,7 +185,7 @@ window 对象
           android: 不管窗口目标是是什么,始终在当前页面打开,
           ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
     window.close();   关闭窗口,返回表示是否成功操作的布尔值
-  计时器/函数调用 延时调用&间时调用&动画调用API
+  计时器/函数调用 延时调用&间时调用&动画调用API 
     JS单线程异步执行的机制
       JS引擎只有一个线程,强迫异步事件排队等待被执行,不可在同时执行两条命令
       setTimeout
@@ -433,18 +442,6 @@ window 对象
           alert(txt); // 返回选中的文字
         }
       });
-  Remarks:
-    由于window是顶层对象,因此调用它的子对象/属性/方法时可以不显示的指明window对象
-      例如window.alert()和alert()是一个意思.
-      实际上全局变量 a 等价于 window.a
-    加上window.和不加window.的区别:
-      不加window.情况,当某个浏览器识别不了该属性/方法时,就当作变量使用了
-      加window则是强制性的操作,不会产生误会.
-      当所有浏览器都支持的属性或方法,可不用加window.
-    全局环境中的变量、函数都是window对象的属性和方法.
-      全局变量与window属性的差异:
-      全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
-      访问未声明的变量会报错,而未声明window对象的属性则为undefined.
 window的属性对象 
   window.document  文档对象 「更多详见 DOM document对象」 
     document.location 等价于 window.location
@@ -959,7 +956,11 @@ window的属性对象
     screen.availLeft;
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
-  window.frames    包含窗口所有框架的一个数组
+  window.frames    包含窗口所有框架[iframe]的对象 
+    window.frames[num]  通过下标来获取到ifrme
+    window.frames[name] 通过iframe的'name'属性值来获取到iframe
+  window.top/..    框架
+    window.top == window.frames.top;  // true 
   客户端检测「详细见 JavaScript高级程序设计 228 页」 
     PS：
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
@@ -2494,6 +2495,28 @@ Same-Origin_Policy 同源政策
     相比JSONP只能发GET请求,CORS允许任何类型的请求。  
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
+postMessage cross-document_messaging,跨文档消息传递 
+  PS：简称为XDM,指在不同域的页面间传递消息,XDM之前,要稳妥的实现这种通信需花很多功夫 
+  win.postMessage(mes,url); 向当前页面中的<iframe>或由当前页打开的窗口传递数据 
+    PS：XDM的核心方法
+    win 其他窗口的一个引用 
+      如iframe的contentWindow属性、执行 window.open 返回的窗口对象、
+      或者是命名过或数值索引的window.frames 
+    mes 字符串,发送的消息
+    url 字符串,域名 
+      url指向的文档必须来源于指定的域,若匹配,消息会传递到框架中,否则无动作;
+      "*" 表示可以把消息发送给来自任何域的文档
+    e.g. :
+      var iframew = document.getElementById("myframe").contentWindow;
+      // 所有支持XDM的浏览器也支持iframe的 contentWindow属性
+      iframew.postMessage("a secret","https://www.baidu.com");
+  window.message 事件 
+    PS：接收到XDM消息时,会触发window对象的message事件 
+    e.data
+    e.origin
+    e.source
+ (详参 JavaScript高级程序设计 481页)
+ Exp: Chrome测试未能实现  
 SSE 「HTML5」
 WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」 
   PS： 最初是为了解决浏览器上视频通话而提出的,

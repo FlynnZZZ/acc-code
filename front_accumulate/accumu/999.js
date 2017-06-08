@@ -580,39 +580,6 @@ fileNum : 21
 ◆DeskTop 
   editor 
     snippets
-    '-console':
-      'prefix': 'console'
-      'body': 'console'
-    '-console.dir($1);':
-      'prefix': 'consoleDir'
-      'body': 'console.dir($1);'
-    '-console.error($1);':
-      'prefix': 'consoleError'
-      'body': 'console.error($1);'
-    '-console.group($1);':
-      'prefix': 'consoleGroup'
-      'body': 'console.group($1);'
-    '-console.groupEnd();':
-      'prefix': 'consoleGroupEnd'
-      'body': 'console.groupEnd();'
-    '-console.log("|" + "$1" + "|" );':
-      'prefix': 'consolelog'
-      'body': 'console.log("|" + "$1" + "|" );'
-    '-console.log("%c"+$1,"color:red;font-family:vijaya,kaiti;");':
-      'prefix': 'consoleLogColor'
-      'body': 'console.log("%c"+$1,"color:red;");'
-    '-console.table($1);':
-      'prefix': 'consoleTable'
-      'body': 'console.table($1);'
-    '-console.time();':
-      'prefix': 'consoleTime'
-      'body': 'console.time();'
-    '-console.timeEnd($1);':
-      'prefix': 'consoleTimeEnd'
-      'body': 'console.timeEnd($1);'
-    '-console.warn($1);':
-      'prefix': 'consoleWarn'
-      'body': 'console.warn($1);'
       
   QQInput
     自定义短语
@@ -620,6 +587,13 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
+    '-console.clear();':
+      'prefix': 'consoleClear'
+      'body': 'console.clear();'
+    '-querySelectorAll("$1")':
+      'prefix': 'querySelectorAll'
+      'body': 'querySelectorAll("$1")'
+
     
   QQInput
     自定义短语
@@ -627,6 +601,11 @@ fileNum : 21
 
 
 
+jQuery 的 AJAX 属性
+xhrFields: {
+  withCredentials: true
+},
+crossDomain: true,
 
 
 

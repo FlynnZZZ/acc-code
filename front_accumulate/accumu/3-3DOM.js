@@ -1362,10 +1362,12 @@ event 事件对象
     scroll  当用户滚动带滚动条的元素中的内容时,在该元素上触发
     abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发
     error   发生错误时触发 
+      PS：支持该事件的 HTML 标签： <img>, <object>, <style>
+        支持该事件的 JavaScript 对象： window, image
       当发生JS错误时在window上面触发,
       无法加载图像时在<img>元素触发,
       无法加载嵌入内容在<object>元素上触发,
-      有框架无法加载时在框架集上触发
+      有框架无法加载时在框架集上触发 [?]
     select  当用户选择文本框「input或textarea,且disabled为false时」中的字符时触发 
       支持该事件的标签:<input type="text">, <textarea>
       e.target.selectionStart 选中字符的indx
@@ -3312,25 +3314,6 @@ File_API 文件和二进制数据的操作 「HTML5」
       video.src = obj_url;
       video.play()
       window.URL.revokeObjectURL(obj_url);  
-cross-document_messaging 跨文档消息传递 
-  PS：简称为XDM,指在不同域的页面间传递消息,
-    XDM机制出现之前,要稳妥的实现这种通信需花很多功夫
-  postMessage(mes,url); 向当前页面中的<iframe>或有当前页弹出的窗口传递数据.
-    PS：XDM的核心方法
-    mes 字符串,发送的消息
-    url 字符串,域名
-      url指向的文档必须来源于指定的域,若匹配,消息会传递到框架中,否则无动作.
-      若把第二个参数设置为"*",则表示可以把消息发送给来自任何域的文档
-    e.g. :
-      var iframew = document.getElementById("myframe").contentWindow;
-      // 所有支持XDM的浏览器也支持iframe的 contentWindow属性
-      iframew.postMessage("a secret","https://www.baidu.com");
-  window.message 事件 
-    PS：接收到XDM消息时,会触发window对象的message事件 
-    e.data
-    e.origin
-    e.source
- (详参 JavaScript高级程序设计 481页)
 Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
   var audio = document.querySelector(slt); 获取audio元素对象
   var video = document.querySelector(slt); 获取video元素对象

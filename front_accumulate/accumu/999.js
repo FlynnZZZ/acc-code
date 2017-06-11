@@ -587,12 +587,6 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
-    '-console.clear();':
-      'prefix': 'consoleClear'
-      'body': 'console.clear();'
-    '-querySelectorAll("$1")':
-      'prefix': 'querySelectorAll'
-      'body': 'querySelectorAll("$1")'
 
     
   QQInput

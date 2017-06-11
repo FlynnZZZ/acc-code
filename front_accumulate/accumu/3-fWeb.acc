@@ -1146,29 +1146,32 @@ GitHub
   短语_符号 
   ◆短语
   tag       标签
-  attr      属性
+  atr       属性 attr attribute
   slt       选择器 selector
-  bool      布尔值
+  bol       布尔值 bool boolean 
   num       数值
   str       字符串
   arr       数组
-  indx      数组的下标
-  elem      数组成员/DOM对象
+  idx       数组的下标 indx index
+  bgn       开始 begin
+  end       结束 
+  elm       数组成员/DOM对象 elem element
   obj       对象
   key       对象的键,或属性等
   val       对象的值/值
   foo       「无属性」函数
-  cfoo      「回调型」函数
+  cfo       「回调型」函数 cfoo 
   arg       「无属性」参数
-  param     「配置项」参数
-  retn      返回值
-  Jelem     jQuery对象
+  pram      「配置项」参数 param 
+  typ       类型 type
+  rtn       返回值 ret retn 
+  Jelm      jQuery对象 Jelem
   DiBs      在浏览器中有差异,有兼容性问题  Different in Browsers
   more      其他的,更多的
   moIn      更多参见 more in
   macro     总体,宏观
   micro     小的,微观
-  detail    详细
+  detil     详细 detail
   acc       总结,积累
   rec       记录
   todo      待处理,待整理
@@ -1180,7 +1183,7 @@ GitHub
     ES5+  ES5新增
     ES6+  ES6新增
     ...
-  folder    文件夹
+  foder     文件夹 folder
   file      文件
   self      自己的,自定义的
   SlPt      自我观点、认为 SelfPoint

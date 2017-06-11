@@ -306,7 +306,7 @@ express 后端开发框架
     执行以上代码：
       $ node server.js 
     浏览器访问 http://127.0.0.1:8081/index.htm
-  Cookie 管理
+  Cookie 管理 
     我们可以使用中间件向 Node.js 服务器发送 cookie 信息,以下代码输出了客户端发送的 cookie 信息：
     // express_cookie.js 文件
     var express      = require('express')

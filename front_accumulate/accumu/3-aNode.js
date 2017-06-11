@@ -1,58 +1,78 @@
 介绍_概念_说明_定义
-  NodeJS介绍
-    2009 年,Node 项目诞生,它是服务器上的 JavaScript 运行环境.
-    简单的说 Node.js 就是运行在服务端的 JavaScript 
-    Node.js 是一个基于Chrome JavaScript 运行时建立的一个平台 
-    Node.js是一个事件驱动I/O服务端JavaScript环境,基于Google的V8引擎
-    V8引擎执行Javascript的速度非常快,性能非常好 
-    用于开发脱离浏览器的JS程序(主要用于工具或服务端,比如文件处理)
-  NodeJS的版本特点
+  Node 服务器上的 JavaScript 运行环境
+    2009 年Node项目诞生,
+    Node.js 是一个事件驱动I/O服务端JavaScript环境,
+    JavaScript语言通过Node在服务器运行,在这个意义上,Node有点像JavaScript虚拟机；
+    用于开发脱离浏览器的JS程序,主要用于工具或服务端,比如文件处理
+    其次,Node提供大量工具库,使得JavaScript语言与操作系统互动,比如读写文件、新建子进程,
+    在这个意义上,Node又是JavaScript的工具库。
+    Node内部采用Google公司的V8引擎,作为JavaScript语言解释器,
+    通过自行开发的libuv库,调用操作系统资源 
+  版本特点 
     偶数位为稳定版本
     e.g. :-0.6.X -0.8.X -0.10.X  
     奇数为非稳定版本
     e.g. :-0.7.X -0.9.X -0.11.X  
-  
-  Node.js 应用一般由3部分组成
-    required引入模块：我们可以使用 require 指令来载入 Node.js 模块.
-    创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器.
-    接收请求与响应请求: 客户端可以使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
-    
-  运行环境
-    path 环境变量
-      执行命令时,优先到path指定的路径中去寻找.
-    cmd执行环境 Node指令
-      node -v     查看所安装node的版本信息
-      node 文件名  执行该文件
-    需要将执行的文件放在引用库的文件夹下(自带的库则不用)
-    Node.js REPL 交互式解释器
-      PS：Node.js REPL,Read Eval Print Loop, 表示一个电脑的环境,
-        类似 Window 系统的终端或 Unix/Linux shell,我们可以在终端中输入命令,并接收系统的响应.
-        Node 的交互式解释器可以很好的调试 Javascript 代码.
-        通过输入 node 命令来启动 Node 的终端
-      Node 自带了交互式解释器,可以执行以下任务：
-        读取 - 读取用户输入,解析输入了Javascript 数据结构并存储在内存中.
-        执行 - 执行输入的数据结构
-        打印 - 输出结果
-        循环 - 循环操作以上步骤直到用户两次按下 ctrl-c 按钮退出.
-      REPL 命令
-        ctrl + c   退出当前终端.
-        ctrl + c   按下两次退出 Node REPL
-        ctrl + d   退出 Node REPL
-        向上/向下键 查看输入的历史命令
-        tab 键     列出当前命令
-        .help      列出使用命令
-        .break     退出多行表达式
-        .clear     退出多行表达式
-        .save filename  保存当前的 Node REPL 会话到指定文件
-        .load filename  载入当前 Node REPL 会话的文件内容.
-        
+  程序一般由3部分组成
+    required引入模块：使用 require 指令来载入 Node.js 模块 
+    创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
+    接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
   Node.js 回调函数
-    PS：Node.js 异步编程的直接体现就是回调.
+    PS：Node.js 异步编程的直接体现就是回调 
       异步编程依托于回调来实现,但不能说使用了回调后程序就异步化了.
-      回调函数在完成任务后就会被调用,Node 使用了大量的回调函数,Node 所有 API 都支持回调函数.
-      例如,我们可以一边读取文件,一边执行其他命令,在文件读取完成后,
-      我们将文件内容作为回调函数的参数返回.这样在执行代码时就没有阻塞或等待文件 I/O 操作.
-      这就大大提高了 Node.js 的性能,可以处理大量的并发请求.
+      Node 所有 API 都支持回调函数.
+      在执行代码时就没有阻塞或等待文件 I/O 操作.
+      可大大提高了 Node.js 的性能,可以处理大量的并发请求.
+      Node采用V8引擎处理JavaScript脚本,最大特点就是单线程运行,一次只能运行一个任务。
+      这导致Node大量采用异步操作（asynchronous opertion）,
+      即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
+    由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
+      var isTrue = function(value, callback) {
+        if (value === true) {
+          callback(null, "Value was true.");
+        }
+        else {
+          callback(new Error("Value is not true!"));
+        }
+      }
+      上面代码就把进一步的处理,交给回调函数callback。
+    Node约定 
+      若某个函数需要回调函数作为参数,则回调函数是最后一个参数。
+      回调函数本身的第一个参数,约定为上一步传入的错误对象。
+        var callback = function (error, value) {
+          if (error) {
+            return console.log(error);
+          }
+          console.log(value);
+        }
+        上面代码中,callback的第一个参数是Error对象,第二个参数才是真正的数据参数。
+        这是因为回调函数主要用于异步操作,当回调函数运行时,前期的操作早结束了,
+        错误的执行栈早就不存在了,传统的错误捕捉机制try…catch对于异步操作行不通,
+        所以只能把错误交给回调函数处理。
+        try {
+          db.User.get(userId, function(err, user) {
+            if(err) {
+              throw err
+            }
+            // ...
+          })
+        } 
+        catch(e) {
+          console.log(‘Oh no!’);
+        }
+        上面代码中,db.User.get方法是一个异步操作,等到抛出错误时,
+        可能它所在的try…catch代码块早就运行结束了,这会导致错误无法被捕捉。
+        所以,Node统一规定,一旦异步操作发生错误,就把错误对象传递到回调函数。
+      若没有发生错误,回调函数的第一个参数就传入null。
+      这种写法有一个很大的好处,就是说只要判断回调函数的第一个参数,就知道有没有出错,
+      若不是null,就肯定出错了。另外,这样还可以层层传递错误。
+      if(err) {
+        // 除了放过No Permission错误意外,其他错误传给下一个回调函数
+        if(!err.noPermission) {
+          return next(err);
+        }
+      }
+      由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
     阻塞与非阻塞调用的不同
       e.g.:
       阻塞代码实例
@@ -82,17 +102,17 @@
       第一个实例在文件读取完后才执行完程序. 
       第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
       因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
-      所以如果需要处理回调函数的参数,我们就需要写在回调函数内.
+      所以若需要处理回调函数的参数,我们就需要写在回调函数内.
     Node.js 事件循环
-      Node.js 是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
-      Node.js 的每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
-      Node.js 基本上所有的事件机制都是用设计模式中观察者模式实现.
+      Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
+      每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
+      基本上所有的事件机制都是用设计模式中观察者模式实现.
         观察者模式定义了一种一对多的依赖关系,让多个观察者对象同时监听某一个主题对象.
         这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己.
-      Node.js 单线程类似进入一个while(true)的事件循环,直到没有事件观察者后退出,
-      每个异步事件都生成一个事件观察者,如果有事件发生就调用该回调函数.
+      Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
+      每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
     事件驱动程序
-      PS：Node.js 使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
+      PS：Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
         然后去服务下一个web请求.
         当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
         这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
@@ -116,9 +136,411 @@
           // 1
           // 2
           // 3
+运行环境及执行命令 
+  path 环境变量 
+    执行命令时,优先到path指定的路径中去寻找.
+  Node命令 [cmd执行环境中]
+    node -v       查看所安装node的版本信息
+    node fileName 执行文件
+      fileName  可省略后缀名
+        node demo
+        或者
+        node demo.js
+    node -e str   使用-e参数,可执行代码字符串
+      node -e 'console.log("Hello World")'
+  Nodejs REPL 交互式解释器 
+    PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
+      类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
+      Node的交互式解释器可以很好的调试 Javascript 代码,
+      'node' 命令来启动Node的终端,'node --use_strict' REPL将在严格模式下运行
+    REPL 命令 
+      ctrl + c   退出当前终端
+      ctrl + c   按下两次退出 Node REPL
+      ctrl + d   退出 Node REPL
+      tab        列出当前命令
+      up/down    查看输入的历史命令
+      .help      列出使用命令
+      .break     退出多行表达式
+      .clear     退出多行表达式
+      .save filename  保存当前的 Node REPL 会话到指定文件
+      .load filename  载入当前 Node REPL 会话的文件内容
+      _     下划线表示上一个命令的返回结果
+        > 1 + 1
+        2
+        > _ + 1
+        3
 --------------------------------------------------------------------------------
+全局对象 
+  PS：JS中有一个特殊的对象,称为全局对象[Global Object],
+    它及其所有属性都可以在程序的任何地方访问,即全局变量
+    在浏览器JS中,通常 window 是全局对象, 而 Node 中的全局对象是 global,
+    所有全局变量,除了 global 本身以外都是 global 对象的属性 
+    在 Node 可直接访问到 global 的属性,而不需要在应用中包含它
+  ECMAScript 全局变量的定义 
+    在最外层定义的变量
+    全局对象的属性
+    隐式定义的变量(未定义直接赋值的变量)
+    当你定义一个全局变量时,这个变量同时也会成为全局对象的属性,反之亦然
+    需要注 意的是,在 Node.js 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的,
+    而模块本身不是最外层上下文
+    注意：永远使用 var 定义变量以避免引入全局变量
+      因为全局变量会污染 命名空间,提高代码的耦合风险
+  ◆全局对象
+  global  Node所在的全局环境,类似浏览器的window对象 
+    最根本的作用是作为全局变量的宿主
+    global 和 window 的不同 
+      在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性
+        var x = 1;
+        等同于设置 
+        window.x = 1;
+      在模块中不是这样,[REPL环境的行为与浏览器一致]。
+        在模块文件中
+        var x = 1;
+        该变量不是global对象的属性
+        global.x // undefined。
+        因为模块的全局变量都是该模块私有的,其他模块无法取到。
+  process global对象的属性对象,用于描述当前Node进程状态 
+    PS：表示Node所处的当前进程,允许开发者与该进程互动,
+      提供了一个与操作系统的简单接口
+    ◆事件
+    exit   当进程准备退出时触发.
+    beforeExit 当 node 清空事件循环,并且没有其他安排时触发这个事件.
+      通常来说,当没有进程安排时 node 退出,
+      但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
+    uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
+      若给异常添加了监视器,默认的操作(打印堆栈跟踪信息并退出)就不会发生.
+    Signal 当进程接收到信号时就触发.
+      信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
+    e.g.:
+      创建文件 main.js ,代码如下所示：
+      process.on('exit', function(code) {
+        // 以下代码永远不会执行
+        setTimeout(function() { console.log("该代码不会执行"); }, 0);
+        console.log('退出码为:', code);
+      });
+      console.log("程序执行结束");
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      程序执行结束
+      退出码为: 0
+    ◆退出状态码
+      状态码	名称 & 描述
+      1	Uncaught Fatal Exception
+      有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
+      2	Unused
+      保留
+      3	Internal JavaScript Parse Error
+      JavaScript的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
+      4	Internal JavaScript Evaluation Failure
+      JavaScript 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
+      5	Fatal Error
+      V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为： FATAL ERROR
+      6	Non-function Internal Exception Handler
+      未捕获异常,内部异常处理函数不知为何设置为on-function,并且不能被调用.
+      7	Internal Exception Handler Run-Time Failure
+      未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
+      8	Unused
+      保留
+      9	Invalid Argument
+      可能是给了未知的参数,或者给的参数没有值.
+      10	Internal JavaScript Run-Time Failure
+      JavaScript的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
+      12	Invalid Debug Argument 
+      设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
+      >128	Signal Exits
+      若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
+    ◆属性
+    stdout      标准输出流.
+    stderr      标准错误流.
+    stdin       标准输入流.
+    argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
+      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
+    execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
+    execArgv    返回一个数组,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数.
+    env         返回一个对象,成员为当前 shell 的环境变量
+    exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
+    version     Node 的版本,比如v0.10.18.
+    versions    一个属性,包含了 node 的版本和依赖.
+    config      一个包含用来编译当前 node 执行文件的 javascript 配置选项的对象.
+      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
+    pid         当前进程的进程号.
+    title       进程名,默认值为"node",可以自定义该值.
+    arch        当前 CPU 的架构：'arm'、'ia32' 或者 'x64'.
+    platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
+    mainModule  require.main 的备选方法.
+      不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
+      可以认为,这两者引用了同一个模块.
+    e.g.:
+      创建文件 main.js ,代码如下所示：
+      process.stdout.write("Hello World!" + "\n"); // 输出到终端
+      process.argv.forEach(function(val, index, array) { // 通过参数读取
+       console.log(index + ': ' + val);
+      });
+      console.log(process.execPath); // 获取执行路局
+      console.log(process.platform); // 平台信息
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      Hello World!
+      0: node
+      1: /web/www/node/main.js
+      /usr/local/node/0.10.36/bin/node
+      darwin
+    ◆方法
+    abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
+    chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
+    cwd()   返回当前进程的工作目录
+    exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
+    getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    setgid(id) 设置进程的群组标识(参见 setgid(2)).
+      可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    setuid(id) 设置进程的用户标识(参见setuid(2)).
+      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
+      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
+      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
+    memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
+    nextTick(callback) 一旦当前事件循环结束,调用回到函数.
+    umask([mask]) 设置或读取进程文件的掩码.
+      子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
+    uptime() 返回 Node 已经运行的秒数.
+    hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
+      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
+      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
+      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
+    e.g.:
+      创建文件 main.js ,代码如下所示：
+      console.log('当前目录: ' + process.cwd()); // 输出当前目录
+      console.log('当前版本: ' + process.version); // 输出当前版本
+      console.log(process.memoryUsage()); // 输出内存使用情况
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      当前目录: /web/com/runoob/nodejs
+      当前版本: v0.10.36
+      { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
+  Date    时间类
+  console 用于提供控制台标准输出 
+    PS：由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
+      Node.js 沿用了这个标准,提供与习惯行为一致的 console 对象,
+      用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
+      指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
+    console.log([data][, ...]) 向标准输出流打印字符并以换行符结束
+      该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
+      若有多个参数,则 以类似于C 语言 printf() 命令的格式输出.
+    console.info([data][, ...]) 该命令的作用是返回信息性消息
+      这个命令与 console.log 差别并不大,
+      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
+    console.error([data][, ...]) 输出错误消息的
+      控制台在出现错误时会显示是红色的叉子.
+    console.warn([data][, ...]) 输出警告消息
+      控制台出现有黄色的惊叹号.
+    console.dir(obj[, options]) 用来对一个对象进行检查(inspect),并以易于阅读和打印的格式显示.
+    console.time(label) 输出时间,表示计时开始.
+    console.timeEnd(label) 结束时间,表示计时结束.
+    console.trace(message[, ...]) 当前执行的代码在堆栈中的调用路径
+      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
+    console.assert(value[, message][, ...]) 用于判断某个表达式或变量是否为真,
+      接收两个参数,第一个参数是表达式,第二个参数是字符串.
+      只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+  Buffer 缓冲区,处理二进制数据的接口 
+    PS：JS只有字符串数据类型,没有二进制数据类型, 
+      处理TCP流或文件流时,需使用二进制数据, 因此Nodejs定义了一Buffer类,
+      用来创建一个专门存放二进制数据的缓存区;
+      在Nodejs中,Buffer类是随Node内核一起发布的核心库;
+    var bufer = new Buffer(val); 通过Buffer类来创建bufer对象 
+      PS： bufer对象是一个类似数组的对象,成员都为0到255的整数值,即一个8位的字节 
+      ◆val可为以下类型：
+      num         整数,用于指定创建的bufer的长度[单位为字节],或分配的字节内存 
+        var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
+      bufer       bufer对象,通过拷贝来创建新buffer对象 
+        var buffer = new Buffer([1, 1, 2, 2, 3]);
+        console.log(buffer); // <Buffer 01 01 02 02 03>
+      str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
+        type  编码方式,默认为utf-8,其他可选值为 
+          "ascii"
+          "utf8"
+          "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
+          "ucs2"    utf16le的别名
+          "base64"
+          "hex"      将每个字节转为两个十六进制字符
+        var buf = new Buffer("www.runoob.com", "utf-8"); 
+      arr         数组,数组成员必须是整数值
+        var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
+        console.log(hello.toString()); // 'Hello'
+    对象属性方法
+      bufer.length;  读写,bufer对象所占据的内存长度  
+        PS：改值与Buffer对象的内容无关;
+          如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+        var buf1 = new Buffer('1234567');
+        var buf2 = new Buffer(8);
+        console.log(buf1.length); // 7
+        console.log(buf2.length); // 8
+      bufer.toJSON();    返回将bufer对象转换为JSON格式对象 
+        PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+        e.g.:
+          var bufer = new Buffer('abc');
+          var json = bufer.toJSON();
+          console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+          console.log(typeof json); // object
+          
+          var buf = new Buffer('test');
+          var json = JSON.stringify(buf);
+          console.log(json); // '[116,101,115,116]'
+          var copy = new Buffer(JSON.parse(json));
+          console.log(copy); // <Buffer 74 65 73 74>
+      bufer.write(str [,idx] [,len] [,typ]);  将字符串写入bufer对象,返回实际写入的长度
+        PS：若 buffer 空间不足,则只会写入部分字符串.
+        str   写入缓冲区的字符串.
+        idx   缓冲区开始写入的索引值,默认为 0 
+        len   写入的字节数,默认为 buffer.length 
+        typ   使用的编码.默认为 'utf8' 
+        e.g.:
+          var buf = new Buffer(256);
+          var len = buf.write("www.runoob.com");
+          console.log("写入字节数 : "+ len);  // 写入字节数 : 14
+          console.log(buf);
+          // <Buffer 77 77 77 2e 72 75 6e 6f 6f 62 2e 63 6f 6d 00 00 90 74 48 ee 42 01 00 00 0a 00 00 00 00 00 00 00 b8 74 48 ee 42 01 00 00 05 00 00 00 01 00 00 00 00 00 ... >
+      bufer.toString([typ] [,bgn] [,end]);  解码buf缓冲区数据并使用指定的编码返回字符串
+        typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+        bgn    开始读取的索引位置,默认为 0 
+        end    结束位置,默认为缓冲区的末尾 
+        e.g.:
+          var buf = new Buffer(26);
+          for (var i = 0 ; i < 26 ; i++) { 
+            buf[i] = i + 97; 
+          }
+          console.log(buf);
+          // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+          console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+          console.log( buf.toString('ascii',0,5));   // 输出: abcde
+          console.log( buf.toString('utf8',0,5));    // 输出: abcde
+          console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+      bufer.slice([bgn[,end]]);  bufer剪切,返回剪切的新缓冲区
+        begin 可选,默认为 0
+        end   可选,默认为 bufer.length
+        e.g.:
+          var buf1 = new Buffer('123');
+          var buf2 = buf1.slice(0,2);
+          console.log(buf2); // <Buffer 31 32>
+      buf.copy(bufer[,buferBgn[,bufBgn[,bufEnd]]]); 拷贝buf到bufer中,返回undefined
+        bufer     复制到的bufer对象
+        buferBgn  数字,可选,默认为 0,开始复制插入的下标
+        bufBgn    数字,可选,默认为 0
+        bufEnd    数字,可选,默认为 buf.length
+        e.g.:
+          var buf1 = new Buffer('abcdefghi');
+          var buf2 = new Buffer(6);
+          for (var i = 0; i < buf2.length; i++) {
+            buf2[i] = 65;
+          }
+          console.log(buf1,buf2);
+          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+          buf1.copy(buf2,2,3,5);
+          console.log(buf1,buf2);
+          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+          var bufStr1 = buf1.toString();
+          var bufStr2 = buf2.toString();
+          console.log(bufStr1,bufStr2);
+          // abcdefghi AAdeAA
+      bufer.compare(buf);  比较 
+        e.g.:
+          var buf1 = new Buffer('10');
+          var buf2 = new Buffer('11');
+          var result = buf1.compare(buf2);
+          console.log(result); // -1
+    静态属性方法 
+      Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
+        buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
+          参数列表只有一个成员,就直接返回该成员
+        length  可选,默认为总长度,指定新buf对象的长度
+          省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
+          因此,显式提供这个参数,能提供运行速度。 
+        e.g.:
+          var buf1 = new Buffer('11');
+          var buf2 = new Buffer('22');
+          var buf3 = Buffer.concat([buf1,buf2]);
+          console.log(buf3.toString());   // 1122
+      Buffer.isEncoding(typ)  返回一个布尔值,表示Buffer实例是否为指定编码 
+        Buffer.isEncoding('utf8'); // true
+      Buffer.isBuffer(obj)    返回一个布尔值,判断对象是否为Buffer实例 
+        Buffer.isBuffer(Date) // false
+      Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度
+        str  检测的字符串
+        typ  可选,编码类型,默认编码方式为utf8
+        Buffer.byteLength('Hello', 'utf8') // 5
+    与二进制数组的关系 
+      TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
+      比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
+      注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]）。
+      另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的。
+      二进制数组的buffer属性,保留指向原Buffer对象的指针。
+      二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
+      比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
+  ◆全局变量
+  __filename 当前正在执行的脚本的文件名 
+    PS： 它将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同. 
+      若在模块中,返回的值是模块文件的路径.
+    e.g.:
+      创建文件 main.js ,代码如下所示：
+      // 输出全局变量 __filename 的值
+      console.log( __filename );
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      /web/com/runoob/nodejs/main.js
+  __dirname  当前执行脚本所在的目录 
+    e.g.:
+      创建文件 main.js ,代码如下所示：
+      // 输出全局变量 __dirname 的值
+      console.log( __dirname );
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      /web/com/runoob/nodejs
+  ◆全局函数
+  setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
+    PS：实际的调用间隔,还取决于系统因素;
+      间隔的毫秒数在1毫秒到2,147,483,647 毫秒（约 24.8 天）之间,
+      若超过这个范围,会被自动改为1毫秒;
+    setTimeout(function (){ 
+      console.log( "Hello, World!"); 
+    }, 2000);
+    执行 main.js 文件 : node main.js
+    两秒后输出
+    // Hello, World!
+  clearTimeout(num)      通过一定时器编号来终止该定时器 
+    num   setTimeout函数创建的定时器返回的编号 
+    e.g.:
+      // 两秒后执行函数
+      var num = setTimeout(function (){ 
+        console.log( "Hello, World!"); 
+      }, 2000);
+      // 清除定时器
+      clearTimeout(num);
+      执行 main.js 文件: node main.js
+  setInterval(foo, time) 指定毫秒数后执行函数,返回一整数代表定时器的编号
+    由于系统因素,可能无法保证每次调用之间正好间隔指定的毫秒数,
+    但只会多于这个间隔,而不会少于它;
+    指定的毫秒数必须是 1 到 2,147,483,647（大约 24.8 天）之间的整数,
+    若超过这个范围,会被自动改为1毫秒;
+  clearInterval(num)     终止一个用setInterval方法新建的定时器。
+  require() 用于加载模块
+  Buffer()  用于操作二进制数据
+  ◆伪全局变量 
+    模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
+  module
+  module.exports
+  exports
 基础语法 
-  this
+  this 
     全局作用域下的this
       在浏览器里this等价于window对象,若声明一些全局变量(不管在任何地方),
       这些变量都会作为this的属性.
@@ -150,96 +572,6 @@
       console.log(this.foo); // bar
       testThis();
       console.log(this.foo); // foo
-Buffer 缓冲区 
-  PS：JavaScript 语言自身只有字符串数据类型,没有二进制数据类型.
-    但在处理像TCP流或文件流时,必须使用到二进制数据.
-    因此在 Node.js中,定义了一个 Buffer 类,该类用来创建一个专门存放二进制数据的缓存区.
-    在 Node.js 中,Buffer 类是随 Node 内核一起发布的核心库.
-    Buffer 库为 Node.js 带来了一种存储原始数据的方法,可以让 Node.js 处理二进制数据,
-    每当需要在 Node.js 中处理I/O操作中移动的数据时,就有可能使用 Buffer 库.
-    原始数据存储在 Buffer 类的实例中.
-    一个 Buffer 类似于一个整数数组,但它对应于 V8 堆内存之外的一块原始内存.
-  var buf = new Buffer(10); 创建长度为 10 字节的 Buffer 实例
-  var buf = new Buffer(buf); 通过拷贝buf创建
-    e.g.:
-    var buf = new Buffer([1, 1, 2, 2, 3]);
-    console.log(buf); // <Buffer 01 01 02 02 03>
-  var buf = new Buffer("www.runoob.com", "utf-8"); 通过一个字符串来创建 Buffer 实例
-    utf-8 是默认的编码方式,
-    此外它同样支持以下编码："ascii", "utf8", "utf16le", "ucs2", "base64" 和 "hex".  
-  buf.length;  返回buf对象所占据的内存长度
-    e.g.:
-      var buf1 = new Buffer('1234567');
-      var buf2 = new Buffer(8);
-      console.log(buf1.length); // 7
-      console.log(buf2.length); // 8
-  buf.write(str[,index[,length]][,encoding]); 将字符串写入buf缓冲区,返回实际写入的长度
-    PS：如果 buffer 空间不足, 则只会写入部分字符串.
-    Arguments: 
-      string   写入缓冲区的字符串.
-      index    缓冲区开始写入的索引值,默认为 0 .
-      length   写入的字节数,默认为 buffer.length
-      encoding 使用的编码.默认为 'utf8' 
-    e.g.:
-      var buf = new Buffer(256);
-      var len = buf.write("www.runoob.com");
-      console.log("写入字节数 : "+ len);  // 写入字节数 : 14
-      console.log(buf);
-      // <Buffer 77 77 77 2e 72 75 6e 6f 6f 62 2e 63 6f 6d 00 00 90 74 48 ee 42 01 00 00 0a 00 00 00 00 00 00 00 b8 74 48 ee 42 01 00 00 05 00 00 00 01 00 00 00 00 00 ... >
-  buf.toString([encoding[,begin[,end]]]); 解码buf缓冲区数据并使用指定的编码返回字符串
-    Arguments:
-      encoding 使用的编码.默认为 'utf8' .
-      begin    指定开始读取的索引位置,默认为 0.
-      end      结束位置,默认为缓冲区的末尾.
-    e.g.:
-      var buf = new Buffer(26);
-      for (var i = 0 ; i < 26 ; i++) { buf[i] = i + 97; }
-      console.log(buf);
-      // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-      console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-      console.log( buf.toString('ascii',0,5));   // 输出: abcde
-      console.log( buf.toString('utf8',0,5));    // 输出: abcde
-      console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-  buf.toJSON();    返回将buf类数组转换为JSON格式对象
-    e.g.:
-      var buf = new Buffer('abc');
-      var json = buf.toJSON();
-      console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-      console.log(typeof json); // object
-  buf.slice([begin[,end]]);  buf缓冲区剪切,返回剪切的新缓冲区
-    Arguments:
-      begin 可选,默认为 0
-      end   可选,默认为 buf.length
-    e.g.:
-      var buf1 = new Buffer('123');
-      var buf2 = buf1.slice(0,2);
-      console.log(buf2); // <Buffer 31 32>
-  Buf.copy(targetBuf[,targetBegin[,begin[,end]]]); 拷贝缓冲区,返回undefined
-    Arguments:
-      targetBuf    要拷贝的 Buffer 对象.
-      targetBegin  数字,可选,默认为 0
-      begin        数字,可选,默认为 0
-      end          数字,可选,默认为 buf.length
-    e.g.:
-      var buf1 = new Buffer('abc');
-      var buf2 = new Buffer(3);
-      buf1.copy(buf2);
-      console.log(buf2.toString()); // abc
-  Buf.compare(buf);  比较
-    e.g.:
-      var buf1 = new Buffer('10');
-      var buf2 = new Buffer('11');
-      var result = buf1.compare(buf2);
-      console.log(result); // -1
-  Buffer.concat(buflist[,length]);  buf缓冲区合并,返回合并后的新buffer对象
-    Arguments:
-      buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-      length  指定新buf对象的长度
-    e.g.:
-      var buf1 = new Buffer('11');
-      var buf2 = new Buffer('22');
-      var buf3 = Buffer.concat([buf1,buf2]);
-      console.log(buf3.toString());   // 1122
 Stream 流 
   PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     例如,对http 服务器发起请求的request 对象就是一个 Stream,还有stdout,标准输出.
@@ -332,77 +664,92 @@ Stream 流
         console.log("文件解压完成.");
         代码执行结果如下：
         文件解压完成.
-模块系统 
-  PS：为了让NodeJS的文件可以相互调用,NodeJS提供了一个简单的模块系统.
-    模块是Node.js 应用程序的基本组成部分,文件和模块是一一对应的.
-    换言之,一个 Node.js 文件就是一个模块,
-    这个文件可能是JavaScript 代码、JSON 或者编译过的C/C++ 扩展.
-  模块的引用和创建
-    PS：Node.js 提供了exports 和 require 两个对象,
-      其中 exports 是模块公开的接口,
-      require 用于从外部获取一个模块的接口,即所获取模块的 exports 对象.
-    exports.foo = function(){ }
-      e.g.:
-        创建hello.js文件,代码如下：
-          exports.world = function() { console.log('Hello World'); }
-        在以上示例中,hello.js 通过 exports 对象把 world 作为模块的访问接口,
-        在 main.js 中通过 require('./hello') 加载这个模块,
-          然后就可以直接访 问 hello.js 中 exports 对象的成员函数 world 了.
-    module.obj = function(){ }
-      e.g.:
+模块系统 为了NodeJS的文件可相互调用 
+  PS：文件和模块是一一对应的,即一个Nodejs文件就是一个模块,
+    文件可能是JavaScript 代码、JSON 或者编译过的 C/C++ 扩展等等;
+    按照CommonJS规范定义和使用模块
+  module       模块公开的接口 
+    PS：module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
+    exports.foo = function(){ } 
       hello.js 文件中
+        exports.world = function() { 
+          console.log('Hello World'); 
+        };
+        // 通过 exports 对象把 world 作为模块的访问接口 
+      main.js  文件中
+        通过 require('./hello') 加载这个模块,
+        然后就可以直接访 问 hello.js 中 exports 对象的成员函数 world 了
+    module.obj = function(){ } 
+      hello.js 文件中 
         function world() { 
           var name; 
           this.setName = function(thyName) { name = thyName; }; 
           this.sayHello = function() { console.log('Hello ' + name); }; 
         }; 
         module.exports = world;
-      main.js 文件中
+      main.js  文件中 
         var World = require('./hello'); 
         world = new World(); 
         world.setName('BYVoid'); 
         world.sayHello(); 
-    ◆require 引入模块
-      require方法接受以下几种参数的传递：
-        http、fs、path等,原生模块.
-        ./mod或../mod,相对路径的文件模块.
-        /pathtomodule/mod,绝对路径的文件模块.
-        mod,非原生模块的文件模块.
-    var aoo = require(path); 通过路径引入
-      e.g. :
-        模块的引入和创建
-          student.js 文件中
-            function add(student){ console.log("Add student:" + student); }
-            exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
-          teacher.js 文件中
-            function add(teacher){ console.log("Add teacher:" + teacher); }
-            exports.add =add; // 通过 exports对象 暴露值
-          klass.js 文件中
-            var student =require("./student"); 
-            // 通过 require函数 来引入student.js 模块 
-            // (student.js 和 class.js 在同一目录下,必须使用./)
-            var teacher =require("./teacher");
-            // 引入 teacher.js 模块
-            function add(t,ss){
-              teacher.add(t);  // 调用teacher.js 模块中的 add函数
-              ss.forEach(function(val,i){ student.add(val); })
-              // 调用student.js 模块中的 add函数
-            }
-            exports.add =add; // 传统的模块实例
-            // moudule.exports.add =add; // 成为一个特别的模块类型
-            //和 exports.add =add; 类似(功能相同),调用方式不同
-            // 若存在 exports.add =add; moudule.exports.add =add;被忽略
-          index.js 文件中
-            var klass =require("./klass"); // 引入 klass.js
-            klass.add("abc",["12","34"]);  // 调用 klass.js 中的函数
-            // Add teacher:abc
-            // Add student:12
-            // Add student:34
+  require(arg) 获取模块的接口 
+    PS：加载时可以省略脚本文件的后缀名
+      模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
+      意味着模块实际上只会执行一次。
+      若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数。        
+    arg  参数可为以下几种 
+      原生模块       http、fs、path等
+      相对路径的文件 ./mod或../mod等
+      绝对路径的文件 /pathtomodule/mod等
+      name  非原生模块的文件模块,通过配置文件指定
+        var bar = require('bar');
+        有时候,一个模块本身就是一个目录,目录中包含多个文件。
+        这时候,Node在 package.json 文件中,寻找main属性所指明的模块入口文件。
+        {
+          "name" : "bar",
+          "main" : "./lib/bar.js"
+        }
+        上面代码中,模块的启动文件为 lib子目录下的 bar.js。
+        当使用require('bar')命令加载该模块时,
+        实际上加载的是./node_modules/bar/lib/bar.js文件。
+        下面写法会起到同样效果。
+        var bar = require('bar/lib/bar.js');
+        若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
+    var aoo = require(path); 通过路径引入 
+      e.g. : 模块的引入和创建 
+        student.js 文件中
+          function add(student){ console.log("Add student:" + student); }
+          exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
+        teacher.js 文件中
+          function add(teacher){ console.log("Add teacher:" + teacher); }
+          exports.add =add; // 通过 exports对象 暴露值
+        klass.js 文件中
+          var student =require("./student"); 
+          // 通过 require函数 来引入student.js 模块 
+          // (student.js 和 class.js 在同一目录下,必须使用./)
+          var teacher =require("./teacher");
+          // 引入 teacher.js 模块
+          function add(t,ss){
+            teacher.add(t);  // 调用teacher.js 模块中的 add函数
+            ss.forEach(function(val,i){ student.add(val); })
+            // 调用student.js 模块中的 add函数
+          }
+          exports.add =add; // 传统的模块实例
+          // moudule.exports.add =add; // 成为一个特别的模块类型
+          //和 exports.add =add; 类似(功能相同),调用方式不同
+          // 若存在 exports.add =add; moudule.exports.add =add;被忽略
+        index.js 文件中
+          var klass =require("./klass"); // 引入 klass.js
+          klass.add("abc",["12","34"]);  // 调用 klass.js 中的函数
+          // Add teacher:abc
+          // Add student:12
+          // Add student:34
     var aoo = require(str);  通过模块名引入
-      e.g.:
-      var fs = require('fs'); // 引入fs模块
-  ◆核心模块
-  events 事件模块
+      e.g.:  var fs = require('fs'); // 引入fs模块
+  ◆核心模块  不用安装就可以使用 
+    源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
+    核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
+  events 事件模块 
     PS：Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
     Node.js 里面的许多对象都会分发事件：
       一个 net.Server 对象会在每次有新连接时分发一个事件,
@@ -410,7 +757,7 @@ Stream 流
       所有这些产生事件的对象都是 events.EventEmitter 的实例.
     var events = require('events');   引入 events 模块
     var event = new events.EventEmitter(); 创建事件功能对象
-      EventEmitter 对象如果在实例化时发生错误,会触发 'error' 事件.
+      EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
       当添加新的监听器时,'newListener' 事件会触发,
       当监听器被移除时,'removeListener' 事件被触发.
     event.on(eName,function([arg1,arg2...]){ }); 给指定事件添加监听器
@@ -465,7 +812,7 @@ Stream 流
       首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
       其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
       继承 EventEmitter 不会打乱对象原有的继承关系.
-  http   http服务模块
+  http   http服务模块,提供HTTP服务器功能 
     PS： Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
       1024 以下的端口是系统保留端口,需要管理员权限才能使用;
       http 模块主要用于搭建 HTTP 服务端和客户端,
@@ -593,7 +940,7 @@ Stream 流
         Hello World!
         </body>
         </html>
-  fs     文件系统模块file system
+  fs     file system,文件系统模块,与文件系统交互
     PS：fs模块可用于对系统文件及目录进行读写操作.
       Node.js 提供一组类似 UNIX(POSIX)标准的文件操作API.
       也可使用 fs.read 和 fs.write 读写文件,
@@ -610,7 +957,7 @@ Stream 流
             console.log('成功删除了 /tmp/shiyanlou');
         });
         异步方法中回调函数的第一个参数总是留给异常参数(exception),
-        如果方法成功完成,该参数为null或undefined
+        若方法成功完成,该参数为null或undefined
       同步写法demo:
         var fs = require('fs');
         fs.unlinkSync('/tmp/shiyanlou'); // Sync 表示是同步方法
@@ -619,7 +966,7 @@ Stream 流
         而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
     var fs = require('fs'); 引入文件系统模块
     fs.writeFile(path,data,[options],callback); 写内容到文件中
-      PS： 写入文件内容,如果文件不存在会创建一个文件,但不会主动创建目录
+      PS： 写入文件内容,若文件不存在会创建一个文件,但不会主动创建目录
         写入时会先清空文件
       Arguments:
         path    字符串,路径及文件名
@@ -741,18 +1088,18 @@ Stream 流
       Arguments:
         path     文件的路径
         flags    文件打开的行为
-          r   以读取模式打开文件.如果文件不存在抛出异常.
-          r+  以读写模式打开文件.如果文件不存在抛出异常.
+          r   以读取模式打开文件.若文件不存在抛出异常.
+          r+  以读写模式打开文件.若文件不存在抛出异常.
           rs  以同步的方式读取文件.
           rs+ 以同步的方式读取和写入文件.
-          w   以写入模式打开文件,如果文件不存在则创建.
-          wx  类似 'w',但是如果文件路径存在,则文件写入失败.
-          w+  以读写模式打开文件,如果文件不存在则创建.
-          wx+ 类似 'w+', 但是如果文件路径存在,则文件读写失败.
-          a   以追加模式打开文件,如果文件不存在则创建.
-          ax  类似 'a', 但是如果文件路径存在,则文件追加失败.
-          a+  以读取追加模式打开文件,如果文件不存在则创建.
-          ax+ 类似 'a+', 但是如果文件路径存在,则文件读取追加失败.          
+          w   以写入模式打开文件,若文件不存在则创建.
+          wx  类似 'w',但是若文件路径存在,则文件写入失败.
+          w+  以读写模式打开文件,若文件不存在则创建.
+          wx+ 类似 'w+', 但是若文件路径存在,则文件读写失败.
+          a   以追加模式打开文件,若文件不存在则创建.
+          ax  类似 'a', 但是若文件路径存在,则文件追加失败.
+          a+  以读取追加模式打开文件,若文件不存在则创建.
+          ax+ 类似 'a+', 但是若文件路径存在,则文件读取追加失败.          
         mode     设置文件模式(权限),文件创建默认权限为 0666,可读写)
         callback 回调函数,带有两个参数如：callback(err, fd)      
     fs.stat(path,callback); 获取文件信息
@@ -767,21 +1114,21 @@ Stream 流
           console.log(stats.isFile()); 		//true
         })      
       stats对象的方法
-        stats.isFile(); 如果是文件返回 true,否则返回 false.
-        stats.isDirectory(); 如果是目录返回 true,否则返回 false.
-        stats.isBlockDevice(); 如果是块设备返回 true,否则返回 false.
-        stats.isCharacterDevice(); 如果是字符设备返回 true,否则返回 false.
-        stats.isSymbolicLink(); 如果是软链接返回 true,否则返回 false.
-        stats.isFIFO(); 如果是FIFO,返回true,否则返回 false.
+        stats.isFile(); 若是文件返回 true,否则返回 false.
+        stats.isDirectory(); 若是目录返回 true,否则返回 false.
+        stats.isBlockDevice(); 若是块设备返回 true,否则返回 false.
+        stats.isCharacterDevice(); 若是字符设备返回 true,否则返回 false.
+        stats.isSymbolicLink(); 若是软链接返回 true,否则返回 false.
+        stats.isFIFO(); 若是FIFO,返回true,否则返回 false.
           FIFO是UNIX中的一种特殊类型的命令管道.
-        stats.isSocket(); 如果是 Socket 返回 true,否则返回 false.      
+        stats.isSocket(); 若是 Socket 返回 true,否则返回 false.      
     fs.read(fd,buffer,offset,length,position,callback); 读取文件
       Arguments:
         fd      通过 fs.open() 方法返回的文件描述符.
         buffer  数据写入的缓冲区
         offset  缓冲区写入的写入偏移量
         length  要从文件中读取的字节数
-        position  文件读取的起始位置,如果 position 的值为 null,则会从当前文件指针的位置读取
+        position  文件读取的起始位置,若 position 的值为 null,则会从当前文件指针的位置读取
         callback  回调函数,有三个参数err, bytesRead, buffer
           err 为错误信息, bytesRead 表示读取的字节数,buffer 为缓冲区对象
       e.g.:
@@ -881,13 +1228,13 @@ Stream 流
           文件关闭成功          
     fs.rename(oldPath, newPath, callback)
       回调函数没有参数,但可能抛出异常          
-  url    
+  url    解析URL 
     PS：URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
     var url = require("url"); 引入url模块
-    url.parse(url [,bool1] [,bool2]); 将URL解析为对象「方便后续其他操作」
+    url.parse(url [,bol1] [,bol2]); 将URL解析为对象「方便后续其他操作」
       url   字符串,传入需要解析的URL字符串
-      bool1 布尔值,可选,默认false,是否将query字段转换为对象表示
-      bool2 布尔值,可选,默认false,当URL不全时更智能的识别
+      bol1  布尔值,可选,默认false,是否将query字段转换为对象表示
+      bol2  布尔值,可选,默认false,当URL不全时更智能的识别
       e.g. :
         url.parse("https://www.baidu.com");
         返回如下的对象
@@ -905,15 +1252,27 @@ Stream 流
           path: '/',     // 路径
           href: 'https://www.baidu.com/' // 完整超链接
         }
-    url.format(url对象); 将url对象格式化为url字符串
+    url.format(urlObj);     将url对象格式化为url字符串
       e.g. :
       var obj =url.parse("https://www.baidu.com");
       url.format(obj); // 'https://www.baidu.com/'
     url.resolve(str1,str2); 拼接为URL
       e.g. :
-      url.resolve("https://imooc.com","/course/list");
-      // 'https://imooc.com/course/list'
-  querystring 
+        url.resolve("https://imooc.com","/course/list");
+        // 'https://imooc.com/course/list'
+        
+        url.resolve('/one/two/three', 'four')
+        // '/one/two/four'
+        
+        url.resolve('http://example.com/', '/one')
+        // 'http://example.com/one'
+        
+        url.resolve('http://example.com/one/', 'two')
+        // 'http://example.com/one/two'
+        
+        url.resolve('http://example.com/one', '/two')
+        // 'http://example.com/two'
+  querystring  解析URL的查询字符串
     PS：
     var querystring = require("querystring"); 引入querystring模块
     querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
@@ -952,7 +1311,9 @@ Stream 流
     querystring.unescapeBuffer()
     querystring.encode()
     querystring.decode()
-  util 提供常用函数的集合
+  child_process 新建子进程 
+  crypto  提供加密和解密功能,基本上是对OpenSSL的包装
+  util   提供常用函数的集合 
     PS：用于弥补核心JavaScript 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
       PS：JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
@@ -982,10 +1343,10 @@ Stream 流
         util.inspect 并不会简单地直接把对象转换为字符串,
         即使该对象定义了toString方法也不会调用.
       Arguments:
-        showHidden 可选,如果值为 true,将会输出更多隐藏信息
+        showHidden 可选,若值为 true,将会输出更多隐藏信息
         depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
           指定为 null 表示将不限递归层数完整遍历对象. 
-          如果color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
+          若color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
       e.g.:
         var util = require('util'); 
         function Person() { 
@@ -1055,7 +1416,7 @@ Stream 流
         platform : linux
         total memory : 25103400960 bytes.
         free memory : 20676710400 bytes.
-  path 模块提供了一些用于处理文件路径的小工具
+  path   处理文件路径 
     PS：
     var path = require("path"); 引入path模块
     path.normalize(p) 规范化路径,注意'..' 和 '.'.
@@ -1067,7 +1428,7 @@ Stream 流
     path.dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
     path.basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
     path.extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
-      如果一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
+      若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
     path.parse(pathString) 返回路径字符串的对象.
     path.format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
     path.sep 平台的文件路径分隔符,'\\' 或 '/'
@@ -1100,7 +1461,7 @@ Stream 流
         const request = 'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n';
         client.write(request); // 向服务器发送一个消息
         
-        // 如果 server destroy 之后, 再调用下面的代码会报错
+        // 若 server destroy 之后, 再调用下面的代码会报错
         // setInterval(() => {
         //   client.write('hello in interval')
         // }, 100)
@@ -1151,7 +1512,7 @@ Stream 流
   dns  模块用于解析域名
     PS：
     var dns = require("dns"); 引入dns模块
-  domain,域 简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
+  domain  域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
     PS：
       domain模块,把处理多个不同的IO的操作作为一个组.
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
@@ -1161,9 +1522,143 @@ Stream 流
         隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
         显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
     var domain = require("domain"); 引入domain模块
+  assert  主要用于断言,如果表达式不符合预期,就抛出一个错误。
+    PS：Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
+    assert(bol,str); 
+      bol  布尔值
+        为true时,无任何提示,返回undefined;
+        为false时,抛出一错误,错误的提示信息为第二个参数设定的字符串
+      str   字符串
+      e.g.：
+        var assert = require('assert');
+        function add (a, b) {
+          return a + b;
+        }
+        var expected = add(1,2);
+        assert( expected === 3, '预期1加2等于3');
+        // 无任何输出,因为assert方法的第一个参数是true。
+        assert( expected === 4, '预期1加2等于3')
+        // AssertionError: 预期1加2等于3
+        会抛出一个错误,因为assert方法的第一个参数是false。
+    assert.ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
+    assert.equal(actVal,expVal [,tip]);
+      PS：equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算。
+      actVal  实际值
+      expVal  预期值
+      tip     字符串,错误的提示信息 
+      assert.equal(true, value, message);
+      // 等同于
+      assert(value, message);
+      e.g.： 
+        var assert = require('assert');
+        function add (a, b) {
+          return a + b;
+        }
+        var expected = add(1,2);
+        // 以下三句效果相同
+        assert(expected == 3, '预期1+2等于3');
+        assert.ok(expected == 3, '预期1+2等于3');
+        assert.equal(expected, 3, '预期1+2等于3');
+    assert.notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
+      PS：notEqual方法的用法与equal方法类似
+        内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算。
+      e.g.：
+        var assert = require('assert');
+        function add (a, b) {
+          return a + b;
+        }
+        var expected = add(1,2);
+        // 以下三种写法效果相同
+        assert(expected != 4, '预期不等于4');
+        assert.ok(expected != 4, '预期不等于4');
+        assert.notEqual(expected, 4, '预期不等于4');
+    assert.deepEqual(actVal,expVal [,tip]); 比较两个对象
+      两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误。
+      e.g.：
+        var assert = require('assert');
+        var list1 = [1, 2, 3, 4, 5];
+        var list2 = [1, 2, 3, 4, 5];
+        assert.deepEqual(list1, list2, '预期两个数组应该有相同的属性');
+        
+        var person1 = { "name":"john", "age":"21" };
+        var person2 = { "name":"john", "age":"21" };
+        assert.deepEqual(person1, person2, '预期两个对象应该有相同的属性');
+    assert.notDeepEqual(actVal,expVal [,tip]); 与deepEqual方法正好相反
+      用来断言两个对象是否不相等
+    assert.strictEqual(actVal,expVal [,tip])   使用严格相等'===',比较两个表达式
+      e.g.：
+        var assert = require('assert');
+        assert.strictEqual(1, '1', '预期严格相等');
+        // AssertionError: 预期严格相等
+    assert.notStrictEqual(actVal,expVal [,tip]) 使用严格不相等'!==',比较两个表达式
+    assert.throws(block, [error], [message])  预期某个代码块会抛出一个错误,且抛出的错误符合指定的条件
+      // 例一,抛出的错误符合某个构造函数
+      assert.throws(
+        function() {
+          throw new Error("Wrong value");
+        },
+        Error,
+        '不符合预期的错误类型'
+      );
+      
+      // 例二、抛出错误的提示信息符合正则表达式
+      assert.throws(
+        function() {
+          throw new Error("Wrong value");
+        },
+        /value/,
+        '不符合预期的错误类型'
+      );
+      
+      // 例三、抛出的错误符合自定义函数的校验
+      assert.throws(
+        function() {
+          throw new Error("Wrong value");
+        },
+        function(err) {
+          if ( (err instanceof Error) && /value/.test(err) ) {
+            return true;
+          }
+        },
+        '不符合预期的错误类型'
+      );
+      assert.doesNotThrow()
+    assert.doesNotThrow(block, [message])     预期某个代码块不抛出错误。
+      assert.doesNotThrow(
+        function() {
+          console.log("Nothing to see here");
+        },
+        '预期不抛出错误' 
+      );
+    assert.ifError(val)  断言某个表达式是否false
+      如果该表达式对应的布尔值等于true,就抛出一个错误。
+      它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误。
+      e.g.：
+        function sayHello(name, callback) {
+          var error = false;
+          var str   = "Hello "+name;
+          callback(error, str);
+        }
+        // use the function
+        sayHello('World', function(err, value){
+          assert.ifError(err);
+          // ...
+        })
+    assert.fail(actual, expected, message, operator)   用于抛出一个错误。
+      该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误。
+      如果message参数对应的布尔值不为false,抛出的错误信息就是message,
+      否则错误信息就是“实际值 + 分隔符 + 预期值”。    
+      e.g.：
+        var assert = require('assert');
+        assert.fail(21, 42, 'Test Failed', '###')
+        // AssertionError: Test Failed
+        assert.fail(21, 21, 'Test Failed', '###')
+        // AssertionError: Test Failed
+        assert.fail(21, 42, undefined, '###')
+        // AssertionError: 21 ### 42
   本地模块
   ◆第三方模块
-  cheerio html文件源码操作模块
+  cheerio html文件源码操作模块 
     PS：像使用jquery一样方便快捷地操作抓取到的源码
     var cheerio =require("cheerio"); 引入cheerio模块
     var $ =cheerio.load(data); 将传入的数据生成DOM,并返回选择器API用于获取DOM元素
@@ -1245,225 +1740,16 @@ Stream 流
     var router = require("./router");
     server.start(router.route);
     在这里,我们传递的函数依旧什么也没做.
-  如果现在启动应用(node index.js,始终记得这个命令行),随后请求一个URL,
+  若现在启动应用(node index.js,始终记得这个命令行),随后请求一个URL,
     你将会看到应用输出相应的信息,这表明我们的HTTP服务器已经在使用路由模块了,
     并会将请求的路径传递给路由：
   $ node index.js
     Server has started.
   以上输出已经去掉了比较烦人的/favicon.ico请求相关的部分.
   浏览器访问 http://127.0.0.1:8888/,输出结果如下：
-全局对象 
-  PS：JavaScript 中有一个特殊的对象,称为全局对象(Global Object),
-    它及其所有属性都可以在程序的任何地方访问,即全局变量.
-    在浏览器 JavaScript 中,通常 window 是全局对象, 而 Node.js 中的全局对象是 global,
-    所有全局变量(除了 global 本身以外)都是 global 对象的属性.
-    在 Node.js 我们可以直接访问到 global 的属性,而不需要在应用中包含它.
-  全局对象与全局变量
-    global 最根本的作用是作为全局变量的宿主.
-    按照 ECMAScript 的定义,满足以下条 件的变量是全局变量：
-      在最外层定义的变量；
-      全局对象的属性；
-      隐式定义的变量(未定义直接赋值的变量).
-      当你定义一个全局变量时,这个变量同时也会成为全局对象的属性,反之亦然.
-      需要注 意的是,在 Node.js 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的, 
-      而模块本身不是最外层上下文.
-      注意： 永远使用 var 定义变量以避免引入全局变量,
-      因为全局变量会污染 命名空间,提高代码的耦合风险.
-  __filename 表示当前正在执行的脚本的文件名
-    PS： 它将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同. 
-      如果在模块中,返回的值是模块文件的路径.
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      // 输出全局变量 __filename 的值
-      console.log( __filename );
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      /web/com/runoob/nodejs/main.js
-  __dirname 表示当前执行脚本所在的目录
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      // 输出全局变量 __dirname 的值
-      console.log( __dirname );
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      /web/com/runoob/nodejs
-  setTimeout(cb, ms) 全局函数在指定的毫秒(ms)数后执行指定函数(cb)
-    返回一个代表定时器的句柄值.
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      function printHello(){ console.log( "Hello, World!"); }
-      // 两秒后执行以上函数
-      setTimeout(printHello, 2000);
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      Hello, World!
-  clearTimeout(t)     全局函数用于停止一个之前通过 setTimeout() 创建的定时器
-    参数 t 是通过 setTimeout() 函数创建的定时器
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      function printHello(){ console.log( "Hello, World!"); }
-      // 两秒后执行以上函数
-      var t = setTimeout(printHello, 2000);
-      // 清除定时器
-      clearTimeout(t);
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-  setInterval(cb, ms) 全局函数在指定的毫秒(ms)数后执行指定函数(cb)
-    返回一个代表定时器的句柄值.可以使用 clearInterval(t) 函数来清除定时器.
-    setInterval() 方法会不停地调用函数,直到 clearInterval() 被调用或窗口被关闭.
-  console 用于提供控制台标准输出
-    PS：它是由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
-      Node.js 沿用了这个标准,提供与习惯行为一致的 console 对象,
-      用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
-    console.log([data][, ...]) 向标准输出流打印字符并以换行符结束
-      该方法接收若干 个参数,如果只有一个参数,则输出这个参数的字符串形式.
-      如果有多个参数,则 以类似于C 语言 printf() 命令的格式输出.
-    console.info([data][, ...]) 该命令的作用是返回信息性消息
-      这个命令与 console.log 差别并不大,
-      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
-    console.error([data][, ...]) 输出错误消息的
-      控制台在出现错误时会显示是红色的叉子.
-    console.warn([data][, ...]) 输出警告消息
-      控制台出现有黄色的惊叹号.
-    console.dir(obj[, options]) 用来对一个对象进行检查(inspect),并以易于阅读和打印的格式显示.
-    console.time(label) 输出时间,表示计时开始.
-    console.timeEnd(label) 结束时间,表示计时结束.
-    console.trace(message[, ...]) 当前执行的代码在堆栈中的调用路径
-      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
-    console.assert(value[, message][, ...]) 用于判断某个表达式或变量是否为真,
-      接收两个参数,第一个参数是表达式,第二个参数是字符串.
-      只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-  process global对象的属性对象,用于描述当前 Nodejs 进程状态
-    PS：提供了一个与操作系统的简单接口
-    ◆事件
-    exit   当进程准备退出时触发.
-    beforeExit 当 node 清空事件循环,并且没有其他安排时触发这个事件.
-      通常来说,当没有进程安排时 node 退出,
-      但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
-    uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
-      如果给异常添加了监视器,默认的操作(打印堆栈跟踪信息并退出)就不会发生.
-    Signal 当进程接收到信号时就触发.
-      信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      process.on('exit', function(code) {
-        // 以下代码永远不会执行
-        setTimeout(function() { console.log("该代码不会执行"); }, 0);
-        console.log('退出码为:', code);
-      });
-      console.log("程序执行结束");
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      程序执行结束
-      退出码为: 0
-    ◆退出状态码
-      状态码	名称 & 描述
-      1	Uncaught Fatal Exception
-      有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
-      2	Unused
-      保留
-      3	Internal JavaScript Parse Error
-      JavaScript的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
-      4	Internal JavaScript Evaluation Failure
-      JavaScript 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
-      5	Fatal Error
-      V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为： FATAL ERROR
-      6	Non-function Internal Exception Handler
-      未捕获异常,内部异常处理函数不知为何设置为on-function,并且不能被调用.
-      7	Internal Exception Handler Run-Time Failure
-      未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,如果 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
-      8	Unused
-      保留
-      9	Invalid Argument
-      可能是给了未知的参数,或者给的参数没有值.
-      10	Internal JavaScript Run-Time Failure
-      JavaScript的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
-      12	Invalid Debug Argument 
-      设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
-      >128	Signal Exits
-      如果 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
-    ◆属性
-    stdout      标准输出流.
-    stderr      标准错误流.
-    stdin       标准输入流.
-    argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
-      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
-    execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-    execArgv    返回一个数组,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数.
-    env         返回一个对象,成员为当前 shell 的环境变量
-    exitCode    进程退出时的代码,如果进程优通过 process.exit() 退出,不需要指定退出码.
-    version     Node 的版本,比如v0.10.18.
-    versions    一个属性,包含了 node 的版本和依赖.
-    config      一个包含用来编译当前 node 执行文件的 javascript 配置选项的对象.
-      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
-    pid         当前进程的进程号.
-    title       进程名,默认值为"node",可以自定义该值.
-    arch        当前 CPU 的架构：'arm'、'ia32' 或者 'x64'.
-    platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
-    mainModule  require.main 的备选方法.
-      不同点,如果主模块在运行时改变,require.main可能会继续返回老的模块.
-      可以认为,这两者引用了同一个模块.
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      process.stdout.write("Hello World!" + "\n"); // 输出到终端
-      process.argv.forEach(function(val, index, array) { // 通过参数读取
-       console.log(index + ': ' + val);
-      });
-      console.log(process.execPath); // 获取执行路局
-      console.log(process.platform); // 平台信息
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      Hello World!
-      0: node
-      1: /web/www/node/main.js
-      /usr/local/node/0.10.36/bin/node
-      darwin
-    ◆方法
-    abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
-    chdir(directory)   改变当前工作进程的目录,如果操作失败抛出异常.
-    cwd()   返回当前进程的工作目录
-    exit([code])   使用指定的 code 结束进程.如果忽略,将会使用 code 0.
-    getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setgid(id) 设置进程的群组标识(参见 setgid(2)).
-      可以接收数字 ID 或者群组名.如果指定了群组名,会阻塞等待解析为数字 ID .
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setuid(id) 设置进程的用户标识(参见setuid(2)).
-      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
-      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
-      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.如果忽略,信号会是 'SIGTERM'.
-    memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
-    nextTick(callback) 一旦当前事件循环结束,调用回到函数.
-    umask([mask]) 设置或读取进程文件的掩码.
-      子进程从父进程继承掩码.如果mask 参数有效,返回旧的掩码.否则,返回当前掩码.
-    uptime() 返回 Node 已经运行的秒数.
-    hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
-      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
-      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
-      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
-    e.g.:
-      创建文件 main.js ,代码如下所示：
-      console.log('当前目录: ' + process.cwd()); // 输出当前目录
-      console.log('当前版本: ' + process.version); // 输出当前版本
-      console.log(process.memoryUsage()); // 输出内存使用情况
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      当前目录: /web/com/runoob/nodejs
-      当前版本: v0.10.36
-      { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
 --------------------------------------------------------------------------------
 RESTful API 
-  PS： REST即表述性状态传递(英文：Representational State Transfer,简称REST),
+  PS： REST,Representational State Transfer 表述性状态传递,
     是Roy Fielding博士在2000年他的博士论文中提出来的一种软件架构风格.
     表述性状态转移是一组架构约束条件和原则.满足这些约束条件和原则的应用程序或设计就是RESTful.
     需要注意的是,REST是设计风格而不是标准.
@@ -1696,7 +1982,7 @@ RESTful API
       encoding ,字符串,字符编码(默认： 'utf8')
       shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
       timeout,数字,超时时间(默认： 0)
-      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),如果超出那么子进程将会被杀死 (默认: 200*1024)
+      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
       killSignal ,字符串,结束信号(默认：'SIGTERM')
       uid,数字,设置用户进程的 ID
       gid,数字,设置进程组的 ID
@@ -1784,7 +2070,7 @@ RESTful API
       env Object 环境变量键值对
       execPath String 创建子进程的可执行文件
       execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
-      silent Boolean 如果为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
+      silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
       uid Number 设置用户进程的 ID
       gid Number 设置进程组的 ID
       返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.

@@ -1,5 +1,4 @@
 less 
-介绍_概念_说明_定义 
   简介： 一种动态样式表语言,属于CSS预处理语言的一种,扩展了 CSS 语言,
     增加了变量、Mixin、函数等特性,使 CSS 更易维护和扩展。
     Less 可以运行在 Node 或浏览器端。
@@ -14,13 +13,13 @@ less
   使用： 
     ◆编译成CSS
     命令行用法
-      PS：Less官方有一款基于Node.js的库,用于编译.less文件, 使用时,首先全局安装less
+      PS：Less官方有一款基于Nodejs的库,用于编译.less文件, 使用时,首先全局安装less
         部分系统下可能需要在前面加上sudo切换为超级管理员权限
       ★命令行 命令
         执行 lessc 且不带任何参数,就会在命令行上输出所有可用选项的列表
       npm install -g less  // 通过 npm 安装编译器
       lessc styles.less    // 执行 Less 编译器,将输出编译之后的 CSS 代码到 stdout
-        lessc styles.less > styles.css // 可以将输出重定向到一个文件
+        lessc styles.less > ./styles.css // 可以将输出重定向到一个文件
       ★额外选用命令
       -x  // 输出压缩过的 CSS
       --clean-css  // 启用 Clean CSS 进行压缩,获得更好的压缩效果
@@ -744,7 +743,6 @@ Extend,派生 「v1.4.0+」
       .aoo { box-shadow: inset 0 0 10px #555, 0 0 20px #111; }
 --------------------------------------------------------------------------------
 sass 
-介绍_概念_说明_定义 
   PS：Sass 是最早的 CSS 预处理语言,有比 LESS 更为强大的功能,
     不过其一开始的缩进式语法(Sass 老版本语法)并不能被大众接受,
     不过由于其强大的功能,还是有很多开发者选择了 Sass。

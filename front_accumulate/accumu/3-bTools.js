@@ -41,6 +41,7 @@ npm,node_package_manager node包管理器
     ◆已安装 
       npm install lodash   [在命令操作符中执行]
       npm install express -g    # 全局安装
+      npm install less -g    
       npm install express       # 本地安装
       npm install jQuery 
       npm install request

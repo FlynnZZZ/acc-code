@@ -1,5 +1,4 @@
-ECMAScript 6 
---------------------------------------------------------------------------------
+ES6
 ◆变量扩展 
   lexical scopes,词法作用域,即块作用域,会在函数内部、代码块「即 {}」内部创建 
     块级作用域是很多类C语言的工作机制, ES6引入块级声明的目的是增强JS的灵活性,
@@ -809,7 +808,7 @@ RegExp 正则的扩展
     // 匹配所有的箭头字符
     const regexArrows = /^\p{Block=Arrows}+$/u;
     regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
-Strings and Regular Expressions,字符串与正则表达式 
+Strings_and_Regular_Expressions,字符串与正则表达式 
   PS：ECMAScript 6 诞生之前,JavaScript 字符串(string)由 16 位编码的字符组成(UTF-16).
     每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
     所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
@@ -1422,7 +1421,7 @@ Blob  二进制数据的基本对象
     若类型未知,则该值为空字符串。
     在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据。
   blob.close() 关闭 Blob 对象,以便能释放底层资源。 
-Symbol  符号,标志,记号 
+Symbol 符号,标志,记号 
   PS：一种全新的数据类型,不可变,用来产生唯一的标识,也无法直接访问这个标识
     Symbol的目的：解决对象的属性名冲突
   创建符号
@@ -1505,7 +1504,7 @@ Symbol  符号,标志,记号
     Symbol.KeyFor(sym1); // aoo
     Symbol.KeyFor(sym2); // undefined
 --------------------------------------------------------------------------------
-class 类 
+Class 类 
   PS：ES6以前,都是使用函数function和原型prototype来模拟类class实现面向对象的编程;
     实际上,class本质上还是基于原型prototype的实现做的进一步封装,使使用起来更简单明了。
     也就是说它实际上也是函数function和原型prototype实现。
@@ -2002,7 +2001,7 @@ Promise 异步模式
     使用 Promise 监控 点击时间 , 使用Promise 改变事件的执行方式 [?] 
   e.g.:
     通过Promise来调用AJAX 「self」
-    var pro = new Promise(function(rs , rj){
+    var pro = new Promise(function(rs, rj){
       $.ajax({
         type : 'get',
         url  : 'url',
@@ -2060,10 +2059,7 @@ Promise 异步模式
     // 上一步是：准备请求C
     // 请求C成功
     // Promise {[[PromiseStatus]]: "resolved", [[PromiseValue]]: undefined}
-ASYNC   用来取代回调函数、解决异步操作的一种方法 
-  async 函数与 Promise、Generator 函数类似, 它本质上是 Generator 函数的语法糖。
-  async 函数并不属于 ES6,而是被列入了 ES7。
-module 模块化历史 
+Modules 模块化历史 
   介绍
     ES6之前,JS不支持原生的模块化。
     若要实现模块化,要借助一些框架,比如：requireJS或者seaJS等;
@@ -2720,7 +2716,7 @@ module 模块化历史
         查询模块绝对路径 require.resolve('./test.js');
         查看单个的模块缓存 require.cache[require.resolve('./test.js')]
         删除模块缓存 delete require.cache[require.resolve('./test.js')];
-export&import ES6模块化规范 
+Export&Import ES6模块化规范 
   PS： export 命令用于定义模块的对外接口,即提供接口,
     import 命令用于引入其他模块提供的功能,即引入接口;
   ES6 模块的设计思想: 尽量的静态化
@@ -3223,7 +3219,9 @@ export&import ES6模块化规范
         import { height } from "./module-B.js";
         console.log(height); // undefined,不会抛出异常,只是值为undefined
 -------------------------------------------------------------------------------
-ECMAScript 7 
+ES7 
+ASYNC  用来取代回调函数、解决异步操作的一种方法  
+  PS：async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖;
 -------------------------------------------------------------------------待整理 
 
 

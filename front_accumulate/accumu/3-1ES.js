@@ -1815,7 +1815,7 @@ OOP 面向对象
     while(条件){};  先判断再运行
     do{}while(条件); 先执行后判断,至少会执行一次 
     for(var key in obj){} 无序遍历 
-      PS： ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测
+      PS： ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测 
         若原型链上的属性设置为可遍历,则也会将其遍历出来.
       e.g. 对象 数组 字符串的遍历
         var obj ={ 

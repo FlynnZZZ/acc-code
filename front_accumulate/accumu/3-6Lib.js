@@ -20,7 +20,7 @@ Framework 框架
 --------------------------------------------------------------------------------
 jQuery 快速简洁的JavaScript库 
   PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
-    2.0 版本不支持ie 6/7/8
+    2.0+ 版本不再支持 IE6/7/8
   核心特性总结 
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
@@ -300,7 +300,7 @@ DOM 操作
           .aoo{ background-color:pink;}
           $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
           // 在所有的p标签中添加粗体的Hello,且背景为pink
-      Jelem.before('htmlCode'/Jelem) 将html代码/Jelem添加到元素外部头部
+      Jelem.before('htmlCode'/Jelem)     将html代码/Jelem添加到元素外部头部
       Jelem.insertBefore("selector"/Jelem) 被插入到外部头部 [与before相反]
         将元素/内容content插入到元素外部尾部 
       Jelem.after('htmlCode'/Jelem)      外部尾部插入
@@ -316,7 +316,11 @@ DOM 操作
         有参数:设置元素内容文本
       Jelem.wrap("HTML代码"/Jelem)          每个元素外包裹元素
       Jelem.wrapAll("HTML代码"/Jelem)       所有元素整体外包裹元素
-      Jelem.unwrap("HTML代码"/Jelem)        元素外包裹的元素去除
+      Jelem.unwrap("HTML代码"/Jelem)        元素外包裹的元素去除[?]
+        e.g.：
+          <a href="#"><div class="aoo"> 123123 </div></a>
+          $('.aoo').unwrap('a');
+          结果为： <div class="aoo"> 123123 </div>
       Jelem.wrapInner("HTML代码"/Jelem)     将每个元素的内容包裹
       Jelem.remove()   删除元素
         删除该元素和其子元素及以下的所有内容(包括自身标签)

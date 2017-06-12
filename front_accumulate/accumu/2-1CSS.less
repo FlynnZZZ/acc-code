@@ -7,7 +7,7 @@
     CSS2.1在2002年启动开发,是对CSS2的修订版;
   CSS3  
     CSS版本说明
-      CSS 分为不同等级,CSS1 现已废弃, CSS2.1 是推荐标准, 
+      CSS 分为不同等级,CSS1 现已废弃,CSS2.1 是推荐标准,
       CSS3 分成多个小模块,正在标准化中。
     颜色模式新增 RGBA HSLA 
     text-shadow [见文本样式]
@@ -319,8 +319,8 @@ Style    样式
         none   默认。如果此字体不可用,则不保持此字体的 x-height。
         number 定义字体的 aspect 值比率。
         e.g.：
-          如果 14px 的 Verdana（aspect 值是 0.58）不可用，
-          但是某个可用的字体的 aspect 值是 0.46，
+          如果 14px 的 Verdana（aspect 值是 0.58）不可用,
+          但是某个可用的字体的 aspect 值是 0.46,
           那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
       font- weight    字重     
         number    100-900的整百数(其中400=normal,700=bold)
@@ -355,7 +355,7 @@ Style    样式
       使用系统字体
         PS：若希望一个Web页面结合用户操作系统的设置,font的系统字体值会很方便,
           这些值用于取得操作系统中元素的字体大小、字体系列、字体系列、
-          字体加粗、字体风格等等, 并将其应用到一个元素.    
+          字体加粗、字体风格等等,并将其应用到一个元素.    
         caption 用于有标题的控件,如按钮     
         icon 用于对图标加标签     
         menu  用于菜单,即下拉菜单和菜单列表     
@@ -377,9 +377,9 @@ Style    样式
             font-family: 'MyFont';
             src: url('myfont.eot'); /* IE6+ */     
             src: local('myfont.ttf'),
-            url('myfont.woff') format('woff'), /* FF3.6 */
+            url('myfont.woff') format('woff'),/* FF3.6 */
             url('myfont.ttf') format('truetype'); 
-            /* FF3.5+, Saf3+,Chrome,Opera10+ */   
+            /* FF3.5+,Saf3+,Chrome,Opera10+ */   
           }
       在页面上显示服务器端的字体
         使用@font-face属性来使用服务器端字体
@@ -429,7 +429,7 @@ Style    样式
         no-repeat  背景图像将仅显示一次
         inherit    规定应该从父元素继承 background-repeat 属性的设置
       background-position   背景位置
-        PS：若仅规定了一个值,另一个值默认为50%, 可以混合使用 % 和 position 值,
+        PS：若仅规定了一个值,另一个值默认为50%,可以混合使用 % 和 position 值,
           但最好不要混用固定值和百分比(实质关键字也是百分比),可能导致错误.
         Exp: background-position:X轴 Y轴; 设置背景图像的起始位置
           使用固定值,表示背景的左上角相对于元素边框外侧左上角的坐标;
@@ -480,65 +480,110 @@ Style    样式
       blur 模糊
       drop-shadow 阴影
       e.g.
-    transition 指定变化的过渡效果 「IE10+ CSS3+」 
-      PS： 允许css的属性值在一定的时间区域内平滑的过渡,
-        当指定的 CSS 属性改变时,过渡效果将开.
-        并非所有的CSS属性都支持transition.
-      transition:property duration timing-function delay; 简写方式
-        同时指定多个动画可用逗号分隔,如 transition:width 2s,height 2s;
-        property        指定参与过渡的属性
-          规定应用过渡效果的css属性的名称,当指定的css属性改变时,过渡效果将开始
+    transform  变换处理「IE9+ CSS3+」 
+      PS：IE9及以上支持2D变换,IE10及以上支持3D变换;只对block元素生效;
+      transform:translate(len1[,len2]); 2D平移
+        len1  距离,对应x轴,需带单位'px'
+        len2  距离,对应y轴,需带单位'px',默认为0
+        e.g.：
+          <div class=""> 123123 </div>
+          div{
+            width: 50px;
+            height: 50px;
+            background-color: #b9e4e7;
+            transform:translate(5px,30px);
+            transition:all 1s ease 0s;
+          }
+          div:hover{
+            transform:translate(30px);
+            // 单价与
+            // transform:translate(30px,0);
+          }
+      transform:rotate(NUMdeg);         2D旋转
+        顺时针旋转,deg是css3中的角度单位
+      transform:rotate3d(x,y,z,NUMdeg); 3D旋转
+        PS：运动量由指定的角度定义,如果为正,运动将为顺时针,如果为负,则为逆时针;
+          在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
+          并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
+          如果这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
+          非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
+        x    num,表示旋转轴X坐标方向的矢量
+        y    num,表示旋转轴Y坐标方向的矢量
+        z    num类型,表示旋转轴Z坐标方向的矢量
+        NUM  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
+        e.g.：transform: rotate3d(1,0,0,60deg);
+      transform:scale(num1[,num2]);     2D缩放 
+        num1   缩放的倍数,不可为负,对应x轴
+        num2   可选,默认等于num1,缩放的倍数,不可为负,对应y轴
+      transform:scalex(num);            仅x轴缩放
+      transform:scaley(num);            仅y轴缩放
+      transform:skew(NUM1deg,NUM2deg);  变形
+        NUM1deg  对应x轴
+        NUM2deg  可选,对应y轴,默认为0.即只在水平方向上倾斜
+      同时使用多个变形时,只用声明一个'transform',多个变形方法间使用空格连接 
+        transform:方法1 方法2...;
+      transform-origin:x [y];      定义变换原点
+        PS：搭配属性,用于定义运动点;默认为盒子的中心为运动点 
+        x   代表x方向的值
+        y   代表y方向的值;可选,只有一个参数时只在水平方向上移动 
+        x、y可能的值为:top、right、bottom、left、center(默认值) 
+    transition 指定变化的过渡效果「IE10+ CSS3+」 
+      PS：使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始;
+        并非所有的CSS属性都支持transition[如 ?];
+      transition:[property] duration [speed] [delay]; 简写方式
+        PS：同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s;
+        property   可选,默认为所有属性,指定变化的属性 
+          规定应用过渡效果的css属性的名称
           all       默认,值所有属性都将获得过渡效果
           none      没有属性会获得过渡效果
-          属性名列表 定义应用过渡效果的css属性名称列表,列表以逗号分隔.
-        duration        必须,过渡持续时间,指定以秒s或毫秒ms为单位
-        timing-function 过渡的速度变化
+          p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
+        duration   过渡持续时间[需带单位s秒或ms毫秒]
+        speed      可选,默认为'ease',过渡的速度变化 
           ease        逐渐变慢
           linear      匀速
           ease-in     加速
           ease-out    减速
           ease-in-out 加速后减速
-          cubic-bezier(n,n,n,n)在cubic-bezier函数中定义自己的值.n在1到1之间.
-        delay           开始执行的延迟时间,指定以秒s或毫秒ms为单位
+          cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
+        delay      可选,默认为 0,开始执行的延迟时间[需带单位s秒或ms毫秒]
       ◆单独指定:
-      transition-property:  指定参与过渡的属性
-      transition-duration:  过渡持续时间
-      transition-timing-function:  变换速度
-      transition-delay:     延迟时间
+      transition-property:         指定参与过渡的属性
+      transition-duration:         过渡持续时间
+      transition-timing-function:  速度变化
+      transition-delay:            延迟时间
       e.g. :
         <div></div>
         div {
-          width:100px;
-          height:100px;
-          background:blue;
+          width:100px; height:100px; background:blue;
           transition:width 2s;
-          -webkit-transition:width 2s; /* Safari and Chrome */
-          -moz-transition:width 2s;    /* Firefox 4 */
-          -o-transition:width 2s;      /* Opera */
+          // -webkit-transition:width 2s; /* Safari and Chrome */
+          // -moz-transition:width 2s;    /* Firefox 4 */
+          // -o-transition:width 2s;      /* Opera */
         }
         div:hover { width:300px; }
-    animations 自定义关键帧动画  「IE9+ CSS3+」 
+    animations 自定义关键帧动画「IE10+ CSS3+」 
       PS：通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果
-      animation:name dura tim-func delay ite-cou direc; 简写方式
-        name     关键帧名称
-        duration 完成动画的时间(单位为秒或毫秒,0则无动画)
-        timing-function 动画变化速度的曲线
-        delay           动画开始前的延迟
-        iteration-count 动画执行的次数
-        direction       是否轮流反向播放动画
+      animation:name duration speed delay counts direction; 简写方式
+        name       关键帧名称
+        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画]
+        speed      动画速度变化的曲线
+        delay      动画开始前的延迟
+        counts     动画执行的次数
+        direction  是否轮流反向播放动画
       ◆分别定义
-      animation-name     关键帧名称
-        keyframename 自定义的关键帧名称
-        none 无动画效果(可用于覆盖来自级联的动画)
-      animation-duration 完成动画的时间,单位为秒或毫秒(默认为0)
-      animation-timing-function 动画的速度曲线
+      animation-name:str;  关键帧名称
+        str 关键帧名称
+          keyframename 自定义的关键帧名称
+          none 无动画效果(可用于覆盖来自级联的动画)
+      animation-duration   动画持续时间,默认为0无动画效果[需带单位为s秒或ms毫秒]
+      animation-timing-function 动画的速度曲线 
         ease 默认,平滑,等于 cubic-bezier(0.25,0.1,0.25,1.0)
         linear    匀速,等于 cubic-bezier(0.0,0.0,1.0,1.0)
         ease-in   加速,等于 cubic-bezier(0.42,0,1.0,1.0)
         ease-out  减速,等于 cubic-bezier(0,0,0.58,1.0)
-        ease-in-out 慢快慢, cubic-bezier(0.42,0,0.58,1.0)
+        ease-in-out 慢快慢,cubic-bezier(0.42,0,0.58,1.0)
         cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 (取值为0-1)
-      animation-delay    动画开始之前的延迟(默认为0)
+      animation-delay      动画开始前的延迟,默认为0
       animation-iteration-count 动画执行的次数
         num      自定义的次数
         infinite 无限次
@@ -554,17 +599,15 @@ Style    样式
         forwards  目标保持动画最后一帧的样式
           最后一帧是哪个取决于animation-direction和 animation-iteration-count:
         both      根据animation-direction（见后）轮流应用forwards和backwards规则
-      animation-play-state: 定义动画暂停或播放状态
+      animation-play-state 定义动画暂停或播放状态 
         通过该属性可以灵活的控制动画的播放状态
         running  播放,由暂停到播放时动画会接着暂停的状态开始运行
         paused   暂停,暂停时动画会保持暂停时的状态
-      @keyframes 创建关键帧
-        PS：以百分比来规定改变发生的时间,
-          关键词 "from" 和 "to"(等价于 0% 和 100%).
-          0% 是动画的开始时间,100% 动画的结束时间.
+      @keyframes name{percent{styleCodes}}   创建关键帧
+        PS：以百分比来规定改变发生的时间;关键词 "from" 和 "to",等价于 0% 和 100%
+          0% 是动画的开始时间,100% 动画的结束时间;
           为了获得最佳的浏览器支持,应该始终定义 0% 和 100% .
           @-webkit-keyframes 兼容写法
-        @keyframes 名称{0%-100%关键帧代码}
         e.g.：
           @keyframes mymove {
             from {top:0px; background:red; width:100px;}
@@ -572,70 +615,44 @@ Style    样式
             50%  {top:100px;}
             75%  {top:200px;}
             100% {top:200px; background:yellow; width:300px;} }
-          可以把多个状态写在一行,使用逗号分割
-            @keyframes pound {
-              from,to { transform: none; }
-              50% { transform: scale(1.2); } }
+        可以把多个状态写在一起,使用逗号分割
+          @keyframes pound {
+            from,to { transform: none; }
+            50% { transform: scale(1.2); } 
+          }
       e.g. :
         <div></div>
         div {
-          width:100px;
-          height:100px;
-          background:red;
-          position:relative;
+          width:100px; height:100px; background:red; position:relative;
           animation:mymove 5s infinite;
-          -webkit-animation:mymove 5s ease-in-out infinite alternate;
-          /*Safari and Chrome*/ }
+          // -webkit-animation:mymove 5s ease-in-out infinite alternate;
+          /*Safari and Chrome*/ 
+        }
         @keyframes mymove {
           from {top:0px; background:red; width:100px;}
           25%  {top:200px;}
           50%  {top:100px;}
           75%  {top:200px;}
-          100% {top:200px; background:yellow; width:300px;} }
-        @-webkit-keyframes mymove {
-          /*Safari and Chrome*/
-          from {top:0px; background:red; width:100px;}
-          25%  {top:200px;}
-          50%  {top:100px;}
-          75%  {top:200px;}
-          100% {top:200px; background:yellow; width:300px;} }
-    transform  变形处理 「IE9+ CSS3+」 
-      translate 平移旋转:指定对象的2D平移
-        Define:transform:translate(length1,length1)
-          length1对应x轴,length2对应y轴,length2默认为0
-      rotate    旋转:指定对象的2D旋转
-        e.g. transform:rotate(90deg) 旋转90度
-        顺时针旋转,deg是css3中的角度单位
-      rotate3d  3d旋转
-        e.g.：transform: rotate3d(1, 0, 0, 60deg);
-      scale     缩放:指定对象的2D缩放
-        语法:transform:scale(num1,num2)
-          num表示缩放的倍数(不可为负),若num2未指定,则默认等于num1;
-          num1对应x轴,num2对应y轴
-        scalex(x)仅x轴缩放
-        scaley(y)仅y轴缩放
-      skew      扭曲
-        e.g. transform:skew(20deg,30deg);
-          第一个数值对应x轴,第二个数值对应y轴;
-          若第二个数值未指定,则默认为0.即只在水平方向上倾斜
-      可对一个元素使用多种变形的方法:
-        transform:方法1 方法2...;
-      transform-origin 定义旋转点
-        PS：搭配属性,用于定义运动点
-          若未定义默认以盒子的中心为运动点
-        Define:transform-origin:X坐标值 Y坐标值;
-          可能的值为:top、right、bottom、left、center(默认值)及上下左右的两两组合.
-          只有一个参数时只在水平方向上移动.
+          100% {top:200px; background:yellow; width:300px;} 
+        }
+        // @-webkit-keyframes mymove {
+        //   /*Safari and Chrome*/
+        //   from {top:0px; background:red; width:100px;}
+        //   25%  {top:200px;}
+        //   50%  {top:100px;}
+        //   75%  {top:200px;}
+        //   100% {top:200px; background:yellow; width:300px;} 
+        // }
     linear-gradient 线性渐变 
       PS： 渐变实质上属性特征为图片而非颜色值,
         故可设置background-image背景图片而不能设置背景色background-color
-      -webkit-linear-gradient( [angle], <color position>+ )
+      -webkit-linear-gradient( [angle],<color position>+ )
         [angle]             可选,控制渐变的方向
           关键字: top「默认,从上到下」、right、bottom、left
             可组合使用,若 left top 即从左上角开始
           角度值: 整数表示顺时针,负数表示逆时针;
             如270deg「默认值,等同于top」
-        <color position>+   若干个位置及颜色,控制渐变的过程, 如: red 20% 
+        <color position>+   若干个位置及颜色,控制渐变的过程,如: red 20% 
           position 可为像素值或百分比
       e.g.：
         .linearGradientTest { 
@@ -643,19 +660,19 @@ Style    样式
           /*从上到下,颜色由白到黑*/
           background-image: -webkit-linear-gradient(180deg,#fff,gray 20%,#000);
           /*180deg 则表示从右向左;从白色开始到20%处过渡到灰色,100%处过渡到黑色*/
-          background-image: -webkit-linear-gradient( #fff, gray 20%, #000 );
+          background-image: -webkit-linear-gradient( #fff,gray 20%,#000 );
           /*默认为270deg即top从上到下*/
-          background-image: -webkit-linear-gradient( #fff 30%,  #000  60% );
-          /*等价: -webkit-linear-gradient( #fff,#fff 30%,  #000  60% ,#000);*/
+          background-image: -webkit-linear-gradient( #fff 30%,#000  60% );
+          /*等价: -webkit-linear-gradient( #fff,#fff 30%,#000  60% ,#000);*/
         }
       Remarks： 
         在Chrome中
-          linear-gradient(to bottom, #feb26e, #e79248);          不用加前缀
-          --webkit-linear-gradient(bottom, #feb26e, #e79248); 需加前缀
-    radial-gradient 径向渐变
+          linear-gradient(to bottom,#feb26e,#e79248);          不用加前缀
+          --webkit-linear-gradient(bottom,#feb26e,#e79248); 需加前缀
+    radial-gradient 径向渐变 
       -webkit-radial-gradient([origin],[shape],<color position>+)
         PS：该方法需增加厂商前缀
-        [origin]           定义渐变的起始点和方向, 默认为中心点
+        [origin]           定义渐变的起始点和方向,默认为中心点
           关键字: cernter,top,right,bottom,left;默认为 center center
             当定义为 top 时,相当于 top center
         [shape]            渐变的形状
@@ -666,7 +683,7 @@ Style    样式
             百分比值0%,或者长度值0,表示渐变中心点;
             百分比值100%表示渐变射线与边缘形状的相交点位置;
             其间的百分比值线性对应渐变射线上的点;
-      radial-gradient(<r1 r2 at x y>, <color position>+);
+      radial-gradient(<r1 r2 at x y>,<color position>+);
         PS：Chrome可不加-webkit-前缀
         <r1 r2 at x y>    定义渐变圆心及半径,r为半径,x、y为圆心坐标
           可选关键字: 用于描述边缘轮廓的具体位置
@@ -681,42 +698,42 @@ Style    样式
           e.g.：
             background-image: radial-gradient(
               ellipse farthest-corner at 45px 45px ,
-              #00FFFF 0%, rgba(0, 0, 255, 0) 50%, #0000FF 95%);
+              #00FFFF 0%,rgba(0,0,255,0) 50%,#0000FF 95%);
             background-image: radial-gradient(
-              ellipse farthest-corner at 470px 47px , 
-              #FFFF80 20%, rgba(204, 153, 153, 0.4) 30%, #E6E6FF 60%);
+              ellipse farthest-corner at 470px 47px ,
+              #FFFF80 20%,rgba(204,153,153,0.4) 30%,#E6E6FF 60%);
             background-image: radial-gradient(
-              farthest-corner at 45px 45px , 
-              #FF0000 0%, #0000FF 100%);
+              farthest-corner at 45px 45px ,
+              #FF0000 0%,#0000FF 100%);
             background-image: radial-gradient(
-              16px at 60px 50% , 
-              #000000 0%, #000000 14px, 
-              rgba(0, 0, 0, 0.3) 18px, 
-              rgba(0, 0, 0, 0) 19px);
+              16px at 60px 50% ,
+              #000000 0%,#000000 14px,
+              rgba(0,0,0,0.3) 18px,
+              rgba(0,0,0,0) 19px);
         <color position>+ 若干个颜色值及位置
         e.g.：
           background-image:radial-gradient( 
             150px 100px at 50% 50% ,
-            #c792b3 0%, #ac8671 30%, #d42cb3 50%, #7ac67a 100%
+            #c792b3 0%,#ac8671 30%,#d42cb3 50%,#7ac67a 100%
             );
     渐变重复 
       有两种方式可以重复背景图片
-      background-repeat
-      -webkit-repeating-radial-gradient和-webkit-repeating-linear-gradient 
+      background-repeat 
+      -webkit-repeating-radial-gradient 和 -webkit-repeating-linear-gradient 
       e.g.：
         background: -webkit-repeating-radial-gradient(
-          #ace, #ace 5px, #f96 5px, #f96 10px);  
+          #ace,#ace 5px,#f96 5px,#f96 10px);  
     color  颜色值
       英文单词表示 
         red green blue black white gray yellow pink gold orange 
         transparent「透明」
       rgb|rgba 
-        rgb(num%, num%, num%) 
+        rgb(num%,num%,num%) 
           num 范围 0-100,若小于0则为0,大于100则为100;
           e.g.： rgb(100%,0,0)
-        rgb(num, num, num) 
-          num 范围 0-255, 若小于0则为0,大于255则为255
-        rgba(num, num, num, opacity) 
+        rgb(num,num,num) 
+          num 范围 0-255,若小于0则为0,大于255则为255
+        rgba(num,num,num,opacity) 
           opacity     可选,透明度值,范围0-1,默认为1,不透明;
       #RedGreenBlue  十六进制颜色 
         red、green、blue 分别表示两位16进制的数值「01-ff」,代表该颜色的浓度
@@ -725,7 +742,7 @@ Style    样式
           #000000 可缩写为 #000
           #336699 可缩写为 #369
       hsl 
-        如 hsla(136, 64%, 65%, 0.82)
+        如 hsla(136,64%,65%,0.82)
           第四个数值为透明度,可选,默认为1,不透明
       Web安全色: 在256色计算机系统上会避免抖动的颜色
         RGB值20%和51(相应的十六进制值为33)的倍数,0%或0也是.
@@ -994,12 +1011,12 @@ Style    样式
       }      
     :-webkit-autofill     自动填充表单的背景
       PS： chrome记住密码后,输入时,显示的提示的样式
-        input:-webkit-autofill, 
-        textarea:-webkit-autofill, 
+        input:-webkit-autofill,
+        textarea:-webkit-autofill,
         select:-webkit-autofill {
-          background-color: rgb(250, 255, 189); 
+          background-color: rgb(250,255,189); 
           background-image: none;
-          color: rgb(0, 0, 0);
+          color: rgb(0,0,0);
         }
     -webkit-text-security 使用指定形状代替文字显示
       circle 圆圈 
@@ -1017,7 +1034,7 @@ Style    样式
         }
   特殊样式
     -webkit-tap-highlight-color  点击链接或js定义的点击元素时,出现半透明灰色背景;
-      PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 , 「CSS3+」
+      PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 ,「CSS3+」
         可设置-webkit-tap-highlight-color的颜色;
       禁用高亮: 设置颜色的alpha值为0即可
       e.g.：
@@ -1416,7 +1433,7 @@ Selector 选择器
     attr() 用来获取选择到的元素的某一HTML属性值,并用于其样式。 [实验性API]
       PS：它也可以用于伪元素,属性值采用伪元素所依附的元素。
         attr() 表达式可以用于任何CSS属性。 
-       attr( attribute-name <type-or-unit>? [, <fallback> ]? )
+       attr( attribute-name <type-or-unit>? [,<fallback> ]? )
         attribute-name  是CSS所引用的HTML属性名称。
         <type-or-unit>  表示所引用的属性值的单位。
           若该单位相对于所引用的属性值不合法,那么attr()表达式也不合法。
@@ -1432,25 +1449,25 @@ Selector 选择器
             number   <number>  属性值将被解析为CSS <number>。 若不是合法值（不是数字或超出CSS属性规定的数字范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
             length   <length>  属性值将被解析为CSS <length>,带单位,比如 12.5em。 若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
-            若属性值是一个相对长度, attr()会将其计算为绝对长度。
+            若属性值是一个相对长度,attr()会将其计算为绝对长度。
             前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
-            em, ex, px, rem, vw, vh, vmin, vmax, mm, cm, in, pt, or pc   <length>  
+            em,ex,px,rem,vw,vh,vmin,vmax,mm,cm,in,pt,or pc   <length>  
             属性值将被解析为CSS <number>,不带单位,如 12.5,并被解释为带有所规定单位的 <length> 值。若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
-            若属性值是一个相对长度, attr()会将其计算为绝对长度。
+            若属性值是一个相对长度,attr()会将其计算为绝对长度。
             前缀与后缀空格将被截掉。
             
             0,或该属性允许的最小值（若0是不合法的值）。
             angle   <angle>  属性值将被解析为CSS <angle>,带单位,如30.5deg。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
-            deg, grad, rad   <angle>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <angle> 值。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
+            deg,grad,rad   <angle>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <angle> 值。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
             time   <time>  属性值将被解析为CSS <time>,带单位,如30.5ms。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
-            s, ms   <time>  属性值将被解析为CSS <time>,不带单位,如30.5,并被解释为带有所规定单位的 <time> 值。。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
+            s,ms   <time>  属性值将被解析为CSS <time>,不带单位,如30.5,并被解释为带有所规定单位的 <time> 值。。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
             frequency   <frequency>  属性值将被解析为CSS <frequency>,带单位,如12.5kHz)。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
-            Hz, kHz   <frequency>  属性值将被解析为CSS <frequency>,不带单位,如12.5),并被解释为带有所规定单位的<frequency>值。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
+            Hz,kHz   <frequency>  属性值将被解析为CSS <frequency>,不带单位,如12.5),并被解释为带有所规定单位的<frequency>值。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
             前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
             %   <percentage>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <percentage>值。若不是合法值（不是数字或超出CSS属性规定的范围）,则使用默认值。
             若属性值用作长度,attr()将其计算为绝对长度。
@@ -1510,7 +1527,7 @@ Selector 选择器
     媒体类型
       all  适用于所有设备
       print 打印设备
-        Intended for paged material and for documents viewed on screen in print preview mode. Please consult the section on paged media, and the media section of the Getting Started tutorial for information about formatting issues that are specific to paged media.
+        Intended for paged material and for documents viewed on screen in print preview mode. Please consult the section on paged media,and the media section of the Getting Started tutorial for information about formatting issues that are specific to paged media.
       screen 屏幕
         Intended primarily for color computer screens.
     逻辑操作符
@@ -1531,7 +1548,7 @@ Selector 选择器
           而不是： @media (not all) and (monochrome) { ... }
       only 仅在媒体查询匹配成功的情况下应用指定样式
         可以通过它让选中的样式在老式浏览器中不被应用。
-      ,    将多个媒体查询以逗号分隔放在一起
+      ,  将多个媒体查询以逗号分隔放在一起
         只要其中任何一个为真,整个媒体语句就返回真,相当于 or .
     媒体属性
       PS：大多数媒体属性可以带有“min-”或“max-”前缀,用于表达“最低...”或者“最高...”。
@@ -1544,7 +1561,7 @@ Selector 选择器
           注意：用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
         e.g.：
           若你想向最小宽度20em的手持设备或屏幕应用样式表,你可以使用这样的查询：
-          @media handheld and (min-width: 20em), screen and (min-width: 20em) { ... }
+          @media handheld and (min-width: 20em),screen and (min-width: 20em) { ... }
           
           这个媒体查询将向最小宽度8.5英寸的打印机应用样式表：
           <link rel="stylesheet" media="print and (min-width: 8.5in)"
@@ -1577,7 +1594,7 @@ Selector 选择器
         e.g.：
           下面为宽屏设备选择了一个特殊的样式表。
           宽高比或者16：9或者16：10。    
-          @media screen and (device-aspect-ratio: 16/9), screen and (device-aspect-ratio: 16/10) { ... }
+          @media screen and (device-aspect-ratio: 16/9),screen and (device-aspect-ratio: 16/10) { ... }
       orientation   指定了设备处于横屏(宽度大于高度)模式还是竖屏(高度大于宽度)模式。
         e.g.：
           向竖屏设备应用样式表：
@@ -1910,13 +1927,13 @@ Layout   布局
             e.g.：
               <div class="container">
                 <span class="part1">
-                  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意, 要这众生,都明白我意, 
+                  我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要这众生,都明白我意,
                 </span>
                 <div class="middle">
                   <img class="float" src="http://pic6.huitu.com/res/20130116/84481_20130116142820494200_1.jpg" alt="">
                 </div>
                 <span class="part2">
-                  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,  要这地,再埋不了我心,  要这众生,都明白我意,  要那诸佛,都烟消云散!
+                  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散!
                   123456789132456789
                 </span>
               </div>
@@ -1944,10 +1961,10 @@ Layout   布局
           父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
         方法五:父元素也浮动
     position 定位
-      PS： 除 static 外, 元素定位后会变成类似于 inline-block 元素
+      PS： 除 static 外,元素定位后会变成类似于 inline-block 元素
       static   默认值,无定位
         元素出现在正常的流中
-        忽略 top, bottom, left, right 或者 z-index 声明
+        忽略 top,bottom,left,right 或者 z-index 声明
       relative 相对定位
         PS：相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流.
           相当于transform的translate,元素只是在显示上进行了偏移 (SelfThink),
@@ -1969,7 +1986,7 @@ Layout   布局
             出了这个剪裁区域的内容会根据 overflow 的值来处理。
             剪裁区域可能比元素的内容区大,也可能比内容区小。
           可能的值:
-            rect(top, right, bottom, left)
+            rect(top,right,bottom,left)
             auto    默认值,不应用任何剪裁。
             inherit 规定应该从父元素继承 clip 属性的值。
           e.g.：
@@ -2130,7 +2147,7 @@ Layout   布局
               top: 0;
               left: 0;
               height: 20 *@wu;
-              background-color: rgba(34, 34, 34, 0.2);
+              background-color: rgba(34,34,34,0.2);
               padding: 0 8 *@wu;
               font-size: 12 *@wu;
               color: #fff;
@@ -2348,7 +2365,7 @@ Size 尺寸
         浏览器可视区域(visual viewport)的宽度小于等于layout viewport的宽度
       对于visual viewport,它是通过window.innerWidth/Height来进行度量的。
       很明显当用户缩小或者放大的时候,度量的尺寸会发生变化。 
-      兼容性：IPhone上完全支持,在Android 2, Oprea mini 和 UC 8中无法正确获取。 
+      兼容性：IPhone上完全支持,在Android 2,Oprea mini 和 UC 8中无法正确获取。 
     ideal viewport(理想视口)
       ideal viewport并没有一个固定的尺寸,不同的设备拥有有不同的ideal viewport
       ideal viewport的宽度 = 屏幕的逻辑像素宽度
@@ -2359,7 +2376,7 @@ Size 尺寸
     meta标签控制viewport
       移动设备默认的viewport是layout viewport,
       在进行移动设备网站的开发时,我们需要的是ideal viewport.可使用meta标签来设置
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="viewport" content="width=device-width,initial-scale=1.0">
         其中width为layout viewport的宽度,
       该标签的作用是让layout viewport的宽度等于设备的屏幕宽度,再等于ideal viewport的宽度
         width=device-width和initial-scale=1.0的功能基本一样,
@@ -2445,10 +2462,10 @@ var() CSS变量
         var(--bc): #369;           
       }
   变量使用 
-    var( 自定义属性名 [, 默认值 ] ) 
+    var( 自定义属性名 [,默认值 ] ) 
       若使用的变量未定义「仅限于没有定义」,则使用后面的值作为元素的属性值
       .box { --1: #369; }
-      body { background-color: var(--1, #cd0000); }
+      body { background-color: var(--1,#cd0000); }
       则此时的背景色是#cd0000：
     变量不合法时使用缺省特性
       PS：对于CSS变量,只要语法是正确的,就算变量形式不正确,也是会作为正常的声明解析,
@@ -2456,7 +2473,7 @@ var() CSS变量
       body {
         --color: 20px;
         background-color: #369;
-        background-color: var(--color, #cd0000);
+        background-color: var(--color,#cd0000);
       }
       上面CSS等同于：
       body {
@@ -2707,7 +2724,7 @@ var() CSS变量
   水平垂直居中方法
     ◆定位法
     position + 负margin偏移 (见垂直居中方法)
-    position + transform: translate(-50%, -50%); (参见垂直居中方法)
+    position + transform: translate(-50%,-50%); (参见垂直居中方法)
     position + margin:auto  (详参垂直居中方法)
     ◆其他方法
     display:table-cell + text-align + vertical-align 
@@ -2933,7 +2950,7 @@ Collection
     fixed的元素是相对整个页面固定位置的,在屏幕上滑动只是在移动这个所谓的viewport,
     原来的网页还好好的在那,fixed的内容也没有变过位置,
     所以说并不是iOS不支持fixed,只是fixed的元素不是相对手机屏幕固定的。
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
     
   css中插入文件 url(文件地址)
     e.g. 
@@ -2973,10 +2990,10 @@ Collection
 
   vmin and vmax
     vmin 和 vmax关于视口高度和宽度两者的最小或者最大值。
-    比如,浏览器的宽度设置为1100px,高度设置为700px, 1vmin = 1px, 1vmax = 11px。
-    若宽度设置为800px,高度设置为1080px, 1vmin=8px, 1vmax=10.8px。
+    比如,浏览器的宽度设置为1100px,高度设置为700px,1vmin = 1px,1vmax = 11px。
+    若宽度设置为800px,高度设置为1080px,1vmin=8px,1vmax=10.8px。
   ex and ch
-    ex 和 ch 单位,类似于 em 和 rem, 依赖于当前的字体和字体大小。
+    ex 和 ch 单位,类似于 em 和 rem,依赖于当前的字体和字体大小。
      但是,不同的是,这两货是基于字体的度量单位,依赖于设定的字体。
     ch 单位通常被定义为数字0的宽度。
     你可以在Eric Meyers的博客里找到关于它的一些有意思的讨论,

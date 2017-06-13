@@ -1222,11 +1222,11 @@ AJAX
         w3c盒子模型不包含,IE盒子模型则包含,
 Deferred 对象 
   PS：jQuery 1.5 中引入; 和 Promise 对象一起作为 jQuery 对 Promise 的一种实现;
-    在 jQuery1.x 和2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
+    在 jQuery1.x - jQuery2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
     不同于原生promises遵守 Promises/A+ 提案「从CommonJS Promises 衍生而来」的约定,
     导致其无法兼容其他实现promises的库,比如 Q library;
     jQ3改进了同原生 promises的互操作性,但Deferred的 then 方法签名仍然会有些不同,
-    但行为方面它已经同 ECMAScript 2015 标准更加一致;
+    但行为方面它已经同 ECMAScript2015 标准更加一致;
   Deferred和Promise对象 
     PS： Deferred 对象可以被用来执行异步操作,例如 Ajax 请求和动画的实现。
       在 jQuery 中,Promise对象是只能由Deferred对象或 jQuery 对象创建。
@@ -1235,31 +1235,120 @@ Deferred 对象
       在 ECMAScript 中, 不论一个 promise 被完成 (fulfilled) 还是被拒绝 (rejected),
       我们都说它被解析 (resolved) 了。
       然而在 jQuery 的文档中,被解析这个词指的是 ECMAScript 标准中的完成 (fulfilled) 状态。
-    var deferred = $.Deferred()    创建deferred对象
-    deferred.resolve([argument,...]) 解析Deferred,以指定参数执行所有回调
-    deferred.reject([argument,...])  拒绝Deferred,以指定参数执行所有回调
-    deferred.always(cfoos[, cfoos, ..., cfoos])
-       添加在该 Deferred 对象被解析或被拒绝时调用的处理函数
-    deferred.done(cfoos[, cfoos, ..., cfoos])
-      添加在该 Deferred 对象被解析时调用的处理函数
-    deferred.fail(cfoos[, cfoos, ..., cfoos])
-      添加在该 Deferred 对象被拒绝时调用的处理函数
-    deferred.notify([argument, ..., argument]):
-      调用 Deferred 对象上的 progressCallbacks 处理函数并传递制定的参数
-    deferred.notifyWith(context[, argument, ..., argument])
-      在制定的上下文中调用 progressCallbacks 处理函数并传递制定的参数。
-    deferred.progress(cfoos[, cfoos, ..., cfoos])
-      添加在该 Deferred 对象产生进展通知时被调用的处理函数。
-    deferred.promise([target])  返回 Deferred 对象的 promise 对象
-    deferred.rejectWith(context[, argument, ..., argument])
-      拒绝一个 Deferred 对象并在指定的上下文中以指定参数调用所有的failCallbacks处理函数。
-    deferred.resolveWith(context[, argument, ..., argument])
-      解析一个 Deferred 对象并在指定的上下文中以指定参数调用所有的doneCallbacks处理函数。
-    deferred.state()    返回当前 Deferred 对象的状态。
-    deferred.then(resolvedCallback[, rejectedCallback[, progressCallback]])
-      添加在该 Deferred 对象被解析、拒绝或收到进展通知时被调用的处理函数
+    var defer = $.Deferred([fooName])    创建deferred对象
+      PS：接受一函数名作为参数,$.Deferred()生成的defer对象将作为该函数的默认参数
+      var wait = function(defer){
+        var tasks = function(){
+          console.log("执行完毕！");
+          defer.resolve(); // 改变Deferred对象的执行状态
+        };
+        setTimeout(tasks,2000);
+        return defer.promise(); // 返回promise对象
+      };
+      $.Deferred(wait)
+      .done(function(){ 
+        console.log("哈哈,成功了！"); 
+      })
+      .fail(function(){ 
+        console.log("出错啦！"); 
+      });
+    defer.resolve([arg1,...]) 手动改变deferred对象的运行状态为"已完成"
+    defer.reject([arg,...])   手动改变deferred对象的运行状态为"已失败"
+    defer.done(foo [,foo,...])     指定操作成功时的回调函数
+    defer.fail(foo [,foo,...])     指定操作失败时的回调函数
+    defer.then(rsCfoo [,rjCfoo[,progressCallback]]) 解析、拒绝或收到进展通知时调用处理函数
       可用 done() 也可以通过 then() 来处理操作成功的情况;
       区别是then能够把接收到的值通过参数传递给后续的then,done,fail或progress调用
+    defer.progress(foo [,foo,...]) Deferred对象产生进展通知时被调用的处理函数。
+    defer.always(foo [,foo,...])   总是会执行
+    defer.state()     返回当前Deferred对象的状态
+    defer.promise([foo])  
+      无参数时,返回一promise对象,该对象的运行状态无法被改变
+        为决解defer是全局对象,其执行状态可从外部改变的问题而引入
+          返回的promise对象只开放与改变执行状态无关的方法,如done()方法和fail()方法,
+          屏蔽了与改变执行状态有关的方法,如resolve()方法和reject()方法,
+          从而使得执行状态不能被改变;
+        var defer = $.Deferred(); 
+        var wait = function(defer){
+          var tasks = function(){
+            console.log("执行完毕！");
+            defer.resolve(); // 改变Deferred对象的执行状态
+          };
+          setTimeout(tasks,5000);
+          return defer;
+        };
+        $.when(wait(defer))
+        .done(function(){ 
+          console.log("哈哈,成功了！"); 
+        })
+        .fail(function(){ 
+          console.log("出错啦！"); 
+        });
+        defer.resolve(); 
+        导致done()方法立刻执行,跳出"哈哈,成功了！"
+        等5秒之后再跳出"执行完毕！"
+        为避免该情况,jQuery 提供了 deferred.promise() 方法
+        改进后
+        var defer = $.Deferred(); 
+        var wait = function(defer){
+          var tasks = function(){
+            console.log("执行完毕！");
+            defer.resolve(); 
+          };
+          setTimeout(tasks,5000);
+          return defer.promise(); // 返回promise对象
+        };
+        var pms = wait(defer); // 新建promise对象,改为对这个对象进行操作 
+        $.when(pms)
+        .done(function(){ 
+          console.log("哈哈,成功了！"); 
+        })
+        .fail(function(){ 
+          console.log("出错啦！"); 
+        });
+        pms.resolve(); // 此时,这个语句是无效的
+        更好的写法是将defer对象变成 wait 函数的内部对象
+        var wait = function(){
+          var defer = $.Deferred(); //在函数内部,新建一个Deferred对象
+          var tasks = function(){
+            console.log("执行完毕！");
+            defer.resolve(); // 改变Deferred对象的执行状态
+          };
+          setTimeout(tasks,5000);
+          return defer.promise(); // 返回promise对象
+        };
+        $.when(wait())
+        .done(function(){ 
+          console.log("哈哈,成功了！"); 
+        })
+        .fail(function(){ 
+          console.log("出错啦！"); 
+        });    
+      传入函数时,在参数对象上部署deferred接口 
+        var defer = $.Deferred(); 
+        var wait = function(defer){
+          var tasks = function(){
+            console.log("执行完毕！");
+            defer.resolve(); 
+          };
+          setTimeout(tasks,3000);
+        };
+        defer.promise(wait);
+        // 在wait对象上部署Deferred接口,后面能直接在wait上面调用 done() 和 fail()
+        wait(defer);
+        wait.done(function(){ 
+          console.log("哈哈,成功了！"); 
+        })
+        .fail(function(){ 
+          console.log("出错啦！"); 
+        });
+    defer.notify([arg,...])  调用Deferred对象的progressCallbacks处理函数并传递制定的参数
+    defer.notifyWith(context [,arg,...]) 
+      在制定的上下文中调用progressCallbacks处理函数并传递制定的参数
+    defer.resolveWith(context [,arg,...]) 
+      解析Deferred对象并在指定的上下文中以指定参数调用所有的doneCallbacks处理函数。
+    defer.rejectWith(context [,arg,...]) 
+      拒绝Deferred对象并在指定的上下文中以指定参数调用所有的failCallbacks处理函数
     e.g.： 
       利用 Deferred 依次执行 Ajax 请求
       var username = 'testuser';
@@ -1297,7 +1386,7 @@ Deferred 对象
       timeout(1000).then(function() {
         console.log('等待了1秒钟！');
       });
-    jQ1.x-2.x 同 jQ3 的区别 
+    jQ1.x-jQ2.x 同 jQ3 的区别 
       var deferred = $.Deferred();
       deferred.then(function() {
         throw new Error('一条错误信息');
@@ -1319,11 +1408,11 @@ Deferred 对象
         }
       );
       deferred.resolve();
-      jQuery 3.x 中, 这段代码会在控制台输出“第一个失败条件函数” 和 “第二个成功条件函数”。
+      jQuery3.x 中, 这段代码会在控制台输出“第一个失败条件函数” 和 “第二个成功条件函数”。
       原因就像我前面提到的,抛出异常后的状态会被转换成拒绝操作进而失败条件回调函数一定会被执行。
       此外,一旦异常被处理（在这个例子里被失败条件回调函数传给了第二个then()）,
       后面的成功条件函数就会被执行（这里是第三个 then() 里的成功条件函数）。
-      在 jQuery 1.x 和 2.x 中,除了第一个函数（抛出错误异常的那个）之外没有其他函数会被执行,
+      在 jQuery1.x 和 jQuery12.x 中,除了第一个函数（抛出错误异常的那个）之外没有其他函数会被执行,
       所以你只会在控制台里看到“未处理的异常：一条错误信息。”
       为了更好的改善它同 ECMAScript2015 的兼容性,
       jQuery3.x 还给 Deferred 和 Promise 对象增加了一个叫做 catch() 的新方法。
@@ -1331,8 +1420,25 @@ Deferred 对象
       它的函数签名如下：
       deferred.catch(rejectedCallback)
       可以看出,这个方法不过是 then(null, rejectedCallback) 的一个快捷方式罢了。
-  e.g.：  在ajax中使用 「self」 
-    var deferred = $.Deferred();
+  $.when(defer1,defer2,..)    整体模式,都完成后执行
+    都成功了才运行done()指定的回调函数;若有一个失败或都失败,执行fail()指定的回调函数  
+    $.when(
+      $.ajax({
+        ..
+      }), 
+      $.ajax({
+        ..
+      })
+    )
+    .done(function(data){ 
+      console.log("哈哈,成功了！"); 
+    })
+    .fail(function(data){ 
+      console.log("出错啦！"); 
+    });
+  e.g.： 
+    在ajax中使用「self」 
+    var defer = $.Deferred();
     $.ajax({
       type : 'get',
       url  : './source/test-json.json',
@@ -1341,18 +1447,60 @@ Deferred 对象
       }, 
       dataType : 'json',
       success  : function(backData,textStatus,obj){
-        deferred.resolve(backData);
+        defer.resolve(backData);
       }, 
       error    : function (xhr,status,errorTrown){
-        deferred.reject(status);
+        defer.reject(status);
       }, 
     });
-    deferred.then(function(data){
+    defer.then(function(data){
       console.log(data,1);
     })
     .catch(function(data){
       console.log(data,2);
     })
+    
+    var defer = $.Deferred(); 
+    var wait = function(defer){
+      var tasks = function(){
+        console.log("执行完毕！");
+        defer.resolve(); // 改变deferred对象的执行状态
+      };
+      setTimeout(tasks,5000);
+      return defer;
+    };
+    //  wait() 函数返回的是deferred对象,可进行链式操作
+    $.when(wait(defer))
+    .done(function(data){ 
+      console.log("哈哈,成功了！"); 
+    })
+    .fail(function(data){ 
+      console.log("出错啦！"); 
+    });
+  e.g.： 在jQueryAJAX中的便捷使用 
+    $.ajax({
+      ...
+    })
+    .done(function(data){
+      console.log('success');
+    })
+    .fail(function(data){ 
+      console.log('error');
+    });
+    
+    自由添加多个回调,按照添加顺序执行
+    $.ajax({
+      ...
+    })
+    .done(function(data){ 
+      console.log("哈哈,成功了！");
+    } )
+    .fail(function(data){ 
+      console.log("出错啦！"); 
+    } )
+    .done(function(data){ 
+      console.log("第二个回调函数！");
+    } );
 jQuery插件 
   $(form).validate({options})  插件自带包含必填、数字、URL在内容的验证规则 
     即时显示异常信息,允许自定义验证规则

@@ -692,6 +692,21 @@ fileNum : 21
       '-user-select':
         'prefix': 'userSelect'
         'body': 'user-select:'
+    '-function':
+      'prefix': 'function'
+      'body': 'function'
+    '-function($1){$2\n};':
+      'prefix': 'function1'
+      'body': 'function($1){$2\n};'
+    '-function($1){$2\n}':
+      'prefix': 'function11'
+      'body': 'function($1){$2\n}'
+    '-function $1($2){$3\n};':
+      'prefix': 'function2'
+      'body': 'function $1($2){$3\n};'
+    '-(function(){})();':
+      'prefix': 'function3'
+      'body': '(function ($1){$3\n})($2);'
     
   QQInput
     自定义短语

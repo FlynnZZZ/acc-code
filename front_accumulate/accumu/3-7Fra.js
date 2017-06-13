@@ -1,4 +1,4 @@
-★AngularJS 
+●AngularJS 
   PS：诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
     最为核心的是：MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
   概念类
@@ -8,33 +8,32 @@
       ng-init 指令初始化应用程序数据
       ng-model 指把元素值(比如输入域的值)绑定到应用程序
   ◆四大核心特性
-  MVC (Model Controller View)
+  MVC,Model Controller View
     PS：MVC 只是手段,目的是模块化和复用
       model :数据模型层;
       view :视图层,负责展示;
       controller:业务逻辑和控制逻辑.
     $scope 
-      PS：MVC 是借助$scope实现的.
-        是一个POJO,Plain Old JavaScript Object.
-        提供了一些工具方法 $watch() $apply().
-        是表达式的执行环境,也叫作用域.
-        是一个树型结构,与DOM标签平行.
-        子$scope对象会继承父$scope上的属性和方法.
-        每个Angular应用只有一个根$scope对象,一般位于ng-app上
-        可以传播事件,类似DOM事件,可以向上也可以向下.
-        不仅是MVC的基础,也是实现双向数据绑定的基础.
-        可以使用angular.element($0).scope()进行调试.
-主要概念
-◆components 组件 
+      PS：MVC 是借助$scope实现的 
+        是一个POJO,Plain Old JavaScript Object 
+        提供了一些工具方法 $watch() $apply() 
+        是表达式的执行环境,也叫作用域 
+        是一个树型结构,与DOM标签平行 
+        子$scope对象会继承父$scope上的属性和方法 
+        每个Angular应用只有一个根$scope对象,一般位于ng-app上 
+        可以传播事件,类似DOM事件,可以向上也可以向下 
+        不仅是MVC的基础,也是实现双向数据绑定的基础 
+        可以使用angular.element($0).scope()进行调试 
+components 组件 
   全生命周期支持
-◆directives 指令
+directives 指令
   PS：指令可以自定义
   属性指令: 改变组件模板的外观或行为,如样式等
   结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
-◆services   服务 : 实现专一目的的逻辑单元,如日志服务
-◆dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
-◆metadata 元数据
-◆templates 模板
+services   服务 : 实现专一目的的逻辑单元,如日志服务
+dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
+metadata 元数据
+templates 模板
   框架代码以模块形式组织 「文件模块」
     core    核心模块
     common  通用模块
@@ -47,8 +46,8 @@
         import {Component} from "@angular/core" // @Component 装饰器
         import {Directive} from "@angular/core" // @Directive 装饰器
   功能单元以模块形式组织 「应用模块」
-◆data binding 数据绑定
-◆modules 模块
+data binding 数据绑定
+modules 模块
 todo 
   模块化 
     PS：一切由模块开始
@@ -93,20 +92,17 @@ todo
     数据模型到视图,视图到数据模型.
     取值表达式 {{}}
 --------------------------------------------------------------------------------
-★VueJS: 轻巧、高性能、可组件化的MVVM库 
-介绍_概念_说明_定义 
-  介绍
-    主要用于实现响应的数据绑定和组合的视图组件.
-  说明
-    浏览器支持: 不支持IE8及其以下版本,因为vue使用了ES5特性。 
-    版本:   非压缩版有错误提示和警告,而压缩版则没有
+●VueJS: 轻巧、高性能、可组件化的MVVM库 
+  PS：主要用于实现响应的数据绑定和组合的视图组件; 
+    不支持IE8及其以下版本,因为vue使用了ES5特性;
+    非压缩版有错误提示和警告,而压缩版则没有;
   与jQuery对比
     jQuery这种处理方式在业务复杂的情况下,复杂程度急剧增加,
-    而vue采用了 mvvm 的方式,双向绑定,可以使我们专注于业务逻辑,所以开发更快.
-    前端的逻辑不同于后端,组件化开发是前端的未来,而 vue 学习曲线平稳,收益可观
-    同时jQuery是命令式编程,而vue采用的是声明式,开发会更快,debug也更方便,
-    前端的HTML CSS 都是声明式,
-    Vue的 API 设计深受 AngularJS、KnockoutJS、Ractive.js 和 Rivets.js 的影响。
+    而vue采用mvvm的方式,双向绑定,可专注于业务逻辑,开发更快;
+    前端的逻辑不同于后端,组件化开发是前端的未来,vue学习曲线平稳,收益可观;
+    同时jQuery是命令式编程,而vue是声明式,开发会更快,debug也更方便,
+    前端的 HTML CSS 都是声明式,
+    Vue的 API 设计深受 AngularJS、KnockoutJS、RactiveJS 和 RivetsJS 的影响 
   特点
     声明式渲染
       Vue.js 的核心是一个允许你采用简洁的模板语法来声明式的将数据渲染进 DOM 的系统
@@ -132,11 +128,11 @@ todo
             data: { message: '时间:' + new Date() }
           })
         将这个元素节点的 title 属性和 Vue 实例的 message 属性绑定到一起。
-    双向数据绑定
+    双向数据绑定 
       view  层:  HTML或DOM
       model 层:  自定义的JS文件
-      通过 vue.js（使用v-model这个指令）完成中间的底层逻辑,实现绑定的效果。
-      改变其中的任何一层,另外一层都会改变。
+      通过 vuejs（使用v-model这个指令）完成中间的底层逻辑,实现绑定的效果 
+      改变其中的任何一层,另外一层都会改变 
       e.g.:
         HTML 文件
           <div id="app">
@@ -209,58 +205,200 @@ todo
         })
         // "a is: 1"
 安装|启动 
-  方法一: 使用<script>标签直接引用VueJS文件
+  方法一: 使用<script>标签直接引用VueJS文件 
     Vue 会被注册为一个全局变量
     e.g. : <script src="./vue.min.js" charset="utf-8"></script>
-  方法二: npm 命令安装
+  方法二: npm 命令安装 
     // npm install vue
     npm install -g vue-cli 
     // 创建一个基于'webpack'模版的新项目
     vue init webpack「项目类型」 my-vue-project「项目名称」  
     cd my-vue-project
-    npm install  // 安装依赖,默认会根据 package.json 文件中配置的依赖文件进行安装
-    npm run dev  // 启动Vue,默认执行package.json中script属性的配置
-new Vue(vParamsObj)   创建vueObj,Vue对象 
-  vParamsObj   用于配置vueObj的参数对象
+    npm install  
+    // 安装依赖,默认会根据 package.json 文件中配置的依赖文件进行安装
+    npm run dev  
+    // 启动Vue,默认执行package.json中script属性的配置
+var app = new Vue(params);   创建vm[ViewModel的简称,表示Vue实例]
+  params   用于配置vm的参数对象 
+    包括数据、模板、挂载元素、方法、生命周期钩子等选项 
     'el'    : selector   指定Vue接管的元素         
     'data'    : {}       可选,数据
-      在vParamsObj中 this 表示的即是'data'对象
+      在params中 this 表示的即是'data'对象
     'methods' : {}       可选,方法
     'watch'   : {}       可选,监听
     'components' : {}    可选,导入组件
       e.g.: 'components': {App}    // 加载标签为App的组件
     ...
+  属性与方法 
+    每个Vue实例都会代理其 data 对象里所有的属性
+      var data = { a: 1 }
+      var vm = new Vue({
+        data: data
+      })
+      vm.a === data.a  // true
+      // 设置属性也会影响到原始数据
+      vm.a = 2
+      data.a // -> 2
+      // ... 反之亦然
+      data.a = 3
+      vm.a // -> 3
+      注意只有这些被代理的属性是响应的。
+      如果在实例创建之后添加新的属性到实例上,它不会触发视图更新
+    带有前缀$的实例方法与属性[以便与代理的data属性区分]
+      var data = { a: 1 }
+      var vm = new Vue({
+        el: '#example',
+        data: data
+      })
+      vm.$data === data  // true
+      vm.$el === document.getElementById('example') //  true
+      // $watch 是一个实例方法
+      vm.$watch('a', function (newVal, oldVal) {
+        // 这个回调将在 `vm.a`  改变后调用
+      })
+      不要在实例属性或者回调函数中（如 vm.$watch('a', newVal => this.myMethod())）使用箭头函数。
+      因为箭头函数绑定父上下文,所以 this 不会像预想的一样是 Vue 实例,而是 this.myMethod 未被定义。
+  实例生命周期 
+    PS： 每个Vue实例在被创建之前都要经过一系列的初始化过程 
+      如实例需要配置数据观测(data observer)、编译模版、挂载实例到 DOM ,
+      然后在数据变化时更新 DOM 。
+      在这个过程中,实例也会调用一些 生命周期钩子 ,提供了执行自定义逻辑的机会
+      钩子的 this 指向调用它的 Vue 实例
+      Vuejs没有“控制器”的概念,
+      组件的自定义逻辑可以分布在这些钩子中。  
+    ◆生命周期钩子
+    beforeCreate  实例创建之前调用 
+    created  在实例被创建之后被调用 
+      var vm = new Vue({
+        data: {
+          a: 1
+        },
+        created: function () {
+          // `this` 指向 vm 实例
+          console.log('a is: ' + this.a)
+        }
+      });
+      //  "a is: 1"
+    mounted 
+    updated 
+    destroyed 
+var vmExd = Vue.extend({params}) 扩展Vue构造器,从而用预定义选项创建可复用的组件构造器
+    // 所有的 `vmExd` 实例都将以预定义的扩展选项被创建
+    var ve = new vmExd()
+    在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中。
+    所有的Vue组件其实都是被扩展的Vue实例
 v-xx  Directives指令系统
-  PS：用于将vueObj和 HTML DOM 进行关联
-    做为HTML标签的属性,可以让 Vue.js 对一个 DOM 元素做各种处理;
-    指令带有前缀 v-,以表示它们是 Vue.js 提供的特殊属性;
-  ▼数据渲染: 其值对应的为 vParamsObj.data 对象中的值
-    v-text 文本,如将<a>做为字符串而非HTML标签
-    v-html HTML文本,会将<a>做为HTML标签而非字符串
-    {{}}  模版字符
-      和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-  ▼显示控制
-    v-if/v-else : v-if用于条件判断,和v-else是一对. 控制显示 
-    v-show      : 作用与v-if类似 
-      不同的是v-show的元素会始终渲染并保持在 DOM 中「使用的是display:none」,
-      且v-show不支持<template>标签
-  v-for='val in obj'   渲染循环列表
-    其中obj是 vParamsObj.data 中的一属性
+  PS：用于将vm和 HTML DOM 进行关联, 
+    做为HTML标签的属性,可以让Vuejs对一个 DOM 元素做各种处理;
+    指令带有前缀 v-,以表示它们是Vuejs提供的特殊属性;
+  ◆数据渲染
+    其值对应的为 params.data 中的值
+  v-text 文本
+    如将<a>做为字符串而非HTML标签
+  v-html HTML文本 
+    如将<a>做为HTML标签而非字符串
+  v-once 一次性插值
+    当数据改变时,插值处的内容不会更新
+    <span v-once>This will never change: {{ msg }}</span>
+  v-for='val in obj'   渲染循环列表 
+    其中obj是 params.data 中的一属性
     val 为自定义的占位符,obj的一属性,便于后续使用
-  v-on:eventName='foo' 事件处理与绑定 「可使用@进行缩写」
-    foo    为 vParamsObj.methods 中的方法
-    e.g.: v-on:click='foo' 简写为 @click='foo'
-  v-bind:attrName='val'  属性赋值 「可使用冒号:进行简写」
-    val   可为str、obj、arr等
+    e.g.：
+      <div id="app-4">
+        <ol>
+          <li v-for="todo in todos">
+            {{ todo.text }}
+            // 在插值中使用了 todo 
+          </li>
+        </ol>
+      </div>
+      var app4 = new Vue({
+        el: '#app-4',
+        data: {
+          todos: [
+            { text: '学习 JavaScript' },
+            { text: '学习 Vue' },
+            { text: '整个牛项目' }
+          ]
+        }
+      })
+  v-model:"val"   用于一些表单元素[相当于表单取值取值]
+    常见的表单如 input,checkbox,radio,select:
+    e.g.：
+      动态展示输入
+      <div id="app-6">
+        <p>{{ message }}</p>
+        <input v-model="message">
+      </div>
+      var app6 = new Vue({
+        el: '#app-6',
+        data: {
+          message: 'Hello Vue!'
+        }
+      })    
+  ◆显示控制 
+  v-if:"val"    控制显示
+  v-else:"val"  控制显示 
+    PS：v-if用于条件判断,和v-else是一对
+    e.g.：
+      <div id="app-3">
+        <p v-if="seen">现在你看到我了</p>
+      </div>
+      var app3 = new Vue({
+        el: '#app-3',
+        data: {
+          seen: true
+        }
+      })
+      在控制台设置 app3.seen = false 隐藏
+  v-show      作用与v-if类似 
+    不同的是v-show的元素会始终渲染并保持在DOM中「使用的是display:none」,
+    且v-show不支持<template>标签
+  ◆事件绑定
+  v-on:eventName='foo' 事件处理与绑定 「可用'@'简写」
+    foo    为 params.methods 中的方法
+    e.g.: 
+      <div id="app-5">
+        <p>{{ message }}</p>
+        <button v-on:click="reverseMessage">逆转消息</button>
+        // 可简写为 <button @click="reverseMessage">逆转消息</button>
+      </div>
+      var app5 = new Vue({
+        el: '#app-5',
+        data: {
+          message: 'Hello Vue.js!'
+        },
+        methods: {
+          reverseMessage: function () {
+            this.message = this.message.split('').reverse().join('')
+          }
+        }
+      })    
+  ◆属性控制
+  v-bind:attrName='val'  属性赋值 「可用冒号':'简写」
+    val 为 str 时
       当为str时,表示属性attrName的值为str
-      当为arr时,表示该属性的值为该数组中的多个 
-        其中数组中的值和 vParamsObj.data 中的
+      <div id="app-2">
+        <span v-bind:title="message">
+        // 简写为 <span :title="message">
+          鼠标悬停几秒钟查看此处动态绑定的提示信息！
+        </span>
+      </div>
+      var app2 = new Vue({
+        el: '#app-2',
+        data: {
+          message: '页面加载于 ' + new Date()
+        }
+      }); 
+      // app2.message = '新消息';
+      // 可通过更改 app2.message 的值来改变显示
+    val 为 arr 时
+      表示该属性的值为该数组中的多个 
+      其中数组中的值和 params.data 中的
+    val 为 obj 时
       当为obj时,obj中的key为该属性的名称,obj中的val为该属性的值或函数判断
-        <div :class="{aoo : isRed}"> </div>
-        该class的名称为aoo,值为isRed函数的判断
-    e.g.: <img v-bing:src='imgSrc' alt="">
-      简写为 <img :src='imgSrc' alt="">
-  v-model : 用于一些表单元素,常见的input,checkbox,radio,select:
+      <div :class="{aoo : isRed}"> </div>
+      该class的名称为aoo,值为isRed函数的判断
   v-attr
   v-repeat
   HTML代码
@@ -1684,38 +1822,32 @@ v-xx  Directives指令系统
           '
         })
 {{}} 模板语法 
-  PS：Vue.js 使用了基于 HTML 的模版语法,可声明式地将 DOM 绑定至底层 Vue 实例的数据.
-    所有 Vue.js 的模板都是合法的 HTML ,所以能被遵循规范的浏览器和 HTML 解析器解析。
+  PS：Vuejs 使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
+    所有Vuejs的模板都是合法的 HTML ,所以能被遵循规范的浏览器和 HTML 解析器解析;
     在底层的实现上, Vue 将模板编译成虚拟 DOM 渲染函数。
     结合响应系统,在应用状态改变时,Vue 能够智能地计算出重新渲染组件的最小代价并应用到 DOM 操作上。
-    也可以不用模板,直接写渲染（render）函数,使用可选的 JSX 语法。  
-  {{}} 插值
-    PS：{{value}}的形式就能取到value的值,并与value进行绑定
-    文本数据绑定
-      最常见的形式就是使用 Mustache 语法--双大括号--的文本插值.
-      e.g.:
-        <span>Message: {{ msg }}</span>
-        Mustache 标签将会被替代为对应数据对象上 msg 属性的值。
-        无论何时,绑定的数据对象上 msg 属性发生了改变,插值处的内容都会更新。
-        通过使用 v-once 指令,你也能执行一次性地插值,当数据改变时,插值处的内容不会更新。
-        但请留心这会影响到该节点上所有的数据绑定：
-    配合JavaScript表达式使用
-      PS：实际上,对于所有的数据绑定, Vue.js 都提供了完全的 JavaScript 表达式支持。
-        模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date 。
-        不应该在模板表达式中试图访问用户定义的全局变量。
+    也可不用模板,直接写渲染[render]函数,使用可选的 JSX 语法。  
+  {{}}  Mustache语法,文本插值
+    PS：{{value}}的形式就能取到value的值,并与value进行绑定,
+      绑定的数据对象上的属性发生了改变,插值处的内容都会更新 
+      双大括号会将数据解释为纯文本,而非 HTML 
+    配合JS表达式使用 
+      PS：Vuejs提供了完全的JS表达式支持 
+        模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date 
+        不应该在模板表达式中试图访问用户定义的全局变量 
       e.g.:
         {{ number + 1 }}
         {{ ok ? 'YES' : 'NO' }}
         {{ message.split('').reverse().join('') }}
         <div v-bind:id="'list-' + id"></div>
-        这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析。
+        这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析
       每个绑定都只能包含单个表达式
-        下面的例子都不会生效。
-        <!-- 这是语句,不是表达式 -->
+        下面的例子都不会生效
+        // <!-- 这是语句,不是表达式 -->
         {{ var a = 1 }}
-        <!-- 流控制也不会生效,请使用三元表达式 -->
+        // <!-- 流控制也不会生效,请使用三元表达式 -->
         {{ if (ok) { return message } }}
-    过滤器
+    过滤器 
       PS：Vue.js 允许你自定义过滤器,被用作一些常见的文本格式化。
         Vue 2.x 中,过滤器只能在 mustache 绑定和 v-bind 表达式（从 2.1.0 开始支持）中使用,
         因为过滤器设计目的就是用于文本转换。
@@ -1915,17 +2047,145 @@ v-xx  Directives指令系统
         在这个示例中,使用 watch 选项允许我们执行异步操作（访问一个 API）,
         限制我们执行该操作的频率,并在我们得到最终结果前,设置中间状态。这是计算属性无法做到的。
         除了 watch 选项之外,您还可以使用 vm.$watch API 命令。          
-component 组件系统 
-  PS：Vue.js 的一重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用;
+  {{}}  模版字符
+    和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
+    
+    
+    Mustache 不能在 HTML 属性中使用,应使用 v-bind 指令：
+    <div v-bind:id="dynamicId"></div>
+    这对布尔值的属性也有效 —— 如果条件被求值为 false 的话该属性会被移除：
+    <button v-bind:disabled="someDynamicCondition">Button</button>
+    使用 JavaScript 表达式
+    
+    迄今为止,在我们的模板中,我们一直都只绑定简单的属性键值。但实际上,对于所有的数据绑定, Vue.js 都提供了完全的 JavaScript 表达式支持。
+    {{ number + 1 }}
+    {{ ok ? 'YES' : 'NO' }}
+    {{ message.split('').reverse().join('') }}
+    <div v-bind:id="'list-' + id"></div>
+    这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析。有个限制就是,每个绑定都只能包含单个表达式,所以下面的例子都不会生效。
+    <!-- 这是语句,不是表达式 -->
+    {{ var a = 1 }}
+    <!-- 流控制也不会生效,请使用三元表达式 -->
+    {{ if (ok) { return message } }}
+    模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date 。你不应该在模板表达式中试图访问用户定义的全局变量。
+    
+    指令
+    
+    指令（Directives）是带有 v- 前缀的特殊属性。指令属性的值预期是单一 JavaScript 表达式（除了 v-for,之后再讨论）。指令的职责就是当其表达式的值改变时相应地将某些行为应用到 DOM 上。让我们回顾一下在介绍里的例子：
+    <p v-if="seen">Now you see me</p>
+    这里, v-if 指令将根据表达式 seen 的值的真假来移除/插入 <p> 元素。
+    参数
+    
+    一些指令能接受一个“参数”,在指令后以冒号指明。例如, v-bind 指令被用来响应地更新 HTML 属性：
+    <a v-bind:href="url"></a>
+    在这里 href 是参数,告知 v-bind 指令将该元素的 href 属性与表达式 url 的值绑定。
+    另一个例子是 v-on 指令,它用于监听 DOM 事件：
+    <a v-on:click="doSomething">
+    在这里参数是监听的事件名。我们也会更详细地讨论事件处理。
+    修饰符
+    
+    修饰符（Modifiers）是以半角句号 . 指明的特殊后缀,用于指出一个指令应该以特殊方式绑定。例如,.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
+    <form v-on:submit.prevent="onSubmit"></form>
+    之后当我们更深入地了解 v-on 与 v-model时,会看到更多修饰符的使用。
+    过滤器
+    
+    Vue.js 允许你自定义过滤器,可被用作一些常见的文本格式化。过滤器可以用在两个地方：mustache 插值和 v-bind 表达式。过滤器应该被添加在 JavaScript 表达式的尾部,由“管道”符指示：
+    <!-- in mustaches -->
+    {{ message | capitalize }}
+    <!-- in v-bind -->
+    <div v-bind:id="rawId | formatId"></div>
+    Vue 2.x 中,过滤器只能在 mustache 绑定和 v-bind 表达式（从 2.1.0 开始支持）中使用,因为过滤器设计目的就是用于文本转换。为了在其他指令中实现更复杂的数据变换,你应该使用计算属性。
+    
+    过滤器函数总接受表达式的值作为第一个参数。
+    new Vue({
+      // ...
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ''
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+      }
+    })
+    过滤器可以串联：
+    {{ message | filterA | filterB }}
+    过滤器是 JavaScript 函数,因此可以接受参数：
+    {{ message | filterA('arg1', arg2) }}
+    这里,字符串 'arg1' 将传给过滤器作为第二个参数, arg2 表达式的值将被求值然后传给过滤器作为第三个参数。
+    缩写
+    
+    v- 前缀在模板中是作为一个标示 Vue 特殊属性的明显标识。当你使用 Vue.js 为现有的标记添加动态行为时,它会很有用,但对于一些经常使用的指令来说有点繁琐。同时,当搭建 Vue.js 管理所有模板的 SPA 时,v- 前缀也变得没那么重要了。因此,Vue.js 为两个最为常用的指令提供了特别的缩写：
+    v-bind 缩写
+    
+    <!-- 完整语法 -->
+    <a v-bind:href="url"></a>
+    <!-- 缩写 -->
+    <a :href="url"></a>
+    v-on 缩写
+    
+    <!-- 完整语法 -->
+    <a v-on:click="doSomething"></a>
+    <!-- 缩写 -->
+    <a @click="doSomething"></a>
+    它们看起来可能与普通的 HTML 略有不同,但 : 与 @ 对于属性名来说都是合法字符,在所有支持 Vue.js 的浏览器都能被正确地解析。而且,它们不会出现在最终渲染的标记。缩写语法是完全可选的,但随着你更深入地了解它们的作用,你会庆幸拥有它们。    
+    
+    
+Component 组件系统 
+  PS：Vuejs的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
     在一个大型应用中,为了使得开发过程可控,有必要将应用整体分割成一个个的组件.
-    Vue.js 组件类似于自定义元素.
-    提供了原生自定义元素所不具备的一些重要功能,
+    Vuejs组件类似于自定义元素, 提供了原生自定义元素所不具备的一些重要功能,
     比如组件间的数据流,自定义事件系统,以及动态的、带特效的组件替换;
+    在Vue里,一个组件本质上是一个拥有预定义选项的一个Vue实例
+  Vue.component('name',params);     注册组件
+    name   组件的名称
+    params 配置对象   
+      template:"HTMLStr"    组件的HTML代码
+      props: ['todo']       自定义属性
+    e.g.：
+      定义名为 todo-item 的新组件
+      Vue.component('todo-item', {
+        template: '<li>这是个待办项</li>'
+      })
+      用其构建另一个组件模板 
+      <ol>
+        // <!-- 创建一个 todo-item 组件的实例 -->
+        <todo-item></todo-item>
+      </ol>
+      将数据从父作用域传到子组件。让我们来修改一下组件的定义,使之能够接受一个属性：
+      Vue.component('todo-item', {
+        // todo-item 组件现在接受一个
+        // "prop",类似于一个自定义属性
+        // 这个属性名为 todo。
+        props: ['todo'],
+        template: '<li>{{ todo.text }}</li>'
+      })
+      使用 v-bind 指令将待办项传到每一个重复的组件中：
+      <div id="app-7">
+        <ol>
+          // <!-- 现在我们为每个todo-item提供待办项对象    -->
+          // <!-- 待办项对象是变量,即其内容可以是动态的 -->
+          <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+        </ol>
+      </div>
+      Vue.component('todo-item', {
+        props: ['todo'],
+        template: '<li>{{ todo.text }}</li>'
+      })
+      var app7 = new Vue({
+        el: '#app-7',
+        data: {
+          groceryList: [
+            { text: '蔬菜' },
+            { text: '奶酪' },
+            { text: '随便其他什么人吃的东西' }
+          ]
+        }
+      })
   组件形式
     使用一个 .vue 格式文件将 HTML+CSS+JS 装起来,
     <template>HTML代码<template/>,<style>CSS代码<style/>,<script>JS代码<script/>
-View,视图  被 Vue 实例管理的 DOM 节点 
+View 视图,被Vue实例管理的DOM节点 
   当一个 Vue 实例被创建时,它会递归遍历根元素的所有子结点,同时完成必要的数据绑定。
   当这个视图被编译之后,它就会自动响应数据的变化。
   在使用 Vue.js 时,除了自定义指令 (稍后会有解释),几乎不必直接接触 DOM。
@@ -1953,8 +2213,8 @@ Model,模型 一个轻微改动过的原生 JavaScript 对象
 vue-resource : 作为vue插件的形式存在 
   通过 XMLHttpRequest 或 JSONP 发起请求并处理响应。
 --------------------------------------------------------------------------------
-★React 
-介绍_概念_说明_定义
+●React 
+介绍_概念_说明_定义 
   起源于Facebook,用来架设Instagram网站,
   设计思想独特,属于革命性创新,性能出众,代码逻辑却非常简单;
   框架使用语言jsx和自己一整套完整的工具链「工具集合」
@@ -1965,7 +2225,7 @@ vue-resource : 作为vue插件的形式存在
   cd helloworld
   npm start   「npm run start的缩写」
 --------------------------------------------------------------------------------
-★orage  「self」
+●orage  「self」
   功能: 轻量、简洁、功能--多模块化自由组合、待续...
   简写符号:
     pa   parents
@@ -2009,6 +2269,10 @@ vue-resource : 作为vue插件的形式存在
       }
     } )
 ---------------------------------------------------------------------以下待整理
+
+
+
+
 
 
 

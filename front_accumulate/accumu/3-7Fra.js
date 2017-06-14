@@ -297,7 +297,7 @@ v-xx  Directives指令系统
     如将<a>做为字符串而非HTML标签
   v-html HTML文本 
     如将<a>做为HTML标签而非字符串
-  v-once 一次性插值
+  v-once 一次性插值 
     当数据改变时,插值处的内容不会更新
     <span v-once>This will never change: {{ msg }}</span>
   v-for='val in obj'   渲染循环列表 
@@ -355,8 +355,8 @@ v-xx  Directives指令系统
     不同的是v-show的元素会始终渲染并保持在DOM中「使用的是display:none」,
     且v-show不支持<template>标签
   ◆事件绑定
-  v-on:eventName='foo' 事件处理与绑定 「可用'@'简写」
-    foo    为 params.methods 中的方法
+  v-on:eventName='fooName' 事件处理与绑定 「可用'@'简写」
+    fooName    为 params.methods 中的方法
     e.g.: 
       <div id="app-5">
         <p>{{ message }}</p>
@@ -431,29 +431,11 @@ v-xx  Directives指令系统
     另一个例子是 v-on 指令,它用于监听 DOM 事件：
     <a v-on:click="doSomething">
     在这里参数是监听的事件名。我们也会更详细地讨论事件处理。
-  修饰符
-    修饰符（Modifiers）是以半角句号 . 指明的特殊后缀,用于指出一个指定应该以特殊方式绑定。
-    例如,.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
-    <form v-on:submit.prevent="onSubmit"></form>
-    之后当我们更深入地了解 v-on 与 v-model时,会看到更多修饰符的使用。
-  缩写
-    v- 前缀在模板中是作为一个标示 Vue 特殊属性的明显标识。
-    使用 Vue.js 为现有的标记添加动态行为时,会很有用,但对于一些经常使用的指令来说有点繁琐。
-    同时,当搭建 Vue.js 管理所有模板的 SPA 时,v- 前缀也变得没那么重要了。
-    因此,Vue.js 为两个最为常用的指令提供了特别的缩写：
-    v-bind 缩写
-      <!-- 完整语法 -->
-      <a v-bind:href="url"></a>
-      <!-- 缩写 -->
-      <a :href="url"></a>
-    v-on 缩写
-      <!-- 完整语法 -->
-      <a v-on:click="doSomething"></a>
-      <!-- 缩写 -->
-      <a @click="doSomething"></a>
-    它们看起来可能与普通的 HTML 略有不同,但 : 与 @ 对于属性名来说都是合法字符,
-    在所有支持 Vue.js 的浏览器都能被正确地解析。而且,它们不会出现在最终渲染的标记。
-    缩写语法是完全可选的,但随着你更深入地了解它们的作用,你会庆幸拥有它们。        
+  Modifiers修饰符
+    PS：修饰符是以点号'.'指明的特殊后缀,用于指出一个指令以特殊方式绑定;
+      主要用于 v-on 与 v-model  指令
+    .prevent 指定v-on指令触发的事件调用 event.preventDefault() 
+      <form v-on:submit.prevent="onSubmit"></form>
   Class 与 Style 绑定
     PS：数据绑定一个常见需求是操作元素的 class 列表和它的内联样式。
       因为它们都是属性 ,我们可以用v-bind 处理它们：只需要计算出表达式最终的字符串。
@@ -1821,62 +1803,32 @@ v-xx  Directives指令系统
             </div>\
           '
         })
-{{}} 模板语法 
+Mustache 模板语法 
   PS：Vuejs 使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
-    所有Vuejs的模板都是合法的 HTML ,所以能被遵循规范的浏览器和 HTML 解析器解析;
-    在底层的实现上, Vue 将模板编译成虚拟 DOM 渲染函数。
-    结合响应系统,在应用状态改变时,Vue 能够智能地计算出重新渲染组件的最小代价并应用到 DOM 操作上。
-    也可不用模板,直接写渲染[render]函数,使用可选的 JSX 语法。  
-  {{}}  Mustache语法,文本插值
+    在底层的实现上, Vue 将模板编译成虚拟 DOM 渲染函数;
+    结合响应系统,应用状态改变时,Vue能够以最小代价重新渲染组件并应用到DOM操作上;
+    也可不用模板,直接写渲染[render]函数,使用可选的 JSX 语法;  
+  {{}}  文本插值
     PS：{{value}}的形式就能取到value的值,并与value进行绑定,
       绑定的数据对象上的属性发生了改变,插值处的内容都会更新 
       双大括号会将数据解释为纯文本,而非 HTML 
-    配合JS表达式使用 
-      PS：Vuejs提供了完全的JS表达式支持 
-        模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date 
-        不应该在模板表达式中试图访问用户定义的全局变量 
-      e.g.:
-        {{ number + 1 }}
-        {{ ok ? 'YES' : 'NO' }}
-        {{ message.split('').reverse().join('') }}
-        <div v-bind:id="'list-' + id"></div>
-        这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析
-      每个绑定都只能包含单个表达式
-        下面的例子都不会生效
-        // <!-- 这是语句,不是表达式 -->
-        {{ var a = 1 }}
-        // <!-- 流控制也不会生效,请使用三元表达式 -->
-        {{ if (ok) { return message } }}
-    过滤器 
-      PS：Vue.js 允许你自定义过滤器,被用作一些常见的文本格式化。
-        Vue 2.x 中,过滤器只能在 mustache 绑定和 v-bind 表达式（从 2.1.0 开始支持）中使用,
-        因为过滤器设计目的就是用于文本转换。
-        为了在其他指令中实现更复杂的数据变换,你应该使用计算属性。
-      过滤器应该被添加在 mustache 插值的尾部,由“管道符”指示：
-      {{ message | capitalize }}
-      <!-- in mustaches -->
-      {{ message | capitalize }}
-      <!-- in v-bind -->
-      <div v-bind:id="rawId | formatId"></div>
-      
-      过滤器函数总接受表达式的值作为第一个参数。
-      new Vue({
-        // ...
-        filters: {
-          capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
-          }
-        }
-      })
-      过滤器可以串联：
-      {{ message | filterA | filterB }}
-      过滤器是 JavaScript 函数,因此可以接受参数：
-      {{ message | filterA('arg1', arg2) }}
-      这里,字符串 'arg1' 将传给过滤器作为第二个参数,
-      arg2 表达式的值将被求值然后传给过滤器作为第三个参数.
-  计算属性
+  配合JS表达式使用 
+    PS：Vuejs提供了完全的JS表达式支持; 
+      模板表达式都被放在沙盒中,只能访问全局变量的一个白名单,如 Math 和 Date, 
+      不应该在模板表达式中试图访问用户定义的全局变量; 
+    e.g.:
+      {{ number + 1 }}
+      {{ ok ? 'YES' : 'NO' }}
+      {{ message.split('').reverse().join('') }}
+      <div v-bind:id="'list-' + id"></div>
+      这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析
+    每个绑定都只能包含单个表达式
+      下面的例子都不会生效
+      // <!-- 这是语句,不是表达式 -->
+      {{ var a = 1 }}
+      // <!-- 流控制也不会生效,请使用三元表达式 -->
+      {{ if (ok) { return message } }}
+  计算属性 
     PS：在模板中绑定表达式是非常便利的,但是它们实际上只用于简单的操作。
       可以像绑定普通属性一样在模板中绑定计算属性。
     在模板中放入太多的逻辑会让模板过重且难以维护。
@@ -2047,8 +1999,7 @@ v-xx  Directives指令系统
         在这个示例中,使用 watch 选项允许我们执行异步操作（访问一个 API）,
         限制我们执行该操作的频率,并在我们得到最终结果前,设置中间状态。这是计算属性无法做到的。
         除了 watch 选项之外,您还可以使用 vm.$watch API 命令。          
-  {{}}  模版字符
-    和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
+  Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
     
     
     Mustache 不能在 HTML 属性中使用,应使用 v-bind 指令：
@@ -2128,8 +2079,38 @@ v-xx  Directives指令系统
     <!-- 缩写 -->
     <a @click="doSomething"></a>
     它们看起来可能与普通的 HTML 略有不同,但 : 与 @ 对于属性名来说都是合法字符,在所有支持 Vue.js 的浏览器都能被正确地解析。而且,它们不会出现在最终渲染的标记。缩写语法是完全可选的,但随着你更深入地了解它们的作用,你会庆幸拥有它们。    
-    
-    
+filters 过滤器 
+  PS：类似Linux中的管道,vuejs也使用的是'|'; 可用作一些常见的文本格式化
+    Vue2.x 中,过滤器只能在 mustache绑定 和 v-bind表达式[从 2.1.0 开始支持]中使用,
+    因为过滤器设计目的就是用于文本转换。
+    为了在其他指令中实现更复杂的数据变换,应该使用计算属性。
+  Vue.filter 自定义内建过滤器
+    Vue.filter('reverse', function (value) {
+      return value.split('').reverse().join('')
+    })
+  过滤器添加在JS表达式的尾部,由“管道”符指示 
+    // <!-- in mustaches -->
+    {{ message | capitalize }}
+    // <!-- in v-bind -->
+    <div v-bind:id="rawId | formatId"></div>
+  过滤器函数总接受表达式的值作为第一个参数
+    new Vue({
+      // ...
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ''
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+      }
+    })
+  过滤器串联 
+    {{ message | filterA | filterB }}
+  过滤器传参 
+    过滤器是JS函数,因此可以接受参数
+    {{ message | filterA('arg1', arg2) }}
+    字符串'arg1'将传给过滤器作为第二个参数, 
+    arg2 表达式的值将被求值然后传给过滤器作为第三个参数。 
 Component 组件系统 
   PS：Vuejs的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
@@ -2204,12 +2185,6 @@ Model,模型 一个轻微改动过的原生 JavaScript 对象
   这也意味着多个 Vue 实例可以观察同一份数据。
   在较大型的应用程序中,我们也推荐将 Vue 实例作为纯粹的视图看待,同时把数据处理逻辑放在更独立的外部数据层。
   一旦数据被观察,Vue.js 就不会再侦测到新加入或删除的属性了。作为弥补,我们会为被观察的对象增加 $add, $set和 $delete 方法。
-| 过滤器 
-  与Linux中的管道类似,vue.js也使用的是|
-  过滤器有内建,也可以用 Vue.filter 自定义:
-    Vue.filter('reverse', function (value) {
-      return value.split('').reverse().join('')
-    })
 vue-resource : 作为vue插件的形式存在 
   通过 XMLHttpRequest 或 JSONP 发起请求并处理响应。
 --------------------------------------------------------------------------------

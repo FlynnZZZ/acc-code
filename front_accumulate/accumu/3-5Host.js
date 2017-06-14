@@ -22,11 +22,28 @@
 操作系统 
 --------------------------------------------------------------------------------
 浏览器 
-  URL中的参数 lastreporttime
+  URL中的参数 lastreporttime 
     在URL末尾增加一个 lastreporttime 参数,表示只会加载该参数时间之后的报告.
     e.g.
     'http://gumball.wickedlysmart.com/?lastreporttime=1302212903099'
     指定的时间为一串数字,单位为毫秒.
+  浏览器检测 
+    检测是否为 IE6、7、8、9 [不支持 IE10、11]
+      var isIE = function(num){
+        var b = document.createElement('b')
+        b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->'
+        return b.getElementsByTagName('i').length === 1
+      }
+      alert(
+        'ie6:' + isIE(6) + '\n' + 
+        'ie7:' + isIE(7) + '\n' + 
+        'ie8:' + isIE(8) + '\n' + 
+        'ie9:' + isIE(9) + '\n' + 
+        // 'ie10:' + isIE(10) + '\n' + 
+        // 'ie11:' + isIE(11) + '\n' + 
+        'ie:' + isIE()
+      );
+
 --------------------------------------------------------------------------------
 本地服务器
   使用 xampp 搭建本地服务器

@@ -1468,7 +1468,7 @@ event 事件对象
     textInput 在文本插入文本框之前会触发(DOM3新增)
       只有可编辑区域才能触发该事件
       e.data; 表示用户输入的字符(如可能为s或S取决于是否按了Shift)
-  合成事件 当为IME(Iput Method Editor,输入法编辑器)输入字符时触发
+  合成事件 当为IME[Iput Method Editor,输入法编辑器]输入字符时触发 
     PS：复合事件时DOM3级事件中新添加的一类事件,用于处理IME的输入序列
       IME可以让用户输入在物理键盘上找不到的字符(如输入中文)
       浏览器支持率度不高
@@ -1478,11 +1478,24 @@ event 事件对象
       e.data; 正在插入的文本
     compositionend    在IME的文本复合系统关闭时触发,表示返回正常键盘输入状态
       e.data; 包含此次输入会话中插入的所有字符
-  变动事件 当底层DOM结构发生变化时触发
-    变动事件是为XML或HTML DOM设计的,不特定于某种语言
+  变动事件 当底层DOM结构发生变化时触发[IE9+]
+    PS：变动事件是为XML或HTML DOM设计的,不特定于某种语言
+    兼容性检测
+      var isSupported = document.implementation.hasFeature("MutationEvents"，"2.0");
     DOM2级定义了如下变动事件
-   (详情参见 JavaScript高级程序设计 384页)
-  变动名称事件 当元素或属性名变动时触发.(已被废弃)
+    DOMSubtreeModified   在DOM结构中发生任何变化时触发
+    DOMNodeInserted  一节点被插入另一节点时触发
+    DOMNodeInsertedIntoDocument   节点被直接插入文档或通过子树间接插入文档后触发
+      该事件在 DOMNodeInserted 后触发
+    DOMNodeRemoved   节点被删除时触发
+    DOMNodeRemovedFromDocument   节点从文档中删除或通过子树间接从文档中删除前触发
+      该事件在 DOMNodeRemoved 之后触发
+    DOMAttrModified  特性被修改后触发 
+    DOMCharacterDataModified  文本节点值发生变化时触发
+    (详情参见 JavaScript高级程序设计384页)
+    Exp:
+      使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
+  变动名称事件 当元素或属性名变动时触发[已被废弃]
   ◆HTML5事件
     PS：DOM规范没有涵盖所有浏览器支持的事件
       HTML5详尽列出了浏览器应该支持的所有事件
@@ -1660,13 +1673,12 @@ event 事件对象
     DOM2级规范了模拟特定事件的方式
     IE有自己的模拟方式
   document.createEvent(str);   创建event对象
-    Arguments:表示要创建的事件类型的字符串
-      DOM2级中都使用英文复数形式
-      DOM3级中都使用英文单数形式
-      UIEvents       一般的UI事件,鼠标、键盘事件都继承至UI事件
-      MouseEvents    一般的鼠标事件
-      MutationEvents 一般的DOM变动事件
-      HTMLEvents     一般的HTML事件(DOM3中无该事件,被分散到其他类别中去了)
+    str   表示要创建的事件类型的字符串
+      PS：DOM2级中都使用英文复数形式, DOM3级中都使用英文单数形式
+      'UIEvents'       一般的UI事件,鼠标、键盘事件都继承至UI事件
+      'MouseEvents'    一般的鼠标事件
+      'MutationEvents' 一般的DOM变动事件
+      'HTMLEvents'     一般的HTML事件[DOM3中无该事件,被分散到其他类别中去了]
   nod.dispatchEvent(e);     触发创建的事件
   // 模拟鼠标事件
   var e =document.createEvent("MouseEvents");
@@ -1713,7 +1725,7 @@ event 事件对象
     var t = document.getElementById('test');
     trigger(t, 'click');
 自定义事件 「DOM3」「IE8+?」
-  var evt =document.createEvent("CustomEvent");    创建事件
+  var evt = document.createEvent("CustomEvent");    创建事件
   evt.initEvent('customEvent',true,true);          定义事件类型
   evt.initCustomEvent(str,boo,boo,obj);
     str  触发的事件类型 type

@@ -464,9 +464,9 @@ window的属性对象
           console.log(cookie[i]);
         }
       document.cookie = str; 写入cookie 
-        PS：不会对原有的cookie进行覆盖,只会进行增加
+        PS：不会对原有的cookie进行覆盖,只会进行增加 
           分号、逗号、空格不可作为cookie的值,可使用encodeURIComponent方法进行转义;
-        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'
+        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure';
         key=val  必须,cookie的内容
         expires  可选,过期时间,即过了该时间,cookie被清理
           PS：使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,

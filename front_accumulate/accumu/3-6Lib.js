@@ -639,61 +639,64 @@ DOM 操作
 Event 事件 
   PS：Jelem绑定事件,则为列表中的每个对象进行了绑定
   ◆事件绑定与取消 
-    PS：bind,live,delegate,on
-      其中 elem.eventName 为bind的简写.
-      对应解除为 unbind、die、undelegate、off
-      bind 只能针对已经存在的元素进行事件的设置；
+    PS：bind,live,delegate,on;对应解除为 unbind、die、undelegate、off 
       live on delegate 均支持未来新添加元素的事件绑定 [使用委托的方式才会生效]
+      bind 只能针对已经存在的元素进行事件的设置；
       bind 在 1.7 版本前比较受推崇之后已不推荐
-      on 是 1.7 版本新添加的,也推荐使用,
       live 在 1.9 版本已经删除
-  Jelem.on()      绑定事件 
-    一般事件绑定
-      Jelem.on("事件名",function(e){}) 
-        jq对象为多个元素的数组时,此操作则给每个元素都绑定了事件
-    同时绑定多事件
-      Jelem.on("mouseover mouseout",foo)  
-    绑定多组事件
-      Jelem.on({ mouseover：foo1, mouseout：foo2, click：foo3, })
-    绑定自定义事件
-      Jelem.on("myOwnEvent",function(event,showName){  
-        $(this).text(showName + "! What a beautiful name!").show()；
-      })；
-      $("button").click(function(){
-        $("p").trigger("myOwnEvent",["Anja"])；
-      })；
-    事件传递信息
-      Jelem.on("click",{msg:"You just clicked me!"},foo);
-      function foo (event){ alert(event.data.msg); }
-    事件代理 [可对未来元素进行绑定]
-      Jelem.on('事件a',"selector",function(){
-        // 其中 this 表示的为 selector表示的DOM元素
-      }) 
-        对selector对应的元素上执行事件,才会执行响应函数(相当于将函数中的判断外置了)
-        PS-Self: 仍需符合冒泡原理,响应元素需为绑定元素的子元素?
-  Jelem.off()     取消绑定 
-    PS： 移除元素上绑定的一个或多个事件的事件处理函数
-      off()函数主要用于解除由on()函数绑定的事件处理函数 
-    Jelem.off(events,selector,handler)
-      events   可选,String类型,一个或多个用空格分隔的事件或可选的命名空间
-        例如"click"、"focus click"、"keydown.myPlugin" 
-      selector 可选,String类型,jQuery选择器,用于Jelem 
-        如果该参数为null或被省略,则表示当前元素自身绑定事件
-        (实际触发者也可能是后代元素,只要事件流能到达当前元素即可) 
-      handler  可选,Function类型,指定的事件处理函数 
-    Jelem.off(eventsMap,selector)
-      Arguments:
-        eventsMap  Object类型,event:handler 对象
-          如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
-        selector 指定的对象(属于Jelem的后代元素)
-          如果省略参数selector,则移除Jelem及后代的所用响应函数
-          selector 必须与通过on()函数添加绑定时传入的选择器一致 
-        如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
-        实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
-        参数越多,限定条件就越多,被移除的范围就越小
-      RetValue:
-        返回值为jQuery类型,返回当前jQuery对象本身 
-  Jelem.unbind()  取消绑定
+  Jelem.on(params)   事件绑定 [1.7 版本增加,推荐使用的方式] 
+    Jelem.on("eName",foo)         常规事件绑定 
+      jq对象为多个元素的数组时,此操作则给每个元素都绑定了事件
+    Jelem.on("eName1 eName2",foo) 同时多事件绑定 
+    Jelem.on(paramsObj)           多组事件绑定 
+      paramsObj   为一个 eName-foo 的配置对象
+        { 
+          mouseover：foo1, 
+          mouseout：foo2, 
+          click：foo3, 
+          ...
+        }
+    Jelem.on(str,foo)             自定义事件绑定 
+      foo  默认传入 e,arg1,arg2,.. 
+        arg为传递的信息,通过 trigger 触发时配置的数组元素 
+      e.g.：
+        $("p").on("aoo",function(e,arg1,arg2){  
+          $(this).text(arg1 + arg2);
+        });
+        $("button").click(function(){
+          $("p").trigger("aoo",["abc","123"]);
+        });
+    Jelem.on("eName",val,foo)     事件绑信息定传递 
+      obj  对象,传递的信息,通过 e.data 获取 
+      e.g.：
+        Jelem.on("click",{msg:"You just clicked me!"},function(e){
+          console.log(e.data);
+        });
+    Jelem.on('eName',"slct",foo)  事件代理 [可对未来元素进行绑定]
+      PS：foo 中 this 表示的为 slct 表示的元素 
+        对selector对应的元素上执行事件,才会执行响应函数
+        仍需符合冒泡原理,响应元素需为绑定元素的子元素[?]
+  Jelem.off(['eName1 eName2'] [,slct] [,foo]) 主要解除由on绑定的事件 
+    PS： 移除元素上绑定的一个或多个事件的事件处理函数 
+    eName  可选,默认移除该元素所有的事件绑定 
+      如"click"、"focus click"、"keydown.myPlugin" 
+    slct   可选,选择器,如果该参数为null或被省略,则表示当前元素自身绑定事件
+      (实际触发者也可能是后代元素,只要事件流能到达当前元素即可) 
+    foo    可选,指定的事件处理函数 
+    todo:
+      Jelem.off(eventsMap,selector)
+        Arguments:
+          eventsMap  Object类型,event:handler 对象
+            如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
+          selector 指定的对象(属于Jelem的后代元素)
+            如果省略参数selector,则移除Jelem及后代的所用响应函数
+            selector 必须与通过on()函数添加绑定时传入的选择器一致 
+          如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
+          实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
+          参数越多,限定条件就越多,被移除的范围就越小
+        RetValue:
+          返回值为jQuery类型,返回当前jQuery对象本身 
+  Jelem.unbind()   取消绑定
     规定从指定元素上删除的一个或多个事件处理程序 
     如果没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
     语法
@@ -707,7 +710,7 @@ Event 事件
       语法
         $(selector).unbind(eventObj)
         eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
-  Jelem.eventName(foo)   快捷绑定
+  Jelem.eventName(foo)   快捷绑定[bind的简写] 
     Jelem.click(foo)    点击事件绑定
     $(document).ready(foo)  DOM结构加载完后执行
       简写方式: $(function(){/*jQuery代码*/})
@@ -722,7 +725,7 @@ Event 事件
     Jelem.focus(foo)
     Jelem.blur(foo)
     Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
-  事件绑定性能优化
+  事件绑定性能优化 
     正确使用事件委托
       $('#t').find('td').on('click', function () {  
         $(this).css({ 
@@ -739,14 +742,30 @@ Event 事件
         });  
       }); 
   触发事件 
-    Jelem.trigger("event",[param1,param2,...]); 
-      event	 必需,规定指定元素要触发的事件
-        可以使自定义事件(使用 bind() 函数来附加),或者任何标准事件
-      [param1,param2,...]	 可选,传递到事件处理程序的额外参数
-        PS：额外的参数对自定义事件特别有用
-      Remarks:
+    Jelem.trigger("eName",[arr]);   触发事件及信息传递 
+      eName   必需,指定触发的事件
+      arr     数组,可选,传递到事件处理程序的额外参数 
+        额外的参数对自定义事件特别有用
+      e.g.：
+        $("p").on("aoo",function(e,arg1,arg2){  
+          $(this).text(arg1 + arg2);
+        });
+        $("button").click(function(){
+          $("p").trigger("aoo",["abc","123"]);
+        });
+        改写为对象及单参数的方式
+        $("p").on("aoo",function(e,arg){  
+          $(this).text(arg.aoo + arg.boo);
+        });
+        $("button").click(function(){
+          $("p").trigger("aoo",[{
+            aoo : 'abc',
+            boo : '123'
+          }]);
+        });
+      Exp:
         使用 val() 改变 select 的值,不会触发其 change 事件
-    Jelem.eventName();   快捷触发
+    Jelem.eventName();   快捷触发 
       Jelem.click();  触发点击 
         PS：不会产生鼠标点击的效果,如下拉选项不会弹出
   Event 对象
@@ -1220,7 +1239,7 @@ AJAX
       PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
         两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
         w3c盒子模型不包含,IE盒子模型则包含,
-Deferred 对象 
+Deferred 异步操作
   PS：jQuery 1.5 中引入; 和 Promise 对象一起作为 jQuery 对 Promise 的一种实现;
     在 jQuery1.x - jQuery2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
     不同于原生promises遵守 Promises/A+ 提案「从CommonJS Promises 衍生而来」的约定,

@@ -710,21 +710,22 @@ Event 事件
       语法
         $(selector).unbind(eventObj)
         eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
-  Jelem.eventName(foo)   快捷绑定[bind的简写] 
-    Jelem.click(foo)    点击事件绑定
-    $(document).ready(foo)  DOM结构加载完后执行
+  Jelem.name(foo) 快捷绑定[bind的简写] 
+    ★name可使用的值枚举如下:
+    Jelem.click(foo);          点击事件绑定
+    $(document).ready(foo);    DOM结构加载完后执行
       简写方式: $(function(){/*jQuery代码*/})
-    Jelem.change(foo)      元素的值或内容发生变化时响应
-    Jelem.scroll(fuoo)     元素滚动条滑动事件
-    Jelem.hover()  「JS 中无hover事件,所以无法使用on方法来绑定 ?」 
-      可以有退出状态时的回调函数
-        Jelem.hover(foo1,foo2)
+    Jelem.change(foo);         元素的值或内容发生变化时响应
+    Jelem.scroll(fuoo);        元素滚动条滑动事件
+    Jelem.hover(foo1 [,foo2]); 悬浮事件
+      PS：JS中无hover事件,无法使用on方法来绑定「SlPt」 
+      foo1  进入悬浮时回调 
+      foo2  可选,离开悬浮时回调
         如click事件则无 
-          Jelem.click(foo1,foo2)
-          始终不会执行foo1,代替的是执行foo2
-    Jelem.focus(foo)
-    Jelem.blur(foo)
-    Jelem.toggle(foo1,foo2[,foo3][,...])  点击依次执行函数 [1.9 版本移除]
+          Jelem.click(foo1,foo2) 始终不会执行foo1,代替的是执行foo2
+    Jelem.focus(foo);          获得焦点事件
+    Jelem.blur(foo);           失去焦点事件
+    Jelem.toggle(foo1,foo2 [,foo3,..]);  点击依次执行函数[1.9 版本移除] 
   事件绑定性能优化 
     正确使用事件委托
       $('#t').find('td').on('click', function () {  

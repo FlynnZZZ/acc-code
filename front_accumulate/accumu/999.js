@@ -618,6 +618,38 @@ fileNum : 21
     '-jq-trigger("event",[]);':
       'prefix': 'trigger'
       'body': 'trigger("click",[$1]);'
+    '-jq-$.ajax({}).done':
+      'prefix': 'ajaxJQ1'
+      'body': """$.ajax({
+          type : 'get',
+          url  : 'url',
+          data : {
+            key : val,
+          }, 
+          dataType : 'json',
+          xhrFields: {
+            withCredentials: true
+            // 请求带上cookie
+          },
+          crossDomain: true, 
+          // 跨域
+          // contentType:'application/json',
+          beforeSend : function(){ }, 
+          // 发送请求前执行
+          complete : function(jqxhr,status){
+            // 请求完成完后(无论成功与否)执行
+          }, 
+          cache : true / false 
+          // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
+        })
+        .done(function(backData,textStatus,obj){
+          console.log(backData);
+        })
+        .fail(function(xhr,status,errorTrown){
+          console.log(status);
+        });"""
+      
+      
     
   QQInput
     自定义短语

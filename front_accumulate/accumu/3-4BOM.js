@@ -463,7 +463,7 @@ window的属性对象
         for (var i = 0; i < cookie.length; i++) {
           console.log(cookie[i]);
         }
-      document.cookie = str; 写入cookie 
+      document.cookie = str;  写入cookie 
         PS：不会对原有的cookie进行覆盖,只会进行增加 
           分号、逗号、空格不可作为cookie的值,可使用encodeURIComponent方法进行转义;
         document.cookie ='key=val;expires=time;domain=域名;path=路径;secure';

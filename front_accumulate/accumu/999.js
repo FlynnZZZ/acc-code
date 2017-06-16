@@ -587,6 +587,37 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
+    '-jq-$.ajax({})':
+      'prefix': 'ajaxJQ'
+      'body': """$.ajax({
+          type : 'get',
+          url  : 'url',
+          data : {
+            key : val,
+          }, 
+          dataType : 'json',
+          xhrFields: {
+            withCredentials: true
+            // 请求带上cookie
+          },
+          crossDomain: true, 
+          // 跨域
+          // contentType:'application/json',
+          beforeSend : function(){ }, 
+          // 发送请求前执行
+          success  : function(backData,textStatus,obj){
+          }, 
+          error    : function (xhr,status,errorTrown){
+          }, 
+          complete : function(jqxhr,status){
+            // 请求完成完后(无论成功与否)执行
+          }, 
+          cache : true / false 
+          // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
+        });"""
+    '-jq-trigger("event",[]);':
+      'prefix': 'trigger'
+      'body': 'trigger("click",[$1]);'
     
   QQInput
     自定义短语

@@ -2471,7 +2471,8 @@ OOP 面向对象
           function box(sum){
             if(num<=1){
               return 1;
-            }else{
+            }
+            else{
               return num*arguments.callee(num-1);
               //此时arguments.callee等价于box
             }
@@ -2485,6 +2486,28 @@ OOP 面向对象
           return sum;
         }
         foo(5,6,1); // 12
+      基本类型按值传参,引用类型按引用传参
+        // 基本类型[此处为字符串],参数按值传递
+        var localObjOpera = function(localStorageItem,key,val){
+          if (localStorageItem === undefined) { // 不存在则初始化为一对象 
+            localStorageItem = JSON.stringify({});
+          }
+          var obj = JSON.parse(localStorageItem);
+          obj[key] = val;
+          localStorageItem = JSON.stringify(obj);
+          console.log(obj,localStorageItem,localStorageItem === localStorage.abc,typeof localStorageItem);
+          // {aa: "11"} "{"aa":"11"}" false "string"
+        };
+        localObjOpera(localStorage.abc,'aa','11');
+        console.log(localStorage.abc);   // undefined
+        
+        // 引用类型对象参数按引用传递
+        var editObj = function(obj){
+          obj['a'] = '1111';
+        };
+        var aoo = {};
+        editObj(aoo);
+        console.log(aoo); // {a: "1111"}
     return 函数的返回值
       函数使用 return 关键字返回值,若没有 return 默认返回undefined.
       当执行到 return 后直接返回值,后面代码不再执行,

@@ -2890,7 +2890,7 @@ WebSocket     网络通信协议「HTML5」 「IE10+」
 Web_Storage    网页本地存储 「IE8+ HTML5」
   PS： JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
-  localStorage   本地存储
+  localStorage   本地存储 [IE8+]
     PS： 永久存储,永不失效除非手动删除
       有容量限制,每个域「包括各个网页」 5 M 左右「DiBs」;
       子域名间或子域名和主域名间localStorage不共享;
@@ -2898,10 +2898,15 @@ Web_Storage    网页本地存储 「IE8+ HTML5」
       不能被爬虫爬取,不要用它完全取代URL传参,
       各浏览器间,数据是独立的,在firefox中的localstorage数据,在chrome上无法读取.
       只能存储字符串,当存取的内容比较复杂时,使用JSON函数辅助处理
-    localStorage.XX = str;               自定义属性进行读/写
+    localStorage.XX = str;               读写自定义属性
+      只能存字符串,对象类型需JSON化存入「SlPt」
       e.g.
       localStorage.XX;   //"abc"
       localStorage;       //Storage {name: "abc", length: 1}
+      
+      localStorage.yy = {};
+      console.log(localStorage.yy,typeof localStorage.yy);
+      // [object Object] string
     localStorage.length;                 localStorage的数据项个数
     localStorage.key(num);               获取localStorage中第num+1 个key对的值
       console.log(localStorage); // Storage {aoo: "a", boo: "b", length: 2}
@@ -3605,6 +3610,7 @@ deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5�
 orientationchange  在屏幕发生翻转时触发「HTML5」 
   window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 -------------------------------------------------------------------------待整理 
+
 
 
 

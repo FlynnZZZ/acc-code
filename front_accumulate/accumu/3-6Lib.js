@@ -1019,6 +1019,7 @@ AJAX
     xhrFields: {
       withCredentials: true // 请求带上cookie
     },
+    crossDomain: true,
     data:{
       key1:val1,
       key2:val2,

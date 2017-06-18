@@ -575,79 +575,53 @@ fileNum : 21
 
       
     })(jQuery);
+    
+  myFra
+    childCpt to  parentCpt  data  
+
+    dq（）defer query
+    
+    data（） self then parent get
+
+
 
 
 ◆DeskTop 
   editor 
     snippets
+    '.text.html.vue':
+      'new Vue({$1});':
+        'prefix': 'newVue'
+        'body': 'new Vue({$1});'
+    '*':
+      'data':
+        'prefix': 'data'
+        'body': """data""" 
+      'from':
+        'prefix': 'from'
+        'body': """from""" 
+      'handler':
+        'prefix': 'handler'
+        'body': """handler""" 
+      'methods':
+        'prefix': 'methods'
+        'body': """methods""" 
+      'watch':
+        'prefix': 'watch'
+        'body': """watch""" 
+    '-forEach(foo); --arr':
+      'prefix': 'forEach'
+      'body': """forEach(function(val,indx,arr){
+        $1
+      } );"""
       
   QQInput
     自定义短语
+    fgx  3  ___________________________________________________________________________
     
 ◆NoteBook 
   editor 
     snippets
-    '-jq-$.ajax({})':
-      'prefix': 'ajaxJQ'
-      'body': """$.ajax({
-          type : 'get',
-          url  : 'url',
-          data : {
-            key : val,
-          }, 
-          dataType : 'json',
-          xhrFields: {
-            withCredentials: true
-            // 请求带上cookie
-          },
-          crossDomain: true, 
-          // 跨域
-          // contentType:'application/json',
-          beforeSend : function(){ }, 
-          // 发送请求前执行
-          success  : function(backData,textStatus,obj){
-          }, 
-          error    : function (xhr,status,errorTrown){
-          }, 
-          complete : function(jqxhr,status){
-            // 请求完成完后(无论成功与否)执行
-          }, 
-          cache : true / false 
-          // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
-        });"""
-    '-jq-trigger("event",[]);':
-      'prefix': 'trigger'
-      'body': 'trigger("click",[$1]);'
-    '-jq-$.ajax({}).done':
-      'prefix': 'ajaxJQ1'
-      'body': """$.ajax({
-          type : 'get',
-          url  : 'url',
-          data : {
-            key : val,
-          }, 
-          dataType : 'json',
-          xhrFields: {
-            withCredentials: true
-            // 请求带上cookie
-          },
-          crossDomain: true, 
-          // 跨域
-          // contentType:'application/json',
-          beforeSend : function(){ }, 
-          // 发送请求前执行
-          complete : function(jqxhr,status){
-            // 请求完成完后(无论成功与否)执行
-          }, 
-          cache : true / false 
-          // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
-        })
-        .done(function(backData,textStatus,obj){
-          console.log(backData);
-        })
-        .fail(function(xhr,status,errorTrown){
-          console.log(status);
-        });"""
       
       
     
@@ -664,7 +638,7 @@ xhrFields: {
 crossDomain: true,
 
 
-
+sudo 
 
 
 

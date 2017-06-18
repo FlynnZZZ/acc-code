@@ -1,7 +1,7 @@
 介绍_概念_说明_定义
-  Node 服务器上的 JavaScript 运行环境
+  Node 服务器上的JS运行环境 
     2009 年Node项目诞生,
-    Node.js 是一个事件驱动I/O服务端JavaScript环境,
+    NodeJS 是一个事件驱动I/O服务端JavaScript环境,
     JavaScript语言通过Node在服务器运行,在这个意义上,Node有点像JavaScript虚拟机；
     用于开发脱离浏览器的JS程序,主要用于工具或服务端,比如文件处理
     其次,Node提供大量工具库,使得JavaScript语言与操作系统互动,比如读写文件、新建子进程,
@@ -14,15 +14,15 @@
     奇数为非稳定版本
     e.g. :-0.7.X -0.9.X -0.11.X  
   程序一般由3部分组成
-    required引入模块：使用 require 指令来载入 Node.js 模块 
+    required引入模块：使用 require 指令来载入 NodeJS 模块 
     创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
     接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
-  Node.js 回调函数
-    PS：Node.js 异步编程的直接体现就是回调 
+  NodeJS 回调函数
+    PS：NodeJS 异步编程的直接体现就是回调 
       异步编程依托于回调来实现,但不能说使用了回调后程序就异步化了.
       Node 所有 API 都支持回调函数.
       在执行代码时就没有阻塞或等待文件 I/O 操作.
-      可大大提高了 Node.js 的性能,可以处理大量的并发请求.
+      可大大提高了 NodeJS 的性能,可以处理大量的并发请求.
       Node采用V8引擎处理JavaScript脚本,最大特点就是单线程运行,一次只能运行一个任务。
       这导致Node大量采用异步操作（asynchronous opertion）,
       即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
@@ -103,7 +103,7 @@
       第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
       因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
       所以若需要处理回调函数的参数,我们就需要写在回调函数内.
-    Node.js 事件循环
+    NodeJS 事件循环
       Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
       每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
       基本上所有的事件机制都是用设计模式中观察者模式实现.
@@ -118,7 +118,7 @@
         这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
         这也被称之为非阻塞式IO或者事件驱动IO.
         在事件驱动模型中,会生成一个主循环来监听事件,当检测到事件时触发回调函数.
-      Node.js 有多个内置的事件,可以通过引入events模块,并实例化EventEmitter类来绑定和监听事件
+      NodeJS 有多个内置的事件,可以通过引入events模块,并实例化EventEmitter类来绑定和监听事件
         e.g.:
           var events = require('events'); // 引入 events 模块
           var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
@@ -138,8 +138,8 @@
           // 3
 运行环境及执行命令 
   path 环境变量 
-    执行命令时,优先到path指定的路径中去寻找.
-  Node命令 [cmd执行环境中]
+    执行命令时,优先到path指定的路径中去寻找
+  Node命令 [命令行中]
     node -v       查看所安装node的版本信息
     node fileName 执行文件
       fileName  可省略后缀名
@@ -148,13 +148,13 @@
         node demo.js
     node -e str   使用-e参数,可执行代码字符串
       node -e 'console.log("Hello World")'
-  Nodejs REPL 交互式解释器 
+  NodeJS REPL Node的交互式解释器 
     PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
-      Node的交互式解释器可以很好的调试 Javascript 代码,
-      'node' 命令来启动Node的终端,'node --use_strict' REPL将在严格模式下运行
+      Node的交互式解释器可以很好的调试JS代码,
+      'node' 命令来启动Node的终端,'node --use_strict' REPL将在严格模式下运行,
+      相当于浏览器的Console控制台「SlPt」
     REPL 命令 
-      ctrl + c   退出当前终端
       ctrl + c   按下两次退出 Node REPL
       ctrl + d   退出 Node REPL
       tab        列出当前命令
@@ -164,7 +164,7 @@
       .clear     退出多行表达式
       .save filename  保存当前的 Node REPL 会话到指定文件
       .load filename  载入当前 Node REPL 会话的文件内容
-      _     下划线表示上一个命令的返回结果
+      _     下划线表示上一个命令的返回结果 
         > 1 + 1
         2
         > _ + 1
@@ -181,7 +181,7 @@
     全局对象的属性
     隐式定义的变量(未定义直接赋值的变量)
     当你定义一个全局变量时,这个变量同时也会成为全局对象的属性,反之亦然
-    需要注 意的是,在 Node.js 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的,
+    需要注 意的是,在 NodeJS 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的,
     而模块本身不是最外层上下文
     注意：永远使用 var 定义变量以避免引入全局变量
       因为全局变量会污染 命名空间,提高代码的耦合风险
@@ -331,7 +331,7 @@
   Date    时间类
   console 用于提供控制台标准输出 
     PS：由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
-      Node.js 沿用了这个标准,提供与习惯行为一致的 console 对象,
+      NodeJS 沿用了这个标准,提供与习惯行为一致的 console 对象,
       用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
       指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
     console.log([data][, ...]) 向标准输出流打印字符并以换行符结束
@@ -354,9 +354,9 @@
       只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
   Buffer 缓冲区,处理二进制数据的接口 
     PS：JS只有字符串数据类型,没有二进制数据类型, 
-      处理TCP流或文件流时,需使用二进制数据, 因此Nodejs定义了一Buffer类,
+      处理TCP流或文件流时,需使用二进制数据, 因此NodeJS定义了一Buffer类,
       用来创建一个专门存放二进制数据的缓存区;
-      在Nodejs中,Buffer类是随Node内核一起发布的核心库;
+      在NodeJS中,Buffer类是随Node内核一起发布的核心库;
     var bufer = new Buffer(val); 通过Buffer类来创建bufer对象 
       PS： bufer对象是一个类似数组的对象,成员都为0到255的整数值,即一个8位的字节 
       ◆val可为以下类型：
@@ -665,7 +665,7 @@ Stream 流
         代码执行结果如下：
         文件解压完成.
 模块系统 为了NodeJS的文件可相互调用 
-  PS：文件和模块是一一对应的,即一个Nodejs文件就是一个模块,
+  PS：文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JavaScript 代码、JSON 或者编译过的 C/C++ 扩展等等;
     按照CommonJS规范定义和使用模块
   module       模块公开的接口 
@@ -750,8 +750,8 @@ Stream 流
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
   events 事件模块 
-    PS：Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
-    Node.js 里面的许多对象都会分发事件：
+    PS：NodeJS 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
+    NodeJS 里面的许多对象都会分发事件：
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
       所有这些产生事件的对象都是 events.EventEmitter 的实例.
@@ -813,7 +813,7 @@ Stream 流
       其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
       继承 EventEmitter 不会打乱对象原有的继承关系.
   http   http服务模块,提供HTTP服务器功能 
-    PS： Node.js自带的 http 模块, 当协议为 https 时,使用 https 模块
+    PS： NodeJS自带的 http 模块, 当协议为 https 时,使用 https 模块
       1024 以下的端口是系统保留端口,需要管理员权限才能使用;
       http 模块主要用于搭建 HTTP 服务端和客户端,
       使用 HTTP 服务器或客户端功能必须调用 http 模块.
@@ -942,7 +942,7 @@ Stream 流
         </html>
   fs     file system,文件系统模块,与文件系统交互
     PS：fs模块可用于对系统文件及目录进行读写操作.
-      Node.js 提供一组类似 UNIX(POSIX)标准的文件操作API.
+      NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
       也可使用 fs.read 和 fs.write 读写文件,
       fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
       但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
@@ -1968,7 +1968,7 @@ RESTful API
         id: 3 } 
       }  
 多进程 
-  PS：Node.js 是以单线程的模式运行的,但它使用的是事件驱动来处理并发,
+  PS：NodeJS 是以单线程的模式运行的,但它使用的是事件驱动来处理并发,
     这样有助于我们在多核 cpu 的系统上创建多个子进程,从而提高性能.
     每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
     他们可能会共享父进程的 stdio 流,或者也可以是独立的被导流的流对象.

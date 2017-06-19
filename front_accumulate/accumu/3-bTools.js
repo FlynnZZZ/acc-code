@@ -20,17 +20,27 @@ npm,node_package_manager node包管理器
       --save-dev 将该模块写入当前的 package.json 文件中的 devDependencies 属性
       e.g.:
         npm install lodash -g   全局安装 
-        npm install npm -g  升级npm版本
+        npm install npm -g      升级npm版本[会更新所有npm的包?]
     uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
       PS：不要直接删除本地插件包
       npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
     list [-g]       当前目录已安装插件[简写'ls']
     update <name>   更新模块
+      e.g.：
+        npm update -g           更新npm 
+        npm update vue-cli -g   更新vue
     -v              版本
-    ◆其他命令 
+    npm show express     #显示模块详情
+    npm update        #升级当前目录下的项目的所有模块
+    npm update express    #升级当前目录下的项目的指定模块
+    npm update -g express  #升级全局安装的express模块
+    npm uninstall express  #删除指定的模块
+    npm -g install npm         最新稳定版
+    npm -g install npm@2.9.1   指定版本
+    其他命令 
       help            查看npm帮助
       search <name>   搜索模块
-    ◆已安装 
+    已安装 
       npm install lodash       在命令操作符中执行
       npm install express -g   # 全局安装
       npm install less -g    
@@ -40,6 +50,8 @@ npm,node_package_manager node包管理器
       npm install cheerio
       npm install anywhere -g  快速搭建服务器用于本地调试
       npm install weinre -g    安装weinre,用于调试手机页面
+    待整理
+      npm view vue-cli   查看全局 vue-cli 版本
   cnpm npm的淘宝镜像  
     PS：npm的插件安装是从国外服务器下载,受网络影响大,淘宝团队将其复制到自己的服务器上,
       是一个完整 npmjs.org 镜像,可用其代替官方版本[只读],目前同步频率为 10 分钟每次,
@@ -206,8 +218,62 @@ npm,node_package_manager node包管理器
         PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
           也就是配置项目所需的运行和开发环境;
         --production  可选,只下载dependencies节点的包
+webpack 
+  提供了强大的loader API来定义对不同文件格式的预处理逻辑
+  Webpack 基于loader还可以实现大量高级功能，比如自动分块打包并按需加载、对图片资源引用的自动定位、根据图片大小决定是否用base64内联、开发时的模块热替换等等
 
 
-
-
-
+  webpack 与 vue 
+    在Webpack的loader API基础上开发了vue-loader插件，从而让我们可以用这样的单文件格式 (*.vue) 来书写Vue组件：
+    
+    <style>
+    .my-component h2 {
+      color: red;
+    }
+    </style>
+    
+    <template>
+    <div class="my-component">
+    <h2>Hello from {{msg}}</h2>
+    <other-component></other-component>
+    </div>
+    </template>
+    
+    <script>
+    // 遵循 CommonJS 模块格式
+    var otherComponent = require('./other-component')
+    
+    // 导出组件定义
+    module.exports = {
+      data: function () {
+        return {
+          msg: 'vue-loader'
+        }
+      },
+      components: {
+        'other-component': otherComponent
+      }
+    }
+    </script>
+    同时，还可以在*.vue文件中使用其他预处理器，只需要安装对应的Webpack loader即可： 
+    <style lang="stylus">
+    .my-component h2
+    color red
+    </style>
+    
+    <template lang="jade">
+    div.my-component
+    h2 Hello from {{msg}}
+    </template>
+    
+    <script lang="babel">
+    // 利用 Babel 编译 ES2015
+    export default {
+      data () {
+        return {
+          msg: 'Hello from Babel!'
+        }
+      }
+    }
+    </script>
+    这样的组件格式，把一个组件的模板、样式、逻辑三要素整合在同一个文件中，即方便开发，也方便复用和维护。另外，Vue.js本身支持对组件的异步加载，配合Webpack的分块打包功能，可以极其轻松地实现组件的异步按需加载。

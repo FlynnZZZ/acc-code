@@ -146,8 +146,57 @@
         node demo
         或者
         node demo.js
-    node -e str   使用-e参数,可执行代码字符串
+    node -e str   使用-e参数,可执行代码字符串 
       node -e 'console.log("Hello World")'
+    node 升级
+      npm cache clean -f   清除 npm cache
+      npm install -g n     安装n模块 
+        node有一个模块叫n，是专门用来管理 node.js 的版本
+      n stable   升级 node.js 到最新稳定版 
+        n后面也可以跟随版本号比如：
+        n v0.10.26
+        n 0.10.26
+      n ls       查看所有node版本
+      $ n latest 安装最新的版本
+      $ n stable 安装稳定版本
+      $ n rm 0.10.1 删除某个版本
+      $ n use 0.10.21 some.js 以指定的版本来执行脚本
+
+      
+      nvm全称Node Version Manager，它与n的实现方式不同，其是通过shell脚本实现的。
+      
+      安装方式有两种：
+      
+      $ curl https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
+      或者
+      
+      $ wget -qO- https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
+      以上脚本会把nvm库clone到~/.nvm，然后会在~/.bash_profile, ~/.zshrc或~/.profile末尾添加source，安装完成之后，你可以用以下命令来安装node
+      
+      $ nvm install 0.10
+      使用指定的版本
+      
+      $ nvm use 0.10
+      查看当前已经安装的版本
+      
+      $ nvm ls
+      .nvm
+      ->  v0.10.24
+      查看正在使用的版本
+      
+      $ nvm current
+      v0.10.24
+      以指定版本执行脚本
+      
+      $ nvm run 0.10.24 myApp.js
+      卸载nvm
+      
+      $ rm -rf ~/.nvm
+      总结
+      
+      以上就是两种Node版本管理工具的安装和基本使用方法，选择适合你的那一种口味。
+
+      
   NodeJS REPL Node的交互式解释器 
     PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应

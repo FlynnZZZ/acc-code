@@ -589,40 +589,50 @@ fileNum : 21
 ◆DeskTop 
   editor 
     snippets
-    '.text.html.vue':
-      'new Vue({$1});':
-        'prefix': 'newVue'
-        'body': 'new Vue({$1});'
-    '*':
-      'data':
-        'prefix': 'data'
-        'body': """data""" 
-      'from':
-        'prefix': 'from'
-        'body': """from""" 
-      'handler':
-        'prefix': 'handler'
-        'body': """handler""" 
-      'methods':
-        'prefix': 'methods'
-        'body': """methods""" 
-      'watch':
-        'prefix': 'watch'
-        'body': """watch""" 
-    '-forEach(foo); --arr':
-      'prefix': 'forEach'
-      'body': """forEach(function(val,indx,arr){
-        $1
-      } );"""
       
   QQInput
     自定义短语
-    fgx  3  ___________________________________________________________________________
     
 ◆NoteBook 
   editor 
     snippets
-      
+    *
+    'fail':
+      'prefix': 'fail'
+      'body': """fail""" 
+    'false':
+      'prefix': 'false'
+      'body': """false""" 
+    html
+    # V◆◆◆◆◆
+    '-vue-velse':
+      'prefix': 'velse'
+      'body': """v-else:'key'""" 
+    '-vue-vfor':
+      'prefix': 'vfor'
+      'body': """v-for='ph in keyObj'""" 
+    '-vue-vhtml':
+      'prefix': 'vhtml'
+      'body': """v-html='key'""" 
+    '-vue-vif':
+      'prefix': 'vif'
+      'body': """v-if:'key'""" 
+    '-vue-vmodel':
+      'prefix': 'vhtml'
+      'body': """v-model='key'""" 
+    '-vue-von':
+      'prefix': 'von'
+      'body': """@eName='arg'""" 
+    '-vue-vonce':
+      'prefix': 'vonce'
+      'body': """v-once""" 
+    '-vue-vshow':
+      'prefix': 'vshow'
+      'body': """v-show:'key'""" 
+    '-vue-vtext':
+      'prefix': 'vtext'
+      'body': """v-text='key'""" 
+
       
     
   QQInput
@@ -639,23 +649,6 @@ crossDomain: true,
 
 
 sudo 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

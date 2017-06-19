@@ -104,20 +104,321 @@ todo
   使用<script>标签直接引用VueJS 
     Vue被注册为一个全局变量
     e.g. : <script src="./vue.min.js" charset="utf-8"></script>
+    
+    异步组件 
+      在不使用脚手架的情况下将一个个组件分别独立成一个个html文件,
+      再去引用注册它们,也是可以实现的,但一般不推荐这样做。
+      vue.js 可以将异步组件定义为一个工厂函数
+      e.g.：
+        新建一 head.html
+          <div> 这是头部  </div>
+        在 index.html 中异步引入 head.html 作为组件
+          <div id="app1">
+            <head-com></head-com>
+          </div>
+          Vue.component('head-com', function (resolve, reject) {
+            $.get("./head.html").then(function (res) {
+              resolve({
+                template: res
+              })
+            });
+          });
+          var app1 = new Vue({
+            el: '#app1'
+          });
   命令行 npm 和 webpack 构建项目 
-    npm install -g vue-cli              npm全局安装Vue 
+    ◆安装工具 
+    npm install -g webpack              全局安装webpack 
+    npm install -g vue                  全局安装vue 
+    npm install -g vue-cli              全局安装vue-cli [vue构建工具?]
       在安装Vue后就可以在命令行中使用'vue'命令了
       vue --version  // 查看Vue的版本 
+    ◆创建项目 
     vue init webpack test1「项目名称」   创建基于'webpack'模版的新项目 
-    cd test1                            进入新创建的项目文件夹 
+    cd  test1                           进入新创建的项目文件夹 
       文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
       后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
     npm install                         安装依赖 
       默认会根据 package.json 文件中配置的依赖文件进行安装 
       增加'node_modules'文件夹 
+    ◆启动项目 
     npm run dev                         启动Vue 
       启动本地服务,打开浏览器,运行项目
       默认执行 package.json 中 script 属性 dev 的配置
+      运行安装时,eslint mocha 等等依赖,建议初学不安装
+    ◆构建发布 
+    npm run build                       运行构建,生成生产环境可发布的代码
+    webpack                             打包[直接运行] 
+      webpack --color --progress 
+    使用路由功能 
+      npm install vue-router      安装路由
+      配置路由
+        在 main.js 里
+        import Vue from 'vue'
+        import VueRouter from 'vue-router'
+        import App from './App'
+    
+        Vue.use(VueRouter);
+        
+        const routes = [
+          { 
+            path: '/',             // 首页默认重定向至Index路由
+            redirect: '/index'
+          },
+          { 
+            path: '/test', 
+            component: resolve => require(['./components/test.vue'], resolve) 
+          },
+          { 
+            path: '/index', 
+            component: resolve => require(['./components/index.vue'], resolve) 
+          }
+        ];
+        
+        const router = new VueRouter({
+          routes // （缩写）相当于 routes: routes,
+        });
+        
+        // 4. 创建和挂载根实例。
+        // 记得要通过 router 配置参数注入路由，
+        // 从而让整个应用都有路由功能
+        const app = new Vue({
+          router,
+          render: h => h(App)
+        }).$mount('#app');
+        
+    安装 vue 路由模块vue-router和网络请求模块vue-resource
+      npm install vue-router vue-resource --save
+        
+    使用路由搭建单页应用
+      
+      之前已经通过命令安装了vue-router
+      
+      cnpm install vue-router --save
+      在webpack.config.js加入别名
+      
+      resolve: {
+          alias: {vue: 'vue/dist/vue.js'}
+        }
+      为什么要加 alias 配置项？其作用可以在文档中有相应的描述:查看图片修改完之后的webpack.config.js是这样子的:
+      
+      var path = require('path')
+      var webpack = require('webpack')
+      
+      module.exports = {
+        entry: './src/main.js',
+        output: {
+          path: path.resolve(__dirname, './dist'),
+          publicPath: '/dist/',
+          filename: 'build.js'
+        },
+        resolveLoader: {
+          root: path.join(__dirname, 'node_modules'),
+        },
+        module: {
+          loaders: [
+            {
+              test: /\.vue$/,
+              loader: 'vue'
+            },
+            {
+              test: /\.js$/,
+              loader: 'babel',
+              exclude: /node_modules/
+            },
+            {
+              test: /\.(png|jpg|gif|svg)$/,
+              loader: 'file',
+              query: {
+                name: '[name].[ext]?[hash]'
+              }
+            }
+          ]
+        },
+        resolve: {
+          alias: {vue: 'vue/dist/vue.js'}
+        },
+        devServer: {
+          historyApiFallback: true,
+          noInfo: true
+        },
+        devtool: '#eval-source-map'
+      }
+      
+      if (process.env.NODE_ENV === 'production') {
+        module.exports.devtool = '#source-map'
+        // http://vue-loader.vuejs.org/en/workflow/production.html
+        module.exports.plugins = (module.exports.plugins || []).concat([
+          new webpack.DefinePlugin({
+            'process.env': {
+              NODE_ENV: '"production"'
+            }
+          }),
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
+        ])
+      }
+      再按之前的方法写一个组件 secondcomponent.vue
+      
+      <template>
+        <div>
+          <h1>I am another page</h1>
+          <a> written by {{ author }} </a>
+          <p> 感谢 <a href="https://github.com/showonne">showonne</a>大神的技术指导</p>
+        </div>
+      </template>
+      
+      <script>
+      export default {
+        data() {
+          return {
+            author: "微信公众号 jinkey-love",
+            articles: [],
+          }
+        }
+        }
+      }
+      </script>
+      
+      <style>
+      </style>
+      这时候修改 main.js，引入并注册 vue-router
+      
+      import VueRouter from "vue-router";
+      Vue.use(VueRouter);
+      并且配置路由规则和 app 启动配置项加上 router，旧版的 router.map 方法在vue-router 2.0 已经不能用了。修改后的main.js如下:
+      
+      import Vue from 'vue'
+      import App from './App.vue'
+      import VueRouter from "vue-router";
+      import VueResource from 'vue-resource'
+      
+      //开启debug模式
+      Vue.config.debug = true;
+      
+      Vue.use(VueRouter);
+      Vue.use(VueResource);
+      
+      // 定义组件, 也可以像教程之前教的方法从别的文件引入
+      const First = { template: '<div><h2>我是第 1 个子页面</h2></div>' }
+      import secondcomponent from './component/secondcomponent.vue'
+      
+      // 创建一个路由器实例
+      // 并且配置路由规则
+      const router = new VueRouter({
+        mode: 'history',
+        base: __dirname,
+        routes: [
+          {
+            path: '/first',
+            component: First
+          },
+          {
+            path: '/second',
+            component: secondcomponent
+          }
+        ]
+      })
+      
+      // 现在我们可以启动应用了！
+      // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
+      const app = new Vue({
+        router: router,
+        render: h => h(App)
+      }).$mount('#app')
+      这样子改完再打开浏览器看看。查看图片点击那两个链接试试，会发现<router-view></router-view>的内容已经展示出来，同时注意浏览器地址已经变更。查看图片另外，也可以把 App.vue 的内容写在 main.js 也是可以的不过不建议这么做查看图片
+      
+      如果你使用 vue1.0和0.7版本的 vue-router，请参照下面这个教程, 他整个系列都不错的，当然仅限于 vue1.0 :
+      
+      http://guowenfh.github.io/2016/03/28/vue-webpack-06-router/
+      给页面加点动态数据
+      
+      这时候的页面都是静态的(数据在写程序的时候已经固定了不能修改)，而每个应用基本上都会请求外部数据以动态改变页面内容。对应有一个库叫 vue-resource 帮我们解决这个问题。使用命令行安装
+      
+      cnpm install vue-resource --save
+      在 main.js 引入并注册 vue-resource:
+      
+      import VueResource from 'vue-resource'
+      Vue.use(VueResource);
+      我们在 secondcomponent.vue 上来动态加载数据添加一个列表:
+      
+      <ul>
+            <li v-for="article in articles">
+              {{article.title}}
+            </li>
+          </ul>
+      在 data 里面加入数组 articles 并赋值为[]然后在 data 后面加入加入钩子函数 mounted(详细请参照官方文档关于 vue 生命周期的解析)，data 和 mount 中间记得记得加逗号
+      
+      mounted: function() {
+          this.$http.jsonp('https://api.douban.com/v2/movie/top250?count=10', {}, {
+              headers: {
+      
+              },
+              emulateJSON: true
+          }).then(function(response) {
+            // 这里是处理正确的回调
+      
+              this.articles = response.data.subjects
+              // this.articles = response.data["subjects"] 也可以
+      
+          }, function(response) {
+              // 这里是处理错误的回调
+              console.log(response)
+          });
+        }
+      这里使用的是豆瓣的公开 GET 接口，如果接口是跨域的 POST 请求，则需要在服务器端配置:
+      
+      Access-Control-Allow-Origin: *        
+        
+    项目基本目录结构 
+      bulid            构建的配置文件
+      config           
+      dist             打包构建好的代码
+        static 
+        index.html 
+      node_modules     
+      src              开发目录 
+        assets         静态资源目录 
+        components     组件目录 
+        App.vue        主入口视图文件 
+        main.js        主入口JS文件 
+      static 
+      index.html 
+      package.json 
+      ...
+      
+    webpack.config.js  webpack配置文件 
+      在 webpack.config.js 中的配置
+      module.exports = {
+        entry: {
+          'index': './vue/index/main.js',
+        },
+        output: {
+          path: './public/bulid',
+          filename: '[filename].js' // 可以多点切入
+        },
+        module: {
+          loaders: [
+            {
+              test: /\.vue$/,
+              exclude: /node_modules/,
+              loader: vue.withLoaders({
+                js: 'babel?optional[]=runtime'
+              })
+            },
+            { test: /\.scss$/, loader: 'style!css!sass' },
+            { test: /\.css$/, loader: "style!css" },
+            { test: /\.js$/, loader: 'babel-loader' }
+          ]
+        },
+        resolve: { // 解决 npm 的依赖问题
+          modulesDirectories: ['node_modules'],
+          extensions: ['', '.js', '.json']
+        },
+      }      
 View,视图   Vue实例管理的DOM节点 
   当一Vue实例被创建时,它会递归遍历根元素的所有子节点,同时完成必要的数据绑定,
   当视图被编译后,它就会自动响应数据的变化,
@@ -485,7 +786,7 @@ Directives,指令系统 用于model和view的交互
       })    
   v-for='ph in keyObj'   渲染循环列表 
     ph 为自定义的占位符placeholder,keyObj的属性,便于后续使用 
-      '(ph,indx) in keyObj' 形式,使用下标占位符'indx'
+      '(ph,key) in keyObj' 形式,使用下标占位符'key'
     e.g.：
       <div id="test">
         <ol>
@@ -545,7 +846,7 @@ Directives,指令系统 用于model和view的交互
       在控制台设置 app3.seen = false 隐藏
   v-else:"key"  控制显示 
     PS：v-if用于条件判断,和v-else是一对
-  v-show        作用与v-if类似 
+  v-show:'key'  作用与v-if类似 
     不同的是v-show的元素会始终渲染并保持在DOM中「使用的是display:none」,
     且v-show不支持<template>标签
   ◆属性控制

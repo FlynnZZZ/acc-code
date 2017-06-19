@@ -597,45 +597,11 @@ fileNum : 21
   editor 
     snippets
     *
-    'fail':
-      'prefix': 'fail'
-      'body': """fail""" 
-    'false':
-      'prefix': 'false'
-      'body': """false""" 
     html
-    # V◆◆◆◆◆
-    '-vue-velse':
-      'prefix': 'velse'
-      'body': """v-else:'key'""" 
-    '-vue-vfor':
-      'prefix': 'vfor'
-      'body': """v-for='ph in keyObj'""" 
-    '-vue-vhtml':
-      'prefix': 'vhtml'
-      'body': """v-html='key'""" 
-    '-vue-vif':
-      'prefix': 'vif'
-      'body': """v-if:'key'""" 
-    '-vue-vmodel':
-      'prefix': 'vhtml'
-      'body': """v-model='key'""" 
-    '-vue-von':
-      'prefix': 'von'
-      'body': """@eName='arg'""" 
-    '-vue-vonce':
-      'prefix': 'vonce'
-      'body': """v-once""" 
-    '-vue-vshow':
-      'prefix': 'vshow'
-      'body': """v-show:'key'""" 
-    '-vue-vtext':
-      'prefix': 'vtext'
-      'body': """v-text='key'""" 
 
       
     
-  QQInput
+  QQInput 
     自定义短语
     
 

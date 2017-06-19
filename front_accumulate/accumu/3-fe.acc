@@ -357,7 +357,7 @@ Atom
       open-in-browsers           在浏览器中快捷打开html
         安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
       pigments                   根据颜色值显示颜色
-      remember-folds             记录折叠的状态
+      language-vue-component     vue组件的语法插件 
       选用插件
         autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
           自定义快捷键 alt-m
@@ -382,6 +382,7 @@ Atom
             若无项目文件夹,则默认不加载
           记录状态 如 标签等
         autocomplete-paths         路径补全
+        remember-folds             记录折叠的状态
         Symbols-tree-View          快速定位到函数、变量的位置等等
           设置默认不显示的类别:number string undefined unknown array object
         highlight-line             当前行高亮

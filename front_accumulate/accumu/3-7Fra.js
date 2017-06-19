@@ -47,7 +47,7 @@ templates 模板
         import {Directive} from "@angular/core" // @Directive 装饰器
   功能单元以模块形式组织 「应用模块」
 data binding 数据绑定
-modules 模块
+modules 模块 
 todo 
   模块化 
     PS：一切由模块开始
@@ -141,13 +141,14 @@ todo
     npm install                         安装依赖 
       默认会根据 package.json 文件中配置的依赖文件进行安装 
       增加'node_modules'文件夹 
+    npm install vue-router vue-resource --save  安装路由模块和网络请求模块
     ◆启动项目 
     npm run dev                         启动Vue 
       启动本地服务,打开浏览器,运行项目
       默认执行 package.json 中 script 属性 dev 的配置
       运行安装时,eslint mocha 等等依赖,建议初学不安装
     ◆构建发布 
-    npm run build                       运行构建,生成生产环境可发布的代码
+    npm run build                       运行构建,生成生产环境可发布的代码 
     webpack                             打包[直接运行] 
       webpack --color --progress 
     使用路由功能 
@@ -187,7 +188,7 @@ todo
           render: h => h(App)
         }).$mount('#app');
         
-    安装 vue 路由模块vue-router和网络请求模块vue-resource
+    安装 vue 路由模块vue-router和网络请求模块vue-resource 
       npm install vue-router vue-resource --save
         
     使用路由搭建单页应用
@@ -950,7 +951,7 @@ Directives,指令系统 用于model和view的交互
       不过,字符串拼接麻烦又易错。
       因此,在 v-bind 用于 class 和 style 时,VueJS 专门增强了它。
       表达式的结果类型除了字符串之外,还可以是对象或数组。
-    绑定 HTML Class
+    绑定 HTML Class 
       对象语法
       我们可以传给 v-bind:class 一个对象,以动态地切换 class 。
         <div v-bind:class="{ active: isActive }"></div>
@@ -991,7 +992,7 @@ Directives,指令系统 用于model和view的交互
             }
           }
         }
-    数组语法
+    数组语法 
       我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表：
       <div v-bind:class="[activeClass,errorClass]">
       data: {
@@ -1005,7 +1006,7 @@ Directives,指令系统 用于model和view的交互
       此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 。
       不过,当有多个条件 class 时这样写有些繁琐。可以在数组语法中使用对象语法：
       <div v-bind:class="[{ active: isActive },errorClass]">
-    用在组件上
+    用在组件上 
       这个章节假设你已经对 Vue 组件 有一定的了解。当然你也可以跳过这里,稍后再回过头来看。
       当你在一个定制的组件上用到 class 属性的时候,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖。
       例如,若你声明了这个组件:
@@ -1020,7 +1021,7 @@ Directives,指令系统 用于model和view的交互
       <my-component v-bind:class="{ active: isActive }"></my-component>
       当 isActive 为 true 的时候,HTML 将被渲染成为:
       <p class="foo bar active"></p>
-    绑定内联样式
+    绑定内联样式 
       对象语法
         v-bind:style 的对象语法十分直观——看着非常像 CSS ,其实它是一个 JavaScript 对象。 CSS 属性名可以用驼峰式（camelCase）或短横分隔命名（kebab-case）：
         <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
@@ -1042,7 +1043,7 @@ Directives,指令系统 用于model和view的交互
         <div v-bind:style="[baseStyles,overridingStyles]">
       自动添加前缀
         当 v-bind:style 使用需要特定前缀的 CSS 属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀。
-    条件渲染
+    条件渲染 
         
         v-if
         
@@ -1134,7 +1135,7 @@ Directives,指令系统 用于model和view的交互
         v-if 也是惰性的：若在初始渲染时条件为假,则什么也不做——在条件第一次变为真时才开始局部编译（编译会被缓存起来）。
         相比之下,v-show 简单得多——元素始终被编译并保留,只是简单地基于 CSS 切换。
         一般来说,v-if 有更高的切换消耗而 v-show 有更高的初始渲染消耗。因此,若需要频繁切换使用 v-show 较好,若在运行时条件不大可能改变则使用 v-if 较好。        
-    列表渲染
+    列表渲染 
         v-for
         
         我们用 v-for 指令根据一组数组的选项列表进行渲染。 v-for 指令需要以 item in items 形式的特殊语法,items 是源数据数组并且 item 是数组元素迭代的别名。
@@ -1355,7 +1356,7 @@ Directives,指令系统 用于model和view的交互
             })
           }
         }
-    事件处理器
+    事件处理器 
         
         监听事件
         
@@ -1496,7 +1497,7 @@ Directives,指令系统 用于model和view的交互
         扫一眼 HTML 模板便能轻松定位在 JavaScript 代码里对应的方法。
         因为你无须在 JavaScript 里手动绑定事件,你的 ViewModel 代码可以是非常纯粹的逻辑,和 DOM 完全解耦,更易于测试。
         当一个 ViewModel 被销毁时,所有的事件处理器都会自动被删除。你无须担心如何自己清理它们。        
-    表单控件绑定
+    表单控件绑定 
         
         基础用法
         

@@ -189,9 +189,6 @@ todo
       运行安装时,eslint mocha 等等依赖,建议初学不安装
     ◆构建发布 
     npm run build                       运行构建,生成生产环境可发布的代码 
-<<<<<<< HEAD
-
-=======
     
     项目目录文件说明 
       ├── README.md
@@ -605,7 +602,7 @@ todo
              name: 'manifest',
              chunks: ['vendor']
            })
-       CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery，vue）的块并将它们分成独立的包。而为什么要new两次这个插件，这是一个很经典的bug的解决方案，在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来，官方文档上推荐使用这个插件，当我们在项目里实际使用之后，发现一旦更改了 app.js 内的代码，vendor.js 的 hash 也会改变，那么下次上线时，用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了。所以第二次new就是解决这个问题的，请你好好看vue-cli那个英文原注释
+       CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包。而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了。所以第二次new就是解决这个问题的,请你好好看vue-cli那个英文原注释
        
        // extract webpack runtime and module manifest to its own file in order to
        // prevent vendor hash from being updated whenever app bundle is updated        
@@ -717,7 +714,6 @@ todo
         main.js    #启动配置,webpack入口文件
     
     
->>>>>>> origin/master
     使用路由功能 
       npm install vue-router      安装路由
       配置路由
@@ -2906,6 +2902,39 @@ Component 组件
         </div>\
       '
     })    
+  使用<template>标签
+    如果组件中的内容过多,一堆的引号和加号来拼接这些字符串简直就是噩梦。
+    所以Vue 引入了template标签（html5定义的,浏览器默认不去解析里面的内容）。
+    <template> 不能用在 <table> 内下面来看看它的使用方法：
+    ◆HTML中
+    ...
+    <script src="js/vue.js"></script>
+    <body>
+      // <!-- 使用 template 并且添加选择器(只能使用id)-->
+      <template id="myTemp">
+        <h2>This is Template </h2>
+        <p>add ...</p>
+      </template>
+      <div id="app">
+        <my-component></my-component>
+        <my-component></my-component>
+      </div>
+      <script>
+        Vue.component("my-component", {
+          template:"#myTemp" //对应上面定义的template标签中的选择器
+        })
+        new Vue({
+          el:"#app"
+        });
+      </script>
+    </body>
+    ◆渲染为
+    <div id="app">
+      <h2>This is Template </h2>
+      <p>add ...</p>
+      <h2>This is Template </h2>
+      <p>add ...</p>
+    </div>    
   单文件的组件模式 
     PS：使用一个 .vue 格式文件将 HTML+CSS+JS 组装起来;一个 .vue 文件就是一个组件;
       组件的通信方式同上[使用 props 和 event] ;
@@ -2932,6 +2961,211 @@ vue-resource  与后台数据交互
 axios         功能和 Vue-resource 类似
 Vuex          大规模状态管理
 vue-router    路由
+  PS：vue-router@2.x 只适用于 Vue2.x 版本
+  script引入
+    <script src="/path/to/vue.js"></script>
+    <script src="/path/to/vue-router.js"></script>
+    在 Vue 后面加载 vue-router，它会自动安装的：
+  npm使用
+    ◆安装
+    npm install vue-router --save
+    ◆进行引入
+    import Vue from "vue";
+    import VueRouter from "vue-router";
+    Vue.use(VueRouter);
+    // 如果在一个模块化工程中使用它，必须要通过 Vue.use() 明确地安装路由功能：
+    // 如果使用全局的 script 标签，则无须如此    
+    
+    e.g.：
+      ◆html
+      <div id="app">
+        <h1>Hello App!</h1>
+        <p>
+          // <!-- 使用指令 v-link 进行导航。 -->
+          <a v-link="{ path: '/foo' }">Go to Foo</a>
+          <a v-link="{ path: '/bar' }">Go to Bar</a>
+        </p>
+        // <!-- 路由外链 -->
+        <router-view></router-view>
+      </div>
+      ◆JS:
+      // 定义组件
+      var Foo = Vue.extend({
+        template: '<p>This is foo!</p>'
+      })
+      var Bar = Vue.extend({
+        template: '<p>This is bar!</p>'
+      })
+      // 路由器需要一个根组件。
+      // 出于演示的目的，这里使用一个空的组件，直接使用 HTML 作为应用的模板
+      var App = Vue.extend({})
+      // 创建一个路由器实例
+      // 创建实例时可以传入配置参数进行定制，为保持简单，这里使用默认配置
+      var router = new VueRouter()
+      // 定义路由规则
+      // 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend
+      // 创建的组件构造函数，也可以是一个组件选项对象。
+      // 稍后我们会讲解嵌套路由
+      router.map({
+        '/foo': {
+          component: Foo
+        },
+        '/bar': {
+          component: Bar
+        }
+      })
+      // 现在我们可以启动应用了！
+      // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
+      router.start(App, '#app')
+      
+    结合定义的 .vue 单文件组件
+
+    定义路由规则 最主要是 main.js 的变化
+      // 引入vue以及vue-router
+      import Vue from "vue";
+      import VueRouter from "vue-router";
+      Vue.use(VueRouter);
+      // 引入组件！直接使用es6的语法
+      import index from './components/app.vue';
+      import list from './components/list.vue';
+      import hello from './components/hello.vue';
+      //开启debug模式
+      Vue.config.debug = true;
+      // new Vue(app);//这是上一篇用到的，新建一个vue实例，现在使用vue-router就不需要了。
+      // 路由器需要一个根组件。
+      var App = Vue.extend({});
+      // 创建一个路由器实例
+      var router = new VueRouter();
+      // 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend创建的组件构造函数，也可以是一个组件选项对象。
+      // 稍后我们会讲解嵌套路由
+      router.map({//定义路由映射
+        '/index':{//访问地址
+          name:'index',//定义路由的名字。方便使用。
+          component:index,//引用的组件名称，对应上面使用`import`导入的组件
+          //component:require("components/app.vue")//还可以直接使用这样的方式也是没问题的。不过会没有import集中引入那么直观
+        },
+        '/list': {
+          name:'list',
+          component: list
+        },
+      });
+      router.redirect({//定义全局的重定向规则。全局的重定向会在匹配当前路径之前执行。
+        '*':"/index"//重定向任意未匹配路径到/index
+      });
+      // 现在我们可以启动应用了！
+      // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
+      router.start(App, '#app');
+
+    在 index.html 需要有用于渲染匹配的组件，如下
+      <div id="app">
+      <router-view></router-view>
+      </div>
+
+    现在当我们运行 npm start 进入'http://localhost:8080/'
+    就会自动跳转到'http://localhost:8080/#!/index'，并且读取里面的内容
+
+    实现路由跳转
+
+    主要抽出app.vue中的内容来讲解，的内容是：(list.vue里面的内容自行设置查看吧)
+    <template>
+      <div>
+        <h1>姓名：{{name}}</h1>
+        <h2>{{age}}</h2>
+        <button @click="golist">$route.router.go查看</button>
+        <a v-link="{ name: 'list' }">v-link查看列表</a>
+        <a v-link="{ name: 'index' }">回去主页</a>
+      </div>
+    </template>
+    <script>
+      export default {//这里是官方的写法，默认导出，ES6
+        data () { //ES6，等同于data:function(){}
+        return {    //必须使用这样的形式，才能创建出单一的作用域
+          name:"guowenfh",
+          age:"21"
+        }
+      },
+      methods :{
+        golist () {//方法，定义路由跳转，注意这里必须使用this，不然报错
+          this.$route.router.go({name:"list"});
+        }
+      }
+    }
+    </script>
+    <style></style>
+    <!-- 样式自行设置，或者直接看源码就好 -->
+    因为自刷新的缘故，直接切换到浏览器。
+
+    点击上面使用的v-link，与router.go的方式都可以跳转到list定义的路由。（观察浏览器地址栏的变化）在这里我们使用的{name:"list"}，使用{ path: '/list' }会有同样的效果。
+
+    引用Vue组件
+
+    在第一小点里面我们看到了在页面内的组件的使用方法，第二小点中学习到了vue-router的制定路由规则。
+
+    看过这两个地方之后，我们把思维发散开来，应该就能触类旁通的想到如何在页面中嵌套加载别的组件了。
+    我们创建一个hello.vue ，里面内容随意。现在我们如果要在app.vue中加载它，那么只需要在app.vue中使用import hello from "./hello.vue"（其实这个达到了使用require两步的效果。引入赋值）。
+
+    引入之后，只需要如下注册：
+
+    export default {
+        //其它的就
+        components:{
+            hello//若还有更多的组件，只需要在import的情况下，以逗号分割，继续注册就好
+        }
+    }
+    最后在app.vue中添加<hello></hello>这一对自定义标签，就可以实现加载hello.vue中的内容。
+
+    组件的嵌套也就是这样，很简单的描述完了，但是怎么样去抽离组件，在工作中积累可以复用的组件才是我们真正需要去思考的。
+
+    那么先到这，关于组件之间通信的问题，留到以后慢慢了解。
+
+    路由嵌套
+
+    还是刚刚的代码与目录结构，我们已经实现了组件之间的嵌套，但是有时并不希望组件直接就加载进来，而是在用户点击后才展现在页面中，这是就需要使用到路由嵌套。
+
+    为了偷懒，这里就直接使用hello.vue。实现嵌套路由主要有以下几步：
+
+    第一步：制定嵌套路由规则：
+
+    看main.js下面这部分的代码：
+      router.map({
+        '/index':{
+          name:'index',
+          component:index,
+          // 在/index下设置一个子路由
+          subRoutes:{
+            // 当匹配到/index/hello时，会在index的<router-view>内渲染
+            '/hello':{
+              name:'hello',//可有可无，主要是为了方便使用
+              // 一个hello组件
+              component:hello
+            }
+          }
+        },
+      });
+    第二步：在组件中添加<router-view>
+
+    来自官网的解释：<router-view> 用于渲染匹配的组件，它基于Vue的动态组件系统，所以它继承了一个正常动态组件的很多特性。
+
+    将<router-view>写在app.vue的<template></template>标签中。
+
+    第三步：写入跳转路径
+
+    还是在app.vue中：
+
+    <a v-link="{ name: 'index' }">回去主页</a>
+    <!-- 点击这两个标签就会实现页面内的切换效果 -->
+    <a v-link="{ name: 'hello' }">嵌套的路由</a>
+    ，切换到浏览器，点击该嵌套的路由即可让hello.vue中的展现出来，在这里直接使用了v-link来实现跳转（知道为什么要写name了吧。。如果使用path会是这样的{ path: '/index/hello' }- -。 ） ，当然router.go同理。（注意在点击两个不同的文字时，地址栏的变化，以及展现内容的切换）
+
+    注意：
+
+    在我的源码中是在<style scoped></style>标签中定义样式的，请注意scoped的使用，它表示在该style中定义的样式只会在当前的组件中起到效果，而不会去影响全局的css样式。
+
+    最简单的理解应该就是：
+
+    未写该scoped属性的所有组件中的样式，在经过vue-loader编译之后拥有全局作用域。相当于共用一份css样式表。
+
+    而写了该属性的的组件中定义的样式，拥有独立作用域。相当于除去引入了公用的一份css样式表外，但单独拥有一份css的样式表。
 vue-validator 表单验证 
 vue-touch     移动端 
 --------------------------------------------------------------------------------

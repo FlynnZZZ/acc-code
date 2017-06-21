@@ -400,6 +400,7 @@ Atom
           \n$1
       清除空行      \r\n\r\n   替换为 \r\n
       在字符后换行  a          替换为 a\n\t
+    可在命令行中使用Atom打开当前文件: atom ./ 
   ◆Suggestion&Question 
     优点总结
       折叠功能优秀

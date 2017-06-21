@@ -9,7 +9,7 @@ npm,node_package_manager node包管理器
       和npm相关的指令或命令前都需添加'npm '
     ◆常用命令 
     npm init        初始化,新建 package.json 文件
-    install <name> [-g] [--save-dev] [--save]  使用npm安装插件 
+    install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为 i 
       <name>     node插件名称, 如：npm install gulp-less --save-dev
       -g         全局安装 
         将会安装在C:\Users\Administrator\AppData\Roaming\npm,并写入系统环境变量
@@ -43,6 +43,8 @@ npm,node_package_manager node包管理器
     npm -g install npm@2.9.1   指定版本
     ◆配置参数 
     -v              版本
+    –save           添加到dependencies,简写化 -S
+    –save-dev       添加到devDependencies,简写为 -D 
     其他命令 
       help            查看npm帮助
       search <name>   搜索模块
@@ -251,39 +253,67 @@ npm,node_package_manager node包管理器
         --production  可选,只下载dependencies节点的包
 webpack   模块加载器兼打包工具 
   介绍 
-    基于JS,有四大核心 Entry、Output、Loaders 和 Plugins;
+    基于JS,包括四大核心 Entry、Output、Loaders 和 Plugins;
     把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
     支持3种引入方式: AMD commonjs ES6模块化
-<<<<<<< HEAD
     原理:
     把所有的非js资源都转换成js,
     如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
     把图片转换成一个图片地址的 js 变量或 base64 编码等,
     然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
-=======
     从 2.0 版本开始,webpack原生支持用ES6 module规范[import/export]去进行模块打包
+    'chunk'  表示为 '块'
   工作方式 
     把项目当做一个整体,通过一给定的主文件[如 index.js],
     Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
     最后打包为一个浏览器可识别的JS文件;
->>>>>>> origin/master
   命令行命令 
-    npm install webpack --save-dev  安装webpack并写入依赖配置文件  
-    webpack aoo.js boo.js [--xx]    将 aoo.js 文件打包成 boo.js 文件
+    npm install -g webpack [--save-dev]  安装webpack并写入依赖配置文件  
+    npm install -g webpack-dev-server    静态资源服务器 
+      安装后就可使用 webpack-dev-server 命令了,将 webpack 项目在本地起服务 
+      基于Node.js Express框架的轻量开发服务器
+      开发中会监听文件的变化在内存中实时打包
+      可以使用webpack-dev-server直接启动,
+      也可以增加参数来获取更多的功能,具体配置可以参见官方文档。
+      默认启动端口8080,通过localhost:8080/webpack-dev-server/可以访问页面,
+      文件修改后保存时会在页面头部看到sever的状态变化,并且会进行热替换,实现页面的自动刷新。
+      
+      安装完毕后 在config中添加配置
+      module.exports = {
+        ....
+        devServer: {
+          historyApiFallback: true,
+          hot: true,
+          inline: true,
+          progress: true,
+        },
+        ...
+      }
+      然后再 package.json 里配置运行的命令[npm支持自定义一些命令]
+      ...
+      "scripts": {
+        "start": "webpack-dev-server --hot --inline"
+      },
+      ...      
+    webpack aoo.js boo.js [--xx]    将 aoo.js 文件打包成 boo.js 文件 
       --xx   可选,表示配置参数,可同时使用多个
         --watch           当文件更改时,自动打包
         --progress        打包时显示进度
         --display-modules 打包完后显示依赖的模块 
         --display-reasons 显示打包的原因 
+    webpack                    启动webpack
+    webpack -h                 查看版本信息及可用的指令 
+    webpack -w                 提供watch方法,实时进行打包更新
+    webpack -p                 对打包后的文件进行压缩
+    webpack -d                 提供SourceMaps,方便调试
+    webpack --colors           输出结果带彩色,比如：会用红色显示耗时较长的步骤
+    webpack --profile          输出性能数据,可以看到每一步的耗时
     ◆其他命令参数
-<<<<<<< HEAD
-  webpack.config.js   默认的配置文件 
-    PS：需手动创建该文件; 通过配置文件 webpack.config.js 来进行相应的配置;
-=======
     webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies。
   webpack.config.js 默认的配置文件 
     PS：需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
->>>>>>> origin/master
+      该文件是一个 node.js 模块,返回一个 json 格式的配置信息对象,
+      或者通过 --config 选项来指定配置文件;
     相关命令 
       webpack              [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
       webpack --config xx.js  自定义配置文件[可不再是默认的 webpack.config.js]
@@ -301,10 +331,11 @@ webpack   模块加载器兼打包工具
           root : [path.join(__dirname,'src')],
           extensions : ['','.ts','.js']
         },
-        module : {
-          loaders : [
+        module : {    // 定义对模块的处理逻辑
+          loaders : [  
             {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
-          ]
+          ],
+          
         }
       } 
       多文件单输出 
@@ -499,91 +530,38 @@ webpack   模块加载器兼打包工具
             new htmlWebpackPlugin(arg);
           ]
         }
-<<<<<<< HEAD
-  ◆loader,解释器   用于编译解释相应的文件
+  loader,解释器  用于编译解释相应的文件
     PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
       连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
-    ★相关命令
-    npm install 「loaderName」 [--save-dev]   安装loader 
-      npm install css-loader style-loader     可同时安装多个loader 
-    使用方式 
-      require时中指定使用的loader  require("loaderName!./xx/fileName.xx");  
-        使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
-        可同时使用多个,如 require("style-loader!css-loader!./style.css");
-      在 webpack.config.js 配置文件中进行配置  
-        {
-=======
-  Loaders,解释器 用于编译解释相应的文件 
-    PS：Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
+      Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
       多个loader之间使用”!”连接,类似于Linux的pipe命令,加载器的加载顺序为从右向左处理;
       对于所需要的加载器,需要写在 package.json 文件中,
       并通过npm install下载安装到./node_modules文件夹中才会生效,
       否则在编译过程中因找不到加载器报错
+    loader 的特性
+      可通过管道方式链式调用
+        每个loader可以把资源转换成任意格式并传递给下一个loader,
+        但是最后一个loader必须返回JavaScript。
+      Loader可以同步或异步执行
+      Loader运行在nodejs环境中,所以可以做任何可能的事情
+      Loader可以接受参数,以此来传递配置项给loader
+      Loader可以通过文件扩展名[或正则表达式]绑定给不同类型的文件
+      Loader可以通过npm发布和安装 
+      除了通过 package.json 的main指定,通常的模块也可以导出一个loader来使用
+      Loader可以访问配置
+      插件可以让loader拥有更多特性
+      Loader可以分发出附加的任意文件
+    ★相关命令
     npm install 「loaderName」 [--save-dev]   安装loader 
       npm install css-loader style-loader     可同时安装多个loader 
-    ◆loader 枚举
-    ★在JS中引入CSS 
-      如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
-      css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
-      style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
-    css-loader       使webpack可以处理'.css'格式文件
-    style-loader     用于将引入的样式文件插入到HTML中
-      e.g.：
-        a.js 文件中: 
-          require("style-loader!css-loader!./style.css");
-        命令行编译,将 a.js 打包成 a.bundle.js :
-          webpack a.js  a.bundle.js
-        index.html 文件中
-          引入 a.bundle.js 文件
-          则 style.css 文件的内容被插入到了该HTML中
-    URL资源处理
-      默认情况,vue-loader 是自动用 css-loader 和 Vue 组件编译器来处理样式和模板文件的。在处理过程中,所有的资源 URL 比如<img src="...">, background: url(...) 和 CSS @import 都是被当做依赖的模块来处理。
-      
-      例如,url(./image.png) 被转译成 require('./image.png')。
-      
-      <img src="../image.png">
-      如上会被再转译成：
-      
-      createElement('img', { attrs: { src: require('../image.png') }})
-      因为 .png 并不是个 JavaScript 文件,你需要配置 Webpack 使用 file-loader 或者 url-loader 处理它们。项目脚手架工具 vue-cli 也能帮你配置这些。
-      
-      这样做的好处是：
-      
-      file-loader 允许你指定在哪里复制和存放静态资源文件 ,以及用版本哈希值命名从而更好利用缓存。 这意味着,可以把图片放到 *.vue 文件旁边,可使用相对路径,而不需要担心发布时候的 URL。使用适当的配置,Webpack 在打包输出的时候,会自动把文件路径转为正确的 URL。
-      
-      url-loader 允许你内联 base-64 数据格式的URL资源,如果小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。如果文件大于这个阈值。会自动it automatically falls back to file-loader.          
-    ◆使用方式
-    require("loaderName!./xx/fileName.xx");  在require中指定使用的loader 
-      使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
-      可同时使用多个,如 require("style-loader!css-loader!./style.css");
-    webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 在命令行中编译时指定
-      可同时指定多个loader 
-      e.g.：
-        webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
-      // 指定了style和css 两个loader
-    在配置文件中进行配置 
-      {
-        module : {
-          loaders : [
-            {test: /\.jade$/ , loader : 'jade' },
-            // 通过正则的test方将文件的后缀名法进行匹配
-            // 匹配成功则使用 指定的loader
-            {test: /\.css$/ , loader : 'style!css'},
-            // 或者 {test: /\.css$/ , loader : ["style", "css"]},
-          ] 
-        }
-      }
-      e.g.：
-        var htmlWebpackPlugin = require('html-webpack-plugin');
-        var path = require("path");
-        moudle.exports = {
-          context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
-          entry : './src/app.js',
-          output : {
-            path : '.dist',
-            filename : 'js/[name].budle.js'
-          },
->>>>>>> origin/master
+    使用方式 
+      require时指定使用的loader  
+        e.g.：require("loaderName!./xx/fileName.xx");  
+        使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
+        可同时使用多个,如 require("style-loader!css-loader!./style.css");
+      webpack.config.js 文件中进行配置  
+        根据模块类型[扩展名]来自动绑定需要的 loader
+        {
           module : {
             loaders : [
               {test: /\.jade$/ , loader : 'jade' },
@@ -594,104 +572,18 @@ webpack   模块加载器兼打包工具
             ] 
           }
         }
-        e.g.：
-          var htmlWebpackPlugin = require('html-webpack-plugin');
-          var path = require("path");
-          moudle.exports = {
-            context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
-            entry : './src/app.js',
-            output : {
-              path : '.dist',
-              filename : 'js/[name].budle.js'
-            },
-            module : {
-              loaders : [
-                { test : /\.js$/,
-                  loader : 'babel', // 通过 babel 对 JS文件进行编译
-                  exclude : path.resolve(__dirname,'node_modules'), // 指定不用处理的部分
-                  // 通过path「Node的API」将相对路径 node_modules 解析为绝对路径
-                  include : './src/', // 指定处理的范围
-                  query : {
-                    presets : ['latest'] 
-                    // 指定将 js 编译的版本,其他的如 ["es2015"] 等
-                  }
-                  // 可在 npm 的 package.json 中 指定
-                  // "babel" : { "presets" : ["latest"] }
-                  // 从而取消在此处指定 query 项
-                },
-                { html : /\.html$/,
-                  loader : 'html-loader'
-                },
-                { test : /\.css$/,
-                  loader : 'style-loader!css-loader?importLoader=1!postcss-loader', 
-                  // importLoader=1 表示该Loader后的1个loader来处理css中import的css
-                  // 或 loader : ["style-loader","css-loader"."postcss-loader"]
-                  // 注: 解析的顺序为 从后向前,即postcss-loader先起作用
-                  // css-loader 用于在JS中处理 css文件
-                  // style-loader 用于将处理后的css插入到HTML中
-                  // 使用 postcss-loader 的 autoprefixer 功能 将css属性添加前缀
-                  // 需安装 postcss-loader 和 autoprefixer 
-                },
-                { test : /\.less$/,
-                  loader : 'style!css!postcss!less', // 可以省略 -loader
-                  // less-loader 会自动将 @import 引入的css属性增加浏览器前缀
-                  // 故可省略 ?importLoader
-                },
-                { test : /\.sass$/,
-                  loader : 'style!css!postcss!sass',
-                },
-                // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的「相对」路径
-                //   // HTML、CSS中图片的相对路径会被替换
-                //   // 组件模版中HTML内需如此使用 <img src="${require(../a.png)}"/>
-                //   loader : 'file',
-                //   query : {
-                //     name :'assets/[name]-[hash:5].[ext]' , // 用于定义图片的路径
-                //     // [name]、[hash]、[ext]都为占位符表示名字、哈希和后缀名
-                //     // 其中 [hash:5] 表示取hash字符串中的5位
-                //   }
-                // },
-                // { test : /\.(png|jpg|gif|svg)$/i, 
-                //   loader : 'url', // 可以处理图片或文件
-                //   query : {
-                //     limit : 20000, // 20k,当图片小于该该值时,将被转换为base64
-                //     // 否则交由 file-loader 来处理
-                //     name :'assets/[name]-[hash:5].[ext]' , 
-                //   }
-                // },
-                { test : /\.(png|jpg|gif|svg)$/i, 
-                  loaders : [  // 指定多个loader
-                    'url-loader?limit=1000&name=assets/[name]-[hash:5].[ext]',
-                    'image-webpack' // 用于压缩图片,按照逆序会先执行压缩
-                  ], 
-                  }
-                },
-              ]
-            },
-            postcss : [
-              require('autoprefixer')({
-                browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
-              })
-            ],
-            或 
-            // postcss : function(){
-            //   return [
-            //     require('autoprefixer')({
-            //       browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
-            //     })
-            //   ]
-            // } ,
-            plugins : [
-              new htmlWebpackPlugin({
-                filename : 'index.html',
-                template : 'index.html',
-                inject : 'body'
-              })
-            ]
-          }
-      编译时指定[在命令行中]        webpack f1 f2 --moudle-bind 'loader'     
-        可同时指定多个loader 
-          webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
-          // 指定了style和css 两个loader
+        
+        {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
+        // 或
+        {
+          test : /\.png$/,
+          loader : 'url-loader',
+          query : {mimetype : "image/png"}
+        }
+      命令行中编译时指定 
+        webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 
+        webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
+        // 指定了style和css 两个loader
     Query_Parameters,loader的配置参数
       在 require 时配置 
         require("url-loader?mimetype=img/png!./file.png");
@@ -703,34 +595,7 @@ webpack   模块加载器兼打包工具
           loader : 'url-loader',
           query : {mimetype : "image/png"}
         }
-<<<<<<< HEAD
       在命令行中进行配置   
-  css-loader       使webpack可以处理'.css'格式文件
-  style-loader     用于将引入的样式文件插入到HTML中 
-    e.g.：
-      a.js 文件中: 
-        require("style-loader!css-loader!./style.css");
-      命令行编译,将 a.js 打包成 a.bundle.js :
-        webpack a.js  a.bundle.js
-      index.html 文件中
-        引入 a.bundle.js 文件
-        则 style.css 文件的内容被插入到了该HTML中
-  vue-loader       可把 .vue 文件转换成webpack包,和整个打包过程融合起来
-  ◆plugins插件  可对整个webpack的流程进行一定的控制 
-  html-webpack-plugin  在HTML文件中自动引入打包后的文件
-=======
-    ◆Query_Parameters,loader的配置参数
-    在require时配置
-      require("url-loader?mimetype=img/png!./file.png");
-    在配置文件中进行配置
-      {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
-      // 或
-      {
-        test : /\.png$/,
-        loader : 'url-loader',
-        query : {mimetype : "image/png"}
-      }
-    在cli命令行中进行配置 
     e.g.：
       module.loaders 是webpack最重要的一项配置,
       告知webpack每一种文件都需要使用什么加载器来处理
@@ -760,141 +625,456 @@ webpack   模块加载器兼打包工具
           }
         ]
       }
-  ◆Plugins,插件 
-  webpack.optimize.UglifyJsPlugin        丑化生成的js代码 
-    module.exports = {
-      plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-          compress: {
-            warnings: false
+      
+      在JS中引入CSS 
+      如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
+      css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
+      style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
+    loader枚举 
+      css-loader       使webpack可以处理'.css'格式文件
+      style-loader     用于将引入的样式文件插入到HTML中
+        e.g.：
+          a.js 文件中: 
+            require("style-loader!css-loader!./style.css");
+          命令行编译,将 a.js 打包成 a.bundle.js :
+            webpack a.js  a.bundle.js
+          index.html 文件中
+            引入 a.bundle.js 文件
+            则 style.css 文件的内容被插入到了该HTML中
+      URL资源处理        
+        默认情况,vue-loader 是自动用 css-loader 和 Vue 组件编译器来处理样式和模板文件的。在处理过程中,所有的资源 URL 比如<img src="...">, background: url(...) 和 CSS @import 都是被当做依赖的模块来处理。
+        
+        例如,url(./image.png) 被转译成 require('./image.png')。
+        
+        <img src="../image.png">
+        如上会被再转译成：
+        
+        createElement('img', { attrs: { src: require('../image.png') }})
+        因为 .png 并不是个 JavaScript 文件,你需要配置 Webpack 使用 file-loader 或者 url-loader 处理它们。项目脚手架工具 vue-cli 也能帮你配置这些。
+        
+        这样做的好处是：
+        
+        file-loader 允许你指定在哪里复制和存放静态资源文件 ,以及用版本哈希值命名从而更好利用缓存。 这意味着,可以把图片放到 *.vue 文件旁边,可使用相对路径,而不需要担心发布时候的 URL。使用适当的配置,Webpack 在打包输出的时候,会自动把文件路径转为正确的 URL。
+        
+        url-loader 允许你内联 base-64 数据格式的URL资源,如果小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。如果文件大于这个阈值。会自动it automatically falls back to file-loader.          
+      css-loader       在JS中处理引入的CSS  
+      style-loader     用于将引入的样式文件插入到HTML中 
+        e.g.：
+          a.js 文件中: 
+            require("style-loader!css-loader!./style.css");
+          命令行编译,将 a.js 打包成 a.bundle.js :
+            webpack a.js  a.bundle.js
+          index.html 文件中
+            引入 a.bundle.js 文件
+            则 style.css 文件的内容被插入到了该HTML中
+      vue-loader       可把 .vue 文件转换成webpack包,和整个打包过程融合起来 
+      url-loader       在JS中处理引入的图片文件 
+        ◆css中 
+        h1 {
+          color: $red;
+          background: url('./imgs/avatar.jpg');
+        }
+        ◆main.js 
+        var img1 = document.createElement("img");
+        img1.src = require("./small.png");
+        document.body.appendChild(img1);
+        var img2 = document.createElement("img");
+        img2.src = require("./big.png");
+        document.body.appendChild(img2);
+        ◆index.html 
+        <script type="text/javascript" src="bundle.js"></script>
+        ◆webpack.config.js 
+        module.exports = {
+          entry: './main.js',
+          output: {
+            filename: 'bundle.js'
+          },
+          module: {
+            loaders:[
+              { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
+              // 当图片体积小于8192bytes时,转换为 base64
+            ]
           }
-        })
-      ]
-    }
-  webpack.optimize.CommonsChunkPlugin    提取入口的公共模块到单独的文件 
-    module.exports = {
-      plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-          name: 'vendor',
-          filename: 'vendor.js',
-          minChunks: 3
-        })
-      ]
-    }
-  html-webpack-plugin       在HTML文件中自动引入打包后的文件 
->>>>>>> origin/master
-    相关命令  
-      npm install html-webpack-plugin --save-dev // 安装插件
-    使用
-      在 webpack.config.js 中
-      // 引用
-      var htmlWebpackPlugin = require("html-webpack-plugin");
-      在 module.exports 中的 'plugins' 中实例化配置
+        };
+        
+        {
+          test: /\.(png|jpg)$/,
+          loader: 'url-loader?limit=10000&name=build/[name].[ext]'
+        }
+        如果图片资源小于10kb就会转化成 base64 格式的 dataUrl,
+        其他的图片会存放在build/文件夹下 
+  Plugins,插件   扩展webpack的功能 
+    webpack.optimize.UglifyJsPlugin        压缩处理 
       module.exports = {
-        // context : '', // 指定当前的路径 
-        entry : {
-          main : './src/main.js',
-          a : './src/a.js',
-          b : './src/b.js',
-        },  
-        output: {   
-          path : './dist/js',       
-          filename : './bundle.js',
-          publicPath : 'http://cdn.com/' // 代替 path 添加在 filename 值的前面
-        },
-        resolve : {
-          root : [path.join(__dirname,'src')],
-          extensions : ['','.ts','.js']
-        },
-        module : {
-          loaders : [
-            {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
-          ]
-        },
-        plugins : [
-          new htmlWebpackPlugin({ // 实例化
-            template : './aoo.html' , // 指定html文件做为将生成的HTML文件的模版,
-            // 按照output的path路径中生成html文件,并引入打包后的文件
-            filename : 'aoo-[hash].html', // 指定生成的HTML的名称
-            inject : 'head' ,  // 指定打包后的文件插入的位置,如 head中
-            // false 则表示不放入到指定模版生成的文件中
-            aoo : 'boo',   // 自定义的属性,可在指定的模版文件中引用
-            // 模版文件中 方式为 <%= htmlWebpackPlugin.options.aoo %>
-            minify : {  // 对按照模版生成的文件进行压缩
-              removeComments : true , // 删除注释
-              collapseWhitespace : true , // 删除空格 
-            } , 
-            chunks : ['main','a'] // 指定加载的打包后的文件,默认为所有
-          }),
-          new htmlWebpackPlugin({    
-            template : './boo.html' ,
-            filename : 'boo-[hash].html', 
-            inject : 'body' ,  
-            minify : {  
-              removeComments : true , 
-              collapseWhitespace : true , 
-            } , 
-            excludechunks : ['a'],  // 指定除了选中的打包后的文件
-          }),
+        plugins: [
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
         ]
       }
-
-      在模版文件中引用 htmlWebpackPlugin
-        遍历取值 
-          遍历 htmlWebpackPlugin 
-            <% for(key in htmlWebpackPlugin){%>  // 运行代码不需要'='
-              <%= key %>  // 取值需要'='
-            <% } %>
-            得到 files 和 options 两个对象
-          遍历 htmlWebpackPlugin.files 和 htmlWebpackPlugin.options
-            <% for(key in htmlWebpackPlugin.files){%>
-              <%= key %> : <%= JSON.stringify(htmlWebpackPlugin.files[key])%> 
-              // 通过 json.stringify 将对象内容字符串化
-            <% } %>
-            <% for(key in htmlWebpackPlugin.options){%>
-              <%= key %> : <%= JSON.stringify(htmlWebpackPlugin.options[key])%> 
-            <% } %>
-        在模版中指定的位置引入指定打包后的文件 
-          <script src="<%= htmlWebpackPlugin.files.chunk.xx.entry %>" charset="utf-8"></script>
-          其中 xx 为 webpack.config.js 文件中 module.exports.entry.key 定义的文件 
-        在模版中插入打包后的文件的内容
-          <script  type='text/javascript'>
-            <%= compilation.asserts[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
-          </script>
-  extract-text-webpack-plugin   提取css文件到单独的文件 
-    npm install extract-text-webpack-plugin -S
       
-    var ExtractTextPlugin = require('extract-text-webpack-plugin');
-    module.exports = {
-      entry: {
-        main: './src/main.js'
-      },
-      output: {
-        // 打包输出的目录,这里是绝对路径,必选设置项
-        path: path.resolve(__dirname, './dist'),
-        // 资源基础路径
-        publicPath: '/dist/',
-        // 打包输出的文件名
-        filename: 'build.js'
-      },
-      module: {
-        rules: [
-          {
-            test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: 'css-loader?minimize'
-            })
-          }
+      ◆main.js
+      var longVariableName = 'Hello';
+      longVariableName += ' World';
+      document.write('<h1>' + longVariableName + '</h1>');
+      ◆index.html
+      <html>
+      <body>
+        <script src="bundle.js"></script>
+      </body>
+      </html>
+      ◆webpack.config.js
+      var webpack = require('webpack');
+      var uglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+      module.exports = {
+        entry: './main.js',
+        output: {
+          filename: 'bundle.js'
+        },
+        plugins: [
+          new uglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
         ]
-      },
+      };
+      ◆输出
+      var o="Hello";o+=" World",document.write("<h1>"+o+"</h1>")   
+    webpack.optimize.CommonsChunkPlugin    提取入口的公共模块到单独的文件 
+      module.exports = {
+        plugins: [
+          new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.js',
+            minChunks: 3
+          })
+        ]
+      }
+      
+      提取公共模块 
+        现在我们build出来的只有一个 bundle.js 
+        如果第三方库很多的话,会造成这个文件非常大,减慢加载速度,
+        现在我们要把第三方库和我们app本身的代码分成两个文件。
+        修改entry入口文件
+        entry: {
+          app: path.resolve(APP_PATH, 'index.js'),
+          //添加要打包在vendors里面的库
+          vendors: ['jquery', 'moment']
+        },
+        // 添加CommonsChunkPlugin
+        plugins: [
+          //把入口文件里面的数组打包成verdors.js
+          new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+        ]
+    webpack.ProvidePlugin                  把一个全局变量插入到所有的代码中
+      ◆webpack.config.js 中
       plugins: [
-        new ExtractTextPlugin({ filename: 'static/css/app.css', allChunks: true })
+        //provide $, jQuery and window.jQuery to every script
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery",
+          "window.jQuery": "jquery"
+        })
       ]
-    }
-    将会生成/dist/static/css/app.css,此时output.publicPath将会发挥作用
+      ◆js中
+      //import $ from 'jquery'; //不需要了,可
+      $, jQuery, window.jQuery 都可以直接使用了
+    html-webpack-plugin       在HTML文件中自动引入打包后的文件 
+      相关命令  
+        npm install html-webpack-plugin --save-dev // 安装插件
+      使用
+        在 webpack.config.js 中
+        // 引用
+        var htmlWebpackPlugin = require("html-webpack-plugin");
+        在 module.exports 中的 'plugins' 中实例化配置
+        module.exports = {
+          // context : '', // 指定当前的路径 
+          entry : {
+            main : './src/main.js',
+            a : './src/a.js',
+            b : './src/b.js',
+          },  
+          output: {   
+            path : './dist/js',       
+            filename : './bundle.js',
+            publicPath : 'http://cdn.com/' // 代替 path 添加在 filename 值的前面
+          },
+          resolve : {
+            root : [path.join(__dirname,'src')],
+            extensions : ['','.ts','.js']
+          },
+          module : {
+            loaders : [
+              {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
+            ]
+          },
+          plugins : [
+            new htmlWebpackPlugin({ // 实例化
+              template : './aoo.html' , // 指定html文件做为将生成的HTML文件的模版,
+              // 按照output的path路径中生成html文件,并引入打包后的文件
+              filename : 'aoo-[hash].html', // 指定生成的HTML的名称
+              inject : 'head' ,  // 指定打包后的文件插入的位置,如 head中
+              // false 则表示不放入到指定模版生成的文件中
+              aoo : 'boo',   // 自定义的属性,可在指定的模版文件中引用
+              // 模版文件中 方式为 <%= htmlWebpackPlugin.options.aoo %>
+              minify : {  // 对按照模版生成的文件进行压缩
+                removeComments : true , // 删除注释
+                collapseWhitespace : true , // 删除空格 
+              } , 
+              chunks : ['main','a'] // 指定加载的打包后的文件,默认为所有
+            }),
+            new htmlWebpackPlugin({    
+              template : './boo.html' ,
+              filename : 'boo-[hash].html', 
+              inject : 'body' ,  
+              minify : {  
+                removeComments : true , 
+                collapseWhitespace : true , 
+              } , 
+              excludechunks : ['a'],  // 指定除了选中的打包后的文件
+            }),
+          ]
+        }
 
-  ...
+        在模版文件中引用 htmlWebpackPlugin
+          遍历取值 
+            遍历 htmlWebpackPlugin 
+              <% for(key in htmlWebpackPlugin){%>  // 运行代码不需要'='
+                <%= key %>  // 取值需要'='
+              <% } %>
+              得到 files 和 options 两个对象
+            遍历 htmlWebpackPlugin.files 和 htmlWebpackPlugin.options
+              <% for(key in htmlWebpackPlugin.files){%>
+                <%= key %> : <%= JSON.stringify(htmlWebpackPlugin.files[key])%> 
+                // 通过 json.stringify 将对象内容字符串化
+              <% } %>
+              <% for(key in htmlWebpackPlugin.options){%>
+                <%= key %> : <%= JSON.stringify(htmlWebpackPlugin.options[key])%> 
+              <% } %>
+          在模版中指定的位置引入指定打包后的文件 
+            <script src="<%= htmlWebpackPlugin.files.chunk.xx.entry %>" charset="utf-8"></script>
+            其中 xx 为 webpack.config.js 文件中 module.exports.entry.key 定义的文件 
+          在模版中插入打包后的文件的内容
+            <script  type='text/javascript'>
+              <%= compilation.asserts[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
+            </script>
+      e.g.：
+        var htmlWebpackPlugin = require('html-webpack-plugin');
+        var path = require("path");
+        moudle.exports = {
+          context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
+          entry : './src/app.js',
+          output : {
+            path : '.dist',
+            filename : 'js/[name].budle.js'
+          },
+          module : {
+            loaders : [
+              {test: /\.jade$/ , loader : 'jade' },
+              // 通过正则的test方将文件的后缀名法进行匹配
+              // 匹配成功则使用 指定的loader
+              {test: /\.css$/ , loader : 'style!css'},
+              // 或者 {test: /\.css$/ , loader : ["style", "css"]},
+            ] 
+          }
+        }
+        
+        var htmlWebpackPlugin = require('html-webpack-plugin');
+        var path = require("path");
+        moudle.exports = {
+          context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
+          entry : './src/app.js',
+          output : {
+            path : '.dist',
+            filename : 'js/[name].budle.js'
+          },
+          module : {
+            loaders : [
+              { test : /\.js$/,
+                loader : 'babel', // 通过 babel 对 JS文件进行编译
+                exclude : path.resolve(__dirname,'node_modules'), // 指定不用处理的部分
+                // 通过path「Node的API」将相对路径 node_modules 解析为绝对路径
+                include : './src/', // 指定处理的范围
+                query : {
+                  presets : ['latest'] 
+                  // 指定将 js 编译的版本,其他的如 ["es2015"] 等
+                }
+                // 可在 npm 的 package.json 中 指定
+                // "babel" : { "presets" : ["latest"] }
+                // 从而取消在此处指定 query 项
+              },
+              { html : /\.html$/,
+                loader : 'html-loader'
+              },
+              { test : /\.css$/,
+                loader : 'style-loader!css-loader?importLoader=1!postcss-loader', 
+                // importLoader=1 表示该Loader后的1个loader来处理css中import的css
+                // 或 loader : ["style-loader","css-loader"."postcss-loader"]
+                // 注: 解析的顺序为 从后向前,即postcss-loader先起作用
+                // css-loader 用于在JS中处理 css文件
+                // style-loader 用于将处理后的css插入到HTML中
+                // 使用 postcss-loader 的 autoprefixer 功能 将css属性添加前缀
+                // 需安装 postcss-loader 和 autoprefixer 
+              },
+              { test : /\.less$/,
+                loader : 'style!css!postcss!less', // 可以省略 -loader
+                // less-loader 会自动将 @import 引入的css属性增加浏览器前缀
+                // 故可省略 ?importLoader
+              },
+              { test : /\.sass$/,
+                loader : 'style!css!postcss!sass',
+              },
+              // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的「相对」路径
+              //   // HTML、CSS中图片的相对路径会被替换
+              //   // 组件模版中HTML内需如此使用 <img src="${require(../a.png)}"/>
+              //   loader : 'file',
+              //   query : {
+              //     name :'assets/[name]-[hash:5].[ext]' , // 用于定义图片的路径
+              //     // [name]、[hash]、[ext]都为占位符表示名字、哈希和后缀名
+              //     // 其中 [hash:5] 表示取hash字符串中的5位
+              //   }
+              // },
+              // { test : /\.(png|jpg|gif|svg)$/i, 
+              //   loader : 'url', // 可以处理图片或文件
+              //   query : {
+              //     limit : 20000, // 20k,当图片小于该该值时,将被转换为base64
+              //     // 否则交由 file-loader 来处理
+              //     name :'assets/[name]-[hash:5].[ext]' , 
+              //   }
+              // },
+              { test : /\.(png|jpg|gif|svg)$/i, 
+                loaders : [  // 指定多个loader
+                  'url-loader?limit=1000&name=assets/[name]-[hash:5].[ext]',
+                  'image-webpack' // 用于压缩图片,按照逆序会先执行压缩
+                ], 
+                }
+              },
+            ]
+          },
+          postcss : [
+            require('autoprefixer')({
+              browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
+            })
+          ],
+          或 
+          // postcss : function(){
+          //   return [
+          //     require('autoprefixer')({
+          //       browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
+          //     })
+          //   ]
+          // } ,
+          plugins : [
+            new htmlWebpackPlugin({
+              filename : 'index.html',
+              template : 'index.html',
+              inject : 'body'
+            })
+          ]
+        }
+    extract-text-webpack-plugin   提取css文件到单独的文件 
+      npm install extract-text-webpack-plugin -S
+        
+      var ExtractTextPlugin = require('extract-text-webpack-plugin');
+      module.exports = {
+        entry: {
+          main: './src/main.js'
+        },
+        output: {
+          // 打包输出的目录,这里是绝对路径,必选设置项
+          path: path.resolve(__dirname, './dist'),
+          // 资源基础路径
+          publicPath: '/dist/',
+          // 打包输出的文件名
+          filename: 'build.js'
+        },
+        module: {
+          rules: [
+            {
+              test: /\.css$/,
+              use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: 'css-loader?minimize'
+              })
+            }
+          ]
+        },
+        plugins: [
+          new ExtractTextPlugin({ filename: 'static/css/app.css', allChunks: true })
+        ]
+      }
+      将会生成/dist/static/css/app.css,此时output.publicPath将会发挥作用
+    CommonsChunkPlugin            提取出公用模块 
+      开发中需要将多个页面的公用模块独立打包,
+      从而可以利用浏览器缓存机制来提高页面加载效率,减少页面初次加载时间,
+      只有当某功能被用到时,才去动态的加载。
+      
+      var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+      module.exports = {
+        entry: { a: "./a", b: "./b" },
+        output: { filename: "[name].js" },
+        plugins: [ new CommonsChunkPlugin("common.js") ]
+      }
+      
+      在文件中根据下面的方式引用即可 
+      <script src="common.js"></script> 
+      <script src="a.js"></script> 
+      <script src="b.js"></script> 
+  使用步骤 
+    创建项目文件夹 myproject
+    cd myproject
+    npm init 
+    新建 webpack.config.js 文件 
+      npm install html-webpack-plugin --save-dev  安装用于自动快速的生成HTML的插件
+      
+      写config文件
+      var path = require('path');
+      var HtmlwebpackPlugin = require('html-webpack-plugin');
+      //定义了一些文件夹的路径
+      var rootPath = path.resolve(__dirname);
+      var appPath = path.resolve(rootPath, 'app');
+      var buildPath = path.resolve(rootPath, 'build');
+      
+      module.exports = {
+        //项目的文件夹 可以直接用文件夹名称 默认会找index.js 也可以确定是哪个文件名字
+        entry: appPath,
+        //输出的文件名 合并以后的js会命名为bundle.js
+        output: {
+          path: buildPath,
+          filename: 'bundle.js'
+        },
+        //添加我们的插件 会自动生成一个html文件
+        plugins: [
+          new HtmlwebpackPlugin({
+            title: 'Hello World app'
+          })
+        ]
+      };
+    添加第三方库
+      如使用jquery之类的库,
+      安装jquery的支持
+      npm install jquery  --save-dev
+      在js中引用
+      var $ = require('jquery');
+      var app  = document.createElement('div');
+      app.innerHTML = '<h1>Hello World it</h1>';
+      document.body.appendChild(app);
+      $('body').append('<p>look at me!</p>');
+    在项目根目录运行:  webpack
+    部署上线
+      新创建一个单独的config文件,因为部署上线使用webpack的时候
+      不需要一些dev-tools,dev-server和jshint校验等。
+      复制现有的config文件,命名为 webpack.production.config.js,
+      将里面关于 devServer等和开发有关的东西删掉。
+      在 package.json 中添加一个命令
+      "scripts": {
+        "start": "webpack-dev-server --hot --inline",
+        "build": "webpack --progress --profile --colors --config webpack.production.config.js"
+      },
+      当要上线的时候,运行 npm run build
   webpack 与 vue组件 
     PS：webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
       基于loader可实现大量高级功能, 如自动分块打包并按需加载、对图片资源引用的自动定位、
@@ -967,9 +1147,7 @@ webpack   模块加载器兼打包工具
         }
       </script>
       当使用 lang="less" 即使用Less,需 安装如下依赖
-<<<<<<< HEAD
       npm install -g css-loader less less-loader --save-dev
-=======
       npm install -g css-loader less less-loader  --save-dev
     webpack.config.js  文件的设置 
     module.exports = {
@@ -1006,124 +1184,204 @@ webpack   模块加载器兼打包工具
       |--index.html    vue应用的骨架html
       |--package.json  npm配置文件
       |--webpack.config.js   webpack配置文件
->>>>>>> origin/master
-Gulp 
-  PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
-    她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
-    使用她,我们不仅可以很愉快的编写代码,而且大大提高我们的工作效率。
-    gulp是基于Nodejs的自动任务运行器,
-    她能自动化地完成 javascript/coffee/sass/less/html/image/css 等文件的的测试、
-    检查、合并、压缩、格式化、浏览器自动刷新、部署文件生成,
-    并监听文件在改动后重复指定的这些步骤。
-    在实现上,她借鉴了Unix操作系统的管道（pipe）思想,前一级的输出,直接变成后一级的输入,
-    使得在操作上非常简单。
-    gulp 和 grunt 非常类似,但相比于 grunt 的频繁 IO 操作,
-    gulp 的流操作,能更快地更便捷地完成构建工作。
-  全局安装gulp
-    PS：全局安装gulp目的是为了通过她执行gulp任务；
-    cnpm install gulp -g   安装
-    gulp -v     查看是否正确安装,出现版本号即为正确安装
-      //  CLI version 3.9.1
-  新建 package.json 文件
-    PS：package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
-    手动新建配置文件
-      它是这样一个json文件（注意：json文件内是不能写注释的,复制下列内容请删除注释）：
-      {
-        "name": "test",   //项目名称（必须）
-        "version": "1.0.0",   //项目版本（必须）
-        "description": "This is for study gulp project !",   //项目描述（必须）
-        "homepage": "",   //项目主页
-        "repository": {    //项目资源库
-          "type": "git",
-          "url": "https://git.oschina.net/xxxx"
-        },
-        "author": {    //项目作者信息
-          "name": "surging",
-          "email": "surging2@qq.com"
-        },
-        "license": "ISC",    //项目许可协议
-        "devDependencies": {    //项目依赖的插件
-          "gulp": "^3.8.11",
-          "gulp-less": "^3.0.0"
+    步骤
+      初始化项目目录,最终目录结构如下：
+        - dist //文件生成目录
+            -- //自动生成
+        - node_module //自动安装
+            -- ...
+        - src //文件入口
+            -- components //组件存放
+                -- app.vue //主.vue
+            -- main.js //主.js
+        - index.html   //主.html
+        - package.json //npm 配置 
+        // 可以直接使用npm init来初始化我们的package.json文件的配置
+        - webpack.cofig.js // webpack配置
+      配置 webpack.config.js 文件
+        var path = require('path');
+        // NodeJS中的Path对象,用于处理目录的对象,提高开发效率。
+        // 模块导入
+        module.exports = {
+          // 入口文件地址,不需要写完,会自动查找
+          entry: './src/main',
+          // 输出
+          output: {
+            path: path.join(__dirname, './dist'),
+            // 文件地址,使用绝对路径形式
+            filename: '[name].js',
+            //[name]这里是webpack提供的根据路口文件自动生成的名字
+            publicPath: '/dist/'
+            // 公共文件生成的地址
+          },
+          // 服务器配置相关,自动刷新!
+          devServer: {
+            historyApiFallback: true,
+            hot: false,
+            inline: true,
+            grogress: true,
+          },
+          // 加载器
+          module: {
+            // 加载器
+            loaders: [
+              // 解析.vue文件
+              { test: /\.vue$/, loader: 'vue' },
+              // 转化ES6的语法
+              { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+              // 编译css并自动添加css前缀
+              { test: /\.css$/, loader: 'style!css!autoprefixer'},
+              //.scss 文件想要编译,scss就需要这些东西！来编译处理
+              //install css-loader style-loader sass-loader node-sass --save-dev
+              { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+              // 图片转化,小于8K自动转化为base64的编码
+              { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'},
+              //html模板编译？
+              { test: /\.(html|tpl)$/, loader: 'html-loader' },
+            ]
+          },
+          // .vue的配置。需要单独出来配置,其实没什么必要--
+          // 因为我删了也没保错,不过这里就留这把,因为官网文档里是可以有单独的配置的。
+          vue: {
+            loaders: {
+              css: 'style!css!autoprefixer',
+            }
+          },
+          // 转化成es5的语法
+          babel: {
+            presets: ['es2015'],
+            plugins: ['transform-runtime']
+          },
+          resolve: {
+            // require时省略的扩展名,如：require('module') 不需要module.js
+            extensions: ['', '.js', '.vue'],
+            // 别名,可以直接使用别名来代表设定的路径以及其他
+            alias: {
+              filter: path.join(__dirname, './src/filters'),
+              components: path.join(__dirname, './src/components')
+            }
+          },
+          // 开启source-map,webpack有多种source-map,在官网文档可以查到
+          devtool: 'eval-source-map'
+        };
+其他工具
+  Gulp 
+    PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
+      她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
+      使用她,我们不仅可以很愉快的编写代码,而且大大提高我们的工作效率。
+      gulp是基于Nodejs的自动任务运行器,
+      她能自动化地完成 javascript/coffee/sass/less/html/image/css 等文件的的测试、
+      检查、合并、压缩、格式化、浏览器自动刷新、部署文件生成,
+      并监听文件在改动后重复指定的这些步骤。
+      在实现上,她借鉴了Unix操作系统的管道（pipe）思想,前一级的输出,直接变成后一级的输入,
+      使得在操作上非常简单。
+      gulp 和 grunt 非常类似,但相比于 grunt 的频繁 IO 操作,
+      gulp 的流操作,能更快地更便捷地完成构建工作。
+    全局安装gulp
+      PS：全局安装gulp目的是为了通过她执行gulp任务；
+      cnpm install gulp -g   安装
+      gulp -v     查看是否正确安装,出现版本号即为正确安装
+        //  CLI version 3.9.1
+    新建 package.json 文件
+      PS：package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
+      手动新建配置文件
+        它是这样一个json文件（注意：json文件内是不能写注释的,复制下列内容请删除注释）：
+        {
+          "name": "test",   //项目名称（必须）
+          "version": "1.0.0",   //项目版本（必须）
+          "description": "This is for study gulp project !",   //项目描述（必须）
+          "homepage": "",   //项目主页
+          "repository": {    //项目资源库
+            "type": "git",
+            "url": "https://git.oschina.net/xxxx"
+          },
+          "author": {    //项目作者信息
+            "name": "surging",
+            "email": "surging2@qq.com"
+          },
+          "license": "ISC",    //项目许可协议
+          "devDependencies": {    //项目依赖的插件
+            "gulp": "^3.8.11",
+            "gulp-less": "^3.0.0"
+          }
         }
-      }
-    cnpm init 命令 命令提示符执行创建
-      通过 cd命令 确定创建的位置,e.g.:进入到文件名为 testgulp的文件夹下
-      cnpm init    创建 package.json 文件
-      name: (testgulp) XXX       输入 XXX 作为项目名称,必须项,e.g.:testg
-      version: (1.0.0) XXX       输入 XXX 作为项目版本,必须项,e.g.:1.0.0
-      description: XXX           输入 XXX 作为项目描述,必须项,e.g.:this is a test
-      entry point: (index.js)    定义入口文件,默认为括号内的
-      test command:              测试命令,可选
-      git repository:            git地址,可选
-      keywords:                  关键字,可选
-      author:                    作者信息,可选
-      license: (ISC)             许可信息,可选
-      Is this ok? (yes)    输入 y 确认创建
-    cnpm help package.json     查看 package.json 帮助文档,会跳转网页
-  本地安装gulp插件
-    安装：定位目录命令后提示符执行cnpm install --save-dev；
-    以gulp-less为例（编译less文件）,命令提示符执行cnpm install gulp-less --save-dev；
-    将会安装在node_modules的gulp-less目录下,该目录下有一个 gulp-less 的使用帮助文档README.md；
-    为了能正常使用,我们还得本地安装gulp：cnpm install gulp --save-dev；
-      全局安装了gulp,项目也安装了gulp,
-      全局安装gulp是为了执行gulp任务,本地安装gulp则是为了调用gulp插件的功能。
-  新建 gulpfile.js 文件（重要）
-    PS：gulpfile.js 是gulp项目的配置文件,
-      是位于项目根目录的普通js文件（其实将 gulpfile.js 放入其他文件夹下亦可）。
-    大概是这样一个js文件,主要配置:
-      //导入工具包 require('node_modules里对应模块')
-      var gulp = require('gulp'), //本地安装gulp所用到的地方
-      less = require('gulp-less');
-      
-      //定义一个testLess任务（自定义任务名称）
-      gulp.task('testLess', function () {
-        gulp.src('src/less/index.less') //该任务针对的文件
-        .pipe(less()) //该任务调用的模块
-        .pipe(gulp.dest('src/css')); //将会在src/css下生成index.css
-      });
-      
-      //定义默认任务 elseTask为其他任务,该示例没有定义elseTask任务
-      gulp.task('default',['testLess', 'elseTask']); 
-      
-      //gulp.task(name[, deps], fn) 定义任务  name：任务名称 deps：依赖任务名称 fn：回调函数
-      //gulp.src(globs[, options]) 执行任务处理的文件  globs：处理的文件路径(字符串或者字符串数组) 
-      //gulp.dest(path[, options]) 处理完后文件生成路径
-  运行gulp
-    命令提示符执行 gulp 任务名称
-    编译less：命令提示符执行 gulp testLess；
-    当执行 gulp default 或 gulp 将会调用default任务里的所有任务[‘testLess’,’elseTask’]。
-  使用webstorm运行gulp任务
-    说明：使用webstorm可视化运行gulp任务；
-    使用方法：
-      将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
-      若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
-Anythere 将当前目录变成一个静态文件服务器的根目录 
-  npm install anywhere -g   npm全局安装anythere
-  执行参数
-    -p 指定端口,默认为8000,
-      e.g.:
-      anywhere -p 8000 
-      可省略
-      anywhere  8000 
-    -s 静默执行不会自动打开浏览器,默认自动打开网页
-Weinre,Web Inspector Remote  一种远程调试工具 
-  PS：功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
-    由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
-    所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
-  三个端的含义：
-    客户端(client)：本地的WebInspector,远程调试客户端。
-    服务端(agent)：本地的HTTPServer,为目标页面与客户端建立通信。
-    目标页面(target)：被调试的页面,页面已嵌入weinre的远程js。
-  Weinre运行
-    weinre -boundHost 192.168.0.102  -httpPort 8099   命令行键入 
-      httpPort 为调试服务器运行的端口,默认8080;
-      boundHost 调试服务器绑定的IP地址或域名,默认localhost,需改为本机地址 '192.168.0.102'
-    添加 js到 所需的调试的html的头部
-      <script src="http://192.168.0.102:8099/target/target-script-min.js#anonymous"></script> 
-Grunt和Gulp的工作方式 
-  在一个配置文件中,指明对某些文件进行类似编译,组合,压缩等任务的具体步骤,
-  这个工具之后可以自动替你完成这些任务。
-Bower 
+      cnpm init 命令 命令提示符执行创建
+        通过 cd命令 确定创建的位置,e.g.:进入到文件名为 testgulp的文件夹下
+        cnpm init    创建 package.json 文件
+        name: (testgulp) XXX       输入 XXX 作为项目名称,必须项,e.g.:testg
+        version: (1.0.0) XXX       输入 XXX 作为项目版本,必须项,e.g.:1.0.0
+        description: XXX           输入 XXX 作为项目描述,必须项,e.g.:this is a test
+        entry point: (index.js)    定义入口文件,默认为括号内的
+        test command:              测试命令,可选
+        git repository:            git地址,可选
+        keywords:                  关键字,可选
+        author:                    作者信息,可选
+        license: (ISC)             许可信息,可选
+        Is this ok? (yes)    输入 y 确认创建
+      cnpm help package.json     查看 package.json 帮助文档,会跳转网页
+    本地安装gulp插件
+      安装：定位目录命令后提示符执行cnpm install --save-dev；
+      以gulp-less为例（编译less文件）,命令提示符执行cnpm install gulp-less --save-dev；
+      将会安装在node_modules的gulp-less目录下,该目录下有一个 gulp-less 的使用帮助文档README.md；
+      为了能正常使用,我们还得本地安装gulp：cnpm install gulp --save-dev；
+        全局安装了gulp,项目也安装了gulp,
+        全局安装gulp是为了执行gulp任务,本地安装gulp则是为了调用gulp插件的功能。
+    新建 gulpfile.js 文件（重要）
+      PS：gulpfile.js 是gulp项目的配置文件,
+        是位于项目根目录的普通js文件（其实将 gulpfile.js 放入其他文件夹下亦可）。
+      大概是这样一个js文件,主要配置:
+        //导入工具包 require('node_modules里对应模块')
+        var gulp = require('gulp'), //本地安装gulp所用到的地方
+        less = require('gulp-less');
+        
+        //定义一个testLess任务（自定义任务名称）
+        gulp.task('testLess', function () {
+          gulp.src('src/less/index.less') //该任务针对的文件
+          .pipe(less()) //该任务调用的模块
+          .pipe(gulp.dest('src/css')); //将会在src/css下生成index.css
+        });
+        
+        //定义默认任务 elseTask为其他任务,该示例没有定义elseTask任务
+        gulp.task('default',['testLess', 'elseTask']); 
+        
+        //gulp.task(name[, deps], fn) 定义任务  name：任务名称 deps：依赖任务名称 fn：回调函数
+        //gulp.src(globs[, options]) 执行任务处理的文件  globs：处理的文件路径(字符串或者字符串数组) 
+        //gulp.dest(path[, options]) 处理完后文件生成路径
+    运行gulp
+      命令提示符执行 gulp 任务名称
+      编译less：命令提示符执行 gulp testLess；
+      当执行 gulp default 或 gulp 将会调用default任务里的所有任务[‘testLess’,’elseTask’]。
+    使用webstorm运行gulp任务
+      说明：使用webstorm可视化运行gulp任务；
+      使用方法：
+        将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
+        若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
+  Anythere 将当前目录变成一个静态文件服务器的根目录 
+    npm install anywhere -g   npm全局安装anythere
+    执行参数
+      -p 指定端口,默认为8000,
+        e.g.:
+        anywhere -p 8000 
+        可省略
+        anywhere  8000 
+      -s 静默执行不会自动打开浏览器,默认自动打开网页
+  Weinre,Web Inspector Remote  一种远程调试工具 
+    PS：功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
+      由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
+      所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
+    三个端的含义：
+      客户端(client)：本地的WebInspector,远程调试客户端。
+      服务端(agent)：本地的HTTPServer,为目标页面与客户端建立通信。
+      目标页面(target)：被调试的页面,页面已嵌入weinre的远程js。
+    Weinre运行
+      weinre -boundHost 192.168.0.102  -httpPort 8099   命令行键入 
+        httpPort 为调试服务器运行的端口,默认8080;
+        boundHost 调试服务器绑定的IP地址或域名,默认localhost,需改为本机地址 '192.168.0.102'
+      添加 js到 所需的调试的html的头部
+        <script src="http://192.168.0.102:8099/target/target-script-min.js#anonymous"></script> 
+  Grunt和Gulp的工作方式 
+    在一个配置文件中,指明对某些文件进行类似编译,组合,压缩等任务的具体步骤,
+    这个工具之后可以自动替你完成这些任务。
+  Bower 
 
 

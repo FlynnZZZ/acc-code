@@ -596,26 +596,54 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
-    *
-    html
+    --------------------------------
+    html----------------------------
     # S◆◆◆◆◆
-    '-self-cptInit':
-      'prefix': 'cptInit'
+    '-self-cptTemplate':
+      'prefix': 'cptTemplate'
       'body': """
       <style>
     
       </style>
-
+      $1
       <script type="text/javascript">
       $(function(){
-        $1
+        
       })
       </script>
       """ 
+    # V◆◆◆◆◆
     '-vue-vbind':
       'prefix': 'vbind'
-      'body': """:attrName='arg'""" 
-    JS
+      'body': """:class='${1:arg}'""" 
+    '-vue-velse':
+      'prefix': 'velse'
+      'body': """v-else:'${1:key}'""" 
+    '-vue-vfor':
+      'prefix': 'vfor'
+      'body': """v-for='item1 in ${1:items1}'""" 
+    '-vue-vhtml':
+      'prefix': 'vhtml'
+      'body': """v-html='${1:key}'""" 
+    '-vue-vif':
+      'prefix': 'vif'
+      'body': """v-if:'${1:key}'""" 
+    '-vue-vmodel':
+      'prefix': 'vhtml'
+      'body': """v-model='${1:key}'""" 
+    '-vue-von':
+      'prefix': 'von'
+      'body': """@click='${1:arg}'""" 
+    '-vue-vonce':
+      'prefix': 'vonce'
+      'body': """v-once""" 
+    '-vue-vshow':
+      'prefix': 'vshow'
+      'body': """v-show:'${1:key}'""" 
+    '-vue-vtext':
+      'prefix': 'vtext'
+      'body': """v-text='${1:key}'""" 
+    JS------------------------------
     '-vue-new Vue({$1});':
       'prefix': 'newVue'
       'body': """new Vue({
@@ -629,7 +657,7 @@ fileNum : 21
           mounted : function (){
             this.$nextTick(function () {
               // 代码保证 this.$el 在 document 中
-            })
+            });
           },
         });""" 
 

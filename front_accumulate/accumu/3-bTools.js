@@ -81,7 +81,10 @@ npm,node_package_manager node包管理器
           }
         命令行执行 npm run aoo 
         即为执行  node index.js 
-    文件内容
+      npm install  npm在当前目录下载项目的所有依赖
+        在有了完整的 package.json 文件的情况下,
+        下载的文件存放在node_modules中,这一过程由npm自动完成,我们只需等待即可。
+    文件内容详情 
       {
         "name": "Hello World",
         "version": "0.0.1",
@@ -129,7 +132,21 @@ npm,node_package_manager node包管理器
         // devDependencies 指定项目开发所需要的模块,指向一个对象
         // 对象的各个成员,分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围。
       }
-      版本号的设定规则
+      dependencies 键值内的内容
+        在运行npm install xxx后可以自动插入相应的值,
+        如需要安装vue,运行npm install vue,
+        npm就会自动安装最新版本的vue到当前node_modules文件夹中,
+        dependencies的内容也会变成如下：
+        "dependencies": {
+          "vue": "^1.0.16"
+        }
+      devDependencies 键值内的内容
+        是指开发过程中需要用到的依赖包,包括ES6转ES5加载器、CSS加载器等等,
+        这部分的内容可通过npm install xxx --save-dev 进行安装,
+        如需要安装webpack,输入npm install webpack --save-dev,
+        在devDependencies下就会写入webpack的具体安装信息。      
+      
+      版本号的设定规则 
         PS： 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
           可以加上各种限定,主要有以下几种
         '~',tilde   波浪号+指定版本
@@ -234,16 +251,22 @@ npm,node_package_manager node包管理器
         --production  可选,只下载dependencies节点的包
 webpack   模块加载器兼打包工具 
   介绍 
-    把各种资源,如JS「含JSX」、coffee、样式「如less/sass」、图片等都作为模块来使用和处理,
-    工作方式是：把项目当做一个整体,通过一给定的主文件[如 index.js],
-    Webpack将从该文件开始找到项目的所有依赖文件,使用loaders处理它们,
-    最后打包为一个浏览器可识别的JavaScript文件;
+    基于JS,有四大核心 Entry、Output、Loaders 和 Plugins;
+    把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
     支持3种引入方式: AMD commonjs ES6模块化
+<<<<<<< HEAD
     原理:
     把所有的非js资源都转换成js,
     如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
     把图片转换成一个图片地址的 js 变量或 base64 编码等,
     然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
+=======
+    从 2.0 版本开始,webpack原生支持用ES6 module规范[import/export]去进行模块打包
+  工作方式 
+    把项目当做一个整体,通过一给定的主文件[如 index.js],
+    Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
+    最后打包为一个浏览器可识别的JS文件;
+>>>>>>> origin/master
   命令行命令 
     npm install webpack --save-dev  安装webpack并写入依赖配置文件  
     webpack aoo.js boo.js [--xx]    将 aoo.js 文件打包成 boo.js 文件
@@ -253,18 +276,27 @@ webpack   模块加载器兼打包工具
         --display-modules 打包完后显示依赖的模块 
         --display-reasons 显示打包的原因 
     ◆其他命令参数
+<<<<<<< HEAD
   webpack.config.js   默认的配置文件 
     PS：需手动创建该文件; 通过配置文件 webpack.config.js 来进行相应的配置;
+=======
+    webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies。
+  webpack.config.js 默认的配置文件 
+    PS：需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
+>>>>>>> origin/master
     相关命令 
-      webpack          [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
-      webpack --config xx.js  自定义配置文件[不再是默认的 webpack.config.js]
+      webpack              [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
+      webpack --config xx.js  自定义配置文件[可不再是默认的 webpack.config.js]
     配置文件详情:
       module.exports = {     // commonjs 模块化 输出 
+        context: __dirname + "/src", // __dirname 是指项目根目录
         entry : './src/main.js',   // 入口文件,将被打包的文件 
+        // 项目的入口点,作为执行上下文的根
         output: {                  // 指定打包后的文件
           path : './dist/js',         // 指定路径
           filename : './bundle.js'    // 打包输出的文件名,「也可定义路径,会接着path后,推荐只指定名称」
         },
+        // 执行完成后,生成文件的存放位置的属性
         resolve : {
           root : [path.join(__dirname,'src')],
           extensions : ['','.ts','.js']
@@ -275,6 +307,168 @@ webpack   模块加载器兼打包工具
           ]
         }
       } 
+      多文件单输出 
+        const webpack = require("webpack");
+        module.exports = {
+          context: __dirname + "/src",
+          entry: {
+            app: ["./home.js", "./events.js", "./vendor.js"],
+          },
+          output: {
+            path: __dirname + "/dist",
+            filename: "[name].bundle.js",
+          },
+        };
+        根据数组顺序,文件全部会被一起打包在 dist/app.bundle.js 里 
+      多文件多个输出
+        const webpack = require("webpack");
+        module.exports = {
+          context: __dirname + "/src",
+          entry: {
+            home: "./home.js",
+            events: "./events.js",
+            contact: "./contact.js",
+          },
+          output: {
+            path: __dirname + "/dist",
+            filename: "[name].bundle.js",
+          },
+        };
+        会被打包成以下三个文件：
+        dist/home.bundle.js、 
+        dist/events.bundle.js, 
+        dist/contact.bundle.js。
+    其他说明
+      版本2.x 官方推荐 module.rules 写法
+      module.exports = {
+        module: {
+          rules: [   
+            {
+              test: /\.js$/,
+              use: [ 'babel-loader' ],
+              exclude: /node_modules/ ,    // 跳过 node_modules 目录
+              options: {
+                cacheDirectory: true    // 缓存结果
+              }
+            },
+            {
+              test: /\.css$/,
+              use: ["style-loader", "css-loader"],
+              // Loaders 会根据数组的逆序运行,即 css-loader 会跑在 style-loader 前面。
+            }
+          ]
+        }
+      }
+      版本1.x 前,更多的用 module.loaders 写法
+      module.exports = {
+        module: {
+          loaders: [
+            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }
+          ]
+        }
+      }      
+    执行过程
+      从 context 文件夹开始 寻找 entry 上的文件名, 读取内容
+      每当遇到 import 或者 require()  依赖项时,解析这些代码,并且打包到最终构建里。
+      接着它会不断递归搜索实际需要的依赖项,直到它到达了“树”的底部。
+      从上一步接着,Webpack 把所有东西打包到 output.path 的文件夹里,
+      并使用 output.filename 命名 「 [name] 表示使用 entry 项的 key」
+    e.g.： 
+      完整的wepack配置文件 webpack.config.js
+      2017.4.8 新增less支持,先安装less和less的加载器
+      // 安装完成之后在配置文件中添加对应的加载器规则
+      npm i less less-loader -S
+      var path = require('path'),
+      webpack = require('webpack'),
+      ExtractTextPlugin = require('extract-text-webpack-plugin');
+      
+      module.exports = {
+        devtool: 'eval',
+        entry: {
+          main: './src/main.js'
+        },
+        resolve: {
+          // 自动解析确定的扩展
+          extensions: ['.js', '.vue'],
+          // 告诉 webpack 解析模块时应该搜索的目录
+          modules: [
+            path.resolve(__dirname, 'src'),
+            'node_modules'
+          ],
+          alias: {
+            'src': path.resolve(__dirname, './src')
+          }
+        },
+        output: {
+          // 打包输出的目录,这里是绝对路径,必选设置项
+          path: path.resolve(__dirname, './dist'),
+          // 资源基础路径
+          publicPath: '/dist/',
+          // 打包输出的文件名
+          filename: 'build.js'
+        },
+        module: {
+          rules: [
+            {
+              test: /\.vue$/,
+              loader: 'vue-loader'
+            },
+            {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true
+              }
+            },
+            {
+              test: /\.css$/,
+              use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: 'css-loader?minimize'
+              })
+            },
+            // 支持less,2017.4.8添加
+            {
+              test: /\.less$/,
+              use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [
+                  { loader: "css-loader?minimize" },
+                  { loader: "less-loader" }
+                ]
+              })
+            },
+            {
+              // 处理图片文件
+              test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+              loader: 'url-loader',
+              options: {
+                limit: 7186, // inline base64 if <= 7K
+                name: 'static/images/[name].[ext]'
+              }
+            },
+            {
+              // 处理字体文件
+              test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+              loader: 'url-loader',
+              options: {
+                limit: 7186, // inline base64 if <= 7K
+                name: 'static/fonts/[name].[ext]'
+              }
+            }
+          ]
+        },
+        plugins: [
+          // https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          }),
+          new ExtractTextPlugin({ filename: 'static/css/app.css', allChunks: true })
+        ]
+      }    
     ◆注解 
     entry     指定将被打包的文件,格式可为str,arr,obj
       str     指定单一的入口文件
@@ -305,6 +499,7 @@ webpack   模块加载器兼打包工具
             new htmlWebpackPlugin(arg);
           ]
         }
+<<<<<<< HEAD
   ◆loader,解释器   用于编译解释相应的文件
     PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
       连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
@@ -317,6 +512,78 @@ webpack   模块加载器兼打包工具
         可同时使用多个,如 require("style-loader!css-loader!./style.css");
       在 webpack.config.js 配置文件中进行配置  
         {
+=======
+  Loaders,解释器 用于编译解释相应的文件 
+    PS：Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
+      多个loader之间使用”!”连接,类似于Linux的pipe命令,加载器的加载顺序为从右向左处理;
+      对于所需要的加载器,需要写在 package.json 文件中,
+      并通过npm install下载安装到./node_modules文件夹中才会生效,
+      否则在编译过程中因找不到加载器报错
+    npm install 「loaderName」 [--save-dev]   安装loader 
+      npm install css-loader style-loader     可同时安装多个loader 
+    ◆loader 枚举
+    ★在JS中引入CSS 
+      如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
+      css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
+      style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
+    css-loader       使webpack可以处理'.css'格式文件
+    style-loader     用于将引入的样式文件插入到HTML中
+      e.g.：
+        a.js 文件中: 
+          require("style-loader!css-loader!./style.css");
+        命令行编译,将 a.js 打包成 a.bundle.js :
+          webpack a.js  a.bundle.js
+        index.html 文件中
+          引入 a.bundle.js 文件
+          则 style.css 文件的内容被插入到了该HTML中
+    URL资源处理
+      默认情况,vue-loader 是自动用 css-loader 和 Vue 组件编译器来处理样式和模板文件的。在处理过程中,所有的资源 URL 比如<img src="...">, background: url(...) 和 CSS @import 都是被当做依赖的模块来处理。
+      
+      例如,url(./image.png) 被转译成 require('./image.png')。
+      
+      <img src="../image.png">
+      如上会被再转译成：
+      
+      createElement('img', { attrs: { src: require('../image.png') }})
+      因为 .png 并不是个 JavaScript 文件,你需要配置 Webpack 使用 file-loader 或者 url-loader 处理它们。项目脚手架工具 vue-cli 也能帮你配置这些。
+      
+      这样做的好处是：
+      
+      file-loader 允许你指定在哪里复制和存放静态资源文件 ,以及用版本哈希值命名从而更好利用缓存。 这意味着,可以把图片放到 *.vue 文件旁边,可使用相对路径,而不需要担心发布时候的 URL。使用适当的配置,Webpack 在打包输出的时候,会自动把文件路径转为正确的 URL。
+      
+      url-loader 允许你内联 base-64 数据格式的URL资源,如果小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。如果文件大于这个阈值。会自动it automatically falls back to file-loader.          
+    ◆使用方式
+    require("loaderName!./xx/fileName.xx");  在require中指定使用的loader 
+      使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
+      可同时使用多个,如 require("style-loader!css-loader!./style.css");
+    webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 在命令行中编译时指定
+      可同时指定多个loader 
+      e.g.：
+        webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
+      // 指定了style和css 两个loader
+    在配置文件中进行配置 
+      {
+        module : {
+          loaders : [
+            {test: /\.jade$/ , loader : 'jade' },
+            // 通过正则的test方将文件的后缀名法进行匹配
+            // 匹配成功则使用 指定的loader
+            {test: /\.css$/ , loader : 'style!css'},
+            // 或者 {test: /\.css$/ , loader : ["style", "css"]},
+          ] 
+        }
+      }
+      e.g.：
+        var htmlWebpackPlugin = require('html-webpack-plugin');
+        var path = require("path");
+        moudle.exports = {
+          context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
+          entry : './src/app.js',
+          output : {
+            path : '.dist',
+            filename : 'js/[name].budle.js'
+          },
+>>>>>>> origin/master
           module : {
             loaders : [
               {test: /\.jade$/ , loader : 'jade' },
@@ -436,6 +703,7 @@ webpack   模块加载器兼打包工具
           loader : 'url-loader',
           query : {mimetype : "image/png"}
         }
+<<<<<<< HEAD
       在命令行中进行配置   
   css-loader       使webpack可以处理'.css'格式文件
   style-loader     用于将引入的样式文件插入到HTML中 
@@ -450,6 +718,71 @@ webpack   模块加载器兼打包工具
   vue-loader       可把 .vue 文件转换成webpack包,和整个打包过程融合起来
   ◆plugins插件  可对整个webpack的流程进行一定的控制 
   html-webpack-plugin  在HTML文件中自动引入打包后的文件
+=======
+    ◆Query_Parameters,loader的配置参数
+    在require时配置
+      require("url-loader?mimetype=img/png!./file.png");
+    在配置文件中进行配置
+      {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
+      // 或
+      {
+        test : /\.png$/,
+        loader : 'url-loader',
+        query : {mimetype : "image/png"}
+      }
+    在cli命令行中进行配置 
+    e.g.：
+      module.loaders 是webpack最重要的一项配置,
+      告知webpack每一种文件都需要使用什么加载器来处理
+      module: {
+        loaders: [ //加载器配置
+          //.vue文件使用vue-loader处理（这里将-loader省去了）
+          {
+            test: /\.vue$/,
+            loader: 'vue'
+          },
+          //.js文件首先经过ealint-loader处理,再经过babel-loader处理
+          {
+            test: /\.js$/,
+            loader: 'babel!eslint',
+            // make sure to exclude 3rd party code in node_modules
+            exclude: /node_modules/
+          },
+          {
+            //图片文件使用url-loader处理,小于10kb的直接转换为base64
+            test: /\.(png|jpg|gif)$/,
+            loader: 'url',
+            query: {
+              limit: 10000,
+              // fallback to file-loader with this naming scheme
+              name: '[name].[ext]?[hash]'
+            }
+          }
+        ]
+      }
+  ◆Plugins,插件 
+  webpack.optimize.UglifyJsPlugin        丑化生成的js代码 
+    module.exports = {
+      plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false
+          }
+        })
+      ]
+    }
+  webpack.optimize.CommonsChunkPlugin    提取入口的公共模块到单独的文件 
+    module.exports = {
+      plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'vendor',
+          filename: 'vendor.js',
+          minChunks: 3
+        })
+      ]
+    }
+  html-webpack-plugin       在HTML文件中自动引入打包后的文件 
+>>>>>>> origin/master
     相关命令  
       npm install html-webpack-plugin --save-dev // 安装插件
     使用
@@ -528,6 +861,39 @@ webpack   模块加载器兼打包工具
           <script  type='text/javascript'>
             <%= compilation.asserts[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
           </script>
+  extract-text-webpack-plugin   提取css文件到单独的文件 
+    npm install extract-text-webpack-plugin -S
+      
+    var ExtractTextPlugin = require('extract-text-webpack-plugin');
+    module.exports = {
+      entry: {
+        main: './src/main.js'
+      },
+      output: {
+        // 打包输出的目录,这里是绝对路径,必选设置项
+        path: path.resolve(__dirname, './dist'),
+        // 资源基础路径
+        publicPath: '/dist/',
+        // 打包输出的文件名
+        filename: 'build.js'
+      },
+      module: {
+        rules: [
+          {
+            test: /\.css$/,
+            use: ExtractTextPlugin.extract({
+              fallback: 'style-loader',
+              use: 'css-loader?minimize'
+            })
+          }
+        ]
+      },
+      plugins: [
+        new ExtractTextPlugin({ filename: 'static/css/app.css', allChunks: true })
+      ]
+    }
+    将会生成/dist/static/css/app.css,此时output.publicPath将会发挥作用
+
   ...
   webpack 与 vue组件 
     PS：webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
@@ -601,7 +967,46 @@ webpack   模块加载器兼打包工具
         }
       </script>
       当使用 lang="less" 即使用Less,需 安装如下依赖
+<<<<<<< HEAD
       npm install -g css-loader less less-loader --save-dev
+=======
+      npm install -g css-loader less less-loader  --save-dev
+    webpack.config.js  文件的设置 
+    module.exports = {
+      module: {
+        rules: [
+          {
+            test: /\.vue$/, // 这是个正则表达式
+            loader: 'vue-loader' // 指定loader
+          },
+          {
+            test: /\.css$/, 
+            use: [ 'style-loader', 'css-loader' ] // 指定多个loader
+          },
+          {
+            test: /\.less$/, 
+            use: [ 'style-loader', 'less-loader' ] 
+          }
+        ]
+      }
+    }
+    e.g.：  vue目录结构初始化
+      手动创建的
+      webpack2   项目目录
+      |--dist    编译打包生成的文件存放的目录
+      |--node_modules   npm包存放的目录,自动生成
+      |--src         vue应用的源码存放目录
+      |--|---pages   vue其它组件的存放目录
+      |--|---css     应用的css目录
+      |--|---|---app.css 应用的主css文件
+      |--|---images  图片目录
+      |--|---main.js   vue应用的入口js
+      |--|---App.vue   vue应用的根组件
+      |--.babelrc      babel配置文件
+      |--index.html    vue应用的骨架html
+      |--package.json  npm配置文件
+      |--webpack.config.js   webpack配置文件
+>>>>>>> origin/master
 Gulp 
   PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；

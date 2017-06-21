@@ -1,4 +1,4 @@
-插件
+插件 
   使用 全局函数
     function foo(aoo){
       alert(aoo);

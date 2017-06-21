@@ -149,8 +149,7 @@ todo
       运行安装时,eslint mocha 等等依赖,建议初学不安装
     ◆构建发布 
     npm run build                       运行构建,生成生产环境可发布的代码 
-    webpack                             打包[直接运行] 
-      webpack --color --progress 
+
     使用路由功能 
       npm install vue-router      安装路由
       配置路由
@@ -2359,7 +2358,8 @@ Component 组件
     })    
   单文件的组件模式 
     PS：使用一个 .vue 格式文件将 HTML+CSS+JS 组装起来;一个 .vue 文件就是一个组件;
-      组件的通信方式同上[使用 props 和 event] 
+      组件的通信方式同上[使用 props 和 event] ;
+      单文件组件的写法需要编译工具才能最终在浏览器端工作;
     文件结构为 
     <template> HTMLCode <template/>
     <script> JSCode <script/>

@@ -21,8 +21,8 @@ npm,node_package_manager node包管理器
       --save-dev 和 --save 的区别
         --save-dev 是开发时候依赖的东西
         --save     是发布之后还依赖的东西
-        比如写 ES6 代码，如果想编译成 ES5 发布那么 babel 就是devDependencies,
-        如果用了 jQuery，由于发布之后还是依赖jQuery，所以是dependencies;
+        比如写 ES6 代码,如果想编译成 ES5 发布那么 babel 就是devDependencies,
+        如果用了 jQuery,由于发布之后还是依赖jQuery,所以是dependencies;
       e.g.:
         npm install lodash -g   全局安装 
         npm install npm -g      升级npm版本[会更新所有npm的包?]
@@ -239,6 +239,11 @@ webpack   模块加载器兼打包工具
     Webpack将从该文件开始找到项目的所有依赖文件,使用loaders处理它们,
     最后打包为一个浏览器可识别的JavaScript文件;
     支持3种引入方式: AMD commonjs ES6模块化
+    原理:
+    把所有的非js资源都转换成js,
+    如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
+    把图片转换成一个图片地址的 js 变量或 base64 编码等,
+    然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
   命令行命令 
     npm install webpack --save-dev  安装webpack并写入依赖配置文件  
     webpack aoo.js boo.js [--xx]    将 aoo.js 文件打包成 boo.js 文件
@@ -248,7 +253,7 @@ webpack   模块加载器兼打包工具
         --display-modules 打包完后显示依赖的模块 
         --display-reasons 显示打包的原因 
     ◆其他命令参数
-  webpack.config.js 默认的配置文件 
+  webpack.config.js   默认的配置文件 
     PS：需手动创建该文件; 通过配置文件 webpack.config.js 来进行相应的配置;
     相关命令 
       webpack          [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
@@ -300,148 +305,150 @@ webpack   模块加载器兼打包工具
             new htmlWebpackPlugin(arg);
           ]
         }
-  loader,解释器 用于编译解释相应的文件 
+  ◆loader,解释器   用于编译解释相应的文件
+    PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
+      连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
+    ★相关命令
     npm install 「loaderName」 [--save-dev]   安装loader 
       npm install css-loader style-loader     可同时安装多个loader 
-    ◆loader 枚举
-    css-loader       使webpack可以处理'.css'格式文件
-    style-loader     用于将引入的样式文件插入到HTML中
-      e.g.：
-        a.js 文件中: 
-          require("style-loader!css-loader!./style.css");
-        命令行编译,将 a.js 打包成 a.bundle.js :
-          webpack a.js  a.bundle.js
-        index.html 文件中
-          引入 a.bundle.js 文件
-          则 style.css 文件的内容被插入到了该HTML中
-    ◆使用方式
-    require("loaderName!./xx/fileName.xx");  在require中指定使用的loader 
-      使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
-      可同时使用多个,如 require("style-loader!css-loader!./style.css");
-    webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 在命令行中编译时指定
-      可同时指定多个loader 
-      e.g.：
-        webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
-      // 指定了style和css 两个loader
-    在配置文件中进行配置 
-      {
-        module : {
-          loaders : [
-            {test: /\.jade$/ , loader : 'jade' },
-            // 通过正则的test方将文件的后缀名法进行匹配
-            // 匹配成功则使用 指定的loader
-            {test: /\.css$/ , loader : 'style!css'},
-            // 或者 {test: /\.css$/ , loader : ["style", "css"]},
-          ] 
-        }
-      }
-      e.g.：
-        var htmlWebpackPlugin = require('html-webpack-plugin');
-        var path = require("path");
-        moudle.exports = {
-          context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
-          entry : './src/app.js',
-          output : {
-            path : '.dist',
-            filename : 'js/[name].budle.js'
-          },
+    使用方式 
+      require时中指定使用的loader  require("loaderName!./xx/fileName.xx");  
+        使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
+        可同时使用多个,如 require("style-loader!css-loader!./style.css");
+      在 webpack.config.js 配置文件中进行配置  
+        {
           module : {
             loaders : [
-              { test : /\.js$/,
-                loader : 'babel', // 通过 babel 对 JS文件进行编译
-                exclude : path.resolve(__dirname,'node_modules'), // 指定不用处理的部分
-                // 通过path「Node的API」将相对路径 node_modules 解析为绝对路径
-                include : './src/', // 指定处理的范围
-                query : {
-                  presets : ['latest'] 
-                  // 指定将 js 编译的版本,其他的如 ["es2015"] 等
-                }
-                // 可在 npm 的 package.json 中 指定
-                // "babel" : { "presets" : ["latest"] }
-                // 从而取消在此处指定 query 项
-              },
-              { html : /\.html$/,
-                loader : 'html-loader'
-              },
-              { test : /\.css$/,
-                loader : 'style-loader!css-loader?importLoader=1!postcss-loader', 
-                // importLoader=1 表示该Loader后的1个loader来处理css中import的css
-                // 或 loader : ["style-loader","css-loader"."postcss-loader"]
-                // 注: 解析的顺序为 从后向前,即postcss-loader先起作用
-                // css-loader 用于在JS中处理 css文件
-                // style-loader 用于将处理后的css插入到HTML中
-                // 使用 postcss-loader 的 autoprefixer 功能 将css属性添加前缀
-                // 需安装 postcss-loader 和 autoprefixer 
-              },
-              { test : /\.less$/,
-                loader : 'style!css!postcss!less', // 可以省略 -loader
-                // less-loader 会自动将 @import 引入的css属性增加浏览器前缀
-                // 故可省略 ?importLoader
-              },
-              { test : /\.sass$/,
-                loader : 'style!css!postcss!sass',
-              },
-              // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的「相对」路径
-              //   // HTML、CSS中图片的相对路径会被替换
-              //   // 组件模版中HTML内需如此使用 <img src="${require(../a.png)}"/>
-              //   loader : 'file',
-              //   query : {
-              //     name :'assets/[name]-[hash:5].[ext]' , // 用于定义图片的路径
-              //     // [name]、[hash]、[ext]都为占位符表示名字、哈希和后缀名
-              //     // 其中 [hash:5] 表示取hash字符串中的5位
-              //   }
-              // },
-              // { test : /\.(png|jpg|gif|svg)$/i, 
-              //   loader : 'url', // 可以处理图片或文件
-              //   query : {
-              //     limit : 20000, // 20k,当图片小于该该值时,将被转换为base64
-              //     // 否则交由 file-loader 来处理
-              //     name :'assets/[name]-[hash:5].[ext]' , 
-              //   }
-              // },
-              { test : /\.(png|jpg|gif|svg)$/i, 
-                loaders : [  // 指定多个loader
-                  'url-loader?limit=1000&name=assets/[name]-[hash:5].[ext]',
-                  'image-webpack' // 用于压缩图片,按照逆序会先执行压缩
-                ], 
-                }
-              },
-            ]
-          },
-          postcss : [
-            require('autoprefixer')({
-              browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
-            })
-          ],
-          或 
-          // postcss : function(){
-          //   return [
-          //     require('autoprefixer')({
-          //       browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
-          //     })
-          //   ]
-          // } ,
-          plugins : [
-            new htmlWebpackPlugin({
-              filename : 'index.html',
-              template : 'index.html',
-              inject : 'body'
-            })
-          ]
+              {test: /\.jade$/ , loader : 'jade' },
+              // 通过正则的test方将文件的后缀名法进行匹配
+              // 匹配成功则使用 指定的loader
+              {test: /\.css$/ , loader : 'style!css'},
+              // 或者 {test: /\.css$/ , loader : ["style", "css"]},
+            ] 
+          }
         }
-    ◆Query_Parameters,loader的配置参数
-    在require时配置
-      require("url-loader?mimetype=img/png!./file.png");
-    在配置文件中进行配置
-      {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
-      // 或
-      {
-        test : /\.png$/,
-        loader : 'url-loader',
-        query : {mimetype : "image/png"}
-      }
-    在cli命令行中进行配置
-  ◆plugins插件 
+        e.g.：
+          var htmlWebpackPlugin = require('html-webpack-plugin');
+          var path = require("path");
+          moudle.exports = {
+            context : __dirname, // 指定当前上下文环境,即当前路径"./"的位置
+            entry : './src/app.js',
+            output : {
+              path : '.dist',
+              filename : 'js/[name].budle.js'
+            },
+            module : {
+              loaders : [
+                { test : /\.js$/,
+                  loader : 'babel', // 通过 babel 对 JS文件进行编译
+                  exclude : path.resolve(__dirname,'node_modules'), // 指定不用处理的部分
+                  // 通过path「Node的API」将相对路径 node_modules 解析为绝对路径
+                  include : './src/', // 指定处理的范围
+                  query : {
+                    presets : ['latest'] 
+                    // 指定将 js 编译的版本,其他的如 ["es2015"] 等
+                  }
+                  // 可在 npm 的 package.json 中 指定
+                  // "babel" : { "presets" : ["latest"] }
+                  // 从而取消在此处指定 query 项
+                },
+                { html : /\.html$/,
+                  loader : 'html-loader'
+                },
+                { test : /\.css$/,
+                  loader : 'style-loader!css-loader?importLoader=1!postcss-loader', 
+                  // importLoader=1 表示该Loader后的1个loader来处理css中import的css
+                  // 或 loader : ["style-loader","css-loader"."postcss-loader"]
+                  // 注: 解析的顺序为 从后向前,即postcss-loader先起作用
+                  // css-loader 用于在JS中处理 css文件
+                  // style-loader 用于将处理后的css插入到HTML中
+                  // 使用 postcss-loader 的 autoprefixer 功能 将css属性添加前缀
+                  // 需安装 postcss-loader 和 autoprefixer 
+                },
+                { test : /\.less$/,
+                  loader : 'style!css!postcss!less', // 可以省略 -loader
+                  // less-loader 会自动将 @import 引入的css属性增加浏览器前缀
+                  // 故可省略 ?importLoader
+                },
+                { test : /\.sass$/,
+                  loader : 'style!css!postcss!sass',
+                },
+                // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的「相对」路径
+                //   // HTML、CSS中图片的相对路径会被替换
+                //   // 组件模版中HTML内需如此使用 <img src="${require(../a.png)}"/>
+                //   loader : 'file',
+                //   query : {
+                //     name :'assets/[name]-[hash:5].[ext]' , // 用于定义图片的路径
+                //     // [name]、[hash]、[ext]都为占位符表示名字、哈希和后缀名
+                //     // 其中 [hash:5] 表示取hash字符串中的5位
+                //   }
+                // },
+                // { test : /\.(png|jpg|gif|svg)$/i, 
+                //   loader : 'url', // 可以处理图片或文件
+                //   query : {
+                //     limit : 20000, // 20k,当图片小于该该值时,将被转换为base64
+                //     // 否则交由 file-loader 来处理
+                //     name :'assets/[name]-[hash:5].[ext]' , 
+                //   }
+                // },
+                { test : /\.(png|jpg|gif|svg)$/i, 
+                  loaders : [  // 指定多个loader
+                    'url-loader?limit=1000&name=assets/[name]-[hash:5].[ext]',
+                    'image-webpack' // 用于压缩图片,按照逆序会先执行压缩
+                  ], 
+                  }
+                },
+              ]
+            },
+            postcss : [
+              require('autoprefixer')({
+                browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
+              })
+            ],
+            或 
+            // postcss : function(){
+            //   return [
+            //     require('autoprefixer')({
+            //       browser : ['latest 5 versions'] , // 最近的5个浏览器的版本
+            //     })
+            //   ]
+            // } ,
+            plugins : [
+              new htmlWebpackPlugin({
+                filename : 'index.html',
+                template : 'index.html',
+                inject : 'body'
+              })
+            ]
+          }
+      编译时指定[在命令行中]        webpack f1 f2 --moudle-bind 'loader'     
+        可同时指定多个loader 
+          webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
+          // 指定了style和css 两个loader
+    Query_Parameters,loader的配置参数
+      在 require 时配置 
+        require("url-loader?mimetype=img/png!./file.png");
+      在 webpack.config.js 配置文件中进行配置 
+        {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
+        或
+        {
+          test : /\.png$/,
+          loader : 'url-loader',
+          query : {mimetype : "image/png"}
+        }
+      在命令行中进行配置   
+  css-loader       使webpack可以处理'.css'格式文件
+  style-loader     用于将引入的样式文件插入到HTML中 
+    e.g.：
+      a.js 文件中: 
+        require("style-loader!css-loader!./style.css");
+      命令行编译,将 a.js 打包成 a.bundle.js :
+        webpack a.js  a.bundle.js
+      index.html 文件中
+        引入 a.bundle.js 文件
+        则 style.css 文件的内容被插入到了该HTML中
+  vue-loader       可把 .vue 文件转换成webpack包,和整个打包过程融合起来
+  ◆plugins插件  可对整个webpack的流程进行一定的控制 
   html-webpack-plugin  在HTML文件中自动引入打包后的文件
     相关命令  
       npm install html-webpack-plugin --save-dev // 安装插件
@@ -523,13 +530,13 @@ webpack   模块加载器兼打包工具
           </script>
   ...
   webpack 与 vue组件 
-    webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
-    基于loader可实现大量高级功能,
-    如自动分块打包并按需加载、对图片资源引用的自动定位、
-    根据图片大小决定是否用base64内联、开发时的模块热替换等等;
-    在Webpack的loader API基础上开发了vue-loader插件,可用 .vue 单文件格式来写Vue组
-    把一个组件的模板、样式、逻辑三要素整合在同一个文件中,即方便开发,也方便复用和维护;
-    Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
+    PS：webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
+      基于loader可实现大量高级功能, 如自动分块打包并按需加载、对图片资源引用的自动定位、
+      根据图片大小决定是否用base64内联、开发时的模块热替换等等;
+    vue-loader插件 
+      在Webpack的loader API基础上开发的,可用 .vue 单文件格式来写Vue组件
+      把一个组件的模板、样式、逻辑三要素整合在同一个文件中,即方便开发,也方便复用和维护;
+      Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
     e.g.：
       <style>
         ...
@@ -569,7 +576,7 @@ webpack   模块加载器兼打包工具
         //   }
         // }
       </script>
-    可在 .vue 文件中使用其他预处理器,只需要安装对应的Webpack loader即可 
+    在 .vue 文件中使用其他预处理器[需安装对应的Webpack loader] 
       <style lang="less">
         .my-component{
           background-color : bule;
@@ -594,7 +601,7 @@ webpack   模块加载器兼打包工具
         }
       </script>
       当使用 lang="less" 即使用Less,需 安装如下依赖
-      npm install -g css-loader less less-loader  --save-dev
+      npm install -g css-loader less less-loader --save-dev
 Gulp 
   PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；

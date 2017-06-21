@@ -598,6 +598,43 @@ fileNum : 21
     snippets
     *
     html
+    # S◆◆◆◆◆
+    '-self-cptInit':
+      'prefix': 'cptInit'
+      'body': """
+      <style>
+    
+      </style>
+
+      <script type="text/javascript">
+      $(function(){
+        $1
+      })
+      </script>
+      """ 
+    '-vue-vbind':
+      'prefix': 'vbind'
+      'body': """:attrName='arg'""" 
+    JS
+    '-vue-new Vue({$1});':
+      'prefix': 'newVue'
+      'body': """new Vue({
+          el : '$1',
+          data : {
+            
+          },
+          methods : {
+            
+          },
+          mounted : function (){
+            this.$nextTick(function () {
+              // 代码保证 this.$el 在 document 中
+            })
+          },
+        });""" 
+
+
+
 
       
     

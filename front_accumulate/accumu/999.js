@@ -589,6 +589,21 @@ fileNum : 21
 ◆DeskTop 
   editor 
     snippets
+    js-------------------
+    '-Vue.component("xx",{});':
+      'prefix': 'vueComponent'
+      'body': """Vue.component("${1:xx}",{
+        template: "",
+        props : [],
+        data : function(){
+          return {
+            
+          }
+        },
+        computer ： {}，
+        methods ：{}，
+      });""" 
+
       
   QQInput
     自定义短语
@@ -596,70 +611,8 @@ fileNum : 21
 ◆NoteBook 
   editor 
     snippets
-    --------------------------------
     html----------------------------
-    # S◆◆◆◆◆
-    '-self-cptTemplate':
-      'prefix': 'cptTemplate'
-      'body': """
-      <style>
-    
-      </style>
-      $1
-      <script type="text/javascript">
-      $(function(){
-        
-      })
-      </script>
-      """ 
-    # V◆◆◆◆◆
-    '-vue-vbind':
-      'prefix': 'vbind'
-      'body': """:class='${1:arg}'""" 
-    '-vue-velse':
-      'prefix': 'velse'
-      'body': """v-else='${1:key}'""" 
-    '-vue-vfor':
-      'prefix': 'vfor'
-      'body': """v-for='item1 in ${1:items1}'""" 
-    '-vue-vhtml':
-      'prefix': 'vhtml'
-      'body': """v-html='${1:key}'""" 
-    '-vue-vif':
-      'prefix': 'vif'
-      'body': """v-if='${1:key}'""" 
-    '-vue-vmodel':
-      'prefix': 'vhtml'
-      'body': """v-model='${1:key}'""" 
-    '-vue-von':
-      'prefix': 'von'
-      'body': """@click='${1:arg}'""" 
-    '-vue-vonce':
-      'prefix': 'vonce'
-      'body': """v-once""" 
-    '-vue-vshow':
-      'prefix': 'vshow'
-      'body': """v-show='${1:key}'""" 
-    '-vue-vtext':
-      'prefix': 'vtext'
-      'body': """v-text='${1:key}'""" 
     JS------------------------------
-    '-vue-new Vue({$1});':
-      'prefix': 'newVue'
-      'body': """new Vue({
-          el : '$1',
-          data : {
-            
-          },
-          methods : {
-            
-          },
-          mounted : function (){
-            this.$nextTick(function () {
-              // 代码保证 this.$el 在 document 中
-            });
-          },
-        });""" 
 
 
 
@@ -684,7 +637,69 @@ sudo
 v-model select bug 
 
 
-
+Vue.component("time-choose",{
+  template: "<span>\
+    <select > \
+      <option  v-for='year in years'>{{year}}</option> \
+    </select> \
+    <select @change='changDays(curMonth)' v-model='curMonth'> \
+      <option  v-for='month in months' >{{month}}</option> \
+    </select> \
+    <select > \
+      <option  v-for='day in days'>{{day}}</option> \
+    </select> \
+  </span> ",
+  props : [],
+  data : function(){
+    return {
+      years : [],
+      months : [],
+      curMonth : 1,
+      days : [],
+    }
+  },
+  methods : {
+    changDays : function(month){
+      console.log(month);
+      this.days = []
+      if (month == 2 ) {
+        console.log(2);
+        for (var i = 0; i < 28; i++) {
+          this.days.push(i+1);
+        }
+      }
+      else if (['4','6','9','11'].includes(month)) {
+        console.log(1111);
+        for (var i = 0; i < 30; i++) {
+          this.days.push(i+1);
+        }
+      }
+      else {
+        console.log(1111111111111);
+        for (var i = 0; i < 31; i++) {
+          this.days.push(i+1);
+        }
+      }
+    },
+    
+  },
+  mounted : function (){
+    this.$nextTick(function () {
+      // 代码保证 this.$el 在 document 中
+    });
+    var now = new Date();
+    var curY = now.getFullYear();
+    for (var i = 0; i < 100; i++) {
+      this.years.push(curY-i);
+    }
+    for (var i = 0; i < 12; i++) {
+      this.months.push(i+1);
+    }
+    for (var i = 0; i < 31; i++) {
+      this.days.push(i+1);
+    }
+  },
+});
 
 
 

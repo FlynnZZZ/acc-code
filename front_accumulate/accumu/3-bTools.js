@@ -1264,7 +1264,7 @@ webpack   模块加载器兼打包工具
           // 开启source-map,webpack有多种source-map,在官网文档可以查到
           devtool: 'eval-source-map'
         };
-其他工具
+其他工具 
   Gulp 
     PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
       她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；

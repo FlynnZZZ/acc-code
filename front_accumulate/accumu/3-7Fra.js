@@ -1317,7 +1317,7 @@ Directives,指令系统 用于model和view的交互
       渲染为
       <div id="test"><a href="#">作为文本出现</a></div>
   v-model="key"  表单元素读写值 
-    常见的表单如 input,checkbox,radio,select:
+    常见的表单如 input,checkbox,radio,select,
     e.g.：
       动态展示输入
       <div id="test">
@@ -1330,6 +1330,11 @@ Directives,指令系统 用于model和view的交互
           message: 'Hello Vue!'
         }
       })    
+    Exp： 
+      <select class="" name="" v-model='key'>
+        <option value="">{{data1}}</option>
+        // 需将 value="" 属性去掉,否则 v-model 取到的值为 ""
+      </select>
   v-for='ph in keyObj'   渲染循环列表 
     ph 为自定义的占位符placeholder,keyObj的属性,便于后续使用 
       '(ph,key) in keyObj' 形式,使用下标占位符'key'

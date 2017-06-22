@@ -681,7 +681,7 @@ crossDomain: true,
 
 sudo 
 
-
+v-model select bug 
 
 
 

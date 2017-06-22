@@ -1378,7 +1378,7 @@ Directives,指令系统 用于model和view的交互
         }
       })    
   ◆显示控制 
-  v-if:"key"    控制显示
+  v-if="key"    控制显示
     e.g.：
       <div id="test">
         <p v-if="seen">现在你看到我了</p>
@@ -1390,9 +1390,9 @@ Directives,指令系统 用于model和view的交互
         }
       })
       在控制台设置 app3.seen = false 隐藏
-  v-else:"key"  控制显示 
+  v-else="key"  控制显示 
     PS：v-if用于条件判断,和v-else是一对
-  v-show:'key'  作用与v-if类似 
+  v-show='key'  作用与v-if类似 
     不同的是v-show的元素会始终渲染并保持在DOM中「使用的是display:none」,
     且v-show不支持<template>标签
   ◆属性控制

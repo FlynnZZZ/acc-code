@@ -618,7 +618,7 @@ fileNum : 21
       'body': """:class='${1:arg}'""" 
     '-vue-velse':
       'prefix': 'velse'
-      'body': """v-else:'${1:key}'""" 
+      'body': """v-else='${1:key}'""" 
     '-vue-vfor':
       'prefix': 'vfor'
       'body': """v-for='item1 in ${1:items1}'""" 
@@ -627,7 +627,7 @@ fileNum : 21
       'body': """v-html='${1:key}'""" 
     '-vue-vif':
       'prefix': 'vif'
-      'body': """v-if:'${1:key}'""" 
+      'body': """v-if='${1:key}'""" 
     '-vue-vmodel':
       'prefix': 'vhtml'
       'body': """v-model='${1:key}'""" 
@@ -639,7 +639,7 @@ fileNum : 21
       'body': """v-once""" 
     '-vue-vshow':
       'prefix': 'vshow'
-      'body': """v-show:'${1:key}'""" 
+      'body': """v-show='${1:key}'""" 
     '-vue-vtext':
       'prefix': 'vtext'
       'body': """v-text='${1:key}'""" 

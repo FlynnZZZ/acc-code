@@ -1211,6 +1211,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
         // 代码保证 this.$el 在 document 中
       })
     }
+  directives : val 可选,自定义指令 
   ...
   ◆vm.$xx [带有前缀$的]实例方法与属性[用于访问选项对象里的属性] 
     PS：vm.xx 代理的是data中的属性,则使用 vm.$xx 访问如el,data等在选项对象里的属性;
@@ -1495,6 +1496,103 @@ Directives,指令系统 用于model和view的交互
         <comp :foo="bar" @update:foo="val => bar = val"></comp>
         当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件：
         this.$emit('update:foo',newValue)
+  自定义指令 
+    PS：有的情况下,仍然需要对纯DOM元素进行底层操作,这时候就会用到自定义指令;
+    Vue.directive('name', options);  自定义全局指令 
+      name    指令的名称
+      options 配置对象或函数 
+        {
+          // 当绑定元素插入到 DOM 中
+          inserted: function (el) {
+            // 聚焦元素
+            el.focus()
+          }
+        }
+    directives : val,       注册局部指令
+      directives: {
+        focus: {
+          // 指令的定义---
+        }
+      }
+    e.g.：
+      当页面加载时,元素将获得焦点
+      // 注册一个全局自定义指令 v-focus
+      Vue.directive('focus', {
+        // 当绑定元素插入到 DOM 中。
+        inserted: function (el) {
+          // 聚焦元素
+          el.focus()
+        }
+      })
+    在模板中任何元素上使用新的 v-xx 指令
+      <input v-focus>
+    指令定义函数提供了几个钩子函数[可选]：
+      bind         指令第一次绑定到元素时调用[只调用一次] 
+        用这个钩子函数可以定义一个在绑定时执行一次的初始化动作。
+      inserted     被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于 document 中]
+      update       被绑定元素所在的模板更新时调用,而不论绑定值是否变化
+        通过比较更新前后的绑定值,可以忽略不必要的模板更新
+      componentUpdated  被绑定元素所在模板完成一次更新周期时调用。
+      unbind       指令与元素解绑时调用[只调用一次]
+      钩子函数的参数 
+        el         指令所绑定的元素,可以用来直接操作 DOM 
+        binding    一个对象,包含以下属性 
+          name       指令名,不包括 v- 前缀 
+          value      指令的绑定值 
+            例如： v-my-directive="1 + 1", value 的值是 2
+          oldValue   指令绑定的前一个值,仅在 update 和 componentUpdated 钩子中可用 
+            无论值是否改变都可用。
+          expression 绑定值的字符串形式。 例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
+          arg        传给指令的参数
+            例如 v-my-directive:foo, arg 的值是 "foo"。
+          modifiers  一个包含修饰符的对象
+            例如： v-my-directive.foo.bar, 
+            修饰符对象 modifiers 的值是 { foo: true, bar: true }。
+        vnode      Vue编译生成的虚拟节点 
+        oldVnode   上一个虚拟节点,仅在 update 和 componentUpdated 钩子中可用 
+        除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
+      如果需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+    
+        一个使用了这些参数的自定义钩子样例：
+        <div id="hook-arguments-example" v-demo:hello.a.b="message"></div>
+        Vue.directive('demo', {
+          bind: function (el, binding, vnode) {
+            var s = JSON.stringify
+            el.innerHTML =
+              'name: '       + s(binding.name) + '<br>' +
+              'value: '      + s(binding.value) + '<br>' +
+              'expression: ' + s(binding.expression) + '<br>' +
+              'argument: '   + s(binding.arg) + '<br>' +
+              'modifiers: '  + s(binding.modifiers) + '<br>' +
+              'vnode keys: ' + Object.keys(vnode).join(', ')
+          }
+        })
+        new Vue({
+          el: '#hook-arguments-example',
+          data: {
+            message: 'hello!'
+          }
+        })
+        name: "demo"
+        value: "hello!"
+        expression: "message"
+        argument: "hello"
+        modifiers: {"a":true,"b":true}
+        vnode keys: tag, data, children, text, elm, ns, context, functionalContext, key, componentOptions, child, parent, raw, isStatic, isRootInsert, isComment, isCloned, isOnce
+        函数简写
+    
+        大多数情况下,我们可能想在 bind 和 update 钩子上做重复动作,并且不想关心其它的钩子函数。可以这样写:
+        Vue.directive('color-swatch', function (el, binding) {
+          el.style.backgroundColor = binding.value
+        })
+        对象字面量
+        
+        如果指令需要多个值,可以传入一个 JavaScript 对象字面量。记住,指令函数能够接受所有合法类型的 JavaScript 表达式。
+        <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+        Vue.directive('demo', function (el, binding) {
+          console.log(binding.value.color) // => "white"
+          console.log(binding.value.text)  // => "hello!"
+        })    
   Class 与 Style 绑定
     PS：数据绑定一个常见需求是操作元素的 class 列表和它的内联样式。
       因为它们都是属性 ,我们可以用v-bind 处理它们：只需要计算出表达式最终的字符串。
@@ -2207,8 +2305,6 @@ Directives,指令系统 用于model和view的交互
         
         若你还不熟悉Vue的组件,跳过这里即可。
         HTML 内建的 input 类型有时不能满足你的需求。还好,Vue 的组件系统允许你创建一个具有自定义行为可复用的 input 类型,这些 input 类型甚至可以和 v-model 一起使用！要了解更多,请参阅自定义 input 类型          
-  v-attr   
-  v-repeat 
 Mustache,模板语法   插值 
   PS：Vue使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
     在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
@@ -2434,7 +2530,7 @@ Component 组件
       <script type="text/x-template">
       JavaScript内联模版字符串
       .vue 组件
-  父组件通过子组件的props向下传递数据给子组件 
+  父组件通过子组件的props向子组件传递数据 
     组件实例的作用域是孤立的,不能在子组件的模板内直接引用父组件的数据;
     e.g.：
       Vue.component('child',{
@@ -2524,7 +2620,7 @@ Component 组件
         Function
         Object
         Array
-  子组件通过v-on绑定自定义事件向父元素传递信息 
+  子组件通过'v-on'自定义事件向父元素传递信息 
     PS：$on('eventName') 监听事件,$emit('eventName',data) 触发事件
       父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
     e.g.：
@@ -2537,13 +2633,14 @@ Component 组件
         template: '<button v-on:click="addSelf">{{ counter }}</button>',
         data: function () {
           return {
-            counter: 0
+            counter: 0,
+            moreData: '来自子组件的消息',
           }
         },
         methods: {
           addSelf: function () {
             this.counter += 1
-            this.$emit('addtotal')
+            this.$emit('addtotal',this.moreData)
             // 此处需注意将'addtotal'统一改为'addTotal'时,vue不工作
             // 在HTML中不区分大小写,但在JS中区分大小写「SlPt」
           }
@@ -2555,11 +2652,14 @@ Component 组件
           total: 0
         },
         methods: {
-          incrementTotal: function () {
+          incrementTotal: function (moreData) {
             this.total += 1
+            console.log(moreData);
           }
         }
       })
+    Exp: 
+      用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写「SlPt」
   非父子组件通信 
     简单场景下,使用一个的 Vue 实例作为中央事件总线
       var bus = new Vue()
@@ -2970,7 +3070,7 @@ vue-router    路由
   script引入
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
-    在 Vue 后面加载 vue-router，它会自动安装的：
+    在 Vue 后面加载 vue-router,它会自动安装的：
   npm使用
     ◆安装
     npm install vue-router --save
@@ -2978,8 +3078,8 @@ vue-router    路由
     import Vue from "vue";
     import VueRouter from "vue-router";
     Vue.use(VueRouter);
-    // 如果在一个模块化工程中使用它，必须要通过 Vue.use() 明确地安装路由功能：
-    // 如果使用全局的 script 标签，则无须如此    
+    // 如果在一个模块化工程中使用它,必须要通过 Vue.use() 明确地安装路由功能：
+    // 如果使用全局的 script 标签,则无须如此    
     
     e.g.：
       ◆html
@@ -3002,14 +3102,14 @@ vue-router    路由
         template: '<p>This is bar!</p>'
       })
       // 路由器需要一个根组件。
-      // 出于演示的目的，这里使用一个空的组件，直接使用 HTML 作为应用的模板
+      // 出于演示的目的,这里使用一个空的组件,直接使用 HTML 作为应用的模板
       var App = Vue.extend({})
       // 创建一个路由器实例
-      // 创建实例时可以传入配置参数进行定制，为保持简单，这里使用默认配置
+      // 创建实例时可以传入配置参数进行定制,为保持简单,这里使用默认配置
       var router = new VueRouter()
       // 定义路由规则
       // 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend
-      // 创建的组件构造函数，也可以是一个组件选项对象。
+      // 创建的组件构造函数,也可以是一个组件选项对象。
       // 稍后我们会讲解嵌套路由
       router.map({
         '/foo': {
@@ -3020,7 +3120,7 @@ vue-router    路由
         }
       })
       // 现在我们可以启动应用了！
-      // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
+      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上。
       router.start(App, '#app')
       
     结合定义的 .vue 单文件组件
@@ -3036,17 +3136,17 @@ vue-router    路由
       import hello from './components/hello.vue';
       //开启debug模式
       Vue.config.debug = true;
-      // new Vue(app);//这是上一篇用到的，新建一个vue实例，现在使用vue-router就不需要了。
+      // new Vue(app);//这是上一篇用到的,新建一个vue实例,现在使用vue-router就不需要了。
       // 路由器需要一个根组件。
       var App = Vue.extend({});
       // 创建一个路由器实例
       var router = new VueRouter();
-      // 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend创建的组件构造函数，也可以是一个组件选项对象。
+      // 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend创建的组件构造函数,也可以是一个组件选项对象。
       // 稍后我们会讲解嵌套路由
       router.map({//定义路由映射
         '/index':{//访问地址
           name:'index',//定义路由的名字。方便使用。
-          component:index,//引用的组件名称，对应上面使用`import`导入的组件
+          component:index,//引用的组件名称,对应上面使用`import`导入的组件
           //component:require("components/app.vue")//还可以直接使用这样的方式也是没问题的。不过会没有import集中引入那么直观
         },
         '/list': {
@@ -3058,20 +3158,20 @@ vue-router    路由
         '*':"/index"//重定向任意未匹配路径到/index
       });
       // 现在我们可以启动应用了！
-      // 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
+      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上。
       router.start(App, '#app');
 
-    在 index.html 需要有用于渲染匹配的组件，如下
+    在 index.html 需要有用于渲染匹配的组件,如下
       <div id="app">
       <router-view></router-view>
       </div>
 
     现在当我们运行 npm start 进入'http://localhost:8080/'
-    就会自动跳转到'http://localhost:8080/#!/index'，并且读取里面的内容
+    就会自动跳转到'http://localhost:8080/#!/index',并且读取里面的内容
 
     实现路由跳转
 
-    主要抽出app.vue中的内容来讲解，的内容是：(list.vue里面的内容自行设置查看吧)
+    主要抽出app.vue中的内容来讲解,的内容是：(list.vue里面的内容自行设置查看吧)
     <template>
       <div>
         <h1>姓名：{{name}}</h1>
@@ -3082,52 +3182,52 @@ vue-router    路由
       </div>
     </template>
     <script>
-      export default {//这里是官方的写法，默认导出，ES6
-        data () { //ES6，等同于data:function(){}
-        return {    //必须使用这样的形式，才能创建出单一的作用域
+      export default {//这里是官方的写法,默认导出,ES6
+        data () { //ES6,等同于data:function(){}
+        return {    //必须使用这样的形式,才能创建出单一的作用域
           name:"guowenfh",
           age:"21"
         }
       },
       methods :{
-        golist () {//方法，定义路由跳转，注意这里必须使用this，不然报错
+        golist () {//方法,定义路由跳转,注意这里必须使用this,不然报错
           this.$route.router.go({name:"list"});
         }
       }
     }
     </script>
     <style></style>
-    <!-- 样式自行设置，或者直接看源码就好 -->
-    因为自刷新的缘故，直接切换到浏览器。
+    <!-- 样式自行设置,或者直接看源码就好 -->
+    因为自刷新的缘故,直接切换到浏览器。
 
-    点击上面使用的v-link，与router.go的方式都可以跳转到list定义的路由。（观察浏览器地址栏的变化）在这里我们使用的{name:"list"}，使用{ path: '/list' }会有同样的效果。
+    点击上面使用的v-link,与router.go的方式都可以跳转到list定义的路由。（观察浏览器地址栏的变化）在这里我们使用的{name:"list"},使用{ path: '/list' }会有同样的效果。
 
     引用Vue组件
 
-    在第一小点里面我们看到了在页面内的组件的使用方法，第二小点中学习到了vue-router的制定路由规则。
+    在第一小点里面我们看到了在页面内的组件的使用方法,第二小点中学习到了vue-router的制定路由规则。
 
-    看过这两个地方之后，我们把思维发散开来，应该就能触类旁通的想到如何在页面中嵌套加载别的组件了。
-    我们创建一个hello.vue ，里面内容随意。现在我们如果要在app.vue中加载它，那么只需要在app.vue中使用import hello from "./hello.vue"（其实这个达到了使用require两步的效果。引入赋值）。
+    看过这两个地方之后,我们把思维发散开来,应该就能触类旁通的想到如何在页面中嵌套加载别的组件了。
+    我们创建一个hello.vue ,里面内容随意。现在我们如果要在app.vue中加载它,那么只需要在app.vue中使用import hello from "./hello.vue"（其实这个达到了使用require两步的效果。引入赋值）。
 
-    引入之后，只需要如下注册：
+    引入之后,只需要如下注册：
 
     export default {
         //其它的就
         components:{
-            hello//若还有更多的组件，只需要在import的情况下，以逗号分割，继续注册就好
+            hello//若还有更多的组件,只需要在import的情况下,以逗号分割,继续注册就好
         }
     }
-    最后在app.vue中添加<hello></hello>这一对自定义标签，就可以实现加载hello.vue中的内容。
+    最后在app.vue中添加<hello></hello>这一对自定义标签,就可以实现加载hello.vue中的内容。
 
-    组件的嵌套也就是这样，很简单的描述完了，但是怎么样去抽离组件，在工作中积累可以复用的组件才是我们真正需要去思考的。
+    组件的嵌套也就是这样,很简单的描述完了,但是怎么样去抽离组件,在工作中积累可以复用的组件才是我们真正需要去思考的。
 
-    那么先到这，关于组件之间通信的问题，留到以后慢慢了解。
+    那么先到这,关于组件之间通信的问题,留到以后慢慢了解。
 
     路由嵌套
 
-    还是刚刚的代码与目录结构，我们已经实现了组件之间的嵌套，但是有时并不希望组件直接就加载进来，而是在用户点击后才展现在页面中，这是就需要使用到路由嵌套。
+    还是刚刚的代码与目录结构,我们已经实现了组件之间的嵌套,但是有时并不希望组件直接就加载进来,而是在用户点击后才展现在页面中,这是就需要使用到路由嵌套。
 
-    为了偷懒，这里就直接使用hello.vue。实现嵌套路由主要有以下几步：
+    为了偷懒,这里就直接使用hello.vue。实现嵌套路由主要有以下几步：
 
     第一步：制定嵌套路由规则：
 
@@ -3138,9 +3238,9 @@ vue-router    路由
           component:index,
           // 在/index下设置一个子路由
           subRoutes:{
-            // 当匹配到/index/hello时，会在index的<router-view>内渲染
+            // 当匹配到/index/hello时,会在index的<router-view>内渲染
             '/hello':{
-              name:'hello',//可有可无，主要是为了方便使用
+              name:'hello',//可有可无,主要是为了方便使用
               // 一个hello组件
               component:hello
             }
@@ -3149,7 +3249,7 @@ vue-router    路由
       });
     第二步：在组件中添加<router-view>
 
-    来自官网的解释：<router-view> 用于渲染匹配的组件，它基于Vue的动态组件系统，所以它继承了一个正常动态组件的很多特性。
+    来自官网的解释：<router-view> 用于渲染匹配的组件,它基于Vue的动态组件系统,所以它继承了一个正常动态组件的很多特性。
 
     将<router-view>写在app.vue的<template></template>标签中。
 
@@ -3160,17 +3260,17 @@ vue-router    路由
     <a v-link="{ name: 'index' }">回去主页</a>
     <!-- 点击这两个标签就会实现页面内的切换效果 -->
     <a v-link="{ name: 'hello' }">嵌套的路由</a>
-    ，切换到浏览器，点击该嵌套的路由即可让hello.vue中的展现出来，在这里直接使用了v-link来实现跳转（知道为什么要写name了吧。。如果使用path会是这样的{ path: '/index/hello' }- -。 ） ，当然router.go同理。（注意在点击两个不同的文字时，地址栏的变化，以及展现内容的切换）
+    ,切换到浏览器,点击该嵌套的路由即可让hello.vue中的展现出来,在这里直接使用了v-link来实现跳转（知道为什么要写name了吧。。如果使用path会是这样的{ path: '/index/hello' }- -。 ） ,当然router.go同理。（注意在点击两个不同的文字时,地址栏的变化,以及展现内容的切换）
 
     注意：
 
-    在我的源码中是在<style scoped></style>标签中定义样式的，请注意scoped的使用，它表示在该style中定义的样式只会在当前的组件中起到效果，而不会去影响全局的css样式。
+    在我的源码中是在<style scoped></style>标签中定义样式的,请注意scoped的使用,它表示在该style中定义的样式只会在当前的组件中起到效果,而不会去影响全局的css样式。
 
     最简单的理解应该就是：
 
-    未写该scoped属性的所有组件中的样式，在经过vue-loader编译之后拥有全局作用域。相当于共用一份css样式表。
+    未写该scoped属性的所有组件中的样式,在经过vue-loader编译之后拥有全局作用域。相当于共用一份css样式表。
 
-    而写了该属性的的组件中定义的样式，拥有独立作用域。相当于除去引入了公用的一份css样式表外，但单独拥有一份css的样式表。
+    而写了该属性的的组件中定义的样式,拥有独立作用域。相当于除去引入了公用的一份css样式表外,但单独拥有一份css的样式表。
 vue-validator 表单验证 
 vue-touch     移动端 
 --------------------------------------------------------------------------------

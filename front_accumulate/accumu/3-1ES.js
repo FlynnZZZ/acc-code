@@ -443,6 +443,7 @@ ECMAScript JS核心,语法部分
       e.g.
         str.substring(1,4) 等价于 str.substring(4,1)
     ◆字符串对比
+    str1.includes(str2);    str1中是否包含str2的布尔值  
     str1.indexOf(str2,begin); 从指定位置向后首个指定字符串的下标
       当begin不存在时,直接从头开始
       RetValue:检测字符不存在则返回-1
@@ -711,7 +712,7 @@ ECMAScript JS核心,语法部分
         }
       }
       obj.info();
-  对象属性&对象操作
+  对象属性&对象操作 
     对象属性的属性或特性
       数据属性:  包含4个描述属性行为的特性
         PS：后3个只能通过函数来设定

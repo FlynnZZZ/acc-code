@@ -18,14 +18,14 @@ Framework 框架
   Mobile开发可以用jQueryMobile,
   MVC解决方案用backbone.
 --------------------------------------------------------------------------------
-jQuery 快速简洁的JavaScript库 
+jQuery 快速简洁的JS库 
   PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
     2.0+ 版本不再支持 IE6/7/8
   核心特性总结 
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
     拥有便捷的插件扩展机制和丰富的插件.
-    jQuery兼容各种主流浏览器,如IE 6.0+、FF 1.5+、Safari 2.0+、Opera 9.0+等。
+    jQuery兼容各种主流浏览器,如 IE 6.0+、FF 1.5+、Safari 2.0+、Opera 9.0+等。
     jQuery操作即使Jelem不存在也不会报错
       $("#aoo").css("height"); 
       即使$("#aoo")不存在也不会报错;
@@ -111,12 +111,14 @@ jQuery 快速简洁的JavaScript库
     (function(J){
       // 此作用域中 J 等价于 jQuery
     })(jQuery);
-DOM 操作 
+DOM操作 
   PS：使用JQ方法获取的HTML元素,为JQ DOM元素对象,
     jQuery对象是通过jQuery包装DOM对象产生的对象,
     Jelem 类似于数组,未获取到元素则为空数组,
     数组中每个元素为原生JS的DOM元素对象;
     在jQuery中 $ 等价于 jQuery,$为快捷方式;
+  $(document) 独有的属性和方法 
+    $(document).ready(function () {})   [参见事件]
   Jelem 创建 
     $('<div>') 创建一个div Jelem
     Jelem.clone([bool]) 复制元素
@@ -636,7 +638,7 @@ DOM 操作
           $('.imgs').scrollLeft(Math.round(val)*width );
         },1000);
       })
-Event 事件 
+Event,事件 
   PS：Jelem绑定事件,则为列表中的每个对象进行了绑定
   ◆事件绑定与取消 
     PS：bind,live,delegate,on;对应解除为 unbind、die、undelegate、off 
@@ -1237,10 +1239,18 @@ AJAX
       $.browser.mozilla 为 true 表示当前为火狐浏览器
       $.browser.msie    为 true 表示当前为IE浏览器
       $.browser.version 获取浏览器版本信息
-    $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
-      PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
-        两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
-        w3c盒子模型不包含,IE盒子模型则包含,
+    $.support 浏览器检测 
+      $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
+        PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
+          两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
+          w3c盒子模型不包含,IE盒子模型则包含,
+      $.support.mozilla && $.support.version >= "1.8" 
+      $.support.safari
+      $.support.chrome
+      $.support.camino
+      $.support.opera
+      $.support.msie && $.support.version <= 6 // Target IE6 and below
+      $.support.msie && $.support.version > 6  // Target anything above IE6
 Deferred 异步操作
   PS：jQuery 1.5 中引入; 和 Promise 对象一起作为 jQuery 对 Promise 的一种实现;
     在 jQuery1.x - jQuery2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
@@ -2002,146 +2012,37 @@ Bootstrap 快速开发Web应用程序和网站的前端框架
     弹出框
     旋转轮播
     自动定位浮标
---------------------------------------------------------------------------------
-Idea 
-  视图-控制器-数据存储-模块 app
 ---------------------------------------------------------------------以下待整理 
-  面试题
-    webview
-    二叉树
+Question & Idea 
+  视图-控制器-数据存储-模块 app
+  在当前页面中打开一新页面,点击返回后,保留之前页面的状态[如JS将某个元素隐藏了],如何实现?
+    在Firefox中返回可以保存状态,但Chrome和IE中不会,
+    方法一:将跳转之前的状态信息使用,sessionStorage存起来,返回后再使用JS调回状态.
+    方法二:使用hash来存状态信息,原理同方法一.
+  一道面试题
+    function foo(){
+      getName =function(){ console.log(1); }
+      return this;
+    }
+    foo.getName =function(){ console.log(2); }
+    foo.prototype.getName =function(){ console.log(3); }
+    var getName =function(){ console.log(4); }
+    function getName(){ console.log(5); }
+    // 请写出以下输出结果
+    foo.getName()           //2
+    getName()               //4
+    foo().getName()         //1 ,执行foo()后,getName未加var是全局变量产生覆盖
+    getName()               //1
+    new foo.getName()       //2
+    new foo().getName()     //3 ,相当于(new foo()).getName() 改写为(new foo).getName()
+      new foo().getName() ===(new foo).getName() //true
+      var aoo =new foo();
+      aoo.getName() === new foo().getName() //true
+    new new foo().getName() //3,懵比
+  "偷"的代码
 
-  Question & Idea 
-    在浏览器中, length 的值为0 ,为什么会这样子?
-    通过图片的像素信息 在网页中创建图片 ?
-      像素数据 如 ctx.getImageData(10,10,50,50).data
-    网页防盗,将显示出来的内容与复制粘贴的内容不一致
-      通过复制事件来改变粘贴板的内容,如何具体实现(?)
-    局部作用域的表示?
-      在全局中运行时,有一个window对象,
-      那么在函数作用域内,表示该作用域的对象如何引用
-    在当前页面中打开一新页面,点击返回后,保留之前页面的状态(如JS将某个元素隐藏了),如何实现?
-      在Firefox中返回可以保存状态,但Chrome和IE中不会,
-      方法一:将跳转之前的状态信息使用,sessionStorage存起来,返回后再使用JS调回状态.
-      方法二:使用hash来存状态信息,原理同方法一.
-    
-    增强网页文档的可读性
-      如通过Ctrl+左键选中一行文字使其增加背景颜色,
-      然后Alt+左键点击取消颜色背景.
-      
-    如何规定JS执行在一定的时间内完成,如将一元素颜色在3秒内从白到黑?
-      通过操作CSS样式,再定义元素的animation动画来实现
-    如何实现无CSS属性的动画,如scroll bar 滚动的动画?
-      注:CSS不可定义元素的scroll bar 的位置, 故不可用CSS3的animation来实现
-  ---------------------------------------------------------------------以下待整理
-    一道面试题
-      function foo(){
-        getName =function(){ console.log(1); }
-        return this;
-      }
-      foo.getName =function(){ console.log(2); }
-      foo.prototype.getName =function(){ console.log(3); }
-      var getName =function(){ console.log(4); }
-      function getName(){ console.log(5); }
-      // 请写出以下输出结果
-      foo.getName()           //2
-      getName()               //4
-      foo().getName()         //1 ,执行foo()后,getName未加var是全局变量产生覆盖
-      getName()               //1
-      new foo.getName()       //2
-      new foo().getName()     //3 ,相当于(new foo()).getName() 改写为(new foo).getName()
-        new foo().getName() ===(new foo).getName() //true
-        var aoo =new foo();
-        aoo.getName() === new foo().getName() //true
-      new new foo().getName() //3,懵比
-  
-    "偷"的代码
-      得到上传文件的地址(并非直观可见的地址)
-        function getFileURL(argu) {
-          var url =''
-          var file = null
-          if(argu.files && argu.files[0] ){
-            file = argu.files[0]
-        console.log(argu)
-        console.log(argu.files)
-        console.log(argu.files[0])
-          }
-          url = window.URL.createObjectURL(file)
-        console.log(typeof url)
-          creatFile(url)
-         }
-  
-         //根据指定URL创建一个对象,比如选择 音频 创建 音频
-        function creatFile(url){
-          var textHtml =  "<audio src='"+url+"' controls> </audio>"
-          $(".mark").after(textHtml);
-        }
-        <body>
-            <div  id="show">
-                <div class="mark"></div>
-            </div>
-        <br>
-        <input type="file" value="" onchange="getFileURL(this)">
-        </body>
-  
-    view 视口 移动端
-  
-  
-    window.location = canvas.toDataURL("image/png")
-    将整个页面设置为画布绘制后的图像
-  
-    使用画布将彩色视频变成黑白
-      谷歌浏览器的安全策略在本地运行失败
-      <video  id="video" width="720" height="480" src="鸿星尔克.mp4" controls=""></video>
-      <canvas id="buffer" width="720" height="480"></canvas>
-      <canvas id="display" width="720" height="480"></canvas>
-  
-      var video =document.getElementById('video')
-      var bufferCanvas =document.getElementById('buffer')
-      var displayCanvas =document.getElementById('display')
-      video.load()
-      video.addEventListener("play",processFrame)
-      function processFrame(){
-        if(video.paused || video.ended) {
-          return;
-        }
-        var buffer =bufferCanvas.getContext("2d");
-        var display =displayCanvas.getContext("2d");
-        buffer.drawImage(video,0,0,bufferCanvas.width,bufferCanvas.height);
-        console.log(buffer)
-        var frame =buffer.getImageData(0,0,bufferCanvas.width,bufferCanvas.height);
-        var length =frame.data.length/4;
-        for(var i =0;i<length;i++){
-          var xhr =frame.data[i*4+0];
-          var g =frame.data[i*4+1];
-          var b =frame.data[i*4+2];
-          noir(i,xhr,g,b,frame.data);
-        }
-        display.putImageData(frame,0,0);
-        setTimeout(processFrame,0)
-      }
-  
-      function noir(pos,xhr,g,b,data){
-        var brightness =(3*xhr +4*g +b) >>>3;
-        if(brightness <0) {
-          brightness = 0;
-        }
-        data[pos*4 +0] =brightness;
-        data[pos*4 +1] =brightness;
-        data[pos*4 +2] =brightness;
-      }
-  
-    includes 比 indexOf 兼容性好
-  
-    当逻辑复杂时,可以通过添加属性如class或调整CSS来简化JS逻辑复杂程度
 
-    检测浏览器 [?]
-      $.support.mozilla && $.support.version >= "1.8" 
-      $.support.safari
-      $.support.chrome
-      $.support.camino
-      $.support.opera
-      $.support.msie && $.support.version <= 6 // Target IE6 and below
-      $.support.msie && $.support.version > 6  // Target anything above IE6
+
 
 
 

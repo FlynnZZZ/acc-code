@@ -1618,23 +1618,35 @@ event 事件对象
        若在Firefox浏览器中, 当第一次触发pageshow时,persisted的值一定是false,
        而在第一次触发pagehide时,persisted 为true
   ◆剪贴版事件
-   IE率先使用,HTML5纳入规范
-   beforecopy 在发生复制操作前触发
-   copy       在发生复制操作时触发
-   beforecut  在发生剪切操作前触发
-   cut        在发生剪切操作时触发
-   beforepaste 在发生粘贴操作前触发
-   paste      在发生粘贴操作时触发
-   访问剪贴板中的数据:clipboardData对象
-     使用 clipboardData 对象,IE中其为window的属性,其他浏览器为事件对象event的属性
-     clipboardData.getData(formatstr);   从剪贴板中取得数据
-       Arguments:formatstr 表示数据格式的字符串
-         IE中有两种格式 "text" "URL"
-         其他浏览器 该参数是一种MIME类型(可使用"text"代表"text/plain")
-     clipboardData.setData(formatstr,str); 设置剪贴板中的数据,返回布尔值表示是否成功操作
+  IE率先使用,HTML5纳入规范
+  beforecopy 在发生复制操作前触发
+  copy       在发生复制操作时触发
+  beforecut  在发生剪切操作前触发
+  cut        在发生剪切操作时触发
+  beforepaste 在发生粘贴操作前触发
+  paste      在发生粘贴操作时触发
+  访问剪贴板中的数据
+    $('#a').on("copy",function(e){
+      if (window.getSelection) {
+        text = window.getSelection().toString();
+        console.log(1);
+      } 
+      else if (document.selection && document.selection.createRange) {
+        text = document.selection.createRange().text;
+        console.log(2);
+      }
+      console.log(text);
+    });
+    clipboardData对象 [无该对象?]
+    使用 clipboardData 对象,IE中其为window的属性,其他浏览器为事件对象event的属性
+    clipboardData.getData(formatstr);   从剪贴板中取得数据
+      formatstr     数据格式的字符串
+        IE中有两种格式 "text" "URL"
+        其他浏览器 该参数是一种MIME类型[可使用"text"代表"text/plain"]
+    clipboardData.setData(formatstr,str); 设置剪贴板中的数据,返回布尔值表示是否成功操作
        Arguments:formatstr 仍然是数据类型(但其他浏览器已不能识别 "text")
          第二个参数为要更换的字符串
-     clipboardData.clearData(); 从剪贴板中清除数据
+    clipboardData.clearData(); 从剪贴板中清除数据
   ◆移动端事件
    touchstart
    touchend
@@ -3625,21 +3637,21 @@ Web_Workers 工作线程 「HTML5」
         const hello = document.createElement('button', 'button-hello')
 ------------------------------------------------------------------------待整理 
   
-  
-  <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>
-  <input type="text" name="" value="" id="test1">
-  <input type="text" name="" value="" id="test2">
-  // 准备在ios上测试
-  $.subscribe('evtname',function(ev){
-     $('#test2').focus();
-  });
-  $('#test1').on('input',function(){
-    $.publish('evtname');
-  });
-  // 或者
-  setTimeout(function(){
-    $('#test1').focus();
-  },10000);
+  input表单无法获取焦点
+    <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>
+    <input type="text" name="" value="" id="test1">
+    <input type="text" name="" value="" id="test2">
+    // 准备在ios上测试
+    $.subscribe('evtname',function(ev){
+       $('#test2').focus();
+    });
+    $('#test1').on('input',function(){
+      $.publish('evtname');
+    });
+    // 或者
+    // setTimeout(function(){
+    //   $('#test1').focus();
+    // },10000);
 
 
 

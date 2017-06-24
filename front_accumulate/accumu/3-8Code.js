@@ -35,7 +35,7 @@
 --------------------------------------------------------------------------------
 PC端
 网络收集 
-  获取、压缩图片
+  获取、压缩图片 
     <input type="file" name="" value="" id="fileChoose">
     var myFile = document.getElementById('fileChoose');
     myFile.onchange = function(event) {
@@ -324,7 +324,7 @@ PC端
       document.body.appendChild(img);
     }
     dealImage('.myImg',obj,appendImg);
-  回到顶部
+  回到顶部 
     <div class="top"> 11111 </div>
     $('.top').click(function () { 
       var elem = $('body');
@@ -333,7 +333,7 @@ PC端
       // console.log(elem1);
       elem.animate({scrollTop: 0}, 800); 
     }); 
-  滚动到顶部和底部
+  滚动到顶部和底部 
     window.onscroll = function(){
       var client = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
       // 可视区高度
@@ -358,7 +358,7 @@ PC端
         console.log('scroll to bottom');
       }
     })
-  图片预加载
+  图片预加载 
     $.preloadImages = function () { 
       for (var i = 0; i < arguments.length; i++) {
         var img = $('<img>');
@@ -366,7 +366,7 @@ PC端
       } 
     }; 
     $.preloadImages('img/hover1.png', 'img/hover2.png');
-  将指定字符替换为其变形后的字符
+  将指定字符替换为其变形后的字符 
     function rule(str){ return str.slice(1,-3)*2 + 'vw'; }
     function strReplace(originStr,rgep,rule){
       var matchRgep = new RegExp(rgep,'g');
@@ -382,7 +382,7 @@ PC端
     var replaceRgep = /\s(\d+)px;/;
     strReplace(originStr,replaceRgep,rule); 
     // style="width:720vw height:494vw720vw494vw"
-  显示用户选取的本地图片
+  显示用户选取的本地图片 
     假设有一个表单,用于用户选取图片。
 
     <input type="file" name="picture" accept="image/png, image/jpeg"/>
@@ -434,7 +434,7 @@ PC端
       }
       return false;
     };
-  获取、设置input的光标位置
+  获取、设置input的光标位置 
     <input type="text" name="" value="123456">
     (function($) {
       $.fn.getCursorPosition = function() {
@@ -475,7 +475,7 @@ PC端
       $('input').setCaretPosition(4);
       
     })
-  鼠标拖动图片
+  鼠标拖动图片 
     function dragElem(jelem,wrap = jelem.parent()){
       obj = {};
       var leftMax = wrap.width()-jelem.width();
@@ -547,24 +547,19 @@ PC端
         }
       })();
     </script>
-  禁止用户复制 剪切 粘贴
+  禁止用户复制 剪切 粘贴 
     <form id="form">
       <input type="text" placeholder="用户名">
     </form>
-
-    <script>
-      (function() {
-        var form = document.getElementById('form');
-        var input = form.getElementsByTagName('input');
-        for (var i = 0; i < input.length; i++) {
-          input[i].oncopy = input[i].onpaste=input[i].oncut = function() {
-            // copy为复制 paste为粘贴 cut为剪切
-            return false;
-          }
-        }
-      })();
-    </script>
-  js实现焦点进入文本框内关闭输入法:imeMode
+    var form = document.getElementById('form');
+    var input = form.getElementsByTagName('input');
+    for (var i = 0; i < input.length; i++) {
+      input[i].oncopy = input[i].onpaste=input[i].oncut = function() {
+        // copy为复制 paste为粘贴 cut为剪切
+        return false;
+      }
+    }
+  js实现焦点进入文本框内关闭输入法:imeMode 
     2011-05-26 11:23
     要用到的东西: imeMode:xxx
     有四个参数
@@ -576,6 +571,69 @@ PC端
     <INPUT onfocus=" this.style.imeMode='inactive' " />
     <INPUT onfocus=" this.style.imeMode='auto' " />
     <INPUT onfocus=" this.style.imeMode='disabled' " /> 这个应该算最常用的了,其他可以不记
+  得到本地上传文件的地址[并非直观可见的地址] 
+    <div class="mark"></div>
+    <input type="file" value="" onchange="getFileURL(this)">
+    //根据指定URL创建一个对象,比如选择 音频 创建 音频
+    function creatFile(url){
+      var textHtml =  "<audio src='"+url+"' controls> </audio>"
+      $(".mark").after(textHtml);
+    }
+    function getFileURL(argu) {
+      var url =''
+      var file = null
+      if(argu.files && argu.files[0] ){
+        file = argu.files[0]
+        console.log(argu)
+        console.log(argu.files)
+        console.log(argu.files[0])
+      }
+      url = window.URL.createObjectURL(file)
+      console.log(typeof url,url);
+      creatFile(url)
+    }
+  将整个页面设置为画布绘制后的图像 
+    window.location = canvas.toDataURL("image/png")
+  使用画布将彩色视频变成黑白
+    谷歌浏览器的安全策略在本地运行失败
+    <video  id="video" width="720" height="480" src="鸿星尔克.mp4" controls=""></video>
+    <canvas id="buffer" width="720" height="480"></canvas>
+    <canvas id="display" width="720" height="480"></canvas>
+
+    var video =document.getElementById('video')
+    var bufferCanvas =document.getElementById('buffer')
+    var displayCanvas =document.getElementById('display')
+    video.load()
+    video.addEventListener("play",processFrame)
+    function processFrame(){
+      if(video.paused || video.ended) {
+        return;
+      }
+      var buffer =bufferCanvas.getContext("2d");
+      var display =displayCanvas.getContext("2d");
+      buffer.drawImage(video,0,0,bufferCanvas.width,bufferCanvas.height);
+      console.log(buffer)
+      var frame =buffer.getImageData(0,0,bufferCanvas.width,bufferCanvas.height);
+      var length =frame.data.length/4;
+      for(var i =0;i<length;i++){
+        var xhr =frame.data[i*4+0];
+        var g =frame.data[i*4+1];
+        var b =frame.data[i*4+2];
+        noir(i,xhr,g,b,frame.data);
+      }
+      display.putImageData(frame,0,0);
+      setTimeout(processFrame,0)
+    }
+
+    function noir(pos,xhr,g,b,data){
+      var brightness =(3*xhr +4*g +b) >>>3;
+      if(brightness <0) {
+        brightness = 0;
+      }
+      data[pos*4 +0] =brightness;
+      data[pos*4 +1] =brightness;
+      data[pos*4 +2] =brightness;
+    }
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

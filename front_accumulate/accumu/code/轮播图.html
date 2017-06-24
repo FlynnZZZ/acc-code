@@ -1,0 +1,42 @@
+通过z-index 实现轮播图
+  <style>
+    .boundary{
+      position: relative;
+      background: pink;
+    }
+    .img{
+      z-index: 100;
+      position: absolute;left: 0;top: 0;
+    }
+    .active{
+      z-index: 110;
+    }
+  </style>
+  <input id="button" type="button" name="name" value="点击切换">
+  <div class="boundary">
+    <img class="img active" src="http://cdnstatic.visualizeus.com/thumbs/12/33/123347ce2eeea7d0fc05643f39518f9f_i.jpg" alt="picture1" />
+    <img class="img" src="http://cdnstatic.visualizeus.com/thumbs/86/37/8637e4b4b016ba4b631bd628ebc07f48_i.jpg" alt="picture2" />
+    <img class="img" src="http://cdnstatic.visualizeus.com/thumbs/21/cf/21cf04f8cb7799e36d2b8160c349de01_i.jpg" alt="picture3" />
+  </div>
+
+  <script>
+    // 轮播图的效果:
+    //   定时轮播
+    //   点击切换(下一张图片)
+    // 实现原理:使多张图叠加在一起,通过改变一张的z-index属性来进行显示控制.
+    var button =document.querySelector('#button')
+    button.addEventListener('click',next)
+    var num =0;
+    var sum =3;
+    function next(){
+      // 使当前显示的图片下沉(不显示)
+      var active =document.querySelector('.active')
+      active.classList.remove('active')
+      // 使下一张浮上来
+      var i =(num++)%sum
+      var img =document.querySelectorAll('.img')[i]
+      img.classList.add('active')
+    }
+    // 实现图片的自动切换
+    setInterval(next,1000)
+  </script>

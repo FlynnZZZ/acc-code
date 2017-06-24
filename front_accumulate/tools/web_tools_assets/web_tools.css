@@ -21,14 +21,10 @@ body {
   width: 80%;
   margin: auto;
   padding: 30px 10px 50px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   border: 1px solid #aaa;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 #aoo .aItme {
   background-color: #C7EDCC;
@@ -44,14 +40,11 @@ body {
   border-bottom: 1px solid #aaa;
   padding-left: 5px;
   margin-bottom: 5px;
-  color: #333;
+  color: #555;
 }
 #aoo .aItme ul {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   padding: 5px;
 }
 #aoo .aItme li {
@@ -62,19 +55,18 @@ body {
   margin-bottom: 10px;
   font-family: 'vijaya', 'Consolas', '楷体';
 }
+#aoo .aItme li:hover {
+  background-color: #545050;
+}
 #aoo .aItme li a {
   height: 1.5em;
   max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   padding: 0 5px;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #aoo .aItme:hover h4 {
-  color: #9909ab;
+  color: #111;
 }

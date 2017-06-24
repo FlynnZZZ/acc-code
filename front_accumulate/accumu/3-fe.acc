@@ -167,6 +167,7 @@ Atom
       ctrl-]              alt-a         取消行缩进
       ctrl-[              alt-s         行缩进          「 ctrl-[ ,不能缩进空行」
       ctrl-shift-k        alt-d         删除行
+      ctrl-shift-enter    alt-enter     在上一行插入 
       ctrl-j              alt-z         合并下一行到当前行
       ctrl+alt+f2         alt-x         在当前行行增加书签
       ctrl-l              alt-c         选取当前行,继续执行选取下一行
@@ -976,8 +977,9 @@ GitHub
     P - 10278
     C - 11382
     S - 15917
+  暴露的变量,统一采用前缀'z'或'Z'
 自定义命名 
-  无意义的模块名称
+  无意义的模块名称 
     so
     as
     wa
@@ -987,7 +989,7 @@ GitHub
     ft  工具函数
     sv  自定义变量
     db  数据结构块
-  变量名
+  变量名 
     aoo
     boo
     coo
@@ -1005,7 +1007,7 @@ GitHub
     cxx
     dxx
     exx
-  函数名
+  函数名 
     是否 is
       e.g.:
         判断是否最小 isMin
@@ -1029,7 +1031,7 @@ GitHub
     iux
     jux
     kux
-  常用词语缩写
+  常用词语缩写 
     ◆描述类
       colo    颜色
       bg      背景

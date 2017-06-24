@@ -863,7 +863,7 @@ Event 事件
   Exp:
 AJAX 
   PS： jQuery 最常用的 AJAX API 可以为分三类;
-  contentType 数据格式
+  contentType 数据格式 
     application/x-www-form-urlencoded 默认方式,表单提交
       数据的URL方式编码,由jQuery来做,
       只需在$.ajax({})参数中设置 processData = true「也是默认,可省略」;
@@ -1741,529 +1741,274 @@ Exp:
 Suggestion:
 --------------------------------------------------------------------------------
 Bootstrap 快速开发Web应用程序和网站的前端框架 
-介绍_概念_说明_定义 
-  PS：Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
-    简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)
-    Bootstrap 的响应式 CSS 能够自适应于台式机、平板电脑和手机
-    一套丰富的预定义样式表
-  Bootstrap2和Bootstrap3的区别
-    Bootstrap2兼容性更好
-    Bootstrap3放弃了IE7,IE8支持性也不是很好,功能更多
-  使用要求
-    Bootstrap 中使用了一些HTML5元素和CSS属性,所以需要一些其他条件来支持HTML5,如使用HTML5的声明
-    在head中添加 viewport meta 标签
-      为让Bootstrap开发的网站对移动设备友好,确保适当的绘制和触屏缩放
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    引入 jQuery、Bootstrap CSS、Bootstrap JS 
-      PS：Bootstrap中的JS插件依赖于jQuery,因此jQuery需在Bootstrap前引入
-      e.g. 
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-CSS 
-  核心思想:通过给HTML标签引入 Bootstrap 定义的class属性,来控制标签的样式.
-  移动设备优先
-    之前 Bootstrap 版本(直到 2.x),您需要手动引用另一个 CSS,才能让整个项目友好的支持移动设备。
-    Bootstrap 3 默认的 CSS 本身就对移动设备友好支持
-    Bootstrap 3 的设计目标是移动设备优先,然后才是桌面设备。
-  网格系统(Grid System)
-    使用说明:
-      网格系统是通过指定您想要横跨的十二个可用的列来创建的。
-        例如,要创建三个相等的列,可使用三个 .col-xs-4。(若和小于等于12 则在一行显示,否则换行)
-      网格的基本结构
-        <div class="container">       // 网格 块 
-          // 行必须放置在 class="container" 内,以便获得适当的对齐(alignment)和内边距(padding)。
-          <div class="row">           // 网格 行 
-            <div class="col-*-*">     // 网格 单元 
-              <div class="row">                  // 网格嵌套 行
-                <div class="col-*-*">...</div>   // 网格嵌套 单元
-              </div>
-            </div> 
-            <div class="col-*-*">...</div>
+  介绍_概念_说明_定义 
+    PS：Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
+      简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)
+      Bootstrap 的响应式 CSS 能够自适应于台式机、平板电脑和手机
+      一套丰富的预定义样式表
+    Bootstrap2和Bootstrap3的区别
+      Bootstrap2兼容性更好
+      Bootstrap3放弃了IE7,IE8支持性也不是很好,功能更多
+    使用要求
+      Bootstrap 中使用了一些HTML5元素和CSS属性,所以需要一些其他条件来支持HTML5,如使用HTML5的声明
+      在head中添加 viewport meta 标签
+        为让Bootstrap开发的网站对移动设备友好,确保适当的绘制和触屏缩放
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      引入 jQuery、Bootstrap CSS、Bootstrap JS 
+        PS：Bootstrap中的JS插件依赖于jQuery,因此jQuery需在Bootstrap前引入
+        e.g. 
+          <link href="css/bootstrap.min.css" rel="stylesheet">
+          <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+  CSS 
+    核心思想:通过给HTML标签引入 Bootstrap 定义的class属性,来控制标签的样式.
+    移动设备优先
+      之前 Bootstrap 版本(直到 2.x),您需要手动引用另一个 CSS,才能让整个项目友好的支持移动设备。
+      Bootstrap 3 默认的 CSS 本身就对移动设备友好支持
+      Bootstrap 3 的设计目标是移动设备优先,然后才是桌面设备。
+    网格系统(Grid System)
+      使用说明:
+        网格系统是通过指定您想要横跨的十二个可用的列来创建的。
+          例如,要创建三个相等的列,可使用三个 .col-xs-4。(若和小于等于12 则在一行显示,否则换行)
+        网格的基本结构
+          <div class="container">       // 网格 块 
+            // 行必须放置在 class="container" 内,以便获得适当的对齐(alignment)和内边距(padding)。
+            <div class="row">           // 网格 行 
+              <div class="col-*-*">     // 网格 单元 
+                <div class="row">                  // 网格嵌套 行
+                  <div class="col-*-*">...</div>   // 网格嵌套 单元
+                </div>
+              </div> 
+              <div class="col-*-*">...</div>
+            </div>
+            <div class="row">
+              ...
+            </div>
           </div>
-          <div class="row">
-            ...
+          <div class="container">
+            ....
           </div>
+        原理: 网格单元采用的是左浮动的排列原理
+      容器 container
+        .container       只在最小屏才占满屏幕宽
+        .container-fluid 始终占满屏宽
+      列宽度 col-*-*
+        在表示 网格单元的标签中添加class
+        超小屏(<768px)  .col-xs-
+        小屏  (≥768px)  .col-sm-
+        中屏  (≥992px)  .col-md-
+        大屏  (≥1200px) .col-lg-
+        在中型设备中,Bootstrap 会查找带有 md 的类,并使用它们。
+        在大型设备中,会查找带有 lg 的类,并使用它们。
+        小屏会兼容大屏(保持比例)(当只定义了小屏时)
+        可以同时添加不同屏的列宽,可在不同尺寸时获取不同的宽度比例
+      列偏移 col-*-offset-*
+        大屏幕显示器上使用偏移 .col-md-offset-* 类,
+        则该列列的左外边距(margin)增加 * 列,其中 * 范围是从 1 到 11。
+        在 网格单元 标签中添加该属性class
+      列嵌套
+        在需要嵌套的 网格单元 中,添加 网格行,然后再在 网格行 中添加 网格单元.
+      列排序 col-*-push-* / col-*-pull-*
+        改变带有 .col-md-push-* 和 .col-md-pull-* 类的内置网格列的顺序,其中 * 范围是从 1 到 11
+        在 网格单元 上添加上此类,push 相当于右移,数字表示移动的列数;pull相当于左移.
+      清楚浮动 clearfix visible-*
+        在需要清除浮动的单元后添加 <div class="clearfix visible-*"></div>
+    全局样式
+      body{
+        font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size:14px;
+        line-height: 1.42857143;
+        color:#333;
+        background-color:#fff;
+      }
+      使用了 normalize.css 第三方库,将不同浏览器的默认样式效果统一
+      .visible-*  在某种宽度下显示(其他不显示)
+      .hidden-*   在某种宽度下显示(其他不隐藏)
+      .show       显示
+      .hidden     显示
+    文本样式
+      标题
+        h1-h5 标签和class
+          Bootstrap都进行了样式设置;也可以使用 class h1-h5 达到和 h标签类似的效果 (有细微差别)
+        small 内联子标题标签和class
+          即在标题内再添加标题.使用 <small></small>标签 或 .small class
+      引导主体副本 更大更粗、行高更高的文本 class="lead" 强调
+      <p class="text-left">向左对齐文本</p>
+      <p class="text-center">居中对齐文本</p>
+      <p class="text-right">向右对齐文本</p>
+      <p class="text-muted">本行内容是减弱的</p>
+      <p class="text-primary">本行内容带有一个 primary class</p>
+      <p class="text-success">本行内容带有一个 success class</p>
+      <p class="text-info">本行内容带有一个 info class</p>
+      <p class="text-warning">本行内容带有一个 warning class</p>
+      <p class="text-danger">本行内容带有一个 danger class</p>
+      // 文字颜色
+      .text-muted    柔和灰
+      .text-primary  主要蓝
+      .text-info     信息蓝
+      .text-success  成功绿
+      .text-warning  警告黄
+      .text-danger   危险红
+      // 背景颜色
+      .bg-primary  主要蓝
+      .bg-info     信息蓝
+      .bg-success  成功绿
+      .bg-warning  警告黄
+      .bg-danger   危险红
+    列表 
+      ul 或 ol 标签中定义
+        .list-unstyled 移除指示样式
+        .list-inline 把所有的列表项放在同一行中。
+      dl 标签中定义
+        .dl-horizontal 将dt和dd放置在一行展示
+    代码
+      <code> 内联显示代码
+      <pre>  代码显示为一个独立的块元素或者代码有多行
+      <kbd>  显示为黑底白字
+      <var>  用于显示变量,显示为斜体
+      <samp> 程序结果显示
+    表格
+      <table>  .table 为表格添加基础样式(必须),自适应,占满container,两行之间有一条分割线
+        .table-striped   <tbody>内 行背景色斑马线形式交替显示 ( IE8 不支持)
+        .table-bordered  添加边框
+        .table-hover     <tbody>内 行启用鼠标悬停显示背景色#F5F5F5
+        .table-condensed 让表格更加紧凑
+      <tr>、<th>或<td> 的添加类
+        .active  将(前面.table-hover)悬停的颜色固定在行或者单元格上
+        .success 给 行或单元格 添加 背景色#DFF0D8 表示成功操作
+        .info    给 行或单元格 添加 背景色#D9EDF7 表示信息变化的操作
+        .warning 给 行或单元格 添加 背景色#FCF8E3 表示一个警告的操作
+        .danger  给 行或单元格 添加 背景色#F2DEDE 表示一个危险的操作
+      表格尺寸自适应/响应式
+        把 .table 放置在 .table-responsive 内,
+        可以让表格水平滚动以适应小型设备(小于 768px)
+        当在大于 768px 宽的大型设备上查看时,看不到任何的差别
+    表单
+      .form-group   设置margin-bottom =15px
+      .form-control 设置width为100%
+      form 
+        .form-inline  内联表单,所有后代元素在一行显示
+      label
+        .sr-only  将其内容隐藏
+        .control-label  自动居中label在父元素中的位置
+      input的结构样式
+        <div class="type的类型">
+          <label><input type=" " />xx</label>
         </div>
-        <div class="container">
-          ....
-        </div>
-      原理: 网格单元采用的是左浮动的排列原理
-    容器 container
-      .container       只在最小屏才占满屏幕宽
-      .container-fluid 始终占满屏宽
-    列宽度 col-*-*
-      在表示 网格单元的标签中添加class
-      超小屏(<768px)  .col-xs-
-      小屏  (≥768px)  .col-sm-
-      中屏  (≥992px)  .col-md-
-      大屏  (≥1200px) .col-lg-
-      在中型设备中,Bootstrap 会查找带有 md 的类,并使用它们。
-      在大型设备中,会查找带有 lg 的类,并使用它们。
-      小屏会兼容大屏(保持比例)(当只定义了小屏时)
-      可以同时添加不同屏的列宽,可在不同尺寸时获取不同的宽度比例
-    列偏移 col-*-offset-*
-      大屏幕显示器上使用偏移 .col-md-offset-* 类,
-      则该列列的左外边距(margin)增加 * 列,其中 * 范围是从 1 到 11。
-      在 网格单元 标签中添加该属性class
-    列嵌套
-      在需要嵌套的 网格单元 中,添加 网格行,然后再在 网格行 中添加 网格单元.
-    列排序 col-*-push-* / col-*-pull-*
-      改变带有 .col-md-push-* 和 .col-md-pull-* 类的内置网格列的顺序,其中 * 范围是从 1 到 11
-      在 网格单元 上添加上此类,push 相当于右移,数字表示移动的列数;pull相当于左移.
-    清楚浮动 clearfix visible-*
-      在需要清除浮动的单元后添加 <div class="clearfix visible-*"></div>
-  全局样式
-    body{
-      font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-      font-size:14px;
-      line-height: 1.42857143;
-      color:#333;
-      background-color:#fff;
-    }
-    使用了 normalize.css 第三方库,将不同浏览器的默认样式效果统一
-    .visible-*  在某种宽度下显示(其他不显示)
-    .hidden-*   在某种宽度下显示(其他不隐藏)
-    .show       显示
-    .hidden     显示
-  文本样式
-    标题
-      h1-h5 标签和class
-        Bootstrap都进行了样式设置;也可以使用 class h1-h5 达到和 h标签类似的效果 (有细微差别)
-      small 内联子标题标签和class
-        即在标题内再添加标题.使用 <small></small>标签 或 .small class
-    引导主体副本 更大更粗、行高更高的文本 class="lead" 强调
-    <p class="text-left">向左对齐文本</p>
-    <p class="text-center">居中对齐文本</p>
-    <p class="text-right">向右对齐文本</p>
-    <p class="text-muted">本行内容是减弱的</p>
-    <p class="text-primary">本行内容带有一个 primary class</p>
-    <p class="text-success">本行内容带有一个 success class</p>
-    <p class="text-info">本行内容带有一个 info class</p>
-    <p class="text-warning">本行内容带有一个 warning class</p>
-    <p class="text-danger">本行内容带有一个 danger class</p>
-    // 文字颜色
-    .text-muted    柔和灰
-    .text-primary  主要蓝
-    .text-info     信息蓝
-    .text-success  成功绿
-    .text-warning  警告黄
-    .text-danger   危险红
-    // 背景颜色
-    .bg-primary  主要蓝
-    .bg-info     信息蓝
-    .bg-success  成功绿
-    .bg-warning  警告黄
-    .bg-danger   危险红
-  列表 
-    ul 或 ol 标签中定义
-      .list-unstyled 移除指示样式
-      .list-inline 把所有的列表项放在同一行中。
-    dl 标签中定义
-      .dl-horizontal 将dt和dd放置在一行展示
-  代码
-    <code> 内联显示代码
-    <pre>  代码显示为一个独立的块元素或者代码有多行
-    <kbd>  显示为黑底白字
-    <var>  用于显示变量,显示为斜体
-    <samp> 程序结果显示
-  表格
-    <table>  .table 为表格添加基础样式(必须),自适应,占满container,两行之间有一条分割线
-      .table-striped   <tbody>内 行背景色斑马线形式交替显示 ( IE8 不支持)
-      .table-bordered  添加边框
-      .table-hover     <tbody>内 行启用鼠标悬停显示背景色#F5F5F5
-      .table-condensed 让表格更加紧凑
-    <tr>、<th>或<td> 的添加类
-      .active  将(前面.table-hover)悬停的颜色固定在行或者单元格上
-      .success 给 行或单元格 添加 背景色#DFF0D8 表示成功操作
-      .info    给 行或单元格 添加 背景色#D9EDF7 表示信息变化的操作
-      .warning 给 行或单元格 添加 背景色#FCF8E3 表示一个警告的操作
-      .danger  给 行或单元格 添加 背景色#F2DEDE 表示一个危险的操作
-    表格尺寸自适应/响应式
-      把 .table 放置在 .table-responsive 内,
-      可以让表格水平滚动以适应小型设备(小于 768px)
-      当在大于 768px 宽的大型设备上查看时,看不到任何的差别
-  表单
-    .form-group   设置margin-bottom =15px
-    .form-control 设置width为100%
-    form 
-      .form-inline  内联表单,所有后代元素在一行显示
-    label
-      .sr-only  将其内容隐藏
-      .control-label  自动居中label在父元素中的位置
-    input的结构样式
-      <div class="type的类型">
-        <label><input type=" " />xx</label>
-      </div>
-      行内样式则为 type类型值-inline
-    控件状态
-    表单小图标 校验状态
-  按钮
-    PS：任何带有 class .btn 的元素都会继承圆角灰色按钮的默认外观
-      <a>、<button> 或 <input> 元素可使用按钮 class。
-      但建议在 <button> 元素上使用,避免跨浏览器不一致
-    .btn         为按钮添加基本样式,必须
-    
-    .btn-default 默认/标准按钮
-    .btn-primary 原始按钮样式(未被操作)
-    .btn-success 表示成功的动作
-    .btn-info    该样式可用于要弹出信息的按钮
-    .btn-warning 表示需要谨慎操作的按钮
-    .btn-dange   表示一个危险动作的按钮操作
-    .btn-link    让按钮看起来像个链接 (仍然保留按钮行为)
-    
-    .btn-lg      制作一个大按钮
-    .btn-sm      制作一个小按钮
-    .btn-xs      制作一个超小按钮
-    .btn-block   块级按钮(拉伸至父元素100%的宽度)
-    
-    .active      按钮被点击
-    .disabled    禁用按钮
-    按钮组
-      <div class="btn-group">
-        <button type="button" name="button" class="btn btn-default">111</button>
-        <button type="button" name="button" class="btn btn-default">111</button>
-        <button type="button" name="button" class="btn btn-default">111</button>
-      </div>
-    按钮工具栏
-      <div class="btn-toolbar">
+        行内样式则为 type类型值-inline
+      控件状态
+      表单小图标 校验状态
+    按钮
+      PS：任何带有 class .btn 的元素都会继承圆角灰色按钮的默认外观
+        <a>、<button> 或 <input> 元素可使用按钮 class。
+        但建议在 <button> 元素上使用,避免跨浏览器不一致
+      .btn         为按钮添加基本样式,必须
+      
+      .btn-default 默认/标准按钮
+      .btn-primary 原始按钮样式(未被操作)
+      .btn-success 表示成功的动作
+      .btn-info    该样式可用于要弹出信息的按钮
+      .btn-warning 表示需要谨慎操作的按钮
+      .btn-dange   表示一个危险动作的按钮操作
+      .btn-link    让按钮看起来像个链接 (仍然保留按钮行为)
+      
+      .btn-lg      制作一个大按钮
+      .btn-sm      制作一个小按钮
+      .btn-xs      制作一个超小按钮
+      .btn-block   块级按钮(拉伸至父元素100%的宽度)
+      
+      .active      按钮被点击
+      .disabled    禁用按钮
+      按钮组
         <div class="btn-group">
-          <button type="button" name="button" class="btn btn-default"></button>
-          <button type="button" name="button" class="btn btn-default"></button>
-          <button type="button" name="button" class="btn btn-default"></button>
-          <button type="button" name="button" class="btn btn-default"></button>
+          <button type="button" name="button" class="btn btn-default">111</button>
+          <button type="button" name="button" class="btn btn-default">111</button>
+          <button type="button" name="button" class="btn btn-default">111</button>
         </div>
-      </div>
-  图片
-    // 图片形状
-    .img-rounded    添加 border-radius:6px 来获得图片圆角。
-    .img-circle     添加 border-radius:50% 来让整个图片变成圆形。
-    .img-thumbnail  添加一些内边距(padding)和一个灰色的边框。
-    .img-responsive 图片尺寸自适应
-      max-width:100%;height:auto;
-  图标
-    <button type="button" class="close">&times;</button> 关闭x,关闭按钮
-    <a type="button" class="close">&times;</a> 关闭x,关闭按钮
-    <span class="caret"></span>  倒三角
-  位置控制
-    .center-block 居中
-    .pull-left    居左
-    .pull-right   居右
-      <div class="pull-left">居左</div>
-      <div class="pull-right">居右</div>
-      <div class="clearfix visible-sm">清除浮动</div>  
-  小图标
-    一般使用span或i标签引入
-    <span class="glyphicon glyphicon-asterisk"></span>
-    <i class="glyphicon glyphicon-asterisk"></i>
-    图标+表单
-      <div class="input-group">
-        <span class="input-group-addon">
-        <span class="glyphicon glyphicon-zoom-in"></span>
-        </span>
-        <input type="text" class="form-control">
-      </div>
-  下拉菜单
-  导航
-    //选项卡导航
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#">home</a></li>
-      <li><a href="#">home</a></li>
-      <li><a href="#">home</a></li>
-    </ul>
-    .nav-pills   胶囊式导航
-    .nav-stacked 堆叠式导航
-    .nav-justified 自适应
-    .nav-divider 选项分割符,选项样式
-    二级导航
-    导航条
-      <nav class="navbar navbar-default">
-        <div class="navbar-header">
-          <a href="#" class="navbar-brand">导航</a>
+      按钮工具栏
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <button type="button" name="button" class="btn btn-default"></button>
+            <button type="button" name="button" class="btn btn-default"></button>
+            <button type="button" name="button" class="btn btn-default"></button>
+            <button type="button" name="button" class="btn btn-default"></button>
+          </div>
         </div>
-        <!-- <ul class="nav navbar-nav">
-          <li><a href="#">2222</a></li>
-          <li><a href="#">2222</a></li>
-        </ul> -->
-      </nav>
-组件
-JS插件 
-  PS：一组基于jQuery的JS插件集 (故需要引入jQuery库)
-  使用方法:给元素添加 data-xx="xxx" 属性 或再配合jQuery 使用.
-  动画效果
-  下拉菜单
-  选项卡
-  警告框
-  按钮
-  折叠
-  模态弹窗
-  滚动侦测
-  提示框
-  弹出框
-  旋转轮播
-  自动定位浮标
+    图片
+      // 图片形状
+      .img-rounded    添加 border-radius:6px 来获得图片圆角。
+      .img-circle     添加 border-radius:50% 来让整个图片变成圆形。
+      .img-thumbnail  添加一些内边距(padding)和一个灰色的边框。
+      .img-responsive 图片尺寸自适应
+        max-width:100%;height:auto;
+    图标
+      <button type="button" class="close">&times;</button> 关闭x,关闭按钮
+      <a type="button" class="close">&times;</a> 关闭x,关闭按钮
+      <span class="caret"></span>  倒三角
+    位置控制
+      .center-block 居中
+      .pull-left    居左
+      .pull-right   居右
+        <div class="pull-left">居左</div>
+        <div class="pull-right">居右</div>
+        <div class="clearfix visible-sm">清除浮动</div>  
+    小图标
+      一般使用span或i标签引入
+      <span class="glyphicon glyphicon-asterisk"></span>
+      <i class="glyphicon glyphicon-asterisk"></i>
+      图标+表单
+        <div class="input-group">
+          <span class="input-group-addon">
+          <span class="glyphicon glyphicon-zoom-in"></span>
+          </span>
+          <input type="text" class="form-control">
+        </div>
+    下拉菜单
+    导航
+      //选项卡导航
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#">home</a></li>
+        <li><a href="#">home</a></li>
+        <li><a href="#">home</a></li>
+      </ul>
+      .nav-pills   胶囊式导航
+      .nav-stacked 堆叠式导航
+      .nav-justified 自适应
+      .nav-divider 选项分割符,选项样式
+      二级导航
+      导航条
+        <nav class="navbar navbar-default">
+          <div class="navbar-header">
+            <a href="#" class="navbar-brand">导航</a>
+          </div>
+          <!-- <ul class="nav navbar-nav">
+            <li><a href="#">2222</a></li>
+            <li><a href="#">2222</a></li>
+          </ul> -->
+        </nav>
+  组件
+  JS插件 
+    PS：一组基于jQuery的JS插件集 (故需要引入jQuery库)
+    使用方法:给元素添加 data-xx="xxx" 属性 或再配合jQuery 使用.
+    动画效果
+    下拉菜单
+    选项卡
+    警告框
+    按钮
+    折叠
+    模态弹窗
+    滚动侦测
+    提示框
+    弹出框
+    旋转轮播
+    自动定位浮标
 --------------------------------------------------------------------------------
 Idea 
   视图-控制器-数据存储-模块 app
-收集 
-  一个页面从输入 URL 到页面加载显示完成,这个过程中都发生了什么？（流程说的越详细越好）
-    详细版：
-      1、浏览器会开启一个线程来处理这个请求,对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
-      2、调用浏览器内核中的对应方法,比如 WebView 中的 loadUrl 方法;
-      3、通过DNS解析获取网址的IP地址,设置 UA 等信息发出第二个GET请求;
-      4、进行HTTP协议会话,客户端发送报头(请求报头);
-      5、进入到web服务器上的 Web Server,如 Apache、Tomcat、Node.JS 等服务器;
-      6、进入部署好的后端应用,如 PHP、Java、JavaScript、Python 等,找到对应的请求处理;
-      7、处理结束回馈报头,此处如果浏览器访问过,缓存上有对应资源,会与服务器最后修改时间对比,一致则返回304;
-      8、浏览器开始下载html文档(响应报头,状态码200),同时使用缓存;
-      9、文档树建立,根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
-      10、页面开始渲染DOM,JS根据DOM API操作DOM,执行事件绑定等,页面显示完成。
-    简洁版：
-      浏览器根据请求的URL交给DNS域名解析,找到真实IP,向服务器发起请求；
-      服务器交给后台处理完成后返回数据,浏览器接收文件（HTML、JS、CSS、图象等）；
-      浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析,建立相应的内部数据结构（如HTML的DOM）；
-      载入解析到的资源文件,渲染页面,完成。
-
-  网页多语言支持
-    采用统一编码UTF-8方式编码
-      所以对提供了多语言版本的网站来说,Unicode字符集应该是最理想的选择。
-      它是一种双字节编码机制的字符集,不管是东方文字还是西方文字,在Unicode中一律用两个字节来表示,
-      因而至少可以定义65536个不同的字符,几乎可以涵盖世界上目前所有通用的语言的每一种字符。
-      所以在设计和开发多语言网站时,一定要注意先把非中文页面的字符集定义为“utf-8”格式,
-      这一步非常重要,原因在于若等页面做好之后再更改字符集设置,可说是一件非常非常吃力不讨好的工作,
-      有时候甚至可能需要从头再来,重新输入网站的文字内容。
-    多语言网站实现计划 ：
-      静态：就是为每种语言分辨准备一套页面文件,
-        通过文件后缀名来区分不同语言,
-          例如对于首页文件index_en.htm供给英语界面,index_gb.htm供给简体中文界面,index_big.htm供给繁体中文界面
-        通过子目录来区分不同语言。
-          或者是en/index.htm供给英语界面,gb/index.htm供给简体中文界面,big/index.htm供给繁体中文界面
-        一旦用户选择了需要的语言后,主动跳转到相应的页面,首页以下其他链接也是按照同样方法处理。
-        从保护的角度来看,通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
-      动态：站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
-       在需要输出语言文字的处所同一采用语言变量来表现,这些语言变量可以根据用户选择不同的语言赋予不同的值,
-       从而实现在不同的语言环境下输出不同的文字。
-        例如：语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
-        当用户选择的语言是简体中文时赋值为“姓名”,这样就可以适应不同语言时的输出。
-      优缺点
-        采用静态方法的长处是页面直接输出到客户端,不需要在服务器上运行,占用服务器的资源比拟少,
-          系统能够支撑的并发连接数较多,
-          毛病是要为每种语言制作一套页面文件,很多内容即使是和语言无关的也要分不同语言来存储,占用的存储空间较多。
-        采用动态方法和静态方法的优毛病正好相反,它的长处是动态页面文件只有一套,不同语言的文字应用语言变量来存储,
-          和语言无关的内容只存储一份,占用的存储空间较少,并且扩大新语言比拟轻易,
-          毛病需要在服务器上运行,然后把成果输进到客户端,占用服务器的资源比拟多,系统能够支撑的并发连接数较少。
-
-    根据navigator.language我们可以获取到浏览器的语言设置
-    如果是中文的话返回的是zh-CN, 英文的话返回的可能是en,en-US等其它的
-    一般情况下（一般系统和浏览器的语言一致的。当操作系统是中文,浏览器是英文,只能用服务器脚本去判断）是没有问题啦。
-    navigator.language对IE的支持不是很好,IE的话可以选用navigator.userLanguage判断操作系统的语言
-    
-  代码功能实现
-    表单中不允许输入中文(输入中文自动消失)
-      <form id="form">
-        <input type="text" placeholder="用户名">
-      </form>
-  
-      <script>
-        (function() {
-          var form = document.getElementById('form');
-          var input = form.getElementsByTagName('input');
-  
-          // 给input 绑定两个事件(键盘按下、失焦)
-          input[0].onkeyup = input[0].onblur = function(e) {
-            // clear(this);
-            // 等价于
-            clear(e.target)
-          }
-  
-          function clear(o) {
-            o.value = o.value.replace(/[\u4e00-\u9fa5]/g, '');
-            // 这两个unicode值正好是Unicode表中的汉字的头和尾
-          }
-        })();
-      </script>
-  
-    禁止用户复制 剪切 粘贴
-      <form id="form">
-        <input type="text" placeholder="用户名">
-      </form>
-  
-      <script>
-        (function() {
-          var form = document.getElementById('form');
-          var input = form.getElementsByTagName('input');
-          for (var i = 0; i < input.length; i++) {
-            input[i].oncopy = input[i].onpaste=input[i].oncut = function() {
-              // copy为复制 paste为粘贴 cut为剪切
-              return false;
-            }
-          }
-        })();
-      </script>
-  
-    通过z-index 实现轮播图
-      <style>
-        .boundary{
-          position: relative;
-          background: pink;
-        }
-        .img{
-          z-index: 100;
-          position: absolute;left: 0;top: 0;
-        }
-        .active{
-          z-index: 110;
-        }
-      </style>
-      <input id="button" type="button" name="name" value="点击切换">
-      <div class="boundary">
-        <img class="img active" src="http://cdnstatic.visualizeus.com/thumbs/12/33/123347ce2eeea7d0fc05643f39518f9f_i.jpg" alt="picture1" />
-        <img class="img" src="http://cdnstatic.visualizeus.com/thumbs/86/37/8637e4b4b016ba4b631bd628ebc07f48_i.jpg" alt="picture2" />
-        <img class="img" src="http://cdnstatic.visualizeus.com/thumbs/21/cf/21cf04f8cb7799e36d2b8160c349de01_i.jpg" alt="picture3" />
-      </div>
-  
-      <script>
-        // 轮播图的效果:
-        //   定时轮播
-        //   点击切换(下一张图片)
-        // 实现原理:使多张图叠加在一起,通过改变一张的z-index属性来进行显示控制.
-        var button =document.querySelector('#button')
-        button.addEventListener('click',next)
-        var num =0;
-        var sum =3;
-        function next(){
-          // 使当前显示的图片下沉(不显示)
-          var active =document.querySelector('.active')
-          active.classList.remove('active')
-          // 使下一张浮上来
-          var i =(num++)%sum
-          var img =document.querySelectorAll('.img')[i]
-          img.classList.add('active')
-        }
-        // 实现图片的自动切换
-        setInterval(next,1000)
-      </script>
-  
-    留言板
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <title>留言板</title>
-          <script src="jFols.js" charset="utf-8"></script>
-          <style>
-  
-          </style>
-        </head>
-        <body>
-          <div class="inputPart">
-            <input id="inputText" type="text" name="name" value="" placeholder="在此输入留言">
-            <input id="inputButton" type="button" name="name" value="添加留言">
-          </div>
-          <div class="messagePart">
-            <!-- <div class="message">
-              <input  type="button" name="name" value="编辑">
-              <input type="button" name="name" value="删除">
-              <span>message</span>
-            </div> -->
-          </div>
-  
-        <script>
-          // 实现功能:
-          //   在输入框输入留言,点击添加将留言添加在下方
-          //   可修改留言
-          //   可删除留言
-  
-          // 实现添加功能
-          var inputButton =document.querySelector("#inputButton");
-          inputButton.addEventListener("click",addMessage);
-          // 函数功能:将输入的文字添加到下方
-          function addMessage(){
-            // PS-Self:若将addMessage定义为var addMessage=function(){}的形式,则必须将其放在绑定事件的前面,否则执行不到.
-            var messagePart =document.querySelector(".messagePart");
-            var inputText =document.querySelector('#inputText');
-            var value =inputText.value;
-            messagePart.insertAdjacentHTML("beforeEnd",`
-              <div class="message">
-                <input class="edit" type="button" name="name" value="编辑">
-                <input class="delete" type="button" name="name" value="删除">
-                <span class="mesContent editable" contenteditable="false">${value}</span>
-              </div>`)
-          }
-  
-          // 实现删除/编辑功能
-          var messagePart =document.querySelector(".messagePart");
-          messagePart.addEventListener("click",function (evernt){
-            var eveEle =event.target;
-            // eveEle表示被点击的元素 (和冒泡无关)
-            console.log('点击的元素为',eveEle);
-            if (eveEle.classList.contains('delete')) {
-              // 判断是否点击的是删除按钮
-              console.log(eveEle.parentElement);
-              eveEle.parentElement.remove()
-            }else if (eveEle.classList.contains('edit')) {
-              // 判断点击的是否是编辑按钮
-              var span =broEle(eveEle,'mesContent')
-              span.setAttribute("contenteditable","true")
-              span.focus()
-            }
-          });
-        </script>
-        </body>
-      </html>
-  
-    js实现焦点进入文本框内关闭输入法:imeMode
-      2011-05-26 11:23
-      要用到的东西: imeMode:xxx
-      有四个参数
-      active 代表输入法为中文
-      inactive 代表输入法为英文
-      auto 代表打开输入法 (默认)
-      disable 代表关闭输入法
-      <INPUT onfocus=" this.style.imeMode='active' " />
-      <INPUT onfocus=" this.style.imeMode='inactive' " />
-      <INPUT onfocus=" this.style.imeMode='auto' " />
-      <INPUT onfocus=" this.style.imeMode='disabled' " /> 这个应该算最常用的了,其他可以不记
-  
-    音乐播放器
-Question And Answer 
-  html调试中,如何使访问后的链接回到未访问的状态.
-    决解方法1 关闭网页重新打开
-
-  怎样避免用户在留言或发帖等在网页中添加字符时,加入html标签等会影响网页的因素?(不一定是问题的问题)
-    使用 innerText 而非 innerHTML
----------------------------------------------------------------------以下待整理
+---------------------------------------------------------------------以下待整理 
   面试题
-    pushstate
     webview
     二叉树
-    使用过的jQuery组件
-    json格式有什么优缺点？
-    css的盒模型, width和height指定的是什么
-    介绍下http协议
-      http的header有哪些内容
-      402.402等状态码什么含义
-      get与post方法的区别是什么？除了get与post,还有哪些方式？
-    bootstrap
-    anjularJS
-
-    ES6的object.assign()
-    window.onclick与addEventListener的区别。同时用他们注册监听器的话,触发顺序是什么；
-    如何进行页面加载优化；
-    算法： 求3的平方根；
-    CSS实现一个圆环形loading效果
-    CSS3 实现一个立方体
-    如果网页内容需要支持多语言,你会怎么做？
-    模块式开发
-    ajax的回调函数,（答success, error,complete）还有其他几种?
-    ajax 的ContentType 和 datatype 的区别（答了之后又问了 datatype有哪些类型）
-    一个div width = 12px, 里面有个p元素是1.5em, 现在把浏览器窗口放大2倍,div和p的width是多少
-    给了几个个字符串,有的里面有双引号,有的是单引号,有的没引号,判断哪个是合法有效的JSON格式数据
-    MVVM
-
-    写出页面中超链接href中包含"/ system/"字符的CSS选择器
-    简述编写jQuery插件的步骤和代码编写关键点
-    jQuery widget 插件
 
   Question & Idea 
     在浏览器中, length 的值为0 ,为什么会这样子?
@@ -2287,226 +2032,6 @@ Question And Answer
       通过操作CSS样式,再定义元素的animation动画来实现
     如何实现无CSS属性的动画,如scroll bar 滚动的动画?
       注:CSS不可定义元素的scroll bar 的位置, 故不可用CSS3的animation来实现
-  Collection 
-    奇怪的代码
-      赋值 =
-        b =(a =c);
-        分解为:
-          a =c;
-          b =a;
-        b =(a = ctx.createImageData(w, h)).data;
-        分解为:
-          a =ctx.createImageData(w, h);
-          b =a.data;
-  
-        if(tog = !tog){}
-        相当于
-          tog =!tog
-          if(tog){}
-        总结:
-          var a =1;
-          var b =2;
-          console.log( a =b);  //2
-          即 a = b 的值为a
-  
-        var a = b =1
-        相当于
-        var a= 1;
-        b =1;     //  b为全局变量
-  
-        var aoo =a ||b;
-        相当于
-        if(a) {
-          var aoo =a;
-        }else {
-          var aoo =b;
-        }
-    模块化开发怎么做？
-      方法一:使用立即执行的匿名函数创建作用域
-        var module1 =(function(){
-          //code
-        })();
-      方法二:使用JS对象方式创建命名空间
-        var module1 ={}
-        module1.aoo =12;
-        module1.foo =function(){
-          console.log(1);
-        }
-    什么是Cookie 隔离？(或者说：请求资源的时候不要让它带cookie怎么做)
-      如果静态文件都放在主域名下,那静态文件请求的时候都带有的cookie的数据提交给server的,浪费流量,所以需要隔离开.
-      因为cookie有域的限制,因此不能跨域提交请求,故使用非主要域名的时候,请求头中就不会带有cookie数据,
-      这样可以降低请求头的大小,降低请求时间,从而达到降低整体请求延时的目的.
-      同时这种方式不会将cookie传入Web Server,也减少了Web Server对cookie的处理分析环节,
-      提高了webserver的http请求的解析速度.
-    如何判断一个变量是否为null
-      var aoo = null;
-      if(aoo === null) {
-        alert("is null");
-      }
-    使用JS改变 <input type="range" name="" value=""> 的值,不会触发input事件?
-    习题及精解
-      根据以下代码 编写第一个for循环,使用第二个for循环分别输出 0,1,2,3,4
-        var list=[];
-        for(var i = 0; i < 5; i++) { //code }
-        for(var j = 0; j < 5; j++) { list[j](); }
-        解1
-        var list=[];
-        for(var i = 0; i < 5; i++) {
-          list[i] =(function(){
-            var a =i;
-            return function(){ console.log(a) }
-          })();
-        }
-        for(var j = 0; j < 5; j++) { list[j](); }
-        解2
-        var list=[];
-        for(let i = 0; i < 5; i++) {
-          list[i] =function(){
-            console.log(i);
-          };
-        }
-        // console.log(list);
-        for(var j = 0; j < 5; j++) { list[j](); }
-  技巧 综合 总结 
-    JS使用技巧
-      函数绑定
-        e.g. :
-        var aoo ={
-          message:"abc",
-          click:function(e){
-            alert(this.message);
-          }
-        }
-        var btn =document.getElementById("myBtn");
-        btn.onclick =function(){
-          aoo.click();
-        }
-    知识点综合
-      length
-        PS：字符串和数组 有length属性
-          String的length属性不可手动更改
-          Array的length属性可以手动更改
-        e.g.
-          var arr =[1,2,3,4,5]
-          arr.length =7;
-          arr;              //[1, 2, 3, 4, 5, undefined × 2]
-          arr.length =3;
-          arr;              //[1, 2, 3]
-    编程小技巧
-      使用中间量来承接值
-        e.g. 实现 applyCompare 函数
-          参数如下
-          expression 是一个 数组, 包含了 3 个元素
-          第一个元素是 op, 值是 '>' '<' '==' 其中之一
-          剩下两个元素分别是 2 个数字
-          根据 op 对数字运算并返回结果(结果是 true 或者 false)
-          var applyCompare = function(expression) {
-            var op = expression[0]
-            var a = expression[1]
-            var b = expression[2]
-            // 使用变量op、a、b来承接值——数组中的三个值
-            if(op == '<') {
-              return a < b
-            }
-            if(op == '>') {
-              return a > b
-            }
-            if(op == '==') {
-              return a == b
-            }
-          }
-          总结使用中间变量来承接值的优点:
-            减少重复的输入
-            方便更改,如更改条件将数组中的第二个元素为op,更改函数更容易.
-  
-      当一个值a为布尔值时,开关其值
-        即当其为true时改为false,为false改为true
-        a = !a;
-    自我总结:
-      当程序的执行为按先后执行的流程时,需要考虑到某些语句未执行的情况.
-        e.g. 判断一个数组中是否存在数字1.
-          function func(arr){
-            var len = arr.length;
-            for(var i = 0; i < len; i++) {
-              if(arr[i]-1==0) {
-                return true;
-              }
-            }
-            //需要考虑到for未执行的情况,当数组为空时,for不执行.
-            // 在for后面加一个return false来执行arr为空的情况
-            // 考虑到for执行而if未执行的情况
-            // 考虑到for和if都执行的情况.
-            return false;
-          }
-  
-      调试报错总结
-        html中JS代码的放置位置问题.
-        当调试程序中出现错误如: Uncaught TypeError: Cannot read property...,原因是js代码在执行前未加载到,则须将js的引入标签放到body尾部,
-  
-        未正确获取到html元素
-           Cannot read property 'insertAdjacentHTML' of null
-  
-      js中起名的问题
-        var discount = function(price, grade) {
-          var gradeobj = {'小学生':0.5,'初中生':0.6,'高中生':0.7,'大学生':0.8,'研究生':0.9,undefined:1}
-          return gradeobj[grade]*price;
-        }
-        discount(10,'小学生')
-        // 5
-        //将gradeobj的名字取为grade-obj则程序报错.
-  
-      二维数组arr的问题
-        当arr的长度一定后(或存在具体的二维的arr时),可使用arr[][]进行值的访问和对数组进行a[][]=XX 形式的修改
-          e.g.  var arr=[ [0, 9, 0, 0], [0, 0, 9, 0], [9, 0, 9, 0], [0, 9, 0, 0], ]
-            arr[0][0];//0,可访问值
-            arr[0][0]=2;
-            arr;//[ [2, 9, 0, 0], [0, 0, 9, 0], [9, 0, 9, 0], [0, 9, 0, 0], ]   //可修改值
-        当arr未固定时,不可进行arr[][]的修改或arr[][]形式的访问未定义的值
-          e.g. var arr=new Array()
-            arr[0][0];  //报错
-            arr[0][0]=1;  //报错
-        创建长度不定的二维数组
-          var arr = new Array();   //先声明一维
-          for(var i=0;i<n;i++){    //一维长度为n
-            arr[i]=new Array();    //声明二维
-            for(var j=0;j<m;j++){  //二维长度为m
-              arr[i][j]="";        //将变量初始化为空,后面在用所需的值覆盖里面的值
-            }
-          }
-  
-      自我总结特殊点
-        JS
-          var box=setInterval(function(){
-            alert("abc");
-          },1000)
-          // 该语句会直接执行
-  
-        html
-          <script type="text/javascript">
-            function a(){
-              location.href ='https://www.baidu.com'
-            }
-          </script>
-          <a href="javascript:a()">XXX</a>
-          // 在网页中点击链接XXX 会跳转到百度去.
-  
-      使用JS配合CSS的transition来产生动画,
-        先在元素的CSS中定义transition来'监听变化',
-        再动态的给一个元素添加一个class,使其某个属性发生变化,从而达到动画效果,而非直接到结果.
-        注意:不可使元素从无到有的进行过渡,如将display:none;换成visiblity:hidden;
-    页面间传递信息
-      方法一:使用 sessionStorage 或 localStorage 来存取需传递的信息
-      方法二:使用 锚点来存取需传递的信息
-    高阶函数传参的问题
-      方法一:默认函数 不够灵活,相当于固定了参数
-      方法二:将高阶函数的参数和高阶函数一起作为参数传递  [完美解决!]
-  JS代码规范 ----20170316 [self] 
-    暴露的变量 统一采用前缀 Z
-    采用 对象模块的形式切分JS代码
-      初始化模块  必选
-      入口函数    必选
-      保存模块    可选
-    采用 函数封装 + 公用变量统一存放在 Zpub 对象中
   ---------------------------------------------------------------------以下待整理
     一道面试题
       function foo(){

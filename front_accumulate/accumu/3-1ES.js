@@ -59,6 +59,7 @@ ECMAScript JS核心,语法部分
     可以一个或多个字符
     不能把关键字、保留字、true、false和null等作为标识符
     标识符中的字母也可以包含扩展的 ASCII 或 Unicode字母字符,但不推荐使用
+    不能使用'-'
   关键字和保留字 
     有些名称有特殊意义,不可作为变量名
     关键字: 是程序中已经开始使用的字符
@@ -164,10 +165,15 @@ ECMAScript JS核心,语法部分
   Null   表示一个空对象指针,表示什么都没有,相当于一个占位符
     PS：:将来用于保存对象的变量,可初始化为null.
     e.g. :
-    console.log(null==undefined);//true ,undefined派生于null
-    var box= null;
-    console.log(typeof box);  // object
-    console.log(typeof null); // object
+      console.log(null==undefined);//true ,undefined派生于null
+      var box= null;
+      console.log(typeof box);  // object
+      console.log(typeof null); // object
+    判断一个值是否为null
+      var aoo = null;
+      if(aoo === null) {
+        console.log('is null');
+      }
   Boolean 布尔值
     PS：Boolean类型有两个值(字面量): true 和 false
       ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值.
@@ -404,8 +410,8 @@ ECMAScript JS核心,语法部分
         String(null)      "null"
         e.g.  String(1); //"1"
     ◆信息获取
-    str.length;   返回字符串的字符个数的数值
-      或 str["length"]
+    str.length;  str,只读,字符串的字符个数 
+      或 str["length"],
       e.g. :
       "abc".length;    // 3
       "abc"['length']; // 3

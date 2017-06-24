@@ -501,10 +501,14 @@ window的属性对象
         Cookie累加长度限制为4kb,超过部分被忽略;
           通过使用其他符号分割,避免Cookie的数量限制,读取时再自行解析
           e.g.: name=a&b=c&d=e&f=g
-      修改cookie
+      修改cookie 
         若服务器想改变一个已存在的cookie,则修改时key、domain、path、secure需都匹配,
         否则,则是新建一cookie;
-      设置Cookie的expires为0或者过期时间 删除cookie
+      设置Cookie的expires为0或者过期时间 删除cookie 
+      Cookie 隔离[即请求时不带cookie] 
+        若静态文件放在主域名下,则静态文件请求时都会带cookie提交给server,
+        cookie有域的限制,也不能跨域传递,故使用非主要域名的时候,请求头中就不会带有cookie数据,
+        不发送cookie也减少了Web Server对cookie的处理分析环节,
     document.hidden  网页可见性API 「HTML5」 
       页面不可见时播放中的视频暂停,可见时视频继续播放
         <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>

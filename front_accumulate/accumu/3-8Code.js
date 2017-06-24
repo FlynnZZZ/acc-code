@@ -524,6 +524,58 @@ PC端
     }
     var textElem = $("input")[0];
     selectText(textElem, 4, 7);
+  表单中不允许输入中文[输入中文自动消失] 
+    <form id="form">
+      <input type="text" placeholder="用户名">
+    </form>
+
+    <script>
+      (function() {
+        var form = document.getElementById('form');
+        var input = form.getElementsByTagName('input');
+
+        // 给input 绑定两个事件(键盘按下、失焦)
+        input[0].onkeyup = input[0].onblur = function(e) {
+          // clear(this);
+          // 等价于
+          clear(e.target)
+        }
+
+        function clear(o) {
+          o.value = o.value.replace(/[\u4e00-\u9fa5]/g, '');
+          // 这两个unicode值正好是Unicode表中的汉字的头和尾
+        }
+      })();
+    </script>
+  禁止用户复制 剪切 粘贴
+    <form id="form">
+      <input type="text" placeholder="用户名">
+    </form>
+
+    <script>
+      (function() {
+        var form = document.getElementById('form');
+        var input = form.getElementsByTagName('input');
+        for (var i = 0; i < input.length; i++) {
+          input[i].oncopy = input[i].onpaste=input[i].oncut = function() {
+            // copy为复制 paste为粘贴 cut为剪切
+            return false;
+          }
+        }
+      })();
+    </script>
+  js实现焦点进入文本框内关闭输入法:imeMode
+    2011-05-26 11:23
+    要用到的东西: imeMode:xxx
+    有四个参数
+    active 代表输入法为中文
+    inactive 代表输入法为英文
+    auto 代表打开输入法 (默认)
+    disable 代表关闭输入法
+    <INPUT onfocus=" this.style.imeMode='active' " />
+    <INPUT onfocus=" this.style.imeMode='inactive' " />
+    <INPUT onfocus=" this.style.imeMode='auto' " />
+    <INPUT onfocus=" this.style.imeMode='disabled' " /> 这个应该算最常用的了,其他可以不记
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

@@ -1173,7 +1173,7 @@ DOM操作归纳总结
     //是否支持方向转换事件
     console.log('onorientationchange' in window);  // false
 事件绑定、解绑及触发 
-  PS：响应某个事件的函数就叫做事件处理程序(或事件侦听器)
+  PS：响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
     事件处理程序的名字以"on"开头加上事件名
     函数中 this 等于 事件的目标元素
   HTML事件处理程序「也叫内联事件处理程序」 
@@ -1182,7 +1182,7 @@ DOM操作归纳总结
     <input type="button" value="clickme" onclick="alert('点击')">
   DOM0级事件处理程序: 将一个函数赋值给一个事件处理程序属性
     PS：事件处理组成:元素对象.事件处理函数=函数
-      当添加多个相同的事件(而执行函数不同),会产生覆盖
+      当添加多个相同[即使执行函数不同]的事件,会产生覆盖
     e.g. :
       document.onclick=function(){ alert("abc"); }; //单击文档任意处
 
@@ -1190,12 +1190,12 @@ DOM操作归纳总结
       btn.onclick =function(){ };  // 绑定事件
       btn.onclick =null;            // 解除绑定
   DOM2级事件处理程序: addEventListener&removeEventListener
-    PS：DOM2级事件定义了两个方法,用于添加事件和删除事件处理程序的操作.
+    PS：DOM2级事件定义了两个方法,用于添加事件和删除事件处理程序的操作 
       所有DOM节点中都包含这两个方法.
       当一个元素被绑定多个相同类型事件时,都会执行,无覆盖
       同一元素的绑定不同的事件其被调用的顺序不依赖于绑定的顺序,
       绑定多个相同的事件则会按照定义的先后顺序来触发.
-      IE8 及之前不支持w3c的事件绑定(IE9之后支持)
+      IE8及之前不支持DOM2级事件绑定[IE9+支持]
     elem.addEventListener("事件名",事件函数,bool);   事件绑定
       PS：通过该方式添加的事件,只能使用removeEventListener来移除
       bool  可选,表示是否使用捕获的布尔值,默认为false
@@ -1463,9 +1463,9 @@ event 事件对象
         参数为: "Control" "Shift" "AltGraph" "Meta"
     设备中的键盘事件(详情参见 JavaScript高级程序设计 384页)
   文本事件 当在文档中输入文本时触发
-    textInput 在文本插入文本框之前会触发(DOM3新增)
+    textInput 在文本插入文本框之前会触发[DOM3+]
       只有可编辑区域才能触发该事件
-      e.data; 表示用户输入的字符(如可能为s或S取决于是否按了Shift)
+      e.data; 表示用户输入的字符[如可能为s或S取决于是否按了Shift] 
   合成事件 当为IME[Iput Method Editor,输入法编辑器]输入字符时触发 
     PS：复合事件时DOM3级事件中新添加的一类事件,用于处理IME的输入序列
       IME可以让用户输入在物理键盘上找不到的字符(如输入中文)
@@ -1532,16 +1532,16 @@ event 事件对象
       complete 对象已经加载完毕
   hashchange URL变化时在window上触发「IE8+」 
   // 设备相关事件
-  (详参 JavaScript高级程序设计 395 页)
+  [详参 JavaScript高级程序设计 395 页]
   ◆其他事件:
     propertychange [IE专有] 
      不管js操作还是键盘鼠标手动操作,只要HTML元素属性发生改变即可立即捕获到.
-    input    监听表单值改变 (IE9+支持)
-     适用元素: input type=text , textarea
-     使用情景: 粘贴可触发;
-     HTML5中的标准事件
-     在Chrome中通过JS改变表单的值,不会触发
-     ios微信中,自定义获取焦点存在问题
+    input    监听表单值改变[IE9+] 
+      适用元素: input type=text , textarea
+      使用情景: 粘贴可触发;
+      HTML5中的标准事件
+      在Chrome中通过JS改变表单的值,不会触发该事件 
+      ios微信中,自定义获取焦点存在问题
     selectstart 其触发时间为目标对象被开始选中时(即选中动作刚开始,尚未实质性被选中)
      该事件常使用于使目标对象“禁止变蓝”,比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
      而当我们要避免这种情况时就可以使用该事件
@@ -3335,7 +3335,7 @@ File_API 文件和二进制数据的操作 「HTML5」
       video.src = obj_url;
       video.play()
       window.URL.revokeObjectURL(obj_url);  
-Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
+Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」 
   var audio = document.querySelector(slt); 获取audio元素对象
   var video = document.querySelector(slt); 获取video元素对象
   方法
@@ -3624,7 +3624,7 @@ Web_Workers 工作线程 「HTML5」
       Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
         const hello = document.createElement('button', 'button-hello')
 ------------------------------------------------------------------------待整理 
-  套接字
+  
   
   <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>
   <input type="text" name="" value="" id="test1">

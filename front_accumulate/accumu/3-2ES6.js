@@ -985,7 +985,7 @@ Object 对象扩展
     var num2 = 12;
     Object.is(str,num);  // false
     Object.is(num2,num); // true
-  Object.assign() 将源对象的属性赋值到目标对象上
+  Object.assign() 将源对象的属性赋值到目标对象上 
     PS：参数可以是多个「至少是两个」
     let origin = {"b":2,"c":3}; //这个充当源对象
     let target = {"a":1};       //这个充当目标对象

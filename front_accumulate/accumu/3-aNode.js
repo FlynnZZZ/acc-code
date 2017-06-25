@@ -13,11 +13,11 @@
     e.g. :-0.6.X -0.8.X -0.10.X  
     奇数为非稳定版本
     e.g. :-0.7.X -0.9.X -0.11.X  
-  程序一般由3部分组成
+  程序一般由3部分组成 
     required引入模块：使用 require 指令来载入 NodeJS 模块 
     创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
     接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
-  NodeJS 回调函数
+  NodeJS 回调函数 
     PS：NodeJS 异步编程的直接体现就是回调 
       异步编程依托于回调来实现,但不能说使用了回调后程序就异步化了.
       Node 所有 API 都支持回调函数.
@@ -26,7 +26,7 @@
       Node采用V8引擎处理JavaScript脚本,最大特点就是单线程运行,一次只能运行一个任务。
       这导致Node大量采用异步操作（asynchronous opertion）,
       即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
-    由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
+    由于这种特性,某一个任务的后续操作,往往采用回调函数[callback]的形式进行定义 
       var isTrue = function(value, callback) {
         if (value === true) {
           callback(null, "Value was true.");
@@ -73,7 +73,7 @@
         }
       }
       由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
-    阻塞与非阻塞调用的不同
+    阻塞与非阻塞调用的不同 
       e.g.:
       阻塞代码实例
         创建一个文件 input.txt ,内容如下：
@@ -103,7 +103,7 @@
       第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
       因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
       所以若需要处理回调函数的参数,我们就需要写在回调函数内.
-    NodeJS 事件循环
+    NodeJS 事件循环 
       Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
       每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
       基本上所有的事件机制都是用设计模式中观察者模式实现.
@@ -111,7 +111,7 @@
         这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己.
       Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
       每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
-    事件驱动程序
+    事件驱动程序 
       PS：Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
         然后去服务下一个web请求.
         当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
@@ -148,11 +148,11 @@
         node demo.js
     node -e str   使用-e参数,可执行代码字符串 
       node -e 'console.log("Hello World")'
-    node 升级
+    node 升级 
       npm cache clean -f   清除 npm cache
       npm install -g n     安装n模块 
         node有一个模块叫n，是专门用来管理 node.js 的版本
-      n stable   升级 node.js 到最新稳定版 
+      n stable   升级 nodejs 到最新稳定版 
         n后面也可以跟随版本号比如：
         n v0.10.26
         n 0.10.26
@@ -195,8 +195,6 @@
       总结
       
       以上就是两种Node版本管理工具的安装和基本使用方法，选择适合你的那一种口味。
-
-      
   NodeJS REPL Node的交互式解释器 
     PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
@@ -219,6 +217,39 @@
         > _ + 1
         3
 --------------------------------------------------------------------------------
+基础语法 
+  this 
+    全局作用域下的this
+      在浏览器里this等价于window对象,若声明一些全局变量(不管在任何地方),
+      这些变量都会作为this的属性.
+      在node里面,有两种执行JavaScript代码的方式,
+      一种是直接在里面执行一行行代码.
+        声明的全局变量会添加到global对象,也会添加给this
+        global 和 this 是等价的.
+      一种是直接执行写好的JavaScript文件,
+        声明的全局变量会添加到global对象,但不会自动添加到this
+    function this
+      除了在DOM事件处理程序里,
+        事件处理程序里面的this表示被绑定的元素对象
+      不是用new调用外,
+        若使用new调用,函数就变成了一个构造函数,
+        就创建了一个实例,this指代这个实例.
+        当构造函数使用new生成实例时,this指向其prototype.
+        e.g. :
+        function Foo() { console.log(this.aoo); }
+        Foo.prototype.aoo = "111"; 
+        Foo();  // undefined
+        var obj = new Foo();   // 111
+        console.log(obj.aoo);  // 111
+      无论是在浏览器环境还是node环境,
+      正常的方式调用函数(直接执行而无前缀),this指代全局的this
+      使用严格模式,this就会变成undefined.
+      e.g. :
+      var foo = "bar";
+      function testThis() { this.foo = "foo"; }
+      console.log(this.foo); // bar
+      testThis();
+      console.log(this.foo); // foo
 全局对象 
   PS：JS中有一个特殊的对象,称为全局对象[Global Object],
     它及其所有属性都可以在程序的任何地方访问,即全局变量
@@ -401,132 +432,138 @@
     console.assert(value[, message][, ...]) 用于判断某个表达式或变量是否为真,
       接收两个参数,第一个参数是表达式,第二个参数是字符串.
       只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-  Buffer 缓冲区,处理二进制数据的接口 
+  Buffer  缓冲区,处理二进制数据的接口 
     PS：JS只有字符串数据类型,没有二进制数据类型, 
-      处理TCP流或文件流时,需使用二进制数据, 因此NodeJS定义了一Buffer类,
+      处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
       用来创建一个专门存放二进制数据的缓存区;
       在NodeJS中,Buffer类是随Node内核一起发布的核心库;
-    var bufer = new Buffer(val); 通过Buffer类来创建bufer对象 
-      PS： bufer对象是一个类似数组的对象,成员都为0到255的整数值,即一个8位的字节 
+    var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
+      PS： bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
       ◆val可为以下类型：
-      num         整数,用于指定创建的bufer的长度[单位为字节],或分配的字节内存 
+      num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
         var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
       bufer       bufer对象,通过拷贝来创建新buffer对象 
         var buffer = new Buffer([1, 1, 2, 2, 3]);
         console.log(buffer); // <Buffer 01 01 02 02 03>
       str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
-        type  编码方式,默认为utf-8,其他可选值为 
-          "ascii"
-          "utf8"
+        type  编码方式,默认为'utf-8',其他可选值为 
+          "base64"  
+          "ascii"   
+          "utf8"    
           "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
           "ucs2"    utf16le的别名
-          "base64"
-          "hex"      将每个字节转为两个十六进制字符
-        var buf = new Buffer("www.runoob.com", "utf-8"); 
+          "hex"     将每个字节转为两个十六进制字符
+        e.g.：
+          var bufer1 = new Buffer("abcdefg", "utf-8"); 
+          var bufer2 = new Buffer("abcdefg", "base64"); 
+          console.log(bufer1,bufer2);
+          // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
       arr         数组,数组成员必须是整数值
         var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
         console.log(hello.toString()); // 'Hello'
-    对象属性方法
-      bufer.length;  读写,bufer对象所占据的内存长度  
-        PS：改值与Buffer对象的内容无关;
-          如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
-        var buf1 = new Buffer('1234567');
-        var buf2 = new Buffer(8);
-        console.log(buf1.length); // 7
-        console.log(buf2.length); // 8
-      bufer.toJSON();    返回将bufer对象转换为JSON格式对象 
-        PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-        e.g.:
-          var bufer = new Buffer('abc');
-          var json = bufer.toJSON();
-          console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-          console.log(typeof json); // object
-          
-          var buf = new Buffer('test');
-          var json = JSON.stringify(buf);
-          console.log(json); // '[116,101,115,116]'
-          var copy = new Buffer(JSON.parse(json));
-          console.log(copy); // <Buffer 74 65 73 74>
-      bufer.write(str [,idx] [,len] [,typ]);  将字符串写入bufer对象,返回实际写入的长度
-        PS：若 buffer 空间不足,则只会写入部分字符串.
-        str   写入缓冲区的字符串.
-        idx   缓冲区开始写入的索引值,默认为 0 
-        len   写入的字节数,默认为 buffer.length 
-        typ   使用的编码.默认为 'utf8' 
-        e.g.:
-          var buf = new Buffer(256);
-          var len = buf.write("www.runoob.com");
-          console.log("写入字节数 : "+ len);  // 写入字节数 : 14
-          console.log(buf);
-          // <Buffer 77 77 77 2e 72 75 6e 6f 6f 62 2e 63 6f 6d 00 00 90 74 48 ee 42 01 00 00 0a 00 00 00 00 00 00 00 b8 74 48 ee 42 01 00 00 05 00 00 00 01 00 00 00 00 00 ... >
-      bufer.toString([typ] [,bgn] [,end]);  解码buf缓冲区数据并使用指定的编码返回字符串
-        typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
-        bgn    开始读取的索引位置,默认为 0 
-        end    结束位置,默认为缓冲区的末尾 
-        e.g.:
-          var buf = new Buffer(26);
-          for (var i = 0 ; i < 26 ; i++) { 
-            buf[i] = i + 97; 
-          }
-          console.log(buf);
-          // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-          console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-          console.log( buf.toString('ascii',0,5));   // 输出: abcde
-          console.log( buf.toString('utf8',0,5));    // 输出: abcde
-          console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-      bufer.slice([bgn[,end]]);  bufer剪切,返回剪切的新缓冲区
-        begin 可选,默认为 0
-        end   可选,默认为 bufer.length
-        e.g.:
-          var buf1 = new Buffer('123');
-          var buf2 = buf1.slice(0,2);
-          console.log(buf2); // <Buffer 31 32>
-      buf.copy(bufer[,buferBgn[,bufBgn[,bufEnd]]]); 拷贝buf到bufer中,返回undefined
-        bufer     复制到的bufer对象
-        buferBgn  数字,可选,默认为 0,开始复制插入的下标
-        bufBgn    数字,可选,默认为 0
-        bufEnd    数字,可选,默认为 buf.length
-        e.g.:
-          var buf1 = new Buffer('abcdefghi');
-          var buf2 = new Buffer(6);
-          for (var i = 0; i < buf2.length; i++) {
-            buf2[i] = 65;
-          }
-          console.log(buf1,buf2);
-          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
-          buf1.copy(buf2,2,3,5);
-          console.log(buf1,buf2);
-          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
-          var bufStr1 = buf1.toString();
-          var bufStr2 = buf2.toString();
-          console.log(bufStr1,bufStr2);
-          // abcdefghi AAdeAA
-      bufer.compare(buf);  比较 
-        e.g.:
-          var buf1 = new Buffer('10');
-          var buf2 = new Buffer('11');
-          var result = buf1.compare(buf2);
-          console.log(result); // -1
-    静态属性方法 
-      Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
-        buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-          参数列表只有一个成员,就直接返回该成员
-        length  可选,默认为总长度,指定新buf对象的长度
-          省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
-          因此,显式提供这个参数,能提供运行速度。 
-        e.g.:
-          var buf1 = new Buffer('11');
-          var buf2 = new Buffer('22');
-          var buf3 = Buffer.concat([buf1,buf2]);
-          console.log(buf3.toString());   // 1122
-      Buffer.isEncoding(typ)  返回一个布尔值,表示Buffer实例是否为指定编码 
-        Buffer.isEncoding('utf8'); // true
-      Buffer.isBuffer(obj)    返回一个布尔值,判断对象是否为Buffer实例 
-        Buffer.isBuffer(Date) // false
-      Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度
-        str  检测的字符串
-        typ  可选,编码类型,默认编码方式为utf8
-        Buffer.byteLength('Hello', 'utf8') // 5
+    ◆Buffer实例的属性方法 
+    bufer[idx]  下标访问
+    bufer.length  读写,bufer对象所占据的内存长度  
+      PS：改值与Buffer对象的内容无关;
+        如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+      var buf1 = new Buffer('1234567');
+      var buf2 = new Buffer(8);
+      console.log(buf1.length); // 7
+      console.log(buf2.length); // 8
+    bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
+      PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+      e.g.:
+        var bufer = new Buffer('abc');
+        var json = bufer.toJSON();
+        console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+        console.log(typeof json); // object
+        
+        var buf = new Buffer('test');
+        var json = JSON.stringify(buf);
+        console.log(json); // '[116,101,115,116]'
+        var copy = new Buffer(JSON.parse(json));
+        console.log(copy); // <Buffer 74 65 73 74>
+    bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
+      PS：若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略;
+      str   写入缓冲区的字符串 
+      idx   缓冲区开始写入的索引值,默认为 0 
+      len   写入的字节数,默认为 buffer.length 
+      typ   使用的编码.默认为'utf8' 
+      e.g.: 
+        var buf = new Buffer('abcdefg');
+        var len = buf.write("1234");
+        console.log("写入字节数 : "+ len);  // 写入字节数 : 4
+        console.log(buf.toString()); // 1234efg
+    bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
+      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+      bgn    开始读取的索引位置,默认为 0 
+      end    结束位置,默认为缓冲区的末尾 
+      e.g.:
+        var buf = new Buffer(26);
+        for (var i = 0 ; i < 26 ; i++) { 
+          buf[i] = i + 97; 
+        }
+        console.log(buf);
+        // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+        console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+        console.log( buf.toString('ascii',0,5));   // 输出: abcde
+        console.log( buf.toString('utf8',0,5));    // 输出: abcde
+        console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+    bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区
+      begin 可选,默认为 0
+      end   可选,默认为 bufer.length
+      e.g.:
+        var buf1 = new Buffer('123');
+        var buf2 = buf1.slice(0,2);
+        console.log(buf2); // <Buffer 31 32>
+    bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
+      bufer1   复制的目标bufer对象 
+      bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
+      bfBgn    数字,可选,默认为 0 
+      bfEnd    数字,可选,默认为 buf.length 
+      e.g.: 
+        var buf1 = new Buffer('abcdefghi');
+        var buf2 = new Buffer(6);
+        for (var i = 0; i < buf2.length; i++) {
+          buf2[i] = 65;
+        }
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+        buf1.copy(buf2,2,3,5);
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+        var bufStr1 = buf1.toString();
+        var bufStr2 = buf2.toString();
+        console.log(bufStr1,bufStr2);
+        // abcdefghi AAdeAA
+    bufer.compare(buf)  比较 
+      e.g.:
+        var buf1 = new Buffer('10');
+        var buf2 = new Buffer('11');
+        var result = buf1.compare(buf2);
+        console.log(result); // -1
+    bufer.equals(bufer1)
+    ◆静态属性方法 
+    Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
+      buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
+        参数列表只有一个成员,就直接返回该成员
+      length  可选,默认为总长度,指定新buf对象的长度
+        省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
+        因此,显式提供这个参数,能提供运行速度。 
+      e.g.:
+        var buf1 = new Buffer('11');
+        var buf2 = new Buffer('22');
+        var buf3 = Buffer.concat([buf1,buf2]);
+        console.log(buf3.toString());   // 1122
+    Buffer.isEncoding(typ)  返回布尔值,表示Buffer实例是否为指定编码 
+      Buffer.isEncoding('utf8'); // true
+    Buffer.isBuffer(obj)    返回布尔值,判断对象是否为Buffer实例的 
+      Buffer.isBuffer(Date) // false
+    Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度 
+      str  检测的字符串
+      typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
+      Buffer.byteLength('Hello', 'utf8') // 5
+    Buffer.compare() 
     与二进制数组的关系 
       TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
       比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
@@ -582,253 +619,133 @@
     若超过这个范围,会被自动改为1毫秒;
   clearInterval(num)     终止一个用setInterval方法新建的定时器。
   require() 用于加载模块
-  Buffer()  用于操作二进制数据
+  Buffer()  用于操作二进制数据 
   ◆伪全局变量 
     模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
   exports
-基础语法 
-  this 
-    全局作用域下的this
-      在浏览器里this等价于window对象,若声明一些全局变量(不管在任何地方),
-      这些变量都会作为this的属性.
-      在node里面,有两种执行JavaScript代码的方式,
-      一种是直接在里面执行一行行代码.
-        声明的全局变量会添加到global对象,也会添加给this
-        global 和 this 是等价的.
-      一种是直接执行写好的JavaScript文件,
-        声明的全局变量会添加到global对象,但不会自动添加到this
-    function this
-      除了在DOM事件处理程序里,
-        事件处理程序里面的this表示被绑定的元素对象
-      不是用new调用外,
-        若使用new调用,函数就变成了一个构造函数,
-        就创建了一个实例,this指代这个实例.
-        当构造函数使用new生成实例时,this指向其prototype.
-        e.g. :
-        function Foo() { console.log(this.aoo); }
-        Foo.prototype.aoo = "111"; 
-        Foo();  // undefined
-        var obj = new Foo();   // 111
-        console.log(obj.aoo);  // 111
-      无论是在浏览器环境还是node环境,
-      正常的方式调用函数(直接执行而无前缀),this指代全局的this
-      使用严格模式,this就会变成undefined.
-      e.g. :
-      var foo = "bar";
-      function testThis() { this.foo = "foo"; }
-      console.log(this.foo); // bar
-      testThis();
-      console.log(this.foo); // foo
-Stream 流 
-  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
-    例如,对http 服务器发起请求的request 对象就是一个 Stream,还有stdout,标准输出.
-    所有的 Stream 对象都是 EventEmitter 的实例
-  Stream 有四种流类型：
-    Readable  可读操作
-    Writable  可写操作
-    Duplex    可读可写操作
-    Transform 操作被写入数据,然后读出结果
-  ◆常用事件
-  data   当有数据可读时触发
-  end    没有更多的数据可读时触发
-  error  在接收和写入过程中发生错误时触发
-  finish 所有数据已被写入到底层系统时触发
-  e.g.:
-    从文件中读取数据
-      创建 input.txt 文件,内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var data = '';
-        var rs = fs.createReadStream('input.txt'); // 创建可读流
-        rs.setEncoding('UTF8'); // 设置编码为 utf8.
-        // 处理流事件 data  end error
-        rs.on('data', function(chunk) { data += chunk; });
-        rs.on('end',function(){ console.log(data); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上代码执行结果如下：
-        程序执行完毕
-        菜鸟教程官网地址：www.runoob.com
-    将数据写入文件
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var data = '菜鸟教程官网地址：www.runoob.com';
-        // 创建一个可以写入的流,写入到文件 output.txt 中
-        var rs = fs.createWriteStream('output.txt');
-        // 使用 utf8 编码写入数据
-        rs.write(data,'UTF8');
-        rs.end(); // 标记文件末尾
-        // 处理流事件 
-        rs.on('finish', function() { console.log("写入完成."); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下：
-        程序执行完毕
-        写入完成.
-      查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
-  管道流 
-    PS：管道提供了一个输出流到输入流的机制.
-      通常我们用于从一个流中获取数据并将数据传递到另外一个流中
-    e.g.:
-      读取一文件内容并将数据写入到另外一文件中
-      设置 input.txt 文件内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var rs = fs.createReadStream('input.txt');// 创建一个可读流
-        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
-        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
-        rs.pipe(writerStream); // 管道读写操作
-        console.log("程序执行完毕");
-      程序执行完毕,查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
-  链式流
-    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
-      链式流一般用于管道操作.
-    e.g.:
-      用管道和链式来压缩和解压文件
-        创建 compress.js 文件, 代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 压缩 input.txt 文件为 input.txt.gz
-        fs.createReadStream('input.txt')
-          .pipe(zlib.createGzip())
-          .pipe(fs.createWriteStream('input.txt.gz'));
-        console.log("文件压缩完成.");
-        代码执行结果如下：
-        文件压缩完成.
-        执行完以上操作后,我们可以看到当前目录下生成了 input.txt 的压缩文件 input.txt.gz.
-      接下来,解压该文件
-        创建 decompress.js 文件,代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 解压 input.txt.gz 文件为 input.txt
-        fs.createReadStream('input.txt.gz')
-          .pipe(zlib.createGunzip())
-          .pipe(fs.createWriteStream('input.txt'));
-        console.log("文件解压完成.");
-        代码执行结果如下：
-        文件解压完成.
-模块系统 为了NodeJS的文件可相互调用 
+模块 
   PS：文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JavaScript 代码、JSON 或者编译过的 C/C++ 扩展等等;
     按照CommonJS规范定义和使用模块
-  module       模块公开的接口 
-    PS：module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
-    exports.foo = function(){ } 
-      hello.js 文件中
-        exports.world = function() { 
-          console.log('Hello World'); 
-        };
-        // 通过 exports 对象把 world 作为模块的访问接口 
-      main.js  文件中
-        通过 require('./hello') 加载这个模块,
-        然后就可以直接访 问 hello.js 中 exports 对象的成员函数 world 了
-    module.obj = function(){ } 
-      hello.js 文件中 
-        function world() { 
-          var name; 
-          this.setName = function(thyName) { name = thyName; }; 
-          this.sayHello = function() { console.log('Hello ' + name); }; 
-        }; 
-        module.exports = world;
-      main.js  文件中 
-        var World = require('./hello'); 
-        world = new World(); 
-        world.setName('BYVoid'); 
-        world.sayHello(); 
-  require(arg) 获取模块的接口 
-    PS：加载时可以省略脚本文件的后缀名
-      模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
-      意味着模块实际上只会执行一次。
-      若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数。        
-    arg  参数可为以下几种 
-      原生模块       http、fs、path等
-      相对路径的文件 ./mod或../mod等
-      绝对路径的文件 /pathtomodule/mod等
-      name  非原生模块的文件模块,通过配置文件指定
-        var bar = require('bar');
-        有时候,一个模块本身就是一个目录,目录中包含多个文件。
-        这时候,Node在 package.json 文件中,寻找main属性所指明的模块入口文件。
-        {
-          "name" : "bar",
-          "main" : "./lib/bar.js"
-        }
-        上面代码中,模块的启动文件为 lib子目录下的 bar.js。
-        当使用require('bar')命令加载该模块时,
-        实际上加载的是./node_modules/bar/lib/bar.js文件。
-        下面写法会起到同样效果。
-        var bar = require('bar/lib/bar.js');
-        若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
-    var aoo = require(path); 通过路径引入 
-      e.g. : 模块的引入和创建 
-        student.js 文件中
-          function add(student){ console.log("Add student:" + student); }
-          exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
-        teacher.js 文件中
-          function add(teacher){ console.log("Add teacher:" + teacher); }
-          exports.add =add; // 通过 exports对象 暴露值
-        klass.js 文件中
-          var student =require("./student"); 
-          // 通过 require函数 来引入student.js 模块 
-          // (student.js 和 class.js 在同一目录下,必须使用./)
-          var teacher =require("./teacher");
-          // 引入 teacher.js 模块
-          function add(t,ss){
-            teacher.add(t);  // 调用teacher.js 模块中的 add函数
-            ss.forEach(function(val,i){ student.add(val); })
-            // 调用student.js 模块中的 add函数
+  commonjs规范 模块的引入 
+    module       模块公开的接口 
+      PS：module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
+      exports.foo = function(){ } 
+        hello.js 文件中
+          exports.world = function() { 
+            console.log('Hello World'); 
+          };
+          // 通过 exports 对象把 world 作为模块的访问接口 
+        main.js  文件中
+          通过 require('./hello') 加载这个模块,
+          然后就可以直接访 问 hello.js 中 exports 对象的成员函数 world 了
+      module.obj = function(){ } 
+        hello.js 文件中 
+          function world() { 
+            var name; 
+            this.setName = function(thyName) { name = thyName; }; 
+            this.sayHello = function() { console.log('Hello ' + name); }; 
+          }; 
+          module.exports = world;
+        main.js  文件中 
+          var World = require('./hello'); 
+          world = new World(); 
+          world.setName('BYVoid'); 
+          world.sayHello(); 
+    require(arg) 获取模块的接口 
+      PS：加载时可以省略脚本文件的后缀名
+        模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
+        意味着模块实际上只会执行一次。
+        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数。        
+      arg  可为模块名或文件路径  
+        原生模块       http、fs、path等模块名
+        相对路径的文件 ./mod或../mod等
+        绝对路径的文件 /pathtomodule/mod等
+        name  非原生模块的文件模块,通过配置文件指定
+          var bar = require('bar');
+          有时候,一个模块本身就是一个目录,目录中包含多个文件。
+          这时候,Node在 package.json 文件中,寻找main属性所指明的模块入口文件。
+          {
+            "name" : "bar",
+            "main" : "./lib/bar.js"
           }
-          exports.add =add; // 传统的模块实例
-          // moudule.exports.add =add; // 成为一个特别的模块类型
-          //和 exports.add =add; 类似(功能相同),调用方式不同
-          // 若存在 exports.add =add; moudule.exports.add =add;被忽略
-        index.js 文件中
-          var klass =require("./klass"); // 引入 klass.js
-          klass.add("abc",["12","34"]);  // 调用 klass.js 中的函数
-          // Add teacher:abc
-          // Add student:12
-          // Add student:34
-    var aoo = require(str);  通过模块名引入
-      e.g.:  var fs = require('fs'); // 引入fs模块
-  ◆核心模块  不用安装就可以使用 
+          上面代码中,模块的启动文件为 lib子目录下的 bar.js。
+          当使用require('bar')命令加载该模块时,
+          实际上加载的是./node_modules/bar/lib/bar.js文件。
+          下面写法会起到同样效果。
+          var bar = require('bar/lib/bar.js');
+          若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
+      var aoo = require(str);  通过模块名引入 
+        e.g.:  var fs = require('fs'); // 引入fs模块
+      var aoo = require(path); 通过路径引入 
+        e.g. : 模块的引入和创建 
+          student.js 文件中
+            function add(student){ console.log("Add student:" + student); }
+            exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
+          teacher.js 文件中
+            function add(teacher){ console.log("Add teacher:" + teacher); }
+            exports.add =add; // 通过 exports对象 暴露值
+          klass.js 文件中
+            var student =require("./student"); 
+            // 通过 require函数 来引入student.js 模块 
+            // (student.js 和 class.js 在同一目录下,必须使用./)
+            var teacher =require("./teacher");
+            // 引入 teacher.js 模块
+            function add(t,ss){
+              teacher.add(t);  // 调用teacher.js 模块中的 add函数
+              ss.forEach(function(val,i){ student.add(val); })
+              // 调用student.js 模块中的 add函数
+            }
+            exports.add =add; // 传统的模块实例
+            // moudule.exports.add =add; // 成为一个特别的模块类型
+            //和 exports.add =add; 类似(功能相同),调用方式不同
+            // 若存在 exports.add =add; moudule.exports.add =add;被忽略
+          index.js 文件中
+            var klass =require("./klass"); // 引入 klass.js
+            klass.add("abc",["12","34"]);  // 调用 klass.js 中的函数
+            // Add teacher:abc
+            // Add student:12
+            // Add student:34
+  ◆核心模块[Node自带不用安装即可使用] 
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
   events 事件模块 
-    PS：NodeJS 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
+    PS：NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
     NodeJS 里面的许多对象都会分发事件：
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-      所有这些产生事件的对象都是 events.EventEmitter 的实例.
-    var events = require('events');   引入 events 模块
-    var event = new events.EventEmitter(); 创建事件功能对象
+      所有这些产生事件的对象都是 events.EventEmitter 的实例; 
+    var events = require('events');   引入events模块
+    var EventEmitter = events.EventEmitter;  获取到事件对象的类 
+    var evt = new EventEmitter(); 创建事件功能对象 
       EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
       当添加新的监听器时,'newListener' 事件会触发,
       当监听器被移除时,'removeListener' 事件被触发.
-    event.on(eName,function([arg1,arg2...]){ }); 给指定事件添加监听器
-      PS：事件名为字符串,可自定义.一个事件可以绑定多次
-      回调函数的传入的参数为手动触发时指定的值
-    event.emit(eName[,val1,val2...]); 手动触发事件
+    evt.on('eName',foo);    监听事件 
+      PS：事件名为字符串,可自定义,一个事件可以绑定多次, 
+        此处'on'也可以换成'addEventListener';
+      回调函数的传入的参数为[手动]触发时指定的值 
+    evt.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听  
       当事件触发时,注册到这个事件的事件监听器被依次调用
-    event.addListener(eName,listener) 给指定事件添加监听器
-    event.once(eName,listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-    event.removeListener(eName,listener)  移除指定事件的指定监听器
-      此操作将会改变处于被删监听器之后的那些监听器的索引
-      e.g.:
+    evt.addListener('eName',listener) 给指定事件添加监听器
+    evt.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+    evt.removeListener('eName',fooName)  移除指定事件的监听 
+      PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
+      fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
+      e.g.: 
         var callback = function(stream) { };
         server.on('connection', callback);
         server.removeListener('connection', callback);
-    event.removeAllListeners([eName])  移除所有监听器,若指定事件,则移除该事件的所有监听器
-    event.setMaxListeners(num)   提高监听器的默认限制的数量
-      默认情况下,单个事件允许绑定不超过 10 监听器函数否则就会输出警告信息
-    event.listeners(eName)     返回指定事件的监听器数组
-    event.emit(eName[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值
-    events.EventEmitter.listenerCount(event,eName)  返回指定事件功能对象的事件的监听器数量
-    e.g.:
+    evt.removeAllListeners(['eName'])  移除所有监听器
+      eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
+    evt.setMaxListeners(num)   设置事件最大的监听数量 
+      默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
+    evt.listeners('eName')     返回指定事件的监听函数的数组 
+    evt.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值
+    EventEmitter.listenerCount(evt,'eName')  返回指定事件功能对象的事件的监听器数量 
+    e.g.: 
       var events = require('events');
       var event = new events.EventEmitter();
       var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
@@ -854,75 +771,213 @@ Stream 流
         监听器 listener2 执行
         1 个监听器监听连接事件
         程序执行完毕
-    继承 EventEmitter
+    继承 EventEmitter 
       大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
       包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
       为什么要这样做呢？原因有两点：
       首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
       其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
       继承 EventEmitter 不会打乱对象原有的继承关系.
+  url    解析URL 
+    PS：包含五个方法,不需要实例化[本身就是一实例对象]
+    var url = require("url"); 引入url模块
+    url.parse(url [,bol1] [,bol2]); 将URL解析为对象「方便后续其他操作」
+      url   字符串,传入需要解析的URL字符串
+      bol1  可选,默认false,是否将query字段转换为对象表示
+      bol2  可选,默认false,当URL不全时更智能的识别
+      e.g. :
+        url.parse("https://www.baidu.com");
+        返回如下的对象
+        {
+          protocol: 'https:',  // 使用协议
+          slashes: true,       // 是否有协议的双斜线
+          auth: null,
+          host: 'www.baidu.com', // ip地址或域名
+          port: null,       // 端口,默认为80,否则会指明
+          hostname: 'www.baidu.com', // 主机名
+          hash: null,   // hash值,锚点
+          search: null, // 查询字符串参数
+          query: null,  // 发送给服务器的数据,使用=的键值对表示,参数串
+          pathname: '/', // 路径名,
+          path: '/',     // 路径
+          href: 'https://www.baidu.com/' // 完整超链接
+        }
+    url.format(urlObj);     将url对象格式化为url字符串
+      e.g. :
+      var obj =url.parse("https://www.baidu.com");
+      url.format(obj); // 'https://www.baidu.com/'
+    url.resolve(str1,str2); 拼接为URL 
+      e.g. :
+        url.resolve("https://imooc.com","/course/list");
+        // 'https://imooc.com/course/list'
+        
+        url.resolve('/one/two/three', 'four')
+        // '/one/two/four'
+        
+        url.resolve('http://example.com/', '/one')
+        // 'http://example.com/one'
+        
+        url.resolve('http://example.com/one/', 'two')
+        // 'http://example.com/one/two'
+        
+        url.resolve('http://example.com/one', '/two')
+        // 'http://example.com/two'
+  querystring  解析URL的查询字符串 
+    var querystring = require("querystring"); 引入querystring模块
+    querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
+      obj  需序列化的对象
+      str1 可选,默认为'&',参数连接符
+      str2 可选,默认为'=',键值分割符
+      e.g. :
+        querystring.stringify({
+          name:"Scott",
+          course:["Java","Node"],
+          from:""
+        })
+        // 'name=Scott&course=Java&course=Node&from='
+    querystring.parse(str [,str1] [,str2] [,options])   解析为对象格式  
+      str  需要解析的字符串
+      str1 可选,默认为'&',参数连接符
+        e.g.：
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      str2 可选,默认为'=',键值分割符 
+      optons  其他配置 
+      e.g. :
+        querystring.parse('name=Scott&course=Java&course=Node&from=');
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+    querystring.escape(str); 转义为URL可用的字符串
+      e.g. : 
+        querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
+    querystring.unescape(str); 反转义 
+      e.g. :
+        querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
+    querystring.unescapeBuffer() 
+    querystring.encode()
+    querystring.decode()
   http   http服务模块,提供HTTP服务器功能 
-    PS： NodeJS自带的 http 模块, 当协议为 https 时,使用 https 模块
-      1024 以下的端口是系统保留端口,需要管理员权限才能使用;
-      http 模块主要用于搭建 HTTP 服务端和客户端,
-      使用 HTTP 服务器或客户端功能必须调用 http 模块.
-    Web服务器
+    PS：主要用于搭建HTTP服务端和客户端; 
+    Web服务器 
       Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
       Web服务器的基本功能就是提供Web信息浏览服务.
       它只需支持HTTP协议、HTML文档格式及URL,与客户端的网络浏览器配合.
-      大多数 web 服务器都支持服务端的脚本语言(php、python、ruby)等,
+      大多数 web 服务器都支持服务端的脚本语言php、python、ruby等,
       并通过脚本语言从数据库获取数据,将结果返回给客户端浏览器.
       目前最主流的三个Web服务器是Apache、Nginx、IIS.
-    Web 应用架构
-      Client   客户端,一般指浏览器,浏览器可以通过 HTTP 协议向服务器请求数据.
-      Server   服务端,一般指 Web 服务器,可以接收客户端请求,并向客户端发送响应数据.
-      Business 业务层,通过 Web 服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等.
-      Data     数据层,一般由数据库组成.
-    var http =require("http"); 引入 http 模块
-    var server =http.createServer(function(req,res){}); 创建服务器
-      req 请求
-        req.url  请求的地址
-        req.setEncoding("utf8"); 设置请求的格式为UTF-8
-        req.addListener("data",function(dataPart){}); data事件,当接收请求信息时触发
-          会触发多次,dataPart为每次信息,将所有dataPart串起来就是,请求传送的信息了
-        req.addListener("end",function(){}); end事件,请求信息传送完毕后触发
-      res 响应
-        res.writeHead(状态码,obj); 设置响应头
-          obj  设置响应头信息的对象
-          e.g.:
-          res.writeHead(200,{"Content-Type":"text/plain"})
-        res.write(str); 定义响应信息
-        res.end([str]); 完成响应,参数可选,存在会将其发送
-      server.listen(端口[,url]);  监听网址及端口
-      e.g. :
-        var http =require("http"); // 引入 http 模块
-        //创建Web服务器,传入一回调函数,用于处理请求
-        var server =http.createServer(function(req,res){ 
-          res.writeHead(200,{"Content-Type":"text/plain"});
-          res.write("haha! ");
-          res.end("hello word\n");
+    Web应用架构 
+      Client   客户端,一般指浏览器,浏览器可以通过 HTTP 协议向服务器请求数据 
+      Server   服务端,一般指Web服务器,可接收客户端请求,并向客户端发送响应数据 
+      Business 业务层,通过Web服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等
+      Data     数据层,一般由数据库组成 
+    var http = require("http"); 引入http模块 
+      PS：使用HTTP服务器或客户端功能必须调用该模块
+    var server = http.createServer(foo); 创建服务器 
+      foo 依次传入参数 (req,res) 
+        req 请求 
+          req.url  请求的地址
+          req.setEncoding("utf8"); 设置请求的格式为UTF-8
+          req.addListener("data",function(dataPart){}); data事件,当接收请求信息时触发
+            会触发多次,dataPart为每次信息,将所有dataPart串起来就是,请求传送的信息了
+          req.addListener("end",function(){}); end事件,请求信息传送完毕后触发
+        res 响应 
+          res.writeHead(状态码,obj); 设置响应头
+            obj  设置响应头信息的对象
+            e.g.:
+            res.writeHead(200,{"Content-Type":"text/plain"})
+          res.write(str); 定义响应信息
+          res.end([str]); 完成响应,参数可选,存在会将其发送
+    server.listen(port [,url]);  监听ip及端口 
+    http.request(options [,foo])  从后台发送http请求
+      PS：返回可写的request实例流
+      options  配置项参数,可为str或obj
+        str  字符串,将被 url.parse 解析为对象
+        obj  对象 
+          host           服务器域名或ip地址
+          hostname       host别名
+          port           端口
+          localAddress   
+          socketPath     
+          method         请求方法,默认为'get'
+          path           请求的路径 
+          headers        请求头对象 
+          auth           计算认证头的认证,一般为 user 和 password 
+          agent          代理 
+          keepAlive      
+          keepAliveMsecs     
+      foo      参数为 (res) 
+        res 服务器的响应 
+      e.g.： 慕课网评论的提交 
+        var http = require("http");
+        var querystring = require("querystring");
+        var postData = querystring.stringify({  
+          'content' : '用于测试评论的评论',
+          'mid' : 8837
         });
-        server.listen(1337,"127.0.0.1"); // 监听请求
-        // 通过监听 http://127.0.0.1:1337 来调用回调函数
-        console.log("server running at http://127.0.0.1:1337");
-        Node环境中运行该文件
-        打开浏览器输入地址 "http://127.0.0.1:1337" 
-        出现 haha! hello word
-    http.get(url,function(res){}); 使用get方法请求指定url的数据
-      res.on('data',function(data){ }); 监听请求的数据下载事件,会不断的触发
-        PS：将回调函数中所有的data数据串起来就是完整的响应数据了
-      res.on('end',function(){ }); 请求数据下载完毕触发
-    e.g.:
-      创建Web服务器
-      创建 server.js 文件,代码如下所示：
+        var options = {
+          hostname : 'www.imooc.com',
+          path : '/course/docomment', 
+          port : 80,
+          // 前三项用于组成请求的地址
+          method : 'POST',
+          // headers 来自于 网页请求的 Reqeust Headers
+          headers : {
+            'Accept' : 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding' : 'gzip, deflate',
+            'Accept-Language' : 'zh-CN,zh;q=0.8,en;q=0.6',
+            'Content-Length' : postData.length, // 仅此处更改 
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Cookie' : 'imooc_uuid=aaf7ef90-41e9-4556-b4c4-d565f6666970; imooc_isnew_ct=1491625441; UM_distinctid=15c07943af93d8-07e39e6439fbee-3e64430f-1fa400-15c07943afa529; CNZZDATA1261110065=2035860492-1494771972-null%7C1494771972; PHPSESSID=5vftmu08ki7j3b5m9nuqpclqq4; loginstate=1; apsid=ZlMDQxODI1ZjExYmQ0ZWJmZmVlNDNmOWE3YjFkNTQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMzc5Mjk3MgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAxMzU2MDA3NTY1QHFxLmNvbQAAAAAAAAAAAAAAAAAAADZlMmEwZjMzOWZiZmMwNWJkOTNlYTg4MTM2NWMxMTligfxFWYH8RVk%3DNG; last_login_username=1356007565%40qq.com; cninfo=weibo-ad48fca2a463aa6148f0b70c330b445b; Hm_lvt_f0cfcccd7b1393990c78efdeebff3968=1498279675; Hm_lpvt_f0cfcccd7b1393990c78efdeebff3968=1498279675; IMCDNS=0; imooc_isnew=2; cvde=5945fc118b240-423',
+            'Host' : 'www.imooc.com',
+            'Origin' : 'http://www.imooc.com',
+            'Proxy-Connection' : 'keep-alive',
+            'Referer' : 'http://www.imooc.com/video/8837',
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
+            'X-Requested-With' : 'XMLHttpRequest'
+          },
+        };
+        // 提交数据的格式,从响应的网站获取 
+        var req = http.request(options,function(res){
+          console.log('status',res.statusCode); // 网络请求的状态码
+          // 输出响应头信息
+          console.log('response headers',JSON.stringify(res.headers));
+          // 接收响应信息时,Node以流的形式来接收,可用于监听信息流事件
+          res.on("data",function(chunk){
+            // chunk 为接收到的数据,类型为 buffer 类型 
+            console.log(Buffer.isBuffer(chunk)); // true
+            console.log(typeof chunk);  // object
+          });
+          // 数据接收完毕
+          res.on("end",function(){
+            console.log('评论完毕----');
+          });
+          
+        });
+        // 请求出错事件
+        req.on("error",function(e){
+          console.log('评论出错',e.message);
+        });
+        req.write(postData); // 将请求数据写入请求体 
+        req.end(); // 结束请求,请始终加上
+    http.get(url,foo);   使用get方法请求指定url的数据 
+      PS：基于 http.request 的封装,
+        相对于request,将请求方法默认为get,且自动调用req.end();
+      foo   传入参数 (res) 
+        res.on('data',foo); 监听请求的数据传输,会不断的触发 
+          PS：将回调函数中所有的data数据串起来就是完整的响应数据了
+          foo  传入参数 (data) 
+        res.on('end',foo);  请求数据下载完毕触发
+    e.g.: 
+      在该目录下创建一个 index.htm 文件[用于读取] 
+      创建Web服务器 
         var http = require('http');
         var fs = require('fs');
         var url = require('url');
-        // 创建服务器
-        http.createServer( function (request, response) {  
-          // 解析请求,包括文件名
-          var pathname = url.parse(request.url).pathname;
-          // 输出请求的文件名
+        http.createServer( function (req, res) {  
+          var pathname = url.parse(req.url).pathname;
           console.log("Request for " + pathname + " received.");
           // 从文件系统中读取请求的文件内容
           fs.readFile(pathname.substr(1), function (err, data) {
@@ -930,44 +985,29 @@ Stream 流
               console.log(err);
               // HTTP 状态码: 404 : NOT FOUND
               // Content Type: text/plain
-              response.writeHead(404, {'Content-Type': 'text/html'});
+              res.writeHead(404, {'Content-Type': 'text/html'});
             }
             else{	         
               // HTTP 状态码: 200 : OK
               // Content Type: text/plain
-              response.writeHead(200, {'Content-Type': 'text/html'});	
+              res.writeHead(200, {'Content-Type': 'text/html'});	
               // 响应文件内容
-              response.write(data.toString());		
+              res.write(data.toString());		
             }
             //  发送响应数据
-            response.end();
+            res.end();
           });   
         }).listen(8081);
         // 控制台会输出以下信息
         console.log('Server running at http://127.0.0.1:8081/');
-      在该目录下创建一个 index.htm 文件,代码如下：
-        <html>
-        <head>
-        <title>Sample Page</title>
-        </head>
-        <body>
-        Hello World!
-        </body>
-        </html>
-      执行 server.js 文件：
-      
-      创建Web客户端
-      创建 client.js 文件,代码如下所示：
+      创建Web客户端 
         var http = require('http');
-        // 用于请求的选项
         var options = {
           host: 'localhost',
           port: '8081',
           path: '/index.htm'  
         };
-        // 处理响应的回调函数
         var callback = function(response){
-          // 不断更新数据
           var body = '';
           response.on('data', function(data) {
             body += data;
@@ -977,18 +1017,22 @@ Stream 流
             console.log(body);
           });
         }
-        // 向服务端发送请求
         var req = http.request(options, callback);
         req.end();
-      新开一个终端,执行 client.js 文件,输出结果如下：
-        <html>
-        <head>
-        <title>Sample Page</title>
-        </head>
-        <body>
-        Hello World!
-        </body>
-        </html>
+  https  https服务模块 
+    PS：和http模块类似,在搭建https服务器时需SSl证书
+    搭建https服务器
+      var https = require("https");
+      var fs = require("fs");
+      var options = {
+        key : fs.readFileSync('ssh_key.pem'),
+        cert : fs.readFileSync('ssh_cert.pem')
+      }
+      https.createServer(options,function(req,res){
+        res.writeHead(200);
+        res.end('hello');
+      })
+      .listen(8080);
   fs     file system,文件系统模块,与文件系统交互
     PS：fs模块可用于对系统文件及目录进行读写操作.
       NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
@@ -1277,90 +1321,7 @@ Stream 流
           文件关闭成功          
     fs.rename(oldPath, newPath, callback)
       回调函数没有参数,但可能抛出异常          
-  url    解析URL 
-    PS：URL对象包含五个方法,不需要实例化,本身就是一个实例对象.
-    var url = require("url"); 引入url模块
-    url.parse(url [,bol1] [,bol2]); 将URL解析为对象「方便后续其他操作」
-      url   字符串,传入需要解析的URL字符串
-      bol1  布尔值,可选,默认false,是否将query字段转换为对象表示
-      bol2  布尔值,可选,默认false,当URL不全时更智能的识别
-      e.g. :
-        url.parse("https://www.baidu.com");
-        返回如下的对象
-        {
-          protocol: 'https:',  // 使用协议
-          slashes: true,       // 是否有协议的双斜线
-          auth: null,
-          host: 'www.baidu.com', // ip地址或域名
-          port: null,       // 端口,默认为80,否则会指明
-          hostname: 'www.baidu.com', // 主机名
-          hash: null,   // hash值,锚点
-          search: null, // 查询字符串参数
-          query: null,  // 发送给服务器的数据,使用=的键值对表示,参数串
-          pathname: '/', // 路径名,
-          path: '/',     // 路径
-          href: 'https://www.baidu.com/' // 完整超链接
-        }
-    url.format(urlObj);     将url对象格式化为url字符串
-      e.g. :
-      var obj =url.parse("https://www.baidu.com");
-      url.format(obj); // 'https://www.baidu.com/'
-    url.resolve(str1,str2); 拼接为URL
-      e.g. :
-        url.resolve("https://imooc.com","/course/list");
-        // 'https://imooc.com/course/list'
-        
-        url.resolve('/one/two/three', 'four')
-        // '/one/two/four'
-        
-        url.resolve('http://example.com/', '/one')
-        // 'http://example.com/one'
-        
-        url.resolve('http://example.com/one/', 'two')
-        // 'http://example.com/one/two'
-        
-        url.resolve('http://example.com/one', '/two')
-        // 'http://example.com/two'
-  querystring  解析URL的查询字符串
-    PS：
-    var querystring = require("querystring"); 引入querystring模块
-    querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
-      obj  需序列化的对象
-      str1 字符串,可选,默认为'&',用于键值对间的连接
-      str2 字符串,可选,默认为'=',用于键值对的键值连接
-      e.g. :
-        querystring.stringify({
-          name:"Scott",
-          course:["Java","Node"],
-          from:""
-        })
-        // 'name=Scott&course=Java&course=Node&from='
-    querystring.parse(str [,str1] [,str2])   解析为对象格式  
-      str  字符串,需要解析的字符串
-      str1 字符串,可选,默认为'&',指定键值对间的连接符号
-        e.g.：
-        var str = 'name=Scott-course=Java-course=Node-from=';
-        var obj1 = querystring.parse(str);
-        var obj2 = querystring.parse(str,'-');
-        console.log(obj1,'/n',obj2);
-        // { name: 'Scott-course=Java-course=Node-from=' } 
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-      str2 字符串,可选,默认为'=',指定键值对的键值连接符号
-      e.g. :
-        querystring.parse('name=Scott&course=Java&course=Node&from=');
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-    querystring.escape(str); 转义为URL可用的字符串
-      e.g. :
-      querystring.escape("哈哈>._.<");
-      // '%E5%93%88%E5%93%88%3E._.%3C'
-    querystring.unescape(str); 反转义
-      e.g. :
-      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C');
-      // '哈哈>._.<'
-    querystring.unescapeBuffer()
-    querystring.encode()
-    querystring.decode()
-  child_process 新建子进程 
+  child_process  新建子进程 
   crypto  提供加密和解密功能,基本上是对OpenSSL的包装
   util   提供常用函数的集合 
     PS：用于弥补核心JavaScript 的功能 过于精简的不足
@@ -1433,7 +1394,7 @@ Stream 流
         util.isError(new Error()) // true
         util.isError(new TypeError()) // true
         util.isError({ name: 'Error', message: 'an error occurred' }) // false      
-  os 模块提供了一些基本的系统操作函数
+  os   模块提供了一些基本的系统操作函数
     PS：
     var os = require("os"); 引入os模块
     os.tmpdir() 返回操作系统的默认临时文件夹.
@@ -1500,8 +1461,8 @@ Stream 流
         joint path : /test/test1/2slashes/1slash
         resolve : /web/com/1427176256_27423/main.js
         ext name : .js    
-  net  模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法
-    创建客户端
+  net  模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法 
+    创建客户端 
       const net = require("net");     // 引入 net模块
       const host = '59.111.160.197';  // 指定host,只能填写 ip,而不能为网址
       const port = 80;                // 指定 端口
@@ -1522,7 +1483,7 @@ Stream 流
         client.destroy(); // 关闭 client 连接
       } );        
       client.on('close', function() { }) // 连接关闭时触发 close 事件
-    创建服务端
+    创建服务端 
       const net = require('net');
       const host = ''; // 字符串,表示接受任意 ip 地址的连接
       const port = 2000; // 1024-65535之间, 1024以下端口需管理员权限才能使用
@@ -1571,7 +1532,7 @@ Stream 流
         隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
         显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
     var domain = require("domain"); 引入domain模块
-  assert  主要用于断言,如果表达式不符合预期,就抛出一个错误。
+  assert  主要用于断言,如果表达式不符合预期,就抛出一个错误 
     PS：Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
     assert(bol,str); 
       bol  布尔值
@@ -1705,12 +1666,15 @@ Stream 流
         // AssertionError: Test Failed
         assert.fail(21, 42, undefined, '###')
         // AssertionError: 21 ### 42
-  本地模块
-  ◆第三方模块
+  Promise  同步形式执行异步操作　
+    var Promise = require("Promise");   模块引入　
+  ◆本地模块 
+  ◆第三方模块 
   cheerio html文件源码操作模块 
     PS：像使用jquery一样方便快捷地操作抓取到的源码
-    var cheerio =require("cheerio"); 引入cheerio模块
-    var $ =cheerio.load(data); 将传入的数据生成DOM,并返回选择器API用于获取DOM元素
+    npm install cheerio -g   安装cheerio模块
+    var cheerio = require("cheerio"); 引入cheerio模块
+    var $ = cheerio.load(data); 将传入的数据生成DOM,返回选择器API用于获取DOM元素 
       $(selector)  获取selector对应的元素组成的类数组对象
         $($(selector)[0]).html();  获取第一个元素的HTML字符
         $($(selector)[0]).text();  获取第一个元素的文本
@@ -1720,7 +1684,7 @@ Stream 流
       e.g.:
       var $ =cheerio.load(data);
       var a =$('a'); // 获取所有的a元素对象,操作类似与jQuery
-  request 请求模块
+  request 请求模块 
     var request =require('request'); 引入request模块
     request(url,function(err,response,data){ }); 向URL发送请求
       回调函数传入err response data三个参数
@@ -1728,6 +1692,98 @@ Stream 流
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
+Stream,流 
+  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+    例如,对http 服务器发起请求的request 对象就是一个 Stream,还有stdout,标准输出.
+    所有的 Stream 对象都是 EventEmitter 的实例
+  Stream 有四种流类型：
+    Readable  可读操作
+    Writable  可写操作
+    Duplex    可读可写操作
+    Transform 操作被写入数据,然后读出结果
+  ◆常用事件
+  data   当有数据可读时触发
+  end    没有更多的数据可读时触发
+  error  在接收和写入过程中发生错误时触发
+  finish 所有数据已被写入到底层系统时触发
+  e.g.:
+    从文件中读取数据
+      创建 input.txt 文件,内容如下：
+        菜鸟教程官网地址：www.runoob.com
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var data = '';
+        var rs = fs.createReadStream('input.txt'); // 创建可读流
+        rs.setEncoding('UTF8'); // 设置编码为 utf8.
+        // 处理流事件 data  end error
+        rs.on('data', function(chunk) { data += chunk; });
+        rs.on('end',function(){ console.log(data); });
+        rs.on('error', function(err){ console.log(err.stack); });
+        console.log("程序执行完毕");
+      以上代码执行结果如下：
+        程序执行完毕
+        菜鸟教程官网地址：www.runoob.com
+    将数据写入文件
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var data = '菜鸟教程官网地址：www.runoob.com';
+        // 创建一个可以写入的流,写入到文件 output.txt 中
+        var rs = fs.createWriteStream('output.txt');
+        // 使用 utf8 编码写入数据
+        rs.write(data,'UTF8');
+        rs.end(); // 标记文件末尾
+        // 处理流事件 
+        rs.on('finish', function() { console.log("写入完成."); });
+        rs.on('error', function(err){ console.log(err.stack); });
+        console.log("程序执行完毕");
+      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下：
+        程序执行完毕
+        写入完成.
+      查看 output.txt 文件的内容：
+        菜鸟教程官网地址：www.runoob.com
+  管道流 
+    PS：管道提供了一个输出流到输入流的机制.
+      通常我们用于从一个流中获取数据并将数据传递到另外一个流中
+    e.g.:
+      读取一文件内容并将数据写入到另外一文件中
+      设置 input.txt 文件内容如下：
+        菜鸟教程官网地址：www.runoob.com
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var rs = fs.createReadStream('input.txt');// 创建一个可读流
+        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
+        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
+        rs.pipe(writerStream); // 管道读写操作
+        console.log("程序执行完毕");
+      程序执行完毕,查看 output.txt 文件的内容：
+        菜鸟教程官网地址：www.runoob.com
+  链式流
+    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
+      链式流一般用于管道操作.
+    e.g.:
+      用管道和链式来压缩和解压文件
+        创建 compress.js 文件, 代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 压缩 input.txt 文件为 input.txt.gz
+        fs.createReadStream('input.txt')
+          .pipe(zlib.createGzip())
+          .pipe(fs.createWriteStream('input.txt.gz'));
+        console.log("文件压缩完成.");
+        代码执行结果如下：
+        文件压缩完成.
+        执行完以上操作后,我们可以看到当前目录下生成了 input.txt 的压缩文件 input.txt.gz.
+      接下来,解压该文件
+        创建 decompress.js 文件,代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 解压 input.txt.gz 文件为 input.txt
+        fs.createReadStream('input.txt.gz')
+          .pipe(zlib.createGunzip())
+          .pipe(fs.createWriteStream('input.txt'));
+        console.log("文件解压完成.");
+        代码执行结果如下：
+        文件解压完成.
 路由 
   PS：我们要为路由提供请求的URL和其他需要的GET及POST参数,
     随后路由需要根据这些数据来执行相应的代码.
@@ -2149,14 +2205,6 @@ RESTful API
 --------------------------------------------------------------------------------
 总结收集
 ----------------------------------------------------------------------以下待整理
-
-
-
-
-
-
-
-
 
 
 

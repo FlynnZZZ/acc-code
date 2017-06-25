@@ -2001,11 +2001,17 @@ Directives,指令系统  用于model和view的交互
       update       被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
         通过比较更新前后的绑定值,可以忽略不必要的模板更新
         e.g.：
+          当DOM渲染有更新时
           <div id="demo1" >
             <input type="text" name="" value="" v-test1>
             <button type="button" name="button" @click="inputFocus">click</button>
             <span>{{inputIsFocus}}</span>
-            <!-- // 是否存在span元素直接导致钩子函数是否被执行 -->
+            <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
+          </div>
+          或改为: 当指令的值有变化时
+          <div id="demo1" >
+            <input type="text" name="" value="" v-test1="inputIsFocus">
+            <button type="button" name="button" @click="inputFocus">click</button>
           </div>
           Vue.directive('test1', {
             update : function(el,binds,vn,oVn){

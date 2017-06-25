@@ -118,7 +118,17 @@ DOM操作
     数组中每个元素为原生JS的DOM元素对象;
     在jQuery中 $ 等价于 jQuery,$为快捷方式;
   $(document) 独有的属性和方法 
-    $(document).ready(function () {})   [参见事件]
+    .ready(function () {})   [参见事件]+
+    ◆全局Ajax事件处理器
+    .ajaxComplete(foo)   每当一Ajax请求完成时触发 
+      PS：从 1.8+ 开始该方法只能绑定到document元素
+      foo  依次传入参数 (event, xhr, options)
+    .ajaxError(foo)      每当一AJAX请求出错时触发 
+      foo  依次传入参数 (event, xhr, options)
+    .ajaxSend(foo)       每当一AJAX请求发送前时触发 
+      foo  依次传入参数 (event, xhr, options)
+    .ajaxStart(foo)      每当一Ajax请求即将发送,若其他Ajax请求都完成则触发 
+      foo  无参数 
   Jelem 创建 
     $('<div>') 创建一个div Jelem
     Jelem.clone([bool]) 复制元素
@@ -2019,7 +2029,7 @@ Question & Idea
     在Firefox中返回可以保存状态,但Chrome和IE中不会,
     方法一:将跳转之前的状态信息使用,sessionStorage存起来,返回后再使用JS调回状态.
     方法二:使用hash来存状态信息,原理同方法一.
-  一道面试题
+  一道面试题 
     function foo(){
       getName =function(){ console.log(1); }
       return this;
@@ -2039,7 +2049,6 @@ Question & Idea
       var aoo =new foo();
       aoo.getName() === new foo().getName() //true
     new new foo().getName() //3,懵比
-  "偷"的代码
 
 
 

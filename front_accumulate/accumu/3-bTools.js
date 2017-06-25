@@ -1,15 +1,15 @@
 npm,node_package_manager node包管理器 
-  PS：随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等],
-    允许用户从NPM服务器下载别人编写的第三方包到本地使用.
-    允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用.
-    允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用.
+  PS：随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
+    允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
+    允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
+    允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用. 
   命令行命令 
     PS：所有node_modules/.bin/目录下的命令,都可以用 'npm run 命令' 的格式运行,
       在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
       和npm相关的指令或命令前都需添加'npm '
     ◆常用命令 
     npm init        初始化,新建 package.json 文件
-    install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为 i 
+    npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为 i 
       <name>     node插件名称, 如：npm install gulp-less --save-dev
       -g         全局安装 
         将会安装在C:\Users\Administrator\AppData\Roaming\npm,并写入系统环境变量
@@ -26,11 +26,11 @@ npm,node_package_manager node包管理器
       e.g.:
         npm install lodash -g   全局安装 
         npm install npm -g      升级npm版本[会更新所有npm的包?]
-    uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
+    npm uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
       PS：不要直接删除本地插件包
       npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
-    list [-g]       当前目录已安装插件[简写'ls']
-    update <name>   更新模块
+    npm list [-g]       当前目录已安装插件[简写'ls']
+    npm update <name>   更新模块 
       e.g.：
         npm update -g           更新npm 
         npm update vue-cli -g   更新vue

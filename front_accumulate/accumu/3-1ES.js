@@ -2786,7 +2786,7 @@ Function 函数对象
       在绝大多数情况下,函数的调用方式决定了this的值.
       this不能在执行期间被赋值,在每次函数被调用时this的值也可能会不同.
       ES5引入了bind方法来设置函数的this值,而不用考虑函数如何被调用的.
-    this使用的地方
+    this使用的地方 
       全局中:在全局运行上下文中(在任何函数体外部),指代全局对象
         在浏览器中执行后得到一个Window对象,这是一个全局对象
         console.log(this === window); // true
@@ -2914,6 +2914,19 @@ Function 函数对象
         }
         var aoo = add.call(7,2,4);
         console.log(aoo); // 9 
+      实现继承的效果 
+        function Pet(words){
+          this.words = words;
+          this.speak = function (){
+            console.log(this.words);
+          };
+        };
+        function Dog(words){
+          Pet.call(this,words);
+        };
+        var dog1 = new Dog('wang!');
+        dog1.speak(); // wang!
+        console.log(dog1); // Dog {words: "wang!", speak: function}
     foo.apply(thisArg[,arrays])        改变this指向
       PS：使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
         都是函数对象的方法,区别在于接收参数的形式不同.
@@ -3037,7 +3050,7 @@ Function 函数对象
       var color="红色的"; //此处color是全局变量,该变量是window的属性.
       // 此时 var color 等价于 window.color
       console.log(this.color);        //color
-    其他特殊情况
+    其他特殊情况 
       var aoo =1;
       var obj ={ aoo:2, foo:function(){return this.aoo;} }
       obj.foo();    // 2

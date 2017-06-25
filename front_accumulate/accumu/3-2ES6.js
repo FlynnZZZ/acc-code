@@ -1897,12 +1897,12 @@ Generator 生成器函数
     ite.next(); // {value: "gen2 start", done: false}
     ite.next(); // {value: "gen2 end", done: false}
     ite.next(); // {value: "end", done: false}
-Promise 异步模式 
-  PS： 采用 Promise 方式,可采用'同步'形式的代码来决解异步函数间的层层嵌套,
-    将原来异步函数的嵌套关系转变为'同步'的链式关系.
-    Promise 对象是一个代理对象,代理了最终返回的值,可以在后期使用.
-    将异步操作封装成 Promise 对象.
-    然后使用 Promise 对象的 then catch 等方法,进行链式的形似同步的写法完成异步操作.
+Promise 同步书写异步模式 
+  PS：采用'同步'形式的代码来决解异步函数间的层层嵌套, 
+    将原来异步函数的嵌套关系转变为'同步'的链式关系; 
+    Promise 对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
+    将异步操作封装成 Promise 对象; 
+    然后使用 Promise 对象的 then catch 等方法,进行链式的形似同步的写法完成异步操作, 
     Promise有以下几种状态:
     pending: 初始状态, 初始状态,未完成或拒绝。
     fulfilled: 意味着操作成功完成。
@@ -1914,8 +1914,8 @@ Promise 异步模式
     首先,无法取消 Promise,一旦新建它就会立即执行,无法中途取消。
     其次,若不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
     第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
-  new Promise(foo) 创建Promise对象
-    PS： Promise在创建时,参数函数就会执行
+  var prms = new Promise(foo) 创建Promise对象 
+    PS： Promise在创建时,参数函数就会执行 
       参数为一「执行异步操作的」函数, resolve 和 reject 传递给函数的参数「executor」
       参数函数内,若 resolve 被调用,代表该Promise被成功解析「resolve」;
       若 reject 被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
@@ -1924,84 +1924,84 @@ Promise 异步模式
       或是调用 reject 方法,表示初始化的异步代码调用失败,整个promise被拒绝。
       若在executor 方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
       即相当于reject方法被调用,executor 的返回值也就会被忽略。
-    var pro = new Promise(function(rs,rj){
+    foo 依次传入参数 (rs,rj)
       rs(arg1); // 用于 异步成功后 传递数据 arg1
       rj(arg2); // 用于 异步失败后 传递数据 arg2
       // rs rj函数根据逻辑需要进行相应的执行
-    })
-  pro.then(foo1[,foo2])    rs或rj执行触发foo1或foo2,,会返回promise对象
+  ◆prms的方法 
+  prms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2,,返回promise对象 
     foo2 可选,在rj后执行,若不存在则忽略;
     其中rs将其参数传递给foo1作为参数,rj将其参数传递给foo2作为参数;
     foo1 默认会返回一个Promise值,也可以自定义返回值,
     该值会传递到下一个then的foo1方法参数中;
     若 foo1 返回一个新 Promise,
     则then之后再调用的then就是新Promise中的逻辑了;
-  pro.catch(foo)  用于处理操作异常,会返回promise对象
-    pro.catch(function (error) {
+  prms.catch(foo)  用于处理操作异常,返回promise对象 
+    prms.catch(function (error) {
       //操作失败的处理程序
     });
-  Promise.all(arr)  所有完成触发 
-    PS：参数为一数组,其元素是Promise实例对象,
-      当所有实例对象的状态为fulfilled时,Promise.all()才会触发;
-      最终的结果为多个rs传递的值组成的一个数组;
-    let pro1 = new Promise(function(resolve){
-      setTimeout(function () {
-        resolve('实例1操作成功');
-      },5000);
-    });
-    let pro2 = new Promise(function(resolve){
-      setTimeout(function () {
-        resolve('实例2操作成功');
-      },1000);
-    });
-    // 5秒之后控制台才会输出结果
-    Promise.all([pro1,pro2])
-    .then(function(result){
-      console.log(result);
-    });
-    // ["实例1操作成功", "实例2操作成功"]
-  Promise.race(arr) 竞速,完成一个即可 
-    PS：参数要求跟Promise.all( )方法一样,
-      不同的是,它参数中的promise实例,只要有一个状态发生变化,
-      不管是成功fulfilled还是异常rejected,它就会有返回,
+  ◆静态方法 
+  Promise.all(arr)  全体模式,所有成功[?]时触发 
+    PS：当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
+    arr  由Promise实例组成的数组
+    e.g.：
+      let prms1 = new Promise(function(resolve){
+        setTimeout(function () {
+          resolve('实例1操作成功');
+        },5000);
+      });
+      let prms2 = new Promise(function(resolve){
+        setTimeout(function () {
+          resolve('实例2操作成功');
+        },1000);
+      });
+      // 5秒之后控制台才会输出结果
+      Promise.all([pro1,pro2])
+      .then(function(result){
+        console.log(result);
+      });
+      // ["实例1操作成功", "实例2操作成功"]
+  Promise.race(arr) 竞速模式,有一个完成时触发 
+    PS：参数中的promise实例,只要有一个状态发生变化[不管成功还是异常],它就会有返回,
       其他实例中再发生变化,也不管了。
-    let pro1 = new Promise(function(resolve){
-      setTimeout(function () {
-        resolve('实例1操作成功');
-      },4000);
-    });
-    let pro2 = new Promise(function(resolve,reject){
-      setTimeout(function () {
-        reject('实例2操作失败');
-      },2000);
-    });
-    Promise.race([pro2,pro1])
-    .then(function(result){
-      console.log(result);
-    })
-    .catch(function(error){
-      console.log(error);
-    });
-    // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
-    // 实例2操作失败
-    由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
-    所以最后输出的是：实例2操作失败。
-  Promise.resolve()
-  Promise.reject()
-  Promise.prototype.then()
-  Promise.prototype.catch()
-  finally
-  bind
-  all
-  joinprops
-  any
-  some
-  race
+    arr  由Promise实例组成的数组 
+    e.g.：
+      let prms1 = new Promise(function(resolve){
+        setTimeout(function () {
+          resolve('实例1操作成功');
+        },4000);
+      });
+      let prms2 = new Promise(function(resolve,reject){
+        setTimeout(function () {
+          reject('实例2操作失败');
+        },2000);
+      });
+      Promise.race([pro2,pro1])
+      .then(function(result){
+        console.log(result);
+      })
+      .catch(function(error){
+        console.log(error);
+      });
+      // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
+      // 实例2操作失败
+      由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
+      所以最后输出的是：实例2操作失败。
+  Promise.resolve() 
+  Promise.reject()  
+  Promise.prototype.then()  
+  Promise.prototype.catch() 
+  todo:
+    finally
+    bind
+    joinprops
+    any
+    some
   Question:
-    使用 Promise 监控 点击时间 , 使用Promise 改变事件的执行方式 [?] 
+    使用 Promise 监控 点击事件 , 使用Promise 改变事件的执行方式 [?] 
   e.g.:
     通过Promise来调用AJAX 「self」
-    var pro = new Promise(function(rs, rj){
+    var prms = new Promise(function(rs, rj){
       $.ajax({
         type : 'get',
         url  : 'url',
@@ -2017,14 +2017,14 @@ Promise 异步模式
         }, 
       });
     })
-    pro.then(function(data){
+    prms.then(function(data){
       console.log(data); // 打印出AJAX获取到的数据
     })
     .catch(function(data){
       console.log(data); // 打印出出错的信息
     })
     
-    let pro = new Promise(function(resolve,reject){
+    let prms = new Promise(function(resolve,reject){
       if(true){
         resolve('操作成功'); //调用操作成功方法
       }
@@ -2049,7 +2049,7 @@ Promise 异步模式
       console.log('请求失败');
     }
     //用then处理操作成功,catch处理操作异常
-    pro.then(requestA)
+    prms.then(requestA)
     .then(requestB)
     .then(requestC)
     .catch(requestError);
@@ -3223,13 +3223,6 @@ ES7
 ASYNC  用来取代回调函数、解决异步操作的一种方法  
   PS：async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖;
 -------------------------------------------------------------------------待整理 
-
-
-
-
-
-
-
 
 
 

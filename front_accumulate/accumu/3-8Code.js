@@ -594,7 +594,7 @@ PC端
     }
   将整个页面设置为画布绘制后的图像 
     window.location = canvas.toDataURL("image/png")
-  使用画布将彩色视频变成黑白
+  使用画布将彩色视频变成黑白 
     谷歌浏览器的安全策略在本地运行失败
     <video  id="video" width="720" height="480" src="鸿星尔克.mp4" controls=""></video>
     <canvas id="buffer" width="720" height="480"></canvas>

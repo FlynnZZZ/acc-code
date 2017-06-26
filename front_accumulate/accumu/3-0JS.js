@@ -793,12 +793,6 @@ back-forward cache简称bfcache,往返缓存
       module1.foo =function(){
         console.log(1);
       }
-SelfCreate 
-  组件化的实现 
-    将 HTML、CSS、JS 代码,统一放置在一 xx.html 文件中,作为一个'组件'
-    通过ajax方式获取'组件'并插入到'对象HTML'中
-    在'对象HTML'中,通过标签 <cpt-xxx></cpt-xxx> 的方式来确定'组件'的插入位置 
-      内部实现, $('cpt-xxx').after(data).remove();
 ---------------------------------------------------------------------以下待整理
 
 

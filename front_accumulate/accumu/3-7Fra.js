@@ -2441,10 +2441,50 @@ Component,组件
       <script type="text/x-template">
       JavaScript内联模版字符串
       .vue 组件
-  父组件通过子组件的props向子组件传递数据 
+  在子组件上监听事件来触发在父组件上的自定义事件,向父元素传递数据 
+    PS：vm.$on('eventName',foo) 监听事件,vm.$emit('event-name',data) 触发事件 
+      父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
+    e.g.：
+      <div id="parent">
+        <p>{{ total }}</p>
+        <cpt-child v-on:parent-event-name="incrementTotal"></cpt-child>
+        <cpt-child v-on:parent-event-name="incrementTotal"></cpt-child>
+      </div>
+      Vue.component('cpt-child',{
+        template: '<button v-on:click="childFoo">{{ counter }}</button>',
+        data: function () {
+          return {
+            counter: 0,
+            moreData: '来自子组件的消息',
+          }
+        },
+        methods: {
+          childFoo: function () {
+            this.counter += 1
+            this.$emit('parent-event-name',this.moreData)
+            // 此处需注意,将'parent-event-name'改为驼峰写法时,vue不工作
+            // 在HTML中不区分大小写,但在JS中区分大小写「SlPt」
+          }
+        },
+      })
+      new Vue({
+        el: '#parent',
+        data: {
+          total: 0
+        },
+        methods: {
+          incrementTotal: function (moreData) {
+            this.total += 1
+            console.log(moreData);
+          }
+        }
+      })
+    Exp: 
+      用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写「SlPt」
+  在子组件中注册props属性[进行监听],父组件中添加该属性,当改变其属性值时,子组件将得到通知 
     组件实例的作用域是孤立的,不能在子组件的模板内直接引用父组件的数据;
     e.g.：
-      Vue.component('child',{
+      Vue.component('cpt-child',{
         // 声明 props
         props: ['message'],
         // 就像 data 一样,prop 可以用在模板内
@@ -2452,7 +2492,7 @@ Component,组件
         template: '<span>{{ message }}</span>'
       })
       传入一个普通字符串：
-      <child message="hello!"></child>
+      <cpt-child message="hello!"></cpt-child>
       结果： hello!
     属性命名camelCased[驼峰式]转换为kebab-case[短横线隔开式] 
       PS：HTML特性不区分大小写,当未使用字符串模版[若使用字符串模版,则没有这些限制],
@@ -2481,7 +2521,7 @@ Component,组件
         }
       })
     props单向数据流 
-      PS：当父组件的属性变化时,将传导给子组件,但是不会反过来,
+      PS：当父组件的属性变化时,将传导给子组件,但是不会反过来, 
         这是为了防止子组件无意修改了父组件的状态;
         每当父组件更新时,子组件的所有 prop 都会更新为最新值,
         这意味着不应该在子组件内部改变 prop 否则,Vue 会在控制台给出警告;
@@ -2531,56 +2571,15 @@ Component,组件
         Function
         Object
         Array
-  子组件通过'v-on'自定义事件向父元素传递信息 
-    PS：$on('eventName') 监听事件,$emit('eventName',data) 触发事件
-      父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
-    e.g.：
-      <div id="parent">
-        <p>{{ total }}</p>
-        <cpt-child v-on:addtotal="incrementTotal"></cpt-child>
-        <cpt-child v-on:addtotal="incrementTotal"></cpt-child>
-      </div>
-      Vue.component('cpt-child',{
-        template: '<button v-on:click="addSelf">{{ counter }}</button>',
-        data: function () {
-          return {
-            counter: 0,
-            moreData: '来自子组件的消息',
-          }
-        },
-        methods: {
-          addSelf: function () {
-            this.counter += 1
-            this.$emit('addtotal',this.moreData)
-            // 此处需注意将'addtotal'统一改为'addTotal'时,vue不工作
-            // 在HTML中不区分大小写,但在JS中区分大小写「SlPt」
-          }
-        },
-      })
-      new Vue({
-        el: '#parent',
-        data: {
-          total: 0
-        },
-        methods: {
-          incrementTotal: function (moreData) {
-            this.total += 1
-            console.log(moreData);
-          }
-        }
-      })
-    Exp: 
-      用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写「SlPt」
+    通过自定义事件的监听和触发来达到同样的效果「SlPt」 
   非父子组件通信 
-    简单场景下,使用一个的 Vue 实例作为中央事件总线
-      var bus = new Vue()
-      // 触发组件 A 中的事件
-      bus.$emit('id-selected',1)
-      // 在组件 B 创建的钩子中监听事件
-      bus.$on('id-selected',function (id) {
+    简单场景下,使用一个的 Vue 实例作为中央事件总线 
+      var bus = new Vue();
+      bus.$emit('custom-event',data); // 触发事件
+      bus.$on('custom-event',function (data) { // 监听事件
         // ...
       })
-    复杂情况下,使用专门的状态管理模式
+    复杂情况下,使用专门的状态管理模式 
   Slot 内容分发[父组件替换子组件内容]
     编译作用域、组件作用域
       <cpt-child> {{ message }} </cpt-child>
@@ -2716,7 +2715,7 @@ Component,组件
             items : 'aaa',// 为 false 时,则无该属性
           }
         });
-  <component v-bind:is="aoo"> 动态组件
+  <component v-bind:is="aoo"> 动态组件 
     通过<component>引入;v-bind:is="aoo"动态切换
     e.g.：
       <div id="parent">
@@ -3218,38 +3217,108 @@ suggestion:
     op   operation
     ms   message
   思想 
-    通过JS管控HTML元素
-    var o1 = new Org( {
-      el : '#app',
-      da : {
-        
-      },
-      me : {
-        
-      },
-      ms : {
-        o2 : {data:value},
-      },
-      op   : {
-        '#app-btn1' : me.foo1,
-        '#app-btn1' : {
-          'click' : me.foo1
+    通过JS管控HTML元素 
+      var o1 = new Org( {
+        el : '#app',
+        da : {
+          
         },
-        '#app-btn1' : [
-          { 'click' : me.foo1 },
-          { 'hover,mouseout' : me.foo2 },
-          { 'hover' : {  
-            is  : me.foo2 ,
-            aoo : foo 
-          }  
+        me : {
+          
+        },
+        ms : {
+          o2 : {data:value},
+        },
+        op   : {
+          '#app-btn1' : me.foo1,
+          '#app-btn1' : {
+            'click' : me.foo1
           },
-        ],
-        '#app-btn2' : function(data){
-          console.log(data);
-          me.foo2(data)
-        },
-      }
-    } )
+          '#app-btn1' : [
+            { 'click' : me.foo1 },
+            { 'hover,mouseout' : me.foo2 },
+            { 'hover' : {  
+              is  : me.foo2 ,
+              aoo : foo 
+            }  
+            },
+          ],
+          '#app-btn2' : function(data){
+            console.log(data);
+            me.foo2(data)
+          },
+        }
+      } )
+    组件化的实现 
+      将 HTML、CSS、JS 代码,统一放置在一 xx.html 文件中,作为一个'组件'
+      通过ajax方式获取'组件'并插入到'对象HTML'中
+      在'对象HTML'中,通过标签 <cpt-xxx></cpt-xxx> 的方式来确定'组件'的插入位置 
+        内部实现, $('cpt-xxx').after(data).remove();
+    组件间通信 
+      通过自定义事件的方式来实现 
+      Jelem.trigger("eName" [,arr]);     触发事件及传递数据
+      Jelem.on(str,function(e,arg1,arg2,..){ }) 监听事件及接收数据
+      将事件的监听触发绑定在需互相传递数据组件的共同父元素上,
+      事件需先监听后触发才能保证无信息遗漏,
+      因为根据组件的加载,他们的共同父元素在他们加载之前是存在的,不会导致无法获取到DOM的情况,
+      一般可将事件绑定到'body'元素上,
+      假设 A B 组件 ,其加载的时间不同,若 A 先加载,B 后加载,
+        A 在 B 加载后发送消息 
+        ...
+      
+      封装监听触发,实现相互通信 
+        原理:
+          触发一个事件'e'时,同时监听[一次性]事件'_e_',
+          响应一个事件'e'时,同时触发事件'_e_';
+          注意:请始终保持先监听再触发的顺序 
+          $.fn.extend({
+            io : function(ename,foo){
+              var that = this;
+              this.on(ename,function(e,data){
+                var outData = foo(e,data);
+                // console.log(data,'收到的数据');
+                var event = '__'+ename+'__';
+                var arr = [];
+                arr.push(outData);
+                that.trigger(event,arr);
+              });
+            },
+            oi : function(ename,outData,foo){
+              var that = this;
+              var event = '__'+ename+'__';
+              this.one(event,function(e,data){
+                foo(e,data);
+                // console.log(data,'触发后回来的数据');
+              })
+              var arr = [];
+              arr.push(outData);
+              that.trigger(ename,arr);
+            },
+          });
+          
+          // agreed 为双方约定的通信名称 
+          var elem = $('.aoo');
+          
+          // 监听事件['agreed'],然后发送 数据
+          elem.io('agreed',function(e,data){
+            // console.log(data,'接收到的信息');
+            if (data == 1) {
+              return 10;
+            }
+            else if (data == 2) {
+              return 20
+            }
+            else {
+              return 'no suitable data'
+            }
+          });
+          // 发送 请求数据 后,等待回应
+          elem.oi('agreed','1',function(e,data){
+            console.log(data,'等待的回应');
+          });
+        效果:利用发送信息的方式来获取信息 
+          可自定义规则,向未来元素发送信息 
+            预定义发送数据,等待未来元素的触发 
 ---------------------------------------------------------------------以下待整理
 
 

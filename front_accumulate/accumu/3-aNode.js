@@ -1,4 +1,4 @@
-介绍_概念_说明_定义
+介绍_概念_说明_定义 
   Node 服务器上的JS运行环境 
     2009 年Node项目诞生,
     NodeJS 是一个事件驱动I/O服务端JavaScript环境,
@@ -432,7 +432,7 @@
     console.assert(value[, message][, ...]) 用于判断某个表达式或变量是否为真,
       接收两个参数,第一个参数是表达式,第二个参数是字符串.
       只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-  Buffer  缓冲区,处理二进制数据的接口 
+  Buffer  缓冲区,处理二进制数据的接口[用于保存原始数据] 
     PS：JS只有字符串数据类型,没有二进制数据类型, 
       处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
       用来创建一个专门存放二进制数据的缓存区;
@@ -450,6 +450,7 @@
           "base64"  
           "ascii"   
           "utf8"    
+          "utf-8"    
           "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
           "ucs2"    utf16le的别名
           "hex"     将每个字节转为两个十六进制字符
@@ -563,7 +564,7 @@
       str  检测的字符串
       typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
       Buffer.byteLength('Hello', 'utf8') // 5
-    Buffer.compare() 
+    Buffer.compare(buf1,buf2)    比较两份Buffer对象 
     与二进制数组的关系 
       TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
       比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
@@ -574,8 +575,8 @@
       比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
   ◆全局变量
   __filename 当前正在执行的脚本的文件名 
-    PS： 它将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同. 
-      若在模块中,返回的值是模块文件的路径.
+    PS：将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
+      在模块中,返回的值是模块文件的路径 
     e.g.:
       创建文件 main.js ,代码如下所示：
       // 输出全局变量 __filename 的值
@@ -591,7 +592,7 @@
       执行 main.js 文件,代码如下所示:
       $ node main.js
       /web/com/runoob/nodejs
-  ◆全局函数
+  ◆全局函数 
   setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
     PS：实际的调用间隔,还取决于系统因素;
       间隔的毫秒数在1毫秒到2,147,483,647 毫秒（约 24.8 天）之间,
@@ -612,19 +613,119 @@
       // 清除定时器
       clearTimeout(num);
       执行 main.js 文件: node main.js
-  setInterval(foo, time) 指定毫秒数后执行函数,返回一整数代表定时器的编号
+  setInterval(foo, time) 指定毫秒数后执行函数,返回一整数代表定时器的编号 
     由于系统因素,可能无法保证每次调用之间正好间隔指定的毫秒数,
     但只会多于这个间隔,而不会少于它;
     指定的毫秒数必须是 1 到 2,147,483,647（大约 24.8 天）之间的整数,
     若超过这个范围,会被自动改为1毫秒;
-  clearInterval(num)     终止一个用setInterval方法新建的定时器。
-  require() 用于加载模块
+  clearInterval(num)     终止一个用setInterval方法新建的定时器 
+  require() 用于加载模块 
   Buffer()  用于操作二进制数据 
   ◆伪全局变量 
     模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
   exports
+Stream,流  用于暂存和移动数据 
+  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+    如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
+    所有的 Stream 对象都是 EventEmitter 的实例 
+  Stream 有四种流类型：
+    Readable  可读操作
+    Writable  可写操作
+    Duplex    可读可写操作
+    Transform 操作被写入数据,然后读出结果
+  ◆stm流对象的方法属性
+  stm.pause()    暂停流传输 
+  stm.resume()   启动流传输 
+  ◆Event 常用事件 
+  data     当steam数据传递时时触发 
+    stm.on("data",function(chunk){
+      // chunk 数据块,Buffer类型 
+    })
+  readable 可读时触发 
+  end      数据传递完成时触发[之后目标不再可写] 
+  close    流传输关闭时 
+  error    在接收和写入过程中发生错误时触发
+  finish   所有数据已被写入到底层系统时触发
+  e.g.: 
+    从文件中读取数据 
+      创建 input.txt 文件,内容如下：
+        菜鸟教程官网地址：www.runoob.com
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var data = '';
+        var rs = fs.createReadStream('input.txt'); // 创建可读流
+        rs.setEncoding('UTF8'); // 设置编码为 utf8.
+        // 处理流事件 data  end error
+        rs.on('data', function(chunk) { data += chunk; });
+        rs.on('end',function(){ console.log(data); });
+        rs.on('error', function(err){ console.log(err.stack); });
+        console.log("程序执行完毕");
+      以上代码执行结果如下：
+        程序执行完毕
+        菜鸟教程官网地址：www.runoob.com
+    将数据写入文件
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var data = '菜鸟教程官网地址：www.runoob.com';
+        // 创建一个可以写入的流,写入到文件 output.txt 中
+        var rs = fs.createWriteStream('output.txt');
+        // 使用 utf8 编码写入数据
+        rs.write(data,'UTF8');
+        rs.end(); // 标记文件末尾
+        // 处理流事件 
+        rs.on('finish', function() { console.log("写入完成."); });
+        rs.on('error', function(err){ console.log(err.stack); });
+        console.log("程序执行完毕");
+      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下：
+        程序执行完毕
+        写入完成.
+      查看 output.txt 文件的内容：
+        菜鸟教程官网地址：www.runoob.com
+  管道流 
+    PS：管道提供了一个输出流到输入流的机制 
+      通常我们用于从一个流中获取数据并将数据传递到另外一个流中
+    e.g.:
+      读取一文件内容并将数据写入到另外一文件中
+      设置 input.txt 文件内容如下：
+        菜鸟教程官网地址：www.runoob.com
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var rs = fs.createReadStream('input.txt');// 创建一个可读流
+        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
+        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
+        rs.pipe(writerStream); // 管道读写操作
+        console.log("程序执行完毕");
+      程序执行完毕,查看 output.txt 文件的内容：
+        菜鸟教程官网地址：www.runoob.com
+  链式流
+    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
+      链式流一般用于管道操作.
+    e.g.:
+      用管道和链式来压缩和解压文件
+        创建 compress.js 文件, 代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 压缩 input.txt 文件为 input.txt.gz
+        fs.createReadStream('input.txt')
+          .pipe(zlib.createGzip())
+          .pipe(fs.createWriteStream('input.txt.gz'));
+        console.log("文件压缩完成.");
+        代码执行结果如下：
+        文件压缩完成.
+        执行完以上操作后,我们可以看到当前目录下生成了 input.txt 的压缩文件 input.txt.gz.
+      接下来,解压该文件
+        创建 decompress.js 文件,代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 解压 input.txt.gz 文件为 input.txt
+        fs.createReadStream('input.txt.gz')
+          .pipe(zlib.createGunzip())
+          .pipe(fs.createWriteStream('input.txt'));
+        console.log("文件解压完成.");
+        代码执行结果如下：
+        文件解压完成.
 模块 
   PS：文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JavaScript 代码、JSON 或者编译过的 C/C++ 扩展等等;
@@ -1058,18 +1159,17 @@
         同步方法执行完并返回结果后,才能执行后续的代码 
         而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
     var fs = require('fs'); 引入文件系统模块
-    fs.writeFile(path,data,[options],callback); 写内容到文件中
+    fs.writeFile(path,data,[options],callback); 写内容到文件中 
       PS： 写入文件内容,若文件不存在会创建一个文件,但不会主动创建目录
         写入时会先清空文件
-      Arguments:
-        path    字符串,路径及文件名
-        data    字符串,写入的内容
-        option  对象,用于控制写入,包含{encoding,mode,flag}
-          encoding 默认编码为 utf8
-          mode     模式为 0666
-          flag     默认值为 "w",表示重写,会清空文件之前的内容
-            'a'  增加,在文件原有的基础上增加
-        callback 回调函数,传入参数 err
+      path    字符串,路径及文件名
+      data    字符串,写入的内容
+      option  对象,用于控制写入,包含{encoding,mode,flag}
+        encoding 默认编码为 utf8
+        mode     模式为 0666
+        flag     默认值为 "w",表示重写,会清空文件之前的内容
+          'a'  增加,在文件原有的基础上增加
+      callback 回调函数,传入参数 err
       e.g.:
         var fs = require('fs'); // 引入fs模块
         fs.writeFile('./test2.txt', '生当做人杰', function(err) {
@@ -1095,15 +1195,15 @@
           });
 
           flag传值,r代表读取文件,w代表写文件,a代表追加 
-    fs.readFile(path,[option],callback); 读取文件内容
-      Arguments:
-        path   字符串,路径及文件名
-        option   对象
-          encoding String |null default=null
-          flag  默认为 'r'
-        callback 回调函数,传入两个参数 err 和 data
-          err是读取文件出错时触发的错误对象,
-          data是从文件读取的数据 
+    fs.writeFileSync()   写文件的同步写法 
+    fs.readFile(path,[option],callback);  读取文件内容
+      path     字符串,路径及文件名
+      option   对象
+        encoding String |null default=null
+        flag  默认为 'r'
+      callback 回调函数,传入参数 (err,data) 
+        err   读取文件出错时触发的错误对象 
+        data  Buffer类型,从文件读取的数据 
       e.g.:
         一个文本文件: text.txt 内容如下:
           line one
@@ -1129,8 +1229,7 @@
               if (err) { throw err; }
               console.log('utf-8: ', data);
             });
-
-        readFile 同步的写法就是没有回调函数:fs.readFileSync(filename,[options])
+    fs.readFileSync()     readFile的同步写法[就是没有回调函数] 
     fs.unlink(path,callback); 删除文件
       Arguments:
         path 字符串,路径及文件名
@@ -1321,6 +1420,8 @@
           文件关闭成功          
     fs.rename(oldPath, newPath, callback)
       回调函数没有参数,但可能抛出异常          
+    fs.createReadStream(path,options);  创建可读的stream流 
+    fs.createWriteStream(path,options); 创建可写的stream流 
   child_process  新建子进程 
   crypto  提供加密和解密功能,基本上是对OpenSSL的包装
   util   提供常用函数的集合 
@@ -1692,98 +1793,6 @@
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
-Stream,流 
-  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
-    例如,对http 服务器发起请求的request 对象就是一个 Stream,还有stdout,标准输出.
-    所有的 Stream 对象都是 EventEmitter 的实例
-  Stream 有四种流类型：
-    Readable  可读操作
-    Writable  可写操作
-    Duplex    可读可写操作
-    Transform 操作被写入数据,然后读出结果
-  ◆常用事件
-  data   当有数据可读时触发
-  end    没有更多的数据可读时触发
-  error  在接收和写入过程中发生错误时触发
-  finish 所有数据已被写入到底层系统时触发
-  e.g.:
-    从文件中读取数据
-      创建 input.txt 文件,内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var data = '';
-        var rs = fs.createReadStream('input.txt'); // 创建可读流
-        rs.setEncoding('UTF8'); // 设置编码为 utf8.
-        // 处理流事件 data  end error
-        rs.on('data', function(chunk) { data += chunk; });
-        rs.on('end',function(){ console.log(data); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上代码执行结果如下：
-        程序执行完毕
-        菜鸟教程官网地址：www.runoob.com
-    将数据写入文件
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var data = '菜鸟教程官网地址：www.runoob.com';
-        // 创建一个可以写入的流,写入到文件 output.txt 中
-        var rs = fs.createWriteStream('output.txt');
-        // 使用 utf8 编码写入数据
-        rs.write(data,'UTF8');
-        rs.end(); // 标记文件末尾
-        // 处理流事件 
-        rs.on('finish', function() { console.log("写入完成."); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下：
-        程序执行完毕
-        写入完成.
-      查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
-  管道流 
-    PS：管道提供了一个输出流到输入流的机制.
-      通常我们用于从一个流中获取数据并将数据传递到另外一个流中
-    e.g.:
-      读取一文件内容并将数据写入到另外一文件中
-      设置 input.txt 文件内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var rs = fs.createReadStream('input.txt');// 创建一个可读流
-        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
-        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
-        rs.pipe(writerStream); // 管道读写操作
-        console.log("程序执行完毕");
-      程序执行完毕,查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
-  链式流
-    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
-      链式流一般用于管道操作.
-    e.g.:
-      用管道和链式来压缩和解压文件
-        创建 compress.js 文件, 代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 压缩 input.txt 文件为 input.txt.gz
-        fs.createReadStream('input.txt')
-          .pipe(zlib.createGzip())
-          .pipe(fs.createWriteStream('input.txt.gz'));
-        console.log("文件压缩完成.");
-        代码执行结果如下：
-        文件压缩完成.
-        执行完以上操作后,我们可以看到当前目录下生成了 input.txt 的压缩文件 input.txt.gz.
-      接下来,解压该文件
-        创建 decompress.js 文件,代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 解压 input.txt.gz 文件为 input.txt
-        fs.createReadStream('input.txt.gz')
-          .pipe(zlib.createGunzip())
-          .pipe(fs.createWriteStream('input.txt'));
-        console.log("文件解压完成.");
-        代码执行结果如下：
-        文件解压完成.
 路由 
   PS：我们要为路由提供请求的URL和其他需要的GET及POST参数,
     随后路由需要根据这些数据来执行相应的代码.

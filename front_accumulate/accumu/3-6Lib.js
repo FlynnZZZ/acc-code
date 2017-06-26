@@ -688,6 +688,7 @@ Event,事件
       PS：foo 中 this 表示的为 slct 表示的元素 
         对selector对应的元素上执行事件,才会执行响应函数
         仍需符合冒泡原理,响应元素需为绑定元素的子元素[?]
+  Jelem.one('eName',foo)   绑定一次性事件 
   Jelem.off(['eName1 eName2'] [,slct] [,foo]) 主要解除由on绑定的事件 
     PS： 移除元素上绑定的一个或多个事件的事件处理函数 
     eName  可选,默认移除该元素所有的事件绑定 
@@ -755,7 +756,7 @@ Event,事件
         });  
       }); 
   触发事件 
-    Jelem.trigger("eName",[arr]);   触发事件及信息传递 
+    Jelem.trigger("eName" [,arr]);   触发事件及信息传递 
       eName   必需,指定触发的事件
       arr     数组,可选,传递到事件处理程序的额外参数 
         额外的参数对自定义事件特别有用
@@ -1192,9 +1193,9 @@ AJAX
   $.contains(elem1, elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
     elem1  一个DOM对象节点元素,用于包含其他节点的容器
     elem2  另一个DOM对象节点元素,用于被其他容器所包含 
-  $.extend (options)  可对原有的工具函数进行扩展,自定义类级别的jQuery插件
-    PS：扩展工具方法或者叫静态方法
-    options 对象,表示自定义插件的函数内容
+  $.extend (options)       扩展jQuery类本身
+    PS：扩展静态方法,自定义类级别的jQuery插件;等价于 $.xxx = function(){};
+    options 对象,表示自定义插件的函数内容 
       $.extend({
         foo:function(){
           console.log(1);
@@ -1220,10 +1221,23 @@ AJAX
       $('.box:moreThen1000px').click(function() { 
         console.log(1); 
       });
-  $.extend(obj1, obj2, ...objn)  扩展原有的Object对象
+      
+      $.extend({
+        add : function(a,b){
+          return a+b;
+        },
+        a :'aaaa'
+      });
+      console.log($.add(3,4)); // 7
+      console.log($.a);        // aaaa
+      $.add2 = function(a,b){
+        return a-b;
+      }
+      console.log($.add2(4,3)); //1
+  $.extend(obj1,obj2,..)  和并多个对象 
     PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者
     obj1至objN  表示需要合并的各个原有对象
-    e.g.：对两个已有的对象进行合并
+    e.g.：对两个已有的对象进行合并 
       var obj1 = {
         aoo : 1 ,
         boo : 2 
@@ -1234,7 +1248,8 @@ AJAX
       }
       var obj = $.extend(obj1,obj2);
       console.log(obj); // Object {aoo: 3, boo: 2, coo: 2}
-  $.fn.extend() 扩展实例方法
+  $.fn.extend({name:foo,..}) 扩展实例方法
+    等价于 $.fn.xxx
     e.g. 
       $.fn.extend({
         foo : function(){

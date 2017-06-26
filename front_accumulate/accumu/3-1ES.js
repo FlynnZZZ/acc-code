@@ -3501,6 +3501,10 @@ RegExp   正则对象
       var pattern=/^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
       var str="123abc.com@aaa.com";
       alert(pattern.test(str));
+  Question:
+    只包含中文和字母a的正则
+      中文表示为 [\u0391-\uFFE5]
+      为 /[\u0391-\uFFE5a]/ ?
 Error    错误对象 
   PS：JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
     然后整个程序就中断在发生错误的地方,不再往下执行.

@@ -752,11 +752,11 @@ window的属性对象
       location.href = 'https://www.baidu.com'; //当前网页跳转到百度
     location.hash      读写URL锚点部分「#后面的部分」「若无返回''」
     location.host      主机名:端口名「省略默认的80端口」
-    location.hostname  读写 主机名/服务器名
-    location.pathname  读写 路径名(URL中的目录和文件名)
-    location.port      读写 端口号「若url中不包含端口号则返回''」
+    location.hostname  读写,主机名/服务器名
+    location.pathname  读写,路径名(URL中的目录和文件名)
+    location.port      读写,端口号「若url中不包含端口号则返回''」
     location.protocol  协议「通常是 http: 或 https:」
-    location.search    读写URL的查询字符串「以问号?开头的部分,包括?」
+    location.search    读写,URL的查询字符串「以问号?开头的部分,包括?」
       设置查询字符串会刷新网页
       'https://www.baidu.com/?aoo=2&boo=c'
       location.search;   //  "?aoo=2&boo=c"

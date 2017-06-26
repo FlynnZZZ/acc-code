@@ -1791,6 +1791,11 @@ Directives,指令系统  用于model和view的交互
   v-on:eName="drctVal" 事件处理与绑定「简写'@eName'」
     PS：当一个ViewModel被销毁时,所有的事件处理器都会自动被删除[无须自己清理]        
     drctVal  当触发事件时执行'drctVal',可为函数[可带参数]、单条语句或无 
+      当为函数时且未自定义传参,则默认传入经过vue包装过的event事件对象 
+        若有自定义传参,则默认参数被取消
+        e.srcElement 表示事件绑定的元素 
+          可用来进行DOM操作「SlPt」
+      可自定义参数'$event',用于表示该事件的[经过vue包装的]event对象 
     e.g.: 
       <div id="test">
         <p>{{ message }}</p>
@@ -2977,7 +2982,7 @@ vue-resource  与后台数据交互
     foo  传入参数 res「返回的结果,且进行了Vue封装」
   vm.$http.post()
   vm.$http.jsonp()
-axios         功能和 Vue-resource 类似 
+axios         功能和vue-resource类似 
 Vuex          大规模状态管理 
 vue-router    路由 
   PS：vue-router@2.x 只适用于 Vue2.x 版本

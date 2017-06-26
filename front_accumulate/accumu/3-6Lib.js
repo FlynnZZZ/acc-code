@@ -361,7 +361,7 @@ DOM操作
           e.g.：  Jelem.css({"background-color":"red",color:"yellow"});  
         Jelem.css("color",function(index,oldValue){ }); 传入函数
           // 设置返回值(即 return的值)为属性值.
-    元素属性
+    元素属性 
       ◆添加属性
       Jelem.attr();  读写属性值 
         Jelem.attr('属性名')     返回选定属性的属性值

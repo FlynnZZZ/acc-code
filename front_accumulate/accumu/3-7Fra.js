@@ -998,13 +998,37 @@ Model,模型  一个轻微改动过的原生JS对象
     但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
     所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
   由于JS的限制,Vue不能检测以下变动的数据 
-    当利用索引直接设置一个项时,如： vm.items[num] = newValue 
-      以下两种替代方式将达到效果触发状态更新
-      // Vue.set
-      Vue.set(example1.items,indexOfItem,newValue)
-      // Array.prototype.splice`
-      example1.items.splice(indexOfItem,1,newValue)
-    当你修改数组的长度时,如： vm.items.length = newLength
+    当[函数内仅有]数组通过索引index直接设置某一项时
+      如： vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
+      可使用以下方式将达到效果触发状态更新
+      ◆Vue.set
+      Vue.set(arr,index,newVal)
+      this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
+      ◆Array.prototype.splice
+      arr.splice(indx,1,newVal)
+      ◆同时在当前函数内改变会引起视图变化的操作 
+        <div class="slct" >
+          <div v-for="item1 in items">{{item1}}</div>
+          <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
+          <button type="button" @click="changeItems">click</button>
+        </div>
+        var vm = new Vue({
+          el : '.slct',
+          data : {
+            items :[ 1, 2, 3, 4, 5 ],
+            items1 :[{a:1},{a:2},{a:3},{a:4}],
+            n : 1,
+          },
+          methods : {
+            changeItems : function(){
+              console.log(this.items);
+              this.items[0] = ++this.n;
+              // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
+            },
+          },
+        });
+
+    当你修改数组的长度时,如： vm.items.length = newLength 
       使用 splice 替代直接长度的修改
       example1.items.splice(newLength)
   vm实例创建后新增的数据不能被监控到 
@@ -1084,9 +1108,9 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
     在params中的方法中 this 表示的即为 vm;
   ◆params   用于配置vm的参数对象 
     包括数据、模板、挂载元素、方法、生命周期钩子等选项 
-  'el' : 'slct'    必选,指定Vue接管的元素 
+  el : 'slct'      必选,指定Vue接管的元素 
     slct 选择器,当为class选择器时,若存在多个该class,则只接管第一个
-  'data' : val     可选,vm的数据模型 
+  data : val       可选,vm的数据模型 
     PS：Vue实例默认代理其'data'对象,在params中使用 this 表示'data'对象;
     val 为 obj 或 function(){ return obj }
     e.g.：
@@ -1131,7 +1155,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       userInfo = {name:'Kyle Hu',age:22}; // 引用关系被破坏,DOM不会重新渲染
       userInfo.age = 25; // 引用关系被破坏,DOM不会重新渲染
       vm.age = 23; // DOM被渲染成23
-  'methods':val    可选,vm的方法 
+  methods : val    可选,vm的方法 
     使用method方法返回数据 
         <li v-for="n in even(numbers)">{{ n }}</li>
         data: {
@@ -1144,8 +1168,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
             });
           }
         }
-  'computed':val   可选,vm的计算方法 
-    PS：相当于经过处理的data数据,在第一次取值时进行计算「SlPt」
+  computed : val   可选,vm的计算方法 
+    PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化「SlPt」
     val  包含方法的对象,其方法名可作为类似于data的属性名使用  
       computed : {
         cmptFoo1 : function(arg){
@@ -1203,7 +1227,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
           })
         }
       }
-  'watch' :val     可选,vm的数据监听方法 
+  watch : val      可选,vm的数据监听方法 
     e.g.：
       var vm = new Vue({
         data: {
@@ -1212,20 +1236,19 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
           c: 3
         },
         watch: {
+          // 当值'a'变化时,执行函数 
           a: function (val, oldVal) {
             console.log('new: %s, old: %s', val, oldVal)
           },
-          // 方法名
-          b: 'someMethod',
-          // 深度 watcher
+          b: 'someMethod',   // 方法名
           c: {
             handler: function (val, oldVal) { /* ... */ },
-            deep: true
+            deep: true // 深度 watcher
           }
         }
       })
       vm.a = 2 // -> new: 2, old: 1
-    todo
+    todo 
       当想要在数据变化响应时,执行异步操作或开销较大的操作,很有用的
       <div id="watch-example">
         <p> 
@@ -1285,7 +1308,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       限制执行该操作的频率,并在得到最终结果前,设置中间状态
       这是计算属性无法做到的
       除了 watch 选项之外,还可以使用 vm.$watch API 命令
-  'components':val 可选,vm的组件 
+  components : val 可选,vm的组件 
     e.g.: 
       HTML中
       <cpt1></cpt1>
@@ -1303,18 +1326,18 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
         //   ..
         // }
       })
-  'filters' : val  可选,定义过滤器 
+  filters : val    可选,定义过滤器 
     val  包含过滤器函数的对象
       {
         ftFoo1 : function(val){
           // 
         }
       }
-  'props'  : val   可选,作为组件时[在 .vue 格式文件中],注册标签属性,同父组件通信 
+  props  : val     可选,作为组件时[在 .vue 格式文件中],注册标签属性,同父组件通信 
     PS：在父组件中插入该子组件时,并添加子组件注册的attr,通过attr的值来向子组件传递信息,
       在vm实例中可通过 this.attr 来获取值,HTML中 attr 可直接获取值
     val  ['attr1','attr2',..] 
-  'mounted': foo   可选,模型渲染后 
+  mounted : foo    可选,模型渲染后 
     使用 mounted 并不能保证钩子函数中的 this.$el 在 document 中
     为此还应该引入 Vue.nextTick/vm.$nextTick例如：
     mounted: function () {
@@ -1347,7 +1370,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
         })
   vm.$data    vm的数据对象
   vm.$el      vm接管的DOM对象
-  vm.$watch('val',function(newVal,oldVal) { }); 回调在 vm.val 改变后调用
+  vm.$watch('val',function(newVal,oldVal) { }); 回调在'vm.val'改变后调用
     不要在实例属性或者回调函数中使用箭头函数 
     如 vm.$watch('a',newVal => this.myMethod())
     因为箭头函数绑定父上下文,所以 this 不会像预想的一样是Vue实例,
@@ -1939,7 +1962,13 @@ Directives,指令系统  用于model和view的交互
         <input v-on:keyup.enter="submit">
       config.keyCodes 全局对象自定义按键修饰符别名 
         // 可以使用 v-on:keyup.f1
-        Vue.config.keyCodes.f1 = 112
+        Vue.config.keyCodes.f1 = 112;  // 单个定义
+        Vue.config.keyCodes = {  // 同时定义多个
+          v: 86,
+          f1: 112,
+          mediaPlayPause: 179,
+          up: [38, 87]
+        }
       同时监听多个按键 
         // <!-- Alt + C -->
         <input @keyup.alt.67="clear">
@@ -3319,7 +3348,7 @@ suggestion:
         效果:利用发送信息的方式来获取信息 
           可自定义规则,向未来元素发送信息 
             预定义发送数据,等待未来元素的触发 
----------------------------------------------------------------------以下待整理
+---------------------------------------------------------------------以下待整理 
 
 
 

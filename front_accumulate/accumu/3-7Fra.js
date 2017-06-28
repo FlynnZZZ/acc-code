@@ -1101,6 +1101,10 @@ Model,模型  一个轻微改动过的原生JS对象
           }
         }
       })
+全局配置 
+  Vue.config.devtools   读写,是否允许'vue-devtools'检查代码
+    开发版本默认为 true,生产版本默认为 false。生产版本设为 true 可以启用检查。
+  // 务必在加载 Vue 之后,立即同步设置以下内容
 var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染 
   PS： VueJS的核心,采用简洁的模板语法来声明式的将数据渲染进DOM的系统;
     VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;

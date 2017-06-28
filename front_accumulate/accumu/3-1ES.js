@@ -502,7 +502,7 @@ ECMAScript JS核心,语法部分
     访问对象的不存在的属性,不会报错,返回值为undefined;
   引用类型值的读、写 
     自我总结 
-      按引用访问,传递的是指针(引用),一个对象可由多个指针访问.
+      按引用访问,传递的是指针[引用],一个对象可由多个指针访问.
       覆盖时,则改变指针的指向;
       修改时,改变的是指针指向的实际值.
     权威说法 
@@ -532,13 +532,13 @@ ECMAScript JS核心,语法部分
       console.log(aoo.name); // changed,boo的值也随着变化了
       aoo = 1;          //改变 aoo,不再指向对象
       console.log(boo);      // {name: "changed", age: 19},boo仍指向对象
-    函数是对象
-      var foo =function(){ console.log(1); }
-      var goo =foo; //表示变量 aoo 和 boo 指向同一函数
-      foo =2; // 改变 aoo,不再指向函数
+    函数是对象 
+      var foo = function(){ console.log(1); }
+      var goo = foo; //表示变量 aoo 和 boo 指向同一函数
+      foo = 2; // 改变 aoo,不再指向函数
       console.log(goo()); // 1, boo 仍指向该函数
       console.log(foo()); // 报错
-    对象按照地址来进行的比较,而非按属性或内容来进行比较
+    对象按照地址来进行的比较,而非按属性或内容来进行比较 
       相同对象的两个引用 和 具有相同属性的两个对象 的区别
       var obj1 = {aoo:1};
       var obj2 = {aoo:1};
@@ -551,8 +551,22 @@ ECMAScript JS核心,语法部分
       obj1和obj3是两个变量名,指向的相同的值---内存中的一个实际对象
       因此修改了obj1的值的同时也改变了obj3的值;
       变量obj2指向的是另外一个对象,只是和obj1有相同的属性而已
+  key-val 键值对表现形式 
+    PS：对象的每一个属性都是用一个名称来标记的;类似数组的表现形式,但无长度属性
+    key,键 字符串类型,属性名或方法名 
+      可为任何字符[不只是合法的变量名]
+      需用引号的情况:包含除'字母' '数字' '_'以外的字符特殊字符,或以数字开头,或为JS保留字;
+      e.g.
+      var aoo = { "d sd ":1 }
+      console.log(aoo["d sd "]); // 1
+    val,值 属性值或方法/函数 
+      值可为任意类型值及单表达式
+      var obj = {
+        key1 : new Date().getHours()
+      }
+      console.log(obj); // {key1: 21} 
   创建对象 
-    PS： ECMA-262 的定义为:无序的名值的合集
+    PS：ECMA-262 定义为:无序的名值的合集 
       对象一般没有长度,具有多种属性的内容结构 .
       与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类.
       对象由属性和值构成,值可以为基本值、对象或函数等任何类型.
@@ -560,31 +574,7 @@ ECMAScript JS核心,语法部分
       对象其实就是一组数据和功能的集合.
       概念类似的有:python的字典,C/C++的散列表,Java的HashMap,PHP的关联数组等.
       对象的种类: JS内置对象(如 Number)、宿主环境(如 window)、自定义(如 {}).
-    对象的表现形式:  键-值「key-value」对
-      { 键1:值1, 键2:值2, ... }
-      键key: 叫做属性名或方法名;值value:为属性值或方法(函数).
-      属性名key 的使用规范
-        对象的每一个属性都是用一个名称来标记的,
-        属性名称可以为任何字符(不只是合法的变量名).
-        创建对象时,属性名除数字外,否则都需要用引号包住.(不用引号也不会报错)
-        属性名必须使用引号括起来的情况
-          若属性名中包含特殊字符(除字母、数字、下划线以外的字符)
-          若属性名以数字开头
-          属性名为JavaScript保留字
-        e.g.
-        var aoo ={ "d sd ":1 }
-        aoo["d sd "]; // 1
-      类似数组的表现形式,但无长度属性
-     (可使用 Object.keys(obj).length 求出其属性的个数)
-      e.g. :
-      var obj={};
-      obj[0]="a";
-      obj[1]=12;
-      obj["a"]="abc";
-      console.log(obj);        // {0:"a", 1:12, a:"abc"}
-      console.log(obj.length); // undefined
-      Object.keys(obj).length; // 3
-    字面量 {}     创建对象
+    {} 字面量创建对象 
       var box=null; 初始化对象
       var obj={}    没有任何属性的对象(空对象)
       var obj1={属性1:值1,属性2:值2,...}    //名值对间使用逗号隔开.
@@ -599,7 +589,7 @@ ECMAScript JS核心,语法部分
             voo2 = 'b' ,
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
-    new Object(value); 创建对象
+    new Object(value); 构造函数[类]创建对象 
       PS：即使用原生构造函数Object来创建对象
         使用构造函数创建对象需使用new操作符
       Arguments:括号里可以任意传参,可以传数值、字符串、布尔值等,而且还可以进行相应的计算.
@@ -645,8 +635,8 @@ ECMAScript JS核心,语法部分
           console.log(azz);
           console.log(bzz);
     工厂模式  创建对象 
-      PS：工厂模式时软件领域一种广为人知的设计模式
-      function createObject(name,age){    // 创建工厂函数
+      PS：工厂模式时软件领域一种广为人知的设计模式 
+      function createObject(name,age){    // 创建工厂函数 
         var obj=new Object();             //创建对象
         obj.name=name;                    //添加属性
         obj.age=age;
@@ -655,14 +645,14 @@ ECMAScript JS核心,语法部分
         };
         return obj;                       //返回对象引用
       }
-      var aoo=createObject("lee",100);       //创建第一个对象
-      var boo=createObject('jack',200);      //创建第二个对象
+      var aoo = createObject("lee",100);       //创建第一个对象
+      var boo = createObject('jack',200);      //创建第二个对象
       aoo.run();    //"lee100运行中"
       boo.run();    //"jack200运行中"
       缺点:
         无法继承
         无法识别对象(获取对象的类型)
-    Object.create() 创建对象(ES5新增) 
+    Object.create() 创建对象[ES5+] 
       var obj =Object.create(obj.__proto__,{新增属性/方法 及特性});
       e.g.
         var aoo = {x:1};
@@ -680,184 +670,28 @@ ECMAScript JS核心,语法部分
 
         var obj=Object.create(Object.prototype);
         obj;  // {} ,创建一个空对象
-    (详参 类)
     e.g.:
-      var box=new Object(); //创建一个对象
-      box.name='abc';           //给box对象添加name属性并赋值.
-      box.age=20;               //给box对象添加age属性并赋值.
-      alert(box.age);           //打印出box对象age属性的属性值.
-      var box=Object();    //new关键字可以省略
-      var box={};          //字面量方式创建的对象.
-      var box={            //字面量创建对象及其属性.
-        name:'abc';
-        age:19;
-      };
-      alert(box['name']);  //用数组的方式输出.
-      var box={            //给对象创建方法
-        run:function(){    //匿名函数
-        }
-      }
-      alert(box.run());
-      //没有括号(如box.run)会打印代码(即该函数),有括号(即执行函数)会打印返回值.
+      var obj = new Object(); 
+      // var obj=Object();    // new关键字可以省略
 
-      var obj={
-        name:"小明",
-        age:12,
-        sex:"男",
-        sayhi:function(){
+      var obj = {
+        name : "小明",
+        age : 12,
+        sex : "男",
+        sayhi : function(){
           return "say";
         },
-        info:function(){
-          return "用户名"+this.name+"年龄"+this.age;   //使用this访问当前对象的属性
+        info : function(){ //使用this访问当前对象的属性
+          return this.name+"年龄"+this.age; 
         }
       }
-      obj.info();
-  对象属性&对象操作 
-    对象属性的属性或特性
-      数据属性:  包含4个描述属性行为的特性
-        PS：后3个只能通过函数来设定
-        value        属性的值.默认为 undefined
-        writable     默认true,表示能否修改属性的值
-        enumerable   默认true,能否枚举(即是否可通过for in 枚举)
-        configurable 默认true,能否通过delete删除,能否配置(修改其属性等)
-          不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了
-      访问器属性:包含4个特性描述
-        get  设置获取属性值时的操作,默认返回属性值
-        set  设定设置属性值时的操作,默认返回属性值
-        enumerable    同数据属性
-        configurable  同数据属性
-        e.g.
-          var person={
-            name:"小明",
-            sex:"男",
-            // 注意此处无冒号
-            get age(){ return 12; },
-            set age(val){ console.log("设置为"+val) }
-          }
-          person.age;       //12
-          person.age=16;    //设置为16
-
-          var obj={
-            x:3,
-            y:4,
-            z:5,
-            get sum(){ return this.x+this.y+this.z; },
-            set double(val){ this.x*=val, this.y*=val, this.z*=val }
-          };
-          obj.sum;        //12
-          obj.double=2;
-          obj.x;          //6
-          obj.sum;        //24
-
-          var obj={};
-          Object.defineProperty(obj,"a",{
-            //注意此处有冒号
-            get:function(){ return 12; }
-          });
-          obj.a;      //12
-
-          var book ={year:2004,edition:1};
-          Object.defineProperty(book,"name",{
-            get :function(){ return 1; },
-            set : function(value){ this.edition = value; }
-          });
-          book.name;       // 1
-          book.name =11;
-          book.edition;    // 11
-
-          function Foo(){ };
-          Object.defineProperty(Foo.prototype,'z',{
-            get:function(){return 1; }
-          })
-          var obj =new Foo();
-          obj.z; // 1
-          obj.z =11;
-          obj.z; // 1
-          Object.defineProperty(obj,'z',{
-            value:100,configurable:true
-          });
-          obj.z; // 100
-          delete obj.z;
-          obj.z; // 1
-        Remarks:
-          在使用Object.defineProperty 函数时,不一定非要同时指定set 和 get,
-          只指定get时,意味着属性不能写,尝试写入被忽略;
-          类似的只指定set则属性不能读 ?.
-      ◆定义/修改
-      Object.defineProperty(obj,"key",obj1); 定义属性及其特性
-        PS：通过该方法创建的属性,其3个特性未设置时默认为false
-          不能同时定义数据属性和访问器属性(要分开定义)
-        obj  为属性所在的对象
-        key  为所在对象的属性的名字
-        obj1 特性的描述对象
-        e.g.
-        var obj ={"sex":"男"}
-        Object.defineProperty(obj,"name1",{
-          value:"小明",
-          writable:true,
-          enumerable:true,
-          configurable:true
-        });
-        obj.name1;
-      Object.defineProperties(obj,obj1);  同时定义多个属性及特性
-        Arguments:
-          obj  修改的目标对象
-          obj1 属性名及其对应的属性组成的对象
-        e.g.
-          var obj = {};
-          Object.defineProperties(obj, {
-            aoo: {
-              value: 101,
-              writable: true,
-              enumerable: true,
-              configurable: true
-            },
-            boo: {
-              set: function(x) {
-                document.write("in property set accessor" + newLine);
-                this.newaccpropvalue = x;
-              },
-              get: function() {
-                document.write("in property get accessor" + newLine);
-                return this.newaccpropvalue;
-              },
-              enumerable: true,
-              configurable: true
-            }
-          });
-      ◆查询
-      obj.hasOwnProperty("propName"); 返回对象上是否有该属性的布尔值,不包括继承的属性
-        e.g.
-        var obj={"name":"abc"};
-        obj.hasOwnProperty("name"); //true
-      obj.propertyIsEnumerable("propName"); 表示对象属性是否可以枚举的布尔值
-      Object.getOwnPropertyDescriptor(obj,"propName"); 返回对象指定属性的特性描述对象
-        PS：可对DOM或BOM对象使用该方法.
-          若查询的属性不存在则返回undefined.
-        var obj ={aoo:"a"};
-        Object.getOwnPropertyDescriptor(obj,"aoo");
-        //Object {value: "a", writable: true, enumerable: true, configurable: true}
-      ◆阻止
-      Object.getOwnPropertyNames();  返回对象所有自有属性名(数组形式)(包括不可枚举的属性)
-      Object.isExtensible(obj);      表示对象能否扩展的布尔值
-      Object.isSealed(obj);     表示对象对象是否被密封的布尔值
-      Object.isFrozen(obj);     表示对象是否被冻结的布尔值
-      ◆操作对象
-      Object.preventExtensions(obj); 设置对象不可扩展(ES5新增)
-        不能给对象添加属性,但可以修改和删除已有属性
-        只是对对象操作,对其原型链无影响
-      Object.seal(obj);        密封对象(ES5新增)
-        不可扩展,不可删除,但可修改其属性值
-        只是对对象操作,对其原型链无影响
-      Object.freeze(obj);      冻结对象(ES5新增)
-        最严格的防篡改级别
-        既不可扩展,又是密封的,且属性值也不可修改
-        只是对对象操作,对其原型链无影响
+      obj.info(); // 小明年龄12
+  对象实例操作 
     ◆操作对象的属性
       PS： 访问对象不存在的属性,不会报错,返回值为undefined
         对象的属性可以手动赋值,进行覆盖修改.
         对象默认是可扩展的,可以向对象中添加、删除属性和方法
-    obj.属性名 或 obj["属性名"]  读、写对象的属性值
+    obj.key/obj[key]  读、写对象的属性值 
       PS：属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问.
         括号内的部分可以为任意表达式,系统自动将其转化为字符串来判断是否有该属性
         即也可以使用变量名当成属性名调用
@@ -866,8 +700,8 @@ ECMAScript JS核心,语法部分
         var str = "abc";
         str[aoo];   //3
         str.aoo;    //undefined,str无aoo属性.
-    obj.键名();     调用对象的方法
-    str in obj;    返回对象中是否有某属性的布尔值
+    obj.key();     调用对象的方法
+    str in obj;    返回对象中是否有某属性的布尔值 
       var obj ={ aoo:1, boo:"a" }
       'aoo' in obj; //true
       'boo' in obj; //true
@@ -880,7 +714,7 @@ ECMAScript JS核心,语法部分
       "content" in box.content.content;         //true
       "content" in box.content.content.content; //true
       PS-Self:box.content = box ,则始终将其带入box.content.content.content;运算?
-    delete obj.key 或 delete obj["key"] 删除属性
+    delete obj.key/delete obj[key] 删除属性 
       PS： 对于数组可以删除键值对,但仍会保留位置(该处显示为undefined);对象中不会
       若删除成功返回 true,否则返回 false
       若删除不存在的值也会返回true
@@ -889,23 +723,23 @@ ECMAScript JS核心,语法部分
       var obj ={aoo:1,boo:"a"};
       delete obj.aoo; //true
       obj; // {boo: "a"}
-    Object.keys(obj); 以数组形式返回对象不包含原型的所有属性名
-      应用: 获取对象的"长度"
-        Object.keys(obj).length;
+    for(var key in obj){}        遍历属性  [详参语句]
+  静态属性方法 
+    Object.keys(obj); 以数组形式返回对象不包含原型的所有属性名 
+      Object.keys(obj).length;    获取对象的"长度"
       e.g.
       var obj ={
         aoo:"a",
         boo:22,
-        foo:function(){ 
+        foo: function(){ 
           console.log("hello") 
         }
       }
-      obj.__proto__.doo=1;
-      obj.constructor.prototype.eoo =11;
+      obj.__proto__.doo = 1;
+      obj.constructor.prototype.eoo = 11;
       console.log(obj.doo); //1
       console.log(obj.eoo); //11
       Object.keys(obj); //["aoo", "boo", "foo"]
-    for(var key in obj){}        遍历属性  [详参语句]
     Object.assign(obj1,obj2,..);  合并多个对象
       e.g.
       var obj1 ={name:"abc"};
@@ -913,32 +747,147 @@ ECMAScript JS核心,语法部分
       var obj3 ={sex:"man"};
       Object.assign(obj1,obj2,obj3);
       // {name: "abc", height: 180, sex: "man"}
-    Exp:
-      通过val获取对应的key 
-        var getKey = function(val,bool = true){
-          var arr = [];
-          var str = '';
-          for(var key in obj){
-            if (obj[key] === val ) {
-              arr.push(key);
-            }
-          };
-          if (bool) {
-            return arr;
-          }
-          else {
-            return arr[0];
-          }
+  特性  对象属性的属性 
+    数据属性:包含4个描述属性行为的特性 
+      PS：后3个只能通过函数来设定 
+      value        属性的值.默认为 undefined
+      writable     默认true,表示能否修改属性的值
+      enumerable   默认true,能否枚举(即是否可通过for in 枚举)
+      configurable 默认true,能否通过delete删除,能否配置(修改其属性等)
+        不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了
+    访问器属性:包含4个特性描述 
+      get  设置获取属性值时的操作,默认返回属性值
+      set  设定设置属性值时的操作,默认返回属性值
+      enumerable    同数据属性
+      configurable  同数据属性
+      e.g.
+        var person={
+          name:"小明",
+          sex:"男",
+          // 注意此处无冒号
+          get age(){ return 12; },
+          set age(val){ console.log("设置为"+val) }
         }
-        var obj = {
-          aoo : 'a',
-          boo : 'a',
-          coo : 1,
-          doo : 2
-        }
-        getKey('a');       // (2) ["aoo", "boo"]
-        getKey('a',false); // "aoo"
-  对象的 原型&继承&多态
+        person.age;       //12
+        person.age=16;    //设置为16
+
+        var obj={
+          x:3,
+          y:4,
+          z:5,
+          get sum(){ return this.x+this.y+this.z; },
+          set double(val){ this.x*=val, this.y*=val, this.z*=val }
+        };
+        obj.sum;        //12
+        obj.double=2;
+        obj.x;          //6
+        obj.sum;        //24
+
+        var obj={};
+        Object.defineProperty(obj,"a",{
+          //注意此处有冒号
+          get:function(){ return 12; }
+        });
+        obj.a;      //12
+
+        var book ={year:2004,edition:1};
+        Object.defineProperty(book,"name",{
+          get :function(){ return 1; },
+          set : function(value){ this.edition = value; }
+        });
+        book.name;       // 1
+        book.name =11;
+        book.edition;    // 11
+
+        function Foo(){ };
+        Object.defineProperty(Foo.prototype,'z',{
+          get:function(){return 1; }
+        })
+        var obj =new Foo();
+        obj.z; // 1
+        obj.z =11;
+        obj.z; // 1
+        Object.defineProperty(obj,'z',{
+          value:100,configurable:true
+        });
+        obj.z; // 100
+        delete obj.z;
+        obj.z; // 1
+      Remarks:
+        在使用Object.defineProperty 函数时,不一定非要同时指定set 和 get,
+        只指定get时,意味着属性不能写,尝试写入被忽略;
+        类似的只指定set则属性不能读 ?.
+    ◆定义/修改
+    Object.defineProperty(obj,"key",obj1); 定义属性及其特性
+      PS：通过该方法创建的属性,其3个特性未设置时默认为false
+        不能同时定义数据属性和访问器属性(要分开定义)
+      obj  为属性所在的对象
+      key  为所在对象的属性的名字
+      obj1 特性的描述对象
+      e.g.
+      var obj ={"sex":"男"}
+      Object.defineProperty(obj,"name1",{
+        value:"小明",
+        writable:true,
+        enumerable:true,
+        configurable:true
+      });
+      obj.name1;
+    Object.defineProperties(obj,obj1);  同时定义多个属性及特性
+      Arguments:
+        obj  修改的目标对象
+        obj1 属性名及其对应的属性组成的对象
+      e.g.
+        var obj = {};
+        Object.defineProperties(obj, {
+          aoo: {
+            value: 101,
+            writable: true,
+            enumerable: true,
+            configurable: true
+          },
+          boo: {
+            set: function(x) {
+              document.write("in property set accessor" + newLine);
+              this.newaccpropvalue = x;
+            },
+            get: function() {
+              document.write("in property get accessor" + newLine);
+              return this.newaccpropvalue;
+            },
+            enumerable: true,
+            configurable: true
+          }
+        });
+    ◆查询
+    obj.hasOwnProperty("propName"); 返回对象上是否有该属性的布尔值,不包括继承的属性
+      e.g.
+      var obj={"name":"abc"};
+      obj.hasOwnProperty("name"); //true
+    obj.propertyIsEnumerable("propName"); 表示对象属性是否可以枚举的布尔值
+    Object.getOwnPropertyDescriptor(obj,"propName"); 返回对象指定属性的特性描述对象
+      PS：可对DOM或BOM对象使用该方法.
+        若查询的属性不存在则返回undefined.
+      var obj ={aoo:"a"};
+      Object.getOwnPropertyDescriptor(obj,"aoo");
+      //Object {value: "a", writable: true, enumerable: true, configurable: true}
+    ◆阻止
+    Object.getOwnPropertyNames();  返回对象所有自有属性名(数组形式)(包括不可枚举的属性)
+    Object.isExtensible(obj);      表示对象能否扩展的布尔值
+    Object.isSealed(obj);     表示对象对象是否被密封的布尔值
+    Object.isFrozen(obj);     表示对象是否被冻结的布尔值
+    ◆操作对象
+    Object.preventExtensions(obj); 设置对象不可扩展(ES5新增)
+      不能给对象添加属性,但可以修改和删除已有属性
+      只是对对象操作,对其原型链无影响
+    Object.seal(obj);        密封对象(ES5新增)
+      不可扩展,不可删除,但可修改其属性值
+      只是对对象操作,对其原型链无影响
+    Object.freeze(obj);      冻结对象(ES5新增)
+      最严格的防篡改级别
+      既不可扩展,又是密封的,且属性值也不可修改
+      只是对对象操作,对其原型链无影响
+  原型&继承&多态 
     对象的构造原型 :构造函数的原型对象
       PS：函数对象的属性prototype也是一个对象,
         只有函数对象才有prototype(原型)属性
@@ -1144,6 +1093,31 @@ ECMAScript JS核心,语法部分
         定义多个函数,(函数名相同)区别是传入的参数不同,
         调用时,会根据传入参数的不同自动选择对应的函数执行.
         JS中:会产生覆盖,只有最后一个定义的函数有用.
+  Exp:
+    遍历,通过val获取对应的key 
+      var getKey = function(val,bool = true){
+        var arr = [];
+        var str = '';
+        for(var key in obj){
+          if (obj[key] === val ) {
+            arr.push(key);
+          }
+        };
+        if (bool) {
+          return arr;
+        }
+        else {
+          return arr[0];
+        }
+      }
+      var obj = {
+        aoo : 'a',
+        boo : 'a',
+        coo : 1,
+        doo : 2
+      }
+      getKey('a');       // (2) ["aoo", "boo"]
+      getKey('a',false); // "aoo"
 数据类型相关的方法、功能 
   ◆类型检测
   typeof val;               [详参 一元运算符]

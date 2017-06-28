@@ -1,97 +1,3 @@
-●AngularJS 
-  PS：诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
-    最为核心的是：MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
-  概念类
-    指令: 通过被称为指令的新属性来扩展HTML,为应用添加功能,允许自定义指令.
-      带有前缀ng- 
-      ng-app 指令初始化一个AngularJS应用程序
-      ng-init 指令初始化应用程序数据
-      ng-model 指把元素值(比如输入域的值)绑定到应用程序
-  ◆四大核心特性
-  MVC,Model Controller View
-    PS：MVC 只是手段,目的是模块化和复用
-      model :数据模型层;
-      view :视图层,负责展示;
-      controller:业务逻辑和控制逻辑.
-    $scope 
-      PS：MVC 是借助$scope实现的 
-        是一个POJO,Plain Old JavaScript Object 
-        提供了一些工具方法 $watch() $apply() 
-        是表达式的执行环境,也叫作用域 
-        是一个树型结构,与DOM标签平行 
-        子$scope对象会继承父$scope上的属性和方法 
-        每个Angular应用只有一个根$scope对象,一般位于ng-app上 
-        可以传播事件,类似DOM事件,可以向上也可以向下 
-        不仅是MVC的基础,也是实现双向数据绑定的基础 
-        可以使用angular.element($0).scope()进行调试 
-components 组件 
-  全生命周期支持
-directives 指令
-  PS：指令可以自定义
-  属性指令: 改变组件模板的外观或行为,如样式等
-  结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
-services   服务 : 实现专一目的的逻辑单元,如日志服务
-dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
-metadata 元数据
-templates 模板
-  框架代码以模块形式组织 「文件模块」
-    core    核心模块
-    common  通用模块
-    forms   表单模块
-    http    网络模块
-    ... 
-    模块的引入
-      e.g.: 
-        import {Http} from "@angular/http"
-        import {Component} from "@angular/core" // @Component 装饰器
-        import {Directive} from "@angular/core" // @Directive 装饰器
-  功能单元以模块形式组织 「应用模块」
-data binding 数据绑定
-modules 模块 
-todo 
-  模块化 
-    PS：一切由模块开始
-    路由
-      使用ngRoute进行视图之间的路由
-      e.g. :
-      $routeProvider.when('/hello',{
-        templateUrl:'tpls/hello.html',
-        controller:'HelloCtrl'
-      }).when("/list",{
-        templateUrl:"tpls/bookList.html",
-        controller:"BookListCtrl"
-      }).otherwise({
-        redirectTo:'/hello'
-      })
-    模块
-      定义模块 
-        var mod =angular.module("modName",[]); // 创建模块
-        // 创建控制器
-        mod.controller("contrName",["$scope",function($scope){
-        };])
-    依赖注入
-      模块之间有依赖,使用依赖注入来决解
-      e.g. :
-      var bookStoreApp =angular.module("bookStoreApp",[
-        'ngRoute',"ngAnimate","bookStoreCtrls","bookStoreFilters"
-      ])
-  指令系统 
-    AngularJS内置指令 共63个
-      ng-app
-      
-      ng-controller
-      
-      ng-class
-      ng-show
-      ng-hide
-      
-      ng-click
-      
-      ng-view
-  双向数据绑定 
-    数据模型到视图,视图到数据模型.
-    取值表达式 {{}}
---------------------------------------------------------------------------------
 ●VueJS  数据驱动,组件化开发模式,渐进式前端框架 
   PS：支持IE9+,因vue使用了ES5特性;非压缩版有错误提示和警告,而压缩版则没有;
     API设计受 AngularJS、KnockoutJS、RactiveJS 和 RivetsJS 影响;
@@ -1101,10 +1007,16 @@ Model,模型  一个轻微改动过的原生JS对象
           }
         }
       })
-全局配置 
-  Vue.config.devtools   读写,是否允许'vue-devtools'检查代码
-    开发版本默认为 true,生产版本默认为 false。生产版本设为 true 可以启用检查。
-  // 务必在加载 Vue 之后,立即同步设置以下内容
+静态属性/方法 
+  Vue.config.devtools   读写,是否允许'vue-devtools'检查代码 
+    开发版本默认为 true,生产版本默认为 false。生产版本设为 true 可以启用检查
+    务必在加载 Vue 之后,立即同步设置
+  var Vue1 = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
+    PS： 所有的Vue组件其实都是被扩展的Vue实例 
+      在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中
+    var ve = new Vue1(params); 
+  Vue.set(obj,key,val) 全局修改对象[确保视图会更新] 
+  Vue.component(tagName,options);  注册全局组件[详见组件]
 var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染 
   PS： VueJS的核心,采用简洁的模板语法来声明式的将数据渲染进DOM的系统;
     VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;
@@ -1351,56 +1263,32 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
     }
   directives : val 可选,自定义指令 
   ...
-  ◆vm.$xx [带有前缀$的]实例方法与属性[用于访问选项对象里的属性] 
-    PS：vm.xx 代理的是data中的属性,则使用 vm.$xx 访问如el,data等在选项对象里的属性;
-    ★实例属性
-      e.g.：
-        var obj = { a: 1 };
-        var vm = new Vue({
-          el: '#test',
-          data: obj,
-        });
-        vm.$data === obj;  // true
-        vm.$el === document.getElementById('test'); // true
-    vm.$el      实例接管的DOM对象
-    vm.$data    实例的data
-    ★实例方法
-    vm.$watch('val', foo)  监控元素改变的方法
-      val 为data对象中的属性值
-      foo 依次传入函数 (newVal, oldVal) 
-      e.g.：
-        vm.$watch('a', function (newVal, oldVal) {
-            // 这个回调将在 `vm.a`  改变后调用
-        })
-  vm.$data    vm的数据对象
-  vm.$el      vm接管的DOM对象
-  vm.$watch('val',function(newVal,oldVal) { }); 回调在'vm.val'改变后调用
+实例属性/方法 
+  ◆vm.$xx [带有前缀$的]实例方法/属性 
+    PS：在配置对象中使用'this'代替'vm' 
+    e.g.：
+      var obj = { a: 1 };
+      var vm = new Vue({
+        el: '#test',
+        data: obj,
+      });
+      vm.$data === obj;  // true
+      vm.$el === document.getElementById('test'); // true
+  vm.$el      实例接管的DOM对象
+  vm.$data    实例的data
+  vm.$watch('key', foo)  监控元素改变的方法 
+    key data对象中的属性 
+    foo 依次传入函数 (newVal, oldVal) 
+    e.g.：
+      vm.$watch('a', function (newVal, oldVal) {
+          // 回调将在`vm.a`值改变后调用 
+      })
     不要在实例属性或者回调函数中使用箭头函数 
-    如 vm.$watch('a',newVal => this.myMethod())
-    因为箭头函数绑定父上下文,所以 this 不会像预想的一样是Vue实例,
-    而是 this.myMethod 未被定义;
-  e.g.：
-    HTML
-    <div id="test"> {{ message }} </div>
-    JS
-    var test = new Vue({
-      el: '#test',
-      data: { 
-        message: 'Hello Vue!', 
-      }
-    })
-    渲染为 
-    <div id="test"> Hello Vue! </div>
-  Exp：
-    后续使用data中不存在的的数据的决解办法 
-      在data中声明
-      Vue.set(obj,key,val) 全局声明 
-      vm.$set(obj,key,val) 局部声明
-        在vm实例的的方法中将'vm'改为 this 
-var vmEx = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
-  PS： 所有的Vue组件其实都是被扩展的Vue实例
-    在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中
-  var ve = new vmEx(params); 
+      如 vm.$watch('a',newVal => this.myMethod())
+      因为箭头函数绑定父上下文,this 不是Vue实例,
+  vm.$set(obj,key,val)  局部声明
+  vm.$el      vm接管的DOM对象
+  vm.$data    vm的数据对象
 Lifecycle_hooks,生命周期钩子 
   PS：钩子：某个阶段开始或者结束之前、之后等过程中被触发的函数,
     每个Vue实例在被创建之前都要经过一系列的初始化过程, 
@@ -1429,7 +1317,7 @@ Lifecycle_hooks,生命周期钩子
   deactivated   组件被移除时 
   beforeDestroy 
   destroyed     销毁观察、组件及事件 
-Directives,指令系统  用于model和view的交互 
+Directives,指令系统:model和view的交互 
   PS：将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
@@ -1815,14 +1703,14 @@ Directives,指令系统  用于model和view的交互
       一般,'v-if'有更高的切换消耗而'v-show'有更高的初始渲染消耗,
       因此若需要频繁切换使用'v-show'较好,若在运行时条件不大可能改变则使用'v-if'较好 
   ◆事件绑定
-  v-on:eName="drctVal" 事件处理与绑定「简写'@eName'」
+  v-on:eName="arg" 事件处理与绑定「简写'@eName'」
     PS：当一个ViewModel被销毁时,所有的事件处理器都会自动被删除[无须自己清理]        
-    drctVal  当触发事件时执行'drctVal',可为函数[可带参数]、单条语句或无 
-      当为函数时且未自定义传参,则默认传入经过vue包装过的event事件对象 
+    arg  当触发事件时执行'arg',可为函数[可带参数]、单条语句或无 
+      当为函数且未自定义传参时,则默认传入经过vue包装过的event事件对象 
         若有自定义传参,则默认参数被取消
         e.srcElement 表示事件绑定的元素 
           可用来进行DOM操作「SlPt」
-      可自定义参数'$event',用于表示该事件的[经过vue包装的]event对象 
+      当为函数时,传入参数'$event'表示该事件的[经过vue包装的]event对象 
     e.g.: 
       <div id="test">
         <p>{{ message }}</p>
@@ -2249,7 +2137,7 @@ Directives,指令系统  用于model和view的交互
     data : {
       a : fasle,
     }
-Mustache,模板语法  插值 
+Mustache,模板语法插值 
   PS：Vue使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
     在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
     结合响应系统,应用状态改变时,Vue以最小代价重新渲染组件并应用到DOM操作上;
@@ -2297,7 +2185,7 @@ Mustache,模板语法  插值
         }
       }
   Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-Filters,过滤器  用于文本格式化 
+Filters,过滤器:数据格式化 
   PS：Vue2.x 中,过滤器只能在'插值'和'v-bind'表达式[从' 2.1.0'开始支持]中使用 
     类似Linux中的管道,vuejs也使用的是'|'; 
     因为过滤器设计目的就是用于文本转换
@@ -2427,7 +2315,7 @@ Component,组件
           ]
         }
       })
-  需在父实例的模块中使用,在HTML中指定位置 
+  在父实例的模块中使用,在HTML中指定位置 
     以自定义元素<my-component></my-component>的形式使用
     要确保在初始化根实例之前注册了组件
     <div id="example">
@@ -2998,13 +2886,256 @@ Component,组件
       ★子组件内
       绑定事件用于响应何时向父组件发送数据
       在事件的回调函数中 $emit('eventName',data) 触发在父组件中的事件A 
-过渡效果  
-  Vue在插入、更新或者移除 DOM 时,提供多种不同方式的应用过渡效果。
-  包括以下工具：
-  在CSS过渡和动画中自动应用'class'
-  可以配合使用第三方CSS动画库,如 Animate.css
-  可以配合使用第三方js动画库,如 Velocity.js
-  在过渡钩子函数中使用js直接操作 DOM
+过渡效果 
+  Vue在插入、更新或者移除DOM时,有多种不同方式的应用过渡效果 
+    在CSS过渡和动画中自动应用'class' 
+    在过渡钩子函数中使用js直接操作DOM 
+    配合使用第三方CSS动画库,如 Animate.css 
+    配合使用第三方js动画库,如 Velocity.js 
+  <transition>的封装组件 
+    PS：可给任何元素和组件添加 entering/leaving 过渡
+    可用于下列情形 
+      条件渲染[v-if] 条件展示[v-show] 动态组件 组件根节点 
+    原理 
+      当插入或删除包含在 transition 组件中的元素时,Vue 将会做以下处理：
+      自动嗅探目标元素是否应用了 CSS 过渡或动画,
+      如果是,在恰当的时机添加/删除 CSS 类名。
+      如果过渡组件提供了JS钩子函数,这些钩子函数将在恰当的时机被调用。
+      如果没有找到JS钩子并且也没有检测到 CSS 过渡/动画,
+      DOM 操作[插入/删除]在下一帧中立即执行。
+      [注意：此指浏览器逐帧动画机制,和Vue的 nextTick 概念不同]
+    类名 
+      v-xx 为类名的默认名称,可对所有无'name'属性的<transition>组件起作用,
+      使用 <transition name="a-b"> 'name'属性可重置前缀,如 v-enter 替换为 a-b-enter
+      有6个CSS类名在 enter/leave 的过渡中切换
+      v-enter         定义进入过渡的开始状态
+        在元素被插入时生效,在下一个帧移除。
+      v-enter-active  定义过渡的状态
+        在元素整个过渡过程中作用,在元素被插入时生效,
+        在 transition/animation 完成之后移除。 
+        这个类可以被用来定义过渡的过程时间,延迟和曲线函数。
+      v-enter-to      定义进入过渡的结束状态['2.1.8+']
+        在元素被插入一帧后生效[于此同时 v-enter 被删除],
+        在 transition/animation 完成之后移除。
+      v-leave         定义离开过渡的开始状态
+        在离开过渡被触发时生效,在下一个帧移除。
+      v-leave-active  定义过渡的状态
+        在元素整个过渡过程中作用,在离开过渡被触发后立即生效,
+        在 transition/animation 完成之后移除。 
+        这个类可以被用来定义过渡的过程时间,延迟和曲线函数。
+      v-leave-to      定义离开过渡的结束状态['2.1.8+'] 
+        在离开过渡被触发一帧后生效[于此同时 v-leave 被删除],
+        在 transition/animation 完成之后移除。      
+    CSS 过渡 
+      e.g.：
+        .fade-enter-active, .fade-leave-active {
+          transition: opacity 0.5s
+        }
+        .fade-enter, .fade-leave-to {
+          opacity: 0
+        }
+        <div id="demo">
+          <button v-on:click="show = !show"> Toggle </button>
+          <transition name="fade">
+            <p v-if="show">hello</p>
+          </transition>
+        </div>
+        new Vue({
+          el: '#demo',
+          data: {
+            show: true
+          }
+        })
+    CSS 动画 
+      CSS 动画用法同 CSS 过渡,
+      区别是在动画中 v-enter 类名在节点插入 DOM 后不会立即删除,
+      而是在 animationend 事件触发时删除。
+      e.g.：
+        p{
+          background : #aaa;
+        }
+        .bounce-enter-active {
+          animation: in 1.5s;
+        }
+        .bounce-leave-active {
+          animation: out 1.5s;
+        }
+        @keyframes in {
+          0% {
+            transform: scale(0);
+          }
+          50% {
+            transform: scale(1.5);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes out {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.5);
+          }
+          100% {
+            transform: scale(0);
+          }
+        }
+        <div id="example-2">
+          <button @click="show = !show">Toggle show</button>
+          <transition name="bounce">
+            <p v-if="show">Look at me!</p>
+          </transition>
+        </div>
+        new Vue({
+          el: '#example-2',
+          data: {
+            show: true
+          }
+        })
+      自定义过渡类名
+        可通过以下特性来自定义过渡类名：
+        enter-class
+        enter-active-class
+        leave-class
+        leave-active-class
+        他们的优先级高于普通的类名,这对于 Vue 的过渡系统和其他第三方 CSS 动画库,
+        如 Animate.css 结合使用十分有用。
+        e.g.：
+          <link href="https://unpkg.com/animate.css@3.5.1/animate.min.css" rel="stylesheet" type="text/css">
+          <div id="example-3">
+            <button @click="show = !show"> Toggle render </button>
+          <transition
+          name="custom-classes-transition"
+          enter-active-class="animated tada"
+          leave-active-class="animated bounceOutRight"
+          >
+            <p v-if="show">hello</p>
+          </transition>
+          </div>
+          new Vue({
+            el: '#example-3',
+            data: {
+              show: true
+            }
+          })
+    动画监听事件 
+      PS：Vue为了知道过渡的完成,必须设置相应的事件监听器。
+        它可以是 transitionend 或 animationend ,这取决于给元素应用的 CSS 规则。
+        如果你使用其中任何一种,Vue 能自动识别类型并设置监听。
+        但是,在一些场景中,你需要给同一个元素同时设置两种过渡动效,
+        比如 animation 很快的被触发并完成了,而 transition 效果还没结束。
+        在这种情况中,需要使用 type 特性并设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
+      JavaScript钩子
+        before-enter 
+        enter 
+        after-enter 
+        enter-cancelled 
+        before-leave 
+        after-leave 
+        leave-cancelled 
+        e.g.：
+          可在属性中声明 JavaScript 钩子
+          <transition
+          v-on:before-enter="beforeEnter"
+          v-on:enter="enter"
+          v-on:after-enter="afterEnter"
+          v-on:enter-cancelled="enterCancelled"
+          v-on:before-leave="beforeLeave"
+          v-on:leave="leave"
+          v-on:after-leave="afterLeave"
+          v-on:leave-cancelled="leaveCancelled" >
+            <!-- ... -->
+          </transition>
+          // ...
+          methods: {
+            // --------
+            // 进入中
+            // --------
+            beforeEnter: function (el) {
+              // ...
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            enter: function (el, done) {
+              // ...
+              done()
+            },
+            afterEnter: function (el) {
+              // ...
+            },
+            enterCancelled: function (el) {
+              // ...
+            },
+            // --------
+            // 离开时
+            // --------
+            beforeLeave: function (el) {
+              // ...
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            leave: function (el, done) {
+              // ...
+              done()
+            },
+            afterLeave: function (el) {
+              // ...
+            },
+            // leaveCancelled 只用于 v-show 中
+            leaveCancelled: function (el) {
+              // ...
+            }
+          }
+          这些钩子函数可以结合 CSS transitions/animations 使用,也可以单独使用。
+          当只用 JavaScript 过渡的时候, 在 enter 和 leave 中,回调函数 done 是必须的 。 
+          否则,它们会被同步调用,过渡会立即完成。
+          推荐对于仅使用 JavaScript 过渡的元素添加 v-bind:css="false",Vue 会跳过 CSS 的检测。
+          这也可以避免过渡过程中 CSS 的影响。
+        e.g.：
+          一个使用 Velocity.js 的简单例子：
+          // <!--
+          // Velocity works very much like jQuery.animate and is
+          // a great option for JavaScript animations
+          // -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+          <div id="example-4">
+            <button @click="show = !show"> Toggle </button>
+            <transition
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:leave="leave"
+            v-bind:css="false" >
+              <p v-if="show"> Demo </p>
+            </transition>
+          </div>
+          new Vue({
+            el: '#example-4',
+            data: {
+              show: false
+            },
+            methods: {
+              beforeEnter: function (el) {
+                el.style.opacity = 0
+                el.style.transformOrigin = 'left'
+              },
+              enter: function (el, done) {
+                Velocity(el, { opacity: 1, fontSize: '1.4em' }, { duration: 300 })
+                Velocity(el, { fontSize: '1em' }, { complete: done })
+              },
+              leave: function (el, done) {
+                Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 600 })
+                Velocity(el, { rotateZ: '100deg' }, { loop: 2 })
+                Velocity(el, {
+                  rotateZ: '45deg',
+                  translateY: '30px',
+                  translateX: '30px',
+                  opacity: 0
+                }, { complete: done })
+              }
+            }
+          })          
 ◆扩展插件 
 vue-resource  与后台数据交互 
   PS：作为vue插件的形式存在,通过 XMLHttpRequest 或 JSONP 发起请求并处理响应 
@@ -3239,7 +3370,101 @@ suggestion:
   cd helloworld
   npm start   「npm run start的缩写」 
 --------------------------------------------------------------------------------
-●orage「self」
+●AngularJS 
+  PS：诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
+    最为核心的是：MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
+  概念类
+    指令: 通过被称为指令的新属性来扩展HTML,为应用添加功能,允许自定义指令.
+      带有前缀ng- 
+      ng-app 指令初始化一个AngularJS应用程序
+      ng-init 指令初始化应用程序数据
+      ng-model 指把元素值(比如输入域的值)绑定到应用程序
+  ◆四大核心特性
+  MVC,Model Controller View 
+    PS：MVC 只是手段,目的是模块化和复用
+      model :数据模型层;
+      view :视图层,负责展示;
+      controller:业务逻辑和控制逻辑.
+    $scope 
+      PS：MVC 是借助$scope实现的 
+        是一个POJO,Plain Old JavaScript Object 
+        提供了一些工具方法 $watch() $apply() 
+        是表达式的执行环境,也叫作用域 
+        是一个树型结构,与DOM标签平行 
+        子$scope对象会继承父$scope上的属性和方法 
+        每个Angular应用只有一个根$scope对象,一般位于ng-app上 
+        可以传播事件,类似DOM事件,可以向上也可以向下 
+        不仅是MVC的基础,也是实现双向数据绑定的基础 
+        可以使用angular.element($0).scope()进行调试 
+  components 组件 
+    全生命周期支持
+  directives 指令
+    PS：指令可以自定义
+    属性指令: 改变组件模板的外观或行为,如样式等
+    结构指令: 改变组件模板的DOM结构,如插值或移除DOM节点
+  services   服务 : 实现专一目的的逻辑单元,如日志服务
+  dependency injection 依赖注入: 组件引入外部构建「如服务」的一种机制
+  metadata 元数据
+  templates 模板
+    框架代码以模块形式组织 「文件模块」
+      core    核心模块
+      common  通用模块
+      forms   表单模块
+      http    网络模块
+      ... 
+      模块的引入
+        e.g.: 
+          import {Http} from "@angular/http"
+          import {Component} from "@angular/core" // @Component 装饰器
+          import {Directive} from "@angular/core" // @Directive 装饰器
+    功能单元以模块形式组织 「应用模块」
+  data binding 数据绑定
+  modules 模块 
+  todo 
+    模块化 
+      PS：一切由模块开始
+      路由
+        使用ngRoute进行视图之间的路由
+        e.g. :
+        $routeProvider.when('/hello',{
+          templateUrl:'tpls/hello.html',
+          controller:'HelloCtrl'
+        }).when("/list",{
+          templateUrl:"tpls/bookList.html",
+          controller:"BookListCtrl"
+        }).otherwise({
+          redirectTo:'/hello'
+        })
+      模块
+        定义模块 
+          var mod =angular.module("modName",[]); // 创建模块
+          // 创建控制器
+          mod.controller("contrName",["$scope",function($scope){
+          };])
+      依赖注入
+        模块之间有依赖,使用依赖注入来决解
+        e.g. :
+        var bookStoreApp =angular.module("bookStoreApp",[
+          'ngRoute',"ngAnimate","bookStoreCtrls","bookStoreFilters"
+        ])
+    指令系统 
+      AngularJS内置指令 共63个
+        ng-app
+        
+        ng-controller
+        
+        ng-class
+        ng-show
+        ng-hide
+        
+        ng-click
+        
+        ng-view
+    双向数据绑定 
+      数据模型到视图,视图到数据模型.
+      取值表达式 {{}}
+--------------------------------------------------------------------------------
+●originJS「SlSt」 
   功能: 轻量、简洁、功能--多模块化自由组合、待续...
   简写符号:
     pa   parents

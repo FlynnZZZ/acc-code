@@ -55,11 +55,11 @@
         这些代码的意思是：若用户浏览器是IE6及以下,那这段代码才会生效。
         若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
   IE8才开始支持css3
-  CSS规则
+  CSS规则 
     PS：一个CSS文件由多个CSS规则组成,
-      每个规则都有两个基本部分:选择器(selector)和声明块(declaration block),
-      声明块由若干个声明(declaration)组成,
-      每个声明是一个属性-值对(property-value).
+      每个规则都有两个基本部分:选择器[selector]和声明块[declaration_block],
+      声明块由若干个声明[declaration]组成,
+      每个声明是一个属性-值对[property-value].
       值为一个关键字或该属性可取关键字的一个列表,
       关键字键用空格分开,只有一种情况例外:font属性中 字体大小/行高 
       若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略
@@ -399,7 +399,7 @@ Style    样式
                 font-family:Arial;
                 src:local("Arial");
               }
-    background 背景 「简写」
+    background 背景「简写」
       PS：通常建议使用简写方式,而非使用单个属性,
         因为该属性在较老的浏览器中兼容性更好,且键入的字母更少
       Exp:background:背景颜色 url() 重复 位置
@@ -1042,7 +1042,7 @@ Style    样式
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  「iOS」
       -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-  样式说明
+  样式说明 
     样式的特点
       ⒈继承
         网页中子元素将继承父元素的某些样式.如控制段落p中的文字大小,可以直接给body标记加样式.

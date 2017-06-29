@@ -62,12 +62,12 @@ ECMAScript JS核心,语法部分
     不能使用'-'
   关键字和保留字 
     有些名称有特殊意义,不可作为变量名
-    关键字: 是程序中已经开始使用的字符
+    关键字: 程序中已经开始使用的字符
       ECMAScript全部关键字: 
       'var' 'function' 'return' 'if' 'else' 'for' 'while' 'continue' 'break' 
       'case' 'catch'  'default' 'delete' 'do'  'finally' 'in' 'inseanceof' 
       'new' 'switch' 'this' 'throw' 'try' 'typeof'  'void'  'with'
-    保留字: 还没有特定的用途,但可能在将来被用作关键字
+    保留字: 还没有特定的用途,但可能在将来被用作关键字 
       ECMAScript-262 第3版 定义的全部保留字
       'abstract' 'boolean' 'byte' 'char' 'class' 'const' 'debugger' 'double'
       'enum' 'export' 'extends' 'final' 'float' 'goto' 'implements' 'import' 'int'
@@ -175,7 +175,7 @@ ECMAScript JS核心,语法部分
         console.log('is null');
       }
   Boolean 布尔值
-    PS：Boolean类型有两个值(字面量): true 和 false
+    PS：Boolean类型有两个值[字面量]: true 和 false
       ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值.
     隐式转换为布尔值
       转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
@@ -2326,8 +2326,8 @@ ArrayBuffer 二进制数组
     Int16Array (16 位整数)数组视图, 
     Float32Array (32 位浮点数)数组视图等等
   DataView    用来生成内存的视图,可以自定义格式和字节序 
-    比如第一个字节是Uint8(无符号8位整数)、第二个字节是Int16(16 位整数)、
-    第三个字节是Float32(32 位浮点数)等等。
+    比如第一个字节是Uint8[无符号8位整数]、第二个字节是Int16[16 位整数]、
+    第三个字节是Float32[32 位浮点数]等等。
   数据类型 字节长度  对应的C语言类型    含义 
     Int8      1     signed char      8 位带符号整数               
     Uint8     1     unsigned char    8 位不带符号整数               
@@ -3657,7 +3657,7 @@ Math   数学对象
     Math.asin(num)        返回num的反正弦值
     Math.atan(num)        返回num的反正切值
     Math.atan2(num1,num2) 返回num1/num2的反正切值
-JSON:  "JavaScript Object Notation",JS对象表示法 
+JSON,JavaScript_Object_Notation,JS对象表示法 
   PS： 一种基于文本、独立于语言的轻量级数据交换格式,
     利用 JS 中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.

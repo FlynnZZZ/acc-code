@@ -30,7 +30,21 @@
     通过盒子的宽度设置成百分比来根据屏幕的宽度来进行伸缩
   CSS层叠/覆盖原理
     PS：即产生冲突的规则
-    规则(SelfThink)
+    样式的特点
+      ⒈继承
+        网页中子元素将继承父元素的某些样式.如控制段落p中的文字大小,可以直接给body标记加样式.
+      ⒉层叠覆盖 
+        网页中子元素定义了与父元素同类型的样式,则子元素的样式将覆盖掉父元素的样式
+        当html标签内引用了多个同类型的样式时,后面定义的样式会覆盖前面定义的样式(与引用的先后顺序无关).
+    CSS样式优先级
+      优先级就近原则,同权重情况下样式定义最近者为准;
+      载入样式以最后载入的定位为准;
+      !important >内联 >  id > class > tag
+    元素覆盖的优先级
+      背景
+        默认的后面的元素覆盖前面的元素,
+        子元素覆盖父元素,
+    规则「SlPt」 
       层叠:部分覆盖;覆盖:整体替换.
       选择器同名,声明块层叠
       属性同名覆盖
@@ -47,7 +61,8 @@
         如同时定义 display:table 和 display:block 属性,他们同时起作用;
         定义 display:inline 和 display:block 两种属性有冲突,则优先级高起作用.
   css样式可引入html,jsp,php,asp,net等中使用
-  注释 /*注释*/
+  注释 
+    /*注释*/
     只对IE生效的注释
       <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" media="screen" href="path/to/ie.css" />
@@ -55,17 +70,17 @@
         这些代码的意思是：若用户浏览器是IE6及以下,那这段代码才会生效。
         若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
   IE8才开始支持css3
-  CSS规则 
-    PS：一个CSS文件由多个CSS规则组成,
-      每个规则都有两个基本部分:选择器[selector]和声明块[declaration_block],
-      声明块由若干个声明[declaration]组成,
-      每个声明是一个属性-值对[property-value].
-      值为一个关键字或该属性可取关键字的一个列表,
-      关键字键用空格分开,只有一种情况例外:font属性中 字体大小/行高 
-      若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略
-  id class 命名
-    类名由以字母开头的小写字母（a-z）、数字（0-9）、下划线（）、减号（-）组成。
-    ID名称由不以数字开头的小写字母（a-z）、数字（0-9）、下划线（）组成。
+  CSS规则  CSS文件由多个CSS规则组成 
+    每个规则都有两个基本部分:选择器[selector]和声明块[declaration_block],
+    'selector'           区分大小写
+    'declaration_block'  若干个声明[declaration]
+    'declaration'        property-value 对
+    'val'                关键字[keyword]或可取关键字的列表 
+    'keyword'            用空格分开,只有一种情况例外:font属性中 字体大小/行高 
+    若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略
+  'id' 'class' 命名规则 
+    类名由以字母开头的小写字母[a-z]、数字[0-9]、下划线'_'、减号'-'组成 
+    ID名称由不以数字开头的小写字母[a-z]、数字[0-9]、下划线'_'组成 
 定义：  
   自定义
     表明css样式作用的清晰的描述方式：a元素 指定 b样式 对 c元素 产生 d作用
@@ -116,948 +131,7 @@ css引入
     内联式「行内样式」> 内嵌样式「内部式」> 链接式「外部式」> @import「导入式」
     引入时,后引入的具有优先
   Remarks:style标签也可以添加class属性
-Style    样式   
-  专题样式
-    text   文本样式 
-      PS：valign只有在表格标签中使用,字体无text-valign属性
-      color           字体颜色
-        当边框颜色未设置时,该属性的颜色值会应用到边框上
-      letter-spacing  字母或文字间距
-        PS： 该样式在使用英文单词时,是设置字母与字母之间的距离
-        normal   默认值,等价于0
-        <length> 正值增加间距,负值减少间距
-        inherit
-      word-spacing    字间距 
-        PS：单词间的间距使用word-spacing,当汉字之间存在空格时,该属性也能起作用.
-        normal   默认值,等价于0
-        length   正值增加间距,负值减少间距
-        inherit
-      word-wrap       文本换行「CSS3」
-        PS：默认情况下不会在单词内部换行,即单词长度大于一行宽,会超出到容器外;
-          如连续的一连串数字会出现不能自动换行的情况,而中文不存在,
-          原因是因为英文文本或数字间没有加空格,浏览器会认为这是一个特别长的单词;
-        normal     默认值,只在半角空格或连字符的地方换行
-        break-word 「当一个单词长度大于行宽时才会」在单词或url地址内部进行换行
-      word-break      文本换行「CSS3」
-        normal    默认
-        keep-all  只能在半角空格或连字符如逗号处换行「否则在一行显示」
-        break-all 尽可能的在单词内换行
-      word-wrap:break-word 和 word-break:break-all 的区别
-        总的来说,后者更彻底
-        word-wrap:break-word  一般处理情况为在单词间换行
-          当出现一行内放不下一个单词时才会在单词内换行.
-        word-break:break-all  默认为单词内部换行
-      white-space  如何处理元素内的空白/元素的换行处理 
-        normal   默认,空白会被浏览器忽略
-          换行符、多个连续的空格会转换为一个空格
-        nowrap   文本不会换行,文本会在在同一行上继续,直到遇到 <br> 标签为止。
-        pre      空白会被浏览器保留,其行为方式类似 HTML 中的 <pre> 标签。
-        pre-wrap 保留空白符序列,但是正常地进行换行
-        pre-line 合并空白符序列,但是保留换行符
-        inherit  规定应该从父元素继承 white-space 属性的值。            
-      line-height     行高 
-        PS：设置行间的距离(行高)
-          行高是指上下文本行基线间的垂直距离.
-          行距是指一行底线到下一行顶线的垂直距离.行距也可以这么算：(行高-字体size)/2.
-          内容区：底线和顶线包裹的区域
-          具有继承性
-        normal      默认,设置合理的行间距。
-        number      设置数字,此数字会与当前的字体尺寸相乘来设置行间距。相当于倍数
-        length      设置固定的行间距。
-        %           基于当前字体尺寸的百分比行间距。
-        inherit     规定从父元素继承line-height属性的值。
-      text-indent     缩进 
-        PS： 
-          允许使用负值。若使用负值,那么首行会被缩进到左边,产生一种“悬挂缩进”的效果。
-          无法将该属性应用到行内元素.
-        pixels  定义固定的缩进,默认值为0
-        em      文字大小的倍数
-        %       父元素 width 的百分比
-        inherit 规定应该从父元素继承text-indent属性的值。
-      text-decoration 文本修饰 
-        PS：没有继承属性
-        none         标准文本,默认值
-        underline    下划线,链接文本的默认样式
-        line-through 贯穿线
-        overline     上划线
-        blink        定义闪烁的文本 (可能存在兼容性问题)
-        e.g. 
-        同时定义多个文本修饰,使用空格隔开
-          text-decoration:underline overline
-      text-transform  文本大小写转换 
-        uppercase   
-        lowercase   
-        capitalize  单词首字母大写
-        none
-      text-align      定义父元素指定其包含的行内元素的水平对齐方式 
-        行内元素、文本、图片等设置如居中的样式.具有继承属性.
-        left
-        right
-        center
-        justify 两端对齐
-      text-transform  文本大小写 
-        capitalize 单词首字母大写
-        uppercase  字母大写
-        lowercase  小写字母
-        inherit    继承
-      text-shadow     文字阴影 
-        PS：css2.1中被删除,在css3.0中又恢复了使用.
-        text-shadow:length1 length2 length3 color;
-          length1 横向方向距离
-          length2 纵向方向距离
-          length3 可选,阴影模糊半径
-          color   阴影的颜色,默认使用当前字体颜色
-        指定多个阴影
-          text-shadow:length1 length2 length3 color,length4 length5 length6 color,...;
-      text-overflow   文本溢出显示方式 
-        PS：该属性只在当盒子中的文本在水平方向上超出时有效.
-          若将white-space的属性值设为nowrap,使得盒子的右端不能换行显示,达到水平方向溢出的效果
-        ellipsis  单行文本溢出显示为省略号
-          单行溢出显示
-            width:xxx [也可以使用 max-width 代替 width]
-            overflow:hidden
-            white-space: nowrap
-            /*前三个为前提条件*/
-            text-overflow:ellipsis
-          多行溢出显示
-            不支持多行文本溢出显示省略号
-            可使用:after 来模拟
-            e.g.：
-            <div class="wrap">
-              很多年以后,奥雷连诺上校站在行刑队面前,准会想起父亲带他去参观冰块的那个遥远的下午。当时,马孔多是个二十户人家的村庄,一座座土房都盖在河岸上,河水清澈,沿着遍布石头的河床流去,河里的石头光滑、洁白,活像史前的巨蛋。----加西亚·马尔克斯
-              knowing something of everything and everything of something.
-            </div>
-            .wrap{
-              width: 300px;
-              height: 54px;
-              text-overflow : ellipsis;
-              overflow: hidden;
-              position: relative;
-            }
-            .wrap:after{
-              content: '...';
-              position: absolute;
-              bottom: 2px;
-              right: 0;
-              background-color: #fff;
-              width: 30px;
-              height: 20px;
-            }
-      unicode-bidi    设置文本方向 
-        normal
-        embed
-        bidi-override
-      direction       文本方向
-        PS：对于行内元素,只有当unicode-bidi属性设置为embed或bidi-override时才会应用该属性
-        ltr     默认,文本方向从左到右
-        rtl     文本方向从右到左,从右向左的文本默认为rtl
-        inherit 继承
-    font   字体样式「简写」 
-      PS：font-size 和 font-family 属性必选 ,其他属性可选   
-        缩写时没有固定的顺序   
-      font- family    字体风格 
-        PS：不要设置不常用的字体,若用户电脑上没有安装该字体,会显示浏览器默认的字体
-          尽量选用通用的字体,当使用很特殊的字体时,可采用图片的形式决解. 可定义多个字体,字体用引号引起来,使用逗号隔开 (当为多个单词时使用引号) ?
-          当前一个字体不支持时直接使用下一个 绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
-          因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
-        e.g.  
-          div{font-family: "微软雅黑","楷体";}
-          body{font-family:"Microsoft Yahei";} 或body{font-family:"微软雅黑";}
-          注:第一种方法比第二种方法兼容性更好一些.     
-        常用字体及英文表示 
-          宋体         SimSun 
-          黑体         SimHei 
-          微软雅黑     Microsoft YaHei 
-          微软正黑体   Microsoft JhengHei 
-          新宋体   NSimSun 
-          新细明体  PMingLiU
-          细明体   MingLiU 
-          标楷体   DFKai-SB 
-          仿宋  FangSong 
-          楷体  KaiTi 
-          仿宋_GB2312 FangSong_GB2312 
-          楷体_GB2312   KaiTi_GB2312 
-        Mac OS的一些：   
-          华文细黑：STHeiti Light [STXihei]   
-          华文黑体：STHeiti   
-          华文楷体：STKaiti   
-          华文宋体：STSong   
-          华文仿宋：STFangsong
-        装Office会生出来的一些：
-          隶书: LiSu   
-          幼圆: YouYuan   
-          华文细黑: STXihei   
-          华文楷体: STKaiti   
-          华文宋体: STSong
-          华文中宋: STZhongsong   
-          华文仿宋: STFangsong   
-          方正舒体: FZShuTi   
-          方正姚体: FZYaoti
-          华文彩云: STCaiyun   
-          华文琥珀: STHupo   
-          华文隶书: STLiti   
-          华文行楷: STXingkai   
-          华文新魏: STXinwei   
-      font-size       字号 
-        PS：该属性设置元素的字体大小.实际上它设置的是字体中字符框的高度;
-          实际的字符字形可能比这些框高或矮（通常会矮）。     
-        %      参考对象为其父元素的 font-size     
-        length 把 font- size 设置为一个固定的值。
-        larger 比父元素更大     
-        smaller     比父元素更小
-        把字体的尺寸设置为不同的尺寸,从 xx-small 到 xx-large。 
-          xx-small     x-small small medium
-          默认值 large x-large xx-large     
-          inherit     继承父元素的大小 (子元素会默认继承)   
-      font-size-adjust  规定元素的aspect值「IE不支持」 
-        PS：字体的小写字母 "x" 的高度与 "font-size" 高度之间的比率被称为一个字体的 aspect 值。
-          当字体拥有高的 aspect 值时,那么当此字体被设置为很小的尺寸时会更易阅读。
-          举例：Verdana 的 aspect 值是 0.58
-          （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
-          Times New Roman 的 aspect 值是 0.46。
-          这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
-        none   默认。如果此字体不可用,则不保持此字体的 x-height。
-        number 定义字体的 aspect 值比率。
-        e.g.：
-          如果 14px 的 Verdana（aspect 值是 0.58）不可用,
-          但是某个可用的字体的 aspect 值是 0.46,
-          那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
-      font- weight    字重     
-        number    100-900的整百数(其中400=normal,700=bold)
-        normal     
-        lighter     
-        bold     加粗     
-        bolder     
-      font-style      字体风格
-        normal  默认     
-        italic  斜体,对于没有斜体的特殊字体,将应用oblique.     
-        oblique 倾斜,是正常竖直文本的一个倾斜版本.
-          通常,italic和oblique文本看上去完全一样   
-      font-variant    字体变形
-        normal     
-        small-caps  小型大写文字     
-        inherit    
-      font-stretch    字体水平拉伸  (CSS2.1 已删除该属性)     
-      e.g.：  
-        p{   
-          font-style:italic;   
-          font-variant:small-caps;   
-          font-weight:bold;   
-          font-size:12px;   
-          line-height:1.5em;   
-          font- family:"宋体",sans-serif; 
-          } 
-        可简写为 
-        p{   
-          font:italic small-caps bold 12px/1.5em "宋体",sans-serif;  
-          /* 在缩写font-size和line-height中间加/ */ 
-        }
-      使用系统字体
-        PS：若希望一个Web页面结合用户操作系统的设置,font的系统字体值会很方便,
-          这些值用于取得操作系统中元素的字体大小、字体系列、字体系列、
-          字体加粗、字体风格等等,并将其应用到一个元素.    
-        caption 用于有标题的控件,如按钮     
-        icon 用于对图标加标签     
-        menu  用于菜单,即下拉菜单和菜单列表     
-        message-box 用于对话框     
-        small-caption 用于对小控件加标签     
-        status-bar 用于窗口状态条     
-        e.g.：
-          .aoo{font:caption;} 
-      自定义服务器端字体   
-        PS：@font-face 已经从CSS2.1中去除   
-        @font-face{
-          font-family:(自定义的)"字体名称" 
-          src:url(字体文件地址)  
-          src:url(字体文件地址)     
-          ...
-        }   
-        e.g.：   
-          @font-face {     
-            font-family: 'MyFont';
-            src: url('myfont.eot'); /* IE6+ */     
-            src: local('myfont.ttf'),
-            url('myfont.woff') format('woff'),/* FF3.6 */
-            url('myfont.ttf') format('truetype'); 
-            /* FF3.5+,Saf3+,Chrome,Opera10+ */   
-          }
-      在页面上显示服务器端的字体
-        使用@font-face属性来使用服务器端字体
-        @font-face{ 
-          font-family:XX;
-          src:url(XXX.otf) format("opentype");
-        }     
-        使用XX来定义一个服务器端的字体
-        fromat声明字体文件的格式,可以省略文件格式的声明,单独使用src属性值. 字体格式  字体属性 otf opentype ttf
-          truetype eot embedded-opentype (只有IE支持) e.g. @font-face{ font-
-          family:webFont; src:url(XXX.otf)format("opentype");     }     h1{ font-
-          family:webFont;     }
-    
-      显示客户端本地的字体
-        将font-family设置为本地的字体名,然后将src属性设置为local("字体")
-          e.g. @font-face{
-                font-family:Arial;
-                src:local("Arial");
-              }
-    background 背景「简写」
-      PS：通常建议使用简写方式,而非使用单个属性,
-        因为该属性在较老的浏览器中兼容性更好,且键入的字母更少
-      Exp:background:背景颜色 url() 重复 位置
-      e.g.  background:green url(图片地址) no-repeat 20px center;
-      background-color      背景颜色
-        PS：为元素设置一种纯色
-          颜色会填充元素的内容、内边距和边框区域,扩展到元素边框的外边界,但不包括外边距
-          若边框有透明部分,如虚线边框或透明色,会透过这些透明部分显示出背景色
-        属性值:
-          transparent 默认,背景颜色为透明。
-          color_name  规定颜色值为颜色名称的背景颜色(比如 red)。
-          hex_number  规定颜色值为十六进制值的背景颜色(比如 #ff0000)。
-          rgb_number  规定颜色值为 rgb 代码的背景颜色(比如 rgb(255,0,0))。
-          inherit     规定应该从父元素继承 background-color 属性的设置。
-      background-image      背景图片
-        PS：背景图片的显示覆盖在背景颜色上
-        background-image:url(图片地址);
-          url('URL')  指向图像的路径
-          none    默认值,不显示背景图像
-          inherit 规定应该从父元素继承 background-image 属性的设置。
-        一个元素中可设置多个背景图片
-          background-image:url(url),(url)...; 位置顺序依次是上右下左
-      background-repeat     背景图片重复
-        repeat     默认,背景图像将在垂直方向和水平方向重复
-        repeat-x   背景图像将在水平方向重复
-        repeat-y   背景图像将在垂直方向重复
-        no-repeat  背景图像将仅显示一次
-        inherit    规定应该从父元素继承 background-repeat 属性的设置
-      background-position   背景位置
-        PS：若仅规定了一个值,另一个值默认为50%,可以混合使用 % 和 position 值,
-          但最好不要混用固定值和百分比(实质关键字也是百分比),可能导致错误.
-        Exp: background-position:X轴 Y轴; 设置背景图像的起始位置
-          使用固定值,表示背景的左上角相对于元素边框外侧左上角的坐标;
-          使用百分比或position关键字,表示相对于背景左上角百分比(参考背景自身)的坐标点,
-            相对于元素边框外侧左上角的百分比(相对于元素)的坐标.
-        position  关键字:top、right、bottom、left和center
-        %         左上角是 0% 0%。右下角是 100% 100%
-        length    尺寸值
-      background-size       背景图像尺寸
-        CSS3属性,支持IE9+
-        auto    默认值,保持图片的原始宽、高
-        length  设置背景图像的高度和宽度。
-          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
-        %       以父元素的百分比来设置背景图像的宽度和高度。
-          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
-          设置 background-size:100% 100%; 就可以图片自适应宽高了.
-        cover   把背景图像扩展至足够大,以使背景图像完全覆盖背景区域。
-          背景图像的某些部分也许无法显示在背景定位区域中。
-          图片保持宽高比缩放,长宽都铺满为止(可能会有溢出)
-        contain 把图像图像扩展至最大尺寸,以使其宽度和高度完全适应内容区域。
-          图片保持宽高比缩放,长宽有一个铺满即可(可能会有漏白)
-      background-clip       指定背景的显示范围
-        border-box   默认值,背景在border区域内进行填充,超出部分将被裁剪掉;
-        padding-box  背景在padding区域内进行填充,超过padding区域的背景将被裁剪掉;
-        content-box  背景在content区域内进行填充,超过content区域的背景将被裁剪掉;
-      background-origin     指定背景图像时的填充起点
-        border-box  起始位置从border的外边缘开始显示背景图片;
-        padding-box 默认值,背景图像相对于内边距框来定位
-        content-box 背景图像相对于内容框来定位
-      background-break      指定行内元素的背景图像进行平铺时的循环方式.
-        continues:
-        bounding-box:
-        each-box:
-      background-attachment 规定背景图像是否固定或者随着页面的其余部分滚动
-        scroll ,默认值
-        fixed
-        inherit
-    filter 滤镜
-      PS：-webkit-filter:
-      grayscale 灰度
-      sepia 复古色
-      saturate 饱和度
-      hue-rotate 色相旋转
-      invert  反色
-      opacity 透明度
-      brightness 亮度
-      contrast 对比度
-      blur 模糊
-      drop-shadow 阴影
-      e.g.
-    transform  变换处理「IE9+ CSS3+」 
-      PS：IE9及以上支持2D变换,IE10及以上支持3D变换;只对block元素生效;
-      transform:translate(len1[,len2]); 2D平移
-        len1  距离,对应x轴,需带单位'px'
-        len2  距离,对应y轴,需带单位'px',默认为0
-        e.g.：
-          <div class=""> 123123 </div>
-          div{
-            width: 50px;
-            height: 50px;
-            background-color: #b9e4e7;
-            transform:translate(5px,30px);
-            transition:all 1s ease 0s;
-          }
-          div:hover{
-            transform:translate(30px);
-            // 单价与
-            // transform:translate(30px,0);
-          }
-      transform:rotate(NUMdeg);         2D旋转
-        顺时针旋转,deg是css3中的角度单位
-      transform:rotate3d(x,y,z,NUMdeg); 3D旋转
-        PS：运动量由指定的角度定义,如果为正,运动将为顺时针,如果为负,则为逆时针;
-          在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
-          并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
-          如果这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
-          非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
-        x    num,表示旋转轴X坐标方向的矢量
-        y    num,表示旋转轴Y坐标方向的矢量
-        z    num类型,表示旋转轴Z坐标方向的矢量
-        NUM  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
-        e.g.：transform: rotate3d(1,0,0,60deg);
-      transform:scale(num1[,num2]);     2D缩放 
-        num1   缩放的倍数,不可为负,对应x轴
-        num2   可选,默认等于num1,缩放的倍数,不可为负,对应y轴
-      transform:scalex(num);            仅x轴缩放
-      transform:scaley(num);            仅y轴缩放
-      transform:skew(NUM1deg,NUM2deg);  变形
-        NUM1deg  对应x轴
-        NUM2deg  可选,对应y轴,默认为0.即只在水平方向上倾斜
-      同时使用多个变形时,只用声明一个'transform',多个变形方法间使用空格连接 
-        transform:方法1 方法2...;
-      transform-origin:x [y];      定义变换原点
-        PS：搭配属性,用于定义运动点;默认为盒子的中心为运动点 
-        x   代表x方向的值
-        y   代表y方向的值;可选,只有一个参数时只在水平方向上移动 
-        x、y可能的值为:top、right、bottom、left、center(默认值) 
-    transition 指定变化的过渡效果「IE10+ CSS3+」 
-      PS：使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始;
-        并非所有的CSS属性都支持transition[如 ?];
-      transition:[property] duration [speed] [delay]; 简写方式
-        PS：同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s;
-        property   可选,默认为所有属性,指定变化的属性 
-          规定应用过渡效果的css属性的名称
-          all       默认,值所有属性都将获得过渡效果
-          none      没有属性会获得过渡效果
-          p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
-        duration   过渡持续时间[需带单位s秒或ms毫秒]
-        speed      可选,默认为'ease',过渡的速度变化 
-          ease        逐渐变慢
-          linear      匀速
-          ease-in     加速
-          ease-out    减速
-          ease-in-out 加速后减速
-          cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
-        delay      可选,默认为 0,开始执行的延迟时间[需带单位s秒或ms毫秒]
-      ◆单独指定:
-      transition-property:         指定参与过渡的属性
-      transition-duration:         过渡持续时间
-      transition-timing-function:  速度变化
-      transition-delay:            延迟时间
-      e.g. :
-        <div></div>
-        div {
-          width:100px; height:100px; background:blue;
-          transition:width 2s;
-          // -webkit-transition:width 2s; /* Safari and Chrome */
-          // -moz-transition:width 2s;    /* Firefox 4 */
-          // -o-transition:width 2s;      /* Opera */
-        }
-        div:hover { width:300px; }
-    animations 自定义关键帧动画「IE10+ CSS3+」 
-      PS：通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果
-      animation:name duration speed delay counts direction; 简写方式
-        name       关键帧名称
-        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画]
-        speed      动画速度变化的曲线
-        delay      动画开始前的延迟
-        counts     动画执行的次数
-        direction  是否轮流反向播放动画
-      ◆分别定义
-      animation-name:str;  关键帧名称
-        str 关键帧名称
-          keyframename 自定义的关键帧名称
-          none 无动画效果(可用于覆盖来自级联的动画)
-      animation-duration   动画持续时间,默认为0无动画效果[需带单位为s秒或ms毫秒]
-      animation-timing-function 动画的速度曲线 
-        ease 默认,平滑,等于 cubic-bezier(0.25,0.1,0.25,1.0)
-        linear    匀速,等于 cubic-bezier(0.0,0.0,1.0,1.0)
-        ease-in   加速,等于 cubic-bezier(0.42,0,1.0,1.0)
-        ease-out  减速,等于 cubic-bezier(0,0,0.58,1.0)
-        ease-in-out 慢快慢,cubic-bezier(0.42,0,0.58,1.0)
-        cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 (取值为0-1)
-      animation-delay      动画开始前的延迟,默认为0
-      animation-iteration-count 动画执行的次数
-        num      自定义的次数
-        infinite 无限次
-      animation-direction  是否轮流反向播放动画
-        normal      默认,首次正序运行,每周期结束从头到尾运行
-        reverse     首次反向运行,每周期结束动画由尾到头运行
-        alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
-          比如 ease-in 反向时成为ease-out
-        alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
-      animation-fill-mode  指定动画执行之前和之后如何给动画目标应用样式
-        none      默认值,回到最初状态
-        backwards 采用相应第一帧的样式
-        forwards  目标保持动画最后一帧的样式
-          最后一帧是哪个取决于animation-direction和 animation-iteration-count:
-        both      根据animation-direction（见后）轮流应用forwards和backwards规则
-      animation-play-state 定义动画暂停或播放状态 
-        通过该属性可以灵活的控制动画的播放状态
-        running  播放,由暂停到播放时动画会接着暂停的状态开始运行
-        paused   暂停,暂停时动画会保持暂停时的状态
-      @keyframes name{percent{styleCodes}}   创建关键帧
-        PS：以百分比来规定改变发生的时间;关键词 "from" 和 "to",等价于 0% 和 100%
-          0% 是动画的开始时间,100% 动画的结束时间;
-          为了获得最佳的浏览器支持,应该始终定义 0% 和 100% .
-          @-webkit-keyframes 兼容写法
-        e.g.：
-          @keyframes mymove {
-            from {top:0px; background:red; width:100px;}
-            25%  {top:200px;}
-            50%  {top:100px;}
-            75%  {top:200px;}
-            100% {top:200px; background:yellow; width:300px;} }
-        可以把多个状态写在一起,使用逗号分割
-          @keyframes pound {
-            from,to { transform: none; }
-            50% { transform: scale(1.2); } 
-          }
-      e.g. :
-        <div></div>
-        div {
-          width:100px; height:100px; background:red; position:relative;
-          animation:mymove 5s infinite;
-          // -webkit-animation:mymove 5s ease-in-out infinite alternate;
-          /*Safari and Chrome*/ 
-        }
-        @keyframes mymove {
-          from {top:0px; background:red; width:100px;}
-          25%  {top:200px;}
-          50%  {top:100px;}
-          75%  {top:200px;}
-          100% {top:200px; background:yellow; width:300px;} 
-        }
-        // @-webkit-keyframes mymove {
-        //   /*Safari and Chrome*/
-        //   from {top:0px; background:red; width:100px;}
-        //   25%  {top:200px;}
-        //   50%  {top:100px;}
-        //   75%  {top:200px;}
-        //   100% {top:200px; background:yellow; width:300px;} 
-        // }
-    linear-gradient 线性渐变 
-      PS： 渐变实质上属性特征为图片而非颜色值,
-        故可设置background-image背景图片而不能设置背景色background-color
-      -webkit-linear-gradient( [angle],<color position>+ )
-        [angle]             可选,控制渐变的方向
-          关键字: top「默认,从上到下」、right、bottom、left
-            可组合使用,若 left top 即从左上角开始
-          角度值: 整数表示顺时针,负数表示逆时针;
-            如270deg「默认值,等同于top」
-        <color position>+   若干个位置及颜色,控制渐变的过程,如: red 20% 
-          position 可为像素值或百分比
-      e.g.：
-        .linearGradientTest { 
-          background: -webkit-linear-gradient( top,#fff,#000); 
-          /*从上到下,颜色由白到黑*/
-          background-image: -webkit-linear-gradient(180deg,#fff,gray 20%,#000);
-          /*180deg 则表示从右向左;从白色开始到20%处过渡到灰色,100%处过渡到黑色*/
-          background-image: -webkit-linear-gradient( #fff,gray 20%,#000 );
-          /*默认为270deg即top从上到下*/
-          background-image: -webkit-linear-gradient( #fff 30%,#000  60% );
-          /*等价: -webkit-linear-gradient( #fff,#fff 30%,#000  60% ,#000);*/
-        }
-      Remarks： 
-        在Chrome中
-          linear-gradient(to bottom,#feb26e,#e79248);          不用加前缀
-          --webkit-linear-gradient(bottom,#feb26e,#e79248); 需加前缀
-    radial-gradient 径向渐变 
-      -webkit-radial-gradient([origin],[shape],<color position>+)
-        PS：该方法需增加厂商前缀
-        [origin]           定义渐变的起始点和方向,默认为中心点
-          关键字: cernter,top,right,bottom,left;默认为 center center
-            当定义为 top 时,相当于 top center
-        [shape]            渐变的形状
-          circle  圆形
-          ellipse 椭圆形
-        <color position>+  渐变颜色及位置
-          position 可以为百分比或像素值
-            百分比值0%,或者长度值0,表示渐变中心点;
-            百分比值100%表示渐变射线与边缘形状的相交点位置;
-            其间的百分比值线性对应渐变射线上的点;
-      radial-gradient(<r1 r2 at x y>,<color position>+);
-        PS：Chrome可不加-webkit-前缀
-        <r1 r2 at x y>    定义渐变圆心及半径,r为半径,x、y为圆心坐标
-          可选关键字: 用于描述边缘轮廓的具体位置
-            closest-side   相切
-              圆形: 渐变的边缘形状与容器距离渐变中心点最近的一边相切
-              椭圆: 或者至少与距离渐变中心点最近的垂直和水平边相切
-            farthest-side   与closest-side相反
-              边缘形状与容器距离渐变中心点最远的一边相切（或最远的垂直和水平边）。
-            closest-corner  渐变的边缘形状与容器距离渐变中心点最近的一个角相交
-            farthest-corner 渐变的边缘形状与容器距离渐变中心点最远的一个角相交
-            contaner     刚好填充满整个容器
-          e.g.：
-            background-image: radial-gradient(
-              ellipse farthest-corner at 45px 45px ,
-              #00FFFF 0%,rgba(0,0,255,0) 50%,#0000FF 95%);
-            background-image: radial-gradient(
-              ellipse farthest-corner at 470px 47px ,
-              #FFFF80 20%,rgba(204,153,153,0.4) 30%,#E6E6FF 60%);
-            background-image: radial-gradient(
-              farthest-corner at 45px 45px ,
-              #FF0000 0%,#0000FF 100%);
-            background-image: radial-gradient(
-              16px at 60px 50% ,
-              #000000 0%,#000000 14px,
-              rgba(0,0,0,0.3) 18px,
-              rgba(0,0,0,0) 19px);
-        <color position>+ 若干个颜色值及位置
-        e.g.：
-          background-image:radial-gradient( 
-            150px 100px at 50% 50% ,
-            #c792b3 0%,#ac8671 30%,#d42cb3 50%,#7ac67a 100%
-            );
-    渐变重复 
-      有两种方式可以重复背景图片
-      background-repeat 
-      -webkit-repeating-radial-gradient 和 -webkit-repeating-linear-gradient 
-      e.g.：
-        background: -webkit-repeating-radial-gradient(
-          #ace,#ace 5px,#f96 5px,#f96 10px);  
-    color  颜色值
-      英文单词表示 
-        red green blue black white gray yellow pink gold orange 
-        transparent「透明」
-      rgb|rgba 
-        rgb(num%,num%,num%) 
-          num 范围 0-100,若小于0则为0,大于100则为100;
-          e.g.： rgb(100%,0,0)
-        rgb(num,num,num) 
-          num 范围 0-255,若小于0则为0,大于255则为255
-        rgba(num,num,num,opacity) 
-          opacity     可选,透明度值,范围0-1,默认为1,不透明;
-      #RedGreenBlue  十六进制颜色 
-        red、green、blue 分别表示两位16进制的数值「01-ff」,代表该颜色的浓度
-        缩写形式 
-          当设置的颜色是16进制的色彩值时,若每两位的值相同,可以缩写一半.
-          #000000 可缩写为 #000
-          #336699 可缩写为 #369
-      hsl 
-        如 hsla(136,64%,65%,0.82)
-          第四个数值为透明度,可选,默认为1,不透明
-      Web安全色: 在256色计算机系统上会避免抖动的颜色
-        RGB值20%和51(相应的十六进制值为33)的倍数,0%或0也是.
-    length 尺寸
-      单位
-        PS：px、em、％都是相对单位
-          除了值为零的情况下(0后面可以不加单位),所有非零的值后面都要加单位.
-        绝对长度单位
-          in 英寸
-          cm 厘米;mm 毫米
-          pt 点: 标准印刷度量单位
-        相对单位长度
-        px 像素 指的是显示器上的小点(css规范中假设90px=1英寸),
-          实际情况是浏览器会使用显示器的实际像素值有关,目前大多数设计者都倾向于使用像素px作为单位.
-        ex: 所用字体中小写x的高度
-          PS：使用不同的字体,其对应的ex大小可能不同
-        em: 元素给定的font-size值大小
-          PS：若font-size=10px,则1em=10px.
-            em 相对于当前对象内文本的字体尺寸,并不是一个固定的值
-            元素的字体大小会继承
-            一般浏览器默认font-size=16px
-            em 可以指定到小数点后三位.
-          e.g. 
-          p{font-size:12px;text-indent:2em;}
-          /*上面代码就是实现段落首行缩进24px,也就是缩进两个字体大小的距离.*/
-        rem: 根元素(html元素)的font-size值
-          rem(root em,根 em) 和em类似 (一般,1rem=16px)
-          e.g. :
-            html {font-size: 62.5%;}  /*10 ÷ 16 × 100% = 62.5%*/
-            body {font-size: 1.4rem;} /*1.4 × 10px = 14px */
-            h1 { font-size: 2.4rem;}  /*2.4 × 10px = 24px*/
-        vw: 相对于视窗的宽度width,视窗宽度为100vw
-        vh: 相对于视窗的高度height,视窗高度为100vh
-      calc(expression)  length数值运算 (CSS3新增)
-        PS：
-          适用于IE9+,移动端基本还不兼容
-        使用规则:
-          其中expression是一个表达式,用来计算长度的表达式,结果为length值
-          使用“+”、“-”、“*” 和 “/”四则运算；
-          表达式中有“+”和“-”时,其前后必须要有空格,如"widht: calc(12%+5em)"写法错误.
-          表达式中有“*”和“/”时,其前后可以没有空格,但建议留有空格。
-          可以使用百分比、px、em、rem等,混合使用各种单位进行计算；
-        e.g. 
-        width:calc(50% + 2em);
-        浏览器会自动计算width的值
-      zoom 比例缩放 (只有IE内核的浏览器支持)
-        zoom:normal(默认值,使用对象的实际尺寸)/百分数(缩放比例)
-        
-        尺寸单位
-      resize 是否可由用户调整元素的尺寸 (CSS3)
-        none       用户无法调整元素的尺寸。
-        both       用户可调整元素的高度和宽度。
-        horizontal 用户可调整元素的宽度。
-        vertical   用户可调整元素的高度。           
-  通用样式
-    outline 边线「简写属性」
-      PS：outline类似border,但border会影响盒模型,而outline不会
-      outline-style   边线样式
-        none    默认值
-        dooted dashed solid double groove ridge inset outset
-        inherit
-      outline-width   边线宽度
-        thin medium thick length
-        inherit
-      outline-color   边线颜色
-        color
-        invert   执行颜色反转,可使轮廓在不同的背景颜色中都是可见
-        inherit
-      outline-offset  边线偏移
-        length 轮廓与边框边缘的距离。
-      e.g. outline:solid 1px red;
-    opacity:0-1; 透明度「CSS3+」
-      指定元素的不透明度,值从0.0(完全透明)到1.0(完全不透明)
-      指定父元素的透明度后,其子元素的透明度不可改变 [?]
-    cursor 光标悬浮样式
-      PS：规定要显示的光标的类型、形状
-        该属性定义了鼠标指针放在一个元素边界范围内时所用的光标形状,
-        不过 CSS2.1 没有定义由哪个边界确定这个范围
-      属性值:
-        auto      默认值,浏览器设置的光标
-        default   默认光标(通常是一个箭头)
-        pointer   光标呈现为指示链接的指针(一只手)
-        url       需使用的自定义光标的 URL
-          PS：在列表的末端始终定义一种普通的光标,当自定义光标不起作用时备用
-          e.g.：
-          a{cursor: url(aa.png),pointer;}
-        crosshair 光标呈现为十字线
-        move      此光标指示某对象可被移动
-        e-resize  此光标指示矩形框的边缘可被向右(东)移动
-        ne-resize 此光标指示矩形框的边缘可被向上及向右移动(北/东)
-        nw-resize 此光标指示矩形框的边缘可被向上及向左移动(北/西)
-        n-resize  此光标指示矩形框的边缘可被向上(北)移动
-        se-resize 此光标指示矩形框的边缘可被向下及向右移动(南/东)
-        sw-resize 此光标指示矩形框的边缘可被向下及向左移动(南/西)
-        s-resize  此光标指示矩形框的边缘可被向下移动(南)
-        w-resize  此光标指示矩形框的边缘可被向左移动(西)
-        text      此光标指示文本
-        wait      此光标指示程序正忙(通常是一只表或沙漏)
-        help      此光标指示可用的帮助(通常是一个问号或一个气球)
-    visibility 元素可见性
-      visible 默认值,元素是可见的
-      hidden  使对象在网页上不可见,但会保留该元素在网页本该显示的空间.
-      collapse 当在表格元素中使用时,此值可删除一行或一列,但是它不会影响表格的布局。
-        被行或列占据的空间会留给其他内容使用。
-        若此值被用在其他的元素上,会呈现为 "hidden"。
-    display 元素类型
-      PS：html中的标签元素大体被分为三种不同的类型:块状元素、内联元素(又叫行内元素)和内联块元素.
-        每个元素都有一个默认的 display 值,这与元素的类型有关。
-        对于大多数元素它们的默认值通常是 block 或 inline 。
-        css中可通过设置元素的display属性来转换.
-      display: none;
-        隐藏对象且不保留其物理空间
-        位置不保留,但功能仍可用
-          如display:none;的音频仍可以获取后播放;
-          一些特殊元素的默认 display 值是它,例如 script 。
-      display: inline;
-        行内元素只能容纳文本或其他行内元素,它允许其他行内元素与其位于同一行
-        定义宽度和高度不起作用(宽度和高度随着内容的大小变化)
-        行内元素的margin属性只有margin-left和margin-right有用.
-        常见行内元素有a、span、br、i、em、strong、label、q、var、cite、code等.
-      display: block;
-        当未定义块元素的尺寸时,该元素的宽度默认为父元素的宽度,高度为子元素的高度.
-        可容纳行内元素和其他块元素,宽度和高度可设置.
-        常用的块元素有:div、p、h1-h6、ol、ul、dl、table、address、blockquote、form 等等
-      display: inline-block;
-        可并列行显示,且可以指定宽高
-        默认情况下使用inline-block类型时,并列显示的元素的垂直对齐方式是底部对齐,
-        可使用vertical-align属性进行控制.
-        常见的行内块元素:img、input、a
-      display: table;              作为块级表格来显示(类似 <table>)(CSS3新增)
-      display: table-cell;         元素会作为一个表格单元格显示(类似 <td> 和 <th>)(CSS3新增)
-      display: inline-table;       将table元素和其他行内元素在同同一行显示 (CSS2新增)
-      display: table-footer-group; 作为一个或多个行的分组来显示(类似 <tfoot>)
-      display: table-header-group; 作为一个或多个行的分组来显示(类似 <thead>)
-      display: table-row;          元素会作为一个表格行显示(类似 <tr>)
-      display: table-row-group;    作为一个或多个行的分组来显示(类似 <tbody>)
-      display: table-caption;      元素会作为一个表格标题显示(类似 <caption>)
-      display: table-column;       作为一个单元格列显示(类似 <col>)
-      display: table-column-group; 作为一个或多个列的分组来显示(类似 <colgroup>)
-      display: list-item;  元素作为列表显示 (会在元素的开头加上列表的标记)
-      display: inline-list-item;
-      display: run-in;  元素会根据上下文作为块级元素或内联元素显示
-      display: inherit; 规定应该从父元素继承 display 属性的值。
-    display:none 和 visibility:hidden 的区别
-      display:none 元素的宽度、高度等各种属性值都将丢失
-      visibility:hidden 元素仅仅在视觉上看不见,而其所占据的空间位置仍然存在,
-        即其仍有高度 宽度等属性值.
-    user-select     文本选择控制
-      兼容写法:
-        -webkit-user-select:   /* Chrome all / Safari all /opera15+*/  
-        -moz-user-select:      /* Firefox all */  
-        -ms-user-select:       /* IE 10+ */  
-        user-select: 
-      auto    默认值,用户可以选中元素中的内容
-      text    用户可以选择元素中的文本
-      element 文本可选,但仅限元素的边界内(只有IE和FF支持)
-      all     在编辑器内,若双击或上下文点击发生在子元素上,该值的最高级祖先元素将被选中
-      none    不可别选中
-  标签及其样式
-    list-style 列表标记样式 「简写」
-      list-style-type  列表标记
-        normal
-        disc    实心圆
-        none    无
-        circle  空心圆
-        square  实心方块
-        decimal 数字
-        circle  圆圈
-        decimal-leading-zero 以0开头的标记
-        lower/upper-roman    小/大写罗马数字
-        upper/lower-alpha    大/小写英文字母
-        upper/lower-latin    大/小写拉丁字母
-        lower-greek          小写希腊字母
-        ...
-      list-style-image 标记设置为图像 
-        url(图片地址)
-        none
-        inherit
-        e.g.：
-          ul li{list-style-image: url(aaa.png);}
-      list-style-position 标记位置
-        outset 默认值
-        inset
-        inherit
-      list-position 标记位置
-      e.g. 
-        list-style:circle inside url(XXX/XXX.png);
-        /*在图像加载错误时使用空心圆代替.*/
-    table 表格
-      table 表格
-        PS：
-          表格的display默认为table,独占一行
-          display:inline-table; 定义一个行内表格,可以和其他行内元素共处一行.
-        PS-Self:表格的行高度通过指定表格的高度和行的高度来设定.
-        text-align      水平对齐方式
-        border-collapse 定义表格决定其单元格边框样式
-          separate  默认值,分隔,表框会被分开,相邻的单元格都拥有独立的边框
-          collapse  合并,表格边框合并为一个单一的边框,使单元格之间没有边框间距.
-        border-spacing  单元格间距
-          border-spacing:length length;
-          规定相邻单元格之间的距离,仅用于边框分离模式下
-          第一个值表示水平间距,第二个值表示垂直间距,若只有一个值则表示水平和垂直.
-        caption-side    表格标题位置
-          top     默认值,表格标题定位在表格之上.
-          bottom
-          inherit
-        empty-cells     是否显示表格中无内容的单元格
-          常用于边框分离模式
-          show    默认值,在空单元格周围绘制边框
-          hide    不在空单元格周围绘制边框
-          inherit
-        table-layout    表格列宽度的指定方式
-          auto  默认值,列宽度由单元格的内容长度定.
-          fixed 列宽度通过指定表格的宽度和列宽度进行设定.
-      thead 表头
-        display:table-header-group; 
-      tbody 表体
-        display:table-row-group; 
-      tfoot 
-        display:table-footer-group; 
-      colgroup
-        display:table-column-group
-      col
-        display:table-column;
-      caption 表格标题
-        PS：其display:table-caption;
-        caption-side
-          top 默认值
-          bottom 
-      tr
-        display:table-row; 
-      td
-        PS：其display为table-cell;
-          table-layout 模式下,定义首行td的宽度才会生效,且该列宽度都如此.
-        vertical-align
-        text-align
-      th
-    a 链接
-      链接的四种状态:
-        a:link普通的未被访问的状态
-        a:visited用户已访问的状态
-        a:hover光标悬停在链接上的状态
-        a:active链接被点击的状态
-      属性
-    ul  无序列表
-      list-style 
-      -webkit-padding-start: 40px;  列表的默认缩进
-    ol  有序列表
-      list-style 
-    input 表单
-      padding 
-    textarea 文本域
-      resize: none;  禁止缩放
-  配件样式
-    ::-webkit-scrollbar       滚动条样式
-      .aoo ::-webkit-scrollbar {
-        color: #fff;
-        background-color: #8E8E8E;
-        width: 10px;
-        border-radius: 5px;
-      }
-    ::-webkit-scrollbar-thumb 滚动滑块样式
-      .con-box-wrap ::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        background: #fff;
-      }      
-    :-webkit-autofill     自动填充表单的背景
-      PS： chrome记住密码后,输入时,显示的提示的样式
-        input:-webkit-autofill,
-        textarea:-webkit-autofill,
-        select:-webkit-autofill {
-          background-color: rgb(250,255,189); 
-          background-image: none;
-          color: rgb(0,0,0);
-        }
-    -webkit-text-security 使用指定形状代替文字显示
-      circle 圆圈 
-      disc   圆形 
-      square 正方形
-      e.g.：
-        <input type="text"   name="" value="">
-        input{ -webkit-text-security:disc; text-security:disc; }
-        
-        <div class="" contenteditable="">123</div>
-        div{
-          -webkit-text-security:disc;
-          background-color: green;
-          height: 22px;
-        }
-  特殊样式
-    -webkit-tap-highlight-color  点击链接或js定义的点击元素时,出现半透明灰色背景;
-      PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 ,「CSS3+」
-        可设置-webkit-tap-highlight-color的颜色;
-      禁用高亮: 设置颜色的alpha值为0即可
-      e.g.：
-        设置高亮色为50%透明的红色:
-        -webkit-tap-highlight-color: rgba(255,0,0,0.5);
-    -webkit-touch-callout        长按弹出菜单控制  「iOS」
-      -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-  样式说明 
-    样式的特点
-      ⒈继承
-        网页中子元素将继承父元素的某些样式.如控制段落p中的文字大小,可以直接给body标记加样式.
-      ⒉层叠(覆盖)
-        网页中子元素定义了与父元素同类型的样式,则子元素的样式将覆盖掉父元素的样式
-        当html标签内引用了多个同类型的样式时,后面定义的样式会覆盖前面定义的样式(与引用的先后顺序无关).
-    CSS样式优先级
-      优先级就近原则,同权重情况下样式定义最近者为准;
-      载入样式以最后载入的定位为准;
-      !important >内联 >  id > class > tag
-    元素覆盖的优先级
-      背景
-        默认的后面的元素覆盖前面的元素,
-        子元素覆盖父元素,
-Selector 选择器 
+Selector,选择器 
   PS： css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
     selector{
       key1:val1;
@@ -1674,6 +748,936 @@ Selector 选择器
       @media screen and (max-width:800px) {div{width:100%}}
       @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
       @media screen and (min-width:1201px) {div{width:33.33%}}
+Declaration,样式声明  
+  专题样式 
+    text   文本样式 
+      PS：valign只有在表格标签中使用,字体无text-valign属性
+      color           字体颜色
+        当边框颜色未设置时,该属性的颜色值会应用到边框上 
+      letter-spacing  字母或文字间距
+        PS： 该样式在使用英文单词时,是设置字母与字母之间的距离
+        normal   默认值,等价于0
+        <length> 正值增加间距,负值减少间距
+        inherit
+      word-spacing    字间距 
+        PS：单词间的间距使用word-spacing,当汉字之间存在空格时,该属性也能起作用.
+        normal   默认值,等价于0
+        length   正值增加间距,负值减少间距
+        inherit
+      word-wrap       文本换行「CSS3」
+        PS：默认情况下不会在单词内部换行,即单词长度大于一行宽,会超出到容器外;
+          如连续的一连串数字会出现不能自动换行的情况,而中文不存在,
+          原因是因为英文文本或数字间没有加空格,浏览器会认为这是一个特别长的单词;
+        normal     默认值,只在半角空格或连字符的地方换行
+        break-word 「当一个单词长度大于行宽时才会」在单词或url地址内部进行换行
+      word-break      文本换行「CSS3」
+        normal    默认
+        keep-all  只能在半角空格或连字符如逗号处换行「否则在一行显示」
+        break-all 尽可能的在单词内换行
+      word-wrap:break-word 和 word-break:break-all 的区别
+        总的来说,后者更彻底
+        word-wrap:break-word  一般处理情况为在单词间换行
+          当出现一行内放不下一个单词时才会在单词内换行.
+        word-break:break-all  默认为单词内部换行
+      white-space  如何处理元素内的空白/元素的换行处理 
+        normal   默认,空白会被浏览器忽略
+          换行符、多个连续的空格会转换为一个空格
+        nowrap   文本不会换行,文本会在在同一行上继续,直到遇到 <br> 标签为止。
+        pre      空白会被浏览器保留,其行为方式类似 HTML 中的 <pre> 标签。
+        pre-wrap 保留空白符序列,但是正常地进行换行
+        pre-line 合并空白符序列,但是保留换行符
+        inherit  规定应该从父元素继承 white-space 属性的值。            
+      line-height     行高 
+        PS：设置行间的距离(行高)
+          行高是指上下文本行基线间的垂直距离.
+          行距是指一行底线到下一行顶线的垂直距离.行距也可以这么算：(行高-字体size)/2.
+          内容区：底线和顶线包裹的区域
+          具有继承性
+        normal      默认,设置合理的行间距。
+        number      设置数字,此数字会与当前的字体尺寸相乘来设置行间距。相当于倍数
+        length      设置固定的行间距。
+        %           基于当前字体尺寸的百分比行间距。
+        inherit     规定从父元素继承line-height属性的值。
+      text-indent     缩进 
+        PS： 
+          允许使用负值。若使用负值,那么首行会被缩进到左边,产生一种“悬挂缩进”的效果。
+          无法将该属性应用到行内元素.
+        pixels  定义固定的缩进,默认值为0
+        em      文字大小的倍数
+        %       父元素 width 的百分比
+        inherit 规定应该从父元素继承text-indent属性的值。
+      text-decoration 文本修饰 
+        PS：没有继承属性
+        none         标准文本,默认值
+        underline    下划线,链接文本的默认样式
+        line-through 贯穿线
+        overline     上划线
+        blink        定义闪烁的文本 (可能存在兼容性问题)
+        e.g. 
+        同时定义多个文本修饰,使用空格隔开
+          text-decoration:underline overline
+      text-transform  文本大小写转换 
+        uppercase   
+        lowercase   
+        capitalize  单词首字母大写
+        none
+      text-align      定义父元素指定其包含的行内元素的水平对齐方式 
+        行内元素、文本、图片等设置如居中的样式.具有继承属性.
+        left
+        right
+        center
+        justify 两端对齐
+      text-transform  文本大小写 
+        capitalize 单词首字母大写
+        uppercase  字母大写
+        lowercase  小写字母
+        inherit    继承
+      text-shadow     文字阴影 
+        PS：css2.1中被删除,在css3.0中又恢复了使用.
+        text-shadow:length1 length2 length3 color;
+          length1 横向方向距离
+          length2 纵向方向距离
+          length3 可选,阴影模糊半径
+          color   阴影的颜色,默认使用当前字体颜色
+        指定多个阴影
+          text-shadow:length1 length2 length3 color,length4 length5 length6 color,...;
+      text-overflow   文本溢出显示方式 
+        PS：该属性只在当盒子中的文本在水平方向上超出时有效.
+          若将white-space的属性值设为nowrap,使得盒子的右端不能换行显示,达到水平方向溢出的效果
+        ellipsis  单行文本溢出显示为省略号
+          单行溢出显示
+            width:xxx [也可以使用 max-width 代替 width]
+            overflow:hidden
+            white-space: nowrap
+            /*前三个为前提条件*/
+            text-overflow:ellipsis
+          多行溢出显示
+            不支持多行文本溢出显示省略号
+            可使用:after 来模拟
+            e.g.：
+            <div class="wrap">
+              很多年以后,奥雷连诺上校站在行刑队面前,准会想起父亲带他去参观冰块的那个遥远的下午。当时,马孔多是个二十户人家的村庄,一座座土房都盖在河岸上,河水清澈,沿着遍布石头的河床流去,河里的石头光滑、洁白,活像史前的巨蛋。----加西亚·马尔克斯
+              knowing something of everything and everything of something.
+            </div>
+            .wrap{
+              width: 300px;
+              height: 54px;
+              text-overflow : ellipsis;
+              overflow: hidden;
+              position: relative;
+            }
+            .wrap:after{
+              content: '...';
+              position: absolute;
+              bottom: 2px;
+              right: 0;
+              background-color: #fff;
+              width: 30px;
+              height: 20px;
+            }
+      unicode-bidi    设置文本方向 
+        normal
+        embed
+        bidi-override
+      direction       文本方向
+        PS：对于行内元素,只有当unicode-bidi属性设置为embed或bidi-override时才会应用该属性
+        ltr     默认,文本方向从左到右
+        rtl     文本方向从右到左,从右向左的文本默认为rtl
+        inherit 继承
+    font   字体样式「简写」 
+      font : family size[/line-height] [weight] [style] [variant] [stretch];
+        font-size 和 font-family 属性必选 ,其他属性可选   
+        缩写时没有固定的顺序   
+      font-family:'name1'[,'name2',..];     字体风格 
+        PS：若客户端无设置的字体则显示浏览器默认字体,
+          当使用很特殊的字体时,可采用图片的形式决解,
+          当前一个字体不支持时直接使用下一个,
+          绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
+          因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
+        name  表示字体名称,定义多个字体,用逗号隔开 
+        e.g.：  
+          font-family:"微软雅黑";
+          font-family:"Microsoft Yahei"; // 兼容性更好
+          font-family: "微软雅黑","楷体";
+        常用字体及英文表示 
+          宋体         SimSun 
+          黑体         SimHei 
+          微软雅黑     Microsoft YaHei 
+          微软正黑体   Microsoft JhengHei 
+          新宋体   NSimSun 
+          新细明体  PMingLiU
+          细明体   MingLiU 
+          标楷体   DFKai-SB 
+          仿宋  FangSong 
+          楷体  KaiTi 
+          仿宋_GB2312 FangSong_GB2312 
+          楷体_GB2312   KaiTi_GB2312 
+        Mac OS的一些：   
+          华文细黑：STHeiti Light [STXihei]   
+          华文黑体：STHeiti   
+          华文楷体：STKaiti   
+          华文宋体：STSong   
+          华文仿宋：STFangsong
+        装Office会生出来的一些：
+          隶书: LiSu   
+          幼圆: YouYuan   
+          华文细黑: STXihei   
+          华文楷体: STKaiti   
+          华文宋体: STSong
+          华文中宋: STZhongsong   
+          华文仿宋: STFangsong   
+          方正舒体: FZShuTi   
+          方正姚体: FZYaoti
+          华文彩云: STCaiyun   
+          华文琥珀: STHupo   
+          华文隶书: STLiti   
+          华文行楷: STXingkai   
+          华文新魏: STXinwei   
+      font-size       字号 
+        PS：该属性设置元素的字体大小.实际上它设置的是字体中字符框的高度;
+          实际的字符字形可能比这些框高或矮（通常会矮）。     
+        %      参考对象为其父元素的 font-size     
+        length 把 font- size 设置为一个固定的值。
+        larger 比父元素更大     
+        smaller     比父元素更小
+        把字体的尺寸设置为不同的尺寸,从 xx-small 到 xx-large。 
+          xx-small     x-small small medium
+          默认值 large x-large xx-large     
+          inherit     继承父元素的大小 (子元素会默认继承)   
+      font-size-adjust 规定元素的aspect值「IE不支持」 
+        PS：字体的小写字母 "x" 的高度与 "font-size" 高度之间的比率被称为一个字体的 aspect 值。
+          当字体拥有高的 aspect 值时,那么当此字体被设置为很小的尺寸时会更易阅读。
+          举例：Verdana 的 aspect 值是 0.58
+          （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
+          Times New Roman 的 aspect 值是 0.46。
+          这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
+        none   默认。如果此字体不可用,则不保持此字体的 x-height。
+        number 定义字体的 aspect 值比率。
+        e.g.：
+          如果 14px 的 Verdana（aspect 值是 0.58）不可用,
+          但是某个可用的字体的 aspect 值是 0.46,
+          那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
+      font-weight     字重     
+        number    100-900的整百数(其中400=normal,700=bold)
+        normal     
+        lighter     
+        bold     加粗     
+        bolder     
+      font-style      字体风格 
+        normal  默认     
+        italic  斜体,对于没有斜体的特殊字体,将应用oblique.     
+        oblique 倾斜,是正常竖直文本的一个倾斜版本.
+          通常,italic和oblique文本看上去完全一样   
+      font-variant    字体变形 
+        normal     
+        small-caps  小型大写文字     
+        inherit    
+      font-stretch    字体水平拉伸[CSS2.1删除]     
+      e.g.：  
+        p{   
+          font-style:italic;   
+          font-variant:small-caps;   
+          font-weight:bold;   
+          font-size:12px;   
+          line-height:1.5em;   
+          font- family:"宋体",sans-serif; 
+          } 
+        可简写为 
+        p{   
+          font:italic small-caps bold 12px/1.5em "宋体",sans-serif;  
+          /* 在缩写font-size和line-height中间加/ */ 
+        }
+      使用系统字体
+        PS：若希望一个Web页面结合用户操作系统的设置,font的系统字体值会很方便,
+          这些值用于取得操作系统中元素的字体大小、字体系列、字体系列、
+          字体加粗、字体风格等等,并将其应用到一个元素.    
+        caption 用于有标题的控件,如按钮     
+        icon 用于对图标加标签     
+        menu  用于菜单,即下拉菜单和菜单列表     
+        message-box 用于对话框     
+        small-caption 用于对小控件加标签     
+        status-bar 用于窗口状态条     
+        e.g.：
+          .aoo{font:caption;} 
+      自定义服务器端字体   
+        PS：@font-face 已经从CSS2.1中去除   
+        @font-face{
+          font-family:(自定义的)"字体名称" 
+          src:url(字体文件地址)  
+          src:url(字体文件地址)     
+          ...
+        }   
+        e.g.：   
+          @font-face {     
+            font-family: 'MyFont';
+            src: url('myfont.eot'); /* IE6+ */     
+            src: local('myfont.ttf'),
+            url('myfont.woff') format('woff'),/* FF3.6 */
+            url('myfont.ttf') format('truetype'); 
+            /* FF3.5+,Saf3+,Chrome,Opera10+ */   
+          }
+      在页面上显示服务器端的字体
+        使用@font-face属性来使用服务器端字体
+        @font-face{ 
+          font-family:XX;
+          src:url(XXX.otf) format("opentype");
+        }     
+        使用XX来定义一个服务器端的字体
+        fromat声明字体文件的格式,可以省略文件格式的声明,单独使用src属性值. 字体格式  字体属性 otf opentype ttf
+          truetype eot embedded-opentype (只有IE支持) e.g. @font-face{ font-
+          family:webFont; src:url(XXX.otf)format("opentype");     }     h1{ font-
+          family:webFont;     }
+    
+      显示客户端本地的字体
+        将font-family设置为本地的字体名,然后将src属性设置为local("字体")
+          e.g. @font-face{
+                font-family:Arial;
+                src:local("Arial");
+              }
+    background 背景「简写」
+      PS：通常建议使用简写方式,而非使用单个属性,
+        因为该属性在较老的浏览器中兼容性更好,且键入的字母更少
+      Exp:background:背景颜色 url() 重复 位置
+      e.g.  background:green url(图片地址) no-repeat 20px center;
+      background-color      背景颜色
+        PS：为元素设置一种纯色
+          颜色会填充元素的内容、内边距和边框区域,扩展到元素边框的外边界,但不包括外边距
+          若边框有透明部分,如虚线边框或透明色,会透过这些透明部分显示出背景色
+        属性值:
+          transparent 默认,背景颜色为透明。
+          color_name  规定颜色值为颜色名称的背景颜色(比如 red)。
+          hex_number  规定颜色值为十六进制值的背景颜色(比如 #ff0000)。
+          rgb_number  规定颜色值为 rgb 代码的背景颜色(比如 rgb(255,0,0))。
+          inherit     规定应该从父元素继承 background-color 属性的设置。
+      background-image      背景图片
+        PS：背景图片的显示覆盖在背景颜色上
+        background-image:url(图片地址);
+          url('URL')  指向图像的路径
+          none    默认值,不显示背景图像
+          inherit 规定应该从父元素继承 background-image 属性的设置。
+        一个元素中可设置多个背景图片
+          background-image:url(url),(url)...; 位置顺序依次是上右下左
+      background-repeat     背景图片重复
+        repeat     默认,背景图像将在垂直方向和水平方向重复
+        repeat-x   背景图像将在水平方向重复
+        repeat-y   背景图像将在垂直方向重复
+        no-repeat  背景图像将仅显示一次
+        inherit    规定应该从父元素继承 background-repeat 属性的设置
+      background-position   背景位置
+        PS：若仅规定了一个值,另一个值默认为50%,可以混合使用 % 和 position 值,
+          但最好不要混用固定值和百分比(实质关键字也是百分比),可能导致错误.
+        Exp: background-position:X轴 Y轴; 设置背景图像的起始位置
+          使用固定值,表示背景的左上角相对于元素边框外侧左上角的坐标;
+          使用百分比或position关键字,表示相对于背景左上角百分比(参考背景自身)的坐标点,
+            相对于元素边框外侧左上角的百分比(相对于元素)的坐标.
+        position  关键字:top、right、bottom、left和center
+        %         左上角是 0% 0%。右下角是 100% 100%
+        length    尺寸值
+      background-size       背景图像尺寸
+        CSS3属性,支持IE9+
+        auto    默认值,保持图片的原始宽、高
+        length  设置背景图像的高度和宽度。
+          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
+        %       以父元素的百分比来设置背景图像的宽度和高度。
+          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
+          设置 background-size:100% 100%; 就可以图片自适应宽高了.
+        cover   把背景图像扩展至足够大,以使背景图像完全覆盖背景区域。
+          背景图像的某些部分也许无法显示在背景定位区域中。
+          图片保持宽高比缩放,长宽都铺满为止(可能会有溢出)
+        contain 把图像图像扩展至最大尺寸,以使其宽度和高度完全适应内容区域。
+          图片保持宽高比缩放,长宽有一个铺满即可(可能会有漏白)
+      background-clip       指定背景的显示范围
+        border-box   默认值,背景在border区域内进行填充,超出部分将被裁剪掉;
+        padding-box  背景在padding区域内进行填充,超过padding区域的背景将被裁剪掉;
+        content-box  背景在content区域内进行填充,超过content区域的背景将被裁剪掉;
+      background-origin     指定背景图像时的填充起点
+        border-box  起始位置从border的外边缘开始显示背景图片;
+        padding-box 默认值,背景图像相对于内边距框来定位
+        content-box 背景图像相对于内容框来定位
+      background-break      指定行内元素的背景图像进行平铺时的循环方式.
+        continues:
+        bounding-box:
+        each-box:
+      background-attachment 规定背景图像是否固定或者随着页面的其余部分滚动
+        scroll ,默认值
+        fixed
+        inherit
+    filter 滤镜
+      PS：-webkit-filter:
+      grayscale 灰度
+      sepia 复古色
+      saturate 饱和度
+      hue-rotate 色相旋转
+      invert  反色
+      opacity 透明度
+      brightness 亮度
+      contrast 对比度
+      blur 模糊
+      drop-shadow 阴影
+      e.g.
+    transform  变换处理「IE9+ CSS3+」 
+      PS：IE9及以上支持2D变换,IE10及以上支持3D变换;只对block元素生效;
+      transform:translate(len1[,len2]); 2D平移
+        len1  距离,对应x轴,需带单位'px'
+        len2  距离,对应y轴,需带单位'px',默认为0
+        e.g.：
+          <div class=""> 123123 </div>
+          div{
+            width: 50px;
+            height: 50px;
+            background-color: #b9e4e7;
+            transform:translate(5px,30px);
+            transition:all 1s ease 0s;
+          }
+          div:hover{
+            transform:translate(30px);
+            // 单价与
+            // transform:translate(30px,0);
+          }
+      transform:rotate(NUMdeg);         2D旋转
+        顺时针旋转,deg是css3中的角度单位
+      transform:rotate3d(x,y,z,NUMdeg); 3D旋转
+        PS：运动量由指定的角度定义,如果为正,运动将为顺时针,如果为负,则为逆时针;
+          在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
+          并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
+          如果这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
+          非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
+        x    num,表示旋转轴X坐标方向的矢量
+        y    num,表示旋转轴Y坐标方向的矢量
+        z    num类型,表示旋转轴Z坐标方向的矢量
+        NUM  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
+        e.g.：transform: rotate3d(1,0,0,60deg);
+      transform:scale(num1[,num2]);     2D缩放 
+        num1   缩放的倍数,不可为负,对应x轴
+        num2   可选,默认等于num1,缩放的倍数,不可为负,对应y轴
+      transform:scalex(num);            仅x轴缩放
+      transform:scaley(num);            仅y轴缩放
+      transform:skew(NUM1deg,NUM2deg);  变形
+        NUM1deg  对应x轴
+        NUM2deg  可选,对应y轴,默认为0.即只在水平方向上倾斜
+      同时使用多个变形时,只用声明一个'transform',多个变形方法间使用空格连接 
+        transform:方法1 方法2...;
+      transform-origin:x [y];      定义变换原点
+        PS：搭配属性,用于定义运动点;默认为盒子的中心为运动点 
+        x   代表x方向的值
+        y   代表y方向的值;可选,只有一个参数时只在水平方向上移动 
+        x、y可能的值为:top、right、bottom、left、center(默认值) 
+    transition 指定变化的过渡效果「IE10+ CSS3+」 
+      PS：使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始;
+        并非所有的CSS属性都支持transition[如 ?];
+      transition:[property] duration [speed] [delay]; 简写方式
+        PS：同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s;
+        property   可选,默认为所有属性,指定变化的属性 
+          规定应用过渡效果的css属性的名称
+          all       默认,值所有属性都将获得过渡效果
+          none      没有属性会获得过渡效果
+          p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
+        duration   过渡持续时间[需带单位s秒或ms毫秒]
+        speed      可选,默认为'ease',过渡的速度变化 
+          ease        逐渐变慢
+          linear      匀速
+          ease-in     加速
+          ease-out    减速
+          ease-in-out 加速后减速
+          cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
+        delay      可选,默认为 0,开始执行的延迟时间[需带单位s秒或ms毫秒]
+      ◆单独指定:
+      transition-property:         指定参与过渡的属性
+      transition-duration:         过渡持续时间
+      transition-timing-function:  速度变化
+      transition-delay:            延迟时间
+      e.g. :
+        <div></div>
+        div {
+          width:100px; height:100px; background:blue;
+          transition:width 2s;
+          // -webkit-transition:width 2s; /* Safari and Chrome */
+          // -moz-transition:width 2s;    /* Firefox 4 */
+          // -o-transition:width 2s;      /* Opera */
+        }
+        div:hover { width:300px; }
+    animations 自定义关键帧动画「IE10+ CSS3+」 
+      PS：通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果
+      animation:name duration speed delay counts direction; 简写方式
+        name       关键帧名称
+        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画]
+        speed      动画速度变化的曲线
+        delay      动画开始前的延迟
+        counts     动画执行的次数
+        direction  是否轮流反向播放动画
+      ◆分别定义
+      animation-name:str;  关键帧名称
+        str 关键帧名称
+          keyframename 自定义的关键帧名称
+          none 无动画效果(可用于覆盖来自级联的动画)
+      animation-duration   动画持续时间,默认为0无动画效果[需带单位为s秒或ms毫秒]
+      animation-timing-function 动画的速度曲线 
+        ease 默认,平滑,等于 cubic-bezier(0.25,0.1,0.25,1.0)
+        linear    匀速,等于 cubic-bezier(0.0,0.0,1.0,1.0)
+        ease-in   加速,等于 cubic-bezier(0.42,0,1.0,1.0)
+        ease-out  减速,等于 cubic-bezier(0,0,0.58,1.0)
+        ease-in-out 慢快慢,cubic-bezier(0.42,0,0.58,1.0)
+        cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 (取值为0-1)
+      animation-delay      动画开始前的延迟,默认为0
+      animation-iteration-count 动画执行的次数
+        num      自定义的次数
+        infinite 无限次
+      animation-direction  是否轮流反向播放动画
+        normal      默认,首次正序运行,每周期结束从头到尾运行
+        reverse     首次反向运行,每周期结束动画由尾到头运行
+        alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
+          比如 ease-in 反向时成为ease-out
+        alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
+      animation-fill-mode  指定动画执行之前和之后如何给动画目标应用样式
+        none      默认值,回到最初状态
+        backwards 采用相应第一帧的样式
+        forwards  目标保持动画最后一帧的样式
+          最后一帧是哪个取决于animation-direction和 animation-iteration-count:
+        both      根据animation-direction（见后）轮流应用forwards和backwards规则
+      animation-play-state 定义动画暂停或播放状态 
+        通过该属性可以灵活的控制动画的播放状态
+        running  播放,由暂停到播放时动画会接着暂停的状态开始运行
+        paused   暂停,暂停时动画会保持暂停时的状态
+      @keyframes name{percent{styleCodes}}   创建关键帧
+        PS：以百分比来规定改变发生的时间;关键词 "from" 和 "to",等价于 0% 和 100%
+          0% 是动画的开始时间,100% 动画的结束时间;
+          为了获得最佳的浏览器支持,应该始终定义 0% 和 100% .
+          @-webkit-keyframes 兼容写法
+        e.g.：
+          @keyframes mymove {
+            from {top:0px; background:red; width:100px;}
+            25%  {top:200px;}
+            50%  {top:100px;}
+            75%  {top:200px;}
+            100% {top:200px; background:yellow; width:300px;} }
+        可以把多个状态写在一起,使用逗号分割
+          @keyframes pound {
+            from,to { transform: none; }
+            50% { transform: scale(1.2); } 
+          }
+      e.g. :
+        <div></div>
+        div {
+          width:100px; height:100px; background:red; position:relative;
+          animation:mymove 5s infinite;
+          // -webkit-animation:mymove 5s ease-in-out infinite alternate;
+          /*Safari and Chrome*/ 
+        }
+        @keyframes mymove {
+          from {top:0px; background:red; width:100px;}
+          25%  {top:200px;}
+          50%  {top:100px;}
+          75%  {top:200px;}
+          100% {top:200px; background:yellow; width:300px;} 
+        }
+        // @-webkit-keyframes mymove {
+        //   /*Safari and Chrome*/
+        //   from {top:0px; background:red; width:100px;}
+        //   25%  {top:200px;}
+        //   50%  {top:100px;}
+        //   75%  {top:200px;}
+        //   100% {top:200px; background:yellow; width:300px;} 
+        // }
+    linear-gradient 线性渐变 
+      PS： 渐变实质上属性特征为图片而非颜色值,
+        故可设置background-image背景图片而不能设置背景色background-color
+      -webkit-linear-gradient( [angle],<color position>+ )
+        [angle]             可选,控制渐变的方向
+          关键字: top「默认,从上到下」、right、bottom、left
+            可组合使用,若 left top 即从左上角开始
+          角度值: 整数表示顺时针,负数表示逆时针;
+            如270deg「默认值,等同于top」
+        <color position>+   若干个位置及颜色,控制渐变的过程,如: red 20% 
+          position 可为像素值或百分比
+      e.g.：
+        .linearGradientTest { 
+          background: -webkit-linear-gradient( top,#fff,#000); 
+          /*从上到下,颜色由白到黑*/
+          background-image: -webkit-linear-gradient(180deg,#fff,gray 20%,#000);
+          /*180deg 则表示从右向左;从白色开始到20%处过渡到灰色,100%处过渡到黑色*/
+          background-image: -webkit-linear-gradient( #fff,gray 20%,#000 );
+          /*默认为270deg即top从上到下*/
+          background-image: -webkit-linear-gradient( #fff 30%,#000  60% );
+          /*等价: -webkit-linear-gradient( #fff,#fff 30%,#000  60% ,#000);*/
+        }
+      Remarks： 
+        在Chrome中
+          linear-gradient(to bottom,#feb26e,#e79248);          不用加前缀
+          --webkit-linear-gradient(bottom,#feb26e,#e79248); 需加前缀
+    radial-gradient 径向渐变 
+      -webkit-radial-gradient([origin],[shape],<color position>+)
+        PS：该方法需增加厂商前缀
+        [origin]           定义渐变的起始点和方向,默认为中心点
+          关键字: cernter,top,right,bottom,left;默认为 center center
+            当定义为 top 时,相当于 top center
+        [shape]            渐变的形状
+          circle  圆形
+          ellipse 椭圆形
+        <color position>+  渐变颜色及位置
+          position 可以为百分比或像素值
+            百分比值0%,或者长度值0,表示渐变中心点;
+            百分比值100%表示渐变射线与边缘形状的相交点位置;
+            其间的百分比值线性对应渐变射线上的点;
+      radial-gradient(<r1 r2 at x y>,<color position>+);
+        PS：Chrome可不加-webkit-前缀
+        <r1 r2 at x y>    定义渐变圆心及半径,r为半径,x、y为圆心坐标
+          可选关键字: 用于描述边缘轮廓的具体位置
+            closest-side   相切
+              圆形: 渐变的边缘形状与容器距离渐变中心点最近的一边相切
+              椭圆: 或者至少与距离渐变中心点最近的垂直和水平边相切
+            farthest-side   与closest-side相反
+              边缘形状与容器距离渐变中心点最远的一边相切（或最远的垂直和水平边）。
+            closest-corner  渐变的边缘形状与容器距离渐变中心点最近的一个角相交
+            farthest-corner 渐变的边缘形状与容器距离渐变中心点最远的一个角相交
+            contaner     刚好填充满整个容器
+          e.g.：
+            background-image: radial-gradient(
+              ellipse farthest-corner at 45px 45px ,
+              #00FFFF 0%,rgba(0,0,255,0) 50%,#0000FF 95%);
+            background-image: radial-gradient(
+              ellipse farthest-corner at 470px 47px ,
+              #FFFF80 20%,rgba(204,153,153,0.4) 30%,#E6E6FF 60%);
+            background-image: radial-gradient(
+              farthest-corner at 45px 45px ,
+              #FF0000 0%,#0000FF 100%);
+            background-image: radial-gradient(
+              16px at 60px 50% ,
+              #000000 0%,#000000 14px,
+              rgba(0,0,0,0.3) 18px,
+              rgba(0,0,0,0) 19px);
+        <color position>+ 若干个颜色值及位置
+        e.g.：
+          background-image:radial-gradient( 
+            150px 100px at 50% 50% ,
+            #c792b3 0%,#ac8671 30%,#d42cb3 50%,#7ac67a 100%
+            );
+    渐变重复 
+      有两种方式可以重复背景图片
+      background-repeat 
+      -webkit-repeating-radial-gradient 和 -webkit-repeating-linear-gradient 
+      e.g.：
+        background: -webkit-repeating-radial-gradient(
+          #ace,#ace 5px,#f96 5px,#f96 10px);  
+  通用样式 
+    outline 边线「简写属性」
+      PS：outline类似border,但border会影响盒模型,而outline不会
+      outline-style   边线样式
+        none    默认值
+        dooted dashed solid double groove ridge inset outset
+        inherit
+      outline-width   边线宽度
+        thin medium thick length
+        inherit
+      outline-color   边线颜色
+        color
+        invert   执行颜色反转,可使轮廓在不同的背景颜色中都是可见
+        inherit
+      outline-offset  边线偏移
+        length 轮廓与边框边缘的距离。
+      e.g. outline:solid 1px red;
+    opacity:0-1; 透明度「CSS3+」
+      指定元素的不透明度,值从0.0(完全透明)到1.0(完全不透明)
+      指定父元素的透明度后,其子元素的透明度不可改变 [?]
+    cursor 光标悬浮样式
+      PS：规定要显示的光标的类型、形状
+        该属性定义了鼠标指针放在一个元素边界范围内时所用的光标形状,
+        不过 CSS2.1 没有定义由哪个边界确定这个范围
+      属性值:
+        auto      默认值,浏览器设置的光标
+        default   默认光标(通常是一个箭头)
+        pointer   光标呈现为指示链接的指针(一只手)
+        url       需使用的自定义光标的 URL
+          PS：在列表的末端始终定义一种普通的光标,当自定义光标不起作用时备用
+          e.g.：
+          a{cursor: url(aa.png),pointer;}
+        crosshair 光标呈现为十字线
+        move      此光标指示某对象可被移动
+        e-resize  此光标指示矩形框的边缘可被向右(东)移动
+        ne-resize 此光标指示矩形框的边缘可被向上及向右移动(北/东)
+        nw-resize 此光标指示矩形框的边缘可被向上及向左移动(北/西)
+        n-resize  此光标指示矩形框的边缘可被向上(北)移动
+        se-resize 此光标指示矩形框的边缘可被向下及向右移动(南/东)
+        sw-resize 此光标指示矩形框的边缘可被向下及向左移动(南/西)
+        s-resize  此光标指示矩形框的边缘可被向下移动(南)
+        w-resize  此光标指示矩形框的边缘可被向左移动(西)
+        text      此光标指示文本
+        wait      此光标指示程序正忙(通常是一只表或沙漏)
+        help      此光标指示可用的帮助(通常是一个问号或一个气球)
+    visibility 元素可见性
+      visible 默认值,元素是可见的
+      hidden  使对象在网页上不可见,但会保留该元素在网页本该显示的空间.
+      collapse 当在表格元素中使用时,此值可删除一行或一列,但是它不会影响表格的布局。
+        被行或列占据的空间会留给其他内容使用。
+        若此值被用在其他的元素上,会呈现为 "hidden"。
+    display 元素类型
+      PS：html中的标签元素大体被分为三种不同的类型:块状元素、内联元素(又叫行内元素)和内联块元素.
+        每个元素都有一个默认的 display 值,这与元素的类型有关。
+        对于大多数元素它们的默认值通常是 block 或 inline 。
+        css中可通过设置元素的display属性来转换.
+      display: none;
+        隐藏对象且不保留其物理空间
+        位置不保留,但功能仍可用
+          如display:none;的音频仍可以获取后播放;
+          一些特殊元素的默认 display 值是它,例如 script 。
+      display: inline;
+        行内元素只能容纳文本或其他行内元素,它允许其他行内元素与其位于同一行
+        定义宽度和高度不起作用(宽度和高度随着内容的大小变化)
+        行内元素的margin属性只有margin-left和margin-right有用.
+        常见行内元素有a、span、br、i、em、strong、label、q、var、cite、code等.
+      display: block;
+        当未定义块元素的尺寸时,该元素的宽度默认为父元素的宽度,高度为子元素的高度.
+        可容纳行内元素和其他块元素,宽度和高度可设置.
+        常用的块元素有:div、p、h1-h6、ol、ul、dl、table、address、blockquote、form 等等
+      display: inline-block;
+        可并列行显示,且可以指定宽高
+        默认情况下使用inline-block类型时,并列显示的元素的垂直对齐方式是底部对齐,
+        可使用vertical-align属性进行控制.
+        常见的行内块元素:img、input、a
+      display: table;              作为块级表格来显示(类似 <table>)(CSS3新增)
+      display: table-cell;         元素会作为一个表格单元格显示(类似 <td> 和 <th>)(CSS3新增)
+      display: inline-table;       将table元素和其他行内元素在同同一行显示 (CSS2新增)
+      display: table-footer-group; 作为一个或多个行的分组来显示(类似 <tfoot>)
+      display: table-header-group; 作为一个或多个行的分组来显示(类似 <thead>)
+      display: table-row;          元素会作为一个表格行显示(类似 <tr>)
+      display: table-row-group;    作为一个或多个行的分组来显示(类似 <tbody>)
+      display: table-caption;      元素会作为一个表格标题显示(类似 <caption>)
+      display: table-column;       作为一个单元格列显示(类似 <col>)
+      display: table-column-group; 作为一个或多个列的分组来显示(类似 <colgroup>)
+      display: list-item;  元素作为列表显示 (会在元素的开头加上列表的标记)
+      display: inline-list-item;
+      display: run-in;  元素会根据上下文作为块级元素或内联元素显示
+      display: inherit; 规定应该从父元素继承 display 属性的值。
+    display:none 和 visibility:hidden 的区别
+      display:none 元素的宽度、高度等各种属性值都将丢失
+      visibility:hidden 元素仅仅在视觉上看不见,而其所占据的空间位置仍然存在,
+        即其仍有高度 宽度等属性值.
+    user-select     文本选择控制
+      兼容写法:
+        -webkit-user-select:   /* Chrome all / Safari all /opera15+*/  
+        -moz-user-select:      /* Firefox all */  
+        -ms-user-select:       /* IE 10+ */  
+        user-select: 
+      auto    默认值,用户可以选中元素中的内容
+      text    用户可以选择元素中的文本
+      element 文本可选,但仅限元素的边界内(只有IE和FF支持)
+      all     在编辑器内,若双击或上下文点击发生在子元素上,该值的最高级祖先元素将被选中
+      none    不可别选中
+  标签及其样式 
+    list-style 列表标记样式 「简写」
+      list-style-type  列表标记
+        normal
+        disc    实心圆
+        none    无
+        circle  空心圆
+        square  实心方块
+        decimal 数字
+        circle  圆圈
+        decimal-leading-zero 以0开头的标记
+        lower/upper-roman    小/大写罗马数字
+        upper/lower-alpha    大/小写英文字母
+        upper/lower-latin    大/小写拉丁字母
+        lower-greek          小写希腊字母
+        ...
+      list-style-image 标记设置为图像 
+        url(图片地址)
+        none
+        inherit
+        e.g.：
+          ul li{list-style-image: url(aaa.png);}
+      list-style-position 标记位置
+        outset 默认值
+        inset
+        inherit
+      list-position 标记位置
+      e.g. 
+        list-style:circle inside url(XXX/XXX.png);
+        /*在图像加载错误时使用空心圆代替.*/
+    table 表格
+      table 表格
+        PS：
+          表格的display默认为table,独占一行
+          display:inline-table; 定义一个行内表格,可以和其他行内元素共处一行.
+        PS-Self:表格的行高度通过指定表格的高度和行的高度来设定.
+        text-align      水平对齐方式
+        border-collapse 定义表格决定其单元格边框样式
+          separate  默认值,分隔,表框会被分开,相邻的单元格都拥有独立的边框
+          collapse  合并,表格边框合并为一个单一的边框,使单元格之间没有边框间距.
+        border-spacing  单元格间距
+          border-spacing:length length;
+          规定相邻单元格之间的距离,仅用于边框分离模式下
+          第一个值表示水平间距,第二个值表示垂直间距,若只有一个值则表示水平和垂直.
+        caption-side    表格标题位置
+          top     默认值,表格标题定位在表格之上.
+          bottom
+          inherit
+        empty-cells     是否显示表格中无内容的单元格
+          常用于边框分离模式
+          show    默认值,在空单元格周围绘制边框
+          hide    不在空单元格周围绘制边框
+          inherit
+        table-layout    表格列宽度的指定方式
+          auto  默认值,列宽度由单元格的内容长度定.
+          fixed 列宽度通过指定表格的宽度和列宽度进行设定.
+      thead 表头
+        display:table-header-group; 
+      tbody 表体
+        display:table-row-group; 
+      tfoot 
+        display:table-footer-group; 
+      colgroup
+        display:table-column-group
+      col
+        display:table-column;
+      caption 表格标题
+        PS：其display:table-caption;
+        caption-side
+          top 默认值
+          bottom 
+      tr
+        display:table-row; 
+      td
+        PS：其display为table-cell;
+          table-layout 模式下,定义首行td的宽度才会生效,且该列宽度都如此.
+        vertical-align
+        text-align
+      th
+    a 链接
+      链接的四种状态:
+        a:link普通的未被访问的状态
+        a:visited用户已访问的状态
+        a:hover光标悬停在链接上的状态
+        a:active链接被点击的状态
+      属性
+    ul  无序列表
+      list-style 
+      -webkit-padding-start: 40px;  列表的默认缩进
+    ol  有序列表
+      list-style 
+    input 表单
+      padding 
+    textarea 文本域
+      resize: none;  禁止缩放
+  配件样式 
+    ::-webkit-scrollbar       滚动条样式
+      .aoo ::-webkit-scrollbar {
+        color: #fff;
+        background-color: #8E8E8E;
+        width: 10px;
+        border-radius: 5px;
+      }
+    ::-webkit-scrollbar-thumb 滚动滑块样式
+      .con-box-wrap ::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background: #fff;
+      }      
+    :-webkit-autofill     自动填充表单的背景
+      PS： chrome记住密码后,输入时,显示的提示的样式
+        input:-webkit-autofill,
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+          background-color: rgb(250,255,189); 
+          background-image: none;
+          color: rgb(0,0,0);
+        }
+    -webkit-text-security 使用指定形状代替文字显示
+      circle 圆圈 
+      disc   圆形 
+      square 正方形
+      e.g.：
+        <input type="text"   name="" value="">
+        input{ -webkit-text-security:disc; text-security:disc; }
+        
+        <div class="" contenteditable="">123</div>
+        div{
+          -webkit-text-security:disc;
+          background-color: green;
+          height: 22px;
+        }
+  特殊样式 
+    -webkit-tap-highlight-color  点击链接或js定义的点击元素时,出现半透明灰色背景;
+      PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 ,「CSS3+」
+        可设置-webkit-tap-highlight-color的颜色;
+      禁用高亮: 设置颜色的alpha值为0即可
+      e.g.：
+        设置高亮色为50%透明的红色:
+        -webkit-tap-highlight-color: rgba(255,0,0,0.5);
+    -webkit-touch-callout        长按弹出菜单控制  「iOS」
+      -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
+  declaration_val  常用声明值 
+    color_val  颜色值
+      英文单词表示 
+        red green blue black white gray yellow pink gold orange 
+        transparent「透明」
+      rgb|rgba 
+        rgb(num%,num%,num%) 
+          num 范围 0-100,若小于0则为0,大于100则为100;
+          e.g.： rgb(100%,0,0)
+        rgb(num,num,num) 
+          num 范围 0-255,若小于0则为0,大于255则为255
+        rgba(num,num,num,opacity) 
+          opacity  可选,透明度值,范围0-1,默认为1,不透明;
+      #RedGreenBlue  十六进制颜色 
+        red、green、blue 分别表示两位16进制的数值「01-ff」,代表该颜色的浓度
+        缩写形式 
+          当设置的颜色是16进制的色彩值时,若每两位的值相同,可以缩写一半.
+          #000000 可缩写为 #000
+          #336699 可缩写为 #369
+      hsl 
+        如 hsla(136,64%,65%,0.82)
+          第四个数值为透明度,可选,默认为1,不透明
+      Web安全色: 在256色计算机系统上会避免抖动的颜色
+        RGB值20%和51(相应的十六进制值为33)的倍数,0%或0也是.
+    length 尺寸
+      单位
+        PS：px、em、％都是相对单位
+          除了值为零的情况下(0后面可以不加单位),所有非零的值后面都要加单位.
+        绝对长度单位
+          in 英寸
+          cm 厘米;mm 毫米
+          pt 点: 标准印刷度量单位
+        相对单位长度
+        px 像素 指的是显示器上的小点(css规范中假设90px=1英寸),
+          实际情况是浏览器会使用显示器的实际像素值有关,目前大多数设计者都倾向于使用像素px作为单位.
+        ex: 所用字体中小写x的高度
+          PS：使用不同的字体,其对应的ex大小可能不同
+        em: 元素给定的font-size值大小
+          PS：若font-size=10px,则1em=10px.
+            em 相对于当前对象内文本的字体尺寸,并不是一个固定的值
+            元素的字体大小会继承
+            一般浏览器默认font-size=16px
+            em 可以指定到小数点后三位.
+          e.g. 
+          p{font-size:12px;text-indent:2em;}
+          /*上面代码就是实现段落首行缩进24px,也就是缩进两个字体大小的距离.*/
+        rem: 根元素(html元素)的font-size值
+          rem(root em,根 em) 和em类似 (一般,1rem=16px)
+          e.g. :
+            html {font-size: 62.5%;}  /*10 ÷ 16 × 100% = 62.5%*/
+            body {font-size: 1.4rem;} /*1.4 × 10px = 14px */
+            h1 { font-size: 2.4rem;}  /*2.4 × 10px = 24px*/
+        vw: 相对于视窗的宽度width,视窗宽度为100vw
+        vh: 相对于视窗的高度height,视窗高度为100vh
+      calc(expression)  length数值运算 (CSS3新增)
+        PS：
+          适用于IE9+,移动端基本还不兼容
+        使用规则:
+          其中expression是一个表达式,用来计算长度的表达式,结果为length值
+          使用“+”、“-”、“*” 和 “/”四则运算；
+          表达式中有“+”和“-”时,其前后必须要有空格,如"widht: calc(12%+5em)"写法错误.
+          表达式中有“*”和“/”时,其前后可以没有空格,但建议留有空格。
+          可以使用百分比、px、em、rem等,混合使用各种单位进行计算；
+        e.g. 
+        width:calc(50% + 2em);
+        浏览器会自动计算width的值
+      zoom 比例缩放 (只有IE内核的浏览器支持)
+        zoom:normal(默认值,使用对象的实际尺寸)/百分数(缩放比例)
+        
+        尺寸单位
+      resize 是否可由用户调整元素的尺寸 (CSS3)
+        none       用户无法调整元素的尺寸。
+        both       用户可调整元素的高度和宽度。
+        horizontal 用户可调整元素的宽度。
+        vertical   用户可调整元素的高度。           
 Layout   布局   
   布局一般分为四种类型：固定布局、可切换的固定布局、弹性布局、混合布局。
     PS：可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式：
@@ -2178,7 +2182,7 @@ Layout   布局
       auto   默认值,即项目的本来大小。
       length 项目将占据固定空间「如350px」
       百分比  
-    align-self 允许单个项目与其他项目不一样的对齐方式 「可覆盖align-items属性」
+    align-self 允许单个项目与其他项目不一样的对齐方式 「可覆盖'align-items'属性」
       auto 默认值,表示继承父元素的align-items属性,若无父元素,则等同于stretch
       flex-start
       flex-end
@@ -3033,7 +3037,7 @@ Collection
       .cancel-btn{
         float:left;
         margin-left: 10vw;
-        /**此处导致title-txt 不能居中/
+        /*此处导致title-txt 不能居中*/
       }
       .title-txt{
         font-size: 18*@wu;
@@ -3050,12 +3054,6 @@ Collection
 
 
   在文字超出部分部分使用...显示
-
-
-
-
-
-
 
 
 

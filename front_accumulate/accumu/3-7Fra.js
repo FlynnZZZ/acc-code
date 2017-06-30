@@ -1024,9 +1024,9 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
     在params中的方法中 this 表示的即为 vm;
   ◆params   用于配置vm的参数对象 
     包括数据、模板、挂载元素、方法、生命周期钩子等选项 
-  el : 'slct'      必选,指定Vue接管的元素 
+  'el' : 'slct'      必选,指定Vue接管的元素 
     slct 选择器,当为class选择器时,若存在多个该class,则只接管第一个
-  data : val       可选,vm的数据模型 
+  'data' : val       可选,vm的数据模型 
     PS：Vue实例默认代理其'data'对象,在params中使用 this 表示'data'对象;
     val 为 obj 或 function(){ return obj }
     e.g.：
@@ -1071,7 +1071,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       userInfo = {name:'Kyle Hu',age:22}; // 引用关系被破坏,DOM不会重新渲染
       userInfo.age = 25; // 引用关系被破坏,DOM不会重新渲染
       vm.age = 23; // DOM被渲染成23
-  methods : val    可选,vm的方法 
+  'methods' : val    可选,vm的方法 
     使用method方法返回数据 
         <li v-for="n in even(numbers)">{{ n }}</li>
         data: {
@@ -1084,7 +1084,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
             });
           }
         }
-  computed : val   可选,vm的计算方法 
+  'computed' : val   可选,vm的计算方法 
     PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化「SlPt」
     val  包含方法的对象,其方法名可作为类似于data的属性名使用  
       computed : {
@@ -1143,7 +1143,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
           })
         }
       }
-  watch : val      可选,vm的数据监听方法 
+  'watch' : val      可选,vm的数据监听方法 
     e.g.：
       var vm = new Vue({
         data: {
@@ -1224,7 +1224,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       限制执行该操作的频率,并在得到最终结果前,设置中间状态
       这是计算属性无法做到的
       除了 watch 选项之外,还可以使用 vm.$watch API 命令
-  components : val 可选,vm的组件 
+  'components' : val 可选,vm的组件 
     e.g.: 
       HTML中
       <cpt1></cpt1>
@@ -1242,18 +1242,18 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
         //   ..
         // }
       })
-  filters : val    可选,定义过滤器 
+  'filters' : val    可选,定义过滤器 
     val  包含过滤器函数的对象
       {
         ftFoo1 : function(val){
           // 
         }
       }
-  props  : val     可选,作为组件时[在 .vue 格式文件中],注册标签属性,同父组件通信 
+  'props'  : val     可选,作为组件时[在 .vue 格式文件中],注册标签属性,同父组件通信 
     PS：在父组件中插入该子组件时,并添加子组件注册的attr,通过attr的值来向子组件传递信息,
       在vm实例中可通过 this.attr 来获取值,HTML中 attr 可直接获取值
     val  ['attr1','attr2',..] 
-  mounted : foo    可选,模型渲染后 
+  'mounted' : foo    可选,模型渲染后 
     使用 mounted 并不能保证钩子函数中的 this.$el 在 document 中
     为此还应该引入 Vue.nextTick/vm.$nextTick例如：
     mounted: function () {
@@ -1261,7 +1261,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
         // 代码保证 this.$el 在 document 中
       })
     }
-  directives : val 可选,自定义指令 
+  'directives' : val 可选,自定义指令 
   ...
 实例属性/方法 
   ◆vm.$xx [带有前缀$的]实例方法/属性 
@@ -2929,7 +2929,7 @@ Component,组件
     CSS 过渡 
       e.g.：
         .fade-enter-active, .fade-leave-active {
-          transition: opacity 0.5s
+          transition: opacity 0.5s;
         }
         .fade-enter, .fade-leave-to {
           opacity: 0

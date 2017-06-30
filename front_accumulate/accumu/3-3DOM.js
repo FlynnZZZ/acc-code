@@ -1494,32 +1494,23 @@ event 事件对象
     Exp:
       使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
   变动名称事件 当元素或属性名变动时触发[已被废弃]
-  ◆HTML5事件
+  ◆HTML5事件 
     PS：DOM规范没有涵盖所有浏览器支持的事件
       HTML5详尽列出了浏览器应该支持的所有事件
      (如下为浏览器完善支持的部分事件)
   contextmenu  上下文菜单事件
     当点击网页时,会自动出现Windows自带的菜单
     使用contextmenu 事件来修改指定的菜单(前提将默认行为取消)
-  beforeunload  离开前事件
-    PS：表示的是离开关闭/刷新网页时,触发的事件
-      目的是让开发人员能在页面卸载前阻止这一操作
-    弹出确认对话框
-      须将 e.returnValue 的值设为要显示给用户的字符串(IE 及 Firefox)
-      要显示给用户的字符串作为函数的返回值返回(safari 和 Chrome)
+  beforeunload  离开关闭/刷新网页时,在window上触发事件 
+    PS：目的是让开发人员能在页面卸载前阻止这一操作, 
+      通过以返回值的形式来显示给用户提示[无返回值则无提示],
+      chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
     e.g.
-    jquery离开页面弹出提示代码
-      //绑定beforeunload事件
-      $(window).bind('beforeunload',function(){
+      $(window).bind('beforeunload',function(e){
         return '您输入的内容尚未保存,确定离开此页面吗？';
       });
       //解除绑定,一般放在提交触发事件中
       $(window).unbind('beforeunload');
-    js离开页面提示
-      window.onbeforeunload = function(event) {
-        return confirm("确定退出吗");
-      }
-      // 在Chrome中不会显示 返回的字符(而是Chrome自设的默认字符)
   DOMContentLoaded 形成完整的DOM树后触发
     与load事件不同,不会理会图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
   readystatechange
@@ -1625,7 +1616,7 @@ event 事件对象
   cut        在发生剪切操作时触发
   beforepaste 在发生粘贴操作前触发
   paste      在发生粘贴操作时触发
-  访问剪贴板中的数据
+  访问剪贴板中的数据 
     $('#a').on("copy",function(e){
       if (window.getSelection) {
         text = window.getSelection().toString();
@@ -1647,14 +1638,14 @@ event 事件对象
        Arguments:formatstr 仍然是数据类型(但其他浏览器已不能识别 "text")
          第二个参数为要更换的字符串
     clipboardData.clearData(); 从剪贴板中清除数据
-  ◆移动端事件
+  ◆移动端事件 
    touchstart
    touchend
    touchmove
   Exp： 
-    页面加载时只执行 onload
-    页面刷新时先执行 onbeforeunload,然后 onunload,最后 onload
-    页面关闭时先执行 onbeforeunload,最后 onunload
+    页面加载时只执行'load'事件 
+    页面刷新时先执行'beforeunload',然后'unload',最后'load' 
+    页面关闭时先执行'beforeunload',最后'unload' 
 事件委托 
   PS：
     在创建GUI的语言(如C#)中,为GUI中的每个按钮添加一个onclick事件处理程序很常见,
@@ -1734,7 +1725,7 @@ event 事件对象
 
     var t = document.getElementById('test');
     trigger(t, 'click');
-自定义事件 「DOM3」「IE8+?」
+自定义事件「DOM3」 
   var evt = document.createEvent("CustomEvent");    创建事件
   evt.initEvent('customEvent',true,true);          定义事件类型
   evt.initCustomEvent(str,boo,boo,obj);
@@ -1806,12 +1797,8 @@ event 事件对象
     }
 事件归纳总结 
   事件枚举及分类
-    // ◆会在window上触发的事件
-    scroll   滚动「带滚动条的」元素时在该元素上触发「网页滚动在window上触发」
-      window.onscroll =function(){
-        console.log('网页滚动');
-      }
-    popstate   当活动历史记录条目更改时,在window上触发  「HTML5 IE10+」
+    ◆在window上触发的事件 
+    popstate   当活动历史记录条目更改时,在window上触发「HTML5 IE10+」
       PS：调用history.pushState()或history.replaceState()不会触发该事件,
         只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
         或者在JS代码中调用 history.back();
@@ -1830,6 +1817,11 @@ event 事件对象
       PS：当#值发生变化时也会触发这个事件
       e.oldURL; 变化前的URL
       e.newURL; 变化后的URL
+    ◆
+    scroll     滚动「带滚动条的」元素时在该元素上触发「网页滚动在window上触发」
+      window.onscroll =function(){
+        console.log('网页滚动');
+      }
   事件绑定
     var addEvent = function(elem, type, handle, capture) {
       if(elem.addEventListener) {

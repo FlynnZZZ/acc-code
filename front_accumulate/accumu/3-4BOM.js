@@ -3287,7 +3287,7 @@ IndexedDB   浏览器端数据库 「HTML5」
       }
     }  
   e.g.：
-drag&drop 拖放「IE9+ HTML5」 
+Drag&Drop 拖放「IE9+ HTML5」 
   PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 
     IE4最早加入拖放功能,只能拖放文本框
   定义拖动元素 
@@ -3315,7 +3315,7 @@ drag&drop 拖放「IE9+ HTML5」
     dragover   被拖放元素处于目标元素上方时触发
     dragleave  被拖放元素离开目标元素的范围时触发
     drop       被拖放元素放置到目标元素后触发
-    e.dataTransfer 拖放事件的属性对象
+    e.dataTransfer 拖放事件的属性对象 
       PS：IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
       ◆数据传递
         为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
@@ -3363,8 +3363,8 @@ drag&drop 拖放「IE9+ HTML5」
       e.dataTransfer.types  当前保存的数据类型,如'text'
       e.dataTransfer.items  返回 DataTransferItemList 对象
       e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
-  兼容
-    IE9-不支持draggable属性,但可通过mousedown事件来模拟
+  兼容 
+    IE9-不支持draggable属性,但可通过mousedown事件来模拟 
       e.g.:
       elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
     firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性

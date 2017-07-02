@@ -638,12 +638,27 @@ Stream,流  用于暂存和移动数据
   ◆stm流对象的方法属性
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 
+  stm.write()    写入流 
+    var readStream = fs.createReadStream('video.mp4');
+    var writerStream = fs.createWriteStream('video1.mp4');
+    readStream.on("data",function(chunk){
+      if (writerStream.write(chunk) == false) {
+        readStream.pause();
+      }
+    })
+    readStream.on("end",function(){
+      writerStream.end;
+    })
+    writerStream.on("drain",function(){
+      readStream.resume();
+    })
   ◆Event 常用事件 
   data     当steam数据传递时时触发 
     stm.on("data",function(chunk){
       // chunk 数据块,Buffer类型 
     })
   readable 可读时触发 
+  drain    
   end      数据传递完成时触发[之后目标不再可写] 
   close    流传输关闭时 
   error    在接收和写入过程中发生错误时触发
@@ -1421,6 +1436,8 @@ Stream,流  用于暂存和移动数据
     fs.rename(oldPath, newPath, callback)
       回调函数没有参数,但可能抛出异常          
     fs.createReadStream(path,options);  创建可读的stream流 
+      为异步操作,不会阻塞后续代码执行 
+      var readStream = fs.createReadStream('1.pm4');
     fs.createWriteStream(path,options); 创建可写的stream流 
   child_process  新建子进程 
   crypto  提供加密和解密功能,基本上是对OpenSSL的包装

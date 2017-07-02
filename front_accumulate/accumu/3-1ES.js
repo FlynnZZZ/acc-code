@@ -1829,6 +1829,20 @@ OOP 面向对象
   break 和 continue  只能用于循环语句中,精确控制代码的执行 
     continue 「跳出当前循环」继续下一次循环
     break    跳出整个循环「执行循环后的语句」
+      aa: // 命名最外层的循环 
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          for (var k = 0; k < 3; k++) {
+            if (k == 1) {
+              console.log(i);
+              break aa; // 直接跳出最外层的循环 
+            }
+            
+          }
+          
+        }
+      }
+
   return   函数返回
   throw val  异常触发,用于随之抛出自定义错误 
     value 类型无要求
@@ -2157,7 +2171,7 @@ Array   数组对象
         console.log(res); // 15
     arr.reduceRight(); 和reduce类似,只是从右到左遍历 「ES5」
     ★遍历数组元素: 循环访问元素叫遍历 
-    arr.forEach(foo[, thisArr])  对数组的每个元素执行操作 「ES5」
+    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作 「ES5」
       PS：forEach 方法按顺序为数组中含有效值的每一项执行一次foo 函数,
         那些已删除(使用delete方法等情况)或者从未赋值的项将被跳过
        (而值为 undefined 的项则不会被跳过).
@@ -2187,11 +2201,24 @@ Array   数组对象
         obj.add([1, 3, 5, 7]);
         console.log(obj.count); // 4
         console.log(obj.sum);   // 16
-      Remarks:
-        forEach 遍历的范围在第一次调用 foo 前就会确定,
-        调用forEach 后添加到数组中的项不会被 foo 访问到,
+      遍历范围在第一次函数调用前会确定,之后添加到数组中的项不会被foo访问到 
         若已经存在的值被改变,则传递给 foo 的值是 forEach 遍历到他们那一刻的值,
         已删除的项不会被遍历到.
+      无法自定义终止遍历,只有出现错误时会停止[可通过try来抛出异常] 
+        使用try来抛出错误且不影响后续的其他代码执行 
+        var arr = [1,2,3,4,5];
+        try {
+          arr.forEach(function(val,indx,arr){
+            console.log(val,'1');
+            if (val == 3) {
+              console.log(val,'2');
+              throw '1111' ;
+            }
+          });
+        } 
+        catch (e) {
+          console.log('执行了');
+        } 
     arr.map(foo[,thisArg])   返回由回调函数的返回值组成的数组「ES5」 
       foo   对数组arr的每个元素调用函数,依次传入参数 (val,indx,arr)
         val    数组中当前被传递的元素

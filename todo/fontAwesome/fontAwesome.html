@@ -10,14 +10,40 @@
     *{
       margin: 0;padding: 0;
     }
+    .pointer{
+      cursor: pointer;
+      user-select:none;
+    }
+    .none{
+      display: none;
+    }
+    .red{
+      color: #ec2626;
+    }
+    .redBg{
+      background: rgba(236, 38, 38, 0.49);
+    }
+    .goldBg{
+      background: rgba(180, 224, 85, 0.43);
+    }
+    .blueBg{
+      background: rgba(44, 185, 108, 0.47);
+    }
+    .markBg{
+      background: rgba(249, 104, 109, 0.57);
+    }
     #fas{
-      padding: 20px 0;
+      outline: 1px solid #999;
       position: relative;
-      margin-right: 40px;
+      padding-bottom: 20px;
+      /*margin-right: 20px;*/
+    }
+    .items{
+      font-size: 0;
     }
     .item{
       display: inline-block;
-      outline: 1px solid #ccc;
+      outline: 1px solid #999;
       padding: 3px;
       font-size: 0;
       /*user-select:none;*/
@@ -29,8 +55,9 @@
       color: #ff3037 ;
     }
     .item .icon{
+      vertical-align: middle;
       display: inline-block;
-      width: 34px;
+      width: 24px;
       text-align: center;
       position: relative;
       z-index: -1;
@@ -42,12 +69,13 @@
     .item .txt{
       position: relative;
       z-index: -1;
-      font-size: 16px;
-      width: 100px;
+      font-size: 10px;
+      width: 50px;
       height: 100%;
-      padding: 2px 5px;
-      /*outline: none;*/
+      padding-left: 3px;
       border: none;
+      outline: none;
+      vertical-align: middle;
     }
     .trash{
       position: fixed;
@@ -56,32 +84,90 @@
       background: #ff5280;
     }
     .tip{
-      margin-top: 20px;
       text-align: center;
+      margin-top: 20px;
+    }
+    .toTop{
+      font-size: 30px;
+      color: #5624bf;
+      position: fixed;
+      bottom: 20px;
+      right: 5px;
+    }
+    .toTop:hover{
+      color: #0bd46a;
+    }
+    .handle{
+      width: 40px;
+      position: fixed;
+      right: 0px;
+      top: 0;
+      margin-top: 50vh;
+      transform:translateY(-50%);
+      font-family: 'kaiti';
+      
+    }
+    .handle div{
+      background-color: #b9e4e7;
+      outline: 1px solid #aaa;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .handle .s1{
+      position: relative;
+    }
+    .handle .s1:hover .s11{
+      display: block;
+    }
+    .handle .s11{
+      position: absolute;
+      right: 100%;
+      top: 18%;
+      height: 60%;
+      display: none;
+    }
+    
+    textarea{
+      width: 98%;
+      height: 1em;
+      resize: none;
     }
   </style>
 </head>
 
 <body>
   <section id="fas"  >
-    <div class="item" 
-    v-for="(item,indx) in items" 
-    @click="selectTxt($event)" 
-    @dragstart="dragstart(indx)"
-    @drop="drop($event,indx)"
-    @dragover="dragover" 
-    draggable="true">
-      <div class="icon"> <i  :class="item"></i> </div>
+    <div class="items">
+      <div class="item" 
+      v-for="(item,indx) in items" 
+      @click="selectTxt($event)" 
+      @dragstart="dragstart(indx)"
+      @dragover="dragover" 
+      @drop="drop($event,indx)"
+      :class="{blueBg:indx==testIndx,goldBg:indx == i,redBg:indx == j,markBg:item == 'fa-map-marker'}"
+      draggable="true">
+      <div class="icon"> <i class="fa" :class="item"></i> </div>
       <input type="text" class="txt" 
       @change="unchange(item,indx)" 
       :value="item"/>
     </div>
+    </div>
     
-    <div class="trash">垃圾箱</div>
-    <div class="tip">总共 956 个,当前 {{len}} 个</div>
+    <div class="trash"  @dragover="dragover" @drop="drop($event,'-1')">垃圾箱</div>
+    <div class="tip">共 {{oLen}} <span v-if="len">, 当前 {{len}}</span> </div>
+    <div class="toTop pointer none" @click="toTop"> <i class="fa fa-chevron-up"></i> </div>
+    <div class="handle">
+      <div class="pointer" @click="loadOrigin">重置加载</div>
+      <div class="pointer s1" @click="testTxtFoo" > 去重检测
+        <input type="text" class="s11" v-model="testTxt" @click="selectTxt($event)">
+      </div>
+      <div class="pointer" @click="checkAll"> 全检查重 </div>
+    </div>
   </section>
   
+  <textarea ></textarea>
 </body>
+<script src="./data.js" charset="utf-8"></script>
 <script src="./jq3.1.1min.js" charset="utf-8"></script>
 <script src="./vue2.3.0.js" charset="utf-8"></script>
 <script type="text/javascript">
@@ -91,24 +177,41 @@
     data : {
       
       items : '',
-      len : '',
+      oLen : '',
       
       curStr : '',
       curIndx : '',
       
       flag : 1,
+      
+      testTxt : '',
+      testIndx : -1,
+      
+      p : 1,
+      i : -11,
+      j : -11,
     },
-    computed : { },
+    computed : { 
+      len : function(){
+        return this.items.length;
+      },
+    },
     watch : {
       flag : function(){
         var that = this;
         localStorage.fas = JSON.stringify(that.items);
+        $('textarea').val(localStorage.fas);
         console.log('saved');
       },
     },
     methods : {
       selectTxt : function(e){
-        $(e.srcElement).find('.txt').select();
+        if ($(e.srcElement).find('.txt').length) {
+          $(e.srcElement).find('.txt').select();
+        }
+        else {
+          $(e.srcElement).select();
+        }
       },
       unchange : function(txt,indx){
         console.log(txt);
@@ -118,16 +221,70 @@
         this.curStr = this.items[indx];
         this.curIndx = indx;
       },
+      dragover : function(e){
+        e.preventDefault();
+      },
       drop : function(e,indx){
         e.preventDefault();
         // console.log('drop',indx);
         var that = this;
-        this.items.splice(that.curIndx,1);
-        this.items.splice(indx,0,that.curStr)
+        if (indx == -1) {
+          this.i = -11;
+          this.j = -11;
+          this.items.splice(that.curIndx,1);
+          this.testIndx = -1;
+        }
+        else {
+          this.items.splice(that.curIndx,1);
+          this.items.splice(indx,0,that.curStr)
+        }
         this.flag++;
       },
-      dragover : function(e){
-        e.preventDefault();
+      
+      toTop : function(){
+        $(document).scrollTop(0);
+      },
+      loadOrigin : function(){
+        var bol = confirm('确定加载吗?');
+        if (bol) {
+          localStorage.clear();
+          location.reload();
+        }
+      },
+      testTxtFoo : function(){
+        var that = this;
+        this.items.forEach(function(val,indx,arr){
+          if (val == that.testTxt) {
+            that.testIndx = indx;
+          }
+        });
+        this.testTxt = '';
+      },
+      checkAll : function(){
+        var that = this;
+        var num = this.items.length;
+        var f = false;
+        this.i = -11;
+        this.j = -11;
+        for (var i = 0; i < num; i++) {
+          var items = that.items.slice(that.p);
+          for (var j = 0; j < items.length; j++) {
+            if (this.items[i] == items[j]) {
+              var k = j + this.p;
+              this.i = i;
+              this.j = k;
+              this.items.splice(0,0,'1')
+              this.items.splice(0,1)
+              f = true;
+              break;
+            }
+          }
+          that.p++;
+          if (f) {
+            break;
+          }
+        }
+        console.log('checkAll');
       },
     },
     mounted : function (){
@@ -135,49 +292,48 @@
       this.$nextTick(function () { });
       
       
+      that.oLen = oData.length;
       if (!localStorage.fas) {
-        $.ajax({
-          type : 'get',
-          url  : './data.json',
-          dataType : 'json',
-        })
-        .done(function(backData,textStatus,obj){
-          // console.log(backData);
-          that.items = backData;
-          that.len = backData.length;
-          console.log('from data file'); 
-        })
-        .fail(function(xhr,status,errorTrown){
-          console.log(status);
-        });
+        // $.ajax({
+        //   type : 'get',
+        //   url  : './data.json',
+        //   dataType : 'json',
+        // })
+        // .done(function(backData,textStatus,obj){
+        //   // console.log(backData);
+        //   that.items = backData;
+        //   that.len = backData.length;
+        //   console.log('from data file --ajax'); 
+        // })
+        // .fail(function(xhr,status,errorTrown){
+        //   console.log(status);
+        // });
+        
+        that.items = oData;
+        console.log('from JS file'); 
+        
       }
       else {
         that.items = JSON.parse(localStorage.fas);
-        that.len = that.items.length;
         console.log('from localStorage'); 
       }
+      
+      $(document).on("scroll",function(e){
+        var top = $(this).scrollTop();
+        // console.log(top);
+        if (top>10) {
+          $('.toTop').removeClass('none');
+        }
+        else {
+          $('.toTop').addClass('none');
+        }
+      })
       
     },
   });
   
-  
-  
-  
 </script>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1085,7 +1085,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
           }
         }
   'computed' : val   可选,vm的计算方法 
-    PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化「SlPt」
+    PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化,而不能自定义更改「SlPt」
     val  包含方法的对象,其方法名可作为类似于data的属性名使用  
       computed : {
         cmptFoo1 : function(arg){

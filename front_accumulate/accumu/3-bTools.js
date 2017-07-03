@@ -29,7 +29,8 @@ npm,node_package_manager node包管理器
     npm uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
       PS：不要直接删除本地插件包
       npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
-    npm list [-g]       当前目录已安装插件[简写'ls']
+    npm list [-g]       当前目录已安装插件[简写'ls'] 
+      npm list <moudle name> [-g]  查看模块的版本号 
     npm update <name>   更新模块 
       e.g.：
         npm update -g           更新npm 
@@ -39,15 +40,22 @@ npm,node_package_manager node包管理器
     npm update express    #升级当前目录下的项目的指定模块
     npm update -g express  #升级全局安装的express模块
     npm uninstall express  #删除指定的模块
+    npm search <name>      搜索模块 
     npm -g install npm         最新稳定版
     npm -g install npm@2.9.1   指定版本
+    npm help            查看npm帮助
+      npm help <command> 可查看某条命令的详细帮助
     ◆配置参数 
+    -g              全局安装 
+      本地安装  将安装包放在'./node_modules'下[运行npm命令时所在的目录],
+        如果没有该目录,会在当前执行 npm 命令的目录下生成 node_modules 目录。
+        可通过 require() 来引入本地安装的包
+      全局安装 将安装包放在 /usr/local 下或者你 node 的安装目录。
+        可以直接在命令行里使用。
+      如果你希望具备两者功能,则需要在两个地方安装它或使用 npm link 
     -v              版本
     –save           添加到dependencies,简写化 -S
     –save-dev       添加到devDependencies,简写为 -D 
-    其他命令 
-      help            查看npm帮助
-      search <name>   搜索模块
     已安装 
       npm install lodash       在命令操作符中执行
       npm install express -g   # 全局安装
@@ -86,6 +94,15 @@ npm,node_package_manager node包管理器
       npm install  npm在当前目录下载项目的所有依赖
         在有了完整的 package.json 文件的情况下,
         下载的文件存放在node_modules中,这一过程由npm自动完成,我们只需等待即可。
+      npm init    自动生成 package.json 文件    
+        package.json 文件可以手工编写,也可以使用 npm init 命令自动生成
+        该命令采用互动方式,需用户指定一些规则,
+        然后在当前目录生成一个基本的 package.json 文件,
+        其中只有name项目名称和version项目版本是必填的,其他都是选填的。
+      npm install [--production]   根据 package.json 的配置下载所有需要的包 
+        PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
+          也就是配置项目所需的运行和开发环境;
+        --production  可选,只下载dependencies节点的包
     文件内容详情 
       {
         "name": "Hello World",
@@ -150,7 +167,15 @@ npm,node_package_manager node包管理器
       
       版本号的设定规则 
         PS： 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
-          可以加上各种限定,主要有以下几种
+        NPM使用语义版本号来管理代码
+        语义版本号分为'X.Y.Z'三位,分别代表主版本号、次版本号和补丁版本号。
+        当代码变更时,版本号按以下原则更新。
+        如果只是修复bug,需要更新Z位。
+        如果是新增了功能,但是向下兼容,需要更新Y位。
+        如果有大变动,向下不兼容,需要更新X位。
+        版本号有了这个保证后,在申明第三方包依赖时,
+        除了可依赖于一个固定版本号外,还可依赖于某个范围的版本号。
+        例如"argv": "0.0.x"表示依赖于0.0.x 系列的最新版argv
         '~',tilde   波浪号+指定版本
           如'~1.2.2',表示安装'1.2.x'的最新版本[不低于'1.2.2'],
           但是不安装'1.3.x',也就是说安装时不改变大版本号和次要版本号
@@ -159,7 +184,23 @@ npm,node_package_manager node包管理器
           但是不安装'2.x.x',也就是说安装时不改变大版本号。
           需要注意的是,如果大版本号为0,则插入号的行为与波浪号相同,
           因为此时处于开发阶段,即使是次要版本号变动,也可能带来程序的不兼容
-        'latest'      安装最新版本
+        'latest'      安装最新版本 
+        these are all valid:
+        { "dependencies" :
+          { "foo" : "1.0.0 - 2.9999.9999"
+          , "bar" : ">=1.0.2 <2.1.2"
+          , "baz" : ">1.0.2 <=2.3.4"
+          , "boo" : "2.0.1"
+          , "qux" : "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0"
+          , "asd" : "http://asdf.com/asdf.tar.gz"
+          , "til" : "~1.2"
+          , "elf" : "~1.2.3"
+          , "two" : "2.x"
+          , "thr" : "3.3.x"
+          , "lat" : "latest"
+          , "dyl" : "file:../dyl"
+          }
+        }
       peerDependencies 用来供插件指定其所需要的主工具的版本
         有时项目和所依赖的模块,都会同时依赖另一个模块,但是所依赖的版本不一样。
         比如,你的项目依赖A模块和B模块的 1.0 版,而A模块本身又依赖B模块的 2.0 版。
@@ -241,16 +282,16 @@ npm,node_package_manager node包管理器
         "style": [
           "./node_modules/tipso/src/tipso.css"
         ]
-    相关命令
-      npm init    自动生成 package.json 文件    
-        package.json 文件可以手工编写,也可以使用 npm init 命令自动生成
-        该命令采用互动方式,需用户指定一些规则,
-        然后在当前目录生成一个基本的 package.json 文件,
-        其中只有name项目名称和version项目版本是必填的,其他都是选填的。
-      npm install [--production]   根据 package.json 的配置下载所有需要的包 
-        PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
-          也就是配置项目所需的运行和开发环境;
-        --production  可选,只下载dependencies节点的包
+      name - 包名。
+      version - 包的版本号。
+      description - 包的描述。
+      homepage - 包的官网 url 。
+      author - 包的作者姓名。
+      contributors - 包的其他贡献者姓名。
+      dependencies - 依赖包列表。如果依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下。
+      repository - 包代码存放的地方的类型,可以是 git 或 svn,git 可在 Github 上。
+      main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,如果你包的名字叫 express,然后用户安装它,然后require("express")。
+      keywords - 关键字        
 webpack   模块加载器兼打包工具 
   介绍 
     基于JS,包括四大核心 Entry、Output、Loaders 和 Plugins;

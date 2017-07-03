@@ -118,24 +118,22 @@
         这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
         这也被称之为非阻塞式IO或者事件驱动IO.
         在事件驱动模型中,会生成一个主循环来监听事件,当检测到事件时触发回调函数.
-      NodeJS 有多个内置的事件,可以通过引入events模块,并实例化EventEmitter类来绑定和监听事件
-        e.g.:
-          var events = require('events'); // 引入 events 模块
-          var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
-          var foo = function connected() {  // 创建事件处理程序
-            console.log('1');
-            eventEmitter.emit('data_received'); // 触发 data_received 事件 
-          }
-          eventEmitter.on('connection', foo); // 绑定 connection 事件处理程序
-          eventEmitter.on('data_received', function(){ // 绑定 data_received 事件
-            console.log('2');
-          });
-          eventEmitter.emit('connection'); // 触发 connection 事件 
-          console.log("3");
-          执行:
-          // 1
-          // 2
-          // 3
+      可通过引入'events'模块,并实例化EventEmitter类来绑定和监听事件
+        var events = require('events'); // 引入 events 模块
+        var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
+        eventEmitter.on('connection', function () {  // 绑定 connection 事件处理程序
+          console.log('1');
+          eventEmitter.emit('data_received'); // 触发 data_received 事件 
+        }); 
+        eventEmitter.on('data_received', function(){ // 绑定 data_received 事件
+          console.log('2');
+        });
+        eventEmitter.emit('connection'); // 触发 connection 事件 
+        console.log("3");
+        执行:
+        // 1
+        // 2
+        // 3
 运行环境及执行命令 
   path 环境变量 
     执行命令时,优先到path指定的路径中去寻找
@@ -151,7 +149,7 @@
     node 升级 
       npm cache clean -f   清除 npm cache
       npm install -g n     安装n模块 
-        node有一个模块叫n，是专门用来管理 node.js 的版本
+        node有一个模块叫n,是专门用来管理 node.js 的版本
       n stable   升级 nodejs 到最新稳定版 
         n后面也可以跟随版本号比如：
         n v0.10.26
@@ -163,7 +161,7 @@
       $ n use 0.10.21 some.js 以指定的版本来执行脚本
 
       
-      nvm全称Node Version Manager，它与n的实现方式不同，其是通过shell脚本实现的。
+      nvm全称Node Version Manager,它与n的实现方式不同,其是通过shell脚本实现的。
       
       安装方式有两种：
       
@@ -171,7 +169,7 @@
       或者
       
       $ wget -qO- https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
-      以上脚本会把nvm库clone到~/.nvm，然后会在~/.bash_profile, ~/.zshrc或~/.profile末尾添加source，安装完成之后，你可以用以下命令来安装node
+      以上脚本会把nvm库clone到~/.nvm,然后会在~/.bash_profile, ~/.zshrc或~/.profile末尾添加source,安装完成之后,你可以用以下命令来安装node
       
       $ nvm install 0.10
       使用指定的版本
@@ -194,13 +192,13 @@
       $ rm -rf ~/.nvm
       总结
       
-      以上就是两种Node版本管理工具的安装和基本使用方法，选择适合你的那一种口味。
-  NodeJS REPL Node的交互式解释器 
+      以上就是两种Node版本管理工具的安装和基本使用方法,选择适合你的那一种口味。
+  NodeJS_REPL Node的交互式解释器 
     PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
       Node的交互式解释器可以很好的调试JS代码,
-      'node' 命令来启动Node的终端,'node --use_strict' REPL将在严格模式下运行,
       相当于浏览器的Console控制台「SlPt」
+    'node'命令 来启动Node的终端,'node --use_strict' REPL将在严格模式下运行,
     REPL 命令 
       ctrl + c   按下两次退出 Node REPL
       ctrl + d   退出 Node REPL
@@ -216,6 +214,134 @@
         2
         > _ + 1
         3
+单进程单线程 
+  PS：NodeJS以单线程的模式运行,使用事件驱动来处理并发,
+    每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发。
+    基本上所有的事件机制都是用设计模式中观察者模式实现。
+    每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
+    他们可能会共享父进程的 stdio 流,或者也可以是独立的被导流的流对象.
+  Node 提供了 child_process 模块来创建子进程 
+    child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
+      command： 字符串, 将要运行的命令,参数使用空格隔开
+      options ：对象,可以是：
+      cwd ,字符串,子进程的当前工作目录
+      env,对象 环境变量键值对
+      encoding ,字符串,字符编码(默认： 'utf8')
+      shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
+      timeout,数字,超时时间(默认： 0)
+      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
+      killSignal ,字符串,结束信号(默认：'SIGTERM')
+      uid,数字,设置用户进程的 ID
+      gid,数字,设置进程组的 ID
+      cfoo ：回调函数,包含三个参数error, stdout 和 stderr.
+      exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+          var workerProcess = child_process.exec('node support.js '+i,
+          function (error, stdout, stderr) {
+            if (error) {
+              console.log(error.stack);
+              console.log('Error code: '+error.code);
+              console.log('Signal received: '+error.signal);
+            }
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+          });
+          workerProcess.on('exit', function (code) {
+            console.log('子进程已退出,退出码 '+code);
+          });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js 
+        子进程已退出,退出码 0
+        stdout: 进程 1 执行.
+        stderr: 
+        子进程已退出,退出码 0
+        stdout: 进程 0 执行.
+        stderr: 
+        子进程已退出,退出码 0
+        stdout: 进程 2 执行.
+        stderr:     
+    child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
+      Arguments:
+        command： 将要运行的命令
+        args： Array 字符串参数数组
+        options Object
+        cwd String 子进程的当前工作目录
+        env Object 环境变量键值对
+        stdio Array|String 子进程的 stdio 配置
+        detached Boolean 这个子进程将会变成进程组的领导
+        uid Number 设置用户进程的 ID
+        gid Number 设置进程组的 ID
+        spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+          var workerProcess = child_process.spawn('node', ['support.js', i]);
+          workerProcess.stdout.on('data', function (data) {
+            console.log('stdout: ' + data);
+          });
+          workerProcess.stderr.on('data', function (data) {
+            console.log('stderr: ' + data);
+          });
+          workerProcess.on('close', function (code) {
+            console.log('子进程已退出,退出码 '+code);
+          });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js stdout: 进程 0 执行.
+        子进程已退出,退出码 0
+        stdout: 进程 1 执行.
+        子进程已退出,退出码 0
+        stdout: 进程 2 执行.
+        子进程已退出,退出码 0    
+    child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
+      PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
+        与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
+      Arguments:
+        modulePath： String,将要在子进程中运行的模块
+        args： Array 字符串参数数组
+        options：Object
+        cwd String 子进程的当前工作目录
+        env Object 环境变量键值对
+        execPath String 创建子进程的可执行文件
+        execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
+        silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
+        uid Number 设置用户进程的 ID
+        gid Number 设置进程组的 ID
+        返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+           var worker_process = child_process.fork("support.js", [i]);	
+           worker_process.on('close', function (code) {
+              console.log('子进程已退出,退出码 ' + code);
+           });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js 
+        进程 0 执行.
+        子进程已退出,退出码 0
+        进程 1 执行.
+        子进程已退出,退出码 0
+        进程 2 执行.
+        子进程已退出,退出码 0
 --------------------------------------------------------------------------------
 基础语法 
   this 
@@ -630,11 +756,13 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
   PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
-  Stream 有四种流类型：
-    Readable  可读操作
-    Writable  可写操作
-    Duplex    可读可写操作
-    Transform 操作被写入数据,然后读出结果
+  var steam = require('stream');  // 
+  四种Stream流类型：
+    Readable  可读流,读取数据并暂存于bufer中 
+      可'pause'和'resume' 
+    Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
+    Duplex    可读可写操作 
+    Transform 可读写,操作被写入数据,然后读出结果
   ◆stm流对象的方法属性
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 
@@ -652,6 +780,7 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
     writerStream.on("drain",function(){
       readStream.resume();
     })
+  pipe()   
   ◆Event 常用事件 
   data     当steam数据传递时时触发 
     stm.on("data",function(chunk){
@@ -828,39 +957,52 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
   events 事件模块 
-    PS：NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
-    NodeJS 里面的许多对象都会分发事件：
-      一个 net.Server 对象会在每次有新连接时分发一个事件,
-      一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-      所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-    var events = require('events');   引入events模块
+    PS：events 模块只提供了一个对象： events.EventEmitter, 
+      EventEmitter 的核心就是事件触发与事件监听器功能的封装;
+      NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
+      NodeJS 里面的许多对象都会分发事件：
+        一个 net.Server 对象会在每次有新连接时分发一个事件,
+        一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
+        所有这些产生事件的对象都是 events.EventEmitter 的实例; 
+    var events = require('events');   引入events模块 
+    ★EventEmitter 类
     var EventEmitter = events.EventEmitter;  获取到事件对象的类 
-    var evt = new EventEmitter(); 创建事件功能对象 
+    var evEm = new EventEmitter(); 创建事件功能对象 
       EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
       当添加新的监听器时,'newListener' 事件会触发,
       当监听器被移除时,'removeListener' 事件被触发.
-    evt.on('eName',foo);    监听事件 
-      PS：事件名为字符串,可自定义,一个事件可以绑定多次, 
-        此处'on'也可以换成'addEventListener';
-      回调函数的传入的参数为[手动]触发时指定的值 
-    evt.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听  
+    ▼实例属性方法
+    evEm.on('eName',foo);    监听事件 
+      PS： 此处'on'也可以换成'addEventListener' 
+      foo 回调函数,参数为[手动]触发时传入的值 
+    evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
+    evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+    evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
       当事件触发时,注册到这个事件的事件监听器被依次调用
-    evt.addListener('eName',listener) 给指定事件添加监听器
-    evt.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-    evt.removeListener('eName',fooName)  移除指定事件的监听 
+    evEm.removeListener('eName',fooName)  移除指定事件的监听 
       PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
       fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
       e.g.: 
         var callback = function(stream) { };
         server.on('connection', callback);
         server.removeListener('connection', callback);
-    evt.removeAllListeners(['eName'])  移除所有监听器
+    evEm.removeAllListeners(['eName'])  移除所有监听器
       eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
-    evt.setMaxListeners(num)   设置事件最大的监听数量 
+    evEm.setMaxListeners(num)   设置事件最大的监听数量 
       默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
-    evt.listeners('eName')     返回指定事件的监听函数的数组 
-    evt.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值
-    EventEmitter.listenerCount(evt,'eName')  返回指定事件功能对象的事件的监听器数量 
+    evEm.listeners('eName')     返回指定事件的监听函数的数组 
+    evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
+    ▼类属性方法
+    EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
+    ▼EventEmitter 事件 
+    error  在实例化时发生错误触发
+    newListener     在添加新监听器时被触发
+      event - 字符串,事件名称
+      listener - 处理事件函数
+    removeListener  从指定监听器数组中删除一个监听器
+      此操作将会改变处于被删监听器之后的那些监听器的索引
+      event - 字符串,事件名称
+      listener - 处理事件函数
     e.g.: 
       var events = require('events');
       var event = new events.EventEmitter();
@@ -2098,136 +2240,8 @@ RESTful API
         profession: 'clerk',
         id: 3 } 
       }  
-多进程 
-  PS：NodeJS 是以单线程的模式运行的,但它使用的是事件驱动来处理并发,
-    这样有助于我们在多核 cpu 的系统上创建多个子进程,从而提高性能.
-    每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
-    他们可能会共享父进程的 stdio 流,或者也可以是独立的被导流的流对象.
-  Node 提供了 child_process 模块来创建子进程,方法有：
-  child_process.exec(command[,options],callback); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
-    Arguments:
-      command： 字符串, 将要运行的命令,参数使用空格隔开
-      options ：对象,可以是：
-      cwd ,字符串,子进程的当前工作目录
-      env,对象 环境变量键值对
-      encoding ,字符串,字符编码(默认： 'utf8')
-      shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
-      timeout,数字,超时时间(默认： 0)
-      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
-      killSignal ,字符串,结束信号(默认：'SIGTERM')
-      uid,数字,设置用户进程的 ID
-      gid,数字,设置进程组的 ID
-      callback ：回调函数,包含三个参数error, stdout 和 stderr.
-      exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
-    e.g.:
-      让我们创建两个 js 文件 support.js 和 master.js.
-      support.js 文件代码：
-      console.log("进程 " + process.argv[2] + " 执行." );
-      master.js 文件代码：
-      const fs = require('fs');
-      const child_process = require('child_process');
-      for(var i=0; i<3; i++) {
-        var workerProcess = child_process.exec('node support.js '+i,
-        function (error, stdout, stderr) {
-          if (error) {
-            console.log(error.stack);
-            console.log('Error code: '+error.code);
-            console.log('Signal received: '+error.signal);
-          }
-          console.log('stdout: ' + stdout);
-          console.log('stderr: ' + stderr);
-        });
-        workerProcess.on('exit', function (code) {
-          console.log('子进程已退出,退出码 '+code);
-        });
-      }
-      执行以上代码,输出结果为：
-      $ node master.js 
-      子进程已退出,退出码 0
-      stdout: 进程 1 执行.
-      stderr: 
-      子进程已退出,退出码 0
-      stdout: 进程 0 执行.
-      stderr: 
-      子进程已退出,退出码 0
-      stdout: 进程 2 执行.
-      stderr:     
-  child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
-    Arguments:
-      command： 将要运行的命令
-      args： Array 字符串参数数组
-      options Object
-      cwd String 子进程的当前工作目录
-      env Object 环境变量键值对
-      stdio Array|String 子进程的 stdio 配置
-      detached Boolean 这个子进程将会变成进程组的领导
-      uid Number 设置用户进程的 ID
-      gid Number 设置进程组的 ID
-      spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
-    e.g.:
-      让我们创建两个 js 文件 support.js 和 master.js.
-      support.js 文件代码：
-      console.log("进程 " + process.argv[2] + " 执行." );
-      master.js 文件代码：
-      const fs = require('fs');
-      const child_process = require('child_process');
-      for(var i=0; i<3; i++) {
-        var workerProcess = child_process.spawn('node', ['support.js', i]);
-        workerProcess.stdout.on('data', function (data) {
-          console.log('stdout: ' + data);
-        });
-        workerProcess.stderr.on('data', function (data) {
-          console.log('stderr: ' + data);
-        });
-        workerProcess.on('close', function (code) {
-          console.log('子进程已退出,退出码 '+code);
-        });
-      }
-      执行以上代码,输出结果为：
-      $ node master.js stdout: 进程 0 执行.
-      子进程已退出,退出码 0
-      stdout: 进程 1 执行.
-      子进程已退出,退出码 0
-      stdout: 进程 2 执行.
-      子进程已退出,退出码 0    
-  child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
-    PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
-      与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
-    Arguments:
-      modulePath： String,将要在子进程中运行的模块
-      args： Array 字符串参数数组
-      options：Object
-      cwd String 子进程的当前工作目录
-      env Object 环境变量键值对
-      execPath String 创建子进程的可执行文件
-      execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
-      silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
-      uid Number 设置用户进程的 ID
-      gid Number 设置进程组的 ID
-      返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
-    e.g.:
-      让我们创建两个 js 文件 support.js 和 master.js.
-      support.js 文件代码：
-      console.log("进程 " + process.argv[2] + " 执行." );
-      master.js 文件代码：
-      const fs = require('fs');
-      const child_process = require('child_process');
-      for(var i=0; i<3; i++) {
-         var worker_process = child_process.fork("support.js", [i]);	
-         worker_process.on('close', function (code) {
-            console.log('子进程已退出,退出码 ' + code);
-         });
-      }
-      执行以上代码,输出结果为：
-      $ node master.js 
-      进程 0 执行.
-      子进程已退出,退出码 0
-      进程 1 执行.
-      子进程已退出,退出码 0
-      进程 2 执行.
-      子进程已退出,退出码 0
 其他相关 
-  electron 开发桌面程序
+  electron 开发桌面程序 
 --------------------------------------------------------------------------------
 总结收集
 ----------------------------------------------------------------------以下待整理

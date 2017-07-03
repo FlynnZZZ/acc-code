@@ -626,7 +626,7 @@
   module
   module.exports
   exports
-Stream,流  用于暂存和移动数据 
+Stream,流  用于暂存和移动数据[以bufer的形式存在] 
   PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 

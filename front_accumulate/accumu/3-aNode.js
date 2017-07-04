@@ -376,12 +376,9 @@
       console.log(this.foo); // bar
       testThis();
       console.log(this.foo); // foo
-全局对象 
-  PS：JS中有一个特殊的对象,称为全局对象[Global Object],
-    它及其所有属性都可以在程序的任何地方访问,即全局变量
-    在浏览器JS中,通常 window 是全局对象, 而 Node 中的全局对象是 global,
-    所有全局变量,除了 global 本身以外都是 global 对象的属性 
-    在 Node 可直接访问到 global 的属性,而不需要在应用中包含它
+Global_Object 全局对象及其所有属性都可以在程序的任何地方访问 
+  PS：浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
+    所有全局变量[除了global本身以外]都是'global'对象的属性 
   ECMAScript 全局变量的定义 
     在最外层定义的变量
     全局对象的属性
@@ -405,23 +402,23 @@
         该变量不是global对象的属性
         global.x // undefined。
         因为模块的全局变量都是该模块私有的,其他模块无法取到。
-  process global对象的属性对象,用于描述当前Node进程状态 
-    PS：表示Node所处的当前进程,允许开发者与该进程互动,
+  process 用于描述当前Node进程状态 
+    PS：global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
       提供了一个与操作系统的简单接口
     ◆事件
-    exit   当进程准备退出时触发.
-    beforeExit 当 node 清空事件循环,并且没有其他安排时触发这个事件.
+    exit       当进程准备退出时触发.
+    beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
       通常来说,当没有进程安排时 node 退出,
       但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
     uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
-      若给异常添加了监视器,默认的操作(打印堆栈跟踪信息并退出)就不会发生.
-    Signal 当进程接收到信号时就触发.
+      若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
+    signal 当进程接收到信号时就触发.
       信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
     e.g.:
-      创建文件 main.js ,代码如下所示：
       process.on('exit', function(code) {
-        // 以下代码永远不会执行
-        setTimeout(function() { console.log("该代码不会执行"); }, 0);
+        setTimeout(function() {  // 该代码永远不会执行
+          console.log("该代码不会执行"); 
+        }, 0);
         console.log('退出码为:', code);
       });
       console.log("程序执行结束");
@@ -534,171 +531,8 @@
       当前目录: /web/com/runoob/nodejs
       当前版本: v0.10.36
       { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
-  Date    时间类
-  console 用于提供控制台标准输出 
-    PS：由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
-      NodeJS 沿用了这个标准,提供与习惯行为一致的 console 对象,
-      用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
-      指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
-    console.log([data][, ...]) 向标准输出流打印字符并以换行符结束
-      该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
-      若有多个参数,则 以类似于C 语言 printf() 命令的格式输出.
-    console.info([data][, ...]) 该命令的作用是返回信息性消息
-      这个命令与 console.log 差别并不大,
-      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
-    console.error([data][, ...]) 输出错误消息的
-      控制台在出现错误时会显示是红色的叉子.
-    console.warn([data][, ...]) 输出警告消息
-      控制台出现有黄色的惊叹号.
-    console.dir(obj[, options]) 用来对一个对象进行检查(inspect),并以易于阅读和打印的格式显示.
-    console.time(label) 输出时间,表示计时开始.
-    console.timeEnd(label) 结束时间,表示计时结束.
-    console.trace(message[, ...]) 当前执行的代码在堆栈中的调用路径
-      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
-    console.assert(value[, message][, ...]) 用于判断某个表达式或变量是否为真,
-      接收两个参数,第一个参数是表达式,第二个参数是字符串.
-      只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-  Buffer  缓冲区,处理二进制数据的接口[用于保存原始数据] 
-    PS：JS只有字符串数据类型,没有二进制数据类型, 
-      处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
-      用来创建一个专门存放二进制数据的缓存区;
-      在NodeJS中,Buffer类是随Node内核一起发布的核心库;
-    var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
-      PS： bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
-      ◆val可为以下类型：
-      num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
-        var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
-      bufer       bufer对象,通过拷贝来创建新buffer对象 
-        var buffer = new Buffer([1, 1, 2, 2, 3]);
-        console.log(buffer); // <Buffer 01 01 02 02 03>
-      str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
-        type  编码方式,默认为'utf-8',其他可选值为 
-          "base64"  
-          "ascii"   
-          "utf8"    
-          "utf-8"    
-          "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
-          "ucs2"    utf16le的别名
-          "hex"     将每个字节转为两个十六进制字符
-        e.g.：
-          var bufer1 = new Buffer("abcdefg", "utf-8"); 
-          var bufer2 = new Buffer("abcdefg", "base64"); 
-          console.log(bufer1,bufer2);
-          // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
-      arr         数组,数组成员必须是整数值
-        var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
-        console.log(hello.toString()); // 'Hello'
-    ◆Buffer实例的属性方法 
-    bufer[idx]  下标访问
-    bufer.length  读写,bufer对象所占据的内存长度  
-      PS：改值与Buffer对象的内容无关;
-        如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
-      var buf1 = new Buffer('1234567');
-      var buf2 = new Buffer(8);
-      console.log(buf1.length); // 7
-      console.log(buf2.length); // 8
-    bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
-      PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-      e.g.:
-        var bufer = new Buffer('abc');
-        var json = bufer.toJSON();
-        console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-        console.log(typeof json); // object
-        
-        var buf = new Buffer('test');
-        var json = JSON.stringify(buf);
-        console.log(json); // '[116,101,115,116]'
-        var copy = new Buffer(JSON.parse(json));
-        console.log(copy); // <Buffer 74 65 73 74>
-    bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
-      PS：若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略;
-      str   写入缓冲区的字符串 
-      idx   缓冲区开始写入的索引值,默认为 0 
-      len   写入的字节数,默认为 buffer.length 
-      typ   使用的编码.默认为'utf8' 
-      e.g.: 
-        var buf = new Buffer('abcdefg');
-        var len = buf.write("1234");
-        console.log("写入字节数 : "+ len);  // 写入字节数 : 4
-        console.log(buf.toString()); // 1234efg
-    bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
-      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
-      bgn    开始读取的索引位置,默认为 0 
-      end    结束位置,默认为缓冲区的末尾 
-      e.g.:
-        var buf = new Buffer(26);
-        for (var i = 0 ; i < 26 ; i++) { 
-          buf[i] = i + 97; 
-        }
-        console.log(buf);
-        // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-        console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-        console.log( buf.toString('ascii',0,5));   // 输出: abcde
-        console.log( buf.toString('utf8',0,5));    // 输出: abcde
-        console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-    bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区
-      begin 可选,默认为 0
-      end   可选,默认为 bufer.length
-      e.g.:
-        var buf1 = new Buffer('123');
-        var buf2 = buf1.slice(0,2);
-        console.log(buf2); // <Buffer 31 32>
-    bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
-      bufer1   复制的目标bufer对象 
-      bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
-      bfBgn    数字,可选,默认为 0 
-      bfEnd    数字,可选,默认为 buf.length 
-      e.g.: 
-        var buf1 = new Buffer('abcdefghi');
-        var buf2 = new Buffer(6);
-        for (var i = 0; i < buf2.length; i++) {
-          buf2[i] = 65;
-        }
-        console.log(buf1,buf2);
-        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
-        buf1.copy(buf2,2,3,5);
-        console.log(buf1,buf2);
-        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
-        var bufStr1 = buf1.toString();
-        var bufStr2 = buf2.toString();
-        console.log(bufStr1,bufStr2);
-        // abcdefghi AAdeAA
-    bufer.compare(buf)  比较 
-      e.g.:
-        var buf1 = new Buffer('10');
-        var buf2 = new Buffer('11');
-        var result = buf1.compare(buf2);
-        console.log(result); // -1
-    bufer.equals(bufer1)
-    ◆静态属性方法 
-    Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
-      buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-        参数列表只有一个成员,就直接返回该成员
-      length  可选,默认为总长度,指定新buf对象的长度
-        省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
-        因此,显式提供这个参数,能提供运行速度。 
-      e.g.:
-        var buf1 = new Buffer('11');
-        var buf2 = new Buffer('22');
-        var buf3 = Buffer.concat([buf1,buf2]);
-        console.log(buf3.toString());   // 1122
-    Buffer.isEncoding(typ)  返回布尔值,表示Buffer实例是否为指定编码 
-      Buffer.isEncoding('utf8'); // true
-    Buffer.isBuffer(obj)    返回布尔值,判断对象是否为Buffer实例的 
-      Buffer.isBuffer(Date) // false
-    Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度 
-      str  检测的字符串
-      typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
-      Buffer.byteLength('Hello', 'utf8') // 5
-    Buffer.compare(buf1,buf2)    比较两份Buffer对象 
-    与二进制数组的关系 
-      TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
-      比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
-      注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]）。
-      另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的。
-      二进制数组的buffer属性,保留指向原Buffer对象的指针。
-      二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
-      比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
+  Date    时间类 
+  console 用于提供控制台标准输出[详见浏览器调试] 
   ◆全局变量
   __filename 当前正在执行的脚本的文件名 
     PS：将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
@@ -746,12 +580,241 @@
     若超过这个范围,会被自动改为1毫秒;
   clearInterval(num)     终止一个用setInterval方法新建的定时器 
   require() 用于加载模块 
-  Buffer()  用于操作二进制数据 
   ◆伪全局变量 
     模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
   exports
+events 事件模块 
+  PS：events 模块只提供了一个对象： events.EventEmitter, 
+    EventEmitter 的核心就是事件触发与事件监听器功能的封装;
+    NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
+    NodeJS 里面的许多对象都会分发事件：
+      一个 net.Server 对象会在每次有新连接时分发一个事件,
+      一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
+      所有这些产生事件的对象都是 events.EventEmitter 的实例; 
+    大多数时候不会直接使用 EventEmitter,而是在对象中继承它。
+    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类。
+  var events = require('events');   引入events模块 
+  ★EventEmitter 类
+  var EventEmitter = events.EventEmitter;  获取到事件对象的类 
+  var evEm = new EventEmitter(); 创建事件功能对象 
+    EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
+    当添加新的监听器时,'newListener' 事件会触发,
+    当监听器被移除时,'removeListener' 事件被触发.
+  ▼实例属性方法
+  evEm.on('eName',foo);    监听事件 
+    PS： 此处'on'也可以换成'addEventListener' 
+    foo 回调函数,参数为[手动]触发时传入的值 
+  evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
+  evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+  evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
+    当事件触发时,注册到这个事件的事件监听器被依次调用
+  evEm.removeListener('eName',fooName)  移除指定事件的监听 
+    PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
+    fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
+    e.g.: 
+      var callback = function(stream) { };
+      server.on('connection', callback);
+      server.removeListener('connection', callback);
+  evEm.removeAllListeners(['eName'])  移除所有监听器
+    eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
+  evEm.setMaxListeners(num)   设置事件最大的监听数量 
+    默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
+  evEm.listeners('eName')     返回指定事件的监听函数的数组 
+  evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
+  ▼类属性方法
+  EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
+  ▼EventEmitter 事件 
+  error  在实例化时发生错误触发 
+    当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
+    Node.js 会把它当作异常,退出程序并输出错误信息,
+    为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
+  newListener     在添加新监听器时被触发 
+    event - 字符串,事件名称
+    listener - 处理事件函数
+  removeListener  从指定监听器数组中删除一个监听器
+    此操作将会改变处于被删监听器之后的那些监听器的索引
+    event - 字符串,事件名称
+    listener - 处理事件函数
+  e.g.: 
+    var events = require('events');
+    var event = new events.EventEmitter();
+    var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
+    var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
+    // 绑定 connection 事件,处理函数为 listener1 
+    event.addListener('connection', listener1);
+    // 绑定 connection 事件,处理函数为 listener2
+    event.on('connection', listener2);
+    var eventListeners = events.EventEmitter.listenerCount(event,'connection');
+    console.log(eventListeners + " 个监听器监听连接事件");
+    event.emit('connection'); // 激活事件
+    event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
+    console.log("listener1 不再受监听");
+    event.emit('connection'); // 触发事件
+    eventListeners = events.EventEmitter.listenerCount(event,'connection');
+    console.log(eventListeners + " 个监听器监听连接事件");
+    console.log("程序执行完毕");
+    执行结果
+      2 个监听器监听连接事件
+      监听器 listener1 执行
+      监听器 listener2 执行
+      listener1 不再受监听
+      监听器 listener2 执行
+      1 个监听器监听连接事件
+      程序执行完毕
+  继承 EventEmitter 
+    大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
+    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
+    为什么要这样做呢？原因有两点：
+    首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
+    其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
+    继承 EventEmitter 不会打乱对象原有的继承关系.
+Buffer  缓冲区,处理二进制数据的接口[用于保存原始数据] 
+  PS：JS只有字符串数据类型,没有二进制数据类型, 
+    处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
+    用来创建一个专门存放二进制数据的缓存区;
+    在NodeJS中,Buffer类是随Node内核一起发布的核心库;
+    Buffer 库为 Node.js 带来了一种存储原始数据的方法,
+    每当需要在 Node.js 中处理I/O操作中移动的数据时,就有可能使用 Buffer 库。
+    原始数据存储在 Buffer 类的实例中。
+    一个 Buffer 类似于一个整数数组,对应于 V8 堆内存之外的一块原始内存。
+  var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
+    PS： bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
+    ◆val可为以下类型：
+    num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
+      var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
+    bufer       bufer对象,通过拷贝来创建新buffer对象 
+      var buffer = new Buffer([1, 1, 2, 2, 3]);
+      console.log(buffer); // <Buffer 01 01 02 02 03>
+    str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
+      type  编码方式,默认为'utf-8',其他可选值为 
+        "base64"  
+        "ascii"   
+        "utf8"    
+        "utf-8"    
+        "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
+        "ucs2"    utf16le的别名
+        "hex"     将每个字节转为两个十六进制字符
+      e.g.：
+        var bufer1 = new Buffer("abcdefg", "utf-8"); 
+        var bufer2 = new Buffer("abcdefg", "base64"); 
+        console.log(bufer1,bufer2);
+        // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
+    arr         数组,数组成员必须是整数值 
+      var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
+      console.log(hello.toString()); // 'Hello'
+  ◆Buffer实例的属性方法 
+  bufer[idx]  下标访问
+  bufer.length  读写,bufer对象所占据的内存长度  
+    PS：改值与Buffer对象的内容无关;
+      如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+    var buf1 = new Buffer('1234567');
+    var buf2 = new Buffer(8);
+    console.log(buf1.length); // 7
+    console.log(buf2.length); // 8
+  bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
+    PS：若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
+    str   写入缓冲区的字符串 
+    idx   缓冲区开始写入的索引值,默认为 0 
+    len   写入的字节数,默认为 buffer.length 
+    typ   使用的编码.默认为'utf8' 
+    e.g.: 
+      var buf = new Buffer('abcdefg');
+      var len = buf.write("1234");
+      console.log("写入字节数 : "+ len);  // 写入字节数 : 4
+      console.log(buf.toString()); // 1234efg
+  bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
+    typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+    bgn    开始读取的索引位置,默认为 0 
+    end    结束位置,默认为缓冲区的末尾 
+    e.g.:
+      var buf = new Buffer(26);
+      for (var i = 0 ; i < 26 ; i++) { 
+        buf[i] = i + 97; 
+      }
+      console.log(buf);
+      // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+      console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+      console.log( buf.toString('ascii',0,5));   // 输出: abcde
+      console.log( buf.toString('utf8',0,5));    // 输出: abcde
+      console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+  bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
+    PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+    e.g.:
+      var bufer = new Buffer('abc');
+      var json = bufer.toJSON();
+      console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+      console.log(typeof json); // object
+      
+      var buf = new Buffer('test');
+      var json = JSON.stringify(buf);
+      console.log(json); // '[116,101,115,116]'
+      var copy = new Buffer(JSON.parse(json));
+      console.log(copy); // <Buffer 74 65 73 74>
+  bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
+    begin 可选,默认为 0
+    end   可选,默认为 bufer.length
+    e.g.:
+      var buf1 = new Buffer('123');
+      var buf2 = buf1.slice(0,2);
+      console.log(buf2); // <Buffer 31 32>
+  bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
+    bufer1   复制的目标bufer对象 
+    bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
+    bfBgn    数字,可选,默认为 0 
+    bfEnd    数字,可选,默认为 buf.length 
+    e.g.: 
+      var buf1 = new Buffer('abcdefghi');
+      var buf2 = new Buffer(6);
+      for (var i = 0; i < buf2.length; i++) {
+        buf2[i] = 65;
+      }
+      console.log(buf1,buf2);
+      // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+      buf1.copy(buf2,2,3,5);
+      console.log(buf1,buf2);
+      // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+      var bufStr1 = buf1.toString();
+      var bufStr2 = buf2.toString();
+      console.log(bufStr1,bufStr2);
+      // abcdefghi AAdeAA
+  bufer.compare(buf)  比较 
+    e.g.:
+      var buf1 = new Buffer('10');
+      var buf2 = new Buffer('11');
+      var result = buf1.compare(buf2);
+      console.log(result); // -1
+  bufer.equals(bufer1)
+  ◆静态属性方法 
+  Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
+    buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
+      参数列表只有一个成员,就直接返回该成员
+    length  可选,默认为总长度,指定新buf对象的长度
+      省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
+      因此,显式提供这个参数,能提供运行速度。 
+    e.g.:
+      var buf1 = new Buffer('11');
+      var buf2 = new Buffer('22');
+      var buf3 = Buffer.concat([buf1,buf2]);
+      console.log(buf3.toString());   // 1122
+  Buffer.isEncoding(typ)  返回布尔值,表示Buffer实例是否为指定编码 
+    Buffer.isEncoding('utf8'); // true
+  Buffer.isBuffer(obj)    返回布尔值,判断对象是否为Buffer实例的 
+    Buffer.isBuffer(Date) // false
+  Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度 
+    str  检测的字符串
+    typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
+    Buffer.byteLength('Hello', 'utf8') // 5
+  Buffer.compare(buf1,buf2)    比较两份Buffer对象 
+  与二进制数组的关系 
+    TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
+    比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
+    注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]）。
+    另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的。
+    二进制数组的buffer属性,保留指向原Buffer对象的指针。
+    二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
+    比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
 Stream,流  用于暂存和移动数据[以bufer的形式存在] 
   PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
@@ -766,7 +829,7 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
   ◆stm流对象的方法属性
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 
-  stm.write()    写入流 
+  writerStream.write(data,'UTF8')   使用 utf8 编码写入数据 
     var readStream = fs.createReadStream('video.mp4');
     var writerStream = fs.createWriteStream('video1.mp4');
     readStream.on("data",function(chunk){
@@ -780,8 +843,48 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
     writerStream.on("drain",function(){
       readStream.resume();
     })
-  pipe()   
+  writerStream.end()      标记文件末尾
+  readerStream.setEncoding('UTF8');  设置编码为 utf8
+  pipe 管道 
+    PS：管道提供了一个输出流到输入流的机制 
+      通常用于从一个流中获取数据并将数据传递到另外一个流中 
+      慢慢的实现大文件的复制过程 
+    e.g.:
+      读取一文件内容并将数据写入到另外一文件中
+      设置 input.txt 文件内容如下：
+        菜鸟教程官网地址：www.runoob.com
+      创建 main.js 文件, 代码如下：
+        var fs = require("fs");
+        var rs = fs.createReadStream('input.txt');// 创建一个可读流
+        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
+        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
+        rs.pipe(writerStream); // 管道读写操作
+        console.log("程序执行完毕");
+      程序执行完毕,查看 output.txt 文件的内容：
+        菜鸟教程官网地址：www.runoob.com
+    链式流,通过连接输出流到另外一个流并创建多个对个流操作链的机制,一般用于管道操作
+      e.g.:
+      用管道和链式来压缩文件 
+        创建 compress.js 文件, 代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 压缩 input.txt 文件为 input.txt.gz
+        fs.createReadStream('input.txt')
+        .pipe(zlib.createGzip())
+        .pipe(fs.createWriteStream('input.txt.gz'));
+        console.log("文件压缩完成.");
+        执行后,当前目录下生成压缩文件 input.txt.gz 
+      用管道和链式来解压文件 
+        创建 decompress.js 文件,代码如下：
+        var fs = require("fs");
+        var zlib = require('zlib');
+        // 解压 input.txt.gz 文件为 input.txt
+        fs.createReadStream('input.txt.gz')
+        .pipe(zlib.createGunzip())
+        .pipe(fs.createWriteStream('input.txt'));
+        console.log("文件解压完成.");
   ◆Event 常用事件 
+    所有的 Stream 对象都是 EventEmitter 的实例
   data     当steam数据传递时时触发 
     stm.on("data",function(chunk){
       // chunk 数据块,Buffer类型 
@@ -827,88 +930,40 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
         写入完成.
       查看 output.txt 文件的内容：
         菜鸟教程官网地址：www.runoob.com
-  管道流 
-    PS：管道提供了一个输出流到输入流的机制 
-      通常我们用于从一个流中获取数据并将数据传递到另外一个流中
-    e.g.:
-      读取一文件内容并将数据写入到另外一文件中
-      设置 input.txt 文件内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
-        var fs = require("fs");
-        var rs = fs.createReadStream('input.txt');// 创建一个可读流
-        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
-        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
-        rs.pipe(writerStream); // 管道读写操作
-        console.log("程序执行完毕");
-      程序执行完毕,查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
-  链式流
-    PS：链式是通过连接输出流到另外一个流并创建多个对个流操作链的机制.
-      链式流一般用于管道操作.
-    e.g.:
-      用管道和链式来压缩和解压文件
-        创建 compress.js 文件, 代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 压缩 input.txt 文件为 input.txt.gz
-        fs.createReadStream('input.txt')
-          .pipe(zlib.createGzip())
-          .pipe(fs.createWriteStream('input.txt.gz'));
-        console.log("文件压缩完成.");
-        代码执行结果如下：
-        文件压缩完成.
-        执行完以上操作后,我们可以看到当前目录下生成了 input.txt 的压缩文件 input.txt.gz.
-      接下来,解压该文件
-        创建 decompress.js 文件,代码如下：
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 解压 input.txt.gz 文件为 input.txt
-        fs.createReadStream('input.txt.gz')
-          .pipe(zlib.createGunzip())
-          .pipe(fs.createWriteStream('input.txt'));
-        console.log("文件解压完成.");
-        代码执行结果如下：
-        文件解压完成.
-模块 
+模块,Nodejs应用程序的基本组成部分,可让Nodejs的文件可以相互调用 
   PS：文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
-    文件可能是JavaScript 代码、JSON 或者编译过的 C/C++ 扩展等等;
+    文件可能是JS代码、JSON 或者编译过的 C/C++ 扩展等等;
     按照CommonJS规范定义和使用模块
   commonjs规范 模块的引入 
     module       模块公开的接口 
       PS：module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
-      exports.foo = function(){ } 
-        hello.js 文件中
-          exports.world = function() { 
-            console.log('Hello World'); 
-          };
-          // 通过 exports 对象把 world 作为模块的访问接口 
-        main.js  文件中
-          通过 require('./hello') 加载这个模块,
-          然后就可以直接访 问 hello.js 中 exports 对象的成员函数 world 了
-      module.obj = function(){ } 
-        hello.js 文件中 
-          function world() { 
-            var name; 
-            this.setName = function(thyName) { name = thyName; }; 
-            this.sayHello = function() { console.log('Hello ' + name); }; 
-          }; 
-          module.exports = world;
-        main.js  文件中 
-          var World = require('./hello'); 
-          world = new World(); 
-          world.setName('BYVoid'); 
-          world.sayHello(); 
-    require(arg) 获取模块的接口 
-      PS：加载时可以省略脚本文件的后缀名
+      hello.js 文件中 
+        function world() { 
+          console.log(1);
+        }; 
+        module.exports = world;
+      main.js  文件中 
+        var word = require('./hello'); 
+        world(); // 1
+    exports      模块公开的接口 
+      hello.js 文件中 
+        // 通过 exports 对象把 world 作为模块的访问接口 
+        exports.world = function() { 
+          console.log(1); 
+        };
+      main.js  文件中 
+        var world = require('./hello'); // 加载模块 
+        world.world(); // 1 
+    require(arg) 获取模块的接口[即所获取模块的 exports 对象] 
+      PS：加载时可省略脚本文件的后缀名 
         模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
-        意味着模块实际上只会执行一次。
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数。        
+        意味着模块实际上只会执行一次 
+        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数 
       arg  可为模块名或文件路径  
         原生模块       http、fs、path等模块名
         相对路径的文件 ./mod或../mod等
         绝对路径的文件 /pathtomodule/mod等
-        name  非原生模块的文件模块,通过配置文件指定
+        name  非原生模块的文件模块,通过配置文件指定 
           var bar = require('bar');
           有时候,一个模块本身就是一个目录,目录中包含多个文件。
           这时候,Node在 package.json 文件中,寻找main属性所指明的模块入口文件。
@@ -922,10 +977,10 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
           下面写法会起到同样效果。
           var bar = require('bar/lib/bar.js');
           若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
-      var aoo = require(str);  通过模块名引入 
-        e.g.:  var fs = require('fs'); // 引入fs模块
-      var aoo = require(path); 通过路径引入 
-        e.g. : 模块的引入和创建 
+      e.g.：
+        通过模块名引入 
+        var fs = require('fs'); // 引入fs模块
+        通过路径引入 
           student.js 文件中
             function add(student){ console.log("Add student:" + student); }
             exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
@@ -956,86 +1011,6 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
   ◆核心模块[Node自带不用安装即可使用] 
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
-  events 事件模块 
-    PS：events 模块只提供了一个对象： events.EventEmitter, 
-      EventEmitter 的核心就是事件触发与事件监听器功能的封装;
-      NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
-      NodeJS 里面的许多对象都会分发事件：
-        一个 net.Server 对象会在每次有新连接时分发一个事件,
-        一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-        所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-    var events = require('events');   引入events模块 
-    ★EventEmitter 类
-    var EventEmitter = events.EventEmitter;  获取到事件对象的类 
-    var evEm = new EventEmitter(); 创建事件功能对象 
-      EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
-      当添加新的监听器时,'newListener' 事件会触发,
-      当监听器被移除时,'removeListener' 事件被触发.
-    ▼实例属性方法
-    evEm.on('eName',foo);    监听事件 
-      PS： 此处'on'也可以换成'addEventListener' 
-      foo 回调函数,参数为[手动]触发时传入的值 
-    evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
-    evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-    evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
-      当事件触发时,注册到这个事件的事件监听器被依次调用
-    evEm.removeListener('eName',fooName)  移除指定事件的监听 
-      PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
-      fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
-      e.g.: 
-        var callback = function(stream) { };
-        server.on('connection', callback);
-        server.removeListener('connection', callback);
-    evEm.removeAllListeners(['eName'])  移除所有监听器
-      eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
-    evEm.setMaxListeners(num)   设置事件最大的监听数量 
-      默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
-    evEm.listeners('eName')     返回指定事件的监听函数的数组 
-    evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
-    ▼类属性方法
-    EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
-    ▼EventEmitter 事件 
-    error  在实例化时发生错误触发
-    newListener     在添加新监听器时被触发
-      event - 字符串,事件名称
-      listener - 处理事件函数
-    removeListener  从指定监听器数组中删除一个监听器
-      此操作将会改变处于被删监听器之后的那些监听器的索引
-      event - 字符串,事件名称
-      listener - 处理事件函数
-    e.g.: 
-      var events = require('events');
-      var event = new events.EventEmitter();
-      var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
-      var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
-      // 绑定 connection 事件,处理函数为 listener1 
-      event.addListener('connection', listener1);
-      // 绑定 connection 事件,处理函数为 listener2
-      event.on('connection', listener2);
-      var eventListeners = events.EventEmitter.listenerCount(event,'connection');
-      console.log(eventListeners + " 个监听器监听连接事件");
-      event.emit('connection'); // 激活事件
-      event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
-      console.log("listener1 不再受监听");
-      event.emit('connection'); // 触发事件
-      eventListeners = events.EventEmitter.listenerCount(event,'connection');
-      console.log(eventListeners + " 个监听器监听连接事件");
-      console.log("程序执行完毕");
-      执行结果
-        2 个监听器监听连接事件
-        监听器 listener1 执行
-        监听器 listener2 执行
-        listener1 不再受监听
-        监听器 listener2 执行
-        1 个监听器监听连接事件
-        程序执行完毕
-    继承 EventEmitter 
-      大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
-      包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-      为什么要这样做呢？原因有两点：
-      首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
-      其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
-      继承 EventEmitter 不会打乱对象原有的继承关系.
   url    解析URL 
     PS：包含五个方法,不需要实例化[本身就是一实例对象]
     var url = require("url"); 引入url模块
@@ -1260,26 +1235,54 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
         console.log('Server running at http://127.0.0.1:8081/');
       创建Web客户端 
         var http = require('http');
-        var options = {
+        var options = { // 用于请求的选项 
           host: 'localhost',
           port: '8081',
           path: '/index.htm'  
         };
-        var callback = function(response){
+        var callback = function(response){ // 处理响应的回调函数
           var body = '';
-          response.on('data', function(data) {
+          response.on('data', function(data) { // 不断更新数据
             body += data;
           });
-          response.on('end', function() {
-            // 数据接收完成
+          response.on('end', function() { // 数据接收完成
             console.log(body);
           });
         }
-        var req = http.request(options, callback);
+        var req = http.request(options, callback); // 向服务端发送请求
         req.end();
+    路由 
+      PS：为路由提供请求的URL和其他需要的GET及POST参数,路由根据这些数据来执行相应的代码.
+        因此需要查看HTTP请求,从中提取出请求的URL以及GET/POST参数,
+        这一功能应当属于路由还是服务器[甚至作为一个模块自身的功能]确实值得探讨,
+        需要的所有数据都会包含在request对象中,该对象作为回调函数的第一个参数传递 
+      router.js 文件 
+        function route(pathname) {
+          console.log("About to route a request for " + pathname);
+        }
+        exports.route = route;
+      server.js 文件 
+        var http = require("http");
+        var url = require("url");
+        function start(route) {
+          function onRequest(request, response) {
+            var pathname = url.parse(request.url).pathname;
+            route(pathname);
+            response.writeHead(200, {"Content-Type": "text/plain"});
+            response.write("Hello World");
+            response.end();
+          }
+          http.createServer(onRequest).listen(8888);
+          console.log("Server has started.");
+        }
+        exports.start = start;
+      index.js 文件 
+        var server = require("./server");
+        var router = require("./router");
+        server.start(router.route);
   https  https服务模块 
     PS：和http模块类似,在搭建https服务器时需SSl证书
-    搭建https服务器
+    搭建https服务器 
       var https = require("https");
       var fs = require("fs");
       var options = {
@@ -1575,8 +1578,9 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
           读取相同的文件
           site:www.r
           文件关闭成功          
-    fs.rename(oldPath, newPath, callback)
+    fs.rename(oldPath, newPath, callback) 
       回调函数没有参数,但可能抛出异常          
+    ★流相关 
     fs.createReadStream(path,options);  创建可读的stream流 
       为异步操作,不会阻塞后续代码执行 
       var readStream = fs.createReadStream('1.pm4');
@@ -1779,12 +1783,11 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
       server.on('close', () => {            // 服务器关闭时触发
         console.log('server closed')
       })
-  dns  模块用于解析域名
+  dns  模块用于解析域名 
     PS：
     var dns = require("dns"); 引入dns模块
   domain  域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
-    PS：
-      domain模块,把处理多个不同的IO的操作作为一个组.
+    PS： domain模块,把处理多个不同的IO的操作作为一个组.
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
       domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
       与process.on('uncaughtException')不同.
@@ -1952,74 +1955,110 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
-路由 
-  PS：我们要为路由提供请求的URL和其他需要的GET及POST参数,
-    随后路由需要根据这些数据来执行相应的代码.
-    因此,我们需要查看HTTP请求,从中提取出请求的URL以及GET/POST参数.
-    这一功能应当属于路由还是服务器(甚至作为一个模块自身的功能)确实值得探讨,
-    但这里暂定其为我们的HTTP服务器的功能.
-    我们需要的所有数据都会包含在request对象中,该对象作为回调函数的第一个参数传递.
-    但是为了解析这些数据,我们需要额外的 NodeJS 模块,它们分别是url和querystring模块.
-    当然我们也可以用querystring模块来解析POST请求体中的参数.
-  找出浏览器请求的URL路径：
-    var http = require("http");
-    var url = require("url");
-    function start() {
-      function onRequest(request, response) {
-        var pathname = url.parse(request.url).pathname;
-        console.log("Request for " + pathname + " received.");
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("Hello World");
-        response.end();
+GET/POST 请求 
+  PS：表单提交到服务器一般使用 GET/POST 请求
+  获取GET请求内容 
+    PS：由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
+      因此可手动解析后面的内容作为GET请求的参数。
+    e.g.：
+      var http = require('http');
+      var url = require('url');
+      var util = require('util');
+      http.createServer(function(req, res){
+        res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
+        res.end(util.inspect(url.parse(req.url, true)));
+      }).listen(3000);
+      在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
+      网页显示:
+      Url {
+        protocol: null,
+        slashes: null,
+        auth: null,
+        host: null,
+        port: null,
+        hostname: null,
+        hash: null,
+        search: '?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
+        query: { name: '菜鸟教程', url: 'www.runoob.com' },
+        pathname: '/user',
+        path: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
+        href: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com' 
       }
-      http.createServer(onRequest).listen(8888);
-      console.log("Server has started.");
-    }
-    exports.start = start;
-    好了,我们的应用现在可以通过请求的URL路径来区别不同请求了,
-    这使我们得以使用路由(还未完成)来将请求以URL路径为基准映射到处理程序上.
-    在我们所要构建的应用中,这意味着来自/start和/upload的请求可以使用不同的代码来处理.
-    稍后我们将看到这些内容是如何整合到一起的.
-  现在我们可以来编写路由了,建立一个名为 router.js 的文件,添加以下内容：
-    function route(pathname) {
-      console.log("About to route a request for " + pathname);
-    }
-    exports.route = route;
-    如你所见,这段代码什么也没干,不过对于现在来说这是应该的.
-    在添加更多的逻辑以前,我们先来看看如何把路由和服务器整合起来.
-  我们的服务器应当知道路由的存在并加以有效利用.
-  我们当然可以通过硬编码的方式将这一依赖项绑定到服务器上,
-  但是其它语言的编程经验告诉我们这会是一件非常痛苦的事,
-  因此我们将使用依赖注入的方式较松散地添加路由模块.
-  首先,我们来扩展一下服务器的start()函数,以便将路由函数作为参数传递过去,
-    server.js 文件代码如下
-    var http = require("http");
-    var url = require("url");
-    function start(route) {
-      function onRequest(request, response) {
-        var pathname = url.parse(request.url).pathname;
-        console.log("Request for " + pathname + " received.");
-        route(pathname);
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("Hello World");
-        response.end();
-      }
-      http.createServer(onRequest).listen(8888);
-      console.log("Server has started.");
-    }
-    exports.start = start;
-  同时,我们会相应扩展index.js,使得路由函数可以被注入到服务器中：
-    var server = require("./server");
-    var router = require("./router");
-    server.start(router.route);
-    在这里,我们传递的函数依旧什么也没做.
-  若现在启动应用(node index.js,始终记得这个命令行),随后请求一个URL,
-    你将会看到应用输出相应的信息,这表明我们的HTTP服务器已经在使用路由模块了,
-    并会将请求的路径传递给路由：
-  $ node index.js
-    Server has started.
-  以上输出已经去掉了比较烦人的/favicon.ico请求相关的部分.
-  浏览器访问 http://127.0.0.1:8888/,输出结果如下：
+    获取 URL 的参数
+      使用 url.parse 方法来解析 URL 中的参数
+      var http = require('http');
+      var url = require('url');
+      var util = require('util');
+      http.createServer(function(req, res){
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        // 解析 url 参数
+        var params = url.parse(req.url, true).query;
+        res.write("网站名：" + params.name);
+        res.write("\n");
+        res.write("网站 URL：" + params.url);
+        res.end();
+      }).listen(3000);
+      在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
+      返回结果:
+  获取 POST 请求内容
+    PS：POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
+      原因是等待请求体传输可能是一件耗时的工作。
+      比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
+      恶意的POST请求会大大消耗服务器的资源,
+      所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做。
+    基本语法结构 
+      var http = require('http');
+      var querystring = require('querystring');
+      http.createServer(function(req, res){
+        // 定义了一个post变量,用于暂存请求体的信息
+        var post = '';     
+        
+        // 通过req的data事件监听函数,每当接受到请求体的数据,就累加到post变量中
+        req.on('data', function(chunk){    
+          post += chunk;
+        });
+        
+        // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回。
+        req.on('end', function(){    
+          post = querystring.parse(post);
+          res.end(util.inspect(post));
+        });
+      }).listen(3000);
+    e.g.：
+      表单通过 POST 提交并输出数据：
+      var http = require('http');
+      var querystring = require('querystring');
+      var postHTML = 
+      '<html><head><meta charset="utf-8"><title>菜鸟教程 Node.js 实例</title></head>' +
+      '<body>' +
+      '<form method="post">' +
+      '网站名： <input name="name"><br>' +
+      '网站 URL： <input name="url"><br>' +
+      '<input type="submit">' +
+      '</form>' +
+      '</body></html>';
+      http.createServer(function (req, res) {
+        var body = "";
+        req.on('data', function (chunk) {
+          body += chunk;
+        });
+        req.on('end', function () {
+          // 解析参数
+          body = querystring.parse(body);
+          // 设置响应头部信息及编码
+          res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+          
+          if(body.name && body.url) { // 输出提交的数据
+            res.write("网站名：" + body.name);
+            res.write("<br>");
+            res.write("网站 URL：" + body.url);
+          } 
+          else {  // 输出表单
+            res.write(postHTML);
+          }
+          res.end();
+        });
+      }).listen(3000);
 --------------------------------------------------------------------------------
 RESTful API 
   PS： REST,Representational State Transfer 表述性状态传递,

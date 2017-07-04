@@ -627,8 +627,13 @@ windows环境
     console 对象 
       PS：console对象为浏览器的实现,包含在浏览器自带的开发工具中, 
         虽然还不是标准,但各大浏览器都原生支持,已成为事实上的标准;
-      console.log(val1,val2,...);     将一般消息记录到控制台 
-        PS：自动在输出的最后一个值后添加换行符 
+        由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
+        NodeJS 沿用了这个标准,提供与习惯行为一致的 console 对象,
+        用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
+        指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
+      console.log([val1][, ...])   向标准输出流打印字符并以换行符结束
+        PS： 该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
+          若有多个参数,则 以类似于C 语言 printf() 命令的格式输出
         格式占位符
           PS：log方法将占位符替换以后的内容,显示在console窗口
           %s     字符串
@@ -647,11 +652,30 @@ windows环境
             两种参数格式,可以结合在一起使用.
             console.log(" %s + %s ", 1, 1, "= 2")
             // 1 + 1  = 2
-      console.debug(val)     
-      console.dir()                输出对象的信息,用于显示一个对象的所有属性.
+      console.info([val][, ...])   返回信息性消息 
+        这个命令与 console.log 差别并不大,
+        除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
+      console.error([val1][, ...]) 输出错误消息 
+        控制台在出现错误时会显示是红色的叉子.
+      console.warn([val1][, ...])  输出警告消息 
+        控制台出现有黄色的惊叹号.
+      console.dir(obj[, options])  用来对一个对象进行检查[inspect],并以易于阅读和打印的格式显示.
         可读性较好,一般用于输出显示DOM节点
         Node中可指定以高亮形式输出
           console.dir(obj,{color:true})
+      console.trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
+        这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
+      console.assert([bool][,val]) 用于判断某个表达式或变量是否为真 
+        PS：接收两个参数,第一个参数是表达式,第二个参数是字符串.
+          只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+        bool  布尔值,默认为false 
+        e.g.：
+          若为假,则显示一条事先指定的错误信息
+          console.assert(true === false,"判断条件不成立")
+          // Assertion failed: 判断条件不成立
+          判断子节点的个数是否大于等于500.
+          console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+      console.debug(val)     
       console.dirxml()             主要用于以目录树形式显示DOM节点
         若参数不是DOM节点,则等同于dir
       console.table()              对于某些复合类型的数据将其转为表格显示
@@ -678,15 +702,6 @@ windows环境
          (index) name paradigm
           csharp "C#" "object-oriented"
           fsharp "F#" "functional"
-      console.trace()              当前执行的代码在堆栈中的调用路径.
-      console.assert([bool][,val]) 条件验证,为假时以错误的形式输出,为真时无输出 
-        bool  布尔值,默认为false 
-        e.g.:
-          若为假,则显示一条事先指定的错误信息
-          console.assert(true === false,"判断条件不成立")
-          // Assertion failed: 判断条件不成立
-          判断子节点的个数是否大于等于500.
-          console.assert(list.childNodes.length < 500, "节点个数大于等于500")
       console.count([val])         用于计数,输出被调用的次数 
         接收一个参数作为标签,进行相应的次数统计
         e.g.:
@@ -701,9 +716,6 @@ windows环境
           // : 3
           // : 4
           // : 5
-      console.info(val)      将信息记录到控制台
-      console.warn(val)      将警告消息记录到控制台
-      console.error(val)     将错误消息记录到控制台
       console.clear()         清空控制台,光标回到第一行
       ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
       console.time()         计时开始

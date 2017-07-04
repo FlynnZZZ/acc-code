@@ -1708,8 +1708,9 @@ Directives,指令系统:model和view的交互
     arg  当触发事件时执行'arg',可为函数[可带参数]、单条语句或无 
       当为函数且未自定义传参时,则默认传入经过vue包装过的event事件对象 
         若有自定义传参,则默认参数被取消
-        e.srcElement 表示事件绑定的元素 
+        e.srcElement 表示响应事件的元素 
           可用来进行DOM操作「SlPt」
+        e.currentTarget 表示绑定事件的元素 
       当为函数时,传入参数'$event'表示该事件的[经过vue包装的]event对象 
     e.g.: 
       <div id="test">

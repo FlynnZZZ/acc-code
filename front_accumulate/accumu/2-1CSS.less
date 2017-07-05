@@ -826,7 +826,13 @@ Declaration,样式声明
         left
         right
         center
-        justify 两端对齐
+        justify 两端对齐[对最后一行文本无效] 
+          使用:after 伪元素将所有行生效 
+          .box:after{
+            content: "";
+            display:inline-block; // 需要是非块元素
+            width: 100%;  // 为了换行
+          }
       text-transform  文本大小写 
         capitalize 单词首字母大写
         uppercase  字母大写

@@ -219,7 +219,7 @@
             // 不进行自动补全或处理的文件或者文件夹
             fallback: [path.join(__dirname, '../node_modules')],
             alias: {
-        	  // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
+            // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
               'vue$': 'vue/dist/vue.common.js',
               'src': path.resolve(__dirname, '../src'),
               'assets': path.resolve(__dirname, '../src/assets'),
@@ -3147,213 +3147,278 @@ vue-resource  与后台数据交互
   vm.$http.post()
   vm.$http.jsonp()
 axios         功能和vue-resource类似 
-Vuex          大规模状态管理 
 vue-router    路由 
-  PS：vue-router@2.x 只适用于 Vue2.x 版本
-  script引入
+  PS：'2.x'只适用于 Vue2.x 版本
+  script引入 
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
-    在 Vue 后面加载 vue-router,它会自动安装的：
-  npm使用
-    ◆安装
-    npm install vue-router --save
-    ◆进行引入
+    在Vue后面加载 vue-router,它会自动安装的
+  npm使用 
+    npm install vue-router --save     安装 
+    ◆引入
     import Vue from "vue";
     import VueRouter from "vue-router";
-    Vue.use(VueRouter);
-    // 如果在一个模块化工程中使用它,必须要通过 Vue.use() 明确地安装路由功能：
-    // 如果使用全局的 script 标签,则无须如此    
-    
+    Vue.use(VueRouter); // 通过 Vue.use() 明确地安装路由功能：
+    // 使用全局的 script 标签,则默认安装了  
+  使用步骤 
+    ◆定义[路由]组件 
+      可以从其他文件 import 进来
+      const Foo = { template: '<div>foo</div>' }  // 组件配置对象
+      const Bar = { template: '<div>bar</div>' }
+    ◆配置路由 
+      每个路由应该映射一个组件
+      const routes = [
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar }
+      ]
+    ◆创建router实例,然后传定义的路由配置 
+      const router = new VueRouter({ routes }) 
+      // [缩写]相当于 routes: routes
+    ◆创建和挂载根实例 
+      通过'router'配置参数注入路由,从而让整个应用都有路由功能 
+      const app = new Vue({ router })
+      .$mount('#app')
+      // 现在,应用已经启动了！ 
+  <router-link to="/foo">xxx</router-link>   连接路由 
+  <router-view></router-view>    路由渲染,路由出口 
+    PS：<router-link>默认会被渲染成一个<a>标签
+    to   属性指定链接 
     e.g.：
-      ◆html
-      <div id="app">
-        <h1>Hello App!</h1>
-        <p>
-          // <!-- 使用指令 v-link 进行导航 -->
-          <a v-link="{ path: '/foo' }">Go to Foo</a>
-          <a v-link="{ path: '/bar' }">Go to Bar</a>
-        </p>
-        // <!-- 路由外链 -->
-        <router-view></router-view>
-      </div>
-      ◆JS:
-      // 定义组件
-      var Foo = Vue.extend({
-        template: '<p>This is foo!</p>'
-      })
-      var Bar = Vue.extend({
-        template: '<p>This is bar!</p>'
-      })
-      // 路由器需要一个根组件
-      // 出于演示的目的,这里使用一个空的组件,直接使用 HTML 作为应用的模板
-      var App = Vue.extend({})
-      // 创建一个路由器实例
-      // 创建实例时可以传入配置参数进行定制,为保持简单,这里使用默认配置
-      var router = new VueRouter()
-      // 定义路由规则
-      // 每条路由规则应该映射到一个组件这里的“组件”可以是一个使用 Vue.extend
-      // 创建的组件构造函数,也可以是一个组件选项对象
-      // 稍后我们会讲解嵌套路由
-      router.map({
-        '/foo': {
-          component: Foo
-        },
-        '/bar': {
-          component: Bar
+      <router-link to="/foo">Go to Foo</router-link>
+      <router-link to="/bar">Go to Bar</router-link>
+      <!-- 路由匹配到的组件将渲染在这里 -->
+      <router-view></router-view>    
+  '/:xx'   动态路由,配任意的'/xxx' 
+    this.$route.params 在组件内获取当前的具体的路径 
+      e.g.：
+        const User = {
+          template: '<div>User {{ $route.params.id }}</div>'
         }
-      })
-      // 现在我们可以启动应用了！
-      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上
-      router.start(App, '#app')
-      
-    结合定义的 .vue 单文件组件
-
-    定义路由规则 最主要是 main.js 的变化
-      // 引入vue以及vue-router
-      import Vue from "vue";
-      import VueRouter from "vue-router";
-      Vue.use(VueRouter);
-      // 引入组件！直接使用es6的语法
-      import index from './components/app.vue';
-      import list from './components/list.vue';
-      import hello from './components/hello.vue';
-      //开启debug模式
-      Vue.config.debug = true;
-      // new Vue(app);//这是上一篇用到的,新建一个vue实例,现在使用vue-router就不需要了
-      // 路由器需要一个根组件
-      var App = Vue.extend({});
-      // 创建一个路由器实例
-      var router = new VueRouter();
-      // 每条路由规则应该映射到一个组件这里的“组件”可以是一个使用 Vue.extend创建的组件构造函数,也可以是一个组件选项对象
-      // 稍后我们会讲解嵌套路由
-      router.map({//定义路由映射
-        '/index':{//访问地址
-          name:'index',//定义路由的名字方便使用
-          component:index,//引用的组件名称,对应上面使用`import`导入的组件
-          //component:require("components/app.vue")//还可以直接使用这样的方式也是没问题的不过会没有import集中引入那么直观
-        },
-        '/list': {
-          name:'list',
-          component: list
-        },
-      });
-      router.redirect({//定义全局的重定向规则全局的重定向会在匹配当前路径之前执行
-        '*':"/index"//重定向任意未匹配路径到/index
-      });
-      // 现在我们可以启动应用了！
-      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上
-      router.start(App, '#app');
-
-    在 index.html 需要有用于渲染匹配的组件,如下
-      <div id="app">
-      <router-view></router-view>
-      </div>
-
-    现在当我们运行 npm start 进入'http://localhost:8080/'
-    就会自动跳转到'http://localhost:8080/#!/index',并且读取里面的内容
-
-    实现路由跳转
-
-    主要抽出app.vue中的内容来讲解,的内容是：(list.vue里面的内容自行设置查看吧)
-    <template>
-      <div>
-        <h1>姓名：{{name}}</h1>
-        <h2>{{age}}</h2>
-        <button @click="golist">$route.router.go查看</button>
-        <a v-link="{ name: 'list' }">v-link查看列表</a>
-        <a v-link="{ name: 'index' }">回去主页</a>
-      </div>
-    </template>
-    <script>
-      export default {//这里是官方的写法,默认导出,ES6
-        data () { //ES6,等同于data:function(){}
-        return {    //必须使用这样的形式,才能创建出单一的作用域
-          name:"guowenfh",
-          age:"21"
-        }
-      },
-      methods :{
-        golist () {//方法,定义路由跳转,注意这里必须使用this,不然报错
-          this.$route.router.go({name:"list"});
+      在一个路由中设置多段『路径参数』,对应的值都会设置到 $route.params 中
+        模式             匹配路径       $route.params
+        /a/:aoo         /a/bar        { aoo: 'bar' }
+        /a/:aoo/b/:boo  /a/bar/b/123  { aoo: 'bar', boo: 123 }
+    $route.query  [如果URL中有查询参数]获取查询参数 
+      对于路径 /foo?user=1,则有 $route.query.user == 1,如果没有查询参数,则是个空对象。
+    $route.hash   当前路由的hash值,如果无hash,则为空字符串 
+    响应路由参数的变化
+      当使用路由参数时,例如从 /user/foo 导航到 user/bar,原来的组件实例会被复用。
+      因为两个路由都渲染同个组件,比起销毁再创建,复用则显得更加高效。
+      不过,这也意味着组件的生命周期钩子不会再被调用。
+      复用组件时,想对路由参数的变化作出响应的话,你可以简单地 watch[监测变化]$route对象 
+      const User = {
+        template: '...',
+        watch: {
+          '$route' (to, from) {
+            // 对路由变化作出响应...
+          }
         }
       }
+    匹配优先级
+      有时,同一个路径可匹配多个路由,匹配优先级按照路由的定义顺序：先定义的优先级高 
+  嵌套路由  
+    一个被渲染组件同样可以包含自己的嵌套<router-view>
+    e.g.：
+    const User = {
+      template: `
+      <div class="user">
+      <h2>User {{ $route.params.id }}</h2>
+      <router-view></router-view>
+      </div>
+      `
     }
-    </script>
-    <style></style>
-    <!-- 样式自行设置,或者直接看源码就好 -->
-    因为自刷新的缘故,直接切换到浏览器
-
-    点击上面使用的v-link,与router.go的方式都可以跳转到list定义的路由（观察浏览器地址栏的变化）在这里我们使用的{name:"list"},使用{ path: '/list' }会有同样的效果
-
-    引用Vue组件
-
-    在第一小点里面我们看到了在页面内的组件的使用方法,第二小点中学习到了vue-router的制定路由规则
-
-    看过这两个地方之后,我们把思维发散开来,应该就能触类旁通的想到如何在页面中嵌套加载别的组件了
-    我们创建一个hello.vue ,里面内容随意现在我们如果要在app.vue中加载它,那么只需要在app.vue中使用import hello from "./hello.vue"（其实这个达到了使用require两步的效果引入赋值）
-
-    引入之后,只需要如下注册：
-
-    export default {
-        //其它的就
-        components:{
-            hello//若还有更多的组件,只需要在import的情况下,以逗号分割,继续注册就好
+    要在嵌套的出口中渲染组件,需要在 VueRouter 的参数中使用 children 配置：
+    const router = new VueRouter({
+      routes: [
+        { 
+          path: '/user/:id', component: User,
+          children: [
+            {
+              // 当 /user/:id/profile 匹配成功,
+              // UserProfile 会被渲染在 User 的 <router-view> 中
+              path: 'profile',
+              component: UserProfile
+            },
+            {
+              // 当 /user/:id/posts 匹配成功
+              // UserPosts 会被渲染在 User 的 <router-view> 中
+              path: 'posts',
+              component: UserPosts
+            }
+          ]
         }
-    }
-    最后在app.vue中添加<hello></hello>这一对自定义标签,就可以实现加载hello.vue中的内容
-
-    组件的嵌套也就是这样,很简单的描述完了,但是怎么样去抽离组件,在工作中积累可以复用的组件才是我们真正需要去思考的
-
-    那么先到这,关于组件之间通信的问题,留到以后慢慢了解
-
-    路由嵌套
-
-    还是刚刚的代码与目录结构,我们已经实现了组件之间的嵌套,但是有时并不希望组件直接就加载进来,而是在用户点击后才展现在页面中,这是就需要使用到路由嵌套
-
-    为了偷懒,这里就直接使用hello.vue实现嵌套路由主要有以下几步：
-
-    第一步：制定嵌套路由规则：
-
-    看main.js下面这部分的代码：
-      router.map({
-        '/index':{
-          name:'index',
-          component:index,
-          // 在/index下设置一个子路由
-          subRoutes:{
-            // 当匹配到/index/hello时,会在index的<router-view>内渲染
-            '/hello':{
-              name:'hello',//可有可无,主要是为了方便使用
-              // 一个hello组件
-              component:hello
+      ]
+    })  
+    基于上面的配置,你访问 /user/foo 时,User 的出口是不会渲染任何东西,
+    这是因为没有匹配到合适的子路由。如果想要渲染点什么,可以提供一个 空的 子路由：
+    const router = new VueRouter({
+      routes: [
+        {
+          path: '/user/:id', component: User,
+          children: [
+            // 当 /user/:id 匹配成功,
+            // UserHome 会被渲染在 User 的 <router-view> 中
+            { path: '', component: UserHome },
+            
+            // ...其他子路由
+          ]
+        }
+      ]
+    })
+  编程式的导航 
+    PS：除了使用 <router-link> 创建 a 标签来定义导航链接,
+      还可以借助 router 的实例方法,通过编写代码来实现。
+      vue-router的导航方法 push、 replace、 go 是效仿 window.history API 的 
+      window.history.pushState、 
+      window.history.replaceState 
+      window.history.go
+      但其在各类路由模式 history、 hash 和 abstract 下表现一致
+    router.push(location)  向 history栈添加一个新的记录
+      PS：所以,当用户点击浏览器后退按钮时,则回到之前的 URL 
+        当你点击 <router-link> 时,这个方法会在内部调用,
+        所以说,点击 <router-link :to="..."> 等同于调用 router.push(...)。
+      location   可以是一个字符串路径,或者一个描述地址的对象
+      <router-link :to="...">	router.push(...)
+      
+      router.push('home') // 字符串
+      router.push({ path: 'home' }) // 对象
+      router.push({ name: 'user', params: { userId: 123 }}) // 命名的路由
+      router.push({ path: 'register', query: { plan: 'private' }})
+      // 带查询参数,变成 /register?plan=private
+    router.replace(location)  替换掉当前的history记录 
+      <router-link :to="..." replace>	router.replace(...)
+    router.go(n)  在 history 记录中向前或者后退多少步,类似 window.history.go(n) 
+      n 一个整数 
+      e.g.：
+        router.go(1)
+        // 在浏览器记录中前进一步,等同于 history.forward()
+        router.go(-1)
+        // 后退一步记录,等同于 history.back()
+        router.go(3)
+        // 前进 3 步记录
+        router.go(-100)
+        router.go(100)
+        // 如果 history 记录不够用,那就默默地失败呗
+  命名路由 
+    有时候,通过一个名称来标识一个路由显得更方便一些,
+    特别是在链接一个路由,或者是执行一些跳转的时候。
+    可以在创建 Router 实例的时候,在 routes 配置中给某个路由设置名称。
+    const router = new VueRouter({
+      routes: [
+        {
+          path: '/user/:userId',
+          name: 'user',
+          component: User
+        }
+      ]
+    })
+    要链接到一个命名路由,可以给 router-link 的 to 属性传一个对象：
+    <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+    这跟代码调用 router.push() 是一回事：
+    router.push({ name: 'user', params: { userId: 123 }})
+    这两种方式都会把路由导航到 /user/123 路径。
+  命名视图
+    同时[同级]展示多个视图,而不是嵌套展示,可在界面中拥有多个单独命名的视图,
+    如果 router-view 没有设置名字,那么默认为 default。
+    e.g.：
+      <router-view class="view one"></router-view>
+      <router-view class="view two" name="a"></router-view>
+      <router-view class="view three" name="b"></router-view>
+      一个视图使用一个组件渲染,因此对于同个路由,多个视图就需要多个组件
+      const router = new VueRouter({
+        routes: [
+          {
+            path: '/',
+            components: {
+              default: Foo,
+              a: Bar,
+              b: Baz
             }
           }
-        },
-      });
-    第二步：在组件中添加<router-view>
-
-    来自官网的解释：<router-view> 用于渲染匹配的组件,它基于Vue的动态组件系统,所以它继承了一个正常动态组件的很多特性
-
-    将<router-view>写在app.vue的<template></template>标签中
-
-    第三步：写入跳转路径
-
-    还是在app.vue中：
-
-    <a v-link="{ name: 'index' }">回去主页</a>
-    <!-- 点击这两个标签就会实现页面内的切换效果 -->
-    <a v-link="{ name: 'hello' }">嵌套的路由</a>
-    ,切换到浏览器,点击该嵌套的路由即可让hello.vue中的展现出来,在这里直接使用了v-link来实现跳转（知道为什么要写name了吧如果使用path会是这样的{ path: '/index/hello' }- - ） ,当然router.go同理（注意在点击两个不同的文字时,地址栏的变化,以及展现内容的切换）
-
-    注意：
-
-    在我的源码中是在<style scoped></style>标签中定义样式的,请注意scoped的使用,它表示在该style中定义的样式只会在当前的组件中起到效果,而不会去影响全局的css样式
-
-    最简单的理解应该就是：
-
-    未写该scoped属性的所有组件中的样式,在经过vue-loader编译之后拥有全局作用域相当于共用一份css样式表
-
-    而写了该属性的的组件中定义的样式,拥有独立作用域相当于除去引入了公用的一份css样式表外,但单独拥有一份css的样式表
+        ]
+      })
+  重定向 
+    『重定向』的意思是,当用户访问 /a时,URL 将会被替换成 /b,然后匹配路由为 /b
+    通过 routes 配置来完成
+    e.g.：
+      从 /a 重定向到 /b：
+      const router = new VueRouter({
+        routes: [
+          { path: '/a', redirect: '/b' }
+        ]
+      })
+      重定向的目标也可以是一个命名的路由：
+      const router = new VueRouter({
+        routes: [
+          { path: '/a', redirect: { name: 'foo' }}
+        ]
+      })
+      甚至是一个方法,动态返回重定向目标：
+      const router = new VueRouter({
+        routes: [
+          { path: '/a', redirect: to => {
+            // 方法接收 目标路由 作为参数
+            // return 重定向的 字符串路径/路径对象
+          }}
+        ]
+      })
+  别名
+    '/a' 的别名是 '/b',意味着,当用户访问 /b 时,URL 会保持为 /b,
+    但是路由匹配则为 /a,就像用户访问 /a 一样。
+    『别名』的功能让你可以自由地将 UI 结构映射到任意的 URL,而不是受限于配置的嵌套路由结构。
+    e.g.：
+      const router = new VueRouter({
+        routes: [
+          { path: '/a', component: A, alias: '/b' }
+        ]
+      })
+  HTML5 History 模式
+    vue-router 默认 hash 模式,使用 URL 的 hash 来模拟一个完整的 URL,
+    于是当 URL 改变时,页面不会重新加载。
+    如果不想要很丑的 hash,可以用路由的 history 模式,
+    这种模式充分利用 history.pushState API 来完成 URL 跳转而无须重新加载页面。
+    const router = new VueRouter({
+      mode: 'history',
+      routes: [...]
+    })
+    当你使用 history 模式时,URL 就像正常的 url,
+    例如' http://yoursite.com/user/id',也好看！
+    不过这种模式要玩好,还需要后台配置支持。
+    因为我们的应用是个单页客户端应用,如果后台没有正确的配置,
+    当用户在浏览器直接访问 'http://oursite.com/user/id' 就会返回 404,这就不好看了。
+    所以呢,你要在服务端增加一个覆盖所有情况的候选资源：
+    如果 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
+    这个页面就是你 app 依赖的页面。
+    
+    后端配置例子
+    Apache
+      <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteBase /
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . /index.html [L]
+      </IfModule>
+    nginx
+      location / {
+        try_files $uri $uri/ /index.html;
+      }
+    Node.js (Express)
+      https://github.com/bripkens/connect-history-api-fallback
+    警告
+      给个警告,因为这么做以后,你的服务器就不再返回 404 错误页面,
+      因为对于所有路径都会返回 index.html 文件。
+      为了避免这种情况,你应该在 Vue 应用里面覆盖所有的路由情况,然后在给出一个 404 页面。
+      const router = new VueRouter({
+        mode: 'history',
+        routes: [
+          { path: '*', component: NotFoundComponent }
+        ]
+      })
+      或者,如果你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
+      当没有匹配到路由的时候返回 404,从而实现 fallback。
+Vuex          大规模状态管理 
 vue-validator 表单验证 
 vue-touch     移动端 
 suggestion: 

@@ -132,6 +132,11 @@
       height: 1em;
       resize: none;
     }
+    .msg{
+      position: absolute;
+      width: 5px; height: 10px;overflow: hidden;
+      bottom: 0;right: 0;
+    }
   </style>
 </head>
 
@@ -165,7 +170,11 @@
     </div>
   </section>
   
-  <textarea ></textarea>
+  <section id="msg">
+    <textarea ></textarea>
+    <div class="msg" > {{msg}} </div>
+  </section>
+    
 </body>
 <script src="./data.js" charset="utf-8"></script>
 <script src="./jq3.1.1min.js" charset="utf-8"></script>
@@ -328,6 +337,23 @@
           $('.toTop').addClass('none');
         }
       })
+      
+    },
+  });
+  var vm2 = new Vue({
+    el : '#msg',
+    data : {
+      
+      msg : msg,
+    },
+    computed : { },
+    methods : {
+      
+    },
+    mounted : function (){
+      var that = this;
+      this.$nextTick(function () { });
+      
       
     },
   });

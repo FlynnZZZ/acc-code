@@ -9,19 +9,11 @@ fileNum : 21
 
 
 -------------------------------------------------------------------------todo 
-  整理fontawesome
-    分类
-    手势
-    方向指示
-    logo
-    状态表示
-    一个图标多个标签按标签组合来查找
-
   整理自己的 tools.js pub_less.less pub_js.js 
   
   百度编辑器
 
-  获取图片的 base64
+  获取图片的 base64 
     $('.imgChoose input').on('change',function(e){
       var fil = e.target.files[0];
       var fr =new FileReader(fil); 

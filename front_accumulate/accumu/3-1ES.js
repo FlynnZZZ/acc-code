@@ -497,7 +497,7 @@ ECMAScript JS核心,语法部分
       var str ="123456";
       var s ="-";
       Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
-引用类型： Object 对象 
+引用类型：Object 对象 
   PS：JS中所有对象都为引用类型,引用类型只包含有对象,即1对1的等价关系;
     访问对象的不存在的属性,不会报错,返回值为undefined;
   引用类型值的读、写 
@@ -2439,7 +2439,7 @@ Function 函数对象
       }else {
         foo =function foo(){ }
       }
-  Argument函数的参数 
+  Argument,函数的参数 
     传入的参数可多可少,多则舍去,少则使用undefined来补充
       function foo(){ 
         console.log(arguments[0],arguments[1]); 
@@ -2490,8 +2490,8 @@ Function 函数对象
         return sum;
       }
       foo(5,6,1); // 12
-    基本类型按值传参,引用类型按引用传参
-      // 基本类型[此处为字符串],参数按值传递
+    参数[包括基本类型和引用类型]按值传递,引用类型的属性按引用传递   
+      基本类型[此处为字符串],参数按值传递
       var localObjOpera = function(localStorageItem,key,val){
         if (localStorageItem === undefined) { // 不存在则初始化为一对象 
           localStorageItem = JSON.stringify({});
@@ -2505,14 +2505,20 @@ Function 函数对象
       localObjOpera(localStorage.abc,'aa','11');
       console.log(localStorage.abc);   // undefined
       
-      // 引用类型对象参数按引用传递
+      引用类型对象参数按值传递
+      var aoo = {c:'3'};
       var editObj = function(obj){
-        obj['a'] = '1111';
+        obj = {a:'1'};  
       };
-      var aoo = {};
       editObj(aoo);
-      console.log(aoo); // {a: "1111"}
-  return 函数的返回值
+      console.log(aoo); //  {c: "3"}
+      对象参数的属性按引用传递 
+      var editObj1 = function(obj){
+        obj['b'] = '2';
+      };
+      editObj1(aoo);
+      console.log(aoo); // {c: "3", b: "2"}
+  return,函数的返回值 
     函数使用 return 关键字返回值,若没有 return 默认返回undefined.
     当执行到 return 后直接返回值,后面代码不再执行,
     当 return 后不带值,默认返回 undefined
@@ -2526,9 +2532,9 @@ Function 函数对象
         return ;
         2;
       }
-  函数的调用:函数名称加上()即可调用
-  特殊形式的函数
-    全局函数(参见 window对象)
+  (),函数的调用  函数名称加上()即可调用
+  特殊形式的函数 
+    全局函数[参见 window对象]
       系统内置构造函数:用于创建数据对象
         Boolean()
         String()
@@ -2536,7 +2542,7 @@ Function 函数对象
         Object()
         Date()
         ...
-    匿名函数 : 没有名字的函数
+    匿名函数 : 没有名字的函数 
       可以通过匿名函数来执行某些一次性的任务.(自调用)
       可以将匿名函数作为参数传递给其他函数(参见高阶函数)
       通过匿名函数来定义函数
@@ -2556,7 +2562,7 @@ Function 函数对象
           }
         }
         console.log(box()());  //abc.
-    闭包closure: 可访问一个函数作用域里变量的函数
+    closure,闭包: 可访问一个函数作用域里变量的函数 
       PS： 或者说闭包是函数中创建的函数.
         闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存.
         过度使用闭包可能会导致内存占用过多.
@@ -2666,22 +2672,21 @@ Function 函数对象
           goo();
         }
         foo();  // 1
-    构造函数
-      PS：
-        构造器函数首字母大写(约定写法),区别其他的一般函数.
-        构造器用于生成对象(类似于 类)
-       (构造器及构造器的prototype一起,相当于类)
+    构造函数 
+      PS：构造器函数首字母大写[约定写法],用于区别其他的一般函数,
+        构造器用于生成对象[类似于'类']
+        (构造器及构造器的prototype一起,相当于类)
         任何函数通过new来调用就可以作为构造函数;
         若不用new来调用,构造函数和普通函数无区别
-      obj.constructor; 获取对象的构造器函数
+      obj.constructor;  获取对象的构造器函数
         e.g.
         "abc".constructor;  //function String() { [native code] }
         Object.constructor; //function Function() { [native code] }
         12.0.constructor;   //function Number() { [native code] }
         // 12.constructor;     //报错,将点.作为了小数点
-        var aoo =123;
+        var aoo = 123;
         aoo.constructor; //function Number() { [native code] }
-      公有属性和私有属性
+      公有属性和私有属性 
         function Foo(a){
           var age = 100;    //私有
           function goo(){   //私有函数
@@ -2745,7 +2750,7 @@ Function 函数对象
     自调用函数 :立即调用的函数
       (function(){console.log("hello");})()  //hello
       (function(a,b){console.log(a+b);})(2,3); //5
-    递归 :一个函数调用本身或者两个函数相互调用
+    递归 :一个函数调用本身或者两个函数相互调用 
       PS：递归必须要定义终止条件,否则无限递归.
       e.g.
       用递归求斐波那契数
@@ -2768,14 +2773,14 @@ Function 函数对象
       Remarks:
         一般递归效率较低,
         一些需要探测或者处理多分支(可能分支又产生分支)的问题,则递归效率较高
-  不具备函数重载
+  不具备函数重载 
     即当函数名相同时会被覆盖掉(不会因为参数不同而进行区分)
     ECMAScript中的函数,没有像其他高级语言那种函数重载功能.
     e.g.
     function box(num,a){ return num+1; }
     function box(num){ return num+2; }
     console.log(box(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
-  this 执行函数时的上下文对象
+  this 执行函数时的上下文对象 
     PS：函数内部另一个特殊对象.
       在JS中函数的this关键字的行为与其他语言相比有很多不同.
       this引用的是函数据以执行操作的对象.
@@ -3060,12 +3065,12 @@ Function 函数对象
       var goo =obj.foo;
       goo();  // 1
   ◆函数相关属性/方法
-  foo.length; 获取函数声明时定义的参数的个数
+  foo.length;   获取函数声明时定义的参数的个数
     e.g. :
     function box(a,b){ return a+b; }
     console.log(box.length);  // 2,表示box的参数有两个.
-  foo.name;   函数的名字
-  foo.caller; 返回调用当前函数的函数(当前函数的直接父函数)
+  foo.name;     函数的名字
+  foo.caller;   返回调用当前函数的函数(当前函数的直接父函数)
     function foo(){
       console.log(foo.caller);
     };
@@ -3073,7 +3078,7 @@ Function 函数对象
       foo();
     };
     goo(); // function goo(){ foo(); }
-  foo.prototype(构造)函数的原型属性对象(参见 对象原型)
+  foo.prototype [构造]函数的原型属性对象(参见 对象原型)
 Date     日期时间对象 
   PS：ECMAScript提供了Date类型来处理时间和日期 
     Date 对象内置一系列获取和设置日期时间信息的方法.

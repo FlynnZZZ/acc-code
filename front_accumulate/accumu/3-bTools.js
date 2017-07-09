@@ -296,18 +296,19 @@ webpack   模块加载器兼打包工具
   介绍 
     基于JS,包括四大核心 Entry、Output、Loaders 和 Plugins;
     把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
-    支持3种引入方式: AMD commonjs ES6模块化
+    支持 AMD commonJS ES6Moudle 3 种引入方式
     原理:
-    把所有的非js资源都转换成js,
-    如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
-    把图片转换成一个图片地址的 js 变量或 base64 编码等,
-    然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
-    从 2.0 版本开始,webpack原生支持用ES6 module规范[import/export]去进行模块打包
+      把所有的非js资源都转换成js,
+      如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
+      把图片转换成一个图片地址的 js 变量或 base64 编码等,
+      然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
+    工作方式 
+      把项目当做一个整体,通过一给定的主文件[如 index.js],
+      Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
+      最后打包为一个浏览器可识别的JS文件;
+  说明 
+    从 2.0 版本开始,支持用 ES6module 规范[import/export]去进行模块打包
     'chunk'  表示为 '块'
-  工作方式 
-    把项目当做一个整体,通过一给定的主文件[如 index.js],
-    Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
-    最后打包为一个浏览器可识别的JS文件;
   命令行命令 
     npm install -g webpack [--save-dev]  安装webpack并写入依赖配置文件  
     npm install -g webpack-dev-server    静态资源服务器 
@@ -351,14 +352,14 @@ webpack   模块加载器兼打包工具
     webpack --profile          输出性能数据,可以看到每一步的耗时
     ◆其他命令参数
     webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies。
-  webpack.config.js 默认的配置文件 
+  'webpack.config.js'默认的配置文件 
     PS：需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
       该文件是一个 node.js 模块,返回一个 json 格式的配置信息对象,
       或者通过 --config 选项来指定配置文件;
     相关命令 
       webpack              [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
       webpack --config xx.js  自定义配置文件[可不再是默认的 webpack.config.js]
-    配置文件详情:
+    配置文件详情: 
       module.exports = {     // commonjs 模块化 输出 
         context: __dirname + "/src", // __dirname 是指项目根目录
         entry : './src/main.js',   // 入口文件,将被打包的文件 
@@ -542,36 +543,38 @@ webpack   模块加载器兼打包工具
         ]
       }    
     ◆注解 
-    entry     指定将被打包的文件,格式可为str,arr,obj
-      str     指定单一的入口文件
+    entry     指定将被打包的文件的入口,依赖关系网的根节点 
+      格式可为str,arr,obj 
+      str     指定单一的入口文件 
+        var baseConfig = {
+          entry: './src/index.js'
+        };
       arr     将多个文件打包在一起 
         如 [ './entry1.js' , 'entry2.js' ] 
-      obj     key-val 形式,对象的val可为str或arr
-        输出打包后的文件和output参数有关,若 output.filename 仍指定为一个值,
-        则最后打包后的文件只有一个,结果是两个同名的文件产生覆盖的结果,
-        output.filename 可采用占位符的形式来指定来打包成多个文件[详见output配置]
-        如 {
-          page1 : './aoo.js',
-          page2 : [ './entry1.js' , 'entry2.js' ] 
-        }
-    output    obj,指定打包的文件 
-      path 指定打包后的文件的存放路径
-      filename 指定打包后的文件的名称
-        val1 : str,指定一固定的文件名称
-        val2 : str+占位符,当穿在多个输出的文件时用于指定名称「如entry的val为obj时」
-          [name]  表示entry的obj的key
-          [hash]  表示打包时产生的hash值
-          [chunkhash] 每个chunk的hash值,相当于文件的MD5值「MD5值为了保证每个文件的唯一性」
+      obj     key-val 形式,对象的val可为str或arr 
+        适用于可能需要不止一个入口的情况 
+        同'output'的关系 
+          输出打包后的文件和output参数有关,若 output.filename 仍指定为一个值,
+          则最后打包后的文件只有一个,结果是两个同名的文件产生覆盖的结果,
+          output.filename 可采用占位符的形式来指定来打包成多个文件[详见output配置]
+          entry : {
+            main : './src/index.js'
+            page1 : './aoo.js',
+            page2 : [ './entry1.js' , 'entry2.js' ] 
+          }
+    output    obj,指定打包文件的输出 
+      打包后的程序和资源将要去到的路径 
+      'path'     指定打包后的文件的存放路径 
+      'filename' 指定打包后的文件的名称 
+        值为str,指定文件名称
+        可使用占位符指定动态的输入 
+          当存在多个输出的文件时用于指定名称「如entry的val为obj时」
+          [name]      表示entry的obj的key
+          [hash]      表示打包时产生的hash值
+          [chunkhash] 每个chunk的hash值,相当于文件的MD5值
+            MD5值为了保证每个文件的唯一性
           e.g.: filename : '[name]-[hash].js'
-    plugins   arr,使用插件,arr的元素为插件的初始化
-      e.g.:
-      var htmlWebpackPlugin = require("html-webpack-plugin");
-        module.exports ={
-          plugins: [
-            new htmlWebpackPlugin(arg);
-          ]
-        }
-  loader,解释器  用于编译解释相应的文件
+  loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
     PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
       连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
       Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
@@ -579,8 +582,8 @@ webpack   模块加载器兼打包工具
       对于所需要的加载器,需要写在 package.json 文件中,
       并通过npm install下载安装到./node_modules文件夹中才会生效,
       否则在编译过程中因找不到加载器报错
-    loader 的特性
-      可通过管道方式链式调用
+    特性 
+      可通过管道方式链式调用 
         每个loader可以把资源转换成任意格式并传递给下一个loader,
         但是最后一个loader必须返回JavaScript。
       Loader可以同步或异步执行
@@ -592,40 +595,46 @@ webpack   模块加载器兼打包工具
       Loader可以访问配置
       插件可以让loader拥有更多特性
       Loader可以分发出附加的任意文件
-    ★相关命令
     npm install 「loaderName」 [--save-dev]   安装loader 
-      npm install css-loader style-loader     可同时安装多个loader 
-    使用方式 
-      require时指定使用的loader  
-        e.g.：require("loaderName!./xx/fileName.xx");  
-        使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
-        可同时使用多个,如 require("style-loader!css-loader!./style.css");
-      webpack.config.js 文件中进行配置  
-        根据模块类型[扩展名]来自动绑定需要的 loader
-        {
-          module : {
-            loaders : [
-              {test: /\.jade$/ , loader : 'jade' },
-              // 通过正则的test方将文件的后缀名法进行匹配
-              // 匹配成功则使用 指定的loader
-              {test: /\.css$/ , loader : 'style!css'},
-              // 或者 {test: /\.css$/ , loader : ["style", "css"]},
-            ] 
+      npm install css-loader style-loader    同时安装多个loader 
+    'webpack.config.js'文件配置  
+      PS：根据模块类型[扩展名]来自动绑定需要的 loader
+        为了让加载器工作,需要一个正则表达式来定义需修改的文件,
+        以及一个字符串或数组用来申明我们需要使用的加载器。
+      '1.x'版本的配置方式 
+      module : {
+        loaders : [
+          {test: /\.jade$/ , loader : 'jade' },
+          // 通过正则的test方将文件的后缀名法进行匹配
+          // 匹配成功则使用 指定的loader
+          {test: /\.css$/ , loader : 'style!css'},
+          // 或者 {test: /\.css$/ , loader : ["style", "css"]},
+        ] 
+      }
+      '2.x'版本的配置方式 
+      module: {
+        rules: [
+          {
+            test: /* RegEx */,
+            use: [
+              {
+                loader: /* loader name */,
+                query: /* optional config object */
+              }
+            ]
           }
-        }
-        
-        {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
-        // 或
-        {
-          test : /\.png$/,
-          loader : 'url-loader',
-          query : {mimetype : "image/png"}
-        }
-      命令行中编译时指定 
-        webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 
-        webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
-        // 指定了style和css 两个loader
-    Query_Parameters,loader的配置参数
+        ]
+      }
+      其他使用方式 
+        require时指定使用的loader  
+          e.g.：require("loaderName!./xx/fileName.xx");  
+          使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
+          可同时使用多个,如 require("style-loader!css-loader!./style.css");
+        命令行中编译时指定 
+          webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 
+          webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
+          // 指定了style和css 两个loader
+    Query_Parameters,loader的配置参数 
       在 require 时配置 
         require("url-loader?mimetype=img/png!./file.png");
       在 webpack.config.js 配置文件中进行配置 
@@ -637,43 +646,9 @@ webpack   模块加载器兼打包工具
           query : {mimetype : "image/png"}
         }
       在命令行中进行配置   
-    e.g.：
-      module.loaders 是webpack最重要的一项配置,
-      告知webpack每一种文件都需要使用什么加载器来处理
-      module: {
-        loaders: [ //加载器配置
-          //.vue文件使用vue-loader处理（这里将-loader省去了）
-          {
-            test: /\.vue$/,
-            loader: 'vue'
-          },
-          //.js文件首先经过ealint-loader处理,再经过babel-loader处理
-          {
-            test: /\.js$/,
-            loader: 'babel!eslint',
-            // make sure to exclude 3rd party code in node_modules
-            exclude: /node_modules/
-          },
-          {
-            //图片文件使用url-loader处理,小于10kb的直接转换为base64
-            test: /\.(png|jpg|gif)$/,
-            loader: 'url',
-            query: {
-              limit: 10000,
-              // fallback to file-loader with this naming scheme
-              name: '[name].[ext]?[hash]'
-            }
-          }
-        ]
-      }
-      
-      在JS中引入CSS 
-      如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
-      css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
-      style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
     loader枚举 
       css-loader       使webpack可以处理'.css'格式文件
-      style-loader     用于将引入的样式文件插入到HTML中
+      style-loader     用于将引入的样式文件插入到HTML中 
         e.g.：
           a.js 文件中: 
             require("style-loader!css-loader!./style.css");
@@ -744,7 +719,109 @@ webpack   模块加载器兼打包工具
         }
         如果图片资源小于10kb就会转化成 base64 格式的 dataUrl,
         其他的图片会存放在build/文件夹下 
+    e.g.：
+      module: {
+        loaders: [ //加载器配置
+          //.vue文件使用vue-loader处理（这里将-loader省去了）
+          {
+            test: /\.vue$/,
+            loader: 'vue'
+          },
+          //.js文件首先经过ealint-loader处理,再经过babel-loader处理
+          {
+            test: /\.js$/,
+            loader: 'babel!eslint',
+            // make sure to exclude 3rd party code in node_modules
+            exclude: /node_modules/
+          },
+          {
+            //图片文件使用url-loader处理,小于10kb的直接转换为base64
+            test: /\.(png|jpg|gif)$/,
+            loader: 'url',
+            query: {
+              limit: 10000,
+              // fallback to file-loader with this naming scheme
+              name: '[name].[ext]?[hash]'
+            }
+          }
+        ]
+      }
+      在JS中引入CSS 
+      如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
+      css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
+      style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
+    使用案例
+      样式CSS 
+        需要css和style加载器
+        npm install --save-dev css-loader style-loader
+        module: {
+          rules: [
+            {
+              test: /\.css$/,
+              use: [
+                { loader: 'style-loader' },
+                { loader: 'css-loader' }
+                // main.css 将先经过css加载器的处理,然后是style加载器
+              ]
+            }
+          ]
+        }
+      预处理器,如LESS或其他css预处理器
+        需要安装相应的加载器,并添加到规则中
+        rules: [
+          {
+            test: /\.less$/,
+            use: [
+              { loader: 'style-loader' },
+              { loader: 'css-loader' },
+              { loader: 'less-loader' }
+            ]
+          }
+        ]
+      编译,如使用Babel加载器来编译脚本文件
+        rules: [
+          {
+            test: /\.js$/,
+            use: [
+              { loader: 'babel-loader' }
+            ]
+          }
+        ]
+      图片
+        Webpack可以在样式表里检测出 url()语句,让加载器对图片文件或链接本身做出一些改变 
+      
+      index.less file
+      @import 'less/vars';
+      body {
+        background-color: @background-color;
+        color: @text-color;
+      }
+      .logo {
+        background-image: url('./images/logo.svg');
+      }
+      
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'url-loader',
+            query: { limit : 10000 }
+          }
+        ]
+      }
+      可以应用文件加载器来拷贝文件,或使用url-加载器,将图片替换为base64字符串,
+      除非它超过字节限制,在这种情况下,它将用相对路径替换url语句,并将文件复制到输出位置。
+      加载器可以通过传递query对象来配置,比如我们可以配置加载器内联文件,当文件不超过10Kb的时候。
   Plugins,插件   扩展webpack的功能 
+    plugins   arr,使用插件,arr的元素为插件的初始化 
+      e.g.:
+      var htmlWebpackPlugin = require("html-webpack-plugin");
+        module.exports ={
+          plugins: [
+            new htmlWebpackPlugin(arg);
+          ]
+        }
+    ◆内建插件
     webpack.optimize.UglifyJsPlugin        压缩处理 
       module.exports = {
         plugins: [
@@ -810,7 +887,7 @@ webpack   模块加载器兼打包工具
           //把入口文件里面的数组打包成verdors.js
           new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
         ]
-    webpack.ProvidePlugin                  把一个全局变量插入到所有的代码中
+    webpack.ProvidePlugin                  把一个全局变量插入到所有的代码中 
       ◆webpack.config.js 中
       plugins: [
         //provide $, jQuery and window.jQuery to every script
@@ -823,7 +900,8 @@ webpack   模块加载器兼打包工具
       ◆js中
       //import $ from 'jquery'; //不需要了,可
       $, jQuery, window.jQuery 都可以直接使用了
-    html-webpack-plugin       在HTML文件中自动引入打包后的文件 
+    ◆常用插件 
+    html-webpack-plugin           在HTML文件中自动引入打包后的文件 
       相关命令  
         npm install html-webpack-plugin --save-dev // 安装插件
       使用
@@ -1424,5 +1502,7 @@ webpack   模块加载器兼打包工具
     在一个配置文件中,指明对某些文件进行类似编译,组合,压缩等任务的具体步骤,
     这个工具之后可以自动替你完成这些任务。
   Bower 
+
+
 
 

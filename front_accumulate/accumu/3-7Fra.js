@@ -1024,9 +1024,9 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
     在params中的方法中 this 表示的即为 vm;
   ◆params   用于配置vm的参数对象 
     包括数据、模板、挂载元素、方法、生命周期钩子等选项 
-  'el' : 'slct'      必选,指定Vue接管的元素 
+  'el' : 'slct'    必选,指定Vue接管的元素 
     slct 选择器,当为class选择器时,若存在多个该class,则只接管第一个
-  'data' : val       可选,vm的数据模型 
+  'data' : val     可选,vm的数据模型 
     PS：Vue实例默认代理其'data'对象,在params中使用 this 表示'data'对象;
     val 为 obj 或 function(){ return obj }
     e.g.：
@@ -1071,7 +1071,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       userInfo = {name:'Kyle Hu',age:22}; // 引用关系被破坏,DOM不会重新渲染
       userInfo.age = 25; // 引用关系被破坏,DOM不会重新渲染
       vm.age = 23; // DOM被渲染成23
-  'methods' : val    可选,vm的方法 
+  'methods' : val  可选,vm的方法 
     使用method方法返回数据 
         <li v-for="n in even(numbers)">{{ n }}</li>
         data: {
@@ -1084,18 +1084,17 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
             });
           }
         }
-  'computed' : val   可选,vm的计算方法 
-    PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化,而不能自定义更改「SlPt」
-    val  包含方法的对象,其方法名可作为类似于data的属性名使用  
-      computed : {
-        cmptFoo1 : function(arg){
-          // 
-        }
+  'computed'       可选,vm的计算方法 
+    PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化 「SlPt」
+    computed : {
+      val : function(arg){
+        // 
+        // val 为函数的返回值
       }
+    }
     setter 
       PS：计算属性默认只有 getter,需要时也可提供 setter;
-        computed的方法依赖于实例中data数据[但不会改变data数据],
-        若希望computed的方法改变也会引起data数据的改变,需为之创建一个setter
+        默认computed的属性根据其依赖自动执行获取,设置setter可自定义进行执行
       // ...
       computed: {
         fullName: {
@@ -1113,36 +1112,18 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
       运行 vm.fullName = 'John Doe' 时,setter会被调用,
       vm.firstName 和 vm.lastName 也会被对应更新 
     e.g.：
-    在DOM中放入太多逻辑会难以维护,采用方法返回值的形式,将逻辑转移的vm中 
-      <div id="example"> {{ message.split('').reverse().join('') }} </div>
-      改为
-      <div id="example1">
-        <p>Original message: "{{ message }}"</p>
-        <p>Computed reversed message: "{{ rvsMsg }}"</p>
-      </div>
-      var vm = new Vue({
-        el: '#example1',
-        data: { message: 'Hello' },
+      获取经过处理的数据副本[而非改变原数据] 
+        <li v-for="n in evenNumbers">{{ n }}</li>
+        data: {
+          numbers: [ 1,2,3,4,5 ]
+        },
         computed: {
-          rvsMsg: function () {
-            return this.message.split('').reverse().join('')
+          evenNumbers: function () {
+            return this.numbers.filter(function (number) {
+              return number % 2 === 0
+            })
           }
         }
-      });
-      控制台中修改vm  vm.rvsMsg 的值始终取决于 vm.message 的值,
-      当 vm.message 发生改变时,依赖于 vm.rvsMsg 的绑定也会更新;
-    获取经过处理的数据副本[而非改变原数据] 
-      <li v-for="n in evenNumbers">{{ n }}</li>
-      data: {
-        numbers: [ 1,2,3,4,5 ]
-      },
-      computed: {
-        evenNumbers: function () {
-          return this.numbers.filter(function (number) {
-            return number % 2 === 0
-          })
-        }
-      }
   'watch' : val      可选,vm的数据监听方法 
     e.g.：
       var vm = new Vue({
@@ -1278,7 +1259,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
   vm.$data    实例的data
   vm.$watch('key', foo)  监控元素改变的方法 
     key data对象中的属性 
-    foo 依次传入函数 (newVal, oldVal) 
+    foo 传入参数 (newVal,oldVal) 
     e.g.：
       vm.$watch('a', function (newVal, oldVal) {
           // 回调将在`vm.a`值改变后调用 
@@ -1317,7 +1298,7 @@ Lifecycle_hooks,生命周期钩子
   deactivated   组件被移除时 
   beforeDestroy 
   destroyed     销毁观察、组件及事件 
-Directives,指令系统:model和view的交互 
+Directives,指令   model和view的交互 
   PS：将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
@@ -1494,12 +1475,12 @@ Directives,指令系统:model和view的交互
           // 当存在 value="" 时 , v-model 的值为 ""
           // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
         </select>
-  v-for="ph in keyObj"   渲染循环列表 
-    ph 为自定义的占位符placeholder[是数组元素迭代的别名]keyObj的属性,便于后续使用 
-      支持'(ph,key) in keyObj' 形式,使用下标占位符'key'
-    通过数组来迭代 
+  v-for="item in items"   渲染循环列表 
+    item 为自定义的占位符placeholder[是数组元素迭代的别名]items的属性,便于后续使用 
+      支持'(item,indx) in items' 形式,使用下标占位符'indx' 
+    arr迭代 
       <ol id="test">
-        <li v-for="ph in dataKeyArr"> {{ ph.text }} </li>
+        <li v-for="item in dataKeyArr"> {{ item.text }} </li>
       </ol>
       var vm = new Vue({
         el: '#test',
@@ -1511,7 +1492,7 @@ Directives,指令系统:model和view的交互
           ]
         }
       })
-    通过对象的属性来迭代 
+    obj迭代 
       <ul id="repeat-object" class="demo">
         <li v-for="value in obj"> {{ value }} </li>
       </ul>
@@ -1529,17 +1510,17 @@ Directives,指令系统:model和view的交互
       John
       Doe
       30
-    提供第二个的参数为键名 
+    '(item,indx) in items' 提供第二个的参数为键名 
       <div v-for="(value,key) in object">
         {{ key }} : {{ value }}
       </div>
-    提供三个参数为索引 
+    '(item,key,indx) in items' 提供三个参数为索引 
       <div v-for="(value,key,index) in object">
         {{ index }}. {{ key }} : {{ value }}
       </div>
       在遍历对象时,是按 Object.keys() 的结果遍历,
       但不能保证结果在不同的JS引擎下是一致的
-    整数迭代 
+    num整数迭代 
       <div>
         <span v-for="n in 10">{{ n }}</span>
       </div>
@@ -1552,9 +1533,8 @@ Directives,指令系统:model和view的交互
           <li class="divider"></li>
         </template>
       </ul>
-    组件迭代 
-      但不能自动传递数据到组件里,
-      因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
+    'props'传递数据 
+      不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
       <div id="todo-list-example">
         <input v-model="newTodoText" v-on:keyup.enter="addNewTodo" 
         placeholder="Add a todo" >
@@ -1586,7 +1566,7 @@ Directives,指令系统:model和view的交互
           }
         }
       });
-    渲染元素复用 
+    'key'标识渲染元素复用 
       当VueJS用 v-for 正在更新已渲染过的元素列表时,
       它默认用 “就地复用” 策略若数据项的顺序被改变,
       Vue将不是移动 DOM 元素来匹配数据项的顺序,
@@ -1604,7 +1584,6 @@ Directives,指令系统:model和view的交互
       或者你是故意要依赖于默认行为来获得性能提升
       因为它是 Vue 识别节点的一个通用机制,key 并不特别与 v-for 关联,
       key 还具有其他用途,我们将在后面的指南中看到其他用途
-      
     可用'of'替代'in'作为分隔符 
       <div v-for="item of items"></div>
   v-once  一次性插值[配合插值使用] 
@@ -1629,7 +1608,7 @@ Directives,指令系统:model和view的交互
         <p>Paragraph 1</p>
         <p>Paragraph 2</p>
       </template>
-      默认的渲染元素会被复用,可用'key'控制元素是否被复用 
+    'key'管理元素是否被复用 
       Vue尽可能高效的渲染元素,通常会复用已有元素[而不是从头开始渲染]
         <div id="bbb">
           <template v-if="loginType === 'username'">
@@ -1686,23 +1665,24 @@ Directives,指令系统:model和view的交互
         },5000);
         初始在表单输入的值,在5s后消失[input元素被重新渲染了]
         当两个'key'值相同时,相当与没有'key'时的默认情况 
-  v-else-if="drctVal" 条件渲染 ['2.1.0'+] 
-    v-else-if 必须跟在 v-if 或者 v-else-if之后
-      <div v-if="type === 'A'"> A </div>
-      <div v-else-if="type === 'B'"> B </div>
-      <div v-else-if="type === 'C'"> C </div>
-      <div v-else> Not A/B/C </div>
-  v-else              条件渲染 
-    PS：v-if用于条件判断,和v-else是一对
-    'v-else'必须紧跟在'v-if'或者'v-else-if'的后面,否则它不能被识别
-      <h1 v-if="ok">Yes</h1>
-      <h1 v-else>No</h1>
+        注意, <label> 元素仍然会被高效地复用,因为它们没有添加 key 属性。
+    v-else-if="drctVal" 条件渲染 ['2.1.0'+] 
+      v-else-if 必须跟在 v-if 或者 v-else-if之后
+        <div v-if="type === 'A'"> A </div>
+        <div v-else-if="type === 'B'"> B </div>
+        <div v-else-if="type === 'C'"> C </div>
+        <div v-else> Not A/B/C </div>
+    v-else              条件渲染 
+      PS：v-if用于条件判断,和v-else是一对
+      'v-else'必须紧跟在'v-if'或者'v-else-if'的后面,否则它不能被识别
+        <h1 v-if="ok">Yes</h1>
+        <h1 v-else>No</h1>
   v-show="drctVal"  作用与v-if类似 
     PS：'v-show'的元素会始终渲染并保持在DOM中「使用 display:none」
       v-show不支持<template>标签
       一般,'v-if'有更高的切换消耗而'v-show'有更高的初始渲染消耗,
       因此若需要频繁切换使用'v-show'较好,若在运行时条件不大可能改变则使用'v-if'较好 
-  ◆事件绑定
+  ◆事件绑定 
   v-on:eName="arg" 事件处理与绑定「简写'@eName'」
     PS：当一个ViewModel被销毁时,所有的事件处理器都会自动被删除[无须自己清理]        
     arg  当触发事件时执行'arg',可为函数[可带参数]、单条语句或无 
@@ -1716,7 +1696,6 @@ Directives,指令系统:model和view的交互
       <div id="test">
         <p>{{ message }}</p>
         <button v-on:click="reverseMsg">逆转消息</button>
-        // 可简写为 <button @click="reverseMsg">逆转消息</button>
       </div>
       var app5 = new Vue({
         el: '#test',
@@ -1729,9 +1708,23 @@ Directives,指令系统:model和view的交互
           }
         }
       })    
+    内联处理器方法
+      除了直接绑定到一个方法,也可以用内联JS语句
+      <div id="example-3">
+        <button v-on:click="say('hi')">Say hi</button>
+        <button v-on:click="say('what')">Say what</button>
+      </div>
+      new Vue({
+        el: '#example-3',
+        methods: {
+          say: function (message) {
+            alert(message)
+          }
+        }
+      })
     只有修饰符 
       <form v-on:submit.prevent></form>
-    '$event' 在HTML中传入,表示原生DOM事件对象 
+    '$event' 表示原生DOM事件对象 
       <button v-on:click="warn('11111',$event)">Submit</button>
       // ...
       methods: {
@@ -1741,27 +1734,123 @@ Directives,指令系统:model和view的交互
           alert(message)
         }
       }
-  ◆属性控制
-  v-bind:attrName="drctVal"  属性赋值「简写':attrName'」
-    arg 为str时,表示属性attrName的值为str 
-      <div id="app-2">
-        <span v-bind:title="message">
-        // 简写为 <span :title="message">
-          鼠标悬停几秒钟查看此处动态绑定的提示信息！
-        </span>
-      </div>
-      var app2 = new Vue({
-        el: '#app-2',
-        data: {
-          message: '页面加载于 ' + new Date()
-        }
-      }); 
-      // app2.message = '新消息';
-      // 可通过更改 app2.message 的值来改变显示
-    ★用于'class'和'style'属性时,参数可以是对象或数组
-    arr   表示该class的值为该数组中的多个 
-      其中数组中的值属于 params.data 
-      e.g.：
+  ◆属性控制 
+  v-bind:attrName="arg"  属性赋值「简写':attrName'」
+    PS：在v-bind 用于'class'和'style'时,VueJS专门增强了它
+      表达式的结果类型除了字符串之外,还可以是对象或数组
+    arg 可为str,arr,obj
+      str,表示属性attrName的值为str 
+        <div id="app-2">
+          <span v-bind:title="message">
+          // 简写为 <span :title="message">
+            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+          </span>
+        </div>
+        var app2 = new Vue({
+          el: '#app-2',
+          data: {
+            message: '页面加载于 ' + new Date()
+          }
+        }); 
+        // app2.message = '新消息';
+        // 可通过更改 app2.message 的值来改变显示
+      arr,表示该class的值为该数组中的多个 
+        e.g.：
+          <div v-bind:class="[activeClass,errorClass]">
+          data: {
+            activeClass: 'active',
+            errorClass: 'text-danger'
+          }
+          渲染为:
+          <div class="active text-danger"></div>
+        使用三元表达式,根据条件切换列表中的class  
+          <div v-bind:class="[isActive ? activeClass : '',errorClass]">
+          此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
+        可在数组语法中使用对象语法 
+          <div v-bind:class="[{ active: isActive },errorClass]"> 
+      obj,key为属性名,val可为属性的值、函数判断或简单表达式  
+        动态地切换class 
+          <div v-bind:class="{ active: isActive }"></div>
+          class active 存在与否将取决于数据属性 isActive 是否为真值
+        与普通的class属性共存 
+          <div class="static" :class="{ active: isActive,'text-danger': hasError }">
+          </div>
+          data: {
+            isActive: true,
+            hasError: false
+          }
+          渲染为:
+          <div class="static active"></div>
+        可直接绑定数据属性里的对象 
+          <div id="test" v-bind:class="dataKeyObj"></div>
+          new Vue({
+            el : '#test',
+            data: {
+              dataKeyObj: {
+                active: true,
+                'text-danger': false
+              }
+            }
+          });
+          渲染为
+          <div id="test" class="active"></div>
+        可为计算属性的方法[返回的对象] 
+          <div v-bind:class="comptFoo"></div>
+          data: {
+            isActive: true,
+            error: null
+          },
+          computed: {
+            comptFoo: function () {
+              return {
+                active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal',
+              }
+            }
+          }      
+    v-bind:class=arg  'class'类样式
+      对象语法 
+        动态地切换 class 
+          <div v-bind:class="{ active: isActive }"></div>
+          上面的语法表示 classactive 的更新将取决于数据属性 isActive 是否为真值 
+        可以在对象中传入更多属性用来动态切换多个class 
+        此外,v-bind:class指令可以与普通的class属性共存如下模板:
+          <div class="static"
+            v-bind:class="{ active: isActive,'text-danger': hasError }">
+          </div>
+          如下 data:
+          data: {
+            isActive: true,
+            hasError: false
+          }
+          渲染为:
+          <div class="static active"></div>
+        当 isActive 或者 hasError 变化时,class列表将相应地更新
+        若 hasError 的值为 true ,class列表将变为 "static active text-danger"
+        可以直接绑定数据里的一个对象 
+          <div v-bind:class="classObject"></div>
+          data: {
+            classObject: {
+              active: true,
+              'text-danger': false
+            }
+          }
+          渲染的结果和上面一样我们也可以在这里绑定返回对象的计算属性这是一个常用且强大的模式：
+          <div v-bind:class="classObject"></div>
+          data: {
+            isActive: true,
+            error: null
+          },
+          computed: {
+            classObject: function () {
+              return {
+                active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal',
+              }
+            }
+          }
+      数组语法 
+        我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表：
         <div v-bind:class="[activeClass,errorClass]">
         data: {
           activeClass: 'active',
@@ -1769,85 +1858,68 @@ Directives,指令系统:model和view的交互
         }
         渲染为:
         <div class="active text-danger"></div>
-      使用三元表达式,根据条件切换列表中的class  
+        若你也想根据条件切换列表中的 class ,可以用三元表达式：
         <div v-bind:class="[isActive ? activeClass : '',errorClass]">
         此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-      可在数组语法中使用对象语法 
-        <div v-bind:class="[{ active: isActive },errorClass]"> 
-    obj   key为属性名,val可为属性的值、函数判断或简单表达式  
-      动态地切换class 
-        <div v-bind:class="{ active: isActive }"></div>
-        class active 存在与否将取决于数据属性 isActive 是否为真值
-      与普通的class属性共存 
-        <div class="static" :class="{ active: isActive,'text-danger': hasError }">
-        </div>
+        不过,当有多个条件 class 时这样写有些繁琐可以在数组语法中使用对象语法：
+        <div v-bind:class="[{ active: isActive },errorClass]">
+      用在组件上 
+        在定制的组件上用到class属性的时,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖
+        例如,若你声明了这个组件:
+        Vue.component('my-component',{
+          template: '<p class="foo bar">Hi</p>'
+        })
+        然后在使用它的时候添加一些 class：
+        <my-component class="baz boo"></my-component>
+        HTML 最终将被渲染成为:
+        <p class="foo bar baz boo">Hi</p>
+        同样的适用于绑定 HTML class :
+        <my-component v-bind:class="{ active: isActive }"></my-component>
+        当 isActive 为 true 的时候,HTML 将被渲染成为:
+        <p class="foo bar active"></p>
+    v-bind:style=arg  'style'内联样式 
+      对象语法
+        v-bind:style 的对象语法十分直观,非常像CSS的
+        须将短横分隔命名[kebab-case]改为驼峰式[camelCase] 
+        <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
         data: {
-          isActive: true,
-          hasError: false
+          activeColor: 'red',
+          fontSize: 30
         }
-        渲染为:
-        <div class="static active"></div>
-      可直接绑定数据属性里的对象 
-        <div id="test" v-bind:class="dataKeyObj"></div>
-        new Vue({
-          el : '#test',
-          data: {
-            dataKeyObj: {
-              active: true,
-              'text-danger': false
-            }
-          }
-        });
-        渲染为
-        <div id="test" class="active"></div>
-      可为计算属性的方法[返回的对象] 
-        <div v-bind:class="comptFoo"></div>
+        直接绑定到一个样式对象通常更好,让模板更清晰：
+        <div v-bind:style="styleObject"></div>
         data: {
-          isActive: true,
-          error: null
-        },
-        computed: {
-          comptFoo: function () {
-            return {
-              active: this.isActive && !this.error,
-              'text-danger': this.error && this.error.type === 'fatal',
-            }
+          styleObject: {
+            color: 'red',
+            fontSize: '13px'
           }
-        }      
-  ◆指令的扩展
+        }
+        同样的,对象语法常常结合返回对象的计算属性使用
+      数组语法
+        v-bind:style 的数组语法可以将多个样式对象应用到一个元素上：
+        <div v-bind:style="[baseStyles,overridingStyles]">
+      自动添加前缀
+        当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
+    v-bind:key=arg  标识DOM节点 
+  ◆指令的扩展 
   Modifiers,修饰符  指出一个指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
     PS：修饰符是以点号'.'指明的特殊后缀;指令可以串联;
-    .prevent 修饰v-on,触发的事件调用 event.preventDefault() 
-      <form v-on:submit.prevent="onSubmit"></form>
-      // <!-- 提交事件不再重载页面 -->
-    .native  修饰v-on,监听原生事件 
-      e.g.：<my-component v-on:click.native="doTheThing"></my-component>
-    .enter   修饰v-on,按键为,
-      如 @keyup.enter 表示当按键为Enter,keyup时响应,也可使用数字 
-    .sync    对子组件props双向绑定 [Vue 2.0 中移除,Vue 2.3 加入] 
-      Vue1.x  中 .sync 对子组件props双向绑定
-        当一个子组件改变了一个 prop 的值时,这个变化也会同步到父组件中所绑定的值
-        这很方便,但也会导致问题,因为它破坏了『单向数据流』的假设,会带来高的维护成本
-      Vue 2.3 加入,作为一个编译时的语法糖 
-        只是让子组件改变父组件状态的代码更容易被区分
-        会被扩展为一个自动更新父组件属性的 v-on 侦听器
-        <comp :foo.sync="bar"></comp>
-        会被扩展为：
-        <comp :foo="bar" @update:foo="val => bar = val"></comp>
-        当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件：
-        this.$emit('update:foo',newValue)
-    .stop    阻止冒泡 
-      <a v-on:click.stop="doThis"></a>
-      // <!-- 阻止单击事件冒泡 -->
-    .capture 事件捕获模式
-      <!-- 添加事件侦听器时使用事件捕获模式 -->
-      <div v-on:click.capture="doThis">...</div>
-    .self    当事件在该元素本身上时触发 
-      <!-- 只当事件在该元素本身（而不是子元素）触发时触发回调 -->
-      <div v-on:click.self="doThat">...</div>
-    .once    '2.1.4'新增 
-      <!-- 事件只会执行一次 -->
-      <a v-on:click.once="doThis"></a>
+    事件修饰符
+      .prevent 修饰v-on,触发的事件调用 event.preventDefault() 
+        <form v-on:submit.prevent="onSubmit"></form>
+        // <!-- 提交事件不再重载页面 -->
+      .stop    阻止冒泡 
+        <a v-on:click.stop="doThis"></a>
+        // <!-- 阻止单击事件冒泡 -->
+      .capture 事件捕获模式
+        <!-- 添加事件侦听器时使用事件捕获模式 -->
+        <div v-on:click.capture="doThis">...</div>
+      .self    当事件在该元素本身上时触发 
+        <!-- 只当事件在该元素本身（而不是子元素）触发时触发回调 -->
+        <div v-on:click.self="doThat">...</div>
+      .once    '2.1.4'新增 
+        <!-- 事件只会执行一次 -->
+        <a v-on:click.once="doThis"></a>
     按键修饰符   在监听键盘事件时,监测键值 
       记住所有的keyCode比较困难,所以Vue为最常用的按键提供了别名 
         <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
@@ -1880,6 +1952,25 @@ Directives,指令系统:model和view的交互
       .alt    '2.1.0'新增
       .shift  '2.1.0'新增
       .meta   '2.1.0'新增
+    鼠标按键修饰符['2.1.0 新增'] 
+      .left
+      .right
+      .middle
+    其他修饰符
+      .native  修饰v-on,监听原生事件 
+        e.g.：<my-component v-on:click.native="doTheThing"></my-component>
+      .sync    对子组件props双向绑定 [Vue 2.0 中移除,Vue 2.3 加入] 
+        Vue1.x  中 .sync 对子组件props双向绑定
+          当一个子组件改变了一个 prop 的值时,这个变化也会同步到父组件中所绑定的值
+          这很方便,但也会导致问题,因为它破坏了『单向数据流』的假设,会带来高的维护成本
+        Vue 2.3 加入,作为一个编译时的语法糖 
+          只是让子组件改变父组件状态的代码更容易被区分
+          会被扩展为一个自动更新父组件属性的 v-on 侦听器
+          <comp :foo.sync="bar"></comp>
+          会被扩展为：
+          <comp :foo="bar" @update:foo="val => bar = val"></comp>
+          当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件：
+          this.$emit('update:foo',newValue)
     ◆v-model的修饰符 
     .lazy    v-model在input事件中同步输入框的值与数据,'lazy'从而转变为在change事件中同步
       // <!-- 在 "change" 而不是 "input" 事件中更新 -->
@@ -1890,7 +1981,7 @@ Directives,指令系统:model和view的交互
     .trim   自动过滤用户输入的首尾空格
       <input v-model.trim="msg">
   v-name[arg.xx.xx='val']  自定义指令 
-    PS：有的情况下,仍然需要对纯DOM元素进行底层操作,这时候就会用到自定义指令;
+    PS：用于对纯DOM元素进行底层操作 
     Vue.directive('name', options);  自定义全局指令 
       name    指令的名称
       options 配置对象或函数 
@@ -1901,6 +1992,17 @@ Directives,指令系统:model和view的交互
             el.focus()
           }
         }
+      e.g.：当页面加载时,元素将获得焦点 
+        <div class="aaa"> <input v-focus > </div>
+        Vue.directive('focus', {
+          inserted: function (el) {
+            el.focus();
+            console.log(11111);
+          }
+        });
+        new Vue({
+          el : '.aaa',
+        });
     directives : val,       注册局部指令 
       directives: {
         focus: {
@@ -1908,18 +2010,6 @@ Directives,指令系统:model和view的交互
         }
       }
     在模板中元素上使用 v-xx 指令 
-    e.g.：
-      当页面加载时,元素将获得焦点
-      <div class="aaa"> <input v-focus > </div>
-      Vue.directive('focus', {
-        inserted: function (el) {
-          el.focus();
-          console.log(11111);
-        }
-      });
-      new Vue({
-        el : '.aaa',
-      });
     fooName:function(el,binding,vnode,oldVnode){ },   指令定义[钩子]函数 
       ◆fooName 钩子函数
       bind         指令第一次绑定到元素时调用[只调用一次] 
@@ -2015,111 +2105,13 @@ Directives,指令系统:model和view的交互
       Vue.directive('color-swatch', function (el, binding) {
         el.style.backgroundColor = binding.value
       })
-    指令可传入对象字面量 
-      指令函数能够接受所有合法类型的 JavaScript 表达式
+    指令传入对象字面量 
+      指令函数能够接受所有合法类型的JS表达式 
       <div v-demo="{ color: 'white', text: 'hello!' }"></div>
       Vue.directive('demo', function (el, binding) {
         console.log(binding.value.color) // => "white"
         console.log(binding.value.text)  // => "hello!"
       })    
-  Class与Style绑定 
-    PS：数据绑定一个常见需求是操作元素的'class'列表和它的内联样式
-      因为它们都是属性 ,我们可以用v-bind 处理它们：只需要计算出表达式最终的字符串
-      不过,字符串拼接麻烦又易错
-      因此,在 v-bind 用于'class'和'style'时,VueJS 专门增强了它
-      表达式的结果类型除了字符串之外,还可以是对象或数组
-    ◆Class
-    对象语法
-      动态地切换 class 
-        <div v-bind:class="{ active: isActive }"></div>
-        上面的语法表示 classactive 的更新将取决于数据属性 isActive 是否为真值 
-      可以在对象中传入更多属性用来动态切换多个class 
-      此外,v-bind:class指令可以与普通的class属性共存如下模板:
-        <div class="static"
-          v-bind:class="{ active: isActive,'text-danger': hasError }">
-        </div>
-        如下 data:
-        data: {
-          isActive: true,
-          hasError: false
-        }
-        渲染为:
-        <div class="static active"></div>
-      当 isActive 或者 hasError 变化时,class列表将相应地更新
-      若 hasError 的值为 true ,class列表将变为 "static active text-danger"
-      可以直接绑定数据里的一个对象 
-        <div v-bind:class="classObject"></div>
-        data: {
-          classObject: {
-            active: true,
-            'text-danger': false
-          }
-        }
-        渲染的结果和上面一样我们也可以在这里绑定返回对象的计算属性这是一个常用且强大的模式：
-        <div v-bind:class="classObject"></div>
-        data: {
-          isActive: true,
-          error: null
-        },
-        computed: {
-          classObject: function () {
-            return {
-              active: this.isActive && !this.error,
-              'text-danger': this.error && this.error.type === 'fatal',
-            }
-          }
-        }
-    数组语法 
-      我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表：
-      <div v-bind:class="[activeClass,errorClass]">
-      data: {
-        activeClass: 'active',
-        errorClass: 'text-danger'
-      }
-      渲染为:
-      <div class="active text-danger"></div>
-      若你也想根据条件切换列表中的 class ,可以用三元表达式：
-      <div v-bind:class="[isActive ? activeClass : '',errorClass]">
-      此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-      不过,当有多个条件 class 时这样写有些繁琐可以在数组语法中使用对象语法：
-      <div v-bind:class="[{ active: isActive },errorClass]">
-    用在组件上 
-      在定制的组件上用到class属性的时,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖
-      例如,若你声明了这个组件:
-      Vue.component('my-component',{
-        template: '<p class="foo bar">Hi</p>'
-      })
-      然后在使用它的时候添加一些 class：
-      <my-component class="baz boo"></my-component>
-      HTML 最终将被渲染成为:
-      <p class="foo bar baz boo">Hi</p>
-      同样的适用于绑定 HTML class :
-      <my-component v-bind:class="{ active: isActive }"></my-component>
-      当 isActive 为 true 的时候,HTML 将被渲染成为:
-      <p class="foo bar active"></p>
-    ◆Style
-    对象语法
-      v-bind:style 的对象语法十分直观,非常像CSS的
-      须将短横分隔命名[kebab-case]改为驼峰式[camelCase] 
-      <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
-      data: {
-        activeColor: 'red',
-        fontSize: 30
-      }
-      直接绑定到一个样式对象通常更好,让模板更清晰：
-      <div v-bind:style="styleObject"></div>
-      data: {
-        styleObject: {
-          color: 'red',
-          fontSize: '13px'
-        }
-      }
-      同样的,对象语法常常结合返回对象的计算属性使用
-    数组语法
-      v-bind:style 的数组语法可以将多个样式对象应用到一个元素上：
-      <div v-bind:style="[baseStyles,overridingStyles]">
-    自动添加前缀
-      当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
   指令的值'drctVal'可为单条语句 
     <div id="example-1"> 
       <button v-on:click="counter += 1">增加 1</button>
@@ -2138,7 +2130,7 @@ Directives,指令系统:model和view的交互
     data : {
       a : fasle,
     }
-Mustache,模板语法插值 
+Mustache,插值 
   PS：Vue使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
     在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
     结合响应系统,应用状态改变时,Vue以最小代价重新渲染组件并应用到DOM操作上;
@@ -2186,7 +2178,7 @@ Mustache,模板语法插值
         }
       }
   Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-Filters,过滤器:数据格式化 
+Filters,过滤器 
   PS：Vue2.x 中,过滤器只能在'插值'和'v-bind'表达式[从' 2.1.0'开始支持]中使用 
     类似Linux中的管道,vuejs也使用的是'|'; 
     因为过滤器设计目的就是用于文本转换
@@ -2194,14 +2186,19 @@ Filters,过滤器:数据格式化
     过滤器函数总接受"|"左边的值作为第一个参数
   插值及指令中使用 
     添加在JS表达式的尾部,由“管道”符指示 
-    // 插值中
+    插值中使用
     {{ message | ftFoo }}
-    // v-bind 中
+    v-bind 中使用
     <div v-bind:id="rawId | ftFoo"></div>
-    // 传入额外的参数
+    传入额外的参数
     {{ message | ftFoo(arg1,arg2,..) }}
+  过滤器传参 
+    过滤器是JS函数,因此可以接受参数
+    {{ message | filterA('arg1',arg2) }}
+    字符串'arg1'将传给过滤器作为第二个参数,
+    arg2 表达式的值将被求值然后传给过滤器作为第三个参数 
   Vue.filter('ftName',foo); 自定义内建过滤器[全局过滤器,可在所有实例中使用] 
-    foo  依次传入参数 val[,arg1,arg2,..] 
+    foo  传入参数 val[,arg1,arg2,..] 
       val 表示'|'左边的值,
       arg 可选,表示使用时传入的额外参数 
     e.g.：
@@ -2211,11 +2208,6 @@ Filters,过滤器:数据格式化
       })
   过滤器串联 
     {{ message | filterA | filterB }}
-  过滤器传参 
-    过滤器是JS函数,因此可以接受参数
-    {{ message | filterA('arg1',arg2) }}
-    字符串'arg1'将传给过滤器作为第二个参数,
-    arg2 表达式的值将被求值然后传给过滤器作为第三个参数 
 Component,组件 
   PS：Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
@@ -2236,7 +2228,7 @@ Component,组件
           strArr  ['attr1','att2',...]
           
         this.todo 获取到值 
-      data     : foo           可选,组件的数据存放,但必须为一函数 
+      data     : foo          可选,组件的数据存放,但必须为一函数 
         PS：通过Vue构造器传入的各种选项大多数都可以在组件里用,
           data 是一个例外,它必须是函数
         e.g.：
@@ -3149,6 +3141,7 @@ vue-resource  与后台数据交互
 axios         功能和vue-resource类似 
 vue-router    路由 
   PS：'2.x'只适用于 Vue2.x 版本
+  在web开发中，“route”是指根据url分配到对应的处理程序。——贺师俊
   script引入 
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
@@ -3216,7 +3209,7 @@ vue-router    路由
       }
     匹配优先级
       有时,同一个路径可匹配多个路由,匹配优先级按照路由的定义顺序：先定义的优先级高 
-  嵌套路由  
+  嵌套路由 
     一个被渲染组件同样可以包含自己的嵌套<router-view>
     e.g.：
     const User = {
@@ -3317,7 +3310,7 @@ vue-router    路由
     这跟代码调用 router.push() 是一回事：
     router.push({ name: 'user', params: { userId: 123 }})
     这两种方式都会把路由导航到 /user/123 路径。
-  命名视图
+  命名视图 
     同时[同级]展示多个视图,而不是嵌套展示,可在界面中拥有多个单独命名的视图,
     如果 router-view 没有设置名字,那么默认为 default。
     e.g.：
@@ -3362,7 +3355,7 @@ vue-router    路由
           }}
         ]
       })
-  别名
+  别名 
     '/a' 的别名是 '/b',意味着,当用户访问 /b 时,URL 会保持为 /b,
     但是路由匹配则为 /a,就像用户访问 /a 一样。
     『别名』的功能让你可以自由地将 UI 结构映射到任意的 URL,而不是受限于配置的嵌套路由结构。
@@ -3546,7 +3539,7 @@ react-native
 --------------------------------------------------------------------------------
 ●originJS「SlSt」 
   功能: 轻量、简洁、功能--多模块化自由组合、待续...
-  简写符号:
+  简写符号: 
     pa   parents
     pu   public
     el   elements
@@ -3657,6 +3650,18 @@ react-native
         效果:利用发送信息的方式来获取信息 
           可自定义规则,向未来元素发送信息 
             预定义发送数据,等待未来元素的触发 
+            
+      出现的'时间前''时间后' + 信息的'发送者''接受者' 
+      
+      1. 请求模式 
+        信息接受者主动
+        prev to next 
+        next to prev 
+        接受者不断的发送请求,接收到响应后停止
+        请求的参数为信息发出者预先定义好的参数 
+      2. 广播模式 ---相对于第一种更复杂,废弃 
+        不断发送直到收到信息后停止广播 
+        接收一个数组参数,数组的元素为接收的对象及传递的信息数组
 ---------------------------------------------------------------------以下待整理 
 
 

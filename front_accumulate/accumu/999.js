@@ -594,13 +594,4 @@ v-model select bug
 
 学习 vue-router 
 
-组件间通信
-  出现的时间前后 + 信息的发送接受者 
-  信息获取者主动
-  prev to next 
-  next to prev 
-  
-  1. 广播模式 
-    不断发送直到收到信息后停止广播
-  2. 请求模式 
 

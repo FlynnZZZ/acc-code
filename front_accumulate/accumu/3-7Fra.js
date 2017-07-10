@@ -108,7 +108,7 @@
         var config = require('../config') // 获取 config/index.js 的默认配置
         
         /* 
-        ** 如果 Node 的环境无法判断当前是 dev / product 环境
+        ** 若 Node 的环境无法判断当前是 dev / product 环境
         ** 使用 config.dev.env.NODE_ENV 作为当前的环境
         */
         
@@ -120,7 +120,7 @@
         var proxyMiddleware = require('http-proxy-middleware') // 使用 proxyTable 
         var webpackConfig = require('./webpack.dev.conf') // 使用 dev 环境的 webpack 配置
         
-        /* 如果没有指定运行端口,使用 config.dev.port 作为运行端口 */
+        /* 若没有指定运行端口,使用 config.dev.port 作为运行端口 */
         var port = process.env.PORT || config.dev.port
         
         /* 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置 */
@@ -160,7 +160,7 @@
           app.use(proxyMiddleware(context, options))
         })
         
-        // 使用 connect-history-api-fallback 匹配资源,如果不匹配就可以重定向到指定地址
+        // 使用 connect-history-api-fallback 匹配资源,若不匹配就可以重定向到指定地址
         app.use(require('connect-history-api-fallback')())
         
         // 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
@@ -183,7 +183,7 @@
           var uri = 'http://localhost:' + port
           console.log('Listening at ' + uri + '\n')
           
-          // 如果不是测试环境,自动打开浏览器并跳到我们的开发地址
+          // 若不是测试环境,自动打开浏览器并跳到我们的开发地址
           if (process.env.NODE_ENV !== 'testing') {
             opn(uri)
           }
@@ -343,7 +343,7 @@
         var merge = require('webpack-merge') // 加载 webpack 配置合并工具
         var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf.js
         /* 一个 webpack 扩展,可以提取一些代码并且将它们和文件分离开 */ 
-        /* 如果我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
+        /* 若我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
         var ExtractTextPlugin = require('extract-text-webpack-plugin')
         /* 一个可以插入 html 并且创建新的 .html 文件的插件 */
         var HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -766,7 +766,7 @@
       }).$mount('#app')
       这样子改完再打开浏览器看看查看图片点击那两个链接试试,会发现<router-view></router-view>的内容已经展示出来,同时注意浏览器地址已经变更查看图片另外,也可以把 App.vue 的内容写在 main.js 也是可以的不过不建议这么做查看图片
       
-      如果你使用 vue1.0和0.7版本的 vue-router,请参照下面这个教程, 他整个系列都不错的,当然仅限于 vue1.0 :
+      若你使用 vue1.0和0.7版本的 vue-router,请参照下面这个教程, 他整个系列都不错的,当然仅限于 vue1.0 :
       
       http://guowenfh.github.io/2016/03/28/vue-webpack-06-router/
       给页面加点动态数据
@@ -804,7 +804,7 @@
               console.log(response)
           });
         }
-      这里使用的是豆瓣的公开 GET 接口,如果接口是跨域的 POST 请求,则需要在服务器端配置:
+      这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
       
       Access-Control-Allow-Origin: *        
         
@@ -965,15 +965,15 @@ Model,模型  一个轻微改动过的原生JS对象
       // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
   异步更新队列 
     当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
-    如果同一个'watcher'被多次触发,只会一次推入到队列中。
+    若同一个'watcher'被多次触发,只会一次推入到队列中。
     这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
     然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
     Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
-    如果执行环境不支持,会采用 setTimeout(fn, 0) 代替。
+    若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
     e.g.：
       当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
       当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
-      多数情况我们不需要关心这个过程,但是如果你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
+      多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
       虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
     Vue.nextTick(callback)  在数据变化之后使用使其操作插队「SlPt」
       <div id="example">{{message}}</div>
@@ -1298,7 +1298,7 @@ Lifecycle_hooks,生命周期钩子
   deactivated   组件被移除时 
   beforeDestroy 
   destroyed     销毁观察、组件及事件 
-Directives,指令   model和view的交互 
+Directives,指令  model和view的交互 
   PS：将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
@@ -2052,7 +2052,7 @@ Directives,指令   model和view的交互
       unbind       指令与元素解绑时调用[只调用一次]
       ◆钩子函数的参数 
         除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
-        如果需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+        若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
       el         指令所绑定的元素,可以用来直接操作 DOM 
         el.focus()   表单获得焦点
         el.select()  表单值被选中
@@ -2832,7 +2832,7 @@ Component,组件
       '
     })    
   使用<template>标签
-    如果组件中的内容过多,一堆的引号和加号来拼接这些字符串简直就是噩梦
+    若组件中的内容过多,一堆的引号和加号来拼接这些字符串简直就是噩梦
     所以Vue 引入了template标签（html5定义的,浏览器默认不去解析里面的内容）
     <template> 不能用在 <table> 内下面来看看它的使用方法：
     ◆HTML中
@@ -2892,9 +2892,9 @@ Component,组件
     原理 
       当插入或删除包含在 transition 组件中的元素时,Vue 将会做以下处理：
       自动嗅探目标元素是否应用了 CSS 过渡或动画,
-      如果是,在恰当的时机添加/删除 CSS 类名。
-      如果过渡组件提供了JS钩子函数,这些钩子函数将在恰当的时机被调用。
-      如果没有找到JS钩子并且也没有检测到 CSS 过渡/动画,
+      若是,在恰当的时机添加/删除 CSS 类名。
+      若过渡组件提供了JS钩子函数,这些钩子函数将在恰当的时机被调用。
+      若没有找到JS钩子并且也没有检测到 CSS 过渡/动画,
       DOM 操作[插入/删除]在下一帧中立即执行。
       [注意：此指浏览器逐帧动画机制,和Vue的 nextTick 概念不同]
     类名 
@@ -3016,7 +3016,7 @@ Component,组件
     动画监听事件 
       PS：Vue为了知道过渡的完成,必须设置相应的事件监听器。
         它可以是 transitionend 或 animationend ,这取决于给元素应用的 CSS 规则。
-        如果你使用其中任何一种,Vue 能自动识别类型并设置监听。
+        若你使用其中任何一种,Vue 能自动识别类型并设置监听。
         但是,在一些场景中,你需要给同一个元素同时设置两种过渡动效,
         比如 animation 很快的被触发并完成了,而 transition 效果还没结束。
         在这种情况中,需要使用 type 特性并设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
@@ -3136,12 +3136,12 @@ vue-resource  与后台数据交互
     url  请求的地址
     arg  可选,obj,请求的参数
     foo  传入参数 res「返回的结果,且进行了Vue封装」
-  vm.$http.post()
-  vm.$http.jsonp()
+  vm.$http.post()  post请求 
+  vm.$http.jsonp() jsonp请求 
 axios         功能和vue-resource类似 
 vue-router    路由 
-  PS：'2.x'只适用于 Vue2.x 版本
-  在web开发中，“route”是指根据url分配到对应的处理程序。——贺师俊
+  PS：'vue-router2.x'只适用于'Vue2.x'版本
+    在web开发中，“route”是指根据url分配到对应的处理程序
   script引入 
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
@@ -3158,28 +3158,29 @@ vue-router    路由
       可以从其他文件 import 进来
       const Foo = { template: '<div>foo</div>' }  // 组件配置对象
       const Bar = { template: '<div>bar</div>' }
-    ◆配置路由 
-      每个路由应该映射一个组件
-      const routes = [
-        { path: '/foo', component: Foo },
-        { path: '/bar', component: Bar }
-      ]
-    ◆创建router实例,然后传定义的路由配置 
-      const router = new VueRouter({ routes }) 
-      // [缩写]相当于 routes: routes
+    ◆创建router实例,配置路由 
+      const vrt = new VueRouter({ 
+        routes : [
+          { path: '/foo', component: Foo },
+          { path: '/bar', component: Bar }
+          // 每个路由映射一个组件
+        ]
+      }) 
     ◆创建和挂载根实例 
       通过'router'配置参数注入路由,从而让整个应用都有路由功能 
-      const app = new Vue({ router })
+      const app = new Vue({ 
+        router : vrt,
+      })
       .$mount('#app')
       // 现在,应用已经启动了！ 
   <router-link to="/foo">xxx</router-link>   连接路由 
-  <router-view></router-view>    路由渲染,路由出口 
-    PS：<router-link>默认会被渲染成一个<a>标签
+    PS：<router-link>默认会被渲染成一个<a>标签 
     to   属性指定链接 
+  <router-view></router-view>    路由渲染,路由出口 
     e.g.：
       <router-link to="/foo">Go to Foo</router-link>
       <router-link to="/bar">Go to Bar</router-link>
-      <!-- 路由匹配到的组件将渲染在这里 -->
+      // <!-- 路由匹配到的组件将渲染在这里 -->
       <router-view></router-view>    
   '/:xx'   动态路由,配任意的'/xxx' 
     this.$route.params 在组件内获取当前的具体的路径 
@@ -3191,9 +3192,9 @@ vue-router    路由
         模式             匹配路径       $route.params
         /a/:aoo         /a/bar        { aoo: 'bar' }
         /a/:aoo/b/:boo  /a/bar/b/123  { aoo: 'bar', boo: 123 }
-    $route.query  [如果URL中有查询参数]获取查询参数 
-      对于路径 /foo?user=1,则有 $route.query.user == 1,如果没有查询参数,则是个空对象。
-    $route.hash   当前路由的hash值,如果无hash,则为空字符串 
+    this.$route.query  [若URL中有查询参数]获取查询参数 
+      对于路径 /foo?user=1,则有 $route.query.user == 1,若没有查询参数,则是个空对象。
+    this.$route.hash   当前路由的hash值,若无hash,则为空字符串 
     响应路由参数的变化
       当使用路由参数时,例如从 /user/foo 导航到 user/bar,原来的组件实例会被复用。
       因为两个路由都渲染同个组件,比起销毁再创建,复用则显得更加高效。
@@ -3207,9 +3208,8 @@ vue-router    路由
           }
         }
       }
-    匹配优先级
-      有时,同一个路径可匹配多个路由,匹配优先级按照路由的定义顺序：先定义的优先级高 
-  嵌套路由 
+    当同一个路径匹配多个路由时,则先定义的路由优先级高 
+  'children'嵌套路由 
     一个被渲染组件同样可以包含自己的嵌套<router-view>
     e.g.：
     const User = {
@@ -3224,7 +3224,8 @@ vue-router    路由
     const router = new VueRouter({
       routes: [
         { 
-          path: '/user/:id', component: User,
+          path: '/user/:id', 
+          component: User,
           children: [
             {
               // 当 /user/:id/profile 匹配成功,
@@ -3243,7 +3244,7 @@ vue-router    路由
       ]
     })  
     基于上面的配置,你访问 /user/foo 时,User 的出口是不会渲染任何东西,
-    这是因为没有匹配到合适的子路由。如果想要渲染点什么,可以提供一个 空的 子路由：
+    这是因为没有匹配到合适的子路由。若想要渲染点什么,可以提供一个 空的 子路由：
     const router = new VueRouter({
       routes: [
         {
@@ -3291,11 +3292,9 @@ vue-router    路由
         // 前进 3 步记录
         router.go(-100)
         router.go(100)
-        // 如果 history 记录不够用,那就默默地失败呗
-  命名路由 
-    有时候,通过一个名称来标识一个路由显得更方便一些,
-    特别是在链接一个路由,或者是执行一些跳转的时候。
-    可以在创建 Router 实例的时候,在 routes 配置中给某个路由设置名称。
+        // 若 history 记录不够用,那就默默地失败呗
+  'name'命名路由 
+    通过名称来标识路由显得更方便,可在创建'Router'实例时,在'routes'配置中设置路由名称 
     const router = new VueRouter({
       routes: [
         {
@@ -3309,10 +3308,10 @@ vue-router    路由
     <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
     这跟代码调用 router.push() 是一回事：
     router.push({ name: 'user', params: { userId: 123 }})
-    这两种方式都会把路由导航到 /user/123 路径。
-  命名视图 
-    同时[同级]展示多个视图,而不是嵌套展示,可在界面中拥有多个单独命名的视图,
-    如果 router-view 没有设置名字,那么默认为 default。
+    这两种方式都会把路由导航到 /user/123 路径 
+  命名视图,实现一路由对应多视图 
+    同时[同级]展示多个视图,可在界面中拥有多个单独命名的视图,
+    若 router-view 没有设置名字,那么默认为 default。
     e.g.：
       <router-view class="view one"></router-view>
       <router-view class="view two" name="a"></router-view>
@@ -3330,7 +3329,7 @@ vue-router    路由
           }
         ]
       })
-  重定向 
+  'redirect'重定向 
     『重定向』的意思是,当用户访问 /a时,URL 将会被替换成 /b,然后匹配路由为 /b
     通过 routes 配置来完成
     e.g.：
@@ -3355,20 +3354,19 @@ vue-router    路由
           }}
         ]
       })
-  别名 
-    '/a' 的别名是 '/b',意味着,当用户访问 /b 时,URL 会保持为 /b,
-    但是路由匹配则为 /a,就像用户访问 /a 一样。
-    『别名』的功能让你可以自由地将 UI 结构映射到任意的 URL,而不是受限于配置的嵌套路由结构。
+  'alias'别名 
+    '/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a'
+    『别名』功能可自由地将UI结构映射到任意的URL,而不是受限于配置的嵌套路由结构 
     e.g.：
       const router = new VueRouter({
         routes: [
           { path: '/a', component: A, alias: '/b' }
         ]
       })
-  HTML5 History 模式
+  HTML5_History模式
     vue-router 默认 hash 模式,使用 URL 的 hash 来模拟一个完整的 URL,
     于是当 URL 改变时,页面不会重新加载。
-    如果不想要很丑的 hash,可以用路由的 history 模式,
+    若不想要很丑的 hash,可以用路由的 history 模式,
     这种模式充分利用 history.pushState API 来完成 URL 跳转而无须重新加载页面。
     const router = new VueRouter({
       mode: 'history',
@@ -3377,10 +3375,10 @@ vue-router    路由
     当你使用 history 模式时,URL 就像正常的 url,
     例如' http://yoursite.com/user/id',也好看！
     不过这种模式要玩好,还需要后台配置支持。
-    因为我们的应用是个单页客户端应用,如果后台没有正确的配置,
+    因为我们的应用是个单页客户端应用,若后台没有正确的配置,
     当用户在浏览器直接访问 'http://oursite.com/user/id' 就会返回 404,这就不好看了。
     所以呢,你要在服务端增加一个覆盖所有情况的候选资源：
-    如果 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
+    若 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
     这个页面就是你 app 依赖的页面。
     
     后端配置例子
@@ -3409,7 +3407,7 @@ vue-router    路由
           { path: '*', component: NotFoundComponent }
         ]
       })
-      或者,如果你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
+      或者,若你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
       当没有匹配到路由的时候返回 404,从而实现 fallback。
 Vuex          大规模状态管理 
 vue-validator 表单验证 

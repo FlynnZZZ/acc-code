@@ -682,7 +682,7 @@ PC端
     var elem = document.querySelector(".wrap");
     linesEndOmit(elem,1);
   图片缩放、部分显示
-  京东商品预览效果
+  京东商品预览效果 
     function imgHover(){
       var ihWraper = $('.dTop2');
       var mask = ihWraper.find('.dt2Mask');
@@ -726,6 +726,37 @@ PC端
       })
     }
     imgHover();
+  查询字符串读写设置 
+    // 查询字符串 对象化 
+    // 加载的组件
+    // 请求的接口
+    // 
+    zPub.searchStrObj = function(){ 
+      var resultObj = {};
+      var arr1 = location.search.slice(1).split("&");
+      arr1.forEach(function(val,indx,arr){
+        var arr2 = val.split("=");
+        resultObj[arr2[0]] = arr2[1];
+      } );
+      return resultObj;
+    };
+    // 设置查询字符串
+    // {
+    //   's1' : 1,
+    //   's3' : 3,
+    // }
+    zPub.setSearch = function(obj){
+      var resStr = '?';
+      var o = zPub.searchStrObj();
+      for(var key in obj){
+        o[key] = obj[key];
+      };
+      for(var k in o){
+        resStr += k +'='+o[k]+'&';
+      };
+      return location.pathname+resStr.slice(0,-1);
+      
+    };
 --------------------------------------------------------------------------------
 移动端
 网络收集 

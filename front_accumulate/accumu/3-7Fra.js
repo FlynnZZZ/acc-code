@@ -3429,7 +3429,7 @@ suggestion:
   cd helloworld
   npm start   「npm run start的缩写」 
 JSX,JavaScript&XML 
-components_Lifecycle,组件声明周期
+components_Lifecycle,组件声明周期 
   mounted   插入阶段
   componentWillMount mounted前调用
   componentDidMount  mounted后调用

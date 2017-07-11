@@ -1904,7 +1904,7 @@ Directives,指令  model和view的交互
   ◆指令的扩展 
   Modifiers,修饰符  指出一个指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
     PS：修饰符是以点号'.'指明的特殊后缀;指令可以串联;
-    事件修饰符
+    事件修饰符 
       .prevent 修饰v-on,触发的事件调用 event.preventDefault() 
         <form v-on:submit.prevent="onSubmit"></form>
         // <!-- 提交事件不再重载页面 -->
@@ -1971,15 +1971,15 @@ Directives,指令  model和view的交互
           <comp :foo="bar" @update:foo="val => bar = val"></comp>
           当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件：
           this.$emit('update:foo',newValue)
-    ◆v-model的修饰符 
-    .lazy    v-model在input事件中同步输入框的值与数据,'lazy'从而转变为在change事件中同步
-      // <!-- 在 "change" 而不是 "input" 事件中更新 -->
-      <input v-model.lazy="msg" >
-    .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值]
-      <input v-model.number="age" type="number">
-      这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
-    .trim   自动过滤用户输入的首尾空格
-      <input v-model.trim="msg">
+    v-model的修饰符 
+      .lazy    v-model在input事件中同步输入框的值与数据,'lazy'从而转变为在change事件中同步
+        // <!-- 在 "change" 而不是 "input" 事件中更新 -->
+        <input v-model.lazy="msg" >
+      .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值]
+        <input v-model.number="age" type="number">
+        这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
+      .trim   自动过滤用户输入的首尾空格
+        <input v-model.trim="msg">
   v-name[arg.xx.xx='val']  自定义指令 
     PS：用于对纯DOM元素进行底层操作 
     Vue.directive('name', options);  自定义全局指令 

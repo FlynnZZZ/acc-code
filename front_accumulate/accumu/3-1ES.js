@@ -262,7 +262,7 @@ ECMAScript JS核心,语法部分
         obj.valueOf(); // Object {aoo: 1, boo: 2}
         obj.valueOf =function(){ return 100; };
         +obj; // 100
-      Number(val);  返回转换为的数值
+      Number(val);  返回转换为的数值 
         Number(true);  /* 1 */   Number(false);     /* 0  */
         Number(null);  /* 0 */   Number(undefined)  /* NaN */
         Number(number)     // 对应的值
@@ -399,9 +399,9 @@ ECMAScript JS核心,语法部分
           obj.toString =function(){ return "hello"; }; // 自定义该对象的toString方法
           "a" + obj; // "ahello"
       val.toString(); 参见通用方法
-      String(val);      返回转换后的字符串
-        若值存在toString()方法,则调用该方法(没有参数)并返回相应的结果
-        否则(即值为null或undefined),则返回"null"或'undefined'
+      String(val);    返回转换后的字符串 
+        若值存在 .toString() 方法,则调用该方法并返回相应的结果 
+        否则[即值为null或undefined],则返回"null"或'undefined'
         String(num)       "数值"
         String(str)       "字符串"
         String(true)      "true"
@@ -3615,36 +3615,7 @@ Global|Window 全局对象
     SyntaxError    构造函数SyntaxError
     TypeError      构造函数TypeError
     URIError       构造函数URIError
-  window 对象 
-    PS：ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
-      window为JS「而非ECMAScript」最顶层的对象, 
-    全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
-      var a =1;
-      window.a; //1 ,a就是window.a
-    全局函数/方法
-      parseInt(str,radix) 
-      parseFloat(str) 
-      isFinite(val)  检测是否是不是无穷值 
-        若值是NaN、+Infinity或-Infinity,返回false,其余返回true
-      isNaN(val);    若值为NaN返回true,否则返回false
-      encodeURI(URI) 将字符串编码为URI 
-        通用资源标识符简称为URI
-        ",/?:@&=+$#" 等有特殊含义的ASCII标点符号,不会进行转义
-      decodeURI():解码某个编码的URI
-      encodeURIComponent(URI) 将字符串编码为URI
-        不会对ASCII字母、数字及"-_.!～*'()"等进行编码 
-      decodeURIComponent()    解码一个编码的URI
-      escape()   对字符串进行编码
-        不要编码URI
-        不会对"*@-_+./"等ASCII标点符号进行编码
-      unescape() 解码由 escape() 编码的字符串
-      eval()     将JavaScript字符串当作脚本来执行 
-        若参数是一个表达式,eval()函数执行表达式,
-        若参数是js语句,eval()将执行js语句;
-        是一种由函数执行的动态代码,比直接执行脚本慢很多;
-      Number(obj)   把对象值转换为数字.
-      String(val)   把对象的值转换为字符串
-        String() 函数返回与字符串对象的 toString() 方法值一样 
+  window 对象[详见BOM] 
 Math   数学对象 
   PS：为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
   ◆数学值
@@ -4267,7 +4238,7 @@ JavaScript 核心概念之作用域和闭包
     若在整个执行期上下文中都没有找到这个变量,在这种情况下,该变量被认为是未定义的。
     这也就是为什么函数可以访问全局变量,当局部变量和全局变量同名时,会使用局部变量而不使用全局变量,
     以及 JavaScript 中各种看似怪异的、有趣的作用域问题的答案。
-  闭包（Closure）
+  Closure,闭包
     闭包（Closure）是 JavaScript 最强大的特性之一。
     function assignEvents(){
       var id = "xdi9592";
@@ -4328,7 +4299,6 @@ JavaScript 核心概念之作用域和闭包
     闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
     从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 -----------------------------------------------------------------------待整理 
-
 
 
 

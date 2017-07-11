@@ -443,6 +443,32 @@ window 对象
         }
       });
 window的属性对象 
+  PS：ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
+    window为JS「而非ECMAScript」最顶层的对象, 
+  全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
+    var a =1;
+    window.a; //1 ,a就是window.a
+  全局函数/方法 
+    parseInt(str,radix) 
+    parseFloat(str) 
+    isFinite(val)  检测是否是不是无穷值 
+      若值是NaN、+Infinity或-Infinity,返回false,其余返回true
+    isNaN(val);    若值为NaN返回true,否则返回false
+    encodeURI(URI) 将字符串编码为URI 
+      通用资源标识符简称为URI
+      ",/?:@&=+$#" 等有特殊含义的ASCII标点符号,不会进行转义
+    decodeURI():解码某个编码的URI
+    encodeURIComponent(URI) 将字符串编码为URI
+      不会对ASCII字母、数字及"-_.!～*'()"等进行编码 
+    decodeURIComponent()    解码一个编码的URI
+    escape()   对字符串进行编码
+      不要编码URI
+      不会对"*@-_+./"等ASCII标点符号进行编码
+    unescape() 解码由 escape() 编码的字符串
+    eval()     将JavaScript字符串当作脚本来执行 
+      若参数是一个表达式,eval()函数执行表达式,
+      若参数是js语句,eval()将执行js语句;
+      是一种由函数执行的动态代码,比直接执行脚本慢很多;
   window.document  文档对象 「更多详见 DOM document对象」 
     document.location 等价于 window.location
     document.documentElement.clientWidth

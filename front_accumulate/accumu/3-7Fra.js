@@ -1244,7 +1244,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
     }
   'directives' : val 可选,自定义指令 
   ...
-实例属性/方法 
+实例属性/方法/事件 
   ◆vm.$xx [带有前缀$的]实例方法/属性 
     PS：在配置对象中使用'this'代替'vm' 
     e.g.：
@@ -1270,6 +1270,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
   vm.$set(obj,key,val)  局部声明
   vm.$el      vm接管的DOM对象
   vm.$data    vm的数据对象
+  vm.$on('eventName',foo)     监听事件
+  vm.$emit('event-name',data) 触发事件
 Lifecycle_hooks,生命周期钩子 
   PS：钩子：某个阶段开始或者结束之前、之后等过程中被触发的函数,
     每个Vue实例在被创建之前都要经过一系列的初始化过程, 

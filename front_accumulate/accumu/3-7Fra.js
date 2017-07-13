@@ -1304,7 +1304,7 @@ Directives,指令  model和view的交互
   PS：将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
-  v-text="drctVal" 纯文本 
+  v-text="val"   纯文本 
     e.g.：
       <div id="test" v-text='aoo'> </div>
       new Vue({
@@ -1315,7 +1315,7 @@ Directives,指令  model和view的交互
       });
       渲染为 
       <div id="test">&lt;a href="#"&gt;作为文本出现&lt;/a&gt;</div>
-  v-html="drctVal" HTML文本 
+  v-html="val"   HTML文本 
     e.g.：
       <div id="test" v-html='aoo'> </div>
       new Vue({
@@ -1326,9 +1326,8 @@ Directives,指令  model和view的交互
       });
       渲染为
       <div id="test"><a href="#">作为文本出现</a></div>
-  v-model="drctVal"  表单元素读写值 
+  v-model="val"  表单元素读写值 
     PS：常见的表单如 input,checkbox,radio,select[select的option不支持],
-      对于单选按钮,勾选框及选择列表选项,v-model绑定的value通常是静态字符串,而对于勾选框则是逻辑值 
     e.g.：
       动态展示输入
       <div id="test">
@@ -1342,14 +1341,16 @@ Directives,指令  model和view的交互
         }
       })    
     单个checkbox复选框,值为 false/true 
-      <section id="a" class="">
-        <input type="checkbox" id="checkbox" v-model="checked">
-        <label for="checkbox">{{ checked }}</label>
+      <section id="checkbox">
+        <label>
+          <input type="checkbox" value="获取不到" v-model="checked">
+          {{ checked }}
+        </label>
       </section>
       var vm = new Vue({
-        el : '#a',
+        el : '#checkbox',
         data : {
-          checked : ture,
+          checked : true,
         },
       });
       默认选中,通过点击切换,显示'true'或'false'
@@ -1371,9 +1372,9 @@ Directives,指令  model和view的交互
           checkedNames: []
         }
       });
-    radio单选按钮 
+    radio单选按钮,获取value值 
       显示选中的值 
-      <section id="a" class="">
+      <section id="a" >
         <input type="radio" id="one" value="One" v-model="picked">
         <label for="one">One</label>
         <br>
@@ -1388,95 +1389,96 @@ Directives,指令  model和view的交互
           picked : '',
         },
       });
-    单选列表 
-      <select v-model="selected">
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
+    select列表 
+      <select  v-model='key'>
+        <option value="">{{val}}</option>
+        // 当存在 value="xx" 时 , v-model 的值为 "xx",否则为val
+        // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
       </select>
-      <span>Selected: {{ selected }}</span>
-    多选列表,绑定到一个数组 
-      <select v-model="selected" multiple>
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-      </select>
-      <br>
-      <span>Selected: {{ selected }}</span>
-    动态切换表单值,可用'v-bind'实现[且这个属性的值可以不是字符串]
-      复选框切换选中 
-        <section id="a" class="">
-          <input type="checkbox" v-model="toggle" v-bind:true-value="a" v-bind:false-value="b" >
-        </section>
-        var vm = new Vue({
-          el : '#a',
-          data : {
-            toggle : '1',
-            a : '1',
-            b : '2',
-          },
-        });
-        setTimeout(function(){
-          vm.toggle = '2';
-        },2000);
-        // 当选中时
-        vm.toggle === vm.a
-        // 当没有选中时
-        vm.toggle === vm.b
-      单选按钮切换选中  
-        <section id="a" class="">
-          <input type="radio" v-model="pick" v-bind:value="a">
-        </section>
-        var vm = new Vue({
-          el : '#a',
-          data : {
-            pick : '1',
-            a : '1',
-          },
-        });
-        setTimeout(function(){
-          vm.a = '2';
-        },2000);
-        // 当选中时
-        vm.pick === vm.a
-      选择列表设置 
-        <select v-model="selected">
-            // <!-- 内联对象字面量 -->
-          <option v-bind:value="{ number: 123 }">123</option>
-        </select>
-        // 当选中时
-        typeof vm.selected // -> 'object'
-        vm.selected.number // -> 123
-        
-        切换选中 
-        <section id="a" class="">
-          <select v-model="slctVal">
-            <option v-for="item1 in items" :value="item1.val">{{item1.show}}</option>
+      单选列表 
+        <div id="slct">
+          <select  v-model="selected">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
           </select>
-        </section>
-        var vm = new Vue({
-          el : '#a',
-          data : {
-            slctVal : '1',
-            items : [
-              {val:1,show:'a'},
-              {val:2,show:'b'},
-              {val:3,show:'c'},
-              {val:4,show:'d'},
-            ],
-          },
-        });
-        setTimeout(function(){
-          vm.slctVal = 2;
-        },2000);
-    Exp： 
-      关于select标签 
-        <select class="" name="" v-model='key'>
-          <option value="">{{data1}}</option>
-          //  v-model 取到的值为 option 中 value 的属性,
-          // 当存在 value="" 时 , v-model 的值为 ""
-          // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
-        </select>
+          <span>Selected: {{ selected }}</span>
+        </div>
+      多选列表,绑定到一个数组 
+        <div id="slct">
+          <select v-model="selected" multiple>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+          <div>Selected: {{ selected }}</div>
+        </div>
+      动态切换表单值,可用'v-bind'实现[且这个属性的值可以不是字符串]
+        复选框切换选中 
+          <section id="a" class="">
+            <input type="checkbox" v-model="toggle" v-bind:true-value="a" v-bind:false-value="b" >
+          </section>
+          var vm = new Vue({
+            el : '#a',
+            data : {
+              toggle : '1',
+              a : '1',
+              b : '2',
+            },
+          });
+          setTimeout(function(){
+            vm.toggle = '2';
+          },2000);
+          // 当选中时
+          vm.toggle === vm.a
+          // 当没有选中时
+          vm.toggle === vm.b
+        单选按钮切换选中  
+          <section id="a" class="">
+            <input type="radio" v-model="pick" v-bind:value="a">
+          </section>
+          var vm = new Vue({
+            el : '#a',
+            data : {
+              pick : '1',
+              a : '1',
+            },
+          });
+          setTimeout(function(){
+            vm.a = '2';
+          },2000);
+          // 当选中时
+          vm.pick === vm.a
+        选择列表设置 
+          <select v-model="selected">
+              // <!-- 内联对象字面量 -->
+            <option v-bind:value="{ number: 123 }">123</option>
+          </select>
+          // 当选中时
+          typeof vm.selected // -> 'object'
+          vm.selected.number // -> 123
+          
+          切换选中 
+          <section id="a" class="">
+            <select v-model="slctVal">
+              <option v-for="item1 in items" :value="item1.val">{{item1.show}}</option>
+            </select>
+          </section>
+          var vm = new Vue({
+            el : '#a',
+            data : {
+              slctVal : '1',
+              items : [
+                {val:1,show:'a'},
+                {val:2,show:'b'},
+                {val:3,show:'c'},
+                {val:4,show:'d'},
+              ],
+            },
+          });
+          setTimeout(function(){
+            vm.slctVal = 2;
+          },2000);
   v-for="item in items"   渲染循环列表 
     item 为自定义的占位符placeholder[是数组元素迭代的别名]items的属性,便于后续使用 
       支持'(item,indx) in items' 形式,使用下标占位符'indx' 
@@ -1974,13 +1976,13 @@ Directives,指令  model和view的交互
           当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件：
           this.$emit('update:foo',newValue)
     v-model的修饰符 
-      .lazy    v-model在input事件中同步输入框的值与数据,'lazy'从而转变为在change事件中同步
+      .lazy   从input事件转变为在change事件中同步  
         // <!-- 在 "change" 而不是 "input" 事件中更新 -->
         <input v-model.lazy="msg" >
-      .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值]
+      .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值] 
         <input v-model.number="age" type="number">
         这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
-      .trim   自动过滤用户输入的首尾空格
+      .trim   自动过滤用户输入的首尾空格 
         <input v-model.trim="msg">
   v-name[arg.xx.xx='val']  自定义指令 
     PS：用于对纯DOM元素进行底层操作 
@@ -3171,10 +3173,10 @@ vue-router    路由
     ◆创建和挂载根实例 
       通过'router'配置参数注入路由,从而让整个应用都有路由功能 
       const app = new Vue({ 
+        el : '#app',
         router : vrt,
       })
-      .$mount('#app')
-      // 现在,应用已经启动了！ 
+      // .$mount('#app')
   <router-link to="/foo">xxx</router-link>   连接路由 
     PS：<router-link>默认会被渲染成一个<a>标签 
     to   属性指定链接 

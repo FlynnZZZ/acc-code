@@ -1405,43 +1405,6 @@ Deferred 异步操作
       解析Deferred对象并在指定的上下文中以指定参数调用所有的doneCallbacks处理函数。
     defer.rejectWith(context [,arg,...]) 
       拒绝Deferred对象并在指定的上下文中以指定参数调用所有的failCallbacks处理函数
-    e.g.： 
-      利用 Deferred 依次执行 Ajax 请求
-      var username = 'testuser';
-      var fileToSearch = 'README.md';
-      $.getJSON('https://api.github.com/user/' + username + '/repositories')
-      .then(function(repositories) {
-        return repositories[0].name;
-      })
-      .then(function(lastUpdatedRepository) {
-        return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/files');
-      })
-      .then(function(files) {
-        var README = null;
-        for (var i = 0; i < files.length; i++) {
-          if (files[i].name.indexOf(fileToSearch) >= 0) {
-            README = files[i].path;
-            break;
-          }
-        }
-        return README;
-      })
-      .then(function(README) {
-        return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/file/' + README + '/content');
-      })
-      .then(function(content) {
-        console.log(content);
-      });
-      
-      创建一个基于 Promise 的 setTimeout 函数
-      function timeout(milliseconds) {
-        var deferred = $.Deferred(); //创建一个新Deferred
-        setTimeout(deferred.resolve, milliseconds); // 在指定时间后解析Deferred对象
-        return deferred.promise(); // 返回Deferred对象的Promise对象
-      }
-      timeout(1000).then(function() {
-        console.log('等待了1秒钟！');
-      });
     jQ1.x-jQ2.x 同 jQ3 的区别 
       var deferred = $.Deferred();
       deferred.then(function() {
@@ -1533,7 +1496,7 @@ Deferred 异步操作
     .fail(function(data){ 
       console.log("出错啦！"); 
     });
-  e.g.： 在jQueryAJAX中的便捷使用 
+
     $.ajax({
       ...
     })
@@ -1544,19 +1507,42 @@ Deferred 异步操作
       console.log('error');
     });
     
-    自由添加多个回调,按照添加顺序执行
-    $.ajax({
-      ...
+    利用 Deferred 依次执行 Ajax 请求
+    var username = 'testuser';
+    var fileToSearch = 'README.md';
+    $.getJSON('https://api.github.com/user/' + username + '/repositories')
+    .then(function(repositories) {
+      return repositories[0].name;
     })
-    .done(function(data){ 
-      console.log("哈哈,成功了！");
-    } )
-    .fail(function(data){ 
-      console.log("出错啦！"); 
-    } )
-    .done(function(data){ 
-      console.log("第二个回调函数！");
-    } );
+    .then(function(lastUpdatedRepository) {
+      return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/files');
+    })
+    .then(function(files) {
+      var README = null;
+      for (var i = 0; i < files.length; i++) {
+        if (files[i].name.indexOf(fileToSearch) >= 0) {
+          README = files[i].path;
+          break;
+        }
+      }
+      return README;
+    })
+    .then(function(README) {
+      return $.getJSON('https://api.github.com/user/' + username + '/repository/' + lastUpdatedRepository + '/file/' + README + '/content');
+    })
+    .then(function(content) {
+      console.log(content);
+    });
+    
+    创建一个基于 Promise 的 setTimeout 函数
+    function timeout(milliseconds) {
+      var deferred = $.Deferred(); //创建一个新Deferred
+      setTimeout(deferred.resolve, milliseconds); // 在指定时间后解析Deferred对象
+      return deferred.promise(); // 返回Deferred对象的Promise对象
+    }
+    timeout(1000).then(function() {
+      console.log('等待了1秒钟！');
+    });
 jQuery插件 
   $(form).validate({options})  插件自带包含必填、数字、URL在内容的验证规则 
     即时显示异常信息,允许自定义验证规则

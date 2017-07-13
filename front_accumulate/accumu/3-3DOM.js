@@ -1670,88 +1670,121 @@ event 事件对象
       }
     })
 事件模拟 
-  PS：使用JS来触发特定的事件
-    DOM2级规范了模拟特定事件的方式
-    IE有自己的模拟方式
-  document.createEvent(str);   创建event对象
+  PS：使用JS来触发特定的事件, DOM2级规范了模拟特定事件的方式 
+    IE有自己的模拟方式 
+  document.createEvent(str);  创建event对象
     str   表示要创建的事件类型的字符串
       PS：DOM2级中都使用英文复数形式, DOM3级中都使用英文单数形式
       'UIEvents'       一般的UI事件,鼠标、键盘事件都继承至UI事件
       'MouseEvents'    一般的鼠标事件
       'MutationEvents' 一般的DOM变动事件
       'HTMLEvents'     一般的HTML事件[DOM3中无该事件,被分散到其他类别中去了]
-  nod.dispatchEvent(e);     触发创建的事件
+  elem.dispatchEvent(e);      触发创建的事件
   // 模拟鼠标事件
-  var e =document.createEvent("MouseEvents");
+  var e = document.createEvent("MouseEvents");
   e.initMouseEvent();  指定与鼠标事件有关的信息.
     接收15个参数
-    type  字符串,表示要触发的事件类型(如 "click")
-    bubbles  布尔值,表示事件是否应该冒泡(一般设置为true)
+    type       字符串,表示要触发的事件类型(如 "click")
+    bubbles    布尔值,表示事件是否应该冒泡(一般设置为true)
     cancelable 布尔值,表示事件是否可以取消(一般设置为true)
-    view  与事件关联的视图(通常设置为 document.defaultView)
-    detail 整数,与事件有关的详细信息(通常设置为0)
-    screenX 整数,事件行对于屏幕的X坐标
-    screenY 整数,事件行对于屏幕的Y坐标
-    clientX 整数,事件相对于视口的X坐标
-    clientY 整数,事件相对于视口的Y坐标
-    ctrlKey 布尔值,表示是否按下了Ctrl,默认值为false
-    altKey 布尔值,表示是否按下了Alt,默认值为false
-    shiftKey 布尔值,表示是否按下了Shift,默认值为false
-    metaKey 布尔值,表示是否按下了Meta,默认值为false
-    button 整数,表示按下了哪一个鼠标键,默认值为0
+    view       与事件关联的视图(通常设置为 document.defaultView)
+    detail     整数,与事件有关的详细信息(通常设置为0)
+    screenX    整数,事件行对于屏幕的X坐标
+    screenY    整数,事件行对于屏幕的Y坐标
+    clientX    整数,事件相对于视口的X坐标
+    clientY    整数,事件相对于视口的Y坐标
+    ctrlKey    布尔值,表示是否按下了Ctrl,默认值为false
+    altKey     布尔值,表示是否按下了Alt,默认值为false
+    shiftKey   布尔值,表示是否按下了Shift,默认值为false
+    metaKey    布尔值,表示是否按下了Meta,默认值为false
+    button     整数,表示按下了哪一个鼠标键,默认值为0
     relatedTarget 对象,表示与事件相关的对象(只在模拟 mouseover 和mouseout时使用)
   e.g. :
-    var btn =document.getElementById("myBtn");
-    // 创建事件对象
-    var event =document.createEvent("MouseEvents");
+    var btn = document.getElementById("myBtn"); 
+    var event = document.createEvent("MouseEvents"); // 创建事件对象
     // 初始化事件对象
     event.initMouseEvent("click",true,true,document.defaultView,0,0,0,0,0,false,false,false,false,0,null)
     // 触发事件
     btn.dispatchEvent(event);
   // 模拟键盘事件
-  (详参 JavaScript高级程序设计 407页)
+  (详参 JavaScript高级程序设计 407 页)
   // 模拟其他事件
-  (详参 JavaScript高级程序设计 409页)
+  (详参 JavaScript高级程序设计 409 页)
   兼容写法
     function trigger(elem, type) {
       if (document.createEvent) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(type, true, false);
         elem.dispatchEvent(event);
-      } else {
+      } 
+      else {
         elem.fireEvent('on' + type);
       }
     }
 
     var t = document.getElementById('test');
     trigger(t, 'click');
-自定义事件「DOM3」 
-  var evt = document.createEvent("CustomEvent");    创建事件
-  evt.initEvent('customEvent',true,true);          定义事件类型
-  evt.initCustomEvent(str,boo,boo,obj);
-    str  触发的事件类型 type
-    bool 表示事件是否应该冒泡
-    bool 表示事件是否可以取消
-    obj  任意值,保存在event对象的detail属性中.
-  elem.addEventListener('customEvent',cfoo,false); 监听事件
-  elem.dispatchEvent(evt);     触发事件
+创建和触发事件 
+  var event = new Event(eNameStr); Event构造函数创建自定义事件[IE11+]  
+    eNameStr 字符串,创建的事件名
+  var event = new CustomEvent(eNameStr,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
+    传递的数据对象通过 e.detail 来获取 
+  elem.addEventListener(eNameStr,cfoo,bool);   监听事件 
+    cfoo 回调函数,传送参数 e[事件对象]
+  elem.dispatchEvent(event);  触发事件 
+  Exp：
+    var on = function(eName,foo,elem) {
+      var el = elem || document;
+      el.addEventListener(eName, function(e){
+        foo(e,e.detail);
+      }, false);
+    }
+    var tr = function(eName,data,elem){
+      var event = new CustomEvent(eName, { 'detail': data });
+      var el = elem || document;
+      el.dispatchEvent(event);
+    }
+  老式的方式
+    这种创建 events 的方式已经过时了,请使用 event 构造函数来替代
+    早期的创建事件的方法使用了受Java启发的API
+    var event = document.createEvent('Event');  创建事件
+    event.initEvent('build', true, true);  定义事件
+      事件名为'build'
+    document.addEventListener('build', function (e) {  监听事件 
+      // e.target matches document from above
+    }, false);
+    document.dispatchEvent(event); 触发事件
+    自定义事件「DOM3」 
+    var evt = document.createEvent("CustomEvent");   创建事件 
+    evt.initEvent('customEvent',true,true);          定义事件类型 
+    evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
+      str  触发的事件类型 type
+      bool 表示事件是否应该冒泡
+      bool 表示事件是否可以取消
+      obj  任意值,保存在event对象的detail属性中.
+    elem.addEventListener('customEvent',cfoo,false); 监听事件 
+    elem.dispatchEvent(evt);     触发事件
 采用对象封装法使事件兼容处理: 
   var eventCompat ={
     add:function(elem,type,func){
       if(elem.addEventListener) {
         elem.addEventListener(type,func);
-      }else if(elem.attachEvent) {
+      }
+      else if(elem.attachEvent) {
         elem.attachEvent("on"+type,func);
-      }else {
+      }
+      else {
         elem["on"+type]=func;
       }
     },
     remove:function(elem,type,func){
       if(elem.addEventListener) {
         elem.removeEventListener(type,func);
-      }else if(elem.attachEvent) {
+      }
+      else if(elem.attachEvent) {
         elem.detachEvent("on"+type,func);
-      }else {
+      }
+      else {
         elem["on"+type]=null;
       }
     },
@@ -1767,14 +1800,16 @@ event 事件对象
     preventDefault:function(e){
       if(e.preventDefault) {
         e.preventDefault();
-      }else {
+      }
+      else {
         e.returnValue =false;
       }
     },
     stopPropagation:function(e){
       if(e.stopPropagation) {  // 使用属性的形式来判断
         e.stopPropagation();
-      }else {
+      }
+      else {
         e.cancelBubble =true;
       }
     }

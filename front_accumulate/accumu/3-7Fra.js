@@ -3539,8 +3539,8 @@ react-native
       数据模型到视图,视图到数据模型.
       取值表达式 {{}}
 --------------------------------------------------------------------------------
-●originJS「SlSt」 
-  功能: 轻量、简洁、功能--多模块化自由组合、待续...
+●originJS[SlSt] 
+  功能: 轻量、简洁、功能--多模块化自由组合、待续... 
   简写符号: 
     pa   parents
     pu   public
@@ -3589,11 +3589,11 @@ react-native
         内部实现, $('cpt-xxx').after(data).remove();
     组件间通信 
       通过自定义事件的方式来实现 
-      Jelem.trigger("eName" [,arr]);     触发事件及传递数据
-      Jelem.on(str,function(e,arg1,arg2,..){ }) 监听事件及接收数据
+      Jelem.trigger("eName" [,arr]);     触发事件及传递数据 
+      Jelem.on(str,function(e,arg1,arg2,..){ }) 监听事件及接收数据 
       将事件的监听触发绑定在需互相传递数据组件的共同父元素上,
       事件需先监听后触发才能保证无信息遗漏,
-      因为根据组件的加载,他们的共同父元素在他们加载之前是存在的,不会导致无法获取到DOM的情况,
+      因为根据组件的加载,他们的共同父元素在他们加载之前是存在的,不会导致无法获取到DOM的情况, 
       一般可将事件绑定到'body'元素上,
       假设 A B 组件 ,其加载的时间不同,若 A 先加载,B 后加载,
         A 在 B 加载后发送消息 
@@ -3661,10 +3661,35 @@ react-native
         next to prev 
         接受者不断的发送请求,接收到响应后停止
         请求的参数为信息发出者预先定义好的参数 
-      2. 广播模式  
-        信息发送者主动
+      2. 广播模式 
+        信息发送者主动 
         将信息同时放置于body的data中和通过事件来发送 
         接收时通过两个渠道来获取,从而保证获取到数据不受组件的加载的先后顺序影响 
+        function put (ename,data,elem){ 
+          var el = elem || $('body');
+          el.data(ename,data);
+          el.trigger(ename,[data]);
+        }
+        function get (ename,foo,elem){ 
+          var el = elem || $('body');
+          var data1 = el.data(ename);
+          if (data1) { // 当接受者为后出现时 
+            foo(data1);
+          }
+          else { // 当接受者为先出现时 
+            el.on(ename,function(e,data2){ 
+              foo(data2) 
+            })
+          }
+        }
+        // 使用
+        var foo = function(data){ 
+          console.log(data);
+        }
+        put('test',{'a','11111'});
+        get('test',function(data){ 
+          console.log(data);
+        })
 ---------------------------------------------------------------------以下待整理 
 
 

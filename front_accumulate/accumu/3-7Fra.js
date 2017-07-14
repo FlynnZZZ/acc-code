@@ -1124,6 +1124,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm],声明式渲染
             })
           }
         }
+    Exp: 
+      建议该功能也可以传参
   'watch' : val      可选,vm的数据监听方法 
     e.g.：
       var vm = new Vue({
@@ -3655,26 +3657,23 @@ react-native
             
       出现的'时间前''时间后' + 信息的'发送者''接受者' 
       
-      1. 请求模式 
-        信息接受者主动
-        prev to next 
-        next to prev 
-        接受者不断的发送请求,接收到响应后停止
-        请求的参数为信息发出者预先定义好的参数 
-      2. 广播模式 
-        信息发送者主动 
-        将信息同时放置于body的data中和通过事件来发送 
-        接收时通过两个渠道来获取,从而保证获取到数据不受组件的加载的先后顺序影响 
+      1. 广播模式 
+        PS：信息发送者主动 
+          将信息同时放置于body的data中和通过事件来发送 
+          接收时通过两个渠道来获取,从而保证获取到数据不受组件的加载的先后顺序影响 
         function put (ename,data,elem){ 
           var el = elem || $('body');
           el.data(ename,data);
           el.trigger(ename,[data]);
         }
-        function get (ename,foo,elem){ 
+        function get (ename,foo,bool,elem){ 
           var el = elem || $('body');
           var data1 = el.data(ename);
           if (data1) { // 当接受者为后出现时 
             foo(data1);
+            if (bool) { // 去掉data数据后续能一直响应
+              el.data(ename,null) 
+            }
           }
           else { // 当接受者为先出现时 
             el.on(ename,function(e,data2){ 
@@ -3690,6 +3689,12 @@ react-native
         get('test',function(data){ 
           console.log(data);
         })
+      2. 请求模式 
+        信息接受者主动
+        prev to next 
+        next to prev 
+        接受者不断的发送请求,接收到响应后停止
+        请求的参数为信息发出者预先定义好的参数 
 ---------------------------------------------------------------------以下待整理 
 
 

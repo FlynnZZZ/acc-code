@@ -1399,13 +1399,26 @@ Directives,指令  model和view的交互
       </select>
       单选列表 
         <div id="slct">
-          <select  v-model="selected">
+          <select  v-model="slctVal">
             <option>A</option>
             <option>B</option>
             <option>C</option>
           </select>
-          <span>Selected: {{ selected }}</span>
+          <span>Selected: {{ slctVal }}</span>
         </div>
+        new Vue({
+          el : '#slct',
+          data : {
+            slctVal : '1',
+          },
+          mounted : function(){
+            var that = this;
+            setTimeout(function(){
+              that.slctVal = '11';
+              // 当选项中没有被赋予的值存在时,会被默认重置为undefined
+            },1000);
+          },
+        });
       多选列表,绑定到一个数组 
         <div id="slct">
           <select v-model="selected" multiple>

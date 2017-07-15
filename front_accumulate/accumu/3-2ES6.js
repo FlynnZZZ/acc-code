@@ -191,6 +191,22 @@ Destructuring,解构赋值
     // ...arr  // 报错
     sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
     // ,sum( ...arr ) 的效果相当于sum( 2,3 ) 
+  todo
+    ... 扩展符 「ES6新增」 
+    把数组解开成单独的元素
+    e.g.
+      var aoo =[1,2,3];
+      var boo =[...aoo,4];
+      console.log(boo);  //[1, 2, 3, 4]
+      console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
+      // 相当于
+      console.log.apply(null,aoo); // 1 2 3
+      ...aoo;            //报错
+
+      获取部分参数
+      var foo =function(aoo,...boo){ console.log(aoo,boo); }
+      foo(1,2,3,4);  // 1 [2, 3, 4]
+      //  将其余的参数放在数组 boo 中
 for(var val of aoo){} 「有序?」遍历 
   可遍历的对象包括数组,对象,字符串,set和map结构等具有iterator接口的数据结构
   数组遍历 

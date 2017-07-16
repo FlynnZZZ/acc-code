@@ -157,15 +157,7 @@ ECMAScript JS核心,语法部分
     在某些语言中,字符串以对象的形式来表示,因此是引用类型,但ECMAScript中不是
   基本包装类型 :三种基本类型的变体,在一定条件下,拥有对象的性质 
     PS：基本包装对象也是对象,如可调用方法、设置属性等对象拥有的操作 
-    ◆显示创建基本包装对象 
-    var bol = new Boolean(); 创建布尔值基本包装对象 
-    var num = new Number();  创建数值基本包装对象  
-      var box1=new Number();
-      var box2=new Number(1);
-      console.log(box1);    //Number {[[PrimitiveValue]]: 0}
-      console.log(box2);    //Number {[[PrimitiveValue]]: 1}
-      typeof box2;          //返回值为"object"
-    var str = new String();  创建字符串基本包装对象  
+      通过构造函数显式的创建基本包装对象 
     隐式创建的包装对象和显式创建的包装对象及区别 
       区别1:基本包装对象和对象一样按引用进行比较
         var a1 = "test";
@@ -192,11 +184,11 @@ ECMAScript JS核心,语法部分
     typeof a;         //"undefined"
     console.log(a);   //报错,a未定义
   null      表示一个空对象指针,表示什么都没有,相当于一个占位符
-    PS：:将来用于保存对象的变量,可初始化为null.
+    PS：将来用于保存对象的变量,可初始化为null 
     e.g. :
       console.log(null==undefined);//true ,undefined派生于null
-      var box= null;
-      console.log(typeof box);  // object
+      var val = null;
+      console.log(typeof val);  // object
       console.log(typeof null); // object
     判断一个值是否为null
       var aoo = null;
@@ -205,25 +197,19 @@ ECMAScript JS核心,语法部分
       }
   Boolean 布尔值 
     PS：Boolean类型有两个值[字面量]: true 和 false
-      ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值.
-    隐式转换为布尔值
-      转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
-      其余全部转换为true
-      e.g.
-        var box = ''; 
-        //条件语句中()内必须是布尔值
-        if(box){ console.log('真');}
-        else{ console.log('假');} // 假
-        
-        console.log(!0,!1); // true false
-    Boolean(val);  返回转换为的布尔值
-      var a = Boolean(0);         // 转换为false
-      var a = Boolean(-0);        // 转换为false
-      var a = Boolean(0.0);       // 转换为false
-      var a = Boolean(NaN);       // 转换为false
-      var a = Boolean(undefined); // 转换为false
-      var a = Boolean('');        // 转换为false
-      其余皆转换为true
+      ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
+    转换为布尔值
+      隐式转换为布尔值
+        转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
+        其余全部转换为true
+        e.g.
+          var box = ''; 
+          //条件语句中()内必须是布尔值
+          if(box){ console.log('真');}
+          else{ console.log('假');} // 假
+          
+          console.log(!0,!1); // true false
+      Boolean() 显式转换为布尔值 
   Number  数值 
     PS： Number类型包含两种数值:整型和浮点型, [不同于C语言]JS中整数相除可以到浮点数
       可以保存+0 和 -0,且 +0 ===-0;
@@ -235,9 +221,9 @@ ECMAScript JS核心,语法部分
         八进制字面量在严格模式下是无效的,会导致支持的JavaScript引擎抛出错误
       十六进制数 必须使用0x或0X开头,最大字符不超过f
     科学计数 
-      e 可大写,可小写
+      e E 可大写,可小写
       默认情况下,ECMAScript会将小数点后面有6个零以上的浮点数使用科学计数法表示
-      var a=2E3;//或者2e3
+      var a = 2E3;//或者2e3
       console.log(a); //2000
       2e3;  //2000
       0.000000005; //5e-9
@@ -261,23 +247,23 @@ ECMAScript JS核心,语法部分
       Infinity 「正无穷」 -Infinity 「负无穷」: 当超过范围时显示
         Number.NEGATIVE_INFINITY  // -Infinity
         Number.POSITIVE_INFINITY  // Infinity
-      NaN 非数值(not a number)
-        PS：该数值用于表示一个本来要返回数值的操作数未返回数值的情况(而不会报错)
+      NaN not_a_number,非数值 
+        PS：该数值用于表示一个本来要返回数值的操作数未返回数值的情况[而不会报错] 
           在其他语言中,任何数值除以零都会导致错误而终止程序执行,
           但在ECMAScript中会返回特殊的值,不会影响程序执行.
           任何与NaN进行运算的结果均为 NaN
-          NaN 不和任何值相等(包括自己)
+          NaN 不和任何值相等[包括自己] 
         Number.NaN;        //NaN,非数值
         e.g.
-        var a=0/0;
-        console.log(a);  //NaN
-        NaN+1;           //NaN
+        var a = 0/0;
+        console.log(a);  // NaN
+        NaN+1;           // NaN
         console.log(NaN == NaN); // false
       // 静态属性,如直接通过Number调用的属性(Number.XX)
       Number.MAX_VALUE;  //1.7976931348623157e+308,最大值
       Number.MIN_VALUE;  //5e-324,最小值
     转换为数值 
-      隐式转换为数值
+      隐式转换为数值 
         undefined转换为NaN;
         null、false转换为0;
         true转换为1;
@@ -289,85 +275,7 @@ ECMAScript JS核心,语法部分
         obj.valueOf(); // Object {aoo: 1, boo: 2}
         obj.valueOf =function(){ return 100; };
         +obj; // 100
-      Number(val);  返回转换为的数值 
-        Number(true);  /* 1 */   Number(false);     /* 0  */
-        Number(null);  /* 0 */   Number(undefined)  /* NaN */
-        Number(number)     // 对应的值
-        Number("")         // 0
-        其他规则:
-          只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
-            Number('070'); //70
-            注:若是070(无引号包含)则会转换为8进制数.
-            Number(070);   //56
-          只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
-          若不是以上三种字符串类型,则返回NaN
-            console.log(Number('123abc123')); // NaN
-          若为对象,调用 vaueOf()/toString()方法
-            先调用对象的vaueOf()方法,然后依照前面的规则转换返回的值,
-            若转换的结果是NaN,则改用toString()方法,
-            然后再依次按照前面的规则转换返回的字符串值.
-      parseInt(str [,radix]); 把字符串转换成整数值
-        PS：由于Number()转换字符串时比较复杂且不够合理,更常用的是parseInt()
-          忽略字符串前面的空格,直至找到第一个非空格字符
-          从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略(.也被忽略)
-          若第一个字符不是数字字符或负号,则返回NaN(空字符返回NaN)
-          可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
-          es5不再具备解析八进制,需指定基数
-        str   被转换的字符串(支持科学计数法形式的转换)
-        radix 可选,用于解决各种进制的转换
-          当radix为0时,或没有设置该参数时且符合十进制格式时,默认为十进制
-          2    二进制
-          8    二进制
-          10   二进制
-          16  十六进制
-          e.g.
-          parseInt('oxA');     //10,十六进制
-          parseInt('070');     //70,十进制
-          parseInt('0xALabc'); //10,labc被自动过滤掉了
-          parseInt('0xAF');    //175,十六进制
-          parseInt('AF',16);   //175,第二参数指定16进制,可以去掉0x前导
-          parseInt('AF');      //NaN
-        e.g.
-          console.log(parsetint('abc123')) //NaN,第一个不是数字会返回NaN
-          console.log(parsetint('1a2b'))   //1,从第一个数值开始取直到非数字结束
-          console.log(parseInt('3.14'));   //3,小数点不是数值.
-          console.log(parsetint(''));      //NaN,空返回NaN
-
-          Number(""); //为0;
-          parseInt(""); //为NaN
-        ECMAScript 3 和ECMAScript 5 的分歧
-          parseInt("070");  // ECMAScript 3 认为是 56(八进制)
-          parseInt("070");  // ECMAScript 5 认为是 70(十进制)
-      parseFloat(str);     把字符串转换成浮点数值
-        和 parseInt() 类似,区别是数字中可以包含一个点.
-        只能解析为10进制数
-        若字符串包含的是一个可解析为整数的数(没有小数点,或小数点后都是零),则返回整数
-        十六进制始终转成零
-        e.g.
-        parseFloat('123abc');  //123,去掉不识别的部分
-        parseFloat('0xA');     //0,不识别十六进制
-        parseFloat('12.3.4');  //12.3,只认一个小数点
-        parseFloat('01.20');   //1.2,去掉前、后导0
-        parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
-    isFinite(num);  返回数值num是否在可用范围内的布尔值 
-      isFinite(10); // true
-    isNaN(val);     返回是否能转换为NaN的布尔值 
-      先后调用valueOf() toString() 直到将值转换为数值为止,进行判断
-      console.log(isNaN(1));      //false
-      console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
-      console.log(isNaN(true));   //false,true可以转换为1
-      console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
-      console.log(isNaN(NaN));    //true
-      Remarks:
-        当值为对象时,首先调用对象的 valueOf()方法,然后确定该方法返回的值是否可以转换为数值,若不能,则基于这个返回值再调用toString()方法,再测试返回值.
-    num.toFixed(num);       将数字保留小数点后num位并转化为字符串「会四舍五入」 
-    num.toExponential(x); 以科学计数法表示并保留x位小数.并转换成字符串 
-    num.toPrecision(x);   以指数或点形式来表示「根据x的长度来决定形式」 
-    ★包装对象方法
-    num.toString()  将数值转换为字符串 
-      // 123.toString()  报错
-      123.0.toString() // '123'
-      (123).toString() // '123'
+      通过 Number() parseInt() 和 parseFloat() 显示转换为数值 
   String  字符串 
     PS： 用于表示由零或多个16位Unicode字符组成的字符序列.
       表示显示的字符,使用引号引起来,无特殊含义.
@@ -379,35 +287,35 @@ ECMAScript JS核心,语法部分
         有些符号不便放在引号中(如引号,换号符等),需要进行转义.
         在引号中发现的\,其后面的字符有特殊意义.
         可出现在字符串的任何位置. 被作为一个字符来解释.
-      常用特殊字符:
-        \0 Null字节
-        \b 退格符
-        \f 换页符
-        \n 换行符
-        \r 回车符
-        \t Tab (制表符)
-        \v 垂直制表符
-        \' 单引号'
-        \" 双引号"
-        \\ 反斜杠字符(\)
-        \XXX 由从0到377最多三位八进制数XXX表示的 Latin-1 字符。
-          例如,\251 是版权符号的八进制序列。
-          严格模式下,不能使用八进制转义字符。
-        \xXX 由从00和FF的两位十六进制数字XX表示的Latin-1 字符。
-          例如,\ xA9是版权符号的十六进制序列。
-        \uXXXX 由四位十六进制数字XXXX表示的Unicode字符。
-          例如,\ u00A9是版权符号的Unicode序列
-        \u{XXXXX} Unicode代码点 code point 转义字符。
-          例如,\u{2F804} 相当于Unicode转义字符 \uD87E\uDC04的简写。
+      ★常用特殊字符:
+      \0 Null字节
+      \b 退格符
+      \f 换页符
+      \n 换行符
+      \r 回车符
+      \t Tab (制表符)
+      \v 垂直制表符
+      \' 单引号'
+      \" 双引号"
+      \\ 反斜杠字符(\)
+      \XXX 由从0到377最多三位八进制数XXX表示的 Latin-1 字符。
+        例如,\251 是版权符号的八进制序列。
+        严格模式下,不能使用八进制转义字符。
+      \xXX 由从00和FF的两位十六进制数字XX表示的Latin-1 字符。
+        例如,\ xA9是版权符号的十六进制序列。
+      \uXXXX 由四位十六进制数字XXXX表示的Unicode字符。
+        例如,\ u00A9是版权符号的Unicode序列
+      \u{XXXXX} Unicode代码点 code point 转义字符。
+        例如,\u{2F804} 相当于Unicode转义字符 \uD87E\uDC04的简写。
       e.g.
         '\t\n\n'.length; // 3
 
         var aoo = "read \"book\"";
         console.log(aoo); // read "book"
     创建字符串 
-      字面量法创建
-      new String(); 构造函数创建
-      字符串不可单独修改其字符(只能覆盖替换)
+      'xx' 字面量法创建
+      new String() 构造函数创建
+      字符串不可单独修改其字符[只能覆盖替换] 
         e.g.
         var name = 'abc';
         name[1];   //"b"
@@ -416,116 +324,21 @@ ECMAScript JS核心,语法部分
         name ="a";
         name;      //"a"
     其他类型→字符串 
-      隐式转换为字符串
+      隐式转换为字符串 
         使用 空字符+其他值 ""+value
         undefined  "undefined"
         true       "true"
         false      "false"
         null       "null"
         NaN        "NaN";
-        数值转换为数值本身(数字字符串).
+        数值转换为数值本身[数字字符串] 
         其余对象,若存在这个对象则转换为toString()方法的值,否则转换为undefined.
           e.g. :
           var obj ={aoo:1,boo:2};
           obj.toString(); // "[object Object]"
           obj.toString =function(){ return "hello"; }; // 自定义该对象的toString方法
           "a" + obj; // "ahello"
-      val.toString(); 参见通用方法
-      String(val);    返回转换后的字符串 
-        若值存在 .toString() 方法,则调用该方法并返回相应的结果 
-        否则[即值为null或undefined],则返回"null"或'undefined'
-        String(num)       "数值"
-        String(str)       "字符串"
-        String(true)      "true"
-        String(false)     "false"
-        String(undefined) "undefined"
-        String(null)      "null"
-        e.g.  String(1); //"1"
-    ◆字符获取 
-    str.charAt(idx); 返回指定下标对应的字符
-      e.g. :
-      "abcdefg".charAt(1); // "b"
-    str.charCodeAt(index); 返回以Unicode编码形式指定索引位置的字符
-      e.g.
-      'Ab'.charCodeAt(1)   //98
-      'abc'.charCodeAt(0)  //97
-    ◆字符串获取 
-    str.substr(bgn[,num]); 返回指定位置开始的num个字符串
-      当只有一个参数且负数时,同 slice
-      当n为负数或0时,返回空字符串.
-    str.substring(idx1,idx2);  返回截取的新字符串
-      idx1 数值,必须,若为负数返回全部字符串
-      idx2 数值,可选,若省略表示到最后,若为负,则取0
-        以两个参数中较小一个作为起始位置,较大的参数作为结束位置
-      e.g.
-        str.substring(1,4) 等价于 str.substring(4,1)
-    ◆字符串对比 
-    str1.includes(str2);    str1中是否包含str2的布尔值  
-    str1.indexOf(str2,bgn); 从指定位置向后首个指定字符串的下标
-      当bgn不存在时,直接从头开始
-      RetValue:检测字符不存在则返回-1
-      e.g.
-      'abcdef'.indexOf('bc')   // 1
-      'abcdef'.indexOf('ac')   // -1
-    str1.lastIndexOf(str2,bgn);从指定位置向前的首个指定字符串的下标
-      当bgn不存在时,表示从末尾开始搜索.
-      RetValue:搜索字符不存在时,返回-1
-    str1.search(str2);   返回字符串的位置
-    str1.match(str2);    返回查找到的字符str2或null
-    str1.localCompare(str2); 返回两个字符串比较的数值表示
-      若str1和str2相同,返回0;
-      第一个不同字符,str1在str2前,返回1,否则返回-1
-    str1.localeCompare(str2); 使用本地特定的顺序来比较字符串
-      若str1大则返回1,相等返回0,否则返回-1
-    ◆字符串修改
-    str1.replace(regexp/str2,replacement)  字符替换
-      返回值为 使用replacement替换str1中第一个str2后的 结果字符串
-      e.g.: 'abcde'.replace('ab','11'); // "11cde"
-    str1.split(str2)    通过字符分割成数组
-      与 join 或互为反操作
-      str.split("字符x") 将str字符串通过其中的字符x作为分割,返回字符串数组
-      str.split()        则将str作为一个元素放入一数组中.
-      e.g.
-        将arr使用-进行分割成数组
-        var arr = "1-2-3"
-        arr.split("-"); //返回值为["1","2","3"]
-
-        var aoo = '1020304';
-        aoo.split('0').join(''); // "1234"
-    str.concat(str1,str2,...);  字符串拼接,返回新串
-    str.trim() 去除字符串开始和结束的空格
-      var str = ' 12 3 ';
-      var res = str.trim();
-      console.log("|" + res + "|" ); // |12 3|
-    ◆字符串转换
-      PS：只有几种语言(如土耳其语)具有地方特有的大小写本地性,
-        一般是否本地化效果是一致的
-    str.toUpperCase(); 转换为大写,返回转换后的值
-    str.toLowerCase(); 转换为小写,返回转换后的值
-    str.toLocaleLowerCase();  将字符串全部转换为小写,并且本地化
-    str.toLocaleUpperCase();  将字符串全部转换为大写,并且本地化
-    ◆包装对象方法 
-      var str = 'abcd';
-      var strObj = new String(str); 
-      // String {0: "a", 1: "b", 2: "c", 3: "d", length: 4, [[PrimitiveValue]]: "abcd"}
-    str.length; 只读,字符长度 
-      "abc".length;    // 3
-      "abc"['length']; // 3
-    str[num];   下标法访问字符 
-    str.slice(bgn[,end]);  字符截取[详见 arr.slice() ] 
-    ◆静态方法
-    String.fromCharCode(num,num...); 得到指定的Unicode值对应的字符 
-      e.g. :
-      String.fromCharCode(72,69,76,76,79); // "HELLO"
-    ◆借用方法
-    Array.prototype.join.call(str1,str2); 使用str2来间隔str1 
-      e.g. :
-        var str ="123456";
-        var s ="-";
-        Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
-        var str ="1-2-3-4-5-6";
-        var s ="=";
-        Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
+      val.toString() String() 显式转换 
 引用类型：Object 对象 
   PS：引用类型就叫对象「SlPt」; ECMA-262 定义为:无序的名值的合集 
     对象一般没有长度,具有多种属性的内容结构 
@@ -573,6 +386,21 @@ ECMAScript JS核心,语法部分
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
     var obj = new Foo() 构造函数[类]实例化对象 
+      构造函数生成对象的原理 
+        若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
+        若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
+        var Foo = function(){
+          this.aoo = 1;
+          this.boo = 2;
+        }
+        var Goo = function(){
+          this.aoo = 1;
+          this.boo = 2;
+          return {a:'a'}
+        }
+        var obj1 = new Foo();
+        var obj2 = new Goo();
+        console.log(obj1,obj2); // Foo {aoo: 1, boo: 2}  Object {a: "a"}
       obj.__proto__ === Foo.prototype  // true 
       new Object(arg); 构造函数创建对象 
         arg 可为数值、字符串、布尔值等或是简单的表达式  
@@ -602,9 +430,12 @@ ECMAScript JS核心,语法部分
           若不得不使用new,为了防止出错,最好在视觉上把构造函数与其他函数区分开来。
           比如,构造函数的函数名,采用首字母大写[InitialCap],其他函数名一律首字母小写。      
       自定义构造函数 创建对象 
-        function Foo(aoo,boo){ this.azz=aoo; this.bzz=boo; }
+        function Foo(arg1,arg2){ 
+          this.aoo = arg1; 
+          this.boo = arg2; 
+        }
         var obj = new Foo(2,3);
-        obj; //Foo {azz: 2, bzz: 3}
+        obj; //Foo {aoo: 2, boo: 3}
         Remarks:
           和工厂模式比较,构造函数创建的对象可以将其标识为一种特定的类型
           当创建对象时未使用new则会导致window对象属性的意外增加
@@ -1176,7 +1007,7 @@ ECMAScript JS核心,语法部分
         寄生组合式继承
         组合继承(也叫伪经典继承)
           JavaScript中最常用的继承模式
-  多态 : JS无多态
+  JS无多态 
     假如有多态功能:
       定义多个函数,[函数名相同]区别是传入的参数不同,
       调用时,会根据传入参数的不同自动选择对应的函数执行.
@@ -2090,9 +1921,109 @@ OOP,面向对象
 标准库--对象  
 ◆数据封装类对象  
 Object  一般对象[JS中所有对象的父对象?] 
-Boolean 布尔对象:处理布尔值的包装对象 
-Number  数值对象:处理数值的包装对象 
-String  字符对象:处理字符串的包装对象 
+Boolean 布尔对象:处理布尔值的'包装对象' 
+  var bol = new Boolean(); 创建布尔值基本包装对象 
+Number  数值对象:处理数值的'包装对象' 
+  var num = new Number();  创建数值基本包装对象  
+    var box1=new Number();
+    var box2=new Number(1);
+    console.log(box1);    //Number {[[PrimitiveValue]]: 0}
+    console.log(box2);    //Number {[[PrimitiveValue]]: 1}
+    typeof box2;          //返回值为"object"
+  num.toFixed(num)     将数字保留小数点后num位并转化为字符串「会四舍五入」 
+  num.toExponential(x) 以科学计数法表示并保留x位小数.并转换成字符串 
+  num.toPrecision(x)   以指数或点形式来表示「根据x的长度来决定形式」 
+  num.toString()       将数值转换为字符串 
+    // 123.toString()  报错
+    123.0.toString() // '123'
+    (123).toString() // '123'
+String  字符对象:处理字符串的'包装对象' 
+  var str = new String();  创建字符串基本包装对象  
+    var str = 'abcd';
+    var strObj = new String(str); 
+    // String {0: "a", 1: "b", 2: "c", 3: "d", length: 4, [[PrimitiveValue]]: "abcd"}
+  ★字符获取 
+  var num = str.length  只读,字符长度 
+    "abc".length;    // 3
+    "abc"['length']; // 3
+  var rstStr = str[idx] 下标法访问字符 
+  var rstStr = str.charAt(idx)  返回指定下标对应的字符
+    "abcdefg".charAt(1); // "b"
+  var num = str.charCodeAt(idx);  以Unicode编码形式显示索引位置的字符 
+    var num1 = 'Ab'.charCodeAt(1)   
+    var num2 = 'abc'.charCodeAt(0)  
+    console.log(num1,num2,typeof num1) // 98 97 "number"
+  ★字符串获取 
+  var rstStr = str.slice(bgn[,end])  字符截取[详见 arr.slice()] 
+  var rstStr = str.substr(bgn[,num]) 从指定位置开始的num个字符 
+    当只有一个参数且负数时,同 slice 
+    当n为负数或0时,返回空字符串 
+  var rstStr = str.substring(idx1,idx2)  两点间截取 
+    PS：以参数中较小者作为起始位置,较大者作为结束位置的前闭后开区间的字符
+    idx1 数值,必须,若为负数返回全部字符串
+    idx2 数值,可选,若省略表示到最后,若为负,则取0
+    e.g.
+      var str = 'abcde'
+      var s1 = str.substring(1,2) 
+      var s2 = str.substring(2,1)
+      console.log(s1,s2); // b b
+  ★字符串对比 
+  str1.includes(str2);    str1中是否包含str2的布尔值  
+  str1.indexOf(str2,bgn); 从指定位置向后首个指定字符串的下标
+    当bgn不存在时,直接从头开始
+    RetValue:检测字符不存在则返回-1
+    e.g.
+    'abcdef'.indexOf('bc')   // 1
+    'abcdef'.indexOf('ac')   // -1
+  str1.lastIndexOf(str2,bgn);从指定位置向前的首个指定字符串的下标
+    当bgn不存在时,表示从末尾开始搜索.
+    RetValue:搜索字符不存在时,返回-1
+  str1.search(str2);   返回字符串的位置
+  str1.match(str2);    返回查找到的字符str2或null
+  str1.localCompare(str2); 返回两个字符串比较的数值表示
+    若str1和str2相同,返回0;
+    第一个不同字符,str1在str2前,返回1,否则返回-1
+  str1.localeCompare(str2); 使用本地特定的顺序来比较字符串
+    若str1大则返回1,相等返回0,否则返回-1
+  ★字符串修改
+  str1.replace(regexp/str2,replacement)  字符替换
+    返回值为 使用replacement替换str1中第一个str2后的 结果字符串
+    e.g.: 'abcde'.replace('ab','11'); // "11cde"
+  str1.split(str2)    通过字符分割成数组 
+    与 join 或互为反操作
+    str.split("字符x") 将str字符串通过其中的字符x作为分割,返回字符串数组
+    str.split()        则将str作为一个元素放入一数组中.
+    e.g.
+      将arr使用-进行分割成数组
+      var arr = "1-2-3"
+      arr.split("-"); //返回值为["1","2","3"]
+
+      var aoo = '1020304';
+      aoo.split('0').join(''); // "1234"
+  str.concat(str1,str2,...);  字符串拼接,返回新串 
+  str.trim() 去除字符串开始和结束的空格 
+    var str = ' 12 3 ';
+    var res = str.trim();
+    console.log("|" + res + "|" ); // |12 3|
+  ★字符串转换
+    PS：只有几种语言如土耳其语[]具有地方特有的大小写本地性,一般是否本地化效果是一致的 
+  str.toUpperCase(); 转换为大写,返回转换后的值
+  str.toLowerCase(); 转换为小写,返回转换后的值
+  str.toLocaleLowerCase();  将字符串全部转换为小写,并且本地化
+  str.toLocaleUpperCase();  将字符串全部转换为大写,并且本地化
+  ★静态方法
+  String.fromCharCode(num,num...); 得到指定的Unicode值对应的字符 
+    e.g. :
+    String.fromCharCode(72,69,76,76,79); // "HELLO"
+  ★借用方法
+  Array.prototype.join.call(str1,str2); 使用str2来间隔str1 
+    e.g. :
+      var str ="123456";
+      var s ="-";
+      Array.prototype.join.call(str,s); // "1-2-3-4-5-6"
+      var str ="1-2-3-4-5-6";
+      var s ="=";
+      Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
 Array   数组对象 
   PS：数组是JS内置的一种特殊类型的对象 
     可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象 
@@ -2157,7 +2088,7 @@ Array   数组对象
         var arr=new Array(1,3,true,"abc");
         arr;  // [1, 3, true, "abc"]
         可省略 new 关键字
-  'Array.prototype'的属性&方法 
+  实例属性&方法 : 'Array.prototype'上的属性&方法 
     ◆信息查询 
     var val = arr[num]   读写数组元素 
       num  下标,从0开始
@@ -2178,11 +2109,11 @@ Array   数组对象
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    var idx = arr.indexOf(val[,bgn])  查询元素索引「ES5」 
+    var idx = arr.indexOf(val[,bgn])     查询元素索引「ES5」 
       PS：返回值为下标值,若找不到则返回-1 
       bgn  表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    var idx = arr.lastIndexOf(val)    查询元素的索引[从右向左]「ES5」 
+    var idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左]「ES5」 
     ◆改变原数组
     arr.reverse() 颠倒数组元素的顺序 
       e.g. :
@@ -2196,7 +2127,7 @@ Array   数组对象
         obj.pop(); // 3
         console.log(obj);// [1, 2]
     arr.shift()  删除头部的一个元素  
-    arr.sort([foo])  排序元素 
+    arr.sort([foo])  根据回调布尔值排序元素 
       foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
         通过冒泡的算法大小排序「SlSt」;
         若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
@@ -2407,7 +2338,6 @@ Array   数组对象
         }
         ["1", "2", "3"].map(returnInt); // [1,2,3]
         
-        
         var arr = [1, 3, 5];
         var res = arr.map(function(val,idx,arr){
           console.log(val);
@@ -2460,8 +2390,8 @@ Array   数组对象
         console.log(res); // 15
     var val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历「ES5」
   静态方法 
-    Array.isArray(arr)  返回是否为数组的布尔值「ES5」 
-    Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组,并返回新数组「ES5」
+    var bol = Array.isArray(arr)  判断是否为布尔值「ES5」 
+    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组「ES5」
       arrLike 想要转换成数组的类数组或可遍历对象
       mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
       thisArr 可选,执行 mapFoo 函数时 this 的值
@@ -2525,11 +2455,11 @@ ArrayBuffer 二进制数组
     Float64   8     double           64 位浮点数                    
 ◆功能类对象 
 Function 函数对象 
-  PS：函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能.
-    在 JS 中,“一切皆对象”,数组和函数本质上都是对象.
-    函数是定义一次但却可以调用或执行任意多次的一段代码.
-    若函数名称重复会产生覆盖.
-    JS中代码块(大括号之间)里不会产生作用域,函数是唯一能创建新作用域的地方.
+  PS：函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能 
+    函数是定义一次但却可以调用或执行任意多次的一段代码 
+    若函数名称重复会产生覆盖 
+    JS中代码块[大括号之间]里不会产生作用域,函数是唯一能创建新作用域的地方 
+    函数也是对象可以向其他值一样作为参数传递 
   Function 类型
     PS：函数也是一个值,类型为函数,
       在ECMAScript中, Function类型 实际上是对象
@@ -2544,81 +2474,60 @@ Function 函数对象
       goo.a =1;
       console.log(goo.a); //1
   创建函数 
-    PS：函数的创建有 函数声明 和 函数表达式 两种常用方法.
-      变量名可以使用中文字符来进行命名而不会报错,但最好不要使用中文.
-    function foo(arg){} function关键字创建函数 
-      PS：ECMAScript中的函数使用function关键字来声明,后跟一组参数以及函数体.
-        该方法创建的函数,调用可在声明(位置)前进行(函数声明提升)
-        函数声明后,函数不调用不执行
-      函数的调用 : 函数名(参数);
-    var foo = function(arg){}  变量初始化创建函数
-      函数的创建需在调用前完成
-      e.g.
-      var foo =function bar(){ alert(1); }
-      bar() ; //报错:bar未定义
-      // 会将赋值变量的函数的函数名忽略
-      自调用可省略一个括号
-        var foo =function bar(){ alert(1); }();   //直接调用
-        // foo中存放的是 函数的返回值,而非函数本身
-        等价于
-        var foo =(function bar(){ alert(1); })();
-        等价于
-       (function bar(){ alert(1); })();
-    var foo = new Function('arg1',...,"函数体"); 构造函数创建函数
+    PS：变量名可以使用中文字符来进行命名而不会报错[但最好不要使用中文] 
+    function foo(arg){}        函数声明创建 
+    var foo = function(arg){}  函数表达式创建 
+      var foo = function bar(){ 
+        console.log(1);
+      }
+      foo(); // 1
+      bar(); // 报错:bar未定义,会将赋值变量的函数的函数名忽略 
+    var foo = new Function('arg1',...,"函数体"); 构造函数创建 
       PS：不推荐使用该方法,会导致解析两次代码,影响性能,
-        第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串.
+        第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串 
+      var foo1 = function(){}
+      foo1.constructor;  // Function() { [native code] }
+      var foo2 = new Function("a","b","console.log(a+b);");
+      foo2(1,3); // 4
+    不同声明的差异 
+      关键字声明法:函数的调用可在声明之前,函数在代码运行之前有预加载[函数声明提升] 
+      变量初始化:函数的创建需在调用前完成,实质上,该函数就是一个变量,没有预加载 
       e.g. :
-        var foo = function(){}
-        foo.constructor;  // Function() { [native code] }
-
-        var foo = new Function("a","b","console.log(a+b);");
-        foo(1,3); // 4
-    不同声明的差异
-      关键字声明法:函数的调用可在声明之前或之后无影响,函数在代码运行之前有预加载.
-      变量初始化:函数的调用必须在声明之后,实质上,该函数就是一个变量,没有预加载.
-      e.g. :
-      console.log(foo()); // 1
-      function foo(){ return 1; }
-      var foo =function(){ return 2; }
-      console.log(foo()); // 2
-      原理:在代码运行前,函数被预加载以便运行时调用,
+        console.log(foo()); // 1
+        function foo(){ return 1; }
+        var foo = function(){ return 2; }
+        console.log(foo()); // 2
+        原理:在代码运行前,函数被预加载以便运行时调用,
         运行时读取到变量声明的函数,导致产生了覆盖.
-
       以下语法可能导致错误,不同的浏览器的结果可能有差异
       if(condition) {
         function foo(){ }
-      }else {
+      }
+      else {
         function foo(){ }
       }
       修改为
       var foo;
       if(condition) {
-        foo =function(){ }
-      }else {
-        foo =function foo(){ }
+        foo = function(){ }
       }
-  Argument,函数的参数 
-    传入的参数可多可少,多则舍去,少则使用undefined来补充
+      else {
+        foo = function foo(){ }
+      }
+  'argument'函数的参数 
+    传入的参数可多可少,多则舍去,少则使用undefined来补充 
       function foo(){ 
         console.log(arguments[0],arguments[1]); 
       };
       foo(1); // 1 undefined
-    默认参数:在定义函数时,可先将将参数赋值 「ES6+」
-      function foo(b,c=3){ 
-        console.log(b,c); 
-      }
-      foo();           //undefined 3
-      foo(1);          //1 3,当未传参时默认参数
-      foo(1,4);        //1 4,当传入参数时则使用传入的值
-      foo(1,c=5);      //1 5
-    arguments 类数组 : 在函数体内,表示实际传入函数的参数组成的数组
-      arguments.length; 在函数体内表示实际传入参数的数量
+    arguments 类数组 : 在函数体内,表示实际传入函数的参数组成的数组 
+      arguments.length 在函数体内表示实际传入参数的数量 
         e.g. :
         function box(){ return arguments.length; }
         console.log(box(1,2,3,4,5));  // 5
-      arguments[num] 读写相应的参数 
+      arguments[num]   读写相应的参数 
         在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
-      arguments.callee; 在函数体内表示函数本身
+      arguments.callee 在函数体内表示函数本身 
         该属性是一个指针,指向拥有这个arguments对象的函数.
         e.g.
         递归-阶乘
@@ -2641,16 +2550,17 @@ Function 函数对象
             //此时arguments.callee等价于box
           }
         }
-      e.g. 对若干个数值进行累加
-      function foo(){
-        var sum = 0;
-        for(var i=0;i<arguments.length;i++){
-          sum=sum+arguments[i];
+      e.g. 
+        对若干个数值进行累加
+        function sum(){
+          var sum = 0;
+          for(var i = 0;i < arguments.length;i++){
+            sum = sum + arguments[i];
+          }
+          return sum;
         }
-        return sum;
-      }
-      foo(5,6,1); // 12
-    参数按共享传递  
+        sum(5,6,1); // 12
+    参数按共享传递 
       基本类型[此处为字符串],参数按值传递
       var localObjOpera = function(localStorageItem,key,val){
         if (localStorageItem === undefined) { // 不存在则初始化为一对象 
@@ -2678,10 +2588,10 @@ Function 函数对象
       };
       editObj1(aoo);
       console.log(aoo); // {c: "3", b: "2"}
-  return,函数的返回值 
-    函数使用 return 关键字返回值,若没有 return 默认返回undefined.
-    当执行到 return 后直接返回值,后面代码不再执行,
-    当 return 后不带值,默认返回 undefined
+  'return'函数的返回值 
+    PS：函数执行到'return'后直接返回值,后面代码不再执行 
+    使用'return'关键字返回值,若没有return默认返回 undefined 
+    'return' 后无值,默认返回 undefined
       var foo = function(){
         return 
         2;
@@ -2692,7 +2602,24 @@ Function 函数对象
         return ;
         2;
       }
-  (),函数的调用  函数名称加上()即可调用
+  foo()函数调用  
+    foo()  直接调用 
+    obj.foo() 方法调用 
+    new Foo() 构造器调用 
+    foo.call() call/apply/bind调用 
+    自调用:声明时调用 
+      var foo = function(){ 
+        alert(1); 
+      }();   //直接调用
+      // foo中存放的是 函数的返回值,而非函数本身
+      等价于
+      var foo = (function bar(){ 
+        alert(1); 
+      })();
+      等价于
+     (function bar(){ 
+       alert(1); 
+     })();
   特殊形式的函数 
     全局函数[参见 window对象]
       系统内置构造函数:用于创建数据对象
@@ -2934,303 +2861,22 @@ Function 函数对象
         一般递归效率较低,
         一些需要探测或者处理多分支(可能分支又产生分支)的问题,则递归效率较高
   不具备函数重载 
-    即当函数名相同时会被覆盖掉(不会因为参数不同而进行区分)
-    ECMAScript中的函数,没有像其他高级语言那种函数重载功能.
+    即当函数名相同时会被覆盖掉[不会因为参数不同而进行区分] 
     e.g.
-    function box(num,a){ return num+1; }
-    function box(num){ return num+2; }
-    console.log(box(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
-  this 执行函数时的上下文对象 
-    PS：函数内部另一个特殊对象.
-      在JS中函数的this关键字的行为与其他语言相比有很多不同.
-      this引用的是函数据以执行操作的对象.
-      是JavaScript的一个关键字,表示一个对象.
-      随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象.
-      this指针是面向对象程序设计中的一项重要概念,它表示当前运行的对象.
-      this在函数运行时确定.
-      在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
-      在绝大多数情况下,函数的调用方式决定了this的值.
-      this不能在执行期间被赋值,在每次函数被调用时this的值也可能会不同.
-      ES5引入了bind方法来设置函数的this值,而不用考虑函数如何被调用的.
-    this使用的地方 
-      全局中:在全局运行上下文中(在任何函数体外部),指代全局对象
-        在浏览器中执行后得到一个Window对象,这是一个全局对象
-        console.log(this === window); // true
-        在全局作用域内,我们可以通过this访问到 所有的全局属性
-        var a = 1;
-        console.log(this.a);
-        // 1 ,定义的全局变量实际上就是window的属性
-      函数中:this的值取决于函数是如何调用的
-        函数的普通调用this始终指向window
-          var aoo = 1;
-          function foo(){
-            var aoo = 2;
-            console.log(this);   //window
-            console.log(this.aoo); //1
-            this.aoo =3;
-            console.log(this.aoo); //3
-          }
-          foo();
-          相当于
-          window.foo()
-
-          var aoo = 1;
-          function foo(){
-            console.log(this.aoo);
-            var aoo =2
-            function goo(){
-              console.log(this.aoo);
-            }
-            goo();
-          }
-          var obj = {aoo: 3, hoo: foo};
-          obj.hoo(); //3,1
-
-          var aoo =1;
-          var obj ={
-            aoo:2,
-            foo:function(){
-              return function(){return this.aoo;}
-            }
-          }
-          console.log(obj.foo()());  // 1
-        声明一个局部变量保存this引用
-          当需要在嵌套函数中读取调用被嵌套函数的对象的属性时
-          var aoo = 1;
-          function foo(){
-            console.log(this.aoo);
-            var that = this;
-            var aoo =2
-            function goo(){console.log(that.aoo);}
-            goo();
-          }
-          var obj = {aoo: 3, hoo: foo};
-          obj.hoo(); //3,3
-
-          通过把外部作用域中的this对象保存在一个闭包能访问到的变量中,实现闭包访问该对象
-          var aoo =1;
-          var obj ={
-            aoo:2,
-            foo:function(){
-              var that =this;
-              return function(){return that.aoo;}
-            }
-          }
-          console.log(obj.foo()());  // 2
-        作为构造函数
-          var aoo = 1;
-          function Foo(){this.aoo = 2;}
-          function Goo(){ this.aoo =3;return {aoo:4}; };
-          var obj = new Foo();
-          var obj1 =new Goo();
-          console.log(obj.aoo);  // 2
-          console.log(obj1.aoo); // 4
-        使用对象间接调用
-          var obj ={aoo:100};
-          function foo(){ return this.aoo; };
-          obj.goo =foo;
-          console.log(obj.goo()); // 100
-      对象内
-        var aoo = 1;
-        function foo(){ console.log(this.aoo);  }
-        var obj = { aoo: 2,  goo: foo }
-        obj.goo(); // 2 ,obj调用的this指向obj
-        var joo =obj.goo;
-        joo();     //1,
-        相当于 window.joo(); this指向window
-
-        var aoo =11;
-        var obj ={
-          aoo:22,
-          foo:function(){
-            return function(){ return this.aoo; }
-          },
-        }
-        obj.foo()();   //11
-        // 相当于
-       (obj.foo())(); //11
-      DOM中
-        var aoo =document.querySelector("#aoo");
-        aoo.addEventListener("click",function(){
-          console.log(this);
-        })
-        //表示被点击的那个元素对象
-    foo.call(thisArg[,arg1,arg2,...])  改变this指向
-      thisArg       在 foo 函数运行时指定的 this 值 
-        非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
-        原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
-      arg1,arg2,... 指定的参数列表
-      e.g.：
-        var obj = {}
-        var aoo = obj.toString();
-        console.log(aoo); // [object Object]
-        
-        function foo(arg){ 
-          console.log(Object.prototype.toString.call(arg,1,2)); 
-        };
-        foo(7);    // [object Number]
-        等价于
-        function foo(){ 
-          console.log(Object.prototype.toString.call(this)); 
-        };
-        foo.call(7); // [object Number]
-        
-        function add(arg1,arg2){ 
-          return arg1 + this;
-        }
-        var aoo = add.call(7,2,4);
-        console.log(aoo); // 9 
-      实现继承的效果 
-        function Pet(words){
-          this.words = words;
-          this.speak = function (){
-            console.log(this.words);
-          };
-        };
-        function Dog(words){
-          Pet.call(this,words);
-        };
-        var dog1 = new Dog('wang!');
-        dog1.speak(); // wang!
-        console.log(dog1); // Dog {words: "wang!", speak: function}
-    foo.apply(thisArg[,arrays])        改变this指向
-      PS：使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
-        都是函数对象的方法,区别在于接收参数的形式不同.
-        改变this的好处:对象不需要与方法发生任何耦合关系
-      thisArg 在 foo 函数运行时指定的 this 值 
-        非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
-        原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
-      array   函数传入的参数,类型为数组或类数组对象
-        其中的数组元素将作为单独的参数传给 foo 函数.
-        若该参数的值为null 或 undefined,则表示不需要传入任何参数.
-        从ECMAScript 5 开始可以使用类数组对象「可能存在兼容性问题」
-      e.g. :
-        function Pet(words){
-          this.words =words;
-          this.speak =function(){console.log(this.words);}
-        }
-        function Dog(words){ Pet.call(this,words); }
-        // 或者 Pet.apply(this,arguments);
-        var dog =new Dog("wang");
-        dog.speak(); // wang
-
-        var box={
-          color:"蓝色",
-          sayColor:function(){ console.log(this.color); }
-        }
-        box.sayColor();  //蓝色,box调用函数 this就表示box
-
-        var aoo = 1;
-        var obj = {aoo: 2};
-        function foo(a){console.log(this[a]);}
-        foo.call(null,"aoo"); // 1
-        foo.call(obj,"aoo");  // 2
-      apply和call继承 
-        将函数指向对象后,对象将获取到函数的属性
-        e.g.
-          function foo(){ this.name ="abc" }
-          var obj ={};
-          console.log(obj.name); //undefined
-          foo.call(obj);
-          console.log(obj.name); //abc
-
-          仿造new
-            function Person(name,age){
-              this.name =name;
-              this.age =age;
-            }
-            var p1 =new Person("aoo",19); //使用new 创建
-            function New(func){
-              return function(){
-                var obj ={"__proto__":func.prototype};
-                func.apply(obj,arguments); //使对象获取到传入函数的属性
-                return obj;
-              }
-            }
-            var p2 =New(Person)("boo",18); //使用仿造的new
-            console.log(p1); //Person {name: "aoo", age: 19}
-            console.log(p2); //Person {name: "boo", age: 18}
-    fun.bind(thisArg[,arg1,arg2,...])  创建新函数并改变this指向 「ES5」
-      PS：bind()方法会创建一个新函数 
-        当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
-        之后的一序列参数将会在传递的实参前传入作为它的参数;
-        返回值为由指定的this值和初始化参数改造后的原函数拷贝;
-      thisArg       绑定函数被调用时,代替原函数运行时的 this 指向 
-        当使用new 操作符调用绑定函数时,该参数无效.
-      arg1,arg2,... 绑定函数被调用时,这些参数将将于实参之前传递函数
-      使用bind固定参数值 
-        function foo(arg1,arg2,arg3){ 
-          return arg1 + arg2 + arg3; 
-        };
-        // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
-        var foo1 = foo.bind(undefined,100);
-        foo1(1,2); // 103 ,第二、三个参数分别为1、2
-        var f2 = foo1.bind(undefined,10);
-        foo2(1); // 111
-      使用new时 
-        function Foo(){ 
-          this.b = 1; 
-          this.a = 2;
-          return this.a; 
-        };
-        var Goo = Foo.bind({a:3});
-        Goo(); // 3
-        new Goo(); // {b:1}
-      e.g. :
-        var x = 9;
-        var obj = {
-          x: 81,
-          getX: function() { return this.x; }
-        };
-        obj.getX(); // 返回 81
-        var foo = obj.getX;
-        foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
-        var goo = foo.bind(obj);
-        goo(); // 返回 81
-
-        var obj ={
-          foo:1,
-          bar:function(){
-            return this.foo;
-          }
-        }
-        obj.bar();  //1
-        var a =obj.bar;
-        a();        //undefined
-        var b =obj.bar.bind(obj)
-        obj.bar.bind(obj)() // 1
-        b()         //1
-        obj.foo =12;
-        b()         //12
-
-        var person ={
-          name :'a',
-          job : '1',
-          sayHello:function(){ return this.name + this.job; }
-        }
-        person.sayHello()     //"a1"
-        var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
-        anotherGuySayHello()  //"b2"
-    e.g. :
-      console.log(this);; //window,因为在window的范围下.
-      var color="红色的"; //此处color是全局变量,该变量是window的属性.
-      // 此时 var color 等价于 window.color
-      console.log(this.color);        //color
-    其他特殊情况 
-      var aoo =1;
-      var obj ={ aoo:2, foo:function(){return this.aoo;} }
-      obj.foo();    // 2
-     (obj.foo)();  // 2
-     (obj.foo = obj.foo)();  // 1
-      var goo =obj.foo;
-      goo();  // 1
+      function foo(num,a){ 
+        return num+1; 
+      }
+      function foo(num){ 
+        return num+2; 
+      }
+      console.log(foo(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
   ◆函数相关属性/方法
   foo.length;   获取函数声明时定义的参数的个数
     e.g. :
     function box(a,b){ return a+b; }
     console.log(box.length);  // 2,表示box的参数有两个.
   foo.name;     函数的名字
-  foo.caller;   返回调用当前函数的函数(当前函数的直接父函数)
+  foo.caller;   返回调用当前函数的函数[当前函数的直接父函数]
     function foo(){
       console.log(foo.caller);
     };
@@ -3743,36 +3389,15 @@ Error    错误对象
 ◆单体内置对象 
   PS：ECMA-262 的定义为由ECMAScript实现提供的、不依赖宿主环境的对象,
     这些对象在ECMAScript程序执行之前就已经存在了.
-Global|Window 全局对象 
-  PS： JS继承于ECMAScript,浏览器中,JS的全局对象为window,
+Global&Window 全局对象 
+  PS：JS继承于ECMAScript,浏览器中,JS的全局对象为window,
     Web浏览器将window作为global对象的一部分加以实现;
     Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象,
     不属于任何其他对象的属性和方法,最终都是它的属性和方法;
     所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
-    诸如前面的 isNaN isFinite paresInt等等;
     Global对象没有办法直接访问,在浏览器中可使用window对象实现全局访问;
-  var global =function(){ return this; }  间接获取Global对象
-  其他内置属性/方法:
-    URI 编码方法
-      PS：URI编码可以对URI(链接)进行编码,以便发送给浏览器 
-        URI(Uniform Rescurce Identifiers),通用资源标识符
-        有效的URI中不能包含某些字符,如空格
-        采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
-        encodeURICompinent()编码比encodeURI()编码来的更加彻底
-        一般来说encodeURIConponent()使用频率要高一些.
-      encodeURI(str)/decodeURI(str)
-        不会对本身属于URI的特殊字符进行编码,如冒号、正斜杠、问号和#等;
-      encodeURICommponent(str)/decodeURIComponent(str)
-        会对任何非标准字符进行编码.
-    eval()方法
-      eval()方法主要担当一个字符串解析器的作用
-      只接受一个参数,而这个参数就是要执行的JavaScript代码的字符串.
-      e.g.
-        'var box =100';   //表达式为一行字符串,而非JS代码
-        console.log(box);       //程序报错,不存在box
-        eval('var box =100');
-        console.log(box);       //100
-  Global对象属性
+  var global = function(){ return this; }  间接获取Global对象
+  全局属性&方法 
     undefined  特殊值undefined
     NaN        特殊值NaN
     Infinity   特殊值Infinity
@@ -3791,7 +3416,142 @@ Global|Window 全局对象
     SyntaxError    构造函数SyntaxError
     TypeError      构造函数TypeError
     URIError       构造函数URIError
-  window 对象[详见BOM] 
+    ★转换方法 
+      PS：URI编码可以对URI链接进行编码,以便发送给浏览器 
+        URI(Uniform Rescurce Identifiers),通用资源标识符
+        有效的URI中不能包含某些字符,如空格
+        采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
+        encodeURICompinent()编码比encodeURI()编码来的更加彻底
+        一般来说encodeURIConponent()使用频率要高一些.
+    encodeURI(str) 编码URI
+      不会对本身属于URI的特殊字符进行编码,如冒号、正斜杠、问号和#等;
+    decodeURI(str) 解码URI
+    encodeURICommponent(str) 完全编码URI 
+      会对任何非标准字符进行编码 
+    decodeURIComponent(str)  完全解码URI 
+    btoa()  将ascii字符串或二进制数据转换成一base64编码过的字符串
+    atob()  解码base64编码 
+      PS：该方法不能直接作用于Unicode字符串.
+        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
+        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
+        DOM Level 0 规范
+      e.g.:
+        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
+        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
+      Unicode 字符串
+        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
+        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
+        function utf8_to_b64( str ) {
+          return window.btoa(unescape(encodeURIComponent( str )));
+        }
+        function b64_to_utf8( str ) {
+          return decodeURIComponent(escape(window.atob( str )));
+        }
+    
+        // Usage:
+        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
+        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
+        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
+        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
+    Boolean(val);  返回转换为的布尔值
+      var a = Boolean(0);         // 转换为false
+      var a = Boolean(-0);        // 转换为false
+      var a = Boolean(0.0);       // 转换为false
+      var a = Boolean(NaN);       // 转换为false
+      var a = Boolean(undefined); // 转换为false
+      var a = Boolean('');        // 转换为false
+      其余皆转换为true
+    Number(val);  返回转换为的数值 
+      Number(true);  /* 1 */   Number(false);     /* 0  */
+      Number(null);  /* 0 */   Number(undefined)  /* NaN */
+      Number(number)     // 对应的值
+      Number("")         // 0
+      其他规则:
+        只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
+          Number('070'); //70
+          注:若是070(无引号包含)则会转换为8进制数.
+          Number(070);   //56
+        只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
+        若不是以上三种字符串类型,则返回NaN
+          console.log(Number('123abc123')); // NaN
+        若为对象,调用 vaueOf()/toString()方法
+          先调用对象的vaueOf()方法,然后依照前面的规则转换返回的值,
+          若转换的结果是NaN,则改用toString()方法,
+          然后再依次按照前面的规则转换返回的字符串值.
+    parseInt(str [,radix]); 把字符串转换成整数值
+      PS：由于Number()转换字符串时比较复杂且不够合理,更常用的是parseInt()
+        忽略字符串前面的空格,直至找到第一个非空格字符
+        从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略(.也被忽略)
+        若第一个字符不是数字字符或负号,则返回NaN(空字符返回NaN)
+        可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
+        es5不再具备解析八进制,需指定基数
+      str   被转换的字符串(支持科学计数法形式的转换)
+      radix 可选,用于解决各种进制的转换
+        当radix为0时,或没有设置该参数时且符合十进制格式时,默认为十进制
+        2    二进制
+        8    二进制
+        10   二进制
+        16  十六进制
+        e.g.
+        parseInt('oxA');     //10,十六进制
+        parseInt('070');     //70,十进制
+        parseInt('0xALabc'); //10,labc被自动过滤掉了
+        parseInt('0xAF');    //175,十六进制
+        parseInt('AF',16);   //175,第二参数指定16进制,可以去掉0x前导
+        parseInt('AF');      //NaN
+      e.g.
+        console.log(parsetint('abc123')) //NaN,第一个不是数字会返回NaN
+        console.log(parsetint('1a2b'))   //1,从第一个数值开始取直到非数字结束
+        console.log(parseInt('3.14'));   //3,小数点不是数值.
+        console.log(parsetint(''));      //NaN,空返回NaN
+
+        Number(""); //为0;
+        parseInt(""); //为NaN
+      ECMAScript 3 和ECMAScript 5 的分歧
+        parseInt("070");  // ECMAScript 3 认为是 56(八进制)
+        parseInt("070");  // ECMAScript 5 认为是 70(十进制)
+    parseFloat(str);     把字符串转换成浮点数值
+      和 parseInt() 类似,区别是数字中可以包含一个点.
+      只能解析为10进制数
+      若字符串包含的是一个可解析为整数的数(没有小数点,或小数点后都是零),则返回整数
+      十六进制始终转成零
+      e.g.
+      parseFloat('123abc');  //123,去掉不识别的部分
+      parseFloat('0xA');     //0,不识别十六进制
+      parseFloat('12.3.4');  //12.3,只认一个小数点
+      parseFloat('01.20');   //1.2,去掉前、后导0
+      parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
+    String(val);    返回转换后的字符串 
+      若值存在 .toString() 方法,则调用该方法并返回相应的结果 
+      否则[即值为null或undefined],则返回"null"或'undefined'
+      String(num)       "数值"
+      String(str)       "字符串"
+      String(true)      "true"
+      String(false)     "false"
+      String(undefined) "undefined"
+      String(null)      "null"
+      e.g.  String(1); //"1"
+    ★判断方法
+    var bol = isFinite(num) 检测数值是否在可用范围内 
+      isFinite(10); // true
+    var bol = isNaN(val)    检查值否能转换为NaN 
+      先后调用valueOf() toString() 直到将值转换为数值为止,进行判断
+      console.log(isNaN(1));      //false
+      console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
+      console.log(isNaN(true));   //false,true可以转换为1
+      console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
+      console.log(isNaN(NaN));    //true
+      Remarks:
+        当值为对象时,首先调用对象的 valueOf()方法,然后确定该方法返回的值是否可以转换为数值,若不能,则基于这个返回值再调用toString()方法,再测试返回值.
+    ★其他方法 
+    eval(str) 字符串解析器 
+      str  要执行解析的JS代码的字符串 
+      e.g.
+        var str = 'var num = 100'; // 表达式为一行字符串,而非JS代码
+        // console.log(num);  // 报错,不存在
+        var val = eval(str);
+        console.log(num,val); // 100 undefined 
+  window 对象的DOM和BOM属性&方法[详见 DOM&BOM] 
 Math   数学对象 
   PS：为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
   ◆数学值
@@ -3836,7 +3596,7 @@ Math   数学对象
     Math.asin(num)        返回num的反正弦值
     Math.atan(num)        返回num的反正切值
     Math.atan2(num1,num2) 返回num1/num2的反正切值
-JSON,JavaScript_Object_Notation,JS对象表示法 
+JSON,'JavaScript_Object_Notation'JS对象表示法 
   PS： 一种基于文本、独立于语言的轻量级数据交换格式,
     利用 JS 中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.
@@ -4386,6 +4146,313 @@ Scope,作用域
       // Hi! I'm Hammad and I like Cosmology.
       // The value of this is [object Window].
       .bind() 就像.call()函数一样,它允许你传递其余的参数,用逗号分隔;
+'this'执行函数时的上下文对象 
+  PS：函数内部另一个特殊对象.
+    在JS中函数的this关键字的行为与其他语言相比有很多不同.
+    this引用的是函数据以执行操作的对象.
+    是JavaScript的一个关键字,表示一个对象.
+    随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象.
+    this指针是面向对象程序设计中的一项重要概念,它表示当前运行的对象.
+    this在函数运行时确定.
+    在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
+    在绝大多数情况下,函数的调用方式决定了this的值.
+    this不能在执行期间被赋值,在每次函数被调用时this的值也可能会不同.
+    ES5引入了bind方法来设置函数的this值,而不用考虑函数如何被调用的.
+  在全局运行上下文中[在任何函数体外部],指向全局对象'window' 
+    console.log(this === window); // true 
+    var aoo = 1; 
+    console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性
+    this.boo = 2;
+    console.log(boo); // 2 
+  函数中:this的值取决于函数是如何调用的 
+    普通函数调用:this始终指向'window'[严格模式下指向 undefined]
+      var aoo = 1;
+      function foo(){
+        var aoo = 2;
+        console.log(this);   //window
+        console.log(this.aoo); //1
+        this.aoo =3;
+        console.log(this.aoo); //3
+      }
+      foo();
+      相当于
+      window.foo()
+
+      var aoo = 1;
+      function foo(){
+        console.log(this.aoo);
+        var aoo =2
+        function goo(){
+          console.log(this.aoo);
+        }
+        goo();
+      }
+      var obj = {aoo: 3, hoo: foo};
+      obj.hoo(); //3,1
+
+      var aoo =1;
+      var obj ={
+        aoo:2,
+        foo:function(){
+          return function(){return this.aoo;}
+        }
+      }
+      console.log(obj.foo()());  // 1
+    作为构造函数:this表示一空对象,其原型为 Foo.prototype 对象 
+      var aoo = 1;
+      function Foo(){ 
+        this.aoo = 2;
+      }
+      function Goo(){ 
+        this.aoo = 3;
+        return {aoo:4}; 
+      };
+      var obj1 = new Foo();
+      var obj2 = new Goo();
+      console.log(obj1.aoo,obj2.aoo); // 2 4 
+    使用对象方法调用:this指向调用方法的对象 
+      var obj = {aoo:100};
+      function foo(){ 
+        return this.aoo; 
+      };
+      obj.goo = foo;
+      console.log(obj.goo()); // 100
+  对象内 
+    var aoo = 1;
+    function foo(){ 
+      console.log(this.aoo);  
+    }
+    var obj = { aoo: 2,  foo : foo }
+    obj.foo(); // 2 ,obj调用的this指向obj
+    var goo = obj.foo;
+    goo();     // 1 
+    相当于 window.goo(); this指向window
+
+    var aoo = 1;
+    var obj = {
+      aoo : 2,
+      foo : function(){
+        return function(){ 
+          return this.aoo; 
+        }
+      },
+    }
+    obj.foo()();  // 1
+    // 相当于
+    (obj.foo())(); // 2
+  DOM中 
+    var el = document.querySelector("#el");
+    el.addEventListener("click",function(){
+      console.log(this);
+    })
+    //表示被点击的那个元素对象
+  e.g. :
+    var aoo = 1;
+    var obj = { 
+      aoo : 2, 
+      foo : function(){
+        return this.aoo;
+      } 
+    }
+    var val1 = obj.foo();   // 2
+    var val2 = (obj.foo)();  // 2
+    var val3 = (obj.foo = obj.foo)();  // 1
+    var goo = obj.foo;
+    var val4 = goo();  // 1
+    console.log(val1,val2,val3,val4); // 2 2 1 1 
+  foo.call(thisArg[,arg1,arg2,...]) 改变this指向
+    thisArg 在foo函数运行时指定的'this'值,为 null 或 undefined 时,不改变指向 
+      原始值[数字,字符串,布尔值]的 this 会指向该原始值的自动包装对象
+    arg     指定的参数列表
+    e.g.：
+      var foo = function(){
+        console.log(this);
+      }
+      var val1 = foo.call(1) 
+      var val2 = foo.call(true) 
+      var val3 = foo.call(null) 
+      var val4 = foo.call(undefined) 
+      console.log(val1); // Number {[[PrimitiveValue]]: 1}
+      console.log(val2); // Boolean {[[PrimitiveValue]]: true}
+      console.log(val3); // window 
+      console.log(val4); // window 
+      
+      function add(arg1,arg2){ 
+        return arg1 + this;
+      }
+      var aoo = add.call(7,2,4);
+      console.log(aoo); // 9 
+      
+      console.log({}.toString()); // [object Object]
+      function foo(arg){ 
+        console.log(Object.prototype.toString.call(arg,1,2)); 
+      };
+      console.log(foo(7)); // [object Number]
+      等价于
+      function foo(){ 
+        console.log(Object.prototype.toString.call(this)); 
+      };
+      foo.call(7); // [object Number]
+    实现继承的效果 
+      function Pet(words){
+        this.words = words;
+        this.speak = function (){
+          console.log(this.words);
+        };
+      };
+      function Dog(words){
+        Pet.call(this,words);
+      };
+      var dog1 = new Dog('wang!');
+      dog1.speak(); // wang!
+      console.log(dog1); // Dog {words: "wang!", speak: function}
+  foo.apply(thisArg[,argArr])       改变this指向
+    PS：使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
+      都是函数对象的方法,区别在于接收参数的形式不同.
+      改变this的好处:对象不需要与方法发生任何耦合关系
+    thisArg 在 foo 函数运行时指定的 this 值 
+      非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
+      原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
+    argArr  函数传入的参数,类型为数组或类数组对象
+      其中的数组元素将作为单独的参数传给 foo 函数.
+      若该参数的值为null 或 undefined,则表示不需要传入任何参数.
+      从ECMAScript 5 开始可以使用类数组对象「可能存在兼容性问题」
+    e.g. :
+      function Pet(words){
+        this.words =words;
+        this.speak =function(){console.log(this.words);}
+      }
+      function Dog(words){ Pet.call(this,words); }
+      // 或者 Pet.apply(this,arguments);
+      var dog =new Dog("wang");
+      dog.speak(); // wang
+
+      var box={
+        color:"蓝色",
+        sayColor:function(){ console.log(this.color); }
+      }
+      box.sayColor();  //蓝色,box调用函数 this就表示box
+
+      var aoo = 1;
+      var obj = {aoo: 2};
+      function foo(a){console.log(this[a]);}
+      foo.call(null,"aoo"); // 1
+      foo.call(obj,"aoo");  // 2
+    apply和call继承 
+      将函数指向对象后,对象将获取到函数的属性
+      e.g.
+        function foo(){ this.name ="abc" }
+        var obj ={};
+        console.log(obj.name); //undefined
+        foo.call(obj);
+        console.log(obj.name); //abc
+
+        仿造new
+          function Person(name,age){
+            this.name =name;
+            this.age =age;
+          }
+          var p1 =new Person("aoo",19); //使用new 创建
+          function New(func){
+            return function(){
+              var obj ={"__proto__":func.prototype};
+              func.apply(obj,arguments); //使对象获取到传入函数的属性
+              return obj;
+            }
+          }
+          var p2 =New(Person)("boo",18); //使用仿造的new
+          console.log(p1); //Person {name: "aoo", age: 19}
+          console.log(p2); //Person {name: "boo", age: 18}
+  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态「ES5」
+    PS：bind()方法会创建一个新函数 
+      当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
+      之后的一序列参数将会在传递的实参前传入作为它的参数;
+      返回值为由指定的this值和初始化参数改造后的原函数拷贝;
+    thisArg 绑定函数被调用时,代替原函数运行时的'this'指向 
+      当使用new 操作符调用绑定函数时,该参数无效.
+    arg     绑定函数被调用时,这些参数将将于实参之前传递函数
+    使用bind固定参数值 
+      function foo(arg1,arg2,arg3){ 
+        return arg1 + arg2 + arg3; 
+      };
+      // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
+      var foo1 = foo.bind(undefined,100);
+      foo1(1,2); // 103 ,第二、三个参数分别为1、2
+      var f2 = foo1.bind(undefined,10);
+      foo2(1); // 111
+    使用new时,会忽略绑定 
+      function Foo(){ 
+        this.b = 1; 
+        return this.a; 
+      };
+      var Goo = Foo.bind({a:2});
+      Goo(); // 2
+      new Goo(); // {b:1} 
+      var Hoo = Foo.bind({a:{aoo:3}})
+      Hoo();
+      new Hoo(); // {b:1} 
+    e.g. :
+      var x = 9;
+      var obj = {
+        x: 81,
+        getX: function() { return this.x; }
+      };
+      obj.getX(); // 返回 81
+      var foo = obj.getX;
+      foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
+      var goo = foo.bind(obj);
+      goo(); // 返回 81
+
+      var obj = {
+        foo : 1,
+        bar : function(){
+          return this.foo;
+        }
+      }
+      obj.bar();  //1
+      var a =obj.bar;
+      a();        //undefined
+      var b =obj.bar.bind(obj)
+      obj.bar.bind(obj)() // 1
+      b()         //1
+      obj.foo =12;
+      b()         //12
+
+      var person = {
+        name :'a',
+        job : '1',
+        sayHello : function(){ 
+          return this.name + this.job; 
+        }
+      }
+      person.sayHello()     //"a1"
+      var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
+      anotherGuySayHello()  //"b2"
+  声明局部变量来保存this引用 
+    当需要在嵌套函数中读取调用被嵌套函数的对象的属性时
+    var aoo = 1;
+    function foo(){
+      console.log(this.aoo);
+      var that = this;
+      var aoo = 2
+      function goo(){
+        console.log(that.aoo);
+      }
+      goo();
+    }
+    var obj = {aoo: 3, hoo: foo};
+    obj.hoo(); //3,3
+
+    通过把外部作用域中的this对象保存在一个闭包能访问到的变量中,实现闭包访问该对象
+    var aoo =1;
+    var obj ={
+      aoo:2,
+      foo:function(){
+        var that =this;
+        return function(){return that.aoo;}
+      }
+    }
+    console.log(obj.foo()());  // 2
 JavaScript 核心概念之作用域和闭包 
   function_scope 函数对象作用域
     JavaScript 中每个函数都表示为一个函数对象（函数实例）,

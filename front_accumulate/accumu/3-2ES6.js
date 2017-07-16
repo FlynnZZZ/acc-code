@@ -1091,6 +1091,14 @@ Function 函数的扩展
         let age = 25;//错误,再次声明age
       }
       person();
+    默认参数:在定义函数时,可先将将参数赋值 「ES6+」
+      function foo(b,c=3){ 
+        console.log(b,c); 
+      }
+      foo();           //undefined 3
+      foo(1);          //1 3,当未传参时默认参数
+      foo(1,4);        //1 4,当传入参数时则使用传入的值
+      foo(1,c=5);      //1 5
   ...aoo  restArgument,获取函数剩下部分的参数,类型为数组
     在实参中,除了指定参数以外,剩余的参数都会被...values获取到
       function sum(result,...values){ //求和函数,得到的结果赋值到result 

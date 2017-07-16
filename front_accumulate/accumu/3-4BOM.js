@@ -318,33 +318,8 @@ window 对象
     // 窗口操作
     blur()        将焦点从窗口移除
     focus()       将焦点移至窗口
-    方法
-    window.btoa()  将ascii字符串或二进制数据转换成一base64编码过的字符串
-    window.atob()  解码 
-      PS：该方法不能直接作用于Unicode字符串.
-        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
-        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
-        DOM Level 0 规范
-      e.g.:
-        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
-        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
-      Unicode 字符串
-        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
-        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
-        function utf8_to_b64( str ) {
-          return window.btoa(unescape(encodeURIComponent( str )));
-        }
-        function b64_to_utf8( str ) {
-          return decodeURIComponent(escape(window.atob( str )));
-        }
-    
-        // Usage:
-        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
-        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
-        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
-        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
   ◆其他接口 
-  window.Notification 浏览器通知接口「DiBs HTML5」 
+  window.Notification   浏览器通知接口「DiBs HTML5」 
     PS：用于在用户的桌面,而非网页上显示通知信息, 
       桌面电脑和手机都适用,比如通知用户收到了一封Email。
       具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。

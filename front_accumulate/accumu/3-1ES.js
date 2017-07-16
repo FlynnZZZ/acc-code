@@ -49,6 +49,7 @@ ECMAScript JS核心,语法部分
     box.MAX_VALUE;    //undefined , 属性
     Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
   实例：类型的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
+  ES5 IE9及以上支持 
 语法规则 
   PS：区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
     一等函数「first-class_function」来自于 Scheme;
@@ -441,7 +442,7 @@ ECMAScript JS核心,语法部分
         String(null)      "null"
         e.g.  String(1); //"1"
     ◆字符获取 
-    str.charAt(indx); 返回指定下标对应的字符
+    str.charAt(idx); 返回指定下标对应的字符
       e.g. :
       "abcdefg".charAt(1); // "b"
     str.charCodeAt(index); 返回以Unicode编码形式指定索引位置的字符
@@ -449,25 +450,25 @@ ECMAScript JS核心,语法部分
       'Ab'.charCodeAt(1)   //98
       'abc'.charCodeAt(0)  //97
     ◆字符串获取 
-    str.substr(begin[,num]); 返回指定位置开始的num个字符串
+    str.substr(bgn[,num]); 返回指定位置开始的num个字符串
       当只有一个参数且负数时,同 slice
       当n为负数或0时,返回空字符串.
-    str.substring(indx1,indx2);  返回截取的新字符串
-      indx1 数值,必须,若为负数返回全部字符串
-      indx2 数值,可选,若省略表示到最后,若为负,则取0
+    str.substring(idx1,idx2);  返回截取的新字符串
+      idx1 数值,必须,若为负数返回全部字符串
+      idx2 数值,可选,若省略表示到最后,若为负,则取0
         以两个参数中较小一个作为起始位置,较大的参数作为结束位置
       e.g.
         str.substring(1,4) 等价于 str.substring(4,1)
     ◆字符串对比 
     str1.includes(str2);    str1中是否包含str2的布尔值  
-    str1.indexOf(str2,begin); 从指定位置向后首个指定字符串的下标
-      当begin不存在时,直接从头开始
+    str1.indexOf(str2,bgn); 从指定位置向后首个指定字符串的下标
+      当bgn不存在时,直接从头开始
       RetValue:检测字符不存在则返回-1
       e.g.
       'abcdef'.indexOf('bc')   // 1
       'abcdef'.indexOf('ac')   // -1
-    str1.lastIndexOf(str2,begin);从指定位置向前的首个指定字符串的下标
-      当begin不存在时,表示从末尾开始搜索.
+    str1.lastIndexOf(str2,bgn);从指定位置向前的首个指定字符串的下标
+      当bgn不存在时,表示从末尾开始搜索.
       RetValue:搜索字符不存在时,返回-1
     str1.search(str2);   返回字符串的位置
     str1.match(str2);    返回查找到的字符str2或null
@@ -730,14 +731,20 @@ ECMAScript JS核心,语法部分
         var obj3 = {coo:true};
         var res = Object.assign(obj1,obj2,obj3);
         console.log(res); // {aoo: "abc", boo: 180, coo: true} 
+    var bol = Object.is(val1,val2); 值是否相同[可能存在兼容问题] 
+      与 == 或 === 的逻辑不同 
+      e.g.:
+        Object.is(+0,-0);    //false
+        Object.is(0,0);      //true
+        Object.is(NaN, NaN); //true
   对象属性的特性 
+    PS：'writable'、'enumerable'、'configurable'只能通过函数来设定 
     ◆数据属性 描述属性行为 
-      PS：后3个只能通过函数来设定 
     value        属性的值,默认为 undefined 
-    writable     默认为true,表示能否修改属性的值 
-    enumerable   默认为true,能否枚举[即是否可通过for in 枚举] 
-    configurable 默认为true,能否通过delete删除,能否配置[修改其属性等] 
-      不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了
+    writable     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
+    enumerable   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
+    configurable 默认为true,能否[删除、通过'defineProperty'修改属性、修改属性特性等]配置 
+      不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
     ◆访问器属性 
     get  读属性值时的操作,默认返回属性值 
     set  写属性值时的操作,默认返回属性值 
@@ -789,9 +796,9 @@ ECMAScript JS核心,语法部分
         }
         或
         {
-          get : function(){
+          get : function(){ // 默认不可读?
           },
-          set : function(){ // 
+          set : function(){ // 默认不可写
           },
           enumerable : bool, // 默认为 false 
           configurable : bool // 默认为 false 
@@ -876,17 +883,17 @@ ECMAScript JS核心,语法部分
         {
           key1 : {
             value: val,
-            writable: bool,
-            enumerable: bool,
-            configurable: bool
+            writable: bool, // 默认为 false
+            enumerable: bool, // 默认为 false
+            configurable: bool // 默认为 false
           },
           key2 : {
-            get : function() {
+            get : function() { // 默认不可读?
             },
-            set : function(val) {
+            set : function(val) { // 默认不可写
             },
-            enumerable : bool,
-            configurable : bool
+            enumerable : bool, // 默认为 false
+            configurable : bool // 默认为 false
           }
           ...
         }
@@ -935,22 +942,45 @@ ECMAScript JS核心,语法部分
       console.log('arr1',arr1); // arr1 (2) ["aoo", "boo"]
       var arr2 = Object.getOwnPropertyNames(obj);
       console.log('arr2',arr2); // arr2 (3) ["aoo", "boo", "coo"]
-    var bool = Object.isExtensible(obj); 表示对象能否扩展的布尔值
-    var bool = Object.isSealed(obj);     表示对象对象是否被密封的布尔值
-    var bool = Object.isFrozen(obj);     表示对象是否被冻结的布尔值
-    ◆操作对象
-    Object.preventExtensions(obj); 设置对象不可扩展[ES5新增]
-      不能给对象添加属性,但可以修改和删除已有属性
-      只是对对象操作,对其原型链无影响
-    Object.seal(obj);        密封对象[ES5新增]
-      不可扩展,不可删除,但可修改其属性值
-      只是对对象操作,对其原型链无影响
-    Object.freeze(obj);      冻结对象[ES5新增]
-      最严格的防篡改级别
-      既不可扩展,又是密封的,且属性值也不可修改
-      只是对对象操作,对其原型链无影响
+  对象的类型class标签 
+    PS：无直接访问对象类型的方式,可间接通过 Object.prototype.toString 方式来获取
+    var type = Object.prototype.toString;
+    var getType = function(val){
+      return type.call(val).slice(8,-1);
+    }
+    console.log(type.call(null)); // [object Null] 
+    console.log(getType(null)); // Null
+    console.log(getType(undefined)); // Undefined
+    console.log(getType(true)); // Boolean
+    console.log(getType('a')); // String
+    console.log(getType(1)); // Number
+    console.log(getType(new Number())); // Number
+    console.log(typeof new Number()); // object
+    console.log(getType({})); // object
+    console.log(getType([])); // Array
+    console.log(getType(new Date())); // Date
+    常用的类型检测方法
+      Object.prototype.toString.call(val); 获取值类型 
+      typeof val;               [详参 一元运算符]
+      obj instanceof Object;    [详参 关系运算符]
+      obj.constructor 
+      duck_type 鸭子类型,根据其表现来判断其身份 
+  对象的可扩展extensible标签 
+    var bool = Object.isExtensible(obj); 对象能否扩展 
+      PS：即对象的属性/方法是否可增加
+    var bool = Object.isSealed(obj);     对象是否被密封 
+    var bool = Object.isFrozen(obj);     对象是否被冻结 
+    Object.preventExtensions(obj); 设置对象不可扩展[ES5+]
+      PS：不能给对象新增属性,但可以修改和删除已有属性
+        只是对对象操作,对其原型链无影响
+    Object.seal(obj);        密封对象[ES5+]
+      PS：在不可扩展的基础上将所有属性变成不可配置
+        只是对对象操作,对其原型链无影响
+    Object.freeze(obj);      冻结对象[ES5+]
+      PS：在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
+        只是对对象操作,对其原型链无影响
   原型&继承 
-    对象的构造原型 :构造函数的原型对象 
+    对象的构造原型 : 构造函数的原型对象 
       PS：构造函数的属性prototype是一对象,只有[构造]函数[对象]才有prototype[原型]属性
       原型的作用原理&执行流程
         创建的每一个函数都有一个prototype属性对象,
@@ -1019,7 +1049,7 @@ ECMAScript JS核心,语法部分
         原对象的 __proto__ 指向无变化,后续重设相当于又增加了一条链.
         var obj1 =new Foo();
         console.log(obj1.azz); //11,改变后续生成对象的 __proto__ 指向
-      修改实例来自于原型的引用类型,会修改原型
+      修改实例来自于原型的引用类型,会修改原型 
         e.g. :
         function Person(){ };
         Person.prototype ={ "constructor":Person, "friends":["a","b"] }
@@ -1033,7 +1063,7 @@ ECMAScript JS核心,语法部分
         console.log(p2.friends);  // ["a", "b", "c"]
         决解方法:只将共享的且不再改变的属性和方法放入原型中.
           设置原型中的属性为只读(SelfPoint)
-      Object.getPrototypeOf(obj); 获取对象的原型对象[ES5新增]
+      Object.getPrototypeOf(obj); 获取对象的原型对象[ES5+] 
         等价于 obj.__proto__
       修改JS内置数据类型的prototype 
         e.g.
@@ -1042,7 +1072,7 @@ ECMAScript JS核心,语法部分
         通过赋值undefined覆盖,来删除定义的prototype
       delete Foo.prototype.key  删除原型属性
       Foo.prototype.key ='XX'   覆盖原型属性
-    原型链继承
+    原型链继承 
       PS：JS中的面向对象继承机制基于原型,将原型链作为实现继承的主要方法
         基本思想:利用原型让一个引用类型继承另一个引用类型的属性和方法
         通过实现原型链,本质上扩展了原型搜索机制
@@ -1151,6 +1181,100 @@ ECMAScript JS核心,语法部分
       定义多个函数,[函数名相同]区别是传入的参数不同,
       调用时,会根据传入参数的不同自动选择对应的函数执行.
       JS中:会产生覆盖,只有最后一个定义的函数有用.
+  对象转换为原始类型 
+    若输入的值已经是个原始值,则直接返回它.
+    默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number. [?]
+      e.g.:
+        var date =new Date();
+        console.log(typeof date); // Object
+        var aoo = date + '';
+        var boo = date + 1; // Date类型被优先转换为 String
+        var coo =date.toString();
+        var doo =date.valueOf()
+        console.log( aoo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)
+        console.log(typeof aoo);  // String
+        console.log( boo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)1
+        console.log(typeof boo);  // String
+        console.log( coo); // Mon Jan 09 2017 11:36:49 GMT+0800 (中国标准时间)
+        console.log( doo); // 1483932704579
+
+        var aoo = [1,2,3];
+        var boo = aoo + 0; // 默认转换为 String
+        var coo = aoo + '0';
+        console.log(boo); // 1,2,30
+        console.log(typeof boo); // string
+        console.log(coo); // 1,2,30
+        console.log(typeof coo); // string
+    转换为 Number:先调用 valueOf 再调用 toString 
+      调用该对象的valueOf()方法.若valueOf()返回原始值,则返回这个原始值.
+      否则,调用该对象的toString()方法.若toString()返回原始值,则返回这个原始值.
+      否则,抛出TypeError异常.
+    转换为 String:先调用 toString 再调用 valueOf 
+    e.g.:
+      var obj = {
+        valueOf: function() { // 未返回原始值 
+          console.log(1);return {};
+        },
+        toString: function() { // 未返回原始值 
+          console.log(2);return {};
+        } 
+      }
+      Number(obj); // 1 2 报错
+      分析:调用Number方法时,先调用对象的valueOf方法,再调用其toString方法
+        一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
+    val.valueOf()       对象转换为基本类型的默认方法 
+      PS：优先级高于'toString',当'valueOf'转换后仍为非基本类型再调用'toString'[?] 
+      var obj1 = {a:1}
+      obj1.valueOf = function(){
+        return '自定义的转换值'
+      }
+      console.log(+obj1); // NaN, 转换成的数值
+      console.log(''+obj1); // 自定义的转换值, 转换成的字符串
+    obj.toString([num]) 对象转换为基本类型的默认方法 
+      PS：'null'和'undefined'没有该方法 
+      num 可选,默认为10,表示进制,一般为 2、8、16 等 
+      ◆默认返回值
+      foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
+        var foo = function(){
+          console.log(1);
+        }
+        foo.toString(); //"function(){ console.log(1); }"
+      arr.toString(); 将数组元素转换连接为字符串返回
+        和 arr.join('') 效果一样.
+      obj.toString(); 返回"[object Object]"
+        var obj ={};
+        obj.toString(); // "[object Object]"
+      e.g.
+        var num = 10;
+        num.toString();    //返回值为'10'
+        num.toString(2);   //返回值为'1010',二进制输出
+
+        "abc".toString();   //"abc"
+        // 123.toString(); // 报错 ,默认将点.作为了小数点
+        123.1.toString(); // "123.1"
+
+        var val1;
+        val1.toString(); //报错,因为val1未初始化为 undefined
+        var val2 = undefined;
+        val2.toString();  //报错
+      自定义转换方法'toString' 
+        var obj1 = {a:1}
+        console.log(obj1.toString()); // [object Object] 
+        obj1.toString = function(){
+          return '自定义的返回值'
+        }
+        console.log(obj1.toString()); // 自定义的返回值 
+        console.log(''+obj1);         // 自定义的返回值 
+        console.log(+obj1);           // NaN  
+        var obj2 = {b:2}
+        obj2.toString = function(){
+          return 100
+        }
+        console.log(+obj2); // 100
+    val.toLocaleString(); 转换为本地字符串
+      返回对象的字符串、数值或布尔值表示 
+      通常与toString()方法的返回值相同
+      foo.valueOf(); 返回函数对象本身
   Exp:
     遍历,通过val获取对应的key 
       var getKey = function(val,bool = true){
@@ -1176,125 +1300,6 @@ ECMAScript JS核心,语法部分
       }
       getKey('a');       // (2) ["aoo", "boo"]
       getKey('a',false); // "aoo"
-数据类型相关的方法、功能 
-  ◆类型检测
-  typeof val;               [详参 一元运算符]
-  obj instanceof Object;    [详参 关系运算符]
-  Object.prototype.toString.call(val); 获取值类型 
-    e.g. 判断值是否为数组
-    var a ="1";
-    var b =1;
-    var c =[1];
-    var d ={age:1}
-    Object.prototype.toString(a);       // "[object Object]"
-    Object.prototype.toString.call(a);  // "[object String]"
-    Object.prototype.toString.call(b);  // "[object Number]"
-    Object.prototype.toString.call(c);  // "[object Array]"
-    Object.prototype.toString.call(d);  // "[object Object]"
-    Object.prototype.toString.call(null);  // "[object Null]",IE8及以下为"[object Object]"
-  obj.constructor 
-  duck_type 鸭子类型,根据其表现来判断其身份 
-  ◆数据通用属性/方法 
-    Date实例的toLocaleString toString valueOf 方法,返回值有不同 
-      var box = new Date(2007,10,15,17,22,45,15);
-      console.log(box);
-      //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
-      console.log(box.toString());
-      //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
-      console.log(box.toLocaleString()); //2007/11/15 下午5:22:45
-      console.log(box.valueOf());        //1195118565015
-      toLocaleString 和 toString 方法在不同浏览器显示的效果可能不一样,一般调试使用;
-      e.g.
-      var box = ["a",18,"js"];  //字面量数组
-      box.valueOf();  // ["a", 18, "js"]
-      box.toString(); // "a,18,js"
-      box.toLocaleString();//"a,18,js"
-      上面显示一致,当出现如时间的属性时,则返回字符串格式参照本地时间格式.
-    Object 类型是所有它的实例的基础 
-      PS：Object类型所具有的任何属性和方法同样存在于更具体的对象中
-        ECMA-262 中对象的行为不一定适用于JavaScript中的其他对象,
-        比如BOM和DOM中的对象都属于宿主对象,由宿主实现提供和定义的,
-        ECMA-262 不负责定义宿主对象,因此宿主对象可能不会继承Object.
-    val.constructor;     返回创建该对象的构造函数
-    val.hasownProperty(str);   见上文
-    val.isPrototypeOf(obj);    见上文
-    val.propertyIsEnumerable(str);  见上文
-    val.toString([num]);   转换为字符串
-      PS：数值 布尔值 对象和字符串都有 toString() 方法.(null和undefined没有)
-      Arguments: num 可选,为表示进制的数值,一般为2、8、16 等
-        未填写,num默认为10进制
-      foo.toString(); 返回定义该函数对象的字符串(函数的源代码)
-      arr.toString(); 将数组元素转换连接为字符串返回
-        和 arr.join('') 效果一样.
-      obj.toString();
-        var obj ={};
-        obj.toString; // function toString() { [native code] }
-        //原型上的toString属性
-        obj.toString(); // "[object Object]"
-      e.g.
-        var box=10;
-        box.toString();    //返回值为'10'
-        box.toString(2);   //返回值为'1010',二进制输出
-
-        "abc".toString();   //"abc"
-        123.toString(); // 报错 ,默认将点.作为了小数点
-        123.1.toString(); // "123.1"
-
-        var desk;
-        desk.toString(); //报错
-        var box =undefined;
-        box.toString();  //报错
-
-        var foo =function(){console.log(1);}
-        foo.toString(); //"function(){ console.log(1); }"
-    val.toLocaleString(); 转换为本地字符串
-    val.valueOf();  返回对象的字符串、数值或布尔值表示
-      通常与toString()方法的返回值相同
-      foo.valueOf(); 返回函数对象本身
-    Object.is(val1,val2); 返回是否相同的布尔值 [可能存在兼容问题]
-      与 == 或 === 的逻辑不同.
-      e.g.:
-        Object.is(+0,-0);    //false
-        Object.is(0,0);      //true
-        Object.is(NaN, NaN); //true
-    转换为原始类型 
-      若输入的值已经是个原始值,则直接返回它.
-      默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number. [?]
-        e.g.:
-          var date =new Date();
-          console.log(typeof date); // Object
-          var aoo = date + '';
-          var boo = date + 1; // Date类型被优先转换为 String
-          var coo =date.toString();
-          var doo =date.valueOf()
-          console.log( aoo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)
-          console.log(typeof aoo);  // String
-          console.log( boo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)1
-          console.log(typeof boo);  // String
-          console.log( coo); // Mon Jan 09 2017 11:36:49 GMT+0800 (中国标准时间)
-          console.log( doo); // 1483932704579
-
-          var aoo = [1,2,3];
-          var boo = aoo + 0; // 默认转换为 String
-          var coo = aoo + '0';
-          console.log(boo); // 1,2,30
-          console.log(typeof boo); // string
-          console.log(coo); // 1,2,30
-          console.log(typeof coo); // string
-      转换为 Number:先调用 valueOf 再调用 toString.
-        调用该对象的valueOf()方法.若valueOf()返回原始值,则返回这个原始值.
-        否则,调用该对象的toString()方法.若toString()返回原始值,则返回这个原始值.
-        否则,抛出TypeError异常.
-      转换为 String:先调用 toString 再调用 valueOf.
-      e.g.:
-        var obj = {
-          // 没有返回原始值
-          valueOf: function() {console.log(1);return {};},
-          // 没有返回原始值
-          toString: function() {console.log(2);return {};} }
-        Number(obj); // 1 2 报错
-        分析:调用Number方法时,先调用对象的valueOf方法,再调用其toString方法
-          一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
 Evaluation_Strategy,求值策略 
   PS：决定变量之间、函数调用时实参和形参之间值的传递方式 
   读写引用类型值的 
@@ -1414,7 +1419,7 @@ Evaluation_Strategy,求值策略
       -box;               //-1
       typeof box;         //String类型
       typeof -box;        //Number类型
-    typeof val; 返回操作数数据类型的字符串表示 
+    var str = typeof val; 获取值类型 
       PS：typeof是操作符而非函数,因此后面的括号可有可无.
       val   操作数,可以是变量,也可以是字面量 
       返回值为如下6种之一
@@ -1435,9 +1440,7 @@ Evaluation_Strategy,求值策略
         function foo(){}
         typeof foo;       // "function"
     var bol = delete val; 删除数组、对象等属性 
-      PS：当数组的元素被删除时,其被删除的元素的位置会被保留,值变成undefined
-        若删除成功返回 true,否则返回 false
-        若删除不存在的值也会返回true
+      PS： 若删除成功返回 true,否则返回 false, 若删除不存在的值也会返回true
         不能删除继承的属性,否则不会删除,返回false
       e.g.：
         var obj = {a:1,b:2,c:3}
@@ -1446,7 +1449,11 @@ Evaluation_Strategy,求值策略
         var arr = [1,2,3]
         var bol2 = delete arr[1]
         console.log(bol2,arr); // true [1, undefined × 1, 3]
-    new Foo();  初始化对象 
+      数组元素被删除时,其位置会被保留,值变成'undefined'且索引不存在了 
+        var arr = ['a','b','c']
+        delete arr[1]
+        console.log(arr,1 in arr); // ["a", undefined × 1, "c"]  false
+    var obj = new Foo();  初始化对象 
     void exp;   运行表达式,并始终返回 undefined
       PS：无论void后的表达式是什么,void操作符始终返回 undefined
       使用void的目的 
@@ -1892,37 +1899,32 @@ Evaluation_Strategy,求值策略
     其他语句 在 执行语句 后运行;
   while(条件){};  先判断再运行
   do{}while(条件); 先执行后判断,至少会执行一次 
-  for(var key in obj){} 无序遍历[适用于 str arr obj][会遍历到原型链上的属性] 
-    PS： ECMAScript对象的属性无顺序,因此for-in循环的顺序不可预测 
-      若原型链上的属性设置为可遍历,则也会将其遍历出来 
-    对象的遍历 
+  for(var key in obj){} 无序遍历[适用'str''arr''obj']  
+    PS：若原型链上的属性设置为可遍历,则也会将其遍历出来 
+    遍历字符串 
+      var str = 'abc';
+      var rst = '';
+      for(var key in str){
+        rst += key + '=' + str[key] + '&'
+      };
+      console.log(rst); // 0=a&1=b&2=c&
+    遍历数组 
+      var arr = ['a','b','c']
+      var rst = '';
+      for(var idx in arr){
+        rst += idx + '-' + arr[idx]
+      } 
+      console.log(rst); // 0-a1-b2-c
+    遍历对象 
       var obj ={ 
         aoo : "a", 
         boo : 11 
       }
+      var rst = '';
       for(var key in obj){ 
-        console.log(key,':',obj[key]) 
+        rst += key +':'+ obj[key]
       }
-      // aoo : a
-      // boo : 11
-    数组的遍历 
-      var arr = [1,2,3,4,5]
-      for(var indx in arr){
-        console.log(indx,'-',arr[indx]);
-      } 
-      // 0 - 1
-      // 1 - 2
-      // 2 - 3
-      // 3 - 4
-      // 4 - 5
-    字符串的遍历 
-      var str = 'abc';
-      for(var key in str){
-        console.log(key,'-',str[key]);
-      };
-      // 0 - a
-      // 1 - b
-      // 2 - c
+      console.log(rst); // aoo:aboo:11
   ◆控制结构
   break 和 continue  只能用于循环语句中,精确控制代码的执行 
     continue 「跳出当前循环」继续下一次循环
@@ -2088,16 +2090,52 @@ OOP,面向对象
 标准库--对象  
 ◆数据封装类对象  
 Object  一般对象[JS中所有对象的父对象?] 
-Boolean 布尔对象:处理布尔值的包装对象
-Number  数值对象:处理数值的包装对象
-String  字符对象:处理字符串的包装对象
+Boolean 布尔对象:处理布尔值的包装对象 
+Number  数值对象:处理数值的包装对象 
+String  字符对象:处理字符串的包装对象 
 Array   数组对象 
   PS：数组是JS内置的一种特殊类型的对象 
-     可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象
-     JS中的Array类型和其他语言中的数组区别很大,数组的元素可以保存任何类型
-     数组是一种特殊的对象,凡是对象有的性质,数组都有
+    可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象 
+    JS中的Array类型和其他语言中的数组区别很大,数组的元素可以保存任何类型 
+    数组的最大长度为'2^23-1'
+  'idx-val',数组结构:'索引-元素'组成的有序集合 
+    idx数组索引
+      下标可设置为[非自然数]数字和字符,但不将其计算在数组的长度中
+        var arr=[];
+        arr[0]=1;
+        arr[1]=3;
+        console.log(arr); // [1, 3]
+        arr["a"]=5;
+        arr[12.5]="abc";
+        console.log(arr); // [1, 3, a: 5, 12.5: "abc"]
+        arr["a"];   // 5 ,仍然存在且可以访问,但是不计算在数组的长度中
+        console.log(arr.length);    //2
+    val数组元素
+      数组元素也可以为表达式 
+        var x = 3;
+        var arr = [2*x,x+3,x];
+        console.log(arr); // [6, 6, 3]
+      省略数组中的某个值,则默认为undefined
+        var arr=[1,,3];
+        console.log(arr); // [1, undefined × 1, 3]
+    JS会自动忽略最后一个逗号,可能存在兼容问题
+      var arr = [1,2,];
+      console.log(arr.length,arr); // 2 [1, 2]
+    稀疏数组:并不含有从0开始的连续索引,一般length属性值比实际元素个数大 
+      var arr1 = [undefined]; // 有一个元素为undefined
+      var arr2 = new Array(1);// 稀疏数组,元素长度为1,但无元素
+      console.log(arr1,arr2); // [undefined]  []
+      console.log(0 in arr1); // true
+      console.log(0 in arr2); // false
+      var arr3 = []
+      console.log(0 in arr3); // false
+      arr3.length = 100  // 稀疏数组
+      arr3[99] = 'a'
+      console.log(98 in arr3,99 in arr3); // false true 
+      var arr4 = [,,,]  // 稀疏数组
+      console.log(0 in arr4); // false
   创建数组 
-    [] 字面量创建
+    [] 字面量创建 
        空数组:var arr=[];
        带有元素的数组:var arr=[1,2,3,3,2]
        var box = [,,]          //表示数组长度为2或3,可能有兼容性问题
@@ -2107,92 +2145,59 @@ Array   数组对象
        foo.name;            //"fan"
        foo.length;          //2
        console.log(foo)     //[1, 2, name: "fan"]
-    var arr = new Array(); 内置构造函数创建
-      PS：可省略 new 关键字(不推荐使用)
+    var arr = new Array(); 内置构造函数创建 
+      PS：可省略'new'关键字[不推荐使用]
       无参数 : 创建空数组 []
-      一个参数:作为数组的元素或指定数组的长度
+      单参数:作为数组的元素或指定数组的长度 
         var arr1=new Array("a");
         var arr2=new Array(6);   //表示该数组的长度为6
         console.log(arr1);   // ["a"]
         console.log(arr2);   // [undefined × 6]
-      两个参数及以上:将参数作为数组的元素
+      多参数:将参数作为数组的元素 
         var arr=new Array(1,3,true,"abc");
         arr;  // [1, 3, true, "abc"]
         可省略 new 关键字
-    可采用用类似对象的方式(键值对)来表示元素
-      下标设置为(非自然数)数字和字符,但不将其计算在数组的长度中
-      e.g. :
-      var arr=[];
-      arr[0]=1;
-      arr[1]=3;
-      console.log(arr); // [1, 3]
-      arr["a"]=5;
-      arr[12.5]="abc";
-      console.log(arr); // [1, 3, a: 5, 12.5: "abc"]
-      arr["a"];   // 5 ,仍然存在且可以访问,但是不计算在数组的长度中
-      console.log(arr.length);    //2
-    数组元素也可以为表达式
-      var x=3;
-      var arr=[2*x,x+3,x];
-      arr; // [6, 6, 3]
-    省略数组中的某个值,则默认为undefined
-      var arr=[1,,3];
-      arr[1]; // undefined
-    JS会自动忽略最后一个逗号,可能存在兼容问题
-      var arr=[1,2,];
-      arr.length; // 2
-    稀疏数组:并不含有从0开始的连续索引,一般length属性值比实际元素个数大.
-      e.g. :
-      var arr1 =[undefined]; // 有一个元素为undefined
-      var arr2 =new Array(1);// 元素长度为1,但无元素
-      console.log(arr1); // [undefined]
-      console.log(arr2); // []
-      console.log(0 in arr1); // true
-      console.log(0 in arr2); // false
-  属性/方法 
+  'Array.prototype'的属性&方法 
     ◆信息查询 
-    arr.length; 读写长度 
-      返回值类型为数值,表示arr元素的个数
-      e.g.： 设置数组长度
-        var bar = [1,2,3,4,5,6,7,8,9];
-        bar.length = 3;
-        console.log(bar); // [1,2,3]
-        bar.length = 4;
-        console.log(bar); // [1, 2, 3, undefined ]
+    var val = arr[num]   读写数组元素 
+      num  下标,从0开始
+    var num = arr.length 读写数组长度 
+      var arr = [1,2,3,4,5];
+      arr.length = 3;
+      console.log(arr); // [1,2,3]
+      arr.length = 4;
+      console.log(arr); // [1, 2, 3, undefined ]
       使用下标来修改数组长度
         var foo=[];
         foo[100]=3;
         foo.length;   //101
-    arr.includes(val [,index])  返回表示元素是否存在的布尔值
+    var bol = arr.includes(val [,index])  检测元素是否存在 
       val   需要查找的元素值;
       index 可选,默认为 0,从该索引处开始向后查找 
       e.g.
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    arr.indexOf(val[,begin])    查找数组中元素对应的下标 「ES5」
-      begin表示开始的下标位置,默认为0,
-        若为负,则-1 表示最后一个元素,依次类推.
-      返回值为下标值,若找不到则返回-1
-    arr.lastIndexOf(val)  返回从右到左查找到的元素的下标 「ES5」
-    ◆数组操作 
-    ★改变原数组
-    arr[num]   读写数组元素 
-      num  下标,从0开始
-    arr.reverse();  颠倒数组中元素的顺序并返回结果数组
+    var idx = arr.indexOf(val[,bgn])  查询元素索引「ES5」 
+      PS：返回值为下标值,若找不到则返回-1 
+      bgn  表示开始查询的索引位置,默认为0 
+        若为负,则为 bgn+arr.length 
+    var idx = arr.lastIndexOf(val)    查询元素的索引[从右向左]「ES5」 
+    ◆改变原数组
+    arr.reverse() 颠倒数组元素的顺序 
       e.g. :
         var arr = [1, 2, 3];
         var result = arr.reverse();
         console.log(arr,':',result); // [3, 2, 1] ":" [3, 2, 1]
-    arr.pop()    删除末尾的一个元素并将其返回 
+    arr.pop()    删除末尾的一个元素 
       无参数;若原数组为空,则无操作,并返回 undefined 值 
       e.g. :
         var obj = [1,2,3];
         obj.pop(); // 3
         console.log(obj);// [1, 2]
-    arr.shift()  删除头部的一个元素并将其返回 
-    arr.sort([foo])  排序元素并返结果数组 
-      foo 可选,传参: 数组的两个元素, 用于排序用;返回值为true则调序,否则不变;
+    arr.shift()  删除头部的一个元素  
+    arr.sort([foo])  排序元素 
+      foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
         通过冒泡的算法大小排序「SlSt」;
         若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
         var arr =[31,1,2,5,4]
@@ -2216,7 +2221,7 @@ Array   数组对象
         });
         console.log(arr); // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    arr.push(val1[,val2,...])    末尾添加元素,返回新数组的长度值 
+    var num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
       val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
       e.g.
         var arr = [1];
@@ -2227,25 +2232,25 @@ Array   数组对象
         var aoo = [1,2,3];
         aoo.push("d","e",12);  // 6
         console.log(aoo);   // [1, 2, 3, "d", "e", 12]
-    arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组的长度值 
-    arr.splice(bg[,num][,v1,v2,...]) 删除「添加」元素,返回由删除元素组成的数组
+    var num = arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组的长度值 
+    var arr1 = arr.splice(bgn[,num][,v1,v2,...]) 删除[添加]元素,返回由删除元素组成的数组
       PS：删除若干个元素,使用参数列表中声明的值从被删除的元素处插入,
         添加的元素的个数可大于、等于或小于删除元素的个数; 
         若没有删除元素,则返回空数组;
-      bg  开始删除的元素的下标[包括该元素] 
+      bgn  开始删除的元素的下标[包括该元素] 
         若超出数组的长度,则从数组末尾开始「不会删除元素了」；
-        若是负值,则为 arr.length+begin 
+        若是负值,则为 arr.length+bgn 
       num 可选,默认为arr.length「SlSt」,要删除元素的个数 
         若为 0,则不移除元素,此时至少应添加一个新元素
-        若大于begin之后的元素个数,则取该数值
+        若大于bgn之后的元素个数,则取该数值
       v   可选,要添加进数组的元素;若无,则只删除元素 
-      e.g.
+      e.g. 
         var arr = [1,2,3];
         var aoo = arr.splice
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
-    ★不改变原数组
-    arr.slice([bgn][,end]);   返回截取的新数组 
+    ◆不改变原数组
+    var rstArr = arr.slice([bgn][,end]); 片段复制 
       PS：截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
         当bgn或end有为负数时,则使其加上 str.length 来代替
       bgn  可选,开始下标,默认为0 
@@ -2273,32 +2278,23 @@ Array   数组对象
         }
         var aoo = list(1, 2, 3);
         console.log(aoo); // [1, 2, 3]
-    arr.concat(val/arr1);  拼接数组或元素,返回结果数组 
-      连接元素 
+    var rstArr = arr.concat(val1[val2,..]);  拼接数组或元素 
+      val 可为数组或数组的元素 
+      e.g.：
+        拼接元素 
         var arr = [1,2,3];
-        var backArr = arr.concat(4,5);
-        console.log(backArr,'-',arr); 
-        // (5) [1, 2, 3, 4, 5] "-" (3) [1, 2, 3]
-      连接数组
-        连接单个数组
-        var arr1 = [1,2,3];
-        var arr2 = ["a","b"];
-        var resArr = arr1.concat(arr2);
-        console.log(arr1,'\n',arr2,'\n',resArr);
-        // [1, 2, 3] 
-        // ["a", "b"] 
-        // [1, 2, 3, "a", "b"]
-        连接多个数组
+        var rstArr = arr.concat(4,5);
+        console.log(rstArr); // [1, 2, 3, 4, 5]  
+        拼接数组
         var arr1 = [1,2,3];
         var arr2 = [4,5];
         var arr3 = [6,7,8,9];
         var resArr = arr1.concat(arr2,arr3);
-        console.log(arr1,'\n',arr2,'\n',arr3,'\n',resArr);
-        // [1, 2, 3] 
-        // [4, 5] 
-        // [6, 7, 8, 9] 
-        // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    arr.join([str]);   使用str串连每个元素,返回结果字符串
+        console.log(resArr); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        var arr4 = ['a',['b','c']]
+        var rstArr = arr1.concat(arr4)
+        console.log(rstArr); // [1,2,3,'a',['b','c']]
+    var rstStr = arr.join([str])  使用str串连每个元素 
       str 可选,默认为逗号',',表示用于连接的字符
       e.g. 将[1,2,3]输出为字符串"1-2-3"
         var arr = [1,2,3];
@@ -2306,58 +2302,24 @@ Array   数组对象
         console.log(arr); // [1, 2, 3]
         console.log(str); // 1-2-3
       Extend：
-        function repeatStr(str,n){ 
-          return new Array(n+1).join(str); 
-        };
-        repeatStr("a",6); // "aaaaaa"
-    arr.filter(foo [,thisArg]) 过滤数组,返回结果数组 「ES5」
-      foo 调用的函数,参数依次为: val元素,ind下标,arr原数组 
-        用来测试数组的每个元素的函数;
-        返回true表示保留该元素,通过测试,false则不保留;
-      thisArg 可选,执行函数时的用于 this 的值
-      e.g. 筛选数组arr中小于12的数
-        var arr = [10, 2, 34, 4, 11, 12];
-        var res = arr.filter(function(val,indx,arr){
-          return val < 12; // 返回值为 true,则保留该元素
-        });
-        console.log(arr); // [10, 2, 34, 4, 11, 12]
-        console.log(res); // [10, 2, 4, 11]
-    arr.reduce(foo [,initVal]) 条件缩减,返回最后一次回调函数的返回值「ES5」
-      PS：接收一个函数作为累加器,数组中的每个值(从左到右)开始缩减,最终为一个值 
-        为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
-        若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
-        若数组只有一个元素并且没有initialValue, 或者有initialValue但数组是空的,
-        这个唯一的值直接被返回而不会调用回调函数.
-        通常来说提供一个initialValue初始值更安全一点,因为没有的话会出现3种可能的输出结果,
-      foo 执行数组中每个值的函数,参数依次为 (retVal,currVal,indx,arr) ;
-        retVal  上一次回调函数的返回值 
-          或提供的初始值(initialValue),或数组第一个值(此时currVal为数组第二个值)
-        currVal 数组中当前被处理的元素
-        index   当前被处理元素在数组中的索引index
-        arr     调用 reduce 的数组
-      initVal  可选,作为首次调用 foo 时,代替它的第一个参数
-      e.g. 实现将数组中所有元素进行累加
-        var arr = [1, 2, 3, 4, 5];
-        var res = arr.reduce(function(retVal,currVal,indx,arr){ 
-          return retVal + currVal; 
-        });
-        console.log(arr); // [1, 2, 3, 4, 5]
-        console.log(res); // 15
-    arr.reduceRight(); 和reduce类似,只是从右到左遍历 「ES5」
-    ★遍历数组元素: 循环访问元素叫遍历 
-    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作 「ES5」
-      PS：forEach 方法按顺序为数组中含有效值的每一项执行一次foo 函数,
-        那些已删除(使用delete方法等情况)或者从未赋值的项将被跳过
-       (而值为 undefined 的项则不会被跳过).
+        重复字符串
+          function repeatStr(str,n){ 
+            return new Array(n+1).join(str); 
+          };
+          repeatStr("a",6); // "aaaaaa"
+    ◆遍历方法
+      以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
+    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作「ES5」
+      PS：已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
         无法中止或跳出forEach循环,除非报错.
       foo    函数为每个元素执行,接收三个参数：
         value 可选,元素
         index 可选,元素的索引
         arr   可选,数组对象本身
       thisArr 可选,表示数组本身,当执行回调函数时用作this的值「参考对象」.
-        若给forEach传递了thisArg 参数,它将作为 foo 函数的执行上下文,
-        类似执行如下函数foo.call(thisArg, element, index, array).
-        若 thisArg 值为 undefined 或 null,
+        若给forEach传递了thisArr 参数,它将作为 foo 函数的执行上下文,
+        类似执行如下函数foo.call(thisArr, element, index, array).
+        若 thisArr 值为 undefined 或 null,
         函数的 this 值取决于当前执行环境是否为严格模式,
         严格模式下为 undefined,非严格模式下为全局对象.
         function Counter() {
@@ -2382,7 +2344,7 @@ Array   数组对象
         使用try来抛出错误且不影响后续的其他代码执行 
         var arr = [1,2,3,4,5];
         try {
-          arr.forEach(function(val,indx,arr){
+          arr.forEach(function(val,idx,arr){
             console.log(val,'1');
             if (val == 3) {
               console.log(val,'2');
@@ -2393,12 +2355,46 @@ Array   数组对象
         catch (e) {
           console.log('执行了');
         } 
-    arr.map(foo[,thisArg])   返回由回调函数的返回值组成的数组「ES5」 
-      foo   对数组arr的每个元素调用函数,依次传入参数 (val,indx,arr)
-        val    数组中当前被传递的元素
-        indx   数组中当前被传递的元素的索引
-        arr    调用 map 方法的数组
-      thisArg 可选,数组本身, 执行 foo 函数时 this 指向的对象 
+    var bol = arr.every(foo [,thisArr]);    回调值判断,是否全部为真「ES5」
+      PS：若有一次返回值为 false,则该方法就返回 false,并停止遍历;
+        foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
+        every 遍历的元素范围在第一次调用 foo 之前就已确定了,
+        在调用 every 之后添加到数组中的元素不会被 foo 访问到,
+        若数组中存在的元素被更改,则他们传入 foo 的值是 every 访问到他们那一刻的值,
+        那些被删除的元素或从来未被赋值的元素将不会被访问到;
+      foo 用来测试每个元素的函数,传入参数 (val,idx,arr) 
+      thisArr 执行 callback 时使用的 this 值 
+        若为 every 提供一个 thisArr 参数,在该参数为调用 callback 时的 this 值。
+        若省略该参数,则 callback 被调用时的 this 值,
+        在非严格模式下为全局对象,在严格模式下传入 undefined。
+      e.g. 判断是否所有元素大于18 
+        var arr = [19, 20, 22];
+        var res = arr.every(function(val,idx,arr){
+          return val > 18;
+        });
+        console.log(res); // true
+    var bol = arr.some(foo [,thisArr]);     回调值判断,是否存在为真「ES5」
+      PS： 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
+        foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
+        some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
+        在调用 some 后被添加到数组中的值不会被 foo 访问到,
+        若数组中存在且还未被访问到的元素被 foo 改变了,
+        则其传递给 foo 的值是 some 访问到它那一刻的值;
+      foo 为每个元素执行的函数,依次传入参数 (val,idx,arr) 
+      thisArr  可选,将会把它传给被调用的 foo,作为 this 值.
+        否则,在非严格模式下将会是全局对象,严格模式下是 undefined.
+      e.g. :  是否存在大于18的元素 
+        var arr = [19, 10, 9];
+        var res = arr.some(function(val,idx,arr){
+          return val > 18;
+        });
+        console.log(res); // true
+    var rstStr = arr.map(foo [,thisArr])    回调值组成的数组「ES5」 
+      foo   传入参数 (val,idx,arr) 
+        val 数组中当前被传递的元素
+        idx 数组中当前被传递的元素的索引
+        arr 调用map方法的数组
+      thisArr 可选,数组本身,执行 foo 函数时 this 指向的对象 
       e.g.
         arr = [1, 2, 3];
         arr.map(String);  // ["1", "2", "3"]
@@ -2413,9 +2409,9 @@ Array   数组对象
         
         
         var arr = [1, 3, 5];
-        var res = arr.map(function(val,indx,arr){
+        var res = arr.map(function(val,idx,arr){
           console.log(val);
-          console.log(indx);
+          console.log(idx);
           console.log(arr);
           return 1;
         })
@@ -2429,61 +2425,49 @@ Array   数组对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    arr.every(foo [,thisArg]); 条件判断,返回是否全部为真的布尔值「ES5」
-      PS：为数组中的每个元素执行一次 foo ;
-        若有一次 foo 返回值为 false,则该方法就返回 false;
-        foo 只会为那些已经被赋值的索引调用,
-        不会为那些被删除或从来没被赋值的索引调用;
-        every 遍历的元素范围在第一次调用 foo 之前就已确定了,
-        在调用 every 之后添加到数组中的元素不会被 foo 访问到,
-        若数组中存在的元素被更改,则他们传入 foo 的值是 every 访问到他们那一刻的值,
-        那些被删除的元素或从来未被赋值的元素将不会被访问到;
-        该方法不会改变原数组;
-      foo 用来测试每个元素的函数,依次传入参数 (val,indx,arr) 
-      thisArg 执行 callback 时使用的 this 值 
-        若为 every 提供一个 thisArg 参数,在该参数为调用 callback 时的 this 值。
-        若省略该参数,则 callback 被调用时的 this 值,
-        在非严格模式下为全局对象,在严格模式下传入 undefined。
-      e.g. 判断是否所有元素大于18 
-        var arr = [19, 20, 22];
-        var res = arr.every(function(val,indx,arr){
-          return val > 18;
+    var rstArr = arr.filter(foo [,thisArr]) 回调值为true的元素组成的数组「ES5」
+      foo     回调函数,传入参数: (val,idx,arr) 
+        返回true表示保留该元素,通过测试,false则不保留;
+      thisArr 可选,执行函数时的用于 this 的值
+      e.g. 筛选数组arr中小于12的数
+        var arr = [10, 2, 34, 4, 11, 12];
+        var res = arr.filter(function(val,idx,arr){
+          return val < 12; // 返回值为 true,则保留该元素
         });
-        console.log(res); // true
-    arr.some(foo [,thisArg]);  条件判断,返回是否存在为真的布尔值「ES5」
-      PS：some 为数组中的每一个元素执行一次 foo 函数, 
-        一旦 foo 返回值为真,some 将会立即返回 true;
-        foo 只会在那些”有值“的索引上被调用,
-        不会在那些被删除或从来未被赋值的索引上调用;
-        some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
-        在调用 some 后被添加到数组中的值不会被 foo 访问到,
-        若数组中存在且还未被访问到的元素被 foo 改变了,
-        则其传递给 foo 的值是 some 访问到它那一刻的值;
-        some 被调用时不会改变数组;
-      foo 为每个元素执行的函数,依次传入参数 (val,indx,arr) 
-      thisArg  可选,将会把它传给被调用的 foo,作为 this 值.
-        否则,在非严格模式下将会是全局对象,严格模式下是 undefined.
-      e.g. :  是否存在大于18的元素 
-        var arr = [19, 10, 9];
-        var res = arr.some(function(val,indx,arr){
-          return val > 18;
+        console.log(arr); // [10, 2, 34, 4, 11, 12]
+        console.log(res); // [10, 2, 4, 11]
+    var val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值「ES5」
+      PS：接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
+        为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
+        若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
+        若数组只有一个元素并且没有initialValue, 或者有initialValue但数组是空的,
+        这个唯一的值直接被返回而不会调用回调函数.
+        通常来说提供一个initialValue初始值更安全一点,因为没有的话会出现3种可能的输出结果,
+      foo     执行数组中每个值的函数,传入参数依 (retVal,curVal,idx,arr) 
+        retVal 上一次回调函数的返回值 
+          或提供的初始值(initialValue),或数组第一个值(此时curVal为数组第二个值)
+        curVal 数组中当前被处理的元素
+        idx    当前被处理元素在数组中的索引idx
+        arr    调用 reduce 的数组
+      initVal 可选,作为首次调用 foo 时,代替它的第一个参数
+      e.g. 
+        元素累加
+        var arr = [1, 2, 3, 4, 5];
+        var res = arr.reduce(function(retVal,curVal,idx,arr){ 
+          return retVal + curVal; 
         });
-        console.log(res); // true
+        console.log(arr); // [1, 2, 3, 4, 5]
+        console.log(res); // 15
+    var val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历「ES5」
   静态方法 
     Array.isArray(arr)  返回是否为数组的布尔值「ES5」 
-    Array.from(arrLike [,mapFoo] [,thisArg]); 对象转换为数组,并返回新数组「ES5」
+    Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组,并返回新数组「ES5」
       arrLike 想要转换成数组的类数组或可遍历对象
       mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
-      thisArg 可选,执行 mapFoo 函数时 this 的值
-  delete arr[num]  删除元素,其位置保存 
-    值变为undefined,数组长度无变化
-    e.g.
-      var aoo = ['a','b','c'];
-      delete aoo[1];
-      console.log(aoo,aoo.length); // ['a', undefined × 1, 'c'] 3
+      thisArr 可选,执行 mapFoo 函数时 this 的值
   Exp: 
     数组的复制
-      通过 slice(0) 复制
+      通过 slice(0) 复制 
         PS：使用slice为浅拷贝,只能将第一层完全复制「更深层是引用」
         当arr中的元素为数组时,修改它仍然会改变复制后的数组
         var arr = [[1], 2];
@@ -3329,6 +3313,22 @@ Date     日期时间对象
   日期的比较：使用变量名比较时,对象的变量名指向的是地址
     通过 getTime() 转换为毫秒数进行比较
     将时间对象通过JSON格式转化后进行比较
+    
+  Date实例的toLocaleString toString valueOf 方法,返回值有不同 
+    var box = new Date(2007,10,15,17,22,45,15);
+    console.log(box);
+    //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
+    console.log(box.toString());
+    //Thu Nov 15 2007 17:22:45 GMT+0800(中国标准时间)
+    console.log(box.toLocaleString()); //2007/11/15 下午5:22:45
+    console.log(box.valueOf());        //1195118565015
+    toLocaleString 和 toString 方法在不同浏览器显示的效果可能不一样,一般调试使用;
+    e.g.
+    var box = ["a",18,"js"];  //字面量数组
+    box.valueOf();  // ["a", 18, "js"]
+    box.toString(); // "a,18,js"
+    box.toLocaleString();//"a,18,js"
+    上面显示一致,当出现如时间的属性时,则返回字符串格式参照本地时间格式.
 RegExp   正则对象 
   PS：Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
     正则表达式是一个描述字符模式的对象.
@@ -3869,7 +3869,6 @@ JSON,JavaScript_Object_Notation,JS对象表示法
       //[1,2,3,4],object类型(数组为object类型)
   JSON.stringify(val[,arr/func,num/str]); 序列化,将JS值转换为JSON字符串
     PS：序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中
-      值为undefined的任何属性也都会被跳过
     val       需序列化的值
     arr/func  可选,过滤器,数组或函数
       若为数组则,结果中将只包含数组中列出的属性
@@ -3909,8 +3908,8 @@ JSON,JavaScript_Object_Notation,JS对象表示法
         // {"title":"Professional Javascript","authors":"abc","year":5000}
         其中为值undefined的被忽略
     num/str   可选,缩进排版选项,数值或字符
-        当为数值时范围为1-10(超过10仍取10),表示最大缩进空格数(不会改变数据(SelfThink))
-        若为字符串时,则该字符串将在JSON字符串中被用作缩进字符(代替空格)
+      当为数值时范围为'1-10'[超过10仍取10],表示最大缩进空格数(不会改变数据(SelfThink))
+      若为字符串时,则该字符串将在JSON字符串中被用作缩进字符[代替空格]
           可将缩进字符设置为制表符等
           缩进字符串最长长度不能超过10个字符,否则只使用前10个字符
     e.g. :
@@ -3919,13 +3918,17 @@ JSON,JavaScript_Object_Notation,JS对象表示法
       var obj ={a:undefined,b:NaN,c:Infinity,d:new Date()};
       JSON.stringify(obj);
       // "{"b":null,"c":null,"d":"2016-12-28T07:45:24.152Z"}"
-    对象成员的值为 undefined 函数 或 XML对象 该成员会被过滤
-        var obj = {aoo:1,boo:undefined,coo:function(){ }};
+    当'对象'成员的值为'undefined''函数'或'XML对象'时,则该成员会被过滤 
+        var obj = {
+          aoo:1,
+          boo:undefined,
+          coo:function(){ }
+        };
         JSON.stringify(obj); // "{"aoo":1}"
-    数组成员为 undefined、函数或XML对象,将被转换成null
+    当'数组'成员为'undefined'、'函数'或'XML对象'时,将被转换成null
       var arr = [undefined,function(){ }];
       JSON.stringify(arr); // "[null,null]"
-    正则对象转换为空对象{}
+    '正则'会被转换为空对象{}
       JSON.stringify(/aoo/); // "{}"
     忽略对象的不可遍历属性
       var obj = {};
@@ -3976,12 +3979,26 @@ JSON,JavaScript_Object_Notation,JS对象表示法
           }
         }
         JSON.stringify(user); // "{"coo":"c","doo":"d"}"
-    使用toJSON的特性,将正则转化为字符串
-      var reg = /aoo/;
-      JSON.stringify(reg); // "{}"
-      设置toJSON方法
+    使用'toJSON'
+      将正则转化为字符串
       RegExp.prototype.toJSON = RegExp.prototype.toString;
       JSON.stringify(/aoo/); // ""/aoo/""
+      自定义解析
+      var obj1 = {
+        a : 1,
+        b : 'aa'
+      }
+      var rst1 = JSON.stringify(obj1);
+      var obj2 = {
+        a : 1,
+        b : 'aa',
+        toJSON : function(){
+          return '自定义的返回值'
+        }
+      }
+      var rst2 = JSON.stringify(obj2);
+      console.log(rst1); // {"a":1,"b":"aa"}
+      console.log(rst2); // "自定义的返回值"
   JSON.parse(JSONstr[,func]);     反序列化,将 JSON字符 串转换为JS值
     PS：若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
     JSONstr 需要解析的JSON字符串

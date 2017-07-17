@@ -34,828 +34,6 @@ VueJS  数据驱动,组件化开发模式,渐进式前端框架
           var app1 = new Vue({
             el: '#app1'
           });
-  命令行 npm 和 webpack 构建项目 
-    ◆安装工具 
-    npm install -g webpack              全局安装webpack 
-    npm install -g vue                  全局安装vue 
-    npm install -g vue-cli              全局安装vue-cli [vue构建工具?]
-      在安装Vue后就可以在命令行中使用'vue'命令了
-      vue --version  // 查看Vue的版本 
-    ◆创建项目 
-    vue init webpack test1「项目名称」   创建基于'webpack'模版的新项目 
-    cd  test1                           进入新创建的项目文件夹 
-      文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
-      后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
-    npm install                         安装依赖 
-      默认会根据 package.json 文件中配置的依赖文件进行安装 
-      增加'node_modules'文件夹 
-    npm install vue-router vue-resource --save  安装路由模块和网络请求模块
-    ◆启动项目 
-    npm run dev                         启动Vue 
-      启动本地服务,打开浏览器,运行项目
-      默认执行 package.json 中 script 属性 dev 的配置
-      运行安装时,eslint mocha 等等依赖,建议初学不安装
-    ◆构建发布 
-    npm run build                       运行构建,生成生产环境可发布的代码 
-    
-    项目目录文件说明 
-      ├── README.md
-      ├── build                           编译任务的代码
-      │   ├── build.js
-        require('./check-versions')() // 检查 Node 和 npm 版本
-        require('shelljs/global') // 使用了 shelljs 插件,可以让我们在 node 环境的 js 中使用 shell
-        env.NODE_ENV = 'production'
-        
-        var path = require('path') // 不再赘述
-        var config = require('../config') // 加载 config.js
-        var ora = require('ora') // 一个很好看的 loading 插件
-        var webpack = require('webpack') // 加载 webpack
-        var webpackConfig = require('./webpack.prod.conf') // 加载 webpack.prod.conf
-        
-        console.log( //  输出提示信息 ～ 提示用户请在 http 服务下查看本页面,否则为空白页
-          '  Tip:\n' +
-          '  Built files are meant to be served over an HTTP server.\n' +
-          '  Opening index.html over file:// won\'t work.\n'
-        )
-        
-        var spinner = ora('building for production...') // 使用 ora 打印出 loading + log
-        spinner.start() // 开始 loading 动画
-        
-        /* 拼接编译输出文件路径 */
-        var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
-        /* 删除这个文件夹 （递归删除） */
-        rm('-rf', assetsPath)
-        /* 创建此文件夹 */ 
-        mkdir('-p', assetsPath)
-        /* 复制 static 文件夹到我们的编译输出目录 */
-        cp('-R', 'static/*', assetsPath)
-        
-        //  开始 webpack 的编译
-        webpack(webpackConfig, function (err, stats) {
-          // 编译成功的回调函数
-          spinner.stop()
-          if (err) throw err
-          process.stdout.write(stats.toString({
-            colors: true,
-            modules: false,
-            children: false,
-            chunks: false,
-            chunkModules: false
-          }) + '\n')
-        })        
-      │   ├── check-versions.js
-      │   ├── dev-client.js
-      │   ├── dev-server.js 
-        require('./check-versions')() // 检查 Node 和 npm 版本
-        var config = require('../config') // 获取 config/index.js 的默认配置
-        
-        /* 
-        ** 若 Node 的环境无法判断当前是 dev / product 环境
-        ** 使用 config.dev.env.NODE_ENV 作为当前的环境
-        */
-        
-        if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
-        var path = require('path') // 使用 NodeJS 自带的文件路径工具
-        var express = require('express') // 使用 express
-        var webpack = require('webpack') // 使用 webpack
-        var opn = require('opn') // 一个可以强制打开浏览器并跳转到指定 url 的插件
-        var proxyMiddleware = require('http-proxy-middleware') // 使用 proxyTable 
-        var webpackConfig = require('./webpack.dev.conf') // 使用 dev 环境的 webpack 配置
-        
-        /* 若没有指定运行端口,使用 config.dev.port 作为运行端口 */
-        var port = process.env.PORT || config.dev.port
-        
-        /* 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置 */
-        /* 项目参考 https://github.com/chimurai/http-proxy-middleware */
-        var proxyTable = config.dev.proxyTable
-        
-        /* 使用 express 启动一个服务 */
-        var app = express()
-        var compiler = webpack(webpackConfig) // 启动 webpack 进行编译
-        
-        /* 启动 webpack-dev-middleware,将 编译后的文件暂存到内存中 */
-        var devMiddleware = require('webpack-dev-middleware')(compiler, {
-          publicPath: webpackConfig.output.publicPath,
-          stats: {
-            colors: true,
-            chunks: false
-          }
-        })
-        
-        /* 启动 webpack-hot-middleware,也就是我们常说的 Hot-reload */
-        var hotMiddleware = require('webpack-hot-middleware')(compiler)
-        
-        /* 当 html-webpack-plugin 模板更新的时候强制刷新页面 */
-        compiler.plugin('compilation', function (compilation) {
-          compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-            hotMiddleware.publish({ action: 'reload' })
-            cb()
-          })
-        })
-        
-        // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-        Object.keys(proxyTable).forEach(function (context) {
-          var options = proxyTable[context]
-          if (typeof options === 'string') {
-            options = { target: options }
-          }
-          app.use(proxyMiddleware(context, options))
-        })
-        
-        // 使用 connect-history-api-fallback 匹配资源,若不匹配就可以重定向到指定地址
-        app.use(require('connect-history-api-fallback')())
-        
-        // 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
-        app.use(devMiddleware)
-        
-        // 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
-        app.use(hotMiddleware)
-        
-        // 拼接 static 文件夹的静态资源路径
-        var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-        // 为静态资源提供响应服务
-        app.use(staticPath, express.static('./static'))
-        
-        // 让我们这个 express 服务监听 port 的请求,并且将此服务作为 dev-server.js 的接口暴露
-        module.exports = app.listen(port, function (err) {
-          if (err) {
-            console.log(err)
-            return
-          }
-          var uri = 'http://localhost:' + port
-          console.log('Listening at ' + uri + '\n')
-          
-          // 若不是测试环境,自动打开浏览器并跳到我们的开发地址
-          if (process.env.NODE_ENV !== 'testing') {
-            opn(uri)
-          }
-        })
-      │   ├── utils.js
-      │   ├── webpack.base.conf.js        webpack 基础配置
-        var path = require('path') // 使用 NodeJS 自带的文件路径插件
-        var config = require('../config') // 引入 config/index.js
-        var utils = require('./utils') // 引入一些小工具
-        var projectRoot = path.resolve(__dirname, '../') // 拼接我们的工作区路径为一个绝对路径
-        
-        /* 将 NodeJS 环境作为我们的编译环境 */
-        var env = process.env.NODE_ENV
-        /* 是否在 dev 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
-        var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
-        /* 是否在 production 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
-        var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
-        /* 最终是否使用 cssSourceMap */
-        var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
-        
-        module.exports = {
-          entry: {
-            app: './src/main.js' // 编译文件入口
-          },
-          output: {
-            path: config.build.assetsRoot, // 编译输出的静态资源根路径
-            publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, // 正式发布环境下编译输出的上线路径的根路径
-            filename: '[name].js' // 编译输出的文件名
-          },
-          resolve: {
-            // 自动补全的扩展名
-            extensions: ['', '.js', '.vue'],
-            // 不进行自动补全或处理的文件或者文件夹
-            fallback: [path.join(__dirname, '../node_modules')],
-            alias: {
-            // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
-              'vue$': 'vue/dist/vue.common.js',
-              'src': path.resolve(__dirname, '../src'),
-              'assets': path.resolve(__dirname, '../src/assets'),
-              'components': path.resolve(__dirname, '../src/components')
-            }
-          },
-          resolveLoader: {
-            fallback: [path.join(__dirname, '../node_modules')]
-          },
-          module: {
-            preLoaders: [
-              // 预处理的文件及使用的 loader
-              {
-                test: /\.vue$/,
-                loader: 'eslint',
-                include: projectRoot,
-                exclude: /node_modules/
-              },
-              {
-                test: /\.js$/,
-                loader: 'eslint',
-                include: projectRoot,
-                exclude: /node_modules/
-              }
-            ],
-            loaders: [
-              // 需要处理的文件及使用的 loader
-              {
-                test: /\.vue$/,
-                loader: 'vue'
-              },
-              {
-                test: /\.js$/,
-                loader: 'babel',
-                include: projectRoot,
-                exclude: /node_modules/
-              },
-              {
-                test: /\.json$/,
-                loader: 'json'
-              },
-              {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: 'url',
-                query: {
-                  limit: 10000,
-                  name: utils.assetsPath('img/[name].[hash:7].[ext]')
-                }
-              },
-              {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: 'url',
-                query: {
-                  limit: 10000,
-                  name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-                }
-              }
-            ]
-          },
-          eslint: {
-            // eslint 代码检查配置工具
-            formatter: require('eslint-friendly-formatter')
-          },
-          vue: {
-            // .vue 文件配置 loader 及工具 (autoprefixer)
-            loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-            postcss: [
-              require('autoprefixer')({
-                browsers: ['last 2 versions']
-              })
-            ]
-          }
-        }        
-      │   ├── webpack.dev.conf.js 
-        var config = require('../config') // 同样的使用了 config/index.js
-        var webpack = require('webpack') // 使用 webpack
-        var merge = require('webpack-merge') // 使用 webpack 配置合并插件
-        var utils = require('./utils') // 使用一些小工具
-        var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf
-        /* 使用 html-webpack-plugin 插件,这个插件可以帮我们自动生成 html 并且注入到 .html 文件中 */
-        var HtmlWebpackPlugin = require('html-webpack-plugin') 
-        
-        // 将 Hol-reload 相对路径添加到 webpack.base.conf 的 对应 entry 前
-        Object.keys(baseWebpackConfig.entry).forEach(function (name) {
-          baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-        })
-        
-        /* 将我们 webpack.dev.conf.js 的配置和 webpack.base.conf.js 的配置合并 */
-        module.exports = merge(baseWebpackConfig, {
-          module: {
-            // 使用 styleLoaders
-            loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
-          },
-          // 使用 #eval-source-map 模式作为开发工具,此配置可参考 DDFE 往期文章详细了解
-          devtool: '#eval-source-map',
-          plugins: [
-            /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
-            new webpack.DefinePlugin({
-              'process.env': config.dev.env
-            }),
-            // 参考项目 https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-            new webpack.optimize.OccurenceOrderPlugin(),
-            /* HotModule 插件在页面进行变更的时候只会重回对应的页面模块,不会重绘整个 html 文件 */
-            new webpack.HotModuleReplacementPlugin(),
-            /* 使用了 NoErrorsPlugin 后页面中的报错不会阻塞,但是会在编译结束后报错 */
-            new webpack.NoErrorsPlugin(),
-            // 参考项目 https://github.com/ampedandwired/html-webpack-plugin
-            /* 将 index.html 作为入口,注入 html 代码后生成 index.html文件 */
-            new HtmlWebpackPlugin({
-              filename: 'index.html',
-              template: 'index.html',
-              inject: true
-            })
-          ]
-        })      
-      │   └── webpack.prod.conf.js
-        var path = require('path') 
-        var config = require('../config') // 加载 confi.index.js
-        var utils = require('./utils') // 使用一些小工具
-        var webpack = require('webpack') // 加载 webpack
-        var merge = require('webpack-merge') // 加载 webpack 配置合并工具
-        var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf.js
-        /* 一个 webpack 扩展,可以提取一些代码并且将它们和文件分离开 */ 
-        /* 若我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
-        var ExtractTextPlugin = require('extract-text-webpack-plugin')
-        /* 一个可以插入 html 并且创建新的 .html 文件的插件 */
-        var HtmlWebpackPlugin = require('html-webpack-plugin')
-        var env = config.build.env
-        
-        /* 合并 webpack.base.conf.js */
-        var webpackConfig = merge(baseWebpackConfig, {
-          module: {
-            /* 使用的 loader */
-            loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
-          },
-          /* 是否使用 #source-map 开发工具,更多信息可以查看 DDFE 往期文章 */
-          devtool: config.build.productionSourceMap ? '#source-map' : false,
-          output: {
-            /* 编译输出目录 */
-            path: config.build.assetsRoot,
-            /* 编译输出文件名 */
-            filename: utils.assetsPath('js/[name].[chunkhash].js'), // 我们可以在 hash 后加 :6 决定使用几位 hash 值
-            // 没有指定输出名的文件输出的文件名
-            chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-          },
-          vue: {
-            /* 编译 .vue 文件时使用的 loader */
-            loaders: utils.cssLoaders({
-              sourceMap: config.build.productionSourceMap,
-              extract: true
-            })
-          },
-          plugins: [
-            /* 使用的插件 */
-            /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
-            new webpack.DefinePlugin({
-              'process.env': env
-            }),
-            /* 压缩 js (同样可以压缩 css) */
-            new webpack.optimize.UglifyJsPlugin({
-              compress: {
-                warnings: false
-              }
-            }),
-            new webpack.optimize.OccurrenceOrderPlugin(),
-            /* 将 css 文件分离出来 */
-            new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
-            /* 构建要输出的 index.html 文件, HtmlWebpackPlugin 可以生成一个 html 并且在其中插入你构建生成的资源 */
-            new HtmlWebpackPlugin({
-              filename: config.build.index, // 生成的 html 文件名
-              template: 'index.html', // 使用的模板
-              inject: true, // 是否注入 html (有多重注入方式,可以选择注入的位置)
-              minify: { // 压缩的方式
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true
-                // 更多参数可查看 https://github.com/kangax/html-minifier#options-quick-reference
-              },
-              chunksSortMode: 'dependency'
-            }),
-            
-            // 此处增加 @OYsun 童鞋补充
-            // CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js
-            
-            new webpack.optimize.CommonsChunkPlugin({
-              name: 'vendor',
-              minChunks: function (module, count) {
-                // 依赖的 node_modules 文件会被提取到 vendor 中
-                return (
-                  module.resource &&
-                  /\.js$/.test(module.resource) &&
-                  module.resource.indexOf(
-                    path.join(__dirname, '../node_modules')
-                  ) === 0
-                )
-              }
-            }),
-            new webpack.optimize.CommonsChunkPlugin({
-              name: 'manifest',
-              chunks: ['vendor']
-            })
-            
-          ]
-        })
-        
-        /* 开启 gzip 的情况下使用下方的配置 */
-        if (config.build.productionGzip) {
-          /* 加载 compression-webpack-plugin 插件 */
-          var CompressionWebpackPlugin = require('compression-webpack-plugin')
-          /* 向webpackconfig.plugins中加入下方的插件 */
-          webpackConfig.plugins.push(
-            /* 使用 compression-webpack-plugin 插件进行压缩 */
-            new CompressionWebpackPlugin({
-              asset: '[path].gz[query]',
-              algorithm: 'gzip',
-              test: new RegExp(
-                '\\.(' +
-                config.build.productionGzipExtensions.join('|') +
-                ')$'
-              ),
-              threshold: 10240,
-              minRatio: 0.8
-            })
-          )
-        }
-        
-        // split vendor js into its own file
-         /* 没有指定输出文件名的文件输出的静态文件名 */
-       new webpack.optimize.CommonsChunkPlugin({
-             name: 'vendor',
-             minChunks: function (module, count) {
-               // any required modules inside node_modules are extracted to vendor
-               return (
-                 module.resource &&
-                 /\.js$/.test(module.resource) &&
-                 module.resource.indexOf(
-                   path.join(__dirname, '../node_modules')
-                 ) === 0
-               )
-             }
-           }),
-           // extract webpack runtime and module manifest to its own file in order to
-           // prevent vendor hash from being updated whenever app bundle is updated
-           /* 没有指定输出文件名的文件输出的静态文件名 */
-           new webpack.optimize.CommonsChunkPlugin({
-             name: 'manifest',
-             chunks: ['vendor']
-           })
-       CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了所以第二次new就是解决这个问题的,请你好好看vue-cli那个英文原注释
-       
-       // extract webpack runtime and module manifest to its own file in order to
-       // prevent vendor hash from being updated whenever app bundle is updated        
-        
-        module.exports = webpackConfig        
-      ├── config                          webpack 的配置文件
-      │   ├── dev.env.js
-      │   ├── index.js
-        index.js 中有 dev 和 production 两种环境的配置
-        
-        var path = require('path')
-        
-        module.exports = {
-          build: { // production 环境
-            env: require('./prod.env'), // 使用 config/prod.env.js 中定义的编译环境
-            index: path.resolve(__dirname, '../dist/index.html'), // 编译输入的 index.html 文件
-            assetsRoot: path.resolve(__dirname, '../dist'), // 编译输出的静态资源路径
-            assetsSubDirectory: 'static', // 编译输出的二级目录
-            assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
-            productionSourceMap: true, // 是否开启 cssSourceMap
-            // Gzip off by default as many popular static hosts such as
-            // Surge or Netlify already gzip all static assets for you.
-            // Before setting to `true`, make sure to:
-            // npm install --save-dev compression-webpack-plugin
-            productionGzip: false, // 是否开启 gzip
-            productionGzipExtensions: ['js', 'css'] // 需要使用 gzip 压缩的文件扩展名
-          },
-          dev: { // dev 环境
-            env: require('./dev.env'), // 使用 config/dev.env.js 中定义的编译环境
-            port: 8080, // 运行测试页面的端口
-            assetsSubDirectory: 'static', // 编译输出的二级目录
-            assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
-            proxyTable: {}, // 需要 proxyTable 代理的接口（可跨域）
-            cssSourceMap: false // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
-          }
-        }        
-      │   └── prod.env.js
-      ├── index.html
-      ├── package.json
-      ├── src
-      │   ├── App.vue
-      │   ├── assets
-      │   │   └── logo.png
-      │   ├── components
-      │   │   └── Hello.vue
-      │   └── main.js
-      └── static    
-    
-    
-    
-      .gitignore   # 忽略无需git控制的文件  比如 node_modules
-      .eslintrc    # eslint加载器配置
-      .babelrc         # babel加载器配置
-      build 
-        webpack.base.config.js         # webpack 基础配置
-          基础配置包括了webpack的最基本配置,
-          包括入口文件、输入文件、加载器配置、插件配置等,
-          module.exports = {
-            entry: './src/main.js', //页面入口文件配置
-            output: { //入口文件输出配置
-              path: './dist',
-              publicPath: 'dist/',
-              filename: 'build.js'
-            },
-            module: { //加载器配置
-              loaders: [
-                {
-                  test: /\.vue$/,
-                  loader: 'vue'
-                },
-                {
-                  test: /\.js$/,
-                  loader: 'babel!eslint',
-                  // make sure to exclude 3rd party code in node_modules
-                  exclude: /node_modules/
-                },
-                {
-                  // edit this for additional asset file types
-                  test: /\.(png|jpg|gif)$/,
-                  loader: 'url',
-                  query: {
-                    // inline files smaller then 10kb as base64 dataURL
-                    limit: 10000,
-                    // fallback to file-loader with this naming scheme
-                    name: '[name].[ext]?[hash]'
-                  }
-                }
-              ]
-            },
-            vue: {  // vue-loader 设置:
-              loaders: {
-                js: 'babel!eslint'
-              }
-            }
-            //将所有的*.vue文件转化为javascript文件并执行ESLint检测,这里需要配置.eslintrc文件
-          }    
-        webpack.dev.config.js          # webpack 开发配置
-        webpack.prod.config.js         # webpack 生产配置
-      node_modules         #通过npm安装的模块
-      index.html       # 首页
-      package.json     # 项目配置
-      src 
-        components    # 组件文件夹,存放app组件
-          A.vue
-          B.vue
-          Counter.vue
-        assets   #静态资源 
-        app.vue    ## 主vue组件
-        main.js    #启动配置,webpack入口文件
-    
-    
-    使用路由功能 
-      npm install vue-router      安装路由
-      配置路由
-        在 main.js 里
-        import Vue from 'vue'
-        import VueRouter from 'vue-router'
-        import App from './App'
-    
-        Vue.use(VueRouter);
-        
-        const routes = [
-          { 
-            path: '/',             // 首页默认重定向至Index路由
-            redirect: '/index'
-          },
-          { 
-            path: '/test', 
-            component: resolve => require(['./components/test.vue'], resolve) 
-          },
-          { 
-            path: '/index', 
-            component: resolve => require(['./components/index.vue'], resolve) 
-          }
-        ];
-        
-        const router = new VueRouter({
-          routes // （缩写）相当于 routes: routes,
-        });
-        
-        // 4. 创建和挂载根实例
-        // 记得要通过 router 配置参数注入路由,
-        // 从而让整个应用都有路由功能
-        const app = new Vue({
-          router,
-          render: h => h(App)
-        }).$mount('#app');
-        
-    安装 vue 路由模块vue-router和网络请求模块vue-resource 
-      npm install vue-router vue-resource --save
-        
-    使用路由搭建单页应用
-      
-      之前已经通过命令安装了vue-router
-      
-      npm install vue-router --save
-      直接上ES6的语法来进行引入
-      import Vue from "vue";
-      import VueRouter from "vue-router";
-      Vue.use(VueRouter);
-
-      在webpack.config.js加入别名
-      
-      resolve: {
-          alias: {vue: 'vue/dist/vue.js'}
-        }
-      为什么要加 alias 配置项？其作用可以在文档中有相应的描述:查看图片修改完之后的webpack.config.js是这样子的:
-      
-      var path = require('path')
-      var webpack = require('webpack')
-      
-      module.exports = {
-        entry: './src/main.js',
-        output: {
-          path: path.resolve(__dirname, './dist'),
-          publicPath: '/dist/',
-          filename: 'build.js'
-        },
-        resolveLoader: {
-          root: path.join(__dirname, 'node_modules'),
-        },
-        module: {
-          loaders: [
-            {
-              test: /\.vue$/,
-              loader: 'vue'
-            },
-            {
-              test: /\.js$/,
-              loader: 'babel',
-              exclude: /node_modules/
-            },
-            {
-              test: /\.(png|jpg|gif|svg)$/,
-              loader: 'file',
-              query: {
-                name: '[name].[ext]?[hash]'
-              }
-            }
-          ]
-        },
-        resolve: {
-          alias: {vue: 'vue/dist/vue.js'}
-        },
-        devServer: {
-          historyApiFallback: true,
-          noInfo: true
-        },
-        devtool: '#eval-source-map'
-      }
-      
-      if (process.env.NODE_ENV === 'production') {
-        module.exports.devtool = '#source-map'
-        // http://vue-loader.vuejs.org/en/workflow/production.html
-        module.exports.plugins = (module.exports.plugins || []).concat([
-          new webpack.DefinePlugin({
-            'process.env': {
-              NODE_ENV: '"production"'
-            }
-          }),
-          new webpack.optimize.UglifyJsPlugin({
-            compress: {
-              warnings: false
-            }
-          })
-        ])
-      }
-      再按之前的方法写一个组件 secondcomponent.vue
-      
-      <template>
-        <div>
-          <h1>I am another page</h1>
-          <a> written by {{ author }} </a>
-          <p> 感谢 <a href="https://github.com/showonne">showonne</a>大神的技术指导</p>
-        </div>
-      </template>
-      
-      <script>
-      export default {
-        data() {
-          return {
-            author: "微信公众号 jinkey-love",
-            articles: [],
-          }
-        }
-        }
-      }
-      </script>
-      
-      <style>
-      </style>
-      这时候修改 main.js,引入并注册 vue-router
-      
-      import VueRouter from "vue-router";
-      Vue.use(VueRouter);
-      并且配置路由规则和 app 启动配置项加上 router,旧版的 router.map 方法在vue-router 2.0 已经不能用了修改后的main.js如下:
-      
-      import Vue from 'vue'
-      import App from './App.vue'
-      import VueRouter from "vue-router";
-      import VueResource from 'vue-resource'
-      
-      //开启debug模式
-      Vue.config.debug = true;
-      
-      Vue.use(VueRouter);
-      Vue.use(VueResource);
-      
-      // 定义组件, 也可以像教程之前教的方法从别的文件引入
-      const First = { template: '<div><h2>我是第 1 个子页面</h2></div>' }
-      import secondcomponent from './component/secondcomponent.vue'
-      
-      // 创建一个路由器实例
-      // 并且配置路由规则
-      const router = new VueRouter({
-        mode: 'history',
-        base: __dirname,
-        routes: [
-          {
-            path: '/first',
-            component: First
-          },
-          {
-            path: '/second',
-            component: secondcomponent
-          }
-        ]
-      })
-      
-      // 现在我们可以启动应用了！
-      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上
-      const app = new Vue({
-        router: router,
-        render: h => h(App)
-      }).$mount('#app')
-      这样子改完再打开浏览器看看查看图片点击那两个链接试试,会发现<router-view></router-view>的内容已经展示出来,同时注意浏览器地址已经变更查看图片另外,也可以把 App.vue 的内容写在 main.js 也是可以的不过不建议这么做查看图片
-      
-      若你使用 vue1.0和0.7版本的 vue-router,请参照下面这个教程, 他整个系列都不错的,当然仅限于 vue1.0 :
-      
-      http://guowenfh.github.io/2016/03/28/vue-webpack-06-router/
-      给页面加点动态数据
-      
-      这时候的页面都是静态的(数据在写程序的时候已经固定了不能修改),而每个应用基本上都会请求外部数据以动态改变页面内容对应有一个库叫 vue-resource 帮我们解决这个问题使用命令行安装
-      
-      cnpm install vue-resource --save
-      在 main.js 引入并注册 vue-resource:
-      
-      import VueResource from 'vue-resource'
-      Vue.use(VueResource);
-      我们在 secondcomponent.vue 上来动态加载数据添加一个列表:
-      
-      <ul>
-            <li v-for="article in articles">
-              {{article.title}}
-            </li>
-          </ul>
-      在 data 里面加入数组 articles 并赋值为[]然后在 data 后面加入加入钩子函数 mounted(详细请参照官方文档关于 vue 生命周期的解析),data 和 mount 中间记得记得加逗号
-      
-      mounted: function() {
-          this.$http.jsonp('https://api.douban.com/v2/movie/top250?count=10', {}, {
-              headers: {
-      
-              },
-              emulateJSON: true
-          }).then(function(response) {
-            // 这里是处理正确的回调
-      
-              this.articles = response.data.subjects
-              // this.articles = response.data["subjects"] 也可以
-      
-          }, function(response) {
-              // 这里是处理错误的回调
-              console.log(response)
-          });
-        }
-      这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
-      
-      Access-Control-Allow-Origin: *        
-        
-    项目基本目录结构 
-      bulid            构建的配置文件
-      config           
-      dist             打包构建好的代码
-        static 
-        index.html 
-      node_modules     
-      src              开发目录 
-        assets         静态资源目录 
-        components     组件目录 
-        App.vue        主入口视图文件 
-        main.js        主入口JS文件 
-      static 
-      index.html 
-      package.json 
-      ...
-      
-    webpack.config.js  webpack配置文件 
-      在 webpack.config.js 中的配置
-      module.exports = {
-        entry: {
-          'index': './vue/index/main.js',
-        },
-        output: {
-          path: './public/bulid',
-          filename: '[filename].js' // 可以多点切入
-        },
-        module: {
-          loaders: [
-            {
-              test: /\.vue$/,
-              exclude: /node_modules/,
-              loader: vue.withLoaders({
-                js: 'babel?optional[]=runtime'
-              })
-            },
-            { test: /\.scss$/, loader: 'style!css!sass' },
-            { test: /\.css$/, loader: "style!css" },
-            { test: /\.js$/, loader: 'babel-loader' }
-          ]
-        },
-        resolve: { // 解决 npm 的依赖问题
-          modulesDirectories: ['node_modules'],
-          extensions: ['', '.js', '.json']
-        },
-      }      
 ◆MVVM模型 
   // <!--这里是 view-->
   <div id="app"> awesome </div>
@@ -2091,96 +1269,118 @@ Directives,指令 : model和view的交互,在HTML中指定
         这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
       .trim   自动过滤用户输入的首尾空格 
         <input v-model.trim="msg">
-  v-xx:arg.xx.xx='val'  自定义指令 
-    PS：用于对纯DOM元素进行底层操作 
-    Vue.directive('name', options);  自定义全局指令 
-      name    指令的名称
-      options 配置对象或函数 
-        {
-          // 当绑定元素插入到 DOM 中
-          inserted: function (el) {
-            // 聚焦元素
-            el.focus()
-          }
-        }
-      e.g.：当页面加载时,元素将获得焦点 
-        <div class="aaa"> <input v-focus > </div>
-        Vue.directive('focus', {
-          inserted: function (el) {
+  指令的值'val'可为单条语句 
+    <div id="example-1"> 
+      <button v-on:click="counter += 1">增加 1</button>
+      <p>这个按钮被点击了 {{ counter }} 次</p>
+    </div> 
+    var example1 = new Vue({
+      el: '#example-1',
+      data: {
+        counter: 0
+      }
+    })
+    
+    <section id="example" class="">
+      <span v-if="a?true:false">111111111111111</span>
+    </section>
+    data : {
+      a : fasle,
+    }
+v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定  
+  PS：用于对纯DOM元素进行底层操作 
+  drct_name 指令的名称 
+  drctArg   可选,指令的参数 
+  mdf       可选,指令的修改器 
+  drctVal   可选,指令的值 
+    指令值为对象字面量 
+      指令函数能够接受所有合法类型的JS表达式 
+      <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+      Vue.directive('demo', function (el, binding) {
+        console.log(binding.value.color) // => "white"
+        console.log(binding.value.text)  // => "hello!"
+      })    
+  Vue.directive('name', params);  定义全局指令 
+    name    指令的名称
+    params 配置对象或函数 { hookName : function(){ }, }
+  directives : val,               注册局部指令 
+    directives: {
+      focus: {
+        // 指令的定义--- 
+      }
+    }
+  e.g.：
+    <div class="aaa"> <input v-focus > </div>
+    Vue.directive('focus', {
+      inserted: function (el) {
+        el.focus();
+        console.log(11111);
+      }
+    });
+    new Vue({
+      el : '.aaa',
+    });
+  hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
+    ◆hookName 钩子函数
+    bind     指令第一次绑定到元素时调用[只调用一次] 
+      用这个钩子函数可以定义一个在绑定时执行一次的初始化动作
+    inserted 被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于'document'中] 
+    update   被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
+      通过比较更新前后的绑定值,可以忽略不必要的模板更新
+      e.g.：
+        当DOM渲染有更新时
+        <div id="demo1" >
+          <input type="text"  v-test1>
+          <button type="button"  @click="inputFocus">click</button>
+          <span>{{inputIsFocus}}</span>
+          <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
+        </div>
+        或改为: 当指令的值有变化时 
+        <div id="demo1" >
+          <input type="text" v-test1="inputIsFocus">
+          <button type="button" @click="inputFocus">click</button>
+        </div>
+        Vue.directive('test1', {
+          update : function(el,binds,vn,oVn){
             el.focus();
-            console.log(11111);
-          }
+            console.log(11);
+          },
         });
         new Vue({
-          el : '.aaa',
-        });
-    directives : val,       注册局部指令 
-      directives: {
-        focus: {
-          // 指令的定义--- 
-        }
-      }
-    hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
-      ◆hookName 钩子函数
-      bind         指令第一次绑定到元素时调用[只调用一次] 
-        用这个钩子函数可以定义一个在绑定时执行一次的初始化动作
-      inserted     被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于 document 中]
-      update       被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
-        通过比较更新前后的绑定值,可以忽略不必要的模板更新
-        e.g.：
-          当DOM渲染有更新时
-          <div id="demo1" >
-            <input type="text"  v-test1>
-            <button type="button"  @click="inputFocus">click</button>
-            <span>{{inputIsFocus}}</span>
-            <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
-          </div>
-          或改为: 当指令的值有变化时
-          <div id="demo1" >
-            <input type="text" v-test1="inputIsFocus">
-            <button type="button" @click="inputFocus">click</button>
-          </div>
-          Vue.directive('test1', {
-            update : function(el,binds,vn,oVn){
-              el.focus();
-              console.log(11);
+          el: '#demo1',
+          data: {
+            inputIsFocus : false,
+          },
+          methods : {
+            inputFocus : function(){
+              this.inputIsFocus = !this.inputIsFocus;
+              console.log(this.inputIsFocus);
             },
-          });
-          new Vue({
-            el: '#demo1',
-            data: {
-              inputIsFocus : false,
-            },
-            methods : {
-              inputFocus : function(){
-                this.inputIsFocus = !this.inputIsFocus;
-                console.log(this.inputIsFocus);
-              },
-            },
-          })
-      componentUpdated  被绑定元素所在模板完成一次更新周期时调用 
-      unbind       指令与元素解绑时调用[只调用一次]
-      ◆钩子函数的参数 
-        除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
-        若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
-      el         指令所绑定的元素,可以用来直接操作 DOM 
-        el.focus()   表单获得焦点
-        el.select()  表单值被选中
-      binding    对象,包含以下属性 
-        name       指令名,不包括 v- 前缀 
-        value      绑定值 
-          例如： v-my-directive="1 + 1", value 的值是 2
-        expression 绑定值的字符串形式 
-          例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
-        arg        传给指令的参数 
-          例如 v-my-directive:foo, arg 的值是 "foo"
-        modifiers  一个包含修饰符的对象 
-          例如： v-my-directive.foo.bar, 
-          修饰符对象 modifiers 的值是 { foo: true, bar: true }
-        oldValue   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
-          无论值是否改变都可用
-      vnode      Vue编译生成的虚拟节点 
-      oldVnode   上一个虚拟节点,仅在'update'和'componentUpdated'钩子中可用 
+          },
+        })
+    componentUpdated  被绑定元素所在模板完成一次更新周期时调用 
+    unbind   指令与元素解绑时调用[只调用一次]
+    ◆钩子函数的参数 
+      除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
+      若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+    el       指令所绑定的元素,可以用来直接操作DOM 
+      el.focus()   表单获得焦点
+      el.select()  表单值被选中
+    binding  对象,包含以下属性 
+      'name'       指令名,不包括'v-'前缀[即'drct_name']  
+      'value'      绑定值[即'drctVal'] 
+        例如： v-my-directive="1 + 1", value 的值是 2
+      'expression' 绑定值的字符串形式['drctVal'的字符串形式] 
+        例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
+      'arg'        传给指令的参数[即'drctArg'] 
+        例如 v-my-directive:foo, arg 的值是 "foo"
+      'modifiers'  一个包含修饰符的对象['mdf'组成的对象] 
+        例如： v-my-directive.foo.bar, 
+        修饰符对象 modifiers 的值是 { foo: true, bar: true }
+      'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
+        无论值是否改变都可用
+    vnode    Vue编译生成的虚拟节点 
+    oldVnode 上一个虚拟节点,仅在'update'和'componentUpdated'钩子中可用 
     e.g.：
       <div id="map" v-drct:arg.a.b="msg"></div>
       Vue.directive('drct', {
@@ -2210,36 +1410,11 @@ Directives,指令 : model和view的交互,在HTML中指定
       modifiers: {"a":true,"b":true}
       vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
       oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-    options简写为函数 
-      在 bind 和 update 钩子上做重复动作,而不关心其它的钩子函数 
-      Vue.directive('color-swatch', function (el, binding) {
-        el.style.backgroundColor = binding.value
-      })
-    指令传入对象字面量 
-      指令函数能够接受所有合法类型的JS表达式 
-      <div v-demo="{ color: 'white', text: 'hello!' }"></div>
-      Vue.directive('demo', function (el, binding) {
-        console.log(binding.value.color) // => "white"
-        console.log(binding.value.text)  // => "hello!"
-      })    
-  指令的值'val'可为单条语句 
-    <div id="example-1"> 
-      <button v-on:click="counter += 1">增加 1</button>
-      <p>这个按钮被点击了 {{ counter }} 次</p>
-    </div> 
-    var example1 = new Vue({
-      el: '#example-1',
-      data: {
-        counter: 0
-      }
+  options简写为函数 
+    在 bind 和 update 钩子上做重复动作,而不关心其它的钩子函数 
+    Vue.directive('color-swatch', function (el, binding) {
+      el.style.backgroundColor = binding.value
     })
-    
-    <section id="example" class="">
-      <span v-if="a?true:false">111111111111111</span>
-    </section>
-    data : {
-      a : fasle,
-    }
 Component,组件 
   PS：Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
@@ -2864,7 +2039,7 @@ Component,组件
         </div>\
       '
     })    
-  使用<template>标签
+  使用<template>标签 
     若组件中的内容过多,一堆的引号和加号来拼接这些字符串简直就是噩梦
     所以Vue 引入了template标签（html5定义的,浏览器默认不去解析里面的内容）
     <template> 不能用在 <table> 内下面来看看它的使用方法：
@@ -2897,21 +2072,609 @@ Component,组件
       <h2>This is Template </h2>
       <p>add ...</p>
     </div>    
-  单文件的组件模式 
-    PS：使用一个 .vue 格式文件将 HTML+CSS+JS 组装起来;一个 .vue 文件就是一个组件;
-      组件的通信方式同上[使用 props 和 event] ;
-      单文件组件的写法需要编译工具才能最终在浏览器端工作;
-    文件结构为 
+'xx.vue'单文件组件&'vue-cli' 
+  PS：使用一个'.vue'格式文件将'HTML''CSS''JS'组装起来;一个'.vue'文件就是一个组件;
+    组件的通信方式同上[使用 props 和 event] ;
+    单文件组件的写法需要编译工具才能最终在浏览器端工作;
+  '.vue'的文件结构 
     <template> HTMLCode <template/>
     <script> JSCode <script/>
-    <style> CSSCode <style/>
-    ◆自我总结
-    通过自定义事件子组件向父组件传递信息 
-      ★父组件内
-      绑定事件A,用于响应子组件 $emit('eventName',data) 的触发 
-      ★子组件内
-      绑定事件用于响应何时向父组件发送数据
-      在事件的回调函数中 $emit('eventName',data) 触发在父组件中的事件A 
+    <style scoped > CSSCode <style/>
+      scoped   可选,表示该样式只在该组件内生效,不会影响其他组件 
+  vue-cli 官方提供的一个脚手架工具,用于初始化一个Vue项目 
+    使用要求 
+      NodeJS大于'4.0'版本 
+      安装Git,用于下载代码
+    使用步骤
+      ◆工具安装[初始安装一次即可] 
+      npm install -g webpack            全局安装webpack 
+      npm install -g vue                全局安装vue 
+      npm install -g vue-cli            全局安装vue-cli
+        在安装Vue后就可以在命令行中使用'vue'命令了
+        vue --version 或 vue -V // 查看Vue的版本 
+        vue list  // 查看官方提供的模版 
+      ◆初始化项目 
+      vue init webpack test1「项目名称」   创建基于'webpack'模版的Vue项目 
+      cd  test1                           进入新创建的项目文件夹 
+        文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
+        后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
+      npm install                         安装依赖 
+        根据存在的'package.json'文件的配置安装依赖文件 
+        增加'node_modules'文件夹 
+      npm install vue-router vue-resource --save  安装路由模块和网络请求模块
+      ◆启动项目 
+      npm run dev                         启动测试服务器  
+        启动本地服务,打开浏览器,运行项目
+        默认执行 package.json 中 script 属性 dev 的配置
+        运行安装时,eslint mocha 等等依赖,建议初学不安装
+      ◆构建发布 
+      npm run build                       运行构建,生成生产环境可发布的代码 
+    项目目录文件说明 
+      ├── README.md
+      ├── build                           编译任务的代码
+      │   ├── build.js
+        require('./check-versions')() // 检查 Node 和 npm 版本
+        require('shelljs/global') // 使用了 shelljs 插件,可以让我们在 node 环境的 js 中使用 shell
+        env.NODE_ENV = 'production'
+        
+        var path = require('path') // 不再赘述
+        var config = require('../config') // 加载 config.js
+        var ora = require('ora') // 一个很好看的 loading 插件
+        var webpack = require('webpack') // 加载 webpack
+        var webpackConfig = require('./webpack.prod.conf') // 加载 webpack.prod.conf
+        
+        console.log( //  输出提示信息 ～ 提示用户请在 http 服务下查看本页面,否则为空白页
+          '  Tip:\n' +
+          '  Built files are meant to be served over an HTTP server.\n' +
+          '  Opening index.html over file:// won\'t work.\n'
+        )
+        
+        var spinner = ora('building for production...') // 使用 ora 打印出 loading + log
+        spinner.start() // 开始 loading 动画
+        
+        /* 拼接编译输出文件路径 */
+        var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
+        /* 删除这个文件夹 （递归删除） */
+        rm('-rf', assetsPath)
+        /* 创建此文件夹 */ 
+        mkdir('-p', assetsPath)
+        /* 复制 static 文件夹到我们的编译输出目录 */
+        cp('-R', 'static/*', assetsPath)
+        
+        //  开始 webpack 的编译
+        webpack(webpackConfig, function (err, stats) {
+          // 编译成功的回调函数
+          spinner.stop()
+          if (err) throw err
+          process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+          }) + '\n')
+        })        
+      │   ├── check-versions.js
+      │   ├── dev-client.js
+      │   ├── dev-server.js 
+        require('./check-versions')() // 检查 Node 和 npm 版本
+        var config = require('../config') // 获取 config/index.js 的默认配置
+        
+        /* 
+        ** 若 Node 的环境无法判断当前是 dev / product 环境
+        ** 使用 config.dev.env.NODE_ENV 作为当前的环境
+        */
+        
+        if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+        var path = require('path') // 使用 NodeJS 自带的文件路径工具
+        var express = require('express') // 使用 express
+        var webpack = require('webpack') // 使用 webpack
+        var opn = require('opn') // 一个可以强制打开浏览器并跳转到指定 url 的插件
+        var proxyMiddleware = require('http-proxy-middleware') // 使用 proxyTable 
+        var webpackConfig = require('./webpack.dev.conf') // 使用 dev 环境的 webpack 配置
+        
+        /* 若没有指定运行端口,使用 config.dev.port 作为运行端口 */
+        var port = process.env.PORT || config.dev.port
+        
+        /* 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置 */
+        /* 项目参考 https://github.com/chimurai/http-proxy-middleware */
+        var proxyTable = config.dev.proxyTable
+        
+        /* 使用 express 启动一个服务 */
+        var app = express()
+        var compiler = webpack(webpackConfig) // 启动 webpack 进行编译
+        
+        /* 启动 webpack-dev-middleware,将 编译后的文件暂存到内存中 */
+        var devMiddleware = require('webpack-dev-middleware')(compiler, {
+          publicPath: webpackConfig.output.publicPath,
+          stats: {
+            colors: true,
+            chunks: false
+          }
+        })
+        
+        /* 启动 webpack-hot-middleware,也就是我们常说的 Hot-reload */
+        var hotMiddleware = require('webpack-hot-middleware')(compiler)
+        
+        /* 当 html-webpack-plugin 模板更新的时候强制刷新页面 */
+        compiler.plugin('compilation', function (compilation) {
+          compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
+            hotMiddleware.publish({ action: 'reload' })
+            cb()
+          })
+        })
+        
+        // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
+        Object.keys(proxyTable).forEach(function (context) {
+          var options = proxyTable[context]
+          if (typeof options === 'string') {
+            options = { target: options }
+          }
+          app.use(proxyMiddleware(context, options))
+        })
+        
+        // 使用 connect-history-api-fallback 匹配资源,若不匹配就可以重定向到指定地址
+        app.use(require('connect-history-api-fallback')())
+        
+        // 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
+        app.use(devMiddleware)
+        
+        // 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
+        app.use(hotMiddleware)
+        
+        // 拼接 static 文件夹的静态资源路径
+        var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+        // 为静态资源提供响应服务
+        app.use(staticPath, express.static('./static'))
+        
+        // 让我们这个 express 服务监听 port 的请求,并且将此服务作为 dev-server.js 的接口暴露
+        module.exports = app.listen(port, function (err) {
+          if (err) {
+            console.log(err)
+            return
+          }
+          var uri = 'http://localhost:' + port
+          console.log('Listening at ' + uri + '\n')
+          
+          // 若不是测试环境,自动打开浏览器并跳到我们的开发地址
+          if (process.env.NODE_ENV !== 'testing') {
+            opn(uri)
+          }
+        })
+      │   ├── utils.js
+      │   ├── webpack.base.conf.js        webpack 基础配置
+        var path = require('path') // 使用 NodeJS 自带的文件路径插件
+        var config = require('../config') // 引入 config/index.js
+        var utils = require('./utils') // 引入一些小工具
+        var projectRoot = path.resolve(__dirname, '../') // 拼接我们的工作区路径为一个绝对路径
+        
+        /* 将 NodeJS 环境作为我们的编译环境 */
+        var env = process.env.NODE_ENV
+        /* 是否在 dev 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
+        var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
+        /* 是否在 production 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
+        var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
+        /* 最终是否使用 cssSourceMap */
+        var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
+        
+        module.exports = {
+          entry: {
+            app: './src/main.js' // 编译文件入口
+          },
+          output: {
+            path: config.build.assetsRoot, // 编译输出的静态资源根路径
+            publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, // 正式发布环境下编译输出的上线路径的根路径
+            filename: '[name].js' // 编译输出的文件名
+          },
+          resolve: {
+            // 自动补全的扩展名
+            extensions: ['', '.js', '.vue'],
+            // 不进行自动补全或处理的文件或者文件夹
+            fallback: [path.join(__dirname, '../node_modules')],
+            alias: {
+            // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
+              'vue$': 'vue/dist/vue.common.js',
+              'src': path.resolve(__dirname, '../src'),
+              'assets': path.resolve(__dirname, '../src/assets'),
+              'components': path.resolve(__dirname, '../src/components')
+            }
+          },
+          resolveLoader: {
+            fallback: [path.join(__dirname, '../node_modules')]
+          },
+          module: {
+            preLoaders: [
+              // 预处理的文件及使用的 loader
+              {
+                test: /\.vue$/,
+                loader: 'eslint',
+                include: projectRoot,
+                exclude: /node_modules/
+              },
+              {
+                test: /\.js$/,
+                loader: 'eslint',
+                include: projectRoot,
+                exclude: /node_modules/
+              }
+            ],
+            loaders: [
+              // 需要处理的文件及使用的 loader
+              {
+                test: /\.vue$/,
+                loader: 'vue'
+              },
+              {
+                test: /\.js$/,
+                loader: 'babel',
+                include: projectRoot,
+                exclude: /node_modules/
+              },
+              {
+                test: /\.json$/,
+                loader: 'json'
+              },
+              {
+                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                loader: 'url',
+                query: {
+                  limit: 10000,
+                  name: utils.assetsPath('img/[name].[hash:7].[ext]')
+                }
+              },
+              {
+                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                loader: 'url',
+                query: {
+                  limit: 10000,
+                  name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+                }
+              }
+            ]
+          },
+          eslint: {
+            // eslint 代码检查配置工具
+            formatter: require('eslint-friendly-formatter')
+          },
+          vue: {
+            // .vue 文件配置 loader 及工具 (autoprefixer)
+            loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
+            postcss: [
+              require('autoprefixer')({
+                browsers: ['last 2 versions']
+              })
+            ]
+          }
+        }        
+      │   ├── webpack.dev.conf.js 
+        var config = require('../config') // 同样的使用了 config/index.js
+        var webpack = require('webpack') // 使用 webpack
+        var merge = require('webpack-merge') // 使用 webpack 配置合并插件
+        var utils = require('./utils') // 使用一些小工具
+        var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf
+        /* 使用 html-webpack-plugin 插件,这个插件可以帮我们自动生成 html 并且注入到 .html 文件中 */
+        var HtmlWebpackPlugin = require('html-webpack-plugin') 
+        
+        // 将 Hol-reload 相对路径添加到 webpack.base.conf 的 对应 entry 前
+        Object.keys(baseWebpackConfig.entry).forEach(function (name) {
+          baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
+        })
+        
+        /* 将我们 webpack.dev.conf.js 的配置和 webpack.base.conf.js 的配置合并 */
+        module.exports = merge(baseWebpackConfig, {
+          module: {
+            // 使用 styleLoaders
+            loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+          },
+          // 使用 #eval-source-map 模式作为开发工具,此配置可参考 DDFE 往期文章详细了解
+          devtool: '#eval-source-map',
+          plugins: [
+            /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
+            new webpack.DefinePlugin({
+              'process.env': config.dev.env
+            }),
+            // 参考项目 https://github.com/glenjamin/webpack-hot-middleware#installation--usage
+            new webpack.optimize.OccurenceOrderPlugin(),
+            /* HotModule 插件在页面进行变更的时候只会重回对应的页面模块,不会重绘整个 html 文件 */
+            new webpack.HotModuleReplacementPlugin(),
+            /* 使用了 NoErrorsPlugin 后页面中的报错不会阻塞,但是会在编译结束后报错 */
+            new webpack.NoErrorsPlugin(),
+            // 参考项目 https://github.com/ampedandwired/html-webpack-plugin
+            /* 将 index.html 作为入口,注入 html 代码后生成 index.html文件 */
+            new HtmlWebpackPlugin({
+              filename: 'index.html',
+              template: 'index.html',
+              inject: true
+            })
+          ]
+        })      
+      │   └── webpack.prod.conf.js
+        var path = require('path') 
+        var config = require('../config') // 加载 confi.index.js
+        var utils = require('./utils') // 使用一些小工具
+        var webpack = require('webpack') // 加载 webpack
+        var merge = require('webpack-merge') // 加载 webpack 配置合并工具
+        var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf.js
+        /* 一个 webpack 扩展,可以提取一些代码并且将它们和文件分离开 */ 
+        /* 若我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
+        var ExtractTextPlugin = require('extract-text-webpack-plugin')
+        /* 一个可以插入 html 并且创建新的 .html 文件的插件 */
+        var HtmlWebpackPlugin = require('html-webpack-plugin')
+        var env = config.build.env
+        
+        /* 合并 webpack.base.conf.js */
+        var webpackConfig = merge(baseWebpackConfig, {
+          module: {
+            /* 使用的 loader */
+            loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
+          },
+          /* 是否使用 #source-map 开发工具,更多信息可以查看 DDFE 往期文章 */
+          devtool: config.build.productionSourceMap ? '#source-map' : false,
+          output: {
+            /* 编译输出目录 */
+            path: config.build.assetsRoot,
+            /* 编译输出文件名 */
+            filename: utils.assetsPath('js/[name].[chunkhash].js'), // 我们可以在 hash 后加 :6 决定使用几位 hash 值
+            // 没有指定输出名的文件输出的文件名
+            chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+          },
+          vue: {
+            /* 编译 .vue 文件时使用的 loader */
+            loaders: utils.cssLoaders({
+              sourceMap: config.build.productionSourceMap,
+              extract: true
+            })
+          },
+          plugins: [
+            /* 使用的插件 */
+            /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
+            new webpack.DefinePlugin({
+              'process.env': env
+            }),
+            /* 压缩 js (同样可以压缩 css) */
+            new webpack.optimize.UglifyJsPlugin({
+              compress: {
+                warnings: false
+              }
+            }),
+            new webpack.optimize.OccurrenceOrderPlugin(),
+            /* 将 css 文件分离出来 */
+            new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
+            /* 构建要输出的 index.html 文件, HtmlWebpackPlugin 可以生成一个 html 并且在其中插入你构建生成的资源 */
+            new HtmlWebpackPlugin({
+              filename: config.build.index, // 生成的 html 文件名
+              template: 'index.html', // 使用的模板
+              inject: true, // 是否注入 html (有多重注入方式,可以选择注入的位置)
+              minify: { // 压缩的方式
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+                // 更多参数可查看 https://github.com/kangax/html-minifier#options-quick-reference
+              },
+              chunksSortMode: 'dependency'
+            }),
+            
+            // 此处增加 @OYsun 童鞋补充
+            // CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js
+            
+            new webpack.optimize.CommonsChunkPlugin({
+              name: 'vendor',
+              minChunks: function (module, count) {
+                // 依赖的 node_modules 文件会被提取到 vendor 中
+                return (
+                  module.resource &&
+                  /\.js$/.test(module.resource) &&
+                  module.resource.indexOf(
+                    path.join(__dirname, '../node_modules')
+                  ) === 0
+                )
+              }
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+              name: 'manifest',
+              chunks: ['vendor']
+            })
+            
+          ]
+        })
+        
+        /* 开启 gzip 的情况下使用下方的配置 */
+        if (config.build.productionGzip) {
+          /* 加载 compression-webpack-plugin 插件 */
+          var CompressionWebpackPlugin = require('compression-webpack-plugin')
+          /* 向webpackconfig.plugins中加入下方的插件 */
+          webpackConfig.plugins.push(
+            /* 使用 compression-webpack-plugin 插件进行压缩 */
+            new CompressionWebpackPlugin({
+              asset: '[path].gz[query]',
+              algorithm: 'gzip',
+              test: new RegExp(
+                '\\.(' +
+                config.build.productionGzipExtensions.join('|') +
+                ')$'
+              ),
+              threshold: 10240,
+              minRatio: 0.8
+            })
+          )
+        }
+        
+        // split vendor js into its own file
+         /* 没有指定输出文件名的文件输出的静态文件名 */
+       new webpack.optimize.CommonsChunkPlugin({
+             name: 'vendor',
+             minChunks: function (module, count) {
+               // any required modules inside node_modules are extracted to vendor
+               return (
+                 module.resource &&
+                 /\.js$/.test(module.resource) &&
+                 module.resource.indexOf(
+                   path.join(__dirname, '../node_modules')
+                 ) === 0
+               )
+             }
+           }),
+           // extract webpack runtime and module manifest to its own file in order to
+           // prevent vendor hash from being updated whenever app bundle is updated
+           /* 没有指定输出文件名的文件输出的静态文件名 */
+           new webpack.optimize.CommonsChunkPlugin({
+             name: 'manifest',
+             chunks: ['vendor']
+           })
+       CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了所以第二次new就是解决这个问题的,请你好好看vue-cli那个英文原注释
+       
+       // extract webpack runtime and module manifest to its own file in order to
+       // prevent vendor hash from being updated whenever app bundle is updated        
+        
+        module.exports = webpackConfig        
+      ├── config                          webpack 的配置文件
+      │   ├── dev.env.js
+      │   ├── index.js
+        index.js 中有 dev 和 production 两种环境的配置
+        
+        var path = require('path')
+        
+        module.exports = {
+          build: { // production 环境
+            env: require('./prod.env'), // 使用 config/prod.env.js 中定义的编译环境
+            index: path.resolve(__dirname, '../dist/index.html'), // 编译输入的 index.html 文件
+            assetsRoot: path.resolve(__dirname, '../dist'), // 编译输出的静态资源路径
+            assetsSubDirectory: 'static', // 编译输出的二级目录
+            assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
+            productionSourceMap: true, // 是否开启 cssSourceMap
+            // Gzip off by default as many popular static hosts such as
+            // Surge or Netlify already gzip all static assets for you.
+            // Before setting to `true`, make sure to:
+            // npm install --save-dev compression-webpack-plugin
+            productionGzip: false, // 是否开启 gzip
+            productionGzipExtensions: ['js', 'css'] // 需要使用 gzip 压缩的文件扩展名
+          },
+          dev: { // dev 环境
+            env: require('./dev.env'), // 使用 config/dev.env.js 中定义的编译环境
+            port: 8080, // 运行测试页面的端口
+            assetsSubDirectory: 'static', // 编译输出的二级目录
+            assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
+            proxyTable: {}, // 需要 proxyTable 代理的接口（可跨域）
+            cssSourceMap: false // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
+          }
+        }        
+      │   └── prod.env.js
+      ├── index.html
+      ├── package.json
+      ├── src
+      │   ├── App.vue
+      │   ├── assets
+      │   │   └── logo.png
+      │   ├── components
+      │   │   └── Hello.vue
+      │   └── main.js
+      └── static    
+    
+      .gitignore   # 忽略无需git控制的文件  比如 node_modules
+      .eslintrc    # eslint加载器配置
+      .babelrc         # babel加载器配置
+      build 
+        webpack.base.config.js         # webpack 基础配置
+          基础配置包括了webpack的最基本配置,
+          包括入口文件、输入文件、加载器配置、插件配置等,
+          module.exports = {
+            entry: './src/main.js', //页面入口文件配置
+            output: { //入口文件输出配置
+              path: './dist',
+              publicPath: 'dist/',
+              filename: 'build.js'
+            },
+            module: { //加载器配置
+              loaders: [
+                {
+                  test: /\.vue$/,
+                  loader: 'vue'
+                },
+                {
+                  test: /\.js$/,
+                  loader: 'babel!eslint',
+                  // make sure to exclude 3rd party code in node_modules
+                  exclude: /node_modules/
+                },
+                {
+                  // edit this for additional asset file types
+                  test: /\.(png|jpg|gif)$/,
+                  loader: 'url',
+                  query: {
+                    // inline files smaller then 10kb as base64 dataURL
+                    limit: 10000,
+                    // fallback to file-loader with this naming scheme
+                    name: '[name].[ext]?[hash]'
+                  }
+                }
+              ]
+            },
+            vue: {  // vue-loader 设置:
+              loaders: {
+                js: 'babel!eslint'
+              }
+            }
+            //将所有的*.vue文件转化为javascript文件并执行ESLint检测,这里需要配置.eslintrc文件
+          }    
+        webpack.dev.config.js          # webpack 开发配置
+        webpack.prod.config.js         # webpack 生产配置
+      node_modules         #通过npm安装的模块
+      index.html       # 首页
+      package.json     # 项目配置
+      src 
+        components    # 组件文件夹,存放app组件
+          A.vue
+          B.vue
+          Counter.vue
+        assets   #静态资源 
+        app.vue    ## 主vue组件
+        main.js    #启动配置,webpack入口文件
+        
+      项目基本目录结构 
+        bulid            构建的配置文件
+        config           
+        dist             打包构建好的代码
+          static 
+          index.html 
+        node_modules     
+        src              开发目录 
+          assets         静态资源目录 
+          components     组件目录 
+          App.vue        主入口视图文件 
+          main.js        主入口JS文件 
+        static 
+        index.html 
+        package.json 
+        ...
+    webpack.config.js  webpack配置文件 
+      在 webpack.config.js 中的配置
+      module.exports = {
+        entry: {
+          'index': './vue/index/main.js',
+        },
+        output: {
+          path: './public/bulid',
+          filename: '[filename].js' // 可以多点切入
+        },
+        module: {
+          loaders: [
+            {
+              test: /\.vue$/,
+              exclude: /node_modules/,
+              loader: vue.withLoaders({
+                js: 'babel?optional[]=runtime'
+              })
+            },
+            { test: /\.scss$/, loader: 'style!css!sass' },
+            { test: /\.css$/, loader: "style!css" },
+            { test: /\.js$/, loader: 'babel-loader' }
+          ]
+        },
+        resolve: { // 解决 npm 的依赖问题
+          modulesDirectories: ['node_modules'],
+          extensions: ['', '.js', '.json']
+        },
+      }      
 过渡效果 
   Vue在插入、更新或者移除DOM时,有多种不同方式的应用过渡效果 
     在CSS过渡和动画中自动应用'class' 
@@ -3061,90 +2824,121 @@ Component,组件
             }
           })
     ◆JS过渡动画 
-    动画监听事件 
       PS：Vue为了知道过渡的完成,必须设置相应的事件监听器。
         它可以是 transitionend 或 animationend ,这取决于给元素应用的 CSS 规则。
         若你使用其中任何一种,Vue 能自动识别类型并设置监听。
         但是,在一些场景中,你需要给同一个元素同时设置两种过渡动效,
         比如 animation 很快的被触发并完成了,而 transition 效果还没结束。
         在这种情况中,需要使用 type 特性并设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
-      JS钩子
-        before-enter 
-        enter 
-        after-enter 
-        enter-cancelled 
-        before-leave 
-        after-leave 
-        leave-cancelled 
-      操作流程 
-        <transition>标签中绑定JS钩子事件 
-        <transition
-        @:before-enter="beforeEnter"
-        @:enter="enter"
-        @:after-enter="afterEnter"
-        @:enter-cancelled="enterCancelled"
-        @:before-leave="beforeLeave"
-        @:leave="leave"
-        @:after-leave="afterLeave"
-        @:leave-cancelled="leaveCancelled" 
-        :css="false"> // <!-- 添加  v-bind:css="false" 避免CSS过渡的影响-->
-          // <!-- ... -->
+    JS钩子
+      before-enter 
+      enter 
+      after-enter 
+      enter-cancelled 
+      before-leave 
+      after-leave 
+      leave-cancelled 
+    操作流程 
+      <transition>标签中绑定JS钩子事件 
+      <transition
+      @:before-enter="beforeEnter"
+      @:enter="enter"
+      @:after-enter="afterEnter"
+      @:enter-cancelled="enterCancelled"
+      @:before-leave="beforeLeave"
+      @:leave="leave"
+      @:after-leave="afterLeave"
+      @:leave-cancelled="leaveCancelled" 
+      :css="false"> // <!-- 添加  v-bind:css="false" 避免CSS过渡的影响-->
+        // <!-- ... -->
+      </transition>
+      // ...
+      methods: {
+        // 回调的参数 el 表示的为<transition>标签内的DOM元素 
+        beforeEnter: function (el) {
+        },
+        // 此回调函数是可选项的设置
+        // 与 CSS 结合时使用
+        enter: function (el, done) {
+          // ...
+          done()
+        },
+        afterEnter: function (el) {
+        },
+        enterCancelled: function (el) {
+        },
+        beforeLeave: function (el) {
+        },
+        // 此回调函数是可选项的设置
+        // 与 CSS 结合时使用
+        leave: function (el, done) {
+          // ...
+          done()
+        },
+        afterLeave: function (el) {
+        },
+        // leaveCancelled 只用于 v-show 中
+        leaveCancelled: function (el) {
+        }
+      }
+      这些钩子函数可以结合 CSS transitions/animations 使用,也可以单独使用 
+      当只用JS过渡的时候,在 enter 和 leave 中,回调函数 done 是必须的 
+      否则,它们会被同步调用,过渡会立即完成 
+      推荐对于仅使用JS过渡的元素添加 v-bind:css="false",Vue会跳过CSS的检测 
+      这也可以避免过渡过程中 CSS 的影响 
+    e.g.：
+      使用jQuery动画 
+      .pos{ // 定义预先的位置 
+        position: absolute;
+        top: 100px;
+        left: 200px;
+        width: 100px;
+        height: 100px;
+        background-color: #b9e4e7;
+      }
+      <div id="demo">
+        <button v-on:click="show=!show"> Toggle </button>
+        <transition 
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @leave="leave"
+        :css="false"> 
+          <div class="pos" v-show="show">123321</div>
         </transition>
-        // ...
-        methods: {
-          // 回调的参数 el 表示的为<transition>标签内的DOM元素 
-          beforeEnter: function (el) {
+      </div>
+      new Vue({
+        el: '#demo',
+        data: {
+          show: true,
+        },
+        methods : {
+          beforeEnter : function(el){
+            $(el).css({
+              left : '-100px',
+              opacity : 0
+            })
           },
-          // 此回调函数是可选项的设置
-          // 与 CSS 结合时使用
-          enter: function (el, done) {
-            // ...
-            done()
+          enter : function(el,done){
+            $(el).animate({
+              left : '200px',
+              opacity : 1
+            }, {
+              duration : 1500,
+              complete : done
+            })
           },
-          afterEnter: function (el) {
+          leave : function(el,done){
+            $(el).animate({
+              left : '500px',
+              opacity : 1
+            }, {
+              duration : 1500,
+              complete : done
+            })
           },
-          enterCancelled: function (el) {
-          },
-          beforeLeave: function (el) {
-          },
-          // 此回调函数是可选项的设置
-          // 与 CSS 结合时使用
-          leave: function (el, done) {
-            // ...
-            done()
-          },
-          afterLeave: function (el) {
-          },
-          // leaveCancelled 只用于 v-show 中
-          leaveCancelled: function (el) {
-          }
-        }
-        这些钩子函数可以结合 CSS transitions/animations 使用,也可以单独使用 
-        当只用JS过渡的时候,在 enter 和 leave 中,回调函数 done 是必须的 
-        否则,它们会被同步调用,过渡会立即完成 
-        推荐对于仅使用JS过渡的元素添加 v-bind:css="false",Vue会跳过CSS的检测 
-        这也可以避免过渡过程中 CSS 的影响 
-      e.g.：
-        使用jQuery动画 
-        .pos{ // 定义预先的位置 
-          position: absolute;
-          top: 100px;
-          left: 200px;
-          width: 100px;
-          height: 100px;
-          background-color: #b9e4e7;
-        }
-        <div id="demo">
-          <button v-on:click="show=!show"> Toggle </button>
-          <transition 
-          @before-enter="beforeEnter"
-          @enter="enter"
-          @leave="leave"
-          :css="false"> 
-            <div class="pos" v-show="show">123321</div>
-          </transition>
-        </div>
-◆扩展插件 
+        },
+      })
+◆Vue扩展插件 
 vue-resource  与后台数据交互 
   PS：作为vue插件的形式存在,通过 XMLHttpRequest 或 JSONP 发起请求并处理响应 
   vm.$http.get('url'[,arg]).then(foo)   get请求 
@@ -3155,60 +2949,98 @@ vue-resource  与后台数据交互
   vm.$http.jsonp() jsonp请求 
 axios         功能和vue-resource类似 
 vue-router    路由 
-  PS：'vue-router2.x'只适用于'Vue2.x'版本
-    在web开发中，“route”是指根据url分配到对应的处理程序
-  script引入 
+  PS：'vue-router2.x'只适用于'Vue2.x'版本,
+    在web开发中，“route”是指根据url分配到对应的处理程序;根据不同的地址来显示不同的页面 
+  引入'Vue-router'
+    ◆script引入 
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
     在Vue后面加载 vue-router,它会自动安装的
-  npm使用 
+    ◆npm安装引入 
     npm install vue-router --save     安装 
-    ◆引入
+    // 引入使用
     import Vue from "vue";
     import VueRouter from "vue-router";
     Vue.use(VueRouter); // 通过 Vue.use() 明确地安装路由功能：
     // 使用全局的 script 标签,则默认安装了  
   使用步骤 
-    ◆定义[路由]组件 
-      可以从其他文件 import 进来
-      const Foo = { template: '<div>foo</div>' }  // 组件配置对象
-      const Bar = { template: '<div>bar</div>' }
-    ◆创建router实例,配置路由 
-      const vrt = new VueRouter({ 
-        routes : [
-          { path: '/foo', component: Foo },
-          { path: '/bar', component: Bar }
-          // 每个路由映射一个组件
-        ]
-      }) 
-    ◆创建和挂载根实例 
-      通过'router'配置参数注入路由,从而让整个应用都有路由功能 
-      const app = new Vue({ 
-        el : '#app',
-        router : vrt,
-      })
-      // .$mount('#app')
-  <router-link to="/foo">xxx</router-link>   连接路由 
-    PS：<router-link>默认会被渲染成一个<a>标签 
-    to   属性指定链接 
-  <router-view></router-view>    路由渲染,路由出口 
+    ◆定义[路由]组件 [可以从其他文件 import 进来] 
+    const Foo = { template: '<div>foo</div>' }  // 组件配置对象
+    const Bar = { template: '<div>bar</div>' }
+    ◆创建router实例并配置路由[创建映射,即路径和页面对应] 
+    const VRconfig = new VueRouter({ 
+      // mode : 'history', // 采用'history'模式 
+      routes : [
+        { path : '/aoo', component : Foo },
+        { 
+          path : '/boo', 
+          component : { // 命名视图 
+            viewName1 : cptA,
+            viewName2 : cptB,
+          },
+          name : 'coo',  // 命名路由 
+          children : [ // 路由嵌套 
+            {
+              path: 'profile',
+              component: UserProfile,
+            },
+            {
+              path: 'posts',
+              component: UserPosts,
+            }
+          ],
+          redirect : '/coo', // 重定向到'/coo' 
+        }
+        // 每个路由映射一个组件
+      ]
+    }) 
+    ◆创建和挂载根实例 : 通过'router'配置参数注入路由,从而让整个应用都有路由功能 
+    const app = new Vue({ 
+      el : '#app',
+      router : VRconfig,
+    }) // .$mount('#app')
+  <router-view></router-view>    路由渲染,路由出口 : 指定组件的渲染位置 
     e.g.：
       <router-link to="/foo">Go to Foo</router-link>
       <router-link to="/bar">Go to Bar</router-link>
       // <!-- 路由匹配到的组件将渲染在这里 -->
       <router-view></router-view>    
-  '/:xx'   动态路由,配任意的'/xxx' 
-    this.$route.params 在组件内获取当前的具体的路径 
+    <router-view name="xx"></router-view> 命名视图,实现一路由对应多视图 
+      同时[同级]展示多个视图,可在界面中拥有多个单独命名的视图,若未设置名字,则默认为default 
       e.g.：
-        const User = {
-          template: '<div>User {{ $route.params.id }}</div>'
-        }
-      在一个路由中设置多段『路径参数』,对应的值都会设置到 $route.params 中
+        <router-view class="view one"></router-view>
+        <router-view class="view two" name="a"></router-view>
+        <router-view class="view three" name="b"></router-view>
+        一个视图使用一个组件渲染,因此对于同个路由,多个视图就需要多个组件
+        const router = new VueRouter({
+          routes: [
+            {
+              path: '/',
+              components: {
+                default: Foo,
+                a: Bar,
+                b: Baz
+              }
+            }
+          ]
+        })
+  <router-link to="aoo" tag='tagName'>xxx</router-link>   连接路由 : 用于在页面点击跳转 
+    PS：<router-link>默认会被渲染成一个<a>标签 
+    to   属性,指定链接地址 
+      <router-link to="/aoo">xxx</router-link> // 到根路径下的aoo 
+      <router-link :to="'aoo'">xxx</router-link> // 动态绑定
+      <router-link :to="{path:'aoo/boo'}">xxx</router-link> // 传入对象 
+      <router-link :to="{name:'aoo'}">xxx</router-link> // 具名路由  
+    tag  指定<router-link>渲染成的HTML标签,'tagName'为标签名,如'div'、'li'等
+  '/path/:param' 动态路由,配任意的'/path/:xx'[类似于于地址中的查询字符串] 
+    this.$route.params 在组件内获取当前的具体的路径的对象 
+      在HTML中可直接使用 $route.params.xx 来取匹配到的地址参数 
+      在一个路由中设置多段路径参数 
         模式             匹配路径       $route.params
-        /a/:aoo         /a/bar        { aoo: 'bar' }
-        /a/:aoo/b/:boo  /a/bar/b/123  { aoo: 'bar', boo: 123 }
+        /a/:aoo         /a/bar         { aoo: 'bar' }
+        /a/:aoo/b/:boo  /a/bar/b/123   { aoo: 'bar', boo: 123 }
     this.$route.query  [若URL中有查询参数]获取查询参数 
-      对于路径 /foo?user=1,则有 $route.query.user == 1,若没有查询参数,则是个空对象。
+      对于路径 /foo?user=1,则有 $route.query.user == 1,若没有查询参数,则是个空对象 
     this.$route.hash   当前路由的hash值,若无hash,则为空字符串 
     响应路由参数的变化
       当使用路由参数时,例如从 /user/foo 导航到 user/bar,原来的组件实例会被复用。
@@ -3240,7 +3072,7 @@ vue-router    路由
       routes: [
         { 
           path: '/user/:id', 
-          component: User,
+          component: User, // 需在该组件的HTML中定义<router-view>
           children: [
             {
               // 当 /user/:id/profile 匹配成功,
@@ -3308,14 +3140,15 @@ vue-router    路由
         router.go(-100)
         router.go(100)
         // 若 history 记录不够用,那就默默地失败呗
-  'name'命名路由 
+    router.beforeEach()  
+  'name':"xx" 路由配置中命名路由 
     通过名称来标识路由显得更方便,可在创建'Router'实例时,在'routes'配置中设置路由名称 
     const router = new VueRouter({
       routes: [
         {
-          path: '/user/:userId',
-          name: 'user',
-          component: User
+          path : '/user/:userId',
+          name : 'user',
+          component : User
         }
       ]
     })
@@ -3324,26 +3157,6 @@ vue-router    路由
     这跟代码调用 router.push() 是一回事：
     router.push({ name: 'user', params: { userId: 123 }})
     这两种方式都会把路由导航到 /user/123 路径 
-  命名视图,实现一路由对应多视图 
-    同时[同级]展示多个视图,可在界面中拥有多个单独命名的视图,
-    若 router-view 没有设置名字,那么默认为 default。
-    e.g.：
-      <router-view class="view one"></router-view>
-      <router-view class="view two" name="a"></router-view>
-      <router-view class="view three" name="b"></router-view>
-      一个视图使用一个组件渲染,因此对于同个路由,多个视图就需要多个组件
-      const router = new VueRouter({
-        routes: [
-          {
-            path: '/',
-            components: {
-              default: Foo,
-              a: Bar,
-              b: Baz
-            }
-          }
-        ]
-      })
   'redirect'重定向 
     『重定向』的意思是,当用户访问 /a时,URL 将会被替换成 /b,然后匹配路由为 /b
     通过 routes 配置来完成
@@ -3424,6 +3237,230 @@ vue-router    路由
       })
       或者,若你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
       当没有匹配到路由的时候返回 404,从而实现 fallback。
+  todo
+    使用路由功能 
+      npm install vue-router      安装路由
+      配置路由
+        在 main.js 里
+        import Vue from 'vue'
+        import VueRouter from 'vue-router'
+        import App from './App'
+    
+        Vue.use(VueRouter);
+        
+        const routes = [
+          { 
+            path: '/',             // 首页默认重定向至Index路由
+            redirect: '/index'
+          },
+          { 
+            path: '/test', 
+            component: resolve => require(['./components/test.vue'], resolve) 
+          },
+          { 
+            path: '/index', 
+            component: resolve => require(['./components/index.vue'], resolve) 
+          }
+        ];
+        
+        const router = new VueRouter({
+          routes // （缩写）相当于 routes: routes,
+        });
+        
+        // 4. 创建和挂载根实例
+        // 记得要通过 router 配置参数注入路由,
+        // 从而让整个应用都有路由功能
+        const app = new Vue({
+          router,
+          render: h => h(App)
+        }).$mount('#app');
+    使用路由搭建单页应用
+      
+      之前已经通过命令安装了vue-router
+      
+      npm install vue-router --save
+      直接上ES6的语法来进行引入
+      import Vue from "vue";
+      import VueRouter from "vue-router";
+      Vue.use(VueRouter);
+
+      在webpack.config.js加入别名
+      
+      resolve: {
+          alias: {vue: 'vue/dist/vue.js'}
+        }
+      为什么要加 alias 配置项？其作用可以在文档中有相应的描述:查看图片修改完之后的webpack.config.js是这样子的:
+      
+      var path = require('path')
+      var webpack = require('webpack')
+      
+      module.exports = {
+        entry: './src/main.js',
+        output: {
+          path: path.resolve(__dirname, './dist'),
+          publicPath: '/dist/',
+          filename: 'build.js'
+        },
+        resolveLoader: {
+          root: path.join(__dirname, 'node_modules'),
+        },
+        module: {
+          loaders: [
+            {
+              test: /\.vue$/,
+              loader: 'vue'
+            },
+            {
+              test: /\.js$/,
+              loader: 'babel',
+              exclude: /node_modules/
+            },
+            {
+              test: /\.(png|jpg|gif|svg)$/,
+              loader: 'file',
+              query: {
+                name: '[name].[ext]?[hash]'
+              }
+            }
+          ]
+        },
+        resolve: {
+          alias: {vue: 'vue/dist/vue.js'}
+        },
+        devServer: {
+          historyApiFallback: true,
+          noInfo: true
+        },
+        devtool: '#eval-source-map'
+      }
+      
+      if (process.env.NODE_ENV === 'production') {
+        module.exports.devtool = '#source-map'
+        // http://vue-loader.vuejs.org/en/workflow/production.html
+        module.exports.plugins = (module.exports.plugins || []).concat([
+          new webpack.DefinePlugin({
+            'process.env': {
+              NODE_ENV: '"production"'
+            }
+          }),
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
+        ])
+      }
+      再按之前的方法写一个组件 secondcomponent.vue
+      
+      <template>
+        <div>
+          <h1>I am another page</h1>
+          <a> written by {{ author }} </a>
+          <p> 感谢 <a href="https://github.com/showonne">showonne</a>大神的技术指导</p>
+        </div>
+      </template>
+      
+      <script>
+      export default {
+        data() {
+          return {
+            author: "微信公众号 jinkey-love",
+            articles: [],
+          }
+        }
+        }
+      }
+      </script>
+      
+      <style>
+      </style>
+      这时候修改 main.js,引入并注册 vue-router
+      
+      import VueRouter from "vue-router";
+      Vue.use(VueRouter);
+      并且配置路由规则和 app 启动配置项加上 router,旧版的 router.map 方法在vue-router 2.0 已经不能用了修改后的main.js如下:
+      
+      import Vue from 'vue'
+      import App from './App.vue'
+      import VueRouter from "vue-router";
+      import VueResource from 'vue-resource'
+      
+      //开启debug模式
+      Vue.config.debug = true;
+      
+      Vue.use(VueRouter);
+      Vue.use(VueResource);
+      
+      // 定义组件, 也可以像教程之前教的方法从别的文件引入
+      const First = { template: '<div><h2>我是第 1 个子页面</h2></div>' }
+      import secondcomponent from './component/secondcomponent.vue'
+      
+      // 创建一个路由器实例
+      // 并且配置路由规则
+      const router = new VueRouter({
+        mode: 'history',
+        base: __dirname,
+        routes: [
+          {
+            path: '/first',
+            component: First
+          },
+          {
+            path: '/second',
+            component: secondcomponent
+          }
+        ]
+      })
+      
+      // 现在我们可以启动应用了！
+      // 路由器会创建一个 App 实例,并且挂载到选择符 #app 匹配的元素上
+      const app = new Vue({
+        router: router,
+        render: h => h(App)
+      }).$mount('#app')
+      这样子改完再打开浏览器看看查看图片点击那两个链接试试,会发现<router-view></router-view>的内容已经展示出来,同时注意浏览器地址已经变更查看图片另外,也可以把 App.vue 的内容写在 main.js 也是可以的不过不建议这么做查看图片
+      
+      若你使用 vue1.0和0.7版本的 vue-router,请参照下面这个教程, 他整个系列都不错的,当然仅限于 vue1.0 :
+      
+      http://guowenfh.github.io/2016/03/28/vue-webpack-06-router/
+      给页面加点动态数据
+      
+      这时候的页面都是静态的(数据在写程序的时候已经固定了不能修改),而每个应用基本上都会请求外部数据以动态改变页面内容对应有一个库叫 vue-resource 帮我们解决这个问题使用命令行安装
+      
+      cnpm install vue-resource --save
+      在 main.js 引入并注册 vue-resource:
+      
+      import VueResource from 'vue-resource'
+      Vue.use(VueResource);
+      我们在 secondcomponent.vue 上来动态加载数据添加一个列表:
+      
+      <ul>
+            <li v-for="article in articles">
+              {{article.title}}
+            </li>
+          </ul>
+      在 data 里面加入数组 articles 并赋值为[]然后在 data 后面加入加入钩子函数 mounted(详细请参照官方文档关于 vue 生命周期的解析),data 和 mount 中间记得记得加逗号
+      
+      mounted: function() {
+          this.$http.jsonp('https://api.douban.com/v2/movie/top250?count=10', {}, {
+              headers: {
+      
+              },
+              emulateJSON: true
+          }).then(function(response) {
+            // 这里是处理正确的回调
+      
+              this.articles = response.data.subjects
+              // this.articles = response.data["subjects"] 也可以
+      
+          }, function(response) {
+              // 这里是处理错误的回调
+              console.log(response)
+          });
+        }
+      这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
+      
+      Access-Control-Allow-Origin: *        
 Vuex          大规模状态管理 
 vue-validator 表单验证 
 vue-touch     移动端 

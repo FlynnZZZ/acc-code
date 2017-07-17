@@ -1561,6 +1561,15 @@ Declaration,样式声明
       list-style 
     input 表单
       padding 
+      type=number 时,
+        input[type=number] {  
+          -moz-appearance:textfield;  
+        }  
+        input[type=number]::-webkit-inner-spin-button,  
+        input[type=number]::-webkit-outer-spin-button {  
+          -webkit-appearance: none;  
+          margin: 0;  
+        }  
     textarea 文本域 
       resize: none;  禁止缩放
   配件样式 

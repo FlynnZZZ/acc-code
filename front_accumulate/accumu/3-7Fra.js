@@ -1274,8 +1274,8 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
       });
       vm.$data === obj;  // true
       vm.$el === document.getElementById('test'); // true
-  vm.$el      实例接管的DOM对象
-  vm.$data    实例的data
+  vm.$el      实例接管的DOM对象 
+  vm.$data    实例的data 
   vm.$watch('key', foo)  监控元素改变的方法 
     key data对象中的属性 
     foo 传入参数 (newVal,oldVal) 
@@ -1287,8 +1287,6 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
       如 vm.$watch('a',newVal => this.myMethod())
       因为箭头函数绑定父上下文,this 不是Vue实例,
   vm.$set(obj,key,val)  局部声明
-  vm.$el      vm接管的DOM对象
-  vm.$data    vm的数据对象
   vm.$on('eventName',foo)     监听事件
   vm.$emit('event-name',data) 触发事件
 Lifecycle_hooks,生命周期钩子 
@@ -3146,8 +3144,6 @@ Component,组件
             <div class="pos" v-show="show">123321</div>
           </transition>
         </div>
-
-
 ◆扩展插件 
 vue-resource  与后台数据交互 
   PS：作为vue插件的形式存在,通过 XMLHttpRequest 或 JSONP 发起请求并处理响应 

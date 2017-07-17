@@ -339,6 +339,12 @@ ECMAScript JS核心,语法部分
           obj.toString =function(){ return "hello"; }; // 自定义该对象的toString方法
           "a" + obj; // "ahello"
       val.toString() String() 显式转换 
+    Exp:
+      数值字符串比较其数值大小,采用相减的方式
+        var str1 = '9';
+        var str2 = '100';
+        console.log(str1>str2);   // true , 非想要的结果 
+        console.log(str1-str2>0); // false
 引用类型：Object 对象 
   PS：引用类型就叫对象「SlPt」; ECMA-262 定义为:无序的名值的合集 
     对象一般没有长度,具有多种属性的内容结构 

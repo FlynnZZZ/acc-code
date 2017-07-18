@@ -1,4 +1,4 @@
-ECMAScript JS核心,语法部分 
+ECMAScript : JS核心,语法部分 
   ECMAscript: JS的语法核心,提供核心语言功能; 
     由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
@@ -100,10 +100,22 @@ ECMAScript JS核心,语法部分
       arguments[num] 变成静态副本,按共享传递 
         在函数中修改arguments[num]不会影响到函数的参数,
         当修改 arguments[num].xx 会影响 
+      不能使用arguments.callee
+      不能使用arguments.caller
+      不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
       初始化时重复定义对象属性报错
         e.g.： var obj = {a:1,a:2}
       禁止8进制的字面量
         console.log(0123); // 83,严格模式下则报错 
+        不能使用前缀0表示八进制数 
+      禁止this指向全局对象
+      函数的参数不能有同名属性,否则报错
+      不能对只读属性赋值,否则报错
+      不能删除不可删除的属性,否则报错
+      不能删除变量delete prop,会报错,只能删除属性delete global[prop]
+      eval不会在它的外层作用域引入变量
+      eval和arguments不能被重新赋值
+      增加了保留字[如 protected static 和 interface] 
 -------------------------------------------------------------------------------
 ◆数据类型 
 变量&常量&字面量 
@@ -1737,7 +1749,7 @@ Evaluation_Strategy,求值策略
   while(条件){};  先判断再运行
   do{}while(条件); 先执行后判断,至少会执行一次 
   for(var key in obj){} 无序遍历[适用'str''arr''obj']  
-    PS：若原型链上的属性设置为可遍历,则也会将其遍历出来 
+    PS：若原型链上的属性设置为可遍历,则也会将其遍历出来;可使用'break'终止循环 
     遍历字符串 
       var str = 'abc';
       var rst = '';
@@ -1745,10 +1757,11 @@ Evaluation_Strategy,求值策略
         rst += key + '=' + str[key] + '&'
       };
       console.log(rst); // 0=a&1=b&2=c&
-    遍历数组 
+    遍历数组[遍历的下标为字符串类型而非数值类型] 
       var arr = ['a','b','c']
       var rst = '';
       for(var idx in arr){
+        // console.log(typeof idx); // string
         rst += idx + '-' + arr[idx]
       } 
       console.log(rst); // 0-a1-b2-c
@@ -1992,8 +2005,8 @@ String  字符对象:处理字符串的'包装对象'
   str1.localeCompare(str2); 使用本地特定的顺序来比较字符串
     若str1大则返回1,相等返回0,否则返回-1
   ★字符串修改
-  str1.replace(regexp/str2,replacement)  字符替换
-    返回值为 使用replacement替换str1中第一个str2后的 结果字符串
+  var str = str1.replace(regexp/str2,replacement)  字符替换
+    返回值为'使用replacement替换[str1中]第一个str2的'结果字符串
     e.g.: 'abcde'.replace('ab','11'); // "11cde"
   str1.split(str2)    通过字符分割成数组 
     与 join 或互为反操作
@@ -2030,6 +2043,7 @@ String  字符对象:处理字符串的'包装对象'
       var str ="1-2-3-4-5-6";
       var s ="=";
       Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
+  Array.prototype.splice.call('aaaa',1,1,"*")   [如何实现??]
 Array   数组对象 
   PS：数组是JS内置的一种特殊类型的对象 
     可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象 
@@ -3008,7 +3022,7 @@ RegExp   正则对象
     i   ignore case,忽略大小写
     g   global,全局匹配
     m   multiple lines,多行匹配
-  Metacharacter 元符号 :包含特殊含义的字符 
+  Metacharacter,元符号 : 特殊含义的字符 
     PS： 可以控制匹配模式的方式.
       第二个反斜杠"/"后的元字符将失去其特殊含义[用于放置模式修饰符的]
     ★字符元字符
@@ -3337,9 +3351,10 @@ RegExp   正则对象
       var str="123abc.com@aaa.com";
       alert(pattern.test(str));
   Question:
-    只包含中文和字母a的正则
+    只包含中文和字母a的正则 
       中文表示为 [\u0391-\uFFE5]
       为 /[\u0391-\uFFE5a]/ ?
+    指定初始开始匹配的字符的下标,如'abcde',指定从第二个字符开始匹配 
 Error    错误对象 
   PS：JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
     然后整个程序就中断在发生错误的地方,不再往下执行.
@@ -4282,7 +4297,6 @@ Scope,作用域
       console.log(val2); // Boolean {[[PrimitiveValue]]: true}
       console.log(val3); // window 
       console.log(val4); // window 
-      
       function add(arg1,arg2){ 
         return arg1 + this;
       }

@@ -1,28 +1,77 @@
-ES6
-  PS：于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言
+ES6 
+  PS：于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
+  Babel转码器将ES6转换为ES5 
+    配置文件'.babelrc' : 位于项目的根目录 
+      文件配置  用来设置转码规则和插件
+        {
+          "presets": [  // 设定转码规则 
+            "latest",
+            "react",
+            "stage-2"
+          ],
+          "plugins": []
+        }
+        官方提供了以下的规则集,可以根据需要安装 
+          # 最新转码规则
+          $ npm install --save-dev babel-preset-latest
+          # react 转码规则
+          $ npm install --save-dev babel-preset-react
+          # 不同阶段语法提案的转码规则[共有4个阶段],选装一个
+          $ npm install --save-dev babel-preset-stage-0
+          $ npm install --save-dev babel-preset-stage-1
+          $ npm install --save-dev babel-preset-stage-2
+          $ npm install --save-dev babel-preset-stage-3
+    'babel-cli'命令行编译 
+      npm install --global babel-cli   #安装
+      基本用法 
+        babel example.js  # 转码结果输出到标准输出
+        babel example.js --out-file compiled.js  # 转码结果写入一个文件
+          # 或者
+          babel example.js -o compiled.js
+          # --out-file 或 -o 参数指定输出文件
+        babel src --out-dir lib     # 整个目录转码
+          # 或者
+          babel src -d lib
+          # --out-dir 或 -d 参数指定输出目录
+        babel src -d lib -s   # -s 参数生成source map文件
+    'babel-cli'项目中安装 
+      PS：全局环境下,进行 Babel 转码意味着,如果项目要运行,全局环境必须有 Babel,
+        也就是说项目产生了对环境的依赖。
+        另一方面,这样做也无法支持不同项目使用不同版本的 Babel。
+      npm install --save-dev babel-cli   #安装
+      配置'package.json' 
+        {
+          // ...
+          "devDependencies": {
+            "babel-cli": "^6.0.0"
+          },
+          "scripts": {
+            "build": "babel src -d lib"
+          },
+        }
+      npm run build         #执行命令转码 
 ◆变量扩展 
-  lexical scopes,词法作用域,即块作用域,会在函数内部、代码块「即 {}」内部创建 
-    块级作用域是很多类C语言的工作机制, ES6引入块级声明的目的是增强JS的灵活性,
-    同时又能与其它编程语言保持一致.
-  Global Block Bindings,全局块级绑定
-    全局作用域使用 var 声明全局变量,相当于给全局对象「浏览器环境下是 window」添加属性
-      这意味着全局对象的属性可能会意外地被重写覆盖
-      var RegExp = "Hello!";
-      console.log(window.RegExp);     // "Hello!"
-    若在全局作用域使用 let 或 const,绑定也发生在全局作用域内,但不会向全局对象添加属性
-      let RegExp = "Hello!";
-      console.log(RegExp);           // "Hello!"
-      console.log(window.RegExp);    // function RegExp() { [native code] }
+'lexical_scopes'词法作用域,即'块作用域'
+  PS：会在函数内部、代码块「即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
+    块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
+  if (true) { 
+    var aoo = 1; 
+    let boo = 2;
+  }
+  console.log(aoo); // 1
+  console.log(boo); // 报错,boo is not defined
+'Global_Block_Bindings'全局块级绑定
+  全局作用域使用'var'声明全局变量,相当于给全局对象「浏览器环境下是 window」添加属性 
+    这意味着全局对象的属性可能会意外地被重写覆盖
+    var RegExp = "Hello!";
+    console.log(window.RegExp);     // "Hello!"
+  若在全局作用域使用'let'或'const',绑定也发生在全局作用域内,但不会向全局对象添加属性 
+    let RegExp = "Hello!";
+    console.log(RegExp);           // "Hello!"
+    console.log(window.RegExp);    // function RegExp() { [native code] }
 let   定义块级变量 
-  块级作用域限制,只在定义的块级作用域中存在;
-    PS：任何一对花括号{}中的语句都属于一个块,称之为块级作用域;
-    if (true) { 
-      var aoo = 1; 
-      let boo = 2;
-    }
-    console.log(aoo); // 1
-    console.log(boo); // 报错,boo is not defined
-  无变量提升
+  PS：块级作用域限制,只在定义的块级作用域中存在;
+  无变量提升 
     var aoo = 1;
     var boo = 2;
     function foo(){
@@ -31,264 +80,188 @@ let   定义块级变量
       var aoo = 3; 
       let boo = 4; 
     }
-  重复声明变量报错
-    var aoo = 1;
-    var aoo = 2;
-    let aoo = 3; // 报错,Identifier 'aoo' has already been declared
-    let boo = 4;
-    let boo = 5; // 报错,Identifier 'boo' has already been declared
-  函数内重新声明函数的参数报错
-    function foo(aoo){
+  重复声明报错 
+    e.g.：
       var aoo = 1;
-      let aoo = 2;  //报错,Identifier 'aoo' has already been declared
-      console.log(aoo);
-    }
-  Let Declarations in Loops,循环中的 let 声明
+      var aoo = 2;
+      let aoo = 3; // 报错,Identifier 'aoo' has already been declared
+      let boo = 4;
+      let boo = 5; // 报错,Identifier 'boo' has already been declared
+    函数内重新声明函数的参数报错
+      function foo(aoo){
+        var aoo = 1;
+        let aoo = 2;  //报错,Identifier 'aoo' has already been declared
+        console.log(aoo);
+      }
+  'Let_Declarations_in_Loops'循环中的'let'声明 
     var arr =[];
-    for(var i = 0; i < 10; i++) { arr.push(i); }
+    for(var i = 0; i < 10; i++) { 
+      arr.push(i); 
+    }
     console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    var funArr =[];
+    var fooArr =[];
     for(var i = 0; i < 10; i++) {
-      funArr.push(function(){console.log(i); });
+      fooArr.push(function(){console.log(i); });
     }
-    console.log(funArr[0]); // function(){console.log(i); }
+    console.log(fooArr[0]); // function(){console.log(i); }
     // i 是以引用的方式存在函数中的
-    console.log(funArr[0]()); // 10
+    console.log(fooArr[0]()); // 10
     使用let的声明方式
-    var funArr =[];
+    var fooArr =[];
     for(let i = 0; i < 10; i++) {
-      funArr.push(function(){console.log(i); });
+      fooArr.push(function(){console.log(i); });
     }
-    console.log(funArr[0]); // function(){console.log(i); }
+    console.log(fooArr[0]); // function(){console.log(i); }
     // i 是以引用的方式存在函数中的
-    console.log(funArr[0]()); // 0
+    console.log(fooArr[0]()); // 0
     注:let 声明在上述循环内部中的表现是在规范中特别定义的,
-      实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的.
+    实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
 const 定义块级常量 
   PS：只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
   const aoo =2;
   aoo = 2;     // 报错 ,常量不可改变
-  delete aoo;  // 报错
+  delete aoo;  // 报错 
   const boo;   // 报错 ,定义时必须赋值
-  不可传值改变,只能传址改变;
+  不可传值改变,只能传址改变; 
+    不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
     传值赋值和传址赋值
     传址：赋值过程中,变量实存储的是数据的地址「对数据的引用」,而非原始数据或者数据的拷贝
     const arr =[1,2,3];
-    arr =[1];    // 报错
+    arr = [1];    // 报错
     arr.push(4); // 允许
     arr[4] =5;   // 允许
     arr;         // [1, 2, 3, 4, 5]
-    const obj = {key1 : 1}
-    obj.key1 = 2; // 允许
     
-    不能限制对于值的类型为对象的变量的修改,阻止的是绑定的修改,而不是绑定值的修改
     const person = { name: "Nicholas" };
     person.name = "Greg"; // 正常
     person = { name: "Greg" }; // 抛出错误
     person 变量一开始已经和包含一个属性的对象绑定.
-    修改 person.name 是被允许的因为 person 的值(地址)未发生改变,
+    修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
-◆操作符扩展   
-Destructuring,解构赋值 
-  PS：ES6允许按照一定模式,从数组和对象中提取值,对变量进行赋值,这被称为解构
+◆操作符&语句扩展   
+'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值
+  PS：
   e.g.:
-    传统的变量赋值
-    var arr = [1,2,3];//把数组的值分别赋给下面的变量；
-    var a = arr[0];
-    var b = arr[1];
-    var c = arr[2];
-    console.log(a);// 1
-    console.log(b);// 2
-    console.log(c);// 3
-    变量的解构赋值
     var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
-    console.log(a);// 1
-    console.log(b);// 2
-    console.log(c);// 3
-  结构赋值可以嵌套
+    console.log(a,b,c);// 1 2 3 
+  解构嵌套 
     var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
-    console.log(c1); // 3.1
-    console.log(c2); // 3.2
-  不完全解构
-    var [a,b,c] = [1,2];
-    console.log(a);//结果：a的值为1
-    console.log(b);//结果：b的值为2
+    console.log(c1,c2); // 3.1 3.2
+  不完全解构 
     赋值不成功,变量的值为undefined
     var [a,b,c] = [1,2];
-    console.log(a);//结果：a的值为1
-    console.log(b);//结果：b的值为2
-    console.log(c);//结果：c的值为undefined
-  允许设定默认值
+    console.log(a,b,c); // 1 2 undefined 
+  设定默认值 
     var [a,b,c=3] = [1,2];
-    console.log(a);//结果:a的值为1
-    console.log(b);//结果:b的值为2
-    console.log(c);//结果:c的值为3
-    覆盖默认值「当新的值为undefined的时候,是不会覆盖默认值的」
+    console.log(a,b,c); // 1 2 3 
+    覆盖默认值 
     var [a,b,c=3] =[1,2,4];
-    console.log(a);//结果:a的值为1
-    console.log(b);//结果:b的值为2
-    console.log(c);//结果:c的值为4
-  对象的解构赋值：对象的解构赋值不会受到属性的排列次序影响,是跟属性名关联起来的
-    PS：变量名要和属性名一致,才会成功赋值。
-      若变量找不到与其名字相同的属性,就会赋值不成功
+    console.log(a,b,c); // 1 2 4
+  对象的解构赋值：不受属性的顺序影响,和属性名对应 
+    PS：默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
     e.g.:
-      var { a,b,c} = {"a":1,"b":2,"c":3};
-      console.log(a); // 1 
-      console.log(b); // 2
-      console.log(c); // 3
+      var {a,b,c} = {"a":1,"b":2,"c":3};
+      console.log(a,b,c); // 1 2 3 
       改变顺序
       var { a,b,c } = {"a":1,"c":3,"b":2};
-      console.log(a); // 1
-      console.log(b); // 2
-      console.log(c); // 3
+      console.log(a,b,c); // 1 2 3 
       
       var { a } = {"b":2};
-      console.log(a);//结果：a的值为undefined
-    给一个变量名与属性名不一样的变量解构赋值
-      var { b:a,} = {"b":2};
+      console.log(a); // undefined
+    给一个变量名与属性名不一样的变量解构赋值 
+      var { b:a } = {"b":2};
       console.log(a); // 2
   对象解构赋值嵌套
     var {a:{b}} = {"a":{"b":1}};
     console.log(b);//结果：b的值为1
-  对象解构指定默认值
-    var {a,b=2} = {"a":1};
-    console.log(b);//结果：b的值为默认值2
-  字符串的解构赋值
-    PS：解构赋值的过程中,字符串被转换成了一个类似数组的对象
-    var [a,b,c,d,e,f] = "123456";
-    console.log(a); // 1
+  对象解构指定默认值 
+    var {a,b=2} = {"a":1}; 
     console.log(b); // 2
-    console.log(c); // 3
-    console.log(d); // 4
-    console.log(e); // 5
-    console.log(f); // 6
-  解构赋值的用途
-    交换变量的值
-      传统做法
+  字符串的解构赋值 
+    PS：解构赋值的过程中,字符串被转换成了一个类似数组的对象
+    var [a,b,c,d,e] = "12345";
+    console.log(a,b,c,d,e); // 1 2 3 4 5 
+  使用举例  
+    交换变量的值 
       var x = 1;
       var y = 2;
-      var z = x;//第三个变量临时存放x的值
-      x = y;  //把y的值赋给x；
-      y = z;  //把z的值赋值给y；
-      console.log(x); //结果：x为2
-      console.log(y); //结果：y为1
-      使用解构
-      var x = 1;
-      var y = 2;
-      [x,y] = [y,x];
-    定义函数参数
-      function foo({a,b,c}){ console.log(a,b,c); }
+      [x,y] = [y,x]; 
+    定义函数参数 
+      function foo({a,b,c}){ 
+        console.log(a,b,c); 
+      }
       foo({a:1,b:2,c:3,d:4}); // 1 2 3 
-    函数参数的默认值
-      function demo({aoo=1}){ console.log(aoo); }
+    函数参数的默认值 
+      function demo({aoo=1}){ 
+        console.log(aoo); 
+      }
       demo({});
-... 扩展运算符 
+'spread'扩展运算符 : 把数组解开成单独的值 
   PS：除了用在rest参数中,还有其他用途
-  结合数组使用,把数组的元素用逗号分隔开来,组成一个序列
+  结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
     function sum(a,b) {
       return  a+b ;
     }
     let arr = [2,3];
     // ...arr  // 报错
     sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
-    // ,sum( ...arr ) 的效果相当于sum( 2,3 ) 
-  todo
-    ... 扩展符 「ES6新增」 
-    把数组解开成单独的元素
-    e.g.
-      var aoo =[1,2,3];
-      var boo =[...aoo,4];
-      console.log(boo);  //[1, 2, 3, 4]
-      console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
-      // 相当于
-      console.log.apply(null,aoo); // 1 2 3
-      ...aoo;            //报错
-
-      获取部分参数
-      var foo =function(aoo,...boo){ console.log(aoo,boo); }
-      foo(1,2,3,4);  // 1 [2, 3, 4]
-      //  将其余的参数放在数组 boo 中
-for(var val of aoo){} 「有序?」遍历 
-  可遍历的对象包括数组,对象,字符串,set和map结构等具有iterator接口的数据结构
+    // sum( ...arr ) 的效果相当于sum( 2,3 ) 
+  e.g.
+    var aoo =[1,2,3];
+    var boo =[...aoo,4];
+    console.log(boo);  //[1, 2, 3, 4]
+    console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
+    // 相当于
+    console.log.apply(null,aoo); // 1 2 3
+    ...aoo;            //报错
+  函数中将部分参数组成的数组 
+    var foo = function(aoo,...boo){ 
+      console.log(aoo,boo); 
+    }
+    foo(1,2,3,4);  // 1 [2, 3, 4]
+    //  将其余的参数放在数组 boo 中
+for(var val of iterator){}  遍历 
+  PS：可遍历的对象包括数组,对象,字符串,set和map结构等具有'iterator'接口的数据结构 
   数组遍历 
-    方式一:for      缺点：代码不够简洁。
-      var arr = [1,2,3,4,5];
-      for(let i = 0;i<arr.length;i++){
-        //...
-      }
-    方式二:forEach  缺点就是：无法中断停止整个循环。
-      var arr = [1,2,3,4,5];
-      arr.forEach(function (value,index) {
-        //...
-      });
-    方式三:for...in 其中i为字符串类型,而非数字类型
-      var arr = [1,2,3,4,5];
-      for(let i in arr){
-        // 此处i为字符串类型,而非数字类型
-      }
-    方式四:for...of 
-      var arr = [1,2,3,4,5];
-      for(let value of arr){
-        console.log(value); // 1 2 3 4 5
-      }
-  结合 keys() 获取到循环的索引「数字类型,而非字符串类型」
-  break 循环可以终止
-    var arr = [1,2,3,4,5];
-    for(let value of arr){
-      if(value == 3){ break; /* 终止整个循环 */ }
-      console.log(value); // 1 2
+    var arr = ['a','b','c','d','e'];
+    for(let val of arr){
+      // console.log(typeof );
+      console.log(val); // a b c d e
     }
-  continue 跳出当前循环「继续后面的循环」
-    var arr = [1,2,3,4,5];
-    for(let value of arr){
-      if(value == 3){ continue;/* 跳过当前循环,继续后面的循环 */ }
-      console.log(value); // 1 2 4  5
-    }
-  keys()  使用数组的扩展keys()获取键名再遍历,index为数字类型
-    var arr = [1,2,3,4,5];
-    for(let index of arr.keys()){
-      console.log(index); // 0 1 2 3 4
-    }
-  支持字符串的遍历
-    let word = "我是前端君";
+  字符串遍历 
+    let word = "abcde";
     for(let w of word){
-      console.log(w); // 我  是  前  端  君
+      console.log(w); // a  b  c  d  e
     }
-  支持类数组的遍历,例如DOM List
+  类数组遍历,如'DOM List'
     <p>1</p>
     <p>2</p>
     <p>3</p>
     //假设有3个p元素
-    let pList = document.getElementsByTagName('p');
+    let pList = document.querySelectorAll('p');
     for(let p of pList){
-      console.log(p);
+      console.log(p); // <p>1</p>  <p>2</p>  <p>3</p> 
     }
-    // <p>1</p>
-    // <p>2</p>
-    // <p>3</p>
-  支持set和map解构的遍历
-  for...of 不能遍历Object对象 
-    PS：要能够被for...of正常遍历的,都需要实现一个遍历器Iterator。
-      而数组,Set和Map结构,早就内置好了遍历器Iterator「又叫迭代器」,
-      它们的原型中都有一个 Symbol.iterator 方法；
-      而Object对象并没有实现这个接口,使得它无法被for...of遍历。
+  set和map解构的遍历
+  不能遍历'Object' 
+    PS：要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
+      而数组、Set和Map结构,内置了遍历器Iterator,它们的原型中都有一个 Symbol.iterator 方法 
+      而Object对象并没有实现这个接口,所以无法被for...of遍历 
     e.g.： 遍历对象报错
       let obj = {"name":"前端君"};
       for(let v of obj){  
         console.log(v);
       }
       // 报错, undefined is not a function
-    验证它们原型中的 Symbol.iterator 方法：
-      Symbol.iterator 是Symbol 对象的 iterator 属性,是一个特殊的Symbol值,
-      因此,当它作为prototype对象属性名的时候,获取它的时候需要使用[ ]的形式;
-      prototype[Symbol.iterator],不能使用点形式获取：prototype.Symbol.iterator。
-      即只要一个数据结构拥有一个叫[Symbol.iterator]()方法的数据结构,
-      就可以被for...of遍历,称为可遍历对象
-      var arr = Array.prototype[Symbol.iterator];  // Array
-      var str = String.prototype[Symbol.iterator]; // String
-      var set = Set.prototype[Symbol.iterator];    // Set
-      var map = Map.prototype[Symbol.iterator];    // Map
-      var obj = Object.prototype[Symbol.iterator]; // Object
+    验证原型中的'Symbol.iterator'方法 
+      'Symbol.iterator'是一个特殊的Symbol值,其作为prototype对象属性名时,需使用'[]'的形式;
+      prototype[Symbol.iterator] [不能使用点形式获取：prototype.Symbol.iterator]
+      即只要一数据结构拥有[Symbol.iterator]()方法的数据结构,就可被'for-of'遍历,称为可遍历对象 
+      var arr = Array.prototype[Symbol.iterator];  
+      var str = String.prototype[Symbol.iterator]; 
+      var set = Set.prototype[Symbol.iterator];    
+      var map = Map.prototype[Symbol.iterator];    
+      var obj = Object.prototype[Symbol.iterator]; 
       console.log(arr); // function values() { [native code] }
       console.log(str); // function [Symbol.iterator]() { [native code] }
       console.log(set); // function values() { [native code] }
@@ -316,7 +289,8 @@ for(var val of aoo){} 「有序?」遍历
         1:"我是1",
         2:"我是2",
         length:3,
-        [Symbol.iterator] : function() { //添加[Symbol.iterator]方法
+        //添加[Symbol.iterator]方法
+        [Symbol.iterator] : function() { 
           let _this = this;
           let index = 0;
           return {
@@ -330,16 +304,32 @@ for(var val of aoo){} 「有序?」遍历
         }
       };
       for(let v of obj){
-        console.log(v);
-        // "我是0"
-        // "我是1"
-        // "我是2"
+        console.log(v); // "我是0" // "我是1" // "我是2"
       }
+  'break'终止循环 
+    var arr = [1,2,3,4,5];
+    for(let val of arr){
+      if(value == 3){ break; } 
+      console.log(val); // 1 2
+    }
+  'continue'继续[后面的]循环 
+    var arr = [1,2,3,4,5];
+    for(let val of arr){
+      if(val == 3){ continue; } // 跳过当前循环,继续后面的循环
+      console.log(val); // 1 2 4  5
+    }
+  使用数组的扩展keys()获取键名再遍历,index为数字类型
+    var arr = [1,2,3,4,5];
+    var rstArr = arr.keys();
+    console.log(resArr); 
+    for(let index of arr.keys()){
+      console.log(index); // 0 1 2 3 4
+    }
 --------------------------------------------------------------------------------
 ◆标准库的扩展 
 Number 数值 
-  PS：ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上
-    目的是减少全局性的函数,把全局函数合理地规划到其他对象下,渐渐实现语言的模块化。
+  PS：ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
+    目的是减少全局性的函数,把全局函数合理地规划到其他对象下,逐渐实现语言的模块化 
   Number.isNaN()      判断是否为非数值
     传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
     而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
@@ -408,7 +398,7 @@ Math   对象扩展
   Math.log2(x)    返回以 2 为底的 x 的对数。
   Math.tanh(x)    返回 x 的双曲正切。
 String 字符串扩展 
-  `a${1+2}b` 模版字符串  [ES6+] 
+  `a${1+2}b` 模版字符串 
     PS：又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
     e.g.
       var str =`a
@@ -421,15 +411,14 @@ String 字符串扩展
     `${}` 模板占位符 
       ${str1}表示变量字符串str1表示的字符
       ${}中可以放任意的javascript表达式
-      var aoo="fan";
-      var boo=`${aoo} hello!`; // 此处使用反引号(数字1的左边的按键)引起来
-      var coo = `${1+2} hello`
-      console.log(boo); // fan hello
-      console.log(coo); // 3 hello
-  str.repeat(num) 将目标字符串重复N次,返回一个新的字符串「不影响目标字符串」
+      var aoo = "fan";
+      var boo = `${aoo} hello!`; 
+      var coo = `${1+2} hello`;
+      console.log(boo,coo); // fan hello   3 hello
+  var rstStr = str.repeat(num) 将字符串重复N次并返回「不影响目标字符串」
     var aoo = "1";  //目标字符串
-    var boo = aoo.repeat(3); //变量aoo被重复三次；
     console.log(aoo); // 1
+    var boo = aoo.repeat(3); //变量aoo被重复三次；
     console.log(boo); // 111
   str1.includes(str2); 返回是否包含str2的布尔值  
     'good'.includes('o') // true
@@ -825,7 +814,7 @@ RegExp 正则的扩展
     // 匹配所有的箭头字符
     const regexArrows = /^\p{Block=Arrows}+$/u;
     regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
-Strings_and_Regular_Expressions,字符串与正则表达式 
+'Strings_and_Regular_Expressions'字符串与正则表达式 
   PS：ECMAScript 6 诞生之前,JavaScript 字符串(string)由 16 位编码的字符组成(UTF-16).
     每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
     所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
@@ -1529,101 +1518,187 @@ Symbol 符号,标志,记号
     Symbol.KeyFor(sym1); // aoo
     Symbol.KeyFor(sym2); // undefined
 --------------------------------------------------------------------------------
-Class 类 
-  PS：ES6以前,都是使用函数function和原型prototype来模拟类class实现面向对象的编程;
-    实际上,class本质上还是基于原型prototype的实现做的进一步封装,使使用起来更简单明了。
-    也就是说它实际上也是函数function和原型prototype实现。
-  class 关键字,声明类 
-    PS：构造方法constructor是一个类必须要有的方法,默认返回实例对象,
-      constructor函数相当于ES5的构造函数,
-      创建类的实例对象的时候,会调用此方法来初始化实例对象。
-      若没有编写constructor方法,执行的时候也会被加上一个默认的空的constructor方法。
-      前面不用加function,后面不得加,方法全部都是定义在类的prototype属性中。
-      类的内部定义的所有方法都是不可枚举的;
-      类和模块内部默认采取严格模式;
+'Class'类 
+  PS：ES6以前,使用函数'function'和原型'prototype'来模拟类class实现面向对象; 
+    'class'本质上还是基于原型prototype的实现做的进一步封装 
+  class Cls {} 创建类 
+    PS： 类的内部定义的所有方法都是不可枚举的; 类和模块内部默认采取严格模式;
       class内部只允许定义方法,不允许定义属性,包括静态属性;
-    class Cla{
-      constructor(aoo,boo){ // 类的默认方法,通过new命令生成对象实例时,自动调用
-        this.aoo =aoo; 
-        this.boo =boo; 
-      };
-      toString() { 
-        return '('+this.x+', '+this.y+')'; 
-      };
-    }
-    var cla1 =new Cla(1,2);
-    cla1; // Cla {aoo: 1, boo: 2}
-    
-    class Animal { //定义一个叫Animal的类
-      constructor(color){ //构造函数constructor
-        this.color = color;
-        // this,指向的是该类实例化后的对象
+    'constructor'构造方法,创建类时必须的方法,相当于ES5的构造函数
+      PS：创建类的实例对象的时候,会调用此方法来初始化实例对象。
+        若没有编写constructor方法,执行的时候也会被加上一个默认的空的constructor方法。
+        其中constructor方法是构造方法,在实例化一个类的时候被调用。
+        constructor方法是必须的,也是唯一的,一个类体不能含有多个constructor构造方法。
+      class Cla{
+        constructor(aoo,boo){ // 类的默认方法,通过new命令生成对象实例时,自动调用 
+          // this,指向的是该类实例化后的对象
+          this.aoo = aoo; 
+          this.boo = boo; 
+        };
+        toString() { 
+          return '('+this.x+', '+this.y+')'; 
+        };
       }
-    }
-    
-    es5
-    var Animal=function(name){
-      this.name=name;
-    }
-    animal.prototype={
-      speak:function(){
-        console.log("I am"+this.name);
-      }
-    }
-    var animal = new Animal("cat");
-    animal.speak();  //I am cat
-    es6
-    class Animal(){
-      constructor(name){
+      var cla1 =new Cla(1,2);
+      cla1; // Cla {aoo: 1, boo: 2}
+    e.g.：
+      es5
+      var Animal=function(name){
         this.name=name;
       }
-      speak(){
-        console.log("I am"+this.name);
+      animal.prototype={
+        speak:function(){
+          console.log("I am"+this.name);
+        }
       }
-    }
-    const animal=new Animal("cat");
-    animal.speak();    //I am cat
+      var animal = new Animal("cat");
+      animal.speak();  //I am cat
+      es6
+      class Animal(){
+        constructor(name){
+          this.name=name;
+        }
+        speak(){
+          console.log("I am"+this.name);
+        }
+      }
+      const animal=new Animal("cat");
+      animal.speak();    //I am cat
+    'static'关键字,声明类的静态方法 : 不用实例化对象,通过类本身来调用;
+      class Animal {
+        constructor(name){
+          this.name = name;
+        }
+        static friends(a1,a2){
+          return `${a1.name} and ${a2.name} are friends`;
+        }
+      }
+      let dog = new Animal('dog');
+      let cat = new Animal('cat');
+      Animal.friends(dog,cat); 
+    'extends'关键字,子类继承父类 
+      e.g.：
+        class Animal { //父类Animal
+          constructor(name){
+            this.name = name;
+          }
+          say(){
+            return `This is a animal`;
+          }
+        }
+        class Dog extends Animal { //子类Dog 
+          constructor(name,color){
+            super(name);
+            this.color = color;
+          }
+          getAttritube(){
+            return `${super.say()}, name：${this.name}, color:${this.color}`;
+            // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
+          }
+        }
+        let doge = new Dog("dog","black"); //创建Dog的实例对象
+        doge.getAttritube(); //调用子类的Dog的实例方法
+        // "This is a animal, name：dog, color:black"
+        
+        // 使用继承的方式创建的对象既是父类的实例,也是子类的实例。
+        doge instanceof Dog ;   // true
+        doge instanceof Animal; // true
+      'super'关键字,继承关系中的方法调用 
+        PS：子类必须在constructor方法里调用super方法,否则不能新建实例 
+          因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工。
+          显然,只有调用了super方法之后,才可以使用this。
+          必须先调用super,才可以使用this,否则报错;
+          而super本身指代的是父类的实例对象,可以使用super.的方式调用父对象的方法。
+          由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+          如果子类没有显式的定义constructor,那么下面的代码将被默认添加
+          constructor(...args){
+            super(...args)
+          }
+        e.g.：
+          class Point {
+            constructor(x, y) {
+              this.x = x;
+              this.y = y;
+            }
+          }
+          class ColorPoint extends Point {
+            constructor(x, y, color) {
+              // this.color = color; // 错误
+              super(x, y);
+              this.color = color; // 正确
+            }
+          }
+          var cp = new ColorPoint(25, 8, 'green');
+          cp instanceof ColorPoint // true
+          cp instanceof Point // true
+        静态方法与实例方法的调用
+          子类自动继承父类的静态方法,子类的静态方法中,使用'super'调用父类的静态方法。
+            'super'只能调用父类的静态方法,而不能调用父类的其它方法;
+          子类的实例方法中的'super'只能调用父类的实例方法,不能调用其静态方法
+            可以使用 父类名.方法 的方式调用父类的静态方法
+          class Foo{
+            static say(){
+              console.log('foo say');
+            }
+          }
+          class Bar extends Foo{
+            sayHello(){
+              // super.say(); // 报错,因为sayHello不是静态方法
+              console.log('hello');
+            }
+            static singHello(){
+              super.say();
+              console.log('bar say')
+            }
+          }
+          Bar.say(); // foo say
+          Bar.singHello(); // foo say bar say
+          let bar = new Bar();
+          bar.sayHello(); // hello
+      ES5继承和ES6继承的区别 
+        在ES5中,继承实质上是子类先创建属于自己的this,
+        然后再将父类的方法添加到this 「也就是使用 Parent.apply(this) 的方式」,
+        或者 this.__proto__ 「即Child.prototype=new Parent()」上。
+        而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this。
   类的属性和方法 
     PS：把类名后面的括号{ }里面的内容称之为类体,在类体内来编写类的属性和方法;
-      其中constructor方法是构造方法,在实例化一个类的时候被调用。
-      constructor方法是必须的,也是唯一的,一个类体不能含有多个constructor构造方法。
       可以在方法里面自定义一些对象的属性,
       此外,还可以自定义方法,它属于类的实例方法,实例化后对象可以调用此方法。
-    class Animal {
-      constructor(name){ //构造方法
-        this.name = name;
+    e.g.：
+      class Animal {
+        constructor(name){ //构造方法
+          this.name = name;
+        }
+        getName(){ //自定义方法
+          return this.name;
+        }
       }
-      getName(){ //自定义方法
-        return this.name;
-      }
-    }
-    var dog = new Animal('doge');
-    dog.name; // 'doge'
-    
+      var dog = new Animal('doge');
+      dog.name; // 'doge'
     属性名可以使用表达式
-    var  aoo = 'boo';
-    class Cla{
-      [aoo] () {
-        console.log(1);
+      var  aoo = 'boo';
+      class Cla{
+        [aoo] () {
+          console.log(1);
+        }
       }
-    }
-    var cla = new Cla();
-    cla.boo(); // 1
+      var cla = new Cla();
+      cla.boo(); // 1
   new Cla(arg) 创建类实例 
-    PS：必须使用new创建字来创建类的实例对象;先声明定义类,再创建实例,否则会报错
-    class Animal {
-      constructor(name){
-        this.name = name;
+    PS：必须使用new创建字来创建类的实例对象;需先声明类,再创建实例,否则会报错 
+    e.g.：
+      class Animal {
+        constructor(name){
+          this.name = name;
+        }
+        getName(){
+          return 'This is a'+this.name;
+        }
       }
-      getName(){
-        return 'This is a'+this.name;
-      }
-    }
-    let dog = new Animal('dog'); //创建一个Animal实例对象dog
-    dog.name;      // dog
-    dog.getName(); // This is a dog
-    
-    立即执行的class
+      let dog = new Animal('dog'); //创建一个Animal实例对象dog
+      dog.name;      // dog
+      dog.getName(); // This is a dog
+  new Cla{}(arg) 立即执行的class 
     let point = new class{
       constructor(x = 0, y = 0) {
         this.x = x;
@@ -1634,111 +1709,8 @@ Class 类
       }
     }(1, 2);
     console.log(point.toString()); // 3
-  static 关键字,声明类的静态方法 
-    PS：自定义方法是实例方法,需通过实例化后的对象来调用的方法;
-      静态方法是类的方法,不用实例化对象,通过类本身来调用;
-    class Animal {
-      constructor(name){
-        this.name = name;
-      }
-      static friends(a1,a2){
-        return `${a1.name} and ${a2.name} are friends`;
-      }
-    }
-    let dog = new Animal('dog');
-    let cat = new Animal('cat');
-    Animal.friends(dog,cat); //调用静态方法friends
-    // dog and cat are friends
-    
-    使用static关键字可以在类中定义类的静态方法,子类自动继承父类的静态方法。
-    在子类的静态方法中,可以使用super调用父类的静态方法。
-    注意,子类静态方法中的super只能调用父类的静态方法,而不能调用父类的其它方法;
-    反之亦然,子类的实例方法中的super只能调用父类的实例方法,不能调用其静态方法,
-    如果想要调用父类的静态方法,可以使用 父类名.方法 的方式。
-    class Foo{
-      static say(){
-        console.log('foo say');
-      }
-    }
-    class Bar extends Foo{
-      sayHello(){
-        // super.say(); // 报错,因为sayHello不是静态方法
-        console.log('hello');
-      }
-      static singHello(){
-        super.say();
-        console.log('bar say')
-      }
-    }
-    Bar.say(); // foo say
-    Bar.singHello(); // foo say bar say
-    let bar = new Bar();
-    bar.sayHello(); // hello
-  extends 关键字,实现子类继承父类 
-    e.g.：
-      class Animal { //父类Animal
-        constructor(name){
-          this.name = name;
-        }
-        say(){
-          return `This is a animal`;
-        }
-      }
-      class Dog extends Animal { //子类Dog
-        constructor(name,color){
-          super(name);
-          this.color = color;
-        }
-        getAttritube(){
-          return `${super.say()}, name：${this.name}, color:${this.color}`;
-          // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
-        }
-      }
-      let doge = new Dog("dog","black"); //创建Dog的实例对象
-      doge.getAttritube(); //调用子类的Dog的实例方法
-      // "This is a animal, name：dog, color:black"
-      
-      // 使用继承的方式创建的对象既是父类的实例,也是子类的实例。
-      doge instanceof Dog ;   // true
-      doge instanceof Animal; // true
-    super 关键字
-      子类必须在constructor方法里调用super方法,否则不能新建实例。
-      因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工。
-      显然,只有调用了super方法之后,才可以使用this。
-      必须先调用super(),才可以使用this,否则报错;
-      而super本身指代的是父类的实例对象,我们可以使用super.的方式调用父对象的方法。
-      此外,由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字。
-    
-      class Point {
-        constructor(x, y) {
-          this.x = x;
-          this.y = y;
-        }
-      }
-      class ColorPoint extends Point {
-        constructor(x, y, color) {
-          // this.color = color; // 错误
-          super(x, y);
-          this.color = color; // 正确
-        }
-      }
-      上面代码中,子类的constructor方法没有调用super之前,就使用this关键字,结果报错,
-      而放在super方法之后就是正确的.
-      var cp = new ColorPoint(25, 8, 'green');
-      cp instanceof ColorPoint // true
-      cp instanceof Point // true
-      
-      如果子类没有显式的定义constructor,那么下面的代码将被默认添加
-      constructor(...args){
-        super(...args)
-      }
-    ES5继承和ES6继承的区别 
-      在ES5中,继承实质上是子类先创建属于自己的this,
-      然后再将父类的方法添加到this 「也就是使用 Parent.apply(this) 的方式」,
-      或者 this.__proto__ 「即Child.prototype=new Parent()」上。
-      而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this。
-  class的取值函数 getter 和存值函数 setter 
-    在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数.
+  'getter'&'setter'class的取值函数和存值函数 
+    在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数 
     class MyClass {
       get prop() {
         return 'getter';
@@ -1848,125 +1820,132 @@ Proxy 代理
   setPrototypeOf()
 Generator 生成器函数 
   PS：可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
-    利用Generator函数暂停执行的特性来实现异步操作。
-    原理：将异步操作的语句写到yield后面,通过执行next方法进行回调。
-  function* 声明Generator函数
-    function* Hello(name) { //声明一个Hello的Generator函数
-      yield `hello ${name}`;
-      yield `how are you`;
-      yield `bye`;
-    }
-  调用Generator函数
-    PS：Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态
+    可利用Generator函数暂停执行的特性来实现异步操作 
+    原理：将异步操作的语句写到yield后面,通过执行next方法进行回调 
+  function* foo(){} 声明Generator函数
+    e.g.：
+      function* Hello(name) {  
+        yield `hello ${name}`;
+        yield `how are you`;
+        yield `bye`;
+      }
+    'yield'关键字 : 相当于暂停执行并且返回信息 
+      Generator函数可以有多个yield
+      yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行 
+    'yield*'关键字 : 调用另一个Generator函数
+      若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
+      那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
+      function* gen1() {   
+        yield "gen1 start";
+        yield "gen1 end";
+      }
+      function* gen2() {  
+        yield "gen2 start";
+        yield "gen2 end";
+      }
+      function* start() { 
+        yield "start";
+        // 使用关键字yield*来实现调用另外两个Generator函数
+        yield* gen1();
+        yield* gen2();
+        yield "end";
+      }
+      var ite = start(); //调用start函数,创建一个生成器
+      ite.next(); // {value: "start", done: false}
+      ite.next(); // {value: "gen1 start", done: false}
+      ite.next(); // {value: "gen1 end", done: false}
+      ite.next(); // {value: "gen2 start", done: false}
+      ite.next(); // {value: "gen2 end", done: false}
+      ite.next(); // {value: "end", done: false}
+  调用Generator函数 
+    PS：Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
       Generator函数被调用后并不会一直执行到最后,而是先回返回一个生成器对象,
-      然后hold住不动,等到生成器对象的next()方法被调用后,函数才会继续执行,
+      然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
       直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
-      直到next()再一次被调用的时候,才会继续接着往下执行,直到done的值为true。
-    function* foo(name) {
-      yield `hello ${name}`;
-      yield `how are you`;
-      yield `bye`;
-    }
-    //调用Hello函数
-    let ite = foo('前端君'); // foo {[[GeneratorStatus]]: "suspended"}
-    ite.next(); // {value: "hello 前端君", done: false}
-    ite.next(); // {value: "how are you", done: false}
-    ite.next(); // {value: "bye", done: false}
-    ite.next(); // {value: undefined, done: true}
-  yield关键字
-    yield的作用相当于暂停执行并且返回信息,但是Generator函数可以有很多个yield。
-    yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行。
-  next([arg])方法
-    arg参数替换上一个yield的返回值
-    function* Hello() {
-      var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
-      console.log(res,1); // undefined 1
-      yield res;
-    }
-    let iterator = Hello(); // 返回一生成器对象
-    iterator.next(); //{value: "hello", done: false}
-    // 若为 iterator.next(); // {value: undefined, done: false}
-    iterator.next("world"); // {value: "world", done: false}
-    相当于
-    function* Hello() {
-      var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
-      console.log(res); // {value: undefined, done: false}
-      yield 'world';
-    }
-    let iterator = Hello(); // 返回一生成器对象
-    iterator.next(); // {value: "hello", done: false}
-    iterator.next(); // {value: "world", done: false}
-  yield*关键字
-    在一个Generator函数里面,调用另一个Generator函数,可用关键字 yield*
-    若一个Generator函数A执行过程中,进入（调用）了另一个Generator函数B,
-    那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行。
-    function* gen1() {  //声明Generator函数：gen1   
-      yield "gen1 start";
-      yield "gen1 end";
-    }
-    function* gen2() {  //声明Generator函数：gen2
-      yield "gen2 start";
-      yield "gen2 end";
-    }
-    function* start() { //声明Generator函数：start
-      yield "start";
-      // 使用关键字yield*来实现调用另外两个Generator函数
-      yield* gen1();
-      yield* gen2();
-      yield "end";
-    }
-    var ite = start(); //调用start函数,创建一个生成器
-    ite.next(); // {value: "start", done: false}
-    ite.next(); // {value: "gen1 start", done: false}
-    ite.next(); // {value: "gen1 end", done: false}
-    ite.next(); // {value: "gen2 start", done: false}
-    ite.next(); // {value: "gen2 end", done: false}
-    ite.next(); // {value: "end", done: false}
+      直到'next'再一次被调用的时候,才会继续接着往下执行,直到done的值为true 
+    e.g.：
+      function* foo(name) {
+        yield name
+        yield `world`
+        yield `fina`
+      }
+      let ite = foo('hello');
+      console.log(ite); // foo {[[GeneratorStatus]]: "suspended"}
+      setTimeout(function(){
+        console.log(ite.next()); // Object {value: "hello", done: false}
+        setTimeout(function(){
+          console.log(ite.next()); // Object {value: "world", done: false}
+          setTimeout(function(){
+            console.log(ite.next()); // Object {value: "fina", done: false}
+            setTimeout(function(){
+              console.log(ite.next()); // Object {value: undefined, done: true}
+              console.log(ite.next()); // Object {value: undefined, done: true}
+            },1000);
+          },1000);
+        },1000);
+      },1000);
+    next([arg])方法 
+      arg 参数,替换上一个yield的返回值
+      function* Hello() {
+        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
+        console.log(res,1); // undefined 1
+        yield res;
+      }
+      let iterator = Hello(); // 返回一生成器对象
+      iterator.next(); //{value: "hello", done: false}
+      // 若为 iterator.next(); // {value: undefined, done: false}
+      iterator.next("world"); // {value: "world", done: false}
+      相当于
+      function* Hello() {
+        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
+        console.log(res); // {value: undefined, done: false}
+        res = 'world'
+        yield res;
+      }
+      let iterator = Hello(); // 返回一生成器对象
+      iterator.next(); // {value: "hello", done: false}
+      iterator.next(); // {value: "world", done: false}
 Promise 同步书写异步模式 
-  PS：采用'同步'形式的代码来决解异步函数间的层层嵌套, 
-    将原来异步函数的嵌套关系转变为'同步'的链式关系; 
-    Promise 对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
-    将异步操作封装成 Promise 对象; 
-    然后使用 Promise 对象的 then catch 等方法,进行链式的形似同步的写法完成异步操作, 
-    Promise有以下几种状态:
-    pending: 初始状态, 初始状态,未完成或拒绝。
-    fulfilled: 意味着操作成功完成。
-    rejected: 意味着操作失败。
-    只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态。
-    一旦状态改变,就不会再变,任何时候都可以得到这个结果。
-    这与事件「Event」完全不同,事件的特点是,若你错过了它,再去监听,是得不到结果的。
-    Promise 的缺点
-    首先,无法取消 Promise,一旦新建它就会立即执行,无法中途取消。
-    其次,若不设置回调函数,Promise 内部抛出的错误,不会反应到外部。
-    第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成.
+  PS：采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
+    Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
+    将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
+  Promise的状态 
+    pending :   初始状态,初始状态,未完成或拒绝 
+    fulfilled : 意味着操作成功完成 
+    rejected :  意味着操作失败 
+    只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态 
+    一旦状态改变,就不会再变,任何时候都可以得到这个结果 
+    与事件「Event」不同,事件的特点是,若错过了,再去监听则得不到结果  
+  Promise的缺点
+    首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
+    其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
+    第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
   var prms = new Promise(foo) 创建Promise对象 
-    PS： Promise在创建时,参数函数就会执行 
-      参数为一「执行异步操作的」函数, resolve 和 reject 传递给函数的参数「executor」
-      参数函数内,若 resolve 被调用,代表该Promise被成功解析「resolve」;
-      若 reject 被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
-      executor主要用于初始化异步代码,一旦异步代码调用完成,
-      要么调用 resolve 方法来表示Promise被成功解析,
-      或是调用 reject 方法,表示初始化的异步代码调用失败,整个promise被拒绝。
-      若在executor 方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
+    PS：Promise在创建时,参数函数就会执行 
+    foo   用于放置执行异步操作的函数,传入参数 (resolve,reject) 
+      函数内,若'resolve'被调用,代表该Promise被成功解析「resolve」;
+      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
+      foo主要用于初始化异步代码,一旦异步代码调用完成,
+      要么调用resolve方法来表示Promise被成功解析,
+      或是调用reject方法,表示初始化的异步代码调用失败,整个promise被拒绝。
+      若在foo方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
       即相当于reject方法被调用,executor 的返回值也就会被忽略。
-    foo 依次传入参数 (rs,rj)
-      rs(arg1); // 用于 异步成功后 传递数据 arg1
-      rj(arg2); // 用于 异步失败后 传递数据 arg2
-      // rs rj函数根据逻辑需要进行相应的执行
+      resolve(arg1); // 用于 异步成功后 传递数据 arg1
+      reject(arg2); // 用于 异步失败后 传递数据 arg2
+      // resolve reject 函数根据逻辑需要进行相应的执行
   ◆prms的方法 
-  prms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2,,返回promise对象 
-    foo2 可选,在rj后执行,若不存在则忽略;
-    其中rs将其参数传递给foo1作为参数,rj将其参数传递给foo2作为参数;
-    foo1 默认会返回一个Promise值,也可以自定义返回值,
-    该值会传递到下一个then的foo1方法参数中;
-    若 foo1 返回一个新 Promise,
-    则then之后再调用的then就是新Promise中的逻辑了;
+  prms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2,返回promise对象 
+    foo1 rs(sucessData)后执行,传入参数 (sucessData)
+      默认会返回一个Promise值,也可以自定义返回值 
+      若 foo1 返回一个新 Promise,
+      则then之后再调用的then就是新Promise中的逻辑了;
+    foo2 可选,rj(failData)后执行,传入参数 (failData) 
   prms.catch(foo)  用于处理操作异常,返回promise对象 
     prms.catch(function (error) {
       //操作失败的处理程序
     });
   ◆静态方法 
-  Promise.all(arr)  全体模式,所有成功[?]时触发 
+  Promise.all(arr)  全局模式,所有成功[?]才触发 
     PS：当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
     arr  由Promise实例组成的数组
     e.g.：
@@ -2084,670 +2063,13 @@ Promise 同步书写异步模式
     // 上一步是：准备请求C
     // 请求C成功
     // Promise {[[PromiseStatus]]: "resolved", [[PromiseValue]]: undefined}
-Modules 模块化历史 
-  介绍
-    ES6之前,JS不支持原生的模块化。
-    若要实现模块化,要借助一些框架,比如：requireJS或者seaJS等;
-    JS一直没有模块体系,无法将一大程序拆分成互相依赖的小文件,再简单的拼装起来。
-    其他语言都有这项功能,比如 Ruby 的require、Python 的import,
-    甚至就连 CSS 都有@import,
-    在 ES6 之前,社区制定了一些模块加载方案,最主要的有 CommonJS 和 AMD 两种。
-    前者用于服务器,后者用于浏览器。
-    ES6 在语言标准的层面上,实现了模块功能,而且实现得相当简单,
-    完全可以取代 CommonJS 和 AMD 规范,成为浏览器和服务器通用的模块解决方案。
-    现在的web系统越来越庞大、复杂,需要团队分工,多人协作,
-    大型系统的javascript文件经常存在复杂的依赖关系,后期的维护成本会越来越高。
-    JavaScript模块化正式为了解决这一需求而诞生。
-    目前还没有浏览器支持ES6的module模块。
-  模块化演化
-    PS：模块化开发是一种生产效率高,维护成本低的生产方式
-      从软件开发角度来说,模块化开发是一种开发模式,写代码的一种方式;
-      非模块化开发可能遇到的问题: 命名冲突、文件依赖
-      模块化优点: 提升开发效率、方便后期维护.
-      业务复杂, 重用逻辑非常多, 扩展性要求较高 时推荐使用模块化开发.
-    全局函数
-      function add(a , b) {
-        return parseFloat(a) + parseFloat(b);
-      }
-      function substract(a ,b) {}
-      存在的问题：
-        污染了全局变量,无法保证不与其他模块发生变量名冲突。
-        模块成员之间看不出直接关系。
-    对象封装-命名空间
-      var calculator = {
-        add: function(a, b) { return parseFloat(a) + parseFloat(b); },
-        subtract: function(a, b) {},
-      };
-      优缺点:
-        从某种程度上解决了变量命名冲突的问题,但未从根本上解决命名冲突。
-        从代码级别可以明显区分出哪些函数属于同一个模块
-        暴露了所有的模块成员,内部状态可以被外部改写,不安全。
-        命名空间越来越长。
-    私有公有成员分离
-      var calculator = (function () {
-        function convert(input){ return parseInt(input); }
-        function add(a, b) { return convert(a) + convert(b); }
-        function subtract(a, b) {}
-        function multiply(a, b) {}
-        function divide(a, b) {}
-
-        return {
-          add : add,
-          subtract : subtract,
-          multiply : multiply,
-          divide : divide
-        }
-      })();
-      优点:
-        此方式将函数包装成一独立的作用域,私有空间的变量和函数不会影响到全局作用域.
-        以返回值的方式得到模块的公共成员、公开公有方法,隐藏私有空间内部的属性、元素.
-        可以有选择的对外暴露自身成员。
-        从某种意义上来说,解决了变量命名冲突的问题。
-    模块的扩展与维护
-      // 计算模块
-      (function (calculator) {
-        function convert(input) { return parseInt(input); }
-        calculator.add = function(a, b) { return convert(a) + convert(b); }
-        window.calculator = calculator;
-      })(window.calculator || {});
-      // 新增需求
-      (function (calculator) {
-        calculator.remain = function (a , b) { return a % b; }
-        window.calculator = calculator;
-      })(window.calculator || {});
-      alert(calculator.remain(4,3));
-      优点:
-        有利于对庞大的模块的子模块划分。
-        实现了开闭原则：对新增开发,对修改关闭。
-        对于已有文件尽量不要修改,通过添加新文件的方式添加新功能。
-    第三方依赖的管理
-      (function (calculator , $) {
-        // 依赖函数的参数,是属于模块内部
-        // console.log($);
-        calculator.remain = function (a , b) { return a % b; }
-        window.calculator = calculator;
-      })(window.calculator || {} , jQuery);
-      优点:
-        模块最好要保证模块的职责单一性,最好不要与程序的其他部分直接交互,
-        通过向匿名函数注入依赖项的形式,保证了模块的独立性,还使模块之间的以来关系变得明显.
-        对于模块的依赖通过自执行函数的参数传入,这样做可以做到依赖抽象,
-        本例中使用的jQuery,而当要使用zepto的时候,只要更换传入的参数即可。
-        原则：高内聚低耦合,模块内相关性高,模块间关联低。
-  模块化规范
-    PS：客户端规范主要有：AMD 和 CMD
-      服务器端规范主要是 CommonJS,
-      node.js 用的就是 CommonJS 规范。
-    AMD 异步模块定义,依赖前置,实现主要有 RequireJS, RequireJS在国外用的比较多
-      PS：制定了定义模块的规则,这样模块和模块的依赖可以被异步加载。
-        这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。
-      模块名的格式
-        模块名用来唯一标识定义中模块,它们同样在依赖数组中使用。
-        AMD的模块名规范是CommonJS模块名规范的超集。引用如下：
-        模块名是由一个或多个单词以正斜杠为分隔符拼接成的字符串
-        单词须为驼峰形式,或者".",".."
-        模块名不允许文件扩展名的形式,如".js"
-        模块名可以为 "相对的" 或 "顶级的"。若首字符为"."或".."则为"相对的"模块名
-        顶级的模块名从根命名空间的概念模块解析
-        相对的模块名从 "require" 书写和调用的模块解析
-        上文引用的CommonJS模块id属性常被用于JavaScript模块。
-        相对模块名解析示例：
-        若模块 "a/b/c" 请求 "../d", 则解析为"a/d"
-        若模块 "a/b/c" 请求 "./e", 则解析为"a/b/e"
-        若AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名,大多数字符都允许在插件资源名使用。
-      API说明
-        define(id?, dependencies?, factory);
-          id  可选,字符串,指的是定义中模块的名字.
-            若没有提供该参数,模块的名字应该默认为模块加载器请求的指定脚本的名字。
-            若提供了该参数,模块名必须是“顶级”的和绝对的（不允许相对名字）。
-          dependencies,是个定义中模块所依赖模块的数组。
-            依赖模块必须根据模块的工厂方法优先级执行,并且执行的结果应该按照依赖数组中的位置顺序以参数的形式传入（定义中模块的）工厂方法中。
-            依赖的模块名若是相对的,应该解析为相对定义中的模块。
-            换句话来说,相对名解析为相对于模块的名字,并非相对于寻找该模块的名字的路径。
-            本规范定义了三种特殊的依赖关键字。
-            若"require","exports", 或 "module"出现在依赖列表中,
-            参数应该按照CommonJS模块规范自由变量去解析。
-            依赖参数是可选的,若忽略此参数,它应该默认为["require", "exports", "module"]。
-            然而,若工厂方法的形参个数小于3,加载器会选择以函数指定的参数个数调用工厂方法。
-          factory,为模块初始化要执行的函数或对象。
-            若为函数,它应该只被执行一次。若是对象,此对象应该为模块的输出值。
-            若工厂方法返回一个值（对象,函数,或任意强制类型转换为true的值）,应该为设置为模块的输出值。
-          简单的 CommonJS 转换
-            若依赖性参数被忽略,模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
-            在某些情况下,因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法）,模块加载器可以选择扫描不扫描依赖性。
-            若有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
-        define.amd 属性
-          PS：为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
-            任何全局函数应该有一个"amd"的属性,它的值为一个对象。
-            这样可以防止与现有的定义了define函数但不遵从AMD编程接口的代码相冲突。
-          当前,define.amd对象的属性没有包含在本规范中。实现本规范的作者,可以用它通知超出本规范编程接口基本实现的额外能力。
-          define.amd的存在表明函数遵循本规范。若有另外一个版本的编程接口,那么应该定义另外一个属性,如define.amd2,表明实现只遵循该版本的编程接口。
-          e.g.:
-            一个如何定义同一个环境中允许多次加载同一个版本的模块的实现：
-            define.amd = {
-              multiversion: true
-            };
-            最简短的定义：
-            define.amd = {};
-          一次输出多个模块
-            在一个脚本中可以使用多次define调用。这些define调用的顺序不应该是重要的。早一些的模块定义中所指定的依赖,可以在同一脚本中晚一些定义。模块加载器负责延迟加载未解决的依赖,直到全部脚本加载完毕,防止没必要的请求。
-        e.g.:
-          使用 require 和 exports
-          创建一个名为"alpha"的模块,使用了require,exports,和名为"beta"的模块:
-          define("alpha", ["require", "exports", "beta"], function (require, exports, beta) {
-               exports.verb = function() {
-                   return beta.verb();
-                   //Or:
-                   return require("beta").verb();
-               }
-           });
-          一个返回对象的匿名模块：
-          define(["alpha"], function (alpha) {
-            return {
-              verb: function(){
-                return alpha.verb() + 2;
-              }
-            };
-          });
-          一个没有依赖性的模块可以直接定义对象：
-          define({
-            add: function(x, y){
-              return x + y;
-            }
-          });
-          一个使用了简单CommonJS转换的模块定义：
-          define(function (require, exports, module) {
-            var a = require('a'),
-            b = require('b');
-    
-            exports.action = function () {};
-          });
-        全局变量
-          本规范保留全局变量"define"以用来实现本规范。包额外信息异步定义编程接口是为将来的CommonJS API保留的。模块加载器不应在此函数添加额外的方法或属性。
-          本规范保留全局变量"require"被模块加载器使用。模块加载器可以在合适的情况下自由地使用该全局变量。它可以使用这个变量或添加任何属性以完成模块加载器的特定功能。它同样也可以选择完全不使用"require"。
-        使用注意
-          为了使静态分析工具（如build工具）可以正常工作,推荐使用字面上形如的'define(...)'。
-        与CommonJS的关系
-          一个关于本API的wiki开始在CommonJS wiki中创建了,作为中转的格式,模块中转。但是为了包含模块定义接口,随着时间而不断改变。在CommonJS列表中关于推荐本API作为模块定义API尚未达成一致。本API被转移到它自己的wiki和讨论组中。
-          AMD可以作为CommonJS模块一个中转的版本只要CommonJS没有被用来同步的require调用。使用同步require调用的CommonJS代码可以被转换为使用回调风格的AMD模块加载器。
-    CMD,Common Module Definition 通用模块定义,依赖就近
-      PS：主要实现有 SeaJS, SeaJS的创始人为阿里的玉伯
-        SeaJS在阿里系用的非常广泛,包括京东等也在用SeaJS
-        但是SeaJS已经停止维护了,因为在ES6中已经有了模块化的实现,
-        该规范明确了模块的基本书写格式和基本交互规则。
-        在 CMD 规范中,一个模块就是一个文件。 代码的书写格式如下： define(factory);
-      define Function
-        define 是一个全局函数,用来定义模块。
-      define define(factory)
-        define 接受 factory 参数,factory 可以是一个函数,也可以是一个对象或字符串。
-        factory 为对象、字符串时,表示模块的接口就是该对象、字符串。
-        比如可以如下定义一个 JSON 数据模块：
-        define({ "foo": "bar" });
-        也可以通过字符串定义模板模块：
-        define('I am a template. My name is {{name}}.');
-        factory 为函数时,表示是模块的构造方法。执行该构造方法,可以得到模块向外提供的接口。factory 方法在执行时,默认会传入三个参数：require、exports 和 module：
-        define(function(require, exports, module) { /*模块代码*/ });
-      define define(id?, deps?, factory)
-        define 也可以接受两个以上参数。字符串 id 表示模块标识,数组 deps 是模块依赖。比如：
-        define('hello', ['jquery'], function(require, exports, module) { /*模块代码*/ });
-        id 和 deps 参数可以省略。省略时,可以通过构建工具自动生成。
-        注意：带 id 和 deps 参数的 define 用法不属于 CMD 规范,而属于 Modules/Transport 规范。
-      define.cmd Object
-        一个空对象,可用来判定当前页面是否有 CMD 模块加载器：
-        if (typeof define === "function" && define.cmd) {
-          /*有 Sea.js 等 CMD 模块加载器存在*/
-        }
-      require Function
-        require 是 factory 函数的第一个参数。
-      require require(id)
-        require 是一个方法,接受 模块标识 作为唯一参数,用来获取其他模块提供的接口。
-        define(function(require, exports) {
-          // 获取模块 a 的接口
-          var a = require('./a');
-          // 调用模块 a 的方法
-          a.doSomething();
-        });
-        注意：在开发时,require 的书写需要遵循一些 简单约定。
-      require.async require.async(id, callback?)
-        require.async 方法用来在模块内部异步加载模块,并在加载完成后执行指定回调。callback 参数可选。
-        define(function(require, exports, module) {
-          // 异步加载一个模块,在加载完成时,执行回调
-          require.async('./b', function(b) {
-            b.doSomething();
-          });
-          // 异步加载多个模块,在加载完成时,执行回调
-          require.async(['./c', './d'], function(c, d) {
-            c.doSomething();
-            d.doSomething();
-          });
-        });
-        注意：require 是同步往下执行,require.async 则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
-      require.resolve require.resolve(id)
-        使用模块系统内部的路径解析机制来解析并返回模块路径。该函数不会加载模块,只返回解析后的绝对路径。
-        define(function(require, exports) {
-          console.log(require.resolve('./b'));
-          // ==> http://example.com/path/to/b.js
-        });
-        这可以用来获取模块路径,一般用在插件环境或需动态拼接模块路径的场景下。
-      exports Object
-        exports 是一个对象,用来向外提供模块接口。
-        define(function(require, exports) {
-          // 对外提供 foo 属性
-          exports.foo = 'bar';
-          // 对外提供 doSomething 方法
-          exports.doSomething = function() {};
-        });
-        除了给 exports 对象增加成员,还可以使用 return 直接向外提供接口。
-        define(function(require) {
-          // 通过 return 直接提供接口
-          return {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        若 return 语句是模块中的唯一代码,还可简化为：
-        define({
-          foo: 'bar',
-          doSomething: function() {}
-        });
-        上面这种格式特别适合定义 JSONP 模块。
-        特别注意：下面这种写法是错误的！
-        define(function(require, exports) {
-          // 错误用法！！!
-          exports = {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        正确的写法是用 return 或者给 module.exports 赋值：
-        define(function(require, exports, module) {
-          // 正确写法
-          module.exports = {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        提示：exports 仅仅是 module.exports 的一个引用。在 factory 内部给 exports 重新赋值时,并不会改变 module.exports 的值。因此给 exports 赋值是无效的,不能用来更改模块接口。
-      module Object
-        module 是一个对象,上面存储了与当前模块相关联的一些属性和方法。
-      module.id String
-    
-        模块的唯一标识。
-    
-        define('id', [], function(require, exports, module) {
-    
-          // 模块代码
-    
-        });
-        上面代码中,define 的第一个参数就是模块标识。
-      module.uri String
-        根据模块系统的路径解析规则得到的模块绝对路径。
-    
-        define(function(require, exports, module) {
-    
-          console.log(module.uri);
-          // ==> http://example.com/path/to/this/file.js
-    
-        });
-        一般情况下（没有在 define 中手写 id 参数时）,module.id 的值就是 module.uri,两者完全相同。
-      module.dependencies Array
-        dependencies 是一个数组,表示当前模块的依赖。
-      module.exports Object
-        当前模块对外提供的接口。
-    
-        传给 factory 构造方法的 exports 参数是 module.exports 对象的一个引用。只通过 exports 参数来提供接口,有时无法满足开发者的所有需求。 比如当模块的接口是某个类的实例时,需要通过 module.exports 来实现：
-    
-        define(function(require, exports, module) {
-    
-          // exports 是 module.exports 的一个引用
-          console.log(module.exports === exports); // true
-    
-          // 重新给 module.exports 赋值
-          module.exports = new SomeClass();
-    
-          // exports 不再等于 module.exports
-          console.log(module.exports === exports); // false
-    
-        });
-        注意：对 module.exports 的赋值需要同步执行,不能放在回调函数里。下面这样是不行的：
-    
-        // x.js
-        define(function(require, exports, module) {
-    
-          // 错误用法
-          setTimeout(function() {
-            module.exports = { a: "hello" };
-          }, 0);
-    
-        });
-        在 y.js 里有调用到上面的 x.js:
-    
-        // y.js
-        define(function(require, exports, module) {
-    
-          var x = require('./x');
-    
-          // 无法立刻得到模块 x 的属性 a
-          console.log(x.a); // undefined
-    
-        });
-      小结
-        这就是 CMD 模块定义规范的所有内容。经常使用的 API 只有 define, require, require.async, exports, module.exports 这五个。其他 API 有个印象就好,在需要时再来查文档,不用刻意去记。
-        与 RequireJS 的 AMD 规范相比,CMD 规范尽量保持简单,并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性。通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行,后续会介绍。
-    SeaJs
-      PS：是一基于 CMD 规范实现的模块化开发解决方案.
-        作者：Alibaba 玉伯
-        简单友好的模块化定义规范。
-        自然直观的代码组织方式。
-      使用步骤
-        引入sea.js库
-        define 定义模块
-          PS：在CMD规范中,一个模块就是一个js文件
-            define 是一个全局函数,用来定义模块
-          define(factory)
-            参数 factory可为字符串、对象或函数
-              define(function(require, exports, module){
-                // 模块代码
-              });
-              define(obj);
-              define(str);
-            注意：为了减少出错,定义函数的时候直接把这三个参数写上
-            factory为对象、字符串时,表示模块的接口就是该对象、字符串
-              比如可以如下定义一个 JSON 数据模块：
-              define({ "foo": "bar" });
-              也可以通过字符串定义模板模块：
-              define('I am a template. My name is {{name}}.');
-            factory为函数时,表示是模块的构造方法。执行该构造方法,可以得到模块向外提供的接口。factory方法在执行时,默认会传入三个参数：require、exports和 module：
-
-          define(function(require, exports, module) { // 模块代码});
-          define define(id?, deps?, factory)
-
-          　　define也可以接受两个以上参数。字符串 id表示模块标识,数组 deps是模块依赖。比如：
-
-          define('hello', ['jquery'], function(require, exports, module) { // 模块代码});
-          　　id和 deps参数可以省略。省略时,可以通过构建工具自动生成。
-          　　注意：带 id和 deps参数的 define用法不属于 CMD 规范,而属于 Modules/Transport 规范。
-
-          define.cmd Object
-
-          　　一个空对象,可用来判定当前页面是否有 CMD 模块加载器：
-
-          if (typeof define === "function" && define.cmd) {
-              // 有 Sea.js 等 CMD 模块加载器存在
-          }
-          require Function
-
-          　　require是 factory函数的第一个参数。
-
-          require require(id)
-
-          　　require是一个方法,接受 模块标识 作为唯一参数,用来获取其他模块提供的接口。
-
-          define(function(require, exports) {
-            // 获取模块 a 的接口
-            var a = require('./a');
-            // 调用模块 a 的方法
-            a.doSomething();
-          });
-          注意：在开发时,require的书写需要遵循一些 简单约定。
-
-          require.async  require.async(id, callback?)
-
-          　　require.async方法用来在模块内部异步加载模块,并在加载完成后执行指定回调。callback参数可选。
-
-          define(function(require, exports, module) {
-            // 异步加载一个模块,在加载完成时,执行回调
-            require.async('./b', function(b) {
-              b.doSomething();
-            });
-
-            // 异步加载多个模块,在加载完成时,执行回调
-            require.async(['./c', './d'], function(c, d) {
-              c.doSomething();
-              d.doSomething();
-            });
-          });
-          注意：require是同步往下执行,require.async则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
-
-          require.resolve  require.resolve(id)
-
-          　　使用模块系统内部的路径解析机制来解析并返回模块路径。该函数不会加载模块,只返回解析后的绝对路径。
-
-          define(function(require, exports) {
-            console.log(require.resolve('./b'));
-            // ==> http://example.com/path/to/b.js
-          });
-          　　这可以用来获取模块路径,一般用在插件环境或需动态拼接模块路径的场景下。
-        暴露接口
-          exports
-          module.exports
-        依赖模块
-          require(‘模块id’)
-        启动模块系统
-          seajs.use(‘模块id’,function( 模块对象 ){ 业务代码 });
-        e.g.:
-          01-convertor.js 中
-            // 定义模块
-            define(function (require, exports, module) {
-              // 暴露接口
-              exports.convertToNumber = function (input) {
-                return parseFloat(input);
-              }
-            });
-          01-calculator.js 中
-            define(function (require, exports, module) {
-              // 此处是模块的私有空间,定义模块的私有成员
-              // 载入01-convertor模块
-              var convertor = require('./01-convertor');
-              function add(a, b) {
-                return convertor.convertToNumber(a) + convertor.convertToNumber(b);
-              }
-              exports.add = add;
-            });
-          01-helloworld.html 中
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <title>Title</title>
-              <script src="node_modules/seajs/dist/sea.js"></script>
-              <script>
-                seajs.use('./01-calculator.js', function (calculator) {
-                  alert(calculator.add(1,2));
-                });
-              </script>
-            </head>
-            <body>
-            </body>
-            </html>
-      定义模块define
-        PS：先有规范,后有实现
-          在CMD规范中,一个模块就是一个js文件
-        define(factory)   define是一个全局函数,用来定义模块
-          对象{}     外部会直接获取到该对象
-          字符串''   同上
-          函数function( require, exports, module ){ // 模块代码 }
-            注意：为了减少出错,定义函数的时候直接把这三个参数写上
-          factory为对象、字符串时,表示模块的接口就是该对象、字符串。
-          比如可以如下定义一个 JSON 数据模块：
-            define({ "foo": "bar" });
-          也可以通过字符串定义模板模块：
-            define('I am a template. My name is {{name}}.');
-          factory为函数时,表示是模块的构造方法。
-            执行该构造方法,可以得到模块向外提供的接口。
-            factory方法在执行时,默认会传入三个参数：require、exports和 module：
-            define(function(require, exports, module) { // 模块代码});
-            define define(id?, deps?, factory)
-            define也可以接受两个以上参数。字符串 id表示模块标识,数组 deps是模块依赖。
-            比如：
-            define('hello', ['jquery'], function(require, exports, module) { 
-              // 模块代码
-            });
-          id和 deps参数可以省略。省略时,可以通过构建工具自动生成。
-          注意：
-            带 id和 deps参数的 define用法不属于 CMD 规范,
-            而属于 Modules/Transport 规范。
-        define.cmd  一个空对象,可用来判定当前页面是否有 CMD 模块加载器：
-          if (typeof define === "function" && define.cmd) { 
-            // 有 Sea.js 等 CMD 模块加载器存在
-          }
-        require  require是 factory函数的第一个参数。
-        require(id) require是一个方法
-          接受 模块标识 作为唯一参数,用来获取其他模块提供的接口。
-          define(function(require, exports) { 
-          // 获取模块 a 的接口 
-          var a = require('./a'); 
-          // 调用模块 a 的方法 
-          a.doSomething();
-          });
-          注意：在开发时,require的书写需要遵循一些 简单约定。
-        require.async(id, callback?)
-          require.async 方法用来在模块内部异步加载模块,并在加载完成后执行指定回调。
-          callback参数可选。
-          define(function(require, exports, module) {
-          // 异步加载一个模块,在加载完成时,执行回调
-          require.async('./b', function(b) {
-            b.doSomething();
-          });
-
-          // 异步加载多个模块,在加载完成时,执行回调
-          require.async(['./c', './d'], function(c, d) {
-            c.doSomething();
-            d.doSomething();
-          });
-          });
-          注意：require是同步往下执行,require.async则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
-        require.resolve(id)  使用模块系统内部的路径解析机制来解析并返回模块路径。
-          该函数不会加载模块,只返回解析后的绝对路径。
-          define(function(require, exports) {
-          console.log(require.resolve('./b'));
-          // ==> http://example.com/path/to/b.js
-          });
-          　　这可以用来获取模块路径,一般用在插件环境或需动态拼接模块路径的场景下。
-      exports 和 module.exports
-        功能:通过给 exports或module.exports动态的挂载变量、函数或对象,外部会获取到该接口
-        exports 等价于 module.exports
-        可以通过多次给exports 挂载属性向外暴露
-        不能直接给 exports 赋值
-        若想暴露单个变量、函数或对象可以通过直接给module.exports 赋值 即可
-      exports exports是一个对象,用来向外提供模块接口。
-        define(function(require, exports) {
-        // 对外提供 foo 属性
-        exports.foo = 'bar';
-
-        // 对外提供 doSomething 方法
-        exports.doSomething = function() {};
-        });
-        　　除了给 exports对象增加成员,还可以使用 return直接向外提供接口。
-
-        define(function(require) {
-        // 通过 return 直接提供接口
-        return {
-          foo: 'bar',
-          doSomething: function() {}
-        };
-        });
-        　　若 return语句是模块中的唯一代码,还可简化为：
-
-        define({
-        foo: 'bar',
-        doSomething: function() {}
-        });
-        　　上面这种格式特别适合定义 JSONP 模块。
-
-        特别注意：下面这种写法是错误的！
-
-        define(function(require, exports) {
-        // 错误用法！！!
-        exports = {
-          foo: 'bar',
-          doSomething: function() {}
-        };
-        });
-        正确的写法是用 return或者给 module.exports赋值：
-
-        define(function(require, exports, module) {
-        // 正确写法
-        module.exports = {
-          foo: 'bar',
-          doSomething: function() {}
-        };
-        });
-        提示：exports 仅仅是 module.exports 的一个引用。在 factory 内部给 exports 重新赋值时,并不会改变 module.exports 的值。因此给 exports 赋值是无效的,不能用来更改模块接口。
-      module  module是一个对象,上面存储了与当前模块相关联的一些属性和方法。
-        module.id 字符串,模块的唯一标识。
-          define('id', [], function(require, exports, module) { 
-          // 模块代码
-          });
-          上面代码中,define的第一个参数就是模块标识。
-        module.uri 字符串, 根据模块系统的路径解析规则得到的模块绝对路径。
-          define(function(require, exports, module) {
-          console.log(module.uri); 
-          // ==> http://example.com/path/to/this/file.js
-          });
-          一般情况下(没有在 define 中手写 id 参数时),module.id 的值就是 module.uri,两者完全相同。
-        module.dependencies dependencies是一个数组,表示当前模块的依赖。
-        module.exports    当前模块对外提供的接口。
-          传给 factory 构造方法的 exports 参数是 module.exports 对象的一个引用。
-          只通过 exports 参数来提供接口,有时无法满足开发者的所有需求。
-          比如当模块的接口是某个类的实例时,需要通过 module.exports 来实现：
-          define(function(require, exports, module) {
-          // exports 是 module.exports 的一个引用
-          console.log(module.exports === exports); // true
-
-          // 重新给 module.exports 赋值
-          module.exports = new SomeClass();
-
-          // exports 不再等于 module.exports
-          console.log(module.exports === exports); // false
-          });
-          注意：对 module.exports 的赋值需要同步执行,不能放在回调函数里。下面这样是不行的：
-          // x.js
-          define(function(require, exports, module) {
-          // 错误用法
-          setTimeout(function() {
-            module.exports = { a: "hello" };
-          }, 0);
-          });
-          在 y.js 里有调用到上面的 x.js:
-
-          // y.js
-          define(function(require, exports, module) {
-          var x = require('./x');
-
-          // 无法立刻得到模块 x 的属性 a
-          console.log(x.a); // undefined
-          });
-      小结
-        经常使用的 API 只有 define, require, require.async, exports, module.exports 五个。
-        其他 API 次之,在需要时再来查文档,不用刻意去记。
-        与 RequireJS 的 AMD 规范相比,CMD 规范尽量保持简单,
-        并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性.
-        通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行
-    CommonJs
-      PS：SeaJs 和 CommonJs 规范非常的相似,并且在 node.js 中使用起来更简单。
-        在 node.js 中直接使用require引包,直接使用 exports 和 module.exports 暴露公开成员,
-        并且npm基于CommonJs实现了自动加载和安装依赖。
-      同样的 CommonJs 让 node.js 变得：
-        1、增加内聚性,有助分工协作,
-        2、方便重构,
-        3、提高代码质量
-      node.js 中的实现为：
-        (function(exports,require,module,__filename,__dirname){
-        return module.exports;
-        });
-      require
-        加载模块后会缓存,多次加载后得到同一对象 require('http')
-        查看模块缓存console.log(require.cache);
-        查询模块绝对路径 require.resolve('./test.js');
-        查看单个的模块缓存 require.cache[require.resolve('./test.js')]
-        删除模块缓存 delete require.cache[require.resolve('./test.js')];
-Export&Import ES6模块化规范 
-  PS： export 命令用于定义模块的对外接口,即提供接口,
-    import 命令用于引入其他模块提供的功能,即引入接口;
-  ES6 模块的设计思想: 尽量的静态化
-    使得编译时就能确定模块的依赖关系,以及输入和输出的变量。
-    CommonJS 和 AMD 模块: 运行时加载
-      都只能在运行时确定这些东西。
+'Modules'模块化规范 
+  PS：export 定义模块的对外接口,即提供接口,import 引入其他模块提供的功能,即引入接口;
+    ES6的模块自动采用严格模式,不管是否在模块头部加上"use strict";
+    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this。
+  ES6模块设计思想: 尽量的静态化,使编译时能确定模块的依赖关系,以及输入和输出的变量 
+    CommonJS和AMD 模块: 运行时加载 
+      都只能在运行时确定这些东西 
       比如,CommonJS 模块就是对象,输入时必须查找对象属性。
       // CommonJS模块
       let { stat, exists, readFile } = require('fs');
@@ -2761,7 +2083,7 @@ Export&Import ES6模块化规范
       然后再从这个对象上面读取3个方法。
       这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
       导致完全没办法在编译时做“静态优化”。
-    ES6 模块: “编译时加载”或者静态加载
+    ES6模块: “编译时加载”或者静态加载
       ES6不是对象,而是通过export命令显式指定输出的代码,再通过import命令输入。
       // ES6模块
       import { stat, exists, readFile } from 'fs';
@@ -2777,62 +2099,97 @@ Export&Import ES6模块化规范
       目前,通过各种工具库,其实已经做到了这一点。
       将来浏览器的新 API 就能用模块格式提供,不再必须做成全局变量或者navigator对象的属性。
       不再需要对象作为命名空间(比如Math对象),未来这些功能可以通过模块提供。
-  ES6 的模块自动采用严格模式,不管你有没有在模块头部加上"use strict";
-    严格模式的部分限制:
-      arguments不会自动反映函数参数的变化
-      不能使用arguments.callee
-      不能使用arguments.caller
-      不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
-      禁止this指向全局对象
-      变量必须声明后再使用
-      函数的参数不能有同名属性,否则报错
-      不能使用with语句
-      不能对只读属性赋值,否则报错
-      不能使用前缀0表示八进制数,否则报错
-      不能删除不可删除的属性,否则报错
-      不能删除变量delete prop,会报错,只能删除属性delete global[prop]
-      eval不会在它的外层作用域引入变量
-      eval和arguments不能被重新赋值
-      增加了保留字(比如 protected static 和 interface )
-    ES6 模块之中,顶层的this指向undefined,即不应该在顶层代码使用this。
-  export 输出变量
-    PS：一个模块就是一个独立的文件,
-      该文件内部的所有变量,外部无法获取。
+  export 输出接口 
+    PS：一个模块就是一个独立的文件,该文件内部的变量,外部无法获取。
       若希望外部能读取模块内的变量,须使用export关键字输出变量。
-    export var aoo = val;  单个变量输出
+    export var aoo = val;     单个变量输出 
+      对外部输出三个变量: aoo boo coo
+      export var aoo = 'aa';
+      export var boo = 'bb';
+      export var coo = 1958;
+    export function foo() {}; 单个函数输出 
+    export default    默认输出
+      PS：通过默认输出,和指定名称的引入,完成模块变量的引入;
       e.g.:
-        使用 export 命令对外部输出三个变量: aoo boo coo
-        export var aoo = 'aa';
-        export var boo = 'bb';
-        export var coo = 1958;
-      输出函数或类(class)
-        对外输出一个函数 foo
-        export function foo(x, y) { };
-    export {aoo,boo};      {} 封装后输出
-      PS：使用大括号指定所要输出的一组变量;
-        与前一种写法(直接放置在var语句前)是等价的,
-        但是应该优先考虑使用这种写法。
-        因为这样就可以在脚本尾部,一眼看清楚输出了哪些变量。
-      e.g.:
-        var aoo = 'aa';
-        var boo = 'bb';
-        var coo = 1958;
-        export {aoo, boo, coo};
-      as关键字  重命名输出变量
-        重命名了函数foo1和foo2的对外接口,foo2使用不同的名字输出了两次:
-        function foo1() { ... }
-        function foo2() { ... }
-        export {
-          foo1 as goo1,
-          foo2 as goo2,
-          foo2 as hoo1
-        };
+        // export-default.js
+        默认输出一个函数
+        export default function () { console.log('sss'); }
+        或
+        export default function foo() { console.log('sss'); }
+        或
+        function foo() { console.log('foo'); }
+        export default foo;
+        最终相当于 [self] : export {foo as default };
+        // import-default.js
+        其他模块加载该模块时,import命令可以为该匿名函数指定任意名字。
+        import goo from './export-default';
+        相当于 [self] : import { default as goo } from './profile';
+        goo(); // 'sss'
+        可使用任意名称指向 export-default.js 输出的方法,
+        这时就不需要知道原模块输出的函数名。
+        函数名foo,在模块外部是无效的,加载的时候,视同匿名函数加载。
+        
+        输出类
+        // MyClass.js
+        export default class { ... }
+        // main.js
+        import MyClass from 'MyClass';
+        let o = new MyClass();
+        
+        在一条import语句中同时输入默认方法和其他变量
+          import _, { each } from 'lodash';
+          对应上面代码的export语句如下。
+          export default function (obj) { }         
+          export function each(obj, iterator, context) { }
+      默认输出和正常输出的比较
+        使用export default时,对应的import语句不需要使用大括号；
+        export default function foo() { } // 输出
+        import goo from 'xx';             // 输入
+        
+        正常时,对应的import语句需要使用大括号。
+        export function foo() { }; // 输出
+        import {goo} from 'xx';    // 输入
+      一个模块只能有一个默认输出,'export default'命令只能使用一次
+        PS：本质上,export default 就是输出一个叫做default的变量或方法,
+          然后输入时,系统允许你为它取任意名字。
+        // modules.js
+        function foo(x, y) { return x * y; }
+        export {foo as default};
+        // app.js
+        import { default as xxx } from 'modules';
+      'export default'后不能跟变量声明语句
+        PS：因为export default命令其实只是输出一个叫做default的变量
+          export default 本质是将该命令后面的值,赋给default变量以后再默认
+        export var a = 1; // 正确
+        
+        var a = 1; 
+        export default a; // 正确
+        相当于 [self] : export { a as default } ;
+        
+        export default 42; // 正确
+        相当于 [self] : export { 42 as default } ;
+        
+        export default var a = 1; // 错误
+    export {aoo,boo}  {}封装输出,使用大括号指定所要输出的一组变量 
+      var aoo = 'aa';
+      var boo = 'bb';
+      var coo = 1958;
+      export {aoo, boo, coo};
+    'as'关键字    重命名输出变量 
+      重命名了函数foo1和foo2的对外接口,foo2使用不同的名字输出了两次:
+      function foo1() {  }
+      function foo2() {  }
+      export {
+        foo1 as goo1,
+        foo2 as goo2,
+        foo2 as hoo1
+      };
     e.g.:
-      export 1; // 报错, 直接输出1, 1 只是一个值,不是接口。
+      export 1; // 报错 
       
       var m = 1;
       export m; // 报错
-      单变量输出格式:
+      单变量输出格式采用以下方式 
       export var m = 1;
       或
       var m = 1;
@@ -2841,7 +2198,6 @@ Export&Import ES6模块化规范
       var n = 1;
       export {n as m};
       
-      同样的,function和class的输出,也必须遵守这样的写法
       function f() {}
       export f;  // 报错
       改为:
@@ -2849,104 +2205,43 @@ Export&Import ES6模块化规范
       或
       function f() {}
       export {f};
-    输出的值是实时动态的
+    输出的值是实时动态的 
       export var aoo = 'bar';
       setTimeout(() => aoo = 'baz', 500);
       上面代码输出变量aoo,值为bar,500 毫秒之后变成baz。
       这一点与 CommonJS 规范完全不同。
       CommonJS 模块输出的是值的缓存,不存在动态更新。
-    export命令必须在模块顶层作用域定义
-      export命令可以出现在模块的任何位置,只要处于模块顶层就可以;
-      若处于块级作用域内,就会报错。
-      因为处于条件代码块之中,就没法做静态优化了,违背了ES6模块的设计初衷。
-      function foo() { export default 'bar' } // SyntaxError
+    'export'命令必须在模块顶层作用域定义
+      PS：可出现在模块的任何位置,但要处于模块顶层,若处于块级作用域内,就会报错 
+        因为处于条件代码块之中,就没法做静态优化了,违背了ES6模块的设计初衷。
+      function foo() { 
+        export default 'bar'  // SyntaxError
+      } 
       foo();
-      上面代码中,export语句放在函数之中,结果报错。
-  export default 默认输出
-    PS：通过默认输出,和指定名称的引入,完成模块变量的引入;
-    e.g.:
-      // export-default.js
-      默认输出一个函数
-      export default function () { console.log('sss'); }
-      或
-      export default function foo() { console.log('sss'); }
-      或
-      function foo() { console.log('foo'); }
-      export default foo;
-      最终相当于 [self] : export {foo as default };
-      // import-default.js
-      其他模块加载该模块时,import命令可以为该匿名函数指定任意名字。
-      import goo from './export-default';
-      相当于 [self] : import { default as goo } from './profile';
-      goo(); // 'sss'
-      可使用任意名称指向 export-default.js 输出的方法,
-      这时就不需要知道原模块输出的函数名。
-      函数名foo,在模块外部是无效的,加载的时候,视同匿名函数加载。
-      
-      输出类
-      // MyClass.js
-      export default class { ... }
-      // main.js
-      import MyClass from 'MyClass';
-      let o = new MyClass();
-    默认输出和正常输出的比较
-      使用export default时,对应的import语句不需要使用大括号；
-      export default function foo() { } // 输出
-      import goo from 'xx';             // 输入
-      
-      正常时,对应的import语句需要使用大括号。
-      export function foo() { }; // 输出
-      import {goo} from 'xx';    // 输入
-    一个模块只能有一个默认输出,export default 命令只能使用一次
-      PS：本质上,export default 就是输出一个叫做default的变量或方法,
-        然后输入时,系统允许你为它取任意名字。
-      // modules.js
-      function foo(x, y) { return x * y; }
-      export {foo as default};
-      // app.js
-      import { default as xxx } from 'modules';
-    export default 后不能跟变量声明语句
-      PS：因为export default命令其实只是输出一个叫做default的变量
-        export default 本质是将该命令后面的值,赋给default变量以后再默认
-      export var a = 1; // 正确
-      
-      var a = 1; 
-      export default a; // 正确
-      相当于 [self] : export { a as default } ;
-      
-      export default 42; // 正确
-      相当于 [self] : export { 42 as default } ;
-      
-      export default var a = 1; // 错误
-    在一条import语句中同时输入默认方法和其他变量
-        import _, { each } from 'lodash';
-        对应上面代码的export语句如下。
-        export default function (obj) { }         
-        export function each(obj, iterator, context) { }
-  import 命令
-    PS：export定义模块的对外接口后,其他 JS 文件就可通过import加载这个模块;
-    import {} from './xx' 加载JS文件,并从中输入变量
-      // main.js
-      import {firstName, lastName, year} from './profile';
-      console.log(firstName);
-      import命令接受一对大括号,里面指定要从其他模块导入的变量名。
-      大括号里面的变量名,必须与被导入模块(profile.js)对外接口的名称相同。
-      from指定模块文件的位置,可以是相对路径,也可以是绝对路径,.js 可以省略。
-    as 关键字   重命名输入的变量
+  import 引入接口 
+    PS：其他JS文件通过import加载export定义对外的输出 
+    import {name1[,name2,..]} from './xx' 加载JS文件,并从中输入变量 
+      {name1[,name2,..]}  指定要从其他模块导入的变量名 
+        大括号里面的变量名,必须与被导入模块对外接口的名称相同
+      from       指定模块文件的位置,可是相对路径或绝对路径,'.js'可省略 
+      e.g.：
+        import {firstName, lastName, year} from './profile';
+        console.log(firstName);
+    import {name1[,name2,..]} from 'moduleName'; 
+      PS：若使用模块名,而非路径路径,则必须有配置文件,告诉JS引擎该模块的位置 
+      e.g.：
+        import {myMethod} from 'util';
+        util是模块文件名,由于不带有路径,需通过配置告诉引擎怎么取到这个模块 
+    'as'关键字  重命名输入的变量 
       import { aoo as boo } from './profile';
-    import {} from 'moduleName';
-      若使用模块名,而非路径路径,则必须有配置文件,告诉 js 引擎该模块的位置。
-      import {myMethod} from 'util';
-      上面代码中,util是模块文件名,
-      由于不带有路径,必须通过配置,告诉引擎怎么取到这个模块。
-    import命令具有提升效果,会提升到整个模块的头部,首先执行。
-      foo();
-      import { foo } from 'my_module';
-      上面的代码不会报错,因为import的执行早于foo的调用。
-      这种行为的本质是,import命令是编译阶段执行的,在代码运行之前。
-    不能使用表达式和变量
-      由于import是静态执行,所以不能使用表达式和变量,
-      这些只有在运行时才能得到结果的语法结构。
+    'import'命令引入提升,会提升到整个模块的头部,首先执行 
+      e.g.：
+        foo();
+        import { foo } from 'my_module';
+        import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
+    不能使用表达式和变量 
+      由于import是静态执行,所以不能使用表达式和变量,这些只有在运行时才能得到结果的语法结构 
+      在静态分析阶段,这些语法都是没法得到值的。
       import { 'f' + 'oo' } from 'my_module'; // 报错
       
       let module = 'my_module'; // 报错
@@ -2954,32 +2249,30 @@ Export&Import ES6模块化规范
       
       if (x === 1) { import { foo } from 'module1'; } // 报错
       else { import { foo } from 'module2'; }
-      上面三种写法都会报错,因为它们用到了表达式、变量和if结构。
-      在静态分析阶段,这些语法都是没法得到值的。
-    其他写法
-      import语句会执行所加载的模块,因此可以有下面的写法。
+    其他写法 
+      import语句会执行所加载的模块,因此可以有下面的写法 
       
-      仅仅执行lodash模块,但是不输入任何值。
-      import 'lodash'; 
+      import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
       
-      多次重复执行同一句import语句,那么只会执行一次,而不会执行多次。
+      多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
       import 'lodash';
       import 'lodash'; // 未执行
     
-      import语句是 Singleton 模式。
+      import语句是'Singleton'模式。
       import { foo } from 'my_module';
       import { bar } from 'my_module';
       等同于
       import { foo, bar } from 'my_module';
-      上面代码中,虽然foo和bar在两个语句中加载,但是它们对应的是同一个my_module实例。
     import * as aoo from './xx';  模块的整体加载
-      PS：除了指定加载某个输出值,还可以使用整体加载,即用星号(*)指定一个对象,
-        所有输出值都加载在这个对象上面。
+      PS：使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
       e.g.:
         // circle.js
-        export function area(radius) { return Math.PI * radius * radius; }
-        export function circumference(radius) { return 2 * Math.PI * radius; }
-        
+        export function area(radius) { 
+          return Math.PI * radius * radius; 
+        }
+        export function circumference(radius) { 
+          return 2 * Math.PI * radius; 
+        }
         // main.js
         import { area, circumference } from './circle';
         console.log('圆面积：' + area(4));
@@ -2988,26 +2281,26 @@ Export&Import ES6模块化规范
         import * as circle from './circle';
         console.log('圆面积：' + circle.area(4));
         console.log('圆周长：' + circle.circumference(14));
-      模块整体加载所在的对象(上例是circle),应该是可以静态分析的,不允许运行时改变
+      模块整体加载所在的对象不允许运行时改变 
         import * as circle from './circle';
         // 下面两行都是不允许的
         circle.foo = 'hello';
         circle.area = function () {};
-  export  from  复合写法
-    PS：若在一个模块之中,先后输入输出同一个模块,import语句可与export语句写在一起。
+  export {}  from 'path' 先后输入输出同一个模块
+    PS：
     e.g.:
       export { foo, bar } from 'my_module';
       // 等同于
       import { foo, bar } from 'my_module';
       export { foo, bar };
-    接口改名 export { foo as myFoo } from 'my_module';
-    整体输出 export * from 'my_module';
-    默认接口 export { default } from 'foo';
-    具名接口改为默认接口 export { es6 as default } from './someModule';
+    export { foo as myFoo } from 'my_module' 接口改名 
+    export * from 'my_module';               整体输出 
+    export { default } from 'foo';           默认接口 
+    export { aoo as default } from './someModule'  具名接口改为默认接口 
       // 等同于
       import { es6 } from './someModule';
       export default es6;
-    默认接口改名为具名接口 export { default as es6 } from './someModule';
+    export { default as es6 } from './someModule'  默认接口改为具名接口 
     下面三种import语句,没有对应的复合写法。
       import * as someIdentifier from "someModule";
       import someIdentifier from "someModule";
@@ -3016,8 +2309,8 @@ Export&Import ES6模块化规范
       export * as someIdentifier from "someModule";
       export someIdentifier from "someModule";
       export someIdentifier, { namedIdentifier } from "someModule";
-  模块的继承
-    e.g.:
+  模块的继承 
+    e.g.: 
       假设有一个circleplus模块,继承了circle模块。
       // circleplus.js
       export * from 'circle';
@@ -3036,7 +2329,7 @@ Export&Import ES6模块化规范
       import exp from 'circleplus';
       console.log(exp(math.e));
       上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
-  跨模块常量
+  跨模块常量 
     const声明的常量只在当前代码块有效。
     若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
     可以采用下面的写法。
@@ -3070,7 +2363,7 @@ Export&Import ES6模块化规范
     // script.js
     import {db, users} from './constants';
   import(specifier)
-    PS：前面介绍过,import命令会被 JavaScript 引擎静态分析,
+    PS：前面介绍过,import命令会被JS引擎静态分析,
       先于模块内的其他模块执行(叫做”连接“更合适)。所以,下面的代码会报错。
       // 报错
       if (x === 2) { import MyModual from './myModual'; }
@@ -3248,6 +2541,5 @@ ES7
 ASYNC  用来取代回调函数、解决异步操作的一种方法  
   PS：async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖;
 -------------------------------------------------------------------------待整理 
-
 
 

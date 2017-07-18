@@ -258,6 +258,10 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
       {
         attr1 : Number, // 表示只接收数值
         attr2 : [Number,String], // 接收数值和字符串
+        attr3 : {
+          type : Array , // 接收的类型为数组 
+          default : [], // 初始值为空 
+        }
       }
   'computed'   数据的依赖 
     PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化 「SlPt」
@@ -2941,11 +2945,18 @@ Component,组件
 ◆Vue扩展插件 
 vue-resource  与后台数据交互 
   PS：作为vue插件的形式存在,通过 XMLHttpRequest 或 JSONP 发起请求并处理响应 
-  vm.$http.get('url'[,arg]).then(foo)   get请求 
+  使用步骤 
+    npm install vue-resource  安装vue-resource 
+    import VueResource from 'vue-resource' 引入vue-resource 
+    Vue.use(VueResource)  声明使用 
+  ★方法
+  vm.$http.get('url'[,arg]).then(foo1,foo2) get请求 
     url  请求的地址
     arg  可选,obj,请求的参数
-    foo  传入参数 res「返回的结果,且进行了Vue封装」
-  vm.$http.post()  post请求 
+    foo1 成功的回调,传入参数 (data) 
+      返回的数据进行了Vue封装
+    foo2 失败的回调,传入参数 (err) 
+  vm.$http.post'url'[,arg]).then(foo1,foo2) post请求 
   vm.$http.jsonp() jsonp请求 
 axios         功能和vue-resource类似 
 vue-router    路由 
@@ -3462,6 +3473,35 @@ vue-router    路由
       
       Access-Control-Allow-Origin: *        
 Vuex          大规模状态管理 
+  npm install vuex --save   安装
+  import Vuex from 'vuex'   引入vuex
+  Vue.use(Vuex)  注册 
+  let store = new Vuex.store({ // 实例化数据中心 
+    state : {  // 用于储存数据 
+    },
+    getters : {
+    }
+    mutations : { // 用于执行的函数,不可异步执行,一般用于直接操作 state 中的数据  
+      foo : function(state,data1){
+        // state 即为储存数据的对象,data1 为 commit() 传入的数据 
+      },
+    },
+    actions : { // 用于执行的函数,一般是异步的,常和后端API交互 
+      goo : function(context,data2){
+        // context 一般用来执行 mutations 中的函数,data2 为 dispatch() 传入的数据 
+        // context.commit('foo',data1) 
+      },
+    }
+  })
+  new Vue({
+    el : '',
+    data : {},
+    store : store, // 在全局实例化对象[组件的顶层容器]中使用  
+  });
+  在组件的方法中
+    this.$store.state.xx 使用数据 
+    thi.$store.commit('foo',data) 执行'mutations'中的方法 
+    thi.$store.dispatch('goo',data) 执行'actions'中的方法 
 vue-validator 表单验证 
 vue-touch     移动端 
 suggestion: 

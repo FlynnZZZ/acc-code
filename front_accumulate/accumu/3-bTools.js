@@ -1502,7 +1502,10 @@ webpack   模块加载器兼打包工具
     在一个配置文件中,指明对某些文件进行类似编译,组合,压缩等任务的具体步骤,
     这个工具之后可以自动替你完成这些任务。
   Bower 
-
-
+  json-server  接口Mock数据 
+    npm install json-server --save  安装依赖 
+    在'dev-server.js'文件中进行配置
+    var jsonServer = require('json-sever'); 引入json-server 
+    ...
 
 

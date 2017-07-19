@@ -3035,14 +3035,15 @@ vue-router    路由
             }
           ]
         })
-  <router-link to="aoo" tag='tagName'>xxx</router-link>   连接路由 : 用于在页面点击跳转 
+  <router-link >xxx</router-link>   连接路由 : 用于在页面点击跳转 
     PS：<router-link>默认会被渲染成一个<a>标签 
-    to   属性,指定链接地址 
+    to="aoo"      属性,指定链接地址 
       <router-link to="/aoo">xxx</router-link> // 到根路径下的aoo 
       <router-link :to="'aoo'">xxx</router-link> // 动态绑定
       <router-link :to="{path:'aoo/boo'}">xxx</router-link> // 传入对象 
       <router-link :to="{name:'aoo'}">xxx</router-link> // 具名路由  
-    tag  指定<router-link>渲染成的HTML标签,'tagName'为标签名,如'div'、'li'等
+    tag='tagName' 指定<router-link>渲染成的HTML标签,'tagName'为标签名,如'div'、'li'等
+    active-class="className"  指定样式 
   '/path/:param' 动态路由,配任意的'/path/:xx'[类似于于地址中的查询字符串] 
     this.$route.params 在组件内获取当前的具体的路径的对象 
       在HTML中可直接使用 $route.params.xx 来取匹配到的地址参数 
@@ -3053,7 +3054,8 @@ vue-router    路由
     this.$route.query  [若URL中有查询参数]获取查询参数 
       对于路径 /foo?user=1,则有 $route.query.user == 1,若没有查询参数,则是个空对象 
     this.$route.hash   当前路由的hash值,若无hash,则为空字符串 
-    响应路由参数的变化
+    this.$route.path  
+    响应路由参数的变化 
       当使用路由参数时,例如从 /user/foo 导航到 user/bar,原来的组件实例会被复用。
       因为两个路由都渲染同个组件,比起销毁再创建,复用则显得更加高效。
       不过,这也意味着组件的生命周期钩子不会再被调用。
@@ -3781,6 +3783,10 @@ originJS[SlSt]
         next to prev 
         接受者不断的发送请求,接收到响应后停止
         请求的参数为信息发出者预先定义好的参数 
+    将公用资源初次加载存放到客户端,之后在缓存中去取 
+      如公用的库 jQuery,Vue,自定义的工具 等等 
+      1. 使用 localStorage 存储 
+      2. 
 ---------------------------------------------------------------------以下待整理 
 
 

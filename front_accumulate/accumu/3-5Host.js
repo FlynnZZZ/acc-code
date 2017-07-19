@@ -80,7 +80,7 @@
 --------------------------------------------------------------------------------
 本地服务器
   使用 xampp 搭建本地服务器
-    修改服务器根目录指向  httpd.conf 文件
+    修改服务器根目录指向'httpd.conf'文件
       DocumentRoot "E:/project/more/yihuo/HTML"
       <Directory "E:/project/more/yihuo/HTML">
           #
@@ -109,7 +109,7 @@
           #
           Require all granted
       </Directory>
-    虚拟主机的配置 httpd.conf 文件 
+    虚拟主机的配置'httpd-vhosts.conf'文件 
       <VirtualHost 127.0.0.2:8081>
         ServerAdmin webmaster@dummy-host2.example.com
         DocumentRoot "E:/project/more/yihuo/HTML"

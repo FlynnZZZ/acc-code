@@ -1724,187 +1724,6 @@ Symbol 符号,标志,记号
     inst.prop ;      // 'getter'
   相关操作
   Cla.name;  获取类的名字
-Proxy 代理 
-  PS：作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
-  new Proxy(obj1,obj2) Proxy创建-Proxy的实现
-    get方法 用于代理对象的读操作 
-      var person = {"name":"张三"};
-      var pro = new Proxy(person,{  //创建代理对象pro,代理person的读写操作
-        get:function(target,property){
-          return "李四"
-        }
-      });
-      pro.name; //李四
-    set方法 用于代理对象的写操作 
-      var bankAccount = {"RMB":1000,"dollar":0};
-      var banker = new Proxy(bankAccount,{ //创建一个Proxy代理实例
-        get:function(target, property){      //编写get处理程序
-          if(target[property] > 0){  //判断余额是否大于0
-            return target[property]; //有余额,就返回余额值
-          }
-          else{
-            return "余额不足"; //没钱了
-          }    
-        },
-        set:function(target,property,value){ //编写set处理程序
-          if(!Number.isInteger(value)){ //存入的数额必须是一个数字类型
-            console.log(value,'数值不正确');
-            return "请设置正确的数值";
-          }
-          else {
-            target[property] = value;  //修改属性的值
-            console.log('存款成功');
-          }
-        }
-      });
-      banker.RMB;    // 1000,查款
-      banker.dollar; // 余额不足,查款
-      banker.dollar = "五百"; // 五百 数值不正确,存款
-      banker.dollar;          // 余额不足,查款
-      banker.dollar = 500;    // 存款成功,存款
-      banker.dollar;          // 500,查款
-    ownKeys()  代理过滤 Object.ownKeys() 对对象的属性遍历
-      let person = {"name":"老王","age":40,"height":1.8};
-      let proxy = new Proxy(person,{
-        ownKeys:function(target){  //ownKeys过滤对对象的属性遍历
-          return ["name","age"]
-        }
-      });
-      Object.keys(person); // ["name", "age","height"],未使用代理
-      Object.keys(proxy);  // ["name", "age"]
-    has()      代理 key in object 的操作
-      var person = { "name":"张三", "age":20 };
-      var proxy = new Proxy(person, {
-        has: function(target, prop) {
-          if(target[prop] === undefined){
-            return false;
-          }
-          else{
-            return true;
-          }
-        }
-      });
-      "name" in proxy;   // true
-      "height" in proxy; // false
-    apply()    若被代理的变量是一个函数,则代理调用
-      let foo = function(){
-        console.log('我是原始函数');
-      };
-      let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
-        apply:function(){
-          console.log('我是代理函数');
-        }
-      });
-      proxy(); // 我是代理函数
-  var obj = Proxy.revocable() 代理及取消代理,返回一个对象
-    obj.proxy    Proxy的代理实例对象
-    obj.revoke() 用于取消代理
-    e.g.：
-      let person = {"name":"张三"};
-      let handle = {  //定义一个代理处理程序
-        get:function(target,prop){
-          return "李四";
-        }
-      };
-      let object = Proxy.revocable(person,handle); //使用Proxy.revocable()代理
-      object.proxy.name; // 李四
-      object.revoke();   //调用返回对象object的revoke方法,取消代理
-      object.proxy.name; //报错,代理被取消
-  defineProperty()
-  deleteProperty()
-  enumerate()
-  getOwnPropertyDescriptor()
-  getPrototypeOf()
-  isExtensible()
-  preventExtensions()
-  setPrototypeOf()
-Generator 生成器函数 
-  PS：可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
-    可利用Generator函数暂停执行的特性来实现异步操作 
-    原理：将异步操作的语句写到yield后面,通过执行next方法进行回调 
-  function* foo(){} 声明Generator函数
-    e.g.：
-      function* Hello(name) {  
-        yield `hello ${name}`;
-        yield `how are you`;
-        yield `bye`;
-      }
-    'yield'关键字 : 相当于暂停执行并且返回信息 
-      Generator函数可以有多个yield
-      yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行 
-    'yield*'关键字 : 调用另一个Generator函数
-      若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
-      那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
-      function* gen1() {   
-        yield "gen1 start";
-        yield "gen1 end";
-      }
-      function* gen2() {  
-        yield "gen2 start";
-        yield "gen2 end";
-      }
-      function* start() { 
-        yield "start";
-        // 使用关键字yield*来实现调用另外两个Generator函数
-        yield* gen1();
-        yield* gen2();
-        yield "end";
-      }
-      var ite = start(); //调用start函数,创建一个生成器
-      ite.next(); // {value: "start", done: false}
-      ite.next(); // {value: "gen1 start", done: false}
-      ite.next(); // {value: "gen1 end", done: false}
-      ite.next(); // {value: "gen2 start", done: false}
-      ite.next(); // {value: "gen2 end", done: false}
-      ite.next(); // {value: "end", done: false}
-  调用Generator函数 
-    PS：Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
-      Generator函数被调用后并不会一直执行到最后,而是先回返回一个生成器对象,
-      然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
-      直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
-      直到'next'再一次被调用的时候,才会继续接着往下执行,直到done的值为true 
-    e.g.：
-      function* foo(name) {
-        yield name
-        yield `world`
-        yield `fina`
-      }
-      let ite = foo('hello');
-      console.log(ite); // foo {[[GeneratorStatus]]: "suspended"}
-      setTimeout(function(){
-        console.log(ite.next()); // Object {value: "hello", done: false}
-        setTimeout(function(){
-          console.log(ite.next()); // Object {value: "world", done: false}
-          setTimeout(function(){
-            console.log(ite.next()); // Object {value: "fina", done: false}
-            setTimeout(function(){
-              console.log(ite.next()); // Object {value: undefined, done: true}
-              console.log(ite.next()); // Object {value: undefined, done: true}
-            },1000);
-          },1000);
-        },1000);
-      },1000);
-    next([arg])方法 
-      arg 参数,替换上一个yield的返回值
-      function* Hello() {
-        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
-        console.log(res,1); // undefined 1
-        yield res;
-      }
-      let iterator = Hello(); // 返回一生成器对象
-      iterator.next(); //{value: "hello", done: false}
-      // 若为 iterator.next(); // {value: undefined, done: false}
-      iterator.next("world"); // {value: "world", done: false}
-      相当于
-      function* Hello() {
-        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
-        console.log(res); // {value: undefined, done: false}
-        res = 'world'
-        yield res;
-      }
-      let iterator = Hello(); // 返回一生成器对象
-      iterator.next(); // {value: "hello", done: false}
-      iterator.next(); // {value: "world", done: false}
 Promise 同步书写异步模式 
   PS：采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
@@ -2063,6 +1882,196 @@ Promise 同步书写异步模式
     // 上一步是：准备请求C
     // 请求C成功
     // Promise {[[PromiseStatus]]: "resolved", [[PromiseValue]]: undefined}
+Generator 生成器函数 
+  PS：可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
+    可利用Generator函数暂停执行的特性来实现异步操作 
+    原理：将异步操作的语句写到yield后面,通过执行next方法进行回调 
+  function* foo(){} 声明Generator函数
+    e.g.：
+      function* Hello(name) {  
+        yield `hello ${name}`;
+        yield `how are you`;
+        yield `bye`;
+      }
+    'yield'关键字 : 相当于暂停执行并且返回信息 
+      Generator函数可以有多个yield
+      yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行 
+    'yield*'关键字 : 调用另一个Generator函数
+      若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
+      那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
+      function* gen1() {   
+        yield "gen1 start";
+        yield "gen1 end";
+      }
+      function* gen2() {  
+        yield "gen2 start";
+        yield "gen2 end";
+      }
+      function* start() { 
+        yield "start";
+        // 使用关键字yield*来实现调用另外两个Generator函数
+        yield* gen1();
+        yield* gen2();
+        yield "end";
+      }
+      var ite = start(); //调用start函数,创建一个生成器
+      ite.next(); // {value: "start", done: false}
+      ite.next(); // {value: "gen1 start", done: false}
+      ite.next(); // {value: "gen1 end", done: false}
+      ite.next(); // {value: "gen2 start", done: false}
+      ite.next(); // {value: "gen2 end", done: false}
+      ite.next(); // {value: "end", done: false}
+  调用Generator函数 
+    PS：Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
+      Generator函数被调用后并不会一直执行到最后,而是先回返回一个生成器对象,
+      然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
+      直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
+      直到'next'再一次被调用的时候,才会继续接着往下执行,直到done的值为true 
+    e.g.：
+      function* foo(name) {
+        yield name
+        yield `world`
+        yield `fina`
+      }
+      let ite = foo('hello');
+      console.log(ite); // foo {[[GeneratorStatus]]: "suspended"}
+      setTimeout(function(){
+        console.log(ite.next()); // Object {value: "hello", done: false}
+        setTimeout(function(){
+          console.log(ite.next()); // Object {value: "world", done: false}
+          setTimeout(function(){
+            console.log(ite.next()); // Object {value: "fina", done: false}
+            setTimeout(function(){
+              console.log(ite.next()); // Object {value: undefined, done: true}
+              console.log(ite.next()); // Object {value: undefined, done: true}
+            },1000);
+          },1000);
+        },1000);
+      },1000);
+    next([arg])方法 
+      arg 参数,替换上一个yield的返回值
+      function* Hello() {
+        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
+        console.log(res,1); // undefined 1
+        yield res;
+      }
+      let iterator = Hello(); // 返回一生成器对象
+      iterator.next(); //{value: "hello", done: false}
+      // 若为 iterator.next(); // {value: undefined, done: false}
+      iterator.next("world"); // {value: "world", done: false}
+      相当于
+      function* Hello() {
+        var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
+        console.log(res); // {value: undefined, done: false}
+        res = 'world'
+        yield res;
+      }
+      let iterator = Hello(); // 返回一生成器对象
+      iterator.next(); // {value: "hello", done: false}
+      iterator.next(); // {value: "world", done: false}
+Proxy 对象代理 
+  PS：作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
+  new Proxy(target,params) Proxy创建-Proxy的实现 
+    target 代理的目标对象
+    params 配置对象 
+      get     代理对象的读操作,传入参数 (target,prop) 
+        target 表示代理的目标对象 
+        prop   占位符,表示代理对象的属性 
+        e.g.：
+          var person = {"name":"张三"};
+          var pro = new Proxy(person,{  //创建代理对象pro,代理person的读写操作
+            get : function(target,property){
+              return "李四"
+            }
+          });
+          pro.name; //李四
+      set     代理对象的写操作,传入参数 (target,prop,value)  
+        target  同'set'
+        prop    同'set'
+        value   设置的值 
+        e.g.：
+          var bankAccount = {"RMB":1000,"dollar":0};
+          var banker = new Proxy(bankAccount,{ //创建一个Proxy代理实例
+            get : function(target,property){      //编写get处理程序
+              if(target[property] > 0){  //判断余额是否大于0
+                return target[property]; //有余额,就返回余额值
+              }
+              else{
+                return "余额不足"; //没钱了
+              }    
+            },
+            set : function(target,property,value){ //编写set处理程序
+              if(!Number.isInteger(value)){ //存入的数额必须是一个数字类型
+                console.log(value,'数值不正确');
+                return "请设置正确的数值";
+              }
+              else {
+                target[property] = value;  //修改属性的值
+                console.log('存款成功');
+              }
+            }
+          });
+          banker.RMB;    // 1000,查款
+          banker.dollar; // 余额不足,查款
+          banker.dollar = "五百"; // 五百 数值不正确,存款
+          banker.dollar;          // 余额不足,查款
+          banker.dollar = 500;    // 存款成功,存款
+          banker.dollar;          // 500,查款
+      ownKeys 代理对象的keys集合[通过 Object.keys()来查看] 
+        let person = {"name":"老王","age":40,"height":1.5};
+        let proxy = new Proxy(person,{ 
+          ownKeys : function(target){  // ownKeys过滤对对象的属性遍历
+            return ["name","age"] 
+          }
+        });
+        Object.keys(person); // ["name", "age","height"],未使用代理
+        Object.keys(proxy);  // ["name", "age"]
+      has     代理对象的属性查询[通过 key in obj 来查看]
+        var person = { "name":"张三", "age":20 };
+        var proxy = new Proxy(person, {
+          has : function(target, prop) {
+            if(target[prop] === undefined){
+              return false;
+            }
+            else{
+              return true;
+            }
+          }
+        });
+        "name" in proxy;   // true
+        "height" in proxy; // false
+      apply   代理函数对象的执行 
+        let foo = function(){
+          console.log('我是原始函数');
+        };
+        let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
+          apply : function(){
+            console.log('我是代理函数');
+          }
+        });
+        proxy(); // 我是代理函数
+  var obj = Proxy.revocable() 代理及取消代理,返回一个对象 
+    obj.proxy    Proxy的代理实例对象
+    obj.revoke() 用于取消代理
+    e.g.：
+      let person = {"name":"张三"};
+      let handle = {  //定义一个代理处理程序
+        get : function(target,prop){
+          return "李四";
+        }
+      };
+      let obj = Proxy.revocable(person,handle); // 使用Proxy.revocable()代理
+      obj.proxy.name; // 李四
+      obj.revoke();   //调用返回对象obj的revoke方法,取消代理
+      obj.proxy.name; //报错,代理被取消
+  defineProperty() 
+  deleteProperty() 
+  enumerate()
+  getOwnPropertyDescriptor()
+  getPrototypeOf()
+  isExtensible()
+  preventExtensions()
+  setPrototypeOf()
 'Modules'模块化规范 
   PS：export 定义模块的对外接口,即提供接口,import 引入其他模块提供的功能,即引入接口;
     ES6的模块自动采用严格模式,不管是否在模块头部加上"use strict";

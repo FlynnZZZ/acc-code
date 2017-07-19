@@ -35,7 +35,7 @@ jQuery 快速简洁的JS库
   封装库方法 
     函数式封装
     对象式封装
-  封装库-连缀 :一条语句同时设置一个或多个节点两个或两个以上的操作 
+  链式操作 :一条语句同时设置一个或多个节点两个或两个以上的操作 
       实现连缀操作,需要改写库函数的封装方式,使用函数式对象写法
       e.g.
         <div id="box"> 123 </div>
@@ -80,6 +80,14 @@ jQuery 快速简洁的JS库
           }
           return this;
         }
+      .end() 方法,使得结果集可以后退一步 
+        $('div')
+        .find('h3')
+        .eq(2)
+        .html('Hello')
+        .end() //退回到选中所有的h3元素的那一步
+        .eq(0) //选中第一个h3元素
+        .html('World'); //将它的内容改为World
   jQuery 引入 
     本地引入
       下载jQuery的JS文件到本地,通过script标签引入
@@ -138,30 +146,62 @@ DOM操作
       PS：等价于 jQuery("selector");
         selector 可为组合选择器
         CSS选择器几乎可全部适用 
-      ◆层级关系
-        :first 第一个
-          e.g. $("div:first")  //表示选取第一个div
-        :last  最后一个
-        :even  下标为偶数的 (实质上第奇数个元素被选中)
-        :odd   下标为奇数的 (实质上第偶数个元素被选中)
-        :eq(n) 下标指定选择器
-          e.g. $("p:eq(1)"); 选择第二个 p元素
-          Exp:选取带有指定 index 值的元素。index 值从 0 开始
-            经常与其他元素/选择器一起使用,来选择指定的组中特定序号的元素(如上面的例子)。
-          语法 $(":eq(index)")            
-        :gt(n) 下标大于n的
-        :lt(n) 下标小于n的
-        :only-child  当元素为其父元素的唯一子元素时
-        :nth-child(index/even/odd/equation) 下标/偶数/奇数/xn+m表达式
-        :first-child
-        :last-child
-      ◆属性、内容
-        :empty          内容为空的元素
-        :parent         含有子元素或文本的元素
-        :contains(str)  内容包含字符str [相当于判断 innerText 包含]
+      :xx  筛选  
+        e.g.：
+          $('.a:first')    // 获取第一个.a元素
+          $('#a :first')   // 获取 #a 内的第一个元素
+          $('#a p:first')  // 获取 #a 内的第一个p元素
+        first 第一个元素
+        last  最后一个元素 
+        even  下标为偶数的[实质上第奇数个元素被选中] 
+        odd   下标为奇数的[实质上第偶数个元素被选中] 
+        eq(n) 指定下标的元素 
+          e.g. 
+            $("p:eq(1)"); 选择第二个p元素 
+        gt(n) 下标大于n的元素
+        lt(n) 下标小于n的元素
+        only-child  唯一子元素 
+        nth-child(index/even/odd/equation) 下标/偶数/奇数/xn+m表达式
+        first-child 第一个子元素
+        last-child  最后一个子元素 
+        input    所有input、textarea、select、button等元素
+        text     单行文本框
+        password 密码框
+        radio    单选框
+        checkbox 多选框
+        submit   提交按钮
+        image    图像按钮
+        reset    重置按钮
+        button   按钮
+        file     上传域
+        visible  可见的元素 
+        hidden       所有 display:none visibility:hidden type='hidden' 的元素
+        animated 当前处于动画状态的元素
+        focus        当前所用获取焦点的元素
+        enabled    可用元素
+        disabled   不可用
+        checked    被选中 [单选框、复选框]
+        selected   被选中 [下拉列表]
+        empty      内容为空的元素
+        parent     含有子元素或文本的元素
+        header     标题元素,h1、h2...
+        contains(str)  内容包含字符str[相当于判断 innerText 包含]
           e.g. 
             $("div:contains(abc)");  // 选取所有内容包含abc的div元素 
-        []           属性选择器
+        not(selector) 非选择器
+          selector 为所有jQuery支持的选择器
+          e.g. 
+            $("li:not(li:first)") 
+            $('.mask-selected:not(.none)')
+        has(selector) 元素包含后代元素selector对应的元素
+          e.g.：
+            <div class="aoo "> 1</div>
+            <div class="aoo boo"> 2
+              <div class="boo">
+                11
+              </div>
+            console.log( $('.aoo:has(.boo)').is($('.aoo').eq(1)) ); // true
+      []   属性选择器
           $("div[class]");        选取所有 有class属性 的div元素
           $("div[XX="XXX"]");     选取所有 XX="XXX" 的div元素
           $("div[XX!="XXX"]");    不等
@@ -173,42 +213,7 @@ DOM操作
             <div class="aoo boo"> </div>
             $("div[class~="aoo"]");
           $("a[XX*="XXX"][class]");    //可多个组合使用
-      ◆选择器筛选
-        :not(selector)  非选择器
-          selector 为所有jQuery支持的选择器
-          e.g. 
-            $("li:not(li:first)") 
-            $('.mask-selected:not(.none)')
-        :has(selector)  元素包含后代元素selector对应的元素
-          e.g.：
-            <div class="aoo "> 1</div>
-            <div class="aoo boo"> 2
-              <div class="boo">
-                11
-              </div>
-            console.log( $('.aoo:has(.boo)').is($('.aoo').eq(1)) ); // true
-      ◆元素状态
-        :hidden       所有 display:none visibility:hidden type='hidden' 的元素
-        :visible      和:hidden相反
-        :animated     正在执行动画的所用元素
-        :focus        当前所用获取焦点的元素
-      ◆表单类
-        :input 所有 input、textarea、select、button等等
-        :text     单行文本框
-        :password 密码框
-        :radio    单选框
-        :checkbox 多选框
-        :submit   提交按钮
-        :image    图像按钮
-        :reset    重置按钮
-        :button   按钮
-        :file     上传域
-        ★表单状态类
-        :enabled    可用元素
-        :disabled   不可用
-        :checked    被选中 [单选框、复选框]
-        :selected   被选中 [下拉列表]
-      ◆组合
+      组合
         > 子元素 
           $("#playlist > li") 
         * 通配
@@ -217,8 +222,7 @@ DOM操作
           J(".one+div") <=> J('.one').next('div')
         ~ 同级后面元素 
           J('.one~div') <=> J('.one').nextAll('div')
-      ◆其他
-        $(':header')  所有的标题元素,h1、h2...
+      其他
         Xpath选择器
       \\   选择器中的特殊字符转义
         <div id="aoo#boo"> </div>
@@ -236,7 +240,7 @@ DOM操作
         不可通过 Jelem.$("selector")获取Jelem
         原生JS中可通过 elem.getElementById() 来获取子类元素
         而jQuery中$相当于 document.getElementById(),而不能拆分.
-      ★层级关系筛选
+      ★层级关系筛选 
       Jelem.parents(["selector"])  所有祖先元素
       Jelem.closest("selector")    最近的第一个祖先元素
       Jelem.parent(["selector"])   父级及以上的一个元素  [无参时,为父元素]
@@ -250,17 +254,20 @@ DOM操作
       Jelem.find('selector')        从后代元素中获取Jelem
         自身Jelem若find自己则获取不到
       Jelem.children(['selector'])  和find类似,只是从子元素中获取
-      ★属性筛选
+      ★属性筛选 
       Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
-      ★其他条件筛选
+      ★其他条件筛选 
       Jelem.eq(index) 通过下标选取Jelem 
         index为整数,指示元素的位置[从0开始]
         如果是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem 
         Jelem.not(function(index){}); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
+      $('div').has('p'); // 选择包含p元素的div元素
+      $('div').filter('.myClass'); //选择class等于myClass的div元素
+      $('div').first(); //选择第1个div元素
     通过elem获取 
-      $(elem);  返回Jelem
+      $(elem);  返回Jelem 
         e.g. $(document); // 获取整个文档
     性能优化
       关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器。
@@ -534,6 +541,26 @@ DOM操作
         $element = $containerLi.first().detach();
         //... 许多复杂的操作
         $container.append($element);
+    Jelem.each(foo)  为每个匹配成员规定执行的函数,返回 
+      foo  回调函数,依次传入参数 (indx,elem) 
+        其中 elem 为DOMElem,通过 $(elem) 转换为 Jelem
+        返回 'false' 将停止循环,就像在普通的循环中使用 'break'
+        返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
+      e.g.
+        Jelem.each(function(){ 
+          // 输出每个dom元素
+          console.log(this); 
+          // 输入每个Jelem
+          console.log($(this)); 
+        })
+        
+        $('.todo-cell').each(function()){ 
+          console.log(arguments) 
+        }
+        或写成
+        $('.todo-cell').each(function(i,e)){ 
+          console.log(i,e) 
+        }
   Animation 动画
     time 数值,速度,过渡的时间,默认为0「单位毫秒」
       number (比如 1500)
@@ -544,9 +571,9 @@ DOM操作
       "linear"   匀速
     cfoo 回调函数,在动画执行完后调用 
     ◆可见性变化
+    Jelem.show([time,cfoo]);   显示元素
     Jelem.hide([time,cfoo]);   隐藏元素
       cfoo 可选,hide之后执行的函数「前提为设置了time,否则不可选」
-    Jelem.show([time,cfoo]);   显示元素
     Jelem.fadeIn(time,cfoo)        元素的淡入
     Jelem.fadeOut(time,cfoo)       元素的淡出
     Jelem.fadeToggle(time,cfoo);   开/关淡入淡出
@@ -583,11 +610,12 @@ DOM操作
           }
         }
       );
-    Jelem.stop[(bool1][,bool2])             停止动画
+    Jelem.stop([bool1][,bool2])  停止动画
       bool1 可选,默认为false,表示当元素有多个动画时只停止第一个动画;true则停止所用动画
       bool2 可选,默认false表示在执行到的位置,表示停止后的动画位置,true表示到最后
+    Jelem.delay()                延缓动画
     ◆其他
-    jQuery.fx.off = true   禁用jQuery动画效果
+    $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
     e.g.：
       左右滑动效果
       <div class="wrap">
@@ -648,6 +676,145 @@ DOM操作
           $('.imgs').scrollLeft(Math.round(val)*width );
         },1000);
       })
+工具方法 
+  $.each(obj, foo)  对象遍历
+    foo 参数依次传入obj的 key,val 
+    当obj为数组时,key表示下标
+    var obj = { 
+      one : 1, 
+      two : 2, 
+      three : 3, 
+      four : 4
+    };
+    $.each(obj, function(key, val) { 
+      console.log(key, val); 
+    });
+    // one,1,two,2,three,four,4
+  $.map(arr, foo)     对每个数组中的元素调用函数得到返回值组成新的数组
+    arr    用于遍历的数组
+    foo    遍历执行的函数,传入 value值和下标index;
+    retn   一个新数组
+    e.g.
+      var foo =[1,2,3,4]
+      var a =$.map(foo,function(v){
+        return v*v
+      })
+      a;    //[1, 4, 9, 16]
+  $.grep(arr, foo)    对数组中每个元素进行筛选,返回符合条件的成员 
+    arr  用于筛选的数组
+    foo  筛选函数,依次传入arr的 val,indx 
+    e.g.
+      var foo =[1,2,3,4,5];
+      var arr =$.grep(foo,function(val,indx){
+        return val % 2 == 0;
+      })
+      arr;      //[2, 4]
+  $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
+    e.g.：
+      $.trim('a bc '); // "a bc"
+  $.stringify({obj}) 序列化为JSON
+  $.parseJSON(jsonStr) 解析JSON字符串
+  $.param (obj)  使对象或数组按照key/value格式进行序列化编码
+    PS：该编码后的值常用于向服务端发送URL请求
+    obj  表示需要进行序列化的对象
+      该对象也可以是一个数组,整个函数返回一个经过序列化编码后的字符串
+  $.isArray(arr)         判断是否为数组
+  $.inArray(item, array) 判断元素是否在数组内
+  $.isEmptyObject(obj)   检测一对象的内容是否为空
+    如果为空,则该函数返回true,否则,返回false值;
+    obj  需要检测的对象名称
+  $.isPlainObject(obj)   检测对象是否为原始对象
+    检测对象是否为通过{}或new Object()关键字创建的原始对象的布尔值;
+  $.contains(elem1, elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
+    elem1  一个DOM对象节点元素,用于包含其他节点的容器
+    elem2  另一个DOM对象节点元素,用于被其他容器所包含 
+  $.extend (options)       扩展jQuery类本身
+    PS：扩展静态方法,自定义类级别的jQuery插件;等价于 $.xxx = function(){};
+    options 对象,表示自定义插件的函数内容 
+      $.extend({
+        foo:function(){
+          console.log(1);
+        }
+      });
+      $.foo(); //1
+    e.g.：
+      自定义一个用于返回两个数中最大值的插件
+      $.extend({
+        'maxNum' : function(num1,num2){
+          return (num1 > num2) ? num1 : num2 ;
+        }
+      })
+      var maxNum = $.maxNum(1,2);
+      console.log(maxNum); // 2
+      
+      扩展自己的选择器
+      $.extend($.expr[':'], {
+        moreThen1000px: function(a) {
+          return $(a).width() > 1000;
+        }
+      });
+      $('.box:moreThen1000px').click(function() { 
+        console.log(1); 
+      });
+      
+      $.extend({
+        add : function(a,b){
+          return a+b;
+        },
+        a :'aaaa'
+      });
+      console.log($.add(3,4)); // 7
+      console.log($.a);        // aaaa
+      $.add2 = function(a,b){
+        return a-b;
+      }
+      console.log($.add2(4,3)); //1
+  $.extend(obj1,obj2,..)  和并多个对象 
+    PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者
+    obj1至objN  表示需要合并的各个原有对象
+    e.g.：对两个已有的对象进行合并 
+      var obj1 = {
+        aoo : 1 ,
+        boo : 2 
+      }
+      var obj2 = {
+        aoo : 3 ,
+        coo : 2 
+      }
+      var obj = $.extend(obj1,obj2);
+      console.log(obj); // Object {aoo: 3, boo: 2, coo: 2}
+  $.fn.extend({name:foo,..}) 扩展实例方法
+    等价于 $.fn.xxx
+    e.g. 
+      $.fn.extend({
+        foo : function(){
+          console.log(2);
+        }
+      });
+      $("div").foo(); //2
+  $.makeArray() 将对象转化为数组 
+  $.type() 判断对象的类别（函数对象、日期对象、数组对象、正则对象等等）。
+  $.isFunction() 判断某个参数是否为函数。
+  $.isPlainObject() 判断某个参数是否为用"{}"或"new Object"建立的对象。
+  已废弃 
+    $.browser 对象 获取浏览器的名称与版本信息 「1.9-可用」
+      PS：已在jQuery 1.9 中被移除,因为识别方法不准确
+      $.browser.chrome  为 true 表示当前为Chrome浏览器
+      $.browser.mozilla 为 true 表示当前为火狐浏览器
+      $.browser.msie    为 true 表示当前为IE浏览器
+      $.browser.version 获取浏览器版本信息
+    $.support 浏览器检测 
+      $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
+        PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
+          两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
+          w3c盒子模型不包含,IE盒子模型则包含,
+      $.support.mozilla && $.support.version >= "1.8" 
+      $.support.safari
+      $.support.chrome
+      $.support.camino
+      $.support.opera
+      $.support.msie && $.support.version <= 6 // Target IE6 and below
+      $.support.msie && $.support.version > 6  // Target anything above IE6
 Event,事件 
   PS：Jelem绑定事件,则为列表中的每个对象进行了绑定
   ◆事件绑定与取消 
@@ -698,24 +865,23 @@ Event,事件
     foo    可选,指定的事件处理函数 
     todo:
       Jelem.off(eventsMap,selector)
-        Arguments:
-          eventsMap  Object类型,event:handler 对象
-            如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
-          selector 指定的对象(属于Jelem的后代元素)
+        eventsMap  Object类型,event:handler 对象
+          如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
+        selector 指定的对象(属于Jelem的后代元素)
             如果省略参数selector,则移除Jelem及后代的所用响应函数
             selector 必须与通过on()函数添加绑定时传入的选择器一致 
-          如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
-          实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
-          参数越多,限定条件就越多,被移除的范围就越小
+        如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
+        实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
+        参数越多,限定条件就越多,被移除的范围就越小
         RetValue:
           返回值为jQuery类型,返回当前jQuery对象本身 
   Jelem.unbind()   取消绑定
     规定从指定元素上删除的一个或多个事件处理程序 
     如果没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
     语法
-      $(selector).unbind(event,function)
-      event    可选,规定删除元素的一个或多个事件 由空格分隔多个事件值.
-      function 可选,规定从元素的指定事件取消绑定的函数名.若未设置该参数,则会删除绑定到指定事件的所有函数 
+      $(selector).unbind(event,foo)
+      event 可选,规定删除元素的一个或多个事件 由空格分隔多个事件值.
+      foo   可选,规定从元素的指定事件取消绑定的函数名.若未设置该参数,则会删除绑定到指定事件的所有函数 
     使用 Event 对象来取消绑定事件处理程序 unbind
       规定要删除的事件对象 
       用于对自身内部的事件取消绑定(比如当事件已被触发一定次数之后,删除事件处理程序) 
@@ -725,19 +891,37 @@ Event,事件
         eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
   Jelem.name(foo) 快捷绑定[bind的简写] 
     ★name可使用的值枚举如下:
-    Jelem.click(foo);          点击事件绑定
-    $(document).ready(foo);    DOM结构加载完后执行
+    $(document).ready(foo); DOM结构加载完后执行
       简写方式: $(function(){/*jQuery代码*/})
-    Jelem.change(foo);         元素的值或内容发生变化时响应
-    Jelem.scroll(fuoo);        元素滚动条滑动事件
+    Jelem.load()            元素加载完毕
+    Jelem.unload()          用户离开页面    
+    Jelem.click(foo);          单击事件 
+    Jelem.dblclick()           鼠标双击 
+    Jelem.mousedown()          按下鼠标
+    Jelem.mouseenter()         鼠标进入（进入子元素不触发）
+    Jelem.mouseleave()         鼠标离开（离开子元素不触发）
+    Jelem.mousemove()          鼠标在元素内部移动
+    Jelem.mouseout()           鼠标离开（离开子元素也触发）
+    Jelem.mouseover()          鼠标进入（进入子元素也触发）
+    Jelem.mouseup()            松开鼠标
     Jelem.hover(foo1 [,foo2]); 悬浮事件
       PS：JS中无hover事件,无法使用on方法来绑定「SlPt」 
       foo1  进入悬浮时回调 
       foo2  可选,离开悬浮时回调
         如click事件则无 
           Jelem.click(foo1,foo2) 始终不会执行foo1,代替的是执行foo2
-    Jelem.focus(foo);          获得焦点事件
-    Jelem.blur(foo);           失去焦点事件
+    Jelem.select()      用户选中文本框中的内容
+    Jelem.submit()      用户递交表单
+    Jelem.change(foo);  元素的值或内容发生变化时响应
+    Jelem.focus(foo); 获得焦点事件
+    Jelem.focusin()   子元素获得焦点
+    Jelem.focusout()  子元素失去焦点
+    Jelem.blur(foo);  失去焦点事件
+    Jelem.keydown()   按下键盘（长时间按键,只返回一个事件）
+    Jelem.keypress() 按下键盘（长时间按键,将返回多个事件）
+    Jelem.keyup()    松开键盘
+    Jelem.scroll(foo); 元素滚动条滑动事件
+    Jelem.resize() 浏览器窗口的大小发生改变
     Jelem.toggle(foo1,foo2 [,foo3,..]);  点击依次执行函数[1.9 版本移除] 
   事件绑定性能优化 
     正确使用事件委托
@@ -839,6 +1023,7 @@ Event,事件
       PS： 针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
         规定 event.metaKey() 为键盘事件中获取<ctrl>按键.
     event.originalEvent 指向原始的事件对象
+    event.data 在事件对象上绑定数据,然后传入事件处理函数
   window.onload 与 $(document).ready(function () {}) 的区别
     执行时间
     window.onload 必须等到页面内包括图片的所有元素加载完毕后才能执行
@@ -875,7 +1060,7 @@ Event,事件
       注：直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
   Exp:
 AJAX 
-  PS： jQuery 最常用的 AJAX API 可以为分三类;
+  PS：低于'1.5.0'版本,返回的是XHR对象,高于'1.5.0'版本,返回的是deferred对象
   contentType 数据格式 
     application/x-www-form-urlencoded 默认方式,表单提交
       数据的URL方式编码,由jQuery来做,
@@ -1121,168 +1306,13 @@ AJAX
   绑定Ajax事件
   Jelem.ajaxStart(cfoo)  在Ajax请求发出前触发函数
   Jelem.ajaxStop(cfoo)   在Ajax请求完成后触发函数
-方法 
-  Jelem.each(foo)    为每个匹配成员规定执行的函数,返回 
-    foo  回调函数,依次传入参数 (indx,elem) 
-      其中 elem 为DOMElem,通过 $(elem) 转换为 Jelem
-      返回 'false' 将停止循环,就像在普通的循环中使用 'break'
-      返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
-    e.g.
-      Jelem.each(function(){ 
-        // 输出每个dom元素
-        console.log(this); 
-        // 输入每个Jelem
-        console.log($(this)); 
-      })
-      
-      $('.todo-cell').each(function()){ 
-        console.log(arguments) 
-      }
-      或写成
-      $('.todo-cell').each(function(i,e)){ 
-        console.log(i,e) 
-      }
-  $.each(obj, foo)  对象遍历
-    foo 参数依次传入obj的 key,val 
-    当obj为数组时,key表示下标
-    var obj = { 
-      one : 1, 
-      two : 2, 
-      three : 3, 
-      four : 4
-    };
-    $.each(obj, function(key, val) { 
-      console.log(key, val); 
-    });
-    // one,1,two,2,three,four,4
-  $.map(arr, foo)     对每个数组中的元素调用函数得到返回值组成新的数组
-    arr    用于遍历的数组
-    foo    遍历执行的函数,传入 value值和下标index;
-    retn   一个新数组
-    e.g.
-      var foo =[1,2,3,4]
-      var a =$.map(foo,function(v){
-        return v*v
-      })
-      a;    //[1, 4, 9, 16]
-  $.grep(arr, foo)    对数组中每个元素进行筛选,返回符合条件的成员 
-    arr  用于筛选的数组
-    foo  筛选函数,依次传入arr的 val,indx 
-    e.g.
-      var foo =[1,2,3,4,5];
-      var arr =$.grep(foo,function(val,indx){
-        return val % 2 == 0;
-      })
-      arr;      //[2, 4]
-  $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
-    e.g.：
-      $.trim('a bc '); // "a bc"
-  $.stringify({obj}) 序列化为JSON
-  $.parseJSON(jsonStr) 解析JSON字符串
-  $.param (obj)  使对象或数组按照key/value格式进行序列化编码
-    PS：该编码后的值常用于向服务端发送URL请求
-    obj  表示需要进行序列化的对象
-      该对象也可以是一个数组,整个函数返回一个经过序列化编码后的字符串
-  $.isArray(arr)         判断是否为数组
-  $.inArray(item, array) 判断元素是否在数组内
-  $.isEmptyObject(obj)   检测一对象的内容是否为空
-    如果为空,则该函数返回true,否则,返回false值;
-    obj  需要检测的对象名称
-  $.isPlainObject(obj)   检测对象是否为原始对象
-    检测对象是否为通过{}或new Object()关键字创建的原始对象的布尔值;
-  $.contains(elem1, elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
-    elem1  一个DOM对象节点元素,用于包含其他节点的容器
-    elem2  另一个DOM对象节点元素,用于被其他容器所包含 
-  $.extend (options)       扩展jQuery类本身
-    PS：扩展静态方法,自定义类级别的jQuery插件;等价于 $.xxx = function(){};
-    options 对象,表示自定义插件的函数内容 
-      $.extend({
-        foo:function(){
-          console.log(1);
-        }
-      });
-      $.foo(); //1
-    e.g.：
-      自定义一个用于返回两个数中最大值的插件
-      $.extend({
-        'maxNum' : function(num1,num2){
-          return (num1 > num2) ? num1 : num2 ;
-        }
-      })
-      var maxNum = $.maxNum(1,2);
-      console.log(maxNum); // 2
-      
-      扩展自己的选择器
-      $.extend($.expr[':'], {
-        moreThen1000px: function(a) {
-          return $(a).width() > 1000;
-        }
-      });
-      $('.box:moreThen1000px').click(function() { 
-        console.log(1); 
-      });
-      
-      $.extend({
-        add : function(a,b){
-          return a+b;
-        },
-        a :'aaaa'
-      });
-      console.log($.add(3,4)); // 7
-      console.log($.a);        // aaaa
-      $.add2 = function(a,b){
-        return a-b;
-      }
-      console.log($.add2(4,3)); //1
-  $.extend(obj1,obj2,..)  和并多个对象 
-    PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者
-    obj1至objN  表示需要合并的各个原有对象
-    e.g.：对两个已有的对象进行合并 
-      var obj1 = {
-        aoo : 1 ,
-        boo : 2 
-      }
-      var obj2 = {
-        aoo : 3 ,
-        coo : 2 
-      }
-      var obj = $.extend(obj1,obj2);
-      console.log(obj); // Object {aoo: 3, boo: 2, coo: 2}
-  $.fn.extend({name:foo,..}) 扩展实例方法
-    等价于 $.fn.xxx
-    e.g. 
-      $.fn.extend({
-        foo : function(){
-          console.log(2);
-        }
-      });
-      $("div").foo(); //2
-  已废弃 
-    $.browser 对象 获取浏览器的名称与版本信息 「1.9-可用」
-      PS：已在jQuery 1.9 中被移除,因为识别方法不准确
-      $.browser.chrome  为 true 表示当前为Chrome浏览器
-      $.browser.mozilla 为 true 表示当前为火狐浏览器
-      $.browser.msie    为 true 表示当前为IE浏览器
-      $.browser.version 获取浏览器版本信息
-    $.support 浏览器检测 
-      $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
-        PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
-          两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
-          w3c盒子模型不包含,IE盒子模型则包含,
-      $.support.mozilla && $.support.version >= "1.8" 
-      $.support.safari
-      $.support.chrome
-      $.support.camino
-      $.support.opera
-      $.support.msie && $.support.version <= 6 // Target IE6 and below
-      $.support.msie && $.support.version > 6  // Target anything above IE6
-Deferred 异步操作
-  PS：jQuery 1.5 中引入; 和 Promise 对象一起作为 jQuery 对 Promise 的一种实现;
-    在 jQuery1.x - jQuery2.x 版本中, Deferred 对象遵守的是 CommonJS Promises 提案中的约定,
-    不同于原生promises遵守 Promises/A+ 提案「从CommonJS Promises 衍生而来」的约定,
-    导致其无法兼容其他实现promises的库,比如 Q library;
-    jQ3改进了同原生 promises的互操作性,但Deferred的 then 方法签名仍然会有些不同,
-    但行为方面它已经同 ECMAScript2015 标准更加一致;
+Deferred,异步操作
+  PS：'jQuery1.5'中引入; 和Promise对象一起作为jQuery对Promise的一种实现;
+    '1.x-2.x'版本中,Deferred对象遵守的是CommonJS Promises提案中的约定,
+    不同于原生promises遵守Promises/A+提案「从CommonJS Promises 衍生而来」的约定,
+    导致其无法兼容其他实现promises的库,
+    '3.0'改进了同原生 promises的互操作性,但Deferred的then方法签名仍然会有些不同,
+    但行为方面它已经同ECMAScript2015标准更加一致;
   Deferred和Promise对象 
     PS： Deferred 对象可以被用来执行异步操作,例如 Ajax 请求和动画的实现。
       在 jQuery 中,Promise对象是只能由Deferred对象或 jQuery 对象创建。
@@ -1291,39 +1321,40 @@ Deferred 异步操作
       在 ECMAScript 中, 不论一个 promise 被完成 (fulfilled) 还是被拒绝 (rejected),
       我们都说它被解析 (resolved) 了。
       然而在 jQuery 的文档中,被解析这个词指的是 ECMAScript 标准中的完成 (fulfilled) 状态。
-    var defer = $.Deferred([fooName])    创建deferred对象
-      PS：接受一函数名作为参数,$.Deferred()生成的defer对象将作为该函数的默认参数
-      var wait = function(defer){
-        var tasks = function(){
-          console.log("执行完毕！");
-          defer.resolve(); // 改变Deferred对象的执行状态
+    var defer = $.Deferred()    创建deferred对象
+    var defer = $.Deferred(fooName) 创建deferred对象
+      fooName 函数名,$.Deferred()生成的defer对象将作为fooName的默认参数 
+      e.g.：
+        var wait = function(defer){
+          var tasks = function(){
+            console.log("执行完毕！");
+            defer.resolve(); // 改变Deferred对象的执行状态
+          };
+          setTimeout(tasks,2000);
+          return defer.promise(); // 返回promise对象
         };
-        setTimeout(tasks,2000);
-        return defer.promise(); // 返回promise对象
-      };
-      $.Deferred(wait)
-      .done(function(){ 
-        console.log("哈哈,成功了！"); 
-      })
-      .fail(function(){ 
-        console.log("出错啦！"); 
-      });
-    defer.resolve([arg1,...]) 手动改变deferred对象的运行状态为"已完成"
-    defer.reject([arg,...])   手动改变deferred对象的运行状态为"已失败"
-    defer.done(foo [,foo,...])     指定操作成功时的回调函数
-    defer.fail(foo [,foo,...])     指定操作失败时的回调函数
+        $.Deferred(wait)
+        .done(function(){ 
+          console.log("哈哈,成功了！"); 
+        })
+        .fail(function(){ 
+          console.log("出错啦！"); 
+        });
+    defer.resolve([arg1,...])   改变状态为"已完成" 
+    defer.reject([arg,...])     改变状态为"已失败" 
+    defer.done(foo [,foo,...])  指定成功时的回调函数 
+    defer.fail(foo [,foo,...])  指定失败时的回调函数 
     defer.then(rsCfoo [,rjCfoo[,progressCallback]]) 解析、拒绝或收到进展通知时调用处理函数
       可用 done() 也可以通过 then() 来处理操作成功的情况;
       区别是then能够把接收到的值通过参数传递给后续的then,done,fail或progress调用
     defer.progress(foo [,foo,...]) Deferred对象产生进展通知时被调用的处理函数。
-    defer.always(foo [,foo,...])   总是会执行
+    defer.always(foo [,foo,...])   总会执行
     defer.state()     返回当前Deferred对象的状态
     defer.promise([foo])  
-      无参数时,返回一promise对象,该对象的运行状态无法被改变
-        为决解defer是全局对象,其执行状态可从外部改变的问题而引入
-          返回的promise对象只开放与改变执行状态无关的方法,如done()方法和fail()方法,
-          屏蔽了与改变执行状态有关的方法,如resolve()方法和reject()方法,
-          从而使得执行状态不能被改变;
+      无参数时   返回一promise对象,该对象的运行状态无法被改变 
+        为决解defer是全局对象,其执行状态可从外部改变的问题而引入, 
+          返回的promise对象只开放与改变执行状态无关的方法,如'done'和'fail'方法,
+          屏蔽了与改变执行状态有关的方法,如'resolve'和'reject'方法,从而使执行状态不能被改变;
         var defer = $.Deferred(); 
         var wait = function(defer){
           var tasks = function(){
@@ -1341,8 +1372,7 @@ Deferred 异步操作
           console.log("出错啦！"); 
         });
         defer.resolve(); 
-        导致done()方法立刻执行,跳出"哈哈,成功了！"
-        等5秒之后再跳出"执行完毕！"
+        导致done()方法立刻执行,跳出"哈哈,成功了！",等5秒之后再跳出"执行完毕！"
         为避免该情况,jQuery 提供了 deferred.promise() 方法
         改进后
         var defer = $.Deferred(); 
@@ -1381,23 +1411,22 @@ Deferred 异步操作
           console.log("出错啦！"); 
         });    
       传入函数时,在参数对象上部署deferred接口 
-        var defer = $.Deferred(); 
-        var wait = function(defer){
+        var wait = function(defer){ // 定义函数 
           var tasks = function(){
             console.log("执行完毕！");
             defer.resolve(); 
           };
           setTimeout(tasks,3000);
         };
-        defer.promise(wait);
-        // 在wait对象上部署Deferred接口,后面能直接在wait上面调用 done() 和 fail()
-        wait(defer);
-        wait.done(function(){ 
+        var defer = $.Deferred(); 
+        defer.promise(wait);  // 在wait对象上部署Deferred接口,后面可调用 done() 和 fail()
+        wait.done(function(){  // 监听 
           console.log("哈哈,成功了！"); 
         })
         .fail(function(){ 
           console.log("出错啦！"); 
         });
+        wait(defer); // 执行函数 
     defer.notify([arg,...])  调用Deferred对象的progressCallbacks处理函数并传递制定的参数
     defer.notifyWith(context [,arg,...]) 
       在制定的上下文中调用progressCallbacks处理函数并传递制定的参数

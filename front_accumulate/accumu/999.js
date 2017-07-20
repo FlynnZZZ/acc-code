@@ -514,9 +514,7 @@ fileNum : 21
 
 
 jQuery 的 AJAX 属性
-xhrFields: {
-  withCredentials: true
-},
+xhrFields: { withCredentials: true },
 crossDomain: true,
 
 

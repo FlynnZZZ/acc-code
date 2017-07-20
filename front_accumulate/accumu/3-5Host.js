@@ -81,44 +81,24 @@
 本地服务器
   使用 xampp 搭建本地服务器
     修改服务器根目录指向'httpd.conf'文件
-      DocumentRoot "E:/project/more/yihuo/HTML"
-      <Directory "E:/project/more/yihuo/HTML">
-          #
-          # Possible values for the Options directive are "None", "All",
-          # or any combination of:
-          #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
-          #
-          # Note that "MultiViews" must be named *explicitly* --- "Options All"
-          # doesnt give it to you.
-          #
-          # The Options directive is both complicated and important.  Please see
-          # http://httpd.apache.org/docs/2.4/mod/core.html#options
-          # for more information.
-          #
+      DocumentRoot "E:/project/more/yihuo/HTML"              1
+      <Directory "E:/project/more/yihuo/HTML">               2
           Options Indexes FollowSymLinks Includes ExecCGI
 
-          #
-          # AllowOverride controls what directives may be placed in .htaccess files.
-          # It can be "All", "None", or any combination of the keywords:
-          #   AllowOverride FileInfo AuthConfig Limit
-          #
           AllowOverride All
 
-          #
-          # Controls who can get stuff from this server.
-          #
           Require all granted
       </Directory>
     虚拟主机的配置'httpd-vhosts.conf'文件 
-      <VirtualHost 127.0.0.2:8081>
+      <VirtualHost *:80>                                     
         ServerAdmin webmaster@dummy-host2.example.com
-        DocumentRoot "E:/project/more/yihuo/HTML"
-        ServerName yihuo.localtst.com
+        DocumentRoot "E:/project/more/yihuo/HTML"            3
+        ServerName yihuo.localtst.com                        4
         ErrorLog "logs/dummy-host2.example.com-error.log"
         CustomLog "logs/dummy-host2.example.com-access.log" common
       </VirtualHost>
     设置本地 Hosts
-      127.0.0.2    yihuo.localtst.com 
+      127.0.0.1    yihuo.localtst.com                        5
       // 127.0.0.2  上文配置虚拟主机时 VirtualHost 的回送 IP
 --------------------------------------------------------------------------------
 移动端 

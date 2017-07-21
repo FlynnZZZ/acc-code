@@ -92,7 +92,7 @@
     <section class="aItme" v-for="item in items"> 
       <h4>{{item.tl}}</h4>
       <ul>
-        <li v-for="item1 in item.chids">
+        <li v-for="item1 in item.items1">
           <a :href="item1.href" target="_blank"> {{item1.name}} </a>
         </li>
       </ul>
@@ -106,7 +106,7 @@
     data : {
       items : [
         { tl : '本地工具',
-          chids : [
+          items1 : [
             { name : 'fontAwesome',
               href : './a/font_awesome/FontAwesome.html'
             },
@@ -119,7 +119,7 @@
           ],
         },
         { tl : '工具站点',
-          chids : [
+          items1 : [
             { name : 'CSS3 Generator',
               href : 'http://css3generator.com/'
             },
@@ -144,7 +144,7 @@
           ],
         },
         { tl : 'API&amp;文档',
-          chids : [
+          items1 : [
             { name : 'MDN',
               href : 'https://developer.mozilla.org/zh-CN/'
             },
@@ -163,7 +163,7 @@
           ],
         },
         { tl : '常用网站',
-          chids : [
+          items1 : [
             { name : 'imooc 慕课网',
               href : 'http://www.imooc.com/'
             },

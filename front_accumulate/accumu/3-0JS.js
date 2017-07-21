@@ -1,460 +1,80 @@
-介绍 
+JavaScript 
   JS诞生于1995年,最初用于验证表单输入;现在用来实现网页的特效、动画及交互等;
   解释型的,基于对象和事件驱动并具有相对安全性的客户端脚本语言;
-专业术语、名词解释、说明 
-  scripting_language脚本语言：
-    不具备开发操作系统的能力,只用来编写控制其他大型应用程序的'脚本';
-  API,Application_Programming_interfaces应用编程接口 
-    API 一些预先定义的函数
-      目的是给应用程序与开发人员基于某软件或硬件得以访问一组例程的能力,
-      无需访问源码,或理解内部工作机制的细节;
-      提供了一组对象,方法和属性,可以用来访问这些技术的所有功能
-      API 是对象,拥有属性和方法.
-    PS-Self:程序提供的操作它的一些函数、方法等.
-      对方定义的一种互相交互信息的方式.
-  host_environment宿主环境：语言在运行时的环境 
-    对于JavaScript,宿主环境最常见的是web浏览器,
-    浏览器提供了一个JavaScript运行的环境,
-    这个环境里面,需要提供一些接口,
-    好让JavaScript引擎能够和宿主环境对接.
-    但是环境不是唯一的,也就是JavaScript不仅仅能够在浏览器里面跑,
-    也能在其他提供了宿主环境的程序里面跑,最常见的就是nodejs.
-    同样作为一个宿主环境,nodejs也有自己的JavaScript引擎--V8.
-    Node.js 官方的定义:
-    Node.js is a platform built on Chrome’s JavaScript runtime for easily building fast, scalable network applications
-  JavaScript引擎 
-    真正执行JavaScript代码的地方,
-    常见的引擎有V8「目前最快JS引擎、Google生产」、JavaScript core;
-    JavaScript引擎主要做了下面几件事情：
-    一套与宿主环境相联系的规则;
-    JavaScript引擎内核「基本语法规范、逻辑、命令和算法」;
-    一组内置对象和API;
-    其他约定.
-  debug：调试、除错
-  耦合关系：相互关联的意思
-  localhost：计算机网络中,localhost 意为'本地主机',指'这台计算机' 
-    是给loopback回路网络接口的一个标准主机名;
-    相对应的IP地址为'127.0.0.1'「IPv4」和'::1'「IPv6」
-说明 
   JS本身不提供任何与 I/O「输入/输出」相关的API「如网络、存储和图形等」,都靠宿主环境提供,
   所以JS只合适嵌入更大型的应用程序环境,去调用宿主环境提供的底层API;
   嵌入js的宿主环境有多种,最常见的环境就是浏览器,另外还有服务器环境,即Node项目;
-  JS内容划分 
+  JS内容划分: 
     除ECMAScript外,各种宿主环境提供额外的API,以便JS调用;
     以浏览器为例,它提供的额外API可以分成三大类：
     浏览器控制类：操作浏览器,
     DOM类：操作网页的各种元素,
     Web类：实现互联网的各种功能;
     若宿主环境是服务器「如Node」,则会提供各种操作系统的API,比如文件操作、网络通信等;
-  JS甚至也可以用来操作数据库 
-    NoSQL数据库,本身就是在JSON格式的基础上诞生的,
-    大部分NoSQL数据库允许JavaScript直接操作。
-    基于SQL语言的开源数据库PostgreSQL支持JS作为操作语言,可以部分取代SQL查询语言。
-约定 
-  参数的表示中,使用[]包裹起来的表示可选参数 
-    str.slice(beginSlice[, endSlice])  表示第二个参数为可选
-网页的加载过程 
-  下载HTML文档,从头开始顺序解析,边下载边解析HTML
-  解析中遇到script标签,停止HTML的解析,JS引擎工作,边下载边解析JS,
-  解析完毕后,恢复HTML的解析
-  原因: JS可能修改DOM,故浏览器优先执行JS
-  Gecko和Webkit引擎在网页被阻塞后,会生成第二个线程解析文档,下载外部资源,
-  但是不会修改DOM,网页还是处于阻塞状态。
-  
-  JS脚本的执行也是顺序执行,但下载时会同时进行,
-  也就是说,脚本的执行顺序由它们在页面中的出现顺序决定,
-  当然,执行多个脚本都会产生'阻塞效应',
-  必须等到它们都执行完,浏览器才会继续页面渲染。
-  
-  解析和执行CSS,也会产生阻塞。
-  Firefox会等到脚本前面的所有样式表,都下载并解析完,再执行脚本；
-  Webkit则是一旦发现脚本引用了样式,就会暂停执行脚本,等到样式表下载并解析完,再恢复执行。
-  此外,对于来自同一个域名的资源,比如脚本文件、样式表文件、图片文件等,
-  浏览器一般最多同时下载六个(IE11允许同时下载13个)。
-  若是来自不同域名的资源,就没有这个限制。
-  所以,通常把静态文件放在不同的域名之下,以加快下载速度。
-JS代码引入、执行 
-  嵌入式:html标签中插入,作为某个元素的属性值或超链接的href属性值.
-    // 通过一个链接弹出一个确认框
-    <a href="javascript:confirm('hello');">hello</a>
-    // 点击一段文字弹出一个提示框
-    <p onclick="javascript:alert('我是弹出来的内容');">点我</p>
-  内部JS: <script type="text/javascript">/*JS代码*/</script>
-    内部JS中不可出现"</script>"字符串
-      <script> alert("</script>"); </script>
-      网页上会显示出: );
-      不会执行出 alert("</script>"),(可改为alert("</scr"+"ipt>"))
-      浏览器执行到alert中的</script>时会以为是script的结束标签.
-      外部JS则可以执行 alert("</script>")
-  外部JS: <script src="JS文件路径"></script>
-    放置位置:一般将script标签放在body的最后面,也可以放入head中
-    外部的JS的优点:
-      维护性高
-      可缓存(加载一次,无需加载):若有两个页面使用同一个文件,只需下载一次.
-      方便未来扩展
-    script加载使用的协议
-      默认采用http协议 
-      <script src="example.js" charset="utf-8"></script>
-      采用https
-      <script src="https://example.js" charset="utf-8"></script>
-      根据页面本身的协议来决定
-      <script src="//example.js" charset="utf-8"></script>
-    Remarks:
-      外部JS文件带有.js扩展名,但这个扩展名是非必须的,浏览器不会检查JS文件的扩展名.
-      若不使用.js扩展名,需确保服务器能返回正确的MIME类型
-  异步加载JS的方式
-    一：<script>标签的 async="async"属性.
-      HTML5 中新增的属性,Chrome、FF、IE9&IE9+均支持
-      脚本相对于页面的其余部分异步地执行(当页面继续进行解析的同时,脚本将被执行)
-      async 属性仅适用于外部脚本(只有在使用 src 属性时)
-      该方法不能保证脚本按顺序执行(当有多个该属性的script时)
-    二：<script>标签的 defer="defer"属性.
-      规定脚本执行延迟,直到页面加载完毕,再执行
-      兼容所有浏览器.此外,这种方法可以确保所有设置 defer 属性的脚本按顺序执行.
-    三：AJAX eval
-      使用 AJAX 得到脚本内容,然后通过 eval_r(xmlhttp.responseText)来运行脚本
-      兼容所有浏览器.
-    四：iframe 方式
-      可以参照：iframe 异步加载技术及性能中关于 Meboo 的部分
-      兼容所有浏览器.
-    五: 在JS文件中创建script元素对象,按照要求添加到DOM中
-      如创建script对象 然后在添加src地址;
-      动态加入的JS需在CSS文件加载完后才会去下载
-      动态生成的script不会阻塞页面渲染,但无法保证JS的执行顺序,
-      先加载完的JS先执行,将其async属性设置为false 保证执行顺序
-      ['a.js','b.js'].forEach(function(scr){
-        var script = document.createElement('script');
-        script.src = src;
-        script.async = false;
-        document.head.append(script);
-      })
-  Todo: 
-    JavaScript代码嵌入网页的方法
-      JavaScript代码只有嵌入网页,才能在用户浏览器网页时运行。
-
-      网页中嵌入JavaScript代码,主要有四种方法。
-
-      <script>标签：代码嵌入网页
-      <script>标签：加载外部脚本
-      事件属性：代码写入HTML元素的事件处理属性,比如onclick或者onmouseover
-      URL协议：URL支持以javascript:协议的方式,执行JavaScript代码
-      后两种方法用得很少,常用的是前两种方法。由于内容(HTML代码)和行为代码(JavaScript)应该分离,所以第一种方法应当谨慎使用。
-
-      script标签：代码嵌入网页
-      通过<script>标签,可以直接将JavaScript代码嵌入网页。
-
-      <script>
-        console.log('Hello World');
-      </script>
-      <script>标签有一个type属性,用来指定脚本类型。对JavaScript脚本来说,type属性可以设为两种值。
-
-      text/javascript：这是默认值,也是历史上一贯设定的值。若你省略type属性,默认就是这个值。对于老式浏览器,设为这个值比较好。
-      application/javascript：对于较新的浏览器,建议设为这个值。
-      <script type="application/javascript">
-        console.log('Hello World');
-      </script>
-      由于<script>标签默认就是JavaScript代码。所以,嵌入JavaScript脚本时,type属性也可以省略。
-
-      若type属性的值,浏览器不认识,那么它不会执行其中的代码。利用这一点,可以在<script>标签之中嵌入任意的文本内容,然后加上一个浏览器不认识的type属性即可。
-
-      <script id="mydata" type="x-custom-data">
-        console.log('Hello World');
-      </script>
-      上面的代码,浏览器不会执行,也不会显示它的内容,因为不认识它的type属性。但是,这个<script>节点依然存在于DOM之中,可以使用<script>节点的text属性读出它的内容。
-
-      document.getElementById('mydata').text
-      // "
-      //   console.log('Hello World');
-      // "
-      script标签：加载外部脚本
-      <script>标签也可以指定加载外部的脚本文件。
-
-      <script src="example.js"></script>
-      若脚本文件使用了非英语字符,还应该注明编码。
-
-      <script charset="utf-8" src="example.js"></script>
-      所加载的脚本必须是纯的 JavaScript 代码,不能有HTML代码和<script>标签。
-
-      加载外部脚本和直接添加代码块,这两种方法不能混用。下面代码的console.log语句直接被忽略。
-
-      <script charset="utf-8" src="example.js">
-        console.log('Hello World!');
-      </script>
-      为了防止攻击者篡改外部脚本,script标签允许设置一个integrity属性,写入该外部脚本的Hash签名,用来验证脚本的一致性。
-
-      <script src="/assets/application.js"
-        integrity="sha256-TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs=">
-      </script>
-      上面代码中,script标签有一个integrity属性,指定了外部脚本/assets/application.js的SHA265签名。一旦有人改了这个脚本,导致SHA265签名不匹配,浏览器就会拒绝加载。
-
-      事件属性
-      某些HTML元素的事件属性(比如onclick和onmouseover),可以写入JavaScript代码。当指定事件发生时,就会调用这些代码。
-
-      <div onclick="alert('Hello')"></div>
-      上面的事件属性代码只有一个语句。若有多个语句,用分号分隔即可。
-
-      URL协议
-      URL支持javascript:协议,调用这个URL时,就会执行JavaScript代码。
-
-      <a href="javascript:alert('Hello')"></a>
-      浏览器的地址栏也可以执行javascipt:协议。将javascript:alert('Hello')放入地址栏,按回车键,就会跳出提示框。
-
-      若JavaScript代码返回一个字符串,浏览器就会新建一个文档,展示这个字符串的内容,原有文档的内容都会消失。
-
-      <a href="javascript:new Date().toLocaleTimeString();">
-        What time is it?
-      </a>
-      上面代码中,用户点击链接以后,会打开一个新文档,里面有当前时间。
-
-      若返回的不是字符串,那么浏览器不会新建文档,也不会跳转。
-
-      <a href="javascript:console.log(new Date().toLocaleTimeString())">
-      What time is it?
-      </a>
-      上面代码中,用户点击链接后,网页不会跳转,只会在控制台显示当前时间。
-
-      javascript:协议的常见用途是书签脚本Bookmarklet。由于浏览器的书签保存的是一个网址,所以javascript:网址也可以保存在里面,用户选择这个书签的时候,就会在当前页面执行这个脚本。为了防止书签替换掉当前文档,可以在脚本最后返回void 0。
-    脚本的动态加载
-      除了静态的script标签,还可以动态生成script标签,然后加入页面,从而实现脚本的动态加载。
-      
-      ['a.js', 'b.js'].forEach(function(src) {
-        var script = document.createElement('script');
-        script.src = src;
-        document.head.appendChild(script);
-      });
-      这种方法的好处是,动态生成的script标签不会阻塞页面渲染,也就不会造成浏览器假死。但是问题在于,这种方法无法保证脚本的执行顺序,哪个脚本文件先下载完成,就先执行哪个。
-      
-      若想避免这个问题,可以设置async属性为false。
-      
-      ['a.js', 'b.js'].forEach(function(src) {
-        var script = document.createElement('script');
-        script.src = src;
-        script.async = false;
-        document.head.appendChild(script);
-      });
-      上面的代码依然不会阻塞页面渲染,而且可以保证b.js在a.js后面执行。不过需要注意的是,在这段代码后面加载的脚本文件,会因此都等待b.js执行完成后再执行。
-      
-      我们可以把上面的写法,封装成一个函数。
-      
-      (function() {
-        var scripts = document.getElementsByTagName('script')[0];
-        function load(url) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = url;
-          scripts.parentNode.insertBefore(script, scripts);
-        }
-        load('//apis.google.com/js/plusone.js');
-        load('//platform.twitter.com/widgets.js');
-        load('//s.thirdpartywidget.com/widget.js');
-      }());
-      上面代码中,async属性设为true,是因为加载的脚本没有互相依赖关系。而且,这样就不会造成堵塞。
-      
-      若想为动态加载的脚本指定回调函数,可以使用下面的写法。
-      
-      function loadScript(src, done) {
-        var js = document.createElement('script');
-        js.src = src;
-        js.onload = function() {
-          done();
-        };
-        js.onerror = function() {
-          done(new Error('Failed to load script ' + src));
-        };
-        document.head.appendChild(js);
-      }
-      此外,动态嵌入还有一个地方需要注意。动态嵌入必须等待CSS文件加载完成后,才会去下载外部脚本文件。静态加载就不存在这个问题,script标签指定的外部脚本文件,都是与CSS文件同时并发下载的。
-      
-      加载使用的协议
-      若不指定协议,浏览器默认采用HTTP协议下载。
-      
-      <script src="example.js"></script>
-      上面的example.js默认就是采用HTTP协议下载,若要采用HTTPS协议下载,必需写明(假定服务器支持)。
-      
-      <script src="https://example.js"></script>
-      但是有时我们会希望,根据页面本身的协议来决定加载协议,这时可以采用下面的写法。
-      
-      <script src="//example.js"></script>    
-    方法一: window.onload = function(){ }
-    方法二: 将script标签放在body的结尾处
-  Remarks: 
-    原则上,将其放在html头部,但视情况可以将其放在网页的任何部分.
-    一个html文件可以有几个<script>...</script>,且可以共享方法和变量.
---------------------------------------------------------------------------------
-环境 
-  在给定事件存在的变量和变量值的集合叫做环境
-  在程序开始运行时,环境通常包含一些标准变量(比如函数,包括自定义及系统预设)
-  理论上可以给任何变量赋一个新值,如 alert = 5;则alert不再是一个函数,且不能再用于显示信息.
-内存 
-  一般来说,确保占用最少的内存可以让页面获得更好的性能.
-  JS垃圾回收
-    javascript具有自动垃圾收集机制,即执行环境会负责管理代码执行过程中使用的内存,
-    其他语言比如C和C++,必须手动跟踪内存使用情况适时的释放,否则会造成很多问题.
+JS相关知识 
+  GC,垃圾回收机制 
+    早期的计算机语言,如 C 和 C++,需开发者手动跟踪内存,优点是内存分配和释放的效率高,
+    缺点是很容易忘记释放内存,从而造成内存的泄露,
+    新的编程语言,比如 JAVA, C#, JS,都提供了谓'垃圾回收的机制',
+    运行时自身会运行相应的垃圾回收机制,程序员只需要申请内存,而不需要关注内存的释放 
+    垃圾回收器'GC'会在适当的时候将已经终止生命周期的变量的内存给释放掉 
+    GC大大简化了应用层开发的复杂度,降低了内存泄露的风险 
+    JS具有自动垃圾收集机制,即执行环境会负责管理代码执行过程中使用的内存,
     JS会自行管理内存分配及无用内存的回收.
-    优化内存的最佳方案:一旦数据不再有用,那么将其设置为null来释放引用(也叫解除引用)
+    优化内存的最佳方案:一旦数据不再有用,那么将其设置为null来释放引用也叫解除引用[]
     解除引用适用于大多数全局变量和全局对象.(PS-Self:局部作用域的变量在执行完毕后不再内存中)
-    var a={
+    var a = {
       name:"abc"
     };
-    a=null;  //解除对象引用,等待垃圾收集器回收
-  内存泄漏(可参见 函数>闭包>)
-    内存泄漏就是无法销毁驻留在内存中的元素.
-    IE的JScript对象和DOM对象使用不同的垃圾收集方式,因此闭包在IE中会导致一些问题.
-    setTimeout 的第一个参数使用字符串而非函数的话,会引发内存泄漏.
-    IE6 时代有 bug,闭包会造成内存泄漏,这个现在已经无须考虑了.
-    其次,闭包本身不会造成内存泄漏,但闭包过多很容易导致内存泄漏.
-    这句话很矛盾,技术上讲,闭包是不会造成内存泄漏的,浏览器的 bug 除外.
-    但是,闭包会造成对象引用的生命周期脱离当前函数的上下文,
-    因此,若不仔细考虑闭包函数的生命周期,的确有可能出现意料之外的内存泄漏,
-    当然,从严格意义上讲,这是程序员自己的 bug,而不是闭包的错.
-作用域「执行环境」
-  PS：执行环境定义了变量或函数有权访问的其他数据,决定了他们各自的行为.
-  作用域与变量
-    PS：在局部作用域内定义变量不加var,则定义的为全局全局变量(不推荐使用)
-    变量在作用域中的访问规则
-      规则1:子作用域内可访问上层作用域的变量,反之则不行.
-      规则2:当前作用域的变量优先级高于上层作用域的变量.
-      e.g. :
-      var aoo=1;
-      function foo(){
-        var aoo =2;
-        var boo =11;
-        console.log(aoo);
-      }
-      foo();            //2 , 规则2
-      console.log(boo); // 报错 , 规则1
-  全局作用域
-    在web浏览器中,全局执行环境被认为是window对象
-    所有全局变量和函数都是window对象的属性和方法
-    尽量控制全局变量的数量,容易引发bug
-    在函数内定义变量不加var即定义的为全局变量.
-  块作用域(私有作用域):{...}之间(Self) JS不具备
-    if(){}、for(){}等没有作用域
-    仿造块级作用域
-      PS：使用自我执行的匿名函数达到块级作用域的效果.
-        使用块级作用域后,匿名函数中定义的任何变量,都会在执行结束时被销毁.
-        采用块级作用域,每个开发者可以使用自己的变量,而不必担心搞乱全局作用域.
-      e.g.
-     (function(){
-        //这里是块级作用域
-      })()
-      这种做法可以减少闭包占用内存的问题,因为没有指向匿名函数的引用,
-      只要函数执行完毕,就可以立即销毁其作用域链了
-
-      function box(){
-        //包含自我执行的匿名函数,就可以实现私有作用域
-       (function(){
-          for(var i=0;i<3;i++){
-            console.log(i);
-          }
-        })();      //出了这个私有作用域,变量立即被销毁
-        console.log(i);
-      }
-      box();
-      //打印出0,1,2,然后程序报错:i is not defined
-    块级作用域用途:多人协同独立开发环境,不会互相干扰
-      在全局作用域中使用块级作用域可以减少闭包占用的内存问题,因为没有指向匿名函数的引用.
-     (function(){
-        //这里就是全局的私有作用域(块级作用域)
-      })();
-  函数作用域:每个函数体内为一个作用域 JS具备
-    函数作用域的运行机制:
-      每个函数被调用时都会创建自己的执行环境,
-      当执行到这个函数时,函数的环境就会被推到环境中去执行,
-      执行后在环境栈中弹出(退出),把控制权交给上一级的执行环境.
-      当执行环境中的所有代码执行完毕后,该环境被销毁,其中的所有变量和函数也随之销毁(没有产生闭包的情况).
-      全局环境下,需要程序执行完毕或网页被关闭才会销毁.
-      每个执行环境都有一个与之关联的变量对象,环境中定义的所有变量和函数都保存在这个对象中
-     (我们无法访问这个变量对象,但解析器处理数据时后台会使用它)
-    私有变量:在函数中定义的变量(因为不能在函数的外部访问这些变量)
-      私有变量包括函数的参数、局部变量和在函数内部定义的其他函数
-      通过闭包访问私有变量
-        function Box(){
-          var age=100;    //私有变量
-          function run(){ //私有函数
-            return "运行中";
-          }
-          this.getAge=function(){ //对外可见的公共接口,特权方法
-            return age;
-          }
-        }
-        var box=new Box();
-        console.log(box.run);      //undefined,无法调用
-        console.log(box.getAge()); //100
-  动态作用域: JS不具备
-    function foo(){
-      console.log(aoo)
-    }
-    function goo(){
-      var aoo =1;
-      foo();
-    }
-    goo(); // 报错, aoo未定义
-    若支持动态作用域,则为结果为 1
-  静态作用域:也称为词法作用域或闭包  JS具备
-    函数创建时所处的作用域为其父作用域,函数可访问其父作用域;但父作用域不可访问子作用域(Self)
-      通过闭包来访问函数中的变量
-      var goo =function(){
-        var aoo =5;
-        function foo(){
-          console.log(aoo);
-        }
-        window.foo =foo;
-      }();  // 运行一次 ,创建函数和初始化变量
-      foo(); // 5
-    通过new Function()创建的函数,其父作用域始终指向window(全局)
-      new Function() 创建函数
-        function foo(){
-          var aoo =1;
-          var goo =new Function("","console.log(aoo)");
-          // 函数 goo 父作用域为window ,相当于在全局创建的函数,不可访问函数作用域的变量
-          goo();
-        }
-        foo();   //报错,aoo未定义
-  call apply bind 指定作用域(见 对象>this>)
-  模块模式
-    e.g. :
-    var aoo =function(){
-      // 私有变量和私有函数
-      var azz =1;
-      function fzz(){
-      }
-      // 创建对象
-      var obj =new Foo();
-      // 添加特权/公有属性和方法
-      obj.bzz = 2;
-      obj.gzz =function(){
-      }
-      return obj;
-    }
-JS运行过程机理 可近似做如下理解：
-  JS代码执行为从上到下顺序执行
-  代码执行环境分:全局环境window 和 函数作用域环境
-  JS代码执行阶段分:预处理阶段 和 执行阶段
-  JS代码运行过程试分析:
-    解析器接收到JS代码开始,此时处于全局环境下,解析器先进入预处理阶段
-      扫描所有代码,将var声明的全局变量和函数添加到缓存中预备使用
-        记录变量名,值为undefined,未使用var的变量未记录;函数则将函数名指向函数
-      若函数名和变量名重名,缓存中函数优先级高,覆盖变量名.
-    从代码起始部分执行,在全局中,遇到变量声明时将值和名字在缓存中对应起来以便后续使用
-      执行阶段若产生覆盖问题,则由最后声明的变量为准
-     (函数只在预处理时产生覆盖问题,读取代码执行过程时会跳过函数,因为存在缓存中)
-    若进入函数的局部作用域(也可称为子环境),和全局类似先预处理,将变量名和函数添加到子环境的缓存中
-      预处理阶段,函数传入的值被放入缓存,不会被后续重名变量干扰,但会被重名函数覆盖
-    子环境执行同全局类似,顺序执行,遇到变量声明时将值和名字在缓存中对应起来以便后续执行使用
-      在前辈环境不可获取到后代环境的缓存,反之则可以.
-      局部环境运行时,优先访问自己的缓存,若无再向上级寻找
-      子环境执行完毕,环境会被销毁,缓存不存在;后续再执行则重新再创建
-    注: 同类型的,变量和变量重名或函数和函数重名 ,则后面的覆盖前面的
-GC,垃圾回收机制 
-  早期的计算机语言,比如 C 和 C++,需要开发者手动的来跟踪内存,这种机制的优点是内存分配和释放的效率很高.
-  但是它也有着它的缺点,程序员很容易不小心忘记释放内存,从而造成内存的泄露.
-  新的编程语言,比如 JAVA, C#, javascript, 都提供了所谓'垃圾回收的机制',
-  运行时自身会运行相应的垃圾回收机制.程序员只需要申请内存,而不需要关注内存的释放.
-  垃圾回收器(GC)会在适当的时候将已经终止生命周期的变量的内存给释放掉.
-  GC 的优点就在于它大大简化了应用层开发的复杂度,降低了内存泄露的风险.
+    a = null;  //解除对象引用,等待垃圾收集器回收
+  环境 
+    在给定事件存在的变量和变量值的集合叫做环境
+    在程序开始运行时,环境通常包含一些标准变量(比如函数,包括自定义及系统预设)
+    理论上可以给任何变量赋一个新值,如 alert = 5;则alert不再是一个函数,且不能再用于显示信息.
+  内存 
+    一般来说,确保占用最少的内存可以让页面获得更好的性能.
+    内存泄漏 : 无法销毁驻留在内存中的数据 [参见 函数>闭包>]
+      IE的JScript对象和DOM对象使用不同的垃圾收集方式,因此闭包在IE中会导致一些问题.
+      setTimeout 的第一个参数使用字符串而非函数的话,会引发内存泄漏.
+      IE6时代有 bug,闭包会造成内存泄漏,这个现在已经无须考虑了.
+      其次,闭包本身不会造成内存泄漏,但闭包过多很容易导致内存泄漏.
+      这句话很矛盾,技术上讲,闭包是不会造成内存泄漏的,浏览器的 bug 除外.
+      但是,闭包会造成对象引用的生命周期脱离当前函数的上下文,
+      因此,若不仔细考虑闭包函数的生命周期,的确有可能出现意料之外的内存泄漏,
+      当然,从严格意义上讲,这是程序员自己的 bug,而不是闭包的错.
+  JS引擎 
+    真正执行JS代码的地方,
+    常见的引擎有V8「目前最快JS引擎、Google生产」、JS core;
+    JS引擎主要做了下面几件事情：
+    一套与宿主环境相联系的规则;
+    JS引擎内核「基本语法规范、逻辑、命令和算法」;
+    一组内置对象和API;
+    其他约定.
+  JS运行过程机理 
+    可近似做如下理解：
+    JS代码执行为从上到下顺序执行
+    代码执行环境分:全局环境window 和 函数作用域环境
+    JS代码执行阶段分:预处理阶段 和 执行阶段
+    JS代码运行过程试分析:
+      解析器接收到JS代码开始,此时处于全局环境下,解析器先进入预处理阶段
+        扫描所有代码,将var声明的全局变量和函数添加到缓存中预备使用
+          记录变量名,值为undefined,未使用var的变量未记录;函数则将函数名指向函数
+        若函数名和变量名重名,缓存中函数优先级高,覆盖变量名.
+      从代码起始部分执行,在全局中,遇到变量声明时将值和名字在缓存中对应起来以便后续使用
+        执行阶段若产生覆盖问题,则由最后声明的变量为准
+       (函数只在预处理时产生覆盖问题,读取代码执行过程时会跳过函数,因为存在缓存中)
+      若进入函数的局部作用域(也可称为子环境),和全局类似先预处理,将变量名和函数添加到子环境的缓存中
+        预处理阶段,函数传入的值被放入缓存,不会被后续重名变量干扰,但会被重名函数覆盖
+      子环境执行同全局类似,顺序执行,遇到变量声明时将值和名字在缓存中对应起来以便后续执行使用
+        在前辈环境不可获取到后代环境的缓存,反之则可以.
+        局部环境运行时,优先访问自己的缓存,若无再向上级寻找
+        子环境执行完毕,环境会被销毁,缓存不存在;后续再执行则重新再创建
+      注: 同类型的,变量和变量重名或函数和函数重名 ,则后面的覆盖前面的
+约定&自我约定  
+  参数的表示中,使用[]包裹起来的表示可选参数 
+    str.slice(beginSlice[, endSlice])  表示第二个参数为可选
 --------------------------------------------------------------------------------
-Hybrid App 混合开发 
+'Hybrid_App'混合开发 
   PS-Self:JS可以在网页中通过API操作系统,实现各种功能
   混合开发说的是, 你写的网页运行在手机程序里
   本来网页能提供的功能是有限的
@@ -471,413 +91,13 @@ Hybrid App 混合开发
   这样的效果就是原生代码(相对于 js 而言的
   官方开发语言)实现功能并且提供 js 函数
   js 代码用别人提供的功能写逻辑
-'Modules'模块化历史 
-  介绍
-    ES6之前,JS不支持原生的模块化,若要实现模块化,要借助一些框架,比如：requireJS或者seaJS等;
-    ES6之前,社区制定了一些模块加载方案,最主要的有 CommonJS 和 AMD 两种 
-    前者用于服务器,后者用于浏览器 
-    目前还没有浏览器支持ES6的module模块 
-  模块化演化
-    全局函数 
-    对象封装-命名空间
-      var calculator = {
-        add: function(a, b) { return parseFloat(a) + parseFloat(b); },
-        subtract: function(a, b) {},
-      };
-      优缺点: 从某种程度上解决了变量命名冲突的问题,但未从根本上解决命名冲突。
-      从代码级别可以明显区分出哪些函数属于同一个模块
-      暴露了所有的模块成员,内部状态可以被外部改写,不安全。
-      命名空间越来越长。
-    私有公有成员分离 
-      var calculator = (function () {
-        function convert(input){ return parseInt(input); }
-        function add(a, b) { return convert(a) + convert(b); }
-        function subtract(a, b) {}
-        function multiply(a, b) {}
-        function divide(a, b) {}
-
-        return {
-          add : add,
-          subtract : subtract,
-          multiply : multiply,
-          divide : divide
-        }
-      })();
-    模块的扩展与维护 
-      // 计算模块
-      (function (calculator) {
-        function convert(input) { 
-          return parseInt(input); 
-        }
-        calculator.add = function(a, b) { 
-          return convert(a) + convert(b); 
-        }
-        window.calculator = calculator;
-      })(window.calculator || {});
-      // 新增需求
-      (function (calculator) {
-        calculator.remain = function (a , b) { 
-          return a % b; 
-        }
-        window.calculator = calculator;
-      })(window.calculator || {});
-      alert(calculator.remain(4,3));
-    第三方依赖的管理 
-      (function (calculator , $) {
-        // 依赖函数的参数,是属于模块内部
-        // console.log($);
-        calculator.remain = function (a , b) { return a % b; }
-        window.calculator = calculator;
-      })(window.calculator || {} , jQuery);
-  模块化规范及实现 
-    AMD 异步模块定义,依赖前置,实现主要有 RequireJS 
-      PS：制定了定义模块的规则,这样模块和模块的依赖可以被异步加载。
-        这和浏览器的异步加载模块的环境刚好适应（浏览器同步加载模块会导致性能、可用性、调试和跨域访问等问题）。
-      模块名的格式
-        模块名用来唯一标识定义中模块,它们同样在依赖数组中使用。
-        AMD的模块名规范是CommonJS模块名规范的超集。引用如下：
-        模块名是由一个或多个单词以正斜杠为分隔符拼接成的字符串
-        单词须为驼峰形式,或者".",".."
-        模块名不允许文件扩展名的形式,如".js"
-        模块名可以为 "相对的" 或 "顶级的"。若首字符为"."或".."则为"相对的"模块名
-        顶级的模块名从根命名空间的概念模块解析
-        相对的模块名从 "require" 书写和调用的模块解析
-        上文引用的CommonJS模块id属性常被用于JavaScript模块。
-        相对模块名解析示例：
-        若模块 "a/b/c" 请求 "../d", 则解析为"a/d"
-        若模块 "a/b/c" 请求 "./e", 则解析为"a/b/e"
-        若AMD的实现支持加载器插件(Loader-Plugins),则"!"符号用于分隔加载器插件模块名和插件资源名。由于插件资源名可以非常自由地命名,大多数字符都允许在插件资源名使用。
-      API说明
-        define(id?, dependencies?, factory);
-          id  可选,字符串,指的是定义中模块的名字.
-            若没有提供该参数,模块的名字应该默认为模块加载器请求的指定脚本的名字。
-            若提供了该参数,模块名必须是“顶级”的和绝对的（不允许相对名字）。
-          dependencies,是个定义中模块所依赖模块的数组。
-            依赖模块必须根据模块的工厂方法优先级执行,并且执行的结果应该按照依赖数组中的位置顺序以参数的形式传入（定义中模块的）工厂方法中。
-            依赖的模块名若是相对的,应该解析为相对定义中的模块。
-            换句话来说,相对名解析为相对于模块的名字,并非相对于寻找该模块的名字的路径。
-            本规范定义了三种特殊的依赖关键字。
-            若"require","exports", 或 "module"出现在依赖列表中,
-            参数应该按照CommonJS模块规范自由变量去解析。
-            依赖参数是可选的,若忽略此参数,它应该默认为["require", "exports", "module"]。
-            然而,若工厂方法的形参个数小于3,加载器会选择以函数指定的参数个数调用工厂方法。
-          factory,为模块初始化要执行的函数或对象。
-            若为函数,它应该只被执行一次。若是对象,此对象应该为模块的输出值。
-            若工厂方法返回一个值（对象,函数,或任意强制类型转换为true的值）,应该为设置为模块的输出值。
-          简单的 CommonJS 转换
-            若依赖性参数被忽略,模块加载器可以选择扫描工厂方法中的require语句以获得依赖性（字面量形为require("module-id")）。第一个参数必须字面量为require从而使此机制正常工作。
-            在某些情况下,因为脚本大小的限制或函数不支持toString方法（Opera Mobile是已知的不支持函数的toString方法）,模块加载器可以选择扫描不扫描依赖性。
-            若有依赖参数,模块加载器不应该在工厂方法中扫描依赖性。
-        define.amd 属性
-          PS：为了清晰的标识全局函数（为浏览器加载script必须的）遵从AMD编程接口,
-            任何全局函数应该有一个"amd"的属性,它的值为一个对象。
-            这样可以防止与现有的定义了define函数但不遵从AMD编程接口的代码相冲突。
-          当前,define.amd对象的属性没有包含在本规范中。实现本规范的作者,可以用它通知超出本规范编程接口基本实现的额外能力。
-          define.amd的存在表明函数遵循本规范。若有另外一个版本的编程接口,那么应该定义另外一个属性,如define.amd2,表明实现只遵循该版本的编程接口。
-          e.g.:
-            一个如何定义同一个环境中允许多次加载同一个版本的模块的实现：
-            define.amd = {
-              multiversion: true
-            };
-            最简短的定义：
-            define.amd = {};
-          一次输出多个模块
-            在一个脚本中可以使用多次define调用。这些define调用的顺序不应该是重要的。早一些的模块定义中所指定的依赖,可以在同一脚本中晚一些定义。模块加载器负责延迟加载未解决的依赖,直到全部脚本加载完毕,防止没必要的请求。
-        e.g.:
-          使用 require 和 exports
-          创建一个名为"alpha"的模块,使用了require,exports,和名为"beta"的模块:
-          define("alpha", ["require", "exports", "beta"], function (require, exports, beta) {
-               exports.verb = function() {
-                   return beta.verb();
-                   //Or:
-                   return require("beta").verb();
-               }
-           });
-          一个返回对象的匿名模块：
-          define(["alpha"], function (alpha) {
-            return {
-              verb: function(){
-                return alpha.verb() + 2;
-              }
-            };
-          });
-          一个没有依赖性的模块可以直接定义对象：
-          define({
-            add: function(x, y){
-              return x + y;
-            }
-          });
-          一个使用了简单CommonJS转换的模块定义：
-          define(function (require, exports, module) {
-            var a = require('a'),
-            b = require('b');
-    
-            exports.action = function () {};
-          });
-        全局变量
-          本规范保留全局变量"define"以用来实现本规范。包额外信息异步定义编程接口是为将来的CommonJS API保留的。模块加载器不应在此函数添加额外的方法或属性。
-          本规范保留全局变量"require"被模块加载器使用。模块加载器可以在合适的情况下自由地使用该全局变量。它可以使用这个变量或添加任何属性以完成模块加载器的特定功能。它同样也可以选择完全不使用"require"。
-        使用注意
-          为了使静态分析工具（如build工具）可以正常工作,推荐使用字面上形如的'define(...)'。
-        与CommonJS的关系
-          一个关于本API的wiki开始在CommonJS wiki中创建了,作为中转的格式,模块中转。但是为了包含模块定义接口,随着时间而不断改变。在CommonJS列表中关于推荐本API作为模块定义API尚未达成一致。本API被转移到它自己的wiki和讨论组中。
-          AMD可以作为CommonJS模块一个中转的版本只要CommonJS没有被用来同步的require调用。使用同步require调用的CommonJS代码可以被转换为使用回调风格的AMD模块加载器。
-    CMD,Common Module Definition 通用模块定义,依赖就近,主要实现有 SeaJS
-      define Function
-        define 是一个全局函数,用来定义模块。
-      define define(factory)
-        define 接受 factory 参数,factory 可以是一个函数,也可以是一个对象或字符串。
-        factory 为对象、字符串时,表示模块的接口就是该对象、字符串。
-        比如可以如下定义一个 JSON 数据模块：
-        define({ "foo": "bar" });
-        也可以通过字符串定义模板模块：
-        define('I am a template. My name is {{name}}.');
-        factory 为函数时,表示是模块的构造方法。执行该构造方法,可以得到模块向外提供的接口。factory 方法在执行时,默认会传入三个参数：require、exports 和 module：
-        define(function(require, exports, module) { /*模块代码*/ });
-      define define(id?, deps?, factory)
-        define 也可以接受两个以上参数。字符串 id 表示模块标识,数组 deps 是模块依赖。比如：
-        define('hello', ['jquery'], function(require, exports, module) { /*模块代码*/ });
-        id 和 deps 参数可以省略。省略时,可以通过构建工具自动生成。
-        注意：带 id 和 deps 参数的 define 用法不属于 CMD 规范,而属于 Modules/Transport 规范。
-      define.cmd Object
-        一个空对象,可用来判定当前页面是否有 CMD 模块加载器：
-        if (typeof define === "function" && define.cmd) {
-          /*有 Sea.js 等 CMD 模块加载器存在*/
-        }
-      require Function
-        require 是 factory 函数的第一个参数。
-      require require(id)
-        require 是一个方法,接受 模块标识 作为唯一参数,用来获取其他模块提供的接口。
-        define(function(require, exports) {
-          // 获取模块 a 的接口
-          var a = require('./a');
-          // 调用模块 a 的方法
-          a.doSomething();
-        });
-        注意：在开发时,require 的书写需要遵循一些 简单约定。
-      require.async require.async(id, callback?)
-        require.async 方法用来在模块内部异步加载模块,并在加载完成后执行指定回调。callback 参数可选。
-        define(function(require, exports, module) {
-          // 异步加载一个模块,在加载完成时,执行回调
-          require.async('./b', function(b) {
-            b.doSomething();
-          });
-          // 异步加载多个模块,在加载完成时,执行回调
-          require.async(['./c', './d'], function(c, d) {
-            c.doSomething();
-            d.doSomething();
-          });
-        });
-        注意：require 是同步往下执行,require.async 则是异步回调执行。require.async 一般用来加载可延迟异步加载的模块。
-      require.resolve require.resolve(id)
-        使用模块系统内部的路径解析机制来解析并返回模块路径。该函数不会加载模块,只返回解析后的绝对路径。
-        define(function(require, exports) {
-          console.log(require.resolve('./b'));
-          // ==> http://example.com/path/to/b.js
-        });
-        这可以用来获取模块路径,一般用在插件环境或需动态拼接模块路径的场景下。
-      exports Object
-        exports 是一个对象,用来向外提供模块接口。
-        define(function(require, exports) {
-          // 对外提供 foo 属性
-          exports.foo = 'bar';
-          // 对外提供 doSomething 方法
-          exports.doSomething = function() {};
-        });
-        除了给 exports 对象增加成员,还可以使用 return 直接向外提供接口。
-        define(function(require) {
-          // 通过 return 直接提供接口
-          return {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        若 return 语句是模块中的唯一代码,还可简化为：
-        define({
-          foo: 'bar',
-          doSomething: function() {}
-        });
-        上面这种格式特别适合定义 JSONP 模块。
-        特别注意：下面这种写法是错误的！
-        define(function(require, exports) {
-          // 错误用法！！!
-          exports = {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        正确的写法是用 return 或者给 module.exports 赋值：
-        define(function(require, exports, module) {
-          // 正确写法
-          module.exports = {
-            foo: 'bar',
-            doSomething: function() {}
-          };
-        });
-        提示：exports 仅仅是 module.exports 的一个引用。在 factory 内部给 exports 重新赋值时,并不会改变 module.exports 的值。因此给 exports 赋值是无效的,不能用来更改模块接口。
-      module Object
-        module 是一个对象,上面存储了与当前模块相关联的一些属性和方法。
-      module.id String
-    
-        模块的唯一标识。
-    
-        define('id', [], function(require, exports, module) {
-    
-          // 模块代码
-    
-        });
-        上面代码中,define 的第一个参数就是模块标识。
-      module.uri String
-        根据模块系统的路径解析规则得到的模块绝对路径。
-    
-        define(function(require, exports, module) {
-    
-          console.log(module.uri);
-          // ==> http://example.com/path/to/this/file.js
-    
-        });
-        一般情况下（没有在 define 中手写 id 参数时）,module.id 的值就是 module.uri,两者完全相同。
-      module.dependencies Array
-        dependencies 是一个数组,表示当前模块的依赖。
-      module.exports Object
-        当前模块对外提供的接口。
-    
-        传给 factory 构造方法的 exports 参数是 module.exports 对象的一个引用。只通过 exports 参数来提供接口,有时无法满足开发者的所有需求。 比如当模块的接口是某个类的实例时,需要通过 module.exports 来实现：
-    
-        define(function(require, exports, module) {
-    
-          // exports 是 module.exports 的一个引用
-          console.log(module.exports === exports); // true
-    
-          // 重新给 module.exports 赋值
-          module.exports = new SomeClass();
-    
-          // exports 不再等于 module.exports
-          console.log(module.exports === exports); // false
-    
-        });
-        注意：对 module.exports 的赋值需要同步执行,不能放在回调函数里。下面这样是不行的：
-    
-        // x.js
-        define(function(require, exports, module) {
-    
-          // 错误用法
-          setTimeout(function() {
-            module.exports = { a: "hello" };
-          }, 0);
-    
-        });
-        在 y.js 里有调用到上面的 x.js:
-    
-        // y.js
-        define(function(require, exports, module) {
-    
-          var x = require('./x');
-    
-          // 无法立刻得到模块 x 的属性 a
-          console.log(x.a); // undefined
-    
-        });
-      小结
-        这就是 CMD 模块定义规范的所有内容。经常使用的 API 只有 define, require, require.async, exports, module.exports 这五个。其他 API 有个印象就好,在需要时再来查文档,不用刻意去记。
-        与 RequireJS 的 AMD 规范相比,CMD 规范尽量保持简单,并与 CommonJS 和 Node.js 的 Modules 规范保持了很大的兼容性。通过 CMD 规范书写的模块,可以很容易在 Node.js 中运行,后续会介绍。
-    CommonJs 
-      PS：SeaJs 和 CommonJs 规范非常的相似,并且在 node.js 中使用起来更简单 
-        在 node.js 中直接使用require引包,直接使用 exports 和 module.exports 暴露公开成员,
-        并且npm基于CommonJs实现了自动加载和安装依赖。
-      同样的 CommonJs 让 node.js 变得：
-        1、增加内聚性,有助分工协作,
-        2、方便重构,
-        3、提高代码质量
-      node.js 中的实现为：
-        (function(exports,require,module,__filename,__dirname){
-        return module.exports;
-        });
-      require
-        加载模块后会缓存,多次加载后得到同一对象 require('http')
-        查看模块缓存console.log(require.cache);
-        查询模块绝对路径 require.resolve('./test.js');
-        查看单个的模块缓存 require.cache[require.resolve('./test.js')]
-        删除模块缓存 delete require.cache[require.resolve('./test.js')];
-shim 和 polyfill 
+'shim'&'polyfill' 
   shim 是将不同 api 封装成一种,
     比如 jQuery 的 $.ajax 封装了 XMLHttpRequest,
     IE 用 ActiveXObject 方式创建 xhr 对象.
   polyfill 是 shim 的一种.
     polyfill 特指 shim 成的 api 是遵循标准的,
     其典型做法是在IE浏览器中增加 window.XMLHttpRequest ,内部实现使用 ActiveXObject.
-数据结构 
-  数据结构就是存储数据的方式
-  队列
-  栈
-  链表
-    将零散的东西连起来,从而进行有序的操作.
-    e.g.
-      // 定义零散的东西
-      var Node =function(e){
-        this.element =e;
-        this.next =null
-      }
-      var n1 =new Node(1);
-      var n2 =new Node(2);
-      var n3 =new Node(3);
-      // 建立关系,连起来
-      n1.next = n2;
-      n2.next = n3;
-      // 将零散东西输出
-      var n = n1;
-      while(n != null){
-        console.log('遍历链表',n.element);
-        n = n.next;
-      }
-  哈希表
-    哈希表就是用 字符串 当下标,也就是 JS 中的对象的实现方式
-    也是其他语言中的 字典
-  树
-  集合
-  图
-    如 点 线 互联 求路线
-算法 
-  复杂度 :对一个操作复杂程度的大致估计 
-    五种常见时间复杂度 : 消耗的时间
-    O(1)     常数复杂度,比如读取数组中的某一个元素
-    O(logN)  比如二分搜索,常用于有序列表的查找
-    O(N)     比如数组的遍历
-    O(NlogN) 两个有序列表求交集,使用二分搜索
-    O(N^2)   两个列表求交集
-    空间复杂度 : 占用的内存
-    O(1)     在数组中返回某一个元素
-    O(N)     复制一个数组并返回
-  15 个经典基础算法 
-    Hash
-    快速排序
-    快递选择SELECT
-    BFS/DFS （广度/深度优先遍历）
-    红黑树 （一种自平衡的二叉查找树）
-    KMP 字符串匹配算法
-    DP (动态规划 dynamic programming)
-    A*寻路算法： 求解最短路径
-    Dijkstra：最短路径算法 
-    遗传算法
-    启发式搜索
-    图像特征提取之SIFT算法
-    傅立叶变换
-    SPFA(shortest path faster algorithm) 单元最短路径算法
-  算法设计思想 
-    迭代法
-    穷举搜索法
-    递推法
-    动态规划
-    贪心算法
-    回溯
-    分治算法
---------------------------------------------------------------------------------
-浏览器差异
-back-forward cache简称bfcache,往返缓存 
-  Firefox和Opera独有特性,可在用户使用浏览器的'后退'和'前进'按钮时加快页面的转换速度。
-  该缓存中不仅保存着页面数据,还保存了DOM和JavaScript的状态；
-  实际上是将整个页面都保存在了内存里。
-  若页面位于bfcache中,那么再次打开该页面就不会触发load事件。
 --------------------------------------------------------------------------------
 前端性能优化 
   文件的合并、压缩
@@ -955,7 +175,7 @@ back-forward cache简称bfcache,往返缓存
       <link rel="prerender" href="http://example.com">
       Steve Souders 的一篇文章中写到：
         这类似于在一个隐藏的 tab 页中打开了某个链接 – 将下载所有资源、创建 DOM 结构、
-        完成页面布局、应用 CSS 样式和执行 JavaScript 脚本等。
+        完成页面布局、应用 CSS 样式和执行 JS 脚本等。
         当用户真正访问该链接时,隐藏的页面就切换为可见,使页面看起来就是瞬间加载完成一样。
         Google 搜索在其即时搜索页面中已经应用该技术多年了,微软也宣称将在 IE11 中支持该特性。
         需要注意的是不要滥用该特性,当你知道用户一定会点击某个链接时才可以进行预渲染,
@@ -1004,7 +224,7 @@ back-forward cache简称bfcache,往返缓存
       当访问一个页面的时候,先把所有的图片路径替换成一张大小为1*1px图片的路径（这样就只需请求一次）,
       只有当图片出现在浏览器的可视区域内时,才设置图片正真的路径,让图片显示出来。这就是图片懒加载。
   JS操作
-    用innerHTML代替DOM操作,减少DOM操作次数,优化javascript性能。
+    用innerHTML代替DOM操作,减少DOM操作次数,优化JS性能。
     当需要设置的样式很多时设置className而不是直接操作style。
     少用全局变量、缓存DOM节点查找的结果。减少IO读取操作。
   图片大小控制合适
@@ -1049,7 +269,7 @@ back-forward cache简称bfcache,往返缓存
       减少对象查找,如 a.b.c.d 这种查找方式非常耗性能,尽可能把它定义在变量里；
       多线程 将执行时间过长的运算异步操作.
 图片 
-  base64
+  base64 
     比起直接引入图片地址,css文件中引入base64格式的图片对样式渲染的性能消耗明显,
     若大量使用,会带来耗电和发热的问题,需谨慎使用。
     图片转成base64编码后,文档大小较原文件大了一些,而经过 gzip 后两者几乎没有区别。
@@ -1109,17 +329,6 @@ back-forward cache简称bfcache,往返缓存
       }
       else {
         var aoo = b;
-      }
-  '模块化'开发 
-    方法一:使用立即执行的匿名函数创建作用域
-      var module1 =(function(){
-        //code
-      })();
-    方法二:使用JS对象方式创建命名空间
-      var module1 ={}
-      module1.aoo =12;
-      module1.foo =function(){
-        console.log(1);
       }
 ---------------------------------------------------------------------以下待整理
 

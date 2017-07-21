@@ -1,13 +1,6 @@
 介绍_概念_说明_定义 
-  Node 服务器上的JS运行环境 
-    2009 年Node项目诞生,
-    NodeJS 是一个事件驱动I/O服务端JavaScript环境,
-    JavaScript语言通过Node在服务器运行,在这个意义上,Node有点像JavaScript虚拟机；
-    用于开发脱离浏览器的JS程序,主要用于工具或服务端,比如文件处理
-    其次,Node提供大量工具库,使得JavaScript语言与操作系统互动,比如读写文件、新建子进程,
-    在这个意义上,Node又是JavaScript的工具库。
-    Node内部采用Google公司的V8引擎,作为JavaScript语言解释器,
-    通过自行开发的libuv库,调用操作系统资源 
+  PS：发布于2009年,一个事件驱动I/O服务端JS运行环境,JS语言通过Node在服务器运行 
+    内部采用V8引擎,作为JS语言解释器,通过自行开发的libuv库,调用操作系统资源 
   版本特点 
     偶数位为稳定版本
     e.g. :-0.6.X -0.8.X -0.10.X  
@@ -17,127 +10,10 @@
     required引入模块：使用 require 指令来载入 NodeJS 模块 
     创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
     接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
-  NodeJS 回调函数 
-    PS：NodeJS 异步编程的直接体现就是回调 
-      异步编程依托于回调来实现,但不能说使用了回调后程序就异步化了.
-      Node 所有 API 都支持回调函数.
-      在执行代码时就没有阻塞或等待文件 I/O 操作.
-      可大大提高了 NodeJS 的性能,可以处理大量的并发请求.
-      Node采用V8引擎处理JavaScript脚本,最大特点就是单线程运行,一次只能运行一个任务。
-      这导致Node大量采用异步操作（asynchronous opertion）,
-      即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
-    由于这种特性,某一个任务的后续操作,往往采用回调函数[callback]的形式进行定义 
-      var isTrue = function(value, callback) {
-        if (value === true) {
-          callback(null, "Value was true.");
-        }
-        else {
-          callback(new Error("Value is not true!"));
-        }
-      }
-      上面代码就把进一步的处理,交给回调函数callback。
-    Node约定 
-      若某个函数需要回调函数作为参数,则回调函数是最后一个参数。
-      回调函数本身的第一个参数,约定为上一步传入的错误对象。
-        var callback = function (error, value) {
-          if (error) {
-            return console.log(error);
-          }
-          console.log(value);
-        }
-        上面代码中,callback的第一个参数是Error对象,第二个参数才是真正的数据参数。
-        这是因为回调函数主要用于异步操作,当回调函数运行时,前期的操作早结束了,
-        错误的执行栈早就不存在了,传统的错误捕捉机制try…catch对于异步操作行不通,
-        所以只能把错误交给回调函数处理。
-        try {
-          db.User.get(userId, function(err, user) {
-            if(err) {
-              throw err
-            }
-            // ...
-          })
-        } 
-        catch(e) {
-          console.log(‘Oh no!’);
-        }
-        上面代码中,db.User.get方法是一个异步操作,等到抛出错误时,
-        可能它所在的try…catch代码块早就运行结束了,这会导致错误无法被捕捉。
-        所以,Node统一规定,一旦异步操作发生错误,就把错误对象传递到回调函数。
-      若没有发生错误,回调函数的第一个参数就传入null。
-      这种写法有一个很大的好处,就是说只要判断回调函数的第一个参数,就知道有没有出错,
-      若不是null,就肯定出错了。另外,这样还可以层层传递错误。
-      if(err) {
-        // 除了放过No Permission错误意外,其他错误传给下一个回调函数
-        if(!err.noPermission) {
-          return next(err);
-        }
-      }
-      由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
-    阻塞与非阻塞调用的不同 
-      e.g.:
-      阻塞代码实例
-        创建一个文件 input.txt ,内容如下：
-          11111111111111
-        创建 main.js 文件, 代码如下：
-          var fs = require("fs");
-          var data = fs.readFileSync('input.txt');
-          console.log(data.toString());
-          console.log("程序执行结束!");
-        node main.js 以上代码执行结果:
-          11111111111111
-          程序执行结束!
-      非阻塞代码实例
-        创建一个文件 input.txt ,内容如下：
-          11111111111
-        创建 main.js 文件, 代码如下：
-          var fs = require("fs");
-          fs.readFile('input.txt', function (err, data) {
-            if (err) return console.error(err);
-            console.log(data.toString());
-          });
-          console.log("程序执行结束!");
-        $ node main.js 以上代码执行结果如下：
-          程序执行结束!
-          11111111111
-      第一个实例在文件读取完后才执行完程序. 
-      第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
-      因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
-      所以若需要处理回调函数的参数,我们就需要写在回调函数内.
-    NodeJS 事件循环 
-      Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
-      每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
-      基本上所有的事件机制都是用设计模式中观察者模式实现.
-        观察者模式定义了一种一对多的依赖关系,让多个观察者对象同时监听某一个主题对象.
-        这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己.
-      Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
-      每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
-    事件驱动程序 
-      PS：Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
-        然后去服务下一个web请求.
-        当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
-        这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
-        这也被称之为非阻塞式IO或者事件驱动IO.
-        在事件驱动模型中,会生成一个主循环来监听事件,当检测到事件时触发回调函数.
-      可通过引入'events'模块,并实例化EventEmitter类来绑定和监听事件
-        var events = require('events'); // 引入 events 模块
-        var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
-        eventEmitter.on('connection', function () {  // 绑定 connection 事件处理程序
-          console.log('1');
-          eventEmitter.emit('data_received'); // 触发 data_received 事件 
-        }); 
-        eventEmitter.on('data_received', function(){ // 绑定 data_received 事件
-          console.log('2');
-        });
-        eventEmitter.emit('connection'); // 触发 connection 事件 
-        console.log("3");
-        执行:
-        // 1
-        // 2
-        // 3
 运行环境及执行命令 
   path 环境变量 
     执行命令时,优先到path指定的路径中去寻找
-  Node命令 [命令行中]
+  Node命令[命令行中] 
     node -v       查看所安装node的版本信息
     node fileName 执行文件
       fileName  可省略后缀名
@@ -214,145 +90,135 @@
         2
         > _ + 1
         3
-单进程单线程 
-  PS：NodeJS以单线程的模式运行,使用事件驱动来处理并发,
-    每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发。
+NodeJS的运行方式及编程风格 
+  以单线程模式运行,使用事件驱动来处理并发,使用回调函数异步操作 
     基本上所有的事件机制都是用设计模式中观察者模式实现。
     每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
-    他们可能会共享父进程的 stdio 流,或者也可以是独立的被导流的流对象.
-  Node 提供了 child_process 模块来创建子进程 
-    child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
-      command： 字符串, 将要运行的命令,参数使用空格隔开
-      options ：对象,可以是：
-      cwd ,字符串,子进程的当前工作目录
-      env,对象 环境变量键值对
-      encoding ,字符串,字符编码(默认： 'utf8')
-      shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
-      timeout,数字,超时时间(默认： 0)
-      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
-      killSignal ,字符串,结束信号(默认：'SIGTERM')
-      uid,数字,设置用户进程的 ID
-      gid,数字,设置进程组的 ID
-      cfoo ：回调函数,包含三个参数error, stdout 和 stderr.
-      exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
-      e.g.:
-        让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
-        console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
-        const fs = require('fs');
-        const child_process = require('child_process');
-        for(var i=0; i<3; i++) {
-          var workerProcess = child_process.exec('node support.js '+i,
-          function (error, stdout, stderr) {
-            if (error) {
-              console.log(error.stack);
-              console.log('Error code: '+error.code);
-              console.log('Signal received: '+error.signal);
+    他们可能会共享父进程的stdio流,或者也可以是独立的被导流的流对象 
+  回调函数 
+    PS：NodeJS异步编程依托于回调来实现,所有API都支持回调函数 
+      Node采用V8引擎处理JS脚本,最大特点就是单线程运行,一次只能运行一个任务。
+      这导致Node大量采用异步操作（asynchronous opertion）,
+      即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
+    由于这种特性,某一个任务的后续操作,往往采用回调函数[callback]的形式进行定义 
+      var isTrue = function(value, callback) {
+        if (value === true) {
+          callback(null, "Value was true.");
+        }
+        else {
+          callback(new Error("Value is not true!"));
+        }
+      }
+      上面代码就把进一步的处理,交给回调函数callback。
+    Node约定 
+      若某个函数需要回调函数作为参数,则回调函数是最后一个参数。
+      回调函数本身的第一个参数,约定为上一步传入的错误对象。
+        var callback = function (error, value) {
+          if (error) {
+            return console.log(error);
+          }
+          console.log(value);
+        }
+        上面代码中,callback的第一个参数是Error对象,第二个参数才是真正的数据参数。
+        这是因为回调函数主要用于异步操作,当回调函数运行时,前期的操作早结束了,
+        错误的执行栈早就不存在了,传统的错误捕捉机制try…catch对于异步操作行不通,
+        所以只能把错误交给回调函数处理。
+        try {
+          db.User.get(userId, function(err, user) {
+            if(err) {
+              throw err
             }
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-          });
-          workerProcess.on('exit', function (code) {
-            console.log('子进程已退出,退出码 '+code);
-          });
+            // ...
+          })
+        } 
+        catch(e) {
+          console.log(‘Oh no!’);
         }
-        执行以上代码,输出结果为：
-        $ node master.js 
-        子进程已退出,退出码 0
-        stdout: 进程 1 执行.
-        stderr: 
-        子进程已退出,退出码 0
-        stdout: 进程 0 执行.
-        stderr: 
-        子进程已退出,退出码 0
-        stdout: 进程 2 执行.
-        stderr:     
-    child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
-      Arguments:
-        command： 将要运行的命令
-        args： Array 字符串参数数组
-        options Object
-        cwd String 子进程的当前工作目录
-        env Object 环境变量键值对
-        stdio Array|String 子进程的 stdio 配置
-        detached Boolean 这个子进程将会变成进程组的领导
-        uid Number 设置用户进程的 ID
-        gid Number 设置进程组的 ID
-        spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
+        上面代码中,db.User.get方法是一个异步操作,等到抛出错误时,
+        可能它所在的try…catch代码块早就运行结束了,这会导致错误无法被捕捉。
+        所以,Node统一规定,一旦异步操作发生错误,就把错误对象传递到回调函数。
+      若没有发生错误,回调函数的第一个参数就传入null 
+      这种写法有一个很大的好处,就是说只要判断回调函数的第一个参数,就知道有没有出错, 
+      若不是null,就肯定出错了。另外,这样还可以层层传递错误 
+      if(err) {
+        // 除了放过No Permission错误意外,其他错误传给下一个回调函数
+        if(!err.noPermission) {
+          return next(err);
+        }
+      }
+      由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
+    阻塞与非阻塞调用的不同 
       e.g.:
-        让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
-        console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
-        const fs = require('fs');
-        const child_process = require('child_process');
-        for(var i=0; i<3; i++) {
-          var workerProcess = child_process.spawn('node', ['support.js', i]);
-          workerProcess.stdout.on('data', function (data) {
-            console.log('stdout: ' + data);
+      阻塞代码实例
+        创建一个文件 input.txt ,内容如下：
+          11111111111111
+        创建 main.js 文件, 代码如下：
+          var fs = require("fs");
+          var data = fs.readFileSync('input.txt');
+          console.log(data.toString());
+          console.log("程序执行结束!");
+        node main.js 以上代码执行结果:
+          11111111111111
+          程序执行结束!
+      非阻塞代码实例
+        创建一个文件 input.txt ,内容如下：
+          11111111111
+        创建 main.js 文件, 代码如下：
+          var fs = require("fs");
+          fs.readFile('input.txt', function (err, data) {
+            if (err) return console.error(err);
+            console.log(data.toString());
           });
-          workerProcess.stderr.on('data', function (data) {
-            console.log('stderr: ' + data);
-          });
-          workerProcess.on('close', function (code) {
-            console.log('子进程已退出,退出码 '+code);
-          });
-        }
-        执行以上代码,输出结果为：
-        $ node master.js stdout: 进程 0 执行.
-        子进程已退出,退出码 0
-        stdout: 进程 1 执行.
-        子进程已退出,退出码 0
-        stdout: 进程 2 执行.
-        子进程已退出,退出码 0    
-    child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
-      PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
-        与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
-      Arguments:
-        modulePath： String,将要在子进程中运行的模块
-        args： Array 字符串参数数组
-        options：Object
-        cwd String 子进程的当前工作目录
-        env Object 环境变量键值对
-        execPath String 创建子进程的可执行文件
-        execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
-        silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
-        uid Number 设置用户进程的 ID
-        gid Number 设置进程组的 ID
-        返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
-      e.g.:
-        让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
-        console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
-        const fs = require('fs');
-        const child_process = require('child_process');
-        for(var i=0; i<3; i++) {
-           var worker_process = child_process.fork("support.js", [i]);	
-           worker_process.on('close', function (code) {
-              console.log('子进程已退出,退出码 ' + code);
-           });
-        }
-        执行以上代码,输出结果为：
-        $ node master.js 
-        进程 0 执行.
-        子进程已退出,退出码 0
-        进程 1 执行.
-        子进程已退出,退出码 0
-        进程 2 执行.
-        子进程已退出,退出码 0
+          console.log("程序执行结束!");
+        $ node main.js 以上代码执行结果如下：
+          程序执行结束!
+          11111111111
+      第一个实例在文件读取完后才执行完程序. 
+      第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
+      因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
+      所以若需要处理回调函数的参数,我们就需要写在回调函数内.
+    NodeJS 事件循环 
+      Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
+      每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
+      基本上所有的事件机制都是用设计模式中观察者模式实现.
+        观察者模式定义了一种一对多的依赖关系,让多个观察者对象同时监听某一个主题对象.
+        这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己.
+      Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
+      每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
+    事件驱动程序 
+      PS：Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
+        然后去服务下一个web请求.
+        当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
+        这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
+        这也被称之为非阻塞式IO或者事件驱动IO.
+        在事件驱动模型中,会生成一个主循环来监听事件,当检测到事件时触发回调函数.
+      可通过引入'events'模块,并实例化EventEmitter类来绑定和监听事件
+        var events = require('events'); // 引入 events 模块
+        var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
+        eventEmitter.on('connection', function () {  // 绑定 connection 事件处理程序
+          console.log('1');
+          eventEmitter.emit('data_received'); // 触发 data_received 事件 
+        }); 
+        eventEmitter.on('data_received', function(){ // 绑定 data_received 事件
+          console.log('2');
+        });
+        eventEmitter.emit('connection'); // 触发 connection 事件 
+        console.log("3");
+        执行:
+        // 1
+        // 2
+        // 3
 --------------------------------------------------------------------------------
 基础语法 
   this 
     全局作用域下的this
       在浏览器里this等价于window对象,若声明一些全局变量(不管在任何地方),
       这些变量都会作为this的属性.
-      在node里面,有两种执行JavaScript代码的方式,
+      在node里面,有两种执行JS代码的方式,
       一种是直接在里面执行一行行代码.
         声明的全局变量会添加到global对象,也会添加给this
         global 和 this 是等价的.
-      一种是直接执行写好的JavaScript文件,
+      一种是直接执行写好的JS文件,
         声明的全局变量会添加到global对象,但不会自动添加到this
     function this
       除了在DOM事件处理程序里,
@@ -376,7 +242,7 @@
       console.log(this.foo); // bar
       testThis();
       console.log(this.foo); // foo
-Global_Object 全局对象及其所有属性都可以在程序的任何地方访问 
+'Global_Object'全局对象 : 可在程序的任何地方访问 
   PS：浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
   ECMAScript 全局变量的定义 
@@ -392,7 +258,7 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
   global  Node所在的全局环境,类似浏览器的window对象 
     最根本的作用是作为全局变量的宿主
     global 和 window 的不同 
-      在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性
+      在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
         var x = 1;
         等同于设置 
         window.x = 1;
@@ -401,7 +267,7 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
         var x = 1;
         该变量不是global对象的属性
         global.x // undefined。
-        因为模块的全局变量都是该模块私有的,其他模块无法取到。
+        因为模块的全局变量都是该模块私有的,其他模块无法取到 
   process 用于描述当前Node进程状态 
     PS：global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
       提供了一个与操作系统的简单接口
@@ -432,10 +298,10 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
       有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
       2	Unused
       保留
-      3	Internal JavaScript Parse Error
-      JavaScript的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
-      4	Internal JavaScript Evaluation Failure
-      JavaScript 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
+      3	Internal JS Parse Error
+      JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
+      4	Internal JS Evaluation Failure
+      JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
       5	Fatal Error
       V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为： FATAL ERROR
       6	Non-function Internal Exception Handler
@@ -446,8 +312,8 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
       保留
       9	Invalid Argument
       可能是给了未知的参数,或者给的参数没有值.
-      10	Internal JavaScript Run-Time Failure
-      JavaScript的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
+      10	Internal JS Run-Time Failure
+      JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
       12	Invalid Debug Argument 
       设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
       >128	Signal Exits
@@ -464,7 +330,7 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
     exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
     version     Node 的版本,比如v0.10.18.
     versions    一个属性,包含了 node 的版本和依赖.
-    config      一个包含用来编译当前 node 执行文件的 javascript 配置选项的对象.
+    config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
       它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
     pid         当前进程的进程号.
     title       进程名,默认值为"node",可以自定义该值.
@@ -580,12 +446,13 @@ Global_Object 全局对象及其所有属性都可以在程序的任何地方访
     若超过这个范围,会被自动改为1毫秒;
   clearInterval(num)     终止一个用setInterval方法新建的定时器 
   require() 用于加载模块 
+  Buffer()  用于操作二进制数据 
   ◆伪全局变量 
     模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
   exports
-events 事件模块 
+events,事件模块 
   PS：events 模块只提供了一个对象： events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
@@ -668,9 +535,9 @@ events 事件模块
     包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
     为什么要这样做呢？原因有两点：
     首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
-    其次 JavaScript 的对象机制是基于原型的,支持 部分多重继承,
+    其次 JS 的对象机制是基于原型的,支持 部分多重继承,
     继承 EventEmitter 不会打乱对象原有的继承关系.
-Buffer  缓冲区,处理二进制数据的接口[用于保存原始数据] 
+Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据] 
   PS：JS只有字符串数据类型,没有二进制数据类型, 
     处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
     用来创建一个专门存放二进制数据的缓存区;
@@ -815,7 +682,7 @@ Buffer  缓冲区,处理二进制数据的接口[用于保存原始数据]
     二进制数组的buffer属性,保留指向原Buffer对象的指针。
     二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
     比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
-Stream,流  用于暂存和移动数据[以bufer的形式存在] 
+Stream,流 用于暂存和移动数据[以bufer的形式存在] 
   PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
@@ -1158,7 +1025,7 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
           method : 'POST',
           // headers 来自于 网页请求的 Reqeust Headers
           headers : {
-            'Accept' : 'application/json, text/javascript, */*; q=0.01',
+            'Accept' : 'application/json, text/JS, */*; q=0.01',
             'Accept-Encoding' : 'gzip, deflate',
             'Accept-Language' : 'zh-CN,zh;q=0.8,en;q=0.6',
             'Content-Length' : postData.length, // 仅此处更改 
@@ -1585,13 +1452,12 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
       为异步操作,不会阻塞后续代码执行 
       var readStream = fs.createReadStream('1.pm4');
     fs.createWriteStream(path,options); 创建可写的stream流 
-  child_process  新建子进程 
   crypto  提供加密和解密功能,基本上是对OpenSSL的包装
   util   提供常用函数的集合 
-    PS：用于弥补核心JavaScript 的功能 过于精简的不足
+    PS：用于弥补核心JS 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
-      PS：JavaScript 的面向对象特性是基于原型的,与常见的基于类的不同.
-        JavaScript 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
+      PS：JS 的面向对象特性是基于原型的,与常见的基于类的不同.
+        JS 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
         handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
       e.g.:
         var util = require('util'); 
@@ -1658,38 +1524,128 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
         util.isError(new Error()) // true
         util.isError(new TypeError()) // true
         util.isError({ name: 'Error', message: 'an error occurred' }) // false      
-  os   模块提供了一些基本的系统操作函数
-    PS：
-    var os = require("os"); 引入os模块
-    os.tmpdir() 返回操作系统的默认临时文件夹.
-    os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
-    os.hostname() 返回操作系统的主机名.
-    os.type() 返回操作系统名
-    os.platform() 返回操作系统名
-    os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
-    os.release() 返回操作系统的发行版本.
-    os.uptime() 返回操作系统运行的时间,以秒为单位.
-    os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
-    os.totalmem() 返回系统内存总量,单位为字节.
-    os.freemem() 返回操作系统空闲内存量,单位是字节.
-    os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
-      型号、速度(单位 MHz)、
-      时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
-    os.networkInterfaces() 获得网络接口列表.
-    e.g.:
-      创建 main.js 文件,代码如下所示：
-        var os = require("os");
-        console.log('endianness : ' + os.endianness());// CPU 的字节序
-        console.log('type : ' + os.type()); // 操作系统名
-        console.log('platform : ' + os.platform()); // 操作系统名
-        console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
-        console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
-      代码执行结果如下：
-        endianness : LE
-        type : Linux
-        platform : linux
-        total memory : 25103400960 bytes.
-        free memory : 20676710400 bytes.
+  child_process 创建子进程 
+    child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
+      command： 字符串, 将要运行的命令,参数使用空格隔开
+      options ：对象,可以是：
+      cwd ,字符串,子进程的当前工作目录
+      env,对象 环境变量键值对
+      encoding ,字符串,字符编码(默认： 'utf8')
+      shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
+      timeout,数字,超时时间(默认： 0)
+      maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
+      killSignal ,字符串,结束信号(默认：'SIGTERM')
+      uid,数字,设置用户进程的 ID
+      gid,数字,设置进程组的 ID
+      cfoo ：回调函数,包含三个参数error, stdout 和 stderr.
+      exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+          var workerProcess = child_process.exec('node support.js '+i,
+          function (error, stdout, stderr) {
+            if (error) {
+              console.log(error.stack);
+              console.log('Error code: '+error.code);
+              console.log('Signal received: '+error.signal);
+            }
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+          });
+          workerProcess.on('exit', function (code) {
+            console.log('子进程已退出,退出码 '+code);
+          });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js 
+        子进程已退出,退出码 0
+        stdout: 进程 1 执行.
+        stderr: 
+        子进程已退出,退出码 0
+        stdout: 进程 0 执行.
+        stderr: 
+        子进程已退出,退出码 0
+        stdout: 进程 2 执行.
+        stderr:     
+    child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
+      Arguments:
+        command： 将要运行的命令
+        args： Array 字符串参数数组
+        options Object
+        cwd String 子进程的当前工作目录
+        env Object 环境变量键值对
+        stdio Array|String 子进程的 stdio 配置
+        detached Boolean 这个子进程将会变成进程组的领导
+        uid Number 设置用户进程的 ID
+        gid Number 设置进程组的 ID
+        spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+          var workerProcess = child_process.spawn('node', ['support.js', i]);
+          workerProcess.stdout.on('data', function (data) {
+            console.log('stdout: ' + data);
+          });
+          workerProcess.stderr.on('data', function (data) {
+            console.log('stderr: ' + data);
+          });
+          workerProcess.on('close', function (code) {
+            console.log('子进程已退出,退出码 '+code);
+          });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js stdout: 进程 0 执行.
+        子进程已退出,退出码 0
+        stdout: 进程 1 执行.
+        子进程已退出,退出码 0
+        stdout: 进程 2 执行.
+        子进程已退出,退出码 0    
+    child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
+      PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
+        与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
+      Arguments:
+        modulePath： String,将要在子进程中运行的模块
+        args： Array 字符串参数数组
+        options：Object
+        cwd String 子进程的当前工作目录
+        env Object 环境变量键值对
+        execPath String 创建子进程的可执行文件
+        execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
+        silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
+        uid Number 设置用户进程的 ID
+        gid Number 设置进程组的 ID
+        返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
+      e.g.:
+        让我们创建两个 js 文件 support.js 和 master.js.
+        support.js 文件代码：
+        console.log("进程 " + process.argv[2] + " 执行." );
+        master.js 文件代码：
+        const fs = require('fs');
+        const child_process = require('child_process');
+        for(var i=0; i<3; i++) {
+           var worker_process = child_process.fork("support.js", [i]);	
+           worker_process.on('close', function (code) {
+              console.log('子进程已退出,退出码 ' + code);
+           });
+        }
+        执行以上代码,输出结果为：
+        $ node master.js 
+        进程 0 执行.
+        子进程已退出,退出码 0
+        进程 1 执行.
+        子进程已退出,退出码 0
+        进程 2 执行.
+        子进程已退出,退出码 0
   path   处理文件路径 
     PS：
     var path = require("path"); 引入path模块
@@ -1725,6 +1681,38 @@ Stream,流  用于暂存和移动数据[以bufer的形式存在]
         joint path : /test/test1/2slashes/1slash
         resolve : /web/com/1427176256_27423/main.js
         ext name : .js    
+  os   模块提供了一些基本的系统操作函数
+    PS：
+    var os = require("os"); 引入os模块
+    os.tmpdir() 返回操作系统的默认临时文件夹.
+    os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
+    os.hostname() 返回操作系统的主机名.
+    os.type() 返回操作系统名
+    os.platform() 返回操作系统名
+    os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
+    os.release() 返回操作系统的发行版本.
+    os.uptime() 返回操作系统运行的时间,以秒为单位.
+    os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
+    os.totalmem() 返回系统内存总量,单位为字节.
+    os.freemem() 返回操作系统空闲内存量,单位是字节.
+    os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
+      型号、速度(单位 MHz)、
+      时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
+    os.networkInterfaces() 获得网络接口列表.
+    e.g.:
+      创建 main.js 文件,代码如下所示：
+        var os = require("os");
+        console.log('endianness : ' + os.endianness());// CPU 的字节序
+        console.log('type : ' + os.type()); // 操作系统名
+        console.log('platform : ' + os.platform()); // 操作系统名
+        console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
+        console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
+      代码执行结果如下：
+        endianness : LE
+        type : Linux
+        platform : linux
+        total memory : 25103400960 bytes.
+        free memory : 20676710400 bytes.
   net  模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法 
     创建客户端 
       const net = require("net");     // 引入 net模块
@@ -2077,7 +2065,7 @@ RESTful API
     可使用开放的XML标准来描述、发布、发现、协调和配置这些应用程序,用于开发分布式的互操作的应用程序.
     基于 REST 架构的 Web Services 即是 RESTful.
     由于轻量级以及通过 HTTP 直接传输数据的特性,Web 服务的 RESTful 方法已经成为最常见的替代方法.
-    可以使用各种语言(比如 Java 程序、Perl、Ruby、Python、PHP 和 Javascript[包括 Ajax])实现客户端.
+    可以使用各种语言(比如 Java 程序、Perl、Ruby、Python、PHP 和 JS[包括 Ajax])实现客户端.
     RESTful Web 服务通常可以通过自动客户端或代表用户的应用程序访问.
     但是,这种服务的简便性让用户能够与之直接交互,
     使用它们的 Web 浏览器构建一个 GET URL 并读取返回的内容.

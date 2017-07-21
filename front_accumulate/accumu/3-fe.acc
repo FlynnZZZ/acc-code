@@ -329,15 +329,14 @@ Atom
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
     社区扩展
-      autocomplete-cocos2d-js    cocos的补全插件
       atom-beautify              代码格式美化
       autocomplete-project-paths 路径补全
         Question: 路径补全应为/而非\
       color-picker               快捷颜色选择
         颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
         或直接使用快捷键ctrl+alt+c进行颜色值的选择插入.
-      file-icons                 显示文件图标
       highlight-selected         高亮选中词
+      language-vue-component     vue组件的语法插件 
       minimap                    缩略图
         样式设置
           atom-text-editor atom-text-editor-minimap {
@@ -358,10 +357,12 @@ Atom
       open-in-browsers           在浏览器中快捷打开html
         安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
       pigments                   根据颜色值显示颜色
-      language-vue-component     vue组件的语法插件 
-      选用插件
+      regex-railroad-diagram     正则查看
+      选用插件 
+        autocomplete-cocos2d-js    cocos的补全插件
         autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
           自定义快捷键 alt-m
+        file-icons                 显示文件图标
         simplified-chinese-menu    菜单汉化
         atom-wrap-in-tag           在选中字符外增加标签
           (该快捷键有bug,不起效,使用 'alt-w': 'unset!' 命令来解决)

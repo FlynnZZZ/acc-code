@@ -4,123 +4,182 @@
 <head>
   <meta charset="utf-8">
   <title>Web开发工具集</title>
-  <!-- <link rel="stylesheet/less" type="text/css" href="./a/web_tools.less" />
-  <script src="./a/less_2.5.3_min.js" charset="utf-8"></script> -->
-  <link rel="stylesheet" href="./a/web_tools.css">
+  <!-- 
+  <link rel="stylesheet/less" type="text/css" href="./a/web_tools.less" />
+  <script src="./a/less_2.5.3_min.js" charset="utf-8"></script> 
+  -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      display: inline-block;
+    }
+    span {
+      display: inline-block;
+    }
+    ul {
+      list-style: none;
+    }
+    body {
+      background-color: rgba(199, 237, 204, 0.47);
+    }
+    #aoo {
+      min-width: 1000px;
+      width: 80%;
+      margin: auto;
+      padding: 30px 10px 50px;
+      display: flex;
+      flex-wrap: wrap;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
+    }
+    #aoo .aItme {
+      background-color: #C7EDCC;
+      max-width: 800px;
+      max-height: 500px;
+      overflow-y: auto;
+      border: 1px solid #999;
+      margin-bottom: 20px;
+      margin-right: 20px;
+    }
+    #aoo .aItme h4 {
+      line-height: 2em;
+      border-bottom: 1px solid #aaa;
+      padding-left: 5px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    #aoo .aItme ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 5px;
+    }
+    #aoo .aItme li {
+      margin-right: 8px;
+      background-color: #757575;
+      border-radius: 2px;
+      border: 1px solid #aaa;
+      margin-bottom: 10px;
+      font-family: 'vijaya', 'Consolas', '楷体';
+    }
+    #aoo .aItme li:hover {
+      background-color: #545050;
+    }
+    #aoo .aItme li a {
+      height: 1.5em;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 0 5px;
+      display: inline-flex;
+      align-items: center;
+    }
+    #aoo .aItme:hover h4 {
+      color: #111;
+    }
+  </style>
+  <script src="./a/jq3.1.1min.js" charset="utf-8"></script>
+  <script src="./a/vue230min.js" charset="utf-8"></script>
 </head>
 
 <body>
   
   <article id="aoo"> 
-    <section class="aItme"> <h4>本地工具</h4>
+    <section class="aItme" v-for="item in items"> 
+      <h4>{{item.tl}}</h4>
       <ul>
-        <li>
-          <a href="./a/kag/CSS3 Keyframes Animation Generator.html" target="_blank">
-            CSS3 Keyframes Animation Generator
-          </a>
-        </li>
-        <li>
-          <a href="./a/font_awesome/FontAwesome.html" target="_blank"> 
-            fontAwesome 
-          </a>
-        </li>
-        <li>
-          <a href="http://localhost/project/test/" target="_blank"> 
-            LocalTest-DeskTop
-          </a>
-        </li>
-        <li>
-          <a href="http://localbackend.hkbao.com:8081/test" target="_blank"> 
-            LocalTest-NoteBook
-          </a>
-        </li>
-      </ul>
-      
-    </section>
-    
-    <section class="aItme"> <h4>工具站点</h4>
-      <ul>
-        <li>
-          <a href="http://css3generator.com/" target="_blank"> 
-            CSS3 Generator 
-          </a>
-        </li>
-        <li>
-          <a href="http://tongji.baidu.com/data/browser" target="_blank"> 
-            百度流量统计平台 
-          </a>
-        </li>
-        <li>
-          <a href="http://www.bejson.com/zhuanyi/" target="_blank"> 
-            JSON压缩转义 
-          </a>
-        </li>
-        <li>
-          <a href="http://fontawesome.dashgame.com/" target="_blank"> 
-            fontAwesome 
-          </a>
-        </li>
-        <li>
-          <a href="http://www.bejson.com/jsoneditoronline/" target="_blank"> 
-            JSON编辑器 
-          </a>
-        </li>
-        <li>
-          <a href="https://daneden.github.io/animate.css/" target="_blank"> 
-            动画效果展示 
-          </a>
-        </li>
-      </ul>
-      
-    </section>
-    
-    <section class="aItme"> <h4>API&amp;文档</h4>
-      <ul>
-        <li>
-          <a href="https://developer.mozilla.org/zh-CN/" target="_blank"> MDN </a>
-        </li>
-        <li>
-          <a href="http://www.jquery123.com" target="_blank">
-            jQuery API中文文档
-          </a>
-        </li>
-        <li>
-          <a href="https://cn.vuejs.org/v2/api/" target="_blank">
-            Vue API中文文档
-          </a>
-        </li>
-        <li>
-          <a href="https://router.vuejs.org/zh-cn/" target="_blank">
-            vue-router 2 中文文档
-          </a>
-        </li>
-        <li>
-          <a href="http://www.cocos.com/docs/creator/index.html" target="_blank">
-            Cocos Creator 文档
-          </a>
+        <li v-for="item1 in item.chids">
+          <a :href="item1.href" target="_blank"> {{item1.name}} </a>
         </li>
       </ul>
     </section>
-    
-    <section class="aItme"> <h4>常用网站</h4>
-      <ul>
-        <li>
-          <a href="http://www.imooc.com/" target="_blank">
-            imooc 慕课网
-          </a>
-        </li>
-      </ul>
-    </section>
-    
-    
   </article>
   
-
 </body>
-
-<script src="./a/jq_3.1.1_min.js" charset="utf-8"></script>
-<script src="./a/web_tools.js" charset="utf-8"></script>
-
+<script type="text/javascript">
+  new Vue({
+    el : '#aoo',
+    data : {
+      items : [
+        { tl : '本地工具',
+          chids : [
+            { name : 'CSS3 Keyframes Animation Generator',
+              href : './a/kag/CSS3 Keyframes Animation Generator.html'
+            },
+            { name : 'fontAwesome',
+              href : './a/font_awesome/FontAwesome.html'
+            },
+            { name : 'LocalTest-DeskTop',
+              href : 'http://localhost/project/test/'
+            },
+            { name : 'LocalTest-NoteBook',
+              href : 'http://project.lcltst.com/test/vue/vuetest.html'
+            },
+          ],
+        },
+        { tl : '工具站点',
+          chids : [
+            { name : 'CSS3 Generator',
+              href : 'http://css3generator.com/'
+            },
+            { name : '百度流量统计平台',
+              href : 'http://tongji.baidu.com/data/browser'
+            },
+            { name : 'JSON压缩转义',
+              href : 'http://www.bejson.com/zhuanyi/'
+            },
+            { name : 'fontAwesome',
+              href : 'http://fontawesome.dashgame.com/'
+            },
+            { name : 'JSON编辑器',
+              href : 'http://www.bejson.com/jsoneditoronline/'
+            },
+            { name : '动画效果展示',
+              href : 'https://daneden.github.io/animate.css/'
+            },
+          ],
+        },
+        { tl : 'API&amp;文档',
+          chids : [
+            { name : 'MDN',
+              href : 'https://developer.mozilla.org/zh-CN/'
+            },
+            { name : 'jQuery API中文文档',
+              href : 'http://www.jquery123.com'
+            },
+            { name : 'Vue API中文文档',
+              href : 'https://cn.vuejs.org/v2/api/'
+            },
+            { name : 'vue-router 2 中文文档',
+              href : 'https://router.vuejs.org/zh-cn/'
+            },
+            { name : 'Cocos Creator 文档',
+              href : 'http://www.cocos.com/docs/creator/index.html'
+            },
+          ],
+        },
+        { tl : '常用网站',
+          chids : [
+            { name : 'imooc 慕课网',
+              href : 'http://www.imooc.com/'
+            },
+          ],
+        },
+      ],
+    },
+    computed : {},
+    watch : {},
+    methods : {},
+    mounted : function (){
+      var that = this;
+      
+    },
+  });
+</script>
 </html>
 
 

@@ -266,9 +266,7 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
   'computed'   数据的依赖 
     PS：相当于经过处理的data数据,根据其依赖的data数据变化而变化 「SlPt」
     computed : {
-      val : function(arg){
-        // 
-        // val 为函数的返回值
+      val : function(){  // 不能传参 ? 
       }
     }
     setter 
@@ -304,7 +302,7 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
           }
         }
     Exp: 
-      建议该功能也可以传参
+      建议该功能也可以传参 
   'watch'      监听数据的变化 
     e.g.：
       var vm = new Vue({

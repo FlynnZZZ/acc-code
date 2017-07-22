@@ -1,4 +1,4 @@
-BOM,Browser_Object_Model 浏览器对象模型 
+'Browser_Object_Model',BOM : 浏览器对象模型 
   PS： 访问和操作浏览器窗口「显示的页面以外的部分」,
     BOM由一系列相关的对象构成,并且每个对象都提供了很多方法与属性,用来访问浏览器功能
     BOM只是ECMAScript的一个扩展,没有任何相关标准
@@ -13,45 +13,96 @@ BOM,Browser_Object_Model 浏览器对象模型
     提供用户显示器分辨率详细信息的screen对象
     对cookies的支持
     像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
-window 对象 
+window 
   PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
     核心对象是window,表示浏览器的一个实例.
     window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
     双重角色:既是JS访问浏览器窗口的一个接口,也是ECMAScript规定的Global对象
     在网页中定义的任何对象 变量和函数,都以window作为其Global对象
     若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
-  使用说明 
-    加上window.和不加window.的区别:
-      不加window.情况,当某个浏览器识别不了该属性/方法时,就当作变量使用了
-      加window则是强制性的操作,不会产生误会.
-      当所有浏览器都支持的属性或方法,可不用加window.
-    全局环境中的变量、函数都是window对象的属性和方法.
-      全局变量与window属性的差异:
-      全局变量(准确的说应该是显式声明的全局变量)无法使用delete, window属性则可以
-      访问未声明的变量会报错,而未声明window对象的属性则为undefined.
-  窗口与框架  
+  加上'window.'和不加'window.'的区别:
+    使用所有浏览器都支持的属性或方法,可不用加,
+    不加时,当某个浏览器识别不了该属性/方法时,就会当作变量使用,
+    加window则是强制性的操作,不会产生误会.
+  ◆框架  
     PS：若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
-      在frames集合中,可通过数值索引(从0开始,从左至右,从上至下),
-      或者框架名称来访问相应的window对象
-    window.name  表示窗口/框架的名称
-    window.frames
-    e.g. :
-      下面是一个包含框架的页面
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <title>Frameset Example</title>
-        </head>
-        <frameset rows="">
-          <frame src="frame.html" name=topFrame>
-          <frameset cols="">
-            <frame src="" name="">
-            <frame src="" name="">
-          </frameset>
+      (更多内容参见 JavaScript高级程序设计 196 页)
+  window.name    表示窗口/框架的名称
+  window.frames  框架集 
+    PS：可通过数值索引[从0开始,从左至右,从上至下]或框架的name属性值来获取到对应的框架window对象  
+    e.g.：
+      <frameset >
+        <frame src="frame.html" name="topFrame">
+        <frameset >
+          <frame >
+          <frame >
         </frameset>
-      </html>
-      可通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
-   (更多内容参见 JavaScript高级程序设计 196页)
+      </frameset>
+      通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
+  ◆打开&关闭窗口 
+  var win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
+    PS：查找一个已经存在的窗口或者新建的浏览器窗口
+      若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
+      否则打开新窗口并命名
+      若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错
+    url    :     可选,将要导航到的URL;
+      若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
+    target : 可选,窗口目标,被打开窗口的名称/位置
+      _self   在当前窗口显示目标网页
+      _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
+      _blank  新建一个窗口,默认值
+        不打开新新窗口的情况下会忽略第三个参数
+      _parent 在当前框架的父框架内打开.假如当前框架无父框架,此参数值等同于   _self   .
+      str     命名打开的窗口,后续凡是以该名称打开的窗口都在这个窗口中加载
+        相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
+        name 不能包含有空格
+    params :  可选,设置窗口参数,各参数用逗号隔开
+      PS：字符串中不可出现空格
+      width   数值,窗口宽度,不能小于100
+      height  数值,窗口高度,不能小于100
+      top     数值,窗口顶部距屏幕顶部的px值[不可为负]
+      left    数值,窗口左端距屏幕左端的px值[不能是负值]
+      menubar    yes/no,菜单栏显示,默认为no
+      scrollbars yes/no,滚动条显示,默认为no
+      toolbar    yes/no,工具栏显示,默认为no
+      status     yes/no,状态栏显示,默认为no
+      resizable  yes/no,能否拖动改变窗口大小,默认为no
+      scrollable yes/no,能否滚动,默认为no 
+      location   yes/no,是否在显示地址栏
+        不同浏览器的默认值不同,操作方式也不同(可能隐藏,可能禁用)
+      fullscreen yes/no,浏览器窗口是否最大化[仅限IE]
+    bol    : 表示新页面是否取代浏览器记录中当前加载页面的布尔值
+    window.opener   表示打开它的原始窗口window对象.
+      PS：
+        打开的窗口(新窗口)关联着原始窗口(老窗口);
+        打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
+        在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
+        使用超链接打开的新窗口也可以.
+      newWin.opener =null;  切断联系
+        表示在单独的进程中运行新标签页,告诉浏览器他们不需要通信,
+        联系一旦切断就无法恢复了
+      自我总结:
+        当打开的新窗口在当前窗口显示(即 _self、_parent或_top等),
+        则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口.
+        window.opener.document.querySelector(); 获取到父元素的DOM对象
+    e.g.
+      open('https://www.baidu.com','abc',width=300,height=300,top=100)
+      若设置了参数属性,则会在新的浏览器窗口中打开窗口,
+      因为现存的窗口风格和需要打开的新窗口风格不同.
+
+      在新打开的窗口中弹出警告栏
+      var box =open('https://www.baidu.com','abc')
+      box.alert('abc')
+
+      子窗口操作父窗口:点击新打开的窗口在父窗口输入一行字
+      var aoo =window.open('https://www.baidu.com','abc',"width=300,height=300,top=100");
+      document.onclick =function(){ aoo.opener.document.write("点击了子窗口"); }
+      结果为:点击父窗口在父窗口打印.(Chrome中测试)
+    Exp：
+      微信中兼容性问题
+        android: 不管窗口目标是是什么,始终在当前页面打开,
+        ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
+  var bol = close();   关闭窗口,返回表示是否成功操作的布尔值
   位置与尺寸  
     ◆浏览器位置
       返回值类型为数值,单位都为px
@@ -117,74 +168,6 @@ window 对象
         } else {
           console.log('页面宽度大于700px');
         }
-  导航和打开/关闭窗口 
-    window.open([url],[窗口目标],[参数str],[boolean]);   打开/新建窗口
-      PS：查找一个已经存在的窗口或者新建的浏览器窗口
-        若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
-        否则打开新窗口并命名
-      Arguments: 一般使用3个参数
-        url:     可选,将要导航到的URL;
-          若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
-        窗口目标: 可选,被打开窗口的名称/位置
-          _self   在当前窗口显示目标网页
-          _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
-          _blank  新建一个窗口,默认值
-            不打开新新窗口的情况下会忽略第三个参数
-          _parent 在当前框架的父框架内打开.假如当前框架无父框架,此参数值等同于   _self   .
-          str     命名打开的窗口,后续凡是以该名称打开的窗口都在这个窗口中加载
-            相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
-            name 不能包含有空格
-        参数str:  可选,设置窗口参数,各参数用逗号隔开
-          PS：字符串中不可出现空格
-          width   数值,窗口宽度,不能小于100
-          height  数值,窗口高度,不能小于100
-          top     数值,窗口顶部距屏幕顶部的px值(不能是负值)
-          left    数值,窗口左端距屏幕左端的px值(不能是负值)
-          menubar    yes/no,菜单栏显示,默认为no
-          scrollbars yes/no,滚动条显示,默认为no
-          toolbar    yes/no,工具栏显示,默认为no
-          status     yes/no,状态栏显示,默认为no
-          resizable  yes/no,能否拖动改变窗口大小,默认为no
-          location   yes/no,是否在显示地址栏
-            不同浏览器的默认值不同,操作方式也不同(可能隐藏,可能禁用)
-          fullscreen yes/no,浏览器窗口是否最大化(仅限IE)
-        boolean: 表示新页面是否取代浏览器记录中当前加载页面的布尔值
-      RetValue: 返回打开窗口的window对象
-        PS：有些浏览器默认情况下不允许我们调整主浏览器窗口或位置
-          但允许调整创建的窗口
-      window.opener   表示打开它的原始窗口window对象.
-        PS：
-          打开的窗口(新窗口)关联着原始窗口(老窗口);
-          打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
-          在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
-          使用超链接打开的新窗口也可以.
-        newWin.opener =null;  切断联系
-          表示在单独的进程中运行新标签页,告诉浏览器他们不需要通信,
-          联系一旦切断就无法恢复了
-        自我总结:
-          当打开的新窗口在当前窗口显示(即 _self、_parent或_top等),
-          则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口.
-          window.opener.document.querySelector(); 获取到父元素的DOM对象
-      e.g.
-        open('https://www.baidu.com','abc',width=300,height=300,top=100)
-        若设置了参数属性,则会在新的浏览器窗口中打开窗口,
-        因为现存的窗口风格和需要打开的新窗口风格不同.
-
-        在新打开的窗口中弹出警告栏
-        var box =open('https://www.baidu.com','abc')
-        box.alert('abc')
-
-        子窗口操作父窗口:点击新打开的窗口在父窗口输入一行字
-        var aoo =window.open('https://www.baidu.com','abc',"width=300,height=300,top=100");
-        document.onclick =function(){ aoo.opener.document.write("点击了子窗口"); }
-        结果为:点击父窗口在父窗口打印.(Chrome中测试)
-      Remarks:
-        若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错
-      sSummary: 
-        微信中兼容性问题
-          android: 不管窗口目标是是什么,始终在当前页面打开,
-          ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
-    window.close();   关闭窗口,返回表示是否成功操作的布尔值
   计时器/函数调用 延时调用&间时调用&动画调用API 
     JS单线程异步执行的机制
       JS引擎只有一个线程,强迫异步事件排队等待被执行,不可在同时执行两条命令
@@ -272,7 +255,7 @@ window 对象
         }
         box();
       </script>
-    var rafId =requestAnimationFrame(函数);
+    var rafId = requestAnimationFrame(foo);
       PS：原理跟setTimeout/setInterval类似,
         通过递归调用同一方法来不断更新画面以达到动起来的效果,
         它优于setTimeout/setInterval的地方在于它是由浏览器专门为动画提供的API,
@@ -983,7 +966,7 @@ window的属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-AJAX,Asynchronous_JavaScript_and_XML  异步的JS和XML 
+'Asynchronous_JavaScript_and_XML',AJAX 异步的JS和XML 
   PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
     可用JS动态抓取内容构建页面;
     file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
@@ -2007,7 +1990,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
         return sheep;
       });
     });    
-JSONP,JSON_with_Padding 填充式JSON或参数式JSON 
+'JSON_with_Padding',JSONP 填充式JSON或参数式JSON 
   PS：可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
@@ -2074,7 +2057,7 @@ Comet  服务器推送,一种更高级的AJAX技术
   HTTP流
     PS：页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-CORS,Cross-Origin_Resource_Sharing 跨源资源共享 
+'Cross-Origin_Resource_Sharing',CORS : 跨源资源共享 
   PS：
     CORS是一个W3C标准,全称是“跨域资源共享”,
     允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
@@ -2284,7 +2267,7 @@ CORS,Cross-Origin_Resource_Sharing 跨源资源共享
     由于无论同源请求还是跨域请求都使用相同的接口,
     因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
     如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
-Img_Ping 跨域 
+'Img_Ping'跨域 
   PS：网页可从任何网页中加载图像而无跨域问题,也是在线广告跟踪浏览量的主要方式;
     动态的创建图像,使用load和error事件来处理响应
     图像Ping时与服务器进行简单、单向的跨域通信的一种方式
@@ -2298,7 +2281,7 @@ Img_Ping 跨域
     img.src ="https://www.baidu.com?name=abc"; // 请求中发送了一个name参数
     onload 和 onerror 事件处理程序指定为同一个函数,
     则无论什么响应,请求完成都能得到通知
-Same-Origin_Policy 同源政策 
+'Same-Origin_Policy'同源政策 
   PS： 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
     目的为了保证用户信息的安全,防止恶意的网站窃取数据;
@@ -2500,7 +2483,7 @@ Same-Origin_Policy 同源政策
     相比JSONP只能发GET请求,CORS允许任何类型的请求。  
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
-postMessage cross-document_messaging,跨文档消息传递 
+'cross-document_messaging',postMessage  跨文档消息传递 
   PS：简称为XDM,指在不同域的页面间传递消息,XDM之前,要稳妥的实现这种通信需花很多功夫 
   win.postMessage(mes,url); 向当前页面中的<iframe>或由当前页打开的窗口传递数据 
     PS：XDM的核心方法
@@ -2520,10 +2503,10 @@ postMessage cross-document_messaging,跨文档消息传递
     e.data
     e.origin
     e.source
- (详参 JavaScript高级程序设计 481页)
- Exp: Chrome测试未能实现  
+  (详参 JavaScript高级程序设计 481 页)
+  Exp: Chrome测试未能实现  
 SSE 「HTML5」
-WebRTC,Web_Real_Time_Communication  网络实时通信 「HTML5」 
+'Web_Real_Time_Communication',WebRTC : 网络实时通信 「HTML5」 
   PS： 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
@@ -2940,7 +2923,7 @@ Web_Storage    网页本地存储 「IE8+ HTML5」
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-Application_Cache,appcache  应用离线缓存 「HTML5」
+'Application_Cache',appcache  应用离线缓存 「HTML5」
   PS：让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;

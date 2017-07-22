@@ -133,8 +133,9 @@ ECMAScript : JS核心,语法部分
       // 相当于
       var a = 1; b = 1; 
     是否使用var声明的差别
-      都相当于给 window 添加属性,但使用var声明的变量不可 delete 删除 
-        不使用var定义变量可以使用 delete 删除
+      都相当于给window添加属性,但使用var声明的变量不可delete删除 
+      不使用var定义变量可以使用delete删除
+
       var aoo = 1; 
       boo = 2;
       console.log(window.aoo); // 1
@@ -144,6 +145,9 @@ ECMAScript : JS核心,语法部分
       console.log(bol1,aoo); // fasle 1
       console.log(bol2);     // true
       console.log(boo);  // 报错 boo 未定义, 因为boo已被删除而无法访问
+    全局变量与window属性的差异 
+      准确的说应该是显式声明的全局变量无法delete,window属性则可以
+      访问未声明的变量会报错,而未声明window对象的属性则为undefined.
     重复的var声明：相当于一个赋值操作并不会报错,不推荐使用 
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";

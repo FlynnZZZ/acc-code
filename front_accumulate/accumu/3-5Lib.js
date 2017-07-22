@@ -125,7 +125,7 @@ DOM操作
     Jelem 类似于数组,未获取到元素则为空数组,
     数组中每个元素为原生JS的DOM元素对象;
     在jQuery中 $ 等价于 jQuery,$为快捷方式;
-  $(document) 独有的属性和方法 
+  $(document) 独有的属性和方法[简写为 $()] 
     .ready(function () {})   [参见事件]+
     ◆全局Ajax事件处理器
     .ajaxComplete(foo)   每当一Ajax请求完成时触发 
@@ -143,9 +143,8 @@ DOM操作
       bool   布尔值,默认为false,若为true,则复制 Event 和 Data
   Jelem 获取 
     $("selector"); 通过选择器获取Jelem 
-      PS：等价于 jQuery("selector");
-        selector 可为组合选择器
-        CSS选择器几乎可全部适用 
+      PS：等价于 jQuery("selector"); 
+      selector 选择器,可为组合选择器,CSS选择器几乎可全部适用 
       :xx  筛选  
         e.g.：
           $('.a:first')    // 获取第一个.a元素
@@ -236,10 +235,16 @@ DOM操作
         $(document) 整个网页文档流
         $("body")   就是body
     通过Jelem获取 
-      Remarks:
-        不可通过 Jelem.$("selector")获取Jelem
-        原生JS中可通过 elem.getElementById() 来获取子类元素
-        而jQuery中$相当于 document.getElementById(),而不能拆分.
+      $('selector',Jelem)  在Jelem中查找'selector'
+      ★自身条件筛选 
+      Jelem.first()   选择第一个 
+      Jelem.eq(index) 下标选取 
+        index为整数,指示元素的位置[从0开始]
+        如果是负数,则从集合中的最后一个元素往回计数。
+      Jelem.not('selector'/Jelem) 非筛选 
+        Jelem.not(function(index){}); 用于检测集合中每个元素的函数 
+      Jelem.has('selector');   包含筛选 
+      Jelem.filter('selector');   相等筛选  
       ★层级关系筛选 
       Jelem.parents(["selector"])  所有祖先元素
       Jelem.closest("selector")    最近的第一个祖先元素
@@ -257,15 +262,6 @@ DOM操作
       ★属性筛选 
       Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
-      ★其他条件筛选 
-      Jelem.eq(index) 通过下标选取Jelem 
-        index为整数,指示元素的位置[从0开始]
-        如果是负数,则从集合中的最后一个元素往回计数。
-      Jelem.not('selector'/Jelem) 获取Jelem中不包含参数中的Jelem的Jelem 
-        Jelem.not(function(index){}); 用于检测集合中每个元素的函数。this 是当前 DOM 元素。
-      $('div').has('p'); // 选择包含p元素的div元素
-      $('div').filter('.myClass'); //选择class等于myClass的div元素
-      $('div').first(); //选择第1个div元素
     通过elem获取 
       $(elem);  返回Jelem 
         e.g. $(document); // 获取整个文档
@@ -308,7 +304,7 @@ DOM操作
         PS：使用get取下标,index的可能性更多
         参数为负时:0 表示第一个,-1 表示最后一个,-2 表示倒数第二个,依此类推...
         无参数时,将jQ对象数组转换为可用JS操作的常规数组.
-    增删改
+    增删改 
       Jelem.prepend('htmlCode'/Jelem)    内部头部插入
       Jelem.prependTo("selector"/Jelem)  被插入到内部头部 [与prepend相反]
         将元素/内容content插入到元素内部头部
@@ -452,13 +448,13 @@ DOM操作
         e.g.：
           $('#box').removeDate('name');
       ◆class相关
-      Jelem.hasClass('class名');    检测class类
+      Jelem.hasClass('className')    检测class类
         返回值类型为Boolean,若存在返回true,否则false.
-      Jelem.addClass('class名');    添加class类
+      Jelem.addClass('className')    添加class类
         若为多个元素,则每个元素中都添加该类
-      Jelem.removeClass('class名'); 移除class类
+      Jelem.removeClass('className') 移除class类
         Jelem.removeClass("aoo boo"); 移除class aoo 和 class boo
-      Jelem.toggleClass('class名'); 开关class类
+      Jelem.toggleClass('className') 开关class类
         若有,则删除;没有,则加上
     元素信息
       ◆尺寸位置信息 
@@ -561,44 +557,56 @@ DOM操作
         $('.todo-cell').each(function(i,e)){ 
           console.log(i,e) 
         }
-  Animation 动画
-    time 数值,速度,过渡的时间,默认为0「单位毫秒」
-      number (比如 1500)
+  Animation 动画 
+    time   数值,过渡的时间,单位毫秒,默认一般为0 
+      number  如 1500 
       "normal"
       "slow"
       "fast"
       "swing"    
       "linear"   匀速
-    cfoo 回调函数,在动画执行完后调用 
-    ◆可见性变化
-    Jelem.show([time,cfoo]);   显示元素
-    Jelem.hide([time,cfoo]);   隐藏元素
-      cfoo 可选,hide之后执行的函数「前提为设置了time,否则不可选」
-    Jelem.fadeIn(time,cfoo)        元素的淡入
-    Jelem.fadeOut(time,cfoo)       元素的淡出
-    Jelem.fadeToggle(time,cfoo);   开/关淡入淡出
-    Jelem.fadeTo(time,opacity,cfoo)   元素透明度变化到opacity 
-      opacity 透明度,0-1 之间取值
+    cfoo   回调函数,在动画执行完后调用 
+    ◆可见性变化 
+    Jelem.show([time] [,cfoo])   'height'&'widht'&'opacity'恢复到原始
+    Jelem.hide([time] [,cfoo])   'height'&'widht'&'opacity'过渡到0 
+    Jelem.toggle([time][,cfoo])  切换'show'和'hide'
+    Jelem.fadeIn([time] [,cfoo])      'opacity'从0过渡到1 
+    Jelem.fadeOut([time] [,cfoo])     'opacity'从1过渡到0  
+    Jelem.fadeToggle([time] [,cfoo])  切换'fadeIn'和'fadeOut' 
+    Jelem.fadeTo(time,opacity,cfoo) 透明度过渡到指定值'opacity' 
+      opacity   透明度,0-1 之间取值
     ◆尺寸变化
-    Jelem.slideDown(time,cfoo)   高度变化
-    Jelem.slideUp(time,cfoo)     高度变化
-    Jelem.slideToggle(time,cfoo) 开/关高度变化
-    Jelem.toggle([time][,cfoo]);     开/关长宽尺寸变化
-    ◆自定义变化
-    Jelem.animate(params,time[,duration][,cfoo])  定义变化及变化的过程
-      params 必须,表示元素的最终样式状态
+    Jelem.slideDown(time,cfoo)   向下'height'从0展开到初始值 
+    Jelem.slideUp(time,cfoo)     向上'height'从原始值收缩到0 
+    Jelem.slideToggle(time,cfoo) 切换'slideDown'和'slideUp' 
+    ◆自定义变化 
+      当定义样式的值时,单位默认为'px',如 '100px'或'100'等价
+    Jelem.animate(params[,time][,duration][,cfoo])  定义变化及变化的过程 
+      params 必须,元素的最终样式状态,由样式属性和其值组成的对象 
+        {
+          styleAttr : styleVal,
+          ... 
+        }
+        styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
+          $(".aoo").animate({
+            fontSize:"50px"
+          },1000)
+        styleVal 可通过 -=、+= 等在原值上进行便捷计算 
+          $(".aoo").animate({
+            width:"+=10px", // 在原来的基础上加10px
+            height:"-=100%"
+          },1000)
+        非CSS样式的属性列举 
+          scrollTop 定义滚动条的滚动距离
+            $('.aoo').animate({
+              scrollTop : '+=33'
+            },100)
       time   可选,执行时间 
-        "normal" ,默认值
-        毫秒 （比如 1500）
+        number    毫秒,如 1500
+        "normal"  默认值
         "slow"
         "fast"
-      e.g. 
-        $(".aoo").animate({width:"100%",height:"100%",fontSize:"50px"},1000)
-        $(".aoo").animate({
-          width:"+=10px", // 在原来的基础上加10px
-          height:"-=100%"
-        },1000)
-    Jelem.animate(params,obj)    定义每个阶段的变化
+    Jelem.animate(params,obj)    定义每个阶段的变化 
       e.g. 
         $('.a').animate({
           left:100
@@ -610,10 +618,18 @@ DOM操作
           }
         }
       );
-    Jelem.stop([bool1][,bool2])  停止动画
-      bool1 可选,默认为false,表示当元素有多个动画时只停止第一个动画;true则停止所用动画
-      bool2 可选,默认false表示在执行到的位置,表示停止后的动画位置,true表示到最后
-    Jelem.delay()                延缓动画
+    Jelem.stop([bool1] [,bool2]) 停止动画 
+      bool1  默认为false,是否清空未执行完的动画队列 
+      bool2  默认false,是否将动画调到最后状态 
+    Jelem.delay(time)            延缓动画 
+      e.g.：
+        $('#aoo').animate({
+          width : '+=30'
+        },1000)
+        .delay(500)
+        .animate({
+          height : '+=30'
+        },1000)
     ◆其他
     $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
     e.g.：
@@ -676,6 +692,13 @@ DOM操作
           $('.imgs').scrollLeft(Math.round(val)*width );
         },1000);
       })
+    动画队列 : 将一元素的多个动画按顺序书写,会按顺序执行,而非同时执行 
+      或使用链式操作,也会按顺序执行[前一个动画执行完了,才会执行下一个] 
+    var bol = Jelem.is(':animated') 判断元素是否处于动画状态 
+  新奇用法 
+    $(this)[bol:'removeClass':'addClass']('redColor');
+    等价于 
+    bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
 工具方法 
   $.each(obj, foo)  对象遍历
     foo 参数依次传入obj的 key,val 
@@ -825,7 +848,25 @@ Event,事件
       live 在 1.9 版本已经删除
   Jelem.on(params)   事件绑定 [1.7 版本增加,推荐使用的方式] 
     Jelem.on("eName",foo)         常规事件绑定 
-      jq对象为多个元素的数组时,此操作则给每个元素都绑定了事件
+      PS：Jelem为元素集时,此操作则给每个元素都绑定了事件 
+      eName  事件类型、事件名称 
+        blur focus load unload resize scroll  click dblclick error 
+        mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave 
+        change select submit 
+        keydown keyup keypress 
+        ... 
+    Jelem.on("eName.xx",foo)      添加事件命名空间,便于管理 
+      e.g.：
+        Jelem.on("click",function(e){
+          console.log(1);
+        })
+        Jelem.on("click.aoo",function(e){
+          console.log(2);
+        })
+        Jelem.off('click.aoo')   // 移除 click.aoo 的事件 
+        Jelem.off('.aoo')        // 移除所有 .aoo 的事件 
+        Jelem.trigger("click!"); // 触发所有无命名空间的 click 事件 
+        Jelem.trigger("click");  // 触发所有 click 事件 
     Jelem.on("eName1 eName2",foo) 同时多事件绑定 
     Jelem.on(paramsObj)           多组事件绑定 
       paramsObj   为一个 eName-foo 的配置对象
@@ -836,7 +877,7 @@ Event,事件
           ...
         }
     Jelem.on(str,foo)             自定义事件绑定 
-      foo  默认传入 e,arg1,arg2,.. 
+      foo  传入参数  (e,arg1,arg2,..) 
         arg为传递的信息,通过 trigger 触发时配置的数组元素 
       e.g.：
         $("p").on("aoo",function(e,arg1,arg2){  
@@ -889,7 +930,7 @@ Event,事件
       语法
         $(selector).unbind(eventObj)
         eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
-  Jelem.name(foo) 快捷绑定[bind的简写] 
+  Jelem.eventName(foo)  快捷绑定[bind的简写] 
     ★name可使用的值枚举如下:
     $(document).ready(foo); DOM结构加载完后执行
       简写方式: $(function(){/*jQuery代码*/})
@@ -904,12 +945,6 @@ Event,事件
     Jelem.mouseout()           鼠标离开（离开子元素也触发）
     Jelem.mouseover()          鼠标进入（进入子元素也触发）
     Jelem.mouseup()            松开鼠标
-    Jelem.hover(foo1 [,foo2]); 悬浮事件
-      PS：JS中无hover事件,无法使用on方法来绑定「SlPt」 
-      foo1  进入悬浮时回调 
-      foo2  可选,离开悬浮时回调
-        如click事件则无 
-          Jelem.click(foo1,foo2) 始终不会执行foo1,代替的是执行foo2
     Jelem.select()      用户选中文本框中的内容
     Jelem.submit()      用户递交表单
     Jelem.change(foo);  元素的值或内容发生变化时响应
@@ -921,10 +956,14 @@ Event,事件
     Jelem.keypress() 按下键盘（长时间按键,将返回多个事件）
     Jelem.keyup()    松开键盘
     Jelem.scroll(foo); 元素滚动条滑动事件
-    Jelem.resize() 浏览器窗口的大小发生改变
-    Jelem.toggle(foo1,foo2 [,foo3,..]);  点击依次执行函数[1.9 版本移除] 
+    Jelem.resize() 浏览器窗口的大小发生改变 
+    Jelem.hover(foo1 [,foo2]); 悬浮事件[jQuery合成事件] 
+      PS： 
+      foo1  进入悬浮时回调  
+      foo2  可选,离开悬浮时回调 
+    Jelem.toggle(foo1,foo2 [,foo3,..]);  点击依次执行函数[jQuery合成事件 1.9 版本移除] 
   事件绑定性能优化 
-    正确使用事件委托
+    正确使用事件委托 
       $('#t').find('td').on('click', function () {  
         $(this).css({ 
           'color': 'red', 
@@ -941,10 +980,9 @@ Event,事件
       }); 
   触发事件 
     Jelem.trigger("eName" [,arr]);   触发事件及信息传递 
-      eName   必需,指定触发的事件
+      PS：会触发事件的默认行为 
+      eName   必需,指定触发的事件 
       arr     数组,可选,传递到事件处理程序的额外参数 
-        额外的参数对自定义事件特别有用
-      e.g.：
         $("p").on("aoo",function(e,arg1,arg2){  
           $(this).text(arg1 + arg2);
         });
@@ -961,25 +999,20 @@ Event,事件
             boo : '123'
           }]);
         });
-      Exp:
+      Exp: 
         使用 val() 改变 select 的值,不会触发其 change 事件
+    Jelem.triggerHandler()     触发事件但不触发默认行为 
     Jelem.eventName();   快捷触发 
       Jelem.click();  触发点击 
         PS：不会产生鼠标点击的效果,如下拉选项不会弹出
   Event 对象
     PS：jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
       使得事件处理在各大浏览器下都可以正常的运行而不需要进行浏览器类型判断。
-    event.type 获取事件的类型
-      e.g.：
-        $("a").click(function(event){
-          alert(event.type); //获取时间类型
-          return false;  //阻止链接跳转
-        })
-        以上代码运行后会返回：“click”。
-    event.preventDefault()  阻止默认的事件行为
+    event.type 获取事件的类型[jQuery封装属性]  
+    event.preventDefault()  阻止事件默认行为
       PS：JavaScript中符合W3C规范的preventDefault()方法在IE浏览器中无效。
         jQuery对其进行了封装,使之能兼容各种浏览器。
-    event.stopPropagation() 阻止事件的冒泡
+    event.stopPropagation() 阻止事件冒泡
       PS：JavaScript中符合W3C规范的stopPropagation()方法在IE浏览器中无效。
         jQuery对其进行封装,使之能兼容各种浏览器。
     event.target 获取到触发事件的元素
@@ -990,50 +1023,34 @@ Event,事件
           alert(event.target.tagName); //获取触发事件的元素的标签名称
           return false; //阻止链接跳转
         })
-    event.relatedTarget 
-      PS： 标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
-        相关元素通过 event.relatedTarget 属性来获取.
-        event.relatedTarget 在 mouseover 中相当于IE浏览器的 event.fromElement,
-        在 mouseout 中相当于IE浏览器的 event.toElement,
-        jQuery对其进行了封装,使之能兼容各种浏览器。
+    event.relatedTarget 相关元素 
+      PS：标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
+        相关元素通过 event.relatedTarget 属性来获取 
     event.pageX 获取到光标相对页面的x坐标
     event.pageY 获取到光标相对页面的y坐标
-      PS：
-        如果没有使用jQuery时,那么IE浏览器中是用 event.x/event.y,
+      PS：如果没有使用jQuery时,那么IE浏览器中是用 event.x/event.y,
+        在IE浏览器中还应该减去默认的2px的边框。
         而在Firefox浏览器中用 event.pageX/event.pageY,
         如果页上有滚动条,则还要加上滚动条的宽度和高度。
-        在IE浏览器中还应该减去默认的2px的边框。
-      e.g.：
-        $(function() {
-          $("a").click(function(event) {
-            alert("Current mouse position:" + event.pageX + "," + event.pageY);
-            //获取鼠标当前相对于页面的坐标
-            return false; //阻止链接跳转
-          });
-        })
-    event.which 在鼠标单击事件中获取到鼠标的左、中、右键,在键盘事件中获取键盘的按钮
-      e.g.：
-        $(function() {
-          $("body").mousedown(function(e) {
-            alert(e.which); //1 = 鼠标左键；2 = 鼠标中键；3 = 鼠标右键。
-          })
-        })
-        以上代码加载到页面中,用鼠标单击页面时,单击左、中、右键分别返回1、2、3.
-    event.metaKey 属性
-      PS： 针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery也进行了封装,
-        规定 event.metaKey() 为键盘事件中获取<ctrl>按键.
+    event.which 鼠标单击事件中获取到鼠标的左、中、右键,键盘事件中获取键盘的按钮 
+      鼠标单击事件中  
+        左、中、右键分别对应值 1、2、3 
+    event.metaKey 键盘事件中获取<ctrl>按键 
+      PS：针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery进行了封装,
     event.originalEvent 指向原始的事件对象
     event.data 在事件对象上绑定数据,然后传入事件处理函数
-  window.onload 与 $(document).ready(function () {}) 的区别
+  $(document).ready(foo) 与 window.onload 的区别 
     执行时间
-    window.onload 必须等到页面内包括图片的所有元素加载完毕后才能执行
-    $(document).ready() 是 DOM 结构绘制完毕后就执行,不必等到所有内容加载完毕
+    window.onload       须等到页面内包括图片的所有元素加载完毕后才能执行
+    $(document).ready() DOM结构绘制完毕后就执行,不必等到所有内容加载完毕
     编写个数不同
-    window.onload 不能同时编写多个,若有多个 window.onload 方法,只会执行一个
-    $(document).ready() 可以同时编写多个,并且都可以得到执行
+    window.onload       不能同时存在多个,否则会被覆盖 
+    $(document).ready() 可以同时编写多个,并且都可以得到执行 
     简化写法
     window.onload 没有简化写法
-    $(document).ready(function(){}) 可以简写成 $(function(){})
+    $(document).ready(foo) 可以简写成 $(foo)
+  Jelem.load(foo) 在元素内容加载完毕触发 
+    $(window).load(function(){}) 等价于 window.onload = function(){}
   todo 
     禁止右键点击
       $(document).bind("contextmenu",function(e){
@@ -1046,7 +1063,7 @@ Event,事件
       $('img').on('error', function () {
         $(this).prop('src', 'img/broken.png');
       });
-    鼠标悬停(hover)切换 class 属性
+    鼠标悬停'hover'切换class属性
       假如当用户鼠标悬停在一个可点击的元素上时,你希望改变其效果,下面这段代码可以在其悬停在元素上时添加 class 属性,当用户鼠标离开时,则自动取消该 class 属性：
       $('.btn').hover(function () {
         $(this).addClass('hover');
@@ -1160,33 +1177,36 @@ AJAX
         
         success: function() { ... }
       });
-  ◆方法型 
-  $.get(url[,data][,cfoo][,type]) get请求 
-    url  请求的地址
-    data 可选,get方法会把data添加到url上,故可直接改变url而省略data;
-    cfoo 载入成功时调用回调函数
-      PS：只有当Response的返回状态为success才执行该函数
-      参数
-      backData   返回的数据
-      textStatus 字符串形式表示的响应的状态
-    type 请求的数据类型,如'json'
-  $.post(url[,data][,cfoo][,type])  post请求 
-    type 客户端请求的数据类型,如 JSON、XML 等等
   ◆捷径型 
-  Jelem.load(url[,data][,cfoo])  获取数据并将内容插入Jelem元素中 
-    url      请求的地址
-    data     可选,发送的数据
-    cfoo     可选,请求成功时执行的回调函数
-  $.getJSON(url[,data][,cfoo])   获取数据并解析
-    url    请求加载json格式文件的服务器地址
-    data   可选,请求时发送的数据
-    cfoo   可选,数据请求成功后执行的回调函数,获取的数据作为参数传入
-  $.getScript(url[,cfoo])      请求并执行获取到的JavaScript格式文件 
+  Jelem.load(url[,data][,cfoo]) 加载HTML并将其插入Jelem元素中 
+    url      请求的地址 
+      可使用'url selector'的形式来对获取的HTML进行筛选 
+        $('#aoo').load('test.html .boo') 加载'test.html'页面class为'boo'的内容 
+    data     可选,发送的数据,当存在参数时使用'POST',否则为'GET'方式
+    cfoo     可选,请求完成触发的回调,传入参数 (reponseText,textStatus,xhr) 
+      reponseText 请求返回的内容
+      textStatus  请求状态,'success' 'error' 'notmodified' 'timeout' 4 种
+      xhr         XMLHttpRequest对象 
+  $.getScript(url[,cfoo])       请求并执行获取到的JS文件 
     $.getScript('http://www.imooc.com/data/sport_f.js',function() { 
       console.log("获取成功,自动执行JS");
     });
+  $.getJSON(url[,cfoo])  加载并解析JSON文件 
+    url    请求加载json格式文件的服务器地址
+    cfoo   可选,传入参数 (backData) 
+  ◆方法型 
+  $.get(url[,data][,cfoo][,type])   GET请求 
+    url  请求的地址 
+    data 可选,get方法会把data添加到url上,可直接改变url而省略data; 
+    cfoo 请求成功时的回调函数,传入参数 (backData,textStatus) 
+      PS：只有当Response的返回状态为success才执行该函数
+      backData   返回的数据 
+      textStatus 响应的状态,'success' 'error' 'notmodified' 'timeout' 4 种
+    type 服务端返回数据的格式 
+      'xml' 'html' 'script' 'json' 'text' 'default' 
+  $.post(url[,data][,cfoo][,type])  POST请求 
   ◆通用型
-  $.ajaxSetup([options])    设置全局Ajax默认选项 
+  $.ajaxSetup([options])  设置全局Ajax默认选项 
     PS：可以设置Ajax请求的一些全局性选项值,
       设置完成后,后面的Ajax请求将不需要再添加这些选项值,它的调用格式为：
     options 可选,对象,通过该对象设置Ajax请求时的全局选项值。
@@ -1210,47 +1230,51 @@ AJAX
         success  : function(backData,textStatus,obj){
         }, 
       });
-  $.ajax({
-    // 可选,发送的数据,若为get则会被附在url上;post则 作为postBody传出
-    type:'请求方法', // 默认为get
-    url:'/uploads/tags/json',
-    // get请求,将键值对改为 &key1=val1&key2=val2 附在URL上
-    xhrFields: {
-      withCredentials: true // 请求带上cookie
-    },
-    crossDomain: true,
-    data:{
-      key1:val1,
-      key2:val2,
-      ...
-    }, 
-    // 服务器返回的数据类型,若不指定,jQuery将根据HTTP包MIME信息来智能判断
-    dataType:'json', // 常用JSON格式,设置为 'json',其他如'text'
-    // 常用的回调函数
-    // contentType:'application/json',
-    beforeSend:function(){ // 发送请求前执行
-    }, 
-    success:function(backData,textStatus,功能性的对象){ // 请求成功后执行
-    }, 
-    error:function (xhr,status,errorTrown){ // 请求失败后执行
-    }, 
-    complete:function(jqxhr,status){ // 请求完成完后执行,无论成功与否
-    }, 
-    // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
-    cache:true / false ,
-  });
+  $.ajax(options)          jQuery最底层的AJAX实现 
+    options   参数配置对象 
+      PS：在回调函数中,'this'表示该次AJAX请求的'options'对象参数 
+      url : str      发送的请求地址,默认为当前页地址 
+      type : str     请求方式,默认为"GET" 
+        PS：GET请求,键值对将改为'&key1=val1&key2=val2'的形式附在URL上
+        'POST'
+        'PUT'
+        'DELETE'
+        ...
+      timeout : num  请求超时设置,单位毫秒'ms',此设置将覆盖$.ajaxSetup()的全局设置 
+      data : obj/str 发送的请求数据
+        obj为'key-val'的映射形式  
+        str为字符串形式
+         如 'username='+encodeURLComponent(val1)+'&content='+encodeURLComponent(val2)
+      dataType : str 预期服务器返回的数据类型
+        PS：默认根据HTTP包MIME信息返回reponseText或reponseXML,作为回调函数参数传递 
+        'xml'    XML文档,可使用jQuery处理 
+        'html'   纯文本HTML信息,包含的script标签在插入DOM时执行 
+        'script' 纯文本JS代码,
+        'json'   JSON数据 
+        'jsonp'  JSONP格式
+          如'url?callback=xx',jq将自动替换'xx'为正确函数名,以执行回调 
+        'text'   纯文本字符串 
+      beforeSend : foo 发送请求前的回调,传入参数 (xhr) 
+        PS：若回调返回false,则取消本次AJAX请求 
+        xhr  XMLHttpRequest对象 
+      complete : foo   请求完成后的回调[失败或成功都会执行],传入参数 (xhr,textStatus) 
+      success : foo    请求成功后的回调,参数 (backData,textStatus,obj) 
+        backData  由服务器返回,并由'dataType'参数处理后的数据 
+          可能是 xmlDoc,jsonObj,html,text等
+      error : foo      请求失败后的回调,参数 (xhr,textStatus,[errorTrown])
+        errorTrown  可选,捕获的错误对象
+      global : bol  默认为true,是否触发全局AJAX事件[ajaxStart和ajaxStop] 
+      xhrFields : obj  
+        withCredentials : bol   请求是否带cookie
+      crossDomain : bol 是否跨域 
+      cache : bol       是否缓存 
+      // contentType:'application/json',
   ◆JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已
   $.ajax({
-    type:'请求方法',
-    url:'/uploads/tags/json',
-    data:{}, 
+    // ... 
     dataType:'jsonp',
     jsonp:"cfoo123", // 需要在后端有相应的改动,名称需一致
-    beforeSend:function(){ }, 
-    success:function(backData,textStatus,功能性的对象){ },
-    error:function (xhr,status,errorTrown){ },
-    complete:function(jqxhr,status){ },
-    cache:true / false 
+    // ... 
   });
   e.g. 上传文件
     ajax上传的时候,需要获得input:file 选择的文件(可能为多个文件),获取其文件列表为：
@@ -1298,14 +1322,40 @@ AJAX
 
       )
     在服务端循环遍历这个数组就可以上传文件了 
-  ◆其他方法
-  $(selector).serialize()   序列化表单元素值 
-    PS：可将表单中有name属性的元素值进行序列化,生成标准URL编码文本字符串,直接用于ajax请求;
-    selector  一个或多个表单中的元素或表单form元素本身
-    e.g.：var aoo = $('form').serialize();
-  绑定Ajax事件
-  Jelem.ajaxStart(cfoo)  在Ajax请求发出前触发函数
-  Jelem.ajaxStop(cfoo)   在Ajax请求完成后触发函数
+  ◆Ajax全局事件
+    PS：cfoo回调函数中,$(this)表示为'Jelem' 
+  Jelem.ajaxStart(cfoo)  Ajax请求发出前响应 
+  Jelem.ajaxStop(cfoo)   Ajax请求结束后响应 
+  Jelem.ajaxComplete(cfoo)  Ajax请求完成时响应 
+  Jelem.ajaxError(cfoo)  Ajax请求发生错误时响应 
+  Jelem.ajaxSend(cfoo)  Ajax请求发送前响应 
+  Jelem.ajaxSuccess(cfoo)  Ajax请求成功时响应 
+  ◆辅助方法
+  Jelem.serialize()   序列化表单元素值 
+    PS：将表单中有name属性的元素值进行序列化,生成标准URL编码文本字符串,直接用于ajax请求 
+    e.g.：
+      $.get('get1.php',$('#form1').serialize(),function(backData,textStatus){
+      })
+    不光表单可使用,其他元素也能使用 
+      e.g.： 
+        将选中的复选框和单选框的值序列化为字符串形式 
+        $(':checkbox,:radio').serialize() 
+  Jelem.serializeArray()  DOM元素序列化,返回JSON格式数据 
+  e.g.：
+    <input type="text" class="a2" name='n1' value='abc1'>
+    <input type="text" class="a2" name='n2' value='abc2'>
+    <input type="text" class="a2" name='n3' value='abc3'>
+    console.log($('.a2').serialize());
+    // n1=abc1&n2=abc2&n3=abc3 
+    console.log($('.a2').serializeArray());
+    // [
+    //   { name : "n1", value : "abc1" },
+    //   { name : "n2", value : "abc2" },
+    //   { name : "n3", value : "abc3" },
+    // ]
+  $.param(obj)   将对象按照'key-val'进行序列化 
+    var obj = {a:1,b:2,c:3}
+    console.log($.param(obj)); // a=1&b=2&c=3
 Deferred,异步操作
   PS：'jQuery1.5'中引入; 和Promise对象一起作为jQuery对Promise的一种实现;
     '1.x-2.x'版本中,Deferred对象遵守的是CommonJS Promises提案中的约定,
@@ -1573,25 +1623,33 @@ Deferred,异步操作
       console.log('等待了1秒钟！');
     });
 jQuery插件 
-  $(form).validate({options})  插件自带包含必填、数字、URL在内容的验证规则 
-    即时显示异常信息,允许自定义验证规则
-    form    表单元素
-    options 调用方法时的配置对象 
-      所有的验证规则和异常信息显示的位置都在该对象中进行设置。
-    e.g.：
-      $('#myform').validate({
-        // 自定义验证规则
-        rules : {
-          email : {
-            require : true ,
-            email : true 
+  'Validation'表单验证插件 
+    'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js'
+    特点 
+      内置验证规则 : 拥有必填、数字、email、URL和信用卡号等19类内置验证规则 
+      自定义验证规则 
+      验证信息提示 : 内置默认验证信息提示,也可自定义覆盖 
+      实时验证 : 可通过keyup和blur事件触发验证,而不仅仅在提交表单时验证 
+    $(form).validate({options})  插件自带包含必填、数字、URL在内容的验证规则 
+      即时显示异常信息,允许自定义验证规则
+      form    表单元素
+      options 调用方法时的配置对象 
+        所有的验证规则和异常信息显示的位置都在该对象中进行设置。
+      e.g.：
+        $('#myform').validate({
+          // 自定义验证规则
+          rules : {
+            email : {
+              require : true ,
+              email : true 
+            }
           }
-        }
-        // 错误提示位置
-        errorPlacement : function(error,elem){
-          error.appendTo('.tip');
-        }
-      })
+          // 错误提示位置
+          errorPlacement : function(error,elem){
+            error.appendTo('.tip');
+          }
+        })
+  'Form'表单插件 
   $(form).ajaxForm ({options}) 实现ajax方式向服务器提交表单数据 
     form     表单元素
     options  配置对象,设置发送ajax的数据和参数

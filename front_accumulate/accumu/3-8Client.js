@@ -1,436 +1,3 @@
-介绍_概念_说明_定义
-web标准的构成 
-  主要有三部分:结构「structure」、表现「presentation」和行为「behavior」
-  结构标准对应的主要语言是html
-  表现标准对应的主要语言是css
-  行为标准对应的主要语言是javascript
-常识
-  网页文件名的中英文问题
-    在本地电脑中,使用中英文无影响;
-    若将网页文件存放在服务器上,建议使用英文名,以免产生异常.
-  命名规则样式
-    驼峰式   headerLeft  一般用于组合名词
-    拼接式   header-left 一般用于属性叠加
-  url 路径:
-    绝对路径: 提供目标文档的完整主机名称、路径信息及文档全称
-    相对路径:
-      同级,直接书写目标文档全称: fileName,如 boo.js;
-      上一级,书写为:folderName/fileName;
-      ../ 表示上一级目录; ./ 表示当前目录; / 表示相对根路径
-  HSL色彩模式 工业界的一种颜色标准
-    PS：
-      通过对色相(H) 饱和度(S) 明度(L)三个颜色通道的变化及其相互叠加来得到各式各样的颜色的,
-      HSL即是代表色相,饱和度,明度三个通道的颜色,这个标准几乎包括了人类视力所能感知的所有颜色,
-      是目前运用最广的颜色系统之一。
-    H(hue)分量 代表的是人眼所能感知的颜色范围
-      这些颜色分布在一个平面的色相环上,取值范围是0°到360°的圆心角,每个角度可以代表一种颜色。
-      六大主色作基本参照：360°/0°红、60°黄、120°绿、180°青、240°蓝、300°洋红
-    S(saturation)分量 指的是色彩的饱和度
-      它用0%至100%的值描述了相同色相、明度下色彩纯度的变化。
-      数值越大,颜色中的灰色越少,颜色越鲜艳,呈现一种从灰度到纯色的变化
-    L(lightness)分量 指的是色彩的明度,作用是控制色彩的明暗变化。
-      它同样使用了0%至100%的取值范围。
-      数值越小,色彩越暗,越接近于黑色；数值越大,色彩越亮,越接近于白色。
-  编码
-    ANSI  本地编码「不代表具体的编码」
-      比如在简体版windows上它表示GB2312编码,
-      在繁体版windows上它表示Big5编码,
-      在日文操作系统上它表示JIS编码。
-    UTF-8 
---------------------------------------------------------------------------------
-URL,Uniform_Resource_Locator 也叫网址或统一资源定位符 
-  PS：可以由单词组成,或者是因特网协议「IP」地址如:'162.168.1.253';
-    用于定位万维网上的文档或其他数据
-  scheme://host.domain:port/path/fileName  语法规则
-    scheme  定义因特网服务的类型
-      http   超文本传输协议,以'http://'开头的普通网页,不加密
-      https  安全超文本传输协议,安全网页,加密所有信息交换
-      ftp    文件传输协议,用于将文件下载或上传至网站
-      file   本地计算机上的文件
-    host    定义域主机,http的默认主机是www
-    domain  定义因特网域名,如W3school.com.cn
-    port    定义主机上的端口号,http的默认端口号是80
-    path    定义服务器上的路径,若省略,则文档必须位于网站的根目录中
-    fileName  定义文档/资源的名称
-  HTML URL字符编码: 将字符转换为可通过因特网传输的格式
-    URL只能使用ASCII字符集来通过因特网进行发送,
-    由于URL常常会包含ASCII集合之外的字符,URL必须转换为有效的ASCII格式。
-    URL编码使用%其后跟随两位的十六进制数来替换非ASCII字符。
-    URL不能包含空格,URL编码通常使用+来替换空格
-HTTP 协议 
-  PS：计算机通过网络进行通信的规则, 是一种无状态协议,不建立持久的连接;
-    使客户(浏览器)能够向web服务器请求信息和服务
-  Request,HTTP请求 
-    一般由四部分组成:
-    请求方法,如GET或POST请求
-    请求的URL
-    请求头,包含一些客户端环境信息,身份验证信息等
-    请求体,即请求正文,其中可以包含客户提交的查询字符串信息,表单信息等等.
-  Response,HTTP响应 
-    一般由三部分组成:
-    状态码: 一个数字和文字组成的,用于表示请求的状态(是成功还是失败等)
-    响应头: 和请求头类似,包含许多的信息,如服务器类型、日期时间、内容类型和长度等.
-    响应体: 响应正文.
-  Headers,HTTP头信息
-    PS：每个http请求和响应都会带有相应的头部信息
-      xhr对象提供了操作头信息「请求头信息和响应头信息」的方法
-      有的浏览器允许重写默认头信息,而有的浏览器则不允许.
-      头信息中必须使用ASCII码.
-    默认情况下,发送xhr请求的同时,还会发送下列头信息
-      虽然不同浏览器发送的头部信息会有所不同,以下为共有的信息
-      Accept          浏览器能够处理的内容类型
-      Accept-Charset  浏览器能够显示的字符集
-      Accept-Encoding 浏览器能够处理的压缩编码
-      Accept-language 浏览器当前设置的语言
-      Connection      浏览器父服务器之间连接的类型
-      Cookie          当前页面设置的任何Cookie
-      Host            发出请求的页面所在的域
-      Referer         发出请求页面的URI
-        注意,HTTP规范将这个头部字段拼写错了, 为了保证与规范一致,只能将错就错
-       (该英文的正确拼法为referrer)
-      User-Agent      浏览器的用户代理字符串
-  网址的组成  
-    协议 http、https(https为加密的https) 超文本传输协议(收发的信息是文本信息)
-    主机/域名/ip地址
-      ip地址 32 位2 进制的数字(4 个八位的数字)
-      电脑通信靠ip地址,ip地址不好记使用域名
-      进入DOS环境 输入 ping 域名来进行查询ip地址.
-      e.g. :
-        WWW.baidu.com 等网址
-        WWW       子域名
-        baidu.com 主域名
-    端口 端口是一个16位的数字,范围0-65535
-      http协议默认为80,因此一般不用填写.
-      1024 以下的端口是系统保留端口,需要管理员权限才能使用;
-      服务器的服务程序在启动的时候会向系统注册一个端口
-    路径 /.../...等
-    # hash
-      #代表网页中的一个位置.在第一个#后面出现的任何字符,都会被浏览器解读为位置标识符
-        e.g.:
-        'http://www.example.com/index.html#print' 就代表网页index.html 的print位置.
-        浏览器读取这个URL后,会自动将print位置滚动至可视区域.
-        为网页位置指定标识符,有两个方法:
-        一是使用锚点,比如<a name="print"></a>
-        二是使用id属性,比如<div id="print">
-      #是用来指导浏览器动作的,对服务器端完全无用.所以,HTTP请求中不包括#.
-        比如,访问下面的网址,'http://www.example.com/index.html#print',
-        浏览器实际发出的请求是这样的：
-        GET /index.html HTTP/1.1
-        Host: www.example.com
-      单单改变#后的部分,浏览器只会滚动到相应位置,不会重新加载网页.若无该锚点则也无滚动
-      改变#会改变浏览器的访问历史
-        每一次改变#后的部分,都会在浏览器的访问历史中增加一个记录,
-        使用"后退"按钮,就可以回到上一个位置.
-        这对于ajax应用程序特别有用,可以用不同的#值,表示不同的访问状态,
-        然后向用户给出可以访问某个状态的链接.
-        值得注意的是,上述规则对IE6和IE7不成立,它们不会因为#的改变而增加历史记录.
-    ? 查询字符串
-      传递参数时用于连接
-        & 不同参数的间隔符
-        = 参数中名和值的连接
-        e.g.:
-        'http://www.xxx.com/Show.asp?id=77&nameid=2905210001&page=1'
-      清除缓存
-        e.g.:
-        'http://www.xxxxx.com/index.html '
-        'http://www.xxxxx.com/index.html?test123123'
-        两个url打开的页面一样,但是后面这个有问号,说明不调用缓存的内容,
-        而认为是一个新地址,重新读取.
-  URL地址字符转换 
-    url的可用字符： 0-9,a-z,A-Z ,其他用十六进制表示,并在每个字节前加%
-    url编码:encodeURIComponent('字符')
-    url解码:decodeURIComponent('字符')
-  HTTP状态码 
-    PS：由三位数值组成,第一位表示其类别
-    '1XX' 表示请求已接收
-    '2XX' 成功
-    '3XX' 重定向,表示没有成功,客户必须采取进一步的动作
-    '4XX' 客户端错误
-    '5XX' 服务器端错误
-    ◆常用状态码
-    200 OK      正常返回信息
-    304 Not Modified 自从上次请求后,请求的网页未修改过
-    400 Bad Request  请求错误,不符合要求 
-      服务器无法理解请求的格式,客户端不应再次使用相同的内容发起请求
-    401   请求未授权 
-    403 Forbidden    禁止访问
-    404 Not Found    找不到匹配的资源
-    500 Internal Server Error  最常见的服务器端错误
-    503 Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
-    其他状态码及说明
-      100 Continue     继续,
-        一般在发送post请求时,已发送了http header之后服务端将返回此信息,
-        表示确认,之后发送具体参数信息
-      201 Created   请求成功并且服务器创建了新的资源
-      202 Accepted  服务器已接受请求,但尚未处理
-      301 Moved Permanently  请求的网页已永久移动到新位置.
-      302 Found        临时性重定向.
-      303 See Other    临时性重定向,且总是使用 GET 请求新的 URI.
-      401 Unauthorized      请求未授权.
-  HTTP请求方法 :发送请求的类型
-    PS：http 1.0 定义了8种方法,主要使用'GET'和'POST';
-    GET  请求
-      最常见的请求类型,常用于向服务器查询信息.
-      一般用于信息获取.
-      使用URL传递参数.(发送的信息可见)
-      对发送信息的数量有限制,一般在2000个字符内.
-      必要时可将查询字符串参数追加到URL的末尾以便将信息发送给服务器.
-      对于xhr而言,位于open方法的URL末尾的查询字符串必须经过正确的编码才行,
-      查询字符串中每个参数的名称和值都需使用encodeURIComponent()进行编码,
-      名值对必须由&分割.
-    POST 请求
-      通常用于向服务器发送应该被保存的数据.
-      一般用于修改服务器上的资源.
-      对发送信息的数量无限制.
-      Remarks:
-        表单提交时 Content-Type 为 application/x-www-form-urlencoded
-    PUT  请求更新服务器端数据
-    HEAD 检查一个对象是否存在
-    DELETE  请求删除数据
-    CONNECT 对通道提供支持
-    TRACE   跟踪到服务器的路径
-    OPTIONS 查询Web服务器的性能
-    GET 和 POST 的区别
-      大体上讲,向服务器发送客户端数据有两种方式：查询字符串和请求正文.
-      通常,若是使用查询字符串,就发起了一个GET请求；
-      若是使用请求正文,就发起了一个POST请求
-     (若你反过来做,HTTP协议并不会阻止你,但这是没有必要的：最好在这里坚持标准实践).
-      有一种普遍的误解是POST请求是安全的,而GET请求不安全.
-      事实上若使用HTTPS协议,两者都是安全的；若不使用,则都不安全.
-      若不使用HTTPS协议,入侵者会像查看GET请求的查询字符串一样,轻松查看POST请求的报文数据.
-      使用GET请求,用户会在查询字符串中看到所有的输入数据(包括隐藏域),这是丑陋而且凌乱的.
-      浏览器会限制查询字符串的长度(对请求正文没有长度限制).
-      基于这些原因,一般推荐使用POST进行表单提交.
-  HTTP 和 TCP 的区别
-    TPC/IP 协议是传输层协议
-      主要解决数据如何在网络中传输,是一种“经过三次握手”的可靠的传输方式
-    HTTP 协议即超文本传送协议(Hypertext Transfer Protocol ),应用层协议,
-      是 Web 联网的基础,也是手机联网常用的协议之一
-      HTTP 协议是建立在 TCP 协议之上的一种应用.
-  HTTP 传输过程 
-    建立TCP连接
-      输入地址,然后回车
-      Chrome搜索自身的DNS缓存 ,当没有找到或缓存失效时
-      Chrome搜索操作系统自身的DNS缓存,若仍没找到,
-      Chrome读取本地的HOST文件,若仍没找到,
-      Chrome 发起一个DNS的一个系统调用 ,一般向宽带运营商查询DNS,
-      宽带运营商服务器查找自身缓存,若未成功,
-      运营商服务器发起一个迭代DNS解析的请求 ,逐层向上查询,
-      运营商服务器把结果返回操作系统内核,同时缓存起来,
-      操作系统内核把结果返回浏览器
-      最终,浏览器得到 www.baidu.com 对应的ip地址,
-      获取ip地址后,浏览器发起HTTP "三次握手",建立 TCP/IP 连接,
-    浏览器就可以向服务器发送HTTP请求了,如get方法发送请求
-      Web浏览器向Web服务器发送请求命令
-      Web浏览器发送请求头信息
-    服务器端接收到请求,根据路径参数,经过后端的处理之后,把结果数据发送给浏览器,如请求页面
-      Web服务器发送应答信息
-      Web服务器向浏览器发送数据
-      Web服务器关闭TCP连接
-    浏览器拿到完整的HTML页面代码,解析和渲染该页面,
-    同时其中的JS、CSS、图片等静态资源,同样也是一个个HTTP请求都需要经过上面的步骤来获取.
-    最终浏览器渲染成功呈现页面.
-网页的显示过程 
-  浏览器加载网页过程
-    一个网页的加载依赖于脚本文件、CSS样式文件。浏览器加载网页的过程如下:
-    首先,浏览器下载 HTML 并开始解析。如果浏览器发现外部CSS资源链接则发送下载请求。
-    浏览器可以在下载CSS资源的同时,并行解析HTML文件,
-    但是,一旦发现有脚本文件的引用,则必须等待脚本文件完成下载并且执行后才能继续解析。
-    脚本文件完成下载并且执行后,浏览器可以继续解析HTML工作,
-    如果遇到非阻塞资源浏览器会发送下载请求并且继续解析。
-    即使浏览器可以并行执行多个请求,但是无法与针对脚本文件的操作并行执行。
-    
-  一个页面从输入 URL 到页面加载显示完成,这个过程中都发生了什么？（流程说的越详细越好）
-    详细版：
-      1、浏览器会开启一个线程来处理这个请求,对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
-      2、调用浏览器内核中的对应方法,比如 WebView 中的 loadUrl 方法;
-      3、通过DNS解析获取网址的IP地址,设置 UA 等信息发出第二个GET请求;
-      4、进行HTTP协议会话,客户端发送报头(请求报头);
-      5、进入到web服务器上的 Web Server,如 Apache、Tomcat、Node.JS 等服务器;
-      6、进入部署好的后端应用,如 PHP、Java、JavaScript、Python 等,找到对应的请求处理;
-      7、处理结束回馈报头,此处如果浏览器访问过,缓存上有对应资源,会与服务器最后修改时间对比,一致则返回304;
-      8、浏览器开始下载html文档(响应报头,状态码200),同时使用缓存;
-      9、文档树建立,根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
-      10、页面开始渲染DOM,JS根据DOM API操作DOM,执行事件绑定等,页面显示完成。
-    简洁版：
-      浏览器根据请求的URL交给DNS域名解析,找到真实IP,向服务器发起请求；
-      服务器交给后台处理完成后返回数据,浏览器接收文件（HTML、JS、CSS、图象等）；
-      浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析,建立相应的内部数据结构（如HTML的DOM）；
-      载入解析到的资源文件,渲染页面,完成。    
-名称解释类汇总 
-  IDE: 集成开发环境,Integrated Development Environment
-  MVC 模式
-    Model,模型层:      提供/保存数据
-    Controller,控制层: 数据处理,实现业务逻辑
-    View,视图层:       展示数据,提供用户界面
-  MVVM 模式
-    PS：用 View Model 代替 Controller.
-      本质：view 绑定 view-model,视图与数据模型强耦合,
-      数据的变化实时反映在 view 上,不需要手动处理.
-    Model
-    View
-    View-Model：简化的 Controller,唯一作用就是为 View 提供处理好的数据,不含其他逻辑。
-  SPA, Single-page application
-    前端可以做到： 读写数据 切换视图 用户交互
-    这意味着,网页其实是一个应用程序。
-    2010 年后,前端工程师从开发页面,变成了开发”前端应用“（跑在浏览器里面的应用程序）。
-  Native App  是一种基于智能手机本地操作系统并使用原生程式编写运行的第三方应用程序
-    如iOS、Android、WP系统,也叫本地app。
-    一般使用的开发语言为JAVA、C++、Objective-C。
-  静态页面和动态页面
-    动态页面 : 通过数据库进行架构的网站。
-      动态网站除了要设计网页外,还要通过数据库和编程序来使网站具有更多自动的和高级的功能。
-      例如,网站里的产品资料和图片数量很多、种类很多,
-      为方便顾客查找,就应通过数据库编程来在网页上实现自动搜索；
-      系统、在线采购系统、商务交流系统等都是用数据库来做成的
-      一般使用PHP ASP JSP 等制作
-      动态网页则更新较多,一般用于用户互动较多的网站
-    静态网站: 主要是指由静态网站制作而成的网站。
-      也可以简单的这样理解：动态网站的功能就是 想填加一条信息,只要登陆会员或者网站管理后台。
-      然后像发电子邮件一样,填表单提交后, 网站前台就能显示了,就已经更新完毕了
-      静态的需要用FTP或者WEBFTP从服务器上把需要更新的文件下载到本地修改后再上传。
-      运行在客户端的程序、网页、插件、组件 属于静态网页,可以脱离服务器运行于浏览器客户端
-      静态网页适合更新较少的网站,一般适用于展示型的网站
-    区分 : 最简单的方法就是看后缀
-      态网页网址中有两个标志性的符号“?”和“&”（有的可能没有&）,?和&就是用来带参数的,
-      现在几乎所有的网页都是动态网页。
-动画 
-  实现方式 
-    JavaScript 通过定时器刷新,间隔来改变元素样式。
-    CSS3 transition和animation。
-    HTML5 使用HTML5提供的绘图方式：
-  绘制频率 
-    页面每一帧变化都是系统绘制出来的（GPU或者CPU）。
-    它的最高绘制频率受限于显示器的刷新频率（而非显卡）, 
-    所以大多数情况下最高的绘制频率只能是每秒60帧,对应于显示器的60Hz
-    帧,frame per second,简称fps;
-  刷新频率
-    图像在屏幕上更新的速度,也就是屏幕上的图像每秒出现的次数,单位是Hz,
-    刷新频率越高,屏幕上图片闪烁感就越小,稳定性也就越高。
-    人的眼睛不容易察觉75Hz以上刷新频率带来的闪烁感。
-  硬件加速
-    硬件有三个处理器：CPU、GPU和APU（声音处理器）。他们通过PCI/AGP/PCIE总线交换数据。
-    GPU在浮点运算、并行计算等部分计算方面,明显高于CPU的性能。
-  fps 
-    GPU渲染画面的频率, 游戏里谈到掉帧,是指GPU渲染画面频率降低。
-    比如跌落到30fps甚至20fps,但因为视觉暂留原理,我们看到的画面仍然是运动和连贯的。
-  Hz
-    显示器刷新屏幕的频率
---------------------------------------------------------------------------------
-命令提示符操作 
-  命令提示符是在操作系统中,提示进行命令输入的一种工作提示符;
-  在不同的操作系统环境下,命令提示符各不相同;
-windows环境 
-  PS：命令行程序为cmd.exe,是一个32位的命令行程序,
-    微软Windows系统基于Windows上的命令解释程序,类似于微软的DOS操作系统。
-    输入一些命令,cmd.exe 可以执行,比如输入shutdown -s就会在30秒后关机。
-    打开方法：开始-所有程序-附件 或 开始-寻找-输入：cmd/cmd.exe 回车。
-    CMD即命令提示符窗口[cmd.exe],是Windows的“标配”组件,
-    它可以实现用户与操作系统的直接交流,并负责用户输入的所有命令的解释和支持。
-    命令提示符进行的操作往往更具有专业性——实际上很多Windows中的操作只能通过命令来实现;
-    在命令行中文件名不区分大小写;
-  命令 快捷键 操作
-    PS：
-      命令码无大小写区分 (文件夹的名称也无大小写区分)     
-    快捷键
-      rightMouse        粘贴
-      up/down           选择历史命令
-      F7                显示命令历史记录
-      Esc               清除当前命令行
-      ctrl+c            强行中止命令执行
-      ctrl+d            退出其他运行环境或推出命令行程序 
-      alt+printScreen   截取当前命令窗[需在画板中粘贴]
-      F9                按编号选择命令[从0开始] 
-      ctrl+h            和删除backspace功能相同
-      enter[选中文字下]  复制
-    文件操作类
-      cd XX      进入XX文件夹
-        cd ./    当前文件夹
-        cd ../   到上级文件夹
-        cd /     到该磁盘的根目录
-        cd \     到该磁盘的根目录
-      <x>:       进入磁盘
-        e.g. : e:  进入到E盘 ;  c:  进入到c盘
-      dir        列出目录下的所有文件
-      mkdir      创建文件夹
-      <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
-      type <fileName> 参看文件内容
-      start <folderName> 打开文件夹
-    命令行相关
-      cls       清屏
-    信息查看类
-      winver    检查Windows版本
-      ipconfig  显示当前的TCP/IP配置的设置值
-        ipconfig /all：显示本机TCP/IP配置的详细信息；
-        ipconfig /release：DHCP客户端手工释放IP地址；
-        ipconfig /renew：DHCP客户端手工向服务器刷新请求；
-        ipconfig /flushdns：清除本地DNS缓存内容；
-        ipconfig /displaydns：显示本地DNS内容；
-        ipconfig /registerdns：DNS客户端手工向服务器进行注册；
-        ipconfig /showclassid：显示网络适配器的DHCP类别信息；
-        ipconfig /setclassid：设置网络适配器的DHCP类别。
-        ipconfig /renew “Local Area Connection”：更新“本地连接”适配器的由 DHCP 分配 IP 地址的配置
-        ipconfig /showclassid Local*：显示名称以 Local 开头的所有适配器的 DHCP 类别 ID
-        ipconfig /setclassid “Local Area Connection” TEST：将“本地连接”适配器的 DHCP 类别 ID 设置为 TEST        
-      cmd       CMD命令提示符
-        cmd.exe  完整写法
-      Nslookup  IP地址侦测器
-      netstat -an   (TC)命令检查接口
-      nslookup      网络管理的工具向导
-    打开应用类
-      explorer     打开资源管理器
-      calc         启动计算器
-      mspaint      画图板
-      write        写字板
-      eudcedit     造字程序
-      magnify      放大镜实用程序
-      dvdplay      DVD播放器
-      taskmgr      任务管理器
-      devmgmt.msc  设备管理器
-      diskmgmt.msc 磁盘管理实用程序
-      notepad      打开记事本
-      osk          打开屏幕键盘
-      fsmgmt.msc   共享文件夹管理器
-      narrator     屏幕“讲述人”
-      Msconfig.exe 系统配置实用程序
-      eventvwr     事件查看器
-      charmap      启动字符映射表
-      utilman      辅助工具管理器
-      wiaacmgr     扫描仪和照相机向导[需要安装] 
-      services.msc 本地服务设置
-      certmgr.msc  证书管理实用程序
-      compmgmt.msc 计算机管理
-      sfc.exe      系统文件检查器
-      perfmon.msc  计算机性能监测程序
-      regedit.exe  注册表
-      regedt32     注册表编辑器
-      cleanmgr     垃圾整理
-      wmimgmt.msc  打开windows管理体系结构[WMI]
-      sigverif     文件签名验证程序
-      wscript      windows脚本宿主设置
-      mmc          打开控制台
-      dxdiag       检查DirectX信息
-      chkdsk.exe   Chkdsk磁盘检查
-    其他待整理
-      wupdmgr      windows更新程序
-      winchat      XP自带局域网聊天
-      mstsc        远程桌面连接
-      mobsync      同步命令
-      dcomcnfg     打开系统组件服务
-      ddeshare     打开DDE共享设置
-      shrpubw      创建共享文件夹
-      syskey       系统加密,一旦加密就不能解开,保护windows xp系统的双重密码
-      sfc /scannow windows文件保护
-      tsshutdn     60 秒倒计时关机命令
-      rononce -p   15 秒关机
-      regsvr32 /u *.dll         停止dll文件运行
-      regsvr32 /u zipfldr.dll   取消ZIP支持
-      cliconfg      SQL SERVER 客户端网络实用程序
-      conf          启动netmeeting
-      odbcad32      ODBC数据源管理器
-      logoff        注销命令
-      net stop messenger   停止信使服务
-      net start messenger  开始信使服务
 浏览器 
   介绍_概念_说明_定义 
     说明 
@@ -860,11 +427,789 @@ windows环境
   Firefox
   IE
   Safari
-NodeJS环境 
-git bash 
-  命令
-    clear   清空输出
-    ls      相当于dir命令
+网页的显示过程 
+  浏览器加载网页过程
+    一个网页的加载依赖于脚本文件、CSS样式文件。浏览器加载网页的过程如下:
+    首先,浏览器下载 HTML 并开始解析。如果浏览器发现外部CSS资源链接则发送下载请求。
+    浏览器可以在下载CSS资源的同时,并行解析HTML文件,
+    但是,一旦发现有脚本文件的引用,则必须等待脚本文件完成下载并且执行后才能继续解析。
+    脚本文件完成下载并且执行后,浏览器可以继续解析HTML工作,
+    如果遇到非阻塞资源浏览器会发送下载请求并且继续解析。
+    即使浏览器可以并行执行多个请求,但是无法与针对脚本文件的操作并行执行。
+  一个页面从输入 URL 到页面加载显示完成,这个过程中都发生了什么？（流程说的越详细越好）
+    详细版：
+      1、浏览器会开启一个线程来处理这个请求,对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
+      2、调用浏览器内核中的对应方法,比如 WebView 中的 loadUrl 方法;
+      3、通过DNS解析获取网址的IP地址,设置 UA 等信息发出第二个GET请求;
+      4、进行HTTP协议会话,客户端发送报头(请求报头);
+      5、进入到web服务器上的 Web Server,如 Apache、Tomcat、Node.JS 等服务器;
+      6、进入部署好的后端应用,如 PHP、Java、JavaScript、Python 等,找到对应的请求处理;
+      7、处理结束回馈报头,此处如果浏览器访问过,缓存上有对应资源,会与服务器最后修改时间对比,一致则返回304;
+      8、浏览器开始下载html文档(响应报头,状态码200),同时使用缓存;
+      9、文档树建立,根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
+      10、页面开始渲染DOM,JS根据DOM API操作DOM,执行事件绑定等,页面显示完成。
+    简洁版：
+      浏览器根据请求的URL交给DNS域名解析,找到真实IP,向服务器发起请求；
+      服务器交给后台处理完成后返回数据,浏览器接收文件（HTML、JS、CSS、图象等）；
+      浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析,建立相应的内部数据结构（如HTML的DOM）；
+      载入解析到的资源文件,渲染页面,完成。    
+浏览器 
+  URL中的参数 lastreporttime 
+    在URL末尾增加一个 lastreporttime 参数,表示只会加载该参数时间之后的报告.
+    e.g.
+    'http://gumball.wickedlysmart.com/?lastreporttime=1302212903099'
+    指定的时间为一串数字,单位为毫秒.
+  浏览器检测 
+    检测是否为 IE6、7、8、9 [不支持 IE10、11]
+      var isIE = function(num){
+        var b = document.createElement('b')
+        b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->'
+        return b.getElementsByTagName('i').length === 1
+      }
+      alert(
+        'ie6:' + isIE(6) + '\n' + 
+        'ie7:' + isIE(7) + '\n' + 
+        'ie8:' + isIE(8) + '\n' + 
+        'ie9:' + isIE(9) + '\n' + 
+        // 'ie10:' + isIE(10) + '\n' + 
+        // 'ie11:' + isIE(11) + '\n' + 
+        'ie:' + isIE()
+      );
+  网页多语言支持 
+    采用统一编码UTF-8方式编码
+      所以对提供了多语言版本的网站来说,Unicode字符集应该是最理想的选择。
+      它是一种双字节编码机制的字符集,不管是东方文字还是西方文字,在Unicode中一律用两个字节来表示,
+      因而至少可以定义65536个不同的字符,几乎可以涵盖世界上目前所有通用的语言的每一种字符。
+      所以在设计和开发多语言网站时,一定要注意先把非中文页面的字符集定义为“utf-8”格式,
+      这一步非常重要,原因在于若等页面做好之后再更改字符集设置,可说是一件非常非常吃力不讨好的工作,
+      有时候甚至可能需要从头再来,重新输入网站的文字内容。
+    多语言网站实现计划 ：
+      静态：就是为每种语言分辨准备一套页面文件,
+        通过文件后缀名来区分不同语言,
+          例如对于首页文件index_en.htm供给英语界面,index_gb.htm供给简体中文界面,index_big.htm供给繁体中文界面
+        通过子目录来区分不同语言。
+          或者是en/index.htm供给英语界面,gb/index.htm供给简体中文界面,big/index.htm供给繁体中文界面
+        一旦用户选择了需要的语言后,主动跳转到相应的页面,首页以下其他链接也是按照同样方法处理。
+        从保护的角度来看,通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
+      动态：站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
+       在需要输出语言文字的处所同一采用语言变量来表现,这些语言变量可以根据用户选择不同的语言赋予不同的值,
+       从而实现在不同的语言环境下输出不同的文字。
+        例如：语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
+        当用户选择的语言是简体中文时赋值为“姓名”,这样就可以适应不同语言时的输出。
+      优缺点
+        采用静态方法的长处是页面直接输出到客户端,不需要在服务器上运行,占用服务器的资源比拟少,
+          系统能够支撑的并发连接数较多,
+          毛病是要为每种语言制作一套页面文件,很多内容即使是和语言无关的也要分不同语言来存储,占用的存储空间较多。
+        采用动态方法和静态方法的优毛病正好相反,它的长处是动态页面文件只有一套,不同语言的文字应用语言变量来存储,
+          和语言无关的内容只存储一份,占用的存储空间较少,并且扩大新语言比拟轻易,
+          毛病需要在服务器上运行,然后把成果输进到客户端,占用服务器的资源比拟多,系统能够支撑的并发连接数较少。
+  
+    根据navigator.language我们可以获取到浏览器的语言设置
+    如果是中文的话返回的是zh-CN, 英文的话返回的可能是en,en-US等其它的
+    一般情况下（一般系统和浏览器的语言一致的。当操作系统是中文,浏览器是英文,只能用服务器脚本去判断）是没有问题啦。
+    navigator.language对IE的支持不是很好,IE的话可以选用navigator.userLanguage判断操作系统的语言      
+  在浏览器中,length 的值默认为0  why?
+网页的加载过程 
+  下载HTML文档,从头开始顺序解析,边下载边解析HTML
+  解析中遇到script标签,停止HTML的解析,JS引擎工作,边下载边解析JS,
+  解析完毕后,恢复HTML的解析
+  原因: JS可能修改DOM,故浏览器优先执行JS
+  Gecko和Webkit引擎在网页被阻塞后,会生成第二个线程解析文档,下载外部资源,
+  但是不会修改DOM,网页还是处于阻塞状态。
+  
+  JS脚本的执行也是顺序执行,但下载时会同时进行,
+  也就是说,脚本的执行顺序由它们在页面中的出现顺序决定,
+  当然,执行多个脚本都会产生'阻塞效应',
+  必须等到它们都执行完,浏览器才会继续页面渲染。
+  
+  解析和执行CSS,也会产生阻塞。
+  Firefox会等到脚本前面的所有样式表,都下载并解析完,再执行脚本；
+  Webkit则是一旦发现脚本引用了样式,就会暂停执行脚本,等到样式表下载并解析完,再恢复执行。
+  此外,对于来自同一个域名的资源,比如脚本文件、样式表文件、图片文件等,
+  浏览器一般最多同时下载六个(IE11允许同时下载13个)。
+  若是来自不同域名的资源,就没有这个限制。
+  所以,通常把静态文件放在不同的域名之下,以加快下载速度。
+JS代码引入、执行 
+  嵌入式:html标签中插入,作为某个元素的属性值或超链接的href属性值.
+    // 通过一个链接弹出一个确认框
+    <a href="javascript:confirm('hello');">hello</a>
+    // 点击一段文字弹出一个提示框
+    <p onclick="javascript:alert('我是弹出来的内容');">点我</p>
+  内部JS: <script type="text/javascript">/*JS代码*/</script>
+    内部JS中不可出现"</script>"字符串
+      <script> alert("</script>"); </script>
+      网页上会显示出: );
+      不会执行出 alert("</script>"),(可改为alert("</scr"+"ipt>"))
+      浏览器执行到alert中的</script>时会以为是script的结束标签.
+      外部JS则可以执行 alert("</script>")
+  外部JS: <script src="JS文件路径"></script>
+    放置位置:一般将script标签放在body的最后面,也可以放入head中
+    外部的JS的优点:
+      维护性高
+      可缓存(加载一次,无需加载):若有两个页面使用同一个文件,只需下载一次.
+      方便未来扩展
+    script加载使用的协议
+      默认采用http协议 
+      <script src="example.js" charset="utf-8"></script>
+      采用https
+      <script src="https://example.js" charset="utf-8"></script>
+      根据页面本身的协议来决定
+      <script src="//example.js" charset="utf-8"></script>
+    Remarks:
+      外部JS文件带有.js扩展名,但这个扩展名是非必须的,浏览器不会检查JS文件的扩展名.
+      若不使用.js扩展名,需确保服务器能返回正确的MIME类型
+  异步加载JS的方式
+    一：<script>标签的 async="async"属性.
+      HTML5 中新增的属性,Chrome、FF、IE9&IE9+均支持
+      脚本相对于页面的其余部分异步地执行(当页面继续进行解析的同时,脚本将被执行)
+      async 属性仅适用于外部脚本(只有在使用 src 属性时)
+      该方法不能保证脚本按顺序执行(当有多个该属性的script时)
+    二：<script>标签的 defer="defer"属性.
+      规定脚本执行延迟,直到页面加载完毕,再执行
+      兼容所有浏览器.此外,这种方法可以确保所有设置 defer 属性的脚本按顺序执行.
+    三：AJAX eval
+      使用 AJAX 得到脚本内容,然后通过 eval_r(xmlhttp.responseText)来运行脚本
+      兼容所有浏览器.
+    四：iframe 方式
+      可以参照：iframe 异步加载技术及性能中关于 Meboo 的部分
+      兼容所有浏览器.
+    五: 在JS文件中创建script元素对象,按照要求添加到DOM中
+      如创建script对象 然后在添加src地址;
+      动态加入的JS需在CSS文件加载完后才会去下载
+      动态生成的script不会阻塞页面渲染,但无法保证JS的执行顺序,
+      先加载完的JS先执行,将其async属性设置为false 保证执行顺序
+      ['a.js','b.js'].forEach(function(scr){
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        document.head.append(script);
+      })
+  Todo: 
+    JavaScript代码嵌入网页的方法
+      JavaScript代码只有嵌入网页,才能在用户浏览器网页时运行。
+
+      网页中嵌入JavaScript代码,主要有四种方法。
+
+      <script>标签：代码嵌入网页
+      <script>标签：加载外部脚本
+      事件属性：代码写入HTML元素的事件处理属性,比如onclick或者onmouseover
+      URL协议：URL支持以javascript:协议的方式,执行JavaScript代码
+      后两种方法用得很少,常用的是前两种方法。由于内容(HTML代码)和行为代码(JavaScript)应该分离,所以第一种方法应当谨慎使用。
+
+      script标签：代码嵌入网页
+      通过<script>标签,可以直接将JavaScript代码嵌入网页。
+
+      <script>
+        console.log('Hello World');
+      </script>
+      <script>标签有一个type属性,用来指定脚本类型。对JavaScript脚本来说,type属性可以设为两种值。
+
+      text/javascript：这是默认值,也是历史上一贯设定的值。若你省略type属性,默认就是这个值。对于老式浏览器,设为这个值比较好。
+      application/javascript：对于较新的浏览器,建议设为这个值。
+      <script type="application/javascript">
+        console.log('Hello World');
+      </script>
+      由于<script>标签默认就是JavaScript代码。所以,嵌入JavaScript脚本时,type属性也可以省略。
+
+      若type属性的值,浏览器不认识,那么它不会执行其中的代码。利用这一点,可以在<script>标签之中嵌入任意的文本内容,然后加上一个浏览器不认识的type属性即可。
+
+      <script id="mydata" type="x-custom-data">
+        console.log('Hello World');
+      </script>
+      上面的代码,浏览器不会执行,也不会显示它的内容,因为不认识它的type属性。但是,这个<script>节点依然存在于DOM之中,可以使用<script>节点的text属性读出它的内容。
+
+      document.getElementById('mydata').text
+      // "
+      //   console.log('Hello World');
+      // "
+      script标签：加载外部脚本
+      <script>标签也可以指定加载外部的脚本文件。
+
+      <script src="example.js"></script>
+      若脚本文件使用了非英语字符,还应该注明编码。
+
+      <script charset="utf-8" src="example.js"></script>
+      所加载的脚本必须是纯的 JavaScript 代码,不能有HTML代码和<script>标签。
+
+      加载外部脚本和直接添加代码块,这两种方法不能混用。下面代码的console.log语句直接被忽略。
+
+      <script charset="utf-8" src="example.js">
+        console.log('Hello World!');
+      </script>
+      为了防止攻击者篡改外部脚本,script标签允许设置一个integrity属性,写入该外部脚本的Hash签名,用来验证脚本的一致性。
+
+      <script src="/assets/application.js"
+        integrity="sha256-TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs=">
+      </script>
+      上面代码中,script标签有一个integrity属性,指定了外部脚本/assets/application.js的SHA265签名。一旦有人改了这个脚本,导致SHA265签名不匹配,浏览器就会拒绝加载。
+
+      事件属性
+      某些HTML元素的事件属性(比如onclick和onmouseover),可以写入JavaScript代码。当指定事件发生时,就会调用这些代码。
+
+      <div onclick="alert('Hello')"></div>
+      上面的事件属性代码只有一个语句。若有多个语句,用分号分隔即可。
+
+      URL协议
+      URL支持javascript:协议,调用这个URL时,就会执行JavaScript代码。
+
+      <a href="javascript:alert('Hello')"></a>
+      浏览器的地址栏也可以执行javascipt:协议。将javascript:alert('Hello')放入地址栏,按回车键,就会跳出提示框。
+
+      若JavaScript代码返回一个字符串,浏览器就会新建一个文档,展示这个字符串的内容,原有文档的内容都会消失。
+
+      <a href="javascript:new Date().toLocaleTimeString();">
+        What time is it?
+      </a>
+      上面代码中,用户点击链接以后,会打开一个新文档,里面有当前时间。
+
+      若返回的不是字符串,那么浏览器不会新建文档,也不会跳转。
+
+      <a href="javascript:console.log(new Date().toLocaleTimeString())">
+      What time is it?
+      </a>
+      上面代码中,用户点击链接后,网页不会跳转,只会在控制台显示当前时间。
+
+      javascript:协议的常见用途是书签脚本Bookmarklet。由于浏览器的书签保存的是一个网址,所以javascript:网址也可以保存在里面,用户选择这个书签的时候,就会在当前页面执行这个脚本。为了防止书签替换掉当前文档,可以在脚本最后返回void 0。
+    脚本的动态加载
+      除了静态的script标签,还可以动态生成script标签,然后加入页面,从而实现脚本的动态加载。
+      
+      ['a.js', 'b.js'].forEach(function(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        document.head.appendChild(script);
+      });
+      这种方法的好处是,动态生成的script标签不会阻塞页面渲染,也就不会造成浏览器假死。但是问题在于,这种方法无法保证脚本的执行顺序,哪个脚本文件先下载完成,就先执行哪个。
+      
+      若想避免这个问题,可以设置async属性为false。
+      
+      ['a.js', 'b.js'].forEach(function(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        document.head.appendChild(script);
+      });
+      上面的代码依然不会阻塞页面渲染,而且可以保证b.js在a.js后面执行。不过需要注意的是,在这段代码后面加载的脚本文件,会因此都等待b.js执行完成后再执行。
+      
+      我们可以把上面的写法,封装成一个函数。
+      
+      (function() {
+        var scripts = document.getElementsByTagName('script')[0];
+        function load(url) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = url;
+          scripts.parentNode.insertBefore(script, scripts);
+        }
+        load('//apis.google.com/js/plusone.js');
+        load('//platform.twitter.com/widgets.js');
+        load('//s.thirdpartywidget.com/widget.js');
+      }());
+      上面代码中,async属性设为true,是因为加载的脚本没有互相依赖关系。而且,这样就不会造成堵塞。
+      
+      若想为动态加载的脚本指定回调函数,可以使用下面的写法。
+      
+      function loadScript(src, done) {
+        var js = document.createElement('script');
+        js.src = src;
+        js.onload = function() {
+          done();
+        };
+        js.onerror = function() {
+          done(new Error('Failed to load script ' + src));
+        };
+        document.head.appendChild(js);
+      }
+      此外,动态嵌入还有一个地方需要注意。动态嵌入必须等待CSS文件加载完成后,才会去下载外部脚本文件。静态加载就不存在这个问题,script标签指定的外部脚本文件,都是与CSS文件同时并发下载的。
+      
+      加载使用的协议
+      若不指定协议,浏览器默认采用HTTP协议下载。
+      
+      <script src="example.js"></script>
+      上面的example.js默认就是采用HTTP协议下载,若要采用HTTPS协议下载,必需写明(假定服务器支持)。
+      
+      <script src="https://example.js"></script>
+      但是有时我们会希望,根据页面本身的协议来决定加载协议,这时可以采用下面的写法。
+      
+      <script src="//example.js"></script>    
+    方法一: window.onload = function(){ }
+    方法二: 将script标签放在body的结尾处
+  Remarks: 
+    原则上,将其放在html头部,但视情况可以将其放在网页的任何部分.
+    一个html文件可以有几个<script>...</script>,且可以共享方法和变量.
+'back-forward_cache'简称'bfcache',往返缓存 
+  Firefox和Opera独有特性,可在用户使用浏览器的'后退'和'前进'按钮时加快页面的转换速度。
+  该缓存中不仅保存着页面数据,还保存了DOM和JS的状态；
+  实际上是将整个页面都保存在了内存里。
+  若页面位于bfcache中,那么再次打开该页面就不会触发load事件。
+--------------------------------------------------------------------------------
+移动端 
+微信开发介绍 
+  就是手机浏览器,只不过多了一些与微信的API对接的事情,微信也提供了很多jssdk,
+  如果不想跟微信发生关系,就是一个手机网页
+  正常是嵌入H5就可以了,需要微信登录、微信支付之类的功能,可以通过微信API进一步开发。
+说明 
+  微信 6.1 版本以后,会自带QQ浏览器的X5内核,即使你没有安装QQ浏览器。  [?]
+  webkit内核中的一些私有的meta标签,这些meta标签在开发webapp时起到非常重要的作用
+    <meta content=”width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;” name=”viewport” /> 
+    第一个meta标签表示：强制让文档的宽度与设备的宽度保持1:1,
+    并且文档最大的宽度比例是1.0,且不允许用户点击屏幕放大浏览；
+
+    <meta content=”yes” name=”apple-mobile-web-app-capable” /> 
+    第二个meta标签是iphone设备中的safari私有meta标签,它表示：允许全屏模式浏览；
+
+    <meta content=”black” name=”apple-mobile-web-app-status-bar-style” /> 
+    第三个meta标签也是iphone的私有标签,它指定的iphone中safari顶端的状态条的样式；
+
+    <meta content=”telephone=no” name=”format-detection” /> 
+    第四个meta标签表示：告诉设备忽略将页面中的数字识别为电话号码。
+
+
+    去除Android平台中对邮箱地址的识别
+    看 过iOS webapp API的同学都知道iOS提供了一个meta标签:用于禁用iOS对页面中电话号码的自动识别。在iOS中是不自动识别邮件 地 址的,但在Android平台,它会自动检测邮件地址,当用户touch到这个邮件地址时,Android会弹出一个框提示用户发送邮件,如果你不 想 Android自动识别页面中的邮件地址,你不妨加上这样一句meta标签在head 中 1 <meta content=”email=no” name=”format-detection” />
+
+
+
+    例子1：<a href="tel:400-4000-0000" >XXX</a>
+    这个a标签里的href调用的是手机号码。当点击这个a标签的时候则弹出是否拨打该号码的提示。
+    在手机浏览器中使用是没有任何问题的,
+    但在微信中,在安卓系统手机,微信 5.0.1 以上版本时该标签就失效了。（最新的微信版本是否解决了这个问题目前还不清楚）。这种情况下,将：
+    <a href="tel:400-4000-0000" >XXX</a>改为
+    <a link="tel:400-4000-0000" >
+    则可以解决部分安卓机型,（但不是全部的）,有些机型依然不行。
+    这个和微信客户端有关。目前没有找到满意的解决办法。
+WeUI：专为开发微信HTML5应用的开源Web UI组件库
+  PS：WeUI是一套同微信原生视觉体验一致的基础样式库,
+    为微信Web开发量身设计,可以令用户的使用感知更加统一。
+    包含button、cell、dialog、toast、article、icon等各式元素。
+  说明篇
+    使用 dist/style 文件中的 weui.css 和 weui.min.css 两个文件
+  起始
+    需要在body标签中加入ontouchstart ,如: <body ontouchstart>
+微信开发者工具: 用于在手机上调试页面
+  使用方法及原理
+  将电脑和手机处于同一局域网「可通过Wi-Fi或USB连接」
+  切换到开发者工具的调试页根据手机系统「ios或android」进行相应的选择普通调试
+  选择代理的ip 「一般Wi-Fi以 168 开头」
+  将需要调试的网页的地址「不可使用file协议,即需要开启本地服务器」发送到微信上,
+  在微信上打开从电脑上发来的链接即可看到调试页的效果了
+微信JS-SDK 
+  PS：微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
+    通过微信JS-SDK,网页开发者可使用拍照、选图、语音、位置等手机系统的能力,
+    同时可以直接使用微信分享、扫一扫、卡券、支付等微信特有的能力。
+  ?
+    所有使用微信JS SDK的网站,都必须实名到微信认证、缴费。它采取了类似Apple App Store的策略,由系统运营方来保障用户的安全。
+    所有能使用微信增强能力的网页都是经过认证权限的
+  JSSDK使用步骤
+    步骤一：绑定域名
+      先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+      如果你使用了支付类接口,请确保支付目录在该安全域名下,否则将无法完成支付。
+      备注：登录后可在“开发者中心”查看对应的接口权限。
+    步骤二：引入JS文件
+      在需要调用JS接口的页面引入如下JS文件
+        http://res.wx.qq.com/open/js/jweixin-1.0.0.js
+      使用https协议,务必引入 https://res.wx.qq.com/open/js/jweixin-1.0.0.js ,
+        否则将无法在iOS9.0以上系统中成功使用JSSDK
+      如需使用摇一摇周边功能,请引入 jweixin-1.1.0.js
+      备注：支持使用 AMD/CMD 标准模块加载方法加载
+    步骤三：通过config接口注入权限验证配置
+      所有需要使用JS-SDK的页面必须先注入配置信息,否则将无法调用,
+      同一个url仅需调用一次,对于变化url的SPA的web app可在每次url变化时进行调用,
+      目前Android微信客户端不支持 pushState 的H5新特性,
+      所以使用pushState来实现web app的页面会导致签名失败,此问题会在Android6.2中修复）。
+      wx.config({
+        debug: true, 
+        // 开启调试模式,调用的所有api的返回值会在客户端alert出来,
+        // 若要查看传入的参数,可以在pc端打开,参数信息会通过log打出,仅在pc端时才会打印。
+        appId: '',    // 必填,公众号的唯一标识
+        timestamp: ,  // 必填,生成签名的时间戳
+        nonceStr: '', // 必填,生成签名的随机串
+        signature: '',// 必填,签名,见附录1
+        jsApiList: [] // 必填,需要使用的JS接口列表,所有JS接口列表见附录2
+      });
+    步骤四：通过ready接口处理成功验证
+      wx.ready(function(){
+        // config信息验证后会执行ready方法,所有接口调用都必须在config接口获得结果之后,
+        // config是一个客户端的异步操作,所以如果需要在页面加载时就调用相关接口,则须把相关接口放在ready函数中调用来确保正确执行。
+        // 对于用户触发时才调用的接口,则可以直接调用,不需要放在ready函数中。
+      });
+    步骤五：通过error接口处理失败验证
+      wx.error(function(res){
+        // config信息验证失败会执行error函数,如签名过期导致验证失败,
+        // 具体错误信息可以打开config的debug模式查看,
+        // 也可以在返回的res参数中查看,对于SPA可以在这里更新签名。
+      });    
+  接口调用说明
+    PS：所有接口通过wx对象(也可使用jWeixin对象)来调用,参数是一个对象,
+    除了每个接口本身需要传的参数之外,还有以下通用参数：
+      success  接口调用成功时执行的回调函数。
+      fail     接口调用失败时执行的回调函数。
+      complete 接口调用完成时执行的回调函数,无论成功或失败都会执行。
+      cancel   用户点击取消时的回调函数,仅部分有用户取消操作的api才会用到。
+      trigger  监听Menu中的按钮点击时触发的方法,该方法仅支持Menu中的相关接口。
+        不要尝试在trigger中使用ajax异步请求修改本次分享的内容,
+        因为客户端分享操作是一个同步操作,这时候使用ajax的回包会还没有返回。
+      以上几个函数都带有一个参数,类型为对象,
+      其中除了每个接口本身返回的数据之外,还有一个通用属性errMsg,其值格式如下：
+      调用成功时："xxx:ok" ,其中xxx为调用的接口名
+      用户取消时："xxx:cancel",其中xxx为调用的接口名
+      调用失败时：其值为具体错误信息    
+  基础接口
+    判断当前客户端版本是否支持指定JS接口
+    wx.checkJsApi({
+      jsApiList: ['chooseImage'], // 需要检测的JS接口列表,所有JS接口列表见附录2,
+      success: function(res) {
+        // 以键值对的形式返回,可用的api值true,不可用为false
+        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+      }
+    });
+    备注：checkJsApi接口是客户端6.0.2新引入的一个预留接口,第一期开放的接口均可不使用checkJsApi来检测。
+  分享接口
+    请注意不要有诱导分享等违规行为,对于诱导分享行为将永久回收公众号接口权限,详细规则请查看：朋友圈管理常见问题 。
+    获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+    wx.onMenuShareTimeline({
+        title: '', // 分享标题
+        link: '', // 分享链接
+        imgUrl: '', // 分享图标
+        success: function () { 
+            // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+            // 用户取消分享后执行的回调函数
+        }
+    });
+    获取“分享给朋友”按钮点击状态及自定义分享内容接口
+      wx.onMenuShareAppMessage({
+        title: '', // 分享标题
+        desc: '', // 分享描述
+        link: '', // 分享链接
+        imgUrl: '', // 分享图标
+        type: '', // 分享类型,music、video或link,不填默认为link
+        dataUrl: '', // 如果type是music或video,则要提供数据链接,默认为空
+        success: function () { 
+          // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+          // 用户取消分享后执行的回调函数
+        }
+      });
+    获取“分享到QQ”按钮点击状态及自定义分享内容接口
+      wx.onMenuShareQQ({
+        title: '', // 分享标题
+        desc: '', // 分享描述
+        link: '', // 分享链接
+        imgUrl: '', // 分享图标
+        success: function () { 
+          // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+          // 用户取消分享后执行的回调函数
+        }
+      });
+    获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口
+      wx.onMenuShareWeibo({
+        title: '', // 分享标题
+        desc: '', // 分享描述
+        link: '', // 分享链接
+        imgUrl: '', // 分享图标
+        success: function () { 
+          // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+          // 用户取消分享后执行的回调函数
+        }
+      });
+    获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+      wx.onMenuShareQZone({
+        title: '', // 分享标题
+        desc: '', // 分享描述
+        link: '', // 分享链接
+        imgUrl: '', // 分享图标
+        success: function () { 
+          // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+          // 用户取消分享后执行的回调函数
+        }
+      });
+  图像接口
+    拍照或从手机相册中选图接口
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图,默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机,默认二者都有
+        success: function (res) {
+          var localIds = res.localIds; // 返回选定照片的本地ID列表,localId可以作为img标签的src属性显示图片
+        }
+      });
+    预览图片接口
+      wx.previewImage({
+          current: '', // 当前显示图片的http链接
+          urls: [] // 需要预览的图片http链接列表
+      });
+    上传图片接口
+      wx.uploadImage({
+          localId: '', // 需要上传的图片的本地ID,由chooseImage接口获得
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          success: function (res) {
+              var serverId = res.serverId; // 返回图片的服务器端ID
+          }
+      });
+      备注：上传图片有效期3天,可用微信多媒体接口下载图片到自己的服务器,此处获得的 serverId 即 media_id,参考文档 ../12/58bfcfabbd501c7cd77c19bd9cfa8354.html 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
+    下载图片接口
+      wx.downloadImage({
+          serverId: '', // 需要下载的图片的服务器端ID,由uploadImage接口获得
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          success: function (res) {
+              var localId = res.localId; // 返回图片下载后的本地ID
+          }
+      });
+  音频接口
+    开始录音接口 
+      wx.startRecord();
+    停止录音接口   
+      wx.stopRecord({
+          success: function (res) {
+              var localId = res.localId;
+          }
+      });
+    监听录音自动停止接口
+      wx.onVoiceRecordEnd({
+        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+        complete: function (res) {
+          var localId = res.localId; 
+        }
+      });
+    播放语音接口
+      wx.playVoice({
+          localId: '' // 需要播放的音频的本地ID,由stopRecord接口获得
+      });
+    暂停播放接口
+      wx.pauseVoice({
+          localId: '' // 需要暂停的音频的本地ID,由stopRecord接口获得
+      });
+    停止播放接口
+      wx.stopVoice({
+          localId: '' // 需要停止的音频的本地ID,由stopRecord接口获得
+      });
+    监听语音播放完毕接口
+      wx.onVoicePlayEnd({
+          success: function (res) {
+              var localId = res.localId; // 返回音频的本地ID
+          }
+      });
+    上传语音接口
+      wx.uploadVoice({
+          localId: '', // 需要上传的音频的本地ID,由stopRecord接口获得
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+              success: function (res) {
+              var serverId = res.serverId; // 返回音频的服务器端ID
+          }
+      });
+      备注：上传语音有效期3天,可用微信多媒体接口下载语音到自己的服务器,此处获得的 serverId 即 media_id,参考文档 ../12/58bfcfabbd501c7cd77c19bd9cfa8354.html 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
+    下载语音接口
+      wx.downloadVoice({
+          serverId: '', // 需要下载的音频的服务器端ID,由uploadVoice接口获得
+          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          success: function (res) {
+              var localId = res.localId; // 返回音频的本地ID
+          }
+      });
+  识别音频并返回识别结果接口
+    wx.translateVoice({
+       localId: '', // 需要识别的音频的本地Id,由录音相关接口获得
+        isShowProgressTiPS： 1, // 默认为1,显示进度提示
+        success: function (res) {
+            alert(res.translateResult); // 语音识别的结果
+        }
+    });
+  获取网络状态接口
+    wx.getNetworkType({
+        success: function (res) {
+            var networkType = res.networkType; // 返回网络类型2g,3g,4g,wifi
+        }
+    });
+  地理位置
+    使用微信内置地图查看位置接口
+      wx.openLocation({
+        latitude: 0, // 纬度,浮点数,范围为90 ~ -90
+        longitude: 0, // 经度,浮点数,范围为180 ~ -180。
+        name: '', // 位置名
+        address: '', // 地址详情说明
+        scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+        infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+    });
+    获取地理位置接口
+      wx.getLocation({
+          type: 'wgs84', // 默认为wgs84的gps坐标,如果要返回直接给openLocation用的火星坐标,可传入'gcj02'
+          success: function (res) {
+              var latitude = res.latitude; // 纬度,浮点数,范围为90 ~ -90
+              var longitude = res.longitude; // 经度,浮点数,范围为180 ~ -180。
+              var speed = res.speed; // 速度,以米/每秒计
+              var accuracy = res.accuracy; // 位置精度
+          }
+      });
+    摇一摇周边
+      开启查找周边ibeacon设备接口
+      wx.startSearchBeacons({
+        ticket:"",  //摇周边的业务ticket, 系统自动添加在摇出来的页面链接后面
+        complete:function(argv){
+          //开启查找完成后的回调函数
+        }
+      });
+      备注：上述摇一摇周边接口使用注意事项及更多返回结果说明,请参考：摇一摇周边获取设备信息
+    备注：如需接入摇一摇周边功能,请参考：申请开通摇一摇周边
+    关闭查找周边ibeacon设备接口
+      wx.stopSearchBeacons({
+        complete:function(res){
+          //关闭查找完成后的回调函数
+        }
+      });
+    监听周边ibeacon设备接口
+      wx.onSearchBeacons({
+        complete:function(argv){
+          //回调函数,可以数组形式取得该商家注册的在周边的相关设备列表
+        }
+      });
+  界面操作
+    隐藏右上角菜单接口
+      wx.hideOptionMenu();
+    显示右上角菜单接口
+      wx.showOptionMenu();
+    关闭当前网页窗口接口
+      wx.closeWindow();
+    批量隐藏功能按钮接口
+      wx.hideMenuItems({
+          menuList: [] // 要隐藏的菜单项,只能隐藏“传播类”和“保护类”按钮,所有menu项见附录3
+      });
+    批量显示功能按钮接口
+      wx.showMenuItems({
+          menuList: [] // 要显示的菜单项,所有menu项见附录3
+      });
+    隐藏所有非基础按钮接口
+      wx.hideAllNonBaseMenuItem();
+      // “基本类”按钮详见附录3
+    显示所有功能按钮接口
+      wx.showAllNonBaseMenuItem();
+    微信扫一扫
+      调起微信扫一扫接口
+      wx.scanQRCode({
+        needResult: 0, // 默认为0,扫描结果由微信处理,1则直接返回扫描结果,
+        scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码,默认二者都有
+        success: function (res) {
+          var result = res.resultStr; // 当needResult 为 1 时,扫码返回的结果
+        }
+      });    
+  跳转微信商品页接口
+    wx.openProductSpecificView({
+      productId: '', // 商品id
+      viewType: '' // 0.默认值,普通商品详情页1.扫一扫商品详情页2.小店商品详情页
+    });    
+  微信卡券
+    微信卡券接口中使用的签名凭证api_ticket,与步骤三中config使用的签名凭证jsapi_ticket不同,开发者在调用微信卡券JS-SDK的过程中需依次完成两次不同的签名,并确保凭证的缓存。
+    获取api_ticket
+      api_ticket 是用于调用微信卡券JS API的临时票据,有效期为7200 秒,通过access_token 来获取。
+    开发者注意事项：
+      1.此用于卡券接口签名的api_ticket与步骤三中通过config接口注入权限验证配置使用的jsapi_ticket不同。
+      2.由于获取api_ticket 的api 调用次数非常有限,频繁刷新api_ticket 会导致api调用受限,影响自身业务,开发者需在自己的服务存储与更新api_ticket。
+    接口调用请求说明
+      http请求方式: GET
+      https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=wx_card
+    参数说明
+      参数	是否必须	说明
+      access_token	是	调用接口凭证
+      返回数据
+    数据示例：
+      {
+        "errcode":0,
+        "errmsg":"ok",
+        "ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKdvsdshFKA",
+        "expires_in":7200
+      }
+      参数名	描述
+      errcode	错误码
+      errmsg	错误信息
+      ticket	api_ticket,卡券接口中签名所需凭证
+      expires_in	有效时间    
+    拉取适用卡券列表并获取用户选择信息
+      wx.chooseCard({
+        shopId: '', // 门店Id
+        cardType: '', // 卡券类型
+        cardId: '', // 卡券Id
+        timestamp: 0, // 卡券签名时间戳
+        nonceStr: '', // 卡券签名随机串
+        signType: '', // 签名方式,默认'SHA1'
+        cardSign: '', // 卡券签名
+        success: function (res) {
+          var cardList= res.cardList; // 用户选中的卡券列表信息
+        }
+      });
+      参数名	必填	类型	示例值	描述
+      shopId	否	string(24)	1234	门店ID。shopID用于筛选出拉起带有指定location_list(shopID)的卡券列表,非必填。
+      cardType	否	string(24)	GROUPON	卡券类型,用于拉起指定卡券类型的卡券列表。当cardType为空时,默认拉起所有卡券的列表,非必填。
+      cardId	否	string(32)	p1Pj9jr90_SQRaVqYI239Ka1erk	卡券ID,用于拉起指定cardId的卡券列表,当cardId为空时,默认拉起所有卡券的列表,非必填。
+      timestamp	是	string(32)	14300000000	时间戳。
+      nonceStr	是	string(32)	sduhi123	随机字符串。
+      signType	是	string(32)	SHA1	签名方式,目前仅支持SHA1
+      cardSign	是	string(64)	abcsdijcous123	签名。
+      cardSign详见附录4。开发者特别注意：签名错误会导致拉取卡券列表异常为空,请仔细检查参与签名的参数有效性。
+      
+      特别提醒
+      拉取列表仅与用户本地卡券有关,拉起列表异常为空的情况通常有三种：签名错误、时间戳无效、筛选机制有误。请开发者依次排查定位原因。    
+    批量添加卡券接口
+      wx.addCard({
+          cardList: [{
+              cardId: '',
+              cardExt: ''
+          }], // 需要添加的卡券列表
+          success: function (res) {
+              var cardList = res.cardList; // 添加的卡券列表信息
+          }
+      });
+      cardExt详见附录4,值得注意的是,这里的card_ext参数必须与参与签名的参数一致,格式为字符串而不是Object,否则会报签名错误。    
+    查看微信卡包中的卡券接口
+      wx.openCard({
+          cardList: [{
+              cardId: '',
+              code: ''
+          }]// 需要打开的卡券列表
+      });
+    核销后再次赠送卡券接口
+      wx.consumeAndShareCard({
+          cardId: '',
+          code: ''
+      });
+      参数说明：
+      
+      参数	说明
+      cardId	上一步核销的card_id,若传入错误的card_id会报错
+      code	上一步核销的code,若传入错误的code会报错
+      注意：
+      
+      该接口只支持微信6.3.6以上版本的客户端,开发者在调用时需要注意两点：
+      
+      1.需要引入1.1.0版本的js文件： https://res.wx.qq.com/open/js/jweixin-1.1.0.js
+      
+      2.需要判断用户客户端版本号,做出容错处理,详情点击：判断当前客户端版本是否支持指定JS接口
+    发起一个微信支付请求
+      wx.chooseWXPay({
+          timestamp: 0, // 支付签名时间戳,注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+          nonceStr: '', // 支付签名随机串,不长于 32 位
+          package: '', // 统一支付接口返回的prepay_id参数值,提交格式如：prepay_id=***）
+          signType: '', // 签名方式,默认为'SHA1',使用新版支付需传入'MD5'
+          paySign: '', // 支付签名
+          success: function (res) {
+              // 支付成功后的回调函数
+          }
+      });
+      备注：prepay_id 通过微信支付统一下单接口拿到,paySign 采用统一的微信支付 Sign 签名生成方法,注意这里 appId 也要参与签名,appId 与 config 中传入的 appId 一致,即最后参与签名的参数有appId, timeStamp, nonceStr, package, signType。
+      请注意该接口只能在你配置的支付目录下调用,同时需确保支付目录在JS接口安全域名下。
+      微信支付开发文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
+遇到的问题 
+  ios 
+    滑动当前div使其他div产生滚动效果
+ios 
+  iOS 10.3+ 可通过给 input[type='file'] 的标签里指定 capture="user" 来调用手机前置摄像头
+android
 --------------------------------------------------------------------------------
 插件类工具
 ueditor 百度编辑器 
@@ -920,8 +1265,7 @@ ueditor 百度编辑器
       如上 情景 前提都是URL未变化同样要保持当前状态,故通过添加自定义的hash决解,
       通过hash来添加、解析状态,从而到达要求的效果
 Question & Idea
---------------------------------------------------------------------以下待整理 
 webview
-
+-------------------------------------------------------------------- 以下待整理 
 
 

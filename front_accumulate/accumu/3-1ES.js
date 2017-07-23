@@ -812,12 +812,6 @@ ECMAScript : JS核心,语法部分
     console.log(getType({})); // object
     console.log(getType([])); // Array
     console.log(getType(new Date())); // Date
-    常用的类型检测方法
-      Object.prototype.toString.call(val); 获取值类型 
-      typeof val;               [详参 一元运算符]
-      obj instanceof Object;    [详参 关系运算符]
-      obj.constructor 
-      duck_type 鸭子类型,根据其表现来判断其身份 
   对象的可扩展extensible标签 
     var bool = Object.isExtensible(obj); 对象能否扩展 
       PS：即对象的属性/方法是否可增加
@@ -1128,6 +1122,12 @@ ECMAScript : JS核心,语法部分
       返回对象的字符串、数值或布尔值表示 
       通常与toString()方法的返回值相同
       foo.valueOf(); 返回函数对象本身
+  常用的类型检测方法
+    Object.prototype.toString.call(val); 获取值类型 
+    typeof val;               [详参 一元运算符]
+    obj instanceof Object;    [详参 关系运算符]
+    obj.constructor 
+    duck_type 鸭子类型,根据其表现来判断其身份 
   Exp:
     遍历,通过val获取对应的key 
       var getKey = function(val,bool = true){

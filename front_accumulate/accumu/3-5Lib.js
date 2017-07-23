@@ -138,11 +138,11 @@ DOM操作
     .ajaxStart(foo)      每当一Ajax请求即将发送,若其他Ajax请求都完成则触发 
       foo  无参数 
   Jelem 创建 
-    $('<div>') 创建一个div Jelem
+    var Jelem = $(HTMLStr)  通过HTML创建Jelem
     Jelem.clone([bool]) 复制元素
       bool   布尔值,默认为false,若为true,则复制 Event 和 Data
   Jelem 获取 
-    $("selector"); 通过选择器获取Jelem 
+    $("selector")  通过选择器获取Jelem 
       PS：等价于 jQuery("selector"); 
       selector 选择器,可为组合选择器,CSS选择器几乎可全部适用 
       :xx  筛选  
@@ -269,6 +269,8 @@ DOM操作
             })
           })(jQuery);
           选择器仅仅是 jQuery.expr[':'] 对象的一部分,可直接扩展 
+    var Jelem = $(elem)  通过elem获取,返回Jelem 
+        e.g. $(document); // 获取整个文档
     通过Jelem获取 
       $('selector',Jelem)  在Jelem中查找'selector'
       ★自身条件筛选 
@@ -297,9 +299,6 @@ DOM操作
       ★属性筛选 
       Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
-    通过elem获取 
-      $(elem);  返回Jelem 
-        e.g. $(document); // 获取整个文档
     性能优化
       关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器。
       因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是;
@@ -332,13 +331,13 @@ DOM操作
         $containerLiSpan= $containerLi.find('span');
   Jelem 操作 
     PS：若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
-    Jelem 转换为 elem
-      PS： 而Jelem对象 使用原生JS的方法时,需转换为elem对象
-      Jelem[index];     下标获取对应的元素
-      Jelem.get(index); get取下标获取elem
-        PS：使用get取下标,index的可能性更多
-        参数为负时:0 表示第一个,-1 表示最后一个,-2 表示倒数第二个,依此类推...
-        无参数时,将jQ对象数组转换为可用JS操作的常规数组.
+    转换为原始DOM元素对象elem 
+      PS：使用原生JS的方法时,需将Jelem转换为elem对象
+      var elem = Jelem[index]     获取对应下标的DOM元素
+      var elemArr = Jelem.toArray() 返回DOM元素组成的数组 
+      var elemArr = Jelem.get()   返回DOM元素组成的数组 
+      var elem = Jelem.get(num)   获取对应数字的DOM元素 
+        num  数值,从0开始,可为负,为负值时,表示第 num+Jelem.length 个
     增删改 
       Jelem.prepend('htmlCode'/Jelem)    内部头部插入
       Jelem.prependTo("selector"/Jelem)  被插入到内部头部 [与prepend相反]
@@ -491,7 +490,7 @@ DOM操作
         Jelem.removeClass("aoo boo"); 移除class aoo 和 class boo
       Jelem.toggleClass('className') 开关class类
         若有,则删除;没有,则加上
-    元素信息
+    元素信息 
       ◆尺寸位置信息 
         PS：对于$(window)和$(document)其 width() innerWidth() outerWidth() 相同
           且为只读,也和其 margin border padding 无关 ,
@@ -534,7 +533,7 @@ DOM操作
           console.log(pos); //  Object {top: 10, left: 20}
       ◆其他信息
       Jelem.size()         元素个数
-      Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
+      var num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
         e.g.： 点击获取当前为第几个li 
           <ul>
@@ -555,7 +554,7 @@ DOM操作
       Jelem.select();  选中文字 
         选中如input、textarea等元素类的文字,
         不可选中因增加contenteditable属性而可编辑的元素的文字;
-    性能优化
+    性能优化 
       繁重的操作中分离元素
         如果你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
         建议首先分离元素然后在添加。
@@ -667,6 +666,7 @@ DOM操作
         },1000)
     ◆其他
     $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
+    $.fx.interval     读写动画的频率,单位毫秒 
     e.g.：
       左右滑动效果
       <div class="wrap">
@@ -735,6 +735,7 @@ DOM操作
     等价于 
     bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
 工具方法 
+  ◆遍历相关 
   $.each(obj, foo)  对象遍历
     foo 参数依次传入obj的 key,val 
     当obj为数组时,key表示下标
@@ -767,25 +768,31 @@ DOM操作
         return val % 2 == 0;
       })
       arr;      //[2, 4]
+  ◆数组相关 
+  var bol = $.isArray(arr)         判断是否为数组
+  var idx = $.inArray(item, array) 元素在数组的位置,不存在返回-1 
+  $.makeArray()          将对象转化为数组 
+  $.merge(arr1,arr2)   合并两个数组 
+  $.unique(arr)     删除数组中的重复元素[不能用于普通数组]
+  ◆字符串相关 
   $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
     e.g.：
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
-  $.parseJSON(jsonStr) 解析JSON字符串
-  $.param (obj)  使对象或数组按照'key-val'格式进行序列化编码 
-    PS：该编码后的值常用于向服务端发送URL请求
-    obj  表示需要进行序列化的对象 
-      该对象也可以是一个数组,整个函数返回一个经过序列化编码后的字符串
-  $.isArray(arr)         判断是否为数组
-  $.inArray(item, array) 判断元素是否在数组内
-  $.isEmptyObject(obj)   检测一对象的内容是否为空
-    如果为空,则该函数返回true,否则,返回false值;
-    obj  需要检测的对象名称
-  $.isPlainObject(obj)   检测对象是否为原始对象
-    检测对象是否为通过{}或new Object()关键字创建的原始对象的布尔值;
-  $.contains(elem1, elem2) 检测在一DOM节点中是否包含另外一DOM节点的布尔值
+  $.parseJSON(jsonStr) 解析JSON字符串 
+  $.parseXML(str) 解析一字符串到一个XML文件 
+  ◆检测相关
+  $.type(obj)    判断JS对象的类型[函数对象、日期对象、数组对象、正则对象等] 
+  var bol = $.isNumberic(val)   判断是否为数值 
+  var bol = $.isFunction(obj)   判断是否为函数 
+  var bol = $.isEmptyObject(obj)   检测对象是否为空 
+  var bol = $.isPlainObject(obj)   检测对象是否为原始对象 
+    检测对象是否为通过{}或new Object()关键字创建的原始对象
+  var bol = $.isWindow(obj)     是否为window对象 
+  var bol = $.contains(elem1,elem2) 检测elem1中是否包含elem2 
     elem1  一个DOM对象节点元素,用于包含其他节点的容器
     elem2  另一个DOM对象节点元素,用于被其他容器所包含 
+  ◆jQuery扩展 
   $.extend (options)       扩展jQuery类本身
     PS：扩展静态方法,自定义类级别的jQuery插件;等价于 $.xxx = function(){};
     options 对象,表示自定义插件的函数内容 
@@ -873,10 +880,7 @@ DOM操作
         sub('body').foo(); // just for me 
       })
     })();
-  $.makeArray() 将对象转化为数组 
-  $.type() 判断对象的类别（函数对象、日期对象、数组对象、正则对象等等）。
-  $.isFunction() 判断某个参数是否为函数。
-  $.isPlainObject() 判断某个参数是否为用"{}"或"new Object"建立的对象 
+  ◆其他方法 
   $.proxy(foo,thisArg)  指定函数foo中this的指向 
     <button id="btn1">btn1</button>
     <button id="btn2">btn2</button>
@@ -898,6 +902,8 @@ DOM操作
         $(this).fadeOut(200)
       },this))
     })
+  $.holdReady()   暂停或恢复'ready'事件的执行 
+  $.Callbacks()   回调列表对象,可用来管理回调函数 
   已废弃 
     $.browser 对象 获取浏览器的名称与版本信息 「1.9-可用」
       PS：已在jQuery 1.9 中被移除,因为识别方法不准确
@@ -1034,7 +1040,7 @@ Event,事件
     Jelem.keydown()   按下键盘（长时间按键,只返回一个事件）
     Jelem.keypress() 按下键盘（长时间按键,将返回多个事件）
     Jelem.keyup()    松开键盘
-    Jelem.scroll(foo); 元素滚动条滑动事件
+    Jelem.scroll(foo)  元素滚动条滑动事件
     Jelem.resize() 浏览器窗口的大小发生改变 
     Jelem.hover(foo1 [,foo2]); 悬浮事件[jQuery合成事件] 
       PS： 
@@ -1087,14 +1093,16 @@ Event,事件
   Event 对象
     PS：jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
       使得事件处理在各大浏览器下都可以正常的运行而不需要进行浏览器类型判断。
-    event.type 获取事件的类型[jQuery封装属性]  
-    event.preventDefault()  阻止事件默认行为
-      PS：JavaScript中符合W3C规范的preventDefault()方法在IE浏览器中无效。
+    e.type 获取事件的类型[jQuery封装属性]  
+    e.preventDefault()  阻止事件默认行为
+      PS：JavaScript中符合W3C规范的 preventDefault()方法在IE浏览器中无效。
         jQuery对其进行了封装,使之能兼容各种浏览器。
-    event.stopPropagation() 阻止事件冒泡
+    e.isDefaultPrevented()  根据是否调用过'preventDefault'返回布尔值 
+    e.stopPropagation() 阻止事件冒泡
       PS：JavaScript中符合W3C规范的stopPropagation()方法在IE浏览器中无效。
         jQuery对其进行封装,使之能兼容各种浏览器。
-    event.target 获取到触发事件的元素
+    e.isPropagationStopped() 根据是否调用过'stopPropagation'返回布尔值
+    e.target 获取到触发事件的元素
       PS：jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
       e.g.：
         $("a[href=http://www.jb51.net]").click(function(event){
@@ -1102,23 +1110,27 @@ Event,事件
           alert(event.target.tagName); //获取触发事件的元素的标签名称
           return false; //阻止链接跳转
         })
-    event.relatedTarget 相关元素 
-      PS：标准DOM中,mouseover 和 mouseout 发生的元素通过event.target()来获取,
-        相关元素通过 event.relatedTarget 属性来获取 
-    event.pageX 获取到光标相对页面的x坐标
-    event.pageY 获取到光标相对页面的y坐标
-      PS：如果没有使用jQuery时,那么IE浏览器中是用 event.x/event.y,
+    e.relatedTarget 相关元素 
+      PS：标准DOM中,mouseover 和 mouseout 发生的元素通过e.target()来获取,
+        相关元素通过 e.relatedTarget 属性来获取 
+    e.currentTarget  在事件冒泡阶段中的当前DOM元素 
+    e.pageX 获取到光标相对页面的x坐标
+    e.pageY 获取到光标相对页面的y坐标
+      PS：如果没有使用jQuery时,那么IE浏览器中是用 e.x/e.y,
         在IE浏览器中还应该减去默认的2px的边框。
-        而在Firefox浏览器中用 event.pageX/event.pageY,
+        而在Firefox浏览器中用 e.pageX/e.pageY,
         如果页上有滚动条,则还要加上滚动条的宽度和高度。
-    event.which 鼠标单击事件中获取到鼠标的左、中、右键,键盘事件中获取键盘的按钮 
+    e.which 鼠标单击事件中获取到鼠标的左、中、右键,键盘事件中获取键盘的按钮 
       鼠标单击事件中  
         左、中、右键分别对应值 1、2、3 
       e.which == '13' enter,回车键 
-    event.metaKey 键盘事件中获取<ctrl>按键 
+    e.metaKey 键盘事件中获取<ctrl>按键 
       PS：针对不同浏览器对键盘中的<ctrl>按键解释不同,jQuery进行了封装,
-    event.originalEvent 指向原始的事件对象
-    event.data 在事件对象上绑定数据,然后传入事件处理函数
+    e.originalEvent 指向原始的事件对象
+    e.data    在事件对象上绑定数据,然后传入事件处理函数 
+    e.namespage  事件被指定的命名空间 
+    e.result   事件最后触发的处理函数的返回值 
+    e.timeStamp   触发事件时距1970年1月1日的毫秒数  
   $(document).ready(foo) 与 window.onload 的区别 
     执行时间
     window.onload       须等到页面内包括图片的所有元素加载完毕后才能执行
@@ -1471,6 +1483,7 @@ AJAX
     //   { name : "n3", value : "abc3" },
     // ]
   $.param(obj)   将对象按照'key-val'进行序列化 
+    PS：常用于将编码后的值向服务端发送请求 
     var obj = {a:1,b:2,c:3}
     console.log($.param(obj)); // a=1&b=2&c=3
 Deferred,异步操作

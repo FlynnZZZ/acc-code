@@ -2784,7 +2784,7 @@ SSE 「HTML5」
       conn.on('open', function(){
         conn.send('hi!');
       });
-WebSocket     网络通信协议「HTML5」 「IE10+」
+WebSocket    网络通信协议「HTML5」 「IE10+」
   PS：目标是在一个单独的持久连接上提供全双工、双向通信, 
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给客户端[且客户端代码会得到通知];
@@ -2875,7 +2875,7 @@ WebSocket     网络通信协议「HTML5」 「IE10+」
     connection.onmessage = function(e) {
       console.log(e.data.byteLength); // ArrayBuffer对象有byteLength属性
     };
-Web_Storage    网页本地存储 「IE8+ HTML5」
+'Web Storage'  网页本地存储 「IE8+ HTML5」
   PS： JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
   localStorage   本地存储 [IE8+]

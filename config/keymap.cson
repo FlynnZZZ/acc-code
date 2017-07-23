@@ -1,0 +1,141 @@
+# Your keymap
+#
+# Atom keymaps work similarly to style sheets. Just as style sheets use
+# selectors to apply styles to elements, Atom keymaps use selectors to associate
+# keystrokes with events in specific contexts. Unlike style sheets however,
+# each selector can only be declared once.
+#
+# You can create a new keybinding in this file by typing "key" and then hitting
+# tab.
+#
+# Here's an example taken from Atom's built-in keymap:
+#
+# 'atom-text-editor':
+#   'enter': 'editor:newline'
+#
+# 'atom-workspace':
+#   'ctrl-shift-p': 'core:move-up'
+#   'ctrl-p': 'core:move-down'
+#
+# You can find more information about keymaps in these guides:
+# * http://flight-manual.atom.io/using-atom/sections/basic-customization/#_customizing_keybindings
+# * http://flight-manual.atom.io/behind-atom/sections/keymaps-in-depth/
+#
+# If you're having trouble with your keybindings not working, try the
+# Keybinding Resolver: `Cmd+.` on macOS and `Ctrl+.` on other platforms. See the
+# Debugging Guide for more information:
+# * http://flight-manual.atom.io/hacking-atom/sections/debugging/#check-the-keybindings
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it in the
+# Atom Flight Manual:
+# http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
+
+# --------------------------------------------------------------------------------
+'.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
+  # 查找时 查找上一个
+  'f4': 'find-and-replace:find-previous'
+  # 取消 find-and-replace 
+  'ctrl-e': 'find-and-replace:select-undo'
+  'ctrl-u': 'unset!'
+  
+# '.platform-darwin, .platform-win32, .platform-linux':
+  # 'alt-f': 'go-to-line:toggle'
+  
+'atom-workspace atom-text-editor:not([mini])':
+  # 复制行
+  'alt-v': 'editor:duplicate-lines'
+  # 注释
+  'ctrl-q': 'editor:toggle-line-comments'
+  # 折叠所有
+  'alt-1': 'editor:fold-all'
+  # 展开所有
+  'alt-2': 'editor:unfold-all'
+  # 折叠选中
+  # 'alt-3': 'editor:fold-selection'
+  # 行缩进
+  'alt-s': 'editor:indent-selected-rows'
+  # 行负缩进
+  'alt-a': 'editor:outdent-selected-rows'
+  # 合并行
+  'alt-z': 'editor:join-lines'
+  'alt-3': 'editor:fold-current-row'
+  'alt-4': 'editor:unfold-current-row'
+  'ctrl-j': 'unset!'
+  'alt-enter': 'editor:newline-above'
+  
+'.platform-win32, .platform-linux':
+  'ctrl-.': 'settings-view:show-keybindings'
+  'alt-\\': 'tree-view:reveal-active-file'
+  
+'.platform-win32 atom-text-editor':
+  # 行标记
+  'alt-x': 'bookmarks:toggle-bookmark'
+  # 选中括号内的内容
+  'alt-q': 'bracket-matcher:select-inside-brackets'
+  # 删除匹配括号
+  'alt-t': 'bracket-matcher:remove-matching-brackets'
+  
+'atom-workspace atom-text-editor':
+  # 字母大/小写
+  'alt-u': 'editor:upper-case'
+  'alt-i': 'editor:lower-case'
+  # 到文档顶/底部
+  'ctrl-1': 'core:move-to-top'
+  'ctrl-2': 'core:move-to-bottom'
+  # 选中行
+  'alt-c': 'editor:select-line'
+  'ctrl-l': 'unset!'
+  
+'atom-text-editor:not([mini])':
+  # 删除行
+  'alt-d': 'editor:delete-line'
+  # 'alt-s': 'editor:indent'
+  'ctrl-`': 'editor:newline'
+  
+'atom-text-editor':
+  # 激活提示
+  'alt-e': 'autocomplete-plus:activate'
+  # 浏览器兼容写法
+  'alt-p': 'autoprefixer'
+  'alt-f': 'bracket-matcher:go-to-matching-bracket'
+  
+'atom-workspace':
+  # 插件 Atom Wrap In Tag 快捷键
+  'alt-w': 'wrap-in-tag:wrap'
+  'alt-b': 'open-in-browsers:toggle'
+  'ctrl-alt-p': 'php-cs-fixer:fix'
+  
+'body':
+  # 删除
+  'f1': 'core:backspace'
+  # 取消 跳转到标签的快捷键
+  'alt-1': 'unset!'
+  'alt-2': 'unset!'
+  'alt-3': 'unset!'
+  'alt-4': 'unset!'
+  'alt-5': 'unset!'
+  'alt-6': 'unset!'
+  'alt-7': 'unset!'
+  'alt-8': 'unset!'
+  'alt-9': 'unset!'
+  'alt-w': 'unset!'
+  'ctrl-tab': 'unset!'
+  'ctrl-n': 'unset!'
+  'ctrl-m': 'unset!'
+  'alt-m': 'application:add-project-folder'
+  'alt-o': 'application:open-file'
+  'alt-n': 'application:new-window'
+  'alt-l': 'pane:reopen-closed-item'
+  
+  
+# PS:须将同一类的放置在一起否则会不起作用,如'atom-workspace atom-text-editor:not([mini])':的一类必须放在一起
+
+
+
+
+
+
+
+
+

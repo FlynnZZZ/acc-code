@@ -411,75 +411,50 @@
       <s>删除线</s>
     <del> 删除线
       <del></del> 增加删除线
-表格 
+Table表格 
   PS： 在一些浏览器中,没有内容的表格单元显示的不太好,
     如果某个单元格是空的「没有内容」,浏览器可能无法显示出这个单元格的边框,
     为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来;
-  <table></table> 表格,整个表格以其开始和结束
+  <table>   表格,整个表格以其开始和结束
     PS：单独使用没有意义,需配合其他表格元素使用.
-      表格属于display:table,特点:单独一行
-      表格中可以包含任何内容,所以在使用div+css之前是使用表格对网页内容进行排版与布局的
-    属性:
-      cellpadding       定义单元边沿与其内容之间的空白.
-      cellspacing='0'   定义单元格之间的空白.
-      bgcolor           设置表格背景色
-      background        设置表格背景图片
-      border            设置边框宽度,默认为0
-        e.g.:
-          设置表格边框为1
-          <table border="1"> </table>
-      cellpadding       单元格边框与其内部内容之间空间的大小.默认为2(单元格内边距)
-      cellspacing       单元格之间空间的大小.默认为2(单元格间距,值为0时表格边框为实线)
-      bordercolorlight  设置边框亮部分(左＆上)的颜色(当border的值大于等于1时才有用)
-      bordercolordark   设置边框暗部分(右＆下)的颜色(当border的值大于等于1时才有用)
-      align             设置表格水平对齐方式
-      with              设置表格宽度(建议使用css控制)
-      height            表格高度(建议使用css控制)
-      summary    表格的摘要,内容不会在浏览器中显示出来
-        其作用是增加表格的可读性(语义化),使搜索引擎更好的读懂表格内容.
-        e.g. <table summary="表格简介文本"> </table>
-  <caption></caption> 用于放置表格的标题
-  <thead></thead> 表格头部
+    cellpadding   定义单元边沿与其内容之间的空白 
+      pixels   默认为2px
+      %
+    cellspacing   定义单元格之间的空白 
+      pixels   默认为2px 
+      %
+    frame   规定外侧边框的哪个部分是可见的 
+      void  above  below hsides lhs rhs vsides box border
+    rules   规定内侧边框的哪个部分是可见的 
+      none groups rows cols  all
+    bordercolorlight 设置左＆上边框的颜色[当border的值大于等于1时才有用] 
+    bordercolordark  设置右＆下边框的颜色[当border的值大于等于1时才有用] 
+    summary    表格的摘要[语义化属性] 
+      PS：内容不会在浏览器中显示出来,其作用是增加表格的可读性,
+        使搜索引擎更好的读懂表格内容 
+      e.g. <table summary="表格简介文本"> </table>
+  <caption> 用于放置表格的标题
+  <thead>   表格头部
     表头部分,table的结构性标签
     定义时无论thead处于table的什么位置,thead会默认放置在表格的开始,并且字体默认加粗.
     thead中不可省略tr
     只能存在一个thead(虽然设置多个不会报错)
-  <tbody></tbody> 表体,table的主体部分
+  <tbody>   表体,table的主体部分
     可以定义多个
     当表格内容非常多时,表格会下载一点显示一点,但若加上<tbody>标签后,则该表格内容全部下载完才会显示.
-  <tfoot></tfoot> 表格页脚
-    tfoot在表格中会默认显示在最下方(即使在标签结构中放置在最前面)
-    一个table中只能有一个tfoot(虽然存在多个也不会报错)
-  <tr>行</tr> 表格行
-    注:单元格合并实质上为单元格的跨越(需将其占据位置的单元格删除).
-    属性
-      rowspan=num;num行合并
-      align   水平对齐方式
-      valign   垂直对齐方式(top、middle、bottom)
-  <th>...</th> 表头列
-     定义表格表头(默认文字加粗、自动居中)
+  <tfoot>   表格页脚
+    tfoot在表格中会默认显示在最下方,即使在标签结构中放置在最前面 
+    一个table中只能有一个tfoot[虽然存在多个也不会报错] 
+  <tr>  表格行 
+    注:单元格合并实质上为单元格的跨越[需将其占据位置的单元格删除] 
+  <th>  表头列 
+    定义表格表头,默认文字加粗、自动居中 
     使用方法:在thead中使用,将相应的td更改为th即可
-  <td>列</td> 表格列
-    colspan=num;num列合并.
-    当<td></td>之间没有内容时,默认是不显示边框的
-      解决方法:加一个空格符＆nbsp;
-  scope 属性标识某个单元是否是列、行、列组或行组的表头
-    PS：该属性不会在普通浏览器中产生任何视觉变化,类似于语义化的标签.
-      屏幕阅读器可以利用该属性.
-      由于不会在普通浏览器中产生任何视觉效果,很难判断浏览器是否支持 scope 属性.
-    Exp:通过属性值 row,表头行包括的所有表格都将和表头单元格联系起来.
-      指定 col,会将当前列的所有单元格和表头单元格绑定起来.
-      使用 rowgroup 和 colgroup 会将单元格的行组(由 <thead>、<tbody> 或 <tfoot> 标签定义)或列组中的所有单元格和表头单元格绑定起来(由 <col> 或 <colgroup> 标签定义).
-    属性值
-      col      规定单元格是列的表头
-      row      规定单元格是行的表头
-      colgroup 规定单元格是列组的表头
-      rowgroup 规定单元格是行组的表头
-  thead、tbody及tfoot的html属性
-    align定义其内容的水平对齐方式       left/center/right/justify/char
-    char规定根据哪个字符来进行文本对齐   character
-    charoff规定第一个对齐字符的偏移量    num
-    valign定义元素中内容的垂直对齐方式   top/middle/bottom/baseline
+  <td>  表格列 
+    rowspan  列合并 
+      num
+    colspan  行合并 
+      num 
   <colgroup ></colgroup> 列组
     PS：只能在table标签内使用
       通过使用colgroup标签,可以向整个列应用样式,而不需要重复为每个单元格或每一行设置样式.
@@ -539,13 +514,30 @@
             <td>$49</td>
           </tr>
         </table>
-  多用属性
-    tr/td
-      align  水平对齐方式 
-        left/right/center
-      valign 竖直对齐方式
-        top/middle/bottom
-表单  
+  多用属性 
+    tr/td 
+      align  水平对齐方式[HTML5不支持] 
+        left right center 
+      valign 竖直对齐方式[HTML5不支持]  
+        top middle bottom
+    thead、tbody&tfoot 
+      align定义其内容的水平对齐方式       left/center/right/justify/char
+      char规定根据哪个字符来进行文本对齐   character
+      charoff规定第一个对齐字符的偏移量    num
+      valign定义元素中内容的垂直对齐方式   top/middle/bottom/baseline
+    scope 属性标识某个单元是否是列、行、列组或行组的表头 
+      PS：该属性不会在普通浏览器中产生任何视觉变化,类似于语义化的标签 
+        屏幕阅读器可以利用该属性 
+        由于不会在普通浏览器中产生任何视觉效果,很难判断浏览器是否支持 scope 属性 
+      col      规定单元格是列的表头
+        指定 col,会将当前列的所有单元格和表头单元格绑定起来 
+      row      规定单元格是行的表头
+        通过属性值 row,表头行包括的所有表格都将和表头单元格联系起来 
+      colgroup 规定单元格是列组的表头
+        使用rowgroup和colgroup会将单元格的行组[由 <thead>、<tbody> 或 <tfoot> 标签定义]
+        或列组中的所有单元格和表头单元格绑定起来[由 <col> 或 <colgroup> 标签定义]  
+      rowgroup 规定单元格是行组的表头
+Form表单  
   PS：表单字段也叫表单控件,如input、button等元素「self」 
   <fieldset></fieldset> 表单信息分组
     PS：默认有一个细线边框,可设置border属性为none关闭它.
@@ -589,7 +581,7 @@
         一般来说,method和enctype是两个不同的互不影响的属性,
         但在传文件时,method必须要指定为POST,否则文件只剩下filename了；
         当没有传文件时,enctype会改回默认的application/x-www-form-urlencoded
-      'text/plain'	  空格转换为 "+" 加号,但不对特殊字符编码
+      'text/plain'      空格转换为 "+" 加号,但不对特殊字符编码
         按照键值对排列表单数据 key1=value1\r\nkey2=value2,不进行转义;
         若表单中有文件,则只留文件名；
       Exp:
@@ -924,8 +916,11 @@
         ...
       </optgroup>
   表单通用属性 
-    name 
-      当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式
+    name     表单名称 
+      当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
+    disabled 禁用禁用 
+     如input 用户不可输入
+     disabled="disabled"
   Remarks:
     type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?]
 其他功能类 
@@ -1306,37 +1301,33 @@
     通过<div>和<span>将HTML元素组合起来
     div和span在html标记中无任何特殊含义,
     其存在的意义就是为了应用css样式.(一个块元素一个行内元素)
-通用属性 
-  data-**="xxx"  自定义元素的属性
+HTML全局属性 
+  class    规定元素的一个或多个类名 
+  id='xx'  使用id属性创建锚点 
+    在相对链接或url后面添加#id名称即可链接到锚点 
+  style    规定元素的行内CSS样式 
+  title    元素的额外信息,当鼠标悬浮时,显示出文字说明 
+  dir    规定元素中内容的文本方向 
+  lang  规定元素内容的语言 
+    en 英语 
+  accesskey  规定激活元素的快捷键 
+  tabindex    规定元素的tab键次序 
+  ◆HTML5新增属性 
+  data-**  自定义元素的属性 
     **为任意字符,长度不限
-    xxx为属性值,长度不限
-  role 语义化
-    HTML5的标签属性,可用于标识一个普通的标签,使之语义化,方便浏览器对其具体功能进行识别.
+  role     标识标签,使之语义化 
+    方便浏览器对其具体功能进行识别 
     e.g. <div role="navigation"></div>
-      例如div容器制作的导航栏,加上role="navigation",可以让浏览器知晓这是一个导航容器而不是一个普通的容器
-      从而在面对一些特殊人群的时候可以做出正确的反应(例如盲人)
-      当然,针对例子中的这种用法,其实用<nav>标签会更好.
-  contenteditable=ture  可编辑
-    PS：定义元素的内容在网页上是否可编辑
-      contenteditable 属性是 HTML5 中的新属性.
-      在编辑的内容里进行回车会换行
-    语法:<element contenteditable="value">
-    属性值value:
-      true 可编辑
-      false 不可编辑
-      insert 继承
-  disabled 禁用
-   如input 用户不可输入
-   disabled="disabled"
-  title 说明显示
-    当鼠标悬浮在元素上时,会显示出的文字说明
-    e.g.
-      <div title="这是一个div标签">123</div>
-  lang 规定元素内容的语言
-    e.g. <div lang="en"></div>
-  使用id属性创建锚点
-    在相对链接或url后面添加#id名称即可链接到锚点.
-◆character_entities,字符实体 
+  contenteditable  定义元素的内容是否可编辑 
+    PS： 在编辑的内容里进行回车会换行
+    true/false/insert 
+  contextmenu    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
+  draggable    规定元素是否可拖动 
+  dropzone    规定在拖动被拖动数据时是否进行复制、移动或链接 
+  hidden      规定元素仍未或不再相关 
+  spellcheck  规定是否对元素进行拼写和语法检查 
+  translate   规定是否应该翻译元素内容 
+◆'character_entities'字符实体 
   PS：HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
     若希望正确地显示预留字符,可在 HTML 源代码中使用字符实体;
     实体名称比实体编号好记,但浏览器可能并不支持所有实体名称,而支持所有实体数字;
@@ -1753,13 +1744,6 @@ Collection
 习题及精解
 Question & idea 
 --------------------------------------------------------------------以下待整理 
-
-
-
-
-
-
-
 
 
 

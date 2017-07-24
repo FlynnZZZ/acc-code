@@ -361,7 +361,7 @@ ECMAScript : JS核心,语法部分
         var str2 = '100';
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
-引用类型：Object 对象 
+引用类型：Object对象 
   PS：引用类型就叫对象「SlPt」; ECMA-262 定义为:无序的名值的合集 
     对象一般没有长度,具有多种属性的内容结构 
     与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类 
@@ -1943,7 +1943,16 @@ OOP,面向对象
 -------------------------------------------------------------------------------
 标准库--对象  
 ◆数据封装类对象  
-Object  一般对象[JS中所有对象的父对象?] 
+Object  一般对象 
+  JS中所有类型对象的父对象,包括函数对象 
+    Object.prototype.foo = function(){
+      return '所有类型的对象都会继承到!'
+    }
+    var goo = function(){
+    }
+    var arr = []
+    console.log(goo.foo(),arr.foo()); 
+    // 所有类型的对象都会继承到! 所有类型的对象都会继承到!
 Boolean 布尔对象:处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
 Number  数值对象:处理数值的'包装对象' 
@@ -2538,42 +2547,14 @@ Function 函数对象
       else {
         foo = function foo(){ }
       }
-  'argument'函数的参数 
+  'argument'函数参数 
     传入的参数可多可少,多则舍去,少则使用undefined来补充 
       function foo(){ 
         console.log(arguments[0],arguments[1]); 
       };
       foo(1); // 1 undefined
-    arguments 类数组 : 在函数体内,表示实际传入函数的参数组成的数组 
-      arguments.length 在函数体内表示实际传入参数的数量 
-        e.g. :
-        function box(){ return arguments.length; }
-        console.log(box(1,2,3,4,5));  // 5
-      arguments[num]   读写相应的参数 
-        在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
-      arguments.callee 在函数体内表示函数本身 
-        该属性是一个指针,指向拥有这个arguments对象的函数.
-        e.g.
-        递归-阶乘
-        function sum(num){
-          if(num<=1){
-            return 1;
-          }else{
-            return num*sum(num-1);
-          }
-        }
-        对于阶乘函数一般要用到递归算法,所以函数内部一定会调用自身;
-        若函数名不改变是没有问题的,一旦改变函数名,内部的自身调用需要逐一修改
-        为了解决这个问题,我们可以使用arguments.callee来代替.
-        function box(sum){
-          if(num<=1){
-            return 1;
-          }
-          else{
-            return num*arguments.callee(num-1);
-            //此时arguments.callee等价于box
-          }
-        }
+    arguments [在函数体内]表示实际传入函数的参数组成的类数组 
+      PS：类数组表示类似与数组的结构但无 Array.prototype 内的属性和方法 
       e.g. 
         对若干个数值进行累加
         function sum(){
@@ -2584,6 +2565,35 @@ Function 函数对象
           return sum;
         }
         sum(5,6,1); // 12
+      arguments.length 在函数体内表示实际传入参数的数量 
+        e.g. :
+        function box(){ return arguments.length; }
+        console.log(box(1,2,3,4,5));  // 5
+      arguments[idx]   读写相应的参数 
+        在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
+      arguments.callee 在函数体内表示函数本身 
+        该属性是一个指针,指向拥有这个arguments对象的函数 
+        e.g.
+          递归-阶乘
+          function sum(num){
+            if(num<=1){
+              return 1;
+            }else{
+              return num*sum(num-1);
+            }
+          }
+          对于阶乘函数一般要用到递归算法,所以函数内部一定会调用自身;
+          若函数名不改变是没有问题的,一旦改变函数名,内部的自身调用需要逐一修改
+          为了解决这个问题,我们可以使用arguments.callee来代替.
+          function box(sum){
+          if(num<=1){
+            return 1;
+          }
+          else{
+            return num*arguments.callee(num-1);
+            //此时arguments.callee等价于box
+          }
+        }
     参数按共享传递 
       基本类型[此处为字符串],参数按值传递
       var localObjOpera = function(localStorageItem,key,val){
@@ -2612,10 +2622,10 @@ Function 函数对象
       };
       editObj1(aoo);
       console.log(aoo); // {c: "3", b: "2"}
-  'return'函数的返回值 
+  'return'函数返回值 
     PS：函数执行到'return'后直接返回值,后面代码不再执行 
-    使用'return'关键字返回值,若没有return默认返回 undefined 
-    'return' 后无值,默认返回 undefined
+    使用'return'关键字返回值,若没有return默认返回'undefined' 
+    'return'后无值,默认返回'undefined'
       var foo = function(){
         return 
         2;

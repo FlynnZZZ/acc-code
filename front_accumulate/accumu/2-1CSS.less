@@ -2045,40 +2045,39 @@ Layout   布局
       PS： 该部分讨论的行是指所有共行的行内元素共同组成的一个包含行,
         而非特指行内元素的父元素,即改变父元素的高度对定位无影响,
         但改变行高inline-height会有影响.
-      属性值:
-        比较时,可假想该行中存在一和行内元素并列的文本.
-        ◆定义无文本内容的行内元素或替换元素和有文本内容的行内元素情况有不同,
-          后续便于说明简称为无文本元素和有文本元素,
-          对齐时有文本元素对齐的是其内容中文字的基线,无文本元素对齐的是其底边,
-          后续默认基线为文字的基线或元素的底边.
-          元素基线与行基线的关系
-        baseline   默认,元素基线和所在行的基线对齐
-        length     通过值(可正负)调整两基线的位置
-          '0px'等同于'baseline'
-        %          通过相对行的line-height的百分比值(可正负)调整两基线的位置
-          0% 等同于 baseline 
-        super      元素基线相对于行基线升高到上标位置
-          规范并未定义元素升高的距离,对于不同的用户代理,这个距离可能有所不同,
-          字体大小不会改变.
-        sub        元素基线相对于行基线下降到下标位置
-        ◆有无文本元素都表现同无文本元素
-          元素上边、下边或中部与行上边、下边或中部(一般为基线上方0.5ex处)位置关系
-        top      将元素顶端与行框的顶端对齐
-        middle   将行内元素框的中点与父元素基线上方0.5ex处对齐
-          此处,1ex相对与父元素的font-size定义,大多数用户代理的1ex为0.5em
-        bottom   将元素底端与行框的底端对齐
-        ◆有无文本元素都表现同有文本元素
-          对齐时,比较的情况为假设当前行存在文字,和inline元素存在同样大小文字时,
-          两个文字的顶部平齐或底部平齐,而产生的定位,
-          故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
-        text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
-        text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
+      比较时,可假想该行中存在一和行内元素并列的文本.
+      ◆定义无文本内容的行内元素或替换元素和有文本内容的行内元素情况有不同,
+        后续便于说明简称为无文本元素和有文本元素,
+        对齐时有文本元素对齐的是其内容中文字的基线,无文本元素对齐的是其底边,
+        后续默认基线为文字的基线或元素的底边.
+        元素基线与行基线的关系
+      baseline   默认,元素基线和所在行的基线对齐
+      length     通过值(可正负)调整两基线的位置
+        '0px'等同于'baseline'
+      %          通过相对行的line-height的百分比值(可正负)调整两基线的位置
+        0% 等同于 baseline 
+      super      元素基线相对于行基线升高到上标位置
+        规范并未定义元素升高的距离,对于不同的用户代理,这个距离可能有所不同,
+        字体大小不会改变.
+      sub        元素基线相对于行基线下降到下标位置
+      ◆有无文本元素都表现同无文本元素
+        元素上边、下边或中部与行上边、下边或中部(一般为基线上方0.5ex处)位置关系
+      top      将元素顶端与行框的顶端对齐
+      middle   将行内元素框的中点与父元素基线上方0.5ex处对齐
+        此处,1ex相对与父元素的font-size定义,大多数用户代理的1ex为0.5em
+      bottom   将元素底端与行框的底端对齐
+      ◆有无文本元素都表现同有文本元素
+        对齐时,比较的情况为假设当前行存在文字,和inline元素存在同样大小文字时,
+        两个文字的顶部平齐或底部平齐,而产生的定位,
+        故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
+      text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
+      text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
     vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置
       baseline
       top
       middle
       bottom
-  flex 布局   「CSS3 IE10」 
+  flex 布局   [CSS3 IE10] 
     PS：常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
@@ -2096,15 +2095,15 @@ Layout   布局
       row-reverse     水平排列,顺序从右向左排列
       column          垂直排列,顺序从上向下排列
       column-reverse  垂直排列,顺序从下向上排列
-    justify-content 排列方向上「水平或垂直」的对齐方式「和flex-direction有关」 
+    justify-content 排列方向上的对齐方式 [水平或垂直和flex-direction有关] 
       当flex-direction定义为垂直排列时,表示为垂直方向上的对齐方式
       flex-start    默认值,左对齐
       flex-end      右对齐
       center        居中对齐
       space-between 两端对齐,项目之间的间隔都相等。
       space-around  平铺「项目之间的间隔会比项目与边框的间隔大一倍」
-    align-items     垂直排列方向上的对齐方式「和flex-direction有关」 
-      stretch     默认值,「若未设置尺寸或为auto时,项目占满flex容器」
+    align-items     垂直排列方向上的对齐方式[和flex-direction有关] 
+      stretch     默认值,[若项目高度未设置尺寸或为auto时,则高度方向项目占满容器]
         即若未设置尺寸或为auto时,
         水平排列,项目高度为容器的100%,
         垂直排列,项目的宽度为容器的100%;
@@ -2113,11 +2112,11 @@ Layout   布局
       center      居中对齐
       baseline    文字基线对齐
         后续项目的第一行文字的基线与第一个项目的第一行的文字的基线对齐;
-    flex-wrap       「水平排列时」是否换行及换行后的排列顺序 
+    flex-wrap       [水平排列时]是否换行及换行后的排列顺序 
       nowrap  默认值,不换行
       wrap          「一行放不下时」换行,从上往下排列「顺序」
       wrap-reverse  「一行放不下时」换行,从下往上排列「逆序」
-    align-content   「水平排列且换行时」多行的对齐方式
+    align-content   [水平排列且换行时]多行的对齐方式
       stretch       默认值,多个行占满父元素的高度.
       flex-start    多行向上堆积,第一行与父元素的顶部对齐.
       flex-end      多行向下堆积,最后一行与父元素的底部对齐
@@ -2564,7 +2563,7 @@ var() CSS变量
       在调试框中输入一下代码即可
         document.querySelector("head").insertAdjacentHTML("afterbegin",
         '<style> *{ outline: dashed 1px red; } </style>' )
-
+  ◆居中总结
   水平居中方法汇总
     margin:0 auto; 定义block子元素使其水平居中
     text-align:center; 定义其父元素使其inline、inline-block子元素或文字等水平居中
@@ -2743,10 +2742,13 @@ var() CSS变量
     display:table-cell + text-align + vertical-align 
     calc
     flex
-
-  固定长宽比缩放
-    方法一:使用vw等单位,将width和height设置成需要的比例即可.
-    方法二:使用padding属性的百分比数参照对象为其父元素宽度.
+  ◆其他
+  固定长宽比缩放 
+    1 使用vw/vh作为换算单位,将width和height设置成需要的比例即可 
+    2 使用rem作为换算单位,类似于vw/vh单位 
+    3 使用padding属性的百分比数参照对象为其父元素宽度.
+      父元素使用padding来确定高度[padding的百分比参考其父元素的宽度] 
+      父元素相对或绝对定位,子元素相对于父元素绝对定位脱离文档流[使子元素不占用父元素的空间] 
       <div class="container">
         <div class="wrapper">
           <div class="content"> 1 </div>
@@ -2767,54 +2769,7 @@ var() CSS变量
         left:0;top:0;
         background-color:blue;
       }
-
-  特殊用法(至少对于自己来说)
-    多个浮动元素情况下,且有浮动元素被挤到下一行,将下一行的浮动元素移动到当前行.
-      <div>123</div>
-      <p>abc</p>
-      div{
-      width:100%;height:66px;
-      background-color:#ccc;
-      float:left;
-      }
-      p{
-      width:99px;height:88px;
-      background-color:#123456;
-      float:left;
-      margin-left:-50%;
-      }
-      
-  CSS创建三角形
-    原理:四条边框边框并无重叠的部分
-    div{
-      width: 0;
-      height: 0;
-      border: solid 20px;
-      border-color: transparent transparent red transparent;
-      /*上、左、右三条边隐藏(颜色设为 transparent透明)*/
-    }
-    
-  CSS优化、提高性能的方法有哪些？
-    关键选择器(key selector)。选择器的最后面的部分为关键选择器(即用来匹配目标元素的部分)；
-    若规则拥有 ID 选择器作为其关键选择器,则不要为规则增加标签。
-    过滤掉无关的规则(这样样式系统就不会浪费时间去匹配它们了)；
-    提取项目的通用公有样式,增强可复用性,按模块编写组件；增强项目的协同开发性、可维护性和可扩展性;
-    使用预处理工具或构建工具(gulp对css进行语法检查、自动补前缀、打包压缩、自动优雅降级)；
-    
-  vertical-align 和 text-align
-    display：table-cell 的父元素内,子元素 指定 vertical-align 对 自己 产生 垂直对齐的作用
-    父元素 指定 text-align样式 对 display：inline 和 display：inline-block的子元素 产生 水平对齐的作用
-    
-  隐性改变display类型
-    当元素(不论之前是什么类型元素,display:none除外)设置以下2句之一:
-    ⒈position:absolute:
-    ⒉float:left/right
-    自我总结:
-      设置该两种样式,都会脱离文档流,
-      导致元素的display显示类型就会自动变为以display:inline-block(块状元素)的方式显示,
-      当然可以设置元素的width和height了,且默认宽度不占满父元素.
-      
-  两个同级盒子,一固定尺寸另一个弹性伸缩「占满剩余空间」
+  两个同级盒子,一固定尺寸另一个弹性伸缩占满剩余空间 
     分别就水平 和 垂直方向排列来讨论
     水平排列时 
       <div class="wrap">
@@ -2910,13 +2865,58 @@ var() CSS变量
       使用 box-sizing:border-box; 属性;
         高度设置为100%,margin-top 为负值和固定高度的兄弟盒子重叠一部分.
         再使用 padding-top 值等于 margin-top 将其内容不与兄弟盒子重叠;
-  多个同级盒子,若干个固定,若干个弹性伸缩 「todo」
-  元素固定宽高比、尺寸自适应的方法
-    方法一:父元素使用padding来确定高度 (padding的百分比参考其父元素的宽度) 
-      父元素相对或绝对定位,子元素相对于父元素绝对定位脱离文档流 (使子元素不占用父元素的空间)
-    方法二:使用单位vw
-      统一使用vw作为尺寸单位,或设置rem等于1vw,使用rem作为单位
+  多个同级盒子,若干个固定,若干个弹性伸缩 [todo]
   文本超出显示为省略号 [见 text-overflow 属性]
+  父元素高度不固定,使子元素高度等于父元素高度 
+    1 使用flex布局
+    2 position定位,子元素相对于父元素定位,高度100% 
+
+  特殊用法[至少对于自己来说]
+    多个浮动元素情况下,且有浮动元素被挤到下一行,将下一行的浮动元素移动到当前行.
+      <div>123</div>
+      <p>abc</p>
+      div{
+      width:100%;height:66px;
+      background-color:#ccc;
+      float:left;
+      }
+      p{
+      width:99px;height:88px;
+      background-color:#123456;
+      float:left;
+      margin-left:-50%;
+      }
+      
+  CSS创建三角形
+    原理:四条边框边框并无重叠的部分
+    div{
+      width: 0;
+      height: 0;
+      border: solid 20px;
+      border-color: transparent transparent red transparent;
+      /*上、左、右三条边隐藏(颜色设为 transparent透明)*/
+    }
+    
+  CSS优化、提高性能的方法有哪些？
+    关键选择器(key selector)。选择器的最后面的部分为关键选择器(即用来匹配目标元素的部分)；
+    若规则拥有 ID 选择器作为其关键选择器,则不要为规则增加标签。
+    过滤掉无关的规则(这样样式系统就不会浪费时间去匹配它们了)；
+    提取项目的通用公有样式,增强可复用性,按模块编写组件；增强项目的协同开发性、可维护性和可扩展性;
+    使用预处理工具或构建工具(gulp对css进行语法检查、自动补前缀、打包压缩、自动优雅降级)；
+    
+  vertical-align 和 text-align
+    display：table-cell 的父元素内,子元素 指定 vertical-align 对 自己 产生 垂直对齐的作用
+    父元素 指定 text-align样式 对 display：inline 和 display：inline-block的子元素 产生 水平对齐的作用
+    
+  隐性改变display类型
+    当元素(不论之前是什么类型元素,display:none除外)设置以下2句之一:
+    ⒈position:absolute:
+    ⒉float:left/right
+    自我总结:
+      设置该两种样式,都会脱离文档流,
+      导致元素的display显示类型就会自动变为以display:inline-block(块状元素)的方式显示,
+      当然可以设置元素的width和height了,且默认宽度不占满父元素.
+      
   
   将元素隐藏的方法
     .none{ display: none; }

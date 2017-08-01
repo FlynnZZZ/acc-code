@@ -289,7 +289,7 @@
     'body': 'v-else'
   '-vue-vfor':
     'prefix': 'vfor'
-    'body': 'v-for="${1:item} in ${2:items}"' 
+    'body': 'v-for="${1:(item,idx)} in ${2:items}"' 
   '-vue-vhtml':
     'prefix': 'vhtml'
     'body': 'v-html="${1:key}"' 

@@ -1,6 +1,6 @@
 介绍_概念_说明_定义
 介绍：  
-  css「cascading_style_sheets」,层叠样式表
+  css,'cascading_style_sheets',层叠样式表
     一种用来表现html或XML等文件样式的计算机语言;
     CSS1在1996年成为推荐标准.包含内容如字体、颜色、空白边等内容;
     CSS2在1998年成为推荐标准,增加了浮动定位、高级选择器等;
@@ -827,12 +827,6 @@ Declaration,样式声明
         right
         center
         justify 两端对齐[对最后一行文本无效] 
-          使用:after 伪元素将所有行生效 
-          .box:after{
-            content: "";
-            display:inline-block; // 需要是非块元素
-            width: 100%;  // 为了换行
-          }
       text-transform  文本大小写 
         capitalize 单词首字母大写
         uppercase  字母大写
@@ -1468,7 +1462,7 @@ Declaration,样式声明
       all     在编辑器内,若双击或上下文点击发生在子元素上,该值的最高级祖先元素将被选中
       none    不可别选中
   标签及其样式 
-    a链接 
+    <a>链接 
       ◆链接的四种状态:
       a:link    普通的未被访问的状态
       a:visited 用户已访问的状态
@@ -1524,7 +1518,7 @@ Declaration,样式声明
         margin 无效 
       th 
     Form表单相关 
-      input 表单
+      <input> 表单
         padding 
         type=number 时,
           input[type=number] {  
@@ -1535,43 +1529,41 @@ Declaration,样式声明
             -webkit-appearance: none;  
             margin: 0;  
           }  
-      textarea 文本域 
+      <textarea> 文本域 
         resize: none;  禁止缩放
-    ul/ol列表相关
-    ul  无序列表 
-      list-style 
+    <ul>/<ol>列表相关
+      list-style 列表标记样式[简写样式] 
+        list-style-type  列表标记
+          normal
+          disc    实心圆
+          none    无
+          circle  空心圆
+          square  实心方块
+          decimal 数字
+          circle  圆圈
+          decimal-leading-zero 以0开头的标记
+          lower/upper-roman    小/大写罗马数字
+          upper/lower-alpha    大/小写英文字母
+          upper/lower-latin    大/小写拉丁字母
+          lower-greek          小写希腊字母
+          ...
+        list-style-image 标记设置为图像 
+          url(图片地址)
+          none
+          inherit
+          e.g.：
+            ul li{list-style-image: url(aaa.png);}
+        list-style-position 标记位置
+          outset 默认值
+          inset
+          inherit
+        list-position 标记位置
+        e.g. 
+          list-style:circle inside url(XXX/XXX.png);
+          /*在图像加载错误时使用空心圆代替.*/
       -webkit-padding-start: 40px;  列表的默认缩进
-    ol  有序列表 
-      list-style 
-    list-style 列表标记样式[简写样式] 
-      list-style-type  列表标记
-        normal
-        disc    实心圆
-        none    无
-        circle  空心圆
-        square  实心方块
-        decimal 数字
-        circle  圆圈
-        decimal-leading-zero 以0开头的标记
-        lower/upper-roman    小/大写罗马数字
-        upper/lower-alpha    大/小写英文字母
-        upper/lower-latin    大/小写拉丁字母
-        lower-greek          小写希腊字母
-        ...
-      list-style-image 标记设置为图像 
-        url(图片地址)
-        none
-        inherit
-        e.g.：
-          ul li{list-style-image: url(aaa.png);}
-      list-style-position 标记位置
-        outset 默认值
-        inset
-        inherit
-      list-position 标记位置
-      e.g. 
-        list-style:circle inside url(XXX/XXX.png);
-        /*在图像加载错误时使用空心圆代替.*/
+      <ul>  无序列表 
+      ol  有序列表 
   配件样式 
     ::-webkit-scrollbar       滚动条样式
       .aoo ::-webkit-scrollbar {
@@ -2870,6 +2862,15 @@ var() CSS变量
   父元素高度不固定,使子元素高度等于父元素高度 
     1 使用flex布局
     2 position定位,子元素相对于父元素定位,高度100% 
+  不同长度的文本平均分布在相同长度的一段区域内 
+    text-align : justify 文本两端对齐 [对最后一行文本无效] 
+    使用:after 伪元素将所有行生效 
+    .box:after{
+      content: "";
+      display:inline-block; // 需要是非块元素
+      width: 100%;  // 为了换行
+    }
+
 
   特殊用法[至少对于自己来说]
     多个浮动元素情况下,且有浮动元素被挤到下一行,将下一行的浮动元素移动到当前行.
@@ -2916,7 +2917,6 @@ var() CSS变量
       设置该两种样式,都会脱离文档流,
       导致元素的display显示类型就会自动变为以display:inline-block(块状元素)的方式显示,
       当然可以设置元素的width和height了,且默认宽度不占满父元素.
-      
   
   将元素隐藏的方法
     .none{ display: none; }

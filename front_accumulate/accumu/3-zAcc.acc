@@ -594,12 +594,25 @@ VSCode
 
     文件 首选项 键盘快捷方式
   ◆快捷键 [参照Atom快捷键设置]
+    ★不同于Atom的
+    Alt+E    移动到下一个选中项 
   ◆插件 
-    view in browser 
-      快捷键 ctrl-f1
+    ★外观
     vscode-icons  文件图标主题
-    open in browser 
+    One Dark Theme  Atom的oneDark主题
+    ★功能
+    open in browser 在浏览器中打开文件 
       快捷键 alt-b
+    Path Intellisense  路径提示 
+    VS Color Picker  颜色选取 
+      自定义快捷键 ctrl+alt+c 
+    ★HTML
+    Auto Rename Tag  同时修改HTML标签
+    HTML Snippets HTML语言代码提示 
+    ★JS
+    JavaScript Snippet Pack  ES5及以下的代码提示
+    JavaScript (ES6) code snippets  ES6代码提示 
+    jQuery Code Snippets jQuery代码提示 
   ◆其他 
     如何在折叠后的文字后新增新的文字
   ◆Suggestion&Question 

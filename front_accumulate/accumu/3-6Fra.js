@@ -3752,16 +3752,18 @@ originJS[SlSt]
           el.data(ename,data);
           el.trigger(ename,[data]);
         }
-        function get (ename,foo,bool,elem){ 
+        function get (ename,foo,elem){ 
           var el = elem || $('body');
           var data1 = el.data(ename);
           if (data1) { // 当接受者为后出现时 
             foo(data1);
-            if (bool) { // 去掉data数据后续能一直响应
-              el.data(ename,null) 
-            }
           }
           else { // 当接受者为先出现时 
+            el.on(ename,function(e,data2){ 
+              foo(data2) 
+            })
+          }
+          if (!$._data(el[0],'events')[ename]) { // 如果事件不存在则绑定 
             el.on(ename,function(e,data2){ 
               foo(data2) 
             })

@@ -1047,6 +1047,9 @@ Event,事件
       foo1  进入悬浮时回调  
       foo2  可选,离开悬浮时回调 
     Jelem.toggle(foo1,foo2 [,foo3,..]);  点击依次执行函数[jQuery合成事件 1.9 版本移除] 
+  ◆事件绑定检测
+  Jelem.data('events')[ename]         [1.8 版本以下]
+  $._data(Jelem[0],'events')[ename];  [1.8 版本以上]
   事件绑定性能优化 
     正确使用事件委托 
       $('#t').find('td').on('click', function () {  

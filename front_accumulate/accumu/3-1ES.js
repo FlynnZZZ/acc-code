@@ -3432,10 +3432,12 @@ Global&Window 全局对象
     所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
     Global对象没有办法直接访问,在浏览器中可使用window对象实现全局访问;
   var global = function(){ return this; }  间接获取Global对象
-  全局属性&方法 
-    undefined  特殊值undefined
-    NaN        特殊值NaN
-    Infinity   特殊值Infinity
+  ◆全局属性&方法 
+  特殊值 
+    undefined  特殊值 undefined
+    NaN        特殊值 NaN
+    Infinity   特殊值 Infinity
+  构造函数 
     Object     构造函数Object
     Array      构造函数Array
     Function   构造函数Function
@@ -3451,43 +3453,23 @@ Global&Window 全局对象
     SyntaxError    构造函数SyntaxError
     TypeError      构造函数TypeError
     URIError       构造函数URIError
-    ★转换方法 
-      PS：URI编码可以对URI链接进行编码,以便发送给浏览器 
-        URI(Uniform Rescurce Identifiers),通用资源标识符
-        有效的URI中不能包含某些字符,如空格
-        采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
-        encodeURICompinent()编码比encodeURI()编码来的更加彻底
-        一般来说encodeURIConponent()使用频率要高一些.
-    encodeURI(str) 编码URI
-      不会对本身属于URI的特殊字符进行编码,如冒号、正斜杠、问号和#等;
-    decodeURI(str) 解码URI
-    encodeURICommponent(str) 完全编码URI 
-      会对任何非标准字符进行编码 
-    decodeURIComponent(str)  完全解码URI 
-    btoa()  将ascii字符串或二进制数据转换成一base64编码过的字符串
-    atob()  解码base64编码 
-      PS：该方法不能直接作用于Unicode字符串.
-        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
-        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
-        DOM Level 0 规范
-      e.g.:
-        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
-        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
-      Unicode 字符串
-        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
-        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
-        function utf8_to_b64( str ) {
-          return window.btoa(unescape(encodeURIComponent( str )));
-        }
-        function b64_to_utf8( str ) {
-          return decodeURIComponent(escape(window.atob( str )));
-        }
-    
-        // Usage:
-        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
-        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
-        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
-        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
+  转换方法 
+    PS：URI编码可以对URI链接进行编码,以便发送给浏览器 
+      URI(Uniform Rescurce Identifiers),通用资源标识符
+      有效的URI中不能包含某些字符,如空格
+      采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
+      encodeURICompinent()编码比encodeURI()编码来的更加彻底
+      一般来说encodeURIConponent()使用频率要高一些.
+    var uriStr = encodeURI(str) 将字符串编码为URI 
+      PS：通用资源标识符简称为URI
+        不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
+    var str = decodeURI(uriStr) 解码URI
+    var uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
+      会对任何非标准字符进行编码[ASCII字母、数字及"-_.!～*'()"等进行编码] 
+    var str = decodeURIComponent(str)    解码URI[完全解码] 
+    escape()   对字符串进行编码 
+      不要编码URI, 不会对"*@-_+./"等ASCII标点符号进行编码
+    unescape() 解码由'escape'编码的字符串
     Boolean(val);  返回转换为的布尔值
       var a = Boolean(0);         // 转换为false
       var a = Boolean(-0);        // 转换为false
@@ -3566,7 +3548,7 @@ Global&Window 全局对象
       String(undefined) "undefined"
       String(null)      "null"
       e.g.  String(1); //"1"
-    ★判断方法
+  判断方法 
     var bol = isFinite(num) 检测数值是否在可用范围内 
       isFinite(10); // true
     var bol = isNaN(val)    检查值否能转换为NaN 
@@ -3578,15 +3560,16 @@ Global&Window 全局对象
       console.log(isNaN(NaN));    //true
       Remarks:
         当值为对象时,首先调用对象的 valueOf()方法,然后确定该方法返回的值是否可以转换为数值,若不能,则基于这个返回值再调用toString()方法,再测试返回值.
-    ★其他方法 
-    eval(str) 字符串解析器 
+  其他方法 
+    eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
+      PS：是一种由函数执行的动态代码,比直接执行脚本慢很多;
       str  要执行解析的JS代码的字符串 
       e.g.
         var str = 'var num = 100'; // 表达式为一行字符串,而非JS代码
         // console.log(num);  // 报错,不存在
         var val = eval(str);
         console.log(num,val); // 100 undefined 
-  window 对象的DOM和BOM属性&方法[详见 DOM&BOM] 
+  window 对象的DOM和BOM属性&方法 [详见 DOM&BOM] 
 Math   数学对象 
   PS：为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
   ◆数学值
@@ -3932,7 +3915,6 @@ Performance 当前页面加载相关的性能信息
   
   该属性表示当前网页经过了多少次重定向跳转。  
 ------------------------------------------------------------------------------- 
-其他 
 Scope,作用域 
   PS：作用域是在运行时代码中的某些特定部分中变量,函数和对象的可访问性。
     即作用域决定了代码区块中变量和其他资源的可见性。

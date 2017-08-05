@@ -13,96 +13,116 @@
     提供用户显示器分辨率详细信息的screen对象
     对cookies的支持
     像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
-window 
+window 对象
   PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
     核心对象是window,表示浏览器的一个实例.
     window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
-    双重角色:既是JS访问浏览器窗口的一个接口,也是ECMAScript规定的Global对象
     在网页中定义的任何对象 变量和函数,都以window作为其Global对象
     若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
+    ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
+    window为JS「而非ECMAScript」最顶层的对象, 
   加上'window.'和不加'window.'的区别:
     使用所有浏览器都支持的属性或方法,可不用加,
     不加时,当某个浏览器识别不了该属性/方法时,就会当作变量使用,
     加window则是强制性的操作,不会产生误会.
-  ◆框架  
+  全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
+    var a =1;
+    window.a; //1 ,a就是window.a
+  框架  
     PS：若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
       (更多内容参见 JavaScript高级程序设计 196 页)
-  window.name    表示窗口/框架的名称
-  window.frames  框架集 
-    PS：可通过数值索引[从0开始,从左至右,从上至下]或框架的name属性值来获取到对应的框架window对象  
-    e.g.：
-      <frameset >
-        <frame src="frame.html" name="topFrame">
+    window.name    表示窗口/框架的名称
+    window.frames  框架集 
+      PS：可通过数值索引[从0开始,从左至右,从上至下]或框架的name属性值来获取到对应的框架window对象  
+      e.g.：
         <frameset >
-          <frame >
-          <frame >
+          <frame src="frame.html" name="topFrame">
+          <frameset >
+            <frame >
+            <frame >
+          </frameset>
         </frameset>
-      </frameset>
-      通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
-  ◆打开&关闭窗口 
-  var win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
-    PS：查找一个已经存在的窗口或者新建的浏览器窗口
-      若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
-      否则打开新窗口并命名
-      若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错
-    url    :     可选,将要导航到的URL;
-      若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
-    target : 可选,窗口目标,被打开窗口的名称/位置
-      _self   在当前窗口显示目标网页
-      _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
-      _blank  新建一个窗口,默认值
-        不打开新新窗口的情况下会忽略第三个参数
-      _parent 在当前框架的父框架内打开.假如当前框架无父框架,此参数值等同于   _self   .
-      str     命名打开的窗口,后续凡是以该名称打开的窗口都在这个窗口中加载
-        相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
-        name 不能包含有空格
-    params :  可选,设置窗口参数,各参数用逗号隔开
-      PS：字符串中不可出现空格
-      width   数值,窗口宽度,不能小于100
-      height  数值,窗口高度,不能小于100
-      top     数值,窗口顶部距屏幕顶部的px值[不可为负]
-      left    数值,窗口左端距屏幕左端的px值[不能是负值]
-      menubar    yes/no,菜单栏显示,默认为no
-      scrollbars yes/no,滚动条显示,默认为no
-      toolbar    yes/no,工具栏显示,默认为no
-      status     yes/no,状态栏显示,默认为no
-      resizable  yes/no,能否拖动改变窗口大小,默认为no
-      scrollable yes/no,能否滚动,默认为no 
-      location   yes/no,是否在显示地址栏
-        不同浏览器的默认值不同,操作方式也不同(可能隐藏,可能禁用)
-      fullscreen yes/no,浏览器窗口是否最大化[仅限IE]
-    bol    : 表示新页面是否取代浏览器记录中当前加载页面的布尔值
-    window.opener   表示打开它的原始窗口window对象.
-      PS：
-        打开的窗口(新窗口)关联着原始窗口(老窗口);
-        打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
-        在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
-        使用超链接打开的新窗口也可以.
-      newWin.opener =null;  切断联系
-        表示在单独的进程中运行新标签页,告诉浏览器他们不需要通信,
-        联系一旦切断就无法恢复了
-      自我总结:
-        当打开的新窗口在当前窗口显示(即 _self、_parent或_top等),
-        则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口.
-        window.opener.document.querySelector(); 获取到父元素的DOM对象
-    e.g.
-      open('https://www.baidu.com','abc',width=300,height=300,top=100)
-      若设置了参数属性,则会在新的浏览器窗口中打开窗口,
-      因为现存的窗口风格和需要打开的新窗口风格不同.
+        通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
+    window.length  窗口中的框架数量
+    parent          指向包含另一个窗口的窗口(有框架使用)
+    top             包含特定窗口的最顶层窗口(由框架使用)
+  窗口 
+    self           指示当前窗口
+    window          指示当前窗口,与self等效
+    var win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
+      PS：查找一个已经存在的窗口或者新建的浏览器窗口
+        若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
+        否则打开新窗口并命名
+        若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错
+      url    :     可选,将要导航到的URL;
+        若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
+      target : 可选,窗口目标,被打开窗口的名称/位置
+        _self   在当前窗口显示目标网页
+        _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
+        _blank  新建一个窗口,默认值
+          不打开新新窗口的情况下会忽略第三个参数
+        _parent 在当前框架的父框架内打开.假如当前框架无父框架,此参数值等同于   _self   .
+        str     命名打开的窗口,后续凡是以该名称打开的窗口都在这个窗口中加载
+          相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
+          name 不能包含有空格
+      params :  可选,设置窗口参数,各参数用逗号隔开
+        PS：字符串中不可出现空格
+        width   数值,窗口宽度,不能小于100
+        height  数值,窗口高度,不能小于100
+        top     数值,窗口顶部距屏幕顶部的px值[不可为负]
+        left    数值,窗口左端距屏幕左端的px值[不能是负值]
+        menubar    yes/no,菜单栏显示,默认为no
+        scrollbars yes/no,滚动条显示,默认为no
+        toolbar    yes/no,工具栏显示,默认为no
+        status     yes/no,状态栏显示,默认为no
+        resizable  yes/no,能否拖动改变窗口大小,默认为no
+        scrollable yes/no,能否滚动,默认为no 
+        location   yes/no,是否在显示地址栏
+          不同浏览器的默认值不同,操作方式也不同(可能隐藏,可能禁用)
+        fullscreen yes/no,浏览器窗口是否最大化[仅限IE]
+      bol    : 表示新页面是否取代浏览器记录中当前加载页面的布尔值
+      window.opener   表示打开它的原始窗口window对象.
+        PS：
+          打开的窗口(新窗口)关联着原始窗口(老窗口);
+          打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
+          在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
+          使用超链接打开的新窗口也可以.
+        newWin.opener =null;  切断联系
+          表示在单独的进程中运行新标签页,告诉浏览器他们不需要通信,
+          联系一旦切断就无法恢复了
+        自我总结:
+          当打开的新窗口在当前窗口显示(即 _self、_parent或_top等),
+          则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口.
+          window.opener.document.querySelector(); 获取到父元素的DOM对象
+      e.g.
+        open('https://www.baidu.com','abc',width=300,height=300,top=100)
+        若设置了参数属性,则会在新的浏览器窗口中打开窗口,
+        因为现存的窗口风格和需要打开的新窗口风格不同.
 
-      在新打开的窗口中弹出警告栏
-      var box =open('https://www.baidu.com','abc')
-      box.alert('abc')
+        在新打开的窗口中弹出警告栏
+        var box =open('https://www.baidu.com','abc')
+        box.alert('abc')
 
-      子窗口操作父窗口:点击新打开的窗口在父窗口输入一行字
-      var aoo =window.open('https://www.baidu.com','abc',"width=300,height=300,top=100");
-      document.onclick =function(){ aoo.opener.document.write("点击了子窗口"); }
-      结果为:点击父窗口在父窗口打印.(Chrome中测试)
-    Exp：
-      微信中兼容性问题
-        android: 不管窗口目标是是什么,始终在当前页面打开,
-        ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
-  var bol = close();   关闭窗口,返回表示是否成功操作的布尔值
+        子窗口操作父窗口:点击新打开的窗口在父窗口输入一行字
+        var aoo =window.open('https://www.baidu.com','abc',"width=300,height=300,top=100");
+        document.onclick =function(){ aoo.opener.document.write("点击了子窗口"); }
+        结果为:点击父窗口在父窗口打印.(Chrome中测试)
+      Exp：
+        微信中兼容性问题
+          android: 不管窗口目标是是什么,始终在当前页面打开,
+          ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
+    var bol = close();   关闭窗口,返回表示是否成功操作的布尔值
+    opener          打开当前窗口的窗口
+    closed          当窗口关闭时返回true
+    defaultStatus   底部状态栏默认显示(可读写)
+      读写 浏览器底部状态栏默认显示值
+      defaultStatus="状态栏默认显示文本";
+    status          底部状态栏条件显示的值
+      浏览器在某种条件下显示的值,当条件不成立时则不显示.
+      描述由用户交互导致的状态栏的临时消息
+      status="状态栏文本";
+    blur()        将焦点从窗口移除
+    focus()       将焦点移至窗口
   位置与尺寸  
     ◆浏览器位置
       返回值类型为数值,单位都为px
@@ -280,27 +300,80 @@ window
       点击确定,则返回值为用户输入的值;点击取消,则返回null.
     find();    调出查找对话框,异步显示
     print();   调出打印对话框,异步显示
-  其他属性方法 
-    onload
-    closed          当窗口关闭时返回true
-    frame           窗口中的框架对象数组
-    length          窗口中的框架数量
-    offscreenBuffering        用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
-    opener          打开当前窗口的窗口
-    self            指示当前窗口
-    defaultStatus   底部状态栏默认显示(可读写)
-      读写 浏览器底部状态栏默认显示值
-      defaultStatus="状态栏默认显示文本";
-    status          底部状态栏条件显示的值
-      浏览器在某种条件下显示的值,当条件不成立时则不显示.
-      描述由用户交互导致的状态栏的临时消息
-      status="状态栏文本";
-    parent          指向包含另一个窗口的窗口(有框架使用)
-    top             包含特定窗口的最顶层窗口(由框架使用)
-    window          指示当前窗口,与self等效
-    // 窗口操作
-    blur()        将焦点从窗口移除
-    focus()       将焦点移至窗口
+  base64编码&解码 
+    var bs64Str = window.btoa(btStr)  base64编码处理,返回base64字符串[HTML5 IE10+] 
+      btStr  二进制数据组成的Unicode字符串 
+    var btStr = window.atob(bs64Str)  base64解码处理[HTML5 IE10+] 
+      PS：返回二进制数据组成的Unicode字符串
+        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
+        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
+        DOM Level 0 规范
+      bs64Str  经过base64编码后的字符串 
+      e.g.:
+        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
+        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
+      Unicode 字符串 
+        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
+        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
+        function utf8_to_b64( str ) {
+          return window.btoa(unescape(encodeURIComponent( str )));
+        }
+        function b64_to_utf8( str ) {
+          return decodeURIComponent(escape(window.atob( str )));
+        }
+
+        // Usage:
+        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
+        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
+        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
+        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
+    e.g.：
+        当服务器数据库中保存的是图片的二进制数据及图片文件的格式时,根据此二进制数据来渲染图片
+        <input type="file" id="file"/>
+        <input type="button" value="读取图像" onclick="readPicture()" id="btnReadPicture"/>
+        <div id="result"></div>
+        if(typeof FileReader == 'undefined') {
+          result.innerHTML = "抱歉,你的浏览器不支持FileReader";
+        }
+        function readPicture(){
+          // 检查是否为图像类型
+          var fileObj = document.getElementById("file").files[0];
+          if(!/image\/\w+/.test(fileObj.type)) {
+            alert("请确保文件类型为图像类型");
+            return false;
+          }
+          var reader = new FileReader();
+          reader.readAsBinaryString(fileObj); // 将文件以二进制文件读入页面中
+          reader.onload = function(f){
+            var result = document.getElementById("result");
+            var src = "data:" + fileObj.type + ";base64," + window.btoa(this.result);
+            result.innerHTML = '<img src ="'+src+'"/>';
+          }
+        }
+        
+        使用canvas绘制一张图片后,点击上传
+        首先通过canvas元素的'toDataURL'方法获取该图片的url地址,
+        然后获取该URL地址中的base64格式的字符串,
+        最后使用atob方法将其解码为一串二进制数据,并将该二进制数据提交到服务器端
+        <input type="button" value="上传图片" onclick="imgSave()"/><br/>
+        <canvas id="canvas" width="400" height="300"></canvas>
+        var canvas;
+        function draw(id) {
+          canvas = document.getElementById(id);
+          var context = canvas.getContext('2d');
+          context.fillStyle = 'rgb(0,0,255)';
+          context.fillRect(0,0,canvas.width,canvas.height);
+          context.fillStyle = 'rgb(255,255,0)';
+          context.fillRect(10,20,50,50);
+        }
+        draw('canvas');
+        function imgSave(){
+          var data = canvas.toDataURL("image/png");
+          data = data.replace("data:image/png;base64,","");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST","uploadImg.php");
+          xhr.send(window.atob(data));
+        }
   ◆其他接口 
   window.Notification   浏览器通知接口「DiBs HTML5」 
     PS：用于在用户的桌面,而非网页上显示通知信息, 
@@ -400,34 +473,22 @@ window
           alert(txt); // 返回选中的文字
         }
       });
+  其他属性方法 
+    window.onload
+    window.offscreenBuffering 用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
 window的属性对象 
-  PS：ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
-    window为JS「而非ECMAScript」最顶层的对象, 
-  全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
-    var a =1;
-    window.a; //1 ,a就是window.a
-  全局函数/方法 
-    parseInt(str,radix) 
-    parseFloat(str) 
-    isFinite(val)  检测是否是不是无穷值 
-      若值是NaN、+Infinity或-Infinity,返回false,其余返回true
-    isNaN(val);    若值为NaN返回true,否则返回false
-    encodeURI(URI) 将字符串编码为URI 
-      通用资源标识符简称为URI
-      ",/?:@&=+$#" 等有特殊含义的ASCII标点符号,不会进行转义
-    decodeURI():解码某个编码的URI
-    encodeURIComponent(URI) 将字符串编码为URI
-      不会对ASCII字母、数字及"-_.!～*'()"等进行编码 
-    decodeURIComponent()    解码一个编码的URI
-    escape()   对字符串进行编码
-      不要编码URI
-      不会对"*@-_+./"等ASCII标点符号进行编码
-    unescape() 解码由 escape() 编码的字符串
-    eval()     将JavaScript字符串当作脚本来执行 
-      若参数是一个表达式,eval()函数执行表达式,
-      若参数是js语句,eval()将执行js语句;
-      是一种由函数执行的动态代码,比直接执行脚本慢很多;
   window.document  文档对象 「更多详见 DOM document对象」 
+    document.selection  当前激活选中区,即高亮文本块,或文档中用户可执行某些操作的其它元素
+      典型用途是作为用户的输入,以便识别正在对文档的哪一部分正在处理,或者作为某一操作的结果输出给用户。 
+      用户和脚本都可以创建选中区。用户创建选中区的办法是拖曳文档的一部分。
+      脚本创建选中区的办法是在文本区域或类似对象上调用 select 方法。
+      要获取当前选中区,请对   document   对象应用   selection   关键字。
+      要对选中区执行操作,请先用   createRange   方法从选中区创建一个文本区域对象。  
+      一个文档同一时间只能有一个选中区。选中区的类型决定了其中为空或者包含文本和/或元素块。
+      尽管空的选中区不包含任何内容,你仍然可以用它作为文档中的位置标志。  
+      在IE下 这个方法  document.selection.createRange() 不支持,因此为了修复这个bug和在IE10+以上的话,
+      今天又特意研究了下, 在file控件下获取焦点情况下 document.selection.createRange() 将会拒绝访问,
+      所以我们要失去下焦点。我们可以再加一句代码就可以支持了 file.blur();
     document.location 等价于 window.location
     document.documentElement.clientWidth
       IE 下可使用 DOM 方法获取(其他浏览器也支持)

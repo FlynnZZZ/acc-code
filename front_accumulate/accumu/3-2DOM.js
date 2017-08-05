@@ -1479,7 +1479,7 @@ event 事件对象
   变动事件 当底层DOM结构发生变化时触发[IE9+]
     PS：变动事件是为XML或HTML DOM设计的,不特定于某种语言
     兼容性检测
-      var isSupported = document.implementation.hasFeature("MutationEvents"，"2.0");
+      var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
     DOM2级定义了如下变动事件
     DOMSubtreeModified   在DOM结构中发生任何变化时触发
     DOMNodeInserted  一节点被插入另一节点时触发
@@ -2189,7 +2189,7 @@ Form 表单及表单字段脚本
     多选选择框中的每个选中的值单独一个条目
     单击提交按钮也会发送提交按钮,否则,不发送提交按钮(包括type为image的input元素)
     select元素的值,就是选中的option元素的value特性的值,若option元素没有value特性,则是其文本值
-  input+type=text 和 textarea 文本框
+  input[type=text] 和 textarea 文本框
     在其文本框中输入的内容保存在他们的value中
     text.select()  选择文本框中所有的文本
     text.selectionStart  光标选中文本开始的字符下标表示 [HTML5新增]
@@ -2320,7 +2320,7 @@ Form 表单及表单字段脚本
         window[curCallbackName] = undefined;
       }
       
-      // 如果已有其他参数,这里需要判断一下,改为拼接 &callback=
+      // 若已有其他参数,这里需要判断一下,改为拼接 &callback=
       form.action = form.action + '?callback=' + curCallbackName;        
 iframe 
   <iframe id="frame1" name='cpt-topNav' src="/cpt/top_nav.html" ></iframe>
@@ -3022,23 +3022,21 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
           context.rotate(degrees*Math.PI/180);
         }
         context.restore();
-'File API'文件和二进制数据的操作 「HTML5」
-  PS： HTML5在DOM中为文件输入元素添加了一个files集合,
-    文件输入元素如 <input type="file" id="myFile" />,
-    通过文件输入字段选择文件时,files集合中将包含一组File对象.
+FileList 对象与 File 对象 [HTML5]
+  PS：FileList对象表示用户选择的文件列表,
+    HTML4中,file控件内只能选中一个文件,
+    HTML5中[通过添加multiple属性],file控件内能一次选中多个文件,
+    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表.
     HTML5支持一次选择多个文件,若件选择控件没有开启多选模式,那么数组只有一个元素.
-  FileList 和 File 对象    
-    PS：FileList 表示files集,files为change事件对象的 e.target.files,
-      FileList 为 File 对象组成的数组;
-      File 对象,负责处理那些以文件形式存在的二进制数据,也就是操作本地文件,
-      每个File对象对应着一个文件,
-      包含了文件的一些元信息,比如文件名、上次改动时间、文件大小和文件类型。
-    fil.name;  本地文件系统中的文件名
-    fil.type;  文件的MIME类型,字符串
-    fil.size;  文件的字节大小
-    fil.lastModified      文件的上次修改时间,格式为时间戳。
-    fil.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-    e.g.: 采用拖放方式,也可以得到FileList对象。
+  ◆获取 FileList 和 File 对象 
+    PS：FileList 表示files集,files为change事件对象的 e.target.files 
+    e.g.：
+      <input type="file" id="file" multiple>
+      document.querySelector("#file").addEventListener("change",function(e){
+        console.log(this.files);
+      })
+      
+      采用拖放方式,也可以得到FileList对象 [?]
       var dropZone = document.getElementById('drop_zone');
       dropZone.addEventListener('drop', handleFileSelect, false);
       function handleFileSelect(evt) {
@@ -3047,32 +3045,45 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
         var files = evt.dataTransfer.files; // FileList object.
         // ...
       }
-  FileReader 对象  用于读取文件,即把文件内容读入内存
-    PS：FileReader类型实现的是一种异步文件读取机制
-    它的参数是File对象或Blob对象
-    var fr =new FileReader(); 创建fr对象
-    fr.result;  文件的URI数据,其他操作的结果都存放在该属性中
-      当是图片数据时,可作为图片的src
-    fr.readAsText(Blob|File,encoding)  返回纯文本的形式
-      返回文本字符串,并保存在result属性中 [?]
-      encoding   前一个参数的编码方法,可选 默认情况下,文本编码格式是’UTF-8’,
-        可以通过可选的格式参数,指定其他编码格式的文本。
-      该方法是异步方法,一般监听onload件,用来确定文件是否加载结束,
-      方法是判断FileReader实例的result属性是否有值。
-    fr.readAsDataURL(Blob|File);       得到一个基于Base64编码的data-uri对象     
-      返回一个data URL,它的作用基本上是将文件数据进行Base64编码。
-      可以将返回值设为图像的src属性。
-      读取文件以数据URI的形式保存在result属性中 
-    fr.readAsBinaryString(Blob|File)   得到二进制字符串
-      该字符串每个字节包含一个0到255之间的整数。
-      可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容。
-      与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器。     
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var rawData = reader.result;
-      }
-      reader.readAsBinaryString(file);
-    fr.readAsArrayBuffer(Blob|File)    得到一个ArrayBuffer对象
+  var fileList = inputFileElem.files;
+  var file = fileList[idx];
+  ◆属性&方法   
+  file.name;  本地文件系统中的文件名 
+  file.type;  文件的MIME类型,字符串 
+  file.size;  文件的字节大小 
+  file.lastModified      文件的上次修改时间,格式为时间戳。
+  file.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
+Blob 对象[HTML5]
+  PS：代表原始二进制数据,File 对象继承了Blob对象 
+  获取Blob对象
+    <input type="file" id="file" multiple size="80" accept="image/*"/>
+    <input type="button" onclick="ShowFileType();" value="显示文件信息"/>
+    function ShowFileType() {
+      var file = document.getElementById("file").files[0];
+      console.log(file);
+    }
+  blob.size   Blob对象的字节长度
+  blob.type   Blob的MIME类型,若是未知类型,则返回一个空字符串 
+FileReader 对象  用于读取文件[把文件内容读入内存]
+  PS：FileReader采用的是一种异步的文件读取机制
+  var fr = new FileReader(arg); 创建fr对象 
+    arg  File 对象或 Blob 对象
+  ◆属性&方法 
+    ★读取文件数据到'result'中
+    fr.readAsBinaryString(Blob|File)     得到文件的二进制字符串 
+      PS：通常将其传送到服务器端,服务器端可以通过这段字符串存储文件
+        该字符串每个字节包含一个0到255之间的整数
+        可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
+        与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
+      e.g.：
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var rawData = reader.result;
+        }
+        reader.readAsBinaryString(file);
+    fr.readAsDataURL(Blob|File);         得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
+      PS：将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
+    fr.readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
       返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
       在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
       var reader = new FileReader();
@@ -3080,21 +3091,19 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
         var arrayBuffer = reader.result;
       }
       reader.readAsArrayBuffer(file);
-    fr.abort()  用于中止文件上传
+    fr.readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
+      encoding   可选,指定编码类型,默认为'UTF-8' 
+    ★中断文件数据读取 
+    fr.abort()  中断文件读取  
       var reader = new FileReader();
       reader.abort();
-    ◆事件
-      FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
-    load      读取成功后触发
-      load事件的回调函数接受一个事件对象,该对象的target.result就是文件的内容。
-      下面是一个使用 readAsDataURL 方法,为img元素添加src属性的例子。
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        document.createElement('img').src = e.target.result;
-        // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
-      };
-      reader.readAsDataURL(f);
-    progress  进度事件,每过50ms左右,就会触发一次
+    ◆读取到的数据 
+    fr.result;  文件的URI数据,其他操作的结果都存放在该属性中 
+    当是图片数据时,可作为图片的src
+  ◆事件
+    PS：FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
+    loadstart 数据读取开始时触发
+    progress  数据读取中触发,每50ms左右触发一次 
       e.g.: 用来显示读取进度
         var reader = new FileReader();
         reader.onprogress = updateProgress;
@@ -3108,8 +3117,9 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
             }
           }
         }
-    error     发生错误时触发事件
-      触发error事件时,相关的信息在FileReader的error.code,表示错误码
+    abort     读取中断或调用 reader.abort()方法时触发 
+    error     数据读取出错时触发  
+      触发error事件时,相关的信息在 fr.error.code 中,表示错误码
       1 未找到文件
       2 安全性错误
       3 表示读取中断
@@ -3132,62 +3142,93 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
             alert('An error occurred reading this file.');
           };
         }
-    abort 读取中断或调用reader.abort()方法时触发。
-    loadend 读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面。
-    loadstart 读取将要开始时触发
-    e.g.:
+    load      读取成功后触发 
+      load事件的回调函数接受一个事件对象,该对象的target.result就是文件的内容。
+      下面是一个使用 readAsDataURL 方法,为img元素添加src属性的例子。
       var reader = new FileReader();
       reader.onload = function(e) {
-        console.log(e.target.result);
+        document.createElement('img').src = e.target.result;
+        // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
+      };
+      reader.readAsDataURL(f);
+    loadend   读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面 
+  e.g.:
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      console.log(e.target.result);
+    }
+    reader.readAsText(blob);
+    
+    读取文件内容后直接以二进制格式上传
+    var reader = new FileReader();
+    reader.onload = function(){
+      xhr.sendAsBinary(this.result);
+    }
+    // 把从input里读取的文件内容,放到fileReader的result字段里
+    reader.readAsBinaryString(file);
+    不过chrome已经把XMLHttpRequest的sendAsBinary方法移除了,所以自行实现
+    XMLHttpRequest.prototype.sendAsBinary = function(text){
+      var data = new ArrayBuffer(text.length);
+      var ui8a = new Uint8Array(data, 0);
+      for (var i = 0; i < text.length; i++){ 
+        ui8a[i] = (text.charCodeAt(i) & 0xff);
       }
-      reader.readAsText(blob);
+      this.send(ui8a);
+    }
+    将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
+    再把整个数组发送出去。
+URL 对象         用于对二进制数据生成URL 
+  PS：用于生成指向File对象或Blob对象的URL,
+    同样的二进制数据, 每调用一次URL.createObjectURL方法,就会得到一个不一样的URL,
+    这个URL的存在时间,等同于网页的存在时间,
+    一旦网页刷新或卸载,这个URL就失效。
+    除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效。
+  var objecturl =  window.URL.createObjectURL(blob);  创建url对象实例 
+    上面的代码会对二进制数据生成一个URL,
+    类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
+    这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性。
+  window.URL.revokeObjectURL(objectURL); 使URL失效
+  e.g.:
+    在网页插入图片
+    var img = document.createElement("img");
+    img.src = window.URL.createObjectURL(files[0]);
+    img.height = 60;
+    img.onload = function(e) {
+      window.URL.revokeObjectURL(this.src);
+    }
+    docment.body.appendChild(img);
+    var info = document.createElement("span");
+    info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
+    docment.body.appendChild(info);
+    
+    本机视频预览
+    var video = document.getElementById('video');
+    var obj_url = window.URL.createObjectURL(blob);
+    video.src = obj_url;
+    video.play()
+    window.URL.revokeObjectURL(obj_url);  
+    
+    function html5Reader(file) {         
+      var fileObj = file.files[0],
+      img = document.getElementById("img");   
+      // URL.createObjectURL  safari不支持
+      img.src = URL.createObjectURL(fileObj);
+      img.onload =function() {
+        var data = getBase64Image(img);
+        console.log(data);  // 打印出base64编码
+      }
+    }
+    function getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
       
-      读取文件内容后直接以二进制格式上传
-      var reader = new FileReader();
-      reader.onload = function(){
-        xhr.sendAsBinary(this.result);
-      }
-      // 把从input里读取的文件内容,放到fileReader的result字段里
-      reader.readAsBinaryString(file);
-      不过chrome已经把XMLHttpRequest的sendAsBinary方法移除了,所以自行实现
-      XMLHttpRequest.prototype.sendAsBinary = function(text){
-        var data = new ArrayBuffer(text.length);
-        var ui8a = new Uint8Array(data, 0);
-        for (var i = 0; i < text.length; i++){ 
-          ui8a[i] = (text.charCodeAt(i) & 0xff);
-        }
-        this.send(ui8a);
-      }
-      将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
-      再把整个数组发送出去。
-  URL 对象         用于对二进制数据生成URL
-    PS：用于生成指向File对象或Blob对象的URL,
-      同样的二进制数据, 每调用一次URL.createObjectURL方法,就会得到一个不一样的URL,
-      这个URL的存在时间,等同于网页的存在时间,
-      一旦网页刷新或卸载,这个URL就失效。
-      除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效。
-    var objecturl =  window.URL.createObjectURL(blob);  创建url对象实例
-      上面的代码会对二进制数据生成一个URL,
-      类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
-      这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性。
-    window.URL.revokeObjectURL(objectURL); 使URL失效
-    e.g.:在网页插入图片
-      var img = document.createElement("img");
-      img.src = window.URL.createObjectURL(files[0]);
-      img.height = 60;
-      img.onload = function(e) {
-        window.URL.revokeObjectURL(this.src);
-      }
-      docment.body.appendChild(img);
-      var info = document.createElement("span");
-      info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
-      docment.body.appendChild(info);
-    e.g.:本机视频预览
-      var video = document.getElementById('video');
-      var obj_url = window.URL.createObjectURL(blob);
-      video.src = obj_url;
-      video.play()
-      window.URL.revokeObjectURL(obj_url);  
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+      var dataURL = canvas.toDataURL("image/"+ext);
+      return dataURL;
+    }
 Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」 
   var audio = document.querySelector(slt); 获取audio元素对象
   var video = document.querySelector(slt); 获取video元素对象

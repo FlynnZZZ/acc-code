@@ -1355,7 +1355,7 @@ AJAX
         PS：若回调返回false,则取消本次AJAX请求 
         xhr  XMLHttpRequest对象 
       complete : foo   请求完成后的回调[失败或成功都会执行],传入参数 (xhr,textStatus) 
-      success : foo    请求成功后的回调,参数 (backData,textStatus,obj) 
+      success : foo    请求成功后的回调,参数 (backData,textStatus,otherObj) 
         backData  由服务器返回,并由'dataType'参数处理后的数据 
           可能是 xmlDoc,jsonObj,html,text等
       error : foo      请求失败后的回调,参数 (xhr,textStatus,[errorTrown])

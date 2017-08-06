@@ -120,17 +120,52 @@ css引入
         @import url("css文件名.css");
       </style>
     主要使用方式:将多个css文件导入到某个综合的css文件中.
-  link 和 @import 的区别
+  'link'和'@import' 的区别
     link属于XHTML标签,在HTML文件中使用
-    @import 是CSS2.1提供的用于加载CSS(有兼容问题,基本可以忽略),
+    '@import' 是CSS2.1提供的用于加载CSS(有兼容问题,基本可以忽略),
       可在CSS文件中使用,也能在<style>标签中使用,
       在CSS文件中需在其他规则之前,否则会被忽略
     页面被加载的时,link会同时被加载,而@impot会等到页面被加载完再加载;
     与<link>相比,@import要慢,不光增加额外的请求数,还会导致不可预料的问题 ?
   四种引入方式的优先级: 
-    内联式「行内样式」> 内嵌样式「内部式」> 链接式「外部式」> @import「导入式」
+    内联式「行内样式」> 内嵌样式「内部式」> 链接式「外部式」> '@import'「导入式」
     引入时,后引入的具有优先
   Remarks:style标签也可以添加class属性
+Config,设置配置 
+  '@font-face'自定义字体
+    PS：从CSS2.1中去除,CSS3加入[?];将自定义的字体文件放置在服务器,浏览器下载后使用 
+    e.g.：
+      @font-face{
+        font-family: abc; // 自定义字体的名称 
+      }
+    自定义服务器端字体   
+      @font-face{
+        font-family:(自定义的)"字体名称" 
+        src:url(字体文件地址)  
+        src:url(字体文件地址)     
+        ...
+      }   
+      e.g.：   
+        @font-face {     
+          font-family: 'MyFont';
+          src: url('myfont.eot'); /* IE6+ */     
+          src: local('myfont.ttf'),
+          url('myfont.woff') format('woff'),/* FF3.6 */
+          url('myfont.ttf') format('truetype'); 
+          /* FF3.5+,Saf3+,Chrome,Opera10+ */   
+        }
+    在页面上显示服务器端的字体
+      使用@font-face属性来使用服务器端字体
+      @font-face{ 
+        font-family:XX;
+        src:url(XXX.otf) format("opentype");
+      }     
+      使用XX来定义一个服务器端的字体
+      fromat声明字体文件的格式,可以省略文件格式的声明,单独使用src属性值. 字体格式  字体属性 otf opentype ttf
+        truetype eot embedded-opentype (只有IE支持) e.g. @font-face{ font-
+        family:webFont; src:url(XXX.otf)format("opentype");     }     h1{ font-
+        family:webFont;     }
+
 Selector,选择器 
   PS： css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
     selector{
@@ -749,8 +784,130 @@ Selector,选择器
       @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
       @media screen and (min-width:1201px) {div{width:33.33%}}
 Declaration,样式声明 
-  专题样式 
-    text   文本样式 
+  字体&文本
+    'font'字体样式
+      font : family size[/line-height] [weight] [style] [variant] [stretch];
+        'font-size'和'font-family'属性必选,其他可选   
+        缩写时没有固定的顺序   
+      font-family : 'name1'[,'name2',..];     字体类型 
+        PS： 当前一个字体不支持时使用下一个,
+          若客户端无设置的字体则显示浏览器默认字体,
+          绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
+          因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
+          当使用很特殊的字体时,可采用图片的形式决解,
+        name  表示字体名称,定义多个字体,用逗号隔开 
+        e.g.：  
+          font-family:"微软雅黑";
+          font-family:"Microsoft Yahei"; // 兼容性更好
+          font-family: "微软雅黑","楷体";
+        常用字体及英文表示 
+          宋体         SimSun 
+          黑体         SimHei 
+          微软雅黑     Microsoft YaHei 
+          微软正黑体   Microsoft JhengHei 
+          新宋体   NSimSun 
+          新细明体  PMingLiU
+          细明体   MingLiU 
+          标楷体   DFKai-SB 
+          仿宋  FangSong 
+          楷体  KaiTi 
+          仿宋_GB2312 FangSong_GB2312 
+          楷体_GB2312   KaiTi_GB2312 
+          ◆Mac OS的一些：   
+          华文细黑：STHeiti Light [STXihei]   
+          华文黑体：STHeiti   
+          华文楷体：STKaiti   
+          华文宋体：STSong   
+          华文仿宋：STFangsong
+          ◆装Office会生出来的一些：
+          隶书: LiSu   
+          幼圆: YouYuan   
+          华文细黑: STXihei   
+          华文楷体: STKaiti   
+          华文宋体: STSong
+          华文中宋: STZhongsong   
+          华文仿宋: STFangsong   
+          方正舒体: FZShuTi   
+          方正姚体: FZYaoti
+          华文彩云: STCaiyun   
+          华文琥珀: STHupo   
+          华文隶书: STLiti   
+          华文行楷: STXingkai   
+          华文新魏: STXinwei   
+      font-size       字号 
+        PS：该属性设置元素的字体大小.实际上它设置的是字体中字符框的高度;
+          实际的字符字形可能比这些框高或矮（通常会矮）。     
+        %      参考对象为其父元素的 font-size     
+        length 把 font- size 设置为一个固定的值。
+        larger 比父元素更大     
+        smaller     比父元素更小
+        把字体的尺寸设置为不同的尺寸,从 xx-small 到 xx-large。 
+          xx-small     x-small small medium
+          默认值 large x-large xx-large     
+          inherit     继承父元素的大小 (子元素会默认继承)   
+      font-size-adjust 规定元素的aspect值「IE不支持」 
+        PS：字体的小写字母 "x" 的高度与 "font-size" 高度之间的比率被称为一个字体的 aspect 值。
+          当字体拥有高的 aspect 值时,那么当此字体被设置为很小的尺寸时会更易阅读。
+          举例：Verdana 的 aspect 值是 0.58
+          （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
+          Times New Roman 的 aspect 值是 0.46。
+          这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
+        none   默认。如果此字体不可用,则不保持此字体的 x-height。
+        number 定义字体的 aspect 值比率。
+        e.g.：
+          如果 14px 的 Verdana（aspect 值是 0.58）不可用,
+          但是某个可用的字体的 aspect 值是 0.46,
+          那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
+      font-weight     字重     
+        number    100-900的整百数(其中400=normal,700=bold)
+        normal     
+        lighter     
+        bold     加粗     
+        bolder     
+      font-style      字体风格 
+        normal  默认     
+        italic  斜体,对于没有斜体的特殊字体,将应用oblique.     
+        oblique 倾斜,是正常竖直文本的一个倾斜版本.
+          通常,italic和oblique文本看上去完全一样   
+      font-variant    字体变形 
+        normal     
+        small-caps  小型大写文字     
+        inherit    
+      font-stretch    字体水平拉伸[CSS2.1删除]     
+      e.g.：  
+        p{   
+          font-style:italic;   
+          font-variant:small-caps;   
+          font-weight:bold;   
+          font-size:12px;   
+          line-height:1.5em;   
+          font- family:"宋体",sans-serif; 
+          } 
+        可简写为 
+        p{   
+          font:italic small-caps bold 12px/1.5em "宋体",sans-serif;  
+          /* 在缩写font-size和line-height中间加/ */ 
+        }
+      使用系统字体 
+        PS：若希望一个Web页面结合用户操作系统的设置,font的系统字体值会很方便,
+          这些值用于取得操作系统中元素的字体大小、字体系列、字体系列、
+          字体加粗、字体风格等等,并将其应用到一个元素.    
+        caption 用于有标题的控件,如按钮     
+        icon 用于对图标加标签     
+        menu  用于菜单,即下拉菜单和菜单列表     
+        message-box 用于对话框     
+        small-caption 用于对小控件加标签     
+        status-bar 用于窗口状态条     
+        e.g.：
+          .aoo{font:caption;} 
+    
+      显示客户端本地的字体
+        将font-family设置为本地的字体名,然后将src属性设置为local("字体")
+          e.g. @font-face{
+                font-family:Arial;
+                src:local("Arial");
+              }
+    'text'文本样式 
       PS：valign只有在表格标签中使用,字体无text-valign属性
       color           字体颜色
         当边框颜色未设置时,该属性的颜色值会应用到边框上 
@@ -883,156 +1040,7 @@ Declaration,样式声明
         ltr     默认,文本方向从左到右
         rtl     文本方向从右到左,从右向左的文本默认为rtl
         inherit 继承
-    font   字体样式「简写」 
-      font : family size[/line-height] [weight] [style] [variant] [stretch];
-        font-size 和 font-family 属性必选 ,其他属性可选   
-        缩写时没有固定的顺序   
-      font-family:'name1'[,'name2',..];     字体风格 
-        PS：若客户端无设置的字体则显示浏览器默认字体,
-          当使用很特殊的字体时,可采用图片的形式决解,
-          当前一个字体不支持时直接使用下一个,
-          绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
-          因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
-        name  表示字体名称,定义多个字体,用逗号隔开 
-        e.g.：  
-          font-family:"微软雅黑";
-          font-family:"Microsoft Yahei"; // 兼容性更好
-          font-family: "微软雅黑","楷体";
-        常用字体及英文表示 
-          宋体         SimSun 
-          黑体         SimHei 
-          微软雅黑     Microsoft YaHei 
-          微软正黑体   Microsoft JhengHei 
-          新宋体   NSimSun 
-          新细明体  PMingLiU
-          细明体   MingLiU 
-          标楷体   DFKai-SB 
-          仿宋  FangSong 
-          楷体  KaiTi 
-          仿宋_GB2312 FangSong_GB2312 
-          楷体_GB2312   KaiTi_GB2312 
-        Mac OS的一些：   
-          华文细黑：STHeiti Light [STXihei]   
-          华文黑体：STHeiti   
-          华文楷体：STKaiti   
-          华文宋体：STSong   
-          华文仿宋：STFangsong
-        装Office会生出来的一些：
-          隶书: LiSu   
-          幼圆: YouYuan   
-          华文细黑: STXihei   
-          华文楷体: STKaiti   
-          华文宋体: STSong
-          华文中宋: STZhongsong   
-          华文仿宋: STFangsong   
-          方正舒体: FZShuTi   
-          方正姚体: FZYaoti
-          华文彩云: STCaiyun   
-          华文琥珀: STHupo   
-          华文隶书: STLiti   
-          华文行楷: STXingkai   
-          华文新魏: STXinwei   
-      font-size       字号 
-        PS：该属性设置元素的字体大小.实际上它设置的是字体中字符框的高度;
-          实际的字符字形可能比这些框高或矮（通常会矮）。     
-        %      参考对象为其父元素的 font-size     
-        length 把 font- size 设置为一个固定的值。
-        larger 比父元素更大     
-        smaller     比父元素更小
-        把字体的尺寸设置为不同的尺寸,从 xx-small 到 xx-large。 
-          xx-small     x-small small medium
-          默认值 large x-large xx-large     
-          inherit     继承父元素的大小 (子元素会默认继承)   
-      font-size-adjust 规定元素的aspect值「IE不支持」 
-        PS：字体的小写字母 "x" 的高度与 "font-size" 高度之间的比率被称为一个字体的 aspect 值。
-          当字体拥有高的 aspect 值时,那么当此字体被设置为很小的尺寸时会更易阅读。
-          举例：Verdana 的 aspect 值是 0.58
-          （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
-          Times New Roman 的 aspect 值是 0.46。
-          这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
-        none   默认。如果此字体不可用,则不保持此字体的 x-height。
-        number 定义字体的 aspect 值比率。
-        e.g.：
-          如果 14px 的 Verdana（aspect 值是 0.58）不可用,
-          但是某个可用的字体的 aspect 值是 0.46,
-          那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
-      font-weight     字重     
-        number    100-900的整百数(其中400=normal,700=bold)
-        normal     
-        lighter     
-        bold     加粗     
-        bolder     
-      font-style      字体风格 
-        normal  默认     
-        italic  斜体,对于没有斜体的特殊字体,将应用oblique.     
-        oblique 倾斜,是正常竖直文本的一个倾斜版本.
-          通常,italic和oblique文本看上去完全一样   
-      font-variant    字体变形 
-        normal     
-        small-caps  小型大写文字     
-        inherit    
-      font-stretch    字体水平拉伸[CSS2.1删除]     
-      e.g.：  
-        p{   
-          font-style:italic;   
-          font-variant:small-caps;   
-          font-weight:bold;   
-          font-size:12px;   
-          line-height:1.5em;   
-          font- family:"宋体",sans-serif; 
-          } 
-        可简写为 
-        p{   
-          font:italic small-caps bold 12px/1.5em "宋体",sans-serif;  
-          /* 在缩写font-size和line-height中间加/ */ 
-        }
-      使用系统字体
-        PS：若希望一个Web页面结合用户操作系统的设置,font的系统字体值会很方便,
-          这些值用于取得操作系统中元素的字体大小、字体系列、字体系列、
-          字体加粗、字体风格等等,并将其应用到一个元素.    
-        caption 用于有标题的控件,如按钮     
-        icon 用于对图标加标签     
-        menu  用于菜单,即下拉菜单和菜单列表     
-        message-box 用于对话框     
-        small-caption 用于对小控件加标签     
-        status-bar 用于窗口状态条     
-        e.g.：
-          .aoo{font:caption;} 
-      自定义服务器端字体   
-        PS：@font-face 已经从CSS2.1中去除   
-        @font-face{
-          font-family:(自定义的)"字体名称" 
-          src:url(字体文件地址)  
-          src:url(字体文件地址)     
-          ...
-        }   
-        e.g.：   
-          @font-face {     
-            font-family: 'MyFont';
-            src: url('myfont.eot'); /* IE6+ */     
-            src: local('myfont.ttf'),
-            url('myfont.woff') format('woff'),/* FF3.6 */
-            url('myfont.ttf') format('truetype'); 
-            /* FF3.5+,Saf3+,Chrome,Opera10+ */   
-          }
-      在页面上显示服务器端的字体
-        使用@font-face属性来使用服务器端字体
-        @font-face{ 
-          font-family:XX;
-          src:url(XXX.otf) format("opentype");
-        }     
-        使用XX来定义一个服务器端的字体
-        fromat声明字体文件的格式,可以省略文件格式的声明,单独使用src属性值. 字体格式  字体属性 otf opentype ttf
-          truetype eot embedded-opentype (只有IE支持) e.g. @font-face{ font-
-          family:webFont; src:url(XXX.otf)format("opentype");     }     h1{ font-
-          family:webFont;     }
-    
-      显示客户端本地的字体
-        将font-family设置为本地的字体名,然后将src属性设置为local("字体")
-          e.g. @font-face{
-                font-family:Arial;
-                src:local("Arial");
-              }
+  todo
     background 背景「简写」
       PS：通常建议使用简写方式,而非使用单个属性,
         因为该属性在较老的浏览器中兼容性更好,且键入的字母更少
@@ -2981,7 +2989,7 @@ Collection
     那么子元素设置为1,也比父元素高
 
 
-  像素
+  像素 
     Device Pixels(设备像素) 一个设备像素（或者称为物理像素）是显示器上最小的物理显示单元。
     在操作系统的调度下,每一个设备像素都有自己的颜色值和亮度值。
     苹果公司为它的双倍屏幕密度的显示器（double-density displays）创造了一个新词“Retina”,
@@ -3001,7 +3009,7 @@ Collection
     但由于单个位图像素已经无法再进一步分割,只能就近取色,导致图片变虚。
     像素密度可以通过javascript的window.devicePixelRatio来查询(注意：不是所有浏览器都支持devicePixelRatio)。一旦检测到高密度显示器,你就可以用高质量图片替换普通图片：
 
-  vmin and vmax
+  vmin and vmax 
     vmin 和 vmax关于视口高度和宽度两者的最小或者最大值。
     比如,浏览器的宽度设置为1100px,高度设置为700px,1vmin = 1px,1vmax = 11px。
     若宽度设置为800px,高度设置为1080px,1vmin=8px,1vmax=10.8px。
@@ -3058,12 +3066,7 @@ Collection
   
   flex 布局如何指定单一一元素在水平方向上的对齐方式
 
-
-
-
-
   在文字超出部分部分使用...显示
-
 
 
 

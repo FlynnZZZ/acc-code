@@ -3769,6 +3769,7 @@ originJS[SlSt]
             })
           }
         }
+        // ename  不可使用大小写、不可使用'_'连接,最好全部为小写字母 
         // 使用
         var foo = function(data){ 
           console.log(data);

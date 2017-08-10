@@ -1,6 +1,6 @@
 ◆tools
 Atom 
-  ◆软件设置 
+  设置 
     编辑器设置
       悬挂缩进 设置为2
       字体设置  Consolas,楷体
@@ -114,7 +114,7 @@ Atom
         
         // 设置技巧
         // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
-  ◆快捷键 
+  快捷键 
     默认快捷键
       ◆常用
       ctrl-alt-↑/↓        光标多选
@@ -137,6 +137,7 @@ Atom
       ctrl-\              显示/隐藏目录树
       ctrl-f              在buffer中查找
       ctrl-.	            key-binding-resolver:toggle,激活 查看键位的绑定情况
+      ctrl-,	            设置 
       ◆其他
         ctrl-shift-s      保存所有打开的文件
         ctrl-t/ctrl-p     查找文件
@@ -210,7 +211,7 @@ Atom
         取消 ctrl-e 在 find-and-replace 插件下的快捷键设置
         '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
           'ctrl-e': 'unset!'
-  ◆插件 
+  插件 
     自带插件
       about                  关于Atom的信息查看 [help-about Atom]
         禁止后可能影响软件的自动升级
@@ -388,7 +389,7 @@ Atom
         Symbols-tree-View          快速定位到函数、变量的位置等等
           设置默认不显示的类别:number string undefined unknown array object
         highlight-line             当前行高亮
-  ◆使用经验总结
+  总结 
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
       将查找内容的部分进行替换
@@ -404,7 +405,7 @@ Atom
       在字符后换行  a          替换为 a\n\t
     可在命令行中使用Atom打开当前文件: atom ./ 
     1.18.0 折叠正常 1.19.0 折叠非标准内容的文件存在bug,并且也不能记住折叠的状态  
-  ◆Suggestion&Question 
+  Suggestion&Question 
     优点总结
       折叠功能优秀
       选中字符后直接增加括号,则选中的内容被包括在括号内
@@ -456,7 +457,7 @@ Notepad2
         其他全部去除
       显示状态栏              勾选 
       退出时保存设置          勾选 
-  快捷键
+  快捷键 
     Ctrl+W                   开关自动换行
     Ctrl+↑↓                  上下滚动显示,在屏幕显示范围内光标位置不动
     Ctrl+left/right          单词跳转
@@ -477,17 +478,17 @@ Notepad2
       将所需包括的内容选中,Alt+X完成输入.
     Ctrl+Shift+s             将选中区域的制表符转换为空格
     Ctrl+Shift+t             将选中区域的空格转换为制表符
-  使用技巧
+  总结 
     将光标移到行的最左端--显示行号的位置,点击或拖动进行行选择。
-  Suggestion
+  Suggestion&Question:
     中文字体及非中文字体单独设置
     将打开的多个文件放在一个窗口中,通过标签切换.
     自定义快捷键
 Hbuilder 
   设置
 Notepad++ 
-  ◆设置
-  ◆快捷键  [参照Atom快捷键设置] 
+  设置
+  快捷键 [参照Atom快捷键设置] 
     设置-管理快捷键 进行修改
     快键键文件为 C:\Users\Fan\AppData\Roaming\Notepad++\shortcuts.xml
       <NotepadPlus>
@@ -580,24 +581,23 @@ Notepad++
       unknow             ctrl-.            管理快捷键 
       ◆未知
       选中当前行
-  ◆插件
+  插件 
     autosave
-  ◆其他
-  ◆Suggestion&Question 
+  Suggestion&Question 
     如何设置将所有文件默认作为Python格式  [Notepad++ python格式文件可以折叠]
       设置-语言格式设置-选择python 
       在自定义扩展名中填入需要的格式后缀 如 txt rec
     取消代码折叠后的下划线
     自定义扩展词 [snippet?]
 VSCode 
-  ◆设置 
+  设置 
     文件 首选项 用户设置
 
     文件 首选项 键盘快捷方式
-  ◆快捷键 [参照Atom快捷键设置]
+  快捷键 [参照Atom快捷键设置]
     ★不同于Atom的
     Alt+E    移动到下一个选中项 
-  ◆插件 
+  插件 
     ★外观
     vscode-icons  文件图标主题
     One Dark Theme  Atom的oneDark主题
@@ -614,11 +614,24 @@ VSCode
     JavaScript Snippet Pack  ES5及以下的代码提示
     JavaScript (ES6) code snippets  ES6代码提示 
     jQuery Code Snippets jQuery代码提示 
-  ◆其他 
+  Suggestion&Question 
     如何在折叠后的文字后新增新的文字
-  ◆Suggestion&Question 
     折叠功能
       折叠后将后面所用的空行也折叠进去了,无法在折叠状态下,再在接着的后一行添加内容
+WebStorm 
+  设置 
+  快捷键 
+    Settings                      Atom           设置                 
+    Collapse all                  Atom           折叠所有             
+    Expand all                    Atom           展开所有折叠          
+    Duplicate line or Selection   Atom           复制行 
+    Delete line                   Atom           删除行 
+    Comment with line comment     Atom           行注释  
+    Move line up                  Atom           上移行  
+    Move line down                Atom           下移行  
+  插件 
+  总结 
+  Suggestion&Question:
 Sublime text3 
   ◆设置 
     缩进宽度         查看   缩进 标签宽度:2

@@ -268,22 +268,23 @@ HTTP 协议
   HTTP 缓存
     PS：缓存:存储指定资源的一份拷贝,并在下次请求该资源时提供该拷贝的技术 
     缓存控制 头信息 
-      Cache-control 头
-        PS：HTTP/1.1 定义,请求头和响应头都支持该属性,提供的不同的值来定义缓存策略 
+      Cache-control 头 [HTTP/1.1] 
+        PS：请求头和响应头都支持该属性,提供的不同的值来定义缓存策略; 
+          当请求头的Cache-control优先级高于响应头中的;
         'no-store'  完全不支持缓存,每次由客户端发起的请求都会下载完整的响应内容 
         'no-cache'  不缓存内容,在释放缓存内容前向服务端源地址发送请求以验证缓存是否有效 
         'private'   私有缓存,响应的内容只能被唯一的用户缓存 
         'public'    公共缓存,响应可以被任何请求来源缓存 
         max-age=num  判断缓存是否过期,num为距离请求发起的时间的秒数 
         must-revalidate 缓存验证,在使用一些老的资源前强制验证状态判断其是否过期
-      Expires 头
-        PS：HTTP/1.0 定义 
-          Cache-Control的max-age值表示缓存文件的有效时间的秒数,
+      Expires 头 [HTTP/1.0]
+        PS： Cache-Control的max-age值表示缓存文件的有效时间的秒数,
+          时间根据系统的时间来进行判断;
           Expire的值是一个绝对时间点,表示缓存文件在某个时间点之前有效。
-          在Cache-Control和Expires同时存在的情况下,Cache-Control的优先级高于Expires
-      Pragma 头 
-        PS：HTTP/1.0 标准定义,响应头不支持该属性,
-          通常定义Pragma以向后兼容基于HTTP/1.0 的客户端 
+          Cache-Control优先级高于Expires;
+      Pragma 头 [HTTP/1.0]
+        PS：响应头不支持该属性,通常定义Pragma以向后兼容基于HTTP/1.0 的客户端 
+        no-cache  通知客户端不要对该资源进行缓存 
       Last-Modified/If-Modified-Since 头  
         需配合Cache-Control使用,
         缓存过期后,请求头发出 If-Modified-Since 来判断是否更新缓存, 
@@ -292,12 +293,15 @@ HTTP 协议
         如果不相同文件更新了,HTTP200,返回数据,
         同时通过响应头更新last-Modified的值,以备下次对比 
     无法被浏览器缓存的请求 
+      浏览器发出的第一个请求的资源默认是不被缓存的; 
       HTTP信息头中包含Cache-Control:no-cache,
       pragma:no-cache,
       或Cache-Control:max-age=0 等告诉浏览器不用缓存的请求
       需要根据Cookie,认证信息等决定输入内容的动态请求是不能被缓存的
       POST请求无法被缓存
       HTTP响应头中不包含Last-Modified/Etag,也不包含Cache-Control/Expires的请求无法被缓存
+    不使用缓存的方法 
+      使用查询字符串来避免缓存,缓存以URL为依据 [古老的方法] 
 --------------------------------------------------------------------------------
 数据结构 
   数据结构就是存储数据的方式
@@ -365,4 +369,3 @@ HTTP 协议
     回溯
     分治算法
 二叉树 
-

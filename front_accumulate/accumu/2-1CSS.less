@@ -604,21 +604,40 @@ Selector,选择器
   'Media Queries'媒体查询 [IE9+][手机端浏览器都支持][CSS3]
     PS：根据不同的媒体类型和条件,指定对应的样式
       媒体查询让css可以更精确作用于不同的媒体或同一媒体的不同条件.
-      媒体查询可以用在css的 @media 和 @import 规则上,也可以被用字html和xml中.
+      媒体查询可以用在css的'@media'和'@import'规则上,也可以被用字html和xml中.
       用来做响应式设计,即根据条件(如屏幕的宽度)来选用样式
       Media Queries是css3中的一个和各种媒体相关的重要模块.
-    使用方式
-      ◆在CSS中使用
-      @media 设备类型 and (执行条件1) and (执行条件2){执行的样式}
-        设备类型
-          all 表示任何设备
+    使用方式 
+      ◆在HTML中使用 
+      <link href="xxx.css" media="screen"/>  适用于计算机彩色屏幕 
+      <link href="xxx.css" media="print"/> 适用于打印预览模式下查看的内容或打印机打印的内容 
+      <link href="xxx.css" media="screen and (min-width:800px)"/>
+      ◆在CSS中使用 
+      @media type connector (condition1) connector (condition2){ styleCode }
+        type      设备类型 
+          all    任何设备
           screen 常用的类型
-          tv
-        and 逻辑操作符 
-          通过and ()添加条件,可以添加多个条件
-      ◆在HTML中使用
-      <link media="screen and (min-width:800px)"  href="xxx.css"/>
-      ◆在CSS或HTML中使用
+          tv 
+        connector 逻辑连接符 
+          and  交集 
+          or   并集
+        condition 条件 
+          可搭配关键字 not 
+            @media (not min-width:800px){}
+          min-width:  
+          min-height:   
+          max-width:   
+          max-height:  
+          orientation: 屏幕方向 
+            porttrait    
+        e.g.： 
+          @media (min-width:800px){
+            ...
+          }
+          @media (min-width:800px) and (max-width:1024px){
+            ...
+          }
+      ◆在CSS或HTML中使用 
       @import url(XXX.css) screen and (min-width:800px);
     媒体类型
       all  适用于所有设备
@@ -1011,9 +1030,9 @@ Declaration,样式声明
     ◆其他
     color      字体颜色
       当边框颜色未设置时,该属性的颜色值会应用到边框上 
-    direction  文本方向
+    direction  文本方向 
       PS：对于行内元素,只有当unicode-bidi属性设置为embed或bidi-override时才会应用该属性
-      ltr     默认,文本方向从左到右
+      ltr     文本方向从左到右,默认 
       rtl     文本方向从右到左,从右向左的文本默认为rtl
       inherit 继承
     line-height  行高[行间距]  
@@ -1270,20 +1289,31 @@ Declaration,样式声明
         .aoo{
           background:repeating-radial-gradient( #ace,#ace 5px,#f96 5px,#f96 10px);  
         }
-    filter 滤镜 [CSS3]
-      PS：-webkit-filter;存在兼容性问题 
-      grayscale 灰度
-      sepia 复古色
-      saturate 饱和度
-      hue-rotate 色相旋转
-      invert  反色
-      opacity 透明度
-      brightness 亮度
-      contrast 对比度
-      blur 模糊
-      drop-shadow 阴影
-      e.g.
-  变换&过渡&动画
+    filter滤镜 [CSS3]
+      PS：CSS3 filters能处理视频和图片;只有Chrome支持  
+      filter: 
+        none   
+        grayscale()  灰度,默认值:100%
+        sepia()      复古色,默认值:100% 
+        saturate()   饱和度,默认值:100% 
+        hue-rotate() 色相旋转,默认值:0deg 
+        invert()     反色,默认值:100% 
+        opacity:     透明度,默认值:100% 
+        brightness() 亮度,默认值100%
+        contrast()   对比度,默认值100% 
+        blur()       模糊,默认值:0px 
+        drop-shadow() 阴影 
+          .aoo{
+            filter:drop-shadow(5px 5px 5px #ccc);
+          }
+      e.g. 
+        img {
+          filter : grayscale(1);
+        }
+        img:hover {
+          filter : grayscale(0);
+        }
+  变换&过渡&动画  
     transform  变换处理 [IE9+ CSS3] 
       PS：IE9+支持2D变换,IE10+支持3D变换;只对block元素生效;
       transform-origin : x [y];      定义变换原点 
@@ -1346,32 +1376,38 @@ Declaration,样式声明
       同时使用多个变形时,多个变形方法间使用空格连接[只声明一个'transform'] 
         transform:方法1 方法2...;
     transition 指定变化的过渡效果 [IE10+ CSS3] 
-      PS：使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始;
+      PS：使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始; 
         并非所有的CSS属性都支持transition[如 ?];
+        过渡需要事件触发[如:hover]
       transition-property:         指定参与过渡的属性 
         规定应用过渡效果的css属性的名称
         all       值所有属性都将获得过渡效果,默认值 
         none      没有属性会获得过渡效果
         p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
-      transition-duration:         过渡持续时间,单位s或ms
-      transition-timing-function:  速度变化
-        ease        逐渐变慢,默认值 
-        linear      匀速
-        ease-in     加速
-        ease-out    减速
-        ease-in-out 加速后减速
+      transition-duration:         过渡持续时间,单位s或ms 
+      transition-timing-function:  速度变化 
+        ease        慢速开始中间快速慢速结束,默认值 
+          cubic-bezier(0.25,0.1,0.25,1)
+        linear      匀速 
+          cubic-bezier(0,0,1,1) 
+        ease-in     慢速开始匀速结束 
+          cubic-bezier(0.42,0,1,1)
+        ease-out    匀速开始慢速结束 
+          cubic-bezier(0,0,0.58,1)
+        ease-in-out 慢速开始中间匀速慢速结束 
+          cubic-bezier(0.42,0,0.58,1)
         cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
-      transition-delay:            延迟时间,单位s或ms
+      transition-delay:            延迟时间,单位s或ms 
         0  默认值 
-      transition:[property] duration [speed] [delay]; [简写方式]
-        PS：同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s;
+      transition : [property] duration [accelerate] [delay]; [简写方式] 
+        PS：同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s; 
         property   可选,默认为所有属性,指定变化的属性 
         duration   过渡持续时间 
-        speed      可选,过渡的速度变化 
-        delay      可选,默认为 0,开始执行的延迟时间
+        accelerate 可选,过渡的速度变化  
+        delay      可选,默认为 0,开始执行的延迟时间 
       e.g. :
-        <div></div>
-        div {
+        <div>  </div>
+        div { 
           width:100px; height:100px; background:blue;
           transition:width 2s;
           // -webkit-transition:width 2s; /* Safari and Chrome */
@@ -1379,66 +1415,76 @@ Declaration,样式声明
           // -o-transition:width 2s;      /* Opera */
         }
         div:hover { width:300px; }
-    animations 自定义关键帧动画 [IE10+ CSS3] 
-      PS：通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果
-      animation:name duration speed delay counts direction; 简写方式
-        name       关键帧名称
-        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画]
-        speed      动画速度变化的曲线
-        delay      动画开始前的延迟
-        counts     动画执行的次数
-        direction  是否轮流反向播放动画
-      ◆分别定义
-      animation-name:str;  关键帧名称
-        str 关键帧名称
+    animations 自定义关键帧动画 [IE10+ CSS3]  
+      PS: 通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果 
+      animation : name duration accelerate delay counts direction; 简写方式 
+        name       关键帧名称 
+        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画] 
+        accelerate 动画速度变化的曲线 
+        delay      动画开始前的延迟 
+        counts     动画执行的次数 
+        direction  是否轮流反向播放动画 
+        ◆分别定义
+        animation-name       关键帧名称 
           keyframename 自定义的关键帧名称
-          none 无动画效果(可用于覆盖来自级联的动画)
-      animation-duration   动画持续时间,默认为0无动画效果[需带单位为s秒或ms毫秒]
-      animation-timing-function 动画的速度曲线 
-        ease 默认,平滑,等于 cubic-bezier(0.25,0.1,0.25,1.0)
-        linear    匀速,等于 cubic-bezier(0.0,0.0,1.0,1.0)
-        ease-in   加速,等于 cubic-bezier(0.42,0,1.0,1.0)
-        ease-out  减速,等于 cubic-bezier(0,0,0.58,1.0)
-        ease-in-out 慢快慢,cubic-bezier(0.42,0,0.58,1.0)
-        cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 (取值为0-1)
-      animation-delay      动画开始前的延迟,默认为0
-      animation-iteration-count 动画执行的次数
-        num      自定义的次数
-        infinite 无限次
-      animation-direction  是否轮流反向播放动画
-        normal      默认,首次正序运行,每周期结束从头到尾运行
-        reverse     首次反向运行,每周期结束动画由尾到头运行
-        alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
-          比如 ease-in 反向时成为ease-out
-        alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
-      animation-fill-mode  指定动画执行之前和之后如何给动画目标应用样式
-        none      默认值,回到最初状态
-        backwards 采用相应第一帧的样式
-        forwards  目标保持动画最后一帧的样式
-          最后一帧是哪个取决于animation-direction和 animation-iteration-count:
-        both      根据animation-direction（见后）轮流应用forwards和backwards规则
-      animation-play-state 定义动画暂停或播放状态 
-        通过该属性可以灵活的控制动画的播放状态
-        running  播放,由暂停到播放时动画会接着暂停的状态开始运行
-        paused   暂停,暂停时动画会保持暂停时的状态
-      @keyframes name{percent{styleCodes}}   创建关键帧
-        PS：以百分比来规定改变发生的时间;关键词 "from" 和 "to",等价于 0% 和 100%
-          0% 是动画的开始时间,100% 动画的结束时间;
-          为了获得最佳的浏览器支持,应该始终定义 0% 和 100% .
+          none          无动画效果[可以用于覆盖来自于级联的动画] 
+        animation-duration   动画持续时间,默认为0无动画效果,单位s或ms  
+        animation-timing-function 动画的速度曲线 
+          ease        慢速开始中间快速慢速结束,默认值 
+            cubic-bezier(0.25,0.1,0.25,1.0) 
+          linear      匀速 
+            cubic-bezier(0.0,0.0,1.0,1.0)
+          ease-in     慢速开始匀速结束 
+            cubic-bezier(0.42,0,1.0,1.0)
+          ease-out    匀速开始慢速结束 
+            cubic-bezier(0,0,0.58,1.0)
+          ease-in-out 慢速开始中间匀速慢速结束 
+            cubic-bezier(0.42,0,0.58,1.0)
+          cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
+        animation-delay      动画开始前的延迟,默认为0 
+        animation-iteration-count 动画执行的次数 
+          num      自定义次数,默认为1 
+          infinite 无限次
+        animation-direction  动画在下一周期是否反向播放 
+          normal      默认,首次正序运行,每周期结束从头到尾运行
+          alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
+            比如 ease-in 反向时成为ease-out
+          reverse     首次反向运行,每周期结束动画由尾到头运行 
+          alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
+        animation-play-state 定义动画暂停或播放状态 
+          通过该属性可以灵活的控制动画的播放状态
+          running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
+          paused   暂停,暂停时动画会保持暂停时的状态
+        animation-fill-mode  对象在动画播放时间外的状态 
+          none      回到最初状态,默认值 
+          backwards 动画完成后回到最初的CSS样式 
+          forwards  动画完成后保持最后CSS样式不变 
+            最后样式取决于'animation-direction'和'animation-iteration-count'
+          both      根据animation-direction（见后）轮流应用forwards和backwards规则
+      @keyframes  创建关键帧 
+        PS：以百分比%规定动画阶段;"from"和"to"等价于0%[动画开始]和100%[动画结束];
+          为了获得最佳的浏览器支持,应始终定义0%和100%;  
           @-webkit-keyframes 兼容写法
+        @keyframes name{ 
+          percent {
+            styleCodes
+          }
+          ....
+        }   
         e.g.：
           @keyframes mymove {
             from {top:0px; background:red; width:100px;}
             25%  {top:200px;}
             50%  {top:100px;}
             75%  {top:200px;}
-            100% {top:200px; background:yellow; width:300px;} }
+            100% {top:200px; background:yellow; width:300px;} 
+          }
         可以把多个状态写在一起,使用逗号分割
           @keyframes pound {
             from,to { transform: none; }
             50% { transform: scale(1.2); } 
           }
-      e.g. :
+      e.g. : 
         <div></div>
         div {
           width:100px; height:100px; background:red; position:relative;
@@ -1513,7 +1559,7 @@ Declaration,样式声明
         both       用户可调整元素的高度和宽度。
         horizontal 用户可调整元素的宽度。
         vertical   用户可调整元素的高度。           
-    outline 边线
+    outline 边线 
       PS：outline类似border,但border会影响盒模型,而outline不会
       outline-style   边线样式 
         none    无,默认值
@@ -1541,11 +1587,11 @@ Declaration,样式声明
       outline: width style color; [简写属性]
       e.g. 
         outline:solid 1px red;
-    cursor 光标悬浮样式
-      PS：规定要显示的光标的类型、形状
+    cursor 光标悬浮样式 
+      PS：规定要显示的光标的类型、形状 
         该属性定义了鼠标指针放在一个元素边界范围内时所用的光标形状,
         不过 CSS2.1 没有定义由哪个边界确定这个范围
-      属性值:
+      属性值 : 
         auto      默认值,浏览器设置的光标
         default   默认光标(通常是一个箭头)
         pointer   光标呈现为指示链接的指针(一只手)
@@ -1566,13 +1612,13 @@ Declaration,样式声明
         text      此光标指示文本
         wait      此光标指示程序正忙(通常是一只表或沙漏)
         help      此光标指示可用的帮助(通常是一个问号或一个气球)
-    visibility 元素可见性
+    visibility 元素可见性 
       visible 默认值,元素是可见的
       hidden  使对象在网页上不可见,但会保留该元素在网页本该显示的空间.
       collapse 当在表格元素中使用时,此值可删除一行或一列,但是它不会影响表格的布局。
         被行或列占据的空间会留给其他内容使用。
         若此值被用在其他的元素上,会呈现为 "hidden"。
-    display 元素类型
+    display 元素类型 
       PS：html中的标签元素大体被分为三种不同的类型:块状元素、内联元素(又叫行内元素)和内联块元素.
         每个元素都有一个默认的 display 值,这与元素的类型有关。
         对于大多数元素它们的默认值通常是 block 或 inline 。
@@ -1610,21 +1656,81 @@ Declaration,样式声明
       display: inline-list-item;
       display: run-in;  元素会根据上下文作为块级元素或内联元素显示
       display: inherit; 规定应该从父元素继承 display 属性的值。
-    display:none 和 visibility:hidden 的区别
+    display:none 和 visibility:hidden 的区别 
       display:none 元素的宽度、高度等各种属性值都将丢失
       visibility:hidden 元素仅仅在视觉上看不见,而其所占据的空间位置仍然存在,
         即其仍有高度 宽度等属性值.
-    user-select     文本选择控制
-      兼容写法:
-        -webkit-user-select:   /* Chrome all / Safari all /opera15+*/  
-        -moz-user-select:      /* Firefox all */  
-        -ms-user-select:       /* IE 10+ */  
-        user-select: 
+    user-select     文本选择控制[IE10+] 
+      兼容前缀:'-webkit-' '-moz-' '-ms-'
       auto    默认值,用户可以选中元素中的内容
+      none    不可被选中 
       text    用户可以选择元素中的文本
       element 文本可选,但仅限元素的边界内(只有IE和FF支持)
       all     在编辑器内,若双击或上下文点击发生在子元素上,该值的最高级祖先元素将被选中
-      none    不可别选中
+  配件样式 
+    cursor鼠标 
+      auto    默认值 
+      default 默认光标通常是一个箭头 
+      pointer    手形光标
+      move    表示对象可被移动 
+      text    指示文字  
+      wait    等待,指示程序正忙   
+      help    指示可用的帮助 
+      progress 指示过程 
+      e-resize,n-resize,s-resize,w-resize,ne-resize,nw-resize,se-resize,sw-resize
+      url     根据用户定义的资源显示 
+      crosshair  十指形光标 
+      inherit 继承父元素
+    'scrollbar'滚动条 
+      IE 
+      scrollbar-arrow-color   滚动条上下箭头的颜色
+      scrollbar-face-color    滚动滑块的颜色 
+      scrollbar-3dlight-color 滚动条亮边的颜色 
+      scrollbar-highlight-color 滚动条空白部分的颜色 
+      scrollbar-shadow-color 滚动条阴影的颜色 
+      scrollbar-darkshadow-color 滚动条强阴影的颜色 
+      scrollbar-track-color 滚动条背景的颜色[仅适用body、div、textarea、iframe] 
+      scrollbar-base-color 滚动条基本颜色 [仅适用body、div、textarea、iframe] 
+      Chrome 
+      ::-webkit-scrollbar     滚动条整体样式 
+        .aoo ::-webkit-scrollbar {
+          color: #fff;
+          background-color: #8E8E8E;
+          width: 10px;
+          border-radius: 5px;
+        }
+      ::-webkit-scrollbar-button     滚动条两端按钮 
+      ::-webkit-scrollbar-track     滚动条外层轨道  
+      ::-webkit-scrollbar-track-plece     内层轨道、滚动条中间部分   
+      ::-webkit-scrollbar-thumb 滚动条滑块 
+        .con-box-wrap ::-webkit-scrollbar-thumb {
+          border-radius: 2px;
+          background: #fff;
+        }      
+      ::-webkit-scrollbar-corner 滚动条边角  
+      :-webkit-autofill     自动填充表单的背景
+        PS： chrome记住密码后,输入时,显示的提示的样式
+          input:-webkit-autofill,
+          textarea:-webkit-autofill,
+          select:-webkit-autofill {
+            background-color: rgb(250,255,189); 
+            background-image: none;
+            color: rgb(0,0,0);
+          }
+      -webkit-text-security 使用指定形状代替文字显示 
+        circle 圆圈 
+        disc   圆形 
+        square 正方形
+        e.g.：
+          <input type="text"   name="" value="">
+          input{ -webkit-text-security:disc; text-security:disc; }
+          
+          <div class="" contenteditable="">123</div>
+          div{
+            -webkit-text-security:disc;
+            background-color: green;
+            height: 22px;
+          }
   标签及其样式 
     <a>链接 
       ◆链接的四种状态:
@@ -1684,9 +1790,10 @@ Declaration,样式声明
     Form表单相关 
       <input> 表单
         padding 
-        type=number 时,
+        type=number 
+          不显示选择箭头 
           input[type=number] {  
-            -moz-appearance:textfield;  
+            -moz-appearance : textfield;  
           }  
           input[type=number]::-webkit-inner-spin-button,  
           input[type=number]::-webkit-outer-spin-button {  
@@ -1728,42 +1835,6 @@ Declaration,样式声明
       -webkit-padding-start: 40px;  列表的默认缩进
       <ul>  无序列表 
       ol  有序列表 
-  配件样式 
-    ::-webkit-scrollbar       滚动条样式
-      .aoo ::-webkit-scrollbar {
-        color: #fff;
-        background-color: #8E8E8E;
-        width: 10px;
-        border-radius: 5px;
-      }
-    ::-webkit-scrollbar-thumb 滚动滑块样式
-      .con-box-wrap ::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        background: #fff;
-      }      
-    :-webkit-autofill     自动填充表单的背景
-      PS： chrome记住密码后,输入时,显示的提示的样式
-        input:-webkit-autofill,
-        textarea:-webkit-autofill,
-        select:-webkit-autofill {
-          background-color: rgb(250,255,189); 
-          background-image: none;
-          color: rgb(0,0,0);
-        }
-    -webkit-text-security 使用指定形状代替文字显示
-      circle 圆圈 
-      disc   圆形 
-      square 正方形
-      e.g.：
-        <input type="text"   name="" value="">
-        input{ -webkit-text-security:disc; text-security:disc; }
-        
-        <div class="" contenteditable="">123</div>
-        div{
-          -webkit-text-security:disc;
-          background-color: green;
-          height: 22px;
-        }
   特殊样式 
     -webkit-tap-highlight-color  点击链接或js定义的点击元素时,出现半透明灰色背景;
       PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 ,「CSS3+」
@@ -1809,7 +1880,7 @@ Layout,布局
         line-height属性会增加自身的content的高度.
         块元素中可以包含快元素和行内元素.
       inline-block行内块元素,同时具有行内元素和块元素的特点. (CSS2.1新增)
-    box      盒子模型篇
+    box      盒子模型篇 
       PS： html元素都可以看成一个盒子,css布局主要通过盒子模型来实现.
       ◆盒子模型的四要素
         PS：只有外边距margin可为负

@@ -18,9 +18,9 @@ Framework 框架
   Mobile开发可以用jQueryMobile,
   MVC解决方案用backbone.
 --------------------------------------------------------------------------------
-jQuery 快速简洁的JS库 
+jQuery : 快速简洁的JS库 
   PS：jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
-    2.0+ 版本不再支持IE8及以下 
+    2.0+版本不再支持IE8及以下 
   核心特性总结 
     具有独特的链式语法和短小清晰的多功能接口；
     具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
@@ -1974,7 +1974,7 @@ jQuery插件
         })
     jQuery UI Events事件 
       slidechange   滑条改变事件
-'jQuery Mobile'
+'jQuery_Mobile' 
   引入 
     <link rel="stylesheet" href='jquery.mobile.css'>  // 引入样式文件 
     <script src="jquery.js"></script>                 // jQuery依赖
@@ -2000,7 +2000,7 @@ Exp:
    })
 Suggestion:
 --------------------------------------------------------------------------------
-Bootstrap 快速开发Web应用程序和网站的前端框架 
+Bootstrap : 快速开发Web应用程序和网站的前端框架 
   介绍_概念_说明_定义 
     PS：Bootstrap 来自 Twitter, 2011 年八月在 GitHub 上发布的开源产品
       简洁灵活的用于搭建Web页面的基于 HTML、CSS、JAVASCRIPT 的工具集 (HTML5 CSS3)

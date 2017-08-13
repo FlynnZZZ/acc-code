@@ -9,20 +9,23 @@ npm,node_package_manager node包管理器
     和npm相关的指令或命令前都需添加'npm '
   ◆常用命令 
   npm init        初始化,新建 package.json 文件
-  npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为 i 
+  npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为'i' 
     <name>     node插件名称, 如：npm install gulp-less --save-dev
     -g         全局安装 
       将会安装在C:\Users\Administrator\AppData\Roaming\npm,并写入系统环境变量
       非全局安装：将会安装在当前定位目录；
       全局安装可以通过命令行在任何地方调用它,
-      本地安装将安装在定位目录的node_modules文件夹下,通过require()调用
+      本地安装将安装在定位目录的node_modules文件夹下,通过require()调用 
     --save     将该模块写入当前的 package.json 文件中的 dependencies 属性
     --save-dev 将该模块写入当前的 package.json 文件中的 devDependencies 属性
-    --save-dev 和 --save 的区别
+    --save-dev 和 --save 的区别 
       --save-dev 是开发时候依赖的东西
       --save     是发布之后还依赖的东西
       比如写 ES6 代码,如果想编译成 ES5 发布那么 babel 就是devDependencies,
       如果用了 jQuery,由于发布之后还是依赖jQuery,所以是dependencies;
+    全局安装与本地安装 
+      两者不冲突,有时需要两者都进行安装,全局安装是为了在命令行中执行命令,
+      本地安装是为了在本项目中使用 
     e.g.:
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
@@ -30,8 +33,9 @@ npm,node_package_manager node包管理器
     PS：不要直接删除本地插件包
     npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
   npm list [-g]       当前目录已安装插件[简写'ls'] 
-    npm list <moudle name> [-g]  查看模块的版本号 
-  npm update <name>   更新模块 
+    npm list <name> [-g]  查看模块的版本号 
+  npm update <name> [-g] [--save-dev]  更新插件
+    npm update [--save-dev]  // 更新全部插件
     e.g.：
       npm update -g           更新npm 
       npm update vue-cli -g   更新vue
@@ -43,7 +47,7 @@ npm,node_package_manager node包管理器
   npm search <name>      搜索模块 
   npm -g install npm         最新稳定版
   npm -g install npm@2.9.1   指定版本
-  npm help            查看npm帮助
+  npm help            查看npm帮助 
     npm help <command> 可查看某条命令的详细帮助
   ◆配置参数 
   -g              全局安装 
@@ -74,16 +78,24 @@ npm,node_package_manager node包管理器
       官方网址：'http://npm.taobao.org'
     安装cnpm 
       'npm install -g cnpm --registry=https://registry.npm.taobao.org'
-  待整理
+  待整理 
     npm view vue-cli   查看全局 vue-cli 版本
-package.json npm配置文件
+package.json npm配置文件 
   PS：将配置信息写入 package.json 并将其加入版本管理,通过配置更方便包的管理;
     该文件不是必须的,当没有该文件时,则相应的命令不生效; 
     定义当前项目所需要的各种模块,以及项目的配置信息,如名称、版本、许可证等元数据等;
     package.json 文件就是一个JSON对象,该对象的每一个成员就是当前项目的一项设置。
     比如name就是项目名称,version是版本[遵守“大版本.次要版本.小版本”的格式]。
   相关命令 
-    npm init     创建并初始化 package.json 文件
+    npm init     创建 package.json 文件
+      该文件也可手动创建配置,
+      该命令采用互动方式,需用户指定一些规则,
+      然后在当前目录生成一个基本的 package.json 文件,
+      其中'name'项目名称和'version'项目版本必填,其他选填 
+    npm install [--production]   根据 package.json 的配置,下载所有依赖  
+      PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
+        下载的文件存放在node_modules中,这一过程由npm自动完成,我们只需等待即可。
+      --production  可选,只下载dependencies节点的包
     npm run xx   默认执行该文件中'script'下的属性定义的命令
       package.json 中
       "script" : {
@@ -91,18 +103,6 @@ package.json npm配置文件
         }
       命令行执行 npm run aoo 
       即为执行  node index.js 
-    npm install  npm在当前目录下载项目的所有依赖
-      在有了完整的 package.json 文件的情况下,
-      下载的文件存放在node_modules中,这一过程由npm自动完成,我们只需等待即可。
-    npm init    自动生成 package.json 文件    
-      package.json 文件可以手工编写,也可以使用 npm init 命令自动生成
-      该命令采用互动方式,需用户指定一些规则,
-      然后在当前目录生成一个基本的 package.json 文件,
-      其中只有name项目名称和version项目版本是必填的,其他都是选填的。
-    npm install [--production]   根据 package.json 的配置下载所有需要的包 
-      PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
-        也就是配置项目所需的运行和开发环境;
-      --production  可选,只下载dependencies节点的包
   文件内容详情 
     {
       "name": "Hello World",
@@ -345,6 +345,7 @@ Webpack   模块加载器兼打包工具
       --display-modules 打包完后显示依赖的模块 
       --display-reasons 显示打包的原因 
   webpack                    启动webpack
+  webpack -v                 查看版本号 
   webpack -h                 查看版本信息及可用的指令 
   webpack -w                 提供watch方法,实时进行打包更新
   webpack -p                 对打包后的文件进行压缩
@@ -583,6 +584,9 @@ loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     对于所需要的加载器,需要写在 package.json 文件中,
     并通过npm install下载安装到./node_modules文件夹中才会生效,
     否则在编译过程中因找不到加载器报错
+    webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
+    基于loader可实现大量高级功能, 如自动分块打包并按需加载、对图片资源引用的自动定位、
+    根据图片大小决定是否用base64内联、开发时的模块热替换等等;
   特性 
     可通过管道方式链式调用 
       每个loader可以把资源转换成任意格式并传递给下一个loader,
@@ -1173,9 +1177,8 @@ Plugins,插件   扩展webpack的功能
         })
       ]
     };
-  添加第三方库
-    如使用jquery之类的库,
-    安装jquery的支持
+  添加第三方库 
+    如使用jquery之类的库,需安装jquery的支持
     npm install jquery  --save-dev
     在js中引用
     var $ = require('jquery');
@@ -1184,7 +1187,7 @@ Plugins,插件   扩展webpack的功能
     document.body.appendChild(app);
     $('body').append('<p>look at me!</p>');
   在项目根目录运行:  webpack
-  部署上线
+  部署上线 
     新创建一个单独的config文件,因为部署上线使用webpack的时候
     不需要一些dev-tools,dev-server和jshint校验等。
     复制现有的config文件,命名为 webpack.production.config.js,
@@ -1195,99 +1198,119 @@ Plugins,插件   扩展webpack的功能
       "build": "webpack --progress --profile --colors --config webpack.production.config.js"
     },
     当要上线的时候,运行 npm run build
-webpack 与 vue组件 
-  PS：webpack提供强大的 loader API 来定义对不同文件格式的预处理逻辑
-    基于loader可实现大量高级功能, 如自动分块打包并按需加载、对图片资源引用的自动定位、
-    根据图片大小决定是否用base64内联、开发时的模块热替换等等;
-  vue-loader插件 
-    在Webpack的loader API基础上开发的,可用 .vue 单文件格式来写Vue组件
-    把一个组件的模板、样式、逻辑三要素整合在同一个文件中,即方便开发,也方便复用和维护;
-    Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
-  e.g.：
-    <style>
-      ...
-    </style>
-    <template>
-      <div class="my-component">
-        <h2>Hello from {{ msg }}</h2>
-        <other-component></other-component>
-      </div>
-    </template>
-    <script>
-      // 遵循 ES6 模块格式
-      import otherComponent from './other-component';
-      // 导出组件定义
-      export default {
-        data: function () {
-          return {
-            msg: 'vue-loader'
-          }
-        },
-        components: {
-          'other-component': otherComponent
-        }
-      }
-      
-      // CommonJS 模块格式
-      // var otherComponent = require('./other-component');
-      // 导出组件定义
-      // module.exports = {
-      //   data: function () {
-      //     return {
-      //       msg: 'vue-loader'
-      //     }
-      //   },
-      //   components: {
-      //     'other-component': otherComponent
-      //   }
-      // }
-    </script>
-  在 .vue 文件中使用其他预处理器[需安装对应的Webpack loader] 
-    <style lang="less">
-      .my-component{
-        background-color : bule;
-        .child{
-          background-color:green;
-        }
-      }
-    </style>
-    <template lang="jade">
-      div.my-component
-      h2 Hello from {{msg}}
-    </template>
-    
-    <script lang="babel">
-      // 利用 Babel 编译 ES2015
-      export default {
-        data () {
-          return {
-            msg: 'Hello from Babel!'
+'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
+  使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码
+  '.vue'文件 
+    vue-loader插件 
+      在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
+      Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
+    在'.vue'文件中使用其他预处理器[需安装对应的Webpack loader] 
+      <template lang="jade">
+        div.my-component
+        h2 Hello from {{msg}}
+      </template>
+      <script lang="babel">
+        // 利用 Babel 编译 ES2015
+        export default {
+          data () {
+            return {
+              msg: 'Hello from Babel!'
+            }
           }
         }
-      }
-    </script>
-    当使用 lang="less" 即使用Less,需 安装如下依赖
-    npm install -g css-loader less less-loader --save-dev
-    npm install -g css-loader less less-loader  --save-dev
-  webpack.config.js  文件的设置 
-  module.exports = {
-    module: {
-      rules: [
-        {
-          test: /\.vue$/, // 这是个正则表达式
-          loader: 'vue-loader' // 指定loader
-        },
-        {
-          test: /\.css$/, 
-          use: [ 'style-loader', 'css-loader' ] // 指定多个loader
-        },
-        {
-          test: /\.less$/, 
-          use: [ 'style-loader', 'less-loader' ] 
+      </script>
+      <style lang="less">
+        .my-component{
+          background-color : bule;
+          .child{
+            background-color:green;
+          }
         }
-      ]
+      </style>
+      当使用 lang="less" 即使用Less,需 安装如下依赖
+      npm install -g css-loader less less-loader --save-dev
+      npm install -g css-loader less less-loader  --save-dev
+    e.g.：
+      <template>
+        <div class="my-component">
+          <h2>Hello from {{ msg }}</h2>
+          <other-component></other-component>
+        </div>
+      </template>
+      <script>
+        // 遵循 ES6 模块格式
+        import otherComponent from './other-component';
+        // 导出组件定义
+        export default {
+          data: function () {
+            return {
+              msg: 'vue-loader'
+            }
+          },
+          components: {
+            'other-component': otherComponent
+          }
+        }
+        
+        // CommonJS 模块格式
+        // var otherComponent = require('./other-component');
+        // 导出组件定义
+        // module.exports = {
+        //   data: function () {
+        //     return {
+        //       msg: 'vue-loader'
+        //     }
+        //   },
+        //   components: {
+        //     'other-component': otherComponent
+        //   }
+        // }
+      </script>
+      <style>
+        ...
+      </style>
+  webpack.config.js webpack配置文件 
+    module.exports = {
+      entry: {
+        'index': './vue/index/main.js',
+      },
+      output: {
+        path: './public/bulid',
+        filename: '[filename].js' // 可以多点切入
+      },
+      module: {
+        rules: [
+          {
+            test: /\.vue$/, // 这是个正则表达式
+            loader: 'vue-loader' // 指定loader
+          },
+          {
+            test: /\.css$/, 
+            use: [ 'style-loader', 'css-loader' ] // 指定多个loader
+          },
+          {
+            test: /\.less$/, 
+            use: [ 'style-loader', 'less-loader' ] 
+          }
+        ]
+        // loaders: [
+        //   {
+        //     test: /\.vue$/,
+        //     exclude: /node_modules/,
+        //     loader: vue.withLoaders({
+        //       js: 'babel?optional[]=runtime'
+        //     })
+        //   },
+        //   { test: /\.scss$/, loader: 'style!css!sass' },
+        //   { test: /\.css$/, loader: "style!css" },
+        //   { test: /\.js$/, loader: 'babel-loader' }
+        // ]
+      }
+      resolve: { // 解决 npm 的依赖问题
+        modulesDirectories: ['node_modules'],
+        extensions: ['', '.js', '.json']
+      },
     }
-  }
   e.g.：  vue目录结构初始化
     手动创建的
     webpack2   项目目录
@@ -1304,23 +1327,22 @@ webpack 与 vue组件
     |--index.html    vue应用的骨架html
     |--package.json  npm配置文件
     |--webpack.config.js   webpack配置文件
-  步骤
+  步骤 
     初始化项目目录,最终目录结构如下：
       - dist //文件生成目录
           -- //自动生成
-      - node_module //自动安装
+      - node_module //自动安装 
           -- ...
       - src //文件入口
-          -- components //组件存放
+          -- components //组件存放 
               -- app.vue //主.vue
           -- main.js //主.js
       - index.html   //主.html
-      - package.json //npm 配置 
-      // 可以直接使用npm init来初始化我们的package.json文件的配置
+      - package.json // npm 配置 
       - webpack.cofig.js // webpack配置
     配置 webpack.config.js 文件
       var path = require('path');
-      // NodeJS中的Path对象,用于处理目录的对象,提高开发效率。
+      // NodeJS中的Path对象,用于处理目录的对象,提高开发效率 
       // 模块导入
       module.exports = {
         // 入口文件地址,不需要写完,会自动查找
@@ -1384,12 +1406,704 @@ webpack 与 vue组件
         // 开启source-map,webpack有多种source-map,在官网文档可以查到
         devtool: 'eval-source-map'
       };
+  使用步骤 
+    ◆工具安装[初始安装一次即可] 
+    npm install -g webpack            全局安装webpack 
+    npm install -g vue                全局安装vue 
+    npm install -g vue-cli            全局安装vue-cli
+      在安装Vue后就可以在命令行中使用'vue'命令了
+      vue --version 或 vue -V // 查看Vue的版本 
+      vue list  // 查看官方提供的模版 
+    ◆初始化项目 
+    vue init webpack projectName[项目名称不能为中文]       创建基于'webpack'模版的Vue项目 
+    cd  projectName       进入新创建的项目文件夹 
+      文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
+      后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
+    npm init              npm初始化,创建 package.json 文件 
+    npm install           安装依赖 
+      根据存在的'package.json'文件的配置安装依赖文件 
+      增加'node_modules'文件夹 
+    npm install vue-router vue-resource --save  安装路由模块和网络请求模块
+    ◆启动项目 
+    npm run dev                         启动测试服务器  
+      启动本地服务,打开浏览器,运行项目
+      默认执行 package.json 中 script 属性 dev 的配置
+      运行安装时,eslint mocha 等等依赖,建议初学不安装
+    ◆构建发布 
+    npm run build                       运行构建,生成生产环境可发布的代码 
+  项目目录文件说明 
+    ├── README.md
+    ├── build                           编译任务的代码
+    │   ├── build.js
+      require('./check-versions')() // 检查 Node 和 npm 版本
+      require('shelljs/global') // 使用了 shelljs 插件,可以让我们在 node 环境的 js 中使用 shell
+      env.NODE_ENV = 'production'
+      
+      var path = require('path') // 不再赘述
+      var config = require('../config') // 加载 config.js
+      var ora = require('ora') // 一个很好看的 loading 插件
+      var webpack = require('webpack') // 加载 webpack
+      var webpackConfig = require('./webpack.prod.conf') // 加载 webpack.prod.conf
+      
+      console.log( //  输出提示信息 ～ 提示用户请在 http 服务下查看本页面,否则为空白页
+        '  Tip:\n' +
+        '  Built files are meant to be served over an HTTP server.\n' +
+        '  Opening index.html over file:// won\'t work.\n'
+      )
+      
+      var spinner = ora('building for production...') // 使用 ora 打印出 loading + log
+      spinner.start() // 开始 loading 动画
+      
+      /* 拼接编译输出文件路径 */
+      var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
+      /* 删除这个文件夹 （递归删除） */
+      rm('-rf', assetsPath)
+      /* 创建此文件夹 */ 
+      mkdir('-p', assetsPath)
+      /* 复制 static 文件夹到我们的编译输出目录 */
+      cp('-R', 'static/*', assetsPath)
+      
+      //  开始 webpack 的编译
+      webpack(webpackConfig, function (err, stats) {
+        // 编译成功的回调函数
+        spinner.stop()
+        if (err) throw err
+        process.stdout.write(stats.toString({
+          colors: true,
+          modules: false,
+          children: false,
+          chunks: false,
+          chunkModules: false
+        }) + '\n')
+      })        
+    │   ├── check-versions.js
+    │   ├── dev-client.js
+    │   ├── dev-server.js 
+      require('./check-versions')() // 检查 Node 和 npm 版本
+      var config = require('../config') // 获取 config/index.js 的默认配置
+      
+      /* 
+      ** 若 Node 的环境无法判断当前是 dev / product 环境
+      ** 使用 config.dev.env.NODE_ENV 作为当前的环境
+      */
+      
+      if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+      var path = require('path') // 使用 NodeJS 自带的文件路径工具
+      var express = require('express') // 使用 express
+      var webpack = require('webpack') // 使用 webpack
+      var opn = require('opn') // 一个可以强制打开浏览器并跳转到指定 url 的插件
+      var proxyMiddleware = require('http-proxy-middleware') // 使用 proxyTable 
+      var webpackConfig = require('./webpack.dev.conf') // 使用 dev 环境的 webpack 配置
+      
+      /* 若没有指定运行端口,使用 config.dev.port 作为运行端口 */
+      var port = process.env.PORT || config.dev.port
+      
+      /* 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置 */
+      /* 项目参考 https://github.com/chimurai/http-proxy-middleware */
+      var proxyTable = config.dev.proxyTable
+      
+      /* 使用 express 启动一个服务 */
+      var app = express()
+      var compiler = webpack(webpackConfig) // 启动 webpack 进行编译
+      
+      /* 启动 webpack-dev-middleware,将 编译后的文件暂存到内存中 */
+      var devMiddleware = require('webpack-dev-middleware')(compiler, {
+        publicPath: webpackConfig.output.publicPath,
+        stats: {
+          colors: true,
+          chunks: false
+        }
+      })
+      
+      /* 启动 webpack-hot-middleware,也就是我们常说的 Hot-reload */
+      var hotMiddleware = require('webpack-hot-middleware')(compiler)
+      
+      /* 当 html-webpack-plugin 模板更新的时候强制刷新页面 */
+      compiler.plugin('compilation', function (compilation) {
+        compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
+          hotMiddleware.publish({ action: 'reload' })
+          cb()
+        })
+      })
+      
+      // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
+      Object.keys(proxyTable).forEach(function (context) {
+        var options = proxyTable[context]
+        if (typeof options === 'string') {
+          options = { target: options }
+        }
+        app.use(proxyMiddleware(context, options))
+      })
+      
+      // 使用 connect-history-api-fallback 匹配资源,若不匹配就可以重定向到指定地址
+      app.use(require('connect-history-api-fallback')())
+      
+      // 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
+      app.use(devMiddleware)
+      
+      // 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
+      app.use(hotMiddleware)
+      
+      // 拼接 static 文件夹的静态资源路径
+      var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+      // 为静态资源提供响应服务
+      app.use(staticPath, express.static('./static'))
+      
+      // 让我们这个 express 服务监听 port 的请求,并且将此服务作为 dev-server.js 的接口暴露
+      module.exports = app.listen(port, function (err) {
+        if (err) {
+          console.log(err)
+          return
+        }
+        var uri = 'http://localhost:' + port
+        console.log('Listening at ' + uri + '\n')
+        
+        // 若不是测试环境,自动打开浏览器并跳到我们的开发地址
+        if (process.env.NODE_ENV !== 'testing') {
+          opn(uri)
+        }
+      })
+    │   ├── utils.js
+    │   ├── webpack.base.conf.js        webpack 基础配置
+      var path = require('path') // 使用 NodeJS 自带的文件路径插件
+      var config = require('../config') // 引入 config/index.js
+      var utils = require('./utils') // 引入一些小工具
+      var projectRoot = path.resolve(__dirname, '../') // 拼接我们的工作区路径为一个绝对路径
+      
+      /* 将 NodeJS 环境作为我们的编译环境 */
+      var env = process.env.NODE_ENV
+      /* 是否在 dev 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
+      var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
+      /* 是否在 production 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
+      var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
+      /* 最终是否使用 cssSourceMap */
+      var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
+      
+      module.exports = {
+        entry: {
+          app: './src/main.js' // 编译文件入口
+        },
+        output: {
+          path: config.build.assetsRoot, // 编译输出的静态资源根路径
+          publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, // 正式发布环境下编译输出的上线路径的根路径
+          filename: '[name].js' // 编译输出的文件名
+        },
+        resolve: {
+          // 自动补全的扩展名
+          extensions: ['', '.js', '.vue'],
+          // 不进行自动补全或处理的文件或者文件夹
+          fallback: [path.join(__dirname, '../node_modules')],
+          alias: {
+          // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
+            'vue$': 'vue/dist/vue.common.js',
+            'src': path.resolve(__dirname, '../src'),
+            'assets': path.resolve(__dirname, '../src/assets'),
+            'components': path.resolve(__dirname, '../src/components')
+          }
+        },
+        resolveLoader: {
+          fallback: [path.join(__dirname, '../node_modules')]
+        },
+        module: {
+          preLoaders: [
+            // 预处理的文件及使用的 loader
+            {
+              test: /\.vue$/,
+              loader: 'eslint',
+              include: projectRoot,
+              exclude: /node_modules/
+            },
+            {
+              test: /\.js$/,
+              loader: 'eslint',
+              include: projectRoot,
+              exclude: /node_modules/
+            }
+          ],
+          loaders: [
+            // 需要处理的文件及使用的 loader
+            {
+              test: /\.vue$/,
+              loader: 'vue'
+            },
+            {
+              test: /\.js$/,
+              loader: 'babel',
+              include: projectRoot,
+              exclude: /node_modules/
+            },
+            {
+              test: /\.json$/,
+              loader: 'json'
+            },
+            {
+              test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+              loader: 'url',
+              query: {
+                limit: 10000,
+                name: utils.assetsPath('img/[name].[hash:7].[ext]')
+              }
+            },
+            {
+              test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+              loader: 'url',
+              query: {
+                limit: 10000,
+                name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+              }
+            }
+          ]
+        },
+        eslint: {
+          // eslint 代码检查配置工具
+          formatter: require('eslint-friendly-formatter')
+        },
+        vue: {
+          // .vue 文件配置 loader 及工具 (autoprefixer)
+          loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
+          postcss: [
+            require('autoprefixer')({
+              browsers: ['last 2 versions']
+            })
+          ]
+        }
+      }        
+    │   ├── webpack.dev.conf.js 
+      var config = require('../config') // 同样的使用了 config/index.js
+      var webpack = require('webpack') // 使用 webpack
+      var merge = require('webpack-merge') // 使用 webpack 配置合并插件
+      var utils = require('./utils') // 使用一些小工具
+      var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf
+      /* 使用 html-webpack-plugin 插件,这个插件可以帮我们自动生成 html 并且注入到 .html 文件中 */
+      var HtmlWebpackPlugin = require('html-webpack-plugin') 
+      
+      // 将 Hol-reload 相对路径添加到 webpack.base.conf 的 对应 entry 前
+      Object.keys(baseWebpackConfig.entry).forEach(function (name) {
+        baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
+      })
+      
+      /* 将我们 webpack.dev.conf.js 的配置和 webpack.base.conf.js 的配置合并 */
+      module.exports = merge(baseWebpackConfig, {
+        module: {
+          // 使用 styleLoaders
+          loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+        },
+        // 使用 #eval-source-map 模式作为开发工具,此配置可参考 DDFE 往期文章详细了解
+        devtool: '#eval-source-map',
+        plugins: [
+          /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
+          new webpack.DefinePlugin({
+            'process.env': config.dev.env
+          }),
+          // 参考项目 https://github.com/glenjamin/webpack-hot-middleware#installation--usage
+          new webpack.optimize.OccurenceOrderPlugin(),
+          /* HotModule 插件在页面进行变更的时候只会重回对应的页面模块,不会重绘整个 html 文件 */
+          new webpack.HotModuleReplacementPlugin(),
+          /* 使用了 NoErrorsPlugin 后页面中的报错不会阻塞,但是会在编译结束后报错 */
+          new webpack.NoErrorsPlugin(),
+          // 参考项目 https://github.com/ampedandwired/html-webpack-plugin
+          /* 将 index.html 作为入口,注入 html 代码后生成 index.html文件 */
+          new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: 'index.html',
+            inject: true
+          })
+        ]
+      })      
+    │   └── webpack.prod.conf.js
+      var path = require('path') 
+      var config = require('../config') // 加载 confi.index.js
+      var utils = require('./utils') // 使用一些小工具
+      var webpack = require('webpack') // 加载 webpack
+      var merge = require('webpack-merge') // 加载 webpack 配置合并工具
+      var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf.js
+      /* 一个 webpack 扩展,可以提取一些代码并且将它们和文件分离开 */ 
+      /* 若我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
+      var ExtractTextPlugin = require('extract-text-webpack-plugin')
+      /* 一个可以插入 html 并且创建新的 .html 文件的插件 */
+      var HtmlWebpackPlugin = require('html-webpack-plugin')
+      var env = config.build.env
+      
+      /* 合并 webpack.base.conf.js */
+      var webpackConfig = merge(baseWebpackConfig, {
+        module: {
+          /* 使用的 loader */
+          loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
+        },
+        /* 是否使用 #source-map 开发工具,更多信息可以查看 DDFE 往期文章 */
+        devtool: config.build.productionSourceMap ? '#source-map' : false,
+        output: {
+          /* 编译输出目录 */
+          path: config.build.assetsRoot,
+          /* 编译输出文件名 */
+          filename: utils.assetsPath('js/[name].[chunkhash].js'), // 我们可以在 hash 后加 :6 决定使用几位 hash 值
+          // 没有指定输出名的文件输出的文件名
+          chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+        },
+        vue: {
+          /* 编译 .vue 文件时使用的 loader */
+          loaders: utils.cssLoaders({
+            sourceMap: config.build.productionSourceMap,
+            extract: true
+          })
+        },
+        plugins: [
+          /* 使用的插件 */
+          /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
+          new webpack.DefinePlugin({
+            'process.env': env
+          }),
+          /* 压缩 js (同样可以压缩 css) */
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          }),
+          new webpack.optimize.OccurrenceOrderPlugin(),
+          /* 将 css 文件分离出来 */
+          new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
+          /* 构建要输出的 index.html 文件, HtmlWebpackPlugin 可以生成一个 html 并且在其中插入你构建生成的资源 */
+          new HtmlWebpackPlugin({
+            filename: config.build.index, // 生成的 html 文件名
+            template: 'index.html', // 使用的模板
+            inject: true, // 是否注入 html (有多重注入方式,可以选择注入的位置)
+            minify: { // 压缩的方式
+              removeComments: true,
+              collapseWhitespace: true,
+              removeAttributeQuotes: true
+              // 更多参数可查看 https://github.com/kangax/html-minifier#options-quick-reference
+            },
+            chunksSortMode: 'dependency'
+          }),
+          
+          // 此处增加 @OYsun 童鞋补充
+          // CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js
+          
+          new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: function (module, count) {
+              // 依赖的 node_modules 文件会被提取到 vendor 中
+              return (
+                module.resource &&
+                /\.js$/.test(module.resource) &&
+                module.resource.indexOf(
+                  path.join(__dirname, '../node_modules')
+                ) === 0
+              )
+            }
+          }),
+          new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            chunks: ['vendor']
+          })
+          
+        ]
+      })
+      
+      /* 开启 gzip 的情况下使用下方的配置 */
+      if (config.build.productionGzip) {
+        /* 加载 compression-webpack-plugin 插件 */
+        var CompressionWebpackPlugin = require('compression-webpack-plugin')
+        /* 向webpackconfig.plugins中加入下方的插件 */
+        webpackConfig.plugins.push(
+          /* 使用 compression-webpack-plugin 插件进行压缩 */
+          new CompressionWebpackPlugin({
+            asset: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: new RegExp(
+              '\\.(' +
+              config.build.productionGzipExtensions.join('|') +
+              ')$'
+            ),
+            threshold: 10240,
+            minRatio: 0.8
+          })
+        )
+      }
+      
+      // split vendor js into its own file
+       /* 没有指定输出文件名的文件输出的静态文件名 */
+     new webpack.optimize.CommonsChunkPlugin({
+           name: 'vendor',
+           minChunks: function (module, count) {
+             // any required modules inside node_modules are extracted to vendor
+             return (
+               module.resource &&
+               /\.js$/.test(module.resource) &&
+               module.resource.indexOf(
+                 path.join(__dirname, '../node_modules')
+               ) === 0
+             )
+           }
+         }),
+         // extract webpack runtime and module manifest to its own file in order to
+         // prevent vendor hash from being updated whenever app bundle is updated
+         /* 没有指定输出文件名的文件输出的静态文件名 */
+         new webpack.optimize.CommonsChunkPlugin({
+           name: 'manifest',
+           chunks: ['vendor']
+         })
+     CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了所以第二次new就是解决这个问题的,请你好好看vue-cli那个英文原注释
+     
+     // extract webpack runtime and module manifest to its own file in order to
+     // prevent vendor hash from being updated whenever app bundle is updated        
+      
+      module.exports = webpackConfig        
+    ├── config                          webpack 的配置文件
+    │   ├── dev.env.js
+    │   ├── index.js
+      index.js 中有 dev 和 production 两种环境的配置
+      
+      var path = require('path')
+      
+      module.exports = {
+        build: { // production 环境
+          env: require('./prod.env'), // 使用 config/prod.env.js 中定义的编译环境
+          index: path.resolve(__dirname, '../dist/index.html'), // 编译输入的 index.html 文件
+          assetsRoot: path.resolve(__dirname, '../dist'), // 编译输出的静态资源路径
+          assetsSubDirectory: 'static', // 编译输出的二级目录
+          assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
+          productionSourceMap: true, // 是否开启 cssSourceMap
+          // Gzip off by default as many popular static hosts such as
+          // Surge or Netlify already gzip all static assets for you.
+          // Before setting to `true`, make sure to:
+          // npm install --save-dev compression-webpack-plugin
+          productionGzip: false, // 是否开启 gzip
+          productionGzipExtensions: ['js', 'css'] // 需要使用 gzip 压缩的文件扩展名
+        },
+        dev: { // dev 环境
+          env: require('./dev.env'), // 使用 config/dev.env.js 中定义的编译环境
+          port: 8080, // 运行测试页面的端口
+          assetsSubDirectory: 'static', // 编译输出的二级目录
+          assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
+          proxyTable: {}, // 需要 proxyTable 代理的接口（可跨域）
+          cssSourceMap: false // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
+        }
+      }        
+    │   └── prod.env.js
+    ├── index.html
+    ├── package.json
+    ├── src
+    │   ├── App.vue
+    │   ├── assets
+    │   │   └── logo.png
+    │   ├── components
+    │   │   └── Hello.vue
+    │   └── main.js
+    └── static    
+  
+    .gitignore   # 忽略无需git控制的文件  比如 node_modules
+    .eslintrc    # eslint加载器配置
+    .babelrc         # babel加载器配置
+    build 
+      webpack.base.config.js         # webpack 基础配置
+        基础配置包括了webpack的最基本配置,
+        包括入口文件、输入文件、加载器配置、插件配置等,
+        module.exports = {
+          entry: './src/main.js', //页面入口文件配置
+          output: { //入口文件输出配置
+            path: './dist',
+            publicPath: 'dist/',
+            filename: 'build.js'
+          },
+          module: { //加载器配置
+            loaders: [
+              {
+                test: /\.vue$/,
+                loader: 'vue'
+              },
+              {
+                test: /\.js$/,
+                loader: 'babel!eslint',
+                // make sure to exclude 3rd party code in node_modules
+                exclude: /node_modules/
+              },
+              {
+                // edit this for additional asset file types
+                test: /\.(png|jpg|gif)$/,
+                loader: 'url',
+                query: {
+                  // inline files smaller then 10kb as base64 dataURL
+                  limit: 10000,
+                  // fallback to file-loader with this naming scheme
+                  name: '[name].[ext]?[hash]'
+                }
+              }
+            ]
+          },
+          vue: {  // vue-loader 设置:
+            loaders: {
+              js: 'babel!eslint'
+            }
+          }
+          //将所有的*.vue文件转化为javascript文件并执行ESLint检测,这里需要配置.eslintrc文件
+        }    
+      webpack.dev.config.js          # webpack 开发配置
+      webpack.prod.config.js         # webpack 生产配置
+    node_modules         #通过npm安装的模块
+    index.html       # 首页
+    package.json     # 项目配置
+    src 
+      components    # 组件文件夹,存放app组件
+        A.vue
+        B.vue
+        Counter.vue
+      assets   #静态资源 
+      app.vue    ## 主vue组件
+      main.js    #启动配置,webpack入口文件
+      
+    项目基本目录结构 
+      bulid            构建的配置文件
+      config           
+      dist             打包构建好的代码
+        static 
+        index.html 
+      node_modules     
+      src              开发目录 
+        assets         静态资源目录 
+        components     组件目录 
+        App.vue        主入口视图文件 
+        main.js        主入口JS文件 
+      static 
+      index.html 
+      package.json 
+      ...
+--------------------------------------------------------------------------------
+RequireJS 模块化开发框架 
+  模块化开发的目的 
+    开发阶段: 不打包、不压缩、模块化开发 
+    部署阶段: 自动打包、压缩   减少http请求
+  功能 
+    异步加载文件 
+    模块化开发: 
+      一个文件一个模块 
+      减少全局变量 
+  define(['name',] [dependArr,]foo)  定义模块 
+    name      模块名,默认为文件路径,一般省略  
+    dependArr 依赖模块名组成的数组,可选   
+    foo       模块实现,传入参数顺序对应依赖模块的顺序 
+  define(obj)  定义简单的对象 
+  require(dependArr,foo)           加载模块 
+    dependArr   依赖的模块名组成的数组 
+    foo         依赖模块下载完后执行的函数,传入参数顺序对应依赖模块的顺序
+  requirejs.config(configObj)      配置
+    configObj     配置对象 
+    {
+      baseUrl : '/a',   
+      paths : {          
+        'jquery' : 'lib/jquery', // 配置模块路径 
+        'vue' : [
+          '//cdn.bootcss.com/vue/2.3.0/vue',  // 首选加载模块 
+          'lib/vue'   // 上一个模块加载失败后备用的加载文件 
+        ],
+        'css' : './lib/require/css',
+        'i18n' : './lib/require/i18n',
+      },
+      shim : {  
+      },
+      map : {    
+        'app/api' : {  // 指定'app/api'模块的'jquery'依赖为'./lib/jquery'
+          'jquery' : './lib/jquery',
+        },
+        'app/api2' : { // 指定'app/api2'模块的'jquery'依赖为'./lib/jquery2'
+          'jquery' : './lib/jquery2',
+        },
+        '*' : {  // 指定所有的模块'jquery'依赖为'./lib/jquery2' 
+          'jquery' : './lib/jquery2',
+          'css' : './lib/require/css',
+        },
+      },
+      waitSeconds : 10,  
+      urlArgs : 'name=1111',
+      config : {
+        text : { // 配置text插件模块 
+          onXhr : function(xhr,url){ // ajax执行的open方法[send方法前],可用来设置http头 
+            xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+          },
+          createXhr : function(){ // 用来覆盖text插件默认的xhr对象,一般用不到
+          },
+          onXhrComplete : function(xhr,url){ // ajax完成后支持的函数 
+          },
+        },
+      },
+    }
+    baseUrl   配置RequireJS加载文件的根路径 
+      HTML中插入的JS    以当前HTML文件路径为跟路径 
+      <script src=".require.js" data-main='/a/app'></script>  在当前HTML路径上加上'/a' 
+    paths     配置模块的路径 
+    shim      配置不支持AMD的模块 
+      如 Modernizr.js 
+      shim : {
+        'modernizr' : {  // 不支持AMD的模块名称 
+          // deps : ['jquery'], // 依赖的模块名称,可选  
+          exports : 'Modernizr', // 输出的模块对象名称  
+          // init : function($){ // 初始化函数,可选,返回的对象代替exports作为模块对象  
+          //   return $;
+          // },
+        }
+      }
+      如 bootstrap, bootstrap只有依赖,而无全局变量  
+      shim : {
+        bootstrap : ['jquery'] // 简写方式 
+      }
+    map       配置不同模块的相同依赖指向不同文件 
+    waitSeconds 下载js等待的时间,默认7秒,若设为0,则禁用等待超时;超时则RequireJS会报错
+    urlArgs   下载文件时,在URL后增加额外的query参数 
+  text插件模块 
+    用于加载文本文件的RequireJS插件,可用于加载HTML
+    本质通过AJAX请求来加载文本,有跨域的限制 
+    require(['text!/user.html!strip'],function(template){ 
+      // 会先加载text插件模块在加载'user.html'模块 
+      // !strip 可选,只获取'user.html'中body内的部分 
+      console.log(template);
+    })
+  CSS插件模块 
+    用于加载样式文件的RequireJS插件  
+    为了让'css!'生效,需在RequireJS中配置['map'内或'paths'内任选一个进行配置]
+    require(['css!jqurey-ui.css',]function(){
+    })
+  i18n插件模块 
+    支持国际化多语言 
+    require(['i18n!./nls/message',],function(i18n){
+      console.log(i18n.aoo);
+    })
+    必须包含'nls',即加载的内容需放置于'nls'文件夹内 
+    文件夹设置 
+      nls 
+        en 
+          messages.js 
+            define({
+              'aoo' : 'show English'
+            })
+        zh 
+          messages.js 
+            define({
+              'aoo' : '显示为中文'
+            })
+        messages.js  
+          define({
+            'en' : true,
+            'zh' : true,
+          })
+    指定语言 
+      1. 使用浏览器的 navigator.language 或 navigator.userLanguage 属性
+      2. 配置语言 
+        config : {
+          i18n : {
+            locale : 'zh'
+          }
+        }
+  加载机制  
+    使用 head.appendChild() 将每个依赖加载成script标签,故可跨域加载 
+    加载后的模块会立即执行 
 --------------------------------------------------------------------------------
 其他工具 
+  Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
+    如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
+  browserify|webpack JS模块化方案,文件打包工具,预编译模块的方案  
 Gulp 
   PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
-    她不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
-    使用她,我们不仅可以很愉快的编写代码,而且大大提高我们的工作效率。
+    不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
     gulp是基于Nodejs的自动任务运行器,
     她能自动化地完成 javascript/coffee/sass/less/html/image/css 等文件的的测试、
     检查、合并、压缩、格式化、浏览器自动刷新、部署文件生成,
@@ -1403,7 +2117,7 @@ Gulp
     cnpm install gulp -g   安装
     gulp -v     查看是否正确安装,出现版本号即为正确安装
       //  CLI version 3.9.1
-  新建 package.json 文件
+  新建 package.json 文件 
     PS：package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
     手动新建配置文件
       它是这样一个json文件（注意：json文件内是不能写注释的,复制下列内容请删除注释）：
@@ -1447,7 +2161,7 @@ Gulp
     为了能正常使用,我们还得本地安装gulp：cnpm install gulp --save-dev；
       全局安装了gulp,项目也安装了gulp,
       全局安装gulp是为了执行gulp任务,本地安装gulp则是为了调用gulp插件的功能。
-  新建 gulpfile.js 文件（重要）
+  新建 gulpfile.js 文件[重要] 
     PS：gulpfile.js 是gulp项目的配置文件,
       是位于项目根目录的普通js文件（其实将 gulpfile.js 放入其他文件夹下亦可）。
     大概是这样一个js文件,主要配置:
@@ -1468,11 +2182,11 @@ Gulp
       //gulp.task(name[, deps], fn) 定义任务  name：任务名称 deps：依赖任务名称 fn：回调函数
       //gulp.src(globs[, options]) 执行任务处理的文件  globs：处理的文件路径(字符串或者字符串数组) 
       //gulp.dest(path[, options]) 处理完后文件生成路径
-  运行gulp
+  运行gulp 
     命令提示符执行 gulp 任务名称
     编译less：命令提示符执行 gulp testLess；
     当执行 gulp default 或 gulp 将会调用default任务里的所有任务[‘testLess’,’elseTask’]。
-  使用webstorm运行gulp任务
+  使用webstorm运行gulp任务 
     说明：使用webstorm可视化运行gulp任务；
     使用方法：
       将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
@@ -1486,7 +2200,7 @@ Anythere 将当前目录变成一个静态文件服务器的根目录
       可省略
       anywhere  8000 
     -s 静默执行不会自动打开浏览器,默认自动打开网页
-Weinre,Web Inspector Remote  一种远程调试工具 
+Weinre,'Web Inspector Remote'一种远程调试工具 
   PS：功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
     由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
     所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。

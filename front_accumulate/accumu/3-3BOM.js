@@ -1027,7 +1027,7 @@ window的属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-'Asynchronous_JavaScript_and_XML',AJAX 异步的JS和XML 
+AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML 
   PS：浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
     可用JS动态抓取内容构建页面;
     file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
@@ -2051,15 +2051,19 @@ Fetch 用来取代XMLHttpRequest的一种新规范
         return sheep;
       });
     });    
-'JSON_with_Padding',JSONP 填充式JSON或参数式JSON 
+JSONP,'JSON_with_Padding'填充式JSON或参数式JSON 
   PS：可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
     决解AJAX不能跨域访问的问题.
-  使用方法及原理:
+  使用方法及原理: 
     script标签可载入外域的JS文件,自己先定义一函数,然后从script中载入执行函数,
     从而达到载入JS文件后就执行操作,达到获取数据,
     从而也省去了监听script加载完成的操作.
+    e.g.：
+      <script src="http://www.aoo.com/boo?callback=foo1"></script> 
+      后端通过callback获取参数值'fool1'进行动态生成代码
+      自定义一全局函数并执行 fool1(arg) 
     e.g.:
       在 a 网页中
       <script >
@@ -2075,7 +2079,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
   缺点
     可能存在安全隐患,须确保JSON数据中无恶意的代码
     若JSONP请求失败则不容易判断,虽然HTML5给<script>元素新增了一error事件,但支持情况不好
-  Remarks:
+  Remarks: 
     <script>标记放在body标记结尾处,等待网页加载完后在载入
   决解向AJAX一样动态更新的问题
     通过替换script标签来动态更新
@@ -2118,7 +2122,7 @@ Comet  服务器推送,一种更高级的AJAX技术
   HTTP流
     PS：页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-'Cross-Origin_Resource_Sharing',CORS : 跨源资源共享 
+CORS,'Cross-Origin_Resource_Sharing'跨源资源共享 
   PS：
     CORS是一个W3C标准,全称是“跨域资源共享”,
     允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;

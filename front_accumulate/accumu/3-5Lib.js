@@ -1401,13 +1401,19 @@ AJAX
         } 
       traditional : bol   是否使用传统的方式序列化数据 
       xhr : foo       回调创建XMLHttpRequest对象 
-  ◆JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已
-  $.ajax({
-    // ... 
-    dataType:'jsonp',
-    jsonp:"cfoo123", // 需要在后端有相应的改动,名称需一致
-    // ... 
-  });
+  JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已 
+    function cfoo123(){   // 和 success 任选一个,否则会执行两次 
+      console.log(1111111);
+    };
+    $.ajax({
+      // ... 
+      dataType : 'jsonp',
+      jsonp : "cfoo123", // 需要在后端有相应的改动,名称需一致
+      success : function(arg){ // 和cfoo123 任选一个,否则会执行两次 
+        console.log(arg);
+      },
+      // ... 
+    });
   e.g. 上传文件
     ajax上传的时候,需要获得input:file 选择的文件(可能为多个文件),获取其文件列表为：
       // input标签的files属性
@@ -1462,7 +1468,7 @@ AJAX
   Jelem.ajaxError(cfoo)  Ajax请求发生错误时响应 
   Jelem.ajaxSend(cfoo)  Ajax请求发送前响应 
   Jelem.ajaxSuccess(cfoo)  Ajax请求成功时响应 
-  ◆辅助方法
+  ◆辅助方法 
   Jelem.serialize()   序列化表单元素值 
     PS：将表单中有name属性的元素值进行序列化,生成标准URL编码文本字符串,直接用于ajax请求 
     e.g.：

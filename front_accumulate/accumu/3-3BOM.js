@@ -13,7 +13,7 @@
     提供用户显示器分辨率详细信息的screen对象
     对cookies的支持
     像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
-window 对象
+window 对象 
   PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
     核心对象是window,表示浏览器的一个实例.
     window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
@@ -44,8 +44,9 @@ window 对象
         </frameset>
         通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
     window.length  窗口中的框架数量
-    parent          指向包含另一个窗口的窗口(有框架使用)
-    top             包含特定窗口的最顶层窗口(由框架使用)
+    window.parent  指向包含另一个窗口的窗口(有框架使用)
+    window.top     包含特定窗口的最顶层窗口(由框架使用)
+      window.top == window.frames.top;  // true 
   窗口 
     self           指示当前窗口
     window          指示当前窗口,与self等效
@@ -834,7 +835,7 @@ window的属性对象
     navigator.productSub;      产品的次要信息「如 Gecko的版本」
     navigator.vendor;      浏览器的品牌
     navigator.vendorSub;   有关供应商的次要信息
-    navigator.userAgent; 用户代理字符串,显示浏览器的信息「也将兼容的浏览器的信息列出」
+    navigator.userAgent; 用户代理字符串,显示浏览器的信息[也将兼容的浏览器的信息列出]
       navigator.userAgent;  //"Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
     navigator.plugins;  返回浏览器安装插件的信息,类型为数组
       navigator.plugins[i].name;        //插件名
@@ -1008,8 +1009,13 @@ window的属性对象
   window.frames    包含窗口所有框架[iframe]的对象 
     window.frames[num]  通过下标来获取到ifrme
     window.frames[name] 通过iframe的'name'属性值来获取到iframe
-  window.top/..    框架
-    window.top == window.frames.top;  // true 
+  window.CSS       CSS接口涵盖了CSS相关的方法 [W3C][IE不支持]
+    PS：CSS接口是一个工具接口，因此无法创建该类型的对象：其内部只定义了静态的方法 
+    CSS.supports()  检测浏览器是否支持CSS的某些功能  
+      bol = CSS.supports(propertyName, value);
+      bol = CSS.supports(supportCondition);
+      e.g.：
+      console.log(CSS.supports("display", "flex")); // true 
   客户端检测「详细见 JavaScript高级程序设计 228 页」 
     PS：
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,

@@ -162,7 +162,7 @@ Selector,选择器
     使用大小写字母、_、-和数字组成,
     驼峰法间隔单词,数字和_一般用来排序区分;
   单体选择器 
-    常用 
+    简单选择器  
       *  通配符选择器 
         用于定义所有的html元素的样式.
         e.g. *{margin:0;padding:0}
@@ -196,7 +196,20 @@ Selector,选择器
           用于定义只出现一次的样式(虽然多次使用可以起作用,但最好不要多次使用)
         Remarks:在需使用的标签元素内定义id名,如id="id名称".
         注:类名或id名不要使用数字开头
-    子选择器
+      [attrName]  属性选择器 [IE7+]
+        [attribute]        用于选取带有指定属性的元素。
+        [attribute=value]  用于选取属性为指定值元素
+          PS：该格式要求与属性值完全匹配
+        [attribute~=value] 包含指定属性值的元素
+        [attribute|=value] 用于选取属性带有指定词汇开头的元素
+        [attribute*=value] 包含指定字符串的元素
+        [attribute^=value] 以指定字符串开头的元素
+        [attribute$=value] 以指定字符串结尾的元素
+        e.g.：
+          [title] { color:red; }
+          [title='W3School'] { border:5px solid blue; }
+          [title~='hello'] { color:red; }
+    关系选择器  
       :nth-child(An+B)   当元素为其父元素的第An+B「如4n+1」个子元素时 [CSS3]
         :nth-child(B)    当元素为其父元素的第B个子元素时「即n为0时」
         :nth-child(odd)  当元素为其父元素的第奇数个子元素时 
@@ -423,20 +436,6 @@ Selector,选择器
       :read-only   当元素处于只读状态时的样式
         e.g. input:read-write{}
       :read-write  当元素处于可读写状态时的样式
-    其他 
-      [attrName]  属性选择器 [IE7+]
-        [attribute]        用于选取带有指定属性的元素。
-        [attribute=value]  用于选取属性为指定值元素
-          PS：该格式要求与属性值完全匹配
-        [attribute~=value] 包含指定属性值的元素
-        [attribute|=value] 用于选取属性带有指定词汇开头的元素
-        [attribute*=value] 包含指定字符串的元素
-        [attribute^=value] 以指定字符串开头的元素
-        [attribute$=value] 以指定字符串结尾的元素
-        e.g.：
-          [title] { color:red; }
-          [title='W3School'] { border:5px solid blue; }
-          [title~='hello'] { color:red; }
       :not(selector) 非选择器 
         某个结构元素使用样式,但想排除这个结构元素下的子结构元素不使用这个样式,可以使用not选择器
         e.g. 
@@ -467,6 +466,22 @@ Selector,选择器
         e.g. 
           <p>文字<q lang="no">段落中的引用的文字</q>文字</p>
           q:lang(no){}
+      :invalid 和 :valid 伪类选择器 
+        指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
+        e.g. input[type="email"]:invalid{}
+      nth-of-type 和 nth-last-of-type
+      required 和 optional 伪类选择器
+        required伪类选择器用来指定允许使用required属性
+          而且已经指定了required属性的input元素、select元素以及textarea元素的样式
+        optional伪类选择器用来指定允许使用required属性
+          而且未指定required属性的input元素、select元素以及textarea元素的样式.
+      indeterminate 
+        只有火狐浏览器支持
+        指定当页面打开时,一组单选框中没有任何一个单选框被设定为选中状态时,整组单选框的样式.
+      :default 
+        该属性只支持火狐浏览器
+        用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
+        e.g. input:default{}
     Remarks:
       ::before 和 :after 中的单冒号与双冒号的区别
         单冒号用于CSS3伪类,如 :active :focus :hover :visited 等等
@@ -508,23 +523,6 @@ Selector,选择器
       <div class="boo">字体变红 </div>
       <div class="boo">字体未变红 </div>
       .aoo+.boo{color: red;}
-  其他选择器 
-    :invalid 和 :valid 伪类选择器 
-      指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
-      e.g. input[type="email"]:invalid{}
-    nth-of-type 和 nth-last-of-type
-    required 和 optional 伪类选择器
-      required伪类选择器用来指定允许使用required属性
-        而且已经指定了required属性的input元素、select元素以及textarea元素的样式
-      optional伪类选择器用来指定允许使用required属性
-        而且未指定required属性的input元素、select元素以及textarea元素的样式.
-    indeterminate 
-      只有火狐浏览器支持
-      指定当页面打开时,一组单选框中没有任何一个单选框被设定为选中状态时,整组单选框的样式.
-    :default 
-      该属性只支持火狐浏览器
-      用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
-      e.g. input:default{}
   CSS表达式  
     attr() 用来获取选择到的元素的某一HTML属性值,并用于其样式[实验性API]
       PS：它也可以用于伪元素,属性值采用伪元素所依附的元素。
@@ -1289,7 +1287,7 @@ Declaration,样式声明
         .aoo{
           background:repeating-radial-gradient( #ace,#ace 5px,#f96 5px,#f96 10px);  
         }
-    filter滤镜 [CSS3]
+    filter滤镜 [CSS3][IE不支持]
       PS：CSS3 filters能处理视频和图片;只有Chrome支持  
       filter: 
         none   

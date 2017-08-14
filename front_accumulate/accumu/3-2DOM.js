@@ -76,7 +76,7 @@
     DOM模块版本检测
       可使用 document.implementation.hasFeature() 方法来检测(详见: Document)
 ◆Node节点 
-  PS：DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构
+  PS：DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
     节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
     每个节点都有自己的特点、数据和方法,也与其他节点间存在关系
     整个HTML文档可以表示为以一个特定节点为根节点的树形结构
@@ -142,7 +142,7 @@
   Nod.replaceChild(NEWnod,OLDnod); Nod内替换OLDnod为NEWnod,返回值为OLDnod
   Nod.removeChild(nod); 删除子节点nod,并返回
   ◆其他操作
-  nod.cloneNode(bool);   复制节点(但未添加到文档结构中)
+  nod.cloneNode(bool);   复制节点[但未添加到文档结构中] 
     PS：不会复制节点中JS添加的属性(如事件等),只复制特性.
       IE中存在bug会复制事件处理程序,可以通过复制前移除事件来决解.
     bool 一个布尔值
@@ -152,9 +152,9 @@
     Arguments: 接受两个参数 特性名和特性版本号
     RetValue:返回值为布尔值
     存在和document.implementation.hasFeature();同样的问题,测试不一定准确
-  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相同 (DOM3级新增)
+  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相同 [DOM3]
     相同指的是两个节点引用的是同一个对象
-  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相等 (DOM3级新增)
+  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相等 [DOM3]
     相等指的是两个节点是相同的类型,具有相等的属性(如nodeName),
     且attributes和childNodes属性也相等.
   nod.setUserData(键名,数据值(任何类型),处理函数); 给一节点添加额外数据
@@ -447,46 +447,43 @@ Document文档根节点
   document.close();
   ◆DOM 功能检测
   document.implementation;  返回 DOMImplementation 对象
-    hasFeature(feature,version); 返回布尔值
-      DOM1级只为 document.implementation 规定了这一个方法
-      返回值为Boolean值,支持则为true,否则为false
-      检测结果有时候不正确
-       (如 safari2.x 及更早版本会返回true,即使没有完全实现某些DOM功能)
-      Arguments:
-        feature 要检测的DOM功能的名称
-        version DOM的版本号
-        e.g. :
-        Core        1.0 2.0 3.0 基本的DOM,用于描述表现文档的节点树
-        XML         1.0 2.0 3.0 Core的XML扩展,添加了对CDATA、处理指令及实体的支持
-        HTML        1.0 2.0     XML的HTML扩展,添加了对HTML特有元素及实体的支持
-        Views       2.0         基于某些样式完成文档的格式化
-        StyleSheets 2.0         将样式表关联到文档
-        CSS         2.0         对层叠样式表1级的支持
-        CSS2        2.0         对层叠样式表2级的支持
-        Events      2.0 3.0     常规的DOM事件
-        UIEvents    2.0 3.0     用户界面事件
-        MouseEvents 2.0 3.0     由鼠标引发的事件
-        MulationEvents 2.0 3.0  DOM树变化时引发的事件
-        HTMLEvents  2.0         HTML 4.01 事件
-        Range       2.0         用于操作DOM树中某个范围的对象和方法
-        Traversal   2.0         遍历DOM树的方法
-        LS          3.0         文件与DOM树之间的同步加载和保存
-        LS-Async    3.0         文件与DOM树之间的异步加载和保存
-        Validation  3.0         在确保有效的前提下修改DOM树的方法
+    PS：DOM1级只为 document.implementation 规定了'hasFeature'一个方法
+    hasFeature(feature,version); 浏览器检测,返回布尔值
+      PS：支持则为true,否则为false; 检测结果有时候不正确
+        如 safari2.x 及更早版本会返回true,即使没有完全实现某些DOM功能
+      feature   要检测的DOM功能的名称
+      version   DOM的版本号
+      ★枚举:
+      Core        1.0 2.0 3.0 基本的DOM,用于描述表现文档的节点树
+      XML         1.0 2.0 3.0 Core的XML扩展,添加了对CDATA、处理指令及实体的支持
+      HTML        1.0 2.0     XML的HTML扩展,添加了对HTML特有元素及实体的支持
+      Views       2.0         基于某些样式完成文档的格式化
+      StyleSheets 2.0         将样式表关联到文档
+      CSS         2.0         对层叠样式表1级的支持
+      CSS2        2.0         对层叠样式表2级的支持
+      Events      2.0 3.0     常规的DOM事件
+      UIEvents    2.0 3.0     用户界面事件
+      MouseEvents 2.0 3.0     由鼠标引发的事件
+      MulationEvents 2.0 3.0  DOM树变化时引发的事件
+      HTMLEvents  2.0         HTML 4.01 事件
+      Range       2.0         用于操作DOM树中某个范围的对象和方法
+      Traversal   2.0         遍历DOM树的方法
+      LS          3.0         文件与DOM树之间的同步加载和保存
+      LS-Async    3.0         文件与DOM树之间的异步加载和保存
+      Validation  3.0         在确保有效的前提下修改DOM树的方法
       e.g.
-      document.implementation.hasFeature("CSS","2.0")
-      document.implementation.hasFeature("CSS2","2.0")
-      document.implementation.hasFeature("HTML","1.0")
-  document.implementation.createDocumentType(); 创建HTML5之前的doctype相关
-  document.implementation.createDocument(); 创建新文档
-  document.implementation.createHTMLDocument(titlename); 创建一个完整的HTML文档
-    包括 <html> <head> <title> <body>元素
-    传入的参数为放在<title>元素中的字符串
-    通过该方法创建的文档时 HTMLDocument 类型的实例
-    只有Opera和Safari支持该方法
+        document.implementation.hasFeature("CSS","2.0")
+        document.implementation.hasFeature("CSS2","2.0")
+        document.implementation.hasFeature("HTML","1.0")
+    createDocumentType(); 创建HTML5之前的doctype相关
+    createDocument(); 创建新文档
+    createHTMLDocument(titlename); 创建一个完整的HTML文档 [只有Opera和Safari支持]  
+      包括 <html> <head> <title> <body>元素
+      传入的参数'titlename'为放在<title>元素中的字符串
+      通过该方法创建的文档时 HTMLDocument 类型的实例
 类型&详解 
-  Element 类型:    元素节点
-    PS：Element 类型用于表现XML或HTML元素,提供了对元素标签名、子节点即特性的访问
+  Element 类型: DOM元素 [继承于 Node 类型]
+    PS： 用于表现XML或HTML元素,提供了对元素标签名、子节点即特性的访问 
       除了 Document 类型之外,Element 类型算是Web编程中最常用的类型了.
     ◆节点属性
     elem.nodeType;   节点类型值为1
@@ -499,7 +496,7 @@ Document文档根节点
     其子节点可能是:
       Element Text Comment ProcessingInstruction
       CDATASection EntityReference
-  HTMLElement 类型:直接继承自 Element 并添加了一些属性
+  HTMLElement 类型:HTMLDOM元素  [继承于 Element 类型] 
     PS：可以直接通过 == 来比较「不同于ECMAScript中的对象」「SelfPoint」
       所有HTML元素都有 HTMLElement 类型表示.
       e.g. :
@@ -1299,7 +1296,7 @@ event 事件对象
     当eventphase等于2是,this target currentTarget 是相等的
   e.stopImmediatePropagation()  取消事件传递,并阻止处理程序调用
    (DOM3新增)
-  e.trusted;    表示事件是否为浏览器生成的布尔值(DOM3级新增)
+  e.trusted;    表示事件是否为浏览器生成的布尔值[DOM3]
   e.view;       与事件关联的抽象视图,等同于发生事件的window对象
   ◆鼠标事件的位置信息
   e.screenX     相对于设备屏幕左上角的坐标
@@ -1927,6 +1924,11 @@ e.g.:
       }
 --------------------------------------------------------------------------------
 ◆Mobile 移动端
+Special
+  ios移动设备上,长按<a>标签,会弹出浏览器的原生菜单
+    在JS中设置取消的方法
+    document.documentElement.style.webkitTouchCallout = 'none';
+    代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
 Event 事件 
   Touch 触摸事件
     PS：由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)

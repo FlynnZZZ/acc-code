@@ -781,7 +781,7 @@ DOM操作
   $.stringify({obj}) 序列化为JSON
   $.parseJSON(jsonStr) 解析JSON字符串 
   $.parseXML(str) 解析一字符串到一个XML文件 
-  ◆检测相关
+  ◆其他检测相关
   $.type(obj)    判断JS对象的类型[函数对象、日期对象、数组对象、正则对象等] 
   var bol = $.isNumberic(val)   判断是否为数值 
   var bol = $.isFunction(obj)   判断是否为函数 
@@ -905,14 +905,14 @@ DOM操作
   $.holdReady()   暂停或恢复'ready'事件的执行 
   $.Callbacks()   回调列表对象,可用来管理回调函数 
   已废弃 
-    $.browser 对象 获取浏览器的名称与版本信息 「1.9-可用」
-      PS：已在jQuery 1.9 中被移除,因为识别方法不准确
+    $.browser 对象 获取浏览器的名称与版本信息 [1.9-] 
+      PS：'1.9版本'被移除,因识别方法不准确,现已作为一插件存在 
       $.browser.chrome  为 true 表示当前为Chrome浏览器
       $.browser.mozilla 为 true 表示当前为火狐浏览器
       $.browser.msie    为 true 表示当前为IE浏览器
       $.browser.version 获取浏览器版本信息
-    $.support 浏览器检测 
-      $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 「1.8-可用」
+    $.support 浏览器检测 [1.8-]
+      $.support.boxModel 检测浏览器是否属于标准的w3c盒子模型 
         PS：浏览器的盒子模型分为两类,一类为标准的w3c盒子模型,另一类为IE盒子模型,
           两者区别为在Width和Height这两个属性值中是否包含padding和border的值,
           w3c盒子模型不包含,IE盒子模型则包含,

@@ -629,6 +629,9 @@ WebStorm
     Comment with line comment     Atom           行注释  
     Move line up                  Atom           上移行  
     Move line down                Atom           下移行  
+    start new line                atom           在上一行插入 
+    start new line before current atom           在下一行插入 
+    join lines                    atom           合并行 
   插件 
   总结 
   Suggestion&Question:

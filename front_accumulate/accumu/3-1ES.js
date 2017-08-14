@@ -392,7 +392,7 @@ ECMAScript : JS核心,语法部分
       }
       console.log(obj); // {key1: 21} 
   创建对象 
-    var obj = {}  字面量创建对象 
+    obj = {}  字面量创建对象 
       var box=null; 初始化对象
       var obj={}    没有任何属性的对象(空对象)
       var obj1={属性1:值1,属性2:值2,...}    //名值对间使用逗号隔开.
@@ -407,7 +407,7 @@ ECMAScript : JS核心,语法部分
             voo2 = 'b' ,
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
-    var obj = new Foo() 构造函数[类]实例化对象 
+    obj = new Foo() 构造函数[类]实例化对象 
       构造函数生成对象的原理 
         若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
         若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
@@ -466,7 +466,7 @@ ECMAScript : JS核心,语法部分
             var obj= Foo(2,3);
             console.log(azz);
             console.log(bzz);
-    var obj = foo()     工厂模式创建对象 
+    obj = foo()     工厂模式创建对象 
       PS：工厂模式使软件领域一种广为人知的设计模式 
       function createObject(name,age){    // 创建工厂函数 
         var obj=new Object();             //创建对象
@@ -484,10 +484,14 @@ ECMAScript : JS核心,语法部分
       缺点:
         无法继承
         无法识别对象(获取对象的类型)
-    var obj = Object.create(protoObj[,keys]); 继承方式创建对象[ES5+] 
+    obj = Object.create(protoObj[,keys]); 继承方式创建对象[ES5] 
       protoObj 原型对象 [Foo.prototype 或 obj.__proto__]  
       keys     新增属性方法及属性特性的配置对象 
       e.g.
+        创建出'纯净的空对象',没有原型
+        var obj = Object.create(null);
+        console.log(obj); // {}
+        
         var aoo = {x:1};
         var boo = Object.create(aoo);
         console.log(boo);   // {} 
@@ -559,7 +563,7 @@ ECMAScript : JS核心,语法部分
         str.aoo;    // undefined,str无aoo属性.
     obj.key(); 调用对象的方法
   静态属性方法 
-    var arr = Object.keys(obj); 获取对象[不包含原型]所有的属性名 
+    arr = Object.keys(obj); 获取对象[不包含原型]所有的属性名 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
       e.g.
         var obj = {
@@ -575,7 +579,7 @@ ECMAScript : JS核心,语法部分
         console.log(obj.aoo); // 1
         console.log(obj.boo); // 11
         console.log(arr);     // ["aoo", "boo", "foo"]
-    var obj = Object.assign(obj1[,obj2,..]);  合并多个对象
+    obj = Object.assign(obj1[,obj2,..]);  合并多个对象
       e.g.
         var obj1 = {aoo:"abc"};
         var res1 = Object.assign(obj1); 
@@ -584,7 +588,7 @@ ECMAScript : JS核心,语法部分
         var obj3 = {coo:true};
         var res = Object.assign(obj1,obj2,obj3);
         console.log(res); // {aoo: "abc", boo: 180, coo: true} 
-    var bol = Object.is(val1,val2); 值是否相同[可能存在兼容问题] 
+    bol = Object.is(val1,val2); 值是否相同[可能存在兼容问题] 
       与 == 或 === 的逻辑不同 
       e.g.:
         Object.is(+0,-0);    //false
@@ -596,7 +600,8 @@ ECMAScript : JS核心,语法部分
     value        属性的值,默认为 undefined 
     writable     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
     enumerable   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
-    configurable 默认为true,能否[删除、通过'defineProperty'修改属性、修改属性特性等]配置 
+    configurable 默认为true,能否配置 
+      包括能否删除、通过'defineProperty'修改属性、修改属性特性等配置 
       不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
     ◆访问器属性 
     get  读属性值时的操作,默认返回属性值 
@@ -636,7 +641,7 @@ ECMAScript : JS核心,语法部分
     enumerable    同数据属性 
     configurable  同数据属性 
     ◆定义&修改
-    Object.defineProperty(obj,key,param); 定义属性key及其特性 
+    Object.defineProperty(obj,key,param); 定义属性key及其特性[ES5] 
       PS：只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
       obj   属性key所在的对象
       key   对象的属性名 
@@ -730,7 +735,7 @@ ECMAScript : JS核心,语法部分
         console.log(obj.zoo); // undefined
         obj.zoo = 100;
         console.log(obj.zoo); // 100 
-    Object.defineProperties(obj,param);  同时定义多个属性及特性
+    Object.defineProperties(obj,param);  同时定义多个属性及特性[ES5]
       obj   修改的目标对象
       param 属性名及其对应的特性配置的对象 
         {
@@ -773,17 +778,17 @@ ECMAScript : JS核心,语法部分
           }
         });
     ◆查询
-    var bool = obj.hasOwnProperty(key); 查询属性是否存在[不包括继承的属性] 
+    bol = obj.hasOwnProperty(key); 查询属性是否存在[不包括继承的属性] 
       var obj = {aoo:"abc"};
       obj.hasOwnProperty("aoo"); // true
-    var bool = obj.propertyIsEnumerable(key); 查询属性是否可枚举 
-    var obj = Object.getOwnPropertyDescriptor(obj,"propName"); 查询属性的特性配置 
+    bol = obj.propertyIsEnumerable(key); 查询属性是否可枚举 
+    obj = Object.getOwnPropertyDescriptor(obj,"prop"); 查询属性的特性配置[ES5] 
       PS：可对DOM或BOM对象使用该方法;若查询的属性不存在则返回undefined 
       var obj = {aoo:"a"};
       var rst = Object.getOwnPropertyDescriptor(obj,"aoo");
       console.log(rst);
       // Object {value: "a", writable: true, enumerable: true, configurable: true}
-    var arr = Object.getOwnPropertyNames(); 查询所有自有属性名[包括不可枚举的属性] 
+    arr = Object.getOwnPropertyNames(); 查询所有自有属性名[包括不可枚举属性] [ES5] 
       var obj = {aoo:11,boo:'aa'}
       Object.defineProperty(obj,'coo',{
         value : 22,
@@ -795,7 +800,7 @@ ECMAScript : JS核心,语法部分
       console.log('arr1',arr1); // arr1 (2) ["aoo", "boo"]
       var arr2 = Object.getOwnPropertyNames(obj);
       console.log('arr2',arr2); // arr2 (3) ["aoo", "boo", "coo"]
-  对象的类型class标签 
+  对象的类型'class' 
     PS：无直接访问对象类型的方式,可间接通过 Object.prototype.toString 方式来获取
     var type = Object.prototype.toString;
     var getType = function(val){
@@ -813,17 +818,17 @@ ECMAScript : JS核心,语法部分
     console.log(getType([])); // Array
     console.log(getType(new Date())); // Date
   对象的可扩展extensible标签 
-    var bool = Object.isExtensible(obj); 对象能否扩展 
+    bol = Object.isExtensible(obj); 对象能否扩展[ES5] 
       PS：即对象的属性/方法是否可增加
-    var bool = Object.isSealed(obj);     对象是否被密封 
-    var bool = Object.isFrozen(obj);     对象是否被冻结 
-    Object.preventExtensions(obj); 设置对象不可扩展[ES5+]
+    bol = Object.isSealed(obj);     对象是否被密封[ES5] 
+    bol = Object.isFrozen(obj);     对象是否被冻结[ES5] 
+    Object.preventExtensions(obj); 设置对象不可扩展[ES5]
       PS：不能给对象新增属性,但可以修改和删除已有属性
         只是对对象操作,对其原型链无影响
-    Object.seal(obj);        密封对象[ES5+]
+    Object.seal(obj);        密封对象[ES5]
       PS：在不可扩展的基础上将所有属性变成不可配置
         只是对对象操作,对其原型链无影响
-    Object.freeze(obj);      冻结对象[ES5+]
+    Object.freeze(obj);      冻结对象[ES5]
       PS：在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
         只是对对象操作,对其原型链无影响
   原型&继承 
@@ -910,7 +915,7 @@ ECMAScript : JS核心,语法部分
         console.log(p2.friends);  // ["a", "b", "c"]
         决解方法:只将共享的且不再改变的属性和方法放入原型中.
           设置原型中的属性为只读(SelfPoint)
-      Object.getPrototypeOf(obj); 获取对象的原型对象[ES5+] 
+      Object.getPrototypeOf(obj); 获取对象的原型对象 [ES5] 
         等价于 obj.__proto__
       修改JS内置数据类型的prototype 
         e.g.

@@ -1978,6 +1978,9 @@ RequireJS 模块化开发框架
     模块化开发: 
       一个文件一个模块 
       减少全局变量 
+  加载机制  
+    使用 head.appendChild() 将每个依赖加载成script标签,故可跨域加载 
+    加载后的模块会立即执行 
   define(['name',] [dependArr,]foo)  定义模块 
     name      模块名,默认为文件路径,一般省略  
     dependArr 依赖模块名组成的数组,可选   
@@ -1986,7 +1989,7 @@ RequireJS 模块化开发框架
   require(dependArr,foo)           加载模块 
     dependArr   依赖的模块名组成的数组 
     foo         依赖模块下载完后执行的函数,传入参数顺序对应依赖模块的顺序
-  requirejs.config(configObj)      配置
+  requirejs.config(configObj)      RequireJS配置 
     configObj     配置对象 
     {
       baseUrl : '/a',   
@@ -2049,21 +2052,18 @@ RequireJS 模块化开发框架
     map       配置不同模块的相同依赖指向不同文件 
     waitSeconds 下载js等待的时间,默认7秒,若设为0,则禁用等待超时;超时则RequireJS会报错
     urlArgs   下载文件时,在URL后增加额外的query参数 
-  text插件模块 
-    用于加载文本文件的RequireJS插件,可用于加载HTML
-    本质通过AJAX请求来加载文本,有跨域的限制 
+  text插件模块 : 用于加载文本文件的RequireJS插件
+    可用于加载HTML; 本质通过AJAX请求来加载文本,有跨域的限制 
     require(['text!/user.html!strip'],function(template){ 
       // 会先加载text插件模块在加载'user.html'模块 
       // !strip 可选,只获取'user.html'中body内的部分 
       console.log(template);
     })
-  CSS插件模块 
-    用于加载样式文件的RequireJS插件  
+  CSS插件模块 : 用于加载样式文件的RequireJS插件  
     为了让'css!'生效,需在RequireJS中配置['map'内或'paths'内任选一个进行配置]
     require(['css!jqurey-ui.css',]function(){
     })
-  i18n插件模块 
-    支持国际化多语言 
+  i18n插件模块 : 支持国际化多语言 
     require(['i18n!./nls/message',],function(i18n){
       console.log(i18n.aoo);
     })
@@ -2090,12 +2090,66 @@ RequireJS 模块化开发框架
       2. 配置语言 
         config : {
           i18n : {
-            locale : 'zh'
+            locale : 'zh' 
           }
         }
-  加载机制  
-    使用 head.appendChild() 将每个依赖加载成script标签,故可跨域加载 
-    加载后的模块会立即执行 
+  r.js  打包工具 
+    npm install requirejs -g   通过npm安装RequireJS 
+      r.js.cmd -o baseUrl=xx name=xx out=xx.js   命令行执行,进行打包
+        进入对应文件夹下的命令行环境执行,
+        baseUrl=路径
+        name=要打包的文件名[可以不带文件后缀]
+        out=命名输出文件的名称 
+    下载 r.js 文件 
+      通过Node执行 r.js 来进行打包 
+      node r.js -o baseUrl=xx name=xx out=xx.js  
+        进入存放 r.js 文件的目录下,命令行中执行   
+    通过配置文件来打包 
+      node r.js -o app.build.js 
+        配置文件即为 app.build.js 
+        ({
+          appDir : './src', // 要打包的根目录,会将CSS也打包,./ 表示该配置文件所在的位置 
+          baseUrl : './js', // 所要打包的目录 
+          dir : './build', // 输出目录 
+          mainConfigFile : 'src/js/requirejs.config.js', // 指定RequireJS的配置文件 
+          optimize : 'none', // 可选 'uglify', 是否使用压缩 
+          inlineText : false, // 使用 text 插件后,将HTML文件不打包 
+          // name : 'app',     // 打包的具体文件 ,单模块打包 同 modules 互斥 
+          modules : [   // 多模块打包 
+            {
+              name : '' , // 打包的模块名 
+              include : [  // 添加所需要一起打包的文件 
+                '',
+                '',
+              ],
+              exclude : [ // 排除不打包的模块 
+                '',
+                '',
+              ],
+              excludeShallow : [ // 浅移除,仅将列出的模块移除,但会将其依赖打包进来  
+                '',
+              ],
+              insertRequire : [
+                '',
+              ],
+            },
+            {
+              
+            },
+          ]
+        })
+  构建工具 
+    1 Grunt、Gulp、Webpack
+    2 使用npm来配置构建命令 
+      npm init   生成 package.json 文件 
+        {
+          // ... 
+          script : {
+            'package' : 'node ./xx/r.js -o ./xx/app.build.js',
+          }
+        }
+      npm run-srcipt xx  执行'script'字段内配置的命令 
+        简写为 npm run xx 
 --------------------------------------------------------------------------------
 其他工具 
   Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 

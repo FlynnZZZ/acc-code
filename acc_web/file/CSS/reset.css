@@ -1,0 +1,49 @@
+@charset "utf-8";
+/*重置样式*/
+html,body,div,span,p,a,ul,ol,li,
+table,tbody,thead,tfoot,tr,td,
+form,input,select,textarea,option,label,button,
+article,section,footer,header {
+  margin: 0;
+  padding: 0;
+  font-family: 'sans-serif', 'Microsoft YaHei';
+}
+ul { list-style: none; }
+
+input[type=number] { -moz-appearance:textfield; }
+input[type=number]::-webkit-inner-spin-button,  
+input[type=number]::-webkit-outer-spin-button {  
+  -webkit-appearance: none;  
+  margin: 0;  
+}  
+
+/*选用 布局类*/
+.inb { display: inline-block !important; }
+.block { display: block !important;}
+.vamWp:before {
+  content: '';
+  display: inline-block;
+  height:100%;
+  width: 0;
+  vertical-align: middle;
+}
+.vam{ vertical-align: middle; }
+.center{text-align: center;}
+.fR{ float: right; }
+.fL{ float: left; }
+
+/*选用 修饰类*/
+.pointer{
+  cursor: pointer;
+  user-select:none;
+}
+
+/*选用 操作类*/
+.none { display: none !important; }
+.hid1 { visibility: hidden !important; }
+.hid2 {
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+

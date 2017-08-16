@@ -555,7 +555,7 @@ window的属性对象
         若静态文件放在主域名下,则静态文件请求时都会带cookie提交给server,
         cookie有域的限制,也不能跨域传递,故使用非主要域名的时候,请求头中就不会带有cookie数据,
         不发送cookie也减少了Web Server对cookie的处理分析环节,
-    document.hidden  网页可见性API 「HTML5」 
+    document.hidden  网页可见性API[HTML5]  
       页面不可见时播放中的视频暂停,可见时视频继续播放
         <video id="video" autoplay="autoplay" loop="loop" src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
         var video = document.getElementById('video') ;
@@ -584,6 +584,8 @@ window的属性对象
               break;
           }
         }
+    document.designMode = 'on'   网页中所有元素可编辑  
+      'off'
   window.history   保存着用户上网的记录,从窗口被打开的那一刻算起 
     PS：每个浏览器窗口、标签页及框架,都有自己特定的window对象及其history对象;
       安全考虑,得不到用户浏览过的URL,但可在用户访问过的页面列表中进行选择;

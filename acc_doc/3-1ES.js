@@ -2128,9 +2128,9 @@ Array   数组对象
         可省略 new 关键字
   实例属性&方法 : 'Array.prototype'上的属性&方法 
     ◆信息查询 
-    var val = arr[num]   读写数组元素 
+    val = arr[num]   读写数组元素 
       num  下标,从0开始
-    var num = arr.length 读写数组长度 
+    num = arr.length 读写数组长度 
       var arr = [1,2,3,4,5];
       arr.length = 3;
       console.log(arr); // [1,2,3]
@@ -2140,18 +2140,18 @@ Array   数组对象
         var foo=[];
         foo[100]=3;
         foo.length;   //101
-    var bol = arr.includes(val [,index])  检测元素是否存在 
+    bol = arr.includes(val [,index])  检测元素是否存在 
       val   需要查找的元素值;
       index 可选,默认为 0,从该索引处开始向后查找 
       e.g.
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    var idx = arr.indexOf(val[,bgn])     查询元素索引「ES5」 
+    idx = arr.indexOf(val[,bgn])     查询元素索引「ES5」 
       PS：返回值为下标值,若找不到则返回-1 
       bgn  表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    var idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左]「ES5」 
+    idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左]「ES5」 
     ◆改变原数组
     arr.reverse() 颠倒数组元素的顺序 
       e.g. :
@@ -2190,7 +2190,7 @@ Array   数组对象
         });
         console.log(arr); // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    var num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
+    num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
       val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
       e.g.
         var arr = [1];
@@ -2201,8 +2201,8 @@ Array   数组对象
         var aoo = [1,2,3];
         aoo.push("d","e",12);  // 6
         console.log(aoo);   // [1, 2, 3, "d", "e", 12]
-    var num = arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组的长度值 
-    var arr1 = arr.splice(bgn[,num][,v1,v2,...]) 删除[添加]元素,返回由删除元素组成的数组
+    num = arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组的长度值 
+    arr1 = arr.splice(bgn[,num][,v1,v2,...]) 删除[添加]元素,返回由删除元素组成的数组
       PS：删除若干个元素,使用参数列表中声明的值从被删除的元素处插入,
         添加的元素的个数可大于、等于或小于删除元素的个数; 
         若没有删除元素,则返回空数组;
@@ -2219,7 +2219,7 @@ Array   数组对象
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
     ◆不改变原数组
-    var rstArr = arr.slice([bgn][,end]); 片段复制 
+    rstArr = arr.slice([bgn][,end]); 片段复制 
       PS：截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
         当bgn或end有为负数时,则使其加上 str.length 来代替
       bgn  可选,开始下标,默认为0 
@@ -2247,7 +2247,7 @@ Array   数组对象
         }
         var aoo = list(1, 2, 3);
         console.log(aoo); // [1, 2, 3]
-    var rstArr = arr.concat(val1[val2,..]);  拼接数组或元素 
+    rstArr = arr.concat(val1[val2,..]);  拼接数组或元素 
       val 可为数组或数组的元素 
       e.g.：
         拼接元素 
@@ -2263,7 +2263,7 @@ Array   数组对象
         var arr4 = ['a',['b','c']]
         var rstArr = arr1.concat(arr4)
         console.log(rstArr); // [1,2,3,'a',['b','c']]
-    var rstStr = arr.join([str])  使用str串连每个元素 
+    rstStr = arr.join([str])  使用str串连每个元素 
       str 可选,默认为逗号',',表示用于连接的字符
       e.g. 将[1,2,3]输出为字符串"1-2-3"
         var arr = [1,2,3];
@@ -2324,7 +2324,7 @@ Array   数组对象
         catch (e) {
           console.log('执行了');
         } 
-    var bol = arr.every(foo [,thisArr]);    回调值判断,是否全部为真「ES5」
+    bol = arr.every(foo [,thisArr]);    回调值判断,是否全部为真「ES5」
       PS：若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -2342,7 +2342,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    var bol = arr.some(foo [,thisArr]);     回调值判断,是否存在为真「ES5」
+    bol = arr.some(foo [,thisArr]);     回调值判断,是否存在为真「ES5」
       PS： 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -2358,7 +2358,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    var rstStr = arr.map(foo [,thisArr])    回调值组成的数组「ES5」 
+    rstStr = arr.map(foo [,thisArr])    回调值组成的数组「ES5」 
       foo   传入参数 (val,idx,arr) 
         val 数组中当前被传递的元素
         idx 数组中当前被传递的元素的索引
@@ -2393,7 +2393,7 @@ Array   数组对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    var rstArr = arr.filter(foo [,thisArr]) 回调值为true的元素组成的数组「ES5」
+    rstArr = arr.filter(foo [,thisArr]) 回调值为true的元素组成的数组「ES5」
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       thisArr 可选,执行函数时的用于 this 的值
@@ -2404,7 +2404,7 @@ Array   数组对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    var val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值「ES5」
+    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值「ES5」
       PS：接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
         为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
         若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
@@ -2426,7 +2426,7 @@ Array   数组对象
         });
         console.log(arr); // [1, 2, 3, 4, 5]
         console.log(res); // 15
-    var val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历「ES5」
+    val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历「ES5」
   静态方法 
     var bol = Array.isArray(arr)  判断是否为布尔值「ES5」 
     var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组「ES5」

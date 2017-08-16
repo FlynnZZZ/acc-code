@@ -8,7 +8,7 @@ npm,node_package_manager node包管理器
     在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
     和npm相关的指令或命令前都需添加'npm '
   ◆常用命令 
-  npm init        初始化,新建 package.json 文件
+  npm init        初始化,创建'package.json'文件
   npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为'i' 
     <name>     node插件名称, 如：npm install gulp-less --save-dev
     -g         全局安装 
@@ -45,8 +45,8 @@ npm,node_package_manager node包管理器
   npm update -g express  #升级全局安装的express模块
   npm uninstall express  #删除指定的模块
   npm search <name>      搜索模块 
-  npm -g install npm         最新稳定版
-  npm -g install npm@2.9.1   指定版本
+  npm install npm  -g       最新稳定版 
+  npm -g install npm@2.9.1  指定版本 
   npm help            查看npm帮助 
     npm help <command> 可查看某条命令的详细帮助
   ◆配置参数 
@@ -293,12 +293,12 @@ package.json npm配置文件
     main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,如果你包的名字叫 express,然后用户安装它,然后require("express")。
     keywords - 关键字        
 --------------------------------------------------------------------------------
-Webpack   模块加载器兼打包工具 
+Webpack  模块加载器兼打包工具 
 介绍 
-  基于JS,包括四大核心 Entry、Output、Loaders 和 Plugins;
+  基于JS,包括四大核心'Entry''Output''Loaders'和'Plugins';
   把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
-  支持 AMD commonJS ES6Moudle 3 种引入方式
-  原理:
+  支持'AMD''commonJS''ES6Moudle'三种引入方式
+  原理: 
     把所有的非js资源都转换成js,
     如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
     把图片转换成一个图片地址的 js 变量或 base64 编码等,
@@ -308,10 +308,12 @@ Webpack   模块加载器兼打包工具
     Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
     最后打包为一个浏览器可识别的JS文件;
 说明 
-  从 2.0 版本开始,支持用 ES6module 规范[import/export]去进行模块打包
+  从'2.0'版本开始,支持用'ES6module'规范[import/export]去进行模块打包 
   'chunk'  表示为 '块'
 命令行命令 
-  npm install -g webpack [--save-dev]  安装webpack并写入依赖配置文件  
+  npm install webpack -g 全局安装Webpack[仅一次即可]
+  npm init    npm初始化
+  npm install webpack --save-dev  安装webpack并写入依赖配置文件  
   npm install -g webpack-dev-server    静态资源服务器 
     安装后就可使用 webpack-dev-server 命令了,将 webpack 项目在本地起服务 
     基于Node.js Express框架的轻量开发服务器
@@ -338,7 +340,7 @@ Webpack   模块加载器兼打包工具
       "start": "webpack-dev-server --hot --inline"
     },
     ...      
-  webpack aoo.js boo.js [--xx]    将 aoo.js 文件打包成 boo.js 文件 
+  webpack aoo.js boo.js [--xx]    将'aoo.js'文件打包成'boo.js'文件 
     --xx   可选,表示配置参数,可同时使用多个
       --watch           当文件更改时,自动打包
       --progress        打包时显示进度
@@ -353,7 +355,7 @@ Webpack   模块加载器兼打包工具
   webpack --colors           输出结果带彩色,比如：会用红色显示耗时较长的步骤
   webpack --profile          输出性能数据,可以看到每一步的耗时
   ◆其他命令参数
-  webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies。
+  webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies 
 'webpack.config.js'默认的配置文件 
   PS：需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
     该文件是一个 node.js 模块,返回一个 json 格式的配置信息对象,
@@ -576,7 +578,7 @@ Webpack   模块加载器兼打包工具
         [chunkhash] 每个chunk的hash值,相当于文件的MD5值
           MD5值为了保证每个文件的唯一性
         e.g.: filename : '[name]-[hash].js'
-loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
+Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
   PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
     Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
@@ -600,8 +602,26 @@ loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     Loader可以访问配置
     插件可以让loader拥有更多特性
     Loader可以分发出附加的任意文件
-  npm install 「loaderName」 [--save-dev]   安装loader 
-    npm install css-loader style-loader    同时安装多个loader 
+  相关命令 
+    npm install <loaderName> --save-dev   安装loader 
+      npm install css-loader style-loader    同时安装多个loader 
+  Query_Parameters,loader的配置参数 
+    在 require 时配置 
+      require("url-loader?mimetype=img/png!./file.png");
+      require("style-loader!css-loader!./css/css.css");
+    在 webpack.config.js 配置文件中进行配置 
+      {
+        test: /\.png$/,
+        loader : 'url-loader?mimetype=image/png'
+      }
+      或
+      {
+        test : /\.png$/,
+        loader : 'url-loader',
+        query : {mimetype : "image/png"}
+      }
+    在命令行中进行配置 
+      webpack a.js b.js --module-bind "css=style-loader!css-loader"   
   'webpack.config.js'文件配置  
     PS：根据模块类型[扩展名]来自动绑定需要的 loader
       为了让加载器工作,需要一个正则表达式来定义需修改的文件,
@@ -639,21 +659,9 @@ loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
         webpack file1.xx file2.xx --moudle-bind 'fileType=loaderName' 
         webpack a.js a.bundle.js --moudle-bind 'css=style-loader!css-loader' 
         // 指定了style和css 两个loader
-  Query_Parameters,loader的配置参数 
-    在 require 时配置 
-      require("url-loader?mimetype=img/png!./file.png");
-    在 webpack.config.js 配置文件中进行配置 
-      {test: /\.png$/,loader : 'url-loader?mimetype=image/png'}
-      或
-      {
-        test : /\.png$/,
-        loader : 'url-loader',
-        query : {mimetype : "image/png"}
-      }
-    在命令行中进行配置   
   loader枚举 
-    css-loader       使webpack可以处理'.css'格式文件
-    style-loader     用于将引入的样式文件插入到HTML中 
+    css-loader       使webpack具备处理'.css'文件的能力 
+    style-loader     用于将处理的样式文件插入到HTML中 
       e.g.：
         a.js 文件中: 
           require("style-loader!css-loader!./style.css");
@@ -2151,6 +2159,10 @@ RequireJS 模块化开发框架
       npm run-srcipt xx  执行'script'字段内配置的命令 
         简写为 npm run xx 
 --------------------------------------------------------------------------------
+HttpServer   本地调试及移动端调试 
+  npm i http-server -g   全局安装'http-server'  
+  http-server   在相应的文件夹下启动服务
+  在网页中或手机中访问出现的网址 
 其他工具 
   Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
     如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
@@ -2277,5 +2289,4 @@ json-server  接口Mock数据
   在'dev-server.js'文件中进行配置
   var jsonServer = require('json-sever'); 引入json-server 
   ...
-
 

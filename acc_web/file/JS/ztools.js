@@ -353,6 +353,67 @@
     } );
     return resultObj;
   };
+  
+  // 查询字符串 对象化 
+  // 加载的组件
+  // 请求的接口
+  // 
+  ztools.searchStrObj = function(){ 
+    var resultObj = {};
+    var arr1 = location.search.slice(1).split("&");
+    arr1.forEach(function(val,indx,arr){
+      var arr2 = val.split("=");
+      resultObj[arr2[0]] = arr2[1];
+    } );
+    return resultObj;
+  };
+  // 设置查询字符串
+  // {
+  //   's1' : 1,
+  //   's3' : 3,
+  // }
+  ztools.setSearch = function(obj){
+    var resStr = '?';
+    var o = ztools.searchStrObj();
+    for(var key in obj){
+      o[key] = obj[key];
+    };
+    for(var k in o){
+      resStr += k +'='+o[k]+'&';
+    };
+    return location.pathname+resStr.slice(0,-1);
+  };
+  
+  // 组件加载 
+  // var params = [
+  //   [ url,pos ],
+  //   [ url,pos ],
+  //   [ url,pos ],
+  // ]
+  ztools.loadComponent = function(params){
+    var head = $('head');
+    var html = $('html');
+    var arr = [];
+    for (var i = 0; i < params.length; i++) {
+      (function (i){
+        arr[i] =  $.ajax({
+          type : 'get',
+          url  : params[i][0],
+        })
+        .fail(function (xhr,status,errorTrown){
+          console.log('loadComponent fail,url:',params[i][0]);
+        })
+        .done(function(backData,textStatus,obj){
+          // console.log($(backData)['style'], $(backData));
+          $(params[i][1]).after($(backData)[2]).remove();
+          head.append($(backData)[0]);
+          html.append($(backData)[4]);
+        })
+      })(i);
+    }
+    var back = $.when(arr);
+    return back;
+  };
 
 }();
 

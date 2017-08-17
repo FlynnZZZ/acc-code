@@ -172,7 +172,7 @@ ECMAScript : JS核心,语法部分
   基本类型：也叫原始类型,直接存储在stack栈中的简单数据段;
     占据空间小、大小固定,属于被频繁使用的数据;
     在某些语言中,字符串以对象的形式来表示,因此是引用类型,但ECMAScript中不是
-  基本包装类型 :'Boolean''Number''String'三种基本类型的变体,一定条件下,有对象的性质 
+  基本包装类型:'Boolean''Number''String'三种基本类型的变体,一定条件下有对象的性质 
     PS：基本包装对象也是对象,如可调用方法、设置属性等对象拥有的操作 
       通过构造函数显式的创建基本包装对象 
     隐式创建的包装对象和显式创建的包装对象及区别 
@@ -293,7 +293,7 @@ ECMAScript : JS核心,语法部分
         obj.valueOf(); // Object {aoo: 1, boo: 2}
         obj.valueOf =function(){ return 100; };
         +obj; // 100
-      通过 Number() parseInt() 和 parseFloat() 显示转换为数值 
+      通过 Number() parseInt() 和 parseFloat() 显示转换为数值 [详见'Global']
   String  字符串 
     PS： 用于表示由零或多个16位Unicode字符组成的字符序列.
       表示显示的字符,使用引号引起来,无特殊含义.
@@ -3485,24 +3485,25 @@ Global&Window 全局对象
       var a = Boolean(undefined); // 转换为false
       var a = Boolean('');        // 转换为false
       其余皆转换为true
-    Number(val);  返回转换为的数值 
-      Number(true);  /* 1 */   Number(false);     /* 0  */
-      Number(null);  /* 0 */   Number(undefined)  /* NaN */
+    num = Number(val);  将任意类型数据转换为数值  
       Number(number)     // 对应的值
+      Number(true);      // 1
+      Number(false);     // 0 
+      Number(null);      // 0 
+      Number(undefined)  // NaN 
       Number("")         // 0
       其他规则:
         只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
-          Number('070'); //70
-          注:若是070(无引号包含)则会转换为8进制数.
-          Number(070);   //56
+          Number('070'); // 70
+          Number(070);   // 56
         只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
-        若不是以上三种字符串类型,则返回NaN
+        若不是以上三种字符串类型,则返回NaN 
           console.log(Number('123abc123')); // NaN
-        若为对象,调用 vaueOf()/toString()方法
-          先调用对象的vaueOf()方法,然后依照前面的规则转换返回的值,
-          若转换的结果是NaN,则改用toString()方法,
+        若为对象,先后调用'vaueOf''toString'方法 
+          先调用对象的vaueOf方法,然后依照前面的规则转换返回的值,
+          若转换的结果是NaN,则改用toString方法,
           然后再依次按照前面的规则转换返回的字符串值.
-    parseInt(str [,radix]); 把字符串转换成整数值
+    num = parseInt(str [,radix]); 将字符串转换成整数值
       PS：由于Number()转换字符串时比较复杂且不够合理,更常用的是parseInt()
         忽略字符串前面的空格,直至找到第一个非空格字符
         从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略(.也被忽略)
@@ -3534,7 +3535,7 @@ Global&Window 全局对象
       ECMAScript 3 和ECMAScript 5 的分歧
         parseInt("070");  // ECMAScript 3 认为是 56(八进制)
         parseInt("070");  // ECMAScript 5 认为是 70(十进制)
-    parseFloat(str);     把字符串转换成浮点数值
+    num = parseFloat(str);        将字符串转换成浮点数值
       和 parseInt() 类似,区别是数字中可以包含一个点.
       只能解析为10进制数
       若字符串包含的是一个可解析为整数的数(没有小数点,或小数点后都是零),则返回整数

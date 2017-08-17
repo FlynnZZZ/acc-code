@@ -974,7 +974,7 @@ UI系统
   ScrollView 滚动视图
   Prefab 复用列表内容
   
-  e.g.： 制作动态生成内容的列表
+  Example: 制作动态生成内容的列表
     准备数据
       以物品栏为例,我们要动态生成一个物品,大概需要这样的一组数据：
       物品 id
@@ -1527,7 +1527,7 @@ JS脚本
       });
     ccNode.getChildByName()  通过节点名称查找子节点
       this.node.getChildByName("Cannon_01");
-    e.g.：
+    Example:
       cc.Class({
         extends: cc.Component,
         properties: {
@@ -1605,25 +1605,25 @@ JS脚本
       duration Number,duration in seconds
       deltaPos Vec2 | Number 
       deltaY optional Number 
-      e.g.：
+      Example:
         var actionTo = cc.moveBy(2, cc.p(windowSize.width - 40, windowSize.height - 40));
     cc.moveTo(duration,position[,y]) 移动到目标位置,返回ActionInterval 
       duration Number,duration in seconds
       position Vec2 | Number 
       y optional Number 
-      e.g.：var actionBy = cc.moveTo(2, cc.p(80, 80));
+      Example:var actionBy = cc.moveTo(2, cc.p(80, 80));
     cc.repeatForever(action)  永远地重复一个动作,返回ActionInterval 
       PS：由于这个动作不会停止,所以不能被添加到 cc.sequence 或 cc.spawn 中
       action FiniteTimeAction 
-      e.g.： var repeat = cc.repeatForever(cc.rotateBy(1.0, 360));
+      Example: var repeat = cc.repeatForever(cc.rotateBy(1.0, 360));
     cc.delayTime(d)  返回ActionInterval 
       d Number, duration in seconds
-      e.g.： var delay = cc.delayTime(1);
+      Example: var delay = cc.delayTime(1);
     cc.sequence(actionOrActionArray,tempArray) 顺序执行动作, 返回ActionInterval
       创建的动作将按顺序依次运行
       actionOrActionArray FiniteTimeAction | FiniteTimeAction[] 
       tempArray     FiniteTimeAction 
-      e.g.：
+      Example:
         // create sequence with actions
         var seq = cc.sequence(act1, act2);
         // create sequence with array
@@ -1635,7 +1635,7 @@ JS脚本
       selector Function
       selectorTarget optional,Object
       data   optional,Any
-      e.g.：
+      Example:
         // CallFunc without data
         var finish = cc.callFunc(this.removeSprite, this);
         // CallFunc with data
@@ -1665,7 +1665,7 @@ JS脚本
         之后在合适的时间调用 loadScene, 就可以立即切换场景;
       sceneName  场景文件的文件名「不包含后缀名」
       cfoo       预加载完后执行的回调
-      e.g.：
+      Example:
         cc.director.preloadScene('table', function () {
           cc.log('Next scene preloaded');
         });
@@ -1748,7 +1748,7 @@ JS脚本
       具有该结构的脚本就是 Cocos Creator 中的脚本组件,
       能够挂载到场景中的节点上,提供控制节点的各种功能;
       当编辑完脚本并保存,Cocos Creator 会自动检测到脚本的改动,并迅速编译;
-    e.g.： 一份简单的组件脚本如下
+    Example: 一份简单的组件脚本如下
       cc.Class({
           extends: cc.Component,
           properties: { },
@@ -1756,7 +1756,7 @@ JS脚本
           update: function (dt) { },
       });
     cc.Class(paramsObj) 声明cc中的类 
-      e.g.: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量 
+      Example: 用 cc.Class 创建一个类型,并且赋给了 Sprite 变量 
         同时还将类名设为 "sprite",类名用于序列化,一般可以省略。
         var Sprite = cc.Class({
           name: "sprite"
@@ -1996,7 +1996,7 @@ JS脚本
           需要拖拽资源赋值的属性栏上会显示黄色的标签,
           标签上显示的是资源的类型,如sprite-frame,prefab,font等。
           只要从资源管理器中拖拽相应类型的资源过来就可以完成赋值。
-      e.g.：
+      Example:
         cc.Class({
           extends: cc.Component,
           properties: {
@@ -2038,7 +2038,7 @@ JS脚本
           }
       type    类型声明
         当 default 不能提供足够详细的类型信息时,需用 type 显式声明具体的类型 
-        e.g.：
+        Example:
           将 type 设置为指定类型的构造函数 
           enemy: {
             default: null,
@@ -2466,14 +2466,14 @@ JS脚本
         不应该修改 runAction 后的动作,否则将无法发挥作用,
         如果想进行修改,请在定义 action 时加入。
       action Action 
-      e.g.： 
+      Example: 
         var action = cc.scaleTo(0.2, 1, 0.6);
         node.runAction(action);
         node.runAction(action).repeatForever(); // fail
         node.runAction(action.repeatForever()); // right
     nod.stopAction(action)  停止并移除指定的动作 
       action  Action,An action object to be removed
-      e.g.：
+      Example:
         var action = cc.scaleTo(0.2, 1, 0.6);
         node.stopAction(action);
     ▼节点与组件
@@ -2502,7 +2502,7 @@ JS脚本
       interval num,interval_time,单位s
       times    num,repeat_times
       time     num,delay_time,单位s
-      e.g.：
+      Example:
         //间隔时间1秒,不延迟,永久重复
         this.schedule(function(){
           console.log("schedule log...");
@@ -2525,7 +2525,7 @@ JS脚本
   ActionInterval类 时间间隔动作,这种动作在已定时间内完成,继承FiniteTimeAction 
     easing(easeObj)  缓动运动,返回ActionInterval 
       easeObj Object 
-      e.g.： action.easing(cc.easeIn(3.0));
+      Example: action.easing(cc.easeIn(3.0));
     repeat(times)  重复动作可以按一定次数重复一个动作,返回ActionInterval 
       times Unknown 
     repeatForever() 有限次数内重复一个动作请使用 Repeat 动作,返回ActionInterval 
@@ -2729,7 +2729,7 @@ JS脚本
           }
         });
       nod.on(cc.Node.EventType.xx,cfoo,this)  枚举类型注册
-        e.g.：
+        Example:
           var tFun =function (event){
             console.log("touchend event:"+event.touch.getLocation().x +"|"+event.touch.getLocation().y); 
           };

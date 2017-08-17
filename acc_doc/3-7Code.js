@@ -1472,7 +1472,7 @@ PC端
       则 |x| = |(H-h)/2 - t|    「绝对值」
 技巧方式总结 
   在本地开起service服务时,可创建一个 *.json 文件,可用于AJAX获取模拟
-    e.g.： 在页面中插入一张图
+    Example: 在页面中插入一张图
       目录结构 
       index.html
       source

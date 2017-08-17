@@ -207,7 +207,7 @@ Atom
       ctrl-n m , . /
     其他说明
       unset!  取消设置
-        e.g.:
+        Example:
         取消 ctrl-e 在 find-and-replace 插件下的快捷键设置
         '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
           'ctrl-e': 'unset!'
@@ -393,7 +393,7 @@ Atom
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
       将查找内容的部分进行替换
-        e.g.:
+        Example:
           查找 1122 将其替换为 11AA
           (11)22;
           $1AA;
@@ -967,7 +967,7 @@ GitHub
     help   查看git的使用帮助「git命令」
     clone  将远端仓库克隆到本地形成本地仓库
       默认克隆在当前文件夹
-      e.g.: git clone https://github.com/hk029/hello-world.git
+      Example: git clone https://github.com/hk029/hello-world.git
     init   在本地创建一个新的本地仓库
     add    添加文件到本地仓库
     mv     移动或重命名文件
@@ -1039,7 +1039,7 @@ GitHub
     exx
   函数名 
     是否 is
-      e.g.:
+      Example:
         判断是否最小 isMin
     foo
     goo
@@ -1168,7 +1168,7 @@ GitHub
       font     文字
       print    打印
       themes   主题
-    e.g.:
+    Example:
       文本输入框 .input_tx
       密码输入框 .input_pw
       登录密码输入框 .input_pw_login
@@ -1224,7 +1224,7 @@ GitHub
   SlSt      自我设置 SelfSet
   文档描述相关
   PS：      说明
-  e.g.：    举例子
+  Example:    举例子
   Exp:      经验积累
   Self：    自己相关
   Extend：  扩展

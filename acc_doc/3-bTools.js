@@ -26,7 +26,7 @@ npm,node_package_manager node包管理器
     全局安装与本地安装 
       两者不冲突,有时需要两者都进行安装,全局安装是为了在命令行中执行命令,
       本地安装是为了在本项目中使用 
-    e.g.:
+    Example:
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
   npm uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
@@ -36,7 +36,7 @@ npm,node_package_manager node包管理器
     npm list <name> [-g]  查看模块的版本号 
   npm update <name> [-g] [--save-dev]  更新插件
     npm update [--save-dev]  // 更新全部插件
-    e.g.：
+    Example:
       npm update -g           更新npm 
       npm update vue-cli -g   更新vue
   npm show express     #显示模块详情
@@ -450,7 +450,7 @@ Webpack  模块加载器兼打包工具
     接着它会不断递归搜索实际需要的依赖项,直到它到达了“树”的底部。
     从上一步接着,Webpack 把所有东西打包到 output.path 的文件夹里,
     并使用 output.filename 命名 「 [name] 表示使用 entry 项的 key」
-  e.g.： 
+  Example: 
     完整的wepack配置文件 webpack.config.js
     2017.4.8 新增less支持,先安装less和less的加载器
     // 安装完成之后在配置文件中添加对应的加载器规则
@@ -577,7 +577,7 @@ Webpack  模块加载器兼打包工具
         [hash]      表示打包时产生的hash值
         [chunkhash] 每个chunk的hash值,相当于文件的MD5值
           MD5值为了保证每个文件的唯一性
-        e.g.: filename : '[name]-[hash].js'
+        Example: filename : '[name]-[hash].js'
 Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
   PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
@@ -652,7 +652,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     }
     其他使用方式 
       require时指定使用的loader  
-        e.g.：require("loaderName!./xx/fileName.xx");  
+        Example:require("loaderName!./xx/fileName.xx");  
         使用'!'隔离,表示引用前指定由 loaderName 来处理 .xx 文件,
         可同时使用多个,如 require("style-loader!css-loader!./style.css");
       命令行中编译时指定 
@@ -662,7 +662,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
   loader枚举 
     css-loader       使webpack具备处理'.css'文件的能力 
     style-loader     用于将处理的样式文件插入到HTML中 
-      e.g.：
+      Example:
         a.js 文件中: 
           require("style-loader!css-loader!./style.css");
         命令行编译,将 a.js 打包成 a.bundle.js :
@@ -688,7 +688,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       url-loader 允许你内联 base-64 数据格式的URL资源,如果小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。如果文件大于这个阈值。会自动it automatically falls back to file-loader.          
     css-loader       在JS中处理引入的CSS  
     style-loader     用于将引入的样式文件插入到HTML中 
-      e.g.：
+      Example:
         a.js 文件中: 
           require("style-loader!css-loader!./style.css");
         命令行编译,将 a.js 打包成 a.bundle.js :
@@ -732,7 +732,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       }
       如果图片资源小于10kb就会转化成 base64 格式的 dataUrl,
       其他的图片会存放在build/文件夹下 
-  e.g.：
+  Example:
     module: {
       loaders: [ //加载器配置
         //.vue文件使用vue-loader处理（这里将-loader省去了）
@@ -827,7 +827,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     加载器可以通过传递query对象来配置,比如我们可以配置加载器内联文件,当文件不超过10Kb的时候。
 Plugins,插件   扩展webpack的功能 
   plugins   arr,使用插件,arr的元素为插件的初始化 
-    e.g.:
+    Example:
     var htmlWebpackPlugin = require("html-webpack-plugin");
       module.exports ={
         plugins: [
@@ -993,7 +993,7 @@ Plugins,插件   扩展webpack的功能
           <script  type='text/javascript'>
             <%= compilation.asserts[htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpackPlugin.files.publicPath.length)].source() %>
           </script>
-    e.g.：
+    Example:
       var htmlWebpackPlugin = require('html-webpack-plugin');
       var path = require("path");
       moudle.exports = {
@@ -1238,7 +1238,7 @@ Plugins,插件   扩展webpack的功能
       当使用 lang="less" 即使用Less,需 安装如下依赖
       npm install -g css-loader less less-loader --save-dev
       npm install -g css-loader less less-loader  --save-dev
-    e.g.：
+    Example:
       <template>
         <div class="my-component">
           <h2>Hello from {{ msg }}</h2>
@@ -1319,7 +1319,7 @@ Plugins,插件   扩展webpack的功能
         extensions: ['', '.js', '.json']
       },
     }
-  e.g.：  vue目录结构初始化
+  Example:  vue目录结构初始化
     手动创建的
     webpack2   项目目录
     |--dist    编译打包生成的文件存放的目录
@@ -2207,11 +2207,11 @@ Gulp
         }
       }
     cnpm init 命令 命令提示符执行创建
-      通过 cd命令 确定创建的位置,e.g.:进入到文件名为 testgulp的文件夹下
+      通过 cd命令 确定创建的位置,Example:进入到文件名为 testgulp的文件夹下
       cnpm init    创建 package.json 文件
-      name: (testgulp) XXX       输入 XXX 作为项目名称,必须项,e.g.:testg
-      version: (1.0.0) XXX       输入 XXX 作为项目版本,必须项,e.g.:1.0.0
-      description: XXX           输入 XXX 作为项目描述,必须项,e.g.:this is a test
+      name: (testgulp) XXX       输入 XXX 作为项目名称,必须项,Example:testg
+      version: (1.0.0) XXX       输入 XXX 作为项目版本,必须项,Example:1.0.0
+      description: XXX           输入 XXX 作为项目描述,必须项,Example:this is a test
       entry point: (index.js)    定义入口文件,默认为括号内的
       test command:              测试命令,可选
       git repository:            git地址,可选
@@ -2261,7 +2261,7 @@ Anythere 将当前目录变成一个静态文件服务器的根目录
   npm install anywhere -g   npm全局安装anythere
   执行参数
     -p 指定端口,默认为8000,
-      e.g.:
+      Example:
       anywhere -p 8000 
       可省略
       anywhere  8000 

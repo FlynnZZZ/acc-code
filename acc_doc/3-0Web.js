@@ -85,7 +85,7 @@ Web图片
       <iframe id="iframe" src="icon.svg"></iframe>
       上面是四种在网页中插入SVG图像的方式。
     SVG文件还可以插入其他DOM元素
-      e.g.:在<div>元素中插入svg
+      Example:在<div>元素中插入svg
       <div id="stage"></div>
       <script>
       $('#stage').load('icon.svg', function (response) {
@@ -214,7 +214,7 @@ Web图片
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
       };
-      e.g.: 假定我们要将下面的表格画成图形。
+      Example: 假定我们要将下面的表格画成图形。
       
       Date	Amount
       2014-01-01	$10

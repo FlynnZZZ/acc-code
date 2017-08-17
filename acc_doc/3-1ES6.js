@@ -74,7 +74,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
         var s3 = Symbol('foo');
         var s4 = Symbol('foo');
         s3 === s4 // false
-      e.g.：
+      Example:
         var sym1 = Symbol("aoo");
         var sym2 = Symbol();
         var str1 = sym1.toString();
@@ -122,7 +122,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
   作为属性名使用 
     PS：对象的属性名现在可以有两种类型,一种是原来就有的字符串,另一种就是新增的Symbol类型 
       凡是属性名属于Symbol类型,就都是独一无二的,可以保证不会与其他属性名产生冲突 
-    e.g.：
+    Example:
       let name = Symbol();
       let age = '年龄'
       let person = {
@@ -153,7 +153,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     Symbol类型属性名的特点 
       不会出现在'for...in'和'for...of'中
       不会被 Object.keys()、Object.getOwnPropertyNames()、JSON.stringify() 返回
-      e.g.：
+      Example:
         let name = Symbol();
         let person = {
           [name]:"张三",  //symbol类型
@@ -187,7 +187,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     Symbol.KeyFor(sym1); // aoo
     Symbol.KeyFor(sym2); // undefined
   Symbol.hasInstance  对象使用instanceof运算符时,调用的方法 
-    e.g.：
+    Example:
       foo instanceof Foo 在语言内部,实际调用的是 Foo[Symbol.hasInstance](foo) 
       class MyClass {
         [Symbol.hasInstance](foo) {
@@ -553,11 +553,11 @@ Blob  二进制数据的基本对象
       blobParts 一个包含实际数据的数组
       options   数据的类型
       使用其它对象创建一个 Blob 对象
-        e.g.:用字符串构建一个 blob：
+        Example:用字符串构建一个 blob：
         var debug = {hello: "world"};
         var blob = new Blob([JSON.stringify(debug, null, 2)],
           {type : 'application/json'});
-      e.g.: 利用Blob对象,生成可下载文件
+      Example: 利用Blob对象,生成可下载文件
         var blob = new Blob(["Hello World"]);
         var a = document.createElement("a");
         a.href = window.URL.createObjectURL(blob);
@@ -598,7 +598,7 @@ Blob  二进制数据的基本对象
       Safari 中的 blob.webkitSlice()
       slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时。 
       使用Firefox 30 删除了对 blob.mozSlice() 的支持。
-    e.g.:  使用XMLHttpRequest对象,将大文件分割上传
+    Example:  使用XMLHttpRequest对象,将大文件分割上传
       var inputElem = document.querySelector('input[type="file"]');
       function upload(blobOrFile) {
         var xhr = new XMLHttpRequest();
@@ -675,7 +675,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
       }
       var cla1 =new Cla(1,2);
       cla1; // Cla {aoo: 1, boo: 2}
-    e.g.：
+    Example:
       es5
       var Animal=function(name){
         this.name=name;
@@ -711,7 +711,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
       let cat = new Animal('cat');
       Animal.friends(dog,cat); 
     'extends'关键字,子类继承父类 
-      e.g.：
+      Example:
         class Animal { //父类Animal
           constructor(name){
             this.name = name;
@@ -748,7 +748,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
           constructor(...args){
             super(...args)
           }
-        e.g.：
+        Example:
           class Point {
             constructor(x, y) {
               this.x = x;
@@ -798,7 +798,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
     PS：把类名后面的括号{ }里面的内容称之为类体,在类体内来编写类的属性和方法;
       可以在方法里面自定义一些对象的属性,
       此外,还可以自定义方法,它属于类的实例方法,实例化后对象可以调用此方法。
-    e.g.：
+    Example:
       class Animal {
         constructor(name){ //构造方法
           this.name = name;
@@ -820,7 +820,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
       cla.boo(); // 1
   new Cla(arg) 创建类实例 
     PS：必须使用new创建字来创建类的实例对象;需先声明类,再创建实例,否则会报错 
-    e.g.：
+    Example:
       class Animal {
         constructor(name){
           this.name = name;
@@ -901,7 +901,7 @@ Promise 同步书写异步模式
   Promise.all(arr)  全局模式,所有成功[?]才触发 
     PS：当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
     arr  由Promise实例组成的数组
-    e.g.：
+    Example:
       let prms1 = new Promise(function(resolve){
         setTimeout(function () {
           resolve('实例1操作成功');
@@ -922,7 +922,7 @@ Promise 同步书写异步模式
     PS：参数中的promise实例,只要有一个状态发生变化[不管成功还是异常],它就会有返回,
       其他实例中再发生变化,也不管了。
     arr  由Promise实例组成的数组 
-    e.g.：
+    Example:
       let prms1 = new Promise(function(resolve){
         setTimeout(function () {
           resolve('实例1操作成功');
@@ -956,7 +956,7 @@ Promise 同步书写异步模式
     some
   Question:
     使用 Promise 监控 点击事件 , 使用Promise 改变事件的执行方式 [?] 
-  e.g.:
+  Example:
     通过Promise来调用AJAX 「self」
     var prms = new Promise(function(rs, rj){
       $.ajax({
@@ -1021,7 +1021,7 @@ Generator 生成器函数
     可利用Generator函数暂停执行的特性来实现异步操作 
     原理：将异步操作的语句写到yield后面,通过执行next方法进行回调 
   function* foo(){} 声明Generator函数
-    e.g.：
+    Example:
       function* Hello(name) {  
         yield `hello ${name}`;
         yield `how are you`;
@@ -1061,7 +1061,7 @@ Generator 生成器函数
       然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
       直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
       直到'next'再一次被调用的时候,才会继续接着往下执行,直到done的值为true 
-    e.g.：
+    Example:
       function* foo(name) {
         yield name
         yield `world`
@@ -1111,7 +1111,7 @@ Proxy 对象代理
       get     代理对象的读操作,传入参数 (target,prop) 
         target 表示代理的目标对象 
         prop   占位符,表示代理对象的属性 
-        e.g.：
+        Example:
           var person = {"name":"张三"};
           var pro = new Proxy(person,{  //创建代理对象pro,代理person的读写操作
             get : function(target,property){
@@ -1123,7 +1123,7 @@ Proxy 对象代理
         target  同'set'
         prop    同'set'
         value   设置的值 
-        e.g.：
+        Example:
           var bankAccount = {"RMB":1000,"dollar":0};
           var banker = new Proxy(bankAccount,{ //创建一个Proxy代理实例
             get : function(target,property){      //编写get处理程序
@@ -1187,7 +1187,7 @@ Proxy 对象代理
   var obj = Proxy.revocable() 代理及取消代理,返回一个对象 
     obj.proxy    Proxy的代理实例对象
     obj.revoke() 用于取消代理
-    e.g.：
+    Example:
       let person = {"name":"张三"};
       let handle = {  //定义一个代理处理程序
         get : function(target,prop){
@@ -1298,7 +1298,7 @@ let   定义块级变量
       let boo = 4; 
     }
   重复声明报错 
-    e.g.：
+    Example:
       var aoo = 1;
       var aoo = 2;
       let aoo = 3; // 报错,Identifier 'aoo' has already been declared
@@ -1358,7 +1358,7 @@ const 定义块级常量
 ◆操作符&语句扩展   
 'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值
   PS：
-  e.g.:
+  Example:
     var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
     console.log(a,b,c);// 1 2 3 
   解构嵌套 
@@ -1376,7 +1376,7 @@ const 定义块级常量
     console.log(a,b,c); // 1 2 4
   对象的解构赋值：不受属性的顺序影响,和属性名对应 
     PS：默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
-    e.g.:
+    Example:
       var {a,b,c} = {"a":1,"b":2,"c":3};
       console.log(a,b,c); // 1 2 3 
       改变顺序
@@ -1465,7 +1465,7 @@ for(var val of iterator){}  遍历
     PS：要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
       而数组、Set和Map结构,内置了遍历器Iterator,它们的原型中都有一个 Symbol.iterator 方法 
       而Object对象并没有实现这个接口,所以无法被for...of遍历 
-    e.g.： 遍历对象报错
+    Example: 遍历对象报错
       let obj = {"name":"前端君"};
       for(let v of obj){  
         console.log(v);
@@ -1570,7 +1570,7 @@ for(var val of iterator){}  遍历
     执行这个函数,就会返回一个遍历器。
     属性名 Symbol.iterator 是一个表达式,返回Symbol对象的iterator属性,
     这是一个预定义好的、类型为 Symbol 的特殊值 
-    e.g.：
+    Example:
       数组的 Symbol.iterator 属性 
         let arr = ['a', 'b', 'c'];
         let iter = arr[Symbol.iterator]();
@@ -1626,7 +1626,7 @@ for(var val of iterator){}  遍历
     export function foo() {}; 单个函数输出 
     export default    默认输出
       PS：通过默认输出,和指定名称的引入,完成模块变量的引入;
-      e.g.:
+      Example:
         // export-default.js
         默认输出一个函数
         export default function () { console.log('sss'); }
@@ -1700,7 +1700,7 @@ for(var val of iterator){}  遍历
         foo2 as goo2,
         foo2 as hoo1
       };
-    e.g.:
+    Example:
       export 1; // 报错 
       
       var m = 1;
@@ -1740,18 +1740,18 @@ for(var val of iterator){}  遍历
       {name1[,name2,..]}  指定要从其他模块导入的变量名 
         大括号里面的变量名,必须与被导入模块对外接口的名称相同
       from       指定模块文件的位置,可是相对路径或绝对路径,'.js'可省略 
-      e.g.：
+      Example:
         import {firstName, lastName, year} from './profile';
         console.log(firstName);
     import {name1[,name2,..]} from 'moduleName'; 
       PS：若使用模块名,而非路径路径,则必须有配置文件,告诉JS引擎该模块的位置 
-      e.g.：
+      Example:
         import {myMethod} from 'util';
         util是模块文件名,由于不带有路径,需通过配置告诉引擎怎么取到这个模块 
     'as'关键字  重命名输入的变量 
       import { aoo as boo } from './profile';
     'import'命令引入提升,会提升到整个模块的头部,首先执行 
-      e.g.：
+      Example:
         foo();
         import { foo } from 'my_module';
         import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
@@ -1781,7 +1781,7 @@ for(var val of iterator){}  遍历
       import { foo, bar } from 'my_module';
     import * as aoo from './xx';  模块的整体加载
       PS：使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
-      e.g.:
+      Example:
         // circle.js
         export function area(radius) { 
           return Math.PI * radius * radius; 
@@ -1804,7 +1804,7 @@ for(var val of iterator){}  遍历
         circle.area = function () {};
   export {}  from 'path' 先后输入输出同一个模块
     PS：
-    e.g.:
+    Example:
       export { foo, bar } from 'my_module';
       // 等同于
       import { foo, bar } from 'my_module';
@@ -1826,7 +1826,7 @@ for(var val of iterator){}  遍历
       export someIdentifier from "someModule";
       export someIdentifier, { namedIdentifier } from "someModule";
   模块的继承 
-    e.g.: 
+    Example: 
       假设有一个circleplus模块,继承了circle模块。
       // circleplus.js
       export * from 'circle';
@@ -1973,7 +1973,7 @@ for(var val of iterator){}  遍历
           ]);
       }
       main();    
-  e.g.：
+  Example:
     说明:
     假设现在有 module-A.js 和 module-B.js 两个js文件,
     把它们视为两个模块,moduleA模块和moduleB模块来对待和处理;
@@ -2135,7 +2135,7 @@ String 字符串扩展
       对于那些需要4个字节存储的字符,JS 会认为它是两个字符,此时它的字符长度length为2。
       如字符："𠮷",就是一个需要4个字节存储,length为2的字符。
       对于4字节的字符,JS无法正确读取字符
-    e.g.:
+    Example:
       var str1 = "前端";
       var str2 = "𠮷";
       str1.length; //length为2
@@ -2168,7 +2168,7 @@ Array 数组扩展
     ele instanceof Array;  // false,非数组
     ele instanceof Object; // true,对象
     Array.from(ele) instanceof Array; // true,数组
-    e.g.:将字符串分割成数组
+    Example:将字符串分割成数组
       let str = 'hello';
       Array.from(str); // ["h", "e", "l", "l", "o"]
   ◆实例方法
@@ -2214,7 +2214,7 @@ Array 数组扩展
     //a
     //b
   数组推导：用简洁的写法,直接通过现有的数组生成新数组
-    e.g.: 将数组的每个元素乘以2,得到一个新数组
+    Example: 将数组的每个元素乘以2,得到一个新数组
     传统的实现方法：
     var arr1 = [1,2,3,4];
     var arr2 = [];
@@ -2858,7 +2858,7 @@ RegExp 正则扩展
     因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
     这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
     也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
-  e.g.:
+  Example:
     var text = "𠮷";
     console.log(text.length);           // 2
     单个 Unicode 字符 "𠮷" 由代理项对表示,
@@ -2867,7 +2867,7 @@ RegExp 正则扩展
     为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
     它可以提取给定位置字符串的对应 Unicode 代码点.
     该方法接收代码单元而非字符的位置并返回一个整型值.
-    e.g.:
+    Example:
       var text = "𠮷a";
       console.log(text.charCodeAt(0));    // 55362
       console.log(text.charCodeAt(1));    // 57271
@@ -2887,7 +2887,7 @@ RegExp 正则扩展
   String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
     PS：可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
       针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
-    e.g.:
+    Example:
       使用给定的代码点来产生相应的单个字符
       console.log(String.fromCodePoint(134071));  // "𠮷"
 --------------------------------------------------------------------------------
@@ -2898,7 +2898,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
   async function foo() {}        函数声明
     PS：同一般函数声明相同,使用'async function'代替'function'来声明异步函数
       函数执行时,遇到await就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
-    e.g.：
+    Example:
       function timeout(ms) {
         return new Promise((resolve) => {
           setTimeout(resolve, ms);
@@ -2926,7 +2926,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         async函数返回的Promise对象,必须等到内部所有await命令后面的Promise对象执行完,
         才会发生状态改变,除非遇到return语句或者抛出错误
       return返回值为then方法回调的参数 
-      e.g.：
+      Example:
         async function f() {
           return 'hello world';
         }
@@ -2940,7 +2940,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
     await proms 
       PS：await命令只能用在async函数之中,用在普通函数会报错 
       proms   Promise对象,否则被转成一个立即resolve的Promise对象 
-      e.g.：
+      Example:
         async function f() {
           return await 123;
         }

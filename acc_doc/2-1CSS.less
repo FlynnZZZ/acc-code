@@ -124,7 +124,7 @@ Config,设置配置
   '@font-face'自定义字体
     PS：从CSS2.1中去除,CSS3加入[?];将自定义的字体文件放置在服务器,浏览器下载后使用 
       自定义字体在英文网站总使用较多,因为英文只有26个字母,字体文件小,下载速度快;
-    e.g.：
+    Example:
       @font-face{
         font-family: abc; // 自定义字体的名称 
         src : url('abc1.ttf'),url('abc1.eot'); // 字体文件在服务器的位置  
@@ -205,7 +205,7 @@ Selector,选择器
         [attribute^=val] 属性以'val'开头[CSS3]
         [attribute$=val] 属性以'val'结尾[CSS3]
         [attribute*=val] 属性包含'val'[CSS3]
-        e.g.：
+        Example:
           [title] { color:red; }
           [title='W3School'] { border:5px solid blue; }
           [title=W3C] { border:5px solid blue; }
@@ -224,7 +224,7 @@ Selector,选择器
               content:"加在每个元素前面的文字,包括未显示的"
             }
         :after   元素内部尾部定义 
-          e.g.：
+          Example:
             纯CSS悬浮提示
             <p> 
               <span data-descr="文字提示1">查看</span>
@@ -248,13 +248,13 @@ Selector,选择器
             '\00BB'  双右箭头
           content:url(图片地址)    加入图片
           content:attr(属性名)    将元素的指定属性的属性值插入
-            e.g.：
+            Example:
             在链接后增加 (链接地址)
             a:after {content: " (" attr(href) ")";}
           配合属性:定义符号 quotes 
             PS：quote字符类型(使用双引号""的时候需要使用转义字符\)
               open-quote开始字符;close-quote结尾字符
-            e.g.：
+            Example:
               给h1元素内容使用()括起来.
               h1{ quotes:"(" ")" }  /*定义 open-quote 和 close-quote*/
               h1:before{ content:open-quote; }
@@ -267,7 +267,7 @@ Selector,选择器
             counter-reset:计数器名称 重置编号;  计数器重置为"重置编号"
             counter-increment:计数器名称 num;  变化间隔
               当num为 -2 则,每次减少2个,若为3则每次增加3个
-            e.g.：
+            Example:
               <body>
                 <h1>HTML tutorials</h1>
                   <h2>HTML Tutorial</h2>
@@ -314,7 +314,7 @@ Selector,选择器
       动作伪类 
         ★链接伪类 
         'LVHA'保证生效的先后顺序 :link—:visited—:hover—:active 
-          e.g.：
+          Example:
             <a href="#">这个链接在鼠标按下和松开的这段时间内会变成绿色</a>
             body { background-color: #ffffc9 }
             a:link { color: blue } /* 未访问链接 */
@@ -402,7 +402,7 @@ Selector,选择器
         :nth-child(arg)      所有子元素过滤伪类的蓝本  [CSS3] 
           :nth-child(num)    父元素的第'num'个子元素,从1开始
           :nth-child(Xn+X)   父元素的第'Xn+X'个子元素,X表示数字,n表示从0开始的数 
-            e.g.：
+            Example:
             :nth-child(n+3){ color: red; } 表示从第三个元素开始后面的所有元素 
             :nth-child(-n+3){ color: red; } 表示从第三个元素开始前面的所有元素 
             :nth-child(3n+1){ color: red; } 每3个为一组取第一个  
@@ -584,7 +584,7 @@ Selector,选择器
           该值必须合法,且不能包含另一个attr()表达式。
           若attr()不是所在CSS属性值的唯一值,其<fallback>值必须为<type-or-unit>所指定的类型,
           否则CSS会使用相应<type-or-unit>定义的默认值（见上表）。
-      e.g.：
+      Example:
         <p data-foo="hello">world</p>
         p:before { content:attr(data-foo) " "; }
   选择器的特性 
@@ -641,7 +641,7 @@ Selector,选择器
           max-height:  
           orientation: 屏幕方向 
             porttrait    
-        e.g.： 
+        Example: 
           @media (min-width:800px){
             ...
           }
@@ -661,14 +661,14 @@ Selector,选择器
         PS：若使用了 not 或 only 操作符,必须明确指定一个媒体类型。
       and  组合多个媒体属性,合并到同一条媒体查询中
         只有当每个属性都为真时,这条查询的结果才为真
-        e.g.：
+        Example:
           @media (min-width: 700px) { ... }
           若你只想在横屏时应用这个,你可以使用 and 操作符合并媒体属性：
           @media (min-width: 700px) and (orientation: landscape) { ... }
       not  对一条媒体查询的结果进行取反
         PS：not 关键字仅能应用于整个查询,而不能单独应用于一个独立的查询
           在逗号媒体查询列表中 not 仅会否定它应用到的媒体查询上而不影响其它的媒体查询。
-        e.g.：
+        Example:
           not 在下面的查询中最后被计算： @media not all and (monochrome) { ... }
           等价于： @media not (all and (monochrome)) { ... }
           而不是： @media (not all) and (monochrome) { ... }
@@ -685,7 +685,7 @@ Selector,选择器
       width         描述了输出设备渲染区域,如可视区域的宽度或打印机纸盒的宽度
         PS：可接受 min/max 前缀
           注意：用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
-        e.g.：
+        Example:
           若你想向最小宽度20em的手持设备或屏幕应用样式表,你可以使用这样的查询：
           @media handheld and (min-width: 20em),screen and (min-width: 20em) { ... }
           
@@ -700,7 +700,7 @@ Selector,选择器
           注意：用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
       device-height 描述了输出设备的高度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
         PS：可否接受 min/max 前缀
-        e.g.：
+        Example:
           向显示在最大宽度800px的屏幕上的文档应用样式表,你可以这样做：
           <link rel="stylesheet" media="screen and (max-device-width: 799px)" />
       device-width  描述了输出设备的宽度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
@@ -709,7 +709,7 @@ Selector,选择器
         PS：可接受 min/max 前缀
           该值包含两个以“/”分隔的正整数。
           代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        e.g.：
+        Example:
           下面为显示区域宽高至少为一比一的设备选择了一个特殊的样式表。
           这指定了宽高比或者1：1或者更大。换句话说,可视区域或者是正方形或者是宽屏。
           @media screen and (min-aspect-ratio: 1/1) { ... }
@@ -717,18 +717,18 @@ Selector,选择器
         PS：可否接受 min/max 前缀
           该值包含两个以“/”分隔的正整数。
           代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        e.g.：
+        Example:
           下面为宽屏设备选择了一个特殊的样式表。
           宽高比或者16：9或者16：10。    
           @media screen and (device-aspect-ratio: 16/9),screen and (device-aspect-ratio: 16/10) { ... }
       orientation   指定了设备处于横屏(宽度大于高度)模式还是竖屏(高度大于宽度)模式。
-        e.g.：
+        Example:
           向竖屏设备应用样式表：
           @media all and (orientation: portrait) { ... }
       resolution    指定输出设备的分辨率(像素密度)
         PS：可接受 min/max 前缀：是
           分辨率可以用每英寸（dpi）或每厘米（dpcm）的点数来表示。
-        e.g.：
+        Example:
           为每英寸至多300点的打印机应用样式：
           @media print and (min-resolution: 300dpi) { ... }
           
@@ -740,7 +740,7 @@ Selector,选择器
             例如,若显示器为蓝色和红色提供5比特,而为绿色提供6比特,
             则认为每个颜色单元有5比特。
           若设备使用索引颜色,则使用颜色表中颜色单元的最小比特数。
-        e.g.：
+        Example:
           向所有能显示颜色的设备应用样式表：
           @media all and (color) { ... }
           
@@ -748,7 +748,7 @@ Selector,选择器
           @media all and (min-color: 4) { ... }
       color-index   指定了输出设备中颜色查询表中的条目数量。
         PS：可接受 min/max 前缀
-        e.g.：
+        Example:
           向所有使用索引颜色的设备应用样式表,你可以这么做：
           @media all and (color-index) { ... }
           
@@ -756,21 +756,21 @@ Selector,选择器
           <link rel="stylesheet" media="all and (min-color-index: 256)" href="http://foo.bar.com/stylesheet.css" />    
       grid          判断输出设备是网格设备还是位图设备
         PS：若设备是基于网格的（例如电传打字机终端或只能显示一种字形的电话）,该值为1,否则为0。
-        e.g.：
+        Example:
           向一个15字符宽度或更窄的手持设备应用样式：
           @media handheld and (grid) and (max-width: 15em) { ... }
           注意：“em” 在网格设备中有不同的意义；
           一个“em”的实际宽度不得而知,假设1em相当于一个网格单元的宽高。
       monochrome    指定了一个黑白（灰度）设备每个像素的比特数。若不是黑白设备,值为0。
         PS：可接受 min/max 前缀：是
-        e.g.：
+        Example:
           向所有黑白设备应用样式表：
           @media all and (monochrome) { ... }
           
           向每个像素至少8比特的黑白设备应用样式表：
           @media all and (min-monochrome: 8) { ... }
       scan          描述了电视输出设备的扫描过程。
-        e.g.：
+        Example:
           向以顺序方式扫描的电视机上应用样式表：
           @media tv and (scan: progressive) { ... }
     主要功能
@@ -782,7 +782,7 @@ Selector,选择器
         orientation:portrait | landscape  定义输出设备中的页面可见区域高度是否大于或等于宽度
           portrait： 指定输出设备中的页面可见区域高度大于或等于宽度
           landscape： 除portrait值情况外,都是landscape
-        e.g.：
+        Example:
           @media screen and (orientation:portrait){ … }
           @import url(example.css) screen and (orientation:landscape);
     e.g. 
@@ -839,7 +839,7 @@ Declaration,样式声明
     font : family size[/line-height] [weight] [style] [variant] [stretch];
       'font-size'和'font-family'属性必选,其他可选   
       缩写时没有固定的顺序   
-      e.g.：  
+      Example:  
         p{   
           font-style:italic;   
           font-variant:small-caps;   
@@ -860,7 +860,7 @@ Declaration,样式声明
         因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
         当使用很特殊的字体时,可采用图片的形式决解,
       name  表示字体名称,定义多个字体,用逗号隔开 
-      e.g.：  
+      Example:  
         font-family:"微软雅黑";
         font-family:"Microsoft Yahei"; // 兼容性更好
         font-family: "微软雅黑","楷体";
@@ -935,7 +935,7 @@ Declaration,样式声明
         这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
       none   默认。若此字体不可用,则不保持此字体的 x-height。
       number 定义字体的 aspect 值比率。
-      e.g.：
+      Example:
         若 14px 的 Verdana（aspect 值是 0.58）不可用,
         但是某个可用的字体的 aspect 值是 0.46,
         那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
@@ -948,7 +948,7 @@ Declaration,样式声明
       message-box 用于对话框     
       small-caption 用于对小控件加标签     
       status-bar 用于窗口状态条     
-      e.g.：
+      Example:
         .aoo{font:caption;} 
     ◆'text'文本 
       PS：valign只有在表格标签中使用,字体无text-valign属性
@@ -1011,7 +1011,7 @@ Declaration,样式声明
         多行溢出显示
           不支持多行文本溢出显示省略号
           可使用:after 来模拟
-          e.g.：
+          Example:
           <div class="wrap">
             很多年以后,奥雷连诺上校站在行刑队面前,准会想起父亲带他去参观冰块的那个遥远的下午。当时,马孔多是个二十户人家的村庄,一座座土房都盖在河岸上,河水清澈,沿着遍布石头的河床流去,河里的石头光滑、洁白,活像史前的巨蛋。----加西亚·马尔克斯
             knowing something of everything and everything of something.
@@ -1081,7 +1081,7 @@ Declaration,样式声明
         ◆RGB
         rgb(num%,num%,num%) 
           num 范围 0-100,若小于0则为0,大于100则为100;
-          e.g.： rgb(100%,0,0)
+          Example: rgb(100%,0,0)
         rgb(num,num,num)  
           num 范围 0-255,若小于0则为0,大于255则为255
       CSS3新增: RGBA、HSL、HSLA 
@@ -1191,9 +1191,9 @@ Declaration,样式声明
         begin   渐变线终点位置或使用角度确定渐变线
           to keyword 
           角度 
-        e.g.：
+        Example:
           linear-gradient(to bottom,red,white) 
-      e.g.：
+      Example:
         .linearGradientTest { 
           background: -webkit-linear-gradient( top,#fff,#000); 
           /*从上到下,颜色由白到黑*/
@@ -1255,7 +1255,7 @@ Declaration,样式声明
         beginColor 开始颜色
         color  中间若干颜色 
         endColor 结束颜色
-        e.g.： 
+        Example: 
           radial-gradient(30px 40px at 40px 40px,red,white);
       radial-gradient(<r1 r2 at x y>,(color position)+); [W3C标准] 
         PS：Chrome可不加-webkit-前缀
@@ -1269,7 +1269,7 @@ Declaration,样式声明
             closest-corner  渐变的边缘形状与容器距离渐变中心点最近的一个角相交
             farthest-corner 渐变的边缘形状与容器距离渐变中心点最远的一个角相交
             contaner     刚好填充满整个容器
-          e.g.：
+          Example:
             background-image: radial-gradient(
               ellipse farthest-corner at 45px 45px ,
               #00FFFF 0%,rgba(0,0,255,0) 50%,#0000FF 95%);
@@ -1285,7 +1285,7 @@ Declaration,样式声明
               rgba(0,0,0,0.3) 18px,
               rgba(0,0,0,0) 19px);
         color position    若干个颜色值及位置
-        e.g.：
+        Example:
           background-image:radial-gradient( 
             150px 100px at 50% 50% ,
             #c792b3 0%,#ac8671 30%,#d42cb3 50%,#7ac67a 100%
@@ -1296,7 +1296,7 @@ Declaration,样式声明
       ◆重复渐变 [CSS3]
       repeating-linear-gradient 
       repeating-radial-gradient 
-      e.g.：
+      Example:
         .aoo{
           background:repeating-radial-gradient( #ace,#ace 5px,#f96 5px,#f96 10px);  
         }
@@ -1344,7 +1344,7 @@ Declaration,样式声明
       transform : translate(lenX[,lenY]); 2D平移 
         lenX  x轴平移距离
         lenY  y轴平移距离,默认为0
-        e.g.：
+        Example:
           <div class=""> 123123 </div>
           div{
             width: 50px;
@@ -1372,7 +1372,7 @@ Declaration,样式声明
         y   num,表示旋转轴Y坐标方向的矢量
         z   num类型,表示旋转轴Z坐标方向的矢量
         XX  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
-        e.g.：transform: rotate3d(1,0,0,60deg);
+        Example:transform: rotate3d(1,0,0,60deg);
       transform : scale(numX[,numY]); 2D缩放 
         numX   X轴缩放倍数,不可为负
         numY   Y轴缩放倍数,可选,默认等于numX,不可为负
@@ -1482,7 +1482,7 @@ Declaration,样式声明
           }
           ....
         }   
-        e.g.：
+        Example:
           @keyframes mymove {
             from {top:0px; background:red; width:100px;}
             25%  {top:200px;}
@@ -1608,7 +1608,7 @@ Declaration,样式声明
         pointer   光标呈现为指示链接的指针(一只手)
         url       需使用的自定义光标的 URL
           PS：在列表的末端始终定义一种普通的光标,当自定义光标不起作用时备用
-          e.g.：
+          Example:
           a{cursor: url(aa.png),pointer;}
         crosshair 光标呈现为十字线
         move      此光标指示某对象可被移动
@@ -1732,7 +1732,7 @@ Declaration,样式声明
         circle 圆圈 
         disc   圆形 
         square 正方形
-        e.g.：
+        Example:
           <input type="text"   name="" value="">
           input{ -webkit-text-security:disc; text-security:disc; }
           
@@ -1833,7 +1833,7 @@ Declaration,样式声明
           url(图片地址)
           none
           inherit
-          e.g.：
+          Example:
             ul li{list-style-image: url(aaa.png);}
         list-style-position 标记位置
           outset 默认值
@@ -1851,7 +1851,7 @@ Declaration,样式声明
       PS：该属性只用于iOS,只有iOS「iPhone和iPad」的浏览器支持 ,「CSS3+」
         可设置-webkit-tap-highlight-color的颜色;
       禁用高亮: 设置颜色的alpha值为0即可
-      e.g.：
+      Example:
         设置高亮色为50%透明的红色:
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  「iOS」
@@ -1948,7 +1948,7 @@ Layout,布局
             在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
             每种颜色显示1px的宽度。
             若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
-            e.g.： -moz-border-bottom-colors: red orange yellow green blue purple ;
+            Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
           e.g. border：solid 2px red；
         border-radius 边框圆角 [简写方式] [CSS3] 
           PS：IE9+不加前缀支持 
@@ -1987,7 +1987,7 @@ Layout,布局
               img   使用绝对或相对 url 地址指定背景图像
             border-image-slice:(length|%){1,4}  图片裁切 
               默认值为100% 
-              e.g.：
+              Example:
                 .aoo{
                   border-image-slice: len1 len2 len3 len4;
                   // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
@@ -2007,7 +2007,7 @@ Layout,布局
             slice   图片裁切,上右下左 
             width   边框宽度,上右下左 
             repeat  重复样式 
-          e.g.：
+          Example:
             border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
         border:none 与 border:0 的区别
           border:0 相当于 border-width:0,
@@ -2104,7 +2104,7 @@ Layout,布局
           非浮动的子元素
           非浮动的非同分支元素:会将targeElem中的文字挤开,但不会'围绕'
             只会位于floatElem下方,而不会位于floatElem右边
-            e.g.：
+            Example:
               <div class="container">
                 <span class="part1">
                   我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要这众生,都明白我意,
@@ -2169,7 +2169,7 @@ Layout,布局
             rect(top,right,bottom,left)
             auto    默认值,不应用任何剪裁。
             inherit 规定应该从父元素继承 clip 属性的值。
-          e.g.：
+          Example:
           img{position:absolute;clip:rect(0px 50px 200px 0px);}
       fixed    相对于浏览器窗口的定位 
         PS：脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化]
@@ -2409,7 +2409,7 @@ Layout,布局
       position为absolute 或fixed 
       'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
         display：table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
-    e.g.：
+    Example:
       使用BFC将浮动元素和block元素同行且不会影响到block元素(即浮动元素不会浮在block元素上)
       <div class="aoo"> 1111 </div>
       <div class="boo"> 222222 </div>
@@ -2534,7 +2534,7 @@ Size 尺寸
     设备独立像素(Device independent Pixel) 也称为逻辑像素,简称dip。
       根据上述设备像素与CSS像素之间的关系、及DPR的官方定义,我们可以推断出：
       CSS像素 =设备独立像素 = 逻辑像素
-      e.g.：
+      Example:
         在Retina屏的iphone上,devicePixelRatio的值为2,
         也就是说1个css像素相当于2个物理像素。
         但是要注意的是,devicePixelRatio 在不同的浏览器中还存在些许的兼容性问题
@@ -2566,7 +2566,7 @@ Size 尺寸
     ideal viewport(理想视口)
       ideal viewport并没有一个固定的尺寸,不同的设备拥有有不同的ideal viewport
       ideal viewport的宽度 = 屏幕的逻辑像素宽度
-      e.g.：
+      Example:
         iphone5的ideal viewport宽度是320px,
           也就是说在iphone5中,css中的320px就代表iphone屏幕的宽度
         安卓设备比较复杂,有320px的,有360px的,有384px的等等
@@ -2626,7 +2626,7 @@ var() CSS变量
     语法是：--*,变量使用语法是：var(--*),其中*表示我们的变量名称。
     命名要求
       不能包含$,[,^,(,%等字符,但是可以是中文、日文或者韩文
-      e.g.：
+      Example:
         :root { --1: #369; }
         body { background-color: var(--1); }
   
@@ -2898,7 +2898,7 @@ var() CSS变量
     position + margin:auto
       父元素relative定位,子元素left=right,top=bottom,margin:auto;
     position + margin    百分比偏移
-      e.g.：
+      Example:
         #parent {position: relative;}
         #child {
           position: absolute;

@@ -146,7 +146,7 @@ DOM操作
       PS：等价于 jQuery("selector"); 
       selector 选择器,可为组合选择器,CSS选择器几乎可全部适用 
       :xx  筛选  
-        e.g.：
+        Example:
           $('.a:first')    // 获取第一个.a元素
           $('#a :first')   // 获取 #a 内的第一个元素
           $('#a p:first')  // 获取 #a 内的第一个p元素
@@ -193,7 +193,7 @@ DOM操作
             $("li:not(li:first)") 
             $('.mask-selected:not(.none)')
         :has(selector) 元素包含后代元素selector对应的元素
-          e.g.：
+          Example:
             <div class="aoo "> 1</div>
             <div class="aoo boo"> 2
               <div class="boo">
@@ -345,7 +345,7 @@ DOM操作
       Jelem.append('htmlCode'/Jelem)     内部尾部插入
         也可以将style标签内的css代码添加到head中
       Jelem1.appendTo("selector"/Jelem2) 被插入到内部尾部 [与append顺序相反]
-        e.g.：
+        Example:
           .aoo{ background-color:pink;}
           $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
           // 在所有的p标签中添加粗体的Hello,且背景为pink
@@ -366,7 +366,7 @@ DOM操作
       Jelem.wrap("HTML代码"/Jelem)          每个元素外包裹元素
       Jelem.wrapAll("HTML代码"/Jelem)       所有元素整体外包裹元素
       Jelem.unwrap("HTML代码"/Jelem)        元素外包裹的元素去除[?]
-        e.g.：
+        Example:
           <a href="#"><div class="aoo"> 123123 </div></a>
           $('.aoo').unwrap('a');
           结果为： <div class="aoo"> 123123 </div>
@@ -381,7 +381,7 @@ DOM操作
         删除该元素的子元素及以下的所有内容(不包括自身标签)
         返回值为清空后的元素
       Jelem.removeAttr('属性名')  删除属性
-        e.g.：
+        Example:
           Jelem.removeAttr('class'); 
       Jelem1.replaceWith("HTML代码"/Jelem)  元素1代替为元素2
       Jelem1.replaceAll("selector"/Jelem2)  元素2代替为元素1 [与replaceWith相反]
@@ -392,10 +392,10 @@ DOM操作
           Jelem.css("color");  // 获取元素的字体颜色
           Jelem.css("color","red"); // 设置元素的字体颜色为红色
         Jelem.css(attrArr);  获取多个属性值
-          e.g.：
+          Example:
             Jelem.css(["color","font-size"]); 
         Jelem.css(attrObj);  设置多个属性
-          e.g.：  Jelem.css({"background-color":"red",color:"yellow"});  
+          Example:  Jelem.css({"background-color":"red",color:"yellow"});  
         Jelem.css("color",function(index,oldValue){ }); 传入函数
           // 设置返回值(即 return的值)为属性值.
     元素属性 
@@ -403,11 +403,11 @@ DOM操作
       Jelem.attr();  读写属性值 
         Jelem.attr('属性名')     返回选定属性的属性值
         Jelem.attr('属性名',str/boolean) 设定选定属性的属性值
-          e.g.：
+          Example:
             Jelem.attr('disabled',false); // 取消表单禁用
         Jelem.attr(attribute,function(index,oldvalue){...}) 通过函数来操作属性
         Jelem.attr({attribute:value, attribute:value ...})  同时设置多组属性值
-        e.g.：
+        Example:
           Jelem.attr('class'); // 获取class属性的值
           Jelem.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
@@ -422,7 +422,7 @@ DOM操作
         Jelem.attr('disabled') 返回 disabled
         Jelem.prop('disabled') 返回 true
         使用prop不会在DOM中反应出来
-        e.g.：
+        Example:
           <input type="checkbox" name="" value="">
           $('#checkbox').on("click",function(e){
             var aoo = $(this).prop('checked');
@@ -470,16 +470,16 @@ DOM操作
         返回第一个匹配元素的 value 属性的值 
       ◆自定义数据
       Jelem.data(key,value) 绑定自定义数据 [DOM中无任何变化]
-        e.g.：
+        Example:
           $('#box').data('name', 'TG'); 
       Jelem.data(key) 读取自定义数据 
-        e.g.：
+        Example:
           <div class="aoo" data-id='111'> 23423 </div>
           var Jelem = $('.aoo');
           var id = Jelem.data('id');
           console.log(id); // 111
       Jelem.removeDate(key) 移除自定义数据
-        e.g.：
+        Example:
           $('#box').removeDate('name');
       ◆class相关
       Jelem.hasClass('className')    检测class类
@@ -514,13 +514,13 @@ DOM操作
         PS：返回包含top和left属性的对象;
           元素相对与document的top和left;
           此方法只对可见元素有效;
-        e.g.：
+        Example:
           $(".a").offset(); // {top: 24, left: 0}
           $(".a").offset().left = 20; // ? 
           $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
       Jelem.position()  元素相对于其offsetParent的top和left [只读?]
         PS：只对可见元素有效
-        e.g.：
+        Example:
           .parent{
             position: relative;
           }
@@ -535,7 +535,7 @@ DOM操作
       Jelem.size()         元素个数
       var num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
-        e.g.： 点击获取当前为第几个li 
+        Example: 点击获取当前为第几个li 
           <ul>
             <li>aaaaa</li>
             <li>bbbbb</li>
@@ -656,7 +656,7 @@ DOM操作
       bool1  默认为false,是否清空未执行完的动画队列 
       bool2  默认false,是否将动画调到最后状态 
     Jelem.delay(time)            延缓动画 
-      e.g.：
+      Example:
         $('#aoo').animate({
           width : '+=30'
         },1000)
@@ -667,7 +667,7 @@ DOM操作
     ◆其他
     $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
     $.fx.interval     读写动画的频率,单位毫秒 
-    e.g.：
+    Example:
       左右滑动效果
       <div class="wrap">
         <div class="num">
@@ -776,7 +776,7 @@ DOM操作
   $.unique(arr)     删除数组中的重复元素[不能用于普通数组]
   ◆字符串相关 
   $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
-    e.g.：
+    Example:
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
   $.parseJSON(jsonStr) 解析JSON字符串 
@@ -803,7 +803,7 @@ DOM操作
         }
       });
       $.foo(); //1
-    e.g.：
+    Example:
       自定义一个用于返回两个数中最大值的插件
       $.extend({
         'maxNum' : function(num1,num2){
@@ -839,7 +839,7 @@ DOM操作
     PS：在扩展对象时,两个对象将进行合并,当存在相同属性名时,后者将覆盖前者 
     target 用于扩展并返回的目标对象 
     obj    表示需要合并的各个原有对象
-    e.g.：
+    Example:
       对两个已有的对象进行合并 
       var target = {
         aoo : 1 ,
@@ -941,7 +941,7 @@ Event,事件
         keydown keyup keypress 
         ... 
     Jelem.on("eName.xx",foo)      添加事件命名空间,便于管理 
-      e.g.：
+      Example:
         Jelem.on("click",function(e){
           console.log(1);
         })
@@ -964,7 +964,7 @@ Event,事件
     Jelem.on(str,foo)             自定义事件绑定 
       foo  传入参数  (e,arg1,arg2,..) 
         arg为传递的信息,通过 trigger 触发时配置的数组元素 
-      e.g.：
+      Example:
         $("p").on("aoo",function(e,arg1,arg2){  
           $(this).text(arg1 + arg2);
         });
@@ -973,7 +973,7 @@ Event,事件
         });
     Jelem.on("eName",val,foo)     事件绑信息定传递 
       obj  对象,传递的信息,通过 e.data 获取 
-      e.g.：
+      Example:
         Jelem.on("click",{msg:"You just clicked me!"},function(e){
           console.log(e.data);
         });
@@ -1107,7 +1107,7 @@ Event,事件
     e.isPropagationStopped() 根据是否调用过'stopPropagation'返回布尔值
     e.target 获取到触发事件的元素
       PS：jQuery对其封装后,避免了W3C、IE和safari浏览器不同标准的差异.
-      e.g.：
+      Example:
         $("a[href=http://www.jb51.net]").click(function(event){
           alert(event.target.href); //获取触发事件的<a>元素的href属性值
           alert(event.target.tagName); //获取触发事件的元素的标签名称
@@ -1177,7 +1177,7 @@ AJAX
     application/x-www-form-urlencoded 默认方式,表单提交
       数据的URL方式编码,由jQuery来做,
       只需在$.ajax({})参数中设置 processData = true「也是默认,可省略」;
-      e.g.：
+      Example:
         $.ajax({
           method: 'POST',
           url: '...',
@@ -1311,7 +1311,7 @@ AJAX
         }
         ...
       }
-    e.g.：
+    Example:
       $.ajaxSetup({
         url : 'xx'
       });
@@ -1471,15 +1471,15 @@ AJAX
   ◆辅助方法 
   Jelem.serialize()   序列化表单元素值 
     PS：将表单中有name属性的元素值进行序列化,生成标准URL编码文本字符串,直接用于ajax请求 
-    e.g.：
+    Example:
       $.get('get1.php',$('#form1').serialize(),function(backData,textStatus){
       })
     不光表单可使用,其他元素也能使用 
-      e.g.： 
+      Example: 
         将选中的复选框和单选框的值序列化为字符串形式 
         $(':checkbox,:radio').serialize() 
   Jelem.serializeArray()  DOM元素序列化,返回JSON格式数据 
-  e.g.：
+  Example:
     <input type="text" class="a2" name='n1' value='abc1'>
     <input type="text" class="a2" name='n2' value='abc2'>
     <input type="text" class="a2" name='n3' value='abc3'>
@@ -1513,7 +1513,7 @@ Deferred,异步操作
     var defer = $.Deferred()    创建deferred对象
     var defer = $.Deferred(fooName) 创建deferred对象
       fooName 函数名,$.Deferred()生成的defer对象将作为fooName的默认参数 
-      e.g.：
+      Example:
         var wait = function(defer){
           var tasks = function(){
             console.log("执行完毕！");
@@ -1673,7 +1673,7 @@ Deferred,异步操作
     .fail(function(data){ 
       console.log("出错啦！"); 
     });
-  e.g.： 
+  Example: 
     在ajax中使用「self」 
     var defer = $.Deferred();
     $.ajax({
@@ -1774,7 +1774,7 @@ jQuery插件
       form    表单元素
       options 调用方法时的配置对象 
         所有的验证规则和异常信息显示的位置都在该对象中进行设置。
-      e.g.：
+      Example:
         $('#myform').validate({
           // 自定义验证规则
           rules : {
@@ -1792,7 +1792,7 @@ jQuery插件
     $(form).ajaxForm ({options}) 实现ajax方式向服务器提交表单数据 
       form     表单元素
       options  配置对象,设置发送ajax的数据和参数
-      e.g.：
+      Example:
         var options = {
           url : 'xxx/xx.php',
           target : '.tip'
@@ -1817,7 +1817,7 @@ jQuery插件
       在加载图片时自带进度条,还能以自动播放的方式浏览图片
     linkimage 为包含图片的<a>元素名称
     options   为插件方法的配置对象
-    e.g.：
+    Example:
       $('.imgs a').lightBox({
         overlayBgColor : "#666" , // 图片浏览时的背景色
         overlayOpacity : 0.5, // 背景色透明度
@@ -1881,7 +1881,7 @@ jQuery插件
         "x"
         "y"
       }
-      e.g.： <ul>中的各个<li>元素则能指定的透明度进行任意的拖曳排序
+      Example: <ul>中的各个<li>元素则能指定的透明度进行任意的拖曳排序
         $('ul').sortable({
           delay : 2 ,   // 为防止与点击事件冲突,延时两秒
           opacity : 0.5 // 拖动时透明度为0.5
@@ -1899,7 +1899,7 @@ jQuery插件
       Jelem   显示弹出对话框的元素
       options 方法的配置对象 
         在对象中可以设置对话框类型、“确定”、“取消”按钮执行的代码等。
-      e.g.：
+      Example:
         $("#aoo").dialog({
           height : 140 ,
           modal  : true ,
@@ -1925,7 +1925,7 @@ jQuery插件
         在标题中,再使用<a>元素的“href”属性设置选项标题对应的内容
       Jelem   为选项卡整体外围元素,该元素包含选项卡标题与内容
       options 方法的配置对象,通过该对象还能以ajax方式加载选项卡的内容
-      e.g.：
+      Example:
         $('#tabs').tabs({
           fx : { // 设置各选项卡在切换时的动画效果
             opacity : 'toggle',
@@ -1961,7 +1961,7 @@ jQuery插件
       Jelem   需要显示提示信息的元素
       options 可选,方法的配置对象
         在该对象中,可以设置提示信息的弹出、隐藏时的效果和所在位置
-      e.g.：
+      Example:
         给各个<a>元素都绑定工具提示插件,
         将在指定的位置并以动画效果展示各个<a>元素中title属性所对应的内容。
         $('a').tooltip({

@@ -148,7 +148,7 @@ NodeJS的运行方式及编程风格
       }
       由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
     阻塞与非阻塞调用的不同 
-      e.g.:
+      Example:
       阻塞代码实例
         创建一个文件 input.txt ,内容如下：
           11111111111111
@@ -280,7 +280,7 @@ NodeJS的运行方式及编程风格
       若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
     signal 当进程接收到信号时就触发.
       信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
-    e.g.:
+    Example:
       process.on('exit', function(code) {
         setTimeout(function() {  // 该代码永远不会执行
           console.log("该代码不会执行"); 
@@ -339,7 +339,7 @@ NodeJS的运行方式及编程风格
     mainModule  require.main 的备选方法.
       不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
       可以认为,这两者引用了同一个模块.
-    e.g.:
+    Example:
       创建文件 main.js ,代码如下所示：
       process.stdout.write("Hello World!" + "\n"); // 输出到终端
       process.argv.forEach(function(val, index, array) { // 通过参数读取
@@ -387,7 +387,7 @@ NodeJS的运行方式及编程风格
       它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
       主要用途是可以通过精确的时间间隔,来衡量程序的性能.
       你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
-    e.g.:
+    Example:
       创建文件 main.js ,代码如下所示：
       console.log('当前目录: ' + process.cwd()); // 输出当前目录
       console.log('当前版本: ' + process.version); // 输出当前版本
@@ -403,7 +403,7 @@ NodeJS的运行方式及编程风格
   __filename 当前正在执行的脚本的文件名 
     PS：将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
       在模块中,返回的值是模块文件的路径 
-    e.g.:
+    Example:
       创建文件 main.js ,代码如下所示：
       // 输出全局变量 __filename 的值
       console.log( __filename );
@@ -411,7 +411,7 @@ NodeJS的运行方式及编程风格
       $ node main.js
       /web/com/runoob/nodejs/main.js
   __dirname  当前执行脚本所在的目录 
-    e.g.:
+    Example:
       创建文件 main.js ,代码如下所示：
       // 输出全局变量 __dirname 的值
       console.log( __dirname );
@@ -431,7 +431,7 @@ NodeJS的运行方式及编程风格
     // Hello, World!
   clearTimeout(num)      通过一定时器编号来终止该定时器 
     num   setTimeout函数创建的定时器返回的编号 
-    e.g.:
+    Example:
       // 两秒后执行函数
       var num = setTimeout(function (){ 
         console.log( "Hello, World!"); 
@@ -480,7 +480,7 @@ events,事件模块
   evEm.removeListener('eName',fooName)  移除指定事件的监听 
     PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
     fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
-    e.g.: 
+    Example: 
       var callback = function(stream) { };
       server.on('connection', callback);
       server.removeListener('connection', callback);
@@ -504,7 +504,7 @@ events,事件模块
     此操作将会改变处于被删监听器之后的那些监听器的索引
     event - 字符串,事件名称
     listener - 处理事件函数
-  e.g.: 
+  Example: 
     var events = require('events');
     var event = new events.EventEmitter();
     var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
@@ -563,7 +563,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
         "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
         "ucs2"    utf16le的别名
         "hex"     将每个字节转为两个十六进制字符
-      e.g.：
+      Example:
         var bufer1 = new Buffer("abcdefg", "utf-8"); 
         var bufer2 = new Buffer("abcdefg", "base64"); 
         console.log(bufer1,bufer2);
@@ -586,7 +586,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     idx   缓冲区开始写入的索引值,默认为 0 
     len   写入的字节数,默认为 buffer.length 
     typ   使用的编码.默认为'utf8' 
-    e.g.: 
+    Example: 
       var buf = new Buffer('abcdefg');
       var len = buf.write("1234");
       console.log("写入字节数 : "+ len);  // 写入字节数 : 4
@@ -595,7 +595,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
     bgn    开始读取的索引位置,默认为 0 
     end    结束位置,默认为缓冲区的末尾 
-    e.g.:
+    Example:
       var buf = new Buffer(26);
       for (var i = 0 ; i < 26 ; i++) { 
         buf[i] = i + 97; 
@@ -608,7 +608,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
       console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
   bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
     PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-    e.g.:
+    Example:
       var bufer = new Buffer('abc');
       var json = bufer.toJSON();
       console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
@@ -622,7 +622,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
   bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
     begin 可选,默认为 0
     end   可选,默认为 bufer.length
-    e.g.:
+    Example:
       var buf1 = new Buffer('123');
       var buf2 = buf1.slice(0,2);
       console.log(buf2); // <Buffer 31 32>
@@ -631,7 +631,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
     bfBgn    数字,可选,默认为 0 
     bfEnd    数字,可选,默认为 buf.length 
-    e.g.: 
+    Example: 
       var buf1 = new Buffer('abcdefghi');
       var buf2 = new Buffer(6);
       for (var i = 0; i < buf2.length; i++) {
@@ -647,7 +647,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
       console.log(bufStr1,bufStr2);
       // abcdefghi AAdeAA
   bufer.compare(buf)  比较 
-    e.g.:
+    Example:
       var buf1 = new Buffer('10');
       var buf2 = new Buffer('11');
       var result = buf1.compare(buf2);
@@ -660,7 +660,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     length  可选,默认为总长度,指定新buf对象的长度
       省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
       因此,显式提供这个参数,能提供运行速度。 
-    e.g.:
+    Example:
       var buf1 = new Buffer('11');
       var buf2 = new Buffer('22');
       var buf3 = Buffer.concat([buf1,buf2]);
@@ -716,7 +716,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     PS：管道提供了一个输出流到输入流的机制 
       通常用于从一个流中获取数据并将数据传递到另外一个流中 
       慢慢的实现大文件的复制过程 
-    e.g.:
+    Example:
       读取一文件内容并将数据写入到另外一文件中
       设置 input.txt 文件内容如下：
         菜鸟教程官网地址：www.runoob.com
@@ -730,7 +730,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       程序执行完毕,查看 output.txt 文件的内容：
         菜鸟教程官网地址：www.runoob.com
     链式流,通过连接输出流到另外一个流并创建多个对个流操作链的机制,一般用于管道操作
-      e.g.:
+      Example:
       用管道和链式来压缩文件 
         创建 compress.js 文件, 代码如下：
         var fs = require("fs");
@@ -762,7 +762,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   close    流传输关闭时 
   error    在接收和写入过程中发生错误时触发
   finish   所有数据已被写入到底层系统时触发
-  e.g.: 
+  Example: 
     从文件中读取数据 
       创建 input.txt 文件,内容如下：
         菜鸟教程官网地址：www.runoob.com
@@ -844,7 +844,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           下面写法会起到同样效果。
           var bar = require('bar/lib/bar.js');
           若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
-      e.g.：
+      Example:
         通过模块名引入 
         var fs = require('fs'); // 引入fs模块
         通过路径引入 
@@ -938,7 +938,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     querystring.parse(str [,str1] [,str2] [,options])   解析为对象格式  
       str  需要解析的字符串
       str1 可选,默认为'&',参数连接符
-        e.g.：
+        Example:
         var str = 'name=Scott-course=Java-course=Node-from=';
         var obj1 = querystring.parse(str);
         var obj2 = querystring.parse(str,'-');
@@ -986,7 +986,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         res 响应 
           res.writeHead(状态码,obj); 设置响应头
             obj  设置响应头信息的对象
-            e.g.:
+            Example:
             res.writeHead(200,{"Content-Type":"text/plain"})
           res.write(str); 定义响应信息
           res.end([str]); 完成响应,参数可选,存在会将其发送
@@ -1010,7 +1010,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           keepAliveMsecs     
       foo      参数为 (res) 
         res 服务器的响应 
-      e.g.： 慕课网评论的提交 
+      Example: 慕课网评论的提交 
         var http = require("http");
         var querystring = require("querystring");
         var postData = querystring.stringify({  
@@ -1070,7 +1070,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           PS：将回调函数中所有的data数据串起来就是完整的响应数据了
           foo  传入参数 (data) 
         res.on('end',foo);  请求数据下载完毕触发
-    e.g.: 
+    Example: 
       在该目录下创建一个 index.htm 文件[用于读取] 
       创建Web服务器 
         var http = require('http');
@@ -1197,7 +1197,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         flag     默认值为 "w",表示重写,会清空文件之前的内容
           'a'  增加,在文件原有的基础上增加
       callback 回调函数,传入参数 err
-      e.g.:
+      Example:
         var fs = require('fs'); // 引入fs模块
         fs.writeFile('./test2.txt', '生当做人杰', function(err) {
           if (err) { throw err; }
@@ -1231,7 +1231,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       callback 回调函数,传入参数 (err,data) 
         err   读取文件出错时触发的错误对象 
         data  Buffer类型,从文件读取的数据 
-      e.g.:
+      Example:
         一个文本文件: text.txt 内容如下:
           line one
           line two
@@ -1273,7 +1273,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         path     路径和目录名称
         mode     可选,设置目录的权限,默认为 0777
         callback 回调函数,传入参数 err 
-      e.g.:
+      Example:
         var fs = require('fs'); // 引入fs模块
         fs.mkdir('./newdir', function(err) { // 创建 newdir 目录
           if (err) { throw err; }
@@ -1284,7 +1284,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         path 路径和目录名称
         callback 回调函数,传入两个参数 err files
           files是一个数组,每个元素是此目录下的文件或文件夹的名称
-      e.g.:
+      Example:
         结果输出当前目录下的所有文件及文件夹
         var fs = require('fs'); // 引入fs模块
         fs.readdir('./', function(err, files) {
@@ -1295,7 +1295,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Arguments:
         path      文件路径.
         callback  回调函数,没有参数.
-      e.g.:
+      Example:
       fs.rmdir("./新建文件夹",function(err){
         if (err) {
           console.log(err);
@@ -1325,7 +1325,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Arguments:
         path     文件路径.
         callback 回调函数,带有两个参数如：(err, stats), stats 是 fs.Stats 对象. 
-      e.g.:
+      Example:
         fs.stat(path)执行后,会将stats类的实例返回给其回调函数.
         可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件：
         var fs = require('fs');
@@ -1350,7 +1350,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         position  文件读取的起始位置,若 position 的值为 null,则会从当前文件指针的位置读取
         callback  回调函数,有三个参数err, bytesRead, buffer
           err 为错误信息, bytesRead 表示读取的字节数,buffer 为缓冲区对象
-      e.g.:
+      Example:
         input.txt 文件内容为：
           菜鸟教程官网地址：www.runoob.com
         接下来我们创建 file.js 文件,代码如下所示：
@@ -1379,7 +1379,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Arguments:
         fd   通过 fs.open() 方法返回的文件描述符
         callback   回调函数,没有参数
-      e.g.:
+      Example:
         input.txt 文件内容为：
           菜鸟教程官网地址：www.runoob.com
         接下来我们创建 file.js 文件,代码如下所示：
@@ -1411,7 +1411,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         fd  通过 fs.open() 方法返回的文件描述符.
         len  文件内容截取的长度.
         callback  回调函数,没有参数.
-      e.g.:
+      Example:
         input.txt 文件内容为：
           site:www.runoob.com
         接下来我们创建 file.js 文件,代码如下所示：
@@ -1459,7 +1459,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       PS：JS 的面向对象特性是基于原型的,与常见的基于类的不同.
         JS 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
         handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
-      e.g.:
+      Example:
         var util = require('util'); 
         function Base() { 
         	this.name = 'base'; 
@@ -1487,7 +1487,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
           指定为 null 表示将不限递归层数完整遍历对象. 
           若color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
-      e.g.:
+      Example:
         var util = require('util'); 
         function Person() { 
         	this.name = 'abc'; 
@@ -1507,19 +1507,19 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         //      [prototype]: { [constructor]: [Circular] } } }
     util.isArray(val); 返回表示参数是否为数组的布尔值
     util.isRegExp(val); 返回表示参数是否为正则表达式的布尔值
-      e.g.:
+      Example:
         var util = require('util');
         util.isRegExp(/some regexp/) // true
         util.isRegExp(new RegExp('another regexp')) // true
         util.isRegExp({}) // false
     util.isDate(val);  返回表示参数是否为日期对象的布尔值
-      e.g.:
+      Example:
         var util = require('util');
         util.isDate(new Date()) // true
         util.isDate(Date()) // false (without 'new' returns a String)
         util.isDate({}) // false
     util.isError(val); 返回表示参数是否为错误对象的布尔值
-      e.g.:
+      Example:
         var util = require('util');
         util.isError(new Error()) // true
         util.isError(new TypeError()) // true
@@ -1539,7 +1539,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       gid,数字,设置进程组的 ID
       cfoo ：回调函数,包含三个参数error, stdout 和 stderr.
       exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
-      e.g.:
+      Example:
         让我们创建两个 js 文件 support.js 和 master.js.
         support.js 文件代码：
         console.log("进程 " + process.argv[2] + " 执行." );
@@ -1584,7 +1584,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         uid Number 设置用户进程的 ID
         gid Number 设置进程组的 ID
         spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
-      e.g.:
+      Example:
         让我们创建两个 js 文件 support.js 和 master.js.
         support.js 文件代码：
         console.log("进程 " + process.argv[2] + " 执行." );
@@ -1625,7 +1625,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         uid Number 设置用户进程的 ID
         gid Number 设置进程组的 ID
         返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
-      e.g.:
+      Example:
         让我们创建两个 js 文件 support.js 和 master.js.
         support.js 文件代码：
         console.log("进程 " + process.argv[2] + " 执行." );
@@ -1665,7 +1665,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     path.delimiter 平台的分隔符, ; or ':'.
     path.posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
     path.win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
-    e.g.:
+    Example:
       创建 main.js 文件,代码如下所示：
         var path = require("path");
         // 格式化路径
@@ -1699,7 +1699,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       型号、速度(单位 MHz)、
       时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
     os.networkInterfaces() 获得网络接口列表.
-    e.g.:
+    Example:
       创建 main.js 文件,代码如下所示：
         var os = require("os");
         console.log('endianness : ' + os.endianness());// CPU 的字节序
@@ -1790,7 +1790,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         为true时,无任何提示,返回undefined;
         为false时,抛出一错误,错误的提示信息为第二个参数设定的字符串
       str   字符串
-      e.g.：
+      Example:
         var assert = require('assert');
         function add (a, b) {
           return a + b;
@@ -1810,7 +1810,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       assert.equal(true, value, message);
       // 等同于
       assert(value, message);
-      e.g.： 
+      Example: 
         var assert = require('assert');
         function add (a, b) {
           return a + b;
@@ -1823,7 +1823,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     assert.notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
       PS：notEqual方法的用法与equal方法类似
         内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算。
-      e.g.：
+      Example:
         var assert = require('assert');
         function add (a, b) {
           return a + b;
@@ -1835,7 +1835,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         assert.notEqual(expected, 4, '预期不等于4');
     assert.deepEqual(actVal,expVal [,tip]); 比较两个对象
       两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误。
-      e.g.：
+      Example:
         var assert = require('assert');
         var list1 = [1, 2, 3, 4, 5];
         var list2 = [1, 2, 3, 4, 5];
@@ -1847,7 +1847,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     assert.notDeepEqual(actVal,expVal [,tip]); 与deepEqual方法正好相反
       用来断言两个对象是否不相等
     assert.strictEqual(actVal,expVal [,tip])   使用严格相等'===',比较两个表达式
-      e.g.：
+      Example:
         var assert = require('assert');
         assert.strictEqual(1, '1', '预期严格相等');
         // AssertionError: 预期严格相等
@@ -1894,7 +1894,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     assert.ifError(val)  断言某个表达式是否false
       如果该表达式对应的布尔值等于true,就抛出一个错误。
       它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误。
-      e.g.：
+      Example:
         function sayHello(name, callback) {
           var error = false;
           var str   = "Hello "+name;
@@ -1909,7 +1909,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误。
       如果message参数对应的布尔值不为false,抛出的错误信息就是message,
       否则错误信息就是“实际值 + 分隔符 + 预期值”。    
-      e.g.：
+      Example:
         var assert = require('assert');
         assert.fail(21, 42, 'Test Failed', '###')
         // AssertionError: Test Failed
@@ -1932,7 +1932,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           当同时存在多个元素该方法会将多个文本合并返回
         $($(selector)[0]).attr(属性名);  获取第一个元素指定属性的值
         $($(selector)[0]).find(selector);  获取第一个元素中对应selector的子元素
-      e.g.:
+      Example:
       var $ =cheerio.load(data);
       var a =$('a'); // 获取所有的a元素对象,操作类似与jQuery
   request 请求模块 
@@ -1948,7 +1948,7 @@ GET/POST 请求
   获取GET请求内容 
     PS：由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
       因此可手动解析后面的内容作为GET请求的参数。
-    e.g.：
+    Example:
       var http = require('http');
       var url = require('url');
       var util = require('util');
@@ -2012,7 +2012,7 @@ GET/POST 请求
           res.end(util.inspect(post));
         });
       }).listen(3000);
-    e.g.：
+    Example:
       表单通过 POST 提交并输出数据：
       var http = require('http');
       var querystring = require('querystring');
@@ -2069,7 +2069,7 @@ RESTful API
     RESTful Web 服务通常可以通过自动客户端或代表用户的应用程序访问.
     但是,这种服务的简便性让用户能够与之直接交互,
     使用它们的 Web 浏览器构建一个 GET URL 并读取返回的内容.
-  e.g.:
+  Example:
     创建 RESTful
     首先,创建一个 json 数据资源文件 users.json,内容如下：
       {

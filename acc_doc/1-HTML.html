@@ -145,7 +145,7 @@
           user-scalable 是否允许用户缩放 
             yes
             no
-        e.g.：
+        Example:
           viewport缩放规则 「在HTML网页的head部分指定」 
           <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
           上面代码指定,viewport的缩放规则: 
@@ -179,7 +179,7 @@
     content=    可选,定义与 http-equiv 或 name 属性相关的元信息
     http-equiv= 可选,把 content 属性关联到 HTTP 头部.
       'refresh' 定时跳转/刷新
-        e.g.:
+        Example:
           <meta http-equiv="refresh" content="2";URL=网址>
           content="2"表示2秒后刷新;URL可选,当无URL时则默认刷新当前页面,
           每隔时间2s 进行刷新(有url时则是等待时间t后刷新到url地址为止,
@@ -251,17 +251,17 @@
             Nginx: 详细参考： 例子
             add_header "X-UA-Compatible" "IE=Edge,chrome=1";
             add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
-      e.g.:
+      Example:
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     charset="UTF-8"  可选,设置字符集 [HTML5]
-      e.g.:
+      Example:
         <meta charset="UTF-8">
         <meta http-equiv="content-type" content="text/html;charset=gb2312"/>
     ◆rel=        可选,
       'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
         <link rel="prefetch" href="url">
         url可为一网页地址或图片地址
-      e.g.:
+      Example:
         <link rel="stylesheet" type="text/css" href="XXX.css" />
         // type在HTML5中可以不用写
   <title>  网页标题
@@ -481,7 +481,7 @@
   <details>    细节 用于描述文档或文档某个部分的细节[仅chrome和safari支持]
     PS：用于标识该元素内部子元素可被展开、搜索显示 
     open   定义details初始状态是否可见 
-    e.g.：
+    Example:
       <details>
         <summary> 细节展示的标题 </summary>
         <div> 折叠展开的内容1 </div>
@@ -804,7 +804,7 @@ Table表格
       在 colgroup 内部定义,为每个列规定不同的属性值.
     属性:
       span number  规定 <col> 元素应该横跨的列数.(h5中只有该属性可用)
-    e.g.:
+    Example:
       通过colgroup和col来控制列
         <table border="1">
           <colgroup>
@@ -1071,7 +1071,7 @@ Form表单
         PS：适用于所有 <input> 标签的类型;
           form 属性必须引用所属表单的 id,
           如需引用一个以上的表单,请使用空格分隔的列表;
-        e.g.:
+        Example:
           <form action="demo_form.asp" method="get" id="user_form">
             First name:<input type="text" name="fname" />
             <input type="submit" />
@@ -1096,7 +1096,7 @@ Form表单
         formmethod:     重写表单的 method 属性
         formnovalidate: 重写表单的 novalidate 属性
         formtarget:     重写表单的 target 属性
-        e.g.:
+        Example:
           <form action="demo_form.asp" method="get" id="user_form">
             E-mail: <input type="email" name="userid" /><br />
             <input type="submit" value="Submit" /> <br />
@@ -1107,12 +1107,12 @@ Form表单
           </form>
       height/width   image类型input标签的图像宽高
         PS：只适用于type=image 的 <input> 标签
-        e.g.: <input type="image" src="img.gif" width="99" height="99" />
+        Example: <input type="image" src="img.gif" width="99" height="99" />
       list           为表单提供选项列表
         PS：datalist 是输入域的选项列表;
           适用于 type=text/search/url/telephone/email/date,
           /pickers/number/range/color 的 <input>;
-        e.g.:
+        Example:
           Webpage: <input type="url" list="url_list" name="link" />
           <datalist id="url_list">
             <option label="W3Schools" value="http://www.w3school.com.cn" />
@@ -1137,7 +1137,7 @@ Form表单
         亲自试一试
       multiple  规定输入域中可选择多个值。
         注释：multiple 属性适用于以下类型的 <input> 标签：email 和 file。
-        e.g.:
+        Example:
           Select images: <input type="file" name="img" multiple="multiple" />
       novalidate 属性
         novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
@@ -1322,7 +1322,7 @@ Form表单
     <param> 为object嵌入的对象规定 run-time 设置
       此标签可为包含它的 <object> 或者 <applet> 标签提供参数。
       HTML 中,<param> 标签没有结束标签,XHTML 中,<param> 标签必须被正确地关闭。
-      e.g.::
+      Example::
         <object classid="clsid:F08DF954-8592-11D1-B16A-00C0F0283628" >
           <param name="BorderStyle" value="1" />
           <param name="MousePointer" value="0" />
@@ -1536,7 +1536,7 @@ HTML全局属性
         max="100"   最大值
         value="80"  当前值 
       <ruby>       文本注释 
-        e.g.：
+        Example:
           <ruby>
             abc
             <rt> 注释的内容 </rt>
@@ -1546,7 +1546,7 @@ HTML全局属性
       <rp>         注释不生效时显示[和'ruby'配合使用] 
       <wbr>        软换行,当宽度不够时换行 
       <datalist>   输入框输入提示 
-        e.g.：
+        Example:
           <input list="cars">
           <datalist id="cars"> // 通过 id 和 input 的 list 进行关联 
             <option value="BWM"></option>

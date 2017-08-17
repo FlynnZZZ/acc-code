@@ -60,7 +60,7 @@
     表示变量没有值,
     NULL 是数据类型为 NULL 的值。
     可以通过设置变量值为 NULL 来清空变量数据;
-    e.g.:
+    Example:
       <?php
       $x = "Hello world!";
       $x = null;
@@ -114,7 +114,7 @@
       可以将任何文本放在'单引号'或"双引号"中：
       字符串变量用于存储并处理文本。
       赋一个文本值给变量时,给文本值加上单引号或者双引号。
-    e.g.:
+    Example:
       <?php 
       $x = "Hello world!";
       echo $x;
@@ -130,7 +130,7 @@
       ?>
     strpos(str1,str2) 在字符串str1内查找str2
       如果找到匹配,返回第一个匹配的字符位置;未找到匹配,则返回 FALSE;
-      e.g.:
+      Example:
         <?php 
         echo strpos("0123456789","345"); // 3
         ?>
@@ -167,13 +167,13 @@
           echo "<br>";
         }
         ?>
-      e.g.:
+      Example:
         <?php
         $age = array("aoo"=>"35","boo"=>"37","coo"=>"43");
         echo "aoo is " . $age['aoo'] . " years old.";
         ?>
     多维数组: 包含一个或多个数组的数组
-    e.g.:
+    Example:
       <?php 
       $cars=array("Volvo","BMW","Toyota");
       var_dump($cars);
@@ -182,7 +182,7 @@
     count($arr) 返回数组长度
     ◆数组排序: 数组中的元素可以按字母或数字顺序进行降序或升序排列
     sort()     对数组进行升序排列 [改变原数组]
-      e.g.:
+      Example:
         <?php
         $aoo = array("aa","abac","ba");
         sort($aoo); 
@@ -196,7 +196,7 @@
         ?>
     rsort()    对数组进行降序排列
     asort()    根据关联数组的值,对数组进行升序排列
-      e.g.:
+      Example:
         <?php
         $aoo = array("a"=>"35","b"=>"37","ab"=>"43");
         asort($aoo);
@@ -204,7 +204,7 @@
         ?>
     arsort()   根据关联数组的值,对数组进行降序排列
     ksort()    根据关联数组的键,对数组进行升序排列
-      e.g.:
+      Example:
         <?php
         $age = array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
         ksort($age);
@@ -216,7 +216,7 @@
       首先必须使用class关键字声明类对象,类是可以包含属性和方法的结构,
       然后在类中定义数据类型,
       最后在实例化的类中使用数据类型;
-    e.g.:
+    Example:
       <?php
       class Car {
         var $color;
@@ -250,7 +250,7 @@
         $GLOBALS[index] 数组
           PS：所有全局变量的存储位置,index 保存变量的名称,
             该数组可以在函数内部访问,也可以直接用来更新全局变量;
-          e.g.:
+          Example:
             <?php
             $x = 5;
             $y = 10;
@@ -262,7 +262,7 @@
             ?>
       global 关键字
         global 关键字用于函数内访问全局变量。
-        e.g.:
+        Example:
         <?php
           $x = 5 ;
           $y = 10 ;
@@ -280,7 +280,7 @@
         PS：当一个函数完成时,它的所有变量通常都会被删除,
           有时候希望某个局部变量不要被删除,
           要做到这一点,需在第一次声明变量时使用 static 关键字;
-        e.g.:
+        Example:
           <?php
           function myTest() {
             static $x = 0;
@@ -296,14 +296,14 @@
       parameter 参数作用域
         参数是通过调用代码将值传递给函数的局部变量。
         参数是在参数列表中声明的,作为函数声明的一部分：
-        e.g.:
+        Example:
           <?php
           function myTest($x) {
             echo $x;
           }
           myTest(5);
           ?>
-      e.g.:
+      Example:
         <?php 
         $x = 5; // 全局变量 
         function myTest() { 
@@ -321,7 +321,7 @@
         ?>
     引用说明
       可以在 双引号中直接引用变量"" ,但不可在单引号中直接应用''
-        e.g.:
+        Example:
           <?php
           $txt = "Hello!" ;
           echo "双引号中可以直接引用变量  $txt"; // 双引号中可以直接引用变量 Hello!
@@ -338,7 +338,7 @@
         name ：必选,字符串,常量名称,即标志符。
         value：必选,常量的值。
         case_insensitive ：可选,boolean值,TRUE 表示常量大小写不敏感,默认为false
-      e.g.:
+      Example:
         创建一个 区分大小写的常量, 常量值为 "abc"：
         <?php
         define("GREETING", "abc");
@@ -353,7 +353,7 @@
         ?>
     常量是全局的
       常量在定义后,默认是全局变量,可以在整个运行的脚本的任何地方使用。
-      e.g.:
+      Example:
         <?php
         define("GREETING", "abc");
         function myTest() { echo GREETING; }
@@ -362,7 +362,7 @@
   超级全局变量: PHP系统中自带的变量
     PS：超级全局变量在PHP 4.1.0之后被启用,在一个脚本的全部作用域中都可用
     $GLOBALS: 存放着用户定义的变量,且可在全局访问的一个组合数组
-      e.g.:
+      Example:
         <?php 
         $x = 75; 
         $y = 25;
@@ -381,7 +381,7 @@
         这个数组中的项目由 Web 服务器创建,
         不能保证每个服务器都提供全部项目,
         服务器可能会忽略一些,或者提供一些没有在这里列举出来的项目;
-      e.g.:
+      Example:
         <?php 
         echo $_SERVER['PHP_SELF']; // /test/one.php
         echo "<br>";
@@ -517,7 +517,7 @@
       这些特殊的常量不区分大小写;
     __LINE__: 文件中的当前行号
       其值依赖于它在脚本中所处的行来决定;
-      e.g.:
+      Example:
         <?php
         echo '这是第 " '  . __LINE__ . ' " 行'; // 这是第 " 9 " 行
         ?>
@@ -526,7 +526,7 @@
         自 PHP 4.0.2 起,__FILE__ 总是包含一个绝对路径,
         如果是符号连接,则是解析后的绝对路径,
         而在此之前的版本有时会包含一个相对路径;
-      e.g.:
+      Example:
         <?php
         echo '该文件位于 " '  . __FILE__ . ' " ';
         // 该文件位于 " E:\project\test\one.php "
@@ -535,7 +535,7 @@
       PS：如果用在被包括文件中,则返回被包括的文件所在的目录。
         它等价于 dirname(__FILE__)。
         除非是根目录,否则目录中名不包括末尾的斜杠。[PHP 5.3.0中新增]
-      e.g.:
+      Example:
         <?php
         echo '该文件位于 " '  . __DIR__ . ' " ';
         // 该文件位于 " E:\project\test "
@@ -543,7 +543,7 @@
     __FUNCTION__:  函数名称  [PHP 4.3.0 新加]
       PS：自 PHP 5 起本常量返回该函数被定义时的名字,区分大小写,
         在 PHP 4 中该值总是小写字母的。
-      e.g.:
+      Example:
         <?php
         function test() {
           echo  '函数名为：' . __FUNCTION__ ;
@@ -556,7 +556,7 @@
         类名包括其被声明的作用区域（例如 Foo\Bar）,
         注意自 PHP 5.4 起 __CLASS__ 对 trait 也起作用。
         当用在 trait 方法中时,__CLASS__ 是调用 trait 方法的类的名字。
-      e.g.:
+      Example:
         <?php
         class test {
           function _print() {
@@ -576,7 +576,7 @@
         从基类继承的成员被插入的 SayWorld Trait 中的 MyHelloWorld 方法所覆盖。
         其行为 MyHelloWorld 类中定义的方法一致。
         优先顺序是当前类中的方法会覆盖 trait 方法,而 trait 方法又覆盖了基类中的方法。
-      e.g.:
+      Example:
         <?php
         class Base {
           public function sayHello() {
@@ -601,7 +601,7 @@
         输出： Hello World!
     __METHOD__: 类的方法名   [PHP 5.0.0 新加] 
       PS：返回该方法被定义时的名字,区分大小写
-      e.g.:
+      Example:
         <?php
         function test() {
           echo  '函数名为：' . __METHOD__ ;
@@ -610,7 +610,7 @@
         ?>
     __NAMESPACE__: 当前命名空间的名称,区分大小写 [PHP 5.3.0 新增]
       PS：此常量是在编译时定义的
-      e.g.:
+      Example:
         <?php
         namespace MyProject;
         echo '命名空间为："', __NAMESPACE__, '"'; 
@@ -648,7 +648,7 @@ OOP,Object-oriented_programming 面向对象
       当对象结束其生命周期时（例如对象所在的函数已调用完毕）,系统自动执行析构函数。
       析构函数往往用来做"清理善后" 的工作,
       例如在建立对象时用new开辟了一片内存空间,应在退出前在析构函数中用delete释放
-    e.g.:
+    Example:
       通过 Car 类 创建了三个对象：Mercedes, Bmw, 和 Audi。
       $mercedes = new Car ();
       $bmw = new Car ();
@@ -659,7 +659,7 @@ OOP,Object-oriented_programming 面向对象
       类名后的一对大括号({})内可以定义变量和方法。
       类的变量使用 var 来声明, 变量也可以初始化值。
       函数定义类似 PHP 函数的定义,但函数只能通过该类及其实例化的对象访问。
-    e.g.:
+    Example:
       <?php
       class Site {
         /* 成员变量 */
@@ -678,7 +678,7 @@ OOP,Object-oriented_programming 面向对象
     调用成员方法 ->
       实例化对象后,可以使用该对象调用成员方法,
       该对象的成员方法只能操作该对象的成员变量：
-      e.g.:
+      Example:
         <?php 
         class Site { 
           /* 成员变量 */ 
@@ -730,7 +730,7 @@ OOP,Object-oriented_programming 面向对象
         $this->url = $par1;
         $this->title = $par2;
       }
-    e.g.:
+    Example:
       $runoob = new Site('www.runoob.com', '菜鸟教程'); 
       $taobao = new Site('www.taobao.com', '淘宝'); 
       $google = new Site('www.google.com', 'Google 搜索'); 
@@ -748,7 +748,7 @@ OOP,Object-oriented_programming 面向对象
       当对象结束其生命周期时,例如对象所在的函数已调用完毕,系统自动执行析构函数。
       PHP 5 引入了析构函数的概念,这类似于其它面向对象的语言;
     function __destruct() {  }
-    e.g.:
+    Example:
       <?php
       class MyDestructableClass {
         function __construct() {
@@ -765,7 +765,7 @@ OOP,Object-oriented_programming 面向对象
   extends 继承
     PS：使用关键字 extends 来继承一个类,PHP 不支持多继承
     格式： class Child extends Parent { /* 代码部分 */ }
-    e.g.:
+    Example:
       Child_Site 类继承了 Site 类,并扩展了功能：
       <?php 
       // 子类扩展站点类别
@@ -777,7 +777,7 @@ OOP,Object-oriented_programming 面向对象
   方法重写
     PS：如果从父类继承的方法不能满足子类的需求,可以对其进行改写,
       这个过程叫方法的覆盖（override）,也称为方法的重写。
-    e.g.:
+    Example:
       function getUrl() {
         echo $this->url . PHP_EOL;
         return $this->url;
@@ -979,7 +979,7 @@ OOP,Object-oriented_programming 面向对象
   final 关键字 [PHP5新增]
     如果父类中的方法被声明为 final,则子类无法覆盖该方法。
     如果一个类被声明为 final,则不能被继承。
-    e.g.:
+    Example:
       以下代码执行会报错：
       <?php
       class BaseClass {
@@ -1029,7 +1029,7 @@ OOP,Object-oriented_programming 面向对象
 运算符 
   .   并置运算符,用于连接字符串 
     PHP 中,只有一个字符串运算符
-    e.g.:
+    Example:
       <?php 
       $txt1 = "aa"; 
       $txt2 = "bb!"; 
@@ -1089,7 +1089,7 @@ OOP,Object-oriented_programming 面向对象
   echo val1[,val2 ...]; 文本输出
     echo 语言结构,使用的时可不加括号,也可以加上： echo 或 echo()
     当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
-    e.g.:
+    Example:
       使用 echo 命令输出字符串「可包含 HTML 标签」：
       <?php
       echo "<h2>PHP 很有趣!</h2>";
@@ -1108,7 +1108,7 @@ OOP,Object-oriented_programming 面向对象
     foreach ($array as $value) {
       <!-- 要执行代码; -->
     }
-    e.g.:
+    Example:
       <html>
       <body>
         <?php
@@ -1129,7 +1129,7 @@ OOP,Object-oriented_programming 面向对象
   创建函数 
     函数的名称应该提示出它的功能, 函数名称以字母或下划线开头,不能以数字开头
     function functionName() { }
-    e.g.:
+    Example:
       <html>
       <body>
       
@@ -1145,7 +1145,7 @@ OOP,Object-oriented_programming 面向对象
   函数参数 
     PS：添加参数可以给函数添加更多的功能;参数类似变量。
       参数就在函数名称后面有一个括号内指定
-    e.g.:
+    Example:
       <html>
       <body>
       
@@ -1182,7 +1182,7 @@ OOP,Object-oriented_programming 面向对象
     </html>
 规定字符 
   PHP_EOL 换行符
-    e.g.:
+    Example:
       <?php
       echo '<div >1' . PHP_EOL . '1</div>' ;
       ?>
@@ -1239,7 +1239,7 @@ OOP,Object-oriented_programming 面向对象
   \ 子命名空间
     PS：与目录和文件的关系很象,PHP 命名空间也允许指定层次化的命名空间的名称。
       因此,命名空间的名字可以使用分层次的方式定义：
-    e.g.:
+    Example:
       <?php
       namespace MyProject\Sub\Level;  //声明分层次的单个命名空间
       const CONNECT_OK = 1;
@@ -1264,7 +1264,7 @@ OOP,Object-oriented_programming 面向对象
       例如, $a = new \currentnamespace\foo();
       或 \currentnamespace\foo::staticmethod();。
       在这种情况下,foo 总是被解析为代码中的文字名(literal name)currentnamespace\foo。
-    e.g.:
+    Example:
       file1.php 文件代码
         <?php
         namespace Foo\Bar\subnamespace; 
@@ -1314,7 +1314,7 @@ OOP,Object-oriented_programming 面向对象
       ?>
     命名空间和动态语言特征
       命名空间的实现受到其语言自身的动态特征的影响。
-      e.g.:
+      Example:
         因此,如果要将下面的代码转换到命名空间中,动态访问元素。
         必须使用完全限定名称（包括命名空间前缀的类名称）。
         注意因为在动态的类名称、函数名称或常量名称中,
@@ -1367,7 +1367,7 @@ OOP,Object-oriented_programming 面向对象
     __NAMESPACE__ 常量 
       其值是包含当前命名空间名称的字符串。
       在全局的,不包括在任何命名空间中的代码,它包含一个空的字符串。
-      e.g.:
+      Example:
         <?php
         namespace MyProject;
         echo '"', __NAMESPACE__, '"';  // 输出 "MyProject"
@@ -1632,7 +1632,7 @@ WAMPServer集成环境
 
 
 --------------------------------------------------------------------------------
-e.g.: 
+Example: 
   员工查询和添加
   HTML 和 JS
   <!DOCTYPE html>

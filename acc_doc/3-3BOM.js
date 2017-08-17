@@ -35,7 +35,7 @@ window 对象
     window.name    表示窗口/框架的名称
     window.frames  框架集 
       PS：可通过数值索引[从0开始,从左至右,从上至下]或框架的name属性值来获取到对应的框架window对象  
-      e.g.：
+      Example:
         <frameset >
           <frame src="frame.html" name="topFrame">
           <frameset >
@@ -173,13 +173,13 @@ window 对象
       window.matchMedia(str).matches; 布尔值,表示当前环境是否匹配查询语句
       addListener() 若mediaQuery查询结果发生变化就触发
         回调函数的参数是MediaQueryList对象
-        e.g.:
+        Example:
         var mtmd = window.matchMedia("(max-width: 700px)");
         mtmd.addListener(foo); // 指定回调函数
         function foo(mtmd) { if(mtmd.matches) { } else { };}
         mtmd.removeListener(foo); // 撤销回调函数
       removeListener();
-      e.g.:
+      Example:
         var result = window.matchMedia('(min-width: 600px)');
         result.media //(min-width: 600px)
         result.matches // true
@@ -199,7 +199,7 @@ window 对象
         在计时结束时,开始执行延时代码.
         若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
         所以延迟时间大于等于定时器设置的值.
-        e.g.:
+        Example:
         console.log(1);
         setTimeout(function() {console.log('a')}, 9);
         setTimeout(function() {console.log('b')}, 3);
@@ -311,7 +311,7 @@ window 对象
         接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
         DOM Level 0 规范
       bs64Str  经过base64编码后的字符串 
-      e.g.:
+      Example:
         var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
         var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
       Unicode 字符串 
@@ -329,7 +329,7 @@ window 对象
         b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
         在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
         所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
-    e.g.：
+    Example:
         当服务器数据库中保存的是图片的二进制数据及图片文件的格式时,根据此二进制数据来渲染图片
         <input type="file" id="file"/>
         <input type="button" value="读取图像" onclick="readPicture()" id="btnReadPicture"/>
@@ -392,7 +392,7 @@ window 对象
       else {
         console.log('该浏览器不支持Notification接口');
       }
-    e.g.：
+    Example:
       当前浏览器支持Notification对象,并当前用户准许使用该对象,
       然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
       if(window.Notification && Notification.permission !== "denied") {
@@ -407,7 +407,7 @@ window 对象
       'denied'  用户明确拒绝接收通知 
     Notification.requestPermission(foo)  获取用户授权
       foo  回调函数,参数为 status「用户授权状态」 
-      e.g.： 若用户拒绝接收通知,用alert方法代替 
+      Example: 若用户拒绝接收通知,用alert方法代替 
         Notification.requestPermission(function (status) {
           if (status === "granted") {
             var n = new Notification("Hi!");
@@ -432,7 +432,7 @@ window 对象
         tag   通知的ID,值为字符串 
           一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示。
         icon  图表的URL,用来显示在通知上
-      e.g.：
+      Example:
         var notice = new Notification('收到新邮件', {
           body: '您总共有3封未读邮件。'
         });
@@ -454,7 +454,7 @@ window 对象
       click 用户点击通知时触发
       close 用户关闭通知时触发
       error 通知出错时触发,大多数发生在通知无法正确显示时 
-      e.g.：
+      Example:
         notice.onshow = function() {
           console.log('Notification shown');
         };
@@ -465,7 +465,7 @@ window 对象
     var selectText = window.getSelection();  
     var str1 = selectText + ''         获取选中的字符串
     var str2 = selectText.toString();  获取选中的字符串
-    e.g.: 打印出文档中被选中的的文字 
+    Example: 打印出文档中被选中的的文字 
       $(document).mouseup(function (e) {
         var txt = window.getSelection();
         if (txt.toString().length >= 1) { 
@@ -525,7 +525,7 @@ window的属性对象
             decodeURICompinent(document.cookie);
         domain   可选,限制域名访问,必须为当前发送Cookie域名的一部分
           PS：只有访问的域名匹配domain属性,Cookie才会发送到服务器
-          e.g.:
+          Example:
             example.com
             .example.com    // 对所有子域名生效
             subdomain.example.com
@@ -547,7 +547,7 @@ window的属性对象
         Firefox中每个域名限制Cookie数量为50,Safari和Chrome无数量限制;
         Cookie累加长度限制为4kb,超过部分被忽略;
           通过使用其他符号分割,避免Cookie的数量限制,读取时再自行解析
-          e.g.: name=a&b=c&d=e&f=g
+          Example: name=a&b=c&d=e&f=g
       修改cookie 
         若服务器想改变一个已存在的cookie,则修改时key、domain、path、secure需都匹配,
         否则,则是新建一cookie;
@@ -1017,7 +1017,7 @@ window的属性对象
     CSS.supports()  检测浏览器是否支持CSS的某些功能  
       bol = CSS.supports(propertyName, value);
       bol = CSS.supports(supportCondition);
-      e.g.：
+      Example:
       console.log(CSS.supports("display", "flex")); // true 
   客户端检测「详细见 JavaScript高级程序设计 228 页」 
     PS：
@@ -1163,7 +1163,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
         可以为空,即发送请求但不发送数据内容,可写作 xhr.send(null) 或 xhr.send()
         若不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
         若带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
-      e.g.:
+      Example:
         发送get请求
           ajax.open('GET',
             'http://www.example.com/somepage.php?id='+ encodeURIComponent(id),true );
@@ -1220,7 +1220,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       e.lengthComputable 表示进度信息是否可用的布尔值
       e.position         表示已接收的字节数
       e.totalSize        表示根据Content-Length响应头部确定的预期字节数
-      e.g.:
+      Example:
         我们先定义 progress 事件的回调函数.
         xhr.onprogress = updateProgress;
         xhr.upload.onprogress = updateProgress;
@@ -1247,7 +1247,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       xhr.upload.onprogress 在上传阶段,每50ms触发一次,
       文件太小网络环境好的时候是直接到100%的;
       在 xhr.send() 之后,xhr.readystate=2 之前触发;
-      e.g.：显示上传进度
+      Example:显示上传进度
         <progress min="0" max="100" value="0">0% complete</progress>
         function upload(blobOrFile) {
           var xhr = new XMLHttpRequest();
@@ -1319,7 +1319,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
         XHR2支持Ajax的返回类型为文档,即xhr.responseType=”document” .
         这意味着,对于那些打开CORS的网站,我们可以直接用Ajax抓取网页,
         然后不用解析HTML字符串,直接对XHR回应进行DOM操作.
-      e.g.:
+      Example:
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/path/to/image.png', true);
         xhr.responseType = 'blob';
@@ -1338,7 +1338,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
         否则该属性的值为null.
     xhr.responseStream   服务器返回的数据流
     xhr.getResponseHeader(key);  获取指定响应头信息
-      e.g.:
+      Example:
       xhr.getResponseHeader('Content-Type');
     xhr.getAllResponseHeader(); 获取整个响应头信息,格式为字符串
       每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
@@ -1372,7 +1372,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
           若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
           较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
           把 responseType 设为 blob,表示服务器传回的是二进制对象.
-        e.g.:
+        Example:
           var xhr = new XMLHttpRequest ();
           xhr.open ('GET', '/path/to/image.png');
           xhr.responseType = 'blob';
@@ -1391,7 +1391,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
               // do something
             }
           }
-    e.g.:
+    Example:
       使用FormData接口上传文件
         <form id="file-form" action="handler.php" method="POST">
           <input type="file" id="file-select" name="photos[]" multiple/>
@@ -1429,7 +1429,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       xhr.onreadystatechange =function(){}; //设置响应事件程序
       xhr.open('get','demo.php',true)    //准备发送请求
       xhr.send();                        //发送请求
-  e.g.:
+  Example:
     使用范例
       var xhr = new XMLHttpRequest(); // 创建 Ajax 对象
       xhr.open(method, url, async); // 设置请求方法 请求地址 是否异步
@@ -1679,12 +1679,12 @@ FormData 用于模拟表单「HTML5」
     不用明确的设置请求头信息,
     xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
   var fmDt = new FormData([formElem]); 创建FormData对象
-    e.g.: 通过表单元素创建
+    Example: 通过表单元素创建
       var fmDt = new FormData(document.forms[0]);
   fmDt.append("key","value"); 向FormData对象中添加信息
     PS：当信息添加完后就可直接使用 xhr.send(fmDt) 进行发送
     第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
-  e.g.:
+  Example:
     模拟File控件,进行文件上传 
       function uploadFiles(url, files) {
         var formData = new FormData();
@@ -1712,7 +1712,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
   检查浏览器是否部署 Fetch API
     if (fetch in window){ /* 支持 */ } 
     else { /* 不支持 */ }
-  e.g.:
+  Example:
     fetch(url).then(function (response) {
       return response.json();
     })
@@ -1734,7 +1734,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
   stream数据流
     数据传送是以数据流stream的形式进行的.
     对于大文件,数据是一段一段得到的.
-    e.g.:
+    Example:
       response.text().then(function (responseText) {
         console.log(responseText);
       }
@@ -2069,11 +2069,11 @@ JSONP,'JSON_with_Padding'填充式JSON或参数式JSON
     script标签可载入外域的JS文件,自己先定义一函数,然后从script中载入执行函数,
     从而达到载入JS文件后就执行操作,达到获取数据,
     从而也省去了监听script加载完成的操作.
-    e.g.：
+    Example:
       <script src="http://www.aoo.com/boo?callback=foo1"></script> 
       后端通过callback获取参数值'fool1'进行动态生成代码
       自定义一全局函数并执行 fool1(arg) 
-    e.g.:
+    Example:
       在 a 网页中
       <script >
         function foo(data){ /*定义需执行的操作*/ }
@@ -2094,7 +2094,7 @@ JSONP,'JSON_with_Padding'填充式JSON或参数式JSON
     通过替换script标签来动态更新
     不能通过只更换script的src标签来达到效果,浏览器不会将其看作一个新元素;
     更换script标签后,强制浏览器做出请求,这种技术称为"脚本插入"
-  e.g.:
+  Example:
     JSONP方法跨域获取百度搜索建议词
     <script type="text/javascript">
       window.onload = function() {
@@ -2373,7 +2373,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
   Cookie 服务器写入浏览器的一小段信息
     document.domain 共享Cookie
       两个网页一级域名相同,只是二级域名不同,浏览器允许通过该设置共享cookies
-      e.g.：
+      Example:
         A网页 'http://w1.example.com/a.html'
         B网页 'http://w2.example.com/b.html',
         那么只要设置相同的document.domain,两个网页就可以共享Cookie。
@@ -2622,7 +2622,7 @@ SSE 「HTML5」
         error.code.PERMISSION_DENIED    用户拒绝提供信息。
         error.code.NOT_SUPPORTED_ERROR  浏览器不支持硬件设备。
         error.code.MANDATORY_UNSATISFIED_ERROR 无法发现指定的硬件设备。
-      e.g.:
+      Example:
         将摄像头拍摄的图像展示在网页上
         <video src="" controls="" id="camera"> </video>
         
@@ -2685,7 +2685,7 @@ SSE 「HTML5」
       }, errorCallback);
       </script>
     Web Audio API  通过浏览器捕获声音
-      e.g.:
+      Example:
         捕获麦克风声音
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         var context = new AudioContext();
@@ -2765,7 +2765,7 @@ SSE 「HTML5」
       网络通信的元数据： IP地址、NAT网络地址翻译和防火墙等。
     WebRTC协议没有规定与服务器的通信方式,因此可以采用各种方式, 比如WebSocket。
     通过服务器,两个客户端按照Session Description Protocol(SDP协议)交换双方的元数据。
-    e.g.:
+    Example:
       var signalingChannel = createSignalingChannel();
       var pc;
       var configuration = ...;
@@ -2814,7 +2814,7 @@ SSE 「HTML5」
     Google 维护一个函数库 adapter.js ,用来抽象掉浏览器之间的差异。
   RTCDataChannel       进行任意数据的通信
     作用是在点对点之间,传播任意数据。它的API与WebSockets的API相同。
-    e.g.:
+    Example:
       var pc = new webkitRTCPeerConnection(servers, {
         optional: [{RtpDataChannels: true}]
       });
@@ -2834,7 +2834,7 @@ SSE 「HTML5」
     由于API比较复杂,一般采用外部函数库进行操作。
     目前,视频聊天的函数库有 SimpleWebRTC easyRTC webRTC.io,
     点对点通信的函数库有PeerJS、Sharefest。
-    e.g.: SimpleWebRTC的示例
+    Example: SimpleWebRTC的示例
       var webrtc = new WebRTC({
         localVideoEl: 'localVideo',
         remoteVideosEl: 'remoteVideos',
@@ -2843,7 +2843,7 @@ SSE 「HTML5」
       webrtc.on('readyToCall', function () {
           webrtc.joinRoom('My room name');
       });
-    e.g.:PeerJS的示例
+    Example:PeerJS的示例
       var peer = new Peer('someid', {key: 'apikey'});
       peer.on('connection', function(conn) {
         conn.on('data', function(data){
@@ -3011,7 +3011,7 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
     CACHE MANIFEST //此标题下列出的文件将在首次下载后进行缓存
     NETWORK        //此标题下列出的文件需要与服务器的连接,且不会被缓存
     FALLBACK       //此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面
-    e.g.：
+    Example:
       CACHE MANIFEST
       #version n.n
       
@@ -3148,7 +3148,7 @@ IndexedDB   浏览器端数据库 「HTML5」
     blocked       上一次的数据库连接还未关闭 
     event,事件对象
       event.target.result 指向打开的IndexedDB数据库
-    e.g.：
+    Example:
       var openRequest = indexedDB.open("test",1);
       var db;
       openRequest.onupgradeneeded = function(e) {
@@ -3344,7 +3344,7 @@ IndexedDB   浏览器端数据库 「HTML5」
         cursor.continue();
       }
     }  
-  e.g.：
+  Example:
 Drag&Drop 拖放「IE9+ HTML5」 
   PS：Web开发人员一直在用jQuery完成拖放,现已原生支持 
     IE4最早加入拖放功能,只能拖放文本框
@@ -3355,7 +3355,7 @@ Drag&Drop 拖放「IE9+ HTML5」
     PS：默认的所有的元素都不能做为放置的目标元素,
       通过阻止拖放时触发事件的默认行为来达到可放置的效果,
       仅仅是光标的显示不同,DOM结构的变化还需自己设置.
-    e.g.:
+    Example:
       var dropTarget = document.querySelector("#aoo");
       dropTarget.ondragover =function(e){
         e.preventDefault();
@@ -3389,7 +3389,7 @@ Drag&Drop 拖放「IE9+ HTML5」
         str 字符串,表示保存的数据类型,取值为'text'或'URL'
       e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
         PS：保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
-        e.g.:
+        Example:
         设置和接收文本数据
         e.dataTransfer.setData('text','some text');
         var text =e.dataTransfer.getData('text');
@@ -3423,11 +3423,11 @@ Drag&Drop 拖放「IE9+ HTML5」
       e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
   兼容 
     IE9-不支持draggable属性,但可通过mousedown事件来模拟 
-      e.g.:
+      Example:
       elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
     firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
     firefox的drop事件默认打开被放到放置目标上的URL.为了正常拖放,要取消其drop事件的默认行为
-  e.g.:
+  Example:
     <div id="dragElem" draggable="true">拖放元素</div>
     <div id="targetElem" >放置目标元素</div>
     #dragElem{ 
@@ -3638,7 +3638,7 @@ devicelight    设备屏幕亮度变化事件 「HTML5」
   var DLRun = function(event) { }
   window.addEventListener('devicelight',DLRun);
   event.value  亮度的流明值
-  e.g.:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
+  Example:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
     window.addEventListener('devicelight', function(e) {
       var lux = e.value;
       if(lux < 50) {

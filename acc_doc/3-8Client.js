@@ -126,7 +126,7 @@
         在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
   小技巧 
     通过浏览器地址栏运行HTML代码 「非IE浏览器内核」
-      e.g.:  
+      Example:  
       在浏览器地址栏直接输入 data:text/html,<a href=''> 13 </a>
       通过JS操作也可
         setTimeout(function(){
@@ -177,7 +177,7 @@
       $(selector)   <=>  document.querySelectorAll(selector)
       $$(selector)  <=>  document.querySelector(selector)
       $x(path)  匹配特定Xpath表达式的所有DOM元素的数组
-        e.g.:$x("//p[a]")  所有包含a元素的p元素
+        Example:$x("//p[a]")  所有包含a元素的p元素
       inspect(obj)  在相关面板显示对象
         DOM元素在Elements面板中显示对象
         JS对象在Profiles面板中显示
@@ -212,7 +212,7 @@
             对输出的内容进行CSS渲染
             console.log('%c this text is styled!','color:red;font-size:24px;');
             输出的内容将显示为红色的24px的字体
-          e.g.:
+          Example:
             console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
             上面代码的 %s 表示字符串的占位符
     
@@ -236,7 +236,7 @@
         PS：接收两个参数,第一个参数是表达式,第二个参数是字符串.
           只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
         bool  布尔值,默认为false 
-        e.g.：
+        Example:
           若为假,则显示一条事先指定的错误信息
           console.assert(true === false,"判断条件不成立")
           // Assertion failed: 判断条件不成立
@@ -271,7 +271,7 @@
           fsharp "F#" "functional"
       console.count([val])         用于计数,输出被调用的次数 
         接收一个参数作为标签,进行相应的次数统计
-        e.g.:
+        Example:
           console.count('a');  // a: 1
           console.count('a');  // a: 2
         
@@ -288,7 +288,7 @@
       console.time()         计时开始
       console.timeEnd(val)   计时结束
         val 为计时器的名称
-        e.g.:
+        Example:
           console.time();
           var array = new Array(1000000);
           for(var i = array.length - 1; i >= 0; i--) {
@@ -1237,7 +1237,7 @@ ueditor 百度编辑器
       p    : 'channel'
       from : 1
       sort : 0
-    e.g.:
+    Example:
       'http://image.baidu.com/data/imgs?col=美女&tag=小清新&pn=10&rn=10&p=channel&from=1&sort=0'
 --------------------------------------------------------------------------------
 技巧 实现 

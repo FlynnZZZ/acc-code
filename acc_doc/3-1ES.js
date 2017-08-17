@@ -105,7 +105,7 @@ ECMAScript : JS核心,语法部分
       不能使用arguments.caller
       不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
       初始化时重复定义对象属性报错
-        e.g.： var obj = {a:1,a:2}
+        Example: var obj = {a:1,a:2}
       禁止8进制的字面量
         console.log(0123); // 83,严格模式下则报错 
         不能使用前缀0表示八进制数 
@@ -200,7 +200,7 @@ ECMAScript : JS核心,语法部分
     typeof undefined; //"undefined"
     typeof a;         //"undefined"
     console.log(a);   //报错,a未定义
-  null      表示一个空对象指针,表示什么都没有,相当于一个占位符
+  null      表示一个空对象指针[逻辑角度看],表示什么都没有相当于一个占位符
     PS：将来用于保存对象的变量,可初始化为null 
     e.g. :
       console.log(null==undefined);//true ,undefined派生于null
@@ -228,10 +228,10 @@ ECMAScript : JS核心,语法部分
           console.log(!0,!1); // true false
       Boolean() 显式转换为布尔值 
   Number  数值 
-    PS： Number类型包含两种数值:整型和浮点型, [不同于C语言]JS中整数相除可以到浮点数
-      可以保存+0 和 -0,且 +0 ===-0;
+    PS：Number类型包含两种数值:整型和浮点型, [不同于C语言]JS中整数相除可以到浮点数 
+      可以保存+0 和 -0,且 +0 === -0;
     数值进制 
-      PS：在进行算术计算时,所有以八进制和十六进制表示的数值最终都将被转换成十进制数值
+      PS：在进行算术计算时,所有八进制和十六进制表示的数值都将被转换成十进制数值
       十进制
       八进制     使用0开头,且最大数值不超过7
         若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
@@ -256,29 +256,30 @@ ECMAScript : JS核心,语法部分
         var box2=8.0;   //小数点后面是0,转换为8
         console.log(box1);   //8
         console.log(box2);   //8
-      浮点数值的精度
+      浮点数值的精度 
         最高精度是17位小数,但算术运算中可能会不精确.
         // 不要使用浮点数做判断
         console.log(0.1+0.2);   // 0.300000000000004
     特殊数值 
-      Infinity 「正无穷」 -Infinity 「负无穷」: 当超过范围时显示
-        Number.NEGATIVE_INFINITY  // -Infinity
-        Number.POSITIVE_INFINITY  // Infinity
-      NaN not_a_number,非数值 
+      Infinity,正无穷 
+      -Infinity,负无穷
+      NaN'not-a-number',非数值 
         PS：该数值用于表示一个本来要返回数值的操作数未返回数值的情况[而不会报错] 
           在其他语言中,任何数值除以零都会导致错误而终止程序执行,
           但在ECMAScript中会返回特殊的值,不会影响程序执行.
           任何与NaN进行运算的结果均为 NaN
           NaN 不和任何值相等[包括自己] 
-        Number.NaN;        //NaN,非数值
         e.g.
-        var a = 0/0;
-        console.log(a);  // NaN
-        NaN+1;           // NaN
-        console.log(NaN == NaN); // false
-      // 静态属性,如直接通过Number调用的属性(Number.XX)
-      Number.MAX_VALUE;  //1.7976931348623157e+308,最大值
-      Number.MIN_VALUE;  //5e-324,最小值
+          var a = 0/0;
+          console.log(a);  // NaN
+          NaN+1;           // NaN
+          console.log(NaN == NaN); // false
+    静态属性
+      Number.MAX_VALUE           最大值,1.7976931348623157e+308
+      Number.MIN_VALUE           最小值,5e-324
+      Number.NEGATIVE_INFINITY   -Infinity
+      Number.POSITIVE_INFINITY   Infinity
+      Number.NaN;                NaN
     转换为数值 
       隐式转换为数值 
         undefined转换为NaN;
@@ -521,7 +522,7 @@ ECMAScript : JS核心,语法部分
           str += key;
         };
         console.log(str); // aooboocoo
-    e.g.:
+    Example:
       var obj = new Object(); 
       // var obj = Object();    // new关键字可以省略
 
@@ -591,7 +592,7 @@ ECMAScript : JS核心,语法部分
         console.log(res); // {aoo: "abc", boo: 180, coo: true} 
     bol = Object.is(val1,val2); 值是否相同[可能存在兼容问题] 
       与 == 或 === 的逻辑不同 
-      e.g.:
+      Example:
         Object.is(+0,-0);    //false
         Object.is(0,0);      //true
         Object.is(NaN, NaN); //true
@@ -1037,7 +1038,7 @@ ECMAScript : JS核心,语法部分
   对象转换为原始类型 
     若输入的值已经是个原始值,则直接返回它.
     默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number. [?]
-      e.g.:
+      Example:
         var date =new Date();
         console.log(typeof date); // Object
         var aoo = date + '';
@@ -1063,7 +1064,7 @@ ECMAScript : JS核心,语法部分
       否则,调用该对象的toString()方法.若toString()返回原始值,则返回这个原始值.
       否则,抛出TypeError异常.
     转换为 String:先调用 toString 再调用 valueOf 
-    e.g.:
+    Example:
       var obj = {
         valueOf: function() { // 未返回原始值 
           console.log(1);return {};
@@ -1175,7 +1176,7 @@ Evaluation_Strategy,求值策略
       包含引用类型值的变量实际上包含的并不是对象本身,而是一个指向该对象的指针.
       从一个变量向另一个变量复制引用类型的值,复制的其实是指针,
       因此两个变量最终都指向同一个对象.
-    e.g.: 
+    Example: 
       引用类型值按引用地址来比较
       var aoo = {a:1};
       var boo = {a:1};
@@ -1278,7 +1279,7 @@ Evaluation_Strategy,求值策略
       -box;               //-1
       typeof box;         //String类型
       typeof -box;        //Number类型
-    var str = typeof val; 获取值类型 
+    str = typeof val; 获取值类型 
       PS：typeof是操作符而非函数,因此后面的括号可有可无.
       val   操作数,可以是变量,也可以是字面量 
       返回值为如下6种之一
@@ -1289,7 +1290,7 @@ Evaluation_Strategy,求值策略
       'object'    对象或null
       'function'  函数[不是数据类型,但是可以使用typeof操作符]
       e.g.
-        typeof a;         // "undefined"  
+        typeof a;         // "undefined",检测未声明的变量不会报错  
         typeof undefined; // "undefined" 
         typeof "fan";     // 'string'
         typeof NaN;       // "number"
@@ -1298,10 +1299,10 @@ Evaluation_Strategy,求值策略
         typeof [1,2];     // "object"
         function foo(){}
         typeof foo;       // "function"
-    var bol = delete val; 删除数组、对象等属性 
+    bol = delete val; 删除数组、对象等属性 
       PS： 若删除成功返回 true,否则返回 false, 若删除不存在的值也会返回true
         不能删除继承的属性,否则不会删除,返回false
-      e.g.：
+      Example:
         var obj = {a:1,b:2,c:3}
         var bol1 = delete obj.b;
         console.log(bol1,obj); // true {a: 1, c: 3}
@@ -1312,7 +1313,7 @@ Evaluation_Strategy,求值策略
         var arr = ['a','b','c']
         delete arr[1]
         console.log(arr,1 in arr); // ["a", undefined × 1, "c"]  false
-    var obj = new Foo();  初始化对象 
+    obj = new Foo();  初始化对象 
     void exp;   运行表达式,并始终返回 undefined
       PS：无论void后的表达式是什么,void操作符始终返回 undefined
       使用void的目的 
@@ -1352,7 +1353,7 @@ Evaluation_Strategy,求值策略
         另一种情况,生成一个空的src的image,
         最好的方式似乎也是src='javascript:void(0)';
       关于 void 后面表达式的执行
-        e.g.:
+        Example:
         var totalNum = 10;
         var obj = {
           get reduceNum() { totalNum--; },
@@ -2026,7 +2027,7 @@ String  字符对象:处理字符串的'包装对象'
   ★字符串修改
   var str = str1.replace(regexp/str2,replacement)  字符替换
     返回值为'使用replacement替换[str1中]第一个str2的'结果字符串
-    e.g.: 'abcde'.replace('ab','11'); // "11cde"
+    Example: 'abcde'.replace('ab','11'); // "11cde"
   str1.split(str2)    通过字符分割成数组 
     与 join 或互为反操作
     str.split("字符x") 将str字符串通过其中的字符x作为分割,返回字符串数组
@@ -2250,7 +2251,7 @@ Array   数组对象
         console.log(aoo); // [1, 2, 3]
     rstArr = arr.concat(val1[val2,..]);  拼接数组或元素 
       val 可为数组或数组的元素 
-      e.g.：
+      Example:
         拼接元素 
         var arr = [1,2,3];
         var rstArr = arr.concat(4,5);
@@ -2504,7 +2505,7 @@ Function 函数对象
       在ECMAScript中, Function类型 实际上是对象
       每个函数都是 Function构造器 的实例,而且都与其他引用类型一样具有属性和方法.
       由于函数是对象,因此函数名实际上也是一个指向函数对象的指针
-    e.g.:
+    Example:
       function foo(){}
       typeof foo;  // "function",类型显示为function
 
@@ -2947,7 +2948,7 @@ Date     日期时间对象
     date = new Date(y,m[,d,h,m,s,ms]);  最少指定年月 
       m   表示'月'的参数,从0开始表示1月 
       d   表示'天'的参数,默认为1,为0时表示上一个月的最后一天
-      e.g.： 
+      Example: 
         var t1 = new Date(2016,1,1); // 2月
         var t2 = new Date(2016,1,0); // 1月 ,根据此特性可求出某月份的天数
         var t3 = new Date(2016,1);   // 2月
@@ -3139,7 +3140,7 @@ RegExp   正则对象
     在RegExp中许多符号被用于表达特殊的含义,当需要表示这些字符时需转义.
     如 点.,当需要匹配点.时,就需要转义 \.
     \uxxxx  查找以十六进制数 xxxx 规定的 Unicode 字符 
-      e.g.:
+      Example:
       \u00A0       不间断空格
       \u0008  \b   Backspace
       \u000D  \r   回车
@@ -3466,13 +3467,13 @@ Global&Window 全局对象
       采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
       encodeURICompinent()编码比encodeURI()编码来的更加彻底
       一般来说encodeURIConponent()使用频率要高一些.
-    var uriStr = encodeURI(str) 将字符串编码为URI 
+    uriStr = encodeURI(str) 将字符串编码为URI 
       PS：通用资源标识符简称为URI
         不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
-    var str = decodeURI(uriStr) 解码URI
-    var uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
+    str = decodeURI(uriStr) 解码URI
+    uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
       会对任何非标准字符进行编码[ASCII字母、数字及"-_.!～*'()"等进行编码] 
-    var str = decodeURIComponent(str)    解码URI[完全解码] 
+    str = decodeURIComponent(str)    解码URI[完全解码] 
     escape()   对字符串进行编码 
       不要编码URI, 不会对"*@-_+./"等ASCII标点符号进行编码
     unescape() 解码由'escape'编码的字符串
@@ -3555,17 +3556,16 @@ Global&Window 全局对象
       String(null)      "null"
       e.g.  String(1); //"1"
   判断方法 
-    var bol = isFinite(num) 检测数值是否在可用范围内 
+    bol = isFinite(num) 检测数值是否在可用范围内 
       isFinite(10); // true
-    var bol = isNaN(val)    检查值否能转换为NaN 
-      先后调用valueOf() toString() 直到将值转换为数值为止,进行判断
+    bol = isNaN(val)    检查值否能转换为NaN 
+      PS：先后调用'valueOf''toString'方法,试图将值转换为数值进行判断 
+      Example:
       console.log(isNaN(1));      //false
       console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
       console.log(isNaN(true));   //false,true可以转换为1
       console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
       console.log(isNaN(NaN));    //true
-      Remarks:
-        当值为对象时,首先调用对象的 valueOf()方法,然后确定该方法返回的值是否可以转换为数值,若不能,则基于这个返回值再调用toString()方法,再测试返回值.
   其他方法 
     eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
       PS：是一种由函数执行的动态代码,比直接执行脚本慢很多;
@@ -3634,7 +3634,7 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
     复合类型: Array Object 不能为函数、正则、日期对象
       对象的键必须用双引号引起来 ,
       数组或对象的最后一个成员不能加逗号
-    e.g.:
+    Example:
       JSON.stringify("aoo"); // ""aoo""
       JSON.stringify("aoo") === "\"aoo\"";  // true
       JSON.stringify("aoo") === ""aoo"";    // 报错
@@ -3734,7 +3734,7 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
         var date = new Date('2015-01-01');
         date.toJSON();         // "2015-01-01T00:00:00.000Z"
         JSON.stringify(date); // ""2015-01-01T00:00:00.000Z""
-      e.g.:
+      Example:
         var obj ={
           a:1,
           b:2,
@@ -3840,7 +3840,7 @@ Performance 当前页面加载相关的性能信息
     domComplete：返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
     loadEventStart：返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
     loadEventEnd：返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-  e.g.:
+  Example:
     var t = performance.timing;
     var pageloadtime = t.loadEventStart - t.navigationStart; 
     //页面加载的耗时
@@ -4287,7 +4287,7 @@ Scope,作用域
     thisArg 在foo函数运行时指定的'this'值,为 null 或 undefined 时,不改变指向 
       原始值[数字,字符串,布尔值]的 this 会指向该原始值的自动包装对象
     arg     指定的参数列表
-    e.g.：
+    Example:
       var foo = function(){
         console.log(this);
       }

@@ -73,7 +73,7 @@ Less文件间的引入
   @import "XXX" 或 @import "XXX.css" 导入less 或CSS文件.
   @import (less) "XXX.css" 则将CSS文件作为Less文件导入.
   如果导入语句是通过media query指定的,那么导入的语句编译之后会被包裹在@Media声明中。
-    e.g.：
+    Example:
       被导入的文件library.less：
         @imported-color: red;
         h1 { color: green; }
@@ -89,13 +89,13 @@ Less文件间的引入
       h1 { color: green; }
       .class { color: #ff0000; }     // 使用导入的变量
   LESS文件的导入语句并不强制要求在顶部,它可以被入在规则内部、混合中或者其它的结构中。
-    e.g.：
+    Example:
       例如放在规则内部：
       pre { @import "library.less"; color: @importedColor; }
       在library.less中定义的变量和规则都会被投篮到pre的规则中：
       pre { color: #ff0000; }   // 定义在library.less中的变量可用
       pre h1 { color: green; }  // 定义在library.less中的样式规则被嵌套到pre中
-  e.g.：
+  Example:
     @import "library"; // library.less
     @import "typo.css";
     @import "../../publicCSS/public.less";
@@ -112,7 +112,7 @@ Less文件间的引入
     @light-blue: @nice-blue + #111;
     #header { color: @light-blue; }
   @aoo: "hello word!";  字符串
-    e.g.：
+    Example:
       @aoo:  "hello word";
       @boo:    "aoo";
       .coo{ content: @@boo; }
@@ -184,7 +184,7 @@ Less文件间的引入
   }
 嵌套： 一选择器中嵌套另一选择器来实现继承,减少了代码量,使代码更清晰 
   & 表示其上一层选择器
-    e.g.：
+    Example:
       ul{
         width: 300px;
         list-style: none;
@@ -208,7 +208,7 @@ Less文件间的引入
       .bordered .top { margin: 5px; }
   & 的高级用法
     用在选择器中的&还可以反转嵌套的顺序并且可以应用到多个类名上。
-    e.g.：
+    Example:
       .child, .sibling {
         .parent & { color: black; }
         & + & { color: red; }
@@ -221,7 +221,7 @@ Less文件间的引入
     &也可以用在混合中用于指示嵌套这个混合的父选择器。
   Media Queries 嵌套 
     Media query也可以使用同样的方式进行嵌套。
-    e.g.：
+    Example:
       .one {
         @media (width: 400px) {
           font-size: 1.2em;
@@ -235,7 +235,7 @@ Less文件间的引入
       @media (width: 400px) and print and color {
         .one { color: blue; }
       }
-  e.g.：
+  Example:
     #aoo {
       color: black;
       .boo { font-size: 12px; }
@@ -248,7 +248,7 @@ Less文件间的引入
 函数 
   PS： 函数不会出现在CSS文件中「使用此特性避免在CSS中出现多余的代码」
   内置函数  ： Less内置了多种函数用于转换颜色、处理字符串、算术运算等
-    e.g.： 将 0.5 转换为 50%,将颜色饱和度增加 5%,颜色亮度降低 25%,色相值增加 8 等用法：
+    Example: 将 0.5 转换为 50%,将颜色饱和度增加 5%,颜色亮度降低 25%,色相值增加 8 等用法：
       @base: #f04615;
       @width: 0.5;
       .class {
@@ -265,7 +265,7 @@ Less文件间的引入
           写代码时不应该依赖这个特性,而且这个特性在未来有可能改变。
         参数：   字符串：需要转义的字符串
         返回值： 字符串 (string)
-        e.g.：
+        Example:
           escape('a=1')
           输出： a%3D1
       e(@string); // 对字符串转义
@@ -275,7 +275,7 @@ Less文件间的引入
           注意：也接受经~""转义的值或者是数字作为参数。其它的值将产生错误。
         参数：  字符串：需要转义的字符串
         返回值：字符串的内容,不含引号
-        e.g.：
+        Example:
           filter:e("ms:alwaysHasItsOwnSyntax.For.Stuff()");
           输出：
           filter: ms:alwaysHasItsOwnSyntax.For.Stuff();
@@ -294,7 +294,7 @@ Less文件间的引入
         字符串：带有占位符的格式化字符串
         任意值：用于替换占位符的值
       返回值：格式化后的字符串
-      e.g.：
+      Example:
         使用a/d格式化：%("repetitions: %a file: %d", 1 + 2, "directory/file.less");
         使用大写的a/d格式化：%('repetitions: %A file: %D', 1 + 2, "directory/file.less");
         使用s格式化：%("repetitions: %s file: %s", 1 + 2, "directory/file.less");
@@ -309,7 +309,7 @@ Less文件间的引入
         移除或替换属性值 (dimension) 的单位。
         参数： @dimension: 数字,带或不带单位
         @unit: 可选,将要替换成的单位,如果省略则移除原单位
-        e.g.：
+        Example:
           unit(5, px)
           输出： 5px
           
@@ -318,7 +318,7 @@ Less文件间的引入
       color(@string); // 将字符串解析为颜色值
         解析颜色,将代表颜色的字符串转换为颜色值,参数必须是16进制表示的颜色或者缩写写法。
         参数： @字符串：代表颜色值的字符串
-        e.g.：
+        Example:
           color("#445566")
           color(~"#123")
           输出：
@@ -330,7 +330,7 @@ Less文件间的引入
           如果没有指定MIME,则Node.js会使用MIME包来决定正确的MIME。
         参数： mimetype： MIME字符串,可选参数
         url： 需要内嵌的文件的url
-        e.g.：
+        Example:
           data-uri('../data/image.jpg');
           输出：
           url('data:image/jpeg;base64,bm90IGFjdHVhbGx5IGEganBlZyBmaWxlCg==');
@@ -450,7 +450,7 @@ Less文件间的引入
       }
 Mixin,混合 
   PS：将一class引入到另一个class中,从而实现class的属性继承.
-  e.g.： !important 使选择器所包含的所有样式都产生效果
+  Example: !important 使选择器所包含的所有样式都产生效果
     .aoo{ 
       color: pink; 
       background-color: pink; 
@@ -473,7 +473,7 @@ Mixin,混合
       boxer: 2 !important; 
     }
   无参数的属性集： 定义的选择器不会暴露到 CSS 中去,但是能在其他的属性集合中引用
-    e.g.：
+    Example:
       .wrap () {   // 不会暴露到编译后的CSS中去
         text-wrap: wrap;
         white-space: pre-wrap;
@@ -509,7 +509,7 @@ Mixin,混合
         逗号分隔的一组值参数的默认值：.name(@param1: red, blue;)。
     使用同样的名字和同样数量的参数定义多个混合是合法的。
     在被调用时,LESS会应用到所有可以应用的混合上。
-    e.g.：
+    Example:
       比如你调用混合时只传了一个参数.mixin(green),
       那么所有只强制要求一个参数的混合都会被调用：
       .mixin(@color) { color-1: @color; }
@@ -586,7 +586,7 @@ Mixin,混合
         LESS 选择使用 guard混合,guarded mixins（类似于 @media 的工作方式）执行条件判断,
         而不是加入 if/else 声明。
         Guards 支持的运算符包括：> >= = =< <。
-      e.g.：
+      Example:
         .mixin (@a) when (lightness(@a) >= 50%) { background-color: black; }
         .mixin (@a) when (lightness(@a) < 50%) { background-color: white; }
         .mixin (@a) { color: @a; }
@@ -648,7 +648,7 @@ Mixin,混合
     #footer { border-radius: 10px; }
 NameSpace,命名空间： 避免重名问题 
   PS：为了更好组织 CSS 或者更好的封装,将一些变量或者混合模块打包起来,
-  e.g.：
+  Example:
     #bundle {
       .aoo () {  
         display: block;
@@ -666,7 +666,7 @@ NameSpace,命名空间： 避免重名问题
 scope 作用域 
   PS：LESS 中的作用域跟其他编程语言非常类似,首先会从本地查找变量或者混合模块,
     优先级从内向外递减;
-  e.g.：
+  Example:
     @var: red;
     #page {
       @var: white;
@@ -679,7 +679,7 @@ scope 作用域
 Extend,派生 「v1.4.0+」
 语法 
   when(bool)  条件判断
-    e.g.：
+    Example:
       .aoo when(@bool = true) {  // v1.5.0+写法
         color: #000;
       }
@@ -701,7 +701,7 @@ Extend,派生 「v1.4.0+」
       .aoo a { color: blue; }
     递归循环
       PS： mixin 可以被自己调用,与 when 联合使用创造出各种迭代/循环结构
-      e.g.：
+      Example:
         .loop(@counter) when (@counter > 0) {
           .loop((@counter - 1));    
           width: (10px * @counter); // code for each iteration
@@ -847,7 +847,7 @@ sass
   声明混合宏
   不带参数混合宏：
   使用 @mixin 关键词来声明一个混合宏
-    e.g.：
+    Example:
     @mixin aoo{ -webkit-border-radius: 5px; border-radius: 5px; }
   带参数混合宏：
     除了声明一个不带参数的混合宏之外,还可以在定义混合宏时带有参数,如：
@@ -881,7 +881,7 @@ sass
       border-radius: 3px;
     }
   混合宏传参
-    e.g.：
+    Example:
     在调用的时候可以给这个混合宏传一个参数值：
       @mixin border-radius($radius){
         -webkit-border-radius: $radius;
@@ -912,7 +912,7 @@ sass
         border-radius: 50%;
       }
     多参数传递
-      e.g.：
+      Example:
         @mixin center($width,$height){
           width: $width;
           height: $height;
@@ -992,7 +992,7 @@ sass
     继承是首先有一个基类存在,不管调用与不调用,
     基类的样式都将会出现在编译出来的 CSS 代码中。
 插值 #{} 
-  e.g.：
+  Example:
     @mixin generate-sizes($class, $small, $medium, $big) {
       .#{$class}-small { font-size: $small; }
       .#{$class}-medium { font-size: $medium; }
@@ -1035,7 +1035,7 @@ sass
     在编译 CSS 文件时不会改变其类型。
     只有一种情况例外,使用 #{ }插值语句 (interpolation) 时,
     有引号字符串将被编译为无引号字符串,这样方便了在混合指令 (mixin) 中引用选择器名。
-    e.g.：
+    Example:
       @mixin firefox-message($selector) {
         body.firefox #{$selector}:before {
           content: "Hi, Firefox users!";

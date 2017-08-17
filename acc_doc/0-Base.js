@@ -141,7 +141,7 @@ HTTP 协议
     路径 /.../...等
     # hash
       #代表网页中的一个位置.在第一个#后面出现的任何字符,都会被浏览器解读为位置标识符
-        e.g.:
+        Example:
         'http://www.example.com/index.html#print' 就代表网页index.html 的print位置.
         浏览器读取这个URL后,会自动将print位置滚动至可视区域.
         为网页位置指定标识符,有两个方法:
@@ -163,10 +163,10 @@ HTTP 协议
       传递参数时用于连接
         & 不同参数的间隔符
         = 参数中名和值的连接
-        e.g.:
+        Example:
         'http://www.xxx.com/Show.asp?id=77&nameid=2905210001&page=1'
       清除缓存
-        e.g.:
+        Example:
         'http://www.xxxxx.com/index.html '
         'http://www.xxxxx.com/index.html?test123123'
         两个url打开的页面一样,但是后面这个有问号,说明不调用缓存的内容,

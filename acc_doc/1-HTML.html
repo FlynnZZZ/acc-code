@@ -270,10 +270,10 @@
     href    定义页面中a链接以此为跟路径
     target  可选,定义页面中a链接的打开方式 
 引入类 
-  <style>  嵌入样式
+  <style>  嵌入样式 
     PS：style标签也可以添加class属性,网页中可同时添加多个style标签;
       对于CSS文档,正确的type属性值是"text/css";
-  <link>   外部样式
+  <link>   外部样式 
     rel  规定当前文档与被链接文档/资源之间的关系 
       只有当使用 href 属性时,才能使用 rel 属性.
       只有 rel 属性的 "stylesheet" 值得到了所有浏览器的支持.其他值只得到了部分地支持.
@@ -312,48 +312,40 @@
       projection 用于投影媒体
       tv    电视
       ...
-  <script> JS引入
-    PS：用于引进JS代码
-      一个script标签不可同时使用内部和外部JS代码.(否则只执行外部JS)
-      存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序.
-      在解析script代码时或下载JS时,网页的处理会暂停
-      script标签可以放在HTML中的任何位置一般放在head中或body的尾部
-      在尾部时,JS的执行在body内容加载后
-      放在head中则在body内容加载前执行,有时会导致一些错误(元素未加载,操作失败)
-    src   可选,用于引入外部文件的JS代码
-    type  表示代码使用内容的类型
-      以前是必选项,现可省略,默认为 type="text/javascript",对于老式浏览器推荐设置改值
-      application/javascript 推荐现代浏览器设置改值
+  <script> JS引入 
+    PS：用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
+      存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;
+      在加载和解析script代码时,网页会暂停对其他内容的加载和解析;
+      script标签可以放在HTML中的任何位置,但一般放在head中或body的尾部;
+    'src'   引入JS文件的路径,可选  
+    'type'  代码内容的类型,也称为MIME类型,可选  
+      以前是必选项,现可省略,默认为 type="text/javascript"[对于老式浏览器推荐设置该值]
+      推荐现代浏览器设置'application/javascript' 
       若设置的type值浏览器不认识,则其中的代码不会执行,但该script节点依然存在于DOM中
-    charset 可选,指定的字符集
-      如charset="UTF-8"
-      由于大多数浏览器忽略它,所以很少使用 [?]
-      若脚本使用非英语字符,则应注明编码 charset="utf-8"
-    defer   可选,网页解析完后解析JS [延迟解析,而非延迟下载] 
-      只对外部JS文件有效; 由于大多数浏览器不支持,故很少用
+    'charset' 可选,指定的字符集,可选 
+      如 charset="UTF-8",由于大多数浏览器忽略它,所以较少使用
+    'defer'   可选,网页解析完后解析JS [延迟解析,而非延迟下载],可选 
+      只对外部JS文件有效; 由于大多数浏览器不支持,故很少用[?]
       当存在多个延迟脚本时,并不一定会按照先后顺序执行 「self:Chrome中如此」
-      下载的脚本文件在 DOMContentLoaded 事件触发前执行(即刚刚读取完</html>标签),
-      而且可以保证执行顺序就是它们在页面上出现的顺序。
-    async   可选,下载完后立即解析JS,但解析期间不阻塞HTML的下载 [HTML5]
-      只对外部JS文件有效 [?]
+      下载的脚本文件在'DOMContentLoaded'事件触发前执行[即刚刚读取完</html>标签],
+      而且可以保证执行顺序就是它们在页面上出现的顺序 
+    'async'   可选,下载完后立即解析JS,但解析期间不阻塞HTML的下载,可选 
+      只对外部JS文件有效
       多个async的脚本并不保证按照指定的先后顺序执行,而是按下载完的先后顺序
       当同时存在async和defer时,defer不生效
-      异步脚本一定会在页面的load事件前执行,可能在DOMContentLoaded事件之前或之后执行
-    onload  当<script>标签指定的外部脚本文件下载和解析完成,会触发load事件
-      可以把所需执行的代码,放在这个事件的回调函数里面。
-      <script src="jquery.min.js" onload="console.log(document.body.innerHTML)">
-      </script>
-    interity  写入该外部脚本的hash签名,验证脚本的一致性
+      异步脚本一定会在页面的load事件前执行,可能在'DOMContentLoaded'事件之前或之后执行
+    'interity'  写入该外部脚本的hash签名,验证脚本的一致性 
       <script src="xx.js" interity="xxxxxx"></script>
       一旦有人更改了这个脚本,导致签名不匹配,浏览器就会拒绝加载
-    当script放置在head中时,需设定DOMContentLoaded事件的回调函数
-      <head>
+    当script放置在head中时,需设定'DOMContentLoaded'事件已保证在文档解析后执行 
+      PS：HTML文档被完全加载、解析时,DOMContentLoaded触发,无需等待样式表、图像和子框架完成加载
       <script>
-        document.addEventListener( 'DOMContentLoaded', function (event) {
-            console.log(document.body.innerHTML);
+        document.addEventListener( 'DOMContentLoaded', function (e) {
+          ...
         });
       </script>
-      </head>
+    当内部JS代码中遇到'</script>'字符串时,会被认为是结束标签导致bug
+      console.log('</script>'); 
   <noscript> 未启用JS
     当浏览器不支持js,或没有启用「如禁止使用JS」时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>

@@ -49,7 +49,7 @@ ECMAScript : JS核心,语法部分
     box.MAX_VALUE;    //undefined , 属性
     Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
   实例：类型的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
-  ES5 IE9及以上支持 
+  IE8支持部分ES5功能,IE9+支持ES5 
 语法规则 
   PS：区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
     一等函数「first-class_function」来自于 Scheme;
@@ -87,13 +87,14 @@ ECMAScript : JS核心,语法部分
     across multiple\
     lines";
     console.log(str);   // string is broken across multiplelines.
-  'use strict'; 使用严格模式 
-    在需使用的作用域中使用
-      在函数的作用域中使用严格模式
-      function foo(){
-        'use strict';
-        // ...
-      };
+  'use strict'; 使用严格模式 [IE10+]
+    在需使用的作用域中使用 
+      在函数的作用域中使用严格模式 
+        function foo(){
+          'use strict';
+          // ...
+        };
+      在整个脚本顶部添加 
     严格模式下的限制 
       不可使用 with(){} 语句
       未声明的变量赋值报错 
@@ -119,12 +120,12 @@ ECMAScript : JS核心,语法部分
 -------------------------------------------------------------------------------
 ◆数据类型 
 变量&常量&字面量 
-  PS： 变量就是一指向一个值的名称;
-    ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一「ES6可以了」;
-    JS变量是松散类型的,不必定义类型可保存任何类型数据「类似于PHP」;
+  PS：JS变量是松散类型的,不必定义类型可保存任何类型数据,类似于PHP,
+    每个变量仅仅是一个用于保存值的占位符;
+    ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
     一个值可由多个变量名称指向,但一个变量只能指向一个值;
   var valName   定义变量
-    PS：变量定义但未赋值,默认为 undefined
+    PS：变量定义但未赋值,默认为'undefined'
     e.g. :
       var box;  // 定义变量box
       console.log(box); // undefined,未初始化,系统设定默认值为 undefined
@@ -132,7 +133,7 @@ ECMAScript : JS核心,语法部分
       var a = b = 1; // 不推荐的写法
       // 相当于
       var a = 1; b = 1; 
-    是否使用var声明的差别
+    是否使用var声明的差别 
       都相当于给window添加属性,但使用var声明的变量不可delete删除 
       不使用var定义变量可以使用delete删除
 
@@ -154,7 +155,7 @@ ECMAScript : JS核心,语法部分
       console.log(box); // abc
     连续定义多个变量：中间用逗号隔开 
       var box="A", age="20", height="175";
-    var 与 逗号,运算符 「moIn 逗号运算符,变量声明」       
+    var 与 逗号,运算符 [参见:逗号运算符,变量声明]     
       (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
       (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
       (var aoo);           // Uncaught SyntaxError: Unexpected token var

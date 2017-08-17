@@ -1,18 +1,19 @@
-'Browser_Object_Model',BOM : 浏览器对象模型 
-  PS： 访问和操作浏览器窗口「显示的页面以外的部分」,
+'Browser-Object-Model'BOM,浏览器对象模型 : 提供与浏览器交互的方法和接口 
+  PS：访问和操作浏览器窗口[显示的页面以外的部分],
     BOM由一系列相关的对象构成,并且每个对象都提供了很多方法与属性,用来访问浏览器功能
     BOM只是ECMAScript的一个扩展,没有任何相关标准
     各个浏览器提供商又按照自己想法去扩展他,那么浏览器共有对象就成了事实的标准
     W3C已将DOM的主要内容纳入了HTML5规范中
   BOM部分包括:
-    从根本上讲,BOM只处理浏览器窗口和框架,但习惯上帮所有针对浏览器的js扩展算作BOM的一部分如,
+    一般BOM只处理浏览器窗口和框架,但习惯上把所有针对浏览器的JS扩展算作BOM的一部分,
+    JS的扩展如下:
     弹出新浏览器窗口的功能
     移动、缩放和关闭浏览器窗口的功能
-    提供浏览器详细信息的navigator对象
-    提供浏览器所加载页面的详细信息的location对象
-    提供用户显示器分辨率详细信息的screen对象
-    对cookies的支持
-    像 XMLHttpRequest 和IE的 ActiveXObject 这样的自定义对象
+    提供浏览器详细信息的'navigator'对象
+    提供浏览器所加载页面的详细信息的'location'对象
+    提供用户显示器分辨率详细信息的'screen'对象
+    对'cookies'的支持
+    'XMLHttpRequest'和IE的'ActiveXObject'这样的自定义对象
 window 对象 
   PS：BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
     核心对象是window,表示浏览器的一个实例.

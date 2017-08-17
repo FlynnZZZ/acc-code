@@ -1,80 +1,53 @@
-'Document_Object_Model',DOM 文档对象模型 
-  PS：DOM的标准由W3C组织规定 
-    DOM 是为了操作文档出现的 API,document 是其的一个对象；
-    DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计 .
-    并不是只有JavaScript有DOM API,其他的程序设计语言如Java也有对应的DOM API.
-    浏览器对html文件的描述方式.
-    给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式 .
-    DOM是给HTML和XML文件使用的一组API.它提供了文件的结构表述,让你可以改变其中的內容.
-    DOM是将整个html文件、标签看成一个由对象组成的树.
-    每个DOM最上面都有一个document对象,然后是html及其他元素.
-    document 表示浏览器中的整个页面,包含完整的DOM.
-    IE中所有DOM对象都是以COM对象的形式实现的,使用object来表示获取到的元素.
-    意味着IE中DOM对象与原生JS对象有差异.
-    对DOM的任何修改都会在浏览器呈现DOM时立即反映出来.
-  W3C DOM 标准
-    分为 3 个不同的部分
-    DOM core,DOM核心:   针对任何结构化文档的标准模型
-    XML DOM:            针对 XML 文档的标准模型
-    HTML DOM:           针对 HTML 文档的标准模型
-      HTML的标准编程接口,关于如何获取、修改、添加或删除 HTML 元素的标准
-      HTML 文档中的所有内容都是节点：
-      整个文档是一个文档节点
-      每个 HTML 元素是元素节点
-      HTML 元素内的文本是文本节点
-      每个 HTML 属性是属性节点
-      注释是注释节点
-  DOM标准的目标
+'Document_Object_Model'DOM,文档对象模型:提供访问和操作网页内容的方法和接口  
+  PS：标准由W3C规定,给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式, 
+    将整个HTML文件、标签看成一个由对象组成的树, 
+    每个DOM最上面都有一个document对象,然后是HTML及其他元素,
+    document表示浏览器中的整个页面,包含完整的DOM;
+    IE中所有DOM对象都是以COM对象的形式实现的,使用object来表示获取到的元素,
+    意味着IE中DOM对象与原生JS对象有差异;
+    对DOM的任何修改都会在浏览器呈现DOM时立即反映出来;
+    DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计,
+    并不是只有JavaScript有DOM API,其他的程序设计语言如Java也有对应的DOM API;
+  DOM标准的目标: 
     让“任何一种程序设计语言”能操控使用“任何一种标记语言”编写出的“任何一份文档”
     “操控”具体含义为能通过DOM提供的API对文档的内容、结构、样式进行访问和修改
-  DOM API 介绍
-    用于操作DOM的API
-    浏览器提供给JavaScript操作html页面内元素的方式.
-    浏览器提供了一些内置函数来让我们操作页面.
-  DOM 模块和级别(DOM Level 1/2/3)
-    DOM XML ：只针对XML文档的标准模型
-    DOM0级(实际上,DOM0级标准是不存在的)
-     所谓的DOM0级是DOM历史坐标中的一个参照点而已,
-     具体说呢,DOM0级指的是IE4和Netscape 4.0 这些浏览器最初支持的DHTML
-     大概2000年的时候争论过DOM0的问题,最后结论大概是,没有官方形成此标准.
-    DOM1级(DOM Level1)
-      PS：于1998年10月成为W3C的推荐标准
-        主要目标是映射文档的结构
-        DOM1级由两个模块组成
-      DOM核心(DOM Core)
-        针对任何结构化文档的标准模型
+  DOM级别和模块 
+    PS：IE6-IE8支持DOM1级,IE9+支持DOM3级
+    DOM0级 
+      实际上,DOM0级标准是不存在的,所谓的DOM0级是DOM历史坐标中的一个参照点,
+      具体的,DOM0级指的是IE4和Netscape 4.0 这些浏览器最初支持的DHTML
+    DOM1级 
+      PS：于1998年成为W3C的推荐标准,主要目标是映射文档的结构
+      DOM1级由两个模块组成
+      'DOM Core'DOM核心 : 针对任何结构化文档的标准模型
         规定如何映射基于XML的文档结构,以便简化对文档中任意部分的访问和操作
-      DOM HTML
-        只针对HTML文档的标准模型
-        DOM HTML模块则在DOM核心的基础上加以扩展,添加了针对HTML的对象和方法
-    DOM2级
-      PS：扩充了(DHTML一直都支持的)鼠标和用户界面事件、范围、遍历(迭代DOM文档的方法)等细分模块,
-        通过对象接口增加了对 CSS 的支持
+      DOM HTML : 只针对HTML文档的标准模型
+        在'DOM Core'基础上加以扩展,添加了针对HTML的对象和方法
+    DOM2级 
+      PS：扩充鼠标和用户界面事件、范围、遍历[迭代DOM文档的方法]等细分模块,
+        通过对象接口增加了对CSS的支持
         DOM1级中的DOM核心模块也经过扩展开始支持XML命名空间
         也引入了新模块,也给出了众多新类型和新接口的定义
       DOM2级核心:在1级的基础上添加了更多的方法和属性
-      DOM视图(DOM Views)：定义了跟踪不同文档(例如,应用CSS之前和之后的文档)视图的接口；
-      DOM事件(DOM Events)：定义了事件和事件处理的接口；
-      DOM样式(DOM Style)：定义了基于CSS为元素应用样式的接口；
-      DOM遍历和范围(DOM Traversal and Range)：定义了遍历和操作文档树的接口
-      DOM2级HTML:在1级的基础上添加了更多的属性、方法和接口
-    DOM3级
-      PS：进一步扩展DOM, 新增了验证文档的方法–在DOM验证(DOM Validation)模块中定义
+      'DOM-Views'DOM视图：定义了跟踪不同文档(例如,应用CSS之前和之后的文档)视图的接口 
+      'DOM-Events'DOM事件：定义了事件和事件处理的接口 
+      'DOM-Style'DOM样式：定义了基于CSS为元素应用样式的接口 
+      'DOM-Traversal-and-Range'DOM遍历和范围：定义了遍历和操作文档树的接口
+      DOM2级HTML:在1级的基础上添加了更多的属性、方法和接口 
+    DOM3级 
+      PS：进一步扩展DOM, 新增了验证文档的方法–在DOM验证'DOM Validation'模块中定义
         对DOM核心进行了扩展,开始支持XML 1.0 规范,涉及XML Infoset、XPath和XML Base
       // 新增模块
       "XPath"模块:
       Load and Save 模块:
-    其他DOM标准
+    其他DOM标准 
       除了DOM核心和DOM HTML接口之外,另外几种语言还发布了只针对自己的DOM标准
       下面列出的语言都是基于XML的,每种语言的DOM标准都添加了与特定语言相关的新方法和新接口：
-      SVG(Scalable Vector Graphic,可伸缩矢量图)1.0；
-      MathML(Mathematical Markup Language,数学标记语言)1.0；
-      SMIL(Synchronized Multimedia Integration Language,同步多媒体集成语言)
-    还有一些语言也开发了自己的DOM实现
-      例如Mozilla的XUL(XML User Interface Language,XML用户界面语言)
-      但是,只有上面列出的几种语言是W3C的推荐标准
-    DOM模块版本检测
-      可使用 document.implementation.hasFeature() 方法来检测(详见: Document)
+      'Scalable Vector Graphic'SVG,可伸缩矢量图 1.0 
+      'Mathematical Markup Language'MathML,数学标记语言 1.0；
+      'Synchronized Multimedia Integration Language'SMIL,同步多媒体集成语言
+      还有一些语言也开发了自己的DOM实现 
+    document.implementation.hasFeature() DOM模块版本检测 [详见Document]
 ◆Node节点 
   PS：DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
     节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
@@ -1234,7 +1207,7 @@ DOM操作归纳总结
     elem.removeEventListener("mousemove", myFunction); // 移除 元素的事件句柄
     定义和用法
     removeEventListener() 方法用于移除由 addEventListener() 方法添加的事件句柄
-event 事件对象 
+Event事件对象 
   PS：在触发DOM上的某个事件是,会产生一个事件对象event,
     这个对象包含着所有与事件有关的信息.
     事件对象包括导致事件的元素、事件的类型、以及其他与特定事件相关的信息.
@@ -1332,19 +1305,14 @@ event 事件对象
       e.returnValue =false; 阻止事件默认行为
 事件分类 
   ◆DOM3级规定了一下几类事件
-  User_Interface「用户界面」,UI事件 当用户与页面上的元素交互时触发 
+  'User-Interface'用户界面,UI事件 当用户与页面上的元素交互时触发 
     PS：不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
     DOMActivate 表示元素已经被用户操作「通过鼠标或键盘」激活 「DOM3级中废弃」
     load    加载完后触发 
-      当页面完全加载后[包括所有图像、JS文件、CSS文件等外部资源]在window上触发,
-      在所有框架都加载完毕时在框架集上面触发,
-      当图片加载完后在<img>元素上触发,
-        e.g.:
-          检查图片是否加载完成,有时需要确保图片完成加载以便执行后面的操作：
-          $('img').load(function () {
-            console.log('image load successful');
-          });
-      当嵌入内容加载完后在<object>元素上触发
+      window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
+      iframe.onload 框架加载完毕时触发 
+      img.onload    图片加载完毕后触发 
+      object.onload 当<object>元素嵌入内容加载完后触发 
     unload  卸载时触发 
       只要用户从一个页面切换到另一个页面就会发生unload事件
       当页面完全卸载后在window上触发,
@@ -1475,7 +1443,7 @@ event 事件对象
       e.data; 包含此次输入会话中插入的所有字符
   变动事件 当底层DOM结构发生变化时触发[IE9+]
     PS：变动事件是为XML或HTML DOM设计的,不特定于某种语言
-    兼容性检测
+    兼容性检测 
       var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
     DOM2级定义了如下变动事件
     DOMSubtreeModified   在DOM结构中发生任何变化时触发
@@ -1492,9 +1460,7 @@ event 事件对象
       使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
   变动名称事件 当元素或属性名变动时触发[已被废弃]
   ◆HTML5事件 
-    PS：DOM规范没有涵盖所有浏览器支持的事件
-      HTML5详尽列出了浏览器应该支持的所有事件
-     (如下为浏览器完善支持的部分事件)
+    PS：DOM规范没有涵盖所有浏览器支持的事件,HTML5详尽列出了浏览器应该支持的所有事件
   contextmenu  上下文菜单事件
     当点击网页时,会自动出现Windows自带的菜单
     使用contextmenu 事件来修改指定的菜单(前提将默认行为取消)
@@ -1508,8 +1474,8 @@ event 事件对象
       });
       //解除绑定,一般放在提交触发事件中
       $(window).unbind('beforeunload');
-  DOMContentLoaded 形成完整的DOM树后触发
-    与load事件不同,不会理会图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
+  DOMContentLoaded 形成完整的DOM树后触发[IE9+]
+    无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
   readystatechange
     e.readyState;
       返回值

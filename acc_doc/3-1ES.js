@@ -2931,21 +2931,19 @@ Date     日期时间对象
     Date对象基于1970年1月1日0时世界协调时间开始的毫秒数.
     UTC(coordinated universeal time,国际协调时间,又称世界统一时间)
     UTC 日期值得是在没有时区偏差的情况下的日期值(UTC和北京时间相差8个小时,北京属于东八区)
-  Date 构造函数「无字面量格式」 创建时间对象 
-    PS： 以常规函数调用他(即不加new操作符)将会返回一个字符串,而不是时间对象.
-      当时间数值超过合理范围值时,会被调整为相邻值,
-      如new Date(2013,13,1)等于new Date(2014,1,1)
-    var time = new Date();     则根据系统当前的时间来创建时间对象
-    var time = new Date(num);  创建根据自世界协调时间到现在经过的毫秒数对应的时间
-      var time = new Date(1000);
-      console.log(time); // Thu Jan 01 1970 08:00:01 GMT+0800(中国标准时间)
-    var time = new Date(str);  创建字符串被 Date.parse() 解析后对应的时间
-      var box=new Date("4/12/2007");
-      等价于
-      var box=new Date(Date.parse("4/12/2007"));
-      console.log(box);
+  Date 构造函数创建时间对象 
+    PS：无字面量格式; 以常规函数调用即不加new操作符,也会返回一个字符串,但不是时间对象;
+    date = new Date();     则根据系统当前的时间来创建时间对象
+    date = new Date(num);  创建根据自世界协调时间到现在经过的毫秒数对应的时间 
+      var date = new Date(1000);
+      console.log(date); // Thu Jan 01 1970 08:00:01 GMT+0800(中国标准时间)
+    date = new Date(str);  创建字符串被 Date.parse() 解析后对应的时间
+      var date1 = new Date("4/12/2007");
+      // 等价于
+      var date2 = new Date(Date.parse("4/12/2007"));
+      console.log(date1,date2);
       // Thu Apr 12 2007 00:00:00 GMT+0800(中国标准时间)
-    var time = new Date(y,m[,d,h,m,s,ms]);  最少指定年月
+    date = new Date(y,m[,d,h,m,s,ms]);  最少指定年月 
       m   表示'月'的参数,从0开始表示1月 
       d   表示'天'的参数,默认为1,为0时表示上一个月的最后一天
       e.g.： 
@@ -2955,6 +2953,8 @@ Date     日期时间对象
         console.log(t1); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
         console.log(t2); //Sun Jan 31 2016 00:00:00 GMT+0800(中国标准时间)
         console.log(t3); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
+    当时间数值超过合理范围值时,会被调整为相邻值 
+      如 new Date(2013,13,1) 等于 new Date(2014,1,1) 
   ◆静态方法
   Date.now();      返回自世界协调时间至今所经过的毫秒数
   Date.parse(str/date); 接收表示日期的字符串参数,返回相应的毫秒数.
@@ -2985,8 +2985,8 @@ Date     日期时间对象
   dat.toDateString()  星期 月 日 年 
     // Thu Jan 01 1970
   dat.toTimeString()  时:分:秒 时区 
-    var time = new Date(1970,0,1,71,20,20); // 71:20:20
-    time.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
+    var date = new Date(1970,0,1,71,20,20); // 71:20:20
+    date.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
   dat.toLocaleDateString()  年/月/日 
     // "2016/12/23"(Chrome下)
     // "‎2016‎年‎12‎月‎23‎日"(IE11下)

@@ -808,14 +808,14 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       在需要调用JS接口的页面引入如下JS文件
         http://res.wx.qq.com/open/js/jweixin-1.0.0.js
       使用https协议,务必引入 https://res.wx.qq.com/open/js/jweixin-1.0.0.js ,
-        否则将无法在iOS9.0以上系统中成功使用JSSDK
+        否则将无法在'iOS9.0'以上系统中成功使用JSSDK
       如需使用摇一摇周边功能,请引入 jweixin-1.1.0.js
       备注：支持使用 AMD/CMD 标准模块加载方法加载
     步骤三：通过config接口注入权限验证配置
       所有需要使用JS-SDK的页面必须先注入配置信息,否则将无法调用,
       同一个url仅需调用一次,对于变化url的SPA的web app可在每次url变化时进行调用,
       目前Android微信客户端不支持 pushState 的H5新特性,
-      所以使用pushState来实现web app的页面会导致签名失败,此问题会在Android6.2中修复）。
+      所以使用pushState来实现web app的页面会导致签名失败,此问题会在'Android6.2'中修复）。
       wx.config({
         debug: true, 
         // 开启调试模式,调用的所有api的返回值会在客户端alert出来,
@@ -862,7 +862,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
         // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
       }
     });
-    备注：checkJsApi接口是客户端6.0.2新引入的一个预留接口,第一期开放的接口均可不使用checkJsApi来检测。
+    备注：checkJsApi接口是客户端'6.0.2'新引入的一个预留接口,第一期开放的接口均可不使用checkJsApi来检测。
   分享接口
     请注意不要有诱导分享等违规行为,对于诱导分享行为将永久回收公众号接口权限,详细规则请查看：朋友圈管理常见问题 。
     获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
@@ -1005,7 +1005,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
               var serverId = res.serverId; // 返回音频的服务器端ID
           }
       });
-      备注：上传语音有效期3天,可用微信多媒体接口下载语音到自己的服务器,此处获得的 serverId 即 media_id,参考文档 ../12/58bfcfabbd501c7cd77c19bd9cfa8354.html 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
+      备注：上传语音有效期3天,可用微信多媒体接口下载语音到自己的服务器,此处获得的 serverId 即 media_id,参考文档 '../12/58bfcfabbd501c7cd77c19bd9cfa8354.html' 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
     下载语音接口
       wx.downloadVoice({
           serverId: '', // 需要下载的音频的服务器端ID,由uploadVoice接口获得

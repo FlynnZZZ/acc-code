@@ -159,8 +159,8 @@ Selector,选择器
     val: 即为属性的值;
     选择器命名大小写敏感;
   命名规范[SlSt]
-    使用大小写字母、_、-和数字组成,
-    驼峰法间隔单词,数字和_一般用来排序区分;
+    使用'大小写字母''_''-'和'数字'组成
+    驼峰法间隔单词,'数字'和'_'一般用来排序区分;
   单体选择器 
     简单选择器  
       *  通配符选择器 
@@ -196,307 +196,317 @@ Selector,选择器
           用于定义只出现一次的样式(虽然多次使用可以起作用,但最好不要多次使用)
         Remarks:在需使用的标签元素内定义id名,如id="id名称".
         注:类名或id名不要使用数字开头
-      [attrName]  属性选择器 [IE7+]
-        [attribute]        用于选取带有指定属性的元素。
-        [attribute=value]  用于选取属性为指定值元素
-          PS：该格式要求与属性值完全匹配
-        [attribute~=value] 包含指定属性值的元素
-        [attribute|=value] 用于选取属性带有指定词汇开头的元素
-        [attribute*=value] 包含指定字符串的元素
-        [attribute^=value] 以指定字符串开头的元素
-        [attribute$=value] 以指定字符串结尾的元素
+      [attrName]  属性选择器 [IE7+] 
+        PS：属性值可使用引号引起来或不用引号,效果相同 
+        [attribute]      带有指定属性的元素 
+        [attribute=val]  属性等于'val'
+        [attribute~=val] 属性包含通过空格分割的一组值中的'val' 
+        [attribute|=val] 属性包含'val'或以'val-'开头 
+        [attribute^=val] 属性以'val'开头[CSS3]
+        [attribute$=val] 属性以'val'结尾[CSS3]
+        [attribute*=val] 属性包含'val'[CSS3]
         e.g.：
           [title] { color:red; }
           [title='W3School'] { border:5px solid blue; }
+          [title=W3C] { border:5px solid blue; }
           [title~='hello'] { color:red; }
     关系选择器  
-      :nth-child(An+B)   当元素为其父元素的第An+B「如4n+1」个子元素时 [CSS3]
-        :nth-child(B)    当元素为其父元素的第B个子元素时「即n为0时」
-        :nth-child(odd)  当元素为其父元素的第奇数个子元素时 
-          也可以写做 :nth-child(2n)
-        :nth-child(even) 当元素为其父元素的第偶数个子元素时
-        e.g：  
-          为所有属于第二个子元素的元素添加边线
-          :nth-child(2){ outline:dashed 1px red; }
-          <div>
-            <span></span>
-            <p>有边线</p>
-          </div>
-          <div>
-            有边线
-            <span></span>
-            <i>有边线</i>
-            <p></p>
-          </div>
-          
-          所有属于第偶数个子元素的p元素添加背景
-          p:nth-child(2n){background-color:red;}
-          <div>
-            <span></span>
-            <p>有背景</p>
-          </div>
-          <div>
-            有背景
-            <span></span>
-            <i>有背景</i>
-            <p></p>
-            <p>有背景</p>
-          </div>
-      :nth-last-child(n) 当元素为倒数第n个子元素时 
-        :nth-last-child(odd)  奇数
-        :nth-last-child(even) 偶数
-      :first-child   指定任意元素的第一个子元素的样式 
-        e.g. 
-          li:first-child{ background:red; }
-      :last-child    当元素为最后一个子元素时 
-        e.g.  :last-child {outline:dashed 1px red;}
-      :only-child    当元素仅有一个子元素时 
-        e.g.  :only-child{ outline:dashed 1px red; }
-      :first-of-type 指定同一级别中,任意一类元素中的第一个的样式
-        e.g. 
-          <div>1
-            <p>11</p>
-            <p>12</p>
-            <span>13</span>
-          </div>
-          <div>2</div>
-          如 1 11 13 为指定的元素
-      :last-of-type  指定同一级别中,任意一类元素中的最后一个的样式
-      :only-of-type  同一级别中,任意一类元素中只有一个时,指定其样式
-    伪选择器 
-      PS：CSS3中规定伪元素使用::[但仍兼容:];IE8仅支持:after
-      ◆伪元素 
-        在CSS3中伪元素改为双冒号':',但人兼容单冒号 
-      :before  元素内部头部定义 
-        e.g. 
-          ::before{
-            content:"加在每个元素前面的文字,包括未显示的"
-          }
-      :after   元素内部尾部定义 
-        e.g.：
-          纯CSS悬浮提示
-          <p> 
-            <span data-descr="文字提示1">查看</span>
-            <span data-descr="文字提示2">文字</span>
-            <span data-descr="文字提示3">提示</span>.
-          </p>
-          span[data-descr] { position: relative; }
-          span[data-descr]:hover::after {
-            content: attr(data-descr);
-            position: absolute;
-            left: 0; top: 24px;
-            width: 200px;
-            background-color: #ffffcc;
-          }
-      content  加入内容,'before'&'after'的配合属性  
-        加入多个内容时,之间使用空格隔开
-          e.g. content:url("XX.png") "前面是一张图片";
-        content:"XX"      加入字符串,字符串内容会按原样显示
-          可使用转义码,如:
-          '\00AB'  双左箭头
-          '\00BB'  双右箭头
-        content:url(图片地址)    加入图片
-        content:attr(属性名)    将元素的指定属性的属性值插入
-          e.g.：
-          在链接后增加 (链接地址)
-          a:after {content: " (" attr(href) ")";}
-        配合属性:定义符号 quotes 
-          PS：quote字符类型(使用双引号""的时候需要使用转义字符\)
-            open-quote开始字符;close-quote结尾字符
-          e.g.：
-            给h1元素内容使用()括起来.
-            h1{ quotes:"(" ")" }  /*定义 open-quote 和 close-quote*/
-            h1:before{ content:open-quote; }
-            h1:after{ content:close-quote; }
-        配合属性:计数器 counter
-          content:counter(自定义名称,编号种类);  定义计数器(种类)
-            可以使用list-style-type属性的值来指定编号的种类
-            比如指定大写字母编号时,使用"upper-alpha"属性.
-            种类可选,默认为阿拉伯数字
-          counter-reset:计数器名称 重置编号;  计数器重置为"重置编号"
-          counter-increment:计数器名称 num;  变化间隔
-            当num为 -2 则,每次减少2个,若为3则每次增加3个
-          e.g.：
-            <body>
-              <h1>HTML tutorials</h1>
-                <h2>HTML Tutorial</h2>
-                <h2>XHTML Tutorial</h2>
-                <h2>CSS Tutorial</h2>
-              <h1>Scripting tutorials</h1>
-                <h2>JavaScript</h2>
-                <h2>VBScript</h2>
-              <h1>XML tutorials</h1>
-                <h2>XML</h2>
-                <h2>XSL</h2>
-            </body>
-            body {counter-reset:section ;}
-            h1 {counter-reset:subsection ;}
-            h1:before {
-              content:"Section " counter(section) ". ";
-              counter-increment:section;
+    伪类选择器 
+      元素伪类 
+        在CSS3中伪元素由单冒号':'改为双冒号'::',但仍兼容单冒号   
+          单冒号与双冒号的区别: 
+          单冒号用于CSS3伪类,如 :active :focus :hover :visited 等等
+          双冒号用于CSS3伪元素,如 ::first-letter ::first-line ::before ::after 等等
+          一般都可以写成单冒号; IE8仅支持:after
+        :before  元素内部头部定义 
+          e.g. 
+            ::before{
+              content:"加在每个元素前面的文字,包括未显示的"
             }
-            h2:before  {
-              content:counter(section) "." counter(subsection) " ";
-              counter-increment:subsection;
+        :after   元素内部尾部定义 
+          e.g.：
+            纯CSS悬浮提示
+            <p> 
+              <span data-descr="文字提示1">查看</span>
+              <span data-descr="文字提示2">文字</span>
+              <span data-descr="文字提示3">提示</span>.
+            </p>
+            span[data-descr] { position: relative; }
+            span[data-descr]:hover::after {
+              content: attr(data-descr);
+              position: absolute;
+              left: 0; top: 24px;
+              width: 200px;
+              background-color: #ffffcc;
             }
-            效果:
-              Section 1. HTML tutorials
-                1.1 HTML Tutorial
-                1.2 XHTML Tutorial
-                1.3 CSS Tutorial
-              Section 2. Scripting tutorials
-                1.1 JavaScript
-                1.2 VBScript
-              Section 3. XML tutorials
-                1.1 XML
-                1.2 XSL
-      :first-letter 元素中的第一个字符 
-        Exp:
-          首字母下沉 
-          <div class="aoo"> 12312312312312 </div>
-          .aoo:first-letter{
-            float: left;  // 必须使用 
-            margin-top: 10px;
-            font-size: 22px;
-          }
-      :first-line   元素中的第一行文本[通过调整窗口改变第一行,也会响应]
-      ◆状态类 
-        PS：只当元素处于某种状态下时,才起作用,默认状态下不起作用 
-      ★链接状态 
-      'LVHA'保证生效的先后顺序 :link—:visited—:hover—:active 
-      :link        未访问时的状态
-      :visited     访问过后的状态
-      :hover     鼠标悬浮时的状态
-        PS：当存在 :link 或 :visited 时,需放置于它们之后才生效
-        高阶用法:通过悬浮一个元素来改变另一个元素的状态
-          PS：受到CSS选择器的parse和执行机制影响(至少在CSS3选择器的框架内)
-            不能“通过后面的元素选择前面的元素”或者“通过子元素选择父元素”,
-            只能“通过前面的元素选择后面的元素”和“通过父元素选择子元素”。
-          通过父元素改变子元素的状态
-            <div class="a">
-              <div class="a1">
-                00000
+        content  加入内容,'before'&'after'的配合属性  
+          加入多个内容时,之间使用空格隔开
+            e.g. content:url("XX.png") "前面是一张图片";
+          content:"XX"      加入字符串,字符串内容会按原样显示
+            可使用转义码,如:
+            '\00AB'  双左箭头
+            '\00BB'  双右箭头
+          content:url(图片地址)    加入图片
+          content:attr(属性名)    将元素的指定属性的属性值插入
+            e.g.：
+            在链接后增加 (链接地址)
+            a:after {content: " (" attr(href) ")";}
+          配合属性:定义符号 quotes 
+            PS：quote字符类型(使用双引号""的时候需要使用转义字符\)
+              open-quote开始字符;close-quote结尾字符
+            e.g.：
+              给h1元素内容使用()括起来.
+              h1{ quotes:"(" ")" }  /*定义 open-quote 和 close-quote*/
+              h1:before{ content:open-quote; }
+              h1:after{ content:close-quote; }
+          配合属性:计数器 counter
+            content:counter(自定义名称,编号种类);  定义计数器(种类)
+              可以使用list-style-type属性的值来指定编号的种类
+              比如指定大写字母编号时,使用"upper-alpha"属性.
+              种类可选,默认为阿拉伯数字
+            counter-reset:计数器名称 重置编号;  计数器重置为"重置编号"
+            counter-increment:计数器名称 num;  变化间隔
+              当num为 -2 则,每次减少2个,若为3则每次增加3个
+            e.g.：
+              <body>
+                <h1>HTML tutorials</h1>
+                  <h2>HTML Tutorial</h2>
+                  <h2>XHTML Tutorial</h2>
+                  <h2>CSS Tutorial</h2>
+                <h1>Scripting tutorials</h1>
+                  <h2>JavaScript</h2>
+                  <h2>VBScript</h2>
+                <h1>XML tutorials</h1>
+                  <h2>XML</h2>
+                  <h2>XSL</h2>
+              </body>
+              body {counter-reset:section ;}
+              h1 {counter-reset:subsection ;}
+              h1:before {
+                content:"Section " counter(section) ". ";
+                counter-increment:section;
+              }
+              h2:before  {
+                content:counter(section) "." counter(subsection) " ";
+                counter-increment:subsection;
+              }
+              效果:
+                Section 1. HTML tutorials
+                  1.1 HTML Tutorial
+                  1.2 XHTML Tutorial
+                  1.3 CSS Tutorial
+                Section 2. Scripting tutorials
+                  1.1 JavaScript
+                  1.2 VBScript
+                Section 3. XML tutorials
+                  1.1 XML
+                  1.2 XSL
+        :first-letter 元素中的第一个字符 
+          Exp:
+            首字母下沉 
+            <div class="aoo"> 12312312312312 </div>
+            .aoo:first-letter{
+              float: left;  // 必须使用 
+              margin-top: 10px;
+              font-size: 22px;
+            }
+        :first-line   元素中的第一行文本[通过调整窗口改变第一行,也会响应]
+      动作伪类 
+        ★链接伪类 
+        'LVHA'保证生效的先后顺序 :link—:visited—:hover—:active 
+          e.g.：
+            <a href="#">这个链接在鼠标按下和松开的这段时间内会变成绿色</a>
+            body { background-color: #ffffc9 }
+            a:link { color: blue } /* 未访问链接 */
+            a:visited { color: purple } /* 已访问链接 */
+            a:hover { font-weight: bold } /* 用户鼠标悬停 */
+            a:active { color: lime } /* 激活链接 */
+        :link        未访问时的状态
+        :visited     访问过后的状态
+        ★用户行为伪类 
+        :hover     鼠标悬浮时的状态
+          PS：当存在 :link 或 :visited 时,需放置于它们之后才生效
+          高阶用法:通过悬浮一个元素来改变另一个元素的状态
+            PS：受到CSS选择器的parse和执行机制影响(至少在CSS3选择器的框架内)
+              不能“通过后面的元素选择前面的元素”或者“通过子元素选择父元素”,
+              只能“通过前面的元素选择后面的元素”和“通过父元素选择子元素”。
+            通过父元素改变子元素的状态
+              <div class="a">
+                <div class="a1">
+                  00000
+                </div>
+                <div class="a2">
+                  11111
+                </div>
               </div>
-              <div class="a2">
+              .a:hover .a2{
+                color: red;
+              }
+            通过前面元素改变后面元素的状态
+              <div class="a">
                 11111
               </div>
-            </div>
-            .a:hover .a2{
-              color: red;
-            }
-          通过前面元素改变后面元素的状态
-            <div class="a">
-              11111
-            </div>
-            <div class="b">
-              2222
-            </div>
-            .a:hover~.b{ color: red; }
-      :active    匹配被用户激活的元素
-        PS：它让页面能在浏览器监测到激活时给出反馈。
-          当用鼠标交互时,它代表的是用户按下按键和松开按键之间的时间
-          :active 伪类通常用来匹配tab键交互
-          通常用于但并不限于 <a> 和 <button> HTML元素
-          该样式可能会被后声明的 :link,:hover 或 :visited 等覆盖,故在它们之后声明  
-      e.g.：
-        <a href="#">这个链接在鼠标按下和松开的这段时间内会变成绿色</a>
-        body { background-color: #ffffc9 }
-        a:link { color: blue } /* 未访问链接 */
-        a:visited { color: purple } /* 已访问链接 */
-        a:hover { font-weight: bold } /* 用户鼠标悬停 */
-        a:active { color: lime } /* 激活链接 */
-      ★其他状态 
-      :focus     元素获得焦点时
-        主要是在文本框控件获得聚焦并进行文字输入使用
-        e.g.  去除所有元素鼠标点击时出现的外边框
-          :focus{ outline:none; }
-      ::selection 当元素处于选中状态时[CSS3] 
-        e.g. 
-          网页中文字被选中时 
-          ::selection{
-            background-color: red;
-          }
-          文本框中的文字被选中时
-          input[type="text"]::selection{
-            font-size: 22px;
-          }
-      :checked     当表单中的radio单选框或者时checkbox复选框处于选取状态时的样式 
-        e.g. input:checked{}
-      :in-range      在范围内
-        指定当元素的有效值被限定在一段范围之内,实际的输入值在该范围之内的样式
-        e.g. 
-          <input type="number" min="0" max="100">
-          
-          input[type="number"]:in-range{color:green;}
-          input[type="number"]:out-of-range{color:red;}
-      :out-of-range  超出范围
-      :enabled     当元素处于可用状态时的样式
-        e.g. input[type="text"]:enabled{}
-      :disabled    匹配每个被禁用的元素(大多用在表单元素上)
-      :read-only   当元素处于只读状态时的样式
-        e.g. input:read-write{}
-      :read-write  当元素处于可读写状态时的样式
-      :not(selector) 非选择器 
-        某个结构元素使用样式,但想排除这个结构元素下的子结构元素不使用这个样式,可以使用not选择器
-        e.g. 
-          :not(h1){ color:green; }
-          /*排除h1.指定其它元素的样式*/
-      :empty    空元素选择器 
-        当元素中内容为空时使用的样式.
-        e.g.  :empty{ background:blue; }
-      :root     根元素选择器 
-        将样式绑定到页面的根元素中.在 HTML 中,根元素始终是 html 元素
-        e.g. 区别body和根元素的区别
-          :root{background-color: :blue; }
-          body{ background-color: :pink; }
-          注:当单独使用 body{ background-color: :pink; } 整个文档也被渲染了,
+              <div class="b">
+                2222
+              </div>
+              .a:hover~.b{ color: red; }
+        :active    匹配被用户激活的元素
+          PS：它让页面能在浏览器监测到激活时给出反馈。
+            当用鼠标交互时,它代表的是用户按下按键和松开按键之间的时间
+            :active 伪类通常用来匹配tab键交互
+            通常用于但并不限于 <a> 和 <button> HTML元素
+            该样式可能会被后声明的 :link,:hover 或 :visited 等覆盖,故在它们之后声明  
+        :focus     元素获得焦点时
+          主要是在文本框控件获得聚焦并进行文字输入使用
+          e.g.  去除所有元素鼠标点击时出现的外边框
+            :focus{ outline:none; }
+      目标伪类 
+        :target    跳转到的目标锚点元素 
+          PS：该样式只在用户点击了页面中的超链接并且跳转到锚点元素后起作用 
+          e.g. 
+            /*跳转链接*/
+            <a href="#A">连接A</a> 
+            <a href="#B">连接B</a> 
+            <a href="#C">连接C</a>
+            /*锚点元素*/
+            <div id="A">内容a</div> 
+            <div id="B">内容b</div> 
+            <div id="C">内容c</div>
+            /*指定样式*/
+            #B:target{ background:blue; color:red; }
+      语言伪类 
+        :lang(c)  'lang'属性为'c'的元素
+          e.g. 
+            <p lang="lv">11</p>
+            <p lang="zh">22</p>
+            P:lang(lv){ color: red; }
+            P:lang(zh){ color: blue; }
+      状态伪类 : 用于标记UI元素当前的状态 
+        PS：只当元素处于某种状态下时,才起作用,默认状态下不起作用 
+        :checked     当表单中的radio单选框或者时checkbox复选框处于选取状态时的样式 
+          e.g. input:checked{}
+        :enabled     当元素处于可用状态时的样式 
+          e.g. input[type="text"]:enabled{}
+        :disabled    匹配每个被禁用的元素[大多用在表单元素上]
+        :indeterminate  [仅火狐支持?]
+          指定当页面打开时,一组单选框中没有任何一个单选框被设定为选中状态时,整组单选框的样式.
+      结构伪类 
+        ★根伪类 
+        :root     根元素,通常是HTML元素 
+          'body'和根元素的区别
+            :root{background-color: :blue; }
+            body{ background-color: :pink; }
+            当单独使用 body{ background-color: :pink; } 整个文档也被渲染了,
             是因为 单独指定body影响到了上面的样式 或许就是一个bug (?)
-      :target   为跳转到的锚点、元素指定样式
-        PS：该样式只在用户点击了页面中的超链接并且跳转到锚点(元素)后起作用.
-        e.g. 
-          /*跳转链接*/
-          <a href="#A">连接A</a> <a href="#B">连接B</a> <a href="#C">连接C</a>
-          /*锚点元素*/
-          <div id="A">内容a</div> <div id="B">内容b</div> <div id="C">内容c</div>
-          /*指定样式*/
-          #B:target{ background:blue; color:red; }
-      :lang()   语言选择器
-        可为不同的语言定义特殊的规则
-        :lang(c)  匹配lang属性等于c的元素
-        e.g. 
-          <p>文字<q lang="no">段落中的引用的文字</q>文字</p>
-          q:lang(no){}
-      :invalid 和 :valid 伪类选择器 
-        指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
-        e.g. input[type="email"]:invalid{}
-      nth-of-type 和 nth-last-of-type
-      required 和 optional 伪类选择器
-        required伪类选择器用来指定允许使用required属性
-          而且已经指定了required属性的input元素、select元素以及textarea元素的样式
-        optional伪类选择器用来指定允许使用required属性
-          而且未指定required属性的input元素、select元素以及textarea元素的样式.
-      indeterminate 
-        只有火狐浏览器支持
-        指定当页面打开时,一组单选框中没有任何一个单选框被设定为选中状态时,整组单选框的样式.
-      :default 
-        该属性只支持火狐浏览器
-        用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
-        e.g. input:default{}
-    Remarks:
-      ::before 和 :after 中的单冒号与双冒号的区别
-        单冒号用于CSS3伪类,如 :active :focus :hover :visited 等等
-        双冒号用于CSS3伪元素,如 ::first-letter ::first-line ::before ::after 等等
-        一般都可以写成单冒号(CSS兼容)
+        ★子元素过滤伪类 
+        :nth-child(arg)      所有子元素过滤伪类的蓝本  [CSS3] 
+          :nth-child(num)    父元素的第'num'个子元素,从1开始
+          :nth-child(Xn+X)   父元素的第'Xn+X'个子元素,X表示数字,n表示从0开始的数 
+            e.g.：
+            :nth-child(n+3){ color: red; } 表示从第三个元素开始后面的所有元素 
+            :nth-child(-n+3){ color: red; } 表示从第三个元素开始前面的所有元素 
+            :nth-child(3n+1){ color: red; } 每3个为一组取第一个  
+          :nth-child(odd)    奇数元素 
+            相当于 :nth-child(2n+1)
+          :nth-child(even)   偶数元素 
+            相当于 :nth-child(2n)
+          e.g：  
+            为所有属于第二个子元素的元素添加边线
+            :nth-child(1){ color : blue; }
+            :nth-child(2){ color : red; }
+            <div>
+              <p>颜色为蓝</p>
+              <p>颜色为红</p>
+            </div>
+            <div>
+              颜色为红
+              <i>颜色为蓝</i>
+              <i>颜色为红</i>
+            </div>
+            
+            所有属于第偶数个子元素的p元素添加背景
+            p:nth-child(2n){background-color:red;}
+            <div>
+              <span></span>
+              <p>有背景</p>
+            </div>
+            <div>
+              有背景
+              <span></span>
+              <i>有背景</i>
+              <p></p>
+              <p>有背景</p>
+            </div>
+        :nth-last-child(arg) 同'nth-child(arg)',顺序为逆序 
+        :first-child   指定任意元素的第一个子元素的样式 
+          e.g. 
+            li:first-child{ background:red; }
+        :last-child    当元素为最后一个子元素时 
+          e.g.  :last-child {outline:dashed 1px red;}
+        :only-child    当元素仅有一个子元素时 
+          e.g.  :only-child{ outline:dashed 1px red; }
+        :nth-of-type(arg)       和'nth-child'类似,按照标签类型来判断 
+        :nth-last-of-type(arg)  ':nth-of-type'的逆序 
+        :first-of-type 指定同一级别中,任意一类元素中的第一个的样式
+          e.g. 
+            <div>1
+              <p>11</p>
+              <p>12</p>
+              <span>13</span>
+            </div>
+            <div>2</div>
+            如 1 11 13 为指定的元素
+        :last-of-type  指定同一级别中,任意一类元素中的最后一个的样式
+        :only-of-type  同一级别中,任意一类元素中只有一个时,指定其样式
+        ★空伪类
+        :empty      当元素中内容为空[允许存在注释节点] 
+          e.g.  :empty{ background:blue; }
+      ★其他状态 
+        ::selection 当元素处于选中状态时[CSS3] 
+          e.g. 
+            网页中文字被选中时 
+            ::selection{
+              background-color: red;
+            }
+            文本框中的文字被选中时
+            input[type="text"]::selection{
+              font-size: 22px;
+            }
+        :in-range      在范围内
+          指定当元素的有效值被限定在一段范围之内,实际的输入值在该范围之内的样式
+          e.g. 
+            <input type="number" min="0" max="100">
+            
+            input[type="number"]:in-range{color:green;}
+            input[type="number"]:out-of-range{color:red;}
+        :out-of-range  超出范围
+        :read-only   当元素处于只读状态时的样式
+          e.g. input:read-write{}
+        :read-write  当元素处于可读写状态时的样式
+        :not(selector) 非选择器 
+          某个结构元素使用样式,但想排除这个结构元素下的子结构元素不使用这个样式,可以使用not选择器
+          e.g. 
+            :not(h1){ color:green; }
+            /*排除h1.指定其它元素的样式*/
+        :invalid 和 :valid 伪类选择器 
+          指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
+          e.g. input[type="email"]:invalid{}
+        required 和 optional 伪类选择器
+          required伪类选择器用来指定允许使用required属性
+            而且已经指定了required属性的input元素、select元素以及textarea元素的样式
+          optional伪类选择器用来指定允许使用required属性
+            而且未指定required属性的input元素、select元素以及textarea元素的样式.
+        :default 
+          该属性只支持火狐浏览器
+          用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
+          e.g. input:default{}
   选择器组合: 将以上单体选择器进行组合使用 
     PS：此处使用A、B来当作选择器,进行表示
-    A,B  所有获取 
+    A,B  所有 
       <div class="aoo"> aoo</div>
       <div class="boo"> boo</div>
       .aoo,.boo{color: red;} /*两个标签的字体都为红色*/
-    AB   同时拥有获取 
-      <div class="aoo boo"> 2 </div>
-      .aoo.boo{color:red;}
-    A B  后代获取 
+    A B  后代 
       <div class="aoo">
         <div class="boo">
           123123
@@ -504,7 +514,10 @@ Selector,选择器
         </div>
       </div>
       .aoo .coo{ color: red; }
-    A>B  子元素获取 
+    AB   同时拥有 
+      <div class="aoo boo"> 2 </div>
+      .aoo.boo{color:red;}
+    A>B  子元素[CSS2.1] 
       <div class="aoo">
         <div class="boo">
           字体变红
@@ -512,17 +525,17 @@ Selector,选择器
         </div>
       </div>
       .aoo>.boo{color: red;}
-    A~B  同级获取 
-      <div class="aoo">123 </div>
-      <div class="boo">字体变红 </div>
-      <div class="coo">123 </div>
-      .aoo~.boo{color:red;}
-    A+B  同级相邻获取 
+    A+B  同级相邻两者[CSS2.1] 
       <div class="boo">字体变红 </div>
       <div class="aoo">123 </div>
       <div class="boo">字体变红 </div>
       <div class="boo">字体未变红 </div>
       .aoo+.boo{color: red;}
+    A~B  同级后者 [CSS3]
+      <div class="aoo">123 </div>
+      <div class="boo">字体变红 </div>
+      <div class="coo">123 </div>
+      .aoo~.boo{color:red;}
   CSS表达式  
     attr() 用来获取选择到的元素的某一HTML属性值,并用于其样式[实验性API]
       PS：它也可以用于伪元素,属性值采用伪元素所依附的元素。
@@ -920,10 +933,10 @@ Declaration,样式声明
         （意味着当字体尺寸为 100px 时,它的 x-height 是 58px ）。
         Times New Roman 的 aspect 值是 0.46。
         这就意味着 Verdana 在小尺寸时比 Times New Roman 更易阅读。
-      none   默认。如果此字体不可用,则不保持此字体的 x-height。
+      none   默认。若此字体不可用,则不保持此字体的 x-height。
       number 定义字体的 aspect 值比率。
       e.g.：
-        如果 14px 的 Verdana（aspect 值是 0.58）不可用,
+        若 14px 的 Verdana（aspect 值是 0.58）不可用,
         但是某个可用的字体的 aspect 值是 0.46,
         那么替代字体的尺寸将是 14 * (0.58/0.46) = 17.65px。
     使用系统字体样式 
@@ -1147,10 +1160,10 @@ Declaration,样式声明
         continues:
         bounding-box:
         each-box:
-      background-attachment 规定背景图像是否固定或者随着页面的其余部分滚动
-        scroll ,默认值
-        fixed
-        inherit
+      background-attachment 背景图像的固定方式 
+        scroll  背景图像会随着页面其余部分的滚动而移动,默认值
+        fixed   当页面的其余部分滚动时,背景图像不会移动 
+        inherit 
       多背景 [CSS3]
         .aoo{
           background-image: url('1.png'),url('2.png'),url('3.png');
@@ -1350,10 +1363,10 @@ Declaration,样式声明
       transform : rotate(XXdeg);         2D[顺时针]旋转
         deg  css3中的角度单位
       transform : rotate3d(x,y,z,XXdeg); 3D旋转
-        PS：运动量由指定的角度定义,如果为正,运动将为顺时针,如果为负,则为逆时针;
+        PS：运动量由指定的角度定义,若为正,运动将为顺时针,若为负,则为逆时针;
           在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
           并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
-          如果这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
+          若这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
           非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
         x   num,表示旋转轴X坐标方向的矢量
         y   num,表示旋转轴Y坐标方向的矢量
@@ -2127,17 +2140,17 @@ Layout,布局
             会在父元素的内部尾部添加一个空的块元素,并清除浮动.
           父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
         方法五:父元素也浮动
-    position 定位
-      PS： 除 static 外,元素定位后会变成类似于 inline-block 元素
-      static   默认值,无定位
-        元素出现在正常的流中
-        忽略 top,bottom,left,right 或者 z-index 声明
-      relative 相对定位
-        PS：相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流.
-          相当于transform的translate,元素只是在显示上进行了偏移 (SelfThink),
-          其显示的优先级被提升,偏移时可能会遮盖其他元素(包括背景和内容)
-        e.g. 
-          ＃XXX{
+    position 定位 
+      PS： 除'static'外,元素定位后会变成类似于'inline-block'元素
+      static   无定位,默认值 
+        元素出现在正常的流中 
+        忽略'top''bottom''left''right'和'z-index'声明 
+      relative 相对定位 
+        PS：相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流 
+          相当于'transform'的'translate',元素只是在显示上进行了偏移[SelfThink] ,
+          其显示的优先级被提升,偏移时可能会遮盖其他元素[包括背景和内容] 
+        e.g:  
+          #aoo{
             position:relative;
             left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
             top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
@@ -2158,10 +2171,11 @@ Layout,布局
             inherit 规定应该从父元素继承 clip 属性的值。
           e.g.：
           img{position:absolute;clip:rect(0px 50px 200px 0px);}
-      fixed    相对于浏览器窗口的定位.
-        表现形式与absolute类似,其定位的参照为视窗本身 (不会随浏览器窗口的滚动条滚动而变化)
-        脱离文档流,这与background-attachment:fixed属性功能相同
-        默认处在视窗的左边中间位置
+      fixed    相对于浏览器窗口的定位 
+        PS：脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化]
+          默认处在视窗的左边中间位置
+        所有能够生成堆叠上下文的元素,会使其子元素的 position:fixed 相对其定位
+          PS：导致元素不再相对视口'Viewport'进行定位;详情见'Stacking Context'
       inherit  继承父元素的定位属性.
       /*配合属性*/
       left/right/top/bottom  位置偏移
@@ -2231,7 +2245,7 @@ Layout,布局
       top
       middle
       bottom
-  flex 布局   [CSS3 IE10] 
+  Flex 布局   [CSS3 IE10] 
     PS：常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
@@ -2352,7 +2366,7 @@ Layout,布局
       baseline
       stretch  占满父元素
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
-  column 多栏布局 「CSS3」   
+  Column 多栏布局 「CSS3」   
     column-count  显示栏目数
       number 元素内容将被划分的列数
       auto   由其他属性决定列数,比如 "column-width"。
@@ -2375,28 +2389,26 @@ Layout,布局
         none | hidden | dotted | dashed | solid 
         double | groove |  ridge | inse | outset
       column-rule-color  颜色
-  BFC
-    块级元素: 使元素变成块级元素的display值有 block list-item table等
-    BFC就是用来格式化块级盒子,同样管理inline类型的盒子还有IFC,以及其他的FC
-    Formatting Context：指页面中的一个渲染区域,并且拥有一套渲染规则,
-      他决定了其子元素如何定位,以及与其他元素的相互关系和作用。
-    BFC,Block Formatting Context
-      一独立的渲染区域,只有Block-level Box参与,
-      其规定了内部的Block-level Box的布局,且不受该区域外的影响.
-      布局规则:
-        内部的Box会在垂直方向,一个接一个的放置
-        同属于一个BFC的两相邻的box的margin会发生重叠
-        每个元素的margin box的左边,与包含块的border box 的左边相接触(对于从左往右的格式化,否者相反)
-        BFC的区域不会与float box重叠
-        BFC就是页面上的一个隔离的独立容器,容器内的子元素不会影响到外面元素,反之亦然.
-        计算BFC的高度时,浮动元素也参与计算
-      生成BFC的元素
-        float属性不为none
-        overflow不为visible
-        根元素
-        position为absolute 或fixed
-        display为inline-block table-cell table-caption flex inline-flex 
-          display：table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
+  BFC,'Block Formatting Context',独立的渲染区域,只有Block-level Box参与 
+    PS：规定了内部的Block-level Box的布局,且不受该区域外的影响.
+      BFC就是用来格式化块级盒子,同样管理inline类型的盒子还有IFC,以及其他的FC
+      块级元素: 使元素变成块级元素的display值有'block''list-item''table'等
+      Formatting_Context：指页面中的一个渲染区域,并且拥有一套渲染规则,
+      决定了其子元素如何定位,以及与其他元素的相互关系和作用。
+    布局规则: 
+      内部的Box会在垂直方向,一个接一个的放置
+      同属于一个BFC的两相邻的box的margin会发生重叠
+      每个元素的margin box的左边,与包含块的border box 的左边相接触[对于从左往右的格式化,否者相反]
+      BFC的区域不会与float box重叠
+      BFC就是页面上的一个隔离的独立容器,容器内的子元素不会影响到外面元素,反之亦然.
+      计算BFC的高度时,浮动元素也参与计算
+    生成BFC的元素  
+      float属性不为none 
+      overflow不为visible 
+      根元素 
+      position为absolute 或fixed 
+      'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
+        display：table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
     e.g.：
       使用BFC将浮动元素和block元素同行且不会影响到block元素(即浮动元素不会浮在block元素上)
       <div class="aoo"> 1111 </div>
@@ -2404,6 +2416,25 @@ Layout,布局
       .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
       .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
       /*使用 overflow: hidden 生成 BFC*/
+  'Stacking Context'堆叠上下文
+    PS：堆叠上下文是HTML元素的三维概念,这些HTML元素在一条假想的相对于面向视窗或者网页的用户的 z 轴上延伸,
+      HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间 
+      生成了'Stacking Context'的元素会影响该元素的层叠关系与定位关系 
+    触发一个元素形成堆叠上下文的方法：
+      PS：所有设置了下面属性样式的元素,都有使其子元素的 position: fixed 失效的能力。
+      根元素HTML,
+      'transform'值不为'none'的元素[即具有'transform'属性],
+      'z-index'非'auto'的绝对/相对定位,
+      'z-index'非'auto'的'flex'项目,即父元素'display: flex|inline-flex',
+      'opacity'值小于 1 的元素[参考 the specification for opacity],
+      'mix-blend-mode'属性值不为'normal'的元素,
+      'filter'值不为'none'的元素,
+      'perspective'值不为'none'的元素,
+      'isolation'属性被设置为'isolate'的元素,
+      position: fixed
+      在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
+      '-webkit-overflow-scrolling'属性被设置'touch'的元素
+  'stacking level'层叠顺序
   已废弃
     弹性盒模型  display:box
       已被 display:flex 取代
@@ -3218,7 +3249,6 @@ Collection
   flex 布局如何指定单一一元素在水平方向上的对齐方式
 
   在文字超出部分部分使用...显示
-
 
 
 

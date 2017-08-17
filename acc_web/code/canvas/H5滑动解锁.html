@@ -12,28 +12,30 @@
   <canvas id="canvasTag"></canvas>  
 </body>  
 <script type="text/javascript">  
+window.onload = function () {  
   // config 
   var href = 'https://www.baidu.com';
-  var finalPassword = '1235789'; 
+  var finalPassword = '1236'; 
   var colorBg = '#ccc';
-  var colorOut = "#627eed"
-  var colorMid = "#e1f6e0"
-  var colorIn = "#d0cc96"
-  var colorLine = "#bb7f7f"
+  var colorOut = "#627eed";
+  var colorMid = "#e1f6e0";
+  var colorIn = "#d0cc96";
+  var colorLine = "#bb7f7f";
   var canvasWidth = document.body.offsetWidth; //网页可见区域宽  
   var canvasHeight = canvasWidth*0.8;  // 画布高度
+  var OffsetX = canvasWidth*0.18; // 左偏移
+  var OffsetY = canvasHeight*0.18;  // 右偏移 
   var radius= canvasWidth*0.077;  // 半径
-  var OffsetX = canvasWidth*0.1; // 画布x内边距
-  var OffsetY = canvasWidth*0.07;  // 画布y内边距
+  var lineW = radius*0.4;
 
   var circleArr = [];  
-  function createCirclePoint(diffX, diffY) {  
+  function createCirclePoint() {  
     for (var row = 0; row < 3; row++) {  
       for (var col = 0; col < 3; col++) {  
         // 计算圆心坐标  
         var Point = {  
-          X: (OffsetX + col * diffX + ( col * 2 + 1) * radius),  
-          Y: (OffsetY + row * diffY + (row * 2 + 1) * radius)  
+          X : (OffsetX + col *( canvasWidth*0.3)),  
+          Y : (OffsetY + row *( canvasHeight*0.3))  
         };  
         circleArr.push(Point);  
       }  
@@ -46,7 +48,7 @@
         var pointIndex = pwdArr[i];  
         cxt.lineTo(circleArr[pointIndex].X, circleArr[pointIndex].Y);  
       }  
-      cxt.lineWidth = 10;  
+      cxt.lineWidth = lineW;  
       cxt.strokeStyle = colorLine;  
       cxt.stroke();  
       cxt.closePath();  
@@ -119,11 +121,11 @@
         console.log('连接数小于4个',password);
       }
       else {
-        console.log("密码结果是："+password);
         var finalPassword1 = '';
         for (var i = 0; i < finalPassword.length; i++) {
           finalPassword1 += finalPassword[i]-1;
         }
+        console.log("密码结果是："+password,finalPassword1);
         if (password == finalPassword1) {
           location.href = href;
         }
@@ -136,21 +138,19 @@
     }, false);  
   }  
   
-  window.onload = function () {  
+  function init(){
     var canvas = document.getElementById("canvasTag");  
     canvas.style.backgroundColor= colorBg;
     canvas.width = canvasWidth;  
     canvas.height = canvasHeight;  
     var cxt = canvas.getContext("2d");  
     
-    // 每行3个圆 
-    var X = (canvasWidth - 2 * OffsetX - radius* 2 * 3) / 2;  
-    var Y = (canvasHeight - 2 * OffsetY - radius* 2 * 3) / 2;  
-    createCirclePoint(X, Y);  
+    createCirclePoint();  
     Draw(cxt, circleArr, [],null);  
     
     bindEvent(canvas, cxt);  
-  }  
+  };
+  init();
+}  
 </script>  
 </html>  
-

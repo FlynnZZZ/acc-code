@@ -2556,7 +2556,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     相比JSONP只能发GET请求,CORS允许任何类型的请求。  
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
-'cross-document_messaging',postMessage  跨文档消息传递 
+'cross-document_messaging',postMessage  跨文档消息传递[HTML5][IE8+] 
   PS：简称为XDM,指在不同域的页面间传递消息,XDM之前,要稳妥的实现这种通信需花很多功夫 
   win.postMessage(mes,url); 向当前页面中的<iframe>或由当前页打开的窗口传递数据 
     PS：XDM的核心方法
@@ -2571,7 +2571,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
       var iframew = document.getElementById("myframe").contentWindow;
       // 所有支持XDM的浏览器也支持iframe的 contentWindow属性
       iframew.postMessage("a secret","https://www.baidu.com");
-  window.message 事件 
+  window.onmessage 事件 
     PS：接收到XDM消息时,会触发window对象的message事件 
     e.data
     e.origin

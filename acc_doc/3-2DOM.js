@@ -1923,7 +1923,7 @@ e.g.:
       }
 --------------------------------------------------------------------------------
 ◆Mobile 移动端
-Special
+Special 
   ios移动设备上,长按<a>标签,会弹出浏览器的原生菜单
     在JS中设置取消的方法
     document.documentElement.style.webkitTouchCallout = 'none';
@@ -2082,7 +2082,7 @@ WeiXin 微信
       })
 --------------------------------------------------------------------------------
 ◆专题 
-Form 表单及表单字段脚本 
+'Form'表单及表单字段脚本 
   PS：HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
     HTMLFormElement 继承了 HTMLElement ,因而与其他HTML元素具有相同的默认属性;
     表单字段为表单中的元素,如input button textarea select 等等
@@ -2323,57 +2323,125 @@ Form 表单及表单字段脚本
       
       // 若已有其他参数,这里需要判断一下,改为拼接 &callback=
       form.action = form.action + '?callback=' + curCallbackName;        
-iframe 
-  <iframe id="frame1" name='cpt-topNav' src="/cpt/top_nav.html" ></iframe>
-  // 在 iframe 加载后才能获取到其内容
-  $('#frame1').on("load",function(e){
-    var html = window.frames['cpt-topNav'].document.querySelector("#topNav");
-    var style = window.frames['cpt-topNav'].document.querySelector("style");
-    var script = window.frames['cpt-topNav'].document.querySelector("script");
-    $(this).after(html).remove();
-    $('head').append()(style);
-    $('html').append(script);
-  });
-其他标签脚本 
-  <a href="#"></a> 超链接
-    URL 协议
-      URL 支持 javascript: 协议,调用URL时会执行对应的JS代码
-      e.g.: <a href="Javascript:console.log(111);">11111111</a>
-      浏览器地址栏也支持 javascript: 协议
-      e.g.: 将 javascript:console.log(111) 放入地址栏,回车执行
-      若JS代码返回的为字符串,则浏览器会在页面中显示出该字符串
-        Chrome: 清空当前页面,显示出返回的字符串
-        <a href="Javascript:'aaa'" target="_blank">11111111</a>  
-        javascript:"aaa"   // 在浏览器地址栏中键入
-  <script src="" charset="utf-8"></script>  脚本引入 
-WYSIWYG 富文本编辑 
-  PS：即what you see is what you get,所见即所得
-    由IE引入,虽然没有规范,已经称为了事实标准
-    技术本质为在页面中嵌入一个包含空HTML页面的iframe,
-    通过设置designMode属性,使该HTML页面可以被编辑,
-    编辑的对象则是该页面<body>元素的HTML代码.
-    designMode 属性有两个可能的值: "off" 和 "on"(on时则可编辑)
-    需要等到页面完全加载之后才能设置为可编辑状态(一般使用 load事件监听)
-  e.g. :
-  在页面创建一个 iframe标签
-  设置其designMode为"on"(frames["XX"].document.designMode ="on")
-  注:在Chrome中不可使iframe的src外链其他文件(出于安全限制?)
-  document.execCommand(); 文档预定义
-    PS：方法也适用于页面中contenteditable属性为true的区块
-      只是把对框架的document引用替换成当前窗口的document对象即可
-    Arguments:接收三个参数
-      执行的命名名称
-      布尔值,表示浏览器是否提供用户界面(Firefox中设置为true会报错,一般设置为false)
-      执行命令相应的值(不需要则为null)
-      命令           值           说明
-      backcolor     颜色字符串    设置文档背景色
-      bold          null         将选择的文本转会为粗体
-      ...
-    e.g. :
-    转换粗体文本
-    frames["XX"].document.execCommand("bold",false,null);
- (详参 JavaScript高级程序设计 440页)
-Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」 
+'iframe'框架元素 
+  <iframe id="frame1" name='firstIframe' src="/cpt/top_nav.html" ></iframe>
+  ★获取iframe元素对象 
+    frames[iframeName]    通过iframe的'name'属性值来获取 
+      var iframe = frames['firstIframe'];
+  ★iframe元素对象的属性 
+    iframe.frameBorder = 0      去掉iframe的边框
+    iframe.scrolling = 'no'     去掉iframe的滚动条 
+  'load'事件,在<iframe>加载后才能获取到其加载的内容 
+    $('#frame1').on("load",function(e){
+      var html = window.frames['firstIframe'].document.querySelector("#topNav");
+      var style = window.frames['firstIframe'].document.querySelector("style");
+      var script = window.frames['firstIframe'].document.querySelector("script");
+      $(this).after(html).remove();
+      $('head').append()(style);
+      $('html').append(script);
+    });
+'audio'&'video' [详见 JavaScript高级程序设计 486 页][HTML5] 
+  元素对象的标签属性'attributes'&对象属性'properties'&方法'methods'
+    ★共有 
+      ▼标签属性 
+        all.src            读写路径,推荐使用子元素<source>实现 
+        all.loop           读写是否应在结束时再次播放
+        bol = all.autoplay       读写自动播放状态
+        bol = all.controls       读写是否应该显示操作控件 
+      ▼对象属性 
+        bol = all.paused         读写是否暂停播放 
+        num = all.currentTime    读写当前播放时长,单位:秒 
+        num = all.duration       读写时长,单位:秒 
+          在加载完音频/视频前,获取不到,返回NaN,往往需要和canplay事件配合使用
+        num = all.playbackRate   读写播放速度,'1.0'为正常速度
+        num = all.volume         读写音量,范围'0-1'
+        all.muted                读写是否关闭声音
+        all.defaultPlaybackRate  读写默认播放速度 
+        video.mediaGroup         读写所属的组合,用于连接多个视频/音频元素 
+        all.ended          返回播放是否已结束
+        all.error          返回错误状态的'mediaError'对象 
+          video.error.code 错误码
+        all.networkState   返回当前网络状态 
+        video.buffered     返回已缓冲部分的'TimeTanges'对象 
+        video.controller   返回当前媒体控制器的'MediaController'对象 
+        video.crossorigin  若文件不是在同域,则crossorigin会被用来进行指示 
+          适用于所有多媒体标签'video''audio''img',
+          目的是处理cross-origin资源共享'CORS'的回放问题
+      ▼对象方法
+        all.play()         播放
+        all.pause()        暂停
+        all.load()         重新载入音频
+        all.canPlayType()  确定浏览器可播放一媒体格式的可能性
+          返回值为:空字符串,"maybe"或"probably"
+            若浏览器无法播放该格式,返回空字符串""
+            若浏览器认为有可能播放该格式,返回"maybe"
+            若浏览器认为能够播放改格式,返回"probably"
+          e.g.
+            video.canPlayType("video/ogg")
+            只传入一个短形式的格式,只可能得到""或"maybe"
+            video.canPlayType('video/ogg; codecs="theora,vorbis"')
+            若传入带编解码的具体类型,就可能达到到""、"maybe"或"probably"作为答案
+    ★独有 
+      ▼标签属性 
+        video.poster         读写视频预览图    
+        video.preload        读写预加载状态  
+          auto 
+          metadata 
+          none 
+      ▼对象属性
+        video.currentSrc   返回当前视频的URL
+        video.played       返回视频已播放部分的'TimeRanges'对象 
+        video.readyState   返回视频当前的就绪状态 
+        video.seekable     返回表示视频可寻址部分的'TimeRanges'对象 
+        video.seeking      返回用户是否正在视频中进行查找 
+        video.startOffsetTime  返回表示当前时间偏移的'Date'对象 
+        video.textTracks       返回表示可用文本轨道的'TextTrackList'对象 
+        video.videoTracks      返回表示可用视频轨道的'VideoTrackList'对象 
+        video.videoWidth   返回当前视频本来的宽,单位:px          
+        video.videoHeight  返回当前视频本来的高,单位:px 
+    
+      audio.fastSeek()     在音频播放器中指定播放时间
+      audio.canPlayType()  检查浏览器是否能够播放指定的音频类型
+      audio.addTextTrack() 向音频添加新的文本轨道
+      audio.requestFullscreen() 全屏
+      audio.exltFullscreen()    退出全屏
+      audio.autoplay       读写自动播放状态
+      audio.defaultMuted   读写音频默认是否静音
+      audio.currentSrc     返回当前音频的 URL
+    readState
+    seeking
+  事件 
+    ★共有事件
+    abort           视频加载放弃时 
+    canplay         当视频缓冲完毕可以播放时触发 
+    canplaythrough  当浏览器可在不因缓冲而停顿的情况下进行播放时 
+    ended           当媒介已抵达结尾时
+    error
+    play
+    playing         当媒介数据正在播放时运行脚本
+    pause           当媒介数据暂停时运行脚本
+    progress
+    ratechange 
+    seeked
+    seeking
+    vstalled
+    durationchange 当视频的时长已更改时 
+    emptied        当目前的播放列表为空时 
+    loadstart
+    loadeddata
+    loadedmetadata
+    suspend
+    timeupdate      音频/视频(audio/video)的播放位置发生改变时触发
+      若视频在播放时,位置一直在改变,则每秒触发一次
+      具体触发情况：
+        播放音频/视频(audio/video)时
+        移动音频/视频(audio/video)播放位置时
+    volumechange
+    waiting
+    ★独有事件 
+  Remarks:
+    直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
+'canvas'画布 [HTML5][IE9+][详参 JavaScript高级程序设计 445 页] 
   PS：画布默认为透明; 在css中指定画布宽高,会导致画布的所有内容进行相应的缩放;
     canvas标签只有width和height两个属性,默认为宽度300px和高度150px;
     若CSS的尺寸与初始画布的比例不一致,它会出现扭曲;
@@ -3023,6 +3091,43 @@ Canvas 画布 [详参 JavaScript高级程序设计 445 页] 「IE9+ HTML5」
           context.rotate(degrees*Math.PI/180);
         }
         context.restore();
+其他标签脚本 
+  <a href="#"></a> 超链接
+    URL 协议
+      URL 支持 javascript: 协议,调用URL时会执行对应的JS代码
+      e.g.: <a href="Javascript:console.log(111);">11111111</a>
+      浏览器地址栏也支持 javascript: 协议
+      e.g.: 将 javascript:console.log(111) 放入地址栏,回车执行
+      若JS代码返回的为字符串,则浏览器会在页面中显示出该字符串
+        Chrome: 清空当前页面,显示出返回的字符串
+        <a href="Javascript:'aaa'" target="_blank">11111111</a>  
+        javascript:"aaa"   // 在浏览器地址栏中键入
+  <script src="" charset="utf-8"></script>  脚本引入 
+WYSIWYG 富文本编辑 [详参 JavaScript高级程序设计 440 页] 
+  PS：'what you see is what you get',所见即所得;由IE引入,虽无规范,已经成为了事实标准
+    技术本质为在页面中嵌入一个包含空HTML页面的iframe,
+    通过设置designMode属性,使该HTML页面可以被编辑,
+    编辑的对象则是该页面<body>元素的HTML代码.
+    designMode 属性有两个可能的值: "off" 和 "on"(on时则可编辑)
+    需要等到页面完全加载之后才能设置为可编辑状态(一般使用 load事件监听)
+  e.g. :
+  在页面创建一个 iframe标签
+  设置其designMode为"on"(frames["XX"].document.designMode ="on")
+  注:在Chrome中不可使iframe的src外链其他文件(出于安全限制?)
+  document.execCommand(); 文档预定义
+    PS：方法也适用于页面中contenteditable属性为true的区块
+      只是把对框架的document引用替换成当前窗口的document对象即可
+    Arguments:接收三个参数
+      执行的命名名称
+      布尔值,表示浏览器是否提供用户界面(Firefox中设置为true会报错,一般设置为false)
+      执行命令相应的值(不需要则为null)
+      命令           值           说明
+      backcolor     颜色字符串    设置文档背景色
+      bold          null         将选择的文本转会为粗体
+      ...
+    e.g. :
+    转换粗体文本
+    frames["XX"].document.execCommand("bold",false,null);
 FileList 对象与 File 对象 [HTML5]
   PS：FileList对象表示用户选择的文件列表,
     HTML4中,file控件内只能选中一个文件,
@@ -3230,77 +3335,7 @@ URL 对象         用于对二进制数据生成URL
       var dataURL = canvas.toDataURL("image/"+ext);
       return dataURL;
     }
-Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」 
-  var audio = document.querySelector(slt); 获取audio元素对象
-  var video = document.querySelector(slt); 获取video元素对象
-  方法
-    a.play()         播放
-    a.pause()        暂停
-    a.load()         重新载入音频
-    a.fastSeek()     在音频播放器中指定播放时间
-    a.canPlayType()  检查浏览器是否能够播放指定的音频类型
-    a.addTextTrack() 向音频添加新的文本轨道
-    a.requestFullscreen() 全屏
-    a.exltFullscreen()    退出全屏
-    a.canPlayType()  确定浏览器可播放一媒体格式的可能性
-      返回值为:空字符串,"maybe"或"probably"
-        若浏览器无法播放该格式,返回空字符串""
-        若浏览器认为有可能播放该格式,返回"maybe"
-        若浏览器认为能够播放改格式,返回"probably"
-      e.g.
-        video.canPlayType("video/ogg")
-        只传入一个短形式的格式,只可能得到""或"maybe"
-        video.canPlayType('video/ogg; codecs="theora,vorbis"')
-        若传入带编解码的具体类型,就可能达到到""、"maybe"或"probably"作为答案
-  属性
-    a.autoplay       读写 自动播放状态
-    a.src            读写 音频src
-    a.controls       设置/返回 音频是否应该显示控件(比如播放/暂停等)
-    a.duration       读写 音频时长(单位为秒)
-      返回值类型为数值
-      在加载完音频之前,获取不到,返回NaN(往往需要和canplay事件配合使用)
-    a.currentTime    读写 当前播放时长(单位为秒)
-      返回值类型为数值
-    a.volume         读写 音量(范围0-1)
-    a.defaultMuted   设置/返回 音频默认是否静音
-    a.loop           设置/返回 音频是否应在结束时再次播放
-    a.muted          设置/返回 是否关闭声音
-    a.paused         设置/返回 音频是否暂停
-      暂停状态,返回 true;播放状态,则返回 false
-    a.playbackRate   设置/返回 音频播放的速度
-      a.defaultPlaybackRate  设置/返回 音频的默认播放速度
-    a.currentSrc     返回当前音频的 URL
-    a.ended          返回音频的播放是否已结束
-    a.networkState   返回音频的当前网络状态
-
-    videoWidth
-    videoHeight
-    error             只读
-      video.error
-      video.error.code 错误码
-    readState
-    seeking
-  事件
-    play
-    pause
-    progress
-    error
-    abort
-    waiting
-    loadedmetadata
-    volumechange
-    timeupdate      音频/视频(audio/video)的播放位置发生改变时触发
-      若视频在播放时,位置一直在改变,则每秒触发一次
-      具体触发情况：
-        播放音频/视频(audio/video)时
-        移动音频/视频(audio/video)播放位置时
-    canplay         表示音频/视频缓冲完毕可以播放时触发
-    ended           当媒介已抵达结尾时
-    pause           当媒介数据暂停时运行脚本
-    playing         当媒介数据正在播放时运行脚本
-  Remarks:
-    直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
-'Web Workers' 工作线程 「HTML5」
+'Web Workers' 工作线程[HTML5]
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.
   通过 window["Worker"] 来查看是否支持Web工作线程.
@@ -3535,9 +3570,4 @@ Audio&Video  [详见 JavaScript高级程序设计 486 页] 「HTML5」
     // setTimeout(function(){
     //   $('#test1').focus();
     // },10000);
-
-
-
-
-
 

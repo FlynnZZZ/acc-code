@@ -295,53 +295,46 @@ ECMAScript : JS核心,语法部分
         +obj; // 100
       通过 Number() parseInt() 和 parseFloat() 显示转换为数值 [详见'Global']
   String  字符串 
-    PS: 用于表示由零或多个16位Unicode字符组成的字符序列.
-      表示显示的字符,使用引号引起来,无特殊含义.
-      几乎任何字符都可以放在引号里,JS会将它解析成string.
-      双引号或单引号,两种表示方法没有任何区别,但必须成对出现.
-      数字使用引号引起来也表示字符,数字字符
-    特殊字符:作为一般字符的扩展,可以在字符串中使用特殊字符
-      PS: String类型包含了一些可能引起歧义的特殊的字符字面量,也叫转义序列.
-        有些符号不便放在引号中(如引号,换号符等),需要进行转义.
-        在引号中发现的\,其后面的字符有特殊意义.
-        可出现在字符串的任何位置. 被作为一个字符来解释.
+    PS: 表示若干个个16位Unicode字符组成的字符序列;使用引号引起来,无特殊含义; 
+      双引号或单引号,两种表示方法没有任何区别,但必须成对出现;
+    特殊字符:可能引起歧义的特殊字符字面量,也叫转义序列  
+      PS: 有些符号不便放在引号中,如引号、换号符等,需要进行转义,作为一般字符的扩展;
       ★常用特殊字符:
-      \0 Null字节
-      \b 退格符
-      \f 换页符
-      \n 换行符
-      \r 回车符
-      \t Tab (制表符)
-      \v 垂直制表符
-      \' 单引号'
-      \" 双引号"
-      \\ 反斜杠字符(\)
-      \XXX 由从0到377最多三位八进制数XXX表示的 Latin-1 字符。
-        例如,\251 是版权符号的八进制序列。
-        严格模式下,不能使用八进制转义字符。
-      \xXX 由从00和FF的两位十六进制数字XX表示的Latin-1 字符。
-        例如,\ xA9是版权符号的十六进制序列。
-      \uXXXX 由四位十六进制数字XXXX表示的Unicode字符。
-        例如,\ u00A9是版权符号的Unicode序列
-      \u{XXXXX} Unicode代码点 code point 转义字符。
-        例如,\u{2F804} 相当于Unicode转义字符 \uD87E\uDC04的简写。
-      Example:
+        '\"' 双引号
+        '\'' 单引号
+        '\n' 换行符
+        '\r' 回车符
+        '\t' Tab制表符 
+        '\0' Null字节
+        '\b' 退格符
+        '\f' 换页符
+        '\v' 垂直制表符
+        '\\' \反斜杠字符
+        '\123' 由从0到377最多三位八进制数表示的'Latin-1'字符 
+          PS：严格模式下,不能使用八进制转义字符。
+          '\251' 版权符号的八进制序列 
+          '\55'  "-"
+        '\x00' 由从00和FF的两位十六进制数字XX表示的'Latin-1'字符 
+          '\xA9'   版权符号的十六进制序列 
+        '\u1234' 由四位十六进制数字表示的Unicode序列字符 
+          '\u00A9' 版权符号 
+        '\u{12345}' Unicode代码点'code point'转义字符 
+          '\u{2F804}' 相当于Unicode转义字符\uD87E\uDC04的简写,'你' 
+      引号中,\后面的字符有特殊意义,可出现在字符串的任何位置,作为一个字符来解释 
         '\t\n\n'.length; // 3
-
-        var aoo = "read \"book\"";
-        console.log(aoo); // read "book"
+      Example:
+        console.log("read \"book\""); // read "book"
     创建字符串 
       'xx' 字面量法创建
       new String() 构造函数创建
       字符串不可单独修改其字符[只能覆盖替换] 
-        Example:
-        var name = 'abc';
-        name[1];   //"b"
-        name[1] =0;
-        name;      //"abc"
-        name ="a";
-        name;      //"a"
-    其他类型→字符串 
+        var str = 'abc';
+        str[1];   //"b"
+        str[1] =0;
+        str;      //"abc"
+        str ="a";
+        str;      //"a"
+    其他类型转换为字符串 
       隐式转换为字符串 
         使用 空字符+其他值 ""+value
         undefined  "undefined"
@@ -356,9 +349,9 @@ ECMAScript : JS核心,语法部分
           obj.toString(); // "[object Object]"
           obj.toString =function(){ return "hello"; }; // 自定义该对象的toString方法
           "a" + obj; // "ahello"
-      val.toString() String() 显式转换 
-    Exp:
-      数值字符串比较其数值大小,采用相减的方式
+      val.toString()、String(val) 显式转换 
+    Exp: 
+      数值字符串比较其数值大小,采用相减的方式 
         var str1 = '9';
         var str2 = '100';
         console.log(str1>str2);   // true , 非想要的结果 
@@ -409,7 +402,44 @@ ECMAScript : JS核心,语法部分
             voo2 = 'b' ,
             arr = [voo1,voo2];
         console.log(arr); // ["a", "b"]
-    obj = new Foo() 构造函数[类]实例化对象 
+      Example:
+        var obj = {
+          name : "小明",
+          age : 12,
+          sex : "男",
+          sayhi : function(){
+            return "say";
+          },
+          info : function(){ //使用this访问当前对象的属性
+            return this.name+"年龄"+this.age; 
+          }
+        }
+        obj.info(); // 小明年龄12
+    obj = new Object(arg) 构造函数创建对象 
+      arg  参数,可为num、str、bol、obj及简单表达式等 
+        若无参数可省略括号,不推荐使用    var obj = new Object; 
+        var obj1 = new Object(2); // Object类型,值是2
+        console.log(obj1,obj1+2);      
+        //  Number {[[PrimitiveValue]]: 2}  
+        // 4 可以和普通变量运算,会隐式转换 
+        var obj2 = {a:1} 
+        console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
+      
+        console.log(new Object({x:1}));      // Object {x : 1} 
+      构造函数创建对象的过程 
+        1 创建一个新对象newobj
+        2 将构造函数的作用域赋值给newobj,因此this就指向了newobj;
+        3 执行构造函数中的代码,为newobj添加属性;
+        4 返回newobj
+      使用new的注意点 
+        var o = new myObject();
+        上面这种做法的问题是:
+        一旦你忘了加上new, myObject()内部的this关键字就会指向全局对象[?],
+        导致所有绑定在this上面的变量,都变成全局变量。
+        因此,建议使用Object.create()命令,替代new命令。
+        若不得不使用new,为了防止出错,最好在视觉上把构造函数与其他函数区分开来。
+        比如,构造函数的函数名,采用首字母大写[InitialCap],其他函数名一律首字母小写。      
+    obj = new Foo() 自定义构构造函数[类]实例化对象 
       构造函数生成对象的原理 
         若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
         若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
@@ -426,48 +456,20 @@ ECMAScript : JS核心,语法部分
         var obj2 = new Goo();
         console.log(obj1,obj2); // Foo {aoo: 1, boo: 2}  Object {a: "a"}
       obj.__proto__ === Foo.prototype  // true 
-      new Object(arg); 构造函数创建对象 
-        arg 可为数值、字符串、布尔值等或是简单的表达式  
-          若无参数可省略括号:var obj = new Object; 有效,但不推荐使用.
-          var obj1 = new Object(2); // Object类型,值是2
-          console.log(obj1);         //  Number {[[PrimitiveValue]]: 2}
-          var rst1 = obj1 + 2;       // 可以和普通变量运算,会隐式转换
-          console.log(rst1);        // 4
-          var obj2 = {a:1} 
-          console.log(obj2);    // Object {a: 1}
-          var rst2 = obj2 + 2;  
-          console.log(rst2);    // [object Object]2 ,变成字符串相加 
-        
-          var obj = new Object({x:1})
-          console.log(obj);          // Object {x : 1} 
-        构造函数创建对象的过程 
-          1 创建一个新对象
-          2 将构造函数的作用域赋值给新对象(因此this就指向了这个新对象);
-          3 执行构造函数中的代码(为这个新对象添加属性);
-          4 返回新对象
-        使用new的注意点 
-          var o = new myObject();
-          上面这种做法的问题是:
-          一旦你忘了加上new, myObject()内部的this关键字就会指向全局对象,
-          导致所有绑定在this上面的变量,都变成全局变量。
-          因此,建议使用Object.create()命令,替代new命令。
-          若不得不使用new,为了防止出错,最好在视觉上把构造函数与其他函数区分开来。
-          比如,构造函数的函数名,采用首字母大写[InitialCap],其他函数名一律首字母小写。      
-      自定义构造函数 创建对象 
+      Example:
         function Foo(arg1,arg2){ 
           this.aoo = arg1; 
           this.boo = arg2; 
         }
-        var obj = new Foo(2,3);
-        obj; //Foo {aoo: 2, boo: 3}
-        Remarks:
-          和工厂模式比较,构造函数创建的对象可以将其标识为一种特定的类型
-          当创建对象时未使用new则会导致window对象属性的意外增加
-            this在运行时绑定,直接调用Person(),this映射到window上
-            function Foo(aoo,boo){ this.azz=aoo; this.bzz=boo; }
-            var obj= Foo(2,3);
-            console.log(azz);
-            console.log(bzz);
+        console.log(new Foo(2,3)); // Foo {aoo: 2, boo: 3}
+      Remarks:
+        和工厂模式比较,构造函数创建的对象可以将其标识为一种特定的类型
+        当创建对象时未使用new则会导致window对象属性的意外增加
+          this在运行时绑定,直接调用Person(),this映射到window上
+          function Foo(aoo,boo){ this.azz=aoo; this.bzz=boo; }
+          var obj= Foo(2,3);
+          console.log(azz);
+          console.log(bzz);
     obj = foo()     工厂模式创建对象 
       PS:工厂模式使软件领域一种广为人知的设计模式 
       function createObject(name,age){    // 创建工厂函数 
@@ -522,24 +524,8 @@ ECMAScript : JS核心,语法部分
           str += key;
         };
         console.log(str); // aooboocoo
-    Example:
-      var obj = new Object(); 
-      // var obj = Object();    // new关键字可以省略
-
-      var obj = {
-        name : "小明",
-        age : 12,
-        sex : "男",
-        sayhi : function(){
-          return "say";
-        },
-        info : function(){ //使用this访问当前对象的属性
-          return this.name+"年龄"+this.age; 
-        }
-      }
-      obj.info(); // 小明年龄12
-  对象的属性方法 
-    PS: 访问对象不存在的属性,不会报错,返回值为undefined
+  对象的属性&方法 
+    PS: 访问对象不存在的属性,不会报错,返回值为undefined 
       对象默认是可扩展的,可以向对象中添加、删除属性和方法
     obj[key]   读写对象的属性值 
       var obj = {
@@ -554,16 +540,87 @@ ECMAScript : JS核心,语法部分
         str += obj['a'+i]
       }
       console.log(str); // abc
-    obj.key    读写对象的属性值 
-      PS:属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问.
+    ◆obj.key    读写对象的属性值 
+      PS:属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问;
         括号内的部分可以为任意表达式,系统自动将其转化为字符串来判断是否有该属性
         即也可以使用变量名当成属性名调用
-      Example:
+      Example: 
         var aoo = "length";
         var str = "abc";
         str[aoo];   // 3
         str.aoo;    // undefined,str无aoo属性.
-    obj.key(); 调用对象的方法
+    foo = obj.constructor    创建当前对象的函数 
+    ◆obj.key(); 调用对象的方法
+    obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
+      PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
+      var obj1 = {a:1}
+      obj1.valueOf = function(){
+        return '自定义的转换值'
+      }
+      // 转换成数值
+      console.log(+obj1); // NaN, 
+      // 转换成字符串
+      console.log(''+obj1); // 自定义的转换值, 
+    str = obj.toString() 对象转换为基本类型的默认方法 
+      PS:'null'和'undefined'没有该方法 
+      ◆默认返回值
+      num.toString([radix]); 返回数值的字符串 
+        radix 可选,默认为10,表示进制,一般为 2、8、16 等 
+      foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
+        var foo = function(){
+          console.log(1);
+        }
+        foo.toString(); //"function(){ console.log(1); }"
+      arr.toString(); 将数组元素转换连接为字符串返回
+        和 arr.join('') 效果一样.
+      obj.toString(); 返回"[object Object]"
+        var obj ={};
+        obj.toString(); // "[object Object]"
+      Example:
+        var num = 10;
+        num.toString();    //返回值为'10'
+        num.toString(2);   //返回值为'1010',二进制输出
+
+        "abc".toString();   //"abc"
+        // 123.toString(); // 报错 ,默认将点.作为了小数点
+        123.1.toString(); // "123.1"
+
+        var val1;
+        val1.toString(); //报错,因为val1未初始化为 undefined
+        var val2 = undefined;
+        val2.toString();  //报错
+      自定义转换方法'toString' 
+        var obj1 = {a:1}
+        console.log(obj1.toString()); // [object Object] 
+        obj1.toString = function(){
+          return '自定义的返回值'
+        }
+        console.log(obj1.toString()); // 自定义的返回值 
+        console.log(''+obj1);         // 自定义的返回值 
+        console.log(+obj1);           // NaN  
+        var obj2 = {b:2}
+        obj2.toString = function(){
+          return 100
+        }
+        console.log(+obj2); // 100
+    str = obj.toLocaleString(); 对象的本地字符串表示 
+      返回对象的字符串、数值或布尔值表示 
+      通常与toString()方法的返回值相同
+      foo.valueOf(); 返回函数对象本身
+    bol = obj.hasOwnProperty(key)        查询属性是否存在[不包括原型链]   
+      key   属性名,需以字符串形式指定
+      Example: 
+        var obj = {aoo:"abc"};
+        obj.hasOwnProperty("aoo"); // true
+    bol = obj.propertyIsEnumerable(key); 查询属性是否能通过'for-in'语句枚举 
+      key   属性名,需以字符串形式指定 
+    bol = obj.isPrototypeOf(targetObj);  查询对象是否为目标对象的原型对象 
+      Example:
+      function Foo(){};
+      var aoo =new Foo();
+      Foo.prototype.isPrototypeOf(aoo);    //true
+      aoo.isPrototypeOf(Foo.prototype);    //fasle 
+      Object.prototype.isPrototypeOf(aoo); //true
   静态属性方法 
     arr = Object.keys(obj); 获取对象[不包含原型]所有的属性名 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
@@ -780,10 +837,6 @@ ECMAScript : JS核心,语法部分
           }
         });
     ◆查询
-    bol = obj.hasOwnProperty(key); 查询属性是否存在[不包括继承的属性] 
-      var obj = {aoo:"abc"};
-      obj.hasOwnProperty("aoo"); // true
-    bol = obj.propertyIsEnumerable(key); 查询属性是否可枚举 
     obj = Object.getOwnPropertyDescriptor(obj,"prop"); 查询属性的特性配置[ES5] 
       PS:可对DOM或BOM对象使用该方法;若查询的属性不存在则返回undefined 
       var obj = {aoo:"a"};
@@ -932,13 +985,6 @@ ECMAScript : JS核心,语法部分
         通过实现原型链,本质上扩展了原型搜索机制
       ◆相关操作
       obj instanceof 构造函数; 是否处于对象的原型链上 [详见: 关系运算符]
-      Obj.isPrototypeOf(obj);  判断obj的原型链上是否有Obj原型对象
-        若是则返回true,否则返回false
-        Example:
-        function Foo(){};
-        var aoo =new Foo();
-        Foo.prototype.isPrototypeOf(aoo);    //true
-        Object.prototype.isPrototypeOf(aoo); //true
       问题: 原型中的缺点带到了原型链中
       Example: :
         function A(){ this.name="abc"; }
@@ -1036,7 +1082,6 @@ ECMAScript : JS核心,语法部分
       调用时,会根据传入参数的不同自动选择对应的函数执行.
       JS中:会产生覆盖,只有最后一个定义的函数有用.
   对象转换为原始类型 
-    若输入的值已经是个原始值,则直接返回它.
     默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number. [?]
       Example:
         var date =new Date();
@@ -1045,12 +1090,12 @@ ECMAScript : JS核心,语法部分
         var boo = date + 1; // Date类型被优先转换为 String
         var coo =date.toString();
         var doo =date.valueOf()
-        console.log( aoo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)
-        console.log(typeof aoo);  // String
-        console.log( boo);  // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)1
-        console.log(typeof boo);  // String
-        console.log( coo); // Mon Jan 09 2017 11:36:49 GMT+0800 (中国标准时间)
-        console.log( doo); // 1483932704579
+        console.log(aoo,typeof aoo);  
+        // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)   String
+        console.log(boo,typeof boo);  
+        // Mon Jan 09 2017 11:35:22 GMT+0800 (中国标准时间)1  String
+        console.log(coo); // Mon Jan 09 2017 11:36:49 GMT+0800 (中国标准时间)
+        console.log(doo); // 1483932704579
 
         var aoo = [1,2,3];
         var boo = aoo + 0; // 默认转换为 String
@@ -1059,12 +1104,12 @@ ECMAScript : JS核心,语法部分
         console.log(typeof boo); // string
         console.log(coo); // 1,2,30
         console.log(typeof coo); // string
-    转换为 Number:先调用 valueOf 再调用 toString 
+    转换为数值:先调用'valueOf'再调用'toString' 
       调用该对象的valueOf()方法.若valueOf()返回原始值,则返回这个原始值.
       否则,调用该对象的toString()方法.若toString()返回原始值,则返回这个原始值.
       否则,抛出TypeError异常.
-    转换为 String:先调用 toString 再调用 valueOf 
-    Example:
+    转换为字符串:先调用'toString'再调用'valueOf'  
+    Example: 
       var obj = {
         valueOf: function() { // 未返回原始值 
           console.log(1);return {};
@@ -1076,60 +1121,7 @@ ECMAScript : JS核心,语法部分
       Number(obj); // 1 2 报错
       分析:调用Number方法时,先调用对象的valueOf方法,再调用其toString方法
         一般调用的是对象原型上的valueOf和toString,而本次对象的方法覆盖了原型上的.
-    val.valueOf()       对象转换为基本类型的默认方法 
-      PS:优先级高于'toString',当'valueOf'转换后仍为非基本类型再调用'toString'[?] 
-      var obj1 = {a:1}
-      obj1.valueOf = function(){
-        return '自定义的转换值'
-      }
-      console.log(+obj1); // NaN, 转换成的数值
-      console.log(''+obj1); // 自定义的转换值, 转换成的字符串
-    obj.toString([num]) 对象转换为基本类型的默认方法 
-      PS:'null'和'undefined'没有该方法 
-      num 可选,默认为10,表示进制,一般为 2、8、16 等 
-      ◆默认返回值
-      foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
-        var foo = function(){
-          console.log(1);
-        }
-        foo.toString(); //"function(){ console.log(1); }"
-      arr.toString(); 将数组元素转换连接为字符串返回
-        和 arr.join('') 效果一样.
-      obj.toString(); 返回"[object Object]"
-        var obj ={};
-        obj.toString(); // "[object Object]"
-      Example:
-        var num = 10;
-        num.toString();    //返回值为'10'
-        num.toString(2);   //返回值为'1010',二进制输出
-
-        "abc".toString();   //"abc"
-        // 123.toString(); // 报错 ,默认将点.作为了小数点
-        123.1.toString(); // "123.1"
-
-        var val1;
-        val1.toString(); //报错,因为val1未初始化为 undefined
-        var val2 = undefined;
-        val2.toString();  //报错
-      自定义转换方法'toString' 
-        var obj1 = {a:1}
-        console.log(obj1.toString()); // [object Object] 
-        obj1.toString = function(){
-          return '自定义的返回值'
-        }
-        console.log(obj1.toString()); // 自定义的返回值 
-        console.log(''+obj1);         // 自定义的返回值 
-        console.log(+obj1);           // NaN  
-        var obj2 = {b:2}
-        obj2.toString = function(){
-          return 100
-        }
-        console.log(+obj2); // 100
-    val.toLocaleString(); 转换为本地字符串
-      返回对象的字符串、数值或布尔值表示 
-      通常与toString()方法的返回值相同
-      foo.valueOf(); 返回函数对象本身
-  常用的类型检测方法
+  常用的类型检测方法 
     Object.prototype.toString.call(val); 获取值类型 
     typeof val;               [详参 一元运算符]
     obj instanceof Object;    [详参 关系运算符]
@@ -1160,7 +1152,7 @@ ECMAScript : JS核心,语法部分
       }
       getKey('a');       // (2) ["aoo", "boo"]
       getKey('a',false); // "aoo"
-Evaluation_Strategy,求值策略 
+'Evaluation-Strategy'求值策略 
   PS:决定变量之间、函数调用时实参和形参之间值的传递方式 
   读写引用类型值的 
     自我总结 
@@ -1212,14 +1204,14 @@ Evaluation_Strategy,求值策略
       obj1和obj3是两个变量名,指向的相同的值---内存中的一个实际对象
       因此修改了obj1的值的同时也改变了obj3的值;
       变量obj2指向的是另外一个对象,只是和obj1有相同的属性而已
-  call_by_value,按值传递 
+  'call-by-value'按值传递 
     PS:最常用的求值策略,JS中的基本类型按值传递
       传递的值为拷贝的副本,修改传递的值并不会影响原来值 
       按值传递由于每次都需要克隆副本,对一些复杂类型,性能较低
-  call_by_reference,按引用传递 
+  'call-by-reference'按引用传递 
     PS:传递的为原始值的隐式引用,当传递的值被改变时原始值也会被改变[两者同时指向相同的值]
       按引用传递会使函数调用的追踪更加困难,有时也会引起一些微妙的BUG。
-  call_by_sharing,按共享传递
+  'call-by-sharing'按共享传递
     PS:也叫按对象传递、按对象共享传递,JS中对象类型按共享传递的 
       最早由Barbara Liskov在1974年的GLU语言中提出,该求值策略被用于Python、Java、Ruby、JS等多种语言
     函数传参时,接受对象实参引用的副本
@@ -1259,21 +1251,18 @@ Evaluation_Strategy,求值策略
   属性访问表达式
   函数调用表达式
   对象创建表达式
-运算符 
+运算符|操作符  
   PS:ECMA-262 描述了一组用于操作数据值的运算符,也叫操作符;
     ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
-    运用于对象时,通常会调用对象的valueOf()和toString()方法,以便取得相应的值;
-    typeof、new 操作符,也称为 typeof 、new 运算符;
-  一元运算符 
-    只能操作一个值得运算符叫做一元运算符
+    运用于对象时,通常会调用对象的'valueOf'和'toString'方法,以便取得相应的值;
+  一元运算符 : 只能操作一个值的运算符 
     ++、-- 自增、自减
       前置和后置的区别:
-        对赋值有影响.
-        在没有赋值操作时,前置后后置是一样的
+        对赋值有影响;在没有赋值操作时,前置后后置是一样的,
         在赋值操作时,前置++会先累加再赋值,而后置++则先赋值再累加.
-      Example: var box=100;
-       var box1=++box;         //box1值为101;
-       var box2=box++;         //box2值为100;
+      Example: 
+      var num = 100;
+      console.log(num++,++num); // 100 , 102 
     +、-   正、负数
       var box="1";
       -box;               //-1
@@ -1314,7 +1303,7 @@ Evaluation_Strategy,求值策略
         delete arr[1]
         console.log(arr,1 in arr); // ["a", undefined × 1, "c"]  false
     obj = new Foo();  初始化对象 
-    void exp;   运行表达式,并始终返回 undefined
+    void exp;   运行表达式,并始终返回 undefined 
       PS:无论void后的表达式是什么,void操作符始终返回 undefined
       使用void的目的 
         undefined 在JS中不是保留字。
@@ -1532,27 +1521,27 @@ Evaluation_Strategy,求值策略
         console.log(num);  // 11
         console.log(boo2); // foo函数
     !  逻辑非 
-      PS:逻辑非可以用于任何值,无论这个值是什么类型,该运算都会返回一个布尔值.
-        执行原理:先将这个值转换成布尔值,然后取反.
-        使用两次逻辑运算符相当于对值进行Boolean()转型函数处理.
-      规则如下:
-        操作数是一个对象,返回false;
-        操作数是数值0、空字符串、null、NaN、undefined,返回true;
-        操作数是一个非空字符串,返回false;
-        操作数是任意非0和infinity,返回false;
-    ◆位运算符 
-     PS:一般应用中,基本用不到位运算符.
-       比较基于底层,性能和速度会非常好.
-       ECMAScript中的所有数值都以IEEE-754 64 位格式存储,
+      PS:可用于任何类型值,最终结果返回一个布尔值;
+        执行原理:先将这个值转换成布尔值,然后取反;
+        使用两次逻辑运算符相当于对值进行Boolean()转型函数处理;
+      ★规则:
+      操作数是一个对象,返回 false;
+      操作数是数值0、空字符串、null、NaN、undefined,返回 true;
+      操作数是一个非空字符串,返回 false;
+      操作数是任意非0和infinity,返回 false;
+    ◆位运算符 : 按内存中表示数值的位来操作数值 
+     PS:一般应用中,基本用不到位运算符; 比较基于底层,性能和速度会非常好;
+       ECMAScript中的所有数值都以'IEEE-754''64位'格式存储,
        但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
-       然后执行操作,最后在将结果转换回64位.
-    ~   位非NOT
-    &   位与AND
-    |   位或OR
-    ^   位异或XOR
-    <<  左移
-    >>  有符号右移
-    >>> 无符号右移
+       然后执行操作,最后在将结果转换回64位,
+       对于开发人员来说,由于64位存储格式是透明的,因此整个过程就像是只存在32位的整数一样;
+      ~   位非NOT
+      &   位与AND
+      |   位或OR
+      ^   位异或XOR
+      <<  左移
+      >>  有符号右移
+      >>> 无符号右移
     ◆其他运算符 
     =  赋值运算符
      =:将右边的赋值给左边
@@ -1827,49 +1816,49 @@ Evaluation_Strategy,求值策略
       }
       foo(); // 2
   其他语句 
-    with(){};  修改当前作用域
-      PS:运行缓慢,尤其是在已设置了属性值时,尽量少使用;严格模式下不可用 
-      Example: :
-      var obj = {
-        "aa":"abc",
-        "bb":11,
-        "cc":true
-      };
-      var aoo = obj.aa;
-      var boo = obj.bb;
-      var coo = obj.cc;
-      console.log(aoo,boo,coo); // abc 11 true
-      等价于
-      var obj = {
-        "aa":"abc",
-        "bb":11,
-        "cc":true
-      };
-      with(obj){ 
-        var aoo = aa; 
-        var boo = bb; 
-        var coo = cc; 
-      }
-      console.log(aoo,boo,coo); // abc 11 true
+  with(){};  修改当前作用域
+    PS:运行缓慢,尤其是在已设置了属性值时,尽量少使用;严格模式下不可用 
+    Example: :
+    var obj = {
+      "aa":"abc",
+      "bb":11,
+      "cc":true
+    };
+    var aoo = obj.aa;
+    var boo = obj.bb;
+    var coo = obj.cc;
+    console.log(aoo,boo,coo); // abc 11 true
+    等价于
+    var obj = {
+      "aa":"abc",
+      "bb":11,
+      "cc":true
+    };
+    with(obj){ 
+      var aoo = aa; 
+      var boo = bb; 
+      var coo = cc; 
+    }
+    console.log(aoo,boo,coo); // abc 11 true
 
-      var aoo = "hello";
-      aoo.toUpperCase(); // HELLO
-      with(aoo){
-        console.log(toUpperCase());
-      }
-    label 使用label语句可以在代码中添加标签,以便将来使用
-      var num = 0;
-      lab : for(var i = 0 ; i < 10 ; i++){
-        for(var j = 0 ; j < 10 ; j++){
-          if( i == 2 && j == 2 ){
-            break lab;
-          }
-          num++;
+    var aoo = "hello";
+    aoo.toUpperCase(); // HELLO
+    with(aoo){
+      console.log(toUpperCase());
+    }
+  label   可在代码中添加标签,以便将来使用 
+    var num = 0;
+    lab : for(var i = 0 ; i < 10 ; i++){
+      for(var j = 0 ; j < 10 ; j++){
+        if( i == 2 && j == 2 ){
+          break lab;
         }
+        num++;
       }
-      console.log(num); // 22,2*10+2
-      该例子中定义的lab标签可以在将来由break或continue语句引用.
-      加标签的语句一般都要与for语句等循环语句配合使用.
+    }
+    console.log(num); // 22,2*10+2
+    该例子中定义的lab标签可以在将来由break或continue语句引用.
+    加标签的语句一般都要与for语句等循环语句配合使用.
   Exp:
     'while' 'for' 和 'if' 等无作用域区间[只有函数才有作用域],
       Example: :
@@ -3532,16 +3521,16 @@ Global|Window 全局对象
         parseFloat('12.3.4');  //12.3,只认一个小数点
         parseFloat('01.20');   //1.2,去掉前、后导0
         parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
-    String(val);    返回转换后的字符串 
-      若值存在 .toString() 方法,则调用该方法并返回相应的结果 
-      否则[即值为null或undefined],则返回"null"或'undefined'
+    str= String(val);    将任意类型值转换为字符串 
+      PS：若值存在'toString'方法,则调用该方法,否则,null返回"null"、undefined返回'undefined'
+      Example:  
       String(num)       "数值"
       String(str)       "字符串"
       String(true)      "true"
       String(false)     "false"
       String(undefined) "undefined"
       String(null)      "null"
-      Example:  String(1); //"1"
+      String(1); //"1"
     uriStr = encodeURI(str) 将字符串编码为URI 
       PS:通用资源标识符简称为URI
         不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
@@ -3572,7 +3561,7 @@ Global|Window 全局对象
         // console.log(num);  // 报错,不存在
         var val = eval(str);
         console.log(num,val); // 100 undefined 
-  window 对象的DOM和BOM属性&方法 [详见 DOM&BOM] 
+  window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
 Math   数学对象 
   PS:为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
   ◆数学值

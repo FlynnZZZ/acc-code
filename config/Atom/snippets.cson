@@ -927,9 +927,6 @@
   '-fromCharCode(num,num...);':
     'prefix': 'fromCharCode'
     'body': 'fromCharCode($1);'
-  '-hasownProperty(str);':
-    'prefix': 'hasownProperty'
-    'body': 'hasownProperty(str);'
   '-includes("$1");':
     'prefix': 'includes'
     'body': 'includes("$1");'

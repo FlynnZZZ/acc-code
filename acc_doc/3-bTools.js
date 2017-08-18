@@ -1,19 +1,19 @@
 npm,node_package_manager node包管理器 
-  PS：随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
+  PS:随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
     允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用. 
 命令行命令 
-  PS：所有node_modules/.bin/目录下的命令,都可以用 'npm run 命令' 的格式运行,
+  PS:所有node_modules/.bin/目录下的命令,都可以用 'npm run 命令' 的格式运行,
     在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
     和npm相关的指令或命令前都需添加'npm '
   ◆常用命令 
   npm init        初始化,创建'package.json'文件
   npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为'i' 
-    <name>     node插件名称, 如：npm install gulp-less --save-dev
+    <name>     node插件名称, 如:npm install gulp-less --save-dev
     -g         全局安装 
       将会安装在C:\Users\Administrator\AppData\Roaming\npm,并写入系统环境变量
-      非全局安装：将会安装在当前定位目录；
+      非全局安装:将会安装在当前定位目录；
       全局安装可以通过命令行在任何地方调用它,
       本地安装将安装在定位目录的node_modules文件夹下,通过require()调用 
     --save     将该模块写入当前的 package.json 文件中的 dependencies 属性
@@ -30,7 +30,7 @@ npm,node_package_manager node包管理器
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
   npm uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
-    PS：不要直接删除本地插件包
+    PS:不要直接删除本地插件包
     npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
   npm list [-g]       当前目录已安装插件[简写'ls'] 
     npm list <name> [-g]  查看模块的版本号 
@@ -71,17 +71,17 @@ npm,node_package_manager node包管理器
     npm install anywhere -g  快速搭建服务器用于本地调试
     npm install weinre -g    安装weinre,用于调试手机页面
   cnpm npm的淘宝镜像  
-    PS：npm的插件安装是从国外服务器下载,受网络影响大,淘宝团队将其复制到自己的服务器上,
+    PS:npm的插件安装是从国外服务器下载,受网络影响大,淘宝团队将其复制到自己的服务器上,
       是一个完整 npmjs.org 镜像,可用其代替官方版本[只读],目前同步频率为 10 分钟每次,
       安装完后最好查看其版本号 cnpm -v 或关闭命令提示符重新打开[安装完直接使用可能会出现错误],
       cnpm跟npm用法完全一致,只是在执行命令时将npm改为cnpm;
-      官方网址：'http://npm.taobao.org'
+      官方网址:'http://npm.taobao.org'
     安装cnpm 
       'npm install -g cnpm --registry=https://registry.npm.taobao.org'
   待整理 
     npm view vue-cli   查看全局 vue-cli 版本
 package.json npm配置文件 
-  PS：将配置信息写入 package.json 并将其加入版本管理,通过配置更方便包的管理;
+  PS:将配置信息写入 package.json 并将其加入版本管理,通过配置更方便包的管理;
     该文件不是必须的,当没有该文件时,则相应的命令不生效; 
     定义当前项目所需要的各种模块,以及项目的配置信息,如名称、版本、许可证等元数据等;
     package.json 文件就是一个JSON对象,该对象的每一个成员就是当前项目的一项设置。
@@ -93,7 +93,7 @@ package.json npm配置文件
       然后在当前目录生成一个基本的 package.json 文件,
       其中'name'项目名称和'version'项目版本必填,其他选填 
     npm install [--production]   根据 package.json 的配置,下载所有依赖  
-      PS：自动寻找当前目录下的 package.json 文件,按其配置执行安装,
+      PS:自动寻找当前目录下的 package.json 文件,按其配置执行安装,
         下载的文件存放在node_modules中,这一过程由npm自动完成,我们只需等待即可。
       --production  可选,只下载dependencies节点的包
     npm run xx   默认执行该文件中'script'下的属性定义的命令
@@ -155,7 +155,7 @@ package.json npm配置文件
       在运行npm install xxx后可以自动插入相应的值,
       如需要安装vue,运行npm install vue,
       npm就会自动安装最新版本的vue到当前node_modules文件夹中,
-      dependencies的内容也会变成如下：
+      dependencies的内容也会变成如下:
       "dependencies": {
         "vue": "^1.0.16"
       }
@@ -166,7 +166,7 @@ package.json npm配置文件
       在devDependencies下就会写入webpack的具体安装信息。      
     
     版本号的设定规则 
-      PS： 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
+      PS: 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
       NPM使用语义版本号来管理代码
       语义版本号分为'X.Y.Z'三位,分别代表主版本号、次版本号和补丁版本号。
       当代码变更时,版本号按以下原则更新。
@@ -352,12 +352,12 @@ Webpack  模块加载器兼打包工具
   webpack -w                 提供watch方法,实时进行打包更新
   webpack -p                 对打包后的文件进行压缩
   webpack -d                 提供SourceMaps,方便调试
-  webpack --colors           输出结果带彩色,比如：会用红色显示耗时较长的步骤
+  webpack --colors           输出结果带彩色,比如:会用红色显示耗时较长的步骤
   webpack --profile          输出性能数据,可以看到每一步的耗时
   ◆其他命令参数
   webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies 
 'webpack.config.js'默认的配置文件 
-  PS：需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
+  PS:需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
     该文件是一个 node.js 模块,返回一个 json 格式的配置信息对象,
     或者通过 --config 选项来指定配置文件;
   相关命令 
@@ -411,7 +411,7 @@ Webpack  模块加载器兼打包工具
           filename: "[name].bundle.js",
         },
       };
-      会被打包成以下三个文件：
+      会被打包成以下三个文件:
       dist/home.bundle.js、 
       dist/events.bundle.js, 
       dist/contact.bundle.js。
@@ -579,7 +579,7 @@ Webpack  模块加载器兼打包工具
           MD5值为了保证每个文件的唯一性
         Example: filename : '[name]-[hash].js'
 Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
-  PS：loader机制支持载入各种各样的静态资源,不只是js脚本,
+  PS:loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
     Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
     多个loader之间使用”!”连接,类似于Linux的pipe命令,加载器的加载顺序为从右向左处理;
@@ -623,7 +623,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     在命令行中进行配置 
       webpack a.js b.js --module-bind "css=style-loader!css-loader"   
   'webpack.config.js'文件配置  
-    PS：根据模块类型[扩展名]来自动绑定需要的 loader
+    PS:根据模块类型[扩展名]来自动绑定需要的 loader
       为了让加载器工作,需要一个正则表达式来定义需修改的文件,
       以及一个字符串或数组用来申明我们需要使用的加载器。
     '1.x'版本的配置方式 
@@ -676,12 +676,12 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       例如,url(./image.png) 被转译成 require('./image.png')。
       
       <img src="../image.png">
-      如上会被再转译成：
+      如上会被再转译成:
       
       createElement('img', { attrs: { src: require('../image.png') }})
       因为 .png 并不是个 JavaScript 文件,你需要配置 Webpack 使用 file-loader 或者 url-loader 处理它们。项目脚手架工具 vue-cli 也能帮你配置这些。
       
-      这样做的好处是：
+      这样做的好处是:
       
       file-loader 允许你指定在哪里复制和存放静态资源文件 ,以及用版本哈希值命名从而更好利用缓存。 这意味着,可以把图片放到 *.vue 文件旁边,可使用相对路径,而不需要担心发布时候的 URL。使用适当的配置,Webpack 在打包输出的时候,会自动把文件路径转为正确的 URL。
       
@@ -1336,7 +1336,7 @@ Plugins,插件   扩展webpack的功能
     |--package.json  npm配置文件
     |--webpack.config.js   webpack配置文件
   步骤 
-    初始化项目目录,最终目录结构如下：
+    初始化项目目录,最终目录结构如下:
       - dist //文件生成目录
           -- //自动生成
       - node_module //自动安装 
@@ -1403,7 +1403,7 @@ Plugins,插件   扩展webpack的功能
           plugins: ['transform-runtime']
         },
         resolve: {
-          // require时省略的扩展名,如：require('module') 不需要module.js
+          // require时省略的扩展名,如:require('module') 不需要module.js
           extensions: ['', '.js', '.vue'],
           // 别名,可以直接使用别名来代表设定的路径以及其他
           alias: {
@@ -2168,7 +2168,7 @@ HttpServer   本地调试及移动端调试
     如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
   browserify|webpack JS模块化方案,文件打包工具,预编译模块的方案  
 Gulp 
-  PS：gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
+  PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
     gulp是基于Nodejs的自动任务运行器,
     她能自动化地完成 javascript/coffee/sass/less/html/image/css 等文件的的测试、
@@ -2179,14 +2179,14 @@ Gulp
     gulp 和 grunt 非常类似,但相比于 grunt 的频繁 IO 操作,
     gulp 的流操作,能更快地更便捷地完成构建工作。
   全局安装gulp
-    PS：全局安装gulp目的是为了通过她执行gulp任务；
+    PS:全局安装gulp目的是为了通过她执行gulp任务；
     cnpm install gulp -g   安装
     gulp -v     查看是否正确安装,出现版本号即为正确安装
       //  CLI version 3.9.1
   新建 package.json 文件 
-    PS：package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
+    PS:package.json 是基于nodejs项目必不可少的配置文件,它是存放在项目根目录的普通json文件；
     手动新建配置文件
-      它是这样一个json文件（注意：json文件内是不能写注释的,复制下列内容请删除注释）：
+      它是这样一个json文件（注意:json文件内是不能写注释的,复制下列内容请删除注释）:
       {
         "name": "test",   //项目名称（必须）
         "version": "1.0.0",   //项目版本（必须）
@@ -2221,14 +2221,14 @@ Gulp
       Is this ok? (yes)    输入 y 确认创建
     cnpm help package.json     查看 package.json 帮助文档,会跳转网页
   本地安装gulp插件
-    安装：定位目录命令后提示符执行cnpm install --save-dev；
+    安装:定位目录命令后提示符执行cnpm install --save-dev；
     以gulp-less为例（编译less文件）,命令提示符执行cnpm install gulp-less --save-dev；
     将会安装在node_modules的gulp-less目录下,该目录下有一个 gulp-less 的使用帮助文档README.md；
-    为了能正常使用,我们还得本地安装gulp：cnpm install gulp --save-dev；
+    为了能正常使用,我们还得本地安装gulp:cnpm install gulp --save-dev；
       全局安装了gulp,项目也安装了gulp,
       全局安装gulp是为了执行gulp任务,本地安装gulp则是为了调用gulp插件的功能。
   新建 gulpfile.js 文件[重要] 
-    PS：gulpfile.js 是gulp项目的配置文件,
+    PS:gulpfile.js 是gulp项目的配置文件,
       是位于项目根目录的普通js文件（其实将 gulpfile.js 放入其他文件夹下亦可）。
     大概是这样一个js文件,主要配置:
       //导入工具包 require('node_modules里对应模块')
@@ -2245,16 +2245,16 @@ Gulp
       //定义默认任务 elseTask为其他任务,该示例没有定义elseTask任务
       gulp.task('default',['testLess', 'elseTask']); 
       
-      //gulp.task(name[, deps], fn) 定义任务  name：任务名称 deps：依赖任务名称 fn：回调函数
-      //gulp.src(globs[, options]) 执行任务处理的文件  globs：处理的文件路径(字符串或者字符串数组) 
+      //gulp.task(name[, deps], fn) 定义任务  name:任务名称 deps:依赖任务名称 fn:回调函数
+      //gulp.src(globs[, options]) 执行任务处理的文件  globs:处理的文件路径(字符串或者字符串数组) 
       //gulp.dest(path[, options]) 处理完后文件生成路径
   运行gulp 
     命令提示符执行 gulp 任务名称
-    编译less：命令提示符执行 gulp testLess；
+    编译less:命令提示符执行 gulp testLess；
     当执行 gulp default 或 gulp 将会调用default任务里的所有任务[‘testLess’,’elseTask’]。
   使用webstorm运行gulp任务 
-    说明：使用webstorm可视化运行gulp任务；
-    使用方法：
+    说明:使用webstorm可视化运行gulp任务；
+    使用方法:
       将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
       若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
 Anythere 将当前目录变成一个静态文件服务器的根目录 
@@ -2267,13 +2267,13 @@ Anythere 将当前目录变成一个静态文件服务器的根目录
       anywhere  8000 
     -s 静默执行不会自动打开浏览器,默认自动打开网页
 Weinre,'Web Inspector Remote'一种远程调试工具 
-  PS：功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
+  PS:功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
     由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
     所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
-  三个端的含义：
-    客户端(client)：本地的WebInspector,远程调试客户端。
-    服务端(agent)：本地的HTTPServer,为目标页面与客户端建立通信。
-    目标页面(target)：被调试的页面,页面已嵌入weinre的远程js。
+  三个端的含义:
+    客户端(client):本地的WebInspector,远程调试客户端。
+    服务端(agent):本地的HTTPServer,为目标页面与客户端建立通信。
+    目标页面(target):被调试的页面,页面已嵌入weinre的远程js。
   Weinre运行
     weinre -boundHost 192.168.0.102  -httpPort 8099   命令行键入 
       httpPort 为调试服务器运行的端口,默认8080;

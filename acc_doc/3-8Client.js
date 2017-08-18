@@ -5,7 +5,7 @@
       浏览器在遇到<body>标签时才开始呈现内容
     主要组成
       渲染引擎: 将网页代码渲染成图像呈现,也叫浏览器内核
-        PS：浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
+        PS:浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
           负责对网页语法的解释,如HTML、JavaScript并渲染（显示）网页。
           渲染引擎决定了浏览器如何显示网页的内容以及页面的格式信息。
           不同的浏览器内核对网页编写语法的解释也有不同,
@@ -19,7 +19,7 @@
           Webkit引擎包含WebCore排版引擎及JavaScriptCore解析引擎,均是从KDE的KHTML及KJS引擎衍生而来,它们都是自由软件,在GPL条约下授权,同时支持BSD系统的开发。
           所以Webkit也是自由软件,同时开放源代码。在安全方面不受IE、Firefox的制约,所以Safari浏览器在国内还是很安全的。
           Google Chrome、360 极速浏览器以及搜狗高速浏览器高速模式也使用Webkit作为内核(在脚本理解方面,Chrome使用自己研发的V8引擎)。
-          WebKit内核常见的浏览器：傲游浏览器3、[1]  Apple Safari (Win/Mac/iPhone/iPad)、Symbian手机浏览器、Android 默认浏览器,
+          WebKit内核常见的浏览器:傲游浏览器3、[1]  Apple Safari (Win/Mac/iPhone/iPad)、Symbian手机浏览器、Android 默认浏览器,
         Gecko    Firefox内核
           Netscape6开始采用的内核,后来的Mozilla FireFox也采用了该内核,
           Gecko的特点是代码完全公开,因此,其可开发程度很高,
@@ -40,7 +40,7 @@
           IE从版本11开始,初步支持WebGL技术。
           IE8的JavaScript引擎是Jscript,IE9开始用Chakra,
           这两个版本区别很大,Chakra无论是速度和标准化方面都很出色。
-          Trident内核的常见浏览器有：
+          Trident内核的常见浏览器有:
             IE6、IE7、IE8（Trident 4.0）
             IE9（Trident 5.0）
             IE10（Trident 6.0）
@@ -64,7 +64,7 @@
         flow  : 渲染树到网页布局,称为"布局流"
         paint : 布局到网页显示为"绘制"
         reflow 和 repaint
-          PS：页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
+          PS:页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
             reflow必然要repaint,反之则不然,
             如改变颜色只会repaint,改变元素的布局则会reflow和repaint,
             通常,浏览器browser会智能的将reflow和repaint限制在相关子树上, 以减小开销
@@ -92,7 +92,7 @@
               }
               allElems.forEach(addHeight);
       JS引擎: 主要作用将网页中的JS代码读取、处理并运行,也叫JS解释器
-        PS：JS为解释型语言,不需编译,由解释器运行
+        PS:JS为解释型语言,不需编译,由解释器运行
           好处: 运行和修改方便
           缺点: 每次运行需要调用解释器,系统开销大,运行速度慢于编译型语言
           为了提高运行速度,目前浏览器都将JS进行一定程度的编译,
@@ -121,7 +121,7 @@
             Opera   Carakan
     浏览器缓存
       反复的获取同一个URL(如JSONP请求),浏览器为了提高效率会加载缓存,会得到同样的缓存文件.
-      e.g. 
+      Example: 
         var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
         在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
   小技巧 
@@ -192,17 +192,17 @@
         touch : touchstart touchmove touchend touchcancel
         control : resize scroll zoom focus blur select change submit reset
     console 对象 
-      PS：console对象为浏览器的实现,包含在浏览器自带的开发工具中, 
+      PS:console对象为浏览器的实现,包含在浏览器自带的开发工具中, 
         虽然还不是标准,但各大浏览器都原生支持,已成为事实上的标准;
         由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
         NodeJS 沿用了这个标准,提供与习惯行为一致的 console 对象,
         用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
         指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
       console.log([val1][, ...])   向标准输出流打印字符并以换行符结束
-        PS： 该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
+        PS: 该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
           若有多个参数,则 以类似于C 语言 printf() 命令的格式输出
         格式占位符
-          PS：log方法将占位符替换以后的内容,显示在console窗口
+          PS:log方法将占位符替换以后的内容,显示在console窗口
           %s     字符串
           %d     整数
           %i     整数
@@ -233,7 +233,7 @@
       console.trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
         这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
       console.assert([bool][,val]) 用于判断某个表达式或变量是否为真 
-        PS：接收两个参数,第一个参数是表达式,第二个参数是字符串.
+        PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
           只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
         bool  布尔值,默认为false 
         Example:
@@ -246,7 +246,7 @@
       console.dirxml()             主要用于以目录树形式显示DOM节点
         若参数不是DOM节点,则等同于dir
       console.table()              对于某些复合类型的数据将其转为表格显示
-        e.g. :
+        Example: :
         var languages = [
           { name: "JavaScript", fileExtension: ".js" },
           { name: "TypeScript", fileExtension: ".ts" },
@@ -317,7 +317,7 @@
     断点调试 [Chrome浏览器下] 
       f12 - Sources 进入断点调试界面
       在程序中添加语句 debuger; 相当于在语句处添加断点
-    Exp： 
+    Exp: 
       不可见符号及空格
         var i = String.fromCharCode(0) +'1'; //"1"
         // ASCII码 0 对应的是null 控制符 不可写的也不显示的符号
@@ -332,25 +332,25 @@
         使用在页面中相应的改变元素来达到感知的效果 
   Todo: 
     浏览器的组成
-    浏览器的核心是两部分：渲染引擎和JavaScript解释器（又称JavaScript引擎）。
+    浏览器的核心是两部分:渲染引擎和JavaScript解释器（又称JavaScript引擎）。
     
     渲染引擎
     渲染引擎的主要作用是,将网页代码渲染为用户视觉可以感知的平面文档。
     
     不同的浏览器有不同的渲染引擎。
     
-    Firefox：Gecko引擎
-    Safari：WebKit引擎
-    Chrome：Blink引擎
+    Firefox:Gecko引擎
+    Safari:WebKit引擎
+    Chrome:Blink引擎
     IE: Trident引擎
     Edge: EdgeHTML引擎
     渲染引擎处理网页,通常分成四个阶段。
     
-    解析代码：HTML代码解析为DOM,CSS代码解析为CSSOM（CSS Object Model）
-    对象合成：将DOM和CSSOM合成一棵渲染树（render tree）
-    布局：计算出渲染树的布局（layout）
-    绘制：将渲染树绘制到屏幕
-    以上四步并非严格按顺序执行,往往第一步还没完成,第二步和第三步就已经开始了。所以,会看到这种情况：网页的HTML代码还没下载完,但浏览器已经显示出内容了。
+    解析代码:HTML代码解析为DOM,CSS代码解析为CSSOM（CSS Object Model）
+    对象合成:将DOM和CSSOM合成一棵渲染树（render tree）
+    布局:计算出渲染树的布局（layout）
+    绘制:将渲染树绘制到屏幕
+    以上四步并非严格按顺序执行,往往第一步还没完成,第二步和第三步就已经开始了。所以,会看到这种情况:网页的HTML代码还没下载完,但浏览器已经显示出内容了。
     
     重流和重绘
     渲染树转换为网页布局,称为“布局流”（flow）；布局显示到页面的这个过程,称为“绘制”（paint）。它们都具有阻塞效应,并且会耗费很多时间和计算资源。
@@ -406,7 +406,7 @@
     
     为了提高运行速度,目前的浏览器都将JavaScript进行一定程度的编译,生成类似字节码（bytecode）的中间代码,以提高运行速度。
     
-    早期,浏览器内部对JavaScript的处理过程如下：
+    早期,浏览器内部对JavaScript的处理过程如下:
     
     读取代码,进行词法分析（Lexical analysis）,将代码分解成词元（token）。
     对词元进行语法分析（parsing）,将代码整理成“语法树”（syntax tree）。
@@ -414,7 +414,7 @@
     使用“字节码解释器”（bytecode interpreter）,将字节码转为机器码。
     逐行解释将字节码转为机器码,是很低效的。为了提高运行速度,现代浏览器改为采用“即时编译”（Just In Time compiler,缩写JIT）,即字节码只在运行时编译,用到哪一行就编译哪一行,并且把编译结果缓存（inline cache）。通常,一个程序被经常用到的,只是其中一小部分代码,有了缓存的编译结果,整个程序的运行速度就会显著提升。不同的浏览器有不同的编译策略。有的浏览器只编译最经常用到的部分,比如循环的部分；有的浏览器索性省略了字节码的翻译步骤,直接编译成机器码,比如chrome浏览器的V8引擎。
     
-    字节码不能直接运行,而是运行在一个虚拟机（Virtual Machine）之上,一般也把虚拟机称为JavaScript引擎。因为JavaScript运行时未必有字节码,所以JavaScript虚拟机并不完全基于字节码,而是部分基于源码,即只要有可能,就通过JIT（just in time）编译器直接把源码编译成机器码运行,省略字节码步骤。这一点与其他采用虚拟机（比如Java）的语言不尽相同。这样做的目的,是为了尽可能地优化代码、提高性能。下面是目前最常见的一些JavaScript虚拟机：
+    字节码不能直接运行,而是运行在一个虚拟机（Virtual Machine）之上,一般也把虚拟机称为JavaScript引擎。因为JavaScript运行时未必有字节码,所以JavaScript虚拟机并不完全基于字节码,而是部分基于源码,即只要有可能,就通过JIT（just in time）编译器直接把源码编译成机器码运行,省略字节码步骤。这一点与其他采用虚拟机（比如Java）的语言不尽相同。这样做的目的,是为了尽可能地优化代码、提高性能。下面是目前最常见的一些JavaScript虚拟机:
     
     Chakra(Microsoft Internet Explorer)
     Nitro/JavaScript Core (Safari)
@@ -422,8 +422,8 @@
     SpiderMonkey (Firefox)
     V8 (Chrome, Chromium)    
   Chrome 
-    js报错： Uncaught RangeError: Invalid string length
-      原因：多重遍历过程中,重复使用变量i导致,把内for循环的变量i换成j.
+    js报错: Uncaught RangeError: Invalid string length
+      原因:多重遍历过程中,重复使用变量i导致,把内for循环的变量i换成j.
   Firefox
   IE
   Safari
@@ -437,7 +437,7 @@
     如果遇到非阻塞资源浏览器会发送下载请求并且继续解析。
     即使浏览器可以并行执行多个请求,但是无法与针对脚本文件的操作并行执行。
   一个页面从输入 URL 到页面加载显示完成,这个过程中都发生了什么？（流程说的越详细越好）
-    详细版：
+    详细版:
       1、浏览器会开启一个线程来处理这个请求,对 URL 分析判断如果是 http 协议就按照 Web 方式来处理;
       2、调用浏览器内核中的对应方法,比如 WebView 中的 loadUrl 方法;
       3、通过DNS解析获取网址的IP地址,设置 UA 等信息发出第二个GET请求;
@@ -448,7 +448,7 @@
       8、浏览器开始下载html文档(响应报头,状态码200),同时使用缓存;
       9、文档树建立,根据标记请求所需指定MIME类型的文件（比如css、js）,同时设置了cookie;
       10、页面开始渲染DOM,JS根据DOM API操作DOM,执行事件绑定等,页面显示完成。
-    简洁版：
+    简洁版:
       浏览器根据请求的URL交给DNS域名解析,找到真实IP,向服务器发起请求；
       服务器交给后台处理完成后返回数据,浏览器接收文件（HTML、JS、CSS、图象等）；
       浏览器对加载到的资源（HTML、JS、CSS等）进行语法解析,建立相应的内部数据结构（如HTML的DOM）；
@@ -456,7 +456,7 @@
 浏览器 
   URL中的参数 lastreporttime 
     在URL末尾增加一个 lastreporttime 参数,表示只会加载该参数时间之后的报告.
-    e.g.
+    Example:
     'http://gumball.wickedlysmart.com/?lastreporttime=1302212903099'
     指定的时间为一串数字,单位为毫秒.
   浏览器检测 
@@ -483,18 +483,18 @@
       所以在设计和开发多语言网站时,一定要注意先把非中文页面的字符集定义为“utf-8”格式,
       这一步非常重要,原因在于若等页面做好之后再更改字符集设置,可说是一件非常非常吃力不讨好的工作,
       有时候甚至可能需要从头再来,重新输入网站的文字内容。
-    多语言网站实现计划 ：
-      静态：就是为每种语言分辨准备一套页面文件,
+    多语言网站实现计划 :
+      静态:就是为每种语言分辨准备一套页面文件,
         通过文件后缀名来区分不同语言,
           例如对于首页文件index_en.htm供给英语界面,index_gb.htm供给简体中文界面,index_big.htm供给繁体中文界面
         通过子目录来区分不同语言。
           或者是en/index.htm供给英语界面,gb/index.htm供给简体中文界面,big/index.htm供给繁体中文界面
         一旦用户选择了需要的语言后,主动跳转到相应的页面,首页以下其他链接也是按照同样方法处理。
         从保护的角度来看,通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
-      动态：站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
+      动态:站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
        在需要输出语言文字的处所同一采用语言变量来表现,这些语言变量可以根据用户选择不同的语言赋予不同的值,
        从而实现在不同的语言环境下输出不同的文字。
-        例如：语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
+        例如:语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
         当用户选择的语言是简体中文时赋值为“姓名”,这样就可以适应不同语言时的输出。
       优缺点
         采用静态方法的长处是页面直接输出到客户端,不需要在服务器上运行,占用服务器的资源比拟少,
@@ -559,19 +559,19 @@ JS代码引入、执行
       外部JS文件带有.js扩展名,但这个扩展名是非必须的,浏览器不会检查JS文件的扩展名.
       若不使用.js扩展名,需确保服务器能返回正确的MIME类型
   异步加载JS的方式
-    一：<script>标签的 async="async"属性.
+    一:<script>标签的 async="async"属性.
       HTML5 中新增的属性,Chrome、FF、IE9&IE9+均支持
       脚本相对于页面的其余部分异步地执行(当页面继续进行解析的同时,脚本将被执行)
       async 属性仅适用于外部脚本(只有在使用 src 属性时)
       该方法不能保证脚本按顺序执行(当有多个该属性的script时)
-    二：<script>标签的 defer="defer"属性.
+    二:<script>标签的 defer="defer"属性.
       规定脚本执行延迟,直到页面加载完毕,再执行
       兼容所有浏览器.此外,这种方法可以确保所有设置 defer 属性的脚本按顺序执行.
-    三：AJAX eval
+    三:AJAX eval
       使用 AJAX 得到脚本内容,然后通过 eval_r(xmlhttp.responseText)来运行脚本
       兼容所有浏览器.
-    四：iframe 方式
-      可以参照：iframe 异步加载技术及性能中关于 Meboo 的部分
+    四:iframe 方式
+      可以参照:iframe 异步加载技术及性能中关于 Meboo 的部分
       兼容所有浏览器.
     五: 在JS文件中创建script元素对象,按照要求添加到DOM中
       如创建script对象 然后在添加src地址;
@@ -590,13 +590,13 @@ JS代码引入、执行
 
       网页中嵌入JavaScript代码,主要有四种方法。
 
-      <script>标签：代码嵌入网页
-      <script>标签：加载外部脚本
-      事件属性：代码写入HTML元素的事件处理属性,比如onclick或者onmouseover
-      URL协议：URL支持以javascript:协议的方式,执行JavaScript代码
+      <script>标签:代码嵌入网页
+      <script>标签:加载外部脚本
+      事件属性:代码写入HTML元素的事件处理属性,比如onclick或者onmouseover
+      URL协议:URL支持以javascript:协议的方式,执行JavaScript代码
       后两种方法用得很少,常用的是前两种方法。由于内容(HTML代码)和行为代码(JavaScript)应该分离,所以第一种方法应当谨慎使用。
 
-      script标签：代码嵌入网页
+      script标签:代码嵌入网页
       通过<script>标签,可以直接将JavaScript代码嵌入网页。
 
       <script>
@@ -604,8 +604,8 @@ JS代码引入、执行
       </script>
       <script>标签有一个type属性,用来指定脚本类型。对JavaScript脚本来说,type属性可以设为两种值。
 
-      text/javascript：这是默认值,也是历史上一贯设定的值。若你省略type属性,默认就是这个值。对于老式浏览器,设为这个值比较好。
-      application/javascript：对于较新的浏览器,建议设为这个值。
+      text/javascript:这是默认值,也是历史上一贯设定的值。若你省略type属性,默认就是这个值。对于老式浏览器,设为这个值比较好。
+      application/javascript:对于较新的浏览器,建议设为这个值。
       <script type="application/javascript">
         console.log('Hello World');
       </script>
@@ -622,7 +622,7 @@ JS代码引入、执行
       // "
       //   console.log('Hello World');
       // "
-      script标签：加载外部脚本
+      script标签:加载外部脚本
       <script>标签也可以指定加载外部的脚本文件。
 
       <script src="example.js"></script>
@@ -751,17 +751,17 @@ JS代码引入、执行
   微信 6.1 版本以后,会自带QQ浏览器的X5内核,即使你没有安装QQ浏览器。  [?]
   webkit内核中的一些私有的meta标签,这些meta标签在开发webapp时起到非常重要的作用
     <meta content=”width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;” name=”viewport” /> 
-    第一个meta标签表示：强制让文档的宽度与设备的宽度保持1:1,
+    第一个meta标签表示:强制让文档的宽度与设备的宽度保持1:1,
     并且文档最大的宽度比例是1.0,且不允许用户点击屏幕放大浏览；
 
     <meta content=”yes” name=”apple-mobile-web-app-capable” /> 
-    第二个meta标签是iphone设备中的safari私有meta标签,它表示：允许全屏模式浏览；
+    第二个meta标签是iphone设备中的safari私有meta标签,它表示:允许全屏模式浏览；
 
     <meta content=”black” name=”apple-mobile-web-app-status-bar-style” /> 
     第三个meta标签也是iphone的私有标签,它指定的iphone中safari顶端的状态条的样式；
 
     <meta content=”telephone=no” name=”format-detection” /> 
-    第四个meta标签表示：告诉设备忽略将页面中的数字识别为电话号码。
+    第四个meta标签表示:告诉设备忽略将页面中的数字识别为电话号码。
 
 
     去除Android平台中对邮箱地址的识别
@@ -769,16 +769,16 @@ JS代码引入、执行
 
 
 
-    例子1：<a href="tel:400-4000-0000" >XXX</a>
+    例子1:<a href="tel:400-4000-0000" >XXX</a>
     这个a标签里的href调用的是手机号码。当点击这个a标签的时候则弹出是否拨打该号码的提示。
     在手机浏览器中使用是没有任何问题的,
-    但在微信中,在安卓系统手机,微信 5.0.1 以上版本时该标签就失效了。（最新的微信版本是否解决了这个问题目前还不清楚）。这种情况下,将：
+    但在微信中,在安卓系统手机,微信 5.0.1 以上版本时该标签就失效了。（最新的微信版本是否解决了这个问题目前还不清楚）。这种情况下,将:
     <a href="tel:400-4000-0000" >XXX</a>改为
     <a link="tel:400-4000-0000" >
     则可以解决部分安卓机型,（但不是全部的）,有些机型依然不行。
     这个和微信客户端有关。目前没有找到满意的解决办法。
-WeUI：专为开发微信HTML5应用的开源Web UI组件库
-  PS：WeUI是一套同微信原生视觉体验一致的基础样式库,
+WeUI:专为开发微信HTML5应用的开源Web UI组件库
+  PS:WeUI是一套同微信原生视觉体验一致的基础样式库,
     为微信Web开发量身设计,可以令用户的使用感知更加统一。
     包含button、cell、dialog、toast、article、icon等各式元素。
   说明篇
@@ -793,25 +793,25 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
   将需要调试的网页的地址「不可使用file协议,即需要开启本地服务器」发送到微信上,
   在微信上打开从电脑上发来的链接即可看到调试页的效果了
 微信JS-SDK 
-  PS：微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
+  PS:微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
     通过微信JS-SDK,网页开发者可使用拍照、选图、语音、位置等手机系统的能力,
     同时可以直接使用微信分享、扫一扫、卡券、支付等微信特有的能力。
   ?
     所有使用微信JS SDK的网站,都必须实名到微信认证、缴费。它采取了类似Apple App Store的策略,由系统运营方来保障用户的安全。
     所有能使用微信增强能力的网页都是经过认证权限的
   JSSDK使用步骤
-    步骤一：绑定域名
+    步骤一:绑定域名
       先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
       如果你使用了支付类接口,请确保支付目录在该安全域名下,否则将无法完成支付。
-      备注：登录后可在“开发者中心”查看对应的接口权限。
-    步骤二：引入JS文件
+      备注:登录后可在“开发者中心”查看对应的接口权限。
+    步骤二:引入JS文件
       在需要调用JS接口的页面引入如下JS文件
         http://res.wx.qq.com/open/js/jweixin-1.0.0.js
       使用https协议,务必引入 https://res.wx.qq.com/open/js/jweixin-1.0.0.js ,
         否则将无法在'iOS9.0'以上系统中成功使用JSSDK
       如需使用摇一摇周边功能,请引入 jweixin-1.1.0.js
-      备注：支持使用 AMD/CMD 标准模块加载方法加载
-    步骤三：通过config接口注入权限验证配置
+      备注:支持使用 AMD/CMD 标准模块加载方法加载
+    步骤三:通过config接口注入权限验证配置
       所有需要使用JS-SDK的页面必须先注入配置信息,否则将无法调用,
       同一个url仅需调用一次,对于变化url的SPA的web app可在每次url变化时进行调用,
       目前Android微信客户端不支持 pushState 的H5新特性,
@@ -826,21 +826,21 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
         signature: '',// 必填,签名,见附录1
         jsApiList: [] // 必填,需要使用的JS接口列表,所有JS接口列表见附录2
       });
-    步骤四：通过ready接口处理成功验证
+    步骤四:通过ready接口处理成功验证
       wx.ready(function(){
         // config信息验证后会执行ready方法,所有接口调用都必须在config接口获得结果之后,
         // config是一个客户端的异步操作,所以如果需要在页面加载时就调用相关接口,则须把相关接口放在ready函数中调用来确保正确执行。
         // 对于用户触发时才调用的接口,则可以直接调用,不需要放在ready函数中。
       });
-    步骤五：通过error接口处理失败验证
+    步骤五:通过error接口处理失败验证
       wx.error(function(res){
         // config信息验证失败会执行error函数,如签名过期导致验证失败,
         // 具体错误信息可以打开config的debug模式查看,
         // 也可以在返回的res参数中查看,对于SPA可以在这里更新签名。
       });    
   接口调用说明
-    PS：所有接口通过wx对象(也可使用jWeixin对象)来调用,参数是一个对象,
-    除了每个接口本身需要传的参数之外,还有以下通用参数：
+    PS:所有接口通过wx对象(也可使用jWeixin对象)来调用,参数是一个对象,
+    除了每个接口本身需要传的参数之外,还有以下通用参数:
       success  接口调用成功时执行的回调函数。
       fail     接口调用失败时执行的回调函数。
       complete 接口调用完成时执行的回调函数,无论成功或失败都会执行。
@@ -849,22 +849,22 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
         不要尝试在trigger中使用ajax异步请求修改本次分享的内容,
         因为客户端分享操作是一个同步操作,这时候使用ajax的回包会还没有返回。
       以上几个函数都带有一个参数,类型为对象,
-      其中除了每个接口本身返回的数据之外,还有一个通用属性errMsg,其值格式如下：
-      调用成功时："xxx:ok" ,其中xxx为调用的接口名
-      用户取消时："xxx:cancel",其中xxx为调用的接口名
-      调用失败时：其值为具体错误信息    
+      其中除了每个接口本身返回的数据之外,还有一个通用属性errMsg,其值格式如下:
+      调用成功时:"xxx:ok" ,其中xxx为调用的接口名
+      用户取消时:"xxx:cancel",其中xxx为调用的接口名
+      调用失败时:其值为具体错误信息    
   基础接口
     判断当前客户端版本是否支持指定JS接口
     wx.checkJsApi({
       jsApiList: ['chooseImage'], // 需要检测的JS接口列表,所有JS接口列表见附录2,
       success: function(res) {
         // 以键值对的形式返回,可用的api值true,不可用为false
-        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        // 如:{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
       }
     });
-    备注：checkJsApi接口是客户端'6.0.2'新引入的一个预留接口,第一期开放的接口均可不使用checkJsApi来检测。
+    备注:checkJsApi接口是客户端'6.0.2'新引入的一个预留接口,第一期开放的接口均可不使用checkJsApi来检测。
   分享接口
-    请注意不要有诱导分享等违规行为,对于诱导分享行为将永久回收公众号接口权限,详细规则请查看：朋友圈管理常见问题 。
+    请注意不要有诱导分享等违规行为,对于诱导分享行为将永久回收公众号接口权限,详细规则请查看:朋友圈管理常见问题 。
     获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
     wx.onMenuShareTimeline({
         title: '', // 分享标题
@@ -949,16 +949,16 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     上传图片接口
       wx.uploadImage({
           localId: '', // 需要上传的图片的本地ID,由chooseImage接口获得
-          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          isShowProgressTiPS: 1, // 默认为1,显示进度提示
           success: function (res) {
               var serverId = res.serverId; // 返回图片的服务器端ID
           }
       });
-      备注：上传图片有效期3天,可用微信多媒体接口下载图片到自己的服务器,此处获得的 serverId 即 media_id,参考文档 ../12/58bfcfabbd501c7cd77c19bd9cfa8354.html 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
+      备注:上传图片有效期3天,可用微信多媒体接口下载图片到自己的服务器,此处获得的 serverId 即 media_id,参考文档 ../12/58bfcfabbd501c7cd77c19bd9cfa8354.html 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
     下载图片接口
       wx.downloadImage({
           serverId: '', // 需要下载的图片的服务器端ID,由uploadImage接口获得
-          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          isShowProgressTiPS: 1, // 默认为1,显示进度提示
           success: function (res) {
               var localId = res.localId; // 返回图片下载后的本地ID
           }
@@ -1000,16 +1000,16 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     上传语音接口
       wx.uploadVoice({
           localId: '', // 需要上传的音频的本地ID,由stopRecord接口获得
-          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          isShowProgressTiPS: 1, // 默认为1,显示进度提示
               success: function (res) {
               var serverId = res.serverId; // 返回音频的服务器端ID
           }
       });
-      备注：上传语音有效期3天,可用微信多媒体接口下载语音到自己的服务器,此处获得的 serverId 即 media_id,参考文档 '../12/58bfcfabbd501c7cd77c19bd9cfa8354.html' 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
+      备注:上传语音有效期3天,可用微信多媒体接口下载语音到自己的服务器,此处获得的 serverId 即 media_id,参考文档 '../12/58bfcfabbd501c7cd77c19bd9cfa8354.html' 目前多媒体文件下载接口的频率限制为10000次/天,如需要调高频率,请邮件weixin-open@qq.com,邮件主题为【申请多媒体接口调用量】,请对你的项目进行简单描述,附上产品体验链接,并对用户量和使用量进行说明。
     下载语音接口
       wx.downloadVoice({
           serverId: '', // 需要下载的音频的服务器端ID,由uploadVoice接口获得
-          isShowProgressTiPS： 1, // 默认为1,显示进度提示
+          isShowProgressTiPS: 1, // 默认为1,显示进度提示
           success: function (res) {
               var localId = res.localId; // 返回音频的本地ID
           }
@@ -1017,7 +1017,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
   识别音频并返回识别结果接口
     wx.translateVoice({
        localId: '', // 需要识别的音频的本地Id,由录音相关接口获得
-        isShowProgressTiPS： 1, // 默认为1,显示进度提示
+        isShowProgressTiPS: 1, // 默认为1,显示进度提示
         success: function (res) {
             alert(res.translateResult); // 语音识别的结果
         }
@@ -1056,8 +1056,8 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
           //开启查找完成后的回调函数
         }
       });
-      备注：上述摇一摇周边接口使用注意事项及更多返回结果说明,请参考：摇一摇周边获取设备信息
-    备注：如需接入摇一摇周边功能,请参考：申请开通摇一摇周边
+      备注:上述摇一摇周边接口使用注意事项及更多返回结果说明,请参考:摇一摇周边获取设备信息
+    备注:如需接入摇一摇周边功能,请参考:申请开通摇一摇周边
     关闭查找周边ibeacon设备接口
       wx.stopSearchBeacons({
         complete:function(res){
@@ -1108,7 +1108,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
     微信卡券接口中使用的签名凭证api_ticket,与步骤三中config使用的签名凭证jsapi_ticket不同,开发者在调用微信卡券JS-SDK的过程中需依次完成两次不同的签名,并确保凭证的缓存。
     获取api_ticket
       api_ticket 是用于调用微信卡券JS API的临时票据,有效期为7200 秒,通过access_token 来获取。
-    开发者注意事项：
+    开发者注意事项:
       1.此用于卡券接口签名的api_ticket与步骤三中通过config接口注入权限验证配置使用的jsapi_ticket不同。
       2.由于获取api_ticket 的api 调用次数非常有限,频繁刷新api_ticket 会导致api调用受限,影响自身业务,开发者需在自己的服务存储与更新api_ticket。
     接口调用请求说明
@@ -1118,7 +1118,7 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       参数	是否必须	说明
       access_token	是	调用接口凭证
       返回数据
-    数据示例：
+    数据示例:
       {
         "errcode":0,
         "errmsg":"ok",
@@ -1151,10 +1151,10 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
       nonceStr	是	string(32)	sduhi123	随机字符串。
       signType	是	string(32)	SHA1	签名方式,目前仅支持SHA1
       cardSign	是	string(64)	abcsdijcous123	签名。
-      cardSign详见附录4。开发者特别注意：签名错误会导致拉取卡券列表异常为空,请仔细检查参与签名的参数有效性。
+      cardSign详见附录4。开发者特别注意:签名错误会导致拉取卡券列表异常为空,请仔细检查参与签名的参数有效性。
       
       特别提醒
-      拉取列表仅与用户本地卡券有关,拉起列表异常为空的情况通常有三种：签名错误、时间戳无效、筛选机制有误。请开发者依次排查定位原因。    
+      拉取列表仅与用户本地卡券有关,拉起列表异常为空的情况通常有三种:签名错误、时间戳无效、筛选机制有误。请开发者依次排查定位原因。    
     批量添加卡券接口
       wx.addCard({
           cardList: [{
@@ -1178,32 +1178,32 @@ WeUI：专为开发微信HTML5应用的开源Web UI组件库
           cardId: '',
           code: ''
       });
-      参数说明：
+      参数说明:
       
       参数	说明
       cardId	上一步核销的card_id,若传入错误的card_id会报错
       code	上一步核销的code,若传入错误的code会报错
-      注意：
+      注意:
       
-      该接口只支持微信6.3.6以上版本的客户端,开发者在调用时需要注意两点：
+      该接口只支持微信6.3.6以上版本的客户端,开发者在调用时需要注意两点:
       
-      1.需要引入1.1.0版本的js文件： https://res.wx.qq.com/open/js/jweixin-1.1.0.js
+      1.需要引入1.1.0版本的js文件: https://res.wx.qq.com/open/js/jweixin-1.1.0.js
       
-      2.需要判断用户客户端版本号,做出容错处理,详情点击：判断当前客户端版本是否支持指定JS接口
+      2.需要判断用户客户端版本号,做出容错处理,详情点击:判断当前客户端版本是否支持指定JS接口
     发起一个微信支付请求
       wx.chooseWXPay({
           timestamp: 0, // 支付签名时间戳,注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
           nonceStr: '', // 支付签名随机串,不长于 32 位
-          package: '', // 统一支付接口返回的prepay_id参数值,提交格式如：prepay_id=***）
+          package: '', // 统一支付接口返回的prepay_id参数值,提交格式如:prepay_id=***）
           signType: '', // 签名方式,默认为'SHA1',使用新版支付需传入'MD5'
           paySign: '', // 支付签名
           success: function (res) {
               // 支付成功后的回调函数
           }
       });
-      备注：prepay_id 通过微信支付统一下单接口拿到,paySign 采用统一的微信支付 Sign 签名生成方法,注意这里 appId 也要参与签名,appId 与 config 中传入的 appId 一致,即最后参与签名的参数有appId, timeStamp, nonceStr, package, signType。
+      备注:prepay_id 通过微信支付统一下单接口拿到,paySign 采用统一的微信支付 Sign 签名生成方法,注意这里 appId 也要参与签名,appId 与 config 中传入的 appId 一致,即最后参与签名的参数有appId, timeStamp, nonceStr, package, signType。
       请注意该接口只能在你配置的支付目录下调用,同时需确保支付目录在JS接口安全域名下。
-      微信支付开发文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
+      微信支付开发文档:https://pay.weixin.qq.com/wiki/doc/api/index.html
 遇到的问题 
   ios 
     滑动当前div使其他div产生滚动效果
@@ -1227,9 +1227,9 @@ ueditor 百度编辑器
 网络收集 
 接口
   百度分类图片api
-    PS： GET提交,返回JSON; sort可以为0和1,作用。。未知
-    URL：'http://image.baidu.com/data/imgs'
-    参数：
+    PS: GET提交,返回JSON; sort可以为0和1,作用。。未知
+    URL:'http://image.baidu.com/data/imgs'
+    参数:
       col  : '大类' // 如 美女
       tag  : '分类' // 小清新
       pn   : 开始条数
@@ -1242,7 +1242,7 @@ ueditor 百度编辑器
 --------------------------------------------------------------------------------
 技巧 实现 
   动态 rem 自适应布局.
-    PS：rem 单位在做移动端的h5开发的时候是最经常使用的单位。
+    PS:rem 单位在做移动端的h5开发的时候是最经常使用的单位。
       采用js动态计算给文档的根节点 font-size 赋值,并以此为尺寸参考进行网页布局.
       可参考淘宝的布局.
     使用的时,将下面的代码放到页面的顶部（head标签内）；

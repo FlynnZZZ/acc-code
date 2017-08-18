@@ -1,14 +1,14 @@
 介绍_概念_说明_定义 
-  PS：发布于2009年,一个事件驱动I/O服务端JS运行环境,JS语言通过Node在服务器运行 
+  PS:发布于2009年,一个事件驱动I/O服务端JS运行环境,JS语言通过Node在服务器运行 
     内部采用V8引擎,作为JS语言解释器,通过自行开发的libuv库,调用操作系统资源 
   版本特点 
     偶数位为稳定版本
-    e.g. :-0.6.X -0.8.X -0.10.X  
+    Example: :-0.6.X -0.8.X -0.10.X  
     奇数为非稳定版本
-    e.g. :-0.7.X -0.9.X -0.11.X  
+    Example: :-0.7.X -0.9.X -0.11.X  
   程序一般由3部分组成 
-    required引入模块：使用 require 指令来载入 NodeJS 模块 
-    创建服务器：服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
+    required引入模块:使用 require 指令来载入 NodeJS 模块 
+    创建服务器:服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
     接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
 运行环境及执行命令 
   path 环境变量 
@@ -27,7 +27,7 @@
       npm install -g n     安装n模块 
         node有一个模块叫n,是专门用来管理 node.js 的版本
       n stable   升级 nodejs 到最新稳定版 
-        n后面也可以跟随版本号比如：
+        n后面也可以跟随版本号比如:
         n v0.10.26
         n 0.10.26
       n ls       查看所有node版本
@@ -39,7 +39,7 @@
       
       nvm全称Node Version Manager,它与n的实现方式不同,其是通过shell脚本实现的。
       
-      安装方式有两种：
+      安装方式有两种:
       
       $ curl https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
       或者
@@ -70,7 +70,7 @@
       
       以上就是两种Node版本管理工具的安装和基本使用方法,选择适合你的那一种口味。
   NodeJS_REPL Node的交互式解释器 
-    PS：REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
+    PS:REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
       Node的交互式解释器可以很好的调试JS代码,
       相当于浏览器的Console控制台「SlPt」
@@ -93,10 +93,10 @@
 NodeJS的运行方式及编程风格 
   以单线程模式运行,使用事件驱动来处理并发,使用回调函数异步操作 
     基本上所有的事件机制都是用设计模式中观察者模式实现。
-    每个子进程总是带有三个流对象：child.stdin, child.stdout 和child.stderr.
+    每个子进程总是带有三个流对象:child.stdin, child.stdout 和child.stderr.
     他们可能会共享父进程的stdio流,或者也可以是独立的被导流的流对象 
   回调函数 
-    PS：NodeJS异步编程依托于回调来实现,所有API都支持回调函数 
+    PS:NodeJS异步编程依托于回调来实现,所有API都支持回调函数 
       Node采用V8引擎处理JS脚本,最大特点就是单线程运行,一次只能运行一个任务。
       这导致Node大量采用异步操作（asynchronous opertion）,
       即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
@@ -150,9 +150,9 @@ NodeJS的运行方式及编程风格
     阻塞与非阻塞调用的不同 
       Example:
       阻塞代码实例
-        创建一个文件 input.txt ,内容如下：
+        创建一个文件 input.txt ,内容如下:
           11111111111111
-        创建 main.js 文件, 代码如下：
+        创建 main.js 文件, 代码如下:
           var fs = require("fs");
           var data = fs.readFileSync('input.txt');
           console.log(data.toString());
@@ -161,16 +161,16 @@ NodeJS的运行方式及编程风格
           11111111111111
           程序执行结束!
       非阻塞代码实例
-        创建一个文件 input.txt ,内容如下：
+        创建一个文件 input.txt ,内容如下:
           11111111111
-        创建 main.js 文件, 代码如下：
+        创建 main.js 文件, 代码如下:
           var fs = require("fs");
           fs.readFile('input.txt', function (err, data) {
             if (err) return console.error(err);
             console.log(data.toString());
           });
           console.log("程序执行结束!");
-        $ node main.js 以上代码执行结果如下：
+        $ node main.js 以上代码执行结果如下:
           程序执行结束!
           11111111111
       第一个实例在文件读取完后才执行完程序. 
@@ -186,7 +186,7 @@ NodeJS的运行方式及编程风格
       Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
       每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
     事件驱动程序 
-      PS：Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
+      PS:Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
         然后去服务下一个web请求.
         当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
         这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
@@ -227,7 +227,7 @@ NodeJS的运行方式及编程风格
         若使用new调用,函数就变成了一个构造函数,
         就创建了一个实例,this指代这个实例.
         当构造函数使用new生成实例时,this指向其prototype.
-        e.g. :
+        Example: :
         function Foo() { console.log(this.aoo); }
         Foo.prototype.aoo = "111"; 
         Foo();  // undefined
@@ -236,14 +236,14 @@ NodeJS的运行方式及编程风格
       无论是在浏览器环境还是node环境,
       正常的方式调用函数(直接执行而无前缀),this指代全局的this
       使用严格模式,this就会变成undefined.
-      e.g. :
+      Example: :
       var foo = "bar";
       function testThis() { this.foo = "foo"; }
       console.log(this.foo); // bar
       testThis();
       console.log(this.foo); // foo
 'Global_Object'全局对象 : 可在程序的任何地方访问 
-  PS：浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
+  PS:浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
   ECMAScript 全局变量的定义 
     在最外层定义的变量
@@ -252,7 +252,7 @@ NodeJS的运行方式及编程风格
     当你定义一个全局变量时,这个变量同时也会成为全局对象的属性,反之亦然
     需要注 意的是,在 NodeJS 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的,
     而模块本身不是最外层上下文
-    注意：永远使用 var 定义变量以避免引入全局变量
+    注意:永远使用 var 定义变量以避免引入全局变量
       因为全局变量会污染 命名空间,提高代码的耦合风险
   ◆全局对象
   global  Node所在的全局环境,类似浏览器的window对象 
@@ -269,7 +269,7 @@ NodeJS的运行方式及编程风格
         global.x // undefined。
         因为模块的全局变量都是该模块私有的,其他模块无法取到 
   process 用于描述当前Node进程状态 
-    PS：global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
+    PS:global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
       提供了一个与操作系统的简单接口
     ◆事件
     exit       当进程准备退出时触发.
@@ -303,7 +303,7 @@ NodeJS的运行方式及编程风格
       4	Internal JS Evaluation Failure
       JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
       5	Fatal Error
-      V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为： FATAL ERROR
+      V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
       6	Non-function Internal Exception Handler
       未捕获异常,内部异常处理函数不知为何设置为on-function,并且不能被调用.
       7	Internal Exception Handler Run-Time Failure
@@ -334,13 +334,13 @@ NodeJS的运行方式及编程风格
       它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
     pid         当前进程的进程号.
     title       进程名,默认值为"node",可以自定义该值.
-    arch        当前 CPU 的架构：'arm'、'ia32' 或者 'x64'.
+    arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
     platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
     mainModule  require.main 的备选方法.
       不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
       可以认为,这两者引用了同一个模块.
     Example:
-      创建文件 main.js ,代码如下所示：
+      创建文件 main.js ,代码如下所示:
       process.stdout.write("Hello World!" + "\n"); // 输出到终端
       process.argv.forEach(function(val, index, array) { // 通过参数读取
        console.log(index + ': ' + val);
@@ -360,22 +360,22 @@ NodeJS的运行方式及编程风格
     cwd()   返回当前进程的工作目录
     exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
     getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     setgid(id) 设置进程的群组标识(参见 setgid(2)).
       可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     setuid(id) 设置进程的用户标识(参见setuid(2)).
       接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
       这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意：这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
       信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
     memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
@@ -388,7 +388,7 @@ NodeJS的运行方式及编程风格
       主要用途是可以通过精确的时间间隔,来衡量程序的性能.
       你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
     Example:
-      创建文件 main.js ,代码如下所示：
+      创建文件 main.js ,代码如下所示:
       console.log('当前目录: ' + process.cwd()); // 输出当前目录
       console.log('当前版本: ' + process.version); // 输出当前版本
       console.log(process.memoryUsage()); // 输出内存使用情况
@@ -401,10 +401,10 @@ NodeJS的运行方式及编程风格
   console 用于提供控制台标准输出[详见浏览器调试] 
   ◆全局变量
   __filename 当前正在执行的脚本的文件名 
-    PS：将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
+    PS:将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
       在模块中,返回的值是模块文件的路径 
     Example:
-      创建文件 main.js ,代码如下所示：
+      创建文件 main.js ,代码如下所示:
       // 输出全局变量 __filename 的值
       console.log( __filename );
       执行 main.js 文件,代码如下所示:
@@ -412,7 +412,7 @@ NodeJS的运行方式及编程风格
       /web/com/runoob/nodejs/main.js
   __dirname  当前执行脚本所在的目录 
     Example:
-      创建文件 main.js ,代码如下所示：
+      创建文件 main.js ,代码如下所示:
       // 输出全局变量 __dirname 的值
       console.log( __dirname );
       执行 main.js 文件,代码如下所示:
@@ -420,7 +420,7 @@ NodeJS的运行方式及编程风格
       /web/com/runoob/nodejs
   ◆全局函数 
   setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
-    PS：实际的调用间隔,还取决于系统因素;
+    PS:实际的调用间隔,还取决于系统因素;
       间隔的毫秒数在1毫秒到2,147,483,647 毫秒（约 24.8 天）之间,
       若超过这个范围,会被自动改为1毫秒;
     setTimeout(function (){ 
@@ -453,10 +453,10 @@ NodeJS的运行方式及编程风格
   module.exports
   exports
 events,事件模块 
-  PS：events 模块只提供了一个对象： events.EventEmitter, 
+  PS:events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
-    NodeJS 里面的许多对象都会分发事件：
+    NodeJS 里面的许多对象都会分发事件:
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
       所有这些产生事件的对象都是 events.EventEmitter 的实例; 
@@ -471,14 +471,14 @@ events,事件模块
     当监听器被移除时,'removeListener' 事件被触发.
   ▼实例属性方法
   evEm.on('eName',foo);    监听事件 
-    PS： 此处'on'也可以换成'addEventListener' 
+    PS: 此处'on'也可以换成'addEventListener' 
     foo 回调函数,参数为[手动]触发时传入的值 
   evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
   evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
   evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
     当事件触发时,注册到这个事件的事件监听器被依次调用
   evEm.removeListener('eName',fooName)  移除指定事件的监听 
-    PS：此操作将会改变处于被删监听器之后的那些监听器的索引,
+    PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
     fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
     Example: 
       var callback = function(stream) { };
@@ -533,12 +533,12 @@ events,事件模块
   继承 EventEmitter 
     大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
     包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-    为什么要这样做呢？原因有两点：
+    为什么要这样做呢？原因有两点:
     首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
     其次 JS 的对象机制是基于原型的,支持 部分多重继承,
     继承 EventEmitter 不会打乱对象原有的继承关系.
 Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据] 
-  PS：JS只有字符串数据类型,没有二进制数据类型, 
+  PS:JS只有字符串数据类型,没有二进制数据类型, 
     处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
     用来创建一个专门存放二进制数据的缓存区;
     在NodeJS中,Buffer类是随Node内核一起发布的核心库;
@@ -547,8 +547,8 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     原始数据存储在 Buffer 类的实例中。
     一个 Buffer 类似于一个整数数组,对应于 V8 堆内存之外的一块原始内存。
   var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
-    PS： bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
-    ◆val可为以下类型：
+    PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
+    ◆val可为以下类型:
     num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
       var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
     bufer       bufer对象,通过拷贝来创建新buffer对象 
@@ -574,14 +574,14 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
   ◆Buffer实例的属性方法 
   bufer[idx]  下标访问
   bufer.length  读写,bufer对象所占据的内存长度  
-    PS：改值与Buffer对象的内容无关;
+    PS:改值与Buffer对象的内容无关;
       如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
     var buf1 = new Buffer('1234567');
     var buf2 = new Buffer(8);
     console.log(buf1.length); // 7
     console.log(buf2.length); // 8
   bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
-    PS：若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
+    PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
     str   写入缓冲区的字符串 
     idx   缓冲区开始写入的索引值,默认为 0 
     len   写入的字节数,默认为 buffer.length 
@@ -607,7 +607,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
       console.log( buf.toString('utf8',0,5));    // 输出: abcde
       console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
   bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
-    PS：如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+    PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
     Example:
       var bufer = new Buffer('abc');
       var json = bufer.toJSON();
@@ -683,11 +683,11 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
     比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
 Stream,流 用于暂存和移动数据[以bufer的形式存在] 
-  PS：Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+  PS:Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
   var steam = require('stream');  // 
-  四种Stream流类型：
+  四种Stream流类型:
     Readable  可读流,读取数据并暂存于bufer中 
       可'pause'和'resume' 
     Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
@@ -713,26 +713,26 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   writerStream.end()      标记文件末尾
   readerStream.setEncoding('UTF8');  设置编码为 utf8
   pipe 管道 
-    PS：管道提供了一个输出流到输入流的机制 
+    PS:管道提供了一个输出流到输入流的机制 
       通常用于从一个流中获取数据并将数据传递到另外一个流中 
       慢慢的实现大文件的复制过程 
     Example:
       读取一文件内容并将数据写入到另外一文件中
-      设置 input.txt 文件内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
+      设置 input.txt 文件内容如下:
+        菜鸟教程官网地址:www.runoob.com
+      创建 main.js 文件, 代码如下:
         var fs = require("fs");
         var rs = fs.createReadStream('input.txt');// 创建一个可读流
         var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
         // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
         rs.pipe(writerStream); // 管道读写操作
         console.log("程序执行完毕");
-      程序执行完毕,查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
+      程序执行完毕,查看 output.txt 文件的内容:
+        菜鸟教程官网地址:www.runoob.com
     链式流,通过连接输出流到另外一个流并创建多个对个流操作链的机制,一般用于管道操作
       Example:
       用管道和链式来压缩文件 
-        创建 compress.js 文件, 代码如下：
+        创建 compress.js 文件, 代码如下:
         var fs = require("fs");
         var zlib = require('zlib');
         // 压缩 input.txt 文件为 input.txt.gz
@@ -742,7 +742,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         console.log("文件压缩完成.");
         执行后,当前目录下生成压缩文件 input.txt.gz 
       用管道和链式来解压文件 
-        创建 decompress.js 文件,代码如下：
+        创建 decompress.js 文件,代码如下:
         var fs = require("fs");
         var zlib = require('zlib');
         // 解压 input.txt.gz 文件为 input.txt
@@ -764,9 +764,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   finish   所有数据已被写入到底层系统时触发
   Example: 
     从文件中读取数据 
-      创建 input.txt 文件,内容如下：
-        菜鸟教程官网地址：www.runoob.com
-      创建 main.js 文件, 代码如下：
+      创建 input.txt 文件,内容如下:
+        菜鸟教程官网地址:www.runoob.com
+      创建 main.js 文件, 代码如下:
         var fs = require("fs");
         var data = '';
         var rs = fs.createReadStream('input.txt'); // 创建可读流
@@ -776,13 +776,13 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         rs.on('end',function(){ console.log(data); });
         rs.on('error', function(err){ console.log(err.stack); });
         console.log("程序执行完毕");
-      以上代码执行结果如下：
+      以上代码执行结果如下:
         程序执行完毕
-        菜鸟教程官网地址：www.runoob.com
+        菜鸟教程官网地址:www.runoob.com
     将数据写入文件
-      创建 main.js 文件, 代码如下：
+      创建 main.js 文件, 代码如下:
         var fs = require("fs");
-        var data = '菜鸟教程官网地址：www.runoob.com';
+        var data = '菜鸟教程官网地址:www.runoob.com';
         // 创建一个可以写入的流,写入到文件 output.txt 中
         var rs = fs.createWriteStream('output.txt');
         // 使用 utf8 编码写入数据
@@ -792,18 +792,18 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         rs.on('finish', function() { console.log("写入完成."); });
         rs.on('error', function(err){ console.log(err.stack); });
         console.log("程序执行完毕");
-      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下：
+      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下:
         程序执行完毕
         写入完成.
-      查看 output.txt 文件的内容：
-        菜鸟教程官网地址：www.runoob.com
+      查看 output.txt 文件的内容:
+        菜鸟教程官网地址:www.runoob.com
 模块,Nodejs应用程序的基本组成部分,可让Nodejs的文件可以相互调用 
-  PS：文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
+  PS:文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JS代码、JSON 或者编译过的 C/C++ 扩展等等;
     按照CommonJS规范定义和使用模块
   commonjs规范 模块的引入 
     module       模块公开的接口 
-      PS：module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
+      PS:module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
       hello.js 文件中 
         function world() { 
           console.log(1);
@@ -822,7 +822,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         var world = require('./hello'); // 加载模块 
         world.world(); // 1 
     require(arg) 获取模块的接口[即所获取模块的 exports 对象] 
-      PS：加载时可省略脚本文件的后缀名 
+      PS:加载时可省略脚本文件的后缀名 
         模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
         意味着模块实际上只会执行一次 
         若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数 
@@ -879,13 +879,13 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
   url    解析URL 
-    PS：包含五个方法,不需要实例化[本身就是一实例对象]
+    PS:包含五个方法,不需要实例化[本身就是一实例对象]
     var url = require("url"); 引入url模块
     url.parse(url [,bol1] [,bol2]); 将URL解析为对象「方便后续其他操作」
       url   字符串,传入需要解析的URL字符串
       bol1  可选,默认false,是否将query字段转换为对象表示
       bol2  可选,默认false,当URL不全时更智能的识别
-      e.g. :
+      Example: :
         url.parse("https://www.baidu.com");
         返回如下的对象
         {
@@ -903,11 +903,11 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           href: 'https://www.baidu.com/' // 完整超链接
         }
     url.format(urlObj);     将url对象格式化为url字符串
-      e.g. :
+      Example: :
       var obj =url.parse("https://www.baidu.com");
       url.format(obj); // 'https://www.baidu.com/'
     url.resolve(str1,str2); 拼接为URL 
-      e.g. :
+      Example: :
         url.resolve("https://imooc.com","/course/list");
         // 'https://imooc.com/course/list'
         
@@ -928,7 +928,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       obj  需序列化的对象
       str1 可选,默认为'&',参数连接符
       str2 可选,默认为'=',键值分割符
-      e.g. :
+      Example: :
         querystring.stringify({
           name:"Scott",
           course:["Java","Node"],
@@ -947,20 +947,20 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
       str2 可选,默认为'=',键值分割符 
       optons  其他配置 
-      e.g. :
+      Example: :
         querystring.parse('name=Scott&course=Java&course=Node&from=');
         // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
     querystring.escape(str); 转义为URL可用的字符串
-      e.g. : 
+      Example: : 
         querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
     querystring.unescape(str); 反转义 
-      e.g. :
+      Example: :
         querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
     querystring.unescapeBuffer() 
     querystring.encode()
     querystring.decode()
   http   http服务模块,提供HTTP服务器功能 
-    PS：主要用于搭建HTTP服务端和客户端; 
+    PS:主要用于搭建HTTP服务端和客户端; 
     Web服务器 
       Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
       Web服务器的基本功能就是提供Web信息浏览服务.
@@ -974,7 +974,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Business 业务层,通过Web服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等
       Data     数据层,一般由数据库组成 
     var http = require("http"); 引入http模块 
-      PS：使用HTTP服务器或客户端功能必须调用该模块
+      PS:使用HTTP服务器或客户端功能必须调用该模块
     var server = http.createServer(foo); 创建服务器 
       foo 依次传入参数 (req,res) 
         req 请求 
@@ -992,7 +992,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           res.end([str]); 完成响应,参数可选,存在会将其发送
     server.listen(port [,url]);  监听ip及端口 
     http.request(options [,foo])  从后台发送http请求
-      PS：返回可写的request实例流
+      PS:返回可写的request实例流
       options  配置项参数,可为str或obj
         str  字符串,将被 url.parse 解析为对象
         obj  对象 
@@ -1063,11 +1063,11 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         req.write(postData); // 将请求数据写入请求体 
         req.end(); // 结束请求,请始终加上
     http.get(url,foo);   使用get方法请求指定url的数据 
-      PS：基于 http.request 的封装,
+      PS:基于 http.request 的封装,
         相对于request,将请求方法默认为get,且自动调用req.end();
       foo   传入参数 (res) 
         res.on('data',foo); 监听请求的数据传输,会不断的触发 
-          PS：将回调函数中所有的data数据串起来就是完整的响应数据了
+          PS:将回调函数中所有的data数据串起来就是完整的响应数据了
           foo  传入参数 (data) 
         res.on('end',foo);  请求数据下载完毕触发
     Example: 
@@ -1119,7 +1119,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         var req = http.request(options, callback); // 向服务端发送请求
         req.end();
     路由 
-      PS：为路由提供请求的URL和其他需要的GET及POST参数,路由根据这些数据来执行相应的代码.
+      PS:为路由提供请求的URL和其他需要的GET及POST参数,路由根据这些数据来执行相应的代码.
         因此需要查看HTTP请求,从中提取出请求的URL以及GET/POST参数,
         这一功能应当属于路由还是服务器[甚至作为一个模块自身的功能]确实值得探讨,
         需要的所有数据都会包含在request对象中,该对象作为回调函数的第一个参数传递 
@@ -1148,7 +1148,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         var router = require("./router");
         server.start(router.route);
   https  https服务模块 
-    PS：和http模块类似,在搭建https服务器时需SSl证书
+    PS:和http模块类似,在搭建https服务器时需SSl证书
     搭建https服务器 
       var https = require("https");
       var fs = require("fs");
@@ -1162,14 +1162,14 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       })
       .listen(8080);
   fs     file system,文件系统模块,与文件系统交互
-    PS：fs模块可用于对系统文件及目录进行读写操作.
+    PS:fs模块可用于对系统文件及目录进行读写操作.
       NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
       也可使用 fs.read 和 fs.write 读写文件,
       fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
       但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
       使用 fs.read 和 fs.write 读写文件需要使用 fs.open 打开文件和 fs.close 关闭文件.
     模块中所有方法都有同步和异步两种形式
-      PS：建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
+      PS:建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
         异步的方法函数最后一个参数为回调函数,回调函数的第一个参数包含了错误信息 error.
       异步写法demo:有一个回调函数
         var fs = require('fs'); // 载入fs模块
@@ -1187,7 +1187,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
     var fs = require('fs'); 引入文件系统模块
     fs.writeFile(path,data,[options],callback); 写内容到文件中 
-      PS： 写入文件内容,若文件不存在会创建一个文件,但不会主动创建目录
+      PS: 写入文件内容,若文件不存在会创建一个文件,但不会主动创建目录
         写入时会先清空文件
       path    字符串,路径及文件名
       data    字符串,写入的内容
@@ -1246,12 +1246,12 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           <Buffer 6c 69 6e 65 20 6f 6e 65 0a 6c 69 6e 65 20 74 77 6f 0a>
           // 这是原始二进制数据在缓冲区中的内容 
           要显示文件内容可以使用 toString() 或 指定编码输出
-            toString()写法：
+            toString()写法:
             fs.readFile('./test.txt', function(err, data) {
               if (err) { throw err; }
               console.log(data.toString());
             });
-            设置utf-8 编码写法：
+            设置utf-8 编码写法:
             fs.readFile('./test.txt', 'utf-8', function(err, data) {
               if (err) { throw err; }
               console.log('utf-8: ', data);
@@ -1261,14 +1261,14 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Arguments:
         path 字符串,路径及文件名
         callback 回调函数,传入参数 err
-      e.g. 
+      Example: 
         var file ='message.txt'
         fs.unlink(file,(err) =>{
           if (err) { throw err }
           console.log(`${file} 成功删除`)
         })
     fs.mkdir(path,[mode],callback); 创建目录
-      PS：当创建的文件夹和已存在的文件夹重名时会报错
+      PS:当创建的文件夹和已存在的文件夹重名时会报错
       Arguments:
         path     路径和目录名称
         mode     可选,设置目录的权限,默认为 0777
@@ -1320,14 +1320,14 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           a+  以读取追加模式打开文件,若文件不存在则创建.
           ax+ 类似 'a+', 但是若文件路径存在,则文件读取追加失败.          
         mode     设置文件模式(权限),文件创建默认权限为 0666,可读写)
-        callback 回调函数,带有两个参数如：callback(err, fd)      
+        callback 回调函数,带有两个参数如:callback(err, fd)      
     fs.stat(path,callback); 获取文件信息
       Arguments:
         path     文件路径.
-        callback 回调函数,带有两个参数如：(err, stats), stats 是 fs.Stats 对象. 
+        callback 回调函数,带有两个参数如:(err, stats), stats 是 fs.Stats 对象. 
       Example:
         fs.stat(path)执行后,会将stats类的实例返回给其回调函数.
-        可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件：
+        可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件:
         var fs = require('fs');
         fs.stat('/Users/liuht/code/itbilu/demo/fs.js', function (err, stats) {
           console.log(stats.isFile()); 		//true
@@ -1351,16 +1351,16 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         callback  回调函数,有三个参数err, bytesRead, buffer
           err 为错误信息, bytesRead 表示读取的字节数,buffer 为缓冲区对象
       Example:
-        input.txt 文件内容为：
-          菜鸟教程官网地址：www.runoob.com
-        接下来我们创建 file.js 文件,代码如下所示：
+        input.txt 文件内容为:
+          菜鸟教程官网地址:www.runoob.com
+        接下来我们创建 file.js 文件,代码如下所示:
           var fs = require("fs");
           var buf = new Buffer(1024);
           console.log("准备打开已存在的文件！");
           fs.open('input.txt', 'r+', function(err, fd) {
             if (err) { return console.error(err); }
             console.log("文件打开成功！");
-            console.log("准备读取文件：");
+            console.log("准备读取文件:");
             fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
               if (err){ console.log(err); }
               console.log(bytes + "  字节被读取");
@@ -1369,20 +1369,20 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
               }
             });
           });
-          以上代码执行结果如下：
+          以上代码执行结果如下:
             准备打开已存在的文件！
             文件打开成功！
-            准备读取文件：
+            准备读取文件:
             42  字节被读取
-            菜鸟教程官网地址：www.runoob.com      
+            菜鸟教程官网地址:www.runoob.com      
     fs.close(fd,callback); 关闭文件
       Arguments:
         fd   通过 fs.open() 方法返回的文件描述符
         callback   回调函数,没有参数
       Example:
-        input.txt 文件内容为：
-          菜鸟教程官网地址：www.runoob.com
-        接下来我们创建 file.js 文件,代码如下所示：
+        input.txt 文件内容为:
+          菜鸟教程官网地址:www.runoob.com
+        接下来我们创建 file.js 文件,代码如下所示:
           var fs = require("fs");
           var buf = new Buffer(1024);
           console.log("准备打开文件！");
@@ -1400,11 +1400,11 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
               });
             });
           });
-        以上代码执行结果如下：
+        以上代码执行结果如下:
           准备打开文件！
           文件打开成功！
           准备读取文件！
-          菜鸟教程官网地址：www.runoob.com
+          菜鸟教程官网地址:www.runoob.com
           文件关闭成功          
     fs.ftruncate(fd,len,callback); 截取文件          
       Arguments:
@@ -1412,9 +1412,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         len  文件内容截取的长度.
         callback  回调函数,没有参数.
       Example:
-        input.txt 文件内容为：
+        input.txt 文件内容为:
           site:www.runoob.com
-        接下来我们创建 file.js 文件,代码如下所示：
+        接下来我们创建 file.js 文件,代码如下所示:
           var fs = require("fs");
           var buf = new Buffer(1024);
           console.log("准备打开文件！");
@@ -1437,7 +1437,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
               });
             });
           });
-        以上代码执行结果如下：
+        以上代码执行结果如下:
           准备打开文件！
           文件打开成功！
           截取10字节后的文件内容.
@@ -1454,9 +1454,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     fs.createWriteStream(path,options); 创建可写的stream流 
   crypto  提供加密和解密功能,基本上是对OpenSSL的包装
   util   提供常用函数的集合 
-    PS：用于弥补核心JS 的功能 过于精简的不足
+    PS:用于弥补核心JS 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
-      PS：JS 的面向对象特性是基于原型的,与常见的基于类的不同.
+      PS:JS 的面向对象特性是基于原型的,与常见的基于类的不同.
         JS 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
         handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
       Example:
@@ -1479,7 +1479,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         console.log(objSub); // { name: 'sub' }
         定义了一个基础对象Base 和一个继承自Base 的Sub,
     util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
-      PS：通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
+      PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
         util.inspect 并不会简单地直接把对象转换为字符串,
         即使该对象定义了toString方法也不会调用.
       Arguments:
@@ -1526,24 +1526,24 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         util.isError({ name: 'Error', message: 'an error occurred' }) // false      
   child_process 创建子进程 
     child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
-      command： 字符串, 将要运行的命令,参数使用空格隔开
-      options ：对象,可以是：
+      command: 字符串, 将要运行的命令,参数使用空格隔开
+      options :对象,可以是:
       cwd ,字符串,子进程的当前工作目录
       env,对象 环境变量键值对
-      encoding ,字符串,字符编码(默认： 'utf8')
+      encoding ,字符串,字符编码(默认: 'utf8')
       shell ,字符串,将要执行命令的 Shell(默认: 在 UNIX 中为/bin/sh, 在 Windows 中为cmd.exe, Shell 应当能识别 -c开关在 UNIX 中,或 /s /c 在 Windows 中. 在Windows 中,命令行解析应当能兼容cmd.exe)
-      timeout,数字,超时时间(默认： 0)
+      timeout,数字,超时时间(默认: 0)
       maxBuffer,数字, 在 stdout 或 stderr 中允许存在的最大缓冲(二进制),若超出那么子进程将会被杀死 (默认: 200*1024)
-      killSignal ,字符串,结束信号(默认：'SIGTERM')
+      killSignal ,字符串,结束信号(默认:'SIGTERM')
       uid,数字,设置用户进程的 ID
       gid,数字,设置进程组的 ID
-      cfoo ：回调函数,包含三个参数error, stdout 和 stderr.
+      cfoo :回调函数,包含三个参数error, stdout 和 stderr.
       exec() 方法返回最大的缓冲区,并等待进程结束,一次性返回缓冲区的内容.
       Example:
         让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
+        support.js 文件代码:
         console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
+        master.js 文件代码:
         const fs = require('fs');
         const child_process = require('child_process');
         for(var i=0; i<3; i++) {
@@ -1561,7 +1561,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
             console.log('子进程已退出,退出码 '+code);
           });
         }
-        执行以上代码,输出结果为：
+        执行以上代码,输出结果为:
         $ node master.js 
         子进程已退出,退出码 0
         stdout: 进程 1 执行.
@@ -1574,8 +1574,8 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         stderr:     
     child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
       Arguments:
-        command： 将要运行的命令
-        args： Array 字符串参数数组
+        command: 将要运行的命令
+        args: Array 字符串参数数组
         options Object
         cwd String 子进程的当前工作目录
         env Object 环境变量键值对
@@ -1586,9 +1586,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         spawn() 方法返回流 (stdout & stderr),在进程返回大量数据时使用.进程一旦开始执行时 spawn() 就开始接收响应.    
       Example:
         让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
+        support.js 文件代码:
         console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
+        master.js 文件代码:
         const fs = require('fs');
         const child_process = require('child_process');
         for(var i=0; i<3; i++) {
@@ -1603,7 +1603,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
             console.log('子进程已退出,退出码 '+code);
           });
         }
-        执行以上代码,输出结果为：
+        执行以上代码,输出结果为:
         $ node master.js stdout: 进程 0 执行.
         子进程已退出,退出码 0
         stdout: 进程 1 执行.
@@ -1611,25 +1611,25 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         stdout: 进程 2 执行.
         子进程已退出,退出码 0    
     child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
-      PS：如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
+      PS:如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
         与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
       Arguments:
-        modulePath： String,将要在子进程中运行的模块
-        args： Array 字符串参数数组
-        options：Object
+        modulePath: String,将要在子进程中运行的模块
+        args: Array 字符串参数数组
+        options:Object
         cwd String 子进程的当前工作目录
         env Object 环境变量键值对
         execPath String 创建子进程的可执行文件
-        execArgv Array 子进程的可执行文件的字符串参数数组(默认： process.execArgv)
-        silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为：false)
+        execArgv Array 子进程的可执行文件的字符串参数数组(默认: process.execArgv)
+        silent Boolean 若为true,子进程的stdin,stdout和stderr将会被关联至父进程,否则,它们将会从父进程中继承.(默认为:false)
         uid Number 设置用户进程的 ID
         gid Number 设置进程组的 ID
         返回的对象除了拥有ChildProcess实例的所有方法,还有一个内建的通信信道.
       Example:
         让我们创建两个 js 文件 support.js 和 master.js.
-        support.js 文件代码：
+        support.js 文件代码:
         console.log("进程 " + process.argv[2] + " 执行." );
-        master.js 文件代码：
+        master.js 文件代码:
         const fs = require('fs');
         const child_process = require('child_process');
         for(var i=0; i<3; i++) {
@@ -1638,7 +1638,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
               console.log('子进程已退出,退出码 ' + code);
            });
         }
-        执行以上代码,输出结果为：
+        执行以上代码,输出结果为:
         $ node master.js 
         进程 0 执行.
         子进程已退出,退出码 0
@@ -1647,7 +1647,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         进程 2 执行.
         子进程已退出,退出码 0
   path   处理文件路径 
-    PS：
+    PS:
     var path = require("path"); 引入path模块
     path.normalize(p) 规范化路径,注意'..' 和 '.'.
     path.join([path1][, path2][, ...]) 用于连接路径
@@ -1666,7 +1666,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     path.posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
     path.win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
     Example:
-      创建 main.js 文件,代码如下所示：
+      创建 main.js 文件,代码如下所示:
         var path = require("path");
         // 格式化路径
         console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
@@ -1676,13 +1676,13 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         console.log('resolve:'+path.resolve('main.js'));
         // 路径中文件的后缀名
         console.log('ext name:'+path.extname('main.js'));
-      代码执行结果如下：
+      代码执行结果如下:
         normalization : /test/test1/2slashes/1slash
         joint path : /test/test1/2slashes/1slash
         resolve : /web/com/1427176256_27423/main.js
         ext name : .js    
   os   模块提供了一些基本的系统操作函数
-    PS：
+    PS:
     var os = require("os"); 引入os模块
     os.tmpdir() 返回操作系统的默认临时文件夹.
     os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
@@ -1700,14 +1700,14 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
     os.networkInterfaces() 获得网络接口列表.
     Example:
-      创建 main.js 文件,代码如下所示：
+      创建 main.js 文件,代码如下所示:
         var os = require("os");
         console.log('endianness : ' + os.endianness());// CPU 的字节序
         console.log('type : ' + os.type()); // 操作系统名
         console.log('platform : ' + os.platform()); // 操作系统名
         console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
         console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
-      代码执行结果如下：
+      代码执行结果如下:
         endianness : LE
         type : Linux
         platform : linux
@@ -1772,19 +1772,19 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         console.log('server closed')
       })
   dns  模块用于解析域名 
-    PS：
+    PS:
     var dns = require("dns"); 引入dns模块
   domain  域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
-    PS： domain模块,把处理多个不同的IO的操作作为一个组.
+    PS: domain模块,把处理多个不同的IO的操作作为一个组.
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
       domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
       与process.on('uncaughtException')不同.
-      Domain 模块可分为隐式绑定和显式绑定：
+      Domain 模块可分为隐式绑定和显式绑定:
         隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
         显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
     var domain = require("domain"); 引入domain模块
   assert  主要用于断言,如果表达式不符合预期,就抛出一个错误 
-    PS：Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
+    PS:Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
     assert(bol,str); 
       bol  布尔值
         为true时,无任何提示,返回undefined;
@@ -1803,7 +1803,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         会抛出一个错误,因为assert方法的第一个参数是false。
     assert.ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
     assert.equal(actVal,expVal [,tip]);
-      PS：equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算。
+      PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算。
       actVal  实际值
       expVal  预期值
       tip     字符串,错误的提示信息 
@@ -1821,7 +1821,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         assert.ok(expected == 3, '预期1+2等于3');
         assert.equal(expected, 3, '预期1+2等于3');
     assert.notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
-      PS：notEqual方法的用法与equal方法类似
+      PS:notEqual方法的用法与equal方法类似
         内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算。
       Example:
         var assert = require('assert');
@@ -1922,7 +1922,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   ◆本地模块 
   ◆第三方模块 
   cheerio html文件源码操作模块 
-    PS：像使用jquery一样方便快捷地操作抓取到的源码
+    PS:像使用jquery一样方便快捷地操作抓取到的源码
     npm install cheerio -g   安装cheerio模块
     var cheerio = require("cheerio"); 引入cheerio模块
     var $ = cheerio.load(data); 将传入的数据生成DOM,返回选择器API用于获取DOM元素 
@@ -1944,9 +1944,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
 GET/POST 请求 
-  PS：表单提交到服务器一般使用 GET/POST 请求
+  PS:表单提交到服务器一般使用 GET/POST 请求
   获取GET请求内容 
-    PS：由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
+    PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
       因此可手动解析后面的内容作为GET请求的参数。
     Example:
       var http = require('http');
@@ -1981,15 +1981,15 @@ GET/POST 请求
         res.writeHead(200, {'Content-Type': 'text/plain'});
         // 解析 url 参数
         var params = url.parse(req.url, true).query;
-        res.write("网站名：" + params.name);
+        res.write("网站名:" + params.name);
         res.write("\n");
-        res.write("网站 URL：" + params.url);
+        res.write("网站 URL:" + params.url);
         res.end();
       }).listen(3000);
       在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
       返回结果:
   获取 POST 请求内容
-    PS：POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
+    PS:POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
       原因是等待请求体传输可能是一件耗时的工作。
       比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
       恶意的POST请求会大大消耗服务器的资源,
@@ -2013,15 +2013,15 @@ GET/POST 请求
         });
       }).listen(3000);
     Example:
-      表单通过 POST 提交并输出数据：
+      表单通过 POST 提交并输出数据:
       var http = require('http');
       var querystring = require('querystring');
       var postHTML = 
       '<html><head><meta charset="utf-8"><title>菜鸟教程 Node.js 实例</title></head>' +
       '<body>' +
       '<form method="post">' +
-      '网站名： <input name="name"><br>' +
-      '网站 URL： <input name="url"><br>' +
+      '网站名: <input name="name"><br>' +
+      '网站 URL: <input name="url"><br>' +
       '<input type="submit">' +
       '</form>' +
       '</body></html>';
@@ -2037,9 +2037,9 @@ GET/POST 请求
           res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
           
           if(body.name && body.url) { // 输出提交的数据
-            res.write("网站名：" + body.name);
+            res.write("网站名:" + body.name);
             res.write("<br>");
-            res.write("网站 URL：" + body.url);
+            res.write("网站 URL:" + body.url);
           } 
           else {  // 输出表单
             res.write(postHTML);
@@ -2049,13 +2049,13 @@ GET/POST 请求
       }).listen(3000);
 --------------------------------------------------------------------------------
 RESTful API 
-  PS： REST,Representational State Transfer 表述性状态传递,
+  PS: REST,Representational State Transfer 表述性状态传递,
     是Roy Fielding博士在2000年他的博士论文中提出来的一种软件架构风格.
     表述性状态转移是一组架构约束条件和原则.满足这些约束条件和原则的应用程序或设计就是RESTful.
     需要注意的是,REST是设计风格而不是标准.
     REST通常基于使用HTTP,URI,和XML以及HTML这些现有的广泛流行的协议和标准.
     REST 通常使用 JSON 数据格式.
-  REST 基本架构的四个方法：
+  REST 基本架构的四个方法:
     GET - 用于获取数据.
     PUT - 用于添加数据.
     DELETE - 用于删除数据.
@@ -2071,7 +2071,7 @@ RESTful API
     使用它们的 Web 浏览器构建一个 GET URL 并读取返回的内容.
   Example:
     创建 RESTful
-    首先,创建一个 json 数据资源文件 users.json,内容如下：
+    首先,创建一个 json 数据资源文件 users.json,内容如下:
       {
         "user1" : {
           "name" : "mahesh",
@@ -2092,15 +2092,15 @@ RESTful API
           "id": 3
         }
       }
-    基于以上数据,我们创建以下 RESTful API：
+    基于以上数据,我们创建以下 RESTful API:
       序号	URI	HTTP 方法	发送内容	结果
       1	listUsers	GET	空	显示所有用户列表
       2	addUser	POST	JSON 字符串	添加新用户
       3	deleteUser	DELETE	JSON 字符串	删除用户
       4	:id	GET	空	显示用户详细信息
-    获取用户列表：
+    获取用户列表:
       以下代码,我们创建了 RESTful API listUsers,
-      用于读取用户的信息列表, server.js 文件代码如下所示：
+      用于读取用户的信息列表, server.js 文件代码如下所示:
       var express = require('express');
       var app = express();
       var fs = require("fs");
@@ -2115,9 +2115,9 @@ RESTful API
         var port = server.address().port
         console.log("应用实例,访问地址为 http://%s:%s", host, port)
       })
-      接下来执行以下命令：
+      接下来执行以下命令:
       应用实例,访问地址为 http://0.0.0.0:8081
-      在浏览器中访问 'http://127.0.0.1:8081/listUsers',结果如下所示：
+      在浏览器中访问 'http://127.0.0.1:8081/listUsers',结果如下所示:
         {
           "user1" : {
             "name" : "mahesh",
@@ -2140,7 +2140,7 @@ RESTful API
         }
     添加用户
       以下代码,我们创建了 RESTful API addUser,
-        用于添加新的用户数据,server.js 文件代码如下所示：
+        用于添加新的用户数据,server.js 文件代码如下所示:
         var express = require('express');
         var app = express();
         var fs = require("fs");
@@ -2167,9 +2167,9 @@ RESTful API
           var port = server.address().port
           console.log("应用实例,访问地址为 http://%s:%s", host, port)
         })
-      接下来执行以下命令：
+      接下来执行以下命令:
       应用实例,访问地址为 'http://0.0.0.0:8081'
-      在浏览器中访问 http://127.0.0.1:8081/addUser,结果如下所示：
+      在浏览器中访问 http://127.0.0.1:8081/addUser,结果如下所示:
         { user1:
           { name: 'mahesh',
           password: 'password1',
@@ -2192,7 +2192,7 @@ RESTful API
           id: 4 } 
         }
     显示用户详情
-      以下代码,我们创建了 RESTful API :id(用户id), 用于读取指定用户的详细信息,server.js 文件代码如下所示：
+      以下代码,我们创建了 RESTful API :id(用户id), 用于读取指定用户的详细信息,server.js 文件代码如下所示:
       var express = require('express');
       var app = express();
       var fs = require("fs");
@@ -2214,10 +2214,10 @@ RESTful API
         console.log("应用实例,访问地址为 http://%s:%s", host, port)
         
       })
-      接下来执行以下命令：
+      接下来执行以下命令:
       $ node server.js 
       应用实例,访问地址为 http://0.0.0.0:8081
-      在浏览器中访问 http://127.0.0.1:8081/2,结果如下所示：
+      在浏览器中访问 http://127.0.0.1:8081/2,结果如下所示:
       {
         "name":"suresh",
         "password":"password2",
@@ -2226,7 +2226,7 @@ RESTful API
       }
     删除用户
       以下代码,我们创建了 RESTful API deleteUser, 用于删除指定用户的详细信息,
-      以下实例中,用户 id 为 2,server.js 文件代码如下所示：
+      以下实例中,用户 id 为 2,server.js 文件代码如下所示:
       var express = require('express');
       var app = express();
       var fs = require("fs");
@@ -2252,10 +2252,10 @@ RESTful API
         console.log("应用实例,访问地址为 http://%s:%s", host, port)
         
       })
-      接下来执行以下命令：
+      接下来执行以下命令:
       $ node server.js 
       应用实例,访问地址为 http://0.0.0.0:8081
-      在浏览器中访问 http://127.0.0.1:8081/deleteUser,结果如下所示：
+      在浏览器中访问 http://127.0.0.1:8081/deleteUser,结果如下所示:
       { user1:
         { name: 'mahesh',
         password: 'password1',

@@ -1,7 +1,7 @@
 介绍_概念_说明_定义 
 介绍 
   HTML  介绍
-    PS：全称 Hyper_Text_Markup_Language 超文本标记语言,
+    PS:全称 Hyper_Text_Markup_Language 超文本标记语言,
       标记语言「markup_language」通过使用一套标记标签「markup_tag」来描述网页;
       HTML文档=网页,HTML文档描述网页,包含HTML标签绘和纯文本;
       Web浏览器的作用是读取HTML文档,并以网页的形式显示,
@@ -20,7 +20,7 @@
     </body>
     </html>
   标签 
-    PS：标签「HTML_tag」也叫标记、元素,标记html,用于浏览器识别;
+    PS:标签「HTML_tag」也叫标记、元素,标记html,用于浏览器识别;
       标签大小写:大小写不敏感「'<p>'等同于'<P>'」,推荐使用小写;
       「SlSt」标签使用Mark表示,属性使用Attr表示
       HTML元素指从开始标签「start tag」到结束标签「end tag」的所有代码;
@@ -40,11 +40,11 @@
 说明 
   运行HTML 
     本地运行: 使用浏览器打开HTML文件
-      通过本地文件系统打开：功能可能受限
-      通过本地服务模拟服务器打开：和服务器的访问类似
+      通过本地文件系统打开:功能可能受限
+      通过本地服务模拟服务器打开:和服务器的访问类似
     远程访问: 将HTML文件存放于服务器,并启动服务器,通过http/https协议进行访问
   浏览器解析HTML方式 
-    PS：一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
+    PS:一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
       HTML5提供的<DOCTYPE html>是标准模式,向后兼容的, 等同于开启了标准模式;
       IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
       如 当去掉html文档中的声明则进入怪异模式.
@@ -61,7 +61,7 @@
     document.documentMode 识别文档模式 「IE专属」「IE8+」
       IE8可以以不同的模式渲染一个页面,主要依赖于!DOCTYPE或者当前的某一个HTML元素.
       如果没有定义!DOCTYPE,IE8以IE5的模式来渲染页面
-      按照下列的值返回：
+      按照下列的值返回:
       5   ----- in IE5 mode
       7   ----- in IE7 mode
       8   ----- in IE8 mode
@@ -70,7 +70,7 @@
 ◆标签&属性 
 声明类 
   <！DOCTYPE>   声明
-    PS：必须是HTML文档的第一行,位于<HTML>标签之前.
+    PS:必须是HTML文档的第一行,位于<HTML>标签之前.
       不是HTML标签,告知浏览器页面使用的HTML版本;
       没有结束标签,对大小写不敏感
       请始终向HTML文档添加<！DOCTYPE>声明,这样浏览器才能获知文档类型.
@@ -103,7 +103,7 @@
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
       HTML 5 使用 <!DOCTYPE html>
   <html>   根标签,所有的网页标签都在其中 
-    PS：block元素,默认高度为0; 定义 height:100%; 则会将网页占满;
+    PS:block元素,默认高度为0; 定义 height:100%; 则会将网页占满;
       背景色会向上渲染将整个浏览器铺满
     manifest="cache.manifest"   定义使用的离线文件[HTML5]   
   <body>   所有HTML标签的wraper 
@@ -113,12 +113,12 @@
   <head>   用于定义文档的头部,所有头部元素的容器 
     头部元素有<title> <script> <style> <link> <meta>等标签;
   <meta/>  提供有关页面的meta-information,元信息 
-    PS：用于设置一些头信息,对网页文件进行说明,
+    PS:用于设置一些头信息,对网页文件进行说明,
       如便于搜索引擎查找.放置于<head></head>之间
       元数据不会显示在页面上,但是对于机器是可读的。
     name=       可选,content值所属的的类型
       'viewport'    视口,设置不同设备下的显示属性「HTML5」
-        PS：Viewport指的是网页的显示区域,
+        PS:Viewport指的是网页的显示区域,
           也就是不借助滚动条的情况下,用户可以看到的部分网页大小,中文译为'视口';
           正常情况下,viewport和浏览器的显示窗口是一样大小的.
           但是,在移动设备上,两者可能不是一样大小.
@@ -207,7 +207,7 @@
         Google Chrome Frame 百科
           “IE=Edge,chrome=1″这样简单快捷,但是弊端是代码将无法通过W3C验证。
           其实这并不是问题,毕竟标准只是标准,如果只有这一个“错误”完全不会有任何不良的影响。
-        IE文档兼容性模式所有可能的值：
+        IE文档兼容性模式所有可能的值:
           Emulate IE8 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
             Standards mode指令会显示成IE8 Standards mode而quirks mode会显示成IE5 mode。
             不同于IE8 mode,Emulate IE8 mode重视<!DOCTYPE>指令。
@@ -224,7 +224,7 @@
             当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE,
             使用Edge mode的页面会使用该版本能支持的最高模式来显示内容。
             同样的那些页面在使用IE8浏览时仍会照常显示。
-        注意事项：
+        注意事项:
           1,根据官网定义X-UA-compatible 标头不区分大小写；
             不过,它必须显示在网页中除 title 元素和其他 meta 元素以外的所有其他元素之前。
             如果不是的话,它不起作用
@@ -248,7 +248,7 @@
             < / IfModule >
             < / IfModule >
             
-            Nginx: 详细参考： 例子
+            Nginx: 详细参考: 例子
             add_header "X-UA-Compatible" "IE=Edge,chrome=1";
             add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
       Example:
@@ -266,12 +266,12 @@
         // type在HTML5中可以不用写
   <title>  网页标题
   <base href="http://aoo/" target="_blank">   定义超链接的根目录[HTML5] 
-    PS：在head中使用 
+    PS:在head中使用 
     href    定义页面中a链接以此为跟路径
     target  可选,定义页面中a链接的打开方式 
 引入类 
   <style>  嵌入样式 
-    PS：style标签也可以添加class属性,网页中可同时添加多个style标签;
+    PS:style标签也可以添加class属性,网页中可同时添加多个style标签;
       对于CSS文档,正确的type属性值是"text/css";
   <link>   外部样式 
     rel  规定当前文档与被链接文档/资源之间的关系 
@@ -313,7 +313,7 @@
       tv    电视
       ...
   <script> JS引入 
-    PS：用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
+    PS:用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
       存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;
       在加载和解析script代码时,网页会暂停对其他内容的加载和解析;
       script标签可以放在HTML中的任何位置,但一般放在head中或body的尾部;
@@ -338,7 +338,7 @@
       <script src="xx.js" interity="xxxxxx"></script>
       一旦有人更改了这个脚本,导致签名不匹配,浏览器就会拒绝加载
     当script放置在head中时,需设定'DOMContentLoaded'事件已保证在文档解析后执行 
-      PS：HTML文档被完全加载、解析时,DOMContentLoaded触发,无需等待样式表、图像和子框架完成加载
+      PS:HTML文档被完全加载、解析时,DOMContentLoaded触发,无需等待样式表、图像和子框架完成加载
       <script>
         document.addEventListener( 'DOMContentLoaded', function (e) {
           ...
@@ -350,7 +350,7 @@
     当浏览器不支持js,或没有启用「如禁止使用JS」时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>
   <iframe> 内联框架,创建包含另外一个文档的内联框架  
-    PS：iframe会阻塞主页面的'load'事件
+    PS:iframe会阻塞主页面的'load'事件
     'frameborder' 是否显示iframe周围的边框,设为'0'即可移除边框 
     'seamless'    无边距边框,使外观类似当前页面的内容[有兼容性问题][HTML5]
     'srcdoc'      指定iframe的内容,优先级高于'src'[HTML5] 
@@ -366,7 +366,7 @@
       而<Frame></Frame>所包含的内容是一个独立的个体,是可以独立显示的.
       另外,应用Iframe还可以在同一个页面中多次显示同一内容,而不必重复这段内容的代码.
   <frameset> 框架[HTML5废弃]
-    PS：通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
+    PS:通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
       每份HTML文档称为一个框架,并且每个框架都独立于其他的框架.
       使用框架的坏处:开发人员必须同时跟踪更多的HTML文档；很难打印整张页面
     <frameset cols="列窗口百分比分割" rows="行窗口百分比分割">
@@ -381,9 +381,9 @@
       number
     Remarks:使用框架结构则至少需要两个HTML文件,在总的HTML文件中
       在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置
-      重要提示：不能将<body></body>标签与<frameset></frameset>标签同时使用.
+      重要提示:不能将<body></body>标签与<frameset></frameset>标签同时使用.
   <frame>    框架[HTML5废弃]
-    PS：不需要body
+    PS:不需要body
     cols  列窗口百分比分割 
     rows  行窗口百分比分割
     noresize   表示不可改变分割比例,默认情况下,用户可以对分割比例进行拖拽从而改变比例 
@@ -394,7 +394,7 @@
     frameborder 边框大小
       0  则无边框 
     framespacing 定义各区域间的间隙大小
-    e.g. 
+    Example: 
       <frameset cols="200,30％,*">
         <!-- cols表示3个框架按照列分
         第一个宽度200px,第二个占总共的30％,最后一个为剩下所有的.
@@ -434,7 +434,7 @@
     建议使用white-space: nowrap;属性代替;
   <q>          引用
     浏览器会对q标签自动添加双引号
-    语义：引用别人的话
+    语义:引用别人的话
     有些浏览器会将q内的内容加引号括起来,有些则没有
   <blockquote> 长文本引用
     如在文章中引入大段某知名作家的文字,这时可用这个标签;
@@ -453,7 +453,7 @@
     与figrue配套使用,用于标签定义figure元素的标题
     它属于figure元素,figcaption元素必须写在figure元素内部,
     可以写在figure元素内的其他从属元素前面或后面,一个figure元素内最多只能允许放置一个figcaption元素.
-    e.g. 
+    Example: 
       <figure>
         <figcaption>
         </figcaption>
@@ -473,13 +473,13 @@
           <p> 说明注释3 </p>
       </figure>
   <address>    联系信息 定义文档或文章的作者/拥有者的联系信息.
-    PS：如果address元素位于body元素内,则它表示文档联系信息.
+    PS:如果address元素位于body元素内,则它表示文档联系信息.
       如果address元素位于article元素内,则它表示文章的联系信息.
       默认显示为斜体,且会换行显示
       用来在页面中呈现联系信息,包括文档的作者、邮箱、地址、电话信息等.
       address元素还用来展示和文章中的相关的联系人的所有联系信息.
   <details>    细节 用于描述文档或文档某个部分的细节[仅chrome和safari支持]
-    PS：用于标识该元素内部子元素可被展开、搜索显示 
+    PS:用于标识该元素内部子元素可被展开、搜索显示 
     open   定义details初始状态是否可见 
     Example:
       <details>
@@ -525,7 +525,7 @@
     hspace      定义图像左侧和右侧的空白(水平边距)
     注:align、space及hspace为处理图片和周围文字的关系.
   <a>   anchor锚点元素超链接 
-    PS：可链接到外部地址实现页面跳转,也可在当前页面实现内部导航的锚点功能
+    PS:可链接到外部地址实现页面跳转,也可在当前页面实现内部导航的锚点功能
     href   链接地址
       网址:链接到指定网页
       锚点:链接网页指定部位
@@ -545,16 +545,16 @@
       站外链接
         <a href=URL>
     html文档链接
-      HTML文档名称(e.g. href="a.HTML")
+      HTML文档名称(Example: href="a.HTML")
     href='mailto:address1?key=value'     E-mail 链接
-      PS：各个键值对间使用&连接;value可选多个,之间使用分号;隔开;
+      PS:各个键值对间使用&连接;value可选多个,之间使用分号;隔开;
       address1       必须,收件人邮箱
       key=value      可选,其他可选参数
         subject=title  title为邮件标题
         body=content   content为邮件内容
         cc=address2    address2为抄送人邮箱
         bcc=address3   address3为密抄人邮箱
-      e.g.    <a href="mailto:example@gmail.com?subject=测试用标题&body=测试内容&cc=example2@qq.com&bcc=example3@163.com">click me</a>
+      Example:    <a href="mailto:example@gmail.com?subject=测试用标题&body=测试内容&cc=example2@qq.com&bcc=example3@163.com">click me</a>
     锚点链接:可跳转到某个页面的某个位置
       创建锚点:
         <a name="锚点名称">显示内容</a>
@@ -563,7 +563,7 @@
     空链接
       没有目标端点的链接.
       格式<a href="＃">显示内容</a>
-      e.g.
+      Example:
         设为首页
         <a href="＃" onclick="this.style.behavior='url(＃default＃homepage)'; this.sethomepage('http:WWW.sohu.com')"> 设为首页</a>
     脚本链接
@@ -597,7 +597,7 @@
       dl元素在HTML5中进行了重新定义.
       每一项包含一条或者多条带名字的dt元素用来表示术语,
       dt元素后面紧跟一个或者多个dd元素用来表示定义.
-    e.g. 
+    Example: 
       <dl>                  <!--定义列表-->
         <dt>标题1</dt>      <!--表示一个项目-->
           <dd>内容1</dd>    <!--表示一个项目下的更详细的内容的解释-->
@@ -611,10 +611,10 @@
   <dd>  描述列表中的项目
   ★HTML5新增
   <canvas> 画布,专门用来绘制图形 
-    PS：canvas标签提供一块画布,可以访问画布中的像素点
+    PS:canvas标签提供一块画布,可以访问画布中的像素点
       canvas标签只是图形容器,图形必须使用脚本来绘制
       主要用途:游戏或高级复杂的图像效果
-    e.g. 通过js绘制一个红色的矩形
+    Example: 通过js绘制一个红色的矩形
       <canvas id="myCanvas">your browser does not support the canvas tag </canvas>
       var canvas=document.getElementById('myCanvas');
       var ctx=canvas.getContext('2d');
@@ -630,7 +630,7 @@
       metadata 只预加载媒体元数据,如视频的总长度与第一帧画面 
       none     页面加载后不载入视频,若指定了'autoplay' 则忽略该特性 
     poster="XXX.png"  图片展示替换方案,可选  
-      PS：当视频不可播放或者未播放的时候,使用该属性向用户展示一张图片代替视频
+      PS:当视频不可播放或者未播放的时候,使用该属性向用户展示一张图片代替视频
     loop     可选,是否循环播放
     error
       读取过程中一旦发生错误,返回一个media error对象,这个对象的code返回对应的错误状态,
@@ -640,7 +640,7 @@
       3 解码发生错误
       4 媒体不可用或者不支持音频/视频
     src      可选,可通过src或source标签来指定
-    e.g. 
+    Example: 
       <video width="750" height="500" src="XXX.mp4">(您的浏览器不支持video元素)</video>
       设定好长和宽和src属性就可以了.
       兼容格式如下:
@@ -651,7 +651,7 @@
   <trace>  视频字幕标签 
   <audio>  音频 
     <audio>元素是一个HTML5元素
-    e.g. 
+    Example: 
       <audio src="XXX.mp3" controls="controls"></audio>
       audio元素只需指定一个src属性即可
       兼容格式如下:
@@ -667,12 +667,12 @@
       controls 带播放控制条,可选属性
       src      可选属性,可通过src或source标签来指定
   <source> 视/音频的资源链接 
-    PS：为video或audio指定多个播放格式与编码;
+    PS:为video或audio指定多个播放格式与编码;
       以确保浏览器可以从中选择一种自己支持的播放格式进行播放.
       按顺序选择,直到选择到所支持的格式为止,后面的source不再读取  
     'src'  指定地址
     'type' 指定文件格式,可选 
-      e.g. <source src="" type='video/ogg; codecs="theora,vorbis"'/>
+      Example: <source src="" type='video/ogg; codecs="theora,vorbis"'/>
         codecs参数指定使用的视频音频编解码器
           theora 视频编解码器;vorbis音频编解码器
     e.g: 
@@ -688,16 +688,16 @@
     wmode="transparent"  使flash背景部分透明
     src  只支持本地播放.(?)
   <progress> 进度条标签,显示进度进程,如显示下载进度 
-    PS：表示一个任务的完成进度这个进度,可以是不确定的,标识进度正在进行,
+    PS:表示一个任务的完成进度这个进度,可以是不确定的,标识进度正在进行,
       可以用百分比数表示准确的进度情况.
-    e.g. <progress max="40" value="20"></progress>
+    Example: <progress max="40" value="20"></progress>
     max=num   定义完成的值,表示总共有多少
     value=num 定义进程的当前值,表示已经完成了多少
     value和max的属性值必须大于0,且max的值大于等于value的值.
     单位是随意的
   <meter>    条状份额显示 
     <meter></meter> 所占份额的条状显示
-    e.g. <meter value="40" max="100" min="0" low="50" high="70" optimum="60">(PS：此处不影响显示)</meter>
+    Example: <meter value="40" max="100" min="0" low="50" high="70" optimum="60">(PS:此处不影响显示)</meter>
     属性:
       value=num   当前占有值,该属性默认为0,可以为小数
       min=min     定义份额最小值,默认为0
@@ -713,8 +713,8 @@
         最佳值属性值必须在min属性值和max属性值之间
   <time>     时间日期 
     time元素代表24小时中的某个时间或者是日期,表示时间允许带时差.
-    PS： 标签定义公历的时间(24 小时制)或日期,时间和时区偏移是可选的.
-    e.g. 
+    PS: 标签定义公历的时间(24 小时制)或日期,时间和时区偏移是可选的.
+    Example: 
       <time datetime="2011-06-22" pubdate="pubdate"></time>
       <time datetime="2014-9-28">2014年9月28日</time>
       <time datetime="2014-9-28">9月28日</time>
@@ -725,11 +725,11 @@
     datetime=时间  规定日期 / 时间.否则,由元素的内容给定日期 / 时间.可选属性
     pubdate       可以用在article元素里面的time上表示,当前文章的发布时间.可选属性
 Table表格 
-  PS： 在一些浏览器中,没有内容的表格单元显示的不太好,
+  PS: 在一些浏览器中,没有内容的表格单元显示的不太好,
     如果某个单元格是空的「没有内容」,浏览器可能无法显示出这个单元格的边框,
     为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来;
   <table>   表格,整个表格以其开始和结束
-    PS：单独使用没有意义,需配合其他表格元素使用.
+    PS:单独使用没有意义,需配合其他表格元素使用.
     cellpadding   定义单元边沿与其内容之间的空白 
       pixels   默认为2px
       %
@@ -743,9 +743,9 @@ Table表格
     bordercolorlight 设置左＆上边框的颜色[当border的值大于等于1时才有用] 
     bordercolordark  设置右＆下边框的颜色[当border的值大于等于1时才有用] 
     summary    表格的摘要[语义化属性] 
-      PS：内容不会在浏览器中显示出来,其作用是增加表格的可读性,
+      PS:内容不会在浏览器中显示出来,其作用是增加表格的可读性,
         使搜索引擎更好的读懂表格内容 
-      e.g. <table summary="表格简介文本"> </table>
+      Example: <table summary="表格简介文本"> </table>
   <caption> 用于放置表格的标题
   <thead>   表格头部
     表头部分,table的结构性标签
@@ -769,13 +769,13 @@ Table表格
     colspan  行合并 
       num 
   <colgroup ></colgroup> 列组
-    PS：只能在table标签内使用
+    PS:只能在table标签内使用
       通过使用colgroup标签,可以向整个列应用样式,而不需要重复为每个单元格或每一行设置样式.
       colgroup标签用于对表格中的列进行组合,以便对其进行格式化.
       通过为colgroup标签添加 class 属性,这样就可以使用 CSS 来控制列
     属性
       span=num 表示控制 num 列(html中只有该属性生效,其他已被废弃)
-    e.g.
+    Example:
       通过colgroup控制列
       <table width="100%" border="1">
         <colgroup span="2" style="background-color:red">1</colgroup>
@@ -797,7 +797,7 @@ Table表格
         </tr>
       </table>
   <col span="2">     表格列控制标签
-    PS：参考 colgroup 一起了解.
+    PS:参考 colgroup 一起了解.
       <col> 标签为表格中一个或多个列定义属性值.
       只能在 table 或 colgroup 元素中使用 <col> 标签.
       通过CSS控制 <col> 标签来控制表格的列.
@@ -839,7 +839,7 @@ Table表格
       charoff规定第一个对齐字符的偏移量    num
       valign定义元素中内容的垂直对齐方式   top/middle/bottom/baseline
     scope 属性标识某个单元是否是列、行、列组或行组的表头 
-      PS：该属性不会在普通浏览器中产生任何视觉变化,类似于语义化的标签 
+      PS:该属性不会在普通浏览器中产生任何视觉变化,类似于语义化的标签 
         屏幕阅读器可以利用该属性 
         由于不会在普通浏览器中产生任何视觉效果,很难判断浏览器是否支持 scope 属性 
       col      规定单元格是列的表头
@@ -851,10 +851,10 @@ Table表格
         或列组中的所有单元格和表头单元格绑定起来[由 <col> 或 <colgroup> 标签定义]  
       rowgroup 规定单元格是行组的表头
 Form表单  
-  PS：表单字段也叫表单控件,如input、button等元素「self」 
+  PS:表单字段也叫表单控件,如input、button等元素「self」 
   <fieldset></fieldset> 表单信息分组
-    PS：默认有一个细线边框,可设置border属性为none关闭它.
-    e.g. 
+    PS:默认有一个细线边框,可设置border属性为none关闭它.
+    Example: 
       <fieldset>
         <legend>框线上显示的文字</legend>
         <form action="">
@@ -862,10 +862,10 @@ Form表单
         </form>
       </fieldset>
   <legend></legend>     显示fieldset边框上的信息文字
-    PS：legend就像fieldset的标题,处于fieldset的顶部,
+    PS:legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
   <form></form>         表单区 
-    PS：为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
+    PS:为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
       用于包含其他表单元素「如文本框、单选框等」的容器,
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
     action="url"  表单提交的地址,即数据交给服务器端的哪个程序进行处理
@@ -879,7 +879,7 @@ Form表单
       "off"
     novalidate   表示表单不进行验证
     enctype      在发送到服务器之前应该如何对表单数据进行编码
-      PS：规定了对表单提交给服务器时表单数据编码的内容类型「Content Type」
+      PS:规定了对表单提交给服务器时表单数据编码的内容类型「Content Type」
         可认为是表单数据的'content type'「MIME type」,
         只不过其取值只能为以下三种之一,否则会转换成默认的编码。
       "application/x-www-form-urlencoded" 默认值,所有字符都会进行编码
@@ -901,7 +901,7 @@ Form表单
         表单发送超过100个具有相同name的字段时,服务器收不到数据 「20170518」
           添加 enctype='multipart/form-data' 解决
     可以提交表单的按钮 
-      PS：用于提交表单的按钮需放置在表单<form>内,
+      PS:用于提交表单的按钮需放置在表单<form>内,
         以下三种任意一按钮都可用于提交表单
         点击提交按钮或「获得焦点时」在表单字段中回车可提交表单,
         <textarea>字段例外,在文本区中回车会换行,
@@ -916,10 +916,10 @@ Form表单
       <!-- 自定义重置按钮 -->
       <button type="submit" name="xx">xxx</button>
   <label for="">内容</label>                表单标签  // todo
-    PS：标签为input元素定义标注,标记; 
+    PS:标签为input元素定义标注,标记; 
       label元素不会向用户呈现特殊效果;
     点击label,使关联表单控件获得焦点,使关联的按钮被点击 
-      PS：产生效果的前提:使用"for"属性把label绑定到另外一个元素,
+      PS:产生效果的前提:使用"for"属性把label绑定到另外一个元素,
         即把"for"属性的值设置为相关元素的id属性的值.
       显示方式关联
         label和input进行了关联,点击label会选中input
@@ -929,7 +929,7 @@ Form表单
         将input标签放在label中也可达到如上效果「需去掉 for="" 」
         <label><input type='radio' name='sex' value='男'/>男</label>
   <input type="类型" name="name" value="">  表单控件 
-    PS：input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
+    PS:input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
       type 属性和 name 属性是必需的
       ios平台的微信中,input默认有圆角;
     type 属性 
@@ -941,7 +941,7 @@ Form表单
         checked属性
           若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
           使用JS 控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
-          e.g. 以下都表示默认被选中
+          Example: 以下都表示默认被选中
             <input type="checkbox" name="name"  checked>
             <input type="checkbox" name="name"  checked="">
             <input type="checkbox" name="name"  checked="1">
@@ -964,7 +964,7 @@ Form表单
         action   指将请求提交给的对象
         method   定义提交方法,默认为get
         accept   表示可以选择的文件MIME类型,多个MIME类型用英文逗号分开
-          e.g. 只能选择png和gif图片 
+          Example: 只能选择png和gif图片 
             <input type="file" accept="image/png,image/gif" name="file" />
           常用MIME类型
             后缀名       MIME名称
@@ -1017,7 +1017,7 @@ Form表单
             *.zip            aplication/zip    
             *.xlsx     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
         multiple 是否可以选择多个文件,多个文件时其value值为第一个文件的虚拟路径
-          e.g. 多文件上传
+          Example: 多文件上传
             <input id="fileId2" type="file" multiple="multiple" name="file" />
       hidden   隐藏域
         value="提交值"
@@ -1061,14 +1061,14 @@ Form表单
           readonly: 元素可被选中和复制;
       ◆HTML5+
       autocomplete  规定form或input域应该拥有自动完成功能
-        PS： 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项;
+        PS: 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项;
           适用于 <form> 标签,以及以下类型的 <input> 标签,
           type= text, search, url, telephone, email, 
             password, datepickers, range 以及 color;
       autofocus  当页面加载完自动获得焦点
         适用于所有 <input> 标签的类型
       form       规定输入域所属的一个或多个表单
-        PS：适用于所有 <input> 标签的类型;
+        PS:适用于所有 <input> 标签的类型;
           form 属性必须引用所属表单的 id,
           如需引用一个以上的表单,请使用空格分隔的列表;
         Example:
@@ -1078,14 +1078,14 @@ Form表单
           </form>
           Last name: <input type="text" name="lname" form="user_form" />
       form override attributes  重写form元素的某些属性设定
-        PS： 适用于type=submit/image 的<input>表单元素;
+        PS: 适用于type=submit/image 的<input>表单元素;
           方便创建不同的提交按钮;
-        表单重写属性有：
+        表单重写属性有:
         formaction:     重写表单的 action 属性
           formaction="提交位置" (提交按钮的属性)
             新属性,可选,适用于提交按钮(包括button和input)
             用于改变form的action
-            e.g. 
+            Example: 
               <form action="demo_form.asp" method="get">
                 <input type="text" name="fname" />
                 <button type="submit">提交</button><br />
@@ -1106,10 +1106,10 @@ Form表单
             <br />
           </form>
       height/width   image类型input标签的图像宽高
-        PS：只适用于type=image 的 <input> 标签
+        PS:只适用于type=image 的 <input> 标签
         Example: <input type="image" src="img.gif" width="99" height="99" />
       list           为表单提供选项列表
-        PS：datalist 是输入域的选项列表;
+        PS:datalist 是输入域的选项列表;
           适用于 type=text/search/url/telephone/email/date,
           /pickers/number/range/color 的 <input>;
         Example:
@@ -1123,25 +1123,25 @@ Form表单
         min 最小的可能值
         max 最大的可能值
         step 最小单位
-        e.g. :
+        Example: :
           让用户只能输入0-100 的值,且是5的倍数
           <input type="number" min="0" max="100" step="5" name="xx"/>
         min、max 和 step 属性用于为包含数字或日期的 input 类型规定限定(约束)。
         max 属性规定输入域所允许的最大值。
         min 属性规定输入域所允许的最小值。
         step 属性为输入域规定合法的数字间隔(如果 step="3",则合法的数是 -3,0,3,6 等)。
-        注释：min、max 和 step 属性适用于以下类型的 <input> 标签：date pickers、number 以及 range。
-        下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9)：
+        注释:min、max 和 step 属性适用于以下类型的 <input> 标签:date pickers、number 以及 range。
+        下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9):
         实例
         Points: <input type="number" name="points" min="0" max="10" step="3" />
         亲自试一试
       multiple  规定输入域中可选择多个值。
-        注释：multiple 属性适用于以下类型的 <input> 标签：email 和 file。
+        注释:multiple 属性适用于以下类型的 <input> 标签:email 和 file。
         Example:
           Select images: <input type="file" name="img" multiple="multiple" />
       novalidate 属性
         novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
-        注释：novalidate 属性适用于 <form> 以及以下类型的 <input> 标签：text, search, url, telephone, email, password, date pickers, range 以及 color.
+        注释:novalidate 属性适用于 <form> 以及以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, range 以及 color.
         实例
         <form action="demo_form.asp" method="get" novalidate="true">
         E-mail: <input type="email" name="user_email" />
@@ -1151,26 +1151,26 @@ Form表单
       pattern 属性
         pattern 属性规定用于验证 input 域的模式(pattern)。
         模式(pattern)是正则表达式。您可以在我们的 JavaScript 教程中学习到有关正则表达式的内容。
-        注释：pattern 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
-        下面的例子显示了一个只能包含三个字母的文本域(不含数字及特殊字符)：
+        注释:pattern 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email 以及 password。
+        下面的例子显示了一个只能包含三个字母的文本域(不含数字及特殊字符):
         实例
         Country code: <input type="text" name="country_code"
         pattern="[A-z]{3}" title="Three letter country code" />
         
         pattern   属性值为一个正则表达式,用于匹配文本框中的值(HTML5新增) 
-          e.g. :
+          Example: :
           只能在文本框中输入数值
           <input type="text" pattern="\d+" name="xx"/>
       placeholder 提示文本
         placeholder 属性提供一种提示(hint),描述输入域所期待的值。
-        注释：placeholder 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
-        提示(hint)会在输入域为空时显示出现,会在输入域获得焦点时消失：
+        注释:placeholder 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email 以及 password。
+        提示(hint)会在输入域为空时显示出现,会在输入域获得焦点时消失:
         实例
         <input type="search" name="user_search"  placeholder="Search W3School" />
         亲自试一试
       required 属性 
         required 属性规定必须在提交之前填写输入域(不能为空)。
-        注释：required 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email, password, date pickers, number, checkbox, radio 以及 file。
+        注释:required 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, number, checkbox, radio 以及 file。
         实例
         Name: <input type="text" name="usr_name" required="required" />          
         required (提交时)检测内容是否为空(HTML5新增)
@@ -1182,7 +1182,7 @@ Form表单
       可选,IE的默认为 "button",而其他浏览器中(包括 W3C 规范)的默认值是 "submit"
       其他值和input表示按钮的type值相同
   <textarea name="" >文本内容</textarea>    多行的文本区 
-    PS：文本区中可以容纳无限数量的文本.
+    PS:文本区中可以容纳无限数量的文本.
     cols       数字,规定文本区内的可见宽度
     row        数字,规定文本区内的可见行数 
       更好的办法是使用css的height和width来控制尺寸.
@@ -1190,7 +1190,7 @@ Form表单
     name       规定文本区的名称.
     disabled   禁用该文本区
     readonly   规定文本区只读 
-      PS：disabled和readonly功能类似,主要区别如下
+      PS:disabled和readonly功能类似,主要区别如下
         1.readonly属性只针对标段元素的文本框,密码框或多行文本框有效,而disabled属性可对所有的表单元素都会有效
         2.设置两个属性的外观不一样
         3.设置readonly的表单元素依然会被提交,而设置disabled的值不会被提交.
@@ -1201,7 +1201,7 @@ Form表单
     属性值:
       multiple="multiple" 规定是否可多选.(Window下,使用Ctrl多选)
       size=num,定义下拉列表中可见选项的数目.
-    e.g. 
+    Example: 
       <label>爱好</label>
       <select multiple="multiple">
         <option value="看书">看书</option>
@@ -1209,12 +1209,12 @@ Form表单
         <option value="运动">运动</option>
       </select>
   <option>显示的内容</option>  下拉列表选项
-    PS：既可以单选又可以多选
+    PS:既可以单选又可以多选
       需与select元素配合使用,否则该标签没有意义.
     属性:
       selected   表示选中状态((当存在多个只有最后一个或几个起作用))
       value="向服务器提交的值" 
-    e.g. 
+    Example: 
       <select name=# >
         <option selected="selected"(初始选择,只能有一个选项有)value="提交值">选项1</option>
         <option  value="提交值">选项2</option>
@@ -1222,7 +1222,7 @@ Form表单
       </select>
   <optgroup></optgroup>       列表选项分组
     将下拉选项进行分组显示
-    e.g. 
+    Example: 
       <optgroup label="组名称">
         <option></option>
         <option></option>
@@ -1240,13 +1240,13 @@ Form表单
   ★无语义标签 : 无任何特殊含义
     存在的意义就是为了应用css样式,一个块元素一个行内元素 
   <div>   块元素 
-    PS：把一些独立的逻辑部分划分出来,放在一个<div>标签中
+    PS:把一些独立的逻辑部分划分出来,放在一个<div>标签中
       div元素是用来为html文档内大块'block-level'的内容提供结构和背景的元素.
       div标签的作用就相当于一个容器.
   <span>  行内元素 
     用来组合文档中的行内元素
   ★样式标签[建议使用CSS来控制] 
-    PS：可组合使用,如表示加粗倾斜同时使用两个标签
+    PS:可组合使用,如表示加粗倾斜同时使用两个标签
     <blink> 闪烁文字「DiBs」
       <blink>内容</blink>  效果:内容文字闪烁 
     <marquee> 移动内容
@@ -1364,9 +1364,9 @@ HTML全局属性
     'xx'为任意字符,长度不限 
   role     标识标签,使之语义化 
     方便浏览器对其具体功能进行识别 
-    e.g. <div role="navigation"></div>
+    Example: <div role="navigation"></div>
   contenteditable  元素内容可编辑 
-    PS： 在编辑的内容里进行回车会换行
+    PS: 在编辑的内容里进行回车会换行
     true/false/insert 
   contextmenu    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
   draggable    规定元素是否可拖动 
@@ -1376,7 +1376,7 @@ HTML全局属性
   translate   规定是否应该翻译元素内容 
   tableindex=3  使用table键跳转时,按照定义的数字顺序 
 ◆'character_entities'字符实体 
-  PS：HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
+  PS:HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
     若希望正确地显示预留字符,可在 HTML 源代码中使用字符实体;
     实体名称比实体编号好记,但浏览器可能并不支持所有实体名称,而支持所有实体数字;
     实体名称对大小写敏感;
@@ -1482,7 +1482,7 @@ HTML全局属性
 --------------------------------------------------------------------------------
 ◆HTML5 
   介绍 
-    PS：HTML5 是对 HTML 标准的第五次修订,HTML5是最新版本的HTML,
+    PS:HTML5 是对 HTML 标准的第五次修订,HTML5是最新版本的HTML,
       引入了简化的标记、新的语义和媒体元素,另外还有一组支持Web应用的JavaScript库
       HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持
       HTML5 = 标记 + JavaScript API + CSS
@@ -1495,7 +1495,7 @@ HTML全局属性
         <link rel="stylesheet" href=""/>
       script标记 JavaScript成为HTML的默认脚本语言,除去原先的'type'属性
         简化为: <script src=""></script> 或 <script> </script>
-      新的解析顺序：不再基于SGML 
+      新的解析顺序:不再基于SGML 
       优点
         HTML5让网页结构变得更加清楚明了,增加了语义化的结构标签
         解决HTML在各个浏览器上存在不兼容的问题
@@ -1503,7 +1503,7 @@ HTML全局属性
         兼容性:HTML5在老版本的浏览器上也可以完美运行
         实用性:HTML5抛弃了不切实际的功能,一切按照实用性的路线出发.
   语义化 
-    PS：通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
+    PS:通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
       比如,网页上的文章的标题就可以用标题标签,网页上的各个栏目的栏目名称也可以使用标题标签.
       文章中内容的段落就得放在段落标签中,
       在文章中有想强调的文本,就可以使用 em 标签表示强调等等.
@@ -1519,7 +1519,7 @@ HTML全局属性
         <input type='checkbox'>
         <input name="be evil">
         标签的'Boolean'值的属性只要写了属性[或者赋任何值]就是true
-        e.g. 
+        Example: 
           <input type="checkbox" checked/>
           <input type="checkbox" checked="checked"/>
           <input type="checkbox" checked=""/>
@@ -1584,7 +1584,7 @@ HTML全局属性
         pattern 正则表达式 自定义验证规则
         表单重写没有提及,自行验证,共包含
         formaction、formenctype、formtarget、formmethod、formnovalidate
-        应用于提交按钮上,如：<input type="submit" formaction="xxx.php">
+        应用于提交按钮上,如:<input type="submit" formaction="xxx.php">
       4 表单事件 
         oninput 用户输入内容时触发,可用于移动端输入字数统计
         oninvalid 验证不通过时触发
@@ -1611,11 +1611,11 @@ HTML全局属性
       <!--[if lt IE 9]>
         <script> src="http://HTML5shim.googlecode.com/svn/trunk/HTML5.js"</script>
       <![endif]-->
-  input元素的新类型：date, email, url等等。
-  新的属性：ping（用于a与area）, charset（用于meta）, async（用于script）。
-  全域属性：id, tabindex, repeat。
-  新的全域属性：contenteditable, contextmenu, draggable, dropzone, hidden, spellcheck。
-  移除元素：
+  input元素的新类型:date, email, url等等。
+  新的属性:ping（用于a与area）, charset（用于meta）, async（用于script）。
+  全域属性:id, tabindex, repeat。
+  新的全域属性:contenteditable, contextmenu, draggable, dropzone, hidden, spellcheck。
+  移除元素:
     acronym
     applet
     basefont

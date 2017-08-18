@@ -21,7 +21,7 @@
     共修改'3'个文件'5'个位置
   'nginx'配置步骤及说明 
     nginx介绍:
-      Nginx ("engine x") 是一个高性能的HTTP和反向代理服务器，也是一个IMAP/POP3/SMTP服务器。Nginx是由Igor Sysoev为俄罗斯访问量第二的Rambler.ru站点开发的，第一个公开版本0.1.0发布于2004年10月4日。其将源代码以类BSD许可证的形式发布，因它的稳定性、丰富的功能集、示例配置文件和低系统资源的消耗而闻名。2011年6月1日，nginx 1.0.4发布。Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，供俄国大型的入口网站及搜索引擎Rambler（俄文：Рамблер）使用。其特点是占有内存少，并发能力强，事实上nginx的并发能力确实在同类型的网页服务器中表现较好.
+      Nginx ("engine x") 是一个高性能的HTTP和反向代理服务器，也是一个IMAP/POP3/SMTP服务器。Nginx是由Igor Sysoev为俄罗斯访问量第二的Rambler.ru站点开发的，第一个公开版本0.1.0发布于2004年10月4日。其将源代码以类BSD许可证的形式发布，因它的稳定性、丰富的功能集、示例配置文件和低系统资源的消耗而闻名。2011年6月1日，nginx 1.0.4发布。Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，供俄国大型的入口网站及搜索引擎Rambler（俄文:Рамблер）使用。其特点是占有内存少，并发能力强，事实上nginx的并发能力确实在同类型的网页服务器中表现较好.
                                             -----摘自百度百科
     nginx安装
       nginx下载:
@@ -38,7 +38,7 @@
           Nginx的配置文件是conf文件下的nginx.conf，其实配置文件可以默认不修改,你通过浏览器输入localhost后出现的页面即为html文件夹下的index.html.所以你可以将你想要检测的文件放到HTML文件夹中，并将原本的index.html文件给删了，这个时候打开网页输入localhost，使用ctrl+F5清下浏览器缓存即出现你产品中的index.html(产品的首页都会命名为index.html）页面，然后在进行一系列测试.
           配置修改
             前面说到配置可以不修改，但在实际测试过程中，一般不大可能会将产品往nginx里的html文件夹中塞，这个时候咱们就得改下配置了；
-            打开nginx文件夹下的conf文件夹，里面有个nginx.conf文件，用阅读工具如记事本之类打开它；举个栗子：
+            打开nginx文件夹下的conf文件夹，里面有个nginx.conf文件，用阅读工具如记事本之类打开它；举个栗子:
               默认网站根目录为/usr/local/nginx/html，要将它改成/homw/www
               用文本编辑软件打开nginx.conf
               将其中的
@@ -101,16 +101,16 @@
             # fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;
             # include fastcgi_params;
             #}
-            “下面我们仔细来分析一下：
-            listen：表示当前的代理服务器监听的端口，默认的是监听80端口。注意，如果我们配置了多个server，这个listen要配置不一样，不然就不能确定转到哪里去了。
-            server_name：表示监听到之后需要转到哪里去，这时我们直接转到本地，这时是直接到nginx文件夹内。
-            location：表示匹配的路径，这时配置了/表示所有请求都被匹配到这里
-            root：里面配置了root，表示当匹配这个请求的路径时，将会在这个文件夹内寻找相应的文件，这里对我们之后的静态文件伺服很有用。
-            index：当没有指定主页时，默认会选择这个指定的文件，它可以有多个，并按顺序来加载，如果第一个不存在，则找第二个，依此类推。
+            “下面我们仔细来分析一下:
+            listen:表示当前的代理服务器监听的端口，默认的是监听80端口。注意，如果我们配置了多个server，这个listen要配置不一样，不然就不能确定转到哪里去了。
+            server_name:表示监听到之后需要转到哪里去，这时我们直接转到本地，这时是直接到nginx文件夹内。
+            location:表示匹配的路径，这时配置了/表示所有请求都被匹配到这里
+            root:里面配置了root，表示当匹配这个请求的路径时，将会在这个文件夹内寻找相应的文件，这里对我们之后的静态文件伺服很有用。
+            index:当没有指定主页时，默认会选择这个指定的文件，它可以有多个，并按顺序来加载，如果第一个不存在，则找第二个，依此类推。
             下面的error_page是代表错误的页面，这里我们暂时不用，先不管它 ”
             （上面这段分析文字，引用自 tomcat结合nginx使用小结）
 
-            接下来的任务就很明确了，把listen 80下面的两个 root html中的路径，改成我们自己放代码的文件夹，例如在E盘下面新建一个home的文件夹，再在目录下新建一个www的文件夹，那么路径就是：E:\home\www，把task1.html放进去，然后修改配置
+            接下来的任务就很明确了，把listen 80下面的两个 root html中的路径，改成我们自己放代码的文件夹，例如在E盘下面新建一个home的文件夹，再在目录下新建一个www的文件夹，那么路径就是:E:\home\www，把task1.html放进去，然后修改配置
 
             server {
             listen 80;
@@ -150,20 +150,20 @@
             # include fastcgi_params;
             #}
 
-            只改上面两处红字（知乎不能改变文字颜色？那就加粗好了）的地方就可以了，然后用任务管理器 （ctrl+alt+delete）关闭nginx进程，可能有好几个，全都关掉，然后重新打开nginx，浏览器输入http://localhost/task1.html，就可以正常访问了，如果还是访问不了的话，在localhost上加上端口：80试试~
+            只改上面两处红字（知乎不能改变文字颜色？那就加粗好了）的地方就可以了，然后用任务管理器 （ctrl+alt+delete）关闭nginx进程，可能有好几个，全都关掉，然后重新打开nginx，浏览器输入http://localhost/task1.html，就可以正常访问了，如果还是访问不了的话，在localhost上加上端口:80试试~
             （其实我理解的是，只要路径正确就行，但是我换了其他的文件夹名字，例如E:\wy\task，E:\task等，都失败了，提示404错误，不知道是不是我访问的姿势不对，我试了一个多小时都不行...ORZ）
 
-            另外，@19 师弟：手机访问我研究出来了，不需要电脑共享文件
+            另外，@19 师弟:手机访问我研究出来了，不需要电脑共享文件
             首先，电脑和手机连接上同一个wifi
             然后查看电脑ip:win+R→cmd→ipconfig→回车, 找到无限局域网适配器wlan中的ip地址，例如我的是192.168.0.119
             然后手机浏览器中输入192.168.01.119/task1.html 就可以看到自己的代码啦~
 
-            PS：手机访问还有另外两个方法
+            PS:手机访问还有另外两个方法
             1、代码上传至服务器，直接用ip访问
             2、谷歌浏览器的F12调试中，左上角有个手机的图标，点那个就可以模拟移动设备访问，有很多不同尺寸的手机，苹果、三星、洛基亚之类的，木有小米 0.0
 
 
-            感想：
+            感想:
             1、感谢@19 师弟的耐心指导，没想到12点了还在，下次有人问你这个问题，把这篇日报给他看就行啦~
             2、我在夜猫子的路上一去不复返了..orz
 
@@ -173,7 +173,7 @@
             为什么用E:\wy\task，E:\task等路径都显示错误，都是转义字符的锅
 
 
-            所有的转义字符和所对应的意义：
+            所有的转义字符和所对应的意义:
             转义字符
             意义
             ASCII码值（十进制）
@@ -219,8 +219,8 @@
             // \xhh
             // 1到2位十六进制所代表的任意字符
             // 二位十六进制
-            // 注意：区分，斜杠："/" 与 反斜杠："\" ,此处不可互换
-            // 来源： 转义字符_百度百科
+            // 注意:区分，斜杠:"/" 与 反斜杠:"\" ,此处不可互换
+            // 来源: 转义字符_百度百科
             // 先前我路径中的\t被自动转换成制表符了，所以读取不了目录，换成mytask就行了
             // 另外，也明白了看错误日志的重要性
             // nginx路径下的\logs\error.log就是错误日志，复制里面的内容去百度就行
@@ -229,21 +229,21 @@
             // 
             // PS:
             // 1、先前我口中的@19 师弟，原来是首席大师兄，失敬，失敬
-            // 2、@苏哈哈 师兄补充的一条：#号是注释符号
+            // 2、@苏哈哈 师兄补充的一条:#号是注释符号
 命令提示符操作 
   命令提示符是在操作系统中,提示进行命令输入的一种工作提示符;
   在不同的操作系统环境下,命令提示符各不相同;
 windows环境 
-  PS：命令行程序为cmd.exe,是一个32位的命令行程序,
+  PS:命令行程序为cmd.exe,是一个32位的命令行程序,
     微软Windows系统基于Windows上的命令解释程序,类似于微软的DOS操作系统。
     输入一些命令,cmd.exe 可以执行,比如输入shutdown -s就会在30秒后关机。
-    打开方法：开始-所有程序-附件 或 开始-寻找-输入：cmd/cmd.exe 回车。
+    打开方法:开始-所有程序-附件 或 开始-寻找-输入:cmd/cmd.exe 回车。
     CMD即命令提示符窗口[cmd.exe],是Windows的“标配”组件,
     它可以实现用户与操作系统的直接交流,并负责用户输入的所有命令的解释和支持。
     命令提示符进行的操作往往更具有专业性——实际上很多Windows中的操作只能通过命令来实现;
     在命令行中文件名不区分大小写;
   命令 快捷键 操作
-    PS：
+    PS:
       命令码无大小写区分 (文件夹的名称也无大小写区分)     
     快捷键
       rightMouse        粘贴
@@ -263,7 +263,7 @@ windows环境
         cd /     到该磁盘的根目录
         cd \     到该磁盘的根目录
       <x>:       进入磁盘
-        e.g. : e:  进入到E盘 ;  c:  进入到c盘
+        Example: : e:  进入到E盘 ;  c:  进入到c盘
       dir        列出目录下的所有文件
       mkdir      创建文件夹
       <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
@@ -274,17 +274,17 @@ windows环境
     信息查看类
       winver    检查Windows版本
       ipconfig  显示当前的TCP/IP配置的设置值
-        ipconfig /all：显示本机TCP/IP配置的详细信息；
-        ipconfig /release：DHCP客户端手工释放IP地址；
-        ipconfig /renew：DHCP客户端手工向服务器刷新请求；
-        ipconfig /flushdns：清除本地DNS缓存内容；
-        ipconfig /displaydns：显示本地DNS内容；
-        ipconfig /registerdns：DNS客户端手工向服务器进行注册；
-        ipconfig /showclassid：显示网络适配器的DHCP类别信息；
-        ipconfig /setclassid：设置网络适配器的DHCP类别。
-        ipconfig /renew “Local Area Connection”：更新“本地连接”适配器的由 DHCP 分配 IP 地址的配置
-        ipconfig /showclassid Local*：显示名称以 Local 开头的所有适配器的 DHCP 类别 ID
-        ipconfig /setclassid “Local Area Connection” TEST：将“本地连接”适配器的 DHCP 类别 ID 设置为 TEST        
+        ipconfig /all:显示本机TCP/IP配置的详细信息；
+        ipconfig /release:DHCP客户端手工释放IP地址；
+        ipconfig /renew:DHCP客户端手工向服务器刷新请求；
+        ipconfig /flushdns:清除本地DNS缓存内容；
+        ipconfig /displaydns:显示本地DNS内容；
+        ipconfig /registerdns:DNS客户端手工向服务器进行注册；
+        ipconfig /showclassid:显示网络适配器的DHCP类别信息；
+        ipconfig /setclassid:设置网络适配器的DHCP类别。
+        ipconfig /renew “Local Area Connection”:更新“本地连接”适配器的由 DHCP 分配 IP 地址的配置
+        ipconfig /showclassid Local*:显示名称以 Local 开头的所有适配器的 DHCP 类别 ID
+        ipconfig /setclassid “Local Area Connection” TEST:将“本地连接”适配器的 DHCP 类别 ID 设置为 TEST        
       cmd       CMD命令提示符
         cmd.exe  完整写法
       Nslookup  IP地址侦测器

@@ -46,7 +46,7 @@ PC端
         console.log(reader.result);
         dealImage(reader.result, { width : 500 }, function(base){
           // document.getElementById("transform").src = base;
-          console.log("压缩后：" + base.length / 1024 + " " + base);　　　　
+          console.log("压缩后:" + base.length / 1024 + " " + base);　　　　
         })
         
       }
@@ -386,7 +386,7 @@ PC端
     假设有一个表单,用于用户选取图片。
 
     <input type="file" name="picture" accept="image/png, image/jpeg"/>
-    一旦用户选中图片,将其显示在canvas的函数可以这样写：
+    一旦用户选中图片,将其显示在canvas的函数可以这样写:
 
     document.querySelector('input[name=picture]').onchange = function(e){
          readFile(e.target.files[0]);

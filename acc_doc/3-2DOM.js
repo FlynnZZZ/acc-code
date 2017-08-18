@@ -1,5 +1,5 @@
 'Document_Object_Model'DOM,文档对象模型:提供访问和操作网页内容的方法和接口  
-  PS：标准由W3C规定,给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式, 
+  PS:标准由W3C规定,给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式, 
     将整个HTML文件、标签看成一个由对象组成的树, 
     每个DOM最上面都有一个document对象,然后是HTML及其他元素,
     document表示浏览器中的整个页面,包含完整的DOM;
@@ -12,44 +12,44 @@
     让“任何一种程序设计语言”能操控使用“任何一种标记语言”编写出的“任何一份文档”
     “操控”具体含义为能通过DOM提供的API对文档的内容、结构、样式进行访问和修改
   DOM级别和模块 
-    PS：IE6-IE8支持DOM1级,IE9+支持DOM3级
+    PS:IE6-IE8支持DOM1级,IE9+支持DOM3级
     DOM0级 
       实际上,DOM0级标准是不存在的,所谓的DOM0级是DOM历史坐标中的一个参照点,
       具体的,DOM0级指的是IE4和Netscape 4.0 这些浏览器最初支持的DHTML
     DOM1级 
-      PS：于1998年成为W3C的推荐标准,主要目标是映射文档的结构
+      PS:于1998年成为W3C的推荐标准,主要目标是映射文档的结构
       DOM1级由两个模块组成
       'DOM Core'DOM核心 : 针对任何结构化文档的标准模型
         规定如何映射基于XML的文档结构,以便简化对文档中任意部分的访问和操作
       DOM HTML : 只针对HTML文档的标准模型
         在'DOM Core'基础上加以扩展,添加了针对HTML的对象和方法
     DOM2级 
-      PS：扩充鼠标和用户界面事件、范围、遍历[迭代DOM文档的方法]等细分模块,
+      PS:扩充鼠标和用户界面事件、范围、遍历[迭代DOM文档的方法]等细分模块,
         通过对象接口增加了对CSS的支持
         DOM1级中的DOM核心模块也经过扩展开始支持XML命名空间
         也引入了新模块,也给出了众多新类型和新接口的定义
       DOM2级核心:在1级的基础上添加了更多的方法和属性
-      'DOM-Views'DOM视图：定义了跟踪不同文档(例如,应用CSS之前和之后的文档)视图的接口 
-      'DOM-Events'DOM事件：定义了事件和事件处理的接口 
-      'DOM-Style'DOM样式：定义了基于CSS为元素应用样式的接口 
-      'DOM-Traversal-and-Range'DOM遍历和范围：定义了遍历和操作文档树的接口
+      'DOM-Views'DOM视图:定义了跟踪不同文档(例如,应用CSS之前和之后的文档)视图的接口 
+      'DOM-Events'DOM事件:定义了事件和事件处理的接口 
+      'DOM-Style'DOM样式:定义了基于CSS为元素应用样式的接口 
+      'DOM-Traversal-and-Range'DOM遍历和范围:定义了遍历和操作文档树的接口
       DOM2级HTML:在1级的基础上添加了更多的属性、方法和接口 
     DOM3级 
-      PS：进一步扩展DOM, 新增了验证文档的方法–在DOM验证'DOM Validation'模块中定义
+      PS:进一步扩展DOM, 新增了验证文档的方法–在DOM验证'DOM Validation'模块中定义
         对DOM核心进行了扩展,开始支持XML 1.0 规范,涉及XML Infoset、XPath和XML Base
       // 新增模块
       "XPath"模块:
       Load and Save 模块:
     其他DOM标准 
       除了DOM核心和DOM HTML接口之外,另外几种语言还发布了只针对自己的DOM标准
-      下面列出的语言都是基于XML的,每种语言的DOM标准都添加了与特定语言相关的新方法和新接口：
+      下面列出的语言都是基于XML的,每种语言的DOM标准都添加了与特定语言相关的新方法和新接口:
       'Scalable Vector Graphic'SVG,可伸缩矢量图 1.0 
       'Mathematical Markup Language'MathML,数学标记语言 1.0；
       'Synchronized Multimedia Integration Language'SMIL,同步多媒体集成语言
       还有一些语言也开发了自己的DOM实现 
     document.implementation.hasFeature() DOM模块版本检测 [详见Document]
 ◆Node节点 
-  PS：DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
+  PS:DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
     节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
     每个节点都有自己的特点、数据和方法,也与其他节点间存在关系
     整个HTML文档可以表示为以一个特定节点为根节点的树形结构
@@ -64,7 +64,7 @@
     HTML 的子元素中有 body,body 的同胞元素有 head ... 等等
     虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
   nod.nodeType  节点类型「共12种」
-    PS：IE中不可使用如 Node.DOCUMENT_NODE 来进行判断「IE没有公开Node类型的构造函数」,
+    PS:IE中不可使用如 Node.DOCUMENT_NODE 来进行判断「IE没有公开Node类型的构造函数」,
       为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
     Node.DOCUMENT_NODE     9,文档的根节点
     Node.ELEMENT_NODE      1,元素节点 
@@ -79,7 +79,7 @@
       Node.ENTITY_REFERENCE_NODE; // 5,表示一个实体引用
       Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
       Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
-    e.g. :  document.nodeType == Node.DOCUMENT_NODE;  // true
+    Example: :  document.nodeType == Node.DOCUMENT_NODE;  // true
   nod.nodeName  节点名称「不同类型节点返回的形式不同」
     元素节点返回大写字母表示的元素名称; 属性节点返回属性名称; 文本节点返回 #text;
   nod.nodeValue;  值(具体定义取决于节点的类型)
@@ -89,7 +89,7 @@
   nod.attributes; 获取当前元素节点的所有属性节点集合数组
     使用下标访问属性节点,遍历时是从后向前的.
     使用属性名直接得到对应的属性节点
-    e.g. box.attributes['title']
+    Example: box.attributes['title']
   ◆节点关系类
   nod.childNodes; 返回值为 NodeList 类数组对象,保存着一组有序的节点
     当nod为元素节点时,其子节点有可能是元素、文本节点、注释或处理指令.
@@ -116,7 +116,7 @@
   Nod.removeChild(nod); 删除子节点nod,并返回
   ◆其他操作
   nod.cloneNode(bool);   复制节点[但未添加到文档结构中] 
-    PS：不会复制节点中JS添加的属性(如事件等),只复制特性.
+    PS:不会复制节点中JS添加的属性(如事件等),只复制特性.
       IE中存在bug会复制事件处理程序,可以通过复制前移除事件来决解.
     bool 一个布尔值
       true  深复制,复制节点及其整个子节点树
@@ -137,12 +137,12 @@
       数据值
       原节点    在删除节点时,原节点是null
       目标节点  在复制节点时,目标节点是null
-    e.g. :
+    Example: :
     设置与获取额外数据
     document.body.setUserData("aoo","boo",function(){});
     var aoo =document.body.getUserData("aoo");
 Document文档根节点
-  PS：JS中通过 Document 类型表示文档.
+  PS:JS中通过 Document 类型表示文档.
     document 对象是 HTMLDocument(继承自Document类型)的一个实例.
     表示整个 HTML 页面.
     document 对象也是window对象的一个属性,因此可以作为全局对象来访问
@@ -161,7 +161,7 @@ Document文档根节点
     document.body === document.querySelector("body"); // true
     「其他属性详见 DOM操作归纳总结->elem」
   document.title; 取/设网页标题,类型为字符串
-    e.g. :
+    Example: :
     PS-Self:通过中间量赋值方法更改网页标题失败
     var a = document.title;
     a = "hello";
@@ -175,13 +175,13 @@ Document文档根节点
   document.domain; 获取域名.类型为字符串(详见: JS高级程序设计 256 页)
     返回值如:"www.baidu.com"
   document.referrer; 获取跳转页的URL,即获取从哪个网址跳转过来的
-    PS：若当前文档不是通过超级链接访问的,则为 ''。
+    PS:若当前文档不是通过超级链接访问的,则为 ''。
       这个属性允许客户端 JavaScript 访问 HTTP 引用头部。
   document.doctype; 表示文档类型,取得对<!DOCTYPE>的引用
     浏览器对该属性的支持差别很大,因此用处很有限
   (更多内容详见 JavaScript高级程序设计 317 页)
   document.styleSheets; 返回页面所有 StyleSheet 对象的 StyleSheetList
-    PS：StyleSheetList 即所有样式表的集合
+    PS:StyleSheetList 即所有样式表的集合
   var sheet =document.styleSheets[0]; 表示一个样式表对象
     <link>节点和<style>节点的sheet属性,也可以获取 StyleSheet 对象,
       如 document.querySelector("link[rel=stylesheet]").sheet
@@ -203,18 +203,18 @@ Document文档根节点
     sheet.title  返回StyleSheet对象的title值；
     sheet.type  返回StyleSheet对象的type值,通常是text/css
     sheet.insertRule(str,index)  向样式表中插入一条新规则 [IE9-为addRule]
-      PS：
+      PS:
       Arguments:
         str   表示CSS规则的字符串
         index 插入位置
       Example: document.styleSheets[0].insertRule('#block { color:white }', 0);
     sheet.deleteRule(index); 从样式表中删除一条规则 [IE9-使用removeRule]
-      PS：
+      PS:
       Example:document.styleSheets[0].deleteRule(0); //删除样式表中的第一条规则
   document.styleSheets[0].cssRules; 返回 CSSRuleList [IE9-为rules]
-    PS：CSSRuleList 为样式表的CSS规则组成的类数组对象
+    PS:CSSRuleList 为样式表的CSS规则组成的类数组对象
   var rule =document.styleSheets[0].cssRules[0]; 表示样式表的一条规则
-    PS：一条CSS规则包括两个部分：CSS选择器和样式声明
+    PS:一条CSS规则包括两个部分:CSS选择器和样式声明
       CSSRule 对象表示样式表中的一条规则,是一个供其他多种类型继承的基类型,
       其中常见的就是 CSSStyleRule 类型
     rule.selectorText; 返回当前规则的选择器
@@ -252,7 +252,7 @@ Document文档根节点
       在[]中传入数值,则后台就会调用items()方法
       []中也可传入字符串,则调用namedItem()方法
     htmlcollection.namedItem("namevalue"); 获取htmlcollection中name属性值为namevalue的项
-    e.g.
+    Example:
     document.getElementsByTagName('div')
     获取所有标签
     document.getElementsByTagName('*')
@@ -265,7 +265,7 @@ Document文档根节点
     DOM2级视图模块 添加的一个属性
     IE不支持该属性,有一个 document.parentWindow 属性和其等价
   document.defaultView.getComputedStyle(elem,str) 返回CSSStyleDeclaration
-    PS：等价于 window.getComputedStyle(elem,str/null);
+    PS:等价于 window.getComputedStyle(elem,str/null);
       表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果.
       CSSStyleDeclaration对象中包含当前元素的所有计算的样式
     Arguments:
@@ -294,7 +294,7 @@ Document文档根节点
    (因为不再推荐使用该元素所以该集合已经不建议使用了)
   ◆创建
   document.createElement(tagName[,options]); 返回创建的元素对象
-    PS：只是创建了一个元素,还没添加到html中,驻留在内存中
+    PS:只是创建了一个元素,还没添加到html中,驻留在内存中
       只是创建了一个空元素(只有标签),无属性和内容(?)
       当指定未定义的元素时,创建一个HTMLUnknownElement
     Arguments:
@@ -306,7 +306,7 @@ Document文档根节点
         则创建的element的 is 属性会被初始化为这个特性的值.
         若这个对象没有 is 特性,则值为空.
     IE中可传入HTML代码来创建HTML元素
-      e.g. :
+      Example: :
       var div =document.createElement("<div class="a" id="b"></div>");
   document.createTextNode("文本");  创建一个文本节点
   document.createCommnet("文本");   创建一个注释节点
@@ -314,7 +314,7 @@ Document文档根节点
   document.createAttribute("特性名");   创建特性节点
     在创建时已经确定了特性的name,后续不需再赋值
   document.importNode(nod,bool); 复制插入节点(HTML中不常用,XML中常用)
-    PS：将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中
+    PS:将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中
       源节点不会从外部文档中删除,被导入的节点是源节点的一个拷贝.
     Example:
     var iframe = document.getElementsByTagName("iframe")[0];
@@ -325,7 +325,7 @@ Document文档根节点
   document.write(str); 在网页上输出字符串
     可以使用该方法动态的包含外部资源,比如JavaScript文件
       注意不能在字符串中直接包含"</script>",否则会导致被解析为脚本块的结束
-    e.g.
+    Example:
     document.write()输出内容和前面内容的输出关系.
     清空原网页输出
       <!DOCTYPE html>
@@ -420,9 +420,9 @@ Document文档根节点
   document.close();
   ◆DOM 功能检测
   document.implementation;  返回 DOMImplementation 对象
-    PS：DOM1级只为 document.implementation 规定了'hasFeature'一个方法
+    PS:DOM1级只为 document.implementation 规定了'hasFeature'一个方法
     hasFeature(feature,version); 浏览器检测,返回布尔值
-      PS：支持则为true,否则为false; 检测结果有时候不正确
+      PS:支持则为true,否则为false; 检测结果有时候不正确
         如 safari2.x 及更早版本会返回true,即使没有完全实现某些DOM功能
       feature   要检测的DOM功能的名称
       version   DOM的版本号
@@ -444,7 +444,7 @@ Document文档根节点
       LS          3.0         文件与DOM树之间的同步加载和保存
       LS-Async    3.0         文件与DOM树之间的异步加载和保存
       Validation  3.0         在确保有效的前提下修改DOM树的方法
-      e.g.
+      Example:
         document.implementation.hasFeature("CSS","2.0")
         document.implementation.hasFeature("CSS2","2.0")
         document.implementation.hasFeature("HTML","1.0")
@@ -456,23 +456,23 @@ Document文档根节点
       通过该方法创建的文档时 HTMLDocument 类型的实例
 类型&详解 
   Element 类型: DOM元素 [继承于 Node 类型]
-    PS： 用于表现XML或HTML元素,提供了对元素标签名、子节点即特性的访问 
+    PS: 用于表现XML或HTML元素,提供了对元素标签名、子节点即特性的访问 
       除了 Document 类型之外,Element 类型算是Web编程中最常用的类型了.
     ◆节点属性
     elem.nodeType;   节点类型值为1
     elem.nodeName;   节点名称为元素的标签名
       等价于 elem.tagName;
       因为返回标签名的字符串存在大小写的问题,推荐的做法为统一转换为小写字符在做比较
-      e.g. : elem.tagName.toLowerCase() == "div";
+      Example: : elem.tagName.toLowerCase() == "div";
     elem.nodeValue;  节点值为 null
     elem.parentNode;  父节点可能是 Document 或其他 elem
     其子节点可能是:
       Element Text Comment ProcessingInstruction
       CDATASection EntityReference
   HTMLElement 类型:HTMLDOM元素  [继承于 Element 类型] 
-    PS：可以直接通过 == 来比较「不同于ECMAScript中的对象」「SelfPoint」
+    PS:可以直接通过 == 来比较「不同于ECMAScript中的对象」「SelfPoint」
       所有HTML元素都有 HTMLElement 类型表示.
-      e.g. :
+      Example: :
       div 为 HTMLDIVElement;
       p 为 HTMLParagraphElement;
       span 为 HTMLElement;
@@ -487,14 +487,14 @@ Document文档根节点
     elem.className 元素的CSS类,返回值为class值的字符串
     ◆读写元素任何特性
     elem.getAttribute("属性名");  返回属性值
-      e.g. :
+      Example: :
       获取 class类
       elem.getAttribute("class/className");
       IE使用class,其他浏览器使用className(?)
     elem.属性名;   任何元素的所有特性也都可以通过DOM元素本身的属性来访问
       不过,只有公认的(非自定义的)特性才会以属性的方式添加到DOM对象中
     elem.style;  返回一(内联)样式对象(CSSStyleDeclaration 的实例)
-      PS：包含着通过HTML的style特性指定的所有样式信息,
+      PS:包含着通过HTML的style特性指定的所有样式信息,
         不包括外部样式表或嵌入样式表的样式.
         在style中指定的任何CSS属性都将表现为这个style对象的相应属性.
         对于使用短划线(如background-color)的CSS属性,需改写为驼峰形式才能访问,
@@ -530,20 +530,20 @@ Document文档根节点
       如 elem.onclick;等类似的事件处理程序
       elem.getAttribute("onclick"); 得到相应的代码字符串
     elem.attributes; 返回 NamedNodeMap 对象,与NodeList类似,也是一个"动态"集合
-      PS：元素的每一个特性都由一个Attr节点表示,每个节点都保存在 NamedNodeMap 对象中
+      PS:元素的每一个特性都由一个Attr节点表示,每个节点都保存在 NamedNodeMap 对象中
         NamedNodeMap中节点的nodeName就是特性的名称,nodevalue就是特性的值
       elem.attributes.getNameItem(str); 返回nodeName为str的节点
       elem.attributes.setNameItem(nod); 向列表中添加nod特性节点
       elem.attributes.removeNameItem(str); 从列表中移除nodeName为str的节点,并返回删除的节点
       elem.attributes.item(num); 返回位于num位置处的节点
-      e.g. :
+      Example: :
       获取元素的id值
       var id =elem.attributes.getNameeItem("id").nodeValue;
       设置元素的id值
       elem.attributes.["id"].nodeValue = "xxx";
     elem.setAttribute("属性名","属性值"); 设置特性,若特性存在则修改,否则创建
       使用元素属性方法来自定义属性不起作用,如div.mycolor ="red"; 需使用setAttribute方法
-      e.g.
+      Example:
         document.getElementById("box").setAttribute("align","center");
         document.getElementById("box").setAttribute("style","color:green");
         elem.setAttribute("contenteditable","true");
@@ -554,9 +554,9 @@ Document文档根节点
         style.setAttribute("media","@media only screen and(max-width:1024px)");
     elem.removeAttribute("属性名"); 删除属性及属性值
   Text 类型:       文本节点
-    PS：没有子节点
+    PS:没有子节点
     元素节点和文本节点的关系
-      e.g. :
+      Example: :
       <div></div>  <!-- 没有内容,没有文本节点 -->
       <div> </div>  <!-- 有空格,有一个文本节点 -->
       <div>hello word</div>  <!-- 有内容,有一个文本节点 -->
@@ -567,7 +567,7 @@ Document文档根节点
     tex.nodeName;  节点名为 "#text"
     tex.nodeValue; 节点值为所包含的文本
       修改文本值时,字符串的特殊字符会被转码
-      e.g. :
+      Example: :
       div.firstChild.nodeValue ="1 <strong> 2 </strong> 3";
       // 输出结果为 "1 &lt;strong&gt; 2 &lt;/strong&gt; 3"
     tex.parentNode; Element
@@ -584,7 +584,7 @@ Document文档根节点
       当在一个元素节点中相邻添加多个文本节点时,外观上是合并在一起,访问时仍是保持独立的
     tex.splitText(num); 原文本节点将包含从开始的num个字符,新文本节点将包含剩下的文本
   Attr 类型:       元素的属性节点
-    PS：元素的特性在DOM中以Attr类型表示,不被认为是DOM文档树的一部分
+    PS:元素的特性在DOM中以Attr类型表示,不被认为是DOM文档树的一部分
     ◆Node 属性
     nodeType 的值为11;
     nodeName 的值为 特性的名称
@@ -614,7 +614,7 @@ Document文档根节点
     systemId 获取HTML5之前的doctype声明中的部分信息
     internalSubset 获取HTML5之前的doctype声明中某些信息
   DocumentFragment 类型: 文档片段,document fragment
-    PS：在所有节点类型中,只有 DocumentFragment 在文档中没有对应的标记
+    PS:在所有节点类型中,只有 DocumentFragment 在文档中没有对应的标记
       一种 "轻量级"的文档,可以包含和控制节点,
       但不会像完整的文档那样占用额外的资源.
       不能把文档片段直接添加到文档中,但可以将他作为一个"仓库"来使用,
@@ -632,7 +632,7 @@ Document文档根节点
     子节点可以是:
       Element ProcessingInstruction Text
       Commnet CDATASection EntityReference
-    e.g. :
+    Example: :
     通过文档片段来保存多个元素然后一次添加(若逐个添加,将导致浏览器反复渲染(呈现))
     <ul id="myList"></ul>
     var fragment =document.createDocumentFragment();
@@ -654,20 +654,20 @@ Document文档根节点
     实践:iframe 修改其跨域的内容,浏览器限制修改?
 扩展 
   DOM扩展 
-    PS：DOM的两个主要扩展是 selector API(选择符API)和 HTML5,此外还有一些其他扩展
+    PS:DOM的两个主要扩展是 selector API(选择符API)和 HTML5,此外还有一些其他扩展
     ◆选择符API 
       众多JavaScript库中最常用的一项功能,根据CSS选择符来匹配DOM元素
       jQuery的核心就是通过CSS选择符查询DOM文档获得元素的引用
       由W3C发起指定的一个标准,致力于让浏览器原生支持CSS查询,
     elem.querySelector(slt); 表示选择器对应的第一个html元素对象
-      PS：没有则为null
+      PS:没有则为null
         Document类型调用该方法时,会在文档元素的范围内查找匹配元素
         而通过Element类型调用该方法时,只会在该元素的后代元素内查找匹配的元素
       Arguments:
         slt可以为标签、类、id等等,也可以为组合选择器如 div.wrap
         slt 中的字符不可包含括号"()"字符
         若传入了不被支持的选择符,querySelector会抛出错误
-      e.g.
+      Example:
         获取div内的span
         <div id="div"> <span id="span">1</span> </div>
         var div =document.querySelector("#div")
@@ -691,16 +691,16 @@ Document文档根节点
       由于HTML5定义的东西很多,此处只讨论与DOM节点相关的内容
       // 与类相关的扩展
     elem.getElementsByClassName(clsName[,parent]); 通过类名来匹配所有符合元素的类数组
-      PS：IE10以前不支持
+      PS:IE10以前不支持
       Arguments:一个包含一个或多个类名的字符串;
         传入多个类名时,类名的先后顺序无影响
       RetValue:返回带有指定类的所有元素的(动态的)NodeList
-      e.g. :
+      Example: :
       获取所有类中包含 "user" 和 "name" 的元素(类名的先后顺序无所谓)
       var aoo =document.getElementsByClassName("user name");
     elem.classList; 返回 DOMTokenList 集合类型的一个实例 「详见 归纳总结」
     document.activeElement; 始终引用DOM中当前获得焦点的元素
-      PS：
+      PS:
         默认情况下,文档刚加载完,document.activeElement 中保存的是document.body元素
         加载期间 document.activeElement 的值为 null
     document.hasFocus(); 检测文档是否获得了焦点,返回布尔值
@@ -714,17 +714,17 @@ Document文档根节点
     document.charset;  取/设文档使用的字符集
     document.defaultCharset;  浏览器及操作系统charset的默认设置
     elem.dataset.XX;    获取自定义元素的属性的值,类型为字符串
-      PS：HTML5规定可以为元素添加非标准的属性,
+      PS:HTML5规定可以为元素添加非标准的属性,
         但要添加前缀 data-,目的是为元素提供与渲染无关的信息或提供语义信息
         elem.dataset 是 DOMStringMap 的一个实例
       IE下html标签自定义属性
         元素对象.属性名 方式来获取(仅IE支持该方式)
         使用 元素对象.getAttribute("属性名") 来获取
-        e.g.
+        Example:
           定义div标签的abc属性,值为aaa
           <div abc="aaa">123</div>
     elem.innerHTML;   取/设元素的文本和标签,但不包括自身的标签,返回值为字符串
-      PS：各个浏览器返回的值可能不完全一样(如是否带空格,大小写问题等)
+      PS:各个浏览器返回的值可能不完全一样(如是否带空格,大小写问题等)
         在大多数浏览器中通过该方法插入<script>元素并不会执行其中的脚本
         并非所有元素都支持innerHTML属性,不支持的元素有:
           col colgroup frameset head html style table tbody thead tfoot tr
@@ -735,7 +735,7 @@ Document文档根节点
       IE8提供了一个类似的方法 window.toStaticHTML()方法
         接收一个HTML字符串,
         返回一个经过处理后的版本(从原HTML中删除所有脚本节点和事件处理程序属性)
-      e.g. :
+      Example: :
       当创建和销毁HTML解析器也会带来性能损失,最好控制在最合理的范围内.如下:
       for(var i=0;i<10;i++){ ul.innerHTML="<li>items</li>";  }
       //每次循环创建解析器,影响性能
@@ -745,17 +745,17 @@ Document文档根节点
       ul.innerHTML=a;
     elem.outerHTML; 获取元素的自身标签及其innerHTML
     elem.insertAdjacentHTML("位置","html代码"); 在指定位置插入HTML代码
-      PS：该方法最早在IE中出现
+      PS:该方法最早在IE中出现
         html代码会在html网页中自动转换为html元素
       Arguments:
         定义位置的术语:beforebegin/afterbegin/beforeend/afterend.
       RetValue:undefined
-      e.g.
+      Example:
       a.insertAdjacentHTML("beforeBegin",`
         <a href="https://www.baidu.com">这是一个到百度的链接</a>
         `)
     elem.scrollIntoView();通过滚动浏览器窗口或某个容器元素使元素出现在视口中
-      PS：实际上,为某个元素设置焦点也会导致浏览器滚动并显示出该元素
+      PS:实际上,为某个元素设置焦点也会导致浏览器滚动并显示出该元素
       Arguments:传入一个布尔值,默认为true
         true 让调用元素的顶部与视口顶部尽可能平齐
         true 让调用元素尽可能全部出现在视口中(若可能的话,会使底部与底部平齐)
@@ -769,13 +769,13 @@ Document文档根节点
       IE8引入了一个新的概念叫"文档模式",
       文档模式决定了可以使用什么功能,以及如何对待文档类型(doctype)
     elem.children;   所有子元素节点组成的一个类数组
-      PS：HTMLCollection的实例;当只包含子元素节点时,children和childNodes相同
+      PS:HTMLCollection的实例;当只包含子元素节点时,children和childNodes相同
         每个子元素包含其所有的自身后代元素
         此属性不是符合W3C标准规范的属性,可以获取指定元素的子元素,
         支持的浏览器有IE5+ Firefox Safari Opera Chrome
         IE8及更早版本的children属性中会包含注释节点,IE9后则只包含元素节点
     elem.contains(); 判断是否包含子节点,返回值为布尔值
-      PS：IE率先引入的方法
+      PS:IE率先引入的方法
       DOM level3 的 compareDocumentPosition() 也能能够确定节点间的关系
         RetValue:数值,表示该关系的位掩码(bitmask)
           1     无关(给定的节点不再当前文档中)
@@ -784,7 +784,7 @@ Document文档根节点
           8     包含(给定的节点是参考节点的祖先)
           16    被包含(给定的节点是参考节点的后代)
     elem.innerText;  取/设元素中包含的所有文本内容.
-      PS：IE 引入的 element.innerText
+      PS:IE 引入的 element.innerText
       innerText 会受样式的影响,它不返回隐藏元素的文本,但 textContent 返回.
       由于 innerText 受 CSS 样式的影响,它会触发重排(reflow),但textContent 不会.
       与 textContent 不同的是, 在 IE11=- 中对 innerText 进行修改,不仅会移除当前元素的子节点,而且还会永久性地销毁所有内部文本节点(由此导致无法再将这些被销毁的文本节点插入到当前元素或任何其他元素中).
@@ -792,7 +792,7 @@ Document文档根节点
       写入值时,则会取代元素的所有子节点
         会对文本中存在的HTML语法字符(如小于号等)进行编码转义(如&lt;)在网页中如实显示出.
     nod.textContent; 取/设元素中包含的所有文本内容  [DOM Level3] [IE9=+支持]
-      PS：innerText 返回值会忽略行内样式和脚本,但textContent则会返回行内样式和脚本代码.
+      PS:innerText 返回值会忽略行内样式和脚本,但textContent则会返回行内样式和脚本代码.
         对象为 Document,DocumentType 或者 Notation 类型节点,则 textContent 返回 null
         若你要获取整个文档的文本以及CDATA数据,
         可以使用 document.documentElement.textContent.
@@ -803,7 +803,7 @@ Document文档根节点
         若该节点没有子节点的话,返回一个空字符串.
         在节点上设置 textContent 属性的话,会删除它的所有子节点,并替换为给定的文本节点.
     elem.outerText;  取/设元素及其包含的所有文本内容
-      PS：读取文本时,innerText等价于outerText
+      PS:读取文本时,innerText等价于outerText
         设置文本时,outerText会替换该元素及其所有子元素
     ◆对 HTMLElement 类型的扩展
     elem.scrollIntoViewIfNeeded(bool); 将不再视口中的元素滚到到视口中
@@ -833,7 +833,7 @@ Document文档根节点
 DOM操作归纳总结 
   创建 elem 
     var img = new Image(); 创建图片对象 
-      e.g. img.src="图片地址"
+      Example: img.src="图片地址"
     var opt = new Options(["文本","值",bool,bool]); 创建option对象 
       两个 bool 分别表示是否被选中和是否有效
       [详见 表单脚本]
@@ -890,14 +890,14 @@ DOM操作归纳总结
       elem.lastChild 最后一个子节点
       ◆其他信息获取
       elem.offsetParent 只读,最近的包含该元素的定位元素
-        PS： 若无定位元素,则为body;当元素display:none,其offsetParent为null;
+        PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
   操作 elem 
     元素增删查改 
       nod1.hasChildNodes(nod2) nod1是否包含nod2
       elem.insertAdjacentHTML("位置",`html字符串`) 插入HTML代码
        (详见: DOM扩展 HTML5)
       elem1.insertAdjacentElement("位置",elem2)  在elem1中插入elem2
-        PS：返回值为elem2
+        PS:返回值为elem2
       Nod.appendChild(子元素a)  在父元素b内的最后位置添加一个子元素a
         (详见:节点 Node节点)
       Nod.insertBefore() 在父元素b内添加一个子元素a
@@ -907,7 +907,7 @@ DOM操作归纳总结
       Nod.replaceChild() 替换子元素「详见Node操作部分」 
       elem.remove()      删除元素「IE11不支持?」
     元素尺寸、位置 
-      PS：为方便描述,设定 元素的边界宽为content+padding+border+margin,
+      PS:为方便描述,设定 元素的边界宽为content+padding+border+margin,
         元素布局宽为content+padding+border,元素内宽为content+padding,
         元素宽为content的宽度「在box-sizing:content-box的默认条件下」
         高度同理;
@@ -923,7 +923,7 @@ DOM操作归纳总结
           windows 中出现滚动条时为 content+padding-滚动条的宽度
           mac 中滚动条在未拖动时自动隐藏,因此不影响 
         无padding和滚动条时clientWidth等于元素设置的宽度
-        e.g. : 获取浏览器窗口的高和宽
+        Example: : 获取浏览器窗口的高和宽
           function getViewport(){
             var obj = {};
             if(document.compatMode == "BackCompat"){
@@ -963,13 +963,13 @@ DOM操作归纳总结
       elem.attributes 元素所有属性的集合
         (详见 HTMLElement 类型)
       elem.style   一个元素样式的对象,行内样式 
-        PS：style.xx 的值需要事先定义在html标签里「CSS中也不行」,否则获取不到,
+        PS:style.xx 的值需要事先定义在html标签里「CSS中也不行」,否则获取不到,
           返回值为字符串,如 style.left 返回 '20px';
         elem.style.left   读写,相对于具有定位属性父元素的left 
         elem.style.width  读写,元素宽
         elem.style.cursor 显示的指针「光标」的类型
       elem.classList 元素所有class的集合
-        PS： firefox 和 Chrome 支持该属性
+        PS: firefox 和 Chrome 支持该属性
         elem.classList.length  获取类的个数
         elem.classList[] 或 elem.classList.item();  获取元素
         elem.classList.contains("类名"); 返回是否包含指定类的布尔值
@@ -1046,11 +1046,11 @@ DOM操作归纳总结
     操作CSS样式 
       通过给元素添加class来操作样式
       elem.style.xxx  读写行内样式
-        PS：style属性仅能读写在标签内的CSS样式,对于内联和链接方式则无法获取;
+        PS:style属性仅能读写在标签内的CSS样式,对于内联和链接方式则无法获取;
         elem.style          CSSStyleDeclaration,样式对象
         elem.style.cssText  读写整个style文本
         elem.style.xxx      读写xxx样式
-          PS：当设置的值为非正常的值时,则不生效,设置为 null/'' 时可清除该样式
+          PS:当设置的值为非正常的值时,则不生效,设置为 null/'' 时可清除该样式
             使用"-"连接的属选采用驼峰命名法来代替,如font-size,改写为fontSize;
           elem.style.color;          读写字体颜色
           elem.style.fontSize;       读写字体大小
@@ -1062,7 +1062,7 @@ DOM操作归纳总结
             elem.style.cssFloat || elem.style.styleFloat;
             typeof elem.style.cssFloat!="undefined" ? 
             elem.style.cssFloat="right" : elem.style.styleFloat="right";
-        e.g. : 
+        Example: : 
           elem.style.backgroundImage = `url(${img.src})`; // 添加背景图片
           elem.style.background = "#ccc";                 // 设置背景色
       链接样式
@@ -1112,7 +1112,7 @@ DOM操作归纳总结
         getStyle(document.getElementById('test'), 'height');
   其他相关
     scrollbar  滚动轴
-      PS：在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度「为0」;
+      PS:在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度「为0」;
       获取滚动轴宽度scrollbarWidth
         方法一  var scrollbarWidth = elem.offsetWidth - elem.clientWidth;
         方法二  
@@ -1125,7 +1125,7 @@ DOM操作归纳总结
           console.log(scrollbarWidth);
 --------------------------------------------------------------------------------
 ◆Event 事件 
-  PS： JS与HTML的交互时通过事件实现的 
+  PS: JS与HTML的交互时通过事件实现的 
     事件是用来处理响应的一个机制.当用户执行某些操作的时候,在去执行一些列代码
     响应可以来自于用户(鼠标点击等),也可以来自浏览器(如文件下载完了).
     浏览器会默认给事件的响应函数添加一个参数,该参数表示该事件对象本身.
@@ -1143,31 +1143,31 @@ DOM操作归纳总结
     //是否支持方向转换事件
     console.log('onorientationchange' in window);  // false
 事件绑定、解绑及触发 
-  PS：响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
+  PS:响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
     事件处理程序的名字以"on"开头加上事件名
     函数中 this 等于 事件的目标元素
   HTML事件处理程序「也叫内联事件处理程序」 
     在内联模型中,事件处理函数是html标签的一个属性,用于处理指定事件.
-    e.g. :
+    Example: :
     <input type="button" value="clickme" onclick="alert('点击')">
   DOM0级事件处理程序: 将一个函数赋值给一个事件处理程序属性
-    PS：事件处理组成:元素对象.事件处理函数=函数
+    PS:事件处理组成:元素对象.事件处理函数=函数
       当添加多个相同[即使执行函数不同]的事件,会产生覆盖
-    e.g. :
+    Example: :
       document.onclick=function(){ alert("abc"); }; //单击文档任意处
 
       bar btn =document.getElementById("myBtn");
       btn.onclick =function(){ };  // 绑定事件
       btn.onclick =null;            // 解除绑定
   DOM2级事件处理程序: addEventListener&removeEventListener
-    PS：DOM2级事件定义了两个方法,用于添加事件和删除事件处理程序的操作 
+    PS:DOM2级事件定义了两个方法,用于添加事件和删除事件处理程序的操作 
       所有DOM节点中都包含这两个方法.
       当一个元素被绑定多个相同类型事件时,都会执行,无覆盖
       同一元素的绑定不同的事件其被调用的顺序不依赖于绑定的顺序,
       绑定多个相同的事件则会按照定义的先后顺序来触发.
       IE8及之前不支持DOM2级事件绑定[IE9+支持]
     elem.addEventListener("事件名",事件函数,bool);   事件绑定
-      PS：通过该方式添加的事件,只能使用removeEventListener来移除
+      PS:通过该方式添加的事件,只能使用removeEventListener来移除
       bool  可选,表示是否使用捕获的布尔值,默认为false
     elem.removeEventListener();     解除绑定
       Arguments:传入与addEventListener()同样的三个参数,
@@ -1179,12 +1179,12 @@ DOM操作归纳总结
         可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
         可在移除元素前解除该元素事件的绑定.
   IE事件处理程序 attachEvent&detachEvent
-    PS：IE实现了与DOM中类似的两个方法
+    PS:IE实现了与DOM中类似的两个方法
       执行函数中的this为window
       同DOM方法类似,可以添加多个相同的事件(执行函数不同),而不产生覆盖
       绑定多个事件,执行的先后顺序为先添加后执行(与DOM方法相反)
     elem.attachEvent("on事件名",函数);  绑定事件
-      e.g. :
+      Example: :
       elem.attachEvent("onclick",function(){ });
     elem.detachEvent();   解除绑定
       匿名函数不可解除绑定
@@ -1193,14 +1193,14 @@ DOM操作归纳总结
     大多数情况下,事件处理函数返回false,可以阻止默认事件行为
       仅仅是在HTML事件属性和DOM0级事件处理方法中,
       才能通过返回 return false 的形式阻止事件宿主的默认行为(?)
-    e.g. :
+    Example: :
     点击链接,返回false,阻止跳转
     <a id="a" href="https://www.baidu.com">点我也不会跳转</a>
     var a =document.querySelector("#a");
     a.onclick =function(){ return false; };
     a.addEventListener("click",function(){return false; });// 不生效
   事件的绑定与移除
-    PS：
+    PS:
       若要移除事件句柄,addEventListener() 的执行函数必须使用外部函数,
       匿名函数,类似 "elem.removeEventListener("event", function(){ myScript });" 该事件是无法移除的
     elem.addEventListener("mousemove", myFunction);    // 向 元素添加事件句柄
@@ -1208,14 +1208,14 @@ DOM操作归纳总结
     定义和用法
     removeEventListener() 方法用于移除由 addEventListener() 方法添加的事件句柄
 Event事件对象 
-  PS：在触发DOM上的某个事件是,会产生一个事件对象event,
+  PS:在触发DOM上的某个事件是,会产生一个事件对象event,
     这个对象包含着所有与事件有关的信息.
     事件对象包括导致事件的元素、事件的类型、以及其他与特定事件相关的信息.
     所有浏览器都支持event对象,但支持的方式不一定相同.
     event会被作为参数传到执行函数中.
     event对象与创建的事件有关,触发的事件类型不一样可用的属性/方法也不同
     只有在事件处理程序执行期间,event对象才存在「一旦执行完则会被销毁」
-  e.g. 验证隐藏的参数
+  Example: 验证隐藏的参数
     //普通空参函数
     function box(){console.log(arguments.length);}
     box(); // 0,没有得到任何传递的参数
@@ -1240,8 +1240,8 @@ Event事件对象
   e.preventDefault();  阻止事件的默认行为
     若cancelable是true则可以使用该方法
   e.stopPropagation(); 取消事件的进一步捕获或冒泡
-    PS：前提bubbles为true,用于阻止事件的传递.
-    e.g. :
+    PS:前提bubbles为true,用于阻止事件的传递.
+    Example: :
     var btn =document.getElementById("myBtn");
     btn.onclick =function(e){
       alert("1");
@@ -1257,7 +1257,7 @@ Event事件对象
   e.detail;     与事件相关的细节信息
   e.eventPhase; 调用事件处理程序阶段的描述数值 
     1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
-    e.g. :
+    Example: :
     var btn =document.getElementById("myBtn");
     btn.onclick =function(e){console.log(e.eventPhase);} // 2
     document.body.addEventListener("click",function(){
@@ -1292,7 +1292,7 @@ Event事件对象
   e.metaKey  布尔值,表示该键是否被按下
   IE中的事件对象
     ◆DOM1级中,event作为window对象的属性存在,IE8及之前
-      e.g. :
+      Example: :
       var btn =document.getElementById("myBtn");
       btm.onclick =function(){var e = window.event;console.log(e.type);} // click
     ◆DOM2级中,attachEvent将event作为事件函数的参数,也可使用window.event 访问.
@@ -1306,7 +1306,7 @@ Event事件对象
 事件分类 
   ◆DOM3级规定了一下几类事件
   'User-Interface'用户界面,UI事件 当用户与页面上的元素交互时触发 
-    PS：不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
+    PS:不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
     DOMActivate 表示元素已经被用户操作「通过鼠标或键盘」激活 「DOM3级中废弃」
     load    加载完后触发 
       window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
@@ -1325,8 +1325,8 @@ Event事件对象
     scroll  当用户滚动带滚动条的元素中的内容时,在该元素上触发
     abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发
     error   发生错误时触发 
-      PS：支持该事件的 HTML 标签： <img>, <object>, <style>
-        支持该事件的 JavaScript 对象： window, image
+      PS:支持该事件的 HTML 标签: <img>, <object>, <style>
+        支持该事件的 JavaScript 对象: window, image
       当发生JS错误时在window上面触发,
       无法加载图像时在<img>元素触发,
       无法加载嵌入内容在<object>元素上触发,
@@ -1366,7 +1366,7 @@ Event事件对象
       不支持dblclick事件,双击浏览器窗口会放大画面而且没有办法改变该行为
     鼠标按钮
       e.button; 返回数值,对应表示鼠标的按钮
-      e.g. 通过事件对象来检测鼠标点击的键
+      Example: 通过事件对象来检测鼠标点击的键
         document.onmousedown =function(evt){
           if(getButton(evt) ==0)alert('左键');
           if(getButton(evt) ==1)alert('中键');
@@ -1388,7 +1388,7 @@ Event事件对象
           }
         }
   键盘事件 当用户通过键盘在页面上执行操作时触发
-    PS：当按下键盘上的字符串时,先触发keydown事件然后是keypress,松开触发keyup
+    PS:当按下键盘上的字符串时,先触发keydown事件然后是keypress,松开触发keyup
       当按下非字符键,先触发keydown,松开触发keyup
     keydown    按下任意键时触发,按住不放会一直触发
     keypress   按下字符键时触发,按住不放会一直触发
@@ -1432,7 +1432,7 @@ Event事件对象
       只有可编辑区域才能触发该事件
       e.data; 表示用户输入的字符[如可能为s或S取决于是否按了Shift] 
   合成事件 当为IME[Iput Method Editor,输入法编辑器]输入字符时触发 
-    PS：复合事件时DOM3级事件中新添加的一类事件,用于处理IME的输入序列
+    PS:复合事件时DOM3级事件中新添加的一类事件,用于处理IME的输入序列
       IME可以让用户输入在物理键盘上找不到的字符(如输入中文)
       浏览器支持率度不高
     compositionstart  在IME的文本复合系统打开时触发,表示要开始输入了
@@ -1442,7 +1442,7 @@ Event事件对象
     compositionend    在IME的文本复合系统关闭时触发,表示返回正常键盘输入状态
       e.data; 包含此次输入会话中插入的所有字符
   变动事件 当底层DOM结构发生变化时触发[IE9+]
-    PS：变动事件是为XML或HTML DOM设计的,不特定于某种语言
+    PS:变动事件是为XML或HTML DOM设计的,不特定于某种语言
     兼容性检测 
       var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
     DOM2级定义了如下变动事件
@@ -1460,15 +1460,15 @@ Event事件对象
       使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
   变动名称事件 当元素或属性名变动时触发[已被废弃]
   ◆HTML5事件 
-    PS：DOM规范没有涵盖所有浏览器支持的事件,HTML5详尽列出了浏览器应该支持的所有事件
+    PS:DOM规范没有涵盖所有浏览器支持的事件,HTML5详尽列出了浏览器应该支持的所有事件
   contextmenu  上下文菜单事件
     当点击网页时,会自动出现Windows自带的菜单
     使用contextmenu 事件来修改指定的菜单(前提将默认行为取消)
   beforeunload  离开关闭/刷新网页时,在window上触发事件 
-    PS：目的是让开发人员能在页面卸载前阻止这一操作, 
+    PS:目的是让开发人员能在页面卸载前阻止这一操作, 
       通过以返回值的形式来显示给用户提示[无返回值则无提示],
       chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
-    e.g.
+    Example:
       $(window).bind('beforeunload',function(e){
         return '您输入的内容尚未保存,确定离开此页面吗？';
       });
@@ -1499,12 +1499,12 @@ Event事件对象
     selectstart 其触发时间为目标对象被开始选中时(即选中动作刚开始,尚未实质性被选中)
      该事件常使用于使目标对象“禁止变蓝”,比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
      而当我们要避免这种情况时就可以使用该事件
-     e.g. <div onselectstart="return false">该文字不可被选中</div>
+     Example: <div onselectstart="return false">该文字不可被选中</div>
     change:当文本框(input或textarea)内容改变且失去焦点后触发
     error  任何没通过try-catch处理的错误都会触发window对象的error事件
      和其他事件不同的是,error事件不会创建event对象,
      取而代之的是三个参数:错误消息、错误所在的URL和行号
-     e.g. :
+     Example: :
      window.onerror =function(message,url,line){
        ...
        return false; // 可阻止浏览器报告错误的默认行为
@@ -1514,9 +1514,9 @@ Event事件对象
     offline 网络从在线变成离线时触发(HTML5新增)
     transitionEnd  CSS的过渡效果transition结束后触发
      事件对象的属性
-       propertyName：发生transition效果的CSS属性名.
-       elapsedTime： transition效果持续的秒数,不含transition-delay的时间.
-       pseudoElement：若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
+       propertyName:发生transition效果的CSS属性名.
+       elapsedTime: transition效果持续的秒数,不含transition-delay的时间.
+       pseudoElement:若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
          若不发生在伪元素上,则返回一个空字符串.
      Example:
      elem.addEventListener('transitionend',function(){},false);
@@ -1533,7 +1533,7 @@ Event事件对象
        对于animationstart事件,elapsedTime属性等于0,除非animation-delay属性等于负值.
     checkbox选中时的事件是什么 [?]
     pageshow  网页重载时触发
-     PS：重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
+     PS:重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
        虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
      Example:
        var EventUtil = {
@@ -1565,7 +1565,7 @@ Event事件对象
        若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
      event.persisted  返回表示页面是否来自bfcache的布尔值
     pagehide  在浏览器卸载页面的时候触发 「unload事件之前」
-     PS：与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
+     PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
        指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
        因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
      event.persisted  返回页面是否将保存在bfcache中的布尔值
@@ -1605,12 +1605,12 @@ Event事件对象
    touchstart
    touchend
    touchmove
-  Exp： 
+  Exp: 
     页面加载时只执行'load'事件 
     页面刷新时先执行'beforeunload',然后'unload',最后'load' 
     页面关闭时先执行'beforeunload',最后'unload' 
 事件委托 
-  PS： 在创建GUI的语言(如C#)中,为GUI中的每个按钮添加一个onclick事件处理程序很常见,
+  PS: 在创建GUI的语言(如C#)中,为GUI中的每个按钮添加一个onclick事件处理程序很常见,
     但是在JavaScript中添加到页面上的事件处理程序数量直接关系到页面的整体运行性能,
     每当绑定事件时,浏览器代码会与支持页面交互的JS代码间建立一个链接,
     链接越多页面执行起来就越慢
@@ -1618,7 +1618,7 @@ Event事件对象
     原因2:绑定事件增加DOM访问次数,会延迟整个页面的交互就绪时间
     利用冒泡/捕获的原理,把事件加到父级上,触发子元素执行效果
     使用事件委托技术能避免对特定的每个节点添加事件监听器
-  e.g. :
+  Example: :
     a 是b的父元素,b是c和d的父元素,通过给a添加click事件,删除c和d.
     // 给父元素a绑定事件
     a.addEventListener('click', function(event){
@@ -1632,11 +1632,11 @@ Event事件对象
       }
     })
 事件模拟 
-  PS：使用JS来触发特定的事件, DOM2级规范了模拟特定事件的方式 
+  PS:使用JS来触发特定的事件, DOM2级规范了模拟特定事件的方式 
     IE有自己的模拟方式 
   document.createEvent(str);  创建event对象
     str   表示要创建的事件类型的字符串
-      PS：DOM2级中都使用英文复数形式, DOM3级中都使用英文单数形式
+      PS:DOM2级中都使用英文复数形式, DOM3级中都使用英文单数形式
       'UIEvents'       一般的UI事件,鼠标、键盘事件都继承至UI事件
       'MouseEvents'    一般的鼠标事件
       'MutationEvents' 一般的DOM变动事件
@@ -1661,7 +1661,7 @@ Event事件对象
     metaKey    布尔值,表示是否按下了Meta,默认值为false
     button     整数,表示按下了哪一个鼠标键,默认值为0
     relatedTarget 对象,表示与事件相关的对象(只在模拟 mouseover 和mouseout时使用)
-  e.g. :
+  Example: :
     var btn = document.getElementById("myBtn"); 
     var event = document.createEvent("MouseEvents"); // 创建事件对象
     // 初始化事件对象
@@ -1694,7 +1694,7 @@ Event事件对象
   elem.addEventListener(eNameStr,cfoo,bool);   监听事件 
     cfoo 回调函数,传送参数 e[事件对象]
   elem.dispatchEvent(event);  触发事件 
-  Exp：
+  Exp:
     var on = function(eName,foo,elem) {
       var el = elem || document;
       el.addEventListener(eName, function(e){
@@ -1796,7 +1796,7 @@ Event事件对象
   事件枚举及分类
     ◆在window上触发的事件 
     popstate   当活动历史记录条目更改时,在window上触发「HTML5 IE10+」
-      PS：调用history.pushState()或history.replaceState()不会触发该事件,
+      PS:调用history.pushState()或history.replaceState()不会触发该事件,
         只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
         或者在JS代码中调用 history.back();
         不同的浏览器在加载页面时处理popstate事件的形式存在差异。
@@ -1804,14 +1804,14 @@ Event事件对象
         若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
         或者受到对 history.replaceState() 的调用的影响,
         e.state 属性为包含历史条目的状态对象的副本,为pushState的第一个参数;
-      e.g.
+      Example:
         window.addEventListener("popstate",function(e){
           var state1 = e.state;
           // state1 就是 pushState 的第一个参数,详情常见BOM history
           console.log(state1)
         })
     hashchange URL变化时在window上触发「IE8+」 
-      PS：当#值发生变化时也会触发这个事件
+      PS:当#值发生变化时也会触发这个事件
       e.oldURL; 变化前的URL
       e.newURL; 变化后的URL
     ◆
@@ -1861,7 +1861,7 @@ Example:
     获取按钮          var bu = document.querySelector("#xxx");
     声明响应的动作.点击后执行   var cli = function(){ console.log("点到我了"); }
     添加事件/监听事件  元素a.addEventListener("事件名称b",执行的函数c,true/false)
-      PS：当在元素a上发生事件b时,执行函数c.
+      PS:当在元素a上发生事件b时,执行函数c.
         事件响应时,浏览器会给执行的函数传一个参数,该参数表示事件本身.
       true/false 可选填,默认为false.
       此处为 bu.addEventListener("click",cli)
@@ -1896,7 +1896,7 @@ Special
     代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
 Event 事件 
   Touch 触摸事件
-    PS：由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
+    PS:由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
     ◆基本触摸事件「在规范中列出并获得跨移动设备广泛实现」
     touchstart  当手指放在屏幕上触发;
     touchmove   当手指在屏幕上滑动时,连续地触发;
@@ -1966,7 +1966,7 @@ Event 事件
     e.touches          当前位于屏幕上的所有手指的一个列表
       event.touches.length  表示屏幕上触摸的手指个数
     e.targetTouches    位于当前DOM元素上的手指的一个列表
-      PS：touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
+      PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
       event.touches.length  表示元素上触摸的手指个数
     e.originalEvent.changedTouches   
       e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
@@ -1981,7 +1981,7 @@ Event 事件
       一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
       当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
   Gestures 触摸事件
-    PS：该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
+    PS:该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
     Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
     Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
     Gestureend    当任何一个手指从屏幕上面移开时触发。
@@ -1990,7 +1990,7 @@ Event 事件
     而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
     若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
     但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
-    手势的专有属性：
+    手势的专有属性:
       rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
       scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
   其他 
@@ -2033,11 +2033,11 @@ WeiXin 微信
     模板字符串  ios中支持,android中不支持「20170124」
     可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
     不支持进行跳转到上一步url中带有参数 的url地址  [?]
-      比如：一个查询列表页的url是： http://someweb?city=beijing
-      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如： 
+      比如:一个查询列表页的url是: http://someweb?city=beijing
+      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如: 
       location.href=document.referrer的时候   
       跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
-      解决：微信开发中 不要用 带url参数的地址,都用/ ../ ,
+      解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
       把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
   event 事件
     click 无延迟 [?]
@@ -2049,7 +2049,7 @@ WeiXin 微信
 --------------------------------------------------------------------------------
 ◆专题 
 'Form'表单及表单字段脚本 
-  PS：HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
+  PS:HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
     HTMLFormElement 继承了 HTMLElement ,因而与其他HTML元素具有相同的默认属性;
     表单字段为表单中的元素,如input button textarea select 等等
   表单元素  [self: 使用formElem表示表单元素]
@@ -2140,7 +2140,7 @@ WeiXin 微信
       }
     ◆表单字段事件
     change  表单值改变时触发
-      支持该事件的 JavaScript 对象： fileUpload, select, text, textarea 等
+      支持该事件的 JavaScript 对象: fileUpload, select, text, textarea 等
       input或textarea元素值变化且失焦时触发
       select元素其选项改变时触发
       input+type=range   划条拖动松开鼠标时响应
@@ -2160,7 +2160,7 @@ WeiXin 微信
     在其文本框中输入的内容保存在他们的value中
     text.select()  选择文本框中所有的文本
     text.selectionStart  光标选中文本开始的字符下标表示 [HTML5新增]
-      e.g. : 获取所选字符
+      Example: : 获取所选字符
         text.value.substring(text.selectionStart,text.selectionEnd);
     text.selectionEnd    光标选中文本结束的字符下标表示
     text.value.setSelectionRange(begin,end)   获取部分字符
@@ -2196,7 +2196,7 @@ WeiXin 微信
         }
       }
     ◆HTMLOptionElement 对象表示<option>元素,有下列属性
-      PS：也可以使用常规DOM功能来访问,但效率比较低下
+      PS:也可以使用常规DOM功能来访问,但效率比较低下
     创建选择项的方法
       方式一:使用DOM创建 设定 再添加到DOM中
       方式二:使用构造函数创建 new Option("文本text","值value") 再添加到DOM中
@@ -2234,7 +2234,7 @@ WeiXin 微信
     Exp:
       该元素绑定'click'事件会触发两次[使用的jQuery绑定],
       使用'mouseup'事件来代替'click'事件来使用;
-  Extend：利用iframe让form的submit不刷新页面进行上传
+  Extend:利用iframe让form的submit不刷新页面进行上传
     form的submit会导致页面的刷新,把form的target指定到一个看不见的iframe,
     那么返回的数据就会被这个iframe接受,于是乎就只有这个iframe会刷新。
     而它又是看不见的,用户自然就感知不到了。
@@ -2342,7 +2342,7 @@ WeiXin 微信
             若浏览器无法播放该格式,返回空字符串""
             若浏览器认为有可能播放该格式,返回"maybe"
             若浏览器认为能够播放改格式,返回"probably"
-          e.g.
+          Example:
             video.canPlayType("video/ogg")
             只传入一个短形式的格式,只可能得到""或"maybe"
             video.canPlayType('video/ogg; codecs="theora,vorbis"')
@@ -2399,7 +2399,7 @@ WeiXin 微信
     suspend
     timeupdate      音频/视频(audio/video)的播放位置发生改变时触发
       若视频在播放时,位置一直在改变,则每秒触发一次
-      具体触发情况：
+      具体触发情况:
         播放音频/视频(audio/video)时
         移动音频/视频(audio/video)播放位置时
     volumechange
@@ -2408,7 +2408,7 @@ WeiXin 微信
   Remarks:
     直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
 'canvas'画布 [HTML5][IE9+][详参 JavaScript高级程序设计 445 页] 
-  PS：画布默认为透明; 在css中指定画布宽高,会导致画布的所有内容进行相应的缩放;
+  PS:画布默认为透明; 在css中指定画布宽高,会导致画布的所有内容进行相应的缩放;
     canvas标签只有width和height两个属性,默认为宽度300px和高度150px;
     若CSS的尺寸与初始画布的比例不一致,它会出现扭曲;
   限制
@@ -2421,7 +2421,7 @@ WeiXin 微信
     对于阻止多种类型的XSS/CSRF攻击「两种典型的跨站攻击」是非常有用的;
     没有服务器环境「比如本地的html网页,操作本地的一张图片」,
     会报"Unable to get image data ... has been tainted by cross-origin data"错误 
-    本地网页的域为'file://,如：file:///home/summer/Desktop/test.html',
+    本地网页的域为'file://,如:file:///home/summer/Desktop/test.html',
     本地图片不是以'file://'开头的,如 'c:\tmp\test.png'
   用途
     通过canvas,JS可以对图像进行像素级的操作,
@@ -2434,7 +2434,7 @@ WeiXin 微信
     if(canvas.getContext) {  }else {  }
   var cvs = document.querySelector('canvas');  canvas对象
     cvs.toDataURL(type,quality); 返回包含图片的 data URI「需将图片预先放入canvas」
-      PS：若画布的高度或宽度是0,那么会返回字符串“data:,”;
+      PS:若画布的高度或宽度是0,那么会返回字符串“data:,”;
       type     可选,返回的图片类型,默认为 PNG
         图片的分辨率为96dpi;
         若传入非“image/png”,但返回的以“data:image/png”开头,则传入类型是不支持的;
@@ -2444,7 +2444,7 @@ WeiXin 微信
         可以从 0 到 1 的区间内选择图片的质量。
         若超出取值范围,将会使用默认值 0.92。其他参数会被忽略。
   var ctx =cvs.getContext("2d");   ctx对象:'2d' 上下文
-    PS：使用上下文的属性和方法来操作画布,是画布的核心对象
+    PS:使用上下文的属性和方法来操作画布,是画布的核心对象
       目前只支持2D绘图,将来可能还会有其他上下文类型
       设置样式等应写在绘制图形之前,否则样式会渲染不上
     画布栅格/坐标空间
@@ -2453,7 +2453,7 @@ WeiXin 微信
       栅格的起点为左上角,坐标为 0,0 ; 所有元素的位置都相对于原点定位.
       所以图形的坐标为距离左边(Y轴)x像素,距离上边(X轴)y像素,坐标为x,y
     ◆绘制矩形
-      PS：不同于SVG,HTML中的元素canvas只支持一种原生的图形绘制：矩形.
+      PS:不同于SVG,HTML中的元素canvas只支持一种原生的图形绘制:矩形.
         所有其他的图形的绘制都至少需要生成一条路径.
         不同于路径函数pathFunction,这三个函数绘制之后会马上显现在canvas上,即时生效.
       ctx.fillRect(x,y,width,height); 绘制一填充的矩形
@@ -2466,7 +2466,7 @@ WeiXin 微信
         ctx.clearRect(45,45,60,60);
         ctx.strokeRect(50,50,50,50);
     ◆绘制路径
-      PS：图形的基本元素是路径
+      PS:图形的基本元素是路径
         路径是通过不同颜色和宽度的线段或曲线相连形成的不同形状的点的集合.
         一个路径,甚至一个子路径,都是闭合的.
         当前路径为空,即调用beginPath()之后,或者canvas刚建的时候,
@@ -2488,21 +2488,21 @@ WeiXin 微信
         但是调用stroke()时不会自动闭合.
       ★移动
       ctx.moveTo(x, y); 移动笔触
-        PS：该函数实际上并不能画出任何东西.
+        PS:该函数实际上并不能画出任何东西.
           当canvas初始化或者beginPath()调用后,你通常会使用moveTo()函数设置起点.
           也能够使用moveTo()绘制一些不连续的路径.
       ★样式
         ◆颜色
-          PS：默认情况下,线条和填充颜色都是黑色(CSS 颜色值 #000000)
+          PS:默认情况下,线条和填充颜色都是黑色(CSS 颜色值 #000000)
             一旦设置了strokeStyle或者fillStyle的值,那么该值就会成为新绘制的图形的默认值.
             若要给每个图形上不同的颜色,需要重新设置 fillStyle 或 strokeStyle 的值.
         ctx.fillStyle    设置图形填充颜色
           可使用颜色名、十六进制或RGB来设置
-          e.g. : ctx.fillStyle = "blue"
+          Example: : ctx.fillStyle = "blue"
         ctx.strikeStyle  设置图形轮廓颜色
         TransparencyEDIT 透明度
           ctx.globalAlpha = num  透明度
-            PS：除了可以绘制实色图形,我们还可以用 canvas 来绘制半透明的图形.
+            PS:除了可以绘制实色图形,我们还可以用 canvas 来绘制半透明的图形.
               通过设置 globalAlpha 属性或者使用一个半透明颜色作为轮廓或填充的样式.
               这个属性影响到 canvas 里所有图形的透明度,
               globalAlpha 属性在需要绘制大量拥有相同透明度的图形时候相当高效.
@@ -2515,7 +2515,7 @@ WeiXin 微信
               ctx.strokeStyle = "rgba(255,0,0,0.5)";
               ctx.fillStyle = "rgba(255,0,0,0.5)";
         ◆线型
-          PS：可以通过一系列属性来设置线的样式
+          PS:可以通过一系列属性来设置线的样式
         ctx.lineWidth = value; 设置线条宽度,属性值必须为正数,默认值是 1.0
           线宽是指给定路径的中心到两边的粗细.
           换句话说就是在路径的两边各绘制线宽的一半.
@@ -2620,10 +2620,10 @@ WeiXin 微信
               ctx.fillRect(0,0,150,150);
         ◆图案
         ctx.createPattern(image, type)
-          PS：用 canvas 对象作为 Image 参数在 Firefox 1.5 (Gecko 1.8) 中是无效的.
+          PS:用 canvas 对象作为 Image 参数在 Firefox 1.5 (Gecko 1.8) 中是无效的.
             图案跟渐变类似,创建出一个pattern之后,赋给fillStyle或strokeStyle即可
           Image 可以是一个 Image 对象的引用,或者另一个 canvas 对象.
-          Type 必须是下面的字符串值之一：repeat,repeat-x,repeat-y 和 no-repeat.
+          Type 必须是下面的字符串值之一:repeat,repeat-x,repeat-y 和 no-repeat.
           Example:
             var ctx = document.getElementById('canvas').getContext('2d');
             var img = new Image();
@@ -2635,7 +2635,7 @@ WeiXin 微信
               ctx.fillRect(0,0,150,150);
             }
         ◆阴影
-          PS：shadowOffsetX,shadowOffsetY 不受变换矩阵所影响.
+          PS:shadowOffsetX,shadowOffsetY 不受变换矩阵所影响.
             负值表示阴影会往上或左延伸,正值则表示会往下或右延伸,它们默认都为 0.
         shadowOffsetX = float 用来设定阴影在X轴的延伸距离
         shadowOffsetY = float 用来设定阴影在Y轴的延伸距离
@@ -2655,7 +2655,7 @@ WeiXin 微信
             ctx.fillText("Sample String", 5, 30);
       ★线
       ctx.lineTo(x, y); 绘制一条从当前位置到指定x以及y位置的直线;
-        该方法有两个参数：x以及y ,代表坐标系中直线结束的点.
+        该方法有两个参数:x以及y ,代表坐标系中直线结束的点.
         开始点和之前的绘制路径有关,之前路径的结束点就是接下来的开始点,
         开始点也可以通过moveTo()函数改变.
       ★矩形
@@ -2707,10 +2707,10 @@ WeiXin 微信
       ★渲染路径
       ctx.stroke();    通过线条来绘制图形轮廓  [无参数]
       ctx.fill();      通过填充路径的内容区域生成实心的图形
-        PS：当我们用到 fill(或者 clip和isPointinPath )你可以选择一个填充规则,
+        PS:当我们用到 fill(或者 clip和isPointinPath )你可以选择一个填充规则,
           该填充规则根据某处在路径的外面或者里面来决定该处是否被填充,
           这对于自己与自己路径相交或者路径被嵌套的时候是有用的.
-        两个可能的值：
+        两个可能的值:
            "nonzero"    non-zero winding rule, 默认值.
            "evenodd"    even-odd winding rule.
         Example:
@@ -2729,7 +2729,7 @@ WeiXin 微信
         ctx.font = "48px serif";
         ctx.fillText("Hello world", 10, 50);
 
-        文本用当前的边框样式被绘制：
+        文本用当前的边框样式被绘制:
         var ctx = document.getElementById('canvas').getContext('2d');
         ctx.font = "48px serif";
         ctx.strokeText("Hello world", 10, 50);
@@ -2737,12 +2737,12 @@ WeiXin 微信
       ctx.font = value  当前我们用来绘制文本的样式.
         和 CSS font 属性相同的语法. 默认的字体是 '10px sans-serif'
       ctx.textAlign = value 文本对齐选项.
-        可选的值包括：start, end, left, right or center. 默认值是 start.
+        可选的值包括:start, end, left, right or center. 默认值是 start.
       ctx.textBaseline = value 基线对齐选项
-        可选的值包括：top, hanging, middle, alphabetic, ideographic, bottom.
+        可选的值包括:top, hanging, middle, alphabetic, ideographic, bottom.
         默认值是 alphabetic.
       ctx.direction = value 文本方向.
-        可能的值包括：ltr, rtl, inherit.默认值是 inherit.
+        可能的值包括:ltr, rtl, inherit.默认值是 inherit.
       Example:
         ctx.font = "48px serif";
         ctx.textBaseline = "hanging";
@@ -2754,15 +2754,15 @@ WeiXin 微信
           var text = ctx.measureText("foo"); // TextMetrics object
           text.width; // 16;
     ◆绘制图像
-      PS： 可以用于动态的图像合成或者作为图形的背景,以及游戏界面(Sprites)等等.
+      PS: 可以用于动态的图像合成或者作为图形的背景,以及游戏界面(Sprites)等等.
         浏览器支持的任意格式的外部图片都可以使用,比如PNG、GIF或者JPEG.
         你甚至可以将同一个页面中其他canvas元素生成的图片作为图片源.
-      引入图像到canvas里需要以下两步基本操作：
+      引入图像到canvas里需要以下两步基本操作:
         获得一个指向HTMLImageElement的对象或者另一个canvas元素的引用作为源,
           也可以通过提供一个URL的方式来使用图片
         使用 drawImage() 函数将图片绘制到画布上
       获得需要绘制的图片
-        canvas的API可以使用下面这些类型中的一种作为图片的源：
+        canvas的API可以使用下面这些类型中的一种作为图片的源:
           HTMLImageElement 这些图片是由Image()函数构造出来的,或者任何的<img>元素
           HTMLVideoElement 用一个HTML的 <video>元素作为你的图片源,
             可以从视频中抓取当前帧作为一个图像
@@ -2771,7 +2771,7 @@ WeiXin 微信
             这是一个高性能的位图,可以低延迟地绘制,
           这些源统一由 CanvasImageSource类型来引用.
         使用相同页面内的图片
-          我们可以通过下列方法的一种来获得与canvas相同页面内的图片的引用：
+          我们可以通过下列方法的一种来获得与canvas相同页面内的图片的引用:
           document.images集合
           document.getElementById() 等方法
         使用其它域名下的图片
@@ -2791,7 +2791,7 @@ WeiXin 微信
             当脚本执行后,图片开始装载.
             若调用 drawImage 时,图片没装载完,那什么都不会发生,
             (在一些旧的浏览器中可能会抛出异常).
-            因此你应该用load时间来保证不会在加载完毕之前使用这个图片：
+            因此你应该用load时间来保证不会在加载完毕之前使用这个图片:
             var img = new Image();   // 创建img元素
             img.onload = function(){
               // 执行drawImage语句
@@ -2807,11 +2807,11 @@ WeiXin 微信
             img.src = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==';
             其优点就是图片内容即时可用,无须再到服务器兜一圈.
             (还有一个优点是,可以将 CSS,JavaScript,HTML 和 图片全部封装在一起,迁移起来十分方便.)
-            缺点就是图像没法缓存,图片大的话内嵌的 url 数据会相当的长：
+            缺点就是图像没法缓存,图片大的话内嵌的 url 数据会相当的长:
         使用视频帧
           你还可以使用<video> 中的视频帧(即便视频是不可见的).
           Example:
-            例如,若你有一个ID为“myvideo”的<video> 元素,你可以这样做：
+            例如,若你有一个ID为“myvideo”的<video> 元素,你可以这样做:
             var canvas = document.getElementById('canvas');
             if (canvas.getContext) {
               var ctx = canvas.getContext('2d');
@@ -2838,11 +2838,11 @@ WeiXin 微信
               ctx.stroke();
             }
         ctx.drawImage(image,x,y,width,height) 增加缩放
-          PS：注意：图像可能会因为大幅度的缩放而变得起杂点或者模糊.
+          PS:注意:图像可能会因为大幅度的缩放而变得起杂点或者模糊.
             若您的图像里面有文字,那么最好还是不要进行缩放,
             因为那样处理之后很可能图像里的文字就会变得无法辨认了.
           drawImage 方法的又一变种是增加了两个用于控制图像在 canvas 中缩放的参数.
-          这个方法多了2个参数：width 和 height,
+          这个方法多了2个参数:width 和 height,
           这两个参数用来控制 当像canvas画入时应该缩放的大小
           Example:
             图像大小被缩放至 50*38 px
@@ -2853,7 +2853,7 @@ WeiXin 微信
               ctx.drawImage(img,50,38,50,38);
             };
         drawImage(image,sx,sy,sWidth,sHeight,dx,dy,dWidth,dHeight) 增加切片
-          PS：切片是个做图像合成的强大工具.
+          PS:切片是个做图像合成的强大工具.
             假设有一张包含了所有元素的图像,那么你可以用这个方法来合成一个完整图像.
             drawImage 方法的第三个也是最后一个变种有8个新参数,用于控制做切片显示的.
           第一个参数和其它的是相同的,都是一个图像或者另一个 canvas 的引用.
@@ -2887,7 +2887,7 @@ WeiXin 微信
                 }
               }
     Path2D 对象 用来缓存或记录绘画命令,这样就能快速地回顾路径
-      PS：为了简化代码和提高性能,Path2D对象已可以在较新版本的浏览器中使用
+      PS:为了简化代码和提高性能,Path2D对象已可以在较新版本的浏览器中使用
         所有的路径方法比如 moveTo, rect, arc 或 quadraticCurveTo等,都可以在Path2D中使用
       ★创建 Path2D
         Path2D()会返回一个新初始化的Path2D对象,
@@ -2898,7 +2898,7 @@ WeiXin 微信
       var pathd = new Path2D(d);    // 从SVG建立Path对象
       pathd.addPath(path [, transform])​
         Path2D API 添加了 addPath作为将path结合起来的方法.
-        当你想要从几个元素中来创建对象时,这将会很实用.比如：
+        当你想要从几个元素中来创建对象时,这将会很实用.比如:
         添加了一条路径到当前路径(可能添加了一个变换矩阵).
       Example:
         在这个例子中,我们创造了一个矩形和一个圆.
@@ -2925,7 +2925,7 @@ WeiXin 微信
     ◆文字绘制
       ctx.font        取/设字体
         使用和css中相同格式
-        e.g. :
+        Example: :
         ctx.font = "italic bold 1.5em Times,serif"
       ctx.fillText(str,x,y,maxwidth); 填充文字
         str      为需要显示的字符串
@@ -2934,10 +2934,10 @@ WeiXin 微信
         maxwidth 文本的最大宽度,可选参数
           当字符串过多导致宽度超过maxwidth,会响应的缩放以适应.
       ctx.textAlign   置文字水平对齐方式
-        PS：在从左到右的语言中,start和end 与 left和right含义相同,比如英语
+        PS:在从左到右的语言中,start和end 与 left和right含义相同,比如英语
           但在从右到左的语言(如希伯来语)中,则正好相反
         可设置的值为:start、end、left、right和center
-        e.g. :
+        Example: :
         ctx.textAlign ="left"
       ctx.textBaseline 基线,取/设字体的垂直对齐方式
         bottom
@@ -2946,11 +2946,11 @@ WeiXin 微信
         ideographic
         hanging
         top
-        e.g. :
+        Example: :
         ctx.textBaseline = "middle"
     ◆
       ctx.globalCompositeOperation  取/设显示层次
-        PS：在新图像产生前进行定义
+        PS:在新图像产生前进行定义
         source-over 默认,新图像在原内容上显示,产生覆盖效果
         source-in   新图形会仅仅出现与原有内容重叠的部分.其它都变成透明
         source-atop 新图形中与原有内容重叠的部分会被绘制,并覆盖于原有内容之上.
@@ -2963,7 +2963,7 @@ WeiXin 微信
         copy   只有新图形会被保留,其它都被清除掉
         xor    重叠的部分会变成透明.
         darker 两图形中重叠的部分作减色处理
-        e.g. :
+        Example: :
         ctx.globalCompositeOperation ="source-over"
     ◆路径相关: 在描出路径之前,路径是不可见的
       在绘制多个图形时,应该在绘制一个图形之前开绘制路径,
@@ -2994,9 +2994,9 @@ WeiXin 微信
       ctx.drawImage(img,x,y);
       ctx.closePath();
       ctx.drawImage(图片/画布/视频(元素)对象,x,y,width,height); 放置图片
-        三参数：1 需要绘制的图片对象, 2 3 图片坐标；
-        五个参数：1 需要绘制的图片对象, 2 3 图片坐标, 4 5 图片宽高；
-        九个参数：1 需要绘制的图片对象, 2 3 绘制图片的横纵向切割点,
+        三参数:1 需要绘制的图片对象, 2 3 图片坐标；
+        五个参数:1 需要绘制的图片对象, 2 3 图片坐标, 4 5 图片宽高；
+        九个参数:1 需要绘制的图片对象, 2 3 绘制图片的横纵向切割点,
           4 5 切割宽度, 6 7 切割好的图片坐标, 8 9 切割好的图片宽高
         关于第一个参数
           得到图片对象的方法:
@@ -3014,7 +3014,7 @@ WeiXin 微信
         保存之前context的状态,如fillStyle、strokeStyle、lineWidth等
       ctx.restore(); 恢复之前保存的状态
       ctx.translate(x,y);   画布平移
-        e.g. :
+        Example: :
         context.translate(20,50)
         分别向x,y方向移动20,50(单位为像素)
       ctx.rotate(弧度值);   画布旋转
@@ -3041,7 +3041,7 @@ WeiXin 微信
         Example:
         color.addColorStop(0.3,"orange");
         color.addColorStop(0.5,"yellow");
-    e.g.
+    Example:
       使用 translate rotate save restore 绘制图案
         <canvas id="canvas" width="400" height="400"></canvas>
 
@@ -3070,18 +3070,18 @@ WeiXin 微信
         javascript:"aaa"   // 在浏览器地址栏中键入
   <script src="" charset="utf-8"></script>  脚本引入 
 WYSIWYG 富文本编辑 [详参 JavaScript高级程序设计 440 页] 
-  PS：'what you see is what you get',所见即所得;由IE引入,虽无规范,已经成为了事实标准
+  PS:'what you see is what you get',所见即所得;由IE引入,虽无规范,已经成为了事实标准
     技术本质为在页面中嵌入一个包含空HTML页面的iframe,
     通过设置designMode属性,使该HTML页面可以被编辑,
     编辑的对象则是该页面<body>元素的HTML代码.
     designMode 属性有两个可能的值: "off" 和 "on"(on时则可编辑)
     需要等到页面完全加载之后才能设置为可编辑状态(一般使用 load事件监听)
-  e.g. :
+  Example: :
   在页面创建一个 iframe标签
   设置其designMode为"on"(frames["XX"].document.designMode ="on")
   注:在Chrome中不可使iframe的src外链其他文件(出于安全限制?)
   document.execCommand(); 文档预定义
-    PS：方法也适用于页面中contenteditable属性为true的区块
+    PS:方法也适用于页面中contenteditable属性为true的区块
       只是把对框架的document引用替换成当前窗口的document对象即可
     Arguments:接收三个参数
       执行的命名名称
@@ -3091,17 +3091,17 @@ WYSIWYG 富文本编辑 [详参 JavaScript高级程序设计 440 页]
       backcolor     颜色字符串    设置文档背景色
       bold          null         将选择的文本转会为粗体
       ...
-    e.g. :
+    Example: :
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
 FileList 对象与 File 对象 [HTML5]
-  PS：FileList对象表示用户选择的文件列表,
+  PS:FileList对象表示用户选择的文件列表,
     HTML4中,file控件内只能选中一个文件,
     HTML5中[通过添加multiple属性],file控件内能一次选中多个文件,
     控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表.
     HTML5支持一次选择多个文件,若件选择控件没有开启多选模式,那么数组只有一个元素.
   ◆获取 FileList 和 File 对象 
-    PS：FileList 表示files集,files为change事件对象的 e.target.files 
+    PS:FileList 表示files集,files为change事件对象的 e.target.files 
     Example:
       <input type="file" id="file" multiple>
       document.querySelector("#file").addEventListener("change",function(e){
@@ -3126,7 +3126,7 @@ FileList 对象与 File 对象 [HTML5]
   file.lastModified      文件的上次修改时间,格式为时间戳。
   file.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
 Blob 对象[HTML5]
-  PS：代表原始二进制数据,File 对象继承了Blob对象 
+  PS:代表原始二进制数据,File 对象继承了Blob对象 
   获取Blob对象
     <input type="file" id="file" multiple size="80" accept="image/*"/>
     <input type="button" onclick="ShowFileType();" value="显示文件信息"/>
@@ -3137,13 +3137,13 @@ Blob 对象[HTML5]
   blob.size   Blob对象的字节长度
   blob.type   Blob的MIME类型,若是未知类型,则返回一个空字符串 
 FileReader 对象  用于读取文件[把文件内容读入内存]
-  PS：FileReader采用的是一种异步的文件读取机制
+  PS:FileReader采用的是一种异步的文件读取机制
   var fr = new FileReader(arg); 创建fr对象 
     arg  File 对象或 Blob 对象
   ◆属性&方法 
     ★读取文件数据到'result'中
     fr.readAsBinaryString(Blob|File)     得到文件的二进制字符串 
-      PS：通常将其传送到服务器端,服务器端可以通过这段字符串存储文件
+      PS:通常将其传送到服务器端,服务器端可以通过这段字符串存储文件
         该字符串每个字节包含一个0到255之间的整数
         可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
         与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
@@ -3154,7 +3154,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
         }
         reader.readAsBinaryString(file);
     fr.readAsDataURL(Blob|File);         得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
-      PS：将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
+      PS:将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
     fr.readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
       返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
       在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
@@ -3173,7 +3173,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
     fr.result;  文件的URI数据,其他操作的结果都存放在该属性中 
     当是图片数据时,可作为图片的src
   ◆事件
-    PS：FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
+    PS:FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
     loadstart 数据读取开始时触发
     progress  数据读取中触发,每50ms左右触发一次 
       Example: 用来显示读取进度
@@ -3250,7 +3250,7 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
     将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
     再把整个数组发送出去。
 URL 对象         用于对二进制数据生成URL 
-  PS：用于生成指向File对象或Blob对象的URL,
+  PS:用于生成指向File对象或Blob对象的URL,
     同样的二进制数据, 每调用一次URL.createObjectURL方法,就会得到一个不一样的URL,
     这个URL的存在时间,等同于网页的存在时间,
     一旦网页刷新或卸载,这个URL就失效。
@@ -3319,7 +3319,7 @@ URL 对象         用于对二进制数据生成URL
         处理函数的参数的data属性即为 工作线程发回的消息
         event.data   表示 工作线程JS 发送的消息
         event.target 表示发出消息的这个工作线程
-        e.g.
+        Example:
           worker.onmessage =function(event){
             var message =event.data;
           }
@@ -3335,7 +3335,7 @@ URL 对象         用于对二进制数据生成URL
       worker.terminate() 若工作线程在运行,则会使其异常停止,且无法再启用,只能再新建
   定义工作线程JS文件
     使用一个onmessage定义一个 接到消息后进行 处理的程序
-      e.g. onmessage = PP;
+      Example: onmessage = PP;
         function PP(event){
           // 若主程序发来"ping",则工作线程JS 回复"pong"
           if(event.data =="ping"){
@@ -3347,7 +3347,7 @@ URL 对象         用于对二进制数据生成URL
       importScripts("http://big.com/a.js","https://www.baidu.com/b.js")
       多个JS间使用逗号分割.
       也可使用 importScripts 建立JSONP请求
-        e.g.
+        Example:
           function makeServerRequest(){
             importScripts("http://SomeServer.com?callback=handleRequest");
             function handleRequest(response){
@@ -3357,7 +3357,7 @@ URL 对象         用于对二进制数据生成URL
           makeServerRequest();
     close         停止工作
       close() 让工作线程停止工作.
-  e.g. 工作线程JS 接收命令执行操作 并返回
+  Example: 工作线程JS 接收命令执行操作 并返回
      (谷歌浏览器报错,其他浏览器可以使用)
       manager.js 文件中(需要链接到HTML文件中)
         window.onload =function(){
@@ -3390,7 +3390,7 @@ URL 对象         用于对二进制数据生成URL
       与动态脚本类似,是指在页面刚加载时不存在的样式,后续添加到页面中的.
   HTML DOM 
     使用HTML DOM操作,可查询 HTML DOM手册
-    e.g. :
+    Example: :
     使用HTML DOM来获取和创建表格
     var table =document.getElementsByTagName('table')[0];
     table.caption.innerHTML;
@@ -3416,7 +3416,7 @@ URL 对象         用于对二进制数据生成URL
     document.body.appendChild(table);
   JavaScript&XML「详参 JavaScript高级程序设计 552 页」 
   XSS,Cross SiteScript 跨站脚本攻击 
-    PS：Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
+    PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
       理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
     原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
       当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
@@ -3438,8 +3438,8 @@ URL 对象         用于对二进制数据生成URL
     XSS防御 
       永远不相信用户的输入,输入验证
       Html encode,对标签进行转换
-        比如输入：'<script>window.location.href=”http://www.baidu.com”;</script>',
-        最终存储的会是：
+        比如输入:'<script>window.location.href=”http://www.baidu.com”;</script>',
+        最终存储的会是:
         '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
         在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
   Web_Components 组件化 
@@ -3456,42 +3456,42 @@ URL 对象         用于对二进制数据生成URL
         }) 
       })
       x-aoo  标签类型「名字」需使用 - 连接
-      不能是以下这些：
+      不能是以下这些:
       annotation-xml、color-profile、font-face、font-face-src、
       font-face-uri、font-face-format、font-face-name、missing-glyph
       第二个参数是标签相关的配置,提供一个 prototype(以 HTMLElement 的原型为基础创建的对象)
         Example:
-          在 HTML 中去使用自定义的标签：
+          在 HTML 中去使用自定义的标签:
           <div> <x-foo></x-foo> </div>
     HTML Imports
     HTML Templates
     Shadow DOM     隔离组件间代码的冲突和影响
-    生命周期和回调：
+    生命周期和回调:
       Web Components 标准提供一系列控制自定义元素的方法
-      一个自定义元素会经历以下生命周期：
+      一个自定义元素会经历以下生命周期:
         注册前创建
         注册自定义元素定义
         在注册后创建元素实例
         元素**到 document 中
         元素从 document 中移除
       ◆回调: 
-        PS：元素的属性变化时
+        PS:元素的属性变化时
           在注册新的自定义元素时指定对应的生命周期回调,为自定义元素添加各种自定义的行为
-          生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准)：
+          生命周期回调包括(括号中为 Custom Elements 2016.07.21 新标准):
       createdCallback(constructor in class)  自定义元素注册后,在实例化之后会调用
-        (多用于做元素的初始化：如**子元素,绑定事件等)
+        (多用于做元素的初始化:如**子元素,绑定事件等)
       attachedCallback(connectedCallback)    元素**到 document 时触发
       detachedCallback(disconnectedCallback) 元素从 document 中移除时触发
         (用于做类似 destroy 之类的事情)
       attributeChangedCallback               元素属性变化时触发
-        (可以用于从外到内的通信：外部通过修改元素的属性来让内部获取相关的数据并且执行对应的操作)
-        这个回调在不同情况下有对应不同的参数：
-        设置属性时,参数列表是：属性名称,null,值,命名空间
-        修改属性时,参数列表是：属性名称,旧值,新值,命名空间
-        删除属性时,参数列表是：属性名称,旧值,null,命名空间
-      adoptedCallback：              使用 document.adoptNode(node) 时触发
+        (可以用于从外到内的通信:外部通过修改元素的属性来让内部获取相关的数据并且执行对应的操作)
+        这个回调在不同情况下有对应不同的参数:
+        设置属性时,参数列表是:属性名称,null,值,命名空间
+        修改属性时,参数列表是:属性名称,旧值,新值,命名空间
+        删除属性时,参数列表是:属性名称,旧值,null,命名空间
+      adoptedCallback:              使用 document.adoptNode(node) 时触发
       Example: 
-        创建一个自定义的 button-hello 按钮,点击时会 alert('hello world')：
+        创建一个自定义的 button-hello 按钮,点击时会 alert('hello world'):
         document.registerElement('button-hello', {
           prototype: Object.create(HTMLButtonElement.prototype, {
             createdCallback: {
@@ -3502,8 +3502,8 @@ URL 对象         用于对二进制数据生成URL
             }
           })
         })
-        注：上述代码执行之后才能使用 <button-hello></button-hello>
-    扩展原有元素：
+        注:上述代码执行之后才能使用 <button-hello></button-hello>
+    扩展原有元素:
       Web Components 标准提供了一种扩展现有标签的方式
       class ButtonHelloElement extends HTMLButtonElement {
         constructor() {
@@ -3517,7 +3517,7 @@ URL 对象         用于对二进制数据生成URL
         extends: 'button' 
       })
       使用 is 属性来声明一个扩展的类型
-      Web Components 标准中：createElement 和 createElementNS 支持元素扩展：
+      Web Components 标准中:createElement 和 createElementNS 支持元素扩展:
         const hello = document.createElement('button', 'button-hello')
 ------------------------------------------------------------------------待整理 
   

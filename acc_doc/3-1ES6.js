@@ -1,5 +1,5 @@
 ES6 
-  PS：于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
+  PS:于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
   Babel转码器将ES6转换为ES5 
     配置文件'.babelrc' : 位于项目的根目录 
       文件配置  用来设置转码规则和插件
@@ -35,7 +35,7 @@ ES6
           # --out-dir 或 -d 参数指定输出目录
         babel src -d lib -s   # -s 参数生成source map文件
     'babel-cli'项目中安装 
-      PS：全局环境下,进行 Babel 转码意味着,如果项目要运行,全局环境必须有 Babel,
+      PS:全局环境下,进行 Babel 转码意味着,如果项目要运行,全局环境必须有 Babel,
         也就是说项目产生了对环境的依赖。
         另一方面,这样做也无法支持不同项目使用不同版本的 Babel。
       npm install --save-dev babel-cli   #安装
@@ -52,10 +52,10 @@ ES6
       npm run build         #执行命令转码 
 ◆数据类型&对象库扩展 
 Symbol 标记,表示独一无二的值[原始数据类型] 
-  PS：JS的第七种数据类型,不可变,用来产生唯一的标识 
+  PS:JS的第七种数据类型,不可变,用来产生唯一的标识 
   创建标记 
     var sym = Symbol([arg])   创建标记 
-      PS：Symbol函数前不能使用new命令,否则会报错。
+      PS:Symbol函数前不能使用new命令,否则会报错。
         因为生成的Symbol是一个原始类型的值,不是对象,也不能添加属性
       arg  可选,表示对Symbol实例的描述,可为字符串或对象 
         主要是为了在控制台显示,或者转为字符串时,比较容易区分 
@@ -83,7 +83,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
         console.log(str1,str2);   // Symbol(aoo) Symbol()
         console.log(typeof sym1); // symbol
     var sym =   Symbol.for(str) 根据参数在全局环境中搜索该symbol,有则返回,无则创建 
-      PS：Symbol.for()创建的值会被登记在全局环境中,供以后用 Symbol.for() 来搜索,
+      PS:Symbol.for()创建的值会被登记在全局环境中,供以后用 Symbol.for() 来搜索,
         可在不同的 iframe 或 service worker 中取到同一个值;
         Symbol() 创建的symbol值不会被登记在全局环境中
       let sym1 = Symbol.for('name');
@@ -120,7 +120,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     var sym2 = Symbol('sm');
     console.log(sym1==sym2,sym1===sym2); // false false
   作为属性名使用 
-    PS：对象的属性名现在可以有两种类型,一种是原来就有的字符串,另一种就是新增的Symbol类型 
+    PS:对象的属性名现在可以有两种类型,一种是原来就有的字符串,另一种就是新增的Symbol类型 
       凡是属性名属于Symbol类型,就都是独一无二的,可以保证不会与其他属性名产生冲突 
     Example:
       let name = Symbol();
@@ -179,9 +179,9 @@ Symbol 标记,表示独一无二的值[原始数据类型]
       };
       Reflect.ownKeys(person); // (2) ["age", Symbol(name)]
   ◆静态属性&方法 
-    PS：ES6提供了11个内置的Symbol值,指向语言内部使用的方法 
+    PS:ES6提供了11个内置的Symbol值,指向语言内部使用的方法 
   Symbol.keyFor(sym) 返回登记在全局环境中的symbol值的key,否则返回undefined
-    PS：“被登记在全局环境中”,即该symbol值是被 Symbol.for()创建的,而非 Symbol();
+    PS:“被登记在全局环境中”,即该symbol值是被 Symbol.for()创建的,而非 Symbol();
     let sym1 = Symbol.for('aoo');
     let sym2 = Symbol('aoo');
     Symbol.KeyFor(sym1); // aoo
@@ -298,9 +298,9 @@ Symbol 标记,表示独一无二的值[原始数据类型]
   Symbol.toPrimitive 对象的 Symbol.toPrimitive 属性,指向一个方法。
     该对象被转为原始类型的值时,会调用这个方法,返回该对象对应的原始类型值。
     Symbol.toPrimitive 被调用时,会接受一个字符串参数,表示当前运算的模式,一共有三种模式。
-    Number：该场合需要转成数值
-    String：该场合需要转成字符串
-    Default：该场合可以转成数值,也可以转成字符串
+    Number:该场合需要转成数值
+    String:该场合需要转成字符串
+    Default:该场合可以转成数值,也可以转成字符串
     let obj = {
       [Symbol.toPrimitive](hint) {
         switch (hint) {
@@ -336,25 +336,25 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     var x = new Collection();
     Object.prototype.toString.call(x) // "[object xxx]"    
   ES6新增内置对象的 Symbol.toStringTag 属性值如下
-    JSON[Symbol.toStringTag]：'JSON'
-    Math[Symbol.toStringTag]：'Math'
-    Module对象M[Symbol.toStringTag]：'Module'
-    ArrayBuffer.prototype[Symbol.toStringTag]：'ArrayBuffer'
-    DataView.prototype[Symbol.toStringTag]：'DataView'
-    Map.prototype[Symbol.toStringTag]：'Map'
-    Promise.prototype[Symbol.toStringTag]：'Promise'
-    Set.prototype[Symbol.toStringTag]：'Set'
-    %TypedArray%.prototype[Symbol.toStringTag]：'Uint8Array'等
-    WeakMap.prototype[Symbol.toStringTag]：'WeakMap'
-    WeakSet.prototype[Symbol.toStringTag]：'WeakSet'
-    %MapIteratorPrototype%[Symbol.toStringTag]：'Map Iterator'
-    %SetIteratorPrototype%[Symbol.toStringTag]：'Set Iterator'
-    %StringIteratorPrototype%[Symbol.toStringTag]：'String Iterator'
-    Symbol.prototype[Symbol.toStringTag]：'Symbol'
-    Generator.prototype[Symbol.toStringTag]：'Generator'
-    GeneratorFunction.prototype[Symbol.toStringTag]：'GeneratorFunction'    
+    JSON[Symbol.toStringTag]:'JSON'
+    Math[Symbol.toStringTag]:'Math'
+    Module对象M[Symbol.toStringTag]:'Module'
+    ArrayBuffer.prototype[Symbol.toStringTag]:'ArrayBuffer'
+    DataView.prototype[Symbol.toStringTag]:'DataView'
+    Map.prototype[Symbol.toStringTag]:'Map'
+    Promise.prototype[Symbol.toStringTag]:'Promise'
+    Set.prototype[Symbol.toStringTag]:'Set'
+    %TypedArray%.prototype[Symbol.toStringTag]:'Uint8Array'等
+    WeakMap.prototype[Symbol.toStringTag]:'WeakMap'
+    WeakSet.prototype[Symbol.toStringTag]:'WeakSet'
+    %MapIteratorPrototype%[Symbol.toStringTag]:'Map Iterator'
+    %SetIteratorPrototype%[Symbol.toStringTag]:'Set Iterator'
+    %StringIteratorPrototype%[Symbol.toStringTag]:'String Iterator'
+    Symbol.prototype[Symbol.toStringTag]:'Symbol'
+    Generator.prototype[Symbol.toStringTag]:'Generator'
+    GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
 Set   集合 
-  PS：ES6新增的一种新的数据结构,可以理解为值的集合;
+  PS:ES6新增的一种新的数据结构,可以理解为值的集合;
     Set中的元素无重复项「会自动去掉重复的元素」;
     Set集合中,key和val为同一个值;
   new Set([arr])  创建set
@@ -412,9 +412,9 @@ Set   集合
     let s = new Set(arr);       // Set {1,2,3,4}
     let newArr = Array.from(s); // [1,2,3,4],完成去重
   WeakSet结构
-    PS：WeakSet结构同样不会存储重复的值;
-      且其成员必须是对象类型的值「严格来说是：具有 iterable 接口的对象」
-      实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数。比如：数组。
+    PS:WeakSet结构同样不会存储重复的值;
+      且其成员必须是对象类型的值「严格来说是:具有 iterable 接口的对象」
+      实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数。比如:数组。
     new WeakSet(arr);
       arr 数组,且其成员必须是对象类型的值,否则就会报错
       let ws = new WeakSet([{"age":18}]); // WeakSet {Object {age: 18}}
@@ -520,7 +520,7 @@ Map   字典
     // name:van
     // age:25
   WeakMap结构
-    和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比：数组,对象,函数等
+    和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比:数组,对象,函数等
     let wm = new WeakMap();
     wm.set(key,val)
       key 必须为引用类型数据,普通值类型则不允许「如字符串,数字,null,undefined,布尔类型」
@@ -538,22 +538,22 @@ Map   字典
       clear方法,
       不支持遍历,也就没有了keys、values、entries、forEach这4个方法
       也没有属性size
-      理由跟WeakSet结构一样：键名中的引用类型是弱引用,
+      理由跟WeakSet结构一样:键名中的引用类型是弱引用,
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
       若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失。
 Blob  二进制数据的基本对象 
-  PS：一个 Blob对象表示一个不可变的,原始数据的类似文件对象。
+  PS:一个 Blob对象表示一个不可变的,原始数据的类似文件对象。
     Blob表示的数据不一定是一个JavaScript原生格式。 
     File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件。
     要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档。
     接受Blob对象的APIs也被列在 File 文档中。
   创建blob对象
     Blob(blobParts[, options])  返回创建的 Blob 对象
-      PS：其内容由参数中给定的数组串联组成。
+      PS:其内容由参数中给定的数组串联组成。
       blobParts 一个包含实际数据的数组
       options   数据的类型
       使用其它对象创建一个 Blob 对象
-        Example:用字符串构建一个 blob：
+        Example:用字符串构建一个 blob:
         var debug = {hello: "world"};
         var blob = new Blob([JSON.stringify(debug, null, 2)],
           {type : 'application/json'});
@@ -582,7 +582,7 @@ Blob  二进制数据的基本对象
     // 你可以像使用一个普通URL那样使用它,比如用在img.src上。
     var url = URL.createObjectURL(blob);
   从Blob中读取内容的唯一方法是使用 FileReader
-    以下代码将 Blob 的内容作为类型数组读取：
+    以下代码将 Blob 的内容作为类型数组读取:
     var reader = new FileReader();
     reader.addEventListener("loadend", function() {
        // reader.result contains the contents of blob as a typed array
@@ -593,7 +593,7 @@ Blob  二进制数据的基本对象
     blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
     slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数。
     若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据。
-    slice 方法在某些浏览器和版本上仍带有供应商前缀：
+    slice 方法在某些浏览器和版本上仍带有供应商前缀:
       Firefox 12 及更早版本的 blob.mozSlice() 
       Safari 中的 blob.webkitSlice()
       slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时。 
@@ -626,7 +626,7 @@ Blob  二进制数据的基本对象
     在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据。
   blob.close() 关闭 Blob 对象,以便能释放底层资源。 
 ArrayBuffer&TypedArray&DataView 二进制数组 
-  PS：ArrayBuffer对象、TypedArray视图和DataView视图是JS操作二进制数据的一个接口。
+  PS:ArrayBuffer对象、TypedArray视图和DataView视图是JS操作二进制数据的一个接口。
     这些对象早就存在,属于独立的规格[2011 年2月发布],ES6 将它们纳入了 ECMAScript 规格,并且增加了新的方法。
     它们都是以数组的语法处理二进制数据,所以统称为二进制数组。
     这个接口的原始设计目的,与 WebGL 项目有关。
@@ -638,13 +638,13 @@ ArrayBuffer&TypedArray&DataView 二进制数组
     二进制数组就是在这种背景下诞生的。它很像C语言的数组,允许开发者以数组下标的形式,直接操作内存,
     大大增强了JavaScript处理二进制数据的能力,使得开发者有可能通过JavaScript与操作系统的原生接口进行二进制通信。
   二进制数组由三类对象组成 
-    ArrayBuffer对象：代表内存之中的一段二进制数据,可以通过“视图”进行操作。
+    ArrayBuffer对象:代表内存之中的一段二进制数据,可以通过“视图”进行操作。
       “视图”部署了数组接口,这意味着,可以用数组的方法操作内存。
-    TypedArray视图：共包括9种类型的视图,
+    TypedArray视图:共包括9种类型的视图,
       比如 Uint8Array（无符号8位整数）数组视图, 
       Int16Array（16 位整数）数组视图, 
       Float32Array（32 位浮点数）数组视图等等。
-    DataView视图：可以自定义复合格式的视图,
+    DataView视图:可以自定义复合格式的视图,
       比如第一个字节是 Uint8（无符号8位整数）、
       第二、三个字节是 Int16（16 位整数）、
       第四个字节开始是 Float32（32 位浮点数）等等,此外还可以自定义字节序。
@@ -653,13 +653,13 @@ ArrayBuffer&TypedArray&DataView 二进制数组
     DataView视图用来读写复杂类型的二进制数据。
     TypedArray 视图支持的数据类型一共有9种（DataView视图支持除Uint8C以外的其他8种）。
 'Class'类 
-  PS：ES6以前,使用函数'function'和原型'prototype'来模拟类class实现面向对象; 
+  PS:ES6以前,使用函数'function'和原型'prototype'来模拟类class实现面向对象; 
     'class'本质上还是基于原型prototype的实现做的进一步封装 
   class Cls {} 创建类 
-    PS： 类的内部定义的所有方法都是不可枚举的; 类和模块内部默认采取严格模式;
+    PS: 类的内部定义的所有方法都是不可枚举的; 类和模块内部默认采取严格模式;
       class内部只允许定义方法,不允许定义属性,包括静态属性;
     'constructor'构造方法,创建类时必须的方法,相当于ES5的构造函数
-      PS：创建类的实例对象的时候,会调用此方法来初始化实例对象。
+      PS:创建类的实例对象的时候,会调用此方法来初始化实例对象。
         若没有编写constructor方法,执行的时候也会被加上一个默认的空的constructor方法。
         其中constructor方法是构造方法,在实例化一个类的时候被调用。
         constructor方法是必须的,也是唯一的,一个类体不能含有多个constructor构造方法。
@@ -726,19 +726,19 @@ ArrayBuffer&TypedArray&DataView 二进制数组
             this.color = color;
           }
           getAttritube(){
-            return `${super.say()}, name：${this.name}, color:${this.color}`;
+            return `${super.say()}, name:${this.name}, color:${this.color}`;
             // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
           }
         }
         let doge = new Dog("dog","black"); //创建Dog的实例对象
         doge.getAttritube(); //调用子类的Dog的实例方法
-        // "This is a animal, name：dog, color:black"
+        // "This is a animal, name:dog, color:black"
         
         // 使用继承的方式创建的对象既是父类的实例,也是子类的实例。
         doge instanceof Dog ;   // true
         doge instanceof Animal; // true
       'super'关键字,继承关系中的方法调用 
-        PS：子类必须在constructor方法里调用super方法,否则不能新建实例 
+        PS:子类必须在constructor方法里调用super方法,否则不能新建实例 
           因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工。
           显然,只有调用了super方法之后,才可以使用this。
           必须先调用super,才可以使用this,否则报错;
@@ -795,7 +795,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
         或者 this.__proto__ 「即Child.prototype=new Parent()」上。
         而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this。
   类的属性和方法 
-    PS：把类名后面的括号{ }里面的内容称之为类体,在类体内来编写类的属性和方法;
+    PS:把类名后面的括号{ }里面的内容称之为类体,在类体内来编写类的属性和方法;
       可以在方法里面自定义一些对象的属性,
       此外,还可以自定义方法,它属于类的实例方法,实例化后对象可以调用此方法。
     Example:
@@ -819,7 +819,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
       var cla = new Cla();
       cla.boo(); // 1
   new Cla(arg) 创建类实例 
-    PS：必须使用new创建字来创建类的实例对象;需先声明类,再创建实例,否则会报错 
+    PS:必须使用new创建字来创建类的实例对象;需先声明类,再创建实例,否则会报错 
     Example:
       class Animal {
         constructor(name){
@@ -859,7 +859,7 @@ ArrayBuffer&TypedArray&DataView 二进制数组
   相关操作
   Cla.name;  获取类的名字
 Promise 同步书写异步模式 
-  PS：采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
+  PS:采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
     将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
   Promise的状态 
@@ -874,7 +874,7 @@ Promise 同步书写异步模式
     其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
     第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
   var prms = new Promise(foo) 创建Promise对象 
-    PS：Promise在创建时,参数函数就会执行 
+    PS:Promise在创建时,参数函数就会执行 
     foo   用于放置执行异步操作的函数,传入参数 (resolve,reject) 
       函数内,若'resolve'被调用,代表该Promise被成功解析「resolve」;
       若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
@@ -899,7 +899,7 @@ Promise 同步书写异步模式
     });
   ◆静态方法 
   Promise.all(arr)  全局模式,所有成功[?]才触发 
-    PS：当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
+    PS:当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
     arr  由Promise实例组成的数组
     Example:
       let prms1 = new Promise(function(resolve){
@@ -919,7 +919,7 @@ Promise 同步书写异步模式
       });
       // ["实例1操作成功", "实例2操作成功"]
   Promise.race(arr) 竞速模式,有一个完成时触发 
-    PS：参数中的promise实例,只要有一个状态发生变化[不管成功还是异常],它就会有返回,
+    PS:参数中的promise实例,只要有一个状态发生变化[不管成功还是异常],它就会有返回,
       其他实例中再发生变化,也不管了。
     arr  由Promise实例组成的数组 
     Example:
@@ -943,7 +943,7 @@ Promise 同步书写异步模式
       // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
       // 实例2操作失败
       由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
-      所以最后输出的是：实例2操作失败。
+      所以最后输出的是:实例2操作失败。
   Promise.resolve() 
   Promise.reject()  
   Promise.prototype.then()  
@@ -994,12 +994,12 @@ Promise 同步书写异步模式
       return '准备请求B';
     }
     function requestB(res){
-      console.log('上一步是：'+res);
+      console.log('上一步是:'+res);
       console.log('请求B成功');
       return '准备请求C';
     }
     function requestC(res){
-      console.log('上一步是：'+res);
+      console.log('上一步是:'+res);
       console.log('请求C成功');
     }
     function requestError(){
@@ -1011,15 +1011,15 @@ Promise 同步书写异步模式
     .then(requestC)
     .catch(requestError);
     // 请求A成功
-    // 上一步是：准备请求B
+    // 上一步是:准备请求B
     // 请求B成功
-    // 上一步是：准备请求C
+    // 上一步是:准备请求C
     // 请求C成功
     // Promise {[[PromiseStatus]]: "resolved", [[PromiseValue]]: undefined}
 Generator 生成器函数 
-  PS：可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
+  PS:可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
     可利用Generator函数暂停执行的特性来实现异步操作 
-    原理：将异步操作的语句写到yield后面,通过执行next方法进行回调 
+    原理:将异步操作的语句写到yield后面,通过执行next方法进行回调 
   function* foo(){} 声明Generator函数
     Example:
       function* Hello(name) {  
@@ -1056,7 +1056,7 @@ Generator 生成器函数
       ite.next(); // {value: "gen2 end", done: false}
       ite.next(); // {value: "end", done: false}
   调用Generator函数 
-    PS：Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
+    PS:Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
       Generator函数被调用后并不会一直执行到最后,而是先回返回一个生成器对象,
       然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
       直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
@@ -1104,7 +1104,7 @@ Generator 生成器函数
       iterator.next(); // {value: "hello", done: false}
       iterator.next(); // {value: "world", done: false}
 Proxy 对象代理 
-  PS：作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
+  PS:作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
   new Proxy(target,params) Proxy创建-Proxy的实现 
     target 代理的目标对象
     params 配置对象 
@@ -1252,7 +1252,7 @@ Reflect  为操作对象提供的API
       上面代码中,Proxy方法拦截target对象的属性赋值行为。
       它采用 Reflect.set 方法将值赋值给对象的属性,确保完成原有的行为,然后再部署额外的功能 
   ◆Reflect对象一共有13个静态方法 
-    PS：这些方法的作用大部分与Object对象的同名方法的作用都是相同的,
+    PS:这些方法的作用大部分与Object对象的同名方法的作用都是相同的,
       而且它与Proxy对象的方法是一一对应的
     Reflect.apply(target,thisArg,args)
     Reflect.construct(target,args)
@@ -1269,7 +1269,7 @@ Reflect  为操作对象提供的API
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
 'lexical_scopes'词法作用域,即'块作用域'
-  PS：会在函数内部、代码块「即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
+  PS:会在函数内部、代码块「即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
     块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
   if (true) { 
     var aoo = 1; 
@@ -1287,7 +1287,7 @@ Reflect  为操作对象提供的API
     console.log(RegExp);           // "Hello!"
     console.log(window.RegExp);    // function RegExp() { [native code] }
 let   定义块级变量 
-  PS：块级作用域限制,只在定义的块级作用域中存在;
+  PS:块级作用域限制,只在定义的块级作用域中存在;
   无变量提升 
     var aoo = 1;
     var boo = 2;
@@ -1334,7 +1334,7 @@ let   定义块级变量
     注:let 声明在上述循环内部中的表现是在规范中特别定义的,
     实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
 const 定义块级常量 
-  PS：只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
+  PS:只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
   const aoo =2;
   aoo = 2;     // 报错 ,常量不可改变
   delete aoo;  // 报错 
@@ -1342,7 +1342,7 @@ const 定义块级常量
   不可传值改变,只能传址改变; 
     不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
     传值赋值和传址赋值
-    传址：赋值过程中,变量实存储的是数据的地址「对数据的引用」,而非原始数据或者数据的拷贝
+    传址:赋值过程中,变量实存储的是数据的地址「对数据的引用」,而非原始数据或者数据的拷贝
     const arr =[1,2,3];
     arr = [1];    // 报错
     arr.push(4); // 允许
@@ -1357,7 +1357,7 @@ const 定义块级常量
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
 ◆操作符&语句扩展   
 'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值
-  PS：
+  PS:
   Example:
     var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
     console.log(a,b,c);// 1 2 3 
@@ -1374,8 +1374,8 @@ const 定义块级常量
     覆盖默认值 
     var [a,b,c=3] =[1,2,4];
     console.log(a,b,c); // 1 2 4
-  对象的解构赋值：不受属性的顺序影响,和属性名对应 
-    PS：默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
+  对象的解构赋值:不受属性的顺序影响,和属性名对应 
+    PS:默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
     Example:
       var {a,b,c} = {"a":1,"b":2,"c":3};
       console.log(a,b,c); // 1 2 3 
@@ -1390,12 +1390,12 @@ const 定义块级常量
       console.log(a); // 2
   对象解构赋值嵌套
     var {a:{b}} = {"a":{"b":1}};
-    console.log(b);//结果：b的值为1
+    console.log(b);//结果:b的值为1
   对象解构指定默认值 
     var {a,b=2} = {"a":1}; 
     console.log(b); // 2
   字符串的解构赋值 
-    PS：解构赋值的过程中,字符串被转换成了一个类似数组的对象
+    PS:解构赋值的过程中,字符串被转换成了一个类似数组的对象
     var [a,b,c,d,e] = "12345";
     console.log(a,b,c,d,e); // 1 2 3 4 5 
   使用举例  
@@ -1414,7 +1414,7 @@ const 定义块级常量
       }
       demo({});
 'spread'扩展运算符 : 把数组解开成单独的值 
-  PS：除了用在rest参数中,还有其他用途
+  PS:除了用在rest参数中,还有其他用途
   结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
     function sum(a,b) {
       return  a+b ;
@@ -1423,7 +1423,7 @@ const 定义块级常量
     // ...arr  // 报错
     sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
     // sum( ...arr ) 的效果相当于sum( 2,3 ) 
-  e.g.
+  Example:
     var aoo =[1,2,3];
     var boo =[...aoo,4];
     console.log(boo);  //[1, 2, 3, 4]
@@ -1438,7 +1438,7 @@ const 定义块级常量
     foo(1,2,3,4);  // 1 [2, 3, 4]
     //  将其余的参数放在数组 boo 中
 for(var val of iterator){}  遍历 
-  PS：可遍历的对象包括数组,对象,字符串,set和map结构等具有'iterator'接口的数据结构 
+  PS:可遍历的对象包括数组,对象,字符串,set和map结构等具有'iterator'接口的数据结构 
     原生具备Iterator接口的数据结构: Array Map Set String TypedArray arguments'函数参数对象'
   数组遍历 
     var arr = ['a','b','c','d','e'];
@@ -1462,7 +1462,7 @@ for(var val of iterator){}  遍历
     }
   set和map解构的遍历
   不能遍历'Object' 
-    PS：要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
+    PS:要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
       而数组、Set和Map结构,内置了遍历器Iterator,它们的原型中都有一个 Symbol.iterator 方法 
       而Object对象并没有实现这个接口,所以无法被for...of遍历 
     Example: 遍历对象报错
@@ -1473,7 +1473,7 @@ for(var val of iterator){}  遍历
       // 报错, undefined is not a function
     验证原型中的'Symbol.iterator'方法 
       'Symbol.iterator'是一个特殊的Symbol值,其作为prototype对象属性名时,需使用'[]'的形式;
-      prototype[Symbol.iterator] [不能使用点形式获取：prototype.Symbol.iterator]
+      prototype[Symbol.iterator] [不能使用点形式获取:prototype.Symbol.iterator]
       即只要一数据结构拥有[Symbol.iterator]()方法的数据结构,就可被'for-of'遍历,称为可遍历对象 
       var arr = Array.prototype[Symbol.iterator];  
       var str = String.prototype[Symbol.iterator]; 
@@ -1487,19 +1487,19 @@ for(var val of iterator){}  遍历
       console.log(obj); // undefined
     Iterator遍历器的原理
       当可遍历对象被for...of遍历的时候,[Symbol.iterator]()就会被调用,
-      返回一个iterator对象,其中还有一个很重要的方法：next();
+      返回一个iterator对象,其中还有一个很重要的方法:next();
       先调用可遍历对象的[Symbol.iterator]( )方法,得到一个iterator遍历器对象,
       然后就在遍历器上不断调用next()方法,直到done的值为true的时候,就表示遍历完成结束了。
-      let arr = ['a','b','c']; //数组：一个可遍历对象
+      let arr = ['a','b','c']; //数组:一个可遍历对象
       let iter = arr[Symbol.iterator](); //调用数组的Symbol.iterator()方法
       iter.next(); // {value: "a", done: false}
-      // 第1次调用next()：返回第1个元素：“a”,以及done的值为fasle,表示循环没有结束,继续遍历。
+      // 第1次调用next():返回第1个元素:“a”,以及done的值为fasle,表示循环没有结束,继续遍历。
       iter.next(); // {value: "b", done: false}
-      // 第2次调用next()：返回第2个元素：“b”,以及done的值还是为fasle,循环没有结束,继续遍历。
+      // 第2次调用next():返回第2个元素:“b”,以及done的值还是为fasle,循环没有结束,继续遍历。
       iter.next(); // {value: "c", done: false}
-      // 第3次调用next()：返回第3个元素：“c”,以及done的值依然为fasle,循环没有结束,继续遍历。
+      // 第3次调用next():返回第3个元素:“c”,以及done的值依然为fasle,循环没有结束,继续遍历。
       iter.next(); // {value: undefined, done: true}
-      // 第4次调用next()：返回的value值为undefined,以及done的值变成了true,表示遍历结束。
+      // 第4次调用next():返回的value值为undefined,以及done的值变成了true,表示遍历结束。
     自定义对象的Iterator遍历器
       给Object对象加上[Symbol.iterator]()方法
       let obj = { //定义一个的Object对象
@@ -1545,7 +1545,7 @@ for(var val of iterator){}  遍历
     }
 --------------------------------------------------------------------------------
 'Iterator'遍历器 : 一种接口,为各种不同的数据结构提供统一的访问机制 
-  PS：JS原有的表示“集合”的数据结构,主要是数组Array和对象Object,ES6又添加了Map和Set 
+  PS:JS原有的表示“集合”的数据结构,主要是数组Array和对象Object,ES6又添加了Map和Set 
     用户还可以组合使用它们,定义自己的数据结构[比如数组的成员是Map,Map的成员是对象] 
     这样就需要一种统一的接口机制,来处理所有不同的数据结构 
     任何数据结构只要部署Iterator接口,就可以完成遍历操作,即依次处理该数据结构的所有成员 
@@ -1580,7 +1580,7 @@ for(var val of iterator){}  遍历
         var aoo4 = iter.next() // { value: undefined, done: true }
         console.log(aoo1,aoo2,aoo3,aoo4);
 'Modules'模块化规范 
-  PS：export 定义模块的对外接口,即提供接口,import 引入其他模块提供的功能,即引入接口;
+  PS:export 定义模块的对外接口,即提供接口,import 引入其他模块提供的功能,即引入接口;
     ES6的模块自动采用严格模式,不管是否在模块头部加上"use strict";
     ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this。
   ES6模块设计思想: 尽量的静态化,使编译时能确定模块的依赖关系,以及输入和输出的变量 
@@ -1616,7 +1616,7 @@ for(var val of iterator){}  遍历
       将来浏览器的新 API 就能用模块格式提供,不再必须做成全局变量或者navigator对象的属性。
       不再需要对象作为命名空间(比如Math对象),未来这些功能可以通过模块提供。
   export 输出接口 
-    PS：一个模块就是一个独立的文件,该文件内部的变量,外部无法获取。
+    PS:一个模块就是一个独立的文件,该文件内部的变量,外部无法获取。
       若希望外部能读取模块内的变量,须使用export关键字输出变量。
     export var aoo = val;     单个变量输出 
       对外部输出三个变量: aoo boo coo
@@ -1625,7 +1625,7 @@ for(var val of iterator){}  遍历
       export var coo = 1958;
     export function foo() {}; 单个函数输出 
     export default    默认输出
-      PS：通过默认输出,和指定名称的引入,完成模块变量的引入;
+      PS:通过默认输出,和指定名称的引入,完成模块变量的引入;
       Example:
         // export-default.js
         默认输出一个函数
@@ -1666,7 +1666,7 @@ for(var val of iterator){}  遍历
         export function foo() { }; // 输出
         import {goo} from 'xx';    // 输入
       一个模块只能有一个默认输出,'export default'命令只能使用一次
-        PS：本质上,export default 就是输出一个叫做default的变量或方法,
+        PS:本质上,export default 就是输出一个叫做default的变量或方法,
           然后输入时,系统允许你为它取任意名字。
         // modules.js
         function foo(x, y) { return x * y; }
@@ -1674,7 +1674,7 @@ for(var val of iterator){}  遍历
         // app.js
         import { default as xxx } from 'modules';
       'export default'后不能跟变量声明语句
-        PS：因为export default命令其实只是输出一个叫做default的变量
+        PS:因为export default命令其实只是输出一个叫做default的变量
           export default 本质是将该命令后面的值,赋给default变量以后再默认
         export var a = 1; // 正确
         
@@ -1728,14 +1728,14 @@ for(var val of iterator){}  遍历
       这一点与 CommonJS 规范完全不同。
       CommonJS 模块输出的是值的缓存,不存在动态更新。
     'export'命令必须在模块顶层作用域定义
-      PS：可出现在模块的任何位置,但要处于模块顶层,若处于块级作用域内,就会报错 
+      PS:可出现在模块的任何位置,但要处于模块顶层,若处于块级作用域内,就会报错 
         因为处于条件代码块之中,就没法做静态优化了,违背了ES6模块的设计初衷。
       function foo() { 
         export default 'bar'  // SyntaxError
       } 
       foo();
   import 引入接口 
-    PS：其他JS文件通过import加载export定义对外的输出 
+    PS:其他JS文件通过import加载export定义对外的输出 
     import {name1[,name2,..]} from './xx' 加载JS文件,并从中输入变量 
       {name1[,name2,..]}  指定要从其他模块导入的变量名 
         大括号里面的变量名,必须与被导入模块对外接口的名称相同
@@ -1744,7 +1744,7 @@ for(var val of iterator){}  遍历
         import {firstName, lastName, year} from './profile';
         console.log(firstName);
     import {name1[,name2,..]} from 'moduleName'; 
-      PS：若使用模块名,而非路径路径,则必须有配置文件,告诉JS引擎该模块的位置 
+      PS:若使用模块名,而非路径路径,则必须有配置文件,告诉JS引擎该模块的位置 
       Example:
         import {myMethod} from 'util';
         util是模块文件名,由于不带有路径,需通过配置告诉引擎怎么取到这个模块 
@@ -1780,7 +1780,7 @@ for(var val of iterator){}  遍历
       等同于
       import { foo, bar } from 'my_module';
     import * as aoo from './xx';  模块的整体加载
-      PS：使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
+      PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
       Example:
         // circle.js
         export function area(radius) { 
@@ -1791,19 +1791,19 @@ for(var val of iterator){}  遍历
         }
         // main.js
         import { area, circumference } from './circle';
-        console.log('圆面积：' + area(4));
-        console.log('圆周长：' + circumference(14));
+        console.log('圆面积:' + area(4));
+        console.log('圆周长:' + circumference(14));
         改用整体加载的方法:
         import * as circle from './circle';
-        console.log('圆面积：' + circle.area(4));
-        console.log('圆周长：' + circle.circumference(14));
+        console.log('圆面积:' + circle.area(4));
+        console.log('圆周长:' + circle.circumference(14));
       模块整体加载所在的对象不允许运行时改变 
         import * as circle from './circle';
         // 下面两行都是不允许的
         circle.foo = 'hello';
         circle.area = function () {};
   export {}  from 'path' 先后输入输出同一个模块
-    PS：
+    PS:
     Example:
       export { foo, bar } from 'my_module';
       // 等同于
@@ -1879,7 +1879,7 @@ for(var val of iterator){}  遍历
     // script.js
     import {db, users} from './constants';
   import(specifier)
-    PS：前面介绍过,import命令会被JS引擎静态分析,
+    PS:前面介绍过,import命令会被JS引擎静态分析,
       先于模块内的其他模块执行(叫做”连接“更合适)。所以,下面的代码会报错。
       // 报错
       if (x === 2) { import MyModual from './myModual'; }
@@ -1977,23 +1977,23 @@ for(var val of iterator){}  遍历
     说明:
     假设现在有 module-A.js 和 module-B.js 两个js文件,
     把它们视为两个模块,moduleA模块和moduleB模块来对待和处理;
-    模块Module：一个模块,就是一个对其他模块暴露自己的属性或者方法的文件。
+    模块Module:一个模块,就是一个对其他模块暴露自己的属性或者方法的文件。
     概念:
-    导出Export：模块可选择性地给其他模块暴露「提供」自己的属性和方法,供其他模块使用。
-    导入Import：模块可根据需要,引入其他模块的提供的属性或者方法,供自己模块使用。
+    导出Export:模块可选择性地给其他模块暴露「提供」自己的属性和方法,供其他模块使用。
+    导入Import:模块可根据需要,引入其他模块的提供的属性或者方法,供自己模块使用。
     
     export 关键字,对外暴露属性方法
-      moduleB模块代码： 
+      moduleB模块代码: 
       //---module-B.js文件---
-      export var name = "前端君"; //导出变量：name
+      export var name = "前端君"; //导出变量:name
     import 关键字,导入其他模块的属性方法
-      PS：关键字from的作用是指定你想要引入的模块
-      moduleA模块代码：
+      PS:关键字from的作用是指定你想要引入的模块
+      moduleA模块代码:
       //---module-A.js文件---
       import { name } from "./module-B.js"; // 导入模块B的name属性,并赋给变量name
       console.log(name) // 前端君
     export {} 批量导出
-      对于模块B,若你想导出多个属性和方法的话,可以这样实现：
+      对于模块B,若你想导出多个属性和方法的话,可以这样实现:
       var name = "前端君"; //属性name
       var age  = 25; //属性age
       var say = function(){ //方法 say
@@ -2004,7 +2004,7 @@ for(var val of iterator){}  遍历
       我们更推荐的是使用这种方法实现导出,因为当对外暴露的属性和方法较多的时候,
       这种方法可以更直观地看出当前模块暴露了哪些变量。
     import {} 批量导入
-      PS：同使用多个同名变量就可以获取对应的属性和方法,
+      PS:同使用多个同名变量就可以获取对应的属性和方法,
         变量名字必须跟导出的一致才能准确获取,位置顺序无要求。
       //---module-A.js文件---
       import { name,age,say } from "./module-B.js";  
@@ -2022,7 +2022,7 @@ for(var val of iterator){}  遍历
       使用星号符*将模块B提供的所有属性和方法整体导入赋值给变量obj,
       使用点运算符来获取它的属性和方法。
     export default 关键语句,实现默认导出
-      PS：每个模块支持导出一个没有名字的变量
+      PS:每个模块支持导出一个没有名字的变量
       // 使用export default关键字对外导出一个匿名函数,
       export default function(){
         console.log("I am default Fn");
@@ -2037,7 +2037,7 @@ for(var val of iterator){}  遍历
         export {name}
         //---module-A.js文件------
         import {name} from "./module-B.js";
-        name = "修改字符串变量"; //报错：name is read-only
+        name = "修改字符串变量"; //报错:name is read-only
       若模块B导出的是对象类型的值,可「部分」修改。
         //---module-B.js文件---
         var person = {"name":"前端君"}
@@ -2055,7 +2055,7 @@ for(var val of iterator){}  遍历
 -------------------------------------------------------------------------------
 ◆标准库的扩展 
 Number 数值 
-  PS：ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
+  PS:ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
     目的是减少全局性的函数,把全局函数合理地规划到其他对象下,逐渐实现语言的模块化 
   Number.isNaN()      判断是否为非数值
     传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
@@ -2069,15 +2069,15 @@ Number 数值
     Number.isFinite('abc');    // false
   Number.parseInt()   解析字符串,返回整数     「等价于 window.parseInt()」 
   Number.parseFloat() 解析字符串,并返回浮点数 「等价于 window.parseFloat()」 
-  ◆新特性：
+  ◆新特性:
   Number.isInteger()  判断是否是整数
-    PS：JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
+    PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
     Number.isInteger(3.2);  // false
     Number.isInteger(3);    // true
     Number.isInteger(3.0);  // true
     Number.isInteger(3.00); // true
   Number.EPSILON 常量,定义一个极小的数值
-    PS：Number.EPSILON 的出现是用来判断浮点数的计算误差,
+    PS:Number.EPSILON 的出现是用来判断浮点数的计算误差,
       若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
     console.log(Number.EPSILON); // 2.220446049250313e-16
     2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
@@ -2086,7 +2086,7 @@ Number 数值
     ES6为引入了安全整数的概念。
     原来JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间,
     超过这个范围,无法精确表示这个值。故称之为不安全。
-    为此,ES6定义了两个常量来表示这个范围的最大值和最小值：
+    为此,ES6定义了两个常量来表示这个范围的最大值和最小值:
     Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER
     此外,若给你一个数值,你不知道它是否超出了这个安全范围,
     可以使用ES6给我们新增的一个函数 Number.isSafeInteger 来进行判断
@@ -2094,8 +2094,8 @@ Number 数值
     Number.isSafeInteger(Number.MAX_SAFE_INTEGER+1); // false
 String 字符串扩展 
   `a${1+2}b` 模版字符串 
-    PS：又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
-    e.g.
+    PS:又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
+    Example:
       var str =`a
         b
         c`;
@@ -2131,9 +2131,9 @@ String 字符串扩展
     name.endsWith('6',5); //false,只针对前5个字符
     name.endsWith('5',5); //true,针对前6个字符
   str.codePointAt()  返回4字节字符对应的十进制数
-    PS：JS 中,一个字符固定为2个字节,
+    PS:JS 中,一个字符固定为2个字节,
       对于那些需要4个字节存储的字符,JS 会认为它是两个字符,此时它的字符长度length为2。
-      如字符："𠮷",就是一个需要4个字节存储,length为2的字符。
+      如字符:"𠮷",就是一个需要4个字节存储,length为2的字符。
       对于4字节的字符,JS无法正确读取字符
     Example:
       var str1 = "前端";
@@ -2149,21 +2149,21 @@ String 字符串扩展
       使用ES6给我们提供的 codePointAt方法,就可以处理这种4个字节的字符了
       var str = "𠮷";
       str.codePointAt();  //结果:134071
-      返回其码点的十进制数：134071,换成16进制就是20bb7,对应的Unicode编码则是\u20bb7
+      返回其码点的十进制数:134071,换成16进制就是20bb7,对应的Unicode编码则是\u20bb7
   String.fromCodePoint(num)  函数的参数是一个字符对应的码点,返回的结果就是对应的字符
-    PS：即使4字节的字符,也能正确实现
-    String.fromCodePoint(134071); //结果："𠮷"
+    PS:即使4字节的字符,也能正确实现
+    String.fromCodePoint(134071); //结果:"𠮷"
   String.raw()  返回字符串最原始的样貌,即使字符串中含有转义符 
     console.log(`hello\tworld`); // hello	world
     \t会被识别为制表符,实现空格效果
-    console.log(String.raw`hello\twolrd`); //输出：hello\twolrd
+    console.log(String.raw`hello\twolrd`); //输出:hello\twolrd
 Array 数组扩展 
   ◆静态方法
   Array.of();  将一组值,转换成数组 
-    PS：Array.of() 函数的出现是源于Array构造函数的缺陷
+    PS:Array.of() 函数的出现是源于Array构造函数的缺陷
     Array.of(1,2,3,4,5); // [1,2,3,4,5]
   Array.from( ) 将类似数组的对象或者可遍历的对象转换成真正的数组 
-    PS：最常见的类数组对象就是调用getElementsByTagName方法得到的结果
+    PS:最常见的类数组对象就是调用getElementsByTagName方法得到的结果
     let ele = document.getElementsByTagName('a');
     ele instanceof Array;  // false,非数组
     ele instanceof Object; // true,对象
@@ -2200,7 +2200,7 @@ Array 数组扩展
     //0 "a"
     //1 "b"
     用 entries() 函数返回的一个遍历器,用for...of进行遍历,
-    能得到数组的键值：0 和 1,以及对应的数组元素：‘a‘和’b‘
+    能得到数组的键值:0 和 1,以及对应的数组元素:‘a‘和’b‘
   arr.keys() 对数组的索引键进行遍历,返回一个遍历器 
     for(let index of ['a', 'b'].keys()) {
       console.log(index);
@@ -2213,9 +2213,9 @@ Array 数组扩展
     }
     //a
     //b
-  数组推导：用简洁的写法,直接通过现有的数组生成新数组
+  数组推导:用简洁的写法,直接通过现有的数组生成新数组
     Example: 将数组的每个元素乘以2,得到一个新数组
-    传统的实现方法：
+    传统的实现方法:
     var arr1 = [1,2,3,4];
     var arr2 = [];
     for(let i=0;i<arr1.length;i++){
@@ -2258,7 +2258,7 @@ Object 对象扩展
       }
     };
   属性名可以是表达式 
-    PS：用字面量定义一个对象的时候,可以用表达式作为对象的属性名或者方法名
+    PS:用字面量定义一个对象的时候,可以用表达式作为对象的属性名或者方法名
       不可使用 点. 方式来获取
     var f = "first";
     var n = "Name";
@@ -2289,7 +2289,7 @@ Object 对象扩展
     Object.is(str,num);  // false
     Object.is(num2,num); // true
   Object.assign() 将源对象的属性赋值到目标对象上 
-    PS：参数可以是多个「至少是两个」
+    PS:参数可以是多个「至少是两个」
     let origin = {"b":2,"c":3}; //这个充当源对象
     let target = {"a":1};       //这个充当目标对象
     Object.assign(target,origin);
@@ -2345,12 +2345,12 @@ Object 对象扩展
       var dog = new Dog('旺财'); //实例化
       //调用say方法
       dog.say(); // 名字叫旺财
-      模拟面向对象编程有几个关键步骤：
+      模拟面向对象编程有几个关键步骤:
       1、构造函数；
       2、给prototype对象添加属性和方法；
       3、实例化；
       4、通过实例化后的对象调用类的方法或者属性。
-      注意：面向对象是一种编程思想,并不是具体的工具。
+      注意:面向对象是一种编程思想,并不是具体的工具。
 Function 函数扩展 
   参数的默认值
     传统的实现方式
@@ -2362,8 +2362,8 @@ Function 函数扩展
       function person(name = 'Zhangsan',age = 25){
         console.log(name,age);
       }
-      person();//结果：Zhangsan  25
-      person('Lisi',18);//结果：Lisi  18
+      person();//结果:Zhangsan  25
+      person('Lisi',18);//结果:Lisi  18
     只有当传入的参数为undefined,才会触发默认值赋值
       function person(age = 12){
         console.log(age);
@@ -2418,7 +2418,7 @@ Function 函数扩展
       若参数超过1个的话,需要用小括号（）括起来,
       函数体语句超过1条的时候,需要用大括号{ }括起来。
       var sum = (a,b) => {return a+b}
-      sum(1,2);//结果：3
+      sum(1,2);//结果:3
     箭头函数中的this指向的是定义时的this,而非执行时的this。
       var obj = {  //定义一个对象
         x:100,     //属性x
@@ -2446,7 +2446,7 @@ Function 函数扩展
       定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
       而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
     todo -----箭头函数 (ES6新增)
-      PS：匿名函数的简化版
+      PS:匿名函数的简化版
         箭头函数的this值是绑定了的
         箭头函数没有arguments对象,若要多参数,则需用...
       创建箭头函数
@@ -2454,27 +2454,27 @@ Function 函数扩展
             相当于: function(参数1,参数2){ return 语句 }
           arg => {语句};  若只有一个参数,可省略圆括号
         ( ) => {语句};  若没有参数,则不可省略圆括号
-        e.g.
+        Example:
           var a1 =[1,2,3]
           var a2 =a1.map(function(n){ return n*n });
           console.log(a2); // [1, 4, 9]
           /*等价于*/ var a3 =a1.map(n => n*n);
           console.log(a3); // [1, 4, 9]
 Math   对象扩展 
-  PS： ES6给Math对象新增了共17个函数
+  PS: ES6给Math对象新增了共17个函数
   Math.trunc()  去除一个数的小数部分,返回整数部分。
-    PS：若传入的参数是整数,就直接返回整数,若是小数,就去除了小数部分,返回整数部分
+    PS:若传入的参数是整数,就直接返回整数,若是小数,就去除了小数部分,返回整数部分
     Math.trunc(3);   // 3
     Math.trunc(3.1); // 3
   Math.sign()   判断一个值到底是正数、负数、零还是NaN
     参数若是正数,结果返回1；
     若是负数,结果返回-1；
     若是0,结果返回0；
-    若是一个非数值类型的参数,结果返回：NaN。
-    Math.sign(3); //结果：1
-    Math.sign(-3); //结果：-1
-    Math.sign(0); //结果：0
-    Math.sign('abc'); //结果：NaN
+    若是一个非数值类型的参数,结果返回:NaN。
+    Math.sign(3); //结果:1
+    Math.sign(-3); //结果:-1
+    Math.sign(0); //结果:0
+    Math.sign('abc'); //结果:NaN
   Math.cbrt()   计算一个数的立方根
     Math.cbrt(8);  //2
     Math.cbrt(27); //3
@@ -2512,7 +2512,7 @@ RegExp 正则扩展
     new RegExp(/abc/ig, 'i').flags // "i"
     上面代码中,原有正则对象的修饰符是ig,它会被第二个参数i覆盖。
   字符串的正则方法
-    字符串对象共有4个方法,可以使用正则表达式：match()、replace()、search()和split()。
+    字符串对象共有4个方法,可以使用正则表达式:match()、replace()、search()和split()。
     ES6将这4个方法,在语言内部全部调用RegExp的实例方法,
     从而做到所有与正则相关的方法,全都定义在RegExp对象上。
     String.prototype.match 调用 RegExp.prototype[Symbol.match]
@@ -2743,7 +2743,7 @@ RegExp 正则扩展
     var escape = require('regexp.escape');
     escape('hi. how are you?');
     // "hi\\. how are you\\?"
-  s 修饰符：dotAll 模式
+  s 修饰符:dotAll 模式
     正则表达式中,点(.)是一个特殊字符,代表任意的单个字符,但是行终止符(line terminator character)除外。
 
     以下四个字符属于”行终止符“。
@@ -2845,7 +2845,7 @@ RegExp 正则扩展
     const regexArrows = /^\p{Block=Arrows}+$/u;
     regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
 'Strings_and_Regular_Expressions'字符串与正则表达式 
-  PS：ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成(UTF-16).
+  PS:ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成(UTF-16).
     每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
     所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
     曾经,16 位的容量对于任意字符的存放都是足够的,
@@ -2885,7 +2885,7 @@ RegExp 正则扩展
       console.log(is32Bit("𠮷"));    // true
       console.log(is32Bit("a"));     // false
   String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
-    PS：可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
+    PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
       针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
     Example:
       使用给定的代码点来产生相应的单个字符
@@ -2893,10 +2893,10 @@ RegExp 正则扩展
 --------------------------------------------------------------------------------
 ES7 
 ASYNC  用来取代回调函数、解决异步操作的一种方法  
-  PS：async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖 
+  PS:async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖 
   var prms = async function(){}  函数表达式定义async函数
   async function foo() {}        函数声明
-    PS：同一般函数声明相同,使用'async function'代替'function'来声明异步函数
+    PS:同一般函数声明相同,使用'async function'代替'function'来声明异步函数
       函数执行时,遇到await就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
     Example:
       function timeout(ms) {
@@ -2938,7 +2938,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         f().then( v => console.log(v)
         , e => console.log(e) )  // Error: 出错了
     await proms 
-      PS：await命令只能用在async函数之中,用在普通函数会报错 
+      PS:await命令只能用在async函数之中,用在普通函数会报错 
       proms   Promise对象,否则被转成一个立即resolve的Promise对象 
       Example:
         async function f() {
@@ -2988,7 +2988,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
           await db.post(doc);
         }
 'Async_Iterator'异步遍历器
-  PS：Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
+  PS:Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
     该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
     其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束。
   遍历器的next方法必须是同步的,只要调用就必须立刻返回值 

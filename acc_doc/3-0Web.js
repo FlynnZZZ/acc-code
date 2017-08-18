@@ -3,14 +3,14 @@ MVC 模式
   Controller,控制层: 数据处理,实现业务逻辑
   View,视图层:       展示数据,提供用户界面
 MVVM 模式
-  PS：用 View Model 代替 Controller.
-    本质：view 绑定 view-model,视图与数据模型强耦合,
+  PS:用 View Model 代替 Controller.
+    本质:view 绑定 view-model,视图与数据模型强耦合,
     数据的变化实时反映在 view 上,不需要手动处理.
   Model
   View
-  View-Model：简化的 Controller,唯一作用就是为 View 提供处理好的数据,不含其他逻辑。
+  View-Model:简化的 Controller,唯一作用就是为 View 提供处理好的数据,不含其他逻辑。
 SPA, Single-page application
-  前端可以做到： 读写数据 切换视图 用户交互
+  前端可以做到: 读写数据 切换视图 用户交互
   这意味着,网页其实是一个应用程序。
   2010 年后,前端工程师从开发页面,变成了开发”前端应用“（跑在浏览器里面的应用程序）。
 'Native_App'一种基于智能手机本地操作系统并使用原生程式编写运行的第三方应用程序 
@@ -25,7 +25,7 @@ SPA, Single-page application
     一般使用PHP ASP JSP 等制作
     动态网页则更新较多,一般用于用户互动较多的网站
   静态网站: 主要是指由静态网站制作而成的网站。
-    也可以简单的这样理解：动态网站的功能就是 想填加一条信息,只要登陆会员或者网站管理后台。
+    也可以简单的这样理解:动态网站的功能就是 想填加一条信息,只要登陆会员或者网站管理后台。
     然后像发电子邮件一样,填表单提交后, 网站前台就能显示了,就已经更新完毕了
     静态的需要用FTP或者WEBFTP从服务器上把需要更新的文件下载到本地修改后再上传。
     运行在客户端的程序、网页、插件、组件 属于静态网页,可以脱离服务器运行于浏览器客户端
@@ -38,7 +38,7 @@ Web图片
   gif,图形交换格式   :  最多256种颜色,支持透明色、动画
   png,网络可移植格式 :  最多1670万种 ,支持透明色,不支持动画
   jpeg,联合图像专家组:  最多1670万种 ,不支持透明色、动画 
-    PS：JPEG文件有两种保存方式,分别是Baseline JPEG和Progressive JPEG。
+    PS:JPEG文件有两种保存方式,分别是Baseline JPEG和Progressive JPEG。
       两种格式有相同尺寸以及图像数据,扩展名也是相同的,唯一的区别是二者显示的方式不同。
     Baseline JPEG,渐进式 JPEG
       该类型的JPEG文件存储方式是按从上到下的扫描方式,把每一行顺序的保存在JPEG文件中。
@@ -58,7 +58,7 @@ Web图片
     保存为 Progressive JPEG
       在photoshop中有“存储为web所用格式”,打开后选择“连续”就是渐进式JPEG。
 'Scalable_Vector_Graphics',SVG 可缩放矢量图 
-  PS：一种描述向量图形的XML格式的标记化语言。
+  PS:一种描述向量图形的XML格式的标记化语言。
     也就是说,SVG本质上是文本文件,格式采用XML,可以在浏览器中显示出矢量图像。
     由于结构是XML格式,使得它可以插入HTML文档,成为DOM的一部分,
     然后用JavaScript和CSS进行操作。
@@ -244,7 +244,7 @@ Web图片
         </g>
       </svg>
 'eXtensible Markup Language'XML,可扩展标记语言 
-  PS：与HTML一样都属于SGML标准通用语言 
+  PS:与HTML一样都属于SGML标准通用语言 
     在使用XML传输信息时,若数据本身为XML文件,则不需设置'Content-Type',
     若由后台程序动态生成,则需设置为'text/xml'  
   语法 
@@ -257,7 +257,7 @@ Web图片
   实现方式 
     JavaScript 通过定时器刷新,间隔来改变元素样式。
     CSS3 transition和animation。
-    HTML5 使用HTML5提供的绘图方式：
+    HTML5 使用HTML5提供的绘图方式:
   绘制频率 
     页面每一帧变化都是系统绘制出来的（GPU或者CPU）。
     它的最高绘制频率受限于显示器的刷新频率（而非显卡）, 
@@ -268,7 +268,7 @@ Web图片
     刷新频率越高,屏幕上图片闪烁感就越小,稳定性也就越高。
     人的眼睛不容易察觉75Hz以上刷新频率带来的闪烁感。
   硬件加速
-    硬件有三个处理器：CPU、GPU和APU（声音处理器）。他们通过PCI/AGP/PCIE总线交换数据。
+    硬件有三个处理器:CPU、GPU和APU（声音处理器）。他们通过PCI/AGP/PCIE总线交换数据。
     GPU在浮点运算、并行计算等部分计算方面,明显高于CPU的性能。
   fps 
     GPU渲染画面的频率, 游戏里谈到掉帧,是指GPU渲染画面频率降低。

@@ -1,5 +1,5 @@
 介绍 说明 概念 
-  PS：PHP,Hypertext Preprocessor 超文本预处理器,名称来源 Personal_Home_Pages  
+  PS:PHP,Hypertext Preprocessor 超文本预处理器,名称来源 Personal_Home_Pages  
     一种创建动态交互性站点的服务器端脚本语言,用于服务器端的存取;
     HTML和js是客户端语言,用于实现页面呈现、特效;
   功能
@@ -14,7 +14,7 @@
     可以输出任意的文本,比如 XHTML 和 XML;
     跨平台,可运行在如Linux、Unix、windows等平台上;
   说明
-    PS：脚本可以放在文档中的任何位置,以 <?php 开头,以?>结尾「且后面的?>是可省略的」;
+    PS:脚本可以放在文档中的任何位置,以 <?php 开头,以?>结尾「且后面的?>是可省略的」;
       文件的默认文件扩展名是 ".php",可包含文本、HTML、JavaScript代码和 PHP 代码,
       代码在服务器上执行,结果以纯 HTML 形式返回给浏览器;
       在本地开发时,调试需开启服务器来访问否则浏览器解析不了「SlPt」;
@@ -36,24 +36,24 @@
     只要在 web 目录中创建 .php 文件即可,服务器将自动为您解析这些文件。
     不需要编译任何软件,或安装额外的工具。
     由于 PHP 是免费的,大多数的 Web 主机都提供对 PHP 的支持。
-    然而,如果服务器不支持 PHP,必须：
+    然而,如果服务器不支持 PHP,必须:
     安装 Web 服务器
     安装 PHP
     安装数据库,比如 MySQL
-    官方 PHP 网站（PHP.net）有 PHP 的安装说明： http://php.net/manual/en/install.php
+    官方 PHP 网站（PHP.net）有 PHP 的安装说明: http://php.net/manual/en/install.php
   PHP 服务器组件
-    PS：对于初学者建议使用集成的服务器组件,它已经包含了 PHP、Apache、Mysql 等服务,
+    PS:对于初学者建议使用集成的服务器组件,它已经包含了 PHP、Apache、Mysql 等服务,
       免去了开发人员将时间花费在繁琐的配置环境过程。
     WampServer
-      Window 系统可以使用 WampServer,下载地址：http://www.wampserver.com/,
+      Window 系统可以使用 WampServer,下载地址:http://www.wampserver.com/,
       支持32位和64位系统,根据自己的系统选择版本。
       WampServer 安装也简单,你只需要一直点击 "Next" 就可以完成安装了。
     XAMPP
       XAMPP 支持 Mac OS 和 Window 系统,
-      下载地址：https://www.apachefriends.org/zh_cn/index.html。
+      下载地址:https://www.apachefriends.org/zh_cn/index.html。
 ---------------------------------------------------------------------------
 数据类型 
-  PS：由于变量占用的空间单元不一样,分成几种数据类型;
+  PS:由于变量占用的空间单元不一样,分成几种数据类型;
     8种原始类型,其中包括四种标量类型、两种复合类型和两种特殊类型;
   ◆标量类型
   NULL    空值
@@ -77,8 +77,8 @@
     echo $y; // 无输出
     ?>
   Integer 整型 
-    PS：整数是一个没有小数的数字; 
-      可用三种格式来指定：十进制、十六进制(以 0x 为前缀)或八进制(前缀为 0);
+    PS:整数是一个没有小数的数字; 
+      可用三种格式来指定:十进制、十六进制(以 0x 为前缀)或八进制(前缀为 0);
     规则 
       必须至少有一个数字 (0-9),
       不能包含逗号或空格,
@@ -110,8 +110,8 @@
     var_dump($x); // float(8.0E-5)
     ?>
   String  字符串
-    PS： 一个字符串是一串字符的序列,就像 "Hello world!"。
-      可以将任何文本放在'单引号'或"双引号"中：
+    PS: 一个字符串是一串字符的序列,就像 "Hello world!"。
+      可以将任何文本放在'单引号'或"双引号"中:
       字符串变量用于存储并处理文本。
       赋一个文本值给变量时,给文本值加上单引号或者双引号。
     Example:
@@ -137,10 +137,10 @@
   Array   数组
     数组可以在一个变量中存储多个值
     array() 创建数组
-      两种创建数值数组的方法：
-      自动分配 ID 键,ID 键总是从 0 开始：
+      两种创建数值数组的方法:
+      自动分配 ID 键,ID 键总是从 0 开始:
         $arr=array("a","b","c");
-      人工分配 ID 键：
+      人工分配 ID 键:
         <?php
         // $arr = array(); // 可以不预先定义,不同于JS
         $arr[0]="a";
@@ -152,13 +152,13 @@
     数值数组: 带有数字 ID 键的数组
     关联数组: 带有指定的键的数组,每个键关联一个值
       关联数组是使用指定分配给数组键的数组
-      两种创建关联数组的方法：
+      两种创建关联数组的方法:
         $age=array("aoo"=>"35","boo"=>"37","coo"=>"43");
         or:
         $age['aoo']="35";
         $age['boo']="37";
         $age['coo']="43";
-        随后可以在脚本中使用指定的键：
+        随后可以在脚本中使用指定的键:
       使用 foreach 循环 遍历关联数组
         <?php
         $age = array("aoo"=>"35","boo"=>"37","coo"=>"43");
@@ -227,7 +227,7 @@
       this指向当前对象实例的指针
 数据量 
   变量: 用于存储信息的"容器"
-    PS：PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
+    PS:PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
     命名规则 
       以 $ 符号开始,后面跟着变量的名称,
       只能包含'字母'、'数字'、汉字及下划线"_" [A-z、0-9 和 _] [不能包含空格],
@@ -242,13 +242,13 @@
         echo '这是一个 '.$x;
       ?>
     作用域
-      有四种不同的变量作用域：    
+      有四种不同的变量作用域:    
       global 全局变量: 在所有函数外部定义的变量
-        PS：拥有全局作用域;
+        PS:拥有全局作用域;
           全局变量可以被脚本中的任何部分访问,
           在函数中访问全局变量,需使用 global 关键字 ;
         $GLOBALS[index] 数组
-          PS：所有全局变量的存储位置,index 保存变量的名称,
+          PS:所有全局变量的存储位置,index 保存变量的名称,
             该数组可以在函数内部访问,也可以直接用来更新全局变量;
           Example:
             <?php
@@ -274,10 +274,10 @@
           echo $y;  // 输出 15
         ?>
       local 局部变量: 在函数内部定义的变量
-        仅能在函数内部访问：
+        仅能在函数内部访问:
         可以在不同函数中使用相同的变量名称,因为函数内定义的变量是局部变量;
       Static 作用域
-        PS：当一个函数完成时,它的所有变量通常都会被删除,
+        PS:当一个函数完成时,它的所有变量通常都会被删除,
           有时候希望某个局部变量不要被删除,
           要做到这一点,需在第一次声明变量时使用 static 关键字;
         Example:
@@ -292,10 +292,10 @@
           myTest(); // 2
           ?>
           每次调用该函数时,该变量将会保留着函数前一次被调用时的值。
-          注释：该变量仍然是函数的局部变量。
+          注释:该变量仍然是函数的局部变量。
       parameter 参数作用域
         参数是通过调用代码将值传递给函数的局部变量。
-        参数是在参数列表中声明的,作为函数声明的一部分：
+        参数是在参数列表中声明的,作为函数声明的一部分:
         Example:
           <?php
           function myTest($x) {
@@ -329,24 +329,24 @@
           echo '单引号中不可直接引用变量  $txt'; // 单引号中不可直接引用变量 $txt
           ?>
   常量: 常量值被定义后,在脚本的其他任何地方都不能被改变。
-    PS：常量是一个简单值的标识符;
+    PS:常量是一个简单值的标识符;
       由英文字母、下划线、和数字组成,但数字不能作为首字母出现,
       常量名不需要加 $ 修饰符;
     设置常量: 使用 define() 函数
       define ( $name , $value [, $case_insensitive ] )
       参数:
-        name ：必选,字符串,常量名称,即标志符。
-        value：必选,常量的值。
-        case_insensitive ：可选,boolean值,TRUE 表示常量大小写不敏感,默认为false
+        name :必选,字符串,常量名称,即标志符。
+        value:必选,常量的值。
+        case_insensitive :可选,boolean值,TRUE 表示常量大小写不敏感,默认为false
       Example:
-        创建一个 区分大小写的常量, 常量值为 "abc"：
+        创建一个 区分大小写的常量, 常量值为 "abc":
         <?php
         define("GREETING", "abc");
         echo GREETING;    // "abc"
         echo '<br>';
         echo greeting;    // "greeting"
         ?>
-        创建一个 不区分大小写的常量, 常量值为 "abc"：
+        创建一个 不区分大小写的常量, 常量值为 "abc":
         <?php
         define("GREETING", "abc", true);
         echo greeting;  // 输出 "abc"
@@ -360,7 +360,7 @@
         myTest();    // "abc"
         ?>        
   超级全局变量: PHP系统中自带的变量
-    PS：超级全局变量在PHP 4.1.0之后被启用,在一个脚本的全部作用域中都可用
+    PS:超级全局变量在PHP 4.1.0之后被启用,在一个脚本的全部作用域中都可用
     $GLOBALS: 存放着用户定义的变量,且可在全局访问的一个组合数组
       Example:
         <?php 
@@ -376,7 +376,7 @@
         echo $z; // 99
         ?>
     $_SERVER: Web服务器信息
-      PS：包含了诸如头信息(header)、路径(path)、
+      PS:包含了诸如头信息(header)、路径(path)、
         以及脚本位置(script locations)等等信息的数组;
         这个数组中的项目由 Web 服务器创建,
         不能保证每个服务器都提供全部项目,
@@ -413,18 +413,18 @@
         如果脚本运行于虚拟主机中,该名称是由那个虚拟主机所设置的值决定。
         (如: www.runoob.com)
       $_SERVER['SERVER_SOFTWARE']  服务器标识字符串,在响应请求时的头信息中给出。
-         (如：Apache/2.2.24)
+         (如:Apache/2.2.24)
       $_SERVER['SERVER_PROTOCOL']  请求页面时通信协议的名称和版本。
         例如,"HTTP/1.0"。
       $_SERVER['REQUEST_METHOD']  访问页面使用的请求方法
         例如,"GET", "HEAD","POST","PUT"。
       $_SERVER['REQUEST_TIME']  请求开始时的时间戳  [PHP 5.1.0+可用]
-         如：1377687496
+         如:1377687496
       $_SERVER['QUERY_STRING']  query string（查询字符串）
         如果有的话,通过它进行页面访问。
       $_SERVER['HTTP_ACCEPT']  当前请求头中 Accept: 项的内容,如果存在的话。
       $_SERVER['HTTP_ACCEPT_CHARSET']  当前请求头中 Accept-Charset: 项的内容,
-        如果存在的话。例如："iso-8859-1,*,utf-8"。
+        如果存在的话。例如:"iso-8859-1,*,utf-8"。
       $_SERVER['HTTP_HOST']  当前请求头中 Host: 项的内容,如果存在的话。
       $_SERVER['HTTP_REFERER']  引导用户代理到当前页的前一页的地址（如果存在）。
         由 user agent 设置决定。
@@ -439,7 +439,7 @@
       $_SERVER['SCRIPT_FILENAME']  当前执行脚本的绝对路径。
       $_SERVER['SERVER_ADMIN'] Apache 服务器配置文件中的 SERVER_ADMIN 参数。
         如果脚本运行在一个虚拟主机上,则该值是那个虚拟主机的值。
-        如：someone@runoob.com
+        如:someone@runoob.com
       $_SERVER['SERVER_PORT']    Web 服务器使用的端口。默认值为 "80"。
         如果使用 SSL 安全连接,则这个值为用户设置的 HTTP 端口。
       $_SERVER['SERVER_SIGNATURE']  包含了服务器版本和虚拟主机名的字符串。
@@ -470,7 +470,7 @@
       </body>
       </html>
     $_POST: 应用于收集表单数据
-      PS：在HTML form标签的指定该属性："method="post"。
+      PS:在HTML form标签的指定该属性:"method="post"。
       在这个实例中,我们指定文件来处理表单数据。
       如果你希望其他的PHP文件来处理该数据,你可以修改该指定的脚本文件名。 
       然后,我们可以使用超级全局变量 $_POST 来收集表单中的 input 字段数据:
@@ -487,9 +487,9 @@
       </body>
       </html>
     $_GET: 应用于收集表单数据
-      PS：在HTML form标签的指定该属性："method="get"。
+      PS:在HTML form标签的指定该属性:"method="get"。
       $_GET 也可以收集URL中发送的数据。
-      假定我们有一个包含参数的超链接HTML页面：
+      假定我们有一个包含参数的超链接HTML页面:
       <html>
       <body>
         <a href="test_get.php?subject=PHP&web=runoob.com">Test $GET</a>
@@ -510,7 +510,7 @@
     $_COOKIE
     $_SESSION
   魔术变量 
-    PS：PHP提供了大量的预定义常量
+    PS:PHP提供了大量的预定义常量
       不过很多常量都是由不同的扩展库定义的,只有在加载了这些扩展库时才会出现,
       或者动态加载后,或者在编译时已经包括进去了;
       有八个魔术常量它们的值随着它们在代码中的位置改变而改变。
@@ -522,7 +522,7 @@
         echo '这是第 " '  . __LINE__ . ' " 行'; // 这是第 " 9 " 行
         ?>
     __FILE__: 文件的完整路径和文件名
-      PS：如果用在被包含文件中,则返回被包含的文件名。
+      PS:如果用在被包含文件中,则返回被包含的文件名。
         自 PHP 4.0.2 起,__FILE__ 总是包含一个绝对路径,
         如果是符号连接,则是解析后的绝对路径,
         而在此之前的版本有时会包含一个相对路径;
@@ -532,7 +532,7 @@
         // 该文件位于 " E:\project\test\one.php "
         ?>
     __DIR__: 文件所在的目录 
-      PS：如果用在被包括文件中,则返回被包括的文件所在的目录。
+      PS:如果用在被包括文件中,则返回被包括的文件所在的目录。
         它等价于 dirname(__FILE__)。
         除非是根目录,否则目录中名不包括末尾的斜杠。[PHP 5.3.0中新增]
       Example:
@@ -541,17 +541,17 @@
         // 该文件位于 " E:\project\test "
         ?>
     __FUNCTION__:  函数名称  [PHP 4.3.0 新加]
-      PS：自 PHP 5 起本常量返回该函数被定义时的名字,区分大小写,
+      PS:自 PHP 5 起本常量返回该函数被定义时的名字,区分大小写,
         在 PHP 4 中该值总是小写字母的。
       Example:
         <?php
         function test() {
-          echo  '函数名为：' . __FUNCTION__ ;
+          echo  '函数名为:' . __FUNCTION__ ;
         }
-        test(); // 函数名为：test
+        test(); // 函数名为:test
         ?>
     __CLASS__: 类的名称      [PHP 4.3.0 新增] 
-      PS：自 PHP 5 起本常量返回该类被定义时的名字,区分大小写;
+      PS:自 PHP 5 起本常量返回该类被定义时的名字,区分大小写;
         在 PHP 4 中该值总是小写字母的,
         类名包括其被声明的作用区域（例如 Foo\Bar）,
         注意自 PHP 5.4 起 __CLASS__ 对 trait 也起作用。
@@ -560,18 +560,18 @@
         <?php
         class test {
           function _print() {
-            echo '类名为：'  . __CLASS__ . "<br>";
-            echo  '函数名为：' . __FUNCTION__ ;
+            echo '类名为:'  . __CLASS__ . "<br>";
+            echo  '函数名为:' . __FUNCTION__ ;
           }
         }
         $t = new test();
         $t->_print();
         ?>
-        输出结果为：
-        类名为：test
-        函数名为：_print
+        输出结果为:
+        类名为:test
+        函数名为:_print
     __TRAIT__:  Trait 的名字 [PHP 5.4.0 新增]
-      PS：自 PHP 5.4.0 起,PHP 实现了代码复用的一个方法,称为 traits。
+      PS:自 PHP 5.4.0 起,PHP 实现了代码复用的一个方法,称为 traits。
         Trait 名包括其被声明的作用区域（例如 Foo\Bar）。
         从基类继承的成员被插入的 SayWorld Trait 中的 MyHelloWorld 方法所覆盖。
         其行为 MyHelloWorld 类中定义的方法一致。
@@ -598,30 +598,30 @@
         $o = new MyHelloWorld();
         $o->sayHello();
         ?>
-        输出： Hello World!
+        输出: Hello World!
     __METHOD__: 类的方法名   [PHP 5.0.0 新加] 
-      PS：返回该方法被定义时的名字,区分大小写
+      PS:返回该方法被定义时的名字,区分大小写
       Example:
         <?php
         function test() {
-          echo  '函数名为：' . __METHOD__ ;
+          echo  '函数名为:' . __METHOD__ ;
         }
-        test(); // 函数名为：test
+        test(); // 函数名为:test
         ?>
     __NAMESPACE__: 当前命名空间的名称,区分大小写 [PHP 5.3.0 新增]
-      PS：此常量是在编译时定义的
+      PS:此常量是在编译时定义的
       Example:
         <?php
         namespace MyProject;
-        echo '命名空间为："', __NAMESPACE__, '"'; 
-        // 命名空间为："MyProject"
+        echo '命名空间为:"', __NAMESPACE__, '"'; 
+        // 命名空间为:"MyProject"
         ?>
 OOP,Object-oriented_programming 面向对象 
   对象是一个由信息及对信息进行处理的描述所组成的整体,是对现实世界的抽象。
-  对象的主要三个特性：
-    对象的表示：对象的表示就相当于身份证,具体区分在相同的行为与状态下有什么不同。
-    对象的形态：当施加那些方法是对象如何响应,颜色,尺寸,外型。
-    对象的行为：可以对 对象施加那些操作,开灯,关灯就是行为。
+  对象的主要三个特性:
+    对象的表示:对象的表示就相当于身份证,具体区分在相同的行为与状态下有什么不同。
+    对象的形态:当施加那些方法是对象如何响应,颜色,尺寸,外型。
+    对象的行为:可以对 对象施加那些操作,开灯,关灯就是行为。
   面向对象内容
     类:   定义了一件事物的抽象特点。类的定义包含了数据的形式以及对数据的操作
     对象: 类的实例
@@ -649,7 +649,7 @@ OOP,Object-oriented_programming 面向对象
       析构函数往往用来做"清理善后" 的工作,
       例如在建立对象时用new开辟了一片内存空间,应在退出前在析构函数中用delete释放
     Example:
-      通过 Car 类 创建了三个对象：Mercedes, Bmw, 和 Audi。
+      通过 Car 类 创建了三个对象:Mercedes, Bmw, 和 Audi。
       $mercedes = new Car ();
       $bmw = new Car ();
       $audi = new Car ();
@@ -672,12 +672,12 @@ OOP,Object-oriented_programming 面向对象
         function getTitle(){ echo $this->title . PHP_EOL; }
       }
       ?>
-  类创建后,使用 new 运算符来实例化该类的对象：
+  类创建后,使用 new 运算符来实例化该类的对象:
   $this 代表自身的对象
   -> 访问成员方法与成员变量
     调用成员方法 ->
       实例化对象后,可以使用该对象调用成员方法,
-      该对象的成员方法只能操作该对象的成员变量：
+      该对象的成员方法只能操作该对象的成员变量:
       Example:
         <?php 
         class Site { 
@@ -720,12 +720,12 @@ OOP,Object-oriented_programming 面向对象
         // www.google.com
         ?>
   __construct 构造函数: 类中一种特殊的方法
-    PS：主要用来在创建对象时初始化对象
+    PS:主要用来在创建对象时初始化对象
       即为对象成员变量赋初始值,总与new运算符一起使用在创建对象的语句中。
       PHP 5 允行开发者在一个类中定义一个方法作为构造函数;
     self: 构造函数就是在由类生成对象时,会自动执行的方法
-    语法格式： function __construct(){}
-      在上面的例子中我们就可以通过构造方法来初始化 $url 和 $title 变量：
+    语法格式: function __construct(){}
+      在上面的例子中我们就可以通过构造方法来初始化 $url 和 $title 变量:
       function __construct( $par1, $par2 ) {
         $this->url = $par1;
         $this->title = $par2;
@@ -744,7 +744,7 @@ OOP,Object-oriented_programming 面向对象
       $taobao->getUrl(); 
       $google->getUrl();
   __destruct 析构函数
-    PS：析构函数(destructor) 与构造函数相反,
+    PS:析构函数(destructor) 与构造函数相反,
       当对象结束其生命周期时,例如对象所在的函数已调用完毕,系统自动执行析构函数。
       PHP 5 引入了析构函数的概念,这类似于其它面向对象的语言;
     function __destruct() {  }
@@ -763,10 +763,10 @@ OOP,Object-oriented_programming 面向对象
       // 销毁 MyDestructableClass
       ?>
   extends 继承
-    PS：使用关键字 extends 来继承一个类,PHP 不支持多继承
-    格式： class Child extends Parent { /* 代码部分 */ }
+    PS:使用关键字 extends 来继承一个类,PHP 不支持多继承
+    格式: class Child extends Parent { /* 代码部分 */ }
     Example:
-      Child_Site 类继承了 Site 类,并扩展了功能：
+      Child_Site 类继承了 Site 类,并扩展了功能:
       <?php 
       // 子类扩展站点类别
       class Child_Site extends Site {
@@ -775,7 +775,7 @@ OOP,Object-oriented_programming 面向对象
       	function getCate(){ echo $this->category . PHP_EOL; }
       }
   方法重写
-    PS：如果从父类继承的方法不能满足子类的需求,可以对其进行改写,
+    PS:如果从父类继承的方法不能满足子类的需求,可以对其进行改写,
       这个过程叫方法的覆盖（override）,也称为方法的重写。
     Example:
       function getUrl() {
@@ -787,9 +787,9 @@ OOP,Object-oriented_programming 面向对象
         echo $this->title . PHP_EOL;
         return $this->title;
       }
-      实例中重写了 getUrl 与 getTitle 方法：
+      实例中重写了 getUrl 与 getTitle 方法:
   public protected private 访问控制
-    PS：通过在属性或方法前添加关键字 public,protected 或 private 来实现.
+    PS:通过在属性或方法前添加关键字 public,protected 或 private 来实现.
     public   : 公有的类成员,可以在任何地方被访问。
     protected: 受保护的类成员,可以被其自身以及其子类和父类访问。
     private  : 私有的类成员,只能被其定义所在的类访问。
@@ -980,7 +980,7 @@ OOP,Object-oriented_programming 面向对象
     如果父类中的方法被声明为 final,则子类无法覆盖该方法。
     如果一个类被声明为 final,则不能被继承。
     Example:
-      以下代码执行会报错：
+      以下代码执行会报错:
       <?php
       class BaseClass {
         public function test() { echo "BaseClass::test() called" . PHP_EOL; }
@@ -1079,7 +1079,7 @@ OOP,Object-oriented_programming 面向对象
     echo "b" <=> "a"; // 1
     ?>  
 全局函数与语句 
-  PS：语句间使用分号;分割,且不可省略
+  PS:语句间使用分号;分割,且不可省略
   var_dump(val); 返回变量的数据类型和值
   intdiv(val1,val2);  返回val1整除val2的值  [PHP7+]
     <?php
@@ -1087,10 +1087,10 @@ OOP,Object-oriented_programming 面向对象
     ?>
   memory_get_usage()-val1-val2 ..; 获取当前PHP消耗的内存
   echo val1[,val2 ...]; 文本输出
-    echo 语言结构,使用的时可不加括号,也可以加上： echo 或 echo()
+    echo 语言结构,使用的时可不加括号,也可以加上: echo 或 echo()
     当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
     Example:
-      使用 echo 命令输出字符串「可包含 HTML 标签」：
+      使用 echo 命令输出字符串「可包含 HTML 标签」:
       <?php
       echo "<h2>PHP 很有趣!</h2>";
       echo "Hello world!<br>";
@@ -1119,12 +1119,12 @@ OOP,Object-oriented_programming 面向对象
         ?>
       </body>
       </html>
-      输出：
+      输出:
       // one
       // two
       // three
 函数 
-  PS： PHP的真正威力源自于它的函数,提供了超过 1000 个内建的函数;
+  PS: PHP的真正威力源自于它的函数,提供了超过 1000 个内建的函数;
     页面加载时执行脚本可以放到函数里;
   创建函数 
     函数的名称应该提示出它的功能, 函数名称以字母或下划线开头,不能以数字开头
@@ -1143,7 +1143,7 @@ OOP,Object-oriented_programming 面向对象
       </body>
       </html>
   函数参数 
-    PS：添加参数可以给函数添加更多的功能;参数类似变量。
+    PS:添加参数可以给函数添加更多的功能;参数类似变量。
       参数就在函数名称后面有一个括号内指定
     Example:
       <html>
@@ -1165,7 +1165,7 @@ OOP,Object-oriented_programming 面向对象
       
       </body>
       </html>
-      输出：
+      输出:
   函数返回值 
     使用 return 语句让函数返回一个值
     <html>
@@ -1191,10 +1191,10 @@ OOP,Object-oriented_programming 面向对象
         <div>1
         1</div>
 命名空间     [PHP5.3新增] 
-  PS： 所有非 PHP 代码包括空白符都不能出现在命名空间的声明之前
+  PS: 所有非 PHP 代码包括空白符都不能出现在命名空间的声明之前
   作用:决解命名冲突; 为(很长的)标识符名称创建一个(简短)别名的名称; 提高源代码的可读性;
   namespace  定义命名空间
-    PS：如果一个文件中包含命名空间,它必须在其它所有代码之前声明命名空间
+    PS:如果一个文件中包含命名空间,它必须在其它所有代码之前声明命名空间
       命名空间通过关键字 namespace 来声明
       默认的,所有常量、类和函数名都放在全局空间下,就和PHP支持命名空间之前一样。
     <?php  
@@ -1237,8 +1237,8 @@ OOP,Object-oriented_programming 面向对象
       // 命名空间前出现了“<html>” 会致命错误 -　命名空间必须是程序脚本的第一条语句
       ?>
   \ 子命名空间
-    PS：与目录和文件的关系很象,PHP 命名空间也允许指定层次化的命名空间的名称。
-      因此,命名空间的名字可以使用分层次的方式定义：
+    PS:与目录和文件的关系很象,PHP 命名空间也允许指定层次化的命名空间的名称。
+      因此,命名空间的名字可以使用分层次的方式定义:
     Example:
       <?php
       namespace MyProject\Sub\Level;  //声明分层次的单个命名空间
@@ -1301,7 +1301,7 @@ OOP,Object-oriented_programming 面向对象
       ?>
     注意访问任意全局类、函数或常量,都可以使用完全限定名称
       例如 \strlen() 或 \Exception 或 \INI_ALL。
-    在命名空间内部访问全局类、函数和常量：
+    在命名空间内部访问全局类、函数和常量:
       <?php
       namespace Foo;
       function strlen() {}
@@ -1319,7 +1319,7 @@ OOP,Object-oriented_programming 面向对象
         必须使用完全限定名称（包括命名空间前缀的类名称）。
         注意因为在动态的类名称、函数名称或常量名称中,
         限定名称和完全限定名称没有区别,因此其前导的反斜杠是不必要的。
-        example1.php 文件代码：
+        example1.php 文件代码:
         <?php
         class classname {
           function __construct() { echo __METHOD__,"\n"; }
@@ -1363,7 +1363,7 @@ OOP,Object-oriented_programming 面向对象
       echo constant('namespacename\constname'), "\n"; // also prints namespaced
       ?>
   namespace 关键字 和 __NAMESPACE__ 魔术常量
-    PS：两种抽象的访问当前命名空间内部元素的方法
+    PS:两种抽象的访问当前命名空间内部元素的方法
     __NAMESPACE__ 常量 
       其值是包含当前命名空间名称的字符串。
       在全局的,不包括在任何命名空间中的代码,它包含一个空的字符串。
@@ -1412,8 +1412,8 @@ OOP,Object-oriented_programming 面向对象
       $a = new namespace\sub\cname(); // instantiates object of class sub\cname
       $b = namespace\CONSTANT; // assigns value of constant CONSTANT to $b
       ?>
-      使用命名空间：别名/导入
-        命名空间支持 有两种使用别名或导入方式：为类名称使用别名,或为命名空间名称使用别名
+      使用命名空间:别名/导入
+        命名空间支持 有两种使用别名或导入方式:为类名称使用别名,或为命名空间名称使用别名
         注意PHP不支持导入函数或常量。
         在PHP中,别名是通过操作符 use 来实现的. 
         1、使用use操作符导入/使用别名
@@ -1459,11 +1459,11 @@ OOP,Object-oriented_programming 面向对象
         $obj = new Another\thing; // instantiates object of class My\Full\Classname\thing
         $obj = new \Another\thing; // instantiates object of class Another\thing
         ?>
-        使用命名空间：后备全局函数/常量
+        使用命名空间:后备全局函数/常量
           在一个命名空间中,当 PHP 遇到一个非限定的类、函数或常量名称时,
           它使用不同的优先策略来解析该名称。类名称总是解析到当前命名空间中的名称。
           因此在访问系统内部或不包含在命名空间中的类名称时,必须使用完全限定名称,
-          例如：
+          例如:
           1、在命名空间中访问全局类
           <?php
           namespace A\B\C;
@@ -1568,7 +1568,7 @@ OOP,Object-oriented_programming 面向对象
     \A\B::foo();  // 调用命名空间 "A\B" 中定义的类 "B" 的 "foo" 方法
                   // 如果类 "A\B" 未找到,则尝试自动装载类 "A\B"
     ?>
-  名称解析遵循下列规则：
+  名称解析遵循下列规则:
     对完全限定名称的函数,类和常量的调用在编译时解析。例如 new \A\B 解析为类 A\B。
     所有的非限定名称和限定名称（非完全限定名称）根据当前的导入规则在编译时进行转换。
       例如,如果命名空间 A\B\C 被导入为 C,
@@ -1578,20 +1578,20 @@ OOP,Object-oriented_programming 面向对象
     非限定类名根据当前的导入规则在编译时转换（用全名代替短的导入名称）。
       例如,如果命名空间 A\B\C 导入为C,则 new C() 被转换为 new A\B\C() 。
     在命名空间内部（例如A\B）,对非限定名称的函数调用是在运行时解析的。
-      例如对函数 foo() 的调用是这样解析的：
+      例如对函数 foo() 的调用是这样解析的:
     在当前命名空间中查找名为 A\B\foo() 的函数
     尝试查找并调用 全局(global) 空间中的函数 foo()。
     在命名空间（例如A\B）内部对非限定名称或限定名称类（非完全限定名称）的调用是在运行时解析的。
-      下面是调用 new C() 及 new D\E() 的解析过程： new C()的解析:
+      下面是调用 new C() 及 new D\E() 的解析过程: new C()的解析:
       在当前命名空间中查找A\B\C类。
       尝试自动装载类A\B\C。
       new D\E()的解析:
-      在类名称前面加上当前命名空间名称变成：A\B\D\E,然后查找该类。
+      在类名称前面加上当前命名空间名称变成:A\B\D\E,然后查找该类。
       尝试自动装载类 A\B\D\E。
       为了引用全局命名空间中的全局类,必须使用完全限定名称 new \C()。
 --------------------------------------------------------------------------------  
 WAMPServer集成环境 
-  PS：
+  PS:
     W : windows
     A : Apache
     M : MySQL
@@ -1617,10 +1617,10 @@ WAMPServer集成环境
     然后 配置完后在 httpd.conf 文件中
       将 Include conf/extra/httpd-vhosts.conf 取消注释「默认是被注释掉的」
       并设置 将'只有本机IP可访问本地资源'改为所有域名都可访问
-        Apache2.4.9版本的httpd.conf文件为：
+        Apache2.4.9版本的httpd.conf文件为:
         #   onlineoffline tag - don't remove
         Require local
-        将“Require local”前面加上#,在下面加上一句：
+        将“Require local”前面加上#,在下面加上一句:
         Require all granted
         保存重启就OK了
     最后 在系统中配置 hosts 文件
@@ -1663,9 +1663,9 @@ Example:
         <script type="text/javascript">
           document.getElementById("search").onclick=function(){
             var request=new XMLHttpRequest();
-            //XHR对象的open方法：请求方法：get；请求地址：server.php,参数为输入的编号；
+            //XHR对象的open方法:请求方法:get；请求地址:server.php,参数为输入的编号；
             request.open("GET","server.php?number="+document.getElementById("keyword").value);
-            //监听request的状态的改变：readyState的改变：
+            //监听request的状态的改变:readyState的改变:
             request.onreadystatechange=function () {
               if(request.readyState==4){//如果readyState为4即服务器响应已完成；
                 if(request.status===200){ //如果request的状态码为200；
@@ -1679,7 +1679,7 @@ Example:
           }
           document.getElementById("save").onclick=function(){
             var add_staff=new XMLHttpRequest();//生成XHR对象；
-            //XHR对象的open方法：请求方法：post；请求地址：server.php；
+            //XHR对象的open方法:请求方法:post；请求地址:server.php；
             add_staff.open("POST","server.php");
             //将填写的数据保存到data；     
             var data="number="+document.getElementById("staffnumber").value+
@@ -1688,11 +1688,11 @@ Example:
               "&job="+document.getElementById("staffjob").value;
             //设置请求头的content-type为获取表单信息；
             add_staff.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            //监听add_staff的状态的改变：readyState的改变：
+            //监听add_staff的状态的改变:readyState的改变:
             add_staff.onreadystatechange=function () {
               if(add_staff.readyState==4){
                 if(add_staff.status===200){
-                  //将响应内容显示出来：
+                  //将响应内容显示出来:
                   document.getElementById("createResult").innerHTML=add_staff.responseText;
                 }
                 else{ alert("发生错误"+add_staff.status); }
@@ -1704,7 +1704,7 @@ Example:
       </body>
     </html>
 
-  Server.php文件：
+  Server.php文件:
   <?php
     //设置页面内容是html编码格式是utf-8
     header("Content-Type: text/plain;charset=utf-8"); 
@@ -1739,8 +1739,8 @@ Example:
       //遍历$staff多维数组,查找key值为number的员工是否存在,如果存在,则修改返回结果
       foreach ($staff as $value) {
         if ($value["number"] == $number) {
-          $result = "找到员工：员工编号：" . $value["number"] . ",员工姓名：" . $value["name"] . 
-          ",员工性别：" . $value["sex"] . ",员工职位：" . $value["job"];
+          $result = "找到员工:员工编号:" . $value["number"] . ",员工姓名:" . $value["name"] . 
+          ",员工性别:" . $value["sex"] . ",员工职位:" . $value["job"];
           break;
         }
       }
@@ -1758,7 +1758,7 @@ Example:
         return;
       }
       //TODO: 获取POST表单数据并保存到数据库
-      echo "员工：" . $_POST["name"] . " 信息保存成功！"; //提示保存成功
+      echo "员工:" . $_POST["name"] . " 信息保存成功！"; //提示保存成功
     }
   ?>
 

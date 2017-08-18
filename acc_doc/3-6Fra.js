@@ -1286,7 +1286,7 @@ Directives,指令 : model和view的交互,在HTML中指定
     data : {
       a : fasle,
     }
-v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定  
+v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意不区分大小写] 
   PS:用于对纯DOM元素进行底层操作 
   drct_name 指令的名称 
   drctArg   可选,指令的参数 
@@ -1301,7 +1301,7 @@ v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定
       })    
   Vue.directive('name', params);  定义全局指令 
     name    指令的名称
-    params 配置对象或函数 { hookName : function(){ }, }
+    params  配置对象或函数 { hookName : function(){ }, }
   directives : val,               注册局部指令 
     directives: {
       focus: {

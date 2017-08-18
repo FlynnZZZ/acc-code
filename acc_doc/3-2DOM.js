@@ -2291,12 +2291,17 @@ WeiXin 微信
       form.action = form.action + '?callback=' + curCallbackName;        
 'iframe'框架元素 
   <iframe id="frame1" name='firstIframe' src="/cpt/top_nav.html" ></iframe>
-  ★获取iframe元素对象 
-    frames[iframeName]    通过iframe的'name'属性值来获取 
+  var iframeElem = document.querySelector("#frame1");  框架的DOM元素对象 
+  ★获取iframe元素嵌入页的window对象 
+    var iframe = frames[iframeName]    通过iframe的'name'属性值来获取 
+      Example:
       var iframe = frames['firstIframe'];
-  ★iframe元素对象的属性 
+  ★iframe的属性 
+    ▼标签属性 
     iframe.frameBorder = 0      去掉iframe的边框
     iframe.scrolling = 'no'     去掉iframe的滚动条 
+    ▼对象属性 
+    iframe.document    框架的document对象 
   'load'事件,在<iframe>加载后才能获取到其加载的内容 
     $('#frame1').on("load",function(e){
       var html = window.frames['firstIframe'].document.querySelector("#topNav");
@@ -3125,7 +3130,7 @@ FileList 对象与 File 对象 [HTML5]
   file.size;  文件的字节大小 
   file.lastModified      文件的上次修改时间,格式为时间戳。
   file.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-Blob 对象[HTML5]
+Blob 对象[HTML5] 
   PS:代表原始二进制数据,File 对象继承了Blob对象 
   获取Blob对象
     <input type="file" id="file" multiple size="80" accept="image/*"/>

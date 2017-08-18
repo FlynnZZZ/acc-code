@@ -1659,6 +1659,7 @@ Deferred,异步操作
       可以看出,这个方法不过是 then(null, rejectedCallback) 的一个快捷方式罢了。
   $.when(defer1,defer2,..)    整体模式,都完成后执行
     都成功了才运行done()指定的回调函数;若有一个失败或都失败,执行fail()指定的回调函数  
+    其中defer和data相对应,data为一数组包含'backData'、'textStatus'和'otherObj' 
     $.when(
       $.ajax({
         ..
@@ -1667,10 +1668,10 @@ Deferred,异步操作
         ..
       })
     )
-    .done(function(data){ 
+    .done(function(data1,data2,..){ 
       console.log("哈哈,成功了！"); 
     })
-    .fail(function(data){ 
+    .fail(function(dat1,dat2,..){ 
       console.log("出错啦！"); 
     });
   Example: 
@@ -2295,7 +2296,5 @@ Question & Idea
       var aoo =new foo();
       aoo.getName() === new foo().getName() //true
     new new foo().getName() //3,懵比
-
-
 
 

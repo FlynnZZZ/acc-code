@@ -1286,12 +1286,12 @@ Directives,指令 : model和view的交互,在HTML中指定
     data : {
       a : fasle,
     }
-v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意不区分大小写] 
+v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意:不区分大小写] 
   PS:用于对纯DOM元素进行底层操作 
-  drct_name 指令的名称 
-  drctArg   可选,指令的参数 
-  mdf       可选,指令的修改器 
-  drctVal   可选,指令的值 
+  'drct_name' 指令的名称 
+  'drctArg'   可选,指令的参数 
+  'mdf'       可选,指令的修改器 
+  'drctVal'   可选,指令的值 
     指令值为对象字面量 
       指令函数能够接受所有合法类型的JS表达式 
       <div v-demo="{ color: 'white', text: 'hello!' }"></div>
@@ -1319,13 +1319,13 @@ v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意
     new Vue({
       el : '.aaa',
     });
-  hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
+  ★hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
     ◆hookName 钩子函数
     bind     指令第一次绑定到元素时调用[只调用一次] 
       用这个钩子函数可以定义一个在绑定时执行一次的初始化动作
     inserted 被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于'document'中] 
     update   被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
-      通过比较更新前后的绑定值,可以忽略不必要的模板更新
+      PS: 可比较更新前后的绑定值'binds.value'和'binds.oldValue',忽略不必要的模板更新  
       Example:
         当DOM渲染有更新时
         <div id="demo1" >
@@ -2911,7 +2911,6 @@ Vuex          大规模状态管理
 vue-validator 表单验证 
 vue-touch     移动端 
 suggestion: 
-  在所有的方法中增加一个值用来表示该DOM元素方便操作DOM[而不需要自定义指令]
 --------------------------------------------------------------------------------
 React 
 介绍_概念_说明_定义 

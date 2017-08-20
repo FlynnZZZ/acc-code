@@ -311,7 +311,7 @@ ECMAScript : JS核心,语法部分
         '\v' 垂直制表符
         '\\' \反斜杠字符
         '\123' 由从0到377最多三位八进制数表示的'Latin-1'字符 
-          PS：严格模式下,不能使用八进制转义字符。
+          PS: 严格模式下,不能使用八进制转义字符。
           '\251' 版权符号的八进制序列 
           '\55'  "-"
         '\x00' 由从00和FF的两位十六进制数字XX表示的'Latin-1'字符 
@@ -1251,7 +1251,7 @@ ECMAScript : JS核心,语法部分
   属性访问表达式
   函数调用表达式
   对象创建表达式
-运算符|操作符  
+运算符|操作符 
   PS:ECMA-262 描述了一组用于操作数据值的运算符,也叫操作符;
     ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
     运用于对象时,通常会调用对象的'valueOf'和'toString'方法,以便取得相应的值;
@@ -1268,10 +1268,10 @@ ECMAScript : JS核心,语法部分
       -box;               //-1
       typeof box;         //String类型
       typeof -box;        //Number类型
-    str = typeof val; 获取值类型 
+    str = typeof val; 检测值类型 
       PS:typeof是操作符而非函数,因此后面的括号可有可无.
       val   操作数,可以是变量,也可以是字面量 
-      返回值为如下6种之一
+      返回值类型为字符串,为如下6种之一
       'undefined' 未定义
       'boolean'   布尔值
       'string'    字符串
@@ -3522,7 +3522,7 @@ Global|Window 全局对象
         parseFloat('01.20');   //1.2,去掉前、后导0
         parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
     str= String(val);    将任意类型值转换为字符串 
-      PS：若值存在'toString'方法,则调用该方法,否则,null返回"null"、undefined返回'undefined'
+      PS: 若值存在'toString'方法,则调用该方法,否则,null返回"null"、undefined返回'undefined'
       Example:  
       String(num)       "数值"
       String(str)       "字符串"

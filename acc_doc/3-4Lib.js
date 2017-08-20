@@ -1,23 +1,3 @@
-介绍_概念_说明_定义 
-  其他库
-    Modernizr 检测浏览器的支持情况
-      要想检测浏览器对一个API的支持,并没有一个统一的方法.
-      几乎每个API都有自己的一种方式来检测.
-      Modernizr是一个开源JavaScript库,
-      提供了一个统一的接口来检测浏览器支持.
-Library 库 
-  每个项目为了提高开发效率,创建一个库来存放大量的重复调用的代码
-  把各种常用的代码片段,组织起来放在一个JS文件中,组成的一个包就是JavaScript库.
-  库是一个编程术语,意思是一些列函数的集合
-  标准库指的是语言自带的库
-Framework 框架 
-  框架与库的概念类似,一般框架规模大于库.
-  框架更强调整体,解决方案,考虑的不单单是某个具体的方法或函数,
-  而是注重从细节到宏观的整体思路,
-  比如UI解决方案可以用ExtJS,
-  Mobile开发可以用jQueryMobile,
-  MVC解决方案用backbone.
---------------------------------------------------------------------------------
 jQuery : 快速简洁的JS库 
   PS:jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
     2.0+版本不再支持IE8及以下 
@@ -277,7 +257,7 @@ DOM操作
       Jelem.first()   选择第一个 
       Jelem.eq(index) 下标选取 
         index为整数,指示元素的位置[从0开始]
-        如果是负数,则从集合中的最后一个元素往回计数。
+        若是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 非筛选 
         Jelem.not(function(index){}); 用于检测集合中每个元素的函数 
       Jelem.has('selector');   包含筛选 
@@ -556,7 +536,7 @@ DOM操作
         不可选中因增加contenteditable属性而可编辑的元素的文字;
     性能优化 
       繁重的操作中分离元素
-        如果你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
+        若你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
         建议首先分离元素然后在添加。
         // 糟糕
         var $container = $("#container"),
@@ -986,24 +966,24 @@ Event,事件
     PS: 移除元素上绑定的一个或多个事件的事件处理函数 
     eName  可选,默认移除该元素所有的事件绑定 
       如"click"、"focus click"、"keydown.myPlugin" 
-    slct   可选,选择器,如果该参数为null或被省略,则表示当前元素自身绑定事件
+    slct   可选,选择器,若该参数为null或被省略,则表示当前元素自身绑定事件
       (实际触发者也可能是后代元素,只要事件流能到达当前元素即可) 
     foo    可选,指定的事件处理函数 
     todo:
       Jelem.off(eventsMap,selector)
         eventsMap  Object类型,event:handler 对象
-          如果省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
+          若省略参数handler,则移除指定元素指定事件类型上绑定的所有事件处理函数 
         selector 指定的对象(属于Jelem的后代元素)
-            如果省略参数selector,则移除Jelem及后代的所用响应函数
+            若省略参数selector,则移除Jelem及后代的所用响应函数
             selector 必须与通过on()函数添加绑定时传入的选择器一致 
-        如果省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
+        若省略了所有参数,则表示移除当前元素及后代元素的所有事件处理函数 
         实际上,off()函数的参数全是筛选条件,只有匹配所有参数条件的事件处理函数才会被移除
         参数越多,限定条件就越多,被移除的范围就越小
         RetValue:
           返回值为jQuery类型,返回当前jQuery对象本身 
   Jelem.unbind()   取消绑定
     规定从指定元素上删除的一个或多个事件处理程序 
-    如果没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
+    若没有规定参数,unbind() 方法会删除指定元素的所有事件处理程序 
     语法
       $(selector).unbind(event,foo)
       event 可选,规定删除元素的一个或多个事件 由空格分隔多个事件值.
@@ -1011,10 +991,10 @@ Event,事件
     使用 Event 对象来取消绑定事件处理程序 unbind
       规定要删除的事件对象 
       用于对自身内部的事件取消绑定(比如当事件已被触发一定次数之后,删除事件处理程序) 
-      如果未规定参数,则 unbind() 方法会删除指定元素的所有事件处理程序 
+      若未规定参数,则 unbind() 方法会删除指定元素的所有事件处理程序 
       语法
         $(selector).unbind(eventObj)
-        eventObj	可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
+        eventObj 可选,规定要使用的事件对象.eventObj参数来自事件绑定函数(即e.target 中的e).
   Jelem.eventName(foo)  快捷绑定[bind的简写] 
     ★name可使用的值枚举如下:
     $(document).ready(foo); DOM结构加载完后执行
@@ -1119,10 +1099,10 @@ Event,事件
     e.currentTarget  在事件冒泡阶段中的当前DOM元素 
     e.pageX 获取到光标相对页面的x坐标
     e.pageY 获取到光标相对页面的y坐标
-      PS:如果没有使用jQuery时,那么IE浏览器中是用 e.x/e.y,
+      PS:若没有使用jQuery时,那么IE浏览器中是用 e.x/e.y,
         在IE浏览器中还应该减去默认的2px的边框。
         而在Firefox浏览器中用 e.pageX/e.pageY,
-        如果页上有滚动条,则还要加上滚动条的宽度和高度。
+        若页上有滚动条,则还要加上滚动条的宽度和高度。
     e.which 鼠标单击事件中获取到鼠标的左、中、右键,键盘事件中获取键盘的按钮 
       鼠标单击事件中  
         左、中、右键分别对应值 1、2、3 
@@ -1152,7 +1132,7 @@ Event,事件
         return false;
       });
     自动修改破损图像
-      如果碰巧在网站上发现了破碎的图像链接,可以用一个被替换的图像来代替。
+      若碰巧在网站上发现了破碎的图像链接,可以用一个被替换的图像来代替。
       添加这个简单的代码可以节省很多麻烦:
       即使你的网站没有破碎的图像链接,添加这段代码也没有任何害处。
       $('img').on('error', function () {
@@ -1165,7 +1145,7 @@ Event,事件
         }, function () {
           $(this).removeClass('hover');
         });
-      你只需要添加必要的CSS代码即可。如果你想要更简洁的代码,可以使用 toggleClass 方法:
+      你只需要添加必要的CSS代码即可。若你想要更简洁的代码,可以使用 toggleClass 方法:
       $('.btn').hover(function () { 
         $(this).toggleClass('hover'); 
       });
@@ -1807,7 +1787,7 @@ jQuery插件
         expires : num/date  整数/日期对象,有效期 
           当为num时,表示有效时长,单位为'天'
           为date日期对象时,表示过期时间,若为已过期的时间,则Cookie将被删除
-          如果不设置或设置为null,则Cookie将被当作session_cookie[浏览器关闭后删除]
+          若不设置或设置为null,则Cookie将被当作session_cookie[浏览器关闭后删除]
         path : str          cookie的路径属性,默认为创建该cookie的页面路径 
         domain : str        cookie的域名属性,默认为创建该cookie的页面域名 
         secure : bol        若为true,则该cookie的传输会要求一个安全协议如https
@@ -2006,6 +1986,70 @@ Exp:
      return false;
    })
 Suggestion:
+--------------------------------------------------------------------------------
+Modernizr : 检测浏览器的支持情况 
+  PS: 一开源JS库,提供了一个统一的接口来检测浏览器支持 
+  引入 
+    通过script标签引入库文件 
+    下载页地址:'https://modernizr.com/download/?setclasses'
+    可自定义配置来进行下载所需要的部分 
+  HTML的类标记的检测方式  
+    Modernizr会自动检测将是否支持的CSS样式以类的形式反馈到HTML标签上 
+    no-xxx 表示不支持xxx属性,通过给 .no-xxx 指定属性来替换不支持该属性的情况 
+    在HTML中加上'class="no-js"',当引入Modernizr后,
+    将变成<HTML class="js ...">[表示浏览器支持JS] 表示Modernizr运行了 
+    Example: 
+      <HTML class="js no-boxshadow borderimage ...."> 
+      支持 border-image 属性,而不支持 box-shadow 属性 
+    CSS属性及对应Modernizr类标记枚举[部分] 
+      '@font-face'                            fontface
+      'text-shadow'                           textshadow
+      'background-size'                       backgroundsize
+      'border-image'                          borderimage
+      'border-radius'                         borderradius
+      'box-shadow'                            boxshadow
+      'opacity'                               opacity
+      'reflection'                            cssreflections
+      '::before'and'::after' pseudo-elements  generatedcontent
+      gradients                               cssgradients
+      hsla()                                  hsla
+      rgba()                                  rgba
+      flexible box layout                     flexbox
+      multi-column layout                     csscolumns
+      multiple backgrounds                    multiplebgs
+      CSS animations                          cssanimations
+      CSS transitions                         csstransitions
+      CSS 2D transformations                  csstransforms
+      CSS 3D transformations                  csstransforms3d
+  全局Modernizr对象 : JS的检测方式 
+    返回值为字符串,表明着浏览器能够处理特定类型的置信水平 
+    空''表示不支持,'maybe'或'probably'则支持 
+    ◆检测支持JS的API 
+    Modernizr.localstorage  
+    Modernizr.geolocation   
+    Modernizr.touch         
+    ★HTML5新增标签及功能
+    Modernizr.canvas        
+    Modernizr.inputtypes.search  是否支持新的search input类型 
+    ★HTML5标签新增属性判断 
+    Modernizr.input.autofocus 
+    Modernizr.input.required 
+    ◆检测CSS属性 
+    Modernizr.borderradius 
+    Modernizr.csstransforms 
+    ◆更详细的信息 
+    Modernizr.video.h264     是否支持这个特殊的编解码器 
+  Modernizr.load()加载器 : 根据JS检测的结果加载不同的脚本 
+    Modernizr.load({
+      test : Modernizr.xx,
+      yep  : 'xx.js',      // 可选 
+      nope : 'xx.js',      // 可选 
+      complete : foo       // 可选 
+    })
+    test：测试浏览器是否支持某个属性 
+    yep：若浏览器支持该属性,加载的脚本 
+    nope：若浏览器不支持该属性,加载的脚本 
+    complete：加载完成后,运行的JS代码 
 --------------------------------------------------------------------------------
 Bootstrap : 快速开发Web应用程序和网站的前端框架 
   介绍_概念_说明_定义 
@@ -2270,7 +2314,7 @@ Bootstrap : 快速开发Web应用程序和网站的前端框架
     旋转轮播
     自动定位浮标
 ---------------------------------------------------------------------以下待整理 
-Question & Idea 
+Question&Idea 
   视图-控制器-数据存储-模块 app
   在当前页面中打开一新页面,点击返回后,保留之前页面的状态[如JS将某个元素隐藏了],如何实现?
     在Firefox中返回可以保存状态,但Chrome和IE中不会,

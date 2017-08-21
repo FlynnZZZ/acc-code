@@ -58,7 +58,7 @@
       <![endif]-->
         这些代码的意思是:若用户浏览器是IE6及以下,那这段代码才会生效。
         若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
-  IE8才开始支持css3
+  IE8才开始支持css3 
   CSS规则  CSS文件由多个CSS规则组成 
     每个规则都有两个基本部分:选择器[selector]和声明块[declaration_block],
     'selector'           区分大小写
@@ -1856,7 +1856,7 @@ Declaration,样式声明
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  「iOS」
       -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-Layout,布局   
+Layout,布局 
   布局一般分为四种类型:固定布局、可切换的固定布局、弹性布局、混合布局。
     PS:可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式:
       其中可切换的固定布局的实现成本最低,但拓展性比较差；
@@ -2142,10 +2142,10 @@ Layout,布局
         方法五:父元素也浮动
     position 定位 
       PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
-      static   无定位,默认值 
+      'static'   无定位,默认值 
         元素出现在正常的流中 
         忽略'top''bottom''left''right'和'z-index'声明 
-      relative 相对定位 
+      'relative' 相对定位 : 相对自身元素定位 
         PS:相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流 
           相当于'transform'的'translate',元素只是在显示上进行了偏移[SelfThink] ,
           其显示的优先级被提升,偏移时可能会遮盖其他元素[包括背景和内容] 
@@ -2155,9 +2155,8 @@ Layout,布局
             left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
             top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
           }
-      absolute 绝对定位
+      'absolute' 绝对定位 : 相对和自己最接近的那个非标准流的祖先元素进行定位 
         PS:元素脱离文档流,元素从原来的位置脱离并让出自己的空间(后面元素占用让出的位置)
-          相对于和自己最接近的那个非标准流的祖先元素进行定位
           通常做法是给其父元素添加相对定位.若不存在这样的父元素,则向上一级寻找,直到以body为参考.
           若不想覆盖下层的元素,可以设置z-index值达到效果。
         clip 裁剪绝对定位元素 (可配合使用的属性)
@@ -2171,31 +2170,44 @@ Layout,布局
             inherit 规定应该从父元素继承 clip 属性的值。
           Example:
           img{position:absolute;clip:rect(0px 50px 200px 0px);}
-      fixed    相对于浏览器窗口的定位 
-        PS:脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化]
+      'fixed'    固定定位 : 相对浏览器窗口的定位 
+        PS:脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化] 
           默认处在视窗的左边中间位置
-        所有能够生成堆叠上下文的元素,会使其子元素的 position:fixed 相对其定位
-          PS:导致元素不再相对视口'Viewport'进行定位;详情见'Stacking Context'
-      inherit  继承父元素的定位属性.
-      /*配合属性*/
-      left/right/top/bottom  位置偏移
-        PS: 定位的参考起点为相对定位的元素 (relative 为其自身位置 (Self))
-        %     left/right 参照宽;top/bottom 参照高
-          relative 若其父元素脱离文档流则参考自身的宽高,否则参考父元素的宽高 (SelfThink)
-          absolute/fixed 参照其定位元素的宽高 (SelfThink)
-        pixel 
-        位置偏移 的特点:
-          使用 位置偏移 可达到width和height的效果 (当定位元素未定义 width 和 height 时)
-            Example: 
-              <div class="a"><div class="aa"></div></div>
-              .a{ position: relative; background-color: blue; width: 500px; height: 500px; }
-              .aa{ background: green; position: absolute; left: 100px; right:100px; top: 200px; bottom: 100px; }
-          定义 位置偏移属性 导致尺寸冲突时
-            left 和 top 优先级高于 right 和 bottom;
-              如定义width后,同时定义left和right,则right属性不生效
-              (比如:left + width + right 小于 定位参考元素的width时) 
-            margin:auto; 调和尺寸冲突,使定位元素尽可能处于中间位置
-              应用:使 left=right=top=bottom + margin:auto 达到居中的效果.
+        生成堆叠上下文的元素,使其子元素不再相对'Viewport'视口定位 
+          所有能够生成堆叠上下文的元素,会使其子元素的position:fixed相对其定位 
+          [详情见'Stacking Context'] 
+      'inherit'  继承父元素的定位属性 
+      ★配合属性
+      'left''right''top'和'bottom'   位置偏移 
+        %     'left''right'参照宽;'top''bottom'参照高 
+          relative 若其父元素脱离文档流则参考自身的宽高,否则参考父元素的宽高[SelfThink] 
+          absolute/fixed 参照其定位元素的宽高[SelfThink]
+        pixel 像素值 
+        达到确定'width'和'height'的效果[当定位元素未定义width和height时] 
+          Example: 
+          <div class="a">
+            <div class="aa"></div>
+          </div>
+          .a{ 
+            position: relative; 
+            background-color: blue; 
+            width: 500px; 
+            height: 500px; 
+          }
+          .aa{ 
+            background: green; 
+            position: absolute; 
+            left: 100px; 
+            right:100px; 
+            top: 200px; 
+            bottom: 100px; 
+          }
+        导致尺寸冲突时 
+          left 和 top 优先级高于 right 和 bottom;
+            如定义width后,同时定义left和right,则right属性不生效
+            (比如:left + width + right 小于 定位参考元素的width时) 
+          margin:auto; 调和尺寸冲突,使定位元素尽可能处于中间位置 
+            应用:使 left=right=top=bottom + margin:auto 达到居中的效果 
       z-index      设置元素的堆叠顺序 「无单位」
         PS:只有relative、absolute、fixed定位元素才有该属性「即static时该属性无效」
         auto    默认,堆叠顺序与父元素相等

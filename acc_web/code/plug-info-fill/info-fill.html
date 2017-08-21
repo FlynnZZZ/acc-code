@@ -1,0 +1,269 @@
+<style id="zIF1Style">
+  *{
+    padding: 0;
+    margin: 0;
+  }
+  #zIF1 .posCenter{
+    position: absolute;
+    top: -999px;
+    bottom: -999px;
+    left: -999px;
+    right: -999px;
+    margin: auto;
+  }
+
+  #zIF1{
+    position: absolute;
+    /*position: relative;*/
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*background-color: #b9e4e7;*/
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+  #zIF1>img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*bottom: 0;right: 0;*/
+    z-index: -1;
+  }
+  
+  #zIF1 .imgChoose{
+    position: relative;
+    width: 40vw;
+    height: 40vw;
+    margin: 20vw auto 0;
+    border: 3px dashed #b15c5c;
+    border-radius: 10%;
+    overflow: hidden;
+  }
+  #zIF1 .icon{
+    width: 33%;
+    height: 33%;
+    border: 4px solid #8d208f;
+    border-radius: 50%;
+    z-index: -1;
+  }
+  #zIF1 .portrait{
+    width: 100%;
+    height: 0;
+    background-color: red;
+  }
+  #zIF1 .icon div:nth-child(1){
+    width: 70%;
+    height: 20%;
+    background-color: #b9e4e7;
+  }
+  #zIF1 .icon div:nth-child(2){
+    height: 70%;
+    width: 20%;
+    background-color: #b9e4e7;
+  }
+  
+  #zIF1 .inputs{
+    position: relative;
+    margin: auto;
+    margin-top: 10vw;
+    text-align: center;
+    overflow: visible;
+  }
+  #zIF1 .inputItem{
+    white-space: nowrap;
+    margin-top: 3vw;
+  }
+  #zIF1 .tl{
+    white-space: pre-line;
+    display: inline-block;
+    width: 22%;
+    text-align: right;
+  }
+  #zIF1 .ct{
+    vertical-align: top;
+    display: inline-block;
+    width: 45%;
+    text-align: left;
+    margin-left: 5vw;
+  }
+  #zIF1 .ct input,#zIF1 .ct select,#zIF1 .ct textarea{
+    width: 40vw;
+    padding: 1vw;
+  }
+  #zIF1 .ct select{
+    padding-right: 1vw;
+    box-sizing: content-box;
+  }
+  #zIF1 .ct textarea{
+    height: 20vw;
+    resize: none;
+  }
+  #zIF1 .btn{
+    text-align: center;
+    border: solid blue 2px;
+    border-radius: 2vw;
+    padding: 1vw 3vw;
+    width: 20vw;
+    margin: auto;
+    margin-top: 5vw;
+    margin-bottom: 5vw;
+  }
+</style>
+<div id="zIF1">
+  <img src="" class="bg">
+  <div class="imgChoose">
+    <img class="portrait">
+    <div class="icon posCenter">
+      <div class="posCenter"> </div>
+      <div class="posCenter"> </div>
+    </div>
+  </div>
+  <div class="inputs">
+    <div class="inputItem">
+      <div class="tl"> 姓名 </div> <div class="ct"> <input type="text" class="inputName" > </div>
+    </div>
+    <div class="inputItem">
+      <div class="tl"> 年龄 </div> <div class="ct"> <input type="number" class="inputAge"> </div>
+    </div>
+    <div class="inputItem">
+      <div class="tl"> 手机号码 </div> <div class="ct"> <input type="number" class="inputMobile"> </div>
+    </div>
+    <div class="inputItem">
+      <div class="tl"> 培训点 </div> 
+      <div class="ct"> 
+        <select class="options" >
+        </select> 
+    </div>
+    </div>
+    <div class="inputItem">
+      <div class="tl"> 参赛宣言及灵感阐述 </div> <div class="ct"> <textarea name="name" ></textarea> </div>
+    </div>
+  </div>
+  <div class="btn"> 提交 </div>
+  <input type="file" accept="image/jpeg,image/gif,image/x-png" id="inputFile" style="display:none;">
+</div>
+<script type="text/javascript" id="zIF1Script">
+  $(function(){
+    var plug = $('#zIF1');
+    var portrait = plug.find('.portrait');
+    var name = plug.find('.inputName');
+    var age = plug.find('.inputAge');
+    var mobile = plug.find('.inputMobile');
+    var select = plug.find('.options');
+    var txt = plug.find('textarea');
+    var bg = plug.find('.bg');
+    var imgFile = $('#inputFile');
+    var height = $(window).height();
+    var width = $(window).width();
+    function dealImage( imgSrc , imgSetObj , callback){
+      var img = new Image();
+      img.src = imgSrc;
+      img.onload = function(){
+        // 默认按比例压缩
+        var w = this.width, h = this.height, scale = w / h;
+        w = imgSetObj.width || w;
+        h = imgSetObj.height || (w / scale);
+        var quality = 1;  // 默认设置为1
+        //生成canvas
+        var canvas = document.createElement('canvas');
+        canvas.width = w; 
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(this, 0, 0, w, h);
+        // 图像质量
+        if(imgSetObj.quality && imgSetObj.quality <= 1 && imgSetObj.quality > 0){
+          quality = imgSetObj.quality;
+        }
+        var base = canvas.toDataURL('image/jpeg', quality );
+        callback(base);
+        // console.log(base);
+      }
+    }; 
+    // init config  
+    var config = plug.parent().data('config');
+    if (config) {
+      bg.attr('src',config.img);
+      var optionsHTML = '';
+      config.options.forEach(function(val,idx,arr){
+        optionsHTML += '<option>'+val+'</option>';
+      });
+      select.append(optionsHTML);
+    }
+    
+    bg.css('height',plug[0].scrollHeight) // 内容超出视口 
+    // console.log(scrollHeight);
+    $(window).on("resize",function(e){ // 弹出键盘时 
+      plug.height(height);
+    })
+    
+    imgFile.on("change",function(e){
+      var fil = e.target.files[0];
+      var fr = new FileReader(fil); 
+      fr.readAsDataURL(fil);
+      fr.onload = function(){
+        var size = fil.size/1024/1024;
+        if (size > 0.5) {  //大于 0.5 M
+          console.log(size,'压缩图片');
+          var compressRate = 0.5 / size * 0.4 ;
+          dealImage(fr.result,{quality : compressRate } , function(src){
+            portrait.attr('src',src);
+            portrait.css('height','100%')
+            console.log(src.length/1024/1024);
+          })
+        }
+        else {
+          portrait.attr('src',fr.result);
+          portrait.css('height','100%')
+        }
+      }
+    })
+    plug.find('.imgChoose').on("click",function(e){
+      imgFile.click();
+    })
+    
+    plug.find('.btn').on("click",function(e){
+      var imgUrl = portrait.attr('src');
+      var nameTxt = name.val()
+      var ageNum = age.val()
+      var mobileNum = mobile.val()
+      var selectVal = select.val()
+      var txtVal = txt.val();
+      if (!imgUrl) {
+        alert('需选择头像');
+      }
+      else if (!nameTxt) {
+        alert('需填写姓名');
+      }
+      else if (!ageNum) {
+        alert('需填写年龄');
+      }
+      else if (!mobileNum) {
+        alert('需填写手机号码');
+      }
+      else if (!selectVal) {
+        alert('需选择'+'选项');
+      }
+      else if (!txtVal) {
+        alert('需填写'+'说明');
+      }
+      else {
+        config.submit({
+          img : imgUrl,
+          name : nameTxt,
+          age : ageNum,
+          mobile : mobileNum,
+          option : selectVal,
+          txt : txtVal,
+        });
+      }
+    })
+    
+    $('head').append($('#zIF1Style'));
+    $('#zIF1Script').remove();
+  })
+</script>

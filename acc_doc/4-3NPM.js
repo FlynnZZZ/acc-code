@@ -2163,6 +2163,17 @@ HttpServer   本地调试及移动端调试
   npm i http-server -g   全局安装'http-server'  
   http-server   在相应的文件夹下启动服务
   在网页中或手机中访问出现的网址 
+  todo
+    http-server -a 127.0.0.1 -p 7070
+    上面的一句命令启动了一个node.js 的静态服务器. 监听本地 7070 端口.
+    静态目录就是当前运行 命令所在的目录
+    如果你的当前项目中存在 public 文件夹,那么默认静态目录会指定到 public
+    如果没有 public 文件夹,那么静态目录就是 根目录 ./
+    你可以把 http-server -a 127.0.0.1 -p 7070 写入到 package.json 文件中的 scripts 节点
+    "scripts": {
+      "start": "http-server -a 127.0.0.1 -p 7070"
+    }
+    这样就可以通过  npm start 来启动静态服务器
 其他工具 
   Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
     如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 

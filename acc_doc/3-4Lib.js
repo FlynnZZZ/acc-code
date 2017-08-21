@@ -487,7 +487,7 @@ DOM操作
       Jelem.outerWidth([bool])   元素宽,content+padding+border[+margin] 
         bool  可选,默认为false,是否包括margin的布尔值
       Jelem.outerHeight([bool])  元素高,content+padding+border[+margin] 
-      Jelem.scrollTop()   读写元素相对滚动条顶部的偏移
+      Jelem.scrollTop()   读写元素相对滚动条顶部的偏移 
         PS:此处的Jelem为拥有滚动条的元素;
       Jelem.scrollLeft()  读写元素相对滚动条左侧的偏移
       Jelem.offset([{top:num1,left:num2}]) 读写元素相对可视区左上角的top和left 
@@ -711,7 +711,7 @@ DOM操作
       或使用链式操作,也会按顺序执行[前一个动画执行完了,才会执行下一个] 
     var bol = Jelem.is(':animated') 判断元素是否处于动画状态 
   新奇用法 
-    $(this)[bol:'removeClass':'addClass']('redColor');
+    $(this)[bol?'removeClass':'addClass']('redColor');
     等价于 
     bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
 工具方法 

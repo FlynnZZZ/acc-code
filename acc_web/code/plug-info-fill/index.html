@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=0">
+  <title>个人信息填写</title>
+  <script src="./jq3.1.1min.js" charset="utf-8"></script>
+</head>
+<body>
+  <div class="wrap"> </div>
+</body>
+<script type="text/javascript">
+  $(function(){
+    $('.wrap').load('./info-fill.html','aa',function(a,b,c){
+      $(this).data('config',{
+        img : './2.jpg',
+        options : [
+          '选项1',
+          '选项2',
+          '选项3',
+        ],
+        submit : function(data){
+          console.log(data);
+        },
+      })
+    })
+  })
+</script>
+</html>

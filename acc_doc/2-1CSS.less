@@ -1907,7 +1907,7 @@ Layout,布局
         pixel 长度值
         %     参考父元素宽度'width' 
           在默认的 writing-mode:horizontal-tb 和 direction:ltr 的情况下
-        margin的特点
+        margin的特点 
           垂直外边距合并
             PS:只有普通文档流中块框的垂直外边距才会发生外边距合并,
               行内框、浮动框或绝对定位之间的外边距不会合并.
@@ -2208,6 +2208,12 @@ Layout,布局
             (比如:left + width + right 小于 定位参考元素的width时) 
           margin:auto; 调和尺寸冲突,使定位元素尽可能处于中间位置 
             应用:使 left=right=top=bottom + margin:auto 达到居中的效果 
+            
+            top : -888px;
+            bottom : -888px;
+            left : -999px;
+            right : -999px;
+            margin : auto;
       z-index      设置元素的堆叠顺序 「无单位」
         PS:只有relative、absolute、fixed定位元素才有该属性「即static时该属性无效」
         auto    默认,堆叠顺序与父元素相等
@@ -2709,8 +2715,12 @@ var() CSS变量
         --margins: calc(24px / var(--columns));
       }
   Example: 
-    element{ --main-bg-color:brown; }                 // 声明一个变量
-    element{ background-color:var(--main-bg-color); } // 使用变量
+    element{ // 声明一个变量
+      --main-bg-color:brown; 
+    }                 
+    element{ // 使用变量
+      background-color:var(--main-bg-color); 
+    } 
 --------------------------------------------------------------------------------
 相关内容           
   css sprite 也叫雪碧图
@@ -3261,8 +3271,5 @@ Collection
   flex 布局如何指定单一一元素在水平方向上的对齐方式
 
   在文字超出部分部分使用...显示
-
-
-
 
 

@@ -500,17 +500,27 @@ fileNum : 21
     
     data（） self then parent get
 
-
-
-
-◆DeskTop 
-  QQInput
+  图片压缩 
+    canvas 的压缩质量 具体压缩后的体积 ? 
     
-    
-◆NoteBook 
-  QQInput 
-    
-
+  图片宽高自适应 
+  var bg = $('#zIF1>img');
+  bg.css('width','100%');
+  bg.css('height','100%');
+  bg.on("load",function(e){
+    console.log('load');
+    var elem = $(this);
+    var rate1 = elem.parent().width()/ elem.parent().height();
+    var rate2 = elem.width()/ elem.height();
+    if (rate1-rate2 > 0) {
+      elem.css('width','100%')
+      elem.css('height','auto')
+    }
+    else {
+      elem.css('height','100%')
+      elem.css('width','auto')
+    }
+  })
 
 
 jQuery 的 AJAX 属性

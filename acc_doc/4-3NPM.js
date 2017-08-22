@@ -1206,6 +1206,7 @@ Plugins,插件   扩展webpack的功能
       "build": "webpack --progress --profile --colors --config webpack.production.config.js"
     },
     当要上线的时候,运行 npm run build
+--------------------------------------------------------------------------------
 'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
   使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码
   '.vue'文件 
@@ -1976,6 +1977,18 @@ Plugins,插件   扩展webpack的功能
       index.html 
       package.json 
       ...
+--------------------------------------------------------------------------------
+'Angular CLI'Angular2的构建工具 
+  PS: 可以创建项目、添加文件以及执行一大堆开发任务,比如测试、打包和发布 
+  相关命令 
+    npm install -g @angular/cli   全局安装 
+      ng version   查看版本信息 
+    ng new my-app [-skip-install]    创建项目 
+      -skip-install 阻止安装依赖,后续通过 cnpm install 来进行安装 
+    cd my-app         进入项目目录,并启动服务器 
+    ng serve --open   启动开发服务器,监听文件变化,在修改文件时重新构建应用 
+      --open [或-o] 参数可以自动打开浏览器并访问 
+  目录结构 
 --------------------------------------------------------------------------------
 RequireJS 模块化开发框架 
   模块化开发的目的 

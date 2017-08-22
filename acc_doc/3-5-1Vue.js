@@ -1,58 +1,59 @@
 VueJS  数据驱动,组件化开发模式,渐进式前端框架 
-  PS:支持IE9+,因vue使用了ES5特性;非压缩版有错误提示和警告,而压缩版则没有;
+  PS:支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
     API设计受 AngularJS、KnockoutJS、RactiveJS 和 RivetsJS 影响;
     Vue没有完全遵循MVVM格式,但其设计受到了它的启发;
 自我约定 
-  当大小写不敏感时采用'_'连接的方式,如 'event_name' [?]
 安装|启动 
-  使用<script>标签直接引用VueJS 
+  <script>标签引入 
     'Vue'被注册为一个全局变量
-    Example: : <script src="./vue.min.js" charset="utf-8"></script>
+    Example: : 
+    <script src="./vue.min.js" charset="utf-8"></script>
     
     异步组件 
       在不使用脚手架的情况下将一个个组件分别独立成一个个html文件,
       再去引用注册它们,也是可以实现的,但一般不推荐这样做
       vue.js 可以将异步组件定义为一个工厂函数
-      Example:
-        新建一 head.html
-          <div> 这是头部  </div>
-        在 index.html 中异步引入 head.html 作为组件
-          <div id="app1">
-            <head-com></head-com>
-          </div>
-          Vue.component('head-com', function (resolve, reject) {
-            $.get("./head.html").then(function (res) {
-              resolve({
-                template: res
-              })
-            });
+      Example: 
+      新建 head.html 
+        <div> 这是头部  </div>
+      在 index.html 中异步引入 head.html 作为组件
+        <div id="app1">
+          <head-com></head-com>
+        </div>
+        Vue.component('head-com', function (resolve, reject) {
+          $.get("./head.html").then(function (res) {
+            resolve({
+              template: res
+            })
           });
-          var app1 = new Vue({
-            el: '#app1'
-          });
-  使用Vue脚手架'vue-cli' [见'bTools']
-◆View&Model 
-  View
-  <div id="app"> awesome {{name}}</div>
-  Model 
-  var myData = {
-    name: 'Vue.js'
-  }
-  ViewModel : 创建一个Vue实例,连接上面的view和model 
-  new Vue({
-    el: '#app',
-    data: myData
-  });
-  渲染结果: awesome Vue.js    
-View,视图  Vue实例管理的DOM节点 
-  当一Vue实例被创建时,它会递归遍历根元素的所有子节点,同时完成必要的数据绑定,
-  当视图被编译后,它就会自动响应数据的变化,
-  使用VueJS时,除了自定义指令,几乎不必直接接触 DOM,
-  当数据发生变化时,视图将会自动触发更新,
-  这些更新的粒度精确到一个文字节点,
-  同时为了更好的性能,这些更新是批量异步执行的;
-Model,模型 一个轻微改动过的原生JS对象 
-  PS:VueJS中的模型就是普通的JS对象——也可以称为数据对象 
+        });
+        var app1 = new Vue({
+          el: '#app1'
+        });
+  'vue-cli'Vue脚手架 [见'bTools']
+View&Model 
+  e.g.：
+    View
+    <div id="app"> awesome {{name}}</div>
+    Model 
+    var myData = {
+      name: 'Vue.js'
+    }
+    ViewModel : 创建一个Vue实例,连接上面的view和model 
+    new Vue({
+      el: '#app',
+      data: myData
+    });
+    渲染结果: awesome Vue.js    
+  'View'视图  Vue实例管理的DOM节点 
+    当一Vue实例被创建时,它会递归遍历根元素的所有子节点,同时完成必要的数据绑定,
+    当视图被编译后,它就会自动响应数据的变化,
+    使用VueJS时,除了自定义指令,几乎不必直接接触 DOM,
+    当数据发生变化时,视图将会自动触发更新,
+    这些更新的粒度精确到一个文字节点,
+    同时为了更好的性能,这些更新是批量异步执行的;
+  'Model'模型 一个轻微改动过的原生JS对象 
+    VueJS中的模型就是普通的JS对象——也可以称为数据对象 
     一旦某对象被作为Vue实例中的数据,它就成为一个 “反应式” 的对象了
     可操作它们的属性,同时正在观察它的 Vue 实例也会收到提示
     VueJS把数据对象的属性都转换成了ES5中的 getter/setters,
@@ -67,135 +68,18 @@ Model,模型 一个轻微改动过的原生JS对象
     同时把数据处理逻辑放在更独立的外部数据层 
     一旦数据被观察,VueJS 就不会再侦测到新加入或删除的属性了
     作为弥补,我们会为被观察的对象增加'$add','$set' 和'$delete'方法 
-  mutation_method,变异方法 会改变调用该方法的原数据的方法 
-    push()  pop() shift() unshift() splice() sort() reverse()
-  重塑数组 [non-mutating_method,非变异方法时] 
-    non-mutating_method,非变异方法   
-    如: filter(),concat(),slice()  
-    不会改变原始数组,但总是返回一个新数组
-    当使用非变异方法时,可以用新数组替换旧数组
-    example1.items = example1.items.filter(function (item) {
-      return item.message.match(/Foo/)
-    })
-    你可能认为这将导致Vue丢弃现有DOM并重新渲染整个列表
-    但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
-    所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
-  由于JS的限制,Vue不能检测以下变动的数据 
-    当[函数内仅有]数组通过索引index直接设置某一项时
-      如: vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
-      可使用以下方式将达到效果触发状态更新
-      ◆Vue.set
-      Vue.set(arr,index,newVal)
-      this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
-      ◆Array.prototype.splice
-      arr.splice(indx,1,newVal)
-      ◆同时在当前函数内改变会引起视图变化的操作 
-        <div class="slct" >
-          <div v-for="item1 in items">{{item1}}</div>
-          <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
-          <button type="button" @click="changeItems">click</button>
-        </div>
-        var vm = new Vue({
-          el : '.slct',
-          data : {
-            items :[ 1, 2, 3, 4, 5 ],
-            items1 :[{a:1},{a:2},{a:3},{a:4}],
-            n : 1,
-          },
-          methods : {
-            changeItems : function(){
-              console.log(this.items);
-              this.items[0] = ++this.n;
-              // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
-            },
-          },
-        });
-
-    当你修改数组的长度时,如: vm.items.length = newLength 
-      使用 splice 替代直接长度的修改
-      example1.items.splice(newLength)
-  vm实例创建后新增的数据不能被监控到 
-    受现代js的限制[以及废弃 Object.observe],Vue不能检测到对象属性的添加或删除。
-    由于Vue会在初始化实例时对属性执行getter/setter转化过程,
-    所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的。
-    Example::
-      var vm = new Vue({
-        data:{
-          a:1
-        }
-      })
-      // `vm.a` 是响应的
-      vm.b = 2
-      // `vm.b` 是非响应的
-    ◆决解办法:
-    预选定义一个值 
-    Vue.set(object, key, value);  将响应属性添加到嵌套的对象
-      Vue不允许在已经创建的实例上动态添加新的根级响应式属性[root-level reactive property]
-      但可使用 Vue.set 来添加 
-      Example: Vue.set(vm.someObject, 'b', 2)
-    vm.$set 实例方法[全局 Vue.set 方法的别名] 
-      this.$set(this.someObject,'b',2)
-    创建一个新的对象,让其包含原对象的属性和新的属性
-      有时向已有对象上添加一些属性,例如使用 Object.assign() 或 _.extend() 方法来添加属性。
-      但是,添加到对象上的新属性不会触发更新。
-      this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
-      // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
-  异步更新队列 
-    当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
-    若同一个'watcher'被多次触发,只会一次推入到队列中。
-    这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
-    然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
-    Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
-    若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
-    Example:
-      当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
-      当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
-      多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
-      虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
-    Vue.nextTick(callback)  在数据变化之后使用使其操作插队「SlPt」
-      <div id="example">{{message}}</div>
-      var vm = new Vue({
-        el: '#example',
-        data: {
-          message: '123'
-        }
-      })
-      vm.message = 'new message' // 更改数据
-      vm.$el.textContent === 'new message' // false
-      Vue.nextTick(function () {
-        vm.$el.textContent === 'new message' // true
-      })
-      在组件内使用 vm.$nextTick() 实例方法特别方便,因为它不需要全局 Vue ,
-      并且回调函数中的 this 将自动绑定到当前的 Vue 实例上:
-      Vue.component('example', {
-        template: '<span>{{ message }}</span>',
-        data: function () {
-          return {
-            message: '没有更新'
-          }
-        },
-        methods: {
-          updateMessage: function () {
-            this.message = '更新完成'
-            console.log(this.$el.textContent) // => '没有更新'
-            this.$nextTick(function () {
-              console.log(this.$el.textContent) // => '更新完成'
-            })
-          }
-        }
-      })
 静态属性/方法 
   Vue.config.devtools   读写,是否允许'vue-devtools'检查代码 
     开发版本默认为 true,生产版本默认为 false。生产版本设为 true 可以启用检查
     务必在加载 Vue 之后,立即同步设置
-  var Vue1 = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
+  var Vued = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
     PS: 所有的Vue组件其实都是被扩展的Vue实例 
       在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中
     var ve = new Vue1(params); 
   Vue.set(obj,key,val) 全局修改对象[确保视图会更新] 
   Vue.component(tagName,options);  注册全局组件[详见组件]
-var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染 
-  PS: VueJS的核心,采用简洁的模板语法来声明式的将数据渲染进DOM的系统;
+var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm]
+  PS: 模板语法声明式的将数据渲染进DOM系统; 
     VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;
     所有的VueJS组件其实都是被扩展的Vue实例;
     在params中的方法中 this 表示的即为 vm;
@@ -466,7 +350,123 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm],声明式渲染
   vm.$set(obj,key,val)  局部声明
   vm.$on('eventName',foo)     监听事件
   vm.$emit('event-name',data) 触发事件
-Lifecycle_hooks,生命周期钩子 
+'Model'更新及监控  
+  'mutation_method'变异方法 会改变调用该方法的原数据的方法 
+    push()  pop() shift() unshift() splice() sort() reverse()
+  'non-mutating_method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
+    如: filter(),concat(),slice()  
+  重塑数组 : 当使用非变异方法时,可以用新数组替换旧数组
+    example1.items = example1.items.filter(function (item) {
+      return item.message.match(/Foo/)
+    })
+    你可能认为这将导致Vue丢弃现有DOM并重新渲染整个列表
+    但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
+    所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
+  由于JS的限制,Vue不能检测以下变动的数据 
+    当[函数内仅有]数组通过索引index直接设置某一项时
+      如: vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
+      可使用以下方式将达到效果触发状态更新
+      ◆Vue.set
+      Vue.set(arr,index,newVal)
+      this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
+      ◆Array.prototype.splice
+      arr.splice(indx,1,newVal)
+      ◆同时在当前函数内改变会引起视图变化的操作 
+        <div class="slct" >
+          <div v-for="item1 in items">{{item1}}</div>
+          <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
+          <button type="button" @click="changeItems">click</button>
+        </div>
+        var vm = new Vue({
+          el : '.slct',
+          data : {
+            items :[ 1, 2, 3, 4, 5 ],
+            items1 :[{a:1},{a:2},{a:3},{a:4}],
+            n : 1,
+          },
+          methods : {
+            changeItems : function(){
+              console.log(this.items);
+              this.items[0] = ++this.n;
+              // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
+            },
+          },
+        });
+
+    当你修改数组的长度时,如: vm.items.length = newLength 
+      使用 splice 替代直接长度的修改
+      example1.items.splice(newLength)
+  vm实例创建后新增的数据不能被监控到 
+    受现代js的限制[以及废弃 Object.observe],Vue不能检测到对象属性的添加或删除。
+    由于Vue会在初始化实例时对属性执行getter/setter转化过程,
+    所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的。
+    Example::
+      var vm = new Vue({
+        data:{
+          a:1
+        }
+      })
+      // `vm.a` 是响应的
+      vm.b = 2
+      // `vm.b` 是非响应的
+    ◆决解办法:
+    预选定义一个值 
+    Vue.set(object, key, value);  将响应属性添加到嵌套的对象
+      Vue不允许在已经创建的实例上动态添加新的根级响应式属性[root-level reactive property]
+      但可使用 Vue.set 来添加 
+      Example: Vue.set(vm.someObject, 'b', 2)
+    vm.$set 实例方法[全局 Vue.set 方法的别名] 
+      this.$set(this.someObject,'b',2)
+    创建一个新的对象,让其包含原对象的属性和新的属性
+      有时向已有对象上添加一些属性,例如使用 Object.assign() 或 _.extend() 方法来添加属性。
+      但是,添加到对象上的新属性不会触发更新。
+      this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+      // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
+  异步更新队列 
+    当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
+    若同一个'watcher'被多次触发,只会一次推入到队列中。
+    这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
+    然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
+    Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
+    若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
+    Example:
+      当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
+      当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
+      多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
+      虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
+    Vue.nextTick(callback)  在数据变化之后使用使其操作插队「SlPt」
+      <div id="example">{{message}}</div>
+      var vm = new Vue({
+        el: '#example',
+        data: {
+          message: '123'
+        }
+      })
+      vm.message = 'new message' // 更改数据
+      vm.$el.textContent === 'new message' // false
+      Vue.nextTick(function () {
+        vm.$el.textContent === 'new message' // true
+      })
+      在组件内使用 vm.$nextTick() 实例方法特别方便,因为它不需要全局 Vue ,
+      并且回调函数中的 this 将自动绑定到当前的 Vue 实例上:
+      Vue.component('example', {
+        template: '<span>{{ message }}</span>',
+        data: function () {
+          return {
+            message: '没有更新'
+          }
+        },
+        methods: {
+          updateMessage: function () {
+            this.message = '更新完成'
+            console.log(this.$el.textContent) // => '没有更新'
+            this.$nextTick(function () {
+              console.log(this.$el.textContent) // => '更新完成'
+            })
+          }
+        }
+      })
+'Lifecycle hooks'生命周期钩子 
   PS:钩子:某个阶段开始或者结束之前、之后等过程中被触发的函数,
     每个Vue实例在被创建之前都要经过一系列的初始化过程, 
     如实例需要配置数据观测[data observer]、编译模版、挂载实例到 DOM,
@@ -474,8 +474,8 @@ Lifecycle_hooks,生命周期钩子
     在这个过程中,实例也会调用一些 生命周期钩子,提供了执行自定义逻辑的机会,
     组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'的概念];
     钩子的 this 指向调用它的 Vue 实例;
-  beforeCreate   
-  created       创建实例 
+  'beforeCreate'   
+  'created'       创建实例 
     var vm = new Vue({
       data: {
         a: 1
@@ -486,16 +486,16 @@ Lifecycle_hooks,生命周期钩子
       }
     });
     //  "a is: 1"
-  beforeMount   
-  mounted       DOM渲染 [替换'1.x'版本的 ready ]
-  beforeUpdate 
-  updated       数据模型更新 
-  activated     组件被激活时 
-  deactivated   组件被移除时 
-  beforeDestroy 
-  destroyed     销毁观察、组件及事件 
-Mustache,插值 
-  PS:Vue使用了基于 HTML 的模版语法,可声明式地将DOM绑定至底层Vue实例的数据;
+  'beforeMount'   
+  'mounted'       DOM渲染 [替换'1.x'版本的 ready ]
+  'beforeUpdate' 
+  'updated'       数据模型更新 
+  'activated'     组件被激活时 
+  'deactivated'   组件被移除时 
+  'beforeDestroy' 
+  'destroyed'     销毁观察、组件及事件 
+'Mustache'插值 
+  PS: 基于HTML的模版语法,声明式地将DOM绑定至底层Vue实例的数据;
     在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
     结合响应系统,应用状态改变时,Vue以最小代价重新渲染组件并应用到DOM操作上;
     也可不用模板,直接写渲染[render]函数,使用可选的 JSX 语法;  
@@ -542,7 +542,7 @@ Mustache,插值
         }
       }
   Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-Filters,过滤器 
+'Filters'过滤器 
   PS:Vue2.x 中,过滤器只能在'插值'和'v-bind'表达式[从' 2.1.0'开始支持]中使用 
     类似Linux中的管道,vuejs也使用的是'|'; 
     因为过滤器设计目的就是用于文本转换
@@ -572,33 +572,13 @@ Filters,过滤器
       })
   过滤器串联 
     {{ message | filterA | filterB }}
-Directives,指令 : model和view的交互,在HTML中指定 
+'Directives'指令 : model和view的交互 
   PS:将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
-  v-text="val"   纯文本 
-    Example:
-      <div id="test" v-text='aoo'> </div>
-      new Vue({
-        el : '#test',
-        data : {
-          aoo : '<a href="#">作为文本出现</a>'
-        }
-      });
-      渲染为 
-      <div id="test">&lt;a href="#"&gt;作为文本出现&lt;/a&gt;</div>
-  v-html="val"   HTML文本 
-    Example:
-      <div id="test" v-html='aoo'> </div>
-      new Vue({
-        el : '#test',
-        data : {
-          aoo : '<a href="#">作为文本出现</a>'
-        }
-      });
-      渲染为
-      <div id="test"><a href="#">作为文本出现</a></div>
-  v-model="val"  表单元素读写值 
+  v-text   纯文本 
+  v-html   HTML文本 
+  v-model  表单元素读写值 
     PS:常见的表单如 input,checkbox,radio,select[select的option不支持],
     Example:
       动态展示输入
@@ -764,7 +744,7 @@ Directives,指令 : model和view的交互,在HTML中指定
           setTimeout(function(){
             vm.slctVal = 2;
           },2000);
-  v-for="item in items"   渲染循环列表 
+  v-for="(item,idx) in items"   渲染循环列表 
     item 为自定义的占位符placeholder[是数组元素迭代的别名]items的属性,便于后续使用 
       支持'(item,indx) in items' 形式,使用下标占位符'indx' 
     arr迭代 
@@ -879,7 +859,7 @@ Directives,指令 : model和view的交互,在HTML中指定
     当数据改变时,插值处的内容不会更新
     <span v-once>This will never change: {{ msg }}</span>
   ◆显示控制 
-  v-if="val"      条件渲染 
+  v-if      条件渲染 
     Example:
       <div id="test">
         <p v-if="seen">现在你看到我了</p>
@@ -966,13 +946,13 @@ Directives,指令 : model和view的交互,在HTML中指定
       'v-else'必须紧跟在'v-if'或者'v-else-if'的后面,否则它不能被识别
         <h1 v-if="ok">Yes</h1>
         <h1 v-else>No</h1>
-  v-show="val"  作用与v-if类似 
+  v-show    作用与v-if类似 
     PS:'v-show'的元素会始终渲染并保持在DOM中「使用 display:none」
       v-show不支持<template>标签
       一般,'v-if'有更高的切换消耗而'v-show'有更高的初始渲染消耗,
       因此若需要频繁切换使用'v-show'较好,若在运行时条件不大可能改变则使用'v-if'较好 
   ◆事件绑定 
-  v-on:e_name="foo" 事件处理与绑定[简写'@e_name'] 
+  v-on:ename="foo" 事件处理与绑定[简写'@e_name'] [事件名不区分大小写] 
     PS:当一个ViewModel被销毁时,所有的事件处理器都会自动被删除,无须自己清理 
     foo  当触发事件时执行'foo',可为函数[可带参数]、单条语句或空 
       回调函数传参 
@@ -1023,8 +1003,8 @@ Directives,指令 : model和view的交互,在HTML中指定
         }
       })    
   ◆属性控制 
-  v-bind:attrName="arg"  属性赋值「简写':attrName'」
-    PS:在v-bind 用于'class'和'style'时,VueJS专门增强了它
+  v-bind:attrName="arg"  属性赋值[简写':attrName'] 
+    PS:在v-bind 用于'class'和'style'时,VueJS专门增强了它 
       表达式的结果类型除了字符串之外,还可以是对象或数组
     arg 可为str,arr,obj
       str,表示属性attrName的值为str 
@@ -1190,7 +1170,7 @@ Directives,指令 : model和view的交互,在HTML中指定
         当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
     v-bind:key=arg  标识DOM节点 
   ◆指令的扩展 
-  Modifiers,修饰符  指出一个指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
+  'Modifiers'修饰符  让指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
     PS:修饰符是以点号'.'指明的特殊后缀;指令可以串联;
     事件修饰符 
       .prevent 修饰v-on,触发的事件调用 event.preventDefault() 
@@ -1286,135 +1266,136 @@ Directives,指令 : model和view的交互,在HTML中指定
     data : {
       a : fasle,
     }
-v-drct_name:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意:不区分大小写] 
-  PS:用于对纯DOM元素进行底层操作 
-  'drct_name' 指令的名称 
-  'drctArg'   可选,指令的参数 
-  'mdf'       可选,指令的修改器 
-  'drctVal'   可选,指令的值 
-    指令值为对象字面量 
-      指令函数能够接受所有合法类型的JS表达式 
-      <div v-demo="{ color: 'white', text: 'hello!' }"></div>
-      Vue.directive('demo', function (el, binding) {
-        console.log(binding.value.color) // => "white"
-        console.log(binding.value.text)  // => "hello!"
-      })    
-  Vue.directive('name', params);  定义全局指令 
-    name    指令的名称
-    params  配置对象或函数 { hookName : function(){ }, }
-  directives : val,               注册局部指令 
-    directives: {
-      focus: {
-        // 指令的定义--- 
+  ◆自定义指令 
+  v-drctname:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [注意:不区分大小写] 
+    PS:用于对纯DOM元素进行底层操作 
+    'drct_name' 指令的名称 
+    'drctArg'   可选,指令的参数 
+    'mdf'       可选,指令的修改器 
+    'drctVal'   可选,指令的值 
+      指令值为对象字面量 
+        指令函数能够接受所有合法类型的JS表达式 
+        <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+        Vue.directive('demo', function (el, binding) {
+          console.log(binding.value.color) // => "white"
+          console.log(binding.value.text)  // => "hello!"
+        })    
+    Vue.directive('name', params);  定义全局指令 
+      name    指令的名称
+      params  配置对象或函数 { hookName : function(){ }, }
+    directives : val,               注册局部指令 
+      directives: {
+        focus: {
+          // 指令的定义--- 
+        }
       }
-    }
-  Example:
-    <div class="aaa"> <input v-focus > </div>
-    Vue.directive('focus', {
-      inserted: function (el) {
-        el.focus();
-        console.log(11111);
-      }
-    });
-    new Vue({
-      el : '.aaa',
-    });
-  ★hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
-    ◆hookName 钩子函数
-    bind     指令第一次绑定到元素时调用[只调用一次] 
-      用这个钩子函数可以定义一个在绑定时执行一次的初始化动作
-    inserted 被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于'document'中] 
-    update   被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
-      PS: 可比较更新前后的绑定值'binds.value'和'binds.oldValue',忽略不必要的模板更新  
-      Example:
-        当DOM渲染有更新时
-        <div id="demo1" >
-          <input type="text"  v-test1>
-          <button type="button"  @click="inputFocus">click</button>
-          <span>{{inputIsFocus}}</span>
-          <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
-        </div>
-        或改为: 当指令的值有变化时 
-        <div id="demo1" >
-          <input type="text" v-test1="inputIsFocus">
-          <button type="button" @click="inputFocus">click</button>
-        </div>
-        Vue.directive('test1', {
-          update : function(el,binds,vn,oVn){
-            el.focus();
-            console.log(11);
-          },
-        });
-        new Vue({
-          el: '#demo1',
-          data: {
-            inputIsFocus : false,
-          },
-          methods : {
-            inputFocus : function(){
-              this.inputIsFocus = !this.inputIsFocus;
-              console.log(this.inputIsFocus);
-            },
-          },
-        })
-    componentUpdated  被绑定元素所在模板完成一次更新周期时调用 
-    unbind   指令与元素解绑时调用[只调用一次]
-    ◆钩子函数的参数 
-      除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
-      若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
-    el       指令所绑定的元素,可以用来直接操作DOM 
-      el.focus()   表单获得焦点
-      el.select()  表单值被选中
-    binding  对象,包含以下属性 
-      'name'       指令名,不包括'v-'前缀[即'drct_name']  
-      'value'      绑定值[即'drctVal'] 
-        例如: v-my-directive="1 + 1", value 的值是 2
-      'expression' 绑定值的字符串形式['drctVal'的字符串形式] 
-        例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
-      'arg'        传给指令的参数[即'drctArg'] 
-        例如 v-my-directive:foo, arg 的值是 "foo"
-      'modifiers'  一个包含修饰符的对象['mdf'组成的对象] 
-        例如: v-my-directive.foo.bar, 
-        修饰符对象 modifiers 的值是 { foo: true, bar: true }
-      'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
-        无论值是否改变都可用
-    vnode    Vue编译生成的虚拟节点 
-    oldVnode 上一个虚拟节点,仅在'update'和'componentUpdated'钩子中可用 
     Example:
-      <div id="map" v-drct:arg.a.b="msg"></div>
-      Vue.directive('drct', {
-        bind: function (el, binds, vnode,oldVnode) {
-          var s = JSON.stringify
-          el.innerHTML = 
-            'name: '       + s(binds.name) + '<br>' +
-            'value: '      + s(binds.value) + '<br>' +
-            'expression: ' + s(binds.expression) + '<br>' +
-            'argument: '   + s(binds.arg) + '<br>' +
-            'modifiers: '  + s(binds.modifiers) + '<br>' +
-            'vnode keys: ' + Object.keys(vnode).join(',') +'<br>'+
-            'oldVnode keys: ' + Object.keys(oldVnode).join(',') 
+      <div class="aaa"> <input v-focus > </div>
+      Vue.directive('focus', {
+        inserted: function (el) {
+          el.focus();
+          console.log(11111);
         }
       });
       new Vue({
-        el: '#map',
-        data: {
-          msg: 'thisisamessage', 
-        }
+        el : '.aaa',
       });
-      显示为:
-      name: "drct"
-      value: "thisisamessage"
-      expression: "msg"
-      argument: "arg"
-      modifiers: {"a":true,"b":true}
-      vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-      oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-  options简写为函数 
-    在 bind 和 update 钩子上做重复动作,而不关心其它的钩子函数 
-    Vue.directive('color-swatch', function (el, binding) {
-      el.style.backgroundColor = binding.value
-    })
-Component,组件 
+    ★hookName : function(el,binding,vnode,oldVnode){ }, 指令定义[钩子]函数 
+      ◆hookName 钩子函数
+      bind     指令第一次绑定到元素时调用[只调用一次] 
+        用这个钩子函数可以定义一个在绑定时执行一次的初始化动作
+      inserted 被绑定元素插入父节点时调用[父节点存在即可调用,不必存在于'document'中] 
+      update   被绑定元素所在的模板更新时调用[DOM渲染?],而不论绑定值是否变化? 
+        PS: 可比较更新前后的绑定值'binds.value'和'binds.oldValue',忽略不必要的模板更新  
+        Example:
+          当DOM渲染有更新时
+          <div id="demo1" >
+            <input type="text"  v-test1>
+            <button type="button"  @click="inputFocus">click</button>
+            <span>{{inputIsFocus}}</span>
+            <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
+          </div>
+          或改为: 当指令的值有变化时 
+          <div id="demo1" >
+            <input type="text" v-test1="inputIsFocus">
+            <button type="button" @click="inputFocus">click</button>
+          </div>
+          Vue.directive('test1', {
+            update : function(el,binds,vn,oVn){
+              el.focus();
+              console.log(11);
+            },
+          });
+          new Vue({
+            el: '#demo1',
+            data: {
+              inputIsFocus : false,
+            },
+            methods : {
+              inputFocus : function(){
+                this.inputIsFocus = !this.inputIsFocus;
+                console.log(this.inputIsFocus);
+              },
+            },
+          })
+      componentUpdated  被绑定元素所在模板完成一次更新周期时调用 
+      unbind   指令与元素解绑时调用[只调用一次]
+      ◆钩子函数的参数 
+        除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
+        若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+      el       指令所绑定的元素,可以用来直接操作DOM 
+        el.focus()   表单获得焦点
+        el.select()  表单值被选中
+      binding  对象,包含以下属性 
+        'name'       指令名,不包括'v-'前缀[即'drct_name']  
+        'value'      绑定值[即'drctVal'] 
+          例如: v-my-directive="1 + 1", value 的值是 2
+        'expression' 绑定值的字符串形式['drctVal'的字符串形式] 
+          例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
+        'arg'        传给指令的参数[即'drctArg'] 
+          例如 v-my-directive:foo, arg 的值是 "foo"
+        'modifiers'  一个包含修饰符的对象['mdf'组成的对象] 
+          例如: v-my-directive.foo.bar, 
+          修饰符对象 modifiers 的值是 { foo: true, bar: true }
+        'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
+          无论值是否改变都可用
+      vnode    Vue编译生成的虚拟节点 
+      oldVnode 上一个虚拟节点,仅在'update'和'componentUpdated'钩子中可用 
+      Example:
+        <div id="map" v-drct:arg.a.b="msg"></div>
+        Vue.directive('drct', {
+          bind: function (el, binds, vnode,oldVnode) {
+            var s = JSON.stringify
+            el.innerHTML = 
+              'name: '       + s(binds.name) + '<br>' +
+              'value: '      + s(binds.value) + '<br>' +
+              'expression: ' + s(binds.expression) + '<br>' +
+              'argument: '   + s(binds.arg) + '<br>' +
+              'modifiers: '  + s(binds.modifiers) + '<br>' +
+              'vnode keys: ' + Object.keys(vnode).join(',') +'<br>'+
+              'oldVnode keys: ' + Object.keys(oldVnode).join(',') 
+          }
+        });
+        new Vue({
+          el: '#map',
+          data: {
+            msg: 'thisisamessage', 
+          }
+        });
+        显示为:
+        name: "drct"
+        value: "thisisamessage"
+        expression: "msg"
+        argument: "arg"
+        modifiers: {"a":true,"b":true}
+        vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
+        oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
+    options简写为函数 
+      在 bind 和 update 钩子上做重复动作,而不关心其它的钩子函数 
+      Vue.directive('color-swatch', function (el, binding) {
+        el.style.backgroundColor = binding.value
+      })
+'Component'组件 
   PS:Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
     在一个大型应用中,为了使得开发过程可控,有必要将应用整体分割成一个个的组件.
@@ -2348,7 +2329,7 @@ Component,组件
 vue-resource  与后台数据交互 
   PS:作为vue插件的形式存在,通过 XMLHttpRequest 或 JSONP 发起请求并处理响应 
   使用步骤 
-    npm install vue-resource  安装vue-resource 
+    npm i vue-resource  安装vue-resource 
     import VueResource from 'vue-resource' 引入vue-resource 
     Vue.use(VueResource)  声明使用 
   ★方法
@@ -2876,7 +2857,7 @@ vue-router    路由
       这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
       
       Access-Control-Allow-Origin: *        
-Vuex          大规模状态管理 
+Vuex          规模状态管理 
   npm install vuex --save   安装
   import Vuex from 'vuex'   引入vuex
   import Vue form 'vue'     引入vue

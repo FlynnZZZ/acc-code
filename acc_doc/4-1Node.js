@@ -580,6 +580,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     var buf2 = new Buffer(8);
     console.log(buf1.length); // 7
     console.log(buf2.length); // 8
+  bufer.byteLength   文件的体积大小 
   bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
     PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
     str   写入缓冲区的字符串 
@@ -674,6 +675,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
     Buffer.byteLength('Hello', 'utf8') // 5
   Buffer.compare(buf1,buf2)    比较两份Buffer对象 
+  bufer = Buffer.from(str)    把字符串转会成Buffer 
   与二进制数组的关系 
     TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
     比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
@@ -1447,6 +1449,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           文件关闭成功          
     fs.rename(oldPath, newPath, callback) 
       回调函数没有参数,但可能抛出异常          
+    fs.exists(path)   检测文件是否存在 
     ★流相关 
     fs.createReadStream(path,options);  创建可读的stream流 
       为异步操作,不会阻塞后续代码执行 
@@ -1713,64 +1716,79 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         platform : linux
         total memory : 25103400960 bytes.
         free memory : 20676710400 bytes.
-  net  模块提供了一些用于底层的网络通信的小工具,包含了创建服务器/客户端的方法 
-    创建客户端 
-      const net = require("net");     // 引入 net模块
-      const host = '59.111.160.197';  // 指定host,只能填写 ip,而不能为网址
-      const port = 80;                // 指定 端口
-      const client = new net.Socket();   // 创建客户端
-      client.connect(port, host, () => { // 建立连接,完成后执行操作
-        const request = 'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n';
-        client.write(request); // 向服务器发送一个消息
-        
-        // 若 server destroy 之后, 再调用下面的代码会报错
-        // setInterval(() => {
-        //   client.write('hello in interval')
-        // }, 100)
-      } );
-      client.on('data', (dat) => {   // 接收服务器的响应数据,触发 data 事件
-        // 参数 dat 默认情况下是 buffer 类型
-        // 可用 dat.toString() 将 buffer 转成字符串
-        console.log('dat:', dat.toString());
-        client.destroy(); // 关闭 client 连接
-      } );        
-      client.on('close', function() { }) // 连接关闭时触发 close 事件
-    创建服务端 
-      const net = require('net');
-      const host = ''; // 字符串,表示接受任意 ip 地址的连接
-      const port = 2000; // 1024-65535之间, 1024以下端口需管理员权限才能使用
-      const server = new net.Server(); // 创建服务器
-      server.listen(port, host, () => { // 在指定端口监听指定客户端请求
-        // server.address(); 返回绑定的服务器的 ip 地址、ip 协议、端口号
-        console.log('listening.', server.address()); // 以 ipv6 格式显示
+  net  底层的网络通信工具,包含创建服务器/客户端的方法 
+    const net = require("net");       引入 net模块
+    const server = new net.Server();  创建服务器 
+    server.listen(port,host,foo)      监听客户端请求,监听到请求后回调 
+      port 端口,数字,1024-65535 之间, 1024 以下端口需管理员权限才能使用
+      host 域名,字符串,空字符串""表示接受任意ip地址的连接 
+      foo  回调,传入参数 () 
+    server.address();                 服务器的ip地址、ip 协议及端口号[以 ipv6 格式显示] 
+    server.on('connection',foo)       有连接建立时,触发'connection'事件 
+      foo 回调,传入参数 (socket) 
+        socket 表示请求方信息的对象 
+          socket.io 是对 websocket 的封装
+          socket的一些属性表示连接的客户端的信息
+        socket.remoteAddress 
+        socket.remotePort       操作系统分配给客户端的  
+        socket.remoteFamily 
+        socket.localAddress     客户端IP 
+        socket.on('data',foo)   接收完数据时触发'data'事件 
+          foo  回调,传入参数 (data) 
+            data 接收到的数据,包括请求头和请求体,Buffer类型
+        socket.write(response)  发送响应数据[可发送多次] 
+          response  响应的数据,可为'String'或"Buffer"类型 
+          格式为: 'HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!';
+          Content-Length 可选,告诉浏览器响应数据量,避免一直等待可和'destroy'二选一 
+        socket.destroy()        结束本次服务器的响应[若不结束,浏览器会一直等待接收数据] 
+    server.on("error",foo)            服务器出错时触发'error'事件 
+      foo  传入参数 (error) 
+    server.on("close",foo)            服务器关闭时触发'close'事件 
+    const client = new net.Socket()   创建客户端
+    client.connect(port,host,foo)     向服务器发送连接请求,连接成功后回调  
+      port   连接的端口 
+      host   ip或域名[不可带'http://']
+      foo    执行的回调,传入参数 () 
+    client.write(request)             发送请求  
+      request   请求内容,格式为:'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n' 
+    client.on("data",foo)         监听响应,接收数据完毕触发'data'事件[SelfThink] 
+      foo  回调,传入参数 (data) 
+        data  响应的数据,默认为Buffer类型,可通过'toString'方法转换成字符串 
+    client.destroy()              关闭请求连接 
+    client.on("close",foo)        监听关闭,关闭连接时触发'close'事件 
+    Example: 
+      创建服务端 
+      server.listen(2000, '', () => { 
+        console.log('listening.', server.address()); 
       })
-      server.on('connection', (socket) => { // 有连接建立时,触发 connection 事件
-        // socket.io 是对 websocket 的封装
-        // socket的一些属性表示连接的客户端的信息
-        const address = socket.remoteAddress;
-        const port = socket.remotePort; // remotePort 是操作系统分配给客户端的
-        const family = socket.remoteFamily;
-        console.log('connected client info', address, port, family)
-        socket.on('data', (dat) => { // 当 socket 接收到数据时,触发 data 事件
-          // dat 是一个 Buffer 类型
-          // Buffer 是 node 中的特殊类型, 用来处理二进制数据
-          const r = dat.toString(); // 调用 toString() 将二进制数据转成字符串
-          console.log('接受到的原始数据', r, typeof(r));
-          
-          const response = 'HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!';
-          // Content-Length,可选,告诉浏览器响应数据量,避免一直等待
-          // 参数可以是 string 类型, 也可以是 buffer 类型
-          socket.write(response);  // 发送数据
-          socket.destroy(); // 用于结束本次服务器的响应
-          // 若不结束,浏览器会一直等待,也就是会一直 loading
+      server.on('connection', (socket) => { 
+        console.log('connected client info', 
+          socket.remoteAddress, 
+          socket.remotePort, 
+          socket.remoteFamily
+        )
+        socket.on('data', (dat) => { 
+          console.log('接受到的原始数据',dat.toString());
+          socket.write('HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!');  
+          socket.destroy(); 
         })
       })
-      server.on('error', (error) => {       // 服务器出错时触发事件
+      server.on('error', (error) => {  
         console.log('server error', error)
       })
-      server.on('close', () => {            // 服务器关闭时触发
+      server.on('close', () => {     
         console.log('server closed')
       })
+      创建客户端 
+      client.connect('80','59.111.160.197',() => { 
+        client.write('GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n'); 
+      });
+      client.on('data', (dat) => {   
+        console.log('dat:', dat.toString());
+        client.destroy(); 
+      });        
+      client.on('close', function() { }) 
+  tls : https的创建 
   dns  模块用于解析域名 
     PS:
     var dns = require("dns"); 引入dns模块
@@ -1919,6 +1937,19 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         // AssertionError: 21 ### 42
   Promise  同步形式执行异步操作　
     var Promise = require("Promise");   模块引入　
+  dns  : 查询网址的ip 
+    dns.lookup(host,foo)    查询网址的IP 
+      host  查询的网址 
+      foo   执行的回调,依次传入参数 (error,ip,ipv) 
+        error 错误对象 
+        ip    查询的ip  
+        ipv   '4'或'6',表示ipv4或ipv6   
+    Example: 
+    const dns = require('dns');
+    const host = 'zhihu.com';
+    dns.lookup(host,(error,ip,ipv) => {
+      console.log(ip,ipv); // 118.178.213.186  4 
+    })
   ◆本地模块 
   ◆第三方模块 
   cheerio html文件源码操作模块 
@@ -1943,9 +1974,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
-GET/POST 请求 
+GET/POST 请求信息获取  
   PS:表单提交到服务器一般使用 GET/POST 请求
-  获取GET请求内容 
+  获取 GET 请求内容 
     PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
       因此可手动解析后面的内容作为GET请求的参数。
     Example:
@@ -2047,6 +2078,9 @@ GET/POST 请求
           res.end();
         });
       }).listen(3000);
+Cookie 操作 
+  写入cookie 
+    在响应头中设定 'Set-Cookie' = 'xx=xxx'
 --------------------------------------------------------------------------------
 RESTful API 
   PS: REST,Representational State Transfer 表述性状态传递,
@@ -2272,6 +2306,4 @@ RESTful API
 --------------------------------------------------------------------------------
 总结收集
 ----------------------------------------------------------------------以下待整理
-
-
 

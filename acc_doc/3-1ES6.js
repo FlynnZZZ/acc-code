@@ -35,7 +35,7 @@ ES6
           # --out-dir 或 -d 参数指定输出目录
         babel src -d lib -s   # -s 参数生成source map文件
     'babel-cli'项目中安装 
-      PS:全局环境下,进行 Babel 转码意味着,如果项目要运行,全局环境必须有 Babel,
+      PS:全局环境下,进行 Babel 转码意味着,若项目要运行,全局环境必须有 Babel,
         也就是说项目产生了对环境的依赖。
         另一方面,这样做也无法支持不同项目使用不同版本的 Babel。
       npm install --save-dev babel-cli   #安装
@@ -199,7 +199,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
       判断左侧的运算子是否为Array的实例。
   Symbol.species      对象的该属性指向其构造函数
     创造实例时,默认会调用这个方法,即使用这个属性返回的函数当作构造函数,来创造新的实例对象。
-  Symbol.match   当执行str.match(obj)时,如果该属性存在,会调用它,返回该方法的返回值 
+  Symbol.match   当执行str.match(obj)时,若该属性存在,会调用它,返回该方法的返回值 
     String.prototype.match(regexp)
     // 等同于
     regexp[Symbol.match](this)
@@ -321,7 +321,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     obj == 'default' // true
     String(obj) // 'str'
     Symbol.toStringTag
-    对象的Symbol.toStringTag属性,指向一个方法。在该对象上面调用Object.prototype.toString方法时,如果这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型。也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串。
+    对象的Symbol.toStringTag属性,指向一个方法。在该对象上面调用Object.prototype.toString方法时,若这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型。也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串。
     
     // 例一
     ({[Symbol.toStringTag]: 'Foo'}.toString())
@@ -653,211 +653,169 @@ ArrayBuffer&TypedArray&DataView 二进制数组
     DataView视图用来读写复杂类型的二进制数据。
     TypedArray 视图支持的数据类型一共有9种（DataView视图支持除Uint8C以外的其他8种）。
 'Class'类 
-  PS:ES6以前,使用函数'function'和原型'prototype'来模拟类class实现面向对象; 
-    'class'本质上还是基于原型prototype的实现做的进一步封装 
-  class Cls {} 创建类 
-    PS: 类的内部定义的所有方法都是不可枚举的; 类和模块内部默认采取严格模式;
-      class内部只允许定义方法,不允许定义属性,包括静态属性;
-    'constructor'构造方法,创建类时必须的方法,相当于ES5的构造函数
-      PS:创建类的实例对象的时候,会调用此方法来初始化实例对象。
-        若没有编写constructor方法,执行的时候也会被加上一个默认的空的constructor方法。
-        其中constructor方法是构造方法,在实例化一个类的时候被调用。
-        constructor方法是必须的,也是唯一的,一个类体不能含有多个constructor构造方法。
-      class Cla{
-        constructor(aoo,boo){ // 类的默认方法,通过new命令生成对象实例时,自动调用 
-          // this,指向的是该类实例化后的对象
-          this.aoo = aoo; 
-          this.boo = boo; 
-        };
-        toString() { 
-          return '('+this.x+', '+this.y+')'; 
-        };
+  PS: 'class'本质上还是基于原型prototype的实现做的进一步封装,
+    ES5之前使用'function'和'prototype'来模拟class实现面向对象;  
+  class Klass {} 创建类 
+    PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
+      class内部只允许定义方法,不允许定义属性,包括静态属性[?];
+      类名后面的括号{}里面的内容称之为类体 
+    Example: 
+      ES5 : 
+      var Animal = function(name){
+        this.name = name;
       }
-      var cla1 =new Cla(1,2);
-      cla1; // Cla {aoo: 1, boo: 2}
-    Example:
-      es5
-      var Animal=function(name){
-        this.name=name;
-      }
-      animal.prototype={
-        speak:function(){
+      animal.prototype = {
+        speak : function(){
           console.log("I am"+this.name);
         }
       }
       var animal = new Animal("cat");
       animal.speak();  //I am cat
-      es6
-      class Animal(){
+      ES6 : 
+      class Animal {
         constructor(name){
-          this.name=name;
+          this.name = name;
         }
         speak(){
-          console.log("I am"+this.name);
+          console.log("I am "+this.name);
         }
       }
-      const animal=new Animal("cat");
+      const animal = new Animal("cat");
       animal.speak();    //I am cat
-    'static'关键字,声明类的静态方法 : 不用实例化对象,通过类本身来调用;
-      class Animal {
-        constructor(name){
-          this.name = name;
-        }
-        static friends(a1,a2){
-          return `${a1.name} and ${a2.name} are friends`;
-        }
-      }
-      let dog = new Animal('dog');
-      let cat = new Animal('cat');
-      Animal.friends(dog,cat); 
-    'extends'关键字,子类继承父类 
+    ◆类体中的方法 
+    constructor(){}   构造方法,声明实例的属性和方法,相当于ES5的构造函数 
+      PS:实例化时,会调用此方法来初始化实例对象; 内部的 this 表示实例对象;  
+        若无'constructor'方法,执行时会使用一个空的constructor方法 
+        具有唯一性,一个类体不能含有多个constructor构造方法 
       Example:
-        class Animal { //父类Animal
-          constructor(name){
-            this.name = name;
-          }
-          say(){
-            return `This is a animal`;
+        class Klass{
+          constructor(aoo,boo){ 
+            // this,指向实例化后的对象
+            this.aoo = aoo; 
+            this.boo = boo; 
+          };
+          toString() { 
+            return '('+this.x+', '+this.y+')'; 
+          };
+        }
+        var cla1 = new Klass(1,2);
+        cla1; // Klass {aoo: 1, boo: 2}
+    foo(){}           声明实例的原型方法 
+      PS: 内部的 this 表示实例对象;  
+      [val] () {}  属性名可使用表达式 
+        var  aoo = 'sayHello';
+        class Klass{
+          [aoo] () {
+            console.log('hello');
           }
         }
-        class Dog extends Animal { //子类Dog 
-          constructor(name,color){
-            super(name);
-            this.color = color;
-          }
-          getAttritube(){
-            return `${super.say()}, name:${this.name}, color:${this.color}`;
-            // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
-          }
-        }
-        let doge = new Dog("dog","black"); //创建Dog的实例对象
-        doge.getAttritube(); //调用子类的Dog的实例方法
-        // "This is a animal, name:dog, color:black"
-        
-        // 使用继承的方式创建的对象既是父类的实例,也是子类的实例。
-        doge instanceof Dog ;   // true
-        doge instanceof Animal; // true
-      'super'关键字,继承关系中的方法调用 
-        PS:子类必须在constructor方法里调用super方法,否则不能新建实例 
-          因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工。
-          显然,只有调用了super方法之后,才可以使用this。
-          必须先调用super,才可以使用this,否则报错;
-          而super本身指代的是父类的实例对象,可以使用super.的方式调用父对象的方法。
-          由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
-          如果子类没有显式的定义constructor,那么下面的代码将被默认添加
-          constructor(...args){
-            super(...args)
-          }
-        Example:
-          class Point {
-            constructor(x, y) {
-              this.x = x;
-              this.y = y;
-            }
-          }
-          class ColorPoint extends Point {
-            constructor(x, y, color) {
-              // this.color = color; // 错误
-              super(x, y);
-              this.color = color; // 正确
-            }
-          }
-          var cp = new ColorPoint(25, 8, 'green');
-          cp instanceof ColorPoint // true
-          cp instanceof Point // true
-        静态方法与实例方法的调用
-          子类自动继承父类的静态方法,子类的静态方法中,使用'super'调用父类的静态方法。
-            'super'只能调用父类的静态方法,而不能调用父类的其它方法;
-          子类的实例方法中的'super'只能调用父类的实例方法,不能调用其静态方法
-            可以使用 父类名.方法 的方式调用父类的静态方法
-          class Foo{
-            static say(){
-              console.log('foo say');
-            }
-          }
-          class Bar extends Foo{
-            sayHello(){
-              // super.say(); // 报错,因为sayHello不是静态方法
-              console.log('hello');
-            }
-            static singHello(){
-              super.say();
-              console.log('bar say')
-            }
-          }
-          Bar.say(); // foo say
-          Bar.singHello(); // foo say bar say
-          let bar = new Bar();
-          bar.sayHello(); // hello
-      ES5继承和ES6继承的区别 
-        在ES5中,继承实质上是子类先创建属于自己的this,
-        然后再将父类的方法添加到this 「也就是使用 Parent.apply(this) 的方式」,
-        或者 this.__proto__ 「即Child.prototype=new Parent()」上。
-        而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this。
-  类的属性和方法 
-    PS:把类名后面的括号{ }里面的内容称之为类体,在类体内来编写类的属性和方法;
-      可以在方法里面自定义一些对象的属性,
-      此外,还可以自定义方法,它属于类的实例方法,实例化后对象可以调用此方法。
-    Example:
-      class Animal {
-        constructor(name){ //构造方法
-          this.name = name;
-        }
-        getName(){ //自定义方法
-          return this.name;
+        var klass = new Klass();
+        klass.sayHello(); // 1
+    static foo(){}    声明类的静态方法 
+      class Klass {
+        static foo(){
+          console.log('静态方法');
         }
       }
-      var dog = new Animal('doge');
-      dog.name; // 'doge'
-    属性名可以使用表达式
-      var  aoo = 'boo';
-      class Cla{
-        [aoo] () {
-          console.log(1);
+      Klass.foo();  // 静态方法
+    getter foo(){}  取值函数 
+    setter foo(){}  存值函数 
+      在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数 
+      class MyClass {
+        get prop() {
+          return 'getter';
+        }
+        set prop(value) {
+          console.log("setter:" + value);
         }
       }
-      var cla = new Cla();
-      cla.boo(); // 1
-  new Cla(arg) 创建类实例 
-    PS:必须使用new创建字来创建类的实例对象;需先声明类,再创建实例,否则会报错 
-    Example:
-      class Animal {
-        constructor(name){
-          this.name = name;
+      var inst = new MyClass();
+      inst.prop = 123; // setter: 123
+      inst.prop ;      // 'getter'
+  class Child extends Parent {} 子类继承父类全部静态方法和实例属性方法,选择性继承原型方法 
+    Example: 
+      class Animal { 
+        constructor(name){ 
+          this.name = name; 
         }
-        getName(){
-          return 'This is a'+this.name;
+        say(){ 
+          return 'This is a animal'; 
         }
       }
-      let dog = new Animal('dog'); //创建一个Animal实例对象dog
-      dog.name;      // dog
-      dog.getName(); // This is a dog
-  new Cla{}(arg) 立即执行的class 
-    let point = new class{
-      constructor(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
+      class Dog extends Animal { 
+        constructor(name,color){
+          super(name);
+          this.color = color;
+          this.say = super.say();
+        }
+        gerInfo(){
+          return super.say()+',name is: '+this.name+',color is: '+this.color;
+          // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
+        }
       }
-      toString() {
-        return this.x + this.y;
-      }
-    }(1, 2);
-    console.log(point.toString()); // 3
-  'getter'&'setter'class的取值函数和存值函数 
-    在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数 
-    class MyClass {
-      get prop() {
-        return 'getter';
-      }
-      set prop(value) {
-        console.log("setter:" + value);
-      }
-    }
-    var inst = new MyClass();
-    inst.prop = 123; // setter: 123
-    inst.prop ;      // 'getter'
-  相关操作
-  Cla.name;  获取类的名字
+      let doge = new Dog("dog","black"); 
+      doge.gerInfo(); // This is a animal,name is: dog,color is: black 
+    使用继承的方式创建的实例对象既是子类的实例,也是父类的实例 
+      class Child extends Parent {}
+      var child = new Child();
+      child instanceof Child ; // true
+      child instanceof Parent; // true
+    super 关键字,在子类中进行调用父类中的构造函数和方法 
+      PS: 而super本身指代的是父类的实例对象,可以使用super.的方式调用父对象的方法[?]
+        由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+      若子类未显式定义'constructor',则下面的代码将被默认添加 
+        constructor(...args){
+          super(...args)
+        }
+      super()  子类的'constructor'构造函数中调用 
+        子类的constructor方法必须调用super方法,否则不能新建实例 
+        因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
+        只有调用了super方法后,才可使用this,否则报错;
+      super.xx()   调用父类中的静态方法或原型方法 
+        子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
+        class Foo{
+          static fooSay(){
+            console.log('foo say');
+          }
+        }
+        class Bar extends Foo{
+          sing(){
+            // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
+            console.log('hello');
+          }
+          static barSay(){
+            super.fooSay();
+            console.log('bar say')
+          }
+        }
+        Bar.fooSay() // foo say 
+        Bar.barSay() // foo say   bar say 
+    ES5继承和ES6继承的区别 
+      在ES5中,继承实质上是子类先创建属于自己的this,
+      然后再将父类的方法添加到this 「也就是使用 Parent.apply(this) 的方式」,
+      或者 this.__proto__ 「即Child.prototype = new Parent()」上;
+      而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
+  klass = new Klass(arg) 创建类实例 
+    PS: 创建实例时会自动执行类体中的'constructor'方法 
+    klass.constructor             创建该实例的类 
+    klass.constructor.prototype   该实例的原型对象 
+    new Klass{}(arg) 立即执行的class 
+      let point = new class{
+        constructor(x = 0, y = 0) {
+          this.x = x;
+          this.y = y;
+        }
+        toString() {
+          return this.x + this.y;
+        }
+      }(1, 2);
+      console.log(point.toString()); // 3
+  ◆相关操作
+  str = Klass.name;  获取类的名字 
 Promise 同步书写异步模式 
   PS:采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
@@ -2406,20 +2364,15 @@ Function 函数扩展
       function sum(result, mult, ...values){
         //rest参数...values放在最后
       }
-  => 箭头函数
-    写法 
-      //传统写法
-      var sum = function(a) {
-        return  a ;
-      };
-      //箭头函数写法
-      var sum = a => a;
+  (arg1,arg2) =>{语句}  箭头函数 
+    PS: 箭头函数没有'arguments'对象,若要多参数,则需用'...'扩展符
+    相当于: function(参数1,参数2){ return 语句 }
     传入多个参数使用括号(),复杂操作使用{}
       若参数超过1个的话,需要用小括号（）括起来,
       函数体语句超过1条的时候,需要用大括号{ }括起来。
       var sum = (a,b) => {return a+b}
       sum(1,2);//结果:3
-    箭头函数中的this指向的是定义时的this,而非执行时的this。
+    箭头函数中的this指向的是定义时的this,而非执行时的this 
       var obj = {  //定义一个对象
         x:100,     //属性x
         show(){
@@ -2445,21 +2398,6 @@ Function 函数扩展
       obj.show(); // 100
       定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
       而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
-    todo -----箭头函数 (ES6新增)
-      PS:匿名函数的简化版
-        箭头函数的this值是绑定了的
-        箭头函数没有arguments对象,若要多参数,则需用...
-      创建箭头函数
-        (arg1,arg2) =>{语句};
-            相当于: function(参数1,参数2){ return 语句 }
-          arg => {语句};  若只有一个参数,可省略圆括号
-        ( ) => {语句};  若没有参数,则不可省略圆括号
-        Example:
-          var a1 =[1,2,3]
-          var a2 =a1.map(function(n){ return n*n });
-          console.log(a2); // [1, 4, 9]
-          /*等价于*/ var a3 =a1.map(n => n*n);
-          console.log(a3); // [1, 4, 9]
 Math   对象扩展 
   PS: ES6给Math对象新增了共17个函数
   Math.trunc()  去除一个数的小数部分,返回整数部分。
@@ -2993,7 +2931,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
     其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束。
   遍历器的next方法必须是同步的,只要调用就必须立刻返回值 
     也就是说,一旦执行next方法,就必须同步地得到value和done这两个属性 
-    如果遍历指针正好指向同步操作,当然没有问题,但对于异步操作,就不太合适了 
+    若遍历指针正好指向同步操作,当然没有问题,但对于异步操作,就不太合适了 
     目前的解决方法是,Generator函数里面的异步操作,返回一个Thunk函数或者Promise对象,
     即value属性是一个Thunk函数或Promise对象,等待以后返回真正的值,而done属性则还是同步产生的
     目前,有一个提案,为异步操作提供原生的遍历器接口,即value和done这两个属性都是异步产生,这称为'异步遍历器'

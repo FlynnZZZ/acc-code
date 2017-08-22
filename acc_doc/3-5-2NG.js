@@ -1,21 +1,20 @@
 AngularJS 
-  PS:诞生于2009年,优秀的前端JS框架,已经被用于Google的多款产品当中 
-    最为核心的是:MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
+  PS:于2009年在Google诞生;核心:MVC、模块化、自动化双向数据绑定、语义化标签、依赖注入等等 
   概念类
-    指令: 通过被称为指令的新属性来扩展HTML,为应用添加功能,允许自定义指令.
+    指令: 通过被称为指令的新属性来扩展HTML,为应用添加功能,允许自定义指令 
       带有前缀ng- 
       ng-app 指令初始化一个AngularJS应用程序
       ng-init 指令初始化应用程序数据
-      ng-model 指把元素值(比如输入域的值)绑定到应用程序
+      ng-model 指把元素值[比如输入域的值]绑定到应用程序
   ◆四大核心特性
-  MVC,Model Controller View 
+  'Model Controller View' MVC
     PS:MVC 只是手段,目的是模块化和复用
       model :数据模型层;
       view :视图层,负责展示;
       controller:业务逻辑和控制逻辑.
     $scope 
       PS:MVC 是借助$scope实现的 
-        是一个POJO,Plain Old JavaScript Object 
+        是一个'Plain Old JavaScript Object'POJO 
         提供了一些工具方法 $watch() $apply() 
         是表达式的执行环境,也叫作用域 
         是一个树型结构,与DOM标签平行 

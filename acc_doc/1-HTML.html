@@ -161,7 +161,7 @@
           <meta name="description" content="描述1,描述2...">
       'referrer'    控制http请求中的referrer 
         ★content 对应的值 
-        'never'     不发送referrer「删除http head中的referer」
+        'never'     不发送referrer[删除http head中的referer]  
         'always'    始终发送referrer 
           不改变http header 中的 referer 的值
           即使当前页使用https协议,且加载资源使用http,加载资源的请求头中仍带referer
@@ -966,56 +966,6 @@ Form表单
         accept   表示可以选择的文件MIME类型,多个MIME类型用英文逗号分开
           Example: 只能选择png和gif图片 
             <input type="file" accept="image/png,image/gif" name="file" />
-          常用MIME类型
-            后缀名       MIME名称
-            *.3gpp    audio/3gpp, video/3gpp
-            *.ac3    audio/ac3
-            *.asf       allpication/vnd.ms-asf
-            *.au           audio/basic
-            *.css           text/css
-            *.csv           text/csv
-            *.doc    application/msword    
-            *.dot    application/msword    
-            *.dtd    application/xml-dtd    
-            *.dwg    image/vnd.dwg    
-            *.dxf      image/vnd.dxf
-            *.gif            image/gif    
-            *.htm    text/html    
-            *.html    text/html    
-            *.jp2            image/jp2    
-            *.jpe       image/jpeg
-            *.jpeg    image/jpeg
-            *.jpg          image/jpeg    
-            *.js       text/javascript, application/javascript    
-            *.json    application/json    
-            *.mp2    audio/mpeg, video/mpeg    
-            *.mp3    audio/mpeg    
-            *.mp4    audio/mp4, video/mp4    
-            *.mpeg    video/mpeg    
-            *.mpg    video/mpeg    
-            *.mpp    application/vnd.ms-project    
-            *.ogg    application/ogg, audio/ogg    
-            *.pdf    application/pdf    
-            *.png    image/png    
-            *.pot    application/vnd.ms-powerpoint    
-            *.pps    application/vnd.ms-powerpoint    
-            *.ppt    application/vnd.ms-powerpoint    
-            *.rtf            application/rtf, text/rtf    
-            *.svf           image/vnd.svf    
-            *.tif         image/tiff    
-            *.tiff       image/tiff    
-            *.txt           text/plain    
-            *.wdb    application/vnd.ms-works    
-            *.wps    application/vnd.ms-works    
-            *.xhtml    application/xhtml+xml    
-            *.xlc      application/vnd.ms-excel    
-            *.xlm    application/vnd.ms-excel    
-            *.xls           application/vnd.ms-excel    
-            *.xlt      application/vnd.ms-excel    
-            *.xlw      application/vnd.ms-excel    
-            *.xml    text/xml, application/xml    
-            *.zip            aplication/zip    
-            *.xlsx     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
         multiple 是否可以选择多个文件,多个文件时其value值为第一个文件的虚拟路径
           Example: 多文件上传
             <input id="fileId2" type="file" multiple="multiple" name="file" />

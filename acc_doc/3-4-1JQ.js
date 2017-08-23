@@ -448,19 +448,6 @@ DOM操作
           textarea 的内容
           select 的 value 值(而非显示值)
         返回第一个匹配元素的 value 属性的值 
-      ◆自定义数据
-      Jelem.data(key,value) 绑定自定义数据 [DOM中无任何变化]
-        Example:
-          $('#box').data('name', 'TG'); 
-      Jelem.data(key) 读取自定义数据 
-        Example:
-          <div class="aoo" data-id='111'> 23423 </div>
-          var Jelem = $('.aoo');
-          var id = Jelem.data('id');
-          console.log(id); // 111
-      Jelem.removeDate(key) 移除自定义数据
-        Example:
-          $('#box').removeDate('name');
       ◆class相关
       Jelem.hasClass('className')    检测class类
         返回值类型为Boolean,若存在返回true,否则false.
@@ -511,9 +498,22 @@ DOM操作
           <div class="parent"> <div class="child"></div> </div>
           var pos = $('.child').position();
           console.log(pos); //  Object {top: 10, left: 20}
+      ◆自定义数据
+      Jelem.data(key,value) 绑定自定义数据 [DOM中无任何变化]
+        Example:
+        $('#box').data('name', 'TG'); 
+      Jelem.data(key)       读取自定义数据 
+        Example:
+          <div class="aoo" data-id='111'> 23423 </div>
+          var Jelem = $('.aoo');
+          var id = Jelem.data('id');
+          console.log(id); // 111
+      Jelem.removeDate(key) 移除自定义数据
+        Example:
+          $('#box').removeDate('name');
       ◆其他信息
       Jelem.size()         元素个数
-      var num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
+      num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
         Example: 点击获取当前为第几个li 
           <ul>
@@ -527,7 +527,7 @@ DOM操作
       Jelem1.is(Jelem2) 判断
         Jelem1.is(Jelem2) 判断两个节点是否相同
         Jelem1.is(":checked") 判断是否被选中
-    状态改变
+    状态改变 
       Jelem.focus();   获得焦点
       Jelem.blur();    失焦
       Jelem.click();   点击元素 「会触发事件」

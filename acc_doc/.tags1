@@ -1,0 +1,10 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+onPullDownRefresh	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^    onPullDownRefresh: function () {  \/\/ 下拉刷新回调接口$/;"	function	line:22
+onReachBottom	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^    onReachBottom: function () {  \/\/ 下拉回调 $/;"	function	line:25
+success	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^      success: function(json){$/;"	function	line:36
+success	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^          success: function(res) {$/;"	function	line:40

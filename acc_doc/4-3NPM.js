@@ -1,4 +1,4 @@
-npm,node_package_manager node包管理器 
+'node package manager'npm node包管理器 
   PS:随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
@@ -8,69 +8,45 @@ npm,node_package_manager node包管理器
     在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
     和npm相关的指令或命令前都需添加'npm '
   ◆常用命令 
-  npm init        初始化,创建'package.json'文件
-  npm install <name> [-g] [--save-dev] [--save]  使用npm安装插件,可简写为'i' 
-    <name>     node插件名称, 如:npm install gulp-less --save-dev
-    -g         全局安装 
-      将会安装在C:\Users\Administrator\AppData\Roaming\npm,并写入系统环境变量
-      非全局安装:将会安装在当前定位目录；
-      全局安装可以通过命令行在任何地方调用它,
-      本地安装将安装在定位目录的node_modules文件夹下,通过require()调用 
-    --save     将该模块写入当前的 package.json 文件中的 dependencies 属性
-    --save-dev 将该模块写入当前的 package.json 文件中的 devDependencies 属性
-    --save-dev 和 --save 的区别 
-      --save-dev 是开发时候依赖的东西
-      --save     是发布之后还依赖的东西
-      比如写 ES6 代码,如果想编译成 ES5 发布那么 babel 就是devDependencies,
-      如果用了 jQuery,由于发布之后还是依赖jQuery,所以是dependencies;
-    全局安装与本地安装 
-      两者不冲突,有时需要两者都进行安装,全局安装是为了在命令行中执行命令,
-      本地安装是为了在本项目中使用 
+  npm init     初始化,创建'package.json'文件 
+  npm install <name> [<pos>]    安装包[简写'i'] 
+    <name>     node包名称 
     Example:
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
-  npm uninstall <name> [-g] [--save-dev]  使用npm卸载插件 
+      npm install npm  -g       最新稳定版 
+      npm -g install npm@2.9.1  指定版本 
+  npm uninstall <name> [<pos>]  卸载包 
     PS:不要直接删除本地插件包
-    npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
-  npm list [-g]       当前目录已安装插件[简写'ls'] 
-    npm list <name> [-g]  查看模块的版本号 
-  npm update <name> [-g] [--save-dev]  更新插件
-    npm update [--save-dev]  // 更新全部插件
     Example:
-      npm update -g           更新npm 
-      npm update vue-cli -g   更新vue
-  npm show express     #显示模块详情
-  npm update        #升级当前目录下的项目的所有模块
-  npm update express    #升级当前目录下的项目的指定模块
-  npm update -g express  #升级全局安装的express模块
-  npm uninstall express  #删除指定的模块
-  npm search <name>      搜索模块 
-  npm install npm  -g       最新稳定版 
-  npm -g install npm@2.9.1  指定版本 
-  npm help            查看npm帮助 
+      npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
+  npm list [<pos>]       查看当前目录已安装模块[简写'ls'] 
+  npm update [<name>] [<pos>]   更新插件
+    npm update       升级当前目录下的所有模块
+    npm update -g           更新npm 
+    npm update vue-cli -g   更新vue
+  npm show express                 显示模块详情
+  npm search <name>       搜索模块 
+  npm view vue-cli   查看全局 vue-cli 版本
+  npm help           查看npm帮助 
     npm help <command> 可查看某条命令的详细帮助
-  ◆配置参数 
-  -g              全局安装 
-    本地安装  将安装包放在'./node_modules'下[运行npm命令时所在的目录],
-      如果没有该目录,会在当前执行 npm 命令的目录下生成 node_modules 目录。
-      可通过 require() 来引入本地安装的包
-    全局安装 将安装包放在 /usr/local 下或者你 node 的安装目录。
-      可以直接在命令行里使用。
-    如果你希望具备两者功能,则需要在两个地方安装它或使用 npm link 
-  -v              版本
-  –save           添加到dependencies,简写化 -S
-  –save-dev       添加到devDependencies,简写为 -D 
-  已安装 
-    npm install lodash       在命令操作符中执行
-    npm install express -g   # 全局安装
-    npm install less -g    
-    npm install express      # 本地安装
-    npm install jQuery 
-    npm install request
-    npm install cheerio
-    npm install anywhere -g  快速搭建服务器用于本地调试
-    npm install weinre -g    安装weinre,用于调试手机页面
-  cnpm npm的淘宝镜像  
+  ◆<pos> 安装位置的配置参数,可选,可多选   
+  -g           全局安装 
+    将会安装在'C:\Users\Administrator\AppData\Roaming\npm'目录下,并写入系统环境变量
+  --save       将模块写入'package.json'文件的'dependencies'属性中[简写'-S']
+  --save-dev   将模块写入'package.json'文件的'devDependencies'属性中[简写'-D'] 
+  '--save-dev'和'--save'的区别 
+    --save-dev 是开发时候依赖的东西
+    --save     是发布之后还依赖的东西
+    比如写ES6代码,若想编译成ES5发布那么'babel'就是'devDependencies',
+    若用了jQuery,由于发布之后还是依赖'jQuery',所以是'dependencies';
+  全局安装与本地安装的区别  
+    PS: 两者不冲突,若希望具备两者功能,则需要同时安装 
+    全局安装: 为了在命令行中执行命令,可通过命令行在任何地方调用它 
+    本地安装: 为了在本项目中使用,安装在项目的node_modules文件夹下,可通过'require' 引入 
+  ◆其他配置参数 
+  -v           参看版本 
+  'cnpm'npm的淘宝镜像  
     PS:npm的插件安装是从国外服务器下载,受网络影响大,淘宝团队将其复制到自己的服务器上,
       是一个完整 npmjs.org 镜像,可用其代替官方版本[只读],目前同步频率为 10 分钟每次,
       安装完后最好查看其版本号 cnpm -v 或关闭命令提示符重新打开[安装完直接使用可能会出现错误],
@@ -78,8 +54,6 @@ npm,node_package_manager node包管理器
       官方网址:'http://npm.taobao.org'
     安装cnpm 
       'npm install -g cnpm --registry=https://registry.npm.taobao.org'
-  待整理 
-    npm view vue-cli   查看全局 vue-cli 版本
 package.json npm配置文件 
   PS:将配置信息写入 package.json 并将其加入版本管理,通过配置更方便包的管理;
     该文件不是必须的,当没有该文件时,则相应的命令不生效; 
@@ -170,9 +144,9 @@ package.json npm配置文件
       NPM使用语义版本号来管理代码
       语义版本号分为'X.Y.Z'三位,分别代表主版本号、次版本号和补丁版本号。
       当代码变更时,版本号按以下原则更新。
-      如果只是修复bug,需要更新Z位。
-      如果是新增了功能,但是向下兼容,需要更新Y位。
-      如果有大变动,向下不兼容,需要更新X位。
+      若只是修复bug,需要更新Z位。
+      若是新增了功能,但是向下兼容,需要更新Y位。
+      若有大变动,向下不兼容,需要更新X位。
       版本号有了这个保证后,在申明第三方包依赖时,
       除了可依赖于一个固定版本号外,还可依赖于某个范围的版本号。
       例如"argv": "0.0.x"表示依赖于0.0.x 系列的最新版argv
@@ -182,7 +156,7 @@ package.json npm配置文件
       'ˆ',caret   插入号+指定版本
         比如'ˆ1.2.2',表示安装'1.x.x'的最新版本,不低于'1.2.2',
         但是不安装'2.x.x',也就是说安装时不改变大版本号。
-        需要注意的是,如果大版本号为0,则插入号的行为与波浪号相同,
+        需要注意的是,若大版本号为0,则插入号的行为与波浪号相同,
         因为此时处于开发阶段,即使是次要版本号变动,也可能带来程序的不兼容
       'latest'      安装最新版本 
       these are all valid:
@@ -209,7 +183,7 @@ package.json npm配置文件
       最典型的场景就是插件,比如A模块是B模块的插件。用户安装的B模块是 1.0 版本,
       但是A插件只能和 2.0 版本的B模块一起使用。
       这时,用户要是将 1.0 版本的B的实例传给A,就会出现问题。
-      因此,需要一种机制,在模板安装的时候提醒用户,如果A和B一起安装,那么B必须是 2.0 模块。
+      因此,需要一种机制,在模板安装的时候提醒用户,若A和B一起安装,那么B必须是 2.0 模块。
 
       {
         "name": "chai-as-promised",
@@ -218,7 +192,7 @@ package.json npm配置文件
         }
       }
       上面代码指定,安装chai-as-promised模块时,主程序chai必须一起安装,
-      而且chai的版本必须是'1.x'。如果你的项目指定的依赖是chai的'2.0'版本,就会报错。
+      而且chai的版本必须是'1.x'。若你的项目指定的依赖是chai的'2.0'版本,就会报错。
       注意,从npm 3.0 版开始,peerDependencies不再会默认安装了。
     bin  用来指定各个内部命令对应的可执行文件的位。
       "bin": {
@@ -288,9 +262,9 @@ package.json npm配置文件
     homepage - 包的官网 url 。
     author - 包的作者姓名。
     contributors - 包的其他贡献者姓名。
-    dependencies - 依赖包列表。如果依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下。
+    dependencies - 依赖包列表。若依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下。
     repository - 包代码存放的地方的类型,可以是 git 或 svn,git 可在 Github 上。
-    main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,如果你包的名字叫 express,然后用户安装它,然后require("express")。
+    main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,若你包的名字叫 express,然后用户安装它,然后require("express")。
     keywords - 关键字        
 --------------------------------------------------------------------------------
 Webpack  模块加载器兼打包工具 
@@ -307,14 +281,14 @@ Webpack  模块加载器兼打包工具
     把项目当做一个整体,通过一给定的主文件[如 index.js],
     Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
     最后打包为一个浏览器可识别的JS文件;
-说明 
-  从'2.0'版本开始,支持用'ES6module'规范[import/export]去进行模块打包 
-  'chunk'  表示为 '块'
+  说明 : 
+    从'2.0'版本开始,支持用'ES6module'规范[import/export]去进行模块打包 
+    'chunk'  表示为 '块'
 命令行命令 
-  npm install webpack -g 全局安装Webpack[仅一次即可]
-  npm init    npm初始化
-  npm install webpack --save-dev  安装webpack并写入依赖配置文件  
-  npm install -g webpack-dev-server    静态资源服务器 
+  npm i -g webpack  全局安装Webpack[仅一次即可]
+  npm init                npm初始化,创建'package.json'文件 
+  npm i webpack --save-dev     安装webpack并写入依赖配置文件  
+  npm i -g webpack-dev-server  静态资源服务器 
     安装后就可使用 webpack-dev-server 命令了,将 webpack 项目在本地起服务 
     基于Node.js Express框架的轻量开发服务器
     开发中会监听文件的变化在内存中实时打包
@@ -340,12 +314,12 @@ Webpack  模块加载器兼打包工具
       "start": "webpack-dev-server --hot --inline"
     },
     ...      
-  webpack aoo.js boo.js [--xx]    将'aoo.js'文件打包成'boo.js'文件 
-    --xx   可选,表示配置参数,可同时使用多个
-      --watch           当文件更改时,自动打包
-      --progress        打包时显示进度
-      --display-modules 打包完后显示依赖的模块 
-      --display-reasons 显示打包的原因 
+  webpack aoo.js boo.js [<options>]    将'aoo.js'文件打包成'boo.js'文件 
+    ◆<options>   可选,表示配置参数,可同时使用多个 
+    --watch           当文件更改时,自动打包
+    --progress        打包时显示进度
+    --display-modules 打包完后显示依赖的模块 
+    --display-reasons 显示打包的原因 
   webpack                    启动webpack
   webpack -v                 查看版本号 
   webpack -h                 查看版本信息及可用的指令 
@@ -354,7 +328,6 @@ Webpack  模块加载器兼打包工具
   webpack -d                 提供SourceMaps,方便调试
   webpack --colors           输出结果带彩色,比如:会用红色显示耗时较长的步骤
   webpack --profile          输出性能数据,可以看到每一步的耗时
-  ◆其他命令参数
   webpack -p       p 表示'生产'模式,输出文件会被 uglifies/minifies 
 'webpack.config.js'默认的配置文件 
   PS:需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
@@ -581,7 +554,7 @@ Webpack  模块加载器兼打包工具
 Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
   PS:loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
-    Webpack本身只能处理JS模块,如果要处理其他类型的文件,就需使用loader进行转换;
+    Webpack本身只能处理JS模块,若要处理其他类型的文件,就需使用loader进行转换;
     多个loader之间使用”!”连接,类似于Linux的pipe命令,加载器的加载顺序为从右向左处理;
     对于所需要的加载器,需要写在 package.json 文件中,
     并通过npm install下载安装到./node_modules文件夹中才会生效,
@@ -685,7 +658,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       
       file-loader 允许你指定在哪里复制和存放静态资源文件 ,以及用版本哈希值命名从而更好利用缓存。 这意味着,可以把图片放到 *.vue 文件旁边,可使用相对路径,而不需要担心发布时候的 URL。使用适当的配置,Webpack 在打包输出的时候,会自动把文件路径转为正确的 URL。
       
-      url-loader 允许你内联 base-64 数据格式的URL资源,如果小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。如果文件大于这个阈值。会自动it automatically falls back to file-loader.          
+      url-loader 允许你内联 base-64 数据格式的URL资源,若小于设定的阈值。这样可以减少 HTTP 请求小文件的数量。若文件大于这个阈值。会自动it automatically falls back to file-loader.          
     css-loader       在JS中处理引入的CSS  
     style-loader     用于将引入的样式文件插入到HTML中 
       Example:
@@ -730,7 +703,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
         test: /\.(png|jpg)$/,
         loader: 'url-loader?limit=10000&name=build/[name].[ext]'
       }
-      如果图片资源小于10kb就会转化成 base64 格式的 dataUrl,
+      若图片资源小于10kb就会转化成 base64 格式的 dataUrl,
       其他的图片会存放在build/文件夹下 
   Example:
     module: {
@@ -760,7 +733,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       ]
     }
     在JS中引入CSS 
-    如果在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
+    若在JS中添加css文件,就需要使用到 css-loader 和 style-loader,
     css-loader 会遍历 CSS 文件,然后找到 url() 表达式然后处理他们,
     style-loader 会把原来的 CSS 代码插入页面中的一个 style 标签中。
   使用案例
@@ -887,7 +860,7 @@ Plugins,插件   扩展webpack的功能
     
     提取公共模块 
       现在我们build出来的只有一个 bundle.js 
-      如果第三方库很多的话,会造成这个文件非常大,减慢加载速度,
+      若第三方库很多的话,会造成这个文件非常大,减慢加载速度,
       现在我们要把第三方库和我们app本身的代码分成两个文件。
       修改entry入口文件
       entry: {
@@ -1977,7 +1950,6 @@ Plugins,插件   扩展webpack的功能
       index.html 
       package.json 
       ...
---------------------------------------------------------------------------------
 'Angular CLI'Angular2的构建工具 
   PS: 可以创建项目、添加文件以及执行一大堆开发任务,比如测试、打包和发布 
   相关命令 
@@ -2172,19 +2144,15 @@ RequireJS 模块化开发框架
       npm run-srcipt xx  执行'script'字段内配置的命令 
         简写为 npm run xx 
 --------------------------------------------------------------------------------
-HttpServer   本地调试及移动端调试 
+http-server  本地调试及移动端调试 
   npm i http-server -g   全局安装'http-server'  
-  http-server [-x xxx]   在相应的文件夹下启动服务
-    在网页中或手机中访问出现的网址 
-  -x 配置项 
+  http-server [<config>]   在相应的文件夹下启动服务
+    PS: 在网页中或手机中访问出现的网址 
+    ◆<config> 配置项 
     -a 127.0.0.1  指定域名 
     -p 8080       指定端口号 
     -s            阻止命令行中打印信息 
     -o            启动服务后自动在浏览器中打开地址 
-其他工具 
-  Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
-    如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
-  browserify|webpack JS模块化方案,文件打包工具,预编译模块的方案  
 Gulp 
   PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
@@ -2275,7 +2243,7 @@ Gulp
     使用方法:
       将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
       若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
-Anythere 将当前目录变成一个静态文件服务器的根目录 
+Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭建服务器用于本地调试 
   npm install anywhere -g   npm全局安装anythere
   执行参数
     -p 指定端口,默认为8000,
@@ -2284,7 +2252,7 @@ Anythere 将当前目录变成一个静态文件服务器的根目录
       可省略
       anywhere  8000 
     -s 静默执行不会自动打开浏览器,默认自动打开网页
-Weinre,'Web Inspector Remote'一种远程调试工具 
+'Web Inspector Remote'Weinre,一种远程调试工具:用于调试手机页面 
   PS:功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
     由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
     所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
@@ -2307,4 +2275,7 @@ json-server  接口Mock数据
   在'dev-server.js'文件中进行配置
   var jsonServer = require('json-sever'); 引入json-server 
   ...
-
+其他工具 
+  Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
+    如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
+  browserify|webpack JS模块化方案,文件打包工具,预编译模块的方案  

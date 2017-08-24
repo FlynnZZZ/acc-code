@@ -1110,8 +1110,8 @@ DOM操作归纳总结
           return elem.currentStyle ? elem.currentStyle[attr] : getComputedStyle(elem, false)[attr];
         };
         getStyle(document.getElementById('test'), 'height');
-  其他相关
-    scrollbar  滚动轴
+  其他相关 
+    scrollbar  滚动轴 
       PS:在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度「为0」;
       获取滚动轴宽度scrollbarWidth
         方法一  var scrollbarWidth = elem.offsetWidth - elem.clientWidth;
@@ -1123,6 +1123,9 @@ DOM操作归纳总结
           var scrollbarWidth = width1 - width2;
           elem.style.overflow = null; // 清除该内联样式
           console.log(scrollbarWidth);
+    插入DOM中的一般标签可立即获取到 
+      $('body').append('<input type="file" id="file">');
+      console.log($('#file'));  // 可获取到 
 --------------------------------------------------------------------------------
 ◆Event 事件 
   PS: JS与HTML的交互时通过事件实现的 
@@ -1445,16 +1448,16 @@ Event事件对象
     PS:变动事件是为XML或HTML DOM设计的,不特定于某种语言
     兼容性检测 
       var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
-    DOM2级定义了如下变动事件
-    DOMSubtreeModified   在DOM结构中发生任何变化时触发
-    DOMNodeInserted  一节点被插入另一节点时触发
-    DOMNodeInsertedIntoDocument   节点被直接插入文档或通过子树间接插入文档后触发
+    DOM2级定义了如下变动事件[已废弃,但目前仍可用] 
+    'DOMSubtreeModified'   在DOM结构中发生任何变化时触发
+    'DOMNodeInserted'              节点被插入另一节点时触发
+    'DOMNodeInsertedIntoDocument'  节点被直接插入文档或通过子树间接插入文档后触发
       该事件在 DOMNodeInserted 后触发
-    DOMNodeRemoved   节点被删除时触发
-    DOMNodeRemovedFromDocument   节点从文档中删除或通过子树间接从文档中删除前触发
+    'DOMNodeRemoved'             节点被删除时触发
+    'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发
       该事件在 DOMNodeRemoved 之后触发
-    DOMAttrModified  特性被修改后触发 
-    DOMCharacterDataModified  文本节点值发生变化时触发
+    'DOMAttrModified'            特性被修改后触发 
+    'DOMCharacterDataModified'  文本节点值发生变化时触发
     (详情参见 JavaScript高级程序设计384页)
     Exp:
       使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
@@ -2156,7 +2159,7 @@ WeiXin 微信
     多选选择框中的每个选中的值单独一个条目
     单击提交按钮也会发送提交按钮,否则,不发送提交按钮(包括type为image的input元素)
     select元素的值,就是选中的option元素的value特性的值,若option元素没有value特性,则是其文本值
-  input[type=text] 和 textarea 文本框
+  input[type="text"] 和 textarea 文本框
     在其文本框中输入的内容保存在他们的value中
     text.select()  选择文本框中所有的文本
     text.selectionStart  光标选中文本开始的字符下标表示 [HTML5新增]
@@ -2164,6 +2167,9 @@ WeiXin 微信
         text.value.substring(text.selectionStart,text.selectionEnd);
     text.selectionEnd    光标选中文本结束的字符下标表示
     text.value.setSelectionRange(begin,end)   获取部分字符
+  input[type="file"]  处于内存中的元素仍能起作用 
+    var file = $('<input type="file" id="file1">')
+    file.click()  // 仍可打开图片选择框 
   select 和 option  下拉列表 
     ◆HTMLSelectElement 类型表示选择框<select>提供了下列属性和方法
       也拥有表单字段共有的属性和方法

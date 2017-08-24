@@ -1,4 +1,4 @@
-VueJS  数据驱动,组件化开发模式,渐进式前端框架 
+VueJS  数据驱动,组件化开发模式,渐进式前端类MVVM框架 
   PS:支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
     API设计受 AngularJS、KnockoutJS、RactiveJS 和 RivetsJS 影响;
     Vue没有完全遵循MVVM格式,但其设计受到了它的启发;

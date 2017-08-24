@@ -1,4 +1,4 @@
-'node package manager'npm node包管理器 
+'node package manager'npm: node包管理器 
   PS:随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
@@ -11,11 +11,11 @@
   npm init     初始化,创建'package.json'文件 
   npm install <name> [<pos>]    安装包[简写'i'] 
     <name>     node包名称 
-    Example:
+    npm install  根据'package.json'安装所有依赖 
+    Example: 
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
-      npm install npm  -g       最新稳定版 
-      npm -g install npm@2.9.1  指定版本 
+      npm install -g npm@2.9.1  指定版本 
   npm uninstall <name> [<pos>]  卸载包 
     PS:不要直接删除本地插件包
     Example:
@@ -47,14 +47,20 @@
   ◆其他配置参数 
   -v           参看版本 
   'cnpm'npm的淘宝镜像  
-    PS:npm的插件安装是从国外服务器下载,受网络影响大,淘宝团队将其复制到自己的服务器上,
-      是一个完整 npmjs.org 镜像,可用其代替官方版本[只读],目前同步频率为 10 分钟每次,
-      安装完后最好查看其版本号 cnpm -v 或关闭命令提示符重新打开[安装完直接使用可能会出现错误],
+    PS:npm的插件来自国外服务器,受网络影响大,淘宝团队将其复制到自己的服务器上,
+      是一个完整'npmjs.org'镜像,可用其代替官方版本[只读],目前同步频率为'10分钟每次',
       cnpm跟npm用法完全一致,只是在执行命令时将npm改为cnpm;
       官方网址:'http://npm.taobao.org'
-    安装cnpm 
-      'npm install -g cnpm --registry=https://registry.npm.taobao.org'
-package.json npm配置文件 
+    ◆安装及使用cnpm 
+    npm install -g cnpm --registry=https://registry.npm.taobao.org
+      安装完直接使用可能会出现错误,最好关闭命令提示符重新打开 
+    cnpm -v  查看其版本号 
+    cnpm i <name>   安装包 
+      '.npmrc'是使用淘宝的镜像产生的文件
+        内容如下
+        registry = http://registry.npm.taobao.org
+        sass_binary_site=https://npm.taobao.org/mirrors/node-sass/      
+'package.json'npm配置文件 
   PS:将配置信息写入 package.json 并将其加入版本管理,通过配置更方便包的管理;
     该文件不是必须的,当没有该文件时,则相应的命令不生效; 
     定义当前项目所需要的各种模块,以及项目的配置信息,如名称、版本、许可证等元数据等;
@@ -77,21 +83,38 @@ package.json npm配置文件
         }
       命令行执行 npm run aoo 
       即为执行  node index.js 
-  文件内容详情 
+  文件内容、详情配置 
     {
+      项目名称 
       "name": "Hello World",
+      版本号
       "version": "0.0.1",
+      作者名 
       "author": "张三",
+      证书 
+      "license":"MIT",
+      其他贡献者姓名 
+      "contributors":[{"name":"李四","email":"lisi@example.com"}],
+      描述 
       "description": "第一个node.js程序",
+      关键词 
       "keywords":["node.js","javascript"],
+      包代码存放的地方 
+        可以是'git'或'svn',git可在'Github'上 
       "repository": {
         "type": "git",
         "url": "https://path/to/url"
       },
-      "license":"MIT",
-      "engines": {"node": "0.10.x"},
+      指明了该模块运行的平台,如Node的某个版本或者浏览器,也可以指定适用的npm版本 
+      "engines" : { 
+        "node" : ">=0.10.3 <0.12", 
+        "npm" : "~1.0.20" 
+      }, 
       "bugs":{"url":"http://path/to/bug","email":"bug@example.com"},
-      "contributors":[{"name":"李四","email":"lisi@example.com"}],
+      指定运行脚本命令的npm命令行缩写 
+        比如'start'指定了运行'npm run start'时,所要执行的命令
+        其他的为 npm run preinstall、npm run postinstall、
+        npm run start、npm run test时,所要执行的命令
       "scripts": {
         "start": "node index.js",
         "preinstall": "echo here it comes!",
@@ -99,10 +122,15 @@ package.json npm配置文件
         "start": "node index.js",
         "test": "tap test/*.js"
       },
-      // scripts 指定了运行脚本命令的npm命令行缩写,
-      // 比如start指定了运行npm run start时,所要执行的命令
-      // 其他的为 npm run preinstall、npm run postinstall、
-      // npm run start、npm run test时,所要执行的命令
+      指定了项目运行所依赖的模块 
+        对象的各个成员,分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围。
+        若依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下 
+        在运行npm install xxx后可以自动插入相应的值,
+        如需要安装vue,运行npm install vue,npm就会自动安装最新版本的vue到当前node_modules文件夹中,
+        dependencies的内容也会变成如下:
+        "dependencies": {
+          "vue": "^1.0.16"
+        }
       "dependencies": {
         "express": "latest",
         "mongoose": "~3.8.3",
@@ -110,8 +138,12 @@ package.json npm配置文件
         "express3-handlebars": "~0.5.0",
         "MD5": "~1.2.0"
       },
-      // dependencies 字段指定了项目运行所依赖的模块,指向一个对象
-      // 对象的各个成员,分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围。
+      指定项目开发所需要的模块 
+        分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围 
+        是指开发过程中需要用到的依赖包,包括ES6转ES5加载器、CSS加载器等等,
+        这部分的内容可通过npm install xxx --save-dev 进行安装,
+        如需要安装webpack,输入npm install webpack --save-dev,
+        在devDependencies下就会写入webpack的具体安装信息。      
       "devDependencies": {
         "bower": "~1.2.8",
         "grunt": "~0.4.1",
@@ -122,22 +154,7 @@ package.json npm配置文件
         "browserify": "2.36.1",
         "grunt-browserify": "~1.3.0",
       }
-      // devDependencies 指定项目开发所需要的模块,指向一个对象
-      // 对象的各个成员,分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围。
     }
-    dependencies 键值内的内容
-      在运行npm install xxx后可以自动插入相应的值,
-      如需要安装vue,运行npm install vue,
-      npm就会自动安装最新版本的vue到当前node_modules文件夹中,
-      dependencies的内容也会变成如下:
-      "dependencies": {
-        "vue": "^1.0.16"
-      }
-    devDependencies 键值内的内容
-      是指开发过程中需要用到的依赖包,包括ES6转ES5加载器、CSS加载器等等,
-      这部分的内容可通过npm install xxx --save-dev 进行安装,
-      如需要安装webpack,输入npm install webpack --save-dev,
-      在devDependencies下就会写入webpack的具体安装信息。      
     
     版本号的设定规则 
       PS: 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
@@ -153,7 +170,7 @@ package.json npm配置文件
       '~',tilde   波浪号+指定版本
         如'~1.2.2',表示安装'1.2.x'的最新版本[不低于'1.2.2'],
         但是不安装'1.3.x',也就是说安装时不改变大版本号和次要版本号
-      'ˆ',caret   插入号+指定版本
+      'ˆ',caret   插入号+指定版本 
         比如'ˆ1.2.2',表示安装'1.x.x'的最新版本,不低于'1.2.2',
         但是不安装'2.x.x',也就是说安装时不改变大版本号。
         需要注意的是,若大版本号为0,则插入号的行为与波浪号相同,
@@ -211,9 +228,10 @@ package.json npm配置文件
       scripts: {  
         start: 'someTool build'
       }
-    main 指定了加载的入口文件
+    main 指定了加载的入口文件 
       require('moduleName')就会加载这个文件。
       这个字段的默认值是模块根目录下面的 index.js。
+      main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,若你包的名字叫 express,然后用户安装它,然后require("express")。
     config  用于添加命令行的环境变量
       package.json 文件中 
         {
@@ -234,19 +252,6 @@ package.json npm配置文件
       "browser": {
         "tipso": "./node_modules/tipso/src/tipso.js"
       },
-    engines 指明了该模块运行的平台
-      比如 Node 的某个版本或者浏览器。
-      { 
-        "engines" : { 
-          "node" : ">=0.10.3 <0.12" 
-        } 
-      }
-      该字段也可以指定适用的npm版本。
-      { 
-        "engines" : { 
-          "npm" : "~1.0.20" 
-        } 
-      }
     man     指定当前模块的man文档的位置 
       "man" :[ "./doc/calc.1" ]
     preferGlobal 当用户不将该模块安装为全局模块时[即无–global参数],是否显示警告
@@ -256,18 +261,9 @@ package.json npm配置文件
       "style": [
         "./node_modules/tipso/src/tipso.css"
       ]
-    name - 包名。
-    version - 包的版本号。
-    description - 包的描述。
     homepage - 包的官网 url 。
-    author - 包的作者姓名。
-    contributors - 包的其他贡献者姓名。
-    dependencies - 依赖包列表。若依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下。
-    repository - 包代码存放的地方的类型,可以是 git 或 svn,git 可在 Github 上。
-    main - main 字段是一个模块ID,它是一个指向你程序的主要项目。就是说,若你包的名字叫 express,然后用户安装它,然后require("express")。
-    keywords - 关键字        
 --------------------------------------------------------------------------------
-Webpack  模块加载器兼打包工具 
+Webpack: 模块加载器兼打包工具 
 介绍 
   基于JS,包括四大核心'Entry''Output''Loaders'和'Plugins';
   把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
@@ -333,24 +329,56 @@ Webpack  模块加载器兼打包工具
   PS:需手动创建该文件; 通过 webpack.config.js 文件来进行相应的配置;
     该文件是一个 node.js 模块,返回一个 json 格式的配置信息对象,
     或者通过 --config 选项来指定配置文件;
-  相关命令 
+  命令行  
     webpack              [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
     webpack --config xx.js  自定义配置文件[可不再是默认的 webpack.config.js]
-  配置文件详情: 
+  配置详情: 
+    let webpack = require('webpack');
+    let path = require('path');
     module.exports = {     // commonjs 模块化 输出 
-      context: __dirname + "/src", // __dirname 是指项目根目录
-      entry : './src/main.js',   // 入口文件,将被打包的文件 
-      // 项目的入口点,作为执行上下文的根
-      output: {                  // 指定打包后的文件
-        path : './dist/js',         // 指定路径
-        filename : './bundle.js'    // 打包输出的文件名,「也可定义路径,会接着path后,推荐只指定名称」
+      入口文件: 将被打包的文件 
+        PS: 格式可为str,arr,obj 
+        str     指定单一的入口文件 
+          './src/index.js'
+        arr     将多个文件打包在一起 
+          [ './entry1.js' , 'entry2.js' ] 
+        obj     key-val 形式,对象的val可为str或arr 
+          适用于可能需要不止一个入口的情况 
+          同'output'的关系 
+            输出打包后的文件和output参数有关,若 output.filename 仍指定为一个值,
+            则最后打包后的文件只有一个,结果是两个同名的文件产生覆盖的结果,
+            output.filename 可采用占位符的形式来指定来打包成多个文件[详见output配置]
+            entry : {
+              main : './src/index.js'
+              page1 : './aoo.js',
+              page2 : [ './entry1.js' , 'entry2.js' ] 
+            }
+      'entry' : './src/main.js',   
+      'context': __dirname + "/src", // __dirname 是指项目根目录
+      项目的入口点,指定打包后的文件,作为执行上下文的根
+        output    obj,指定打包文件的输出 
+        打包后的程序和资源将要去到的路径 
+      'output': { 
+        指定打包后的文件的存放路径 
+        'path' : './dist/js',  
+        指定打包后的文件的名称 
+          也可定义路径,会接着path后,推荐只指定名称 
+          可使用占位符指定动态的输入 
+            当存在多个输出的文件时用于指定名称「如entry的val为obj时」
+            [name]      表示entry的obj的key
+            [hash]      表示打包时产生的hash值
+            [chunkhash] 每个chunk的hash值,相当于文件的MD5值 
+              MD5值为了保证每个文件的唯一性
+            Example: filename : '[name]-[hash].js'
+        'filename' : './bundle.js'   
       },
-      // 执行完成后,生成文件的存放位置的属性
-      resolve : {
+      执行完成后,生成文件的存放位置的属性
+      'resolve' : {
         root : [path.join(__dirname,'src')],
         extensions : ['','.ts','.js']
       },
-      module : {    // 定义对模块的处理逻辑
+      定义对模块的处理逻辑
+      'module' : {    
         loaders : [  
           {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
         ],
@@ -520,37 +548,6 @@ Webpack  模块加载器兼打包工具
       ]
     }    
   ◆注解 
-  entry     指定将被打包的文件的入口,依赖关系网的根节点 
-    格式可为str,arr,obj 
-    str     指定单一的入口文件 
-      var baseConfig = {
-        entry: './src/index.js'
-      };
-    arr     将多个文件打包在一起 
-      如 [ './entry1.js' , 'entry2.js' ] 
-    obj     key-val 形式,对象的val可为str或arr 
-      适用于可能需要不止一个入口的情况 
-      同'output'的关系 
-        输出打包后的文件和output参数有关,若 output.filename 仍指定为一个值,
-        则最后打包后的文件只有一个,结果是两个同名的文件产生覆盖的结果,
-        output.filename 可采用占位符的形式来指定来打包成多个文件[详见output配置]
-        entry : {
-          main : './src/index.js'
-          page1 : './aoo.js',
-          page2 : [ './entry1.js' , 'entry2.js' ] 
-        }
-  output    obj,指定打包文件的输出 
-    打包后的程序和资源将要去到的路径 
-    'path'     指定打包后的文件的存放路径 
-    'filename' 指定打包后的文件的名称 
-      值为str,指定文件名称
-      可使用占位符指定动态的输入 
-        当存在多个输出的文件时用于指定名称「如entry的val为obj时」
-        [name]      表示entry的obj的key
-        [hash]      表示打包时产生的hash值
-        [chunkhash] 每个chunk的hash值,相当于文件的MD5值
-          MD5值为了保证每个文件的唯一性
-        Example: filename : '[name]-[hash].js'
 Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
   PS:loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
@@ -847,7 +844,7 @@ Plugins,插件   扩展webpack的功能
     };
     ◆输出
     var o="Hello";o+=" World",document.write("<h1>"+o+"</h1>")   
-  webpack.optimize.CommonsChunkPlugin    提取入口的公共模块到单独的文件 
+  webpack.optimize.CommonsChunkPlugin    提取公共模块 
     module.exports = {
       plugins: [
         new webpack.optimize.CommonsChunkPlugin({
@@ -2144,7 +2141,7 @@ RequireJS 模块化开发框架
       npm run-srcipt xx  执行'script'字段内配置的命令 
         简写为 npm run xx 
 --------------------------------------------------------------------------------
-http-server  本地调试及移动端调试 
+http-server: 本地调试及移动端调试 
   npm i http-server -g   全局安装'http-server'  
   http-server [<config>]   在相应的文件夹下启动服务
     PS: 在网页中或手机中访问出现的网址 
@@ -2153,6 +2150,29 @@ http-server  本地调试及移动端调试
     -p 8080       指定端口号 
     -s            阻止命令行中打印信息 
     -o            启动服务后自动在浏览器中打开地址 
+Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭建服务器用于本地调试 
+  npm install anywhere -g   npm全局安装anythere
+  执行参数
+    -p 指定端口,默认为8000,
+      Example:
+      anywhere -p 8000 
+      可省略
+      anywhere  8000 
+    -s 静默执行不会自动打开浏览器,默认自动打开网页
+'Web Inspector Remote'Weinre: 一种远程调试工具,用于调试手机页面 
+  PS:功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
+    由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
+    所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
+  三个端的含义:
+    客户端(client):本地的WebInspector,远程调试客户端。
+    服务端(agent):本地的HTTPServer,为目标页面与客户端建立通信。
+    目标页面(target):被调试的页面,页面已嵌入weinre的远程js。
+  Weinre运行
+    weinre -boundHost 192.168.0.102  -httpPort 8099   命令行键入 
+      httpPort 为调试服务器运行的端口,默认8080;
+      boundHost 调试服务器绑定的IP地址或域名,默认localhost,需改为本机地址 '192.168.0.102'
+    添加 js到 所需的调试的html的头部
+      <script src="http://192.168.0.102:8099/target/target-script-min.js#anonymous"></script> 
 Gulp 
   PS:gulp是前端开发过程中对代码进行构建的工具,是自动化项目的构建利器；
     不仅能对网站资源进行优化,而且在开发过程中很多重复的任务能够使用正确的工具自动完成；
@@ -2243,39 +2263,13 @@ Gulp
     使用方法:
       将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
       若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
-Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭建服务器用于本地调试 
-  npm install anywhere -g   npm全局安装anythere
-  执行参数
-    -p 指定端口,默认为8000,
-      Example:
-      anywhere -p 8000 
-      可省略
-      anywhere  8000 
-    -s 静默执行不会自动打开浏览器,默认自动打开网页
-'Web Inspector Remote'Weinre,一种远程调试工具:用于调试手机页面 
-  PS:功能与Firebug、Webkit inspector类似,可以帮助我们即时更改页面元素、样式,调试JS等。
-    由于Weinre的客户端是基于Web Inspector开发,而Web Inspector只兼容WebKit核心的浏览器,
-    所以只能在Chrome/Safari浏览器打开Weinre客户端进行调试。
-  三个端的含义:
-    客户端(client):本地的WebInspector,远程调试客户端。
-    服务端(agent):本地的HTTPServer,为目标页面与客户端建立通信。
-    目标页面(target):被调试的页面,页面已嵌入weinre的远程js。
-  Weinre运行
-    weinre -boundHost 192.168.0.102  -httpPort 8099   命令行键入 
-      httpPort 为调试服务器运行的端口,默认8080;
-      boundHost 调试服务器绑定的IP地址或域名,默认localhost,需改为本机地址 '192.168.0.102'
-    添加 js到 所需的调试的html的头部
-      <script src="http://192.168.0.102:8099/target/target-script-min.js#anonymous"></script> 
 Grunt和Gulp的工作方式 
   在一个配置文件中,指明对某些文件进行类似编译,组合,压缩等任务的具体步骤,
   这个工具之后可以自动替你完成这些任务。
 Bower 
-json-server  接口Mock数据 
+json-server 接口Mock数据 
   npm install json-server --save  安装依赖 
   在'dev-server.js'文件中进行配置
   var jsonServer = require('json-sever'); 引入json-server 
   ...
 其他工具 
-  Gulp|Grunt 工具链、构建工具,能够优化前端工作流程 
-    如自动刷新页面,压缩css、JS,编译Less等,配置需要的插件实现自动化工作 
-  browserify|webpack JS模块化方案,文件打包工具,预编译模块的方案  

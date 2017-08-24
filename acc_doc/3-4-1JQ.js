@@ -1263,22 +1263,18 @@ AJAX
       textStatus  请求状态,'success' 'error' 'notmodified' 'timeout' 4 种
       xhr         XMLHttpRequest对象 
   $.getScript(url[,cfoo])       请求并执行获取到的JS文件 
-    $.getScript('http://www.imooc.com/data/sport_f.js',function() { 
-      console.log("获取成功,自动执行JS");
-    });
   $.getJSON(url[,cfoo])  加载并解析JSON文件 
     url    请求加载json格式文件的服务器地址
-    cfoo   可选,传入参数 (backData) 
+    cfoo   加载完成后的回调,可选,传入参数 (backData,textStatus,xhr) 
   ◆方法型 
   $.get(url[,data][,cfoo][,type])   GET请求 
     url  请求的地址 
     data 可选,get方法会把data添加到url上,可直接改变url而省略data; 
-    cfoo 请求成功时的回调函数,传入参数 (backData,textStatus) 
+    cfoo 请求成功时的回调函数,传入参数 (backData,textStatus,xhr) 
       PS:只有当Response的返回状态为success才执行该函数
       backData   返回的数据 
       textStatus 响应的状态,'success' 'error' 'notmodified' 'timeout' 4 种
-    type 服务端返回数据的格式 
-      'xml' 'html' 'script' 'json' 'text' 'default' 
+    type 服务端返回数据的格式 : 'xml' 'html' 'script' 'json' 'text' 'default' 
   $.post(url[,data][,cfoo][,type])  POST请求 
   ◆通用型
   $.ajaxSetup([options])  设置全局Ajax默认选项 
@@ -1308,79 +1304,127 @@ AJAX
   $.ajax(options)          jQuery最底层的AJAX实现 
     options   参数配置对象 
       PS:在回调函数中,'this'表示该次AJAX请求的'options'对象参数 
-      url : str      发送的请求地址,默认为当前页地址 
-      type : str     请求方式,默认为"GET" 
-        PS:GET请求,键值对将改为'&key1=val1&key2=val2'的形式附在URL上
-        'POST'
-        'PUT'
-        'DELETE'
-        ...
-      timeout : num  请求超时设置,单位毫秒'ms',此设置将覆盖$.ajaxSetup()的全局设置 
-      data : obj/str 发送的请求数据
-        obj为'key-val'的映射形式  
-        str为字符串形式
-          如 'username='+encodeURLComponent(val1)+'&content='+encodeURLComponent(val2)
-        若为数组,将指定为不同值对应同一个名称 
-          {aoo : ['a1','a2']} 转换为 '&aoo=a1&aoo=a2'
-      dataType : str 预期服务器返回的数据类型
-        PS:默认根据HTTP包MIME信息返回reponseText或reponseXML,作为回调函数参数传递 
-        'xml'    XML文档,可使用jQuery处理 
-        'html'   纯文本HTML信息,包含的script标签在插入DOM时执行 
-        'script' 纯文本JS代码,
-        'json'   JSON数据 
-        'jsonp'  JSONP格式
-          如'url?callback=xx',jq将自动替换'xx'为正确函数名,以执行回调 
+      {
+        请求方式,默认为"GET" 
+          PS: GET请求,键值对将改为'&key1=val1&key2=val2'的形式附在URL上
+          'POST'
+          'PUT'
+          'DELETE'
+          ...
+        'type' : "GET",      
+        发送的请求地址,默认为当前页地址 
+        'url' : './',      
+        请求数据 
+          obj   'key-val'的映射形式  
+          str   字符串形式
+            如 'username='+encodeURLComponent(val1)+'&content='+encodeURLComponent(val2)
+          arr   将指定为不同值对应同一个名称 
+            {aoo : ['a1','a2']} 转换为 '&aoo=a1&aoo=a2'
+        'data' : {
+          key : val,
+        }, 
+        预期服务器返回的数据类型 
+          PS:默认根据HTTP包MIME信息返回reponseText或reponseXML,作为回调函数参数传递 
+          'xml'    XML文档,可使用jQuery处理 
+          'html'   纯文本HTML信息,包含的script标签在插入DOM时执行 
+          'script' 纯文本JS代码,
+          'json'   JSON数据 
+          'jsonp'  JSONP格式
+            如'url?callback=xx',jq将自动替换'xx'为正确函数名,以执行回调 
         'text'   纯文本字符串 
-      beforeSend : foo 发送请求前的回调,传入参数 (xhr) 
-        PS:若回调返回false,则取消本次AJAX请求 
-        xhr  XMLHttpRequest对象 
-      complete : foo   请求完成后的回调[失败或成功都会执行],传入参数 (xhr,textStatus) 
-      success : foo    请求成功后的回调,参数 (backData,textStatus,otherObj) 
-        backData  由服务器返回,并由'dataType'参数处理后的数据 
-          可能是 xmlDoc,jsonObj,html,text等
-      error : foo      请求失败后的回调,参数 (xhr,textStatus,[errorTrown])
-        errorTrown  可选,捕获的错误对象
-      global : bol  默认为true,是否触发全局AJAX事件[ajaxStart和ajaxStop] 
-      xhrFields : obj  设置xhr对象 
-        withCredentials : bol   请求是否带cookie
-      crossDomain : bol 是否跨域 
-      cache : bol       是否缓存,默认为true
-        当dataType为'script' 和'jsonp'时,默认为false
-      accepts : obj  内容类型发送请求头,告诉服务器什么样的响应会接收返回
-        若accepts设置需修改,推荐在 $.ajaxSetup() 中设置
-      async : bol    是否异步请求,默认为true 
-        跨域请求和 dataType:'jsonp'请求不支持同步操作 
-      contents : obj 以'{字符串:正则表达式}'匹配的对象 
-        用来确定jQuery如何解析响应,给定其内容类型
-      contentType : str  发送信息的内容编码类型,默认为'application/x-www-form-urlencoded' 
-        'application/json' 
-      context : obj      用于设置AJAX相关回调函数的上下文
-        即让回调函数内的this执行这个对象,默认的this执行AJAX的options 
-      converters : obj   数据类型对数据类型转换器的对象,每个转换器的值是一函数,返回相应的转化值 
-      dataFilter : foo   对返回的原始数据进行预处理,最后需通过'return'返回,参数 (backData,type) 
-        backData   AJAX返回的原始数据 
-        type       AJAX提供的'dataType'参数 
-      headers : obj      信息头,'key-val'对映射到请求一起发送
-        信息头中的设置优先级高于'beforeSend'函数范围内的设置 
-      ifModified : bol   仅在服务器数据改变时获取新数据,默认为false 
-        使用HTTP宝'Last-Modified'头信息判断,也会检查服务器指定的'etag'来确定数据是否被修改 
-      isLocal : bol      允许当前环境为'本地',如文件系统  [貌似不可用?] 
-      jsonp : str        在jsonp请求中重写回调函数的名字 
-        用来代替在'callback=xx'GET或POST请求中的'callback'部分 
-      jsonpCallback : foo  为JSONP请求指定回调函数,将用来取代jQuery自动生成的随机函数名 
-      mimeType : str     用来覆盖xhr的MIME类型 
-      username : str     用于响应HTTP访问认证请求的用户名 
-      password : str     用于响应HTTP访问认证请求的密码 
-      scriptCharset : str  只有当'dataType'为'jsonp'或'script',且type是GET时才能修改字符集'charset' 
-      statusCode : obj    为响应的状态码指定响应函数 
-        为响应状态'404',指定回调 
-        {
-          404 : function(){
+        'dataType' : 'json', 
+        发送请求前的回调,传入参数
+          PS:若回调返回false,则取消本次AJAX请求 
+          xhr  XMLHttpRequest对象 
+        beforeSend : function(xhr){
+          console.log(xhr);
+        }  
+        请求完成后的回调[失败或成功都会执行]  
+        complete : function(xhr,textStatus){
+          console.log(xhr);
+        },   
+        请求成功后的回调  
+          backData  由服务器返回,并由'dataType'参数处理后的数据 
+            可能是 xmlDoc,jsonObj,html,text等
+        success : function(backData,textStatus,xhr){
+          console.log(backData);
+        },    
+        请求失败后的回调 
+          errorTrown  捕获的错误对象 
+        error : function(xhr,textStatus,errorTrown){
+          console.log(xhr);
+        },      
+        信息头,'key-val'对映射到请求一起发送 
+          信息头中的设置优先级高于'beforeSend'函数范围内的设置 
+        'headers' : {},      
+        请求超时设置,单位毫秒'ms',此设置将覆盖$.ajaxSetup()的全局设置 
+        'timeout' : 1000,  
+        是否触发全局AJAX事件,默认为true [ajaxStart和ajaxStop] 
+        'global' : true,  
+        设置xhr对象 
+        'xhrFields' : {
+          'withCredentials' : true,    请求是否带cookie
+        },  
+        是否跨域 
+        'crossDomain' : true, 
+        是否缓存,默认为true 
+          当dataType为'script' 和'jsonp'时,默认为false
+        'cache' : true,       
+        内容类型发送请求头,告诉服务器什么样的响应会接收返回
+          若accepts设置需修改,推荐在 $.ajaxSetup() 中设置
+        'accepts' : {},  
+        是否异步请求,默认为true 
+          跨域请求和 dataType:'jsonp'请求不支持同步操作 
+        'async' : true,    
+        以'{字符串:正则表达式}'匹配的对象 
+          用来确定jQuery如何解析响应,给定其内容类型
+        'contents' : {}, 
+        发送信息的内容编码类型,默认为'application/x-www-form-urlencoded' 
+        'contentType' : 'application/json',
+        用于设置AJAX相关回调函数的上下文
+          即让回调函数内的this执行这个对象,默认的this执行AJAX的options 
+        'context' : {},  
+        数据类型对数据类型转换器的对象,每个转换器的值是一函数,返回相应的转化值 
+        'converters' : {},   
+        对返回的原始数据进行预处理,最后需通过'return'返回  
+          backData   AJAX返回的原始数据 
+          type       AJAX提供的'dataType'参数 
+        dataFilter : function(backData,type){
+          return '111'
+        },   
+        仅在服务器数据改变时获取新数据,默认为false 
+          使用HTTP宝'Last-Modified'头信息判断,也会检查服务器指定的'etag'来确定数据是否被修改 
+        'ifModified' : false,   
+        允许当前环境为'本地',如文件系统  [貌似不可用?] 
+        'isLocal' : false,      
+        在jsonp请求中重写回调函数的名字 
+          用来代替在'callback=xx'GET或POST请求中的'callback'部分 
+        'jsonp' : 'foo',        
+        为JSONP请求指定回调函数,将用来取代jQuery自动生成的随机函数名 
+        'jsonpCallback' : function(){
+          console.log(1);
+        },  
+        用来覆盖xhr的MIME类型 
+        'mimeType' : str     
+        用于响应HTTP访问认证请求的用户名 
+        'username' : 'aaa',     
+        用于响应HTTP访问认证请求的密码 
+        'password' : '111',     
+        只有当'dataType'为'jsonp'或'script',且type是GET时才能修改字符集'charset' 
+        'scriptCharset' : 'utf-8'  ,
+        为响应的状态码指定响应函数 
+        'statusCode' : {
+          404 : function(){             为响应状态'404',指定回调 
             console.log('page not found');
           },
-        } 
-      traditional : bol   是否使用传统的方式序列化数据 
-      xhr : foo       回调创建XMLHttpRequest对象 
+        },    
+        是否使用传统的方式序列化数据 
+        'traditional' : bol   
+        回调创建XMLHttpRequest对象 
+        'xhr' : function(){
+          console.log(1);
+        },       
+      }
   JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已 
     function cfoo123(){   // 和 success 任选一个,否则会执行两次 
       console.log(1111111);
@@ -1985,5 +2029,7 @@ Exp:
    $(document).on("contextmenu",function(e){
      return false;
    })
-Suggestion:
+Suggestion: 
+Question&Idea
+  如何在 AJAX 的回调中获取请求的数据 [?]
 ---------------------------------------------------------------------以下待整理 

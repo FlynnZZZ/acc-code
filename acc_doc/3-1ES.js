@@ -2315,14 +2315,13 @@ Array   数组对象
         catch (e) {
           console.log('执行了');
         } 
-    bol = arr.every(foo [,thisArr]);    回调值判断,是否全部为真「ES5」
+    bol = arr.every(f(val,idx,arr)[,thisArr]);    回调值判断,是否全部为真「ES5」
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
         在调用 every 之后添加到数组中的元素不会被 foo 访问到,
         若数组中存在的元素被更改,则他们传入 foo 的值是 every 访问到他们那一刻的值,
         那些被删除的元素或从来未被赋值的元素将不会被访问到;
-      foo 用来测试每个元素的函数,传入参数 (val,idx,arr) 
       thisArr 执行 callback 时使用的 this 值 
         若为 every 提供一个 thisArr 参数,在该参数为调用 callback 时的 this 值。
         若省略该参数,则 callback 被调用时的 this 值,
@@ -2333,14 +2332,13 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(foo [,thisArr]);     回调值判断,是否存在为真「ES5」
+    bol = arr.some(f(val,idx,arr)[,thisArr]);     回调值判断,是否存在为真「ES5」
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
         在调用 some 后被添加到数组中的值不会被 foo 访问到,
         若数组中存在且还未被访问到的元素被 foo 改变了,
         则其传递给 foo 的值是 some 访问到它那一刻的值;
-      foo 为每个元素执行的函数,依次传入参数 (val,idx,arr) 
       thisArr  可选,将会把它传给被调用的 foo,作为 this 值.
         否则,在非严格模式下将会是全局对象,严格模式下是 undefined.
       Example: :  是否存在大于18的元素 
@@ -2349,11 +2347,10 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    rstStr = arr.map(foo [,thisArr])    回调值组成的数组「ES5」 
-      foo   传入参数 (val,idx,arr) 
-        val 数组中当前被传递的元素
-        idx 数组中当前被传递的元素的索引
-        arr 调用map方法的数组
+    rstStr = arr.map(f(val,idx,arr)[,thisArr])    回调值组成的数组「ES5」 
+      val 数组中当前被传递的元素 
+      idx 数组中当前被传递的元素的索引 
+      arr 调用map方法的数组 
       thisArr 可选,数组本身,执行 foo 函数时 this 指向的对象 
       Example:
         arr = [1, 2, 3];

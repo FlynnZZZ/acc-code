@@ -201,9 +201,6 @@
   '-transient':
     'prefix': 'transient'
     'body': """transient""" 
-  '-typeof':
-    'prefix': 'typeof'
-    'body': 'typeof'
   '-undefined':
     'prefix': 'undefined'
     'body': 'undefined' 
@@ -211,19 +208,25 @@
     'prefix': 'volatile'
     'body': """volatile""" 
 '.text.html.basic':
-  # 标签------------------------------------------------------------------------
-  '<?php $1 ?>':
-    'prefix': 'php'
-    'body': '<?php $1 ?>'
-  '-<div >$1</div>':
-    'prefix': 'divNoClass'
-    'body': '<div >$1</div>'
+  # 声明类 ---------------------------------------------------------------------
   '-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">':
     'prefix': 'metaViewport'
     'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
+  '-<style>$1</style>':
+    'prefix': 'styleSelf'
+    'body': '<style>\n\t$1\n</style>'
   '-<script src="$1" charset="utf-8"></script>':
     'prefix': 'scriptSrc'
     'body': '<script src="$1" charset="utf-8"></script>'
+  # 常用标签 --------------------------------------------------------------------
+  '-<div >$1</div>':
+    'prefix': 'divNoClass'
+    'body': '<div>$1</div>'
+  '-<div id="$1">$2</div>':
+    'prefix': 'divId'
+    'body': ''' <div id="$1">
+        $2
+      </div>'''
   '-<section id="$1" class="">$2</section>':
     'prefix': 'section'
     'body': """<section id="$1" class="">
@@ -232,9 +235,7 @@
   '-<span class="">$1</span>':
     'prefix': 'spanClass'
     'body': '<span class="">$1</span>'
-  '-<style>$1</style>':
-    'prefix': 'styleSelf'
-    'body': '<style>\n\t$1\n</style>'
+  # 组合 -----------------------------------------------------------------------
   '-htmlSelf':
     'prefix': 'htmlSelf'
     'body': """
@@ -267,6 +268,10 @@
     </body>
     
     </html>"""
+  # 其他 -----------------------------------------------------------------------
+  '<?php $1 ?>':
+    'prefix': 'php'
+    'body': '<?php $1 ?>'
   # 属性------------------------------------------------------------------------
   '-class="$1"':
     'prefix': 'class'
@@ -286,7 +291,7 @@
     'body': 'v-else'
   '-vue-vfor':
     'prefix': 'vfor'
-    'body': 'v-for="${1:item} in ${2:items}"' 
+    'body': 'v-for="(${1:---}Item,${1:---}Idx) in ${1:---}List"' 
   '-vue-vhtml':
     'prefix': 'vhtml'
     'body': 'v-html="${1:key}"' 
@@ -325,9 +330,6 @@
     })
     </script>
     """ 
-  '-self-tag':
-    'prefix': 'tag'
-    'body': """<${1:tag}></${1:tag}>""" 
 '.text.html.vue':
   # 名词------------------------------------------------------------------------
   '-beforeCreate':
@@ -512,53 +514,36 @@
   '-/* $1 */':
     'prefix': 'zs'
     'body': '/* $1 */'
-  # -------------------------------------
+  # ES--------------------------------------------------------------------------
   # word
-  'wd-1-__proto__':
-    'prefix': 'proto'
-    'body': '__proto__'
-  'wd-1-prototype':
-    'prefix': 'prototype'
-    'body': 'prototype'
-  'wd-1-configurable':
+  '-configurable':
     'prefix': 'configurable'
     'body': 'configurable'
-  'wd-1-enumerable':
+  '-enumerable':
     'prefix': 'enumerable'
     'body': 'enumerable'
-  'wd-1-writable':
+  '-writable':
     'prefix': 'writable'
     'body': 'writable'
-  'wd-2-ignoreCase':
+  '-ignoreCase':
     'prefix': 'ignoreCase'
     'body': 'ignoreCase'
-  'wd-3-readAsDataURL':
+  '-readAsDataURL':
     'prefix': 'readAsDataURL'
     'body': """readAsDataURL"""
-  'wd-4-pageX':
-    'prefix': 'pageX'
-    'body': 'pageX'
-  'wd-4-pageY':
-    'prefix': 'pageY'
-    'body': 'pageY'
-  'wd-6-parentElement':
+  '-parentElement':
     'prefix': 'parentElement'
     'body': 'parentElement'
-  'wd-8-indexedDB':
+  '-indexedDB':
     'prefix': 'indexedDB'
     'body': 'indexedDB'
-  'wd-9-localStorage':
+  '-localStorage':
     'prefix': 'localStorage'
     'body': 'localStorage'
-  'wd-9-Object':
+  '-Object':
     'prefix': 'Object'
     'body': 'Object'
-  'wd-9-XMLHttpRequest;':
-    'prefix': 'XMLHttpRequest'
-    'body': 'XMLHttpRequest;'
-  'wd-9-window':
-    'prefix': 'window'
-    'body': 'window'
+  # statement 语句 
   '-for (var i = 0; i < $1; i++) { }':
     'prefix': 'for'
     'body': """for (var i = 0; i < $1; i++) {
@@ -569,45 +554,46 @@
     'body': """for(var ${1:key} in ${2:obj}){
       $3
     };"""
-  '/-alert($1);':
-    'prefix': 'alert'
-    'body': 'alert($1);'
-  '/-confirm(str)':
-    'prefix': 'confirm'
-    'body': 'confirm($1)'
-  '/-clearInterval($1)':
-    'prefix': 'clearInterval'
-    'body': 'clearInterval($1)'
-  '/-clearTimeout($1)':
-    'prefix': 'clearTimeout'
-    'body': 'clearTimeout($1)'
-  '/-setTimeout(${1:funName},${2:time});':
-    'prefix': 'setTimeout'
-    'body': 'setTimeout(${1:funName},${2:time});'
-  '/-setInterval(${1:funName},${2:time});':
-    'prefix': 'setInterval'
-    'body': 'setInterval(${1:funName},${2:time});'
-  '/-parseFloat(str);':
-    'prefix': 'parseFloat'
-    'body': 'parseFloat($1);'
-  '/-parseInt(str[,radix]);':
-    'prefix': 'parseInt'
-    'body': 'parseInt(str,${1:radix});'
-  '/-open()':
-    'prefix': 'open'
-    'body': 'open("${1:url}","_self");'
-  '/-prompt("提示文字","默认显示文字");':
-    'prefix': 'prompt'
-    'body': 'prompt("提示文字","默认显示文字");'
-  'A-new FileReader();':
+  # operator 操作符 
+  '-typeof':
+    'prefix': 'typeof'
+    'body': 'typeof'
+  # class 
+  'cls-new FileReader();':
     'prefix': 'newFileReader'
     'body': """new FileReader();"""
-  'A-new WebSocket(url);':
+  'cls-new WebSocket(url);':
     'prefix': 'newWebSocket'
     'body': 'new WebSocket($1);'
-  'A-new Promise($1)':
+  'cls-new Promise($1)':
     'prefix': 'newPromise'
     'body': 'new Promise($1)'
+  # function 
+  'fn-prototype':
+    'prefix': 'prototype'
+    'body': 'prototype'
+  'fn-arguments':
+    'prefix': 'arguments'
+    'body': 'arguments'
+  'fn-caller':
+    'prefix': 'caller'
+    'body': 'caller'
+  'fn-functionArrows ($1) => {$2}':
+    'prefix': 'functionArrows'
+    'body': '($1) => {$2}'
+  'fn-function(){\n}$1':
+    'prefix': 'function1'
+    'body': 'function(){\n}$1'
+  'fn-function $1($2){$3\n};':
+    'prefix': 'function2'
+    'body': 'function $1($2){$3\n};'
+  'fn-(function ($1){$3\n})($2);':
+    'prefix': 'function3'
+    'body': '(function ($1){$3\n})($2);'
+  # obj 
+  'o-__proto__':
+    'prefix': 'proto'
+    'body': '__proto__'
   'o-constructor':
     'prefix': 'constructor1'
     # 存在bug,当为 'prefix': 'constructor' 时
@@ -621,6 +607,31 @@
   'o-call(this[,arg1,arg2,...]);':
     'prefix': 'call'
     'body': """call(${1:this},${2:arg1,arg2,..})"""
+  'o-Object.assign(obj1,obj2,..);':
+    'prefix': 'Objectassign'
+    'body': 'Object.assign($1);'
+  'o-Object.defineProperty(obj,key,{});':
+    'prefix': 'ObjectdefineProperty'
+    'body': '''Object.defineProperty(${1:obj},key,{
+        // get : function (){
+        // },
+        // set : function (){
+        // },
+        value : val,
+        writable : bool,
+        enumerable : bool, 
+        configurable : bool
+      });'''
+  'o-Object.getPrototypeOf(obj);':
+    'prefix': 'ObjectGetPrototypeOf'
+    'body': 'Object.getPrototypeOf($1);'
+  'o-Object.is(val1,val2);':
+    'prefix': 'ObjectIs'
+    'body': 'Object.is($1);'
+  'o-Object.keys(obj);':
+    'prefix': 'Objectkeys'
+    'body': 'Object.keys($1);'
+  # num 
   'num-Infinity':
     'prefix': 'Infinity'
     'body': 'Infinity'
@@ -645,98 +656,75 @@
   'num-isNaN(val);':
     'prefix': 'isNaN'
     'body': 'isNaN($1);'
+  # str 
   'str-split("$1");':
     'prefix': 'split'
     'body': 'split("$1");'
+  # arr 
   'arr-forEach(foo); ':
     'prefix': 'forEach'
     'body': """forEach(function(val,idx,arr){
       $1
     });"""
+  'arr-map(cfoo[,this]);':
+    'prefix': 'map'
+    'body': """var res = arr.map(function(val,idx,arr1){
+      return $1;
+    } )"""
   'arr-isArray($1);':
     'prefix': 'isArray'
     'body': 'isArray($1);'
-  'obj-Object.assign(obj1,obj2,..);':
-    'prefix': 'Objectassign'
-    'body': 'Object.assign($1);'
-  'obj-Object.defineProperty(obj,key,{});':
-    'prefix': 'ObjectdefineProperty'
-    'body': '''Object.defineProperty(${1:obj},key,{
-        // get : function (){
-        // },
-        // set : function (){
-        // },
-        value : val,
-        writable : bool,
-        enumerable : bool, 
-        configurable : bool
-      });'''
-  'obj-Object.getPrototypeOf(obj);':
-    'prefix': 'ObjectGetPrototypeOf'
-    'body': 'Object.getPrototypeOf($1);'
-  'obj-Object.is(val1,val2);':
-    'prefix': 'ObjectIs'
-    'body': 'Object.is($1);'
-  'obj-Object.keys(obj);':
-    'prefix': 'Objectkeys'
-    'body': 'Object.keys($1);'
-  'fn-arguments':
-    'prefix': 'arguments'
-    'body': 'arguments'
-  'fn-caller':
-    'prefix': 'caller'
-    'body': 'caller'
-  'fn-functionArrows ($1) => {$2}':
-    'prefix': 'functionArrows'
-    'body': '($1) => {$2}'
-  'fn-function(){\n}$1':
-    'prefix': 'function1'
-    'body': 'function(){\n}$1'
-  'fn-function $1($2){$3\n};':
-    'prefix': 'function2'
-    'body': 'function $1($2){$3\n};'
-  'fn-(function ($1){$3\n})($2);':
-    'prefix': 'function3'
-    'body': '(function ($1){$3\n})($2);'
-  '-date-Date.now();':
+  'arr-filter(foo [,this]);':
+    'prefix': 'filter'
+    'body': """filter(function(val,idx,arr){
+        return ${2:true[保留]}
+      } ,${1:this});"""
+  'arr-every(foo [,this]);':
+    'prefix': 'every'
+    'body': """every(function(val,idx,arr){
+      return ${2:[全部为真时,才为真]}
+    },${1:this});"""
+  # date 
+  'date-Date.now();':
     'prefix': 'DateNow'
     'body': 'Date.now();'
-  '-date-Date.parse(str/date);':
+  'date-Date.parse(str/date);':
     'prefix': 'DateParse'
     'body': 'Date.parse($1);'
-  '-date-Date.UTC(year,month[,...]);':
+  'date-Date.UTC(year,month[,...]);':
     'prefix': 'DateUTC'
     'body': 'Date.UTC($1);'
-  '-date-getDate()':
+  'date-getDate()':
     'prefix': 'getDate'
     'body': 'getDate();'
-  '-date-getDay()':
+  'date-getDay()':
     'prefix': 'getDay'
     'body': 'getDay();'
-  '-date-getFullYear()':
+  'date-getFullYear()':
     'prefix': 'getFullYear'
     'body': 'getFullYear();'
-  '-date-getHours()':
+  'date-getHours()':
     'prefix': 'getHours'
     'body': 'getHours();'
-  '-date-getMonth()':
+  'date-getMonth()':
     'prefix': 'getMonth'
     'body': 'getMonth();'
-  '-date-getMinutes()':
+  'date-getMinutes()':
     'prefix': 'getMinutes'
     'body': 'getMinutes();'
-  '-date-getMilliseconds()':
+  'date-getMilliseconds()':
     'prefix': 'getMilliseconds'
     'body': 'getMilliseconds();'
-  '-date-getSeconds()':
+  'date-getSeconds()':
     'prefix': 'getSeconds'
     'body': 'getSeconds();'
-  '-date-getTime();':
+  'date-getTime();':
     'prefix': 'getTime'
     'body': 'getTime();'
-  '-date-getTimezoneOffset();':
+  'date-getTimezoneOffset();':
     'prefix': 'getTimezoneOffset'
     'body': 'getTimezoneOffset();'
+  # Math 
   '-Math.abs(num)':
     'prefix': 'MathAbs'
     'body': 'Math.abs($1);'
@@ -791,6 +779,7 @@
   '-Math.tan(弧度值)':
     'prefix': 'MathTan'
     'body': 'Math.tan($1)'
+  # RegExp 
   '-RegExp-new RegExp($1)':
     'prefix': 'newRegExp'
     'body': 'new RegExp($1);'
@@ -809,6 +798,7 @@
   '-RegExp.rightContext;':
     'prefix': 'RegExpRightContext'
     'body': 'RegExp.rightContext;'
+  # console 
   '-console':
     'prefix': 'console'
     'body': 'console'
@@ -845,12 +835,15 @@
   '-console.warn($1);':
     'prefix': 'consoleWarn'
     'body': 'console.warn($1);'
+  # JSON 
   '-JSON.parse($1);':
     'prefix': 'JSONparse'
     'body': 'JSON.parse($1);'
   '-JSON.stringify($1);':
     'prefix': 'JSONstringify'
     'body': 'JSON.stringify($1);'
+  # DOM-------------------------------------------------------------------------
+  # elem 
   'el-innerHTML("$1");':
     'prefix': 'innerHTML'
     'body': 'innerHTML("$1");'
@@ -875,55 +868,34 @@
   'el-insertAdjacentHTML("${1:beforeend}",html)':
     'prefix': 'insertAdjacentHTML'
     'body': 'insertAdjacentHTML("${1:beforeend}",html);'
-  'event-touchmove':
+  # event 
+  'e-touchmove':
     'prefix': 'touchmove'
     'body': 'touchmove'
-  'event-touchend':
+  'e-touchend':
     'prefix': 'touchend'
     'body': 'touchend'
-  'event-readystatechange':
+  'e-readystatechange':
     'prefix': 'readystatechange'
     'body': 'readystatechange'
-  'event-addEventListener("",foo);':
+  'e-addEventListener("",foo);':
     'prefix': 'addEventListener'
     'body': """addEventListener("${1:click}",function(e){
       $2
     })
     """
-  'event-preventDefault()':
+  'e-preventDefault()':
     'prefix': 'preventDefault'
     'body': 'preventDefault()'
-  'event-stopPropagation();':
+  'e-stopPropagation();':
     'prefix': 'stopPropagation'
     'body': 'stopPropagation();'
-  'package--ajax':
-    'prefix': 'ajax'
-    'body':  """
-      var xhr = new XMLHttpRequest();
-      xhr.open('Method', 'Url', true);
-      xhr.setRequestHeader('Content-Type', 'application/json'); // 可选
-      xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-          console.log('state change end', xhr);
-          console.log(xhr.status);
-          console.log(xhr.response);
-          var response = JSON.parse(xhr.response);
-          console.log(response);
-        } 
-        else {
-          console.log('change');
-        }
-      }
-      var aoo = { username: 'gua', password: '123', };
-      var data = JSON.stringify(aoo);
-      xhr.send(data); 
-      """
-  # -----------------------------------------------------------
-  '-filter(foo [,this]);':
-    'prefix': 'filter'
-    'body': """filter(function(val,idx,arr){
-        return ${2:true[保留]}
-      } ,${1:this});"""
+  'e-pageX':
+    'prefix': 'pageX'
+    'body': 'pageX'
+  'e-pageY':
+    'prefix': 'pageY'
+    'body': 'pageY'
   '-fromCharCode(num,num...);':
     'prefix': 'fromCharCode'
     'body': 'fromCharCode($1);'
@@ -942,11 +914,6 @@
   '-lastIndexOf($1);':
     'prefix': 'lastIndexOf'
     'body': 'lastIndexOf($1);'
-  '-map(cfoo[,this]);':
-    'prefix': 'map'
-    'body': """var res = arr.map(function(val,idx,arr){
-      return $2;
-    },${1:this})"""
   '-match(str);':
     'prefix': 'match'
     'body': 'match($1);'
@@ -1072,15 +1039,69 @@
   '-concat($1)':
     'prefix': 'concat'
     'body': 'concat($1)'
-  '-every(foo [,this]);':
-    'prefix': 'every'
-    'body': """every(function(val,idx,arr){
-      return ${2:[全部为真时,才为真]}
-    },${1:this});"""
   '-exec(str);':
     'prefix': 'exec'
     'body': 'exec($1);'
-  # jQuery----------------------------------------------------------------------------
+  # BOM----------------------------------------------------------------------
+  'cls-XMLHttpRequest':
+    'prefix': 'XMLHttpRequest'
+    'body': 'XMLHttpRequest'
+  'o-window':
+    'prefix': 'window'
+    'body': 'window'
+  'W1-alert($1);':
+    'prefix': 'alert'
+    'body': 'alert($1);'
+  'W1-confirm(str)':
+    'prefix': 'confirm'
+    'body': 'confirm($1)'
+  'W1-clearInterval($1)':
+    'prefix': 'clearInterval'
+    'body': 'clearInterval($1)'
+  'W1-clearTimeout($1)':
+    'prefix': 'clearTimeout'
+    'body': 'clearTimeout($1)'
+  'W1-setTimeout(${1:funName},${2:time});':
+    'prefix': 'setTimeout'
+    'body': 'setTimeout(${1:funName},${2:time});'
+  'W1-setInterval(${1:funName},${2:time});':
+    'prefix': 'setInterval'
+    'body': 'setInterval(${1:funName},${2:time});'
+  'W1-parseFloat(str);':
+    'prefix': 'parseFloat'
+    'body': 'parseFloat($1);'
+  'W1-parseInt(str[,radix]);':
+    'prefix': 'parseInt'
+    'body': 'parseInt(str,${1:radix});'
+  'W1-open()':
+    'prefix': 'open'
+    'body': 'open("${1:url}","_self");'
+  'W1-prompt("提示文字","默认显示文字");':
+    'prefix': 'prompt'
+    'body': 'prompt("提示文字","默认显示文字");'
+  'package--ajax':
+    'prefix': 'ajax'
+    'body':  """
+      var xhr = new XMLHttpRequest();
+      xhr.open('Method', 'Url', true);
+      xhr.setRequestHeader('Content-Type', 'application/json'); // 可选
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+          console.log('state change end', xhr);
+          console.log(xhr.status);
+          console.log(xhr.response);
+          var response = JSON.parse(xhr.response);
+          console.log(response);
+        } 
+        else {
+          console.log('change');
+        }
+      }
+      var aoo = { username: 'gua', password: '123', };
+      var data = JSON.stringify(aoo);
+      xhr.send(data); 
+      """
+  # jQuery----------------------------------------------------------------------
   '-jq-$($1)':
     'prefix': 'jq'
     'body': '$($1)'
@@ -1249,7 +1270,7 @@
         cache : true , 
         // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
       })
-      .then(function(backData,statusTxt,otherObj){
+      .then(function(backData,statusTxt,xhr){
         console.log('某接口',statusTxt,backData);
       }
       ,function(xhr,status,errorTrown){
@@ -1420,6 +1441,27 @@
   '-vue-cc-srcElement':
     'prefix': 'srcElement'
     'body': """srcElement""" 
+  # React-----------------------------------------------------------------------
+  '--React;':
+    'prefix': 'React'
+    'body': """React""" 
+  '--React.createClass({$1});':
+    'prefix': 'ReactCreateClass'
+    'body': """React.createClass({
+      render : function1(){
+        return <div> $1 </div>;
+      },
+    });""" 
+  '--React.render(html,elem);':
+    'prefix': 'ReactRender'
+    'body': """React.render(<Tag key="val" />,elem);""" 
+  # HTML------------------------------------------------------------------------
+  '--divHTML:<div>$1</div>':
+    'prefix': 'divHTML'
+    'body': """<div>$1</div>""" 
+  '--spanHTML:<span>$1</span>':
+    'prefix': 'spanHTML'
+    'body': """<span>$1</span>""" 
 
 
 
@@ -1469,6 +1511,5 @@
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
 # -----------------------------------------------------------------------------
-
 
 

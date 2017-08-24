@@ -332,7 +332,7 @@ Webpack: 模块加载器兼打包工具
   命令行  
     webpack              [在命令行中当前文件夹下],默认按照配置文件来执行进行打包  
     webpack --config xx.js  自定义配置文件[可不再是默认的 webpack.config.js]
-  配置详情: 
+  配置详情 
     let webpack = require('webpack');
     let path = require('path');
     module.exports = {     // commonjs 模块化 输出 
@@ -342,7 +342,7 @@ Webpack: 模块加载器兼打包工具
           './src/index.js'
         arr     将多个文件打包在一起 
           [ './entry1.js' , 'entry2.js' ] 
-        obj     key-val 形式,对象的val可为str或arr 
+        obj     'key-val'形式,对象的val可为str或arr 
           适用于可能需要不止一个入口的情况 
           同'output'的关系 
             输出打包后的文件和output参数有关,若 output.filename 仍指定为一个值,
@@ -351,17 +351,17 @@ Webpack: 模块加载器兼打包工具
             entry : {
               main : './src/index.js'
               page1 : './aoo.js',
-              page2 : [ './entry1.js' , 'entry2.js' ] 
+              page2 : [ './entry1.js' , 'entry2.js' ],
+               vendors: ['vue', 'vue-router','vue-resource','vuex']    需进行单独打包的文件  
             }
       'entry' : './src/main.js',   
       'context': __dirname + "/src", // __dirname 是指项目根目录
-      项目的入口点,指定打包后的文件,作为执行上下文的根
-        output    obj,指定打包文件的输出 
-        打包后的程序和资源将要去到的路径 
+      指定打包文件的输出 
+        项目的入口点,指定打包后的文件,作为执行上下文的根
       'output': { 
-        指定打包后的文件的存放路径 
-        'path' : './dist/js',  
-        指定打包后的文件的名称 
+        'path' : './dist/js',      存放路径,输出的路径都相对于它 
+        'publicPath': '/dist/',    对应的server上的路径
+        'filename' : './bundle.js' 打包后的文件的名称 
           也可定义路径,会接着path后,推荐只指定名称 
           可使用占位符指定动态的输入 
             当存在多个输出的文件时用于指定名称「如entry的val为obj时」
@@ -370,20 +370,28 @@ Webpack: 模块加载器兼打包工具
             [chunkhash] 每个chunk的hash值,相当于文件的MD5值 
               MD5值为了保证每个文件的唯一性
             Example: filename : '[name]-[hash].js'
-        'filename' : './bundle.js'   
+        'chunkFilename': 'js/[name].asyncChunk.js?'+new Date().getTime()   chunk生成的配置
       },
       执行完成后,生成文件的存放位置的属性
       'resolve' : {
-        root : [path.join(__dirname,'src')],
-        extensions : ['','.ts','.js']
+        'root' : [path.join(__dirname,'src')],
+        'extensions' : ['','.ts','.js'],
+        'alias': {
+          'vue': 'vue/dist/vue.js'
+        },
       },
-      定义对模块的处理逻辑
-      'module' : {    
-        loaders : [  
-          {test : /\.ts$/,loader : 'ts-loader'} // 定义各种 loaders
-        ],
-        
-      }
+      加载器,定义对模块的处理逻辑[详见'Loaders']
+      'module' : { },
+      插件 [详见'Plugins']
+      'plugins' : [ ],
+      使用'webpack-dev-server'启动热刷新插件
+      'devServer': {
+        contentBase: path.join(__dirname, "/"),
+        host: 'localhost',  建议写IP地址,开发时候电脑的ip地址,localhost可能有问题  
+        port: 9090,         默认9090
+        inline: true,       可以监控js变化
+        hot: true           热启动
+      },
     } 
     多文件单输出 
       const webpack = require("webpack");
@@ -398,7 +406,7 @@ Webpack: 模块加载器兼打包工具
         },
       };
       根据数组顺序,文件全部会被一起打包在 dist/app.bundle.js 里 
-    多文件多个输出
+    多文件多个输出 
       const webpack = require("webpack");
       module.exports = {
         context: __dirname + "/src",
@@ -416,7 +424,7 @@ Webpack: 模块加载器兼打包工具
       dist/home.bundle.js、 
       dist/events.bundle.js, 
       dist/contact.bundle.js。
-  其他说明
+  其他说明 
     版本2.x 官方推荐 module.rules 写法
     module.exports = {
       module: {
@@ -548,7 +556,7 @@ Webpack: 模块加载器兼打包工具
       ]
     }    
   ◆注解 
-Loader,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
+Loaders,解释器  用于编译解释指定类型的文件,在打包之前对依赖进行预处理 
   PS:loader机制支持载入各种各样的静态资源,不只是js脚本,
     连 html,css,images 等各种资源都有相应的 loader 来做依赖管理和打包
     Webpack本身只能处理JS模块,若要处理其他类型的文件,就需使用loader进行转换;
@@ -596,21 +604,51 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     PS:根据模块类型[扩展名]来自动绑定需要的 loader
       为了让加载器工作,需要一个正则表达式来定义需修改的文件,
       以及一个字符串或数组用来申明我们需要使用的加载器。
-    '1.x'版本的配置方式 
-    module : {
-      loaders : [
-        {test: /\.jade$/ , loader : 'jade' },
-        // 通过正则的test方将文件的后缀名法进行匹配
-        // 匹配成功则使用 指定的loader
+    'module' : {
+      loaders : [    '1.x'版本写法 
+        通过正则的test方法将文件的后缀名法进行匹配,成功则使用指定的loader来处理  
+        { test : /\.ts$/,
+          loader : 'ts-loader',
+        }, 
         {test: /\.css$/ , loader : 'style!css'},
-        // 或者 {test: /\.css$/ , loader : ["style", "css"]},
-      ] 
-    }
-    '2.x'版本的配置方式 
-    module: {
-      rules: [
-        {
-          test: /* RegEx */,
+          或 {test: /\.css$/ , loader : ["style", "css"]},
+      ],
+      rules: [       '2.x'版本写法 
+        { test: /\.vue$/,
+          loader: 'vue-loader',    
+          options: {
+            loaders: {
+              scss: 'vue-style-loader!css-loader!sass-loader',               <style lang="scss">
+              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax' <style lang="sass">
+            }
+          }
+        },
+        { test: /\.html$/,
+          loader: "raw-loader"
+        },
+        { test: /\.css$/,
+          loader: 'style-loader!css-loader'
+        },
+        { test: /\.js$/,
+          exclude: /node_modules/,
+          loader: "babel-loader",
+          options: {
+            presets: ["es2015","stage-0"],
+            plugins: ['syntax-dynamic-import']
+          }
+        },
+        { test: /\.scss$/,
+          loader: 'style-loader!css-loader!sass-loader'
+        },
+        { test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+          loader: 'file-loader'
+        },
+        { test: /\.(png|jpg|gif)$/,
+          图片加载器,类似file-loader,可将小图片转成base64,减少http请求
+          如下配置,将小于8192byte的图片转成base64码
+          loader: 'url-loader?limit=8192&name=images/[hash].[ext]'
+        },
+        { test: /* RegEx */,
           use: [
             {
               loader: /* loader name */,
@@ -702,7 +740,7 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
       }
       若图片资源小于10kb就会转化成 base64 格式的 dataUrl,
       其他的图片会存放在build/文件夹下 
-  Example:
+  Example: 
     module: {
       loaders: [ //加载器配置
         //.vue文件使用vue-loader处理（这里将-loader省去了）
@@ -795,15 +833,25 @@ Loader,解释器  用于编译解释指定类型的文件,在打包之前对依�
     可以应用文件加载器来拷贝文件,或使用url-加载器,将图片替换为base64字符串,
     除非它超过字节限制,在这种情况下,它将用相对路径替换url语句,并将文件复制到输出位置。
     加载器可以通过传递query对象来配置,比如我们可以配置加载器内联文件,当文件不超过10Kb的时候。
-Plugins,插件   扩展webpack的功能 
-  plugins   arr,使用插件,arr的元素为插件的初始化 
-    Example:
-    var htmlWebpackPlugin = require("html-webpack-plugin");
-      module.exports ={
-        plugins: [
-          new htmlWebpackPlugin(arg);
-        ]
-      }
+Plugins,插件    扩展webpack的功能 
+  var HtmlWebpackPlugin = require("html-webpack-plugin");
+  plugins: [
+    //webpack3.0的范围提升
+    new webpack.optimize.ModuleConcatenationPlugin(),  插件初始化 
+    //打包生成html文件,并且将js文件引入进来
+    new HtmlWebpackPlugin({
+      filename: path.resolve(__dirname, 'dist/html/index.html'), //生成的html存放路径,相对于path
+      template: path.resolve(__dirname, 'src/html/index.html'), //ejs模板路径,前面最好加上loader用于处理
+      inject: 'body',  //js插入的位置,true/'head'/'body'/false
+      hash: true
+    }),
+    //提取功能模块
+    new CommonsChunkPlugin({
+      name: 'vendors', // 将公共模块提取,生成名为`vendors`的chunk
+      minChunks: 2, //公共模块被使用的最小次数。配置为2,也就是同一个模块只有被2个以外的页面同时引用时才会被提取出来作为common chunks
+      // children:true  //如果为true,那么公共组件的所有子依赖都将被选择进来
+    }),
+  ],
   ◆内建插件
   webpack.optimize.UglifyJsPlugin        压缩处理 
     module.exports = {

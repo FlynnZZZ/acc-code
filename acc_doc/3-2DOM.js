@@ -1123,9 +1123,13 @@ DOM操作归纳总结
           var scrollbarWidth = width1 - width2;
           elem.style.overflow = null; // 清除该内联样式
           console.log(scrollbarWidth);
-    插入DOM中的一般标签可立即获取到 
+    插入DOM中的一般标签可立即获取到
+      表示是同步操作[SelfThink] 
       $('body').append('<input type="file" id="file">');
       console.log($('#file'));  // 可获取到 
+    存在内存中的元素,而非插入到DOM中,仍起作用 
+      var file = $('<input type="file" id="file1">')
+      file.click()  // 仍可打开图片选择框 
 --------------------------------------------------------------------------------
 ◆Event 事件 
   PS: JS与HTML的交互时通过事件实现的 
@@ -2168,8 +2172,19 @@ WeiXin 微信
     text.selectionEnd    光标选中文本结束的字符下标表示
     text.value.setSelectionRange(begin,end)   获取部分字符
   input[type="file"]  处于内存中的元素仍能起作用 
-    var file = $('<input type="file" id="file1">')
-    file.click()  // 仍可打开图片选择框 
+    必须手动执行,才会打开本地文件 
+      <img src="../../../2Resource/2Img/Wallpaper/160521133443-9.jpg" id="img" class="img">
+      <button type="button" id="_btn">click</button>
+      var file = $('<input type="file" id="__file">').appendTo($('body'))
+      setTimeout(function(){ // 执行了 
+        file.click();    
+        $('#_btn').click();
+        console.log(11); 
+      },2000);
+      $('#_btn').on("click",function(e){ // 执行了 
+        file.click();
+        console.log(22); 
+      })
   select 和 option  下拉列表 
     ◆HTMLSelectElement 类型表示选择框<select>提供了下列属性和方法
       也拥有表单字段共有的属性和方法
@@ -3547,4 +3562,3 @@ URL 对象         用于对二进制数据生成URL
     // setTimeout(function(){
     //   $('#test1').focus();
     // },10000);
-

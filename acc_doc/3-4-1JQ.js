@@ -1262,7 +1262,7 @@ AJAX
       reponseText 请求返回的内容
       textStatus  请求状态,'success' 'error' 'notmodified' 'timeout' 4 种
       xhr         XMLHttpRequest对象 
-  $.getScript(url[,cfoo])       请求并执行获取到的JS文件 
+  $.getScript(url[,cfoo])       请求并执行获取到的JS文件[并不会插入到DOM中,仅运行] 
   $.getJSON(url[,cfoo])  加载并解析JSON文件 
     url    请求加载json格式文件的服务器地址
     cfoo   加载完成后的回调,可选,传入参数 (backData,textStatus,xhr) 

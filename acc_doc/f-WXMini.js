@@ -1,4 +1,4 @@
-miniA微信小程序
+miniA微信小程序 
 说明 
   介绍:
     微信小程序主要依赖于微信平台,使用微信台提供的'View''Event''Component''Container'等构建,
@@ -171,7 +171,7 @@ miniA微信小程序
         console.log();
       },        
       onReady: function(){ // 页面初次渲染完成回调  
-        // 一个页面只会调用一次，代表页面已经准备妥当，可以和视图层进行交互
+        // 一个页面只会调用一次,代表页面已经准备妥当,可以和视图层进行交互
         console.log();
       },       
       onHide: function(){ // 页面隐藏回调  
@@ -187,7 +187,7 @@ miniA微信小程序
       },
       onReachBottom: function () { // 上拉触底回调  
         // 可以在app.json的window选项中或页面配置中设置触发距离onReachBottomDistance 
-        // 在触发距离内滑动期间，本事件只会被触发一次
+        // 在触发距离内滑动期间,本事件只会被触发一次
         console.log();
       },
       onShareAppMessage: function(){ // 用户点击右上角转发回调,未设置该项则不会出现转发选项  
@@ -257,7 +257,7 @@ miniA微信小程序
     Page.prototype.route  获取当前页路径['1.2.0+']
     app.getCurrentPages() 获取当前页面栈实例 
       以数组形式按栈的顺序给出,第一个元素为首页,最后一个元素为当前页面
-      不要尝试修改页面栈，会导致路由以及页面状态错误
+      不要尝试修改页面栈,会导致路由以及页面状态错误
   生命周期 
     A、B 两个界面
     ◆应用启动
@@ -294,11 +294,11 @@ miniA微信小程序
       <view wx:for="{{items}}" wx:for-item="name"  wx:for-index="id">
         {{id}}: {{name.one}}
       </view>
-    wx:for={{str}}     值为字符串时，将字符串解析成字符串数组 
+    wx:for={{str}}     值为字符串时,将字符串解析成字符串数组 
       <view wx:for="array"> {{item}} </view>
       // 等同于
       <view wx:for="{{['a','r','r','a','y']}}"> {{item}} </view>
-    花括号和引号之间如果有空格，将最终被解析成为字符串 
+    花括号和引号之间如果有空格,将最终被解析成为字符串 
       <view wx:for="{{[1,2,3]}} "> {{item}} </view>
       // 等同于
       <view wx:for="{{[1,2,3] + ' '}}" > {{item}} </view>
@@ -310,7 +310,7 @@ miniA微信小程序
     str   相当于'item[str]',该值需是列表中唯一的字符串或数字,且不能动态改变 
     *this 保留关键字,表示'item'本身,这种表示需item是一个唯一的字符串或者数字
   wx:if="{{val}}"    条件渲染 
-    PS: wx:if 是惰性的，如果在初始渲染条件为 false，框架什么也不做，在条件第一次变成真的时候才开始局部渲染
+    PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
   wx:elif="{{val}}"  条件渲染 
   wx:else            条件渲染 
   <block wx:if="{{val}}"> </block>  多组件条件渲染 
@@ -378,7 +378,7 @@ miniA微信小程序
       'touchend'    手指触摸动作结束
       'tap'         手指触摸后离开
       'longpress'   手指触摸后,超过350ms再离开['1.5.0+'] 
-        如果指定了事件回调函数并触发了这个事件，tap事件将不被触发 
+        如果指定了事件回调函数并触发了这个事件,tap事件将不被触发 
       'longtap'     手指触摸后,超过350ms再离开[推荐使用longpress事件代替] 
       ◆非冒泡事件：当一个组件上的事件被触发后,该事件不会向父节点传递 
     事件绑定 
@@ -400,17 +400,17 @@ miniA微信小程序
           </view>
         </view>
     事件的捕获阶段
-      PS: '1.5.0+' 起，触摸类事件支持捕获阶段。捕获阶段位于冒泡阶段之前，
-        捕获阶段中，事件到达节点的顺序与冒泡阶段恰好相反。
-        需要在捕获阶段监听事件时，可以采用capture-bind、capture-catch关键字，后者将中断捕获阶段和取消冒泡阶段。
-      在下面的代码中，点击 inner view 会先后调用handleTap2、handleTap4、handleTap3、handleTap1。
+      PS: '1.5.0+' 起,触摸类事件支持捕获阶段。捕获阶段位于冒泡阶段之前,
+        捕获阶段中,事件到达节点的顺序与冒泡阶段恰好相反。
+        需要在捕获阶段监听事件时,可以采用capture-bind、capture-catch关键字,后者将中断捕获阶段和取消冒泡阶段。
+      在下面的代码中,点击 inner view 会先后调用handleTap2、handleTap4、handleTap3、handleTap1。
       <view id="outer" bind:touchstart="handleTap1" capture-bind:touchstart="handleTap2">
         outer view
         <view id="inner" bind:touchstart="handleTap3" capture-bind:touchstart="handleTap4">
           inner view
         </view>
       </view>
-      如果将上面代码中的第一个capture-bind改为capture-catch，将只触发handleTap2。
+      如果将上面代码中的第一个capture-bind改为capture-catch,将只触发handleTap2。
       <view id="outer" bind:touchstart="handleTap1" capture-catch:touchstart="handleTap2">
         outer view
         <view id="inner" bind:touchstart="handleTap3" capture-bind:touchstart="handleTap4">
@@ -432,7 +432,7 @@ miniA微信小程序
         e.currentTarget.dataset  当前组件上由data-开头的自定义属性组成的集合
       ◆'CustomEvent'自定义事件对象属性列表[继承 BaseEvent] 
       e.detail         额外的信息
-        自定义事件所携带的数据，如表单组件的提交事件会携带用户的输入，媒体的错误事件会携带错误信息，详见组件定义中各个事件的定义。
+        自定义事件所携带的数据,如表单组件的提交事件会携带用户的输入,媒体的错误事件会携带错误信息,详见组件定义中各个事件的定义。
         点击事件的detail 带有的 x, y 同 pageX, pageY 代表距离文档左上角的距离。
       ◆'TouchEvent'触摸事件对象属性列表[继承 BaseEvent]：
       e.touches         触摸事件,当前停留在屏幕中的触摸点信息的数组  
@@ -442,11 +442,11 @@ miniA微信小程序
         pageY   num,距离文档左上角的距离 
         clientX  num,距离页面可显示区域[屏幕除去导航条]左上角距离
         clientY  num,距离页面可显示区域[屏幕除去导航条]左上角距离 
-      e.changedTouches  触摸事件，当前变化的触摸点信息的数组 
+      e.changedTouches  触摸事件,当前变化的触摸点信息的数组 
         changedTouches 数据格式同 touches。 
-        表示有变化的触摸点，如从无变有（touchstart），位置变化（touchmove），从有变无（touchend、touchcancel）。
+        表示有变化的触摸点,如从无变有（touchstart）,位置变化（touchmove）,从有变无（touchend、touchcancel）。
       ◆特殊事件： 
-      <canvas/> 中的触摸事件不可冒泡，故没有 currentTarget。
+      <canvas/> 中的触摸事件不可冒泡,故没有 currentTarget。
       canvas 触摸事件中携带的 touches 是'CanvasTouch'数组
         identifier num,触摸点的标识符 
         x       num,距离 Canvas 左上角的距离
@@ -526,13 +526,13 @@ miniA微信小程序
     全局样式与局部样式 
       定义在app.wxss 中的样式为全局样式,作用于每一个页面。
       在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
-基础组件 : 框架为开发者提供的一系列组件，开发者可以通过组合这些基础组件进行快速开发 
-  <view> 视图容器 
+基础组件 : 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
+  <view>         视图容器 
     hover-class   指定按下去的样式类,hover-class="none",默认,没有点击态效果 
     hover-stop-propagation bol,指定是否阻止本节点的祖先节点出现点击态 ['1.5.0+']
-    hover-start-time       num,按住后多久出现点击态，单位毫秒,默认 50  
-    hover-stay-time        num,手指松开后点击态保留时间，单位毫秒,默认 400
-  <swiper>轮播组件,也叫'滑块视图容器' 
+    hover-start-time       num,按住后多久出现点击态,单位毫秒,默认 50  
+    hover-stay-time        num,手指松开后点击态保留时间,单位毫秒,默认 400
+  <swiper>       轮播组件,也叫'滑块视图容器' 
     <swiper>       容器类视图,其中只能放置组件,如放置其他节点,会被自动删除 
     <swiper-item>  仅可放置在<swiper>组件中,宽高自动设置为100%,代表轮播中一帧的页面 
       通常以循环的方式加载到页面中 
@@ -540,7 +540,7 @@ miniA微信小程序
         在'swiper-item'上绑定事件,通过'data-xx'自定义标签绑定数据,然后在function中通过event拿到 
           如：e.currentTarget.dataset.id 对应wxml中的data-id
         通过在每一个的 swiper-item 外面包上一个 a 标签,以超链接的方式跳转页面 
-    Example:
+    Example: 
       main.wxml
       <view>
         <swiper class="swiper_box" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
@@ -584,12 +584,27 @@ miniA微信小程序
           })
         }
       })
-    'vertical' bol,默认值为false 
+    'vertical'     bol,默认值为false 
       当不设置 vertical 属性,或者 vertical=”false” 时,指示点在组件下部,图片轮播从左至右 
       当设置 vertical=”true” 时,指示点在组件右部,图片轮播从下至上
+  <scroll-view>  可滚动视图区域 
+    scroll-x       bol,横向滚动 
+    scroll-y       bol,纵向滚动 
+    scroll-top     num,设置竖向滚动条位置 
+    scroll-left    num,设置横向滚动条位置 
+    scroll-into-view str,将元素滚动到可视区,值应为某子元素id 
+    scroll-with-animation bol,在设置滚动条位置时使用动画过渡,默认 false  
+    enable-back-to-top    bol,[iOS点击顶部状态栏、安卓双击标题栏时]滚动条返回顶部，只支持竖向 
+    upper-threshold   num,距顶部/左边多远时，触发'scrolltoupper'事件,单位px,默认'50' 
+    bindscrolltoupper foo,滚动到顶部/左边，会触发 'scrolltoupper' 事件 
+    lower-threshold   num,距底部/右边多远时，触发 'scrolltolower' 事件,默认'50' 
+    bindscrolltolower foo,滚动到底部/右边，会触发 'scrolltolower' 事件 
+    bindscroll        foo,滚动时触发 
+      event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} 
+    使用竖向滚动时，需要给<scroll-view/>一个固定高度，通过 WXSS 设置 height 
   ◆属性相关 
-  dataset
-    在组件中可以定义数据，这些数据将会通过事件传递给 SERVICE。 书写方式： 以data-开头，多个单词由连字符-链接，不能有大写(大写会自动转成小写)如data-element-type，最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType。
+  dataset 
+    在组件中可以定义数据,这些数据将会通过事件传递给 SERVICE。 书写方式： 以data-开头,多个单词由连字符-链接,不能有大写(大写会自动转成小写)如data-element-type,最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType。
 全局对象、方法及属性 
   app = getApp()   获取小程序实例
   ◆wx对象  
@@ -693,22 +708,22 @@ miniA微信小程序
       即使在'app.json'中删除了'pages'的元素,新增加的文件也不会被删除 
 兼容处理 
   基础库与客户端之间的关系
-    小程序的能力需要微信客户端来支撑，每一个基础库都只能在对应的客户端版本上运行，
+    小程序的能力需要微信客户端来支撑,每一个基础库都只能在对应的客户端版本上运行,
     高版本的基础库无法兼容低版本的微信客户端
   兼容方式 - 接口
-    对于新增的 API，可以用以下代码来判断是否支持用户的手机
+    对于新增的 API,可以用以下代码来判断是否支持用户的手机
     if (wx.openBluetoothAdapter) {
       wx.openBluetoothAdapter()
     } 
     else {
-      // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+      // 如果希望用户在最新版本的客户端上体验您的小程序,可以这样子提示
       wx.showModal({
         title: '提示',
-        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+        content: '当前微信版本过低,无法使用该功能,请升级到最新微信版本后重试。'
       })
     }
   兼容方式 - 参数
-    对于 API 的参数或者返回值有新增的参数，可以判断用以下代码判断。
+    对于 API 的参数或者返回值有新增的参数,可以判断用以下代码判断。
     wx.showModal({
       success: function(res) {
         if (wx.canIUse('showModal.cancel')) {
@@ -717,8 +732,8 @@ miniA微信小程序
       }
     })
   兼容方式 - 组件 
-    对于组件，新增的属性在旧版本上不会被处理，不过也不会报错。
-    如果特殊场景需要对旧版本做一些降级处理，可以这样子做。
+    对于组件,新增的属性在旧版本上不会被处理,不过也不会报错。
+    如果特殊场景需要对旧版本做一些降级处理,可以这样子做。
     Page({
       data: {
         canIUse: wx.canIUse('button.open-type.contact')
@@ -728,7 +743,7 @@ miniA微信小程序
     <contact-button wx:else></contact-button>
 运行机制 
   PS: 小程序没有重启的概念
-    当小程序进入后台，客户端会维持一段时间的运行状态，超过一定时间后（目前是5分钟）会被微信主动销毁
+    当小程序进入后台,客户端会维持一段时间的运行状态,超过一定时间后（目前是5分钟）会被微信主动销毁
     置顶的小程序不会被微信主动销毁
     当收到系统内存告警也会进行小程序的销毁
   前台、后台定义: 
@@ -737,16 +752,14 @@ miniA微信小程序
     当再次启动微信或再次打开小程序,又会从后台进入前台。
     只有当小程序进入后台一定时间,或者系统资源占用过高,才会被真正销毁。
   再次打开逻辑
-    基础库 1.4.0 开始支持，低版本需做兼容处理
+    基础库 1.4.0 开始支持,低版本需做兼容处理
     用户打开小程序的预期有以下两类场景：
     A. 打开首页： 场景值有 1001, 1019, 1022, 1023, 1038, 1056
     B. 打开小程序指定的某个页面： 场景值为除 A 以外的其他
     当再次打开一个小程序逻辑如下：
     上一次的场景 当前打开的场景 效果
     A A 保留原来的状态
-    B A 清空原来的页面栈，打开首页（相当于执行 wx.reLaunch 到首页）
-    A 或 B B 清空原来的页面栈，打开指定页面（相当于执行 wx.reLaunch 到指定页）
+    B A 清空原来的页面栈,打开首页（相当于执行 wx.reLaunch 到首页）
+    A 或 B B 清空原来的页面栈,打开指定页面（相当于执行 wx.reLaunch 到指定页）
 -------------------------------------------------------------------------待整理 
-
-
 

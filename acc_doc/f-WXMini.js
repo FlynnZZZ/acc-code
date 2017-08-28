@@ -526,58 +526,20 @@ miniA微信小程序
     全局样式与局部样式 
       定义在app.wxss 中的样式为全局样式,作用于每一个页面。
       在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
-内置组件 : 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
-  ◆视图组件 
+基础组件 : 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
   <view>         视图容器 
     hover-class   指定按下去的样式类,hover-class="none",默认,没有点击态效果 
     hover-stop-propagation bol,指定是否阻止本节点的祖先节点出现点击态 ['1.5.0+']
     hover-start-time       num,按住后多久出现点击态,单位毫秒,默认 50  
     hover-stay-time        num,手指松开后点击态保留时间,单位毫秒,默认 400
-  <scroll-view>  可滚动视图区域 
-    PS: 勿在 scroll-view 中使用 textarea、map、canvas、video 组件
-      在滚动 scroll-view 时会阻止页面回弹,也无法触发'onPullDownRefresh'
-      若要使用下拉刷新,请使用页面的滚动[能通过点击顶部状态栏回到页面顶部],而非scroll-view 
-    scroll-x       bol,横向滚动 
-    scroll-y       bol,纵向滚动[需设定高度] 
-    scroll-left    num,设置横向滚动条位置 
-    scroll-top     num,设置竖向滚动条位置 
-    scroll-into-view str,将元素滚动到可视区,值应为某子元素id 
-      优先级高于'scroll-top'
-    scroll-with-animation bol,在设置滚动条位置时使用动画过渡,默认 false  
-    enable-back-to-top    bol,[iOS点击顶部状态栏、安卓双击标题栏时]滚动条返回顶部,只支持竖向 
-    upper-threshold   num,距顶部/左边多远时,触发'scrolltoupper'事件,单位px,默认'50' 
-    lower-threshold   num,距底部/右边多远时,触发'scrolltolower'事件,默认'50' 
-    bindscrolltoupper foo,滚动到顶部/左边,会触发'scrolltoupper'事件 
-    bindscrolltolower foo,滚动到底部/右边,会触发'scrolltolower'事件 
-    bindscroll        foo,滚动时触发 
-      event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} 
-    使用竖向滚动时,需要给<scroll-view/>一个固定高度,通过 WXSS 设置 height 
   <swiper>       轮播组件,也叫'滑块视图容器' 
-    PS: 其中只能放置<swiper-item>组件,如放置其他节点,会被自动删除 
-    indicator-dots         是否显示面板指示点,默认 false 
-    indicator-color        指示点颜色,默认 rgba(0, 0, 0, .3) ['1.1.0+'] 
-    indicator-active-color 当前选中的指示点颜色,默认 #000000 ['1.1.0+'] 
-    autoplay  是否自动切换,默认 false  
-    interval  自动切换时间间隔,默认 5000 
-    duration  滑动动画时长,默认 500 
-    circular  是否采用衔接滑动,默认 false  
-    current    当前所在页面的index,默认 0 
-    vertical   滑动方向是否为纵向,默认 false 
-    bindchange foo,'current'改变时触发'change'事件 
-      event.detail = {
-        current: current, 
-        source: source, // 表示导致变更的原因 ['1.4.0+']
-        // autoplay自动播放导致swiper变化；
-        // touch用户划动引起swiper变化；
-        // 其他原因将用空字符串表示。
-      }
-      若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,因而通常情况下请不要这样使用 
-  <swiper-item>  仅可放置在<swiper>组件中,宽高自动设置为100%,代表轮播中一帧的页面 
-    通常以循环的方式加载到页面中 
-    item单击 
-      在'swiper-item'上绑定事件,通过'data-xx'自定义标签绑定数据,然后在function中通过event拿到 
-        如：e.currentTarget.dataset.id 对应wxml中的data-id
-      通过在每一个的 swiper-item 外面包上一个 a 标签,以超链接的方式跳转页面 
+    <swiper>       容器类视图,其中只能放置组件,如放置其他节点,会被自动删除 
+    <swiper-item>  仅可放置在<swiper>组件中,宽高自动设置为100%,代表轮播中一帧的页面 
+      通常以循环的方式加载到页面中 
+      item单击 
+        在'swiper-item'上绑定事件,通过'data-xx'自定义标签绑定数据,然后在function中通过event拿到 
+          如：e.currentTarget.dataset.id 对应wxml中的data-id
+        通过在每一个的 swiper-item 外面包上一个 a 标签,以超链接的方式跳转页面 
     Example: 
       main.wxml
       <view>
@@ -625,27 +587,21 @@ miniA微信小程序
     'vertical'     bol,默认值为false 
       当不设置 vertical 属性,或者 vertical=”false” 时,指示点在组件下部,图片轮播从左至右 
       当设置 vertical=”true” 时,指示点在组件右部,图片轮播从下至上
-  <movable-area> movable-view的可移动区域['1.2.0+'] 
-    PS: 需设置宽高,否则默认10px;
-  <movable-view> 可移动的视图容器,在页面中可以拖拽滑动['1.2.0+'] 
-    PS: 需设置宽高,否则默认10px;默认为绝对定位,top和left属性为0px 
-      当movable-view小于movable-area时,movable-view的移动范围是在movable-area内；
-      当movable-view大于movable-area时,movable-view的移动范围必须包含movable-area（x轴方向和y轴方向分开考虑）
-      movable-view必须在<movable-area/>组件中,并且必须是直接子节点,否则不能移动。
-    direction   movable-view的移动方向,默认'none' 
-      'all'
-      'vertical'
-      'horizontal'
-      'none'
-    inertia     movable-view是否带有惯性,默认'false' 
-    out-of-bounds   超过可移动区域后,movable-view是否还可以移动,默认 false 
-    x   num,定义x轴方向偏移,改变x的值会触发动画
-      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    y   num,定义y轴方向的偏移,改变y的值会触发动画
-      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    damping  阻尼系数,用于控制x或y改变时的动画和过界回弹的动画,值越大移动越快,默认 20 
-    friction 摩擦系数,用于控制惯性滑动的动画,值越大摩擦力越大,滑动越快停止,默认 2 
-      必须大于0,否则会被设置成默认值
+  <scroll-view>  可滚动视图区域 
+    scroll-x       bol,横向滚动 
+    scroll-y       bol,纵向滚动 
+    scroll-top     num,设置竖向滚动条位置 
+    scroll-left    num,设置横向滚动条位置 
+    scroll-into-view str,将元素滚动到可视区,值应为某子元素id 
+    scroll-with-animation bol,在设置滚动条位置时使用动画过渡,默认 false  
+    enable-back-to-top    bol,[iOS点击顶部状态栏、安卓双击标题栏时]滚动条返回顶部，只支持竖向 
+    upper-threshold   num,距顶部/左边多远时，触发'scrolltoupper'事件,单位px,默认'50' 
+    bindscrolltoupper foo,滚动到顶部/左边，会触发 'scrolltoupper' 事件 
+    lower-threshold   num,距底部/右边多远时，触发 'scrolltolower' 事件,默认'50' 
+    bindscrolltolower foo,滚动到底部/右边，会触发 'scrolltolower' 事件 
+    bindscroll        foo,滚动时触发 
+      event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} 
+    使用竖向滚动时，需要给<scroll-view/>一个固定高度，通过 WXSS 设置 height 
   ◆属性相关 
   dataset 
     在组件中可以定义数据,这些数据将会通过事件传递给 SERVICE。 书写方式： 以data-开头,多个单词由连字符-链接,不能有大写(大写会自动转成小写)如data-element-type,最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType。

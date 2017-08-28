@@ -4,7 +4,37 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-onPullDownRefresh	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^    onPullDownRefresh: function () {  \/\/ 下拉刷新回调接口$/;"	function	line:22
-onReachBottom	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^    onReachBottom: function () {  \/\/ 下拉回调 $/;"	function	line:25
-success	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^      success: function(json){$/;"	function	line:36
-success	E:\project\my-github\my-doc\acc_doc\f-MiniApp.js	/^          success: function(res) {$/;"	function	line:40
+sayHello	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    function sayHello(name) {$/;"	function	line:105
+module.exports.sayHello	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      sayHello: sayHello$/;"	property	line:109
+helloMINA	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      helloMINA: function() {$/;"	function	line:115
+onLaunch	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onLaunch: function(opts){  \/\/ 监听小程序初始化,当小程序初始化完成时,全局只触发一次 $/;"	function	line:129
+onShow	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onShow: function(opts){  \/\/ 监听小程序显示,小程序启动或者从后台进入到前台  $/;"	function	line:139
+onHide	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onHide: function(){  \/\/ 监听小程序隐藏,小程序从前台进入到后台 $/;"	function	line:143
+onError	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onError: function(err){ \/\/ 错误监听函数,当发生脚本错误,或者api调用失败时触发 $/;"	function	line:146
+fooName	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      fooName : function(){$/;"	function	line:152
+getCurrentPage	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    App.prototype.getCurrentPage() 获取当前页面实例 $/;"	method	line:157
+onLoad	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onLoad: function(query){  \/\/  页面加载回调 $/;"	function	line:166
+onShow	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onShow: function(){       \/\/ 页面显示回调  $/;"	function	line:170
+onReady	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onReady: function(){ \/\/ 页面初次渲染完成回调  $/;"	function	line:173
+onHide	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onHide: function(){ \/\/ 页面隐藏回调  $/;"	function	line:177
+onUnload	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onUnload: function(){ \/\/ 页面卸载回调  $/;"	function	line:180
+onPullDownRefresh	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onPullDownRefresh: function () {   \/\/ 用户下拉刷新回调 $/;"	function	line:184
+onReachBottom	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onReachBottom: function () { \/\/ 上拉触底回调  $/;"	function	line:188
+onShareAppMessage	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onShareAppMessage: function(){ \/\/ 用户点击右上角转发回调,未设置该项则不会出现转发选项  $/;"	function	line:193
+onPageScroll	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      onPageScroll: function(obj){ \/\/ 页面滚动触发 $/;"	function	line:201
+Page	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    Page.prototype.setData(dataObj,foo) 将数据从逻辑层发送到视图层[异步],同时改变对应的 this.data 的值[同步] $/;"	class	line:207
+Page.setData	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    Page.prototype.setData(dataObj,foo) 将数据从逻辑层发送到视图层[异步],同时改变对应的 this.data 的值[同步] $/;"	method	line:207
+changeText	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^          changeText: function() {$/;"	function	line:233
+changeItemInArray	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^          changeItemInArray: function() {$/;"	function	line:239
+changeItemInObject	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^          changeItemInObject: function(){$/;"	function	line:246
+addNewField	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^          addNewField: function() {$/;"	function	line:251
+tapName	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        tapName: function(event) {$/;"	function	line:364
+detail.current	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        current: current, $/;"	property	line:568
+detail.source	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        source: source, \/\/ 表示导致变更的原因 ['1.4.0+']$/;"	property	line:569
+swiperchange	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        swiperchange: function(e) { \/\/  轮播 改变时会触发的 change 事件$/;"	function	line:604
+onLoad	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        onLoad: function() {$/;"	function	line:606
+success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^            success: function(res) {$/;"	function	line:617
+success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function (res) {$/;"	function	line:734
+fail	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      fail:function(err){$/;"	function	line:739
+complete	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      complete: function(){$/;"	function	line:743
+success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function(res) {$/;"	function	line:772

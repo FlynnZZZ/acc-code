@@ -639,16 +639,486 @@ miniA微信小程序
       'none'
     inertia     movable-view是否带有惯性,默认'false' 
     out-of-bounds   超过可移动区域后,movable-view是否还可以移动,默认 false 
-    x   num,定义x轴方向偏移,改变x的值会触发动画
+    x   num,定义x轴方向偏移,改变x的值会触发动画 
       PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    y   num,定义y轴方向的偏移,改变y的值会触发动画
+    y   num,定义y轴方向的偏移,改变y的值会触发动画 
       PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
     damping  阻尼系数,用于控制x或y改变时的动画和过界回弹的动画,值越大移动越快,默认 20 
     friction 摩擦系数,用于控制惯性滑动的动画,值越大摩擦力越大,滑动越快停止,默认 2 
       必须大于0,否则会被设置成默认值
+  <cover-view>   覆盖在原生组件之上的文本视图['1.4.0+'] 
+    PS: 可覆盖的原生组件包括map、video、canvas，支持嵌套 
+      文本建议都套上cover-view标签，避免排版错误。
+  <cover-image>  覆盖在原生组件之上的图片视图 ['1.4.0+'] 
+    PS: 可覆盖的原生组件同cover-view，原生组件map、video、canvas内，避免嵌套在其他组件内 
+      支持嵌套在cover-view里 
+      事件模型遵循冒泡模型，但不会冒泡到原生组件。
+      只支持基本的定位、布局、文本样式。不支持设置单边的border、opacity、background-image等。
+      建议子节点不要溢出父节点
+      暂不支持css动画。
+    src  图标路径，支持临时路径。暂不支持base64与网络地址。
+  ◆基础内容 
+  <icon>   图标 
+    type   icon的类型 
+      'success'
+      'success_no_circle'
+      'info'
+      'warn'
+      'waiting'
+      'cancel'
+      'download'
+      'search'
+      'clear'
+    size   num,icon的大小，单位px,默认 23 
+    color  icon的颜色 
+  <text>   文本 
+    PS: <text/> 组件内只支持 <text/> 嵌套。 除了文本节点以外的其他节点都无法长按选中。
+      各个操作系统的空格标准并不一致。
+      长按复制功能尚未实现
+    selectable  文本是否可选,默认 false, ['1.1.0+']
+    space       是否显示连续空格  ['1.4.0+'] 
+      ensp  中文字符空格一半大小
+      emsp  中文字符空格大小
+      nbsp  根据字体设置的空格大小
+    decode      是否解码,默认 false    ['1.4.0+']
+      可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
+  <rich-text>  富文本 ['1.4.0+'] 
+    PS: rich-text 组件内屏蔽所有节点的事件。
+      如果使用了不受信任的HTML节点，该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
+    nodes  arr/str,节点列表或HTMLStr,默认值 [] 
+      推荐使用arr类型，组件会将str类型转换为arr，因而性能会有所下降 
+      现支持两种节点，通过type来区分，分别是元素节点和文本节点，默认是元素节点 
+        ★元素节点：type = node
+        name      str,标签名,支持部分受信任的HTML节点,必填 [大小写不敏感]
+        attrs     obj,属性,支持部分受信任的属性 
+          全局支持class和style属性，不支持id属性 
+        children  arr,子节点列表,结构和nodes一致 
+        ★文本节点：type = text
+        text  str,文本,必填 
+    支持默认事件，包括：'tap''touchstart''touchmove''touchcancel''touchend'和'longtap' 
+  <progress>   进度条 
+    percent 0-100 间的浮点数,百分比 
+    show-info   是否在进度条右侧显示百分比,默认 false
+    stroke-width 进度条线的宽度，单位px,默认 6 
+    color           进度条颜色,默认 '#09BB07' 
+    activeColor     已选择的进度条的颜色
+    backgroundColor 未选择的进度条的颜色
+    active          进度条从左往右的动画,默认 false 
+  ◆表单 
+  <form>   表单 
+    PS: 当点击 <form/> 表单中 formType 为 submit 的 <button/> 组件时，会将表单组件中的 value 值进行提交，需要在表单组件中加上 name 来作为 key。
+    report-submit  是否返回formId用于发送模板消息 
+    bindsubmit     foo,携带form中的数据触发'submit'事件 
+      event.detail = {value : {'name': 'value'} , formId: ''} 
+    bindreset      foo,表单重置时会触发'reset'事件 
+  <input/> 输入框 
+    PS: input 组件是一个 native 组件，字体是系统字体，所以无法设置 font-family；
+      在 input 聚焦期间，避免使用 css 动画；
+    value  
+    type   input 的类型  
+      'text'   文本输入键盘,默认 
+      'number' 数字输入键盘
+      'idcard' 身份证输入键盘
+      'digit'  带小数点的数字键盘
+    password  是否是密码类型,默认 false  
+    placeholder       str,输入框为空时占位符 
+      微信版本'6.3.30', placeholder 在聚焦时出现重影问题；
+    placeholder-style str,指定'placeholder'的样式 
+    placeholder-class 指定'placeholder'的样式类 
+      "input-placeholder" 默认 
+    disabled   是否禁用,默认 false  
+    maxlength  最大输入长度，默认 140 
+      设置为 -1 的时候不限制最大长度 
+    cursor-spacing  指定光标与键盘的距离，单位 px ,默认 0 
+      取 input 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离 
+    auto-focus      自动聚焦，拉起键盘,默认 false [即将废弃，请直接使用 focus] 
+    focus     获取焦点,默认 false  
+      微信版本'6.3.30', focus 属性设置无效；
+    confirm-type  设置键盘右下角按钮的文字['1.1.0+'] 
+      "done"   '完成',默认  
+      'send'   '发送' 
+      'search' '搜索' 
+      'next'   '下一个' 
+      'go'     '前往' 
+    confirm-hold  点击键盘右下角按钮时是否保持键盘不收起,默认 false ['1.1.0+']
+    cursor        num,指定focus时的光标位置['1.5.0+'] 
+    bindinput foo,当键盘输入时，触发'input'事件
+      event.detail = {value, cursor}，处理函数可以直接 return 一个字符串，将替换输入框的内容。 
+    bindfocus foo,输入框聚焦时触发
+      event.detail = {value: value} 
+    bindblur  foo,输入框失去焦点时触发
+      event.detail = {value: value} 
+    bindconfirm foo,点击完成按钮时触发
+      event.detail = {value: value}
+  <checkbox-group>  多项选择器，内部由多个checkbox组成 
+    bindchange foo,选中项发生改变时触发change事件
+      detail = {value:[选中的checkbox的value的数组]}
+  <checkbox/>       多选项目 
+    value    
+    disabled  是否禁用,默认 false 
+    checked   当前是否选中，可用来设置默认选中,默认 false 
+    color     checkbox的颜色 
+  <picker>     从底部弹起的滚动选择器 
+    现支持五种选择器'普通选择器''多列选择器''时间选择器''日期选择器''省市区选择器'，是普通选择器。
+    ★普通选择器：mode="selector",默认 
+    range Array / Object Array [] mode为 selector 或 multiSelector 时，range 有效
+    range-key String  当 range 是一个 Object Array 时，通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
+    value Number 0 value 的值表示选择了 range 中的第几个（下标从 0 开始）
+    bindchange EventHandle  value 改变时触发 change 事件，event.detail = {value: value}
+    disabled Boolean false 是否禁用
+    ★多列选择器：mode='multiSelector'['1.4.0+']
+    range 二维Array / 二维Object Array [] mode为 selector 或 multiSelector 时，range 有效。二维数组，长度表示多少列，数组的每项表示每列的数据，如[["a","b"], ["c","d"]]
+    range-key String  当 range 是一个 二维Object Array 时，通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
+    value Array [] value 每一项的值表示选择了 range 对应项中的第几个（下标从 0 开始）
+    bindchange EventHandle  value 改变时触发 change 事件，event.detail = {value: value}
+    bindcolumnchange EventHandle  某一列的值改变时触发 columnchange 事件，event.detail = {column: column, value: value}，column 的值表示改变了第几列（下标从0开始），value 的值表示变更值的下标
+    disabled Boolean false 是否禁用
+    ★时间选择器：mode='time'
+    value String  表示选中的时间，格式为"hh:mm"
+    start String  表示有效时间范围的开始，字符串格式为"hh:mm"
+    end String  表示有效时间范围的结束，字符串格式为"hh:mm"
+    bindchange EventHandle  value 改变时触发 change 事件，event.detail = {value: value}
+    disabled Boolean false 是否禁用
+    ★日期选择器：mode='date'
+    value String 0 表示选中的日期，格式为"YYYY-MM-DD"
+    start String  表示有效日期范围的开始，字符串格式为"YYYY-MM-DD"
+    end String  表示有效日期范围的结束，字符串格式为"YYYY-MM-DD"
+    fields String day 有效值 year,month,day，表示选择器的粒度
+      year 选择器粒度为年
+      month 选择器粒度为月份
+      day 选择器粒度为天
+    bindchange EventHandle  value 改变时触发 change 事件，event.detail = {value: value}
+    disabled Boolean false 是否禁用
+    ★省市区选择器：mode='region'['1.4.0+']
+    value Array [] 表示选中的省市区，默认选中每一列的第一个值 
+    custom-item String  可为每一列的顶部添加一个自定义的项 1.5.0
+    bindchange EventHandle  value 改变时触发 change 事件，event.detail = {value: value} 
+    disabled Boolean false 是否禁用
+  <picker-view>  嵌入页面的滚动选择器 
+    PS: 其中只可放置<picker-view-column/>组件，其他节点不会显示。
+      滚动时在iOS自带振动反馈，可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭
+    value    arr,数组中的数字依次表示... 
+      数字大于 picker-view-column 可选项长度时，选择最后一项。 
+    indicator-style  设置选择器中间选中框的样式 
+    indicator-class  设置选择器中间选中框的类名['1.1.0+'] 
+    mask-style       设置蒙层的样式['1.5.0'] 
+    mask-class       设置蒙层的类名 ['1.5.0']
+    bindchange   foo,当滚动选择，value 改变时触发 change 事件
+      event.detail = {value: value}；
+      value为数组，表示 picker-view 内的 picker-view-column 当前选择的是第几项（下标从 0 开始）
+  <picker-view-column> 滚动选择项 
+    仅可放置于<picker-view />中，其子节点的高度会自动设置成与picker-view的选中框的高度一致 
+  <radio-group>  单项选择器，内部由多个<radio/>组成。
+    bindchange foo,选中项发生变化时触发 change 事件
+      event.detail = {value: 选中项radio的value}
+  <radio>  单选项目 
+    value String  <radio/> 标识。当该<radio/> 选中时，<radio-group/> 的 change 事件会携带<radio/>的value
+    checked Boolean false 当前是否选中
+    disabled Boolean false 是否禁用
+    color Color  radio的颜色，同css的color
+  <slider>  滑动选择器 
+    min Number 0 最小值
+    max Number 100 最大值
+    step Number 1 步长，取值必须大于 0，并且可被(max - min)整除
+    disabled Boolean false 是否禁用
+    value Number 0 当前取值
+    color Color #e9e9e9 背景条的颜色（请使用 backgroundColor）
+    selected-color Color #1aad19 已选择的颜色（请使用 activeColor）
+    activeColor Color #1aad19 已选择的颜色
+    backgroundColor Color #e9e9e9 背景条的颜色
+    show-value Boolean false 是否显示当前 value
+    bindchange EventHandle  完成一次拖动后触发的事件，event.detail = {value: value}
+  <switch>  开关选择器 
+    PS: switch类型切换时在iOS自带振动反馈，可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
+    checked Boolean false 是否选中
+    type String switch 样式，有效值：switch, checkbox
+    bindchange EventHandle  checked 改变时触发 change 事件，event.detail={ value:checked}
+    color Color  switch 的颜色，同 css 的 color
+  <textarea> 多行输入框 
+    PS:  微信版本 6.3.30，textarea 在列表渲染时，新增加的 textarea 在自动聚焦时的位置计算错误。
+      textarea 的 blur 事件会晚于页面上的 tap 事件，如果需要在 button 的点击事件获取 textarea，可以使用 form 的 bindsubmit。
+      不建议在多行文本上对用户的输入进行修改，所以 textarea 的 bindinput 处理函数并不会将返回值反映到 textarea 上。
+      textarea 组件是由客户端创建的原生组件，它的层级是最高的。
+      请勿在 scroll-view 中使用 textarea 组件。
+      css 动画对 textarea 组件无效。
+    value String  输入框的内容 
+    placeholder String  输入框为空时占位符 
+    placeholder-style String  指定 placeholder 的样式 
+    placeholder-class String textarea-placeholder 指定 placeholder 的样式类 
+    disabled Boolean false 是否禁用 
+    maxlength Number 140 最大输入长度，设置为 -1 的时候不限制最大长度 
+    auto-focus Boolean false 自动聚焦，拉起键盘。 
+    focus Boolean false 获取焦点 
+    auto-height Boolean false 是否自动增高，设置auto-height时，style.height不生效 
+    fixed Boolean false 如果 textarea 是在一个 position:fixed 的区域，需要显示指定属性 fixed 为 true 
+    cursor-spacing Number 0 指定光标与键盘的距离，单位 px 。取 textarea 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离 
+    cursor Number  指定focus时的光标位置 1.5.0
+    bindfocus EventHandle  输入框聚焦时触发，event.detail = {value: value} 
+    bindblur EventHandle  输入框失去焦点时触发，
+      event.detail = {value: value} 
+    bindlinechange EventHandle  输入框行数变化时调用，
+      event.detail = {height: 0, heightRpx: 0, lineCount: 0} 
+    bindinput EventHandle  当键盘输入时，触发 input 事件，
+      event.detail = {value, cursor}， bindinput 处理函数的返回值并不会反映到 textarea 上 
+    bindconfirm EventHandle  点击完成时， 触发 confirm 事件，
+      event.detail = {value: value}
+  <label>     用来改进表单组件的可用性 
+    PS: 使用for属性找到对应的id，或者将控件放在该标签下，当点击时，就会触发对应的控件。
+      for优先级高于内部控件，内部有多个控件的时候默认触发第一个控件。
+      目前可以绑定的控件有：<button/>, <checkbox/>, <radio/>, <switch/>。
+    for   绑定控件的id 
+  <button> 按钮 
+    size   按钮的大小,默认'default'  
+      'default' 
+      'mini'
+    type   按钮的样式类型,默认'default'  
+      'primary' 
+      'default' 
+      'warn'
+    plain  按钮是否镂空，背景色透明,默认 false 
+    disabled  是否禁用,默认 false  
+    loading   名称前是否带'loading'图标,默认 false 
+    form-type str,用于<form/>组件,点击分别会触发<form/>组件的submit/reset事件 
+      'submit' 提交表单
+      'reset'  重置表单
+    hover-class 指定按钮按下去的样式类,默认'button-hover'  
+      'button-hover'   默认为{background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}
+      当 hover-class="none" 时，没有点击态效果 
+    hover-stop-propagation  指定是否阻止本节点的祖先节点出现点击态,默认 false  ['1.5.0+']
+    hover-start-time   按住后多久出现点击态，单位毫秒,默认 20   
+    hover-stay-time   手指松开后点击态保留时间，单位毫秒,默认 70   
+    open-type str,微信开放能力['1.1.0+']
+      "getPhoneNumber" 获取用户手机号，可以从bindgetphonenumber回调用获取到用户信息，解包方式
+      "getUserInfo"    获取用户信息,可以从bindgetuserinfo回调中获取到用户信息  
+      'contact'    打开客服会话 
+      'share'      触发用户转发 
+    bindgetphonenumber foo,获取用户手机号回调 '1.2.0+' 
+    bindgetuserinfo    foo,用户点击该按钮时，会返回获取到的用户信息 ['1.3.0+']
+      从返回参数的detail中获取到的值同 wx.getUserInfo  
+    bindcontact        foo,客服消息回调 
+    session-from       str,会话来源['1.4.0+']  
+    send-message-title str,会话内消息卡片标题,默认为当前标题['1.5.0+'] 
+    send-message-path  str,会话内消息卡片点击跳转小程序路径,默认当前分享路径 
+    send-message-img   str,会话内消息卡片图片,默认为当前截图 
+    show-message-card  显示会话内消息卡片,默认 false  
+  ◆导航 
+  <navigator>  页面链接 
+    url String  应用内的跳转链接 
+    open-type String navigate 跳转方式 
+      navigate 对应 wx.navigateTo 的功能 
+      redirect 对应 wx.redirectTo 的功能 
+      switchTab 对应 wx.switchTab 的功能 
+      reLaunch 对应 wx.reLaunch 的功能 1.1.0
+      navigateBack 对应 wx.navigateBack 的功能 1.1.0
+    delta Number  当 open-type 为 'navigateBack' 时有效，表示回退的层数 
+    hover-class String navigator-hover 指定点击时的样式类，当hover-class="none"时，没有点击态效果 
+      navigator-hover 默认为 {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}, <navigator/> 的子节点背景色应为透明色
+    hover-stop-propagation Boolean false 指定是否阻止本节点的祖先节点出现点击态 1.5.0
+    hover-start-time Number 50 按住后多久出现点击态，单位毫秒 
+    hover-stay-time Number 600 手指松开后点击态保留时间，单位毫秒
+  ◆媒体组件 
+  audio 音频 
+    id String  audio 组件的唯一标识符
+    src String  要播放音频的资源地址
+    loop Boolean false 是否循环播放
+    controls Boolean true 是否显示默认控件
+    poster String  默认控件上的音频封面的图片资源地址，如果 controls 属性值为 false 则设置 poster 无效
+    name String 未知音频 默认控件上的音频名字，如果 controls 属性值为 false 则设置 name 无效
+    author String 未知作者 默认控件上的作者名字，如果 controls 属性值为 false 则设置 author 无效
+    binderror EventHandle  当发生错误时触发 error 事件，
+      detail = {errMsg: MediaError.code}
+      MediaError.code
+      MEDIA_ERR_ABORTED 获取资源被用户禁止
+      MEDIA_ERR_NETWORD 网络错误
+      MEDIA_ERR_DECODE 解码错误
+      MEDIA_ERR_SRC_NOT_SUPPOERTED 不合适资源
+    bindplay EventHandle  当开始/继续播放时触发play事件
+    bindpause EventHandle  当暂停播放时触发 pause 事件
+    bindtimeupdate EventHandle  当播放进度改变时触发 timeupdate 事件，detail = {currentTime, duration}
+    bindended EventHandle  当播放到末尾时触发 ended 事件
+  image 图片 
+    PS: image组件默认宽度300px、高度225px
+    src String  图片资源地址 
+    mode String 'scaleToFill' 图片裁剪、缩放的模式 
+      mode 有 13 种模式，其中 4 种是缩放模式，9 种是裁剪模式。
+      模式 值 说明
+      缩放 scaleToFill 不保持纵横比缩放图片，使图片的宽高完全拉伸至填满 image 元素
+      缩放 aspectFit 保持纵横比缩放图片，使图片的长边能完全显示出来。也就是说，可以完整地将图片显示出来。
+      缩放 aspectFill 保持纵横比缩放图片，只保证图片的短边能完全显示出来。也就是说，图片通常只在水平或垂直方向是完整的，另一个方向将会发生截取。
+      缩放 widthFix 宽度不变，高度自动变化，保持原图宽高比不变
+      裁剪 top 不缩放图片，只显示图片的顶部区域
+      裁剪 bottom 不缩放图片，只显示图片的底部区域
+      裁剪 center 不缩放图片，只显示图片的中间区域
+      裁剪 left 不缩放图片，只显示图片的左边区域
+      裁剪 right 不缩放图片，只显示图片的右边区域
+      裁剪 top left 不缩放图片，只显示图片的左上边区域
+      裁剪 top right 不缩放图片，只显示图片的右上边区域
+      裁剪 bottom left 不缩放图片，只显示图片的左下边区域
+      裁剪 bottom right 不缩放图片，只显示图片的右下边区域
+    lazyload Boolean false 图片懒加载。只针对page与scroll-view下的image有效 1.5.0
+    binderror HandleEvent  当错误发生时，发布到 AppService 的事件名，事件对象event.detail = {errMsg: 'something wrong'} 
+    bindload HandleEvent  当图片载入完毕时，发布到 AppService 的事件名，事件对象event.detail = {height:'图片高度px', width:'图片宽度px'}
+  video 视频 
+    PS: video标签认宽度300px、高度225px，设置宽高需要通过wxss设置width和height。
+      video 组件是由客户端创建的原生组件，它的层级是最高的。
+      请勿在 scroll-view 中使用 video 组件。
+      css 动画对 video 组件无效。
+    src String  要播放视频的资源地址 
+    duration Number  指定视频时长 1.1.0
+    controls Boolean true 是否显示默认播放控件（播放/暂停按钮、播放进度、时间） 
+    danmu-list Object Array  弹幕列表 
+    danmu-btn Boolean false 是否显示弹幕按钮，只在初始化时有效，不能动态变更 
+    enable-danmu Boolean false 是否展示弹幕，只在初始化时有效，不能动态变更 
+    autoplay Boolean false 是否自动播放 
+    loop Boolean false 是否循环播放 1.4.0
+    muted Boolean false 是否静音播放 1.4.0
+    bindplay EventHandle  当开始/继续播放时触发play事件 
+    bindpause EventHandle  当暂停播放时触发 pause 事件 
+    bindended EventHandle  当播放到末尾时触发 ended 事件 
+    bindtimeupdate EventHandle  播放进度变化时触发，event.detail = {currentTime: '当前播放时间'} 。触发频率应该在 250ms 一次 
+    bindfullscreenchange EventHandle  当视频进入和退出全屏是触发，event.detail = {fullScreen: '当前全屏状态'} 1.4.0
+    objectFit String contain 当视频大小与 video 容器大小不一致时，视频的表现形式。contain：包含，fill：填充，cover：覆盖 
+    poster String  默认控件上的音频封面的图片资源地址，如果 controls 属性值为 false 则设置 poster 无效
+  ◆其他
+  map 地图 
+    PS: tip: map 组件是由客户端创建的原生组件，它的层级是最高的。
+      tip: 请勿在 scroll-view 中使用 map 组件。
+      tip: css 动画对 map 组件无效。
+      tip: map 组件使用的经纬度是火星坐标系，调用 wx.getLocation 接口需要指定 type 为 gcj02
+    属性名 类型 默认值 说明 最低版本
+    longitude Number  中心经度 
+    latitude Number  中心纬度 
+    scale Number 16 缩放级别，取值范围为5-18 
+    markers Array  标记点 
+    covers Array  即将移除，请使用 markers 
+    polyline Array  路线 
+    circles Array  圆 
+    controls Array  控件 
+    include-points Array  缩放视野以包含所有给定的坐标点 
+    show-location Boolean  显示带有方向的当前定位点 
+    bindmarkertap EventHandle  点击标记点时触发 
+    bindcallouttap EventHandle  点击标记点对应的气泡时触发 1.2.0
+    bindcontroltap EventHandle  点击控件时触发 
+    bindregionchange EventHandle  视野发生变化时触发 
+    bindtap EventHandle  点击地图时触发
+    注意: covers 属性即将移除，请使用 markers 替代
+
+    markers
+
+    标记点用于在地图上显示标记的位置
+
+    属性 说明 类型 必填 备注 最低版本
+    id 标记点id Number 否 marker点击事件回调会返回此id 
+    latitude 纬度 Number 是 浮点数，范围 -90 ~ 90 
+    longitude 经度 Number 是 浮点数，范围 -180 ~ 180 
+    title 标注点名 String 否  
+    iconPath 显示的图标 String 是 项目目录下的图片路径，支持相对路径写法，以'/'开头则表示相对小程序根目录；也支持临时路径 
+    rotate 旋转角度 Number 否 顺时针旋转的角度，范围 0 ~ 360，默认为 0 
+    alpha 标注的透明度 Number 否 默认1，无透明 
+    width 标注图标宽度 Number 否 默认为图片实际宽度 
+    height 标注图标高度 Number 否 默认为图片实际高度 
+    callout 自定义标记点上方的气泡窗口 Object 否 {content, color, fontSize, borderRadius, bgColor, padding, boxShadow, display} 1.2.0
+    label 为标记点旁边增加标签 Object 否 {color, fontSize, content, x, y}，可识别换行符，x,y原点是marker对应的经纬度 1.2.0
+    anchor 经纬度在标注图标的锚点，默认底边中点 Object 否 {x, y}，x表示横向(0-1)，y表示竖向(0-1)。{x: .5, y: 1} 表示底边中点 1.2.0
+    marker 上的气泡 callout
+
+    属性 说明 类型
+    content 文本 String
+    color 文本颜色 String
+    fontSize 文字大小 Number
+    borderRadius callout边框圆角 Number
+    bgColor 背景色 String
+    padding 文本边缘留白 Number
+    display 'BYCLICK':点击显示; 'ALWAYS':常显 String
+    polyline
+
+    指定一系列坐标点，从数组第一项连线至最后一项
+
+    属性 说明 类型 必填 备注 最低版本
+    points 经纬度数组 Array 是 [{latitude: 0, longitude: 0}] 
+    color 线的颜色 String 否 8位十六进制表示，后两位表示alpha值，如：#000000AA 
+    width 线的宽度 Number 否  
+    dottedLine 是否虚线 Boolean 否 默认false 
+    arrowLine 带箭头的线 Boolean 否 默认false，开发者工具暂不支持该属性 1.2.0
+    borderColor 线的边框颜色 String 否  1.2.0
+    borderWidth 线的厚度 Number 否  1.2.0
+    circles
+
+    在地图上显示圆
+
+    属性 说明 类型 必填 备注
+    latitude 纬度 Number 是 浮点数，范围 -90 ~ 90
+    longitude 经度 Number 是 浮点数，范围 -180 ~ 180
+    color 描边的颜色 String 否 8位十六进制表示，后两位表示alpha值，如：#000000AA
+    fillColor 填充颜色 String 否 8位十六进制表示，后两位表示alpha值，如：#000000AA
+    radius 半径 Number 是 
+    strokeWidth 描边的宽度 Number 否
+    controls
+
+    在地图上显示控件，控件不随着地图移动
+
+    属性 说明 类型 必填 备注
+    id 控件id Number 否 在控件点击事件回调会返回此id
+    position 控件在地图的位置 Object 是 控件相对地图位置
+    iconPath 显示的图标 String 是 项目目录下的图片路径，支持相对路径写法，以'/'开头则表示相对小程序根目录；也支持临时路径
+    clickable 是否可点击 Boolean 否 默认不可点击
+    position
+
+    属性 说明 类型 必填 备注
+    left 距离地图的左边界多远 Number 否 默认为0
+    top 距离地图的上边界多远 Number 否 默认为0
+    width 控件宽度 Number 否 默认为图片宽度
+    height 控件高度 Number 否 默认为图片高度
+    地图组件的经纬度必填, 如果不填经纬度则默认值是北京的经纬度。
+  canvas 画布 
+    PS: tip: canvas 组件是由客户端创建的原生组件，它的层级是最高的。
+      tip: 请勿在 scroll-view 中使用 canvas 组件。
+      tip: css 动画对 canvas 组件无效。
+    属性名 类型 默认值 说明
+    canvas-id String  canvas 组件的唯一标识符
+    disable-scroll Boolean false 当在 canvas 中移动时且有绑定手势事件时，禁止屏幕滚动以及下拉刷新
+    bindtouchstart EventHandle  手指触摸动作开始
+    bindtouchmove EventHandle  手指触摸后移动
+    bindtouchend EventHandle  手指触摸动作结束
+    bindtouchcancel EventHandle  手指触摸动作被打断，如来电提醒，弹窗
+    bindlongtap EventHandle  手指长按 500ms 之后触发，触发了长按事件后进行移动不会触发屏幕的滚动
+    binderror EventHandle  当发生错误时触发 error 事件，detail = {errMsg: 'something wrong'}
+    注：
+    canvas 标签默认宽度300px、高度225px
+    同一页面中的 canvas-id 不可重复，如果使用一个已经出现过的 canvas-id，该 canvas 标签对应的画布将被隐藏并不再正常工作
+  open-data 开放数据 基础库 1.4.0 开始支持，低版本需做兼容处理 
+    用于展示微信开放的数据。
+
+    属性名 类型 默认值 说明
+    type String  开放数据类型
+    open-gid String  当 type="groupName" 时生效, 群id
+    type 有效值：
+
+    值 说明 最低版本
+    groupName 拉取群名称 1.4.0
+    Tips: 只有当前用户在此群内才能拉取到群名称
+
+    <open-data type="groupName" open-gid="xxxxxx"></open-data>
+    Tips: 关于open-gid的获取请查看 转发
+  contact-button 客服会话按钮，用于在页面上显示一个客服会话按钮，用户点击该按钮后会进入客服会话
+    PS: button 组件通过设置 open-type="contact" 亦可进入客服会话 
+    属性名	类型	默认值	说明
+    size	Number	18	会话按钮大小，有效值 18-27，单位：px
+    type	String	default-dark	会话按钮的样式类型
+    session-from	String		用户从该按钮进入会话时，开发者将收到带上本参数的事件推送。本参数可用于区分用户进入客服会话的来源。
+    type 有效值：
+
+    值	说明
+    default-dark	
+    default-light
   ◆属性相关 
   dataset 
-    在组件中可以定义数据,这些数据将会通过事件传递给 SERVICE。 书写方式： 以data-开头,多个单词由连字符-链接,不能有大写(大写会自动转成小写)如data-element-type,最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType。
+    在组件中可以定义数据,这些数据将会通过事件传递给 SERVICE。 
+    书写方式： 以data-开头,多个单词由连字符-链接,不能有大写(大写会自动转成小写)如data-element-type,
+    最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType。
+API 
+  网络 
+  媒体 
 全局对象、方法及属性 
   app = getApp()   获取小程序实例
   ◆wx对象  

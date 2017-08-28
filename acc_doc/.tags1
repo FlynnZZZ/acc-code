@@ -34,7 +34,30 @@ detail.source	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        source: 
 swiperchange	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        swiperchange: function(e) { \/\/  轮播 改变时会触发的 change 事件$/;"	function	line:604
 onLoad	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^        onLoad: function() {$/;"	function	line:606
 success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^            success: function(res) {$/;"	function	line:617
-success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function (res) {$/;"	function	line:734
-fail	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      fail:function(err){$/;"	function	line:739
-complete	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      complete: function(){$/;"	function	line:743
-success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function(res) {$/;"	function	line:772
+detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value} $/;"	property	line:748
+bindblur.detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value} $/;"	property	line:750
+bindconfirm.detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value}$/;"	property	line:752
+value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      detail = {value:[选中的checkbox的value的数组]}$/;"	property	line:755
+bindcolumnchange.detail.column	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindcolumnchange EventHandle  某一列的值改变时触发 columnchange 事件，event.detail = {column: column, value: value}，column 的值表示改变了第几列（下标从0开始），value 的值表示变更值的下标$/;"	property	line:774
+bindcolumnchange.detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindcolumnchange EventHandle  某一列的值改变时触发 columnchange 事件，event.detail = {column: column, value: value}，column 的值表示改变了第几列（下标从0开始），value 的值表示变更值的下标$/;"	property	line:774
+disabled...detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value}；$/;"	property	line:807
+detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: 选中项radio的value}$/;"	property	line:813
+detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindchange EventHandle  完成一次拖动后触发的事件，event.detail = {value: value}$/;"	property	line:830
+detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindchange EventHandle  checked 改变时触发 change 事件，event.detail={ value:checked}$/;"	property	line:835
+color.3.30.height.5.0.detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindfocus EventHandle  输入框聚焦时触发，event.detail = {value: value} $/;"	property	line:856
+bindblur.detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value} $/;"	property	line:858
+bindlinechange.detail.height	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {height: 0, heightRpx: 0, lineCount: 0} $/;"	property	line:860
+bindlinechange.detail.heightRpx	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {height: 0, heightRpx: 0, lineCount: 0} $/;"	property	line:860
+bindlinechange.detail.lineCount	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {height: 0, heightRpx: 0, lineCount: 0} $/;"	property	line:860
+detail.value	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      event.detail = {value: value}$/;"	property	line:864
+5.0.errMsg	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      detail = {errMsg: MediaError.code}$/;"	property	line:929
+bindended.5.0.detail.errMsg	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    binderror HandleEvent  当错误发生时，发布到 AppService 的事件名，事件对象event.detail = {errMsg: 'something wrong'} $/;"	property	line:959
+bindload.detail.height	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindload HandleEvent  当图片载入完毕时，发布到 AppService 的事件名，事件对象event.detail = {height:'图片高度px', width:'图片宽度px'}$/;"	property	line:960
+bindload.detail.width	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindload HandleEvent  当图片载入完毕时，发布到 AppService 的事件名，事件对象event.detail = {height:'图片高度px', width:'图片宽度px'}$/;"	property	line:960
+video.1.0.4.0.4.0.detail.currentTime	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindtimeupdate EventHandle  播放进度变化时触发，event.detail = {currentTime: '当前播放时间'} 。触发频率应该在 250ms 一次 $/;"	property	line:978
+detail.fullScreen	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    bindfullscreenchange EventHandle  当视频进入和退出全屏是触发，event.detail = {fullScreen: '当前全屏状态'} 1.4.0$/;"	property	line:979
+ALWAYS.2.0.2.0.2.0.errMsg	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^    binderror EventHandle  当发生错误时触发 error 事件，detail = {errMsg: 'something wrong'}$/;"	property	line:1085
+success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function (res) {$/;"	function	line:1204
+fail	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      fail:function(err){$/;"	function	line:1209
+complete	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      complete: function(){$/;"	function	line:1213
+success	E:\project\my-github\my-doc\acc_doc\f-WXMini.js	/^      success: function(res) {$/;"	function	line:1242

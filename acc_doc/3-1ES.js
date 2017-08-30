@@ -2315,7 +2315,7 @@ Array   数组对象
         catch (e) {
           console.log('执行了');
         } 
-    bol = arr.every(f(val,idx,arr)[,thisArr]);    回调值判断,是否全部为真「ES5」
+    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真「ES5」
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -2332,7 +2332,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(f(val,idx,arr)[,thisArr]);     回调值判断,是否存在为真「ES5」
+    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真「ES5」
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -2347,7 +2347,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    rstStr = arr.map(f(val,idx,arr)[,thisArr])    回调值组成的数组「ES5」 
+    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组「ES5」 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -2381,7 +2381,7 @@ Array   数组对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    rstArr = arr.filter(foo [,thisArr]) 回调值为true的元素组成的数组「ES5」
+    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组「ES5」
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       thisArr 可选,执行函数时的用于 this 的值
@@ -3089,7 +3089,7 @@ RegExp   正则对象
       Example: :
       [a-z] [A-Z] [0-9] 
       互相组合如[a-zA-Z0-9] 
-    [^char]  表示任意不在括号中的一个字符
+    [^char]  表示任意不在括号中的一个字符 
       Example: :
       [^a-z]
       可组合如:[^a-zA-Z0-9]

@@ -1,22 +1,18 @@
-VueJS  数据驱动,组件化开发模式,渐进式前端类MVVM框架 
+VueJS 数据驱动,组件化开发模式,渐进式前端类MVVM框架 
   PS:支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
-    API设计受 AngularJS、KnockoutJS、RactiveJS 和 RivetsJS 影响;
-    Vue没有完全遵循MVVM格式,但其设计受到了它的启发;
+    API设计受AngularJS、KnockoutJS、RactiveJS和RivetsJS影响;
+    Vue没有完全遵循MVVM格式,但受其启发;
 自我约定 
 安装|启动 
-  <script>标签引入 
-    'Vue'被注册为一个全局变量
-    Example: : 
-    <script src="./vue.min.js" charset="utf-8"></script>
-    
+  <script>标签引入: 'Vue'被注册为一个全局变量
     异步组件 
       在不使用脚手架的情况下将一个个组件分别独立成一个个html文件,
       再去引用注册它们,也是可以实现的,但一般不推荐这样做
       vue.js 可以将异步组件定义为一个工厂函数
       Example: 
-      新建 head.html 
+        // head.html 
         <div> 这是头部  </div>
-      在 index.html 中异步引入 head.html 作为组件
+        // index.html 中异步引入 head.html 作为组件
         <div id="app1">
           <head-com></head-com>
         </div>
@@ -347,7 +343,7 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm]
     不要在实例属性或者回调函数中使用箭头函数 
       如 vm.$watch('a',newVal => this.myMethod())
       因为箭头函数绑定父上下文,this 不是Vue实例,
-  vm.$set(obj,key,val)  局部声明
+  vm.$set(obj,key,val)   显示设置  
   vm.$on('eventName',foo)     监听事件
   vm.$emit('event-name',data) 触发事件
 'Model'更新及监控  

@@ -1226,12 +1226,12 @@ Plugins,插件    扩展webpack的功能
     当要上线的时候,运行 npm run build
 --------------------------------------------------------------------------------
 'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
-  使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码
+  使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码 
   '.vue'文件 
-    vue-loader插件 
+    'vue-loader'插件 
       在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
       Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
-    在'.vue'文件中使用其他预处理器[需安装对应的Webpack loader] 
+    在'.vue'文件中使用其他预处理器[需安装对应的loader] 
       <template lang="jade">
         div.my-component
         h2 Hello from {{msg}}
@@ -1255,9 +1255,8 @@ Plugins,插件    扩展webpack的功能
         }
       </style>
       当使用 lang="less" 即使用Less,需 安装如下依赖
-      npm install -g css-loader less less-loader --save-dev
-      npm install -g css-loader less less-loader  --save-dev
-    Example:
+      npm i -g css-loader less less-loader --save-dev
+    Example: 
       <template>
         <div class="my-component">
           <h2>Hello from {{ msg }}</h2>

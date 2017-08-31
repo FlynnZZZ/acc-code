@@ -180,7 +180,7 @@ HTTP 协议
     url的可用字符: 0-9,a-z,A-Z ,其他用十六进制表示,并在每个字节前加%
     url编码:encodeURIComponent('字符')
     url解码:decodeURIComponent('字符')
-  HTTP状态码 
+  'HTTP Code'状态码 
     PS:由三位数值组成,第一位表示其类别
     '1XX' 表示请求已接收
     '2XX' 成功
@@ -188,7 +188,8 @@ HTTP 协议
     '4XX' 客户端错误
     '5XX' 服务器端错误
     ◆常用状态码
-    200 OK      正常返回信息
+    200 OK    正常返回信息
+    302       重定向 
     304 Not Modified 自从上次请求后,请求的网页未修改过
     400 Bad Request  请求错误,不符合要求 
       服务器无法理解请求的格式,客户端不应再次使用相同的内容发起请求
@@ -197,17 +198,16 @@ HTTP 协议
     404 Not Found    找不到匹配的资源
     500 Internal Server Error  最常见的服务器端错误
     503 Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
-    其他状态码及说明
-      100 Continue     继续,
-        一般在发送post请求时,已发送了http header之后服务端将返回此信息,
-        表示确认,之后发送具体参数信息
-      201 Created   请求成功并且服务器创建了新的资源
-      202 Accepted  服务器已接受请求,但尚未处理
-      301 Moved Permanently  请求的网页已永久移动到新位置.
-      302 Found        临时性重定向.
-      303 See Other    临时性重定向,且总是使用 GET 请求新的 URI.
-      401 Unauthorized      请求未授权.
-  HTTP请求方法 :发送请求的类型
+    ◆其他状态码及说明
+    100 Continue     继续,
+      一般在发送post请求时,已发送了http header之后服务端将返回此信息,
+      表示确认,之后发送具体参数信息
+    201 Created   请求成功并且服务器创建了新的资源 
+    202 Accepted  服务器已接受请求,但尚未处理 
+    301 Moved Permanently  请求的网页已永久移动到新位置 
+    303 See Other    临时性重定向,且总是使用 GET 请求新的 URI 
+    401 Unauthorized      请求未授权 
+  'HTTP Method':发送请求的类型
     PS:http 1.0 定义了8种方法,主要使用'GET'和'POST';
     GET  请求
       最常见的请求类型,常用于向服务器查询信息.

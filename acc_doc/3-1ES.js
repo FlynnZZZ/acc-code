@@ -2155,7 +2155,7 @@ Array   数组对象
         var obj = [1,2,3];
         obj.pop(); // 3
         console.log(obj);// [1, 2]
-    arr.shift()  删除头部的一个元素  
+    val = arr.shift()  删除头部的一个元素,返回删除的元素   
     arr.sort([foo])  根据回调布尔值排序元素 
       foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
         通过冒泡的算法大小排序「SlSt」;

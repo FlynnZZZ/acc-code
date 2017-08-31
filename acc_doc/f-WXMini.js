@@ -1,15 +1,14 @@
 miniA微信小程序 
-说明 
   介绍:
     微信小程序主要依赖于微信平台,使用微信台提供的'View''Event''Component''Container'等构建,
     可以说是介于 Web App 和 Native App 之间的一种类型。无须Native App的安装,比Web APP更好的体验
-  开发小程序时可以选择有 APPID 和 无 APPID 两种方式,及其区别 
+说明 
+  开发小程序时可以选择有APPID和无APPID两种方式,及其区别 
     有APPID时,只能和指定的域名进行通信,如果没有进行配置,编译时会报错 
       微信公众平台-小程序-设置-开发设置 
       每种最多可设置两个,只能使用 https 的域名,且申请过程需花费一定时间 
     无APPID时,不可进行发布,但可随意进行网络请求,不限制域名 
   微信对小程序的要求是整体大小不能超过2MB  
-  'WeiXin Markup language' 'WeiXin Style Sheet'
   'Component'组件是视图的基本组成单元
 目录结构及文件 
   程序主体、总体配置信息：'app.js''app.json''app.wxss' 三个文件组成 
@@ -122,10 +121,10 @@ miniA微信小程序
     由于MINA并非运行在浏览器中,所以JS在web中一些能力都无法使用,如'document''window'等
     开发者写的所有代码最终将会打包成一份JavaScript,并在小程序启动的时候运行,
     直到小程序销毁,类似ServiceWorker,所以逻辑层也称之为App Service。
-  App(params)   注册小程序[只能在'app.js'中注册且一次] 
-    params  配置参数对象,指定小程序生命周期函数等
+  App({})   注册小程序 [只能在'app.js'中注册且一次] 
+    PS: 指定小程序生命周期函数等;函数中 this 表示小程序实例;
     {
-      ◆生命周期函数
+      // ◆生命周期函数
       onLaunch: function(opts){  // 监听小程序初始化,当小程序初始化完成时,全局只触发一次 
         console.log(opts);
         // path  打开小程序的路径
@@ -146,65 +145,65 @@ miniA微信小程序
       onError: function(err){ // 错误监听函数,当发生脚本错误,或者api调用失败时触发 
         console.log(err);
       }, 
-      其他 Any  开发者可以添加任意的函数或数据到 Object 参数中,用 this 可以访问
-      'globalData':{}, 全局数据,通过 this.globalData 或 app.globalData 访问  
-      可添加任意函数或数据,用 this 访问 
+      'globalData':{}, // 全局数据,通过 this.globalData 或 app.globalData 访问  
+      // 可添加任意函数或数据,用 this 访问 
       fooName : function(){
         console.log(1);
       },    
     }
-    使用 this 代替使用 getApp()     获取小程序实例
     App.prototype.getCurrentPage() 获取当前页面实例 
       不要在'onLaunch'时调用 getCurrentPage(),此时page还没有生成 
-  Page(params)  注册一个页面,指定页面的'初始数据''生命周期函数''事件处理函数'等 
-    params   参数对象 
+  Page({})  注册页面 
+    PS: 指定页面的'初始数据''生命周期函数''事件处理函数'等 
     {
       'data': { //  页面的初始数据 
         key : val,
       },           
       // ◆生命周期 
-      onLoad: function(query){  //  页面加载回调 
+      onLoad: function(query){   
         // query 其他页面打开当前页面所调用的query参数
-        console.log(query); 
+        console.log('加载页面',query); 
       },        
-      onShow: function(){       // 页面显示回调  
-        console.log();
+      onShow: function(){       
+        console.log('页面显示');
       },        
-      onReady: function(){ // 页面初次渲染完成回调  
+      onReady: function(){      
         // 一个页面只会调用一次,代表页面已经准备妥当,可以和视图层进行交互
-        console.log();
+        console.log('面初次渲染完成');
       },       
-      onHide: function(){ // 页面隐藏回调  
-        console.log();
+      onHide: function(){      
+        console.log('页面隐藏');
       },        
-      onUnload: function(){ // 页面卸载回调  
-        console.log();
+      onUnload: function(){       
+        console.log('页面卸载');
       },      
-      // 其他回调 
-      onPullDownRefresh: function () {   // 用户下拉刷新回调 
-        // 下拉回调: 需先在'app.json'或'.json'中配置 'enablePullDownRefresh':true 
-        console.log();
+      // 事件处理函数 
+      onPullDownRefresh: function () {   
+        // 需先在'app.json'或'.json'中配置'enablePullDownRefresh':true 
+        console.log('下拉刷新');
       },
-      onReachBottom: function () { // 上拉触底回调  
+      onReachBottom: function () {        
         // 可以在app.json的window选项中或页面配置中设置触发距离onReachBottomDistance 
         // 在触发距离内滑动期间,本事件只会被触发一次
-        console.log();
+        console.log('上拉触底');
       },
-      onShareAppMessage: function(){ // 用户点击右上角转发回调,未设置该项则不会出现转发选项  
-        console.log();
-        return {   // 用于自定义转发内容
+      onShareAppMessage: function(){     
+        // 未设置该回调则不会出现转发选项  
+        // 返回值用于自定义转发内容
+        console.log('点击右上角转发');
+        return {   
           'title': '自定义转发标题',  //  转发标题,默认当前小程序名称
           'path': '/page/user?id=123', // 转发路径,默认当前页面path 
           // 必须是以'/'开头的完整路径 
         }
       },
-      onPageScroll: function(obj){ // 页面滚动触发 
+      onPageScroll: function(obj){       
         // obj.scrollTop 页面在垂直方向已滚动的距离,单位px 
-        console.log(obj);
+        console.log('页面滚动',obj);
       },
-      Any       可添加任意函数或数据,用'this'访问 
+      // Any  可添加任意函数或数据,用'this'访问 
     }
-    Page.prototype.setData(dataObj,foo) 将数据从逻辑层发送到视图层[异步],同时改变对应的 this.data 的值[同步] 
+    Page.prototype.setData(dataObj,foo) 更新视图层数据[异步],同时改变对应data中的值[同步] 
       PS: 直接修改 this.data 无效,无法改变页面的状态,还会造成数据不一致 
         单次设置的数据不能超过1024kB,请尽量避免一次设置过多的数据
       dataObj  以'key:value'的形式表示将'this.data'中的'key'对应的值改变成'val' 
@@ -212,7 +211,6 @@ miniA微信小程序
         并不需要在'this.data'中预先定义 
       foo      本次setData对界面渲染完毕后调用['1.5.0+'] 
       Example: 
-        <!--index.wxml-->
         <view>{{text}}</view>
         <button bindtap="changeText"> Change normal data </button>
         <view>{{array[0].text}}</view>
@@ -221,7 +219,6 @@ miniA微信小程序
         <button bindtap="changeItemInObject"> Change Object data </button>
         <view>{{newField.text}}</view>
         <button bindtap="addNewField"> Add new data </button>
-        //index.js
         Page({
           data: {
             text: 'init data',
@@ -245,7 +242,7 @@ miniA微信小程序
           },
           changeItemInObject: function(){
             this.setData({
-              'object.text': 'changed data'
+              'object.text': 'changed data' // 需要使用引号将'object.text'括起来 
             });
           },
           addNewField: function() {
@@ -255,9 +252,10 @@ miniA微信小程序
           }
         })      
     Page.prototype.route  获取当前页路径['1.2.0+']
-    app.getCurrentPages() 获取当前页面栈实例 
-      以数组形式按栈的顺序给出,第一个元素为首页,最后一个元素为当前页面
-      不要尝试修改页面栈,会导致路由以及页面状态错误
+  var app = getApp();   获取小程序实例 
+  app.getCurrentPages() 获取当前页面栈实例 
+    以数组形式按栈的顺序给出,第一个元素为首页,最后一个元素为当前页面
+    不要尝试修改页面栈,会导致路由以及页面状态错误
   生命周期 
     A、B 两个界面
     ◆应用启动
@@ -278,10 +276,8 @@ miniA微信小程序
     ◆从A跳转[wx.rediectTo]到B
     A:unLoad()
     B:Load() Show() Ready()
-'.wxml'和'.wxss'组成视图层,由组件进行展示 
-  PS: 将逻辑层的数据反应成视图,同时将视图层的事件发送给逻辑层 
-    '.wxml'用于描述页面的结构,'.wxss'用于描述页面的样式 
-    WXML中动态数据均来自对应Page的data 
+'WeiXin Markup language','.wxml'视图元素用于描述页面的结构,由组件进行展示 
+  PS: WXML中动态数据均来自对应Page的data;自动会被一个<page>标签包裹
   {{val}}      "Mustache"语法,插值
     适用于'组件文本' '组件属性'
   wx:for="{{arr}}"   列表渲染 
@@ -313,6 +309,7 @@ miniA微信小程序
     PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
   wx:elif="{{val}}"  条件渲染 
   wx:else            条件渲染 
+    和 wx:if 必须相邻 
   <block wx:if="{{val}}"> </block>  多组件条件渲染 
     PS: 一次性判断多个组件标签,可用一个<block/>标签将多个组件包装起来,并使用wx:if控制属性 
       <block/>并不是一个组件,它仅仅是一个包装元素,不会在页面中做任何渲染,只接受控制属性。
@@ -320,38 +317,74 @@ miniA微信小程序
       <view> view1 </view>
       <view> view2 </view>
     </block>
-  <template name="templateName"></template> WXML模板 
-    PS: 可在模板中定义代码片段,然后在不同的地方调用 
-    定义模板 : 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
-      <template name="msgItem">
-        <view>
-          <text> {{index}}: {{msg}} </text>
-          <text> Time: {{time}} </text>
-        </view>
-      </template>
-    使用模板 : 'is'属性声明使用的模板,'data'属性将模板所需要的数据传入 
-      <template is="msgItem" data="{{...item}}"/>
-      Page({
-        data: {
-          item: {
-            index: 0,
-            msg: 'this is a template',
-            time: '2016-09-15'
+  WXML模版及引用 
+    <template name="templateName"></template> WXML模板 
+      PS: 可在模板中定义代码片段,然后在不同的地方调用 
+      定义模板 : 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
+        <template name="msgItem">
+          <view>
+            <text> {{index}}: {{msg}} </text>
+            <text> Time: {{time}} </text>
+          </view>
+        </template>
+      使用模板 : 'is'属性声明使用的模板,'data'属性将模板所需要的数据传入 
+        <template is="msgItem" data="{{...item}}"/>
+        Page({
+          data: {
+            item: {
+              index: 0,
+              msg: 'this is a template',
+              time: '2016-09-15'
+            }
           }
-        }
-      })
-    
-      is属性可以使用Mustache语法,在运行时来决定具体需要渲染哪个模板 
-      <template name="odd"> 
-        <view> odd </view>
-      </template>
-      <template name="even"> 
-        <view> even </view>
-      </template>
-      <block wx:for="{{[1, 2, 3, 4, 5]}}">
-        <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
-      </block>
-    模板的作用域 : 模板拥有自己的作用域,只能使用data传入的数据 
+        })
+      
+        is属性可以使用Mustache语法,在运行时来决定具体需要渲染哪个模板 
+        <template name="odd"> 
+          <view> odd </view>
+        </template>
+        <template name="even"> 
+          <view> even </view>
+        </template>
+        <block wx:for="{{[1, 2, 3, 4, 5]}}">
+          <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
+        </block>
+      模板的作用域 : 模板拥有自己的作用域,只能使用data传入的数据 
+    ◆WXML提供两种文件引用方式'import'和'include' 
+    <import src="xx.wxml"/>   模版引入,在WXML中引入template 
+      Example:
+        item.wxml : 定义一叫item的template  
+        <template name="item">
+          <text>{{text}}</text>
+        </template>
+        index.wxml : 引用 item.wxml,然后使用item模板 
+        <import src="item.wxml"/>
+        <template is="item" data="{{text: 'forbar'}}"/>
+      只会import目标文件中定义的template,而不会import目标文件import的template 
+        <!-- A.wxml -->
+        <template name="A">
+          <text> A template </text>
+        </template>
+        <!-- B.wxml -->
+        <import src="a.wxml"/>
+        <template name="B">
+          <text> B template </text>
+        </template>
+        <!-- C.wxml -->
+        <import src="b.wxml"/>
+        <template is="A"/>  <!-- Error! Can not use tempalte when not import A. -->
+        <template is="B"/>
+    <include src="xx.wxml"/>  页面引入,将目标文件除了<template/>的整个代码引入
+      相当于是拷贝到include位置
+      Example:
+        index.wxml 中 
+        <include src="header.wxml"/>
+        <view> body </view>
+        <include src="footer.wxml"/>
+        header.wxml 中 
+        <view> header </view>
+        footer.wxml 中 
+        <view> footer </view>    
   WXML事件 
     PS: 事件是视图层到逻辑层的通讯方式;可将用户的行为反馈到逻辑层进行处理。
       事件可以绑定在组件上,当达到触发事件,就会执行逻辑层中对应的事件处理函数 
@@ -421,7 +454,7 @@ miniA微信小程序
       PS: 如无特殊说明,当组件触发事件时,逻辑层绑定该事件的处理函数会收到一个事件对象 
       ◆'BaseEvent'基础事件对象属性列表
       e.type           事件类型
-      e.timeStamp      页面打开到触发事件所经过的毫秒数 
+      e.timeStamp      页面打开到触发事件所经过的ms数 
       e.target         触发事件的源组件,触发事件的组件的一些属性值集合  
         e.target.id   事件源组件的id
         e.target.tagName   当前组件的类型
@@ -452,118 +485,106 @@ miniA微信小程序
         identifier num,触摸点的标识符 
         x       num,距离 Canvas 左上角的距离
         y       num,距离 Canvas 左上角的距离
-  WXML引用 
-    PS: WXML提供两种文件引用方式'import'和'include' 
-    <import src="xx.wxml"/>   模版引入,在WXML中引入template 
-      Example:
-        item.wxml : 定义一叫item的template  
-        <template name="item">
-          <text>{{text}}</text>
-        </template>
-        index.wxml : 引用 item.wxml,然后使用item模板 
-        <import src="item.wxml"/>
-        <template is="item" data="{{text: 'forbar'}}"/>
-      只会import目标文件中定义的template,而不会import目标文件import的template 
-        <!-- A.wxml -->
-        <template name="A">
-          <text> A template </text>
-        </template>
-        <!-- B.wxml -->
-        <import src="a.wxml"/>
-        <template name="B">
-          <text> B template </text>
-        </template>
-        <!-- C.wxml -->
-        <import src="b.wxml"/>
-        <template is="A"/>  <!-- Error! Can not use tempalte when not import A. -->
-        <template is="B"/>
-    <include src="xx.wxml"/>  非模版引入,将目标文件除了<template/>的整个代码引入
-      相当于是拷贝到include位置
-      Example:
-        index.wxml 中 
-        <include src="header.wxml"/>
-        <view> body </view>
-        <include src="footer.wxml"/>
-        header.wxml 中 
-        <view> header </view>
-        footer.wxml 中 
-        <view> footer </view>    
-  WXSS: MINA设计的一套样式语言,用于描述WXML的组件样式 
-    PS: 为了适应广大的前端开发者,WXSS具有CSS大部分特性 
-      同时为了更适合开发微信小程序,我们对CSS进行了扩充以及修改 
-    ◆与css相比扩展的特性有 
-    尺寸单位 
-      PS: 建议：开发微信小程序时设计师可以用iPhone6作为视觉稿的标准。
-      'responsive pixel'rpx: 根据屏幕宽度进行自适应,屏幕宽度等于750rpx
-        如在iPhone6上,屏幕宽度为375px,共有750个物理像素,
-        则'750rpx = 375px = 750物理像素','1rpx = 0.5px = 1物理像素' 
-      'root em'rem: 根据屏幕宽度进行自适应,屏幕宽度等于20rem 
-    样式导入 
-      使用'@import'语句导入外联样式表,@import后跟需要导入的外联样式表的相对路径,用';'结束 
-      Example:
-        common.wxss 
-        .small-p{
-          padding:5px;
-        }
-        app.wxss 
-        @import "common.wxss";
-        .middle-p:{
-          padding:15px;
-        }
-    内联样式 
-      MINA组件上支持使用style、class属性来控制组件的样式 
-      style：style接收动态的样式,在运行时会进行解析,
-        不要将静态的样式写进style中,统一写到class中,以免影响渲染速度 
-        <view style="color:{{color}};" />
-    选择器 
-      目前支持的选择器有：
-      选择器               样例            样例描述
-      .class             .intro           选择所有拥有class="intro"的组件
-      #id                #firstname       选择拥有id="firstname"的组件
-      element            view             选择所有view组件
-      element, element   view checkbox    选择所有文档的view组件和所有的checkbox组件
-      ::after            view::after      在view组件后边插入内容
-      ::before           view::before     在view组件前边插入内容
-    全局样式与局部样式 
-      定义在app.wxss 中的样式为全局样式,作用于每一个页面。
-      在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
+'WeiXin Style Sheet','.wxss'视图样式用于描述页面的样式 
+  PS: 为了适应广大的前端开发者,WXSS具有CSS大部分特性 
+    同时为了更适合开发微信小程序,我们对CSS进行了扩充以及修改 
+  ◆与css相比扩展的特性有 
+  尺寸单位 
+    PS: 建议：开发微信小程序时设计师可以用iPhone6作为视觉稿的标准。
+    'responsive pixel'rpx: 根据屏幕宽度进行自适应,屏幕宽度等于750rpx
+      如在iPhone6上,屏幕宽度为375px,共有750个物理像素,
+      则'750rpx = 375px = 750物理像素','1rpx = 0.5px = 1物理像素' 
+    'root em'rem: 根据屏幕宽度进行自适应,屏幕宽度等于20rem 
+  样式导入 
+    使用'@import'语句导入外联样式表,@import后跟需要导入的外联样式表的相对路径,用';'结束 
+    Example:
+      common.wxss 
+      .small-p{
+        padding:5px;
+      }
+      app.wxss 
+      @import "common.wxss";
+      .middle-p:{
+        padding:15px;
+      }
+  内联样式 
+    MINA组件上支持使用style、class属性来控制组件的样式 
+    style：style接收动态的样式,在运行时会进行解析,
+      不要将静态的样式写进style中,统一写到class中,以免影响渲染速度 
+      <view style="color:{{color}};" />
+  选择器 
+    element        标签选择器 
+    #id            id选择器 
+    .class         类选择器 
+    slctor,slctor  并集选择器 
+    ::before       伪选择器,内部头部插入内容  
+    ::after        伪选择器,内部尾部插入内容  
+  全局样式与局部样式 
+    定义在app.wxss 中的样式为全局样式,作用于每一个页面。
+    在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
 内置组件 : 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
+  PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
   ◆视图组件 
   <view>         视图容器 
-    hover-class   指定按下去的样式类,hover-class="none",默认,没有点击态效果 
-    hover-stop-propagation bol,指定是否阻止本节点的祖先节点出现点击态 ['1.5.0+']
-    hover-start-time       num,按住后多久出现点击态,单位毫秒,默认 50  
-    hover-stay-time        num,手指松开后点击态保留时间,单位毫秒,默认 400
+    hover-stop-propagation 是否阻止节点的祖先节点出现点击态,默认'false'['1.5.0+'] ? 
+    hover-class   指定点击后的样式类 
+      "none"   默认值,没有点击态效果 
+    hover-start-time  点击后多久出现点击态,单位ms,默认'50'  
+    hover-stay-time   手指松开后点击态保留时间,单位ms,默认'400'
   <scroll-view>  可滚动视图区域 
-    PS: 勿在 scroll-view 中使用 textarea、map、canvas、video 组件
-      在滚动 scroll-view 时会阻止页面回弹,也无法触发'onPullDownRefresh'
-      若要使用下拉刷新,请使用页面的滚动[能通过点击顶部状态栏回到页面顶部],而非scroll-view 
-    scroll-x       bol,横向滚动 
-    scroll-y       bol,纵向滚动[需设定高度] 
-    scroll-left    num,设置横向滚动条位置 
-    scroll-top     num,设置竖向滚动条位置 
-    scroll-into-view str,将元素滚动到可视区,值应为某子元素id 
+    PS: 不可在组件内中使用<textarea><map><canvas><video>组件 
+      子组件需超出视图范围;
+    scroll-x              横向滚动,默认'false' 
+    scroll-y              纵向滚动[需设定高度],默认'false' 
+    scroll-with-animation 在设置滚动条位置时使用动画过渡,默认'false' 
+    enable-back-to-top [iOS点击顶部状态栏,安卓双击标题栏时]滚动条返回顶部,默认'false' 
+      只支持竖向;当页面存在多个<scroll-veiw>时,全部都返回顶部 
+    scroll-left    num,设置横向滚动条滚动到的位置,单位px 
+      范围:0-(内容宽-视区宽),大于最大值取最大值,小于最小值取最小值  
+    scroll-top     num,设置竖向滚动条滚动到的位置,单位px 
+      范围:0-(内容宽-视区高),大于最大值取最大值,小于最小值取最小值  
+    scroll-into-view      将元素滚动到可视区,值应为某子元素id 
       优先级高于'scroll-top'
-    scroll-with-animation bol,在设置滚动条位置时使用动画过渡,默认 false  
-    enable-back-to-top    bol,[iOS点击顶部状态栏、安卓双击标题栏时]滚动条返回顶部,只支持竖向 
-    upper-threshold   num,距顶部/左边多远时,触发'scrolltoupper'事件,单位px,默认'50' 
-    lower-threshold   num,距底部/右边多远时,触发'scrolltolower'事件,默认'50' 
-    bindscrolltoupper foo,滚动到顶部/左边,会触发'scrolltoupper'事件 
-    bindscrolltolower foo,滚动到底部/右边,会触发'scrolltolower'事件 
+    upper-threshold   距顶部/左边多远时,触发'scrolltoupper'事件,单位px,默认'50' 
+    lower-threshold   距底部/右边多远时,触发'scrolltolower'事件,默认'50' 
+    bindscrolltoupper foo,绑定'scrolltoupper'事件 
+    bindscrolltolower foo,绑定'scrolltolower'事件 
     bindscroll        foo,滚动时触发 
       event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} 
-    使用竖向滚动时,需要给<scroll-view/>一个固定高度,通过 WXSS 设置 height 
-  <swiper>       轮播组件,也叫'滑块视图容器' 
-    PS: 其中只能放置<swiper-item>组件,如放置其他节点,会被自动删除 
-    indicator-dots         是否显示面板指示点,默认 false 
-    indicator-color        指示点颜色,默认 rgba(0, 0, 0, .3) ['1.1.0+'] 
-    indicator-active-color 当前选中的指示点颜色,默认 #000000 ['1.1.0+'] 
-    autoplay  是否自动切换,默认 false  
-    interval  自动切换时间间隔,默认 5000 
-    duration  滑动动画时长,默认 500 
-    circular  是否采用衔接滑动,默认 false  
-    current    当前所在页面的index,默认 0 
-    vertical   滑动方向是否为纵向,默认 false 
+    <scroll-view>中的滚动无法触发'onPullDownRefresh' 
+      若要使用下拉刷新,请使用页面的滚动[能通过点击顶部状态栏回到页面顶部],而非<scroll-view> 
+  <movable-area> 可拖拽滑动视图区域['1.2.0+'] 
+    PS: 需设置宽高,否则默认10px;
+  <movable-view> 可拖拽滑动的视图容器['1.2.0+'] 
+    PS: 宽高默认10px;默认为绝对定位,top和left属性为0px 
+      必须在<movable-area>组件中,并且必须是直接子节点,否则不能移动 
+      当小于<movable-area>时,移动范围是在<movable-area>内；
+      当大于<movable-area>时,移动范围为包含<movable-area>
+    x    num,x轴偏移量,改变值会触发动画 
+      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
+    y    num,y轴偏移量,改变值会触发动画 
+      PS: 如果y的值不在可移动范围内,会自动移动到可移动范围 
+    direction   可移动的方向 
+      'none'  默认
+      'all'
+      'vertical'
+      'horizontal'
+    inertia     移动否带有惯性,默认'false' 
+    out-of-bounds   超过可移动区域后,movable-view是否还可以移动,默认'false' 
+    damping   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认'20' 
+    friction  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认'2' 
+      必须大于0,否则会被设置成默认值
+  <swiper>       滑块视图容器,也叫轮播组件 
+    PS: 其中只能放置<swiper-item>组件,否则会被删除? 
+    indicator-dots  是否显示面板指示点,默认'false' 
+    autoplay        是否自动切换,默认'false'  
+    circular        是否采用衔接滑动,默认'false'  
+    vertical        滑动方向是否为纵向,默认'false' 
+    indicator-color        指示点颜色,默认'rgba(0,0,0,0.3)' ['1.1.0+'] 
+    indicator-active-color 当前选中的指示点颜色,默认'#000' ['1.1.0+'] 
+    interval  自动切换时间间隔,默认'5000' 
+    duration  滑动动画时长,默认'500' 
+    current    当前所在页面的index,默认'0' 
     bindchange foo,'current'改变时触发'change'事件 
       event.detail = {
         current: current, 
@@ -572,13 +593,11 @@ miniA微信小程序
         // touch用户划动引起swiper变化；
         // 其他原因将用空字符串表示。
       }
-      若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,因而通常情况下请不要这样使用 
-  <swiper-item>  仅可放置在<swiper>组件中,宽高自动设置为100%,代表轮播中一帧的页面 
-    通常以循环的方式加载到页面中 
-    item单击 
-      在'swiper-item'上绑定事件,通过'data-xx'自定义标签绑定数据,然后在function中通过event拿到 
-        如：e.currentTarget.dataset.id 对应wxml中的data-id
-      通过在每一个的 swiper-item 外面包上一个 a 标签,以超链接的方式跳转页面 
+      若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,
+      因而通常情况下请不要这样使用 
+  <swiper-item>  轮播中一帧的页面 
+    PS: 仅可放置在<swiper>组件中,宽高自动设置为100%;通常以循环的方式加载到页面中 
+      通过在每一个的 swiper-item 外面包上一个<a>标签,以超链接的方式跳转页面 
     Example: 
       main.wxml
       <view>
@@ -623,41 +642,20 @@ miniA微信小程序
           })
         }
       })
-    'vertical'     bol,默认值为false 
+    vertical   默认值'false' 
       当不设置 vertical 属性,或者 vertical=”false” 时,指示点在组件下部,图片轮播从左至右 
       当设置 vertical=”true” 时,指示点在组件右部,图片轮播从下至上
-  <movable-area> movable-view的可移动区域['1.2.0+'] 
-    PS: 需设置宽高,否则默认10px;
-  <movable-view> 可移动的视图容器,在页面中可以拖拽滑动['1.2.0+'] 
-    PS: 宽高默认10px;默认为绝对定位,top和left属性为0px 
-      必须在<movable-area>组件中,并且必须是直接子节点,否则不能移动 
-      当小于<movable-area>时,移动范围是在<movable-area>内；
-      当大于<movable-area>时,移动范围为包含<movable-area>
-    direction   可移动的方向 
-      'none'  默认
-      'all'
-      'vertical'
-      'horizontal'
-    inertia     移动否带有惯性,默认'false' 
-    out-of-bounds   超过可移动区域后,movable-view是否还可以移动,默认'false' 
-    x   num,定义x轴方向偏移,改变x的值会触发动画 
-      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    y   num,定义y轴方向的偏移,改变y的值会触发动画 
-      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    damping  num,阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认'20' 
-    friction num,摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认'2' 
-      必须大于0,否则会被设置成默认值
   <cover-view>   覆盖在原生组件之上的文本视图['1.4.0+'] 
-    PS: 可覆盖的原生组件包括map、video、canvas,支持嵌套 
-      文本建议都套上cover-view标签,避免排版错误。
+    PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
+      文本建议都套上<cover-view>标签,避免排版错误 
   <cover-image>  覆盖在原生组件之上的图片视图 ['1.4.0+'] 
-    PS: 可覆盖的原生组件同cover-view,原生组件map、video、canvas内,避免嵌套在其他组件内 
-      支持嵌套在cover-view里 
-      事件模型遵循冒泡模型,但不会冒泡到原生组件。
+    PS: 可覆盖的原生组件同<cover-view>,避免嵌套在其他组件内 
+      支持嵌套在<cover-view>里 
+      事件模型遵循冒泡模型,但不会冒泡到原生组件 
       只支持基本的定位、布局、文本样式。不支持设置单边的border、opacity、background-image等。
       建议子节点不要溢出父节点
-      暂不支持css动画。
-    src  图标路径,支持临时路径。暂不支持base64与网络地址。
+      暂不支持css动画 
+    src  图标路径,支持临时路径,暂不支持base64与网络地址 
   ◆基础内容 
   <icon>   图标 
     type   icon的类型 
@@ -670,85 +668,163 @@ miniA微信小程序
       'download'
       'search'
       'clear'
-    size   num,icon的大小,单位px,默认 23 
+    size   icon的大小,单位px,默认'23' 
     color  icon的颜色 
   <text>   文本 
-    PS: <text/> 组件内只支持 <text/> 嵌套。 除了文本节点以外的其他节点都无法长按选中。
+    PS: <text>组件内只支持<text>嵌套;除了文本节点以外的其他节点都无法长按选中;
       各个操作系统的空格标准并不一致。
       长按复制功能尚未实现
-    selectable  文本是否可选,默认 false, ['1.1.0+']
+    selectable  文本是否可选,默认'false'  ['1.1.0+']
     space       是否显示连续空格  ['1.4.0+'] 
-      ensp  中文字符空格一半大小
-      emsp  中文字符空格大小
-      nbsp  根据字体设置的空格大小
-    decode      是否解码,默认 false    ['1.4.0+']
+      'ensp'  中文字符空格一半大小
+      'emsp'  中文字符空格大小
+      'nbsp'  根据字体设置的空格大小
+    decode      是否解码,默认'false' ['1.4.0+'] 
       可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
   <rich-text>  富文本 ['1.4.0+'] 
-    PS: rich-text 组件内屏蔽所有节点的事件。
+    PS: 组件内屏蔽所有节点的事件 
       如果使用了不受信任的HTML节点,该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
-    nodes  arr/str,节点列表或HTMLStr,默认值 [] 
-      推荐使用arr类型,组件会将str类型转换为arr,因而性能会有所下降 
-      现支持两种节点,通过type来区分,分别是元素节点和文本节点,默认是元素节点 
-        ★元素节点：type = node
-        name      str,标签名,支持部分受信任的HTML节点,必填 [大小写不敏感]
-        attrs     obj,属性,支持部分受信任的属性 
-          全局支持class和style属性,不支持id属性 
-        children  arr,子节点列表,结构和nodes一致 
-        ★文本节点：type = text
-        text  str,文本,必填 
+    nodes  arr/str,节点列表或HTMLStr,默认值'[]' 
+      PS: 推荐使用arr类型,组件会将str类型转换为arr,因而性能会有所下降 
+      现支持两种节点: 
+      ★type="node" 元素节点,默认值 
+      name      str,标签名,支持部分受信任的HTML节点,必填[大小写不敏感] 
+        'img'           alt，src，height，width
+        'ol'            start，type
+        'table'         width
+        'th'            colspan，height，rowspan，width
+        'td'            colspan，height，rowspan，width
+        'colgroup'      span，width
+        'col'           span，width
+        'tbody' 
+        'tfoot' 
+        'thead' 
+        'tr' 
+        'a' 
+        'abbr' 
+        'b' 
+        'blockquote' 
+        'br' 
+        'code' 
+        'dd' 
+        'del' 
+        'div' 
+        'dl' 
+        'dt' 
+        'em' 
+        'fieldset' 
+        'h1' 
+        'h2' 
+        'h3' 
+        'h4' 
+        'h5' 
+        'h6' 
+        'hr' 
+        'i' 
+        'ins' 
+        'label' 
+        'legend' 
+        'li' 
+        'p' 
+        'q' 
+        'span' 
+        'strong' 
+        'sub' 
+        'sup' 
+        'ul'
+      attrs     obj,属性 
+        PS: 支持部分受信任的属性,如class和style,不支持id属性 
+        {
+          'class' : '',
+          'style' : '',
+        }
+      children  arr,子节点列表,结构和'nodes'一致 
+        [
+          {
+            
+          }
+        ]
+      ★type="text" 文本节点 
+      text      str,文本,必填 
+    Example: 
+      <rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>
+      Page({
+        data: {
+          nodes: [
+            {
+              type : 'node',
+              name: 'div',
+              attrs: {
+                class: 'div_class',
+                style: 'line-height: 60px; color: red;'
+              },
+              children: [
+                {
+                  type: 'text',
+                  text: 'Hello&nbsp;World!'
+                }
+              ]
+            }
+          ]
+        },
+        tap() {
+          console.log('tap')
+        }
+      })
     支持默认事件,包括：'tap''touchstart''touchmove''touchcancel''touchend'和'longtap' 
   <progress>   进度条 
-    percent 0-100 间的浮点数,百分比 
-    show-info   是否在进度条右侧显示百分比,默认 false
-    stroke-width 进度条线的宽度,单位px,默认 6 
-    color           进度条颜色,默认 '#09BB07' 
+    percent      百分比,'0-100'间的浮点数 
+    show-info    是否在进度条右侧显示百分比,默认'false'
+    stroke-width 进度条线的宽度,单位px,默认'6' 
+    color           进度条颜色,默认'#09BB07' 
     activeColor     已选择的进度条的颜色
     backgroundColor 未选择的进度条的颜色
-    active          进度条从左往右的动画,默认 false 
+    active          进度条从左往右的动画,默认'false' 
   <navigator>  页面链接 
     url           跳转链接 
     open-type     跳转方式 
-      'navigate'  默认,对应 wx.navigateTo 的功能 
-      'redirect'  对应 wx.redirectTo 的功能 
-      'switchTab' 对应 wx.switchTab 的功能 
-      'reLaunch'  对应 wx.reLaunch 的功能 '1.1.0+'
-      'navigateBack' 对应 wx.navigateBack 的功能 '1.1.0+'
-    delta     num,表示回退的层数[当open-type为'navigateBack'时有效] 
+      'navigate'  对应wx.navigateTo()的功能,默认 
+      'redirect'  对应wx.redirectTo()的功能 
+      'switchTab' 对应wx.switchTab()的功能 
+      'reLaunch'  对应wx.reLaunch()的功能 ['1.1.0+'] 
+      'navigateBack' 对应wx.navigateBack()的功能 ['1.1.0+'] 
+    delta     num,表示回退的层数[当'open-type'为'navigateBack'时有效] 
     hover-class 指定点击时的样式类 
-      'navigator-hover' 默认值,{background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;} 
+      'navigator-hover' 默认值 
+        {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;} 
       "none"      没有点击态效果 
-    hover-stop-propagation  指定是否阻止本节点的祖先节点出现点击态,默认 false ['1.5.0+']
-    hover-start-time    按住后多久出现点击态,单位毫秒,默认 50  
-    hover-stay-time    手指松开后点击态保留时间,单位毫秒,默认 600 
+    hover-stop-propagation 指定是否阻止本节点的祖先节点出现点击态,默认'false'['1.5.0+']
+    hover-start-time    按住后多久出现点击态,单位ms,默认'50'  
+    hover-stay-time     手指松开后点击态保留时间,单位ms,默认'600' 
   ◆表单 
   <form>   表单 
-    PS: 当点击 <form/> 表单中 formType 为 submit 的 <button/> 组件时,会将表单组件中的 value 值进行提交,需要在表单组件中加上 name 来作为 key。
+    PS: 当点击<form>内'formType'为'submit'的<button>组件时,会提交表单 
     report-submit  是否返回formId用于发送模板消息 
-    bindsubmit     foo,携带form中的数据触发'submit'事件 
+    bindsubmit   foo,携带form中的数据触发'submit'事件 
       event.detail = {value : {'name': 'value'} , formId: ''} 
-    bindreset      foo,表单重置时会触发'reset'事件 
+    bindreset    foo,表单重置时会触发'reset'事件 
   <input/> 输入框 
-    PS: input 组件是一个 native 组件,字体是系统字体,所以无法设置 font-family；
-      在 input 聚焦期间,避免使用 css 动画；
-    value  
-    type   input 的类型  
+    PS: <input>组件是native组件,字体是系统字体,所以无法设置 
+      在<input>聚焦期间,避免使用css动画；
+    value  input值
+    type   input类型  
       'text'   文本输入键盘,默认 
       'number' 数字输入键盘
       'idcard' 身份证输入键盘
       'digit'  带小数点的数字键盘
-    password  是否是密码类型,默认 false  
-    placeholder       str,输入框为空时占位符 
+    password     是否是密码类型,默认'false'  
+    placeholder  输入框为空时占位符 
       微信版本'6.3.30', placeholder 在聚焦时出现重影问题；
     placeholder-style str,指定'placeholder'的样式 
     placeholder-class 指定'placeholder'的样式类 
       "input-placeholder" 默认 
-    disabled   是否禁用,默认 false  
-    maxlength  最大输入长度,默认 140 
+    disabled   是否禁用,默认'false'  
+    maxlength  最大输入长度,默认'140' 
       设置为 -1 的时候不限制最大长度 
-    cursor-spacing  指定光标与键盘的距离,单位 px ,默认 0 
+    cursor-spacing  指定光标与键盘的距离,单位px ,默认'0' 
       取 input 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离 
-    auto-focus      自动聚焦,拉起键盘,默认 false [即将废弃,请直接使用 focus] 
-    focus     获取焦点,默认 false  
+    auto-focus  自动聚焦,拉起键盘,默认'false' [即将废弃,请直接使用 focus] 
+    focus       获取焦点,默认'false'  
       微信版本'6.3.30', focus 属性设置无效；
     confirm-type  设置键盘右下角按钮的文字['1.1.0+'] 
       "done"   '完成',默认  
@@ -756,158 +832,169 @@ miniA微信小程序
       'search' '搜索' 
       'next'   '下一个' 
       'go'     '前往' 
-    confirm-hold  点击键盘右下角按钮时是否保持键盘不收起,默认 false ['1.1.0+']
+    confirm-hold  点击键盘右下角按钮时是否保持键盘不收起,默认'false' ['1.1.0+']
     cursor        num,指定focus时的光标位置['1.5.0+'] 
-    bindinput foo,当键盘输入时,触发'input'事件
-      event.detail = {value, cursor},处理函数可以直接 return 一个字符串,将替换输入框的内容。 
-    bindfocus foo,输入框聚焦时触发
+    bindinput   foo,当键盘输入时,触发'input'事件
+      函数的返回值将替换输入框的内容 
+      event.detail = {value, cursor}
+    bindfocus   foo,输入框聚焦时触发 
       event.detail = {value: value} 
-    bindblur  foo,输入框失去焦点时触发
+    bindblur    foo,输入框失去焦点时触发 
       event.detail = {value: value} 
-    bindconfirm foo,点击完成按钮时触发
+    bindconfirm foo,点击完成按钮时触发 
       event.detail = {value: value}
-  <checkbox-group>  多项选择器,内部由多个checkbox组成 
-    bindchange foo,选中项发生改变时触发change事件
+  <checkbox-group>  多项选择器,内部由多个<checkbox>组成 
+    bindchange foo,选中项发生改变时触发'change'事件
       detail = {value:[选中的checkbox的value的数组]}
   <checkbox/>       多选项目 
-    value    
-    disabled  是否禁用,默认 false 
-    checked   当前是否选中,可用来设置默认选中,默认 false 
+    value     值 
+    disabled  是否禁用,默认'false' 
+    checked   当前是否选中,可用来设置默认选中,默认'false' 
     color     checkbox的颜色 
   <picker>     从底部弹起的滚动选择器 
-    现支持五种选择器'普通选择器''多列选择器''时间选择器''日期选择器''省市区选择器',是普通选择器。
-    ★普通选择器：mode="selector",默认 
-    range Array / Object Array [] mode为 selector 或 multiSelector 时,range 有效
-    range-key String  当 range 是一个 Object Array 时,通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
-    value Number 0 value 的值表示选择了 range 中的第几个（下标从 0 开始）
-    bindchange EventHandle  value 改变时触发 change 事件,event.detail = {value: value}
-    disabled Boolean false 是否禁用
-    ★多列选择器：mode='multiSelector'['1.4.0+']
-    range 二维Array / 二维Object Array [] mode为 selector 或 multiSelector 时,range 有效。二维数组,长度表示多少列,数组的每项表示每列的数据,如[["a","b"], ["c","d"]]
-    range-key String  当 range 是一个 二维Object Array 时,通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
-    value Array [] value 每一项的值表示选择了 range 对应项中的第几个（下标从 0 开始）
-    bindchange EventHandle  value 改变时触发 change 事件,event.detail = {value: value}
-    bindcolumnchange EventHandle  某一列的值改变时触发 columnchange 事件,event.detail = {column: column, value: value},column 的值表示改变了第几列（下标从0开始）,value 的值表示变更值的下标
-    disabled Boolean false 是否禁用
-    ★时间选择器：mode='time'
-    value String  表示选中的时间,格式为"hh:mm"
-    start String  表示有效时间范围的开始,字符串格式为"hh:mm"
-    end String  表示有效时间范围的结束,字符串格式为"hh:mm"
-    bindchange EventHandle  value 改变时触发 change 事件,event.detail = {value: value}
-    disabled Boolean false 是否禁用
-    ★日期选择器：mode='date'
-    value String 0 表示选中的日期,格式为"YYYY-MM-DD"
-    start String  表示有效日期范围的开始,字符串格式为"YYYY-MM-DD"
-    end String  表示有效日期范围的结束,字符串格式为"YYYY-MM-DD"
-    fields String day 有效值 year,month,day,表示选择器的粒度
-      year 选择器粒度为年
-      month 选择器粒度为月份
-      day 选择器粒度为天
-    bindchange EventHandle  value 改变时触发 change 事件,event.detail = {value: value}
-    disabled Boolean false 是否禁用
-    ★省市区选择器：mode='region'['1.4.0+']
-    value Array [] 表示选中的省市区,默认选中每一列的第一个值 
-    custom-item String  可为每一列的顶部添加一个自定义的项 1.5.0
-    bindchange EventHandle  value 改变时触发 change 事件,event.detail = {value: value} 
-    disabled Boolean false 是否禁用
+    现支持五种选择器'普通选择器''多列选择器''时间选择器''日期选择器''省市区选择器' 
+    ★共有属性 
+    bindchange foo,value改变时触发'change'事件 
+      event.detail = {value: value}
+    disabled   是否禁用,默认'false' 
+    ★mode="selector" 普通选择器,默认值 
+    range      默认'[]' 
+    range-key  当'range'是objArr时,指定对象中key的值作为选择器显示内容 
+    value      表示选择了'range'中的第几个[下标从0开始],默认'0'
+    ★mode='multiSelector' 多列选择器 ['1.4.0+']
+    range      二维数组,长度表示多少列,数组的每项表示每列的数据,默认'[]' 
+      如[["a","b"], ["c","d"]]
+    range-key  指定数组中对象的key值作为选择器显示内容 
+    value      数组的元素表示选择了range对应项中的第几个,下标从0开始,默认'[]' 
+    bindcolumnchange foo,某一列的值改变时触发'columnchange'事件
+      event.detail = {
+        column: column,  // 表示改变了第几列,下标从0开始 
+        value: value     // 表示变更值的下标 
+      }
+    ★mode='time' 时间选择器 
+    value   表示选中的时间,格式为"hh:mm"
+    start   表示有效时间范围的开始,字符串格式为"hh:mm"
+    end     表示有效时间范围的结束,字符串格式为"hh:mm"
+    ★mode='date' 日期选择器 
+    value  表示选中的日期,格式为"YYYY-MM-DD",默认'0'
+    start  表示有效日期范围的开始,字符串格式为"YYYY-MM-DD"
+    end    表示有效日期范围的结束,字符串格式为"YYYY-MM-DD"
+    fields 表示选择器的粒度 
+      day   选择器粒度为天,默认值 
+      year  选择器粒度为年 
+      month 选择器粒度为月份 
+    ★mode='region' 省市区选择器 ['1.4.0+']
+    value         表示选中的省市区,默认选中每一列的第一个值 
+    custom-item   可为每一列的顶部添加一个自定义的项 '1.5.0+' 
   <picker-view>  嵌入页面的滚动选择器 
-    PS: 其中只可放置<picker-view-column/>组件,其他节点不会显示。
+    PS: 其中只可放置<picker-view-column>组件,其他节点不会显示 
       滚动时在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭
     value    arr,数组中的数字依次表示... 
-      数字大于 picker-view-column 可选项长度时,选择最后一项。 
+      数字大于 picker-view-column 可选项长度时,选择最后一项 
     indicator-style  设置选择器中间选中框的样式 
     indicator-class  设置选择器中间选中框的类名['1.1.0+'] 
     mask-style       设置蒙层的样式['1.5.0'] 
     mask-class       设置蒙层的类名 ['1.5.0']
-    bindchange   foo,当滚动选择,value 改变时触发 change 事件
+    bindchange   foo,当滚动选择,value 改变时触发'change'事件
       event.detail = {value: value}；
       value为数组,表示 picker-view 内的 picker-view-column 当前选择的是第几项（下标从 0 开始）
   <picker-view-column> 滚动选择项 
-    仅可放置于<picker-view />中,其子节点的高度会自动设置成与picker-view的选中框的高度一致 
-  <radio-group>  单项选择器,内部由多个<radio/>组成。
-    bindchange foo,选中项发生变化时触发 change 事件
+    仅可放置于<picker-view>中,其子节点的高度会自动设置成与<picker-view>的选中框的高度一致 
+  <radio-group>  单项选择器,内部由多个<radio/>组成 
+    bindchange foo,选中项发生变化时触发'change'事件 
       event.detail = {value: 选中项radio的value}
   <radio>  单选项目 
-    value String  <radio/> 标识。当该<radio/> 选中时,<radio-group/> 的 change 事件会携带<radio/>的value
-    checked Boolean false 当前是否选中
-    disabled Boolean false 是否禁用
-    color Color  radio的颜色,同css的color
+    value     值 
+    checked   当前是否选中,默认'false' 
+    disabled  是否禁用,默认'false' 
+    color     radio的颜色,同css的color
   <slider>  滑动选择器 
-    min Number 0 最小值
-    max Number 100 最大值
-    step Number 1 步长,取值必须大于 0,并且可被(max - min)整除
-    disabled Boolean false 是否禁用
-    value Number 0 当前取值
-    color Color #e9e9e9 背景条的颜色（请使用 backgroundColor）
-    selected-color Color #1aad19 已选择的颜色（请使用 activeColor）
-    activeColor Color #1aad19 已选择的颜色
-    backgroundColor Color #e9e9e9 背景条的颜色
-    show-value Boolean false 是否显示当前 value
-    bindchange EventHandle  完成一次拖动后触发的事件,event.detail = {value: value}
-  <switch>  开关选择器 
-    PS: switch类型切换时在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
-    checked Boolean false 是否选中
-    type String switch 样式,有效值：switch, checkbox
-    bindchange EventHandle  checked 改变时触发 change 事件,event.detail={ value:checked}
-    color Color  switch 的颜色,同 css 的 color
+    min   最小值,默认'0' 
+    max   最大值,默认'100' 
+    step  步长,取值必须大于0,并且可被(max-min)整除,默认'1'
+    disabled  是否禁用,默认'false'
+    value     当前取值,默认'0' 
+    color           背景条的颜色[请使用'backgroundColor'],默认'#e9e9e9'
+    selected-color  已选择的颜色[请使用'activeColor'],默认'#1aad19'
+    activeColor     已选择的颜色,默认'#1aad19' 
+    backgroundColor 背景条的颜色,默认'#e9e9e9' 
+    show-value      是否显示当前value,默认'false' 
+    bindchange    foo,完成一次拖动后触发的事件
+      event.detail = {value: value}
+  <'switch'>  开关选择器 
+    PS: switch切换在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
+    checked   是否选中,默认'false'
+    type      样式
+      'switch'   默认 
+      'checkbox'  
+    bindchange foo, checked改变时触发'change'事件
+      event.detail={ value:checked}
+    color      switch颜色,同css的color
   <textarea> 多行输入框 
-    PS:  微信版本 6.3.30,textarea 在列表渲染时,新增加的 textarea 在自动聚焦时的位置计算错误。
-      textarea 的 blur 事件会晚于页面上的 tap 事件,如果需要在 button 的点击事件获取 textarea,可以使用 form 的 bindsubmit。
-      不建议在多行文本上对用户的输入进行修改,所以 textarea 的 bindinput 处理函数并不会将返回值反映到 textarea 上。
-      textarea 组件是由客户端创建的原生组件,它的层级是最高的。
-      请勿在 scroll-view 中使用 textarea 组件。
-      css 动画对 textarea 组件无效。
-    value String  输入框的内容 
-    placeholder String  输入框为空时占位符 
-    placeholder-style String  指定 placeholder 的样式 
-    placeholder-class String textarea-placeholder 指定 placeholder 的样式类 
-    disabled Boolean false 是否禁用 
-    maxlength Number 140 最大输入长度,设置为 -1 的时候不限制最大长度 
-    auto-focus Boolean false 自动聚焦,拉起键盘。 
-    focus Boolean false 获取焦点 
-    auto-height Boolean false 是否自动增高,设置auto-height时,style.height不生效 
-    fixed Boolean false 如果 textarea 是在一个 position:fixed 的区域,需要显示指定属性 fixed 为 true 
-    cursor-spacing Number 0 指定光标与键盘的距离,单位 px 。取 textarea 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离 
-    cursor Number  指定focus时的光标位置 1.5.0
-    bindfocus EventHandle  输入框聚焦时触发,event.detail = {value: value} 
-    bindblur EventHandle  输入框失去焦点时触发,
+    PS: 微信版本'6.3.30',列表渲染时,新增加的<textarea>在自动聚焦时的位置计算错误 
+      <textarea>的blur事件会晚于页面上的tap事件,
+      如果需要在<button>的点击事件获取textarea,可以使用form的bindsubmit。
+      不建议在多行文本上对用户的输入进行修改,
+      所以textarea的bindinput处理函数并不会将返回值反映到textarea上
+      textarea组件是由客户端创建的原生组件,它的层级是最高的。
+      请勿在scroll-view中使用 textarea 组件。
+      css动画对textarea组件无效
+    value   输入框的内容 
+    placeholder         输入框为空时占位符 
+    placeholder-style   指定'placeholder'的样式 
+    placeholder-class   指定'placeholder'的样式类 
+      'textarea-placeholder'  默认 
+    disabled   是否禁用,默认'false' 
+    maxlength   最大输入长度,设置为'-1'的时候不限制最大长度,默认'140'  
+    auto-focus  自动聚焦,拉起键盘,默认'false' 
+    focus       获取焦点,默认'false'  
+    auto-height 是否自动增高,设置auto-height时,style.height 不生效,默认'false'  
+    fixed      如果textarea是在一个position:fixed的区域,需要显示指定属性fixed为true,默认'false' 
+    cursor-spacing   指定光标与键盘的距离,单位px,默认'0' 
+      取textarea距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离  
+    cursor         num,指定focus时的光标位置 '1.5.0+'
+    bindfocus foo,输入框聚焦时触发 
       event.detail = {value: value} 
-    bindlinechange EventHandle  输入框行数变化时调用,
+    bindblur  foo,输入框失去焦点时触发 
+      event.detail = {value: value} 
+    bindlinechange foo,输入框行数变化时调用 
       event.detail = {height: 0, heightRpx: 0, lineCount: 0} 
-    bindinput EventHandle  当键盘输入时,触发 input 事件,
+    bindinput      foo,当键盘输入时,触发'input'事件 
       event.detail = {value, cursor}, bindinput 处理函数的返回值并不会反映到 textarea 上 
-    bindconfirm EventHandle  点击完成时, 触发 confirm 事件,
+    bindconfirm    foo,点击完成时,触发'confirm'事件 
       event.detail = {value: value}
   <label>    用来改进表单组件的可用性 
-    PS: 使用for属性找到对应的id,或者将控件放在该标签下,当点击时,就会触发对应的控件。
-      for优先级高于内部控件,内部有多个控件的时候默认触发第一个控件。
-      目前可以绑定的控件有：<button/>, <checkbox/>, <radio/>, <switch/>。
+    PS: 使用for属性找到对应的id,或者将控件放在该标签下,当点击时,就会触发对应的控件 
+      for优先级高于内部控件,内部有多个控件的时候默认触发第一个控件 
+      目前可以绑定的控件有：<button/>, <checkbox/>, <radio/>, <'switch'>。
     for   绑定控件的id 
   <button> 按钮 
-    size   按钮的大小,默认'default'  
-      'default' 
+    size   按钮大小   
+      'default'  默认 
       'mini'
-    type   按钮的样式类型,默认'default'  
+    type   按钮样式类型   
+      'default'   默认 
       'primary' 
-      'default' 
       'warn'
-    plain  按钮是否镂空,背景色透明,默认 false 
-    disabled  是否禁用,默认 false  
-    loading   名称前是否带'loading'图标,默认 false 
-    form-type str,用于<form/>组件,点击分别会触发<form/>组件的submit/reset事件 
+    plain  按钮是否镂空,背景色透明,默认'false' 
+    disabled  是否禁用,默认'false'  
+    loading   名称前是否带'loading'图标,默认'false' 
+    form-type 点击对表单产生的效果 
+      点击分别会触发<form>组件的submit/reset事件 
       'submit' 提交表单
       'reset'  重置表单
-    hover-class 指定按钮按下去的样式类,默认'button-hover'  
-      'button-hover'   默认为{background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}
-      当 hover-class="none" 时,没有点击态效果 
-    hover-stop-propagation  指定是否阻止本节点的祖先节点出现点击态,默认 false  ['1.5.0+']
-    hover-start-time   按住后多久出现点击态,单位毫秒,默认 20   
-    hover-stay-time   手指松开后点击态保留时间,单位毫秒,默认 70   
-    open-type str,微信开放能力['1.1.0+']
-      "getPhoneNumber" 获取用户手机号,可以从bindgetphonenumber回调用获取到用户信息,解包方式
-      "getUserInfo"    获取用户信息,可以从bindgetuserinfo回调中获取到用户信息  
-      'contact'    打开客服会话 
-      'share'      触发用户转发 
+    hover-class 指定按钮按下去的样式类   
+      'button-hover'   默认值 
+        {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}
+      "none"           无点击态效果 
+    hover-stop-propagation  指定是否阻止本节点的祖先节点出现点击态,默认'false' ['1.5.0+']
+    hover-start-time   按住后多久出现点击态,单位ms,默认'20'   
+    hover-stay-time   手指松开后点击态保留时间,单位ms,默认'70'   
+    open-type       微信开放能力['1.1.0+']
+      "getPhoneNumber" 获取用户手机号,可从'bindgetphonenumber'回调用获取到用户信息,解包方式
+      "getUserInfo"    获取用户信息,可从'bindgetuserinfo'回调中获取到用户信息  
+      'contact'        打开客服会话 
+      'share'          触发用户转发 
     bindgetphonenumber foo,获取用户手机号回调 '1.2.0+' 
     bindgetuserinfo    foo,用户点击该按钮时,会返回获取到的用户信息 ['1.3.0+']
       从返回参数的detail中获取到的值同 wx.getUserInfo  
@@ -916,70 +1003,80 @@ miniA微信小程序
     send-message-title str,会话内消息卡片标题,默认为当前标题['1.5.0+'] 
     send-message-path  str,会话内消息卡片点击跳转小程序路径,默认当前分享路径 
     send-message-img   str,会话内消息卡片图片,默认为当前截图 
-    show-message-card  显示会话内消息卡片,默认 false  
+    show-message-card  显示会话内消息卡片,默认'false'  
   ◆媒体组件 
-  audio 音频 
-    id String  audio 组件的唯一标识符
-    src String  要播放音频的资源地址
-    loop Boolean false 是否循环播放
-    controls Boolean true 是否显示默认控件
-    poster String  默认控件上的音频封面的图片资源地址,如果 controls 属性值为 false 则设置 poster 无效
-    name String 未知音频 默认控件上的音频名字,如果 controls 属性值为 false 则设置 name 无效
-    author String 未知作者 默认控件上的作者名字,如果 controls 属性值为 false 则设置 author 无效
-    binderror EventHandle  当发生错误时触发 error 事件,
+  <image> 图片 
+    PS: image组件默认宽度300px、高度225px
+    src   图片资源地址 
+    mode  'scaleToFill' 图片裁剪、缩放的模式 
+      mode 有 13 种模式,其中 4 种是缩放模式,9 种是裁剪模式 
+      ★缩放 
+      'scaleToFill' 不保持纵横比缩放图片,使图片的宽高完全拉伸至填满image元素,默认值 
+      'aspectFit'   保持纵横比缩放图片,使图片的长边能完全显示出来,即完整显示图片 
+      'aspectFill'  保持纵横比缩放图片,只保证图片的短边能完全显示出来
+        也就是说,图片通常只在水平或垂直方向是完整的,另一个方向将会发生截取。
+      'widthFix'    宽度不变,高度自动变化,保持原图宽高比不变 
+      ★裁剪,不缩放图片  
+      'top'          只显示图片的顶部区域
+      'bottom'       只显示图片的底部区域
+      'center'       只显示图片的中间区域
+      'left'         只显示图片的左边区域
+      'right'        只显示图片的右边区域
+      'top left'     只显示图片的左上边区域
+      'top right'    只显示图片的右上边区域
+      'bottom left'  只显示图片的左下边区域
+      'bottom right' 只显示图片的右下边区域
+    lazyload   图片懒加载,只针对page与scroll-view下的image有效,默认'false' ['1.5.0']
+    binderror foo,当错误发生时触发 
+      event.detail = {errMsg: 'something wrong'} 
+    bindload  foo,当图片载入完毕时触发  
+      event.detail = {height:'图片高度px', width:'图片宽度px'}
+  <audio> 音频 
+    id       组件的唯一标识符
+    src      要播放音频的资源地址
+    loop     是否循环播放,默认'false' 
+    controls 是否显示默认控件,默认'true' 
+    poster   默认控件上的音频封面的图片资源地址[需'controls'为true] 
+    name     默认控件上的音频名字,默认'未知音频'[需'controls'为true] 
+    author   默认控件上的作者名字,默认'未知作者'[需'controls'为true] 
+    binderror      foo,当发生错误时触发'error'事件 
       detail = {errMsg: MediaError.code}
       MediaError.code
       MEDIA_ERR_ABORTED 获取资源被用户禁止
       MEDIA_ERR_NETWORD 网络错误
       MEDIA_ERR_DECODE 解码错误
       MEDIA_ERR_SRC_NOT_SUPPOERTED 不合适资源
-    bindplay EventHandle  当开始/继续播放时触发play事件
-    bindpause EventHandle  当暂停播放时触发 pause 事件
-    bindtimeupdate EventHandle  当播放进度改变时触发 timeupdate 事件,detail = {currentTime, duration}
-    bindended EventHandle  当播放到末尾时触发 ended 事件
-  image 图片 
-    PS: image组件默认宽度300px、高度225px
-    src String  图片资源地址 
-    mode String 'scaleToFill' 图片裁剪、缩放的模式 
-      mode 有 13 种模式,其中 4 种是缩放模式,9 种是裁剪模式。
-      模式 值 说明
-      缩放 scaleToFill 不保持纵横比缩放图片,使图片的宽高完全拉伸至填满 image 元素
-      缩放 aspectFit 保持纵横比缩放图片,使图片的长边能完全显示出来。也就是说,可以完整地将图片显示出来。
-      缩放 aspectFill 保持纵横比缩放图片,只保证图片的短边能完全显示出来。也就是说,图片通常只在水平或垂直方向是完整的,另一个方向将会发生截取。
-      缩放 widthFix 宽度不变,高度自动变化,保持原图宽高比不变
-      裁剪 top 不缩放图片,只显示图片的顶部区域
-      裁剪 bottom 不缩放图片,只显示图片的底部区域
-      裁剪 center 不缩放图片,只显示图片的中间区域
-      裁剪 left 不缩放图片,只显示图片的左边区域
-      裁剪 right 不缩放图片,只显示图片的右边区域
-      裁剪 top left 不缩放图片,只显示图片的左上边区域
-      裁剪 top right 不缩放图片,只显示图片的右上边区域
-      裁剪 bottom left 不缩放图片,只显示图片的左下边区域
-      裁剪 bottom right 不缩放图片,只显示图片的右下边区域
-    lazyload Boolean false 图片懒加载。只针对page与scroll-view下的image有效 1.5.0
-    binderror HandleEvent  当错误发生时,发布到 AppService 的事件名,事件对象event.detail = {errMsg: 'something wrong'} 
-    bindload HandleEvent  当图片载入完毕时,发布到 AppService 的事件名,事件对象event.detail = {height:'图片高度px', width:'图片宽度px'}
-  video 视频 
-    PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height。
-      video 组件是由客户端创建的原生组件,它的层级是最高的。
-      请勿在 scroll-view 中使用 video 组件。
-      css 动画对 video 组件无效。
-    src String  要播放视频的资源地址 
-    duration Number  指定视频时长 1.1.0
-    controls Boolean true 是否显示默认播放控件（播放/暂停按钮、播放进度、时间） 
-    danmu-list Object Array  弹幕列表 
-    danmu-btn Boolean false 是否显示弹幕按钮,只在初始化时有效,不能动态变更 
-    enable-danmu Boolean false 是否展示弹幕,只在初始化时有效,不能动态变更 
-    autoplay Boolean false 是否自动播放 
-    loop Boolean false 是否循环播放 1.4.0
-    muted Boolean false 是否静音播放 1.4.0
-    bindplay EventHandle  当开始/继续播放时触发play事件 
-    bindpause EventHandle  当暂停播放时触发 pause 事件 
-    bindended EventHandle  当播放到末尾时触发 ended 事件 
-    bindtimeupdate EventHandle  播放进度变化时触发,event.detail = {currentTime: '当前播放时间'} 。触发频率应该在 250ms 一次 
-    bindfullscreenchange EventHandle  当视频进入和退出全屏是触发,event.detail = {fullScreen: '当前全屏状态'} 1.4.0
-    objectFit String contain 当视频大小与 video 容器大小不一致时,视频的表现形式。contain：包含,fill：填充,cover：覆盖 
-    poster String  默认控件上的音频封面的图片资源地址,如果 controls 属性值为 false 则设置 poster 无效
+    bindplay       foo,当开始/继续播放时触发'play'事件 
+    bindpause      foo,当暂停播放时触发'pause'事件 
+    bindtimeupdate foo,当播放进度改变时触发'timeupdate'事件 
+      detail = {currentTime, duration}
+    bindended      foo,当播放到末尾时触发'ended'事件 
+  <video> 视频 
+    PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height 
+      video组件是由客户端创建的原生组件,它的层级是最高的。
+      请勿在scroll-view中使用video组件
+      css动画对video组件无效 
+    src         要播放视频的资源地址 
+    duration    指定视频时长 ['1.1.0']
+    controls    是否显示默认播放控件播放/暂停按钮、播放进度、时间[],默认'true' 
+    enable-danmu  是否展示弹幕,只在初始化时有效,不能动态变更,默认'false' 
+    danmu-btn     是否显示弹幕按钮,只在初始化时有效,不能动态变更,默认'false'  
+    danmu-list    弹幕列表 
+    autoplay  是否自动播放,默认'false' 
+    loop      是否循环播放,默认'false'  '1.4.0'
+    muted     是否静音播放,默认'false'  '1.4.0'
+    bindplay       foo,当开始/继续播放时触发play事件 
+    bindpause      foo,当暂停播放时触发 pause 事件 
+    bindended      foo,当播放到末尾时触发 ended 事件 
+    bindtimeupdate foo,播放进度变化时触发[触发频率大约在250ms/次]
+      event.detail = {currentTime: '当前播放时间'} 。 
+    bindfullscreenchange foo,当视频进入和退出全屏是触发 '1.4.0'
+      event.detail = {fullScreen: '当前全屏状态'} 
+    objectFit   当视频大小与video容器大小不一致时,视频的表现形式 
+      'contain'  包含,默认值 
+      'fill'     填充
+      'cover'    覆盖 
+    poster      默认控件上的音频封面的图片资源地址['controls'需为true]
   ◆其他
   <map> 地图 
     PS: 客户端创建的原生组件,它的层级是最高的
@@ -988,9 +1085,9 @@ miniA微信小程序
       地图组件的经纬度必填, 如果不填经纬度则默认值是北京的经纬度。
     longitude    num,中心经度 
     latitude     num,中心纬度 
-    scale    缩放级别,取值范围为5-18,默认 16  
+    scale    缩放级别,取值范围为'5-18',默认'16'  
     markers  arr,标记点 
-    covers   arr,即将移除,请使用 markers 
+    covers   arr,即将移除,请使用markers 
     polyline arr,路线 
     circles  arr,圆 
     controls arr,控件 
@@ -1001,7 +1098,6 @@ miniA微信小程序
     bindcontroltap   foo,点击控件时触发 
     bindregionchange foo,视野发生变化时触发 
     bindtap          foo,点击地图时触发
-
     markers  标记点用于在地图上显示标记的位置
       属性 说明 类型 必填 备注 最低版本
       id 标记点id Number 否 marker点击事件回调会返回此id 
@@ -1016,8 +1112,8 @@ miniA微信小程序
       callout 自定义标记点上方的气泡窗口 Object 否 {content, color, fontSize, borderRadius, bgColor, padding, boxShadow, display} 1.2.0
       label 为标记点旁边增加标签 Object 否 {color, fontSize, content, x, y},可识别换行符,x,y原点是marker对应的经纬度 1.2.0
       anchor 经纬度在标注图标的锚点,默认底边中点 Object 否 {x, y},x表示横向(0-1),y表示竖向(0-1)。{x: .5, y: 1} 表示底边中点 1.2.0
-    marker 上的气泡 callout
-    content 文本 String
+    marker   上的气泡 callout
+    content  文本 String
       color 文本颜色 String
       fontSize 文字大小 Number
       borderRadius callout边框圆角 Number
@@ -1044,7 +1140,7 @@ miniA微信小程序
       position 控件在地图的位置 Object 是 控件相对地图位置
       iconPath 显示的图标 String 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径
       clickable 是否可点击 Boolean 否 默认不可点击
-    position
+    position 
       left 距离地图的左边界多远 Number 否 默认为0
       top 距离地图的上边界多远 Number 否 默认为0
       width 控件宽度 Number 否 默认为图片宽度
@@ -1055,7 +1151,7 @@ miniA微信小程序
       请勿在 scroll-view 中使用 canvas 组件 
     canvas-id      组件的唯一标识符 
       同一页面中的 canvas-id 不可重复,如果使用一个已经出现过的 canvas-id,该 canvas 标签对应的画布将被隐藏并不再正常工作
-    disable-scroll 当在 canvas 中移动时且有绑定手势事件时,禁止屏幕滚动以及下拉刷新,默认 false 
+    disable-scroll 当在canvas中移动时且有绑定手势事件时,禁止屏幕滚动以及下拉刷新,默认'false' 
     bindtouchstart  foo,手指触摸动作开始
     bindtouchmove   foo,手指触摸后移动
     bindtouchend    foo,手指触摸动作结束
@@ -1067,13 +1163,13 @@ miniA微信小程序
     type       str,开放数据类型
       'groupName' 拉取群名称[只有当前用户在此群内才能拉取到群名称] ['1.4.0+'] 
     open-gid   str,群id,当 type="groupName" 时生效, 
-  <contact-button>     客服会话按钮,点击后会进入客服会话 
-    PS: <button>组件通过设置 open-type="contact" 亦可进入客服会话  
-    size   会话按钮大小,有效值 18-27,单位：px,默认 18 
-    type   会话按钮的样式类型
+  <contact-button>  客服会话按钮,点击后会进入客服会话 
+    PS: <button>组件通过设置open-type="contact"也可进入客服会话  
+    size   按钮大小[有效值'18-27'],单位px,默认'18' 
+    type   按钮的样式类型 
       'default-dark'  默认 
       'default-light'
-    session-from str,用户从该按钮进入会话时,开发者将收到带上本参数的事件推送
+    session-from str,用户从该按钮进入会话时,开发者将收到带上本参数的事件推送 
       本参数可用于区分用户进入客服会话的来源。
   ◆属性相关 
 API 
@@ -1315,7 +1411,7 @@ API
   wx.getSystemInfo     获取到小程序的基础库版本号 
   wx.getSystemInfoSync 获取到小程序的基础库版本号 
   wx.canIUse     判断是否可以在该基础库版本下直接使用对应的API或者组件 
-  app = getApp()   获取小程序实例
+  app = getApp()   获取小程序实例 
 页面路由 : 小程序中所有页面的路由全部由框架进行管理 
   PS: 框架以栈的形式维护了当前的所有页面; 一个应用同时只能打开5个页面
   页面栈 : 以栈的形式维护当前的所有页面  
@@ -1396,7 +1492,15 @@ API
     A A 保留原来的状态
     B A 清空原来的页面栈,打开首页（相当于执行 wx.reLaunch 到首页）
     A 或 B B 清空原来的页面栈,打开指定页面（相当于执行 wx.reLaunch 到指定页）
-Question&Idea
+自我总结 
+  '.wxss'中可使用weui中的样式,在CSS中定义即可而不用引入文件 
+    <image src="../../image/ing.png" class="animationImg"/>
+    .animationImg{
+      animation: weuiLoading 1s steps(12, end) infinite;
+    }
+  HTML标签的可用性总结 
+    ◆标签链接被删除 
+    a img 
+Question&Idea 
   连接跳转到的页面仍有tabBar,如何实现 
 -------------------------------------------------------------------------待整理 
-

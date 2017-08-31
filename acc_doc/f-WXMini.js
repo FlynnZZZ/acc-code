@@ -34,7 +34,7 @@ miniA微信小程序
           "onReachBottomDistance": 50, // 页面上拉触底事件触发时距页面底部距离,单位'px'
         },
         // 设置底部tab的表现,可选 
-        //   多tab应用小程序,可通过该配置项指定tab栏的表现,及tab切换时显示的对应页面 
+        //   指定tab栏表现,及切换对应页面 
         //   最少配置2个,最多5个tab,tab按数组的顺序排序 
         //   图片必须是本地图片不能是网络图片 
         "tabBar": {   
@@ -46,15 +46,12 @@ miniA微信小程序
               "text": "firstBar",             // tab上按钮文字,可选 
               "iconPath": "./img.png",        // 图片路径,icon大小限制为40kb,可选 
               // 当 postion 为 top 时,此参数无效
-              "selectedIconPath":"./img.png"  // 选中时的图片路径,icon大小限制为40kb,可选 
+              "selectedIconPath":"./img.png"  // 选中的图片,icon大小限制为40kb,可选 
               // 当 postion 为 top 时,此参数无效
             }, 
-            { "pagePath": "page/logs/logs"
-              "text": "日志",
-            }
           ],
           "borderStyle":"black",    // 边框色,仅支持'black'或'white',可选 
-          "position": "bottom"  // 显示位置,支持'bottom''top',可选 
+          "position": "bottom"      // 显示位置,支持'bottom''top',可选 
         },
         // 设置各种网络请求超时时间,单位ms,可选 
         "networkTimeout": {  
@@ -280,30 +277,30 @@ miniA微信小程序
   PS: WXML中动态数据均来自对应Page的data;自动会被一个<page>标签包裹
   {{val}}      "Mustache"语法,插值
     适用于'组件文本' '组件属性'
-  wx:for="{{arr}}"   列表渲染 
+  wx:for="{{arr/obj/str}}"  列表渲染 
     当前下标默认为: 'index';当前项默认为: 'item' 
       <view wx:for="{{items}}">
         {{index}}: {{item:one}}
       </view>
-    wx:for-item="placeholder"  指定当前项 
-    wx:for-index="placeholder" 指定当前下标 
-      <view wx:for="{{items}}" wx:for-item="name"  wx:for-index="id">
-        {{id}}: {{name.one}}
-      </view>
-    wx:for={{str}}     值为字符串时,将字符串解析成字符串数组 
-      <view wx:for="array"> {{item}} </view>
-      // 等同于
-      <view wx:for="{{['a','r','r','a','y']}}"> {{item}} </view>
     花括号和引号之间如果有空格,将最终被解析成为字符串 
       <view wx:for="{{[1,2,3]}} "> {{item}} </view>
       // 等同于
       <view wx:for="{{[1,2,3] + ' '}}" > {{item}} </view>
+    值为字符串时,将字符串解析成字符串数组 
+      <view wx:for="abcde"> {{item}} </view>
+      // 等同于
+      <view wx:for="{{['a','b','c','d','e']}}"> {{item}} </view>
+  wx:for-item="placeholder"  指定当前项 
+  wx:for-index="placeholder" 指定当前下标 
+    <view wx:for="{{items}}" wx:for-item="name"  wx:for-index="id">
+      {{id}}: {{name.one}}
+    </view>
   <block wx:for="{{arr}}"> </block>  列表块渲染 
-  wx:key="str/*this"    指定列表中项目的唯一标识符 
+  wx:key="key/*this"    指定列表中项目的唯一标识符 
     PS: 当列表为静态时可不必使用;
       当数据改变触发渲染层重新渲染时,会校正带有key的组件,进行重排而非重建,
       以确保使组件保持自身的状态,并提高列表渲染效率 
-    str   相当于'item[str]',该值需是列表中唯一的字符串或数字,且不能动态改变 
+    key   即表示为'item[key]',该值需是列表中唯一的字符串或数字,且不能动态改变 
     *this 保留关键字,表示'item'本身,这种表示需item是一个唯一的字符串或者数字
   wx:if="{{val}}"    条件渲染 
     PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
@@ -386,39 +383,30 @@ miniA微信小程序
         footer.wxml 中 
         <view> footer </view>    
   WXML事件 
-    PS: 事件是视图层到逻辑层的通讯方式;可将用户的行为反馈到逻辑层进行处理。
+    PS: 事件是视图层到逻辑层的通讯方式;可将用户的行为反馈到逻辑层进行处理 
       事件可以绑定在组件上,当达到触发事件,就会执行逻辑层中对应的事件处理函数 
       事件对象可以携带额外信息,如id, dataset, touches。
-    事件的使用方式: 在组件中绑定一个事件处理函数 
-    'bindtap'   用户点击组件  
-      <view id="tapTest" data-hi="MINA" bindtap="tapName"> Click me! </view>
-      在相应的Page定义中写上相应的事件处理函数,参数是event 
-      Page({
-        tapName: function(event) {
-          console.log(event)
-        }
-      })
-    事件详解 
+    使用方式: 在组件中绑定一个事件处理函数 
+    事件类型及分类 
       PS: 事件分为冒泡事件和非冒泡事件
-      ◆WXML的冒泡事件列表： 
-        冒泡事件：当一个组件上的事件被触发后,该事件会向父节点传递。
-        除下表之外的其他组件自定义事件都是非冒泡事件,
-        如<form/>的submit事件,<input/>的input事件,<scroll-view/>的scroll事件
+      ◆WXML的冒泡事件列表：当一个组件上的事件被触发后,该事件会向父节点传递 
       类型           触发条件
+      'tap'         手指触摸后离开
       'touchstart'  手指触摸
       'touchmove'   手指触摸后移动
       'touchcancel' 手指触摸动作被打断,如来电提醒,弹窗
       'touchend'    手指触摸动作结束
-      'tap'         手指触摸后离开
       'longpress'   手指触摸后,超过350ms再离开['1.5.0+'] 
         如果指定了事件回调函数并触发了这个事件,tap事件将不被触发 
-      'longtap'     手指触摸后,超过350ms再离开[推荐使用longpress事件代替] 
+      'longtap'     手指触摸后,超过350ms再离开[推荐使用'longpress'代替] 
       ◆非冒泡事件：当一个组件上的事件被触发后,该事件不会向父节点传递 
-    事件绑定 
-      事件绑定的写法同组件的属性,以key、value的形式 
-      key以'bind'或'catch'开头,然后跟上事件的类型,如bindtap, catchtouchstart
-      value是一个字符串,需要在对应的Page中定义同名的函数。不然当触发事件的时候会报错。
-      bind事件绑定不会阻止冒泡事件向上冒泡,catch事件绑定会阻止冒泡事件向上冒泡
+        除上表之外的其他组件自定义事件都是非冒泡事件 
+        如<form/>的submit事件,<input/>的input事件,<scroll-view/>的scroll事件
+    事件绑定 : 写法同组件的属性['key-val'的形式]  
+      'key' : 以'bind'或'catch'开头,加上事件的类型,如'bindtap''catchtouchstart'
+      'val' : 一字符串,需在对应的Page中定义同名的函数,否则当触发事件时会报错 
+      'bind'事件绑定不会阻止冒泡事件向上冒泡;
+      'catch'事件绑定会阻止冒泡事件向上冒泡;
       Example:
         点击inner view 会先后触发'handleTap3'和'handleTap2',
         因为tap事件会冒泡到middle view,而middle view阻止了tap事件冒泡,不再向父节点传递,
@@ -432,8 +420,8 @@ miniA微信小程序
             </view>
           </view>
         </view>
-    事件的捕获阶段
-      PS: '1.5.0+' 起,触摸类事件支持捕获阶段。捕获阶段位于冒泡阶段之前,
+    事件的捕获阶段 
+      PS: '1.5.0+'起,触摸类事件支持捕获阶段,捕获阶段位于冒泡阶段之前,
         捕获阶段中,事件到达节点的顺序与冒泡阶段恰好相反。
         需要在捕获阶段监听事件时,可以采用capture-bind、capture-catch关键字,后者将中断捕获阶段和取消冒泡阶段。
       在下面的代码中,点击 inner view 会先后调用handleTap2、handleTap4、handleTap3、handleTap1。
@@ -522,6 +510,7 @@ miniA微信小程序
   全局样式与局部样式 
     定义在app.wxss 中的样式为全局样式,作用于每一个页面。
     在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
+'WeiXin Script','.wxs'套脚本语言,结合WXML，可以构建出页面的结构 
 内置组件 : 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
   PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
   ◆视图组件 
@@ -532,10 +521,9 @@ miniA微信小程序
     hover-start-time  点击后多久出现点击态,单位ms,默认'50'  
     hover-stay-time   手指松开后点击态保留时间,单位ms,默认'400'
   <scroll-view>  可滚动视图区域 
-    PS: 不可在组件内中使用<textarea><map><canvas><video>组件 
-      子组件需超出视图范围;
-    scroll-x              横向滚动,默认'false' 
-    scroll-y              纵向滚动[需设定高度],默认'false' 
+    PS: 不可在组件内中使用<textarea><map><canvas><video>组件
+    scroll-x    横向滚动,默认'false' 
+    scroll-y    纵向滚动[需设定高度],默认'false' 
     scroll-with-animation 在设置滚动条位置时使用动画过渡,默认'false' 
     enable-back-to-top [iOS点击顶部状态栏,安卓双击标题栏时]滚动条返回顶部,默认'false' 
       只支持竖向;当页面存在多个<scroll-veiw>时,全部都返回顶部 
@@ -543,7 +531,7 @@ miniA微信小程序
       范围:0-(内容宽-视区宽),大于最大值取最大值,小于最小值取最小值  
     scroll-top     num,设置竖向滚动条滚动到的位置,单位px 
       范围:0-(内容宽-视区高),大于最大值取最大值,小于最小值取最小值  
-    scroll-into-view      将元素滚动到可视区,值应为某子元素id 
+    scroll-into-view   将元素滚动到可视区,值应为某子元素id 
       优先级高于'scroll-top'
     upper-threshold   距顶部/左边多远时,触发'scrolltoupper'事件,单位px,默认'50' 
     lower-threshold   距底部/右边多远时,触发'scrolltolower'事件,默认'50' 
@@ -553,6 +541,9 @@ miniA微信小程序
       event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY} 
     <scroll-view>中的滚动无法触发'onPullDownRefresh' 
       若要使用下拉刷新,请使用页面的滚动[能通过点击顶部状态栏回到页面顶部],而非<scroll-view> 
+    ◆自我总结 
+    子组件需超出视图范围,否则无法滚动 
+    默认高度为其父元素的100%,需指定其父元素高度,否则滚动相关的事件无法触发 
   <movable-area> 可拖拽滑动视图区域['1.2.0+'] 
     PS: 需设置宽高,否则默认10px;
   <movable-view> 可拖拽滑动的视图容器['1.2.0+'] 
@@ -642,13 +633,10 @@ miniA微信小程序
           })
         }
       })
-    vertical   默认值'false' 
-      当不设置 vertical 属性,或者 vertical=”false” 时,指示点在组件下部,图片轮播从左至右 
-      当设置 vertical=”true” 时,指示点在组件右部,图片轮播从下至上
-  <cover-view>   覆盖在原生组件之上的文本视图['1.4.0+'] 
+  <cover-view>   覆盖在原生组件上的文本视图 ['1.4.0+'] 
     PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
       文本建议都套上<cover-view>标签,避免排版错误 
-  <cover-image>  覆盖在原生组件之上的图片视图 ['1.4.0+'] 
+  <cover-image/> 覆盖在原生组件之上的图片视图 ['1.4.0+'] 
     PS: 可覆盖的原生组件同<cover-view>,避免嵌套在其他组件内 
       支持嵌套在<cover-view>里 
       事件模型遵循冒泡模型,但不会冒泡到原生组件 
@@ -657,7 +645,7 @@ miniA微信小程序
       暂不支持css动画 
     src  图标路径,支持临时路径,暂不支持base64与网络地址 
   ◆基础内容 
-  <icon>   图标 
+  <icon/>   图标 
     type   icon的类型 
       'success'
       'success_no_circle'
@@ -670,17 +658,17 @@ miniA微信小程序
       'clear'
     size   icon的大小,单位px,默认'23' 
     color  icon的颜色 
-  <text>   文本 
+  <text>    文本 
     PS: <text>组件内只支持<text>嵌套;除了文本节点以外的其他节点都无法长按选中;
       各个操作系统的空格标准并不一致。
       长按复制功能尚未实现
     selectable  文本是否可选,默认'false'  ['1.1.0+']
-    space       是否显示连续空格  ['1.4.0+'] 
+    decode      是否解码,默认'false' ['1.4.0+'] 
+      可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
+    space       显示连续空格及方式  ['1.4.0+'] 
       'ensp'  中文字符空格一半大小
       'emsp'  中文字符空格大小
       'nbsp'  根据字体设置的空格大小
-    decode      是否解码,默认'false' ['1.4.0+'] 
-      可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
   <rich-text>  富文本 ['1.4.0+'] 
     PS: 组件内屏蔽所有节点的事件 
       如果使用了不受信任的HTML节点,该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
@@ -794,8 +782,8 @@ miniA微信小程序
         {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;} 
       "none"      没有点击态效果 
     hover-stop-propagation 指定是否阻止本节点的祖先节点出现点击态,默认'false'['1.5.0+']
-    hover-start-time    按住后多久出现点击态,单位ms,默认'50'  
-    hover-stay-time     手指松开后点击态保留时间,单位ms,默认'600' 
+    hover-start-time   按住后多久出现点击态,单位ms,默认'50'  
+    hover-stay-time    手指松开后点击态保留时间,单位ms,默认'600' 
   ◆表单 
   <form>   表单 
     PS: 当点击<form>内'formType'为'submit'的<button>组件时,会提交表单 
@@ -1005,8 +993,9 @@ miniA微信小程序
     send-message-img   str,会话内消息卡片图片,默认为当前截图 
     show-message-card  显示会话内消息卡片,默认'false'  
   ◆媒体组件 
-  <image> 图片 
+  <image/> 图片 
     PS: image组件默认宽度300px、高度225px
+    lazyload   图片懒加载,只在<page>与<scroll-view>下生效,默认'false'['1.5.0']
     src   图片资源地址 
     mode  'scaleToFill' 图片裁剪、缩放的模式 
       mode 有 13 种模式,其中 4 种是缩放模式,9 种是裁剪模式 
@@ -1026,7 +1015,6 @@ miniA微信小程序
       'top right'    只显示图片的右上边区域
       'bottom left'  只显示图片的左下边区域
       'bottom right' 只显示图片的右下边区域
-    lazyload   图片懒加载,只针对page与scroll-view下的image有效,默认'false' ['1.5.0']
     binderror foo,当错误发生时触发 
       event.detail = {errMsg: 'something wrong'} 
     bindload  foo,当图片载入完毕时触发  
@@ -1377,7 +1365,29 @@ API
     ◆音频播放控制 
     ◆音乐播放控制 
   文件 
-  todo : 
+  数据缓存  
+  位置 
+    wx.getLocation({}) 获取当前地理位置信息 
+      PS: 当用户离开小程序后，此接口无法调用；当用户点击“显示在聊天顶部”时，此接口可继续调用。
+      {
+        'type' : '', 指定返回坐标的类型 
+          // 默认为'wgs84'返回gps坐标,'gcj02'返回可用于 wx.openLocation 的坐标
+        success:function(res){
+          // res.latitude  纬度，浮点数，范围为-90~90，负数表示南纬 
+          // res.longitude 经度，浮点数，范围为-180~180，负数表示西经 
+          // res.speed     速度，浮点数，单位m/s 
+          // res.accuracy  位置的精确度 
+          // res.altitude  高度，单位 m 1.2.0
+          // res.verticalAccuracy 垂直精度，单位 m（Android 无法获取，返回 0） 1.2.0
+          // res.horizontalAccuracy 水平精度，单位 m 1.2.0
+        },
+        fail:function(){
+        },
+        complete:function(){
+        },
+      }
+
+  todo : ----------------------------------------------------------------------
   wx.getStorageSync(key)      读取本地存储的数据 
   wx.setStorageSync(key,val)  本地存储 
     val 可为任意类型

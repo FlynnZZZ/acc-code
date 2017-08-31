@@ -211,7 +211,7 @@ Atom
         '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
           'ctrl-e': 'unset!'
   插件 
-    自带插件
+    自带插件 
       about                  关于Atom的信息查看 [help-about Atom]
         禁止后可能影响软件的自动升级
       autocomplete-atom-api  功能未知
@@ -328,16 +328,9 @@ Atom
             Ensure Single trailing Newline      自动去掉文档最后的空行
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
-    社区扩展
-      atom-beautify              代码格式美化
-      autocomplete-project-paths 路径补全
-        Question: 路径补全应为/而非\
-      color-picker               快捷颜色选择
-        颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
-        或直接使用快捷键ctrl+alt+c进行颜色值的选择插入.
-      highlight-selected         高亮选中词
-      language-vue-component     vue组件的语法插件 
-      minimap                    缩略图
+    社区扩展 
+      ◆常用扩展 
+      minimap                    缩略图 
         样式设置
           atom-text-editor atom-text-editor-minimap {
             background-color: rgba(78, 180, 230, 0.05); // 背景色
@@ -354,17 +347,28 @@ Atom
           }
         absolute-mode     在缩略图下方显示代码      取消勾选
       minimap-highlight-selected 缩略图高亮
-      open-in-browsers           在浏览器中快捷打开html
+      color-picker               快捷颜色选择 
+        颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
+        或直接使用快捷键ctrl+alt+c进行颜色值的选择插入.
+      autocomplete-project-paths 路径补全 
+        Question: 路径补全应为/而非\
+      highlight-selected         高亮选中词 
+      pigments                   根据颜色值显示颜色 
+      regex-railroad-diagram     正则查看 
+      remember-folds             记录折叠的状态
+      open-in-browsers           在浏览器中快捷打开html 
         安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
-      pigments                   根据颜色值显示颜色
-      regex-railroad-diagram     正则查看
+      auto-complete-wx           '.wxml','.wxss'语法高亮,及API补全 
+      language-vue-component     vue组件的语法插件 
+      zzz-snippets               自定义的补全插件 
       选用插件 
+        atom-beautify              代码格式美化
         autocomplete-cocos2d-js    cocos的补全插件
-        autoprefixer               用来补充 css 前缀的,会自动生成多个浏览器的前缀
+        autoprefixer               用来补充css前缀的,会自动生成多个浏览器的前缀 
           自定义快捷键 alt-m
-        file-icons                 显示文件图标
-        simplified-chinese-menu    菜单汉化
-        atom-wrap-in-tag           在选中字符外增加标签
+        file-icons                 显示文件图标 
+        simplified-chinese-menu    菜单汉化 
+        atom-wrap-in-tag           在选中字符外增加标签 
           (该快捷键有bug,不起效,使用 'alt-w': 'unset!' 命令来解决)
           自定义默认开始的标签
             设置 open-config-folder 
@@ -378,16 +382,11 @@ Atom
               end:
                 from: [tagrangePos.end.row, tagrangePos.end.column+7],
                 to: [tagrangePos.end.row, tagrangePos.end.column+10]
-        restore-windows            启动时加载之前的多窗口
+        restore-windows            启动时加载之前的多窗口 
           最早关的窗口加载时最后加载
           统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
             若无项目文件夹,则默认不加载
           记录状态 如 标签等
-        autocomplete-paths         路径补全
-        remember-folds             记录折叠的状态
-        Symbols-tree-View          快速定位到函数、变量的位置等等
-          设置默认不显示的类别:number string undefined unknown array object
-        highlight-line             当前行高亮
   总结 
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
@@ -1223,7 +1222,7 @@ Question & Idea
 
   
   
-  
+
   
 
 

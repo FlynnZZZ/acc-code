@@ -1,0 +1,34 @@
+# vue  .vue 
+'.text.html.vue':
+  # 名词------------------------------------------------------------------------
+  '-vue-beforeCreate':
+    'prefix': 'beforeCreate'
+    'body': """beforeCreate""" 
+  '-vue-created':
+    'prefix': 'created'
+    'body': """created""" 
+  '-vue-beforeMount':
+    'prefix': 'beforeMount'
+    'body': """beforeMount""" 
+  '-vue-beforeUpdate':
+    'prefix': 'beforeUpdate'
+    'body': """beforeUpdate""" 
+  '-vue-updated':
+    'prefix': 'updated'
+    'body': """updated""" 
+  '-vue-activated':
+    'prefix': 'activated'
+    'body': """activated""" 
+  '-vue-deactivated':
+    'prefix': 'deactivated'
+    'body': """deactivated""" 
+  '-vue-beforeDestroy':
+    'prefix': 'beforeDestroy'
+    'body': """beforeDestroy""" 
+  '-vue-destroyed':
+    'prefix': 'destroyed'
+    'body': """destroyed""" 
+  # 创建------------------------------------------------------------------------
+  '-vue-new Vue({$1});':
+    'prefix': 'newVue'
+    'body': 'new Vue({$1});'

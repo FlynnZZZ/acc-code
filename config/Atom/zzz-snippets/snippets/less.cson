@@ -1,0 +1,8 @@
+# less -------------------------------------------------------------------------
+'.source.css.less':
+  '-@import "${1:../a.less}";':
+    'prefix': 'import-less'
+    'body': '@import "${1:../a.less}";'
+  '-*@wu':
+    'prefix': 'wu'
+    'body': '*@wu'

@@ -1,4 +1,4 @@
-VueJS 数据驱动,组件化开发模式,渐进式前端类MVVM框架 
+VueJS  数据驱动,组件化开发模式,渐进式前端类MVVM框架 
   PS:支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
     API设计受AngularJS、KnockoutJS、RactiveJS和RivetsJS影响;
     Vue没有完全遵循MVVM格式,但受其启发;
@@ -65,16 +65,16 @@ View&Model
     一旦数据被观察,VueJS 就不会再侦测到新加入或删除的属性了
     作为弥补,我们会为被观察的对象增加'$add','$set' 和'$delete'方法 
 静态属性/方法 
-  Vue.config.devtools   读写,是否允许'vue-devtools'检查代码 
-    开发版本默认为 true,生产版本默认为 false。生产版本设为 true 可以启用检查
-    务必在加载 Vue 之后,立即同步设置
-  var Vued = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
+  Vue.config.devtools = bol  读写,是否允许'vue-devtools'检查代码 
+    开发版本默认为 true,生产版本默认为 false,设为 true 可启用检查
+    务必在加载Vue之后,立即同步设置
+  var VueExt = Vue.extend(params); 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
     PS: 所有的Vue组件其实都是被扩展的Vue实例 
       在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中
-    var ve = new Vue1(params); 
-  Vue.set(obj,key,val) 全局修改对象[确保视图会更新] 
+    var vm = new VueExt(params); 
+  Vue.set(obj,key,val)  显式更新数据[确保视图会更新],若为新数据则加入监控 
   Vue.component(tagName,options);  注册全局组件[详见组件]
-var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm]
+var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm] 
   PS: 模板语法声明式的将数据渲染进DOM系统; 
     VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;
     所有的VueJS组件其实都是被扩展的Vue实例;
@@ -333,9 +333,8 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm]
       vm.$el === document.getElementById('test'); // true
   vm.$el      实例接管的DOM对象 
   vm.$data    实例的data 
-  vm.$watch('key', foo)  监控元素改变的方法 
+  vm.$watch('key',f(newVal,oldVal))  监控元素改变的方法 
     key data对象中的属性 
-    foo 传入参数 (newVal,oldVal) 
     Example:
       vm.$watch('a', function (newVal, oldVal) {
           // 回调将在`vm.a`值改变后调用 
@@ -343,10 +342,10 @@ var vm = new Vue(params); 创建Vue实例[ViewModel,简称vm]
     不要在实例属性或者回调函数中使用箭头函数 
       如 vm.$watch('a',newVal => this.myMethod())
       因为箭头函数绑定父上下文,this 不是Vue实例,
-  vm.$set(obj,key,val)   显示设置  
+  vm.$set(obj,key,val)   效果同Vue.set()  
   vm.$on('eventName',foo)     监听事件
   vm.$emit('event-name',data) 触发事件
-'Model'更新及监控  
+'Model'更新及监控 
   'mutation_method'变异方法 会改变调用该方法的原数据的方法 
     push()  pop() shift() unshift() splice() sort() reverse()
   'non-mutating_method'非变异方法 : 不会改变原始数组,但总是返回一个新数组

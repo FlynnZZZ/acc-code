@@ -697,8 +697,8 @@ ECMAScript : JS核心,语法部分
       })
       var obj = new Foo();
       console.log(obj); 
-    enumerable    同数据属性 
-    configurable  同数据属性 
+    enumerable    能否遍历  
+    configurable  能否配置 
     ◆定义&修改
     Object.defineProperty(obj,key,param); 定义属性key及其特性[ES5] 
       PS:只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
@@ -707,7 +707,7 @@ ECMAScript : JS核心,语法部分
       param 特性的配置对象,不能同时定义'数据属性'和'访问器属性'[要分开定义] 
         {
           value : val,
-          writable : bool, // 默认为 false
+          writable : bool,   // 默认为 false
           enumerable : bool, // 默认为 false
           configurable : bool // 默认为 false
         }

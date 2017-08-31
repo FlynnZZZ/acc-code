@@ -1228,35 +1228,6 @@ ios
   iOS 10.3+ 可通过给 input[type='file'] 的标签里指定 capture="user" 来调用手机前置摄像头
 android
 --------------------------------------------------------------------------------
-插件类工具
-ueditor 百度编辑器 
-  打开图片上传框反映缓慢慢
-    将以下文件中的  'image/* '  改为  'image/jpg,image/jpeg,image/png' 即可
-    文件
-      'ueditor\dialogs\image\image.js'
-      'ueditor.all.min.js'
-    修改内容
-      mimeTypes: 'image/*' 
-      改为  
-      mimeTypes: 'image/jpg,image/jpeg,image/png'  
-    或者全局搜索将所有 'image/* '  改为  'image/jpg,image/jpeg,image/png'
---------------------------------------------------------------------------------
-网络收集 
-接口
-  百度分类图片api
-    PS: GET提交,返回JSON; sort可以为0和1,作用。。未知
-    URL:'http://image.baidu.com/data/imgs'
-    参数:
-      col  : '大类' // 如 美女
-      tag  : '分类' // 小清新
-      pn   : 开始条数
-      rn   : 显示数量
-      p    : 'channel'
-      from : 1
-      sort : 0
-    Example:
-      'http://image.baidu.com/data/imgs?col=美女&tag=小清新&pn=10&rn=10&p=channel&from=1&sort=0'
---------------------------------------------------------------------------------
 技巧 实现 
   动态 rem 自适应布局.
     PS:rem 单位在做移动端的h5开发的时候是最经常使用的单位。

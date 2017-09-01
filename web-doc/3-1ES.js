@@ -1,6 +1,5 @@
-ECMAScript : JS核心,语法部分 
-  ECMAscript: JS的语法核心,提供核心语言功能; 
-    由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
+ECMAScript : JS语法核心,提供核心语言功能; 
+  ECMAscript: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
     ECMA-262 要求支持Unicode标准「从而支持多语言开发」,第五版发布于2009年;
@@ -20,9 +19,9 @@ ECMAScript : JS核心,语法部分
     函数基于过程,写法:foo()
   静态 公有 私有 特权 属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
-    静态方法/属性 : 给类或构造函数定义的属性/方法,无需实例化通过类来访问
+    静态方法/属性 : 类或构造函数的属性/方法[无需实例化通过类名来访问]
     公有属性 : 实例化后通过对象来访问
-    公有方法 : 实例化后通过对象来调用,一般把共用的方法,都放在'原型对象'当中
+    公有方法 : 实例化后通过对象来调用,一般把共用的方法,都放在'原型对象'当中 
       若放在构造函数中,会重复创建共同的方法
     私有属性 : 函数内部定义的属性,外部无法访问
     私有方法 : 函数内部定义的方法,外部无法调用
@@ -34,7 +33,7 @@ ECMAScript : JS核心,语法部分
       var name = arg1;   // 私有属性
       function goo(){};  // 私有方法
       this.age = arg2;                // 公有属性,通过实例对象来访问
-      Foo.prototype.do1 =function(){  // 公有方法,通过实例对象来调用
+      Foo.prototype.do1 = function(){  // 公有方法,通过实例对象来调用
         console.log(name);
       }
       this.do2 = function(){  // 特权方法
@@ -48,37 +47,27 @@ ECMAScript : JS核心,语法部分
     var box = 100;
     box.MAX_VALUE;    //undefined , 属性
     Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
-  实例:类型的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
+  实例:类的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
   IE8支持部分ES5功能,IE9+支持ES5 
 语法规则 
-  PS:区分大小写,如变量、函数名和操作符; 语法源自于Java,基于原型的继承来自于Self;
-    一等函数「first-class_function」来自于 Scheme;
-  标识符: 指变量、函数、属性或函数的参数的名字
-    标识符的组合规则:
-    第一个字符必须是字母、下划线或美元符号$
-    其他字符可以是字母、下划线、美元符号$或数字
+  PS: 语法源自Java,基于原型的继承来自Self;'first-class_function'一等函数来自Scheme;
+  标识符: 指变量、函数、属性或函数的参数的名字 
+    区分大小写
+    第一个字符必须是'字母'、'_'或"$"
+    其他字符可以是'字母'、"_"、'$'或'数字'
     可以一个或多个字符
     不能把关键字、保留字、true、false和null等作为标识符
-    标识符中的字母也可以包含扩展的 ASCII 或 Unicode字母字符,但不推荐使用
+    标识符中的字母也可以包含扩展的ASCII或 Unicode字母字符,但不推荐使用
     不能使用'-'
   关键字和保留字 
     有些名称有特殊意义,不可作为变量名
-    关键字: 程序中已经开始使用的字符
-      ECMAScript全部关键字: 
-      'var' 'function' 'return' 'if' 'else' 'for' 'while' 'continue' 'break' 
-      'case' 'catch'  'default' 'delete' 'do'  'finally' 'in' 'inseanceof' 
-      'new' 'switch' 'this' 'throw' 'try' 'typeof'  'void'  'with'
-    保留字: 还没有特定的用途,但可能在将来被用作关键字 
-      ECMAScript-262 第3版 定义的全部保留字
-      'abstract' 'boolean' 'byte' 'char' 'class' 'const' 'debugger' 'double'
-      'enum' 'export' 'extends' 'final' 'float' 'goto' 'implements' 'import' 'int'
-      'interface' 'long' 'native' 'package' 'private' 'protected' 'public'
-      'short' 'static' 'super' 'synchronized' 'throws' 'transient' 'volatile'
+    关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
+    保留字: 还没有特定的用途,但可能在将来被用作关键字,如'class''int' ... 
   单、双引号需交错、成对使用 
     正确使用: '1"2"3'   "1'2'3" 
     错误使用: "1"2"3"   '1'2'3' 
   多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
-  ; 语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
+  ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
   \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
     PS:大部分js引擎都支持,但并非ECMAScript的规定;
@@ -128,7 +117,7 @@ ECMAScript : JS核心,语法部分
     PS:变量定义但未赋值,默认为'undefined'
     Example: :
       var box;  // 定义变量box
-      console.log(box); // undefined,未初始化,系统设定默认值为 undefined
+      console.log(box); // undefined,未初始化,默认为 undefined
 
       var a = b = 1; // 不推荐的写法
       // 相当于
@@ -207,15 +196,15 @@ ECMAScript : JS核心,语法部分
       var val = null;
       console.log(typeof val);  // object
       console.log(typeof null); // object
-    判断一个值是否为null
+    判断一个值是否为null 
       var aoo = null;
       if(aoo === null) {
         console.log('is null');
       }
   Boolean 布尔值 
-    PS:Boolean类型有两个值[字面量]: true 和 false
+    PS:Boolean类型有两个值[字面量]: true 和 false 
       ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
-    转换为布尔值
+    转换为布尔值 
       隐式转换为布尔值
         转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
         其余全部转换为true
@@ -488,9 +477,9 @@ ECMAScript : JS核心,语法部分
       缺点:
         无法继承
         无法识别对象(获取对象的类型)
-    obj = Object.create(protoObj[,keys]); 继承方式创建对象[ES5] 
-      protoObj 原型对象 [Foo.prototype 或 obj.__proto__]  
-      keys     新增属性方法及属性特性的配置对象 
+    obj = Object.create(protoObj[,configObj]); 继承方式创建对象[ES5] 
+      protoObj   原型对象 [Foo.prototype 或 obj.__proto__]  
+      configObj  新增属性方法及属性特性的配置对象 
       Example:
         创建出'纯净的空对象',没有原型
         var obj = Object.create(null);
@@ -549,7 +538,7 @@ ECMAScript : JS核心,语法部分
         var str = "abc";
         str[aoo];   // 3
         str.aoo;    // undefined,str无aoo属性.
-    foo = obj.constructor    创建当前对象的函数 
+    foo = obj.constructor    创建当前对象的构造函数 
     ◆obj.key(); 调用对象的方法
     obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
       PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
@@ -700,11 +689,11 @@ ECMAScript : JS核心,语法部分
     enumerable    能否遍历  
     configurable  能否配置 
     ◆定义&修改
-    Object.defineProperty(obj,key,param); 定义属性key及其特性[ES5] 
+    Object.defineProperty(obj,key,configObj); 定义属性key及其特性[ES5] 
       PS:只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
       obj   属性key所在的对象
       key   对象的属性名 
-      param 特性的配置对象,不能同时定义'数据属性'和'访问器属性'[要分开定义] 
+      configObj 特性的配置对象,不能同时定义'数据属性'和'访问器属性'[要分开定义] 
         {
           value : val,
           writable : bool,   // 默认为 false
@@ -762,7 +751,7 @@ ECMAScript : JS核心,语法部分
         obj.z; // 100
         delete obj.z;
         obj.z; // 1
-      设置被定义过的属性时,会优先按照定义的配置来执行 
+      对象的属性被配置后,会优先按照定义的配置来执行 
         var Foo = function(){ }
         Object.defineProperty(Foo.prototype,'zoo',{
           get : function(){
@@ -775,9 +764,9 @@ ECMAScript : JS核心,语法部分
         })
         var obj = new Foo(); 
         obj.aoo = 0;
-        console.log(obj,obj.zoo); // {aoo:0} 1 
+        console.log(obj,obj.zoo); // {aoo:0} 1,而非 0 
         obj.zoo = 2;
-        console.log(obj,obj.zoo); // {aoo:11} 1 
+        console.log(obj,obj.zoo); // {aoo:11} 1,而非 11 
         
         var o = {}
         Object.defineProperty(o,'zoo',{
@@ -825,11 +814,9 @@ ECMAScript : JS核心,语法部分
           },
           boo: {
             set: function(x) {
-              document.write("in property set accessor" + newLine);
               this.newaccpropvalue = x;
             },
             get: function() {
-              document.write("in property get accessor" + newLine);
               return this.newaccpropvalue;
             },
             enumerable: true,
@@ -837,7 +824,7 @@ ECMAScript : JS核心,语法部分
           }
         });
     ◆查询
-    obj = Object.getOwnPropertyDescriptor(obj,"prop"); 查询属性的特性配置[ES5] 
+    obj = Object.getOwnPropertyDescriptor(obj,key); 查询属性的特性配置[ES5] 
       PS:可对DOM或BOM对象使用该方法;若查询的属性不存在则返回undefined 
       var obj = {aoo:"a"};
       var rst = Object.getOwnPropertyDescriptor(obj,"aoo");
@@ -874,7 +861,7 @@ ECMAScript : JS核心,语法部分
     console.log(getType(new Date())); // Date
   对象的可扩展extensible标签 
     bol = Object.isExtensible(obj); 对象能否扩展[ES5] 
-      PS:即对象的属性/方法是否可增加
+      PS:即对象的属性/方法是否可增加 
     bol = Object.isSealed(obj);     对象是否被密封[ES5] 
     bol = Object.isFrozen(obj);     对象是否被冻结[ES5] 
     Object.preventExtensions(obj); 设置对象不可扩展[ES5]
@@ -984,7 +971,7 @@ ECMAScript : JS核心,语法部分
         基本思想:利用原型让一个引用类型继承另一个引用类型的属性和方法
         通过实现原型链,本质上扩展了原型搜索机制
       ◆相关操作
-      obj instanceof 构造函数; 是否处于对象的原型链上 [详见: 关系运算符]
+      obj instanceof 构造函数; 是否处于对象的原型链上 [详见: 关系运算符] 
       问题: 原型中的缺点带到了原型链中
       Example: :
         function A(){ this.name="abc"; }

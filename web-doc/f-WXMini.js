@@ -166,7 +166,7 @@ miniA微信小程序
       },        
       onReady: function(){      
         // 一个页面只会调用一次,代表页面已经准备妥当,可以和视图层进行交互
-        console.log('面初次渲染完成');
+        console.log('页面初次渲染完成');
       },       
       onHide: function(){      
         console.log('页面隐藏');
@@ -275,8 +275,9 @@ miniA微信小程序
     B:Load() Show() Ready()
 'WeiXin Markup language','.wxml'视图元素用于描述页面的结构,由组件进行展示 
   PS: WXML中动态数据均来自对应Page的data;自动会被一个<page>标签包裹
-  {{val}}      "Mustache"语法,插值
-    适用于'组件文本' '组件属性'
+  {{val}}      "Mustache"语法,插值 
+    适用于'组件文本''组件属性' 
+    控制class  class="aoo {{boo}}" 
   wx:for="{{arr/obj/str}}"  列表渲染 
     当前下标默认为: 'index';当前项默认为: 'item' 
       <view wx:for="{{items}}">
@@ -314,74 +315,69 @@ miniA微信小程序
       <view> view1 </view>
       <view> view2 </view>
     </block>
-  WXML模版及引用 
-    <template name="templateName"></template> WXML模板 
-      PS: 可在模板中定义代码片段,然后在不同的地方调用 
-      定义模板 : 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
-        <template name="msgItem">
-          <view>
-            <text> {{index}}: {{msg}} </text>
-            <text> Time: {{time}} </text>
-          </view>
-        </template>
-      使用模板 : 'is'属性声明使用的模板,'data'属性将模板所需要的数据传入 
-        <template is="msgItem" data="{{...item}}"/>
-        Page({
-          data: {
-            item: {
-              index: 0,
-              msg: 'this is a template',
-              time: '2016-09-15'
-            }
+  <template name="templateName"></template> WXML模板 
+    PS: 可在模板中定义代码片段,然后在不同的地方调用 
+    定义模板 : 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
+      <template name="msgItem">
+        <view>
+          <text> {{index}}: {{msg}} </text>
+          <text> Time: {{time}} </text>
+        </view>
+      </template>
+    使用模板 : 'is'属性声明使用的模板,'data'属性将模板所需要的数据传入 
+      <template is="msgItem" data="{{...item}}"/>
+      Page({
+        data: {
+          item: {
+            index: 0,
+            msg: 'this is a template',
+            time: '2016-09-15'
           }
-        })
-      
-        is属性可以使用Mustache语法,在运行时来决定具体需要渲染哪个模板 
-        <template name="odd"> 
-          <view> odd </view>
-        </template>
-        <template name="even"> 
-          <view> even </view>
-        </template>
-        <block wx:for="{{[1, 2, 3, 4, 5]}}">
-          <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
-        </block>
-      模板的作用域 : 模板拥有自己的作用域,只能使用data传入的数据 
-    ◆WXML提供两种文件引用方式'import'和'include' 
-    <import src="xx.wxml"/>   模版引入,在WXML中引入template 
-      Example:
-        item.wxml : 定义一叫item的template  
-        <template name="item">
-          <text>{{text}}</text>
-        </template>
-        index.wxml : 引用 item.wxml,然后使用item模板 
-        <import src="item.wxml"/>
-        <template is="item" data="{{text: 'forbar'}}"/>
-      只会import目标文件中定义的template,而不会import目标文件import的template 
-        <!-- A.wxml -->
-        <template name="A">
-          <text> A template </text>
-        </template>
-        <!-- B.wxml -->
-        <import src="a.wxml"/>
-        <template name="B">
-          <text> B template </text>
-        </template>
-        <!-- C.wxml -->
-        <import src="b.wxml"/>
-        <template is="A"/>  <!-- Error! Can not use tempalte when not import A. -->
-        <template is="B"/>
-    <include src="xx.wxml"/>  页面引入,将目标文件除了<template/>的整个代码引入
+        }
+      })
+    
+      is属性可以使用Mustache语法,在运行时来决定具体需要渲染哪个模板 
+      <template name="odd"> 
+        <view> odd </view>
+      </template>
+      <template name="even"> 
+        <view> even </view>
+      </template>
+      <block wx:for="{{[1, 2, 3, 4, 5]}}">
+        <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
+      </block>
+    模板的作用域 : 模板拥有自己的作用域,只能使用data传入的数据 
+  'import'  在WXML中引入<template>模版,及传入数据 [不可绑定引入页的JS数据] 
+    PS: 可自定义数据,但不能从引入页JS中绑定数据;可绑定事件,在引入后页面的JS中定义响应函数; 
+    // tpl-aoo.wxml 中  
+    <template name="aoo"><view wx:for={{key2}}>{{key1}}</view></template>  
+    // boo.wxml 中 
+    <import src="./tpl-aoo.wxml"/>       // 引入 
+    <template is="aoo" data="{{key1:val1,key2:val2,...}}"></template> // 使用,并传入数据 
+    只会import目标文件中定义的template,而不会import目标文件import的template 
+      <!-- A.wxml -->
+      <template name="A">
+        <text> A template </text>
+      </template>
+      <!-- B.wxml -->
+      <import src="a.wxml"/>
+      <template name="B">
+        <text> B template </text>
+      </template>
+      <!-- C.wxml -->
+      <import src="b.wxml"/>
+      <template is="A"/>  <!-- Error! Can not use tempalte when not import A. -->
+      <template is="B"/>
+  'include' 在WXML引用wxml [可绑定引入页的JS数据]  
+    <include src="xx.wxml"/>  页面引入,将目标文件除了<template/>的整个代码引入 
       相当于是拷贝到include位置
       Example:
-        index.wxml 中 
+        <view> header </view>  // header.wxml  
+        <view> footer </view>  // footer.wxml 
+        // index.wxml 中 
         <include src="header.wxml"/>
         <view> body </view>
         <include src="footer.wxml"/>
-        header.wxml 中 
-        <view> header </view>
-        footer.wxml 中 
-        <view> footer </view>    
   WXML事件 
     PS: 事件是视图层到逻辑层的通讯方式;可将用户的行为反馈到逻辑层进行处理 
       事件可以绑定在组件上,当达到触发事件,就会执行逻辑层中对应的事件处理函数 
@@ -478,28 +474,16 @@ miniA微信小程序
     同时为了更适合开发微信小程序,我们对CSS进行了扩充以及修改 
   ◆与css相比扩展的特性有 
   尺寸单位 
-    PS: 建议：开发微信小程序时设计师可以用iPhone6作为视觉稿的标准。
-    'responsive pixel'rpx: 根据屏幕宽度进行自适应,屏幕宽度等于750rpx
-      如在iPhone6上,屏幕宽度为375px,共有750个物理像素,
+    PS: 建议：开发微信小程序时设计师可以用iPhone6作为视觉稿的标准 
+    'responsive pixel'rpx: 根据屏幕宽度进行自适应,屏幕宽度等于750rpx 
+      如在iPhone6上,屏幕宽度为375px,共有750个物理像素, 
       则'750rpx = 375px = 750物理像素','1rpx = 0.5px = 1物理像素' 
     'root em'rem: 根据屏幕宽度进行自适应,屏幕宽度等于20rem 
-  样式导入 
-    使用'@import'语句导入外联样式表,@import后跟需要导入的外联样式表的相对路径,用';'结束 
-    Example:
-      common.wxss 
-      .small-p{
-        padding:5px;
-      }
-      app.wxss 
-      @import "common.wxss";
-      .middle-p:{
-        padding:15px;
-      }
-  内联样式 
+  @import "./xx.wxss"; 导入外联样式表 
+  style="" 内联样式 
     MINA组件上支持使用style、class属性来控制组件的样式 
-    style：style接收动态的样式,在运行时会进行解析,
-      不要将静态的样式写进style中,统一写到class中,以免影响渲染速度 
-      <view style="color:{{color}};" />
+    style接收动态的样式,在运行时会进行解析,如 <view style="color:{{color}};"/>
+    不要将静态的样式写进style中,统一写到class中,以免影响渲染速度 
   选择器 
     element        标签选择器 
     #id            id选择器 
@@ -1181,24 +1165,15 @@ API
             // 'application/x-www-form-urlencoded'  会将数据转换成 query string 
         },
         'data': {  // 请求的参数可以采用'xxx=xxx&xxx=xxx'的形式或者{key:val}的形式 
-          type: "1"
+          key: val,
         },
         'dataType': 'json', // 可选,默认为'json' 
           // 如果设置了 dataType 为 json，则会尝试对响应的数据做一次 JSON.parse
-        success: function (response) {
-          // response  响应 
-          //   data       服务器返回的数据 
-          //   statusCode 服务器返回的状态码 
-          //   header     服务器返回的 HTTP Response Header 
-          that.setData({
-            images: response.data.data.guanggao
-          })
+        success: function (res) {
         },
         fail:function(err){
-          console.log(err)
         },
-        complete: function(){ // 调用结束后无论成功或者失败都会被调用 
-          console.log();
+        complete: function(){ 
         } 
       }
       requestTask 返回值对象,可调用方法中断请求任务 
@@ -1386,7 +1361,45 @@ API
         complete:function(){
         },
       }
-
+  界面 
+    交互反馈 
+    wx.showToast({}) 显示消息提示框 
+      {
+        'title': '' , //提示的内容,必填   
+        'icon': 'success',  //  图标，有效值 "success", "loading"  
+        'image': './',  // 自定义图标的本地路径，优先级高于'icon'  ['1.1.0+']
+        'duration': 1500, // 提示的延迟时间，单位毫秒，默认：1500  
+        'mask': false,    // 是否显示透明蒙层，防止触摸穿透，默认：false  
+        success : function(){},
+        fail : function(){},
+        complete : function(){},
+      }
+    导航 
+    wx.navigateTo({})  保留当前页面,跳转到指定页[只能打开非'tabBar'页] 
+      PS: 使用'wx.navigateBack'可以返回到原页面 
+      {
+        url : './xx', // 必填,页面的路径 
+        success : foo,
+        fail : foo,
+        complete : foo,
+      }
+      以查询字符串的形式进行页面间的传递数据 
+        wx:navigateTo({
+          url:"../logs/logs?id=10"
+        })
+        然后通过B中 onLoad(options) 中取出
+    
+    
+    
+    
+    
+      wx.redirectTo({})  关闭当前页面,跳转到指定页[只能打开非 tabBar 页] 
+      wx.navigatBack({}) 关闭当前页面,返回前若干页
+        可通过 getCurrentPages()) 获取当前的页面栈,决定需要返回几层 
+      wx.switchTab({})   跳转到tabBar页面,并关闭其他所有非tabBar页面 
+      wx.reLaunch()      重新启动[可打开任意页] 
+    
+    
   todo : ----------------------------------------------------------------------
   wx.getStorageSync(key)      读取本地存储的数据 
   wx.setStorageSync(key,val)  本地存储 
@@ -1422,28 +1435,6 @@ API
   wx.getSystemInfoSync 获取到小程序的基础库版本号 
   wx.canIUse     判断是否可以在该基础库版本下直接使用对应的API或者组件 
   app = getApp()   获取小程序实例 
-页面路由 : 小程序中所有页面的路由全部由框架进行管理 
-  PS: 框架以栈的形式维护了当前的所有页面; 一个应用同时只能打开5个页面
-  页面栈 : 以栈的形式维护当前的所有页面  
-    当发生路由切换的时候,页面栈的表现如下：
-    路由方式       页面栈表现
-    初始化          新页面入栈
-    打开新页面      新页面入栈
-    页面重定向      当前页面出栈,新页面入栈
-    页面返回        页面不断出栈,直到目标返回页面,新页面入栈
-    Tab切换        当前页面出栈, 新页面入栈
-  wx.nativateTo({})  保留当前页面,跳转到指定页[只能打开非 tabBar 页] 
-    使用'wx.navigateBack'可以返回到原页面 
-    以查询字符串的形式进行页面间的传递数据 
-      wx:navigateTo({
-        url:"../logs/logs?id=10"
-      })
-      然后通过B中 onLoad(options) 中取出
-  wx.redirectTo({})  关闭当前页面,跳转到指定页[只能打开非 tabBar 页] 
-  wx.navigatBack({}) 关闭当前页面,返回前若干页
-    可通过 getCurrentPages()) 获取当前的页面栈,决定需要返回几层 
-  wx.switchTab({})   跳转到tabBar页面,并关闭其他所有非tabBar页面 
-  wx.reLaunch()      重新启动[可打开任意页] 
 微信Web开发者工具使用 
   快速创建文件[包括'.js''.json''.wxml''.wxss']
     在'app.json'中的'pages'中新增元素即可[注意最后一个不可有',']
@@ -1484,10 +1475,20 @@ API
     <button wx:if="{{canIUse}}" open-type="contact"> 客服消息 </button>
     <contact-button wx:else></contact-button>
 运行机制 
-  PS: 小程序没有重启的概念
+  PS: 小程序没有重启的概念 
     当小程序进入后台,客户端会维持一段时间的运行状态,超过一定时间后（目前是5分钟）会被微信主动销毁
     置顶的小程序不会被微信主动销毁
     当收到系统内存告警也会进行小程序的销毁
+  页面路由 : 小程序中所有页面的路由全部由框架进行管理 
+    PS: 框架以栈的形式维护了当前的所有页面; 一个应用同时只能打开5个页面
+    页面栈 : 以栈的形式维护当前的所有页面  
+      当发生路由切换的时候,页面栈的表现如下：
+      路由方式       页面栈表现
+      初始化          新页面入栈
+      打开新页面      新页面入栈
+      页面重定向      当前页面出栈,新页面入栈
+      页面返回        页面不断出栈,直到目标返回页面,新页面入栈
+      Tab切换        当前页面出栈, 新页面入栈
   前台、后台定义: 
     当用户点击左上角关闭,或者按了设备Home键离开微信,
     小程序并没有正在销毁,而是进入了后台,
@@ -1514,3 +1515,5 @@ API
 Question&Idea 
   连接跳转到的页面仍有tabBar,如何实现 
 -------------------------------------------------------------------------待整理 
+
+

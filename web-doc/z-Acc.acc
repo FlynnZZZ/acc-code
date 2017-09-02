@@ -313,21 +313,24 @@ Atom
       wrap-guide            标尺线
       markdown-preview      在编辑器中以markdown展示
         快捷键 ctrl-shift-m
-      可禁用列表
-        about
-        archive-view
-        background-tips
-        git-diff                 对比差异
-        image-view
-        link
-        open-on-github
-        spell-check
-        Welcome
-        whitespace   [可禁用]
+      可禁用列表 
+        whitespace   空白符设置 
           取消勾选
             Ensure Single trailing Newline      自动去掉文档最后的空行
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
+        about             关于Atom的介绍相关 
+        Welcome           欢迎页 
+        spell-check       拼写检查 
+        archive-view       
+        symbols-view    
+        background-tips
+        git-diff          对比差异
+        image-view        图片预览 
+        metrics           发送收集的信息 
+        link              显示连接 
+        open-on-github    在github打开 
+        github            
     社区扩展 
       ◆常用扩展 
       minimap                    缩略图 

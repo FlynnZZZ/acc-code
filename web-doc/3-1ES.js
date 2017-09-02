@@ -2143,31 +2143,6 @@ Array   数组对象
         obj.pop(); // 3
         console.log(obj);// [1, 2]
     val = arr.shift()  删除头部的一个元素,返回删除的元素   
-    arr.sort([foo])  根据回调布尔值排序元素 
-      foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
-        通过冒泡的算法大小排序「SlSt」;
-        若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
-        var arr =[31,1,2,5,4]
-        var resArr = arr.sort();
-        console.log(arr,'\n',resArr); 
-        // [1, 2, 31, 4, 5]
-        // [1, 2, 31, 4, 5]
-      Example: : 传入 foo 定义函数
-        从下到达排序
-        var arr = [5,2,4,17];
-        var resArr = arr.sort(function(val1,val2){
-          return val1 - val2;
-        });
-        console.log(arr); // (4) [2, 4, 5, 17] 
-        console.log(resArr); // (4) [2, 4, 5, 17]
-        
-        颠倒数组元素顺序
-        var arr = ['a','b','c'];
-        var resArr = arr.sort(function(val1,val2){
-          return true;
-        });
-        console.log(arr); // ["c", "b", "a"]
-        console.log(resArr); // ["c", "b", "a"]
     num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
       val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
       Example:
@@ -2196,6 +2171,31 @@ Array   数组对象
         var aoo = arr.splice
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
+    arr.sort([foo])  根据回调布尔值排序元素 
+      foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
+        通过冒泡的算法大小排序「SlSt」;
+        若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
+        var arr =[31,1,2,5,4]
+        var resArr = arr.sort();
+        console.log(arr,'\n',resArr); 
+        // [1, 2, 31, 4, 5]
+        // [1, 2, 31, 4, 5]
+      Example: : 传入 foo 定义函数
+        从下到达排序
+        var arr = [5,2,4,17];
+        var resArr = arr.sort(function(val1,val2){
+          return val1 - val2;
+        });
+        console.log(arr); // (4) [2, 4, 5, 17] 
+        console.log(resArr); // (4) [2, 4, 5, 17]
+        
+        颠倒数组元素顺序
+        var arr = ['a','b','c'];
+        var resArr = arr.sort(function(val1,val2){
+          return true;
+        });
+        console.log(arr); // ["c", "b", "a"]
+        console.log(resArr); // ["c", "b", "a"]
     ◆不改变原数组
     rstArr = arr.slice([bgn][,end]); 片段复制 
       PS:截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
@@ -2962,6 +2962,7 @@ Date     日期时间对象
   dat.toTimeString()  时:分:秒 时区 
     var date = new Date(1970,0,1,71,20,20); // 71:20:20
     date.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
+  dat.toLocaleString() 
   dat.toLocaleDateString()  年/月/日 
     // "2016/12/23"(Chrome下)
     // "‎2016‎年‎12‎月‎23‎日"(IE11下)
@@ -3182,11 +3183,11 @@ RegExp   正则对象
     rgep.ignoreCase; // true
     rgep.multiline;  // false
     rgep.source;     // "google"
-  rgep.global;      表示g是否已设置的布尔值,默认为false
-  rgep.ignoreCase;  表示i是否已设置的布尔值,默认为false
-  rgep.multiline;   表示m是否已设置的布尔值,默认为false
-  rgep.Source;      正则表达式的文本字符串
-  rgep.lastIndex;   取/设下次匹配字符位置的数值表示(在全局匹配时生效)
+  rgep.global;      表示g是否已设置的布尔值,默认为false 
+  rgep.ignoreCase;  表示i是否已设置的布尔值,默认为false 
+  rgep.multiline;   表示m是否已设置的布尔值,默认为false 
+  rgep.source;      正则表达式的文本字符串 
+  rgep.lastIndex;   取/设下次匹配字符位置的数值表示(在全局匹配时生效) 
   rgep.test(str);   返回对象是否在参数中的布尔值
     var rgep = new RegExp('fan');
     var str = 'fanshenglin';
@@ -3518,7 +3519,7 @@ Global|Window 全局对象
     uriStr = encodeURI(str) 将字符串编码为URI 
       PS:通用资源标识符简称为URI
         不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
-    str = decodeURI(uriStr) 解码URI
+    str = decodeURI(uriStr) 解码URI 
     uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
       会对任何非标准字符进行编码[ASCII字母、数字及"-_.!～*'()"等进行编码] 
     str = decodeURIComponent(str)    解码URI[完全解码] 
@@ -3551,8 +3552,8 @@ Math   数学对象
   ◆数学值
   Math.PI         π的值
     Math.PI;  //3.141592653589793
-  Math.SQRT2      2 的平方根
-  Math.SQRT1_2    1/2 的平方根
+  Math.SQRT2      2 的平方根 
+  Math.SQRT1_2    1/2 的平方根 
   Math.E          自然对数的底数,即常量e的值「也叫欧拉参数」
   Math.LN10        10 的自然对数
   Math.LN2         2 的自然对数
@@ -3573,7 +3574,7 @@ Math   数学对象
     Math.min.apply(null,[0,0,0]);   // 2
   ◆取整
   Math.round(num)   四舍五入取整            「round 圆；循环；一回合；圆形物」
-  Math.ceil(num)    向上舍入取整,数值将变大; 「ceil  天花板」
+  Math.ceil(num)    向上舍入取整,数值将变大; 「ceil  天花板」 
   Math.floor(num)   向下舍入取整,数值将变小; 「floor 地板  」
     Math.floor(1.1)    //1
   其他方法
@@ -3621,11 +3622,11 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
       //"[1,2,3,4]",为string类型
       var a = JSON.parse(s);
       //[1,2,3,4],object类型(数组为object类型)
-  JSON.stringify(val[,arr/func,num/str]); 序列化,将JS值转换为JSON字符串
+  JSON.stringify(val[,arr/foo,num/str]); 序列化,将JS值转换为JSON字符串
     PS:序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中
     val       需序列化的值
-    arr/func  可选,过滤器,数组或函数
-      若为数组则,结果中将只包含数组中列出的属性
+    arr/foo   可选,过滤器,数组或函数
+      若为数组则,结果中将只包含数组中列出的属性 
         Example: :
         var book ={
           "title":"Professional JavaScript",
@@ -3635,7 +3636,7 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
         }
         var jsonText =JSON.stringify(book,["title","edition"]);
         // {"title":"Professional JavaScript","edition":3}
-      若为函数,函数接收两个参数:属性名和属性值,
+      若为函数,函数接收两个参数:属性名和属性值,结果为函数返回值 
         当值为非键值对结构的值时,键名可以为空字符串
         Example: :
         var book ={
@@ -3664,8 +3665,8 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
     num/str   可选,缩进排版选项,数值或字符
       当为数值时范围为'1-10'[超过10仍取10],表示最大缩进空格数(不会改变数据(SelfThink))
       若为字符串时,则该字符串将在JSON字符串中被用作缩进字符[代替空格]
-          可将缩进字符设置为制表符等
-          缩进字符串最长长度不能超过10个字符,否则只使用前10个字符
+        可将缩进字符设置为制表符等
+        缩进字符串最长长度不能超过10个字符,否则只使用前10个字符
     Example: :
       会将属性值为undefined的属性忽略,NaN、Infinity 转换为null,
       时间表示转换为字符串的表示
@@ -3753,10 +3754,10 @@ JSON,'JavaScript_Object_Notation'JS对象表示法
       var rst2 = JSON.stringify(obj2);
       console.log(rst1); // {"a":1,"b":"aa"}
       console.log(rst2); // "自定义的返回值"
-  JSON.parse(JSONstr[,func]);     反序列化,将 JSON字符 串转换为JS值
+  JSON.parse(JSONstr[,foo(key,val)]);     反序列化,将 JSON字符 串转换为JS值
     PS:若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
     JSONstr 需要解析的JSON字符串
-    func    可选,函数的参数传入 属性名 和 属性值
+    foo     可选 
   应用:
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串

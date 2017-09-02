@@ -2311,50 +2311,6 @@ Layout,布局
       0   当空间不足时,该项不缩小;
       Remarks: 
         bug: 使用 flex-shrink:0; 决解左右布局时,一边某一个宽度与其他不同
-        .item{
-          display: flex;
-          align-items: center;
-          margin: 15 *@wu 0 ;
-          .left{
-            width: 150 *@wu;
-            height: 100 *@wu;
-            overflow: hidden;
-            position: relative;
-            flex-shrink: 0;
-            .background{
-              width: 100%;
-            }
-            .view-num{
-              position: absolute;
-              top: 0;
-              left: 0;
-              height: 20 *@wu;
-              background-color: rgba(34,34,34,0.2);
-              padding: 0 8 *@wu;
-              font-size: 12 *@wu;
-              color: #fff;
-              display: flex;
-              align-items: center;
-              span{
-                margin-left: 6 *@wu;
-              }
-            }
-          }
-          .right{
-            margin-left: 15 *@wu;
-            .name{
-              max-height: 45 *@wu;
-              font-size: 16 *@wu;
-              color: #222;
-              overflow: hidden;
-            }
-            .cost{
-              margin-top: 7 *@wu;
-              font-size: 14 *@wu;
-              color: #999;
-            }
-          }
-        }
     flex-basis     项目在排列方向上占据的空间 「和flex-direction有关」
       水平排列时,相当于width;垂直排列时,相当于height;
       auto   默认值,即项目的本来大小。

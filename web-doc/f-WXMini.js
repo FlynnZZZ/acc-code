@@ -118,88 +118,39 @@ miniA微信小程序
     由于MINA并非运行在浏览器中,所以JS在web中一些能力都无法使用,如'document''window'等
     开发者写的所有代码最终将会打包成一份JavaScript,并在小程序启动的时候运行,
     直到小程序销毁,类似ServiceWorker,所以逻辑层也称之为App Service。
-  App({})   注册小程序 [只能在'app.js'中注册且一次] 
+  注册小程序 [只能在'app.js'中注册且一次] 
     PS: 指定小程序生命周期函数等;函数中 this 表示小程序实例;
-    {
-      // ◆生命周期函数
-      onLaunch: function(opts){  // 监听小程序初始化,当小程序初始化完成时,全局只触发一次 
-        console.log(opts);
-        // path  打开小程序的路径
-        // query  打开小程序的query
-        // scene  打开小程序的场景值
-        // shareTicket  shareTicket,详见 获取更多转发信息
-        // referrerInfo  当场景为由另一个小程序打开时,返回此字段
-        // referrerInfo.appId  来源小程序的 appId
-        // referrerInfo.extraData  来源小程序传过来的数据
-      },  
-      onShow: function(opts){  // 监听小程序显示,小程序启动或者从后台进入到前台  
-        console.log(opts);
-        // opts 同 onLaunch 
-      },
-      onHide: function(){  // 监听小程序隐藏,小程序从前台进入到后台 
-        console.log('onHide');
-      },    
-      onError: function(err){ // 错误监听函数,当发生脚本错误,或者api调用失败时触发 
-        console.log(err);
-      }, 
-      'globalData':{}, // 全局数据,通过 this.globalData 或 app.globalData 访问  
-      // 可添加任意函数或数据,用 this 访问 
-      fooName : function(){
-        console.log(1);
-      },    
-    }
     App.prototype.getCurrentPage() 获取当前页面实例 
       不要在'onLaunch'时调用 getCurrentPage(),此时page还没有生成 
-  Page({})  注册页面 
-    PS: 指定页面的'初始数据''生命周期函数''事件处理函数'等 
-    {
-      'data': { //  页面的初始数据 
-        key : val,
-      },           
-      // ◆生命周期 
-      onLoad: function(query){   
-        // query 其他页面打开当前页面所调用的query参数
-        console.log('加载页面',query); 
-      },        
-      onShow: function(){       
-        console.log('页面显示');
-      },        
-      onReady: function(){      
-        // 一个页面只会调用一次,代表页面已经准备妥当,可以和视图层进行交互
-        console.log('页面初次渲染完成');
-      },       
-      onHide: function(){      
-        console.log('页面隐藏');
-      },        
-      onUnload: function(){       
-        console.log('页面卸载');
-      },      
-      // 事件处理函数 
-      onPullDownRefresh: function () {   
-        // 需先在'app.json'或'.json'中配置'enablePullDownRefresh':true 
-        console.log('下拉刷新');
-      },
-      onReachBottom: function () {        
-        // 可以在app.json的window选项中或页面配置中设置触发距离onReachBottomDistance 
-        // 在触发距离内滑动期间,本事件只会被触发一次
-        console.log('上拉触底');
-      },
-      onShareAppMessage: function(){     
-        // 未设置该回调则不会出现转发选项  
-        // 返回值用于自定义转发内容
-        console.log('点击右上角转发');
-        return {   
-          'title': '自定义转发标题',  //  转发标题,默认当前小程序名称
-          'path': '/page/user?id=123', // 转发路径,默认当前页面path 
-          // 必须是以'/'开头的完整路径 
-        }
-      },
-      onPageScroll: function(obj){       
-        // obj.scrollTop 页面在垂直方向已滚动的距离,单位px 
-        console.log('页面滚动',obj);
-      },
-      // Any  可添加任意函数或数据,用'this'访问 
-    }
+  App({
+    // ◆生命周期函数
+    onLaunch: function(opts){  // 监听小程序初始化,当小程序初始化完成时,全局只触发一次 
+      console.log(opts);
+      // path  打开小程序的路径
+      // query  打开小程序的query
+      // scene  打开小程序的场景值
+      // shareTicket  shareTicket,详见 获取更多转发信息
+      // referrerInfo  当场景为由另一个小程序打开时,返回此字段
+      // referrerInfo.appId  来源小程序的 appId
+      // referrerInfo.extraData  来源小程序传过来的数据
+    },  
+    onShow: function(opts){  // 监听小程序显示,小程序启动或者从后台进入到前台  
+      console.log(opts);
+      // opts 同 onLaunch 
+    },
+    onHide: function(){  // 监听小程序隐藏,小程序从前台进入到后台 
+      console.log('onHide');
+    },    
+    onError: function(err){ // 错误监听函数,当发生脚本错误,或者api调用失败时触发 
+      console.log(err);
+    }, 
+    'globalData':{}, // 全局数据,通过 this.globalData 或 app.globalData 访问  
+    // 可添加任意函数或数据,用 this 访问 
+    fooName : function(){
+      console.log(1);
+    },    
+  })   
+  注册页面: 指定页面的'初始数据''生命周期函数''事件处理函数'等 
     Page.prototype.setData(dataObj,foo) 更新视图层数据[异步],同时改变对应data中的值[同步] 
       PS: 直接修改 this.data 无效,无法改变页面的状态,还会造成数据不一致 
         单次设置的数据不能超过1024kB,请尽量避免一次设置过多的数据
@@ -249,6 +200,54 @@ miniA微信小程序
           }
         })      
     Page.prototype.route  获取当前页路径['1.2.0+']
+  Page({
+    'data': { //  页面的初始数据 
+      key : val,
+    },           
+    // ◆生命周期 
+    onLoad: function(query){   
+      // query 其他页面打开当前页面所调用的query参数
+      console.log('加载页面',query); 
+    },        
+    onShow: function(){       
+      console.log('页面显示');
+    },        
+    onReady: function(){      
+      // 一个页面只会调用一次,代表页面已经准备妥当,可以和视图层进行交互
+      console.log('页面初次渲染完成');
+    },       
+    onHide: function(){      
+      console.log('页面隐藏');
+    },        
+    onUnload: function(){       
+      console.log('页面卸载');
+    },      
+    // 事件处理函数 
+    onPullDownRefresh: function () {   
+      // 需先在'app.json'或'.json'中配置'enablePullDownRefresh':true 
+      console.log('下拉刷新');
+    },
+    onReachBottom: function () {        
+      // 可以在app.json的window选项中或页面配置中设置触发距离onReachBottomDistance 
+      // 在触发距离内滑动期间,本事件只会被触发一次
+      console.log('上拉触底');
+    },
+    onShareAppMessage: function(){     
+      // 未设置该回调则不会出现转发选项  
+      // 返回值用于自定义转发内容
+      console.log('点击右上角转发');
+      return {   
+        'title': '自定义转发标题',  //  转发标题,默认当前小程序名称
+        'path': '/page/user?id=123', // 转发路径,默认当前页面path 
+        // 必须是以'/'开头的完整路径 
+      }
+    },
+    onPageScroll: function(obj){       
+      // obj.scrollTop 页面在垂直方向已滚动的距离,单位px 
+      console.log('页面滚动',obj);
+    },
+    // Any  可添加任意函数或数据,用'this'访问 
+  })  
   var app = getApp();   获取小程序实例 
   app.getCurrentPages() 获取当前页面栈实例 
     以数组形式按栈的顺序给出,第一个元素为首页,最后一个元素为当前页面
@@ -495,7 +494,7 @@ miniA微信小程序
   全局样式与局部样式 
     定义在app.wxss 中的样式为全局样式,作用于每一个页面。
     在page的wxss文件中定义的样式为局部样式,只作用在对应的页面,并会覆盖app.wxss 中相同的选择器。   
-'WeiXin Script','.wxs'套脚本语言,结合WXML，可以构建出页面的结构 
+'WeiXin Script','.wxs'套脚本语言,结合WXML,可以构建出页面的结构 
 内置组件: 框架为开发者提供的一系列组件,开发者可以通过组合这些基础组件进行快速开发 
   PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
   ◆视图组件 
@@ -662,13 +661,13 @@ miniA微信小程序
       现支持两种节点: 
       ★type="node" 元素节点,默认值 
       name      str,标签名,支持部分受信任的HTML节点,必填[大小写不敏感] 
-        'img'           alt，src，height，width
-        'ol'            start，type
+        'img'           alt,src,height,width
+        'ol'            start,type
         'table'         width
-        'th'            colspan，height，rowspan，width
-        'td'            colspan，height，rowspan，width
-        'colgroup'      span，width
-        'col'           span，width
+        'th'            colspan,height,rowspan,width
+        'td'            colspan,height,rowspan,width
+        'colgroup'      span,width
+        'col'           span,width
         'tbody' 
         'tfoot' 
         'thead' 
@@ -963,7 +962,7 @@ miniA微信小程序
     hover-stop-propagation  指定是否阻止本节点的祖先节点出现点击态,默认'false' ['1.5.0+']
     hover-start-time   按住后多久出现点击态,单位ms,默认'20'   
     hover-stay-time   手指松开后点击态保留时间,单位ms,默认'70'   
-    open-type       微信开放能力['1.1.0+']
+    open-type       微信开放能力['1.1.0+'] 
       "getPhoneNumber" 获取用户手机号,可从'bindgetphonenumber'回调用获取到用户信息,解包方式
       "getUserInfo"    获取用户信息,可从'bindgetuserinfo'回调中获取到用户信息  
       'contact'        打开客服会话 
@@ -1076,8 +1075,8 @@ miniA微信小程序
       id 标记点id Number 否 marker点击事件回调会返回此id 
       latitude 纬度 Number 是 浮点数,范围 -90 ~ 90 
       longitude 经度 Number 是 浮点数,范围 -180 ~ 180 
-      title 标注点名 String 否  
-      iconPath 显示的图标 String 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径 
+      title 标注点名 str 否  
+      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径 
       rotate 旋转角度 Number 否 顺时针旋转的角度,范围 0 ~ 360,默认为 0 
       alpha 标注的透明度 Number 否 默认1,无透明 
       width 标注图标宽度 Number 否 默认为图片实际宽度 
@@ -1086,32 +1085,32 @@ miniA微信小程序
       label 为标记点旁边增加标签 Object 否 {color, fontSize, content, x, y},可识别换行符,x,y原点是marker对应的经纬度 1.2.0
       anchor 经纬度在标注图标的锚点,默认底边中点 Object 否 {x, y},x表示横向(0-1),y表示竖向(0-1)。{x: .5, y: 1} 表示底边中点 1.2.0
     marker   上的气泡 callout
-    content  文本 String
-      color 文本颜色 String
+    content  文本 str
+      color 文本颜色 str
       fontSize 文字大小 Number
       borderRadius callout边框圆角 Number
-      bgColor 背景色 String
+      bgColor 背景色 str
       padding 文本边缘留白 Number
-      display 'BYCLICK':点击显示; 'ALWAYS':常显 String
+      display 'BYCLICK':点击显示; 'ALWAYS':常显 str
     polyline 指定一系列坐标点,从数组第一项连线至最后一项
       points 经纬度数组 Array 是 [{latitude: 0, longitude: 0}] 
-      color 线的颜色 String 否 8位十六进制表示,后两位表示alpha值,如：#000000AA 
+      color 线的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA 
       width 线的宽度 Number 否  
       dottedLine 是否虚线 Boolean 否 默认false 
       arrowLine 带箭头的线 Boolean 否 默认false,开发者工具暂不支持该属性 1.2.0
-      borderColor 线的边框颜色 String 否  1.2.0
+      borderColor 线的边框颜色 str 否  1.2.0
       borderWidth 线的厚度 Number 否  1.2.0
     circles 在地图上显示圆
       latitude 纬度 Number 是 浮点数,范围 -90 ~ 90
       longitude 经度 Number 是 浮点数,范围 -180 ~ 180
-      color 描边的颜色 String 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
-      fillColor 填充颜色 String 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
+      color 描边的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
+      fillColor 填充颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
       radius 半径 Number 是 
       strokeWidth 描边的宽度 Number 否
     controls 在地图上显示控件,控件不随着地图移动
       id 控件id Number 否 在控件点击事件回调会返回此id
       position 控件在地图的位置 Object 是 控件相对地图位置
-      iconPath 显示的图标 String 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径
+      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径
       clickable 是否可点击 Boolean 否 默认不可点击
     position 
       left 距离地图的左边界多远 Number 否 默认为0
@@ -1149,11 +1148,11 @@ API
   PS: 多数API在执行后有回调['success''fail''complete'],无特别情况下,使用'cfoo'表示[Self];
   网络 
     PS: 最大并发数为'10'; 默认超时时间和最大超时时间都是60s 
-      网络请求的'referer'是不可以设置的，
-      格式固定为'https://servicewechat.com/{appid}/{version}/page-frame.html'，
-      其中{appid}为小程序的'appid'{version}为小程序的版本号，版本号0表示为开发版。
-      小程序进入后台运行后[非置顶聊天],如果5s内网络请求没有结束，会回调错误信息"fail interrupted"；
-      在回到前台之前，网络请求接口调用都会无法调用。
+      网络请求的'referer'是不可以设置的,
+      格式固定为'https://servicewechat.com/{appid}/{version}/page-frame.html',
+      其中{appid}为小程序的'appid'{version}为小程序的版本号,版本号0表示为开发版。
+      小程序进入后台运行后[非置顶聊天],如果5s内网络请求没有结束,会回调错误信息"fail interrupted"；
+      在回到前台之前,网络请求接口调用都会无法调用。
     var requestTask = wx.request({})    发起http请求  
       PS:  
       {
@@ -1170,15 +1169,15 @@ API
           key: val,
         },
         'dataType': 'json', // 可选,默认为'json' 
-          // 如果设置了 dataType 为 json，则会尝试对响应的数据做一次 JSON.parse
+          // 如果设置了 dataType 为 json,则会尝试对响应的数据做一次 JSON.parse
         cfoo,
       }
       requestTask 返回值对象,可调用方法中断请求任务 
         requestTask.abort()  中断请求任务'1.4.0+'
     var uploadTask = wx.uploadFile({})    上传文件,将本地资源上传到服务器  
-      PS: 如通过 wx.chooseImage 等接口获取到一个本地资源的临时文件路径后，
+      PS: 如通过 wx.chooseImage 等接口获取到一个本地资源的临时文件路径后,
         可通过此接口将本地资源上传到指定服务器。
-        客户端发起一个 HTTPS POST 请求，其中 content-type 为 multipart/form-data 。
+        客户端发起一个 HTTPS POST 请求,其中 content-type 为 multipart/form-data 。
       {
         'url': 'xx', // 服务器url
         'filePath': 'xx', // 要上传文件资源的路径
@@ -1194,33 +1193,33 @@ API
         complete :function(){ // 调用成功、失败都会执行 
         }, 
       }
-      uploadTask 返回值对象，可监听上传进度变化事件，以及取消上传任务 
+      uploadTask 返回值对象,可监听上传进度变化事件,以及取消上传任务 
         uploadTask.onProgressUpdate(foo)  监听上传进度变化 '1.4.0' 
           foo  回调,参数 (response) 
           response.progress       num,上传进度百分比
-          response.totalBytesSent num,已经上传的数据长度，单位 Bytes
-          response.totalBytesExpectedToSend num,预期需要上传的数据总长度，单位 Bytes 
+          response.totalBytesSent num,已经上传的数据长度,单位 Bytes
+          response.totalBytesExpectedToSend num,预期需要上传的数据总长度,单位 Bytes 
         uploadTask.abort()  中断上传任务 '1.4.0' 
     var downloadTask = wx.downloadFile({})  下载文件资源到本地
-      PS: 客户端直接发起一个 HTTP GET 请求，返回文件的本地临时路径 
+      PS: 客户端直接发起一个 HTTP GET 请求,返回文件的本地临时路径 
       {
         'url': '', 
         'header': {}, 
         success: function(res){
           // res.tempFilePath   文件的临时路径 
-            // 文件的临时路径，在小程序本次启动期间可以正常使用，
-            // 如需持久保存，需在主动调用 wx.saveFile，在小程序下次启动时才能访问得到
+            // 文件的临时路径,在小程序本次启动期间可以正常使用,
+            // 如需持久保存,需在主动调用 wx.saveFile,在小程序下次启动时才能访问得到
         }, 
         fail: function(){
         },
         complete : function(){
         },
       }
-      downloadTask 返回值对象,可监听下载进度变化事件，以及取消下载任务 
+      downloadTask 返回值对象,可监听下载进度变化事件,以及取消下载任务 
         downloadTask.onProgressUpdate(foo(response))  监听下载进度变化 '1.4.0'
           response.progress           下载进度百分比
-          response.totalBytesWritten  已经下载的数据长度，单位 Bytes
-          response.totalBytesExpectedToWrite 预期需要下载的数据总长度，单位 Bytes
+          response.totalBytesWritten  已经下载的数据长度,单位 Bytes
+          response.totalBytesExpectedToWrite 预期需要下载的数据总长度,单位 Bytes
         downloadTask.abort()  中断下载任务 '1.4.0'
     wx.connectSocket({})     创建WebSocket连接 
       PS: 一个微信小程序同时只能有一个WebSocket连接,否则后续再创建会导致之前的连接关闭;
@@ -1230,22 +1229,22 @@ API
         'header' : {},  
         'method' : 'GET', // 默认是GET
           // 有效值： OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT 
-        'protocols' : [], //  StringArray 否 子协议数组 1.4.0
+        'protocols' : [], //  strArray 否 子协议数组 1.4.0
         cfoo,
       }
     wx.onSocketOpen(foo(res))    监听WebSocket打开 
     wx.sendSocketMessage({}) 发送WebSocket消息
-      PS: 需要先 wx.connectSocket，并在 wx.onSocketOpen 回调之后才能发送
+      PS: 需要先 wx.connectSocket,并在 wx.onSocketOpen 回调之后才能发送
       {
-        data : {}, //  String/ArrayBuffer,需要发送的内容
+        data : {}, //  str/ArrayBuffer,需要发送的内容
         cfoo,
       }
     wx.onSocketMessage(foo(res)) 接收WebSocket消息
-      res.data    String/ArrayBuffer,服务器返回的消息 
+      res.data    str/ArrayBuffer,服务器返回的消息 
     wx.closeSocket({})       关闭WebSocket连接 
       PS: 当连接打开后再调用 wx.closeSocket 才能关闭连接,否则不起作用 
       {
-        'code' : num,  // 可选,表示关闭连接的状态号，表示连接被关闭的原因。
+        'code' : num,  // 可选,表示关闭连接的状态号,表示连接被关闭的原因。
           // 默认的取值是1000 （表示正常连接关闭） 1.4.0
         'reason' : '', // 可选,表示连接被关闭的原因
           // 这个字符串必须是不长于123字节的UTF-8 文本（不是字符） 1.4.0
@@ -1257,16 +1256,16 @@ API
     ◆图片 
     wx.chooseImage({})   从本地相册选择图片或使用相机拍照 
       {
-        'count' : 9, // 最多可以选择的图片张数，默认9
-        'sizeType': ['original', 'compressed'],  //  original原图，compressed压缩图，默认二者都有
-        'sourceType': ['album', 'camera'], //  album从相册选图，camera使用相机，默认二者都有
+        'count' : 9, // 最多可以选择的图片张数,默认9
+        'sizeType': ['original', 'compressed'],  //  original原图,compressed压缩图,默认二者都有
+        'sourceType': ['album', 'camera'], //  album从相册选图,camera使用相机,默认二者都有
         success : function(res){ 
           // res. tempFilePaths  图片的本地文件路径列表 
-          // res.tempFiles  图片的本地文件列表，每一项是一个File对象 '1.2.0'
+          // res.tempFiles  图片的本地文件列表,每一项是一个File对象 '1.2.0'
             // [
             //   {
             //     'path' : '', 本地文件路径
-            //     'size' : '', 本地文件大小，单位：B
+            //     'size' : '', 本地文件大小,单位：B
             //   },
             // ]
         },
@@ -1276,15 +1275,15 @@ API
     wx.previewImage({})  预览图片 
       {
         'urls': [], // 需要预览的图片链接列表
-        'current': '', // 当前显示图片的链接，不填则默认为 urls 的第一张
+        'current': '', // 当前显示图片的链接,不填则默认为 urls 的第一张
         cfoo,
       }
     wx.getImageInfo({})  获取图片信息 
       {
-        'src' : '', // 图片的路径，可为'相对路径''临时文件路径''存储文件路径''网络图片路径'
+        'src' : '', // 图片的路径,可为'相对路径''临时文件路径''存储文件路径''网络图片路径'
         success : function(res){
-          // res.width   num,图片宽度，单位px
-          // res.height  num,图片高度，单位px
+          // res.width   num,图片宽度,单位px
+          // res.height  num,图片高度,单位px
           // res.path    返回图片的本地路径
         },
         fail : function(){
@@ -1293,9 +1292,9 @@ API
         },
       }
     wx.saveImageToPhotosAlbum({}) 保存图片到系统相册 '1.2.0+'
-      PS: 需要用户授权（scope.writePhotosAlbum），详见 用户授权 
+      PS: 需要用户授权（scope.writePhotosAlbum）,详见 用户授权 
       {
-        'filePath': '', // 图片文件路径，可以是临时文件路径也可以是永久文件路径，不支持网络图片路径
+        'filePath': '', // 图片文件路径,可以是临时文件路径也可以是永久文件路径,不支持网络图片路径
         success:function(res){
           // res.errMsg 调用结果
         },
@@ -1304,12 +1303,12 @@ API
       }
     ◆录音 
     wx.startRecord({}) 开始录音,返回录音文件的临时文件路径,接口需要用户授权 
-      PS: 当主动调用wx.stopRecord，或者录音超过1分钟时自动结束录音
-        当用户离开小程序时，此接口无法调用。
+      PS: 当主动调用wx.stopRecord,或者录音超过1分钟时自动结束录音
+        当用户离开小程序时,此接口无法调用。
       {
         success: function(res){
           // res.tempFilePath  录音文件的临时路径
-            // 需持久保存，需在主动调用wx.saveFile
+            // 需持久保存,需在主动调用wx.saveFile
         },
         fail: function(){
         },
@@ -1319,24 +1318,24 @@ API
     wx.stopRecord()  ​ 主动调用停止录音
     ◆音频播放控制 
     wx.playVoice({})  开始播放语音 
-      PS: 同时只允许一个语音文件正在播放，如果前一个语音文件还没播放完，将中断前一个语音播放。
+      PS: 同时只允许一个语音文件正在播放,如果前一个语音文件还没播放完,将中断前一个语音播放。
       {
         'filePath' : 'path', // 需要播放的语音文件的文件路径,必填 
         cfoo,
       }
     wx.pauseVoice()   暂停正在播放的语音 
-      PS: 再次调用wx.playVoice()播放同一个文件时，会从暂停处开始播放。
-        如果想从头开始播放，需要先调用 wx.stopVoice。    
+      PS: 再次调用wx.playVoice()播放同一个文件时,会从暂停处开始播放。
+        如果想从头开始播放,需要先调用 wx.stopVoice。    
     wx.stopVoice()    结束播放语音 
     ◆音乐播放控制 
-      PS: 对于微信客户端来说，只能同时有一个后台音乐在播放。
-      当用户离开小程序后，音乐将暂停播放；
-      当用户点击“显示在聊天顶部”时，音乐不会暂停播放；
-      当用户在其他小程序占用了音乐播放器，原有小程序内的音乐将停止播放。
+      PS: 对于微信客户端来说,只能同时有一个后台音乐在播放。
+      当用户离开小程序后,音乐将暂停播放；
+      当用户点击“显示在聊天顶部”时,音乐不会暂停播放；
+      当用户在其他小程序占用了音乐播放器,原有小程序内的音乐将停止播放。
     wx.getBackgroundAudioPlayerState({}) 获取后台音乐播放状态 
       {
         success : function(res){ 
-          // res.status  播放状态,2：没有音乐在播放，1：播放中，0：暂停中 
+          // res.status  播放状态,2：没有音乐在播放,1：播放中,0：暂停中 
           // 以下信息,只有在当前有音乐播放时返回 
           // res.duration  选定音频的长度,单位：s 
           // res.currentPosition  选定音频的播放位置,单位：s 
@@ -1350,7 +1349,7 @@ API
       }
     wx.playBackgroundAudio({}) 使用后台播放器播放音乐 
       {
-        'dataUrl': '', // 音乐链接，必填,目前支持格式'm4a''aac''mp3''wav'
+        'dataUrl': '', // 音乐链接,必填,目前支持格式'm4a''aac''mp3''wav'
         'title': '',   // 音乐标题
         'coverImgUrl': '', //  封面URL
         cfoo, 
@@ -1359,7 +1358,7 @@ API
     wx.seekBackgroundAudio({}) 控制音乐播放进度 
       PS: iOS'6.3.30',wx.seekBackgroundAudio()会有短暂延迟
       {
-        'position': num, // 音乐位置，单位s,必填 
+        'position': num, // 音乐位置,单位s,必填 
         cfoo,
       }
     wx.stopBackgroundAudio()   停止播放音乐     
@@ -1373,27 +1372,27 @@ API
         // 有在当前有合法的src时返回
       bgAuM.currentTime // num,当前音频的播放位置,单位s 
         // 有在当前有合法的src时返回
-      bgAuM.paused    // 当前是是否暂停或停止状态，true表示暂停或停止，false 表示正在播放 
-      bgAuM.src  // 音频的数据源，默认为空字符串，
-        // 当设置了新的 src 时，会自动开始播放 ，目前支持的格式有 m4a, aac, mp3, wav  否
-      bgAuM.buffered  // num,音频缓冲的时间点，仅保证当前播放时间点到此时间点内容已缓冲 
+      bgAuM.paused    // 当前是是否暂停或停止状态,true表示暂停或停止,false 表示正在播放 
+      bgAuM.src  // 音频的数据源,默认为空字符串,
+        // 当设置了新的 src 时,会自动开始播放 ,目前支持的格式有 m4a, aac, mp3, wav  否
+      bgAuM.buffered  // num,音频缓冲的时间点,仅保证当前播放时间点到此时间点内容已缓冲 
       bgAuM.startTime   // num,读写,音频开始播放的位置,单位s
-      bgAuM.title       // 读写,音频标题，用于做原生音频播放器音频标题 
-        // 原生音频播放器中的分享功能，分享出去的卡片标题，也将使用该值 
+      bgAuM.title       // 读写,音频标题,用于做原生音频播放器音频标题 
+        // 原生音频播放器中的分享功能,分享出去的卡片标题,也将使用该值 
       bgAuM.epname      // 读写,专辑名 
-        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值。  否
+        // 原生音频播放器中的分享功能,分享出去的卡片简介,也将使用该值。  否
       bgAuM.singer      // 读写,歌手名 
-        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值 
-      bgAuM.coverImgUrl // 读写,封面图url，用于做原生音频播放器背景图 
-        // 原生音频播放器中的分享功能，分享出去的卡片配图及背景也将使用该图 
+        // 原生音频播放器中的分享功能,分享出去的卡片简介,也将使用该值 
+      bgAuM.coverImgUrl // 读写,封面图url,用于做原生音频播放器背景图 
+        // 原生音频播放器中的分享功能,分享出去的卡片配图及背景也将使用该图 
       bgAuM.webUrl      // 读写,页面链接 
-        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值 
+        // 原生音频播放器中的分享功能,分享出去的卡片简介,也将使用该值 
       ◆'backgroundAudioManager'对象的方法  
       bgAuM.play()    // 播放
       bgAuM.pause()   // 暂停
       bgAuM.stop()    // 停止
-      bgAuM.seek(num) // 跳转到指定位置，单位 s
-      bgAuM.onCanplay(foo)    // 背景音频进入可以播放状态，但不保证后面可以流畅播放
+      bgAuM.seek(num) // 跳转到指定位置,单位 s
+      bgAuM.onCanplay(foo)    // 背景音频进入可以播放状态,但不保证后面可以流畅播放
       bgAuM.onPlay(foo)       // 背景音频播放事件 
       bgAuM.onPause(foo)      // 背景音频暂停事件 
       bgAuM.onStop(foo)       // 背景音频停止事件 
@@ -1408,22 +1407,22 @@ API
         10003  文件错误
         10004  格式错误
         -1     未知错误  
-      bgAuM.onWaiting(foo)    // 音频加载中事件，当音频因为数据不足，需要停下来加载时会触发
+      bgAuM.onWaiting(foo)    // 音频加载中事件,当音频因为数据不足,需要停下来加载时会触发
     ◆音频组件控制 
     var auCt = wx.createAudioContext(audioId) 创建并返回audio上下文audioContext对象
-      PS: 通过'audioId'跟一个<audio/>组件绑定，通过它可以操作对应的<audio/>组件 
+      PS: 通过'audioId'跟一个<audio/>组件绑定,通过它可以操作对应的<audio/>组件 
       'audioContext'对象的方法列表：
       auCt.setSrc('') // 设置音频的地址
       auCt.play()     // 播放
       auCt.pause()    // 暂停
-      auCt.seek(num)  // 跳转到指定位置，单位 s      
+      auCt.seek(num)  // 跳转到指定位置,单位 s      
     ◆视频 
-    wx.chooseVideo({}) 拍摄视频或从相册中选视频，返回视频临时文件路径 
-      PS: 文件的临时路径，在小程序本次启动期间可以正常使用，
-        如需持久保存，需在主动调用 wx.saveFile，在小程序下次启动时才能访问得到。
+    wx.chooseVideo({}) 拍摄视频或从相册中选视频,返回视频临时文件路径 
+      PS: 文件的临时路径,在小程序本次启动期间可以正常使用,
+        如需持久保存,需在主动调用 wx.saveFile,在小程序下次启动时才能访问得到。
       {
-        'sourceType': [], // 'album'从相册选视频，'camera'使用相机拍摄，默认为['album','camera']
-        'maxDuration':60, // 拍摄视频最长拍摄时间，单位秒。最长支持'60'秒
+        'sourceType': [], // 'album'从相册选视频,'camera'使用相机拍摄,默认为['album','camera']
+        'maxDuration':60, // 拍摄视频最长拍摄时间,单位秒。最长支持'60'秒
         'camera':'back',  // 默认调起的为前置还是后置摄像头
           // 在部分Android手机下由于系统ROM不支持无法生效   
           'front'  前置
@@ -1441,9 +1440,9 @@ API
         },
       }
     wx.saveVideoToPhotosAlbum({}) 保存视频到系统相册 '1.2.0+' 
-      PS: 需要用户授权（scope.writePhotosAlbum），详见 用户授权 
+      PS: 需要用户授权（scope.writePhotosAlbum）,详见 用户授权 
       {
-        'filePath':'', // 视频文件路径，可以是临时文件路径也可以是永久文件路径
+        'filePath':'', // 视频文件路径,可以是临时文件路径也可以是永久文件路径
         success: function(res){
           res.errMsg  // 调用结果
         },
@@ -1452,13 +1451,13 @@ API
       }
     ◆视频组件控制 
     var vdCt = wx.createVideoContext(videoId)  创建并返回video上下文'videoContext'对象
-      PS: 'videoContext'通过videoId跟一个video组件绑定，通过它可以操作一个video组件
+      PS: 'videoContext'通过videoId跟一个video组件绑定,通过它可以操作一个video组件
       'videoContext'对象的方法列表
       vdCt.play()  // 播放  
       vdCt.pause() // 暂停  
-      vdCt.seek(num) // 跳转到指定位置，单位 s  
+      vdCt.seek(num) // 跳转到指定位置,单位 s  
       vdCt.sendDanmu({text:'',color:''})  // 发送弹幕   
-      vdCt.playbackRate(num)   // 设置倍速播放，支持的倍率有0.5/0.8/1.0/1.25/1.5 '1.4.0'
+      vdCt.playbackRate(num)   // 设置倍速播放,支持的倍率有0.5/0.8/1.0/1.25/1.5 '1.4.0'
       vdCt.requestFullScreen() // 进入全屏  '1.4.0'
       vdCt.exitFullScreen()    // 退出全屏  '1.4.0'
   文件 
@@ -1478,8 +1477,8 @@ API
           // res.errMsg   接口调用结果 
           // res.fileList 文件列表 
             // fileItem.filePath   // 文件的本地路径
-            // fileItem.createTime // 文件的保存时的时间戳，从1970/01/01 08:00:00 到当前时间的秒数
-            // fileItem.size       // 文件大小，单位B
+            // fileItem.createTime // 文件的保存时的时间戳,从1970/01/01 08:00:00 到当前时间的秒数
+            // fileItem.size       // 文件大小,单位B
         },
         fail:function(){},
         complete:function(){},
@@ -1490,8 +1489,8 @@ API
         'filePath':'',  // 文件路径
         success:function(res){
           res.errMsg  // 接口调用结果
-          res.size    // num,文件大小，单位B
-          res.createTime // 文件的保存时的时间戳，从1970/01/01 08:00:00 到当前时间的秒数
+          res.size    // num,文件大小,单位B
+          res.createTime // 文件的保存时的时间戳,从1970/01/01 08:00:00 到当前时间的秒数
         },
         fail:function(){ },
         complete:function(){ },
@@ -1504,29 +1503,29 @@ API
     wx.openDocument({}) 新开页面打开文档
       PS: 支持格式'doc','xls','ppt','pdf','docx','xlsx','pptx'
       {
-        'filePath':'', // 文件路径，可通过downFile 得  
-        'fileType':'', // 文件类型，指定文件类型打开文件，可选 
+        'filePath':'', // 文件路径,可通过downFile 得  
+        'fileType':'', // 文件类型,指定文件类型打开文件,可选 
           // 有效值 doc, xls, ppt, pdf, docx, xlsx, pptx  1.4.0
         cfoo,
       }
   数据缓存 
-    PS: 每个微信小程序都可以有自己的本地缓存，
+    PS: 每个微信小程序都可以有自己的本地缓存,
       可以通过 wx.setStorage（wx.setStorageSync）、
       wx.getStorage（wx.getStorageSync）、
       wx.clearStorage（wx.clearStorageSync）可以对本地缓存进行设置、获取和清理。
-      同一个微信用户，同一个小程序 storage 上限为 10MB。
-      localStorage 以用户维度隔离，同一台设备上，A 用户无法读取到 B 用户的数据。
-      localStorage 是永久存储的，但是我们不建议将关键信息全部存在localStorage，以防用户换设备的情况。
+      同一个微信用户,同一个小程序 storage 上限为 10MB。
+      localStorage 以用户维度隔离,同一台设备上,A 用户无法读取到 B 用户的数据。
+      localStorage 是永久存储的,但是我们不建议将关键信息全部存在localStorage,以防用户换设备的情况。
       本地数据存储的大小限制为10MB  
     wx.setStorage({})  将数据存储在本地缓存中指定的key中
-      PS: 会覆盖掉原来该key对应的内容，这是一个异步接口 
+      PS: 会覆盖掉原来该key对应的内容,这是一个异步接口 
       {
         'key':'',        // 本地缓存中的指定的 key
         'data': obj/str, // 需要存储的内容
         cfoo,
       }
     wx.setStorageSync(key,data)  将data存储在本地缓存中指定的key中
-      PS: 会覆盖掉原来该 key 对应的内容，这是一个同步接口 
+      PS: 会覆盖掉原来该 key 对应的内容,这是一个同步接口 
       key  str,本地缓存中的指定的key  
       data obj/str,需要存储的内容 
     wx.getStorage({}) 从本地缓存中异步获取指定key对应的内容 
@@ -1545,7 +1544,7 @@ API
         success:function(res){
           // res.keys         当前storage中所有的key
           // res.currentSize  当前占用的空间大小, 单位kb
-          // res.limitSize    限制的空间大小，单位kb
+          // res.limitSize    限制的空间大小,单位kb
         },
         fail:function(){ },
         complete:function(){ },
@@ -1563,20 +1562,20 @@ API
   位置 
     ◆获取位置 
     wx.getLocation({}) 获取当前地理位置信息 
-      PS: 当用户离开小程序后，此接口无法调用；当用户点击“显示在聊天顶部”时，此接口可继续调用。
-        wx.getLocation()、wx.chooseLocation() 接口需要用户授权，请兼容用户拒绝授权的场景。      
+      PS: 当用户离开小程序后,此接口无法调用；当用户点击“显示在聊天顶部”时,此接口可继续调用。
+        wx.getLocation()、wx.chooseLocation() 接口需要用户授权,请兼容用户拒绝授权的场景。      
       {
         'type' : '', 指定返回坐标的类型 
           // 默认为'wgs84'返回gps坐标,'gcj02'返回可用于 wx.openLocation 的坐标
-          // iOS 6.3.30 type 参数不生效，只会返回 wgs84 类型的坐标信息 
+          // iOS 6.3.30 type 参数不生效,只会返回 wgs84 类型的坐标信息 
         success:function(res){
-          // res.latitude  纬度，浮点数，范围为-90~90，负数表示南纬 
-          // res.longitude 经度，浮点数，范围为-180~180，负数表示西经 
-          // res.speed     速度，浮点数，单位m/s 
+          // res.latitude  纬度,浮点数,范围为-90~90,负数表示南纬 
+          // res.longitude 经度,浮点数,范围为-180~180,负数表示西经 
+          // res.speed     速度,浮点数,单位m/s 
           // res.accuracy  位置的精确度 
-          // res.altitude  高度，单位 m 1.2.0
-          // res.verticalAccuracy 垂直精度，单位 m（Android 无法获取，返回 0） 1.2.0
-          // res.horizontalAccuracy 水平精度，单位 m 1.2.0
+          // res.altitude  高度,单位 m 1.2.0
+          // res.verticalAccuracy 垂直精度,单位 m（Android 无法获取,返回 0） 1.2.0
+          // res.horizontalAccuracy 水平精度,单位 m 1.2.0
         },
         fail:function(){
         },
@@ -1588,8 +1587,8 @@ API
         success:function(res){
           res.name      // 位置名称
           res.address   // 详细地址
-          res.latitude  // 纬度，浮点数，范围为-90~90，负数表示南纬
-          res.longitude // 经度，浮点数，范围为-180~180，负数表示西经
+          res.latitude  // 纬度,浮点数,范围为-90~90,负数表示南纬
+          res.longitude // 经度,浮点数,范围为-180~180,负数表示西经
         },
         fail:function(){
         },
@@ -1601,46 +1600,46 @@ API
     ◆查看位置 
     wx.openLocation({}) ​使用微信内置地图查看位置
       {
-        'latitude':'',  // 纬度，范围为-90~90，负数表示南纬
-        'longitude':'', // 经度，范围为-180~180，负数表示西经
-        'scale':'',     // 缩放比例，范围5~18，默认为18
+        'latitude':'',  // 纬度,范围为-90~90,负数表示南纬
+        'longitude':'', // 经度,范围为-180~180,负数表示西经
+        'scale':'',     // 缩放比例,范围5~18,默认为18
         'name':'',     // 位置名
         'address':'',  // 地址的详细说明
         cfoo,
       }
     ◆地图组件控制 
     var mpCt = wx.createMapContext(mapId) 创建并返回map上下文'mapContext'对象 
-      PS: mapContext通过mapId跟一个<map/>组件绑定，通过它可以操作对应的<map/>组件
+      PS: mapContext通过mapId跟一个<map/>组件绑定,通过它可以操作对应的<map/>组件
       'mapContext'对象的方法列表
       mpCt.getCenterLocation({ // 获取当前地图中心的经纬度
-        // 返回的是gcj02坐标系，可用于 wx.openLocation
+        // 返回的是gcj02坐标系,可用于 wx.openLocation
         success:function(res){
           // res = { longitude: "经度", latitude: "纬度"}
         },
         fail:function(){ },
         complete:function(){ },
       })     
-      mpCt.moveToLocation()  // 将地图中心移动到当前定位点，需要配合map组件的show-location使用  
-      mpCt.translateMarker({  // 平移marker，带动画  '1.2.0+'
+      mpCt.moveToLocation()  // 将地图中心移动到当前定位点,需要配合map组件的show-location使用  
+      mpCt.translateMarker({  // 平移marker,带动画  '1.2.0+'
         'markerId': num, // 指定marker
         'destination': obj, // 指定marker移动到的目标点
         'autoRotate': bol, // 移动过程中是否自动旋转marker
         'rotate': num, // marker的旋转角度
-        'duration': num, // 动画持续时长，默认值1000ms，平移与旋转分别计算
+        'duration': num, // 动画持续时长,默认值1000ms,平移与旋转分别计算
         animationEnd: function(){  // 动画结束回调函数
         },
         fail: function(){ // 接口调用失败的回调函数
         },
       })   
       mpCt.includePoints({    // 缩放视野展示所有经纬度  '1.2.0'
-        'points': arr,  // 要显示在可视区域内的坐标点列表，[{latitude, longitude}]
-        'padding': arr, // 坐标点形成的矩形边缘到地图边缘的距离，单位像素
-        // 格式为[上,右,下,左]，安卓上只能识别数组第一项，上下左右的padding一致。
+        'points': arr,  // 要显示在可视区域内的坐标点列表,[{latitude, longitude}]
+        'padding': arr, // 坐标点形成的矩形边缘到地图边缘的距离,单位像素
+        // 格式为[上,右,下,左],安卓上只能识别数组第一项,上下左右的padding一致。
         // 开发者工具暂不支持padding参数。
       })  
       mpCt.getRegion({    // 获取当前地图的视野范围  '1.4.0'
         'success': function(res){
-          // res = {southwest, northeast}，西南角与东北角的经纬度
+          // res = {southwest, northeast},西南角与东北角的经纬度
         },
         'fail': function(){ },
         'complete': function(){ },
@@ -1683,14 +1682,14 @@ API
       res.version  微信版本号  
       res.system  操作系统版本  
       res.platform  客户端平台  
-      res.fontSizeSetting  用户字体大小设置，单位：px  '1.5.0' 
+      res.fontSizeSetting  用户字体大小设置,单位：px  '1.5.0' 
         以“我-设置-通用-字体大小”中的设置为准 
       res.SDKVersion  客户端基础库版本  '1.1.0' 
-    wx.canIUse(str)  判断小程序的API，回调，参数，组件等是否在当前版本可用 
+    wx.canIUse(str)  判断小程序的API,回调,参数,组件等是否在当前版本可用 
       参数说明： 使用${API}.${method}.${param}.${options}
       或者${component}.${attribute}.${option}方式来调用
       ${API}       代表API名字 
-      ${method}    代表调用方式，有效值为return, success, object, callback 
+      ${method}    代表调用方式,有效值为return, success, object, callback 
       ${param}     代表参数或者返回值 
       ${options}   代表参数的可选值 
       ${component} 代表组件名字 
@@ -1724,33 +1723,9 @@ API
         '4g'    4g网络
         'none'  无网络
         'unknown'  Android下不常见的网络类型
-    wx.setScreenBrightness({})   设置屏幕亮度 '1.2.0+'
-      {
-        value: '', // num,屏幕亮度值，范围 0~1，0 最暗，1 最亮
-        cfoo,
-      }
-    wx.getScreenBrightness({})   获取屏幕亮度 '1.2.0+'
-      {
-        success: function(res){
-          // res.value  num,屏幕亮度值，范围 0~1，0 最暗，1 最亮
-        },
-        fail: function(){ },
-        complete: function(){ },
-      }
-      PS: 若安卓系统设置中开启了自动调节亮度功能，则屏幕亮度会根据光线自动调整，
-        该接口仅能获取自动调节亮度之前的值，而非实时的亮度值。  
-    wx.vibrateLong({})   使手机发生较长时间的振动'400ms'  '1.2.0'
-      {
-        cfoo,
-      }
-    wx.vibrateShort({})  使手机发生较短时间的振动'15ms'  '1.2.0'
-      PS: 仅在 iPhone7/iPhone7Plus 及 Android 机型生效
-      {
-        cfoo,
-      }
     ◆加速度计 
-    wx.onAccelerometerChange(f(res)) 监听加速度数据，频率'5次/秒' 
-      PS: 接口调用后会自动开始监听，可使用 wx.stopAccelerometer 停止监听。
+    wx.onAccelerometerChange(f(res)) 监听加速度数据,频率'5次/秒' 
+      PS: 接口调用后会自动开始监听,可使用 wx.stopAccelerometer 停止监听。
       res.x  num,X轴
       res.y  num,Y轴
       res.z  num,Z轴
@@ -1763,8 +1738,8 @@ API
         cfoo,
       }
     ◆罗盘 
-    wx.onCompassChange(f(res))  监听罗盘数据，频率'5次/秒'
-      PS: 接口调用后会自动开始监听，可使用wx.stopCompass()停止监听 
+    wx.onCompassChange(f(res))  监听罗盘数据,频率'5次/秒'
+      PS: 接口调用后会自动开始监听,可使用wx.stopCompass()停止监听 
       res.direction  num,面对的方向度数 
     wx.startCompass({})  开始监听罗盘数据 '1.1.0'
       {
@@ -1781,14 +1756,14 @@ API
         cfoo,
       }
     ◆扫码 
-    wx.scanCode({})  调起客户端扫码界面，扫码成功后返回对应的结果 
+    wx.scanCode({})  调起客户端扫码界面,扫码成功后返回对应的结果 
       {
-        'onlyFromCamera': false,  // 是否只能从相机扫码，不允许从相册选择图片  '1.2.0'
+        'onlyFromCamera': false,  // 是否只能从相机扫码,不允许从相册选择图片  '1.2.0'
         success: function(res){
           // res.result   所扫码的内容
           // res.scanType 所扫码的类型
           // res.charSet  所扫码的字符集
-          // res.path  当所扫的码为当前小程序的合法二维码时，会返回此字段，内容为二维码携带的path
+          // res.path  当所扫的码为当前小程序的合法二维码时,会返回此字段,内容为二维码携带的path
         },
         fail: function(){ },
         complete: function(){ },
@@ -1809,11 +1784,11 @@ API
       }
     ◆蓝牙 
     ★蓝牙适配器接口  '1.1.0' 
-      PS: iOS微信客户端'6.5.6'版本开始支持，Android'6.5.7'版本开始支持 
-        Mac系统可能无法获取'advertisData'及RSSI，请使用真机调试
-        开发者工具和 Android 上获取到的deviceId为设备 MAC 地址，iOS 上则为设备 uuid。因此deviceId不能硬编码到代码中
+      PS: iOS微信客户端'6.5.6'版本开始支持,Android'6.5.7'版本开始支持 
+        Mac系统可能无法获取'advertisData'及RSSI,请使用真机调试
+        开发者工具和 Android 上获取到的deviceId为设备 MAC 地址,iOS 上则为设备 uuid。因此deviceId不能硬编码到代码中
       wx.openBluetoothAdapter({}) 初始化蓝牙适配器 '1.1.0+'
-        PS: 由于系统的问题，目前仅在mac版的开发工具上支持蓝牙调试 
+        PS: 由于系统的问题,目前仅在mac版的开发工具上支持蓝牙调试 
         {
           cfoo,
         }
@@ -1825,7 +1800,7 @@ API
       wx.getBluetoothAdapterState({}) 获取本机蓝牙适配器状态 '1.1.0+'
         {
           success: function(res){
-            // res.errMsg       成功：ok，错误：详细信息 
+            // res.errMsg       成功：ok,错误：详细信息 
             // res.discovering  是否正在搜索设备 
             // res.available    蓝牙适配器是否可用 
           },
@@ -1836,24 +1811,24 @@ API
         res.available    bol,蓝牙适配器是否可用 
         res.discovering  bol,蓝牙适配器是否处于搜索状态 
       wx.startBluetoothDevicesDiscovery({}) 开始搜寻附近的蓝牙外围设备 '1.1.0+' 
-        PS: 该操作比较耗费系统资源，请在搜索并连接到设备后调用 stop 方法停止搜索 
+        PS: 该操作比较耗费系统资源,请在搜索并连接到设备后调用 stop 方法停止搜索 
         {
           'services': arr, //  蓝牙设备主 service 的 uuid 列表
             // 某些蓝牙设备会广播自己的主 service 的 uuid。
-            // 如果这里传入该数组，那么根据该 uuid 列表，只搜索有这个主服务的设备。
+            // 如果这里传入该数组,那么根据该 uuid 列表,只搜索有这个主服务的设备。
           'allowDuplicatesKey': bol, // 是否允许重复上报同一设备
-            // 如果允许重复上报，则onDeviceFound 方法会多次上报同一设备，但是 RSSI 值会有不同
+            // 如果允许重复上报,则onDeviceFound 方法会多次上报同一设备,但是 RSSI 值会有不同
           'interval': num, //  上报设备的间隔 
-            // 默认为0，意思是找到新设备立即上报，否则根据传入的间隔上报
+            // 默认为0,意思是找到新设备立即上报,否则根据传入的间隔上报
           success: function(res){
-            // res.errMsg         成功：ok，错误：详细信息 
+            // res.errMsg         成功：ok,错误：详细信息 
             // res.isDiscovering  当前蓝牙适配器是否处于搜索状态 
           },
           fail: function(){ },
           complete: function(){ },
         }
         Example：
-        // 以微信硬件平台的蓝牙智能灯为例，主服务的 UUID 是 FEE7。传入这个参数，只搜索主服务 UUID 为 FEE7 的设备
+        // 以微信硬件平台的蓝牙智能灯为例,主服务的 UUID 是 FEE7。传入这个参数,只搜索主服务 UUID 为 FEE7 的设备
         wx.startBluetoothDevicesDiscovery({
           services: ['FEE7'],
           success: function (res) {
@@ -1868,26 +1843,26 @@ API
           fail: function(){ },
           complete: function(){ },
         }
-      wx.getBluetoothDevices({}) 获取所有已发现的蓝牙设备，包括已经和本机处于连接状态的设备 '1.1.0+'
+      wx.getBluetoothDevices({}) 获取所有已发现的蓝牙设备,包括已经和本机处于连接状态的设备 '1.1.0+'
         {
           success: function(res){
             // res.devices  Array  uuid 对应的的已连接设备列表
-              // device.name       string  蓝牙设备名称，某些设备可能没有
-              // device.localName  string  低功耗设备广播名称，某些设备可能没有
+              // device.name       string  蓝牙设备名称,某些设备可能没有
+              // device.localName  string  低功耗设备广播名称,某些设备可能没有
               // device.deviceId   string  用于区分设备的 id
               // device.RSSI       int  当前蓝牙设备的信号强度
               // device.advertisData  ArrayBuffer  当前蓝牙设备的广播内容
                 // 注意：vConsole 无法打印出 ArrayBuffer 类型数据 
-            // res.errMsg  string  成功：ok，错误：详细信息
+            // res.errMsg  string  成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
         }
       wx.onBluetoothDeviceFound(f(res)) 监听寻找到新设备的事件 '1.1.0+'
         res.devices   新搜索到的设备列表
-          device.deviceId  string  蓝牙设备 id，参考 device 对象
-          device.name      string  蓝牙设备名称，参考 device 对象
-          device.localName string  低功耗设备广播名称，某些设备可能没有
+          device.deviceId  string  蓝牙设备 id,参考 device 对象
+          device.name      string  蓝牙设备名称,参考 device 对象
+          device.localName string  低功耗设备广播名称,某些设备可能没有
           device.RSSI      int 当前蓝牙设备的信号强度
           device.advertisData  ArrayBuffer 当前蓝牙设备的广播内容
             注意：vConsole 无法打印出 ArrayBuffer 类型数据 
@@ -1897,21 +1872,21 @@ API
           success: function(res){
             // res.devices  Array  搜索到的设备列表
               // device对象 蓝牙设备信息
-              // device.name  string  蓝牙设备名称，某些设备可能没有
+              // device.name  string  蓝牙设备名称,某些设备可能没有
               // device.deviceId  string  用于区分设备的 id
-            // res.errMsg   string 成功：ok，错误：详细信息
+            // res.errMsg   string 成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
         }
     ★低功耗蓝牙接口 
       wx.createBLEConnection({})  连接低功耗蓝牙设备 '1.1.0+'
-        PS: 安卓手机上如果多次调用create创建连接，有可能导致系统持有同一设备多个连接的实例，
+        PS: 安卓手机上如果多次调用create创建连接,有可能导致系统持有同一设备多个连接的实例,
           导致调用close的时候并不能真正的断开与设备的连接。因此请保证尽量成对的调用create和close接口
         {
-          'deviceId': '', // 蓝牙设备 id，参考 getDevices 接口
+          'deviceId': '', // 蓝牙设备 id,参考 getDevices 接口
           success: function(res){
-            res.errMsg  //  成功：ok，错误：详细信息
+            res.errMsg  //  成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
@@ -1926,29 +1901,29 @@ API
         })
       wx.closeBLEConnection({}) 断开与低功耗蓝牙设备的连接 '1.1.0+' 
         {
-          'deviceId': '', // 蓝牙设备 id，参考 getDevices 接口
+          'deviceId': '', // 蓝牙设备 id,参考 getDevices 接口
           success: function(res){
-            res.errMsg  // 成功：ok，错误：详细信息
+            res.errMsg  // 成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
         }
       wx.getBLEDeviceServices({}) 获取蓝牙设备所有 service（服务） '1.1.0+' 
         {
-          'deviceId': '', //  蓝牙设备 id，参考 getDevices 接口
+          'deviceId': '', //  蓝牙设备 id,参考 getDevices 接口
           success: function(res){
             // res.services  array  设备服务列表
               // service对象 蓝牙设备service(服务)信息
               // service.uuid  string  蓝牙设备服务的 uuid
               // service.isPrimary  boolean  该服务是否为主服务
-            // res.errMsg  string  成功：ok，错误：详细信息
+            // res.errMsg  string  成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
         }
       wx.getBLEDeviceCharacteristics({}) 获取蓝牙设备所有characteristic（特征值）'1.1.0'
         {
-          'deviceId': '', // 蓝牙设备 id，参考 device 对象
+          'deviceId': '', // 蓝牙设备 id,参考 device 对象
           'serviceId': '', // str,蓝牙服务 uuid
           success: function(res){
             // res.characteristics  array  设备特征值列表
@@ -1959,17 +1934,17 @@ API
               // characteristic.properties.write    boolean  该特征值是否支持 write 操作
               // characteristic.properties.notify   boolean  该特征值是否支持 notify 操作
               // characteristic.properties.indicate boolean  该特征值是否支持 indicate 操作
-            // res.errMsg  string  成功：ok，错误：详细信息
+            // res.errMsg  string  成功：ok,错误：详细信息
           },
           fail: function(){ },
           complete: function(){ },
         }
       wx.readBLECharacteristicValue({}) 读取低功耗蓝牙设备的特征值的二进制数据值 '1.1.0'
-        PS: 必须设备的特征值支持read才可以成功调用，具体参照 characteristic 的 properties 属性
+        PS: 必须设备的特征值支持read才可以成功调用,具体参照 characteristic 的 properties 属性
           并行调用多次读写接口存在读写失败的可能性。
           read接口读取到的信息需要在onBLECharacteristicValueChange方法注册的回调中获取。
         {
-          'deviceId': '', //  蓝牙设备 id，参考 device 对象
+          'deviceId': '', //  蓝牙设备 id,参考 device 对象
           'serviceId': '', //  蓝牙特征值对应服务的 uuid
           'characteristicId': '', //  蓝牙特征值的 uuid
           success: function(res){
@@ -1978,38 +1953,38 @@ API
               // characteristic.serviceId         obj.蓝牙设备特征值对应服务的 uuid
               // characteristic.value      ArrayBuffer,蓝牙设备特征值对应的二进制值 
                 // 注意：vConsole 无法打印出 ArrayBuffer 类型数据 
-            // res.errMsg         str,成功：ok，错误：详细信息 
+            // res.errMsg         str,成功：ok,错误：详细信息 
           },
           fail: function(){ },
           complete: function(){ },
         }
       wx.writeBLECharacteristicValue({}) 向低功耗蓝牙设备特征值中写入二进制数据 '1.1.0'
-        PS: 必须设备的特征值支持write才可以成功调用，具体参照 characteristic 的 properties 属性
+        PS: 必须设备的特征值支持write才可以成功调用,具体参照 characteristic 的 properties 属性
           并行调用多次读写接口存在读写失败的可能性
         {
-          'deviceId': '',         //  蓝牙设备 id，参考 device 对象
+          'deviceId': '',         //  蓝牙设备 id,参考 device 对象
           'serviceId': '',        //  蓝牙特征值对应服务的 uuid
           'characteristicId': '', // 蓝牙特征值的 uuid
           'value': ArrayBuffer,   // 蓝牙设备特征值对应的二进制值
           cfoo,
         }
       wx.notifyBLECharacteristicValueChange({})启用特征值变化时的'notify'功能 '1.1.1'
-        PS: 必须设备的特征值支持notify才可以成功调用，具体参照 characteristic 的 properties 属性
+        PS: 必须设备的特征值支持notify才可以成功调用,具体参照 characteristic 的 properties 属性
           必须先启用notify才能监听到设备 characteristicValueChange 事件
         {
-          deviceId  string  是  蓝牙设备 id，参考 device 对象
+          deviceId  string  是  蓝牙设备 id,参考 device 对象
           serviceId  string  是  蓝牙特征值对应服务的 uuid
           characteristicId  string  是  蓝牙特征值的 uuid
           state  boolean  是  true: 启用 notify; false: 停用 notify
           cfoo,
         }
       wx.onBLEConnectionStateChange(f(res)) 监听低功耗蓝牙连接的错误事件 '1.1.1'
-        PS: 包括设备丢失，连接异常断开等等 
-        res.deviceId  string  蓝牙设备 id，参考 device 对象
+        PS: 包括设备丢失,连接异常断开等等 
+        res.deviceId  string  蓝牙设备 id,参考 device 对象
         res.connected  boolean  连接目前的状态
       wx.onBLECharacteristicValueChange(f(res)) 监听低功耗蓝牙设备的特征值变化 '1.1.0'
         PS: 必须先启用notify接口才能接收到设备推送的notification。
-        res.deviceId  string  蓝牙设备 id，参考 device 对象
+        res.deviceId  string  蓝牙设备 id,参考 device 对象
         res.serviceId  string  特征值所属服务 uuid
         res.characteristicId  string  特征值 uuid
         res.value  ArrayBuffer  特征值最新的值（注意：vConsole 无法打印出 ArrayBuffer 类型数据）
@@ -2025,58 +2000,1228 @@ API
       10006  no connection        当前连接已断开
       10007  property not support 当前特征值不支持此操作
       10008  system error         其余所有系统上报的异常
-      10009  system not support   Android 系统特有，系统版本低于 4.3 不支持BLE
+      10009  system not support   Android 系统特有,系统版本低于 4.3 不支持BLE
       10010  no descriptor        没有找到指定描述符
       10011  location not turned  Android6.0 以上系统因未打开定位导致搜寻蓝牙设备（startBluetoothDevicesDiscovery ）失败    
+    ◆iBeacon 
+    开始搜索附近的iBeacon设备  '1.2.0'
+    wx.startBeaconDiscovery({  
+      'uuids': strArray, // iBeacon设备广播的 uuids
+      success: function(res){
+        // res.errMsg str,调用结果
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    停止搜索附近的iBeacon设备 '1.2.0'
+    wx.stopBeaconDiscovery({
+      success: function(res){
+        // res.errMsg  str,调用结果
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    获取所有已搜索到的iBeacon设备 '1.2.0'
+    wx.getBeacons({
+      success: function(res){
+        // res.beacons  objArr,iBeacon设备列表
+          // iBeacon.uuid      str,iBeacon设备广播的uuid
+          // iBeacon.major     str,iBeacon设备的主id
+          // iBeacon.minor     str,iBeacon设备的次 id
+          // iBeacon.proximity num,表示设备距离的枚举值
+          // iBeacon.accuracy  num,iBeacon设备的距离
+          // iBeacon.rssi      num,表示设备的信号强度
+        // res.errMsg   str,调用结果
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    监听iBeacon设备的更新事件 '1.2.0'
+    wx.onBeaconUpdate({
+      'beacons':[ // 当前搜寻到的所有iBeacon设备列表
+        {
+          'uuid':'',  // str,iBeacon设备广播的uuid
+          'major':'', // str,iBeacon设备的主id
+          'minor':'', // str,iBeacon设备的次id
+          'proximity':'', // num,表示设备距离的枚举值
+          'accuracy':'',  // num,iBeacon 设备的距离
+          'rssi':'',      // num,表示设备的信号强度
+        },
+        ...
+      ] 
+    })
+    监听 iBeacon 服务的状态变化 '1.2.0'
+    wx.onBeaconServiceChange(f(res))
+      res = {
+        'available': bol,   // 服务目前是否可用
+        'discovering': bol, // 目前是否处于搜索状态
+      }
+    错误码列表
+      0     ok                            正常
+      11000 unsupport                     系统或设备不支持
+      11001 bluetooth service unavailable 蓝牙服务不可用
+      11002 location service unavailable  位置服务不可用
+      11003 already start                 已经开始搜索    
+    ◆屏幕亮度 
+    设置屏幕亮度 '1.2.0+'
+    wx.setScreenBrightness({
+      value: '', // num,屏幕亮度值,范围 0~1,0 最暗,1 最亮
+      cfoo,
+    })   
+    获取屏幕亮度 '1.2.0+'
+      PS: 若安卓系统设置中开启了自动调节亮度功能,则屏幕亮度会根据光线自动调整,
+        该接口仅能获取自动调节亮度之前的值,而非实时的亮度值。  
+    wx.getScreenBrightness({
+      success: function(res){
+        // res.value  num,屏幕亮度值,范围 0~1,0 最暗,1 最亮
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })   
+    ◆用户截屏事件 
+    监听用户主动截屏事件,用户使用系统截屏按键截屏时触发此事件 '1.4.0'
+    wx.onUserCaptureScreen(foo)
+    ◆震动 
+    使手机发生较长时间的振动'400ms'  '1.2.0'
+    wx.vibrateLong({
+      cfoo,
+    })   
+    使手机发生较短时间的振动'15ms'  '1.2.0'
+      PS: 仅在 iPhone7/iPhone7Plus 及 Android 机型生效
+    wx.vibrateShort({
+      cfoo,
+    })  
+    ◆手机联系人 
+    调用后,用户可以选择将该表单以“新增联系人”或“添加到已有联系人”的方式,
+    写入手机系统通讯录,完成手机通讯录联系人和联系方式的增加。 '1.2.0'
+    wx.addPhoneContact({
+      'firstName': "",   // str,名字,必填 
+      'mobilePhoneNumber': "", // str,手机号
+      'photoFilePath': "",     // str,头像本地文件路径
+      'nickName': "",          // str,昵称
+      'lastName': "",          // str,姓氏
+      'middleName': "",        // str,中间名
+      'remark': "",            // str,备注
+      'weChatNumber': "",      // str,微信号
+      'addressCountry': "",    // str,联系地址国家
+      'addressState': "",      // str,联系地址省份
+      'addressCity': "",       // str,联系地址城市
+      'addressStreet': "",     // str,联系地址街道
+      'addressPostalCode': "", // str,联系地址邮政编码
+      'organization': "",      // str,公司
+      'title': "",             // str,职位
+      'workFaxNumber': "",     // str,工作传真
+      'workPhoneNumber': "",   // str,工作电话
+      'hostNumber': "",        // str,公司电话
+      'email': "",             // str,电子邮件
+      'url': "",               // str,网站
+      'workAddressCountry': "", // str,工作地址国家
+      'workAddressState': "",  // str,工作地址省份
+      'workAddressCity': "",   // str,工作地址城市
+      'workAddressStreet': "", // str,工作地址街道
+      'workAddressPostalCode': "", // str,工作地址邮政编码
+      'homeFaxNumber': "",     // str,住宅传真
+      'homePhoneNumber': "",   // str,住宅电话
+      'homeAddressCountry': "", // str,住宅地址国家
+      'homeAddressState': "",  // str,住宅地址省份
+      'homeAddressCity': "",   // str,住宅地址城市
+      'homeAddressStreet': "", // str,住宅地址街道
+      'homeAddressPostalCode': "", // str,住宅地址邮政编码
+      success: function(res){
+        // res.errMsg  
+          // success ok             添加成功
+          // fail    fail cancel    用户取消操作
+          // fail    fail ${detail} 调用失败,detail 加上详细信息    
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
   界面 
-    交互反馈 
-    wx.showToast({}) 显示消息提示框 
-      {
-        'title': '' , //提示的内容,必填   
-        'icon': 'success',  //  图标，有效值 "success", "loading"  
-        'image': './',  // 自定义图标的本地路径，优先级高于'icon'  ['1.1.0+']
-        'duration': 1500, // 提示的延迟时间，单位毫秒，默认：1500  
-        'mask': false,    // 是否显示透明蒙层，防止触摸穿透，默认：false  
-        success : function(){},
-        fail : function(){},
-        complete : function(){},
-      }
-    导航 
-    wx.navigateTo({})  保留当前页面,跳转到指定页[只能打开非'tabBar'页] 
-      PS: 使用'wx.navigateBack'可以返回到原页面 
-      {
-        url : './xx', // 必填,页面的路径 
-        success : foo,
-        fail : foo,
-        complete : foo,
-      }
+    ◆交互反馈  
+    'showLoading'和'showToast'同时只能显示一个,使用'hideLoading'/'hideToast'都可以关闭提示框 
+    显示loading提示框, 需主动调用wx.hideLoading()才能关闭提示框  '1.1.0'
+    wx.showLoading({
+      'title': str, // 必填,提示的内容
+      'mask': bol,  // 是否显示透明蒙层,防止触摸穿透,默认false
+      cfoo,
+    })
+    隐藏loading提示框 '1.1.0'
+    wx.hideLoading()
+    显示消息提示框 
+    wx.showToast({
+      'title': '' ,   //提示的内容,必填   
+      'icon': 'success', //  图标,有效值 "success", "loading"  
+      'image': './',     // 自定义图标的本地路径,优先级高于'icon'  ['1.1.0+']
+      'duration': 1500,  // 提示的延迟时间,单位毫秒,默认：1500  
+      'mask': false,     // 是否显示透明蒙层,防止触摸穿透,默认：false  
+      cfoo,
+    }) 
+    隐藏消息提示框
+    wx.hideToast()
+    ​显示模态弹窗 
+      Android'6.3.30',返回的'confirm'一直为'true' 
+      iOS点击蒙层不会关闭模态弹窗,所以尽量避免使用“取消”分支中实现业务逻辑   
+    wx.showModal({
+      'title': str,   // 必填,提示的标题
+      'content': str, // 必填,提示的内容
+      'showCancel': bol,     // 是否显示取消按钮,默认为 true
+      'cancelText': str,     // 取消按钮的文字,默认为"取消",最多 4 个字符
+      'cancelColor': "#ccc", // 取消按钮的文字颜色,默认为"#000000"
+      'confirmText': str,    // 确定按钮的文字,默认为"确定",最多 4 个字符
+      'confirmColor': "#fff",// 确定按钮的文字颜色,默认为"#3CC51F"
+      success: function(res){
+        // res.confirm bol,用户是否点击了确定按钮 
+        // res.cancel  bol,用户是否点击了取消
+          // 用于 Android 系统区分点击蒙层关闭还是点击取消按钮关闭 '1.1.0'
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    ​显示操作菜单
+      PS: 点击取消或蒙层时,回调 fail, errMsg 为 "showActionSheet:fail cancel"；
+    wx.showActionSheet({
+      'itemList': strArr, // 必填,按钮的文字数组,数组长度最大为6个
+      'itemColor': '#ccc',  // 按钮的文字颜色,默认为"#000000"
+      success: function(res){
+        // res.tapIndex num,用户点击的按钮,从上到下的顺序,从0开始
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    ◆设置导航条 
+    动态设置当前页面的标题
+    wx.setNavigationBarTitle({
+      'title': str, // 必填,页面标题
+      cfoo,
+    })
+    在当前页面显示导航条加载动画 
+    wx.showNavigationBarLoading()
+    隐藏导航条加载动画 
+    wx.hideNavigationBarLoading() 
+    设置导航条颜色 '1.4.0'
+    wx.setNavigationBarColor({
+      'frontColor': str, // 必填,前景颜色值,包括按钮、标题、状态栏的颜色,仅支持 #ffffff 和 #000000
+      'backgroundColor': // 必填,背景颜色值,有效值为十六进制颜色
+      'animation': {     // 动画效果
+        'duration': num, // 动画变化时间,默认0,单位：毫秒
+        'timingFunc': 'linear', // 动画变化方式,  
+          // 'linear'    动画从头到尾的速度是相同的,默认值   
+          // 'easeIn'    动画以低速开 
+          // 'easeOut'   动画以低速结束 
+          // 'easeInOut' 动画以低速开始和结束 
+      },     
+      cfoo,
+    })
+    ◆设置置顶信息 
+    动态设置置顶栏文字内容 '1.4.3'
+      只有当前小程序被置顶时能生效,如果当前小程序没有被置顶,也能调用成功,
+      但是不会立即生效,只有在用户将这个小程序置顶后才换上设置的文字内容。
+      注意：调用成功后,需间隔 5s 才能再次调用此接口,
+      如果在 5s 内再次调用此接口,会回调 fail,errMsg："setTopBarText: fail invoke too frequently"
+    wx.setTopBarText({
+      'text': str, // 置顶栏文字内容
+      cfoo,
+    })
+    ◆导航 
+    保留当前页面,跳转到应用内的某个页面  
+      使用wx.navigateBack()可以返回到原页面 
+      为了不让用户在使用小程序时造成困扰,规定页面路径只能是五层,请尽量避免多层级的交互方式 
       以查询字符串的形式进行页面间的传递数据 
         wx:navigateTo({
           url:"../logs/logs?id=10"
         })
         然后通过B中 onLoad(options) 中取出
-    
-    
-    
-    
-    
-      wx.redirectTo({})  关闭当前页面,跳转到指定页[只能打开非 tabBar 页] 
-      wx.navigatBack({}) 关闭当前页面,返回前若干页
-        可通过 getCurrentPages()) 获取当前的页面栈,决定需要返回几层 
-      wx.switchTab({})   跳转到tabBar页面,并关闭其他所有非tabBar页面 
-      wx.reLaunch()      重新启动[可打开任意页] 
+    wx.navigateTo({
+      'url': str, // 需要跳转的非tabBar的页面的路径,路径后可以带参数  
+      cfoo,
+    })
+    关闭当前页面,跳转到应用内的某个页面 
+    wx.redirectTo({
+      'url': str, // 需跳转的非tabBar的页面的路径
+      cfoo,
+    })
+    跳转到tabBar页面,并关闭其他所有非tabBar页面 
+    wx.switchTab({
+      'url': str, // 需跳转的tabBar页面的路径,路径后不能带参数
+    })
+    关闭所有页面,打开到应用内的某个页面[可打开任意页]  '1.1.0'
+    wx.reLaunch({
+      'url': str, // 需要跳转的应用内页面路径,如果跳转的页面路径是tabBar页面则不能带参数 
+      cfoo,
+    })
+    关闭当前页面,返回上一页面或多级页面 
+      可通过 getCurrentPages()) 获取当前的页面栈,决定需要返回几层。
+    wx.navigateBack({
+      'delta': num, // 返回的页面数,如果 delta 大于现有页面数,则返回到首页,默认为'1'
+    })
+    ◆动画 
+    创建一个动画实例animation 
+      调用实例的方法来描述动画。最后通过动画实例的'export'方法导出动画数据传递给组件的animation属性。
+      'export'方法每次调用后会清掉之前的动画操作
+    var animation = wx.createAnimation({
+      'duration': num, // 动画持续时间,单位ms,默认'400'
+      'timingFunction': 'linear', // 定义动画的效果
+        // 'linear' 动画从头到尾的速度是相同的,默认值 
+        // 'ease'        动画以低速开始,然后加快,在结束前变慢
+        // 'ease-in'     动画以低速开始
+        // 'ease-in-out' 动画以低速开始和结束
+        // 'ease-out'    动画以低速结束
+        // 'step-start'  动画第一帧就跳至结束状态直到结束
+        // 'step-end'    动画一直保持开始状态,最后一帧跳到结束状态
+      'delay': num, // 动画延迟时间,单位 ms,默认'0' 
+      'transformOrigin': str, // 设置transform-origin,默认"50% 50% 0" 
+    })
+    animation 动画实例可以调用以下方法来描述动画,调用结束后会返回自身,支持链式调用的写法 
+      ★样式
+      animation.opacity(num)  // 透明度,参数范围 0~1
+      animation.backgroundColor(str) // 颜色值
+      animation.width(num/str)  // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      animation.height(num/str) // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      animation.top(num/str)    // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      animation.left(num/str)   // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      animation.bottom(num/str) // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      animation.right(num/str)  // 长度值,如果传入num则默认使用px,可传入其他自定义单位的长度值
+      ★旋转
+      animation.rotate(XXdeg)  // 范围-180~180,从原点顺时针旋转一个deg角度
+      animation.rotateX(XXdeg) // 范围-180~180,在X轴旋转一个deg角度
+      animation.rotateY(XXdeg) // 范围-180~180,在Y轴旋转一个deg角度
+      animation.rotateZ(XXdeg) // 范围-180~180,在Z轴旋转一个deg角度
+      animation.rotate3d(x,y,z,XXdeg) // 同transform-function rotate3d
+      ★缩放 
+      animation.scale(x[,y]) // 一参数表示X轴、Y轴同时缩放x倍；两参数表示X轴缩放x倍,Y轴缩放y倍 
+      animation.scaleX(num)  // 在X轴缩放sx倍数
+      animation.scaleY(num)  // 在Y轴缩放sy倍数
+      animation.scaleZ(num)  // 在Z轴缩放sy倍数
+      animation.scale3d(x,y,z) // 在X轴缩放sx倍数,在Y轴缩放sy倍数,在Z轴缩放sz倍数
+      ★偏移
+      animation.translate(x[,y]) // 一参数表示在X轴偏移x,两参数表示在X轴偏移x,Y轴偏移y,单位px 
+      animation.translateX(num)  // 在X轴偏移num,单位px
+      animation.translateY(num)  // 在Y轴偏移num,单位px
+      animation.translateZ(num)  // 在Z轴偏移num,单位px
+      animation.translate3d(x,y,z) // 在X轴偏移x,在Y轴偏移y,在Z轴偏移z,单位px
+      ★倾斜 
+      animation.skew(x,[y])  
+        // 一参数,Y轴坐标不变,X轴坐标延顺时针倾斜x度；两个参数时,分别在X轴倾斜x度,在Y轴倾斜y度
+        // 参数范围-180~180；
+      animation.skewX(num) // 参数范围-180~180；Y轴坐标不变,X轴坐标延顺时针倾斜num度
+      animation.skewY(num) // 参数范围-180~180；X轴坐标不变,Y轴坐标延顺时针倾斜num度
+      ★矩阵变形：
+      animation.matrix(a,b,c,d,tx,ty) // 同transform-function matrix
+      animation.matrix3d()  // 同transform-function matrix3d
+    动画队列 
+      调用动画操作方法后要调用.step()来表示一组动画完成,可以在一组动画中调用任意多个动画方法,
+      一组动画中的所有动画会同时开始,一组动画完成后才会进行下一组动画。
+      .step()可以传入一个跟wx.createAnimation()一样的配置参数用于指定当前组动画的配置 
+      iOS/Android'6.3.30'通过.step()分隔动画,只有第一步动画能生效 ;
+      Example: 
+      <view animation="{{animationData}}" style="background:red;height:100rpx;width:100rpx"></view>
+      Page({
+        data: {
+          animationData: {}
+        },
+        onShow: function(){
+          var animation = wx.createAnimation({
+            duration: 1000,
+            timingFunction: 'ease',
+          })
+          
+          this.animation = animation
+          
+          animation.scale(2,2).rotate(45).step()
+          
+          this.setData({
+            animationData:animation.export()
+          })
+          
+          setTimeout(function() {
+            animation.translate(30).step()
+            this.setData({
+              animationData:animation.export()
+            })
+          }.bind(this), 1000)
+        },
+        rotateAndScale: function () {
+          // 旋转同时放大
+          this.animation.rotate(45).scale(2, 2).step()
+          this.setData({
+            animationData: this.animation.export()
+          })
+        },
+        rotateThenScale: function () {
+          // 先旋转后放大
+          this.animation.rotate(45).step()
+          this.animation.scale(2, 2).step()
+          this.setData({
+            animationData: this.animation.export()
+          })
+        },
+        rotateAndScaleThenTranslate: function () {
+          // 先旋转同时放大,然后平移
+          this.animation.rotate(45).scale(2, 2).step()
+          this.animation.translate(100, 100).step({ duration: 1000 })
+          this.setData({
+            animationData: this.animation.export()
+          })
+        }
+      })
+    ◆位置 
+    将页面滚动到目标位置 '1.4.0'
+    wx.pageScrollTo({
+      'scrollTop': num, // 滚动到页面的目标位置,单位px 
+    })
+    ◆绘图 
+    ◆下拉刷新 
+    开始下拉刷新,调用后触发下拉刷新动画,效果与用户手动下拉刷新一致 '1.5.0'
+    wx.startPullDownRefresh({
+      cfoo,
+    })
+    停止当前页面下拉刷新 
+    wx.stopPullDownRefresh()
   WXML节点信息 
+    返回一个'SelectorQuery'对象实例 '1.4.0'
+    var sq = wx.createSelectorQuery()
+    'selectorQuery'对象的方法 
+      匹配第一个对应节点,返回一NodesRef对象实例,可以用于获取节点信息 
+      var nr = sq.select(selector)    
+      匹配所有对应节点,返回一个NodesRef对象实例
+      var nr = sq.selectAll(selector) 
+      选择显示区域,用于获取显示区域的尺寸、滚动位置等信息,返回一个NodesRef对象实例
+      var nr = sq.selectViewport()   
+      执行所有的请求,请求结果按请求次序构成数组,在callback的第一个参数中返回  
+      sq.exec([foo])        
+    selector类似于CSS的选择器,但仅支持下列语法 
+      ID选择器：                    #the-id
+      class选择器,可以连续指定多个： .a-class.another-class
+      子元素选择器：                .the-parent > #the-child.a-class
+      多选择器的并集：              #a-node, .some-other-nodes
+    'NodesRef'
+      添加节点的布局位置的查询请求,相对于显示区域,以像素为单位。
+        其功能类似于DOM的'getBoundingClientRect'。返回值是nodesRef对应的selectorQuery。
+        返回的节点信息中,每个节点的位置用left、right、top、bottom、width、height字段描述。
+        如果提供了callback回调函数,在执行selectQuery的exec方法后,节点信息会在callback中返回。
+      nr.boundingClientRect([f(rect)]) 
+        rect.id      // 节点的ID
+        rect.dataset // 节点的dataset
+        rect.left    // 节点的左边界坐标
+        rect.right   // 节点的右边界坐标
+        rect.top     // 节点的上边界坐标
+        rect.bottom  // 节点的下边界坐标
+        rect.width   // 节点的宽度
+        rect.height  // 节点的高度
+      添加节点的滚动位置查询请求,以像素为单位。
+        节点必须是scroll-view或者viewport。返回值是nodesRef对应的selectorQuery。
+        返回的节点信息中,每个节点的滚动位置用scrollLeft、scrollHeight字段描述。
+        如果提供了callback回调函数,在执行selectQuery的exec方法后,节点信息会在callback中返回。
+      nr.scrollOffset([f(res)])
+        res.id      // 节点的ID
+        res.dataset // 节点的dataset
+        res.scrollLeft // 节点的水平滚动位置
+        res.scrollTop  // 节点的竖直滚动位置
+      获取节点的相关信息,需要获取的字段在fields中指定。返回值是nodesRef对应的selectorQuery。
+      nr.fields(fields,[f(res)])
+        fields = {
+          'id': bol,      // 是否返回节点id
+          'dataset': bol, // 是否返回节点dataset
+          'rect': bol,    // 是否返回节点布局位置（left right top bottom）
+          'size': bol,    // 是否返回节点尺寸（width height）
+          'scrollOffset': bol, // 是否返回节点的 scrollLeft scrollTop 
+            // 节点必须是scroll-view或者viewport
+          'properties': ['scrollX', 'scrollY'], // 指定属性名列表,返回节点对应属性名的当前属性值
+            // 只能获得组件文档中标注的常规属性值, id class style 和事件绑定的属性值不可获取 
+        }
+        res.dataset    // 节点的dataset
+        res.width      // 节点的宽度
+        res.height     // 节点的高度
+        res.scrollLeft // 节点的水平滚动位置
+        res.scrollTop  // 节点的竖直滚动位置
+        res.scrollX    // 节点 scroll-x 属性的当前值
+        res.scrollY    // 节点 scroll-x 属性的当前值
   第三方平台 
+    获取第三方平台自定义的数据字段 '1.1.0'
+      wx.getExtConfig 暂时无法通过 wx.canIUse 判断是否兼容,
+      开发者需要自行判断 wx.getExtConfig 是否存在来兼容
+    wx.getExtConfig({
+      success: function(res){
+        // res.errMsg String 调用结果
+        // res.extConfig Object 第三方平台自定义的数据
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    获取第三方平台自定义的数据字段的同步接口 '1.1.0'
+      wx.getExtConfigSync 暂时无法通过 wx.canIUse 判断是否兼容,
+      开发者需要自行判断 wx.getExtConfigSync 是否存在来兼容
+    var extConfig = wx.getExtConfigSync()
+      extConfig obj,第三方平台自定义的数据
   开放接口 
+    'UnionID'机制说明 
+      如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序）,
+      可通过unionid来区分用户的唯一性,
+      因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序）,
+      用户的unionid是唯一的。
+      换句话说,同一用户,对同一个微信开放平台下的不同应用,unionid是相同的。
+      同一个微信开放平台下的相同主体的App、公众号、小程序,
+      如果用户已经关注公众号,或者曾经登录过App或公众号,
+      则用户打开小程序时,开发者可以直接通过wx.login()获取到该用户UnionID,无须用户再次授权。
+    ◆登录 
+      用户登录态拥有一定的时效性。用户越久未使用小程序,用户登录态越有可能失效。
+      反之如果用户一直在使用小程序,则用户登录态一直保持有效。
+      具体时效逻辑由微信维护,对开发者透明。
+      开发者只需要调用wx.checkSession()接口检测当前用户登录态是否有效。
+      登录态过期后开发者可以再调用wx.login()获取新的用户登录态。
+    调用接口获取登录凭证'code' 
+      进而换取用户登录态信息,包括用户的唯一标识'openid' 及本次登录的会话密钥'session_key'。
+      用户数据的加解密通讯需要依赖会话密钥完成。
+    wx.login({
+      success: function(res){
+        // res.errMsg String 调用结果
+        // res.code String 用户允许登录后,回调内容会带上 code（有效期五分钟）,
+          // 需将res.code发送到后台,换取 openId, sessionKey, unionId
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    检测当前用户登录态是否有效 
+    wx.checkSession({
+      success: function(){
+        //session 未过期,并且在本生命周期一直有效
+      },
+      fail: function(){
+        //登录态过期
+        wx.login() //重新登录
+        ....
+      },
+      complete: function(){
+      },
+    })
+    ◆授权 
+    向用户发起授权 '1.2.0'
+      部分接口需要获得同意后才能调用,如果用户未授权过,会弹窗询问用户,用户点击同意后方可调用接口。
+      如果用户点了拒绝,则短期内调用不会出现弹窗,而是直接进入 fail 回调。
+      用户可以在小程序设置界面中修改对该小程序的授权信息。
+      本接口用于提前向用户发起授权,调用后会立刻弹窗询问用户是否同意小程序使用某项功能或获取用户的某些数据,
+      但不会实际调用接口。如果用户之前已经同意,则不会出现弹窗,直接返回成功。
+    wx.authorize({
+      'scope': str, // 需要获取权限的scope 
+        // 'scope.userInfo'          用户信息
+          // 对应接口: wx.getUserInfo 
+        // 'scope.userLocation'      地理位置
+          // 对应接口: wx.getLocation, wx.chooseLocation 
+        // 'scope.address'           通讯地址
+          // 对应接口: wx.chooseAddress 
+        // 'scope.record'            录音功能
+          // 对应接口: wx.startRecord 
+        // 'scope.writePhotosAlbum' 保存到相册    
+          // 对应接口: wx.saveImageToPhotosAlbum, wx.saveVideoToPhotosAlbum 
+      cfoo,
+    })
+    ◆用户信息 
+    获取用户信息 
+      当 withCredentials 为 true 时,要求此前有调用过 wx.login 且登录态尚未过期,
+      此时返回的数据会包含 encryptedData, iv 等敏感信息；
+      当 withCredentials 为 false 时,不要求有登录态,
+      返回的数据不包含 encryptedData, iv 等敏感信息。
+    wx.getUserInfo({
+      'withCredentials': bol, // 是否带上登录态信息,默认'false' '1.1.0'
+      'lang': 'en',           // 指定返回用户信息的语言  '1.4.0'
+        // 'en'    英文,默认值 
+        // 'zh_CN' 简体中文
+        // 'zh_TW' 繁体中文
+      success: function(res){
+        // res.userInfo   用户信息对象,不包含openid等敏感信息
+          // res.userInfo.nickName
+          // res.userInfo.avatarUrl
+          // res.userInfo.gender       性别 0：未知、1：男、2：女
+          // res.userInfo.province
+          // res.userInfo.city
+          // res.userInfo.country
+        // res.rawData    不包括敏感信息的原始数据字符串,用于计算签名。
+        // res.signature      使用sha1(rawData+sessionkey)得到字符串,用于校验用户信息
+        // res.encryptedData  包括敏感数据在内的完整用户信息的加密数据, 解密后为json结构 
+        // res.iv             加密算法的初始向量
+      },
+      fail: function(){ },
+      complete: function(){ },
+    })
+    发起微信支付 
+      '6.5.2'及之前版本中,用户取消支付不会触发 fail 回调,只会触发 complete 回调,
+      回调 errMsg 为 'requestPayment:cancel'
+    wx.requestPayment({
+      'timeStamp': str,  // 必填, 时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间
+      'nonceStr': str,   // 必填, 随机字符串,长度为32个字符以下。
+      'package': str,    // 必填, 统一下单接口返回的 prepay_id 参数值,提交格式如：prepay_id=*
+      'signType': str,   // 必填, 签名算法,暂支持 MD5
+      'paySign': str,    // 必填, 签名,具体签名方案参见小程序支付接口文档;
+      cfoo,
+    })
+    模版消息 
+      微信'6.5.2'及以上版本支持模板功能。低于该版本将无法收到模板消息。    
+      基于微信的通知渠道,为开发者提供了可高效触达用户的模板消息能力,以实现服务的闭环并提供更佳的体验
+      模板推送位置：服务通知
+      模板下发条件：用户本人在微信体系内与页面有交互行为后触发,详见下发条件说明
+      模板跳转能力：点击查看详情仅能跳转下发模板的该帐号的各个页面
+      使用说明 
+        步骤一：获取模板ID
+          有两个方法可以获取模版ID
+          通过模版消息管理接口获取模版ID（详见模版消息管理）
+          在微信公众平台手动配置获取模版ID
+        步骤二：页面的 <form/> 组件,属性report-submit为true时,可以声明为需发模板消息,
+          此时点击按钮提交表单可以获取formId,用于发送模板消息。
+          或者当用户完成支付行为,可以获取prepay_id用于发送模板消息。
+        步骤三：调用接口下发模板消息（详见发送模版消息）
+      模版消息管理
+        1. 获取小程序模板库标题列表 
+          接口地址
+          https://api.weixin.qq.com/cgi-bin/wxopen/template/library/list?access_token=ACCESS_TOKEN
+          HTTP请求方式： POST
+          请求参数说明：
+          参数        必填   说明
+          access_token 是  接口调用凭证
+          offset       是  offset和count用于分页,表示从offset开始,拉取count条记录
+            offset从0开始,count最大为20。
+          count        是  offset和count用于分页,表示从offset开始,拉取count条记录
+            offset从0开始,count最大为20。
+          返回数据说明：
+          在调用模板消息接口后,会返回JSON数据 
+          {
+            "errcode":0,
+            "errmsg":"ok",
+            "list":[
+              {"id":"AT0002","title":"购买成功通知"},
+              {"id":"AT0003","title":"购买失败通知"},
+              {"id":"AT0004","title":"交易提醒"},
+              {"id":"AT0005","title":"付款成功通知"},
+              {"id":"AT0006","title":"付款失败通知"}
+              // id    模板标题id（获取模板标题下的关键词库时需要）
+              // title 模板标题内容
+            ],
+            "total_count":599 
+            // total_count 模板库标题总数
+          }
+        2. 获取模板库某个模板标题下关键词库 
+          接口地址
+          https://api.weixin.qq.com/cgi-bin/wxopen/template/library/get?access_token=ACCESS_TOKEN
+          HTTP请求方式： POST
+          参数 必填 说明
+          access_token 是 接口调用凭证
+          POST参数说明：
+          id 是 模板标题id,可通过接口获取,也可登录小程序后台查看获取
+          返回码说明： 在调用模板消息接口后,会返回JSON数据包。
+          {
+            "errcode": 0,
+            "errmsg": "ok",
+            "id": "AT0002",
+            "title": "购买成功通知",
+            "keyword_list": [
+              {
+                "keyword_id": 3, // 关键词id,添加模板时需要
+                "name": "购买地点", // 关键词内容
+                "example": "TIT造舰厂" // 关键词内容对应的示例
+              },
+              {
+                "keyword_id": 4,
+                "name": "购买时间",
+                "example": "2016年6月6日"
+              },
+              {
+                "keyword_id": 5,
+                "name": "物品名称",
+                "example": "咖啡"
+              }
+            ]
+          }
+        3. 组合模板并添加至帐号下的个人模板库 
+          接口地址 https://api.weixin.qq.com/cgi-bin/wxopen/template/add?access_token=ACCESS_TOKEN
+          HTTP请求方式： POST
+          POST参数说明：
+          access_token    必填,接口调用凭证
+          id              必填,模板标题id,可通过接口获取,也可登录小程序后台查看获取
+          keyword_id_list 必填,开发者自行组合好的模板关键词列表,关键词顺序可以自由搭配
+            例如[3,5,4]或[4,5,3],最多支持10个关键词组合 
+          返回码说明： 在调用模板消息接口后,会返回JSON数据包。
+          {
+            "errcode": 0,
+            "errmsg": "ok",
+            "template_id": "wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc"
+            // 添加至帐号下的模板id,发送小程序模板消息时所需
+          }
+        4. 获取帐号下已存在的模板列表
+          接口地址       
+          https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=ACCESS_TOKEN
+          HTTP请求方式： POST
+          POST参数说明：
+          access_token 必填,接口调用凭证
+          offset       必填,offset和count用于分页,表示从offset开始,拉取count条记录,
+            offset从0开始,count最大为20。最后一页的list长度可能小于请求的count
+          count        必填,offset和count用于分页,表示从offset开始,拉取count条记录,
+            offset从0开始,count最大为20。最后一页的list长度可能小于请求的count
+          返回码说明： 在调用模板消息接口后,会返回JSON数据包。
+          {
+            "errcode": 0,
+            "errmsg": "ok",
+            "list": [ // 帐号下的模板列表
+              {
+                "template_id": "wDYzYZVxobJivW9oMpSCpuvACOfJXQIoKUm0PY397Tc",
+                //  添加至帐号下的模板id,发送小程序模板消息时所需
+                "title": "购买成功通知",
+                // title 模板标题
+                "content": "购买地点{{keyword1.DATA}}\n购买时间{{keyword2.DATA}}\n物品名称{{keyword3.DATA}}\n",
+                // content 模板内容
+                "example": "购买地点：TIT造舰厂\n购买时间：2016年6月6日\n物品名称：咖啡\n"
+                // example 模板内容示例
+              }
+            ]
+          }
+        5. 删除帐号下的某个模板
+          接口地址 https://api.weixin.qq.com/cgi-bin/wxopen/template/del?access_token=ACCESS_TOKEN
+          HTTP请求方式： POST
+          POST参数说明：
+          access_token 必填,接口调用凭证
+          template_id  必填,要删除的模板id
+          返回码说明： 在调用模板消息接口后,会返回JSON数据包。
+          {
+            "errcode": 0,
+            "errmsg": "ok"
+          }
+      发送模版消息 
+        获取 access_token
+          access_token 是全局唯一接口调用凭据,开发者调用各接口时都需使用 access_token,请妥善保存
+          access_token 的存储至少要保留512个字符空间。
+          access_token 的有效期目前为2个小时,需定时刷新,重复获取将导致上次获取的 access_token 失效。
+          公众平台的 API 调用所需的 access_token 的使用及生成方式说明：
+            为了保密 appsecrect,第三方需要一个 access_token 获取和刷新的中控服务器。而其他业务逻辑服务器所使用的 access_token 均来自于该中控服务器,不应该各自去刷新,否则会造成 access_token 覆盖而影响业务；
+            目前 access_token 的有效期通过返回的 expires_in 来传达,目前是7200秒之内的值。中控服务器需要根据这个有效时间提前去刷新新 access_token。在刷新过程中,中控服务器对外输出的依然是老 access_token,此时公众平台后台会保证在刷新短时间内,新老 access_token 都可用,这保证了第三方业务的平滑过渡；
+            access_token 的有效时间可能会在未来有调整,所以中控服务器不仅需要内部定时主动刷新,还需要提供被动刷新 access_token 的接口,这样便于业务服务器在 API 调用获知 access_token 已超时的情况下,可以触发 access_token 的刷新流程。
+            开发者可以使用 AppID 和 AppSecret 调用本接口来获取 access_token。AppID 和 AppSecret 可登录微信公众平台官网-设置-开发设置中获得（需要已经绑定成为开发者,且帐号没有异常状态）。AppSecret 生成后请自行保存,因为在公众平台每次生成查看都会导致 AppSecret 被重置。注意调用所有微信接口时均需使用 https 协议。如果第三方不使用中控服务器,而是选择各个业务逻辑点各自去刷新 access_token,那么就可能会产生冲突,导致服务不稳定。
+              接口地址：
+              https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+              HTTP请求方式: GET
+              参数说明 :               
+              参数 必填 说明
+              grant_type 是 获取 access_token 填写 client_credential
+              appid 是 第三方用户唯一凭证
+              secret 是 第三方用户唯一凭证密钥,即appsecret
+              返回参数说明： 正常情况下,微信会返回下述 JSON 数据包给开发者：
+              {"access_token": "ACCESS_TOKEN", "expires_in": 7200}
+              参数 说明
+              access_token 获取到的凭证
+              expires_in 凭证有效时间,单位：秒
+              错误时微信会返回错误码等信息,JSON 数据包示例如下（该示例为 AppID 无效错误）:
+              {"errcode": 40013, "errmsg": "invalid appid"}
+        发送模板消息
+          接口地址：
+          https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN
+          (ACCESS_TOKEN 需换成上文获取到的 access_token)
+          HTTP请求方式： POST
+          POST参数说明：
+          参数 必填 说明
+          touser 是 接收者（用户）的 openid
+          template_id 是 所需下发的模板消息的id
+          page 否 点击模板卡片后的跳转页面,仅限本小程序内的页面。支持带参数,（示例index?foo=bar）。该字段不填则模板无跳转。
+          form_id 是 表单提交场景下,为 submit 事件带上的 formId；支付场景下,为本次支付的 prepay_id
+          data 是 模板内容,不填则下发空模板
+          color 否 模板内容字体的颜色,不填默认黑色
+          emphasis_keyword 否 模板需要放大的关键词,不填则默认无放大
+          示例：
+          {
+            "touser": "OPENID",  
+            "template_id": "TEMPLATE_ID", 
+            "page": "index",          
+            "form_id": "FORMID",         
+            "data": {
+              "keyword1": {
+                "value": "339208499", 
+                "color": "#173177"
+              }, 
+              "keyword2": {
+                "value": "2015年01月05日 12:30", 
+                "color": "#173177"
+              }, 
+              "keyword3": {
+                "value": "粤海喜来登酒店", 
+                "color": "#173177"
+              } , 
+              "keyword4": {
+                "value": "广州市天河区天河路208号", 
+                "color": "#173177"
+              } 
+            },
+            "emphasis_keyword": "keyword1.DATA" 
+          }
+          返回码说明： 在调用模板消息接口后,会返回JSON数据包。
+          正常时的返回JSON数据包示例：
+          {
+            "errcode": 0,
+            "errmsg": "ok"
+          }
+          错误时会返回错误码信息,说明如下：
+          返回码 说明
+          40037 template_id不正确
+          41028 form_id不正确,或者过期
+          41029 form_id已被使用
+          41030 page不正确
+          45009 接口调用超过限额（目前默认每个帐号日调用限额为100万）
+      下发条件说明 
+        支付
+          当用户在小程序内完成过支付行为,可允许开发者向用户在7天内推送有限条数的模板消息
+          一次支付可下发3条,多次支付下发条数独立,互相不影响 
+        提交表单
+          当用户在小程序内发生过提交表单行为且该表单声明为要发模板消息的,
+          开发者需要向用户提供服务时,可允许开发者向用户在7天内推送有限条数的模板消息
+          一次提交表单可下发1条,多次提交下发条数独立,相互不影响 
+      审核说明 
+        1. 标题
+          1.1 标题不能存在相同
+          1.2 标题意思不能存在过度相似
+          1.3 标题必须以“提醒”或“通知”结尾
+          1.4 标题不能带特殊符号、个性化字词等没有行业通用性的内容
+          1.5 标题必须能体现具体服务场景
+          1.6 标题不能涉及营销相关内容,包括不限于：
+          消费优惠类、购物返利类、商品更新类、优惠券类、代金券类、红包类、会员卡类、积分类、活动类等营销倾向通知
+        2. 关键词
+        2.1 同一标题下,关键词不能存在相同
+        2.2 同一标题下,关键词不能存在过度相似
+        2.3 关键词不能带特殊符号、个性化字词等没有行业通用性的内容
+        2.4 关键词内容示例必须与关键词对应匹配
+        2.5 关键词不能太过宽泛,需要具有限制性,例如：“内容”这个就太宽泛,不能审核通过
+      违规说明
+        除不能违反运营规范外,还不能违反以下规则,包括但不限于：
+        不允许恶意诱导用户进行触发操作,以达到可向用户下发模板目的
+        不允许恶意骚扰,下发对用户造成骚扰的模板
+        不允许恶意营销,下发营销目的模板
+    客服消息 
+    转发 
+      onShareAppMessage(options)
+      在 Page 中定义 onShareAppMessage 函数，设置该页面的转发信息。
+      
+      只有定义了此事件处理函数，右上角菜单才会显示 “转发” 按钮
+      用户点击转发按钮的时候会调用
+      此事件需要 return 一个 Object，用于自定义转发内容
+      options 参数说明
+      
+      参数  类型  说明  最低版本
+      from  String  转发事件来源。button：页面内转发按钮；menu：右上角转发菜单  1.2.4
+      target  Object  如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined  1.2.4
+      自定义转发字段
+      
+      字段  说明  默认值  最低版本
+      title  转发标题  当前小程序名称  
+      path  转发路径  当前页面 path ，必须是以 / 开头的完整路径  
+      imageUrl  自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。iOS 显示图片长宽比是 5:4，Android 显示图片长宽比是 215:168。高度超出部分会从底部裁剪。推荐使用 Android 图片长宽比，可保证图片在两个平台都完整显示，其中 iOS 底部会出现一小段白色    1.5.0
+      success  转发成功的回调函数    1.1.0
+      fail  转发失败的回调函数    1.1.0
+      complete  转发结束的回调函数（转发成功、失败都会执行    1.1.0
+      回调结果：
+      
+      回调类型  errMsg  说明
+      success  shareAppMessage:ok  转发成功
+      fail  shareAppMessage:fail cancel  用户取消转发
+      fail  shareAppMessage:fail (detail message)  转发失败，其中 detail message 为详细失败信息
+      success回调参数说明：
+      
+      参数  类型  说明  最低版本
+      shareTickets  StringArray  shareTicket 数组，每一项是一个 shareTicket ，对应一个转发对象  1.1.0
+      示例代码：
+      
+      Page({
+        onShareAppMessage: function (res) {
+          if (res.from === 'button') {
+            // 来自页面内转发按钮
+            console.log(res.target)
+          }
+          return {
+            title: '自定义转发标题',
+            path: '/page/user?id=123',
+            success: function(res) {
+              // 转发成功
+            },
+            fail: function(res) {
+              // 转发失败
+            }
+          }
+        }
+      })
+      wx.showShareMenu(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      显示当前页面的转发按钮
+      
+      OBJECT参数说明：
+      
+      参数  类型  必填  说明
+      withShareTicket  Boolean  否  是否使用带 shareTicket 的转发详情
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      示例代码：
+      
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+      wx.hideShareMenu(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      隐藏转发按钮
+      
+      OBJECT参数说明：
+      
+      参数  类型  必填  说明
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      示例代码：
+      
+      wx.hideShareMenu()
+      wx.updateShareMenu(OBJECT)
+      基础库 1.2.0 开始支持，低版本需做兼容处理
+      
+      更新转发属性
+      
+      OBJECT参数说明：
+      
+      参数  类型  必填  说明
+      withShareTicket  Boolean  否  是否使用带 shareTicket 的转发详情
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      示例代码：
+      
+      wx.updateShareMenu({
+        withShareTicket: true,
+        success() {
+        }
+      })
+      wx.getShareInfo(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      获取转发详细信息
+      
+      OBJECT参数说明：
+      
+      参数  类型  必填  说明
+      shareTicket  String  是  shareTicket
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      CALLBACK 参数说明：
+      
+      参数  类型  说明
+      errMsg  String  错误信息
+      encryptedData  String  包括敏感数据在内的完整转发信息的加密数据，详细见加密数据解密算法
+      iv  String  加密算法的初始向量，详细见加密数据解密算法
+      encryptedData 解密后为一个 JSON 结构，包含字段如下：
+      
+      字段  说明
+      openGId  群对当前小程序的唯一 ID
+      Tip: 如需要展示群名称，可以使用开放数据组件
+      
+      获取更多转发信息
+      通常开发者希望转发出去的小程序被二次打开的时候能够获取到一些信息，例如群的标识。现在通过调用 wx.showShareMenu 并且设置 withShareTicket 为 true ，当用户将小程序转发到任一群聊之后，可以获取到此次转发的 shareTicket，此转发卡片在群聊中被其他用户打开时，可以在 App.onLaunch() 或 App.onShow 获取到另一个 shareTicket。这两步获取到的 shareTicket 均可通过 wx.getShareInfo() 接口可以获取到相同的转发信息。
+      
+      页面内发起转发
+      基础库 1.2.0 开始支持，低版本需做兼容处理
+      
+      通过给 button 组件设置属性 open-type="share"，可以在用户点击按钮后触发 Page.onShareAppMessage() 事件，如果当前页面没有定义此事件，则点击后无效果。相关组件：button
+      
+      使用指引
+      转发按钮，旨在帮助用户更流畅地与好友分享内容和服务。转发，应是用户自发的行为，且在需要时触手可及。开发者在使用时若遵从以下指引，会得到更佳的用户体验。
+      
+      含义清晰：明确、一目了然的图形按钮，将为用户减少理解的时间。在我们的资源下载中心，你可以找到这样的按钮素材并直接使用。或者你可以根据自己业务的设计风格，灵活设计含义清晰的按钮的样式。当然，你也可以直接使用带文案的按钮，“转发给好友”，它也足够明确。
+      方便点击：按钮点击热区不宜过小，亦不宜过大。同时，转发按钮与其他按钮一样，热区也不宜过密，以免用户误操作。
+      按需出现：并非所有页面都适合放置转发按钮，涉及用户隐私的非公开内容，或可能打断用户完成当前操作体验的场景，该功能并不推荐使用。同时，由于转发过程中，我们将截取用户屏幕图像作为配图，因此，需要注意帮助用户屏蔽个人信息。
+      尊重意愿：理所当然，并非所有的用户，都喜欢与朋友分享你的小程序。因此，它不应该成为一个诱导或强制行为，如转发后才能解锁某项功能等。请注意，这类做法不仅不被推荐，还可能违反我们的《运营规范》，我们强烈建议你在使用前阅读这部分内容。
+      以上，我们陈列了最重要的几点，如果你有时间，可以完整浏览《设计指南》，相信会有更多的收获。
+      
+      Bug & Tip
+      tip: 不自定义转发图片的情况下，默认会取当前页面，从顶部开始，高度为 80% 屏幕宽度的图像作为转发图片。
+      tip: 转发的调试支持请查看 普通转发的调试支持 和 带 shareTicket 的转发
+      tip: 只有转发到群聊中打开才可以获取到 shareTickets 返回值，单聊没有 shareTickets
+      tip: shareTicket 仅在当前小程序生命周期内有效
+      tip: 由于策略变动，小程序群相关能力进行调整，开发者可先使用wx.getShareInfo接口中的群ID进行功能开发。    
+    二维码 
+      获取二维码
+      通过后台接口可以获取小程序任意页面的二维码，扫描该二维码可以直接进入小程序对应的页面。目前微信支持两种二维码，小程序码（左），小程序二维码（右），如下所示：
+      
+      
+      
+      获取小程序码
+      我们推荐生成并使用小程序码，它具有更好的辨识度。目前有两个接口可以生成小程序码，开发者可以根据自己的需要选择合适的接口。
+      
+      接口A: 适用于需要的码数量较少的业务场景 接口地址：
+      
+      https://api.weixin.qq.com/wxa/getwxacode?access_token=ACCESS_TOKEN
+      获取 access_token 详见文档
+      
+      POST 参数说明
+      
+      参数  类型  默认值  说明
+      path  String    不能为空，最大长度 128 字节
+      width  Int  430  二维码的宽度
+      auto_color  Bool  false  自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调
+      line_color  Object  {"r":"0","g":"0","b":"0"}  auth_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
+      注意：通过该接口生成的小程序码，永久有效，数量限制见文末说明，请谨慎使用。用户扫描该码进入小程序后，将直接进入 path 对应的页面。
+      
+      接口B：适用于需要的码数量极多，或仅临时使用的业务场景
+      
+      接口地址：
+      
+      https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN
+      获取 access_token 详见文档
+      
+      POST 参数说明
+      
+      参数  类型  默认值  说明
+      scene  String    最大32个可见字符，只支持数字，大小写英文以及部分特殊字符："!#$&'()*+,/:;=?@-._~"，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
+      page  String    必须是已经发布的小程序页面，例如 "pages/index/index" ,根路径前不要填加'/',不能携带参数（参数请放在scene字段里），如果不填写这个字段，默认跳主页面
+      width  Int  430  二维码的宽度
+      auto_color  Bool  false  自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调
+      line_color  Object  {"r":"0","g":"0","b":"0"}  auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
+      注意：通过该接口生成的小程序码，永久有效，数量暂无限制。用户扫描该码进入小程序后，开发者需在对应页面获取的码中 scene 字段的值，再做处理逻辑。使用如下代码可以获取到二维码中的 scene 字段的值。调试阶段可以使用开发工具的条件编译自定义参数 scene=xxxx 进行模拟，开发工具模拟时的 scene 的参数值需要进行 urlencode
+      
+      // 这是首页的 js
+      Page({
+        onLoad: function(options) {
+          // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
+          var scene = decodeURIComponent(options.scene)
+        }
+      })
+      获取小程序二维码
+      接口C：适用于需要的码数量较少的业务场景
+      
+      接口地址：
+      
+      https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?access_token=ACCESS_TOKEN
+      获取 access_token 详见文档
+      
+      POST 参数说明
+      
+      参数  类型  默认值  说明
+      path  String    不能为空，最大长度 128 字节
+      width  Int  430  二维码的宽度
+      注意：通过该接口生成的小程序二维码，永久有效，数量限制见文末说明，请谨慎使用。用户扫描该码进入小程序后，将直接进入 path 对应的页面。
+      
+      示例：
+      
+      {"path": "pages/index?query=1", "width": 430}
+      注：pages/index 需要在 app.json 的 pages 中定义
+      
+      Bug & Tip
+      tip：通过该接口，仅能生成已发布的小程序的二维码。
+      tip：可以在开发者工具预览时生成开发版的带参二维码。
+      tip：接口A加上接口C，总共生成的码数量限制为100,000，请谨慎调用。
+      tip: POST 参数需要转成 json 字符串，不支持 form 表单提交。
+      tip: auto_color line_color 参数仅对小程序码生效。    
+    收货地址 
+      wx.chooseAddress(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      调起用户编辑收货地址原生界面，并在编辑完成后返回用户选择的地址。
+      
+      OBJECT参数说明：
+      
+      参数  类型  必填  说明
+      success  Function  否  返回用户选择的收货地址信息
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      success返回参数说明：
+      
+      参数  类型  说明
+      errMsg  String  调用结果
+      userName  String  收货人姓名
+      postalCode  String  邮编
+      provinceName  String  国标收货地址第一级地址
+      cityName  String  国标收货地址第二级地址
+      countyName  String  国标收货地址第三级地址
+      detailInfo  String  详细收货地址信息
+      nationalCode  String  收货地址国家码
+      telNumber  String  收货人手机号码
+      示例代码：
+      
+      wx.chooseAddress({
+        success: function (res) {
+          console.log(res.userName)
+          console.log(res.postalCode)
+          console.log(res.provinceName)
+          console.log(res.cityName)
+          console.log(res.countyName)
+          console.log(res.detailInfo)
+          console.log(res.nationalCode)
+          console.log(res.telNumber)
+        }
+      })
+      Bug & Tip
+      tip: wx.chooseAddress 接口需要用户授权，请兼容用户拒绝授权的场景。    
+    卡券 
+      wx.addCard(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      批量添加卡券。
+      
+      Object参数说明：
+      
+      参数  类型  必填  说明
+      cardList  ObjectArray  是  需要添加的卡券列表，列表内对象说明请参见请求对象说明
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      请求对象说明
+      参数  类型  说明
+      cardId  String  卡券 Id
+      cardExt  String  卡券的扩展参数
+      cardExt 说明
+      
+      参数  类型  必填  是否参与签名  说明
+      code  String  否  是  用户领取的 code，仅自定义 code 模式的卡券须填写，非自定义 code 模式卡券不可填写，详情
+      openid  String  否  是  指定领取者的openid，只有该用户能领取。 bind_openid 字段为 true 的卡券必须填写，bind_openid 字段为 false 不可填写。
+      timestamp  Number  是  是  时间戳，东八区时间,UTC+8，单位为秒
+      nonce_str  String  否  是  随机字符串，由开发者设置传入，加强安全性（若不填写可能被重放请求）。随机字符串，不长于 32 位。推荐使用大小写字母和数字，不同添加请求的 nonce_str 须动态生成，若重复将会导致领取失败。
+      fixed_begintimestamp  Number  否  否  卡券在第三方系统的实际领取时间，为东八区时间戳（UTC+8,精确到秒）。当卡券的有效期类为 DATE_TYPE_FIX_TERM 时专用，标识卡券的实际生效时间，用于解决商户系统内起始时间和领取微信卡券时间不同步的问题。
+      outer_str  String  否  否  领取渠道参数，用于标识本次领取的渠道值。
+      signature  String  是  -  签名，商户将接口列表中的参数按照指定方式进行签名,签名方式使用 SHA1，具体签名方案参见：卡券签名
+      注：cardExt 需进行 JSON 序列化为字符串传入
+      
+      回调结果：
+      
+      回调类型  errMsg  说明
+      success  addCard:ok  添加卡券成功
+      fail  addCard:fail cancel  用户取消添加卡券
+      fail  addCard:fail (detail message)  添加卡券失败，其中 detail message 为后台返回的详细失败原因
+      success返回参数：
+      
+      参数  类型  说明
+      cardList  ObjectArray  卡券添加结果列表，列表内对象说明请详见返回对象说明
+      返回对象说明
+      参数  类型  说明
+      code  String  加密 code，为用户领取到卡券的code加密后的字符串，解密请参照：code 解码接口
+      cardId  String  用户领取到卡券的Id
+      cardExt  String  用户领取到卡券的扩展参数，与调用时传入的参数相同
+      isSuccess  Boolean  是否成功
+      示例代码：
+      
+      wx.addCard({
+        cardList: [
+          {
+            cardId: '',
+            cardExt: '{"code": "", "openid": "", "timestamp": "", "signature":""}'
+          }, {
+            cardId: '',
+            cardExt: '{"code": "", "openid": "", "timestamp": "", "signature":""}'
+          }
+        ],
+        success: function(res) {
+          console.log(res.cardList) // 卡券添加结果
+        }
+      })
+      wx.openCard(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      查看微信卡包中的卡券。
+      
+      Object参数说明：
+      
+      参数  类型  必填  说明
+      cardList  ObjectArray  是  需要打开的卡券列表，列表内参数详见openCard 请求对象说明
+      success  Function  否  接口调用成功的回调函数
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      openCard 请求对象说明
+      参数  类型  说明
+      cardId  String  需要打开的卡券 Id
+      code  String  由 addCard 的返回对象中的加密 code 通过解密后得到，解密请参照：code 解码接口
+      示例代码：
+      
+      wx.openCard({
+        cardList: [
+          {
+            cardId: '',
+            code: ''
+          }, {
+            cardId: '',
+            code: ''
+          }
+        ],
+        success: function(res) {
+        }
+      })
+      Tip
+      tip: 目前只有认证小程序才能使用卡券接口，可参考指引进行认证。
+      tip: 了解更多信息，请查看微信卡券接口文档    
+    设置 
+      wx.openSetting(OBJECT)
+      基础库 1.1.0 开始支持，低版本需做兼容处理
+      
+      调起客户端小程序设置界面，返回用户设置的操作结果
+      
+      Object 参数说明：
+      
+      参数  类型  必填  说明
+      success  Function  否  接口调用成功的回调函数，返回内容详见返回参数说明。
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      success返回参数说明：
+      
+      参数  类型  说明
+      authSetting  Object  用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
+      示例代码：
+      
+      wx.openSetting({
+        success: (res) => {
+          /*
+           * res.authSetting = {
+           *   "scope.userInfo": true,
+           *   "scope.userLocation": true
+           * }
+           */
+        }
+      })
+      wx.getSetting(OBJECT)
+      基础库 1.2.0 开始支持，低版本需做兼容处理
+      
+      获取用户的当前设置
+      
+      Object 参数说明：
+      
+      参数  类型  必填  说明
+      success  Function  否  接口调用成功的回调函数，返回内容详见返回参数说明。
+      fail  Function  否  接口调用失败的回调函数
+      complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
+      success返回参数说明：
+      
+      参数  类型  说明
+      authSetting  Object  用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
+      示例代码：
+      
+      wx.getSetting({
+        success: (res) => {
+          /*
+           * res.authSetting = {
+           *   "scope.userInfo": true,
+           *   "scope.userLocation": true
+           * }
+           */
+        }
+      })    
+    微信运动
+    打开小程序 
+    获取发票抬头 
+    生物认证 
   数据 
   扩展接口 
+    将ArrayBuffer数据转成Base64字符串 '1.1.0' 
+    wx.arrayBufferToBase64(arrayBuffer)
+      const arrayBuffer = new Uint8Array([11, 22, 33])
+      const base64 = wx.arrayBufferToBase64(arrayBuffer)
+    将Base64字符串转成ArrayBuffer数据 '1.1.0'
+    wx.base64ToArrayBuffer(base64)
+      const base64 = 'CxYh'
+      const arrayBuffer = wx.base64ToArrayBuffer(base64)  
   调试接口 
+    设置是否打开调试开关，此开关对正式版也能生效。 '1.4.0'
+    wx.setEnableDebug({
+      'enableDebug': bol, // 是否打开调试
+      cfoo,
+    })
   todo : ----------------------------------------------------------------------
-  wx.login({         // 用户登录 
-    success: (res) => {
-      // 发送 res.code 到后台换取 openId, sessionKey, unionId
-    }
-  })
   wx.getSetting({      // 获取用户信息 
     success: (res) => {
       if (res.authSetting['scope.userInfo']) {
@@ -2096,9 +3241,36 @@ API
       }
     }
   })
-  wx.getUserInfo({}) 
-  wx.stopPullDownRefresh()  停止当前页面的下拉刷新 
   app = getApp()   获取小程序实例 
+配合组件使用的API 
+  获取微信用户绑定的手机号,需先调用login接口 
+    PS: 因为需要用户主动触发才能发起获取手机号接口,所以该功能不由 API 来调用,
+      需用 <button> 组件的点击来触发。
+      目前该接口针对非个人开发者,且完成了认证的小程序开放。
+      需谨慎使用,若用户举报较多或被发现在不必要场景下使用,微信有权永久回收该小程序的该接口权限。
+    使用方法:
+    需要将<button>组件'open-type'的值设置为'getPhoneNumber',
+    当用户点击并同意之后,可以通过'bindgetphonenumber'事件回调获取到微信服务器返回的加密数据, 
+    然后在第三方服务端结合 session_key 以及 app_id 进行解密获取手机号
+    例子
+    <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"> </button>
+    Page({ 
+      getPhoneNumber: function(e) { 
+        // e.detail.errMsg
+        // e.detail.iv  加密算法的初始向量 
+        // e.detail.encryptedData  包括敏感数据在内的完整用户信息的加密数据 
+          // 解密后为以下json结构 
+          // {
+          //   "phoneNumber": "13580006666",      用户绑定的手机号,国外手机号会有区号 
+          //   "purePhoneNumber": "13580006666",  没有区号的手机号 
+          //   "countryCode": "86",               区号
+          //   "watermark": {
+          //     "appid":"APPID",
+          //     "timestamp":TIMESTAMP
+          //   }
+          // }
+      } 
+    })
 微信Web开发者工具使用 
   快速创建文件[包括'.js''.json''.wxml''.wxss']
     在'app.json'中的'pages'中新增元素即可[注意最后一个不可有',']

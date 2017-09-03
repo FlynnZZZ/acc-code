@@ -489,6 +489,7 @@ miniA微信小程序
     #id            id选择器 
     .class         类选择器 
     slctor,slctor  并集选择器 
+    .s1.s2         交集选择 
     ::before       伪选择器,内部头部插入内容  
     ::after        伪选择器,内部尾部插入内容  
   全局样式与局部样式 
@@ -1145,12 +1146,13 @@ miniA微信小程序
       本参数可用于区分用户进入客服会话的来源。
   ◆属性相关 
 API 
+  PS: 多数API在执行后有回调['success''fail''complete'],无特别情况下,使用'cfoo'表示[Self];
   网络 
-    PS: 最大并发数是 10; 默认超时时间和最大超时时间都是60s 
+    PS: 最大并发数为'10'; 默认超时时间和最大超时时间都是60s 
       网络请求的'referer'是不可以设置的，
-      格式固定为' https://servicewechat.com/{appid}/{version}/page-frame.html'，
-      其中 {appid} 为小程序的 appid，{version} 为小程序的版本号，版本号为 0 表示为开发版。
-      小程序进入后台运行后（非置顶聊天），如果5s内网络请求没有结束，会回调错误信息 "fail interrupted"；
+      格式固定为'https://servicewechat.com/{appid}/{version}/page-frame.html'，
+      其中{appid}为小程序的'appid'{version}为小程序的版本号，版本号0表示为开发版。
+      小程序进入后台运行后[非置顶聊天],如果5s内网络请求没有结束，会回调错误信息"fail interrupted"；
       在回到前台之前，网络请求接口调用都会无法调用。
     var requestTask = wx.request({})    发起http请求  
       PS:  
@@ -1169,16 +1171,11 @@ API
         },
         'dataType': 'json', // 可选,默认为'json' 
           // 如果设置了 dataType 为 json，则会尝试对响应的数据做一次 JSON.parse
-        success: function (res) {
-        },
-        fail:function(err){
-        },
-        complete: function(){ 
-        } 
+        cfoo,
       }
       requestTask 返回值对象,可调用方法中断请求任务 
         requestTask.abort()  中断请求任务'1.4.0+'
-    var uploadTask = wx.uploadFile(params)    上传文件,将本地资源上传到服务器  
+    var uploadTask = wx.uploadFile({})    上传文件,将本地资源上传到服务器  
       PS: 如通过 wx.chooseImage 等接口获取到一个本地资源的临时文件路径后，
         可通过此接口将本地资源上传到指定服务器。
         客户端发起一个 HTTPS POST 请求，其中 content-type 为 multipart/form-data 。
@@ -1188,9 +1185,9 @@ API
         'name': '',  // 文件对应的 key , 服务器端通过这个key可以获取到文件二进制内容
         'header': {},   // 请求 Header  
         'formData': {}, // 请求中其他额外的 form data
-        success: function(response){ // 接口调用成功的回调函数 
-          // response.data       开发者服务器返回的数据
-          // response.statusCode HTTP状态码
+        success: function(res){ // 接口调用成功的回调函数 
+          // res.data       开发者服务器返回的数据
+          // res.statusCode HTTP状态码
         }, 
         fail : function(){   // 接口调用失败的回调函数 
         }, 
@@ -1204,13 +1201,13 @@ API
           response.totalBytesSent num,已经上传的数据长度，单位 Bytes
           response.totalBytesExpectedToSend num,预期需要上传的数据总长度，单位 Bytes 
         uploadTask.abort()  中断上传任务 '1.4.0' 
-    var downloadTask = wx.downloadFile(params)  下载文件资源到本地
+    var downloadTask = wx.downloadFile({})  下载文件资源到本地
       PS: 客户端直接发起一个 HTTP GET 请求，返回文件的本地临时路径 
       {
         'url': '', 
         'header': {}, 
-        success: function(response){
-          // response.tempFilePath   文件的临时路径 
+        success: function(res){
+          // res.tempFilePath   文件的临时路径 
             // 文件的临时路径，在小程序本次启动期间可以正常使用，
             // 如需持久保存，需在主动调用 wx.saveFile，在小程序下次启动时才能访问得到
         }, 
@@ -1225,7 +1222,7 @@ API
           response.totalBytesWritten  已经下载的数据长度，单位 Bytes
           response.totalBytesExpectedToWrite 预期需要下载的数据总长度，单位 Bytes
         downloadTask.abort()  中断下载任务 '1.4.0'
-    wx.connectSocket(params)     创建WebSocket连接 
+    wx.connectSocket({})     创建WebSocket连接 
       PS: 一个微信小程序同时只能有一个WebSocket连接,否则后续再创建会导致之前的连接关闭;
       {
         'url' : '', // 必须是wss协议 
@@ -1234,40 +1231,25 @@ API
         'method' : 'GET', // 默认是GET
           // 有效值： OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT 
         'protocols' : [], //  StringArray 否 子协议数组 1.4.0
-        success : function(){
-        },
-        fail : function(){
-        },
-        complete : function(){
-        },
+        cfoo,
       }
     wx.onSocketOpen(foo(res))    监听WebSocket打开 
-    wx.sendSocketMessage(params) 发送WebSocket消息
+    wx.sendSocketMessage({}) 发送WebSocket消息
       PS: 需要先 wx.connectSocket，并在 wx.onSocketOpen 回调之后才能发送
       {
         data : {}, //  String/ArrayBuffer,需要发送的内容
-        success : function(){ // 可选 
-        },
-        fail : function(){ // 可选 
-        },
-        complete : function(){ // 可选 
-        },
+        cfoo,
       }
     wx.onSocketMessage(foo(res)) 接收WebSocket消息
       res.data    String/ArrayBuffer,服务器返回的消息 
-    wx.closeSocket(params)       关闭WebSocket连接 
+    wx.closeSocket({})       关闭WebSocket连接 
       PS: 当连接打开后再调用 wx.closeSocket 才能关闭连接,否则不起作用 
       {
         'code' : num,  // 可选,表示关闭连接的状态号，表示连接被关闭的原因。
           // 默认的取值是1000 （表示正常连接关闭） 1.4.0
         'reason' : '', // 可选,表示连接被关闭的原因
           // 这个字符串必须是不长于123字节的UTF-8 文本（不是字符） 1.4.0
-        success : function(){ // 可选 
-        },
-        fail : function(){ // 可选 
-        },
-        complete : function(){ // 可选 
-        },
+        cfoo,
       }
     wx.onSocketError(foo(res))   监听WebSocket错误
     wx.onSocketClose    监听WebSocket关闭
@@ -1295,13 +1277,11 @@ API
       {
         'urls': [], // 需要预览的图片链接列表
         'current': '', // 当前显示图片的链接，不填则默认为 urls 的第一张
-        success:function(){ },
-        fail : function(){ },
-        complete : function(){ },
+        cfoo,
       }
     wx.getImageInfo({})  获取图片信息 
       {
-        'src' : '', // 图片的路径，可以是相对路径，临时文件路径，存储文件路径，网络图片路径
+        'src' : '', // 图片的路径，可为'相对路径''临时文件路径''存储文件路径''网络图片路径'
         success : function(res){
           // res.width   num,图片宽度，单位px
           // res.height  num,图片高度，单位px
@@ -1338,15 +1318,257 @@ API
       }
     wx.stopRecord()  ​ 主动调用停止录音
     ◆音频播放控制 
+    wx.playVoice({})  开始播放语音 
+      PS: 同时只允许一个语音文件正在播放，如果前一个语音文件还没播放完，将中断前一个语音播放。
+      {
+        'filePath' : 'path', // 需要播放的语音文件的文件路径,必填 
+        cfoo,
+      }
+    wx.pauseVoice()   暂停正在播放的语音 
+      PS: 再次调用wx.playVoice()播放同一个文件时，会从暂停处开始播放。
+        如果想从头开始播放，需要先调用 wx.stopVoice。    
+    wx.stopVoice()    结束播放语音 
     ◆音乐播放控制 
+      PS: 对于微信客户端来说，只能同时有一个后台音乐在播放。
+      当用户离开小程序后，音乐将暂停播放；
+      当用户点击“显示在聊天顶部”时，音乐不会暂停播放；
+      当用户在其他小程序占用了音乐播放器，原有小程序内的音乐将停止播放。
+    wx.getBackgroundAudioPlayerState({}) 获取后台音乐播放状态 
+      {
+        success : function(res){ 
+          // res.status  播放状态,2：没有音乐在播放，1：播放中，0：暂停中 
+          // 以下信息,只有在当前有音乐播放时返回 
+          // res.duration  选定音频的长度,单位：s 
+          // res.currentPosition  选定音频的播放位置,单位：s 
+          // res.downloadPercent  整数,音频的下载进度,[80 代表 80%] 
+          // res.dataUrl  歌曲数据链接     
+        },
+        fail: function(){
+        },
+        complete:function(){
+        },
+      }
+    wx.playBackgroundAudio({}) 使用后台播放器播放音乐 
+      {
+        'dataUrl': '', // 音乐链接，必填,目前支持格式'm4a''aac''mp3''wav'
+        'title': '',   // 音乐标题
+        'coverImgUrl': '', //  封面URL
+        cfoo, 
+      }
+    wx.pauseBackgroundAudio()  暂停播放音乐  
+    wx.seekBackgroundAudio({}) 控制音乐播放进度 
+      PS: iOS'6.3.30',wx.seekBackgroundAudio()会有短暂延迟
+      {
+        'position': num, // 音乐位置，单位s,必填 
+        cfoo,
+      }
+    wx.stopBackgroundAudio()   停止播放音乐     
+    wx.onBackgroundAudioPlay(CALLBACK)  监听音乐播放     
+    wx.onBackgroundAudioPause(CALLBACK) 监听音乐暂停 
+    wx.onBackgroundAudioStop(CALLBACK)  监听音乐停止      
+    ◆背景音频播放管理 
+    var bgAuM = wx.getBackgroundAudioManager() 获取全局唯一的背景音频管理器 '1.2.0+' 
+      ◆'backgroundAudioManager'对象的属性 
+      bgAuM.duration  // num,当前音频长度,单位s 
+        // 有在当前有合法的src时返回
+      bgAuM.currentTime // num,当前音频的播放位置,单位s 
+        // 有在当前有合法的src时返回
+      bgAuM.paused    // 当前是是否暂停或停止状态，true表示暂停或停止，false 表示正在播放 
+      bgAuM.src  // 音频的数据源，默认为空字符串，
+        // 当设置了新的 src 时，会自动开始播放 ，目前支持的格式有 m4a, aac, mp3, wav  否
+      bgAuM.buffered  // num,音频缓冲的时间点，仅保证当前播放时间点到此时间点内容已缓冲 
+      bgAuM.startTime   // num,读写,音频开始播放的位置,单位s
+      bgAuM.title       // 读写,音频标题，用于做原生音频播放器音频标题 
+        // 原生音频播放器中的分享功能，分享出去的卡片标题，也将使用该值 
+      bgAuM.epname      // 读写,专辑名 
+        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值。  否
+      bgAuM.singer      // 读写,歌手名 
+        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值 
+      bgAuM.coverImgUrl // 读写,封面图url，用于做原生音频播放器背景图 
+        // 原生音频播放器中的分享功能，分享出去的卡片配图及背景也将使用该图 
+      bgAuM.webUrl      // 读写,页面链接 
+        // 原生音频播放器中的分享功能，分享出去的卡片简介，也将使用该值 
+      ◆'backgroundAudioManager'对象的方法  
+      bgAuM.play()    // 播放
+      bgAuM.pause()   // 暂停
+      bgAuM.stop()    // 停止
+      bgAuM.seek(num) // 跳转到指定位置，单位 s
+      bgAuM.onCanplay(foo)    // 背景音频进入可以播放状态，但不保证后面可以流畅播放
+      bgAuM.onPlay(foo)       // 背景音频播放事件 
+      bgAuM.onPause(foo)      // 背景音频暂停事件 
+      bgAuM.onStop(foo)       // 背景音频停止事件 
+      bgAuM.onEnded(foo)      // 背景音频自然播放结束事件 
+      bgAuM.onTimeUpdate(foo) // 背景音频播放进度更新事件 
+      bgAuM.onPrev(foo)       // 用户在系统音乐播放面板点击上一曲事件（iOS only）
+      bgAuM.onNext(foo)       // 用户在系统音乐播放面板点击下一曲事件（iOS only）
+      bgAuM.onError(foo)      // 背景音频播放错误事件
+        errCode说明
+        10001  系统错误
+        10002  网络错误
+        10003  文件错误
+        10004  格式错误
+        -1     未知错误  
+      bgAuM.onWaiting(foo)    // 音频加载中事件，当音频因为数据不足，需要停下来加载时会触发
+    ◆音频组件控制 
+    var auCt = wx.createAudioContext(audioId) 创建并返回audio上下文audioContext对象
+      PS: 通过'audioId'跟一个<audio/>组件绑定，通过它可以操作对应的<audio/>组件 
+      'audioContext'对象的方法列表：
+      auCt.setSrc('') // 设置音频的地址
+      auCt.play()     // 播放
+      auCt.pause()    // 暂停
+      auCt.seek(num)  // 跳转到指定位置，单位 s      
+    ◆视频 
+    wx.chooseVideo({}) 拍摄视频或从相册中选视频，返回视频临时文件路径 
+      PS: 文件的临时路径，在小程序本次启动期间可以正常使用，
+        如需持久保存，需在主动调用 wx.saveFile，在小程序下次启动时才能访问得到。
+      {
+        'sourceType': [], // 'album'从相册选视频，'camera'使用相机拍摄，默认为['album','camera']
+        'maxDuration':60, // 拍摄视频最长拍摄时间，单位秒。最长支持'60'秒
+        'camera':'back',  // 默认调起的为前置还是后置摄像头
+          // 在部分Android手机下由于系统ROM不支持无法生效   
+          'front'  前置
+          'back'   后置,默认值
+        success: function(res){
+          // res.tempFilePath 选定视频的临时文件路径
+          // res.duration     选定视频的时间长度
+          // res.size    选定视频的数据量大小
+          // res.height  返回选定视频的长
+          // res.width   返回选定视频的宽
+        },
+        fail: function(){
+        },
+        complete: function(){
+        },
+      }
+    wx.saveVideoToPhotosAlbum({}) 保存视频到系统相册 '1.2.0+' 
+      PS: 需要用户授权（scope.writePhotosAlbum），详见 用户授权 
+      {
+        'filePath':'', // 视频文件路径，可以是临时文件路径也可以是永久文件路径
+        success: function(res){
+          res.errMsg  // 调用结果
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    ◆视频组件控制 
+    var vdCt = wx.createVideoContext(videoId)  创建并返回video上下文'videoContext'对象
+      PS: 'videoContext'通过videoId跟一个video组件绑定，通过它可以操作一个video组件
+      'videoContext'对象的方法列表
+      vdCt.play()  // 播放  
+      vdCt.pause() // 暂停  
+      vdCt.seek(num) // 跳转到指定位置，单位 s  
+      vdCt.sendDanmu({text:'',color:''})  // 发送弹幕   
+      vdCt.playbackRate(num)   // 设置倍速播放，支持的倍率有0.5/0.8/1.0/1.25/1.5 '1.4.0'
+      vdCt.requestFullScreen() // 进入全屏  '1.4.0'
+      vdCt.exitFullScreen()    // 退出全屏  '1.4.0'
   文件 
-  数据缓存  
+    wx.saveFile({})  保存文件到本地 
+      PS: 本地文件存储的大小限制为10M 
+      {
+        'tempFilePath':'', // 要保存的文件的临时路径 
+        success:function(res){
+          res.savedFilePath // 文件的保存路径 
+        },
+        fail:function(){ },
+        complete:function(){ },
+      }
+    wx.getSavedFileList({})  获取本地已保存的文件列表 
+      {
+        success:function(res){
+          // res.errMsg   接口调用结果 
+          // res.fileList 文件列表 
+            // fileItem.filePath   // 文件的本地路径
+            // fileItem.createTime // 文件的保存时的时间戳，从1970/01/01 08:00:00 到当前时间的秒数
+            // fileItem.size       // 文件大小，单位B
+        },
+        fail:function(){},
+        complete:function(){},
+      }
+    wx.getSavedFileInfo({}) 获取本地文件的文件信息
+      PS: 此接口只能用于获取已保存到本地的文件 [使用wx.getFileInfo()接口获取临时文件信息] 
+      {
+        'filePath':'',  // 文件路径
+        success:function(res){
+          res.errMsg  // 接口调用结果
+          res.size    // num,文件大小，单位B
+          res.createTime // 文件的保存时的时间戳，从1970/01/01 08:00:00 到当前时间的秒数
+        },
+        fail:function(){ },
+        complete:function(){ },
+      }
+    wx.removeSavedFile({})  删除本地存储的文件 
+      {
+        'filePath':'', // 需要删除的文件路径
+        cfoo,
+      }
+    wx.openDocument({}) 新开页面打开文档
+      PS: 支持格式'doc','xls','ppt','pdf','docx','xlsx','pptx'
+      {
+        'filePath':'', // 文件路径，可通过downFile 得  
+        'fileType':'', // 文件类型，指定文件类型打开文件，可选 
+          // 有效值 doc, xls, ppt, pdf, docx, xlsx, pptx  1.4.0
+        cfoo,
+      }
+  数据缓存 
+    PS: 每个微信小程序都可以有自己的本地缓存，
+      可以通过 wx.setStorage（wx.setStorageSync）、
+      wx.getStorage（wx.getStorageSync）、
+      wx.clearStorage（wx.clearStorageSync）可以对本地缓存进行设置、获取和清理。
+      同一个微信用户，同一个小程序 storage 上限为 10MB。
+      localStorage 以用户维度隔离，同一台设备上，A 用户无法读取到 B 用户的数据。
+      localStorage 是永久存储的，但是我们不建议将关键信息全部存在localStorage，以防用户换设备的情况。
+      本地数据存储的大小限制为10MB  
+    wx.setStorage({})  将数据存储在本地缓存中指定的key中
+      PS: 会覆盖掉原来该key对应的内容，这是一个异步接口 
+      {
+        'key':'',        // 本地缓存中的指定的 key
+        'data': obj/str, // 需要存储的内容
+        cfoo,
+      }
+    wx.setStorageSync(key,data)  将data存储在本地缓存中指定的key中
+      PS: 会覆盖掉原来该 key 对应的内容，这是一个同步接口 
+      key  str,本地缓存中的指定的key  
+      data obj/str,需要存储的内容 
+    wx.getStorage({}) 从本地缓存中异步获取指定key对应的内容 
+      {
+        'key':'', // 本地缓存中的指定的key 
+        success: function(res){
+          // res.data   key对应的内容
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    wx.getStorageSync(key) 从本地缓存中同步获取指定key对应的内容。
+      key   本地缓存中的指定的key 
+    wx.getStorageInfo({})  异步获取当前storage的相关信息
+      {
+        success:function(res){
+          // res.keys         当前storage中所有的key
+          // res.currentSize  当前占用的空间大小, 单位kb
+          // res.limitSize    限制的空间大小，单位kb
+        },
+        fail:function(){ },
+        complete:function(){ },
+      }
+    wx.getStorageInfoSync()   同步获取当前storage的相关信息 
+    wx.removeStorage({})      从本地缓存中异步移除指定key 
+      {
+        'key':'', // 本地缓存中的指定的key 
+        cfoo,
+      }
+    wx.removeStorageSync(key) 从本地缓存中同步移除指定key 
+      key   本地缓存中的指定的key 
+    wx.clearStorage()     清理本地数据缓存[异步]
+    wx.clearStorageSync() 同步清理本地数据缓存 
   位置 
+    ◆获取位置 
     wx.getLocation({}) 获取当前地理位置信息 
       PS: 当用户离开小程序后，此接口无法调用；当用户点击“显示在聊天顶部”时，此接口可继续调用。
+        wx.getLocation()、wx.chooseLocation() 接口需要用户授权，请兼容用户拒绝授权的场景。      
       {
         'type' : '', 指定返回坐标的类型 
           // 默认为'wgs84'返回gps坐标,'gcj02'返回可用于 wx.openLocation 的坐标
+          // iOS 6.3.30 type 参数不生效，只会返回 wgs84 类型的坐标信息 
         success:function(res){
           // res.latitude  纬度，浮点数，范围为-90~90，负数表示南纬 
           // res.longitude 经度，浮点数，范围为-180~180，负数表示西经 
@@ -1361,6 +1583,451 @@ API
         complete:function(){
         },
       }
+    wx.chooseLocation({})   打开地图选择位置 
+      {
+        success:function(res){
+          res.name      // 位置名称
+          res.address   // 详细地址
+          res.latitude  // 纬度，浮点数，范围为-90~90，负数表示南纬
+          res.longitude // 经度，浮点数，范围为-180~180，负数表示西经
+        },
+        fail:function(){
+        },
+        complete:function(){
+        },
+        cancel:function(){
+        },
+      }
+    ◆查看位置 
+    wx.openLocation({}) ​使用微信内置地图查看位置
+      {
+        'latitude':'',  // 纬度，范围为-90~90，负数表示南纬
+        'longitude':'', // 经度，范围为-180~180，负数表示西经
+        'scale':'',     // 缩放比例，范围5~18，默认为18
+        'name':'',     // 位置名
+        'address':'',  // 地址的详细说明
+        cfoo,
+      }
+    ◆地图组件控制 
+    var mpCt = wx.createMapContext(mapId) 创建并返回map上下文'mapContext'对象 
+      PS: mapContext通过mapId跟一个<map/>组件绑定，通过它可以操作对应的<map/>组件
+      'mapContext'对象的方法列表
+      mpCt.getCenterLocation({ // 获取当前地图中心的经纬度
+        // 返回的是gcj02坐标系，可用于 wx.openLocation
+        success:function(res){
+          // res = { longitude: "经度", latitude: "纬度"}
+        },
+        fail:function(){ },
+        complete:function(){ },
+      })     
+      mpCt.moveToLocation()  // 将地图中心移动到当前定位点，需要配合map组件的show-location使用  
+      mpCt.translateMarker({  // 平移marker，带动画  '1.2.0+'
+        'markerId': num, // 指定marker
+        'destination': obj, // 指定marker移动到的目标点
+        'autoRotate': bol, // 移动过程中是否自动旋转marker
+        'rotate': num, // marker的旋转角度
+        'duration': num, // 动画持续时长，默认值1000ms，平移与旋转分别计算
+        animationEnd: function(){  // 动画结束回调函数
+        },
+        fail: function(){ // 接口调用失败的回调函数
+        },
+      })   
+      mpCt.includePoints({    // 缩放视野展示所有经纬度  '1.2.0'
+        'points': arr,  // 要显示在可视区域内的坐标点列表，[{latitude, longitude}]
+        'padding': arr, // 坐标点形成的矩形边缘到地图边缘的距离，单位像素
+        // 格式为[上,右,下,左]，安卓上只能识别数组第一项，上下左右的padding一致。
+        // 开发者工具暂不支持padding参数。
+      })  
+      mpCt.getRegion({    // 获取当前地图的视野范围  '1.4.0'
+        'success': function(res){
+          // res = {southwest, northeast}，西南角与东北角的经纬度
+        },
+        'fail': function(){ },
+        'complete': function(){ },
+      })    
+      mpCt.getScale({   // 获取当前地图的缩放级别  '1.4.0'
+        cfoo,
+      })   
+  设备 
+    ◆系统信息 
+    wx.getSystemInfo({})  获取系统信息 
+      {
+        success: function(res){
+          // res.brand        手机品牌  1.5.0
+          // res.model        手机型号  
+          // res.pixelRatio   设备像素比  
+          // res.screenWidth   屏幕宽度  1.1.0
+          // res.screenHeight  屏幕高度  1.1.0
+          // res.windowWidth   可使用窗口宽度  
+          // res.windowHeight  可使用窗口高度  
+          // res.language   微信设置的语言  
+          // res.version    微信版本号  
+          // res.system     操作系统版本  
+          // res.platform   客户端平台  
+          // res.fontSizeSetting 用户字体大小设置。单位px  1.5.0 
+            // 以“我-设置-通用-字体大小”中的设置为准
+          // res.SDKVersion   客户端基础库版本  1.1.0
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    var res = wx.getSystemInfoSync() 获取系统信息同步接口
+      res.brand  手机品牌  '1.5.0' 
+      res.model  手机型号  
+      res.pixelRatio  设备像素比  
+      res.screenWidth  屏幕宽度  '1.1.0' 
+      res.screenHeight  屏幕高度  '1.1.0' 
+      res.windowWidth  可使用窗口宽度  
+      res.windowHeight  可使用窗口高度  
+      res.language  微信设置的语言  
+      res.version  微信版本号  
+      res.system  操作系统版本  
+      res.platform  客户端平台  
+      res.fontSizeSetting  用户字体大小设置，单位：px  '1.5.0' 
+        以“我-设置-通用-字体大小”中的设置为准 
+      res.SDKVersion  客户端基础库版本  '1.1.0' 
+    wx.canIUse(str)  判断小程序的API，回调，参数，组件等是否在当前版本可用 
+      参数说明： 使用${API}.${method}.${param}.${options}
+      或者${component}.${attribute}.${option}方式来调用
+      ${API}       代表API名字 
+      ${method}    代表调用方式，有效值为return, success, object, callback 
+      ${param}     代表参数或者返回值 
+      ${options}   代表参数的可选值 
+      ${component} 代表组件名字 
+      ${attribute} 代表组件属性 
+      ${option}    代表组件属性的可选值  
+      Example:
+      wx.canIUse('openBluetoothAdapter')
+      wx.canIUse('getSystemInfoSync.return.screenWidth')
+      wx.canIUse('getSystemInfo.success.screenWidth')
+      wx.canIUse('showToast.object.image')
+      wx.canIUse('onCompassChange.callback.direction')
+      wx.canIUse('request.object.method.GET')
+      wx.canIUse('contact-button')
+      wx.canIUse('text.selectable')
+      wx.canIUse('button.open-type.contact')
+    ◆网络状态 
+    wx.getNetworkType({})  获取网络类型  
+      {
+        success: function(res){
+          // res.networkType  网络类型
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    wx.onNetworkStatusChange(f(res))  监听网络状态变化 '1.1.0+'
+      res.isConnected  bol,当前是否有网络连接
+      res.networkType  网络类型
+        'wifi'  wifi网络
+        '2g'    2g网络
+        '3g'    3g网络
+        '4g'    4g网络
+        'none'  无网络
+        'unknown'  Android下不常见的网络类型
+    wx.setScreenBrightness({})   设置屏幕亮度 '1.2.0+'
+      {
+        value: '', // num,屏幕亮度值，范围 0~1，0 最暗，1 最亮
+        cfoo,
+      }
+    wx.getScreenBrightness({})   获取屏幕亮度 '1.2.0+'
+      {
+        success: function(res){
+          // res.value  num,屏幕亮度值，范围 0~1，0 最暗，1 最亮
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+      PS: 若安卓系统设置中开启了自动调节亮度功能，则屏幕亮度会根据光线自动调整，
+        该接口仅能获取自动调节亮度之前的值，而非实时的亮度值。  
+    wx.vibrateLong({})   使手机发生较长时间的振动'400ms'  '1.2.0'
+      {
+        cfoo,
+      }
+    wx.vibrateShort({})  使手机发生较短时间的振动'15ms'  '1.2.0'
+      PS: 仅在 iPhone7/iPhone7Plus 及 Android 机型生效
+      {
+        cfoo,
+      }
+    ◆加速度计 
+    wx.onAccelerometerChange(f(res)) 监听加速度数据，频率'5次/秒' 
+      PS: 接口调用后会自动开始监听，可使用 wx.stopAccelerometer 停止监听。
+      res.x  num,X轴
+      res.y  num,Y轴
+      res.z  num,Z轴
+    wx.startAccelerometer({})      开始监听加速度数据 '1.1.0'
+      {
+        cfoo,
+      }
+    wx.stopAccelerometer({})  停止监听加速度数据 '1.1.0'
+      {
+        cfoo,
+      }
+    ◆罗盘 
+    wx.onCompassChange(f(res))  监听罗盘数据，频率'5次/秒'
+      PS: 接口调用后会自动开始监听，可使用wx.stopCompass()停止监听 
+      res.direction  num,面对的方向度数 
+    wx.startCompass({})  开始监听罗盘数据 '1.1.0'
+      {
+        cfoo,
+      }
+    wx.stopCompass({})   停止监听罗盘数据 '1.1.0+'
+      {
+        cfoo,
+      }
+    ◆拨打电话 
+    wx.makePhoneCall({}) 
+      {
+        'phoneNumber':'', // 需要拨打的电话号码
+        cfoo,
+      }
+    ◆扫码 
+    wx.scanCode({})  调起客户端扫码界面，扫码成功后返回对应的结果 
+      {
+        'onlyFromCamera': false,  // 是否只能从相机扫码，不允许从相册选择图片  '1.2.0'
+        success: function(res){
+          // res.result   所扫码的内容
+          // res.scanType 所扫码的类型
+          // res.charSet  所扫码的字符集
+          // res.path  当所扫的码为当前小程序的合法二维码时，会返回此字段，内容为二维码携带的path
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    ◆剪切板 
+    wx.setClipboardData({})  设置系统剪贴板的内容 '1.1.0+'
+      {
+        'data': '',  // 需要设置的内容 
+        cfoo,
+      }
+    wx.getClipboardData({})  获取系统剪贴板内容 '1.1.0+'
+      {
+        success: function(res){
+          // res.data   剪贴板的内容
+        },
+        fail: function(){ },
+        complete: function(){ },
+      }
+    ◆蓝牙 
+    ★蓝牙适配器接口  '1.1.0' 
+      PS: iOS微信客户端'6.5.6'版本开始支持，Android'6.5.7'版本开始支持 
+        Mac系统可能无法获取'advertisData'及RSSI，请使用真机调试
+        开发者工具和 Android 上获取到的deviceId为设备 MAC 地址，iOS 上则为设备 uuid。因此deviceId不能硬编码到代码中
+      wx.openBluetoothAdapter({}) 初始化蓝牙适配器 '1.1.0+'
+        PS: 由于系统的问题，目前仅在mac版的开发工具上支持蓝牙调试 
+        {
+          cfoo,
+        }
+      wx.closeBluetoothAdapter({}) 关闭蓝牙模块 '1.1.0+'
+        PS: 调用该方法将断开所有已建立的链接并释放系统资源
+        {
+          cfoo,
+        }
+      wx.getBluetoothAdapterState({}) 获取本机蓝牙适配器状态 '1.1.0+'
+        {
+          success: function(res){
+            // res.errMsg       成功：ok，错误：详细信息 
+            // res.discovering  是否正在搜索设备 
+            // res.available    蓝牙适配器是否可用 
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.onBluetoothAdapterStateChange(f(res)) 监听蓝牙适配器状态变化事件 '1.1.0'
+        res.available    bol,蓝牙适配器是否可用 
+        res.discovering  bol,蓝牙适配器是否处于搜索状态 
+      wx.startBluetoothDevicesDiscovery({}) 开始搜寻附近的蓝牙外围设备 '1.1.0+' 
+        PS: 该操作比较耗费系统资源，请在搜索并连接到设备后调用 stop 方法停止搜索 
+        {
+          'services': arr, //  蓝牙设备主 service 的 uuid 列表
+            // 某些蓝牙设备会广播自己的主 service 的 uuid。
+            // 如果这里传入该数组，那么根据该 uuid 列表，只搜索有这个主服务的设备。
+          'allowDuplicatesKey': bol, // 是否允许重复上报同一设备
+            // 如果允许重复上报，则onDeviceFound 方法会多次上报同一设备，但是 RSSI 值会有不同
+          'interval': num, //  上报设备的间隔 
+            // 默认为0，意思是找到新设备立即上报，否则根据传入的间隔上报
+          success: function(res){
+            // res.errMsg         成功：ok，错误：详细信息 
+            // res.isDiscovering  当前蓝牙适配器是否处于搜索状态 
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+        Example：
+        // 以微信硬件平台的蓝牙智能灯为例，主服务的 UUID 是 FEE7。传入这个参数，只搜索主服务 UUID 为 FEE7 的设备
+        wx.startBluetoothDevicesDiscovery({
+          services: ['FEE7'],
+          success: function (res) {
+            console.log(res)
+          }
+        })
+      wx.stopBluetoothDevicesDiscovery({}) 停止搜寻附近的蓝牙外围设备 '1.1.0+' 
+        PS: 请在确保找到需要连接的设备后调用该方法停止搜索。
+        {
+          success: function(res){
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.getBluetoothDevices({}) 获取所有已发现的蓝牙设备，包括已经和本机处于连接状态的设备 '1.1.0+'
+        {
+          success: function(res){
+            // res.devices  Array  uuid 对应的的已连接设备列表
+              // device.name       string  蓝牙设备名称，某些设备可能没有
+              // device.localName  string  低功耗设备广播名称，某些设备可能没有
+              // device.deviceId   string  用于区分设备的 id
+              // device.RSSI       int  当前蓝牙设备的信号强度
+              // device.advertisData  ArrayBuffer  当前蓝牙设备的广播内容
+                // 注意：vConsole 无法打印出 ArrayBuffer 类型数据 
+            // res.errMsg  string  成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.onBluetoothDeviceFound(f(res)) 监听寻找到新设备的事件 '1.1.0+'
+        res.devices   新搜索到的设备列表
+          device.deviceId  string  蓝牙设备 id，参考 device 对象
+          device.name      string  蓝牙设备名称，参考 device 对象
+          device.localName string  低功耗设备广播名称，某些设备可能没有
+          device.RSSI      int 当前蓝牙设备的信号强度
+          device.advertisData  ArrayBuffer 当前蓝牙设备的广播内容
+            注意：vConsole 无法打印出 ArrayBuffer 类型数据 
+      wx.getConnectedBluetoothDevices({})  根据uuid获取处于已连接状态的设备 '1.1.0+'
+        {
+          'services': arr, // 蓝牙设备主 service 的 uuid 列表
+          success: function(res){
+            // res.devices  Array  搜索到的设备列表
+              // device对象 蓝牙设备信息
+              // device.name  string  蓝牙设备名称，某些设备可能没有
+              // device.deviceId  string  用于区分设备的 id
+            // res.errMsg   string 成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+    ★低功耗蓝牙接口 
+      wx.createBLEConnection({})  连接低功耗蓝牙设备 '1.1.0+'
+        PS: 安卓手机上如果多次调用create创建连接，有可能导致系统持有同一设备多个连接的实例，
+          导致调用close的时候并不能真正的断开与设备的连接。因此请保证尽量成对的调用create和close接口
+        {
+          'deviceId': '', // 蓝牙设备 id，参考 getDevices 接口
+          success: function(res){
+            res.errMsg  //  成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+        Example:
+        wx.createBLEConnection({
+          // 这里的 deviceId 需要在上面的 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
+          deviceId: deviceId,
+          success: function (res) {
+            console.log(res)
+          }
+        })
+      wx.closeBLEConnection({}) 断开与低功耗蓝牙设备的连接 '1.1.0+' 
+        {
+          'deviceId': '', // 蓝牙设备 id，参考 getDevices 接口
+          success: function(res){
+            res.errMsg  // 成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.getBLEDeviceServices({}) 获取蓝牙设备所有 service（服务） '1.1.0+' 
+        {
+          'deviceId': '', //  蓝牙设备 id，参考 getDevices 接口
+          success: function(res){
+            // res.services  array  设备服务列表
+              // service对象 蓝牙设备service(服务)信息
+              // service.uuid  string  蓝牙设备服务的 uuid
+              // service.isPrimary  boolean  该服务是否为主服务
+            // res.errMsg  string  成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.getBLEDeviceCharacteristics({}) 获取蓝牙设备所有characteristic（特征值）'1.1.0'
+        {
+          'deviceId': '', // 蓝牙设备 id，参考 device 对象
+          'serviceId': '', // str,蓝牙服务 uuid
+          success: function(res){
+            // res.characteristics  array  设备特征值列表
+              // characteristic对象 蓝牙设备characteristic(特征值)信息
+              // characteristic.uuid  string  蓝牙设备特征值的 uuid
+              // characteristic.properties  object  该特征值支持的操作类型
+              // characteristic.properties.read     boolean  该特征值是否支持 read 操作
+              // characteristic.properties.write    boolean  该特征值是否支持 write 操作
+              // characteristic.properties.notify   boolean  该特征值是否支持 notify 操作
+              // characteristic.properties.indicate boolean  该特征值是否支持 indicate 操作
+            // res.errMsg  string  成功：ok，错误：详细信息
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.readBLECharacteristicValue({}) 读取低功耗蓝牙设备的特征值的二进制数据值 '1.1.0'
+        PS: 必须设备的特征值支持read才可以成功调用，具体参照 characteristic 的 properties 属性
+          并行调用多次读写接口存在读写失败的可能性。
+          read接口读取到的信息需要在onBLECharacteristicValueChange方法注册的回调中获取。
+        {
+          'deviceId': '', //  蓝牙设备 id，参考 device 对象
+          'serviceId': '', //  蓝牙特征值对应服务的 uuid
+          'characteristicId': '', //  蓝牙特征值的 uuid
+          success: function(res){
+            // res.characteristic obj,设备特征值信息.蓝牙设备characteristic(特征值)信息
+              // characteristic.characteristicId  str,蓝牙设备特征值的 uuid
+              // characteristic.serviceId         obj.蓝牙设备特征值对应服务的 uuid
+              // characteristic.value      ArrayBuffer,蓝牙设备特征值对应的二进制值 
+                // 注意：vConsole 无法打印出 ArrayBuffer 类型数据 
+            // res.errMsg         str,成功：ok，错误：详细信息 
+          },
+          fail: function(){ },
+          complete: function(){ },
+        }
+      wx.writeBLECharacteristicValue({}) 向低功耗蓝牙设备特征值中写入二进制数据 '1.1.0'
+        PS: 必须设备的特征值支持write才可以成功调用，具体参照 characteristic 的 properties 属性
+          并行调用多次读写接口存在读写失败的可能性
+        {
+          'deviceId': '',         //  蓝牙设备 id，参考 device 对象
+          'serviceId': '',        //  蓝牙特征值对应服务的 uuid
+          'characteristicId': '', // 蓝牙特征值的 uuid
+          'value': ArrayBuffer,   // 蓝牙设备特征值对应的二进制值
+          cfoo,
+        }
+      wx.notifyBLECharacteristicValueChange({})启用特征值变化时的'notify'功能 '1.1.1'
+        PS: 必须设备的特征值支持notify才可以成功调用，具体参照 characteristic 的 properties 属性
+          必须先启用notify才能监听到设备 characteristicValueChange 事件
+        {
+          deviceId  string  是  蓝牙设备 id，参考 device 对象
+          serviceId  string  是  蓝牙特征值对应服务的 uuid
+          characteristicId  string  是  蓝牙特征值的 uuid
+          state  boolean  是  true: 启用 notify; false: 停用 notify
+          cfoo,
+        }
+      wx.onBLEConnectionStateChange(f(res)) 监听低功耗蓝牙连接的错误事件 '1.1.1'
+        PS: 包括设备丢失，连接异常断开等等 
+        res.deviceId  string  蓝牙设备 id，参考 device 对象
+        res.connected  boolean  连接目前的状态
+      wx.onBLECharacteristicValueChange(f(res)) 监听低功耗蓝牙设备的特征值变化 '1.1.0'
+        PS: 必须先启用notify接口才能接收到设备推送的notification。
+        res.deviceId  string  蓝牙设备 id，参考 device 对象
+        res.serviceId  string  特征值所属服务 uuid
+        res.characteristicId  string  特征值 uuid
+        res.value  ArrayBuffer  特征值最新的值（注意：vConsole 无法打印出 ArrayBuffer 类型数据）
+    'errCode'蓝牙错误码列表
+      错误码  说明                 备注
+      0      ok                   正常
+      10000  not init             未初始化蓝牙适配器
+      10001  not available        当前蓝牙适配器不可用
+      10002  no device            没有找到指定设备
+      10003  connection fail      连接失败
+      10004  no service           没有找到指定服务
+      10005  no characteristic    没有找到指定特征值
+      10006  no connection        当前连接已断开
+      10007  property not support 当前特征值不支持此操作
+      10008  system error         其余所有系统上报的异常
+      10009  system not support   Android 系统特有，系统版本低于 4.3 不支持BLE
+      10010  no descriptor        没有找到指定描述符
+      10011  location not turned  Android6.0 以上系统因未打开定位导致搜寻蓝牙设备（startBluetoothDevicesDiscovery ）失败    
   界面 
     交互反馈 
     wx.showToast({}) 显示消息提示框 
@@ -1398,12 +2065,13 @@ API
         可通过 getCurrentPages()) 获取当前的页面栈,决定需要返回几层 
       wx.switchTab({})   跳转到tabBar页面,并关闭其他所有非tabBar页面 
       wx.reLaunch()      重新启动[可打开任意页] 
-    
-    
+  WXML节点信息 
+  第三方平台 
+  开放接口 
+  数据 
+  扩展接口 
+  调试接口 
   todo : ----------------------------------------------------------------------
-  wx.getStorageSync(key)      读取本地存储的数据 
-  wx.setStorageSync(key,val)  本地存储 
-    val 可为任意类型
   wx.login({         // 用户登录 
     success: (res) => {
       // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -1429,11 +2097,7 @@ API
     }
   })
   wx.getUserInfo({}) 
-  wx.stopPullDownRefresh;  停止当前页面的下拉刷新 
-  ★检测 
-  wx.getSystemInfo     获取到小程序的基础库版本号 
-  wx.getSystemInfoSync 获取到小程序的基础库版本号 
-  wx.canIUse     判断是否可以在该基础库版本下直接使用对应的API或者组件 
+  wx.stopPullDownRefresh()  停止当前页面的下拉刷新 
   app = getApp()   获取小程序实例 
 微信Web开发者工具使用 
   快速创建文件[包括'.js''.json''.wxml''.wxss']

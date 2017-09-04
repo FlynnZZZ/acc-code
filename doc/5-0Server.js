@@ -344,8 +344,8 @@ windows环境
       logoff        注销命令
       net stop messenger   停止信使服务
       net start messenger  开始信使服务
-git bash 
-  命令
-    clear   清空输出
-    ls      相当于dir命令
+git bash: 类似于Linux的命令行 
+  命令 
+    clear   清空输出 
+    ls      相当于dir命令 
 

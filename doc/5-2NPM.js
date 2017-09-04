@@ -1,4 +1,4 @@
-'node package manager'npm: node包管理器 
+'node package manager'NPM: node包管理器 
   PS:随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
@@ -46,14 +46,19 @@
     本地安装: 为了在本项目中使用,安装在项目的node_modules文件夹下,可通过'require' 引入 
   ◆其他配置参数 
   -v           参看版本 
-  'cnpm'npm的淘宝镜像  
+  'cnpm'npm的淘宝镜像 
     PS:npm的插件来自国外服务器,受网络影响大,淘宝团队将其复制到自己的服务器上,
       是一个完整'npmjs.org'镜像,可用其代替官方版本[只读],目前同步频率为'10分钟每次',
       cnpm跟npm用法完全一致,只是在执行命令时将npm改为cnpm;
       官方网址:'http://npm.taobao.org'
     ◆安装及使用cnpm 
-    npm install -g cnpm --registry=https://registry.npm.taobao.org
+    npm install -g cnpm --registry=https://registry.npm.taobao.org // 全局安装cnpm 
       安装完直接使用可能会出现错误,最好关闭命令提示符重新打开 
+    使用别名的方式,将下载地址进行更改[在命令行中执行] 
+    alias cnpm="npm --registry=https://registry.npm.taobao.org \
+      --cache=$HOME/.npm/.cache/cnpm \
+      --disturl=https://npm.taobao.org/dist \
+      --userconfig=$HOME/.cnpmrc"  
     cnpm -v  查看其版本号 
     cnpm i <name>   安装包 
       '.npmrc'是使用淘宝的镜像产生的文件

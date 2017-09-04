@@ -1,36 +1,11 @@
 'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
-说明 
-  使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码 
-  '.vue'文件 
-    'vue-loader'插件 
-      在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
-      Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
-    lang="" 使用预处理器 
-      在'.vue'文件中使用其他预处理器[需安装对应的loader] 
-      当使用 lang="less" 即使用Less,需安装如下依赖
-      npm i -g css-loader less less-loader --save-dev
-      <template lang="jade">
-        div.my-component
-        h2 Hello from {{msg}}
-      </template>
-      <script lang="babel">
-        // 利用 Babel 编译 ES2015
-        export default {
-          data () {
-            return {
-              msg: 'Hello from Babel!'
-            }
-          }
-        }
-      </script>
-      <style lang="less">
-        .my-component{
-          background-color : bule;
-          .child{
-            background-color:green;
-          }
-        }
-      </style>
+  PS: 成熟的Vue项目架构设计;热加载本地测试服务器;集成打包上线方案;  
+    使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码 
+'.vue'文件 
+  PS: 使用一个'.vue'格式文件将'HTML''CSS''JS'组装起来,方便开发,也方便复用和维护;
+    一个'.vue'文件就是一个组件;
+    组件的通信方式同样使用'props'和'event' 
+    单文件组件的写法需要编译工具才能最终在浏览器端工作;
   Example: 
     <template>
       <div class="my-component">
@@ -70,6 +45,77 @@
     <style>
       ...
     </style>
+  <style scope></style>  保证组件内的CSS只对该组件起作用 
+  lang="" 使用预处理器 
+    在'.vue'文件中使用其他预处理器[需安装对应的loader] 
+    当使用 lang="less" 即使用Less,需安装如下依赖
+    npm i -g css-loader less less-loader --save-dev
+    <template lang="jade">
+      div.my-component
+      h2 Hello from {{msg}}
+    </template>
+    <script lang="babel">
+      // 利用 Babel 编译 ES2015
+      export default {
+        data () {
+          return {
+            msg: 'Hello from Babel!'
+          }
+        }
+      }
+    </script>
+    <style lang="less">
+      .my-component{
+        background-color : bule;
+        .child{
+          background-color:green;
+        }
+      }
+    </style>
+使用步骤 
+  ◆工具安装[初始安装一次即可] 
+  npm i -g webpack      全局安装webpack 
+  npm i -g vue          全局安装vue 
+  npm i -g vue-cli      全局安装vue-cli 
+    在安装Vue后就可以在命令行中使用'vue'命令了
+    vue --version 或 vue -V // 查看Vue版本 
+    vue list  // 查看官方提供的模版方案 
+      browserify         
+      browserify-simple  
+      pwa               
+      simple            
+      webpack           
+      webpack-simple    
+  ◆初始化项目 
+  vue init webpack <projectName>[项目名称不能为中文]  创建'webpack'方案的Vue项目 
+  cd  projectName  进入新创建的项目文件夹 
+    文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
+    后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
+  npm init         npm初始化[创建'package.json'文件] 
+  npm i            安装依赖: 根据存在的'package.json'文件配置安装依赖文件 
+    并增加'node_modules'文件夹 
+  npm i vue-router vue-resource --save  安装路由模块和网络请求模块
+  ◆启动项目/构建发布  
+  npm run dev       启动测试服务器  
+    启动本地服务,打开浏览器,运行项目
+    默认执行 package.json 中 script 属性 dev 的配置
+    运行安装时,eslint mocha 等等依赖,建议初学不安装
+  npm run build     运行构建,生成生产环境可发布的代码 
+vue目录结构 
+  vue-project  项目目录
+  |--index.html  骨架html
+  |--src         源码存放目录
+  |--|--main.js    入口js
+  |--|--App.vue    根组件
+  |--|--cpts       其它组件存放目录 
+  |--|--assets     静态资源  
+  |--dist        编译打包生成的文件存放的目录
+  |--package.json       npm配置文件
+  |--webpack.config.js  webpack配置文件
+  |--.babelrc      babel配置文件
+  |--node_modules  npm包存放的目录,自动生成
+  |--.gitignore    忽略无需git控制的文件,比如node_modules 
+  |--README.md     说明文件 
 webpack.config.js webpack配置文件 
   module.exports = {
     entry: {
@@ -112,35 +158,6 @@ webpack.config.js webpack配置文件
       extensions: ['', '.js', '.json']
     },
   }
-Example:  vue目录结构初始化
-  手动创建的
-  webpack2   项目目录
-  |--dist    编译打包生成的文件存放的目录
-  |--node_modules   npm包存放的目录,自动生成
-  |--src         vue应用的源码存放目录
-  |--|---pages   vue其它组件的存放目录
-  |--|---css     应用的css目录
-  |--|---|---app.css 应用的主css文件
-  |--|---images  图片目录
-  |--|---main.js   vue应用的入口js
-  |--|---App.vue   vue应用的根组件
-  |--.babelrc      babel配置文件
-  |--index.html    vue应用的骨架html
-  |--package.json  npm配置文件
-  |--webpack.config.js   webpack配置文件
-步骤 
-  初始化项目目录,最终目录结构如下:
-    - dist //文件生成目录
-        -- //自动生成
-    - node_module //自动安装 
-        -- ...
-    - src //文件入口
-        -- components //组件存放 
-            -- app.vue //主.vue
-        -- main.js //主.js
-    - index.html   //主.html
-    - package.json // npm 配置 
-    - webpack.cofig.js // webpack配置
   配置 webpack.config.js 文件
     var path = require('path');
     // NodeJS中的Path对象,用于处理目录的对象,提高开发效率 
@@ -207,33 +224,10 @@ Example:  vue目录结构初始化
       // 开启source-map,webpack有多种source-map,在官网文档可以查到
       devtool: 'eval-source-map'
     };
-使用步骤 
-  ◆工具安装[初始安装一次即可] 
-  npm install -g webpack            全局安装webpack 
-  npm install -g vue                全局安装vue 
-  npm install -g vue-cli            全局安装vue-cli
-    在安装Vue后就可以在命令行中使用'vue'命令了
-    vue --version 或 vue -V // 查看Vue的版本 
-    vue list  // 查看官方提供的模版 
-  ◆初始化项目 
-  vue init webpack projectName[项目名称不能为中文]       创建基于'webpack'模版的Vue项目 
-  cd  projectName       进入新创建的项目文件夹 
-    文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
-    后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
-  npm init              npm初始化,创建 package.json 文件 
-  npm install           安装依赖 
-    根据存在的'package.json'文件的配置安装依赖文件 
-    增加'node_modules'文件夹 
-  npm install vue-router vue-resource --save  安装路由模块和网络请求模块
-  ◆启动项目 
-  npm run dev                         启动测试服务器  
-    启动本地服务,打开浏览器,运行项目
-    默认执行 package.json 中 script 属性 dev 的配置
-    运行安装时,eslint mocha 等等依赖,建议初学不安装
-  ◆构建发布 
-  npm run build                       运行构建,生成生产环境可发布的代码 
+'vue-loader'插件 
+  在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
+  Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
 项目目录文件说明 
-  ├── README.md
   ├── build                           编译任务的代码
   │   ├── build.js
     require('./check-versions')() // 检查 Node 和 npm 版本
@@ -693,11 +687,9 @@ Example:  vue目录结构初始化
   │   └── main.js
   └── static    
 
-  .gitignore   # 忽略无需git控制的文件  比如 node_modules
   .eslintrc    # eslint加载器配置
-  .babelrc         # babel加载器配置
   build 
-    webpack.base.config.js         # webpack 基础配置
+    webpack.base.config.js         # webpack 基础配置 
       基础配置包括了webpack的最基本配置,
       包括入口文件、输入文件、加载器配置、插件配置等,
       module.exports = {
@@ -741,17 +733,6 @@ Example:  vue目录结构初始化
       }    
     webpack.dev.config.js          # webpack 开发配置
     webpack.prod.config.js         # webpack 生产配置
-  node_modules         #通过npm安装的模块
-  index.html       # 首页
-  package.json     # 项目配置
-  src 
-    components    # 组件文件夹,存放app组件
-      A.vue
-      B.vue
-      Counter.vue
-    assets   #静态资源 
-    app.vue    ## 主vue组件
-    main.js    #启动配置,webpack入口文件
     
   项目基本目录结构 
     bulid            构建的配置文件
@@ -769,6 +750,9 @@ Example:  vue目录结构初始化
     index.html 
     package.json 
     ...
+Coding 
+  xx.vue 中
+    import Vue form "vue";  // 引入Vue 
 --------------------------------------------------------------------------------
 'Angular CLI'Angular2的构建工具 
   PS: 可以创建项目、添加文件以及执行一大堆开发任务,比如测试、打包和发布 

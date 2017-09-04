@@ -504,8 +504,7 @@ Document文档根节点
         style对象的属性值都是字符串,设置时必须包括单位.
         elem.getAttribute("style"); 得到相应的代码字符串
       elem.style.XX   读写指定的行内样式
-      elem.style.cssText; 取/设style特性中的CSS代码
-        可以读写或删除整个样式
+      elem.style.cssText; 读写,'style'属性中的CSS代码 
         Example:
         elem.style.cssText ='background-color:red;'+'border:1px solid black;';
       elem.style.length; CSS属性的数量

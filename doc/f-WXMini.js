@@ -812,7 +812,7 @@ miniA微信小程序
     bindfocus   foo,输入框聚焦时触发 
       event.detail = {value: value} 
     bindblur    foo,输入框失去焦点时触发 
-      event.detail = {value: value} 
+      e.detail.value  输入框的值 
     bindconfirm foo,点击完成按钮时触发 
       event.detail = {value: value}
   <checkbox-group>  多项选择器,内部由多个<checkbox>组成 

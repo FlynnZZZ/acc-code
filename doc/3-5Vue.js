@@ -2050,7 +2050,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
 '.vue'单文件组件 
   PS:使用一个'.vue'格式文件将'HTML''CSS''JS'组装起来,方便开发,也方便复用和维护;
     一个'.vue'文件就是一个组件;
-    组件的通信方式同上[使用 props 和 event] ;
+    组件的通信方式同上[使用'props'和'event'];
     单文件组件的写法需要编译工具才能最终在浏览器端工作;
   '.vue'的文件结构 
     <template> HTMLCode <template/>

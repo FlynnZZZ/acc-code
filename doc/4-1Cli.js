@@ -87,9 +87,9 @@
       webpack           
       webpack-simple    
   ◆初始化项目 
-  vue init webpack <projectName>[项目名称不能为中文]  创建'webpack'方案的Vue项目 
+  vue init <模版名> <项目名>      创建Vue项目  
   cd  projectName  进入新创建的项目文件夹 
-    文件夹中的 index.html 为项目的入口,且默认调用 src 下的 main.js  
+    文件夹中的 index.html 为项目的入口,且默认使用src下的 main.js  
     后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
   npm init         npm初始化[创建'package.json'文件] 
   npm i            安装依赖: 根据存在的'package.json'文件配置安装依赖文件 
@@ -107,7 +107,8 @@ vue目录结构
   |--src         源码存放目录
   |--|--main.js    入口js
   |--|--App.vue    根组件
-  |--|--cpts       其它组件存放目录 
+  |--|--pages      页面目录  
+  |--|--cpts       组件目录 
   |--|--assets     静态资源  
   |--dist        编译打包生成的文件存放的目录
   |--package.json       npm配置文件
@@ -116,7 +117,7 @@ vue目录结构
   |--node_modules  npm包存放的目录,自动生成
   |--.gitignore    忽略无需git控制的文件,比如node_modules 
   |--README.md     说明文件 
-webpack.config.js webpack配置文件 
+webpack.config.js  webpack配置文件 
   module.exports = {
     entry: {
       'index': './vue/index/main.js',
@@ -228,15 +229,15 @@ webpack.config.js webpack配置文件
   在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
   Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
 项目目录文件说明 
-  ├── build                           编译任务的代码
+  ├── build                           编译任务执行的配置 
   │   ├── build.js
     require('./check-versions')() // 检查 Node 和 npm 版本
-    require('shelljs/global') // 使用了 shelljs 插件,可以让我们在 node 环境的 js 中使用 shell
+    require('shelljs/global')     // 使用 shelljs 插件,可在node环境中使用 shell 
     env.NODE_ENV = 'production'
     
     var path = require('path') // 不再赘述
     var config = require('../config') // 加载 config.js
-    var ora = require('ora') // 一个很好看的 loading 插件
+    var ora = require('ora')  //  loading 插件
     var webpack = require('webpack') // 加载 webpack
     var webpackConfig = require('./webpack.prod.conf') // 加载 webpack.prod.conf
     
@@ -250,7 +251,7 @@ webpack.config.js webpack配置文件
     spinner.start() // 开始 loading 动画
     
     /* 拼接编译输出文件路径 */
-    var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
+    var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory) 
     /* 删除这个文件夹 （递归删除） */
     rm('-rf', assetsPath)
     /* 创建此文件夹 */ 
@@ -751,7 +752,7 @@ webpack.config.js webpack配置文件
     package.json 
     ...
 Coding 
-  xx.vue 中
+  xx.vue 中 
     import Vue form "vue";  // 引入Vue 
 --------------------------------------------------------------------------------
 'Angular CLI'Angular2的构建工具 

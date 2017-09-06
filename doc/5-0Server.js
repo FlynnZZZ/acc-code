@@ -348,4 +348,5 @@ git bash: 类似于Linux的命令行
   命令 
     clear   清空输出 
     ls      相当于dir命令 
+    ctrl+d  退出命令行 
 

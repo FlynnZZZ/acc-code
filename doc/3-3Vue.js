@@ -297,8 +297,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           // 代码保证 this.$el 在 document 中
         })
       }
-    'template' : HTMLStr,  // 自定义组件内的HTML[原内容被替换] 
-    render: function(h){   // 
+    'template' : HTMLStr,  // 定义实例的HTML内容[原内容被替换] 
+    render: function(h){   // 将组件渲染到DOM,相当于'template'的作用  
       h(cpt)
     },
   }
@@ -1373,7 +1373,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
     tagName 组件的名称 
       对于自定义标签名,Vue不强制要求遵循W3C规则[小写,并且包含一个短杠],
       但尽管遵循这个规则比较好
-    options 配置对象,相当于new Vue(options)的options  
+    options 配置对象/f(resolve,reject) ,异步组件  
+      PS: 相当于new Vue(options)的options  
       template: HTMLStr,   组件的HTML代码
       props: options ,     可选,自定义属性 
         options 可为 字符串集合数strArr组或对象obj
@@ -2277,7 +2278,7 @@ vue-router    前端路由
     // 引入使用
     import Vue from "vue";
     import VueRouter from "vue-router"; // 引入 
-    Vue.use(VueRouter); // 使用声明,使用全局的 script 标签,则默认安装了  
+    Vue.use(VueRouter); // 使用声明 [全局的 script 标签,则默认安装了] 
     var router = new VueRouter(options); // 根据路由配置实例化 
     new Vue({})    // Vue实例中注册 
   使用步骤 
@@ -2290,7 +2291,7 @@ vue-router    前端路由
       'routes' : [ // 映射表 
         { 
           path : '/boo', // 定义地址URL  
-          component : {  // 展示的组件,当只有一个组件时可直接使用组件名 
+          components : {  // 展示的组件,当只有一个组件时可直接使用组件名 
             viewName1 : cptA, // 命名视图 
             viewName2 : cptB,
           },
@@ -2324,23 +2325,22 @@ vue-router    前端路由
       <router-view></router-view>    
     name="xx"    标识视图,实现一路由对应多视图 
       同时[同级]展示多个视图,可在界面中拥有多个单独命名的视图,若未设置名字,则默认为default 
-      Example:
-        一个视图使用一个组件渲染,因此对于同一个路由,多个视图就需要多个组件
-        <router-view ></router-view>
-        <router-view name="a"></router-view>
-        <router-view name="b"></router-view>
-        const router = new VueRouter({
-          routes: [
-            {
-              path: '/',
-              components: {
-                default: Foo,
-                a: Bar,
-                b: Baz
-              }
+      Example: 一个视图使用一个组件渲染,因此对于同一个路由,多个视图就需要多个组件
+      <router-view ></router-view>
+      <router-view name="a"></router-view>
+      <router-view name="b"></router-view>
+      const router = new VueRouter({
+        routes: [
+          {
+            path: '/',
+            components: {
+              default: Foo,
+              a: Bar,
+              b: Baz
             }
-          ]
-        })
+          }
+        ]
+      })
   <router-link >xxx</router-link> 连接路由 : 用于在页面点击跳转 
     PS:<router-link>默认会被渲染成一个<a>标签 
     to="path"      指定链接地址 
@@ -2786,38 +2786,65 @@ vue-router    前端路由
       这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
       
       Access-Control-Allow-Origin: *        
-Vuex          规模状态管理 
-  npm install vuex --save   安装
+Vuex          状态管理 
+  npm i vuex --save    安装
   import Vuex from 'vuex'   引入vuex
   import Vue form 'vue'     引入vue
-  Vue.use(Vuex)             注册 
-  let store = new Vuex.store({ // 实例化数据中心 
-    state : {  // 用于储存数据 
+  Vue.use(Vuex)             使用声明  
+  let store = new Vuex.store({ // 实例化数据中心'store' 
+    state : {  // 状态,用于储存数据 
+      'key' : val,
     },
-    getters : {
-    }
-    mutations : { // 用于执行的函数,不可异步执行,一般用于直接操作 state 中的数据  
-      foo : function(state,data1){
-        // state 即为储存数据的对象,data1 为 commit() 传入的数据 
+    getters : { // 相当于'computed',对'state'的处理返回 
+      val : function(state){
+        return state.xx;
       },
     },
-    actions : { // 用于执行的函数,一般是异步的,常和后端API交互 
-      goo : function(context,data2){
-        // context 一般用来执行 mutations 中的函数,data2 为 dispatch() 传入的数据 
-        // context.commit('foo',data1) 
+    actions : { // 函数集合,一般是异步的,常和后端API交互、执行'mutations'中的函数  
+      // 用于执行'mutations',通过'mutations'更改'state',而不能直接更改'state' 
+      foo : function(context,data){
+        // 'context'一般用来执行'mutations'中的函数,data为 dispatch()传入的数据 
+        // context.commit('goo',data1) 
       },
-    }
+    },
+    mutations : { // 函数集合,不可异步执行,一般用于直接操作'state'中的数据 
+      goo : function(state,data){ // 默认传入 (state,data) 参数 
+        // state 即为储存数据的对象,data为 commit()传入的数据 
+      },
+    },
   })
   new Vue({
     el : '',
     data : {},
-    store : store, // 在全局实例化对象[组件的顶层容器]中使用  
+    store : store, // 在顶层组件中注册,子组件中使用 vm.$store 进行操作   
   });
-  在组件的方法中 
+  子组件中 
     this.$store  事件对象 
-      this.$store.state.xx 使用数据 
-    thi.$store.commit('foo',data) 执行'mutations'中的方法 
+    this.$store.state.xx   使用数据 
+    this.$store.getters.xx 使用数据 
     thi.$store.dispatch('goo',data) 执行'actions'中的方法 
+    thi.$store.commit('foo',data)   执行'mutations'中的方法 
+  采用模块的状态管理 : 每个模块维护不同的状态,然后合并到一个总数据中心中 
+    const moduleA = {
+      state : {},
+      getters : {},
+      actions : {},
+      mutations : {},
+    }
+    const moduleB = {
+      state : {},
+      getters : {},
+      actions : {},
+      mutations : {},
+    }
+    const store = new Vuex.store({
+      modules : {
+        a: moduleA,
+        b: moduleB,
+      }
+    })
+    // store.state.a  获取状态值 
+    // store.state.b  获取状态值 
 vue-validator 表单验证 
 vue-touch     移动端 
 suggestion: 

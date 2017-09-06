@@ -1201,6 +1201,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
             <input type='number' name='birthDate' value='1940'>
             <input type='submit' onclick='return sendForm(this.form);'>
           </form>
+    xhr.sendAsBinary(BinaryString)   // 发送二进制字符串 
   ◆事件 
     PS:所有XMLHttpRequest的监听事件,都必须在 send() 方法调用之前设定
     xhr.onreadystatechange  readyState值改变时触发该事件 

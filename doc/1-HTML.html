@@ -117,6 +117,7 @@
       如便于搜索引擎查找.放置于<head></head>之间
       元数据不会显示在页面上,但是对于机器是可读的。
     name=       可选,content值所属的的类型
+      PS: 'http-equiv'指明下面要设置的项目;'content'指明该项目设置的内容
       'viewport'    视口,设置不同设备下的显示属性「HTML5」
         PS:Viewport指的是网页的显示区域,
           也就是不借助滚动条的情况下,用户可以看到的部分网页大小,中文译为'视口';
@@ -127,24 +128,22 @@
           另一种方法则是,将viewport设成950px,也就是说,浏览器的显示宽度还是640px,
           但是网页的显示区域达到950px,整个网页缩小了,在浏览器中可以看清楚全貌.
           这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
-        ★content 对应的值 
-          "key1=val1,key2=val2,..."  一串由多个键值对组成的字符串 
-          ▼key的值可为
-          width   viewport宽度 
-            num    单位为像素
-            device-width 设备宽度
-          height  viewport高度 
-            num  单位为像素
-            device-height 设备高度
-          initial-scale 初始缩放比例 
-            num   缩放比例值,范围为 0.01-10
-          maximum-scale 最大缩放比例 
-            num  缩放比例值
-          minimum-scale 最小缩放比例 
-            num  缩放比例值
-          user-scalable 是否允许用户缩放 
-            yes
-            no
+        ★content对应值 : "key1=val1,key2=val2,..."一串由多个键值对组成的字符串 
+        width   viewport宽度 
+          num          单位为像素
+          device-width 设备宽度
+        height  viewport高度 
+          num  单位为像素
+          device-height 设备高度
+        initial-scale 初始缩放比例 
+          num   缩放比例值,范围为 0.01-10
+        maximum-scale 最大缩放比例 
+          num  缩放比例值
+        minimum-scale 最小缩放比例 
+          num  缩放比例值
+        user-scalable 是否允许用户缩放 
+          yes
+          no
         Example:
           viewport缩放规则 「在HTML网页的head部分指定」 
           <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
@@ -155,36 +154,62 @@
           
           <meta name="viewport" content="width=320, initial-scale=2.3, user-scalable=no">
           <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, user-scalable=yes">
-      'description' 对网页描述
-        ★content 对应的值
-        'str1,str2,..' 用于描述的字符,使用','分割多个描述词 
-          <meta name="description" content="描述1,描述2...">
+      'description' 页面的简短描述[限制150字符],有时该描述被用作搜索结果展示片段的一部分 
+        <meta name="description" content="描述1,描述2..."> // 使用','分割多个描述词 
+      'keywords'    页面关键词 
       'referrer'    控制http请求中的referrer 
-        ★content 对应的值 
-        'never'     不发送referrer[删除http head中的referer]  
+        ★content="" 
+        'never'     不发送referrer[删除http头中的referer]  
         'always'    始终发送referrer 
           不改变http header 中的 referer 的值
           即使当前页使用https协议,且加载资源使用http,加载资源的请求头中仍带referer
         'origin'    只发送origin部分
         'default'   若前页面使用https,而加载资源使用http,则不发送referrer
       'author'      设置作者 
-        <meta name="author" content="作者名">
+        <meta name="author" content="作者名"> 
+      'robots'      定义网页搜索引擎索引方式 
+        <meta name="robots" content="index,follow">   // 所有搜索引擎        
+        robotterms是一组使用','分割的值，
+        取值如下：none，noindex，nofollow，all，index和follow。
       'copyright'   版权声明 
         <meta name="copyright" content="声明内容"/>
       'generator'   代码生成软件说明 
-        表示该文件使用什么软件生成的.
+        表示该文件使用什么软件生成的 
         <meta name="generator" content="Notepad2"/>
-        注:http-equiv指明下面要设置的项目
-        content指明该项目设置的内容
-    content=    可选,定义与 http-equiv 或 name 属性相关的元信息
-    http-equiv= 可选,把 content 属性关联到 HTTP 头部.
-      'refresh' 定时跳转/刷新
-        Example:
-          <meta http-equiv="refresh" content="2";URL=网址>
-          content="2"表示2秒后刷新;URL可选,当无URL时则默认刷新当前页面,
-          每隔时间2s 进行刷新(有url时则是等待时间t后刷新到url地址为止,
-          且后续刷新该跳转后的页面)
-      'expires' 设置缓存时间
+      'application-name' Web应用名称,仅当网站被用作为一个应用时才使用 
+        <meta name="application-name" content="应用名称">    
+      在桌面开发时让IE浏览器以最新的模式渲染页面 
+      <meta http-equiv="x-ua-compatible" content="ie=edge"> 
+      <meta name="googlebot" content="index,follow">  // 控制搜索引擎的抓取和索引行为,仅对Google有效  
+      <meta name="google" content="nositelinkssearchbox"> // 告诉Google不显示网站链接的搜索框
+      <meta name="google" content="notranslate"> //告诉Google不提供此页面的翻译
+      <meta name="google-site-verification" content="verification_token"> // 验证Google搜索控制台的所有权
+      <meta name="yandex-verification" content="verification_token"> // 验证Yandex网站管理员的所有权
+      <meta name="msvalidate.01" content="verification_token"> // 验证Bing网站管理员中心的所有权
+      <meta name="alexaVerifyID" content="verification_token"> // 验证Alexa控制台的所有权 
+      <meta name="p:domain_verify" content="code from pinterest"> // 验证Pinterest控制台的所有权 
+      <meta name="norton-safeweb-site-verification" content="norton code"> // 验证Norton安全站点的所有权 
+      <meta name="subject" content="你的网站主题"> // 关于网站主题的简短描述
+      <meta name="rating" content="General"> // 基于网站内容给出一般的年龄分级 
+      <meta name="format-detection" content="telephone=no"> // 禁用自动检测和格式化可能的电话号码
+      <meta http-equiv="x-dns-prefetch-control" content="off"> // 通过设置为 “off” 完全退出 DNS 预取 
+      在客户端存储 cookie，web 浏览器的客户端识别 
+      <meta http-equiv="set-cookie" content="name=value; expires=date; path=url"> 
+      <meta http-equiv="Window-Target" content="_value"> // 指定要显示在一个特定框架中的页面 
+      地理标签
+      <meta name="ICBM" content="latitude, longitude">
+      <meta name="geo.position" content="latitude;longitude">
+      <meta name="geo.region" content="country[-state]">
+        国家代码 (ISO 3166-1): 强制性, 州代码 (ISO 3166-2): 可选; 如 content="US" / content="US-NY" 
+      <meta name="geo.placename" content="city/town">
+        如 content="New York City" 
+    http-equiv= 可选,把'content'属性关联到HTTP头 
+      'refresh' 定时跳转/刷新 
+        Example: 
+        <meta http-equiv="refresh" content="2" URL="网址">
+        content="2" 两秒后刷新 
+        URL         可选,当无URL时则默认刷新当前页面,
+      'expires' 设置缓存时间 
         <meta http-equiv="expires" content="0"/>
         此设置表示不缓存,方便代码调试
         expires 期限,0 为缓存的时间,过期的时间;
@@ -251,12 +276,15 @@
             Nginx: 详细参考: 例子
             add_header "X-UA-Compatible" "IE=Edge,chrome=1";
             add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
+      <meta http-equiv="Cache-Control" content="no-siteapp"/>  // 禁止搜索引擎转码 
       Example:
-        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+      <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     charset="UTF-8"  可选,设置字符集 [HTML5]
       Example:
-        <meta charset="UTF-8">
-        <meta http-equiv="content-type" content="text/html;charset=gb2312"/>
+      // 需放置在head的其他前面 
+      <meta charset="UTF-8"> 
+      <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> // HTML5之前的写法 
+    content=    可选,定义与'http-equiv'或'name'属性相关的元信息
     ◆rel=        可选,
       'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验「HTML5」 
         <link rel="prefetch" href="url">
@@ -267,8 +295,8 @@
   <title>  网页标题
   <base href="http://aoo/" target="_blank">   定义超链接的根目录[HTML5] 
     PS:在head中使用 
-    href    定义页面中a链接以此为跟路径
-    target  可选,定义页面中a链接的打开方式 
+    'href'    定义页面中a链接以此为跟路径
+    'target'  可选,定义页面中a链接的打开方式 
 引入类 
   <style>  嵌入样式 
     PS:style标签也可以添加class属性,网页中可同时添加多个style标签;
@@ -277,32 +305,54 @@
     rel  规定当前文档与被链接文档/资源之间的关系 
       只有当使用 href 属性时,才能使用 rel 属性.
       只有 rel 属性的 "stylesheet" 值得到了所有浏览器的支持.其他值只得到了部分地支持.
-      stylesheet 文档的外部样式表
-      icon       该页面图标 
+      'stylesheet' 文档的外部样式表
+      'icon'       该页面图标 
         IE的格式: <link rel="shortcut icon" href="XX.ico" />
         W3C的格式: <link rel="icon" href="XX.gif" type="image/gif" sizes='16*16'/>
           sizes  定义图标的尺寸 
-      bookmark   相关文档
-      search     链接到针对文档的搜索工具
-      author     链接到该文档的作者
-      prefetch   规定应该对目标文档进行缓存
-      alternate  文档的替代版本(例如打印页、翻译或镜像)
-      help       帮助文档
-      licence    链接到该文档的版权信息
-      next       集合中的下一个文档
-      pingback   指向 pingback 服务器的 URL
-      prev       集合中的前一个文档
-      sidebar    链接到应该显示在浏览器侧栏的文档
-      tag        描述当前文档的标签(关键词)
-      start        集合中的第一个文档.
-      contents     文档的目录
-      index        文档的索引
-      glossary     在文档中使用的词汇的术语表(解释)
-      copyright    包含版权信息的文档
-      chapter      文档的章
-      section      文档的节
-      subsection   文档的小节
-      appendix     文档的附录
+      'bookmark'   相关文档
+      'search'     链接到针对文档的搜索工具
+      'author'     链接到该文档的作者
+      'prefetch'   规定应该对目标文档进行缓存
+      'alternate'  文档的替代版本(例如打印页、翻译或镜像)
+      'help'       帮助文档
+      'licence'    链接到该文档的版权信息
+      'next'       集合中的下一个文档
+      'pingback'   指向 pingback 服务器的 URL
+      'prev'       集合中的前一个文档
+      'sidebar'    链接到应该显示在浏览器侧栏的文档
+      'tag'        描述当前文档的标签(关键词)
+      'start'        集合中的第一个文档.
+      'contents'     文档的目录
+      'index'        文档的索引
+      'glossary'     在文档中使用的词汇的术语表(解释)
+      'copyright'    包含版权信息的文档
+      'chapter'      文档的章
+      'section'      文档的节
+      'subsection'   文档的小节
+      'appendix'     文档的附录
+      'manifest'  
+        链接到一个指定Web应用程序“安装”证书的JSON文件 
+        <link rel="manifest" href="manifest.json">
+      'me'         提供了关于作者或其他人的信息 
+        <link rel="me" href="https://google.com/profiles/thenextweb" type="text/html">
+        <link rel="me" href="mailto:name@example.com">
+        <link rel="me" href="sms:+15035550125">        
+      'import'     加载一个外部的HTML文件到当前HTML文件中 
+        <link rel="import" href="/path/to/component.html">
+      'search'     打开搜索 
+        <link rel="search" href="/open-search.xml" type="application/opensearchdescription+xml" title="Search Title">
+      预取，预载，预浏览 
+      <link rel="dns-prefetch" href="//example.com/">
+      <link rel="preconnect" href="https://www.example.com/">
+      <link rel="prefetch" href="https://www.example.com/">
+      <link rel="prerender" href="https://example.com/">
+      <link rel="preload" href="image.png" as="image">
+      对于 IE11、Chrome、Firefox、Safari 和 Opera 网站图标 
+        IE 10 及以下版本,将'favicon.ico'放在根目录下即可 
+      <link rel="icon" type="image/png" sizes="16x16" href="/path/to/favicon-16x16.png"/>
+      <link rel="icon" type="image/png" sizes="32x32" href="/path/to/favicon-32x32.png"/>
+      <link rel="icon" type="image/png" sizes="96x96" href="/path/to/favicon-96x96.png"/>      
     media 说明这个样式表要应用于的媒体 
       all    用于所有表现媒体
       screen 屏幕媒体
@@ -312,6 +362,7 @@
       projection 用于投影媒体
       tv    电视
       ...
+      
   <script> JS引入 
     PS:用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
       存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;

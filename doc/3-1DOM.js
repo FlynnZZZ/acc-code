@@ -3163,92 +3163,91 @@ Blob 对象[HTML5]
   blob.type   Blob的MIME类型,若是未知类型,则返回一个空字符串 
 FileReader 对象  用于读取文件[把文件内容读入内存]
   PS:FileReader采用的是一种异步的文件读取机制
-  var fr = new FileReader(arg); 创建fr对象 
+  var fr = new FileReader([arg]); 创建fr对象 
     arg  File 对象或 Blob 对象
   ◆属性&方法 
-    ★读取文件数据到'result'中
-    fr.readAsBinaryString(Blob|File)     得到文件的二进制字符串 
-      PS:通常将其传送到服务器端,服务器端可以通过这段字符串存储文件
-        该字符串每个字节包含一个0到255之间的整数
-        可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
-        与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
-      Example:
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          var rawData = reader.result;
-        }
-        reader.readAsBinaryString(file);
-    fr.readAsDataURL(Blob|File);         得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
-      PS:将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
-    fr.readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
-      返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
-      在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
+  ★读取文件数据到'result'中
+  fr.readAsBinaryString(Blob|File) 得到文件的二进制字符串 
+    PS:通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
+      该字符串每个字节包含一个0到255之间的整数
+      可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
+      与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
+    Example:
       var reader = new FileReader();
       reader.onload = function(e) {
-        var arrayBuffer = reader.result;
+        var rawData = reader.result;
       }
-      reader.readAsArrayBuffer(file);
-    fr.readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
-      encoding   可选,指定编码类型,默认为'UTF-8' 
-    ★中断文件数据读取 
-    fr.abort()  中断文件读取  
-      var reader = new FileReader();
-      reader.abort();
-    ◆读取到的数据 
-    fr.result;  文件的URI数据,其他操作的结果都存放在该属性中 
-    当是图片数据时,可作为图片的src
+      reader.readAsBinaryString(file);
+  fr.readAsDataURL(Blob|File);     得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
+    PS:将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
+  fr.readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
+    返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
+    在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
+    var fr = new FileReader();
+    fr.onload = function(e) {
+      var arrayBuffer = fr.result;
+    }
+    fr.readAsArrayBuffer(file);
+  fr.readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
+    encoding   可选,指定编码类型,默认为'UTF-8' 
+  ★中断文件数据读取 
+  fr.abort()  中断文件读取  
+    var reader = new FileReader();
+    reader.abort();
+  ◆读取到的数据 
+  fr.result;  文件的URI数据,其他操作的结果都存放在该属性中 
+  当是图片数据时,可作为图片的src
   ◆事件
     PS:FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
-    loadstart 数据读取开始时触发
-    progress  数据读取中触发,每50ms左右触发一次 
-      Example: 用来显示读取进度
-        var reader = new FileReader();
-        reader.onprogress = updateProgress;
-        function updateProgress(evt) {
-          if (evt.lengthComputable) {
-            var percentLoaded = Math.round((evt.loaded / evt.totalEric Bidelman) * 100);
-            var progress = document.querySelector('.percent');
-            if (percentLoaded < 100) {
-              progress.style.width = percentLoaded + '%';
-              progress.textContent = percentLoaded + '%';
-            }
-          }
+  loadstart 数据读取开始时触发
+  progress  数据读取中触发,每50ms左右触发一次 
+    Example: 用来显示读取进度 
+    var reader = new FileReader();
+    reader.onprogress = function (e) {
+      if (e.lengthComputable) {
+        var percentLoaded = Math.round((e.loaded / e.totalEric Bidelman) * 100);
+        var progress = document.querySelector('.percent');
+        if (percentLoaded < 100) {
+          progress.style.width = percentLoaded + '%';
+          progress.textContent = percentLoaded + '%';
         }
-    abort     读取中断或调用 reader.abort()方法时触发 
-    error     数据读取出错时触发  
-      触发error事件时,相关的信息在 fr.error.code 中,表示错误码
-      1 未找到文件
-      2 安全性错误
-      3 表示读取中断
-      4 文件不可读
-      5 编码错误
-      Example:
-        var reader = new FileReader();
-        reader.onerror = errorHandler;
-        function errorHandler(evt) {
-          switch(evt.target.error.code) {
-            case evt.target.error.NOT_FOUND_ERR:
-            alert('File Not Found!');
-            break;
-            case evt.target.error.NOT_READABLE_ERR:
-            alert('File is not readable');
-            break;
-            case evt.target.error.ABORT_ERR:
-            break;
-            default:
-            alert('An error occurred reading this file.');
-          };
-        }
-    load      读取成功后触发 
-      load事件的回调函数接受一个事件对象,该对象的target.result就是文件的内容。
-      下面是一个使用 readAsDataURL 方法,为img元素添加src属性的例子。
+      }
+    }
+  abort     读取中断或调用 reader.abort()方法时触发 
+  error     数据读取出错时触发  
+    触发error事件时,相关的信息在 fr.error.code 中,表示错误码
+    1 未找到文件 
+    2 安全性错误
+    3 表示读取中断
+    4 文件不可读
+    5 编码错误
+    Example:
       var reader = new FileReader();
-      reader.onload = function(e) {
-        document.createElement('img').src = e.target.result;
-        // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
-      };
-      reader.readAsDataURL(f);
-    loadend   读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面 
+      reader.onerror = errorHandler;
+      function errorHandler(evt) {
+        switch(evt.target.error.code) {
+          case evt.target.error.NOT_FOUND_ERR:
+          alert('File Not Found!');
+          break;
+          case evt.target.error.NOT_READABLE_ERR:
+          alert('File is not readable');
+          break;
+          case evt.target.error.ABORT_ERR:
+          break;
+          default:
+          alert('An error occurred reading this file.');
+        };
+      }
+  load      读取成功后触发 
+    load事件的回调函数接受一个事件对象,该对象的 target.result 就是文件的内容。
+    下面是一个使用 readAsDataURL 方法,为img元素添加src属性的例子。
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.createElement('img').src = e.target.result;
+      // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
+    };
+    reader.readAsDataURL(f);
+  loadend   读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面 
   Example:
     var reader = new FileReader();
     reader.onload = function(e) {

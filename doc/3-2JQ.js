@@ -355,7 +355,7 @@ DOM操作
         删除该元素和其子元素及以下的所有内容(包括自身标签)
         所有与元素相关的数据也会被删除(event handlers、internally cached data)
         返回值为删除的元素
-      Jelem.detach()   删除元素「保留绑定事件、附加数据等」
+      Jelem.detach()   删除元素[保留绑定事件、附加数据等」
         detach 后的返回值(元素)再添加到其他地方,元素的event事件仍存在.
       Jelem.empty()    清空内容
         删除该元素的子元素及以下的所有内容(不包括自身标签)
@@ -392,7 +392,7 @@ DOM操作
           Jelem.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
           $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      Jelem.prop();  读写属性值,和attr类似 「1.6 新增」 
+      Jelem.prop();  读写属性值,和attr类似 [1.6 新增」 
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})
@@ -513,7 +513,7 @@ DOM操作
           $('#box').removeDate('name');
       ◆其他信息
       Jelem.size()         元素个数
-      num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标「从1开始」
+      num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标[从1开始」
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
         Example: 点击获取当前为第几个li 
           <ul>
@@ -530,7 +530,7 @@ DOM操作
     状态改变 
       Jelem.focus();   获得焦点
       Jelem.blur();    失焦
-      Jelem.click();   点击元素 「会触发事件」
+      Jelem.click();   点击元素 [会触发事件」
       Jelem.select();  选中文字 
         选中如input、textarea等元素类的文字,
         不可选中因增加contenteditable属性而可编辑的元素的文字;
@@ -716,8 +716,7 @@ DOM操作
     bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
 工具方法 
   ◆遍历相关 
-  $.each(obj, foo)  对象遍历
-    foo 参数依次传入obj的 key,val 
+  $.each(obj,f(key,val))  对象遍历
     当obj为数组时,key表示下标
     var obj = { 
       one : 1, 
@@ -755,7 +754,7 @@ DOM操作
   $.merge(arr1,arr2)   合并两个数组 
   $.unique(arr)     删除数组中的重复元素[不能用于普通数组]
   ◆字符串相关 
-  $.trim(str)  去除字符串中开始和结尾的空格「不能删除字符串中间的空格」
+  $.trim(str)  去除字符串中开始和结尾的空格[不能删除字符串中间的空格」
     Example:
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
@@ -1153,10 +1152,10 @@ Event,事件
   Exp:
 AJAX 
   PS:低于'1.5.0'版本,返回的是XHR对象,高于'1.5.0'版本,返回的是deferred对象
-  contentType 数据格式 
-    application/x-www-form-urlencoded 默认方式,表单提交
+  'Content-Type' 请求数据的格式 
+    'application/x-www-form-urlencoded' 默认方式,表单提交 
       数据的URL方式编码,由jQuery来做,
-      只需在$.ajax({})参数中设置 processData = true「也是默认,可省略」;
+      只需在$.ajax({})参数中设置 processData = true[也是默认,可省略」;
       Example:
         $.ajax({
           method: 'POST',
@@ -1167,7 +1166,7 @@ AJAX
           processData: true,        // 可省略
           success: function() {}
         });
-    multipart/form-data  适合用于上传文件
+    'multipart/form-data'  适合用于上传文件
       首先,对表单数据构建成FormData的HTML5对象,代码如下。
       /* dataToSend 是FormData对象,可直接作为数据传输到后端 */
       var dataToSend= new FormData();      // HTML5对象, IE11以下不支持
@@ -1188,7 +1187,7 @@ AJAX
         
         success: function() { ... }
       });
-    text/plain  传输字符串
+    'text/plain'  传输字符串
       $.ajax({
         method: 'POST',
         url: '...',
@@ -1199,7 +1198,7 @@ AJAX
         
         success: function() { ... }
       });
-    application/json  传输JSON字符串
+    'application/json'  传输JSON字符串
       要用函数JSON.stringify()处理表单数据
       /* data 为表单Object类型的数据 */
       dataToSend = JSON.stringify(data);
@@ -1214,7 +1213,7 @@ AJAX
         success: function() { ... }
       });
       若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
-      需要转换成Object类型「而Angular不需要」;
+      需要转换成Object类型[而Angular不需要」;
       $.ajax({
         ...
         success: function(data) {
@@ -1222,7 +1221,7 @@ AJAX
           ...
         }
       });
-    text/xml  传输XML
+    'text/xml'  传输XML
       首先,构建XML文档对象,存入表单数据,代码如下。
       /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
       var dataToSend = document.implementation.createDocument("", "formdata", null);
@@ -1301,130 +1300,98 @@ AJAX
         success  : function(backData,textStatus,obj){
         }, 
       });
-  $.ajax(options)          jQuery最底层的AJAX实现 
-    options   参数配置对象 
-      PS:在回调函数中,'this'表示该次AJAX请求的'options'对象参数 
-      {
-        请求方式,默认为"GET" 
-          PS: GET请求,键值对将改为'&key1=val1&key2=val2'的形式附在URL上
-          'POST'
-          'PUT'
-          'DELETE'
-          ...
-        'type' : "GET",      
-        发送的请求地址,默认为当前页地址 
-        'url' : './',      
-        请求数据 
-          obj   'key-val'的映射形式  
-          str   字符串形式
-            如 'username='+encodeURLComponent(val1)+'&content='+encodeURLComponent(val2)
-          arr   将指定为不同值对应同一个名称 
-            {aoo : ['a1','a2']} 转换为 '&aoo=a1&aoo=a2'
-        'data' : {
-          key : val,
-        }, 
-        预期服务器返回的数据类型 
-          PS:默认根据HTTP包MIME信息返回reponseText或reponseXML,作为回调函数参数传递 
-          'xml'    XML文档,可使用jQuery处理 
-          'html'   纯文本HTML信息,包含的script标签在插入DOM时执行 
-          'script' 纯文本JS代码,
-          'json'   JSON数据 
-          'jsonp'  JSONP格式
-            如'url?callback=xx',jq将自动替换'xx'为正确函数名,以执行回调 
-        'text'   纯文本字符串 
-        'dataType' : 'json', 
-        发送请求前的回调,传入参数
-          PS:若回调返回false,则取消本次AJAX请求 
-          xhr  XMLHttpRequest对象 
-        beforeSend : function(xhr){
-          console.log(xhr);
-        }  
-        请求完成后的回调[失败或成功都会执行]  
-        complete : function(xhr,textStatus){
-          console.log(xhr);
-        },   
-        请求成功后的回调  
-          backData  由服务器返回,并由'dataType'参数处理后的数据 
-            可能是 xmlDoc,jsonObj,html,text等
-        success : function(backData,textStatus,xhr){
-          console.log(backData);
-        },    
-        请求失败后的回调 
-          errorTrown  捕获的错误对象 
-        error : function(xhr,textStatus,errorTrown){
-          console.log(xhr);
-        },      
-        信息头,'key-val'对映射到请求一起发送 
-          信息头中的设置优先级高于'beforeSend'函数范围内的设置 
-        'headers' : {},      
-        请求超时设置,单位毫秒'ms',此设置将覆盖$.ajaxSetup()的全局设置 
-        'timeout' : 1000,  
-        是否触发全局AJAX事件,默认为true [ajaxStart和ajaxStop] 
-        'global' : true,  
-        设置xhr对象 
-        'xhrFields' : {
-          'withCredentials' : true,    请求是否带cookie
-        },  
-        是否跨域 
-        'crossDomain' : true, 
-        是否缓存,默认为true 
-          当dataType为'script' 和'jsonp'时,默认为false
-        'cache' : true,       
-        内容类型发送请求头,告诉服务器什么样的响应会接收返回
-          若accepts设置需修改,推荐在 $.ajaxSetup() 中设置
-        'accepts' : {},  
-        是否异步请求,默认为true 
-          跨域请求和 dataType:'jsonp'请求不支持同步操作 
-        'async' : true,    
-        以'{字符串:正则表达式}'匹配的对象 
-          用来确定jQuery如何解析响应,给定其内容类型
-        'contents' : {}, 
-        发送信息的内容编码类型,默认为'application/x-www-form-urlencoded' 
-        'contentType' : 'application/json',
-        用于设置AJAX相关回调函数的上下文
-          即让回调函数内的this执行这个对象,默认的this执行AJAX的options 
-        'context' : {},  
-        数据类型对数据类型转换器的对象,每个转换器的值是一函数,返回相应的转化值 
-        'converters' : {},   
-        对返回的原始数据进行预处理,最后需通过'return'返回  
-          backData   AJAX返回的原始数据 
-          type       AJAX提供的'dataType'参数 
-        dataFilter : function(backData,type){
-          return '111'
-        },   
-        仅在服务器数据改变时获取新数据,默认为false 
-          使用HTTP宝'Last-Modified'头信息判断,也会检查服务器指定的'etag'来确定数据是否被修改 
-        'ifModified' : false,   
-        允许当前环境为'本地',如文件系统  [貌似不可用?] 
-        'isLocal' : false,      
-        在jsonp请求中重写回调函数的名字 
-          用来代替在'callback=xx'GET或POST请求中的'callback'部分 
-        'jsonp' : 'foo',        
-        为JSONP请求指定回调函数,将用来取代jQuery自动生成的随机函数名 
-        'jsonpCallback' : function(){
-          console.log(1);
-        },  
-        用来覆盖xhr的MIME类型 
-        'mimeType' : str     
-        用于响应HTTP访问认证请求的用户名 
-        'username' : 'aaa',     
-        用于响应HTTP访问认证请求的密码 
-        'password' : '111',     
-        只有当'dataType'为'jsonp'或'script',且type是GET时才能修改字符集'charset' 
-        'scriptCharset' : 'utf-8'  ,
-        为响应的状态码指定响应函数 
-        'statusCode' : {
-          404 : function(){             为响应状态'404',指定回调 
-            console.log('page not found');
-          },
-        },    
-        是否使用传统的方式序列化数据 
-        'traditional' : bol   
-        回调创建XMLHttpRequest对象 
-        'xhr' : function(){
-          console.log(1);
-        },       
-      }
+  jQuery最底层的AJAX实现 
+    PS:在回调函数中,'this'表示该次AJAX请求的参数对象 
+  $.ajax({
+    'type': "GET",   // 请求方式,默认为"GET"      
+      // 'GET'   键值对将改为'&key1=val1&key2=val2'的形式附在URL上
+      // 'POST'
+      // 'PUT'
+      // 'DELETE'
+      // ...
+    'url': './',     // 发送的请求地址,默认为当前页地址  
+    'data': obj/str, // 请求数据 
+      // obj   'key-val'的映射形式  
+      // str   字符串形式
+      //   如 'username='+encodeURLComponent(val1)+'&content='+encodeURLComponent(val2)
+      // arr   将指定为不同值对应同一个名称 
+      //   {aoo : ['a1','a2']} 转换为 '&aoo=a1&aoo=a2'
+    'contentType' : 'application/json', // 请求信息的内容编码类型  
+      // 'application/x-www-form-urlencoded'  默认值 
+    'crossDomain' : true, // 是否允许跨域 
+    'xhrFields' : {  // 设置xhr对象 
+      'withCredentials' : true,    // 请求是否带cookie
+    },  
+    'dataType': 'json',// 预期服务器返回的数据类型 
+      // PS:默认根据HTTP包MIME信息返回reponseText或reponseXML,作为回调函数参数传递 
+      // 'xml'    XML文档,可使用jQuery处理 
+      // 'html'   纯文本HTML信息,包含的script标签在插入DOM时执行 
+      // 'script' 纯文本JS代码,
+      // 'json'   JSON数据 
+      // 'jsonp'  JSONP格式
+        // 如'url?callback=xx',jq将自动替换'xx'为正确函数名,以执行回调 
+      // 'text'   纯文本字符串 
+    'headers': {},   // 设置头信息,'key-val'对映射到请求一起发送 
+      // 信息头中的设置优先级高于'beforeSend'函数范围内的设置 
+    beforeSend: function(xhr){ // 请求发送前回调 
+      // xhr  XMLHttpRequest对象 
+      return ;
+      // 若回调返回false,则取消本次AJAX请求 
+    }  
+    complete: function(xhr,textStatus){ // 请求完成后的回调[失败或成功都会执行]  
+      console.log(xhr);
+    },   
+    success: function(backData,textStatus,xhr){ // 请求成功后的回调  
+      // backData  由服务器返回,并由'dataType'参数处理后的数据 
+      // 可能是 xmlDoc,jsonObj,html,text等
+    },    
+    error: function(xhr,textStatus,errorTrown){ // 请求失败后的回调 
+      // errorTrown  捕获的错误对象 
+    },      
+    dataFilter: function(backData,type){ // 对返回的原始数据进行预处理
+      // backData   AJAX返回的原始数据 
+      // type       AJAX提供的'dataType'参数 
+      return '111';
+      // 最终数据需通过'return'返回  
+    },   
+    xhr: function(){ // 回调创建XMLHttpRequest对象 
+      console.log(1);
+    },       
+    jsonpCallback: function(){ // 为JSONP请求指定回调函数
+      // 将用来取代jQuery自动生成的随机函数名 
+    },  
+    'jsonp': 'foo', // 在jsonp请求中重写回调函数的名字 
+      // 用来代替在'callback=xx'GET或POST请求中的'callback'部分 
+    'timeout': 1000, // 请求超时设置,单位'ms',优先级高于$.ajaxSetup()全局设置 
+    'global': true,  // 是否触发全局AJAX事件'ajaxStart'和'ajaxStop',默认为'true' 
+    'cache': true,  // 是否缓存,默认'true' 
+      // 当dataType为'script'和'jsonp'时,默认为false
+    'accepts': {},  // 内容类型发送请求头
+      // 告诉服务器什么样的响应会接收返回 
+      // 若accepts设置需修改,推荐在 $.ajaxSetup() 中设置
+    'async': true, // 是否异步请求,默认'true' 
+      // 跨域请求和 dataType:'jsonp'请求不支持同步操作 
+    'contents': {}, // 用来确定jQuery如何解析响应,给定其内容类型
+      // 以'{字符串:正则表达式}'匹配的对象 
+    'context': {},  // 用于设置AJAX相关回调函数的上下文
+      // 即让回调函数内的this执行这个对象,默认的this执行AJAX的参数对象 
+    'converters': {}, // 数据类型对数据类型转换器的对象
+      // 每个转换器的值是一函数,返回相应的转化值 
+    'ifModified': false, // 仅在服务器数据改变时获取新数据,默认'false' 
+      // 使用HTTP的'Last-Modified'头信息判断,也会检查服务器指定的'etag'来确定数据是否被修改 
+    'isLocal' : false, // 允许当前环境为'本地',如文件系统 [貌似不可用?] 
+    'mimeType' : str // 用来覆盖xhr的MIME类型 
+    'username' : 'aaa', // 用于响应HTTP访问认证请求的用户名 
+    'password' : '111', // 用于响应HTTP访问认证请求的密码 
+    'scriptCharset': 'utf-8', // 设置字符集 
+      // 只有当'dataType'为'jsonp'或'script',且type是GET时才能修改字符集'charset' 
+    'statusCode': { // 为不同的响应状态码指定响应函数 
+      404 : function(){   // 为响应状态'404'指定回调 
+        console.log('page not found');
+      },
+    },    
+    'traditional' : bol, // 是否使用传统的方式序列化数据 
+  })          
   JSONP跨域,原理上不属于AJAX只是采用了AJAX的写法而已 
     function cfoo123(){   // 和 success 任选一个,否则会执行两次 
       console.log(1111111);
@@ -1522,7 +1489,7 @@ AJAX
 Deferred,异步操作
   PS:'jQuery1.5'中引入; 和Promise对象一起作为jQuery对Promise的一种实现;
     '1.x-2.x'版本中,Deferred对象遵守的是CommonJS Promises提案中的约定,
-    不同于原生promises遵守Promises/A+提案「从CommonJS Promises 衍生而来」的约定,
+    不同于原生promises遵守Promises/A+提案[从CommonJS Promises 衍生而来」的约定,
     导致其无法兼容其他实现promises的库,
     '3.0'改进了同原生 promises的互操作性,但Deferred的then方法签名仍然会有些不同,
     但行为方面它已经同ECMAScript2015标准更加一致;
@@ -1699,7 +1666,7 @@ Deferred,异步操作
       console.log("出错啦！"); 
     });
   Example: 
-    在ajax中使用「self」 
+    在ajax中使用[self」 
     var defer = $.Deferred();
     $.ajax({
       type : 'get',
@@ -1787,6 +1754,7 @@ Deferred,异步操作
       console.log('等待了1秒钟！');
     });
 jQuery插件 
+  'jQuery-File-Upload': 文件上传插件 
   'Validation'表单验证插件 
     'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js'
     特点 
@@ -1824,7 +1792,7 @@ jQuery插件
         }
         $('#myForm').ajaxForm(options); 
     $(form).ajaxSubmit()
-  'Cookie'插件 方便地通过cookie对象保存、读取、删除用户的信息,
+  'Cookie'插件: 方便地通过cookie对象保存、读取、删除用户的信息,
     还能通过cookie插件保存用户的浏览记录
     $.cookie(key,value[,options]) 保存
       options 其他配置项 
@@ -1911,7 +1879,7 @@ jQuery插件
           delay : 2 ,   // 为防止与点击事件冲突,延时两秒
           opacity : 0.5 // 拖动时透明度为0.5
         })
-    Jelem.selectable(obj);   其子元素可选「Ctrl多选」 
+    Jelem.selectable(obj);   其子元素可选[Ctrl多选」 
     Jelem.resizable()   改变大小
     Jelem.accordion(options)   折叠菜单
       PS:实现页面中指定区域类似“手风琴”的折叠效果,

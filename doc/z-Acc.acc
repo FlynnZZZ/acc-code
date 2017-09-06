@@ -10,8 +10,8 @@ Atom
         .git, .hg, *.svn, .dS_Store, ._*, thumbs.db,
         *.docx, *.doc, *.pdf,*.jpg,*.project,*.lnk,*.ini,*.exe
       editor 
-        Non Word Characters 「非实体字符」
-          /\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-「」【】〖〗『』《》
+        Non Word Characters [非实体字符」
+          /\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-[」【】〖〗『』《》
     自定义样式设置
       文件-用户样式设置
         // 目录树
@@ -145,14 +145,14 @@ Atom
     自定义快捷键
       默认快捷键          取消/替换为    描述
       ◆取消快捷键
-      alt-1-9             unset!     切换到第几个标签页 「unset! 使快捷键不起作用」
+      alt-1-9             unset!     切换到第几个标签页 [unset! 使快捷键不起作用」
       ctrl-tab            unset!     文档切换        
       ctrl-e              unset!     搜索选中词和ctrl-f功能类似
       ctrl-n              unset!     新建文件
       ctrl-m              unset!     括号间跳转
-      ctrl-u              unset!     取消选中 「等价与ctrl-e」 「find-and-replace」
-      ctrl-j              unset!     合并行 「等价alt-z」
-      ctrl-l              unset!     选中行 「等价alt-c」
+      ctrl-u              unset!     取消选中 [等价与ctrl-e」 [find-and-replace」
+      ctrl-j              unset!     合并行 [等价alt-z」
+      ctrl-l              unset!     选中行 [等价alt-c」
       ◆自定义更改
       backspace           f1            删除
       enter               ctrl-`        换行
@@ -165,7 +165,7 @@ Atom
       ctrl-alt-[          alt-3         折叠当前
       ctrl-alt-]          alt-4         展开当前
       ctrl-]              alt-a         取消行缩进
-      ctrl-[              alt-s         行缩进          「 ctrl-[ ,不能缩进空行」
+      ctrl-[              alt-s         行缩进          [ ctrl-[ ,不能缩进空行」
       ctrl-shift-k        alt-d         删除行
       ctrl-shift-enter    alt-enter     在上一行插入 
       ctrl-j              alt-z         合并下一行到当前行
@@ -173,21 +173,21 @@ Atom
       ctrl-l              alt-c         选取当前行,继续执行选取下一行
       ctrl-u              ctrl-e        取消选取和当前单词相同的下一处
       ctrl+shift+d        alt-v         复制当前行
-      ctrl+alt+o          alt+m         添加项目文件夹 「原快捷键和其他有冲突,故更改」
+      ctrl+alt+o          alt+m         添加项目文件夹 [原快捷键和其他有冲突,故更改」
       ctrl+o              alt+o         打开文件
       ctrl+shift+n        alt-n         打开新窗口
       ctrl-k+ ctrl-u      alt-u         使当前字符大写
       ctrl-k+ ctrl-l      alt-i         使当前字符小写
       ctrl-shift-t        alt-l         打开最近关闭的文件
       ◆插件快捷键
-      ctrl-shift-\        alt-\    在文件目录中定位    「tree view」
-      ctrl+alt+o          alt-b    在浏览器中打开文件  「Open in browsers」
-      ctrl-alt-m          alt-q    选中括号内的内容    「bracket matcher 」
-      ctrl-m              alt-f    标签跳转           「bracket matcher 」
-      ctrl-alt-backspace  alt-t    删除匹配的括号      「bracket matcher 」
-      ctrl-sapce          alt-e    激活提示           「autocomplete-plus」
-      unkow               alt-p    补全选中的CSS       「autoprefixer」 
-        「perfection」
+      ctrl-shift-\        alt-\    在文件目录中定位    [tree view」
+      ctrl+alt+o          alt-b    在浏览器中打开文件  [Open in browsers」
+      ctrl-alt-m          alt-q    选中括号内的内容    [bracket matcher 」
+      ctrl-m              alt-f    标签跳转           [bracket matcher 」
+      ctrl-alt-backspace  alt-t    删除匹配的括号      [bracket matcher 」
+      ctrl-sapce          alt-e    激活提示           [autocomplete-plus」
+      unkow               alt-p    补全选中的CSS       [autoprefixer」 
+        [perfection」
     未占用键汇总
       ◆左
       alt-f1 f2
@@ -225,9 +225,9 @@ Atom
       bookmarks              书签功能支持
       bracket-matcher        括号匹配功能
         设置
-          autocomplete characters 「激活括号特性匹配的字符对」
-            (), [], {}, "", '', ``, “”, ‘’, «», ‹›,<>,《》,（）,「」,『』,【】,〖〗,><
-          pairs with extra newline「在其中间换行时,自动多添加一行」
+          autocomplete characters [激活括号特性匹配的字符对」
+            (), [], {}, "", '', ``, “”, ‘’, «», ‹›,<>,《》,（）,[」,『』,【】,〖〗,><
+          pairs with extra newline[在其中间换行时,自动多添加一行」
             (), [], {}
       command-palette        命令面板 
         快捷键  ctrl-shift-p
@@ -421,7 +421,7 @@ Atom
 Notepad2 
   PS:一个用来取代Notepad的免费程序,绿色软件,安装完毕后只有一个主程序;
     具有显示行号、内建各种程序语法的高亮度显示、改变背景颜色、支持Unicode与UTF-8的功能,
-    具有「行列功能」,可以进行区块模式选取的编辑。
+    具有[行列功能」,可以进行区块模式选取的编辑。
   编辑器设置
     PS: 在更改设置后需要进行 设置-立即保存设置,
       软件会在其存放的位置生成一配置文件,后续设置才会生效。
@@ -1054,10 +1054,10 @@ Sublime text3
   obj       对象
   key       对象的键,或属性等
   val       对象的值/值
-  foo       「无属性」函数
-  cfo       「回调型」函数 cfoo 
-  arg       「无属性」参数
-  pram      「配置项」参数 param 
+  foo       [无属性」函数
+  cfo       [回调型」函数 cfoo 
+  arg       [无属性」参数
+  pram      [配置项」参数 param 
   typ       类型 type
   rtn       返回值 ret retn 
   Jelm      jQuery对象 Jelem
@@ -1090,7 +1090,7 @@ Sublime text3
   Self:    自己相关
   Extend:  扩展
   ◆符号
-  「一般其中的内容为补充说明,注释,解释,注意项等」   
+  [一般其中的内容为补充说明,注释,解释,注意项等」   
   ◆、★、■    标题和内容处于同一层级状态时,给标题添加起到醒目的作用
 自定义规范 
   PS:zzz 作为自己的标识,使用前缀z ,如 zAoo
@@ -1099,7 +1099,7 @@ Sublime text3
   html及CSS 中id和class命名规范 
     PS: 使用 大小写字母、数字 和 下划线_;驼峰法用于间隔;
       以数字或_开头可能存在兼容性问题
-    层级间   字母+数字 使用数字来定位层级「当数字取到两位时,如10,改用两位字母+数字」 
+    层级间   字母+数字 使用数字来定位层级[当数字取到两位时,如10,改用两位字母+数字」 
       一般将id的第一个首字母后带数字用于表示到该id元素的层级
       aoo 
         aBoo aCoo aDoo ...
@@ -1120,12 +1120,12 @@ Sublime text3
         a1aoo | a1aoo_1 | a1aoo_2
         |--a2aoo a2aoo_1 
         |--a2aoo_a a2aoo_a_1 
-        |--a2aoo_a1「a2aoo_a仍重名故改用a2aoo_a1」 a2aoo_a1_1
+        |--a2aoo_a1[a2aoo_a仍重名故改用a2aoo_a1」 a2aoo_a1_1
     下标从0零开始,且0默认省略
     常用短语 
       top rit btm lft mid cnt up dwn frt bck
       ttl ctt bdy wrp item i special s  
-    复杂级别「所有使用同一个名字」
+    复杂级别[所有使用同一个名字」
       aoo  通过数字来定位和_num来区分
       a_0 | a_1 | a_2
       a0_0 a0_1 a0_2 | a1_0 a1_1 a1_2 a1_3 | a2_0 a2_1 a2_2

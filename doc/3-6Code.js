@@ -1469,7 +1469,7 @@ PC端
     item顶部到container的顶部的距离top,item之间的间距m
     self: 判断显示面积最大,则判断item的中线和container中线的偏差值x,
       若多个偏差值相同,则取第一个.
-      则 |x| = |(H-h)/2 - t|    「绝对值」
+      则 |x| = |(H-h)/2 - t|    [绝对值」
 技巧方式总结 
   在本地开起service服务时,可创建一个 *.json 文件,可用于AJAX获取模拟
     Example: 在页面中插入一张图

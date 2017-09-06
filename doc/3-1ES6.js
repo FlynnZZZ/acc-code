@@ -172,7 +172,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
         [age]:12       
       };
       Object.getOwnPropertySymbols(person); // (2) [Symbol(name), Symbol(age)]
-    Reflect.ownKeys(obj)   获取对象所有类型的属性「包括symbol类型」
+    Reflect.ownKeys(obj)   获取对象所有类型的属性[包括symbol类型」
       let person = {
         [Symbol('name')]:"张三",
         "age": 21
@@ -355,7 +355,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
 Set   集合 
   PS:ES6新增的一种新的数据结构,可以理解为值的集合;
-    Set中的元素无重复项「会自动去掉重复的元素」;
+    Set中的元素无重复项[会自动去掉重复的元素」;
     Set集合中,key和val为同一个值;
   new Set([arr])  创建set
     var s1 = new Set();  // 创建一个集合
@@ -413,7 +413,7 @@ Set   集合
     let newArr = Array.from(s); // [1,2,3,4],完成去重
   WeakSet结构
     PS:WeakSet结构同样不会存储重复的值;
-      且其成员必须是对象类型的值「严格来说是:具有 iterable 接口的对象」
+      且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象」
       实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数。比如:数组。
     new WeakSet(arr);
       arr 数组,且其成员必须是对象类型的值,否则就会报错
@@ -433,8 +433,8 @@ Map   字典
   ES5中的key键名的类型要求一定是字符串,ES6已经允许属性名的类型是Symbol
   跟Object对象很像,但其的key键名的类型不再局限于字符串类型了,可为各种类型的值;
   new Map([arr]) 定义Map
-    arr 可选参数,数组
-    var mp1 =new Map()
+    arr  可选,数组
+    var mp1 = new Map()
     let mp2 = new Map([
       ["name","aoo"],
       ["gender",1]
@@ -523,7 +523,7 @@ Map   字典
     和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比:数组,对象,函数等
     let wm = new WeakMap();
     wm.set(key,val)
-      key 必须为引用类型数据,普通值类型则不允许「如字符串,数字,null,undefined,布尔类型」
+      key 必须为引用类型数据,普通值类型则不允许[如字符串,数字,null,undefined,布尔类型」
       let wm = new WeakMap();
       wm.set([1],2);            //数组类型的键名
       wm.set({'name':'van'},2); //对象类型的键名
@@ -542,32 +542,38 @@ Map   字典
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
       若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失。
 Blob  二进制数据的基本对象 
-  PS:一个 Blob对象表示一个不可变的,原始数据的类似文件对象。
+  PS:一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
     Blob表示的数据不一定是一个JavaScript原生格式。 
     File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件。
     要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档。
     接受Blob对象的APIs也被列在 File 文档中。
-  创建blob对象
-    Blob(blobParts[, options])  返回创建的 Blob 对象
-      PS:其内容由参数中给定的数组串联组成。
+  创建blob对象 
+    var bb = new Blob(blobParts[, options])  返回创建的Blob对象 
+      PS:其内容由参数中给定的数组串联组成 
       blobParts 一个包含实际数据的数组
-      options   数据的类型
+      options   数据的类型 
       使用其它对象创建一个 Blob 对象
         Example:用字符串构建一个 blob:
         var debug = {hello: "world"};
-        var blob = new Blob([JSON.stringify(debug, null, 2)],
-          {type : 'application/json'});
-      Example: 利用Blob对象,生成可下载文件
-        var blob = new Blob(["Hello World"]);
+        var blob = new Blob([JSON.stringify(debug, null, 2)],{type : 'application/json'});
+      Example: 利用Blob对象,生成可下载文件 
+        var blob = new Blob(["文件内容"]);
         var a = document.createElement("a");
         a.href = window.URL.createObjectURL(blob);
-        a.download = "hello-world.txt";
-        a.textContent = "Download Hello World!";
+        a.download = "文件名.txt";
+        a.textContent = "点击下载";
         document.body.appendChild(a);
-        最终 HTML中显示为:
-        <a href="blob:http://localhuarun.qilaiwan.com/377b41e4-d95f-4bf0-8e5e-c493d24fc2f4" download="hello-world.txt">Download Hello World!</a>
-        点击后提示下载文本文件 hello-world.txt , 文件内容为“Hello World”。
+        最终HTML中显示为: 
+        <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
+        点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
     blob.slice() 使用blob对象创建blob对象
+    通过<input type="file">获取Blob对象 
+      <input type="file" id="file" multiple size="80" accept="image/*"/>
+      <input type="button" onclick="ShowFileType();" value="显示文件信息"/>
+      function ShowFileType() {
+        var file = document.getElementById("file").files[0];
+        console.log(file);
+      }
   BlobBuilder 接口提供了另外一种创建Blob对象的方式 [已废弃]
     var builder = new BlobBuilder();
     var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
@@ -621,37 +627,48 @@ Blob  二进制数据的基本对象
   blob.isClosed 只读 布尔值,指示 Blob.close() 是否在该对象上调用过
     关闭的 blob 对象不可读。
   blob.size 只读, Blob对象中所包含数据的大小,单位为字节
-  blob.type 只读,字符串,表明该Blob对象所包含数据的MIME类型
-    若类型未知,则该值为空字符串。
-    在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据。
-  blob.close() 关闭 Blob 对象,以便能释放底层资源。 
-ArrayBuffer&TypedArray&DataView 二进制数组 
-  PS:ArrayBuffer对象、TypedArray视图和DataView视图是JS操作二进制数据的一个接口。
-    这些对象早就存在,属于独立的规格[2011 年2月发布],ES6 将它们纳入了 ECMAScript 规格,并且增加了新的方法。
-    它们都是以数组的语法处理二进制数据,所以统称为二进制数组。
-    这个接口的原始设计目的,与 WebGL 项目有关。
-    所谓WebGL,就是指浏览器与显卡之间的通信接口,为了满足 JavaScript 与显卡之间大量的、实时的数据交换,
-    它们之间的数据通信必须是二进制的,而不能是传统的文本格式。
-    文本格式传递一个32位整数,两端的 JavaScript 脚本与显卡都要进行格式转化,将非常耗时。
-    这时要是存在一种机制,可以像 C 语言那样,直接操作字节,
-    将4个字节的32位整数,以二进制形式原封不动地送入显卡,脚本的性能就会大幅提升。
-    二进制数组就是在这种背景下诞生的。它很像C语言的数组,允许开发者以数组下标的形式,直接操作内存,
-    大大增强了JavaScript处理二进制数据的能力,使得开发者有可能通过JavaScript与操作系统的原生接口进行二进制通信。
-  二进制数组由三类对象组成 
-    ArrayBuffer对象:代表内存之中的一段二进制数据,可以通过“视图”进行操作。
-      “视图”部署了数组接口,这意味着,可以用数组的方法操作内存。
-    TypedArray视图:共包括9种类型的视图,
-      比如 Uint8Array（无符号8位整数）数组视图, 
-      Int16Array（16 位整数）数组视图, 
-      Float32Array（32 位浮点数）数组视图等等。
-    DataView视图:可以自定义复合格式的视图,
-      比如第一个字节是 Uint8（无符号8位整数）、
-      第二、三个字节是 Int16（16 位整数）、
-      第四个字节开始是 Float32（32 位浮点数）等等,此外还可以自定义字节序。
-    简单说,ArrayBuffer对象代表原始的二进制数据,
-    TypedArray视图用来读写简单类型的二进制数据,
-    DataView视图用来读写复杂类型的二进制数据。
-    TypedArray 视图支持的数据类型一共有9种（DataView视图支持除Uint8C以外的其他8种）。
+  blob.type 只读,字符串,Blob对象所包含数据的MIME类型 
+    若类型未知,则该值为空字符串 
+    在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
+  blob.close() 关闭 Blob 对象,以便能释放底层资源 
+ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口  
+  PS:ArrayBuffer对象、TypedArray视图和DataView视图,这些对象早就存在,属于独立的规格, 
+    ES6将其纳入ECMAScript规格,并且增加了新的方法,
+    都是以数组的语法处理二进制数据,故统称为二进制数组,
+  由来 
+    这个接口的原始设计目的,与WebGL项目有关。
+    所谓WebGL,就是指浏览器与显卡之间的通信接口,为了满足JS与显卡之间大量的、实时的数据交换,
+    它们之间的数据通信必须是二进制的,而不能是传统的文本格式,
+    文本格式传递一个32位整数,两端的JS脚本与显卡都要进行格式转化,将非常耗时。
+    这时要是存在一种机制,可以像C语言那样,直接操作字节,
+    将4个字节的32位整数,以二进制形式原封不动地送入显卡,脚本的性能就会大幅提升,
+    二进制数组就是在这种背景下诞生的,
+    很像C语言的数组,允许开发者以数组下标的形式,直接操作内存,
+    使得开发者能通过JS与操作系统的原生接口进行二进制通信 
+  ◆二进制数组由三类对象组成 
+    它们支持的数据类型一共有'9'种(DataView对象支持除Uint8C以外的其他8种)。
+  ArrayBuffer 对象,代表原始的二进制数据,内存中的一段二进制数据 
+  TypedArray 视图,用来读写简单类型的二进制数据,代表确定类型的二进制数据 
+    通过9个构造函数,可以生成9种数据格式的视图
+    Uint8Array   [无符号8位整数]数组视图
+    Int16Array   [16位整数]数组视图 
+    Float32Array [32位浮点数]数组视图
+    ...
+  DataView 视图,用来读写复杂类型的二进制数据,代表不确定类型的二进制数据  
+    比如第一个字节是Uint8[无符号8位整数]、
+    第二个字节是Int16[16位整数]、
+    第三个字节是Float32[32位浮点数]等等 
+  ◆TypedArray  用来生成内存的视图 
+  数据类型 字节长度  对应的C语言类型    含义 
+    Int8      1     signed char      8 位带符号整数               
+    Uint8     1     unsigned char    8 位不带符号整数               
+    Uint8C    1     unsigned char    8 位不带符号整数(自动过滤溢出)
+    Int16     2     short            16 位带符号整数               
+    Uint16    2     unsigned short   16 位不带符号整数               
+    Int32     4     int              32 位带符号整数               
+    Uint32    4     unsigned int     32 位不带符号的整数             
+    Float32   4     float            32 位浮点数                    
+    Float64   8     double           64 位浮点数                    
 'Class'类 
   PS: 'class'本质上还是基于原型prototype的实现做的进一步封装,
     ES5之前使用'function'和'prototype'来模拟class实现面向对象;  
@@ -796,8 +813,8 @@ ArrayBuffer&TypedArray&DataView 二进制数组
         Bar.barSay() // foo say   bar say 
     ES5继承和ES6继承的区别 
       在ES5中,继承实质上是子类先创建属于自己的this,
-      然后再将父类的方法添加到this 「也就是使用 Parent.apply(this) 的方式」,
-      或者 this.__proto__ 「即Child.prototype = new Parent()」上;
+      然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式」,
+      或者 this.__proto__ [即Child.prototype = new Parent()」上;
       而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
   klass = new Klass(arg) 创建类实例 
     PS: 创建实例时会自动执行类体中的'constructor'方法 
@@ -826,7 +843,7 @@ Promise 同步书写异步模式
     rejected :  意味着操作失败 
     只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态 
     一旦状态改变,就不会再变,任何时候都可以得到这个结果 
-    与事件「Event」不同,事件的特点是,若错过了,再去监听则得不到结果  
+    与事件[Event」不同,事件的特点是,若错过了,再去监听则得不到结果  
   Promise的缺点
     首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
     其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
@@ -834,8 +851,8 @@ Promise 同步书写异步模式
   var prms = new Promise(foo) 创建Promise对象 
     PS:Promise在创建时,参数函数就会执行 
     foo   用于放置执行异步操作的函数,传入参数 (resolve,reject) 
-      函数内,若'resolve'被调用,代表该Promise被成功解析「resolve」;
-      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝「reject」了
+      函数内,若'resolve'被调用,代表该Promise被成功解析[resolve」;
+      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝[reject」了
       foo主要用于初始化异步代码,一旦异步代码调用完成,
       要么调用resolve方法来表示Promise被成功解析,
       或是调用reject方法,表示初始化的异步代码调用失败,整个promise被拒绝。
@@ -915,7 +932,7 @@ Promise 同步书写异步模式
   Question:
     使用 Promise 监控 点击事件 , 使用Promise 改变事件的执行方式 [?] 
   Example:
-    通过Promise来调用AJAX 「self」
+    通过Promise来调用AJAX [self」
     var prms = new Promise(function(rs, rj){
       $.ajax({
         type : 'get',
@@ -1227,7 +1244,7 @@ Reflect  为操作对象提供的API
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
 'lexical_scopes'词法作用域,即'块作用域'
-  PS:会在函数内部、代码块「即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
+  PS:会在函数内部、代码块[即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
     块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
   if (true) { 
     var aoo = 1; 
@@ -1236,7 +1253,7 @@ Reflect  为操作对象提供的API
   console.log(aoo); // 1
   console.log(boo); // 报错,boo is not defined
 'Global_Block_Bindings'全局块级绑定
-  全局作用域使用'var'声明全局变量,相当于给全局对象「浏览器环境下是 window」添加属性 
+  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window」添加属性 
     这意味着全局对象的属性可能会意外地被重写覆盖
     var RegExp = "Hello!";
     console.log(window.RegExp);     // "Hello!"
@@ -1300,7 +1317,7 @@ const 定义块级常量
   不可传值改变,只能传址改变; 
     不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
     传值赋值和传址赋值
-    传址:赋值过程中,变量实存储的是数据的地址「对数据的引用」,而非原始数据或者数据的拷贝
+    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用」,而非原始数据或者数据的拷贝
     const arr =[1,2,3];
     arr = [1];    // 报错
     arr.push(4); // 允许
@@ -1314,7 +1331,7 @@ const 定义块级常量
     修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
 ◆操作符&语句扩展   
-'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值
+'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值 
   PS:
   Example:
     var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
@@ -1937,7 +1954,7 @@ for(var val of iterator){}  遍历
     把它们视为两个模块,moduleA模块和moduleB模块来对待和处理;
     模块Module:一个模块,就是一个对其他模块暴露自己的属性或者方法的文件。
     概念:
-    导出Export:模块可选择性地给其他模块暴露「提供」自己的属性和方法,供其他模块使用。
+    导出Export:模块可选择性地给其他模块暴露[提供」自己的属性和方法,供其他模块使用。
     导入Import:模块可根据需要,引入其他模块的提供的属性或者方法,供自己模块使用。
     
     export 关键字,对外暴露属性方法
@@ -1996,7 +2013,7 @@ for(var val of iterator){}  遍历
         //---module-A.js文件------
         import {name} from "./module-B.js";
         name = "修改字符串变量"; //报错:name is read-only
-      若模块B导出的是对象类型的值,可「部分」修改。
+      若模块B导出的是对象类型的值,可[部分」修改。
         //---module-B.js文件---
         var person = {"name":"前端君"}
         export { person }
@@ -2025,8 +2042,8 @@ Number 数值
     Number.isFinite(1);        // true,数值1是有穷,即非无穷
     Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
     Number.isFinite('abc');    // false
-  Number.parseInt()   解析字符串,返回整数     「等价于 window.parseInt()」 
-  Number.parseFloat() 解析字符串,并返回浮点数 「等价于 window.parseFloat()」 
+  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()」 
+  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()」 
   ◆新特性:
   Number.isInteger()  判断是否是整数
     PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
@@ -2068,7 +2085,7 @@ String 字符串扩展
       var boo = `${aoo} hello!`; 
       var coo = `${1+2} hello`;
       console.log(boo,coo); // fan hello   3 hello
-  var rstStr = str.repeat(num) 将字符串重复N次并返回「不影响目标字符串」
+  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串」
     var aoo = "1";  //目标字符串
     console.log(aoo); // 1
     var boo = aoo.repeat(3); //变量aoo被重复三次；
@@ -2247,7 +2264,7 @@ Object 对象扩展
     Object.is(str,num);  // false
     Object.is(num2,num); // true
   Object.assign() 将源对象的属性赋值到目标对象上 
-    PS:参数可以是多个「至少是两个」
+    PS:参数可以是多个[至少是两个」
     let origin = {"b":2,"c":3}; //这个充当源对象
     let target = {"a":1};       //这个充当目标对象
     Object.assign(target,origin);
@@ -2336,7 +2353,7 @@ Function 函数扩展
         let age = 25;//错误,再次声明age
       }
       person();
-    默认参数:在定义函数时,可先将将参数赋值 「ES6+」
+    默认参数:在定义函数时,可先将将参数赋值 [ES6+」
       function foo(b,c=3){ 
         console.log(b,c); 
       }
@@ -2384,7 +2401,7 @@ Function 函数扩展
       };
       obj.show(); // undefined
       当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
-      「setTimeout是window对象的方法」,已经不再是obj对象了,
+      [setTimeout是window对象的方法」,已经不再是obj对象了,
       所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
       
       var obj = {

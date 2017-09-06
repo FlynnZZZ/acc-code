@@ -1,10 +1,8 @@
-'Browser-Object-Model'BOM,浏览器对象模型 : 提供与浏览器交互的方法和接口 
+'Browser-Object-Model'BOM,浏览器对象模型: 浏览器提供的接口 
   PS:访问和操作浏览器窗口[显示的页面以外的部分],
-    BOM由一系列相关的对象构成,并且每个对象都提供了很多方法与属性,用来访问浏览器功能
-    BOM只是ECMAScript的一个扩展,没有任何相关标准
-    各个浏览器提供商又按照自己想法去扩展他,那么浏览器共有对象就成了事实的标准
-    W3C已将DOM的主要内容纳入了HTML5规范中
-  BOM部分包括:
+    BOM由一系列相关的对象构成,且每个对象都提供了许多方法与属性,用来访问浏览器功能
+    BOM只是ECMAScript的一个扩展,没有任何相关标准 
+  BOM部分包括: 
     一般BOM只处理浏览器窗口和框架,但习惯上把所有针对浏览器的JS扩展算作BOM的一部分,
     JS的扩展如下:
     弹出新浏览器窗口的功能
@@ -14,44 +12,27 @@
     提供用户显示器分辨率详细信息的'screen'对象
     对'cookies'的支持
     'XMLHttpRequest'和IE的'ActiveXObject'这样的自定义对象
-window 对象 
-  PS:BOM 是为了操作浏览器出现的 API,window 是其的一个对象 
-    核心对象是window,表示浏览器的一个实例.
-    window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象
-    在网页中定义的任何对象 变量和函数,都以window作为其Global对象
-    若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中.
+window 表示浏览器的一个实例 
+  PS: window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象 
+    在网页中定义的任何对象、变量和函数,都以window作为其Global对象 
     ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
-    window为JS「而非ECMAScript」最顶层的对象, 
-  加上'window.'和不加'window.'的区别:
-    使用所有浏览器都支持的属性或方法,可不用加,
-    不加时,当某个浏览器识别不了该属性/方法时,就会当作变量使用,
-    加window则是强制性的操作,不会产生误会.
-  全局作用域中声明的所有变量和函数,都为window对象的属性和方法; 
+    window为JS[而非ECMAScript]最顶层的对象 
+  全局作用域中声明的所有变量和函数,都为window对象的属性和方法  
     var a =1;
     window.a; //1 ,a就是window.a
   框架  
-    PS:若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中
+    PS:若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中 
       (更多内容参见 JavaScript高级程序设计 196 页)
-    window.name    表示窗口/框架的名称
-    window.frames  框架集 
-      PS:可通过数值索引[从0开始,从左至右,从上至下]或框架的name属性值来获取到对应的框架window对象  
-      Example:
-        <frameset >
-          <frame src="frame.html" name="topFrame">
-          <frameset >
-            <frame >
-            <frame >
-          </frameset>
-        </frameset>
-        通过 window.frames[0] 或者 window.frames["topFrame"] 来引用
+    window.name    表示窗口/框架的名称 
+    window.frames  框架集[详见 window.frames] 
     window.length  窗口中的框架数量
     window.parent  指向包含另一个窗口的窗口(有框架使用)
     window.top     包含特定窗口的最顶层窗口(由框架使用)
       window.top == window.frames.top;  // true 
   窗口 
-    self           指示当前窗口
-    window          指示当前窗口,与self等效
-    var win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
+    window.self           指示当前窗口
+    window.window          指示当前窗口,与self等效
+    win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
       PS:查找一个已经存在的窗口或者新建的浏览器窗口
         若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
         否则打开新窗口并命名
@@ -112,60 +93,60 @@ window 对象
       Exp:
         微信中兼容性问题
           android: 不管窗口目标是是什么,始终在当前页面打开,
-          ios    : 只有目标窗口为'_self'时才有效「不填写也不行」,其他则该方法不生效;
-    var bol = close();   关闭窗口,返回表示是否成功操作的布尔值
-    opener          打开当前窗口的窗口
-    closed          当窗口关闭时返回true
-    defaultStatus   底部状态栏默认显示(可读写)
+          ios    : 只有目标窗口为'_self'时才有效[不填写也不行],其他则该方法不生效;
+    bol = close();   关闭窗口,返回表示是否成功操作的布尔值
+    window.opener          打开当前窗口的窗口
+    window.closed          当窗口关闭时返回true
+    window.defaultStatus   底部状态栏默认显示(可读写)
       读写 浏览器底部状态栏默认显示值
       defaultStatus="状态栏默认显示文本";
-    status          底部状态栏条件显示的值
+    window.status          底部状态栏条件显示的值
       浏览器在某种条件下显示的值,当条件不成立时则不显示.
       描述由用户交互导致的状态栏的临时消息
       status="状态栏文本";
-    blur()        将焦点从窗口移除
-    focus()       将焦点移至窗口
+    window.blur()        将焦点从窗口移除
+    window.focus()       将焦点移至窗口
   位置与尺寸  
+    返回值类型为num,单位px 
     ◆浏览器位置
-      返回值类型为数值,单位都为px
-    screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
+    num = window.screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
       screenLeft/Top  火狐不支持
         ie 浏览器的内边缘距离屏幕边缘的距离
         chrome 浏览器的外边缘距离屏幕边缘的距离
-    screenTop  浏览器窗口相对于电脑屏幕上边的距离,可为负
-    screenX    浏览器窗口相对于电脑屏幕左边的距离,可为负
+    num = window.screenTop  浏览器窗口相对于电脑屏幕上边的距离,可为负
+    num = window.screenX    浏览器窗口相对于电脑屏幕左边的距离,可为负
       IE不支持
       Example:  typeof screenLeft; // "number"
-    screenY    浏览器窗口相对于电脑屏幕上边的距离,可以负
+    num = window.screenY    浏览器窗口相对于电脑屏幕上边的距离,可以负
     跨浏览器兼容方法:
       var leftX=(typeof screenLeft=="number")?screenLeft:screenX;
       var topY=(typeof screenTop=="number")?screenTop:screenY;
-    ◆浏览器宽高
+    ◆浏览器宽高 
       返回值类型为数值,单位都为px;
       谷歌浏览器中 innerWidth 和 outerWidth 相同,都为视口大小;
-    outerWidth 浏览器窗口外侧宽「包含浏览器的工具栏、边框、滚动条」「IE9+」
-    outerWidth 浏览器窗口外侧高「包含浏览器的工具栏、边框、滚动条」
-    innerWidth  浏览器显示窗口宽「不包含page_tab和工具栏等,但包含滚动条」「IE9+」
-    innerHeight 浏览器显示窗口高「不包含page_tab和工具栏等,但包含滚动条」
-    moveTo(x,y) 调整浏览器位置,移动到x,y坐标 
+    num = window.outerWidth 浏览器窗口外侧宽[包含浏览器的工具栏、边框、滚动条][IE9+]
+    num = window.outerWidth 浏览器窗口外侧高[包含浏览器的工具栏、边框、滚动条]
+    num = window.innerWidth  浏览器显示窗口宽[不包含page_tab和工具栏等,但包含滚动条][IE9+]
+    num = window.innerHeight 浏览器显示窗口高[不包含page_tab和工具栏等,但包含滚动条]
+    window.moveTo(x,y) 调整浏览器位置,移动到x,y坐标 
       PS:不适用于框架,只能对最完成的window对象使用
-    moveBy(x,y) 调整浏览器位置,向下移动xpx,向右移动ypx
+    window.moveBy(x,y) 调整浏览器位置,向下移动xpx,向右移动ypx
       PS:不适用于框架,只能对最完成的window对象使用
-    resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
+    window.resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
       PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
-    resizeBy(num1,num2) 缩放大小「正数为放大,负数为缩小」
+    window.resizeBy(num1,num2) 缩放大小[正数为放大,负数为缩小]
       PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
       PS:moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
-    scroll(x,y)   滚动到 
+    window.scroll(x,y)   滚动到 
       x 值表示你想要置于左上角的px点的横坐标
       y 值表示你想要置于左上角的px点的纵坐标
-    scrollTo(x,y) 同scroll
-    scrollBy(x,y) 滚动距离 
+    window.scrollTo(x,y) 同scroll
+    window.scrollBy(x,y) 滚动距离 
       PS:要使此方法工作 window 滚动条的可见属性必须设置为true
       x 把文档向右滚动的px数
       y 把文档向下滚动的px数
-    pageXOffset 页面水平滚动距离,单位px
-    pageYOffset 页面垂直滚动距离,单位px
+    num = window.pageXOffset 页面水平滚动距离 
+    num = window.pageYOffset 页面垂直滚动距离 
     window.matchMedia(str); 返回一个MediaQueryList对象
       PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
       str 一个mediaQuery语句的字符串
@@ -191,9 +172,9 @@ window 对象
           console.log('页面宽度大于700px');
         }
   计时器/函数调用 延时调用&间时调用&动画调用API 
-    JS单线程异步执行的机制
-      JS引擎只有一个线程,强迫异步事件排队等待被执行,不可在同时执行两条命令
-      setTimeout
+    JS单线程异步执行的机制 
+      JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
+      setTimeout 
         被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
         异步队列会在同步队列所有代码执行完,JS引擎空闲后,
         在计时结束时,开始执行延时代码.
@@ -209,7 +190,7 @@ window 对象
         console.log(sum);
         setTimeout(function() {console.log('d');}, 0);
         // 1 → 1000000 → c → b → d → a
-      setInterval
+      setInterval 
         依次向异步列队中添加延时调用,
         每个延时调用分别计时,不会互相影响.
         当只有第n个延时被阻塞且阻塞时间小于间隔时间,
@@ -232,7 +213,7 @@ window 对象
         19:44:750
         19:44:760
         19:44:770
-    var stId =setTimeout(foo,num[,arg1,arg2...]); 在指定的时间后执行代码
+    id =setTimeout(foo,num[,arg1,arg2...]) 在指定的时间后执行代码 
       Arguments:
         foo 需延时调用的函数名
         num 数值,延时的时间,单位为毫秒,未指定默认为0
@@ -241,7 +222,7 @@ window 对象
       有解析功能,第一个参数可以是字符串代码
         不推荐此种写法,容易出错,不易扩展,损失性能
         setTimeout("alert('abc')",2000);  // 2秒后执行代码块
-    clearTimeout(stId); 解除延时调用
+    clearTimeout(id) 通过返回id值解除延时调用 
       Example:
       var aoo=setTimeout(function(){ alert("abc");},2000);
       console.log(aoo);  // 50500,延时调用的id值
@@ -249,16 +230,16 @@ window 对象
       等价于
       clearTimeout(50500);
       但此种写法可能存在问题,因为id值可能会变,非一直为定值
-    var siId =setInterval(foo,num); 每隔指定时间执行一次代码
+    id =setInterval(foo,num) 每隔指定时间执行一次代码 
       Arguments:
         foo 需延时调用的函数名
         num 数值,延时的时间,单位为毫秒
-    clearInterval(siId); 解除间时调用
+    clearInterval(id) 通过返回id值解除间时调用 
       Example:
       var box=setInterval(function(){ alert("abc"); },1000);
       clearInterval(box); // 取消调用
       console.log(box);   // 1518 ,虽然已取消调用 但box值仍存在
-    使用 setTimeout 仿造 setInterval
+    使用'setTimeout'仿造'setInterval' 
       在开发环境下,很少使用真正的间歇调用,因为需要根据情况来取消,可能造成同步的一些问题.
       Example:
       使用超时调用设置定时器
@@ -277,31 +258,22 @@ window 对象
         }
         box();
       </script>
-    var rafId = requestAnimationFrame(foo);
-      PS:原理跟setTimeout/setInterval类似,
-        通过递归调用同一方法来不断更新画面以达到动起来的效果,
-        它优于setTimeout/setInterval的地方在于它是由浏览器专门为动画提供的API,
-        浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
-      接收一个函数作为回调,返回一个ID值
+    id = requestAnimationFrame(foo) 浏览器专门为动画提供的API 
+      原理跟setTimeout/setInterval类似,
+      通过递归调用同一方法来不断更新画面以达到动起来的效果,
+      浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
       常用操作:在函数体内使用 requestAnimationFrame 来调用该函数来实现效果.
-    cancelAnimationFrame(rafId); 通过返回ID值取消动画.
+    cancelAnimationFrame(id)   通过返回ID值取消动画 
   系统对话框 
-    PS:系统对话框与浏览器中显示的网页没有关系,也不包含HTML
-      他们的外观由操作系统或浏览器设置决定
-      显示这些对话框的时候代码会停止执行,关掉后恢复
-    alert("abc");   警告对话框,显示一条信息 
-    confirm("abc"); 需要用户确认的对话框,返回一个布尔值 
-      有确定和取消按钮,点击确定返回true,点击取消返回false
-      Example:
-      if(confirm("请选择")){
-        alert("您按了确定按钮");
-      }else{
-        alert("您按了取消按钮");
-      }
-    prompt("提示文字","默认显示文字"); 要求用户输入信息的输入框,
+    PS:系统对话框的外观由操作系统或浏览器设置决定 
+    alert(str)   警告对话框,显示一条信息 
+      显示对话框的时候代码会停止执行,关掉后恢复
+    bol = confirm(str) 需用户确认的对话框,返回一个布尔值 
+      有确定和取消按钮,点击确定返回'true',点击取消返回'false'
+    prompt("提示文字","默认显示文字");  信息输入框 
       点击确定,则返回值为用户输入的值;点击取消,则返回null.
-    find();    调出查找对话框,异步显示
-    print();   调出打印对话框,异步显示
+    find()    调出查找对话框,异步显示[IE不支持] 
+    print()   调出打印对话框,异步显示 
   base64编码&解码 
     var bs64Str = window.btoa(btStr)  base64编码处理,返回base64字符串[HTML5 IE10+] 
       btStr  二进制数据组成的Unicode字符串 
@@ -377,7 +349,7 @@ window 对象
           xhr.send(window.atob(data));
         }
   ◆其他接口 
-  window.Notification   浏览器通知接口「DiBs HTML5」 
+  window.Notification   浏览器通知接口[DiBs HTML5] 
     PS:用于在用户的桌面,而非网页上显示通知信息, 
       桌面电脑和手机都适用,比如通知用户收到了一封Email。
       具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
@@ -406,7 +378,7 @@ window 对象
       'granted' 用户明确同意接收通知 
       'denied'  用户明确拒绝接收通知 
     Notification.requestPermission(foo)  获取用户授权
-      foo  回调函数,参数为 status「用户授权状态」 
+      foo  回调函数,参数为 status[用户授权状态] 
       Example: 若用户拒绝接收通知,用alert方法代替 
         Notification.requestPermission(function (status) {
           if (status === "granted") {
@@ -479,7 +451,7 @@ window 对象
     window.onload
     window.offscreenBuffering 用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
 window的属性对象 
-  window.document  文档对象 「更多详见 DOM document对象」 
+  window.document  文档对象 [更多详见 DOM document对象] 
     document.selection  当前激活选中区,即高亮文本块,或文档中用户可执行某些操作的其它元素
       典型用途是作为用户的输入,以便识别正在对文档的哪一部分正在处理,或者作为某一操作的结果输出给用户。 
       用户和脚本都可以创建选中区。用户创建选中区的办法是拖曳文档的一部分。
@@ -497,12 +469,12 @@ window的属性对象
       DOM操作比原生方法差一些,优先使用原生属性/方法
     document.documentElement.clientHeight
     document.cookie  读写当前网页的cookie 
-      PS:网站为了标示用户身份而储存在Client Side「用户本地终端」上的数据,通常经过加密;
+      PS:网站为了标示用户身份而储存在Client Side[用户本地终端]上的数据,通常经过加密;
         可访问的前提下,http请求中cookie始终会被携带,
         即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
         在子域名中设置的cookie会始终在该子域名的http请求中携带;
         客户端的磁盘上,每个域名大小在4kb以内;
-        每个特定的域名下最多生成 20 个cookie「DiBs」;
+        每个特定的域名下最多生成 20 个cookie[DiBs];
         重要数据不建议保存在cookie中,
         cookie同源政策不要求传输协议,即http和https之间读写无限制
       cookie之间使用分号分割,需手动取出每一个cookie 
@@ -532,7 +504,7 @@ window的属性对象
         path     可选,限制路径访问,只有在该路径及其下才可访问该cookie
         secure   可选,指定是否使用https协议
           该属性为一个开关,不需指定值,若通信为https协议,则其自动打开
-        max-age  指定Cookie有效期,如 60*60*24*365 「一年31536000秒」
+        max-age  指定Cookie有效期,如 60*60*24*365 [一年31536000秒]
         HttpOnly 设置Cookie是否被JS读取,主要为了防止XSS攻击盗取Cookie
           Set-Cookie: key = value;HttpOnly
           该Cookie JS无法获取;AJAX操作也无法获取
@@ -604,7 +576,7 @@ window的属性对象
       为字符串时,跳转到历史记录中包含该字符串的第一个位置
         可能前进也可能后退,决定于那个位置最近
         若历史记录中不包含该字符串则什么也不做
-    history.pushState  「HTML5」 
+    history.pushState  [HTML5] 
       检查当前浏览器是否支持
         if (!!(window.history && history.pushState)){
           // 支持History API
@@ -794,18 +766,18 @@ window的属性对象
     PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
-      每次修改location的属性「hash除外」,页面都会以新URL重新加载,且生成一条历史记录
+      每次修改location的属性[hash除外],页面都会以新URL重新加载,且生成一条历史记录
     location.href      读写整个url
       返回值为当前的位置
       Example: :
       location.href = 'https://www.baidu.com'; //当前网页跳转到百度
-    location.hash      读写URL锚点部分「#后面的部分」「若无返回''」
-    location.host      主机名:端口名「省略默认的80端口」
+    location.hash      读写URL锚点部分[#后面的部分][若无返回'']
+    location.host      主机名:端口名[省略默认的80端口]
     location.hostname  读写,主机名/服务器名
     location.pathname  读写,路径名(URL中的目录和文件名)
-    location.port      读写,端口号「若url中不包含端口号则返回''」
-    location.protocol  协议「通常是 http: 或 https:」
-    location.search    读写,URL的查询字符串「以问号?开头的部分,包括?」
+    location.port      读写,端口号[若url中不包含端口号则返回'']
+    location.protocol  协议[通常是 http: 或 https:]
+    location.search    读写,URL的查询字符串[以问号?开头的部分,包括?]
       设置查询字符串会刷新网页
       'https://www.baidu.com/?aoo=2&boo=c'
       location.search;   //  "?aoo=2&boo=c"
@@ -828,14 +800,14 @@ window的属性对象
     PS: 由Netscape引入,现在已成为识别客户端浏览器的事实标准 
       与其他BOM对象一样,每个浏览器所包含的内容并不完全相同
     ◆浏览器相关
-    navigator.appCodeName;  浏览器名称,通常为Mozilla「即使非Mozilla浏览器也如此」
+    navigator.appCodeName;  浏览器名称,通常为Mozilla[即使非Mozilla浏览器也如此]
     navigator.appName;      浏览器名称,该属性不能精确区分出浏览器
       navigator.appName; //"Netscape",谷歌浏览器中的返回值
     navigator.appVersion;      浏览器版本.一般不与实际版本对应.
     navigator.appMinorVersion; 次版本信息
     navigator.buildID;         浏览器编译版本
-    navigator.product;         产品名称「如 Gecko」
-    navigator.productSub;      产品的次要信息「如 Gecko的版本」
+    navigator.product;         产品名称[如 Gecko]
+    navigator.productSub;      产品的次要信息[如 Gecko的版本]
     navigator.vendor;      浏览器的品牌
     navigator.vendorSub;   有关供应商的次要信息
     navigator.userAgent; 用户代理字符串,显示浏览器的信息[也将兼容的浏览器的信息列出]
@@ -867,8 +839,8 @@ window的属性对象
     navigator.preference(); 设置用户的首选项
     navigator.userProfile; 借以访问用户个人信息的对象
     navigator.mimeTypes; 在浏览器中注册的MIME类型数组
-    navigator.onLine;   返回浏览器是否链接到了因特网的布尔值 「HTML5」
-    navigator.cookieEnabled;  返回浏览器是否支持「启用」cookie的布尔值
+    navigator.onLine;   返回浏览器是否链接到了因特网的布尔值 [HTML5]
+    navigator.cookieEnabled;  返回浏览器是否支持[启用]cookie的布尔值
       启用cookie返回true,否则返回false
       cookieEnabled属性说明
         通常可以在浏览器的临时文件夹中保存一个文件,
@@ -878,13 +850,13 @@ window的属性对象
     navigator.javaEnabled();  浏览器是否启用Java
     ◆系统相关
     navigator.platform  所在系统平台,如 "Win32"
-    navigator.cpuClass; 客户端计算机使用的CPU类型「'x86''68K''Alpha'、PPC或Other」
-    navigator.oscpu;    客户端计算机的操作系统或使用的CPU「chrome和IE不支持」
+    navigator.cpuClass; 客户端计算机使用的CPU类型['x86''68K''Alpha'、PPC或Other]
+    navigator.oscpu;    客户端计算机的操作系统或使用的CPU[chrome和IE不支持]
     navigator.registerContentHandler()
     navigator.registerProtocolHandler()
 
-    navigator.geolocation 地理定位 「HTML5」
-      PS:在地理定位API中,使用小数值来表示经纬度「西经和南纬都用负数表示」
+    navigator.geolocation 地理定位 [HTML5]
+      PS:在地理定位API中,使用小数值来表示经纬度[西经和南纬都用负数表示]
       浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
       单位转换
         可使用一下函数将使用度、分、秒表示的经纬度转换为小数
@@ -914,11 +886,11 @@ window的属性对象
           event.coords.accuracy    精度
           以下属性支持与否取决于设备,桌面浏览器一般没有
           event.coords.altitude          海拔
-          event.coords.altitudeAccuracy  海拔精度「m」
+          event.coords.altitudeAccuracy  海拔精度[m]
           event.coords.heading           以360度表示的方向
-          event.coords.speed             速度 「m/s」
+          event.coords.speed             速度 [m/s]
           event.timestamp 事件戳,表示获取位置时的时间
-        var err = function(event){ }  回调函数,无法确定位置「如用户拒绝授权时」,调用
+        var err = function(event){ }  回调函数,无法确定位置[如用户拒绝授权时],调用
           event.code    错误码
             0  Unknown error,相当于 event.UNKNOWN_ERROR
             1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
@@ -935,12 +907,12 @@ window的属性对象
         PS:位置改变时重复调用成功处理程序,
           回调函数传入的event对象和getCurrentPosition用法类似
       navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
-      Google Maps API 「非HTML5规范」
+      Google Maps API [非HTML5规范]
         该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
         引入 API 放置在 HTML head中
           <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
           sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
-    navigator.vibrate     设备震动 「HTML5」 
+    navigator.vibrate     设备震动 [HTML5] 
       PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
         显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
         由于振动操作很耗电,在低电量时最好取消该操作.
@@ -977,7 +949,7 @@ window的属性对象
               startVibrate(duration);
             }, interval);
           }
-    navigator.permissions.query()   许可查询 「HTML5」 
+    navigator.permissions.query()   许可查询 [HTML5] 
       PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
         Permissions API就是用来查询某个接口的许可情况.
       // 查询地理位置接口的许可情况
@@ -992,7 +964,7 @@ window的属性对象
       });
       有了这个API,就可以自动查询用户的态度.
       当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
-    navigator.battery     电池API,针对移动设备用于检测设备的电池信息 「HTML5」 
+    navigator.battery     电池API,针对移动设备用于检测设备的电池信息 [HTML5] 
       var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
       battery.charging;
       battery.level;
@@ -1004,22 +976,73 @@ window的属性对象
       基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
     screen.height 设备屏幕高,单位px
     screen.width  设备屏幕宽,单位px
-    screen.availHeight; 屏幕可用高度「不包含任务栏高度」
-    screen.availWidth;  屏幕可用宽度「当任务栏在上下时,和 screen.width 相等」
+    screen.availHeight; 屏幕可用高度[不包含任务栏高度]
+    screen.availWidth;  屏幕可用宽度[当任务栏在上下时,和 screen.width 相等]
     screen.availLeft;
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
   window.frames    包含窗口所有框架[iframe]的对象 
-    window.frames[num]  通过下标来获取到ifrme
-    window.frames[name] 通过iframe的'name'属性值来获取到iframe
-  window.CSS       CSS接口涵盖了CSS相关的方法 [W3C][IE不支持]
+    PS: 若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中 
+    window.frames[num]  通过下标来获取到ifrme[从0开始,从左至右,从上至下]  
+    window.frames[name] 通过iframe的'name'属性值来获取到iframe 
+  window.CSS    CSS接口涵盖了CSS相关的方法 [W3C][IE不支持] 
     PS:CSS接口是一个工具接口，因此无法创建该类型的对象:其内部只定义了静态的方法 
     CSS.supports()  检测浏览器是否支持CSS的某些功能  
       bol = CSS.supports(propertyName, value);
       bol = CSS.supports(supportCondition);
       Example:
       console.log(CSS.supports("display", "flex")); // true 
-  客户端检测「详细见 JavaScript高级程序设计 228 页」 
+    CSS.escape()    
+  window.URL  用于对二进制数据生成URL,生成指向File对象或Blob对象的URL  
+    var url = URL.createObjectURL(blob); 创建url对象实例,将二进制数据生成一个URL 
+      同样的二进制数据, 每调用一次该方法,就会得到一个不同的URL,
+      这个URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
+      除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效。
+      类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
+      这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性
+    URL.revokeObjectURL(url);  使生成的URL失效 
+    Example:
+      在网页插入图片
+      var img = document.createElement("img");
+      img.src = window.URL.createObjectURL(files[0]);
+      img.height = 60;
+      img.onload = function(e) {
+        window.URL.revokeObjectURL(this.src);
+      }
+      docment.body.appendChild(img);
+      var info = document.createElement("span");
+      info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
+      docment.body.appendChild(info);
+      
+      本机视频预览
+      var video = document.getElementById('video');
+      var obj_url = window.URL.createObjectURL(blob);
+      video.src = obj_url;
+      video.play()
+      window.URL.revokeObjectURL(obj_url);  
+      
+      function html5Reader(file) {         
+        var fileObj = file.files[0],
+        img = document.getElementById("img");   
+        // URL.createObjectURL  safari不支持
+        img.src = URL.createObjectURL(fileObj);
+        img.onload =function() {
+          var data = getBase64Image(img);
+          console.log(data);  // 打印出base64编码
+        }
+      }
+      function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/"+ext);
+        return dataURL;
+      }
+  客户端检测[详细见 JavaScript高级程序设计 228 页] 
     PS:
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
       更是一种很难过行之有效的开发策略;
@@ -1036,65 +1059,45 @@ window的属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML 
-  PS:浏览器提供了使用http协议收发数据的接口,名为 AJAX; 
-    可用JS动态抓取内容构建页面;
-    file 协议无法使用 AJAX,只有 http 和 https 协议才可以使用 AJAX;
-    还支持通过其他协议传送,比如File和FTP 
-    Ajax提供与服务器异步通信的能力
-    该技术能够向服务器请求额外的数据而无须刷新页面
-    虽然Ajax中的x代表的是XML,但Ajax通信和数据格式无关,即该技术不一定使用XML.
-    W3C也在2006年发布了AJAX的国际标准.
-  AJAX 的组成 
-    并非一种新技术,而是几种原有技术的结合体,
-    使用CSS和XHTML来表示,DOM模型来交互和动态显示,
-    使用XMLHttpRequest来和服务器进行异步通信,
-    使用javascript来绑定和调用;
-    除了XmlHttpRequest对象外,其它技术都基于web标准且已广泛使用;
-  AJAX 运行原理 
-    普通的web开发流程:向服务器端请求这个页面,客户端将文本的结果写入页面;
-    使用Ajax: 客户端在异步获取这个结果后,先由 JS 来处理,然后再显示在页面;
-    通过xhr对象向服务器发http请求,从服务器获得数据,然后用JS操作DOM而更新页面;
-    可以把服务器端看成一个数据接口,它返回的是一个纯文本流,
-    该文本流可以是XML格式、HTML、Javascript代码、JSON格式,也可以只是一个字符串;
-  AJAX 的缺点 
-    不支持使用后退功能, 对搜索引擎的支持比较弱
+'Asynchronous_JavaScript_and_XML'AJAX: 浏览器提供的使用http协议收发数据的接口 
+  PS: 'file://'协议无法使用AJAX,只有'http'和'https'协议才可以使用AJAX;
+    提供了与服务器异步通信的能力; W3C在2006年发布了AJAX的国际标准 
+    使用JS来操作'XMLHttpRequest'对象接口和服务器进行异步通信;
+  AJAX缺点 
+    不支持使用后退功能,对搜索引擎的支持比较弱
     ◆Level1 的限制
-    受浏览器'同源策略'限制,只能请求同域资源「否则请求被拒绝,而未发出」;
+    受浏览器'同源策略'限制,只能请求同域资源[否则请求被拒绝,而未发出];
     仅支持文本数据传输,无法读取和上传二进制文件数据;
     传输数据时,没有进度信息提示, 只能提示是否完成;
     没有超时机制,不方便掌控ajax请求节奏;
-  XMLHttpRequest_Level2 「IE10+ HTML5」 
-    PS: XMLHttpRequest Level2 是XMLHttpRequest的最新版本.
-      IE10以下的版本不支持,它有自己相关的方法来实现; 
-      需要在服务器端进行相关的改动 
-      header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
-      header("Access-Control-Allow-Methods:GET,POST");
+  XMLHttpRequest_Level2 [IE10+][HTML5] 
+    PS: IE10以下的版本不支持,它有自己相关的方法来实现; 
       XMLHttpRequest2级进一步发展了xhr,并已经广发支持,成了事实标准,
       W3C开始着手制定相应的标准以规范其行为,
       并非所有浏览器都完整的实现了XMLHttpRequest2级规范,但都实现了其规定的部分内容,
       level2兼容level1;
+    在服务器端进行的相关改动 
+      header("Access-Control-Allow-Origin:*"); /*星号表示所有的域都可以接受,*/
+      header("Access-Control-Allow-Methods:GET,POST");
     新增功能 
-      可设置 HTTP 请求的时限 timeout; 
-      可使用 FormData 对象管理表单数据;
+      可设置HTTP请求的时限'timeout'; 
+      可使用'FormData'对象管理表单数据;
       可上传文件,可获取服务器端的二进制数据; 
       可跨域请求; 
       可获得数据传输的进度信息;
-  接收请求时的解析方式 
-    text/xml          用responseXML
-    application/json  需先JSON解析,JSON.parse(responseText);
+  'data-type'接收数据的解析方式 
+    'text/xml'          用responseXML
+    'application/json'  需先JSON解析,JSON.parse(responseText);
     其他直接用 responseText
-  XMLHttpRequest 构造函数 
-    IE5最先引入XMLHttpRequest对象到浏览器,通过MSXML库中的一个ActiveX对象实现.
-  var xhr = new XMLHttpRequest(); xhr对象创建 
-    PS:xhr对象是AJAX技术实现的核心,通过调用该对象的属性和方法实现各种功能;
+  var xhr = new XMLHttpRequest(); 创建xhr对象 
+    PS: IE5最先引入XMLHttpRequest对象,通过MSXML库中的一个ActiveX对象实现 
+      xhr对象是AJAX技术实现的核心,通过调用该对象的属性和方法实现各种功能;
       请求发送到服务器端,在收到响应后,响应的数据会自动填充xhr对象的属性,
       即调用xhr的属性可以得到响应的信息;
-  ◆请求 request 
-    xhr.open(method,url[,async]); 建立请求,以备「数据」发送「而未发送数据」 
-      PS:open()方法未发送请求,只是启动一个请求以备发送,通过send()方法进行请求发送
-        若对使用过open()方法的请求,再次使用这个方法,等同于调用abort()
-      method      GET、POST或PUT等 发送请求的类型
+    ◆'request'请求相关属性方法  
+    xhr.open(method,url[,async])  // 建立请求,以备后续数据发送 
+      PS: 若对使用过open()方法的请求,再次使用该方法,等同于调用.abort() 
+      method      GET、POST等,发送请求的类型 
       url         请求的地址(即向哪个地方发送请求,向谁请求)
         可使用相对地址或绝对地址.
       async       可选,布尔值,默认为true异步
@@ -1102,11 +1105,11 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
         同步方式(false):客户端就要等到服务器返回消息后才去执行其他操作
       userName    可选,用户名,默认为空字符串
       passWord    可选,密码,默认为空字符串
-    xhr.setRequestHeader(key,val); 设定请求头信息
-      PS:该方法必须在 open 方法之后,send 方法之前使用; 
-        若该方法多次调用,设定同一个字段,则每一次设置的值会被合并成一个单一的值发送.
+    xhr.setRequestHeader(key,val) // 设定请求头信息 
+      PS:需在'open'方法之后,'send'方法前使用; 
+        若该方法多次调用,设定同一个字段,则每次设置的值会被合并成一个单一的值发送 
       ★key 
-      'Content-Type'   发送的数据格式「编码类型」 
+      'Content-Type'   发送的数据格式[编码类型] 
         PS:请求头中Content-Type决定发送数据的编码类型,
           不同的值对应不同的提交和回调处理方式;
           有常见的五种'Content-Type'发送数据的方式; 
@@ -1122,7 +1125,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
           且其中的特殊字符需要转义成%HH的形式;
         'multipart/form-data' 多用来提交文件 
           采用HTML5的FormData对象来构建提交的数据;
-          不设置请求头部的Content-Type,交给浏览器来处理「设定Boundary等工作」;
+          不设置请求头部的Content-Type,交给浏览器来处理[设定Boundary等工作];
         'text/xml' XML格式传输 
           首先,构建XML文档对象,存入表单数据
           /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
@@ -1142,43 +1145,25 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
           <key2> value2 </key2>
           </formdata>
           */
-          发送数据「不需设置Content-Type」
+          发送数据[不需设置Content-Type]
           req.send(dataToSend);
       'Content-Length' 发送的数据长度
         num  
           xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
-    xhr.withCredentials  跨域请求时,用户信息是否会包含在请求之中的布尔值 
-      用户信息,比如Cookie和认证的HTTP头信息,
-      默认为false,即向example.com 发出跨域请求时,
-      不会发送example.com 设置在本机上的Cookie(若有的话);
-      若你需要通过跨域AJAX发送Cookie,需要打开withCredentials.
-      xhr.withCredentials = true;
-      为了让该属性生效,服务器必须显式返回Access-Control-Allow-Credentials这个头信息.
-      Access-Control-Allow-Credentials: true
-      withCredentials属性打开的话,不仅会发送Cookie,还会设置远程主机指定的Cookie.
-      注意,此时你的脚本还是遵守同源政策,
-      无法 从document.cookie 或者HTTP回应的头信息之中,读取这些Cookie.
-    xhr.send(data); 发送请求「数据」
-      data 发送的数据,类型可为 ArrayBufferView Blob Document String FormData 
+    xhr.withCredentials  // 读写,跨域时,是否允许获取用户信息,默认'false'  
+      PS: 用户信息,比如Cookie和认证的HTTP头信息,
+      为让该属性生效,服务器必须显式返回'Access-Control-Allow-Credentials'头信息 
+        Access-Control-Allow-Credentials: true
+        'withCredentials'属性打开的话,不仅会发送Cookie,还会设置远程主机指定的Cookie.
+        注意,此时你的脚本还是遵守同源政策,
+        无法从document.cookie 或者HTTP回应的头信息之中,读取这些Cookie.
+    xhr.send(data)  // 发送请求数据 
+      data 发送的数据,类型可为'ArrayBufferView''Blob''Document''String''FormData' 
         可以为空,即发送请求但不发送数据内容,可写作 xhr.send(null) 或 xhr.send()
         若不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
         若带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
-      Example:
-        发送get请求
-          ajax.open('GET',
-            'http://www.example.com/somepage.php?id='+ encodeURIComponent(id),true );
-          等同于
-          var data = 'id=' + encodeURIComponent(id));
-          ajax.open('GET', 'http://www.example.com/somepage.php', true);
-          ajax.send(data);
-          GET请求的参数,可以作为查询字符串附加在URL后面,也可以作为send方法的参数
-        发送POST请求
-          var data = 'email=' + encodeURIComponent(email) + '&password='
-            + encodeURIComponent(password);
-          ajax.open('POST', 'http://www.example.com/somepage.php', true);
-          ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          ajax.send(data);
-        发送二进制数据,最好使用ArrayBufferView或Blob对象,这使得通过Ajax上传文件成为可能
+      Example: 
+        发送二进制数据,最好使用ArrayBufferView或Blob对象,这使得通过Ajax上传文件成为可能 
           function sendArrayBuffer() {
             var xhr = new XMLHttpRequest();
             var uInt8Array = new Uint8Array([1, 2, 3]);
@@ -1186,7 +1171,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
             xhr.onload = function(e) { ... };
             xhr.send(uInt8Array.buffer);
           }
-        FormData类型可以用于构造表单数据
+        FormData类型可以用于构造表单数据 
           var formData = new FormData();
           formData.append('username', '张三');
           formData.append('email', 'zhangsan@example.com');
@@ -1201,105 +1186,17 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
             <input type='number' name='birthDate' value='1940'>
             <input type='submit' onclick='return sendForm(this.form);'>
           </form>
-    xhr.sendAsBinary(BinaryString)   // 发送二进制字符串 
-  ◆事件 
-    PS:所有XMLHttpRequest的监听事件,都必须在 send() 方法调用之前设定
-    xhr.onreadystatechange  readyState值改变时触发该事件 
-      PS:异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
-        只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
-      Example: :
-      xhr.onreadystatechange =function(){
-        if(xhr.readyState ===4 && xhr.status === 200) { }
-      };
-    xhr.ontimeout  超时事件,当响应时间超过指定时间触发 「level2」
-    xhr.onprogress  在接收响应期间持续不断的触发「level2」
-      PS:它分成上传和下载两种情况.
-        下载的 progress 事件属于 XMLHttpRequest 对象,
-        上传的 progress 事件属于 XMLHttpRequest.upload 对象
-        需在open方法前添加progress事件处理程序
-      会产生事件对象e,e.target 为xhr对象
-      e.lengthComputable 表示进度信息是否可用的布尔值
-      e.position         表示已接收的字节数
-      e.totalSize        表示根据Content-Length响应头部确定的预期字节数
-      Example:
-        我们先定义 progress 事件的回调函数.
-        xhr.onprogress = updateProgress;
-        xhr.upload.onprogress = updateProgress;
-        然后,在回调函数里面,使用这个事件的一些属性.
-        function updateProgress (event) {
-          if (event.lengthComputable) {
-            var percentComplete = event.loaded / event.total;
-          }
+    xhr.sendAsBinary(BinaryString) // 发送二进制字符串[Chrome中已移除] 
+      自行实现如下 
+      XMLHttpRequest.prototype.sendAsBinary = function(text){
+        var data = new ArrayBuffer(text.length);
+        var ui8a = new Uint8Array(data, 0);
+        for (var i = 0; i < text.length; i++){ 
+          ui8a[i] = (text.charCodeAt(i) & 0xff);
         }
-        上面的代码中,
-        event.total 是需要传输的总字节,
-        event.loaded 是已经传输的字节.
-        若 event.lengthComputable 不为真,则 event.total 等于0.
-    xhr.onabort   请求被中止,比如用户调用了 abort() 方法「level2」
-    xhr.onerror   请求失败「level2」
-      若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
-    xhr.onload    接收到完整的响应数据时触发(IE不支持) 「level2」
-      Firefox中引入的load事件,用于代替readystatechange事件
-      该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
-    xhr.onloadstart 在接收到响应数据的第一个字节时触发 「level2」
-    xhr.onloadend 通信完成或触发error、abort或load事件后触发 「level2」
-    xhr.upload.onprogress  上传的进度「level2」 
-      上传文件时,会不断返回上传的进度
-      xhr.upload.onprogress 在上传阶段,每50ms触发一次,
-      文件太小网络环境好的时候是直接到100%的;
-      在 xhr.send() 之后,xhr.readystate=2 之前触发;
-      Example:显示上传进度
-        <progress min="0" max="100" value="0">0% complete</progress>
-        function upload(blobOrFile) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', '/server', true);
-          xhr.onload = function(e) { ... };
-          // Listen to the upload progress.
-          var progressBar = document.querySelector('progress');
-          xhr.upload.onprogress = function(e) {
-            if(e.lengthComputable) {
-              progressBar.value = (e.loaded / e.total) * 100;
-              // Fallback for unsupported browsers.
-              progressBar.textContent = progressBar.value;
-            }
-          };
-          xhr.send(blobOrFile);
-        }
-        upload(new Blob(['hello world'], {type: 'text/plain'}));
-  ◆响应状态 
-    xhr.readyState  只读,请求的状态码,异步时检测使用 
-      PS:在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
-      0   未初始化  尚未调用open()方法
-      1   启动      已调用open() 连接已建立,但未调用send()方法
-      2   发送      已调用send(),尚未接收响应
-      3   接收      正在接收服务器传来的body部分的数据
-      4   完成      已经接收到全部响应数据,或者本次接收已失败
-      Remarks:
-        xhr.onreadystatechange =function(e){}, 此时 e.target 即为 xhr
-    xhr.status      只读,HTTP响应的状态码 
-      200, OK,访问正常
-      301, Moved Permanently,永久移动
-      302, Move temporarily,暂时移动
-      304, Not Modified,未修改
-      307, Temporary Redirect,暂时重定向
-      401, Unauthorized,未授权
-      403, Forbidden,禁止访问
-      404, Not Found,未发现指定网址
-      500, Internal Server Error,服务器发生错误
-    xhr.statusText  只读,HTTP响应的文本描述,比如'200 OK' 
-    xhr.timeout  超时设定,值为一整数,单位默认为毫秒 [可能存在兼容性] 「level2」
-      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
-        若该属性等于0,就表示没有时间限制.
-        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
-        Opera、Firefox 和 IE 10 支持该属性,
-        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
-        而 Chrome 和 Safari 还不支持
-    xhr.abort();   终止连接
-      调用该方法后,xhr对象会停止触发事件,
-      而且也不再允许访问任何与响应有关的对象属性
-      在终止请求后,还应该对xhr对象进行解引用操作.
-      若请求已经被发送,则立刻中止请求.
-  ◆响应 response 
+        this.send(ui8a);
+      }
+    ◆'response'响应相关属性方法  
     xhr.responseText 只读,获取字符串形式的响应数据
       PS:若本次请求没有成功或者数据不完整,该属性就会等于null.
         若服务器返回的数据格式是JSON,则该属性为JSON字符串.
@@ -1343,7 +1240,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       xhr.getResponseHeader('Content-Type');
     xhr.getAllResponseHeader(); 获取整个响应头信息,格式为字符串
       每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
-    xhr.overrideMimeType() 重写由服务器返回的 MIME type [IE不支持] 「level2」
+    xhr.overrideMimeType() 重写由服务器返回的MIMEtype [IE不支持] [level2]
       PS:该方法需在send方法之前调用
         Firefox最早引入该方法用于重写xhr响应的MIME类型
         该方法被XMLHttpRequest2级纳入规范中
@@ -1353,74 +1250,167 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       xhr.overrideMimeType("text/XML");
       xhr.send(null);
       强制使xhr对象将响应当作XML而非纯文本来处理
-  ◆其他
-    接收二进制数据 
-      PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
-      改写 MIMEType [老方法]
-        改写数据的MIMEType,将服务器返回的二进制数据伪装成文本数据.
-        xhr.overrideMimeType ("text/plain; charset=x-user-defined");
-        然后,用 responseText 属性接收服务器返回的二进制数据.
-        var binStr = xhr.responseText;
-        由于这时,浏览器把它当做文本数据,所以还必须再一个个字节地还原成二进制数据.
-        for (var i = 0, len = binStr.length; i < len; ++i) {
-          var c = binStr.charCodeAt (i);
-          var byte = c & 0xff;
-        }
-        最后一行的位运算"c & 0xff",表示在每个字符的两个字节之中,只保留后一个字节,将前一个字节扔掉.
-        原因是浏览器解读字符的时候,会把字符自动解读成Unicode的 0xF700-0xF7ff 区段.
-      responseType 属性 [新方法]
-        PS:从服务器取回二进制数据,较新的方法是使用新增的 responseType 属性.
-          若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
-          较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
-          把 responseType 设为 blob,表示服务器传回的是二进制对象.
-        Example:
-          var xhr = new XMLHttpRequest ();
-          xhr.open ('GET', '/path/to/image.png');
-          xhr.responseType = 'blob';
-          接收数据的时候,用浏览器自带的 Blob 对象即可.
-          var blob = new Blob ([xhr.response], {type: 'image/png'});
-          注意,是读取 xhr.response,而不是 xhr.responseText.
-          你还可以将 responseType 设为 arraybuffer,把二进制数据装在一个数组里.
-          var xhr = new XMLHttpRequest ();
-          xhr.open ('GET', '/path/to/image.png');
-          xhr.responseType = "arraybuffer";
-          接收数据的时候,需要遍历这个数组.
-          var arrayBuffer = xhr.response;
-          if (arrayBuffer) {
-            var byteArray = new Uint8Array (arrayBuffer);
-            for (var i = 0; i < byteArray.byteLength; i++) {
-              // do something
-            }
+    ◆响应状态 
+    xhr.readyState  只读,请求的状态码,异步时检测使用 
+      PS:在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
+      0   未初始化  尚未调用open()方法
+      1   启动      已调用open() 连接已建立,但未调用send()方法
+      2   发送      已调用send(),尚未接收响应
+      3   接收      正在接收服务器传来的body部分的数据
+      4   完成      已经接收到全部响应数据,或者本次接收已失败
+      Remarks:
+        xhr.onreadystatechange =function(e){}, 此时 e.target 即为 xhr
+    xhr.status      只读,HTTP响应的状态码 
+      200, OK,访问正常
+      301, Moved Permanently,永久移动
+      302, Move temporarily,暂时移动
+      304, Not Modified,未修改
+      307, Temporary Redirect,暂时重定向
+      401, Unauthorized,未授权
+      403, Forbidden,禁止访问
+      404, Not Found,未发现指定网址
+      500, Internal Server Error,服务器发生错误
+    xhr.statusText  只读,HTTP响应的文本描述,比如'200 OK' 
+    xhr.timeout  超时设定,值为整数,单位'ms'[可能存在兼容性][level2]
+      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
+        若该属性等于0,就表示没有时间限制.
+        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
+        Opera、Firefox 和 IE 10 支持该属性,
+        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
+        而 Chrome 和 Safari 还不支持
+    xhr.abort();   终止连接
+      调用该方法后,xhr对象会停止触发事件,
+      而且也不再允许访问任何与响应有关的对象属性
+      在终止请求后,还应该对xhr对象进行解引用操作.
+      若请求已经被发送,则立刻中止请求.
+    ◆事件 
+      PS:所有XMLHttpRequest的监听事件,都必须在 send() 方法调用之前设定
+    xhr.onreadystatechange  readyState值改变时触发该事件 
+      PS:异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
+        只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
+      Example: :
+      xhr.onreadystatechange =function(){
+        if(xhr.readyState ===4 && xhr.status === 200) { }
+      };
+    xhr.ontimeout  超时事件,当响应时间超过指定时间触发 [level2]
+    xhr.onprogress  在接收响应期间持续不断的触发[level2]
+      PS:它分成上传和下载两种情况.
+        下载的 progress 事件属于 XMLHttpRequest 对象,
+        上传的 progress 事件属于 XMLHttpRequest.upload 对象
+        需在open方法前添加progress事件处理程序
+      会产生事件对象e,e.target 为xhr对象
+      e.lengthComputable 表示进度信息是否可用的布尔值
+      e.position         表示已接收的字节数
+      e.totalSize        表示根据Content-Length响应头部确定的预期字节数
+      Example:
+        我们先定义 progress 事件的回调函数.
+        xhr.onprogress = updateProgress;
+        xhr.upload.onprogress = updateProgress;
+        然后,在回调函数里面,使用这个事件的一些属性.
+        function updateProgress (event) {
+          if (event.lengthComputable) {
+            var percentComplete = event.loaded / event.total;
           }
-    Example:
-      使用FormData接口上传文件
-        <form id="file-form" action="handler.php" method="POST">
-          <input type="file" id="file-select" name="photos[]" multiple/>
-          <button type="submit" id="upload-button">上传</button>
-        </form>
-        var fileSelect = document.getElementById('file-select');
-        var files = fileSelect.files;
-        var formData = new FormData();
-        for(var i = 0; i < files.length; i++) {
-          var file = files[i];
-          if(!file.type.match('image.*')) { continue; }
-          formData.append('photos[]', file, file.name);
         }
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'handler.php', true);
-        xhr.onload = function() {
-          if(xhr.status !== 200) { alert('An error occurred!'); }
-        };
-        xhr.send(formData);
-      使用File API上传文件
-        var file = document.getElementById('test-input').files[0];
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'myserver/uploads');
-        xhr.setRequestHeader('Content-Type', file.type);
-        xhr.send(file);
+        上面的代码中,
+        event.total 是需要传输的总字节,
+        event.loaded 是已经传输的字节.
+        若 event.lengthComputable 不为真,则 event.total 等于0.
+    xhr.onabort   请求被中止,如调用了abort()方法[level2]
+    xhr.onerror   请求失败[level2]
+      若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
+    xhr.onload    接收到完整的响应数据时触发(IE不支持) [level2]
+      Firefox中引入的load事件,用于代替readystatechange事件
+      该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
+    xhr.onloadstart 在接收到响应数据的第一个字节时触发 [level2]
+    xhr.onloadend 通信完成或触发error、abort或load事件后触发 [level2]
+    xhr.upload.onprogress  上传的进度,触发频率50ms/次[level2] 
+      文件太小网络环境好的时候是直接到100%的;
+      在xhr.send()后,xhr.readystate=2 前触发;
+      Example:显示上传进度
+        <progress min="0" max="100" value="0">0% complete</progress>
+        function upload(blobOrFile) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/server', true);
+          xhr.onload = function(e) { ... };
+          // Listen to the upload progress.
+          var progressBar = document.querySelector('progress');
+          xhr.upload.onprogress = function(e) {
+            if(e.lengthComputable) {
+              progressBar.value = (e.loaded / e.total) * 100;
+              // Fallback for unsupported browsers.
+              progressBar.textContent = progressBar.value;
+            }
+          };
+          xhr.send(blobOrFile);
+        }
+        upload(new Blob(['hello world'], {type: 'text/plain'}));
+    ◆其他 
+      接收二进制数据 
+        PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
+        改写 MIMEType [老方法]
+          改写数据的MIMEType,将服务器返回的二进制数据伪装成文本数据.
+          xhr.overrideMimeType ("text/plain; charset=x-user-defined");
+          然后,用 responseText 属性接收服务器返回的二进制数据.
+          var binStr = xhr.responseText;
+          由于这时,浏览器把它当做文本数据,所以还必须再一个个字节地还原成二进制数据.
+          for (var i = 0, len = binStr.length; i < len; ++i) {
+            var c = binStr.charCodeAt (i);
+            var byte = c & 0xff;
+          }
+          最后一行的位运算"c & 0xff",表示在每个字符的两个字节之中,只保留后一个字节,将前一个字节扔掉.
+          原因是浏览器解读字符的时候,会把字符自动解读成Unicode的 0xF700-0xF7ff 区段.
+        responseType 属性 [新方法]
+          PS:从服务器取回二进制数据,较新的方法是使用新增的 responseType 属性.
+            若服务器返回文本数据,这个属性的值是"TEXT",这是默认值.
+            较新的浏览器还支持其他值,也就是说,可以接收其他格式的数据.
+            把 responseType 设为 blob,表示服务器传回的是二进制对象.
+          Example:
+            var xhr = new XMLHttpRequest ();
+            xhr.open ('GET', '/path/to/image.png');
+            xhr.responseType = 'blob';
+            接收数据的时候,用浏览器自带的 Blob 对象即可.
+            var blob = new Blob ([xhr.response], {type: 'image/png'});
+            注意,是读取 xhr.response,而不是 xhr.responseText.
+            你还可以将 responseType 设为 arraybuffer,把二进制数据装在一个数组里.
+            var xhr = new XMLHttpRequest ();
+            xhr.open ('GET', '/path/to/image.png');
+            xhr.responseType = "arraybuffer";
+            接收数据的时候,需要遍历这个数组.
+            var arrayBuffer = xhr.response;
+            if (arrayBuffer) {
+              var byteArray = new Uint8Array (arrayBuffer);
+              for (var i = 0; i < byteArray.byteLength; i++) {
+                // do something
+              }
+            }
+      Example:
+        使用FormData接口上传文件
+          <form id="file-form" action="handler.php" method="POST">
+            <input type="file" id="file-select" name="photos[]" multiple/>
+            <button type="submit" id="upload-button">上传</button>
+          </form>
+          var fileSelect = document.getElementById('file-select');
+          var files = fileSelect.files;
+          var formData = new FormData();
+          for(var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if(!file.type.match('image.*')) { continue; }
+            formData.append('photos[]', file, file.name);
+          }
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'handler.php', true);
+          xhr.onload = function() {
+            if(xhr.status !== 200) { alert('An error occurred!'); }
+          };
+          xhr.send(formData);
+        使用File API上传文件
+          var file = document.getElementById('test-input').files[0];
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'myserver/uploads');
+          xhr.setRequestHeader('Content-Type', file.type);
+          xhr.send(file);
   同步&异步 
-    同步需等待服务器响应后,才能执行后续代码;
-    异步:设置响应函数,等待响应后在处理,从而可继续执行后续代码
     使用同步方式
       var xhr =new XMLHttpRequest();    //创建xhr对象
       xhr.open('get','demo.php',false)  //准备发送请求
@@ -1430,7 +1420,7 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
       xhr.onreadystatechange =function(){}; //设置响应事件程序
       xhr.open('get','demo.php',true)    //准备发送请求
       xhr.send();                        //发送请求
-  Example:
+  Example: 
     使用范例
       var xhr = new XMLHttpRequest(); // 创建 Ajax 对象
       xhr.open(method, url, async); // 设置请求方法 请求地址 是否异步
@@ -1675,36 +1665,6 @@ AJAX,'Asynchronous_JavaScript_and_XML'异步的JS和XML
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-FormData 用于模拟表单「HTML5」
-  PS:为序列化表单及创建与表单格式相同的数据,用于通过xhr传输提供了便利.
-    不用明确的设置请求头信息,
-    xhr对象能够识别传入的数据类型是FormData实例,并配置适当头信息.
-  var fmDt = new FormData([formElem]); 创建FormData对象
-    Example: 通过表单元素创建
-      var fmDt = new FormData(document.forms[0]);
-  fmDt.append("key","value"); 向FormData对象中添加信息
-    PS:当信息添加完后就可直接使用 xhr.send(fmDt) 进行发送
-    第一个参数是表单的控件名,第二个参数是实际的值,第三个参数是可选的,通常是文件名.
-  Example:
-    模拟File控件,进行文件上传 
-      function uploadFiles(url, files) {
-        var formData = new FormData();
-        for(var i = 0; i< files.length; i++) {
-          formData.append(files[i].name, files[i]);
-        }
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
-        xhr.onload = function(e) { };
-        xhr.send(formData);  // multipart/form-data
-      }
-      var inputFile = document.querySelector('input[type="file"]');
-      inputFile.addEventListener('change', function(e) {
-        uploadFiles('/server', this.files);
-      }, false);
-    加入JavaScript生成的文件 
-      var content = '<a id="a"><b id="b">hey!</b></a>';
-      var blob = new Blob([content], { type: "text/xml"});
-      formData.append("webmasterfile", blob);
 Fetch 用来取代XMLHttpRequest的一种新规范 
   PS: Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
@@ -2061,7 +2021,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
         return sheep;
       });
     });    
-JSONP,'JSON_with_Padding'填充式JSON或参数式JSON 
+JSONP,'JSON with Padding'填充式JSON或参数式JSON 
   PS:可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
@@ -2580,14 +2540,14 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     e.source
   (详参 JavaScript高级程序设计 481 页)
   Exp: Chrome测试未能实现  
-SSE 「HTML5」
-'Web_Real_Time_Communication',WebRTC : 网络实时通信 「HTML5」 
+SSE [HTML5]
+'Web_Real_Time_Communication',WebRTC : 网络实时通信 [HTML5] 
   PS: 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
     Google是WebRTC的主要支持者和开发者,它最初在Gmail上推出了视频聊天,
     后来在2011年推出了Hangouts,允许在浏览器中打电话。推动了WebRTC标准的确立。
-  MediaStream,又称 getUserMedia  获取音频和视频 「HTML5」   
+  MediaStream,又称 getUserMedia  获取音频和视频 [HTML5]   
     PS: navigator.getUserMedia  在浏览器中获取音频(通过麦克风)和视频(通过摄像头)
       将来可以用于获取任意数据流,比如光盘和传感器
     检查浏览器是否支持getUserMedia方法
@@ -2859,7 +2819,7 @@ SSE 「HTML5」
       conn.on('open', function(){
         conn.send('hi!');
       });
-WebSocket    网络通信协议「HTML5」 「IE10+」
+WebSocket 网络通信协议[HTML5] [IE10+]
   PS:目标是在一个单独的持久连接上提供全双工、双向通信, 
     允许与一个Web服务的连接保持打开,
     只要有新数据,Web服务就可以把数据发送给客户端[且客户端代码会得到通知];
@@ -2914,13 +2874,13 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
         // 发送还没结束
       }
     ws.close();  关闭连接
-    ws.send("message"); 发送数据「任意字符」
+    ws.send("message"); 发送数据[任意字符]
       Web Socket只能通过连接发送纯文本数据,对于复杂的数据结构,需转换为JSON字符串再发送
   Event事件 
-    PS:WebSocket对象不支持DOM2级事件绑定,需使用DOM1级来定义「使用on+事件名」
+    PS:WebSocket对象不支持DOM2级事件绑定,需使用DOM1级来定义[使用on+事件名]
     open    在成功建立连接时触发事件
     message 当服务器向客户端发来消息时触发事件 
-      e.data  值为返回的数据「字符串格式,需要手工解析」
+      e.data  值为返回的数据[字符串格式,需要手工解析]
     error   在发生错误时触发,连接不能持续
     close   在连接关闭时触发 
       e.wasClean  表示连接是否已明确关闭的布尔值
@@ -2950,19 +2910,19 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
     connection.onmessage = function(e) {
       console.log(e.data.byteLength); // ArrayBuffer对象有byteLength属性
     };
-'Web Storage'  网页本地存储 「IE8+ HTML5」
+'Web Storage' 网页本地存储 [IE8+ HTML5]
   PS: JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
   localStorage   本地存储 [IE8+]
     PS: 永久存储,永不失效除非手动删除
-      有容量限制,每个域「包括各个网页」 5 M 左右「DiBs」;
+      有容量限制,每个域[包括各个网页] 5 M 左右[DiBs];
       子域名间或子域名和主域名间localStorage不共享;
       本质是在读写文件,数据多的话会比较卡,firefox会一次性将数据导入内存,
       不能被爬虫爬取,不要用它完全取代URL传参,
       各浏览器间,数据是独立的,在firefox中的localstorage数据,在chrome上无法读取.
       只能存储字符串,当存取的内容比较复杂时,使用JSON函数辅助处理
     localStorage.XX = str;               读写自定义属性
-      只能存字符串,对象类型需JSON化存入「SlPt」
+      只能存字符串,对象类型需JSON化存入[SlPt]
       Example:
       localStorage.XX;   //"abc"
       localStorage;       //Storage {name: "abc", length: 1}
@@ -2998,7 +2958,7 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-'Application_Cache',appcache  应用离线缓存 「HTML5」
+'Application_Cache',appcache  应用离线缓存 [HTML5]
   PS:让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;
@@ -3023,7 +2983,7 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
       
       NETWORK:
       #每次重新拉取的文件
-      * 「表示除 CACHE 中指定的文件其他全部」
+      * [表示除 CACHE 中指定的文件其他全部]
       
       FALLBACK
       #离线状态下代替文件
@@ -3090,11 +3050,11 @@ WebSocket    网络通信协议「HTML5」 「IE10+」
     progress  在文件下载应用缓存的过程中持续不断的触发
     updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
     cached    在应用缓存完整可用时触发
-IndexedDB   浏览器端数据库 「HTML5」 
-  PS: IE 10+支持,但是Safari完全不支持「?」;
+IndexedDB 浏览器端数据库 [HTML5] 
+  PS: IE 10+支持,但是Safari完全不支持[?];
     能够在客户端持久的储存结构化数据的数据库,并且提供了丰富的查询能力;
-    按域名分配独立空间「如a.qq.com 和 b.qq.com」,一个域名下可以创建多个数据库,
-    每个数据库可以创建多个对象储存空间「表」,
+    按域名分配独立空间[如a.qq.com 和 b.qq.com],一个域名下可以创建多个数据库,
+    每个数据库可以创建多个对象储存空间[表],
     一个对象储存空间可以储存多个对象数据
   概述 
     随着浏览器的处理能力不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,
@@ -3102,12 +3062,12 @@ IndexedDB   浏览器端数据库 「HTML5」
     现有的浏览器端数据储存方案,都不适合储存大量数据;
     cookie不超过4KB,且每次请求都会发送回服务器端;
     Window.name 属性缺乏安全性,且没有统一的标准;
-    localStorage在 2.5 M 到 10 MB 之间「DiBs」;
+    localStorage在 2.5 M 到 10 MB 之间[DiBs];
     可以被网页脚本程序创建和操作,它允许储存大量数据,提供查找接口,还能建立索引。
-    IndexedDB不属于关系型数据库「不支持SQL查询语句」,更接近NoSQL数据库。
+    IndexedDB不属于关系型数据库[不支持SQL查询语句],更接近NoSQL数据库。
   特点 
     1、键值对储存 
-      IndexedDB内部采用对象仓库「object store」存放数据。
+      IndexedDB内部采用对象仓库[object store]存放数据。
       所有类型的数据都可以直接存入,包括JavaScript对象。
       在对象仓库中,数据以“键值对”的形式保存,
       每一个数据都有对应的键名,键名是独一无二的,不能有重复,否则会抛出一个错误。
@@ -3116,7 +3076,7 @@ IndexedDB   浏览器端数据库 「HTML5」
       这与localStorage形成对比,后者的操作是同步的。
       异步设计是为了防止大量数据的读写,拖慢网页的表现。
     3、支持事务。 
-      IndexedDB支持事务「transaction」,
+      IndexedDB支持事务[transaction],
       意味着一系列操作步骤之中,只要有一步失败,整个事务就都取消,
       数据库回到事务发生之前的状态,不存在只改写一部分数据的情况。
     4、同域限制 
@@ -3139,9 +3099,9 @@ IndexedDB   浏览器端数据库 「HTML5」
     || window.mozIndexedDB || window.msIndexedDB;
   var openRequest = indexedDB.open(str[,num]);  打开数据库,不存在则创建
     str   字符串,数据库名称
-    num   大于 0 的正整数「0 将报错」,数据库版本,可选,默认为1
+    num   大于 0 的正整数[0 将报错],数据库版本,可选,默认为1
   打开数据库事件 
-    PS:open方法返回的是一个对象「IDBOpenDBRequest」,事件在该对象上触发
+    PS:open方法返回的是一个对象[IDBOpenDBRequest],事件在该对象上触发
     success 打开成功
     error   打开失败
     upgradeneeded 第一次打开该数据库,或者数据库版本发生变化时 
@@ -3172,8 +3132,8 @@ IndexedDB   浏览器端数据库 「HTML5」
       db.createObjectStore("test", { keyPath: "email" }); 
       db.createObjectStore("test2", { autoIncrement: true });
       keyPath 表示所存入对象的email属性用作每条记录的键名
-        「由于键名不能重复,所以存入之前必须保证数据的email属性值都是不一样的」,默认值为null；
-      autoIncrement 表示是否使用自动递增的整数作为键名「第一个数据为1,第二个数据为2,以此类推」
+        [由于键名不能重复,所以存入之前必须保证数据的email属性值都是不一样的],默认值为null；
+      autoIncrement 表示是否使用自动递增的整数作为键名[第一个数据为1,第二个数据为2,以此类推]
         默认为false。 一般来说,keyPath和autoIncrement属性只要使用一个就够了,
         若两个同时使用,表示键名为递增的整数,且对象不得缺少指定属性。
   db.objectStoreNames  返回一个DOMStringList对象 
@@ -3257,7 +3217,7 @@ IndexedDB   浏览器端数据库 「HTML5」
         }
       }
       回调函数接受一个事件对象作为参数,该对象的 target.result 属性指向当前数据对象。
-      当前数据对象的 key 和 value 分别返回键名和键值「即实际存入的数据」。
+      当前数据对象的 key 和 value 分别返回键名和键值[即实际存入的数据]。
       continue 方法将光标移到下一个数据对象,
       若当前数据对象已经是最后一个数据了,则光标指向null。
     openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,
@@ -3346,7 +3306,7 @@ IndexedDB   浏览器端数据库 「HTML5」
       }
     }  
   Example:
-Drag&Drop 拖放「IE9+ HTML5」 
+Drag&Drop 拖放[IE9+ HTML5] 
   PS:Web开发人员一直在用jQuery完成拖放,现已原生支持 
     IE4最早加入拖放功能,只能拖放文本框
   定义拖动元素 
@@ -3535,14 +3495,14 @@ Drag&Drop 拖放「IE9+ HTML5」
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
     }
-Fullscreen 全屏操作「HTML5」 
-  PS:全屏API可以控制浏览器的全屏显示,让一个Element节点「以及子节点」占满用户的整个屏幕
-    目前各大浏览器的最新版本都支持这个API「包括IE11」,但是使用的时候需要加上浏览器前缀
+Fullscreen 全屏操作[HTML5] 
+  PS:全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
+    目前各大浏览器的最新版本都支持这个API[包括IE11],但是使用的时候需要加上浏览器前缀
     放大一个节点时,Firefox和Chrome在行为上略有不同。
     Firefox自动为该节点增加一条CSS规则,将该元素放大至全屏状态,width:100%; height:100%,
     而Chrome则是将该节点放在屏幕的中央,保持原来大小,其他部分变黑。
     用户手动按下ESC键或F11键,也可以退出全屏键;
-    加载新页面,或切换tab,或从浏览器转向其他应用「按下Alt-Tab」,也会导致退出全屏状态;
+    加载新页面,或切换tab,或从浏览器转向其他应用[按下Alt-Tab],也会导致退出全屏状态;
   elem.requestFullscreen() 使该节点全屏
     PS:在Chrome/Firefox等浏览器中直接使用直接使元素节点全屏,会被拒绝
     function requestFullscreen(element) {
@@ -3569,7 +3529,7 @@ Fullscreen 全屏操作「HTML5」
         width: 100%;
         height: 100%;
       }
-  document.exitFullscreen()  用于取消全屏「该方法也带有浏览器前缀」
+  document.exitFullscreen()  用于取消全屏[该方法也带有浏览器前缀]
     function exitFullscreen() {
       if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -3634,7 +3594,7 @@ Fullscreen 全屏操作「HTML5」
 WebGL 
 --------------------------------------------------------------------------------
 移动端
-devicelight    设备屏幕亮度变化事件 「HTML5」
+devicelight    设备屏幕亮度变化事件 [HTML5]
   PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
   var DLRun = function(event) { }
   window.addEventListener('devicelight',DLRun);
@@ -3656,7 +3616,7 @@ devicelight    设备屏幕亮度变化事件 「HTML5」
     @media (light-level: dim) { /* 暗光环境 */ }
     @media (light-level: normal) { /* 正常光环境 */ }
     @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5」
+deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5]
   PS:一旦设备的方向发生变化触发
   检测浏览器是否支持该API
     if (window.DeviceOrientationEvent) { /*  支持 */ } 
@@ -3670,7 +3630,7 @@ deviceorientation  设备摆放方向「竖放或横放」变化事件「HTML5�
     event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
     event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
     event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
-orientationchange  在屏幕发生翻转时触发「HTML5」 
+orientationchange  在屏幕发生翻转时触发[HTML5] 
   window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 -------------------------------------------------------------------------待整理 
 

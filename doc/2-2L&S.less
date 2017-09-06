@@ -41,8 +41,8 @@ less
         建议最好使用 node.js 或其它第三方工具进行预编译;
         如果加载多个 .less 样式表文件,每个文件都会被单独编译,
         因此,一个文件中所定义的任何变量、mixin 或命名空间都无法在其它文件中访问;
-        部分服务器「以IIS居多」会对未知后缀的文件返回404,导致无法正常读取.less文件,
-        解决方案是在服务器中为.less文件配置MIME值为text/css「具体方法请搜索」,
+        部分服务器[以IIS居多」会对未知后缀的文件返回404,导致无法正常读取.less文件,
+        解决方案是在服务器中为.less文件配置MIME值为text/css[具体方法请搜索」,
         或者还有一种更简单的方法,即是直接将.less文件改名为.css文件即可;
       使用步骤: 
       使用link标签引入less文件,但将 rel 属性设置为 "stylesheet/less"
@@ -116,10 +116,10 @@ Less文件间的引入
       @aoo:  "hello word";
       @boo:    "aoo";
       .coo{ content: @@boo; }
-      // compiles to「编译为」:
+      // compiles to[编译为」:
       .coo { content: "hello word"; }
     @{name},插值 
-    ◆字符串中插值 「类似 ruby 和 php 的方式嵌入到字符串中」
+    ◆字符串中插值 [类似 ruby 和 php 的方式嵌入到字符串中」
       @base-url: "http://assets.fnord.com";
       background-image: url("@{base-url}/images/bg.png");
       
@@ -129,10 +129,10 @@ Less文件间的引入
         color: #444;
         background: url("@{images}/white-sand.png");
       }
-      // Import statements  「Version: 1.4.0+」
+      // Import statements  [Version: 1.4.0+」
       @themes: "../../src/themes";
       @import "@{themes}/tidal-wave.less";
-    ◆prop,属性插值       「Version: 1.6.0+」
+    ◆prop,属性插值       [Version: 1.6.0+」
       @property: color;
       .aoo {
         @{property}: #0ee;
@@ -143,7 +143,7 @@ Less文件间的引入
         color: #0ee;
         background-color: #999;
       }
-    ◆selector,选择器插值 「v1.4.0+」
+    ◆selector,选择器插值 [v1.4.0+」
       @mySelector: banner;
       .@{mySelector} { margin: 0 auto; }
       // 编译为
@@ -246,7 +246,7 @@ Less文件间的引入
     #aoo .boo { font-size: 12px; }
     #aoo .coo { width: 300px; }
 函数 
-  PS: 函数不会出现在CSS文件中「使用此特性避免在CSS中出现多余的代码」
+  PS: 函数不会出现在CSS文件中[使用此特性避免在CSS中出现多余的代码」
   内置函数  : Less内置了多种函数用于转换颜色、处理字符串、算术运算等
     Example: 将 0.5 转换为 50%,将颜色饱和度增加 5%,颜色亮度降低 25%,色相值增加 8 等用法:
       @base: #f04615;
@@ -676,7 +676,7 @@ scope 作用域
 ~"XXX" 避免编译  
   PS:比如当有Less不认识的新语法,可避免编译
   .aoo{ width: ~"calc(200px - 10px)"; }
-Extend,派生 「v1.4.0+」
+Extend,派生 [v1.4.0+」
 语法 
   when(bool)  条件判断
     Example:
@@ -730,7 +730,7 @@ Extend,派生 「v1.4.0+」
         .aoo-300px { width: 300px; }
         .aoo-400px { width: 400px; }
         .aoo-500px { width: 500px; }
-    merge,合并属性: 能够聚合多个属性从而形成一个用逗号分隔的单一属性 「v1.5.0+」
+    merge,合并属性: 能够聚合多个属性从而形成一个用逗号分隔的单一属性 [v1.5.0+」
       PS: 对于像 background 和 transform 这类属性非常有用
       .foo() { box-shadow+: inset 0 0 10px #555; }
       // merge需在每个需合并的属性名后添加一个 + 以作标示

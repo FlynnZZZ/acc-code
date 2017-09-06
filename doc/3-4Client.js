@@ -125,7 +125,7 @@
         var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
         在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
   小技巧 
-    通过浏览器地址栏运行HTML代码 「非IE浏览器内核」
+    通过浏览器地址栏运行HTML代码 [非IE浏览器内核」
       Example:  
       在浏览器地址栏直接输入 data:text/html,<a href=''> 13 </a>
       通过JS操作也可
@@ -804,10 +804,10 @@ WeUI:专为开发微信HTML5应用的开源Web UI组件库
     需要在body标签中加入ontouchstart ,如: <body ontouchstart>
 微信开发者工具: 用于在手机上调试页面
   使用方法及原理
-  将电脑和手机处于同一局域网「可通过Wi-Fi或USB连接」
-  切换到开发者工具的调试页根据手机系统「ios或android」进行相应的选择普通调试
-  选择代理的ip 「一般Wi-Fi以 168 开头」
-  将需要调试的网页的地址「不可使用file协议,即需要开启本地服务器」发送到微信上,
+  将电脑和手机处于同一局域网[可通过Wi-Fi或USB连接」
+  切换到开发者工具的调试页根据手机系统[ios或android」进行相应的选择普通调试
+  选择代理的ip [一般Wi-Fi以 168 开头」
+  将需要调试的网页的地址[不可使用file协议,即需要开启本地服务器」发送到微信上,
   在微信上打开从电脑上发来的链接即可看到调试页的效果了
 微信'JS-SDK' 
   PS:微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。

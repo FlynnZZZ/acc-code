@@ -99,7 +99,7 @@ Webpack: 模块加载器兼打包工具
         'filename' : './bundle.js' 打包后的文件的名称 
           也可定义路径,会接着path后,推荐只指定名称 
           可使用占位符指定动态的输入 
-            当存在多个输出的文件时用于指定名称「如entry的val为obj时」
+            当存在多个输出的文件时用于指定名称[如entry的val为obj时」
             [name]      表示entry的obj的key
             [hash]      表示打包时产生的hash值
             [chunkhash] 每个chunk的hash值,相当于文件的MD5值 
@@ -193,7 +193,7 @@ Webpack: 模块加载器兼打包工具
     每当遇到 import 或者 require()  依赖项时,解析这些代码,并且打包到最终构建里。
     接着它会不断递归搜索实际需要的依赖项,直到它到达了“树”的底部。
     从上一步接着,Webpack 把所有东西打包到 output.path 的文件夹里,
-    并使用 output.filename 命名 「 [name] 表示使用 entry 项的 key」
+    并使用 output.filename 命名 [ [name] 表示使用 entry 项的 key」
   Example: 
     完整的wepack配置文件 webpack.config.js
     2017.4.8 新增less支持,先安装less和less的加载器
@@ -781,7 +781,7 @@ Plugins,插件    扩展webpack的功能
             { test : /\.js$/,
               loader : 'babel', // 通过 babel 对 JS文件进行编译
               exclude : path.resolve(__dirname,'node_modules'), // 指定不用处理的部分
-              // 通过path「Node的API」将相对路径 node_modules 解析为绝对路径
+              // 通过path[Node的API」将相对路径 node_modules 解析为绝对路径
               include : './src/', // 指定处理的范围
               query : {
                 presets : ['latest'] 
@@ -812,7 +812,7 @@ Plugins,插件    扩展webpack的功能
             { test : /\.sass$/,
               loader : 'style!css!postcss!sass',
             },
-            // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的「相对」路径
+            // { test : /\.(png|jpg|gif|svg)$/i, // 用于处理图片的[相对」路径
             //   // HTML、CSS中图片的相对路径会被替换
             //   // 组件模版中HTML内需如此使用 <img src="${require(../a.png)}"/>
             //   loader : 'file',

@@ -2,13 +2,13 @@ ECMAScript : JS语法核心,提供核心语言功能;
   ECMAscript: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
-    ECMA-262 要求支持Unicode标准「从而支持多语言开发」,第五版发布于2009年;
+    ECMA-262 要求支持Unicode标准[从而支持多语言开发」,第五版发布于2009年;
     ECMA-262 中对象的行为不一定适用于JS中其他对象,
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
   JavaScript和ECMAScript的关系 
     JS的内容比 ECMA-262 中规定的要多,ECMA-262 的大部分是组成JS的一部分;
     Web浏览器只是ECMAscript实现可能的宿主环境之一,
-    还有其他环境如Node「一种服务端JavaScript平台」和Adobe Flash 等;
+    还有其他环境如Node[一种服务端JavaScript平台」和Adobe Flash 等;
   JS的核心语法ECMAScript包括两个部分:
     基本的语法构造,如操作符、控制结构、语句等
     标准库,如 Array、Date、Math 等
@@ -346,7 +346,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
 引用类型:Object对象 
-  PS:引用类型就叫对象「SlPt」; ECMA-262 定义为:无序的名值的合集 
+  PS:引用类型就叫对象[SlPt」; ECMA-262 定义为:无序的名值的合集 
     对象一般没有长度,具有多种属性的内容结构 
     与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类 
     对象由属性和值构成,值可以为基本值、对象或函数等任何类型 
@@ -1591,7 +1591,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
           return x++, x;
         }
         console.log(foo()); // 1
-      逗号,与 var 关键字 「moIn 关键字-var」
+      逗号,与 var 关键字 [moIn 关键字-var」
         1 , 2==3,function(){ console.log(4); }() // 4;
         var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
         var 2==3;          // Uncaught SyntaxError: Unexpected number
@@ -1764,8 +1764,8 @@ ECMAScript : JS语法核心,提供核心语言功能;
       console.log(rst); // aoo:aboo:11
   ◆控制结构
   break 和 continue  只能用于循环语句中,精确控制代码的执行 
-    continue 「跳出当前循环」继续下一次循环
-    break    跳出整个循环「执行循环后的语句」
+    continue [跳出当前循环」继续下一次循环
+    break    跳出整个循环[执行循环后的语句」
       aa: // 命名最外层的循环 
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
@@ -1781,7 +1781,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
   throw val  异常触发,用于随之抛出自定义错误 
     PS:在遇到throw操作时,代码会立即停止执行
     val 类型无要求
-  try{}catch(err){} 异常捕获与处理「ECMA-262 第3版增加」 
+  try{}catch(err){} 异常捕获与处理[ECMA-262 第3版增加」 
     PS:与Java中的 try-catch 语句完全相同,catch 和 finally 必须存在一个
       IE7存在bug:除非有catch否则不执行finally
     try{
@@ -1925,7 +1925,7 @@ OOP,面向对象
 函数式,过程化 
 ------------------------------------------------------------------------------- 
 ◆数据封装类对象 
-Object  一般对象 
+Object 一般对象 
   JS中所有类型对象的父对象,包括函数对象 
     Object.prototype.foo = function(){
       return '所有类型的对象都会继承到!'
@@ -1937,21 +1937,21 @@ Object  一般对象
     // 所有类型的对象都会继承到! 所有类型的对象都会继承到!
 Boolean 布尔对象:处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
-Number  数值对象:处理数值的'包装对象' 
+Number 数值对象:处理数值的'包装对象' 
   var num = new Number();  创建数值基本包装对象  
     var box1=new Number();
     var box2=new Number(1);
     console.log(box1);    //Number {[[PrimitiveValue]]: 0}
     console.log(box2);    //Number {[[PrimitiveValue]]: 1}
     typeof box2;          //返回值为"object"
-  num.toFixed(num)     将数字保留小数点后num位并转化为字符串「会四舍五入」 
+  num.toFixed(num)     将数字保留小数点后num位并转化为字符串[会四舍五入」 
   num.toExponential(x) 以科学计数法表示并保留x位小数.并转换成字符串 
-  num.toPrecision(x)   以指数或点形式来表示「根据x的长度来决定形式」 
+  num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式」 
   num.toString()       将数值转换为字符串 
     // 123.toString()  报错
     123.0.toString() // '123'
     (123).toString() // '123'
-String  字符对象:处理字符串的'包装对象' 
+String 字符对象:处理字符串的'包装对象' 
   var str = new String();  创建字符串基本包装对象  
     var str = 'abcd';
     var strObj = new String(str); 
@@ -2039,7 +2039,7 @@ String  字符对象:处理字符串的'包装对象'
       var s ="=";
       Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
   Array.prototype.splice.call('aaaa',1,1,"*")   [如何实现??]
-Array   数组对象 
+Array 数组对象 
   PS:数组是JS内置的一种特殊类型的对象 
     可以将数组类比成属性名为从0开始的自然数的对象,数组即有序数据的对象 
     JS中的Array类型和其他语言中的数组区别很大,数组的元素可以保存任何类型 
@@ -2124,11 +2124,11 @@ Array   数组对象
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    idx = arr.indexOf(val[,bgn])     查询元素索引「ES5」 
+    idx = arr.indexOf(val[,bgn])     查询元素索引[ES5」 
       PS:返回值为下标值,若找不到则返回-1 
       bgn  表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左]「ES5」 
+    idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左][ES5」 
     ◆改变原数组
     arr.reverse() 颠倒数组元素的顺序 
       Example: :
@@ -2159,9 +2159,9 @@ Array   数组对象
         添加的元素的个数可大于、等于或小于删除元素的个数; 
         若没有删除元素,则返回空数组;
       bgn  开始删除的元素的下标[包括该元素] 
-        若超出数组的长度,则从数组末尾开始「不会删除元素了」；
+        若超出数组的长度,则从数组末尾开始[不会删除元素了」；
         若是负值,则为 arr.length+bgn 
-      num 可选,默认为arr.length「SlSt」,要删除元素的个数 
+      num 可选,默认为arr.length[SlSt」,要删除元素的个数 
         若为 0,则不移除元素,此时至少应添加一个新元素
         若大于bgn之后的元素个数,则取该数值
       v   可选,要添加进数组的元素;若无,则只删除元素 
@@ -2172,7 +2172,7 @@ Array   数组对象
         console.log(arr); // [1, 3]
     arr.sort([foo])  根据回调布尔值排序元素 
       foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
-        通过冒泡的算法大小排序「SlSt」;
+        通过冒泡的算法大小排序[SlSt」;
         若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
         var arr =[31,1,2,5,4]
         var resArr = arr.sort();
@@ -2255,14 +2255,14 @@ Array   数组对象
           repeatStr("a",6); // "aaaaaa"
     ◆遍历方法
       以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
-    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作「ES5」
+    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作[ES5」
       PS:已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
         无法中止或跳出forEach循环,除非报错.
       foo    函数为每个元素执行,接收三个参数:
         value 可选,元素
         index 可选,元素的索引
         arr   可选,数组对象本身
-      thisArr 可选,表示数组本身,当执行回调函数时用作this的值「参考对象」.
+      thisArr 可选,表示数组本身,当执行回调函数时用作this的值[参考对象」.
         若给forEach传递了thisArr 参数,它将作为 foo 函数的执行上下文,
         类似执行如下函数foo.call(thisArr, element, index, array).
         若 thisArr 值为 undefined 或 null,
@@ -2301,7 +2301,7 @@ Array   数组对象
         catch (e) {
           console.log('执行了');
         } 
-    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真「ES5」
+    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真[ES5」
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -2318,7 +2318,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真「ES5」
+    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真[ES5」
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -2333,7 +2333,7 @@ Array   数组对象
           return val > 18;
         });
         console.log(res); // true
-    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组「ES5」 
+    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5」 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -2367,7 +2367,7 @@ Array   数组对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组「ES5」
+    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5」
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       thisArr 可选,执行函数时的用于 this 的值
@@ -2378,7 +2378,7 @@ Array   数组对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值「ES5」
+    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值[ES5」
       PS:接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
         为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
         若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
@@ -2400,17 +2400,17 @@ Array   数组对象
         });
         console.log(arr); // [1, 2, 3, 4, 5]
         console.log(res); // 15
-    val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历「ES5」
+    val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历[ES5」
   静态方法 
-    var bol = Array.isArray(arr)  判断是否为布尔值「ES5」 
-    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组「ES5」
+    var bol = Array.isArray(arr)  判断是否为布尔值[ES5」 
+    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5」
       arrLike 想要转换成数组的类数组或可遍历对象
       mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
       thisArr 可选,执行 mapFoo 函数时 this 的值
   Exp: 
     数组的复制
       通过 slice(0) 复制 
-        PS:使用slice为浅拷贝,只能将第一层完全复制「更深层是引用」
+        PS:使用slice为浅拷贝,只能将第一层完全复制[更深层是引用」
         当arr中的元素为数组时,修改它仍然会改变复制后的数组
         var arr = [[1], 2];
         var res = arr.slice(0);
@@ -2427,44 +2427,6 @@ Array   数组对象
         console.log(res[0]);  // [1, 1]
       slice concat 的复制都为浅拷贝,只能复制到一维;
       使用JSON 序列化与反序列化来复制(?)
-ArrayBuffer 二进制数组 
-  PS:JavaScript操作二进制数据的接口; 
-    二进制数组由三个对象组成,这些对象早就存在,属于独立的规格,
-    ES6将它们纳入了ECMAScript规格,并增加了新的方法;
-    这些对象原始的设计目的,与WebGL项目有关。
-    所谓WebGL,就是指浏览器与显卡之间的通信接口,
-    为了满足JavaScript与显卡之间大量的、实时的数据交换,
-    它们之间的数据通信必须是二进制的,而不能是传统的文本格式。
-    文本格式传递一个32位整数,两端的JavaScript脚本与显卡都要进行格式转化,将非常耗时。
-    这时要是存在一种机制,可以像C语言那样,直接操作字节,
-    将4个字节的32位整数,以二进制形式原封不动地送入显卡,脚本的性能就会大幅提升。
-    二进制数组就是在这种背景下诞生的。
-    它很像C语言的数组,允许开发者以数组下标的形式,直接操作内存,
-    大大增强了JavaScript处理二进制数据的能力,
-    使得开发者有可能通过JavaScript与操作系统的原生接口进行二进制通信。
-    简单说,ArrayBuffer对象代表原始的二进制数据,TypedArray对象代表确定类型的二进制数据,
-    DataView对象代表不确定类型的二进制数据。
-    它们支持的数据类型一共有 9 种(DataView对象支持除Uint8C以外的其他8种)。
-  ArrayBuffer 代表内存之中的一段二进制数据,可以通过“视图”进行操作。
-    “视图”部署了数组接口,这意味着,可以用数组的方法操作内存。
-  TypedArray  用来生成内存的视图
-    通过9个构造函数,可以生成9种数据格式的视图,
-    比如 Uint8Array (无符号8位整数)数组视图, 
-    Int16Array (16 位整数)数组视图, 
-    Float32Array (32 位浮点数)数组视图等等
-  DataView    用来生成内存的视图,可以自定义格式和字节序 
-    比如第一个字节是Uint8[无符号8位整数]、第二个字节是Int16[16 位整数]、
-    第三个字节是Float32[32 位浮点数]等等。
-  数据类型 字节长度  对应的C语言类型    含义 
-    Int8      1     signed char      8 位带符号整数               
-    Uint8     1     unsigned char    8 位不带符号整数               
-    Uint8C    1     unsigned char    8 位不带符号整数(自动过滤溢出)
-    Int16     2     short            16 位带符号整数               
-    Uint16    2     unsigned short   16 位不带符号整数               
-    Int32     4     int              32 位带符号整数               
-    Uint32    4     unsigned int     32 位不带符号的整数             
-    Float32   4     float            32 位浮点数                    
-    Float64   8     double           64 位浮点数                    
 ◆功能类对象 
 Function 函数对象 
   PS:函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能 
@@ -2898,7 +2860,7 @@ Function 函数对象
     };
     goo(); // function goo(){ foo(); }
   foo.prototype [构造]函数的原型属性对象(参见 对象原型)
-Date     日期时间对象 
+Date 日期时间对象 
   PS:ECMAScript提供了Date类型来处理时间和日期 
     Date 对象内置一系列获取和设置日期时间信息的方法.
     ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的.
@@ -2989,7 +2951,7 @@ Date     日期时间对象
     box.toString(); // "a,18,js"
     box.toLocaleString();//"a,18,js"
     上面显示一致,当出现如时间的属性时,则返回字符串格式参照本地时间格式.
-RegExp   正则对象 
+RegExp 正则对象 
   PS:Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
     正则表达式是一个描述字符模式的对象.
     ECMAScript的RegExp类型表示正则表达式.
@@ -3349,7 +3311,7 @@ RegExp   正则对象
       中文表示为 [\u0391-\uFFE5]
       为 /[\u0391-\uFFE5a]/ ?
     指定初始开始匹配的字符的下标,如'abcde',指定从第二个字符开始匹配 
-Error    错误对象 
+Error 错误对象 
   PS:JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象。
     然后整个程序就中断在发生错误的地方,不再往下执行.
     JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例。
@@ -3546,14 +3508,14 @@ Global|Window 全局对象
         var val = eval(str);
         console.log(num,val); // 100 undefined 
   window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
-Math   数学对象 
+Math 数学对象 
   PS:为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
   ◆数学值
   Math.PI         π的值
     Math.PI;  //3.141592653589793
   Math.SQRT2      2 的平方根 
   Math.SQRT1_2    1/2 的平方根 
-  Math.E          自然对数的底数,即常量e的值「也叫欧拉参数」
+  Math.E          自然对数的底数,即常量e的值[也叫欧拉参数」
   Math.LN10        10 的自然对数
   Math.LN2         2 的自然对数
   Math.LOG2E       以2为底e的对数
@@ -3572,9 +3534,9 @@ Math   数学对象
     Math.min.apply(null,[2,3,5,6,76,8,7]);   // 2
     Math.min.apply(null,[0,0,0]);   // 2
   ◆取整
-  Math.round(num)   四舍五入取整            「round 圆；循环；一回合；圆形物」
-  Math.ceil(num)    向上舍入取整,数值将变大; 「ceil  天花板」 
-  Math.floor(num)   向下舍入取整,数值将变小; 「floor 地板  」
+  Math.round(num)   四舍五入取整            [round 圆；循环；一回合；圆形物」
+  Math.ceil(num)    向上舍入取整,数值将变大; [ceil  天花板」 
+  Math.floor(num)   向下舍入取整,数值将变小; [floor 地板  」
     Math.floor(1.1)    //1
   其他方法
     Math.abs(num)       返回num的绝对值
@@ -3590,7 +3552,7 @@ Math   数学对象
     Math.asin(num)        返回num的反正弦值
     Math.atan(num)        返回num的反正切值
     Math.atan2(num1,num2) 返回num1/num2的反正切值
-JSON,'JavaScript_Object_Notation'JS对象表示法 
+'JavaScript_Object_Notation'JSON,JS对象表示法 
   PS: 一种基于文本、独立于语言的轻量级数据交换格式,
     利用 JS 中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.
@@ -3915,7 +3877,7 @@ Scope,作用域
     作用域是指变量的可访问性,上下文是指 this 在同一作用域内的值。
     也可以使用函数方法来改变上下文;
     在浏览器中在全局作用域中上下文中始终是Window对象,
-    在Nodejs中在全局作用域中上下文中始终是Global 对象「取决于JS的宿主换环境」
+    在Nodejs中在全局作用域中上下文中始终是Global 对象[取决于JS的宿主换环境」
   
     console.log(this);       // window
     function logFunction() {
@@ -4308,7 +4270,7 @@ Scope,作用域
     argArr  函数传入的参数,类型为数组或类数组对象
       其中的数组元素将作为单独的参数传给 foo 函数.
       若该参数的值为null 或 undefined,则表示不需要传入任何参数.
-      从ECMAScript 5 开始可以使用类数组对象「可能存在兼容性问题」
+      从ECMAScript 5 开始可以使用类数组对象[可能存在兼容性问题」
     Example: :
       function Pet(words){
         this.words =words;
@@ -4355,7 +4317,7 @@ Scope,作用域
           var p2 =New(Person)("boo",18); //使用仿造的new
           console.log(p1); //Person {name: "aoo", age: 19}
           console.log(p2); //Person {name: "boo", age: 18}
-  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态「ES5」
+  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态[ES5」
     PS:bind()方法会创建一个新函数 
       当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
       之后的一序列参数将会在传递的实参前传入作为它的参数;
@@ -4551,7 +4513,7 @@ JavaScript 核心概念之作用域和闭包
     闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
     从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 -----------------------------------------------------------------------待整理 
-  作用域「执行环境」
+  作用域[执行环境」
     PS:执行环境定义了变量或函数有权访问的其他数据,决定了他们各自的行为.
     作用域与变量
       PS:在局部作用域内定义变量不加var,则定义的为全局全局变量(不推荐使用)
@@ -4671,6 +4633,5 @@ JavaScript 核心概念之作用域和闭包
         }
         return obj;
       }
-
 
 

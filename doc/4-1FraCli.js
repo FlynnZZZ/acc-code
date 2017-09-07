@@ -1,3 +1,4 @@
+'Command Line Interface for batch scripting'cli: 命令行界面
 'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
   PS: 成熟的Vue项目架构设计;热加载本地测试服务器;集成打包上线方案;  
     使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码 

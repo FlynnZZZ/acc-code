@@ -1373,8 +1373,9 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
     tagname 组件的名称 
       对于自定义标签名,Vue不强制要求遵循W3C规则[小写,并且包含一个短杠],
       但尽管遵循这个规则比较好
-    options 配置对象/f(resolve,reject),异步组件  
-      PS: 相当于new Vue(options)的options  
+    options 
+      ◆配置对象
+        PS: 相当于new Vue(options)的options  
       template: HTMLStr,   组件的HTML代码
       props: options ,     可选,自定义属性 
         options 可为 字符串集合数strArr组或对象obj
@@ -1420,6 +1421,14 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       computer : {}
       methods  : {}
       name : '',        // 命名组件 [Self] 
+      ◆f(resolve,reject) 异步组件 
+        function(resolve,reject){
+          $.get("./head.html").then(function (res) {
+            resolve({
+              template: res
+            })
+          });
+        }, 
     Example: 
       定义名为<todo-item>的新组件
       Vue.component('todo-item',{
@@ -1460,8 +1469,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           ]
         }
       })
-  'components': {},  vue实例中局部注册 
-    通过在组件实例选项中注册,可使组件仅在该实例/组件的作用域中使用
+  'components': {},  vue实例中局部注册[仅能在该实例/组件的作用域中使用]  
     new Vue({
       ...
       components: {

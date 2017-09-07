@@ -3,25 +3,26 @@
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
     允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用. 
-命令行命令 
+相关命令行命令 
   PS:所有node_modules/.bin/目录下的命令,都可以用 'npm run 命令' 的格式运行,
     在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
     和npm相关的指令或命令前都需添加'npm '
   ◆常用命令 
-  npm init     初始化,创建'package.json'文件 
-  npm install <name> [<pos>]    安装包[简写'i'] 
-    <name>     node包名称 
-    npm install  根据'package.json'安装所有依赖 
+  npm init [-y]  初始化,创建'package.json'文件 
+    -y   选用,默认将选项设置为yes 
+  npm install <name> [<posOpt>]    安装包[简写'i'] 
+    <name>       node包名称,可同时安装多个使用空格分割  
     Example: 
       npm install lodash -g   全局安装 
       npm install npm -g      升级npm版本[会更新所有npm的包?]
       npm install -g npm@2.9.1  指定版本 
-  npm uninstall <name> [<pos>]  卸载包 
+  npm i    根据'package.json'安装所有依赖 
+  npm uninstall <name> [<posOpt>]  卸载包 
     PS:不要直接删除本地插件包
     Example:
-      npm uninstall gulp-less gulp-uglify gulp-concat 删除列出的全部插件
-  npm list [<pos>]       查看当前目录已安装模块[简写'ls'] 
-  npm update [<name>] [<pos>]   更新插件
+    npm uninstall gulp-less gulp-uglify gulp-concat  一次性删除多个插件
+  npm list [<posOpt>]       查看当前目录已安装模块[简写'ls'] 
+  npm update [<name>] [<posOpt>]   更新插件
     npm update       升级当前目录下的所有模块
     npm update -g           更新npm 
     npm update vue-cli -g   更新vue
@@ -30,14 +31,14 @@
   npm view vue-cli   查看全局 vue-cli 版本
   npm help           查看npm帮助 
     npm help <command> 可查看某条命令的详细帮助
-  ◆<pos> 安装位置的配置参数,可选,可多选   
-  -g           全局安装 
+  ◆<posOpt> 安装位置的配置参数,可选,可多选   
+  -g         全局安装 
     将会安装在'C:\Users\Administrator\AppData\Roaming\npm'目录下,并写入系统环境变量
-  --save       将模块写入'package.json'文件的'dependencies'属性中[简写'-S']
-  --save-dev   将模块写入'package.json'文件的'devDependencies'属性中[简写'-D'] 
-  '--save-dev'和'--save'的区别 
-    --save-dev 是开发时候依赖的东西
-    --save     是发布之后还依赖的东西
+  --save     将模块写入'package.json'文件的'dependencies'属性中[简写'-S']
+  --save-dev 将模块写入'package.json'文件的'devDependencies'属性中[简写'-D'] 
+  '-S'和'-D'的区别 
+    '-D' 是开发时候依赖的东西
+    '-S' 是发布之后还依赖的东西
     比如写ES6代码,若想编译成ES5发布那么'babel'就是'devDependencies',
     若用了jQuery,由于发布之后还是依赖'jQuery',所以是'dependencies';
   全局安装与本地安装的区别  
@@ -268,11 +269,11 @@
       ]
     homepage - 包的官网 url 。
 --------------------------------------------------------------------------------
-http-server: 本地调试及移动端调试 
-  npm i http-server -g   全局安装'http-server'  
-  http-server [<config>]   在相应的文件夹下启动服务
+http-server: 本地调试及移动端调试服务器  
+  npm i -g http-server     全局安装'http-server'  
+  http-server [<options>]   [在相应的文件夹下]启动服务 
     PS: 在网页中或手机中访问出现的网址 
-    ◆<config> 配置项 
+    ◆<options> 配置项 
     -a 127.0.0.1  指定域名 
     -p 8080       指定端口号 
     -s            阻止命令行中打印信息 

@@ -986,7 +986,7 @@ window的属性对象
     window.frames[num]  通过下标来获取到ifrme[从0开始,从左至右,从上至下]  
     window.frames[name] 通过iframe的'name'属性值来获取到iframe 
   window.CSS    CSS接口涵盖了CSS相关的方法 [W3C][IE不支持] 
-    PS:CSS接口是一个工具接口，因此无法创建该类型的对象:其内部只定义了静态的方法 
+    PS:CSS接口是一个工具接口,因此无法创建该类型的对象:其内部只定义了静态的方法 
     CSS.supports()  检测浏览器是否支持CSS的某些功能  
       bol = CSS.supports(propertyName, value);
       bol = CSS.supports(supportCondition);

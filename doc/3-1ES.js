@@ -4407,7 +4407,7 @@ Scope,作用域
       }
     }
     console.log(obj.foo()());  // 2
-JavaScript 核心概念之作用域和闭包 
+JS核心概念之作用域和闭包 
   function_scope 函数对象作用域
     JavaScript 中每个函数都表示为一个函数对象（函数实例）,
     既然是对象,就有相关的属性和方法。

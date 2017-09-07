@@ -1,4 +1,10 @@
 ◆名词解释 
+  常用单词 
+    bin   binary 二进制 
+    src   source 来源 
+    dest  destination 目的地 
+    repo  repository 仓库 
+    spec  specification 说明书 
   'Integrated_Development_Environment',IDE 集成开发环境 
   'scripting_language'脚本语言 
     不具备开发操作系统的能力,只用来编写控制其他大型应用程序的'脚本';
@@ -45,13 +51,13 @@ HSL 色彩模式,工业界的一种颜色标准
     在日文操作系统上它表示JIS编码。
   UTF-8 
 URI&URL&URN 资源标识定位 
-  'Uniform_Resource_Identifier'URI : 统一资源标识符 
+  'Uniform Resource Identifier'URI : 统一资源标识符 
     一个用于标识某一互联网资源名称的字符串
-    该种标识允许用户对任何（包括本地和互联网的）资源通过特定的协议进行交互操作
-    URI由包括确定语法和相关协议的方案所定义。
-    Web上可用的每种资源(HTML文档、图像、视频片段、程序等)由一个通用资源标识符进行定位
-  'Uniform_Resource_Locator'URL : 统一资源定位符[也叫网址] 
-    PS:从互联网上得到的资源的位置和访问方法的一种简洁的表示,是互联网上标准资源的地址
+    该种标识允许用户对任何[包括本地和互联网的]资源通过特定的协议进行交互操作
+    URI由包括确定语法和相关协议的方案所定义
+    Web上可用的每种资源[HTML文档、图像、视频片段、程序等]由一个通用资源标识符进行定位
+  'Uniform Resource Locator'URL : 统一资源定位符[也叫网址] 
+    PS:从互联网上得到的资源的位置和访问方法的一种简洁的表示,是互联网上标准资源的地址 
       互联网上的每个文件都有一个唯一的URL,它包含的信息指出文件的位置以及浏览器应该怎么处理它
       使用ASCII代码的一部分来表示互联网的地址,
       一般统一资源定位符的开始标志着一个计算机网络所使用的网络协议。
@@ -82,10 +88,8 @@ URI&URL&URN 资源标识定位
         同级,直接书写目标文档全称: fileName,如 boo.js;
         上一级,书写为:folderName/fileName;
         ../ 表示上一级目录; ./ 表示当前目录; / 表示相对根路径
-  'Uniform_Resource_Name'URN : 统一资源名称 
-    标识一个实体的标识符
-  区别
-    URN 与地址无关; URL 和 URN 都是 URI 的子集
+  'Uniform Resource Name'URN : 通过名称来识别资源,和位置无关  
+  URL 和 URN 都是 URI 的子集
 socket,套接字 
   源IP地址和目的IP地址以及源端口号和目的端口号的组合称为套接字。
   其用于标识客户端请求的服务器和服务。
@@ -96,39 +100,73 @@ HTTP 协议
   PS:计算机通过网络进行通信的规则,是一种无状态协议,不建立持久的连接;
     使客户端[浏览器]能够向web服务器请求信息和服务 
     在网络中请求和响应的数据都以二进制传输的[?]
+  报文 
+    HTTP报文是在HTTP应用程序之间发送的数据块。
+    这些数据块以一些文本形式的元信息开头,描述报文的内容及含义,后面跟着可选的数据部分
+    HTTP报文是简单的格式化数据块,每个报文都包含一条来自客户端的请求或者一条来自服务器的响应,
+    起始行和首部就是由行分隔的ASCII文本,主题是一个可选的数据块,可能是文本、二进制或者空
+    由3个部分组成
+      HTTP/1.0 200 OK           // start line,对报文进行描述的起始行 
+      content-type: text/plain  // header,包含属性的首部块 
+      content-length: 19
+      // 空行 
+      Hi, Im a message          //  body,可选的包含数据的主体部分 
+    HTTP报文分为两类 请求报文 和 响应报文 
+    通用首部: 客户端和服务器都可以使用
+      首部                     描述
+      Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型
+      Date             日期,报文创建时间
+      Update           给出了发送端可能想要升级使用新版本或协议
+      Via              显示了报文经过的中间节点（代理、网关）
+      Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
+      Trailer-Encoding 告诉接收端对报文采用什么编码格式
+      Cache-Control    随报文传送缓存指示
+      Pragma           早期的随报文传送指示方式
+    请求首部 
+      Host                接收请求服务器的主机名和端口号 
+      Referer             提供了包含当前请求URI的文档的URL,告诉服务器自己来源 
+        该英文的正确拼法为referrer 
+      User-Agent          发起请求的客户端应用程序,浏览器的用户代理字符串 
+      Accept              告诉服务器能够发送那些媒体类型,客户端能够处理的内容类型 
+      Accept-Charset      客户端能识别的字符集 
+      Accept-Encoding     告诉服务器能够发送那些编码
+      Accept-Language     告诉服务器能够发送那些语言
+      Cookie              客户端字符串
+      Client-IP           客户端IP
+      From                客户端邮件地址
+      Expect              允许客户端列出请求所要求的服务器行为
+      If-Match            如果ETag和文档当前ETag匹配,就获取文档
+      If-Modified-Since   除非在某个指定日期之后修改过,否则限制这个请求
+      If-None-Match       如果ETag和当前文档ETag不符合,获取资源
+      If-Range            允许对文档否个范围内的条件请求
+      If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
+    响应首部 
+      Content-Type     主体的MIME,返回的响应内容的类型  
+      Content-Length   主体的长度或尺寸 
+      Content-Encoding 主体编码格式 
+      Content-Language 解析主体时适用的语言 
+      Content-Base     解析主体中相对URL的基础URL 
+      Content-Location 资源实际位置 
+      Content-MD5      主体的MD5校验和 
+      Content-Range    在整个资源中此实体部分的字节范围  
+      Server           服务器应用软件名称和版本 
+      Age              响应持续时间 
+      Allow            列出了可用的请求方法 
+      Location         告诉客户端实在在哪里,用于定向 
+      ETag             主体的实体标记  
+      Expires          过期时间  
+      Last-Modified    实体最后一次修改时间 
   Request,请求 
     一般由四部分组成:
     请求方法,如GET或POST请求
     请求的URL
     请求头,包含一些客户端环境信息,身份验证信息等 
-      默认情况下,发送xhr请求的同时,还会发送下列头信息
-      虽然不同浏览器发送的头部信息会有所不同,以下为共有的信息
-      Accept          浏览器能够处理的内容类型
-      Accept-Charset  浏览器能够显示的字符集
-      Accept-Encoding 浏览器能够处理的压缩编码
-      Accept-language 浏览器当前设置的语言
-      Connection      浏览器父服务器之间连接的类型
-      Cookie          当前页面设置的任何Cookie
-      Host            发出请求的页面所在的域
-      Referer         发出请求页面的URI
-        注意,HTTP规范将这个头部字段拼写错了, 为了保证与规范一致,只能将错就错
-        (该英文的正确拼法为referrer)
-      User-Agent      浏览器的用户代理字符串
     请求体,即请求正文,其中可以包含客户提交的查询字符串信息,表单信息等等.
   Response,响应 
     一般由三部分组成:
-    状态码: 一个数字和文字组成的,用于表示请求的状态(是成功还是失败等)
+    状态码: 一个数字和文字组成的,用于表示请求的状态[是成功还是失败等] 
     响应头: 和请求头类似,包含许多的信息,如服务器类型、日期时间、内容类型和长度等
-      图片的响应头部中 Content-Type 会指定返回的响应内容的类型
-      实际上只需要指定是 image 就可以了, 具体的类型是没有关系的
-      一般下载的是 zip 文件 
-
     响应体: 响应正文 
-  Headers,HTTP头信息
-    PS:每个http请求和响应都会带有相应的头部信息
-      xhr对象提供了操作头信息[请求头信息和响应头信息」的方法
-      有的浏览器允许重写默认头信息,而有的浏览器则不允许 
-      头信息中必须使用ASCII码.
   网址的组成  
     协议 http、https(https为加密的https) 超文本传输协议(收发的信息是文本信息)
     主机/域名/ip地址
@@ -180,33 +218,86 @@ HTTP 协议
     url的可用字符: 0-9,a-z,A-Z ,其他用十六进制表示,并在每个字节前加%
     url编码:encodeURIComponent('字符')
     url解码:decodeURIComponent('字符')
-  'HTTP Code'状态码 
+  'Status Code'状态码: 表示请求的结果 
     PS:由三位数值组成,第一位表示其类别
-    '1XX' 表示请求已接收
-    '2XX' 成功
-    '3XX' 重定向,表示没有成功,客户必须采取进一步的动作
-    '4XX' 客户端错误
-    '5XX' 服务器端错误
-    ◆常用状态码
-    200 OK    正常返回信息
-    302       重定向 
-    304 Not Modified 自从上次请求后,请求的网页未修改过
-    400 Bad Request  请求错误,不符合要求 
-      服务器无法理解请求的格式,客户端不应再次使用相同的内容发起请求
-    401   请求未授权 
-    403 Forbidden    禁止访问
-    404 Not Found    找不到匹配的资源
-    500 Internal Server Error  最常见的服务器端错误
-    503 Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
-    ◆其他状态码及说明
-    100 Continue     继续,
-      一般在发送post请求时,已发送了http header之后服务端将返回此信息,
-      表示确认,之后发送具体参数信息
-    201 Created   请求成功并且服务器创建了新的资源 
-    202 Accepted  服务器已接受请求,但尚未处理 
-    301 Moved Permanently  请求的网页已永久移动到新位置 
-    303 See Other    临时性重定向,且总是使用 GET 请求新的 URI 
-    401 Unauthorized      请求未授权 
+    状态码被分为五大类：
+    100-199 用于指定客户端应相应的某些动作,表示请求已接收 
+    200-299 用于表示请求成功 
+    300-399 重定向,表示没有成功,客户必须采取进一步的动作,
+      用于已经移动的文件并且常被包含在定位头信息中指定新的地址信息 
+    400-499 客户端错误 
+    500-599 服务器错误 
+    ◆状态码及说明 
+    100  Continue            继续 [HTTP1.1] 
+      初始的请求已经接受,客户应当继续发送请求的其余部分
+    101  Switching Protocols 服务器将遵从客户的请求转换到另外一种协议 [HTTP1.1] 
+    ★200  OK        正常返回信息 
+    201  Created   请求成功,服务器创建了新的资源,Location头给出了它的URL  
+    202  Accepted  服务器已接受请求,但处理尚未完成 
+    203  Non-Authoritative Information 文档已返回,可能有误 [HTTP1.1] 
+      一些应答头可能不正确,因为使用的是文档的拷贝 
+    204  No Content 没有新文档,浏览器应该继续显示原来的文档
+      如果用户定期地刷新页面,而Servlet可以确定用户文档足够新,这个状态代码是很有用的 
+    205  Reset Content 没有新的内容,但浏览器应该重置它所显示的内容 [HTTP1.1] 
+      用来强制浏览器清除表单输入内容 
+    206  Partial Content 客户发送了一个带有Range头的GET请求,服务器完成了它 [HTTP1.1] 
+    300  Multiple Choices 客户请求的文档可以在多个位置找到 
+      这些位置已经在返回的文档内列出。如果服务器要提出优先选择,则应该在Location应答头指明。
+    301  Moved Permanently 客户请求的文档在其他地方
+      新的URL在Location头中给出,浏览器应该自动地访问新的URL。
+    302  Found   重定向,类似于301,但新的URL应该被视为临时性的替代,而不是永久性的 
+      注意,在HTTP1.0 中对应的状态信息是“Moved Temporatily”。
+      出现该状态代码时,浏览器能够自动访问新的URL,因此它是一个很有用的状态代码。
+      注意这个状态代码有时候可以和301替换使用。
+      例如,如果浏览器错误地请求http://host/~user（缺少了后面的斜杠）,
+      有的服务器 返回301,有的则返回302。
+      严格地说,我们只能假定只有当原来的请求是GET时浏览器才会自动重定向。请参见307 
+    303  See Other 类似于301/302  [HTTP1.1]  
+      不同之处在于,如果原来的请求是POST,Location头指定的重定向目标文档应该通过GET提取 
+    304  Not Modified 自从上次请求后,请求的网页未修改过 
+      客户端有缓冲的文档并发出了一个条件性的请求。
+      一般是提供If-Modified-Since头表示客户只想比指定日期更新的文档 
+      服务器告诉客户,原来缓冲的文档还可以继续使用。
+    305  Use Proxy   客户请求的文档应该通过Location头所指明的代理服务器提取 [HTTP1.1] 
+    307  Temporary Redirect  和302相同 [HTTP1.1] 
+      许多浏览器会错误地响应302应答进行重定向,即使原来的请求是POST,
+      即使它实际上只能在POST请求的应答是303时才能重定向。
+      由于这个原因,HTTP 1.1新增了307,以便更加清除地区分几个状态代码：
+      当出现303应答时,浏览器可以跟随重定向的GET和POST请求；
+      如果是307应答,则浏览器只能跟随对GET请求的重定向 
+    ★400  Bad Request  请求出现语法错误,服务器无法理解请求的格式 
+    401  Unauthorized  客户试图未经授权访问受密码保护的页面  
+      响应中会包含一个WWW-Authenticate头,浏览器据此显示用户名字/密码对话框,
+      然后在填写合适的Authorization头后再次发出请求。
+    403  Forbidden     资源不可用,禁止访问
+      服务器理解客户的请求,但拒绝处理它。通常由于服务器上文件或目录的权限设置导致。
+    ★404  Not Found     找不到匹配的资源 
+    405  Method Not Allowed 请求方法对指定的资源不适用 [HTTP1.1] 
+    406  Not Acceptable 类型不兼容 [HTTP1.1]  
+      指定的资源已经找到,但其MIME类型和请求Accpet头中所指定的不兼容
+    407  Proxy Authentication Required 类似于'401' [HTTP1.1]  
+      表示客户必须先经过代理服务器的授权 
+    408  Request Timeout 在服务器许可的等待时间内,客户一直没有发出任何请求 [HTTP1.1] 
+      客户可以在以后重复同一请求 
+    409  Conflict 由于请求和资源的当前状态相冲突,因此请求不能成功 [HTTP1.1] 
+      通常和PUT请求有关 
+    410  Gone 所请求的文档已经不再可用,而且服务器不知道应该重定向到哪一个地址 [HTTP1.1] 
+      它和404的不同在于,返回407表示文档永久地离开了指定的位置,
+      而 404表示由于未知的原因文档不可用 
+    411  Length Required 服务器不能处理请求,除非客户发送一个Content-Length头 [HTTP1.1] 
+    412  Precondition Failed 请求头中指定的一些前提条件失败 [HTTP1.1] 
+    413  Request Entity Too Large 目标文档的大小超过服务器当前愿意处理的大小 [HTTP1.1] 
+      如果服务器认为自己能够稍后再处理该请求,则应该提供一个Retry-After头 
+    414  Request URI Too Long URI太长 [HTTP1.1] 
+    416  Requested Range Not Satisfiable 服务器不能满足客户在请求中指定的Range头 [HTTP1.1]  
+    ★500  Internal Server Error  服务器遇到了意料不到的情况,不能完成客户的请求
+      最常见的服务器端错误
+    501  Not Implemented 服务器不支持实现请求所需要的功能。
+      例如,客户发出了一个服务器不支持的PUT请求 
+    502  Bad Gateway 服务器作为网关或者代理时,为了完成请求访问下一个服务器,但该服务器返回了非法的应答 
+    503  Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
+    504  Gateway Timeout 由作为代理或网关的服务器使用,表示不能及时地从远程服务器获得应答 [HTTP1.1] 
+    505  HTTP Version Not Supported 服务器不支持请求中所指明的HTTP版本  [HTTP1.1]  
   'HTTP Method':发送请求的类型
     PS:http 1.0 定义了8种方法,主要使用'GET'和'POST';
     GET  请求
@@ -225,7 +316,12 @@ HTTP 协议
       Remarks:
         表单提交时 Content-Type 为 application/x-www-form-urlencoded
     PUT  请求更新服务器端数据
-    HEAD 检查一个对象是否存在
+    HEAD 检查一个对象是否存在 
+      在服务器的响应中没有资源的内容,只有资源的一些基本信息
+      主要用于
+      1 在不获取资源的情况下获取资源信息（类型、大小等）
+      2 通过状态码产看资源是否存在
+      3 通过查看首部,测试资源是否被修改了
     DELETE  请求删除数据
     CONNECT 对通道提供支持
     TRACE   跟踪到服务器的路径
@@ -272,35 +368,41 @@ HTTP 协议
     最终浏览器渲染成功呈现页面 
   HTTP 缓存 
     PS:缓存:存储指定资源的一份拷贝,并在下次请求该资源时提供该拷贝的技术 
-    缓存控制 头信息 
-      Cache-control 头 [HTTP/1.1] 
+    缓存控制--头信息 
+      Expires 通过指定缓存文件过期时间来控制 [HTTP/1.0] 
+        'Expire'的值是一个绝对时间点,表示缓存文件在某个时间点之前有效 
+      Cache-Control: max-age=num;  [HTTP/1.1] 
         PS:请求头和响应头都支持该属性,提供的不同的值来定义缓存策略; 
-          当请求头的Cache-control优先级高于响应头中的;
-        'no-store'  完全不支持缓存,每次由客户端发起的请求都会下载完整的响应内容 
+          请求头的'Cache-control'优先级高于响应头中的;
+          'Cache-Control'优先级高于Expires;
+        'no-store'  禁止缓存,每次由客户端发起的请求都会下载完整的响应内容 
+          浏览器会直接向服务器请求原始文件，并且请求中不附带 Etag 参数[服务器认为是新请求]
         'no-cache'  不缓存内容,在释放缓存内容前向服务端源地址发送请求以验证缓存是否有效 
-        'private'   私有缓存,响应的内容只能被唯一的用户缓存 
-        'public'    公共缓存,响应可以被任何请求来源缓存 
-        max-age=num  判断缓存是否过期,num为距离请求发起的时间的秒数 
-        must-revalidate 缓存验证,在使用一些老的资源前强制验证状态判断其是否过期
-      Expires 头 [HTTP/1.0]
-        PS: Cache-Control的max-age值表示缓存文件的有效时间的秒数,
-          时间根据系统的时间来进行判断;
-          Expire的值是一个绝对时间点,表示缓存文件在某个时间点之前有效。
-          Cache-Control优先级高于Expires;
-      Pragma 头 [HTTP/1.0]
-        PS:响应头不支持该属性,通常定义Pragma以向后兼容基于HTTP/1.0 的客户端 
+          表示不使用Cache-Control的缓存控制方式做前置验证，
+          而是使用'Etag'或者'Last-Modified'字段来控制缓存
+        'private'   私有缓存,中间节点不允许缓存,响应的内容只能被唯一的用户缓存  
+        'public'    公共缓存,表示响应可被任何中间节点缓存  
+          如 Browser <-- proxy1 <-- proxy2 <-- Server，中间的proxy可以缓存资源，
+          比如下次再请求同一资源proxy1直接把自己缓存的东西给 Browser 而不再向proxy2要。
+        max-age=num     表示当前资源的有效时间,单位s 
+          时间根据系统的时间来进行判断 
+        must-revalidate 缓存验证,在使用一些老的资源前强制验证状态判断其是否过期 
+      Last-Modified/If-Modified-Since 配合Cache-Control使用 
+        缓存过期后,当之前响应头中存在'Last-Modified'头信息, 
+        请求头发出'If-Modified-Since'判断是否使用缓存, 
+        服务器收到'If-Modified-Since'则与资源的最后修改时间[根据服务器时间]进行比对,
+        若最后修改时间较新,说明资源被改动过,响应'304',从缓存读数据;
+        若最后修改时间较旧,说明资源无新修改,响应'200',返回新数据, 
+        同时通过响应头更新'last-Modified'的值,以备下次对比; 
+      Etag/If-None-Match              配合Cache-Control使用 
+        根据文件的MD5值来判断是否使用缓存;  
+        响应头中返回'Etag'[值为资源的MD5],
+        当资源过期后,请求头中发送'If-None-Match'[值为上次响应头中'Etag'的值], 
+        服务器通过判断文件的MD5和请求头中的'If-None-Match'来执行响应,相同则返回'304';
+        否则响应新的内容,响应头中附带新的'Etag' 
+      Pragma  [HTTP/1.0] 
+        PS:响应头不支持该属性,通常定义'Pragma'以向后兼容基于HTTP/1.0 的客户端 
         no-cache  通知客户端不要对该资源进行缓存 
-      Last-Modified/If-Modified-Since 头  
-        需配合Cache-Control使用,
-        缓存过期后,请求头发出 If-Modified-Since 来判断是否更新缓存, 
-        和上次请求响应头中的 Last-Modified 进行对比,
-        如果相同,则响应HTTP304,从缓存读数据；
-        如果不相同文件更新了,HTTP200,返回数据,
-        同时通过响应头更新last-Modified的值,以备下次对比 
-      Etag 根据文件的MD5值来判断是否读缓存,需服务器支持 
-        在响应头中返回Etag,下次请求头中会默认发送 If-None-Match 值为上次响应头中的值
-        服务器通过判断文件的MD5和请求头中的If-None-Match来执行响应,
-        相同则返回304;否则响应新的内容,响应头中附带新的Etag
     无法被浏览器缓存的请求 
       浏览器发出的第一个请求的资源默认是不被缓存的; 
       HTTP信息头中包含Cache-Control:no-cache,

@@ -973,13 +973,16 @@ RequireJS 模块化开发框架
     使用 head.appendChild() 将每个依赖加载成script标签,故可跨域加载 
     加载后的模块会立即执行 
   define(['name',] [dependArr,]foo)  定义模块 
-    name      模块名,默认为文件路径,一般省略  
+    name      模块名,默认为文件名,一般省略  
     dependArr 依赖模块名组成的数组,可选   
-    foo       模块实现,传入参数顺序对应依赖模块的顺序 
-  define(obj)  定义简单的对象 
+    foo       模块实现,工厂方法,模块初始化要执行的函数或对象 
+      如果为函数,只被执行一次,传入参数顺序对应依赖模块的顺序
+      如果是对象,此对象为模块的输出值 
+    define(obj)  定义简单的对象 
   require(dependArr,foo)           加载模块 
-    dependArr   依赖的模块名组成的数组 
-    foo         依赖模块下载完后执行的函数,传入参数顺序对应依赖模块的顺序
+    PS: require()函数在加载依赖时是异步加载的 
+    dependArr 依赖的模块名组成的数组 
+    foo       依赖模块都加载完后执行的函数,传入参数顺序对应依赖模块的顺序 
   requirejs.config(configObj)      RequireJS配置 
     configObj     配置对象 
     {

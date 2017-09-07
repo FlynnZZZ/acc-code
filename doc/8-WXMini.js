@@ -2792,22 +2792,22 @@ API
     客服消息 
     转发 
       onShareAppMessage(options)
-      在 Page 中定义 onShareAppMessage 函数，设置该页面的转发信息。
+      在 Page 中定义 onShareAppMessage 函数,设置该页面的转发信息。
       
-      只有定义了此事件处理函数，右上角菜单才会显示 “转发” 按钮
+      只有定义了此事件处理函数,右上角菜单才会显示 “转发” 按钮
       用户点击转发按钮的时候会调用
-      此事件需要 return 一个 Object，用于自定义转发内容
+      此事件需要 return 一个 Object,用于自定义转发内容
       options 参数说明
       
       参数  类型  说明  最低版本
       from  String  转发事件来源。button：页面内转发按钮；menu：右上角转发菜单  1.2.4
-      target  Object  如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined  1.2.4
+      target  Object  如果 from 值是 button,则 target 是触发这次转发事件的 button,否则为 undefined  1.2.4
       自定义转发字段
       
       字段  说明  默认值  最低版本
       title  转发标题  当前小程序名称  
-      path  转发路径  当前页面 path ，必须是以 / 开头的完整路径  
-      imageUrl  自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。iOS 显示图片长宽比是 5:4，Android 显示图片长宽比是 215:168。高度超出部分会从底部裁剪。推荐使用 Android 图片长宽比，可保证图片在两个平台都完整显示，其中 iOS 底部会出现一小段白色    1.5.0
+      path  转发路径  当前页面 path ,必须是以 / 开头的完整路径  
+      imageUrl  自定义图片路径,可以是本地文件路径、代码包文件路径或者网络图片路径,支持PNG及JPG,不传入 imageUrl 则使用默认截图。iOS 显示图片长宽比是 5:4,Android 显示图片长宽比是 215:168。高度超出部分会从底部裁剪。推荐使用 Android 图片长宽比,可保证图片在两个平台都完整显示,其中 iOS 底部会出现一小段白色    1.5.0
       success  转发成功的回调函数    1.1.0
       fail  转发失败的回调函数    1.1.0
       complete  转发结束的回调函数（转发成功、失败都会执行    1.1.0
@@ -2816,11 +2816,11 @@ API
       回调类型  errMsg  说明
       success  shareAppMessage:ok  转发成功
       fail  shareAppMessage:fail cancel  用户取消转发
-      fail  shareAppMessage:fail (detail message)  转发失败，其中 detail message 为详细失败信息
+      fail  shareAppMessage:fail (detail message)  转发失败,其中 detail message 为详细失败信息
       success回调参数说明：
       
       参数  类型  说明  最低版本
-      shareTickets  StringArray  shareTicket 数组，每一项是一个 shareTicket ，对应一个转发对象  1.1.0
+      shareTickets  StringArray  shareTicket 数组,每一项是一个 shareTicket ,对应一个转发对象  1.1.0
       示例代码：
       
       Page({
@@ -2842,7 +2842,7 @@ API
         }
       })
       wx.showShareMenu(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
       显示当前页面的转发按钮
       
@@ -2859,7 +2859,7 @@ API
         withShareTicket: true
       })
       wx.hideShareMenu(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
       隐藏转发按钮
       
@@ -2873,7 +2873,7 @@ API
       
       wx.hideShareMenu()
       wx.updateShareMenu(OBJECT)
-      基础库 1.2.0 开始支持，低版本需做兼容处理
+      基础库 1.2.0 开始支持,低版本需做兼容处理
       
       更新转发属性
       
@@ -2892,7 +2892,7 @@ API
         }
       })
       wx.getShareInfo(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
       获取转发详细信息
       
@@ -2907,45 +2907,45 @@ API
       
       参数  类型  说明
       errMsg  String  错误信息
-      encryptedData  String  包括敏感数据在内的完整转发信息的加密数据，详细见加密数据解密算法
-      iv  String  加密算法的初始向量，详细见加密数据解密算法
-      encryptedData 解密后为一个 JSON 结构，包含字段如下：
+      encryptedData  String  包括敏感数据在内的完整转发信息的加密数据,详细见加密数据解密算法
+      iv  String  加密算法的初始向量,详细见加密数据解密算法
+      encryptedData 解密后为一个 JSON 结构,包含字段如下：
       
       字段  说明
       openGId  群对当前小程序的唯一 ID
-      Tip: 如需要展示群名称，可以使用开放数据组件
+      Tip: 如需要展示群名称,可以使用开放数据组件
       
       获取更多转发信息
-      通常开发者希望转发出去的小程序被二次打开的时候能够获取到一些信息，例如群的标识。现在通过调用 wx.showShareMenu 并且设置 withShareTicket 为 true ，当用户将小程序转发到任一群聊之后，可以获取到此次转发的 shareTicket，此转发卡片在群聊中被其他用户打开时，可以在 App.onLaunch() 或 App.onShow 获取到另一个 shareTicket。这两步获取到的 shareTicket 均可通过 wx.getShareInfo() 接口可以获取到相同的转发信息。
+      通常开发者希望转发出去的小程序被二次打开的时候能够获取到一些信息,例如群的标识。现在通过调用 wx.showShareMenu 并且设置 withShareTicket 为 true ,当用户将小程序转发到任一群聊之后,可以获取到此次转发的 shareTicket,此转发卡片在群聊中被其他用户打开时,可以在 App.onLaunch() 或 App.onShow 获取到另一个 shareTicket。这两步获取到的 shareTicket 均可通过 wx.getShareInfo() 接口可以获取到相同的转发信息。
       
       页面内发起转发
-      基础库 1.2.0 开始支持，低版本需做兼容处理
+      基础库 1.2.0 开始支持,低版本需做兼容处理
       
-      通过给 button 组件设置属性 open-type="share"，可以在用户点击按钮后触发 Page.onShareAppMessage() 事件，如果当前页面没有定义此事件，则点击后无效果。相关组件：button
+      通过给 button 组件设置属性 open-type="share",可以在用户点击按钮后触发 Page.onShareAppMessage() 事件,如果当前页面没有定义此事件,则点击后无效果。相关组件：button
       
       使用指引
-      转发按钮，旨在帮助用户更流畅地与好友分享内容和服务。转发，应是用户自发的行为，且在需要时触手可及。开发者在使用时若遵从以下指引，会得到更佳的用户体验。
+      转发按钮,旨在帮助用户更流畅地与好友分享内容和服务。转发,应是用户自发的行为,且在需要时触手可及。开发者在使用时若遵从以下指引,会得到更佳的用户体验。
       
-      含义清晰：明确、一目了然的图形按钮，将为用户减少理解的时间。在我们的资源下载中心，你可以找到这样的按钮素材并直接使用。或者你可以根据自己业务的设计风格，灵活设计含义清晰的按钮的样式。当然，你也可以直接使用带文案的按钮，“转发给好友”，它也足够明确。
-      方便点击：按钮点击热区不宜过小，亦不宜过大。同时，转发按钮与其他按钮一样，热区也不宜过密，以免用户误操作。
-      按需出现：并非所有页面都适合放置转发按钮，涉及用户隐私的非公开内容，或可能打断用户完成当前操作体验的场景，该功能并不推荐使用。同时，由于转发过程中，我们将截取用户屏幕图像作为配图，因此，需要注意帮助用户屏蔽个人信息。
-      尊重意愿：理所当然，并非所有的用户，都喜欢与朋友分享你的小程序。因此，它不应该成为一个诱导或强制行为，如转发后才能解锁某项功能等。请注意，这类做法不仅不被推荐，还可能违反我们的《运营规范》，我们强烈建议你在使用前阅读这部分内容。
-      以上，我们陈列了最重要的几点，如果你有时间，可以完整浏览《设计指南》，相信会有更多的收获。
+      含义清晰：明确、一目了然的图形按钮,将为用户减少理解的时间。在我们的资源下载中心,你可以找到这样的按钮素材并直接使用。或者你可以根据自己业务的设计风格,灵活设计含义清晰的按钮的样式。当然,你也可以直接使用带文案的按钮,“转发给好友”,它也足够明确。
+      方便点击：按钮点击热区不宜过小,亦不宜过大。同时,转发按钮与其他按钮一样,热区也不宜过密,以免用户误操作。
+      按需出现：并非所有页面都适合放置转发按钮,涉及用户隐私的非公开内容,或可能打断用户完成当前操作体验的场景,该功能并不推荐使用。同时,由于转发过程中,我们将截取用户屏幕图像作为配图,因此,需要注意帮助用户屏蔽个人信息。
+      尊重意愿：理所当然,并非所有的用户,都喜欢与朋友分享你的小程序。因此,它不应该成为一个诱导或强制行为,如转发后才能解锁某项功能等。请注意,这类做法不仅不被推荐,还可能违反我们的《运营规范》,我们强烈建议你在使用前阅读这部分内容。
+      以上,我们陈列了最重要的几点,如果你有时间,可以完整浏览《设计指南》,相信会有更多的收获。
       
       Bug & Tip
-      tip: 不自定义转发图片的情况下，默认会取当前页面，从顶部开始，高度为 80% 屏幕宽度的图像作为转发图片。
+      tip: 不自定义转发图片的情况下,默认会取当前页面,从顶部开始,高度为 80% 屏幕宽度的图像作为转发图片。
       tip: 转发的调试支持请查看 普通转发的调试支持 和 带 shareTicket 的转发
-      tip: 只有转发到群聊中打开才可以获取到 shareTickets 返回值，单聊没有 shareTickets
+      tip: 只有转发到群聊中打开才可以获取到 shareTickets 返回值,单聊没有 shareTickets
       tip: shareTicket 仅在当前小程序生命周期内有效
-      tip: 由于策略变动，小程序群相关能力进行调整，开发者可先使用wx.getShareInfo接口中的群ID进行功能开发。    
+      tip: 由于策略变动,小程序群相关能力进行调整,开发者可先使用wx.getShareInfo接口中的群ID进行功能开发。    
     二维码 
       获取二维码
-      通过后台接口可以获取小程序任意页面的二维码，扫描该二维码可以直接进入小程序对应的页面。目前微信支持两种二维码，小程序码（左），小程序二维码（右），如下所示：
+      通过后台接口可以获取小程序任意页面的二维码,扫描该二维码可以直接进入小程序对应的页面。目前微信支持两种二维码,小程序码（左）,小程序二维码（右）,如下所示：
       
       
       
       获取小程序码
-      我们推荐生成并使用小程序码，它具有更好的辨识度。目前有两个接口可以生成小程序码，开发者可以根据自己的需要选择合适的接口。
+      我们推荐生成并使用小程序码,它具有更好的辨识度。目前有两个接口可以生成小程序码,开发者可以根据自己的需要选择合适的接口。
       
       接口A: 适用于需要的码数量较少的业务场景 接口地址：
       
@@ -2955,13 +2955,13 @@ API
       POST 参数说明
       
       参数  类型  默认值  说明
-      path  String    不能为空，最大长度 128 字节
+      path  String    不能为空,最大长度 128 字节
       width  Int  430  二维码的宽度
-      auto_color  Bool  false  自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调
-      line_color  Object  {"r":"0","g":"0","b":"0"}  auth_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
-      注意：通过该接口生成的小程序码，永久有效，数量限制见文末说明，请谨慎使用。用户扫描该码进入小程序后，将直接进入 path 对应的页面。
+      auto_color  Bool  false  自动配置线条颜色,如果颜色依然是黑色,则说明不建议配置主色调
+      line_color  Object  {"r":"0","g":"0","b":"0"}  auth_color 为 false 时生效,使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
+      注意：通过该接口生成的小程序码,永久有效,数量限制见文末说明,请谨慎使用。用户扫描该码进入小程序后,将直接进入 path 对应的页面。
       
-      接口B：适用于需要的码数量极多，或仅临时使用的业务场景
+      接口B：适用于需要的码数量极多,或仅临时使用的业务场景
       
       接口地址：
       
@@ -2971,12 +2971,12 @@ API
       POST 参数说明
       
       参数  类型  默认值  说明
-      scene  String    最大32个可见字符，只支持数字，大小写英文以及部分特殊字符："!#$&'()*+,/:;=?@-._~"，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
-      page  String    必须是已经发布的小程序页面，例如 "pages/index/index" ,根路径前不要填加'/',不能携带参数（参数请放在scene字段里），如果不填写这个字段，默认跳主页面
+      scene  String    最大32个可见字符,只支持数字,大小写英文以及部分特殊字符："!#$&'()*+,/:;=?@-._~",其它字符请自行编码为合法字符（因不支持%,中文无法使用 urlencode 处理,请使用其他编码方式）
+      page  String    必须是已经发布的小程序页面,例如 "pages/index/index" ,根路径前不要填加'/',不能携带参数（参数请放在scene字段里）,如果不填写这个字段,默认跳主页面
       width  Int  430  二维码的宽度
-      auto_color  Bool  false  自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调
-      line_color  Object  {"r":"0","g":"0","b":"0"}  auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
-      注意：通过该接口生成的小程序码，永久有效，数量暂无限制。用户扫描该码进入小程序后，开发者需在对应页面获取的码中 scene 字段的值，再做处理逻辑。使用如下代码可以获取到二维码中的 scene 字段的值。调试阶段可以使用开发工具的条件编译自定义参数 scene=xxxx 进行模拟，开发工具模拟时的 scene 的参数值需要进行 urlencode
+      auto_color  Bool  false  自动配置线条颜色,如果颜色依然是黑色,则说明不建议配置主色调
+      line_color  Object  {"r":"0","g":"0","b":"0"}  auto_color 为 false 时生效,使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"}
+      注意：通过该接口生成的小程序码,永久有效,数量暂无限制。用户扫描该码进入小程序后,开发者需在对应页面获取的码中 scene 字段的值,再做处理逻辑。使用如下代码可以获取到二维码中的 scene 字段的值。调试阶段可以使用开发工具的条件编译自定义参数 scene=xxxx 进行模拟,开发工具模拟时的 scene 的参数值需要进行 urlencode
       
       // 这是首页的 js
       Page({
@@ -2996,9 +2996,9 @@ API
       POST 参数说明
       
       参数  类型  默认值  说明
-      path  String    不能为空，最大长度 128 字节
+      path  String    不能为空,最大长度 128 字节
       width  Int  430  二维码的宽度
-      注意：通过该接口生成的小程序二维码，永久有效，数量限制见文末说明，请谨慎使用。用户扫描该码进入小程序后，将直接进入 path 对应的页面。
+      注意：通过该接口生成的小程序二维码,永久有效,数量限制见文末说明,请谨慎使用。用户扫描该码进入小程序后,将直接进入 path 对应的页面。
       
       示例：
       
@@ -3006,16 +3006,16 @@ API
       注：pages/index 需要在 app.json 的 pages 中定义
       
       Bug & Tip
-      tip：通过该接口，仅能生成已发布的小程序的二维码。
+      tip：通过该接口,仅能生成已发布的小程序的二维码。
       tip：可以在开发者工具预览时生成开发版的带参二维码。
-      tip：接口A加上接口C，总共生成的码数量限制为100,000，请谨慎调用。
-      tip: POST 参数需要转成 json 字符串，不支持 form 表单提交。
+      tip：接口A加上接口C,总共生成的码数量限制为100,000,请谨慎调用。
+      tip: POST 参数需要转成 json 字符串,不支持 form 表单提交。
       tip: auto_color line_color 参数仅对小程序码生效。    
     收货地址 
       wx.chooseAddress(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
-      调起用户编辑收货地址原生界面，并在编辑完成后返回用户选择的地址。
+      调起用户编辑收货地址原生界面,并在编辑完成后返回用户选择的地址。
       
       OBJECT参数说明：
       
@@ -3050,17 +3050,17 @@ API
         }
       })
       Bug & Tip
-      tip: wx.chooseAddress 接口需要用户授权，请兼容用户拒绝授权的场景。    
+      tip: wx.chooseAddress 接口需要用户授权,请兼容用户拒绝授权的场景。    
     卡券 
       wx.addCard(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
       批量添加卡券。
       
       Object参数说明：
       
       参数  类型  必填  说明
-      cardList  ObjectArray  是  需要添加的卡券列表，列表内对象说明请参见请求对象说明
+      cardList  ObjectArray  是  需要添加的卡券列表,列表内对象说明请参见请求对象说明
       success  Function  否  接口调用成功的回调函数
       fail  Function  否  接口调用失败的回调函数
       complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
@@ -3071,13 +3071,13 @@ API
       cardExt 说明
       
       参数  类型  必填  是否参与签名  说明
-      code  String  否  是  用户领取的 code，仅自定义 code 模式的卡券须填写，非自定义 code 模式卡券不可填写，详情
-      openid  String  否  是  指定领取者的openid，只有该用户能领取。 bind_openid 字段为 true 的卡券必须填写，bind_openid 字段为 false 不可填写。
-      timestamp  Number  是  是  时间戳，东八区时间,UTC+8，单位为秒
-      nonce_str  String  否  是  随机字符串，由开发者设置传入，加强安全性（若不填写可能被重放请求）。随机字符串，不长于 32 位。推荐使用大小写字母和数字，不同添加请求的 nonce_str 须动态生成，若重复将会导致领取失败。
-      fixed_begintimestamp  Number  否  否  卡券在第三方系统的实际领取时间，为东八区时间戳（UTC+8,精确到秒）。当卡券的有效期类为 DATE_TYPE_FIX_TERM 时专用，标识卡券的实际生效时间，用于解决商户系统内起始时间和领取微信卡券时间不同步的问题。
-      outer_str  String  否  否  领取渠道参数，用于标识本次领取的渠道值。
-      signature  String  是  -  签名，商户将接口列表中的参数按照指定方式进行签名,签名方式使用 SHA1，具体签名方案参见：卡券签名
+      code  String  否  是  用户领取的 code,仅自定义 code 模式的卡券须填写,非自定义 code 模式卡券不可填写,详情
+      openid  String  否  是  指定领取者的openid,只有该用户能领取。 bind_openid 字段为 true 的卡券必须填写,bind_openid 字段为 false 不可填写。
+      timestamp  Number  是  是  时间戳,东八区时间,UTC+8,单位为秒
+      nonce_str  String  否  是  随机字符串,由开发者设置传入,加强安全性（若不填写可能被重放请求）。随机字符串,不长于 32 位。推荐使用大小写字母和数字,不同添加请求的 nonce_str 须动态生成,若重复将会导致领取失败。
+      fixed_begintimestamp  Number  否  否  卡券在第三方系统的实际领取时间,为东八区时间戳（UTC+8,精确到秒）。当卡券的有效期类为 DATE_TYPE_FIX_TERM 时专用,标识卡券的实际生效时间,用于解决商户系统内起始时间和领取微信卡券时间不同步的问题。
+      outer_str  String  否  否  领取渠道参数,用于标识本次领取的渠道值。
+      signature  String  是  -  签名,商户将接口列表中的参数按照指定方式进行签名,签名方式使用 SHA1,具体签名方案参见：卡券签名
       注：cardExt 需进行 JSON 序列化为字符串传入
       
       回调结果：
@@ -3085,16 +3085,16 @@ API
       回调类型  errMsg  说明
       success  addCard:ok  添加卡券成功
       fail  addCard:fail cancel  用户取消添加卡券
-      fail  addCard:fail (detail message)  添加卡券失败，其中 detail message 为后台返回的详细失败原因
+      fail  addCard:fail (detail message)  添加卡券失败,其中 detail message 为后台返回的详细失败原因
       success返回参数：
       
       参数  类型  说明
-      cardList  ObjectArray  卡券添加结果列表，列表内对象说明请详见返回对象说明
+      cardList  ObjectArray  卡券添加结果列表,列表内对象说明请详见返回对象说明
       返回对象说明
       参数  类型  说明
-      code  String  加密 code，为用户领取到卡券的code加密后的字符串，解密请参照：code 解码接口
+      code  String  加密 code,为用户领取到卡券的code加密后的字符串,解密请参照：code 解码接口
       cardId  String  用户领取到卡券的Id
-      cardExt  String  用户领取到卡券的扩展参数，与调用时传入的参数相同
+      cardExt  String  用户领取到卡券的扩展参数,与调用时传入的参数相同
       isSuccess  Boolean  是否成功
       示例代码：
       
@@ -3113,21 +3113,21 @@ API
         }
       })
       wx.openCard(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
       查看微信卡包中的卡券。
       
       Object参数说明：
       
       参数  类型  必填  说明
-      cardList  ObjectArray  是  需要打开的卡券列表，列表内参数详见openCard 请求对象说明
+      cardList  ObjectArray  是  需要打开的卡券列表,列表内参数详见openCard 请求对象说明
       success  Function  否  接口调用成功的回调函数
       fail  Function  否  接口调用失败的回调函数
       complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
       openCard 请求对象说明
       参数  类型  说明
       cardId  String  需要打开的卡券 Id
-      code  String  由 addCard 的返回对象中的加密 code 通过解密后得到，解密请参照：code 解码接口
+      code  String  由 addCard 的返回对象中的加密 code 通过解密后得到,解密请参照：code 解码接口
       示例代码：
       
       wx.openCard({
@@ -3144,24 +3144,24 @@ API
         }
       })
       Tip
-      tip: 目前只有认证小程序才能使用卡券接口，可参考指引进行认证。
-      tip: 了解更多信息，请查看微信卡券接口文档    
+      tip: 目前只有认证小程序才能使用卡券接口,可参考指引进行认证。
+      tip: 了解更多信息,请查看微信卡券接口文档    
     设置 
       wx.openSetting(OBJECT)
-      基础库 1.1.0 开始支持，低版本需做兼容处理
+      基础库 1.1.0 开始支持,低版本需做兼容处理
       
-      调起客户端小程序设置界面，返回用户设置的操作结果
+      调起客户端小程序设置界面,返回用户设置的操作结果
       
       Object 参数说明：
       
       参数  类型  必填  说明
-      success  Function  否  接口调用成功的回调函数，返回内容详见返回参数说明。
+      success  Function  否  接口调用成功的回调函数,返回内容详见返回参数说明。
       fail  Function  否  接口调用失败的回调函数
       complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
       success返回参数说明：
       
       参数  类型  说明
-      authSetting  Object  用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
+      authSetting  Object  用户授权结果,其中 key 为 scope 值,value 为 Bool 值,表示用户是否允许授权,详见 scope 列表
       示例代码：
       
       wx.openSetting({
@@ -3175,20 +3175,20 @@ API
         }
       })
       wx.getSetting(OBJECT)
-      基础库 1.2.0 开始支持，低版本需做兼容处理
+      基础库 1.2.0 开始支持,低版本需做兼容处理
       
       获取用户的当前设置
       
       Object 参数说明：
       
       参数  类型  必填  说明
-      success  Function  否  接口调用成功的回调函数，返回内容详见返回参数说明。
+      success  Function  否  接口调用成功的回调函数,返回内容详见返回参数说明。
       fail  Function  否  接口调用失败的回调函数
       complete  Function  否  接口调用结束的回调函数（调用成功、失败都会执行）
       success返回参数说明：
       
       参数  类型  说明
-      authSetting  Object  用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
+      authSetting  Object  用户授权结果,其中 key 为 scope 值,value 为 Bool 值,表示用户是否允许授权,详见 scope 列表
       示例代码：
       
       wx.getSetting({
@@ -3216,7 +3216,7 @@ API
       const base64 = 'CxYh'
       const arrayBuffer = wx.base64ToArrayBuffer(base64)  
   调试接口 
-    设置是否打开调试开关，此开关对正式版也能生效。 '1.4.0'
+    设置是否打开调试开关,此开关对正式版也能生效。 '1.4.0'
     wx.setEnableDebug({
       'enableDebug': bol, // 是否打开调试
       cfoo,

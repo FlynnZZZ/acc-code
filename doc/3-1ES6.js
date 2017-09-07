@@ -50,7 +50,823 @@ ES6
           },
         }
       npm run build         #执行命令转码 
-◆数据类型&对象库扩展 
+◆标准库的扩展&数据类型&对象库扩展 
+Number 数值 
+  PS:ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
+    目的是减少全局性的函数,把全局函数合理地规划到其他对象下,逐渐实现语言的模块化 
+  Number.isNaN()      判断是否为非数值
+    传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
+    而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
+    isNaN('abc'); // true,'abc'无法转为一个数值,返回true
+    Number.isNaN('abc'); // false,Number.isNaN不做类型转换,直接返回false
+  Number.isFinite()   判断数值是否非无穷
+    只是对数值类型有效,对非数值类型的参数一律返回false。
+    Number.isFinite(1);        // true,数值1是有穷,即非无穷
+    Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
+    Number.isFinite('abc');    // false
+  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()」 
+  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()」 
+  ◆新特性:
+  Number.isInteger()  判断是否是整数
+    PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
+    Number.isInteger(3.2);  // false
+    Number.isInteger(3);    // true
+    Number.isInteger(3.0);  // true
+    Number.isInteger(3.00); // true
+  Number.EPSILON 常量,定义一个极小的数值
+    PS:Number.EPSILON 的出现是用来判断浮点数的计算误差,
+      若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
+    console.log(Number.EPSILON); // 2.220446049250313e-16
+    2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
+  Number.isSafeInteger() 判断是否为安全整数
+    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 安全整数
+    ES6为引入了安全整数的概念。
+    原来JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间,
+    超过这个范围,无法精确表示这个值。故称之为不安全。
+    为此,ES6定义了两个常量来表示这个范围的最大值和最小值:
+    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER
+    此外,若给你一个数值,你不知道它是否超出了这个安全范围,
+    可以使用ES6给我们新增的一个函数 Number.isSafeInteger 来进行判断
+    Number.isSafeInteger(Number.MAX_SAFE_INTEGER);   // true
+    Number.isSafeInteger(Number.MAX_SAFE_INTEGER+1); // false
+String 字符串扩展 
+  `a${1+2}b` 模版字符串 
+    PS:又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
+    Example:
+      var str =`a
+        b
+        c`;
+      console.log(str);
+      // "a
+      //   b
+      //   c"
+    `${}` 模板占位符 
+      ${str1}表示变量字符串str1表示的字符
+      ${}中可以放任意的javascript表达式
+      var aoo = "fan";
+      var boo = `${aoo} hello!`; 
+      var coo = `${1+2} hello`;
+      console.log(boo,coo); // fan hello   3 hello
+  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串」
+    var aoo = "1";  //目标字符串
+    console.log(aoo); // 1
+    var boo = aoo.repeat(3); //变量aoo被重复三次；
+    console.log(boo); // 111
+  str1.includes(str2); 返回是否包含str2的布尔值  
+    'good'.includes('o') // true
+  str1.startsWith(str2[,num]) 判断str2是否为str1指定的开头位置,
+    num可选,默认为0,表示指定的开头
+    var aoo = "123";      //目标字符串
+    aoo.startsWith('1');  //true,出现在开头位置
+    aoo.startsWith('2');  //false,不是在开头位置
+    aoo.startsWith('2',1); //true,从第2个字符开始
+  str1.endsWith(str2[,num])   判断str2是否出现在str1指定长度的尾部位置
+    num可选,默认为str1的长度
+    var name = "123456";    //目标字符串
+    name.endsWith('1');   //false,不在尾部位置
+    name.endsWith('6');   //true,在尾部位置
+    name.endsWith('6',5); //false,只针对前5个字符
+    name.endsWith('5',5); //true,针对前6个字符
+  str.codePointAt()  返回4字节字符对应的十进制数
+    PS:JS 中,一个字符固定为2个字节,
+      对于那些需要4个字节存储的字符,JS 会认为它是两个字符,此时它的字符长度length为2。
+      如字符:"𠮷",就是一个需要4个字节存储,length为2的字符。
+      对于4字节的字符,JS无法正确读取字符
+    Example:
+      var str1 = "前端";
+      var str2 = "𠮷";
+      str1.length; //length为2
+      str2.length; //length为2
+      str1.charAt(0);  //前
+      str1.charAt(1);  //端
+      str2.charAt(0);  //'�'
+      str2.charAt(1);  //'�'
+      字符"𠮷"是一个4字节的字符,charAt方法能正确读取字符串str1的字符,
+      但无法正确读取4个字节的字符,此时返回结果出现了乱码。
+      使用ES6给我们提供的 codePointAt方法,就可以处理这种4个字节的字符了
+      var str = "𠮷";
+      str.codePointAt();  //结果:134071
+      返回其码点的十进制数:134071,换成16进制就是20bb7,对应的Unicode编码则是\u20bb7
+  String.fromCodePoint(num)  函数的参数是一个字符对应的码点,返回的结果就是对应的字符
+    PS:即使4字节的字符,也能正确实现
+    String.fromCodePoint(134071); //结果:"𠮷"
+  String.raw()  返回字符串最原始的样貌,即使字符串中含有转义符 
+    console.log(`hello\tworld`); // hello	world
+    \t会被识别为制表符,实现空格效果
+    console.log(String.raw`hello\twolrd`); //输出:hello\twolrd
+Array 数组扩展 
+  ◆静态方法
+  Array.of();  将一组值,转换成数组 
+    PS:Array.of() 函数的出现是源于Array构造函数的缺陷
+    Array.of(1,2,3,4,5); // [1,2,3,4,5]
+  Array.from( ) 将类似数组的对象或者可遍历的对象转换成真正的数组 
+    PS:最常见的类数组对象就是调用getElementsByTagName方法得到的结果
+    let ele = document.getElementsByTagName('a');
+    ele instanceof Array;  // false,非数组
+    ele instanceof Object; // true,对象
+    Array.from(ele) instanceof Array; // true,数组
+    Example:将字符串分割成数组
+      let str = 'hello';
+      Array.from(str); // ["h", "e", "l", "l", "o"]
+  ◆实例方法
+  arr.find(foo)      返回数组中符合条件的第一个元素 
+    foo 参数分别为数组中的每个元素
+      每个元素都会进入函数执行,直到结果为true,find函数就会返回该元素的值;
+      倘若所有元素都不符合匿名函数的条件,最终返回undefind
+    let arr = [1,2,3,4,5,6];
+    var aoo = arr.find(function(value){ return value > 2; });
+    console.log(aoo); // 3
+    
+    let arr = [1,2,3,4,5,6];
+    arr.find(function(value){ return value > 7; }); // undefined
+  arr.findIndex(foo) 返回数组中符合条件的第一个元素的位置
+    若所有元素都不符合匿名函数的条件,函数返回-1
+    let arr = [7,8,9,10];
+    arr.findIndex(function(value){ return value > 8; }); // 2
+  arr.fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组
+    let arr = [1,2,3];
+    arr.fill(4); // [4,4,4]
+    
+    let arr = [1,2,3];
+    arr.fill(4,1,3); // [1,4,4],从位置2到到位置4被覆盖
+  arr.entries() 对数组的键值对进行遍历,返回一个遍历器,可以用for..of 对其进行遍历
+    for..of 也是ES6的新增特性 
+    for(let [i,v] of ['a', 'b'].entries()) {
+      console.log(i,v);
+    }
+    //0 "a"
+    //1 "b"
+    用 entries() 函数返回的一个遍历器,用for...of进行遍历,
+    能得到数组的键值:0 和 1,以及对应的数组元素:‘a‘和’b‘
+  arr.keys() 对数组的索引键进行遍历,返回一个遍历器 
+    for(let index of ['a', 'b'].keys()) {
+      console.log(index);
+    }
+    //0
+    //1
+  arr.values()  对数组的元素进行遍历,返回一个遍历器。
+    for(let value of ['a', 'b'].values()) {
+      console.log(value);
+    }
+    //a
+    //b
+  数组推导:用简洁的写法,直接通过现有的数组生成新数组
+    Example: 将数组的每个元素乘以2,得到一个新数组
+    传统的实现方法:
+    var arr1 = [1,2,3,4];
+    var arr2 = [];
+    for(let i=0;i<arr1.length;i++){
+      arr2.push(arr1[i]*2); //每个元素乘以2后,push到数组arr2
+    }
+    console.log(arr2); // [2,4,6,8]
+    
+    var arr1 = [1, 2, 3, 4];
+    var arr2 = [for(i of arr1) i * 2];
+    console.log(arr2); // [ 2, 4, 6, 8 ]
+    
+    在数组推导中,for..of 后面还可以加上if语句
+    var array1 = [1, 2, 3, 4];
+    var array2 = [for(i of array1)  if(i>3) i];
+    console.log(array2); //  [4]
+Object 对象扩展 
+  属性的简写
+    var name = "Zhangsan";
+    var age = 12;
+    //传统的属性写法
+    var person = {
+      "name":name,
+      "age":age
+    };
+    console.log(person); // {name: "Zhangsan", age: 12}
+    //ES6的简洁写法
+    var person = {name,age};
+    console.log(person); // {name: "Zhangsan", age: 12}
+  方法的简写
+    //传统的表示法
+    var person = {
+      say:function(){
+        alert('这是传统的表示法');
+      }
+    };
+    //ES6的表示法
+    var person = {
+      say(){
+        alert('这是ES6的表示法');
+      }
+    };
+  属性名可以是表达式 
+    PS:用字面量定义一个对象的时候,可以用表达式作为对象的属性名或者方法名
+      不可使用 点. 方式来获取
+    var f = "first";
+    var n = "Name";
+    var s = "say";
+    var h = "Hello";
+    var person = {
+      [ f+n ] : "Zhang",
+      [ s+h ](){
+        return "你好吗？";
+      },
+      [f] : 1
+    };
+    console.log(person.firstName); // Zhang
+    console.log(person.sayHello()); // 你好吗？
+    console.log(person[f]); // 1
+    console.log(person.f); // undefined
+    
+    var aoo = 'boo';
+    var obj = {};
+    obj[aoo] = 1;
+    obj['aoo'] = 2;
+    console.log(obj); // Object {boo: 1, aoo: 2}
+  ◆新增的函数
+  Object.is() 比较两个值是否严格相等,或者说全等
+    var str = '12';
+    var num = 12;
+    var num2 = 12;
+    Object.is(str,num);  // false
+    Object.is(num2,num); // true
+  Object.assign() 将源对象的属性赋值到目标对象上 
+    PS:参数可以是多个[至少是两个」
+    let origin = {"b":2,"c":3}; //这个充当源对象
+    let target = {"a":1};       //这个充当目标对象
+    Object.assign(target,origin);
+    console.log(target); // {a: 1, b: 2, c: 3}
+    
+    若赋值过程中,对象的属性出现了相同的名字,则后面的属性值就会覆盖前面的属性值
+    let target = {"a":1};
+    let origin1 = {"a":2};
+    let origin2 = {"a":3};
+    Object.assign(target,origin1,origin2);
+    console.log(target); //  {a: 3}
+  Object.getPrototypeOf() 获取对象的prototype属性
+    function Person(){ //自定义一个Person类（函数）
+    } 
+    Person.prototype = { //函数都有一个预属性prototype对象
+      //给prototype对象添加一个say方法
+      say(){
+        console.log('hello');
+      }
+    };
+    let allen = new Person(); //实例化Person对象,赋值给变量allen
+    allen.say(); // hello,调用类的say方法
+    Object.getPrototypeOf(allen); //{say:function(){.....}}
+    // 获取allen对象的prototype属性
+  Object.setPrototypeOf() 设置对象的prototype属性
+    function Person(){ }
+    Person.prototype = {
+      say(){
+        console.log('hello');
+      }
+    };
+    let allen = new Person();
+    allen.say(); // hello
+    Object.setPrototypeOf( allen, {
+      say(){
+        console.log('hi')
+      } 
+    });
+    allen.say(); // hi
+    javascript的面向对象
+      Javascript本身不是一种面向对象的编程语言,
+      在ES5中,它的语法中也没有class（类的关键字）,
+      但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发。
+      function Dog(name){ //构造函数模拟创建一个Dog类
+        this.name = name;
+      }
+      Dog.prototype = { //把一些属性和方法,定义在prototype对象上
+        "type":"动物",
+        "say":function(){
+          alert("名字叫"+this.name);
+        }
+      };
+      var dog = new Dog('旺财'); //实例化
+      //调用say方法
+      dog.say(); // 名字叫旺财
+      模拟面向对象编程有几个关键步骤:
+      1、构造函数；
+      2、给prototype对象添加属性和方法；
+      3、实例化；
+      4、通过实例化后的对象调用类的方法或者属性。
+      注意:面向对象是一种编程思想,并不是具体的工具。
+Function 函数扩展 
+  参数的默认值
+    传统的实现方式
+      function person(n,a){
+        var name = n || 'Zhangsan';
+        var age  = a ||  25;
+      }
+    ES6实现
+      function person(name = 'Zhangsan',age = 25){
+        console.log(name,age);
+      }
+      person();//结果:Zhangsan  25
+      person('Lisi',18);//结果:Lisi  18
+    只有当传入的参数为undefined,才会触发默认值赋值
+      function person(age = 12){
+        console.log(age);
+      }
+      person();          // 12
+      person(undefined); // 12
+      person(0);         // 0
+      person(null);      // null
+    函数的参数是默认声明的,不能再次声明,否则会报错的
+      function person(age = 12){
+        var age = 25;//错误,再次声明age
+        let age = 25;//错误,再次声明age
+      }
+      person();
+    默认参数:在定义函数时,可先将将参数赋值 [ES6+」
+      function foo(b,c=3){ 
+        console.log(b,c); 
+      }
+      foo();           //undefined 3
+      foo(1);          //1 3,当未传参时默认参数
+      foo(1,4);        //1 4,当传入参数时则使用传入的值
+      foo(1,c=5);      //1 5
+  ...aoo  restArgument,获取函数剩下部分的参数,类型为数组
+    在实参中,除了指定参数以外,剩余的参数都会被...values获取到
+      function sum(result,...values){ //求和函数,得到的结果赋值到result 
+        console.log(values); // [1,2,3,4]
+        values.forEach(function (v,i) { //进行求和
+          result += v; //求和得到的结果存到result
+        });
+        console.log(result); // 10
+      }
+      var res = 0; // 存储求和结果的变量res
+      sum(res,1,2,3,4);  //调用sum函数
+    rest参数必须是函数的最后一个参数,后面不能再跟其他参数
+      //错误写法
+      function sum(result, ...values, mult){
+        //rest参数...values后面还有一个参数mult
+      }
+      //正确的写法
+      function sum(result, mult, ...values){
+        //rest参数...values放在最后
+      }
+  (arg1,arg2) =>{语句}  箭头函数 
+    PS: 箭头函数没有'arguments'对象,若要多参数,则需用'...'扩展符
+    相当于: function(参数1,参数2){ return 语句 }
+    传入多个参数使用括号(),复杂操作使用{}
+      若参数超过1个的话,需要用小括号（）括起来,
+      函数体语句超过1条的时候,需要用大括号{ }括起来。
+      var sum = (a,b) => {return a+b}
+      sum(1,2);//结果:3
+    箭头函数中的this指向的是定义时的this,而非执行时的this 
+      var obj = {  //定义一个对象
+        x:100,     //属性x
+        show(){
+          setTimeout( function(){   //延迟500毫秒,输出x的值
+            //匿名函数
+            console.log(this.x);
+          }, 500 );
+        }
+      };
+      obj.show(); // undefined
+      当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
+      [setTimeout是window对象的方法」,已经不再是obj对象了,
+      所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
+      
+      var obj = {
+        x:100, 
+        show(){
+          setTimeout( () => {   // 箭头函数
+            console.log(this.x);
+          }, 500 );
+        }
+      };
+      obj.show(); // 100
+      定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
+      而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
+Math   对象扩展 
+  PS: ES6给Math对象新增了共17个函数
+  Math.trunc()  去除一个数的小数部分,返回整数部分。
+    PS:若传入的参数是整数,就直接返回整数,若是小数,就去除了小数部分,返回整数部分
+    Math.trunc(3);   // 3
+    Math.trunc(3.1); // 3
+  Math.sign()   判断一个值到底是正数、负数、零还是NaN
+    参数若是正数,结果返回1；
+    若是负数,结果返回-1；
+    若是0,结果返回0；
+    若是一个非数值类型的参数,结果返回:NaN。
+    Math.sign(3); //结果:1
+    Math.sign(-3); //结果:-1
+    Math.sign(0); //结果:0
+    Math.sign('abc'); //结果:NaN
+  Math.cbrt()   计算一个数的立方根
+    Math.cbrt(8);  //2
+    Math.cbrt(27); //3
+  Math.acosh(x) 返回 x 的反双曲余弦。
+  Math.asinh(x) 返回 x 的反双曲正弦。
+  Math.atanh(x) 返回 x 的反双曲正切。
+  Math.clz32(x) 返回 x 的 32 位二进制整数表示形式的前导 0 的个数。
+  Math.sinh(x)  返回x的双曲正弦。
+  Math.cosh(x)  返回 x 的双曲余弦。
+  Math.expm1(x) 返回 eˆx - 1。
+  Math.fround(x) 返回 x 的单精度浮点数形式。
+  Math.hypot(...values) 返回所有参数的平方和的平方根。
+  Math.imul(x, y) 返回两个参数以 32 位整数形式相乘的结果。
+  Math.log1p(x)   返回 1 + x 的自然对数。
+  Math.log10(x)   返回以 10 为底的x的对数。
+  Math.log2(x)    返回以 2 为底的 x 的对数。
+  Math.tanh(x)    返回 x 的双曲正切。
+RegExp 正则扩展 
+  RegExp构造函数
+    在ES5中,RegExp构造函数的参数有两种情况。
+    第一种情况是,参数是字符串,这时第二个参数表示正则表达式的修饰符(flag)。
+    var regex = new RegExp('xyz', 'i');
+    // 等价于
+    var regex = /xyz/i;
+    第二种情况是,参数是一个正则表示式,这时会返回一个原有正则表达式的拷贝。
+    var regex = new RegExp(/xyz/i);
+    // 等价于
+    var regex = /xyz/i;
+    但是,ES5不允许此时使用第二个参数,添加修饰符,否则会报错。
+    var regex = new RegExp(/xyz/, 'i');
+    // Uncaught TypeError: Cannot supply flags when constructing one RegExp from another
+    ES6改变了这种行为。若RegExp构造函数第一个参数是一个正则对象,
+    那么可以使用第二个参数指定修饰符。
+    而且,返回的正则表达式会忽略原有的正则表达式的修饰符,只使用新指定的修饰符。
+    new RegExp(/abc/ig, 'i').flags // "i"
+    上面代码中,原有正则对象的修饰符是ig,它会被第二个参数i覆盖。
+  字符串的正则方法
+    字符串对象共有4个方法,可以使用正则表达式:match()、replace()、search()和split()。
+    ES6将这4个方法,在语言内部全部调用RegExp的实例方法,
+    从而做到所有与正则相关的方法,全都定义在RegExp对象上。
+    String.prototype.match 调用 RegExp.prototype[Symbol.match]
+    String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
+    String.prototype.search 调用 RegExp.prototype[Symbol.search]
+    String.prototype.split 调用 RegExp.prototype[Symbol.split]
+  u修饰符
+    ES6对正则表达式添加了u修饰符,含义为“Unicode模式”,
+    用来正确处理大于\uFFFF的Unicode字符。
+    也就是说,会正确处理四个字节的UTF-16 编码。
+    /^\uD83D/u.test('\uD83D\uDC2A')
+    // false
+    /^\uD83D/.test('\uD83D\uDC2A')
+    // true
+    上面代码中,\uD83D\uDC2A是一个四个字节的UTF-16 编码,代表一个字符。
+    ES5不支持四个字节的UTF-16 编码,会将其识别为两个字符,导致第二行代码结果为true。
+    加了u修饰符以后,ES6就会识别其为一个字符,所以第一行代码结果为false。
+    一旦加上u修饰符号,就会修改下面这些正则表达式的行为。
+    (1)点字符
+      点(.)字符在正则表达式中,含义是除了换行符以外的任意单个字符。
+      对于码点大于0xFFFF的Unicode字符,点字符不能识别,必须加上u修饰符。
+      var s = '𠮷';
+      /^.$/.test(s) // false
+      /^.$/u.test(s) // true
+      上面代码表示,若不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败。
+    (2)Unicode字符表示法
+      ES6新增了使用大括号表示Unicode字符,这种表示法在正则表达式中必须加上u修饰符,才能识别。
+      /\u{61}/.test('a') // false
+      /\u{61}/u.test('a') // true
+      /\u{20BB7}/u.test('𠮷') // true
+      上面代码表示,若不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u。
+    (3)量词
+      使用u修饰符后,所有量词都会正确识别码点大于0xFFFF的Unicode字符。
+
+      /a{2}/.test('aa') // true
+      /a{2}/u.test('aa') // true
+      /𠮷{2}/.test('𠮷𠮷') // false
+      /𠮷{2}/u.test('𠮷𠮷') // true
+      另外,只有在使用u修饰符的情况下,Unicode表达式当中的大括号才会被正确解读,否则会被解读为量词。
+
+      /^\u{3}$/.test('uuu') // true
+      上面代码中,由于正则表达式没有u修饰符,所以大括号被解读为量词。加上u修饰符,就会被解读为Unicode表达式。
+    (4)预定义模式
+      u修饰符也影响到预定义模式,能否正确识别码点大于0xFFFF的Unicode字符。
+
+      /^\S$/.test('𠮷') // false
+      /^\S$/u.test('𠮷') // true
+      上面代码的\S是预定义模式,匹配所有不是空格的字符。只有加了u修饰符,它才能正确匹配码点大于0xFFFF的Unicode字符。
+
+      利用这一点,可以写出一个正确返回字符串长度的函数。
+
+      function codePointLength(text) {
+        var result = text.match(/[\s\S]/gu);
+        return result ? result.length : 0;
+      }
+      var s = '𠮷𠮷';
+      s.length // 4
+      codePointLength(s) // 2
+    (5)i修饰符
+
+      有些Unicode字符的编码不同,但是字型很相近,比如,\u004B与\u212A都是大写的K。
+
+      /[a-z]/i.test('\u212A') // false
+      /[a-z]/iu.test('\u212A') // true
+      上面代码中,不加u修饰符,就无法识别非规范的K字符。
+  y 修饰符
+    除了u修饰符,ES6还为正则表达式添加了y修饰符,叫做“粘连”(sticky)修饰符。
+    y修饰符的作用与g修饰符类似,也是全局匹配,后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于,g修饰符只要剩余位置中存在匹配就可,而y修饰符确保匹配必须从剩余的第一个位置开始,这也就是“粘连”的涵义。
+    var s = 'aaa_aa_a';
+    var r1 = /a+/g;
+    var r2 = /a+/y;
+
+    r1.exec(s) // ["aaa"]
+    r2.exec(s) // ["aaa"]
+
+    r1.exec(s) // ["aa"]
+    r2.exec(s) // null
+    上面代码有两个正则表达式,一个使用g修饰符,另一个使用y修饰符。这两个正则表达式各执行了两次,第一次执行的时候,两者行为相同,剩余字符串都是_aa_a。由于g修饰没有位置要求,所以第二次执行会返回结果,而y修饰符要求匹配必须从头部开始,所以返回null。
+    若改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了。
+    var s = 'aaa_aa_a';
+    var r = /a+_/y;
+
+    r.exec(s) // ["aaa_"]
+    r.exec(s) // ["aa_"]
+    上面代码每次匹配,都是从剩余字符串的头部开始。
+    使用lastIndex属性,可以更好地说明y修饰符。
+
+    const REGEX = /a/g;
+
+    // 指定从2号位置(y)开始匹配
+    REGEX.lastIndex = 2;
+
+    // 匹配成功
+    const match = REGEX.exec('xaya');
+
+    // 在3号位置匹配成功
+    match.index // 3
+
+    // 下一次匹配从4号位开始
+    REGEX.lastIndex // 4
+
+    // 4号位开始匹配失败
+    REGEX.exec('xaxa') // null
+    上面代码中,lastIndex属性指定每次搜索的开始位置,g修饰符从这个位置开始向后搜索,直到发现匹配为止。
+
+    y修饰符同样遵守lastIndex属性,但是要求必须在lastIndex指定的位置发现匹配。
+
+    const REGEX = /a/y;
+
+    // 指定从2号位置开始匹配
+    REGEX.lastIndex = 2;
+
+    // 不是粘连,匹配失败
+    REGEX.exec('xaya') // null
+
+    // 指定从3号位置开始匹配
+    REGEX.lastIndex = 3;
+
+    // 3号位置是粘连,匹配成功
+    const match = REGEX.exec('xaxa');
+    match.index // 3
+    REGEX.lastIndex // 4
+    进一步说,y修饰符号隐含了头部匹配的标志^。
+
+    /b/y.exec('aba')
+    // null
+    上面代码由于不能保证头部匹配,所以返回null。y修饰符的设计本意,就是让头部匹配的标志^在全局匹配中都有效。
+
+    在split方法中使用y修饰符,原字符串必须以分隔符开头。这也意味着,只要匹配成功,数组的第一个成员肯定是空字符串。
+
+    // 没有找到匹配
+    'x##'.split(/#/y)
+    // [ 'x##' ]
+
+    // 找到两个匹配
+    '##x'.split(/#/y)
+    // [ '', '', 'x' ]
+    后续的分隔符只有紧跟前面的分隔符,才会被识别。
+
+    '#x#'.split(/#/y)
+    // [ '', 'x#' ]
+
+    '##'.split(/#/y)
+    // [ '', '', '' ]
+    下面是字符串对象的replace方法的例子。
+
+    const REGEX = /a/gy;
+    'aaxa'.replace(REGEX, '-') // '--xa'
+    上面代码中,最后一个a因为不是出现下一次匹配的头部,所以不会被替换。
+
+    单单一个y修饰符对match方法,只能返回第一个匹配,必须与g修饰符联用,才能返回所有匹配。
+
+    'a1a2a3'.match(/a\d/y) // ["a1"]
+    'a1a2a3'.match(/a\d/gy) // ["a1", "a2", "a3"]
+    y修饰符的一个应用,是从字符串提取token(词元),y修饰符确保了匹配之间不会有漏掉的字符。
+
+    const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
+    const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
+
+    tokenize(TOKEN_Y, '3 + 4')
+    // [ '3', '+', '4' ]
+    tokenize(TOKEN_G, '3 + 4')
+    // [ '3', '+', '4' ]
+
+    function tokenize(TOKEN_REGEX, str) {
+      let result = [];
+      let match;
+      while (match = TOKEN_REGEX.exec(str)) {
+        result.push(match[1]);
+      }
+      return result;
+    }
+    上面代码中,若字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的。但是,一旦出现非法字符,两者的行为就不一样了。
+
+    tokenize(TOKEN_Y, '3x + 4')
+    // [ '3' ]
+    tokenize(TOKEN_G, '3x + 4')
+    // [ '3', '+', '4' ]
+    上面代码中,g修饰符会忽略非法字符,而y修饰符不会,这样就很容易发现错误。
+
+    sticky属性
+    与y修饰符相匹配,ES6的正则对象多了sticky属性,表示是否设置了y修饰符。
+
+    var r = /hello\d/y;
+    r.sticky // true
+    flags属性
+    ES6为正则表达式新增了flags属性,会返回正则表达式的修饰符。
+
+    // ES5的source属性
+    // 返回正则表达式的正文
+    /abc/ig.source
+    // "abc"
+
+    // ES6的flags属性
+    // 返回正则表达式的修饰符
+    /abc/ig.flags
+    // 'gi'
+    RegExp.escape()
+    字符串必须转义,才能作为正则模式。
+
+    function escapeRegExp(str) {
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    }
+
+    let str = '/path/to/resource.html?search=query';
+    escapeRegExp(str)
+    // "\/path\/to\/resource\.html\?search=query"
+    上面代码中,str是一个正常字符串,必须使用反斜杠对其中的特殊字符转义,才能用来作为一个正则匹配的模式。
+
+    已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7。
+    2015 年7月,TC39认为,该方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求。
+
+    RegExp.escape('The Quick Brown Fox');
+    // "The Quick Brown Fox"
+
+    RegExp.escape('Buy it. use it. break it. fix it.');
+    // "Buy it\. use it\. break it\. fix it\."
+
+    RegExp.escape('(*.*)');
+    // "\(\*\.\*\)"
+    字符串转义以后,可以使用RegExp构造函数生成正则模式。
+
+    var str = 'hello. how are you?';
+    var regex = new RegExp(RegExp.escape(str), 'g');
+    assert.equal(String(regex), '/hello\. how are you\?/g');
+    目前,该方法可以用上文的escapeRegExp函数或者垫片模块regexp.escape实现。
+
+    var escape = require('regexp.escape');
+    escape('hi. how are you?');
+    // "hi\\. how are you\\?"
+  s 修饰符:dotAll 模式
+    正则表达式中,点(.)是一个特殊字符,代表任意的单个字符,但是行终止符(line terminator character)除外。
+
+    以下四个字符属于”行终止符“。
+
+    U+000A 换行符(\n)
+    U+000D 回车符(\r)
+    U+2028 行分隔符(line separator)
+    U+2029 段分隔符(paragraph separator)
+    /foo.bar/.test('foo\nbar')
+    // false
+    上面代码中,因为.不匹配\n,所以正则表达式返回false。
+
+    但是,很多时候我们希望匹配的是任意单个字符,这时有一种变通的写法。
+
+    /foo[^]bar/.test('foo\nbar')
+    // true
+    这种解决方案毕竟不太符合直觉,所以现在有一个提案,引入/s修饰符,使得.可以匹配任意单个字符。
+
+    /foo.bar/s.test('foo\nbar') // true
+    这被称为dotAll模式,即点(dot)代表一切字符。所以,正则表达式还引入了一个dotAll属性,返回一个布尔值,表示该正则表达式是否处在dotAll模式。
+
+    const re = /foo.bar/s;
+    // 另一种写法
+    // const re = new RegExp('foo.bar', 's');
+
+    re.test('foo\nbar') // true
+    re.dotAll // true
+    re.flags // 's'
+    /s修饰符和多行修饰符/m不冲突,两者一起使用的情况下,.匹配所有字符,而^和$匹配每一行的行首和行尾。
+  后行断言
+    JavaScript 语言的正则表达式,只支持先行断言(lookahead)和先行否定断言(negative lookahead),不支持后行断言(lookbehind)和后行否定断言(negative lookbehind)。
+
+    目前,有一个提案,引入后行断言。V8 引擎4.9版已经支持,Chrome 浏览器49版打开”experimental JavaScript features“开关(地址栏键入about:flags),就可以使用这项功能。
+
+    ”先行断言“指的是,x只有在y前面才匹配,必须写成/x(?=y)/。比如,只匹配百分号之前的数字,要写成/\d+(?=%)/。”先行否定断言“指的是,x只有不在y前面才匹配,必须写成/x(?!y)/。比如,只匹配不在百分号之前的数字,要写成/\d+(?!%)/。
+
+    /\d+(?=%)/.exec('100% of US presidents have been male')  // ["100"]
+    /\d+(?!%)/.exec('that’s all 44 of them')                 // ["44"]
+    上面两个字符串,若互换正则表达式,就会匹配失败。另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的。
+
+    “后行断言”正好与“先行断言”相反,x只有在y后面才匹配,必须写成/(?<=y)x/。比如,只匹配美元符号之后的数字,要写成/(?<=\$)\d+/。”后行否定断言“则与”先行否定断言“相反,x只有不在y后面才匹配,必须写成/(?<!y)x/。比如,只匹配不在美元符号后面的数字,要写成/(?<!\$)\d+/。
+
+    /(?<=\$)\d+/.exec('Benjamin Franklin is on the $100 bill')  // ["100"]
+    /(?<!\$)\d+/.exec('it’s is worth about €90')                // ["90"]
+    上面的例子中,“后行断言”的括号之中的部分((?<=\$)),也是不计入返回结果。
+
+    “后行断言”的实现,需要先匹配/(?<=y)x/的x,然后再回到左边,匹配y的部分。这种“先右后左”的执行顺序,与所有其他正则操作相反,导致了一些不符合预期的行为。
+
+    首先,”后行断言“的组匹配,与正常情况下结果是不一样的。
+
+    /(?<=(\d+)(\d+))$/.exec('1053') // ["", "1", "053"]
+    /^(\d+)(\d+)$/.exec('1053') // ["1053", "105", "3"]
+    上面代码中,需要捕捉两个组匹配。没有"后行断言"时,第一个括号是贪婪模式,第二个括号只能捕获一个字符,所以结果是105和3。而"后行断言"时,由于执行顺序是从右到左,第二个括号是贪婪模式,第一个括号只能捕获一个字符,所以结果是1和053。
+
+    其次,"后行断言"的反斜杠引用,也与通常的顺序相反,必须放在对应的那个括号之前。
+
+    /(?<=(o)d\1)r/.exec('hodor')  // null
+    /(?<=\1d(o))r/.exec('hodor')  // ["r", "o"]
+    上面代码中,若后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以。
+  Unicode属性类
+    目前,有一个提案,引入了一种新的类的写法\p{...}和\P{...},允许正则表达式匹配符合Unicode某种属性的所有字符。
+
+    const regexGreekSymbol = /\p{Script=Greek}/u;
+    regexGreekSymbol.test('π') // u
+    上面代码中,\p{Script=Greek}指定匹配一个希腊文字母,所以匹配π成功。
+
+    Unicode属性类要指定属性名和属性值。
+
+    \p{UnicodePropertyName=UnicodePropertyValue}
+    对于某些属性,可以只写属性名。
+
+    \p{UnicodePropertyName}
+    \P{…}是\p{…}的反向匹配,即匹配不满足条件的字符。
+
+    注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符。若不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类。
+
+    由于Unicode的各种属性非常多,所以这种新的类的表达能力非常强。
+
+    const regex = /^\p{Decimal_Number}+$/u;
+    regex.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // true
+    上面代码中,属性类指定匹配所有十进制字符,可以看到各种字型的十进制字符都会匹配成功。
+
+    \p{Number}甚至能匹配罗马数字。
+
+    // 匹配所有数字
+    const regex = /^\p{Number}+$/u;
+    regex.test('²³¹¼½¾') // true
+    regex.test('㉛㉜㉝') // true
+    regex.test('ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ') // true
+    下面是其他一些例子。
+
+    // 匹配各种文字的所有字母,等同于Unicode版的\w
+    [\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
+
+    // 匹配各种文字的所有非字母的字符,等同于Unicode版的\W
+    [^\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
+
+    // 匹配所有的箭头字符
+    const regexArrows = /^\p{Block=Arrows}+$/u;
+    regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
+'Strings_and_Regular_Expressions'字符串与正则表达式 
+  PS:ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成(UTF-16).
+    每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
+    所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
+    曾经,16 位的容量对于任意字符的存放都是足够的,
+    然而 Unicode 引入了扩展字符集(expanded character set)使得限制字符的长度在 16 位以内,
+    所以难以满足 Unicode 意图给世界上所有字符提供全局唯一标识符的雄心壮志.
+    UTF-16 的前 2^16 个代码点由单个 16 位代码单元表示.
+    这个范围被称作基本多语言面(Basic Multilingual Plane,BMP).
+    任何超出该范围的部分都是增补的语言面(supplementary plane),
+    代码点将不能被单一的 16 位代码单元表示.
+    因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
+    这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
+    也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
+  Example:
+    var text = "𠮷";
+    console.log(text.length);           // 2
+    单个 Unicode 字符 "𠮷" 由代理项对表示,
+    因此,本例中 JavaScript 在操作该字符串时会将它视为两个 16 位字符.
+  str.codePointAt(index); 返回指定下标字符的经过扩展后的UTF-16 编码
+    为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
+    它可以提取给定位置字符串的对应 Unicode 代码点.
+    该方法接收代码单元而非字符的位置并返回一个整型值.
+    Example:
+      var text = "𠮷a";
+      console.log(text.charCodeAt(0));    // 55362
+      console.log(text.charCodeAt(1));    // 57271
+      console.log(text.charCodeAt(2));    // 97
+      console.log(text.codePointAt(0));   // 134071
+      console.log(text.codePointAt(1));   // 57271
+      console.log(text.codePointAt(2));   // 97
+      示例中的首个字符并没有位于 BMP 范围内,因此它包含两个代码单元,
+      意味着 length 属性是 3 而不是 2 .
+      charCodeAt() 方法返回的只是处于位置 0 的第一个代码单元,
+      而 codePointAt() 返回的是完整的代码点,即使它分配给了多个代码单元.
+
+      对一个字符调用 codePointAt() 方法是判断它所包含代码单元数量的最容易的方法
+      function is32Bit(c) { return c.codePointAt(0) > 0xFFFF; }
+      console.log(is32Bit("𠮷"));    // true
+      console.log(is32Bit("a"));     // false
+  String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
+    PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
+      针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
+    Example:
+      使用给定的代码点来产生相应的单个字符
+      console.log(String.fromCodePoint(134071));  // "𠮷"
 Symbol 标记,表示独一无二的值[原始数据类型] 
   PS:JS的第七种数据类型,不可变,用来产生唯一的标识 
   创建标记 
@@ -1330,7 +2146,7 @@ const 定义块级常量
     person 变量一开始已经和包含一个属性的对象绑定.
     修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
-◆操作符&语句扩展   
+◆操作符&语句扩展 
 'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值 
   PS:
   Example:
@@ -1555,42 +2371,25 @@ for(var val of iterator){}  遍历
         var aoo4 = iter.next() // { value: undefined, done: true }
         console.log(aoo1,aoo2,aoo3,aoo4);
 'Modules'模块化规范 
-  PS:export 定义模块的对外接口,即提供接口,import 引入其他模块提供的功能,即引入接口;
-    ES6的模块自动采用严格模式,不管是否在模块头部加上"use strict";
-    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this。
+  PS: ES6模块默认采用严格模式,不管是否在模块头部加上"use strict"; 
+    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
   ES6模块设计思想: 尽量的静态化,使编译时能确定模块的依赖关系,以及输入和输出的变量 
-    CommonJS和AMD 模块: 运行时加载 
-      都只能在运行时确定这些东西 
-      比如,CommonJS 模块就是对象,输入时必须查找对象属性。
-      // CommonJS模块
-      let { stat, exists, readFile } = require('fs');
-      
-      // 等同于
-      let _fs = require('fs');
-      let stat = _fs.stat;
-      let exists = _fs.exists;
-      let readfile = _fs.readfile;
-      上面代码的实质是整体加载fs模块(即加载fs的所有方法),生成一个对象(_fs),
-      然后再从这个对象上面读取3个方法。
-      这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
-      导致完全没办法在编译时做“静态优化”。
     ES6模块: “编译时加载”或者静态加载
       ES6不是对象,而是通过export命令显式指定输出的代码,再通过import命令输入。
       // ES6模块
       import { stat, exists, readFile } from 'fs';
       上面代码的实质是从fs模块加载3个方法,其他方法不加载。
-      这种加载称为“编译时加载”或者静态加载,即 ES6 可以在编译时就完成模块加载,
-      效率要比 CommonJS 模块的加载方式高。
-      当然,这也导致了没法引用 ES6 模块本身,因为它不是对象。
-      由于 ES6 模块是编译时加载,使得静态分析成为可能。
-      有了它,就能进一步拓宽 JS 的语法,
+      这种加载称为“编译时加载”或者静态加载,即ES6可以在编译时就完成模块加载, 
+      效率要比CommonJS模块的加载方式高, 
+      当然,这也导致了没法引用ES6模块本身,因为它不是对象。
+      由于ES6模块是编译时加载,使得静态分析成为可能。
+      有了它,就能进一步拓宽JS的语法,
       比如引入宏(macro)和类型检验(type system)等只能靠静态分析实现的功能。
-    除了静态加载带来的各种好处,ES6 模块还有以下好处。
-      不再需要UMD模块格式了,将来服务器和浏览器都会支持 ES6 模块格式。
-      目前,通过各种工具库,其实已经做到了这一点。
-      将来浏览器的新 API 就能用模块格式提供,不再必须做成全局变量或者navigator对象的属性。
-      不再需要对象作为命名空间(比如Math对象),未来这些功能可以通过模块提供。
-  export 输出接口 
+    除了静态加载带来的各种好处,ES6模块还有以下好处 
+      不再需要UMD模块格式了,将来服务器和浏览器都会支持ES6模块格式 
+      将来浏览器的新API就能用模块格式提供,不再必须做成全局变量或者navigator对象的属性 
+      不再需要对象作为命名空间[比如Math对象],未来这些功能可以通过模块提供 
+  export 输出接口,对外暴露属性方法 
     PS:一个模块就是一个独立的文件,该文件内部的变量,外部无法获取。
       若希望外部能读取模块内的变量,须使用export关键字输出变量。
     export var aoo = val;     单个变量输出 
@@ -1599,14 +2398,15 @@ for(var val of iterator){}  遍历
       export var boo = 'bb';
       export var coo = 1958;
     export function foo() {}; 单个函数输出 
-    export default    默认输出
-      PS:通过默认输出,和指定名称的引入,完成模块变量的引入;
+    export default  默认输出 
+      PS:通过默认输出和指定名称的引入,完成模块变量的引入;
       Example:
         // export-default.js
         默认输出一个函数
         export default function () { console.log('sss'); }
         或
         export default function foo() { console.log('sss'); }
+        // 函数名foo,在模块外部是无效的,加载的时候,视同匿名函数加载 
         或
         function foo() { console.log('foo'); }
         export default foo;
@@ -1616,9 +2416,6 @@ for(var val of iterator){}  遍历
         import goo from './export-default';
         相当于 [self] : import { default as goo } from './profile';
         goo(); // 'sss'
-        可使用任意名称指向 export-default.js 输出的方法,
-        这时就不需要知道原模块输出的函数名。
-        函数名foo,在模块外部是无效的,加载的时候,视同匿名函数加载。
         
         输出类
         // MyClass.js
@@ -1628,11 +2425,11 @@ for(var val of iterator){}  遍历
         let o = new MyClass();
         
         在一条import语句中同时输入默认方法和其他变量
-          import _, { each } from 'lodash';
+          import _,{ each } from 'lodash';
           对应上面代码的export语句如下。
           export default function (obj) { }         
           export function each(obj, iterator, context) { }
-      默认输出和正常输出的比较
+      默认输出和正常输出的比较 
         使用export default时,对应的import语句不需要使用大括号；
         export default function foo() { } // 输出
         import goo from 'xx';             // 输入
@@ -1640,7 +2437,7 @@ for(var val of iterator){}  遍历
         正常时,对应的import语句需要使用大括号。
         export function foo() { }; // 输出
         import {goo} from 'xx';    // 输入
-      一个模块只能有一个默认输出,'export default'命令只能使用一次
+      一个模块只能有一个默认输出[即'export default'命令只能使用一次] 
         PS:本质上,export default 就是输出一个叫做default的变量或方法,
           然后输入时,系统允许你为它取任意名字。
         // modules.js
@@ -1661,7 +2458,7 @@ for(var val of iterator){}  遍历
         相当于 [self] : export { 42 as default } ;
         
         export default var a = 1; // 错误
-    export {aoo,boo}  {}封装输出,使用大括号指定所要输出的一组变量 
+    export {aoo,boo}  {}封装批量导出,使用大括号指定所要输出的一组变量 
       var aoo = 'aa';
       var boo = 'bb';
       var coo = 1958;
@@ -1702,23 +2499,45 @@ for(var val of iterator){}  遍历
       上面代码输出变量aoo,值为bar,500 毫秒之后变成baz。
       这一点与 CommonJS 规范完全不同。
       CommonJS 模块输出的是值的缓存,不存在动态更新。
-    'export'命令必须在模块顶层作用域定义
+    'export'命令必须在模块顶层作用域定义 
       PS:可出现在模块的任何位置,但要处于模块顶层,若处于块级作用域内,就会报错 
         因为处于条件代码块之中,就没法做静态优化了,违背了ES6模块的设计初衷。
       function foo() { 
         export default 'bar'  // SyntaxError
       } 
       foo();
-  import 引入接口 
+    export {}  from 'path' 先后输入输出同一个模块 
+      PS:
+      Example:
+        export { foo, bar } from 'my_module';
+        // 等同于
+        import { foo, bar } from 'my_module';
+        export { foo, bar };
+      export { foo as myFoo } from 'my_module' 接口改名 
+      export * from 'my_module';               整体输出 
+      export { default } from 'foo';           默认接口 
+      export { aoo as default } from './someModule'  具名接口改为默认接口 
+        // 等同于
+        import { es6 } from './someModule';
+        export default es6;
+      export { default as es6 } from './someModule'  默认接口改为具名接口 
+      下面三种import语句,没有对应的复合写法。
+        import * as someIdentifier from "someModule";
+        import someIdentifier from "someModule";
+        import someIdentifier, { namedIdentifier } from "someModule";
+        为了做到形式的对称,现在有提案,提出补上这三种复合写法。
+        export * as someIdentifier from "someModule";
+        export someIdentifier from "someModule";
+        export someIdentifier, { namedIdentifier } from "someModule";
+  import 引入接口,导入其他模块的属性方法 
     PS:其他JS文件通过import加载export定义对外的输出 
-    import {name1[,name2,..]} from './xx' 加载JS文件,并从中输入变量 
-      {name1[,name2,..]}  指定要从其他模块导入的变量名 
-        大括号里面的变量名,必须与被导入模块对外接口的名称相同
-      from       指定模块文件的位置,可是相对路径或绝对路径,'.js'可省略 
+    import {name1 [,name2,..]} from './xx' 加载JS文件,并从中输入变量 
+      PS: 变量名必须与导出名称相同,位置顺序则无要求 
+      from     指定模块文件的位置,可是相对路径或绝对路径,'.js'可省略 
       Example:
         import {firstName, lastName, year} from './profile';
         console.log(firstName);
-    import {name1[,name2,..]} from 'moduleName'; 
+    import {name1 [,name2,..]} from 'moduleName'; 
       PS:若使用模块名,而非路径路径,则必须有配置文件,告诉JS引擎该模块的位置 
       Example:
         import {myMethod} from 'util';
@@ -1754,52 +2573,25 @@ for(var val of iterator){}  遍历
       import { bar } from 'my_module';
       等同于
       import { foo, bar } from 'my_module';
-    import * as aoo from './xx';  模块的整体加载
+    import * as aoo from './xx';  模块的整体加载 
       PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
       Example:
-        // circle.js
+        // circle.js 
         export function area(radius) { 
           return Math.PI * radius * radius; 
         }
         export function circumference(radius) { 
           return 2 * Math.PI * radius; 
         }
-        // main.js
-        import { area, circumference } from './circle';
-        console.log('圆面积:' + area(4));
-        console.log('圆周长:' + circumference(14));
-        改用整体加载的方法:
-        import * as circle from './circle';
-        console.log('圆面积:' + circle.area(4));
-        console.log('圆周长:' + circle.circumference(14));
+        // main.js 
+        import * as circle from './circle'; 
+        console.log('圆面积:' + circle.area(4)); 
+        console.log('圆周长:' + circle.circumference(14)); 
       模块整体加载所在的对象不允许运行时改变 
         import * as circle from './circle';
         // 下面两行都是不允许的
         circle.foo = 'hello';
         circle.area = function () {};
-  export {}  from 'path' 先后输入输出同一个模块
-    PS:
-    Example:
-      export { foo, bar } from 'my_module';
-      // 等同于
-      import { foo, bar } from 'my_module';
-      export { foo, bar };
-    export { foo as myFoo } from 'my_module' 接口改名 
-    export * from 'my_module';               整体输出 
-    export { default } from 'foo';           默认接口 
-    export { aoo as default } from './someModule'  具名接口改为默认接口 
-      // 等同于
-      import { es6 } from './someModule';
-      export default es6;
-    export { default as es6 } from './someModule'  默认接口改为具名接口 
-    下面三种import语句,没有对应的复合写法。
-      import * as someIdentifier from "someModule";
-      import someIdentifier from "someModule";
-      import someIdentifier, { namedIdentifier } from "someModule";
-      为了做到形式的对称,现在有提案,提出补上这三种复合写法。
-      export * as someIdentifier from "someModule";
-      export someIdentifier from "someModule";
-      export someIdentifier, { namedIdentifier } from "someModule";
   模块的继承 
     Example: 
       假设有一个circleplus模块,继承了circle模块。
@@ -1853,7 +2645,7 @@ for(var val of iterator){}  遍历
     使用的时候,直接加载index.js就可以了。
     // script.js
     import {db, users} from './constants';
-  import(specifier)
+  import(specifier) 
     PS:前面介绍过,import命令会被JS引擎静态分析,
       先于模块内的其他模块执行(叫做”连接“更合适)。所以,下面的代码会报错。
       // 报错
@@ -1948,903 +2740,28 @@ for(var val of iterator){}  遍历
           ]);
       }
       main();    
-  Example:
-    说明:
-    假设现在有 module-A.js 和 module-B.js 两个js文件,
-    把它们视为两个模块,moduleA模块和moduleB模块来对待和处理;
-    模块Module:一个模块,就是一个对其他模块暴露自己的属性或者方法的文件。
-    概念:
-    导出Export:模块可选择性地给其他模块暴露[提供」自己的属性和方法,供其他模块使用。
-    导入Import:模块可根据需要,引入其他模块的提供的属性或者方法,供自己模块使用。
-    
-    export 关键字,对外暴露属性方法
-      moduleB模块代码: 
+  注意事项 
+    声明的变量,对外都是只读的 
+      //---module-B.js文件------
+      var name = "前端君"
+      export {name}
+      //---module-A.js文件------
+      import {name} from "./module-B.js";
+      name = "修改字符串变量"; //报错:name is read-only
+    若模块B导出的是对象类型的值,可[部分」修改。
       //---module-B.js文件---
-      export var name = "前端君"; //导出变量:name
-    import 关键字,导入其他模块的属性方法
-      PS:关键字from的作用是指定你想要引入的模块
-      moduleA模块代码:
-      //---module-A.js文件---
-      import { name } from "./module-B.js"; // 导入模块B的name属性,并赋给变量name
-      console.log(name) // 前端君
-    export {} 批量导出
-      对于模块B,若你想导出多个属性和方法的话,可以这样实现:
-      var name = "前端君"; //属性name
-      var age  = 25; //属性age
-      var say = function(){ //方法 say
-        console.log("say hello");
-      }
-      export {name,age,say} //批量导出
-      上面,我们定义了2个属性和1个方法,最后用一个对象实现将它们批量导出。
-      我们更推荐的是使用这种方法实现导出,因为当对外暴露的属性和方法较多的时候,
-      这种方法可以更直观地看出当前模块暴露了哪些变量。
-    import {} 批量导入
-      PS:同使用多个同名变量就可以获取对应的属性和方法,
-        变量名字必须跟导出的一致才能准确获取,位置顺序无要求。
-      //---module-A.js文件---
-      import { name,age,say } from "./module-B.js";  
-      console.log(name) // 前端君
-      console.log(age)  // 25
-      say() // say hello
-    as 关键字,重命名导入的变量:  给导入的变量换一个名字
-      import { name as myname } from "./module-B.js";
-      console.log(myname) // 前端君
-    * 实现整体导入
-      import * as obj from "./module-B.js";
-      console.log(obj.name); // "前端君"
-      console.log(obj.age);  // 25
-      obj.say();             // say hello
-      使用星号符*将模块B提供的所有属性和方法整体导入赋值给变量obj,
-      使用点运算符来获取它的属性和方法。
-    export default 关键语句,实现默认导出
-      PS:每个模块支持导出一个没有名字的变量
-      // 使用export default关键字对外导出一个匿名函数,
-      export default function(){
-        console.log("I am default Fn");
-      }
-      // 导入这个模块的时候,可以为这个匿名函数取任意的名字,
-      import sayDefault from "./module-B.js"; //取任意名字均可
-      sayDefault(); // I am default Fn
-    注意事项
-      声明的变量,对外都是只读的。
-        //---module-B.js文件------
-        var name = "前端君"
-        export {name}
-        //---module-A.js文件------
-        import {name} from "./module-B.js";
-        name = "修改字符串变量"; //报错:name is read-only
-      若模块B导出的是对象类型的值,可[部分」修改。
-        //---module-B.js文件---
-        var person = {"name":"前端君"}
-        export { person }
-        //---module-A.js文件------
-        import {person} from "./module-B.js";
-        person.name = "修改字符串变量"; //修改成功
-      导入不存在的变量,值为undefined。
-        //---module-B.js文件---
-        var name = "前端君";
-        export {name}
-        //---module-A.js文件------
-        import { height } from "./module-B.js";
-        console.log(height); // undefined,不会抛出异常,只是值为undefined
--------------------------------------------------------------------------------
-◆标准库的扩展 
-Number 数值 
-  PS:ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
-    目的是减少全局性的函数,把全局函数合理地规划到其他对象下,逐渐实现语言的模块化 
-  Number.isNaN()      判断是否为非数值
-    传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
-    而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
-    isNaN('abc'); // true,'abc'无法转为一个数值,返回true
-    Number.isNaN('abc'); // false,Number.isNaN不做类型转换,直接返回false
-  Number.isFinite()   判断数值是否非无穷
-    只是对数值类型有效,对非数值类型的参数一律返回false。
-    Number.isFinite(1);        // true,数值1是有穷,即非无穷
-    Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
-    Number.isFinite('abc');    // false
-  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()」 
-  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()」 
-  ◆新特性:
-  Number.isInteger()  判断是否是整数
-    PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
-    Number.isInteger(3.2);  // false
-    Number.isInteger(3);    // true
-    Number.isInteger(3.0);  // true
-    Number.isInteger(3.00); // true
-  Number.EPSILON 常量,定义一个极小的数值
-    PS:Number.EPSILON 的出现是用来判断浮点数的计算误差,
-      若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
-    console.log(Number.EPSILON); // 2.220446049250313e-16
-    2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
-  Number.isSafeInteger() 判断是否为安全整数
-    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 安全整数
-    ES6为引入了安全整数的概念。
-    原来JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间,
-    超过这个范围,无法精确表示这个值。故称之为不安全。
-    为此,ES6定义了两个常量来表示这个范围的最大值和最小值:
-    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER
-    此外,若给你一个数值,你不知道它是否超出了这个安全范围,
-    可以使用ES6给我们新增的一个函数 Number.isSafeInteger 来进行判断
-    Number.isSafeInteger(Number.MAX_SAFE_INTEGER);   // true
-    Number.isSafeInteger(Number.MAX_SAFE_INTEGER+1); // false
-String 字符串扩展 
-  `a${1+2}b` 模版字符串 
-    PS:又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
-    Example:
-      var str =`a
-        b
-        c`;
-      console.log(str);
-      // "a
-      //   b
-      //   c"
-    `${}` 模板占位符 
-      ${str1}表示变量字符串str1表示的字符
-      ${}中可以放任意的javascript表达式
-      var aoo = "fan";
-      var boo = `${aoo} hello!`; 
-      var coo = `${1+2} hello`;
-      console.log(boo,coo); // fan hello   3 hello
-  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串」
-    var aoo = "1";  //目标字符串
-    console.log(aoo); // 1
-    var boo = aoo.repeat(3); //变量aoo被重复三次；
-    console.log(boo); // 111
-  str1.includes(str2); 返回是否包含str2的布尔值  
-    'good'.includes('o') // true
-  str1.startsWith(str2[,num]) 判断str2是否为str1指定的开头位置,
-    num可选,默认为0,表示指定的开头
-    var aoo = "123";      //目标字符串
-    aoo.startsWith('1');  //true,出现在开头位置
-    aoo.startsWith('2');  //false,不是在开头位置
-    aoo.startsWith('2',1); //true,从第2个字符开始
-  str1.endsWith(str2[,num])   判断str2是否出现在str1指定长度的尾部位置
-    num可选,默认为str1的长度
-    var name = "123456";    //目标字符串
-    name.endsWith('1');   //false,不在尾部位置
-    name.endsWith('6');   //true,在尾部位置
-    name.endsWith('6',5); //false,只针对前5个字符
-    name.endsWith('5',5); //true,针对前6个字符
-  str.codePointAt()  返回4字节字符对应的十进制数
-    PS:JS 中,一个字符固定为2个字节,
-      对于那些需要4个字节存储的字符,JS 会认为它是两个字符,此时它的字符长度length为2。
-      如字符:"𠮷",就是一个需要4个字节存储,length为2的字符。
-      对于4字节的字符,JS无法正确读取字符
-    Example:
-      var str1 = "前端";
-      var str2 = "𠮷";
-      str1.length; //length为2
-      str2.length; //length为2
-      str1.charAt(0);  //前
-      str1.charAt(1);  //端
-      str2.charAt(0);  //'�'
-      str2.charAt(1);  //'�'
-      字符"𠮷"是一个4字节的字符,charAt方法能正确读取字符串str1的字符,
-      但无法正确读取4个字节的字符,此时返回结果出现了乱码。
-      使用ES6给我们提供的 codePointAt方法,就可以处理这种4个字节的字符了
-      var str = "𠮷";
-      str.codePointAt();  //结果:134071
-      返回其码点的十进制数:134071,换成16进制就是20bb7,对应的Unicode编码则是\u20bb7
-  String.fromCodePoint(num)  函数的参数是一个字符对应的码点,返回的结果就是对应的字符
-    PS:即使4字节的字符,也能正确实现
-    String.fromCodePoint(134071); //结果:"𠮷"
-  String.raw()  返回字符串最原始的样貌,即使字符串中含有转义符 
-    console.log(`hello\tworld`); // hello	world
-    \t会被识别为制表符,实现空格效果
-    console.log(String.raw`hello\twolrd`); //输出:hello\twolrd
-Array 数组扩展 
-  ◆静态方法
-  Array.of();  将一组值,转换成数组 
-    PS:Array.of() 函数的出现是源于Array构造函数的缺陷
-    Array.of(1,2,3,4,5); // [1,2,3,4,5]
-  Array.from( ) 将类似数组的对象或者可遍历的对象转换成真正的数组 
-    PS:最常见的类数组对象就是调用getElementsByTagName方法得到的结果
-    let ele = document.getElementsByTagName('a');
-    ele instanceof Array;  // false,非数组
-    ele instanceof Object; // true,对象
-    Array.from(ele) instanceof Array; // true,数组
-    Example:将字符串分割成数组
-      let str = 'hello';
-      Array.from(str); // ["h", "e", "l", "l", "o"]
-  ◆实例方法
-  arr.find(foo)      返回数组中符合条件的第一个元素 
-    foo 参数分别为数组中的每个元素
-      每个元素都会进入函数执行,直到结果为true,find函数就会返回该元素的值;
-      倘若所有元素都不符合匿名函数的条件,最终返回undefind
-    let arr = [1,2,3,4,5,6];
-    var aoo = arr.find(function(value){ return value > 2; });
-    console.log(aoo); // 3
-    
-    let arr = [1,2,3,4,5,6];
-    arr.find(function(value){ return value > 7; }); // undefined
-  arr.findIndex(foo) 返回数组中符合条件的第一个元素的位置
-    若所有元素都不符合匿名函数的条件,函数返回-1
-    let arr = [7,8,9,10];
-    arr.findIndex(function(value){ return value > 8; }); // 2
-  arr.fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组
-    let arr = [1,2,3];
-    arr.fill(4); // [4,4,4]
-    
-    let arr = [1,2,3];
-    arr.fill(4,1,3); // [1,4,4],从位置2到到位置4被覆盖
-  arr.entries() 对数组的键值对进行遍历,返回一个遍历器,可以用for..of 对其进行遍历
-    for..of 也是ES6的新增特性 
-    for(let [i,v] of ['a', 'b'].entries()) {
-      console.log(i,v);
-    }
-    //0 "a"
-    //1 "b"
-    用 entries() 函数返回的一个遍历器,用for...of进行遍历,
-    能得到数组的键值:0 和 1,以及对应的数组元素:‘a‘和’b‘
-  arr.keys() 对数组的索引键进行遍历,返回一个遍历器 
-    for(let index of ['a', 'b'].keys()) {
-      console.log(index);
-    }
-    //0
-    //1
-  arr.values()  对数组的元素进行遍历,返回一个遍历器。
-    for(let value of ['a', 'b'].values()) {
-      console.log(value);
-    }
-    //a
-    //b
-  数组推导:用简洁的写法,直接通过现有的数组生成新数组
-    Example: 将数组的每个元素乘以2,得到一个新数组
-    传统的实现方法:
-    var arr1 = [1,2,3,4];
-    var arr2 = [];
-    for(let i=0;i<arr1.length;i++){
-      arr2.push(arr1[i]*2); //每个元素乘以2后,push到数组arr2
-    }
-    console.log(arr2); // [2,4,6,8]
-    
-    var arr1 = [1, 2, 3, 4];
-    var arr2 = [for(i of arr1) i * 2];
-    console.log(arr2); // [ 2, 4, 6, 8 ]
-    
-    在数组推导中,for..of 后面还可以加上if语句
-    var array1 = [1, 2, 3, 4];
-    var array2 = [for(i of array1)  if(i>3) i];
-    console.log(array2); //  [4]
-Object 对象扩展 
-  属性的简写
-    var name = "Zhangsan";
-    var age = 12;
-    //传统的属性写法
-    var person = {
-      "name":name,
-      "age":age
-    };
-    console.log(person); // {name: "Zhangsan", age: 12}
-    //ES6的简洁写法
-    var person = {name,age};
-    console.log(person); // {name: "Zhangsan", age: 12}
-  方法的简写
-    //传统的表示法
-    var person = {
-      say:function(){
-        alert('这是传统的表示法');
-      }
-    };
-    //ES6的表示法
-    var person = {
-      say(){
-        alert('这是ES6的表示法');
-      }
-    };
-  属性名可以是表达式 
-    PS:用字面量定义一个对象的时候,可以用表达式作为对象的属性名或者方法名
-      不可使用 点. 方式来获取
-    var f = "first";
-    var n = "Name";
-    var s = "say";
-    var h = "Hello";
-    var person = {
-      [ f+n ] : "Zhang",
-      [ s+h ](){
-        return "你好吗？";
-      },
-      [f] : 1
-    };
-    console.log(person.firstName); // Zhang
-    console.log(person.sayHello()); // 你好吗？
-    console.log(person[f]); // 1
-    console.log(person.f); // undefined
-    
-    var aoo = 'boo';
-    var obj = {};
-    obj[aoo] = 1;
-    obj['aoo'] = 2;
-    console.log(obj); // Object {boo: 1, aoo: 2}
-  ◆新增的函数
-  Object.is() 比较两个值是否严格相等,或者说全等
-    var str = '12';
-    var num = 12;
-    var num2 = 12;
-    Object.is(str,num);  // false
-    Object.is(num2,num); // true
-  Object.assign() 将源对象的属性赋值到目标对象上 
-    PS:参数可以是多个[至少是两个」
-    let origin = {"b":2,"c":3}; //这个充当源对象
-    let target = {"a":1};       //这个充当目标对象
-    Object.assign(target,origin);
-    console.log(target); // {a: 1, b: 2, c: 3}
-    
-    若赋值过程中,对象的属性出现了相同的名字,则后面的属性值就会覆盖前面的属性值
-    let target = {"a":1};
-    let origin1 = {"a":2};
-    let origin2 = {"a":3};
-    Object.assign(target,origin1,origin2);
-    console.log(target); //  {a: 3}
-  Object.getPrototypeOf() 获取对象的prototype属性
-    function Person(){ //自定义一个Person类（函数）
-    } 
-    Person.prototype = { //函数都有一个预属性prototype对象
-      //给prototype对象添加一个say方法
-      say(){
-        console.log('hello');
-      }
-    };
-    let allen = new Person(); //实例化Person对象,赋值给变量allen
-    allen.say(); // hello,调用类的say方法
-    Object.getPrototypeOf(allen); //{say:function(){.....}}
-    // 获取allen对象的prototype属性
-  Object.setPrototypeOf() 设置对象的prototype属性
-    function Person(){ }
-    Person.prototype = {
-      say(){
-        console.log('hello');
-      }
-    };
-    let allen = new Person();
-    allen.say(); // hello
-    Object.setPrototypeOf( allen, {
-      say(){
-        console.log('hi')
-      } 
-    });
-    allen.say(); // hi
-    javascript的面向对象
-      Javascript本身不是一种面向对象的编程语言,
-      在ES5中,它的语法中也没有class（类的关键字）,
-      但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发。
-      function Dog(name){ //构造函数模拟创建一个Dog类
-        this.name = name;
-      }
-      Dog.prototype = { //把一些属性和方法,定义在prototype对象上
-        "type":"动物",
-        "say":function(){
-          alert("名字叫"+this.name);
-        }
-      };
-      var dog = new Dog('旺财'); //实例化
-      //调用say方法
-      dog.say(); // 名字叫旺财
-      模拟面向对象编程有几个关键步骤:
-      1、构造函数；
-      2、给prototype对象添加属性和方法；
-      3、实例化；
-      4、通过实例化后的对象调用类的方法或者属性。
-      注意:面向对象是一种编程思想,并不是具体的工具。
-Function 函数扩展 
-  参数的默认值
-    传统的实现方式
-      function person(n,a){
-        var name = n || 'Zhangsan';
-        var age  = a ||  25;
-      }
-    ES6实现
-      function person(name = 'Zhangsan',age = 25){
-        console.log(name,age);
-      }
-      person();//结果:Zhangsan  25
-      person('Lisi',18);//结果:Lisi  18
-    只有当传入的参数为undefined,才会触发默认值赋值
-      function person(age = 12){
-        console.log(age);
-      }
-      person();          // 12
-      person(undefined); // 12
-      person(0);         // 0
-      person(null);      // null
-    函数的参数是默认声明的,不能再次声明,否则会报错的
-      function person(age = 12){
-        var age = 25;//错误,再次声明age
-        let age = 25;//错误,再次声明age
-      }
-      person();
-    默认参数:在定义函数时,可先将将参数赋值 [ES6+」
-      function foo(b,c=3){ 
-        console.log(b,c); 
-      }
-      foo();           //undefined 3
-      foo(1);          //1 3,当未传参时默认参数
-      foo(1,4);        //1 4,当传入参数时则使用传入的值
-      foo(1,c=5);      //1 5
-  ...aoo  restArgument,获取函数剩下部分的参数,类型为数组
-    在实参中,除了指定参数以外,剩余的参数都会被...values获取到
-      function sum(result,...values){ //求和函数,得到的结果赋值到result 
-        console.log(values); // [1,2,3,4]
-        values.forEach(function (v,i) { //进行求和
-          result += v; //求和得到的结果存到result
-        });
-        console.log(result); // 10
-      }
-      var res = 0; // 存储求和结果的变量res
-      sum(res,1,2,3,4);  //调用sum函数
-    rest参数必须是函数的最后一个参数,后面不能再跟其他参数
-      //错误写法
-      function sum(result, ...values, mult){
-        //rest参数...values后面还有一个参数mult
-      }
-      //正确的写法
-      function sum(result, mult, ...values){
-        //rest参数...values放在最后
-      }
-  (arg1,arg2) =>{语句}  箭头函数 
-    PS: 箭头函数没有'arguments'对象,若要多参数,则需用'...'扩展符
-    相当于: function(参数1,参数2){ return 语句 }
-    传入多个参数使用括号(),复杂操作使用{}
-      若参数超过1个的话,需要用小括号（）括起来,
-      函数体语句超过1条的时候,需要用大括号{ }括起来。
-      var sum = (a,b) => {return a+b}
-      sum(1,2);//结果:3
-    箭头函数中的this指向的是定义时的this,而非执行时的this 
-      var obj = {  //定义一个对象
-        x:100,     //属性x
-        show(){
-          setTimeout( function(){   //延迟500毫秒,输出x的值
-            //匿名函数
-            console.log(this.x);
-          }, 500 );
-        }
-      };
-      obj.show(); // undefined
-      当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
-      [setTimeout是window对象的方法」,已经不再是obj对象了,
-      所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
-      
-      var obj = {
-        x:100, 
-        show(){
-          setTimeout( () => {   // 箭头函数
-            console.log(this.x);
-          }, 500 );
-        }
-      };
-      obj.show(); // 100
-      定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
-      而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
-Math   对象扩展 
-  PS: ES6给Math对象新增了共17个函数
-  Math.trunc()  去除一个数的小数部分,返回整数部分。
-    PS:若传入的参数是整数,就直接返回整数,若是小数,就去除了小数部分,返回整数部分
-    Math.trunc(3);   // 3
-    Math.trunc(3.1); // 3
-  Math.sign()   判断一个值到底是正数、负数、零还是NaN
-    参数若是正数,结果返回1；
-    若是负数,结果返回-1；
-    若是0,结果返回0；
-    若是一个非数值类型的参数,结果返回:NaN。
-    Math.sign(3); //结果:1
-    Math.sign(-3); //结果:-1
-    Math.sign(0); //结果:0
-    Math.sign('abc'); //结果:NaN
-  Math.cbrt()   计算一个数的立方根
-    Math.cbrt(8);  //2
-    Math.cbrt(27); //3
-  Math.acosh(x) 返回 x 的反双曲余弦。
-  Math.asinh(x) 返回 x 的反双曲正弦。
-  Math.atanh(x) 返回 x 的反双曲正切。
-  Math.clz32(x) 返回 x 的 32 位二进制整数表示形式的前导 0 的个数。
-  Math.sinh(x)  返回x的双曲正弦。
-  Math.cosh(x)  返回 x 的双曲余弦。
-  Math.expm1(x) 返回 eˆx - 1。
-  Math.fround(x) 返回 x 的单精度浮点数形式。
-  Math.hypot(...values) 返回所有参数的平方和的平方根。
-  Math.imul(x, y) 返回两个参数以 32 位整数形式相乘的结果。
-  Math.log1p(x)   返回 1 + x 的自然对数。
-  Math.log10(x)   返回以 10 为底的x的对数。
-  Math.log2(x)    返回以 2 为底的 x 的对数。
-  Math.tanh(x)    返回 x 的双曲正切。
-RegExp 正则扩展 
-  RegExp构造函数
-    在ES5中,RegExp构造函数的参数有两种情况。
-    第一种情况是,参数是字符串,这时第二个参数表示正则表达式的修饰符(flag)。
-    var regex = new RegExp('xyz', 'i');
-    // 等价于
-    var regex = /xyz/i;
-    第二种情况是,参数是一个正则表示式,这时会返回一个原有正则表达式的拷贝。
-    var regex = new RegExp(/xyz/i);
-    // 等价于
-    var regex = /xyz/i;
-    但是,ES5不允许此时使用第二个参数,添加修饰符,否则会报错。
-    var regex = new RegExp(/xyz/, 'i');
-    // Uncaught TypeError: Cannot supply flags when constructing one RegExp from another
-    ES6改变了这种行为。若RegExp构造函数第一个参数是一个正则对象,
-    那么可以使用第二个参数指定修饰符。
-    而且,返回的正则表达式会忽略原有的正则表达式的修饰符,只使用新指定的修饰符。
-    new RegExp(/abc/ig, 'i').flags // "i"
-    上面代码中,原有正则对象的修饰符是ig,它会被第二个参数i覆盖。
-  字符串的正则方法
-    字符串对象共有4个方法,可以使用正则表达式:match()、replace()、search()和split()。
-    ES6将这4个方法,在语言内部全部调用RegExp的实例方法,
-    从而做到所有与正则相关的方法,全都定义在RegExp对象上。
-    String.prototype.match 调用 RegExp.prototype[Symbol.match]
-    String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
-    String.prototype.search 调用 RegExp.prototype[Symbol.search]
-    String.prototype.split 调用 RegExp.prototype[Symbol.split]
-  u修饰符
-    ES6对正则表达式添加了u修饰符,含义为“Unicode模式”,
-    用来正确处理大于\uFFFF的Unicode字符。
-    也就是说,会正确处理四个字节的UTF-16 编码。
-    /^\uD83D/u.test('\uD83D\uDC2A')
-    // false
-    /^\uD83D/.test('\uD83D\uDC2A')
-    // true
-    上面代码中,\uD83D\uDC2A是一个四个字节的UTF-16 编码,代表一个字符。
-    ES5不支持四个字节的UTF-16 编码,会将其识别为两个字符,导致第二行代码结果为true。
-    加了u修饰符以后,ES6就会识别其为一个字符,所以第一行代码结果为false。
-    一旦加上u修饰符号,就会修改下面这些正则表达式的行为。
-    (1)点字符
-      点(.)字符在正则表达式中,含义是除了换行符以外的任意单个字符。
-      对于码点大于0xFFFF的Unicode字符,点字符不能识别,必须加上u修饰符。
-      var s = '𠮷';
-      /^.$/.test(s) // false
-      /^.$/u.test(s) // true
-      上面代码表示,若不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败。
-    (2)Unicode字符表示法
-      ES6新增了使用大括号表示Unicode字符,这种表示法在正则表达式中必须加上u修饰符,才能识别。
-      /\u{61}/.test('a') // false
-      /\u{61}/u.test('a') // true
-      /\u{20BB7}/u.test('𠮷') // true
-      上面代码表示,若不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u。
-    (3)量词
-      使用u修饰符后,所有量词都会正确识别码点大于0xFFFF的Unicode字符。
-
-      /a{2}/.test('aa') // true
-      /a{2}/u.test('aa') // true
-      /𠮷{2}/.test('𠮷𠮷') // false
-      /𠮷{2}/u.test('𠮷𠮷') // true
-      另外,只有在使用u修饰符的情况下,Unicode表达式当中的大括号才会被正确解读,否则会被解读为量词。
-
-      /^\u{3}$/.test('uuu') // true
-      上面代码中,由于正则表达式没有u修饰符,所以大括号被解读为量词。加上u修饰符,就会被解读为Unicode表达式。
-    (4)预定义模式
-      u修饰符也影响到预定义模式,能否正确识别码点大于0xFFFF的Unicode字符。
-
-      /^\S$/.test('𠮷') // false
-      /^\S$/u.test('𠮷') // true
-      上面代码的\S是预定义模式,匹配所有不是空格的字符。只有加了u修饰符,它才能正确匹配码点大于0xFFFF的Unicode字符。
-
-      利用这一点,可以写出一个正确返回字符串长度的函数。
-
-      function codePointLength(text) {
-        var result = text.match(/[\s\S]/gu);
-        return result ? result.length : 0;
-      }
-      var s = '𠮷𠮷';
-      s.length // 4
-      codePointLength(s) // 2
-    (5)i修饰符
-
-      有些Unicode字符的编码不同,但是字型很相近,比如,\u004B与\u212A都是大写的K。
-
-      /[a-z]/i.test('\u212A') // false
-      /[a-z]/iu.test('\u212A') // true
-      上面代码中,不加u修饰符,就无法识别非规范的K字符。
-  y 修饰符
-    除了u修饰符,ES6还为正则表达式添加了y修饰符,叫做“粘连”(sticky)修饰符。
-    y修饰符的作用与g修饰符类似,也是全局匹配,后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于,g修饰符只要剩余位置中存在匹配就可,而y修饰符确保匹配必须从剩余的第一个位置开始,这也就是“粘连”的涵义。
-    var s = 'aaa_aa_a';
-    var r1 = /a+/g;
-    var r2 = /a+/y;
-
-    r1.exec(s) // ["aaa"]
-    r2.exec(s) // ["aaa"]
-
-    r1.exec(s) // ["aa"]
-    r2.exec(s) // null
-    上面代码有两个正则表达式,一个使用g修饰符,另一个使用y修饰符。这两个正则表达式各执行了两次,第一次执行的时候,两者行为相同,剩余字符串都是_aa_a。由于g修饰没有位置要求,所以第二次执行会返回结果,而y修饰符要求匹配必须从头部开始,所以返回null。
-    若改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了。
-    var s = 'aaa_aa_a';
-    var r = /a+_/y;
-
-    r.exec(s) // ["aaa_"]
-    r.exec(s) // ["aa_"]
-    上面代码每次匹配,都是从剩余字符串的头部开始。
-    使用lastIndex属性,可以更好地说明y修饰符。
-
-    const REGEX = /a/g;
-
-    // 指定从2号位置(y)开始匹配
-    REGEX.lastIndex = 2;
-
-    // 匹配成功
-    const match = REGEX.exec('xaya');
-
-    // 在3号位置匹配成功
-    match.index // 3
-
-    // 下一次匹配从4号位开始
-    REGEX.lastIndex // 4
-
-    // 4号位开始匹配失败
-    REGEX.exec('xaxa') // null
-    上面代码中,lastIndex属性指定每次搜索的开始位置,g修饰符从这个位置开始向后搜索,直到发现匹配为止。
-
-    y修饰符同样遵守lastIndex属性,但是要求必须在lastIndex指定的位置发现匹配。
-
-    const REGEX = /a/y;
-
-    // 指定从2号位置开始匹配
-    REGEX.lastIndex = 2;
-
-    // 不是粘连,匹配失败
-    REGEX.exec('xaya') // null
-
-    // 指定从3号位置开始匹配
-    REGEX.lastIndex = 3;
-
-    // 3号位置是粘连,匹配成功
-    const match = REGEX.exec('xaxa');
-    match.index // 3
-    REGEX.lastIndex // 4
-    进一步说,y修饰符号隐含了头部匹配的标志^。
-
-    /b/y.exec('aba')
-    // null
-    上面代码由于不能保证头部匹配,所以返回null。y修饰符的设计本意,就是让头部匹配的标志^在全局匹配中都有效。
-
-    在split方法中使用y修饰符,原字符串必须以分隔符开头。这也意味着,只要匹配成功,数组的第一个成员肯定是空字符串。
-
-    // 没有找到匹配
-    'x##'.split(/#/y)
-    // [ 'x##' ]
-
-    // 找到两个匹配
-    '##x'.split(/#/y)
-    // [ '', '', 'x' ]
-    后续的分隔符只有紧跟前面的分隔符,才会被识别。
-
-    '#x#'.split(/#/y)
-    // [ '', 'x#' ]
-
-    '##'.split(/#/y)
-    // [ '', '', '' ]
-    下面是字符串对象的replace方法的例子。
-
-    const REGEX = /a/gy;
-    'aaxa'.replace(REGEX, '-') // '--xa'
-    上面代码中,最后一个a因为不是出现下一次匹配的头部,所以不会被替换。
-
-    单单一个y修饰符对match方法,只能返回第一个匹配,必须与g修饰符联用,才能返回所有匹配。
-
-    'a1a2a3'.match(/a\d/y) // ["a1"]
-    'a1a2a3'.match(/a\d/gy) // ["a1", "a2", "a3"]
-    y修饰符的一个应用,是从字符串提取token(词元),y修饰符确保了匹配之间不会有漏掉的字符。
-
-    const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
-    const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
-
-    tokenize(TOKEN_Y, '3 + 4')
-    // [ '3', '+', '4' ]
-    tokenize(TOKEN_G, '3 + 4')
-    // [ '3', '+', '4' ]
-
-    function tokenize(TOKEN_REGEX, str) {
-      let result = [];
-      let match;
-      while (match = TOKEN_REGEX.exec(str)) {
-        result.push(match[1]);
-      }
-      return result;
-    }
-    上面代码中,若字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的。但是,一旦出现非法字符,两者的行为就不一样了。
-
-    tokenize(TOKEN_Y, '3x + 4')
-    // [ '3' ]
-    tokenize(TOKEN_G, '3x + 4')
-    // [ '3', '+', '4' ]
-    上面代码中,g修饰符会忽略非法字符,而y修饰符不会,这样就很容易发现错误。
-
-    sticky属性
-    与y修饰符相匹配,ES6的正则对象多了sticky属性,表示是否设置了y修饰符。
-
-    var r = /hello\d/y;
-    r.sticky // true
-    flags属性
-    ES6为正则表达式新增了flags属性,会返回正则表达式的修饰符。
-
-    // ES5的source属性
-    // 返回正则表达式的正文
-    /abc/ig.source
-    // "abc"
-
-    // ES6的flags属性
-    // 返回正则表达式的修饰符
-    /abc/ig.flags
-    // 'gi'
-    RegExp.escape()
-    字符串必须转义,才能作为正则模式。
-
-    function escapeRegExp(str) {
-      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    }
-
-    let str = '/path/to/resource.html?search=query';
-    escapeRegExp(str)
-    // "\/path\/to\/resource\.html\?search=query"
-    上面代码中,str是一个正常字符串,必须使用反斜杠对其中的特殊字符转义,才能用来作为一个正则匹配的模式。
-
-    已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7。
-    2015 年7月,TC39认为,该方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求。
-
-    RegExp.escape('The Quick Brown Fox');
-    // "The Quick Brown Fox"
-
-    RegExp.escape('Buy it. use it. break it. fix it.');
-    // "Buy it\. use it\. break it\. fix it\."
-
-    RegExp.escape('(*.*)');
-    // "\(\*\.\*\)"
-    字符串转义以后,可以使用RegExp构造函数生成正则模式。
-
-    var str = 'hello. how are you?';
-    var regex = new RegExp(RegExp.escape(str), 'g');
-    assert.equal(String(regex), '/hello\. how are you\?/g');
-    目前,该方法可以用上文的escapeRegExp函数或者垫片模块regexp.escape实现。
-
-    var escape = require('regexp.escape');
-    escape('hi. how are you?');
-    // "hi\\. how are you\\?"
-  s 修饰符:dotAll 模式
-    正则表达式中,点(.)是一个特殊字符,代表任意的单个字符,但是行终止符(line terminator character)除外。
-
-    以下四个字符属于”行终止符“。
-
-    U+000A 换行符(\n)
-    U+000D 回车符(\r)
-    U+2028 行分隔符(line separator)
-    U+2029 段分隔符(paragraph separator)
-    /foo.bar/.test('foo\nbar')
-    // false
-    上面代码中,因为.不匹配\n,所以正则表达式返回false。
-
-    但是,很多时候我们希望匹配的是任意单个字符,这时有一种变通的写法。
-
-    /foo[^]bar/.test('foo\nbar')
-    // true
-    这种解决方案毕竟不太符合直觉,所以现在有一个提案,引入/s修饰符,使得.可以匹配任意单个字符。
-
-    /foo.bar/s.test('foo\nbar') // true
-    这被称为dotAll模式,即点(dot)代表一切字符。所以,正则表达式还引入了一个dotAll属性,返回一个布尔值,表示该正则表达式是否处在dotAll模式。
-
-    const re = /foo.bar/s;
-    // 另一种写法
-    // const re = new RegExp('foo.bar', 's');
-
-    re.test('foo\nbar') // true
-    re.dotAll // true
-    re.flags // 's'
-    /s修饰符和多行修饰符/m不冲突,两者一起使用的情况下,.匹配所有字符,而^和$匹配每一行的行首和行尾。
-  后行断言
-    JavaScript 语言的正则表达式,只支持先行断言(lookahead)和先行否定断言(negative lookahead),不支持后行断言(lookbehind)和后行否定断言(negative lookbehind)。
-
-    目前,有一个提案,引入后行断言。V8 引擎4.9版已经支持,Chrome 浏览器49版打开”experimental JavaScript features“开关(地址栏键入about:flags),就可以使用这项功能。
-
-    ”先行断言“指的是,x只有在y前面才匹配,必须写成/x(?=y)/。比如,只匹配百分号之前的数字,要写成/\d+(?=%)/。”先行否定断言“指的是,x只有不在y前面才匹配,必须写成/x(?!y)/。比如,只匹配不在百分号之前的数字,要写成/\d+(?!%)/。
-
-    /\d+(?=%)/.exec('100% of US presidents have been male')  // ["100"]
-    /\d+(?!%)/.exec('that’s all 44 of them')                 // ["44"]
-    上面两个字符串,若互换正则表达式,就会匹配失败。另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的。
-
-    “后行断言”正好与“先行断言”相反,x只有在y后面才匹配,必须写成/(?<=y)x/。比如,只匹配美元符号之后的数字,要写成/(?<=\$)\d+/。”后行否定断言“则与”先行否定断言“相反,x只有不在y后面才匹配,必须写成/(?<!y)x/。比如,只匹配不在美元符号后面的数字,要写成/(?<!\$)\d+/。
-
-    /(?<=\$)\d+/.exec('Benjamin Franklin is on the $100 bill')  // ["100"]
-    /(?<!\$)\d+/.exec('it’s is worth about €90')                // ["90"]
-    上面的例子中,“后行断言”的括号之中的部分((?<=\$)),也是不计入返回结果。
-
-    “后行断言”的实现,需要先匹配/(?<=y)x/的x,然后再回到左边,匹配y的部分。这种“先右后左”的执行顺序,与所有其他正则操作相反,导致了一些不符合预期的行为。
-
-    首先,”后行断言“的组匹配,与正常情况下结果是不一样的。
-
-    /(?<=(\d+)(\d+))$/.exec('1053') // ["", "1", "053"]
-    /^(\d+)(\d+)$/.exec('1053') // ["1053", "105", "3"]
-    上面代码中,需要捕捉两个组匹配。没有"后行断言"时,第一个括号是贪婪模式,第二个括号只能捕获一个字符,所以结果是105和3。而"后行断言"时,由于执行顺序是从右到左,第二个括号是贪婪模式,第一个括号只能捕获一个字符,所以结果是1和053。
-
-    其次,"后行断言"的反斜杠引用,也与通常的顺序相反,必须放在对应的那个括号之前。
-
-    /(?<=(o)d\1)r/.exec('hodor')  // null
-    /(?<=\1d(o))r/.exec('hodor')  // ["r", "o"]
-    上面代码中,若后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以。
-  Unicode属性类
-    目前,有一个提案,引入了一种新的类的写法\p{...}和\P{...},允许正则表达式匹配符合Unicode某种属性的所有字符。
-
-    const regexGreekSymbol = /\p{Script=Greek}/u;
-    regexGreekSymbol.test('π') // u
-    上面代码中,\p{Script=Greek}指定匹配一个希腊文字母,所以匹配π成功。
-
-    Unicode属性类要指定属性名和属性值。
-
-    \p{UnicodePropertyName=UnicodePropertyValue}
-    对于某些属性,可以只写属性名。
-
-    \p{UnicodePropertyName}
-    \P{…}是\p{…}的反向匹配,即匹配不满足条件的字符。
-
-    注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符。若不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类。
-
-    由于Unicode的各种属性非常多,所以这种新的类的表达能力非常强。
-
-    const regex = /^\p{Decimal_Number}+$/u;
-    regex.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // true
-    上面代码中,属性类指定匹配所有十进制字符,可以看到各种字型的十进制字符都会匹配成功。
-
-    \p{Number}甚至能匹配罗马数字。
-
-    // 匹配所有数字
-    const regex = /^\p{Number}+$/u;
-    regex.test('²³¹¼½¾') // true
-    regex.test('㉛㉜㉝') // true
-    regex.test('ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ') // true
-    下面是其他一些例子。
-
-    // 匹配各种文字的所有字母,等同于Unicode版的\w
-    [\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
-
-    // 匹配各种文字的所有非字母的字符,等同于Unicode版的\W
-    [^\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
-
-    // 匹配所有的箭头字符
-    const regexArrows = /^\p{Block=Arrows}+$/u;
-    regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
-'Strings_and_Regular_Expressions'字符串与正则表达式 
-  PS:ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成(UTF-16).
-    每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
-    所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
-    曾经,16 位的容量对于任意字符的存放都是足够的,
-    然而 Unicode 引入了扩展字符集(expanded character set)使得限制字符的长度在 16 位以内,
-    所以难以满足 Unicode 意图给世界上所有字符提供全局唯一标识符的雄心壮志.
-    UTF-16 的前 2^16 个代码点由单个 16 位代码单元表示.
-    这个范围被称作基本多语言面(Basic Multilingual Plane,BMP).
-    任何超出该范围的部分都是增补的语言面(supplementary plane),
-    代码点将不能被单一的 16 位代码单元表示.
-    因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
-    这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
-    也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
-  Example:
-    var text = "𠮷";
-    console.log(text.length);           // 2
-    单个 Unicode 字符 "𠮷" 由代理项对表示,
-    因此,本例中 JavaScript 在操作该字符串时会将它视为两个 16 位字符.
-  str.codePointAt(index); 返回指定下标字符的经过扩展后的UTF-16 编码
-    为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
-    它可以提取给定位置字符串的对应 Unicode 代码点.
-    该方法接收代码单元而非字符的位置并返回一个整型值.
-    Example:
-      var text = "𠮷a";
-      console.log(text.charCodeAt(0));    // 55362
-      console.log(text.charCodeAt(1));    // 57271
-      console.log(text.charCodeAt(2));    // 97
-      console.log(text.codePointAt(0));   // 134071
-      console.log(text.codePointAt(1));   // 57271
-      console.log(text.codePointAt(2));   // 97
-      示例中的首个字符并没有位于 BMP 范围内,因此它包含两个代码单元,
-      意味着 length 属性是 3 而不是 2 .
-      charCodeAt() 方法返回的只是处于位置 0 的第一个代码单元,
-      而 codePointAt() 返回的是完整的代码点,即使它分配给了多个代码单元.
-
-      对一个字符调用 codePointAt() 方法是判断它所包含代码单元数量的最容易的方法
-      function is32Bit(c) { return c.codePointAt(0) > 0xFFFF; }
-      console.log(is32Bit("𠮷"));    // true
-      console.log(is32Bit("a"));     // false
-  String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
-    PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
-      针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
-    Example:
-      使用给定的代码点来产生相应的单个字符
-      console.log(String.fromCodePoint(134071));  // "𠮷"
+      var person = {"name":"前端君"}
+      export { person }
+      //---module-A.js文件------
+      import {person} from "./module-B.js";
+      person.name = "修改字符串变量"; //修改成功
+    导入不存在的变量,值为undefined。
+      //---module-B.js文件---
+      var name = "前端君";
+      export {name}
+      //---module-A.js文件------
+      import { height } from "./module-B.js";
+      console.log(height); // undefined,不会抛出异常,只是值为undefined
 --------------------------------------------------------------------------------
 ES7 
 ASYNC  用来取代回调函数、解决异步操作的一种方法  

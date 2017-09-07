@@ -708,11 +708,11 @@ Sublime text3
       当时对St还有点热情,所以去把convertutf8的代码改了,禁止保存后重载就行了。
     bufferScroll-st 
       保存折叠状态的插件
-    Alignment:代码对齐插件，快捷键:Ctrl+Alt+A
+    Alignment:代码对齐插件,快捷键:Ctrl+Alt+A
     ConvertToUTF8:支持GBK查看与编辑插件
     Emmet:HTML/CSS代码快速编写插件
-    JsFormat:JS格式化插件，快捷键:Ctrl+Alt+F
-    KeymapManager:快捷键管理插件，快捷键:Ctrl+Alt+K
+    JsFormat:JS格式化插件,快捷键:Ctrl+Alt+F
+    KeymapManager:快捷键管理插件,快捷键:Ctrl+Alt+K
     Package Control:插件安装
     SideBarEnhancements:侧边栏插件
     Theme - Nil:SideBarEnhancements皮肤

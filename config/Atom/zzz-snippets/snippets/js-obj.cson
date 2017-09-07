@@ -1,79 +1,198 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
+  # bol ------------------------------------------------
+  '-bol Boolean($1)':
+    'prefix': 'Boolean bol'
+    'body': 'Boolean($1)'
+  # num ------------------------------------------------
+  '-num Infinity':
+    'prefix': 'Infinity'
+    'body': 'Infinity'
+  '-num Number($1)':
+    'prefix': 'Number num'
+    'body': 'Number($1)'
+  '-num Number.MAX_VALUE':
+    'prefix': 'Number.MAX_VALUE'
+    'body': 'Number.MAX_VALUE'
+  '-num Number.MIN_VALUE':
+    'prefix': 'Number.MIN_VALUE'
+    'body': 'Number.MIN_VALUE'
+  '-num Number.NEGATIVE_INFINITY':
+    'prefix': 'Number.NEGATIVE_INFINITY'
+    'body': 'Number.NEGATIVE_INFINITY'
+  '-num Number.POSITIVE_INFINITY':
+    'prefix': 'Number.POSITIVE_INFINITY'
+    'body': 'Number.POSITIVE_INFINITY'
+  '-num Number.NaN':
+    'prefix': 'Number.NaN'
+    'body': 'Number.NaN'
+  '-num .toFixed(num)':
+    'prefix': 'toFixed'
+    'body': 'toFixed($1)'
+  '-num .toExponential(x)':
+    'prefix': 'toExponential'
+    'body': 'toExponential($1)'
+  '-num .toPrecision(x)':
+    'prefix': 'toPrecision'
+    'body': 'toPrecision($1)'
+  # str ------------------------------------------------
+  '-str String($1)':
+    'prefix': 'String'
+    'body': 'String($1)'
+  '-str String.fromCharCode(num,num...)':
+    'prefix': 'String.fromCharCode'
+    'body': 'String.fromCharCode($1)'
+  '-str .charAt(idx)':
+    'prefix': 'charAt'
+    'body': 'charAt($1)'
+  '-str .charCodeAt(idx)':
+    'prefix': 'charCodeAt'
+    'body': 'charCodeAt($1)'
+  '-str .compile(rgep,modifier)':
+    'prefix': 'compile'
+    'body': 'compile($1)'
+  '-str .substr(begin[,num])':
+    'prefix': 'substr'
+    'body': 'substr($1)'
+  '-str .substring(idx1,idx2)':
+    'prefix': 'substring'
+    'body': 'substring($1)'
+  '-str .search(str/rgep)':
+    'prefix': 'search'
+    'body': 'search($1)'
+  '-str .match(str/rgep)':
+    'prefix': 'match'
+    'body': 'match($1)'
+  '-str .localCompare(str)':
+    'prefix': 'localCompare'
+    'body': 'localCompare($1)'
+  '-str .replace(regexp/str,replacement)':
+    'prefix': 'replace'
+    'body': 'replace($1,$2)'
+  '-str .split(str/rgep)':
+    'prefix': 'split'
+    'body': 'split($1)'
+  '-str .trim()':
+    'prefix': 'trim'
+    'body': 'trim()'
+  '-str .toUpperCase()':
+    'prefix': 'toUpperCase'
+    'body': 'toUpperCase()'
+  '-str .toLowerCase()':
+    'prefix': 'toLowerCase'
+    'body': 'toLowerCase()'
+  '-str .toLocaleLowerCase()':
+    'prefix': 'toLocaleLowerCase'
+    'body': 'toLocaleLowerCase()'
+  '-str .toLocaleUpperCase()':
+    'prefix': 'toLocaleUpperCase'
+    'body': 'toLocaleUpperCase()'
+  '-str/arr .slice(begin[,end])':
+    'prefix': 'slice'
+    'body': 'slice($1)'
+  '-str/arr .includes("$1")':
+    'prefix': 'includes'
+    'body': 'includes("$1")'
+  '-str/arr .indexOf(val[,begin])':
+    'prefix': 'indexOf'
+    'body': 'indexOf($1,0$2)$3'
+  '-str/arr .lastIndexOf($1)':
+    'prefix': 'lastIndexOf'
+    'body': 'lastIndexOf($1)'
+  '-str/arr .concat($1)':
+    'prefix': 'concat'
+    'body': 'concat($1)'
   # arr ------------------------------------------------
-  'arr-forEach(foo); ':
+  '-arr Array.isArray(arr)':
+    'prefix': 'Array.isArray'
+    'body': 'Array.isArray($1)'
+  '-arr Array.from(arrLike [,mapFoo] [,thisArr])':
+    'prefix': 'Array.from'
+    'body': 'Array.from(arrLike,${1:function(){}})($1)'
+  '-arr .pop()':
+    'prefix': 'pop'
+    'body': 'pop()'
+  '-arr .shift()':
+    'prefix': 'shift'
+    'body': 'shift()'
+  '-arr .push($1)':
+    'prefix': 'push'
+    'body': 'push($1)'
+  '-arr .unshift(val1[,val2,...])':
+    'prefix': 'unshift'
+    'body': 'unshift($1)'
+  '-arr .splice(begin ,num ,v1,v2,...)':
+    'prefix': 'splice'
+    'body': 'splice(${1:begin},${2:num},${3:v1,v2,...})'
+  '-arr .sort([foo])':
+    'prefix': 'sort'
+    'body': """sort(${1:function(val1,val2){
+      return ${2:true[改变顺序]}
+    }})"""
+  '-arr .join([str])':
+    'prefix': 'join'
+    'body': 'join($1)'
+  '-arr .forEach(foo) ':
     'prefix': 'forEach'
     'body': """forEach(function(val,idx,arr){
       $1
-    });"""
-  'arr-map(cfoo[,this]);':
+    })"""
+  '-arr .map(cfoo[,this])':
     'prefix': 'map'
     'body': """var res = arr.map(function(val,idx,arr1){
-      return $1;
+      return $1
     } )"""
-  'arr-isArray($1);':
-    'prefix': 'isArray'
-    'body': 'isArray($1);'
-  'arr-filter(foo [,this]);':
-    'prefix': 'filter'
-    'body': """filter(function(val,idx,arr){
-        return ${2:true[保留]}
-      } ,${1:this});"""
-  'arr-every(foo [,this]);':
+  '-arr .every(foo [,this])':
     'prefix': 'every'
     'body': """every(function(val,idx,arr){
       return ${2:[全部为真时,才为真]}
-    },${1:this});"""
-  # num ------------------------------------------------
-  'num-Infinity':
-    'prefix': 'Infinity'
-    'body': 'Infinity'
-  'num-Number($1);':
-    'prefix': 'Number'
-    'body': 'Number($1);'
-  'num-Number.MAX_VALUE':
-    'prefix': 'NumberMaxValue'
-    'body': 'Number.MAX_VALUE'
-  'num-Number.MIN_VALUE':
-    'prefix': 'NumberMinValue'
-    'body': 'Number.MIN_VALUE'
-  'num-Number.NEGATIVE_INFINITY':
-    'prefix': 'NumberNegativeInfinity'
-    'body': 'Number.NEGATIVE_INFINITY'
-  'num-Number.POSITIVE_INFINITY':
-    'prefix': 'NumberPositiveInfinity'
-    'body': 'Number.POSITIVE_INFINITY'
-  'num-isFinite(num);':
-    'prefix': 'isFinite'
-    'body': 'isFinite(num);'
-  'num-isNaN(val);':
-    'prefix': 'isNaN'
-    'body': 'isNaN($1);'
-  # str ------------------------------------------------
-  'str-split("$1");':
-    'prefix': 'split'
-    'body': 'split("$1");'
+    },${1:this})"""
+  '-arr .some(foo [,this])':
+    'prefix': 'some'
+    'body': """some(function(val,idx,arr){
+      return ${2:[若存在返回值为真则返回真]}
+    } ${1:,this})"""
+  '-arr .reverse()':
+    'prefix': 'reverse'
+    'body': 'reverse()'
+  '-arr .filter(foo [,this])':
+    'prefix': 'filter'
+    'body': """filter(function(val,idx,arr){
+        return ${2:true[保留]}
+      } ,${1:this})"""
+  '-arr .reduce(foo[,initVal])':
+    'prefix': 'reduce'
+    'body': """reduce(function(retVal,currVal,idx,arr){ 
+      return $2 
+    },${1:initVal})"""
+  '-arr .reduceRight(foo[,initVal])':
+    'prefix': 'reduceRight'
+    'body': """reduceRight(function(retVal,currVal,idx,arr){ 
+      return $2 
+    },${1:initVal})"""
   # obj ------------------------------------------------
-  'o-__proto__':
+  '-obj __proto__':
     'prefix': 'proto'
     'body': '__proto__'
-  'o-constructor':
-    'prefix': 'constructor1'
-    # 存在bug,当为 'prefix': 'constructor' 时
+  '-obj constructor':
+    'prefix': 'constructor1' # 存在bug,当为 'prefix': 'constructor' 时
     'body': 'constructor'
-  'o-apply(this[,arrays]);':
-    'prefix': 'apply'
-    'body': 'apply(${1:this},${2:arrays});'
-  'o-bind(this[,arg1,arg2,...]);':
-    'prefix': 'bind'
-    'body': 'bind(${1:this},${2:arg1,arg2,..});'
-  'o-call(this[,arg1,arg2,...]);':
-    'prefix': 'call'
-    'body': """call(${1:this},${2:arg1,arg2,..})"""
-  'o-Object.assign(obj1,obj2,..);':
+  '-obj writable':
+    'prefix': 'writable'
+    'body': 'writable' 
+  '-obj enumerable':
+    'prefix': 'enumerable'
+    'body': 'enumerable' 
+  '-obj configurable':
+    'prefix': 'configurable'
+    'body': 'configurable' 
+  '-obj Object.create(protoObj[,configObj])':
+    'prefix': 'Object.create'
+    'body': 'Object.create($1)'
+  '-obj Object.assign(obj1,obj2,..)':
     'prefix': 'Objectassign'
-    'body': 'Object.assign($1);'
-  'o-Object.defineProperty(obj,key,{});':
+    'body': 'Object.assign($1)'
+  '-obj Object.defineProperty(obj,key,configObj)':
     'prefix': 'ObjectdefineProperty'
     'body': '''Object.defineProperty(${1:obj},key,{
         // get : function (){
@@ -84,194 +203,104 @@
         writable : bool,
         enumerable : bool, 
         configurable : bool
-      });'''
-  'o-Object.getPrototypeOf(obj);':
+      })'''
+  '-obj Object.defineProperties(obj,configObj)':
+    'prefix': 'Object.defineProperties'
+    'body': '''Object.defineProperties(${1:obj},{
+        aoo: {
+          value: 101,
+          writable: true,
+          enumerable: true,
+          configurable: true
+        },
+        boo: {
+          set: function(newVal) {
+            // this.xx = newVal
+          },
+          get: function() {
+            // return this.xx
+          },
+          enumerable: true,
+          configurable: true
+        }
+      })'''
+  '-obj Object.getOwnPropertyDescriptor(obj,key)':
+    'prefix': 'Object.getOwnPropertyDescriptor'
+    'body': 'Object.getOwnPropertyDescriptor($1)'
+  '-obj Object.getOwnPropertyNames()':
+    'prefix': 'Object.getOwnPropertyNames'
+    'body': 'Object.getOwnPropertyNames()'
+  '-obj Object.getPrototypeOf(obj)':
     'prefix': 'ObjectGetPrototypeOf'
-    'body': 'Object.getPrototypeOf($1);'
-  'o-Object.is(val1,val2);':
-    'prefix': 'ObjectIs'
-    'body': 'Object.is($1);'
-  'o-Object.keys(obj);':
+    'body': 'Object.getPrototypeOf($1)'
+  '-obj Object.isExtensible(obj)':
+    'prefix': 'Object.isExtensible'
+    'body': 'Object.isExtensible($1)'
+  '-obj Object.isSealed(obj)':
+    'prefix': 'Object.isSealed'
+    'body': 'Object.isSealed($1)'
+  '-obj Object.isFrozen(obj)':
+    'prefix': 'Object.isFrozen'
+    'body': 'Object.isFrozen($1)'
+  '-obj Object.preventExtensions(obj)':
+    'prefix': 'Object.preventExtensions'
+    'body': 'Object.preventExtensions($1)'
+  '-obj Object.seal(obj)':
+    'prefix': 'Object.seal'
+    'body': 'Object.seal($1)'
+  '-obj Object.freeze(obj)':
+    'prefix': 'Object.freeze'
+    'body': 'Object.freeze($1)'
+  '-obj Object.is(val1,val2)':
+    'prefix': 'Object.is'
+    'body': 'Object.is($1)'
+  '-obj Object.keys(obj)':
     'prefix': 'Objectkeys'
-    'body': 'Object.keys($1);'
+    'body': 'Object.keys($1)'
+  '-obj .toString()':
+    'prefix': 'toString'
+    'body': 'toString()'
+  '-obj .toLocaleString()':
+    'prefix': 'toLocaleString'
+    'body': 'toLocaleString()'
+  '-obj .valueOf()':
+    'prefix': 'valueOf'
+    'body': 'valueOf()'
+  '-obj .hasOwnProperty(key)':
+    'prefix': 'hasOwnProperty1'
+    # 存在bug 
+    'body': 'hasOwnProperty($1)'
+  '-obj .propertyIsEnumerable(key)':
+    'prefix': 'propertyIsEnumerable'
+    'body': 'propertyIsEnumerable($1)'
+  '-obj .isPrototypeOf(obj)':
+    'prefix': 'isPrototypeOf'
+    'body': 'isPrototypeOf($1)'
+  '-obj .apply(this[,arrays])':
+    'prefix': 'apply'
+    'body': 'apply(${1:this},${2:arrays})'
+  '-obj .bind(this[,arg1,arg2,...])':
+    'prefix': 'bind'
+    'body': 'bind(${1:this},${2:arg1,arg2,..})'
+  '-obj .call(this[,arg1,arg2,...])':
+    'prefix': 'call'
+    'body': """call(${1:this},${2:arg1,arg2,..})"""
   # fn ------------------------------------------------
-  'fn-prototype':
+  '-fn prototype':
     'prefix': 'prototype'
     'body': 'prototype'
-  'fn-arguments':
+  '-fn arguments':
     'prefix': 'arguments'
     'body': 'arguments'
-  'fn-caller':
+  '-fn caller':
     'prefix': 'caller'
     'body': 'caller'
-  'fn-functionArrows ($1) => {$2}':
-    'prefix': 'functionArrows'
-    'body': '($1) => {$2}'
-  'fn-function(){\n}$1':
+  '-fn function(){\n}$1':
     'prefix': 'function1'
     'body': 'function(){\n}$1'
-  'fn-function $1($2){$3\n};':
+  '-fn function $1($2){$3\n}':
     'prefix': 'function2'
-    'body': 'function $1($2){$3\n};'
-  'fn-(function ($1){$3\n})($2);':
+    'body': 'function $1($2){$3\n}'
+  '-fn (function ($1){$3\n})($2)':
     'prefix': 'function3'
-    'body': '(function ($1){$3\n})($2);'
-  # json ------------------------------------------------
-  '-JSON.parse($1);':
-    'prefix': 'JSONparse'
-    'body': 'JSON.parse($1);'
-  '-JSON.stringify($1);':
-    'prefix': 'JSONstringify'
-    'body': 'JSON.stringify($1);'
-  # date ------------------------------------------------
-  'date-Date.now();':
-    'prefix': 'DateNow'
-    'body': 'Date.now();'
-  'date-Date.parse(str/date);':
-    'prefix': 'DateParse'
-    'body': 'Date.parse($1);'
-  'date-Date.UTC(year,month[,...]);':
-    'prefix': 'DateUTC'
-    'body': 'Date.UTC($1);'
-  'date-getDate()':
-    'prefix': 'getDate'
-    'body': 'getDate();'
-  'date-getDay()':
-    'prefix': 'getDay'
-    'body': 'getDay();'
-  'date-getFullYear()':
-    'prefix': 'getFullYear'
-    'body': 'getFullYear();'
-  'date-getHours()':
-    'prefix': 'getHours'
-    'body': 'getHours();'
-  'date-getMonth()':
-    'prefix': 'getMonth'
-    'body': 'getMonth();'
-  'date-getMinutes()':
-    'prefix': 'getMinutes'
-    'body': 'getMinutes();'
-  'date-getMilliseconds()':
-    'prefix': 'getMilliseconds'
-    'body': 'getMilliseconds();'
-  'date-getSeconds()':
-    'prefix': 'getSeconds'
-    'body': 'getSeconds();'
-  'date-getTime();':
-    'prefix': 'getTime'
-    'body': 'getTime();'
-  'date-getTimezoneOffset();':
-    'prefix': 'getTimezoneOffset'
-    'body': 'getTimezoneOffset();'
-  # math ------------------------------------------------
-  '-Math.abs(num)':
-    'prefix': 'MathAbs'
-    'body': 'Math.abs($1);'
-  '-Math.acos(num)':
-    'prefix': 'MathAcos'
-    'body': 'Math.acos($1);'
-  '-Math.asin(num)':
-    'prefix': 'MathAsin'
-    'body': 'Math.asin($1);'
-  '-Math.atan(num)':
-    'prefix': 'MathAtan'
-    'body': 'Math.atan($1);'
-  '-Math.ceil($1)-up':
-    'prefix': 'Mathceil'
-    'body': 'Math.ceil($1);'
-  '-Math.cos(弧度值)':
-    'prefix': 'MathCos'
-    'body': 'Math.cos($1)'
-  '-Math.exp(num)':
-    'prefix': 'MathExp'
-    'body': 'Math.exp($1);'
-  '-Math.floor($1)':
-    'prefix': 'Mathfloor'
-    'body': 'Math.floor($1);'
-  '-Math.log(num)':
-    'prefix': 'MathLog'
-    'body': 'Math.log($1);'
-  '-Math.max(num1,num2,..)':
-    'prefix': 'MathMax'
-    'body': 'Math.max($1)'
-  '-Math.min(num1,num2,..)':
-    'prefix': 'MathMin'
-    'body': 'Math.min($1)'
-  '-Math.PI':
-    'prefix': 'MathPI'
-    'body': 'Math.PI'
-  '-Math.pow($1)-幂':
-    'prefix': 'Mathpow'
-    'body': 'Math.pow($1);'
-  '-Math.random();':
-    'prefix': 'MathRandom'
-    'body': 'Math.random();'
-  '-Math.round($1)-四舍五入':
-    'prefix': 'Mathround'
-    'body': 'Math.round($1)'
-  '-Math.sin(弧度值)':
-    'prefix': 'MathSin'
-    'body': 'Math.sin($1)'
-  '-Math.sqrt(num)':
-    'prefix': 'MathSqrt'
-    'body': 'Math.sqrt($1)'
-  '-Math.tan(弧度值)':
-    'prefix': 'MathTan'
-    'body': 'Math.tan($1)'
-  # RegExp ------------------------------------------------
-  '-RegExp-new RegExp($1)':
-    'prefix': 'newRegExp'
-    'body': 'new RegExp($1);'
-  '-RegExp.lastMatch;':
-    'prefix': 'RegExpLastMatch'
-    'body': 'RegExp.lastMatch;'
-  '-RegExp.lastParen;':
-    'prefix': 'RegExpLastParen'
-    'body': 'RegExp.lastParen;'
-  '-RegExp.leftContext;':
-    'prefix': 'RegExpLeftContext'
-    'body': 'RegExp.leftContext;'
-  '-RegExp.multiline;':
-    'prefix': 'RegExpMultiline'
-    'body': 'RegExp.multiline;'
-  '-RegExp.rightContext;':
-    'prefix': 'RegExpRightContext'
-    'body': 'RegExp.rightContext;'
-  # console ----------------------------------------------------
-  '-console':
-    'prefix': 'console'
-    'body': 'console'
-  '-console.clear();':
-    'prefix': 'consoleClear'
-    'body': 'console.clear();'
-  '-console.dir($1);':
-    'prefix': 'consoleDir'
-    'body': 'console.dir($1);'
-  '-console.error($1);':
-    'prefix': 'consoleError'
-    'body': 'console.error($1);'
-  '-console.group($1);':
-    'prefix': 'consoleGroup'
-    'body': 'console.group($1);'
-  '-console.groupEnd();':
-    'prefix': 'consoleGroupEnd'
-    'body': 'console.groupEnd();'
-  '-console.log("--$1",$2);':
-    'prefix': 'consolelog'
-    'body': 'console.log("--$1",$2);'
-  '-console.log("%c"+$1,"background:#afffee;");':
-    'prefix': 'consoleLogColor'
-    'body': 'console.log("%c"+$1,"background:#afffee;");'
-  '-console.table($1);':
-    'prefix': 'consoleTable'
-    'body': 'console.table($1);'
-  '-console.time();':
-    'prefix': 'consoleTime'
-    'body': 'console.time();'
-  '-console.timeEnd($1);':
-    'prefix': 'consoleTimeEnd'
-    'body': 'console.timeEnd($1);'
-  '-console.warn($1);':
-    'prefix': 'consoleWarn'
-    'body': 'console.warn($1);'
-  
+    'body': '(function ($1){$3\n})($2)'

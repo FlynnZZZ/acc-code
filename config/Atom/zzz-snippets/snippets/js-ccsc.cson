@@ -1,5 +1,5 @@
 # cocos creator .js ------------------------------------------------------------
 '.source.js':
-  '-ccsc-test':
-    'prefix': 'test-ccsc'
+  '-cc test':
+    'prefix': 'test cc'
     'body': """test"""

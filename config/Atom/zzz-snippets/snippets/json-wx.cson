@@ -1,31 +1,21 @@
 # 微信小程序 .json --------------------------------------------------------------
 '.source.json':
-  '-wx-window':
-    'prefix': 'window-wx'
+  '-wx window':
+    'prefix': 'window wx'
     'body': """\"window": { 
-          // 导航栏背景色 
           "navigationBarBackgroundColor":"#000", 
-          // 导航栏标题颜色,仅支持'black'/'white'
           "navigationBarTextStyle": "white",     
-          // 导航栏标题文字 
           "navigationBarTitleText": "xxx",       
-          // 窗口背景色
           "backgroundColor": "#fff",             
-          // 下拉背景字体、loading图的样式,仅支持'dark'/'light'
           "backgroundTextStyle": "dark",  
-          // 是否开启下拉刷新 
           "enablePullDownRefresh":false,  
-          // 页面上拉触底事件触发时距页面底部距离,单位'px'
           "onReachBottomDistance": 50, 
         } """
-  '-wx-tabBar':
-    'prefix': 'tabBar-wx'
+  '-wx tabBar':
+    'prefix': 'tabBar wx'
     'body': """\"tabBar": {   
-      // 文字默认颜色,必填 
       "color":"#000",           
-      // 文字选中时的颜色,必填 
       "selectedColor":"#000",   
-      // 背景色,必填 
       "backgroundColor":"#fff", 
       "list": [            
         { 
@@ -38,14 +28,14 @@
       "borderStyle":"black",    
       "position": "bottom"  
     } """
-  '-wx-networkTimeout':
-    'prefix': 'networkTimeout-wx'
+  '-wx networkTimeout':
+    'prefix': 'networkTimeout wx'
     'body': """\"networkTimeout": {  
       "request": 60000,        
       'connectSocket': 60000,  
       "downloadFile": 60000,   
       'uploadFile': 60000       
     } """
-  '-wx-debug;':
-    'prefix': 'debug-wx'
+  '-wx debug;':
+    'prefix': 'debug wx'
     'body': """\"debug": true""" 

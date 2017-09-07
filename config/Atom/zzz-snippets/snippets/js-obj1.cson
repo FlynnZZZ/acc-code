@@ -1,0 +1,264 @@
+# js .js 对象及其属性方法--------------------------------------------------------
+'.source.js':
+  # json ------------------------------------------------
+  '-jsn JSON.parse(JSONstr[,foo(key,val)])':
+    'prefix': 'JSON.parse'
+    'body': 'JSON.parse($1)'
+  '-jsn JSON.stringify(val[,arr/foo,num/str])':
+    'prefix': 'JSON.stringify'
+    'body': 'JSON.stringify($1)'
+  # date ------------------------------------------------
+  '-dt Date.now()':
+    'prefix': 'Date.now'
+    'body': 'Date.now()'
+  '-dt Date.parse(str/date)':
+    'prefix': 'Date.parse'
+    'body': 'Date.parse($1)'
+  '-dt Date.UTC(year,month[,...])':
+    'prefix': 'Date.UTC'
+    'body': 'Date.UTC($1)'
+  '-dt .getDate()':
+    'prefix': 'getDate'
+    'body': 'getDate()'
+  '-dt .getDay()':
+    'prefix': 'getDay'
+    'body': 'getDay()'
+  '-dt .getFullYear()':
+    'prefix': 'getFullYear'
+    'body': 'getFullYear()'
+  '-dt .getHours()':
+    'prefix': 'getHours'
+    'body': 'getHours()'
+  '-dt .getMonth()':
+    'prefix': 'getMonth'
+    'body': 'getMonth()'
+  '-dt .getMinutes()':
+    'prefix': 'getMinutes'
+    'body': 'getMinutes()'
+  '-dt .getMilliseconds()':
+    'prefix': 'getMilliseconds'
+    'body': 'getMilliseconds()'
+  '-dt .getSeconds()':
+    'prefix': 'getSeconds'
+    'body': 'getSeconds()'
+  '-dt .getTime()':
+    'prefix': 'getTime'
+    'body': 'getTime()'
+  '-dt .getTimezoneOffset()':
+    'prefix': 'getTimezoneOffset'
+    'body': 'getTimezoneOffset()'
+  '-dt .toDateString()':
+    'prefix': 'toDateString'
+    'body': 'toDateString()'
+  '-dt .toLocaleString()':
+    'prefix': 'toLocaleString'
+    'body': 'toLocaleString()'
+  '-dt .toLocaleDateString()':
+    'prefix': 'toLocaleDateString'
+    'body': 'toLocaleDateString()'
+  '-dt .toLocaleTimeString()':
+    'prefix': 'toLocaleTimeString'
+    'body': 'toLocaleTimeString()'
+  '-dt .toTimeString()':
+    'prefix': 'toTimeString'
+    'body': 'toTimeString()'
+  '-dt .toUTCString()':
+    'prefix': 'toUTCString'
+    'body': 'toUTCString()'
+  # RegExp ------------------------------------------------
+  '-RE multiline':
+    'prefix': 'multiline'
+    'body': 'multiline'
+  '-RE lastIndex':
+    'prefix': 'lastIndex'
+    'body': 'lastIndex'
+  '-RE ignoreCase':
+    'prefix': 'ignoreCase'
+    'body': 'ignoreCase'
+  '-RE RegExp.input':
+    'prefix': 'RegExp.input'
+    'body': 'RegExp.input'
+  '-RE RegExp.lastMatch':
+    'prefix': 'RegExpLastMatch'
+    'body': 'RegExp.lastMatch'
+  '-RE RegExp.lastParen':
+    'prefix': 'RegExpLastParen'
+    'body': 'RegExp.lastParen'
+  '-RE RegExp.leftContext':
+    'prefix': 'RegExpLeftContext'
+    'body': 'RegExp.leftContext'
+  '-RE RegExp.multiline':
+    'prefix': 'RegExpMultiline'
+    'body': 'RegExp.multiline'
+  '-RE RegExp.rightContext':
+    'prefix': 'RegExpRightContext'
+    'body': 'RegExp.rightContext'
+  '-RE new RegExp($1)':
+    'prefix': 'newRegExp'
+    'body': 'new RegExp($1)'
+  '-RE .test(str)':
+    'prefix': 'test'
+    'body': 'test($1)'
+  '-RE .exec(str)':
+    'prefix': 'exec'
+    'body': 'exec($1)'
+  '-RE .compile(rgep,modifier)':
+    'prefix': 'compile'
+    'body': 'compile($1)'
+  # math ------------------------------------------------
+  '-Math.PI':
+    'prefix': 'Math.PI'
+    'body': 'Math.PI'
+  '-Math.SQRT2':
+    'prefix': 'Math.SQRT2'
+    'body': 'Math.SQRT2'
+  '-Math.SQRT1_2':
+    'prefix': 'Math.SQRT1_2'
+    'body': 'Math.SQRT1_2'
+  '-Math.E':
+    'prefix': 'Math.E'
+    'body': 'Math.E'
+  '-Math.LN10':
+    'prefix': 'Math.LN10'
+    'body': 'Math.LN10'
+  '-Math.LN2':
+    'prefix': 'Math.LN2'
+    'body': 'Math.LN2'
+  '-Math.LOG2E':
+    'prefix': 'Math.LOG2E'
+    'body': 'Math.LOG2E'
+  '-Math.LOG10E':
+    'prefix': 'Math.LOG10E'
+    'body': 'Math.LOG10E'
+  '-Math.random()':
+    'prefix': 'Math.random'
+    'body': 'Math.random()'
+  '-Math.abs(num)':
+    'prefix': 'Math.abs'
+    'body': 'Math.abs($1)'
+  '-Math.ceil($1) 向上取整':
+    'prefix': 'Math.ceil'
+    'body': 'Math.ceil($1)'
+  '-Math.floor($1) 向下取整':
+    'prefix': 'Math.floor'
+    'body': 'Math.floor($1)'
+  '-Math.round($1)  四舍五入':
+    'prefix': 'Math.round'
+    'body': 'Math.round($1)'
+  '-Math.exp(num)':
+    'prefix': 'Math.exp'
+    'body': 'Math.exp($1)'
+  '-Math.log(num)':
+    'prefix': 'Math.log'
+    'body': 'Math.log($1)'
+  '-Math.pow($1) 幂':
+    'prefix': 'Math.pow'
+    'body': 'Math.pow($1)'
+  '-Math.sqrt(num)':
+    'prefix': 'Math.sqrt'
+    'body': 'Math.sqrt($1)'
+  '-Math.max(num1,num2,..)':
+    'prefix': 'Math.max'
+    'body': 'Math.max($1)'
+  '-Math.min(num1,num2,..)':
+    'prefix': 'Math.min'
+    'body': 'Math.min($1)'
+  '-Math.cos(弧度值)':
+    'prefix': 'Math.cos'
+    'body': 'Math.cos($1)'
+  '-Math.sin(弧度值)':
+    'prefix': 'Math.sin'
+    'body': 'Math.sin($1)'
+  '-Math.tan(弧度值)':
+    'prefix': 'Math.tan'
+    'body': 'Math.tan($1)'
+  '-Math.asin(num)':
+    'prefix': 'Math.asin'
+    'body': 'Math.asin($1)'
+  '-Math.acos(num)':
+    'prefix': 'Math.acos'
+    'body': 'Math.acos($1)'
+  '-Math.atan(num)':
+    'prefix': 'Math.atan'
+    'body': 'Math.atan($1)'
+  '-Math.atan2(num)':
+    'prefix': 'Math.atan2'
+    'body': 'Math.atan2($1)'
+  # window ------------------------------------------------
+  '-win parseInt(str[,radix])':
+    'prefix': 'parseInt'
+    'body': 'parseInt(str,${1:radix})'
+  '-win parseFloat(str)':
+    'prefix': 'parseFloat'
+    'body': 'parseFloat($1)'
+  '-win encodeURI(str)':
+    'prefix': 'encodeURI'
+    'body': 'encodeURI($1)'
+  '-win decodeURI(uri)':
+    'prefix': 'decodeURI'
+    'body': 'decodeURI($1)'
+  '-win encodeURIComponent(str)':
+    'prefix': 'encodeURIComponent'
+    'body': 'encodeURIComponent($1)'
+  '-win decodeURIComponent(uri)':
+    'prefix': 'decodeURIComponent'
+    'body': 'decodeURIComponent($1)'
+  '-win escape(str)':
+    'prefix': 'escape'
+    'body': 'escape($1)'
+  '-win unescape(str)':
+    'prefix': 'unescape'
+    'body': 'unescape($1)'
+  '-win isFinite(num)':
+    'prefix': 'isFinite'
+    'body': 'isFinite(num)'
+  '-win isNaN(val)':
+    'prefix': 'isNaN'
+    'body': 'isNaN($1)'
+  '-win eval(JSStr)':
+    'prefix': 'eval'
+    'body': 'eval($1)'
+  # console ----------------------------------------------------
+  '-console':
+    'prefix': 'console'
+    'body': 'console'
+  '-console.log("$1--",$2)':
+    'prefix': 'log1'
+    'body': 'console.log("--$1",$2)'
+  '-console.log("%c"+$1,"background:#afffee")':
+    'prefix': 'log color'
+    'body': 'console.log("%c"+$1,"background:#afffee")'
+  '-console.clear()':
+    'prefix': 'console.clear'
+    'body': 'console.clear()'
+  '-console.dir($1)':
+    'prefix': 'console.dir'
+    'body': 'console.dir($1)'
+  '-console.warn($1)':
+    'prefix': 'console.warn'
+    'body': 'console.warn($1)'
+  '-console.table($1)':
+    'prefix': 'consoleTable'
+    'body': 'console.table($1)'
+  '-console.error($1)':
+    'prefix': 'console.error'
+    'body': 'console.error($1)'
+  '-console.group($1)':
+    'prefix': 'console.group'
+    'body': 'console.group($1)'
+  '-console.groupEnd()':
+    'prefix': 'console.groupEnd'
+    'body': 'console.groupEnd()'
+  '-console.time()':
+    'prefix': 'console.time'
+    'body': 'console.time()'
+  '-console.timeEnd($1)':
+    'prefix': 'console.timeEnd'
+    'body': 'console.timeEnd($1)'
+  
+  
+  
+  
+  
+  
+  

@@ -1,0 +1,72 @@
+# DOM .js --------------------------------------------------------------------- 
+'.source.js':
+  # elem -------------------------------------
+  '-D .cloneNode(bool)':
+    'prefix': 'cloneNode'
+    'body': 'cloneNode($1)'
+  '-D .createElement("$1")':
+    'prefix': 'createElement'
+    'body': 'createElement("$1")'
+  '-D .parentElement':
+    'prefix': 'parentElement'
+    'body': 'parentElement'
+  '-D .innerHTML("$1")':
+    'prefix': 'innerHTML'
+    'body': 'innerHTML("$1")'
+  '-D .innerText("$1")':
+    'prefix': 'innerText'
+    'body': 'innerText("$1")'
+  '-D .insertAdjacentHTML("${1:beforeend}",html)':
+    'prefix': 'insertAdjacentHTML'
+    'body': 'insertAdjacentHTML("${1:beforeend}",html)'
+  '-D .querySelector("$1")':
+    'prefix': 'querySelector'
+    'body': 'querySelector("$1")'
+  '-D .querySelectorAll("$1")':
+    'prefix': 'querySelectorAll'
+    'body': 'querySelectorAll("$1")'
+  '-D .getAttribute("$1")':
+    'prefix': 'getAttribute'
+    'body': 'getAttribute("$1")'
+  '-D .setAttribute("$1","$2")':
+    'prefix': 'setAttribute'
+    'body': 'setAttribute("$1","$2")'
+  # event ------------------------------------
+  '-D touchstart':
+    'prefix': 'touchstart'
+    'body': 'touchstart'
+  '-D touchend':
+    'prefix': 'touchend'
+    'body': 'touchend'
+  '-D touchmove':
+    'prefix': 'touchmove'
+    'body': 'touchmove'
+  '-D readystatechange':
+    'prefix': 'readystatechange'
+    'body': 'readystatechange'
+  '-D .addEventListener("",foo)':
+    'prefix': 'addEventListener'
+    'body': """addEventListener("${1:click}",function(e){
+      $2
+    })
+    """
+  '-D .preventDefault()':
+    'prefix': 'preventDefault'
+    'body': 'preventDefault()'
+  '-D .stopPropagation()':
+    'prefix': 'stopPropagation'
+    'body': 'stopPropagation()'
+  '-D pageX':
+    'prefix': 'pageX'
+    'body': 'pageX'
+  '-D pageY':
+    'prefix': 'pageY'
+    'body': 'pageY'
+  '-D currentTarget':
+    'prefix': 'currentTarget'
+    'body': """currentTarget""" 
+  # canvas 
+  # FileReader 
+  '-D .readAsDataURL()':
+    'prefix': 'readAsDataURL'
+    'body': """readAsDataURL($1)"""

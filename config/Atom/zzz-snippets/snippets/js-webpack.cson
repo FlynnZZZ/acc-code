@@ -1,0 +1,5 @@
+# webpack config .js ------------------------------------------------------------
+'.source.js':
+  '-wp test':
+    'prefix': 'test wp'
+    'body': """test"""

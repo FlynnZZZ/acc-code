@@ -1,0 +1,23 @@
+# ES6  .js ---------------------------------------------------------------------
+'.source.js':
+  # clss 
+  '-6 Promise':
+    'prefix': 'Promise'
+    'body': 'Promise'
+  # module 
+  '-*-import':
+    'prefix': 'import'
+    'body': 'import'
+  '-6 import xx from "./";':
+    'prefix': 'import from'
+    'body': 'import ${1:xx} from "${2:./}";'
+  '-6 export':
+    'prefix': 'export default'
+    'body': 'export default $1'
+  '-6 extend':
+    'prefix': 'extend'
+    'body': """extend""" 
+  # 新增
+  '-6 ($1) => {$2}':
+    'prefix': 'function arrow'
+    'body': '($1) => {$2}'

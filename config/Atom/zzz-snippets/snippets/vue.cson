@@ -1,34 +1,158 @@
-# vue  .vue 
+# vue  .vue ------------------------------------------------------------------- 
 '.text.html.vue':
-  # 名词------------------------------------------------------------------------
-  '-vue-beforeCreate':
+  # html------------------------------------------------------------------------
+  '-vue <router-view></router-view>':
+    'prefix': 'router-view'
+    'body': '<router-view>$1</router-view>' 
+  '-vue <router-link></router-link>':
+    'prefix': 'router-link'
+    'body': '<router-link>$1</router-view>' 
+  '-vue lang=':
+    'prefix': 'lang'
+    'body': """lang=\"$1\"""" 
+  # css-------------------------------------------------------------------------
+  '-vue test':
+    'prefix': 'test'
+    'body': """test""" 
+  # js--------------------------------------------------------------------------
+  '-vue test':
+    'prefix': 'test'
+    'body': """test""" 
+'.text.html.basic,.text.html.vue': 
+  '-vue vif':
+    'prefix': 'vif'
+    'body': 'v-if="${1:key}"' 
+  '-vue velseif':
+    'prefix': 'velseif'
+    'body': 'v-else-if="${1:key}"' 
+  '-vue velse':
+    'prefix': 'velse'
+    'body': 'v-else'
+  '-vue vshow':
+    'prefix': 'vshow'
+    'body': 'v-show="${1:key}"' 
+  '-vue vfor':
+    'prefix': 'vfor'
+    'body': 'v-for="(${1:---}Item,${1:---}Idx) in ${1:---}List"' 
+  '-vue vtext':
+    'prefix': 'vtext'
+    'body': 'v-text="${1:key}"' 
+  '-vue vhtml':
+    'prefix': 'vhtml'
+    'body': 'v-html="${1:key}"' 
+  '-vue vmodel':
+    'prefix': 'vmodel'
+    'body': 'v-model="${1:key}"'
+  '-vue vbind':
+    'prefix': 'vbind'
+    'body': ':${1:class}="${2:arg}"'
+  '-vue von':
+    'prefix': 'von'
+    'body': '@${1:click}="${2:arg}"' 
+  '-vue vonce':
+    'prefix': 'vonce'
+    'body': """v-once""" 
+'.source.js,.text.html.vue':
+  '-Vue.extend({});':
+    'prefix': 'vueextend'
+    'body': """Vue.extend({
+        
+      });""" 
+  '-Vue.component("xx",{});':
+    'prefix': 'vueComponent'
+    'body': """Vue.component("${1:xx}",{
+      template : "",
+      props : [],
+      data : function(){
+        return {
+          
+        }
+      },
+      computed : {},
+      methods : {},
+    });""" 
+  '-Vue.directive("xx-xx",{});':
+    'prefix': 'vueDirective'
+    'body': """Vue.directive('${1:xx-xx}', {
+      bind : function(el,binds,vn){
+        // binds{name,value,expression,arg,modifiers}
+      },
+      inserted : function(el,binds,vn){
+        
+      },
+      update : function(el,binds,vn,oVn){
+        // binds{name,value,expression,arg,modifiers,oldValue}
+      },
+      componentUpdated : function(el,binds,vn,oVn){
+        // binds{name,value,expression,arg,modifiers,oldValue}
+      },
+      unbind : function(el,binds,vn,oVn){
+        
+      }
+    });""" 
+  '-Vue.filter("xxXX",foo);':
+    'prefix': 'vuefilter'
+    'body': """Vue.filter('xxXX',function(val,arg2,arg3){
+        
+      });""" 
+  '-vue new Vue({$1});':
+    'prefix': 'newVue'
+    'body': """new Vue({
+        el : '$1',
+        data : {},
+        computed : {},
+        watch : {},
+        methods : {},
+        mounted : function (){
+          var that = this;
+          this.$nextTick(function () { });
+          
+        },
+      });""" 
+  '-vue new VueRouter();':
+    'prefix': 'newVueRouter'
+    'body': """new VueRouter({
+        routes : $1,
+      });""" 
+  '-vue Vue.use($1)':
+    'prefix': 'Vue.use'
+    'body': 'Vue.use($1)'
+  '-vue watch':
+    'prefix': 'watch'
+    'body': """watch""" 
+  '-vue mounted':
+    'prefix': 'mounted'
+    'body': """mounted""" 
+  '-vue filters':
+    'prefix': 'filters'
+    'body': """filters""" 
+  '-vue beforeCreate':
     'prefix': 'beforeCreate'
     'body': """beforeCreate""" 
-  '-vue-created':
+  '-vue created':
     'prefix': 'created'
     'body': """created""" 
-  '-vue-beforeMount':
+  '-vue beforeMount':
     'prefix': 'beforeMount'
     'body': """beforeMount""" 
-  '-vue-beforeUpdate':
+  '-vue beforeUpdate':
     'prefix': 'beforeUpdate'
     'body': """beforeUpdate""" 
-  '-vue-updated':
+  '-vue updated':
     'prefix': 'updated'
     'body': """updated""" 
-  '-vue-activated':
+  '-vue activated':
     'prefix': 'activated'
     'body': """activated""" 
-  '-vue-deactivated':
+  '-vue deactivated':
     'prefix': 'deactivated'
     'body': """deactivated""" 
-  '-vue-beforeDestroy':
+  '-vue beforeDestroy':
     'prefix': 'beforeDestroy'
     'body': """beforeDestroy""" 
-  '-vue-destroyed':
+  '-vue destroyed':
     'prefix': 'destroyed'
     'body': """destroyed""" 
-  # 创建------------------------------------------------------------------------
-  '-vue-new Vue({$1});':
-    'prefix': 'newVue'
-    'body': 'new Vue({$1});'
+  '-vue srcElement':
+    'prefix': 'srcElement'
+    'body': """srcElement""" 

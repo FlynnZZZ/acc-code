@@ -1,17 +1,17 @@
 # php---------------------------------------------------------------------------
 '.text.html.php':
-  '-<?php 换行 ?>':
+  '-php <?php 换行 ?>':
     'prefix': 'phpNextLine'
     'body': """<?php 
       $1
     ?>"""
   # 方法------------------------------------------------------------------------
-  '-echo($1)':
+  '-php echo($1)':
     'prefix': 'echokh'
     'body': 'echo($1)'
-  '-print $1':
+  '-php print $1':
     'prefix': 'print'
     'body': 'print $1'
-  '-print_r($1)':
+  '-php print_r($1)':
     'prefix': 'printR'
     'body': 'print_r($1)'

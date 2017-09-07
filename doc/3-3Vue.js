@@ -73,7 +73,7 @@ View&Model
       在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中
     var vm = new VueExt(params); 
   Vue.set(obj,key,val)  显式更新数据[确保视图会更新],若为新数据则加入监控 
-  Vue.component(tagName,options);  注册全局组件[详见组件] 
+  Vue.component(tagname,options);  注册全局组件[详见组件] 
   Vue.use() 使用vue插件 
 var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm] 
   PS: 模板语法声明式的将数据渲染进DOM系统; 
@@ -1369,11 +1369,11 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
     在Vue里,一个组件本质上是一个拥有预定义选项的一个Vue实例;
     扩展 HTML 元素,封装可重用的代码,
     在较高层面上,组件是自定义元素,VueJS 的编译器为它添加特殊功能;
-  Vue.component(tagName,options); 注册全局组件 
-    tagName 组件的名称 
+  Vue.component(tagname,options)  // 注册全局组件  
+    tagname 组件的名称 
       对于自定义标签名,Vue不强制要求遵循W3C规则[小写,并且包含一个短杠],
       但尽管遵循这个规则比较好
-    options 配置对象/f(resolve,reject) ,异步组件  
+    options 配置对象/f(resolve,reject),异步组件  
       PS: 相当于new Vue(options)的options  
       template: HTMLStr,   组件的HTML代码
       props: options ,     可选,自定义属性 
@@ -1419,9 +1419,9 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           现在每个 counter 都有它自己内部的状态了:
       computer : {}
       methods  : {}
-      name : ''
-    Example:
-      定义名为 todo-item 的新组件
+      name : '',        // 命名组件 [Self] 
+    Example: 
+      定义名为<todo-item>的新组件
       Vue.component('todo-item',{
         template: '<li>这是个待办项</li>'
       })
@@ -1460,6 +1460,17 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           ]
         }
       })
+  'components': {},  vue实例中局部注册 
+    通过在组件实例选项中注册,可使组件仅在该实例/组件的作用域中使用
+    new Vue({
+      ...
+      components: {
+        'my-component': { // 将只在该模板可用 
+          template: '<div>A custom component! {{aoo}}</div>'
+        },
+      }
+    })
+    这种封装也适用于其它可注册的 Vue 功能,如指令
   在父实例的模块中使用,在HTML中指定位置 
     以自定义元素<my-component></my-component>的形式使用
     要确保在初始化根实例之前注册了组件
@@ -1479,17 +1490,6 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       <div>A custom component!</div>
     </div>
     A custom component!
-  components: {},  vue实例中局部注册 
-    通过在组件实例选项中注册,可使组件仅在该实例/组件的作用域中使用
-    new Vue({
-      ...
-      components: {
-        'my-component': { // 将只在该模板可用 
-          template: '<div>A custom component! {{aoo}}</div>'
-        },
-      }
-    })
-    这种封装也适用于其它可注册的 Vue 功能,如指令
   组件元素可能的限制 
     像这些元素 <ul> ,<ol>,<table> ,<select> 限制了能被它包裹的元素,
     而一些像 <option> 这样的元素只能出现在某些其它元素内部
@@ -1892,7 +1892,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       template: '<div><stack-overflow></stack-overflow></div>'
       导致错误 “max stack size exceeded” ,
       要确保递归调用有终止条件[如递归调用时使用 v-if 最终返回 false] 
-  组件间的循环引用Circular References Between Components 
+  组件间的循环引用'Circular References Between Components' 
     Example:构建一文件目录树
     tree-folder 组件
     <p>
@@ -2291,7 +2291,7 @@ vue-router    前端路由
       'routes' : [ // 映射表 
         { 
           path : '/boo', // 定义地址URL  
-          components : {  // 展示的组件,当只有一个组件时可直接使用组件名 
+          components : {  // 展示的组件 
             viewName1 : cptA, // 命名视图 
             viewName2 : cptB,
           },
@@ -2308,7 +2308,10 @@ vue-router    前端路由
           ],
           redirect : '/coo', // 重定向到'/coo',即访问'/boo'就默认跳转到'/coo' 
         },
-        { path : '/aoo', component : Foo },
+        { 
+          path : '/aoo', 
+          component : cptC, // 当只有一个组件时可直接使用组件名  
+        },
         // 每个路由映射一个组件
       ]
     }) 
@@ -2354,8 +2357,8 @@ vue-router    前端路由
         },
       }  
       :to="{name:'aoo'}"  // 具名路由  
-    tag='tagName'  指定<router-link>渲染成的HTML标签 
-      'tagName'    标签名,如'div'、'li'等
+    tag='tagname'  指定<router-link>渲染成的HTML标签 
+      'tagname'    标签名,如'div'、'li'等
     active-class="className"  指定样式 
   '/path/:param' 动态路由,配任意的'/path/xx'[类似于于地址中的查询字符串] 
     PS: '/xx'必须存在否则匹配不到? 

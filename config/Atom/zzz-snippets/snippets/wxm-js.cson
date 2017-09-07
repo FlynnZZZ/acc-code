@@ -1,5 +1,0 @@
-# 微信小程序 .js 
-'.source.js':
-  '-wx-setData':
-    'prefix': 'setData'
-    'body': """setData({$1} )""" 

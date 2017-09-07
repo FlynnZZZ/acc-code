@@ -362,7 +362,7 @@ Atom
       open-in-browsers           在浏览器中快捷打开html 
         安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
       atom-wx                    '.wxml','.wxss'语法高亮 
-      language-vue-component     vue组件的语法插件 
+      language-vue               '.vue'语法高亮 
       zzz-snippets               自定义的补全插件 
       选用插件 
         atom-beautify              代码格式美化

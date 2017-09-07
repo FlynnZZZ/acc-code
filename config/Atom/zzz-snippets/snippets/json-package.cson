@@ -1,0 +1,5 @@
+# package.json  --------------------------------------------------------------
+'.source.json':
+  '-pkg test;':
+    'prefix': 'test pkg'
+    'body': """\"test": true""" 

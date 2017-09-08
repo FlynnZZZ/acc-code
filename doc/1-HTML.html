@@ -362,7 +362,6 @@
       projection 用于投影媒体
       tv    电视
       ...
-      
   <script> JS引入 
     PS:用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
       存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;
@@ -397,7 +396,7 @@
       </script>
     当内部JS代码中遇到'</script>'字符串时,会被认为是结束标签导致bug
       console.log('</script>'); 
-  <noscript> 未启用JS
+  <noscript> 未启用JS 
     当浏览器不支持js,或没有启用[如禁止使用JS」时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>
   <iframe> 内联框架,创建包含另外一个文档的内联框架  
@@ -416,13 +415,13 @@
       在网页中嵌入的<iframe></iframe>所包含的内容与整个页面是一个整体,
       而<Frame></Frame>所包含的内容是一个独立的个体,是可以独立显示的.
       另外,应用Iframe还可以在同一个页面中多次显示同一内容,而不必重复这段内容的代码.
-  <frameset> 框架[HTML5废弃]
+  <frameset> 框架[HTML5废弃] 
     PS:通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
       每份HTML文档称为一个框架,并且每个框架都独立于其他的框架.
       使用框架的坏处:开发人员必须同时跟踪更多的HTML文档；很难打印整张页面
     <frameset cols="列窗口百分比分割" rows="行窗口百分比分割">
-    <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
-    <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
+      <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
+      <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
     </frameset>
     frameborder 边框大小,为0时无边框显示
       firefox中由border控制宽度,framespacing无效,IE相反,所以最好两个值同时设置,以兼容浏览器！(?)(百度知道所得)
@@ -433,7 +432,7 @@
     Remarks:使用框架结构则至少需要两个HTML文件,在总的HTML文件中
       在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置
       重要提示:不能将<body></body>标签与<frameset></frameset>标签同时使用.
-  <frame>    框架[HTML5废弃]
+  <frame>    框架[HTML5废弃] 
     PS:不需要body
     cols  列窗口百分比分割 
     rows  行窗口百分比分割
@@ -912,32 +911,37 @@ Form表单
         // 其他字段
         </form>
       </fieldset>
-  <legend></legend>     显示fieldset边框上的信息文字
+  <legend>     显示fieldset边框上的信息文字
     PS:legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
-  <form></form>         表单区 
+  <form>       表单域  
     PS:为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
       用于包含其他表单元素[如文本框、单选框等」的容器,
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
-    action="url"  表单提交的地址,即数据交给服务器端的哪个程序进行处理
-    method=   规定用于发送 form-data 的 HTTP 方法
-      get  默认值  get方法将值附加到请求该页的URL中
+    name  表单的名字
+      在HTML4中，这个用法不被推荐(应该使用id). 
+      HTML5中，一个文档中的多个form当中，name必须唯一而不仅仅是一个空字符串。
+    action="url"  表单提交的地址,处理该form信息程序所在的URL 
+      该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
+    method=    提交表单的HTTP方法
+      get  默认值 ,将表单数据附加到请求URL中 
         提交信息会显示在url中不适合密码传输,传递少量信息[256 byte」
-      post post数据长度无限制,不会显示在url中.
+      post 表单数据会包含在表单体内然后发送给服务器 
     autocomplete=   是否启用表单的自动完成功能 [HTML5」
       当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果.
       "on"
       "off"
     novalidate   表示表单不进行验证
-    enctype      在发送到服务器之前应该如何对表单数据进行编码
+    enctype      当method为post时, enctype 是提交form给服务器的内容的 MIME 类型 
       PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type」
         可认为是表单数据的'content type'[MIME type」,
         只不过其取值只能为以下三种之一,否则会转换成默认的编码。
-      "application/x-www-form-urlencoded" 默认值,所有字符都会进行编码
+        该值可以被<button>或者<input>元素中的'formenctype'属性重载 
+      "application/x-www-form-urlencoded" 默认值,所有字符都会进行编码 
         空格转换为 "+" 加号,特殊符号转换为 ASCII HEX 值;
         将表单数据中非字母数字的字符转换成转义字符,如"%HH",
         然后组合成 key1=value1&key2=value2 的形式;
-      'multipart/form-data' 不对字符编码,在使用包含文件上传控件的表单时,必须使用该值
+      'multipart/form-data' 不对字符编码,在上传文件时使用 
         用于高效传输文件、非ASCII数据和二进制数据,
         将表单数据逐项地分成不同的部分,用指定的分割符分割每一部分。
         每一部分都拥有Content-Disposition头部,指定了该表单项的键名和一些其他信息;
@@ -945,12 +949,36 @@ Form表单
         一般来说,method和enctype是两个不同的互不影响的属性,
         但在传文件时,method必须要指定为POST,否则文件只剩下filename了；
         当没有传文件时,enctype会改回默认的application/x-www-form-urlencoded
-      'text/plain'      空格转换为 "+" 加号,但不对特殊字符编码
+      'text/plain'      空格转换为 "+" 加号,但不对特殊字符编码 [HTML5]
         按照键值对排列表单数据 key1=value1\r\nkey2=value2,不进行转义;
         若表单中有文件,则只留文件名；
       Exp:
         表单发送超过100个具有相同name的字段时,服务器收不到数据 [20170518」
           添加 enctype='multipart/form-data' 解决
+    target   用来指示在提交表单之后，在哪里显示收到的回复.
+      HTML4:一个用于frame的名字/关键字 
+      HTML5:这是一个用于'browsing context'浏览器上下文的名字/关键字 
+        举例来说, 标签页tab,窗口window,or或者行内frame 
+      如下的关键字含有特别的含义:
+      _self: 在当前HTML4或HTML5文档页面重新加载返回值,默认值 
+        如果这个文档在一个frame中的话，self是在当前frame（document）中重新加载的，而不是整个页面（window） 
+      _blank: 以新的HTML4或HTML5文档窗口加载返回值。
+      _parent: 在父级的frame中以HTML4或HTML5文档形式加载返回值，
+        如果没有父级的frame，行为和_self一致。
+      _top: HTML4: 清空当前文档,加载返回内容；HTML5: 在当前文档的最高级内加载返回值
+        如果没有父级，和_self的行为一致。
+      iframename: 返回值在指定frame中加载 
+      HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载（覆盖）。    
+    accept-charset 一个空格分隔或逗号分隔的列表 
+      列表包括了服务器支持的字符编码。浏览器以这些编码被列举的顺序使用它们。
+      默认值是一个保留字符串“UNKNOWN”。 
+    autocomplete 指示 input 元素是否能够拥有一个默认值[由浏览器自动补全] [HTML5] 
+      该设定可以被属于这个form的子元素的'autocomplete'属性覆盖 
+      "off" 浏览器不自动补全输入
+      "on"  浏览器能够根据用户之前在form里输入的值自动补全 
+    novalidate  [布尔类型的属性]当提交时form是否没有被验证 [HTML5] 
+      如果这个属性没有指定 (因此这个 form 是验证通过的)，
+      该设置可以被属于这个form的 <button> 或者 <input> 元素中的 formnovalidate 属性覆盖
     可以提交表单的按钮 
       PS:用于提交表单的按钮需放置在表单<form>内,
         以下三种任意一按钮都可用于提交表单
@@ -966,6 +994,15 @@ Form表单
       <input type="submit" name="xx" value="xxx">
       <!-- 自定义重置按钮 -->
       <button type="submit" name="xx">xxx</button>
+    无页面刷新的表单提交 
+      <iframe name="frame1"></iframe>
+      <form action="iframe.htm" target="frame1">
+        <input type="submit" value="提交">
+      </form>
+      $('iframe[name=frame1]').on("load",function(){
+        var frame = frames['frame1'].document.querySelector("body")
+        console.log(frame);
+      })
   <label for="">内容</label>                表单标签  // todo
     PS:标签为input元素定义标注,标记; 
       label元素不会向用户呈现特殊效果;
@@ -1178,12 +1215,12 @@ Form表单
         required (提交时)检测内容是否为空(HTML5新增)
           需在form中,且点击submit提交时触发
           适用于 input textarea select
-  <button type="" >内容</button>            定义按钮 
+  <button type="" >      定义按钮 
     在 button 元素内部,可以放置文本或图像.(与 input 创建的按钮的不同之处)
     type 
       可选,IE的默认为 "button",而其他浏览器中(包括 W3C 规范)的默认值是 "submit"
       其他值和input表示按钮的type值相同
-  <textarea name="" >文本内容</textarea>    多行的文本区 
+  <textarea name="" >    多行的文本区 
     PS:文本区中可以容纳无限数量的文本.
     cols       数字,规定文本区内的可见宽度
     row        数字,规定文本区内的可见行数 
@@ -1198,7 +1235,7 @@ Form表单
         3.设置readonly的表单元素依然会被提交,而设置disabled的值不会被提交.
     maxlength  值为数值,规定文本区域的最大字符数.
     wrap='off' 在文本域中输入文字时不自动换行,默认为自动换行
-  <select></select>           下拉列表
+  <select>    下拉列表
     创建单选或多选菜单
     属性值:
       multiple="multiple" 规定是否可多选.(Window下,使用Ctrl多选)
@@ -1210,7 +1247,7 @@ Form表单
         <option value="旅游">旅游</option>
         <option value="运动">运动</option>
       </select>
-  <option>显示的内容</option>  下拉列表选项
+  <option>    下拉列表选项
     PS:既可以单选又可以多选
       需与select元素配合使用,否则该标签没有意义.
     属性:
@@ -1222,7 +1259,7 @@ Form表单
         <option  value="提交值">选项2</option>
           ...
       </select>
-  <optgroup></optgroup>       列表选项分组
+  <optgroup>  列表选项分组
     将下拉选项进行分组显示
     Example: 
       <optgroup label="组名称">
@@ -1236,7 +1273,7 @@ Form表单
     disabled 禁用禁用 
      如input 用户不可输入
      disabled="disabled"
-  Remarks:
+  Remarks: 
     type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?]
 其他标签 
   ★无语义标签 : 无任何特殊含义

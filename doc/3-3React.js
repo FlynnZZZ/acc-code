@@ -1,13 +1,13 @@
 React 
-介绍 
-  起源于Facebook,于13年5月开源
-  使用jsx语言和一整套完整的工具链[工具集合」
-  非完整的MVC、MVVM框架 
-使用 
-  npm install -g  create-react-app       安装React 
-  create-react-ap helloworld[项目名称」  创建React项目并初始化\
-  cd helloworld
-  npm start   [npm run start的缩写」 
+  介绍 
+    起源于Facebook,于13年5月开源
+    使用jsx语言和一整套完整的工具链[工具集合」
+    非完整的MVC、MVVM框架 
+  使用 
+    npm install -g  create-react-app       安装React 
+    create-react-ap helloworld[项目名称」  创建React项目并初始化\
+    cd helloworld
+    npm start   [npm run start的缩写」 
 'JavaScript and XML'JSX 
   Example: 
     <div id="container"> </div>
@@ -70,7 +70,7 @@ this.state   'getInitialState'的返回值
   'componentDidMount'  初始化渲染后 
   ◆Updating 
   'componentWillReceiveProps' 组件首次接收'props'时调用
-  'shouldComponentUpdate' 
+  'shouldComponentUpdate'     
   'componentWillUpdate'       渲染更新前
   'componentDidUpdate'        渲染更新后 
   ◆Unmounting 

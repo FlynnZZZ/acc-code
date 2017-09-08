@@ -15,61 +15,25 @@
     执行命令时,优先到path指定的路径中去寻找
   Node命令[命令行中] 
     node -v       查看所安装node的版本信息
-    node fileName 执行文件
-      fileName  可省略后缀名
-        node demo
-        或者
-        node demo.js
-    node -e str   使用-e参数,可执行代码字符串 
+    node <fileName> 执行文件 
+    node -e <str>   使用-e参数,可执行代码字符串 
       node -e 'console.log("Hello World")'
     node 升级 
-      npm cache clean -f   清除 npm cache
-      npm install -g n     安装n模块 
-        node有一个模块叫n,是专门用来管理 node.js 的版本
-      n stable   升级 nodejs 到最新稳定版 
-        n后面也可以跟随版本号比如:
-        n v0.10.26
-        n 0.10.26
-      n ls       查看所有node版本
-      $ n latest 安装最新的版本
-      $ n stable 安装稳定版本
-      $ n rm 0.10.1 删除某个版本
-      $ n use 0.10.21 some.js 以指定的版本来执行脚本
-
-      
-      nvm全称Node Version Manager,它与n的实现方式不同,其是通过shell脚本实现的。
-      
-      安装方式有两种:
-      
-      $ curl https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
-      或者
-      
-      $ wget -qO- https://raw.github.com/creationix/nvm/v0.4.0/install.sh | sh
-      以上脚本会把nvm库clone到~/.nvm,然后会在~/.bash_profile, ~/.zshrc或~/.profile末尾添加source,安装完成之后,你可以用以下命令来安装node
-      
-      $ nvm install 0.10
-      使用指定的版本
-      
-      $ nvm use 0.10
-      查看当前已经安装的版本
-      
-      $ nvm ls
-      .nvm
-      ->  v0.10.24
-      查看正在使用的版本
-      
-      $ nvm current
-      v0.10.24
-      以指定版本执行脚本
-      
-      $ nvm run 0.10.24 myApp.js
-      卸载nvm
-      
-      $ rm -rf ~/.nvm
-      总结
-      
-      以上就是两种Node版本管理工具的安装和基本使用方法,选择适合你的那一种口味。
-  NodeJS_REPL Node的交互式解释器 
+      n: NodeJS版本管理 
+        npm install -g n     安装n模块 
+        n stable   升级nodejs到最新稳定版 
+          n后面也可以跟随版本号比如:
+          n v0.10.26
+          n 0.10.26
+        n ls       查看所有node版本
+        n latest 安装最新的版本
+        n rm 0.10.1 删除某个版本
+        n use 0.10.21 some.js 以指定的版本来执行脚本
+      nvm'Node Version Manager': NodeJS版本管理 
+        nvm install 0.10  安装Node
+        nvm use 0.10 使用指定的版本
+        nvm ls 查看当前已经安装的版本
+  'NodeJS REPL'Node的交互式解释器 
     PS:REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
       Node的交互式解释器可以很好的调试JS代码,
@@ -400,7 +364,7 @@ NodeJS的运行方式及编程风格
   Date    时间类 
   console 用于提供控制台标准输出[详见浏览器调试] 
   ◆全局变量
-  __filename 当前正在执行的脚本的文件名 
+  __filename 当前正在执行的脚本的路径和文件名 
     PS:将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
       在模块中,返回的值是模块文件的路径 
     Example:
@@ -803,31 +767,33 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   PS:文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JS代码、JSON 或者编译过的 C/C++ 扩展等等;
     按照CommonJS规范定义和使用模块
-  commonjs规范 模块的引入 
-    module       模块公开的接口 
-      PS:module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口
-      hello.js 文件中 
-        function world() { 
-          console.log(1);
-        }; 
-        module.exports = world;
-      main.js  文件中 
-        var word = require('./hello'); 
-        world(); // 1
-    exports      模块公开的接口 
-      hello.js 文件中 
-        // 通过 exports 对象把 world 作为模块的访问接口 
-        exports.world = function() { 
-          console.log(1); 
-        };
-      main.js  文件中 
-        var world = require('./hello'); // 加载模块 
-        world.world(); // 1 
-    require(arg) 获取模块的接口[即所获取模块的 exports 对象] 
-      PS:加载时可省略脚本文件的后缀名 
-        模块一旦被加载以后,就会被系统缓存,若第二次还加载该模块,则会返回缓存中的版本;
-        意味着模块实际上只会执行一次 
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数 
+  commonjs规范: 模块导出、引入 
+    module.exports/exports  模块公开的接口 
+      PS:module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
+      module.exports 
+        hello.js 文件中 
+          function world() { 
+            console.log(1);
+          }; 
+          module.exports = world;
+        main.js  文件中 
+          var word = require('./hello'); 
+          world(); // 1
+      exports      模块公开的接口 
+        hello.js 文件中 
+          // 通过 exports 对象把 world 作为模块的访问接口 
+          exports.world = function() { 
+            console.log(1); 
+          };
+        main.js  文件中 
+          var world = require('./hello'); // 加载模块 
+          world.world(); // 1 
+      相当于 exports = module.exports 
+    obj = require(arg)      获取模块的接口[相当于获取暴露的'exports'对象] 
+      PS:加载时可省略脚本文件的后缀名,依次查找'.js'-'.json'-'.node'-其他; 
+        模块被加载以后,会被系统缓存,后续再加载该模块,会返回缓存中的版本,
+        意味着模块加载实际上只会执行一次, 
+        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
       arg  可为模块名或文件路径  
         原生模块       http、fs、path等模块名
         相对路径的文件 ./mod或../mod等
@@ -846,37 +812,8 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
           下面写法会起到同样效果。
           var bar = require('bar/lib/bar.js');
           若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
-      Example:
-        通过模块名引入 
-        var fs = require('fs'); // 引入fs模块
-        通过路径引入 
-          student.js 文件中
-            function add(student){ console.log("Add student:" + student); }
-            exports.add =add; // 通过 exports对象 注册,以便引入到其他文件中
-          teacher.js 文件中
-            function add(teacher){ console.log("Add teacher:" + teacher); }
-            exports.add =add; // 通过 exports对象 暴露值
-          klass.js 文件中
-            var student =require("./student"); 
-            // 通过 require函数 来引入student.js 模块 
-            // (student.js 和 class.js 在同一目录下,必须使用./)
-            var teacher =require("./teacher");
-            // 引入 teacher.js 模块
-            function add(t,ss){
-              teacher.add(t);  // 调用teacher.js 模块中的 add函数
-              ss.forEach(function(val,i){ student.add(val); })
-              // 调用student.js 模块中的 add函数
-            }
-            exports.add =add; // 传统的模块实例
-            // moudule.exports.add =add; // 成为一个特别的模块类型
-            //和 exports.add =add; 类似(功能相同),调用方式不同
-            // 若存在 exports.add =add; moudule.exports.add =add;被忽略
-          index.js 文件中
-            var klass =require("./klass"); // 引入 klass.js
-            klass.add("abc",["12","34"]);  // 调用 klass.js 中的函数
-            // Add teacher:abc
-            // Add student:12
-            // Add student:34
+      当模块重名时,加载的优先级 
+        node的核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
   ◆核心模块[Node自带不用安装即可使用] 
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
@@ -1655,7 +1592,10 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
     path.normalize(p) 规范化路径,注意'..' 和 '.'.
     path.join([path1][, path2][, ...]) 用于连接路径
       该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
-    path.resolve([from ...], to) 将 to 参数解析为绝对路径.
+    path.resolve([path1],path2) 将path2解析为绝对路径 
+      Example:
+      var path1 = path.resolve('e://a','./b')
+      console.log(path1); // e://a/b 
     path.isAbsolute(path) 判断参数 path 是否是绝对路径.
     path.relative(from, to) 用于将相对路径转为绝对路径.
     path.dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.

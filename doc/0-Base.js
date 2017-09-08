@@ -2,6 +2,7 @@
   常用单词 
     bin   binary 二进制 
     src   source 来源 
+    dist  distribute 分发 
     dest  destination 目的地 
     repo  repository 仓库 
     spec  specification 说明书 
@@ -30,6 +31,7 @@
     是给loopback回路网络接口的一个标准主机名;
     相对应的IP地址为'127.0.0.1'[IPv4」和'::1'[IPv6」
 ◆约定常识 
+文件的MD5值: 为了保证每个文件的唯一性,通过判断MD5值来确定文件是否更改 
 HSL 色彩模式,工业界的一种颜色标准 
   PS:通过对色相'H',饱和度'S',亮度'L'三个颜色通道的变化及其相互叠加来得到各种颜色,
     这个标准几乎包括了人类视力所能感知的所有颜色,目前运用最广的颜色系统之一 
@@ -50,6 +52,61 @@ HSL 色彩模式,工业界的一种颜色标准
     在繁体版windows上它表示Big5编码,
     在日文操作系统上它表示JIS编码。
   UTF-8 
+常用MIME类型 
+  后缀名   MIME名称
+  ◆文本 
+  *.txt    text/plain    
+  *.htm    text/html    
+  *.html   text/html    
+  *.xml    text/xml, application/xml    
+  *.css    text/css
+  *.csv    text/csv
+  *.js     text/javascript, application/javascript    
+  ◆图片 
+  *.dwg    image/vnd.dwg    
+  *.dxf    image/vnd.dxf
+  *.gif    image/gif    
+  *.jp2    image/jp2    
+  *.jpe    image/jpeg
+  *.jpeg   image/jpeg
+  *.jpg    image/jpeg    
+  *.png    image/png    
+  *.svf    image/vnd.svf    
+  *.tif    image/tiff    
+  *.tiff   image/tiff    
+  ◆音频 
+  *.3gpp   audio/3gpp, video/3gpp
+  *.ac3    audio/ac3
+  *.au     audio/basic
+  *.mp2    audio/mpeg, video/mpeg    
+  *.mp3    audio/mpeg    
+  *.mp4    audio/mp4, video/mp4    
+  ◆视频 
+  *.mpeg   video/mpeg    
+  *.mpg    video/mpeg    
+  ◆其他
+  *.doc    application/msword    
+  *.asf    allpication/vnd.ms-asf
+  *.dot    application/msword    
+  *.dtd    application/xml-dtd    
+  *.json   application/json    
+  *.mpp    application/vnd.ms-project    
+  *.ogg    application/ogg, audio/ogg    
+  *.pdf    application/pdf    
+  *.pot    application/vnd.ms-powerpoint    
+  *.pps    application/vnd.ms-powerpoint    
+  *.ppt    application/vnd.ms-powerpoint    
+  *.rtf    application/rtf, text/rtf    
+  *.wdb    application/vnd.ms-works    
+  *.wps    application/vnd.ms-works    
+  *.xhtml  application/xhtml+xml    
+  *.xlc    application/vnd.ms-excel    
+  *.xlm    application/vnd.ms-excel    
+  *.xls    application/vnd.ms-excel    
+  *.xlt    application/vnd.ms-excel    
+  *.xlw    application/vnd.ms-excel    
+  *.xlsx   application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  *.zip    aplication/zip    
 URI&URL&URN 资源标识定位 
   'Uniform Resource Identifier'URI : 统一资源标识符 
     一个用于标识某一互联网资源名称的字符串
@@ -90,7 +147,7 @@ URI&URL&URN 资源标识定位
         ../ 表示上一级目录; ./ 表示当前目录; / 表示相对根路径
   'Uniform Resource Name'URN : 通过名称来识别资源,和位置无关  
   URL 和 URN 都是 URI 的子集
-socket,套接字 
+Socket,套接字 
   源IP地址和目的IP地址以及源端口号和目的端口号的组合称为套接字。
   其用于标识客户端请求的服务器和服务。
   它是网络通信过程中端点的抽象表示,包含进行网络通信必需的五种信息:
@@ -481,53 +538,5 @@ HTTP 协议
     分治算法
 二叉树 
 --------------------------------------------------------------------------------
-常用MIME类型 
-  后缀名       MIME名称
-  *.3gpp    audio/3gpp, video/3gpp
-  *.ac3    audio/ac3
-  *.asf       allpication/vnd.ms-asf
-  *.au           audio/basic
-  *.css           text/css
-  *.csv           text/csv
-  *.doc    application/msword    
-  *.dot    application/msword    
-  *.dtd    application/xml-dtd    
-  *.dwg    image/vnd.dwg    
-  *.dxf      image/vnd.dxf
-  *.gif            image/gif    
-  *.htm    text/html    
-  *.html    text/html    
-  *.jp2            image/jp2    
-  *.jpe       image/jpeg
-  *.jpeg    image/jpeg
-  *.jpg          image/jpeg    
-  *.js       text/javascript, application/javascript    
-  *.json    application/json    
-  *.mp2    audio/mpeg, video/mpeg    
-  *.mp3    audio/mpeg    
-  *.mp4    audio/mp4, video/mp4    
-  *.mpeg    video/mpeg    
-  *.mpg    video/mpeg    
-  *.mpp    application/vnd.ms-project    
-  *.ogg    application/ogg, audio/ogg    
-  *.pdf    application/pdf    
-  *.png    image/png    
-  *.pot    application/vnd.ms-powerpoint    
-  *.pps    application/vnd.ms-powerpoint    
-  *.ppt    application/vnd.ms-powerpoint    
-  *.rtf            application/rtf, text/rtf    
-  *.svf           image/vnd.svf    
-  *.tif         image/tiff    
-  *.tiff       image/tiff    
-  *.txt           text/plain    
-  *.wdb    application/vnd.ms-works    
-  *.wps    application/vnd.ms-works    
-  *.xhtml    application/xhtml+xml    
-  *.xlc      application/vnd.ms-excel    
-  *.xlm    application/vnd.ms-excel    
-  *.xls           application/vnd.ms-excel    
-  *.xlt      application/vnd.ms-excel    
-  *.xlw      application/vnd.ms-excel    
-  *.xml    text/xml, application/xml    
-  *.zip            aplication/zip    
-  *.xlsx     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  
+

@@ -29,6 +29,7 @@
   npm show express                 显示模块详情
   npm search <name>       搜索模块 
   npm view vue-cli   查看全局 vue-cli 版本
+  npm cache clean -f   清除 npm cache
   npm help           查看npm帮助 
     npm help <command> 可查看某条命令的详细帮助
   ◆<posOpt> 安装位置的配置参数,可选,可多选   
@@ -400,5 +401,6 @@ json-server 接口Mock数据
   在'dev-server.js'文件中进行配置
   var jsonServer = require('json-sever'); 引入json-server 
   ...
+iron-node  调试Node代码 
 其他工具 
 

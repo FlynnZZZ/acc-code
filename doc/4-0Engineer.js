@@ -349,6 +349,10 @@ git bash: 类似于Linux的命令行
   命令 
     ◆命令行 
     clear   清空命令行输出 
+    curl <url>  在命令行中显示根据URL获取到的网页内容 
+    echo <xx>   在命令行显示 
+      str  直接显示 
+      $PATH  显示环境变量 
     ◆文件相关操作 
     cd <xx> 进入目录 
       cd /   进入根目录 
@@ -367,6 +371,8 @@ git bash: 类似于Linux的命令行
     ◆执行程序 
     which <name>  查看程序位置 
       如 which node ,which vue 
+    where <name>  查看程序位置 
+      如 where node 
   快捷键 
     ctrl+d  退出命令行 
 --------------------------------------------------------------------------------

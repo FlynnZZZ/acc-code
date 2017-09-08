@@ -355,7 +355,7 @@ DOM操作
         删除该元素和其子元素及以下的所有内容(包括自身标签)
         所有与元素相关的数据也会被删除(event handlers、internally cached data)
         返回值为删除的元素
-      Jelem.detach()   删除元素[保留绑定事件、附加数据等」
+      Jelem.detach()   删除元素[保留绑定事件、附加数据等]
         detach 后的返回值(元素)再添加到其他地方,元素的event事件仍存在.
       Jelem.empty()    清空内容
         删除该元素的子元素及以下的所有内容(不包括自身标签)
@@ -392,7 +392,7 @@ DOM操作
           Jelem.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
           $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      Jelem.prop();  读写属性值,和attr类似 [1.6 新增」 
+      Jelem.prop();  读写属性值,和attr类似 [1.6 新增] 
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})
@@ -513,7 +513,7 @@ DOM操作
           $('#box').removeDate('name');
       ◆其他信息
       Jelem.size()         元素个数
-      num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标[从1开始」
+      num = Jelem.index([Jelem/selector]) 获取元素在其父元素Jelem中的下标[从1开始]
         jelem.index();   无参数,返回该元素在同级元素中的索引位置
         Example: 点击获取当前为第几个li 
           <ul>
@@ -530,7 +530,7 @@ DOM操作
     状态改变 
       Jelem.focus();   获得焦点
       Jelem.blur();    失焦
-      Jelem.click();   点击元素 [会触发事件」
+      Jelem.click();   点击元素 [会触发事件]
       Jelem.select();  选中文字 
         选中如input、textarea等元素类的文字,
         不可选中因增加contenteditable属性而可编辑的元素的文字;
@@ -754,7 +754,7 @@ DOM操作
   $.merge(arr1,arr2)   合并两个数组 
   $.unique(arr)     删除数组中的重复元素[不能用于普通数组]
   ◆字符串相关 
-  $.trim(str)  去除字符串中开始和结尾的空格[不能删除字符串中间的空格」
+  $.trim(str)  去除字符串中开始和结尾的空格[不能删除字符串中间的空格]
     Example:
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
@@ -1155,7 +1155,7 @@ AJAX
   'Content-Type' 请求数据的格式 
     'application/x-www-form-urlencoded' 默认方式,表单提交 
       数据的URL方式编码,由jQuery来做,
-      只需在$.ajax({})参数中设置 processData = true[也是默认,可省略」;
+      只需在$.ajax({})参数中设置 processData = true[也是默认,可省略];
       Example:
         $.ajax({
           method: 'POST',
@@ -1213,7 +1213,7 @@ AJAX
         success: function() { ... }
       });
       若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
-      需要转换成Object类型[而Angular不需要」;
+      需要转换成Object类型[而Angular不需要];
       $.ajax({
         ...
         success: function(data) {
@@ -1489,7 +1489,7 @@ AJAX
 Deferred,异步操作
   PS:'jQuery1.5'中引入; 和Promise对象一起作为jQuery对Promise的一种实现;
     '1.x-2.x'版本中,Deferred对象遵守的是CommonJS Promises提案中的约定,
-    不同于原生promises遵守Promises/A+提案[从CommonJS Promises 衍生而来」的约定,
+    不同于原生promises遵守Promises/A+提案[从CommonJS Promises 衍生而来]的约定,
     导致其无法兼容其他实现promises的库,
     '3.0'改进了同原生 promises的互操作性,但Deferred的then方法签名仍然会有些不同,
     但行为方面它已经同ECMAScript2015标准更加一致;
@@ -1666,7 +1666,7 @@ Deferred,异步操作
       console.log("出错啦！"); 
     });
   Example: 
-    在ajax中使用[self」 
+    在ajax中使用[self] 
     var defer = $.Deferred();
     $.ajax({
       type : 'get',
@@ -1879,7 +1879,7 @@ jQuery插件
           delay : 2 ,   // 为防止与点击事件冲突,延时两秒
           opacity : 0.5 // 拖动时透明度为0.5
         })
-    Jelem.selectable(obj);   其子元素可选[Ctrl多选」 
+    Jelem.selectable(obj);   其子元素可选[Ctrl多选] 
     Jelem.resizable()   改变大小
     Jelem.accordion(options)   折叠菜单
       PS:实现页面中指定区域类似“手风琴”的折叠效果,

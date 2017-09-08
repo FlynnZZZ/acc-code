@@ -18,7 +18,7 @@ Angular2
       'onDestroy'     组件销毁前 
   'Metadata'元数据 : 
   'Templates'模版 : 
-    框架代码以模块形式组织 [文件模块」
+    框架代码以模块形式组织 [文件模块]
       core    核心模块
       common  通用模块
       forms   表单模块
@@ -29,7 +29,7 @@ Angular2
           import {Http} from "@angular/http"
           import {Component} from "@angular/core" // @Component 装饰器
           import {Directive} from "@angular/core" // @Directive 装饰器
-    功能单元以模块形式组织 [应用模块」
+    功能单元以模块形式组织 [应用模块]
   'Data Binding'数据绑定 : 
   'Services'服务 : 
     services   服务 : 实现专一目的的逻辑单元,如日志服务
@@ -55,7 +55,7 @@ Angular2
       
       ng-view
   'Dependency Injection'依赖注入 : 
-    dependency injection 依赖注入: 组件引入外部构建[如服务」的一种机制
+    dependency injection 依赖注入: 组件引入外部构建[如服务]的一种机制
   'Moudles'模块化 : 
     PS:一切由模块开始
     路由

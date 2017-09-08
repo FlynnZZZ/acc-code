@@ -235,27 +235,25 @@
   命令提示符是在操作系统中,提示进行命令输入的一种工作提示符;
   在不同的操作系统环境下,命令提示符各不相同;
 windows环境 
-  PS:命令行程序为cmd.exe,是一个32位的命令行程序,
+  PS:命令行程序为cmd.exe,一个32位的命令行程序,
     微软Windows系统基于Windows上的命令解释程序,类似于微软的DOS操作系统。
-    输入一些命令,cmd.exe 可以执行,比如输入shutdown -s就会在30秒后关机。
+    输入一些命令,cmd.exe 可以执行,比如输入shutdown -s就会在30秒后关机 
     打开方法:开始-所有程序-附件 或 开始-寻找-输入:cmd/cmd.exe 回车。
     CMD即命令提示符窗口[cmd.exe],是Windows的“标配”组件,
     它可以实现用户与操作系统的直接交流,并负责用户输入的所有命令的解释和支持。
     命令提示符进行的操作往往更具有专业性——实际上很多Windows中的操作只能通过命令来实现;
     在命令行中文件名不区分大小写;
   命令 快捷键 操作
-    PS:
-      命令码无大小写区分 (文件夹的名称也无大小写区分)     
     快捷键
-      rightMouse        粘贴
-      up/down           选择历史命令
-      F7                显示命令历史记录
-      Esc               清除当前命令行
-      ctrl+c            强行中止命令执行
-      ctrl+d            退出其他运行环境或推出命令行程序 
+      鼠标右键     粘贴
+      up/down     选择历史命令
+      F7          显示命令历史记录
+      Esc         清除当前命令行
+      ctrl+c      强行中止命令执行
+      ctrl+d      退出其他运行环境或推出命令行程序 
+      F9          按编号选择命令[从0开始] 
+      ctrl+h      和删除backspace功能相同
       alt+printScreen   截取当前命令窗[需在画板中粘贴]
-      F9                按编号选择命令[从0开始] 
-      ctrl+h            和删除backspace功能相同
       enter[选中文字下]  复制
     文件操作类
       cd XX      进入XX文件夹
@@ -271,8 +269,9 @@ windows环境
       type <fileName> 参看文件内容
       start <folderName> 打开文件夹
     命令行相关
-      cls       清屏
+      cls       清屏 
     信息查看类
+      ping <域名>   查询IP地址  
       winver    检查Windows版本
       ipconfig  显示当前的TCP/IP配置的设置值
         ipconfig /all:显示本机TCP/IP配置的详细信息；

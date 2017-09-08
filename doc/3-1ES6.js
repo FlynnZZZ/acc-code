@@ -64,8 +64,8 @@ Number 数值
     Number.isFinite(1);        // true,数值1是有穷,即非无穷
     Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
     Number.isFinite('abc');    // false
-  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()」 
-  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()」 
+  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()] 
+  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()] 
   ◆新特性:
   Number.isInteger()  判断是否是整数
     PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
@@ -107,7 +107,7 @@ String 字符串扩展
       var boo = `${aoo} hello!`; 
       var coo = `${1+2} hello`;
       console.log(boo,coo); // fan hello   3 hello
-  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串」
+  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串]
     var aoo = "1";  //目标字符串
     console.log(aoo); // 1
     var boo = aoo.repeat(3); //变量aoo被重复三次；
@@ -286,7 +286,7 @@ Object 对象扩展
     Object.is(str,num);  // false
     Object.is(num2,num); // true
   Object.assign() 将源对象的属性赋值到目标对象上 
-    PS:参数可以是多个[至少是两个」
+    PS:参数可以是多个[至少是两个]
     let origin = {"b":2,"c":3}; //这个充当源对象
     let target = {"a":1};       //这个充当目标对象
     Object.assign(target,origin);
@@ -375,7 +375,7 @@ Function 函数扩展
         let age = 25;//错误,再次声明age
       }
       person();
-    默认参数:在定义函数时,可先将将参数赋值 [ES6+」
+    默认参数:在定义函数时,可先将将参数赋值 [ES6+]
       function foo(b,c=3){ 
         console.log(b,c); 
       }
@@ -423,7 +423,7 @@ Function 函数扩展
       };
       obj.show(); // undefined
       当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
-      [setTimeout是window对象的方法」,已经不再是obj对象了,
+      [setTimeout是window对象的方法],已经不再是obj对象了,
       所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
       
       var obj = {
@@ -988,7 +988,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
         [age]:12       
       };
       Object.getOwnPropertySymbols(person); // (2) [Symbol(name), Symbol(age)]
-    Reflect.ownKeys(obj)   获取对象所有类型的属性[包括symbol类型」
+    Reflect.ownKeys(obj)   获取对象所有类型的属性[包括symbol类型]
       let person = {
         [Symbol('name')]:"张三",
         "age": 21
@@ -1171,7 +1171,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
 Set   集合 
   PS:ES6新增的一种新的数据结构,可以理解为值的集合;
-    Set中的元素无重复项[会自动去掉重复的元素」;
+    Set中的元素无重复项[会自动去掉重复的元素];
     Set集合中,key和val为同一个值;
   new Set([arr])  创建set
     var s1 = new Set();  // 创建一个集合
@@ -1229,7 +1229,7 @@ Set   集合
     let newArr = Array.from(s); // [1,2,3,4],完成去重
   WeakSet结构
     PS:WeakSet结构同样不会存储重复的值;
-      且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象」
+      且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象]
       实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数。比如:数组。
     new WeakSet(arr);
       arr 数组,且其成员必须是对象类型的值,否则就会报错
@@ -1339,7 +1339,7 @@ Map   字典
     和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比:数组,对象,函数等
     let wm = new WeakMap();
     wm.set(key,val)
-      key 必须为引用类型数据,普通值类型则不允许[如字符串,数字,null,undefined,布尔类型」
+      key 必须为引用类型数据,普通值类型则不允许[如字符串,数字,null,undefined,布尔类型]
       let wm = new WeakMap();
       wm.set([1],2);            //数组类型的键名
       wm.set({'name':'van'},2); //对象类型的键名
@@ -1629,8 +1629,8 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
         Bar.barSay() // foo say   bar say 
     ES5继承和ES6继承的区别 
       在ES5中,继承实质上是子类先创建属于自己的this,
-      然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式」,
-      或者 this.__proto__ [即Child.prototype = new Parent()」上;
+      然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
+      或者 this.__proto__ [即Child.prototype = new Parent()]上;
       而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
   klass = new Klass(arg) 创建类实例 
     PS: 创建实例时会自动执行类体中的'constructor'方法 
@@ -1659,7 +1659,7 @@ Promise 同步书写异步模式
     rejected :  意味着操作失败 
     只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态 
     一旦状态改变,就不会再变,任何时候都可以得到这个结果 
-    与事件[Event」不同,事件的特点是,若错过了,再去监听则得不到结果  
+    与事件[Event]不同,事件的特点是,若错过了,再去监听则得不到结果  
   Promise的缺点
     首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
     其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
@@ -1667,8 +1667,8 @@ Promise 同步书写异步模式
   var prms = new Promise(foo) 创建Promise对象 
     PS:Promise在创建时,参数函数就会执行 
     foo   用于放置执行异步操作的函数,传入参数 (resolve,reject) 
-      函数内,若'resolve'被调用,代表该Promise被成功解析[resolve」;
-      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝[reject」了
+      函数内,若'resolve'被调用,代表该Promise被成功解析[resolve];
+      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝[reject]了
       foo主要用于初始化异步代码,一旦异步代码调用完成,
       要么调用resolve方法来表示Promise被成功解析,
       或是调用reject方法,表示初始化的异步代码调用失败,整个promise被拒绝。
@@ -1748,7 +1748,7 @@ Promise 同步书写异步模式
   Question:
     使用 Promise 监控 点击事件 , 使用Promise 改变事件的执行方式 [?] 
   Example:
-    通过Promise来调用AJAX [self」
+    通过Promise来调用AJAX [self]
     var prms = new Promise(function(rs, rj){
       $.ajax({
         type : 'get',
@@ -2060,7 +2060,7 @@ Reflect  为操作对象提供的API
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
 'lexical_scopes'词法作用域,即'块作用域'
-  PS:会在函数内部、代码块[即 {}」内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
+  PS:会在函数内部、代码块[即 {}]内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
     块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
   if (true) { 
     var aoo = 1; 
@@ -2069,7 +2069,7 @@ Reflect  为操作对象提供的API
   console.log(aoo); // 1
   console.log(boo); // 报错,boo is not defined
 'Global_Block_Bindings'全局块级绑定
-  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window」添加属性 
+  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
     这意味着全局对象的属性可能会意外地被重写覆盖
     var RegExp = "Hello!";
     console.log(window.RegExp);     // "Hello!"
@@ -2133,7 +2133,7 @@ const 定义块级常量
   不可传值改变,只能传址改变; 
     不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
     传值赋值和传址赋值
-    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用」,而非原始数据或者数据的拷贝
+    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用],而非原始数据或者数据的拷贝
     const arr =[1,2,3];
     arr = [1];    // 报错
     arr.push(4); // 允许
@@ -2748,7 +2748,7 @@ for(var val of iterator){}  遍历
       //---module-A.js文件------
       import {name} from "./module-B.js";
       name = "修改字符串变量"; //报错:name is read-only
-    若模块B导出的是对象类型的值,可[部分」修改。
+    若模块B导出的是对象类型的值,可[部分]修改。
       //---module-B.js文件---
       var person = {"name":"前端君"}
       export { person }

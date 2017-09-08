@@ -138,7 +138,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         }
       }
     'computed': {}   // 依赖于其他数据的数据  
-      PS:相当于经过处理的data数据,根据其依赖的data数据变化而变化 [SlPt」
+      PS:相当于经过处理的data数据,根据其依赖的data数据变化而变化 [SlPt]
       {
         val : function(){  // 不能传参 ? 
           return xx;
@@ -411,7 +411,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
       多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
       虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
-    Vue.nextTick(callback)  在数据变化之后使用使其操作插队[SlPt」
+    Vue.nextTick(callback)  在数据变化之后使用使其操作插队[SlPt]
       <div id="example">{{message}}</div>
       var vm = new Vue({
         el: '#example',
@@ -914,7 +914,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         <h1 v-if="ok">Yes</h1>
         <h1 v-else>No</h1>
   v-show    作用与v-if类似 
-    PS:'v-show'的元素会始终渲染并保持在DOM中[使用 display:none」
+    PS:'v-show'的元素会始终渲染并保持在DOM中[使用 display:none]
       v-show不支持<template>标签
       一般,'v-if'有更高的切换消耗而'v-show'有更高的初始渲染消耗,
       因此若需要频繁切换使用'v-show'较好,若在运行时条件不大可能改变则使用'v-if'较好 
@@ -925,7 +925,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       回调函数传参 
         当为函数且未自定义传参时,则默认传入经过vue包装过的event事件对象'e' 
           若有自定义传参,则默认参数被取消
-          e.srcElement 表示响应事件的元素 [可用来进行DOM操作[SlPt」]
+          e.srcElement 表示响应事件的元素 [可用来进行DOM操作[SlPt]]
           e.currentTarget 表示绑定事件的元素 
         'foo($event)' '$event'表示原生DOM事件对象 
           <button v-on:click="warn('11111',$event)">Submit</button>
@@ -1554,7 +1554,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           }
         })
       Exp: 
-        用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写[SlPt」
+        用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写[SlPt]
     父组件向子组件通信: 改变标签属性通信 
       PS: 属性名不区分大小写 
       子组件VM中注册'props'属性[进行监听],父组件中添加属性进行赋值 
@@ -1646,7 +1646,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           Function
           Object
           Array
-      通过自定义事件的监听和触发来达到同样的效果[SlPt」 
+      通过自定义事件的监听和触发来达到同样的效果[SlPt] 
     非父子组件通信 
       简单场景下,使用一个的 Vue 实例作为中央事件总线 
         var transfer = new Vue();

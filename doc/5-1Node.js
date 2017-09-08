@@ -37,7 +37,7 @@
     PS:REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
       类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
       Node的交互式解释器可以很好的调试JS代码,
-      相当于浏览器的Console控制台[SlPt」
+      相当于浏览器的Console控制台[SlPt]
     'node'命令 来启动Node的终端,'node --use_strict' REPL将在严格模式下运行,
     REPL 命令 
       ctrl + c   按下两次退出 Node REPL
@@ -820,7 +820,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
   url    解析URL 
     PS:包含五个方法,不需要实例化[本身就是一实例对象]
     var url = require("url"); 引入url模块
-    url.parse(url [,bol1] [,bol2]); 将URL解析为对象[方便后续其他操作」
+    url.parse(url [,bol1] [,bol2]); 将URL解析为对象[方便后续其他操作]
       url   字符串,传入需要解析的URL字符串
       bol1  可选,默认false,是否将query字段转换为对象表示
       bol2  可选,默认false,当URL不全时更智能的识别

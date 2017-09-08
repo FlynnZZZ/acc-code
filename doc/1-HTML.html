@@ -1,14 +1,9 @@
 介绍_概念_说明_定义 
-介绍 
-  HTML  介绍
-    PS:全称 Hyper_Text_Markup_Language 超文本标记语言,
-      标记语言[markup_language」通过使用一套标记标签[markup_tag」来描述网页;
-      HTML文档=网页,HTML文档描述网页,包含HTML标签绘和纯文本;
-      Web浏览器的作用是读取HTML文档,并以网页的形式显示,
-      不会显示HTML标签,而是用标签来解释页面的内容;
-  XHTML 介绍 
-    XHTML是一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性.
-    2000年底,W3C发布XHTML 1.0版本,是一种在HTML 4.0基础上优化和改进的的新语言
+  HTML,'Hyper Text Markup Language'超文本标记语言
+    'markup language'标记语言,通过使用一套标记标签'markup tag'来描述网页;
+    Web浏览器读取HTML文档,以网页的形式显示,用标签来解释页面的内容;
+  XHTML: 一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性 
+    2000年底,W3C发布XHTML1.0版本,是一种在HTML4.0基础上优化和改进的的新语言
 语法规则 
   文档结构 
     所有的网页文件,通常有四对标记来构成文档的骨架
@@ -19,53 +14,31 @@
     <body> <!-- 表示网页文件的主体部分 -->
     </body>
     </html>
-  标签 
-    PS:<tag>标签也叫标记、元素,标记html,用于浏览器识别;
-      标签大小写:大小写不敏感['<p>'等同于'<P>'」,推荐使用小写;
-      标签使用Tag表示,属性使用Attr表示[SlSt]
-      HTML元素指从开始标签[start tag]到结束标签[end tag]的所有代码;
-    双标记: <Tag>内容</Tag>
-    单标记: <Tag/>
-      自闭合[self-closing」标签,无需闭合,例如:img input br hr 等;
-    标记的属性: <Tag Attr1='参数1' Attr2='参数2' ...>内容</Tag> 
-      标记与属性、属性与属性之间以空格分隔;属性无先后顺序;且属性不是必需的
-      属性为HTML元素提供附加信息,小写字母,用引号括起来[双引号或单引号但须成对使用」;
+  <tag>标签: 也叫标记、元素,用于浏览器识别 
+    PS: 标签大小写不敏感['<p>'等同于'<P>'],推荐使用小写;
+      HTML元素指从开始标签'start tag'到结束标签'end tag'的所有代码;
+    双标记: <tag>内容</tag>
+    单标记: <tag/>
+      也叫自闭合'self-closing'标签,如:img input br hr 等;
+    标记的属性: <tag attr1='参数1' attr2='参数2' ...>内容</tag> 
+      属性为HTML元素提供附加信息,小写字母,值用引号括起来[双引号或单引号但须成对使用];
       HTML5中,属性值可不加引号,除了有空格等特殊情况;
       某些个别的情况下,比如属性值本身就含有双引号,则必须使用单引号,
       如 name=‘Bill“hellwoword”Gates’;
     标签内容 
       字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
   其他 
-  <!-- 注释内容  -->
-说明 
-  运行HTML 
-    本地运行: 使用浏览器打开HTML文件
-      通过本地文件系统打开:功能可能受限
-      通过本地服务模拟服务器打开:和服务器的访问类似
-    远程访问: 将HTML文件存放于服务器,并启动服务器,通过http/https协议进行访问
+    <!-- 注释内容  -->
   浏览器解析HTML方式 
-    PS:一个不含任何 DOCTYPE 的网页将会以 quirks,怪异模式渲染
-      HTML5提供的<DOCTYPE html>是标准模式,向后兼容的, 等同于开启了标准模式;
+    PS:一个不含任何DOCTYPE的网页将会以'quirks'怪异模式渲染 
+      HTML5提供的<DOCTYPE html>是标准模式,向后兼容的,等同于开启了标准模式;
       IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
-      如 当去掉html文档中的声明则进入怪异模式.
-    standards mode,标准模式: 按照 HTML 与 CSS 的定义渲染
+      如去掉html文档中的声明则进入怪异模式
+    standards mode,标准模式: 按照HTML与CSS的定义渲染
     quirks mode,怪异模式: 尝试模拟更旧的浏览器的行为 
-    部分怪异模式[近乎标准」
-      一些浏览器,例如,那些基于 Mozilla 的 Gecko 渲染引擎的,
-      或者 Internet Explorer 8 在 strict mode 下,
-      也使用一种尝试于这两者之间妥协的almost standards,“近乎标准”模式,
-      实施了一种表单元格尺寸的怪异行为,除此之外符合标准定义。
-    ◆方法/属性
-    document.compatMode   识别文档模式 
-      标准模式为: CSS1Compat ; 混杂模式: BackCompat.
-    document.documentMode 识别文档模式 [IE专属」[IE8+」
-      IE8可以以不同的模式渲染一个页面,主要依赖于!DOCTYPE或者当前的某一个HTML元素.
-      如果没有定义!DOCTYPE,IE8以IE5的模式来渲染页面
-      按照下列的值返回:
-      5   ----- in IE5 mode
-      7   ----- in IE7 mode
-      8   ----- in IE8 mode
-      9   ----- in IE9 mode
+    参见 document.compatMode 和 document.documentMode
+  自我设定 
+    标签使用'tag'表示,属性使用'attr'表示,布尔值属性用'prop'表示
 --------------------------------------------------------------------------------
 ◆标签&属性 
 声明类 
@@ -74,8 +47,8 @@
       不是HTML标签,告知浏览器页面使用的HTML版本;
       没有结束标签,对大小写不敏感
       请始终向HTML文档添加<！DOCTYPE>声明,这样浏览器才能获知文档类型.
-      DOCTYPE文档类型,用于引入DTD[说明当前html版本」,告知浏览器解析器HTML的文档标准.
-      DOCTYPE不存在或格式不正确会导致文档以兼容模式[怪异模式」呈现.
+      DOCTYPE文档类型,用于引入DTD[说明当前html版本],告知浏览器解析器HTML的文档标准.
+      DOCTYPE不存在或格式不正确会导致文档以兼容模式[怪异模式]呈现.
     标准模式与兼容模式的区别
       标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
       在兼容模式中,页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作.
@@ -118,7 +91,7 @@
       元数据不会显示在页面上,但是对于机器是可读的。
     name=       可选,content值所属的的类型
       PS: 'http-equiv'指明下面要设置的项目;'content'指明该项目设置的内容
-      'viewport'    视口,设置不同设备下的显示属性[HTML5」
+      'viewport'    视口,设置不同设备下的显示属性[HTML5]
         PS:Viewport指的是网页的显示区域,
           也就是不借助滚动条的情况下,用户可以看到的部分网页大小,中文译为'视口';
           正常情况下,viewport和浏览器的显示窗口是一样大小的.
@@ -145,12 +118,12 @@
           yes
           no
         Example:
-          viewport缩放规则 [在HTML网页的head部分指定」 
+          viewport缩放规则 [在HTML网页的head部分指定] 
           <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
           上面代码指定,viewport的缩放规则: 
-          缩放到当前设备的屏幕宽度[device-width」,
-          初始缩放比例[initial-scale」为1倍,
-          禁止用户缩放[user-scalable」;
+          缩放到当前设备的屏幕宽度[device-width],
+          初始缩放比例[initial-scale]为1倍,
+          禁止用户缩放[user-scalable];
           
           <meta name="viewport" content="width=320, initial-scale=2.3, user-scalable=no">
           <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, user-scalable=yes">
@@ -286,7 +259,7 @@
       <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> // HTML5之前的写法 
     content=    可选,定义与'http-equiv'或'name'属性相关的元信息
     ◆rel=        可选,
-      'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5」 
+      'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5] 
         <link rel="prefetch" href="url">
         url可为一网页地址或图片地址
       Example:
@@ -376,7 +349,7 @@
       如 charset="UTF-8",由于大多数浏览器忽略它,所以较少使用
     'defer'   可选,网页解析完后解析JS [延迟解析,而非延迟下载],可选 
       只对外部JS文件有效; 由于大多数浏览器不支持,故很少用[?]
-      当存在多个延迟脚本时,并不一定会按照先后顺序执行 [self:Chrome中如此」
+      当存在多个延迟脚本时,并不一定会按照先后顺序执行 [self:Chrome中如此]
       下载的脚本文件在'DOMContentLoaded'事件触发前执行[即刚刚读取完</html>标签],
       而且可以保证执行顺序就是它们在页面上出现的顺序 
     'async'   可选,下载完后立即解析JS,但解析期间不阻塞HTML的下载,可选 
@@ -397,7 +370,7 @@
     当内部JS代码中遇到'</script>'字符串时,会被认为是结束标签导致bug
       console.log('</script>'); 
   <noscript> 未启用JS 
-    当浏览器不支持js,或没有启用[如禁止使用JS」时会被激活.
+    当浏览器不支持js,或没有启用[如禁止使用JS]时会被激活.
     <noscript>您的浏览器不支持JavaScript,请升级浏览器!或您没有启用JS</noscript>
   <iframe> 内联框架,创建包含另外一个文档的内联框架  
     PS:iframe会阻塞主页面的'load'事件
@@ -776,7 +749,7 @@
     pubdate       可以用在article元素里面的time上表示,当前文章的发布时间.可选属性
 Table表格 
   PS: 在一些浏览器中,没有内容的表格单元显示的不太好,
-    如果某个单元格是空的[没有内容」,浏览器可能无法显示出这个单元格的边框,
+    如果某个单元格是空的[没有内容],浏览器可能无法显示出这个单元格的边框,
     为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来;
   <table>   表格,整个表格以其开始和结束
     PS:单独使用没有意义,需配合其他表格元素使用.
@@ -901,7 +874,7 @@ Table表格
         或列组中的所有单元格和表头单元格绑定起来[由 <col> 或 <colgroup> 标签定义]  
       rowgroup 规定单元格是行组的表头
 Form表单  
-  PS:表单字段也叫表单控件,如input、button等元素[self」 
+  PS:表单字段也叫表单控件,如input、button等元素[self] 
   <fieldset></fieldset> 表单信息分组
     PS:默认有一个细线边框,可设置border属性为none关闭它.
     Example: 
@@ -916,7 +889,7 @@ Form表单
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
   <form>       表单域  
     PS:为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
-      用于包含其他表单元素[如文本框、单选框等」的容器,
+      用于包含其他表单元素[如文本框、单选框等]的容器,
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
     name  表单的名字
       在HTML4中，这个用法不被推荐(应该使用id). 
@@ -925,16 +898,16 @@ Form表单
       该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
     method=    提交表单的HTTP方法
       get  默认值 ,将表单数据附加到请求URL中 
-        提交信息会显示在url中不适合密码传输,传递少量信息[256 byte」
+        提交信息会显示在url中不适合密码传输,传递少量信息[256 byte]
       post 表单数据会包含在表单体内然后发送给服务器 
-    autocomplete=   是否启用表单的自动完成功能 [HTML5」
+    autocomplete=   是否启用表单的自动完成功能 [HTML5]
       当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果.
       "on"
       "off"
     novalidate   表示表单不进行验证
     enctype      当method为post时, enctype 是提交form给服务器的内容的 MIME 类型 
-      PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type」
-        可认为是表单数据的'content type'[MIME type」,
+      PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type]
+        可认为是表单数据的'content type'[MIME type],
         只不过其取值只能为以下三种之一,否则会转换成默认的编码。
         该值可以被<button>或者<input>元素中的'formenctype'属性重载 
       "application/x-www-form-urlencoded" 默认值,所有字符都会进行编码 
@@ -953,7 +926,7 @@ Form表单
         按照键值对排列表单数据 key1=value1\r\nkey2=value2,不进行转义;
         若表单中有文件,则只留文件名；
       Exp:
-        表单发送超过100个具有相同name的字段时,服务器收不到数据 [20170518」
+        表单发送超过100个具有相同name的字段时,服务器收不到数据 [20170518]
           添加 enctype='multipart/form-data' 解决
     target   用来指示在提交表单之后，在哪里显示收到的回复.
       HTML4:一个用于frame的名字/关键字 
@@ -982,7 +955,7 @@ Form表单
     可以提交表单的按钮 
       PS:用于提交表单的按钮需放置在表单<form>内,
         以下三种任意一按钮都可用于提交表单
-        点击提交按钮或[获得焦点时」在表单字段中回车可提交表单,
+        点击提交按钮或[获得焦点时]在表单字段中回车可提交表单,
         <textarea>字段例外,在文本区中回车会换行,
         若表单中无提交按钮,回车不会提交表单;
         若一个表单中有多个提交按钮,指定按钮可通过设置 formnovalidate 属性表示使用该按钮提交不需验证表单
@@ -1014,7 +987,7 @@ Form表单
         <label for="man">男</label>
         <input id="man" type='radio' name='sex' value='男'/>
       隐式方式关联
-        将input标签放在label中也可达到如上效果[需去掉 for="" 」
+        将input标签放在label中也可达到如上效果[需去掉 for="" ]
         <label><input type='radio' name='sex' value='男'/>男</label>
   <input type="类型" name="name" value="">  表单控件 
     PS:input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
@@ -1038,7 +1011,7 @@ Form表单
         value="提交值" 
       radio    单选按钮 
         name    有多个单选按钮时,多个name的属性值相同才能起到单选的作用
-        checked 定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用」
+        checked 定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用]
       submit   提交按钮
         value="显示的名称"
       reset    重置按钮
@@ -1068,7 +1041,7 @@ Form表单
       url      URL类型   
         要求输入的文本需符合URL的模式
       search   定义用于搜索的文本字段。
-      number     数字字段[带有spinner控件」[ios微信不兼容」 
+      number     数字字段[带有spinner控件][ios微信不兼容] 
         可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
       tel        定义用于电话号码的文本字段 
       date             
@@ -1286,7 +1259,7 @@ Form表单
     用来组合文档中的行内元素
   ★样式标签[建议使用CSS来控制] 
     PS:可组合使用,如表示加粗倾斜同时使用两个标签
-    <blink> 闪烁文字[DiBs」
+    <blink> 闪烁文字[DiBs]
       <blink>内容</blink>  效果:内容文字闪烁 
     <marquee> 移动内容
       <marquee direction="left/right" >文字</marquee>
@@ -1695,5 +1668,4 @@ Collection
 习题及精解 
 Question&Idea 
 --------------------------------------------------------------------以下待整理 
-
 

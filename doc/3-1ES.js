@@ -2,13 +2,13 @@ ECMAScript : JS语法核心,提供核心语言功能;
   ECMAscript: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
-    ECMA-262 要求支持Unicode标准[从而支持多语言开发」,第五版发布于2009年;
+    ECMA-262 要求支持Unicode标准[从而支持多语言开发],第五版发布于2009年;
     ECMA-262 中对象的行为不一定适用于JS中其他对象,
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
   JavaScript和ECMAScript的关系 
     JS的内容比 ECMA-262 中规定的要多,ECMA-262 的大部分是组成JS的一部分;
     Web浏览器只是ECMAscript实现可能的宿主环境之一,
-    还有其他环境如Node[一种服务端JavaScript平台」和Adobe Flash 等;
+    还有其他环境如Node[一种服务端JavaScript平台]和Adobe Flash 等;
   JS的核心语法ECMAScript包括两个部分:
     基本的语法构造,如操作符、控制结构、语句等
     标准库,如 Array、Date、Math 等
@@ -346,7 +346,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
 引用类型:Object对象 
-  PS:引用类型就叫对象[SlPt」; ECMA-262 定义为:无序的名值的合集 
+  PS:引用类型就叫对象[SlPt]; ECMA-262 定义为:无序的名值的合集 
     对象一般没有长度,具有多种属性的内容结构 
     与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类 
     对象由属性和值构成,值可以为基本值、对象或函数等任何类型 
@@ -1591,7 +1591,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
           return x++, x;
         }
         console.log(foo()); // 1
-      逗号,与 var 关键字 [moIn 关键字-var」
+      逗号,与 var 关键字 [moIn 关键字-var]
         1 , 2==3,function(){ console.log(4); }() // 4;
         var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
         var 2==3;          // Uncaught SyntaxError: Unexpected number
@@ -1764,8 +1764,8 @@ ECMAScript : JS语法核心,提供核心语言功能;
       console.log(rst); // aoo:aboo:11
   ◆控制结构
   break 和 continue  只能用于循环语句中,精确控制代码的执行 
-    continue [跳出当前循环」继续下一次循环
-    break    跳出整个循环[执行循环后的语句」
+    continue [跳出当前循环]继续下一次循环
+    break    跳出整个循环[执行循环后的语句]
       aa: // 命名最外层的循环 
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
@@ -1781,7 +1781,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
   throw val  异常触发,用于随之抛出自定义错误 
     PS:在遇到throw操作时,代码会立即停止执行
     val 类型无要求
-  try{}catch(err){} 异常捕获与处理[ECMA-262 第3版增加」 
+  try{}catch(err){} 异常捕获与处理[ECMA-262 第3版增加] 
     PS:与Java中的 try-catch 语句完全相同,catch 和 finally 必须存在一个
       IE7存在bug:除非有catch否则不执行finally
     try{
@@ -1944,9 +1944,9 @@ Number 数值对象:处理数值的'包装对象'
     console.log(box1);    //Number {[[PrimitiveValue]]: 0}
     console.log(box2);    //Number {[[PrimitiveValue]]: 1}
     typeof box2;          //返回值为"object"
-  num.toFixed(num)     将数字保留小数点后num位并转化为字符串[会四舍五入」 
+  num.toFixed(num)     将数字保留小数点后num位并转化为字符串[会四舍五入] 
   num.toExponential(x) 以科学计数法表示并保留x位小数.并转换成字符串 
-  num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式」 
+  num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式] 
   num.toString()       将数值转换为字符串 
     // 123.toString()  报错
     123.0.toString() // '123'
@@ -2124,11 +2124,11 @@ Array 数组对象
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    idx = arr.indexOf(val[,bgn])     查询元素索引[ES5」 
+    idx = arr.indexOf(val[,bgn])     查询元素索引[ES5] 
       PS:返回值为下标值,若找不到则返回-1 
       bgn  表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左][ES5」 
+    idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左][ES5] 
     ◆改变原数组
     arr.reverse() 颠倒数组元素的顺序 
       Example: :
@@ -2159,9 +2159,9 @@ Array 数组对象
         添加的元素的个数可大于、等于或小于删除元素的个数; 
         若没有删除元素,则返回空数组;
       bgn  开始删除的元素的下标[包括该元素] 
-        若超出数组的长度,则从数组末尾开始[不会删除元素了」；
+        若超出数组的长度,则从数组末尾开始[不会删除元素了]；
         若是负值,则为 arr.length+bgn 
-      num 可选,默认为arr.length[SlSt」,要删除元素的个数 
+      num 可选,默认为arr.length[SlSt],要删除元素的个数 
         若为 0,则不移除元素,此时至少应添加一个新元素
         若大于bgn之后的元素个数,则取该数值
       v   可选,要添加进数组的元素;若无,则只删除元素 
@@ -2172,7 +2172,7 @@ Array 数组对象
         console.log(arr); // [1, 3]
     arr.sort([foo])  根据回调布尔值排序元素 
       foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
-        通过冒泡的算法大小排序[SlSt」;
+        通过冒泡的算法大小排序[SlSt];
         若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
         var arr =[31,1,2,5,4]
         var resArr = arr.sort();
@@ -2255,14 +2255,14 @@ Array 数组对象
           repeatStr("a",6); // "aaaaaa"
     ◆遍历方法
       以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
-    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作[ES5」
+    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作[ES5]
       PS:已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
         无法中止或跳出forEach循环,除非报错.
       foo    函数为每个元素执行,接收三个参数:
         value 可选,元素
         index 可选,元素的索引
         arr   可选,数组对象本身
-      thisArr 可选,表示数组本身,当执行回调函数时用作this的值[参考对象」.
+      thisArr 可选,表示数组本身,当执行回调函数时用作this的值[参考对象].
         若给forEach传递了thisArr 参数,它将作为 foo 函数的执行上下文,
         类似执行如下函数foo.call(thisArr, element, index, array).
         若 thisArr 值为 undefined 或 null,
@@ -2301,7 +2301,7 @@ Array 数组对象
         catch (e) {
           console.log('执行了');
         } 
-    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真[ES5」
+    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真[ES5]
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -2318,7 +2318,7 @@ Array 数组对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真[ES5」
+    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真[ES5]
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -2333,7 +2333,7 @@ Array 数组对象
           return val > 18;
         });
         console.log(res); // true
-    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5」 
+    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5] 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -2367,7 +2367,7 @@ Array 数组对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5」
+    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5]
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       thisArr 可选,执行函数时的用于 this 的值
@@ -2378,7 +2378,7 @@ Array 数组对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值[ES5」
+    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值[ES5]
       PS:接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
         为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
         若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
@@ -2400,17 +2400,17 @@ Array 数组对象
         });
         console.log(arr); // [1, 2, 3, 4, 5]
         console.log(res); // 15
-    val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历[ES5」
+    val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历[ES5]
   静态方法 
-    var bol = Array.isArray(arr)  判断是否为布尔值[ES5」 
-    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5」
+    var bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
+    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5]
       arrLike 想要转换成数组的类数组或可遍历对象
       mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
       thisArr 可选,执行 mapFoo 函数时 this 的值
   Exp: 
     数组的复制
       通过 slice(0) 复制 
-        PS:使用slice为浅拷贝,只能将第一层完全复制[更深层是引用」
+        PS:使用slice为浅拷贝,只能将第一层完全复制[更深层是引用]
         当arr中的元素为数组时,修改它仍然会改变复制后的数组
         var arr = [[1], 2];
         var res = arr.slice(0);
@@ -3515,7 +3515,7 @@ Math 数学对象
     Math.PI;  //3.141592653589793
   Math.SQRT2      2 的平方根 
   Math.SQRT1_2    1/2 的平方根 
-  Math.E          自然对数的底数,即常量e的值[也叫欧拉参数」
+  Math.E          自然对数的底数,即常量e的值[也叫欧拉参数]
   Math.LN10        10 的自然对数
   Math.LN2         2 的自然对数
   Math.LOG2E       以2为底e的对数
@@ -3534,9 +3534,9 @@ Math 数学对象
     Math.min.apply(null,[2,3,5,6,76,8,7]);   // 2
     Math.min.apply(null,[0,0,0]);   // 2
   ◆取整
-  Math.round(num)   四舍五入取整            [round 圆；循环；一回合；圆形物」
-  Math.ceil(num)    向上舍入取整,数值将变大; [ceil  天花板」 
-  Math.floor(num)   向下舍入取整,数值将变小; [floor 地板  」
+  Math.round(num)   四舍五入取整            [round 圆；循环；一回合；圆形物]
+  Math.ceil(num)    向上舍入取整,数值将变大; [ceil  天花板] 
+  Math.floor(num)   向下舍入取整,数值将变小; [floor 地板  ]
     Math.floor(1.1)    //1
   其他方法
     Math.abs(num)       返回num的绝对值
@@ -3877,7 +3877,7 @@ Scope,作用域
     作用域是指变量的可访问性,上下文是指 this 在同一作用域内的值。
     也可以使用函数方法来改变上下文;
     在浏览器中在全局作用域中上下文中始终是Window对象,
-    在Nodejs中在全局作用域中上下文中始终是Global 对象[取决于JS的宿主换环境」
+    在Nodejs中在全局作用域中上下文中始终是Global 对象[取决于JS的宿主换环境]
   
     console.log(this);       // window
     function logFunction() {
@@ -4270,7 +4270,7 @@ Scope,作用域
     argArr  函数传入的参数,类型为数组或类数组对象
       其中的数组元素将作为单独的参数传给 foo 函数.
       若该参数的值为null 或 undefined,则表示不需要传入任何参数.
-      从ECMAScript 5 开始可以使用类数组对象[可能存在兼容性问题」
+      从ECMAScript 5 开始可以使用类数组对象[可能存在兼容性问题]
     Example: :
       function Pet(words){
         this.words =words;
@@ -4317,7 +4317,7 @@ Scope,作用域
           var p2 =New(Person)("boo",18); //使用仿造的new
           console.log(p1); //Person {name: "aoo", age: 19}
           console.log(p2); //Person {name: "boo", age: 18}
-  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态[ES5」
+  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态[ES5]
     PS:bind()方法会创建一个新函数 
       当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
       之后的一序列参数将会在传递的实参前传入作为它的参数;
@@ -4513,7 +4513,7 @@ JS核心概念之作用域和闭包
     闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
     从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 -----------------------------------------------------------------------待整理 
-  作用域[执行环境」
+  作用域[执行环境]
     PS:执行环境定义了变量或函数有权访问的其他数据,决定了他们各自的行为.
     作用域与变量
       PS:在局部作用域内定义变量不加var,则定义的为全局全局变量(不推荐使用)

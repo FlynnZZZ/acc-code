@@ -14,10 +14,10 @@
     可以输出任意的文本,比如 XHTML 和 XML;
     跨平台,可运行在如Linux、Unix、windows等平台上;
   说明
-    PS:脚本可以放在文档中的任何位置,以 <?php 开头,以?>结尾[且后面的?>是可省略的」;
+    PS:脚本可以放在文档中的任何位置,以 <?php 开头,以?>结尾[且后面的?>是可省略的];
       文件的默认文件扩展名是 ".php",可包含文本、HTML、JavaScript代码和 PHP 代码,
       代码在服务器上执行,结果以纯 HTML 形式返回给浏览器;
-      在本地开发时,调试需开启服务器来访问否则浏览器解析不了[SlPt」;
+      在本地开发时,调试需开启服务器来访问否则浏览器解析不了[SlPt];
     注释 
       <?php
         // 这是 PHP 单行注释
@@ -67,7 +67,7 @@
       var_dump($x); // NULL
       ?>
   Boolean 布尔型 
-    不区分大小写,可以是 true 和 false[或者 TRUE 和 FALSE」, 通常用于条件判断;
+    不区分大小写,可以是 true 和 false[或者 TRUE 和 FALSE], 通常用于条件判断;
     <?php 
     $x = TRUE;
     $y = false;
@@ -98,7 +98,7 @@
     var_dump($x); // int(39)
     ?>
   Float   浮点型
-    带小数部分的数字,或是指数形式[使用e或E来表示,E的英文是exponent,指数的意思」
+    带小数部分的数字,或是指数形式[使用e或E来表示,E的英文是exponent,指数的意思]
     <?php 
     $x = 10.365;
     var_dump($x); // float(10.365) 
@@ -124,7 +124,7 @@
       ?>
     .  字符串连接符
       <?php echo 'Hi,'.'imooc'.'!';?>
-    strlen() 返回字符串的长度[字符数」
+    strlen() 返回字符串的长度[字符数]
       <?php 
         echo strlen("Hello world!"); // 12
       ?>
@@ -1090,7 +1090,7 @@ OOP,Object-oriented_programming 面向对象
     echo 语言结构,使用的时可不加括号,也可以加上: echo 或 echo()
     当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
     Example:
-      使用 echo 命令输出字符串[可包含 HTML 标签」:
+      使用 echo 命令输出字符串[可包含 HTML 标签]:
       <?php
       echo "<h2>PHP 很有趣!</h2>";
       echo "Hello world!<br>";
@@ -1601,7 +1601,7 @@ WAMPServer集成环境
     DocumentRoot "E:/project/test"  
     <Directory "E:/project/test">
   多站点配置 
-    首先 在 Apache 的 httpd-vhosts.conf [虚拟目录配置」文件中进行配置,且可配置多个
+    首先 在 Apache 的 httpd-vhosts.conf [虚拟目录配置]文件中进行配置,且可配置多个
       <VirtualHost *:80>
         ServerAdmin webmaster@dummy-host2.example.com  
         <!-- 设置管理员邮箱地址,可不用配置 -->
@@ -1615,7 +1615,7 @@ WAMPServer集成环境
         <!--  日常日志,可不用配置-->
       </VirtualHost>
     然后 配置完后在 httpd.conf 文件中
-      将 Include conf/extra/httpd-vhosts.conf 取消注释[默认是被注释掉的」
+      将 Include conf/extra/httpd-vhosts.conf 取消注释[默认是被注释掉的]
       并设置 将'只有本机IP可访问本地资源'改为所有域名都可访问
         Apache2.4.9版本的httpd.conf文件为:
         #   onlineoffline tag - don't remove
@@ -1626,7 +1626,7 @@ WAMPServer集成环境
     最后 在系统中配置 hosts 文件
       127.0.0.1  test01.com
       127.0.0.1  test02.com
-      ... [可配置多个」
+      ... [可配置多个]
 
 
 

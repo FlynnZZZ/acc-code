@@ -26,8 +26,8 @@ express 后端开发框架
       request 对象表示 HTTP 请求,包含了请求查询字符串,参数,内容,HTTP 头部等属性 常见属性有:
       req.app:当callback为外部文件时,用req.app访问express的实例
       req.baseUrl:获取路由当前安装的URL路径
-      req.body / req.cookies:获得[请求主体」/ Cookies
-      req.fresh / req.stale:判断请求是否还[新鲜」
+      req.body / req.cookies:获得[请求主体]/ Cookies
+      req.fresh / req.stale:判断请求是否还[新鲜]
       req.hostname / req.ip:获取主机名和IP地址
       req.originalUrl:获取原始请求URL
       req.params:获取路由的parameters

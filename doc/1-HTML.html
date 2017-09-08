@@ -43,53 +43,41 @@
 ◆标签&属性 
 声明类 
   <！DOCTYPE>   声明
-    PS:必须是HTML文档的第一行,位于<HTML>标签之前.
-      不是HTML标签,告知浏览器页面使用的HTML版本;
+    PS:必须是HTML文档的第一行,非HTML标签,告知浏览器页面使用的HTML版本;
       没有结束标签,对大小写不敏感
       请始终向HTML文档添加<！DOCTYPE>声明,这样浏览器才能获知文档类型.
-      DOCTYPE文档类型,用于引入DTD[说明当前html版本],告知浏览器解析器HTML的文档标准.
-      DOCTYPE不存在或格式不正确会导致文档以兼容模式[怪异模式]呈现.
     标准模式与兼容模式的区别
       标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
       在兼容模式中,页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作.
-        简单的说,就是尽可能的显示能显示的东西给用户看.
+      简单的说,就是尽可能的显示能显示的东西给用户看.
     HTML4.01中 
+      DOCTYPE文档类型,用于引入DTD[说明当前html版本],告知浏览器解析器HTML的文档标准.
+      DOCTYPE不存在或格式不正确会导致文档以兼容模式[怪异模式]呈现.
       HTML4.01基于SGML,<！DOCTYPE>声明需引用DTD告知浏览器文档所使用的文档类型
-      DTD规定了标记语言的规则,这样浏览器才能正确地呈现内容.
-        DTD 全称 “Document Type Definition” 即文档类型定义,
-        是W3C所发布的一个文档类型定义,
-        源于XML规范,用于定义当前文档中的元素、元素的属性、元素之间的结构关系等基本规则.
+      DTD规定了标记语言的规则,这样浏览器才能正确地呈现内容 
+      DTD全称 “Document Type Definition” 即文档类型定义,W3C所发布的一个文档类型定义,
+      源于XML规范,用于定义当前文档中的元素、元素的属性、元素之间的结构关系等基本规则.
       在HTML4.01中有3种<！DOCTYPE>声明.在HTML5中只有一种.
-      HTML5 不基于 SGML,所以不需要引用 DTD。
-    HTML5 声明: <!doctype html> 
-      HTML5不基于SGML,因此不需要对DTD进行引用,
-      但是需要doctype来规范浏览器的行为,让浏览器按照它们应该的方式来运行
-    常用的 DOCTYPE 声明 
-      HTML 4.01 Strict
-        该 DTD 包含所有 HTML 元素和属性,但不包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
-        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-      HTML 4.01 Transitional
-        该 DTD 包含所有 HTML 元素和属性,包括展示性的和弃用的元素(比如 font)。不允许框架集(Framesets)。
-        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-      HTML 4.01 Frameset
-        该 DTD 等同于 HTML 4.01 Transitional,但允许框架集内容。
-        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
-      HTML 5 使用 <!DOCTYPE html>
-  <html>   根标签,所有的网页标签都在其中 
-    PS:block元素,默认高度为0; 定义 height:100%; 则会将网页占满;
-      背景色会向上渲染将整个浏览器铺满
-    manifest="cache.manifest"   定义使用的离线文件[HTML5]   
-  <body>   所有HTML标签的wraper 
-    block元素,默认高度为0; 背景色会向上渲染将整个浏览器铺满
-    self(?):建议不要对body进行样式控制,使用一个其他的盒子代替.
-  </body>
-  <head>   用于定义文档的头部,所有头部元素的容器 
+    HTML5声明: <!doctype html> 
+      HTML5不基于SGML,不需要对DTD进行引用,
+      但是需要doctype来规范浏览器的行为,让浏览器按照它们应该的方式来运行 
+    常用的DOCTYPE声明 
+      HTML4.01 Strict 
+      HTML4.01 Transitional 
+      HTML4.01 Frameset 
+      HTML5 使用 <!DOCTYPE html>
+  <html>  根标签,所有的网页标签都在其中 
+    PS: 高度默认为0,定义height:100%;则会将网页占满;背景色会向上渲染将整个浏览器铺满
+    manifest="cache.manifest"  定义使用的离线文件 [HTML5]  
+  <body>  所有HTML标签的wraper 
+    高度默认为0; 背景色会向上渲染将整个浏览器铺满
+    建议不要对body进行样式控制,使用一个其他的盒子代替[Self] 
+  <head>  用于定义文档的头部,所有头部元素的容器 
     头部元素有<title> <script> <style> <link> <meta>等标签;
-  <meta/>  提供有关页面的meta-information,元信息 
-    PS:用于设置一些头信息,对网页文件进行说明,
-      如便于搜索引擎查找.放置于<head></head>之间
-      元数据不会显示在页面上,但是对于机器是可读的。
-    name=       可选,content值所属的的类型
+  <meta/>  提供有关页面的元信息'meta-information' 
+    PS:用于设置一些头信息,对网页文件进行说明,放置于<head></head>之间
+      如便于搜索引擎查找;元数据不会显示在页面上,但是对于机器是可读的 
+    name=  可选,表示content的类型 
       PS: 'http-equiv'指明下面要设置的项目;'content'指明该项目设置的内容
       'viewport'    视口,设置不同设备下的显示属性[HTML5]
         PS:Viewport指的是网页的显示区域,
@@ -252,29 +240,27 @@
       <meta http-equiv="Cache-Control" content="no-siteapp"/>  // 禁止搜索引擎转码 
       Example:
       <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    content=  可选,定义与'http-equiv'或'name'属性相关的元信息
     charset="UTF-8"  可选,设置字符集 [HTML5]
       Example:
       // 需放置在head的其他前面 
       <meta charset="UTF-8"> 
       <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> // HTML5之前的写法 
-    content=    可选,定义与'http-equiv'或'name'属性相关的元信息
-    ◆rel=        可选,
-      'perfetch' 预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5] 
+    rel=        可选,    
+      'perfetch'  预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5] 
         <link rel="prefetch" href="url">
         url可为一网页地址或图片地址
-      Example:
+      "stylesheet" 
+        HTML5中可省略 
         <link rel="stylesheet" type="text/css" href="XXX.css" />
-        // type在HTML5中可以不用写
   <title>  网页标题
-  <base href="http://aoo/" target="_blank">   定义超链接的根目录[HTML5] 
-    PS:在head中使用 
+  <base href="http://aoo/" target="_blank">  定义超链接的根目录 [HTML5]  
+    PS: 在head中使用 
     'href'    定义页面中a链接以此为跟路径
-    'target'  可选,定义页面中a链接的打开方式 
+    'target'  可选,定义页面中a链接的打开方式,如'_blank' 
 引入类 
   <style>  嵌入样式 
-    PS:style标签也可以添加class属性,网页中可同时添加多个style标签;
-      对于CSS文档,正确的type属性值是"text/css";
-  <link>   外部样式 
+  <link>  外部样式 
     rel  规定当前文档与被链接文档/资源之间的关系 
       只有当使用 href 属性时,才能使用 rel 属性.
       只有 rel 属性的 "stylesheet" 值得到了所有浏览器的支持.其他值只得到了部分地支持.

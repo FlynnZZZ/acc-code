@@ -1,9 +1,9 @@
 // 以下方法基于jQuery
 !function(){
-  window.ztools = {}; // 工具函数 
+  window.ztls = {}; // 工具函数 
   // 通过 input type=file 获取到本地图片的 base64
   // var defe = new $.Deferred();
-  ztools.getLocalImg = function(jInputElem,foo){
+  ztls.getLocalImg = function(jInputElem,foo){
     jInputElem.on("change",function(e){
       var img = e.target.files[0];
       var fr = new FileReader();
@@ -28,7 +28,7 @@
   //   // 宽高可只填一个
   //   quality: num,[0-1 之间]
   // }
-  ztools.dealImg = function ( imgSrc , param , resolve){
+  ztls.dealImg = function ( imgSrc , param , resolve){
     var img = new Image();
     img.src = imgSrc;
     img.onload = function(){
@@ -65,7 +65,7 @@
     }
   }
   // 字符验证 
-  ztools.strVerify = function ( currentVal ,standardVal , minLen , maxLen){
+  ztls.strVerify = function ( currentVal ,standardVal , minLen , maxLen){
     var bool1 = true ,
     bool2 = true ,
     bool3 = true ;
@@ -81,14 +81,14 @@
     // console.log(bool1,bool2,bool3);
     return  bool1 && bool2 && bool3 ;
   }
-  // localstorage 本地存储 读写
-  ztools.localObjOpera = function(lsItem,key,val){
+  // localstorage 读写,本地存储 
+  ztls.localstore = function(lsItem,key,val){
     if (localStorage[lsItem] === undefined) { // 不存在则初始化为一对象 
       localStorage[lsItem] = JSON.stringify({});
     }
     else if (typeof JSON.parse(localStorage[lsItem]) != 'object') {
       localStorage[lsItem] = JSON.stringify({});
-      console.log('localStorage[lsItem] isnot object --ztools.localObjOpera');
+      console.log('localStorage[lsItem] isnot object --ztls.localstore');
     }
     var obj = JSON.parse(localStorage[lsItem]);
     if (val) {
@@ -99,7 +99,7 @@
       return obj[key];
     }
   };
-  // ztools.getData = function(str,val){
+  // ztls.getData = function(str,val){
   //   var info1 = $('body').data(str);
   //   var foo = arguments.callee;
   //   if (info1 == undefined) {
@@ -138,22 +138,22 @@
   }
   // 弹窗效果 
     // param = {
-    //   title : '使用的是默认标题', // 可选,默认为''
-    //   txt : '使用的是默认提示文字', // 可选,默认提示文字
-    //   appendPosition : 'body' ,  // 可选,默认'body'
+    //   title : '标题', // 可选 
+    //   txt : '提示文字', // 可选 
+    //   appendPosition : 'body' ,  // 可选,
     //   cancelBtn : 'inline-block', // 可选,当为 'none' 时,隐藏 取消按钮
-    //   maskBool : 'none', // 可选,是否使用遮罩 
+    //   maskBool : 'none', // 可选,默认使用 
     //   confirmTxt : '确定', // 可选,默认为'确定'
     //   icon : 'fa-exclamation-circle', // 可选,默认为'fa-exclamation-circle redColor'
-    //   height : ' 195px', // 可选,弹窗高度
+    //   height : ' 186px', // 可选,弹窗高度
     //   confirmClick : function(){ // 可选,点击确认按钮时的操作
     //   },
     //   cancelClick : function(){ // 可选,点击取消按钮时的操作
     //   },
     // }
   ztools.popUp = function(param) {
-    var title = param.title || '';
-    var txt = param.txt || '使用的是默认提示文字';
+    var title = param.title || '标题';
+    var txt = param.txt || '提示文字';
     var appendPosition = param.appendPosition || 'body';
     var cancelBtn = param.cancelBtn || 'inline-block';
     var maskBool = param.maskBool || "";
@@ -267,7 +267,7 @@
     var icon = param.icon?'<i class="fa '+param.icon+'"></i>' : '<img src="/common/imgs/icon_check.png">';
     var time = param.time*1000 || 2000;
     var html = 
-    '<div id="_zpopUp">' + 
+    '<div id="_zpopUp_">' + 
     '  <div class="popup">' + 
     '    <i class="fa fa-close"></i>'+
     '    <div class="tl">'+title+'</div>'+
@@ -275,22 +275,22 @@
     '    <div class="txt1"> '+ time/1000 +'s后自动消失! </div>' + 
     '  </div>' + 
     '  <style>' + 
-    '  #_zpopUp {' + 
+    '  #_zpopUp_ {' + 
     '    position: relative;' + 
     '    z-index:99;' + 
     '  }' + 
-    '  #_zpopUp .fa-close{' + 
+    '  #_zpopUp_ .fa-close{' + 
     '    position: absolute;' + 
     '    top: 10px;' + 
     '    right: 10px;' + 
     '    cursor: pointer;' + 
     '    user-select: none;' + 
     '  }' + 
-    '  #_zpopUp .tl{' + 
+    '  #_zpopUp_ .tl{' + 
     '    padding: 6px 14px;' + 
     '    font-size: 18px;' + 
     '  }' + 
-    '  #_zpopUp .popup{' + 
+    '  #_zpopUp_ .popup{' + 
     '    position: fixed;' + 
     '    top: 0;bottom: 0;right: 0;left: 0;margin: auto;' + 
     '    width: 450px;' + 
@@ -298,18 +298,19 @@
     '    background-color: #fff;' + 
     '    border: 1px solid #ccc;' + 
     '  }' + 
-    '  #_zpopUp .txt{' + 
+    '  #_zpopUp_ .txt{' + 
     '    margin-top: 24px;' +
     '    text-align: center;' + 
+    '    font-size: 18px;' + 
     '  }' + 
-    '  #_zpopUp .txt span{' + 
+    '  #_zpopUp_ .txt span{' + 
     '    vertical-align: middle;' + 
     '    margin-left: 5px;' + 
     '  }' + 
-    '  #_zpopUp .txt img{' + 
+    '  #_zpopUp_ .txt img{' + 
     '    vertical-align: middle;' + 
     '  }' + 
-    '  #_zpopUp .txt1{' + 
+    '  #_zpopUp_ .txt1{' + 
     '    margin-top: 10px;' + 
     '    text-align: center;' + 
     '    color: #999;' + 
@@ -317,9 +318,9 @@
     '  }' + 
     '  </style>' + 
     '</div>' ;
-    if (!$('#_zpopUp').length) {
+    if (!$('#_zpopUp_').length) {
       $(appendPosition).append(html);
-      var pop = $('#_zpopUp');
+      var pop = $('#_zpopUp_');
       pop.on('click','.fa-close',function(e){
         pop.remove();
       })
@@ -341,24 +342,9 @@
   // ztools.loading = function(param){
   // };
 
-  // 解析地址栏中的查询字符串
-  ztools.searchStr2Obj = function(spaceMark,connector){
-    var space = spaceMark || "&";
-    var connect = connector || "=";
-    var resultObj = {};
-    var arr1 = location.search.slice(1).split(space);
-    arr1.forEach(function(val,indx,arr){
-      var arr2 = val.split(connect);
-      resultObj[arr2[0]] = arr2[1];
-    } );
-    return resultObj;
-  };
   
   // 查询字符串 对象化 
-  // 加载的组件
-  // 请求的接口
-  // 
-  ztools.searchStrObj = function(){ 
+  ztls.queryObj = function(){ 
     var resultObj = {};
     var arr1 = location.search.slice(1).split("&");
     arr1.forEach(function(val,indx,arr){
@@ -367,14 +353,14 @@
     } );
     return resultObj;
   };
-  // 设置查询字符串
+  // 设置查询字符串   依赖'queryObj'
   // {
   //   's1' : 1,
   //   's3' : 3,
   // }
-  ztools.setSearch = function(obj){
+  ztls.setQuery = function(obj){
     var resStr = '?';
-    var o = ztools.searchStrObj();
+    var o = ztls.queryObj();
     for(var key in obj){
       o[key] = obj[key];
     };
@@ -390,7 +376,7 @@
   //   [ url,pos ],
   //   [ url,pos ],
   // ]
-  ztools.loadComponent = function(params){
+  ztls.loadCpts = function(params){
     var head = $('head');
     var html = $('html');
     var arr = [];
@@ -411,12 +397,190 @@
         })
       })(i);
     }
-    var back = $.when(arr);
-    return back;
+    return $.when.apply(null,arr);
   };
-
-}();
-
-
-
   
+  // 检测是否为IE  num可选 7、8、9 
+  ztls.isIE = function(num){
+    var b = document.createElement('b');
+    b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->';
+    return b.getElementsByTagName('i').length === 1;
+  }
+  
+  // 表单验证   依赖'tipPop' 
+  // var arg = [
+  //   [ '1771234560', /^1\d{10}$/, '手机号填写错误' ],
+  // ]
+  ztls.formVerify = function(arg){
+    return arg.every(function(val,idx,arr){
+      if (val[0] == undefined) {
+        ztls.tipPop({
+          txt : val[2], 
+          icon : 'fa-exclamation-circle redColor',
+        })
+        return false;
+      }
+      var __bol = val[1].test(val[0])
+      if (!__bol) {
+        ztls.tipPop({
+          txt : val[2], 
+          icon : 'fa-exclamation-circle redColor',
+        })
+      }
+      return __bol;
+    });
+  };
+  
+
+  // 选用 ----------------------------------------------------------------------
+  // 地址选择
+  ztls.adrsSlct = function(pro,city,area,data){
+    var proName = Object.keys(data);
+    var html = '<option value="0">请选择</option>';
+    var value = '';
+    proName.forEach(function(val,indx,arr){
+      html += '<option value="'+ val +'">'+ val +'</option>'
+    } );
+    pro.html(html);
+    pro.on("change",function(e){
+      value = $(this).val();
+      var cityName = Object.keys(data[value]);
+      var html1 = '<option value="0">请选择</option>';
+      cityName.forEach(function(val1,indx,arr){
+        html1 += '<option value="'+ val1 +'">'+ val1 +'</option>'
+      } );
+      city.html(html1);
+    })
+    city.on("change",function(e){
+      console.log(value);
+      var value1 = $(this).val();
+      var areaName = data[value][value1];
+      var html2 = '<option value="0">请选择</option>';
+      areaName.forEach(function(val2,indx,arr){
+        html2 += '<option value="'+ val2 +'">'+ val2 +'</option>'
+      } );
+      area.html(html2);
+    })
+  }
+  // 时间选择
+  ztls.dateSlct = function(yJelem,mJelem,dJelem,length){
+    var currentT = new Date();
+    var currentY = currentT.getFullYear();
+    
+    var strY = '<option value="0">请选择</option>';
+    length = length || 100;
+    for (var i =  currentY- length ; i < currentY ; i++) {
+      strY += '<option value="'+ i +'"> '+ i +'年 </option>';
+    }
+    yJelem.html(strY);
+    
+    var strM = '<option value="0">请选择</option>';
+    for (var i = 1; i < 13; i++) {
+      strM += '<option value="'+ i +'"> '+ i +'月 </option>'
+    }
+    mJelem.html(strM);
+    
+    var strD = '<option value="0">请选择</option>';
+    for (var i = 1; i < 32; i++) {
+      strD += '<option value="'+ i +'"> '+ i +'日 </option>';
+    }
+    dJelem.html(strD);
+    
+    mJelem.on("change",function(e){
+      var v = $(this).val();
+      var num = dJelem.children().length;
+      console.log(v,num);
+      var arr = ['4', '6', '9', '11']
+      if (v == 2) {
+        if (num == 32) {
+          dJelem.children().eq(-1).remove();
+          dJelem.children().eq(-1).remove();
+          dJelem.children().eq(-1).remove();
+        }
+        else if (num == 31) {
+          dJelem.children().eq(-1).remove();
+          dJelem.children().eq(-1).remove();
+        }
+        else {
+        }
+      }
+      else if (arr.includes(v)) {
+        if (num == 32) {
+          dJelem.children().eq(-1).remove();
+        }
+        else if (num == 31) {
+        }
+        else {
+          dJelem.append('<option value="29"> 29日 </option><option value="30"> 30日 </option>')
+        }
+      }
+      else {
+        if (num == 32) {
+        }
+        else if (num == 31) {
+          dJelem.append('<option value="31"> 31日 </option>');
+        }
+        else {
+          dJelem.append('<option value="29"> 29日 </option>\
+            <option value="30"> 30日 </option>\
+            <option value="31"> 31日 </option>'
+          );
+        }
+        
+      }
+    })
+  };
+  // 翻页功能
+  // var params = {
+  //   wrapElem : pagesElem,
+  //   currentElem : currentElem,
+  //   currentClass : "current1",
+  //   length : 6,
+  //   hideClass : "none",
+  //   nextBtn : elem1,
+  //   prevBtn : elem2,
+  // }
+  ztls.pagesChange = function(params){
+    params.currentElem.siblings('.'+params.currentClass).removeClass(params.currentClass);
+    params.currentElem.addClass(params.currentClass);
+    
+    var showElems = ":not(."+ params.hideClass +")";
+    var showELems = params.wrapElem.find(showElems);
+    
+    // 点击显示的最后一个时,将其作为后续的第二个
+    var currentLastElem2 = showELems.eq(-2);
+    var currentLastElems = currentLastElem2.nextAll();
+    if (params.currentElem.is(currentLastElem2.next()) && currentLastElems.length > 1) {
+      currentLastElem2.prevAll().addClass(params.hideClass);
+      // console.log(currentLastElems.eq(0));
+      for (var i = 0; i < params.length-1; i++) {
+        currentLastElems.eq(i).removeClass(params.hideClass);
+      };
+    }
+    // 点击显示的第一个时,将其作为后续的倒数第二个
+    var currentFirstElem2 = showELems.eq(1);
+    var currentFirstElems = currentFirstElem2.prevAll();
+    if (params.currentElem.is(currentFirstElem2.prev()) && currentFirstElems.length > 1) {
+      currentFirstElem2.nextAll().addClass(params.hideClass);
+      for (var i = 0; i < params.length-1 ; i++) {
+        currentFirstElems.eq(i).removeClass(params.hideClass);
+      }
+    }
+  };
+  // 延迟执行 : slct 存在时执行 
+  ztls.delayRun = function(slct,foo,argObj){
+    if ($(slct).length) {
+      foo(argObj);
+    }
+    else {
+      var foo1 = arguments.callee;
+      setTimeout(function(){
+        foo1(slct,foo,argObj);
+        // console.log('------'); // to delete
+      },240);
+    }
+  };
+}();
+var qObj = ztls.queryObj();
+
+

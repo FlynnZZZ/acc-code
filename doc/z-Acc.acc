@@ -114,81 +114,41 @@ Atom
         // 设置技巧
         // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
   快捷键 
-    默认快捷键
-      ◆常用
-      ctrl-alt-↑/↓        光标多选
-      ctr-→/←             单词单位移动光标
-      ctrl+↑/↓            上下移动
-      f2                  跳到当前文件的下一条书签
-      ctrl-f2             列出当前工程所有书签
-      ctrl-d              选取和当前单词相同的下一处
-      ctrl/alt-left/right 移动到单词开始/末尾
-      ctrl-Enter          在当前行的末尾回车
-      ctrl-shift-Enter    在当前行的末尾回车
-      alt-f3              选中选择文件中的所有匹配项
-      ctrl+o              打开文件
-      ctrl-shift-o        打开目录
-      ctrl-shift-f        在整个工程中查找 [需将光标位于文件树中]
-      ctrl-g              跳转到指定的行
-      ctrl-r              当前文档中查询变量、符号
-      ctrl-w              关闭当前标签
-      ctrl-click          增加新光标
-      ctrl-\              显示/隐藏目录树
-      ctrl-f              在buffer中查找
-      ctrl-.	            key-binding-resolver:toggle,激活 查看键位的绑定情况
-      ctrl-,	            设置 
-      ◆其他
-        ctrl-shift-s      保存所有打开的文件
-        ctrl-t/ctrl-p     查找文件
-        ctrl-shift-u      调出切换编码选项
-        a/m/delete        增加/修改/删除  [文件目录树下]
-    自定义快捷键
-      默认快捷键          取消/替换为    描述
-      ◆取消快捷键
-      alt-1-9             unset!     切换到第几个标签页 [unset! 使快捷键不起作用]
-      ctrl-tab            unset!     文档切换        
-      ctrl-e              unset!     搜索选中词和ctrl-f功能类似
-      ctrl-n              unset!     新建文件
-      ctrl-m              unset!     括号间跳转
-      ctrl-u              unset!     取消选中 [等价与ctrl-e] [find-and-replace]
-      ctrl-j              unset!     合并行 [等价alt-z]
-      ctrl-l              unset!     选中行 [等价alt-c]
-      ◆自定义更改
-      backspace           f1            删除
-      enter               ctrl-`        换行
-      ctrl+home           ctrl-1        移到文档开始
-      ctrl+end            ctrl-2        移到文档结束
-      ctrl+/              ctrl-q        添加取消注释
-      shift-f3            f4            查找时到上一个
-      ctrl-alt-shift-[    alt-1         折叠所有
-      ctrl-alt-shift-]    alt-2         展开所有
-      ctrl-alt-[          alt-3         折叠当前
-      ctrl-alt-]          alt-4         展开当前
-      ctrl-]              alt-a         取消行缩进
-      ctrl-[              alt-s         行缩进          [ ctrl-[ ,不能缩进空行]
-      ctrl-shift-k        alt-d         删除行
-      ctrl-shift-enter    alt-enter     在上一行插入 
-      ctrl-j              alt-z         合并下一行到当前行
-      ctrl+alt+f2         alt-x         在当前行行增加书签
-      ctrl-l              alt-c         选取当前行,继续执行选取下一行
-      ctrl-u              ctrl-e        取消选取和当前单词相同的下一处
-      ctrl+shift+d        alt-v         复制当前行
-      ctrl+alt+o          alt+m         添加项目文件夹 [原快捷键和其他有冲突,故更改]
-      ctrl+o              alt+o         打开文件
-      ctrl+shift+n        alt-n         打开新窗口
-      ctrl-k+ ctrl-u      alt-u         使当前字符大写
-      ctrl-k+ ctrl-l      alt-i         使当前字符小写
-      ctrl-shift-t        alt-l         打开最近关闭的文件
-      ◆插件快捷键
-      ctrl-shift-\        alt-\    在文件目录中定位    [tree view]
-      ctrl+alt+o          alt-b    在浏览器中打开文件  [Open in browsers]
-      ctrl-alt-m          alt-q    选中括号内的内容    [bracket matcher ]
-      ctrl-m              alt-f    标签跳转           [bracket matcher ]
-      ctrl-alt-backspace  alt-t    删除匹配的括号      [bracket matcher ]
-      ctrl-sapce          alt-e    激活提示           [autocomplete-plus]
-      unkow               alt-p    补全选中的CSS       [autoprefixer] 
-        [perfection]
-    未占用键汇总
+    PS: 自定义的快捷键文档 C:\Users\xxx\.atom\keymap.cson 
+    常用 
+      f2             跳到当前文件的下一条书签
+      ctrl-alt-↑/↓   光标多选
+      ctr-→/←        单词单位移动光标
+      ctrl+↑/↓       上下移动
+      ctrl-f2        列出当前工程所有书签
+      ctrl-d         选取和当前单词相同的下一处
+      ctrl/alt-→/←   移动到单词开始/末尾
+      ctrl-Enter     在当前行的末尾回车
+      ctrl+o         打开文件
+      ctrl-shift-o   打开目录
+      ctrl-g         跳转到指定的行
+      ctrl-r         当前文档中查询变量、符号
+      ctrl-w         关闭当前标签
+      ctrl-click     增加新光标
+      ctrl-\         显示/隐藏目录树
+      ctrl-f         在buffer中查找
+      ctrl-,         设置 
+      alt-f3         选中选择文件中的所有匹配项
+      ◆文件目录树下 
+      ctrl-shift-f 在整个工程中查找 
+      a            新增文件 
+      m            修改文件名  
+      delete       删除文件 
+    不常用 
+      ctrl-shift-s   保存所有打开的文件
+      ctrl-t/ctrl-p  查找文件
+      ctrl-shift-u   调出切换编码选项
+      ctrl-.         key-binding-resolver:toggle,激活 查看键位的绑定情况
+      ctrl-n         新建文件
+      ctrl-home      移到文档开始
+      ctrl+end       移到文档结束
+    已更改 
+    未占用键汇总 
       ◆左
       alt-f1 f2
       alt-`
@@ -201,15 +161,10 @@ Atom
       alt-y [ ]
       alt-h j k l ; '
       alt-, . /
+      ctrl-`
       ctrl-u i
       ctrl-j k ; '
       ctrl-n m , . /
-    其他说明
-      unset!  取消设置
-        Example:
-        取消 ctrl-e 在 find-and-replace 插件下的快捷键设置
-        '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
-          'ctrl-e': 'unset!'
   插件 
     自带插件 
       about                  关于Atom的信息查看 [help-about Atom]
@@ -739,103 +694,103 @@ Sublime text3
       0312B06CB39656D268F6F81C9586DFDF
 键盘的键值码 
   ◆字母和数字键的键码值
-    A	65
-    B	66
-    C	67
-    D	68
-    E	69
-    F	70
-    G	71
-    H	72
-    I	73
-    J	74
-    K	75
-    L	76
-    M	77
-    N	78
-    O	79
-    P	80
-    Q	81
-    R	82
-    S	83
-    T	84
-    U	85
-    V	86
-    W	87
-    X	88
-    Y	89
-    Z	90
-    0	48
-    1	49
-    2	50
-    3	51
-    4	52
-    5	53
-    6	54
-    7	55
-    8	56
-    9	57
+    A 65
+    B 66
+    C 67
+    D 68
+    E 69
+    F 70
+    G 71
+    H 72
+    I 73
+    J 74
+    K 75
+    L 76
+    M 77
+    N 78
+    O 79
+    P 80
+    Q 81
+    R 82
+    S 83
+    T 84
+    U 85
+    V 86
+    W 87
+    X 88
+    Y 89
+    Z 90
+    0 48
+    1 49
+    2 50
+    3 51
+    4 52
+    5 53
+    6 54
+    7 55
+    8 56
+    9 57
   ◆数字键盘上的键的键码值
-    0	96	
-    1	97	
-    2	98	
-    3	99	
-    4	100	
-    5	101	
-    6	102	
-    7	103	
-    8	104	
-    9	105	
-    *	106	
-    +	107	
-    Enter	
-    -	109	
-    .	110	 	 	 	 
-    /	111	 	 	 	 
+    0 96 
+    1 97 
+    2 98 
+    3 99 
+    4 100 
+    5 101 
+    6 102 
+    7 103 
+    8 104 
+    9 105 
+    * 106 
+    + 107 
+    Enter 
+    - 109 
+    . 110        
+    / 111        
   ◆功能键键码值(keyCode)
-    F1	112	
-    F2	113	
-    F3	114	
-    F4	115	
-    108	F5	
-    F6	117	
-    F7	118
-    F8	119
-    F9	120
-    F10	121
-    116	F11	122
-    F12	123 
+    F1 112 
+    F2 113 
+    F3 114 
+    F4 115 
+    108 F5 
+    F6 117 
+    F7 118
+    F8 119
+    F9 120
+    F10 121
+    116 F11 122
+    F12 123 
   ◆控制键键码值(keyCode)
-    BackSpace	  8	  
-    Tab	        9	  
-    Clear	      12	
-    Enter	      13	
-    Shift	      16	
-    Control	    17	
-    Alt	        18	
-    Cape Lock	  20	
-    Esc	        27	
-    Spacebar	  32	
-    Page Up	    33	
-    Page Down	  34	
-    End	        35	
-    Home	      36	
-    Left Arrow  37	
+    BackSpace   8   
+    Tab         9   
+    Clear       12 
+    Enter       13 
+    Shift       16 
+    Control     17 
+    Alt         18 
+    Cape Lock   20 
+    Esc         27 
+    Spacebar   32 
+    Page Up     33 
+    Page Down   34 
+    End         35 
+    Home       36 
+    Left Arrow  37 
     Up A        38
-    Right Arrow	39	
-    Down Arrow	40	
-    Insert	    45	
-    Delete	    46	
-    Num Lock	  144	
-    ;:	        186	
-    =+	        187	
-    -_	        189
-    .>	        190
-    /?	        191
-    `~	        192
-    [{	        219
-    /|	        220
-    ]}	        221
+    Right Arrow 39 
+    Down Arrow 40 
+    Insert     45 
+    Delete     46 
+    Num Lock   144 
+    ;:         186 
+    =+         187 
+    -_         189
+    .>         190
+    /?         191
+    `~         192
+    [{         219
+    /|         220
+    ]}         221
 --------------------------------------------------------------------------------
 ◆自我设定
 起步_基础 

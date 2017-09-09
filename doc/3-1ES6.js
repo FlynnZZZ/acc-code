@@ -151,7 +151,7 @@ String 字符串扩展
     PS:即使4字节的字符,也能正确实现
     String.fromCodePoint(134071); //结果:"𠮷"
   String.raw()  返回字符串最原始的样貌,即使字符串中含有转义符 
-    console.log(`hello\tworld`); // hello	world
+    console.log(`hello\tworld`); // hello world
     \t会被识别为制表符,实现空格效果
     console.log(String.raw`hello\twolrd`); //输出:hello\twolrd
 Array 数组扩展 

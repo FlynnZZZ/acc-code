@@ -771,8 +771,8 @@ OOP,Object-oriented_programming 面向对象
       // 子类扩展站点类别
       class Child_Site extends Site {
          var $category;
-      	function setCate($par){ $this->category = $par; }
-      	function getCate(){ echo $this->category . PHP_EOL; }
+       function setCate($par){ $this->category = $par; }
+       function getCate(){ echo $this->category . PHP_EOL; }
       }
   方法重写
     PS:如果从父类继承的方法不能满足子类的需求,可以对其进行改写,
@@ -975,7 +975,7 @@ OOP,Object-oriented_programming 面向对象
     print Foo::$my_static . PHP_EOL; // foo
     $foo = new Foo();
     print $foo->staticValue() . PHP_EOL; // foo
-    ?>	
+    ?> 
   final 关键字 [PHP5新增]
     如果父类中的方法被声明为 final,则子类无法覆盖该方法。
     如果一个类被声明为 final,则不能被继承。

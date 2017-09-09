@@ -1,20 +1,20 @@
 Webpack: 模块加载器兼打包工具 
-介绍 
-  运行在NodeJS环境中;支持'AMD''commonJS''ES6Moudle'三种引入方式;
-  基于JS,包括四大核心'Entry''Output''Loaders'和'Plugins';
-  把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理,
+  介绍 
+    运行在NodeJS环境中;支持'AMD''commonJS''ES6Moudle'三种引入方式;
+    基于JS,包括四大核心'Entry''Output''Loaders'和'Plugins';
+    把各种资源[如JS、coffee、less、sass、图片等]都作为模块来使用和处理;
   原理: 
     把所有的非js资源都转换成js,
-    如把一个 css 文件转换成“创建一个 style 标签并把它插入 document”的脚本、
-    把图片转换成一个图片地址的 js 变量或 base64 编码等,
-    然后用 CommonJS、AMD 或 ES6模块化 的机制管理起来。
+    如把一个'css'文件转换成'创建一个style标签并把它插入document'的脚本、
+    把图片转换成一个图片地址的js变量或base64编码等,
+    然后用CommonJS、AMD或ES6模块化的机制管理;
   工作方式 
-    把项目当做一个整体,通过一给定的主文件[如 index.js],
-    Webpack将从该文件开始找到项目的所有依赖文件,使用配置的loaders处理它们,
-    最后打包为一个浏览器可识别的JS文件;
+    Webpack会识别HTML及CSS中的路径、JS中的模块引入,将他们进行转换、打包,
+    使用配置的loaders处理相关的文件,
+    最后打包为浏览器可识别的JS文件;
   说明 : 
     从'2.0'版本开始,支持用'ES6module'规范[import/export]去进行模块打包 
-    'chunk'  表示为 '块'
+    'chunk'表示为'块' 
 命令行命令 
   npm i -g webpack  全局安装Webpack[仅一次即可]
   npm init                npm初始化,创建'package.json'文件 

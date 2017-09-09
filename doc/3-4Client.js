@@ -1132,8 +1132,8 @@ WeUI:专为开发微信HTML5应用的开源Web UI组件库
       http请求方式: GET
       https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=wx_card
     参数说明
-      参数	是否必须	说明
-      access_token	是	调用接口凭证
+      参数 是否必须 说明
+      access_token 是 调用接口凭证
       返回数据
     数据示例:
       {
@@ -1142,11 +1142,11 @@ WeUI:专为开发微信HTML5应用的开源Web UI组件库
         "ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKdvsdshFKA",
         "expires_in":7200
       }
-      参数名	描述
-      errcode	错误码
-      errmsg	错误信息
-      ticket	api_ticket,卡券接口中签名所需凭证
-      expires_in	有效时间    
+      参数名 描述
+      errcode 错误码
+      errmsg 错误信息
+      ticket api_ticket,卡券接口中签名所需凭证
+      expires_in 有效时间    
     拉取适用卡券列表并获取用户选择信息
       wx.chooseCard({
         shopId: '', // 门店Id
@@ -1160,14 +1160,14 @@ WeUI:专为开发微信HTML5应用的开源Web UI组件库
           var cardList= res.cardList; // 用户选中的卡券列表信息
         }
       });
-      参数名	必填	类型	示例值	描述
-      shopId	否	string(24)	1234	门店ID。shopID用于筛选出拉起带有指定location_list(shopID)的卡券列表,非必填。
-      cardType	否	string(24)	GROUPON	卡券类型,用于拉起指定卡券类型的卡券列表。当cardType为空时,默认拉起所有卡券的列表,非必填。
-      cardId	否	string(32)	p1Pj9jr90_SQRaVqYI239Ka1erk	卡券ID,用于拉起指定cardId的卡券列表,当cardId为空时,默认拉起所有卡券的列表,非必填。
-      timestamp	是	string(32)	14300000000	时间戳。
-      nonceStr	是	string(32)	sduhi123	随机字符串。
-      signType	是	string(32)	SHA1	签名方式,目前仅支持SHA1
-      cardSign	是	string(64)	abcsdijcous123	签名。
+      参数名 必填 类型 示例值 描述
+      shopId 否 string(24) 1234 门店ID。shopID用于筛选出拉起带有指定location_list(shopID)的卡券列表,非必填。
+      cardType 否 string(24) GROUPON 卡券类型,用于拉起指定卡券类型的卡券列表。当cardType为空时,默认拉起所有卡券的列表,非必填。
+      cardId 否 string(32) p1Pj9jr90_SQRaVqYI239Ka1erk 卡券ID,用于拉起指定cardId的卡券列表,当cardId为空时,默认拉起所有卡券的列表,非必填。
+      timestamp 是 string(32) 14300000000 时间戳。
+      nonceStr 是 string(32) sduhi123 随机字符串。
+      signType 是 string(32) SHA1 签名方式,目前仅支持SHA1
+      cardSign 是 string(64) abcsdijcous123 签名。
       cardSign详见附录4。开发者特别注意:签名错误会导致拉取卡券列表异常为空,请仔细检查参与签名的参数有效性。
       
       特别提醒
@@ -1197,9 +1197,9 @@ WeUI:专为开发微信HTML5应用的开源Web UI组件库
       });
       参数说明:
       
-      参数	说明
-      cardId	上一步核销的card_id,若传入错误的card_id会报错
-      code	上一步核销的code,若传入错误的code会报错
+      参数 说明
+      cardId 上一步核销的card_id,若传入错误的card_id会报错
+      code 上一步核销的code,若传入错误的code会报错
       注意:
       
       该接口只支持微信6.3.6以上版本的客户端,开发者在调用时需要注意两点:

@@ -257,30 +257,30 @@ NodeJS的运行方式及编程风格
       程序执行结束
       退出码为: 0
     ◆退出状态码
-      状态码	名称 & 描述
-      1	Uncaught Fatal Exception
+      状态码 名称 & 描述
+      1 Uncaught Fatal Exception
       有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
-      2	Unused
+      2 Unused
       保留
-      3	Internal JS Parse Error
+      3 Internal JS Parse Error
       JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
-      4	Internal JS Evaluation Failure
+      4 Internal JS Evaluation Failure
       JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
-      5	Fatal Error
+      5 Fatal Error
       V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
-      6	Non-function Internal Exception Handler
+      6 Non-function Internal Exception Handler
       未捕获异常,内部异常处理函数不知为何设置为on-function,并且不能被调用.
-      7	Internal Exception Handler Run-Time Failure
+      7 Internal Exception Handler Run-Time Failure
       未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
-      8	Unused
+      8 Unused
       保留
-      9	Invalid Argument
+      9 Invalid Argument
       可能是给了未知的参数,或者给的参数没有值.
-      10	Internal JS Run-Time Failure
+      10 Internal JS Run-Time Failure
       JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
-      12	Invalid Debug Argument 
+      12 Invalid Debug Argument 
       设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
-      >128	Signal Exits
+      >128 Signal Exits
       若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
     ◆属性
     stdout      标准输出流.
@@ -1026,12 +1026,12 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
               // Content Type: text/plain
               res.writeHead(404, {'Content-Type': 'text/html'});
             }
-            else{	         
+            else{          
               // HTTP 状态码: 200 : OK
               // Content Type: text/plain
-              res.writeHead(200, {'Content-Type': 'text/html'});	
+              res.writeHead(200, {'Content-Type': 'text/html'}); 
               // 响应文件内容
-              res.write(data.toString());		
+              res.write(data.toString());  
             }
             //  发送响应数据
             res.end();
@@ -1269,7 +1269,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         可以通过stats类中的提供方法判断文件的相关属性.例如判断是否为文件:
         var fs = require('fs');
         fs.stat('/Users/liuht/code/itbilu/demo/fs.js', function (err, stats) {
-          console.log(stats.isFile()); 		//true
+          console.log(stats.isFile());   //true
         })      
       stats对象的方法
         stats.isFile(); 若是文件返回 true,否则返回 false.
@@ -1402,9 +1402,9 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Example:
         var util = require('util'); 
         function Base() { 
-        	this.name = 'base'; 
-        	this.base = 1991; 
-        	this.sayHello = function() { console.log('Hello ' + this.name); }; 
+         this.name = 'base'; 
+         this.base = 1991; 
+         this.sayHello = function() { console.log('Hello ' + this.name); }; 
         } 
         Base.prototype.showName = function() { console.log(this.name); }; 
         function Sub() { this.name = 'sub'; } 
@@ -1430,8 +1430,8 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       Example:
         var util = require('util'); 
         function Person() { 
-        	this.name = 'abc'; 
-        	this.toString = function() { return this.name; }; 
+         this.name = 'abc'; 
+         this.toString = function() { return this.name; }; 
         } 
         var obj = new Person(); 
         console.log(util.inspect(obj)); // Person { name: 'abc', toString: [Function] }
@@ -1573,7 +1573,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         const fs = require('fs');
         const child_process = require('child_process');
         for(var i=0; i<3; i++) {
-           var worker_process = child_process.fork("support.js", [i]);	
+           var worker_process = child_process.fork("support.js", [i]); 
            worker_process.on('close', function (code) {
               console.log('子进程已退出,退出码 ' + code);
            });
@@ -2067,11 +2067,11 @@ RESTful API
         }
       }
     基于以上数据,我们创建以下 RESTful API:
-      序号	URI	HTTP 方法	发送内容	结果
-      1	listUsers	GET	空	显示所有用户列表
-      2	addUser	POST	JSON 字符串	添加新用户
-      3	deleteUser	DELETE	JSON 字符串	删除用户
-      4	:id	GET	空	显示用户详细信息
+      序号 URI HTTP 方法 发送内容 结果
+      1 listUsers GET 空 显示所有用户列表
+      2 addUser POST JSON 字符串 添加新用户
+      3 deleteUser DELETE JSON 字符串 删除用户
+      4 :id GET 空 显示用户详细信息
     获取用户列表:
       以下代码,我们创建了 RESTful API listUsers,
       用于读取用户的信息列表, server.js 文件代码如下所示:

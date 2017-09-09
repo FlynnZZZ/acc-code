@@ -1,8 +1,10 @@
-VueJS  数据驱动,组件化开发模式,渐进式前端类MVVM框架 
-  PS:支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
+VueJS,数据驱动,组件化开发模式,渐进式前端类MVVM框架 
+  介绍
+    支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
     API设计受AngularJS、KnockoutJS、RactiveJS和RivetsJS影响;
     Vue没有完全遵循MVVM格式,但受其启发;
-自我约定 
+  说明 
+    标签属性、标签名不区分大小写,需将'camelCased'驼峰转换为'kebab-case'短横线隔开式  
 安装|启动 
   <script>标签引入: 'Vue'被注册为一个全局变量
     异步组件 
@@ -75,14 +77,15 @@ View&Model
   Vue.set(obj,key,val)  显式更新数据[确保视图会更新],若为新数据则加入监控 
   Vue.component(tagname,options);  注册全局组件[详见组件] 
   Vue.use() 使用vue插件 
-var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm] 
+vm = new Vue(params)  创建Vue实例[ViewModel,简称vm] 
   PS: 模板语法声明式的将数据渲染进DOM系统; 
     VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;
     所有的VueJS组件其实都是被扩展的Vue实例;
-    在params中的方法中 this 表示的即为 vm;
+    在params中的方法中'this'表示的即为'vm';
     参数包括数据、模板、挂载元素、方法、生命周期钩子等选项 
   {
     'el': selector, // 指定Vue接管的DOM区域,当选择器指向多个标签时,只接管第一个 
+      // 不能在<body>元素上使用id,对<body>进行接管 
     'data': {},     // 用于渲染、交互的数据 
       PS:Vue实例默认代理其'data'对象,使用 this 表示'data'对象;
       Example:
@@ -176,7 +179,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
               })
             }
           }
-    'watch'      监听数据的变化 
+    'watch'      // 监听数据的变化 
       Example:
         var vm = new Vue({
           data: {
@@ -257,7 +260,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         限制执行该操作的频率,并在得到最终结果前,设置中间状态
         这是计算属性无法做到的
         除了 watch 选项之外,还可以使用 vm.$watch API 命令
-    'methods'    执行的方法 
+    'methods'    // 执行的方法 
       使用method方法返回数据 
           <li v-for="n in even(numbers)">{{ n }}</li>
           data: {
@@ -270,7 +273,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
               });
             }
           }
-    'components': {}, 注册组件[组件需注册后才可使用]  
+    'components': {}, // 注册组件[组件需注册后才可使用]  
       PS: HTML中组件标签不区分大小写,须将驼峰写法转换成'-'连接的方式 
       {
         'cpt-name1' : {
@@ -281,15 +284,15 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         },
         ...
       }
-    'filters'    定义过滤器 
+    'filters'    // 定义过滤器 
       val  包含过滤器函数的对象
         {
           ftFoo1 : function(val){
             // 
           }
         }
-    'directives' 自定义指令 
-    'mounted'    模型渲染后 
+    'directives' // 自定义指令 
+    'mounted'    // 模型渲染后 
       使用 mounted 并不能保证钩子函数中的 this.$el 在 document 中
       为此还应该引入 Vue.nextTick/vm.$nextTick例如:
       mounted: function () {
@@ -539,7 +542,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       })
   过滤器串联 
     {{ message | filterA | filterB }}
-'Directives'指令 : model和view的交互 
+'Directives'指令: model和view的交互 
   PS:将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   ◆数据渲染 
@@ -711,64 +714,15 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           setTimeout(function(){
             vm.slctVal = 2;
           },2000);
-  v-for="(item,idx) in items"   渲染循环列表 
-    item 为自定义的占位符placeholder[是数组元素迭代的别名]items的属性,便于后续使用 
-      支持'(item,indx) in items' 形式,使用下标占位符'indx' 
-    arr迭代 
-      <ol id="test">
-        <li v-for="item in dataKeyArr"> {{ item.text }} </li>
-      </ol>
-      var vm = new Vue({
-        el: '#test',
-        data: {
-          dataKeyArr: [
-            { text: '第一条' },
-            { text: '第二条' },
-            { text: '第三条' },
-          ]
-        }
-      })
-    obj迭代 
-      <ul id="repeat-object" class="demo">
-        <li v-for="value in obj"> {{ value }} </li>
-      </ul>
-      new Vue({
-        el: '#repeat-object',
-        data: {
-          obj: {
-            FirstName: 'John',
-            LastName: 'Doe',
-            Age: 30
-          }
-        }
-      })
-      结果:
-      John
-      Doe
-      30
-    '(item,indx) in items' 提供第二个的参数为键名 
-      <div v-for="(value,key) in object">
-        {{ key }} : {{ value }}
-      </div>
-    '(item,key,indx) in items' 提供三个参数为索引 
-      <div v-for="(value,key,index) in object">
-        {{ index }}. {{ key }} : {{ value }}
-      </div>
-      在遍历对象时,是按 Object.keys() 的结果遍历,
-      但不能保证结果在不同的JS引擎下是一致的
-    num整数迭代 
-      <div>
-        <span v-for="n in 10">{{ n }}</span>
-      </div>
-      结果:
-      1 2 3 4 5 6 7 8 9 10
-    使用<template>模版渲染多个元素块 
-      <ul>
-        <template v-for="item in items">
-          <li>{{ item.msg }}</li>
-          <li class="divider"></li>
-        </template>
-      </ul>
+  v-for="(item,key,idx) in list"   渲染循环列表 
+    item  自定义的占位符placeholder,表示集合'list'中的一项,便于后续使用 
+    key   可选,表示集合'list'中一项的键,数组则为下标 
+    idx   当遍历对象时可用,表示对象的第几个元素 
+      按 Object.keys()的结果遍历对象,但不能保证结果在不同JS引擎下一致
+    list  迭代的集合,可为arr/obj/num 
+      为num时,表示迭代num次,'item'表示每一次的数字 
+    <template v-for="item in list"> 渲染多元素
+      PS: 最终在DOM中不存在<template>标签,仅用于包裹元素  
     'props'传递数据 
       不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
       <div id="todo-list-example">
@@ -813,7 +767,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       你需要为每项提供一个唯一 key 
       属性理想的 key 值是每项都有唯一 id这个特殊的属性相当于 Vue1.x 的 track-by ,
       但它的工作方式类似于一个属性,所以你需要用 v-bind 来绑定动态值 
-      <div v-for="item in items" :key="item.id">
+      <div v-for="item in list" :key="item.id">
         <!-- 内容 -->
       </div>
       建议尽可能使用 v-for 来提供 key ,除非迭代 DOM 内容足够简单,
@@ -821,7 +775,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       因为它是 Vue 识别节点的一个通用机制,key 并不特别与 v-for 关联,
       key 还具有其他用途,我们将在后面的指南中看到其他用途
     可用'of'替代'in'作为分隔符 
-      <div v-for="item of items"></div>
+      <div v-for="item of list"></div>
   v-once  一次性插值[配合插值使用] 
     当数据改变时,插值处的内容不会更新
     <span v-once>This will never change: {{ msg }}</span>
@@ -1515,47 +1469,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       JavaScript内联模版字符串
       .vue 组件
   组件通信 
-    子组件向父组件通信: 触发实例事件通信 
-      父组件上的绑定自定义事件,子组件'$emit'触发绑定的事件 
-      当子组件触发事件时,父组件中事件的回调函数被执行 
-      PS:vm.$on('eventName',foo) 监听事件,vm.$emit('event-name',data) 触发事件 
-        父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
-      Example:
-        <div id="parent">
-          <p>{{ total }}</p>
-          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
-          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
-        </div>
-        Vue.component('cpt-child',{
-          template: '<button v-on:click="childFoo">{{ counter }}</button>',
-          data: function () {
-            return {
-              counter: 0,
-              moreData: '来自子组件的消息',
-            }
-          },
-          methods: {
-            childFoo: function () {
-              this.counter += 1
-              this.$emit('parent_event_name',this.moreData)
-            }
-          },
-        })
-        new Vue({
-          el: '#parent',
-          data: {
-            total: 0
-          },
-          methods: {
-            incrementTotal: function (moreData) {
-              this.total += 1
-              console.log(moreData);
-            }
-          }
-        })
-      Exp: 
-        用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写[SlPt]
-    父组件向子组件通信: 改变标签属性通信 
+    父组件向子组件通信: 设置标签属性通信 
       PS: 属性名不区分大小写 
       子组件VM中注册'props'属性[进行监听],父组件中添加属性进行赋值 
       当父组件赋给属性的值,子组件可获取到 
@@ -1571,16 +1485,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         传入一个普通字符串:
         <cpt-child message="hello!"></cpt-child>
         结果: hello!
-      属性命名camelCased[驼峰式]转换为kebab-case[短横线隔开式] 
-        PS:HTML特性不区分大小写,当未使用字符串模版[若使用字符串模版,则没有这些限制],
-        Vue.component('child',{
-          // camelCase in JavaScript
-          props: ['myMessage'],
-          template: '<span>{{ myMessage }}</span>'
-        })
-        // <!-- kebab-case in HTML -->
-        <child my-message="hello!"></child>
-      v-bind动态属性 
+      'v-bind'动态属性 
         PS:每当父组件的数据变化时,该变化也会传导给子组件 
         <div id="parent">
           <input v-model="parentMsg"> <br>
@@ -1597,14 +1502,14 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
             parentMsg : '',
           }
         })
-      props单向数据流 
+      'props'单向数据流 
         PS:当父组件的属性变化时,将传导给子组件,但是不会反过来, 
           这是为了防止子组件无意修改了父组件的状态;
           每当父组件更新时,子组件的所有 prop 都会更新为最新值,
           这意味着不应该在子组件内部改变 prop 否则,Vue 会在控制台给出警告;
           在js中对象和数组是引用类型,指向同一个内存空间,
           若 prop 是一个对象或数组,在子组件内部改变它会影响父组件的状态;
-      Prop 验证 : 可为组件的props指定验证规格  
+      Prop验证 : 可为组件的props指定验证规格  
         要指定验证规格,改用对象的形式;若传入的数据不符合规格,Vue 会发出警告
         Vue.component('example',{
           props: {
@@ -1647,6 +1552,46 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           Object
           Array
       通过自定义事件的监听和触发来达到同样的效果[SlPt] 
+    子组件向父组件通信: 触发实例事件通信 
+      父组件上的绑定自定义事件,子组件'$emit'触发绑定的事件 
+      当子组件触发事件时,父组件中事件的回调函数被执行 
+      PS:vm.$on('eventName',foo) 监听事件,vm.$emit('event-name',data) 触发事件 
+        父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
+      Example:
+        <div id="parent">
+          <p>{{ total }}</p>
+          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
+          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
+        </div>
+        Vue.component('cpt-child',{
+          template: '<button v-on:click="childFoo">{{ counter }}</button>',
+          data: function () {
+            return {
+              counter: 0,
+              moreData: '来自子组件的消息',
+            }
+          },
+          methods: {
+            childFoo: function () {
+              this.counter += 1
+              this.$emit('parent_event_name',this.moreData)
+            }
+          },
+        })
+        new Vue({
+          el: '#parent',
+          data: {
+            total: 0
+          },
+          methods: {
+            incrementTotal: function (moreData) {
+              this.total += 1
+              console.log(moreData);
+            }
+          }
+        })
+      Exp: 
+        用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写[SlPt]
     非父子组件通信 
       简单场景下,使用一个的 Vue 实例作为中央事件总线 
         var transfer = new Vue();
@@ -1655,7 +1600,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           // ...
         })
       复杂情况下,使用专门的状态管理模式Vuex 
-  'Slot'插槽 : 父组件定制子组件的内容 
+  'slot'插槽 : 父组件定制子组件的内容 
     PS:除非子组件模板包含至少一个<slot>插口,否则父组件的内容将会被丢弃; 
       父组件在子组件标签内定义的内容将换掉子组件内定义的没有属性的slot标签本身;
       在<slot>标签中的任何内容都被视为备用内容,没有要替换的内容时才显示备用内容;
@@ -1749,7 +1694,7 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
         自定义子组件的列表渲染 
         // 子组件 
         <ul>
-          <slot name="item" v-for="item in items" :text="item.text">
+          <slot name="item" v-for="item in list" :text="item.text">
             <!-- 这里写入备用内容 -->
           </slot>
         </ul>        
@@ -1759,6 +1704,11 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
             <li class="my-fancy-item">{{ props.text }}</li>
           </template>
         </my-awesome-list>
+  编写可复用组件 
+    PS:Vue 组件的 API 来自三部分 - props,events 和 slots;
+      Props  允许外部环境传递数据给组件
+      Events 允许组件触发外部环境的副作用
+      Slots  允许外部环境将额外的内容组合在组件中
   <component :is="aoo"> 动态组件 
     通过<component>引入[也可通过其他标签,如<p> ?]; :is="aoo"动态切换[is="aoo"直接指定]
     Example:
@@ -1806,11 +1756,6 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           <!-- 非活动组件将被缓存！ -->
         </component>
       </keep-alive>
-  编写可复用组件 
-    PS:Vue 组件的 API 来自三部分 - props,events 和 slots;
-      Props  允许外部环境传递数据给组件
-      Events 允许组件触发外部环境的副作用
-      Slots  允许外部环境将额外的内容组合在组件中
   子组件索引 
     PS:使用ref为子组件指定一个索引 ID,便于JS直接访问子组件;
       当 ref 和 v-for 一起使用时,ref 是一个数组或对象,包含相应的子组件
@@ -1824,9 +1769,8 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       // 访问子组件
       var child = parent.$refs.profile
   异步组件 
-    在大型应用中,我们可能需要将应用拆分为多个小模块,按需从服务器下载
-    为了让事情更简单,Vuejs 允许将组件定义为一个工厂函数,动态地解析组件的定义
-    Vuejs 只在组件需要渲染时触发工厂函数,并且把结果缓存起来,用于后面的再次渲染
+    PS: Vuejs允许将组件定义为一个工厂函数,动态地解析组件的定义
+      只在组件需要渲染时触发工厂函数,并且把结果缓存起来,用于后面的再次渲染
     Vue.component('async-example',function (resolve,reject) {
       setTimeout(function () {
         // Pass the component definition to the resolve callback
@@ -1834,68 +1778,32 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
           template: '<div>I am async!</div>'
         })
       },1000)
+      // 工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用
+      // 也可以调用 reject(reason) 指示加载失败
+      // 这里 setTimeout 只是为了演示怎么获取组件完全由你决定
     })
-    工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用
-    也可以调用 reject(reason) 指示加载失败
-    这里 setTimeout 只是为了演示怎么获取组件完全由你决定
-    推荐配合使用 :Webpack 的代码分割功能:
-    Vue.component('async-webpack-example',function (resolve) {
-      // 这个特殊的 require 语法告诉 webpack
-      // 自动将编译后的代码分割成不同的块,
-      // 这些块将通过 Ajax 请求自动下载
-      require(['./my-async-component'],resolve)
-    })
-    你可以使用 Webpack 2 + ES2015 的语法返回一个 Promise resolve 函数:
-    Vue.component(
-      'async-webpack-example',
-      () => import('./my-async-component')
-    )
-  高级异步组件 ['2.3.0' 新增] 
-    步组件的工厂函数可返回一如下的对象:
-    const AsyncComp = () => ({
-      // 需要加载的组件. 应当是一个 Promise
-      component: import('./MyComp.vue'),
-      // loading 时应当渲染的组件
-      loading: LoadingComp,
-      // 出错时渲染的组件
-      error: ErrorComp,
-      // 渲染 loading 组件前的等待时间默认:200ms.
-      delay: 200,
-      // 最长等待时间超出此时间则渲染 error 组件默认:Infinity
-      timeout: 3000
-    })
-    当一个异步组件被作为 vue-router 的路由组件使用时,这些高级选项都是无效的,
-    因为在路由切换前就会提前加载所需要的异步组件
-    另外,若你要在路由组件中上述写法,需要使用 vue-router 2.4.0+
-  组件命名约定 
-    当注册组件（或者 props）时,可以使用 kebab-case ,camelCase ,或 TitleCase 
-    // 在组件定义中
-    components: {
-      // 使用 kebab-case 形式注册
-      'kebab-cased-component': { /* ... */ },
-      // register using camelCase
-      'camelCasedComponent': { /* ... */ },
-      // register using TitleCase
-      'TitleCasedComponent': { /* ... */ }
-    }
-    在 HTML 模版中,请使用 kebab-case 形式:
-    // <!-- 在HTML模版中始终使用 kebab-case -->
-    <kebab-cased-component></kebab-cased-component>
-    <camel-cased-component></camel-cased-component>
-    <title-cased-component></title-cased-component>
-    当使用字符串模式时,可以不受 HTML 的 case-insensitive 限制,
-    可使用 camelCase 、 TitleCase 或者 kebab-case 来引用:
-    // <!-- 在字符串模版中可以用任何你喜欢的方式! -->
-    <my-component></my-component>
-    <myComponent></myComponent>
-    <MyComponent></MyComponent>
-    若组件未经 slot 元素传递内容,在字符串模版中可以在组件名后使用 / 使其自闭合,
-    否则自定义元素是无效的 HTML ,浏览器原生的解析器无法识别;
-    <my-component/>
+    使用Webpack的代码分割功能 
+      Vue.component('async-webpack-example', function (resolve) {
+        // 这个特殊的 require 语法告诉 webpack
+        // 自动将编译后的代码分割成不同的块，
+        // 这些块将通过 Ajax 请求自动下载。
+        require(['./my-async-component'], resolve)
+      })
+      Webpack2+ES2015 的语法返回一个 Promise resolve 函数：
+      Vue.component( 'async-webpack-example',
+        () => import('./my-async-component')
+      )
+      局部注册时也可以直接提供一个返回 Promise 的函数 
+      new Vue({
+        // ...
+        components: {
+          'my-component': () => import('./my-async-component')
+        }
+      })        
   递归组件 
     当有name选项时,组件在其模板内可递归调用自己 
     使用 Vue.component 全局注册组件,其全局的ID使用其name选项值,被自动设置;
-    若不谨慎,递归组件可能导致死循环
+    若不谨慎,递归组件可能导致死循环 
       name: 'stack-overflow',
       template: '<div><stack-overflow></stack-overflow></div>'
       导致错误 “max stack size exceeded” ,
@@ -1930,6 +1838,39 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
       this.$options.components.TreeFolderContents = require('./tree-folder-contents.vue')
     }
     问题解决了
+  <template>标签书写组件HTML    
+    PS: 当组件中内容过多,在JS中书写组件模版太过繁琐,可通过<template>在HTML中书写 
+      浏览器默认不去解析里面的内容;<template>不能用在<table>内; 
+    定义组件时,通过id选择器来指定在HTML中书写的模版 
+      <body>
+        // <!-- 使用 template 并且添加选择器(只能使用id)-->
+        <template id="myTemp">
+          <h2>This is Template </h2>
+          <p>add ...</p>
+        </template>
+        <div id="app">
+          <my-component></my-component>
+          <my-component></my-component>
+        </div>
+      </body>
+      <script>
+        Vue.component("my-component", {
+          template:"#myTemp" //对应上面定义的template标签中的选择器
+        })
+        new Vue({
+          el:"#app"
+        });
+      </script>
+  'v-once'对低开销的静态组件使用  
+    当组件中包含大量静态内容时,可使用'v-once'将渲染结果缓存起来
+    Vue.component('terms-of-service',{
+      template: '\
+        <div v-once>\
+          <h1>Terms of Service</h1>\
+          ... a lot of static content ...\
+        </div>\
+      '
+    })    
   内联模版 
     若子组件有 inline-template 特性,组件将把它的内容当作它的模板,
     而不是把它当作分发内容,让模板更灵活
@@ -1951,49 +1892,6 @@ var vm = new Vue(params);  创建Vue实例[ViewModel,简称vm]
     })
     这在有很多模版或者小的应用中有用,否则应该避免使用,
     因为它将模版和组件的其他定义隔离了
-  对低开销的静态组件使用 v-once 
-    当组件中包含大量静态内容时,可使用 v-once 将渲染结果缓存起来
-    Vue.component('terms-of-service',{
-      template: '\
-        <div v-once>\
-          <h1>Terms of Service</h1>\
-          ... a lot of static content ...\
-        </div>\
-      '
-    })    
-  使用<template>标签 
-    若组件中的内容过多,一堆的引号和加号来拼接这些字符串简直就是噩梦
-    所以Vue 引入了template标签（html5定义的,浏览器默认不去解析里面的内容）
-    <template> 不能用在 <table> 内下面来看看它的使用方法:
-    ◆HTML中
-    ...
-    <script src="js/vue.js"></script>
-    <body>
-      // <!-- 使用 template 并且添加选择器(只能使用id)-->
-      <template id="myTemp">
-        <h2>This is Template </h2>
-        <p>add ...</p>
-      </template>
-      <div id="app">
-        <my-component></my-component>
-        <my-component></my-component>
-      </div>
-      <script>
-        Vue.component("my-component", {
-          template:"#myTemp" //对应上面定义的template标签中的选择器
-        })
-        new Vue({
-          el:"#app"
-        });
-      </script>
-    </body>
-    ◆渲染为
-    <div id="app">
-      <h2>This is Template </h2>
-      <p>add ...</p>
-      <h2>This is Template </h2>
-      <p>add ...</p>
-    </div>    
 '.vue'单文件组件[详见'vue-cli'] 
 过渡效果 
   Vue在插入、更新或者移除DOM时,有多种不同方式的应用过渡效果 
@@ -2264,46 +2162,53 @@ vue-resource  http请求封装插件
     Vue.use(VueResource)  // 声明使用 
     vm.$http.get()  // 使用 
   ★方法
-  vm.$http.get('url'[,arg]).then(foo1,foo2) get请求 
-    url  请求的地址
-    arg  可选,obj,请求的参数
-    foo1 成功的回调,传入参数 (data) 
-      返回的数据进行了Vue封装
-    foo2 失败的回调,传入参数 (err) 
-  vm.$http.post'url'[,arg]).then(foo1,foo2) post请求 
+  vm.$http.get('url'[,obj]).then(f1(data1),f2(data2))  get请求 
+    url 请求的地址
+    obj 可选,请求的参数
+    f1  成功的回调,'data1'进行了Vue封装 
+      data1.body       接口响应的数据 
+      data1.bodyText   未经转义的响应数据 
+      data1.headers    相关的头信息 
+      data1.ok         bol,是否请求成功 
+      data1.status     状态码 
+      data1.statusText 状态描述 
+      data1.url        请求的地址  
+    f2  失败的回调,'data2'进行了Vue封装,拥有的属性和'data1'相同 
+  vm.$http.post'url'[,obj]).then(f1(data1),f2(data2))  post请求 
   vm.$http.jsonp() jsonp请求 
-axios         和'vue-resource'类似 
+axios         类似'vue-resource'的插件  
 vue-router    前端路由 
   PS:'vue-router2.x'只适用于'Vue2.x'版本,
     web开发中,'route'指根据url分配到对应的处理程序;根据不同的地址来显示不同的页面 
   引入'Vue-router'
     ◆script引入 
+    在Vue后面加载'vue-router',它会自动安装的
     <script src="/path/to/vue.js"></script>
     <script src="/path/to/vue-router.js"></script>
-    在Vue后面加载 vue-router,它会自动安装的
     ◆npm安装引入 
     npm i vue-router --save     安装 
     // 引入使用
     import Vue from "vue";
     import VueRouter from "vue-router"; // 引入 
-    Vue.use(VueRouter); // 使用声明 [全局的 script 标签,则默认安装了] 
-    var router = new VueRouter(options); // 根据路由配置实例化 
+    Vue.use(VueRouter); // 安装 [全局的<script>标签,则默认安装了] 
+    var router = new VueRouter(options); // 根据路由配置,实例化路由  
     new Vue({})    // Vue实例中注册 
   使用步骤 
-    ◆定义[路由]组件[可以从其他文件 import 进来] 
+    ◆定义[路由]组件[可以从其他文件'import'进来] 
     const Foo = { template: '<div>foo</div>' }  // 组件配置对象
-    const Bar = { template: '<div>bar</div>' }
-    ◆创建router实例[配置路由,创建映射] 
+    const Bar = { template: '<div>bar</div>' }  
+    ◆创建router实例: 配置路由,创建映射 
     const router = new VueRouter({ 
       // mode : 'history', // 采用'history'模式 
       'routes' : [ // 映射表 
         { 
           path : '/boo', // 定义地址URL  
           components : {  // 展示的组件 
-            viewName1 : cptA, // 命名视图 
+            viewName1 : cptA, // 命名视图,可在<router-view>的name中指定  
             viewName2 : cptB,
           },
-          name : 'coo',  // 命名路由 
+          // component : cptC, // 当只有一个组件时可直接使用组件名  
+          name : 'coo',  // 命名路由,可在<router-link>的name中指定  
           children : [   // 路由嵌套 
             {
               path: 'profile',
@@ -2314,28 +2219,22 @@ vue-router    前端路由
               component: UserPosts,
             }
           ],
-          redirect : '/coo', // 重定向到'/coo',即访问'/boo'就默认跳转到'/coo' 
+          redirect : '/coo', // 重定向  [详见 'redirect']
+          alias: '/b',       // 别名    [详见 'alias']
         },
-        { 
-          path : '/aoo', 
-          component : cptC, // 当只有一个组件时可直接使用组件名  
-        },
+        ...
         // 每个路由映射一个组件
       ]
     }) 
     ◆Vue实例中注册 
     const app = new Vue({ 
       el : '#app',
-      router : router,
-    }) // .$mount('#app')
-  <router-view></router-view>     指定视图的渲染位置 
-    Example:
-      <router-link to="/foo">Go to Foo</router-link>
-      <router-link to="/bar">Go to Bar</router-link>
-      // <!-- 路由匹配到的组件将渲染在这里 -->
-      <router-view></router-view>    
+      router : router,    // 注册方式1 
+    }) // .$mount('#app') // 注册方式2 
+  <router-view>    指定组件的渲染位置 
     name="xx"    标识视图,实现一路由对应多视图 
-      同时[同级]展示多个视图,可在界面中拥有多个单独命名的视图,若未设置名字,则默认为default 
+      PS: 一个路由展示多个视图,可在界面中拥有多个单独命名的视图 
+        若未设置名字,则默认为default,一个路由只有一个默认视图  
       Example: 一个视图使用一个组件渲染,因此对于同一个路由,多个视图就需要多个组件
       <router-view ></router-view>
       <router-view name="a"></router-view>
@@ -2352,22 +2251,71 @@ vue-router    前端路由
           }
         ]
       })
-  <router-link >xxx</router-link> 连接路由 : 用于在页面点击跳转 
+  <router-link >xxx</router-link>  路由连接 : 用于在页面点击跳转 
     PS:<router-link>默认会被渲染成一个<a>标签 
-    to="path"      指定链接地址 
-      to="/aoo"           // 到根路径下的aoo 
-      to="aoo"            // 相当于'./aoo' 
-      :to="'aoo'"         // 动态绑定
-      :to={               // 传入对象,相当于 to="/aoo" 
-        path:'aoo',
+    to="path"   指定链接地址 
+      to="/aoo"      // 到根路径下的aoo 
+      to="aoo"       // 相当于'./aoo' 
+      :to="'aoo'"   // 动态绑定
+      :to={         // 传入对象 
+        name: 'aoo', // 具名路由   
+        path: 'aoo', 
         param : {
           key : val,
         },
       }  
-      :to="{name:'aoo'}"  // 具名路由  
-    tag='tagname'  指定<router-link>渲染成的HTML标签 
-      'tagname'    标签名,如'div'、'li'等
+    tag='name'  指定<router-link>渲染成的标签,如'div'、'li'等 
     active-class="className"  指定样式 
+  'children'嵌套路由,子路由  
+    PS: 一个被路由加载的组件同样可包含自己的<router-view>
+    Example:
+      const User = {
+        template: `
+        <div class="user">
+        <h2>User {{ $route.params.id }}</h2>
+        <router-view></router-view>
+        </div>
+        `
+      }
+      const router = new VueRouter({
+        routes: [
+          { 
+            path: '/user/:id', 
+            component: User, // 需在该组件的HTML中定义<router-view>
+            children: [ 
+              {
+                // 当 /user/:id/profile 匹配成功,
+                // UserProfile 会被渲染在 User 的 <router-view> 中
+                path: 'profile',
+                component: UserProfile
+              },
+              {
+                // 当 /user/:id/posts 匹配成功
+                // UserPosts 会被渲染在 User 的 <router-view> 中
+                path: 'posts',
+                component: UserPosts
+              }
+            ]
+          }
+        ]
+      })  
+      基于上面的配置,访问'/user/foo'时,User的出口是不会渲染任何东西,
+      因为没有匹配到合适的子路由,若想要渲染点什么,可以提供一个空的子路由: 
+      const router = new VueRouter({
+        routes: [
+          {
+            path: '/user/:id', 
+            component: User,
+            children: [
+              // 当 /user/:id 匹配成功,
+              // UserHome 会被渲染在 User 的 <router-view> 中
+              { path: '', component: UserHome },
+              
+              // ... 其他子路由 
+            ]
+          }
+        ]
+      })
   '/path/:param' 动态路由,配任意的'/path/xx'[类似于于地址中的查询字符串] 
     PS: '/xx'必须存在否则匹配不到? 
     this.$route.params 在组件内获取当前的具体的路径的对象 
@@ -2394,56 +2342,6 @@ vue-router    前端路由
         }
       }
     当同一个路径匹配多个路由时,则先定义的路由优先级高 
-  'children'嵌套路由,子路由  
-    一个被渲染组件同样可以包含自己的嵌套<router-view>
-    Example:
-    const User = {
-      template: `
-      <div class="user">
-      <h2>User {{ $route.params.id }}</h2>
-      <router-view></router-view>
-      </div>
-      `
-    }
-    const router = new VueRouter({
-      routes: [
-        { 
-          path: '/user/:id', 
-          component: User, // 需在该组件的HTML中定义<router-view>
-          children: [ 
-            {
-              // 当 /user/:id/profile 匹配成功,
-              // UserProfile 会被渲染在 User 的 <router-view> 中
-              path: 'profile',
-              component: UserProfile
-            },
-            {
-              // 当 /user/:id/posts 匹配成功
-              // UserPosts 会被渲染在 User 的 <router-view> 中
-              path: 'posts',
-              component: UserPosts
-            }
-          ]
-        }
-      ]
-    })  
-    基于上面的配置,访问'/user/foo'时,User 的出口是不会渲染任何东西,
-    因为没有匹配到合适的子路由,若想要渲染点什么,可以提供一个空的子路由: 
-    const router = new VueRouter({
-      routes: [
-        {
-          path: '/user/:id', 
-          component: User,
-          children: [
-            // 当 /user/:id 匹配成功,
-            // UserHome 会被渲染在 User 的 <router-view> 中
-            { path: '', component: UserHome },
-            
-            // ... 其他子路由 
-          ]
-        }
-      ]
-    })
   编程式的导航 
     PS:除了使用<router-link>创建<a>标签来定义导航链接,
       还可以借助router的实例方法,通过编写代码来实现。
@@ -2457,14 +2355,14 @@ vue-router    前端路由
         当点击<router-link>时,这个方法会在内部调用,
         点击 <router-link :to="..."> 等同于调用 router.push(...) 
       location   字符串路径/描述地址的对象 
-        <router-link :to="...">	router.push(...)
+        <router-link :to="..."> router.push(...)
       router.push('home') // 字符串
       router.push({ path: 'home' }) // 对象
       router.push({ name: 'user', params: { userId: 123 }}) // 命名的路由
       router.push({ path: 'register', query: { plan: 'private' }})
       // 带查询参数,变成 /register?plan=private
     router.replace(location)  替换掉当前的history记录 
-      <router-link :to="..." replace>	router.replace(...)
+      <router-link :to="..." replace> router.replace(...)
     router.go(n)  在history记录中向前多少步,类似 window.history.go(n) 
       n 一个整数 
       Example:
@@ -2491,125 +2389,111 @@ vue-router    前端路由
     router.push({ name: 'user', params: { userId: 123 }})
     这两种方式都会把路由导航到 /user/123 路径 
   'redirect'重定向 
-    『重定向』的意思是,当用户访问 /a时,URL 将会被替换成 /b,然后匹配路由为 /b
-    通过 routes 配置来完成
-    Example:
-      从 /a 重定向到 /b:
-      const router = new VueRouter({
-        routes: [
-          { path: '/a', redirect: '/b' }
-        ]
-      })
-      重定向的目标也可以是一个命名的路由:
-      const router = new VueRouter({
-        routes: [
-          { path: '/a', redirect: { name: 'foo' }}
-        ]
-      })
-      甚至是一个方法,动态返回重定向目标:
-      const router = new VueRouter({
-        routes: [
-          { path: '/a', redirect: to => {
-            // 方法接收 目标路由 作为参数
-            // return 重定向的 字符串路径/路径对象
-          }}
-        ]
-      })
-  'alias'别名 
-    '/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a'
-    『别名』功能可自由地将UI结构映射到任意的URL,而不是受限于配置的嵌套路由结构 
-    Example:
-      const router = new VueRouter({
-        routes: [
-          { path: '/a', component: A, alias: '/b' }
-        ]
-      })
+    PS: 如当用户访问'/a'时,URL将会被替换成'/b',然后匹配路由为'/b' 
+      通过 routes 配置来完成
+    const router = new VueRouter({
+      routes: [
+        { 
+          path: '/a', 
+          redirect: '/b' 
+          // 重定向的目标也可以是一个命名的路由 : 
+          // redirect: { name: 'foo' }
+          // 甚至是一个方法,动态返回重定向目标:
+          // redirect: to => {
+          //   // 方法接收 目标路由 作为参数
+          //   // return 重定向的 字符串路径/路径对象
+          // }
+        }
+      ]
+    })
+  'alias'别名: 可自由地将UI结构映射到任意的URL,而不受限于配置的嵌套路由结构 
+    若'/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a'
+    const router = new VueRouter({
+      routes: [
+        { 
+          path: '/a', 
+          component: A, 
+          alias: '/b' 
+        }
+      ]
+    })
   配合使用的组件 
     <transition></transition> 实现跳转动画 
     <keep-alive></keep-alive> 缓存,加快路由切换速度 
-  HTML5_History模式
-    vue-router 默认 hash 模式,使用 URL 的 hash 来模拟一个完整的 URL,
-    于是当 URL 改变时,页面不会重新加载。
-    若不想要很丑的 hash,可以用路由的 history 模式,
-    这种模式充分利用 history.pushState API 来完成 URL 跳转而无须重新加载页面。
+  'history'模式 
+    PS: 'vue-router'默认'hash'模式, 
+      使用URL的hash来模拟一个完整的URL,当URL改变时,页面不会重新加载
+      'history'模式充分利用'history.pushState'API来完成URL跳转而无须重新加载页面;
     const router = new VueRouter({
       mode: 'history',
       routes: [...]
     })
-    当你使用 history 模式时,URL 就像正常的 url,
-    例如' http://yoursite.com/user/id',也好看！
-    不过这种模式要玩好,还需要后台配置支持。
-    因为我们的应用是个单页客户端应用,若后台没有正确的配置,
-    当用户在浏览器直接访问 'http://oursite.com/user/id' 就会返回 404,这就不好看了。
-    所以呢,你要在服务端增加一个覆盖所有情况的候选资源:
-    若 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
-    这个页面就是你 app 依赖的页面。
-    
-    后端配置例子
-    Apache
-      <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteBase /
-        RewriteRule ^index\.html$ - [L]
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule . /index.html [L]
-      </IfModule>
-    nginx
-      location / {
-        try_files $uri $uri/ /index.html;
+    注: 
+      不过这种模式要玩好,还需要后台配置支持。
+      因为我们的应用是个单页客户端应用,若后台没有正确的配置,
+      当用户在浏览器直接访问 'http://oursite.com/user/id' 就会返回 404,这就不好看了。
+      所以呢,你要在服务端增加一个覆盖所有情况的候选资源:
+      若 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
+      这个页面就是你 app 依赖的页面。
+      后端配置例子
+        Apache
+          <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteBase /
+            RewriteRule ^index\.html$ - [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule . /index.html [L]
+          </IfModule>
+        nginx
+          location / {
+            try_files $uri $uri/ /index.html;
+          }
+        Node.js (Express)
+          https://github.com/bripkens/connect-history-api-fallback
+      警告
+        给个警告,因为这么做以后,你的服务器就不再返回 404 错误页面,
+        因为对于所有路径都会返回 index.html 文件。
+        为了避免这种情况,你应该在 Vue 应用里面覆盖所有的路由情况,然后在给出一个 404 页面。
+        const router = new VueRouter({
+          mode: 'history',
+          routes: [
+            { path: '*', component: NotFoundComponent }
+          ]
+        })
+        或者,若你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
+        当没有匹配到路由的时候返回 404,从而实现 fallback。
+  异步组件 ['vue-router2.4.0+'] 
+    const AsyncComp = () => ({    
+      // 需要加载的组件. 应当是一个 Promise
+      component: import('./MyComp.vue'),
+      // loading 时应当渲染的组件
+      loading: LoadingComp,
+      // 出错时渲染的组件
+      error: ErrorComp,
+      // 渲染 loading 组件前的等待时间。默认：200ms.
+      delay: 200,
+      // 最长等待时间。超出此时间则渲染 error 组件。默认：Infinity
+      timeout: 3000
+    })
+    const routes = [
+      { 
+        path: '/test', 
+        component: (resolve) => require(['./components/test.vue'], resolve) 
+      },
+      { 
+        path: '/index', 
+        component: (resolve) => require(['./components/index.vue'], resolve) 
       }
-    Node.js (Express)
-      https://github.com/bripkens/connect-history-api-fallback
-    警告
-      给个警告,因为这么做以后,你的服务器就不再返回 404 错误页面,
-      因为对于所有路径都会返回 index.html 文件。
-      为了避免这种情况,你应该在 Vue 应用里面覆盖所有的路由情况,然后在给出一个 404 页面。
-      const router = new VueRouter({
-        mode: 'history',
-        routes: [
-          { path: '*', component: NotFoundComponent }
-        ]
-      })
-      或者,若你是用 Node.js 作后台,可以使用服务端的路由来匹配 URL,
-      当没有匹配到路由的时候返回 404,从而实现 fallback。
+    ];
   todo
-    使用路由功能 
-      npm install vue-router      安装路由
       配置路由
         在 main.js 里
-        import Vue from 'vue'
-        import VueRouter from 'vue-router'
-        import App from './App'
-    
-        Vue.use(VueRouter);
         
-        const routes = [
-          { 
-            path: '/',             // 首页默认重定向至Index路由
-            redirect: '/index'
-          },
-          { 
-            path: '/test', 
-            component: resolve => require(['./components/test.vue'], resolve) 
-          },
-          { 
-            path: '/index', 
-            component: resolve => require(['./components/index.vue'], resolve) 
-          }
-        ];
         
-        const router = new VueRouter({
-          routes // （缩写）相当于 routes: routes,
-        });
         
-        // 4. 创建和挂载根实例
-        // 记得要通过 router 配置参数注入路由,
-        // 从而让整个应用都有路由功能
-        const app = new Vue({
-          router,
-          render: h => h(App)
-        }).$mount('#app');
+        
+        
     使用路由搭建单页应用
       
       之前已经通过命令安装了vue-router

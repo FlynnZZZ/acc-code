@@ -114,7 +114,6 @@ Atom
         // 设置技巧
         // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
   快捷键 
-    PS: 自定义的快捷键文档 C:\Users\xxx\.atom\keymap.cson 
     常用 
       f2             跳到当前文件的下一条书签
       ctrl-alt-↑/↓   光标多选
@@ -147,7 +146,7 @@ Atom
       ctrl-n         新建文件
       ctrl-home      移到文档开始
       ctrl+end       移到文档结束
-    已更改 
+    已更改 : 见 C:\Users\xxx\.atom\keymap.cson 
     未占用键汇总 
       ◆左
       alt-f1 f2

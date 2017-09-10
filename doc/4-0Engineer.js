@@ -372,6 +372,7 @@ git bash: 类似于Linux的命令行
       如 which node ,which vue 
     where <name>  查看程序位置 
       如 where node 
+    atom <path>  用Atom打开文件夹 
   快捷键 
     ctrl+d  退出命令行 
 --------------------------------------------------------------------------------

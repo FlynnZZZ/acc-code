@@ -3,7 +3,7 @@
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 
     允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用. 
-相关命令行命令 
+相关命令 
   PS:所有node_modules/.bin/目录下的命令,都可以用 'npm run 命令' 的格式运行,
     在命令行下,键入 npm run,然后按tab键,就会显示所有可以使用的命令;
     和npm相关的指令或命令前都需添加'npm '
@@ -26,8 +26,9 @@
     npm update       升级当前目录下的所有模块
     npm update -g           更新npm 
     npm update vue-cli -g   更新vue
-  npm show express                 显示模块详情
-  npm search <name>       搜索模块 
+  npm show express    显示模块详情 
+  npm info node 查看详情 
+  npm search <name>    搜索模块 
   npm view vue-cli   查看全局 vue-cli 版本
   npm cache clean -f   清除 npm cache
   npm help           查看npm帮助 

@@ -127,8 +127,10 @@ Config,设置配置
     Example:
       @font-face{
         font-family: abc; // 自定义字体的名称 
-        src : url('abc1.ttf'),url('abc1.eot'); // 字体文件在服务器的位置  
-        // 兼容性考虑,可指定多个字体文件
+        // 字体文件在服务器的位置  
+        src : url('abc1.ttf'),url('abc1.eot'); // 兼容性考虑,可指定多个字体文件
+        // font-weight: 600;
+        // font-style: normal;
       }
       #aoo { font-family: abc; }
       @font-face {     

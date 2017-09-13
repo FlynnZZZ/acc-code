@@ -923,174 +923,6 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           }
         }
       })    
-  ◆属性控制 
-  v-bind:attrName="arg"  属性赋值[简写':attrName'] 
-    PS:在v-bind 用于'class'和'style'时,VueJS专门增强了它 
-      表达式的结果类型除了字符串之外,还可以是对象或数组
-    arg 可为str,arr,obj
-      str,表示属性attrName的值为str 
-        <div id="app-2">
-          <span v-bind:title="message">
-          // 简写为 <span :title="message">
-            鼠标悬停几秒钟查看此处动态绑定的提示信息！
-          </span>
-        </div>
-        var app2 = new Vue({
-          el: '#app-2',
-          data: {
-            message: '页面加载于 ' + new Date()
-          }
-        }); 
-        // app2.message = '新消息';
-        // 可通过更改 app2.message 的值来改变显示
-      arr,表示该class的值为该数组中的多个 
-        Example:
-          <div v-bind:class="[activeClass,errorClass]">
-          data: {
-            activeClass: 'active',
-            errorClass: 'text-danger'
-          }
-          渲染为:
-          <div class="active text-danger"></div>
-        使用三元表达式,根据条件切换列表中的class  
-          <div v-bind:class="[isActive ? activeClass : '',errorClass]">
-          此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-        可在数组语法中使用对象语法 
-          <div v-bind:class="[{ active: isActive },errorClass]"> 
-      obj,key为属性名,val可为属性的值、函数判断或简单表达式  
-        动态地切换class 
-          <div v-bind:class="{ active: isActive }"></div>
-          class active 存在与否将取决于数据属性 isActive 是否为真值
-        与普通的class属性共存 
-          <div class="static" :class="{ active: isActive,'text-danger': hasError }">
-          </div>
-          data: {
-            isActive: true,
-            hasError: false
-          }
-          渲染为:
-          <div class="static active"></div>
-        可直接绑定数据属性里的对象 
-          <div id="test" v-bind:class="dataKeyObj"></div>
-          new Vue({
-            el : '#test',
-            data: {
-              dataKeyObj: {
-                active: true,
-                'text-danger': false
-              }
-            }
-          });
-          渲染为
-          <div id="test" class="active"></div>
-        可为计算属性的方法[返回的对象] 
-          <div v-bind:class="comptFoo"></div>
-          data: {
-            isActive: true,
-            error: null
-          },
-          computed: {
-            comptFoo: function () {
-              return {
-                active: this.isActive && !this.error,
-                'text-danger': this.error && this.error.type === 'fatal',
-              }
-            }
-          }      
-    v-bind:class=arg  'class'类样式
-      对象语法 
-        动态地切换 class 
-          <div v-bind:class="{ active: isActive }"></div>
-          上面的语法表示 classactive 的更新将取决于数据属性 isActive 是否为真值 
-        可以在对象中传入更多属性用来动态切换多个class 
-        此外,v-bind:class指令可以与普通的class属性共存如下模板:
-          <div class="static"
-            v-bind:class="{ active: isActive,'text-danger': hasError }">
-          </div>
-          如下 data:
-          data: {
-            isActive: true,
-            hasError: false
-          }
-          渲染为:
-          <div class="static active"></div>
-        当 isActive 或者 hasError 变化时,class列表将相应地更新
-        若 hasError 的值为 true ,class列表将变为 "static active text-danger"
-        可以直接绑定数据里的一个对象 
-          <div v-bind:class="classObject"></div>
-          data: {
-            classObject: {
-              active: true,
-              'text-danger': false
-            }
-          }
-          渲染的结果和上面一样我们也可以在这里绑定返回对象的计算属性这是一个常用且强大的模式:
-          <div v-bind:class="classObject"></div>
-          data: {
-            isActive: true,
-            error: null
-          },
-          computed: {
-            classObject: function () {
-              return {
-                active: this.isActive && !this.error,
-                'text-danger': this.error && this.error.type === 'fatal',
-              }
-            }
-          }
-      数组语法 
-        我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表:
-        <div v-bind:class="[activeClass,errorClass]">
-        data: {
-          activeClass: 'active',
-          errorClass: 'text-danger'
-        }
-        渲染为:
-        <div class="active text-danger"></div>
-        若你也想根据条件切换列表中的 class ,可以用三元表达式:
-        <div v-bind:class="[isActive ? activeClass : '',errorClass]">
-        此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-        不过,当有多个条件 class 时这样写有些繁琐可以在数组语法中使用对象语法:
-        <div v-bind:class="[{ active: isActive },errorClass]">
-      用在组件上 
-        在定制的组件上用到class属性的时,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖
-        例如,若你声明了这个组件:
-        Vue.component('my-component',{
-          template: '<p class="foo bar">Hi</p>'
-        })
-        然后在使用它的时候添加一些 class:
-        <my-component class="baz boo"></my-component>
-        HTML 最终将被渲染成为:
-        <p class="foo bar baz boo">Hi</p>
-        同样的适用于绑定 HTML class :
-        <my-component v-bind:class="{ active: isActive }"></my-component>
-        当 isActive 为 true 的时候,HTML 将被渲染成为:
-        <p class="foo bar active"></p>
-    v-bind:style=arg  'style'内联样式 
-      对象语法
-        v-bind:style 的对象语法十分直观,非常像CSS的
-        须将短横分隔命名[kebab-case]改为驼峰式[camelCase] 
-        <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
-        data: {
-          activeColor: 'red',
-          fontSize: 30
-        }
-        直接绑定到一个样式对象通常更好,让模板更清晰:
-        <div v-bind:style="styleObject"></div>
-        data: {
-          styleObject: {
-            color: 'red',
-            fontSize: '13px'
-          }
-        }
-        同样的,对象语法常常结合返回对象的计算属性使用
-      数组语法
-        v-bind:style 的数组语法可以将多个样式对象应用到一个元素上:
-        <div v-bind:style="[baseStyles,overridingStyles]">
-      自动添加前缀
-        当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
-    v-bind:key=arg  标识DOM节点 
-  ◆指令的扩展 
   'Modifiers'修饰符  让指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
     PS:修饰符是以点号'.'指明的特殊后缀;指令可以串联;
     事件修饰符 
@@ -1314,6 +1146,173 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         modifiers: {"a":true,"b":true}
         vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
         oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
+  ◆属性控制 
+  v-bind:attrName="arg"  属性赋值[简写':attrName'] 
+    PS:在v-bind 用于'class'和'style'时,VueJS专门增强了它 
+      表达式的结果类型除了字符串之外,还可以是对象或数组
+    arg 可为str,arr,obj
+      str,表示属性attrName的值为str 
+        <div id="app-2">
+          <span v-bind:title="message">
+          // 简写为 <span :title="message">
+            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+          </span>
+        </div>
+        var app2 = new Vue({
+          el: '#app-2',
+          data: {
+            message: '页面加载于 ' + new Date()
+          }
+        }); 
+        // app2.message = '新消息';
+        // 可通过更改 app2.message 的值来改变显示
+      arr,表示该class的值为该数组中的多个 
+        Example:
+          <div v-bind:class="[activeClass,errorClass]">
+          data: {
+            activeClass: 'active',
+            errorClass: 'text-danger'
+          }
+          渲染为:
+          <div class="active text-danger"></div>
+        使用三元表达式,根据条件切换列表中的class  
+          <div v-bind:class="[isActive ? activeClass : '',errorClass]">
+          此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
+        可在数组语法中使用对象语法 
+          <div v-bind:class="[{ active: isActive },errorClass]"> 
+      obj,key为属性名,val可为属性的值、函数判断或简单表达式  
+        动态地切换class 
+          <div v-bind:class="{ active: isActive }"></div>
+          class active 存在与否将取决于数据属性 isActive 是否为真值
+        与普通的class属性共存 
+          <div class="static" :class="{ active: isActive,'text-danger': hasError }">
+          </div>
+          data: {
+            isActive: true,
+            hasError: false
+          }
+          渲染为:
+          <div class="static active"></div>
+        可直接绑定数据属性里的对象 
+          <div id="test" v-bind:class="dataKeyObj"></div>
+          new Vue({
+            el : '#test',
+            data: {
+              dataKeyObj: {
+                active: true,
+                'text-danger': false
+              }
+            }
+          });
+          渲染为
+          <div id="test" class="active"></div>
+        可为计算属性的方法[返回的对象] 
+          <div v-bind:class="comptFoo"></div>
+          data: {
+            isActive: true,
+            error: null
+          },
+          computed: {
+            comptFoo: function () {
+              return {
+                active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal',
+              }
+            }
+          }      
+    v-bind:class=arg  'class'类样式
+      对象语法 
+        动态地切换 class 
+          <div v-bind:class="{ active: isActive }"></div>
+          上面的语法表示 classactive 的更新将取决于数据属性 isActive 是否为真值 
+        可以在对象中传入更多属性用来动态切换多个class 
+        此外,v-bind:class指令可以与普通的class属性共存如下模板:
+          <div class="static"
+            v-bind:class="{ active: isActive,'text-danger': hasError }">
+          </div>
+          如下 data:
+          data: {
+            isActive: true,
+            hasError: false
+          }
+          渲染为:
+          <div class="static active"></div>
+        当 isActive 或者 hasError 变化时,class列表将相应地更新
+        若 hasError 的值为 true ,class列表将变为 "static active text-danger"
+        可以直接绑定数据里的一个对象 
+          <div v-bind:class="classObject"></div>
+          data: {
+            classObject: {
+              active: true,
+              'text-danger': false
+            }
+          }
+          渲染的结果和上面一样我们也可以在这里绑定返回对象的计算属性这是一个常用且强大的模式:
+          <div v-bind:class="classObject"></div>
+          data: {
+            isActive: true,
+            error: null
+          },
+          computed: {
+            classObject: function () {
+              return {
+                active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal',
+              }
+            }
+          }
+      数组语法 
+        我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表:
+        <div v-bind:class="[activeClass,errorClass]">
+        data: {
+          activeClass: 'active',
+          errorClass: 'text-danger'
+        }
+        渲染为:
+        <div class="active text-danger"></div>
+        若你也想根据条件切换列表中的 class ,可以用三元表达式:
+        <div v-bind:class="[isActive ? activeClass : '',errorClass]">
+        此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
+        不过,当有多个条件 class 时这样写有些繁琐可以在数组语法中使用对象语法:
+        <div v-bind:class="[{ active: isActive },errorClass]">
+      用在组件上 
+        在定制的组件上用到class属性的时,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖
+        例如,若你声明了这个组件:
+        Vue.component('my-component',{
+          template: '<p class="foo bar">Hi</p>'
+        })
+        然后在使用它的时候添加一些 class:
+        <my-component class="baz boo"></my-component>
+        HTML 最终将被渲染成为:
+        <p class="foo bar baz boo">Hi</p>
+        同样的适用于绑定 HTML class :
+        <my-component v-bind:class="{ active: isActive }"></my-component>
+        当 isActive 为 true 的时候,HTML 将被渲染成为:
+        <p class="foo bar active"></p>
+    v-bind:style=arg  'style'内联样式 
+      对象语法
+        v-bind:style 的对象语法十分直观,非常像CSS的
+        须将短横分隔命名[kebab-case]改为驼峰式[camelCase] 
+        <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
+        data: {
+          activeColor: 'red',
+          fontSize: 30
+        }
+        直接绑定到一个样式对象通常更好,让模板更清晰:
+        <div v-bind:style="styleObject"></div>
+        data: {
+          styleObject: {
+            color: 'red',
+            fontSize: '13px'
+          }
+        }
+        同样的,对象语法常常结合返回对象的计算属性使用
+      数组语法
+        v-bind:style 的数组语法可以将多个样式对象应用到一个元素上:
+        <div v-bind:style="[baseStyles,overridingStyles]">
+      自动添加前缀
+        当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
+    v-bind:key=arg  标识DOM节点 
 'Component'组件 
   PS:Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
@@ -2153,7 +2152,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           },
         },
       })
-◆Vue扩展插件 
+◆Vue插件 
 vue-resource  http请求封装插件 
   PS:作为vue插件的形式存在,通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 
   使用步骤 
@@ -2174,8 +2173,12 @@ vue-resource  http请求封装插件
       data1.statusText 状态描述 
       data1.url        请求的地址  
     f2  失败的回调,'data2'进行了Vue封装,拥有的属性和'data1'相同 
-  vm.$http.post'url'[,obj]).then(f1(data1),f2(data2))  post请求 
-  vm.$http.jsonp() jsonp请求 
+  vm.$http.post('url'[,obj]).then(f1(data1),f2(data2))  post请求 
+  vm.$http.jsonp(url [,data] [,options]) jsonp请求 
+  设置 
+    跨域 
+    Vue.http.options.xhr = { withCredentials: true }
+    Vue.http.options.emulateJSON = true
 axios         类似'vue-resource'的插件  
 vue-router    前端路由 
   PS:'vue-router2.x'只适用于'Vue2.x'版本,

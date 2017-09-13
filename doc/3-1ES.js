@@ -17,7 +17,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
     方法就是对象的函数
     方法基于对象,调用写法:obj.foo()
     函数基于过程,写法:foo()
-  静态 公有 私有 特权 属性和方法 
+  '静态'、'公有'、'私有'、'特权'属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
     静态方法/属性 : 类或构造函数的属性/方法[无需实例化通过类名来访问]
     公有属性 : 实例化后通过对象来访问
@@ -1486,6 +1486,10 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(bool2,flag); // function (){ flag = 3; } 1
         var bool3 = 1 && (flag = 4); // 不加括号则报错 
         console.log(bool3,flag); // 4 4
+        
+        fn && fn() 
+        // 相当于 
+        if (fn) {fn()}
     || 逻辑或 
       PS:返回值不一定为布尔值;
       返回值:
@@ -1900,7 +1904,7 @@ OOP,面向对象
       car1.showColor();         //red is beautiful
       特点:在构造函数中,内部无创建对象,而是使用this关键字;
         使用new运算符调用构造函数时,创建对象实例
-    原型方式,也叫混合的构造函数
+    原型方式,也叫混合的构造函数 
       用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
       Example: :
       function Car(name,color) { this.name=name; this.color=color; }
@@ -2103,6 +2107,12 @@ Array 数组对象
         var arr=new Array(1,3,true,"abc");
         arr;  // [1, 3, true, "abc"]
         可省略 new 关键字
+  静态方法 
+    bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
+    arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5]
+      arrLike 想要转换成数组的类数组或可遍历对象
+      mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
+      thisArr 可选,执行 mapFoo 函数时 this 的值
   实例属性&方法 : 'Array.prototype'上的属性&方法 
     ◆信息查询 
     val = arr[num]   读写数组元素 
@@ -2141,7 +2151,7 @@ Array 数组对象
         var obj = [1,2,3];
         obj.pop(); // 3
         console.log(obj);// [1, 2]
-    val = arr.shift()  删除头部的一个元素,返回删除的元素   
+    val = arr.shift()  删除头部的一元素并返回删除的元素   
     num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
       val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
       Example:
@@ -2401,12 +2411,6 @@ Array 数组对象
         console.log(arr); // [1, 2, 3, 4, 5]
         console.log(res); // 15
     val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历[ES5]
-  静态方法 
-    var bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
-    var arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5]
-      arrLike 想要转换成数组的类数组或可遍历对象
-      mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
-      thisArr 可选,执行 mapFoo 函数时 this 的值
   Exp: 
     数组的复制
       通过 slice(0) 复制 
@@ -2488,7 +2492,7 @@ Function 函数对象
       else {
         foo = function foo(){ }
       }
-  'argument'函数参数 
+  'arguments'函数参数 
     传入的参数可多可少,多则舍去,少则使用undefined来补充 
       function foo(){ 
         console.log(arguments[0],arguments[1]); 
@@ -3853,8 +3857,8 @@ Performance 当前页面加载相关的性能信息
   
   该属性表示当前网页经过了多少次重定向跳转。  
 ------------------------------------------------------------------------------- 
-Scope,作用域 
-  PS:作用域是在运行时代码中的某些特定部分中变量,函数和对象的可访问性。
+'Scope'作用域 
+  PS: 作用域是在运行时代码中的某些特定部分中变量,函数和对象的可访问性。
     即作用域决定了代码区块中变量和其他资源的可见性。
     作用域还解决了命名问题,在不同作用域中变量名称可以相同。
     作用域与上下文是不同的概念;
@@ -3863,7 +3867,7 @@ Scope,作用域
     局部作用域（也叫本地作用域）
       定义在函数内部的变量具有局部作用域; 每个函数在被调用时都会创建一个新的作用域。
       函数内定义的变量在局部（本地）作用域中。
-  块语句
+  块语句 
     块语句,如 if 和 switch 条件语句或 for 和 while 循环语句,不像函数,
     它们不会创建一个新的作用域。
     在块语句中定义的变量将保留在它们已经存在的作用域中。
@@ -3872,7 +3876,7 @@ Scope,作用域
       var name = 'Hammad'; // name 依然在全局作用域中
     }
     console.log(name); // logs 'Hammad'
-  context,上下文
+  'context',上下文
     上下文是用来指定代码某些特定部分中 this 的值。
     作用域是指变量的可访问性,上下文是指 this 在同一作用域内的值。
     也可以使用函数方法来改变上下文;
@@ -3902,7 +3906,7 @@ Scope,作用域
     }
     new logFunction(); // logFunction {}
     当在严格模式(Strict Mode)中调用函数时,上下文将默认为 undefined。
-  Execution Context,执行期上下文
+  'Execution Context',执行期上下文
     PS:执行期上下文中的上下文这个词语是指作用域而不是上下文。
       这是一个奇怪的命名约定,但由于JavaScipt规范,我们必须链接他们这间的联系。
       JavaScript是一种单线程语言,因此它一次只能执行一个任务。
@@ -3956,40 +3960,6 @@ Scope,作用域
       但是,但是它不能向其父对象反向传递,意味着变量 likes 不能被其父对象访问。
       在不同执行上下文中具有相同名称的变量从执行堆栈的顶部到底部获得优先级。
       在最内层函数（执行堆栈的最上层上下文）中,具有类似于另一变量的名称的变量将具有较高优先级。
-  Closures,闭包
-    当内部函数尝试访问其外部函数的作用域链,即在直接词法作用域之外的变量时,会创建一个闭包。 
-    闭包包含自己的作用域链,父级的作用域链和全局作用域。
-    闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数。
-    即使函数返回后,闭包也可以访问其外部函数的变量。
-    这允许返回的函数保持对外部函数所有资源的访问。
-  
-    在许多其他编程语言中,可以使用公共,私有和受保护的作用域来设置类的属性和方法的可见性。
-    如使用PHP的:
-    // Public Scope
-    public $property;
-    public function method() {
-      // ...
-    }
-    
-    // Private Sccpe
-    private $property;
-    private function method() {
-      // ...
-    }
-    
-    // Protected Scope
-    protected $property;
-    protected function method() {
-      // ...
-    }
-    来自公共（全局）作用域的封装函数使他们免受脆弱的攻击。
-    但是在JavaScript中,没有公共或私有作用域。 但可以使用闭包来模拟此功能。
-    为了保持一切与全局分离,首先将函数封装在如下所示的函数中:
-    // 立即执行函数表达式
-    // 在其中添加函数和变量,它们将不能在外部访问
-    (function () {
-      // 私有作用域 private scope
-    })();
   模块模式
     模块模式类似这样:
     var Module = (function() {
@@ -4101,18 +4071,150 @@ Scope,作用域
       // Hi! I'm Hammad and I like Cosmology.
       // The value of this is [object Window].
       .bind() 就像.call()函数一样,它允许你传递其余的参数,用逗号分隔;
+  'function scope'函数对象作用域 
+    JavaScript 中每个函数都表示为一个函数对象（函数实例）,
+    既然是对象,就有相关的属性和方法。
+    除了正常的属性,函数对象具有仅供 JavaScript 引擎内部使用,
+    但不能通过代码访问的一系列内部属性。这些属性中,其中一个就是 [[scope]] 属性。
+  'Scope Chain'作用域链 
+    内部的 [[scope]] 属性包含了该函数在被创建时作用域中的所有对象集合。
+    该集合称为函数的作用域链（scope chain）。
+    当创建一个函数时,其作用域链中保存的对象,就是在创建该函数时作用域中所有可访问的数据。
+    例如,考虑以下全局函数:
+    function add(num1, num2) {
+      var sum = num1 + num2;
+      return sum;
+    }
+    当定义 add 函数后,其作用域链就创建了。
+  'Execution Context'运行期上下文 
+    执行函数时创建一个内部对象,称为 Execution Context（执行期上下文）。
+    执行期上下文定义了一个函数正在执行时的作用域环境。
+    执行期上下文和我们平常说的上下文不同,执行期上下文指的是作用域。
+    平常说的上下文是this的取值指向。
+    执行期上下文和函数创建时的作用域链对象 [[scope]]  是两个不同的作用域链对象。
+    函数定义时的作用域链对象 [[scope]] 是固定的,
+    而 执行期上下文 会根据不同的运行时环境变化。
+    而且该函数每执行一次,都会创建单独的 执行期上下文,
+    因此对同一函数调用多次,会导致创建多个执行期上下文。
+    一旦函数执行完成,执行期上下文将被销毁。
+    执行期上下文对象有自己的作用域链,当创建执期行上下文时,
+    其作用域链将使用执行函数[[scope]]属性所包含的对象（即,函数定义时的作用域链对象）进行初始化。
+    这些值按照它们在函数中出现的顺序复制到执行期上下文作用域链中。
+  'Activation Object'激活对象 
+    随后,在执行其上下文中创建一个名为 Activation Object（激活对象）的新对象。 
+    这个激活对象保存了函数中的所有形参,实参,局部变量,this 指针等函数执行时函数内部的数据情况。
+    然后将这个激活对象推送到执行其上下文作用域链的顶部。
+    激活对象是一个可变对象,里面的数据随着函数执行时的数据的变化而变化,
+    当函数执行结束之后,执行期上下文将被销毁。
+    也就会销毁Execution Context的作用域链,激活对象也同样被销毁。
+    但若存在闭包,激活对象就会以另外一种方式存在,这也是闭包产生的真正原因,
+    函数在执行时,每遇到一个变量,都会去执行期上下文的作用域链的顶部,
+    执行函数的激活对象开始向下搜索,
+    若在第一个作用域链（即,Activation Object 激活对象）中找到了,那么就返回这个变量。
+    若没有找到,那么继续向下查找,直到找到为止。
+    若在整个执行期上下文中都没有找到这个变量,在这种情况下,该变量被认为是未定义的。
+    这也就是为什么函数可以访问全局变量,当局部变量和全局变量同名时,会使用局部变量而不使用全局变量,
+    以及 JavaScript 中各种看似怪异的、有趣的作用域问题的答案。
+'Closure'闭包 
+  'Closures',闭包
+    当内部函数尝试访问其外部函数的作用域链,即在直接词法作用域之外的变量时,会创建一个闭包。 
+    闭包包含自己的作用域链,父级的作用域链和全局作用域。
+    闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数。
+    即使函数返回后,闭包也可以访问其外部函数的变量。
+    这允许返回的函数保持对外部函数所有资源的访问。
+
+    在许多其他编程语言中,可以使用公共,私有和受保护的作用域来设置类的属性和方法的可见性。
+    如使用PHP的:
+    // Public Scope
+    public $property;
+    public function method() {
+      // ...
+    }
+    
+    // Private Sccpe
+    private $property;
+    private function method() {
+      // ...
+    }
+    
+    // Protected Scope
+    protected $property;
+    protected function method() {
+      // ...
+    }
+    来自公共（全局）作用域的封装函数使他们免受脆弱的攻击。
+    但是在JavaScript中,没有公共或私有作用域。 但可以使用闭包来模拟此功能。
+    为了保持一切与全局分离,首先将函数封装在如下所示的函数中:
+    // 立即执行函数表达式
+    // 在其中添加函数和变量,它们将不能在外部访问
+    (function () {
+      // 私有作用域 private scope
+    })();
+    
+  function assignEvents(){
+    var id = "xdi9592";
+    document.getElementById("save-btn").onclick = function(event) {
+      saveDocument(id);
+    };
+  }
+  assignEvents 函数为DOM元素分配一个事件处理程序。
+  这个处理函数就是一个闭包。为了使该闭包访问id变量,必须创建一个特定的作用域链。
+
+  从作用域的角度分析一下闭包的形成过程:
+  assignEvents 函数创建并且词法解析后,函数对象assignEvents的[[scope]]属性被初始化,
+  作用域链形成,作用域链中包含了全局对象的所有属性和方法（
+  注意,此时因为 assignEvents 函数还未被执行,所以闭包函数并没有被解析）。
+
+  assignEvents 开始执行时,创建 Execution Context（执行期上下文）,
+  在执行期上下文的作用域链中创建 Activation Object(激活对象),
+  并将 Activation Object(激活对象) 推送到作用域链顶部,
+  在其中保存了函数执行时所有可访问函数内部的数据。激活对象包含 id 变量。
+
+  当执行到闭包时,JavaScript 引擎发现了闭包函数的存在,
+  按照通常的手法,将闭包函数解析,为闭包函数对象创建 [[scope]] 属性,初始化作用域链。
+  特别注意的是,这个时候,闭包函数对象的作用域链中有两个对象,
+  一个是 assignEvents 函数执行时的 Activation Object(激活对象) ,还有一个是全局对象
+
+  闭包函数对象的作用域链和 assignEvents 函数的执行期上下文的作用域链是相同的
+  闭包函数是在 assignEvents 函数执行的过程中被定义并且解析的,
+  而函数执行时的作用域是 Activation Object(激活对象) ,
+  闭包函数被解析的时候它的作用域正是 assignEvents 作用域链中的第一个作用域对象 Activation Object(激活对象) ,
+  当然,由于作用域链的关系,全局对象作用域也被引入到闭包函数的作用域链中。
+
+  在词法分析的时候闭包函数的 [[scope]] 属性 就已经在作用域链中保存了对 assignEvents 函数的 Activation Object(激活对象) 的引用,
+  所以当 assignEvents 函数执行完毕之后,闭包函数虽然还没有开始执行,
+  但依然可以访问 assignEvents 的局部数据,
+  并不是因为闭包函数要访问 assignEvents 的局部变量id,
+  所以当 assignEvents 函数执行完毕之后依然保持了对局部变量id的引用。
+  而是不管是否存在变量引用,都会保存对 assignEvents 的 Activation Object(激活对象)作用域对象的引用。
+  因为在词法分析时,闭包函数没有执行,函数内部根本就不知道是否要对 assignEvents 的局部变量进行访问和操作,
+  所以只能先把 assignEvents 的 Activation Object(激活对象) 作用域对象保存起来,
+  当闭包函数执行时,若需要访问 assignEvents 的局部变量,那么再去作用域链中查找。
+
+  也正是因为这种引用,造成了一个副作用。
+  通常,当执行期上下文被销毁时,函数的激活对象也就被销毁了。
+  当有闭包引用时,激活对象就不会被销毁,因为他仍然被引用。这
+  意味着闭包比非隔离的函数需要更多的内存。
+
+  闭包函数执行时创建了自己的 Execution Context（执行期上下文）,
+  其作用域链使用了 [[scope]] 属性,
+  其引用了 assignEvents 函数的 Activation Object(激活对象) 和 全局对象。
+  然后为闭包本身创建一个新的 Activation Object(激活对象)。 
+  所以在闭包函数的执行期上下文的作用域链中保存了自己的 Activation Object(激活对象),
+  外层函数 assignEvents Execution Context（执行期上下文）的 Activation Object(激活对象),
+  以及 Global Object(全局对象)
+
+  JavaScript 引擎使用的内部hook(钩子)跟踪函数定义和执行期上下文的作用域链。 
+  在函数执行时,变量标识符按照从上到下的顺序通过作用域链解析。 
+  若在最后没有找到相同的变量标识符,则抛出一个 undefined(未定义) 的错误。 
+  闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
+  从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 'this'执行函数时的上下文对象 
-  PS:函数内部另一个特殊对象.
-    在JS中函数的this关键字的行为与其他语言相比有很多不同.
-    this引用的是函数据以执行操作的对象.
-    是JavaScript的一个关键字,表示一个对象.
-    随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象.
-    this指针是面向对象程序设计中的一项重要概念,它表示当前运行的对象.
-    this在函数运行时确定.
+  PS:函数内部的一特殊对象[与其他语言相比有很多不同]; 
+    随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象,在函数运行时确定;
     在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
     在绝大多数情况下,函数的调用方式决定了this的值.
     this不能在执行期间被赋值,在每次函数被调用时this的值也可能会不同.
-    ES5引入了bind方法来设置函数的this值,而不用考虑函数如何被调用的.
   在全局运行上下文中[在任何函数体外部],指向全局对象'window' 
     console.log(this === window); // true 
     var aoo = 1; 
@@ -4216,21 +4318,18 @@ Scope,作用域
     var val4 = goo();  // 1
     console.log(val1,val2,val3,val4); // 2 2 1 1 
   foo.call(thisArg[,arg1,arg2,...]) 改变this指向
-    thisArg 在foo函数运行时指定的'this'值,为 null 或 undefined 时,不改变指向 
-      原始值[数字,字符串,布尔值]的 this 会指向该原始值的自动包装对象
+    thisArg 在foo函数运行时指定的'this'值,为'null'或'undefined'时,不改变指向 
+      原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象
     arg     指定的参数列表
-    Example:
+    Example: 
       var foo = function(){
         console.log(this);
       }
-      var val1 = foo.call(1) 
-      var val2 = foo.call(true) 
-      var val3 = foo.call(null) 
-      var val4 = foo.call(undefined) 
-      console.log(val1); // Number {[[PrimitiveValue]]: 1}
-      console.log(val2); // Boolean {[[PrimitiveValue]]: true}
-      console.log(val3); // window 
-      console.log(val4); // window 
+      console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
+      console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
+      console.log(foo.call(null)); // window 
+      console.log(foo.call(undefined)); // window 
+      
       function add(arg1,arg2){ 
         return arg1 + this;
       }
@@ -4239,7 +4338,7 @@ Scope,作用域
       
       console.log({}.toString()); // [object Object]
       function foo(arg){ 
-        console.log(Object.prototype.toString.call(arg,1,2)); 
+        console.log(Object.prototype.toString.call(arg)); 
       };
       console.log(foo(7)); // [object Number]
       等价于
@@ -4317,7 +4416,7 @@ Scope,作用域
           var p2 =New(Person)("boo",18); //使用仿造的new
           console.log(p1); //Person {name: "aoo", age: 19}
           console.log(p2); //Person {name: "boo", age: 18}
-  fun.bind(thisArg[,arg1,arg2,...]) 改变this指向,且始终保持绑定状态[ES5]
+  foo.bind(thisArg[,arg1,arg2,...]) 改变this指向且始终保持绑定状态 [ES5]
     PS:bind()方法会创建一个新函数 
       当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
       之后的一序列参数将会在传递的实参前传入作为它的参数;
@@ -4407,111 +4506,6 @@ Scope,作用域
       }
     }
     console.log(obj.foo()());  // 2
-JS核心概念之作用域和闭包 
-  function_scope 函数对象作用域
-    JavaScript 中每个函数都表示为一个函数对象（函数实例）,
-    既然是对象,就有相关的属性和方法。
-    除了正常的属性,函数对象具有仅供 JavaScript 引擎内部使用,
-    但不能通过代码访问的一系列内部属性。这些属性中,其中一个就是 [[scope]] 属性。
-  Scope_Chain,作用域链
-    内部的 [[scope]] 属性包含了该函数在被创建时作用域中的所有对象集合。
-    该集合称为函数的作用域链（scope chain）。
-    当创建一个函数时,其作用域链中保存的对象,就是在创建该函数时作用域中所有可访问的数据。
-    例如,考虑以下全局函数:
-    function add(num1, num2) {
-      var sum = num1 + num2;
-      return sum;
-    }
-    当定义 add 函数后,其作用域链就创建了。
-  Execution_Context,运行期上下文
-    执行函数时创建一个内部对象,称为 Execution Context（执行期上下文）。
-    执行期上下文定义了一个函数正在执行时的作用域环境。
-    执行期上下文和我们平常说的上下文不同,执行期上下文指的是作用域。
-    平常说的上下文是this的取值指向。
-    执行期上下文和函数创建时的作用域链对象 [[scope]]  是两个不同的作用域链对象。
-    函数定义时的作用域链对象 [[scope]] 是固定的,
-    而 执行期上下文 会根据不同的运行时环境变化。
-    而且该函数每执行一次,都会创建单独的 执行期上下文,
-    因此对同一函数调用多次,会导致创建多个执行期上下文。
-    一旦函数执行完成,执行期上下文将被销毁。
-    执行期上下文对象有自己的作用域链,当创建执期行上下文时,
-    其作用域链将使用执行函数[[scope]]属性所包含的对象（即,函数定义时的作用域链对象）进行初始化。
-    这些值按照它们在函数中出现的顺序复制到执行期上下文作用域链中。
-  Activation_Object,激活对象
-    随后,在执行其上下文中创建一个名为 Activation Object（激活对象）的新对象。 
-    这个激活对象保存了函数中的所有形参,实参,局部变量,this 指针等函数执行时函数内部的数据情况。
-    然后将这个激活对象推送到执行其上下文作用域链的顶部。
-    激活对象是一个可变对象,里面的数据随着函数执行时的数据的变化而变化,
-    当函数执行结束之后,执行期上下文将被销毁。
-    也就会销毁Execution Context的作用域链,激活对象也同样被销毁。
-    但若存在闭包,激活对象就会以另外一种方式存在,这也是闭包产生的真正原因,
-    函数在执行时,每遇到一个变量,都会去执行期上下文的作用域链的顶部,
-    执行函数的激活对象开始向下搜索,
-    若在第一个作用域链（即,Activation Object 激活对象）中找到了,那么就返回这个变量。
-    若没有找到,那么继续向下查找,直到找到为止。
-    若在整个执行期上下文中都没有找到这个变量,在这种情况下,该变量被认为是未定义的。
-    这也就是为什么函数可以访问全局变量,当局部变量和全局变量同名时,会使用局部变量而不使用全局变量,
-    以及 JavaScript 中各种看似怪异的、有趣的作用域问题的答案。
-  Closure,闭包
-    闭包（Closure）是 JavaScript 最强大的特性之一。
-    function assignEvents(){
-      var id = "xdi9592";
-      document.getElementById("save-btn").onclick = function(event) {
-        saveDocument(id);
-      };
-    }
-    assignEvents 函数为DOM元素分配一个事件处理程序。
-    这个处理函数就是一个闭包。为了使该闭包访问id变量,必须创建一个特定的作用域链。
-  
-    从作用域的角度分析一下闭包的形成过程:
-    assignEvents 函数创建并且词法解析后,函数对象assignEvents的[[scope]]属性被初始化,
-    作用域链形成,作用域链中包含了全局对象的所有属性和方法（
-    注意,此时因为 assignEvents 函数还未被执行,所以闭包函数并没有被解析）。
-  
-    assignEvents 开始执行时,创建 Execution Context（执行期上下文）,
-    在执行期上下文的作用域链中创建 Activation Object(激活对象),
-    并将 Activation Object(激活对象) 推送到作用域链顶部,
-    在其中保存了函数执行时所有可访问函数内部的数据。激活对象包含 id 变量。
-  
-    当执行到闭包时,JavaScript 引擎发现了闭包函数的存在,
-    按照通常的手法,将闭包函数解析,为闭包函数对象创建 [[scope]] 属性,初始化作用域链。
-    特别注意的是,这个时候,闭包函数对象的作用域链中有两个对象,
-    一个是 assignEvents 函数执行时的 Activation Object(激活对象) ,还有一个是全局对象
-  
-    闭包函数对象的作用域链和 assignEvents 函数的执行期上下文的作用域链是相同的
-    闭包函数是在 assignEvents 函数执行的过程中被定义并且解析的,
-    而函数执行时的作用域是 Activation Object(激活对象) ,
-    闭包函数被解析的时候它的作用域正是 assignEvents 作用域链中的第一个作用域对象 Activation Object(激活对象) ,
-    当然,由于作用域链的关系,全局对象作用域也被引入到闭包函数的作用域链中。
-  
-    在词法分析的时候闭包函数的 [[scope]] 属性 就已经在作用域链中保存了对 assignEvents 函数的 Activation Object(激活对象) 的引用,
-    所以当 assignEvents 函数执行完毕之后,闭包函数虽然还没有开始执行,
-    但依然可以访问 assignEvents 的局部数据,
-    并不是因为闭包函数要访问 assignEvents 的局部变量id,
-    所以当 assignEvents 函数执行完毕之后依然保持了对局部变量id的引用。
-    而是不管是否存在变量引用,都会保存对 assignEvents 的 Activation Object(激活对象)作用域对象的引用。
-    因为在词法分析时,闭包函数没有执行,函数内部根本就不知道是否要对 assignEvents 的局部变量进行访问和操作,
-    所以只能先把 assignEvents 的 Activation Object(激活对象) 作用域对象保存起来,
-    当闭包函数执行时,若需要访问 assignEvents 的局部变量,那么再去作用域链中查找。
-  
-    也正是因为这种引用,造成了一个副作用。
-    通常,当执行期上下文被销毁时,函数的激活对象也就被销毁了。
-    当有闭包引用时,激活对象就不会被销毁,因为他仍然被引用。这
-    意味着闭包比非隔离的函数需要更多的内存。
-  
-    闭包函数执行时创建了自己的 Execution Context（执行期上下文）,
-    其作用域链使用了 [[scope]] 属性,
-    其引用了 assignEvents 函数的 Activation Object(激活对象) 和 全局对象。
-    然后为闭包本身创建一个新的 Activation Object(激活对象)。 
-    所以在闭包函数的执行期上下文的作用域链中保存了自己的 Activation Object(激活对象),
-    外层函数 assignEvents Execution Context（执行期上下文）的 Activation Object(激活对象),
-    以及 Global Object(全局对象)
-  
-    JavaScript 引擎使用的内部hook(钩子)跟踪函数定义和执行期上下文的作用域链。 
-    在函数执行时,变量标识符按照从上到下的顺序通过作用域链解析。 
-    若在最后没有找到相同的变量标识符,则抛出一个 undefined(未定义) 的错误。 
-    闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
-    从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 -----------------------------------------------------------------------待整理 
   作用域[执行环境]
     PS:执行环境定义了变量或函数有权访问的其他数据,决定了他们各自的行为.

@@ -280,15 +280,15 @@ DOM操作
       Jelem.offsetParent() 最近的祖先定位元素 
         定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
     性能优化
-      关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器。
-      因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是;
+      关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器 
+      因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是; 
       
-      $('#nav').find('a.home'); //3 
-      $('#nav a.home'); //2 
-      $('.home'); //1 
+      $('#nav').find('a.home'); // 3 
+      $('#nav a.home'); // 2 
+      $('.home'); // 1 
       推荐优先使用前两种
       
-      为选择器指定上下文
+      为选择器指定范围 
         默认情况下,当把一个选择器传递给jQuery时,它将遍历整个DOM,
         jQuery方法还具有一个未充分利用的参数,既可以将一个上下文参数传入jQuery,
         以限制它只搜索DOM中特定的一部分。
@@ -299,8 +299,7 @@ DOM操作
         
         jQuery选择器的性能比较:
         $(".class","#id") > $("#id .class") > $(".class")
-        
-      缓存jQuery对象
+      缓存jQuery对象 
         // 糟糕 
         var $container = $('#container'), 
         $containerLi = $('#container li'), 

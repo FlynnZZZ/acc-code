@@ -1654,38 +1654,95 @@ Promise 同步书写异步模式
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
     将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
   Promise的状态 
-    pending :   初始状态,初始状态,未完成或拒绝 
-    fulfilled : 意味着操作成功完成 
-    rejected :  意味着操作失败 
+    'pending'  : 初始状态,未完成或拒绝 
+    'resolved' : 操作成功 
+    'rejected' : 操作失败 
     只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态 
     一旦状态改变,就不会再变,任何时候都可以得到这个结果 
     与事件[Event]不同,事件的特点是,若错过了,再去监听则得不到结果  
-  Promise的缺点
+  Promise的缺点 
     首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
     其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
-    第三,当处于 Pending 状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
-  var prms = new Promise(foo) 创建Promise对象 
+    第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
+  var pms = new Promise(foo(resolve,reject)) 创建Promise对象 
     PS:Promise在创建时,参数函数就会执行 
-    foo   用于放置执行异步操作的函数,传入参数 (resolve,reject) 
-      函数内,若'resolve'被调用,代表该Promise被成功解析[resolve];
-      若'reject'被调用时,代表该Promise的值不能用于后续处理了,即被拒绝[reject]了
-      foo主要用于初始化异步代码,一旦异步代码调用完成,
-      要么调用resolve方法来表示Promise被成功解析,
-      或是调用reject方法,表示初始化的异步代码调用失败,整个promise被拒绝。
+    foo   用于放置执行异步操作的函数 
       若在foo方法的执行过程中抛出了任何异常,那么promise立即被拒绝,
-      即相当于reject方法被调用,executor 的返回值也就会被忽略。
-      resolve(arg1); // 用于 异步成功后 传递数据 arg1
-      reject(arg2); // 用于 异步失败后 传递数据 arg2
+      resolve(data)  表示该pms成功解析并传递参数'data'
+      reject(error)  表示该pms被拒绝并传递参数'error'
       // resolve reject 函数根据逻辑需要进行相应的执行
-  ◆prms的方法 
-  prms.then(foo1[,foo2])    rs或rj执行触发foo1或foo2,返回promise对象 
-    foo1 rs(sucessData)后执行,传入参数 (sucessData)
-      默认会返回一个Promise值,也可以自定义返回值 
-      若 foo1 返回一个新 Promise,
-      则then之后再调用的then就是新Promise中的逻辑了;
-    foo2 可选,rj(failData)后执行,传入参数 (failData) 
-  prms.catch(foo)  用于处理操作异常,返回promise对象 
-    prms.catch(function (error) {
+  ◆pms的方法 
+  pms = pms.then(foo1(data)[,foo2(error)])  rs或rj执行触发foo1或foo2,返回promise对象 
+    foo1 成功后的回调,默认返回一个Promise对象,也可以自定义返回值 
+      返回一新'Promise'类型,后续再调用的'then'就是新Promise中的逻辑了  
+        new Promise(function(rs,rj){
+          console.log('开始');
+          setTimeout(function(){
+            rs('0')
+            console.log('0-1');
+          },200)
+        })
+        .then(function(arg){
+          console.log('当前 1','上一步: '+arg);
+          return new Promise(function(rs,rj){
+            setTimeout(function(){
+              rs('1')
+              console.log('1-2');
+            },1000)
+          })
+        })
+        .then(function(arg){
+          console.log('当前 2','上一步: '+arg);
+          return new Promise(function(rs,rj){
+            setTimeout(function(){
+              rs('2')
+              console.log('2-3');
+            },2000)
+          })
+        })
+        .then(function(arg){
+          console.log('当前 3','上一步: '+arg);
+          return new Promise(function(rs,rj){
+            setTimeout(function(){
+              rs('3')
+              console.log('3-4');
+            },3000)
+          })
+        })
+        // 开始
+        // 0-1
+        // 当前 1 上一步: 0
+        // 1-2
+        // 当前 2 上一步: 1
+        // 2-3
+        // 当前 3 上一步: 2
+        // 3-4
+      返回非'Promise'类型,继续使用.then ,将作为其参数; 
+        new Promise(function(rs,rj){
+          setTimeout(function(){
+            console.log('开始'); 
+            rs('开始'); 
+          },1000) 
+        })
+        .then(function(res){
+          console.log('当前: '+'1','上一步: '+res); 
+          return '1'; 
+        })
+        .then(function(res){
+          console.log('当前: '+'2','上一步是:'+res); 
+          return '2'; 
+        })
+        .then(function(res){ 
+          console.log('当前 :'+'3','上一步是:'+res); 
+        }) 
+        // 延迟1s
+        // 开始 
+        // 当前: 1 上一步: 开始
+        // 当前: 2 上一步是:1
+        // 当前 :3 上一步是:2  
+    foo2 可选,失败/出错后的回调 
+  pms.catch(foo)  用于处理操作异常,返回promise对象 
+    pms.catch(function (error) {
       //操作失败的处理程序
     });
   ◆静态方法 
@@ -1693,12 +1750,12 @@ Promise 同步书写异步模式
     PS:当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
     arr  由Promise实例组成的数组
     Example:
-      let prms1 = new Promise(function(resolve){
+      let pms1 = new Promise(function(resolve){
         setTimeout(function () {
           resolve('实例1操作成功');
         },5000);
       });
-      let prms2 = new Promise(function(resolve){
+      let pms2 = new Promise(function(resolve){
         setTimeout(function () {
           resolve('实例2操作成功');
         },1000);
@@ -1714,12 +1771,12 @@ Promise 同步书写异步模式
       其他实例中再发生变化,也不管了。
     arr  由Promise实例组成的数组 
     Example:
-      let prms1 = new Promise(function(resolve){
+      let pms1 = new Promise(function(resolve){
         setTimeout(function () {
           resolve('实例1操作成功');
         },4000);
       });
-      let prms2 = new Promise(function(resolve,reject){
+      let pms2 = new Promise(function(resolve,reject){
         setTimeout(function () {
           reject('实例2操作失败');
         },2000);
@@ -1739,74 +1796,6 @@ Promise 同步书写异步模式
   Promise.reject()  
   Promise.prototype.then()  
   Promise.prototype.catch() 
-  todo:
-    finally
-    bind
-    joinprops
-    any
-    some
-  Question:
-    使用 Promise 监控 点击事件 , 使用Promise 改变事件的执行方式 [?] 
-  Example:
-    通过Promise来调用AJAX [self]
-    var prms = new Promise(function(rs, rj){
-      $.ajax({
-        type : 'get',
-        url  : 'url',
-        data : {
-          key : val,
-        }, 
-        dataType : 'json',
-        success  : function(backData,textStatus,obj){
-          rs(backData);
-        }, 
-        error    : function (xhr,status,errorTrown){
-          rj(status);
-        }, 
-      });
-    })
-    prms.then(function(data){
-      console.log(data); // 打印出AJAX获取到的数据
-    })
-    .catch(function(data){
-      console.log(data); // 打印出出错的信息
-    })
-    
-    let prms = new Promise(function(resolve,reject){
-      if(true){
-        resolve('操作成功'); //调用操作成功方法
-      }
-      else{
-        reject('操作异常'); //调用操作异常方法
-      }
-    });
-    function requestA(){
-      console.log('请求A成功');
-      return '准备请求B';
-    }
-    function requestB(res){
-      console.log('上一步是:'+res);
-      console.log('请求B成功');
-      return '准备请求C';
-    }
-    function requestC(res){
-      console.log('上一步是:'+res);
-      console.log('请求C成功');
-    }
-    function requestError(){
-      console.log('请求失败');
-    }
-    //用then处理操作成功,catch处理操作异常
-    prms.then(requestA)
-    .then(requestB)
-    .then(requestC)
-    .catch(requestError);
-    // 请求A成功
-    // 上一步是:准备请求B
-    // 请求B成功
-    // 上一步是:准备请求C
-    // 请求C成功
-    // Promise {[[PromiseStatus]]: "resolved", [[PromiseValue]]: undefined}
 Generator 生成器函数 
   PS:可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
     可利用Generator函数暂停执行的特性来实现异步操作 
@@ -2766,7 +2755,7 @@ for(var val of iterator){}  遍历
 ES7 
 ASYNC  用来取代回调函数、解决异步操作的一种方法  
   PS:async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖 
-  var prms = async function(){}  函数表达式定义async函数
+  var pms = async function(){}  函数表达式定义async函数
   async function foo() {}        函数声明
     PS:同一般函数声明相同,使用'async function'代替'function'来声明异步函数
       函数执行时,遇到await就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 

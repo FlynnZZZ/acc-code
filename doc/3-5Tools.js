@@ -8,6 +8,7 @@ ueditor 百度富文本编辑器
       改为  
       mimeTypes: 'image/jpg,image/jpeg,image/png'  
     或者全局搜索将所有 'image/* '  改为  'image/jpg,image/jpeg,image/png'
+  需在appcache启动的服务中测试demo 
 --------------------------------------------------------------------------------
 网络收集 
 接口

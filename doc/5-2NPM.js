@@ -93,66 +93,23 @@
       即为执行  node index.js 
   文件内容、详情配置 
     {
-      项目名称 
-      "name": "Hello World",
-      版本号
-      "version": "0.0.1",
-      作者名 
-      "author": "张三",
-      证书 
-      "license":"MIT",
-      其他贡献者姓名 
-      "contributors":[{"name":"李四","email":"lisi@example.com"}],
-      描述 
-      "description": "第一个node.js程序",
-      关键词 
-      "keywords":["node.js","javascript"],
-      包代码存放的地方 
-        可以是'git'或'svn',git可在'Github'上 
-      "repository": {
-        "type": "git",
-        "url": "https://path/to/url"
+      "name": "Hello World",  // 项目名称 
+      "version": "0.0.1",     // 版本号
+      "author": "",           // 作者名 
+      "license":"MIT",        // 证书 
+      "scripts": {            // 指定运行脚本命令的npm命令行缩写 
+        "start": "node index.js", // 命令行中 npm run start 执行该命令 
       },
-      指明了该模块运行的平台,如Node的某个版本或者浏览器,也可以指定适用的npm版本 
-      "engines" : { 
-        "node" : ">=0.10.3 <0.12", 
-        "npm" : "~1.0.20" 
-      }, 
-      "bugs":{"url":"http://path/to/bug","email":"bug@example.com"},
-      指定运行脚本命令的npm命令行缩写 
-        比如'start'指定了运行'npm run start'时,所要执行的命令
-        其他的为 npm run preinstall、npm run postinstall、
-        npm run start、npm run test时,所要执行的命令
-      "scripts": {
-        "start": "node index.js",
-        "preinstall": "echo here it comes!",
-        "postinstall": "echo there it goes!",
-        "start": "node index.js",
-        "test": "tap test/*.js"
-      },
-      指定了项目运行所依赖的模块 
-        对象的各个成员,分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围。
-        若依赖包没有安装,npm 会自动将依赖包安装在 node_module 目录下 
-        在运行npm install xxx后可以自动插入相应的值,
-        如需要安装vue,运行npm install vue,npm就会自动安装最新版本的vue到当前node_modules文件夹中,
-        dependencies的内容也会变成如下:
-        "dependencies": {
-          "vue": "^1.0.16"
-        }
-      "dependencies": {
+      "dependencies": {       // 生产环境所依赖的模块 
+        // npm install xxx -S 安装,并写入  
         "express": "latest",
         "mongoose": "~3.8.3",
         "handlebars-runtime": "~1.0.12",
         "express3-handlebars": "~0.5.0",
         "MD5": "~1.2.0"
       },
-      指定项目开发所需要的模块 
-        分别由模块名和对应的版本要求组成,表示依赖的模块及其版本范围 
-        是指开发过程中需要用到的依赖包,包括ES6转ES5加载器、CSS加载器等等,
-        这部分的内容可通过npm install xxx --save-dev 进行安装,
-        如需要安装webpack,输入npm install webpack --save-dev,
-        在devDependencies下就会写入webpack的具体安装信息。      
-      "devDependencies": {
+      "devDependencies": {    // 指定项目开发所需要的模块 
+        // npm install xxx -D 进行安装,并写入 
         "bower": "~1.2.8",
         "grunt": "~0.4.1",
         "grunt-contrib-concat": "~0.3.0",
@@ -161,45 +118,46 @@
         "grunt-contrib-clean": "~0.5.0",
         "browserify": "2.36.1",
         "grunt-browserify": "~1.3.0",
-      }
+      },
+      "keywords":[""],   // 关键词 
+      "description": "", // 描述 
+      "repository": {    // 包代码存放的地方 
+        // 可以是'git'或'svn',git可在'Github'上 
+        "type": "git",
+        "url": "https://path/to/url"
+      },
+      "contributors":[{"name":"","email":""},...], // 其他贡献者姓名 
+      "engines": {       // 指明了该模块运行的平台,如Node的某个版本或者浏览器  
+        "node" : ">=0.10.3 <0.12", // 运行平台 
+        "npm" : "~1.0.20"   // 指定适用的npm版本 
+      }, 
+      "bugs":{"url":"http://path/to/bug","email":""},
     }
     
     版本号的设定规则 
-      PS: 如 '1.2.2' ,遵循“大版本.次要版本.小版本”的格式规定,安装时只安装指定版本。
-      NPM使用语义版本号来管理代码
-      语义版本号分为'X.Y.Z'三位,分别代表主版本号、次版本号和补丁版本号。
-      当代码变更时,版本号按以下原则更新。
-      若只是修复bug,需要更新Z位。
-      若是新增了功能,但是向下兼容,需要更新Y位。
-      若有大变动,向下不兼容,需要更新X位。
-      版本号有了这个保证后,在申明第三方包依赖时,
-      除了可依赖于一个固定版本号外,还可依赖于某个范围的版本号。
-      例如"argv": "0.0.x"表示依赖于0.0.x 系列的最新版argv
-      '~',tilde   波浪号+指定版本
-        如'~1.2.2',表示安装'1.2.x'的最新版本[不低于'1.2.2'],
-        但是不安装'1.3.x',也就是说安装时不改变大版本号和次要版本号
-      'ˆ',caret   插入号+指定版本 
-        比如'ˆ1.2.2',表示安装'1.x.x'的最新版本,不低于'1.2.2',
-        但是不安装'2.x.x',也就是说安装时不改变大版本号。
-        需要注意的是,若大版本号为0,则插入号的行为与波浪号相同,
-        因为此时处于开发阶段,即使是次要版本号变动,也可能带来程序的不兼容
-      'latest'      安装最新版本 
-      these are all valid:
-      { "dependencies" :
-        { "foo" : "1.0.0 - 2.9999.9999"
-        , "bar" : ">=1.0.2 <2.1.2"
-        , "baz" : ">1.0.2 <=2.3.4"
-        , "boo" : "2.0.1"
-        , "qux" : "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0"
-        , "asd" : "http://asdf.com/asdf.tar.gz"
-        , "til" : "~1.2"
-        , "elf" : "~1.2.3"
-        , "two" : "2.x"
-        , "thr" : "3.3.x"
-        , "lat" : "latest"
-        , "dyl" : "file:../dyl"
-        }
-      }
+      PS: 
+      NPM使用语义版本号来管理代码 
+        如'1.2.2',遵循'大版本.次要版本.小版本'的格式规定,安装时只安装指定版本。
+        语义版本号分为'X.Y.Z'三位,分别代表主版本号、次版本号和补丁版本号。
+        当代码变更时,版本号按以下原则更新。
+        若只是修复bug,需要更新Z位。
+        若是新增了功能,但是向下兼容,需要更新Y位。
+        若有大变动,向下不兼容,需要更新X位。
+      申明第三方包依赖时,除了可依赖于一个固定版本号外,还可依赖于某个范围的版本号
+        "aoo" : "2.0.1"
+        "aoo": '^1.1.2'  '1.x.x'系列的最新版本 
+          需要注意的是,若大版本号为0,则插入号的行为与波浪号相同,
+        "aoo": '~1.1.2'  '1.1.x'系列的最新版本 
+        "aoo": "1.1.x"   '1.1.x'系列的最新版本 
+        "aoo": 'latest'  始终最新版本 
+        "bar" : ">=1.0.2 <2.1.2"   大于等于'1.0.2'小于'2.1.2'
+        "baz" : ">1.0.2 <=2.3.4"
+        "boo": "1.0.0 - 2.9999.9999"  
+        "qux" : "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0"
+        "asd" : "http://asdf.com/asdf.tar.gz"
+        "two" : "2.x"
+        "thr" : "3.3.x"
+        "dyl" : "file:../dyl"
     peerDependencies 用来供插件指定其所需要的主工具的版本
       有时项目和所依赖的模块,都会同时依赖另一个模块,但是所依赖的版本不一样。
       比如,你的项目依赖A模块和B模块的 1.0 版,而A模块本身又依赖B模块的 2.0 版。

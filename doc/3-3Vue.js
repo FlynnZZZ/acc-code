@@ -977,7 +977,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       .left
       .right
       .middle
-    其他修饰符
+    其他修饰符 
       .native  修饰v-on,监听原生事件 
         Example:<my-component v-on:click.native="doTheThing"></my-component>
       .sync    对子组件props双向绑定 [Vue 2.0 中移除,Vue 2.3 加入] 
@@ -2153,7 +2153,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         },
       })
 ◆Vue插件 
-vue-resource  http请求封装插件 
+'vue-resource'http请求封装插件 
   PS:作为vue插件的形式存在,通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 
   使用步骤 
     npm i vue-resource --save // 安装'vue-resource'并将依赖保存到'package.json' 
@@ -2179,8 +2179,8 @@ vue-resource  http请求封装插件
     跨域 
     Vue.http.options.xhr = { withCredentials: true }
     Vue.http.options.emulateJSON = true
-axios         类似'vue-resource'的插件  
-vue-router    前端路由 
+'axios'类似'vue-resource'的插件 
+'vue-router'前端路由 
   PS:'vue-router2.x'只适用于'Vue2.x'版本,
     web开发中,'route'指根据url分配到对应的处理程序;根据不同的地址来显示不同的页面 
   引入'Vue-router'
@@ -2684,7 +2684,7 @@ vue-router    前端路由
       这里使用的是豆瓣的公开 GET 接口,若接口是跨域的 POST 请求,则需要在服务器端配置:
       
       Access-Control-Allow-Origin: *        
-Vuex          状态管理 
+'Vuex'状态管理 
   npm i vuex --save    安装
   import Vuex from 'vuex'   引入vuex
   import Vue form 'vue'     引入vue
@@ -2743,9 +2743,9 @@ Vuex          状态管理
     })
     // store.state.a  获取状态值 
     // store.state.b  获取状态值 
-vue-validator 表单验证 
-vue-touch     移动端 
+'vue-validator'表单验证 
+'vue-touch'移动端 
 suggestion: 
   建议'computed'功能内的函数也可以传参 
----------------------------------------------------------------------以下待整理 
+---------------------------------------------------------------------以下待整理  
 

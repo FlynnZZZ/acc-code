@@ -1,0 +1,18 @@
+{
+  "name": "aaa-snippets",
+  "main": "./lib/aaa-snippets",
+  "version": "0.0.0",
+  "description": "my package",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "aaa-snippets:toggle"
+  },
+  "repository": "https://github.com/atom/aaa-snippets",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}

@@ -108,7 +108,7 @@
     'body': 'Array.isArray($1)'
   '-arr Array.from(arrLike [,mapFoo] [,thisArr])':
     'prefix': 'Array.from'
-    'body': 'Array.from(arrLike,${1:function(){}})($1)'
+    'body': 'Array.from(arrLike ${1:,foo})'
   '-arr .pop()':
     'prefix': 'pop'
     'body': 'pop()'

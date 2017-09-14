@@ -1,6 +1,9 @@
 # vue  .vue ------------------------------------------------------------------- 
 '.text.html.vue':
   # html------------------------------------------------------------------------
+  '-vue <template>$1</template>':
+    'prefix': 'template'
+    'body': '<template>$1</template>' 
   '-vue <router-view></router-view>':
     'prefix': 'router-view'
     'body': '<router-view>$1</router-view>' 
@@ -10,6 +13,19 @@
   '-vue lang=':
     'prefix': 'lang'
     'body': """lang=\"$1\"""" 
+  '-vue <template> ...':
+    'prefix': 'template package'
+    'body': """
+    <template lang="html">
+      $1
+    </template>
+    <script>
+    export default {
+    }
+    </script>
+    <style lang="css" scoped>
+    </style>
+    """
   # css-------------------------------------------------------------------------
   '-vue test':
     'prefix': 'test'
@@ -18,6 +34,7 @@
   '-vue test':
     'prefix': 'test'
     'body': """test""" 
+
 '.text.html.basic,.text.html.vue': 
   '-vue vif':
     'prefix': 'vif'
@@ -33,7 +50,7 @@
     'body': 'v-show="${1:key}"' 
   '-vue vfor':
     'prefix': 'vfor'
-    'body': 'v-for="(${1:---}Item,${1:---}Idx) in ${1:---}List"' 
+    'body': 'v-for="(${1:---}I,${1:---}K) in list"' 
   '-vue vtext':
     'prefix': 'vtext'
     'body': 'v-text="${1:key}"' 
@@ -52,6 +69,7 @@
   '-vue vonce':
     'prefix': 'vonce'
     'body': """v-once""" 
+
 '.source.js,.text.html.vue':
   '-Vue.extend({});':
     'prefix': 'vueextend'

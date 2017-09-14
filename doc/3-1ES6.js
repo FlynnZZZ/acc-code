@@ -1672,7 +1672,7 @@ Promise 同步书写异步模式
       reject(error)  表示该pms被拒绝并传递参数'error'
       // resolve reject 函数根据逻辑需要进行相应的执行
   ◆pms的方法 
-  pms = pms.then(foo1(data)[,foo2(error)])  rs或rj执行触发foo1或foo2,返回promise对象 
+  pms1 = pms.then(foo1(data)[,foo2(error)])  rs或rj执行触发foo1或foo2,返回promise对象 
     foo1 成功后的回调,默认返回一个Promise对象,也可以自定义返回值 
       返回一新'Promise'类型,后续再调用的'then'就是新Promise中的逻辑了  
         new Promise(function(rs,rj){
@@ -1741,14 +1741,15 @@ Promise 同步书写异步模式
         // 当前: 2 上一步是:1
         // 当前 :3 上一步是:2  
     foo2 可选,失败/出错后的回调 
-  pms.catch(foo)  用于处理操作异常,返回promise对象 
+  pms1 = pms.catch(foo)  用于处理操作异常,返回promise对象 
     pms.catch(function (error) {
       //操作失败的处理程序
     });
   ◆静态方法 
-  Promise.all(arr)  全局模式,所有成功[?]才触发 
-    PS:当所有实例对象的状态变化时才触发;最终的结果为多个rs传递的值组成的一个数组;
-    arr  由Promise实例组成的数组
+  Promise.length    '1',构造器参数的数目 
+  pms = Promise.all(pmsArr)  全局模式,所有成功才成功,有一个失败则失败 
+    PS: 成功时传递值为多个rs传递的值按顺序组成的数组,失败时为传递的失败信息; 
+    pmsArr  由Promise实例组成的数组
     Example:
       let pms1 = new Promise(function(resolve){
         setTimeout(function () {
@@ -1766,9 +1767,8 @@ Promise 同步书写异步模式
         console.log(result);
       });
       // ["实例1操作成功", "实例2操作成功"]
-  Promise.race(arr) 竞速模式,有一个完成时触发 
-    PS:参数中的promise实例,只要有一个状态发生变化[不管成功还是异常],它就会有返回,
-      其他实例中再发生变化,也不管了。
+  pms = Promise.race(pmsArr) 竞速模式,任意一个成功或失败则结束 
+    PS: 结束后,其他实例中再发生变化,也不管了 
     arr  由Promise实例组成的数组 
     Example:
       let pms1 = new Promise(function(resolve){
@@ -1792,8 +1792,36 @@ Promise 同步书写异步模式
       // 实例2操作失败
       由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
       所以最后输出的是:实例2操作失败。
-  Promise.resolve() 
-  Promise.reject()  
+  pms = Promise.reject(val)     传递失败的信息,返回一状态为失败的Promise对象 
+  val = Promise.resolve(pms/thenable/primitive)  传递成功的信息,返回Promise对象 
+    pms,'Promise'对象,返回值直接为该Promise 
+      Promise.resolve(new Promise(function(rs,rj){
+        setTimeout(function(){
+          rs('aoo')
+        },1000)
+      }))
+      .then(function(msg){
+        console.log(msg);
+      })
+    thenable,带有'then'方法的非Promise对象,返回Promise对象[状态由then方法执行决定] 
+      var likePms = {
+        then : function(rs,rj){
+          // console.log(arg(11),'thenable');
+          // rs('boo')
+          rj('boo1')
+        }
+      }
+      Promise.resolve(likePms).then(function(a){
+        console.log(a);
+      }
+      ,function(msg){
+        console.log(msg);
+      })
+    primitive,原始类型,返回fulfilled状态的Promise对象 
+      Promise.resolve('coo').then(function(msg){
+        console.log(msg);
+      })
+  Promise.prototype.constructor 'Promise'函数 
   Promise.prototype.then()  
   Promise.prototype.catch() 
 Generator 生成器函数 
@@ -2048,7 +2076,7 @@ Reflect  为操作对象提供的API
     Reflect.getPrototypeOf(target)
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
-'lexical_scopes'词法作用域,即'块作用域'
+'lexical_scopes'词法作用域,即'块作用域' 
   PS:会在函数内部、代码块[即 {}]内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
     块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
   if (true) { 
@@ -2057,7 +2085,7 @@ Reflect  为操作对象提供的API
   }
   console.log(aoo); // 1
   console.log(boo); // 报错,boo is not defined
-'Global_Block_Bindings'全局块级绑定
+'Global_Block_Bindings'全局块级绑定 
   全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
     这意味着全局对象的属性可能会意外地被重写覆盖
     var RegExp = "Hello!";
@@ -2136,7 +2164,7 @@ const 定义块级常量
     修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
 ◆操作符&语句扩展 
-'Destructuring'解构赋值 : 按照一定模式,从数组和对象中取值,对变量进行赋值 
+'Destructuring'解构赋值: 按照一定模式,从数组和对象中取值,对变量进行赋值 
   PS:
   Example:
     var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
@@ -2193,7 +2221,7 @@ const 定义块级常量
         console.log(aoo); 
       }
       demo({});
-'spread'扩展运算符 : 把数组解开成单独的值 
+'spread'扩展运算符: 把数组解开成单独的值 
   PS:除了用在rest参数中,还有其他用途
   结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
     function sum(a,b) {
@@ -2324,7 +2352,7 @@ for(var val of iterator){}  遍历
       console.log(index); // 0 1 2 3 4
     }
 --------------------------------------------------------------------------------
-'Iterator'遍历器 : 一种接口,为各种不同的数据结构提供统一的访问机制 
+'Iterator'遍历器: 一种接口,为各种不同的数据结构提供统一的访问机制 
   PS:JS原有的表示“集合”的数据结构,主要是数组Array和对象Object,ES6又添加了Map和Set 
     用户还可以组合使用它们,定义自己的数据结构[比如数组的成员是Map,Map的成员是对象] 
     这样就需要一种统一的接口机制,来处理所有不同的数据结构 
@@ -2753,7 +2781,7 @@ for(var val of iterator){}  遍历
       console.log(height); // undefined,不会抛出异常,只是值为undefined
 --------------------------------------------------------------------------------
 ES7 
-ASYNC  用来取代回调函数、解决异步操作的一种方法  
+ASYNC  用来取代回调函数、解决异步操作的一种方法 
   PS:async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖 
   var pms = async function(){}  函数表达式定义async函数
   async function foo() {}        函数声明
@@ -2848,7 +2876,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         for (let doc of docs) {
           await db.post(doc);
         }
-'Async_Iterator'异步遍历器
+'Async_Iterator'异步遍历器 
   PS:Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
     该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
     其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束。
@@ -2858,7 +2886,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
     目前的解决方法是,Generator函数里面的异步操作,返回一个Thunk函数或者Promise对象,
     即value属性是一个Thunk函数或Promise对象,等待以后返回真正的值,而done属性则还是同步产生的
     目前,有一个提案,为异步操作提供原生的遍历器接口,即value和done这两个属性都是异步产生,这称为'异步遍历器'
-for await(var val of asyncIterator){}   遍历异步的Iterator接口
+for await(var val of asyncIterator){}   遍历异步的Iterator接口 
 异步生成器函数 : async函数与Generator函数的结合 
   async function* foo() { } 定义异步Gen函数 
     async function* gen() {
@@ -2867,7 +2895,7 @@ for await(var val of asyncIterator){}   遍历异步的Iterator接口
     const genObj = gen();
     genObj.next().then(x => console.log(x)); // { value: 'hello', done: false }
     执行后返回一个异步Iterator对象,该对象调用next方法,返回一个Promise对象 
-'Decorator'修饰器 : 用来修改类的行为 
+'Decorator'修饰器: 用来修改类的行为 
 -------------------------------------------------------------------------待整理 
 
 

@@ -197,8 +197,8 @@ Atom
           ctrl-.    打开快捷键绑定页 [self]
             '.platform-win32, .platform-linux':
               'ctrl-.': 'settings-view:show-keybindings'
-      snippets
-        通过关键词来扩展为代码块——tab/enter
+      snippets      自动补全功能 
+        通过关键词来扩展为代码块——tab/enter 
           使用alt+shift+s来查看所有的扩展 (?)
         Atom-自定义自动填充代码 Snippets(在这里我把 snippet 理解为代码块。)
           打开定义的文件
@@ -268,23 +268,32 @@ Atom
       markdown-preview      在编辑器中以markdown展示
         快捷键 ctrl-shift-m
       可禁用列表 
+        about             关于Atom的介绍相关 
+        archive-view       
+        background-tips 
+        delek 
+        dev-live-reload 
+        exception-reporting 
+        fuzzy-finder 
+        git-diff          对比差异
+        github            
+        image-view        图片预览 
+        incompatible-packages 
+        keybinding-resolver 
+        link              显示连接 
+        markdown-review 
+        metrics           发送收集的信息 
+        open-on-github    在github打开 
+        package-generator 
+        spell-check       拼写检查 
+        symbols-view    
+        update-package-dependencies 
+        Welcome           欢迎页 
         whitespace   空白符设置 
           取消勾选
             Ensure Single trailing Newline      自动去掉文档最后的空行
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
-        about             关于Atom的介绍相关 
-        Welcome           欢迎页 
-        spell-check       拼写检查 
-        archive-view       
-        symbols-view    
-        background-tips
-        git-diff          对比差异
-        image-view        图片预览 
-        metrics           发送收集的信息 
-        link              显示连接 
-        open-on-github    在github打开 
-        github            
     社区扩展 
       ◆常用扩展 
       minimap                    缩略图 
@@ -359,7 +368,8 @@ Atom
       清除空行      \r\n\r\n   替换为 \r\n
       在字符后换行  a          替换为 a\n\t
     可在命令行中使用Atom打开当前文件: atom ./ 
-    1.18.0 折叠正常 1.19.0 折叠非标准内容的文件存在bug,并且也不能记住折叠的状态  
+    1.18.0 折叠正常,1.19.0 折叠非标准内容的文件存在bug,并且也不能记住折叠的状态  
+    1.20.0 开启atom-beautify导致内存占用过高  
   Suggestion&Question 
     优点总结
       折叠功能优秀

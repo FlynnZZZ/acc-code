@@ -153,9 +153,6 @@
   '-any request':
     'prefix': 'request'
     'body': """request""" 
-  '-any require':
-    'prefix': 'require'
-    'body': """require""" 
   '-any resolve':
     'prefix': 'resolve'
     'body': 'resolve'

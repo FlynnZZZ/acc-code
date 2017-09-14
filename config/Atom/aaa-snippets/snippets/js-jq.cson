@@ -187,6 +187,11 @@
     'body': """on("${1:click}",function(e){
         $2
       })"""
+  '-jq one("${1:click}",cfoo)':
+    'prefix': 'one'
+    'body': """on("${1:click}",function(e){
+        $2
+      })"""
   '-jq originalEvent':
     'prefix': 'originalEvent'
     'body': 'originalEvent'

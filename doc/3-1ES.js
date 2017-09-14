@@ -1,38 +1,30 @@
-ECMAScript : JS语法核心,提供核心语言功能; 
-  ECMAscript: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
+ECMAScript: JS语法核心,提供核心语言功能 
+  PS: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
+    主要包括基本的语法构造[操作符、控制结构、语句等]和标准库[Array、Date、Math等]
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
-    ECMA-262 要求支持Unicode标准[从而支持多语言开发],第五版发布于2009年;
-    ECMA-262 中对象的行为不一定适用于JS中其他对象,
+    'ECMA-262'要求支持Unicode标准[从而支持多语言开发],第五版发布于2009年;
+    'ECMA-262'中对象的行为不一定适用于JS中其他对象,
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
-  JavaScript和ECMAScript的关系 
-    JS的内容比 ECMA-262 中规定的要多,ECMA-262 的大部分是组成JS的一部分;
-    Web浏览器只是ECMAscript实现可能的宿主环境之一,
-    还有其他环境如Node[一种服务端JavaScript平台]和Adobe Flash 等;
-  JS的核心语法ECMAScript包括两个部分:
-    基本的语法构造,如操作符、控制结构、语句等
-    标准库,如 Array、Date、Math 等
-说明&定义  
+说明&定义 
   函数和方法的区别 
-    方法就是对象的函数
-    方法基于对象,调用写法:obj.foo()
     函数基于过程,写法:foo()
+    方法就是对象的函数,基于对象,调用写法:obj.foo()
+  '实例': 类的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
   '静态'、'公有'、'私有'、'特权'属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
-    静态方法/属性 : 类或构造函数的属性/方法[无需实例化通过类名来访问]
-    公有属性 : 实例化后通过对象来访问
-    公有方法 : 实例化后通过对象来调用,一般把共用的方法,都放在'原型对象'当中 
+    静态属性/方法: '构造函数'的属性/方法[无需实例化通过类名来访问] 
+    公有属性/方法: '实例对象'的方法/属性,一般把共用的方法,都放在'原型对象'当中 
       若放在构造函数中,会重复创建共同的方法
-    私有属性 : 函数内部定义的属性,外部无法访问
-    私有方法 : 函数内部定义的方法,外部无法调用
-    特权方法 : 有权访问私有变量和私有函数的 公有方法
+    私有属性/方法: '函数内部'定义的属性/方法,外部无法访问
+    特权方法: 有权访问私有变量和私有函数的'公有方法'
       利用的闭包原理,即通过作用域链,
-      让内部函数能够访问上层函数的变量对象(即该类的私有变量、私有方法).
+      让内部函数能够访问上层函数的变量对象[即该函数的私有变量、私有方法] 
       
     function Foo(arg1,arg2){ // 构造函数
       var name = arg1;   // 私有属性
       function goo(){};  // 私有方法
-      this.age = arg2;                // 公有属性,通过实例对象来访问
+      this.age = arg2;                 // 公有属性,通过实例对象来访问
       Foo.prototype.do1 = function(){  // 公有方法,通过实例对象来调用
         console.log(name);
       }
@@ -40,17 +32,12 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(name); // 访问了私有属性
       }
     }
-    Foo.name ="abc";        // 静态属性
-    Foo.say =function(){};  // 静态方法
+    Foo.name ="abc";         // 静态属性
+    Foo.say =function(){};   // 静态方法
     var aoo =new Foo(1,2);
-
-    var box = 100;
-    box.MAX_VALUE;    //undefined , 属性
-    Number.MAX_VALUE; //1.7976931348623157e+308 , 静态属性.
-  实例:类的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
   IE8支持部分ES5功能,IE9+支持ES5 
 语法规则 
-  PS: 语法源自Java,基于原型的继承来自Self;'first-class_function'一等函数来自Scheme;
+  PS: 语法源自Java,基于原型的继承来自Self;'first-class function'一等函数来自Scheme;
   标识符: 指变量、函数、属性或函数的参数的名字 
     区分大小写
     第一个字符必须是'字母'、'_'或"$"
@@ -64,8 +51,6 @@ ECMAScript : JS语法核心,提供核心语言功能;
     关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
     保留字: 还没有特定的用途,但可能在将来被用作关键字,如'class''int' ... 
   单、双引号需交错、成对使用 
-    正确使用: '1"2"3'   "1'2'3" 
-    错误使用: "1"2"3"   '1'2'3' 
   多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
   ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
@@ -346,17 +331,16 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
 引用类型:Object对象 
-  PS:引用类型就叫对象[SlPt]; ECMA-262 定义为:无序的名值的合集 
-    对象一般没有长度,具有多种属性的内容结构 
+  PS:引用类型就叫对象[SlPt];'ECMA-262'定义为:无序的名值的合集 
+    对象一般没有长度,具有多种属性的内容结构,是一组数据和功能的集合 
     与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类 
     对象由属性和值构成,值可以为基本值、对象或函数等任何类型 
     JS中几乎所有的事物都是对象,对象是拥有属性和方法的数据 
-    对象其实就是一组数据和功能的集合 
     概念类似的有:python的字典,C/C++的散列表,Java的HashMap,PHP的关联数组等 
     对象的种类: JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
   'key-val'键值对表现形式 
     PS:对象的每一个属性都是用一个名称来标记的;类似数组的表现形式,但无长度属性
-    key,键 字符串类型,属性名或方法名 
+    'key'键 字符串类型,属性名或方法名 
       可为任何字符[不只是合法的变量名]
       需用引号的情况:包含除'字母' '数字' '_'以外的字符特殊字符,或以数字开头,或为JS保留字;
       Example:
@@ -369,7 +353,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
         console.log(obj[{}]); // 2 
         console.log(obj[{b:3}]); // 2 
-    val,值 属性值或方法/函数 
+    'val'值 属性值或方法/函数 
       值可为任意类型值及单表达式
       var obj = {
         key1 : new Date().getHours()
@@ -377,36 +361,12 @@ ECMAScript : JS语法核心,提供核心语言功能;
       console.log(obj); // {key1: 21} 
   创建对象 
     obj = {}  字面量创建对象 
-      var box=null; 初始化对象
-      var obj={}    没有任何属性的对象(空对象)
-      var obj1={属性1:值1,属性2:值2,...}    //名值对间使用逗号隔开.
-      不能传参改变key值,可传参改变val值
-        var voo1 = 'a' ,
-            voo2 = 'b' ,
-            koo1 = 'c' ,
-            obj = { koo1 : voo1, 'koo2' : voo2 };
-        console.log(obj); // { koo1 : "a", koo2 : "b" }
-        类似的对于数组
-        var voo1 = 'a' ,
-            voo2 = 'b' ,
-            arr = [voo1,voo2];
-        console.log(arr); // ["a", "b"]
-      Example:
-        var obj = {
-          name : "小明",
-          age : 12,
-          sex : "男",
-          sayhi : function(){
-            return "say";
-          },
-          info : function(){ //使用this访问当前对象的属性
-            return this.name+"年龄"+this.age; 
-          }
-        }
-        obj.info(); // 小明年龄12
+      var box = null  // 初始化对象
+      var obj = {}    // 空对象,没有任何属性的对象
+      var obj = {key1:val1,...}   // 名值对间使用逗号隔开
     obj = new Object(arg) 构造函数创建对象 
+      PS: 若无参数可省略括号 new Object; 不推荐使用
       arg  参数,可为num、str、bol、obj及简单表达式等 
-        若无参数可省略括号,不推荐使用    var obj = new Object; 
         var obj1 = new Object(2); // Object类型,值是2
         console.log(obj1,obj1+2);      
         //  Number {[[PrimitiveValue]]: 2}  
@@ -414,24 +374,17 @@ ECMAScript : JS语法核心,提供核心语言功能;
         var obj2 = {a:1} 
         console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
       
-        console.log(new Object({x:1}));      // Object {x : 1} 
+        console.log(new Object({x:1}));  // Object {x : 1} 
       构造函数创建对象的过程 
-        1 创建一个新对象newobj
-        2 将构造函数的作用域赋值给newobj,因此this就指向了newobj;
-        3 执行构造函数中的代码,为newobj添加属性;
-        4 返回newobj
-      使用new的注意点 
-        var o = new myObject();
-        上面这种做法的问题是:
-        一旦你忘了加上new, myObject()内部的this关键字就会指向全局对象[?],
-        导致所有绑定在this上面的变量,都变成全局变量。
-        因此,建议使用Object.create()命令,替代new命令。
-        若不得不使用new,为了防止出错,最好在视觉上把构造函数与其他函数区分开来。
-        比如,构造函数的函数名,采用首字母大写[InitialCap],其他函数名一律首字母小写。      
+        1 创建一个新对象'newObj' 
+        2 将构造函数的作用域赋值给'newObj',因此this就指向了'newObj';
+        3 执行构造函数中的代码,为'newObj'添加属性;
+        4 返回'newObj'
     obj = new Foo() 自定义构构造函数[类]实例化对象 
       构造函数生成对象的原理 
         若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
         若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
+        即返回值的优先级更高
         var Foo = function(){
           this.aoo = 1;
           this.boo = 2;
@@ -444,28 +397,22 @@ ECMAScript : JS语法核心,提供核心语言功能;
         var obj1 = new Foo();
         var obj2 = new Goo();
         console.log(obj1,obj2); // Foo {aoo: 1, boo: 2}  Object {a: "a"}
-      obj.__proto__ === Foo.prototype  // true 
-      Example:
+      未使用'new'实例化对象时,导致'window'属性意外增加 
+        直接执行构造函数,使内部的'this'指向全局对象window,
+        导致所有绑定在this上面的变量,都变成全局变量
         function Foo(arg1,arg2){ 
           this.aoo = arg1; 
           this.boo = arg2; 
         }
-        console.log(new Foo(2,3)); // Foo {aoo: 2, boo: 3}
-      Remarks:
-        和工厂模式比较,构造函数创建的对象可以将其标识为一种特定的类型
-        当创建对象时未使用new则会导致window对象属性的意外增加
-          this在运行时绑定,直接调用Person(),this映射到window上
-          function Foo(aoo,boo){ this.azz=aoo; this.bzz=boo; }
-          var obj= Foo(2,3);
-          console.log(azz);
-          console.log(bzz);
+        var obj = Foo(2,3);
+        console.log(aoo,boo); // 2,3 
     obj = foo()     工厂模式创建对象 
-      PS:工厂模式使软件领域一种广为人知的设计模式 
+      PS: 工厂模式使软件领域一种广为人知的设计模式 
       function createObject(name,age){    // 创建工厂函数 
-        var obj=new Object();             //创建对象
-        obj.name=name;                    //添加属性
-        obj.age=age;
-        obj.run=function(){               //添加方法
+        var obj = new Object();           //创建对象
+        obj.name = name;                  //添加属性
+        obj.age = age;
+        obj.run = function(){             //添加方法
           return this.name+this.age+"运行中";
         };
         return obj;                       //返回对象引用
@@ -474,23 +421,22 @@ ECMAScript : JS语法核心,提供核心语言功能;
       var boo = createObject('jack',200);      //创建第二个对象
       aoo.run();    //"lee100运行中"
       boo.run();    //"jack200运行中"
-      缺点:
-        无法继承
-        无法识别对象(获取对象的类型)
-    obj = Object.create(protoObj[,configObj]); 继承方式创建对象[ES5] 
-      protoObj   原型对象 [Foo.prototype 或 obj.__proto__]  
-      configObj  新增属性方法及属性特性的配置对象 
-      Example:
+      缺点: 无法继承; 无法识别对象的类型 
+    obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
+      proto   原型对象 [Foo.prototype 或 obj.constructor.prototype]  
         创建出'纯净的空对象',没有原型
         var obj = Object.create(null);
         console.log(obj); // {}
         
+        var obj = Object.create(Object.prototype); // {} ,创建一个空对象
+        
         var aoo = {x:1};
         var boo = Object.create(aoo);
         console.log(boo);   // {} 
-        var bool1 = boo.__proto__ === aoo;      
-        console.log(bool1); // true 
-
+        console.log(aoo.__proto__ === aoo.constructor.prototype); // true
+        console.log(boo.__proto__ === aoo); // true 
+        console.log(boo.constructor.prototype === aoo); // false  
+      config  新增属性方法及属性特性的配置对象 
         var aoo = {x:1};
         var boo = Object.create(aoo,{
           azz : {
@@ -502,45 +448,24 @@ ECMAScript : JS语法核心,提供核心语言功能;
             writable : true
           }
         });
-
-        var obj = Object.create(Object.prototype); // {} ,创建一个空对象
-        
+      Example: 
         var o = {aoo : 'a',boo : 'b'}
         var obj = Object.create(o);
         o.coo = 'c';
         var str = '';
         for(var key in obj){
-          str += key;
+          str += key+'='+obj[key]+'&';
         };
-        console.log(str); // aooboocoo
-  对象的属性&方法 
-    PS: 访问对象不存在的属性,不会报错,返回值为undefined 
+        console.log(str); // aoo=a&boo=b&coo=c&
+  属性&方法 
+    PS: 访问对象不存在的属性,不会报错,返回值为'undefined' 
       对象默认是可扩展的,可以向对象中添加、删除属性和方法
-    obj[key]   读写对象的属性值 
-      var obj = {
-        a0 : 'a',
-        a1 : 'b',
-        a2 : 'c',
-        a3 : 'd',
-        a4 : 'e'
-      }
-      var str = '';
-      for (var i = 0; i < 3; i++) {
-        str += obj['a'+i]
-      }
-      console.log(str); // abc
-    ◆obj.key    读写对象的属性值 
-      PS:属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问;
-        括号内的部分可以为任意表达式,系统自动将其转化为字符串来判断是否有该属性
-        即也可以使用变量名当成属性名调用
-      Example: 
-        var aoo = "length";
-        var str = "abc";
-        str[aoo];   // 3
-        str.aoo;    // undefined,str无aoo属性.
-    foo = obj.constructor    创建当前对象的构造函数 
-    ◆obj.key(); 调用对象的方法
-    obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
+    obj[key]  读写属性值 
+      key    可为表达式或变量,系统将自动转化为字符串 
+    obj.key   读写属性值 
+      PS: 属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问;
+    obj.key() 调用方法 
+    val = obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
       PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
       var obj1 = {a:1}
       obj1.valueOf = function(){
@@ -610,8 +535,10 @@ ECMAScript : JS语法核心,提供核心语言功能;
       Foo.prototype.isPrototypeOf(aoo);    //true
       aoo.isPrototypeOf(Foo.prototype);    //fasle 
       Object.prototype.isPrototypeOf(aoo); //true
+    foo = obj.constructor  创建当前对象的构造函数 
+    proto = obj.__proto__  实例的原型对象 [详见 原型]
   静态属性方法 
-    arr = Object.keys(obj); 获取对象[不包含原型]所有的属性名 [ES5] 
+    arr = Object.keys(obj)  获取对象[不包含原型]所有的属性名 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
       Example:
         var obj = {
@@ -627,7 +554,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
         console.log(obj.aoo); // 1
         console.log(obj.boo); // 11
         console.log(arr);     // ["aoo", "boo", "foo"]
-    obj = Object.assign(obj1[,obj2,..]);  合并多个对象
+    obj = Object.assign(obj1[,obj2,..])   合并多个对象
       Example:
         var obj1 = {aoo:"abc"};
         var res1 = Object.assign(obj1); 
@@ -636,24 +563,39 @@ ECMAScript : JS语法核心,提供核心语言功能;
         var obj3 = {coo:true};
         var res = Object.assign(obj1,obj2,obj3);
         console.log(res); // {aoo: "abc", boo: 180, coo: true} 
-    bol = Object.is(val1,val2); 值是否相同[可能存在兼容问题] 
+    bol = Object.is(val1,val2)  值是否相同[可能存在兼容问题] 
       与 == 或 === 的逻辑不同 
       Example:
         Object.is(+0,-0);    //false
         Object.is(0,0);      //true
         Object.is(NaN, NaN); //true
+    ★对象的可扩展'extensible'标签 
+    bol = Object.isExtensible(obj); 对象能否扩展[ES5] 
+      PS:即对象的属性/方法是否可增加 
+    bol = Object.isSealed(obj);     对象是否被密封[ES5] 
+    bol = Object.isFrozen(obj);     对象是否被冻结[ES5] 
+    Object.preventExtensions(obj); 设置对象不可扩展[ES5]
+      PS:不能给对象新增属性,但可以修改和删除已有属性
+        只是对对象操作,对其原型链无影响
+    Object.seal(obj);        密封对象[ES5]
+      PS:在不可扩展的基础上将所有属性变成不可配置
+        只是对对象操作,对其原型链无影响
+    Object.freeze(obj);      冻结对象[ES5]
+      PS:在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
+        只是对对象操作,对其原型链无影响
+    Object.getPrototypeOf(obj); 获取对象的原型链对象 [详见 原型]
   对象属性的特性 
     PS:'writable'、'enumerable'、'configurable'只能通过函数来设定 
     ◆数据属性 描述属性行为 
-    value        属性的值,默认为 undefined 
-    writable     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
-    enumerable   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
-    configurable 默认为true,能否配置 
+    'value'        属性的值,默认为 undefined 
+    'writable'     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
+    'enumerable'   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
+    'configurable' 默认为true,能否配置 
       包括能否删除、通过'defineProperty'修改属性、修改属性特性等配置 
       不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
     ◆访问器属性 
-    get  读属性值时的操作,默认返回属性值 
-    set  写属性值时的操作,默认返回属性值 
+    'get'  读属性值时的操作,默认返回属性值 
+    'set'  写属性值时的操作,默认返回属性值 
       var obj = {
         aoo : "aaa",
         boo : 111,
@@ -686,8 +628,8 @@ ECMAScript : JS语法核心,提供核心语言功能;
       })
       var obj = new Foo();
       console.log(obj); 
-    enumerable    能否遍历  
-    configurable  能否配置 
+    'enumerable'    能否遍历  
+    'configurable'  能否配置 
     ◆定义&修改
     Object.defineProperty(obj,key,configObj); 定义属性key及其特性[ES5] 
       PS:只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
@@ -843,7 +785,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
       var arr2 = Object.getOwnPropertyNames(obj);
       console.log('arr2',arr2); // arr2 (3) ["aoo", "boo", "coo"]
   对象的类型'class' 
-    PS:无直接访问对象类型的方式,可间接通过 Object.prototype.toString 方式来获取
+    PS: 无直接访问对象类型的方式,可间接通过 Object.prototype.toString 方式来获取
     var type = Object.prototype.toString;
     var getType = function(val){
       return type.call(val).slice(8,-1);
@@ -859,217 +801,193 @@ ECMAScript : JS语法核心,提供核心语言功能;
     console.log(getType({})); // object
     console.log(getType([])); // Array
     console.log(getType(new Date())); // Date
-  对象的可扩展extensible标签 
-    bol = Object.isExtensible(obj); 对象能否扩展[ES5] 
-      PS:即对象的属性/方法是否可增加 
-    bol = Object.isSealed(obj);     对象是否被密封[ES5] 
-    bol = Object.isFrozen(obj);     对象是否被冻结[ES5] 
-    Object.preventExtensions(obj); 设置对象不可扩展[ES5]
-      PS:不能给对象新增属性,但可以修改和删除已有属性
-        只是对对象操作,对其原型链无影响
-    Object.seal(obj);        密封对象[ES5]
-      PS:在不可扩展的基础上将所有属性变成不可配置
-        只是对对象操作,对其原型链无影响
-    Object.freeze(obj);      冻结对象[ES5]
-      PS:在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
-        只是对对象操作,对其原型链无影响
-  原型&继承 
-    对象的构造原型 : 构造函数的原型对象 
-      PS:构造函数的属性prototype是一对象,只有[构造]函数[对象]才有prototype[原型]属性
-      原型的作用原理&执行流程
-        创建的每一个函数都有一个prototype属性对象,
-        这个属性是一个指针,指向一个对象.
-        构造函数的prototype的属性/方法,所有的实例化后的对象都可以'继承'到.
-        对象实例中的属性或方法,优先级高于原型中的[原型中的属性/方法仍存在]
+  构造函数的原型对象&继承 
+    构造函数的原型对象,也是实例的原型链上层对象  
+      PS:构造函数的属性'prototype'是一对象,只有[构造]函数[对象]才有prototype[原型]属性
+      作用原理&执行流程 
+        每个函数都有一'prototype'属性,,指向一个对象 
+        构造函数实例化后的对象都可以'继承'到其'prototype'的属性/方法 
+        对象实例中的属性或方法,优先级高于原型中的[原型中的属性/方法仍存在] 
         原型模式的执行流程:
         1 先查找自身对象中的属性和方法,若有则返回
         2 若自身无,则去其原型对象中查找,若有则返回
         3 否则没有
-      原型的创建&获取 
-        字面量方式 创建原型
+      构造函数原型对象的获取 
+        Foo.prototype               
+        obj.constructor.prototype   
+        Object.getPrototypeOf(obj); 获取对象的原型链对象 [ES5] 
+          等价于 obj.__proto__
+        obj.__proto__               隐式获取,非ECMAscript标准,不建议使用 [IE11+] 
+          PS: 实例直接和其构造函数的原型相关联,忽略了构造器中间桥梁 
+          obj.__proto__ === Foo.prototype  // true 
+          obj.__proto__ === obj.constructor.prototype; // true
+      原型的修改、重设及区别 
+        修改实例来自于原型的引用类型,会修改原型 [详见 求职策略]
+          function Person(){ };
+          Person.prototype ={ 
+            "constructor":Person, 
+            "friends":["a","b"] 
+          }
+          var p1 = new Person();
+          var p2 = new Person();
+          p1.friends.push("c");
+          console.log(p1.friends);  // ["a", "b", "c"]
+          console.log(p2.friends);  // ["a", "b", "c"]
+          p1.friends = ["1"];  // 定义 p1 实例中的属性
+          console.log(p1.friends);  // ["1"]
+          console.log(p2.friends);  // ["a", "b", "c"]
+          决解方法:只将共享的且不再改变的属性和方法放入原型中.
+            设置原型中的属性为只读(SelfPoint)
+        修改JS内置数据类型的'prototype' 
+          Example:
+          String.prototype.abc = 'AA' 
+          'aaa'.abc;  //'AA'
+          通过赋值'undefined'覆盖,来删除定义的prototype
+        delete Foo.prototype.key  删除原型属性
+        Foo.prototype.key ='XX'   覆盖原型属性
+        '字面量方式'创建原型 
           存在问题: Foo.prototype.constructor 被覆盖,
             即 obj.constructor 不再指向构造函数[而指向Object] 
+            [说明实例的 .constructor 属性来自原型链中的对象 ]
             但使用 instanceof 效果不变 
           决解方案:强制指定constructor
           Example: :
-          function Box(){ }
-          Box.prototype={ run:function(){return 1;} }
-          var box1 =new Box();
+          function Box(){}
+          Box.prototype = { run : function(){} }
+          var box1 = new Box();
           box1.constructor; // function Object() { [native code] }
           // 实例的构造函数指向Object
           字面量方式改进为:
-          Box.prototype={
-            constructor:Box, // 强制指定到Box
-            run:function(){return 1;}
+          Box.prototype = {
+            constructor : Box, // 强制指定到Box
+            run : function(){
+              return 1;
+            }
           }
         动态原型模式: 将原型封装到构造函数里 
-          PS:原型的初始化只要第一次初始化就可以了 
-            没必要每次构造函数实例化的时候都初始化
-            并同时解决了封装问题
+          PS: 通过判断,原型对象只需初始化一次就可以了; 也解决了封装问题 
           function Box(name){
-            this.name=name;
+            this.name = name;
             if(typeof this.run!="function"){ //判断this.run是否存在
-              Box.prototype.run=function(){ return this.name; };
+              Box.prototype.run = function(){ 
+                return this.name; 
+              };
             }
           }
           var box1 = new Box("a");
           var box2 = new Box("Jack");
-        通过不同方法创建的对象,其(原型链的中间)原型不同
-          通过构造函数创建的对象,则该对象原型为 构造函数名.prototype;
-          通过字面量{}或new Object({})创建的对象,原型为{}本身 即 Object.prototype;
-        原型的获取
-          obj.constructor.prototype;  通过 构造函数 获取原型
-            只有函数才有prototype属性,表示函数的原型(也就是实例对象的原型)
-          obj.__proto__;  通过 对象实例 的__proto__  [隐式获取]
-            对象的__proto__ 属性,直接和其构造函数的原型相关联(忽略了构造器中间桥梁)
-            __proto__是非标准的,IE中没有,不建议使用
-            obj._proto_=null;在对象中添加表示不从原型中继承属性.
-            obj.__proto__ === obj.constructor.prototype; //true
-            Example: :
-            obj.__proto__.aoo =12;
-      原型的 修改&重设 的区别
-        PS:当重新定义构造函数的原型时(即改变其整个原型时,而非修改其部分),
-          已创建的对象其指向的原型仍然不变,
-          但会影响到更改后再创建的对象的原型.
-        Example: :
-        function Foo(){this.aoo =1; this.boo =2;}
-        Foo.prototype.azz =1;
-        var obj =new Foo();
-        console.log(obj.azz); // 1
-        Foo.prototype.azz =4;        // 修改原型部分
-        console.log(obj.azz); // 4 ,跟随变化
-        Foo.prototype ={azz:11};     // 重定义原型
-        console.log(obj.azz); //4 ,无变化
-        原对象的 __proto__ 指向无变化,后续重设相当于又增加了一条链.
-        var obj1 =new Foo();
-        console.log(obj1.azz); //11,改变后续生成对象的 __proto__ 指向
-      修改实例来自于原型的引用类型,会修改原型 
-        Example: :
-        function Person(){ };
-        Person.prototype ={ "constructor":Person, "friends":["a","b"] }
-        var p1 =new Person();
-        var p2 =new Person();
-        p1.friends.push("c");
-        console.log(p1.friends);  // ["a", "b", "c"]
-        console.log(p2.friends);  // ["a", "b", "c"]
-        p1.friends =["1"];  // 定义 p1 实例中的属性
-        console.log(p1.friends);  // ["1"]
-        console.log(p2.friends);  // ["a", "b", "c"]
-        决解方法:只将共享的且不再改变的属性和方法放入原型中.
-          设置原型中的属性为只读(SelfPoint)
-      Object.getPrototypeOf(obj); 获取对象的原型对象 [ES5] 
-        等价于 obj.__proto__
-      修改JS内置数据类型的prototype 
-        Example:
-        String.prototype.abc = 'AA' 
-        'aaa'.abc;  //'AA'
-        通过赋值undefined覆盖,来删除定义的prototype
-      delete Foo.prototype.key  删除原型属性
-      Foo.prototype.key ='XX'   覆盖原型属性
-    原型链继承 
+        通过不同方法创建的实例,其原型链的[中间]对象不同 
+          通过构造函数Foo创建的对象,则该对象父级原型链对象为'Foo.prototype' 
+          通过字面量{}或new Object({})创建的对象,其父级原型链对象为{}本身,即 Object.prototype 
+        重设构造函数原型对象时,已创建实例其原型链仍然不变,但会影响到更改后再实例化对象的原型链; 
+          function Foo(){
+            this.aoo =1; 
+            this.boo =2;
+          }
+          Foo.prototype.azz =1;
+          var obj = new Foo();
+          console.log(obj.azz); // 1
+          Foo.prototype.azz = 4;        // 修改原型部分
+          console.log(obj.azz); // 4 ,跟随变化
+          Foo.prototype = {azz:11};     // 重定义原型
+          console.log(obj.azz); //4 ,无变化
+          // 原对象的 __proto__ 指向无变化,后续重设相当于又增加了一条链 
+          var obj1 =new Foo();
+          console.log(obj1.azz); //11,改变后续生成对象的 __proto__ 指向
+    继承: JS中所有的构造函数都继承自Object [系统设定]  
       PS:JS中的面向对象继承机制基于原型,将原型链作为实现继承的主要方法
         基本思想:利用原型让一个引用类型继承另一个引用类型的属性和方法
         通过实现原型链,本质上扩展了原型搜索机制
       ◆相关操作
-      obj instanceof 构造函数; 是否处于对象的原型链上 [详见: 关系运算符] 
-      问题: 原型中的缺点带到了原型链中
-      Example: :
-        function A(){ this.name="abc"; }
-        function B(){ this.age=99; }
-        function C(){ this.level="aaa"; }
+      obj instanceof Foo  检测函数是否为对象的构造函数 [详见 运算符] 
+      ◆继承方式 
+        其他正统面向对象语言都会用两种方式实现继承:一个是接口实现,一个是继承.
+        ECMAScript只支持继承,不支持接口实现
+        被继承的函数叫做'超类型'也叫'父类'或'基类',继承的函数叫做'子类型'也叫'子类'或'派生类'
+      重设、修改构造函数的原型对象 
+        function A(){ this.name = "abc"; }
+        function B(){ this.age = 99; }
+        function C(){ this.level = "aaa"; }
         //通过原型链继承
-        B.prototype=new A();
+        B.prototype = new A();
         // new A();     //A {name: "abc"}
-        C.prototype=new B(); //通过原型链继承
-        var c1=new C();
+        C.prototype = new B(); //通过原型链继承
+        var c1 = new C();
         c1.name;        //"abc"
-      其他方法的继承
-        PS:ECMAScript只支持继承,不支持接口实现
-          其他正统面向对象语言都会用两种方式实现继承:一个是接口实现,一个是继承.
-          被继承的函数叫做超类型(父类或基类),被继承的函数叫做子类型(子类或派生类)
-          JS中所有的构造函数都继承自Object [系统设定]
-        拷贝方式继承
-          对象的拷贝
-            var person={
-              name:"abc",
-              age:22,
-              address:{
-                home:"home adress",
-                office:"office address"
-              },
-              hobbies:["football","watched movie"]
-            }
-            var programer ={ language:"js" }
-            // 定义一个实现深拷贝的函数 将aoo拷贝到boo中
-            function copyDeeply(aoo,boo){
-              var c =c||{};
-              for(var key in aoo) {
-                if(typeof aoo[key] ==="object") {
-                  boo[key] =(aoo[key].constructor ===Array)?[]:{};
-                  copyDeeply(aoo[key],boo[key]);
-                }else { boo[key] =aoo[key] }
-              }
-            }
-            copyDeeply(person,programer);
-            programer;
-            //Object {language: "js", name: "abc", age: 22, address: Object, hobbies: Array[2]}
-          构造函数拷贝
-            function Foo(){ this.name ="abc"; this.age =19; }
-            function Goo(){ Foo.apply(this); this.height =180; }
-            var obj =new Goo();
-            console.log(obj); //Goo {name: "abc", age: 19, height: 180}
-        链接式继承
-          子对象和父对象链接
-            var parent ={ name:"abc" }
-            // 定义一个继承函数
-            // 相当于 浏览器自带 Object.create() 功能
-            function createObj(obj){
-              function Foo(){};
-              Foo.prototype =obj;
-              var aoo =new Foo();
-              return aoo;
-            }
-            var child =createObj(parent);
-            console.log(child);      //Foo {}
-            console.log(child.name); //abc
-        构造继承
-        对象冒充(也叫借用构造函数、伪造对象或经典继承)
-          PS: 对象冒充只能继承父类构造函数里的属性或方法
-            父类原型中的方法或属性不可被继承
-          共享的属性或方法放不要放在被继承的构造函数中,否则造成浪费
-            解决方法:直接定义子类构造函数的原型即可
-          Example: :
-          function B(name,age){this.name=name; this.age=age; }
-          B.prototype.sex ='man';
-          function A(name,age){ B.call(this,name,age); }  // 对象冒充
-          A.prototype.address ='aa';
-          var obj =new A('abc',100);
-          console.log(obj.name);    // abc
-          console.log(obj.sex);     // undefined
-          console.log(obj.address); // aa
-        原型式继承
-          // 定义一个中转函数
-          function obj(o){    //o表示将要传递进入的一对象
-            function F(){}    //F构造是一个临时新建对象
-            F.prototype =o;
-            return new F();
+      原型式继承 
+        var parent = { name:"abc" }
+        // 定义一个继承函数,相当于 浏览器自带 Object.create() 功能
+        function createObj(obj){
+          function Foo(){};
+          Foo.prototype = obj;
+          var aoo = new Foo();
+          return aoo;
+        }
+        var child = createObj(parent);
+        console.log(child);      //Foo {}
+        console.log(child.name); //abc
+      对象冒充,也叫借用构造函数、伪造对象或经典继承 
+        PS: 对象冒充只能继承父类构造函数里的属性或方法,而父类原型中的方法或属性不可被继承
+        function B(name,age){
+          this.name = name; 
+          this.age = age; 
+        }
+        B.prototype.sex ='man';
+        function A(name,age){ 
+          B.call(this,name,age);  // 对象冒充
+        }  
+        A.prototype.address ='aa';
+        var obj = new A('abc',100);
+        console.log(obj.name);    // abc
+        console.log(obj.sex);     // undefined
+        console.log(obj.address); // aa
+      拷贝式继承 
+        对象的拷贝 
+          var person = {
+            name:"abc",
+            age:22,
+            address:{
+              home:"home adress",
+              office:"office address"
+            },
+            hobbies:["football","watched movie"]
           }
-          var aoo ={ name:'abc', age:100 };
-          var obj =obj(aoo);  // 实例化 obj对象
-          obj;       //F {}
-          obj.name;  //"abc"
-          obj.__proto__; // Object {name: "abc", age: 100}
-        寄生式(parasitic)继承
-        寄生组合式继承
-        组合继承(也叫伪经典继承)
-          JavaScript中最常用的继承模式
+          var programer ={ language:"js" }
+          // 定义一个实现深拷贝的函数 将aoo拷贝到boo中
+          function copyDeeply(aoo,boo){
+            var c =c||{};
+            for(var key in aoo) {
+              if(typeof aoo[key] ==="object") {
+                boo[key] =(aoo[key].constructor ===Array)?[]:{};
+                copyDeeply(aoo[key],boo[key]);
+              }else { boo[key] =aoo[key] }
+            }
+          }
+          copyDeeply(person,programer);
+          programer;
+          //Object {language: "js", name: "abc", age: 22, address: Object, hobbies: Array[2]}
+        构造函数拷贝
+          function Foo(){ 
+            this.name ="abc"; 
+            this.age =19; 
+          }
+          function Goo(){ 
+            Foo.apply(this); 
+            this.height =180; 
+          }
+          var obj = new Goo();
+          console.log(obj); //Goo {name: "abc", age: 19, height: 180}
+      构造继承 
+      'parasitic'寄生式继承 
+      寄生组合式继承 
+      组合继承,也叫伪经典继承: JS中最常用的继承模式 
   JS无多态 
     假如有多态功能:
       定义多个函数,[函数名相同]区别是传入的参数不同,
       调用时,会根据传入参数的不同自动选择对应的函数执行.
       JS中:会产生覆盖,只有最后一个定义的函数有用.
   对象转换为原始类型 
-    默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number. [?]
+    默认的,Date类型的对象会被设置为 String,其它类型的值会被设置为 Number [?] 
       Example:
         var date =new Date();
         console.log(typeof date); // Object
@@ -1114,7 +1032,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
     obj instanceof Object;    [详参 关系运算符]
     obj.constructor 
     duck_type 鸭子类型,根据其表现来判断其身份 
-  Exp:
+  Exp: 
     遍历,通过val获取对应的key 
       var getKey = function(val,bool = true){
         var arr = [];
@@ -1139,7 +1057,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
       }
       getKey('a');       // (2) ["aoo", "boo"]
       getKey('a',false); // "aoo"
-'Evaluation-Strategy'求值策略 
+'Evaluation Strategy'求值策略 
   PS:决定变量之间、函数调用时实参和形参之间值的传递方式 
   读写引用类型值的 
     自我总结 
@@ -1239,7 +1157,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
   函数调用表达式
   对象创建表达式
 运算符|操作符 
-  PS:ECMA-262 描述了一组用于操作数据值的运算符,也叫操作符;
+  PS: 'ECMA-262'描述了一组用于操作数据值的运算符,也叫操作符;
     ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
     运用于对象时,通常会调用对象的'valueOf'和'toString'方法,以便取得相应的值;
   一元运算符 : 只能操作一个值的运算符 
@@ -1407,10 +1325,10 @@ ECMAScript : JS语法核心,提供核心语言功能;
       1==true;    //true
       1===true;   //false
       NaN==NaN;   //false
-    obj instanceof Foo; 原型检测,表示'Foo.prototype'是否处于'obj'的原型链上的布尔值  
+    bol = obj instanceof Foo; 原型检测,表示'Foo.prototype'是否处于'obj'的原型链上的布尔值  
       PS:检测的对象必须和构造函数处于同一个全局作用域,即同一个iframe和window中,
         若一数组arr在另一个框架中定义则在其他框架中arr instanceof Array;返回false
-      obj  用于检测的对象,若为基本类型则直接返回 false
+      obj  用于检测的对象,若为基本类型则直接返回'false' 
         123.1 instanceof Number;  // false
         "a" instanceof String;    // false
         new Number(123) instanceof Number; //true
@@ -1691,7 +1609,7 @@ ECMAScript : JS语法核心,提供核心语言功能;
       可以在后面加括号,并立即执行函数的代码。
       加括号是最安全的做法,因为！、+、-等运算符会和函数的返回值进行运算,有时造成不必要的麻烦。
     val/exp , function(){ }() 这种操作这种操作
-语句:比表达式更大的单位 
+语句: 比表达式更大的单位 
   PS:程序由语句组成,最简单的语句由一个表达式和表达式后的分号组成.
     语句通常有一个或多个关键字来完成给定的任务.如:判断、循环、退出等.
     在ECMAScript中,所有的代码都是有语句来构成的.
@@ -2431,9 +2349,8 @@ Array 数组对象
         console.log(res[0]);  // [1, 1]
       slice concat 的复制都为浅拷贝,只能复制到一维;
       使用JSON 序列化与反序列化来复制(?)
-◆功能类对象 
 Function 函数对象 
-  PS:函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能 
+  PS: 函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能 
     函数是定义一次但却可以调用或执行任意多次的一段代码 
     若函数名称重复会产生覆盖 
     JS中代码块[大括号之间]里不会产生作用域,函数是唯一能创建新作用域的地方 
@@ -2850,12 +2767,12 @@ Function 函数对象
       }
       console.log(foo(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
   ◆函数相关属性/方法
-  foo.length;   获取函数声明时定义的参数的个数
+  foo.length    获取函数声明时定义的参数的个数 
     Example: :
     function box(a,b){ return a+b; }
     console.log(box.length);  // 2,表示box的参数有两个.
-  foo.name;     函数的名字
-  foo.caller;   返回调用当前函数的函数[当前函数的直接父函数]
+  foo.name      函数的名字
+  foo.caller    返回调用当前函数的函数[当前函数的直接父函数] 
     function foo(){
       console.log(foo.caller);
     };
@@ -2863,7 +2780,195 @@ Function 函数对象
       foo();
     };
     goo(); // function goo(){ foo(); }
-  foo.prototype [构造]函数的原型属性对象(参见 对象原型)
+  foo.prototype [构造]函数的原型对象[详见 原型]
+◆单体内置对象: 由ECMAScript实现提供的、不依赖宿主环境的对象  
+  PS: 这些对象在ECMAScript程序执行之前就已经存在了 
+Global|Window 全局对象 
+  PS:JS继承于ECMAScript,浏览器中,JS的全局对象为window,
+    Web浏览器将window作为global对象的一部分加以实现;
+    Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象,
+    不属于任何其他对象的属性和方法,最终都是它的属性和方法;
+    所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
+    Global对象没有办法直接访问,在浏览器中可使用window对象实现全局访问;
+  var global = function(){ return this; }  间接获取Global对象
+  ◆全局属性&方法 
+  特殊值 
+    undefined  特殊值 undefined
+    NaN        特殊值 NaN
+    Infinity   特殊值 Infinity
+  构造函数 
+    Object     构造函数Object
+    Array      构造函数Array
+    Function   构造函数Function
+    Boolean    构造函数Boolean
+    String     构造函数String
+    Number     构造函数Number
+    Date       构造函数Date
+    RegExp     构造函数RegExp
+    Error          构造函数Error
+    EvalError      构造函数EvalError
+    RangeError     构造函数RangeError
+    ReferenceError 构造函数ReferenceError
+    SyntaxError    构造函数SyntaxError
+    TypeError      构造函数TypeError
+    URIError       构造函数URIError
+  转换方法 
+    PS:URI编码可以对URI链接进行编码,以便发送给浏览器 
+      URI(Uniform Rescurce Identifiers),通用资源标识符
+      有效的URI中不能包含某些字符,如空格
+      采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
+      encodeURICompinent()编码比encodeURI()编码来的更加彻底
+      一般来说encodeURIConponent()使用频率要高一些.
+    Boolean(val);  返回转换为的布尔值 
+      var a = Boolean(0);         // 转换为false
+      var a = Boolean(-0);        // 转换为false
+      var a = Boolean(0.0);       // 转换为false
+      var a = Boolean(NaN);       // 转换为false
+      var a = Boolean(undefined); // 转换为false
+      var a = Boolean('');        // 转换为false
+      其余皆转换为true
+    num = Number(val);  将任意类型数据转换为数值  
+      Number(number)     // 对应的值
+      Number(true);      // 1
+      Number(false);     // 0 
+      Number(null);      // 0 
+      Number(undefined)  // NaN 
+      Number("")         // 0
+      其他规则:
+        只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
+          Number('070'); // 70
+          Number(070);   // 56
+        只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
+        若不是以上三种字符串类型,则返回NaN 
+          console.log(Number('123abc123')); // NaN
+        若为对象,先后调用'vaueOf''toString'方法 
+          先调用对象的vaueOf方法,然后依照前面的规则转换返回的值,
+          若转换的结果是NaN,则改用toString方法,
+          然后再依次按照前面的规则转换返回的字符串值.
+    num = parseInt(str [,radix]); 将字符串转换成整数值 
+      PS:由于'Number'转换字符串时比较复杂且不够合理,更常用的是parseInt
+        忽略字符串前面的空格,直至找到第一个非空格字符,若其不是数字或负号,则返回NaN
+        从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略[.也被忽略]
+        可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
+      str   被转换的字符串,支持科学计数法形式的转换 
+      radix 可选,用于解决各种进制的转换,为避免错误解析建议始终指定基数,默认为十进制   
+        2    二进制
+        8    二进制
+        10   二进制
+        16  十六进制
+        Example:
+        parseInt('oxA');     //10,十六进制
+        parseInt('070');     //70,十进制
+        parseInt('0xALabc'); //10,labc被自动过滤掉了
+        parseInt('0xAF');    //175,十六进制
+        parseInt('AF',16);   //175,第二参数指定16进制,可以去掉0x前导
+        parseInt('AF');      //NaN
+      Example:
+        console.log(parseInt('abc123')) //NaN,第一个不是数字会返回NaN
+        console.log(parseInt('1a2b'))   //1,从第一个数值开始取直到非数字结束
+        console.log(parseInt('3.14'));   //3,小数点不是数值.
+
+        Number(""); //为0;
+        parseInt(""); //为NaN
+      ES3和ES5的分歧 : ES5不再具备解析八进制,需指定基数 
+        parseInt("070");  // ECMAScript 3 认为是 56(八进制)
+        parseInt("070");  // ECMAScript 5 认为是 70(十进制)
+    num = parseFloat(str);        将字符串转换成浮点数值 
+      PS:类似'parseInt',区别是数字中可以包含一个'.'点; 只能解析为10进制数
+      若字符串包含的是一个可解析为整数的数,没有小数点或小数点后都是零,则返回整数
+        parseFloat('12.0');  // 12
+      十六进制始终转成零 
+        parseFloat('0xA');     //0,不识别十六进制
+      Example:
+        parseFloat('123abc');  //123,去掉不识别的部分
+        parseFloat('12.3.4');  //12.3,只认一个小数点
+        parseFloat('01.20');   //1.2,去掉前、后导0
+        parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
+    str= String(val);    将任意类型值转换为字符串 
+      PS: 若值存在'toString'方法,则调用该方法,否则,null返回"null"、undefined返回'undefined'
+      Example:  
+      String(num)       "数值"
+      String(str)       "字符串"
+      String(true)      "true"
+      String(false)     "false"
+      String(undefined) "undefined"
+      String(null)      "null"
+      String(1); //"1"
+    uriStr = encodeURI(str) 将字符串编码为URI 
+      PS:通用资源标识符简称为URI
+        不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
+    str = decodeURI(uriStr) 解码URI 
+    uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
+      会对任何非标准字符进行编码[ASCII字母、数字及"-_.!～*'()"等进行编码] 
+    str = decodeURIComponent(str)    解码URI[完全解码] 
+    escape()   对字符串进行编码 
+      不要编码URI, 不会对"*@-_+./"等ASCII标点符号进行编码
+    unescape() 解码由'escape'编码的字符串
+  判断方法 
+    bol = isFinite(num) 检测数值是否在可用范围内 
+      isFinite(10); // true
+    bol = isNaN(val)    检查值否能转换为NaN 
+      PS:先后调用'valueOf''toString'方法,试图将值转换为数值进行判断 
+      Example:
+      console.log(isNaN(1));      //false
+      console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
+      console.log(isNaN(true));   //false,true可以转换为1
+      console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
+      console.log(isNaN(NaN));    //true
+  其他方法 
+    eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
+      PS:是一种由函数执行的动态代码,比直接执行脚本慢很多;
+      str  要执行解析的JS代码的字符串 
+      Example:
+        var str = 'var num = 100'; // 表达式为一行字符串,而非JS代码
+        // console.log(num);  // 报错,不存在
+        var val = eval(str);
+        console.log(num,val); // 100 undefined 
+  window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
+Math 数学对象 
+  PS:为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
+  ◆数学值
+  Math.PI         π的值
+    Math.PI;  //3.141592653589793
+  Math.SQRT2      2 的平方根 
+  Math.SQRT1_2    1/2 的平方根 
+  Math.E          自然对数的底数,即常量e的值[也叫欧拉参数]
+  Math.LN10        10 的自然对数
+  Math.LN2         2 的自然对数
+  Math.LOG2E       以2为底e的对数
+  Math.LOG10E      以10为底e的对数
+  Math.random();   返回一个介于0到1之间不包括0和1的随机数 
+    PS:不需要参数,添加参数不起作用,也不会报错 
+    若需要某个范围,可套用的公式 
+      值 = Math.floor(Math.random()*总数 + 第一个值)
+      Math.floor(Math,random()*6 + 5);
+      //随机产生5-10之间的任意整数
+  ◆求极值 
+  Math.min(num1,num2,..) 返回一组数值中的最小值 
+  Math.max(num1,num2,..) 返回一组数值中的最大值 
+    Math.max(2,3,5,6,76,8,7);   // 76
+    Math.min(2,3,5,6,76,8,7);   // 2
+    Math.min.apply(null,[2,3,5,6,76,8,7]);   // 2
+    Math.min.apply(null,[0,0,0]);   // 2
+  ◆取整
+  Math.round(num)   四舍五入取整            [round 圆；循环；一回合；圆形物]
+  Math.ceil(num)    向上舍入取整,数值将变大; [ceil  天花板] 
+  Math.floor(num)   向下舍入取整,数值将变小; [floor 地板  ]
+    Math.floor(1.1)    //1
+  其他方法
+    Math.abs(num)       返回num的绝对值
+    Math.pow(num,power) 返回num的power次幂
+    Math.sqrt(num)      返回num的平方根
+    Math.log(num)       返回num的自然对数
+    Math.exp(num)       返回Math.E的num次幂
+    Math.sin(弧度值)  求正弦值
+      Example: Math.sin(30/180*Math.PI);  //0.49999999999999994
+    Math.cos(弧度值)  求余弦值
+    Math.tan(弧度值)  求正切值
+    Math.acos(num)        返回num的反余弦值
+    Math.asin(num)        返回num的反正弦值
+    Math.atan(num)        返回num的反正切值
+    Math.atan2(num1,num2) 返回num1/num2的反正切值
 Date 日期时间对象 
   PS:ECMAScript提供了Date类型来处理时间和日期 
     Date 对象内置一系列获取和设置日期时间信息的方法.
@@ -3367,196 +3472,7 @@ Error 错误对象
     //    at catchIt (~/examples/throwcatch.js:3:9)
     //    at repl:1:5
     代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
-◆单体内置对象 
-  PS: ECMA-262 的定义为由ECMAScript实现提供的、不依赖宿主环境的对象 
-    这些对象在ECMAScript程序执行之前就已经存在了.
-Global|Window 全局对象 
-  PS:JS继承于ECMAScript,浏览器中,JS的全局对象为window,
-    Web浏览器将window作为global对象的一部分加以实现;
-    Global对象是ECMAScript中一个特别的对象,没有定义如何调用Global对象,
-    不属于任何其他对象的属性和方法,最终都是它的属性和方法;
-    所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
-    Global对象没有办法直接访问,在浏览器中可使用window对象实现全局访问;
-  var global = function(){ return this; }  间接获取Global对象
-  ◆全局属性&方法 
-  特殊值 
-    undefined  特殊值 undefined
-    NaN        特殊值 NaN
-    Infinity   特殊值 Infinity
-  构造函数 
-    Object     构造函数Object
-    Array      构造函数Array
-    Function   构造函数Function
-    Boolean    构造函数Boolean
-    String     构造函数String
-    Number     构造函数Number
-    Date       构造函数Date
-    RegExp     构造函数RegExp
-    Error          构造函数Error
-    EvalError      构造函数EvalError
-    RangeError     构造函数RangeError
-    ReferenceError 构造函数ReferenceError
-    SyntaxError    构造函数SyntaxError
-    TypeError      构造函数TypeError
-    URIError       构造函数URIError
-  转换方法 
-    PS:URI编码可以对URI链接进行编码,以便发送给浏览器 
-      URI(Uniform Rescurce Identifiers),通用资源标识符
-      有效的URI中不能包含某些字符,如空格
-      采用特殊的UTF-8 编码替换所有无效字符,从而让浏览器能够接受和理解.
-      encodeURICompinent()编码比encodeURI()编码来的更加彻底
-      一般来说encodeURIConponent()使用频率要高一些.
-    Boolean(val);  返回转换为的布尔值 
-      var a = Boolean(0);         // 转换为false
-      var a = Boolean(-0);        // 转换为false
-      var a = Boolean(0.0);       // 转换为false
-      var a = Boolean(NaN);       // 转换为false
-      var a = Boolean(undefined); // 转换为false
-      var a = Boolean('');        // 转换为false
-      其余皆转换为true
-    num = Number(val);  将任意类型数据转换为数值  
-      Number(number)     // 对应的值
-      Number(true);      // 1
-      Number(false);     // 0 
-      Number(null);      // 0 
-      Number(undefined)  // NaN 
-      Number("")         // 0
-      其他规则:
-        只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
-          Number('070'); // 70
-          Number(070);   // 56
-        只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
-        若不是以上三种字符串类型,则返回NaN 
-          console.log(Number('123abc123')); // NaN
-        若为对象,先后调用'vaueOf''toString'方法 
-          先调用对象的vaueOf方法,然后依照前面的规则转换返回的值,
-          若转换的结果是NaN,则改用toString方法,
-          然后再依次按照前面的规则转换返回的字符串值.
-    num = parseInt(str [,radix]); 将字符串转换成整数值 
-      PS:由于'Number'转换字符串时比较复杂且不够合理,更常用的是parseInt
-        忽略字符串前面的空格,直至找到第一个非空格字符,若其不是数字或负号,则返回NaN
-        从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略[.也被忽略]
-        可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
-      str   被转换的字符串,支持科学计数法形式的转换 
-      radix 可选,用于解决各种进制的转换,为避免错误解析建议始终指定基数,默认为十进制   
-        2    二进制
-        8    二进制
-        10   二进制
-        16  十六进制
-        Example:
-        parseInt('oxA');     //10,十六进制
-        parseInt('070');     //70,十进制
-        parseInt('0xALabc'); //10,labc被自动过滤掉了
-        parseInt('0xAF');    //175,十六进制
-        parseInt('AF',16);   //175,第二参数指定16进制,可以去掉0x前导
-        parseInt('AF');      //NaN
-      Example:
-        console.log(parseInt('abc123')) //NaN,第一个不是数字会返回NaN
-        console.log(parseInt('1a2b'))   //1,从第一个数值开始取直到非数字结束
-        console.log(parseInt('3.14'));   //3,小数点不是数值.
-
-        Number(""); //为0;
-        parseInt(""); //为NaN
-      ES3和ES5的分歧 : ES5不再具备解析八进制,需指定基数 
-        parseInt("070");  // ECMAScript 3 认为是 56(八进制)
-        parseInt("070");  // ECMAScript 5 认为是 70(十进制)
-    num = parseFloat(str);        将字符串转换成浮点数值 
-      PS:类似'parseInt',区别是数字中可以包含一个'.'点; 只能解析为10进制数
-      若字符串包含的是一个可解析为整数的数,没有小数点或小数点后都是零,则返回整数
-        parseFloat('12.0');  // 12
-      十六进制始终转成零 
-        parseFloat('0xA');     //0,不识别十六进制
-      Example:
-        parseFloat('123abc');  //123,去掉不识别的部分
-        parseFloat('12.3.4');  //12.3,只认一个小数点
-        parseFloat('01.20');   //1.2,去掉前、后导0
-        parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
-    str= String(val);    将任意类型值转换为字符串 
-      PS: 若值存在'toString'方法,则调用该方法,否则,null返回"null"、undefined返回'undefined'
-      Example:  
-      String(num)       "数值"
-      String(str)       "字符串"
-      String(true)      "true"
-      String(false)     "false"
-      String(undefined) "undefined"
-      String(null)      "null"
-      String(1); //"1"
-    uriStr = encodeURI(str) 将字符串编码为URI 
-      PS:通用资源标识符简称为URI
-        不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义
-    str = decodeURI(uriStr) 解码URI 
-    uriStr = encodeURIComponent(str) 将字符串编码为URI[完全编码] 
-      会对任何非标准字符进行编码[ASCII字母、数字及"-_.!～*'()"等进行编码] 
-    str = decodeURIComponent(str)    解码URI[完全解码] 
-    escape()   对字符串进行编码 
-      不要编码URI, 不会对"*@-_+./"等ASCII标点符号进行编码
-    unescape() 解码由'escape'编码的字符串
-  判断方法 
-    bol = isFinite(num) 检测数值是否在可用范围内 
-      isFinite(10); // true
-    bol = isNaN(val)    检查值否能转换为NaN 
-      PS:先后调用'valueOf''toString'方法,试图将值转换为数值进行判断 
-      Example:
-      console.log(isNaN(1));      //false
-      console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
-      console.log(isNaN(true));   //false,true可以转换为1
-      console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
-      console.log(isNaN(NaN));    //true
-  其他方法 
-    eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
-      PS:是一种由函数执行的动态代码,比直接执行脚本慢很多;
-      str  要执行解析的JS代码的字符串 
-      Example:
-        var str = 'var num = 100'; // 表达式为一行字符串,而非JS代码
-        // console.log(num);  // 报错,不存在
-        var val = eval(str);
-        console.log(num,val); // 100 undefined 
-  window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
-Math 数学对象 
-  PS:为数学常量和数学函数提供的属性和方法,Math的所有属性/方法都是静态的 
-  ◆数学值
-  Math.PI         π的值
-    Math.PI;  //3.141592653589793
-  Math.SQRT2      2 的平方根 
-  Math.SQRT1_2    1/2 的平方根 
-  Math.E          自然对数的底数,即常量e的值[也叫欧拉参数]
-  Math.LN10        10 的自然对数
-  Math.LN2         2 的自然对数
-  Math.LOG2E       以2为底e的对数
-  Math.LOG10E      以10为底e的对数
-  Math.random();   返回一个介于0到1之间不包括0和1的随机数 
-    PS:不需要参数,添加参数不起作用,也不会报错 
-    若需要某个范围,可套用的公式 
-      值 = Math.floor(Math.random()*总数 + 第一个值)
-      Math.floor(Math,random()*6 + 5);
-      //随机产生5-10之间的任意整数
-  ◆求极值 
-  Math.min(num1,num2,..) 返回一组数值中的最小值 
-  Math.max(num1,num2,..) 返回一组数值中的最大值 
-    Math.max(2,3,5,6,76,8,7);   // 76
-    Math.min(2,3,5,6,76,8,7);   // 2
-    Math.min.apply(null,[2,3,5,6,76,8,7]);   // 2
-    Math.min.apply(null,[0,0,0]);   // 2
-  ◆取整
-  Math.round(num)   四舍五入取整            [round 圆；循环；一回合；圆形物]
-  Math.ceil(num)    向上舍入取整,数值将变大; [ceil  天花板] 
-  Math.floor(num)   向下舍入取整,数值将变小; [floor 地板  ]
-    Math.floor(1.1)    //1
-  其他方法
-    Math.abs(num)       返回num的绝对值
-    Math.pow(num,power) 返回num的power次幂
-    Math.sqrt(num)      返回num的平方根
-    Math.log(num)       返回num的自然对数
-    Math.exp(num)       返回Math.E的num次幂
-    Math.sin(弧度值)  求正弦值
-      Example: Math.sin(30/180*Math.PI);  //0.49999999999999994
-    Math.cos(弧度值)  求余弦值
-    Math.tan(弧度值)  求正切值
-    Math.acos(num)        返回num的反余弦值
-    Math.asin(num)        返回num的反正弦值
-    Math.atan(num)        返回num的反正切值
-    Math.atan2(num1,num2) 返回num1/num2的反正切值
-'JavaScript_Object_Notation'JSON,JS对象表示法 
+'JavaScript Object Notation'JSON,JS对象表示法 
   PS: 一种基于文本、独立于语言的轻量级数据交换格式,
     利用 JS 中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.
@@ -4210,7 +4126,7 @@ Performance 当前页面加载相关的性能信息
   闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
   从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
 'this'执行函数时的上下文对象 
-  PS:函数内部的一特殊对象[与其他语言相比有很多不同]; 
+  PS: 函数内部的一特殊对象[与其他语言相比有很多不同]; 
     随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象,在函数运行时确定;
     在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
     在绝大多数情况下,函数的调用方式决定了this的值.
@@ -4294,9 +4210,21 @@ Performance 当前页面加载相关的性能信息
         }
       },
     }
-    obj.foo()();  // 1
-    // 相当于
-    (obj.foo())(); // 2
+    var val = obj.foo()(); // 相当于 (obj.foo())(); 
+    console.log(val);  // 1 
+    
+    var obj = {
+      name : "小明",
+      age : 12,
+      sex : "男",
+      sayhi : function(){
+        return "say";
+      },
+      info : function(){ //使用this访问当前对象的属性
+        return this.name+"年龄"+this.age; 
+      }
+    }
+    obj.info(); // 小明年龄12
   DOM中 
     var el = document.querySelector("#el");
     el.addEventListener("click",function(){

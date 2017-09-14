@@ -206,7 +206,7 @@ NodeJS的运行方式及编程风格
       console.log(this.foo); // bar
       testThis();
       console.log(this.foo); // foo
-'Global_Object'全局对象 : 可在程序的任何地方访问 
+'Global Object'全局对象 : 可在程序的任何地方访问 
   PS:浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
   ECMAScript 全局变量的定义 
@@ -235,6 +235,86 @@ NodeJS的运行方式及编程风格
   process 用于描述当前Node进程状态 
     PS:global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
       提供了一个与操作系统的简单接口
+    ◆属性
+    obj = process.env   成员为当前shell的环境变量 
+      process.env.aoo  即为在命令行中输入的  aoo=xx
+    process.stdout      标准输出流
+    process.stderr      标准错误流
+    process.stdin       标准输入流
+    process.argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
+      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
+    process.execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
+    process.execArgv    返回一个数组,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数.
+    process.exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
+    process.version     Node 的版本,比如v0.10.18.
+    process.versions    一个属性,包含了 node 的版本和依赖.
+    process.config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
+      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
+    process.pid         当前进程的进程号.
+    process.title       进程名,默认值为"node",可以自定义该值.
+    process.arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
+    process.platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
+    process.mainModule  require.main 的备选方法.
+      不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
+      可以认为,这两者引用了同一个模块.
+    Example:
+      创建文件 main.js ,代码如下所示:
+      process.stdout.write("Hello World!" + "\n"); // 输出到终端
+      process.argv.forEach(function(val, index, array) { // 通过参数读取
+       console.log(index + ': ' + val);
+      });
+      console.log(process.execPath); // 获取执行路局
+      console.log(process.platform); // 平台信息
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      Hello World!
+      0: node
+      1: /web/www/node/main.js
+      /usr/local/node/0.10.36/bin/node
+      darwin
+    ◆方法
+    process.abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
+    process.chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
+    process.cwd()   返回当前进程的工作目录
+    process.exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
+    process.getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.setgid(id) 设置进程的群组标识(参见 setgid(2)).
+      可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.setuid(id) 设置进程的用户标识(参见setuid(2)).
+      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
+      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    process.kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
+      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
+    process.memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
+    process.nextTick(callback) 一旦当前事件循环结束,调用回到函数.
+    process.umask([mask]) 设置或读取进程文件的掩码.
+      子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
+    process.uptime() 返回 Node 已经运行的秒数.
+    process.hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
+      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
+      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
+      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
+    Example:
+      创建文件 main.js ,代码如下所示:
+      console.log('当前目录: ' + process.cwd()); // 输出当前目录
+      console.log('当前版本: ' + process.version); // 输出当前版本
+      console.log(process.memoryUsage()); // 输出内存使用情况
+      执行 main.js 文件,代码如下所示:
+      $ node main.js
+      当前目录: /web/com/runoob/nodejs
+      当前版本: v0.10.36
+      { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
     ◆事件
     exit       当进程准备退出时触发.
     beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
@@ -258,109 +338,18 @@ NodeJS的运行方式及编程风格
       退出码为: 0
     ◆退出状态码
       状态码 名称 & 描述
-      1 Uncaught Fatal Exception
-      有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
-      2 Unused
-      保留
-      3 Internal JS Parse Error
-      JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
-      4 Internal JS Evaluation Failure
-      JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
-      5 Fatal Error
-      V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
-      6 Non-function Internal Exception Handler
-      未捕获异常,内部异常处理函数不知为何设置为on-function,并且不能被调用.
-      7 Internal Exception Handler Run-Time Failure
-      未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
-      8 Unused
-      保留
-      9 Invalid Argument
-      可能是给了未知的参数,或者给的参数没有值.
-      10 Internal JS Run-Time Failure
-      JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
-      12 Invalid Debug Argument 
-      设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
-      >128 Signal Exits
-      若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
-    ◆属性
-    stdout      标准输出流.
-    stderr      标准错误流.
-    stdin       标准输入流.
-    argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
-      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
-    execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-    execArgv    返回一个数组,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数.
-    env         返回一个对象,成员为当前 shell 的环境变量
-    exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
-    version     Node 的版本,比如v0.10.18.
-    versions    一个属性,包含了 node 的版本和依赖.
-    config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
-      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
-    pid         当前进程的进程号.
-    title       进程名,默认值为"node",可以自定义该值.
-    arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
-    platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
-    mainModule  require.main 的备选方法.
-      不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
-      可以认为,这两者引用了同一个模块.
-    Example:
-      创建文件 main.js ,代码如下所示:
-      process.stdout.write("Hello World!" + "\n"); // 输出到终端
-      process.argv.forEach(function(val, index, array) { // 通过参数读取
-       console.log(index + ': ' + val);
-      });
-      console.log(process.execPath); // 获取执行路局
-      console.log(process.platform); // 平台信息
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      Hello World!
-      0: node
-      1: /web/www/node/main.js
-      /usr/local/node/0.10.36/bin/node
-      darwin
-    ◆方法
-    abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
-    chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
-    cwd()   返回当前进程的工作目录
-    exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
-    getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setgid(id) 设置进程的群组标识(参见 setgid(2)).
-      可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setuid(id) 设置进程的用户标识(参见setuid(2)).
-      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
-      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
-      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
-    memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
-    nextTick(callback) 一旦当前事件循环结束,调用回到函数.
-    umask([mask]) 设置或读取进程文件的掩码.
-      子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
-    uptime() 返回 Node 已经运行的秒数.
-    hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
-      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
-      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
-      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
-    Example:
-      创建文件 main.js ,代码如下所示:
-      console.log('当前目录: ' + process.cwd()); // 输出当前目录
-      console.log('当前版本: ' + process.version); // 输出当前版本
-      console.log(process.memoryUsage()); // 输出内存使用情况
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      当前目录: /web/com/runoob/nodejs
-      当前版本: v0.10.36
-      { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
+      1 Uncaught Fatal Exception 有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
+      2 Unused 保留
+      3 Internal JS Parse Error JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
+      4 Internal JS Evaluation Failure JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
+      5 Fatal Error V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
+      6 'Non-function' Internal Exception Handler 未捕获异常,内部异常处理函数不知为何设置为'on-function',并且不能被调用.
+      7 Internal Exception Handler Run-Time Failure 未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
+      8 Unused 保留
+      9 Invalid Argument 可能是给了未知的参数,或者给的参数没有值.
+      10 Internal JS Run-Time Failure JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
+      12 Invalid Debug Argument 设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
+      >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
   Date    时间类 
   console 用于提供控制台标准输出[详见浏览器调试] 
   ◆全局变量
@@ -416,7 +405,7 @@ NodeJS的运行方式及编程风格
   module
   module.exports
   exports
-events,事件模块 
+'Events'事件模块 
   PS:events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
@@ -501,7 +490,7 @@ events,事件模块
     首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
     其次 JS 的对象机制是基于原型的,支持 部分多重继承,
     继承 EventEmitter 不会打乱对象原有的继承关系.
-Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据] 
+'Buffer'缓冲区: 处理二进制数据的接口[用于保存原始数据] 
   PS:JS只有字符串数据类型,没有二进制数据类型, 
     处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
     用来创建一个专门存放二进制数据的缓存区;
@@ -648,7 +637,7 @@ Buffer,缓冲区 处理二进制数据的接口[用于保存原始数据]
     二进制数组的buffer属性,保留指向原Buffer对象的指针。
     二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
     比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
-Stream,流 用于暂存和移动数据[以bufer的形式存在] 
+'Stream'流: 用于暂存和移动数据[以bufer的形式存在] 
   PS:Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
@@ -765,7 +754,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
         菜鸟教程官网地址:www.runoob.com
 模块,Nodejs应用程序的基本组成部分,可让Nodejs的文件可以相互调用 
   PS:文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
-    文件可能是JS代码、JSON 或者编译过的 C/C++ 扩展等等;
+    文件可能是JS代码、JSON或者编译过的C/C++扩展等等;
     按照CommonJS规范定义和使用模块
   commonjs规范: 模块导出、引入 
     module.exports/exports  模块公开的接口 
@@ -1392,7 +1381,7 @@ Stream,流 用于暂存和移动数据[以bufer的形式存在]
       为异步操作,不会阻塞后续代码执行 
       var readStream = fs.createReadStream('1.pm4');
     fs.createWriteStream(path,options); 创建可写的stream流 
-  crypto  提供加密和解密功能,基本上是对OpenSSL的包装
+  crypto 提供加密和解密功能,基本上是对OpenSSL的包装
   util   提供常用函数的集合 
     PS:用于弥补核心JS 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
@@ -2022,28 +2011,20 @@ Cookie 操作
   写入cookie 
     在响应头中设定 'Set-Cookie' = 'xx=xxx'
 --------------------------------------------------------------------------------
-RESTful API 
-  PS: REST,Representational State Transfer 表述性状态传递,
-    是Roy Fielding博士在2000年他的博士论文中提出来的一种软件架构风格.
-    表述性状态转移是一组架构约束条件和原则.满足这些约束条件和原则的应用程序或设计就是RESTful.
-    需要注意的是,REST是设计风格而不是标准.
-    REST通常基于使用HTTP,URI,和XML以及HTML这些现有的广泛流行的协议和标准.
-    REST 通常使用 JSON 数据格式.
-  REST 基本架构的四个方法:
-    GET - 用于获取数据.
-    PUT - 用于添加数据.
-    DELETE - 用于删除数据.
-    POST - 用于更新或添加数据.
-  RESTful Web Services
-    Web service是一个平台独立的,低耦合的,自包含的、基于可编程的web的应用程序,
-    可使用开放的XML标准来描述、发布、发现、协调和配置这些应用程序,用于开发分布式的互操作的应用程序.
-    基于 REST 架构的 Web Services 即是 RESTful.
-    由于轻量级以及通过 HTTP 直接传输数据的特性,Web 服务的 RESTful 方法已经成为最常见的替代方法.
-    可以使用各种语言(比如 Java 程序、Perl、Ruby、Python、PHP 和 JS[包括 Ajax])实现客户端.
-    RESTful Web 服务通常可以通过自动客户端或代表用户的应用程序访问.
-    但是,这种服务的简便性让用户能够与之直接交互,
-    使用它们的 Web 浏览器构建一个 GET URL 并读取返回的内容.
-  Example:
+'Representational State Transfer'RESTful API: 表述性状态传递,一种软件架构风格  
+  PS: 满足这些架构约束条件和原则的应用程序或设计就是RESTful 
+    REST是设计风格而不是标准,常基于HTTP,URI,XML及HTML这些现有的广泛流行的协议和标准使用 
+    REST 通常使用 JSON 数据格式 
+  REST基本架构的四个方法:
+    GET    用于获取数据
+    PUT    用于添加数据
+    DELETE 用于删除数据
+    POST   用于更新或添加数据
+  RESTful Web Services: 基于REST架构的Web Services 
+    由于轻量级及通过HTTP直接传输数据的特性,Web服务的RESTful方法已经成为最常见的替代方法 
+    可以使用各种语言(如Java、Perl、Ruby、Python、PHP、JS[包括 Ajax])实现客户端 
+    RESTful Web 服务通常可以通过自动客户端或代表用户的应用程序访问 
+  Example: 
     创建 RESTful
     首先,创建一个 json 数据资源文件 users.json,内容如下:
       {

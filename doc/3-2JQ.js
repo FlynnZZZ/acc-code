@@ -203,7 +203,7 @@ DOM操作
           J('.one~div') <=> J('.one').nextAll('div')
       其他 
         Xpath选择器 [1.2 版本去掉]
-      '\\'选择器中的特殊字符转义
+      '\\'选择器中的特殊字符转义 
         <div id="aoo#boo"> </div>
         $('#aoo#boo');   正确为  $('#aoo\\#b');
       特殊值 

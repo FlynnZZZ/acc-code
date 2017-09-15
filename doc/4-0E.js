@@ -231,6 +231,132 @@
             // 1、先前我口中的@19 师弟,原来是首席大师兄,失敬,失敬
             // 2、@苏哈哈 师兄补充的一条:#号是注释符号
   'http-server' [详见npm]
-Grunt 
-Gulp  
+Grunt : JS构建工具,前端自动化工具  
+  PS: 基于NodeJS,用JS开发,Grunt及其插件,都作为一个包,可以用NPM安装进行管理 
+  相关命令 
+    npm i -g grunt-cli   全局安装Grunt命令行 
+      grunt -V 查看版本 
+    npm i grunt -D    项目中安装grunt,并写入开发依赖 
+    npm i <name> -D   安装相关插件、工具,并写入开发依赖 
+      npm i load-grunt-tasks -D  安装用于加载包的grunt工具 
+      npm i time-grunt -D   
+  'Gruntfile.js'文件: Grunt的配置文件  
+    PS: Grunt调用'Gruntfile.js'文件,解析里面的任务'task'并执行相应操作 
+    module.exports = function(grunt){
+      require('load-grunt-tasks')(grunt); // 加载所有插件 
+      require('time-grunt')(grunt);       // time-grunt 
+      
+      var config = { // 配置项目路径 
+        app: 'src',
+        dist: 'dist'
+      }
+      
+      grunt.initConfig({ // 任务配置
+        // 定义此参数对象为'params',便于后续描述
+        config:  config,
+        
+        // 任务配置 
+        xx: {   // 命令行中 grunt xx ,执行所有子任务 
+          aoo: { // 子任务, 命令行中 grunt xx:aoo 执行该任务 
+            
+          },
+          boo: {
+            
+          }
+          ...
+        },
+        
+        
+      })
+    }
+    主要分三块代码: 
+      插件加载代码: 把需要用到的插件加载进来 
+      任务注册代码: 注册task,包含编写的任务配置代码 
+      任务配置代码: 要执行的任务和实现的功能 
+    Task    
+    Target  
+    Options 
+    API 
+      通配符 
+        ?   匹配除'/'外的单个字符
+        *   匹配除'/'外的任意字符
+        **  匹配任意字符 
+        {xx,xx,...}  匹配所有列出的字符 
+        !   条件取反 
+      <%= aoo.xx %>   模版占位符,aoo表示'params.aoo' 
+      属性 
+      函数 
+      grunt.file.readJSON('xx.json') // 读取'xx.json'文件 
+      grunt.file.isDir(filePath)     // 判断路径是文件还是文件夹 
+      grunt.loadNpmTasks('grunt-contrib-uglify')  // 加载插件 
+      grunt.registerTask('default',['uglify'])    // 注册任务 
+        在'default'上注册了一个'Uglify'任务,'default'是别名,是默认的'task', 
+        当在项目目录执行grunt时,会执行注册到'default'上的任务 
+  任务插件详解 
+    load-grunt-tasks       加载所有在开发依赖的Grunt插件 
+    grunt-contrib-copy     文件拷贝 
+      'copy': {
+        aoo: {  // 子任务'aoo' 
+          // 形式一: 单/多对单  
+          src: str/arr, // 原文件  
+          dest:   ,     // 目标文件  
+          // 形式二: 多对多映射 
+          files: [
+            {
+              // src: str/arr,  
+              // dest:   ,     
+            },
+          ],
+          // 形式三: 形式二的简化版 
+          files: {
+            // key 为目标文件,val 为原文件 
+            key1: val2,
+          }
+        }
+      }
+    grunt-contrib-clean    文件删除 
+      'clean': {
+        aoo: {
+          src: str/arr, // 将删除的文件 
+          filter:   ,   // 过滤条件 
+            参数可为  NodeJS的函数,如 'isFile' 表示过滤掉文件夹 
+          dot: bol,     // 是否删除以'.'开头的文件 
+        }
+      }
+    grunt-contrib-connect  建立本地服务器 
+    grunt-contrib-watch    监听文件变动  
+    grunt-contrib-uglify   压缩文件  
+      'uglify': {
+        options: {
+          
+        },
+        build: {
+          
+        },
+      }
+    grunt-contrib-concat   合并文件  
+      'concat': {
+        options: {
+          separator: ';',
+        },
+        dist: {
+          src: ['./src/plugin.js', './src/plugin2.js'],
+          dest: './global.js',
+        },
+      }
+    grunt-contrib-jshint   语法检查  
+    grunt-contrib-sass     Scss编译  
+      var sassStyle = 'expanded';
+      
+      'sass': {
+        output : {
+          options: {
+            style: sassStyle
+          },
+          files: {
+            './style.css': './scss/style.scss'
+          }
+        }
+      }
+Gulp: 自动化构建工具 
 ----------------------------------------------------------------------以下待整理

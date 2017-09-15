@@ -24,8 +24,8 @@
   npm list [<posOpt>]       查看当前目录已安装模块[简写'ls'] 
   npm update [<name>] [<posOpt>]   更新插件
     npm update       升级当前目录下的所有模块
-    npm update -g           更新npm 
-    npm update vue-cli -g   更新vue
+    npm update -g vue-cli    更新vue
+    npm update -g npm       更新npm 
   npm show express    显示模块详情 
   npm info node 查看详情 
   npm search <name>    搜索模块 
@@ -36,8 +36,8 @@
   ◆<posOpt> 安装位置的配置参数,可选,可多选   
   -g         全局安装 
     将会安装在'C:\Users\Administrator\AppData\Roaming\npm'目录下,并写入系统环境变量
-  --save     将模块写入'package.json'文件的'dependencies'属性中[简写'-S']
-  --save-dev 将模块写入'package.json'文件的'devDependencies'属性中[简写'-D'] 
+  --save     将模块写入'package.json'文件的'dependencies'属性中[简写 -S]
+  --save-dev 将模块写入'package.json'文件的'devDependencies'属性中[简写 -D] 
   '-S'和'-D'的区别 
     '-D' 是开发时候依赖的东西
     '-S' 是发布之后还依赖的东西

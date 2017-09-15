@@ -3070,7 +3070,7 @@ RegExp 正则对象
     /pattern/attr 字面量方式创建
       PS:正则表达式字面量在脚本加载后编译.
         若需创建的正则表达式是常量,使用这种方式可以获得更好的性能.
-      Example: :
+      Example: 
         var rgep1=/fan/;
         var rgep2=/fan/ig;
     new RegExp(str,attr); 通过字符串创建

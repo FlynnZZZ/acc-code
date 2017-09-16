@@ -1,4 +1,4 @@
-CommonJS模块化规范 
+'CommonJS'模块化规范 
   PS: 一般情况可省略'.js'拓展名,可以使用相对路径,也可以使用绝对路径,
     系统内置模块可直接使用模块名 
     require是同步的,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
@@ -29,12 +29,12 @@ CMD'Common Module Definition'通用模块定义
   AMD推崇依赖前置,在定义模块的时候就要声明其依赖的模块 
   CMD推崇就近依赖,只有在用到某个模块的时候再去require 
 --------------------------------------------------------------------------------
-Webpack: 模块加载器兼打包工具 
+'Webpack'JS模块打包器'module bundler'
   介绍 
     运行在NodeJS环境中;支持'AMD''commonJS''ES6Moudle'三种引入方式;
     基于JS,包括四大核心'Entry''Output''Loaders'和'Plugins';
     把各种资源,如JS、coffee、less、sass、图片等都作为模块来使用和处理;
-    根据模块的依赖关系进行静态分析,然后将这些模块按照指定的规则生成对应的静态资源
+    '预编译'模块的方案,根据模块的依赖关系进行静态分析,然后生成对应的静态资源 
   原理: 
     webpack模块能够以各种方式表达它们的依赖关系,如：
       ES2015'import'语句、CommonJS'require'语句、AMD'define'和'require'语句
@@ -264,7 +264,7 @@ Webpack: 模块加载器兼打包工具
     html,css,images等各种资源都有相应的loader来做依赖管理和打包;
     通过文件扩展名[或正则表达式]绑定给不同类型的文件
     Loader可以同步或异步执行,可接受参数,以此来传递配置项给loader
-  可通过管道方式链式调用 
+  通过管道方式链式调用 
     多个loader之间使用'!'连接,类似于Linux的pipe命令,
     每个loader可以把资源转换成任意格式并传递给下一个loader,
     但是最后一个loader必须返回JavaScript;
@@ -657,52 +657,6 @@ Webpack: 模块加载器兼打包工具
     npm i -D clean-webpack-plugin 
     const CleanWebpackPlugin = require('clean-webpack-plugin');
     new CleanWebpackPlugin(['dist'])  // 每次打包前会清理'dist'文件夹 
-使用步骤 
-  创建项目文件夹 myproject
-  cd myproject
-  npm init 
-  npm install html-webpack-plugin --save-dev  安装用于自动快速的生成HTML的插件
-  新建'webpack.config.js'文件 
-    var path = require('path');
-    var HtmlwebpackPlugin = require('html-webpack-plugin');
-    //定义了一些文件夹的路径
-    var rootPath = path.resolve(__dirname);
-    var appPath = path.resolve(rootPath, 'app');
-    var buildPath = path.resolve(rootPath, 'build');
-    
-    module.exports = {
-      entry: appPath,
-      output: {
-        path: buildPath,
-        filename: 'bundle.js'
-      },
-      plugins: [
-        new HtmlwebpackPlugin({
-          title: 'Hello World app'
-        })
-      ]
-    };
-  添加第三方库 
-    如使用jquery之类的库,需安装jquery的支持
-    npm install jquery  --save-dev
-    在js中引用
-    var $ = require('jquery');
-    var app  = document.createElement('div');
-    app.innerHTML = '<h1>Hello World it</h1>';
-    document.body.appendChild(app);
-    $('body').append('<p>look at me!</p>');
-  在项目根目录运行:  webpack
-  部署上线 
-    新创建一个单独的config文件,因为部署上线使用webpack的时候
-    不需要一些dev-tools,dev-server和jshint校验等。
-    复制现有的config文件,命名为 webpack.production.config.js,
-    将里面关于 devServer等和开发有关的东西删掉。
-    在 package.json 中添加一个命令
-    "scripts": {
-      "start": "webpack-dev-server --hot --inline",
-      "build": "webpack --progress --profile --colors --config webpack.production.config.js"
-    },
-    当要上线的时候,运行 npm run build
 'webpack-merge'通用配置工具: 提取开发环境和生产环境的公用配置  
   npm i -S webpack-merge // 安装  
   新建文件如下,用于开发环境和生产环境的配置  
@@ -731,8 +685,8 @@ Webpack: 模块加载器兼打包工具
       ] 
     }); 
   package.json       // 命令配置  
-    "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "dev": "webpack-dev-server --open --config webpack.dev.js",
+    "prd": "webpack --config webpack.prod.js"
 代码分离 
   有三种常用的代码分离方法：
   入口起点：使用'entry'配置手动地分离代码 
@@ -746,11 +700,58 @@ Webpack: 模块加载器兼打包工具
         var print = module.default;
         print();
       });
+使用步骤 
+  创建项目文件夹 myproject
+  cd myproject
+  npm init 
+  npm install html-webpack-plugin -D  安装用于自动快速的生成HTML的插件 
+  ...
+  'webpack.config.js'文件创建  
+    var path = require('path');
+    var HtmlwebpackPlugin = require('html-webpack-plugin');
+    //定义了一些文件夹的路径
+    var rootPath = path.resolve(__dirname);
+    var appPath = path.resolve(rootPath, 'app');
+    var buildPath = path.resolve(rootPath, 'build');
+    
+    module.exports = {
+      entry: appPath,
+      output: {
+        path: buildPath,
+        filename: 'bundle.js'
+      },
+      plugins: [
+        new HtmlwebpackPlugin({
+          title: 'Hello World app'
+        })
+      ]
+    };
+  添加第三方库 
+    npm install jquery  -D // 如使用jquery之类的库,需安装jquery的支持
+      var $ = require('jquery');
+      var app  = document.createElement('div');
+      app.innerHTML = '<h1>Hello World it</h1>';
+      document.body.appendChild(app);
+      $('body').append('<p>look at me!</p>'); 
+    ...
+  webpack  // 项目根目录执行命令  
+  部署上线 
+    新创建一个单独的config文件,因为部署上线使用webpack的时候
+    不需要一些dev-tools,dev-server和jshint校验等。
+    复制现有的config文件,命名为 webpack.prod.config.js,
+    将里面关于devServer等和开发有关的东西删掉 
+    'package.json'中添加命令 
+      "scripts": {
+        // 测试环境  
+        "dev": "webpack-dev-server --hot --inline",  
+        // 生产环境 
+        "bd": "webpack --progress --profile --colors --config webpack.production.config.js" 
+      },
 --------------------------------------------------------------------------------
-RequireJS 模块化开发框架 
+'RequireJS'模块化开发框架,一种"在线编译"模块的方案 
   模块化开发的目的 
     开发阶段: 不打包、不压缩、模块化开发 
-    部署阶段: 自动打包、压缩   减少http请求
+    部署阶段: 自动打包、压缩  减少http请求
   功能 
     异步加载文件 
     模块化开发: 

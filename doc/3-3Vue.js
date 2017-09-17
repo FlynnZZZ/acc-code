@@ -83,11 +83,14 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     所有的VueJS组件其实都是被扩展的Vue实例;
     在params中的方法中'this'表示的即为'vm';
     参数包括数据、模板、挂载元素、方法、生命周期钩子等选项 
-  {
-    'el': selector, // 指定Vue接管的DOM区域,当选择器指向多个标签时,只接管第一个 
+  {  // 实例选项: params 
+    'el': selector, // 挂载点,指定Vue接管的DOM区域 
+      // 当选择器指向多个标签时,只接管第一个 
       // 不能在<body>元素上使用id,对<body>进行接管 
-    'data': {},     // 用于渲染、交互的数据 
-      PS:Vue实例默认代理其'data'对象,使用 this 表示'data'对象;
+    'template': HTMLStr,  // 模版,定义实例的HTML[接管区域被替代,包括挂载的标签] 
+    'data': {},     // 数据,用于渲染、交互的数据 
+      PS: Vue实例默认代理其'data'对象,使用'this'表示,
+        其优先级高于其他,即'this.xx'优先在'data'中寻找 
       Example:
         var obj = { a: 1 };
         var vm = new Vue({
@@ -101,23 +104,6 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         obj.a = 3;
         console.log(vm.a); // 3
         若在实例创建之后添加新的属性到实例上,它不会触发视图更新
-      双向数据绑定 
-        view层为 HTML DOM, model层为 vue实例,
-        vuejs[使用v-model这个指令]完成中间的底层逻辑,实现绑定的效果, 
-        改变其中的任何一层,另外一层都会改变 
-        Example:
-          HTML
-          <div id="test">
-            <p>{{ message }}</p>
-            <input v-model="message">
-          </div>
-          JS
-          new Vue({
-            el: '#test',
-            data: { 
-              message: '菜鸟教程!', 
-            }
-          });
       不能改变data变量,因为这样完全破坏了data与vm的引用关系 
         var userInfo = {name:'aaa',age:20}
         var vm = new Vue({
@@ -261,27 +247,16 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         这是计算属性无法做到的
         除了 watch 选项之外,还可以使用 vm.$watch API 命令
     'methods'    // 执行的方法 
-      使用method方法返回数据 
-          <li v-for="n in even(numbers)">{{ n }}</li>
-          data: {
-            numbers: [ 1,2,3,4,5 ]
-          },
-          methods: {
-            even: function (numbers) {
-              return numbers.filter(function (number) {
-                return number % 2 === 0
-              });
-            }
-          }
     'components': {}, // 注册组件[组件需注册后才可使用]  
       PS: HTML中组件标签不区分大小写,须将驼峰写法转换成'-'连接的方式 
       {
-        'cpt-name1' : {
-          template : HTMLStr,
-          components : { // 组件的子组件,可以一直嵌套使用  
-            
-          },
-        },
+        'cpt-name1' : cpt, 
+          cpt 可为:   
+          import xx from "./cpt.js";  // 模块化引入的组件
+          Vue.component(cpt,{})       // 定义的全局组件 
+          {                           // 通过对象来配置的组件 
+            template:'',
+          }
         ...
       }
     'filters'    // 定义过滤器 
@@ -300,7 +275,6 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           // 代码保证 this.$el 在 document 中
         })
       }
-    'template' : HTMLStr,  // 定义实例的HTML内容[原内容被替换] 
     render: function(h){   // 将组件渲染到DOM,相当于'template'的作用  
       h(cpt)
     },
@@ -447,13 +421,13 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         }
       })
 'Lifecycle hooks'生命周期钩子 
-  PS:钩子:某个阶段开始或者结束之前、之后等过程中被触发的函数,
-    每个Vue实例在被创建之前都要经过一系列的初始化过程, 
+  PS:钩子:某个阶段开始或者结束之前、之后等过程中被触发的函数, 
+    每个Vue实例在被创建之前都要经过一系列的初始化过程,  
     如实例需要配置数据观测[data observer]、编译模版、挂载实例到 DOM,
     然后在数据变化时更新 DOM,
     在这个过程中,实例也会调用一些 生命周期钩子,提供了执行自定义逻辑的机会,
     组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'的概念];
-    钩子的 this 指向调用它的 Vue 实例;
+    钩子的'this'指向调用它的Vue实例; 
   'beforeCreate'  实例刚创建 
   'created'       实例创建完毕 
   'beforeMount'   DOM渲染前
@@ -545,79 +519,66 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
 'Directives'指令: model和view的交互 
   PS:将vm和 HTML DOM 进行关联,做为HTML标签的属性,让Vue对 DOM 元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
-  ◆数据渲染 
-  v-text   纯文本 
-  v-html   HTML文本 
-  v-model  表单元素读写值 
-    PS:常见的表单如 input,checkbox,radio,select[select的option不支持],
-    Example:
-      动态展示输入
-      <div id="test">
-        <p>{{ message }}</p>
-        <input v-model="message">
-      </div>
-      var vm = new Vue({
-        el: '#test',
-        data: {
-          message: 'Hello Vue!'
-        }
-      })    
-    单个checkbox复选框,值为 false/true 
+  v-text="str"   纯文本 
+  v-html="str"   HTML文本 
+  v-model="str"  双向绑定表单元素值 
+    PS:常见的表单如'input[text]''input[checkbox]','input[radio]',<select>[select的option不支持] 
+    绑定单个'checkbox'复选框,获取值为'false'/'true' 
       <section id="checkbox">
-        <label>
-          <input type="checkbox" value="获取不到" v-model="checked">
-          {{ checked }}
-        </label>
+        <input type="checkbox" value="获取到的不是改值" v-model="checked">
+        {{ checked }}
+      </section>
+      data : {
+        checked : true,
+      },
+      默认选中,通过点击切换,显示'true'或'false'
+    绑定单个'checkbox'复选框并添加'ture-value'及'false-value'属性时,属性值和选中双向绑定 
+      <section id="a">
+        <input type="checkbox" v-model="val" :true-value="val1" :false-value="val2" >
+        <br>
+        {{val}}
       </section>
       var vm = new Vue({
-        el : '#checkbox',
-        data : {
-          checked : true,
-        },
-      });
-      默认选中,通过点击切换,显示'true'或'false'
-    多个checkbox复选框绑定到同一个数组时 
-      显示选取的人名列表 
-      <section id="a" class="">
-        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
-        <label for="jack">Jack</label>
-        <input type="checkbox" id="john" value="John" v-model="checkedNames">
-        <label for="john">John</label>
-        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
-        <label for="mike">Mike</label>
-        <br>
-        <span>Checked names: {{ checkedNames }}</span>
-      </section>
-      new Vue({
-        el: '#a',
-        data: {
-          checkedNames: []
-        }
-      });
-    radio单选按钮,获取value值 
-      显示选中的值 
-      <section id="a" >
-        <input type="radio" id="one" value="One" v-model="picked">
-        <label for="one">One</label>
-        <br>
-        <input type="radio" id="two" value="Two" v-model="picked">
-        <label for="two">Two</label>
-        <br>
-        <span>Picked: {{ picked }}</span>
-      </section>
-      new Vue({
         el : '#a',
         data : {
-          picked : '',
+          val : '',
+          val1 : '选中',
+          val2 : '未选中',
         },
       });
-    select列表 
-      <select  v-model='key'>
-        <option value="">{{val}}</option>
-        // 当存在 value="xx" 时 , v-model 的值为 "xx",否则为val
-        // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
-      </select>
-      单选列表 
+      setTimeout(function(){
+        vm.val = '选中';
+      },2000);
+    同时绑定多个'checkbox'复选框到同一个数组时,会将选中项的'value'存入数组中  
+      <section id="a">
+        <input type="checkbox" value="Jack" v-model="checkedNames">
+        <input type="checkbox" value="John" v-model="checkedNames">
+        <input type="checkbox" value="Mike" v-model="checkedNames">
+        <div>Checked names: {{ checkedNames }}</div>
+      </section>
+      data: {
+        checkedNames: []
+      }
+    绑定'radio'单选按钮,获取'value'值  
+      <section id="a" >
+        <input type="radio" value="One" v-model="picked">
+        <input type="radio" value="Two" v-model="picked">
+        <div>Picked: {{ picked }}</div>
+        <input type="radio" value="1111" v-model="pick">
+        <div>Picked: {{ pick }}</div>
+      </section>
+      data : {
+        picked : '',
+        pick : '22',
+      },
+    绑定<select>单选列表,获取到被选中项的'value'值  
+      Example: 
+        <select  v-model='key'>
+          <option value="">{{val}}</option>
+          // 当存在 value="xx" 时 , v-model 的值为 "xx",否则为val
+          // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
+        </select>
+      当选项中不存在被赋予的值时,会被默认重置为undefined
         <div id="slct">
           <select  v-model="slctVal">
             <option>A</option>
@@ -635,102 +596,42 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
             var that = this;
             setTimeout(function(){
               that.slctVal = '11';
-              // 当选项中没有被赋予的值存在时,会被默认重置为undefined
             },1000);
           },
         });
-      多选列表,绑定到一个数组 
-        <div id="slct">
-          <select v-model="selected" multiple>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-          </select>
-          <div>Selected: {{ selected }}</div>
-        </div>
-      动态切换表单值,可用'v-bind'实现[且这个属性的值可以不是字符串]
-        复选框切换选中 
-          <section id="a" class="">
-            <input type="checkbox" v-model="toggle" v-bind:true-value="a" v-bind:false-value="b" >
-          </section>
-          var vm = new Vue({
-            el : '#a',
-            data : {
-              toggle : '1',
-              a : '1',
-              b : '2',
-            },
-          });
-          setTimeout(function(){
-            vm.toggle = '2';
-          },2000);
-          // 当选中时
-          vm.toggle === vm.a
-          // 当没有选中时
-          vm.toggle === vm.b
-        单选按钮切换选中  
-          <section id="a" class="">
-            <input type="radio" v-model="pick" v-bind:value="a">
-          </section>
-          var vm = new Vue({
-            el : '#a',
-            data : {
-              pick : '1',
-              a : '1',
-            },
-          });
-          setTimeout(function(){
-            vm.a = '2';
-          },2000);
-          // 当选中时
-          vm.pick === vm.a
-        选择列表设置 
-          <select v-model="selected">
-              // <!-- 内联对象字面量 -->
-            <option v-bind:value="{ number: 123 }">123</option>
-          </select>
-          // 当选中时
-          typeof vm.selected // -> 'object'
-          vm.selected.number // -> 123
-          
-          切换选中 
-          <section id="a" class="">
-            <select v-model="slctVal">
-              <option v-for="item1 in items" :value="item1.val">{{item1.show}}</option>
-            </select>
-          </section>
-          var vm = new Vue({
-            el : '#a',
-            data : {
-              slctVal : '1',
-              items : [
-                {val:1,show:'a'},
-                {val:2,show:'b'},
-                {val:3,show:'c'},
-                {val:4,show:'d'},
-              ],
-            },
-          });
-          setTimeout(function(){
-            vm.slctVal = 2;
-          },2000);
-  v-for="(item,key,idx) in list"   渲染循环列表 
+    绑定<select>多选列表,获取到选中项'value'组成的数组 
+      <div id="slct">
+        <select v-model="selected" multiple>
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+        </select>
+        <div>Selected: {{ selected }}</div>
+      </div>
+    表单值为对象 
+      <select v-model="selected"> 
+        // <!-- 内联对象字面量 --> 
+        <option v-bind:value="{ number: 123 }">123</option> 
+      </select> 
+      // 当选中时 
+      typeof vm.selected // -> 'object'
+      vm.selected.number // -> 123
+  v-for="(item,key,idx) in list"   循环渲染  
     item  自定义的占位符placeholder,表示集合'list'中的一项,便于后续使用 
     key   可选,表示集合'list'中一项的键,数组则为下标 
     idx   当遍历对象时可用,表示对象的第几个元素 
       按 Object.keys()的结果遍历对象,但不能保证结果在不同JS引擎下一致
     list  迭代的集合,可为arr/obj/num 
       为num时,表示迭代num次,'item'表示每一次的数字 
-    <template v-for="item in list"> 渲染多元素
+    <template v-for="item in list">   渲染多元素
       PS: 最终在DOM中不存在<template>标签,仅用于包裹元素  
-    'props'传递数据 
+    循环渲染组件,需使用'props'传递数据 
       不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
       <div id="todo-list-example">
         <input v-model="newTodoText" v-on:keyup.enter="addNewTodo" 
         placeholder="Add a todo" >
         <ul>
-          <li is="todo-item" v-for="(todo,index) in todos" v-bind:title="todo"
-          v-on:remove="todos.splice(index,1)" ></li>
+          <li is="todo-item" v-for="(todo,index) in todos" v-bind:title="todo" v-on:remove="todos.splice(index,1)"></li>
         </ul>
       </div>
       Vue.component('todo-item',{
@@ -757,30 +658,14 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         }
       });
     'key'标识渲染元素复用 
-      当VueJS用 v-for 正在更新已渲染过的元素列表时,
-      它默认用 “就地复用” 策略若数据项的顺序被改变,
-      Vue将不是移动 DOM 元素来匹配数据项的顺序,
-      而是简单复用此处每个元素,
-      并且确保它在特定索引下显示已被渲染过的每个元素这个类似 Vue1.x 的 track-by="$index" 
-      这个默认的模式是有效的,但是只适用于不依赖子组件状态或临时 DOM 状态[例如:表单输入值]的列表渲染输出
-      为了给 Vue 一个提示,以便它能跟踪每个节点的身份,从而重用和重新排序现有元素,
-      你需要为每项提供一个唯一 key 
-      属性理想的 key 值是每项都有唯一 id这个特殊的属性相当于 Vue1.x 的 track-by ,
-      但它的工作方式类似于一个属性,所以你需要用 v-bind 来绑定动态值 
-      <div v-for="item in list" :key="item.id">
-        <!-- 内容 -->
-      </div>
-      建议尽可能使用 v-for 来提供 key ,除非迭代 DOM 内容足够简单,
-      或者你是故意要依赖于默认行为来获得性能提升
-      因为它是 Vue 识别节点的一个通用机制,key 并不特别与 v-for 关联,
-      key 还具有其他用途,我们将在后面的指南中看到其他用途
+      其工作方式类似属性,用'v-bind'来动态绑定,'key'并不特别与'v-for'关联  
+      <div v-for="item in list" :key="item.id"> </div>
     可用'of'替代'in'作为分隔符 
       <div v-for="item of list"></div>
   v-once  一次性插值[配合插值使用] 
     当数据改变时,插值处的内容不会更新
-    <span v-once>This will never change: {{ msg }}</span>
-  ◆显示控制 
-  v-if      条件渲染 
+    <span v-once>值不会更新: {{ msg }}</span>
+  v-if="bol"    条件渲染 
     Example:
       <div id="test">
         <p v-if="seen">现在你看到我了</p>
@@ -867,12 +752,11 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       'v-else'必须紧跟在'v-if'或者'v-else-if'的后面,否则它不能被识别
         <h1 v-if="ok">Yes</h1>
         <h1 v-else>No</h1>
-  v-show    作用与v-if类似 
+  v-show="bol"  作用与v-if类似 
     PS:'v-show'的元素会始终渲染并保持在DOM中[使用 display:none]
       v-show不支持<template>标签
       一般,'v-if'有更高的切换消耗而'v-show'有更高的初始渲染消耗,
       因此若需要频繁切换使用'v-show'较好,若在运行时条件不大可能改变则使用'v-if'较好 
-  ◆事件绑定 
   v-on:ename="foo" 事件处理与绑定[简写'@e_name'] [事件名不区分大小写] 
     PS:当一个ViewModel被销毁时,所有的事件处理器都会自动被删除,无须自己清理 
     foo  当触发事件时执行'foo',可为函数[可带参数]、单条语句或空 
@@ -923,9 +807,78 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           }
         }
       })    
-  'Modifiers'修饰符  让指令以特殊方式绑定[主要用于'v-on'、'v-model'] 
+  v-bind:attrName="str/arr/obj"  属性赋值[简写':attrName'] 
+    PS: 在用于'class'和'style'时,VueJS专门增强了它 
+      表达式的结果类型除了字符串之外,还可以是对象或数组
+    str,表示属性值为str 
+      <div id="app-2" :title="message">
+        鼠标悬停几秒钟查看此处动态绑定的提示信息！
+      </div>
+      var app2 = new Vue({
+        el: '#app-2',
+        data: {
+          message: '页面加载于 ' + new Date()
+        }
+      }); 
+      // app2.message = '新消息';
+      // 可通过更改 app2.message 的值来改变显示
+    arr,表示该class的值为该数组中的多个 
+      Example: 
+        <div v-bind:class="[activeClass,errorClass]">
+        data: {
+          activeClass: 'active',
+          errorClass: 'text-danger'
+        }
+        也可在数组语法中使用对象语法 
+        <div v-bind:class="[{ active: isActive },errorClass]"> 
+    obj,key为属性名,val可为属性的值、函数判断或简单表达式 
+      Example: 
+        <div v-bind:class="{ active: isActive }"></div>
+        'active'存在与否将取决于'isActive'是否为真 
+      与普通的class属性共存 
+        <div class="static" :class="{ c1: bol1,c2: bol2 }">
+        </div>
+        data: {
+          bol1: true,
+          bol2: false
+        }
+        渲染为: <div class="static active"></div>
+      可直接绑定数据属性里的对象 
+        <div id="test" v-bind:class="cls"></div>
+        data: {
+          cls: {
+            c1: true,
+            c2: false
+          }
+        }
+    :class=arg  'class'类样式 
+      用在组件上 
+        在组件上用到class属性时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
+        Vue.component('my-component',{
+          template: '<p class="foo bar">Hi</p>'
+        });
+        // 使用 
+        <my-component class="baz boo"></my-component>
+        // 将被渲染成为 
+        <p class="foo bar baz boo">Hi</p>
+        // 同样的适用于动态绑定 
+        <my-component :class="{ active: true }"></my-component>
+        // 被渲染成为
+        <p class="foo bar active"></p>
+    :style=arg  'style'内联样式 
+      对象语法: key为声明属性,val为声明值 
+        可用短横分隔命名'kebab-case'或驼峰式'camelCase' 
+        <div :style="{'background-color':color1,fontSize:fontSize+'px'}"></div>
+        data: {
+          color1: 'red',
+          fontSize: 30
+        }
+      数组语法: 将多个样式对象应用到一个元素上 
+      自动添加前缀: Vue会自动添加相应的前缀 
+    :key=arg  标识DOM节点 
+  'Modifiers'修饰符: 让指令以特殊方式绑定,用于'v-on'、'v-model' 
     PS:修饰符是以点号'.'指明的特殊后缀;指令可以串联;
-    事件修饰符 
+    通用事件修饰符 
       .prevent 修饰v-on,触发的事件调用 event.preventDefault() 
         <form v-on:submit.prevent="onSubmit"></form>
         // <!-- 提交事件不再重载页面 -->
@@ -941,7 +894,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       .once    '2.1.4'新增 
         <!-- 事件只会执行一次 -->
         <a v-on:click.once="doThis"></a>
-    按键修饰符   在监听键盘事件时,监测键值 
+    按键事件修饰符: 监听键盘事件时,监测键值 
       记住所有的keyCode比较困难,所以Vue为最常用的按键提供了别名 
         <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
         <input v-on:keyup.13="submit">
@@ -992,7 +945,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           <comp :foo="bar" @update:foo="val => bar = val"></comp>
           当子组件需要更新 foo 的值时,它需要显式地触发一个更新事件:
           this.$emit('update:foo',newValue)
-    v-model的修饰符 
+    'v-model'修饰符 
       .lazy   从input事件转变为在change事件中同步  
         // <!-- 在 "change" 而不是 "input" 事件中更新 -->
         <input v-model.lazy="msg" >
@@ -1001,25 +954,6 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
       .trim   自动过滤用户输入的首尾空格 
         <input v-model.trim="msg">
-  指令的值'val'可为单条语句 
-    <div id="example-1"> 
-      <button v-on:click="counter += 1">增加 1</button>
-      <p>这个按钮被点击了 {{ counter }} 次</p>
-    </div> 
-    var example1 = new Vue({
-      el: '#example-1',
-      data: {
-        counter: 0
-      }
-    })
-    
-    <section id="example" class="">
-      <span v-if="a?true:false">111111111111111</span>
-    </section>
-    data : {
-      a : fasle,
-    }
-  ◆自定义指令 
   v-drctname:drctArg.mdf1.mdf2='drctVal' 自定义指令,在HTML中指定 [不区分大小写] 
     PS:用于对纯DOM元素进行底层操作 
     'drctname'  指令名称 
@@ -1146,173 +1080,18 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         modifiers: {"a":true,"b":true}
         vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
         oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-  ◆属性控制 
-  v-bind:attrName="arg"  属性赋值[简写':attrName'] 
-    PS:在v-bind 用于'class'和'style'时,VueJS专门增强了它 
-      表达式的结果类型除了字符串之外,还可以是对象或数组
-    arg 可为str,arr,obj
-      str,表示属性attrName的值为str 
-        <div id="app-2">
-          <span v-bind:title="message">
-          // 简写为 <span :title="message">
-            鼠标悬停几秒钟查看此处动态绑定的提示信息！
-          </span>
-        </div>
-        var app2 = new Vue({
-          el: '#app-2',
-          data: {
-            message: '页面加载于 ' + new Date()
-          }
-        }); 
-        // app2.message = '新消息';
-        // 可通过更改 app2.message 的值来改变显示
-      arr,表示该class的值为该数组中的多个 
-        Example:
-          <div v-bind:class="[activeClass,errorClass]">
-          data: {
-            activeClass: 'active',
-            errorClass: 'text-danger'
-          }
-          渲染为:
-          <div class="active text-danger"></div>
-        使用三元表达式,根据条件切换列表中的class  
-          <div v-bind:class="[isActive ? activeClass : '',errorClass]">
-          此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-        可在数组语法中使用对象语法 
-          <div v-bind:class="[{ active: isActive },errorClass]"> 
-      obj,key为属性名,val可为属性的值、函数判断或简单表达式  
-        动态地切换class 
-          <div v-bind:class="{ active: isActive }"></div>
-          class active 存在与否将取决于数据属性 isActive 是否为真值
-        与普通的class属性共存 
-          <div class="static" :class="{ active: isActive,'text-danger': hasError }">
-          </div>
-          data: {
-            isActive: true,
-            hasError: false
-          }
-          渲染为:
-          <div class="static active"></div>
-        可直接绑定数据属性里的对象 
-          <div id="test" v-bind:class="dataKeyObj"></div>
-          new Vue({
-            el : '#test',
-            data: {
-              dataKeyObj: {
-                active: true,
-                'text-danger': false
-              }
-            }
-          });
-          渲染为
-          <div id="test" class="active"></div>
-        可为计算属性的方法[返回的对象] 
-          <div v-bind:class="comptFoo"></div>
-          data: {
-            isActive: true,
-            error: null
-          },
-          computed: {
-            comptFoo: function () {
-              return {
-                active: this.isActive && !this.error,
-                'text-danger': this.error && this.error.type === 'fatal',
-              }
-            }
-          }      
-    v-bind:class=arg  'class'类样式
-      对象语法 
-        动态地切换 class 
-          <div v-bind:class="{ active: isActive }"></div>
-          上面的语法表示 classactive 的更新将取决于数据属性 isActive 是否为真值 
-        可以在对象中传入更多属性用来动态切换多个class 
-        此外,v-bind:class指令可以与普通的class属性共存如下模板:
-          <div class="static"
-            v-bind:class="{ active: isActive,'text-danger': hasError }">
-          </div>
-          如下 data:
-          data: {
-            isActive: true,
-            hasError: false
-          }
-          渲染为:
-          <div class="static active"></div>
-        当 isActive 或者 hasError 变化时,class列表将相应地更新
-        若 hasError 的值为 true ,class列表将变为 "static active text-danger"
-        可以直接绑定数据里的一个对象 
-          <div v-bind:class="classObject"></div>
-          data: {
-            classObject: {
-              active: true,
-              'text-danger': false
-            }
-          }
-          渲染的结果和上面一样我们也可以在这里绑定返回对象的计算属性这是一个常用且强大的模式:
-          <div v-bind:class="classObject"></div>
-          data: {
-            isActive: true,
-            error: null
-          },
-          computed: {
-            classObject: function () {
-              return {
-                active: this.isActive && !this.error,
-                'text-danger': this.error && this.error.type === 'fatal',
-              }
-            }
-          }
-      数组语法 
-        我们可以把一个数组传给 v-bind:class ,以应用一个 class 列表:
-        <div v-bind:class="[activeClass,errorClass]">
-        data: {
-          activeClass: 'active',
-          errorClass: 'text-danger'
-        }
-        渲染为:
-        <div class="active text-danger"></div>
-        若你也想根据条件切换列表中的 class ,可以用三元表达式:
-        <div v-bind:class="[isActive ? activeClass : '',errorClass]">
-        此例始终添加 errorClass ,但是只有在 isActive 是 true 时添加 activeClass 
-        不过,当有多个条件 class 时这样写有些繁琐可以在数组语法中使用对象语法:
-        <div v-bind:class="[{ active: isActive },errorClass]">
-      用在组件上 
-        在定制的组件上用到class属性的时,这些类将被添加到根元素上面,这个元素上已经存在的类不会被覆盖
-        例如,若你声明了这个组件:
-        Vue.component('my-component',{
-          template: '<p class="foo bar">Hi</p>'
-        })
-        然后在使用它的时候添加一些 class:
-        <my-component class="baz boo"></my-component>
-        HTML 最终将被渲染成为:
-        <p class="foo bar baz boo">Hi</p>
-        同样的适用于绑定 HTML class :
-        <my-component v-bind:class="{ active: isActive }"></my-component>
-        当 isActive 为 true 的时候,HTML 将被渲染成为:
-        <p class="foo bar active"></p>
-    v-bind:style=arg  'style'内联样式 
-      对象语法
-        v-bind:style 的对象语法十分直观,非常像CSS的
-        须将短横分隔命名[kebab-case]改为驼峰式[camelCase] 
-        <div v-bind:style="{ color: activeColor,fontSize: fontSize + 'px' }"></div>
-        data: {
-          activeColor: 'red',
-          fontSize: 30
-        }
-        直接绑定到一个样式对象通常更好,让模板更清晰:
-        <div v-bind:style="styleObject"></div>
-        data: {
-          styleObject: {
-            color: 'red',
-            fontSize: '13px'
-          }
-        }
-        同样的,对象语法常常结合返回对象的计算属性使用
-      数组语法
-        v-bind:style 的数组语法可以将多个样式对象应用到一个元素上:
-        <div v-bind:style="[baseStyles,overridingStyles]">
-      自动添加前缀
-        当 v-bind:style 使用需要特定前缀的CSS属性时,如 transform ,VueJS 会自动侦测并添加相应的前缀
-    v-bind:key=arg  标识DOM节点 
+  指令的值'val'可为单条语句 
+    <div id="example"> 
+      <button v-on:click="counter += 1">按钮被点击{{counter}}次</button>
+    </div> 
+    data: {
+      counter: 0
+    }
+内置标签 
+  <component is=""></component>
+  <keep-alive ></keep-alive>
+  <transition ></transition>
+  <slot></slot>
 'Component'组件 
   PS:Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
     几乎任意类型的应用的界面都可以抽象为一个组件树;
@@ -1468,7 +1247,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       JavaScript内联模版字符串
       .vue 组件
   组件通信 
-    父组件向子组件通信: 设置标签属性通信 
+    父组件向子组件通信: 父组件中,子组件标签上设置属性 
       PS: 属性名不区分大小写 
       子组件VM中注册'props'属性[进行监听],父组件中添加属性进行赋值 
       当父组件赋给属性的值,子组件可获取到 
@@ -1551,48 +1330,11 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           Object
           Array
       通过自定义事件的监听和触发来达到同样的效果[SlPt] 
-    子组件向父组件通信: 触发实例事件通信 
-      父组件上的绑定自定义事件,子组件'$emit'触发绑定的事件 
-      当子组件触发事件时,父组件中事件的回调函数被执行 
-      PS:vm.$on('eventName',foo) 监听事件,vm.$emit('event-name',data) 触发事件 
-        父组件在使用子组件的地方直接用v-on来监听子组件触发的事件
-      Example:
-        <div id="parent">
-          <p>{{ total }}</p>
-          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
-          <cpt-child v-on:parent_event_name="incrementTotal"></cpt-child>
-        </div>
-        Vue.component('cpt-child',{
-          template: '<button v-on:click="childFoo">{{ counter }}</button>',
-          data: function () {
-            return {
-              counter: 0,
-              moreData: '来自子组件的消息',
-            }
-          },
-          methods: {
-            childFoo: function () {
-              this.counter += 1
-              this.$emit('parent_event_name',this.moreData)
-            }
-          },
-        })
-        new Vue({
-          el: '#parent',
-          data: {
-            total: 0
-          },
-          methods: {
-            incrementTotal: function (moreData) {
-              this.total += 1
-              console.log(moreData);
-            }
-          }
-        })
-      Exp: 
-        用于触发父元素的事件名不可采用驼峰命名法,建议使用全小写[SlPt]
-    非父子组件通信 
-      简单场景下,使用一个的 Vue 实例作为中央事件总线 
+    子组件向父组件通信: 父组件中,子组件标签上绑定自定义事件  
+      子组件内通过'$emit'触发绑定父组件中子组件标签上的事件  
+      childVm.$emit('event-name',data) 触发事件,传递数据'data'
+    非父子组件通信: 事件/Vuex  
+      简单场景下,用一Vue实例作为中央事件总线  
         var transfer = new Vue();
         transfer.$emit('custom-event',data); // 触发事件
         transfer.$on('custom-event',function (data) { // 监听事件

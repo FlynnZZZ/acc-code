@@ -17,7 +17,7 @@
   流式布局 
     使用非固定像素来定义网页内容,也叫百分比布局
     通过盒子的宽度设置成百分比来根据屏幕的宽度来进行伸缩
-  CSS层叠/覆盖原理
+  CSS层叠/覆盖原理 
     PS:即产生冲突的规则
     样式的特点
       ⒈继承
@@ -49,7 +49,7 @@
       Suggestion:将属性覆盖也改为层叠(有冲突时才覆盖),
         如同时定义 display:table 和 display:block 属性,他们同时起作用;
         定义 display:inline 和 display:block 两种属性有冲突,则优先级高起作用.
-  css样式可引入html,jsp,php,asp,net等中使用
+  css样式可引入html,jsp,php,asp,net等中使用 
   注释 
     /*注释*/
     只对IE生效的注释
@@ -60,14 +60,14 @@
         若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
   IE8才开始支持css3 
   CSS规则  CSS文件由多个CSS规则组成 
-    每个规则都有两个基本部分:选择器[selector]和声明块[declaration_block],
-    'selector'           区分大小写
-    'declaration_block'  若干个声明[declaration]
-    'declaration'        property-value 对
-    'val'                关键字[keyword]或可取关键字的列表 
-    'keyword'            用空格分开,只有一种情况例外:font属性中 字体大小/行高 
-    若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略
-  'id' 'class' 命名规则 
+    每个规则都有两个基本部分:选择器'selector'和声明块'declaration block', 
+    'selector'           区分大小写 
+    'declaration block'  若干个声明[declaration] 
+    'declaration'        声明,'prop-val'对 
+    'prop'               声明属性 
+    'val'                声明值   
+    若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略 
+  'id'、'class' 命名规则 
     类名由以字母开头的小写字母[a-z]、数字[0-9]、下划线'_'、减号'-'组成 
     ID名称由不以数字开头的小写字母[a-z]、数字[0-9]、下划线'_'组成 
 定义:  

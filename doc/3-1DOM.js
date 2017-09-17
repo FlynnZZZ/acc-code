@@ -428,10 +428,9 @@ document 文档根节点: 'HTMLDocument'的实例,表示整个HTML页面
         style对象的属性值都是字符串,设置时必须包括单位.
         elem.getAttribute("style"); 得到相应的代码字符串
       elem.style.XX   读写指定的行内样式
-      elem.style.cssText; 读写,'style'属性中的CSS代码 
-        Example:
+      elem.style.cssText  读写'style'属性中的CSS代码 
         elem.style.cssText ='background-color:red;'+'border:1px solid black;';
-      elem.style.length; CSS属性的数量
+      elem.style.length   CSS属性的数量
       elem.style.parentRule; CSS信息的CSSRule对象
       elem.style.getPropertyPriority(属性名); 返回优先级声明,存在为"important",否则为""
       elem.style.getPropertyCSSValue(属性名); 返回包含指定属性的CSSValue对象

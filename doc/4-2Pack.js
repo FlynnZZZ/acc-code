@@ -36,16 +36,16 @@ CMD'Common Module Definition'通用模块定义
     把各种资源,如JS、coffee、less、sass、图片等都作为模块来使用和处理;
     '预编译'模块的方案,根据模块的依赖关系进行静态分析,然后生成对应的静态资源 
   原理: 
-    webpack模块能够以各种方式表达它们的依赖关系,如：
+    webpack模块能够以各种方式表达它们的依赖关系,如: 
       ES2015'import'语句、CommonJS'require'语句、AMD'define'和'require'语句
       样式文件中的'@import'语句'url(...)'样式、HTML文件中<img src=...>的图片链接 
       webpack1需要特定的loader来转换ES2015'import',然而通过webpack2可直接使用  
-    即: Webpack会识别HTML及CSS中的路径、JS中的模块引入,将他们进行转换、打包,
-    [但不会识别JS中的path,因为无法区分是字符串还是路径]
-    把所有的非js资源都转换成js,
-    如把一个'css'文件转换成'创建一个style标签并把它插入document'的脚本、
-    把图片转换成一个图片地址的js变量或base64编码等,
-    然后用CommonJS、AMD或ES6模块化的机制管理;
+    即: Webpack会识别HTML及CSS中的路径、JS中的模块引入,将他们进行转换、打包, 
+    [但不会识别JS中的path,因为无法区分是字符串还是路径] 
+    把所有的非js资源都转换成js, 
+    如把一个'css'文件转换成'创建一个style标签并把它插入document'的脚本、 
+    把图片转换成一个图片地址的js变量或base64编码等, 
+    然后用CommonJS、AMD或ES6模块化的机制管理; 
   执行过程 
     从'context'目录开始,寻找'entry'内的文件,读取内容
     每当遇到'import'或者require()依赖项时,解析这些代码,并且打包到最终构建里;
@@ -153,7 +153,7 @@ CMD'Common Module Definition'通用模块定义
         // process.cwd() 默认值,NodeJS的启动目录 
       'watch': true, // 监控文件改变,动态更新 
       // 浏览器调试中添加元信息'meta info'可增强调试 
-      'devtool': 'source-map', // 牺牲构建速度的'source-map'是最详细的
+      'devtool': 'source-map', // 牺牲构建速度的'source-map'是最详细的 
         "eval" // 没有模块映射,而是命名模块。以牺牲细节达到最快 
         "eval-source-map"  // 将 SourceMap 嵌入到每个模块中
         "cheap-module-source-map" // 有模块映射'module mappings'的'SourceMap'低级变体 
@@ -197,6 +197,7 @@ CMD'Common Module Definition'通用模块定义
         proxy: { // proxy URLs to backend development server
           '/api': 'http://localhost:3000'
         },
+        grogress: true,
       },
       'resolveLoader':{ // 用来配置loader模块解析的处理细节 
         fallback: path.join(__dirname, "node_modules"),

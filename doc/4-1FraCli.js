@@ -1,5 +1,6 @@
 'Command Line Interface for batch scripting'cli: 命令行界面
-'vue-cli'官方提供的一个脚手架工具,用于初始化一个Vue项目 
+--------------------------------------------------------------------------------
+'vue-cli'官方提供的脚手架工具,用于初始化一个Vue项目 
   PS: 成熟的Vue项目架构设计;热加载本地测试服务器;集成打包上线方案;  
     使用要求 : NodeJS大于'4.0'版本; 安装Git,用于下载代码 
 '.vue'文件 
@@ -46,7 +47,7 @@
     <style>
       ...
     </style>
-  <style scope></style>  保证组件内的CSS只对该组件起作用 
+  <style scoped></style>  保证组件内的CSS只对该组件起作用 
   lang="" 使用预处理器 
     在'.vue'文件中使用其他预处理器[需安装对应的loader] 
     当使用 lang="less" 即使用Less,需安装如下依赖
@@ -76,9 +77,7 @@
 使用步骤 
   ◆工具安装[初始安装一次即可] 
   npm i -g webpack      全局安装webpack 
-  npm i -g vue          全局安装vue 
   npm i -g vue-cli      全局安装vue-cli 
-    在安装Vue后就可以在命令行中使用'vue'命令了
     vue --version 或 vue -V // 查看Vue版本 
     vue list  // 查看官方提供的模版方案 
       browserify         
@@ -87,148 +86,37 @@
       simple            
       webpack           
       webpack-simple    
+  npm i -g vue          全局安装vue 
   ◆初始化项目 
   vue init <模版名> <项目名>      创建Vue项目  
   cd  projectName  进入新创建的项目文件夹 
     文件夹中的 index.html 为项目的入口,且默认使用src下的 main.js  
     后续的开发都在该文件夹下的'src'文件夹下进行[且主要为 App.vue 文件]
-  npm init         npm初始化[创建'package.json'文件] 
-  npm i            安装依赖: 根据存在的'package.json'文件配置安装依赖文件 
-    并增加'node_modules'文件夹 
-  npm i vue-router vue-resource --save  安装路由模块和网络请求模块
+  npm init   npm初始化[创建'package.json'文件] 
+  npm i      安装依赖: 根据存在的'package.json'文件配置安装依赖文件 
+  npm i vue-router vue-resource --S  安装路由模块和网络请求模块
   ◆启动项目/构建发布  
-  npm run dev       启动测试服务器  
-    启动本地服务,打开浏览器,运行项目
-    默认执行 package.json 中 script 属性 dev 的配置
-    运行安装时,eslint mocha 等等依赖,建议初学不安装
-  npm run build     运行构建,生成生产环境可发布的代码 
+  npm run dev     启动测试服务器  
+  npm run build   运行构建,生成生产环境可发布的代码 
 vue目录结构 
   vue-project  项目目录
-  |--index.html  骨架html
-  |--src         源码存放目录
-  |--|--main.js    入口js
-  |--|--App.vue    根组件
-  |--|--pages      页面目录  
-  |--|--cpts       组件目录 
-  |--|--assets     静态资源  
-  |--dist        编译打包生成的文件存放的目录
-  |--package.json       npm配置文件
-  |--webpack.config.js  webpack配置文件
-  |--.babelrc      babel配置文件
-  |--node_modules  npm包存放的目录,自动生成
-  |--.gitignore    忽略无需git控制的文件,比如node_modules 
-  |--README.md     说明文件 
-webpack.config.js  webpack配置文件 
-  module.exports = {
-    entry: {
-      'index': './vue/index/main.js',
-    },
-    output: {
-      path: './public/bulid',
-      filename: '[filename].js' // 可以多点切入
-    },
-    module: {
-      rules: [
-        {
-          test: /\.vue$/, // 这是个正则表达式
-          loader: 'vue-loader' // 指定loader
-        },
-        {
-          test: /\.css$/, 
-          use: [ 'style-loader', 'css-loader' ] // 指定多个loader
-        },
-        {
-          test: /\.less$/, 
-          use: [ 'style-loader', 'less-loader' ] 
-        }
-      ]
-      // loaders: [
-      //   {
-      //     test: /\.vue$/,
-      //     exclude: /node_modules/,
-      //     loader: vue.withLoaders({
-      //       js: 'babel?optional[]=runtime'
-      //     })
-      //   },
-      //   { test: /\.scss$/, loader: 'style!css!sass' },
-      //   { test: /\.css$/, loader: "style!css" },
-      //   { test: /\.js$/, loader: 'babel-loader' }
-      // ]
-    }
-    resolve: { // 解决 npm 的依赖问题
-      modulesDirectories: ['node_modules'],
-      extensions: ['', '.js', '.json']
-    },
-  }
-  配置 webpack.config.js 文件
-    var path = require('path');
-    // NodeJS中的Path对象,用于处理目录的对象,提高开发效率 
-    // 模块导入
-    module.exports = {
-      // 入口文件地址,不需要写完,会自动查找
-      entry: './src/main',
-      // 输出
-      output: {
-        path: path.join(__dirname, './dist'),
-        // 文件地址,使用绝对路径形式
-        filename: '[name].js',
-        //[name]这里是webpack提供的根据路口文件自动生成的名字
-        publicPath: '/dist/'
-        // 公共文件生成的地址
-      },
-      // 服务器配置相关,自动刷新!
-      devServer: {
-        historyApiFallback: true,
-        hot: false,
-        inline: true,
-        grogress: true,
-      },
-      // 加载器
-      module: {
-        // 加载器
-        loaders: [
-          // 解析.vue文件
-          { test: /\.vue$/, loader: 'vue' },
-          // 转化ES6的语法
-          { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-          // 编译css并自动添加css前缀
-          { test: /\.css$/, loader: 'style!css!autoprefixer'},
-          //.scss 文件想要编译,scss就需要这些东西！来编译处理
-          //install css-loader style-loader sass-loader node-sass --save-dev
-          { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-          // 图片转化,小于8K自动转化为base64的编码
-          { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'},
-          //html模板编译？
-          { test: /\.(html|tpl)$/, loader: 'html-loader' },
-        ]
-      },
-      // .vue的配置。需要单独出来配置,其实没什么必要--
-      // 因为我删了也没保错,不过这里就留这把,因为官网文档里是可以有单独的配置的。
-      vue: {
-        loaders: {
-          css: 'style!css!autoprefixer',
-        }
-      },
-      // 转化成es5的语法
-      babel: {
-        presets: ['es2015'],
-        plugins: ['transform-runtime']
-      },
-      resolve: {
-        // require时省略的扩展名,如:require('module') 不需要module.js
-        extensions: ['', '.js', '.vue'],
-        // 别名,可以直接使用别名来代表设定的路径以及其他
-        alias: {
-          filter: path.join(__dirname, './src/filters'),
-          components: path.join(__dirname, './src/components')
-        }
-      },
-      // 开启source-map,webpack有多种source-map,在官网文档可以查到
-      devtool: 'eval-source-map'
-    };
+    index.html  骨架html
+    package.json       npm配置文件
+    webpack.config.js  webpack配置文件
+    .babelrc      babel配置文件
+    .gitignore    忽略无需git控制的文件,比如node_modules 
+    README.md     说明文件 
+    src         源码存放目录 
+      main.js    入口js
+      App.vue    根组件   
+      pages      页面目录 
+      cpts       组件目录 
+      assets     静态资源 
+    dist        编译打包生成的文件存放的目录
+    node_modules  npm包存放的目录,自动生成
 'vue-loader'插件 
-  在Webpack的loader API基础上开发的,可用'.vue'单文件格式来写Vue组件
-  Vuejs支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
+  在Webpack的'loader API'基础上开发,可用'.vue'单文件格式来写Vue组件 
+  VueJS支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
 项目目录文件说明 
   ├── build                           编译任务执行的配置 
   │   ├── build.js
@@ -677,64 +565,7 @@ webpack.config.js  webpack配置文件
         cssSourceMap: false // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
       }
     }        
-  │   └── prod.env.js
-  ├── index.html
-  ├── package.json
-  ├── src
-  │   ├── App.vue
-  │   ├── assets
-  │   │   └── logo.png
-  │   ├── components
-  │   │   └── Hello.vue
-  │   └── main.js
-  └── static    
 
-  .eslintrc    # eslint加载器配置
-  build 
-    webpack.base.config.js         # webpack 基础配置 
-      基础配置包括了webpack的最基本配置,
-      包括入口文件、输入文件、加载器配置、插件配置等,
-      module.exports = {
-        entry: './src/main.js', //页面入口文件配置
-        output: { //入口文件输出配置
-          path: './dist',
-          publicPath: 'dist/',
-          filename: 'build.js'
-        },
-        module: { //加载器配置
-          loaders: [
-            {
-              test: /\.vue$/,
-              loader: 'vue'
-            },
-            {
-              test: /\.js$/,
-              loader: 'babel!eslint',
-              // make sure to exclude 3rd party code in node_modules
-              exclude: /node_modules/
-            },
-            {
-              // edit this for additional asset file types
-              test: /\.(png|jpg|gif)$/,
-              loader: 'url',
-              query: {
-                // inline files smaller then 10kb as base64 dataURL
-                limit: 10000,
-                // fallback to file-loader with this naming scheme
-                name: '[name].[ext]?[hash]'
-              }
-            }
-          ]
-        },
-        vue: {  // vue-loader 设置:
-          loaders: {
-            js: 'babel!eslint'
-          }
-        }
-        //将所有的*.vue文件转化为javascript文件并执行ESLint检测,这里需要配置.eslintrc文件
-      }    
-    webpack.dev.config.js          # webpack 开发配置
-    webpack.prod.config.js         # webpack 生产配置
     
   项目基本目录结构 
     bulid            构建的配置文件

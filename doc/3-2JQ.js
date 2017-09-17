@@ -594,43 +594,39 @@ DOM操作
     Jelem.slideToggle(time,cfoo) 切换'slideDown'和'slideUp' 
     ◆自定义变化 
       当定义样式的值时,单位默认为'px',如 '100px'或'100'等价
-    Jelem.animate(params[,time][,duration][,cfoo])  定义变化及变化的过程 
-      params 必须,元素的最终样式状态,由样式属性和其值组成的对象 
-        {
-          styleAttr : styleVal,
-          ... 
-        }
-        styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
-          $(".aoo").animate({
-            fontSize:"50px"
-          },1000)
-        styleVal 可通过 -=、+= 等在原值上进行便捷计算 
-          $(".aoo").animate({
-            width:"+=10px", // 在原来的基础上加10px
-            height:"-=100%"
-          },1000)
+    Jelem.animate(finalStyle[,time][,duration][,cfoo])  定义变化及变化的过程 
+      {  // 必须,元素的最终样式状态,由样式声明属性和其值组成的对象 
+        styleAttr : styleVal,
+        // styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
+        // styleVal 可通过 -=、+= 等在原值上进行便捷计算 
+        //   $(".aoo").animate({
+        //     width:"+=10px", // 在原来的基础上加10px
+        //     height:"-=100%"
+        //   },1000)
+        ... 
         非CSS样式的属性列举 
           scrollTop 定义滚动条的滚动距离
             $('.aoo').animate({
               scrollTop : '+=33'
             },100)
-      time   可选,执行时间 
+      }
+      time       可选,执行时间 
         number    毫秒,如 1500
         "normal"  默认值
         "slow"
         "fast"
-    Jelem.animate(params,obj)    定义每个阶段的变化 
-      Example: 
-        $('.a').animate({
-          left:100
+      duration   延时 
+      cfoo       执行结束的回调 
+    Jelem.animate(finalStyle,options)    定义变化及变化的过程  
+      {   // 最终样式 
+        left : 100
+      }
+      {   // 配置选项 
+        duration: 1000, // 延迟 
+        step: function(now,fx){ 
         },
-        {
-          duration:1000,
-          step:function(now,fx){
-
-          }
-        }
-      );
+        complete: foo,  // 动画执行完成后的回调 
+      }
     Jelem.stop([bool1] [,bool2]) 停止动画 
       bool1  默认为false,是否清空未执行完的动画队列 
       bool2  默认false,是否将动画调到最后状态 

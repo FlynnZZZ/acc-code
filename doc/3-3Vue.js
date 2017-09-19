@@ -1822,7 +1822,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     [路由]组件,可从其他文件'import'进来 
     const Foo = { template: '<div>foo</div>' }  // 组件配置对象
     const Bar = { template: '<div>bar</div>' }  
-    const router = new VueRouter({  // 创建router实例: 路由Map,创建映射 
+    const router = new VueRouter({  // 路由Map,创建router实例,创建映射 
       // mode : 'history', // 采用'history'模式 
       'routes': [ // 映射表 
         { 
@@ -1847,7 +1847,6 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           alias: '/b',       // 别名    [详见 'alias']
         },
         ...
-        // 每个路由映射一个组件
       ]
     }) 
     const app = new Vue({ // Vue实例中注册  

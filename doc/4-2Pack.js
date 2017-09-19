@@ -36,22 +36,25 @@ CMD'Common Module Definition'通用模块定义
     把各种资源,如JS、coffee、less、sass、图片等都作为模块来使用和处理;
     '预编译'模块的方案,根据模块的依赖关系进行静态分析,然后生成对应的静态资源 
   原理: 
-    webpack模块能够以各种方式表达它们的依赖关系,如: 
-      ES2015'import'语句、CommonJS'require'语句、AMD'define'和'require'语句
-      样式文件中的'@import'语句'url(...)'样式、HTML文件中<img src=...>的图片链接 
-      webpack1需要特定的loader来转换ES2015'import',然而通过webpack2可直接使用  
-    即: Webpack会识别HTML及CSS中的路径、JS中的模块引入,将他们进行转换、打包, 
-    [但不会识别JS中的path,因为无法区分是字符串还是路径] 
+    webpack模块能够以以下方式表达依赖关系,如: 
+      HTML中<img src=...>的图片链接 
+      样式中的'@import'语句 
+      样式中的'url(...)'样式 
+      ES2015'import'语句 
+      CommonJS'require'语句 
+      AMD'define'和'require'语句
+      即: Webpack会识别HTML及CSS中的路径、JS中的模块引入,将他们进行转换、打包, 
+      [但不会识别JS中的path,因为无法区分是字符串还是路径] 
     把所有的非js资源都转换成js, 
     如把一个'css'文件转换成'创建一个style标签并把它插入document'的脚本、 
     把图片转换成一个图片地址的js变量或base64编码等, 
     然后用CommonJS、AMD或ES6模块化的机制管理; 
-  执行过程 
-    从'context'目录开始,寻找'entry'内的文件,读取内容
-    每当遇到'import'或者require()依赖项时,解析这些代码,并且打包到最终构建里;
-    接着它会不断递归搜索实际需要的依赖项,直到它到达了“树”的底部。
-    从上一步接着,Webpack把所有东西打包到'output.path'的文件夹里,
-    并使用'output.filename'命名
+    执行过程:  
+      从'context'目录开始,寻找'entry'内的文件,读取内容
+      每当遇到'import'或者require()依赖项时,解析这些代码,并且打包到最终构建里;
+      接着它会不断递归搜索实际需要的依赖项,直到它到达了“树”的底部。
+      从上一步接着,Webpack把所有东西打包到'output.path'的文件夹里,
+      并使用'output.filename'命名
   说明 : 
     从'2.0'版本开始,支持用'ES6module'规范[import/export]去进行模块打包 
     'chunk'块,被entry所依赖的额外的代码块 

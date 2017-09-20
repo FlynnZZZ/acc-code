@@ -1106,16 +1106,12 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         }
       })
   'components': {},  vue实例中局部注册[仅能在该实例/组件的作用域中使用]  
-    new Vue({
-      ...
-      components: {
-        'my-component': { // 将只在该模板可用 
-          template: '<div>A custom component! {{aoo}}</div>'
-        },
-      }
-    })
-    这种封装也适用于其它可注册的 Vue 功能,如指令
-  <cpt-name></cpt-name> 在父组件中指定子组件位置 
+    components: {
+      tagname: {  
+        template: '<div>A custom component! {{aoo}}</div>'
+      },
+    }
+  <cpt-name></cpt-name>    在父组件中指定子组件位置 
     要确保在初始化根实例之前注册了组件 
     Example: 
       <div id="example">
@@ -1129,7 +1125,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       new Vue({
         el: '#example'
       })
-  is="cptname" 在父组件中指定子组件位置 
+  <tag is="cptname"></tag> 在父组件中指定子组件位置 
     :is="cptname"属性实现动态组件 
       <div id="parent">
         <button type="button" name="button" @click='changeFoo' >switchBtn</button>
@@ -1406,7 +1402,10 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       setTimeout(function () {
         // Pass the component definition to the resolve callback
         resolve({
-          template: '<div>I am async!</div>'
+          template: '<div>I am async! {{xx}}</div>',
+          data: {
+            msg: 'xx'
+          }
         })
       },1000)
       // 工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用 
@@ -1469,9 +1468,10 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       this.$options.components.TreeFolderContents = require('./tree-folder-contents.vue')
     }
     问题解决了
-  <template>标签书写组件HTML    
+  <template id="">在HTML中写组件的标签内容    
     PS: 当组件中内容过多,在JS中书写组件模版太过繁琐,可通过<template>在HTML中书写 
-      浏览器默认不去解析里面的内容;<template>不能用在<table>内; 
+      定义在Vue实例范围外,浏览器默认不解析里面的内容[定义在Vue实例的管理范围内则会被解析]
+      ;<template>不能用在<table>内; 
     定义组件时,通过id选择器来指定在HTML中书写的模版 
       <body>
         // <!-- 使用 template 并且添加选择器(只能使用id)-->
@@ -1499,8 +1499,7 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
         <div v-once>\
           <h1>Terms of Service</h1>\
           ... a lot of static content ...\
-        </div>\
-      '
+        </div>'
     })    
   内联模版 
     若子组件有 inline-template 特性,组件将把它的内容当作它的模板,
@@ -2348,7 +2347,8 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     // store.state.boo  获取moduleB中的state 
 'vue-validator'表单验证 
 'vue-touch'移动端 
-suggestion: 
-  建议'computed'功能内的函数也可以传参 
+Question&Suggestion: 
+  建议'computed'功能内的函数也可以传参  
+  如何操作Vue实例的组件选项,如控制组件  
 ---------------------------------------------------------------------以下待整理  
 

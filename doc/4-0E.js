@@ -403,7 +403,7 @@ Gulp: 自动化构建工具
   相关命令 
     $ npm i -g gulp   // 全局安装gulp 
     $ npm i -D gulp   // 项目中安装并写入开发依赖 
-  'gulpfile.js'配置文件 
+  'gulpfile.js'配置文件[项目根目录创建] 
     var gulp = require('gulp'),  // 加载插件 
       sass = require('gulp-ruby-sass'),
       autoprefixer = require('gulp-autoprefixer'),
@@ -418,32 +418,85 @@ Gulp: 自动化构建工具
       livereload = require('gulp-livereload'),
       del = require('del');
       
+    // 设置默认任务'default', $ gulp 执行  
+    gulp.task('default', ['clean'], function() {
+      // clean任务执行完成了才会去运行其他的任务,
+      // 在gulp.start()里的任务执行的顺序是不确定的,所以将要在它们之前执行的任务写在数组里面。  
+      gulp.start('styles', 'scripts', 'images');
+    });
+    
     // 建立任务: 编译sass、自动添加css前缀、压缩最,后添加'.min'后缀输出到指定目录 
-    gulp.task('aoo', function() { // 创建任务, $ gulp aoo 来执行 
-      return gulp.src('src/styles/main.scss') // gulp.src() 设置需处理的文件的路径
-        // 可以是数组形式的多个文件，也可以是正则表达式 /**/*.scss 
-      .pipe(sass({ style: 'expanded' })) // .pipe() 将需要处理的文件导向sass插件 
-      .pipe(autoprefixer('last 2 version','safari 5','ie 8','ie 9','opera 12.1','ios 6','android 4'))
+    gulp.task('aoo', function() { // 创建任务 
+      return gulp.src('src/styles/main.scss') 
+      .pipe(sass({ style: 'expanded' })) 
+      .pipe(autoprefixer(
+        'last 2 version', 
+        'safari 5','ie 8','ie 9','opera 12.1',
+        'ios 6','android 4'
+      ))
       .pipe(gulp.dest('dist/assets/css'))
       .pipe(rename({suffix: '.min'}))
       .pipe(minifycss())
-      .pipe(gulp.dest('dist/assets/css')) // gulp.dest() 设置生成文件的路径
-        // 一个任务可有多个生成路径, 如:一个输出未压缩的版本，另一个输出压缩后的版本 
+      .pipe(gulp.dest('dist/assets/css')) 
       .pipe(notify({ message: 'Styles task complete' }));
     });      
-      
+    
+    gulp.task('watch', function() { //  监听文件,以执行相应的任务 
+      gulp.watch('src/styles/**/*.scss', ['styles']);
+      gulp.watch('src/scripts/**/*.js', ['scripts']);
+      gulp.watch('src/images/**/*', ['images']);
+    });
+    gulp.task('watch', function() { // 自动刷新页面
+      livereload.listen(); // Create LiveReload server
+      gulp.watch(['dist/**']).on('change', livereload.changed);
+    });
+  API 
+    gulp.task(task[,otherTaskArr],foo)   // 创建任务, $ gulp task 执行  
+      otherTaskArr  可选,其他任务的数组,该任务在任务数组执行完后执行 
+    .pipe()     // 管道操作,将上一个结果导向下一个 
+    gulp.src(path/arr/rgep)    // 设置待处理的文件 
+      path  文件路径 
+      arr   数组形式的多个文件 \
+      rgep  正则表达式,如 '/**/*.scss' 
+    gulp.dest(path)           // 设置生成文件的路径 
+      // 一个任务可有多个生成路径, 如:一个输出未压缩的版本，另一个输出压缩后的版本 
+    gulp.watch(path,[task1,..])  // 监听文件变动执行任务 
   插件枚举 
     $ npm i -D <plugsName>   // 安装插件并写入开发依赖 
+    del        删除文件,原生的node模块  
+      清除之前生成的文件 
+      gulp.task('clean', function(cb) {
+        // 用一个回调函数'cb'确保在退出前完成任务  
+        del(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], cb) 
+      });
+
+      gulp.task('clean', function (cb) {
+        del([
+          'dist/report.csv',
+          'dist/mobile/**/*', // 使用通配模式来匹配 `mobile` 文件夹中的所有文件及文件夹  
+          '!dist/mobile/deploy.json' // 不希望删掉的文件通过取反匹配模式 
+        ], cb);
+      });
     gulp-ruby-sass     sass的编译 
     gulp-autoprefixer  自动添加css前缀
     gulp-minify-css    压缩css
     gulp-jshint        js代码校验
     gulp-concat        合并js文件
     gulp-uglify        压缩js代码
-    gulp-imagemin      压缩图片
+    gulp-imagemin      压缩图片 
+      .pipe(imagemin({   
+        optimizationLevel: 3, 
+        progressive: true, 
+        interlaced: true 
+      }))
+      缓存压缩过的图片,只有新建或者修改过的图片才会被压缩了 
+      .pipe(cache(imagemin({ 
+        optimizationLevel: 5, 
+        progressive: true, 
+        interlaced: true 
+      })))
     gulp-livereload    自动刷新页面
     gulp-cache         图片缓存，只有图片替换了才压缩
     gulp-notify        更改提醒
-    del                清除文件
     gulp-rename       
 ----------------------------------------------------------------------以下待整理

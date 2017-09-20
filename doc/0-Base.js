@@ -145,37 +145,46 @@ URI&URL&URN 资源标识定位
 'Socket'套接字: 源IP地址及其端口号和目的IP地址及其端口号的组合称为套接字 
   用于标识客户端请求的服务器和服务,是网络通信过程中端点的抽象表示;
   包含进行网络通信必需的五种信息: 通信协议,本地IP和端口,远程IP和端口; 
+TCP/IP  
+  物理层
+    将二进制的0和1、电压高低、光的闪灭及电波的强弱信号进行转换 
 HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进行通信的规则  
   PS: 一种无状态协议,不建立持久的连接;使客户端能向服务器请求信息和服务; 
     在网络中请求和响应的数据都以二进制传输的[?]
-  HTTP报文: 在HTTP应用程序之间发送的数据块 
-    PS: 这些数据块以一些文本形式的元信息开头,描述报文的内容及含义,后面跟着可选的数据部分;
-    由3个部分组成
-      HTTP/1.0 200 OK           // start line,对报文进行描述的起始行 
-      content-type: text/plain  // header,包含属性的首部块 
-      content-length: 19
+  HTTP报文: 在HTTP应用程序之间发送的数据块,分为'请求报文'和'响应报文' 
+    请求报文 
+      请求方法   URL    协议版本 
+      请求头部字段     // 可选,包含一些客户端环境信息,身份验证信息等   
       // 空行 
-      Hi, Im a message          //  body,可选的包含数据的主体部分 
-    HTTP报文分为两类: '请求报文'和'响应报文' 
-    通用首部: 客户端和服务器都可以使用 
+      内容实体        // 包含客户提交的查询字符串信息,表单信息等  
+    响应报文 
+      协议版本  状态码  状态码描述短语 
+      响应头部字段    // 可选,包含如服务器类型、日期时间、内容类型和长度等信息   
+      // 空行 
+      内容实体  
+    头部字段 
+      ◆通用首部: 客户端和服务器都可以使用 
       首部                     描述
-      Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型
-      Date             日期,报文创建时间
+      Cache-Control    缓存控制 
+      Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
+        'close'      指服务器像明确断开连接
+        'Keep-Alive' 保持持久连接,HTTP/1.1前默认连接是非持久性的,如需要保存持久连接,需要增加此字段
       Update           给出了发送端可能想要升级使用新版本或协议
+      Date             日期,报文创建时间
       Via              显示了报文经过的中间节点（代理、网关）
       Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
       Trailer-Encoding 告诉接收端对报文采用什么编码格式
-      Cache-Control    随报文传送缓存指示
       Pragma           早期的随报文传送指示方式
-    请求首部 
-      Host                接收请求服务器的主机名和端口号 
+      ◆请求首部 
+      Accept       表明客户端能够处理的内容类型及相对优先级 
+      Accept-Encoding  客户端支持的内容编码及优先级级  
+      Accept-Charset      客户端能识别的字符集 
+      Accept-Language     告诉服务器能够发送那些语言 
+      Authorization       客户端的认证信息 
+      Host         告知服务器请求的主机名和端口号[当一个IP下存在多个域名时] 
       Referer             提供了包含当前请求URI的文档的URL,告诉服务器自己来源 
         该英文的正确拼法为referrer 
-      User-Agent          发起请求的客户端应用程序,浏览器的用户代理字符串 
-      Accept              告诉服务器能够发送那些媒体类型,客户端能够处理的内容类型 
-      Accept-Charset      客户端能识别的字符集 
-      Accept-Encoding     告诉服务器能够发送那些编码
-      Accept-Language     告诉服务器能够发送那些语言
+      User-Agent    浏览器及用户代理字符串等信息  
       Cookie              客户端字符串
       Client-IP           客户端IP
       From                客户端邮件地址
@@ -185,7 +194,7 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       If-None-Match       如果ETag和当前文档ETag不符合,获取资源
       If-Range            允许对文档否个范围内的条件请求
       If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
-    响应首部 
+      ◆响应首部 
       Content-Type     主体的MIME,返回的响应内容的类型  
       Content-Length   主体的长度或尺寸 
       Content-Encoding 主体编码格式 
@@ -195,23 +204,13 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       Content-MD5      主体的MD5校验和 
       Content-Range    在整个资源中此实体部分的字节范围  
       Server           服务器应用软件名称和版本 
+      Set-Cookie       设置cookie 
       Age              响应持续时间 
       Allow            列出了可用的请求方法 
       Location         告诉客户端实在在哪里,用于定向 
       ETag             主体的实体标记  
       Expires          过期时间  
       Last-Modified    实体最后一次修改时间 
-  'Request'请求 
-    一般由四部分组成:
-    请求方法,如GET或POST请求
-    请求的URL
-    请求头,包含一些客户端环境信息,身份验证信息等 
-    请求体,即请求正文,其中可以包含客户提交的查询字符串信息,表单信息等  
-  'Response'响应 
-    一般由三部分组成:
-    状态码: 一个数字和文字组成的,用于表示请求的状态[是成功还是失败等] 
-    响应头: 和请求头类似,包含许多的信息,如服务器类型、日期时间、内容类型和长度等
-    响应体: 响应正文 
   网址的组成  
     协议: 如http、https超文本传输协议[收发的信息是文本信息] 
     主机/域名/ip地址
@@ -248,12 +247,12 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
   'Status Code'状态码: 表示请求的结果 
     PS:由三位数值组成,第一位表示其类别
     状态码被分为五大类：
-    100-199 用于指定客户端应相应的某些动作,表示请求已接收 
-    200-299 用于表示请求成功 
-    300-399 重定向,表示没有成功,客户必须采取进一步的动作,
+    '1XX' information[信息性状态码]  接收的请求正在处理 
+    '2XX' success[成功状态码]        请求正常处理完毕   
+    '3XX' redirection[重定向状态码]  需进行附加操作完成请求 
       用于已经移动的文件并且常被包含在定位头信息中指定新的地址信息 
-    400-499 客户端错误 
-    500-599 服务器错误 
+    '4XX' client error[客户端错误状态码] 服务器无法处理请求  
+    '5XX' server error[服务器错误状态码] 服务器处理请求错误 
     ◆状态码及说明 
     100  Continue            继续 [HTTP1.1] 
       初始的请求已经接受,客户应当继续发送请求的其余部分
@@ -263,42 +262,35 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
     202  Accepted  服务器已接受请求,但处理尚未完成 
     203  Non-Authoritative Information 文档已返回,可能有误 [HTTP1.1] 
       一些应答头可能不正确,因为使用的是文档的拷贝 
-    204  No Content 没有新文档,浏览器应该继续显示原来的文档
+    204  No Content 请求成功,无返回主体数据,应该继续显示原来的文档 
       如果用户定期地刷新页面,而Servlet可以确定用户文档足够新,这个状态代码是很有用的 
     205  Reset Content 没有新的内容,但浏览器应该重置它所显示的内容 [HTTP1.1] 
       用来强制浏览器清除表单输入内容 
     206  Partial Content 客户发送了一个带有Range头的GET请求,服务器完成了它 [HTTP1.1] 
     300  Multiple Choices 客户请求的文档可以在多个位置找到 
       这些位置已经在返回的文档内列出。如果服务器要提出优先选择,则应该在Location应答头指明。
-    301  Moved Permanently 客户请求的文档在其他地方
-      新的URL在Location头中给出,浏览器应该自动地访问新的URL。
-    302  Found   重定向,类似于301,但新的URL应该被视为临时性的替代,而不是永久性的 
+    301  Moved Permanently 永久性重定向,资源已被分配了新的URL 
+      新的URL在Location头中给出,浏览器应该自动地访问新的URL 
+    302  Found             临时重定向,类似于301 
       注意,在HTTP1.0 中对应的状态信息是“Moved Temporatily”。
       出现该状态代码时,浏览器能够自动访问新的URL,因此它是一个很有用的状态代码。
       注意这个状态代码有时候可以和301替换使用。
       例如,如果浏览器错误地请求http://host/~user（缺少了后面的斜杠）,
       有的服务器 返回301,有的则返回302。
       严格地说,我们只能假定只有当原来的请求是GET时浏览器才会自动重定向。请参见307 
-    303  See Other 类似于301/302  [HTTP1.1]  
-      不同之处在于,如果原来的请求是POST,Location头指定的重定向目标文档应该通过GET提取 
-    304  Not Modified 自从上次请求后,请求的网页未修改过 
-      客户端有缓冲的文档并发出了一个条件性的请求。
-      一般是提供If-Modified-Since头表示客户只想比指定日期更新的文档 
-      服务器告诉客户,原来缓冲的文档还可以继续使用。
+    303  See Other 资源存在着另一个URL,通过GET方法获取   [HTTP1.1]  
+      Location头指定重定向目标文档 
+    304  Not Modified 请求数据未改变,可继续使用 
+      通常用于有缓存的请求中 
     305  Use Proxy   客户请求的文档应该通过Location头所指明的代理服务器提取 [HTTP1.1] 
-    307  Temporary Redirect  和302相同 [HTTP1.1] 
-      许多浏览器会错误地响应302应答进行重定向,即使原来的请求是POST,
-      即使它实际上只能在POST请求的应答是303时才能重定向。
-      由于这个原因,HTTP 1.1新增了307,以便更加清除地区分几个状态代码：
-      当出现303应答时,浏览器可以跟随重定向的GET和POST请求；
-      如果是307应答,则浏览器只能跟随对GET请求的重定向 
+    307  Temporary Redirect  临时重定向,和302相同 [HTTP1.1] 
     ★400  Bad Request  请求出现语法错误,服务器无法理解请求的格式 
-    401  Unauthorized  客户试图未经授权访问受密码保护的页面  
+    401  Unauthorized   未认证,客户试图未经授权访问受密码保护的页面  
       响应中会包含一个WWW-Authenticate头,浏览器据此显示用户名字/密码对话框,
       然后在填写合适的Authorization头后再次发出请求。
-    403  Forbidden     资源不可用,禁止访问
+    403  Forbidden      禁止访问 
       服务器理解客户的请求,但拒绝处理它。通常由于服务器上文件或目录的权限设置导致。
-    ★404  Not Found     找不到匹配的资源 
+    ★404  Not Found    未找到匹配的资源 
     405  Method Not Allowed 请求方法对指定的资源不适用 [HTTP1.1] 
     406  Not Acceptable 类型不兼容 [HTTP1.1]  
       指定的资源已经找到,但其MIME类型和请求Accpet头中所指定的不兼容
@@ -317,15 +309,14 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       如果服务器认为自己能够稍后再处理该请求,则应该提供一个Retry-After头 
     414  Request URI Too Long URI太长 [HTTP1.1] 
     416  Requested Range Not Satisfiable 服务器不能满足客户在请求中指定的Range头 [HTTP1.1]  
-    ★500  Internal Server Error  服务器遇到了意料不到的情况,不能完成客户的请求
-      最常见的服务器端错误
+    ★500  Internal Server Error  服务器处理请求时发生错误 
     501  Not Implemented 服务器不支持实现请求所需要的功能。
       例如,客户发出了一个服务器不支持的PUT请求 
     502  Bad Gateway 服务器作为网关或者代理时,为了完成请求访问下一个服务器,但该服务器返回了非法的应答 
     503  Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
     504  Gateway Timeout 由作为代理或网关的服务器使用,表示不能及时地从远程服务器获得应答 [HTTP1.1] 
     505  HTTP Version Not Supported 服务器不支持请求中所指明的HTTP版本  [HTTP1.1]  
-  'HTTP Method':发送请求的类型
+  'Method':发送请求的类型
     PS:http 1.0 定义了8种方法,主要使用'GET'和'POST';
     GET  请求
       最常见的请求类型,常用于向服务器查询信息.
@@ -352,7 +343,7 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
     DELETE  请求删除数据
     CONNECT 对通道提供支持
     TRACE   跟踪到服务器的路径
-    OPTIONS 查询Web服务器的性能
+    OPTIONS 查询Web服务器的性能 
     GET 和 POST 的区别
       大体上讲,向服务器发送客户端数据有两种方式:查询字符串和请求正文.
       通常,若是使用查询字符串,就发起了一个GET请求；
@@ -401,14 +392,14 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
           'Cache-Control'优先级高于Expires;
         'no-store'  禁止缓存,每次由客户端发起的请求都会下载完整的响应内容 
           浏览器会直接向服务器请求原始文件,并且请求中不附带 Etag 参数[服务器认为是新请求]
-        'no-cache'  不缓存内容,在释放缓存内容前向服务端源地址发送请求以验证缓存是否有效 
+        'no-cache'  不缓存过期资源,释放缓存前向服务器发送请求以验证缓存是否有效 
           表示不使用Cache-Control的缓存控制方式做前置验证,
           而是使用'Etag'或者'Last-Modified'字段来控制缓存
         'private'   私有缓存,中间节点不允许缓存,响应的内容只能被唯一的用户缓存  
         'public'    公共缓存,表示响应可被任何中间节点缓存  
           如 Browser <-- proxy1 <-- proxy2 <-- Server,中间的proxy可以缓存资源,
           比如下次再请求同一资源proxy1直接把自己缓存的东西给 Browser 而不再向proxy2要。
-        max-age=num     表示当前资源的有效时间,单位s 
+        max-age=num   当前资源的有效时间,单位s 
           时间根据系统的时间来进行判断 
         must-revalidate 缓存验证,在使用一些老的资源前强制验证状态判断其是否过期 
       Last-Modified/If-Modified-Since 配合Cache-Control使用 
@@ -427,14 +418,14 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       Pragma  [HTTP/1.0] 
         PS:响应头不支持该属性,通常定义'Pragma'以向后兼容基于HTTP/1.0 的客户端 
         no-cache  通知客户端不要对该资源进行缓存 
-    无法被浏览器缓存的请求 
+    无浏览器缓存的请求 
       浏览器发出的第一个请求的资源默认是不被缓存的; 
-      HTTP信息头中包含Cache-Control:no-cache,
-      pragma:no-cache,
-      或Cache-Control:max-age=0 等告诉浏览器不用缓存的请求
-      需要根据Cookie,认证信息等决定输入内容的动态请求是不能被缓存的
-      POST请求无法被缓存
+      POST请求无法被缓存 
+      Cache-Control:no-cache 
+      Cache-Control:max-age=0 
       HTTP响应头中不包含Last-Modified/Etag,也不包含Cache-Control/Expires的请求无法被缓存
+      pragma:no-cache 
+      需要根据Cookie,认证信息等决定输入内容的动态请求是不能被缓存的
     不使用缓存的方法 
       使用查询字符串来避免缓存,缓存以URL为依据 [古老的方法] 
 --------------------------------------------------------------------------------
@@ -762,3 +753,4 @@ windows命令行: 类似于Linux的shell
     logoff        注销命令
     net stop messenger   停止信使服务
     net start messenger  开始信使服务
+

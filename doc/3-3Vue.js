@@ -1409,8 +1409,8 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
           template: '<div>I am async!</div>'
         })
       },1000)
-      // 工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用
-      // 也可以调用 reject(reason) 指示加载失败
+      // 工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用 
+      // 也可以调用 reject(reason) 指示加载失败 
       // 这里 setTimeout 只是为了演示怎么获取组件完全由你决定
     })
     使用Webpack的代码分割功能 
@@ -1853,7 +1853,8 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       el : '#app',
       router : router,    // 注册方式1 
     }) // .$mount('#app') // 注册方式2 
-  <router-view name="">    路由视图,指定组件的渲染位置[在父级组件中指定] 
+  <router-view name="">   路由视图,指定组件的渲染位置 
+    PS: 在挂载点范围内都可以 [?] 
     name="xx"    具名视图,指定视图渲染的组件  
     配合<transition></transition>进行视图过渡效果 
     配合<keep-alive></keep-alive>进行缓存 
@@ -1977,7 +1978,10 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       router.go(3)    // 前进 3 步记录
       router.go(-100)
       router.go(100) // 若history记录不够用,不操作 
-    router.beforeEach(foo)  // 每次跳转回调  
+    router.beforeEach(function(to,from,next){ // 每次跳转回调  
+      // ...
+      next() // 调用next进路由 
+    })  
   'name':"xx" 路由配置中命名路由 
     通过名称来标识路由显得更方便,可在创建'Router'实例时,在'routes'配置中设置路由名称 
     const router = new VueRouter({

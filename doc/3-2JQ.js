@@ -1481,7 +1481,7 @@ AJAX
     PS:常用于将编码后的值向服务端发送请求 
     var obj = {a:1,b:2,c:3}
     console.log($.param(obj)); // a=1&b=2&c=3
-Deferred,异步操作
+'Deferred'异步操作 
   PS:'jQuery1.5'中引入; 和Promise对象一起作为jQuery对Promise的一种实现;
     '1.x-2.x'版本中,Deferred对象遵守的是CommonJS Promises提案中的约定,
     不同于原生promises遵守Promises/A+提案[从CommonJS Promises 衍生而来]的约定,

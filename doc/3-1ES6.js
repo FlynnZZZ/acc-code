@@ -2662,7 +2662,7 @@ for(var val of iterator){}  遍历
     使用的时候,直接加载index.js就可以了。
     // script.js
     import {db, users} from './constants';
-  import(specifier) 
+  proms = import('')   动态加载,返回Promise对象  
     PS:前面介绍过,import命令会被JS引擎静态分析,
       先于模块内的其他模块执行(叫做”连接“更合适)。所以,下面的代码会报错。
       // 报错
@@ -2684,8 +2684,6 @@ for(var val of iterator){}  遍历
       因此,有一个提案,建议引入import()函数,完成动态加载。
     import函数的参数specifier,指定所要加载的模块的位置。
     import命令能够接受什么参数,import()函数就能接受什么参数,
-    两者区别主要是后者为动态加载。
-    import()返回一个 Promise 对象。
     下面是一个例子。
     const main = document.querySelector('main');
     import(`./section-modules/${someVariable}.js`)

@@ -401,6 +401,49 @@ Grunt: JS构建工具,前端自动化工具
     grunt-contrib-connect  建立本地服务器 
 Gulp: 自动化构建工具 
   相关命令 
-    npm i -g gulp 
-  'Gulpfile.js'配置文件 
+    $ npm i -g gulp   // 全局安装gulp 
+    $ npm i -D gulp   // 项目中安装并写入开发依赖 
+  'gulpfile.js'配置文件 
+    var gulp = require('gulp'),  // 加载插件 
+      sass = require('gulp-ruby-sass'),
+      autoprefixer = require('gulp-autoprefixer'),
+      minifycss = require('gulp-minify-css'),
+      jshint = require('gulp-jshint'),
+      uglify = require('gulp-uglify'),
+      imagemin = require('gulp-imagemin'),
+      rename = require('gulp-rename'),
+      concat = require('gulp-concat'),
+      notify = require('gulp-notify'),
+      cache = require('gulp-cache'),
+      livereload = require('gulp-livereload'),
+      del = require('del');
+      
+    // 建立任务: 编译sass、自动添加css前缀、压缩最,后添加'.min'后缀输出到指定目录 
+    gulp.task('aoo', function() { // 创建任务, $ gulp aoo 来执行 
+      return gulp.src('src/styles/main.scss') // gulp.src() 设置需处理的文件的路径
+        // 可以是数组形式的多个文件，也可以是正则表达式 /**/*.scss 
+      .pipe(sass({ style: 'expanded' })) // .pipe() 将需要处理的文件导向sass插件 
+      .pipe(autoprefixer('last 2 version','safari 5','ie 8','ie 9','opera 12.1','ios 6','android 4'))
+      .pipe(gulp.dest('dist/assets/css'))
+      .pipe(rename({suffix: '.min'}))
+      .pipe(minifycss())
+      .pipe(gulp.dest('dist/assets/css')) // gulp.dest() 设置生成文件的路径
+        // 一个任务可有多个生成路径, 如:一个输出未压缩的版本，另一个输出压缩后的版本 
+      .pipe(notify({ message: 'Styles task complete' }));
+    });      
+      
+  插件枚举 
+    $ npm i -D <plugsName>   // 安装插件并写入开发依赖 
+    gulp-ruby-sass     sass的编译 
+    gulp-autoprefixer  自动添加css前缀
+    gulp-minify-css    压缩css
+    gulp-jshint        js代码校验
+    gulp-concat        合并js文件
+    gulp-uglify        压缩js代码
+    gulp-imagemin      压缩图片
+    gulp-livereload    自动刷新页面
+    gulp-cache         图片缓存，只有图片替换了才压缩
+    gulp-notify        更改提醒
+    del                清除文件
+    gulp-rename       
 ----------------------------------------------------------------------以下待整理

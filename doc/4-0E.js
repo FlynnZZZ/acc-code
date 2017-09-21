@@ -452,7 +452,7 @@ Gulp: 自动化构建工具
     });
   API 
     gulp.task(task[,otherTaskArr],foo)   // 创建任务, $ gulp task 执行  
-      otherTaskArr  可选,其他任务的数组,该任务在任务数组执行完后执行 
+      otherTaskArr  可选,其他任务组成的数组,本次任务将在任务数组执行完后执行  
     .pipe()     // 管道操作,将上一个结果导向下一个 
     gulp.src(path/arr/rgep)    // 设置待处理的文件 
       path  文件路径 
@@ -478,10 +478,46 @@ Gulp: 自动化构建工具
         ], cb);
       });
     gulp-ruby-sass     sass的编译 
-    gulp-autoprefixer  自动添加css前缀
-    gulp-minify-css    压缩css
-    gulp-jshint        js代码校验
-    gulp-concat        合并js文件
+    gulp-autoprefixer  自动添加css前缀 
+    gulp-minify   可压缩js脚本，css样式，html文档，json数据，jpg、png和gif图片 
+      $ npm i -D gulp-minify 
+      gulp.task('js', function () {
+        return gulp.src('src/**/*.js')
+        .pipe(code.lint())
+        .pipe(code.dep({
+          name: pkg.name,
+          path: 'http://g.tbcdn.cn/tm/detail/' + pkg.version,
+          depFile: ['seed.js']
+        }))
+        .pipe(minify())
+        .pipe(gulp.dest('build/'))
+      });
+      压缩css并且图片进行datauri
+      gulp.task('css', function () {
+        return gulp.src('src/**/*.css')
+        .pipe(code.lint())
+        .pipe(minify({"datauri": true}))
+        .pipe(gulp.dest('build/'))
+      });
+
+    gulp-htmlmin       压缩HTML 
+      $ npm i -D gulp-htmlmin  
+      gulp.task('htmlmin', function () {
+        var options = {
+          removeComments: true,//清除HTML注释
+          collapseWhitespace: true,//压缩HTML
+          collapseBooleanAttributes: true,//省略布尔属性的值 <input checked="true"/> ==> <input />
+          removeEmptyAttributes: true,//删除所有空格作属性值 <input id="" /> ==> <input />
+          removeScriptTypeAttributes: true,//删除<script>的type="text/javascript"
+          removeStyleLinkTypeAttributes: true,//删除<style>和<link>的type="text/css"
+          minifyJS: true,//压缩页面JS
+          minifyCSS: true//压缩页面CSS
+        };
+        gulp.src('html/**/**.html')
+        .pipe(htmlmin(options))
+        .pipe(gulp.dest('dist/'));
+      });
+    gulp-minify-css    压缩css 
     gulp-uglify        压缩js代码
     gulp-imagemin      压缩图片 
       .pipe(imagemin({   
@@ -495,8 +531,20 @@ Gulp: 自动化构建工具
         progressive: true, 
         interlaced: true 
       })))
+    gulp-concat        合并js文件 
+    gulp-base64        把小图片转成base64字符串 
+    gulp-clean         文件删除 
+      gulp.task('clean',function () {    //删除dist目录下的所有文件
+        gulp.src('dist/*',{read:false})
+        .pipe(clean());
+      });
+    gulp-jshint        js代码校验
     gulp-livereload    自动刷新页面
-    gulp-cache         图片缓存，只有图片替换了才压缩
+    gulp-cache         图片缓存,只有图片替换了才压缩 
     gulp-notify        更改提醒
+    gulp-rev           对css、js文件名加MD5后缀
+    gulp-rev-collector 路径替换
     gulp-rename       
 ----------------------------------------------------------------------以下待整理
+
+

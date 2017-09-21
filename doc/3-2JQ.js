@@ -1644,22 +1644,26 @@ AJAX
       deferred.catch(rejectedCallback)
       可以看出,这个方法不过是 then(null, rejectedCallback) 的一个快捷方式罢了。
   $.when(defer1,defer2,..)    整体模式,都完成后执行 
-    都成功了才运行done()指定的回调函数;若有一个失败或都失败,执行fail()指定的回调函数  
-    其中defer和data相对应,data为一数组包含'backData'、'textStatus'和'otherObj' 
-    $.when(
+    响应数据'data'和'defer'相对应,有多少个请求则传入多少个参数 
+    data为一数组包含'backData'、'textStatus'和'otherObj' 
+    $.when( 
       $.ajax({
         ..
       }), 
       $.ajax({
         ..
-      })
+      }),
+      ...
     )
-    .done(function(data1,data2,..){ 
-      console.log("哈哈,成功了！"); 
+    .fail(function(dat1,dat2,..){    // 有失败则执行 
+      console.log("至少有一个出错啦！"); 
     })
-    .fail(function(dat1,dat2,..){ 
-      console.log("出错啦！"); 
-    });
+    .done(function(data1,data2,..){  // 全部成功才执行 
+      console.log("全部都成功了！"); 
+    })
+    .always(function(){              // 全部完成后执行[不管成功与否]
+      console.log('请求全部完成,但不一定都成功了!');
+    })
   Example: 
     在ajax中使用[self] 
     var defer = $.Deferred();

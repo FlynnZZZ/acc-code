@@ -618,7 +618,7 @@
       </dl>
   <dt>  定义列表中的项目
   <dd>  描述列表中的项目
-  ★HTML5新增
+  ★HTML5新增 
   <canvas> 画布,专门用来绘制图形 
     PS:canvas标签提供一块画布,可以访问画布中的像素点
       canvas标签只是图形容器,图形必须使用脚本来绘制
@@ -733,6 +733,10 @@
       <time datetime="2014-9-28T22:30+8:00">中国时间2014年9月28日晚上10点</time>
     datetime=时间  规定日期 / 时间.否则,由元素的内容给定日期 / 时间.可选属性
     pubdate       可以用在article元素里面的time上表示,当前文章的发布时间.可选属性
+  <template> 内容片段模版 
+    一种用于保存客户端内容的机制,可视为被存储以供随后在文档中使用的一个内容片段 
+    在加载页面时,解析器会处理template元素的内容,但是不会被渲染出来
+    可在运行时使用JS进行实例化 
 Table表格 
   PS: 在一些浏览器中,没有内容的表格单元显示的不太好,
     如果某个单元格是空的[没有内容],浏览器可能无法显示出这个单元格的边框,
@@ -878,8 +882,8 @@ Form表单
       用于包含其他表单元素[如文本框、单选框等]的容器,
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
     name  表单的名字
-      在HTML4中，这个用法不被推荐(应该使用id). 
-      HTML5中，一个文档中的多个form当中，name必须唯一而不仅仅是一个空字符串。
+      在HTML4中,这个用法不被推荐(应该使用id). 
+      HTML5中,一个文档中的多个form当中,name必须唯一而不仅仅是一个空字符串。
     action="url"  表单提交的地址,处理该form信息程序所在的URL 
       该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
     method=    提交表单的HTTP方法
@@ -914,18 +918,18 @@ Form表单
       Exp:
         表单发送超过100个具有相同name的字段时,服务器收不到数据 [20170518]
           添加 enctype='multipart/form-data' 解决
-    target   用来指示在提交表单之后，在哪里显示收到的回复.
+    target   用来指示在提交表单之后,在哪里显示收到的回复.
       HTML4:一个用于frame的名字/关键字 
       HTML5:这是一个用于'browsing context'浏览器上下文的名字/关键字 
         举例来说, 标签页tab,窗口window,or或者行内frame 
       如下的关键字含有特别的含义:
       _self: 在当前HTML4或HTML5文档页面重新加载返回值,默认值 
-        如果这个文档在一个frame中的话，self是在当前frame（document）中重新加载的，而不是整个页面（window） 
+        如果这个文档在一个frame中的话,self是在当前frame（document）中重新加载的,而不是整个页面（window） 
       _blank: 以新的HTML4或HTML5文档窗口加载返回值。
-      _parent: 在父级的frame中以HTML4或HTML5文档形式加载返回值，
-        如果没有父级的frame，行为和_self一致。
+      _parent: 在父级的frame中以HTML4或HTML5文档形式加载返回值,
+        如果没有父级的frame,行为和_self一致。
       _top: HTML4: 清空当前文档,加载返回内容；HTML5: 在当前文档的最高级内加载返回值
-        如果没有父级，和_self的行为一致。
+        如果没有父级,和_self的行为一致。
       iframename: 返回值在指定frame中加载 
       HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载（覆盖）。    
     accept-charset 一个空格分隔或逗号分隔的列表 
@@ -936,7 +940,7 @@ Form表单
       "off" 浏览器不自动补全输入
       "on"  浏览器能够根据用户之前在form里输入的值自动补全 
     novalidate  [布尔类型的属性]当提交时form是否没有被验证 [HTML5] 
-      如果这个属性没有指定 (因此这个 form 是验证通过的)，
+      如果这个属性没有指定 (因此这个 form 是验证通过的),
       该设置可以被属于这个form的 <button> 或者 <input> 元素中的 formnovalidate 属性覆盖
     可以提交表单的按钮 
       PS:用于提交表单的按钮需放置在表单<form>内,

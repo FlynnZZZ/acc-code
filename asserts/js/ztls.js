@@ -113,12 +113,12 @@
   // };
   // 
   // 信息传递的推送和获取[先推送] 
-  ztools.put = function (ename,data,elem){ 
+  ztls.put = function (ename,data,elem){ 
     var el = elem || $('body');
     el.data(ename,data);
     el.trigger(ename,[data]);
   }
-  ztools.get = function (ename,foo,bool,elem){ 
+  ztls.get = function (ename,foo,bool,elem){ 
     var el = elem || $('body');
     var data1 = el.data(ename);
     if (data1) { // 当接受者为后出现时 
@@ -151,7 +151,7 @@
     //   cancelClick : function(){ // 可选,点击取消按钮时的操作
     //   },
     // }
-  ztools.popUp = function(param) {
+  ztls.popUp = function(param) {
     var title = param.title || '标题';
     var txt = param.txt || '提示文字';
     var appendPosition = param.appendPosition || 'body';
@@ -260,7 +260,7 @@
     //   foo : function(){ // 执行的回调
     //   },
     // }
-  ztools.tipPop = function(param){
+  ztls.tipPop = function(param){
     var title = param.title || '提示' ;
     var txt = param.txt || '使用的是默认提示文字';
     var appendPosition = param.appendPosition || 'body';
@@ -339,7 +339,7 @@
   //   //   maskBool : 'none', // 可选,是否使用遮罩 
   //   //   icon : 'fa-exclamation-circle', // 可选,默认为'fa-exclamation-circle redColor'
   //   // }
-  // ztools.loading = function(param){
+  // ztls.loading = function(param){
   // };
 
   
@@ -370,13 +370,13 @@
     return location.pathname+resStr.slice(0,-1);
   };
   
-  // 组件加载 
+  // 初始vm实例加载 
   // var params = [
   //   [ url,pos ],
   //   [ url,pos ],
   //   [ url,pos ],
   // ]
-  ztls.loadCpts = function(params){
+  ztls.loadVm = function(params){
     var head = $('head');
     var html = $('html');
     var arr = [];
@@ -387,18 +387,105 @@
           url  : params[i][0],
         })
         .fail(function (xhr,status,errorTrown){
-          console.log('loadComponent fail,url:',params[i][0]);
+          console.log('load component fail,url:',params[i][0]);
         })
         .done(function(backData,textStatus,obj){
-          // console.log($(backData)['style'], $(backData));
-          $(params[i][1]).after($(backData)[2]).remove();
-          head.append($(backData)[0]);
-          html.append($(backData)[4]);
+          var ct = $(backData)
+          head.append(ct[0]);
+          if (ct[1] == '#text') {
+            $(params[i][1]).after(ct[2]).remove();
+            html.append(ct[4]);
+          }
+          else {
+            $(params[i][1]).after(ct[1]).remove();
+            html.append(ct[2]);
+          }
         })
       })(i);
     }
     return $.when.apply(null,arr);
   };
+  // 异步子组件加载  
+    // 需先在Vue实例中放置子标签且使用v-if="false" 
+    // 异步执行函数,当组件加载到HTML后v-if='true'执行渲染 
+    // 当有一个子组件被渲染其他未被隐藏的子组件都会被渲染出来 
+  // var args = [
+  //   './c-test.html',
+  //   './c-test1.html',
+  // ]
+  ztls.loadCpts = function(args){
+    var head = $('head');
+    var body = $('body');
+    var arr = [];
+    for (var i = 0; i < args.length; i++) {
+      arr.push(
+        $.ajax({
+          type : 'GET',
+          url  : args[i],
+        })
+        .fail(function (xhr,status,errorTrown){
+          console.log('load component fail,from one of:',args);
+        })
+        .done(function(backData,textStatus,xhr){
+          var ct = $(backData)
+          var ct1,ct2;
+          if (ct[1] == '#text') {
+            ct1 = ct[2];
+            ct2 = ct[4];
+          }
+          else {
+            ct1 = ct[1];
+            ct2 = ct[2];
+          }
+          head.append(ct[0]).append(ct1)
+          body.append(ct2);
+        })      
+      )
+    }
+    return $.when.apply(null,arr);
+  }
+  // 初始子组件加载  在Vue实例的beforeMonted之前执行即可 // 相当于 loadCpts+自动触发渲染  
+  // var args = [ '#body', [
+  //   './c-test.html',
+  //   './c-test1.html',
+  // ]]
+  // ztls.loadCptsInit = function(args){
+  //   var _rs = '';
+  //   // hack  通过异步组件的rs()的怪异特性来实现 在vm实例化后定义组件可用  
+  //   // 该函数需在vm实例化前执行 
+  //   // vuejs 版本2.3.0 
+  //   $(args[0]).append('<p style="display:none" is="_xx"></p>');
+  //   Vue.component("_xx",function(rs,rj){
+  //     _rs = rs;
+  //   });
+  //   var head = $('head');
+  //   var body = $('body');
+  //   var arr = [];
+  //   for (var i = 0; i < args[1].length; i++) {
+  //     arr.push(
+  //       $.ajax({
+  //         type : 'GET',
+  //         url  : args[1][i],
+  //       })
+  //       .fail(function (xhr,status,errorTrown){
+  //         console.log('load component fail,from one of:',args[1]);
+  //       })
+  //       .done(function(backData,textStatus,xhr){
+  //         var ct = $(backData)
+  //         head.append(ct[0]).append(ct[2])
+  //         body.append(ct[4]);
+  //       })      
+  //     )
+  //   }
+  //   $.when.apply(null,arr).
+  //   always(function(){
+  //     _rs({ template: '' })
+  //   })
+  //   .done(function(){
+  //     console.log('loaded all c success!');
+  //   })
+  //   return $.when.apply(null,arr);
+  // }
   
   // 检测是否为IE  num可选 7、8、9 
   ztls.isIE = function(num){

@@ -995,20 +995,17 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
   <component is="cptname"></component>   // 放置组件 
   <keep-alive ></keep-alive>
   <transition ></transition>
-  <slot name="slotName"></slot>         // 插槽 
+  <slot name="slotName"></slot>         // 插槽  
+  <template></template>    HTML5标签 
 'Component'组件 
-  PS:Vue的重要概念,提供了一种抽象,用独立可复用的小组件来构建大型应用; 
-    几乎任意类型的应用的界面都可以抽象为一个组件树;
-    在一个大型应用中,为了使得开发过程可控,有必要将应用整体分割成一个个的组件.
+  PS: 可用独立可复用的小组件来构建大型应用; 
     Vuejs组件类似于自定义元素,提供了原生自定义元素所不具备的一些重要功能,
     比如组件间的数据流,自定义事件系统,以及动态的、带特效的组件替换;
     在Vue里,一个组件本质上是一个拥有预定义选项的一个Vue实例;
-    扩展 HTML 元素,封装可重用的代码,
-    在较高层面上,组件是自定义元素,VueJS 的编译器为它添加特殊功能;
+    组件的'data'需是一个函数 
   Vue.component(tagname,options)  // 注册全局组件  
-    tagname 组件的名称 
-      对于自定义标签名,Vue不强制要求遵循W3C规则[小写,并且包含一个短杠],
-      但尽管遵循这个规则比较好
+    PS: 需在插入的Vue实例前定义[否则要触发该实例的任意一组件渲染,如通过'v-if'],才会渲染出该组件 
+    tagname 组件名称,推荐使用小写,且包含一个短杠 
     options 
       ◆配置对象
         PS: 相当于new Vue(options)的options  
@@ -1396,21 +1393,20 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       // 访问子组件
       var child = parent.$refs.profile
   异步组件 
-    PS: Vuejs允许将组件定义为一个工厂函数,动态地解析组件的定义
-      只在组件需要渲染时触发工厂函数,并且把结果缓存起来,用于后面的再次渲染
+    PS: Vuejs允许将组件定义为一个工厂函数,动态地解析组件的定义 
+    只在组件需要渲染时触发工厂函数,并且把结果缓存起来,用于后面的再次渲染 
+      可通过 v-if="true"渲染来触发工厂函数 
+      当vm中任意一组件渲染都会渲染所有其他子组件 
     Vue.component('async-example',function (resolve,reject) {
-      setTimeout(function () {
-        // Pass the component definition to the resolve callback
-        resolve({
-          template: '<div>I am async! {{xx}}</div>',
+      setTimeout(function () { // setTimeout只是为了演示异步获取组件  
+        resolve({ // 组件的配置对象 
+          template: '<div>I am async! {{msg}}</div>',
           data: {
             msg: 'xx'
           }
         })
+        // 也可调用 reject(reason) 指示加载失败  
       },1000)
-      // 工厂函数接收一个 resolve 回调,在收到从服务器下载的组件定义时调用 
-      // 也可以调用 reject(reason) 指示加载失败 
-      // 这里 setTimeout 只是为了演示怎么获取组件完全由你决定
     })
     使用Webpack的代码分割功能 
       Vue.component('async-webpack-example', function (resolve) {
@@ -1469,15 +1465,20 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     }
     问题解决了
   <template id="">在HTML中写组件的标签内容    
-    PS: 当组件中内容过多,在JS中书写组件模版太过繁琐,可通过<template>在HTML中书写 
-      定义在Vue实例范围外,浏览器默认不解析里面的内容[定义在Vue实例的管理范围内则会被解析]
-      ;<template>不能用在<table>内; 
+    PS: 当组件中内容过多,在JS中书写组件模版太过繁琐,可通过<template>在HTML中书写; 
+      需定义在Vue实例范围外[浏览器默认不解析其内容],否则会被解析; 
+      <template>不能用在<table>内; 
+      适用于全局组件和局部组件,且'data'属性需采用函数返回值的形式  
     定义组件时,通过id选择器来指定在HTML中书写的模版 
       <body>
-        // <!-- 使用 template 并且添加选择器(只能使用id)-->
+        // <!-- 使用 template 并且添加选择器 [只能使用id] -->
         <template id="myTemp">
-          <h2>This is Template </h2>
-          <p>add ...</p>
+          // template 内只能有一个标签,否则只渲染第一个标签,
+          // 第一个标签前的非标签内容不会显示,如一段文字等  
+          <div>   
+            <h2>This is Template </h2>
+            <p>{{msg}}</p>
+          </div>
         </template>
         <div id="app">
           <my-component></my-component>
@@ -1486,7 +1487,12 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
       </body>
       <script>
         Vue.component("my-component", {
-          template:"#myTemp" //对应上面定义的template标签中的选择器
+          template:"#myTemp", //对应上面定义的template标签中的选择器
+          data: function(){
+            return {
+              msg: 'aaaa'
+            };
+          }
         })
         new Vue({
           el:"#app"

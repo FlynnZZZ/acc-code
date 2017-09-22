@@ -9,6 +9,8 @@ ueditor 百度富文本编辑器
       mimeTypes: 'image/jpg,image/jpeg,image/png'  
     或者全局搜索将所有 'image/* '  改为  'image/jpg,image/jpeg,image/png'
   需在appcache启动的服务中测试demo 
+  'umeditor.config.js'配置文件 
+    window.UMEDITOR_HOME_URL   用于指定该文件的路径,推荐使用绝对路径[如'/src/...']  
 --------------------------------------------------------------------------------
 网络收集 
 接口

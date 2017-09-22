@@ -1,3 +1,267 @@
+操作系统相关 
+  'path'环境变量 
+    执行命令时,优先到path指定的路径中去寻找
+  REPL'Read Eval Print Loop'交互式解释器 
+    '读取-求值-输出 循环'表示一个电脑的环境 
+    类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
+Shell: 用户和Linux内核之间的接口程序 
+  PS: 一种命令语言解释器'command-language interpreter',
+    在提示符下输入的命令由shell先解释然后传给Linux内核 
+    shell也能被系统中其他有效的Linux实用程序和应用程序所调用 
+    在成功地登录进入系统后shell启动,并始终作为与系统内核的交互手段直至退出系统 
+    shell自身也是一个解释型的程序设计语言,支持在高级语言里所能见到的绝大多数程序控制结构,
+    比如循环,函数,变量和数组,任何在提示符下能键入的命令也能放到一个可执行的shell程序里,
+  命令的执行 
+    命令分两种 
+    内建的shell命令集: 包含在Linux bash内部的,比如打印当前工作目录命令'pwd' 
+    其他命令: 比如拷贝命令'cp'和移动命令'rm',是存在于文件系统中某个目录下的单独的程序 
+      这里的应用程序可以是Linux本身的实用程序,比如ls 和 rm,
+      也可以是购买的商业程序,比如 xv,或者是公用软件（public domain software）,就象 ghostview。
+      然后shell 试着在搜索路径($PATH)里寻找这些应用程序。
+      搜索路径是一个能找到可执行程序的目录列表。
+    shell 首先检查命令是否是内部命令,不是的话再检查是否是一个应用程序,
+    如果你键入的命令不是一个内部命令并且在路径里没有找到这个可执行文件,将会显示一条错误信息。
+    而如果命令被成功的找到的话,shell的内部命令或应用程序将被分解为系统调用并传给Linux内核。
+  常用的shell: 
+     Linux和UNIX系统里可使用多种不同的shell 
+     最常用的几种是'Bourne shell'sh,'C shell'csh,和'Korn shell'ksh, 
+     'tcsh'[csh 的扩展],'bash'[sh的扩展],和'pdksh'[ksh的扩展];
+Bash: 大多数'Linux'及'Mac OS X'系统默认的shell 
+  特性: 
+    'Command-Line Completion'命令补齐: 使用tab主动补全 
+    'Job Control'作业控制: 控制当前正在运行的进程的行为 
+      PS: 当一个命令在前台被运行时,它会禁止用户与shell的交互,直到该命令结束
+        如果要运行的命令要花费很长的时间的话,通常会把它放到后台,以便能在前台继续输入其他命令
+      ctrl-z 使一个运行的进程挂起
+      bg 命令使一个被挂起的进程在后台恢复运行 
+      fg 命令使进程在前台恢复运行 
+      Example: 
+        control-z  // 使命令挂起 
+        bg         // 后台运行 
+  提示符 
+    bash有两级用户提示符
+    第一级是bash在等待命令输入时的提示符。默认的一级提示符是'$',如果是超级用户是'#'
+      PS1="xx"  // 将一级提示符改为指定字符串  
+    当bash期待输入更多的信息以完成命令时显示第二级提示符。缺省的第二级提示符是'>' 
+      PS2="xx"  // 将二级提示符改为指定字符串   
+    另外可以用特殊的字符来定义提示符,下面的列表列出了最常用的特殊字符 
+      提示符特殊字符代码
+      字符     含义 
+      \!       显示该命令的历史记录编号
+      \#       显示当前命令的命令编号
+      \$       显示$符作为提示符,如果用户是root的话,则显示#
+      \/       显示反斜杠 
+      \d       显示当前日期 
+      \h       显示主机名 
+      \n       打印新行 
+      \nnn     显示nnn的八进制值 
+      \s       显示当前运行的shell的名字 
+      \t       显示当前时间 
+      \u       显示当前用户的用户名 
+      \W       显示当前工作目录的名字 
+      \w       显示当前工作目录的路径 
+  通配符 
+    支持的三种通配符：
+    *      匹配任何字符和任何数目的字符
+    ?      匹配任何单字符
+    [...]  匹配任何包含在括号里的单字符 
+      [123] 或 [1-3] 表示数字'1''2''3'中的一个
+  bash变量 
+    最常用的bash变量: 
+    PATH       bash寻找可执行文件的搜索路径
+    PWD        当前工作目录
+    HOME       当前用户的用户目录
+    SECONDS    当前shell开始后所流逝的秒      
+    OLDPWD     前一个工作目录
+    PS1        命令行的一级提示符
+    PS2        命令行的二级提示符
+    EDITOR, FCEDIT  bsah fc 命令的缺省编辑器 
+    HISTFILE        用于贮存历史命令的文件 
+    HISTSIZE        历史命令列表的大小
+  在初始化文件中配置bash 
+    Windows中,在'./Git/etc/bash.bashrc'文件中写入,进行永久别名配置 
+      alias xx1='xxx1'
+      alias xx2='xxx2'
+    bash在每次启动时都读取这个文件,并执行所有包含的命令 
+  ◆命令归纳  
+  "<"输入重定向 
+  '>'输出重定向 
+    可将输入的内容放置到文件中
+    可把一个命令的输出当作另一个命令的输入[更简单的方法是使用管道]
+    Example:
+      ls > directory.out //  把ls命令的输出保存为'directory.out'的文件
+  '|'管道 
+    可把一系列命令连接起来,将上一个命令的输出通过管道传给下一个命令的输入
+    最终输出的结果为管道行中最后一个命令的输出 
+    Example: 
+      cat sample.text | grep "High" | wc -l  // 返回文件中,有'High'的行数 
+      // cat <filename>   列出一个文件的内容
+      // grep <str>    列出存在str的所有行
+      // wc -l         统计输入里的行数 
+  历史操作 
+    history   以列表形式显示所有历史命令 
+    history <num> 仅有最后num个历史命令会被列出 
+    history [-r|w|a|n] [<filename>] 
+      -r  读命令历史列表文件的内容并且把它们当作当前的命令历史列表
+      -w  选项将把当前的命令历史记录写入文件中并覆盖文件原来的内容
+      -a  选项把当前的命令历史记录追加到文件中
+      -n  选项将读取文件中的内容并加入到当前历史命令列表中
+      filename 默认用变量 HISTFILE 的值来代替  
+    fc [-e editor_name] [-n] [-l] [-r] [first] [last] 编辑历史命令 
+      -e editor_name   指定用于编辑命令的文本编辑器 
+        默认以变量FCEDIT的值来代替,如果该变量不存在的话,则用变量EDITOR的值来代替,都不存在的话将使用vi编辑器
+      first 和 last   用于选择列出历史命令的范围,既可以是数字也可以是字符串
+      -n   选项禁止列出命令的编号。
+      -r   选项反向列出匹配的命令。
+      -l   选项把匹配的命令行列在屏幕上,而不是在编辑器中 
+  别名 
+    alias   显示已定义的别名 
+    alias <xx>=<'xxx'>  定义临时别名,使用xx来代替'xxx'[退出bash后失效] 
+      在定义别名时,等号的两头不能有空格,当命令中包含有空格或特殊字符时需要引号 
+      若定义的别名和原本的命令名字相同,可使用 \<command> 来执行原原命令 
+    unalias <xx>  取消xx临时别名 
+  ◆其他命令 
+  快捷键 
+    ctrl+d  退出命令行 
+  命令行 
+    clear   清空命令行输出 
+    curl <url>  在命令行中显示根据URL获取到的网页内容 
+    echo <xx>   在命令行显示 
+      str  直接显示 
+      $PATH  显示环境变量 
+    export 使变量的值对当前shell的所有子进程都可见 。
+    help   显示bash内部命令的帮助信息。
+    kill   终止某个进程
+  文件相关操作 
+    cd <xx> 进入目录 
+      cd /   进入根目录 
+      cd ~   进入当前用户home目录 
+    ls [<name>] [<options>] 查看文件夹的文件 
+      <options>  配置项 
+        -a    查看所有文件[包括隐藏文件]  
+        -al   查看所有文件的详细信息
+    ll [<name>]  查看文件夹的文件详情 
+    pwd   查看当前完整路径 
+    mkdir <name>   创建文件夹 
+    touch <fileName> 新建文件 
+    cp <fileName>  复制文件 
+    rm <name>    删除文件 
+    rm <name> -rf  删除文件夹 
+    mv <name> <newName>  重命名 
+  执行程序 
+    which <name>  查看程序位置 
+      如 which node ,which vue 
+    where <name>  查看程序位置 
+      如 where node 
+    atom <path>  用Atom打开文件夹 
+Git bash: 在Windows系统中使用Bash命令 
+windows命令行: 类似于Linux的shell  
+  PS:命令行程序为cmd.exe,一个32位的命令行程序,
+    实际上很多Windows中的操作只能通过命令来实现;windows命令行中文件名不区分大小写;
+  命令 快捷键 操作
+  快捷键 
+    鼠标右键     粘贴
+    up/down     选择历史命令
+    F7          显示命令历史记录
+    Esc         清除当前命令行
+    ctrl+c      强行中止命令执行
+    ctrl+d      退出其他运行环境或推出命令行程序 
+    F9          按编号选择命令[从0开始] 
+    ctrl+h      和删除backspace功能相同
+    alt+printScreen   截取当前命令窗[需在画板中粘贴]
+    enter[选中文字下]  复制
+  文件操作类 
+    cd XX      进入XX文件夹
+      cd ./    当前文件夹
+      cd ../   到上级文件夹
+      cd /     到该磁盘的根目录
+      cd \     到该磁盘的根目录
+    <x>:       进入磁盘
+      Example: : e:  进入到E盘 ;  c:  进入到c盘
+    dir        列出目录下的所有文件
+    mkdir      创建文件夹
+    <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
+    type <fileName> 参看文件内容
+    start <folderName> 打开文件夹
+  命令行相关 
+    cls       清屏 
+  信息查看类 
+    ping <域名>   查询IP地址  
+    winver    检查Windows版本
+    ipconfig  显示当前的TCP/IP配置的设置值
+      ipconfig /all:显示本机TCP/IP配置的详细信息；
+      ipconfig /release:DHCP客户端手工释放IP地址；
+      ipconfig /renew:DHCP客户端手工向服务器刷新请求；
+      ipconfig /flushdns:清除本地DNS缓存内容；
+      ipconfig /displaydns:显示本地DNS内容；
+      ipconfig /registerdns:DNS客户端手工向服务器进行注册；
+      ipconfig /showclassid:显示网络适配器的DHCP类别信息；
+      ipconfig /setclassid:设置网络适配器的DHCP类别。
+      ipconfig /renew “Local Area Connection”:更新“本地连接”适配器的由 DHCP 分配 IP 地址的配置
+      ipconfig /showclassid Local*:显示名称以 Local 开头的所有适配器的 DHCP 类别 ID
+      ipconfig /setclassid “Local Area Connection” TEST:将“本地连接”适配器的 DHCP 类别 ID 设置为 TEST        
+    cmd       CMD命令提示符
+      cmd.exe  完整写法
+    Nslookup  IP地址侦测器
+    netstat -an   (TC)命令检查接口
+    nslookup      网络管理的工具向导
+  系统控制类 
+    shutdown -s   30 秒后关机 
+  打开应用类 
+    explorer     打开资源管理器
+    calc         启动计算器
+    mspaint      画图板
+    write        写字板
+    eudcedit     造字程序
+    magnify      放大镜实用程序
+    dvdplay      DVD播放器
+    taskmgr      任务管理器
+    devmgmt.msc  设备管理器
+    diskmgmt.msc 磁盘管理实用程序
+    notepad      打开记事本
+    osk          打开屏幕键盘
+    fsmgmt.msc   共享文件夹管理器
+    narrator     屏幕“讲述人”
+    Msconfig.exe 系统配置实用程序
+    eventvwr     事件查看器
+    charmap      启动字符映射表
+    utilman      辅助工具管理器
+    wiaacmgr     扫描仪和照相机向导[需要安装] 
+    services.msc 本地服务设置
+    certmgr.msc  证书管理实用程序
+    compmgmt.msc 计算机管理
+    sfc.exe      系统文件检查器
+    perfmon.msc  计算机性能监测程序
+    regedit.exe  注册表
+    regedt32     注册表编辑器
+    cleanmgr     垃圾整理
+    wmimgmt.msc  打开windows管理体系结构[WMI]
+    sigverif     文件签名验证程序
+    wscript      windows脚本宿主设置
+    mmc          打开控制台
+    dxdiag       检查DirectX信息
+    chkdsk.exe   Chkdsk磁盘检查
+  其他待整理 
+    wupdmgr      windows更新程序
+    winchat      XP自带局域网聊天
+    mstsc        远程桌面连接
+    mobsync      同步命令
+    dcomcnfg     打开系统组件服务
+    ddeshare     打开DDE共享设置
+    shrpubw      创建共享文件夹
+    syskey       系统加密,一旦加密就不能解开,保护windows xp系统的双重密码
+    sfc /scannow windows文件保护
+    tsshutdn     60 秒倒计时关机命令
+    rononce -p   15 秒关机
+    regsvr32 /u *.dll         停止dll文件运行
+    regsvr32 /u zipfldr.dll   取消ZIP支持
+    cliconfg      SQL SERVER 客户端网络实用程序
+    conf          启动netmeeting
+    odbcad32      ODBC数据源管理器
+    logoff        注销命令
+    net stop messenger   停止信使服务
+    net start messenger  开始信使服务
+--------------------------------------------------------------------------------
 ◆名词&术语  
   缩写词 
     bin   binary 二进制 
@@ -42,7 +306,6 @@ HSL 色彩模式,工业界的一种颜色标准
     数值越大,颜色中的灰色越少,颜色越鲜艳,呈现一种从灰度到纯色的变化
   L'lightness'亮度[0-100%]: 指的是色彩的明度,作用是控制色彩的明暗变化 
     取值'0%-100%',数值越小,色彩越暗,越接近于黑色;数值越大,色彩越亮,越接近于白色
---------------------------------------------------------------------------------
 编码 
   ANSI  本地编码[不代表具体的编码]
     如在简体版windows上它表示GB2312编码,繁体版windows上它表示Big5编码,
@@ -499,261 +762,8 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
     分治算法
 二叉树 
 --------------------------------------------------------------------------------
-Shell: 用户和Linux内核之间的接口程序 
-  PS: 一种命令语言解释器'command-language interpreter',
-    在提示符下输入的命令由shell先解释然后传给Linux内核 
-    shell也能被系统中其他有效的Linux实用程序和应用程序所调用 
-    在成功地登录进入系统后shell启动,并始终作为与系统内核的交互手段直至退出系统 
-    shell自身也是一个解释型的程序设计语言,支持在高级语言里所能见到的绝大多数程序控制结构,
-    比如循环,函数,变量和数组,任何在提示符下能键入的命令也能放到一个可执行的shell程序里,
-  命令的执行 
-    命令分两种 
-    内建的shell命令集: 包含在Linux bash内部的,比如打印当前工作目录命令'pwd' 
-    其他命令: 比如拷贝命令'cp'和移动命令'rm',是存在于文件系统中某个目录下的单独的程序 
-      这里的应用程序可以是Linux本身的实用程序,比如ls 和 rm,
-      也可以是购买的商业程序,比如 xv,或者是公用软件（public domain software）,就象 ghostview。
-      然后shell 试着在搜索路径($PATH)里寻找这些应用程序。
-      搜索路径是一个能找到可执行程序的目录列表。
-    shell 首先检查命令是否是内部命令,不是的话再检查是否是一个应用程序,
-    如果你键入的命令不是一个内部命令并且在路径里没有找到这个可执行文件,将会显示一条错误信息。
-    而如果命令被成功的找到的话,shell的内部命令或应用程序将被分解为系统调用并传给Linux内核。
-  常用的shell: 
-     Linux和UNIX系统里可使用多种不同的shell 
-     最常用的几种是'Bourne shell'sh,'C shell'csh,和'Korn shell'ksh, 
-     'tcsh'[csh 的扩展],'bash'[sh的扩展],和'pdksh'[ksh的扩展];
-Bash: 大多数'Linux'及'Mac OS X'系统默认的shell 
-  特性: 
-    'Command-Line Completion'命令补齐: 使用tab主动补全 
-    'Job Control'作业控制: 控制当前正在运行的进程的行为 
-      PS: 当一个命令在前台被运行时,它会禁止用户与shell的交互,直到该命令结束
-        如果要运行的命令要花费很长的时间的话,通常会把它放到后台,以便能在前台继续输入其他命令
-      ctrl-z 使一个运行的进程挂起
-      bg 命令使一个被挂起的进程在后台恢复运行 
-      fg 命令使进程在前台恢复运行 
-      Example: 
-        control-z  // 使命令挂起 
-        bg         // 后台运行 
-  提示符 
-    bash有两级用户提示符
-    第一级是bash在等待命令输入时的提示符。默认的一级提示符是'$',如果是超级用户是'#'
-      PS1="xx"  // 将一级提示符改为指定字符串  
-    当bash期待输入更多的信息以完成命令时显示第二级提示符。缺省的第二级提示符是'>' 
-      PS2="xx"  // 将二级提示符改为指定字符串   
-    另外可以用特殊的字符来定义提示符,下面的列表列出了最常用的特殊字符 
-      提示符特殊字符代码
-      字符     含义 
-      \!       显示该命令的历史记录编号
-      \#       显示当前命令的命令编号
-      \$       显示$符作为提示符,如果用户是root的话,则显示#
-      \/       显示反斜杠 
-      \d       显示当前日期 
-      \h       显示主机名 
-      \n       打印新行 
-      \nnn     显示nnn的八进制值 
-      \s       显示当前运行的shell的名字 
-      \t       显示当前时间 
-      \u       显示当前用户的用户名 
-      \W       显示当前工作目录的名字 
-      \w       显示当前工作目录的路径 
-  通配符 
-    支持的三种通配符：
-    *      匹配任何字符和任何数目的字符
-    ?      匹配任何单字符
-    [...]  匹配任何包含在括号里的单字符 
-      [123] 或 [1-3] 表示数字'1''2''3'中的一个
-  bash变量 
-    最常用的bash变量: 
-    PATH       bash寻找可执行文件的搜索路径
-    PWD        当前工作目录
-    HOME       当前用户的用户目录
-    SECONDS    当前shell开始后所流逝的秒      
-    OLDPWD     前一个工作目录
-    PS1        命令行的一级提示符
-    PS2        命令行的二级提示符
-    EDITOR, FCEDIT  bsah fc 命令的缺省编辑器 
-    HISTFILE        用于贮存历史命令的文件 
-    HISTSIZE        历史命令列表的大小
-  在初始化文件中配置bash 
-    Windows中,在'./Git/etc/bash.bashrc'文件中写入,进行永久别名配置 
-      alias xx1='xxx1'
-      alias xx2='xxx2'
-    bash在每次启动时都读取这个文件,并执行所有包含的命令 
-  ◆命令归纳  
-  "<"输入重定向 
-  '>'输出重定向 
-    可将输入的内容放置到文件中
-    可把一个命令的输出当作另一个命令的输入[更简单的方法是使用管道]
-    Example:
-      ls > directory.out //  把ls命令的输出保存为'directory.out'的文件
-  '|'管道 
-    可把一系列命令连接起来,将上一个命令的输出通过管道传给下一个命令的输入
-    最终输出的结果为管道行中最后一个命令的输出 
-    Example: 
-      cat sample.text | grep "High" | wc -l  // 返回文件中,有'High'的行数 
-      // cat <filename>   列出一个文件的内容
-      // grep <str>    列出存在str的所有行
-      // wc -l         统计输入里的行数 
-  历史操作 
-    history   以列表形式显示所有历史命令 
-    history <num> 仅有最后num个历史命令会被列出 
-    history [-r|w|a|n] [<filename>] 
-      -r  读命令历史列表文件的内容并且把它们当作当前的命令历史列表
-      -w  选项将把当前的命令历史记录写入文件中并覆盖文件原来的内容
-      -a  选项把当前的命令历史记录追加到文件中
-      -n  选项将读取文件中的内容并加入到当前历史命令列表中
-      filename 默认用变量 HISTFILE 的值来代替  
-    fc [-e editor_name] [-n] [-l] [-r] [first] [last] 编辑历史命令 
-      -e editor_name   指定用于编辑命令的文本编辑器 
-        默认以变量FCEDIT的值来代替,如果该变量不存在的话,则用变量EDITOR的值来代替,都不存在的话将使用vi编辑器
-      first 和 last   用于选择列出历史命令的范围,既可以是数字也可以是字符串
-      -n   选项禁止列出命令的编号。
-      -r   选项反向列出匹配的命令。
-      -l   选项把匹配的命令行列在屏幕上,而不是在编辑器中 
-  别名 
-    alias   显示已定义的别名 
-    alias <xx>=<'xxx'>  定义临时别名,使用xx来代替'xxx'[退出bash后失效] 
-      在定义别名时,等号的两头不能有空格,当命令中包含有空格或特殊字符时需要引号 
-      若定义的别名和原本的命令名字相同,可使用 \<command> 来执行原原命令 
-    unalias <xx>  取消xx临时别名 
-  ◆其他命令 
-  快捷键 
-    ctrl+d  退出命令行 
-  命令行 
-    clear   清空命令行输出 
-    curl <url>  在命令行中显示根据URL获取到的网页内容 
-    echo <xx>   在命令行显示 
-      str  直接显示 
-      $PATH  显示环境变量 
-    export 使变量的值对当前shell的所有子进程都可见 。
-    help   显示bash内部命令的帮助信息。
-    kill   终止某个进程
-  文件相关操作 
-    cd <xx> 进入目录 
-      cd /   进入根目录 
-      cd ~   进入当前用户home目录 
-    ls [<name>] [<options>] 查看文件夹的文件 
-      <options>  配置项 
-        -a    查看所有文件[包括隐藏文件]  
-        -al   查看所有文件的详细信息
-    ll [<name>]  查看文件夹的文件详情 
-    pwd   查看当前完整路径 
-    mkdir <name>   创建文件夹 
-    touch <fileName> 新建文件 
-    cp <fileName>  复制文件 
-    rm <name>    删除文件 
-    rm <name> -rf  删除文件夹 
-    mv <name> <newName>  重命名 
-  执行程序 
-    which <name>  查看程序位置 
-      如 which node ,which vue 
-    where <name>  查看程序位置 
-      如 where node 
-    atom <path>  用Atom打开文件夹 
-Git bash: 在Windows系统中使用Bash命令 
-windows命令行: 类似于Linux的shell  
-  PS:命令行程序为cmd.exe,一个32位的命令行程序,
-    实际上很多Windows中的操作只能通过命令来实现;windows命令行中文件名不区分大小写;
-  命令 快捷键 操作
-  快捷键 
-    鼠标右键     粘贴
-    up/down     选择历史命令
-    F7          显示命令历史记录
-    Esc         清除当前命令行
-    ctrl+c      强行中止命令执行
-    ctrl+d      退出其他运行环境或推出命令行程序 
-    F9          按编号选择命令[从0开始] 
-    ctrl+h      和删除backspace功能相同
-    alt+printScreen   截取当前命令窗[需在画板中粘贴]
-    enter[选中文字下]  复制
-  文件操作类 
-    cd XX      进入XX文件夹
-      cd ./    当前文件夹
-      cd ../   到上级文件夹
-      cd /     到该磁盘的根目录
-      cd \     到该磁盘的根目录
-    <x>:       进入磁盘
-      Example: : e:  进入到E盘 ;  c:  进入到c盘
-    dir        列出目录下的所有文件
-    mkdir      创建文件夹
-    <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
-    type <fileName> 参看文件内容
-    start <folderName> 打开文件夹
-  命令行相关 
-    cls       清屏 
-  信息查看类 
-    ping <域名>   查询IP地址  
-    winver    检查Windows版本
-    ipconfig  显示当前的TCP/IP配置的设置值
-      ipconfig /all:显示本机TCP/IP配置的详细信息；
-      ipconfig /release:DHCP客户端手工释放IP地址；
-      ipconfig /renew:DHCP客户端手工向服务器刷新请求；
-      ipconfig /flushdns:清除本地DNS缓存内容；
-      ipconfig /displaydns:显示本地DNS内容；
-      ipconfig /registerdns:DNS客户端手工向服务器进行注册；
-      ipconfig /showclassid:显示网络适配器的DHCP类别信息；
-      ipconfig /setclassid:设置网络适配器的DHCP类别。
-      ipconfig /renew “Local Area Connection”:更新“本地连接”适配器的由 DHCP 分配 IP 地址的配置
-      ipconfig /showclassid Local*:显示名称以 Local 开头的所有适配器的 DHCP 类别 ID
-      ipconfig /setclassid “Local Area Connection” TEST:将“本地连接”适配器的 DHCP 类别 ID 设置为 TEST        
-    cmd       CMD命令提示符
-      cmd.exe  完整写法
-    Nslookup  IP地址侦测器
-    netstat -an   (TC)命令检查接口
-    nslookup      网络管理的工具向导
-  系统控制类 
-    shutdown -s   30 秒后关机 
-  打开应用类 
-    explorer     打开资源管理器
-    calc         启动计算器
-    mspaint      画图板
-    write        写字板
-    eudcedit     造字程序
-    magnify      放大镜实用程序
-    dvdplay      DVD播放器
-    taskmgr      任务管理器
-    devmgmt.msc  设备管理器
-    diskmgmt.msc 磁盘管理实用程序
-    notepad      打开记事本
-    osk          打开屏幕键盘
-    fsmgmt.msc   共享文件夹管理器
-    narrator     屏幕“讲述人”
-    Msconfig.exe 系统配置实用程序
-    eventvwr     事件查看器
-    charmap      启动字符映射表
-    utilman      辅助工具管理器
-    wiaacmgr     扫描仪和照相机向导[需要安装] 
-    services.msc 本地服务设置
-    certmgr.msc  证书管理实用程序
-    compmgmt.msc 计算机管理
-    sfc.exe      系统文件检查器
-    perfmon.msc  计算机性能监测程序
-    regedit.exe  注册表
-    regedt32     注册表编辑器
-    cleanmgr     垃圾整理
-    wmimgmt.msc  打开windows管理体系结构[WMI]
-    sigverif     文件签名验证程序
-    wscript      windows脚本宿主设置
-    mmc          打开控制台
-    dxdiag       检查DirectX信息
-    chkdsk.exe   Chkdsk磁盘检查
-  其他待整理 
-    wupdmgr      windows更新程序
-    winchat      XP自带局域网聊天
-    mstsc        远程桌面连接
-    mobsync      同步命令
-    dcomcnfg     打开系统组件服务
-    ddeshare     打开DDE共享设置
-    shrpubw      创建共享文件夹
-    syskey       系统加密,一旦加密就不能解开,保护windows xp系统的双重密码
-    sfc /scannow windows文件保护
-    tsshutdn     60 秒倒计时关机命令
-    rononce -p   15 秒关机
-    regsvr32 /u *.dll         停止dll文件运行
-    regsvr32 /u zipfldr.dll   取消ZIP支持
-    cliconfg      SQL SERVER 客户端网络实用程序
-    conf          启动netmeeting
-    odbcad32      ODBC数据源管理器
-    logoff        注销命令
-    net stop messenger   停止信使服务
-    net start messenger  开始信使服务
+设计模式 
+  观察者模式
+    观察者模式定义了一种一对多的依赖关系,让多个观察者对象同时监听某一个主题对象 
+    这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己
 

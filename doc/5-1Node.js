@@ -1,25 +1,33 @@
-介绍_概念_说明_定义 
-  PS:发布于2009年,一个事件驱动I/O服务端JS运行环境,JS语言通过Node在服务器运行 
-    内部采用V8引擎,作为JS语言解释器,通过自行开发的libuv库,调用操作系统资源 
-  版本特点 
-    偶数位为稳定版本
-    Example: :-0.6.X -0.8.X -0.10.X  
-    奇数为非稳定版本
-    Example: :-0.7.X -0.9.X -0.11.X  
-  程序一般由3部分组成 
-    required引入模块:使用 require 指令来载入 NodeJS 模块 
-    创建服务器:服务器可以监听客户端的请求,类似于 Apache 、Nginx 等 HTTP 服务器 
-    接收与响应请求: 客户端使用浏览器或终端发送 HTTP 请求,服务器接收请求后返回响应数据.
-运行环境及执行命令 
-  path 环境变量 
-    执行命令时,优先到path指定的路径中去寻找
-  Node命令[命令行中] 
-    node -v       查看所安装node的版本信息
-    node <fileName> 执行文件 
-    node -e <str>   使用-e参数,可执行代码字符串 
+介绍-概念-说明-定义 
+  PS: 发布于2009年,一个事件驱动I/O服务端JS运行环境,JS语言通过Node在服务器运行 
+    内部采用V8引擎,作为JS解释器,通过自行开发的libuv库,调用操作系统资源 
+    偶数位为稳定版本,如: 0.6.X、0.8.X; 奇数为非稳定版本,如: 0.7.X、0.9.X 
+  相关命令 
+    $ node -v         查看所安装node的版本信息
+    $ node <fileName> 执行文件 
+    $ node -e <codeStr>   使用-e参数,可执行代码字符串 
       node -e 'console.log("Hello World")'
+    REPL 命令 
+      PS: 'NodeJS REPL'Node的交互式解释器 
+        Node的交互式解释器可以很好的调试JS代码;相当于浏览器的Console控制台[SlPt]
+      $ node                // 启动Node终端,进入node运行环境 
+      $ node --use_strict   // REPL将在严格模式下运行,
+      $ .help    列出使用命令
+      $ .break   退出多行表达式
+      $ .clear   退出多行表达式
+      $ .save <filename>  保存当前的 Node REPL 会话到指定文件
+      $ .load <filename>  载入当前 Node REPL 会话的文件内容
+      $ _      下划线表示上一个命令的返回结果 
+        > 1 + 1
+        2
+        > _ + 1
+        3
+      ctrl+c   按下两次退出 Node REPL
+      ctrl+d   退出 Node REPL
+      tab      列出当前命令
+      up/down  查看输入的历史命令
     node 升级 
-      n: NodeJS版本管理 
+      方式一: n: NodeJS版本管理 
         npm install -g n     安装n模块 
         n stable   升级nodejs到最新稳定版 
           n后面也可以跟随版本号比如:
@@ -29,42 +37,21 @@
         n latest 安装最新的版本
         n rm 0.10.1 删除某个版本
         n use 0.10.21 some.js 以指定的版本来执行脚本
-      nvm'Node Version Manager': NodeJS版本管理 
+      方式二: nvm'Node Version Manager': NodeJS版本管理 
         nvm install 0.10  安装Node
         nvm use 0.10 使用指定的版本
         nvm ls 查看当前已经安装的版本
-  'NodeJS REPL'Node的交互式解释器 
-    PS:REPL,'Read Eval Print Loop','读取-求值-输出 循环' 表示一个电脑的环境 
-      类似Windows系统的终端或Unix/Linux shell,可在终端中输入命令,并接收系统的响应
-      Node的交互式解释器可以很好的调试JS代码,
-      相当于浏览器的Console控制台[SlPt]
-    'node'命令 来启动Node的终端,'node --use_strict' REPL将在严格模式下运行,
-    REPL 命令 
-      ctrl + c   按下两次退出 Node REPL
-      ctrl + d   退出 Node REPL
-      tab        列出当前命令
-      up/down    查看输入的历史命令
-      .help      列出使用命令
-      .break     退出多行表达式
-      .clear     退出多行表达式
-      .save filename  保存当前的 Node REPL 会话到指定文件
-      .load filename  载入当前 Node REPL 会话的文件内容
-      _     下划线表示上一个命令的返回结果 
-        > 1 + 1
-        2
-        > _ + 1
-        3
+      方式三: 直接下载Node覆盖安装 
 NodeJS的运行方式及编程风格 
   以单线程模式运行,使用事件驱动来处理并发,使用回调函数异步操作 
-    基本上所有的事件机制都是用设计模式中观察者模式实现。
-    每个子进程总是带有三个流对象:child.stdin, child.stdout 和child.stderr.
-    他们可能会共享父进程的stdio流,或者也可以是独立的被导流的流对象 
+    基本上所有的事件机制都是用[设计模式中]观察者模式实现 
+    每个子进程总是带有三个流对象: child.stdin, child.stdout 和 child.stderr 
+    他们可能会共享父进程的stdio流,或者也可以是独立的被导流的流对象  
   回调函数 
-    PS:NodeJS异步编程依托于回调来实现,所有API都支持回调函数 
-      Node采用V8引擎处理JS脚本,最大特点就是单线程运行,一次只能运行一个任务。
-      这导致Node大量采用异步操作（asynchronous opertion）,
-      即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行。
-    由于这种特性,某一个任务的后续操作,往往采用回调函数[callback]的形式进行定义 
+    NodeJS异步编程依托于回调来实现,所有API都支持回调函数 
+      Nodede的单线程[[一次只能运行一个任务]],导致大量采用异步操作'asynchronous opertion' 
+      即任务不是马上执行,而是插在任务队列的尾部,等到前面的任务运行完后再执行 
+      由于这种特性,某一个任务的后续操作,往往采用回调函数[callback]的形式进行定义 
       var isTrue = function(value, callback) {
         if (value === true) {
           callback(null, "Value was true.");
@@ -74,157 +61,66 @@ NodeJS的运行方式及编程风格
         }
       }
       上面代码就把进一步的处理,交给回调函数callback。
-    Node约定 
-      若某个函数需要回调函数作为参数,则回调函数是最后一个参数。
-      回调函数本身的第一个参数,约定为上一步传入的错误对象。
-        var callback = function (error, value) {
-          if (error) {
-            return console.log(error);
-          }
-          console.log(value);
-        }
-        上面代码中,callback的第一个参数是Error对象,第二个参数才是真正的数据参数。
-        这是因为回调函数主要用于异步操作,当回调函数运行时,前期的操作早结束了,
-        错误的执行栈早就不存在了,传统的错误捕捉机制try…catch对于异步操作行不通,
-        所以只能把错误交给回调函数处理。
-        try {
-          db.User.get(userId, function(err, user) {
-            if(err) {
-              throw err
-            }
-            // ...
-          })
-        } 
-        catch(e) {
-          console.log(‘Oh no!’);
-        }
-        上面代码中,db.User.get方法是一个异步操作,等到抛出错误时,
-        可能它所在的try…catch代码块早就运行结束了,这会导致错误无法被捕捉。
-        所以,Node统一规定,一旦异步操作发生错误,就把错误对象传递到回调函数。
-      若没有发生错误,回调函数的第一个参数就传入null 
-      这种写法有一个很大的好处,就是说只要判断回调函数的第一个参数,就知道有没有出错, 
-      若不是null,就肯定出错了。另外,这样还可以层层传递错误 
-      if(err) {
-        // 除了放过No Permission错误意外,其他错误传给下一个回调函数
-        if(!err.noPermission) {
-          return next(err);
-        }
-      }
-      由于这种特性,某一个任务的后续操作,往往采用回调函数（callback）的形式进行定义。
-    阻塞与非阻塞调用的不同 
-      Example:
-      阻塞代码实例
-        创建一个文件 input.txt ,内容如下:
-          11111111111111
-        创建 main.js 文件, 代码如下:
-          var fs = require("fs");
-          var data = fs.readFileSync('input.txt');
-          console.log(data.toString());
-          console.log("程序执行结束!");
-        node main.js 以上代码执行结果:
-          11111111111111
-          程序执行结束!
-      非阻塞代码实例
-        创建一个文件 input.txt ,内容如下:
-          11111111111
-        创建 main.js 文件, 代码如下:
-          var fs = require("fs");
-          fs.readFile('input.txt', function (err, data) {
-            if (err) return console.error(err);
-            console.log(data.toString());
-          });
-          console.log("程序执行结束!");
-        $ node main.js 以上代码执行结果如下:
-          程序执行结束!
-          11111111111
-      第一个实例在文件读取完后才执行完程序. 
-      第二个实例不需要等待文件读取完,可以在读取文件时同时执行后续代码,大大提高了程序的性能.
-      因此,阻塞是按顺序执行的,而非阻塞是不需要按顺序的,
-      所以若需要处理回调函数的参数,我们就需要写在回调函数内.
-    NodeJS 事件循环 
-      Node是单进程单线程应用程序,但是通过事件和回调支持并发,所以性能非常高.
-      每一个 API 都是异步的,并作为一个独立线程运行,使用异步函数调用,并处理并发.
-      基本上所有的事件机制都是用设计模式中观察者模式实现.
-        观察者模式定义了一种一对多的依赖关系,让多个观察者对象同时监听某一个主题对象.
-        这个主题对象在状态发生变化时,会通知所有观察者对象,使它们能够自动更新自己.
-      Node单线程类似进入一个 while(true) 的事件循环,直到没有事件观察者后退出,
-      每个异步事件都生成一个事件观察者,若有事件发生就调用该回调函数.
-    事件驱动程序 
-      PS:Node使用事件驱动模型,当web server接收到请求,就把它关闭然后进行处理,
-        然后去服务下一个web请求.
-        当这个请求完成,它被放回处理队列,当到达队列开头,这个结果被返回给用户.
-        这个模型非常高效可扩展性非常强,因为webserver一直接受请求而不等待任何读写操作,
-        这也被称之为非阻塞式IO或者事件驱动IO.
-        在事件驱动模型中,会生成一个主循环来监听事件,当检测到事件时触发回调函数.
-      可通过引入'events'模块,并实例化EventEmitter类来绑定和监听事件
-        var events = require('events'); // 引入 events 模块
-        var eventEmitter = new events.EventEmitter(); // 创建 eventEmitter 对象
-        eventEmitter.on('connection', function () {  // 绑定 connection 事件处理程序
-          console.log('1');
-          eventEmitter.emit('data_received'); // 触发 data_received 事件 
-        }); 
-        eventEmitter.on('data_received', function(){ // 绑定 data_received 事件
-          console.log('2');
-        });
-        eventEmitter.emit('connection'); // 触发 connection 事件 
-        console.log("3");
-        执行:
-        // 1
-        // 2
-        // 3
+    Node回调函数的约定 
+      若一函数需要'callback'作为参数,则'callback'作为最后一个参数 
+      'callback'的第一个参数,为上一步传入的错误对象'error' 
+      若没有发生错误,'callback'的第一个参数就传入null 
+      好处: 通过判断'callback'的第一个参数来确定是否出错 
 --------------------------------------------------------------------------------
 基础语法 
   this 
-    全局作用域下的this
-      在浏览器里this等价于window对象,若声明一些全局变量(不管在任何地方),
-      这些变量都会作为this的属性.
-      在node里面,有两种执行JS代码的方式,
-      一种是直接在里面执行一行行代码.
-        声明的全局变量会添加到global对象,也会添加给this
-        global 和 this 是等价的.
-      一种是直接执行写好的JS文件,
-        声明的全局变量会添加到global对象,但不会自动添加到this
-    function this
-      除了在DOM事件处理程序里,
-        事件处理程序里面的this表示被绑定的元素对象
-      不是用new调用外,
-        若使用new调用,函数就变成了一个构造函数,
+    全局作用域下的'this' 
+      浏览器中,等价于window,声明的全局变量会作为this的属性 
+      在node里面,有两种执行JS代码的方式: 
+      直接在命令行执行代码: 声明的全局变量会添加到global对象,也会添加给this
+        global 和 this 是等价的 
+      执行JS文件: 声明的全局变量会添加到global对象,但不会自动添加到this
+    'function'函数中的'this' 
+      除了在DOM事件处理程序里,事件处理程序里面的this表示被绑定的元素对象
+      若使用new调用,函数就变成了一个构造函数 
         就创建了一个实例,this指代这个实例.
         当构造函数使用new生成实例时,this指向其prototype.
-        Example: :
-        function Foo() { console.log(this.aoo); }
-        Foo.prototype.aoo = "111"; 
-        Foo();  // undefined
-        var obj = new Foo();   // 111
-        console.log(obj.aoo);  // 111
-      无论是在浏览器环境还是node环境,
-      正常的方式调用函数(直接执行而无前缀),this指代全局的this
-      使用严格模式,this就会变成undefined.
-      Example: :
-      var foo = "bar";
-      function testThis() { this.foo = "foo"; }
-      console.log(this.foo); // bar
-      testThis();
-      console.log(this.foo); // foo
-'Global Object'全局对象 : 可在程序的任何地方访问 
-  PS:浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
+      正常的方式调用函数[直接执行而无前缀],[浏览器和node环境]this指代全局的this
+        使用严格模式,this就会变成undefined
+  CommonJS规范: 模块化,模块导出、引入 
+    ◆模块公开的接口 
+      PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
+    module.exports = val  
+      hello.js 文件中 
+        function world() { 
+          console.log(1);
+        }; 
+        module.exports = world;
+        // module.exports.aoo = world;
+      main.js  文件中 
+        var word = require('./hello'); 
+        world(); // 1
+        // world.aoo(); // 1
+    module.exports.xx = val  
+    exports.xx = val  
+    ◆obj = require(arg)    模块引入接口[相当于获取暴露的'exports'对象] 
+      PS: 加载时可省略脚本文件的后缀名,依次查找'.js'-'.json'-'.node'-其他; 
+        模块被加载以后,会被系统缓存,后续再加载该模块,会返回缓存中的版本,
+        意味着模块加载实际上只会执行一次, 
+        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
+      arg  可为'模块名'或'文件路径'  
+        原生模块       http、fs、path等模块名
+        相对路径的文件 ./mod或../mod等
+        绝对路径的文件 /pathtomodule/mod等
+        name  非原生模块的文件模块,通过配置文件指定 
+          若模块目录中没有 package.json 文件,
+          nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
+      当模块重名时,加载的优先级:  
+        Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
+'Global Object'全局对象: 可在程序的任何地方访问 
+  PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
-  ECMAScript 全局变量的定义 
-    在最外层定义的变量
-    全局对象的属性
-    隐式定义的变量(未定义直接赋值的变量)
-    当你定义一个全局变量时,这个变量同时也会成为全局对象的属性,反之亦然
-    需要注 意的是,在 NodeJS 中你不可能在最外层定义变量,因为所有用户代码都是属于当前模块的,
-    而模块本身不是最外层上下文
-    注意:永远使用 var 定义变量以避免引入全局变量
-      因为全局变量会污染 命名空间,提高代码的耦合风险
-  ◆全局对象
   global  Node所在的全局环境,类似浏览器的window对象 
     最根本的作用是作为全局变量的宿主
     global 和 window 的不同 
       在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
         var x = 1;
-        等同于设置 
+        // 等同于设置 
         window.x = 1;
       在模块中不是这样,[REPL环境的行为与浏览器一致]。
         在模块文件中
@@ -232,11 +128,10 @@ NodeJS的运行方式及编程风格
         该变量不是global对象的属性
         global.x // undefined。
         因为模块的全局变量都是该模块私有的,其他模块无法取到 
-  process 用于描述当前Node进程状态 
-    PS:global对象的属性对象,表示Node所处的当前进程,允许开发者与该进程互动,
-      提供了一个与操作系统的简单接口
+  global.process 用于描述当前Node进程状态  
+    PS: 表示Node所处的当前进程,允许开发者与该进程互动,提供了一个与操作系统的简单接口
     ◆属性
-    obj = process.env   成员为当前shell的环境变量 
+    obj = process.env  成员为当前shell的环境变量 
       process.env.aoo  即为在命令行中输入的  aoo=xx
     process.stdout      标准输出流
     process.stderr      标准错误流
@@ -244,7 +139,7 @@ NodeJS的运行方式及编程风格
     process.argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
       它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
     process.execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-    process.execArgv    返回一个数组,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数.
+    arr = process.execArgv  成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
     process.exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
     process.version     Node 的版本,比如v0.10.18.
     process.versions    一个属性,包含了 node 的版本和依赖.
@@ -289,7 +184,7 @@ NodeJS的运行方式及编程风格
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     process.getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.setgroups(groups) 设置进程的群组 ID.这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+    process.setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
     process.initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
       这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
@@ -352,7 +247,6 @@ NodeJS的运行方式及编程风格
       >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
   Date    时间类 
   console 用于提供控制台标准输出[详见浏览器调试] 
-  ◆全局变量
   __filename 当前正在执行的脚本的路径和文件名 
     PS:将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
       在模块中,返回的值是模块文件的路径 
@@ -756,54 +650,7 @@ NodeJS的运行方式及编程风格
   PS:文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
     文件可能是JS代码、JSON或者编译过的C/C++扩展等等;
     按照CommonJS规范定义和使用模块
-  commonjs规范: 模块导出、引入 
-    module.exports/exports  模块公开的接口 
-      PS:module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
-      module.exports 
-        hello.js 文件中 
-          function world() { 
-            console.log(1);
-          }; 
-          module.exports = world;
-        main.js  文件中 
-          var word = require('./hello'); 
-          world(); // 1
-      exports      模块公开的接口 
-        hello.js 文件中 
-          // 通过 exports 对象把 world 作为模块的访问接口 
-          exports.world = function() { 
-            console.log(1); 
-          };
-        main.js  文件中 
-          var world = require('./hello'); // 加载模块 
-          world.world(); // 1 
-      相当于 exports = module.exports 
-    obj = require(arg)      获取模块的接口[相当于获取暴露的'exports'对象] 
-      PS:加载时可省略脚本文件的后缀名,依次查找'.js'-'.json'-'.node'-其他; 
-        模块被加载以后,会被系统缓存,后续再加载该模块,会返回缓存中的版本,
-        意味着模块加载实际上只会执行一次, 
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
-      arg  可为模块名或文件路径  
-        原生模块       http、fs、path等模块名
-        相对路径的文件 ./mod或../mod等
-        绝对路径的文件 /pathtomodule/mod等
-        name  非原生模块的文件模块,通过配置文件指定 
-          var bar = require('bar');
-          有时候,一个模块本身就是一个目录,目录中包含多个文件。
-          这时候,Node在 package.json 文件中,寻找main属性所指明的模块入口文件。
-          {
-            "name" : "bar",
-            "main" : "./lib/bar.js"
-          }
-          上面代码中,模块的启动文件为 lib子目录下的 bar.js。
-          当使用require('bar')命令加载该模块时,
-          实际上加载的是./node_modules/bar/lib/bar.js文件。
-          下面写法会起到同样效果。
-          var bar = require('bar/lib/bar.js');
-          若模块目录中没有 package.json 文件,nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
-      当模块重名时,加载的优先级 
-        node的核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-  ◆核心模块[Node自带不用安装即可使用] 
+  ◆核心模块: Node自带模块不用安装即可使用  
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
   url    解析URL 
@@ -1879,8 +1726,7 @@ NodeJS的运行方式及编程风格
     dns.lookup(host,(error,ip,ipv) => {
       console.log(ip,ipv); // 118.178.213.186  4 
     })
-  ◆本地模块 
-  ◆第三方模块 
+  ◆第三方模块: 需通过npm安装到本地  
   cheerio html文件源码操作模块 
     PS:像使用jquery一样方便快捷地操作抓取到的源码
     npm install cheerio -g   安装cheerio模块
@@ -1903,113 +1749,116 @@ NodeJS的运行方式及编程风格
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
-GET/POST 请求信息获取  
-  PS:表单提交到服务器一般使用 GET/POST 请求
-  获取 GET 请求内容 
-    PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
-      因此可手动解析后面的内容作为GET请求的参数。
-    Example:
-      var http = require('http');
-      var url = require('url');
-      var util = require('util');
-      http.createServer(function(req, res){
-        res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
-        res.end(util.inspect(url.parse(req.url, true)));
-      }).listen(3000);
-      在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
-      网页显示:
-      Url {
-        protocol: null,
-        slashes: null,
-        auth: null,
-        host: null,
-        port: null,
-        hostname: null,
-        hash: null,
-        search: '?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
-        query: { name: '菜鸟教程', url: 'www.runoob.com' },
-        pathname: '/user',
-        path: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
-        href: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com' 
-      }
-    获取 URL 的参数
-      使用 url.parse 方法来解析 URL 中的参数
-      var http = require('http');
-      var url = require('url');
-      var util = require('util');
-      http.createServer(function(req, res){
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        // 解析 url 参数
-        var params = url.parse(req.url, true).query;
-        res.write("网站名:" + params.name);
-        res.write("\n");
-        res.write("网站 URL:" + params.url);
-        res.end();
-      }).listen(3000);
-      在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
-      返回结果:
-  获取 POST 请求内容
-    PS:POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
-      原因是等待请求体传输可能是一件耗时的工作。
-      比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
-      恶意的POST请求会大大消耗服务器的资源,
-      所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做。
-    基本语法结构 
-      var http = require('http');
-      var querystring = require('querystring');
-      http.createServer(function(req, res){
-        // 定义了一个post变量,用于暂存请求体的信息
-        var post = '';     
-        
-        // 通过req的data事件监听函数,每当接受到请求体的数据,就累加到post变量中
-        req.on('data', function(chunk){    
-          post += chunk;
-        });
-        
-        // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回。
-        req.on('end', function(){    
-          post = querystring.parse(post);
-          res.end(util.inspect(post));
-        });
-      }).listen(3000);
-    Example:
-      表单通过 POST 提交并输出数据:
-      var http = require('http');
-      var querystring = require('querystring');
-      var postHTML = 
-      '<html><head><meta charset="utf-8"><title>菜鸟教程 Node.js 实例</title></head>' +
-      '<body>' +
-      '<form method="post">' +
-      '网站名: <input name="name"><br>' +
-      '网站 URL: <input name="url"><br>' +
-      '<input type="submit">' +
-      '</form>' +
-      '</body></html>';
-      http.createServer(function (req, res) {
-        var body = "";
-        req.on('data', function (chunk) {
-          body += chunk;
-        });
-        req.on('end', function () {
-          // 解析参数
-          body = querystring.parse(body);
-          // 设置响应头部信息及编码
-          res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-          
-          if(body.name && body.url) { // 输出提交的数据
-            res.write("网站名:" + body.name);
-            res.write("<br>");
-            res.write("网站 URL:" + body.url);
-          } 
-          else {  // 输出表单
-            res.write(postHTML);
-          }
+  ◆本地模块: 自定义的JS文件  
+操作总结 
+  GET/POST 请求信息获取  
+    PS:表单提交到服务器一般使用 GET/POST 请求
+    获取 GET 请求内容 
+      PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
+        因此可手动解析后面的内容作为GET请求的参数。
+      Example:
+        var http = require('http');
+        var url = require('url');
+        var util = require('util');
+        http.createServer(function(req, res){
+          res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
+          res.end(util.inspect(url.parse(req.url, true)));
+        }).listen(3000);
+        在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
+        网页显示:
+        Url {
+          protocol: null,
+          slashes: null,
+          auth: null,
+          host: null,
+          port: null,
+          hostname: null,
+          hash: null,
+          search: '?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
+          query: { name: '菜鸟教程', url: 'www.runoob.com' },
+          pathname: '/user',
+          path: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
+          href: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com' 
+        }
+      获取 URL 的参数
+        使用 url.parse 方法来解析 URL 中的参数
+        var http = require('http');
+        var url = require('url');
+        var util = require('util');
+        http.createServer(function(req, res){
+          res.writeHead(200, {'Content-Type': 'text/plain'});
+          // 解析 url 参数
+          var params = url.parse(req.url, true).query;
+          res.write("网站名:" + params.name);
+          res.write("\n");
+          res.write("网站 URL:" + params.url);
           res.end();
-        });
-      }).listen(3000);
-Cookie 操作 
-  写入cookie 
-    在响应头中设定 'Set-Cookie' = 'xx=xxx'
+        }).listen(3000);
+        在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
+        返回结果:
+    获取 POST 请求内容
+      PS:POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
+        原因是等待请求体传输可能是一件耗时的工作。
+        比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
+        恶意的POST请求会大大消耗服务器的资源,
+        所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做。
+      基本语法结构 
+        var http = require('http');
+        var querystring = require('querystring');
+        http.createServer(function(req, res){
+          // 定义了一个post变量,用于暂存请求体的信息
+          var post = '';     
+          
+          // 通过req的data事件监听函数,每当接受到请求体的数据,就累加到post变量中
+          req.on('data', function(chunk){    
+            post += chunk;
+          });
+          
+          // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回。
+          req.on('end', function(){    
+            post = querystring.parse(post);
+            res.end(util.inspect(post));
+          });
+        }).listen(3000);
+      Example:
+        表单通过 POST 提交并输出数据:
+        var http = require('http');
+        var querystring = require('querystring');
+        var postHTML = 
+        '<html><head><meta charset="utf-8"><title>菜鸟教程 Node.js 实例</title></head>' +
+        '<body>' +
+        '<form method="post">' +
+        '网站名: <input name="name"><br>' +
+        '网站 URL: <input name="url"><br>' +
+        '<input type="submit">' +
+        '</form>' +
+        '</body></html>';
+        http.createServer(function (req, res) {
+          var body = "";
+          req.on('data', function (chunk) {
+            body += chunk;
+          });
+          req.on('end', function () {
+            // 解析参数
+            body = querystring.parse(body);
+            // 设置响应头部信息及编码
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
+            
+            if(body.name && body.url) { // 输出提交的数据
+              res.write("网站名:" + body.name);
+              res.write("<br>");
+              res.write("网站 URL:" + body.url);
+            } 
+            else {  // 输出表单
+              res.write(postHTML);
+            }
+            res.end();
+          });
+        }).listen(3000);
+  Cookie 操作 
+    写入cookie 
+      在响应头中设定 'Set-Cookie' = 'xx=xxx'
+Question&Suggestion: 
 --------------------------------------------------------------------------------
 'Representational State Transfer'RESTful API: 表述性状态传递,一种软件架构风格  
   PS: 满足这些架构约束条件和原则的应用程序或设计就是RESTful 
@@ -2224,7 +2073,5 @@ Cookie 操作
       }  
 其他相关 
   electron 开发桌面程序 
---------------------------------------------------------------------------------
-总结收集
 ----------------------------------------------------------------------以下待整理
 

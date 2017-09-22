@@ -399,7 +399,8 @@ Gulp: 自动化构建工具
     能自动化地完成 JS/coffee/sass/less/html/image/css 等文件的
     测试、检查、合并、压缩、格式化、浏览器自动刷新、部署文件生成,
     并监听文件在改动后重复指定的这些步骤等等 
-    借鉴了Unix操作系统的管道'pipe'思想,前一级的输出,直接变成后一级的输入,使得在操作上非常简单
+    借鉴了Unix操作系统的管道'pipe'思想,前一级的输出,直接变成后一级的输入,使得在操作上非常简单 
+    'gulp4.0'中已引入同步机制   
   相关命令 
     $ npm i -g gulp   // 全局安装gulp 
     $ npm i -D gulp   // 项目中安装并写入开发依赖 
@@ -474,14 +475,8 @@ API
   gulp.task(task[,taskArr],foo)  // 创建任务, $ gulp task 执行  
     task      任务名称 
       当任务名为'default'时,通过 $ gulp 执行 
-    taskArr   可选,其他任务组成的数组,执行本次任务前将先执行并完成任务数组内的任务 
-    foo([cb]) 回调函数  
-      cb()   // 完成 task 
-    任务的执行顺序 
-      默认的任务将以最大的并发数执行,即gulp会一次性运行所有的task且不做任何等待 [?] 
-      gulp.task('aoo',['one','two']); 若任务间没有依赖,会按书写顺序执行 
-        如果有依赖的话则会先执行依赖的任务。
-      如果某任务所依赖的任务是异步的,gulp并不会等待依赖的异步任务完成,而是接着执行后续任务 
+    taskArr   可选,任务数组,执行本次任务前将先并行执行任务数组内的任务  
+      若任务所依赖的任务是异步的,gulp并不会等待依赖的异步任务完成,而是接着执行后续任务 
         gulp.task('one',function(){
           setTimeout(function(){ // 一个异步执行的任务
             console.log('one is done')
@@ -491,8 +486,49 @@ API
         gulp.task('two',['one'],function(){ 
           console.log('two is done');
         });
-      等待异步任务中的异步操作完成后再执行后续的任务的方法 
+    foo([cb]) 回调函数  
+      cb()   // 完成 task 
+    串行方式运行任务,即任务依赖 
+      默认的任务以最大并发数执行,即gulp会运行所有的task且不等待  
+      ◆等待异步任务中的异步操作完成后再执行后续的任务的方法 
+      方法一: 在异步操作完成后执行一个回调函数来通知gulp这个异步任务已经完成 
+        回调函数就是任务函数的第一个参数 
+        gulp.task('one',function(cb){ //cb为任务函数提供的回调,用来通知任务已经完成
+          //one是一个异步执行的任务
+          setTimeout(function(){
+            console.log('one is done');
+            cb();   //  执行回调,表示这个异步任务已经完成
+          },5000);
+        });
+        //这时two任务会在one任务中的异步操作完成后再执行
+        gulp.task('two',['one'],function(){
+          console.log('two is done');
+        });
+      方法二: 返回一个'stream'取代使用回调函数 
+        适用于任务就是操作'gulp.src'获取到的流的情况 
+        gulp.task('one',function(cb){
+          var stream = gulp.src('client/**/*.js')
+          .pipe(dosomething()) //dosomething()中有某些异步操作
+          .pipe(gulp.dest('build'));
+          return stream; // 返回一个 stream 来表示它已经被完成 
+        });
+        gulp.task('two',['one'],function(){
+          console.log('two is done');
+        });
+      方法三: 返回一个promise对象 
+        var Q = require('q'); //一个著名的异步处理的库 https://github.com/kriskowal/q
+        gulp.task('one',function(cb){
+          var deferred = Q.defer();
+          // 做一些异步操作
+          setTimeout(function() {
+            deferred.resolve();
+          }, 5000);
+          return deferred.promise;
+        });
         
+        gulp.task('two',['one'],function(){
+          console.log('two is done');
+        });
   .pipe()     // 管道操作,将上一个结果导向下一个 
   gulp.src(path[,options])    // 设置待处理的文件 
     path  str/arr,文件路径 
@@ -533,7 +569,7 @@ API
         event.path str,触发该事件的文件路径 
 插件枚举 
   $ npm i -D <plugsName>   // 安装插件并写入开发依赖 
-  del        删除文件,原生的node模块  
+  del        删除文件,原生的node模块 // rm -rf
     清除之前生成的文件 
     gulp.task('clean', function(cb) {
       // 用一个回调函数'cb'确保在退出前完成任务  
@@ -547,11 +583,25 @@ API
         '!dist/mobile/deploy.json' // 不希望删掉的文件通过取反匹配模式 
       ], cb);
     }); 
-  gulp-less      编译less 
-    $ npm i -D gulp-less  
+  gulp-clean         文件删除 
+    gulp.task('clean',function () {    //删除dist目录下的所有文件
+      gulp.src('dist/*',{read:false})
+      .pipe(clean());
+    });
+  gulp-less          编译less 
+    gulp.task('compile-less', function () {
+      gulp.src('less/*.less')
+      .pipe(less())
+      .pipe(gulp.dest('dist/css'));
+    });
   gulp-ruby-sass     编译sass  
+    gulp.task('compile-sass', function () {
+      gulp.src('sass/*.sass')
+      .pipe(sass())
+      .pipe(gulp.dest('dist/css'));
+    });
   gulp-autoprefixer  自动添加css前缀 
-  gulp-minify   可压缩js脚本,css样式,html文档,json数据,jpg、png和gif图片 
+  gulp-minify        可压缩js脚本,css样式,html文档,json数据,jpg、png和gif图片 
     $ npm i -D gulp-minify 
     gulp.task('js', function () {
       return gulp.src('src/**/*.js')
@@ -571,6 +621,24 @@ API
       .pipe(minify({"datauri": true}))
       .pipe(gulp.dest('build/'))
     });
+  gulp-minify-css    压缩css 
+    gulp.task('minify-css', function () {
+      gulp.src('css/*.css') // 要压缩的css文件
+      .pipe(minifyCss()) //压缩css
+      .pipe(gulp.dest('dist/css'));
+    });
+  gulp-minify-html   压缩HTML 
+    gulp.task('minify-html', function () {
+      gulp.src('html/*.html') // 要压缩的html文件
+      .pipe(minifyHtml()) //压缩
+      .pipe(gulp.dest('dist/html'));
+    });
+  gulp-uglify        压缩js代码 
+    gulp.task('minify-js', function () {
+      gulp.src('js/*.js') // 要压缩的js文件
+      .pipe(uglify())  //使用uglify进行压缩,更多配置请参考：
+      .pipe(gulp.dest('dist/js')); //压缩后的路径
+    });
   gulp-htmlmin       压缩HTML 
     $ npm i -D gulp-htmlmin  
     gulp.task('htmlmin', function () {
@@ -588,8 +656,6 @@ API
       .pipe(htmlmin(options))
       .pipe(gulp.dest('dist/'));
     });
-  gulp-minify-css    压缩css 
-  gulp-uglify        压缩js代码
   gulp-imagemin      压缩图片 
     .pipe(imagemin({   
       optimizationLevel: 3, 
@@ -603,19 +669,51 @@ API
       interlaced: true 
     })))
   gulp-concat        合并js文件 
-  gulp-base64        把小图片转成base64字符串 
-  gulp-clean         文件删除 
-    gulp.task('clean',function () {    //删除dist目录下的所有文件
-      gulp.src('dist/*',{read:false})
-      .pipe(clean());
+    gulp.task('concat', function () {
+      gulp.src('js/*.js')  //要合并的文件
+      .pipe(concat('all.js'))  // 合并匹配到的js文件并命名为 "all.js"
+      .pipe(gulp.dest('dist/js'));
     });
+  gulp-base64        把小图片转成base64字符串 
   gulp-jshint        js代码校验
-  gulp-livereload    自动刷新页面
+  gulp-livereload    当代码变化时,自动刷新页面 
+    最好配合谷歌浏览器来使用,且要安装'livereload chrome extension'扩展插件 
+    var gulp = require('gulp'),
+    less = require('gulp-less'),
+    livereload = require('gulp-livereload');
+    
+    gulp.task('less', function() {
+      gulp.src('less/*.less')
+      .pipe(less())
+      .pipe(gulp.dest('css'))
+      .pipe(livereload());
+    });
+    gulp.task('watch', function() {
+      livereload.listen(); //要在这里调用listen()方法
+      gulp.watch('less/*.less', ['less']);
+    });
   gulp-cache         图片缓存,只有图片替换了才压缩 
   gulp-notify        更改提醒
   gulp-rev           对css、js文件名加MD5后缀
   gulp-rev-collector 路径替换
-  gulp-rename        改变文件名 
+  gulp-rename        重命名文件流中的文件
+    PS: 用'gulp.dest'写入文件时,文件名使用的是文件流中的文件名, 
+      若想改变文件名,可以在之前用gulp-rename插件来改变文件流中的文件名 
+  gulp-load-plugins  自动加载'package.json'文件里的gulp插件 
+    PS: 并不会一开始就加载所有'package.json'里的gulp插件
+      而是在需要用到某个插件的时候,才去加载  
+    var plug = require('gulp-load-plugins')(); // 加载gulp-load-plugins,并运行  
+    plug.name // 表示对应的插件,'name'为原始插件名去掉'gulp-'前缀后转换成的驼峰命名 
+  run-sequence       同步运行 
+    gulp.task('default',function() {
+      runSequence('clean',
+      ['script', 'css','img'],
+      'html',
+      'server',
+      'auto');
+    });
+Suggestion&Question: 
+  如何删除HTML中嵌入的JS中的'console.log();'
 ----------------------------------------------------------------------以下待整理
 
 

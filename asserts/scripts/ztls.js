@@ -1,10 +1,8 @@
-// 以下方法基于jQuery
-!function(){
-  window.ztls = {}; // 工具函数 
-  // 通过 input type=file 获取到本地图片的 base64
-  // var defe = new $.Deferred();
-  ztls.getLocalImg = function(jInputElem,foo){
-    jInputElem.on("change",function(e){
+!function(){ // 以下方法基于jQuery
+window.ztls = { // 工具函数 
+  getLocalImg: function(jInput,foo){ // 通过 input type=file 获取到本地图片的 base64
+    // var defe = new $.Deferred();
+    jInput.on("change",function(e){
       var img = e.target.files[0];
       var fr = new FileReader();
       fr.readAsDataURL(img);
@@ -19,16 +17,15 @@
         foo(obj);
       }
     })
-  } 
-  // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
-  // var defe = new $.Deferred();
-  // param = {
-  //   width : num,
-  //   height: num,
-  //   // 宽高可只填一个
-  //   quality: num,[0-1 之间]
-  // }
-  ztls.dealImg = function ( imgSrc , param , resolve){
+  },
+  dealImg: function (imgSrc,param,resolve){ // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
+    // var defe = new $.Deferred();
+    // param = {
+    //   width : num,
+    //   height: num,
+    //   // 宽高可只填一个
+    //   quality: num,[0-1 之间]
+    // }
     var img = new Image();
     img.src = imgSrc;
     img.onload = function(){
@@ -63,9 +60,8 @@
       var dealedImgSrc = canvas.toDataURL('image/jpeg', quality );
       resolve(dealedImgSrc);
     }
-  }
-  // 字符验证 
-  ztls.strVerify = function ( currentVal ,standardVal , minLen , maxLen){
+  },
+  strVerify: function (currentVal,standardVal,minLen,maxLen){ // 字符验证 
     var bool1 = true ,
     bool2 = true ,
     bool3 = true ;
@@ -80,45 +76,30 @@
     }
     // console.log(bool1,bool2,bool3);
     return  bool1 && bool2 && bool3 ;
-  }
-  // localstorage 读写,本地存储 
-  ztls.localstore = function(lsItem,key,val){
-    if (localStorage[lsItem] === undefined) { // 不存在则初始化为一对象 
-      localStorage[lsItem] = JSON.stringify({});
+  },
+  localObj: function(objName,key,val){ // localstorage 读写,本地存储 
+    if (localStorage[objName] === undefined) { // 不存在则初始化为一对象 
+      localStorage[objName] = JSON.stringify({});
     }
-    else if (typeof JSON.parse(localStorage[lsItem]) != 'object') {
-      localStorage[lsItem] = JSON.stringify({});
-      console.log('localStorage[lsItem] isnot object --ztls.localstore');
+    else if (typeof JSON.parse(localStorage[objName]) != 'object') {
+      localStorage[objName] = JSON.stringify({});
+      console.log('localStorage[objName] isnot object --ztls.localObj');
     }
-    var obj = JSON.parse(localStorage[lsItem]);
+    var obj = JSON.parse(localStorage[objName]);
     if (val) {
       obj[key] = val;
-      localStorage[lsItem] = JSON.stringify(obj);
+      localStorage[objName] = JSON.stringify(obj);
     }
     else {
       return obj[key];
     }
-  };
-  // ztls.getData = function(str,val){
-  //   var info1 = $('body').data(str);
-  //   var foo = arguments.callee;
-  //   if (info1 == undefined) {
-  //     setTimeout(function(){
-  //       foo(str,val);
-  //     },99);
-  //   }
-  //   else {
-  //     val['info'] = info1;
-  //   }
-  // };
-  // 
-  // 信息传递的推送和获取[先推送] 
-  ztls.put = function (ename,data,elem){ 
+  },
+  put: function (ename,data,elem){ // 信息传递的推送和获取[先推送] 
     var el = elem || $('body');
     el.data(ename,data);
     el.trigger(ename,[data]);
-  }
-  ztls.get = function (ename,foo,bool,elem){ 
+  },
+  get: function (ename,foo,bool,elem){ 
     var el = elem || $('body');
     var data1 = el.data(ename);
     if (data1) { // 当接受者为后出现时 
@@ -135,8 +116,8 @@
         foo(data2) 
       })
     }
-  }
-  // 弹窗效果 
+  },
+  popUp: function(param) { // 弹窗效果 
     // param = {
     //   title : '标题', // 可选 
     //   txt : '提示文字', // 可选 
@@ -151,7 +132,6 @@
     //   cancelClick : function(){ // 可选,点击取消按钮时的操作
     //   },
     // }
-  ztls.popUp = function(param) {
     var title = param.title || '标题';
     var txt = param.txt || '提示文字';
     var appendPosition = param.appendPosition || 'body';
@@ -249,8 +229,8 @@
       pop.remove();
       param.cancelClick();
     })
-  }
-  // 提示弹窗[会自动消失]
+  },
+  tipPop: function(param){ // 提示弹窗[会自动消失]
     // param = {
     //   title : '使用的是默认标题', // 该项可选,默认为''
     //   txt : '使用的是默认提示文字', // 默认提示文字
@@ -260,7 +240,6 @@
     //   foo : function(){ // 执行的回调
     //   },
     // }
-  ztls.tipPop = function(param){
     var title = param.title || '提示' ;
     var txt = param.txt || '使用的是默认提示文字';
     var appendPosition = param.appendPosition || 'body';
@@ -331,20 +310,8 @@
         }
       },time);
     }
-  };
-  // // 加载动画 
-  //   // param = {
-  //   //   txt : '使用的是默认提示文字', // 可选,默认提示文字
-  //   //   appendPosition : 'body' ,  // 可选,默认'body'
-  //   //   maskBool : 'none', // 可选,是否使用遮罩 
-  //   //   icon : 'fa-exclamation-circle', // 可选,默认为'fa-exclamation-circle redColor'
-  //   // }
-  // ztls.loading = function(param){
-  // };
-
-  
-  // 查询字符串 对象化 
-  ztls.queryObj = function(){ 
+  },
+  queryObj: function(){ // 查询字符串 对象化 
     var resultObj = {};
     var arr1 = location.search.slice(1).split("&");
     arr1.forEach(function(val,indx,arr){
@@ -352,13 +319,12 @@
       resultObj[arr2[0]] = arr2[1];
     } );
     return resultObj;
-  };
-  // 设置查询字符串   依赖'queryObj'
-  // {
-  //   's1' : 1,
-  //   's3' : 3,
-  // }
-  ztls.setQuery = function(obj){
+  },
+  setQuery: function(obj){ // 设置查询字符串  依赖'queryObj'
+    // {
+    //   's1' : 1,
+    //   's3' : 3,
+    // }
     var resStr = '?';
     var o = ztls.queryObj();
     for(var key in obj){
@@ -368,15 +334,13 @@
       resStr += k +'='+o[k]+'&';
     };
     return location.pathname+resStr.slice(0,-1);
-  };
-  
-  // 初始vm实例加载 
-  // var params = [
-  //   [ url,pos ],
-  //   [ url,pos ],
-  //   [ url,pos ],
-  // ]
-  ztls.loadVm = function(params){
+  },
+  loadVm: function(params){ // 初始vm实例加载 
+    // var params = [
+    //   [ url,pos ],
+    //   [ url,pos ],
+    //   [ url,pos ],
+    // ]
     var head = $('head');
     var html = $('html');
     var arr = [];
@@ -404,16 +368,15 @@
       })(i);
     }
     return $.when.apply(null,arr);
-  };
-  // 异步子组件加载  
+  },
+  loadCpts: function(args){ // 异步子组件加载  
     // 需先在Vue实例中放置子标签且使用v-if="false" 
     // 异步执行函数,当组件加载到HTML后v-if='true'执行渲染 
     // 当有一个子组件被渲染其他未被隐藏的子组件都会被渲染出来 
-  // var args = [
-  //   './c-test.html',
-  //   './c-test1.html',
-  // ]
-  ztls.loadCpts = function(args){
+    // var args = [
+    //   './c-test.html',
+    //   './c-test1.html',
+    // ]
     var head = $('head');
     var body = $('body');
     var arr = [];
@@ -443,13 +406,13 @@
       )
     }
     return $.when.apply(null,arr);
-  }
+  },
   // 初始子组件加载  在Vue实例的beforeMonted之前执行即可 // 相当于 loadCpts+自动触发渲染  
   // var args = [ '#body', [
   //   './c-test.html',
   //   './c-test1.html',
   // ]]
-  // ztls.loadCptsInit = function(args){
+  // loadCptsInit: function(args){
   //   var _rs = '';
   //   // hack  通过异步组件的rs()的怪异特性来实现 在vm实例化后定义组件可用  
   //   // 该函数需在vm实例化前执行 
@@ -485,20 +448,16 @@
   //     console.log('loaded all c success!');
   //   })
   //   return $.when.apply(null,arr);
-  // }
-  
-  // 检测是否为IE  num可选 7、8、9 
-  ztls.isIE = function(num){
+  // },
+  isIE: function(num){ // 检测是否为IE  num可选 7、8、9 
     var b = document.createElement('b');
     b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->';
     return b.getElementsByTagName('i').length === 1;
-  }
-  
-  // 表单验证   依赖'tipPop' 
-  // var arg = [
-  //   [ '1771234560', /^1\d{10}$/, '手机号填写错误' ],
-  // ]
-  ztls.formVerify = function(arg){
+  },
+  formVerify: function(arg){ // 表单验证   依赖'tipPop' 
+    // var arg = [
+    //   [ '1771234560', /^1\d{10}$/, '手机号填写错误' ],
+    // ]
     return arg.every(function(val,idx,arr){
       if (val[0] == undefined) {
         ztls.tipPop({
@@ -516,12 +475,11 @@
       }
       return __bol;
     });
-  };
+  },
   
 
   // 选用 ----------------------------------------------------------------------
-  // 地址选择
-  ztls.adrsSlct = function(pro,city,area,data){
+  adrsSlct: function(pro,city,area,data){ // 地址选择
     var proName = Object.keys(data);
     var html = '<option value="0">请选择</option>';
     var value = '';
@@ -548,9 +506,8 @@
       } );
       area.html(html2);
     })
-  }
-  // 时间选择
-  ztls.dateSlct = function(yJelem,mJelem,dJelem,length){
+  },
+  dateSlct: function(yJelem,mJelem,dJelem,length){ // 时间选择
     var currentT = new Date();
     var currentY = currentT.getFullYear();
     
@@ -616,18 +573,17 @@
         
       }
     })
-  };
-  // 翻页功能
-  // var params = {
-  //   wrapElem : pagesElem,
-  //   currentElem : currentElem,
-  //   currentClass : "current1",
-  //   length : 6,
-  //   hideClass : "none",
-  //   nextBtn : elem1,
-  //   prevBtn : elem2,
-  // }
-  ztls.pagesChange = function(params){
+  },
+  pagesChange: function(params){ // 翻页功能
+    // var params = {
+    //   wrapElem : pagesElem,
+    //   currentElem : currentElem,
+    //   currentClass : "current1",
+    //   length : 6,
+    //   hideClass : "none",
+    //   nextBtn : elem1,
+    //   prevBtn : elem2,
+    // }
     params.currentElem.siblings('.'+params.currentClass).removeClass(params.currentClass);
     params.currentElem.addClass(params.currentClass);
     
@@ -653,9 +609,8 @@
         currentFirstElems.eq(i).removeClass(params.hideClass);
       }
     }
-  };
-  // 延迟执行 : slct 存在时执行 
-  ztls.delayRun = function(slct,foo,argObj){
+  },
+  delayRun: function(slct,foo,argObj){ // 延迟执行 : slct 存在时执行 
     if ($(slct).length) {
       foo(argObj);
     }
@@ -666,8 +621,33 @@
         // console.log('------'); // to delete
       },240);
     }
-  };
+  },
+  // 加载动画 
+  //   // param = {
+  //   //   txt : '使用的是默认提示文字', // 可选,默认提示文字
+  //   //   appendPosition : 'body' ,  // 可选,默认'body'
+  //   //   maskBool : 'none', // 可选,是否使用遮罩 
+  //   //   icon : 'fa-exclamation-circle', // 可选,默认为'fa-exclamation-circle redColor'
+  //   // }
+  // loading: function(param){
+  // },
+
+  // getData: function(str,val){
+  //   var info1 = $('body').data(str);
+  //   var foo = arguments.callee;
+  //   if (info1 == undefined) {
+  //     setTimeout(function(){
+  //       foo(str,val);
+  //     },99);
+  //   }
+  //   else {
+  //     val['info'] = info1;
+  //   }
+  // },
+  // 
+  
+}; 
 }();
-var qObj = ztls.queryObj();
+window.qObj = ztls.queryObj();
 
 

@@ -601,7 +601,8 @@ API
       .pipe(gulp.dest('dist/css'));
     });
   gulp-autoprefixer  自动添加css前缀 
-  gulp-minify        可压缩js脚本,css样式,html文档,json数据,jpg、png和gif图片 
+  gulp-minify        压缩js脚本,css样式,html文档,json数据,jpg、png和gif图片 
+    PS: 压缩不了JSON文件?
     $ npm i -D gulp-minify 
     gulp.task('js', function () {
       return gulp.src('src/**/*.js')
@@ -668,6 +669,8 @@ API
       progressive: true, 
       interlaced: true 
     })))
+  gulp-json-minify   压缩JSON文件 
+  gulp-jsonminify    压缩JSON文件 
   gulp-concat        合并js文件 
     gulp.task('concat', function () {
       gulp.src('js/*.js')  //要合并的文件

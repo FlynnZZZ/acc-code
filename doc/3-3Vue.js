@@ -333,7 +333,9 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'的概念];
     钩子的'this'指向调用它的Vue实例; 
   'beforeCreate'  实例刚创建 
+    设置'data'中的数据无效 
   'created'       实例创建完毕 
+    可设置'data'中的数据 
   'beforeMount'   DOM渲染前
   'mounted'       DOM渲染完毕 [替换'1.x'版本的'ready'] 
   'beforeUpdate'  更新前 

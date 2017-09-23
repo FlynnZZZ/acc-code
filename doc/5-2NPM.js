@@ -12,10 +12,11 @@
     -y   选用,默认将选项设置为yes 
   npm install <name> [<posOpt>]    安装包[简写'i'] 
     <name>       node包名称,可同时安装多个使用空格分割  
+      使用'@'来安装指定的版本 
+      npm i -g webpack@2.3.2   
     Example: 
-      npm install lodash -g   全局安装 
-      npm install npm -g      升级npm版本[会更新所有npm的包?]
-      npm install -g npm@2.9.1  指定版本 
+      npm install -g lodash    全局安装 
+      npm install -g npm       升级npm版本[会更新所有npm的包]
   npm i    根据'package.json'安装所有依赖 
   npm uninstall <name> [<posOpt>]  卸载包 
     PS:不要直接删除本地插件包

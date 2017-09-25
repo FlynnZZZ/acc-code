@@ -140,9 +140,9 @@ MongoDB: 基于分布式文件存储的数据库
   $ show collections  // 查看创建的集合 [?]  
   $ db.<clcName>.drop()  // 删除集合,删除成功返回true,否则返回false  
   ◆文档操作 
-  $ db.<docName>.insert(doc) // 在集合中插入文档,若docName集合不存在则会自动创建  
-  $ db.<docName>.save(doc)   // 类似于'insert',但指定'_id'时,会覆盖文档 
-  $ db.<docName>.find()      // 以非结构化的方式显示所有文档 
+  $ db.<clcName>.insert(doc) // 在集合中插入文档,若clcName集合不存在则会自动创建  
+  $ db.<clcName>.save(doc)   // 类似于'insert',但指定'_id'时,会覆盖文档 
+  $ db.<clcName>.find()      // 以非结构化的方式显示所有文档 
     'AND'条件: 传入多个键,用逗号','分隔 
       db.mycol.find({key1:val1, key2:val2}) 
     'OR'条件: 使用关键字'$or' 
@@ -153,9 +153,105 @@ MongoDB: 基于分布式文件存储的数据库
           ]
         }
       )
-  $ db.<docName>.find().pretty()   // 用格式化方式显示结果 
-  $ db.<docName>.findOne()   // 只返回一个文档 
-  基于一些条件来查询文档: 
+  $ db.<clcName>.find().pretty()   // 用格式化方式显示结果 
+  $ db.<clcName>.findOne()   // 只返回一个文档 
+  $ db.<clcName>.update(doc,{$set:newDoc}[,options])  // 更新文档 
+    db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}})
+    // 默认只更新单个文档,要想更新多个文档,需要把参数 multi 设为 true   
+    db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}},{multi:true})
+  $ db.<clcName>.remove(condition,justOne)  // 删除指定条件的文档 
+    condition  可选,删除文档的标准,默认 {} 将集合中的所有文档删除  
+    justOne    可选,如果设为 true 或 1,则只删除一个文档 
+    // 删除其中所有标题为 'MongoDB Overview' 的文档 
+    db.mycol.remove({'title':'MongoDB Overview'}) 
+  $ <docs>.limit(<num>)  // 限制文档数量 
+    num  数值,当num不存在将显示所有文档 
+  $ <docs>.skip(<num>)  // 显示第num+1个文档 
+    num 默认为0,显示第一个文档 
+  $ <docs>.sort({<key>:1/-1,..})  // 排序,1 正序、-1 倒序 
+    // 按照降序排列标题的文档 
+    db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
+  ◆索引: 实现高效查询 
+    若无索引,则需扫描集合中的所有文档,才能找到匹配查询语句的文档;
+    索引是一种特殊的数据结构,将一小块数据集保存为容易遍历的形式   
+    索引能够存储某种特殊字段或字段集的值,并按照索引指定的方式将字段值进行排序   
+  $ db.<clcName>.ensureIndex({<key>:1/-1})  // 创建索引 
+    key  想创建索引的字段名称
+    1 代表按升序排列字段值;-1 代表按降序排列
+    可选参数: 
+    参数  类型  描述
+    background  bol,是否在后台构建索引,从而不干扰数据库的其他活动,默认'false' 
+    unique  bol,是否创建唯一的索引,从而当索引键匹配了索引中一个已存在值时,集合不接受文档的插入,默认'false'
+    name  str,索引名称,若未指定,MongoDB会结合索引字段名称和排序序号,生成一个索引名称   
+    dropDups  bol,在可能有重复的字段内创建唯一性索引
+      MongoDB 只在某个键第一次出现时进行索引,去除该键后续出现时的所有文档   
+    sparse  bol,若为'true',索引只引用带有指定字段的文档,默认'false'
+      这些索引占据的空间较小,但在一些情况下的表现也不同（特别是排序）
+    expireAfterSeconds  int,单位秒,作为 TTL 来控制 MongoDB 保持集合中文档的时间   
+    v  索引版本,索引版本号   默认的索引版本跟创建索引时运行的 MongoDB 版本号有关   
+    weights  文档,数值,范围从 1 到 99999   表示就字段相对于其他索引字段的重要性 
+    default_language  str,默认'english' 
+      对文本索引而言,用于确定停止词列表,以及词干分析器'stemmer'与断词器'tokenizer'的规则 
+    language_override  str,默认'language' 
+      对文本索引而言,指定了文档所包含的字段名,该语言将覆盖默认语言
+  聚合: 能够处理数据记录并返回计算结果
+    聚合操作能将多个文档中的值组合起来,对成组数据执行各种操作,返回单一的结果 
+  $ db.<clcName>.aggregate(options)  
+    // 从集合中归纳出一个列表,以显示每个用户写的教程数量 
+    db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : 1}}}]) 
+    聚合表达式列表:    
+      $sum      对集合中所有文档的定义值进行加和操作  
+        db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : "$likes"}}}])
+      $avg      对集合中所有文档的定义值进行平均值  
+        db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$avg : "$likes"}}}])
+      $min      计算集合中所有文档的对应值中的最小值  
+        db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$min : "$likes"}}}])
+      $max      计算集合中所有文档的对应值中的最大值  
+        db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$max : "$likes"}}}])
+      $push     将值插入到一个结果文档的数组中  
+        db.mycol.aggregate([{$group : {_id : "$by_user", url : {$push: "$url"}}}])
+      $addToSet 将值插入到一个结果文档的数组中,但不进行复制  
+        db.mycol.aggregate([{$group : {_id : "$by_user", url : {$addToSet : "$url"}}}])
+      $first    根据成组方式,从源文档中获取第一个文档,但只有对之前应用过 $sort 管道操作符的结果才有意义  
+        db.mycol.aggregate([{$group : {_id : "$by_user", first_url : {$first : "$url"}}}])
+      $last     根据成组方式,从源文档中获取最后一个文档,但只有对之前进行过 $sort 管道操作符的结果才有意义  
+        db.mycol.aggregate([{$group : {_id : "$by_user", last_url : {$last : "$url"}}}])
+    聚合架构中的管道操作符： 
+      $project 用来选取集合中一些特定字段 
+      $match   过滤操作 减少用作下一阶段输入的文档的数量 
+      $group   执行真正的聚合操作 
+      $sort    对文档进行排序 
+      $skip    在一组文档中,跳过指定数量的文档 
+      $limit   将查看文档的数目限制为从当前位置处开始的指定数目 
+      $unwind  解开使用数组的文档 
+        当使用数组时,数据处于预连接状态,通过该操作,数据重新回归为各个单独的文档的状态
+        利用该阶段性操作可增加下一阶段性操作的文档数量 
+  ◆复制: 在多个服务器上同步数据的过程 
+    通过在不同的数据库服务器上实现多个数据副本,复制能够实现数据冗余,提高数据的可用性,
+    从而避免了仅仅因为一台服务器故障后就会产生的数据库灾难 
+    复制的运作方式 
+      使用副本集'replica set'来实现复制操作 
+      副本集是一组托管同一数据集的 mongod 对象 
+      在副本集中,主节点负责接收写入操作,所有其他的实例[从节点]则通过执行主节点的操作来拥有同样的数据集 
+      副本集只有一个主节点,其他全是从节点,任何节点都可能成为主节点  
+      所有数据都是从主节点复制到从节点上的 
+      副本集具有 2 个或多个节点（但一般最少需要 3 个节点） 
+      当发生自动故障转移或维护时,会重新推举一个新的主节点 
+      当失败节点恢复后,该节点重新又连接到副本集中,重新作为从节点 
+  ◆分片: 在多台机器上存储数据记录的操作
+    为应对数据增长需求而采取的办法 
+    当数据量增长时,单台机器有可能无法存储数据或可接受的读取写入吞吐量,通过横向扩展,分片技术解决该问题 
+    利用分片技术,可以添加更多的机器来应对数据量增加以及读写操作的要求 
+  ◆创建备份:将服务器上的所有数据都转储到dump目录中 
+  $ mongodump     // 备份 
+  $ mongorestore  // 恢复备份 
+  ◆其他
+  $ mongostat  检查所有运行中的mongod实例的状态 
+  $ mongotop [<time>]  记录并报告MongoDB实例基于每个集合的读写活动,默认每秒返回一次结果 
+    mongotop 30  // 每 30 秒返回 
+  
+     
+  条件查询文档: 
     操作          格式                     RDBMS中的类似语句
     =         {<key>:<value>}             where by = 'tutorials point'
       db.mycol.find({"by":"tutorials point"}).pretty()  
@@ -168,7 +264,7 @@ MongoDB: 基于分布式文件存储的数据库
     >=        {<key>:{$gte:<value>}}      where likes >= 50
       db.mycol.find({"likes":{$gte:50}}).pretty()  
     !         {<key>:{$ne:<value>}}       where likes != 50
-    db.mycol.find({"likes":{$ne:50}}).pretty()  
+      db.mycol.find({"likes":{$ne:50}}).pretty()  
 MongoDB支持的数据类型: 
   String：字符串,在MongoDB中,'UTF-8'编码的字符串才是合法的 
   Integer：整型数值,根据所采用的服务器可分为 32 位或 64 位 

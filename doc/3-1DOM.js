@@ -1,4 +1,4 @@
-'Document_Object_Model'DOM,文档对象模型:提供访问和操作网页内容的方法和接口  
+'Document Object Model'DOM,文档对象模型:提供访问和操作网页内容的方法和接口  
   PS:标准由W3C规定,给文档提供了一种结构化的表示方法,可以改变文档的内容和呈现方式, 
     将整个HTML文件、标签看成一个由对象组成的树, 
     每个DOM最上面都有一个document对象,然后是HTML及其他元素,
@@ -2341,32 +2341,28 @@ WeiXin 微信
     ★独有事件 
   Remarks:
     直接改变音频的src,会立即切换播放;但改变其<source>需要重新加载才会切换播放.
-'canvas'画布 [HTML5][IE9+][详参 JavaScript高级程序设计 445 页] 
-  PS:画布默认为透明; 在css中指定画布宽高,会导致画布的所有内容进行相应的缩放;
-    canvas标签只有width和height两个属性,默认为宽度300px和高度150px;
-    若CSS的尺寸与初始画布的比例不一致,它会出现扭曲;
-  限制
-    出于安全考虑,浏览器不允许处理跨域图像[利用特殊的手段可以突破该限制?]
-    可通过设置 Access-Control-Allow-Origin 来跨域
-    解决处理跨域图像出现的安全警告的方法是使用CORS;
+'canvas'画布  [HTML5][IE9+][详参 JavaScript高级程序设计 445 页] 
+  PS: 通过'width'和'height'两个标签属性设定尺寸,默认为宽度300px和高度150px;
+    若CSS的尺寸与初始画布的比例不一致,会导致画布的内容进行相应的缩放;
+    通过canvas,JS可以对图像进行像素级的操作, 
+    可以直接处理图像的二进制原始数据,为图像的签名技术提供了支持 
+    canvas提供了常用的图像格式转换功能,可使用JS更改图像的编码方式 
+  浏览器不允许处理跨域图像  
+    可使用CORS进行跨域处理;
     为了阻止欺骗,浏览器会追踪 image data,
-    当把跟canvas域不同的图片放到canvas上,canvas就成为“tainted”[被污染的,脏的],
-    浏览器就不让你操作该canvas 的任何像素,
+    当把跟canvas域不同的图片放到canvas上,canvas就成为'tainted'被污染的,
+    浏览器就不让你操作该canvas的任何像素,
     对于阻止多种类型的XSS/CSRF攻击[两种典型的跨站攻击]是非常有用的;
     没有服务器环境[比如本地的html网页,操作本地的一张图片],
     会报"Unable to get image data ... has been tainted by cross-origin data"错误 
     本地网页的域为'file://,如:file:///home/summer/Desktop/test.html',
     本地图片不是以'file://'开头的,如 'c:\tmp\test.png'
-  用途
-    通过canvas,JS可以对图像进行像素级的操作,
-    可以直接处理图像的二进制原始数据,为图像的签名技术提供了支持.
-    canvas提供了常用的图像格式转换功能,可使用JS更改图像的编码方式.
-  <canvas width="600" height="200">您的浏览器不支持画布,请升级</canvas> 添加画布标签
-    在HTML中添加一个宽600px,高200px的画布,推荐使用CSS来控制宽高
-    当不支持画布的浏览器,会显示出标签中的内容.支持的会忽略:
-  检测浏览器是否支持画布:检测是否存在getContext方法
-    if(canvas.getContext) {  }else {  }
-  var cvs = document.querySelector('canvas');  canvas对象
+  检测浏览器是否支持画布: 检测'canvas.getContext'方法是否存在 
+    if(canvas.getContext) {
+    }
+    else {
+    }
+  canvas = document.querySelector('canvas')  获取到canvas 
     cvs.toDataURL(type,quality); 返回包含图片的 data URI[需将图片预先放入canvas]
       PS:若画布的高度或宽度是0,那么会返回字符串“data:,”;
       type     可选,返回的图片类型,默认为 PNG
@@ -2377,228 +2373,41 @@ WeiXin 微信
         在指定图片格式为 image/jpeg 或 image/webp的情况下,
         可以从 0 到 1 的区间内选择图片的质量。
         若超出取值范围,将会使用默认值 0.92。其他参数会被忽略。
-  var ctx =cvs.getContext("2d");   ctx对象:'2d' 上下文
-    PS:使用上下文的属性和方法来操作画布,是画布的核心对象
-      目前只支持2D绘图,将来可能还会有其他上下文类型
-      设置样式等应写在绘制图形之前,否则样式会渲染不上
-    画布栅格/坐标空间
-      canvas元素默认被网格所覆盖.
-      通常来说网格中的一个单元相当于canvas元素中的一像素.
-      栅格的起点为左上角,坐标为 0,0 ; 所有元素的位置都相对于原点定位.
-      所以图形的坐标为距离左边(Y轴)x像素,距离上边(X轴)y像素,坐标为x,y
-    ◆绘制矩形
-      PS:不同于SVG,HTML中的元素canvas只支持一种原生的图形绘制:矩形.
-        所有其他的图形的绘制都至少需要生成一条路径.
-        不同于路径函数pathFunction,这三个函数绘制之后会马上显现在canvas上,即时生效.
-      ctx.fillRect(x,y,width,height); 绘制一填充的矩形
-        参数为 x,y位置及宽、高尺寸,单位为px
-      ctx.strokeRect(x, y, width, height); 绘制一矩形边框
-      ctx.clearRect(x, y, width, height); 清除指定矩形区域,让清除部分完全透明
-      Example:
-        var ctx = canvas.getContext('2d');
-        ctx.fillRect(25,25,100,100);
-        ctx.clearRect(45,45,60,60);
-        ctx.strokeRect(50,50,50,50);
-    ◆绘制路径
-      PS:图形的基本元素是路径
-        路径是通过不同颜色和宽度的线段或曲线相连形成的不同形状的点的集合.
-        一个路径,甚至一个子路径,都是闭合的.
-        当前路径为空,即调用beginPath()之后,或者canvas刚建的时候,
-        第一条路径构造命令通常被视为是moveTo(),无论最后的是什么.
-        出于这个原因,你几乎总是要在设置路径之后专门指定你的起始位置.
-      使用路径绘制图形的步骤
-        首先,创建路径起始点
-        然后,画图命令画出路径
-        之后,封闭路径
-        当路径生成,就能通过描边或填充路径区域来渲染图形.
-      ★开始/结束路径
-      ctx.beginPath(); 开始路径,之后图形绘制命令被指向到路径上生成路径 [无参数]
-      ctx.closePath(); 闭合路径,之后图形绘制命令又重新指向到上下文中 [无参数]
-        就是闭合路径closePath(),不是必需的.
-        这个方法会通过绘制一条从当前点到开始点的直线来闭合图形.
+  ctx = canvas.getContext("2d");   获取canvas的'2d'上下文对象 
+    PS: 使用上下文的属性和方法来操作画布,是画布的核心对象
+      目前只支持2D绘图,将来可能还会有其他上下文类型 
+      设置样式等应写在绘制图形之前,否则样式会渲染不上 
+    画布坐标: canvas左上角为原点坐标: 0,0,所有元素的位置都相对于原点定位 
+    ★绘制矩形: 不同于SVG,canvas只支持一种原生的图形绘制:矩形 
+      不同于路径函数pathFunction,所有其他的图形的绘制都至少需要生成一条路径,
+      这三个函数绘制之后会马上显现在canvas上,即时生效.
+    ctx.fillRect(x,y,w,h)    绘制填充的矩形 
+      x,y   坐标位置,单位px 
+      w,h   宽高尺寸,单位px 
+    ctx.strokeRect(x,y,w,h)  绘制矩形边框 
+    ctx.clearRect(x,y,w,h)   清除一矩形区域,让清除部分完全透明  
+    ★绘制路径 
+      使用路径绘制图形的步骤:  
+        创建路径起始点-绘制出路径-封闭路径-通过描边或填充路径区域来渲染图形 
+      ctx.beginPath()  开始路径,之后图形绘制命令被指向到路径上生成路径 
+      ctx.closePath()  闭合路径,之后图形绘制命令又重新指向到上下文中 
+        闭合路径不是必需的,可通过当前点到开始点的直线来闭合图形,
         若图形是已经闭合了的,即当前点为开始点,该函数什么也不做.
-        当你调用fill()函数时,所有没有闭合的形状都会自动闭合,
-        所以你不需要调用closePath()函数.
+        当调用fill()函数时,所有没有闭合的形状都会自动闭合,也不需要'closePath' 
         但是调用stroke()时不会自动闭合.
-      ★移动
-      ctx.moveTo(x, y); 移动笔触
-        PS:该函数实际上并不能画出任何东西.
-          当canvas初始化或者beginPath()调用后,你通常会使用moveTo()函数设置起点.
-          也能够使用moveTo()绘制一些不连续的路径.
-      ★样式
-        ◆颜色
-          PS:默认情况下,线条和填充颜色都是黑色(CSS 颜色值 #000000)
-            一旦设置了strokeStyle或者fillStyle的值,那么该值就会成为新绘制的图形的默认值.
-            若要给每个图形上不同的颜色,需要重新设置 fillStyle 或 strokeStyle 的值.
-        ctx.fillStyle    设置图形填充颜色
-          可使用颜色名、十六进制或RGB来设置
-          Example: : ctx.fillStyle = "blue"
-        ctx.strikeStyle  设置图形轮廓颜色
-        TransparencyEDIT 透明度
-          ctx.globalAlpha = num  透明度
-            PS:除了可以绘制实色图形,我们还可以用 canvas 来绘制半透明的图形.
-              通过设置 globalAlpha 属性或者使用一个半透明颜色作为轮廓或填充的样式.
-              这个属性影响到 canvas 里所有图形的透明度,
-              globalAlpha 属性在需要绘制大量拥有相同透明度的图形时候相当高效.
-            num 有效的值范围是 0.0 (完全透明)到 1.0(完全不透明),默认是 1.0.
-          使用 strokeStyle 和 fillStyle 属性接受符合 CSS 3 规范的颜色值
-            rgba() 方法与 rgb() 方法类似,就多了一个用于设置色彩透明度的参数.
-            它的有效范围是从 0.0(完全透明)到 1.0(完全不透明).
-            Example:
-              可以用下面的写法来设置具有透明度的颜色.
-              ctx.strokeStyle = "rgba(255,0,0,0.5)";
-              ctx.fillStyle = "rgba(255,0,0,0.5)";
-        ◆线型
-          PS:可以通过一系列属性来设置线的样式
-        ctx.lineWidth = value; 设置线条宽度,属性值必须为正数,默认值是 1.0
-          线宽是指给定路径的中心到两边的粗细.
-          换句话说就是在路径的两边各绘制线宽的一半.
-          因为画布的坐标并不和像素直接对应,当需要获得精确的水平或垂直线的时候要特别注意.
-        ctx.lineCap = type;    设置线条端点的样式
-          butt     默认值
-          round    端点处加上了半径为一半线宽的半圆
-          square   端点处加上了等宽且高度为一半线宽的方块
-        ctx.lineJoin = type;   设定线条与线条间接合处(如折弯的拐角)的样式
-          miter  尖叫,默认值
-          round  圆角
-          bevel  平角
-        ctx.miterLimit = value; 限制当两条线相交时交接处最大长度
-          所谓交接处长度(斜接长度)是指线条交接处内角顶点到外角顶点的长度
-        ctx.setLineDash(segments); 设置当前虚线样式
-          接受一个数组,来指定线段与间隙的交替
-          Example:
-            创建一个行军蚁的效果
-            var ctx = document.getElementById('canvas').getContext('2d');
-            var offset = 0;
-            function draw() {
-              ctx.clearRect(0,0, canvas.width, canvas.height);
-              ctx.setLineDash([4, 2]);
-              ctx.lineDashOffset = -offset;
-              ctx.strokeRect(10,10, 100, 100);
-            }
-            function march() {
-              offset++;
-              if (offset > 16) {
-                offset = 0;
-              }
-              draw();
-              setTimeout(march, 20);
-            }
-            march();
-        ctx.getLineDash(); 返回一个包含当前虚线样式,长度为非负偶数的数组
-        ctx.lineDashOffset = value; 设置虚线样式的起始偏移量
-        ◆渐变
-        ctx.createLinearGradient(x1, y1, x2, y2)
-          接受 4 个参数,表示渐变的起点 (x1,y1) 与终点 (x2,y2).
-        ctx.createRadialGradient(x1, y1, r1, x2, y2, r2)
-          接受 6 个参数,前三个定义一个以 (x1,y1) 为原点,半径为 r1 的圆,
-          后三个参数则定义另一个以 (x2,y2) 为原点,半径为 r2 的圆.
-          Example:
-            var lineargradient = ctx.createLinearGradient(0,0,150,150);
-            var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
-        gradient.addColorStop(position, color)
-          创建出 canvasGradient 对象后,我们就可以用 addColorStop 方法给它上色了.
-          接受 2 个参数,position 参数必须是一个 0.0 与 1.0 之间的数值,
-          表示渐变中颜色所在的相对位置.例如,0.5 表示颜色会出现在正中间.
-          color 参数必须是一个有效的 CSS 颜色值(如 #FFF, rgba(0,0,0,1),等等).
-          可以根据需要添加任意多个色标(color stops).
-          Example:
-            线性黑白渐变
-              var lineargradient = ctx.createLinearGradient(0,0,150,150);
-              lineargradient.addColorStop(0,'white');
-              lineargradient.addColorStop(1,'black');
-            strokeStyle 和 fillStyle 属性都可以接受 canvasGradient 对象
-              var ctx = document.getElementById('canvas').getContext('2d');
-              // Create gradients
-              var lingrad1 = ctx.createLinearGradient(0,0,0,150);
-              lingrad1.addColorStop(0, '#00ABEB');
-              lingrad1.addColorStop(0.5, '#fff');
-              //lingrad.addColorStop(0.5, '#26C000');
-              //lingrad.addColorStop(1, '#fff');
-              var lingrad2 = ctx.createLinearGradient(0,50,0,95);
-              lingrad2.addColorStop(0.5, '#000');
-              lingrad2.addColorStop(1, 'rgba(0,0,0,0)');
-              // assign gradients to fill and stroke styles
-              ctx.fillStyle = lingrad1;
-              ctx.strokeStyle = lingrad2;
-              // draw shapes
-              ctx.fillRect(10,10,130,130);
-              ctx.strokeRect(50,50,50,50);
-            径向渐变
-              var ctx = document.getElementById('canvas').getContext('2d');
-              // 创建渐变
-              var radgrad = ctx.createRadialGradient(45,45,10,52,50,30);
-              radgrad.addColorStop(0, '#A7D30C');
-              radgrad.addColorStop(0.9, '#019F62');
-              radgrad.addColorStop(1, 'rgba(1,159,98,0)');
-              var radgrad2 = ctx.createRadialGradient(105,105,20,112,120,50);
-              radgrad2.addColorStop(0, '#FF5F98');
-              radgrad2.addColorStop(0.75, '#FF0188');
-              radgrad2.addColorStop(1, 'rgba(255,1,136,0)');
-              var radgrad3 = ctx.createRadialGradient(95,15,15,102,20,40);
-              radgrad3.addColorStop(0, '#00C9FF');
-              radgrad3.addColorStop(0.8, '#00B5E2');
-              radgrad3.addColorStop(1, 'rgba(0,201,255,0)');
-              var radgrad4 = ctx.createRadialGradient(0,150,50,0,140,90);
-              radgrad4.addColorStop(0, '#F4F201');
-              radgrad4.addColorStop(0.8, '#E4C700');
-              radgrad4.addColorStop(1, 'rgba(228,199,0,0)');
-              // 画图形
-              ctx.fillStyle = radgrad4;
-              ctx.fillRect(0,0,150,150);
-              ctx.fillStyle = radgrad3;
-              ctx.fillRect(0,0,150,150);
-              ctx.fillStyle = radgrad2;
-              ctx.fillRect(0,0,150,150);
-              ctx.fillStyle = radgrad;
-              ctx.fillRect(0,0,150,150);
-        ◆图案
-        ctx.createPattern(image, type)
-          PS:用 canvas 对象作为 Image 参数在 Firefox 1.5 (Gecko 1.8) 中是无效的.
-            图案跟渐变类似,创建出一个pattern之后,赋给fillStyle或strokeStyle即可
-          Image 可以是一个 Image 对象的引用,或者另一个 canvas 对象.
-          Type 必须是下面的字符串值之一:repeat,repeat-x,repeat-y 和 no-repeat.
-          Example:
-            var ctx = document.getElementById('canvas').getContext('2d');
-            var img = new Image();
-            img.src = 'images/wallpaper.png';
-            img.onload = function(){
-              // 创建图案
-              var ptrn = ctx.createPattern(img,'repeat');
-              ctx.fillStyle = ptrn;
-              ctx.fillRect(0,0,150,150);
-            }
-        ◆阴影
-          PS:shadowOffsetX,shadowOffsetY 不受变换矩阵所影响.
-            负值表示阴影会往上或左延伸,正值则表示会往下或右延伸,它们默认都为 0.
-        shadowOffsetX = float 用来设定阴影在X轴的延伸距离
-        shadowOffsetY = float 用来设定阴影在Y轴的延伸距离
-        shadowBlur = float 用于设定阴影的模糊程度
-          其数值并不跟像素数量挂钩,也不受变换矩阵的影响,默认为 0.
-        shadowColor = color 用于设定阴影颜色效果
-          shadowColor 是标准的 CSS 颜色值,默认是全透明的黑色.
-        Example:
-          文字阴影
-            var ctx = document.getElementById('canvas').getContext('2d');
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            ctx.shadowBlur = 2;
-            ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-            ctx.font = "20px Times New Roman";
-            ctx.fillStyle = "Black";
-            ctx.fillText("Sample String", 5, 30);
-      ★线
-      ctx.lineTo(x, y); 绘制一条从当前位置到指定x以及y位置的直线;
+      ctx.moveTo(x,y)  移动笔触 
+        PS: 该函数实际上并不能画出任何东西.
+          当canvas初始化或者'beginPath'调用后,通常使用'moveTo'设置起点 
+          也能够使用'moveTo'绘制一些不连续的路径 
+      ctx.lineTo(x, y)  绘制一条从当前位置到指定x以及y位置的直线;
         该方法有两个参数:x以及y ,代表坐标系中直线结束的点.
         开始点和之前的绘制路径有关,之前路径的结束点就是接下来的开始点,
         开始点也可以通过moveTo()函数改变.
-      ★矩形
-      ctx.rect(x,y,width,height); 将一个矩形路径增加到当前路径上
+      ctx.rect(x,y,width,height)  将一个矩形路径增加到当前路径上
         绘制一个左上角坐标为(x,y),宽高为width以及height的矩形.
         当该方法执行的时候,moveTo()方法自动设置坐标参数(0,0) .
         也就是说,当前笔触自动重置会默认坐标. ?
-      ★圆弧
-      ctx.arc(x,y,radius,startAngle,endAngle,anticlockwise); 绘制圆弧
+      ctx.arc(x,y,radius,startAngle,endAngle,anticlockwise)  绘制圆弧
         画一个以 x,y 为圆心的以radius为半径的圆弧,从startAngle开始到endAngle结束,
         按照anticlockwise给定的方向[默认为顺时针]来生成.
          x,y为绘制圆弧所在圆上的圆心坐标.
@@ -2607,9 +2416,9 @@ WeiXin 微信
            角度与弧度的js表达式:radians=(Math.PI/180)*degrees.
          这些都是以x轴为基准.
          参数anticlockwise 为一个布尔值.为true时,是逆时针方向,否则顺时针方向.
-      ctx.arcTo(x1,y1,x2,y2,radius);
+      ctx.arcTo(x1,y1,x2,y2,radius) 
         根据给定的控制点和半径画一段圆弧,再以直线连接两个控制点.
-      ★贝塞尔bezier以及二次贝塞尔
+      ▼贝塞尔bezier以及二次贝塞尔
         一次以及二次贝塞尔曲线都十分有用,一般用来绘制复杂有规律的图形.
         Example:
           使用贝赛尔曲线绘制对话气泡
@@ -2638,6 +2447,157 @@ WeiXin 微信
           cp1x,cp1y为控制点坐标,x,y为结束点坐标
       ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) 绘制二次贝塞尔曲线
           cp1x,cp1y为控制点一坐标,cp2x,cp2y为控制点二坐标,x,y为结束点坐标
+    ★样式 
+      ◆颜色: 默认情况下,线条和填充颜色都是黑色'#000' 
+        通过设置'strokeStyle'或'fillStyle'的值,为新绘制的图形设定颜色 
+        若要给每个图形上不同的颜色,需重设'fillStyle'或'strokeStyle'的值 
+      ctx.fillStyle='color'    设置填充颜色 
+        可使用颜色名、十六进制或RGB、rgba来设置
+      ctx.strokeStyle='color'  设置线条颜色  
+        可使用颜色名、十六进制或RGB、rgba来设置
+      ctx.globalAlpha=num    设置全局透明度
+        PS: 该属性影响到canvas里所有图形的透明度,
+          globalAlpha 属性在需要绘制大量拥有相同透明度的图形时候相当高效.
+          也可设置一个半透明颜色作为轮廓或填充的样式 
+        num 有效的值范围: 0.0-1.0,默认'1.0'完全不透明 
+      ◆线型
+      ctx.lineWidth = value; 设置线条宽度,属性值必须为正数,默认值是 1.0
+        线宽是指给定路径的中心到两边的粗细.
+        换句话说就是在路径的两边各绘制线宽的一半.
+        因为画布的坐标并不和像素直接对应,当需要获得精确的水平或垂直线的时候要特别注意.
+      ctx.lineCap = type;    设置线条端点的样式
+        butt     默认值
+        round    端点处加上了半径为一半线宽的半圆
+        square   端点处加上了等宽且高度为一半线宽的方块
+      ctx.lineJoin = type;   设定线条与线条间接合处(如折弯的拐角)的样式
+        miter  尖叫,默认值
+        round  圆角
+        bevel  平角
+      ctx.miterLimit = value; 限制当两条线相交时交接处最大长度
+        所谓交接处长度(斜接长度)是指线条交接处内角顶点到外角顶点的长度
+      ctx.setLineDash(segments); 设置当前虚线样式
+        接受一个数组,来指定线段与间隙的交替
+        Example:
+          创建一个行军蚁的效果
+          var ctx = document.getElementById('canvas').getContext('2d');
+          var offset = 0;
+          function draw() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            ctx.setLineDash([4, 2]);
+            ctx.lineDashOffset = -offset;
+            ctx.strokeRect(10,10, 100, 100);
+          }
+          function march() {
+            offset++;
+            if (offset > 16) {
+              offset = 0;
+            }
+            draw();
+            setTimeout(march, 20);
+          }
+          march();
+      ctx.getLineDash(); 返回一个包含当前虚线样式,长度为非负偶数的数组
+      ctx.lineDashOffset = value; 设置虚线样式的起始偏移量
+      ◆渐变
+      ctx.createLinearGradient(x1, y1, x2, y2)
+        接受 4 个参数,表示渐变的起点 (x1,y1) 与终点 (x2,y2).
+      ctx.createRadialGradient(x1, y1, r1, x2, y2, r2)
+        接受 6 个参数,前三个定义一个以 (x1,y1) 为原点,半径为 r1 的圆,
+        后三个参数则定义另一个以 (x2,y2) 为原点,半径为 r2 的圆.
+        Example:
+          var lineargradient = ctx.createLinearGradient(0,0,150,150);
+          var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
+      gradient.addColorStop(position, color)
+        创建出 canvasGradient 对象后,我们就可以用 addColorStop 方法给它上色了.
+        接受 2 个参数,position 参数必须是一个 0.0 与 1.0 之间的数值,
+        表示渐变中颜色所在的相对位置.例如,0.5 表示颜色会出现在正中间.
+        color 参数必须是一个有效的 CSS 颜色值(如 #FFF, rgba(0,0,0,1),等等).
+        可以根据需要添加任意多个色标(color stops).
+        Example:
+          线性黑白渐变
+            var lineargradient = ctx.createLinearGradient(0,0,150,150);
+            lineargradient.addColorStop(0,'white');
+            lineargradient.addColorStop(1,'black');
+          strokeStyle 和 fillStyle 属性都可以接受 canvasGradient 对象
+            var ctx = document.getElementById('canvas').getContext('2d');
+            // Create gradients
+            var lingrad1 = ctx.createLinearGradient(0,0,0,150);
+            lingrad1.addColorStop(0, '#00ABEB');
+            lingrad1.addColorStop(0.5, '#fff');
+            //lingrad.addColorStop(0.5, '#26C000');
+            //lingrad.addColorStop(1, '#fff');
+            var lingrad2 = ctx.createLinearGradient(0,50,0,95);
+            lingrad2.addColorStop(0.5, '#000');
+            lingrad2.addColorStop(1, 'rgba(0,0,0,0)');
+            // assign gradients to fill and stroke styles
+            ctx.fillStyle = lingrad1;
+            ctx.strokeStyle = lingrad2;
+            // draw shapes
+            ctx.fillRect(10,10,130,130);
+            ctx.strokeRect(50,50,50,50);
+          径向渐变
+            var ctx = document.getElementById('canvas').getContext('2d');
+            // 创建渐变
+            var radgrad = ctx.createRadialGradient(45,45,10,52,50,30);
+            radgrad.addColorStop(0, '#A7D30C');
+            radgrad.addColorStop(0.9, '#019F62');
+            radgrad.addColorStop(1, 'rgba(1,159,98,0)');
+            var radgrad2 = ctx.createRadialGradient(105,105,20,112,120,50);
+            radgrad2.addColorStop(0, '#FF5F98');
+            radgrad2.addColorStop(0.75, '#FF0188');
+            radgrad2.addColorStop(1, 'rgba(255,1,136,0)');
+            var radgrad3 = ctx.createRadialGradient(95,15,15,102,20,40);
+            radgrad3.addColorStop(0, '#00C9FF');
+            radgrad3.addColorStop(0.8, '#00B5E2');
+            radgrad3.addColorStop(1, 'rgba(0,201,255,0)');
+            var radgrad4 = ctx.createRadialGradient(0,150,50,0,140,90);
+            radgrad4.addColorStop(0, '#F4F201');
+            radgrad4.addColorStop(0.8, '#E4C700');
+            radgrad4.addColorStop(1, 'rgba(228,199,0,0)');
+            // 画图形
+            ctx.fillStyle = radgrad4;
+            ctx.fillRect(0,0,150,150);
+            ctx.fillStyle = radgrad3;
+            ctx.fillRect(0,0,150,150);
+            ctx.fillStyle = radgrad2;
+            ctx.fillRect(0,0,150,150);
+            ctx.fillStyle = radgrad;
+            ctx.fillRect(0,0,150,150);
+      ◆图案
+      ctx.createPattern(image, type)
+        PS:用 canvas 对象作为 Image 参数在 Firefox 1.5 (Gecko 1.8) 中是无效的.
+          图案跟渐变类似,创建出一个pattern之后,赋给fillStyle或strokeStyle即可
+        Image 可以是一个 Image 对象的引用,或者另一个 canvas 对象.
+        Type 必须是下面的字符串值之一:repeat,repeat-x,repeat-y 和 no-repeat.
+        Example:
+          var ctx = document.getElementById('canvas').getContext('2d');
+          var img = new Image();
+          img.src = 'images/wallpaper.png';
+          img.onload = function(){
+            // 创建图案
+            var ptrn = ctx.createPattern(img,'repeat');
+            ctx.fillStyle = ptrn;
+            ctx.fillRect(0,0,150,150);
+          }
+      ◆阴影
+        PS:shadowOffsetX,shadowOffsetY 不受变换矩阵所影响.
+          负值表示阴影会往上或左延伸,正值则表示会往下或右延伸,它们默认都为 0.
+      shadowOffsetX = float 用来设定阴影在X轴的延伸距离
+      shadowOffsetY = float 用来设定阴影在Y轴的延伸距离
+      shadowBlur = float 用于设定阴影的模糊程度
+        其数值并不跟像素数量挂钩,也不受变换矩阵的影响,默认为 0.
+      shadowColor = color 用于设定阴影颜色效果
+        shadowColor 是标准的 CSS 颜色值,默认是全透明的黑色.
+      Example:
+        文字阴影
+          var ctx = document.getElementById('canvas').getContext('2d');
+          ctx.shadowOffsetX = 2;
+          ctx.shadowOffsetY = 2;
+          ctx.shadowBlur = 2;
+          ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+          ctx.font = "20px Times New Roman";
+          ctx.fillStyle = "Black";
+          ctx.fillText("Sample String", 5, 30);
       ★渲染路径
       ctx.stroke();    通过线条来绘制图形轮廓  [无参数]
       ctx.fill();      通过填充路径的内容区域生成实心的图形
@@ -2653,12 +2613,38 @@ WeiXin 微信
           ctx.arc(50, 50, 30, 0, Math.PI*2, true);
           ctx.arc(50, 50, 15, 0, Math.PI*2, true);
           ctx.fill("evenodd");
-    ◆绘制文本
+    ★绘制文本 
       ctx.fillText(text, x, y [, maxWidth]); 在指定的(x,y)位置填充指定的文本
         绘制的最大宽度是可选的
       ctx.strokeText(text, x, y [, maxWidth]); 在指定的(x,y)位置绘制文本边框
         绘制的最大宽度是可选的
-      Example:
+      ctx.strokeText(str,x,y,maxwidth); 边框文字 
+      ctx.font        取/设字体
+        使用和css中相同格式
+        Example: :
+        ctx.font = "italic bold 1.5em Times,serif"
+      ctx.fillText(str,x,y,maxwidth); 填充文字
+        str      为需要显示的字符串
+        x,y      绘制的起点坐标
+          以文字的左下角为参考,当x,y都为0时在画布中看不到文字
+        maxwidth 文本的最大宽度,可选参数
+          当字符串过多导致宽度超过maxwidth,会响应的缩放以适应.
+      ctx.textAlign   置文字水平对齐方式
+        PS:在从左到右的语言中,start和end 与 left和right含义相同,比如英语
+          但在从右到左的语言(如希伯来语)中,则正好相反
+        可设置的值为:start、end、left、right和center
+        Example: :
+        ctx.textAlign ="left"
+      ctx.textBaseline 基线,取/设字体的垂直对齐方式
+        bottom
+        middle
+        alphabetic  (默认值)
+        ideographic
+        hanging
+        top
+        Example: :
+        ctx.textBaseline = "middle"
+      Example: 
         var ctx = document.getElementById('canvas').getContext('2d');
         ctx.font = "48px serif";
         ctx.fillText("Hello world", 10, 50);
@@ -2687,7 +2673,7 @@ WeiXin 微信
           var ctx = document.getElementById('canvas').getContext('2d');
           var text = ctx.measureText("foo"); // TextMetrics object
           text.width; // 16;
-    ◆绘制图像
+    ★绘制图像 
       PS: 可以用于动态的图像合成或者作为图形的背景,以及游戏界面(Sprites)等等.
         浏览器支持的任意格式的外部图片都可以使用,比如PNG、GIF或者JPEG.
         你甚至可以将同一个页面中其他canvas元素生成的图片作为图片源.
@@ -2854,35 +2840,7 @@ WeiXin 微信
           这条路径将先移动到点 (M10 10) 然后再水平移动80个单位 (h 80),
           然后下移80个单位 (v 80),接着左移80个单位 (h -80),再回到起点处 (z).
           var p = new Path2D("M10 10 h 80 v 80 h -80 Z");
-    ◆边框
-      ctx.strokeText(str,x,y,maxwidth); 边框文字
-    ◆文字绘制
-      ctx.font        取/设字体
-        使用和css中相同格式
-        Example: :
-        ctx.font = "italic bold 1.5em Times,serif"
-      ctx.fillText(str,x,y,maxwidth); 填充文字
-        str      为需要显示的字符串
-        x,y      绘制的起点坐标
-          以文字的左下角为参考,当x,y都为0时在画布中看不到文字
-        maxwidth 文本的最大宽度,可选参数
-          当字符串过多导致宽度超过maxwidth,会响应的缩放以适应.
-      ctx.textAlign   置文字水平对齐方式
-        PS:在从左到右的语言中,start和end 与 left和right含义相同,比如英语
-          但在从右到左的语言(如希伯来语)中,则正好相反
-        可设置的值为:start、end、left、right和center
-        Example: :
-        ctx.textAlign ="left"
-      ctx.textBaseline 基线,取/设字体的垂直对齐方式
-        bottom
-        middle
-        alphabetic  (默认值)
-        ideographic
-        hanging
-        top
-        Example: :
-        ctx.textBaseline = "middle"
-    ◆
+    ★    
       ctx.globalCompositeOperation  取/设显示层次
         PS:在新图像产生前进行定义
         source-over 默认,新图像在原内容上显示,产生覆盖效果
@@ -2899,7 +2857,7 @@ WeiXin 微信
         darker 两图形中重叠的部分作减色处理
         Example: :
         ctx.globalCompositeOperation ="source-over"
-    ◆路径相关: 在描出路径之前,路径是不可见的
+    ★路径相关: 在描出路径之前,路径是不可见的
       在绘制多个图形时,应该在绘制一个图形之前开绘制路径,
       定制完成后关闭绘制路径并绘制定制好的图形.
 
@@ -2920,7 +2878,7 @@ WeiXin 微信
         endAngle   终点角度,
         direction  逆/顺时针旋转.true为逆时针,false为顺时针.
       ctx.closePath(); 闭合路径
-    ◆图片绘制
+    ★图片绘制
       Example:
       var ctx = document.getElementById("mycanvas").getContext("2d");
       var img=document.getElementById("myImg");
@@ -2952,12 +2910,12 @@ WeiXin 微信
         context.translate(20,50)
         分别向x,y方向移动20,50(单位为像素)
       ctx.rotate(弧度值);   画布旋转
-    ◆绘制阴影
+    ★绘制阴影
       ctx.shadowOffsetX=num; 横向偏移量
       ctx.shadowOffsetY=num; 纵向偏移量
       ctx.shadowColor   阴影颜色
       ctx.shadowBlur=num; 模糊等级
-    ◆绘制渐变
+    ★绘制渐变
       Example:
       ctx.beginPath();
       var color=ctx.createLinearGradient(500,500,500,0);
@@ -3003,113 +2961,78 @@ WeiXin 微信
         <a href="Javascript:'aaa'" target="_blank">11111111</a>  
         javascript:"aaa"   // 在浏览器地址栏中键入
   <script src="" charset="utf-8"></script>  脚本引入 
-WYSIWYG 富文本编辑 [详参 JavaScript高级程序设计 440 页] 
-  PS:'what you see is what you get',所见即所得;由IE引入,虽无规范,已经成为了事实标准
-    技术本质为在页面中嵌入一个包含空HTML页面的iframe,
-    通过设置designMode属性,使该HTML页面可以被编辑,
-    编辑的对象则是该页面<body>元素的HTML代码.
-    designMode 属性有两个可能的值: "off" 和 "on"(on时则可编辑)
-    需要等到页面完全加载之后才能设置为可编辑状态(一般使用 load事件监听)
-  Example: :
-  在页面创建一个 iframe标签
-  设置其designMode为"on"(frames["XX"].document.designMode ="on")
-  注:在Chrome中不可使iframe的src外链其他文件(出于安全限制?)
-  document.execCommand(); 文档预定义
-    PS:方法也适用于页面中contenteditable属性为true的区块
-      只是把对框架的document引用替换成当前窗口的document对象即可
-    Arguments:接收三个参数
-      执行的命名名称
-      布尔值,表示浏览器是否提供用户界面(Firefox中设置为true会报错,一般设置为false)
-      执行命令相应的值(不需要则为null)
-      命令           值           说明
-      backcolor     颜色字符串    设置文档背景色
-      bold          null         将选择的文本转会为粗体
-      ...
-    Example: :
-    转换粗体文本
-    frames["XX"].document.execCommand("bold",false,null);
-FormData 用于模拟表单[HTML5]
-  PS:为序列化表单及创建与表单格式相同的数据,用于通过xhr传输提供了便利 
-    不用明确的设置请求头,xhr对象能够识别传入的数据类型是FormData,并配置适当头信息 
-  var fd = new FormData([formElem]); 创建FormData对象
-    Example: 通过表单元素创建
-      var fd = new FormData(document.forms[0]);
-  fd.append(key,val [,name]); 向FormData对象中添加信息
-    PS:当信息添加完后就可直接使用 xhr.send(fd) 进行发送
-    key   表单的控件名,
-    val   实际的值
-    name  可选,通常是文件名 
-  Example:
-    模拟File控件,进行文件上传 
-    function uploadFiles(url, files) {
-      var formData = new FormData();
-      for(var i = 0; i< files.length; i++) {
-        formData.append(files[i].name, files[i]);
-      }
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.onload = function(e) { };
-      xhr.send(formData);  // multipart/form-data
-    }
-    var inputFile = document.querySelector('input[type="file"]');
-    inputFile.addEventListener('change', function(e) {
-      uploadFiles('/server', this.files);
-    }, false);
-    
-    加入JS生成的文件 
-    var content = '<a id="a"><b id="b">hey!</b></a>';
-    var blob = new Blob([content], { type: "text/xml"});
-    formData.append("webmasterfile", blob);
-FileList 对象与 File 对象 [HTML5]
-  PS:FileList对象表示用户选择的文件列表,
-    HTML4中,file控件内只能选中一个文件,
-    HTML5中[通过添加multiple属性],file控件内能一次选中多个文件,
-    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表.
-    HTML5支持一次选择多个文件,若件选择控件没有开启多选模式,那么数组只有一个元素.
-  ◆获取 FileList 和 File 对象 
-    PS:FileList 表示files集,files为change事件对象的 e.target.files 
+FileList File对象集: 表示用户选择的文件列表 [HTML5]
+  PS: HTML5中[通过添加multiple属性],input[file]内能一次选中多个文件, 
+    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表
+    HTML4中,file控件内只能选中一个文件 
+  ★获取'FileList'
+  e.target.files   input[type='file']的'change'事件的事件对象   
     Example:
-      <input type="file" id="file" multiple>
-      document.querySelector("#file").addEventListener("change",function(e){
-        console.log(this.files);
-      })
+    <input type="file" id="file" multiple>
+    document.querySelector("#file").addEventListener("change",function(e){
+      console.log(this.files);
+    })
       
-      采用拖放方式,也可以得到FileList对象 [?]
-      var dropZone = document.getElementById('drop_zone');
-      dropZone.addEventListener('drop', handleFileSelect, false);
-      function handleFileSelect(evt) {
+    采用拖放方式,也可以得到FileList对象 [?]
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('drop', handleFileSelect, false);
+    function handleFileSelect(evt) {
         evt.stopPropagation();
         evt.preventDefault();
         var files = evt.dataTransfer.files; // FileList object.
         // ...
       }
-  var fileList = inputFileElem.files;
-  var file = fileList[idx];
-  ◆属性&方法   
-  file.name;  本地文件系统中的文件名 
-  file.type;  文件的MIME类型,字符串 
-  file.size;  文件的字节大小 
+  document.querySelector("input[type='file']").files  
+  ★'file'的属性&方法   
+  file.name  本地文件系统中的文件名 
+  file.type  文件的MIME类型,字符串 
+  file.size  文件的字节大小 
   file.lastModified      文件的上次修改时间,格式为时间戳。
   file.lastModeFiedDate  文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-FileReader 对象: 用于读取文件[把文件内容读入内存] 
-  PS:FileReader采用的是一种异步的文件读取机制
-  var fr = new FileReader([arg])  创建fr对象 
-    arg  File对象或Blob对象 
-  ◆属性&方法 
-  ★读取文件数据到'result'中
+  file.webkitRelativePath
+FormData 表单模拟: 序列化表单、创建与表单格式相同的数据 [HTML5]
+  PS: 不用明确的设置请求头,xhr对象能够识别传入的数据类型是FormData,并配置适当头信息 
+  fd = new FormData([formElem]) 创建FormData对象 
+    Example: 通过表单元素创建
+    var fd = new FormData(document.forms[0]);
+  fd.append(key,val [,name])    向fd中添加字段 
+    PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
+    key   表单的控件名 
+    val   实际的值 
+    name  可选,通常是文件名 
+  Example: 文件上传 
+    var inputFile = document.querySelector('input[type="file"]');
+    inputFile.addEventListener('change', function(e) {
+      var formData = new FormData();
+      formData.append(this.files[0].name, this.files[0]);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/server');
+      xhr.onload = function(e) {
+        console.log('上传完成!');
+      };
+      xhr.send(formData);  // multipart/form-data
+    });
+    
+    加入JS生成的文件 
+    var content = '<a id="a"><b id="b">hey!</b></a>';
+    var blob = new Blob([content], { type: "text/xml"});
+    formData.append("webmasterfile", blob);
+FileReader 文件读取: 一种异步的文件读取机制 
+  fr = new FileReader([file/blob])  创建fr对象 
+  ★读取文件: 将文件数据读到到'fr.result'中 
   fr.readAsBinaryString(Blob|File) 得到文件的二进制字符串 
-    PS:通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
+    PS: 通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
       该字符串每个字节包含一个0到255之间的整数
       可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
-      与 XMLHttpRequest.sendAsBinary 方法结合使用,可以使用JS上传任意文件到服务器 [?]    
-    Example:
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var rawData = reader.result;
+      配合 xhr.sendAsBinary(),可上传任意文件到服务器 
+    Example: 
+      var fr = new FileReader();
+      fr.onload = function(e) {
+        var rawData = fr.result;
       }
-      reader.readAsBinaryString(file);
+      fr.readAsBinaryString(file);
   fr.readAsDataURL(Blob|File);     得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
-    PS:将文件数据进行Base64编码, 可以将返回值设为图像的src属性 
+    PS: 将文件数据进行Base64编码,可将返回值作为图像的src 
   fr.readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
     返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
     在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
@@ -3120,20 +3043,15 @@ FileReader 对象: 用于读取文件[把文件内容读入内存]
     fr.readAsArrayBuffer(file);
   fr.readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
     encoding   可选,指定编码类型,默认为'UTF-8' 
-  ★中断文件数据读取 
+  ★其他属性/方法 
   fr.abort()  中断文件读取  
-    var reader = new FileReader();
-    reader.abort();
-  ◆读取到的数据 
-  fr.result;  文件的URI数据,其他操作的结果都存放在该属性中 
-  当是图片数据时,可作为图片的src
+  fr.result   读取到的数据,文件的URI数据,其他操作的结果都存放在该属性中 
   ◆事件
-    PS:FileReader对象采用异步方式读取文件,可以为一系列事件指定回调函数。
   loadstart 数据读取开始时触发
   progress  数据读取中触发,每50ms左右触发一次 
     Example: 用来显示读取进度 
-    var reader = new FileReader();
-    reader.onprogress = function (e) {
+    var fr = new FileReader();
+    fr.onprogress = function (e) {
       if (e.lengthComputable) {
         var percentLoaded = Math.round((e.loaded / e.totalEric Bidelman) * 100);
         var progress = document.querySelector('.percent');
@@ -3143,7 +3061,7 @@ FileReader 对象: 用于读取文件[把文件内容读入内存]
         }
       }
     }
-  abort     读取中断或调用 reader.abort()方法时触发 
+  abort     读取中断或调用 fr.abort() 时触发 
   error     数据读取出错时触发  
     触发error事件时,相关的信息在 fr.error.code 中,表示错误码
     1 未找到文件 
@@ -3152,8 +3070,8 @@ FileReader 对象: 用于读取文件[把文件内容读入内存]
     4 文件不可读
     5 编码错误
     Example:
-      var reader = new FileReader();
-      reader.onerror = errorHandler;
+      var fr = new FileReader();
+      fr.onerror = errorHandler;
       function errorHandler(evt) {
         switch(evt.target.error.code) {
           case evt.target.error.NOT_FOUND_ERR:
@@ -3169,40 +3087,61 @@ FileReader 对象: 用于读取文件[把文件内容读入内存]
         };
       }
   load      读取成功后触发 
-    load事件的回调函数接受一个事件对象,该对象的 target.result 就是文件的内容。
-    下面是一个使用 readAsDataURL 方法,为img元素添加src属性的例子。
-    var reader = new FileReader();
-    reader.onload = function(e) {
+    load事件的回调函数接受一个事件对象,e.target.result 就是文件的内容 
+    <input type="file" >
+    var fr = new FileReader();
+    fr.onload = function(e) {
       document.createElement('img').src = e.target.result;
-      // 此处 reader.result 等价于 e.target.result ,但e.target.result仅为临时的
+      // 此时 fr.result === e.target.result 
     };
-    reader.readAsDataURL(f);
-  loadend   读取完成后触发,不管是否成功。触发顺序排在 onload 或 onerror 后面 
-  Example:
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      console.log(e.target.result);
-    }
-    reader.readAsText(blob);
-    
-    读取文件内容后直接以二进制格式上传
-    var reader = new FileReader();
-    reader.onload = function(){
-      xhr.sendAsBinary(this.result);
+    document.querySelector("input[type='file']")
+    .addEventListener("change",function(e){
+      fr.readAsDataURL(e.target.files[0]);
+    })
+  loadend   读取完成后触发,不管是否成功 
+    触发顺序排在onload或onerror后  
+  Example: 
+    读取文件内容后直接以二进制格式上传 
+    var fr = new FileReader();
+    fr.onload = function(){
+      xhr.sendAsBinary(this.result); // chrome已移除 xhr.sendAsBinary 
     }
     // 把从input里读取的文件内容,放到fileReader的result字段里
-    reader.readAsBinaryString(file);
-    不过chrome已经把XMLHttpRequest的sendAsBinary方法移除了,所以自行实现
+    fr.readAsBinaryString(file);
     XMLHttpRequest.prototype.sendAsBinary = function(text){
       var data = new ArrayBuffer(text.length);
       var ui8a = new Uint8Array(data, 0);
       for (var i = 0; i < text.length; i++){ 
         ui8a[i] = (text.charCodeAt(i) & 0xff);
       }
+      // 将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
+      // 再把整个数组发送出去。
       this.send(ui8a);
     }
-    将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
-    再把整个数组发送出去。
+WYSIWYG'what you see is what you get'所见即所得,富文本编辑 [详参 JS高级程序设计 440 页] 
+  PS: 由IE引入,已成事实标准;本质为在页面中嵌入一个包含空HTML页面的iframe,
+    通过设置designMode属性,使该HTML页面可以被编辑,
+    编辑的对象则是该页面<body>元素的HTML代码.
+    designMode 属性有两个可能的值: "off" 和 "on"(on时则可编辑)
+    需要等到页面完全加载之后才能设置为可编辑状态(一般使用 load事件监听)
+  Example: :
+  在页面创建一个 iframe标签
+  设置其designMode为"on"(frames["XX"].document.designMode ="on")
+  注:在Chrome中不可使iframe的src外链其他文件[出于安全限制] 
+  document.execCommand(); 文档预定义
+    PS:方法也适用于页面中contenteditable属性为true的区块
+      只是把对框架的document引用替换成当前窗口的document对象即可
+    Arguments:接收三个参数
+      执行的命名名称
+      布尔值,表示浏览器是否提供用户界面(Firefox中设置为true会报错,一般设置为false)
+      执行命令相应的值(不需要则为null)
+      命令           值           说明
+      backcolor     颜色字符串    设置文档背景色
+      bold          null         将选择的文本转会为粗体
+      ...
+    Example: :
+    转换粗体文本
+    frames["XX"].document.execCommand("bold",false,null);
 'Web Workers' 工作线程[HTML5]
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.

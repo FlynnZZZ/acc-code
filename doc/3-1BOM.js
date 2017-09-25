@@ -1,4 +1,4 @@
-'Browser-Object-Model'BOM,浏览器对象模型: 浏览器提供的接口 
+'Browser Object Model'BOM,浏览器对象模型: 浏览器提供的接口 
   PS:访问和操作浏览器窗口[显示的页面以外的部分],
     BOM由一系列相关的对象构成,且每个对象都提供了许多方法与属性,用来访问浏览器功能
     BOM只是ECMAScript的一个扩展,没有任何相关标准 
@@ -1059,7 +1059,7 @@ window的属性对象
       但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
       其优先级排在能力检测或怪癖检测之后.
       饱受争议的原因是因为它具有一定的欺骗性.
-'Asynchronous_JavaScript_and_XML'AJAX: 浏览器提供的使用http协议收发数据的接口 
+'Asynchronous JavaScript and_XML'AJAX: 浏览器提供的使用http协议收发数据的接口 
   PS: 'file://'协议无法使用AJAX,只有'http'和'https'协议才可以使用AJAX;
     提供了与服务器异步通信的能力; W3C在2006年发布了AJAX的国际标准 
     使用JS来操作'XMLHttpRequest'对象接口和服务器进行异步通信;
@@ -1070,7 +1070,7 @@ window的属性对象
     仅支持文本数据传输,无法读取和上传二进制文件数据;
     传输数据时,没有进度信息提示, 只能提示是否完成;
     没有超时机制,不方便掌控ajax请求节奏;
-  XMLHttpRequest_Level2 [IE10+][HTML5] 
+  'XMLHttpRequest Level2' [IE10+][HTML5] 
     PS: IE10以下的版本不支持,它有自己相关的方法来实现; 
       XMLHttpRequest2级进一步发展了xhr,并已经广发支持,成了事实标准,
       W3C开始着手制定相应的标准以规范其行为,
@@ -1089,7 +1089,7 @@ window的属性对象
     'text/xml'          用responseXML
     'application/json'  需先JSON解析,JSON.parse(responseText);
     其他直接用 responseText
-  var xhr = new XMLHttpRequest(); 创建xhr对象 
+  xhr = new XMLHttpRequest()  创建xhr对象 
     PS: IE5最先引入XMLHttpRequest对象,通过MSXML库中的一个ActiveX对象实现 
       xhr对象是AJAX技术实现的核心,通过调用该对象的属性和方法实现各种功能;
       请求发送到服务器端,在收到响应后,响应的数据会自动填充xhr对象的属性,
@@ -1271,14 +1271,15 @@ window的属性对象
       404, Not Found,未发现指定网址
       500, Internal Server Error,服务器发生错误
     xhr.statusText  只读,HTTP响应的文本描述,比如'200 OK' 
-    xhr.timeout  超时设定,值为整数,单位'ms'[可能存在兼容性][level2]
+    xhr.timeout     超时设定,值为整数,单位'ms'[可能存在兼容性][level2]
       PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
         若该属性等于0,就表示没有时间限制.
         在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
         Opera、Firefox 和 IE 10 支持该属性,
         IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
         而 Chrome 和 Safari 还不支持
-    xhr.abort();   终止连接
+    ◆相关方法 
+    xhr.abort()    终止连接
       调用该方法后,xhr对象会停止触发事件,
       而且也不再允许访问任何与响应有关的对象属性
       在终止请求后,还应该对xhr对象进行解引用操作.
@@ -1294,12 +1295,10 @@ window的属性对象
       };
     xhr.ontimeout  超时事件,当响应时间超过指定时间触发 [level2]
     xhr.onprogress  在接收响应期间持续不断的触发[level2]
-      PS:它分成上传和下载两种情况.
-        下载的 progress 事件属于 XMLHttpRequest 对象,
-        上传的 progress 事件属于 XMLHttpRequest.upload 对象
+      PS: 下载的'progress'事件属于'xhr'对象,上传的'progress'事件属于'xhr.upload'对象
         需在open方法前添加progress事件处理程序
-      会产生事件对象e,e.target 为xhr对象
-      e.lengthComputable 表示进度信息是否可用的布尔值
+      Event事件对象及其属性/方法 
+      e.lengthComputable bol,能否获取到下载数据的长度  
       e.position         表示已接收的字节数
       e.totalSize        表示根据Content-Length响应头部确定的预期字节数
       Example:
@@ -1316,16 +1315,22 @@ window的属性对象
         event.total 是需要传输的总字节,
         event.loaded 是已经传输的字节.
         若 event.lengthComputable 不为真,则 event.total 等于0.
-    xhr.onabort   请求被中止,如调用了abort()方法[level2]
+    xhr.onabort   请求被中止,如调用abort()方法 [level2]
     xhr.onerror   请求失败[level2]
       若发生网络错误(比如服务器无法连通),onerror事件无法获取报错信息,所以只能显示报错.
-    xhr.onload    接收到完整的响应数据时触发(IE不支持) [level2]
+    xhr.onloadstart 在接收到响应数据的第一个字节时触发 [level2]
+    xhr.onload    接收到完整的响应数据时触发[IE不支持] [level2]
+      PS: 相当于jQuery中ajax的'success'
       Firefox中引入的load事件,用于代替readystatechange事件
       该事件的执行函数会接收到一个event对象,其target属性就指向xhr对象实例
-    xhr.onloadstart 在接收到响应数据的第一个字节时触发 [level2]
-    xhr.onloadend 通信完成或触发error、abort或load事件后触发 [level2]
+    xhr.onloadend 通信完成或触发error、abort或load事件后触发 [level2] 
+      PS: 相当于jQuery AJAX的'completed'
     xhr.upload.onprogress  上传的进度,触发频率50ms/次[level2] 
       文件太小网络环境好的时候是直接到100%的;
+      Event时间对象及其属性/方法 
+      e.lengthComputable   bol,能否获取到上传数据的大小   
+      e.loaded             已上传数据的大小 
+      e.total              上传数据的大小 
       在xhr.send()后,xhr.readystate=2 前触发;
       Example:显示上传进度
         <progress min="0" max="100" value="0">0% complete</progress>
@@ -1345,6 +1350,8 @@ window的属性对象
           xhr.send(blobOrFile);
         }
         upload(new Blob(['hello world'], {type: 'text/plain'}));
+    Event事件对象 
+      e.lengthComputable 
     ◆其他 
       接收二进制数据 
         PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
@@ -1665,7 +1672,7 @@ window的属性对象
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-Fetch 用来取代XMLHttpRequest的一种新规范 
+'Fetch'用来取代XMLHttpRequest的一种新规范 
   PS: Ajax的XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
     而Fetch是将它们分散在几个不同的对象上,设计更合理；
@@ -2021,7 +2028,7 @@ Fetch 用来取代XMLHttpRequest的一种新规范
         return sheep;
       });
     });    
-JSONP,'JSON with Padding'填充式JSON或参数式JSON 
+JSONP'JSON with Padding'填充式JSON或参数式JSON 
   PS:可用于决解主流浏览器的跨域数据访问(即只能支持GET请求,而不支持POST请求)
     应用JSON的一种新方法.
     一种使用<script>标记获取JSON对象的方法.
@@ -2080,7 +2087,7 @@ JSONP,'JSON with Padding'填充式JSON或参数式JSON
         document.getElementsByTagName("head")[0].appendChild(script);
       }
     </script>
-Comet  服务器推送,一种更高级的AJAX技术 
+'Comet'服务器推送,一种更高级的AJAX技术 
   PS: 一种服务器向页面推送数据的技术,能够让信息近乎实时的被推送到页面上; 
     非常适合处理体育比赛的分数和股票报价
   长轮询和流
@@ -2092,217 +2099,118 @@ Comet  服务器推送,一种更高级的AJAX技术
   HTTP流
     PS:页面的整个生命周期内只使用一个HTTP链接,
       即浏览器向服务器发送一个请求,而服务器保持链接打开,然后周期性的向浏览器发送数据
-CORS,'Cross-Origin_Resource_Sharing'跨源资源共享 
-  PS:
-    CORS是一个W3C标准,全称是“跨域资源共享”,
-    允许浏览器向跨源服务器,发出XMLHttpRequest请求,从而克服了AJAX只能同源使用的限制;
-    定义了访问跨源资源时,浏览器与服务器的沟通;
-    新版本的 XMLHttpRequest 对象,可以向不同域名的服务器发出 HTTP 请求.
-    使用"跨域资源共享"的前提,是浏览器必须支持这个功能,而且服务器端必须同意这种"跨域".
-    需要改动服务器端代码.
-    若能够满足上面的条件,则代码的写法与不跨域的请求完全一样.
-    xhr.open ('GET', 'http://other.server/and/path/to/script');
-    目前,除了 IE 8 和 IE 9,主流浏览器都支持 CORS,IE 10 也将支持这个功能.
-    整个CORS通信过程,都是浏览器自动完成,不需要用户参与。
-    对于开发者来说,CORS通信与同源的AJAX通信没有差别,代码完全一样。
-    浏览器一旦发现AJAX请求跨源,就会自动添加一些附加的头信息,有时还会多出一次附加的请求;
-    因此,实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可以跨源通信。
-    浏览器将CORS请求分成:简单请求,simple request和非简单请求,not-so-simple request, 
-    浏览器对这两种请求的处理不同;
-  简单请求
-    需同时满足以下两大条件
-      (1)请求方法是以下三种方法之一。
-      HEAD
-      GET
-      POST
-      (2)HTTP的头信息不超出以下几种字段。
+CORS'Cross-Origin Resource Sharing'跨源资源共享[IE10+] 
+  PS: 是一个W3C标准,允许浏览器向跨源服务器,发出XMLHttpRequest请求;
+    'XMLHttpRequest level2'可跨域发出HTTP请求;
+    使用"跨域资源共享"的前提: 需浏览器支持该功能,且服务器需同意该"跨域", 
+    整个CORS通信过程,都是浏览器自动完成,不需要用户参与 
+    实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可以跨源通信 
+  浏览器将CORS请求分成:'simple request'简单请求和'not-so-simple request'非简单请求 
+    简单请求: HEAD GET POST 的请求,且HTTP的头信息不超出以下几种字段 
       Accept
       Accept-Language
       Content-Language
       Last-Event-ID
-      Content-Type:只限于三个值
-        application/x-www-form-urlencoded、multipart/form-data、text/plain
-      凡是不同时满足上面两个条件,就属于非简单请求。
-    基本流程
-      对于简单请求,浏览器直接发出CORS请求。
-      具体来说,就是在头信息之中,增加一个Origin字段。
-    
-      下面是一个例子,浏览器发现这次跨源AJAX请求是简单请求,就自动在头信息之中,添加一个Origin字段。
-    
-      GET /cors HTTP/1.1
-      Origin: http://api.bob.com
-      Host: api.alice.com
-      Accept-Language: en-US
-      Connection: keep-alive
-      User-Agent: Mozilla/5.0...
-      上面的头信息中,Origin字段用来说明,本次请求来自哪个源(协议 + 域名 + 端口)。服务器根据这个值,决定是否同意这次请求。
+      Content-Type: 只限于三个值
+      application/x-www-form-urlencoded、multipart/form-data、text/plain
       
-      若Origin指定的源,不在许可范围内,服务器会返回一个正常的HTTP回应。浏览器发现,这个回应的头信息没有包含Access-Control-Allow-Origin字段(详见下文),就知道出错了,从而抛出一个错误,被XMLHttpRequest的onerror回调函数捕获。注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200。
-      
+      对于简单请求,浏览器直接发出CORS请求,在头信息之中,增加一个Origin字段 
+      服务器根据这个值,决定是否同意这次请求 
+      若Origin指定的源,不在许可范围内,服务器会返回一个正常的HTTP回应。
+      浏览器发现,这个回应的头信息没有包含Access-Control-Allow-Origin,就知道出错了,
+      从而抛出一个错误,被XMLHttpRequest的onerror回调函数捕获。
+      注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200。
       若Origin指定的域名在许可范围内,服务器返回的响应,会多出几个头信息字段。
-      
       Access-Control-Allow-Origin: http://api.bob.com
-      Access-Control-Allow-Credentials: true
+        // 表示允许请求的域,若为*,则允许所有请求 
+      Access-Control-Allow-Credentials: true 
+        // 表示是否允许发送Cookie
+        // 另一方面,开发者必须在AJAX请求中打开withCredentials属性 
+        // var xhr = new XMLHttpRequest();
+        // xhr.withCredentials = true;
+        // 若省略withCredentials设置,有的浏览器还是会一起发送Cookie。这时,可以显式关闭withCredentials。
+        // xhr.withCredentials = false;
+        // 这个值也只能设为true,若服务器不要浏览器发送Cookie,删除该字段即可。
       Access-Control-Expose-Headers: FooBar
-      Content-Type: text/html; charset=utf-8
-      上面的头信息之中,有三个与CORS请求相关的字段,都以Access-Control-开头。
-      
-      (1)Access-Control-Allow-Origin
-      
-      该字段是必须的。它的值要么是请求时Origin字段的值,要么是一个*,表示接受任意域名的请求。
-    
-      (2)Access-Control-Allow-Credentials
-      
-      该字段可选。它的值是一个布尔值,表示是否允许发送Cookie。默认情况下,Cookie不包括在CORS请求之中。设为true,即表示服务器明确许可,Cookie可以包含在请求中,一起发给服务器。这个值也只能设为true,若服务器不要浏览器发送Cookie,删除该字段即可。
-      
-      (3)Access-Control-Expose-Headers
-      
-      该字段可选。CORS请求时,XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段:Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。若想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定。上面的例子指定,getResponseHeader('FooBar')可以返回FooBar字段的值。
-      
-      withCredentials 属性
-      上面说到,CORS请求默认不包含Cookie信息(以及HTTP认证信息等)。若需要包含Cookie信息,一方面要服务器同意,指定Access-Control-Allow-Credentials字段。
-      
-      Access-Control-Allow-Credentials: true
-      另一方面,开发者必须在AJAX请求中打开withCredentials属性。
-      
-      var xhr = new XMLHttpRequest();
-      xhr.withCredentials = true;
-      否则,即使服务器同意发送Cookie,浏览器也不会发送。或者,服务器要求设置Cookie,浏览器也不会处理。
-      
-      但是,若省略withCredentials设置,有的浏览器还是会一起发送Cookie。这时,可以显式关闭withCredentials。
-      
-      xhr.withCredentials = false;
-      需要注意的是,若要发送Cookie,Access-Control-Allow-Origin就不能设为星号,必须指定明确的、与请求网页一致的域名。同时,Cookie依然遵循同源政策,只有用服务器域名设置的Cookie才会上传,其他域名的Cookie并不会上传,且(跨源)原网页代码中的document.cookie也无法读取服务器域名下的Cookie。
-  非简单请求
-    预检请求
-    非简单请求是那种对服务器有特殊要求的请求,比如请求方法是PUT或DELETE,或者Content-Type字段的类型是application/json。
-    
-    非简单请求的CORS请求,会在正式通信之前,增加一次HTTP查询请求,称为“预检”请求(preflight)。
-    
-    浏览器先询问服务器,当前网页所在的域名是否在服务器的许可名单之中,以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则就报错。
-    
-    下面是一段浏览器的JavaScript脚本。
-    
-    var url = 'http://api.alice.com/cors';
-    var xhr = new XMLHttpRequest();
-    xhr.open('PUT', url, true);
-    xhr.setRequestHeader('X-Custom-Header', 'value');
-    xhr.send();
-    上面代码中,HTTP请求的方法是PUT,并且发送一个自定义头信息X-Custom-Header。
-    
-    浏览器发现,这是一个非简单请求,就自动发出一个“预检”请求,要求服务器确认可以这样请求。下面是这个“预检”请求的HTTP头信息。
-    
-    OPTIONS /cors HTTP/1.1
-    Origin: http://api.bob.com
-    Access-Control-Request-Method: PUT
-    Access-Control-Request-Headers: X-Custom-Header
-    Host: api.alice.com
-    Accept-Language: en-US
-    Connection: keep-alive
-    User-Agent: Mozilla/5.0...
-    “预检”请求用的请求方法是OPTIONS,表示这个请求是用来询问的。头信息里面,关键字段是Origin,表示请求来自哪个源。
-    
-    除了Origin字段,“预检”请求的头信息包括两个特殊字段。
-    
-    (1)Access-Control-Request-Method
-    
-    该字段是必须的,用来列出浏览器的CORS请求会用到哪些HTTP方法,上例是PUT。
-    
-    (2)Access-Control-Request-Headers
-    
-    该字段是一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段,上例是X-Custom-Header。
-    
-    预检请求的回应
-    服务器收到“预检”请求以后,检查了Origin、Access-Control-Request-Method和Access-Control-Request-Headers字段以后,确认允许跨源请求,就可以做出回应。
-    
-    HTTP/1.1 200 OK
-    Date: Mon, 01 Dec 2008 01:15:39 GMT
-    Server: Apache/2.0.61 (Unix)
-    Access-Control-Allow-Origin: http://api.bob.com
-    Access-Control-Allow-Methods: GET, POST, PUT
-    Access-Control-Allow-Headers: X-Custom-Header
-    Content-Type: text/html; charset=utf-8
-    Content-Encoding: gzip
-    Content-Length: 0
-    Keep-Alive: timeout=2, max=100
-    Connection: Keep-Alive
-    Content-Type: text/plain
-    上面的HTTP回应中,关键的是Access-Control-Allow-Origin字段,表示http://api.bob.com可以请求数据。该字段也可以设为星号,表示同意任意跨源请求。
-    
-    Access-Control-Allow-Origin: *
-    若服务器否定了“预检”请求,会返回一个正常的HTTP回应,但是没有任何CORS相关的头信息字段。这时,浏览器就会认定,服务器不同意预检请求,因此触发一个错误,被XMLHttpRequest对象的onerror回调函数捕获。控制台会打印出如下的报错信息。
-    
-    XMLHttpRequest cannot load http://api.alice.com.
-    Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
-    服务器回应的其他CORS相关字段如下。
-    
-    Access-Control-Allow-Methods: GET, POST, PUT
-    Access-Control-Allow-Headers: X-Custom-Header
-    Access-Control-Allow-Credentials: true
-    Access-Control-Max-Age: 1728000
-    (1)Access-Control-Allow-Methods
-    
-    该字段必需,它的值是逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法。注意,返回的是所有支持的方法,而不单是浏览器请求的那个方法。这是为了避免多次“预检”请求。
-    
-    (2)Access-Control-Allow-Headers
-    
-    若浏览器请求包括Access-Control-Request-Headers字段,则Access-Control-Allow-Headers字段是必需的。它也是一个逗号分隔的字符串,表明服务器支持的所有头信息字段,不限于浏览器在“预检”中请求的字段。
-    
-    (3)Access-Control-Allow-Credentials
-    
-    该字段与简单请求时的含义相同。
-    
-    (4)Access-Control-Max-Age
-    
-    该字段可选,用来指定本次预检请求的有效期,单位为秒。上面结果中,有效期是20天(1728000秒),即允许缓存该条回应1728000秒(即20天),在此期间,不用发出另一条预检请求。
-    
-    浏览器的正常请求和回应
-    一旦服务器通过了“预检”请求,以后每次浏览器正常的CORS请求,就都跟简单请求一样,会有一个Origin头信息字段。服务器的回应,也都会有一个Access-Control-Allow-Origin头信息字段。
-    
-    下面是“预检”请求之后,浏览器的正常CORS请求。
-    
-    PUT /cors HTTP/1.1
-    Origin: http://api.bob.com
-    Host: api.alice.com
-    X-Custom-Header: value
-    Accept-Language: en-US
-    Connection: keep-alive
-    User-Agent: Mozilla/5.0...
-    上面头信息的Origin字段是浏览器自动添加的。
-    
-    下面是服务器正常的回应。
-    
-    Access-Control-Allow-Origin: http://api.bob.com
-    Content-Type: text/html; charset=utf-8
-    上面头信息中,Access-Control-Allow-Origin字段是每次回应都必定包含的。
-    
-    与JSONP的比较
-    CORS与JSONP的使用目的相同,但是比JSONP更强大。
-    
-    JSONP只支持GET请求,CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据。      
-  具体操作 (?)
-    在发送请求时,需附加一个额外的Origin头部,包含请求页面的源信息(协议 域名 端口),
-    便于服务器根据该头信息来决定是否给予响应
-    Example: : Origin:'https://www.baidu.com'
-    若服务器认可该请求,就在Access-Control-Allow-Origin 头部中回发相同的源信息
-    若是公共资源,可以回发"*"
-    若没有该头部,或者该头部与源信息不匹配,浏览器会驳回请求
-    注:IE11 中没有该头部信息也允许显示信息,Chrome则不可以.
-    Example: : Access-Control-Allow-Origin:'https://www.baidu.com'
-    Remarks:请求和响应都不包含cookie信息
-  IE对CORS的实现
-    IE8中引入了 XDR(XDomainRequest)类型,与XHR类似,但可以实现跨域通信
-  其他浏览器对CORS的实现
-    通过XMLHttpRequest对象实现对CORS的原生支持
-    请求另一个域中的资源,使用标准的XHR对象并在 open()方法中传入绝对URL即可
-    跨域XHR对象为了安全有如下限制:
-    不能使用 setRequestHeader()设置自定义头部
-    不能发送和接收cookie
-    调用 getAllResponseHeaders()方法总会返回空字符串
-    由于无论同源请求还是跨域请求都使用相同的接口,
-    因此对于本地资源,最好使用相对URL, 在访问远程资源时再使用绝对URL,
-    如此能消除歧义,避免出现限制访问头部或本地cookie信息等问题
-'Img_Ping'跨域 
+        // CORS请求时,xhr.getResponseHeader()方法只能拿到6个基本字段:
+        // Cache-Control、
+        // Content-Language、
+        // Content-Type、
+        // Expires、
+        // Last-Modified、
+        // Pragma。
+        // 若想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定
+        // 上面的例子指定,xhr.getResponseHeader('FooBar')可以返回FooBar字段的值。
+    非简单请求: 凡是不同时满足上面两个条件的请求  
+      'preflight'预检请求: 在正式通信之前,增加一次HTTP查询请求 
+        浏览器先询问服务器,当前网页所在的域名是否在服务器的许可名单之中,
+        以及可以使用哪些HTTP动词和头信息字段。
+        只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则就报错。
+      非简单请求,浏览器会自动发出一个预检请求,要求服务器确认可以这样请求
+      预检请求的HTTP头信息
+        OPTIONS /cors HTTP/1.1
+        // “预检”请求用的请求方法是OPTIONS,表示这个请求是用来询问的。
+        Origin: http://api.bob.com
+        // 头信息里面,关键字段是Origin,表示请求来自哪个源。
+        Access-Control-Request-Method: PUT
+        // 用来列出浏览器的CORS请求会用到哪些HTTP方法,本例是PUT。
+        Access-Control-Request-Headers: X-Custom-Header
+        // 该字段是一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段,本例是X-Custom-Header。
+        Host: api.alice.com
+        Accept-Language: en-US
+        Connection: keep-alive
+        User-Agent: Mozilla/5.0...
+      预检请求的回应 
+        服务器收到“预检”请求以后,检查了Origin、Access-Control-Request-Method
+        和Access-Control-Request-Headers字段以后,确认允许跨源请求,就可以做出回应。
+        HTTP/1.1 200 OK
+        Date: Mon, 01 Dec 2008 01:15:39 GMT
+        Server: Apache/2.0.61 (Unix)
+        Access-Control-Allow-Origin: http://api.bob.com
+        // 表示可请求的源 
+        // 若服务器否定了“预检”请求,会返回一个正常的HTTP回应,但是没有任何CORS相关的头信息字段。
+        // 这时,浏览器就会认定,服务器不同意预检请求,因此触发一个错误,
+        // 被XMLHttpRequest对象的onerror回调函数捕获。控制台会打印出如下的报错信息。
+        Access-Control-Allow-Methods: GET, POST, PUT
+        // 逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法。
+        // 注意,返回的是所有支持的方法,而不单是浏览器请求的那个方法。这是为了避免多次“预检”请求。
+        Access-Control-Allow-Headers: X-Custom-Header
+        // 若浏览器请求包括Access-Control-Request-Headers字段,
+        // 则Access-Control-Allow-Headers字段是必需的。
+        // 它也是一个逗号分隔的字符串,表明服务器支持的所有头信息字段,不限于浏览器在“预检”中请求的字段。
+        Access-Control-Allow-Credentials: true 
+        // 该字段与简单请求时的含义相同。
+        Access-Control-Max-Age: 1728000
+        // 用来指定本次预检请求的有效期,单位为秒。
+        // 该例中有效期是20天(1728000秒),即允许缓存该条回应1728000秒(即20天),
+        // 在此期间,不用发出另一条预检请求。
+        Content-Type: text/html; charset=utf-8
+        Content-Encoding: gzip
+        Content-Length: 0
+        Keep-Alive: timeout=2, max=100
+        Connection: Keep-Alive
+        Content-Type: text/plain
+      通过了预检请求后: 
+        以后每次浏览器正常的CORS请求,就都跟简单请求一样,会有一个Origin头信息字段。
+        服务器的回应,也都会有一个Access-Control-Allow-Origin头信息字段。
+        预检请求后,浏览器的正常CORS请求: 
+        PUT /cors HTTP/1.1
+        Origin: http://api.bob.com 
+        // Origin 字段,浏览器自动添加的 
+        Host: api.alice.com
+        X-Custom-Header: value
+        Accept-Language: en-US
+        Connection: keep-alive
+        User-Agent: Mozilla/5.0...
+        服务器正常的回应: 
+        Access-Control-Allow-Origin: http://api.bob.com
+        // Access-Control-Allow-Origin字段是每次回应都必定包含的。
+        Content-Type: text/html; charset=utf-8
+  与JSONP的比较
+    JSONP只支持GET请求,CORS支持所有类型的HTTP请求。
+    JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据。      
+  IE对CORS的实现: IE8中引入了'XDomainRequest'XDR类型,与XHR类似,但可实现跨域通信 
+'Img Ping'跨域 
   PS:网页可从任何网页中加载图像而无跨域问题,也是在线广告跟踪浏览量的主要方式;
     动态的创建图像,使用load和error事件来处理响应
     图像Ping时与服务器进行简单、单向的跨域通信的一种方式
@@ -2316,7 +2224,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     img.src ="https://www.baidu.com?name=abc"; // 请求中发送了一个name参数
     onload 和 onerror 事件处理程序指定为同一个函数,
     则无论什么响应,请求完成都能得到通知
-'Same-Origin_Policy'同源政策 
+'Same-Origin Policy'同源政策 
   PS: 浏览器安全的基石,1995 年,由Netscape公司引入,目前所有浏览器都实行该政策;
     “同源”指的是: 协议、域名、端口 均相同;
     目的为了保证用户信息的安全,防止恶意的网站窃取数据;
@@ -2363,7 +2271,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     若两个窗口一级域名相同,只是二级域名不同,那么设置上一节介绍的 document.domain 属性,就可以规避同源政策,拿到DOM。
     
     对于完全不同源的网站,目前有两种方法,可以解决跨域窗口的通信问题。
-  fragment_identifier 片段识别符
+  fragment identifier 片段识别符
     片段标识符指的是,URL的#号后面的部分,
     比如 'http://example.com/x.html#fragment'的#fragment。
     若只是改变片段标识符,页面不会重新刷新。
@@ -2379,7 +2287,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     同样的,子窗口也可以改变父窗口的片段标识符。
     parent.location.href= target + “#” + hash;
     window.postMessage
-  Cross-document_messaging 跨文档通信API
+  Cross-document messaging 跨文档通信API
     为window对象新增了一个 window.postMessage 方法,
     允许跨窗口通信,不论这两个窗口是否同源。
   
@@ -2518,7 +2426,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
     相比JSONP只能发GET请求,CORS允许任何类型的请求。  
   跨域 安全考虑,同源策略的限制,不允许跨域调用其他页面的对象
   协议 域名 端口号 等任一一个不相同,都算作跨域.
-'cross-document_messaging',postMessage  跨文档消息传递[HTML5][IE8+] 
+postMessage'cross-document messaging'跨文档消息传递[HTML5][IE8+] 
   PS:简称为XDM,指在不同域的页面间传递消息,XDM之前,要稳妥的实现这种通信需花很多功夫 
   win.postMessage(mes,url); 向当前页面中的<iframe>或由当前页打开的窗口传递数据 
     PS:XDM的核心方法
@@ -2541,7 +2449,7 @@ CORS,'Cross-Origin_Resource_Sharing'跨源资源共享
   (详参 JavaScript高级程序设计 481 页)
   Exp: Chrome测试未能实现  
 SSE [HTML5]
-'Web_Real_Time_Communication',WebRTC : 网络实时通信 [HTML5] 
+'Web Real Time Communication',WebRTC : 网络实时通信 [HTML5] 
   PS: 最初是为了解决浏览器上视频通话而提出的,
     即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
     后来发展到除了音频和视频,还可以传输文字和其他数据。
@@ -2958,7 +2866,7 @@ WebSocket 网络通信协议[HTML5] [IE10+]
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-'Application_Cache',appcache  应用离线缓存 [HTML5]
+'Application Cache',appcache  应用离线缓存 [HTML5]
   PS:让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
     使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
     每个指定了 manifest 的页面在用户对其访问时都会被缓存;

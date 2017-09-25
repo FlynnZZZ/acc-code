@@ -620,15 +620,11 @@
   <dd>  描述列表中的项目
   ★HTML5新增 
   <canvas> 画布,专门用来绘制图形 
-    PS:canvas标签提供一块画布,可以访问画布中的像素点
-      canvas标签只是图形容器,图形必须使用脚本来绘制
-      主要用途:游戏或高级复杂的图像效果
-    Example: 通过js绘制一个红色的矩形
-      <canvas id="myCanvas">your browser does not support the canvas tag </canvas>
-      var canvas=document.getElementById('myCanvas');
-      var ctx=canvas.getContext('2d');
-      ctx.fillStyle='#FF0000';
-      ctx.fillRect(0,0,80,100);
+    PS:canvas标签提供一块画布,可以访问画布中的像素点 
+      画布默认为透明的 ,canvas标签只是图形容器,图形需脚本来绘制 
+      主要用途:游戏或高级复杂的图像效果 
+    <canvas width="600" height="200">您的浏览器不支持画布,请升级</canvas> 添加画布标签
+    当不支持画布的浏览器,会显示出标签中的内容,支持的会忽略 
   <video>  视频 
     属性
     controls 可选,是否添加浏览器自带的播放控制条
@@ -886,16 +882,31 @@ Form表单
       HTML5中,一个文档中的多个form当中,name必须唯一而不仅仅是一个空字符串。
     action="url"  表单提交的地址,处理该form信息程序所在的URL 
       该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
-    method=    提交表单的HTTP方法
+    method=    提交表单的HTTP方法 
       get  默认值 ,将表单数据附加到请求URL中 
         提交信息会显示在url中不适合密码传输,传递少量信息[256 byte]
       post 表单数据会包含在表单体内然后发送给服务器 
+    target    指示提交表单之后,显示收到回复的位置 
+      PS: 通过该属性指向一个iframe来实现无刷新表单提交 
+      HTML4: 一个用于frame的名字/关键字,默认'_self' 
+      HTML5: 一个用于'browsing context'浏览器上下文的名字/关键字 
+        举例来说, 标签页tab,窗口window,or或者行内frame 
+      关键字枚举: 
+      _self: 在当前文档页面重新加载返回值 
+        如果这个文档在一个frame中的话,self是在当前frame（document）中重新加载的,而不是整个页面（window） 
+      _blank: 以新的HTML4或HTML5文档窗口加载返回值。
+      _parent: 在父级的frame中以HTML4或HTML5文档形式加载返回值,
+        如果没有父级的frame,行为和_self一致。
+      _top: HTML4中,清空当前文档,加载返回内容;HTML5中,在当前文档的最高级内加载返回值 
+        如果没有父级,和_self的行为一致。
+      iframename: 返回值在指定frame中加载 
+      HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载[覆盖]    
     autocomplete=   是否启用表单的自动完成功能 [HTML5]
       当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果.
       "on"
       "off"
     novalidate   表示表单不进行验证
-    enctype      当method为post时, enctype 是提交form给服务器的内容的 MIME 类型 
+    enctype      当method为post时,enctype 是提交form给服务器的内容的 MIME 类型 
       PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type]
         可认为是表单数据的'content type'[MIME type],
         只不过其取值只能为以下三种之一,否则会转换成默认的编码。
@@ -918,20 +929,6 @@ Form表单
       Exp:
         表单发送超过100个具有相同name的字段时,服务器收不到数据 [20170518]
           添加 enctype='multipart/form-data' 解决
-    target   用来指示在提交表单之后,在哪里显示收到的回复.
-      HTML4:一个用于frame的名字/关键字 
-      HTML5:这是一个用于'browsing context'浏览器上下文的名字/关键字 
-        举例来说, 标签页tab,窗口window,or或者行内frame 
-      如下的关键字含有特别的含义:
-      _self: 在当前HTML4或HTML5文档页面重新加载返回值,默认值 
-        如果这个文档在一个frame中的话,self是在当前frame（document）中重新加载的,而不是整个页面（window） 
-      _blank: 以新的HTML4或HTML5文档窗口加载返回值。
-      _parent: 在父级的frame中以HTML4或HTML5文档形式加载返回值,
-        如果没有父级的frame,行为和_self一致。
-      _top: HTML4: 清空当前文档,加载返回内容；HTML5: 在当前文档的最高级内加载返回值
-        如果没有父级,和_self的行为一致。
-      iframename: 返回值在指定frame中加载 
-      HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载（覆盖）。    
     accept-charset 一个空格分隔或逗号分隔的列表 
       列表包括了服务器支持的字符编码。浏览器以这些编码被列举的顺序使用它们。
       默认值是一个保留字符串“UNKNOWN”。 

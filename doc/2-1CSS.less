@@ -185,13 +185,13 @@ Selector,选择器
       用于定义只出现一次的样式,虽然多次使用可以起作用,但不要多次使用 
     [attrName]  属性选择器 [IE7+] 
       PS:属性值可使用引号引起来或不用引号,效果相同 
-      [attribute]      带有指定属性的元素 
-      [attribute=val]  属性等于'val'
-      [attribute~=val] 属性包含通过空格分割的一组值中的'val' 
-      [attribute|=val] 属性包含'val'或以'val-'开头 
-      [attribute^=val] 属性以'val'开头[CSS3]
-      [attribute$=val] 属性以'val'结尾[CSS3]
-      [attribute*=val] 属性包含'val'[CSS3]
+      [attr]        带有指定属性的元素 
+      [attr='aoo']  属性值等于'aoo'字符
+      [attr*='aoo'] 属性值包含'aoo'字符 [CSS3]
+      [attr^=aoo]   属性值以'aoo'字符开头[CSS3]
+      [attr$=aoo]   属性值以'aoo'结尾[CSS3]
+      [attr~=aoo]   属性值包含'aoo'单词[即以空格分开的'aoo'字符] 
+      [attr|=aoo]   属性值包含'aoo'或以'aoo-'开头 
       Example:
         [title] { color:red; }
         [title='W3School'] { border:5px solid blue; }
@@ -504,7 +504,7 @@ Selector,选择器
   AB   同时拥有 
     <div class="aoo boo"> 2 </div>
     .aoo.boo{color:red;}
-  A>B  子元素[CSS2.1] 
+  A>B  子元素 [CSS2.1] 
     <div class="aoo">
       <div class="boo">
         字体变红
@@ -512,12 +512,7 @@ Selector,选择器
       </div>
     </div>
     .aoo>.boo{color: red;}
-  A+B  同级相邻两者[CSS2.1] 
-    <div class="boo">字体变红 </div>
-    <div class="aoo">123 </div>
-    <div class="boo">字体变红 </div>
-    <div class="boo">字体未变红 </div>
-    .aoo+.boo{color: red;}
+  A+B  同级相邻后者 [CSS2.1] 
   A~B  同级后者 [CSS3]
     <div class="aoo">123 </div>
     <div class="boo">字体变红 </div>

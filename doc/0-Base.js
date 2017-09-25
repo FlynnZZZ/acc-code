@@ -142,6 +142,7 @@ Bash: 大多数'Linux'及'Mac OS X'系统默认的shell
         -al   查看所有文件的详细信息
     ll [<name>]  查看文件夹的文件详情 
     pwd   查看当前完整路径 
+    env   查看所有环境变量 
     mkdir <name>   创建文件夹 
     touch <fileName> 新建文件 
     cp <fileName>  复制文件 

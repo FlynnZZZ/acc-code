@@ -653,35 +653,32 @@ NodeJS的运行方式及编程风格
   ◆核心模块: Node自带模块不用安装即可使用  
     源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
     核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
-  url    解析URL 
-    PS:包含五个方法,不需要实例化[本身就是一实例对象]
-    var url = require("url"); 引入url模块
-    url.parse(url [,bol1] [,bol2]); 将URL解析为对象[方便后续其他操作]
+  url   一个实例对象,用于解析URL 
+    obj = url.parse(url [,bol1] [,bol2])  将URL解析为对象[方便后续其他操作]
       url   字符串,传入需要解析的URL字符串
-      bol1  可选,默认false,是否将query字段转换为对象表示
-      bol2  可选,默认false,当URL不全时更智能的识别
-      Example: :
-        url.parse("https://www.baidu.com");
-        返回如下的对象
+      bol1  默认'false',是否将'query'字段转换为对象表示 
+      bol2  默认'false',当URL不全时更智能的识别 
+      返回的对象及其字段说明 
+        url.parse("https://www.baidu.com?key=val");
         {
-          protocol: 'https:',  // 使用协议
+          protocol: 'https:',  // 协议
           slashes: true,       // 是否有协议的双斜线
           auth: null,
           host: 'www.baidu.com', // ip地址或域名
-          port: null,       // 端口,默认为80,否则会指明
+          port: null,           // 端口,默认为80,否则会指明
           hostname: 'www.baidu.com', // 主机名
           hash: null,   // hash值,锚点
-          search: null, // 查询字符串参数
-          query: null,  // 发送给服务器的数据,使用=的键值对表示,参数串
+          search: '?key=val', // 查询字符串 
+          query: 'key=val',   // 查询字符串
           pathname: '/', // 路径名,
           path: '/',     // 路径
           href: 'https://www.baidu.com/' // 完整超链接
         }
-    url.format(urlObj);     将url对象格式化为url字符串
+    str = url.format(urlObj)      将url对象格式化为url字符串
       Example: :
       var obj =url.parse("https://www.baidu.com");
       url.format(obj); // 'https://www.baidu.com/'
-    url.resolve(str1,str2); 拼接为URL 
+    str = url.resolve(str1,str2)  拼接为URL 
       Example: :
         url.resolve("https://imooc.com","/course/list");
         // 'https://imooc.com/course/list'

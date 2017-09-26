@@ -36,39 +36,45 @@
     'body': """test""" 
 
 '.text.html.basic,.text.html.vue': 
-  '-vue vif':
-    'prefix': 'vif'
+  '-vue v-if':
+    'prefix': 'v-if'
     'body': 'v-if="${1:key}"' 
-  '-vue velseif':
-    'prefix': 'velseif'
+  '-vue v-else-if':
+    'prefix': 'v-else-if'
     'body': 'v-else-if="${1:key}"' 
-  '-vue velse':
-    'prefix': 'velse'
+  '-vue v-else':
+    'prefix': 'v-else'
     'body': 'v-else'
-  '-vue vshow':
-    'prefix': 'vshow'
+  '-vue v-show':
+    'prefix': 'v-show'
     'body': 'v-show="${1:key}"' 
-  '-vue vfor':
-    'prefix': 'vfor'
+  '-vue v-for':
+    'prefix': 'v-for'
     'body': 'v-for="(${1:---}I,${1:---}K) in list"' 
-  '-vue vtext':
-    'prefix': 'vtext'
+  '-vue v-text':
+    'prefix': 'v-text'
     'body': 'v-text="${1:key}"' 
-  '-vue vhtml':
-    'prefix': 'vhtml'
+  '-vue v-html':
+    'prefix': 'v-html'
     'body': 'v-html="${1:key}"' 
-  '-vue vmodel':
-    'prefix': 'vmodel'
+  '-vue v-model':
+    'prefix': 'v-model'
     'body': 'v-model="${1:key}"'
-  '-vue vbind':
-    'prefix': 'vbind'
+  '-vue v-bind':
+    'prefix': 'v-bind'
     'body': ':${1:class}="${2:arg}"'
-  '-vue von':
-    'prefix': 'von'
+  '-vue v-on':
+    'prefix': 'v-on'
     'body': '@${1:click}="${2:arg}"' 
-  '-vue vonce':
-    'prefix': 'vonce'
+  '-vue v-once':
+    'prefix': 'v-once'
     'body': """v-once""" 
+  '-vue v-cloak':
+    'prefix': 'v-cloak'
+    'body': """v-cloak""" 
+  '-vue v-pre':
+    'prefix': 'v-pre'
+    'body': """v-pre""" 
 
 '.source.js,.text.html.vue':
   '-Vue.extend({});':

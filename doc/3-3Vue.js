@@ -993,6 +993,11 @@ vm = new Vue(params)  创建Vue实例[ViewModel,简称vm]
     data: {
       counter: 0
     }
+  v-pre     跳过该元素及其子元素的编译过程
+    可以用来显示原始'Mustache'标签,跳过大量没有指令的节点会加快编译
+  v-cloak   该指令会保持在元素上直到关联实例结束编译 
+    和 CSS 规则如 [v-cloak] { display: none } 一起用时，
+    可隐藏未编译的'Mustache'标签直到实例准备完毕 
 内置标签 
   <component is="cptname"></component>   // 放置组件 
   <keep-alive ></keep-alive>

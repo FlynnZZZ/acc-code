@@ -1813,7 +1813,7 @@ Event 事件
   Touch 触摸事件
     PS:由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
     ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现]
-    touchstart  当手指放在屏幕上触发;
+    touchstart  当手指放在屏幕上触发,始终会触发,而不管是否改为滑动
     touchmove   当手指在屏幕上滑动时,连续地触发;
       Example:
         指定滑动一定距离执行动作 [self]
@@ -1838,7 +1838,7 @@ Event 事件
         year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
           flagYear =true;
         })
-    touchend    当手指从屏幕上离开时触发;
+    touchend    当手指从屏幕上离开时触发,始终会触发,而不管是否改为滑动
     ◆额外的三个触摸事件[DiBs]
     touchenter   移动的手指进入一个DOM元素
     touchleave   移动手指离开一个DOM元素
@@ -1943,8 +1943,23 @@ Event 事件
         //可作为虚拟键盘关闭事件
       }
     });
+  click点击事件 
+    click会在'touchend'事件后触发 
+    click延迟
+      PS: 移动端需判断是否为双击,故单击后不能立刻触发,需等300ms,直到确认不是双击才触发 
+      去掉click延迟的方法 
+      把viewport设置成设备的实际像素 Chrome和Safari生效 
+        <meta name="viewport" content="width=device-width">
+      设置initial-scale=1.0   Chrome生效 
+        <meta name="viewport" content="initial-scale=1.0">
+      设置CSS     Chrome和Safari都生效 
+        html{
+          touch-action: manipulation;
+        }
+    
+    
 WeiXin 微信  
-  不支持的功能
+  不支持的功能 
     模板字符串  ios中支持,android中不支持[20170124]
     可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
     不支持进行跳转到上一步url中带有参数 的url地址  [?]
@@ -1955,8 +1970,6 @@ WeiXin 微信
       解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
       把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
   event 事件
-    click 无延迟 [?]
-    touchend 、 touchstar 始终会触发(而不管是否改为滑动)
     禁止下滑显示网址 
       $(document).on('touchmove',function(e){
         e.preventDefault();

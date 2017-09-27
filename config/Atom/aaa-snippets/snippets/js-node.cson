@@ -1,0 +1,8 @@
+# Node  .js ---------------------------------------------------------------------
+'.source.js':
+  '-node require($1)':
+    'prefix': 'require'
+    'body': 'require($1)'
+  '-node import($1)':
+    'prefix': 'import1'
+    'body': 'import($1)'

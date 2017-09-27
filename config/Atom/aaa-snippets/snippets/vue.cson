@@ -75,6 +75,21 @@
   '-vue v-pre':
     'prefix': 'v-pre'
     'body': """v-pre""" 
+  '-vue slot="$1"':
+    'prefix': 'slot-vue'
+    'body': 'slot="$1"' 
+  '-vue scope="$1"':
+    'prefix': 'scope-vue'
+    'body': 'scope="$1"' 
+  '-vue is="$1"':
+    'prefix': 'is-vue'
+    'body': 'is="$1"' 
+  '-vue <keep-alive>$1</keep-alive>':
+    'prefix': 'keep-alive'
+    'body': '<keep-alive>$1</keep-alive>'
+  '-vue to="$1"':
+    'prefix': 'to-vue'
+    'body': 'to="$1"'
 
 '.source.js,.text.html.vue':
   '-Vue.extend({});':
@@ -122,12 +137,13 @@
   '-vue new Vue({$1});':
     'prefix': 'newVue'
     'body': """new Vue({
-        el : '$1',
-        data : {},
-        computed : {},
-        watch : {},
-        methods : {},
-        mounted : function (){
+        el: '#xxx',
+        data: {},
+        computed: {},
+        watch: {},
+        methods: {},
+        created: function (){},
+        mounted: function (){
           var that = this;
           this.$nextTick(function () { });
           
@@ -180,3 +196,28 @@
   '-vue srcElement':
     'prefix': 'srcElement'
     'body': """srcElement""" 
+  '-vue $emit':
+    'prefix': 'emit-vue'
+    'body': """$emit('eventName',data)""" 
+  '-vue $on':
+    'prefix': 'on-vue'
+    'body': """$on('eventName',function (){})""" 
+  # 插件 
+  '-vue $http.get().then':
+    'prefix': 'http.get'
+    'body': """$http.get('url',{})  // 某接口
+    .then(function(data){
+      console.log('某接口--成功',data)
+    },
+    function(error){
+      console.log('某接口--失败',error)
+    })""" 
+  '-vue $http.post().then':
+    'prefix': 'http.post'
+    'body': """$http.post('url',{})  // 某接口
+    .then(function(data){
+      console.log('某接口--成功',data)
+    },
+    function(error){
+      console.log('某接口--失败',error)
+    })""" 

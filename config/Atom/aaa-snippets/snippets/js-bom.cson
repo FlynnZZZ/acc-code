@@ -1,49 +1,49 @@
 # BOM  .js ---------------------------------------------------------------------
 '.source.js': 
   # clss --------------------------------------------
-  '-B XMLHttpRequest':
+  '-BM XMLHttpRequest':
     'prefix': 'XMLHttpRequest'
     'body': 'XMLHttpRequest'
-  '-B FileReader':
+  '-BM FileReader':
     'prefix': 'FileReader'
     'body': """FileReader"""
-  '-B WebSocket':
+  '-BM WebSocket':
     'prefix': 'WebSocket'
     'body': 'WebSocket'
   # window ------------------------------------------
-  '-B window':
+  '-BM window':
     'prefix': 'window'
     'body': 'window'
-  '-B history':
+  '-BM history':
     'prefix': 'history'
     'body': 'history'
-  '-B location':
+  '-BM location':
     'prefix': 'location'
     'body': 'location'
-  '-B navigator':
+  '-BM navigator':
     'prefix': 'navigator'
     'body': 'navigator'
-  '-B alert($1)':
+  '-BM alert($1)':
     'prefix': 'alert'
     'body': 'alert($1)'
-  '-B confirm(str)':
+  '-BM confirm(str)':
     'prefix': 'confirm'
     'body': 'confirm($1)'
-  '-B clearInterval($1)':
+  '-BM clearInterval($1)':
     'prefix': 'clearInterval'
     'body': 'clearInterval($1)'
-  '-B clearTimeout($1)':
+  '-BM clearTimeout($1)':
     'prefix': 'clearTimeout'
     'body': 'clearTimeout($1)'
-  '-B setTimeout(${1:funName},${2:time})':
+  '-BM setTimeout(${1:funName},${2:time})':
     'prefix': 'setTimeout'
     'body': 'setTimeout(${1:funName},${2:time})'
-  '-B setInterval(${1:funName},${2:time})':
+  '-BM setInterval(${1:funName},${2:time})':
     'prefix': 'setInterval'
     'body': 'setInterval(${1:funName},${2:time})'
-  '-B open()':
+  '-BM open()':
     'prefix': 'open'
     'body': 'open("${1:url}","_self")'
-  '-B prompt("提示文字","默认显示文字")':
+  '-BM prompt("提示文字","默认显示文字")':
     'prefix': 'prompt'
     'body': 'prompt("提示文字","默认显示文字")'

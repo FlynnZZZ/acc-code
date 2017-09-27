@@ -1,7 +1,10 @@
 # php---------------------------------------------------------------------------
 '.text.html.php':
+  '-php <?php $1 ?>':
+    'prefix': 'php'
+    'body': '<?php $1 ?>'
   '-php <?php 换行 ?>':
-    'prefix': 'phpNextLine'
+    'prefix': 'php-NextLine'
     'body': """<?php 
       $1
     ?>"""

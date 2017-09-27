@@ -1,72 +1,83 @@
 # DOM .js --------------------------------------------------------------------- 
 '.source.js':
   # elem -------------------------------------
-  '-D .cloneNode(bool)':
+  '-DM .cloneNode(bool)':
     'prefix': 'cloneNode'
     'body': 'cloneNode($1)'
-  '-D .createElement("$1")':
+  '-DM .createElement("$1")':
     'prefix': 'createElement'
     'body': 'createElement("$1")'
-  '-D .parentElement':
+  '-DM .parentElement':
     'prefix': 'parentElement'
     'body': 'parentElement'
-  '-D .innerHTML("$1")':
+  '-DM .innerHTML("$1")':
     'prefix': 'innerHTML'
     'body': 'innerHTML("$1")'
-  '-D .innerText("$1")':
+  '-DM .innerText("$1")':
     'prefix': 'innerText'
     'body': 'innerText("$1")'
-  '-D .insertAdjacentHTML("${1:beforeend}",html)':
+  '-DM .insertAdjacentHTML("${1:beforeend}",html)':
     'prefix': 'insertAdjacentHTML'
     'body': 'insertAdjacentHTML("${1:beforeend}",html)'
-  '-D .querySelector("$1")':
+  '-DM .querySelector("$1")':
     'prefix': 'querySelector'
     'body': 'querySelector("$1")'
-  '-D .querySelectorAll("$1")':
+  '-DM .querySelectorAll("$1")':
     'prefix': 'querySelectorAll'
     'body': 'querySelectorAll("$1")'
-  '-D .getAttribute("$1")':
+  '-DM .getAttribute("$1")':
     'prefix': 'getAttribute'
     'body': 'getAttribute("$1")'
-  '-D .setAttribute("$1","$2")':
+  '-DM .setAttribute("$1","$2")':
     'prefix': 'setAttribute'
     'body': 'setAttribute("$1","$2")'
   # event ------------------------------------
-  '-D touchstart':
+  '-DM touchstart':
     'prefix': 'touchstart'
     'body': 'touchstart'
-  '-D touchend':
+  '-DM touchend':
     'prefix': 'touchend'
     'body': 'touchend'
-  '-D touchmove':
+  '-DM touchmove':
     'prefix': 'touchmove'
     'body': 'touchmove'
-  '-D readystatechange':
+  '-DM readystatechange':
     'prefix': 'readystatechange'
     'body': 'readystatechange'
-  '-D .addEventListener("",foo)':
+  '-DM .addEventListener("",foo)':
     'prefix': 'addEventListener'
     'body': """addEventListener("${1:click}",function(e){
       $2
     })
     """
-  '-D .preventDefault()':
+  '-DM .preventDefault()':
     'prefix': 'preventDefault'
     'body': 'preventDefault()'
-  '-D .stopPropagation()':
+  '-DM .stopPropagation()':
     'prefix': 'stopPropagation'
     'body': 'stopPropagation()'
-  '-D pageX':
+  '-DM pageX':
     'prefix': 'pageX'
     'body': 'pageX'
-  '-D pageY':
+  '-DM pageY':
     'prefix': 'pageY'
     'body': 'pageY'
-  '-D currentTarget':
+  '-DM currentTarget':
     'prefix': 'currentTarget'
     'body': """currentTarget""" 
   # canvas 
   # FileReader 
-  '-D .readAsDataURL()':
+  '-DM .readAsDataURL()':
     'prefix': 'readAsDataURL'
     'body': """readAsDataURL($1)"""
+  # 
+  '-DM .readAsBinaryString':
+    'prefix': 'readAsBinaryString'
+    'body': 'readAsBinaryString'
+  '-DM .readAsArrayBuffer':
+    'prefix': 'readAsArrayBuffer'
+    'body': 'readAsArrayBuffer'
+  '-DM .readAsText':
+    'prefix': 'readAsText'
+    'body': 'readAsText'
+

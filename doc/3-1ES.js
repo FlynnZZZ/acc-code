@@ -2013,18 +2013,19 @@ Array 数组对象
        foo.name;            //"fan"
        foo.length;          //2
        console.log(foo)     //[1, 2, name: "fan"]
-    var arr = new Array(); 内置构造函数创建 
-      PS:可省略'new'关键字[不推荐使用]
-      无参数 : 创建空数组 []
-      单参数:作为数组的元素或指定数组的长度 
-        var arr1=new Array("a");
-        var arr2=new Array(6);   //表示该数组的长度为6
+    arr = new Array([arg]) 内置构造函数创建 
+      PS: 可省略'new'关键字[不推荐使用]
+      无参数: 创建空数组 []
+      单参数: 作为数组的元素或指定数组的长度 
+        var arr1 = new Array("a");
+        var arr2 = new Array(6);   //表示该数组的长度为6
+        var arr3 = new Array({ length: 5 });    
         console.log(arr1);   // ["a"]
-        console.log(arr2);   // [undefined × 6]
-      多参数:将参数作为数组的元素 
-        var arr=new Array(1,3,true,"abc");
-        arr;  // [1, 3, true, "abc"]
-        可省略 new 关键字
+        console.log(arr2);   // [undefined × 6] 
+        console.log(arr3);   // 
+      多参数: 将参数作为数组的元素 
+        var arr = new Array(1,3,true,"abc");
+        console.log(arr);  // [1, 3, true, "abc"]
   静态方法 
     bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
     arr = Array.from(arrLike [,mapFoo] [,thisArr]); 对象转换为数组[ES5]
@@ -4287,18 +4288,18 @@ Performance 当前页面加载相关的性能信息
       var dog1 = new Dog('wang!');
       dog1.speak(); // wang!
       console.log(dog1); // Dog {words: "wang!", speak: function}
-  foo.apply(thisArg[,argArr])       改变this指向
-    PS:使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法
+  foo.apply(thisArg[,arr/arrLike])       改变this指向
+    PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
       都是函数对象的方法,区别在于接收参数的形式不同.
       改变this的好处:对象不需要与方法发生任何耦合关系
-    thisArg 在 foo 函数运行时指定的 this 值 
+    thisArg  在foo函数运行时指定的 this 值 
       非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
       原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
-    argArr  函数传入的参数,类型为数组或类数组对象
-      其中的数组元素将作为单独的参数传给 foo 函数.
-      若该参数的值为null 或 undefined,则表示不需要传入任何参数.
-      从ECMAScript 5 开始可以使用类数组对象[可能存在兼容性问题]
-    Example: :
+    arr/arrLike  数组或类数组对象,函数传入的参数, 
+      其中的数组元素将作为单独的参数传给 foo 函数
+      若该参数的值为null或undefined,则表示不需要传入任何参数 
+      从ES5开始可以使用类数组对象 
+    Example: 
       function Pet(words){
         this.words =words;
         this.speak =function(){console.log(this.words);}

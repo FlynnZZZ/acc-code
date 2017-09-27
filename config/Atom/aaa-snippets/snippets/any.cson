@@ -111,9 +111,15 @@
   '-any click':
     'prefix': 'click'
     'body': 'click'
-  '-any components':
-    'prefix': 'components'
-    'body': """components""" 
+  '-any component':
+    'prefix': 'component'
+    'body': """component""" 
+  '-any template':
+    'prefix': 'template'
+    'body': """template""" 
+  '-any compute':
+    'prefix': 'compute'
+    'body': """compute""" 
   '-any continue':
     'prefix': 'continue'
     'body': 'continue'
@@ -164,7 +170,7 @@
     'body': """result""" 
   '-any return':
     'prefix': 'return'
-    'body': 'return'
+    'body': 'return '
   '-any static':
     'prefix': 'static'
     'body': """static""" 
@@ -191,10 +197,10 @@
     'body': 'value' 
   # html------------------------------------------------------------------------
   '-any <tag>$1</tag>':
-    'prefix': 'tag'
+    'prefix': 'tag couple'
     'body': '<${1:tag}></${1:tag}>'
   '-any <tag/>':
-    'prefix': 'tag1'
+    'prefix': 'tag single'
     'body': '<${1:tag}/>'
   # http------------------------------------------------------------------------
   '-any Content-Type':

@@ -37,7 +37,7 @@
 
 '.text.html.basic,.text.html.vue': 
   '-vue v-if':
-    'prefix': 'v-if'
+    'prefix': 'vif'
     'body': 'v-if="${1:key}"' 
   '-vue v-else-if':
     'prefix': 'v-else-if'
@@ -90,6 +90,9 @@
   '-vue to="$1"':
     'prefix': 'to-vue'
     'body': 'to="$1"'
+  '-vue ref="$1"':
+    'prefix': 'ref-vue'
+    'body': 'ref="$1"'
 
 '.source.js,.text.html.vue':
   '-Vue.extend({});':
@@ -160,9 +163,6 @@
   '-vue watch':
     'prefix': 'watch'
     'body': """watch""" 
-  '-vue mounted':
-    'prefix': 'mounted'
-    'body': """mounted""" 
   '-vue filters':
     'prefix': 'filters'
     'body': """filters""" 
@@ -175,6 +175,9 @@
   '-vue beforeMount':
     'prefix': 'beforeMount'
     'body': """beforeMount""" 
+  '-vue mounted':
+    'prefix': 'mounted'
+    'body': """mounted""" 
   '-vue beforeUpdate':
     'prefix': 'beforeUpdate'
     'body': """beforeUpdate""" 
@@ -193,15 +196,21 @@
   '-vue destroyed':
     'prefix': 'destroyed'
     'body': """destroyed""" 
-  '-vue srcElement':
+  '-vue .srcElement':
     'prefix': 'srcElement'
     'body': """srcElement""" 
-  '-vue $emit':
+  '-vue .$set':
+    'prefix': 'set-vue'
+    'body': """$set(obj,key,val)""" 
+  '-vue .$emit':
     'prefix': 'emit-vue'
     'body': """$emit('eventName',data)""" 
-  '-vue $on':
+  '-vue .$on':
     'prefix': 'on-vue'
     'body': """$on('eventName',function (){})""" 
+  '-vue .$refs':
+    'prefix': 'refs-vue'
+    'body': """$refs""" 
   # 插件 
   '-vue $http.get().then':
     'prefix': 'http.get'

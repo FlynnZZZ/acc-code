@@ -51,7 +51,6 @@
   core:
     allowPendingPaneItems: false
     audioBeep: false
-    automaticallyUpdate: false
     closeEmptyWindows: false
     destroyEmptyPanes: false
     disabledPackages: [
@@ -68,12 +67,23 @@
       "git-diff"
       "restore-windows"
       "welcome"
-      "highlight-line"
-      "autoprefixer"
       "language-javascript-jsx"
       "language-babel"
+      "metrics"
       "symbols-view"
-      "es6-javascript"
+      "github"
+      "language-vue-component"
+      "atom-beautify"
+      "pigments"
+      "simplified-chinese-menu"
+      "update-package-dependencies"
+      "dalek"
+      "exception-reporting"
+      "fuzzy-finder"
+      "incompatible-packages"
+      "keybinding-resolver"
+      "markdown-preview"
+      "package-generator"
     ]
     ignoredNames: [
       ".git"
@@ -93,7 +103,7 @@
     ]
     openEmptyEditorOnStart: false
     packagesWithKeymapsDisabled: [
-      "highlight-line"
+      "highlight-selected"
     ]
     projectHome: "E:\\project\\atom"
     telemetryConsent: "limited"
@@ -101,6 +111,7 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "Consolas,楷体 "
+    fontSize: 13
     invisibles:
       cr: " "
       eol: " "
@@ -153,8 +164,7 @@
       "Safari"
     ]
   "php-cs-fixer": {}
-  pigments:
-    markerType: "underline"
+  pigments: {}
   "restore-windows": {}
   "settings-view":
     enabled: true

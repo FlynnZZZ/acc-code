@@ -1,243 +1,71 @@
 '*':
-  # ◆名词---------------------------------------------------------------------
-  '-abstract':
-    'prefix': 'abstract'
-    'body': """abstract""" 
-  '-async':
-    'prefix': 'async'
-    'body': 'async'
-  '-autoprefixer':
-    'prefix': 'autoprefixer'
-    'body': 'autoprefixer'
-  '-blur':
-    'prefix': 'blur'
-    'body': 'blur'
-  '-break':
-    'prefix': 'break'
-    'body': """break""" 
-  '-bundle':
-    'prefix': 'bundle'
-    'body': """bundle""" 
-  '-click':
-    'prefix': 'click'
-    'body': 'click'
-  '-components':
-    'prefix': 'components'
-    'body': """components""" 
-  '-config':
-    'prefix': 'config'
-    'body': """config""" 
-  '-continue':
-    'prefix': 'continue'
-    'body': 'continue'
-  '-data':
-    'prefix': 'data'
-    'body': """data""" 
-  '-default':
-    'prefix': 'default'
-    'body': 'default'
-  '-delete':
-    'prefix': 'delete'
-    'body': 'delete'
-  '-directive':
-    'prefix': 'directive'
-    'body': """directive""" 
-  '-document':
-    'prefix': 'document'
-    'body': 'document'
-  '-double':
-    'prefix': 'double'
-    'body': """double""" 
-  '-error':
-    'prefix': 'error'
-    'body': 'error'
-  '-export':
-    'prefix': 'export'
-    'body': 'export'
-  '-extend':
-    'prefix': 'extend'
-    'body': """extend""" 
-  '-fail':
-    'prefix': 'fail'
-    'body': """fail""" 
-  '-false':
-    'prefix': 'false'
-    'body': """false""" 
-  '-filters':
-    'prefix': 'filters'
-    'body': """filters""" 
-  '-finally':
-    'prefix': 'finally'
-    'body': """finally""" 
-  '-focus':
-    'prefix': 'focus'
-    'body': 'focus'
-  '-from':
-    'prefix': 'from'
-    'body': """from""" 
-  '-function':
-    'prefix': 'function'
-    'body': 'function'
-  '-handler':
-    'prefix': 'handler'
-    'body': """handler""" 
-  '-header':
-    'prefix': 'header'
-    'body': """header""" 
-  '-global':
-    'prefix': 'global'
-    'body': 'global'
-  '-history':
-    'prefix': 'history'
-    'body': 'history'
-  '-implements':
-    'prefix': 'implements'
-    'body': """implements""" 
-  '-import':
-    'prefix': 'import'
-    'body': 'import'
-  '-inseanceof':
-    'prefix': 'inseanceof'
-    'body': """inseanceof""" 
-  '-install':
-    'prefix': 'install'
-    'body': 'install'
-  '-instanceof':
-    'prefix': 'instanceof'
-    'body': 'instanceof'
-  '-interface':
-    'prefix': 'interface'
-    'body': """interface""" 
-  '-length':
-    'prefix': 'length'
-    'body': 'length'
-  '-loader':
-    'prefix': 'loader'
-    'body': """loader""" 
-  '-location':
-    'prefix': 'location'
-    'body': 'location'
-  '-method':
-    'prefix': 'method'
-    'body': """method""" 
-  '-multiple':
-    'prefix': 'multiple'
-    'body': """multiple""" 
-  '-native':
-    'prefix': 'native'
-    'body': """native""" 
-  '-navigator':
-    'prefix': 'navigator'
-    'body': 'navigator'
-  '-package':
-    'prefix': 'package'
-    'body': """package""" 
-  '-private':
-    'prefix': 'private'
-    'body': """private""" 
-  '-props':
-    'prefix': 'props'
-    'body': """props""" 
-  '-protect':
-    'prefix': 'protect'
-    'body': """protect""" 
-  '-public':
-    'prefix': 'public'
-    'body': """public""" 
-  '-request':
-    'prefix': 'request'
-    'body': """request""" 
-  '-require':
-    'prefix': 'require'
-    'body': """require""" 
-  '-resolve':
-    'prefix': 'resolve'
-    'body': 'resolve'
-  '-reject':
-    'prefix': 'reject'
-    'body': 'reject'
-  '-result':
-    'prefix': 'result'
-    'body': """result""" 
-  '-return':
-    'prefix': 'return'
-    'body': 'return'
-  '-route':
-    'prefix': 'route'
-    'body': 'route'
-  '-socket':
-    'prefix': 'socket'
-    'body': """socket""" 
-  '-source':
-    'prefix': 'source'
-    'body': 'source'
-  '-static':
-    'prefix': 'static'
-    'body': """static""" 
-  '-strict':
-    'prefix': 'strict'
-    'body': """strict""" 
-  '-success':
-    'prefix': 'success'
-    'body': 'success'
-  '-switch':
-    'prefix': 'switch'
-    'body': """switch""" 
-  '-synchronized':
-    'prefix': 'synchronized'
-    'body': """synchronized""" 
-  '-target.':
-    'prefix': 'target'
-    'body': 'target'
-  '-that':
-    'prefix': 'that'
-    'body': 'that'
-  '-this':
-    'prefix': 'this'
-    'body': 'this'
-  '-throw':
-    'prefix': 'throw'
-    'body': """throw""" 
-  '-transient':
-    'prefix': 'transient'
-    'body': """transient""" 
-  '-undefined':
-    'prefix': 'undefined'
-    'body': 'undefined' 
-  '-volatile':
-    'prefix': 'volatile'
-    'body': """volatile""" 
+  '--TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ ':
+    'prefix': 'todo self'
+    'body': '// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ '
+  '--localStorage':
+    'prefix': 'localStorage'
+    'body': 'localStorage'
+  '--sessionStorage':
+    'prefix': 'sessionStorage'
+    'body': 'sessionStorage'
+  '--template':
+    'prefix': 'template'
+    'body': 'template'
+  '--module':
+    'prefix': 'module'
+    'body': 'module'
+  '--exports':
+    'prefix': 'exports'
+    'body': 'exports'
+
+'.text.html.basic,.text.xml,.text.html.php':
+  # 标签 ----------------------------
+  '--<div>$1</div>':
+    'prefix': 'div'
+    'body': '<div>$1</div>'
+  '--<div class="">$1</div>':
+    'prefix': 'div-class'
+    'body': '<div class="">$1</div>'
+  '--<div id="">$1</div>':
+    'prefix': 'div-id'
+    'body': '<div id="">$1</div>'
+  '--<template>$1</template>':
+    'prefix': 'template'
+    'body': '<template>$1</template>'
+  # 属性----------------------------------
+  '--style="$1"':
+    'prefix': 'style'
+    'body': 'style="$1"'
+  '--class="$1"':
+    'prefix': 'class'
+    'body': 'class="$1"'
+  '--id="$1"':
+    'prefix': 'id'
+    'body': 'id="$1"'
+  '--placeholder="$1"':
+    'prefix': 'placeholder'
+    'body': 'placeholder="$1"'
+  '--name="$1"':
+    'prefix': 'name'
+    'body': 'name="$1"'
+  # php----------------------------------
+  '--php test':
+    'prefix': 'test-php'
+    'body': 'test'
 '.text.html.basic':
-  # 声明类 ---------------------------------------------------------------------
-  '-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">':
+  # HTML------------------------------------------------------------------------
+  '--<meta name="viewport" content="...">':
     'prefix': 'metaViewport'
     'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
-  '-<style>$1</style>':
-    'prefix': 'styleSelf'
+  '--<style>$1</style>':
+    'prefix': 'style-inset'
     'body': '<style>\n\t$1\n</style>'
-  '-<script src="$1" charset="utf-8"></script>':
-    'prefix': 'scriptSrc'
+  '--<script src="$1" charset="utf-8"></script>':
+    'prefix': 'script-src'
     'body': '<script src="$1" charset="utf-8"></script>'
-  # 常用标签 --------------------------------------------------------------------
-  '-<div >$1</div>':
-    'prefix': 'divNoClass'
-    'body': '<div>$1</div>'
-  '-<div id="$1">$2</div>':
-    'prefix': 'divId'
-    'body': ''' <div id="$1">
-        $2
-      </div>'''
-  '-<section id="$1" class="">$2</section>':
-    'prefix': 'section'
-    'body': """<section id="$1" class="">
-      $2
-    </section>"""
-  '-<span class="">$1</span>':
-    'prefix': 'spanClass'
-    'body': '<span class="">$1</span>'
-  # 组合 -----------------------------------------------------------------------
-  '-htmlSelf':
-    'prefix': 'htmlSelf'
+  # 自定义组合--------------------------------
+  '--self html':
+    'prefix': 'html-self'
     'body': """
     <!DOCTYPE html>
     <html>
@@ -250,837 +78,156 @@
     <body>
     </body>
     </html>"""
-  '-htmlMobile':
-    'prefix': 'htmlMobile'
+  '--self html-mobile':
+    'prefix': 'html-mobile'
     'body': """
     <!DOCTYPE html>
     <html>
-    
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
       <title>$1</title>
       <link rel="stylesheet" href="../css.css">
     </head>
-    
     <body>
-      
     </body>
-    
     </html>"""
-  # 其他 -----------------------------------------------------------------------
-  '<?php $1 ?>':
-    'prefix': 'php'
-    'body': '<?php $1 ?>'
-  # 属性------------------------------------------------------------------------
-  '-class="$1"':
-    'prefix': 'class'
-    'body': 'class="$1"'
-  '-id="$1"':
-    'prefix': 'id'
-    'body': 'id="$1"'
-  '-placeholder="$1"':
-    'prefix': 'placeholder'
-    'body': 'placeholder="$1"'
-  # Vue-------------------------------------------------------------------------
-  '-vue-vbind':
-    'prefix': 'vbind'
-    'body': ':${1:class}="${2:arg}"'
-  '-vue-velse':
-    'prefix': 'velse'
-    'body': 'v-else'
-  '-vue-vfor':
-    'prefix': 'vfor'
-    'body': 'v-for="(${1:---}Item,${1:---}Idx) in ${1:---}List"' 
-  '-vue-vhtml':
-    'prefix': 'vhtml'
-    'body': 'v-html="${1:key}"' 
-  '-vue-vif':
-    'prefix': 'vif'
-    'body': 'v-if="${1:key}"' 
-  '-vue-velseif':
-    'prefix': 'velseif'
-    'body': 'v-else-if="${1:key}"' 
-  '-vue-vmodel':
-    'prefix': 'vmodel'
-    'body': 'v-model="${1:key}"'
-  '-vue-von':
-    'prefix': 'von'
-    'body': '@${1:click}="${2:arg}"' 
-  '-vue-vonce':
-    'prefix': 'vonce'
-    'body': """v-once""" 
-  '-vue-vshow':
-    'prefix': 'vshow'
-    'body': 'v-show="${1:key}"' 
-  '-vue-vtext':
-    'prefix': 'vtext'
-    'body': 'v-text="${1:key}"' 
-  # 自定义----------------------------------------------------------------------
-  '-self-cptTemplate':
-    'prefix': 'cptTemplate'
+  '--self cptTemplate':
+    'prefix': 'cpt-template'
     'body': """
     <style>
-  
     </style>
+    <div>
     $1
+    </div>
     <script type="text/javascript">
     $(function(){
-      
     })
     </script>
     """ 
-'.text.html.vue':
-  # 名词------------------------------------------------------------------------
-  '-beforeCreate':
-    'prefix': 'beforeCreate'
-    'body': """beforeCreate""" 
-  '-created':
-    'prefix': 'created'
-    'body': """created""" 
-  '-beforeMount':
-    'prefix': 'beforeMount'
-    'body': """beforeMount""" 
-  '-beforeUpdate':
-    'prefix': 'beforeUpdate'
-    'body': """beforeUpdate""" 
-  '-updated':
-    'prefix': 'updated'
-    'body': """updated""" 
-  '-activated':
-    'prefix': 'activated'
-    'body': """activated""" 
-  '-deactivated':
-    'prefix': 'deactivated'
-    'body': """deactivated""" 
-  '-beforeDestroy':
-    'prefix': 'beforeDestroy'
-    'body': """beforeDestroy""" 
-  '-destroyed':
-    'prefix': 'destroyed'
-    'body': """destroyed""" 
-  # 创建------------------------------------------------------------------------
-  '-vue-new Vue({$1});':
-    'prefix': 'newVue'
-    'body': 'new Vue({$1});'
-'.text.html.php':
-  '-<?php 换行 ?>':
-    'prefix': 'phpNextLine'
-    'body': """<?php 
-      $1
-    ?>"""
-  # html部分--------------------------------------------------------------------
-  '-<div class="">$1</div>':
-    'prefix': 'div'
-    'body': '<div >$1</div>'
-  '-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">':
-    'prefix': 'metaViewport'
-    'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
-  '-<script src="$1" charset="utf-8"></script>':
-    'prefix': 'scriptSrc'
-    'body': '<script src="$1" charset="utf-8"></script>'
-  '-<span class="">$1</span>':
-    'prefix': 'span'
-    'body': '<span class="">$1</span>'
-  '-<style>$1</style>':
-    'prefix': 'style'
-    'body': '<style>\n\t$1\n</style>'
-  '-class="$1"':
-    'prefix': 'classHtml'
-    'body': 'class="$1"'
-  '-id="$1"':
-    'prefix': 'id'
-    'body': 'id="$1"'
-  # 名词------------------------------------------------------------------------
-  # 方法------------------------------------------------------------------------
-  '-echo($1)':
-    'prefix': 'echokh'
-    'body': 'echo($1)'
-  '-print $1':
-    'prefix': 'print'
-    'body': 'print $1'
-  '-print_r($1)':
-    'prefix': 'printR'
-    'body': 'print_r($1)'
-'.source.css':
-  # 选择器----------------------------------------------------------------------
-  '-nth-child($1){$2}':
+  '--self cptTemplate child':
+    'prefix': 'cpt-template-child'
+    'body': """
+    <style>
+    </style>
+    <template id="c-xxx">
+      <div id="xxx">
+        $1
+      </div>
+    </template>
+    <script type="text/javascript">
+      Vue.component("c-xxx",{
+        template : "#c-xxx",
+        props : [],
+        data : function(){
+          return {
+            msg: ''
+          }
+        },
+        computed : {},
+        methods : {},
+      });
+    </script>
+    """ 
+'.text.xml':   
+  '-wx test':
+    'prefix': 'test'
+    'body': 'test'
+  #  TODO .wxml-------------------------------------------
+
+'.source.css,.source.css.less':
+  # 选择器--------------------------------
+  '--nth-child($1){$2}':
     'prefix': 'nthChild'
     'body': 'nth-child($1)'
-  # 属性------------------------------------------------------------------------
-  '-@keyframes ${1:name}{}':
+  # 属性----------------------------------
+  '--@keyframes ${1:name}{}':
     'prefix': 'keyframes'
     'body': """@keyframes ${1:name}{
       form{
-        
       }
-      
       to{
-        
       }
     }"""
-  '-animation:${1:name} 2s linear 1s infinite alternate;':
+  '--animation:${1:name} 2s linear 1s infinite alternate;':
     'prefix': 'animation'
     'body': 'animation:${1:name} 2s linear 1s infinite alternate;'
-  '-background-color: #b9e4e7;':
+  '--background-color: #b9e4e7;':
     'prefix': 'backgroundColorFast'
     'body': 'background-color: #b9e4e7;'
-  '-border: solid blue 1px;':
-    'prefix': 'borderFast'
+  '--border: solid blue 1px;':
+    'prefix': 'border-fast'
     'body': 'border: solid blue 1px;'
-  '-no-repeat':
+  '--no-repeat':
     'prefix': 'noRepeat1'
     'body': 'no-repeat'
-  '-transform:${1:translate(len1,len2)};':
+  '--transform:${1:translate(len1,len2)};':
     'prefix': 'transform'
     'body': 'transform:${1:translate(len1,len2)};'
-  '-transition:all 5s ease 0.5s;':
+  '--transition:all 5s ease 0.5s;':
     'prefix': 'transition'
     'body': 'transition:all 5s ease 0.5s;'
-  '-translate(len1,len2)':
+  '--translate(len1,len2)':
     'prefix': 'translate'
     'body': 'translate(len1,len2)'
-  '-transparent':
-    'prefix': 'transparent'
-    'body': 'transparent'
-  '-user-select':
-    'prefix': 'userSelect'
+  '--user-select':
+    'prefix': 'user-select'
     'body': 'user-select:'
-  # 值--------------------------------------------------------------------------
-  '-Microsoft YaHei':
+  # 值----------------------------------
+  '--Microsoft YaHei':
     'prefix': 'MicrosoftYaHei'
     'body': 'Microsoft YaHei'
-'.source.css.less':
-  # 操作
-  '-@import "${1:../a.less}";':
-    'prefix': 'import'
-    'body': '@import "${1:../a.less}";'
-  # 选择器
-  '-nth-child($1){$2}':
-    'prefix': 'nthChild'
-    'body': 'nth-child($1)'
-  # 属性------------------------------------------------------------------------
-  '-@keyframes ${1:name}{}':
-    'prefix': 'keyframes'
-    'body': """@keyframes ${1:name}{
-      form{
-        
-      }
-      
-      to{
-        
-      }
-    }"""
-  '-animation:${1:name} 2s linear 1s infinite alternate;':
-    'prefix': 'animation'
-    'body': 'animation:${1:name} 2s linear 1s infinite alternate;'
-  '-background-color: #b9e4e7;':
-    'prefix': 'backgroundColorFast'
-    'body': 'background-color: #b9e4e7;'
-  '-border: solid blue 1px;':
-    'prefix': 'borderFast'
-    'body': 'border: solid blue 1px;'
-  '-transform:${1:translate(len1,len2)};':
-    'prefix': 'transform'
-    'body': 'transform:${1:translate(len1,len2)};'
-  '-transition:all 1s ease 0.5s;':
-    'prefix': 'transition'
-    'body': 'transition:all 1s ease 0.5s;'
-  '-translate(len1,len2)':
-    'prefix': 'translate'
-    'body': 'translate(len1,len2)'
-  '-user-select':
-    'prefix': 'userSelect'
-    'body': 'user-select:'
-  # 值--------------------------------------------------------------------------
-  '-Microsoft YaHei':
-    'prefix': 'MicrosoftYaHei'
-    'body': 'Microsoft YaHei'
-  '-no-repeat':
-    'prefix': 'noRepeat1'
+  '--no-repeat':
+    'prefix': 'no-repeat1'
     'body': 'no-repeat'
-  '-transparent':
+  '--transparent':
     'prefix': 'transparent'
     'body': 'transparent'
-  # 其他------------------------------------------------------------------------
-  '-/* */':
+  # 操作--------------------------------
+  '--/* */':
     'prefix': 'zs'
     'body': '/* $1 */'
-  # 自定义----------------------------------------------------------------------
-  '-*@wu':
-    'prefix': 'wu'
-    'body': '*@wu'
+  '-less test':
+    'prefix': 'test-less'
+    'body': 'test'
+'.source.css':
+  '-test test':
+    'prefix': 'test'
+    'body': 'test'
+  #  TODO  .wxss -------------------------------------------------------------
+
 '.source.js':
-  '-/* $1 */':
+  '--/* $1 */':
     'prefix': 'zs'
     'body': '/* $1 */'
-  # ES--------------------------------------------------------------------------
-  # word
-  '-configurable':
-    'prefix': 'configurable'
-    'body': 'configurable'
-  '-enumerable':
-    'prefix': 'enumerable'
-    'body': 'enumerable'
-  '-writable':
-    'prefix': 'writable'
-    'body': 'writable'
-  '-ignoreCase':
-    'prefix': 'ignoreCase'
-    'body': 'ignoreCase'
-  '-readAsDataURL':
-    'prefix': 'readAsDataURL'
-    'body': """readAsDataURL"""
-  '-parentElement':
-    'prefix': 'parentElement'
-    'body': 'parentElement'
-  '-indexedDB':
-    'prefix': 'indexedDB'
-    'body': 'indexedDB'
-  '-localStorage':
-    'prefix': 'localStorage'
-    'body': 'localStorage'
-  '-Object':
-    'prefix': 'Object'
-    'body': 'Object'
-  # statement 语句 
-  '-for (var i = 0; i < $1; i++) { }':
+  # operator 操作符  statement 语句  
+  '--typeof':
+    'prefix': 'typeof'
+    'body': 'typeof'
+  '--instanceof':
+    'prefix': 'instanceof'
+    'body': 'instanceof'
+  '--try-catch':
+    'prefix': 'try catch'
+    'body': """try {
+      } 
+      catch (e) {
+      } 
+      finally {
+      }"""
+  '--for (var i = 0; i < $1; i++) { }':
     'prefix': 'for'
     'body': """for (var i = 0; i < $1; i++) {
       $2
     }"""
-  '-for-in;':
+  '--for-in;':
     'prefix': 'forin'
     'body': """for(var ${1:key} in ${2:obj}){
       $3
     };"""
-  # operator 操作符 
-  '-typeof':
-    'prefix': 'typeof'
-    'body': 'typeof'
-  # class 
-  'cls-new FileReader();':
-    'prefix': 'newFileReader'
-    'body': """new FileReader();"""
-  'cls-new WebSocket(url);':
-    'prefix': 'newWebSocket'
-    'body': 'new WebSocket($1);'
-  'cls-new Promise($1)':
-    'prefix': 'newPromise'
-    'body': 'new Promise($1)'
-  # function 
-  'fn-prototype':
-    'prefix': 'prototype'
-    'body': 'prototype'
-  'fn-arguments':
-    'prefix': 'arguments'
-    'body': 'arguments'
-  'fn-caller':
-    'prefix': 'caller'
-    'body': 'caller'
-  'fn-functionArrows ($1) => {$2}':
-    'prefix': 'functionArrows'
-    'body': '($1) => {$2}'
-  'fn-function(){\n}$1':
-    'prefix': 'function1'
-    'body': 'function(){\n}$1'
-  'fn-function $1($2){$3\n};':
-    'prefix': 'function2'
-    'body': 'function $1($2){$3\n};'
-  'fn-(function ($1){$3\n})($2);':
-    'prefix': 'function3'
-    'body': '(function ($1){$3\n})($2);'
-  # obj 
-  'o-__proto__':
-    'prefix': 'proto'
-    'body': '__proto__'
-  'o-constructor':
-    'prefix': 'constructor1'
-    # 存在bug,当为 'prefix': 'constructor' 时
-    'body': 'constructor'
-  'o-apply(this[,arrays]);':
-    'prefix': 'apply'
-    'body': 'apply(${1:this},${2:arrays});'
-  'o-bind(this[,arg1,arg2,...]);':
-    'prefix': 'bind'
-    'body': 'bind(${1:this},${2:arg1,arg2,..});'
-  'o-call(this[,arg1,arg2,...]);':
-    'prefix': 'call'
-    'body': """call(${1:this},${2:arg1,arg2,..})"""
-  'o-Object.assign(obj1,obj2,..);':
-    'prefix': 'Objectassign'
-    'body': 'Object.assign($1);'
-  'o-Object.defineProperty(obj,key,{});':
-    'prefix': 'ObjectdefineProperty'
-    'body': '''Object.defineProperty(${1:obj},key,{
-        // get : function (){
-        // },
-        // set : function (){
-        // },
-        value : val,
-        writable : bool,
-        enumerable : bool, 
-        configurable : bool
-      });'''
-  'o-Object.getPrototypeOf(obj);':
-    'prefix': 'ObjectGetPrototypeOf'
-    'body': 'Object.getPrototypeOf($1);'
-  'o-Object.is(val1,val2);':
-    'prefix': 'ObjectIs'
-    'body': 'Object.is($1);'
-  'o-Object.keys(obj);':
-    'prefix': 'Objectkeys'
-    'body': 'Object.keys($1);'
-  # num 
-  'num-Infinity':
-    'prefix': 'Infinity'
-    'body': 'Infinity'
-  'num-Number($1);':
-    'prefix': 'Number'
-    'body': 'Number($1);'
-  'num-Number.MAX_VALUE':
-    'prefix': 'NumberMaxValue'
-    'body': 'Number.MAX_VALUE'
-  'num-Number.MIN_VALUE':
-    'prefix': 'NumberMinValue'
-    'body': 'Number.MIN_VALUE'
-  'num-Number.NEGATIVE_INFINITY':
-    'prefix': 'NumberNegativeInfinity'
-    'body': 'Number.NEGATIVE_INFINITY'
-  'num-Number.POSITIVE_INFINITY':
-    'prefix': 'NumberPositiveInfinity'
-    'body': 'Number.POSITIVE_INFINITY'
-  'num-isFinite(num);':
-    'prefix': 'isFinite'
-    'body': 'isFinite(num);'
-  'num-isNaN(val);':
-    'prefix': 'isNaN'
-    'body': 'isNaN($1);'
-  # str 
-  'str-split("$1");':
-    'prefix': 'split'
-    'body': 'split("$1");'
-  # arr 
-  'arr-forEach(foo); ':
-    'prefix': 'forEach'
-    'body': """forEach(function(val,idx,arr){
-      $1
-    });"""
-  'arr-map(cfoo[,this]);':
-    'prefix': 'map'
-    'body': """var res = arr.map(function(val,idx,arr1){
-      return $1;
-    } )"""
-  'arr-isArray($1);':
-    'prefix': 'isArray'
-    'body': 'isArray($1);'
-  'arr-filter(foo [,this]);':
-    'prefix': 'filter'
-    'body': """filter(function(val,idx,arr){
-        return ${2:true[保留]}
-      } ,${1:this});"""
-  'arr-every(foo [,this]);':
-    'prefix': 'every'
-    'body': """every(function(val,idx,arr){
-      return ${2:[全部为真时,才为真]}
-    },${1:this});"""
-  # date 
-  'date-Date.now();':
-    'prefix': 'DateNow'
-    'body': 'Date.now();'
-  'date-Date.parse(str/date);':
-    'prefix': 'DateParse'
-    'body': 'Date.parse($1);'
-  'date-Date.UTC(year,month[,...]);':
-    'prefix': 'DateUTC'
-    'body': 'Date.UTC($1);'
-  'date-getDate()':
-    'prefix': 'getDate'
-    'body': 'getDate();'
-  'date-getDay()':
-    'prefix': 'getDay'
-    'body': 'getDay();'
-  'date-getFullYear()':
-    'prefix': 'getFullYear'
-    'body': 'getFullYear();'
-  'date-getHours()':
-    'prefix': 'getHours'
-    'body': 'getHours();'
-  'date-getMonth()':
-    'prefix': 'getMonth'
-    'body': 'getMonth();'
-  'date-getMinutes()':
-    'prefix': 'getMinutes'
-    'body': 'getMinutes();'
-  'date-getMilliseconds()':
-    'prefix': 'getMilliseconds'
-    'body': 'getMilliseconds();'
-  'date-getSeconds()':
-    'prefix': 'getSeconds'
-    'body': 'getSeconds();'
-  'date-getTime();':
-    'prefix': 'getTime'
-    'body': 'getTime();'
-  'date-getTimezoneOffset();':
-    'prefix': 'getTimezoneOffset'
-    'body': 'getTimezoneOffset();'
-  # Math 
-  '-Math.abs(num)':
-    'prefix': 'MathAbs'
-    'body': 'Math.abs($1);'
-  '-Math.acos(num)':
-    'prefix': 'MathAcos'
-    'body': 'Math.acos($1);'
-  '-Math.asin(num)':
-    'prefix': 'MathAsin'
-    'body': 'Math.asin($1);'
-  '-Math.atan(num)':
-    'prefix': 'MathAtan'
-    'body': 'Math.atan($1);'
-  '-Math.ceil($1)-up':
-    'prefix': 'Mathceil'
-    'body': 'Math.ceil($1);'
-  '-Math.cos(弧度值)':
-    'prefix': 'MathCos'
-    'body': 'Math.cos($1)'
-  '-Math.exp(num)':
-    'prefix': 'MathExp'
-    'body': 'Math.exp($1);'
-  '-Math.floor($1)':
-    'prefix': 'Mathfloor'
-    'body': 'Math.floor($1);'
-  '-Math.log(num)':
-    'prefix': 'MathLog'
-    'body': 'Math.log($1);'
-  '-Math.max(num1,num2,..)':
-    'prefix': 'MathMax'
-    'body': 'Math.max($1)'
-  '-Math.min(num1,num2,..)':
-    'prefix': 'MathMin'
-    'body': 'Math.min($1)'
-  '-Math.PI':
-    'prefix': 'MathPI'
-    'body': 'Math.PI'
-  '-Math.pow($1)-幂':
-    'prefix': 'Mathpow'
-    'body': 'Math.pow($1);'
-  '-Math.random();':
-    'prefix': 'MathRandom'
-    'body': 'Math.random();'
-  '-Math.round($1)-四舍五入':
-    'prefix': 'Mathround'
-    'body': 'Math.round($1)'
-  '-Math.sin(弧度值)':
-    'prefix': 'MathSin'
-    'body': 'Math.sin($1)'
-  '-Math.sqrt(num)':
-    'prefix': 'MathSqrt'
-    'body': 'Math.sqrt($1)'
-  '-Math.tan(弧度值)':
-    'prefix': 'MathTan'
-    'body': 'Math.tan($1)'
-  # RegExp 
-  '-RegExp-new RegExp($1)':
-    'prefix': 'newRegExp'
-    'body': 'new RegExp($1);'
-  '-RegExp.lastMatch;':
-    'prefix': 'RegExpLastMatch'
-    'body': 'RegExp.lastMatch;'
-  '-RegExp.lastParen;':
-    'prefix': 'RegExpLastParen'
-    'body': 'RegExp.lastParen;'
-  '-RegExp.leftContext;':
-    'prefix': 'RegExpLeftContext'
-    'body': 'RegExp.leftContext;'
-  '-RegExp.multiline;':
-    'prefix': 'RegExpMultiline'
-    'body': 'RegExp.multiline;'
-  '-RegExp.rightContext;':
-    'prefix': 'RegExpRightContext'
-    'body': 'RegExp.rightContext;'
-  # console 
-  '-console':
-    'prefix': 'console'
-    'body': 'console'
-  '-console.clear();':
-    'prefix': 'consoleClear'
-    'body': 'console.clear();'
-  '-console.dir($1);':
-    'prefix': 'consoleDir'
-    'body': 'console.dir($1);'
-  '-console.error($1);':
-    'prefix': 'consoleError'
-    'body': 'console.error($1);'
-  '-console.group($1);':
-    'prefix': 'consoleGroup'
-    'body': 'console.group($1);'
-  '-console.groupEnd();':
-    'prefix': 'consoleGroupEnd'
-    'body': 'console.groupEnd();'
-  '-console.log("--$1",$2);':
-    'prefix': 'consolelog'
-    'body': 'console.log("--$1",$2);'
-  '-console.log("%c"+$1,"background:#afffee;");':
-    'prefix': 'consoleLogColor'
-    'body': 'console.log("%c"+$1,"background:#afffee;");'
-  '-console.table($1);':
-    'prefix': 'consoleTable'
-    'body': 'console.table($1);'
-  '-console.time();':
-    'prefix': 'consoleTime'
-    'body': 'console.time();'
-  '-console.timeEnd($1);':
-    'prefix': 'consoleTimeEnd'
-    'body': 'console.timeEnd($1);'
-  '-console.warn($1);':
-    'prefix': 'consoleWarn'
-    'body': 'console.warn($1);'
-  # JSON 
-  '-JSON.parse($1);':
-    'prefix': 'JSONparse'
-    'body': 'JSON.parse($1);'
-  '-JSON.stringify($1);':
-    'prefix': 'JSONstringify'
-    'body': 'JSON.stringify($1);'
-  # DOM-------------------------------------------------------------------------
-  # elem 
-  'el-innerHTML("$1");':
-    'prefix': 'innerHTML'
-    'body': 'innerHTML("$1");'
-  'el-innerText("$1");':
-    'prefix': 'innerText'
-    'body': 'innerText("$1");'
-  'el-createElement("$1");':
-    'prefix': 'createElement'
-    'body': 'createElement("$1");'
-  'el-cloneNode(bool);':
-    'prefix': 'cloneNode'
-    'body': 'cloneNode($1);'
-  'el-getAttribute("$1");':
-    'prefix': 'getAttribute'
-    'body': 'getAttribute("$1");'
-  'el-querySelector("$1");':
-    'prefix': 'querySelector'
-    'body': 'querySelector("$1");'
-  'el-querySelectorAll("$1")':
-    'prefix': 'querySelectorAll'
-    'body': 'querySelectorAll("$1")'
-  'el-insertAdjacentHTML("${1:beforeend}",html)':
-    'prefix': 'insertAdjacentHTML'
-    'body': 'insertAdjacentHTML("${1:beforeend}",html);'
-  # event 
-  'e-touchmove':
-    'prefix': 'touchmove'
-    'body': 'touchmove'
-  'e-touchend':
-    'prefix': 'touchend'
-    'body': 'touchend'
-  'e-readystatechange':
-    'prefix': 'readystatechange'
-    'body': 'readystatechange'
-  'e-addEventListener("",foo);':
-    'prefix': 'addEventListener'
-    'body': """addEventListener("${1:click}",function(e){
-      $2
-    })
-    """
-  'e-preventDefault()':
-    'prefix': 'preventDefault'
-    'body': 'preventDefault()'
-  'e-stopPropagation();':
-    'prefix': 'stopPropagation'
-    'body': 'stopPropagation();'
-  'e-pageX':
-    'prefix': 'pageX'
-    'body': 'pageX'
-  'e-pageY':
-    'prefix': 'pageY'
-    'body': 'pageY'
-  '-fromCharCode(num,num...);':
-    'prefix': 'fromCharCode'
-    'body': 'fromCharCode($1);'
-  '-includes("$1");':
-    'prefix': 'includes'
-    'body': 'includes("$1");'
-  '-indexOf(val[,begin])':
-    'prefix': 'indexOf'
-    'body': 'indexOf($1,0$2)$3'
-  '-isPrototypeOf(obj);':
-    'prefix': 'isPrototypeOf'
-    'body': 'isPrototypeOf($1);'
-  '-join([str]);':
-    'prefix': 'join'
-    'body': 'join($1);'
-  '-lastIndexOf($1);':
-    'prefix': 'lastIndexOf'
-    'body': 'lastIndexOf($1);'
-  '-match(str);':
-    'prefix': 'match'
-    'body': 'match($1);'
-  '-parse($1);':
-    'prefix': 'parse'
-    'body': 'parse($1);'
-  '-pop();':
-    'prefix': 'pop'
-    'body': 'pop();'
-  '-push($1);':
-    'prefix': 'push'
-    'body': 'push($1);'
-  '-reverse();':
-    'prefix': 'reverse'
-    'body': 'reverse();'
-  '-reduce(foo[,initVal])':
-    'prefix': 'reduce'
-    'body': """reduce(function(retVal,currVal,idx,arr){ 
-      return $2; 
-    },${1:initVal});"""
-  '-reduceRight(foo[,initVal])':
-    'prefix': 'reduceRight'
-    'body': """reduceRight(function(retVal,currVal,idx,arr){ 
-      return $2; 
-    },${1:initVal});"""
-  '-remove("$1")':
-    'prefix': 'remove'
-    'body': 'remove("$1");'
-  '-replace($1)':
-    'prefix': 'replace'
-    'body': 'replace($1);'
-  '-search(str);':
-    'prefix': 'search'
-    'body': 'search($1);'
-  '-shift()':
-    'prefix': 'shift'
-    'body': 'shift()'
-  '-some(foo [,this]);':
-    'prefix': 'some'
-    'body': """some(function(val,idx,arr){
-      return ${2:[若存在返回值为真则返回真]}
-    } ${1:,this});"""
-  '-sessionStorage':
-    'prefix': 'sessionStorage'
-    'body': 'sessionStorage'
-  '-setAttribute("$1","$2");':
-    'prefix': 'setAttribute'
-    'body': 'setAttribute("$1","$2");'
-  '-slice(begin[,end]);':
-    'prefix': 'slice'
-    'body': 'slice($1);'
-  '-sort([foo])':
-    'prefix': 'sort'
-    'body': """sort(${1:function(val1,val2){
-      return ${2:true[改变顺序]}
-    }});"""
-  '-splice(begin ,num ,v1,v2,...)':
-    'prefix': 'splice'
-    'body': 'splice(${1:begin},${2:num},${3:v1,v2,...})'
-  '-stringify($1);':
-    'prefix': 'stringify'
-    'body': 'stringify($1);'
-  '-substr(begin[,num]);':
-    'prefix': 'substr'
-    'body': 'substr($1);'
-  '-substring(idx1,idx2);':
-    'prefix': 'substring'
-    'body': 'substring($1);'
-  '-test(str);':
-    'prefix': 'test'
-    'body': 'test($1);'
-  '-toDateString();':
-    'prefix': 'toDateString'
-    'body': 'toDateString();'
-  '-toLocaleString();':
-    'prefix': 'toLocaleString'
-    'body': 'toLocaleString();'
-  '-toFixed(num);':
-    'prefix': 'toFixed'
-    'body': 'toFixed($1);'
-  '-toLocaleDateString();':
-    'prefix': 'toLocaleDateString'
-    'body': 'toLocaleDateString();'
-  '-toLocaleTimeString();':
-    'prefix': 'toLocaleTimeString'
-    'body': 'toLocaleTimeString();'
-  '-toLowerCase();':
-    'prefix': 'toLowerCase'
-    'body': 'toLowerCase();'
-  '-toString();':
-    'prefix': 'toString'
-    'body': 'toString();'
-  '-toTimeString();':
-    'prefix': 'toTimeString'
-    'body': 'toTimeString();'
-  '-touchstart':
-    'prefix': 'touchstart'
-    'body': 'touchstart'
-  '-toUTCString();':
-    'prefix': 'toUTCString'
-    'body': 'toUTCString();'
-  '-toUpperCase();':
-    'prefix': 'toUpperCase'
-    'body': 'toUpperCase();'
-  '-trim();':
-    'prefix': 'trim'
-    'body': 'trim();'
-  '-unshift(val1[,val2,...]);':
-    'prefix': 'unshift'
-    'body': 'unshift($1);'
-  '-valueOf();':
-    'prefix': 'valueOf'
-    'body': 'valueOf();'
-  '-charAt(idx);':
-    'prefix': 'charAt'
-    'body': 'charAt($1);'
-  '-charCodeAt(idx);':
-    'prefix': 'charCodeAt'
-    'body': 'charCodeAt($1);'
-  '-compile(rgep,modifier);':
-    'prefix': 'compile'
-    'body': 'compile($1);'
-  '-concat($1)':
-    'prefix': 'concat'
-    'body': 'concat($1)'
-  '-exec(str);':
-    'prefix': 'exec'
-    'body': 'exec($1);'
-  # BOM----------------------------------------------------------------------
-  'cls-XMLHttpRequest':
-    'prefix': 'XMLHttpRequest'
-    'body': 'XMLHttpRequest'
-  'o-window':
-    'prefix': 'window'
-    'body': 'window'
-  'W1-alert($1);':
-    'prefix': 'alert'
-    'body': 'alert($1);'
-  'W1-confirm(str)':
-    'prefix': 'confirm'
-    'body': 'confirm($1)'
-  'W1-clearInterval($1)':
-    'prefix': 'clearInterval'
-    'body': 'clearInterval($1)'
-  'W1-clearTimeout($1)':
-    'prefix': 'clearTimeout'
-    'body': 'clearTimeout($1)'
-  'W1-setTimeout(${1:funName},${2:time});':
-    'prefix': 'setTimeout'
-    'body': 'setTimeout(${1:funName},${2:time});'
-  'W1-setInterval(${1:funName},${2:time});':
-    'prefix': 'setInterval'
-    'body': 'setInterval(${1:funName},${2:time});'
-  'W1-parseFloat(str);':
-    'prefix': 'parseFloat'
-    'body': 'parseFloat($1);'
-  'W1-parseInt(str[,radix]);':
-    'prefix': 'parseInt'
-    'body': 'parseInt(str,${1:radix});'
-  'W1-open()':
-    'prefix': 'open'
-    'body': 'open("${1:url}","_self");'
-  'W1-prompt("提示文字","默认显示文字");':
-    'prefix': 'prompt'
-    'body': 'prompt("提示文字","默认显示文字");'
-  'package--ajax':
-    'prefix': 'ajax'
+  # 自定义组合 ---------------------
+  '--ajax pack':
+    'prefix': 'ajax pack'
     'body':  """
       var xhr = new XMLHttpRequest();
       xhr.open('Method', 'Url', true);
@@ -1101,371 +248,18 @@
       var data = JSON.stringify(aoo);
       xhr.send(data); 
       """
-  # jQuery----------------------------------------------------------------------
-  '-jq-$($1)':
-    'prefix': 'jq'
-    'body': '$($1)'
-  '-jq-$-jQuery($1)':
-    'prefix': 'jQuery'
-    'body': 'jQuery($1)'
-  '-jq-$-$.Deferred();':
-    'prefix': 'deferred'
-    'body': '$.Deferred();'
-  '-jq-01-after($1);':
-    'prefix': 'after'
-    'body': 'after($1)'
-  '-jq-01-append($1)':
-    'prefix': 'append'
-    'body': 'append($1)'
-  '-jq-01-before($1)':
-    'prefix': 'before'
-    'body': 'before($1)'
-  '-jq-01-appendTo($1)':
-    'prefix': 'appendTo'
-    'body': 'appendTo($1)'
-  '-jq-01-children(["selector"])':
-    'prefix': 'children'
-    'body': 'children($1)'
-  '-jq-01-clone([bool])':
-    'prefix': 'clone'
-    'body': 'clone($1)'
-  '-jq-01-closest($1)':
-    'prefix': 'closest'
-    'body': 'closest($1)'
-  '-jq-01-find($1)':
-    'prefix': 'find'
-    'body': 'find($1)'
-  '-jq-01-insertAfter($1)':
-    'prefix': 'insertAfter'
-    'body': 'insertAfter($1)'
-  '-jq-01-insertBefore($1)':
-    'prefix': 'insertBefore'
-    'body': 'insertBefore($1)'
-  '-jq-01-next(["selector"])':
-    'prefix': 'next'
-    'body': 'next($1)'
-  '-jq-01-nextAll(["selector"])':
-    'prefix': 'nextAll'
-    'body': 'nextAll($1)'
-  '-jq-01-not($1)':
-    'prefix': 'not'
-    'body': 'not($1)'
-  '-jq-01-wrap($1);':
-    'prefix': 'wrap'
-    'body': 'wrap($1)'
-  '-jq-01-wrapAll($1);':
-    'prefix': 'wrapAll'
-    'body': 'wrapAll($1)'
-  '-jq-01-wrapInner($1);':
-    'prefix': 'wrapInner'
-    'body': 'wrapInner($1)'
-  '-jq-01-unwrap($1);':
-    'prefix': 'unwrap'
-    'body': 'unwrap($1)'
-  '-jq-01-prepend($1)':
-    'prefix': 'prepend'
-    'body': 'prepend($1)'
-  '-jq-01-prependTo($1)':
-    'prefix': 'prependTo'
-    'body': 'prependTo($1)'
-  '-jq-01-prev(["selector"])':
-    'prefix': 'prev'
-    'body': 'prev($1)'
-  '-jq-01-prevAll(["selector"])':
-    'prefix': 'prevAll'
-    'body': 'prevAll($1)'
-  '-jq-01-siblings("$1")':
-    'prefix': 'siblings'
-    'body': 'siblings("$1")'
-  '-jq-01-parent(["selector"])':
-    'prefix': 'parent'
-    'body': 'parent($1)'
-  '-jq-01-parents(["selector"])':
-    'prefix': 'parents'
-    'body': 'parents($1)'
-  '-jq-02-addClass("$1");':
-    'prefix': 'addClass'
-    'body': 'addClass("$1")'
-  '-jq-02-attr($1)':
-    'prefix': 'attr'
-    'body': 'attr($1)'
-  '-jq-02-css($1)':
-    'prefix': 'css'
-    'body': 'css($1)'
-  '-jq-02-data($1)':
-    'prefix': 'data'
-    'body': 'data($1)'
-  '-jq-02-detach()':
-    'prefix': 'detach'
-    'body': 'detach()'
-  '-jq-02-hasClass("$1")':
-    'prefix': 'hasClass'
-    'body': 'hasClass("$1")'
-  '-jq-02-empty()':
-    'prefix': 'empty'
-    'body': 'empty()'
-  '-jq-02-eq(idx)':
-    'prefix': 'eq'
-    'body': 'eq($1)'
-  '-jq-02-html($1)':
-    'prefix': 'html'
-    'body': 'html($1)'
-  '-jq-02-index([$1])':
-    'prefix': 'index'
-    'body': 'index($1)'
-  '-jq-02-innerHeight([$1])':
-    'prefix': 'innerHeight'
-    'body': 'innerHeight($1)'
-  '-jq-02-innerWidth([$1])':
-    'prefix': 'innerWidth'
-    'body': 'innerWidth($1)'
-  '-jq-02-val($1);':
-    'prefix': 'val'
-    'body': 'val($1)'
-  '-jq-02-text($1);':
-    'prefix': 'text'
-    'body': 'text($1)'
-  '-jq-02-prop($1)':
-    'prefix': 'prop'
-    'body': 'prop($1)'
-  '-jq-03-animate(params,time[,duration][,cfoo]);':
-    'prefix': 'animate'
-    'body': 'animate($1)'
-  '-jq-03-fadeIn([time,cfoo])':
-    'prefix': 'fadeIn'
-    'body': 'fadeIn(${1:speed,cfoo})'
-  '-jq-03-fadeOut([time,cfoo])':
-    'prefix': 'fadeOut'
-    'body': 'fadeOut(${1:speed,cfoo})'
-  '-jq-03-fadeToggle([time,cfoo])':
-    'prefix': 'fadeToggle'
-    'body': 'fadeToggle(${1:speed,cfoo})'
-  '-jq-03-fadeTo(time,opacity,cfoo)':
-    'prefix': 'fadeTo'
-    'body': 'fadeTo($1)'
-  '-jq-03-hide([time,cfoo])':
-    'prefix': 'hide'
-    'body': 'hide(${1:speed,cfoo})'
-  '-jq-03-trigger("event",[]);':
-    'prefix': 'trigger'
-    'body': 'trigger("${1:click}",[]);'
-  '-jq-05-ajax':
-    'prefix': 'ajaxJQ'
-    'body': """$.ajax({ // 某接口
-        type : 'GET',
-        url  : 'url',
-        data : {
-          key : val,
-        }, 
-        dataType : 'json',
-        xhrFields: { withCredentials: true  },
-        /* 请求带上cookie */
-        crossDomain: true, 
-        // 跨域
-        // contentType:'application/json',
-        beforeSend : function(){ }, 
-        // 发送请求前执行
-        complete : function(jqxhr,status){ }, 
-        // 请求完成完后(无论成功与否)执行
-        cache : true , 
-        // 后续可能会调用缓存;false则不缓存,只对post方法有效,默认为true
-      })
-      .then(function(backData,statusTxt,xhr){
-        console.log('某接口',statusTxt,backData);
-      }
-      ,function(xhr,status,errorTrown){
-        console.log("%cstatus:"+status+'某接口',"background:#afffee;");
-      }) """
-  '-jq-05-ajaxStart(cfoo);':
-    'prefix': 'ajaxStart'
-    'body': 'ajaxStart(function(){$1})'
-  '-jq-05-ajaxStop(cfoo);':
-    'prefix': 'ajaxStop'
-    'body': 'ajaxStop(function(){$1})'
-  '-jq-andSelf($1);':
-    'prefix': 'andSelf'
-    'body': 'andSelf($1)'
-  '-jq-each(function(){})':
-    'prefix': 'each'
-    'body': """each(function(idx,elem){
-      $1
-      })"""
-  '-jq-metaKey':
-    'prefix': 'metaKey'
-    'body': 'metaKey'
-  '-jq-offset([{top:num1,left:num2}])':
-    'prefix': 'offset'
-    'body': 'offset(${1:{top:num1,left:num2}})'
-  '-jq-offsetParent()':
-    'prefix': 'offsetParent'
-    'body': 'offsetParent()'
-  '-jq-on("${1:click}",cfoo)':
-    'prefix': 'on'
-    'body': """on("${1:click}",function(e){
-        $2
-      })"""
-  '-jq-originalEvent':
-    'prefix': 'originalEvent'
-    'body': 'originalEvent'
-  '-jq-outerHeight([true])':
-    'prefix': 'outerHeight'
-    'body': 'outerHeight(${1:true})'
-  '-jq-outerWidth([true])':
-    'prefix': 'outerWidth'
-    'body': 'outerWidth(${1:true})'
-  '-jq-position()':
-    'prefix': 'position'
-    'body': 'position()'
-  '-jq-relatedTarget':
-    'prefix': 'relatedTarget'
-    'body': 'relatedTarget'
-  '-jq-removeAttr($1)':
-    'prefix': 'removeAttr'
-    'body': 'removeAttr($1)'
-  '-jq-removeDate($1)':
-    'prefix': 'removeDate'
-    'body': 'removeDate($1)'
-  '-jq-removeClass($1)':
-    'prefix': 'removeClass'
-    'body': 'removeClass($1)'
-  '-jq-replaceAll($1)':
-    'prefix': 'replaceAll'
-    'body': 'replaceAll($1)'
-  '-jq-replaceWith($1)':
-    'prefix': 'replaceWith'
-    'body': 'replaceWith($1)'
-  '-jq-request()':
-    'prefix': 'requestJQ'
-    'body': 'request(url,function(err,response,data,){$1});'
-  '-jq-scrollLeft([$1])':
-    'prefix': 'scrollLeft'
-    'body': 'scrollLeft($1)'
-  '-jq-scrollTop([$1])':
-    'prefix': 'scrollTop'
-    'body': 'scrollTop($1)'
-  '-jq-select()':
-    'prefix': 'select'
-    'body': 'select()'
-  '-jq-show([time,cfoo])':
-    'prefix': 'show'
-    'body': 'show(${1:speed,cfoo})'
-  '-jq-slideDown([time,cfoo])':
-    'prefix': 'slideDown'
-    'body': 'slideDown(${1:speed,cfoo})'
-  '-jq-slideUp([time,cfoo])':
-    'prefix': 'slideUp'
-    'body': 'slideUp(${1:speed,cfoo})'
-  '-jq-slideToggle([time,cfoo])':
-    'prefix': 'slideToggle'
-    'body': 'slideToggle(${1:speed,cfoo})'
-  '-jq-stop(bool1][,bool2])':
-    'prefix': 'stop'
-    'body': 'stop(${1:true,true})'
-  '-jq-toggle([time,cfoo])':
-    'prefix': 'toggle'
-    'body': 'toggle(${1:speed,cfoo})'
-  '-jq-toggleClass("$1");':
-    'prefix': 'toggleClass'
-    'body': 'toggleClass("$1");'
-  '-jq-which':
-    'prefix': 'which'
-    'body': 'which'
-  # Vue-------------------------------------------------------------------------
-  '--new Vue({$1});':
-    'prefix': 'newVue'
-    'body': """new Vue({
-        el : '$1',
-        data : {},
-        computed : {},
-        watch : {},
-        methods : {},
-        mounted : function (){
-          var that = this;
-          this.$nextTick(function () { });
-          
-        },
-      });""" 
-  '--new VueRouter();':
-    'prefix': 'newVueRouter'
-    'body': """new VueRouter({
-        routes : $1,
-      });""" 
-  '-Vue.component("xx",{});':
-    'prefix': 'vueComponent'
-    'body': """Vue.component("${1:xx}",{
-      template : "",
-      props : [],
-      data : function(){
-        return {
-          
-        }
-      },
-      computed : {},
-      methods : {},
-    });""" 
-  '-Vue.directive("xx-xx",{});':
-    'prefix': 'vueDirective'
-    'body': """Vue.directive('${1:xx-xx}', {
-      bind : function(el,binds,vn){
-        // binds{name,value,expression,arg,modifiers}
-      },
-      inserted : function(el,binds,vn){
-        
-      },
-      update : function(el,binds,vn,oVn){
-        // binds{name,value,expression,arg,modifiers,oldValue}
-      },
-      componentUpdated : function(el,binds,vn,oVn){
-        // binds{name,value,expression,arg,modifiers,oldValue}
-      },
-      unbind : function(el,binds,vn,oVn){
-        
-      }
-    });""" 
-  '-Vue.filter("xxXX",foo);':
-    'prefix': 'vuefilter'
-    'body': """Vue.filter('xxXX',function(val,arg2,arg3){
-        
-      });""" 
-  '-Vue.extend({});':
-    'prefix': 'vueextend'
-    'body': """Vue.extend({
-        
-      });""" 
-  '-vue-aa-watch':
-    'prefix': 'watch'
-    'body': """watch""" 
-  '-vue-bb-mounted':
-    'prefix': 'mounted'
-    'body': """mounted""" 
-  '-vue-cc-srcElement':
-    'prefix': 'srcElement'
-    'body': """srcElement""" 
-  # React-----------------------------------------------------------------------
-  '--React;':
-    'prefix': 'React'
-    'body': """React""" 
-  '--React.createClass({$1});':
-    'prefix': 'ReactCreateClass'
-    'body': """React.createClass({
-      render : function1(){
-        return <div> $1 </div>;
-      },
-    });""" 
-  '--React.render(html,elem);':
-    'prefix': 'ReactRender'
-    'body': """React.render(<Tag key="val" />,elem);""" 
-  # HTML------------------------------------------------------------------------
-  '--divHTML:<div>$1</div>':
-    'prefix': 'divHTML'
-    'body': """<div>$1</div>""" 
-  '--spanHTML:<span>$1</span>':
-    'prefix': 'spanHTML'
-    'body': """<span>$1</span>""" 
+  # TODO  ----------------------------------------------------------------------
+  '-DM test':
+    'prefix': 'test dom'
+    'body': 'test'
+
+'.text.html.vue':
+  '-vue test':
+    'prefix': 'test-vue'
+    'body': 'test'
 
 
-
-# 使用说明---------------------------------------------------------------------
+# 使用说明 
 # e.g.:
 #   # 提示 显示为
 #   '-console.log()':
@@ -1475,7 +269,7 @@
 #     'body': 'console.log($1);'
 # 语法注释
 # $1 表示光标的默认位置
-# $2 按下 tab 键，光标跳到的第二个位置，以此类推
+# $2 按下 tab 键,光标跳到的第二个位置,以此类推
 # ${1:name} 表示第一次会将 name 选中
 # \n表示换行 \t tab缩进
 # 提示 显示 字符开始不可使用下划线符号_
@@ -1488,7 +282,7 @@
 # Question:
 #   如何同时定义多个类型文件的代码提示
 
-# 原始文档说明 存留-------------------------------------------------------------
+# 原始文档说明 留存 
 # Your snippets
 #
 # Atom snippets allow you to enter a simple prefix in the editor and hit tab to
@@ -1511,5 +305,4 @@
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
 # -----------------------------------------------------------------------------
-
 

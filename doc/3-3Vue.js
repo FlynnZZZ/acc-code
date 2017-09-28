@@ -2387,10 +2387,12 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
     }) // .$mount('#app') // 挂载点方式2 
   routerMap = new VueRouter(options) 'Router Map',创建'router instance'路由实例 
     {  // 路由实例的配置选项对象 
-      mode : 'history', // 模式 
-        'history'   利用'history.pushState'API来完成URL跳转而无须重新加载页面 
+      mode : keywords, // 模式 
         'hash'      默认值,使用URL的hash来模拟一个完整的URL
           利用当hash改变时,页面不会重新加载的特性  
+        'history'   利用'history.pushState'API来完成URL跳转而无须重新加载页面 
+        "abstract"  支持所有JS运行环境,如NodeJS服务器端
+          若发现无浏览器的 API,路由会自动强制进入这个模式 
       routes: [ // 映射表 
         {   // 一个路由对象,也叫一个路由记录 
           path: '/boo', // 定义地址URL  
@@ -2440,29 +2442,6 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
               {  // 子路由记录 
                 path: 'aa',
                 component: cptA,
-                meta: {},  // 路由元信息  
-                  {
-                    requiresAuth: true 
-                  }
-                  一个路由匹配到的所有路由记录会暴露为 $route.matched 数组,
-                  通过遍历 $route.matched 来检查路由记录中的 meta 字段。
-                  下面例子展示在全局导航钩子中检查 meta 字段：
-                  router.beforeEach((to, from, next) => {
-                    if (to.matched.some(record => record.meta.requiresAuth)) {
-                      // this route requires auth, check if logged in
-                      // if not, redirect to login page.
-                      if (!auth.loggedIn()) {
-                        next({
-                          path: '/login',
-                          query: { redirect: to.fullPath }
-                        })
-                      } else {
-                        next()
-                      }
-                    } else {
-                      next() // 确保一定要调用 next()
-                    }
-                  })      
               },
               {
                 path: 'bb',
@@ -2529,12 +2508,39 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
           alias: '/b',      // 别名,地址不变内容变化   
             可自由地将UI结构映射到任意的URL,而不受限于配置的嵌套路由结构 
             若'/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a'
+          meta: {},  // 路由元信息  
+            {
+              requiresAuth: true 
+            }
+            一个路由匹配到的所有路由记录会暴露为 $route.matched 数组,
+            通过遍历 $route.matched 来检查路由记录中的 meta 字段。
+            下面例子展示在全局导航钩子中检查 meta 字段：
+            router.beforeEach((to, from, next) => {
+              if (to.matched.some(record => record.meta.requiresAuth)) {
+                // this route requires auth, check if logged in
+                // if not, redirect to login page.
+                if (!auth.loggedIn()) {
+                  next({
+                    path: '/login',
+                    query: { redirect: to.fullPath }
+                  })
+                } else {
+                  next()
+                }
+              } else {
+                next() // 确保一定要调用 next()
+              }
+            })      
           beforeEnter: (to, from, next) => {  // 路由钩子 
             // 与全局 before 钩子的方法参数是一样 
           },
         },
         // ...
       ],
+      base: str,  // 应用的基路径,默认为"/" 
+        如果整个单页应用服务在 /app/ 下,然后 base 就应该设为 "/app/"。
+      linkActiveClass: str, // 全局配置<router-link>的默认激活class类名
+        默认值:"router-link-active"
       scrollBehavior: function(to,from,savedPosition){ // 滚动行为及位置 
         // PS:  只在'history'模式下可用
         // to   路由对象
@@ -2560,6 +2566,33 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
             }
       },
     }
+  Router实例 
+    ★属性
+    router.app   配置了router的Vue根实例 
+    router.mode  str,路由使用的模式 
+    router.currentRoute  当前路由对应的路由信息对象 
+    ★方法
+    router.beforeEach(guard)
+    router.beforeResolve(guard) 此时异步组件已经加载完成 '2.5.0+' 
+    router.afterEach(hook)
+    router.push(location, onComplete?, onAbort?)
+    router.replace(location, onComplete?, onAbort?)
+    router.go(n)
+    router.back()
+    router.forward()  动态的导航到一个新url 
+    router.getMatchedComponents(location?)  返回目标位置或是当前路由匹配的组件数组
+      是数组的定义/构造类,不是实例,通常在服务端渲染的数据预加载时时候。
+    router.resolve(location, current?, append?)   '2.1.0+'
+      解析目标位置（格式和 <router-link> 的 to 属性一样）,返回包含如下属性的对象：
+      {
+        location: Location;
+        route: Route;
+        href: string;
+      }
+    router.addRoutes(routes) 动态添加更多的路由规则 '2.2.0+' 
+      参数必须是一个符合 routes 选项要求的数组。
+    router.onReady(callback)  添加一个会在第一次路由跳转完成时被调用的回调函数 '2.2.0+'
+      此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
   <router-link to="">   路由导航: 在页面中指定跳转的链接 
     PS: <router-link>默认会被渲染成一个<a>标签 
     to="str/obj"   指定链接地址 
@@ -2688,42 +2721,23 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
         scrollBehavior (to, from, savedPosition) {
           // to 和 from 都是 路由信息对象
         }
-    路由信息对象的属性
+    路由信息对象的属性 
       $route.path  str,对应当前路由的路径,总是解析为绝对路径,如 "/foo/bar"。
       $route.params obj,包含了 动态片段 和 全匹配片段,如果没有路由参数,就是一个空对象 
       $route.query  obj,表示URL查询参数,若无查询参数,则为空对象 
       $route.hash   str,当前路由的hash值,若无hash值,则为空字符串 
-    
-    $route.fullPath
-    
-    类型: string
-    
-    完成解析后的 URL,包含查询参数和 hash 的完整路径。
-    
-    $route.matched
-    
-    类型: Array<RouteRecord>
-    一个数组,包含当前路由的所有嵌套路径片段的 路由记录 。路由记录就是 routes 配置数组中的对象副本（还有在 children 数组）。
-    
-    const router = new VueRouter({
-      routes: [
-        // 下面的对象就是 route record
-        { path: '/foo', component: Foo,
-          children: [
-            // 这也是个 route record
-            { path: 'bar', component: Bar }
-          ]
-        }
-      ]
-    })
-    当 URL 为 /foo/bar,$route.matched 将会是一个包含从上到下的所有对象（副本）。
-    
-    $route.name
-    
-    当前路由的名称,如果有的话    
-    
-    
-    
+      $route.fullPath  str,完成解析后的URL,包含查询参数和hash的完整路径 
+      $route.matched  arr,包含当前路由的所有嵌套路径片段的路由记录的数组
+      $route.name     当前路由的名称,如果有的话    
+  对组件注入 
+    ★注入的属性
+      通过在 Vue 根实例的 router 配置传入 router 实例,下面这些属性成员会被注入到每个子组件。
+    $router router实例 
+    $route  当前激活的路由信息对象
+        这个属性是只读的,里面的属性是immutable（不可变） 的,可 watch（监测变化）它。
+    ★允许的额外配置 
+    beforeRouteEnter
+    beforeRouteLeave
   配合使用的组件 
     <transition></transition> 实现跳转动画 
       基于路由的动态过渡: 基于当前路由与目标路由的变化关系,动态设置过渡效果 
@@ -2789,50 +2803,74 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
     ];
 'Vuex'状态管理 
   使用 
-    npm i vuex --S    安装并写入配置    
-    import Vue form 'vue'     引入vue  
-    import Vuex from 'vuex'   引入vuex 
-    Vue.use(Vuex)             安装     
-    let store = new Vuex.store({ // 实例化数据中心'store' 
-      state: {  // 状态,用于储存数据 
+    ★script引入 
+    在Vue之后引入vuex会进行自动安装 
+    <script src="/path/to/vue.js"></script> 
+    <script src="/path/to/vuex.js"></script> 
+    ★npm安装 
+    $ npm i -S vuex     // 安装并写入配置    
+    import Vue form 'vue'     // 引入vue  
+    import Vuex from 'vuex'   // 引入vuex 
+    Vue.use(Vuex)             // 安装    
+    ★使用  
+    let store = new Vuex.store({}) // 实例化数据中心'store' 
+    new Vue({  // 顶层组件实例 
+      el: '',
+      store: store, // 组件中注册,
+      // store实例会注入到根组件下的所有子组件中 
+      // 子组件中使用 vm.$store 进行操作   
+    });
+  store = new Vuex.store({})  实例化数据中心'store' 
+    {
+      state: {  // 状态,用于储存数据  
         stateData0: val,
+        // .. 
       },
       getters: { // 相当于'computed',对'state'的处理返回 
-        stateData1: function(state){
+        getData1: function(state,getters){
+          // state 传入的状态对象 
+          // getters 当前getters对象 
           return state.xx;
         },
+        // 可通过让 getter 返回一个函数，来实现给 getter 传参 
+        // store.getters.getData2(2) 传参调用 
+        getData2: function(state, getters){
+          return function(id){
+            return state.todos.find(todo => todo.id === id)
+          };
+        },
+        // .. 
       },
       mutations: { // 函数集合,不可异步执行,一般用于直接操作'state'中的数据 
-        foo: function(state,data){  
+        foo: function(state[,data]){  
           // state  储存数据的state对象,
           // data   commit()传入的数据 
         },
+        // ..
       },
       actions: {   // 函数集合,一般是异步的,常和后端API交互、执行'mutations'中的函数  
         // 用于执行'mutations',通过'mutations'更改'state',而不能直接更改'state' 
-        goo: function(context,data){
-          // context 表示该实例'store',一般用来执行'mutations'中的函数,
-            // context.commit('foo',data1) 
+        goo: function(context[,data]){
+          // context 表示该实例'store' 
+            // 一般用来执行'mutations'中的函数,context.commit('foo',data1) 
+            // 也可通过 context.state 和 context.getters 来获取 state 和 getters
           // data    dispatch()传入的数据 
         },
+        // ..
       },
-    })
-    new Vue({  // 顶层组件实例 
-      el: '',
-      data: {},
-      store: store, // 组件中注册,子组件中使用 vm.$store 进行操作   
-    });
-    // 子组件中 : 一般通过'computed'属性来承接 this.$store.state 中的数据 
+    }
+    // 组件中: 一般通过'computed'属性来承接 this.$store.state 中的数据  
     this.$store  事件对象 
     this.$store.state.xx   使用数据 
     this.$store.getters.xx 使用数据 
-    thi.$store.commit('foo',data)   执行'mutations'中的方法 
-    thi.$store.dispatch('goo',data) 执行'actions'中的方法 
+    thi.$store.commit('foo'[,data])   提交,执行'mutations'中的方法 
+    thi.$store.dispatch('goo'[,data]) 执行'actions'中的方法 
   采用模块的状态管理: 每个模块维护不同的状态,然后合并到一个总数据中心中 
     const moduleA = {
       state : {},
       getters : {},
-      actions : {},
+      actions : {
+      },
       mutations : {},
     }
     const moduleB = {

@@ -219,40 +219,40 @@
     'prefix': 'eval'
     'body': 'eval($1)'
   # console ----------------------------------------------------
-  '-console':
+  '-cso console':
     'prefix': 'console'
     'body': 'console'
-  '-console.log("$1--",$2)':
+  '-cso console.log("$1--",$2)':
     'prefix': 'log1'
-    'body': 'console.log("--$1",$2)'
-  '-console.log("%c"+$1,"background:#afffee")':
+    'body': 'console.log(" --$1 ",$2)'
+  '-cso console.log("%c"+$1,"background:#afffee")':
     'prefix': 'log color'
     'body': 'console.log("%c"+$1,"background:#afffee")'
-  '-console.clear()':
+  '-cso console.clear()':
     'prefix': 'console.clear'
     'body': 'console.clear()'
-  '-console.dir($1)':
+  '-cso console.dir($1)':
     'prefix': 'console.dir'
     'body': 'console.dir($1)'
-  '-console.warn($1)':
+  '-cso console.warn($1)':
     'prefix': 'console.warn'
     'body': 'console.warn($1)'
-  '-console.table($1)':
+  '-cso console.table($1)':
     'prefix': 'consoleTable'
     'body': 'console.table($1)'
-  '-console.error($1)':
+  '-cso console.error($1)':
     'prefix': 'console.error'
     'body': 'console.error($1)'
-  '-console.group($1)':
+  '-cso console.group($1)':
     'prefix': 'console.group'
     'body': 'console.group($1)'
-  '-console.groupEnd()':
+  '-cso console.groupEnd()':
     'prefix': 'console.groupEnd'
     'body': 'console.groupEnd()'
-  '-console.time()':
+  '-cso console.time()':
     'prefix': 'console.time'
     'body': 'console.time()'
-  '-console.timeEnd($1)':
+  '-cso console.timeEnd($1)':
     'prefix': 'console.timeEnd'
     'body': 'console.timeEnd($1)'
   

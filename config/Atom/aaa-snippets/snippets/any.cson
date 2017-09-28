@@ -91,9 +91,9 @@
   '-any private':
     'prefix': 'private'
     'body': """private""" 
-  '-any props':
-    'prefix': 'props'
-    'body': """props""" 
+  '-any prop':
+    'prefix': 'prop'
+    'body': """prop""" 
   '-any protect':
     'prefix': 'protect'
     'body': """protect""" 
@@ -115,7 +115,7 @@
     'prefix': 'component'
     'body': """component""" 
   '-any template':
-    'prefix': 'template'
+    'prefix': 'template-any' # exit bug 
     'body': """template""" 
   '-any compute':
     'prefix': 'compute'

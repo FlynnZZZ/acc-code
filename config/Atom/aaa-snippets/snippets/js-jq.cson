@@ -131,7 +131,7 @@
     'prefix': 'text'
     'body': 'text($1)'
   '-jq .prop($1)':
-    'prefix': 'prop'
+    'prefix': 'prop-jq'
     'body': 'prop($1)'
   '-jq replaceAll($1)':
     'prefix': 'replaceAll'

@@ -99,15 +99,21 @@ atom-text-editor.editor {
 // 设置技巧 
 // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
 
-// 注释 
+// 注释内容  
 .syntax--comment {
-  color: #078258;
+  color: #1ca3a3;
+  // color: #969572;
 }
+// 注释符号 
 .syntax--punctuation.syntax--definition.syntax--comment {
-  color: rgba(20, 152, 108, 0.63);
+  color: #1ca3a3;
 }
 // 语法错误 
-
+.syntax--invalid.syntax--illegal {
+  color: inherit !important;
+  background-color: inherit !important; 
+  border-bottom: 2px solid #C80000;
+}
 
 
  

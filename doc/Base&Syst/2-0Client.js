@@ -1,129 +1,128 @@
 浏览器 
-  介绍_概念_说明_定义 
-    说明 
-      浏览器从同一个域同时下载文件的数量有限,当同时下载多个文件,会比相同大小的单个文件慢.
-      浏览器在遇到<body>标签时才开始呈现内容
-    主要组成
-      渲染引擎: 将网页代码渲染成图像呈现,也叫浏览器内核
-        PS:浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
-          负责对网页语法的解释,如HTML、JavaScript并渲染（显示）网页。
-          渲染引擎决定了浏览器如何显示网页的内容以及页面的格式信息。
-          不同的浏览器内核对网页编写语法的解释也有不同,
-          因此同一网页在不同的内核的浏览器里的渲染（显示）效果也可能不同.
-        Blink    Chrome内核
-          Blink是一个由Google和Opera Software开发的浏览器排版引擎,
-          Google计划将这个渲染引擎作为Chromium计划的一部分。
-          这一渲染引擎是开源引擎WebKit中WebCore组件的一个分支,并且在Chrome（28 及往后版本）、Opera（15 及往后版本）和Yandex浏览器中使用。
-        Webkit   Safari内核,Chrome内核原型,开源
-          它是苹果公司自己的内核,也是苹果的Safari浏览器使用的内核。
-          Webkit引擎包含WebCore排版引擎及JavaScriptCore解析引擎,均是从KDE的KHTML及KJS引擎衍生而来,它们都是自由软件,在GPL条约下授权,同时支持BSD系统的开发。
-          所以Webkit也是自由软件,同时开放源代码。在安全方面不受IE、Firefox的制约,所以Safari浏览器在国内还是很安全的。
-          Google Chrome、360 极速浏览器以及搜狗高速浏览器高速模式也使用Webkit作为内核(在脚本理解方面,Chrome使用自己研发的V8引擎)。
-          WebKit内核常见的浏览器:傲游浏览器3、[1]  Apple Safari (Win/Mac/iPhone/iPad)、Symbian手机浏览器、Android 默认浏览器,
-        Gecko    Firefox内核
-          Netscape6开始采用的内核,后来的Mozilla FireFox也采用了该内核,
-          Gecko的特点是代码完全公开,因此,其可开发程度很高,
-          全世界的程序员都可以为其编写代码,增加功能。
-          IE没有使用W3C的标准,这导致了微软内部一些开发人员的不满；
-          他们与当时已经停止更新了的 Netscape的一些员工一起创办了Mozilla,
-          以当时的Mosaic内核为基础重新编写内核,于是开发出了Gecko。
-          此外Gecko也是一个跨平台内核,可以在Windows、 BSD、Linux和Mac OS X中使用。
-          JavaScript引擎是SpiderMonkey。
-        Trident  IE内核
-          1997 年的IE4中首次被采用,是微软在Mosaic代码的基础之上修改而来的,并沿用到IE11。
-          微软很长时间都并没有更新Trident内核,
-          导致了Trident内核曾经几乎与W3C标准脱节（2005 年）,
-          Trident内核的大量 Bug等安全性问题没有得到及时解决,
-          然后加上一些致力于开源的开发者和一些学者们公开自己认为IE浏览器不安全的观点,
-          也有很多用户转向了其他浏览器,Firefox和Opera就是这个时候兴起的。
-          非Trident内核浏览器的市场占有率大幅提高也致使许多网页开发人员开始注意网页标准和非IE浏览器的浏览效果问题。
-          IE从版本11开始,初步支持WebGL技术。
-          IE8的JavaScript引擎是Jscript,IE9开始用Chakra,
-          这两个版本区别很大,Chakra无论是速度和标准化方面都很出色。
-          Trident内核的常见浏览器有:
-            IE6、IE7、IE8（Trident 4.0）
-            IE9（Trident 5.0）
-            IE10（Trident 6.0）
-          360 安全浏览器
-            1.0-5.0 为Trident
-            6.0 为Trident+Webkit
-            7.0 为Trident+Blink
-          国内的厂商一般把其他内核叫做“高速浏览模式”,而Trident则是“兼容浏览模式”,用户可以来回切换。
-        EdgeHTML Edge
-        Presto   Opera前内核 [已废弃]
-          Opera 12.17 及更早版本曾经采用的内核,现已停止开发并废弃,
-          该内核在2003年的Opera7中首次被使用,
-          该款引擎的特点就是渲染速度的优化达到了极致,然而代价是牺牲了网页的兼容性。
-          Opera现已改用Google Chrome的Blink内核。
-        渲染的四个阶段
-          解析代码: HTML解析DOM,CSS解析为CSSOM,CSS Object Model
-          对象合成: 将DOM和CSSOM合成渲染树,render tree
-          布局    : 渲染树布局 layout
-          绘制    : 将渲染树绘制到屏幕
-          注:并非严格按顺序,可能有交叉,如HTML未下载完已有内容在浏览器中显示出来
-        flow  : 渲染树到网页布局,称为"布局流"
-        paint : 布局到网页显示为"绘制"
-        reflow 和 repaint
-          PS:页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
-            reflow必然要repaint,反之则不然,
-            如改变颜色只会repaint,改变元素的布局则会reflow和repaint,
-            通常,浏览器browser会智能的将reflow和repaint限制在相关子树上, 以减小开销
-          尽量减少重绘的次数和成本
-            优先考虑底层DOM元素的变动而非高DOM;
-            browser会累计DOM变动进行一次性执行,故将DOM操作进行集中处理
-              如:读取或写入DOM,尽量居中不要混杂
-              缓存DOM信息
-              使用CSS class 一次性改变样式,而非一项一项的改变
-            动画时尽量使用absolute 或 fixed 定位,减少对其他元素的影响
-            使用document fragment 操作DOM
-            window.requestAnimationFrame() 推迟代码到下次重流时执行,而非立即要求重流
-              开销大
-              function addHeight(elem){
-                var height1 = elem.clientHeight;
+  说明 
+    浏览器从一个域同时下载文件的数量有限,当同时下载多个文件,会比相同大小的单个文件慢.
+    浏览器在遇到<body>标签时才开始呈现内容
+  主要组成 
+    渲染引擎: 将网页代码渲染成图像呈现,也叫浏览器内核
+      PS:浏览器核心的部分是“Rendering Engine”,“渲染引擎”,一般称为“浏览器内核”。
+        负责对网页语法的解释,如HTML、JavaScript并渲染（显示）网页。
+        渲染引擎决定了浏览器如何显示网页的内容以及页面的格式信息。
+        不同的浏览器内核对网页编写语法的解释也有不同,
+        因此同一网页在不同的内核的浏览器里的渲染（显示）效果也可能不同.
+      Blink    Chrome内核
+        Blink是一个由Google和Opera Software开发的浏览器排版引擎,
+        Google计划将这个渲染引擎作为Chromium计划的一部分。
+        这一渲染引擎是开源引擎WebKit中WebCore组件的一个分支,并且在Chrome（28 及往后版本）、Opera（15 及往后版本）和Yandex浏览器中使用。
+      Webkit   Safari内核,Chrome内核原型,开源
+        它是苹果公司自己的内核,也是苹果的Safari浏览器使用的内核。
+        Webkit引擎包含WebCore排版引擎及JavaScriptCore解析引擎,均是从KDE的KHTML及KJS引擎衍生而来,它们都是自由软件,在GPL条约下授权,同时支持BSD系统的开发。
+        所以Webkit也是自由软件,同时开放源代码。在安全方面不受IE、Firefox的制约,所以Safari浏览器在国内还是很安全的。
+        Google Chrome、360 极速浏览器以及搜狗高速浏览器高速模式也使用Webkit作为内核(在脚本理解方面,Chrome使用自己研发的V8引擎)。
+        WebKit内核常见的浏览器:傲游浏览器3、[1]  Apple Safari (Win/Mac/iPhone/iPad)、Symbian手机浏览器、Android 默认浏览器,
+      Gecko    Firefox内核
+        Netscape6开始采用的内核,后来的Mozilla FireFox也采用了该内核,
+        Gecko的特点是代码完全公开,因此,其可开发程度很高,
+        全世界的程序员都可以为其编写代码,增加功能。
+        IE没有使用W3C的标准,这导致了微软内部一些开发人员的不满；
+        他们与当时已经停止更新了的 Netscape的一些员工一起创办了Mozilla,
+        以当时的Mosaic内核为基础重新编写内核,于是开发出了Gecko。
+        此外Gecko也是一个跨平台内核,可以在Windows、 BSD、Linux和Mac OS X中使用。
+        JavaScript引擎是SpiderMonkey。
+      Trident  IE内核
+        1997 年的IE4中首次被采用,是微软在Mosaic代码的基础之上修改而来的,并沿用到IE11。
+        微软很长时间都并没有更新Trident内核,
+        导致了Trident内核曾经几乎与W3C标准脱节（2005 年）,
+        Trident内核的大量 Bug等安全性问题没有得到及时解决,
+        然后加上一些致力于开源的开发者和一些学者们公开自己认为IE浏览器不安全的观点,
+        也有很多用户转向了其他浏览器,Firefox和Opera就是这个时候兴起的。
+        非Trident内核浏览器的市场占有率大幅提高也致使许多网页开发人员开始注意网页标准和非IE浏览器的浏览效果问题。
+        IE从版本11开始,初步支持WebGL技术。
+        IE8的JavaScript引擎是Jscript,IE9开始用Chakra,
+        这两个版本区别很大,Chakra无论是速度和标准化方面都很出色。
+        Trident内核的常见浏览器有:
+          IE6、IE7、IE8（Trident 4.0）
+          IE9（Trident 5.0）
+          IE10（Trident 6.0）
+        360 安全浏览器
+          1.0-5.0 为Trident
+          6.0 为Trident+Webkit
+          7.0 为Trident+Blink
+        国内的厂商一般把其他内核叫做“高速浏览模式”,而Trident则是“兼容浏览模式”,用户可以来回切换。
+      EdgeHTML Edge
+      Presto   Opera前内核 [已废弃]
+        Opera 12.17 及更早版本曾经采用的内核,现已停止开发并废弃,
+        该内核在2003年的Opera7中首次被使用,
+        该款引擎的特点就是渲染速度的优化达到了极致,然而代价是牺牲了网页的兼容性。
+        Opera现已改用Google Chrome的Blink内核。
+      渲染的四个阶段
+        解析代码: HTML解析DOM,CSS解析为CSSOM,CSS Object Model
+        对象合成: 将DOM和CSSOM合成渲染树,render tree
+        布局    : 渲染树布局 layout
+        绘制    : 将渲染树绘制到屏幕
+        注:并非严格按顺序,可能有交叉,如HTML未下载完已有内容在浏览器中显示出来
+      flow  : 渲染树到网页布局,称为"布局流"
+      paint : 布局到网页显示为"绘制"
+      reflow 和 repaint
+        PS:页面生成后,JS操作和样式表操作都会触发flow和paint,称为"重流"和"重绘"
+          reflow必然要repaint,反之则不然,
+          如改变颜色只会repaint,改变元素的布局则会reflow和repaint,
+          通常,浏览器browser会智能的将reflow和repaint限制在相关子树上, 以减小开销
+        尽量减少重绘的次数和成本
+          优先考虑底层DOM元素的变动而非高DOM;
+          browser会累计DOM变动进行一次性执行,故将DOM操作进行集中处理
+            如:读取或写入DOM,尽量居中不要混杂
+            缓存DOM信息
+            使用CSS class 一次性改变样式,而非一项一项的改变
+          动画时尽量使用absolute 或 fixed 定位,减少对其他元素的影响
+          使用document fragment 操作DOM
+          window.requestAnimationFrame() 推迟代码到下次重流时执行,而非立即要求重流
+            开销大
+            function addHeight(elem){
+              var height1 = elem.clientHeight;
+              elem.style.height = (height * 2) + "px";
+            }
+            allElems.forEach(addHeight);
+            开销小
+            function addHeight(elem){
+              var height1 = elem.clientHeight;
+              window.requestAnimationFrame(function(){
                 elem.style.height = (height * 2) + "px";
-              }
-              allElems.forEach(addHeight);
-              开销小
-              function addHeight(elem){
-                var height1 = elem.clientHeight;
-                window.requestAnimationFrame(function(){
-                  elem.style.height = (height * 2) + "px";
-                })
-              }
-              allElems.forEach(addHeight);
-      JS引擎: 主要作用将网页中的JS代码读取、处理并运行,也叫JS解释器
-        PS:JS为解释型语言,不需编译,由解释器运行
-          好处: 运行和修改方便
-          缺点: 每次运行需要调用解释器,系统开销大,运行速度慢于编译型语言
-          为了提高运行速度,目前浏览器都将JS进行一定程度的编译,
-          生成类似字节码的中间代码,以提高运行速度
-        早期,browser对JS的处理过程:
-          读取: 进行词法分析,lexical analysis ,分解成词元,token
-          对token语法分析,parsing,成"语法树",syntax tree
-          翻译器,translator将syntax tree翻译成字节码bytecode
-          字节码解释器,bytecode interpreter将bytecode转换成机器码machine code
-        JIT,即时编译,Just In Time compiler
-          因为bytecode到machine code的过程低效,bytecode只在运行时编译,
-          且缓存,inline cache编译结果;
-          通常一程序经常用到的只是其中一部分代码,缓存机制让程序执行速度显著提升,
-          不同browser的编译策略不同,如V8直接从syntax tree 到machine code
-        JS虚拟机
-          bytecode不能直接运行,需通过一虚拟机,Virtual Machine 运行,
-          一般也将Virtual Machine 称为JS引擎,
-          JS运行时未必有bytecode,
-          所以JS Virtual Machine 不完全基于bytecode,而是部分基于,
-          只要有可能,就通过JIT将源码source code转换到machine code
-          常用的JS Virtual Machine 
-            Chrome  V8
-            Safari  Nitro
-            Firefox SpiderMonkey
-            IE      Chakra
-            Opera   Carakan
-    浏览器缓存
-      反复的获取同一个URL(如JSONP请求),浏览器为了提高效率会加载缓存,会得到同样的缓存文件.
-      Example: 
-        var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
-        在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
+              })
+            }
+            allElems.forEach(addHeight);
+    JS引擎: 主要作用将网页中的JS代码读取、处理并运行,也叫JS解释器
+      PS:JS为解释型语言,不需编译,由解释器运行
+        好处: 运行和修改方便
+        缺点: 每次运行需要调用解释器,系统开销大,运行速度慢于编译型语言
+        为了提高运行速度,目前浏览器都将JS进行一定程度的编译,
+        生成类似字节码的中间代码,以提高运行速度
+      早期,browser对JS的处理过程:
+        读取: 进行词法分析,lexical analysis ,分解成词元,token
+        对token语法分析,parsing,成"语法树",syntax tree
+        翻译器,translator将syntax tree翻译成字节码bytecode
+        字节码解释器,bytecode interpreter将bytecode转换成机器码machine code
+      JIT,即时编译,Just In Time compiler
+        因为bytecode到machine code的过程低效,bytecode只在运行时编译,
+        且缓存,inline cache编译结果;
+        通常一程序经常用到的只是其中一部分代码,缓存机制让程序执行速度显著提升,
+        不同browser的编译策略不同,如V8直接从syntax tree 到machine code
+      JS虚拟机
+        bytecode不能直接运行,需通过一虚拟机,Virtual Machine 运行,
+        一般也将Virtual Machine 称为JS引擎,
+        JS运行时未必有bytecode,
+        所以JS Virtual Machine 不完全基于bytecode,而是部分基于,
+        只要有可能,就通过JIT将源码source code转换到machine code
+        常用的JS Virtual Machine 
+          Chrome  V8
+          Safari  Nitro
+          Firefox SpiderMonkey
+          IE      Chakra
+          Opera   Carakan
+  浏览器缓存
+    反复的获取同一个URL(如JSONP请求),浏览器为了提高效率会加载缓存,会得到同样的缓存文件.
+    Example: 
+      var url="http://gumball.wickedlysmart.com/?callback=updateSales" + "&random=" + (new Date()).getTime();
+      在URL的末尾增加一个数字,URL的实际访问地址没有变,但浏览器会认为其是新URL
   小技巧 
     通过浏览器地址栏运行HTML代码 [非IE浏览器内核]
       Example:  
@@ -191,129 +190,6 @@
         key   : keydown keyup keypress textInput 
         touch : touchstart touchmove touchend touchcancel
         control : resize scroll zoom focus blur select change submit reset
-    console 对象 
-      PS:console对象为浏览器的实现,包含在浏览器自带的开发工具中, 
-        虽然还不是标准,但各大浏览器都原生支持,已成为事实上的标准;
-        由 Internet Explorer 的 JScript 引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
-        NodeJS 沿用了这个标准,提供与习惯行为一致的 console 对象,
-        用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
-        指向Node内置的console模块,提供命令行环境中的标准输入、标准输出功能
-      console.log([val1][, ...])   向标准输出流打印字符并以换行符结束
-        PS: 该方法接收若干 个参数,若只有一个参数,则输出这个参数的字符串形式.
-          若有多个参数,则 以类似于C 语言 printf() 命令的格式输出
-        格式占位符
-          PS:log方法将占位符替换以后的内容,显示在console窗口
-          %s     字符串
-          %d     整数
-          %i     整数
-          %f     浮点数
-          %o     对象的链接
-          %c     CSS格式字符串
-            对输出的内容进行CSS渲染
-            console.log('%c this text is styled!','color:red;font-size:24px;');
-            输出的内容将显示为红色的24px的字体
-          Example:
-            console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
-            上面代码的 %s 表示字符串的占位符
-    
-            两种参数格式,可以结合在一起使用.
-            console.log(" %s + %s ", 1, 1, "= 2")
-            // 1 + 1  = 2
-      console.info([val][, ...])   返回信息性消息 
-        这个命令与 console.log 差别并不大,
-        除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
-      console.error([val1][, ...]) 输出错误消息 
-        控制台在出现错误时会显示是红色的叉子.
-      console.warn([val1][, ...])  输出警告消息 
-        控制台出现有黄色的惊叹号.
-      console.dir(obj[, options])  用来对一个对象进行检查[inspect],并以易于阅读和打印的格式显示.
-        可读性较好,一般用于输出显示DOM节点
-        Node中可指定以高亮形式输出
-          console.dir(obj,{color:true})
-      console.trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
-        这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
-      console.assert([bool][,val]) 用于判断某个表达式或变量是否为真 
-        PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
-          只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-        bool  布尔值,默认为false 
-        Example:
-          若为假,则显示一条事先指定的错误信息
-          console.assert(true === false,"判断条件不成立")
-          // Assertion failed: 判断条件不成立
-          判断子节点的个数是否大于等于500.
-          console.assert(list.childNodes.length < 500, "节点个数大于等于500")
-      console.debug(val)     
-      console.dirxml()             主要用于以目录树形式显示DOM节点
-        若参数不是DOM节点,则等同于dir
-      console.table()              对于某些复合类型的数据将其转为表格显示
-        Example: :
-        var languages = [
-          { name: "JavaScript", fileExtension: ".js" },
-          { name: "TypeScript", fileExtension: ".ts" },
-          { name: "CoffeeScript", fileExtension: ".coffee" }
-        ];
-        console.table(languages);
-        上面代码的language,转为表格显示如下.
-       (index) name fileExtension
-        0 "JavaScript" ".js"
-        1 "TypeScript" ".ts"
-        2 "CoffeeScript" ".coffee"
-        复合型数据转为表格显示的条件是,必须拥有主键.
-          对于上面的数组来说,主键就是数字键.对于对象来说,主键就是它的最外层键.
-          var languages = {
-            csharp: { name: "C#", paradigm: "object-oriented" },
-            fsharp: { name: "F#", paradigm: "functional" }
-          };
-          console.table(languages);
-          上面代码的language,转为表格显示如下.
-         (index) name paradigm
-          csharp "C#" "object-oriented"
-          fsharp "F#" "functional"
-      console.count([val])         用于计数,输出被调用的次数 
-        接收一个参数作为标签,进行相应的次数统计
-        Example:
-          console.count('a');  // a: 1
-          console.count('a');  // a: 2
-        
-          for (var i = 0; i < 5; i++) { 
-            console.count(); 
-          }
-          // : 1
-          // : 2
-          // : 3
-          // : 4
-          // : 5
-      console.clear()         清空控制台,光标回到第一行
-      ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
-      console.time()         计时开始
-      console.timeEnd(val)   计时结束
-        val 为计时器的名称
-        Example:
-          console.time();
-          var array = new Array(1000000);
-          for(var i = array.length - 1; i >= 0; i--) {
-            array[i] = new Object();
-          };
-          console.timeEnd("aoo"); 
-          // aoo: 242ms
-        调用timeEnd方法之后,console窗口会显示'计时器名称: 所耗费的时间'.
-      ◆性能测试
-      console.profile() 
-      console.profileEnd()   
-      ◆分组显示
-      console.group(val)   '组'的开始
-      console.groupEnd()   '组'的结束
-        str  作为'组'的名称
-        在group和groupEnd之间打印的信息可作为一个'组'进行展开或折叠,在输出大量信息时有用
-      修改/定义console方法 
-        因为console对象的所有方法,都可以被覆盖
-        
-        使用自定义的console.log方法,在显示结果添加当前时间
-        ["log", "info", "error"].forEach(function(method) {
-          console[method] = console[method].bind(console,new Date().toISOString());
-        });
-        console.log("出错了！");
-        // 2014-05-18T09:00.000Z 出错了！
     断点调试 [Chrome浏览器下] 
       f12 - Sources 进入断点调试界面
       在程序中添加语句 debuger; 相当于在语句处添加断点
@@ -489,63 +365,6 @@
   Firefox会先将无样式的部分HTML渲染,等CSS加载后在显示完整的部分HTML,
   Chrome会等CSS加载后显示完整的部分HTML,之前不显示
   故将CSS置于head中 
-浏览器 
-  URL中的参数 lastreporttime 
-    在URL末尾增加一个 lastreporttime 参数,表示只会加载该参数时间之后的报告.
-    Example:
-    'http://gumball.wickedlysmart.com/?lastreporttime=1302212903099'
-    指定的时间为一串数字,单位为毫秒.
-  浏览器检测 
-    检测是否为 IE6、7、8、9 [不支持 IE10、11]
-      var isIE = function(num){
-        var b = document.createElement('b')
-        b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->'
-        return b.getElementsByTagName('i').length === 1
-      }
-      alert(
-        'ie6:' + isIE(6) + '\n' + 
-        'ie7:' + isIE(7) + '\n' + 
-        'ie8:' + isIE(8) + '\n' + 
-        'ie9:' + isIE(9) + '\n' + 
-        // 'ie10:' + isIE(10) + '\n' + 
-        // 'ie11:' + isIE(11) + '\n' + 
-        'ie:' + isIE()
-      );
-  网页多语言支持 
-    采用统一编码UTF-8方式编码
-      所以对提供了多语言版本的网站来说,Unicode字符集应该是最理想的选择。
-      它是一种双字节编码机制的字符集,不管是东方文字还是西方文字,在Unicode中一律用两个字节来表示,
-      因而至少可以定义65536个不同的字符,几乎可以涵盖世界上目前所有通用的语言的每一种字符。
-      所以在设计和开发多语言网站时,一定要注意先把非中文页面的字符集定义为“utf-8”格式,
-      这一步非常重要,原因在于若等页面做好之后再更改字符集设置,可说是一件非常非常吃力不讨好的工作,
-      有时候甚至可能需要从头再来,重新输入网站的文字内容。
-    多语言网站实现计划 :
-      静态:就是为每种语言分辨准备一套页面文件,
-        通过文件后缀名来区分不同语言,
-          例如对于首页文件index_en.htm供给英语界面,index_gb.htm供给简体中文界面,index_big.htm供给繁体中文界面
-        通过子目录来区分不同语言。
-          或者是en/index.htm供给英语界面,gb/index.htm供给简体中文界面,big/index.htm供给繁体中文界面
-        一旦用户选择了需要的语言后,主动跳转到相应的页面,首页以下其他链接也是按照同样方法处理。
-        从保护的角度来看,通过子目录比通过文件后缀名来区分不同语言版本显得要简略明了
-      动态:站点内所有页面文件都是动态页面文件（PHP,ASP等）而不是静态页面文件,
-       在需要输出语言文字的处所同一采用语言变量来表现,这些语言变量可以根据用户选择不同的语言赋予不同的值,
-       从而实现在不同的语言环境下输出不同的文字。
-        例如:语言变量ln_name,当用户选择的语言是英语时赋值为“Name”,
-        当用户选择的语言是简体中文时赋值为“姓名”,这样就可以适应不同语言时的输出。
-      优缺点
-        采用静态方法的长处是页面直接输出到客户端,不需要在服务器上运行,占用服务器的资源比拟少,
-          系统能够支撑的并发连接数较多,
-          毛病是要为每种语言制作一套页面文件,很多内容即使是和语言无关的也要分不同语言来存储,占用的存储空间较多。
-        采用动态方法和静态方法的优毛病正好相反,它的长处是动态页面文件只有一套,不同语言的文字应用语言变量来存储,
-          和语言无关的内容只存储一份,占用的存储空间较少,并且扩大新语言比拟轻易,
-          毛病需要在服务器上运行,然后把成果输进到客户端,占用服务器的资源比拟多,系统能够支撑的并发连接数较少。
-  
-    根据navigator.language我们可以获取到浏览器的语言设置
-    如果是中文的话返回的是zh-CN, 英文的话返回的可能是en,en-US等其它的
-    一般情况下（一般系统和浏览器的语言一致的。当操作系统是中文,浏览器是英文,只能用服务器脚本去判断）是没有问题啦。
-    navigator.language对IE的支持不是很好,IE的话可以选用navigator.userLanguage判断操作系统的语言      
-  在浏览器中,length 的值默认为0  why?
-网页的加载过程 
 JS代码引入、执行 
   嵌入式:html标签中插入,作为某个元素的属性值或超链接的href属性值.
     // 通过一个链接弹出一个确认框

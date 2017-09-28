@@ -349,6 +349,7 @@ window 表示浏览器的一个实例
           xhr.send(window.atob(data));
         }
   ◆其他接口 
+  length  当前窗口中frames的数量[包括iframe],等价于 window.frames.length 
   window.Notification   浏览器通知接口[DiBs HTML5] 
     PS:用于在用户的桌面,而非网页上显示通知信息, 
       桌面电脑和手机都适用,比如通知用户收到了一封Email。
@@ -833,9 +834,12 @@ window的属性对象
           }
         }
         console.log(hasIEPlugin('ShockwaveFlash.ShockwaveFlash'));
-    navigator.language; 浏览器的主语言
+    navigator.language  获取到浏览器的语言设置 [IE11+] 
+      'zh-CN'
+      'en'
+      'en-US'
+    navigator.userLanguage   操作系统的默认语言 [IE5+]
     navigator.systemLanguage; 操作系统的主语言
-    navigator.userLanguage;   操作系统的默认语言
     navigator.preference(); 设置用户的首选项
     navigator.userProfile; 借以访问用户个人信息的对象
     navigator.mimeTypes; 在浏览器中注册的MIME类型数组
@@ -1042,6 +1046,127 @@ window的属性对象
         var dataURL = canvas.toDataURL("image/"+ext);
         return dataURL;
       }
+  window.console 浏览器开发工具中用于调试的对象  
+    PS: 由IE的JScript引擎提供的调试工具,后来逐渐成为浏览器的事实标准.
+      NodeJS沿用了这个标准,提供与习惯行为一致的console对象,
+      用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
+    console.log([val1][, ...])   向标准输出流打印字符并以换行符结束
+      PS: 该方法接收若干个参数,若只有一个参数,则输出这个参数的字符串形式.
+        若有多个参数,则以类似于C语言 printf() 命令的格式输出
+      格式占位符
+        PS:log方法将占位符替换以后的内容,显示在console窗口
+        %s     字符串
+        %d     整数
+        %i     整数
+        %f     浮点数
+        %o     对象的链接
+        %c     CSS格式字符串
+          对输出的内容进行CSS渲染
+          console.log('%c this text is styled!','color:red;font-size:24px;');
+          输出的内容将显示为红色的24px的字体
+        Example:
+          console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
+          上面代码的 %s 表示字符串的占位符
+  
+          两种参数格式,可以结合在一起使用.
+          console.log(" %s + %s ", 1, 1, "= 2")
+          // 1 + 1  = 2
+    console.info([val][, ...])   返回信息性消息 
+      这个命令与 console.log 差别并不大,
+      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
+    console.error([val1][, ...]) 输出错误消息 
+      控制台在出现错误时会显示是红色的叉子.
+    console.warn([val1][, ...])  输出警告消息 
+      控制台出现有黄色的惊叹号 
+    console.dir(obj[, options])  用来对一个对象进行检查[inspect],并以易于阅读和打印的格式显示 
+      可读性较好,一般用于输出显示DOM节点
+      Node中可指定以高亮形式输出
+        console.dir(obj,{color:true})
+    console.trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
+      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
+    console.assert([bool][,val]) 用于判断某个表达式或变量是否为真 
+      PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
+        只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+      bool  布尔值,默认为false 
+      Example:
+        若为假,则显示一条事先指定的错误信息
+        console.assert(true === false,"判断条件不成立")
+        // Assertion failed: 判断条件不成立
+        判断子节点的个数是否大于等于500.
+        console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+    console.dirxml()             主要用于以目录树形式显示DOM节点
+      若参数不是DOM节点,则等同于dir
+    console.table()              对于某些复合类型的数据将其转为表格显示
+      Example: :
+      var languages = [
+        { name: "JavaScript", fileExtension: ".js" },
+        { name: "TypeScript", fileExtension: ".ts" },
+        { name: "CoffeeScript", fileExtension: ".coffee" }
+      ];
+      console.table(languages);
+      上面代码的language,转为表格显示如下.
+     (index) name fileExtension
+      0 "JavaScript" ".js"
+      1 "TypeScript" ".ts"
+      2 "CoffeeScript" ".coffee"
+      复合型数据转为表格显示的条件是,必须拥有主键.
+        对于上面的数组来说,主键就是数字键.对于对象来说,主键就是它的最外层键.
+        var languages = {
+          csharp: { name: "C#", paradigm: "object-oriented" },
+          fsharp: { name: "F#", paradigm: "functional" }
+        };
+        console.table(languages);
+        上面代码的language,转为表格显示如下.
+       (index) name paradigm
+        csharp "C#" "object-oriented"
+        fsharp "F#" "functional"
+    console.count([val])         用于计数,输出被调用的次数 
+      接收一个参数作为标签,进行相应的次数统计
+      Example:
+        console.count('a');  // a: 1
+        console.count('a');  // a: 2
+      
+        for (var i = 0; i < 5; i++) { 
+          console.count(); 
+        }
+        // : 1
+        // : 2
+        // : 3
+        // : 4
+        // : 5
+    console.clear()         清空控制台,光标回到第一行
+    ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
+    console.time()         计时开始
+    console.timeEnd(val)   计时结束
+      val 为计时器的名称
+      Example:
+        console.time();
+        var array = new Array(1000000);
+        for(var i = array.length - 1; i >= 0; i--) {
+          array[i] = new Object();
+        };
+        console.timeEnd("aoo"); 
+        // aoo: 242ms
+      调用timeEnd方法之后,console窗口会显示'计时器名称: 所耗费的时间'.
+    ◆性能测试
+    console.profile()     
+    console.profileEnd()   
+    ◆分组显示
+    console.group(val)   '组'的开始
+    console.groupEnd()   '组'的结束 
+      str  作为'组'的名称
+      在group和groupEnd之间打印的信息可作为一个'组'进行展开或折叠,在输出大量信息时有用
+    ◆其他 
+      console.debug(val)     Chrome不支持 
+    修改/定义console方法 
+      因为console对象的所有方法,都可以被覆盖
+      
+      使用自定义的console.log方法,在显示结果添加当前时间
+      ["log", "info", "error"].forEach(function(method) {
+        console[method] = console[method].bind(console,new Date().toISOString());
+      });
+      console.log("出错了！");
+      // 2014-05-18T09:00.000Z 出错了！
   客户端检测[详细见 JavaScript高级程序设计 228 页] 
     PS:
       由于浏览器之间的差异,客户端检测除了是一种补救措施外,
@@ -3524,7 +3649,7 @@ devicelight    设备屏幕亮度变化事件 [HTML5]
     @media (light-level: dim) { /* 暗光环境 */ }
     @media (light-level: normal) { /* 正常光环境 */ }
     @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5]
+deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5] 
   PS:一旦设备的方向发生变化触发
   检测浏览器是否支持该API
     if (window.DeviceOrientationEvent) { /*  支持 */ } 
@@ -3541,8 +3666,6 @@ deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5]
 orientationchange  在屏幕发生翻转时触发[HTML5] 
   window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 -------------------------------------------------------------------------待整理 
-
-
 
 
 

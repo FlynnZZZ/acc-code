@@ -1956,8 +1956,6 @@ Event 事件
         html{
           touch-action: manipulation;
         }
-    
-    
 WeiXin 微信  
   不支持的功能 
     模板字符串  ios中支持,android中不支持[20170124]

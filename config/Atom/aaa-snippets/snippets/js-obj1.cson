@@ -223,7 +223,7 @@
     'prefix': 'console'
     'body': 'console'
   '-cso console.log("$1--",$2)':
-    'prefix': 'log1'
+    'prefix': 'console.log'
     'body': 'console.log(" --$1 ",$2)'
   '-cso console.log("%c"+$1,"background:#afffee")':
     'prefix': 'log color'

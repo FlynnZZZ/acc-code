@@ -166,16 +166,11 @@ ECMAScript: JS语法核心,提供核心语言功能
         boo.z ="z";
         console.log(boo.z); //z
   ◆基本类型枚举 
-  undefined 不存在的值,或尚未赋值的变量
-    表示一个变量未赋值
-    Undefined 类型只有一个值,即 undefined
-    在声明变量时没有对其初始化,则变量的值就是undefined.
-    Example:
-    typeof undefined; //"undefined"
-    typeof a;         //"undefined"
-    console.log(a);   //报错,a未定义
+  undefined 不存在的值,表示一个变量未赋值,该类型只有一个值,即 undefined
+    在声明变量时没有对其初始化,则变量的值就是 undefined 
+    console.log(typeof undefined);  // "undefined" 
   null      表示一个空对象指针[逻辑角度看],表示什么都没有相当于一个占位符
-    PS:将来用于保存对象的变量,可初始化为null 
+    PS: 将来用于保存对象的变量,可初始化为null 
     Example: :
       console.log(null==undefined);//true ,undefined派生于null
       var val = null;
@@ -1183,9 +1178,8 @@ ECMAScript: JS语法核心,提供核心语言功能
       'number'    数值
       'object'    对象或null
       'function'  函数[不是数据类型,但是可以使用typeof操作符]
-      Example:
+      Example: 
         typeof a;         // "undefined",检测未声明的变量不会报错  
-        typeof undefined; // "undefined" 
         typeof "fan";     // 'string'
         typeof NaN;       // "number"
         var nul = null;

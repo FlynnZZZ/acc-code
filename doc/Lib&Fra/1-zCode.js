@@ -634,6 +634,14 @@ PC端
       data[pos*4 +1] =brightness;
       data[pos*4 +2] =brightness;
     }
+  IE6、7、8、9 浏览器检测
+    var isIE = function(num){
+      // num = 6 7 8 9 ,是则返回 true 
+      var b = document.createElement('b')
+      b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->'
+      return b.getElementsByTagName('i').length === 1
+    }
+
 自我实现 
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

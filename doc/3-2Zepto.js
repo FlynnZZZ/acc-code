@@ -19,8 +19,8 @@
     适用于所有的touch(iOS, Android)和pointer事件(Windows Phone)。
   gesture:  在触摸设备上触发 pinch 手势事件。
   stack:   提供 andSelf& end()链式调用方法
-  ios3:    String.prototype.trim 和 Array.prototype.reduce 方法 (如果他们不存在) ，以兼容 iOS 3.x.
-  selector:  实验性的支持 jQuery CSS 表达式 实用功能，比如 $('div:first')和 el.is(':visible')。
+  ios3:    String.prototype.trim 和 Array.prototype.reduce 方法 (如果他们不存在) ,以兼容 iOS 3.x.
+  selector:  实验性的支持 jQuery CSS 表达式 实用功能,比如 $('div:first')和 el.is(':visible')。
   assets:  实验性支持从DOM中移除image元素后清理iOS的内存。
   
   

@@ -484,7 +484,7 @@ CMD'Common Module Definition'通用模块定义
       })
     ]
   webpack.BannerPlugin          给打包后代码添加声明 
-    new webpack.BannerPlugin('版权所有，翻版必究') 
+    new webpack.BannerPlugin('版权所有,翻版必究') 
   webpack.HotModuleReplacementPlugin  热加载 
     需在'webpack-dev-server'的配置中启用'hot'参数,
     还需要在JS模块中执行Webpack提供的API才能实现热加载 

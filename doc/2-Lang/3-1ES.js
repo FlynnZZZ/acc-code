@@ -1,3 +1,14 @@
+JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言 
+  JS本身不提供任何与 I/O[输入/输出]相关的API[如网络、存储和图形等],都靠宿主环境提供,
+  所以JS只合适嵌入更大型的应用程序环境,去调用宿主环境提供的底层API;
+  嵌入JS的宿主环境有多种,最常见的环境就是浏览器,另外还有服务器环境,如Node项目;
+  JS内容划分: 
+    除ECMAScript外,各种宿主环境提供额外的API,以便JS调用;
+    以浏览器为例,它提供的额外API可以分成三大类:
+    浏览器控制类: 操作浏览器,
+    DOM类: 操作网页的各种元素,
+    Web类: 实现互联网的各种功能;
+    若宿主环境是服务器[如Node],则会提供各种操作系统的API,比如文件操作、网络通信等;
 ECMAScript: JS语法核心,提供核心语言功能 
   PS: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
     是宿主环境中脚本语言的国际Web标准;
@@ -8,8 +19,8 @@ ECMAScript: JS语法核心,提供核心语言功能
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
 说明&定义 
   函数和方法的区别 
-    函数基于过程,写法:foo()
-    方法就是对象的函数,基于对象,调用写法:obj.foo()
+    函数基于过程,写法: foo()
+    方法就是对象的函数,基于对象,调用写法: obj.foo()
   '实例': 类的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
   '静态'、'公有'、'私有'、'特权'属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
@@ -94,23 +105,12 @@ ECMAScript: JS语法核心,提供核心语言功能
 ------------------------------------------------------------------------------- 
 ◆数据类型 
 变量&常量&字面量 
-  PS:JS变量是松散类型的,不必定义类型可保存任何类型数据,类似于PHP,
-    每个变量仅仅是一个用于保存值的占位符;
+  PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
     ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
     一个值可由多个变量名称指向,但一个变量只能指向一个值;
-  var valName   定义变量
-    PS:变量定义但未赋值,默认为'undefined'
-    Example: :
-      var box;  // 定义变量box
-      console.log(box); // undefined,未初始化,默认为 undefined
-
-      var a = b = 1; // 不推荐的写法
-      // 相当于
-      var a = 1; b = 1; 
-    是否使用var声明的差别 
-      都相当于给window添加属性,但使用var声明的变量不可delete删除 
-      不使用var定义变量可以使用delete删除
-
+  var valName   定义变量,相当于给window添加属性,但不可'delete'删除 
+    PS: 变量定义但未赋值,默认为'undefined'
+    不用用var声明的变量: 相当于给window添加属性,但可用'delete'删除  
       var aoo = 1; 
       boo = 2;
       console.log(window.aoo); // 1
@@ -122,89 +122,80 @@ ECMAScript: JS语法核心,提供核心语言功能
       console.log(boo);  // 报错 boo 未定义, 因为boo已被删除而无法访问
     全局变量与window属性的差异 
       准确的说应该是显式声明的全局变量无法delete,window属性则可以
-      访问未声明的变量会报错,而未声明window对象的属性则为undefined.
-    重复的var声明:相当于一个赋值操作并不会报错,不推荐使用 
+      访问未声明的变量会报错,而未声明window对象的属性则为undefined 
+    重复的var声明: 相当于赋值操作产生覆盖 
       var box = "fan";
       var box = "abc";  // 相当于 box = "abc";
       console.log(box); // abc
-    连续定义多个变量:中间用逗号隔开 
-      var box="A", age="20", height="175";
-    var 与 逗号,运算符 [参见:逗号运算符,变量声明]     
+    'var' 与','运算符 [参见:逗号运算符,变量声明]     
       (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
       (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
       (var aoo);           // Uncaught SyntaxError: Unexpected token var
       var aoo = 1, window.boo = 2; // Unexpected token .
-  literal字面量[也叫常量或直接量]  直接显示出来的数据值 
-    100            //数字字面量
-    "abc"          //字符串字面量
-    false          //布尔字面量
-    null           //对象字面量
-    /xxx/ig        //正则表达式字面量
-    {x:1,y:2}      //对象字面量表达式
-    [1,2,3,4,5]    //数组字面量表达式
+  'literal'字面量  直接显示出来的数据值 
+    100            // 数字字面量
+    "abc"          // 字符串字面量
+    false          // 布尔字面量
+    null           // 对象字面量
+    /xxx/ig        // 正则表达式字面量
+    {x:1,y:2}      // 对象字面量表达式
+    [1,2,3,4,5]    // 数组字面量表达式
 基本类型&基本包装类型 
-  基本类型:也叫原始类型,直接存储在stack栈中的简单数据段;
-    占据空间小、大小固定,属于被频繁使用的数据;
-    在某些语言中,字符串以对象的形式来表示,因此是引用类型,但ECMAScript中不是
-  基本包装类型:'Boolean''Number''String'三种基本类型的变体,一定条件下有对象的性质 
-    PS:基本包装对象也是对象,如可调用方法、设置属性等对象拥有的操作 
-      通过构造函数显式的创建基本包装对象 
-    隐式创建的包装对象和显式创建的包装对象及区别 
-      区别1:基本包装对象和对象一样按引用进行比较
+  基本类型: 也叫原始类型,存储在'stack'栈中,占据空间小、大小固定 
+  基本包装类型: 基本类型的变体,一定条件下有对象的性质 
+    PS: 基本包装对象也是对象,如可调用方法、设置属性等对象拥有的操作 
+      可通过构造函数显式的创建基本包装对象 
+    隐式创建和显式创建包装对象的区别:  
+      基本包装对象和对象一样按引用进行比较 
         var a1 = "test";
         var a2 = new String("test");  // 对象字符串
         console.log(a1 == a2);//true
         console.log(a1 === a2);//false
-      区别2: 作用时限 
-        隐式创建的包装对象其对象性质是临时性的,如访问属性或方法时,此后其对象性质失效
-        而显示创建的包装对象则一直存在
+      作用时限: 隐式创建的包装对象其对象性质是临时性的 
         var aoo ="abc";
-        aoo.z ="z"; //瞬时存在包装对象,所以不会报错,但后续访该对象被丢弃
-        console.log(aoo.z); //undefined ,上一次隐式创建的包装对象用完就消失了
+        aoo.z ="z"; // 瞬时存在包装对象,所以不会报错,但后续访该对象被丢弃
+        console.log(aoo.z); // undefined 
+        // 上一次隐式创建的包装对象用完就消失了
         // 此次访问其z属性又隐式创建了包装对象但并未定义,所以为undefined
-        var boo =new String("abc");
-        boo.z ="z";
-        console.log(boo.z); //z
+        var boo = new String("abc");
+        boo.z = "z";
+        console.log(boo.z); // z
   ◆基本类型枚举 
-  undefined 不存在的值,表示一个变量未赋值,该类型只有一个值,即 undefined
+  undefined 表示未定义的值,转为数值时为NaN,该类型只有一个值,即 undefined 
     在声明变量时没有对其初始化,则变量的值就是 undefined 
     console.log(typeof undefined);  // "undefined" 
-  null      表示一个空对象指针[逻辑角度看],表示什么都没有相当于一个占位符
-    PS: 将来用于保存对象的变量,可初始化为null 
-    Example: :
-      console.log(null==undefined);//true ,undefined派生于null
-      var val = null;
-      console.log(typeof val);  // object
+  null      表示"无"的对象,转为数值时为0 
+    PS: 将来用于保存对象的变量,可初始化为 null 
+    Example: 
+      console.log(null === null ); // true 
+      console.log(null==undefined); // true ,undefined派生于null
       console.log(typeof null); // object
-    判断一个值是否为null 
-      var aoo = null;
-      if(aoo === null) {
-        console.log('is null');
-      }
-  Boolean 布尔值 
-    PS:Boolean类型有两个值[字面量]: true 和 false 
-      ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
-    转换为布尔值 
-      隐式转换为布尔值
-        转换为false的值: undefined null 数值0 或 0.0 NaN 空字符串""
-        其余全部转换为true
-        Example:
-          var box = ''; 
-          //条件语句中()内必须是布尔值
-          if(box){ console.log('真');}
-          else{ console.log('假');} // 假
-          
-          console.log(!0,!1); // true false
-      Boolean() 显式转换为布尔值 
+  ★基本包装类型 
+  Boolean 布尔值: 包含 true 和 false 两个值
+    PS: ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
+    隐式转换为布尔值 
+      转换为 false 的值: undefined null 0 或 0.0 NaN "" 
+      其余全部转换为 true
+      Example:
+        var box = ''; 
+        //条件语句中()内必须是布尔值
+        if(box){ 
+          console.log('真');
+        }
+        else{ 
+          console.log('假');
+        } 
+        
+        console.log(!0,!1); // true false
+    Boolean() 显式转换为布尔值 
   Number  数值 
-    PS:Number类型包含两种数值:整型和浮点型, [不同于C语言]JS中整数相除可以到浮点数 
-      可以保存+0 和 -0,且 +0 === -0;
+    PS: 可以保存+0 和 -0,且 +0 === -0;
     数值进制 
-      PS:在进行算术计算时,所有八进制和十六进制表示的数值都将被转换成十进制数值
+      PS: 在进行算术计算时,所有八进制和十六进制表示的数值都将被转换成十进制数值
       十进制
-      八进制     使用0开头,且最大数值不超过7
+      八进制     使用0开头,且最大数值不超过7 
         若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
-        八进制字面量在严格模式下是无效的,会导致支持的JavaScript引擎抛出错误
+        八进制字面量在严格模式下是无效的,会导致支持的JS引擎抛错 
       十六进制数 必须使用0x或0X开头,最大字符不超过f
     科学计数 
       e E 可大写,可小写
@@ -214,17 +205,16 @@ ECMAScript: JS语法核心,提供核心语言功能
       2e3;  //2000
       0.000000005; //5e-9
     浮点类型 
-      PS:浮点数值中必须包含一个小数点,并且小数点后面至少有一位数字.
-      浮点数可省略前导0,但不推荐使用
-        var box=3.8;
-        var box=.8;  //有效,但不推荐此写法
-      浮点型自动转化为整型
-        保存浮点数值需要的内存空间比整型数值大两倍,
+      PS: 浮点数值中必须包含一个小数点,并且小数点后面至少有一位数字 
+      浮点数可省略前导0,但不推荐使用 
+        var box = 3.8;
+        var box = .8;  // 有效,但不推荐此写法
+      浮点型自动转化为整型: 保存浮点数值需要的内存空间比整型数值大两倍,
         ECMAscript会自动将可以转换为整型的浮点数值转换成整型
-        var box1=8.;    //小数点后面没有值,转换为8
-        var box2=8.0;   //小数点后面是0,转换为8
-        console.log(box1);   //8
-        console.log(box2);   //8
+        var box1 = 8.;    // 小数点后面没有值,转换为8
+        var box2 = 8.0;   // 小数点后面是0,转换为8
+        console.log(box1);   // 8
+        console.log(box2);   // 8
       浮点数值的精度 
         最高精度是17位小数,但算术运算中可能会不精确.
         // 不要使用浮点数做判断
@@ -243,30 +233,29 @@ ECMAScript: JS语法核心,提供核心语言功能
           console.log(a);  // NaN
           NaN+1;           // NaN
           console.log(NaN == NaN); // false
-    静态属性
+    静态属性 
       Number.MAX_VALUE           最大值,1.7976931348623157e+308
       Number.MIN_VALUE           最小值,5e-324
       Number.NEGATIVE_INFINITY   -Infinity
       Number.POSITIVE_INFINITY   Infinity
       Number.NaN;                NaN
-    转换为数值 
+    转换为数值  
       隐式转换为数值 
-        undefined转换为NaN;
-        null、false转换为0;
-        true转换为1;
+        undefined 转换为 NaN;
+        null、false 转换为 0;
+        true 转换为 1;
         Example:
         console.log(1*"12");  // 12,字符串隐式转换为数值
         console.log(1+"12");  // 112,数值隐式转换为字符串
 
-        var obj ={aoo:1,boo:2};
+        var obj = {aoo:1,boo:2};
         obj.valueOf(); // Object {aoo: 1, boo: 2}
-        obj.valueOf =function(){ return 100; };
+        obj.valueOf = function(){ return 100; };
         +obj; // 100
       通过 Number() parseInt() 和 parseFloat() 显示转换为数值 [详见'Global']
   String  字符串 
-    PS: 表示若干个个16位Unicode字符组成的字符序列;使用引号引起来,无特殊含义; 
-      双引号或单引号,两种表示方法没有任何区别,但必须成对出现;
-    特殊字符:可能引起歧义的特殊字符字面量,也叫转义序列  
+    PS: 表示若干个个16位Unicode字符组成的字符序列;可使用双引号或单引号,但必须成对出现;
+    特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
       PS: 有些符号不便放在引号中,如引号、换号符等,需要进行转义,作为一般字符的扩展;
       ★常用特殊字符:
         '\"' 双引号
@@ -279,11 +268,11 @@ ECMAScript: JS语法核心,提供核心语言功能
         '\f' 换页符
         '\v' 垂直制表符
         '\\' \反斜杠字符
-        '\123' 由从0到377最多三位八进制数表示的'Latin-1'字符 
+        '\123'   由从0到377最多三位八进制数表示的'Latin-1'字符 
           PS: 严格模式下,不能使用八进制转义字符。
           '\251' 版权符号的八进制序列 
           '\55'  "-"
-        '\x00' 由从00和FF的两位十六进制数字XX表示的'Latin-1'字符 
+        '\x00'   由从00和FF的两位十六进制数字XX表示的'Latin-1'字符 
           '\xA9'   版权符号的十六进制序列 
         '\u1234' 由四位十六进制数字表示的Unicode序列字符 
           '\u00A9' 版权符号 
@@ -291,7 +280,7 @@ ECMAScript: JS语法核心,提供核心语言功能
           '\u{2F804}' 相当于Unicode转义字符\uD87E\uDC04的简写,'你' 
       引号中,\后面的字符有特殊意义,可出现在字符串的任何位置,作为一个字符来解释 
         '\t\n\n'.length; // 3
-      Example:
+      Example: 
         console.log("read \"book\""); // read "book"
     创建字符串 
       'xx' 字面量法创建
@@ -305,40 +294,37 @@ ECMAScript: JS语法核心,提供核心语言功能
         str;      //"a"
     其他类型转换为字符串 
       隐式转换为字符串 
-        使用 空字符+其他值 ""+value
+        ""+val
         undefined  "undefined"
         true       "true"
         false      "false"
         null       "null"
         NaN        "NaN";
-        数值转换为数值本身[数字字符串] 
-        其余对象,若存在这个对象则转换为toString()方法的值,否则转换为undefined.
+        数值转换为数值本身,数字字符串 
+        其余对象,通过其'toString'方法转换 
           Example: :
-          var obj ={aoo:1,boo:2};
-          obj.toString(); // "[object Object]"
-          obj.toString =function(){ return "hello"; }; // 自定义该对象的toString方法
-          "a" + obj; // "ahello"
-      val.toString()、String(val) 显式转换 
+          var obj = {aoo:1,boo:2};
+          console.log(obj.toString());  // "[object Object]"
+          obj.toString = function(){    // 自定义该对象的toString方法
+            return "hello"; 
+          }; 
+          console.log('a'+obj);  // "ahello"
+      obj.toString()、String(val) 显式转换 
     Exp: 
       数值字符串比较其数值大小,采用相减的方式 
         var str1 = '9';
         var str2 = '100';
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
-引用类型:Object对象 
-  PS:引用类型就叫对象[SlPt];'ECMA-262'定义为:无序的名值的合集 
-    对象一般没有长度,具有多种属性的内容结构,是一组数据和功能的集合 
-    与C++、Java不同,JS是一种基于原型的编程语言,没有类,而把构造函数用作类 
-    对象由属性和值构成,值可以为基本值、对象或函数等任何类型 
-    JS中几乎所有的事物都是对象,对象是拥有属性和方法的数据 
-    概念类似的有:python的字典,C/C++的散列表,Java的HashMap,PHP的关联数组等 
+引用类型: Object对象 
+  PS: 'ECMA-262'定义为:无序的名值的合集,一般没有长度,是一组数据和功能的集合 
     对象的种类: JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
-  'key-val'键值对表现形式 
-    PS:对象的每一个属性都是用一个名称来标记的;类似数组的表现形式,但无长度属性
-    'key'键 字符串类型,属性名或方法名 
-      可为任何字符[不只是合法的变量名]
-      需用引号的情况:包含除'字母' '数字' '_'以外的字符特殊字符,或以数字开头,或为JS保留字;
-      Example:
+  'key-val'键值对表现形式: 对象成员都是用一个名称来标记的  
+    PS: 访问对象不存在的属性,不会报错,返回值为'undefined' 
+      对象默认是可扩展的,可以向对象中添加、删除属性和方法
+    'key'键  str,属性名或方法名,
+      需用引号的情况: 非合法的变量名,或包含除特殊字符,或以数字开头,或为JS保留字;
+      Example: 
         var aoo = { "d sd ":1 }
         console.log(aoo["d sd "]); // 1
         
@@ -348,80 +334,36 @@ ECMAScript: JS语法核心,提供核心语言功能
         console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
         console.log(obj[{}]); // 2 
         console.log(obj[{b:3}]); // 2 
-    'val'值 属性值或方法/函数 
-      值可为任意类型值及单表达式
+    'val'值  any/expr,属性值或方法/函数   
       var obj = {
         key1 : new Date().getHours()
       }
       console.log(obj); // {key1: 21} 
+    obj[key]  读写属性值 
+      key    expr,系统将自动转化为字符串 
+    obj.key   读写属性值,
+      PS: 属性名不是一个合法的变量名时,只能使用中括号的形式访问;
+    obj.key() 方法调用 
   创建对象 
     obj = {}  字面量创建对象 
       var box = null  // 初始化对象
       var obj = {}    // 空对象,没有任何属性的对象
       var obj = {key1:val1,...}   // 名值对间使用逗号隔开
     obj = new Object(arg) 构造函数创建对象 
-      PS: 若无参数可省略括号 new Object; 不推荐使用
-      arg  参数,可为num、str、bol、obj及简单表达式等 
+      PS: 若无参数可省略括号 new Object 但不推荐使用
+      arg  any/expr,用于创建对象的参数  
+      Example: 
         var obj1 = new Object(2); // Object类型,值是2
-        console.log(obj1,obj1+2);      
-        //  Number {[[PrimitiveValue]]: 2}  
-        // 4 可以和普通变量运算,会隐式转换 
+        console.log(obj1); //  Number {[[PrimitiveValue]]: 2}  
+        console.log(obj1+2); // 4 可以和普通变量运算,会隐式转换 
         var obj2 = {a:1} 
         console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
       
         console.log(new Object({x:1}));  // Object {x : 1} 
-      构造函数创建对象的过程 
-        1 创建一个新对象'newObj' 
-        2 将构造函数的作用域赋值给'newObj',因此this就指向了'newObj';
-        3 执行构造函数中的代码,为'newObj'添加属性;
-        4 返回'newObj'
-    obj = new Foo() 自定义构构造函数[类]实例化对象 
-      构造函数生成对象的原理 
-        若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
-        若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
-        即返回值的优先级更高
-        var Foo = function(){
-          this.aoo = 1;
-          this.boo = 2;
-        }
-        var Goo = function(){
-          this.aoo = 1;
-          this.boo = 2;
-          return {a:'a'}
-        }
-        var obj1 = new Foo();
-        var obj2 = new Goo();
-        console.log(obj1,obj2); // Foo {aoo: 1, boo: 2}  Object {a: "a"}
-      未使用'new'实例化对象时,导致'window'属性意外增加 
-        直接执行构造函数,使内部的'this'指向全局对象window,
-        导致所有绑定在this上面的变量,都变成全局变量
-        function Foo(arg1,arg2){ 
-          this.aoo = arg1; 
-          this.boo = arg2; 
-        }
-        var obj = Foo(2,3);
-        console.log(aoo,boo); // 2,3 
-    obj = foo()     工厂模式创建对象 
-      PS: 工厂模式使软件领域一种广为人知的设计模式 
-      function createObject(name,age){    // 创建工厂函数 
-        var obj = new Object();           //创建对象
-        obj.name = name;                  //添加属性
-        obj.age = age;
-        obj.run = function(){             //添加方法
-          return this.name+this.age+"运行中";
-        };
-        return obj;                       //返回对象引用
-      }
-      var aoo = createObject("lee",100);       //创建第一个对象
-      var boo = createObject('jack',200);      //创建第二个对象
-      aoo.run();    //"lee100运行中"
-      boo.run();    //"jack200运行中"
-      缺点: 无法继承; 无法识别对象的类型 
     obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
       proto   原型对象 [Foo.prototype 或 obj.constructor.prototype]  
         创建出'纯净的空对象',没有原型
-        var obj = Object.create(null);
-        console.log(obj); // {}
+        console.log(Object.create(null)); // {}
         
         var obj = Object.create(Object.prototype); // {} ,创建一个空对象
         
@@ -452,87 +394,79 @@ ECMAScript: JS语法核心,提供核心语言功能
           str += key+'='+obj[key]+'&';
         };
         console.log(str); // aoo=a&boo=b&coo=c&
-  属性&方法 
-    PS: 访问对象不存在的属性,不会报错,返回值为'undefined' 
-      对象默认是可扩展的,可以向对象中添加、删除属性和方法
-    obj[key]  读写属性值 
-      key    可为表达式或变量,系统将自动转化为字符串 
-    obj.key   读写属性值 
-      PS: 属性名不是一个合法的变量名时,不可使用下标法访问,只能使用中括号的形式访问;
-    obj.key() 调用方法 
-    val = obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
-      PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
-      var obj1 = {a:1}
-      obj1.valueOf = function(){
-        return '自定义的转换值'
-      }
-      // 转换成数值
-      console.log(+obj1); // NaN, 
-      // 转换成字符串
-      console.log(''+obj1); // 自定义的转换值, 
-    str = obj.toString() 对象转换为基本类型的默认方法 
-      PS:'null'和'undefined'没有该方法 
-      ◆默认返回值
-      num.toString([radix]); 返回数值的字符串 
-        radix 可选,默认为10,表示进制,一般为 2、8、16 等 
-      foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
-        var foo = function(){
-          console.log(1);
+    'class'类: 语言提供的自定义数据类型的机制,用于创建对象 
+      PS: 类就是对象的数据类型,对象就是类的具象化.
+      仿造类的实现方式:
+      obj = foo()     工厂模式创建对象,返回一个创建的对象  
+        PS: 工厂模式使软件领域一种广为人知的设计模式 
+        function createObject(name,age){    // 创建工厂函数 
+          var obj = new Object();           //创建对象
+          obj.name = name;                  //添加属性
+          obj.age = age;
+          obj.run = function(){             //添加方法
+            return this.name+this.age+"运行中";
+          };
+          return obj;                       //返回对象引用
         }
-        foo.toString(); //"function(){ console.log(1); }"
-      arr.toString(); 将数组元素转换连接为字符串返回
-        和 arr.join('') 效果一样.
-      obj.toString(); 返回"[object Object]"
-        var obj ={};
-        obj.toString(); // "[object Object]"
-      Example:
-        var num = 10;
-        num.toString();    //返回值为'10'
-        num.toString(2);   //返回值为'1010',二进制输出
-
-        "abc".toString();   //"abc"
-        // 123.toString(); // 报错 ,默认将点.作为了小数点
-        123.1.toString(); // "123.1"
-
-        var val1;
-        val1.toString(); //报错,因为val1未初始化为 undefined
-        var val2 = undefined;
-        val2.toString();  //报错
-      自定义转换方法'toString' 
-        var obj1 = {a:1}
-        console.log(obj1.toString()); // [object Object] 
-        obj1.toString = function(){
-          return '自定义的返回值'
+        var aoo = createObject("lee",100);       //创建第一个对象
+        var boo = createObject('jack',200);      //创建第二个对象
+        aoo.run();    //"lee100运行中"
+        boo.run();    //"jack200运行中"
+        缺点: 无法继承; 无法识别对象的类型 
+      obj = new Foo() 自定义构构造函数[类]实例化对象 
+        构造函数生成对象的原理 
+          构造函数创建对象的过程: 
+            1 创建一个新对象'newObj' 
+            2 将构造函数的作用域赋值给'newObj',因此this就指向了'newObj';
+            3 执行构造函数中的代码,为'newObj'添加属性;
+            4 返回'newObj'
+          若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
+          若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
+          即返回值的优先级更高
+          var Foo = function(){
+            this.aoo = 1;
+            this.boo = 2;
+          }
+          var Goo = function(){
+            this.aoo = 1;
+            this.boo = 2;
+            return {a:'a'}
+          }
+          var obj1 = new Foo();
+          var obj2 = new Goo();
+          console.log(obj1,obj2); // Foo {aoo: 1, boo: 2}  Object {a: "a"}
+        未使用'new'实例化对象时,导致'window'属性意外增加 
+          直接执行构造函数,使内部的'this'指向全局对象window,
+          导致所有绑定在this上面的变量,都变成全局变量
+          function Foo(arg1,arg2){ 
+            this.aoo = arg1; 
+            this.boo = arg2; 
+          }
+          var obj = Foo(2,3);
+          console.log(aoo,boo); // 2,3 
+      原型方式,也叫混合的构造函数 
+        用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
+        Example: :
+        function Car(name,color) { this.name=name; this.color=color; }
+        Car.prototype.showColor=function() {
+          console.log(this.color+" is beautiful");
         }
-        console.log(obj1.toString()); // 自定义的返回值 
-        console.log(''+obj1);         // 自定义的返回值 
-        console.log(+obj1);           // NaN  
-        var obj2 = {b:2}
-        obj2.toString = function(){
-          return 100
+        var car1=new Car("aoo","red");
+        var car2=new Car("boo","blue");
+        console.log(car1.color);  //red
+        console.log(car2.color);  //blue
+      动态原型 : 和原型方式相同,唯一不同之处在于对原型方式的优化
+        Example: :
+        function Car(color,name) {
+          this.color=color;
+          this.name=name;
+          if(typeof Car._initialized=="undefined") {
+            Car.prototype.showColor=function(){ alert(this.color); }
+          }
+          Car._initialized=true;
         }
-        console.log(+obj2); // 100
-    str = obj.toLocaleString(); 对象的本地字符串表示 
-      返回对象的字符串、数值或布尔值表示 
-      通常与toString()方法的返回值相同
-      foo.valueOf(); 返回函数对象本身
-    bol = obj.hasOwnProperty(key)        查询属性是否存在[不包括原型链]   
-      key   属性名,需以字符串形式指定
-      Example: 
-        var obj = {aoo:"abc"};
-        obj.hasOwnProperty("aoo"); // true
-    bol = obj.propertyIsEnumerable(key); 查询属性是否能通过'for-in'语句枚举 
-      key   属性名,需以字符串形式指定 
-    bol = obj.isPrototypeOf(targetObj);  查询对象是否为目标对象的原型对象 
-      Example:
-      function Foo(){};
-      var aoo =new Foo();
-      Foo.prototype.isPrototypeOf(aoo);    //true
-      aoo.isPrototypeOf(Foo.prototype);    //fasle 
-      Object.prototype.isPrototypeOf(aoo); //true
-    foo = obj.constructor  创建当前对象的构造函数 
-    proto = obj.__proto__  实例的原型对象 [详见 原型]
-  静态属性方法 
+        该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
+  Object.xx 静态属性/方法 
     arr = Object.keys(obj)  获取对象[不包含原型]所有的属性名 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
       Example:
@@ -579,52 +513,6 @@ ECMAScript: JS语法核心,提供核心语言功能
       PS:在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
         只是对对象操作,对其原型链无影响
     Object.getPrototypeOf(obj); 获取对象的原型链对象 [详见 原型]
-  对象属性的特性 
-    PS:'writable'、'enumerable'、'configurable'只能通过函数来设定 
-    ◆数据属性 描述属性行为 
-    'value'        属性的值,默认为 undefined 
-    'writable'     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
-    'enumerable'   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
-    'configurable' 默认为true,能否配置 
-      包括能否删除、通过'defineProperty'修改属性、修改属性特性等配置 
-      不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
-    ◆访问器属性 
-    'get'  读属性值时的操作,默认返回属性值 
-    'set'  写属性值时的操作,默认返回属性值 
-      var obj = {
-        aoo : "aaa",
-        boo : 111,
-        // 注意此处无冒号
-        get boo (){ 
-          console.log('读取boo中..');
-          return 222; 
-        },
-        set boo (val){ 
-          console.log("boo设置为"+val) 
-        },
-        get coo (){ 
-          console.log('读取coo中..');
-          return 222; 
-        },
-        set coo (val){ 
-          console.log("coo设置为"+val) 
-        },
-      }
-      obj.boo;      // 读取boo中..
-      obj.boo = 11; // boo设置为11
-      obj.coo;      // 读取coo中..
-      obj.coo = 22; // coo设置为22
-      
-      var Foo = function(){ }
-      Object.defineProperty(Foo.prototype,'zoo',{
-        get : function(){
-          return 1;
-        }
-      })
-      var obj = new Foo();
-      console.log(obj); 
-    'enumerable'    能否遍历  
-    'configurable'  能否配置 
     ◆定义&修改
     Object.defineProperty(obj,key,configObj); 定义属性key及其特性[ES5] 
       PS:只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
@@ -779,6 +667,125 @@ ECMAScript: JS语法核心,提供核心语言功能
       console.log('arr1',arr1); // arr1 (2) ["aoo", "boo"]
       var arr2 = Object.getOwnPropertyNames(obj);
       console.log('arr2',arr2); // arr2 (3) ["aoo", "boo", "coo"]
+  Foo.prototype.xx 
+    val = obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
+      PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
+      var obj1 = {a:1}
+      obj1.valueOf = function(){
+        return '自定义的转换值'
+      }
+      // 转换成数值
+      console.log(+obj1); // NaN, 
+      // 转换成字符串
+      console.log(''+obj1); // 自定义的转换值, 
+    str = obj.toString() 对象转换为基本类型的默认方法 
+      PS:'null'和'undefined'没有该方法 
+      ◆默认返回值
+      num.toString([radix]); 返回数值的字符串 
+        radix 可选,默认为10,表示进制,一般为 2、8、16 等 
+      foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
+        var foo = function(){
+          console.log(1);
+        }
+        foo.toString(); //"function(){ console.log(1); }"
+      arr.toString(); 将数组元素转换连接为字符串返回
+        和 arr.join('') 效果一样.
+      obj.toString(); 返回"[object Object]"
+        var obj ={};
+        obj.toString(); // "[object Object]"
+      Example:
+        var num = 10;
+        num.toString();    //返回值为'10'
+        num.toString(2);   //返回值为'1010',二进制输出
+
+        "abc".toString();   //"abc"
+        // 123.toString(); // 报错 ,默认将点.作为了小数点
+        123.1.toString(); // "123.1"
+
+        var val1;
+        val1.toString(); //报错,因为val1未初始化为 undefined
+        var val2 = undefined;
+        val2.toString();  //报错
+      自定义转换方法'toString' 
+        var obj1 = {a:1}
+        console.log(obj1.toString()); // [object Object] 
+        obj1.toString = function(){
+          return '自定义的返回值'
+        }
+        console.log(obj1.toString()); // 自定义的返回值 
+        console.log(''+obj1);         // 自定义的返回值 
+        console.log(+obj1);           // NaN  
+        var obj2 = {b:2}
+        obj2.toString = function(){
+          return 100
+        }
+        console.log(+obj2); // 100
+    str = obj.toLocaleString(); 对象的本地字符串表示 
+      返回对象的字符串、数值或布尔值表示 
+      通常与toString()方法的返回值相同
+      foo.valueOf(); 返回函数对象本身
+    bol = obj.hasOwnProperty(key)        查询属性是否存在[不包括原型链]   
+      key   属性名,需以字符串形式指定
+      Example: 
+        var obj = {aoo:"abc"};
+        obj.hasOwnProperty("aoo"); // true
+    bol = obj.propertyIsEnumerable(key); 查询属性是否能通过'for-in'语句枚举 
+      key   属性名,需以字符串形式指定 
+    bol = obj.isPrototypeOf(targetObj);  查询对象是否为目标对象的原型对象 
+      Example:
+      function Foo(){};
+      var aoo =new Foo();
+      Foo.prototype.isPrototypeOf(aoo);    //true
+      aoo.isPrototypeOf(Foo.prototype);    //fasle 
+      Object.prototype.isPrototypeOf(aoo); //true
+    foo = obj.constructor  创建当前对象的构造函数 
+    proto = obj.__proto__  实例的原型对象 [详见 原型]
+  对象成员的特性 
+    PS: 'writable'、'enumerable'、'configurable'只能通过函数来设定 
+    ◆数据属性 描述属性行为 
+    'value'        属性的值,默认为 undefined 
+    'writable'     默认为true,表示能否[通过直接赋值的方式]修改属性的值 
+    'enumerable'   默认为true,能否[通过'for in'、'Object.keys'等]枚举 
+    'configurable' 默认为true,能否配置 
+      包括能否删除、通过'defineProperty'修改属性、修改属性特性等配置 
+      不可逆性:一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
+    ◆访问器属性 
+    'get'  读属性值时的操作,默认返回属性值 
+    'set'  写属性值时的操作,默认返回属性值 
+      var obj = {
+        aoo : "aaa",
+        boo : 111,
+        // 注意此处无冒号
+        get boo (){ 
+          console.log('读取boo中..');
+          return 222; 
+        },
+        set boo (val){ 
+          console.log("boo设置为"+val) 
+        },
+        get coo (){ 
+          console.log('读取coo中..');
+          return 222; 
+        },
+        set coo (val){ 
+          console.log("coo设置为"+val) 
+        },
+      }
+      obj.boo;      // 读取boo中..
+      obj.boo = 11; // boo设置为11
+      obj.coo;      // 读取coo中..
+      obj.coo = 22; // coo设置为22
+      
+      var Foo = function(){ }
+      Object.defineProperty(Foo.prototype,'zoo',{
+        get : function(){
+          return 1;
+        }
+      })
+      var obj = new Foo();
+      console.log(obj); 
+    'enumerable'    能否遍历  
+    'configurable'  能否配置 
   对象的类型'class' 
     PS: 无直接访问对象类型的方式,可间接通过 Object.prototype.toString 方式来获取
     var type = Object.prototype.toString;
@@ -798,7 +805,7 @@ ECMAScript: JS语法核心,提供核心语言功能
     console.log(getType(new Date())); // Date
   构造函数的原型对象&继承 
     构造函数的原型对象,也是实例的原型链上层对象  
-      PS:构造函数的属性'prototype'是一对象,只有[构造]函数[对象]才有prototype[原型]属性
+      PS: 构造函数的属性'prototype'是一对象,只有函数才有prototype属性 
       作用原理&执行流程 
         每个函数都有一'prototype'属性,,指向一个对象 
         构造函数实例化后的对象都可以'继承'到其'prototype'的属性/方法 
@@ -977,7 +984,7 @@ ECMAScript: JS语法核心,提供核心语言功能
       寄生组合式继承 
       组合继承,也叫伪经典继承: JS中最常用的继承模式 
   JS无多态 
-    假如有多态功能:
+    假如有多态功能: 
       定义多个函数,[函数名相同]区别是传入的参数不同,
       调用时,会根据传入参数的不同自动选择对应的函数执行.
       JS中:会产生覆盖,只有最后一个定义的函数有用.
@@ -1458,7 +1465,7 @@ ECMAScript: JS语法核心,提供核心语言功能
         ""+3+6+"3a";   //"363a",使用空字符串达到字符连接的效果.
         var a=1,b=2,c=3;
         ""+a+b+c;      //"123",数值和字符串+运算为字符串,运算顺序从左到右.
-    ,  逗号运算符: 在一条语句中执行多个操作
+    ,  逗号运算符: 在一条语句中执行多个操作 
       将多个表达式连接为一个表达式,依次执行每个表达式,最终返回值为最后一个表达式的值 
         console.log(1),console.log(2),console.log(3); // 1 2 3
         
@@ -1500,18 +1507,18 @@ ECMAScript: JS语法核心,提供核心语言功能
         for (var i = 0, j = 9; i <= 9; i++, j--) {
           console.log("" + i  + j  );
         }
-      return 处理之后返回: 在返回值前处理一些操作
+      'return'处理之后返回: 在返回值前处理一些操作
         有最后一个表达式被返回,其他的都只是被求值
         function foo () {
           var x = 0;
           return x++, x;
         }
         console.log(foo()); // 1
-      逗号,与 var 关键字 [moIn 关键字-var]
-        1 , 2==3,function(){ console.log(4); }() // 4;
+      配合'var'关键字,同时定义多个变量  
+        var box="A", age="20", height="175";  // 同时定义多个变量 
         var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
         var 2==3;          // Uncaught SyntaxError: Unexpected number
-        aoo = 1, 2==3;     // false
+        1 , 2==3,function(){ console.log(4); }() // 4;
   三元表达式 
     exp1?exp2:exp3;  三元条件运算符, 当exp1为真则执行exp2,否则执行exp3 
       PS:三元条件运算符相当于if语句的简写形式 
@@ -1775,85 +1782,19 @@ ECMAScript: JS语法核心,提供核心语言功能
         if(false) { var boo =1 }else { var coo =2 }
         function foo(){ var doo =3 }
         eoo =4
-◆ECMAScript的两种开发模式 
-OOP,面向对象 
-  PS:面向对象的编程语言最大特色为可编写自己所需的数据类型,以更好的解决问题; 
-    从世界观的角度可以认为:
-    面向对象的基本哲学是认为世界是由各种各样具有自己的运动规律和内部状态的对象所组成的；
-    不同对象之间的相互作用和通讯构成了完整的现实世界
-    语言自带的数据类型有限,要表示复杂的数据,需要有复杂的数据类型.则可使用对象表示复杂类型.
-    传统面向对象语言有一个标志,就是类的概念,通过类可以创建任意多个具有相同属性和方法的对象
-  Class,类: 语言提供的自定义数据类型的机制,用于创建对象 
-    PS: 面向对象语言中'class'关键字声明类,ECMAScript中没有类[ES6中新增] 
-      对象的数据类型是类,对象就是类的具象化.
-    仿造类的实现方式:
-    工厂模式 : 一个返回特定对象类型的函数
-      每次调用工厂函数,都会创建一个新对象
-      Example: :
-      function createCar(name,color) {
-        var car = new Object();
-        car.name = name;
-        car.color = color;
-        car.showColor = function() { 
-          console.log(car.color+" is beautiful"); 
-        }
-        return car;
-      }
-      var car1 = createCar('法拉利',400,"red");
-      car1;              //{name: "法拉利", color: "red"}
-      car1.showColor();  //red is beautiful
-      问题:创建的多个对象之间无共享内容
-    构造函数 : 相当于JS的类,也叫做伪类 
-      Example: :
-      function Car(name,money,color) {
-        this.name=name;
-        this.money=money;
-        this.color=color;
-        this.showColor=function() { console.log(this.color+' is beautiful'); }
-      }
-      var car1 =new Car('法拉利',400,"red");
-      car1;                    //Car {name: "法拉利", money: 400, color: "red"}
-      car1.showColor();         //red is beautiful
-      特点:在构造函数中,内部无创建对象,而是使用this关键字;
-        使用new运算符调用构造函数时,创建对象实例
-    原型方式,也叫混合的构造函数 
-      用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
-      Example: :
-      function Car(name,color) { this.name=name; this.color=color; }
-      Car.prototype.showColor=function() {
-        console.log(this.color+" is beautiful");
-      }
-      var car1=new Car("aoo","red");
-      var car2=new Car("boo","blue");
-      console.log(car1.color);  //red
-      console.log(car2.color);  //blue
-    动态原型 : 和原型方式相同,唯一不同之处在于对原型方式的优化
-      Example: :
-      function Car(color,name) {
-        this.color=color;
-        this.name=name;
-        if(typeof Car._initialized=="undefined") {
-          Car.prototype.showColor=function(){ alert(this.color); }
-        }
-        Car._initialized=true;
-      }
-      该方式 Car.prototype.showColor 只被创建一次,这段代码更像其他语言中的类定义了
-函数式,过程化 
 ------------------------------------------------------------------------------- 
 ◆数据封装类对象 
 Object 一般对象 
   JS中所有类型对象的父对象,包括函数对象 
-    Object.prototype.foo = function(){
-      return '所有类型的对象都会继承到!'
+    Object.prototype.foo = function(){ // 所有类型的对象都会继承到 
+      return '来自 Object'
     }
-    var goo = function(){
-    }
+    var goo = function(){}
     var arr = []
     console.log(goo.foo(),arr.foo()); 
-    // 所有类型的对象都会继承到! 所有类型的对象都会继承到!
-Boolean 布尔对象:处理布尔值的'包装对象' 
+Boolean 布尔对象: 处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
-Number 数值对象:处理数值的'包装对象' 
+Number 数值对象: 处理数值的'包装对象' 
   var num = new Number();  创建数值基本包装对象  
     var box1=new Number();
     var box2=new Number(1);
@@ -1867,7 +1808,7 @@ Number 数值对象:处理数值的'包装对象'
     // 123.toString()  报错
     123.0.toString() // '123'
     (123).toString() // '123'
-String 字符对象:处理字符串的'包装对象' 
+String 字符对象: 处理字符串的'包装对象' 
   var str = new String();  创建字符串基本包装对象  
     var str = 'abcd';
     var strObj = new String(str); 
@@ -2725,9 +2666,14 @@ Function 函数对象
       function test1(){ return 2; }
       function test2(){ return 3; }
       console.log(cal(test1,test2));  //5
-    自调用函数 :立即调用的函数
-      (function(){console.log("hello");})()  //hello
-      (function(a,b){console.log(a+b);})(2,3); //5
+    IIFE,立即执行的函数 
+      (function(window) {
+        // 一个在 window 上下文中调用的自动调用的匿名函数,this的值为window。
+        // do anything
+      })(this);
+      (function(a,b){
+        console.log(a+b);
+      })(2,3); //5
     递归 :一个函数调用本身或者两个函数相互调用 
       PS:递归必须要定义终止条件,否则无限递归.
       Example:
@@ -2761,7 +2707,7 @@ Function 函数对象
         return num+2; 
       }
       console.log(foo(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
-  ◆函数相关属性/方法
+  ◆实例方法属性/方法
   foo.length    获取函数声明时定义的参数的个数 
     Example: :
     function box(a,b){ return a+b; }
@@ -2775,7 +2721,172 @@ Function 函数对象
       foo();
     };
     goo(); // function goo(){ foo(); }
-  foo.prototype [构造]函数的原型对象[详见 原型]
+  foo.prototype [构造]函数的原型对象[详见 原型] 
+  Function.prototype.toString() 返回函数源代码的字符串表示形式 
+  Function.prototype.call(context[,arg1,arg2,...]) 改变上下文this指向 
+    context 在foo函数运行时指定的'this'值,为'null'或'undefined'时,不改变指向 
+      原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象
+    arg     指定的参数列表
+    Example: 
+      var foo = function(){
+        console.log(this);
+      }
+      console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
+      console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
+      console.log(foo.call(null)); // window 
+      console.log(foo.call(undefined)); // window 
+      
+      function add(arg1,arg2){ 
+        return arg1 + this;
+      }
+      var aoo = add.call(7,2,4);
+      console.log(aoo); // 9 
+      
+      console.log({}.toString()); // [object Object]
+      function foo(arg){ 
+        console.log(Object.prototype.toString.call(arg)); 
+      };
+      console.log(foo(7)); // [object Number]
+      等价于
+      function foo(){ 
+        console.log(Object.prototype.toString.call(this)); 
+      };
+      foo.call(7); // [object Number]
+    实现继承的效果 
+      function Pet(words){
+        this.words = words;
+        this.speak = function (){
+          console.log(this.words);
+        };
+      };
+      function Dog(words){
+        Pet.call(this,words);
+      };
+      var dog1 = new Dog('wang!');
+      dog1.speak(); // wang!
+      console.log(dog1); // Dog {words: "wang!", speak: function}
+  Function.prototype.apply(context[,arr/arrLike])  改变上下文this指向 
+    PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
+      都是函数对象的方法,区别在于接收参数的形式不同.
+      改变this的好处:对象不需要与方法发生任何耦合关系
+    context  在foo函数运行时指定的 this 值 
+      非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
+      原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
+    arr/arrLike  数组或类数组对象,函数传入的参数, 
+      其中的数组元素将作为单独的参数传给 foo 函数
+      若该参数的值为null或undefined,则表示不需要传入任何参数 
+      从ES5开始可以使用类数组对象 
+    Example: 
+      function Pet(words){
+        this.words =words;
+        this.speak =function(){console.log(this.words);}
+      }
+      function Dog(words){ Pet.call(this,words); }
+      // 或者 Pet.apply(this,arguments);
+      var dog =new Dog("wang");
+      dog.speak(); // wang
+
+      var box={
+        color:"蓝色",
+        sayColor:function(){ console.log(this.color); }
+      }
+      box.sayColor();  //蓝色,box调用函数 this就表示box
+
+      var aoo = 1;
+      var obj = {aoo: 2};
+      function foo(a){console.log(this[a]);}
+      foo.call(null,"aoo"); // 1
+      foo.call(obj,"aoo");  // 2
+    apply和call继承 
+      将函数指向对象后,对象将获取到函数的属性
+      Example:
+        function foo(){ this.name ="abc" }
+        var obj ={};
+        console.log(obj.name); //undefined
+        foo.call(obj);
+        console.log(obj.name); //abc
+
+        仿造new
+          function Person(name,age){
+            this.name =name;
+            this.age =age;
+          }
+          var p1 =new Person("aoo",19); //使用new 创建
+          function New(func){
+            return function(){
+              var obj ={"__proto__":func.prototype};
+              func.apply(obj,arguments); //使对象获取到传入函数的属性
+              return obj;
+            }
+          }
+          var p2 =New(Person)("boo",18); //使用仿造的new
+          console.log(p1); //Person {name: "aoo", age: 19}
+          console.log(p2); //Person {name: "boo", age: 18}
+  Function.prototype.bind(context[,arg1,arg2,...]) 改变this指向且始终保持绑定状态 'ES5+'
+    PS:bind()方法会创建一个新函数 
+      当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
+      之后的一序列参数将会在传递的实参前传入作为它的参数;
+      返回值为由指定的this值和初始化参数改造后的原函数拷贝;
+    context 绑定函数被调用时,代替原函数运行时的'this'指向 
+      当使用new 操作符调用绑定函数时,该参数无效.
+    arg     绑定函数被调用时,这些参数将将于实参之前传递函数
+    使用bind固定参数值 
+      function foo(arg1,arg2,arg3){ 
+        return arg1 + arg2 + arg3; 
+      };
+      // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
+      var foo1 = foo.bind(undefined,100);
+      foo1(1,2); // 103 ,第二、三个参数分别为1、2
+      var f2 = foo1.bind(undefined,10);
+      foo2(1); // 111
+    使用new时,会忽略绑定 
+      function Foo(){ 
+        this.b = 1; 
+        return this.a; 
+      };
+      var Goo = Foo.bind({a:2});
+      Goo(); // 2
+      new Goo(); // {b:1} 
+      var Hoo = Foo.bind({a:{aoo:3}})
+      Hoo();
+      new Hoo(); // {b:1} 
+    Example: :
+      var x = 9;
+      var obj = {
+        x: 81,
+        getX: function() { return this.x; }
+      };
+      obj.getX(); // 返回 81
+      var foo = obj.getX;
+      foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
+      var goo = foo.bind(obj);
+      goo(); // 返回 81
+
+      var obj = {
+        foo : 1,
+        bar : function(){
+          return this.foo;
+        }
+      }
+      obj.bar();  //1
+      var a =obj.bar;
+      a();        //undefined
+      var b =obj.bar.bind(obj)
+      obj.bar.bind(obj)() // 1
+      b()         //1
+      obj.foo =12;
+      b()         //12
+
+      var person = {
+        name :'a',
+        job : '1',
+        sayHello : function(){ 
+          return this.name + this.job; 
+        }
+      }
+      person.sayHello()     //"a1"
+      var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
+      anotherGuySayHello()  //"b2"
 ◆单体内置对象: 由ECMAScript实现提供的、不依赖宿主环境的对象  
   PS: 这些对象在ECMAScript程序执行之前就已经存在了 
 Global|Window 全局对象 
@@ -3468,11 +3579,9 @@ Error 错误对象
     //    at repl:1:5
     代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
 'JavaScript Object Notation'JSON,JS对象表示法 
-  PS: 一种基于文本、独立于语言的轻量级数据交换格式,
-    利用 JS 中的一些模式来表示结构化数据.
+  PS: 一种基于文本、独立于语言的轻量级数据交换格式 
+    利用JS中的一些模式来表示结构化数据.
     对于整个Web,广泛用于数据的传送和数据的交换.
-    JSON是独立于语言的,也就是说不管什么语言,都可以解析JSON,只需要按照JSON的规则来就行.
-    JSON可以使用javascript内建的方法直接进行解析,转换成javascript对象,非常方便;
     每个JSON对象只能是一个值,即每个JSON文档只能包含一个值;
   JSON值类型和格式
     简单类型: String Number,只能十进制 Boolean Null
@@ -3637,502 +3746,80 @@ Error 错误对象
   应用:
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
-Performance 当前页面加载相关的性能信息 
-  PS: ECMAScript 5 引入“高精度时间戳”这个API,部署在performance对象上。
-    用于精确度量、控制、增强浏览器的性能表现;为测量网站性能,提供以前没有办法做到的精度。
-    它的精度可以达到1毫秒的千分之一,这对于衡量的程序的细微差别,提高程序运行速度很有好处,
-    而且还可以获取后台事件的时间进度。
-    目前,所有主要浏览器都已经支持performance对象,
-    包括Chrome 20+、Firefox 15+、IE 10+、Opera 15+。
-  比如,为了得到脚本运行的准确耗时,需要一个高精度时间戳。
-    传统的做法是使用Date对象的getTime方法。
-    var start = new Date().getTime();
-    // do something here
-    var now = new Date().getTime();
-    var latency = now - start;
-    console.log("任务运行时间:" + latency);
-    不足之处: 
-      精度,getTime方法,以及Date对象的其他方法都只能精确到毫秒级别,
-        想要得到更小的时间差别就无能为力了；
-      局限,这种写法只能获取代码运行过程中的时间进度,无法知道一些后台事件的时间进度,
-        比如浏览器用了多少时间从服务器加载网页。
-  performance.timing  包含了各种与浏览器性能有关的时间数据
-    PS:提供浏览器处理网页各个阶段的耗时。
-    以下属性全部为只读
-    navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳。
-      若没有前一个网页,则等于fetchStart属性。
-      performance.timing.navigationStart   // 13260687
-      表示距离浏览器开始处理当前网页,已经过了13260687毫秒
-    unloadEventStart 若前一个网页与当前网页属于同一个域名,则返回前一个网页的unload事件发生时的Unix毫秒时间戳。
-      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-    unloadEventEnd   若前一个网页与当前网页属于同一个域名,则返回前一个网页unload事件的回调函数结束时的Unix毫秒时间戳。
-      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-    redirectStart    返回第一个HTTP跳转开始时的Unix毫秒时间戳。
-      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-    redirectEnd      返回最后一个HTTP跳转结束时,即跳转回应的最后一个字节接受完成时的Unix毫秒时间戳。
-      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-    fetchStart:返回浏览器准备使用HTTP请求读取文档时的Unix毫秒时间戳。该事件在网页查询本地缓存之前发生。
-    domainLookupStart:返回域名查询开始时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-    domainLookupEnd:返回域名查询结束时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-    connectStart:返回HTTP请求开始向服务器发送时的Unix毫秒时间戳。若使用持久连接(persistent connection),则返回值等同于fetchStart属性的值。
-    connectEnd:返回浏览器与服务器之间的连接建立时的Unix毫秒时间戳。若建立的是持久连接,则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
-    secureConnectionStart:返回浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。若当前网页不要求安全连接,则返回0。
-    requestStart:返回浏览器向服务器发出HTTP请求时(或开始读取本地缓存时)的Unix毫秒时间戳。
-    responseStart:返回浏览器从服务器收到(或从本地缓存读取)第一个字节时的Unix毫秒时间戳。
-    responseEnd:返回浏览器从服务器收到(或从本地缓存读取)最后一个字节时(若在此之前HTTP连接已经关闭,则返回关闭时)的Unix毫秒时间戳。
-    domLoading:返回当前网页DOM结构开始解析时(即Document.readyState属性变为“loading”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-    domInteractive:返回当前网页DOM结构结束解析、开始加载内嵌资源时(即Document.readyState属性变为“interactive”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-    domContentLoadedEventStart:返回当前网页DOMContentLoaded事件发生时(即DOM结构解析完毕、所有脚本开始运行时)的Unix毫秒时间戳。
-    domContentLoadedEventEnd:返回当前网页所有需要执行的脚本执行完成时的Unix毫秒时间戳。
-    domComplete:返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
-    loadEventStart:返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-    loadEventEnd:返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-  Example:
-    var t = performance.timing;
-    var pageloadtime = t.loadEventStart - t.navigationStart; 
-    //页面加载的耗时
-    var dns = t.domainLookupEnd - t.domainLookupStart; 
-    // 域名解析的耗时
-    var tcp = t.connectEnd - t.connectStart; 
-    //TCP连接的耗时
-    var ttfb = t.responseStart - t.navigationStart;
-    // 读取页面第一个字节之前的耗时
-
-  根据上面这些属性,可以计算出网页加载各个阶段的耗时。比如,网页加载整个过程的耗时的计算方法如下:
-  
-  
-  var t = performance.timing; 
-  var pageLoadTime = t.loadEventEnd - t.navigationStart;
-  
-  performance.now()
-  performance.now方法返回当前网页自从performance.timing.navigationStart到当前时间之间的微秒数(毫秒的千分之一)。也就是说,它的精度可以达到100万分之一秒。
-  
-  performance.now() 
-  // 23493457.476999998
-  
-  Date.now() - (performance.timing.navigationStart + performance.now())
-  // -0.64306640625
-  上面代码表示,performance.timing.navigationStart加上performance.now(),近似等于Date.now(),也就是说,Date.now()可以替代performance.now()。但是,前者返回的是毫秒,后者返回的是微秒,所以后者的精度比前者高1000倍。
-  
-  通过两次调用performance.now方法,可以得到间隔的准确时间,用来衡量某种操作的耗时。
-  
-  var start = performance.now();
-  doTasks();
-  var end = performance.now();
-  
-  console.log('耗时:' + (end - start) + '微秒。');
-  performance.mark()
-  mark方法用于为相应的视点做标记。
-  
-  window.performance.mark('mark_fully_loaded');
-  clearMarks方法用于清除标记,若不加参数,就表示清除所有标记。
-  
-  window.peformance.clearMarks('mark_fully_loaded');
-  
-  window.performance.clearMarks();
-  performance.getEntries()
-  浏览器获取网页时,会对网页中每一个对象(脚本文件、样式表、图片文件等等)发出一个HTTP请求。performance.getEntries方法以数组形式,返回这些请求的时间统计信息,有多少个请求,返回数组就会有多少个成员。
-  
-  由于该方法与浏览器处理网页的过程相关,所以只能在浏览器中使用。
-  
-  
-  window.performance.getEntries()[0]
-  
-  // PerformanceResourceTiming { 
-  //   responseEnd: 4121.6200000017125, 
-  //   responseStart: 4120.0690000005125, 
-  //   requestStart: 3315.355000002455, 
-  //   ...
-  // }
-  
-  上面代码返回第一个HTTP请求(即网页的HTML源码)的时间统计信息。该信息以一个高精度时间戳的对象形式返回,每个属性的单位是微秒(microsecond),即百万分之一秒。
-  
-  performance.navigation对象
-  除了时间信息,performance还可以提供一些用户行为信息,主要都存放在performance.navigation对象上面。
-  
-  它有两个属性:
-  
-  (1)performance.navigation.type
-  
-  该属性返回一个整数值,表示网页的加载来源,可能有以下4种情况:
-  
-  0:网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载,相当于常数performance.navigation.TYPE_NAVIGATENEXT。
-  
-  1:网页通过“重新加载”按钮或者location.reload()方法加载,相当于常数performance.navigation.TYPE_RELOAD。
-  
-  2:网页通过“前进”或“后退”按钮加载,相当于常数performance.navigation.TYPE_BACK_FORWARD。
-  
-  255:任何其他来源的加载,相当于常数performance.navigation.TYPE_UNDEFINED。
-  
-  (2)performance.navigation.redirectCount
-  
-  该属性表示当前网页经过了多少次重定向跳转。  
 ------------------------------------------------------------------------------- 
-'Scope'作用域 
-  PS: 作用域是在运行时代码中的某些特定部分中变量,函数和对象的可访问性。
-    即作用域决定了代码区块中变量和其他资源的可见性。
-    作用域还解决了命名问题,在不同作用域中变量名称可以相同。
-    作用域与上下文是不同的概念;
-  JS中两种类型的作用域:
-    全局作用域
-    局部作用域（也叫本地作用域）
-      定义在函数内部的变量具有局部作用域; 每个函数在被调用时都会创建一个新的作用域。
-      函数内定义的变量在局部（本地）作用域中。
-  块语句 
-    块语句,如 if 和 switch 条件语句或 for 和 while 循环语句,不像函数,
-    它们不会创建一个新的作用域。
-    在块语句中定义的变量将保留在它们已经存在的作用域中。
-    if (true) {
-      // 'if' 条件语句块不会创建一个新的作用域
-      var name = 'Hammad'; // name 依然在全局作用域中
-    }
-    console.log(name); // logs 'Hammad'
-  'context',上下文
-    上下文是用来指定代码某些特定部分中 this 的值。
-    作用域是指变量的可访问性,上下文是指 this 在同一作用域内的值。
-    也可以使用函数方法来改变上下文;
-    在浏览器中在全局作用域中上下文中始终是Window对象,
-    在Nodejs中在全局作用域中上下文中始终是Global 对象[取决于JS的宿主换环境]
-  
-    console.log(this);       // window
-    function logFunction() {
-      console.log(this);
-    }
-    logFunction();  // window
-    因为 logFunction() 不是一个对象的属性
-    若作用域在对象的方法中,则上下文将是该方法所属的对象。
-  
-    ES6 代码:
-    class User {
-      logName() {
-        console.log(this);
-      }
-    }
-    (new User).logName(); // User {}
-    若使用 'new' 关键字调用函数,则上下文的值会有所不同。
-    会将上下文设置为被调用函数的实例。
-  
-    function logFunction() {
-      console.log(this);
-    }
-    new logFunction(); // logFunction {}
-    当在严格模式(Strict Mode)中调用函数时,上下文将默认为 undefined。
-  'Execution Context',执行期上下文
-    PS:执行期上下文中的上下文这个词语是指作用域而不是上下文。
-      这是一个奇怪的命名约定,但由于JavaScipt规范,我们必须链接他们这间的联系。
-      JavaScript是一种单线程语言,因此它一次只能执行一个任务。
-      其余的任务在执行期上下文中排队。
-      当 JavaScript 解释器开始执行代码时,上下文（作用域）默认设置为全局。
-      这个全局上下文附加到执行期上下文中,实际上是启动执行期上下文的第一个上下文。
-      之后,每个函数调用（启用）将其上下文附加到执行期上下文中。
-      当另一个函数在该函数或其他地方被调用时,会发生同样的事情。
-      每个函数都会创建自己的执行期上下文。
-      一旦浏览器完成了该上下文中的代码,那么该上下文将从执行期上下文中销毁,
-      并且执行期上下文中的当前上下文的状态将被传送到父级上下文中。 
-      浏览器总是执行堆栈顶部的执行期上下文（实际上是代码中最深层次的作用域）。
-      无论有多少个函数上下文,但是全局上下文只有一个。
-      执行期上下文有创建和代码执行的两个阶段。
-    创建阶段
-      第一阶段,当一个函数被调用但是其代码还没有被执行的时。 
-      在创建阶段主要做的三件事情是:
-      创建变量对象
-        变量对象,也称为激活对象,包含在执行期上下文中定义的所有变量,函数和其他声明。
-        当调用函数时,解析器扫描它所有的资源,包括函数参数,变量和其他声明。
-        包装成一个单一的对象,即变量对象。
-      创建作用域链
-        在执行期上下文的创建阶段,作用域链是在变量对象之后创建的。
-        作用域链本身包含变量对象。
-        作用域链用于解析变量。
-        当被要求解析变量时,JavaScript 始终从代码嵌套的最内层开始,
-        若最内层没有找到变量,就会跳转到上一层父作用域中查找,
-        直到找到该变量或其他任何资源为止。
-        作用域链可以简单地定义为包含其自身执行上下文的变量对象的对象,
-        以及其父级对象的所有其他执行期上下文,一个具有很多其他对象的对象。
-      设置上下文(context)的值（ `this` ）
-    代码执行阶段
-      在执行期上下文的第二阶段,即代码执行阶段,分配其他值并最终执行代码。
-      词法作用域意味着在一组嵌套的函数中,内部函数可以访问其父级作用域中的变量和其他资源。
-      这意味着子函数在词法作用域上绑定到他们父级的执行期上下文。
-      词法作用域有时也被称为静态作用域。
-      function grandfather() {
-        var name = 'Hammad';
-        // likes 在这里不可以被访问
-        function parent() {
-          // name 在这里可以被访问
-          // likes 在这里不可以被访问
-          function child() {
-            // 作用域链最深层
-            // name 在这里也可以被访问
-            var likes = 'Coding';
-          }
-        }
-      }
-      词法作用域向内传递的,意味着 name 可以通过它的子级期执行期上下文访问。
-      但是,但是它不能向其父对象反向传递,意味着变量 likes 不能被其父对象访问。
-      在不同执行上下文中具有相同名称的变量从执行堆栈的顶部到底部获得优先级。
-      在最内层函数（执行堆栈的最上层上下文）中,具有类似于另一变量的名称的变量将具有较高优先级。
-  模块模式
-    模块模式类似这样:
-    var Module = (function() {
-      function privateMethod() {
-        // do something
-      }
-      return {
-        publicMethod: function() {
-          // can call privateMethod();
-        }
-      };
-    })();
-    Module 中的 return 语句包含了我们公开的函数。私有函数只是那些没有返回的函数。
-    没有返回的函数不可以在 Module 命名空间之外访问。
-  
-    私有函数一个惯例是用下划线开始,并返回一个包含我们公共函数的匿名对象。
-    这使得它们很容易在长对象中管理。它看起来是这样子的:
-    var Module = (function () {
-      function _privateMethod() {
-        // do something
-      }
-      function publicMethod() {
-        // do something
-      }
-      return {
-        publicMethod: publicMethod,
-      }
-    })();
-  IIFE,立即执行函数表达式
-    另一种类型的闭包是立即执行函数表达式。
-    一个在 window 上下文中调用的自动调用的匿名函数,这意味着 this的值为window。
-    (function(window) {
-      // do anything
-    })(this);
-  使用 .call(), .apply() 和 .bind() 改变上下文
-    .call() 和 .apply()函数用于在调用函数时改变上下文。
-    给了令人难以置信的编程能力（和一些终极权限来驾驭代码）。
-    要使用call或apply函数,您只需要在函数上调用它,而不是使用一对括号调用函数,
-    并将新的上下文作为第一个参数传递。 函数自己的参数可以在上下文之后传递。
-    call或apply用另一个对象来调用一个方法,将一个函数上下文从初始的上下文改变为指定的新对象。
-    简单的说就是改变函数执行的上下文。
-  
-    function hello() {
-      // do something...
-    }
-    
-    hello(); // 通常的调用方式
-    hello.call(context); // 在这里你可以传递上下文（this 值）作为第一个参数
-    hello.apply(context); // 在这里你可以传递上下文（this 值）作为第一个参数
-    
-    .call()和.apply()之间的区别,
-    在.call()中,其余参数作为以逗号分隔的列表,而.apply()则允许您在数组中传递参数。
-    function introduce(name, interest) {
-      console.log('Hi! I\'m '+ name +' and I like '+ interest +'.');
-      console.log('The value of this is '+ this +'.')
-    }
-    introduce('Hammad', 'Coding');  // 通常的调用方式
-    introduce.call(window, 'Batman', 'to save Gotham'); // 在上下文之后逐个传递参数
-    introduce.apply('Hi', ['Bruce Wayne', 'businesses']); // 在上下文之后传递数组中的参数
-    // Hi! I'm Hammad and I like Coding.
-    // The value of this is [object Window].
-    // Hi! I'm Batman and I like to save Gotham.
-    // The value of this is [object Window].
-    // Hi! I'm Bruce Wayne and I like businesses.
-    // The value of this is Hi.
-    .call()的性能要比.apply()稍快。
-  
-    将文档中的项目列表逐个记录到控制台。
-      <ul>
-          <li>Learn PHP</li>
-          <li>Learn Laravel</li>
-          <li>Learn JavaScript</li>
-          <li>Learn VueJS</li>
-          <li>Learn CLI</li>
-          <li>Learn Git</li>
-          <li>Learn Astral Projection</li>
-      </ul>
-      <script>
-          // 在listItems中保存页面上所有列表项的NodeList
-          var listItems = document.querySelectorAll('ul li');
-          // 循环遍历listItems NodeList中的每个节点,并记录其内容
-          for (var i = 0; i < listItems.length; i++) {
-            (function () {
-              console.log(this.innerHTML);
-            }).call(listItems[i]);
-          }
-          // Output logs:
-          // Learn PHP
-          // Learn Laravel
-          // Learn JavaScript
-          // Learn VueJS
-          // Learn CLI
-          // Learn Git
-          // Learn Astral Projection
-      </script>
-      该日志语句包裹在一个函数中,该 call 函数包含在调用函数中的括号中。
-      将相应的列表项传递给调用函数,以便控制台语句中的 this 关键字记录正确对象的 innerHTML 。
-  
-      对象可以有方法,同样的函数对象也可以有方法。 事实上,JavaScript函数附带了四种内置方法:
-      Function.prototype.apply()
-      Function.prototype.call()
-      Function.prototype.toString() 返回函数源代码的字符串表示形式。
-      Function.prototype.bind() ( ECMAScript 5 (ES5) 中引进)
-      bind() 本身不调用该函数,只用于在调用函数之前绑定上下文和其他参数的值
-      (function introduce(name, interest) {
-        console.log('Hi! I\'m '+ name +' and I like '+ interest +'.');
-        console.log('The value of this is '+ this +'.')
-      }).bind(window, 'Hammad', 'Cosmology')();
-      // Hi! I'm Hammad and I like Cosmology.
-      // The value of this is [object Window].
-      .bind() 就像.call()函数一样,它允许你传递其余的参数,用逗号分隔;
-  'function scope'函数对象作用域 
-    JavaScript 中每个函数都表示为一个函数对象（函数实例）,
-    既然是对象,就有相关的属性和方法。
-    除了正常的属性,函数对象具有仅供 JavaScript 引擎内部使用,
-    但不能通过代码访问的一系列内部属性。这些属性中,其中一个就是 [[scope]] 属性。
-  'Scope Chain'作用域链 
-    内部的 [[scope]] 属性包含了该函数在被创建时作用域中的所有对象集合。
-    该集合称为函数的作用域链（scope chain）。
-    当创建一个函数时,其作用域链中保存的对象,就是在创建该函数时作用域中所有可访问的数据。
-    例如,考虑以下全局函数:
-    function add(num1, num2) {
-      var sum = num1 + num2;
-      return sum;
-    }
-    当定义 add 函数后,其作用域链就创建了。
-  'Execution Context'运行期上下文 
-    执行函数时创建一个内部对象,称为 Execution Context（执行期上下文）。
-    执行期上下文定义了一个函数正在执行时的作用域环境。
-    执行期上下文和我们平常说的上下文不同,执行期上下文指的是作用域。
-    平常说的上下文是this的取值指向。
-    执行期上下文和函数创建时的作用域链对象 [[scope]]  是两个不同的作用域链对象。
-    函数定义时的作用域链对象 [[scope]] 是固定的,
-    而 执行期上下文 会根据不同的运行时环境变化。
-    而且该函数每执行一次,都会创建单独的 执行期上下文,
-    因此对同一函数调用多次,会导致创建多个执行期上下文。
-    一旦函数执行完成,执行期上下文将被销毁。
-    执行期上下文对象有自己的作用域链,当创建执期行上下文时,
-    其作用域链将使用执行函数[[scope]]属性所包含的对象（即,函数定义时的作用域链对象）进行初始化。
-    这些值按照它们在函数中出现的顺序复制到执行期上下文作用域链中。
-  'Activation Object'激活对象 
-    随后,在执行其上下文中创建一个名为 Activation Object（激活对象）的新对象。 
-    这个激活对象保存了函数中的所有形参,实参,局部变量,this 指针等函数执行时函数内部的数据情况。
-    然后将这个激活对象推送到执行其上下文作用域链的顶部。
-    激活对象是一个可变对象,里面的数据随着函数执行时的数据的变化而变化,
-    当函数执行结束之后,执行期上下文将被销毁。
-    也就会销毁Execution Context的作用域链,激活对象也同样被销毁。
-    但若存在闭包,激活对象就会以另外一种方式存在,这也是闭包产生的真正原因,
-    函数在执行时,每遇到一个变量,都会去执行期上下文的作用域链的顶部,
-    执行函数的激活对象开始向下搜索,
-    若在第一个作用域链（即,Activation Object 激活对象）中找到了,那么就返回这个变量。
-    若没有找到,那么继续向下查找,直到找到为止。
-    若在整个执行期上下文中都没有找到这个变量,在这种情况下,该变量被认为是未定义的。
-    这也就是为什么函数可以访问全局变量,当局部变量和全局变量同名时,会使用局部变量而不使用全局变量,
-    以及 JavaScript 中各种看似怪异的、有趣的作用域问题的答案。
-'Closure'闭包 
-  'Closures',闭包
-    当内部函数尝试访问其外部函数的作用域链,即在直接词法作用域之外的变量时,会创建一个闭包。 
-    闭包包含自己的作用域链,父级的作用域链和全局作用域。
-    闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数。
-    即使函数返回后,闭包也可以访问其外部函数的变量。
-    这允许返回的函数保持对外部函数所有资源的访问。
-
-    在许多其他编程语言中,可以使用公共,私有和受保护的作用域来设置类的属性和方法的可见性。
-    如使用PHP的:
-    // Public Scope
-    public $property;
-    public function method() {
-      // ...
-    }
-    
-    // Private Sccpe
-    private $property;
-    private function method() {
-      // ...
-    }
-    
-    // Protected Scope
-    protected $property;
-    protected function method() {
-      // ...
-    }
-    来自公共（全局）作用域的封装函数使他们免受脆弱的攻击。
-    但是在JavaScript中,没有公共或私有作用域。 但可以使用闭包来模拟此功能。
-    为了保持一切与全局分离,首先将函数封装在如下所示的函数中:
-    // 立即执行函数表达式
-    // 在其中添加函数和变量,它们将不能在外部访问
-    (function () {
-      // 私有作用域 private scope
-    })();
-    
-  function assignEvents(){
-    var id = "xdi9592";
-    document.getElementById("save-btn").onclick = function(event) {
-      saveDocument(id);
-    };
-  }
-  assignEvents 函数为DOM元素分配一个事件处理程序。
-  这个处理函数就是一个闭包。为了使该闭包访问id变量,必须创建一个特定的作用域链。
-
-  从作用域的角度分析一下闭包的形成过程:
-  assignEvents 函数创建并且词法解析后,函数对象assignEvents的[[scope]]属性被初始化,
-  作用域链形成,作用域链中包含了全局对象的所有属性和方法（
-  注意,此时因为 assignEvents 函数还未被执行,所以闭包函数并没有被解析）。
-
-  assignEvents 开始执行时,创建 Execution Context（执行期上下文）,
-  在执行期上下文的作用域链中创建 Activation Object(激活对象),
-  并将 Activation Object(激活对象) 推送到作用域链顶部,
-  在其中保存了函数执行时所有可访问函数内部的数据。激活对象包含 id 变量。
-
-  当执行到闭包时,JavaScript 引擎发现了闭包函数的存在,
-  按照通常的手法,将闭包函数解析,为闭包函数对象创建 [[scope]] 属性,初始化作用域链。
-  特别注意的是,这个时候,闭包函数对象的作用域链中有两个对象,
-  一个是 assignEvents 函数执行时的 Activation Object(激活对象) ,还有一个是全局对象
-
-  闭包函数对象的作用域链和 assignEvents 函数的执行期上下文的作用域链是相同的
-  闭包函数是在 assignEvents 函数执行的过程中被定义并且解析的,
-  而函数执行时的作用域是 Activation Object(激活对象) ,
-  闭包函数被解析的时候它的作用域正是 assignEvents 作用域链中的第一个作用域对象 Activation Object(激活对象) ,
-  当然,由于作用域链的关系,全局对象作用域也被引入到闭包函数的作用域链中。
-
-  在词法分析的时候闭包函数的 [[scope]] 属性 就已经在作用域链中保存了对 assignEvents 函数的 Activation Object(激活对象) 的引用,
-  所以当 assignEvents 函数执行完毕之后,闭包函数虽然还没有开始执行,
-  但依然可以访问 assignEvents 的局部数据,
-  并不是因为闭包函数要访问 assignEvents 的局部变量id,
-  所以当 assignEvents 函数执行完毕之后依然保持了对局部变量id的引用。
-  而是不管是否存在变量引用,都会保存对 assignEvents 的 Activation Object(激活对象)作用域对象的引用。
-  因为在词法分析时,闭包函数没有执行,函数内部根本就不知道是否要对 assignEvents 的局部变量进行访问和操作,
-  所以只能先把 assignEvents 的 Activation Object(激活对象) 作用域对象保存起来,
-  当闭包函数执行时,若需要访问 assignEvents 的局部变量,那么再去作用域链中查找。
-
-  也正是因为这种引用,造成了一个副作用。
-  通常,当执行期上下文被销毁时,函数的激活对象也就被销毁了。
-  当有闭包引用时,激活对象就不会被销毁,因为他仍然被引用。这
-  意味着闭包比非隔离的函数需要更多的内存。
-
-  闭包函数执行时创建了自己的 Execution Context（执行期上下文）,
-  其作用域链使用了 [[scope]] 属性,
-  其引用了 assignEvents 函数的 Activation Object(激活对象) 和 全局对象。
-  然后为闭包本身创建一个新的 Activation Object(激活对象)。 
-  所以在闭包函数的执行期上下文的作用域链中保存了自己的 Activation Object(激活对象),
-  外层函数 assignEvents Execution Context（执行期上下文）的 Activation Object(激活对象),
-  以及 Global Object(全局对象)
-
-  JavaScript 引擎使用的内部hook(钩子)跟踪函数定义和执行期上下文的作用域链。 
-  在函数执行时,变量标识符按照从上到下的顺序通过作用域链解析。 
-  若在最后没有找到相同的变量标识符,则抛出一个 undefined(未定义) 的错误。 
-  闭包的开销是其的作用域链保持了对其执行期上下文的激活对象的引用,
-  从而防止激活对象被正常地销毁。 因此,闭包函数代码通常比非闭包函数需要更多的内存。  
-'this'执行函数时的上下文对象 
-  PS: 函数内部的一特殊对象[与其他语言相比有很多不同]; 
-    随着函数使用场合的不同,this的值会发生变化,始终指向当前运行的对象,在函数运行时确定;
-    在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
-    在绝大多数情况下,函数的调用方式决定了this的值.
-    this不能在执行期间被赋值,在每次函数被调用时this的值也可能会不同.
+内存 
+  一般来说,确保占用最少的内存可以让页面获得更好的性能 
+  内存泄漏: 无法销毁驻留在内存中的数据 [参见 函数>闭包>]
+    IE6时代有bug,闭包会造成内存泄漏,这个现在已经无须考虑了 
+    闭包过多容易导致内存泄漏,
+    闭包会造成对象引用的生命周期脱离当前函数的上下文,
+    从严格意义上讲,这是程序员自己的bug,而不是闭包的错 
+'GC'垃圾回收机制 
+  程序员只需要申请内存,而不需要关注内存的释放 
+  垃圾回收器'GC'会在适当的时候将已经终止生命周期的变量的内存给释放掉 
+  JS会自行管理内存分配及无用内存的回收 
+  优化内存的最佳方案: 一旦数据不再有用,则将其设置为null来释放引用,也叫解除引用 
+  解除引用适用于大多数全局变量和全局对象 
+  var a = {
+    name:"abc"
+  };
+  a = null;  //解除对象引用,等待垃圾收集器回收
+JS引擎: 真正执行JS代码的地方,
+  常见的引擎有V8[目前最快JS引擎、Google生产]、JS core;
+  JS引擎主要做了下面几件事情:
+  一套与宿主环境相联系的规则;
+  JS引擎内核[基本语法规范、逻辑、命令和算法];
+  一组内置对象和API;
+  其他约定.
+JS运行过程机理 
+  可近似做如下理解: 
+  从上到下顺序执行代码; 
+  执行阶段分: 预处理阶段 和 执行阶段 
+  代码执行环境分: 全局环境window 和 函数作用域环境 
+  JS代码运行过程分析: 
+    PS: 在父环境不可访问子环境的缓存,反之可以 
+      在子环境运行时,优先访问自己的缓存,若无再向上级寻找 
+      子环境执行完毕,环境会被销毁[闭包则不会],缓存不存在;后续再执行则重新再创建 
+      同类型的,变量和变量重名或函数和函数重名 ,则后面的覆盖前面的 
+    解析器接收到JS代码,此时处于全局环境下 
+    1 进入预处理阶段: 扫描所有代码 
+      PS: 缓存中,当函数名和变量名重名,函数优先级高[覆盖变量名] 
+      将'var'声明的'全局变量'和'函数'添加到缓存中,变量设为'undefined',函数名指向函数 
+      未使用var的变量不记录  
+    2 执行阶段 
+      PS: 直接跳过函数,因为已存在缓存中 
+      在全局环境中  
+        遇到变量声明则将其对应到缓存中,若遇到重名则后面覆盖前面  
+      在入子环境中[函数的局部作用域] 
+        进入子环境预处理阶段: 和全局类似 
+          将'变量'、'函数'和'参数'添加到子环境的'缓存'中 
+          当重名时,'函数'优先级最高覆盖其他,'变量'和'参数'互不影响 
+        进入子环境执行阶段: 同全局类似
+          顺序执行 
+          将变量对应到缓存中,重名时,后面覆盖前面['参数'和'变量'同等对待]
+'Scope'作用域: 在运行时,代码中变量、函数和对象的可访问性 
+  PS: 即作用域决定了代码区块中变量和其他资源的可见性 
+  JS中两种类型的作用域: 
+    全局作用域 
+    局部作用域 
+      定义在函数内部的变量具有局部作用域; 
+      每个函数在被调用时都会创建一个新的作用域。
+      函数内定义的变量在局部作用域中 
+'Closure'闭包: 当内部函数尝试访问其外部函数的作用域链,会创建一个闭包 
+  闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
+  闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
+'this'执行函数时的'context'上下文对象 
+  PS: 随着函数使用场合的不同,this始终指向当前运行的对象,在函数运行时确定;
+    在绝大多数情况下,函数的调用方式决定了this的值;this不能在执行期间被赋值;
+    当在严格模式中调用函数,上下文将默认为 undefined 
   在全局运行上下文中[在任何函数体外部],指向全局对象'window' 
+    NodeJS环境,全局作用域中上下文中始终是Global对象 
     console.log(this === window); // true 
     var aoo = 1; 
     console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性
     this.boo = 2;
     console.log(boo); // 2 
-  函数中:this的值取决于函数是如何调用的 
+  函数中: 'this'取决于函数是如何调用的 
     普通函数调用:this始终指向'window'[严格模式下指向 undefined]
       var aoo = 1;
       function foo(){
@@ -4186,6 +3873,7 @@ Performance 当前页面加载相关的性能信息
       obj.goo = foo;
       console.log(obj.goo()); // 100
   对象内 
+    在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
     var aoo = 1;
     function foo(){ 
       console.log(this.aoo);  
@@ -4226,7 +3914,7 @@ Performance 当前页面加载相关的性能信息
       console.log(this);
     })
     //表示被点击的那个元素对象
-  Example: :
+  Example: 
     var aoo = 1;
     var obj = { 
       aoo : 2, 
@@ -4240,170 +3928,6 @@ Performance 当前页面加载相关的性能信息
     var goo = obj.foo;
     var val4 = goo();  // 1
     console.log(val1,val2,val3,val4); // 2 2 1 1 
-  foo.call(thisArg[,arg1,arg2,...]) 改变this指向
-    thisArg 在foo函数运行时指定的'this'值,为'null'或'undefined'时,不改变指向 
-      原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象
-    arg     指定的参数列表
-    Example: 
-      var foo = function(){
-        console.log(this);
-      }
-      console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
-      console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
-      console.log(foo.call(null)); // window 
-      console.log(foo.call(undefined)); // window 
-      
-      function add(arg1,arg2){ 
-        return arg1 + this;
-      }
-      var aoo = add.call(7,2,4);
-      console.log(aoo); // 9 
-      
-      console.log({}.toString()); // [object Object]
-      function foo(arg){ 
-        console.log(Object.prototype.toString.call(arg)); 
-      };
-      console.log(foo(7)); // [object Number]
-      等价于
-      function foo(){ 
-        console.log(Object.prototype.toString.call(this)); 
-      };
-      foo.call(7); // [object Number]
-    实现继承的效果 
-      function Pet(words){
-        this.words = words;
-        this.speak = function (){
-          console.log(this.words);
-        };
-      };
-      function Dog(words){
-        Pet.call(this,words);
-      };
-      var dog1 = new Dog('wang!');
-      dog1.speak(); // wang!
-      console.log(dog1); // Dog {words: "wang!", speak: function}
-  foo.apply(thisArg[,arr/arrLike])       改变this指向
-    PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
-      都是函数对象的方法,区别在于接收参数的形式不同.
-      改变this的好处:对象不需要与方法发生任何耦合关系
-    thisArg  在foo函数运行时指定的 this 值 
-      非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
-      原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
-    arr/arrLike  数组或类数组对象,函数传入的参数, 
-      其中的数组元素将作为单独的参数传给 foo 函数
-      若该参数的值为null或undefined,则表示不需要传入任何参数 
-      从ES5开始可以使用类数组对象 
-    Example: 
-      function Pet(words){
-        this.words =words;
-        this.speak =function(){console.log(this.words);}
-      }
-      function Dog(words){ Pet.call(this,words); }
-      // 或者 Pet.apply(this,arguments);
-      var dog =new Dog("wang");
-      dog.speak(); // wang
-
-      var box={
-        color:"蓝色",
-        sayColor:function(){ console.log(this.color); }
-      }
-      box.sayColor();  //蓝色,box调用函数 this就表示box
-
-      var aoo = 1;
-      var obj = {aoo: 2};
-      function foo(a){console.log(this[a]);}
-      foo.call(null,"aoo"); // 1
-      foo.call(obj,"aoo");  // 2
-    apply和call继承 
-      将函数指向对象后,对象将获取到函数的属性
-      Example:
-        function foo(){ this.name ="abc" }
-        var obj ={};
-        console.log(obj.name); //undefined
-        foo.call(obj);
-        console.log(obj.name); //abc
-
-        仿造new
-          function Person(name,age){
-            this.name =name;
-            this.age =age;
-          }
-          var p1 =new Person("aoo",19); //使用new 创建
-          function New(func){
-            return function(){
-              var obj ={"__proto__":func.prototype};
-              func.apply(obj,arguments); //使对象获取到传入函数的属性
-              return obj;
-            }
-          }
-          var p2 =New(Person)("boo",18); //使用仿造的new
-          console.log(p1); //Person {name: "aoo", age: 19}
-          console.log(p2); //Person {name: "boo", age: 18}
-  foo.bind(thisArg[,arg1,arg2,...]) 改变this指向且始终保持绑定状态 [ES5]
-    PS:bind()方法会创建一个新函数 
-      当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
-      之后的一序列参数将会在传递的实参前传入作为它的参数;
-      返回值为由指定的this值和初始化参数改造后的原函数拷贝;
-    thisArg 绑定函数被调用时,代替原函数运行时的'this'指向 
-      当使用new 操作符调用绑定函数时,该参数无效.
-    arg     绑定函数被调用时,这些参数将将于实参之前传递函数
-    使用bind固定参数值 
-      function foo(arg1,arg2,arg3){ 
-        return arg1 + arg2 + arg3; 
-      };
-      // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
-      var foo1 = foo.bind(undefined,100);
-      foo1(1,2); // 103 ,第二、三个参数分别为1、2
-      var f2 = foo1.bind(undefined,10);
-      foo2(1); // 111
-    使用new时,会忽略绑定 
-      function Foo(){ 
-        this.b = 1; 
-        return this.a; 
-      };
-      var Goo = Foo.bind({a:2});
-      Goo(); // 2
-      new Goo(); // {b:1} 
-      var Hoo = Foo.bind({a:{aoo:3}})
-      Hoo();
-      new Hoo(); // {b:1} 
-    Example: :
-      var x = 9;
-      var obj = {
-        x: 81,
-        getX: function() { return this.x; }
-      };
-      obj.getX(); // 返回 81
-      var foo = obj.getX;
-      foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
-      var goo = foo.bind(obj);
-      goo(); // 返回 81
-
-      var obj = {
-        foo : 1,
-        bar : function(){
-          return this.foo;
-        }
-      }
-      obj.bar();  //1
-      var a =obj.bar;
-      a();        //undefined
-      var b =obj.bar.bind(obj)
-      obj.bar.bind(obj)() // 1
-      b()         //1
-      obj.foo =12;
-      b()         //12
-
-      var person = {
-        name :'a',
-        job : '1',
-        sayHello : function(){ 
-          return this.name + this.job; 
-        }
-      }
-      person.sayHello()     //"a1"
-      var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
-      anotherGuySayHello()  //"b2"
   声明局部变量来保存this引用 
     当需要在嵌套函数中读取调用被嵌套函数的对象的属性时
     var aoo = 1;

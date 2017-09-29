@@ -1,59 +1,8 @@
-ES6 
-  PS:于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
-  Babel转码器将ES6转换为ES5 
-    配置文件'.babelrc' : 位于项目的根目录 
-      文件配置  用来设置转码规则和插件
-        {
-          "presets": [  // 设定转码规则 
-            "latest",
-            "react",
-            "stage-2"
-          ],
-          "plugins": []
-        }
-        官方提供了以下的规则集,可以根据需要安装 
-          # 最新转码规则
-          $ npm install --save-dev babel-preset-latest
-          # react 转码规则
-          $ npm install --save-dev babel-preset-react
-          # 不同阶段语法提案的转码规则[共有4个阶段],选装一个
-          $ npm install --save-dev babel-preset-stage-0
-          $ npm install --save-dev babel-preset-stage-1
-          $ npm install --save-dev babel-preset-stage-2
-          $ npm install --save-dev babel-preset-stage-3
-    'babel-cli'命令行编译 
-      npm install --global babel-cli   #安装
-      基本用法 
-        babel example.js  # 转码结果输出到标准输出
-        babel example.js --out-file compiled.js  # 转码结果写入一个文件
-          # 或者
-          babel example.js -o compiled.js
-          # --out-file 或 -o 参数指定输出文件
-        babel src --out-dir lib     # 整个目录转码
-          # 或者
-          babel src -d lib
-          # --out-dir 或 -d 参数指定输出目录
-        babel src -d lib -s   # -s 参数生成source map文件
-    'babel-cli'项目中安装 
-      PS:全局环境下,进行 Babel 转码意味着,若项目要运行,全局环境必须有 Babel,
-        也就是说项目产生了对环境的依赖。
-        另一方面,这样做也无法支持不同项目使用不同版本的 Babel。
-      npm install --save-dev babel-cli   #安装
-      配置'package.json' 
-        {
-          // ...
-          "devDependencies": {
-            "babel-cli": "^6.0.0"
-          },
-          "scripts": {
-            "build": "babel src -d lib"
-          },
-        }
-      npm run build         #执行命令转码 
+ES6: 于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
 ◆标准库的扩展&数据类型&对象库扩展 
 Number 数值 
-  PS:ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
-    目的是减少全局性的函数,把全局函数合理地规划到其他对象下,逐渐实现语言的模块化 
+  PS: ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
+    目的: 减少全局性的函数,逐渐实现语言的模块化 
   Number.isNaN()      判断是否为非数值
     传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
     而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
@@ -68,7 +17,7 @@ Number 数值
   Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()] 
   ◆新特性:
   Number.isInteger()  判断是否是整数
-    PS:JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
+    PS: JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
     Number.isInteger(3.2);  // false
     Number.isInteger(3);    // true
     Number.isInteger(3.0);  // true
@@ -821,7 +770,7 @@ RegExp 正则扩展
     // 匹配所有的箭头字符
     const regexArrows = /^\p{Block=Arrows}+$/u;
     regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
-'Strings_and_Regular_Expressions'字符串与正则表达式 
+'Strings and Regular Expressions'字符串与正则表达式 
   PS:ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成(UTF-16).
     每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
     所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
@@ -2076,8 +2025,8 @@ Reflect  为操作对象提供的API
     Reflect.getPrototypeOf(target)
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
-'lexical_scopes'词法作用域,即'块作用域' 
-  PS:会在函数内部、代码块[即 {}]内创建,任何一对花括号'{}'中的语句都属于一个块,称之为块级作用域;
+'lexical scopes'词法作用域,也叫'块作用域' 
+  PS: 会在函数内部、代码块,即'{}'内创建,任何一对花括号'{}'中的语句都属于一个块,
     块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
   if (true) { 
     var aoo = 1; 
@@ -2085,7 +2034,7 @@ Reflect  为操作对象提供的API
   }
   console.log(aoo); // 1
   console.log(boo); // 报错,boo is not defined
-'Global_Block_Bindings'全局块级绑定 
+'Global Block Bindings'全局块级绑定 
   全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
     这意味着全局对象的属性可能会意外地被重写覆盖
     var RegExp = "Hello!";
@@ -2095,7 +2044,7 @@ Reflect  为操作对象提供的API
     console.log(RegExp);           // "Hello!"
     console.log(window.RegExp);    // function RegExp() { [native code] }
 let   定义块级变量 
-  PS:块级作用域限制,只在定义的块级作用域中存在;
+  PS: 块级作用域限制,只在定义的块级作用域中存在;
   无变量提升 
     var aoo = 1;
     var boo = 2;
@@ -2118,7 +2067,7 @@ let   定义块级变量
         let aoo = 2;  //报错,Identifier 'aoo' has already been declared
         console.log(aoo);
       }
-  'Let_Declarations_in_Loops'循环中的'let'声明 
+  'Let Declarations in Loops'循环中的'let'声明 
     var arr =[];
     for(var i = 0; i < 10; i++) { 
       arr.push(i); 
@@ -2736,7 +2685,7 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         for (let doc of docs) {
           await db.post(doc);
         }
-'Async_Iterator'异步遍历器 
+'Async Iterator'异步遍历器 
   PS:Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
     该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
     其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束。

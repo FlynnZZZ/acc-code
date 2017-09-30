@@ -1209,67 +1209,26 @@ ECMAScript: JS语法核心,提供核心语言功能
         delete arr[1]
         console.log(arr,1 in arr); // ["a", undefined × 1, "c"]  false
     obj = new Foo();  初始化对象 
-    void exp;   运行表达式,并始终返回 undefined 
-      PS:无论void后的表达式是什么,void操作符始终返回 undefined
-      使用void的目的 
-        undefined 在JS中不是保留字。
-        如执行以下代码:
-        function joke() {
-          var undefined = "hello world";
-          console.log(undefined); // "hello world"
-        }
-        console.log(undefined);   // undefined
-        可以在一个函数上下文内以undefined做为变量名,
-        于是在这个上下文写的代码便只能通过从全局作用域来取到undefined,如:
-        window.undefined //浏览器环境
-        GLOBAL.undefined //Node环境
-        但要注意的是,即便window, GLOBAL仍然可以在函数上下文被定义,
-        故从window/GLOBAL上取undefined并不是100%可靠的做法。如:
-        function x() {
-          var undefined = 'hello world' ,
-            f = {} ,
-            window = { 'undefined': 'joke' } ;
-          console.log(undefined);         //  hello world
-          console.log(window.undefined);  // joke
-          console.log(f.a === undefined); // false
-          console.log(f.a === void 0);    // true
-        }
-        于是,采用void方式获取undefined便成了通用准则。
-        还有一种方式是通过函数调用。如AngularJS的源码里就用这样的方式:
+    void expr;   执行表达式,并始终返回 undefined 
+      PS: 无论void后的表达式是什么,void操作符始终返回 undefined
+      expr  表达式,不可为空,否则报错 
+        void ();  // Uncaught SyntaxError: Unexpected token )
+      使用void获取'undefined' 
+        'undefined'不是JS的保留字,有可能被占用 
+        还有一种方式是通过函数调用,如AngularJS的源码里就用这样的方式:
         (function(undefined) {
           //此处的 undefined 为undefined
         })();
-        通过不传参数,确保了undefined参数的值是一个undefined。
-      其它作用
-        禁止超链接跳转页面,
-        若URL不写的话,点击会刷新整个页面。
-        于是便用上了href='javascript:void(0)'的方式,
-        确保点击它会执行一个纯粹无聊的void(0)。
-        另一种情况,生成一个空的src的image,
-        最好的方式似乎也是src='javascript:void(0)';
-      关于 void 后面表达式的执行
-        Example:
-        var totalNum = 10;
-        var obj = {
-          get reduceNum() { totalNum--; },
-          get showNum() { return totalNum; }
-        };
-        console.log(obj.reduceNum); // 调用了 reduceNum 的get方法
-        console.log(obj.totalNum);  // 9
-        void obj.reduceNum;         // 调用了 reduceNum 的get方法
-        console.log(obj.totalNum);  // 8
-        delete obj.reduceNum;       // 没有调用 reduceNum 的get方法
-        console.log(obj.totalNum);  // 8
-        无论是普通访问 obj.reduceNum ,还是 void obj.reduceNum 都会使 totalNum 减少;
-        而 delete obj.reduceNum,totalNum 不会减了,
-        因为 delete 操作符不会对 obj.whenMarry 求值;
-        
-        function foo(){ console.log('我执行了'); }
-        var aoo = void foo(); // '我执行了'
-        console.log(aoo);     // undefined
-        
-        console.log(void 0);  // undefined
-        console.log(void(0)); // undefined
+      禁止超链接跳转页面 
+        若链接URL为空,点击会刷新整个页面,
+        点击以 javascript: URI 的链接时,浏览器会对冒号后面的代码进行求值,
+        然后清空页面把求值的结果显示在页面上
+        只有当这段代码的求值结果是 undefined 的时候,浏览器才不会去做显示
+        但不推荐利用 javascript: 伪协议来执行JS代码
+      立即调用的函数表达式 
+        void function(){
+          console.log(1);
+        }();
   二元表达式 
     ◆算术运算符 
       PS:若算术运算的值不是数值,后台会先使用Number()转型函数将其隐式转换为数值.

@@ -1,4 +1,4 @@
-'Document Object Model'DOM,文档对象模型:提供访问和操作网页内容的方法和接口  
+'Document Object Model'DOM,文档对象模型: 提供访问和操作网页内容的方法和接口  
   PS: 由W3C规定,给文档提供了一种结构化的表示方法,可改变文档的内容和呈现方式, 
     DOM标准的目标:让'任何一种程序设计语言'能操控使用'任何一种标记语言'编写出的'任何一份文档'
   DOM树 
@@ -9,42 +9,8 @@
     意味着IE中DOM对象与原生JS对象有差异;
     对DOM的任何修改都会在浏览器呈现DOM时立即反映出来;
     DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计,
-    并不是只有JavaScript有DOM API,其他的程序设计语言如Java也有对应的DOM API;
-  DOM级别和模块 
-    PS:IE6-IE8 支持DOM1级,IE9+支持DOM3级
-    DOM0级: 实际上,DOM0级标准是不存在的,所谓的DOM0级是DOM历史坐标中的一个参照点,
-      具体的,DOM0级指的是IE4和Netscape 4.0 这些浏览器最初支持的DHTML
-    DOM1级: 于1998年成为W3C的推荐标准,主要目标是映射文档的结构
-      DOM1级由两个模块组成
-      'DOM Core'DOM核心: 针对任何结构化文档的标准模型 
-        规定如何映射基于XML的文档结构,以便简化对文档中任意部分的访问和操作
-      DOM HTML: 只针对HTML文档的标准模型
-        在'DOM Core'基础上加以扩展,添加了针对HTML的对象和方法
-    DOM2级 
-      PS: 扩充鼠标和用户界面事件、范围、遍历[迭代DOM文档的方法]等细分模块,
-        通过对象接口增加了对CSS的支持
-        DOM1级中的DOM核心模块也经过扩展开始支持XML命名空间
-        也引入了新模块,也给出了众多新类型和新接口的定义
-      DOM2级核心: 在1级的基础上添加了更多的方法和属性
-      'DOM-Views'DOM视图: 定义了跟踪不同文档(例如,应用CSS之前和之后的文档)视图的接口 
-      'DOM-Events'DOM事件: 定义了事件和事件处理的接口 
-      'DOM-Style'DOM样式: 定义了基于CSS为元素应用样式的接口 
-      'DOM-Traversal-and-Range'DOM遍历和范围: 定义了遍历和操作文档树的接口
-      DOM2级HTML: 在1级的基础上添加了更多的属性、方法和接口 
-    DOM3级 
-      PS: 进一步扩展DOM,新增了验证文档的方法–在DOM验证'DOM Validation'模块中定义
-        对DOM核心进行了扩展,开始支持XML 1.0 规范,涉及XML Infoset、XPath和XML Base
-      // 新增模块
-      "XPath"模块:
-      Load and Save 模块:
-    其他DOM标准 
-      除了DOM核心和DOM HTML接口之外,另外几种语言还发布了只针对自己的DOM标准
-      下面列出的语言都是基于XML的,每种语言的DOM标准都添加了与特定语言相关的新方法和新接口:
-      'Scalable Vector Graphic'SVG,可伸缩矢量图 1.0 
-      'Mathematical Markup Language'MathML,数学标记语言 1.0；
-      'Synchronized Multimedia Integration Language'SMIL,同步多媒体集成语言
-      还有一些语言也开发了自己的DOM实现 
-◆Node节点 
+    并不是只有JS有DOM API,其他的程序设计语言如Java也有对应的DOM API;
+◆'Node'节点 
   PS:DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
     节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
     每个节点都有自己的特点、数据和方法,也与其他节点间存在关系
@@ -1034,18 +1000,16 @@ DOM操作归纳总结
       var file = $('<input type="file" id="file1">')
       file.click()  // 仍可打开图片选择框 
 --------------------------------------------------------------------------------
-◆Event 事件 
-  PS: JS与HTML的交互时通过事件实现的 
-    事件是用来处理响应的一个机制.当用户执行某些操作的时候,在去执行一些列代码
-    响应可以来自于用户(鼠标点击等),也可以来自浏览器(如文件下载完了).
-    浏览器会默认给事件的响应函数添加一个参数,该参数表示该事件对象本身.
-  事件流 
-    事件流描述的是从页面中接收事件的顺序
-    IE的事件流是事件冒泡,从内向外传递
-      事件从子元素向父元素(从内向外)传递,直到最外层浏览器(document)接收到该事件停止
-      事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡.
-    Netscape的事件流是事件捕获,从外向内传递
-      事件从最外层浏览器向内(从外向内)传递,直到传递到触发事件的该元素为止.
+◆'Event'事件: 用来处理响应的一个机制 
+  PS: JS与HTML的交互是通过事件实现的,当用户执行某些操作的时候,在去执行一些列代码
+    响应可来自于用户,也可以来自浏览器[如文件下载完了].
+  事件流: 描述页面中接收事件的顺序 
+    "Capture"事件捕获: W3C规定的标准事件模型,从外向内传递 
+      由'window'-'document'-'html'-'body'-..-事件绑定元素  
+      事件从最外层向内传递,直到传递到触发事件的该元素为止 
+    "Bubbling"事件冒泡: IE的事件流,从内向外传递 
+      事件绑定元素-..-'body'-'html'-'document'-'window'
+      事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡 
   事件支持检测 
     var div = document.createElement('div');
     //是否支持触摸事件
@@ -1117,7 +1081,7 @@ DOM操作归纳总结
     elem.removeEventListener("mousemove", myFunction); // 移除 元素的事件句柄
     定义和用法
     removeEventListener() 方法用于移除由 addEventListener() 方法添加的事件句柄
-Event事件对象 
+Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该参数表示该事件对象本身 
   PS:在触发DOM上的某个事件是,会产生一个事件对象event,
     这个对象包含着所有与事件有关的信息.
     事件对象包括导致事件的元素、事件的类型、以及其他与特定事件相关的信息.
@@ -3492,8 +3456,7 @@ Performance 当前页面加载相关的性能信息
       Web Components 标准中:createElement 和 createElementNS 支持元素扩展:
         const hello = document.createElement('button', 'button-hello')
 ------------------------------------------------------------------------待整理 
-  
-  input表单无法获取焦点
+  input表单无法获取焦点 
     <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>
     <input type="text" name="" value="" id="test1">
     <input type="text" name="" value="" id="test2">

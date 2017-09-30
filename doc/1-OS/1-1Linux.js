@@ -92,7 +92,7 @@ Shell: 一种命令语言解释器'command-language interpreter',
       Windows中,在'./Git/etc/bash.bashrc'文件中写入,进行永久别名配置 
         alias xx1='xxx1'
         alias xx2='xxx2'
-  ◆指令
+命令 
   "<"输入重定向 
   '>'输出重定向 
     可将输入的内容放置到文件中
@@ -187,4 +187,26 @@ Shell: 一种命令语言解释器'command-language interpreter',
     where <name>  查看程序位置 
       如 where node 
     atom <path>  用Atom打开文件夹 
-
+  信息查询 
+    $ whoami  当前使用者用户名 
+    $ find <搜索范围> [<options>] <搜索条件>  完全匹配搜索 
+      options 
+        -name   按文件名称搜索 
+        -iname  按文件名称且不区分大小写搜索 
+        -user   有所有者的文件  
+        -nouser 无所有者的文件  
+        -atime 
+        -atime <num>  访问文件 
+        -ctime <num>  改变文件属性 
+        -mtime <num>  修改文件内容 
+          find /a/b  -mtime +10 查找10天前之前修改过的文件 
+          find /a/b  -mtime 10  查找10天前当天修改的文件 
+          find /a/b  -mtime -10 查找10天前到现在修改的文件
+        -size <size>  根据文件大小修改 
+          $ find . -size -25k   在当前文件夹下查找文件小于25k的文件 
+          $ find . -size 25k    在当前文件夹下查找文件大小为25k的文件 
+          $ find . -size +25k   在当前文件夹下查找文件大于25k的文件 
+        -inum <num>   根据i节点来查找 
+  逻辑符号 
+    -a  逻辑与
+    -o  逻辑或 

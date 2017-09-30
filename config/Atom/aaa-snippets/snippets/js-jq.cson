@@ -258,7 +258,7 @@
       })"""
   # 自定义封装 
   '-jq ajax ':
-    'prefix': 'ajaxJQ'
+    'prefix': 'ajax-jq'
     'body': """$.ajax({ // 某接口
         type : 'GET',
         url  : 'url',
@@ -277,7 +277,7 @@
         console.log('某接口',statusTxt,backData);
       }
       ,function(xhr,status,errorTrown){
-        console.log("%cstatus:"+status+'某接口',"background:#afffee;");
+        console.warn('某接口 fail: ',status);
       }) """
     
     

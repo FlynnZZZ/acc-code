@@ -1,16 +1,139 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
+  # obj ------------------------------------------------
+  '-obj .__proto__':
+    'prefix': 'proto1' # 存在bug
+    'body': '__proto__'
+  '-obj .constructor':
+    'prefix': 'constructor1' # 存在bug,当为 'prefix': 'constructor' 时
+    'body': 'constructor'
+  '-obj .valueOf()':
+    'prefix': 'valueOf'
+    'body': 'valueOf()'
+  '-obj .toString()':
+    'prefix': 'toString'
+    'body': 'toString()'
+  '-obj .toLocaleString()':
+    'prefix': 'toLocaleString'
+    'body': 'toLocaleString()'
+  '-obj .hasOwnProperty(key)':
+    'prefix': 'hasOwnProperty1' # 存在bug 
+    'body': 'hasOwnProperty($1)'
+  '-obj .propertyIsEnumerable(key)':
+    'prefix': 'propertyIsEnumerable'
+    'body': 'propertyIsEnumerable($1)'
+  '-obj .isPrototypeOf(obj)':
+    'prefix': 'isPrototypeOf'
+    'body': 'isPrototypeOf($1)'
+  '-obj .apply(this[,arrays])':
+    'prefix': 'apply'
+    'body': 'apply(${1:this},${2:arrays})'
+  '-obj .bind(this[,arg1,arg2,...])':
+    'prefix': 'bind'
+    'body': 'bind(${1:this},${2:arg1,arg2,..})'
+  '-obj .call(this[,arg1,arg2,...])':
+    'prefix': 'call'
+    'body': """call(${1:this},${2:arg1,arg2,..})"""
+  '-obj Object.create(protoObj[,configObj])':
+    'prefix': 'Object-create'
+    'body': 'Object.create($1)'
+  '-obj Object.is(val1,val2)':
+    'prefix': 'Object-is'
+    'body': 'Object.is($1)'
+  '-obj Object.keys(obj)':
+    'prefix': 'Object-keys'
+    'body': 'Object.keys($1)'
+  '-obj Object.assign(obj1,obj2,..)':
+    'prefix': 'Object-assign'
+    'body': 'Object.assign($1)'
+  '-obj Object.getPrototypeOf(obj)':
+    'prefix': 'Object-getPrototypeOf'
+    'body': 'Object.getPrototypeOf($1)'
+  '-obj Object.defineProperty(obj,key,configObj)':
+    'prefix': 'Object-defineProperty'
+    'body': '''Object.defineProperty(${1:obj},key,{
+        // get : function (){
+        // },
+        // set : function (){
+        // },
+        value : val,
+        writable : bool,
+        enumerable : bool, 
+        configurable : bool
+      })'''
+  '-obj Object.defineProperties(obj,configObj)':
+    'prefix': 'Object-defineProperties'
+    'body': '''Object.defineProperties(${1:obj},{
+        aoo: {
+          value: 101,
+          writable: true,
+          enumerable: true,
+          configurable: true
+        },
+        boo: {
+          set: function(newVal) {
+            // this.xx = newVal
+          },
+          get: function() {
+            // return this.xx
+          },
+          enumerable: true,
+          configurable: true
+        }
+      })'''
+  '-obj Object.getOwnPropertyDescriptor(obj,key)':
+    'prefix': 'Object-getOwnPropertyDescriptor'
+    'body': 'Object.getOwnPropertyDescriptor($1)'
+  '-obj Object.getOwnPropertyNames()':
+    'prefix': 'Object-getOwnPropertyNames'
+    'body': 'Object.getOwnPropertyNames()'
+  '-obj Object.isExtensible(obj)':
+    'prefix': 'Object-isExtensible'
+    'body': 'Object.isExtensible($1)'
+  '-obj Object.isSealed(obj)':
+    'prefix': 'Object-isSealed'
+    'body': 'Object.isSealed($1)'
+  '-obj Object.isFrozen(obj)':
+    'prefix': 'Object-isFrozen'
+    'body': 'Object.isFrozen($1)'
+  '-obj Object.preventExtensions(obj)':
+    'prefix': 'Object-preventExtensions'
+    'body': 'Object.preventExtensions($1)'
+  '-obj Object.seal(obj)':
+    'prefix': 'Object-seal'
+    'body': 'Object.seal($1)'
+  '-obj Object.freeze(obj)':
+    'prefix': 'Object-freeze'
+    'body': 'Object.freeze($1)'
+  '-obj writable':
+    'prefix': 'writable'
+    'body': 'writable' 
+  '-obj enumerable':
+    'prefix': 'enumerable'
+    'body': 'enumerable' 
+  '-obj configurable':
+    'prefix': 'configurable'
+    'body': 'configurable' 
   # bol ------------------------------------------------
+  '-bol Boolean':
+    'prefix': 'Boolean'
+    'body': 'Boolean'
   '-bol Boolean($1)':
-    'prefix': 'Boolean bol'
+    'prefix': 'Boolean1'
     'body': 'Boolean($1)'
   # num ------------------------------------------------
   '-num Infinity':
     'prefix': 'Infinity'
     'body': 'Infinity'
+  '-num Number':
+    'prefix': 'Number1 '
+    'body': 'Number'
   '-num Number($1)':
     'prefix': 'Number num'
     'body': 'Number($1)'
+  '-num Number.NaN':
+    'prefix': 'Number.NaN'
+    'body': 'Number.NaN'
   '-num Number.MAX_VALUE':
     'prefix': 'Number.MAX_VALUE'
     'body': 'Number.MAX_VALUE'
@@ -23,9 +146,6 @@
   '-num Number.POSITIVE_INFINITY':
     'prefix': 'Number.POSITIVE_INFINITY'
     'body': 'Number.POSITIVE_INFINITY'
-  '-num Number.NaN':
-    'prefix': 'Number.NaN'
-    'body': 'Number.NaN'
   '-num .toFixed(num)':
     'prefix': 'toFixed'
     'body': 'toFixed($1)'
@@ -36,11 +156,14 @@
     'prefix': 'toPrecision'
     'body': 'toPrecision($1)'
   # str ------------------------------------------------
+  '-str String':
+    'prefix': 'String str'
+    'body': 'String'
   '-str String($1)':
-    'prefix': 'String'
+    'prefix': 'String1'
     'body': 'String($1)'
   '-str String.fromCharCode(num,num...)':
-    'prefix': 'String.fromCharCode'
+    'prefix': 'String-fromCharCode'
     'body': 'String.fromCharCode($1)'
   '-str .charAt(idx)':
     'prefix': 'charAt'
@@ -48,9 +171,6 @@
   '-str .charCodeAt(idx)':
     'prefix': 'charCodeAt'
     'body': 'charCodeAt($1)'
-  '-str .compile(rgep,modifier)':
-    'prefix': 'compile'
-    'body': 'compile($1)'
   '-str .substr(begin[,num])':
     'prefix': 'substr'
     'body': 'substr($1)'
@@ -102,13 +222,16 @@
   '-str/arr .concat($1)':
     'prefix': 'concat'
     'body': 'concat($1)'
+  '-str/RE .compile(rgep,modifier)':
+    'prefix': 'compile'
+    'body': 'compile($1)'
   # arr ------------------------------------------------
+  '-arr Array':
+    'prefix': 'Array arr'
+    'body': 'Array'
   '-arr Array.isArray(arr)':
-    'prefix': 'Array.isArray'
+    'prefix': 'Array-isArray'
     'body': 'Array.isArray($1)'
-  '-arr Array.from(arrLike [,mapFoo] [,thisArr])':
-    'prefix': 'Array.from'
-    'body': 'Array.from(arrLike ${1:,foo})'
   '-arr .pop()':
     'prefix': 'pop'
     'body': 'pop()'
@@ -170,131 +293,16 @@
     'body': """reduceRight(function(retVal,currVal,idx,arr){ 
       return $2 
     },${1:initVal})"""
-  # obj ------------------------------------------------
-  '-obj __proto__':
-    'prefix': 'proto'
-    'body': '__proto__'
-  '-obj constructor':
-    'prefix': 'constructor1' # 存在bug,当为 'prefix': 'constructor' 时
-    'body': 'constructor'
-  '-obj writable':
-    'prefix': 'writable'
-    'body': 'writable' 
-  '-obj enumerable':
-    'prefix': 'enumerable'
-    'body': 'enumerable' 
-  '-obj configurable':
-    'prefix': 'configurable'
-    'body': 'configurable' 
-  '-obj Object.create(protoObj[,configObj])':
-    'prefix': 'Object.create'
-    'body': 'Object.create($1)'
-  '-obj Object.assign(obj1,obj2,..)':
-    'prefix': 'Objectassign'
-    'body': 'Object.assign($1)'
-  '-obj Object.defineProperty(obj,key,configObj)':
-    'prefix': 'ObjectdefineProperty'
-    'body': '''Object.defineProperty(${1:obj},key,{
-        // get : function (){
-        // },
-        // set : function (){
-        // },
-        value : val,
-        writable : bool,
-        enumerable : bool, 
-        configurable : bool
-      })'''
-  '-obj Object.defineProperties(obj,configObj)':
-    'prefix': 'Object.defineProperties'
-    'body': '''Object.defineProperties(${1:obj},{
-        aoo: {
-          value: 101,
-          writable: true,
-          enumerable: true,
-          configurable: true
-        },
-        boo: {
-          set: function(newVal) {
-            // this.xx = newVal
-          },
-          get: function() {
-            // return this.xx
-          },
-          enumerable: true,
-          configurable: true
-        }
-      })'''
-  '-obj Object.getOwnPropertyDescriptor(obj,key)':
-    'prefix': 'Object.getOwnPropertyDescriptor'
-    'body': 'Object.getOwnPropertyDescriptor($1)'
-  '-obj Object.getOwnPropertyNames()':
-    'prefix': 'Object.getOwnPropertyNames'
-    'body': 'Object.getOwnPropertyNames()'
-  '-obj Object.getPrototypeOf(obj)':
-    'prefix': 'ObjectGetPrototypeOf'
-    'body': 'Object.getPrototypeOf($1)'
-  '-obj Object.isExtensible(obj)':
-    'prefix': 'Object.isExtensible'
-    'body': 'Object.isExtensible($1)'
-  '-obj Object.isSealed(obj)':
-    'prefix': 'Object.isSealed'
-    'body': 'Object.isSealed($1)'
-  '-obj Object.isFrozen(obj)':
-    'prefix': 'Object.isFrozen'
-    'body': 'Object.isFrozen($1)'
-  '-obj Object.preventExtensions(obj)':
-    'prefix': 'Object.preventExtensions'
-    'body': 'Object.preventExtensions($1)'
-  '-obj Object.seal(obj)':
-    'prefix': 'Object.seal'
-    'body': 'Object.seal($1)'
-  '-obj Object.freeze(obj)':
-    'prefix': 'Object.freeze'
-    'body': 'Object.freeze($1)'
-  '-obj Object.is(val1,val2)':
-    'prefix': 'Object.is'
-    'body': 'Object.is($1)'
-  '-obj Object.keys(obj)':
-    'prefix': 'Objectkeys'
-    'body': 'Object.keys($1)'
-  '-obj .toString()':
-    'prefix': 'toString'
-    'body': 'toString()'
-  '-obj .toLocaleString()':
-    'prefix': 'toLocaleString'
-    'body': 'toLocaleString()'
-  '-obj .valueOf()':
-    'prefix': 'valueOf'
-    'body': 'valueOf()'
-  '-obj .hasOwnProperty(key)':
-    'prefix': 'hasOwnProperty1'
-    # 存在bug 
-    'body': 'hasOwnProperty($1)'
-  '-obj .propertyIsEnumerable(key)':
-    'prefix': 'propertyIsEnumerable'
-    'body': 'propertyIsEnumerable($1)'
-  '-obj .isPrototypeOf(obj)':
-    'prefix': 'isPrototypeOf'
-    'body': 'isPrototypeOf($1)'
-  '-obj .apply(this[,arrays])':
-    'prefix': 'apply'
-    'body': 'apply(${1:this},${2:arrays})'
-  '-obj .bind(this[,arg1,arg2,...])':
-    'prefix': 'bind'
-    'body': 'bind(${1:this},${2:arg1,arg2,..})'
-  '-obj .call(this[,arg1,arg2,...])':
-    'prefix': 'call'
-    'body': """call(${1:this},${2:arg1,arg2,..})"""
   # fn ------------------------------------------------
-  '-fn prototype':
-    'prefix': 'prototype'
-    'body': 'prototype'
   '-fn arguments':
     'prefix': 'arguments'
     'body': 'arguments'
   '-fn caller':
     'prefix': 'caller'
     'body': 'caller'
+  '-fn .prototype':
+    'prefix': 'prototype'
+    'body': 'prototype'
   '-fn function(){\n}$1':
     'prefix': 'function1'
     'body': 'function(){\n}$1'

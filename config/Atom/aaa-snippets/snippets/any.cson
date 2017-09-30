@@ -37,9 +37,9 @@
   '-any function':
     'prefix': 'function'
     'body': 'function'
-  '-any handler':
-    'prefix': 'handler'
-    'body': """handler""" 
+  '-any handle':
+    'prefix': 'handle'
+    'body': """handle""" 
   '-any header':
     'prefix': 'header'
     'body': """header""" 
@@ -189,6 +189,9 @@
   '-any throw':
     'prefix': 'throw'
     'body': """throw""" 
+  '-any catch':
+    'prefix': 'catch'
+    'body': """catch""" 
   '-any undefined':
     'prefix': 'undefined'
     'body': 'undefined' 

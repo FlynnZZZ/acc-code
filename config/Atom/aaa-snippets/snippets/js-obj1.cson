@@ -1,5 +1,39 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
+  # window ------------------------------------------------
+  '-win parseInt(str[,radix])':
+    'prefix': 'parseInt'
+    'body': 'parseInt(str,${1:radix})'
+  '-win parseFloat(str)':
+    'prefix': 'parseFloat'
+    'body': 'parseFloat($1)'
+  '-win encodeURI(str)':
+    'prefix': 'encodeURI'
+    'body': 'encodeURI($1)'
+  '-win decodeURI(uri)':
+    'prefix': 'decodeURI'
+    'body': 'decodeURI($1)'
+  '-win encodeURIComponent(str)':
+    'prefix': 'encodeURIComponent'
+    'body': 'encodeURIComponent($1)'
+  '-win decodeURIComponent(uri)':
+    'prefix': 'decodeURIComponent'
+    'body': 'decodeURIComponent($1)'
+  '-win escape(str)':
+    'prefix': 'escape'
+    'body': 'escape($1)'
+  '-win unescape(str)':
+    'prefix': 'unescape'
+    'body': 'unescape($1)'
+  '-win isFinite(num)':
+    'prefix': 'isFinite'
+    'body': 'isFinite($1)'
+  '-win isNaN(val)':
+    'prefix': 'isNaN'
+    'body': 'isNaN($1)'
+  '-win eval(JSStr)':
+    'prefix': 'eval'
+    'body': 'eval($1)'
   # json ------------------------------------------------
   '-jsn JSON.parse(JSONstr[,foo(key,val)])':
     'prefix': 'JSON.parse'
@@ -8,14 +42,17 @@
     'prefix': 'JSON.stringify'
     'body': 'JSON.stringify($1)'
   # date ------------------------------------------------
+  '-dt Date()':
+    'prefix': 'Date'
+    'body': 'Date()'
   '-dt Date.now()':
     'prefix': 'Date.now'
     'body': 'Date.now()'
   '-dt Date.parse(str/date)':
-    'prefix': 'Date.parse'
+    'prefix': 'Date-parse'
     'body': 'Date.parse($1)'
   '-dt Date.UTC(year,month[,...])':
-    'prefix': 'Date.UTC'
+    'prefix': 'Date-UTC'
     'body': 'Date.UTC($1)'
   '-dt .getDate()':
     'prefix': 'getDate'
@@ -75,6 +112,15 @@
   '-RE ignoreCase':
     'prefix': 'ignoreCase'
     'body': 'ignoreCase'
+  '-RE new RegExp($1)':
+    'prefix': 'newRegExp'
+    'body': 'new RegExp($1)'
+  '-RE .test(str)':
+    'prefix': 'test'
+    'body': 'test($1)'
+  '-RE .exec(str)':
+    'prefix': 'exec'
+    'body': 'exec($1)'
   '-RE RegExp.input':
     'prefix': 'RegExp.input'
     'body': 'RegExp.input'
@@ -93,18 +139,6 @@
   '-RE RegExp.rightContext':
     'prefix': 'RegExpRightContext'
     'body': 'RegExp.rightContext'
-  '-RE new RegExp($1)':
-    'prefix': 'newRegExp'
-    'body': 'new RegExp($1)'
-  '-RE .test(str)':
-    'prefix': 'test'
-    'body': 'test($1)'
-  '-RE .exec(str)':
-    'prefix': 'exec'
-    'body': 'exec($1)'
-  '-RE .compile(rgep,modifier)':
-    'prefix': 'compile'
-    'body': 'compile($1)'
   # math ------------------------------------------------
   '-Math.PI':
     'prefix': 'Math.PI'
@@ -184,40 +218,6 @@
   '-Math.atan2(num)':
     'prefix': 'Math.atan2'
     'body': 'Math.atan2($1)'
-  # window ------------------------------------------------
-  '-win parseInt(str[,radix])':
-    'prefix': 'parseInt'
-    'body': 'parseInt(str,${1:radix})'
-  '-win parseFloat(str)':
-    'prefix': 'parseFloat'
-    'body': 'parseFloat($1)'
-  '-win encodeURI(str)':
-    'prefix': 'encodeURI'
-    'body': 'encodeURI($1)'
-  '-win decodeURI(uri)':
-    'prefix': 'decodeURI'
-    'body': 'decodeURI($1)'
-  '-win encodeURIComponent(str)':
-    'prefix': 'encodeURIComponent'
-    'body': 'encodeURIComponent($1)'
-  '-win decodeURIComponent(uri)':
-    'prefix': 'decodeURIComponent'
-    'body': 'decodeURIComponent($1)'
-  '-win escape(str)':
-    'prefix': 'escape'
-    'body': 'escape($1)'
-  '-win unescape(str)':
-    'prefix': 'unescape'
-    'body': 'unescape($1)'
-  '-win isFinite(num)':
-    'prefix': 'isFinite'
-    'body': 'isFinite(num)'
-  '-win isNaN(val)':
-    'prefix': 'isNaN'
-    'body': 'isNaN($1)'
-  '-win eval(JSStr)':
-    'prefix': 'eval'
-    'body': 'eval($1)'
   # console ----------------------------------------------------
   '-cso console':
     'prefix': 'console'

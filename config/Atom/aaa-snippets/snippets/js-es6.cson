@@ -4,6 +4,10 @@
   '-6 Promise':
     'prefix': 'Promise'
     'body': 'Promise'
+  # arr 
+  '-6 Array.from(arrLike [,mapFoo] [,thisArr])':
+    'prefix': 'Array-from'
+    'body': 'Array.from(arrLike ${1:,foo})'
   # module 
   '-*-import':
     'prefix': 'import'

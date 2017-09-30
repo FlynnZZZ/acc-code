@@ -17,6 +17,9 @@
   '--exports':
     'prefix': 'exports'
     'body': 'exports'
+  '--Example:':
+    'prefix': 'Example'
+    'body': 'Example: '
 
 '.text.html.basic,.text.xml,.text.html.php':
   # 标签 ----------------------------
@@ -203,10 +206,13 @@
   # operator 操作符  statement 语句  
   '--typeof':
     'prefix': 'typeof'
-    'body': 'typeof'
+    'body': 'typeof '
   '--instanceof':
     'prefix': 'instanceof'
     'body': 'instanceof'
+  '--void':
+    'prefix': 'void'
+    'body': 'void'
   '--try-catch':
     'prefix': 'try catch'
     'body': """try {

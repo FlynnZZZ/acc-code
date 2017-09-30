@@ -1,138 +1,110 @@
 ES6: 于2015年6月发布,目标是使JS可用来编写复杂的大型应用程序,成为企业级开发语言 
 ◆标准库的扩展&数据类型&对象库扩展 
 Number 数值 
-  PS: ES6中,isNaN、isFinite、parseInt、parseFloat等方法从window移植到了Number上 
-    目的: 减少全局性的函数,逐渐实现语言的模块化 
-  Number.isNaN()      判断是否为非数值
-    传统的 window.isNaN() 会把非数值的参数转化成数值再进行判断,
-    而 Number. isNaN() 只对数值类型有效,非数值类型的参数一律返回false
-    isNaN('abc'); // true,'abc'无法转为一个数值,返回true
-    Number.isNaN('abc'); // false,Number.isNaN不做类型转换,直接返回false
-  Number.isFinite()   判断数值是否非无穷
-    只是对数值类型有效,对非数值类型的参数一律返回false。
-    Number.isFinite(1);        // true,数值1是有穷,即非无穷
-    Number.isFinite(Infinity); // false,Infinity表示无穷大的特殊值
+  PS: isNaN、parseInt等方法从window移到了Number上,为了减少全局性的函数 
+  bol = Number.isNaN(val)   是否为非数值 
+    window.isNaN(val) 会把非数值的参数转化成数值再进行判断 
+    Number.isNaN(val) 只对数值类型有效,非数值类型的参数一律返回false 
+    Example: 
+    console.log(isNaN('abc'));         // true   进行了类型转换 
+    console.log(Number.isNaN('abc'));  // false  不做类型转换 
+  bol = Number.isFinite(val)   是否为有限的数值 
+    只是对数值类型有效,对非数值类型的参数一律返回'false' 
     Number.isFinite('abc');    // false
-  Number.parseInt()   解析字符串,返回整数     [等价于 window.parseInt()] 
-  Number.parseFloat() 解析字符串,并返回浮点数 [等价于 window.parseFloat()] 
+    Number.isFinite(Infinity); // false 
+    Number.isFinite(1);        // true 
+  int = Number.parseInt(str)   解析字符串,返回整数 [等价于 window.parseInt()] 
+  float = Number.parseFloat(str) 解析字符串,并返回浮点数 [等价于 window.parseFloat()] 
   ◆新特性:
-  Number.isInteger()  判断是否是整数
-    PS: JS内部对整数和浮点数采用一样的存储方式,小数点后都是0的浮点数,会被认为是整数
-    Number.isInteger(3.2);  // false
-    Number.isInteger(3);    // true
-    Number.isInteger(3.0);  // true
-    Number.isInteger(3.00); // true
-  Number.EPSILON 常量,定义一个极小的数值
-    PS:Number.EPSILON 的出现是用来判断浮点数的计算误差,
+  Number.MAX_SAFE_INTEGER  最大的安全整数:'9007199254740991' 
+  Number.MIN_SAFE_INTEGER  最小的安全整数:'-9007199254740991' 
+  Number.EPSILON  常量'2.220446049250313e-16',一个极小的数值 
+    PS: Number.EPSILON 的出现是用来判断浮点数的计算误差,
       若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
     console.log(Number.EPSILON); // 2.220446049250313e-16
     2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
-  Number.isSafeInteger() 判断是否为安全整数
-    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 安全整数
-    ES6为引入了安全整数的概念。
-    原来JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间,
-    超过这个范围,无法精确表示这个值。故称之为不安全。
-    为此,ES6定义了两个常量来表示这个范围的最大值和最小值:
-    Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER
-    此外,若给你一个数值,你不知道它是否超出了这个安全范围,
-    可以使用ES6给我们新增的一个函数 Number.isSafeInteger 来进行判断
+  bol = Number.isInteger(num)  是否为整数 
+    PS: JS内整数和浮点数存储方式相同,小数点后都是0的浮点数,会被认为是整数
+    Number.isInteger(3);    // true
+    Number.isInteger(3.0);  // true
+    Number.isInteger(3.00); // true
+    Number.isInteger(3.2);  // false
+  bol = Number.isSafeInteger(num) 是否为安全整数 
+    处于 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 之间的整数
     Number.isSafeInteger(Number.MAX_SAFE_INTEGER);   // true
     Number.isSafeInteger(Number.MAX_SAFE_INTEGER+1); // false
 String 字符串扩展 
-  `a${1+2}b` 模版字符串 
-    PS:又称多行字符串,可以跨越多行,使用反引号引起来,如 `字符`
-    Example:
-      var str =`a
-        b
-        c`;
-      console.log(str);
-      // "a
-      //   b
-      //   c"
-    `${}` 模板占位符 
-      ${str1}表示变量字符串str1表示的字符
-      ${}中可以放任意的javascript表达式
-      var aoo = "fan";
-      var boo = `${aoo} hello!`; 
-      var coo = `${1+2} hello`;
-      console.log(boo,coo); // fan hello   3 hello
-  var rstStr = str.repeat(num) 将字符串重复N次并返回[不影响目标字符串]
+  `a${1+2}b` 模版字符串,可以跨越多行,使用反引号引起来 
+    `${val/expr}` 模板占位符 
+  str1 = str.repeat(num) 将字符串重复num次并返回[不影响源字符串] 
+    PS: 该方法不能用于数值,即不会隐式转换 
     var aoo = "1";  //目标字符串
-    console.log(aoo); // 1
-    var boo = aoo.repeat(3); //变量aoo被重复三次；
-    console.log(boo); // 111
-  str1.includes(str2); 返回是否包含str2的布尔值  
+    console.log(aoo.repeat(3),aoo); // 111 1 
+  bol = str1.includes(str2)   str1是否包含str2 
     'good'.includes('o') // true
-  str1.startsWith(str2[,num]) 判断str2是否为str1指定的开头位置,
-    num可选,默认为0,表示指定的开头
-    var aoo = "123";      //目标字符串
+  bol= str1.startsWith(str2[,idx]) str1起始从idx位置开始是否为str2 
+    idx  可选,默认为0,指定的开头位置 
+    var aoo = "123";      // 目标字符串
     aoo.startsWith('1');  //true,出现在开头位置
     aoo.startsWith('2');  //false,不是在开头位置
     aoo.startsWith('2',1); //true,从第2个字符开始
-  str1.endsWith(str2[,num])   判断str2是否出现在str1指定长度的尾部位置
-    num可选,默认为str1的长度
-    var name = "123456";    //目标字符串
-    name.endsWith('1');   //false,不在尾部位置
-    name.endsWith('6');   //true,在尾部位置
-    name.endsWith('6',5); //false,只针对前5个字符
-    name.endsWith('5',5); //true,针对前6个字符
-  str.codePointAt()  返回4字节字符对应的十进制数
-    PS:JS 中,一个字符固定为2个字节,
-      对于那些需要4个字节存储的字符,JS 会认为它是两个字符,此时它的字符长度length为2。
-      如字符:"𠮷",就是一个需要4个字节存储,length为2的字符。
-      对于4字节的字符,JS无法正确读取字符
-    Example:
-      var str1 = "前端";
-      var str2 = "𠮷";
-      str1.length; //length为2
-      str2.length; //length为2
-      str1.charAt(0);  //前
-      str1.charAt(1);  //端
-      str2.charAt(0);  //'�'
-      str2.charAt(1);  //'�'
-      字符"𠮷"是一个4字节的字符,charAt方法能正确读取字符串str1的字符,
-      但无法正确读取4个字节的字符,此时返回结果出现了乱码。
-      使用ES6给我们提供的 codePointAt方法,就可以处理这种4个字节的字符了
-      var str = "𠮷";
-      str.codePointAt();  //结果:134071
-      返回其码点的十进制数:134071,换成16进制就是20bb7,对应的Unicode编码则是\u20bb7
-  String.fromCodePoint(num)  函数的参数是一个字符对应的码点,返回的结果就是对应的字符
-    PS:即使4字节的字符,也能正确实现
-    String.fromCodePoint(134071); //结果:"𠮷"
-  String.raw()  返回字符串最原始的样貌,即使字符串中含有转义符 
+  bol= str1.endsWith(str2[,idx])   str1的前num位是否以str2结尾 
+    idx   可选,默认为str1的长度
+    var name = "123456";  // 目标字符串
+    name.endsWith('6');   // true,在尾部位置
+    name.endsWith('6',5); // false,只针对前5个字符
+    name.endsWith('5',5); // true,针对前5个字符
+  num = str.codePointAt()  返回4字节字符对应的十进制数 
+    PS: JS中,一个字符固定为2个字节,对于4字节的字符,JS无法正确读取字符 
+    var str1 = "前端";
+    var str2 = "𠮷"; // 需4个字节存储的字符 
+    console.log(str1.length,str2.length); // 2 2 
+    console.log(str1.charAt(0));  // 前
+    console.log(str1.charAt(1));  // 端
+    console.log(str2.charAt(0));  // �,charAt方法只能正确读取2字节字符串 
+    console.log(str2.charAt(1));  // �
+    console.log(str2.codePointAt());  // 134071 
+    返回其码点的十进制数:134071,换成16进制就是'20bb7',对应的Unicode编码则是'\u20bb7'
+  str = String.fromCodePoint(num)  将一个字符对应的码点,转换为对应的字符
+    PS: 即使4字节的字符,也能正确实现
+    String.fromCodePoint(134071); // 结果:"𠮷"
+  str1 = String.raw<str>  返回字符串最原始的样貌,即使字符串中含有转义符 
     console.log(`hello\tworld`); // hello world
-    \t会被识别为制表符,实现空格效果
-    console.log(String.raw`hello\twolrd`); //输出:hello\twolrd
+    '\t'会被识别为制表符,实现空格效果
+    console.log(String.raw`hello\twolrd`); // hello\twolrd
+    console.log(String.raw(`hello\twolrd`)); // 报错 
+    console.log(String.raw'hello\twolrd');   // 报错 
 Array 数组扩展 
   ◆静态方法
-  Array.of();  将一组值,转换成数组 
-    PS:Array.of() 函数的出现是源于Array构造函数的缺陷
-    Array.of(1,2,3,4,5); // [1,2,3,4,5]
-  Array.from( ) 将类似数组的对象或者可遍历的对象转换成真正的数组 
-    PS:最常见的类数组对象就是调用getElementsByTagName方法得到的结果
+  arr = Array.of(val1,val2,..);  将一组值,转换成数组 
+    PS: Array.of() 函数的出现是源于Array构造函数的缺陷
+    console.log(Array.of(1,2,3,4,5)); // [1,2,3,4,5]
+  arr = Array.from(arrLike[,mapFoo][,context]) 转换成为数组 
+    PS: 最常见的类数组对象就是调用getElementsByTagName方法得到的结果
+    arrLike 想要转换成数组的类数组或可遍历对象
+    mapFoo  可选,最后生成的数组会经过该函数的加工处理后再返回
+    context 可选,执行 mapFoo 函数时 this 的值
     let ele = document.getElementsByTagName('a');
     ele instanceof Array;  // false,非数组
     ele instanceof Object; // true,对象
     Array.from(ele) instanceof Array; // true,数组
-    Example:将字符串分割成数组
-      let str = 'hello';
-      Array.from(str); // ["h", "e", "l", "l", "o"]
+    将字符串分割成数组 
+    console.log(Array.from('hello')); // ["h", "e", "l", "l", "o"]
   ◆实例方法
-  arr.find(foo)      返回数组中符合条件的第一个元素 
-    foo 参数分别为数组中的每个元素
-      每个元素都会进入函数执行,直到结果为true,find函数就会返回该元素的值;
-      倘若所有元素都不符合匿名函数的条件,最终返回undefind
-    let arr = [1,2,3,4,5,6];
-    var aoo = arr.find(function(value){ return value > 2; });
+  member1 = arr.find(f(member))  返回数组中符合条件的第一个成员 
+    member  分别为数组中的每个成员  
+      回调函数返回true时,find函数就会返回该成员的值,否则最终返回 undefined  
+    var aoo = [1,2,3,4,5,6].find(function(value){ 
+      return value > 2; 
+    });
     console.log(aoo); // 3
-    
-    let arr = [1,2,3,4,5,6];
-    arr.find(function(value){ return value > 7; }); // undefined
-  arr.findIndex(foo) 返回数组中符合条件的第一个元素的位置
-    若所有元素都不符合匿名函数的条件,函数返回-1
-    let arr = [7,8,9,10];
-    arr.findIndex(function(value){ return value > 8; }); // 2
-  arr.fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组
+  idx = arr.findIndex(f(member)) 返回数组中符合条件的第一个成员的下标 
+    回调返回值为true时,该成员的下标,否则最终返回 -1 
+    var idx1 = [7,8,9,10].findIndex(function(value){ 
+      return value > 8; 
+    }); 
+    console.log(idx1); // 2
+  arr.fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组 
     let arr = [1,2,3];
     arr.fill(4); // [4,4,4]
     
@@ -178,7 +150,7 @@ Array 数组扩展
     var array2 = [for(i of array1)  if(i>3) i];
     console.log(array2); //  [4]
 Object 对象扩展 
-  属性的简写
+  属性的简写 
     var name = "Zhangsan";
     var age = 12;
     //传统的属性写法
@@ -190,7 +162,7 @@ Object 对象扩展
     //ES6的简洁写法
     var person = {name,age};
     console.log(person); // {name: "Zhangsan", age: 12}
-  方法的简写
+  方法的简写 
     //传统的表示法
     var person = {
       say:function(){
@@ -817,7 +789,8 @@ RegExp 正则扩展
       使用给定的代码点来产生相应的单个字符
       console.log(String.fromCodePoint(134071));  // "𠮷"
 Symbol 标记,表示独一无二的值[原始数据类型] 
-  PS:JS的第七种数据类型,不可变,用来产生唯一的标识 
+  PS: JS的第七种数据类型,不可变,用来产生唯一的标识 
+    ES5中对象的key键名的类型要求一定是字符串,ES6已经允许属性名的类型是 Symbol
   创建标记 
     var sym = Symbol([arg])   创建标记 
       PS:Symbol函数前不能使用new命令,否则会报错。
@@ -1119,9 +1092,7 @@ Symbol 标记,表示独一无二的值[原始数据类型]
     Generator.prototype[Symbol.toStringTag]:'Generator'
     GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
 Set   集合 
-  PS:ES6新增的一种新的数据结构,可以理解为值的集合;
-    Set中的元素无重复项[会自动去掉重复的元素];
-    Set集合中,key和val为同一个值;
+  PS: Set中的元素无重复项[会自动去掉重复的元素]; Set集合中,key和val为同一个值;
   new Set([arr])  创建set
     var s1 = new Set();  // 创建一个集合
     var s2 = new Set([1,2,3,2,4]); //创建并初始化
@@ -1195,9 +1166,7 @@ Set   集合
       因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失。
       所以WeakSet结构无keys(),values(),entries(),forEach() 等方法和 size 属性
 Map   字典 
-  ES5中的key键名的类型要求一定是字符串,ES6已经允许属性名的类型是Symbol
-  跟Object对象很像,但其的key键名的类型不再局限于字符串类型了,可为各种类型的值;
-  new Map([arr]) 定义Map
+  new Map([arr]) 定义Map 
     arr  可选,数组
     var mp1 = new Map()
     let mp2 = new Map([
@@ -1307,7 +1276,7 @@ Map   字典
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
       若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失。
 Blob  二进制数据的基本对象 
-  PS:一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
+  PS: 一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
     Blob表示的数据不一定是一个JavaScript原生格式。 
     File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件。
     要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档。
@@ -1434,12 +1403,10 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
     Uint32    4     unsigned int     32 位不带符号的整数             
     Float32   4     float            32 位浮点数                    
     Float64   8     double           64 位浮点数                    
-'Class'类 
-  PS: 'class'本质上还是基于原型prototype的实现做的进一步封装,
-    ES5之前使用'function'和'prototype'来模拟class实现面向对象;  
+'Class'类: 基于原型的实现的封装 
   class Klass {} 创建类 
     PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
-      class内部只允许定义方法,不允许定义属性,包括静态属性[?];
+      class内部不可定义原型属性和静态属性;
       类名后面的括号{}里面的内容称之为类体 
     Example: 
       ES5 : 
@@ -1447,7 +1414,7 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
         this.name = name;
       }
       animal.prototype = {
-        speak : function(){
+        speak: function(){
           console.log("I am"+this.name);
         }
       }
@@ -1465,24 +1432,11 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
       const animal = new Animal("cat");
       animal.speak();    //I am cat
     ◆类体中的方法 
-    constructor(){}   构造方法,声明实例的属性和方法,相当于ES5的构造函数 
-      PS:实例化时,会调用此方法来初始化实例对象; 内部的 this 表示实例对象;  
+    constructor(){}   构造方法,声明实例属性/方法 
+      PS: 实例化时,会调用此方法来初始化实例对象;内部的 this 表示实例对象;  
         若无'constructor'方法,执行时会使用一个空的constructor方法 
         具有唯一性,一个类体不能含有多个constructor构造方法 
-      Example:
-        class Klass{
-          constructor(aoo,boo){ 
-            // this,指向实例化后的对象
-            this.aoo = aoo; 
-            this.boo = boo; 
-          };
-          toString() { 
-            return '('+this.x+', '+this.y+')'; 
-          };
-        }
-        var cla1 = new Klass(1,2);
-        cla1; // Klass {aoo: 1, boo: 2}
-    foo(){}           声明实例的原型方法 
+    foo(){}           声明原型方法 
       PS: 内部的 this 表示实例对象;  
       [val] () {}  属性名可使用表达式 
         var  aoo = 'sayHello';
@@ -1493,16 +1447,16 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
         }
         var klass = new Klass();
         klass.sayHello(); // 1
-    static foo(){}    声明类的静态方法 
+    static foo(){}    声明静态方法 
       class Klass {
         static foo(){
           console.log('静态方法');
         }
       }
       Klass.foo();  // 静态方法
-    getter foo(){}  取值函数 
-    setter foo(){}  存值函数 
-      在Class内部可以使用get和set关键字,对某个属性设置存值函数和取值函数 
+    get foo(){}  取值函数 
+    set foo(){}  存值函数 
+      使用get和set关键字,对某个属性设置存值函数和取值函数 
       class MyClass {
         get prop() {
           return 'getter';
@@ -1526,7 +1480,7 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
       }
       class Dog extends Animal { 
         constructor(name,color){
-          super(name);
+          super(name);  // 调用父类的构造方法,继承实例属性/方法   
           this.color = color;
           this.say = super.say();
         }
@@ -1542,9 +1496,8 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
       var child = new Child();
       child instanceof Child ; // true
       child instanceof Parent; // true
-    super 关键字,在子类中进行调用父类中的构造函数和方法 
-      PS: 而super本身指代的是父类的实例对象,可以使用super.的方式调用父对象的方法[?]
-        由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+    super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
+      PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
       若子类未显式定义'constructor',则下面的代码将被默认添加 
         constructor(...args){
           super(...args)
@@ -1553,7 +1506,7 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
         子类的constructor方法必须调用super方法,否则不能新建实例 
         因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
         只有调用了super方法后,才可使用this,否则报错;
-      super.xx()   调用父类中的静态方法或原型方法 
+      super.xx 父类中的静态方法或原型方法 
         子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
           但可使用 '父类名.方法()' 的方式调用父类的静态方法 
         子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 

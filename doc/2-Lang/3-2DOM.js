@@ -1933,6 +1933,8 @@ WeiXin 微信
       })
 --------------------------------------------------------------------------------
 ◆专题 
+'Image'图片 
+  img = new Image();   创建图像DOM元素 
 'Form'表单及表单字段脚本 
   PS:HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
     HTMLFormElement 继承了 HTMLElement ,因而与其他HTML元素具有相同的默认属性;

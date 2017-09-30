@@ -43,12 +43,14 @@
     selector  选择器 
     bol       布尔值 
     num       数值
+    int       整数 
+    float     浮点数 
     str       字符串
     arr       数组
     obj       对象
     any       任意类型 
     expr      表达式  
-    idx       数组的下标 
+    idx       数组的下标/字符串字符下标  
     bgn       开始 begin
     end       结束 
     elem      DOM对象  

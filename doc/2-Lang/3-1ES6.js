@@ -1166,7 +1166,7 @@ Set   集合
       因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失。
       所以WeakSet结构无keys(),values(),entries(),forEach() 等方法和 size 属性
 Map   字典 
-  new Map([arr]) 定义Map 
+  var map = new Map([arr]) 定义Map 
     arr  可选,数组
     var mp1 = new Map()
     let mp2 = new Map([
@@ -1174,47 +1174,47 @@ Map   字典
       ["gender",1]
     ]);
     console.log(mp2); // Map(2) {"name" => "aoo", "gender" => 1}
-  mp.size   获取实例的成员数
-    let mp = new Map();
-    mp.set(1,3);
-    mp.set('1','3');
-    mp.size;// 2
-  mp.set(key,val) 增加,给实例设置一对键值对,返回map实例
+  map.size   获取实例的成员数
+    let map = new Map();
+    map.set(1,3);
+    map.set('1','3');
+    map.size;// 2
+  map.set(key,val) 增加,给实例设置一对键值对,返回map实例
     key可以为各种类型的值
-      let mp = new Map();
-      mp.set("name","aoo"); // 添加一个string类型的键名
-      mp.set(1,2);          // 添加一个数字类型的键名
-      console.log(mp); // Map(2) {"name" => "aoo", 1 => 2}
-      mp.set([1],2);            // 数组类型的键名
-      mp.set({"age":"15"},2);   // 对象类型的键名
-      mp.set(true,2);           // 布尔类型的键名
-      mp.set(Symbol('name'),2); // Symbol类型的键名
-      mp.set(null,2);           // null为键名
-      mp.set(undefined,2);      // undefined为键名
-      console.log(mp);
+      let map = new Map();
+      map.set("name","aoo"); // 添加一个string类型的键名
+      map.set(1,2);          // 添加一个数字类型的键名
+      console.log(map); // Map(2) {"name" => "aoo", 1 => 2}
+      map.set([1],2);            // 数组类型的键名
+      map.set({"age":"15"},2);   // 对象类型的键名
+      map.set(true,2);           // 布尔类型的键名
+      map.set(Symbol('name'),2); // Symbol类型的键名
+      map.set(null,2);           // null为键名
+      map.set(undefined,2);      // undefined为键名
+      console.log(map);
       // Map(8) {"name" => "aoo", 1 => 2, [1] => 2, Object {age: "15"} => 2, true => 2…}
     若设置一已经存在的键名,后面的键值会覆盖前面的键值
-      let mp = new Map();
-      mp.set("aoo","boo");
-      console.log(mp);     // Map(1) {"aoo" => "boo"}
-      mp.set("aoo","coo"); // 再次设置name的值
-      console.log(mp);     // Map(1) {"aoo" => "coo"}
-  mp.get(val)     返回指定键名的键值
+      let map = new Map();
+      map.set("aoo","boo");
+      console.log(map);     // Map(1) {"aoo" => "boo"}
+      map.set("aoo","coo"); // 再次设置name的值
+      console.log(map);     // Map(1) {"aoo" => "coo"}
+  map.get(val)     返回指定键名的键值
     获取存在对应的键值,若键值对存在,就会返回键值;否则,返回undefined;
-    let mp = new Map([["aoo","boo"]]);
-    mp.get("aoo"); // "boo"
-    mp.get("coo"); // undefined
-  mp.delete(key)  删除指定的键值对,删除成功返回true,否则返回false
+    let map = new Map([["aoo","boo"]]);
+    map.get("aoo"); // "boo"
+    map.get("coo"); // undefined
+  map.delete(key)  删除指定的键值对,删除成功返回true,否则返回false
     let m = new Map();
     m.set("aoo","boo");
     m.delete("aoo"); // true
     m.delete("coo"); // false
-  mp.clear()      一次性删除所有键值对
-  mp.has(key)     判断Map实例内是否含有指定的键值对,有返回true,否则返回false
-    let mp = new Map();
-    mp.set("aoo","boo");
-    mp.has('aoo'); // true
-    mp.has('coo'); // false
+  map.clear()      一次性删除所有键值对
+  map.has(key)     判断Map实例内是否含有指定的键值对,有返回true,否则返回false
+    let map = new Map();
+    map.set("aoo","boo");
+    map.has('aoo'); // true
+    map.has('coo'); // false
   for...of 遍历Map的键名或者键值
   entries() 返回实例的键值对遍历器
     let m = new Map([
@@ -1244,11 +1244,11 @@ Map   字典
     // van
     // 25
   forEach( ) 遍历
-    let mp = new Map([
+    let map = new Map([
       ["name","van"],
       ["age",25]
     ]);
-    mp.forEach(function(value,key){
+    map.forEach(function(value,key){
       console.log(key+':'+value);
     });
     // name:van
@@ -1726,21 +1726,19 @@ Promise 同步书写异步模式
   Promise.prototype.constructor 'Promise'函数 
   Promise.prototype.then()  
   Promise.prototype.catch() 
-Generator 生成器函数 
-  PS:可控制函数的内部状态,依次遍历每个状态;可根据需要,让函数暂停执行或者继续执行。
-    可利用Generator函数暂停执行的特性来实现异步操作 
-    原理:将异步操作的语句写到yield后面,通过执行next方法进行回调 
+Generator 生成器函数: 可控制函数的内部状态,让函数暂停执行或者继续执行  
+  PS: 中途退出后又重新进入执行,函数内定义的变量的状态都会保留 
   function* foo(){} 声明Generator函数
-    Example:
+    Example: 
       function* Hello(name) {  
         yield `hello ${name}`;
         yield `how are you`;
         yield `bye`;
       }
-    'yield'关键字 : 相当于暂停执行并且返回信息 
+    'yield'关键字: 相当于暂停执行并且返回信息 
       Generator函数可以有多个yield
       yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行 
-    'yield*'关键字 : 调用另一个Generator函数
+    'yield*'关键字: 调用另一个Generator函数 
       若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
       那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
       function* gen1() {   
@@ -1766,53 +1764,65 @@ Generator 生成器函数
       ite.next(); // {value: "gen2 end", done: false}
       ite.next(); // {value: "end", done: false}
   调用Generator函数 
-    PS:Generator函数被调用后得到的生成器是一个遍历器iterator,用于遍历函数内部的状态 
-      Generator函数被调用后并不会一直执行到最后,而是先回返回一个生成器对象,
-      然后hold住不动,等到生成器对象的'next'方法被调用后,函数才会继续执行,
-      直到遇到关键字yield后,又会停止执行,并返回一个Object对象,然后继续等待,
-      直到'next'再一次被调用的时候,才会继续接着往下执行,直到done的值为true 
-    Example:
-      function* foo(name) {
-        yield name
-        yield `world`
-        yield `fina`
-      }
-      let ite = foo('hello');
-      console.log(ite); // foo {[[GeneratorStatus]]: "suspended"}
-      setTimeout(function(){
-        console.log(ite.next()); // Object {value: "hello", done: false}
-        setTimeout(function(){
-          console.log(ite.next()); // Object {value: "world", done: false}
-          setTimeout(function(){
-            console.log(ite.next()); // Object {value: "fina", done: false}
-            setTimeout(function(){
-              console.log(ite.next()); // Object {value: undefined, done: true}
-              console.log(ite.next()); // Object {value: undefined, done: true}
-            },1000);
-          },1000);
-        },1000);
-      },1000);
-    next([arg])方法 
-      arg 参数,替换上一个yield的返回值
-      function* Hello() {
+    Generator函数被调用后返回该生成器的迭代器'iterator'对象[而不执行其中的语句] 
+    iterator.next() 首次调用后,语句执行到第一个'yield'表达式的位置,并停止执行 
+      该表达式定义了迭代器要返回的值,或被'yield*'委派至另一个生成器函数 
+        function* anotherGenerator(i) {
+          yield i + 1;
+          yield i + 2;
+          yield i + 3;
+        }
+        function* generator(i){
+          yield i;
+          yield* anotherGenerator(i);
+          yield i + 10;
+        }
+        var gen = generator(10);
+        console.log(gen.next().value); // 10
+        console.log(gen.next().value); // 11
+        console.log(gen.next().value); // 12
+        console.log(gen.next().value); // 13
+        console.log(gen.next().value); // 20
+      返回一个对象,然后继续等待 
+        对象包含两个属性：
+        value: 本次'yield'后面表达式的返回值 
+          区别于'yield'的返回值,在下次.next() 时,才能获取到'yield'的返回值 
+        done: bol,表示生成器是否已经产出了它最后的值,即生成器函数是否已经返回 
+    iterator.next() 再次被调用时,继续接着往下执行,直到done的值为true 
+    iterator.next(arg) 传参,参数会替换上一个'yield'的返回值 
+      function* foo() {
         var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
         console.log(res,1); // undefined 1
         yield res;
       }
-      let iterator = Hello(); // 返回一生成器对象
+      let iterator = foo(); // 返回一生成器对象
       iterator.next(); //{value: "hello", done: false}
       // 若为 iterator.next(); // {value: undefined, done: false}
       iterator.next("world"); // {value: "world", done: false}
       相当于
-      function* Hello() {
+      function* foo() {
         var res = yield `hello`; // 把返回值字符串'hello'赋给变量res
         console.log(res); // {value: undefined, done: false}
         res = 'world'
         yield res;
       }
-      let iterator = Hello(); // 返回一生成器对象
+      let iterator = foo(); // 返回一生成器对象
       iterator.next(); // {value: "hello", done: false}
       iterator.next(); // {value: "world", done: false}
+    当在生成器函数中显式'return'时,会导致生成器立即变为完成状态
+      即调用.next()方法返回的对象的'done'为 true 
+      如果'return'了一个值,则改值会作为下次调用 .next() 方法返回的value值 
+      function* yieldAndReturn() {
+        yield "Y";
+        return "R";//显式返回处
+        yield "unreachable";
+      }
+      var gen = yieldAndReturn()
+      console.log(gen.next()); // { value: "Y", done: false }
+      console.log(gen.next()); // { value: "R", done: true }
+      console.log(gen.next()); // { value: undefined, done: true }
+  使用Generator函数实现异步操作 
+    原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
 Proxy 对象代理 
   PS:作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
   new Proxy(target,params) Proxy创建-Proxy的实现 

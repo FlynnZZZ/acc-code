@@ -1,7 +1,6 @@
 JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言 
-  JS本身不提供任何与 I/O[输入/输出]相关的API[如网络、存储和图形等],都靠宿主环境提供,
-  所以JS只合适嵌入更大型的应用程序环境,去调用宿主环境提供的底层API;
-  嵌入JS的宿主环境有多种,最常见的环境就是浏览器,另外还有服务器环境,如Node项目;
+  I/O[输入/输出]相关的API[如网络、存储和图形等]都靠宿主环境提供[JS本身不提供],
+  嵌入JS的宿主环境有多种,如浏览器、Node环境等;
   JS内容划分: 
     除ECMAScript外,各种宿主环境提供额外的API,以便JS调用;
     以浏览器为例,它提供的额外API可以分成三大类:
@@ -10,19 +9,16 @@ JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言
     Web类: 实现互联网的各种功能;
     若宿主环境是服务器[如Node],则会提供各种操作系统的API,比如文件操作、网络通信等;
   多态:同一操作作用于不同的对象,可以有不同的解释,产生不同的执行结果,JS无多态  
-ECMAScript: JS语法核心,提供核心语言功能 
-  PS: 由ECMA制定和发布,任何基于此规范实现的脚本语言都要遵守其约定;
-    是宿主环境中脚本语言的国际Web标准;
-    主要包括基本的语法构造[操作符、控制结构、语句等]和标准库[Array、Date、Math等]
+ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能 
+  PS: 任何基于此规范实现的脚本语言都要遵守其约定;是宿主环境中脚本语言的国际Web标准;
     本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
     'ECMA-262'要求支持Unicode标准[从而支持多语言开发],第五版发布于2009年;
-    'ECMA-262'中对象的行为不一定适用于JS中其他对象,
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
 说明&定义 
   函数和方法的区别 
     函数基于过程,写法: foo()
     方法就是对象的函数,基于对象,调用写法: obj.foo()
-  '实例': 类的具象化;在面向对象的编程中,通常把通过类创建对象的过程称为实例化; 
+  '实例': 类的具象化;在面向对象中,通过类创建对象的过程称为实例化; 
   '静态'、'公有'、'私有'、'特权'属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
     静态属性/方法: '构造函数'的属性/方法[无需实例化通过类名来访问] 
@@ -40,7 +36,7 @@ ECMAScript: JS语法核心,提供核心语言功能
       Foo.prototype.do1 = function(){  // 公有方法,通过实例对象来调用
         console.log(name);
       }
-      this.do2 = function(){  // 特权方法
+      this.do2 = function(){  // 特权方法 
         console.log(name); // 访问了私有属性
       }
     }
@@ -49,15 +45,13 @@ ECMAScript: JS语法核心,提供核心语言功能
     var aoo =new Foo(1,2);
   IE8支持部分ES5功能,IE9+支持ES5 
 语法规则 
-  PS: 语法源自Java,基于原型的继承来自Self;'first-class function'一等函数来自Scheme;
+  PS: 语法源自Java,基于原型继承来自Self;'first-class function'一等函数来自Scheme;
   标识符: 指变量、函数、属性或函数的参数的名字 
     区分大小写
-    第一个字符必须是'字母'、'_'或"$"
-    其他字符可以是'字母'、"_"、'$'或'数字'
+    第一个字符必须是'字母'、'_'或"$";其他字符可以是'字母'、"_"、'$'或'数字'
+    不能使用关键字、保留字作为标识符
     可以一个或多个字符
-    不能把关键字、保留字、true、false和null等作为标识符
     标识符中的字母也可以包含扩展的ASCII或 Unicode字母字符,但不推荐使用
-    不能使用'-'
   关键字和保留字 
     有些名称有特殊意义,不可作为变量名
     关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
@@ -67,7 +61,7 @@ ECMAScript: JS语法核心,提供核心语言功能
   ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
   \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
-    PS:大部分js引擎都支持,但并非ECMAScript的规定;
+    PS: 大部分JS引擎都支持,但并非ECMAScript标准;
     var str = "string \
     is broken \
     across multiple\
@@ -141,10 +135,18 @@ ECMAScript: JS语法核心,提供核心语言功能
     /xxx/ig        // 正则表达式字面量
     {x:1,y:2}      // 对象字面量表达式
     [1,2,3,4,5]    // 数组字面量表达式
-基本类型&基本包装类型 
+基本类型 
   基本类型: 也叫原始类型,存储在'stack'栈中,占据空间小、大小固定 
+  undefined 表示未定义的值 
+    在声明变量时没有对其初始化,则变量的值就是 undefined 
+    console.log(typeof undefined);  // "undefined" 
+  null      表示"无"的对象 
+    PS: 将来用于保存对象的变量,可初始化为 null 
+    Example: 
+    console.log(null==undefined); // true ,undefined派生于null
+    console.log(typeof null); // object
   基本包装类型: 基本类型的变体,一定条件下有对象的性质[如可调用方法、设置属性等] 
-    PS: 可通过构造函数显式的创建基本包装对象 
+    PS: 通过构造函数显式的创建基本包装对象 
     基本包装对象和对象一样按引用进行比较 
       var a1 = "test";
       var a2 = new String("test");  // 对象字符串
@@ -159,16 +161,6 @@ ECMAScript: JS语法核心,提供核心语言功能
       var boo = new String("abc");
       boo.z = "z";
       console.log(boo.z); // z
-  ◆基本类型枚举 
-  undefined 表示未定义的值 
-    在声明变量时没有对其初始化,则变量的值就是 undefined 
-    console.log(typeof undefined);  // "undefined" 
-  null      表示"无"的对象 
-    PS: 将来用于保存对象的变量,可初始化为 null 
-    Example: 
-    console.log(null==undefined); // true ,undefined派生于null
-    console.log(typeof null); // object
-  ★基本包装类型 
   Boolean 布尔值 
     PS: ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
     隐式转换为布尔值 
@@ -224,21 +216,11 @@ ECMAScript: JS语法核心,提供核心语言功能
     转换为数值  
       隐式转换为数值 
         undefined 为 NaN;null false 为 0;true 为 1;
-        其他对象调用自身的 obj.valueOf() 进行转换 
+        其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
         Example:
         console.log(1*"2",typeof (1*'2'));  // 2 number  
         console.log(1+"1",typeof (1+'1'));  // 11 string
-        
-        var obj = {aoo:1,boo:2};
-        var num = obj.valueOf();
-        var str = obj.toString();
-        console.log(num,typeof num); //  {aoo: 1, boo: 2} "object"
-        console.log(str,typeof str); // [object Object] string
-        obj.valueOf = function(){ 
-          return 100; 
-        };
-        console.log(+obj); // 100 
-      Number() parseInt() 和 parseFloat() 显示转换为数值 [详见'Global']
+      Number()、parseInt()、parseFloat()、obj.valueOf()、obj.toString() 显式转换为 
   String  字符串 
     PS: 表示若干个16位Unicode字符组成的字符序列;可使用双引号或单引号,但必须成对出现;
     特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
@@ -272,20 +254,13 @@ ECMAScript: JS语法核心,提供核心语言功能
       字符串不可单独修改其字符,只能覆盖替换,因为不是引用类型  
     其他类型转换为字符串 
       隐式转换为字符串 
-        ""+val
+        val+"" 
         undefined 为"undefined";null 转换为"null";
         true 为"true";false 为"false";NaN  为"NaN";
-        其他对象通过 obj.toString() 方法隐式转换 
+        其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
           数值会转换为数值本身,即数字字符串 
-          Example: :
           console.log(123.0.toString(),typeof 123..toString()); // 123 string
-          var obj = {aoo:1,boo:2};
-          console.log(obj.toString());  // "[object Object]"
-          obj.toString = function(){    
-            return "hello"; 
-          }; 
-          console.log('a'+obj);  // "ahello"
-      obj.toString()、String(val) 显式转换 
+      String(val)、obj.valueOf()、obj.toString() 显式转换 
     Exp: 
       数值字符串比较其数值大小,采用相减的方式 
         var str1 = '9';
@@ -409,14 +384,14 @@ ECMAScript: JS语法核心,提供核心语言功能
         console.log(window.aoo,boo); // 2,3 
   对象成员的特性'attributes' 
     PS: 'writable'、'enumerable'、'configurable'只能通过函数来设定 
-    ◆数据属性 描述属性行为 
+    ◆数据特性 描述属性行为 
     'value'        默认 undefined,属性的值 
     'writable'     默认 true,是否可写 
     'enumerable'   默认 true,能否枚举 [通过'for in'、'Object.keys'等] 
     'configurable' 默认 true,能否配置 
       包括能否删除、通过'defineProperty'修改属性、修改属性特性等配置 
       不可逆性: 一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
-    ◆访问器属性 
+    ◆访问器特性 
     'get'  读属性值时的操作,默认返回属性值 
     'set'  写属性值时的操作,默认返回属性值 
       var obj = {
@@ -538,85 +513,46 @@ ECMAScript: JS语法核心,提供核心语言功能
     typeof val;               [详参 一元运算符]
     obj instanceof Object;    [详参 关系运算符]
     obj.constructor           查询对象的构造函数 
-'Evaluation Strategy'求值策略 
-  PS: 决定变量之间、函数调用时实参和形参之间值的传递方式 
-  读写引用类型值的 
-    自我总结 
-      按引用访问,传递的是指针[引用],一个对象可由多个指针访问 
-      改变传递的值会影响到原始的值[所有值都指向同一段数据] 
-    权威说法 
-      引用访问:先从栈中读取内存地址,再通过地址找到堆中的值.
-      对象在栈内存中保存一个指向堆'heap'内存中对象位置的指针,由堆内存保存对象
-      引用类型赋值时,在堆内存中为这个值分配空间.由于这种值大小不固定、一般占用空间较多
-      但内存的地址大小是固定的,可以将内存地址保存在栈内存中,
-      若存储在栈中,将会影响程序运行的性能；
-      保存在堆内存中,
-      包含引用类型值的变量实际上包含的并不是对象本身,而是一个指向该对象的指针.
-      从一个变量向另一个变量复制引用类型的值,复制的其实是指针,
-      因此两个变量最终都指向同一个对象.
-    Example: 
-      引用类型值按引用地址来比较
+'Evaluation Strategy'求值策略: 决定变量之间、函数调用时实参和形参之间值的传递方式 
+  读写引用类型值 
+    引用存储: 栈内存中存储指针[指向堆内存],堆内存中存储实际值 
+    引用访问: 先从栈中读取内存地址,再通过地址找到堆中的值 
+    引用类型变量: 实际上是一个指向对象的指针,并非对象本身 
+    引用复制: 复制指针,因此两个变量最终都指向同一个对象 
+    引用类型值按引用地址来比较 
       var aoo = {a:1};
       var boo = {a:1};
       var coo = boo;
       console.log(aoo == boo);  // fasle,值相同但地址不同
-      console.log(aoo === boo); // fasle,值相同但地址不同
       console.log(coo === boo); // true,引用地址相同
-      
-      修改引用类型的值 和 改变变量的指向 
+    修改引用类型的值 和 改变变量的指向 
       var aoo = { name:'abc', age:19 }; // 让 aoo 指向推内存中的一个对象
       var boo = aoo;   // 使 aoo 和 boo 指向同一对象
       console.log(boo); // {name: "abc", age: 19}
       boo.name = "changed"; // 修改堆内存中的对象
       console.log(aoo.name); // changed,boo的值也随着变化了
       aoo = 1;          //改变 aoo,不再指向对象
-      console.log(boo);      // {name: "changed", age: 19},boo仍指向对象
-    函数是对象 
-      var foo = function(){ console.log(1); }
-      var goo = foo; //表示变量 aoo 和 boo 指向同一函数
-      foo = 2; // 改变 aoo,不再指向函数
-      console.log(goo()); // 1, boo 仍指向该函数
-      console.log(foo()); // 报错
-    对象按照地址来进行的比较,而非按属性或内容来进行比较 
-      相同对象的两个引用 和 具有相同属性的两个对象 的区别
-      var obj1 = {aoo:1};
-      var obj2 = {aoo:1};
-      var obj3 = obj1;
-      obj1 == obj2;   // false
-      obj1 == obj3;   // true
-      obj1.aoo = 2;
-      obj3.aoo;    //2
-      obj2.aoo;    //1
-      obj1和obj3是两个变量名,指向的相同的值---内存中的一个实际对象
-      因此修改了obj1的值的同时也改变了obj3的值;
-      变量obj2指向的是另外一个对象,只是和obj1有相同的属性而已
-  'call-by-value'按值传递 
-    PS:最常用的求值策略,JS中的基本类型按值传递
-      传递的值为拷贝的副本,修改传递的值并不会影响原来值 
-      按值传递由于每次都需要克隆副本,对一些复杂类型,性能较低
-  'call-by-reference'按引用传递 
-    PS:传递的为原始值的隐式引用,当传递的值被改变时原始值也会被改变[两者同时指向相同的值]
-      按引用传递会使函数调用的追踪更加困难,有时也会引起一些微妙的BUG。
-  'call-by-sharing'按共享传递
-    PS:也叫按对象传递、按对象共享传递,JS中对象类型按共享传递的 
-      最早由Barbara Liskov在1974年的GLU语言中提出,该求值策略被用于Python、Java、Ruby、JS等多种语言
-    函数传参时,接受对象实参引用的副本
-      对函数形参赋值,不会影响实参的值
+      console.log(boo); // {name: "changed", age: 19},boo仍指向对象
+  'call by value'按值传递: 最常用的求值策略,JS中基本类型按值传递 
+    传递的值为拷贝的副本,修改传递的值并不会影响原来值 
+    按值传递由于每次都需要克隆副本,对一些复杂类型,性能较低
+  'call by reference'按引用传递: 传递的为原始值的隐式引用 
+    PS: 当传递的值被改变时原始值也会被改变[两者同时指向相同的值]
+      按引用传递会使函数调用的追踪更加困难,有时也会引起一些微妙的BUG 
+  'call by sharing'按共享传递: 也叫按对象传递,JS中对象类型按共享传递的
+    PS: 该求值策略被用于Python、Java、Ruby、JS等多种语言 
+    对象实际值存放于堆内存,传递的为指针引用,修改时则改变堆内存对象,重置则改变指针指向 
       var obj = {x : 1};
       function foo(o) {
-        o = 100;
+        o = 100;  // 将指针设置为100 
+      }
+      function goo(o) {
+        o.x = 2;  // 通过指针修改堆内存中的对象 
       }
       foo(obj);
-      console.log(obj); // {x : 1}, obj并未被修改 
-    但对象和它的引用副本会共享它们的对象 
-      所以修改形参对象的属性值,也会影响到实参的属性值 
-      var obj = {x : 1};
-      function foo(o) {
-        o.x = 2;
-        o.y = 3;
-      }
-      foo(obj);
-      console.log(obj); // {x: 2, y: 3},被修改了 
+      console.log(obj); // {x : 1},obj并未被修改 
+      goo(obj);
+      console.log(obj); // {x: 2},被修改了 
 ------------------------------------------------------------------------------- 
 表达式: 解释器通过计算将表达式转换为一个值 
   PS: 最简单的表达式是字面量或变量名; 通过合并简单的表达式来创建复杂的表达式 
@@ -1193,14 +1129,14 @@ Global|Window 全局对象
   PS: Global对象未定义如何访问,在浏览器中可使用window对象实现全局访问;
     所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
   var global = function(){ return this; }  间接获取Global对象
-  ◆全局属性&方法 
-  构造函数 
+  全局属性/方法 
+    ★构造函数 
     Object     构造函数Object
+    Boolean    构造函数Boolean
+    Number     构造函数Number
+    String     构造函数String
     Array      构造函数Array
     Function   构造函数Function
-    Boolean    构造函数Boolean
-    String     构造函数String
-    Number     构造函数Number
     Date       构造函数Date
     RegExp     构造函数RegExp
     Error          构造函数Error
@@ -1210,7 +1146,7 @@ Global|Window 全局对象
     SyntaxError    构造函数SyntaxError
     TypeError      构造函数TypeError
     URIError       构造函数URIError
-  转换方法 
+    ★转换方法 
     bol = Boolean(val)  转换为的布尔值 
       console.log(Boolean(0));         // false
       console.log(Boolean(NaN));       // false
@@ -1314,7 +1250,7 @@ Global|Window 全局对象
     str = decodeURIComponent(str)    解码URI[完全解码] 
     str1 = escape(str)   对字符串进行编码 
     str1 = unescape(str) 解码由'escape'编码的字符串
-  判断方法 
+    ★判断方法 
     bol = isFinite(num) 数值是否有限  
       isFinite(10); // true
     bol = isNaN(val)    检查值否能转换为NaN 
@@ -1325,7 +1261,7 @@ Global|Window 全局对象
       console.log(isNaN(true));   //false,true可以转换为1
       console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
       console.log(isNaN(NaN));    //true
-  其他方法 
+    ★其他方法 
     eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
       PS:是一种由函数执行的动态代码,比直接执行脚本慢很多;
       str  要执行解析的JS代码的字符串 
@@ -1335,238 +1271,147 @@ Global|Window 全局对象
         var val = eval(str);
         console.log(num,val); // 100 undefined 
   window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
-Object 基础类: JS中所有的构造函数都继承自 Object 类型[包括函数对象]  
-  Example: 
+Object 基础类: JS所有对象的基类 
+  JS中所有的构造函数都继承自Object类型
     Object.prototype.foo = function(){ // 所有类型的对象都会继承到 
       return '来自 Object'
     }
     var goo = function(){}
     var arr = []
-    console.log(goo.foo(),arr.foo()); 
+    console.log(goo.foo(),arr.foo()); // 来自 Object 来自 Object
   Object.xx  
-    arr = Object.keys(obj)  获取对象[不包含原型]所有的属性名 [ES5] 
+    arr = Object.keys(obj)  获取对象可枚举的键名 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
-      Example:
-        var obj = {
-          aoo:"a",
-          boo:22,
-          foo: function(){ 
-            console.log("hello") 
-          }
-        }
-        obj.__proto__.aoo = 1;
-        obj.constructor.prototype.boo = 11;
-        var arr = Object.keys(obj); 
-        console.log(obj.aoo); // 1
-        console.log(obj.boo); // 11
-        console.log(arr);     // ["aoo", "boo", "foo"]
-    obj = Object.assign(obj1[,obj2,..])   合并多个对象 
-      Example:
-        var obj1 = {aoo:"abc"};
-        var res1 = Object.assign(obj1); 
-        console.log(res1); // {aoo: "abc"} 
-        var obj2 = {boo:180};
-        var obj3 = {coo:true};
-        var res = Object.assign(obj1,obj2,obj3);
-        console.log(res); // {aoo: "abc", boo: 180, coo: true} 
     bol = Object.is(val1,val2)  值是否相同[可能存在兼容问题] 
       与 == 和 === 的逻辑都不同 
       Example:
       Object.is(+0,-0);    // false
       Object.is(0,0);      // true
       Object.is(NaN, NaN); // true
-    obj = Object.getPrototypeOf(obj); 获取原型对象   
-    ★对象成员及其特性相关 
-    bol = Object.isExtensible(obj); 对象能否扩展[ES5] 
-      PS:即对象的属性/方法是否可增加 
-    bol = Object.isSealed(obj);     对象是否被密封[ES5] 
-    bol = Object.isFrozen(obj);     对象是否被冻结[ES5] 
-    Object.preventExtensions(obj); 设置对象不可扩展[ES5]
-      PS:不能给对象新增属性,但可以修改和删除已有属性
-        只是对对象操作,对其原型链无影响
-    Object.seal(obj);        密封对象[ES5]
-      PS:在不可扩展的基础上将所有属性变成不可配置
-        只是对对象操作,对其原型链无影响
-    Object.freeze(obj);      冻结对象[ES5]
-      PS:在不可扩展的基础上将所有属性变成不可写、不可配置的,最严格的防篡改级别
-        只是对对象操作,对其原型链无影响
-    Object.defineProperty(obj,key,configObj); 定义对象的成员及其特性[ES5] 
-      PS:只指定get时,意味着属性不能写,尝试写入被忽略,类似的只指定set则属性不能读 ?.
-      obj   属性key所在的对象
-      key   对象的属性名 
-      configObj 特性的配置对象,不能同时定义'数据属性'和'访问器属性'[要分开定义] 
-        {
-          value : val,
-          writable : bool,   // 默认为 false
-          enumerable : bool, // 默认为 false
-          configurable : bool // 默认为 false
-        }
-        或
-        {
-          get : function(){ // 默认不可读?
-          },
-          set : function(){ // 默认不可写
-          },
-          enumerable : bool, // 默认为 false 
-          configurable : bool // 默认为 false 
-        }
+    arr = Object.getOwnPropertyNames(obj)  查询所有自有成员[包括不可枚举属性] [ES5] 
+      var obj = {
+        aoo: 1,
+        boo: 'a'
+      }
+      Object.defineProperty(obj,'coo',{
+        value : 11,
+      });
+      var arr = [];
+      for(var key in obj){
+        arr.push(key);
+      };
+      console.log(obj); // {aoo: 1, boo: "a", coo: 11} 
+      console.log(arr); // ["aoo", "boo"] 
+      console.log(Object.getOwnPropertyNames(obj)); // ["aoo", "boo", "coo"] 
+    obj = Object.getOwnPropertyDescriptor(obj,key)  查询成员的数据特性配置[ES5] 
+      PS: 可对DOM或BOM对象使用该方法;若查询的属性不存在则返回undefined 
+      console.log(Object.getOwnPropertyDescriptor({aoo:"a"},"aoo"));
+      // Object {value: "a", writable: true, enumerable: true, configurable: true}
+    obj = Object.assign(obj1[,obj2,..])  合并多个对象,返回合并后的对象  
       Example:
-        var obj = {"sex":"男"}
-        Object.defineProperty(obj,"name1",{
-          value:"小明",
-          writable:true,
-          enumerable:true,
-          configurable:true
-        });
-        obj.name1;
-        
-        var obj = {};
-        Object.defineProperty(obj,"a",{
-          get : function(){ 
-            return 12; 
-          }
-        });
-        obj.a;      //12
-        
-        var book ={year:2004,edition:1};
-        Object.defineProperty(book,"name",{
-          get :function(){ return 1; },
-          set : function(value){ this.edition = value; }
-        });
-        book.name;       // 1
-        book.name =11;
-        book.edition;    // 11
-        
-        function Foo(){ };
-        Object.defineProperty(Foo.prototype,'z',{
-          get:function(){return 1; }
+      console.log(Object.assign({aoo:"abc"})); // {aoo: "abc"} 
+    proto = Object.getPrototypeOf(obj) 返回原型对象   
+    ★对象成员及其特性相关 
+    Object.defineProperty(obj,key,{   // 定义对象的成员及其特性[ES5]  
+      value: val,       // 默认为原始值  
+      writable: bol,    // 默认 false
+      enumerable: bol,  // 默认 false
+      configurable: bol // 默认 false
+      Example: 
+        var proto = {}
+        Object.defineProperty(proto,'aoo',{
+          value: 0 // 其他则默认为 false
         })
-        var obj =new Foo();
-        obj.z; // 1
-        obj.z =11;
-        obj.z; // 1
-        Object.defineProperty(obj,'z',{
-          value:100,
-          configurable:true
-        });
-        obj.z; // 100
-        delete obj.z;
-        obj.z; // 1
-        
-        var Foo = function(){ }
-        Object.defineProperty(Foo.prototype,'zoo',{
-          get : function(){
-            return 1;
-          }
+        var obj = Object.create(proto);
+        obj.aoo = 1;
+        console.log(obj.aoo); // 0,未设置成功 
+        // Object.defineProperty(proto,'aoo',{  // 重复定义报错 
+        //   value: 0 // 其他则默认为 false
+        // })
+        // 解决办法:重新在对象上定义该属性的特性 
+        Object.defineProperty(obj,'aoo',{
+          writable: true,
+          configurable: true
         })
-        var obj = new Foo();
-        console.log(obj); 
-      对象的属性被配置后,会优先按照定义的配置来执行 
+        console.log(obj.aoo); // undefined
+        obj.aoo = 100;
+        console.log(obj.aoo); // 100 
+      // 不能同时定义'数据属性'和'访问器属性'[要分开定义] 
+      get: function(){ // 未设置则不能读
+      },
+      set: function(){ // 未设置则不可写
+      },
+      enumerable: bol,  // 默认 false 
+      configurable: bol // 默认 false 
+      优先按照定义的配置来执行 
         var Foo = function(){ }
-        Object.defineProperty(Foo.prototype,'zoo',{
-          get : function(){
+        Object.defineProperty(Foo.prototype,'boo',{
+          get: function(){
+            console.log(11111);
             return 1;
           },
-          set : function(val){
-            this.aoo = 11;
-            console.log(11111);
+          set: function(val){
+            console.log(22222);
+            this.aoo = 11;  // this 指向实例 
           }
         })
         var obj = new Foo(); 
-        obj.aoo = 0;
-        console.log(obj,obj.zoo); // {aoo:0} 1,而非 0 
-        obj.zoo = 2;
-        console.log(obj,obj.zoo); // {aoo:11} 1,而非 11 
-        
-        var o = {}
-        Object.defineProperty(o,'zoo',{
-          value : 0 // 其他则默认为 false
-        })
-        var obj = Object.create(o)
-        obj.zoo = 1;
-        console.log(obj.zoo); // 0,未设置成功 
-        解决办法:重新在对象上定义该属性的特性 
-        Object.defineProperty(obj,'zoo',{
-          writable : true,
-          configurable : true
-        })
-        console.log(obj.zoo); // undefined
-        obj.zoo = 100;
-        console.log(obj.zoo); // 100 
-    Object.defineProperties(obj,param);  同时定义多个成员及特性[ES5]
-      obj   修改的目标对象
-      param 属性名及其对应的特性配置的对象 
-        {
-          key1 : {
-            value: val,
-            writable: bool, // 默认为 false
-            enumerable: bool, // 默认为 false
-            configurable: bool // 默认为 false
-          },
-          key2 : {
-            get : function() { // 默认不可读?
-            },
-            set : function(val) { // 默认不可写
-            },
-            enumerable : bool, // 默认为 false
-            configurable : bool // 默认为 false
-          }
-          ...
-        }
-      Example:
-        var obj = {};
-        Object.defineProperties(obj, {
-          aoo: {
-            value: 101,
-            writable: true,
-            enumerable: true,
-            configurable: true
-          },
-          boo: {
-            set: function(x) {
-              this.newaccpropvalue = x;
-            },
-            get: function() {
-              return this.newaccpropvalue;
-            },
-            enumerable: true,
-            configurable: true
-          }
-        });
-    obj = Object.getOwnPropertyDescriptor(obj,key); 查询成员的特性配置[ES5] 
-      PS:可对DOM或BOM对象使用该方法;若查询的属性不存在则返回undefined 
-      var obj = {aoo:"a"};
-      var rst = Object.getOwnPropertyDescriptor(obj,"aoo");
-      console.log(rst);
-      // Object {value: "a", writable: true, enumerable: true, configurable: true}
-    arr = Object.getOwnPropertyNames(); 查询所有自有成员[包括不可枚举属性] [ES5] 
-      var obj = {aoo:11,boo:'aa'}
-      Object.defineProperty(obj,'coo',{
-        value : 22,
-      });
-      var arr1 = [];
-      for(var key in obj){
-        arr1.push(key);
-      };
-      console.log('arr1',arr1); // arr1 (2) ["aoo", "boo"]
-      var arr2 = Object.getOwnPropertyNames(obj);
-      console.log('arr2',arr2); // arr2 (3) ["aoo", "boo", "coo"]
-  Object.prototype.xx 
-    val = obj.valueOf()  对象的字符串、数值或布尔值表示,通常与'toString'返回值相同  
-      PS:当'valueOf'转换后仍为非基本类型再调用'toString' 
-      var obj1 = {a:1}
-      obj1.valueOf = function(){
-        return '自定义的转换值'
+        console.log(obj.boo); // 11111 1 
+        obj.boo = 2; // 22222 
+        console.log(obj,obj.boo); // Foo {aoo: 11} 1
+    }); 
+    Object.defineProperties(obj,{     // 同时定义多个成员及特性[ES5]
+      key1: {
+        value: val,       // 默认为原始值 
+        writable: bol,    // 默认 false
+        enumerable: bol,  // 默认 false
+        configurable: bol // 默认 false
+      },
+      key2: {
+        get: function() {    // 未定义则不可读 
+        },
+        set: function(val) { // 未定义则不可写 
+        },
+        enumerable: bol,  // 默认 false
+        configurable: bol // 默认 false
       }
-      // 转换成数值
-      console.log(+obj1); // NaN, 
-      // 转换成字符串
-      console.log(''+obj1); // 自定义的转换值, 
-    str = obj.toString() 对象转换为基本类型的默认方法 
-      PS:'null'和'undefined'没有该方法 
-      ◆默认返回值
+      ...
+    });  
+    bol = Object.isExtensible(obj)  对象的属性/方法能否增加[ES5] 
+    bol = Object.isSealed(obj);     是否被密封[ES5] 
+    bol = Object.isFrozen(obj);     是否被冻结[ES5] 
+    Object.preventExtensions(obj)  不能给对象新增属性[ES5] 
+      PS: 但可修改和删除已有属性; 只是对对象操作,对其原型链无影响
+    Object.seal(obj)     属性不可扩展、不可配置  [ES5]
+      PS: 只是对对象操作,对其原型链无影响
+    Object.freeze(obj)   属性不可扩展、不可写、不可配置[最严格的防篡改级别][ES5]
+      PS: 只是对对象操作,对其原型链无影响
+  Object.prototype.xx 
+    val = obj.valueOf()  对象转换为基本类型,通常与'toString'返回值相同  
+      不一定能转换成基本类型 
+        var obj1 = {key1:1}.valueOf();
+        console.log(obj1,typeof obj1); // {key1: 1} "object" 
+      同时定义'valueOf'和'toString'时 
+        先调用'valueOf'方法,若返回值为基本类型,则返回该基本类型,
+        否则,调用'toString',若返回值为基本类型,则返回该基本类型,
+        否则报错 
+      只定义'toString'方法时  
+        转换为基本类型时,直接调用'toString',当返回值为基本类型,则直接返回,
+        否则报错 
+        var obj2 = {key1:1} 
+        obj2.toString = function(){
+          return 100;
+        }
+        console.log(+obj2); // 100 
+        console.log(''+obj2); // 100 
+    str = obj.toString() 对象转换为基本类型 
       num.toString([radix]); 返回数值的字符串 
         radix 可选,默认为10,表示进制,一般为 2、8、16 等 
+        var num = 10;
+        num.toString();    //返回值为'10'
+        num.toString(2);   //返回值为'1010',二进制输出
+        // 123.toString(); // 报错 ,默认将点.作为了小数点
+        123.1.toString(); // "123.1"
       foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
         var foo = function(){
           console.log(1);
@@ -1575,59 +1420,26 @@ Object 基础类: JS中所有的构造函数都继承自 Object 类型[包括函
       arr.toString(); 将数组元素转换连接为字符串返回
         和 arr.join('') 效果一样.
       obj.toString(); 返回"[object Object]"
-        var obj ={};
+        var obj = {};
         obj.toString(); // "[object Object]"
-      Example:
-        var num = 10;
-        num.toString();    //返回值为'10'
-        num.toString(2);   //返回值为'1010',二进制输出
-
-        "abc".toString();   //"abc"
-        // 123.toString(); // 报错 ,默认将点.作为了小数点
-        123.1.toString(); // "123.1"
-
-        var val1;
-        val1.toString(); //报错,因为val1未初始化为 undefined
-        var val2 = undefined;
-        val2.toString();  //报错
-      自定义转换方法'toString' 
-        var obj1 = {a:1}
-        console.log(obj1.toString()); // [object Object] 
-        obj1.toString = function(){
-          return '自定义的返回值'
-        }
-        console.log(obj1.toString()); // 自定义的返回值 
-        console.log(''+obj1);         // 自定义的返回值 
-        console.log(+obj1);           // NaN  
-        var obj2 = {b:2}
-        obj2.toString = function(){
-          return 100
-        }
-        console.log(+obj2); // 100
-    str = obj.toLocaleString(); 对象的本地字符串表示 
-      返回对象的字符串、数值或布尔值表示 
-      通常与toString()方法的返回值相同
-      foo.valueOf(); 返回函数对象本身
-    bol = obj.hasOwnProperty(key)        查询属性是否存在[不包括原型链]   
-      key   属性名,需以字符串形式指定
-      Example: 
-        var obj = {aoo:"abc"};
-        obj.hasOwnProperty("aoo"); // true
-    bol = obj.propertyIsEnumerable(key); 查询属性是否能通过'for-in'语句枚举 
-      key   属性名,需以字符串形式指定 
-    bol = obj.isPrototypeOf(targetObj);  查询对象是否为目标对象的原型对象 
+      自定义'toString'方法 [详见 'valueOf']
+    str = obj.toLocaleString() 对象的本地字符串表示,通常与toString的返回值相同 
+    bol = obj.hasOwnProperty(key)       查询属性是否存在[不包括原型链]   
+      var obj = {key1: 1}
+      console.log(obj.hasOwnProperty('key1'));  // true
+    bol = obj.propertyIsEnumerable(key) 查询属性是否能通过'for-in'语句枚举 
+    bol = obj.isPrototypeOf(targetObj)  查询对象是否为目标对象的原型对象 
       Example:
       function Foo(){};
-      var aoo =new Foo();
-      Foo.prototype.isPrototypeOf(aoo);    //true
-      aoo.isPrototypeOf(Foo.prototype);    //fasle 
-      Object.prototype.isPrototypeOf(aoo); //true
+      var aoo = new Foo();
+      Foo.prototype.isPrototypeOf(aoo);    // true
+      Object.prototype.isPrototypeOf(aoo); // true
     foo = obj.constructor  创建当前对象的构造函数 
     obj.__proto__ === Foo.prototype 实例的原型对象 [详见 原型]
 Boolean 布尔类: 处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
 Number 数值类: 处理数值的'包装对象' 
-  num = new Number();  创建数值基本包装对象  
+  num = new Number([val]);  创建数值基本包装对象  
     var num1 = new Number();
     var num2 = new Number(1);
     console.log(num1);    // Number {[[PrimitiveValue]]: 0}
@@ -1640,35 +1452,34 @@ Number 数值类: 处理数值的'包装对象'
     Number.POSITIVE_INFINITY   Infinity
     Number.NaN                 NaN
   Number.prototype.xx 
-    num.toFixed(num)     将数字保留小数点后num位并转化为字符串[会四舍五入] 
-    num.toExponential(x) 以科学计数法表示并保留x位小数.并转换成字符串 
-    num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式] 
-    num.toString()       将数值转换为字符串 
-      // 123.toString()  报错
-      123.0.toString() // '123'
-      (123).toString() // '123'
+    str = num.toFixed(x)  将保留x位小数  [会四舍五入] 
+    str = num.toExponential(x)  以科学计数法表示并保留x位小数 
+    str = num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式] 
+      console.log( 123.111.toPrecision(1)); // 1e+2 
+      console.log( 123.111.toPrecision(2)); // 1.2e+2 
+      console.log(typeof  123.111.toPrecision(2)); // string 
 String 字符类: 处理字符串的'包装对象' 
-  var str = new String();  创建字符串基本包装对象  
-    var str = 'abcd';
-    var strObj = new String(str); 
-    // String {0: "a", 1: "b", 2: "c", 3: "d", length: 4, [[PrimitiveValue]]: "abcd"}
+  var str = new String([val])   创建字符串基本包装对象  
+    console.log(new String('abc'));
+    // String {0: "a", 1: "b", 2: "c", length: 3, [[PrimitiveValue]]: "abc"} 
   ★字符获取 
-  var num = str.length  只读,字符长度 
+  num = str.length  只读,字符长度 
     "abc".length;    // 3
     "abc"['length']; // 3
-  var rstStr = str[idx] 下标法访问字符 
-  var rstStr = str.charAt(idx)  返回指定下标对应的字符
-    "abcdefg".charAt(1); // "b"
-  var num = str.charCodeAt(idx);  以Unicode编码形式显示索引位置的字符 
+  str1 = str[idx] 下标法访问字符 
+    console.log('abc'[1]); // b 
+  str1 = str.charAt(idx)  返回指定下标对应的字符 
+    console.log("abc".charAt(1)); // "b"
+  num = str.charCodeAt(idx)  以Unicode编码形式显示索引位置的字符 
     var num1 = 'Ab'.charCodeAt(1)   
     var num2 = 'abc'.charCodeAt(0)  
     console.log(num1,num2,typeof num1) // 98 97 "number"
   ★字符串获取 
-  var rstStr = str.slice(bgn[,end])  字符截取[详见 arr.slice()] 
-  var rstStr = str.substr(bgn[,num]) 从指定位置开始的num个字符 
+  str1 = str.slice(bgn[,end])  字符截取[详见 arr.slice()] 
+  str1 = str.substr(bgn[,num]) 从指定位置开始的num个字符 
     当只有一个参数且负数时,同 slice 
     当n为负数或0时,返回空字符串 
-  var rstStr = str.substring(idx1,idx2)  两点间截取 
+  str1 = str.substring(idx1,idx2)  两点间截取 
     PS:以参数中较小者作为起始位置,较大者作为结束位置的前闭后开区间的字符
     idx1 数值,必须,若为负数返回全部字符串
     idx2 数值,可选,若省略表示到最后,若为负,则取0
@@ -1678,25 +1489,25 @@ String 字符类: 处理字符串的'包装对象'
       var s2 = str.substring(2,1)
       console.log(s1,s2); // b b
   ★字符串对比 
-  str1.includes(str2);    str1中是否包含str2的布尔值  
-  str1.indexOf(str2,bgn); 从指定位置向后首个指定字符串的下标
+  str1.includes(str2)    str1中是否包含str2的布尔值  
+  str1.indexOf(str2,bgn) 从指定位置向后首个指定字符串的下标
     当bgn不存在时,直接从头开始
     RetValue:检测字符不存在则返回-1
     Example:
     'abcdef'.indexOf('bc')   // 1
     'abcdef'.indexOf('ac')   // -1
-  str1.lastIndexOf(str2,bgn);从指定位置向前的首个指定字符串的下标
+  str1.lastIndexOf(str2,bgn)  从指定位置向前的首个指定字符串的下标
     当bgn不存在时,表示从末尾开始搜索.
     RetValue:搜索字符不存在时,返回-1
-  str1.search(str2);   返回字符串的位置
-  str1.match(str2);    返回查找到的字符str2或null
-  str1.localCompare(str2); 返回两个字符串比较的数值表示
+  str1.search(str2)   返回字符串的位置
+  str1.match(str2)    返回查找到的字符str2或null
+  str1.localCompare(str2)  返回两个字符串比较的数值表示
     若str1和str2相同,返回0;
     第一个不同字符,str1在str2前,返回1,否则返回-1
-  str1.localeCompare(str2); 使用本地特定的顺序来比较字符串 
+  str1.localeCompare(str2) 使用本地特定的顺序来比较字符串 
     若str1大则返回1,相等返回0,否则返回-1
   ★字符串修改
-  var str = str1.replace(regexp/str2,replacement)  字符替换
+  str1 = str.replace(regexp/str,replacement)  字符替换
     返回值为'使用replacement替换[str1中]第一个str2的'结果字符串
     Example: 'abcde'.replace('ab','11'); // "11cde"
   str1.split(str2)    通过字符分割成数组 
@@ -1710,23 +1521,23 @@ String 字符类: 处理字符串的'包装对象'
 
       var aoo = '1020304';
       aoo.split('0').join(''); // "1234"
-  str.concat(str1,str2,...);  字符串拼接,返回新串 
+  str.concat(str1,str2,...)   字符串拼接,返回新串 
   str.trim() 去除字符串开始和结束的空格 
     var str = ' 12 3 ';
     var res = str.trim();
     console.log("|" + res + "|" ); // |12 3|
   ★字符串转换
     PS:只有几种语言如土耳其语[]具有地方特有的大小写本地性,一般是否本地化效果是一致的 
-  str.toUpperCase(); 转换为大写,返回转换后的值
-  str.toLowerCase(); 转换为小写,返回转换后的值
-  str.toLocaleLowerCase();  将字符串全部转换为小写,并且本地化
-  str.toLocaleUpperCase();  将字符串全部转换为大写,并且本地化
+  str.toUpperCase()  转换为大写,返回转换后的值
+  str.toLowerCase()  转换为小写,返回转换后的值
+  str.toLocaleLowerCase()   将字符串全部转换为小写,并且本地化
+  str.toLocaleUpperCase()   将字符串全部转换为大写,并且本地化
   ★静态方法
-  String.fromCharCode(num,num...); 得到指定的Unicode值对应的字符 
+  String.fromCharCode(num,num...)  得到指定的Unicode值对应的字符 
     Example: :
     String.fromCharCode(72,69,76,76,79); // "HELLO"
   ★借用方法
-  Array.prototype.join.call(str1,str2); 使用str2来间隔str1 
+  Array.prototype.join.call(str1,str2)   使用str2来间隔str1 
     Example: :
       var str ="123456";
       var s ="-";
@@ -1734,11 +1545,9 @@ String 字符类: 处理字符串的'包装对象'
       var str ="1-2-3-4-5-6";
       var s ="=";
       Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
-  Array.prototype.splice.call('aaaa',1,1,"*")   [如何实现??]
 Array 数组类 
-  PS: 数组是JS内置的一种特殊类型的对象,可类比成有序数据的对象 
-    数组的最大长度为'2^23-1'
-  'idx-val'数组结构: '索引-元素'组成的有序集合 
+  PS: 数组是JS内置的一种特殊类型的对象,可类比成有序数据的对象;数组最大长度为 2^23-1 
+  'idx-val'结构: '索引-元素'组成的有序集合 
     idx数组索引 
       下标可设置为[非自然数]数字和字符,但不将其计算在数组的长度中
         var arr=[];
@@ -1758,7 +1567,7 @@ Array 数组类
       省略数组中的某个值,则默认为undefined
         var arr=[1,,3];
         console.log(arr); // [1, undefined × 1, 3]
-    JS会自动忽略最后一个逗号,可能存在兼容问题
+    JS会自动忽略最后一个逗号,可能存在兼容问题 
       var arr = [1,2,];
       console.log(arr.length,arr); // 2 [1, 2]
     稀疏数组: 并不含有从0开始的连续索引,一般length属性值比实际元素个数大 
@@ -1785,35 +1594,31 @@ Array 数组类
        foo.name;            //"fan"
        foo.length;          //2
        console.log(foo)     //[1, 2, name: "fan"]
-    arr = new Array([arg]) 内置构造函数创建 
-      PS: 可省略'new'关键字[不推荐使用]
+    arr = new Array([val1,val2,..]) 内置构造函数创建 
+      PS: 可省略'new'关键字,但不推荐 
       无参数: 创建空数组 []
       单参数: 作为数组的元素或指定数组的长度 
         var arr1 = new Array("a");
         var arr2 = new Array(6);   //表示该数组的长度为6
-        var arr3 = new Array({ length: 5 });    
         console.log(arr1);   // ["a"]
         console.log(arr2);   // [undefined × 6] 
-        console.log(arr3);   // 
       多参数: 将参数作为数组的元素 
-        var arr = new Array(1,3,true,"abc");
+        var arr = new Array(1,3,true,"abc"); 
         console.log(arr);  // [1, 3, true, "abc"]
-  静态方法 
+  Array.xx  
     bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
-  实例属性&方法 : 'Array.prototype'上的属性&方法 
+  Array.prototype.xx 
     ◆信息查询 
-    val = arr[num]   读写数组元素 
-      num  下标,从0开始
+    val = arr[idx]   读写数组元素 
+      var arr = [];
+      arr[100] = 3;
+      console.log(arr.length);  //101
     num = arr.length 读写数组长度 
       var arr = [1,2,3,4,5];
       arr.length = 3;
       console.log(arr); // [1,2,3]
       arr.length = 4;
       console.log(arr); // [1, 2, 3, undefined ]
-      使用下标来修改数组长度
-        var foo=[];
-        foo[100]=3;
-        foo.length;   //101
     bol = arr.includes(val [,index])  检测元素是否存在 
       val   需要查找的元素值;
       index 可选,默认为 0,从该索引处开始向后查找 
@@ -1893,7 +1698,7 @@ Array 数组类
         console.log(arr); // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
     ◆不改变原数组
-    rstArr = arr.slice([bgn][,end]); 片段复制 
+    arr1 = arr.slice([bgn][,end]); 片段复制 
       PS:截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
         当bgn或end有为负数时,则使其加上 str.length 来代替
       bgn  可选,开始下标,默认为0 
@@ -1921,7 +1726,7 @@ Array 数组类
         }
         var aoo = list(1, 2, 3);
         console.log(aoo); // [1, 2, 3]
-    rstArr = arr.concat(val1[val2,..]);  拼接数组或元素 
+    arr1 = arr.concat(val1[val2,..]);  拼接数组或元素 
       val 可为数组或数组的元素 
       Example:
         拼接元素 
@@ -1937,7 +1742,7 @@ Array 数组类
         var arr4 = ['a',['b','c']]
         var rstArr = arr1.concat(arr4)
         console.log(rstArr); // [1,2,3,'a',['b','c']]
-    rstStr = arr.join([str])  使用str串连每个元素 
+    str1 = arr.join([str])  使用str串连每个元素 
       str 可选,默认为逗号',',表示用于连接的字符
       Example: 将[1,2,3]输出为字符串"1-2-3"
         var arr = [1,2,3];
@@ -2030,7 +1835,7 @@ Array 数组类
           return val > 18;
         });
         console.log(res); // true
-    rstArr = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5] 
+    arr1 = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5] 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -2064,7 +1869,7 @@ Array 数组类
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    rstArr = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5]
+    arr1 = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5]
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       thisArr 可选,执行函数时的用于 this 的值
@@ -2100,42 +1905,29 @@ Array 数组类
     val = arr.reduceRight(foo [,initVal]); 和reduce类似,只是从右到左遍历[ES5]
   Exp: 
     数组的复制
-      通过 slice(0) 复制 
-        PS:使用slice为浅拷贝,只能将第一层完全复制[更深层是引用]
-        当arr中的元素为数组时,修改它仍然会改变复制后的数组
-        var arr = [[1], 2];
-        var res = arr.slice(0);
-        console.log(res[0]);     // [1]
+      slice(0)、concat() 浅拷贝: 只能将第一层完全复制[更深层仍是引用] 
+        var arr = [[0], 0];
+        var arr1 = arr.concat();
+        console.log(arr1[0]);  // [0] 
         arr[0].push(1);
-        console.log(arr[0]);     // [1, 1]
-        console.log(res[0]);     // [1, 1]
-      通过 concat() 复制
-        var arr = [[1], 2];
-        var res = arr.concat();
-        console.log(res[0]);  // [1]
+        console.log(arr[0]);  // [0, 1] 
+        console.log(arr1[0]); // [0, 1] 
+        
+        var arr2 = arr.slice(0);
+        console.log(arr2[0]);  // [0, 1] 
         arr[0].push(1);
-        console.log(arr[0]);  // [1, 1]
-        console.log(res[0]);  // [1, 1]
-      slice concat 的复制都为浅拷贝,只能复制到一维;
-      使用JSON 序列化与反序列化来复制(?)
+        console.log(arr[0]);   // [0, 1, 1] 
+        console.log(arr2[0]);  // [0, 1, 1] 
+      使用JSON序列化与反序列化实现深拷贝 
+        var arr = [[0], 0];
+        var arr1 = JSON.parse(JSON.stringify(arr))
+        console.log(arr1[0]);  // [0] 
+        arr[0].push(1);
+        console.log(arr[0]);  // [0, 1] 
+        console.log(arr1[0]); // [0] 
 Function 函数类 
-  PS: 函数是存储在变量中的一段程序,变量作为一个函数使用,用于实现某种功能 
-    函数是定义一次但却可以调用或执行任意多次的一段代码 
-    若函数名称重复会产生覆盖 
-    JS中代码块[大括号之间]里不会产生作用域,函数是唯一能创建新作用域的地方 
+  PS: JS中代码块[大括号之间]里不会产生作用域,函数是唯一能创建新作用域的地方 
     函数也是对象可以向其他值一样作为参数传递 
-  Function 类型
-    PS: 在ECMAScript中, Function类型 实际上是对象
-      每个函数都是 Function构造器 的实例,而且都与其他引用类型一样具有属性和方法.
-      由于函数是对象,因此函数名实际上也是一个指向函数对象的指针
-    Example:
-      function foo(){}
-      typeof foo;  // "function",类型显示为function
-
-      函数作为对象使用
-      function goo(){}
-      goo.a =1;
-      console.log(goo.a); //1
   创建函数 
     PS:变量名可以使用中文字符来进行命名而不会报错[但最好不要使用中文] 
     function foo(arg){}        函数声明创建 
@@ -2146,45 +1938,34 @@ Function 函数类
       foo(); // 1
       bar(); // 报错:bar未定义,会将赋值变量的函数的函数名忽略 
     var foo = new Function('arg1',...,"函数体"); 构造函数创建 
-      PS:不推荐使用该方法,会导致解析两次代码,影响性能,
+      每个函数都是Function构造器的实例对象  
+        function foo(){}
+        foo.a =1;
+        console.log(foo.a); //1
+      Function创建的函数,其父作用域始终指向 window 
+        function foo(){
+          var aoo = 1;
+          var goo = new Function("","console.log(aoo)");
+          // 函数 goo 父作用域为window ,
+          // 相当于在全局创建的函数,不可访问函数作用域的变量
+          var hoo = function(){
+            console.log(aoo);
+          }
+          hoo();
+          goo();
+        }
+        foo();   //1 报错: aoo is not defined
+      不推荐使用该方法,会导致解析两次代码,影响性能 
         第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串 
       var foo1 = function(){}
       foo1.constructor;  // Function() { [native code] }
       var foo2 = new Function("a","b","console.log(a+b);");
       foo2(1,3); // 4
     不同声明的差异 
-      关键字声明法:函数的调用可在声明之前,函数在代码运行之前有预加载[函数声明提升] 
-      变量初始化:函数的创建需在调用前完成,实质上,该函数就是一个变量,没有预加载 
-      Example: :
-        console.log(foo()); // 1
-        function foo(){ return 1; }
-        var foo = function(){ return 2; }
-        console.log(foo()); // 2
-        原理:在代码运行前,函数被预加载以便运行时调用,
-        运行时读取到变量声明的函数,导致产生了覆盖.
-      以下语法可能导致错误,不同的浏览器的结果可能有差异
-      if(condition) {
-        function foo(){ }
-      }
-      else {
-        function foo(){ }
-      }
-      修改为
-      var foo;
-      if(condition) {
-        foo = function(){ }
-      }
-      else {
-        foo = function foo(){ }
-      }
+      关键字声明法: 函数的调用可在声明之前[函数声明提升] 
+      变量初始化: 函数的创建需在调用前完成 
   'arguments'函数参数 
-    传入的参数可多可少,多则舍去,少则使用undefined来补充 
-      function foo(){ 
-        console.log(arguments[0],arguments[1]); 
-      };
-      foo(1); // 1 undefined
     arguments [在函数体内]表示实际传入函数的参数组成的类数组 
-      PS:类数组表示类似与数组的结构但无 Array.prototype 内的属性和方法 
       Example: 
         对若干个数值进行累加
         function sum(){
@@ -2196,15 +1977,13 @@ Function 函数类
         }
         sum(5,6,1); // 12
       arguments.length 在函数体内表示实际传入参数的数量 
-        Example: :
-        function box(){ return arguments.length; }
-        console.log(box(1,2,3,4,5));  // 5
       arguments[idx]   读写相应的参数 
         在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
       arguments.callee 在函数体内表示函数本身 
         该属性是一个指针,指向拥有这个arguments对象的函数 
         Example:
-          递归-阶乘
+          若在函数内部通过函数名调用自身,当改变函数名时,内部需逐一修改
+          可使用 arguments.callee 来代替来代替函数名来表示函数本身 
           function sum(num){
             if(num<=1){
               return 1;
@@ -2212,9 +1991,6 @@ Function 函数类
               return num*sum(num-1);
             }
           }
-          对于阶乘函数一般要用到递归算法,所以函数内部一定会调用自身;
-          若函数名不改变是没有问题的,一旦改变函数名,内部的自身调用需要逐一修改
-          为了解决这个问题,我们可以使用arguments.callee来代替.
           function box(sum){
           if(num<=1){
             return 1;
@@ -2224,38 +2000,16 @@ Function 函数类
             //此时arguments.callee等价于box
           }
         }
-    参数按共享传递 
-      基本类型[此处为字符串],参数按值传递
-      var localObjOpera = function(localStorageItem,key,val){
-        if (localStorageItem === undefined) { // 不存在则初始化为一对象 
-          localStorageItem = JSON.stringify({});
-        }
-        var obj = JSON.parse(localStorageItem);
-        obj[key] = val;
-        localStorageItem = JSON.stringify(obj);
-        console.log(obj,localStorageItem,localStorageItem === localStorage.abc,typeof localStorageItem);
-        // {aa: "11"} "{"aa":"11"}" false "string"
+    传入的参数不固定,多则舍去,少则用undefined来补充 
+      function foo(){ 
+        console.log(arguments[0],arguments[1]); 
       };
-      localObjOpera(localStorage.abc,'aa','11');
-      console.log(localStorage.abc);   // undefined
-      
-      引用类型对象参数按值传递
-      var aoo = {c:'3'};
-      var editObj = function(obj){
-        obj = {a:'1'};  
-      };
-      editObj(aoo);
-      console.log(aoo); //  {c: "3"}
-      对象参数的属性按引用传递 
-      var editObj1 = function(obj){
-        obj['b'] = '2';
-      };
-      editObj1(aoo);
-      console.log(aoo); // {c: "3", b: "2"}
+      foo(1); // 1 undefined
+    参数按共享传递 [moIn 'Evaluation Strategy']
   'return'函数返回值 
-    PS:函数执行到'return'后直接返回值,后面代码不再执行 
+    PS: 函数执行到'return'后直接返回值,后面代码不再执行 
     使用'return'关键字返回值,若没有return默认返回'undefined' 
-    'return'后无值,默认返回'undefined'
+    'return'后无值,默认返回'undefined' 
       var foo = function(){
         return 
         2;
@@ -2271,243 +2025,35 @@ Function 函数类
     obj.foo() 方法调用 
     new Foo() 构造器调用 
     foo.call() call/apply/bind调用 
-    自调用:声明时调用 
-      var foo = function(){ 
-        alert(1); 
-      }();   //直接调用
-      // foo中存放的是 函数的返回值,而非函数本身
-      等价于
-      var foo = (function bar(){ 
-        alert(1); 
-      })();
-      等价于
-     (function bar(){ 
-       alert(1); 
-     })();
-  特殊形式的函数 
-    全局函数[参见 window对象]
-      系统内置构造函数:用于创建数据对象
-        Boolean()
-        String()
-        Number()
-        Object()
-        Date()
-        ...
-    匿名函数 : 没有名字的函数 
-      可以通过匿名函数来执行某些一次性的任务.(自调用)
-      可以将匿名函数作为参数传递给其他函数(参见高阶函数)
-      通过匿名函数来定义函数
-        把匿名函数赋值给变量
-        var f =function(a){...}
-      单独定义匿名函数程序报错
-        function(){ return "abc"; } // 报错
-      通过自我来执行匿名函数
-       (function(){ alert("abc"); })();
-        //第一个括号内为匿名函数,第二个括号执行.
-        自我执行匿名函数的传参
-       (function(age){ alert(age); })(100);       //100.
-      函数里的匿名函数
-        function box(){
-          return function(){
-            return "abc";
-          }
-        }
-        console.log(box()());  //abc.
-    'closure'闭包: 可访问一个函数作用域里变量的函数 
-      PS: 或者说闭包是函数中创建的函数.
-        闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存.
-        过度使用闭包可能会导致内存占用过多.
-        虽然V8等优化后的JS引擎会尝试回收被闭包占用的内存,但还是要慎重使用.
-      创建闭包的常见的方式:
-        在一个函数内部创建另一个函数,
-        通过另一个函数(在外部调用)访问这个函数的局部变量.
-      作用
-        保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量.
-        将函数a中的变量通过a中的函数b引出到全局作用域,从而可在全局中进行访问.
-        Example: :
-        var goo;
-        function foo(){
-          var b=3;
-          goo= function(){ return b; };
-        }
-        foo();
-        console.log(goo()); // 3
-      应用
-        使用闭包的特点:就是可以把局部变量驻留在内存中,可以避免使用全局变量.
-        由于闭包里作用域返回的局部变量资源不会立刻回收,所以可能会占用更多的内存,
-        过度使用闭包会导致性能下降.
-        由于闭包可能会占用更多内存,一般情况下不推荐使用闭包.
-        Example:
-        使用匿名函数实现局部变量驻留内存中从而累加
-          function foo(){
-            var aoo=100;
-            return function(){aoo++;console.log(aoo)}  //闭包
-          }
-          foo();    //function(){ aoo++; console.log(aoo) }
-          foo()();  //101
-          foo()();  //101
-          var goo =foo();
-          goo();    //101
-          goo();    //102
-          goo=null; //解除引用,等待垃圾回收 释放闭包
-          PS-Self:goo 和 foo()的返回值一样,实质内容不同
-            foo()表示执行函数会对函数内的aoo初始化
-            b表示的为box()执行后的返回值(函数内的闭包)
-        减少参数
-          function cal(base){
-            return function(max){
-              var total =0;
-              for(var i = 1; i <= max; i++){ total +=i;};
-              return total +base;
-            }
-          }
-          var add =cal(2);
-          add(3); // 8
-          var add2 =cal(1);
-          add2(3); // 7
-        封装
-         (function(){
-            var m =0;
-            function get(){ return m; }
-            function set(val){ m =val; }
-            window.getM =get;
-            window.setM =set;
-          })()
-          getM();   //0
-          setM(11);
-          getM();   //11
-        点击列表项返回其在列表中的位置
-          <ol id="list">
-            <li>000</li>
-            <li>111</li>
-            <li>222</li>
-            <li>333</li>
-            <li>444</li>
-          </ol>
-          var  li = list.getElementsByTagName('li');
-          // 方案一:
-          for(var  i = 0; i < li.length; i++){
-           (function(){
-              var aoo =i;
-              li[i].onclick = function() { console.log(aoo); }
-            })()
-          }
-          // 方案二:
-          // for(var  i = 0; i < li.length; i++){
-          //   let aoo =i;
-          //   // 或者 const aoo =i;
-          //   li[i].onclick = function() {
-          //     console.log(aoo);
-          //   }
-          // }
-      内存泄漏
-        IE9之前的版本对JScript对象和COM对象使用不同的垃圾收集例程,
-        因此闭包在IE的这些版本中会导致一些特殊的问题.
-       (具体参见 JavaScript高级程序设计第184页)
-      Example:
-        var aoo =9;
-        function foo(){
-          var aoo =1;
-          return function goo(){ console.log(aoo); }
-        }
-        var joo =foo();
-        joo(); //1
-
-        function foo(){
-          var aoo =11;
-          function goo(){
-            var aoo =1;
-            function joo(){ console.log(aoo); }
-            joo();
-          }
-          goo();
-        }
-        foo();  // 1
-    构造函数 
-      PS:构造器函数首字母大写[约定写法],用于区别其他的一般函数,
-        构造器用于生成对象[类似于'类']
-        (构造器及构造器的prototype一起,相当于类)
-        任何函数通过new来调用就可以作为构造函数;
-        若不用new来调用,构造函数和普通函数无区别
-      obj.constructor;  获取对象的构造器函数
-        Example:
-        "abc".constructor;  //function String() { [native code] }
-        Object.constructor; //function Function() { [native code] }
-        12.0.constructor;   //function Number() { [native code] }
-        // 12.constructor;     //报错,将点.作为了小数点
-        var aoo = 123;
-        aoo.constructor; //function Number() { [native code] }
-      公有属性和私有属性 
-        function Foo(a){
-          var age = 100;    //私有
-          function goo(){   //私有函数
-            console.log(this.name);
-          } 
-          this.name = a;        //公有
-          this.joo =function(){ //公有方法
-            goo();
-          } 
-        }
-        var name ='global';
-        var obj =new Foo("abc");
-        obj.joo();  //global
-        公有 私有 相互调用
-          决解方法1
-            function Foo(a){
-              var age =100;  //私有
-              this.name =a;  //公有
-              function goo(){console.log(this.name);} //私有函数
-              this.joo =function(){goo.call(this);}   //公有方法
-            }
-            var obj =new Foo("abc");
-            obj.joo(); //abc
-          解决方法2
-            function Foo(a){
-              function goo(){console.log(aoo.name)};
-              var aoo ={
-                name:a,
-                joo:function(){goo();}
-              }
-              return aoo;
-            }
-            var obj =Foo("abc");
-            obj.joo(); //abc
-      构造函数也可以具有属性,但不会影响其生成的对象(函数也是对象)
-        function Foo(name){
-          this.name =name;
-        }
-        Foo.age =19;
-        Foo.prototype.aoo =11;
-        var obj =new Foo("abc")
-        Foo.age; //19
-        obj.age; //undefined
-        obj.aoo; //
-    高阶函数(回调函数)
-      PS:将函数名作为另一函数的参数进行传入,则后者为高阶函数.
-        将函数b的功能传入,而非将函数b的执行值传入,
-        所以是将函数b的函数名作为a的一个参数,
-        b也可以是匿名函数.
-      优点:当要变更高阶函数引入的函数的功能时,
-        不用去高阶函数内部修改引入的函数,
-        在执行时直接改变参数即可.
-      Example:
-      function foo(){ }
-      function goo(foo,aoo){return foo(aoo);}
-
-      function cal(x,y){ return x()+y(); }
-      function test1(){ return 2; }
-      function test2(){ return 3; }
-      console.log(cal(test1,test2));  //5
     IIFE,立即执行的函数 
-      (function(window) {
-        // 一个在 window 上下文中调用的自动调用的匿名函数,this的值为window。
-        // do anything
-      })(this);
+      (function bar(){ 
+        console.log(1);
+      })();
+      或
+      !function(){
+        console.log(1);
+      }();
+      或
+      var foo = function(){ 
+        console.log(1);
+      }();   
+      
       (function(a,b){
         console.log(a+b);
-      })(2,3); //5
-    递归 :一个函数调用本身或者两个函数相互调用 
-      PS:递归必须要定义终止条件,否则无限递归.
+      })(2,3); 
+  特殊形式的函数 
+    全局函数 [moIn window]
+    匿名函数: 未命名的函数 
+      单独定义匿名函数程序报错
+      function(){ return "abc"; } // 报错
+    构造函数: 用于实例化对象[构造函数及其prototype一起相当于类] 
+      将首字母大写[约定写法],用于区别其他的一般函数,
+      任何函数都可通过new来调用作为构造函数;若不用new来调用,即为执行函数;
+    高阶函数: 作为函数参数的函数  
+    IIFE,立即执行的函数 [moIn 函数调用]
+    递归: 一个函数调用本身或者两个函数相互调用 
+      PS: 递归必须要定义终止条件,否则无限递归.
+        一般递归效率较低,但处理探测或者处理多分支的问题,则递归效率较高
       Example:
       用递归求斐波那契数
       斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
@@ -2516,30 +2062,16 @@ Function 函数类
         // 这是递归终止的条件, 必须要有, 否则无限递归了
         if(n == 1 || n == 2) {
           return 1
-        } else {
+        } 
+        else {
           // 若 n 不为 1 和 2, 返回 fib(n-2) + fib(n-1)
           // 这时候 fib(n-2) fib(n-1) 需要计算
           // 于是代码进入下一重世界开始计算
           return fib(n-2) + fib(n-1)
         }
       }
-      PS-Self:规律将上一层的表述和下一层的表述,通过题目中的等式进行相等即可,
-        即fib(n)=fib(n-1)+fib(n-2),而fib(n)函数的值为return 返回的值
-        故将return返回值设为fib(n-1)+fib(n-2)即可.
-      Remarks:
-        一般递归效率较低,
-        一些需要探测或者处理多分支(可能分支又产生分支)的问题,则递归效率较高
-  不具备函数重载 
-    即当函数名相同时会被覆盖掉[不会因为参数不同而进行区分] 
-    Example:
-      function foo(num,a){ 
-        return num+1; 
-      }
-      function foo(num){ 
-        return num+2; 
-      }
-      console.log(foo(7,20)); //9,第二个函数把第一个函数覆盖掉了,不具备重载功能.,
-  ◆实例方法属性/方法
+  不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数不同而进行区分] 
+  ◆属性/方法 
   foo.length    获取函数声明时定义的参数的个数 
     Example: :
     function box(a,b){ return a+b; }
@@ -2554,7 +2086,6 @@ Function 函数类
     };
     goo(); // function goo(){ foo(); }
   foo.prototype [构造]函数的原型对象[详见 原型] 
-  Function.prototype.toString() 返回函数源代码的字符串表示形式 
   Function.prototype.call(context[,arg1,arg2,...]) 改变上下文this指向 
     context 在foo函数运行时指定的'this'值,为'null'或'undefined'时,不改变指向 
       原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象
@@ -2719,15 +2250,11 @@ Function 函数类
       person.sayHello()     //"a1"
       var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
       anotherGuySayHello()  //"b2"
-Date 日期时间类 
-  PS:ECMAScript提供了Date类型来处理时间和日期 
-    Date 对象内置一系列获取和设置日期时间信息的方法.
-    ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的.
-    Date对象基于1970年1月1日0时世界协调时间开始的毫秒数.
-    UTC(coordinated universeal time,国际协调时间,又称世界统一时间)
-    UTC 日期值得是在没有时区偏差的情况下的日期值(UTC和北京时间相差8个小时,北京属于东八区)
-  new Date([val]) 构造函数创建时间对象 
-    PS:无字面量格式; 以常规函数调用即不加new操作符,也会返回一个字符串,但不是时间对象;
+Date 日期时间类: 处理时间和日期,内置获取和设置日期时间信息的方法   
+  PS: ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的 
+    Date对象基于1970年1月1日0时世界协调时间开始的毫秒数 
+  date = new Date([val]) 构造函数创建时间对象 
+    PS: 无字面量格式; 以常规函数调用即不加new操作符,也会返回一个字符串,但不是时间对象;
     date = new Date();     则根据系统当前的时间来创建时间对象
     date = new Date(num);  创建根据自世界协调时间到现在经过的毫秒数对应的时间 
       var date = new Date(1000);
@@ -2759,37 +2286,37 @@ Date 日期时间类
       参数中必须有年份和月份
       Date.UTC(2016,10,1,1,1);  //1477962060000
   Date.prototype.xx 
-    // dat.getYear(); 被废弃
-    dat.getDay()          得到星期数值, 0-6 表示.
-    dat.getFullYear()     得到年份数值.
-    dat.getMonth()        得到月份数值, 0-11 表示.
-    dat.getDate()         得到 日 数值, 1-31 表示.
-    dat.getHours()        得到小时数值, 0-23 表示.
-    dat.getMinutes()      得到分钟数值, 0-59 表示.
-    dat.getSeconds()      得到 秒 数值, 0-59 表示.
-    dat.getMilliseconds() 得到毫秒数值, 0-999 表示.
-    dat.getTime()         得到从1970年1月1日到当前时间的毫秒数值
+    // date.getYear(); 被废弃
+    date.getDay()          得到星期数值, 0-6 表示.
+    date.getFullYear()     得到年份数值.
+    date.getMonth()        得到月份数值, 0-11 表示.
+    date.getDate()         得到 日 数值, 1-31 表示.
+    date.getHours()        得到小时数值, 0-23 表示.
+    date.getMinutes()      得到分钟数值, 0-59 表示.
+    date.getSeconds()      得到 秒 数值, 0-59 表示.
+    date.getMilliseconds() 得到毫秒数值, 0-999 表示.
+    date.getTime()         得到从1970年1月1日到当前时间的毫秒数值
     以上'get'方法都有对应的'set'方法,用于改变日期对象的各项值,都具有'UTC'功能,
       如: setDate() setUTCDate()
-    dat.getTimezoneOffset() 得到当前时区的时间和格林威治时间(GMT)相差分钟数值.
+    date.getTimezoneOffset() 得到当前时区的时间和格林威治时间(GMT)相差分钟数值.
       Example:
-      dat.getTimezoneOffset(); //-480 ,相差8个小时
+      date.getTimezoneOffset(); //-480 ,相差8个小时
       若在柏林,则 new Date().getTimezoneOffset();    //-60
     ◆日期格式化 : 将日期按不同的格式转化为字符串
       new Date(0) 默认显示格式'Thu Jan 01 1970 08:00:00 GMT+0800(中国标准时间)'
-    dat.toDateString()  星期 月 日 年 
+    date.toDateString()  星期 月 日 年 
       // Thu Jan 01 1970
-    dat.toTimeString()  时:分:秒 时区 
+    date.toTimeString()  时:分:秒 时区 
       var date = new Date(1970,0,1,71,20,20); // 71:20:20
       date.toTimeString();  // "23:20:20 GMT+0800 (中国标准时间)"
-    dat.toLocaleString() 
-    dat.toLocaleDateString()  年/月/日 
+    date.toLocaleString() 
+    date.toLocaleDateString()  年/月/日 
       // "2016/12/23"(Chrome下)
       // "‎2016‎年‎12‎月‎23‎日"(IE11下)
       // "2016/12/23"(Firefox下)
-    dat.toLocaleTimeString()  时 分 秒 时区 
+    date.toLocaleTimeString()  时 分 秒 时区 
       // 上午8:00:00
-    dat.toUTCString();        完整的UTC日期格式 
+    date.toUTCString();        完整的UTC日期格式 
       // Thu, 01 Jan 1970 00:00:00 GMT
     日期的比较: 使用变量名比较时,对象的变量名指向的是地址 
       通过 getTime() 转换为毫秒数进行比较
@@ -2823,89 +2350,68 @@ Date 日期时间类
     console.log(coo,typeof coo); 
     // Mon Jan 09 2017 11:36:49 GMT+0800 (中国标准时间) string  
     console.log(doo,typeof doo); // 1483932704579 number
-RegExp 正则类 
-  PS:Regular Expression使用字符串来描述、匹配一系列符合某个语法规则的字符串
-    正则表达式是一个描述字符模式的对象.
-    ECMAScript的RegExp类型表示正则表达式.
-    String 和 RegExp 都定义了使用正则表达式进行强大的模式匹配和文本检索与替换的函数.
-    常用于表单的本地验证.
+RegExp 正则类'Regular Expression'描述、匹配一系列符合某个语法规则字符串的规则 
+  PS: 正则表达式是一个描述字符模式的对象.
   创建正则表达式 
-    /pattern/attr 字面量方式创建
-      PS:正则表达式字面量在脚本加载后编译.
+    var rgep = /pattern/attr 字面量方式创建 
+      PS: 正则表达式字面量在脚本加载后编译.
         若需创建的正则表达式是常量,使用这种方式可以获得更好的性能.
       Example: 
-        var rgep1=/fan/;
-        var rgep2=/fan/ig;
-    new RegExp(str,attr); 通过字符串创建
-      PS:使用场景:
-        当创建的正则表达式的模式会发生改变,
-        或者事先并不了解它的模式,
-        或者是从其他地方(比如用户的输入)得到的,
-        代码这时比较适合用构造函数的方式.
-      Example: :
-        var rgep = new RegExp('fan-\\d','ig')
-        console.log(rgep); //  /fan-\d/gi
-    new RegExp(/ab/,'g'); 通过正则创建 [ES6新增]
-  attributes 模式修饰符 
-    i   ignore case,忽略大小写
-    g   global,全局匹配
-    m   multiple lines,多行匹配
-  Metacharacter,元符号 : 特殊含义的字符 
-    PS: 可以控制匹配模式的方式.
-      第二个反斜杠"/"后的元字符将失去其特殊含义[用于放置模式修饰符的]
-    ★字符元字符
-    .   表示[除换行符和回车符外的]任意字符,等价于[^\r\n]
-      Example: :
-      var rgep=/g.gle/;
-      var str1="g gle";
-      var str2="ggle";
-      var str3="g\tgle";
-      var str4="g\ngle";
-      rgep.test(str1);   //true
-      rgep.test(str2);   //true
-      rgep.test(str3);   //false
-      rgep.test(str3);   //false
-    \d  digit,表示一数字          同[0-9]
-    \w  word,表示一字母或数字或_   同[a-zA-Z0-9]
-    \D  表示一非数字              同[^0-9]
-    \W  表示一非字母和数字及_      同[^a-zA-Z0-9]
-    \s  space,表示空白字符、空格、制表符和换行符
+      var rgep1=/fan/;
+      var rgep2=/fan/ig;
+    var rgep = new RegExp(str,attr)  构造函数通过字符串来创建 
+      Example: 
+      var rgep = new RegExp('fan-\\d','ig')
+      console.log(rgep); //  /fan-\d/gi
+    var rgep = new RegExp(/ab/,'g')  构造函数通过正则来创建 [ES6+]
+    ★'attributes'模式修饰符 
+    i   'ignore case'忽略大小写
+    g   'global'全局匹配
+    m   'multiple lines'多行匹配
+  'Metacharacter'元符号: 特殊含义的字符,控制匹配模式的方式 
+    元字符
+    .   [除'\n'换行符和'\r'回车符外的]任意字符,即[^\r\n]
+    \d  'digit'数字,即[0-9]
+    \D  非数字,即[^0-9]
+    \w  'word'字母或数字或_,即[a-zA-Z0-9]
+    \W  非字母和数字及_,即[^a-zA-Z0-9]
+    \s  'space'空白字符、空格、制表符和换行符 
       也可以使用空格来匹配空格
-    \S  表示非空白字符
-    \0  表示null空字符
-    \n  表示换行字符
-    \r  表示回车字符
-    \t  表示制表符
-    \f  表示进纸字符
-    \v  查找垂直制表符
+    \S  非空白字符
+    \0  null空字符
+    \n  换行字符
+    \r  回车字符
+    \t  制表符
+    \f  进纸字符
+    \v  垂直制表符
     \cx 与x对应的控制字符[如Ctrl+x]
     \xxx  查找以八进制数 xxx 规定的字符
     \xdd  查找以十六进制数 dd 规定的字符
-    ★量词字符
-    X?       表示0个或1个X
-    X+       表示1个或多个X
-    X*       表示任意数量的X(可为0)
-    X{num}   表示num个的X
-    X{num,}  表示num个及以上数量的X
-    X{num1,num2}  表示num1个到num2个之间任意数量的X
-    ★锚点字符
-    ^   强制首匹配
-      位于正则字符串的开始(第一个斜杠/后)
-      Example: : ^n 匹配任何开头为 n 的字符串.
-    $   强制尾匹配
-      位于正则字符的末尾(第二个斜杠/之前)
-      Example: : n$ 匹配任何结尾为 n 的字符串.
-    ?=n 匹配任何其后紧接指定字符串 n 的字符串.
-    ?!n 匹配任何其后没有紧接指定字符串 n 的字符串.
-    \b  匹配单词边界(在[]内时无效)
-      /a\b/ 表示a字母为单词的结尾字母
-      /\ba/ 表示a字母为单词的首字母
+  量词字符 
+    X?       0 个或1个X
+    X+       1 个或多个X
+    X*       任意数量的X(可为0)
+    X{num}       num个的X
+    X{num,}      num个及以上数量的X
+    X{num1,num2} num1个到num2个之间任意数量的X
+  锚点字符 
+    ^   首匹配,位于正则字符串的开始 
+      Example: 
+      /^n/ 匹配任何开头为 n 的字符串.
+    $   尾匹配,位于正则字符的末尾 
+      Example: 
+      /n$/ 匹配任何结尾为n的字符串 
+    ?=n 匹配任何其后紧接指定字符串n的字符串 
+    ?!n 匹配任何其后没有紧接指定字符串 n 的字符串 
+    \b  匹配单词边界(在[]内时无效) 
+      /a\b/ 表示a字母为单词的结尾字母 
+      /\ba/ 表示a字母为单词的首字母   
     \B  匹配非单词边界
     \z  只匹配字符串结束处
     \Z  匹配字符串结束处或行尾
     \A  只有匹配字符串开始处??
     \G  匹配当前搜索的开始位置
-    ★方括号[] 与 圆括号()
+  方括号 [] 与 圆括号()
     [char]   表示[]内的任意一个字符 
       Example: :
       [a-z] [A-Z] [0-9] 
@@ -2925,8 +2431,18 @@ RegExp 正则类
     (XYZ)    表示一个(XYZ)
     /(abc){3}/  表示需要匹配abc 三次以上
     (red|blue|green)  查找任何指定的选项(| 或)
+  转义字符: 使用'\字符'转义 
+    在RegExp中许多符号被用于表达特殊的含义,当需要表示这些字符时需转义.
+    如'.',当需要匹配点.时,就需要转义'\.'
+    \uxxxx  查找以十六进制数xxxx规定的Unicode字符 
+      Example:
+      \u00A0       不间断空格
+      \u0008  \b   Backspace
+      \u000D  \r   回车
+      [\u4e00-\u9fa5] 常见汉字 
+      [\u0391-\uFFE5] 所有汉字 
   捕获匹配分组 
-    PS:获取之前需要有匹配操作;
+    PS: 获取之前需要有匹配操作;
       RegExp.$num 或 \num 表示匹配第num个分组中的内容;
     replace方法中 
       实现将str中两个单词位置替换.
@@ -2943,16 +2459,6 @@ RegExp 正则类
       str.match(rgep);  // 需匹配一次
       RegExp.$1;        // "bcde",表示第1个分组匹配到的内容.
       RegExp.$2;        // "1",表示第2个分组匹配到的内容.
-  转义字符:使用 \字符 转义 
-    在RegExp中许多符号被用于表达特殊的含义,当需要表示这些字符时需转义.
-    如 点.,当需要匹配点.时,就需要转义 \.
-    \uxxxx  查找以十六进制数 xxxx 规定的 Unicode 字符 
-      Example:
-      \u00A0       不间断空格
-      \u0008  \b   Backspace
-      \u000D  \r   回车
-      [\u4e00-\u9fa5] 表示所有的汉字
-      [\u0391-\uFFE5] 汉字[更多] 
   贪婪&惰性
     默认为贪婪模式(尽可能多的匹配),在量词后加上?则表示惰性模式.
 
@@ -3016,60 +2522,44 @@ RegExp 正则类
     rgep.ignoreCase; // true
     rgep.multiline;  // false
     rgep.source;     // "google"
-  rgep.global;      表示g是否已设置的布尔值,默认为false 
-  rgep.ignoreCase;  表示i是否已设置的布尔值,默认为false 
-  rgep.multiline;   表示m是否已设置的布尔值,默认为false 
-  rgep.source;      正则表达式的文本字符串 
-  rgep.lastIndex;   取/设下次匹配字符位置的数值表示(在全局匹配时生效) 
-  rgep.test(str);   返回对象是否在参数中的布尔值
-    var rgep = new RegExp('fan');
-    var str = 'fanshenglin';
-    console.log(rgep.test(str));    // true
-    console.log(/fan/i.test('Fan')); // true
-
-    使用全局匹配,匹配多次可能返回错误值.
-    由于正则的lastIndex的属性导致
-    var reg = /\w/g;
-    console.log(reg.test("a")); // true
-    console.log(reg.test("a")); // false
-    console.log(reg.test("a")); // true
-    console.log(reg.test("a")); // false
-  rgep.exec(str);   返回正则匹配于指定字符串中的结果数组,否则返回null
-    Example:
-      var rgep=/[a-z]{2}/;
-      var str='abcdefghi';
-      rgep.exec(str);  // ["ab"]
-
-      var  rgep=/^([a-z]+)\s([0-9]{4})$/;  //使用了分组
-      var str='google 2012';
-      rgep.exec(str);   // ["google 2012", "google", "2012"]
-    捕获性分组,即所有的捕获都返回
-      var rgep=/(\d+)([a-z])/;
-      var str='123abc';
-      rgep.exec(str);  // ["123a", "123", "a"]
+  bol = rgep.global  默认'false',是否全局匹配
+  bol = rgep.ignoreCase  默认'false',是否忽略大小写   
+  bol = rgep.multiline   默认'false',是否多行匹配 
+  str = rgep.source     正则表达式的文本字符串 
+  rgep.lastIndex   读写下次匹配字符位置的数值表示[在全局匹配时生效] 
+  bol = rgep.test(str)   正则是否存在于字符串中 
+    console.log(/bc/.test('abcd'));    // true 
+    使用全局匹配,由于正则的lastIndex的属性,匹配多次可能返回错误值
+      var re = /\w/g;
+      console.log(re.test("a")); // true
+      console.log(re.test("a")); // false
+      console.log(re.test("a")); // true
+      console.log(re.test("a")); // false
+  arrLike = rgep.exec(str)  正则匹配到的字符串组成的数组,否则返回 null
+    捕获性分组,所有的捕获都返回 
+      console.log(/(\d+)([a-z])/.exec('123abc'));
+      // (3) ["123a", "123", "a", index: 0, input: "123abc"]
       
-      var rgep=/(\d+)/;
+      var reg1 = /(\d+)/g;
       var str='123abc12aa3a';
-      console.log(rgep.exec(str)); 
+      console.log(reg1.exec(str)); 
       // ["123", "123", index: 0, input: "123abc12aa3a"]
-      console.log(rgep.exec(str)); 
-      // ["123", "123", index: 0, input: "123abc12aa3a"]
-      console.log(rgep.exec(str)); 
-      // ["123", "123", index: 0, input: "123abc12aa3a"]
-      
-      var rgep=/(\d+)/g;
-      var str='123abc12aa3a';
-      console.log(rgep.exec(str)); 
-      // ["123", "123", index: 0, input: "123abc12aa3a"]
-      console.log(rgep.exec(str)); 
+      console.log(reg1.exec(str)); 
       // ["12", "12", index: 6, input: "123abc12aa3a"]
-      console.log(rgep.exec(str)); 
+      console.log(reg1.exec(str)); 
       // ["3", "3", index: 10, input: "123abc12aa3a"]
+      console.log(reg1.exec(str)); 
+      // null 
+      var reg2 = /(\d+)/;
+      console.log(reg2.exec(str)); 
+      // (2) ["123", "123", index: 0, input: "123abc12aa3a"]
+      console.log(reg2.exec(str)); 
+      // (2) ["123", "123", index: 0, input: "123abc12aa3a"]
     非捕获性分组,在不需返回的分组前加?:
       var rgep=/(?:\d+)([a-z])/;
       var str='123abc';
       rgep.exec(str);  // ["123a", "a"]
-    分组嵌套
+    分组嵌套 
       嵌套分组,从内往外获取
       var pat=/(a?(b?(c?)))/;
       var str='abc';
@@ -3078,7 +2568,7 @@ RegExp 正则类
       a[1] 匹配到的第一个分组(a?(b?(c?)))
       a[2] 匹配到的第二个分组(b?(c?))
       a[3] 匹配到的第三个分组(c?)
-    前瞻捕获
+    前瞻捕获 
       匹配的字符后面必须是XX,使用?=来定义
       var pat=/goo(?=gle)/
       var str='googlea'
@@ -3088,17 +2578,20 @@ RegExp 正则类
       var pat=/\[/
       var str='['
       pat.exec(str)         //["["]
-    换行匹配
+    换行匹配 
       使用首匹配^时,需开启换行匹配才能匹配到多行,
-     (未指定首匹配时则不开启多行匹配也能匹配到多行)
+      (未指定首匹配时则不开启多行匹配也能匹配到多行)
       var pat=/^\d+/gm
       var str='1.baidu\n2.google\n3.bing'
       str.replace(pat,"*")
         // "*.baidu
         // *.google
         // *.bing"
-  rgep.compile(rgep,modifier); 编译正则表达式
-  ◆静态属性 :需先执行匹配(test或exec)
+    Example:
+    console.log(/[a-z]{2}/.exec('abcdefg'));  
+    // ["ab", index: 0, input: "abcdefg"]
+  rgep.compile(rgep,modifier)  编译正则 
+  ◆静态属性: 需先执行匹配'test'或'exec' 
     Example: :
     var rgep=/google/;
     var str="this is a agoogle!";
@@ -3112,27 +2605,27 @@ RegExp 正则类
     RegExp.multiline;    //false
   RegExp.input;        $_  当前被匹配的字符串
   RegExp.lastMatch;    &&  最后一个匹配的字符串
-  RegExp.leftContext;  $`  最后一次匹配前的子串      `
+  RegExp.leftContext;      最后一次匹配前的子串      
   RegExp.rightContext;     在上次匹配之后的子串
   RegExp.lastParen;    $+  最后一对圆括号内的匹配子串
   RegExp.multiline;    $*  指定是否所的表达式都用于多行的布尔值
   ◆字符串中的正则方法
-  str.match(rgep);  返回符合正则的字符串组成的数组
+  str.match(rgep)   返回符合正则的字符串组成的数组
     var rgep=/Box/ig;
     var str="this is a Box2,thatis a box!";
     console.log(str.match(rgep));    //["Box", "box"]
-  str.search(rgep); 返回第一个正则的位置,否则返回-1
+  str.search(rgep)  返回第一个正则的位置,否则返回-1
     search方法查找到即返回,无需g全局匹配
     var rgep=/Box/ig;
     var str="this is a box,thatis a box!";
     str.search(rgep);
     //10,返回第一个匹配的位置(从0开始)
-  str.split(rgep);  返回使用正则分割成的字符串组成的数组
+  str.split(rgep)   返回使用正则分割成的字符串组成的数组
     var rgep=/!/ig;
     var str="this is a box!,thatis a box!";
     str.split(rgep);
     //["this is a box", ",thatis a box", ""]
-  Str.replace(rgep,str); 返回指定字符串替换正则后的新字符串 [未改变原字符串]
+  Str.replace(rgep,str)  返回指定字符串替换正则后的新字符串 [未改变原字符串]
     PS:全局则替换字符串中所有符合的字符,否则替换第一个,
       非全局连续多次替换时,后一次从上一次匹配结束的位置开始匹配
     var rgep=/Box/ig;
@@ -3140,55 +2633,43 @@ RegExp 正则类
     var str ='tom';
     Str.replace(rgep,str); // "this is a tom,that is a tom!"
   常用的正则 
-    检查邮政编码
-      规则六位数字,第一位不是0
-      var pattern=/[1-9][0-9]{5}/;
-      var str="224000";
-      pattern.test(str);      //true
-    检查文件压缩包
-      规则:名称可能为 字母、数字、下划线 格式可能为.zip/.rar/gz
-      var pattern=/^[\w\-]+\.(zip|rar|gz)$/;
+    检查邮政编码: 规则六位数字,第一位不是0 
+      console.log(/^[1-9][0-9]{5}$/.test('123456')); //true
+    检查文件压缩包: 名称可能为 字母、数字、下划线 格式可能为.zip/.rar/.gz
       // |选择符 需使用分组符号 包含起来
-      var str="1-23.zip";
-      pattern.test(str);      //true
-    删除多余空格
-      var pattern=/\s/g;
-      var str="111 222 333 444";
-      str.replace(pattern,"");      //"111222333444"
-    删除首尾空格
-      使用两次正则
+      console.log(/^[\w\-]+\.(zip|rar|gz)$/.test('1-23.zip'));   //true
+    简单的电子邮件验证 
+      var regp = /^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
+      var str = "fols.van@126.com";
+      console.log(regp.test(str)); // true 
+    删除首尾空格 
+      使用两次正则 
         var pattern=/^\s+/;
         var str="    goo    gle  ";
         var result=str.replace(pattern,"");
         pattern=/\s+$/;
         result=result.replace(pattern,"");
         result;            //"goo    gle"
-      使用惰性模式捕获
+      使用惰性模式捕获 
         var pattern=/^\s*(.+?)\s+$/;      //+?是惰性模式
         var str="  goo gle  ";
         pattern.exec(str)[1];     //"goo gle",数组的第二个
         //若使用非惰性模式(或贪婪模式)则返回值为:"goo gle "
         // PS-Self:惰性模式即为捕获最少复合要求的字符.
-      使用分组捕获
+      使用分组捕获 
         var pattern=/^\s*(.+?)\s+$/;
         var str="  goo gle  ";
         var result=str.replace(pattern,"$1");
         alert("|"+result+"|");
-    简单的电子邮件验证
-      var pattern=/^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
-      var str="123abc.com@aaa.com";
-      alert(pattern.test(str));
   Question:
     只包含中文和字母a的正则 
       中文表示为 [\u0391-\uFFE5]
       为 /[\u0391-\uFFE5a]/ ?
     指定初始开始匹配的字符的下标,如'abcde',指定从第二个字符开始匹配 
 Error 错误类 
-  PS: JS解析或执行时,一旦发生错误,引擎就会抛出一个错误对象
-    然后整个程序就中断在发生错误的地方,不再往下执行.
+  PS: JS解析或执行时,当发生错误就会抛出一错误对象,并且程序中断在发生错误的地方 
     JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例 
-  错误类型 
-    PS: ECMA-262 定义了7种错误类型,Error是基类型,是其他六种的父类型
+  错误类型: ECMA-262 定义了7种错误类型,Error是基类型,是其他六种的父类型
     Error
     SyntaxError    解析代码时发生的语法错误
     TypeError      变量或参数不是预期类型时发生的错误
@@ -3502,7 +2983,22 @@ JS运行过程机理
       定义在函数内部的变量具有局部作用域; 
       每个函数在被调用时都会创建一个新的作用域。
       函数内定义的变量在局部作用域中 
+  动态作用域: JS不具备
+    function foo(){
+      console.log(aoo)
+    }
+    function goo(){
+      var aoo =1;
+      foo();
+    }
+    goo(); // 报错, aoo未定义
+    若支持动态作用域,则为结果为 1
 'Closure'闭包: 当内部函数尝试访问其外部函数的作用域链,会创建一个闭包 
+  PS: 闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存.
+    过度使用闭包可能会导致内存占用过多.
+    虽然V8等优化后的JS引擎会尝试回收被闭包占用的内存,但还是要慎重使用.
+    创建闭包的常见的方式:在函数F内部创建函数G,通过G访问函数F内的变量 
+    作用: 保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量.
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
 'this'执行函数时的'context'上下文对象 
@@ -3656,125 +3152,5 @@ Question&Suggestion
       在函数内定义 arguments.callee.args = arguments
       然后 foo.args 就可以获取的传入的参数了 
 -----------------------------------------------------------------------待整理 
-作用域[执行环境]
-  PS:执行环境定义了变量或函数有权访问的其他数据,决定了他们各自的行为.
-  作用域与变量
-    PS:在局部作用域内定义变量不加var,则定义的为全局全局变量(不推荐使用)
-    变量在作用域中的访问规则
-      规则1:子作用域内可访问上层作用域的变量,反之则不行.
-      规则2:当前作用域的变量优先级高于上层作用域的变量.
-      Example: :
-      var aoo=1;
-      function foo(){
-        var aoo =2;
-        var boo =11;
-        console.log(aoo);
-      }
-      foo();            //2 , 规则2
-      console.log(boo); // 报错 , 规则1
-  全局作用域
-    在web浏览器中,全局执行环境被认为是window对象
-    所有全局变量和函数都是window对象的属性和方法
-    尽量控制全局变量的数量,容易引发bug
-    在函数内定义变量不加var即定义的为全局变量.
-  块作用域(私有作用域):{...}之间(Self) JS不具备
-    if(){}、for(){}等没有作用域
-    仿造块级作用域
-      PS:使用自我执行的匿名函数达到块级作用域的效果.
-        使用块级作用域后,匿名函数中定义的任何变量,都会在执行结束时被销毁.
-        采用块级作用域,每个开发者可以使用自己的变量,而不必担心搞乱全局作用域.
-      Example:
-     (function(){
-        //这里是块级作用域
-      })()
-      这种做法可以减少闭包占用内存的问题,因为没有指向匿名函数的引用,
-      只要函数执行完毕,就可以立即销毁其作用域链了
-
-      function box(){
-        //包含自我执行的匿名函数,就可以实现私有作用域
-       (function(){
-          for(var i=0;i<3;i++){
-            console.log(i);
-          }
-        })();      //出了这个私有作用域,变量立即被销毁
-        console.log(i);
-      }
-      box();
-      //打印出0,1,2,然后程序报错:i is not defined
-    块级作用域用途:多人协同独立开发环境,不会互相干扰
-      在全局作用域中使用块级作用域可以减少闭包占用的内存问题,因为没有指向匿名函数的引用.
-     (function(){
-        //这里就是全局的私有作用域(块级作用域)
-      })();
-  函数作用域:每个函数体内为一个作用域 JS具备
-    函数作用域的运行机制:
-      每个函数被调用时都会创建自己的执行环境,
-      当执行到这个函数时,函数的环境就会被推到环境中去执行,
-      执行后在环境栈中弹出(退出),把控制权交给上一级的执行环境.
-      当执行环境中的所有代码执行完毕后,该环境被销毁,其中的所有变量和函数也随之销毁(没有产生闭包的情况).
-      全局环境下,需要程序执行完毕或网页被关闭才会销毁.
-      每个执行环境都有一个与之关联的变量对象,环境中定义的所有变量和函数都保存在这个对象中
-     (我们无法访问这个变量对象,但解析器处理数据时后台会使用它)
-    私有变量:在函数中定义的变量(因为不能在函数的外部访问这些变量)
-      私有变量包括函数的参数、局部变量和在函数内部定义的其他函数
-      通过闭包访问私有变量
-        function Box(){
-          var age=100;    //私有变量
-          function run(){ //私有函数
-            return "运行中";
-          }
-          this.getAge=function(){ //对外可见的公共接口,特权方法
-            return age;
-          }
-        }
-        var box=new Box();
-        console.log(box.run);      //undefined,无法调用
-        console.log(box.getAge()); //100
-  动态作用域: JS不具备
-    function foo(){
-      console.log(aoo)
-    }
-    function goo(){
-      var aoo =1;
-      foo();
-    }
-    goo(); // 报错, aoo未定义
-    若支持动态作用域,则为结果为 1
-  静态作用域:也称为词法作用域或闭包  JS具备
-    函数创建时所处的作用域为其父作用域,函数可访问其父作用域;但父作用域不可访问子作用域(Self)
-      通过闭包来访问函数中的变量
-      var goo =function(){
-        var aoo =5;
-        function foo(){
-          console.log(aoo);
-        }
-        window.foo =foo;
-      }();  // 运行一次 ,创建函数和初始化变量
-      foo(); // 5
-    通过new Function()创建的函数,其父作用域始终指向window(全局)
-      new Function() 创建函数
-        function foo(){
-          var aoo =1;
-          var goo =new Function("","console.log(aoo)");
-          // 函数 goo 父作用域为window ,相当于在全局创建的函数,不可访问函数作用域的变量
-          goo();
-        }
-        foo();   //报错,aoo未定义
-  call apply bind 指定作用域(见 对象>this>)
-  模块模式
-    Example: :
-    var aoo =function(){
-      // 私有变量和私有函数
-      var azz =1;
-      function fzz(){
-      }
-      // 创建对象
-      var obj =new Foo();
-      // 添加特权/公有属性和方法
-      obj.bzz = 2;
-      obj.gzz =function(){
-      }
-      return obj;
-    }
 
 

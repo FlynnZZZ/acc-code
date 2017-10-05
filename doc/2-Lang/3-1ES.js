@@ -2756,19 +2756,17 @@ Math  数学对象
     Math.asin(num)        返回num的反正弦值
     Math.atan(num)        返回num的反正切值
     Math.atan2(num1,num2) 返回num1/num2的反正切值
-JSON'JavaScript Object Notation'JS对象表示法 
-  PS: 一种基于文本、独立于语言的轻量级数据交换格式 
-    利用JS中的一些模式来表示结构化数据.
-    对于整个Web,广泛用于数据的传送和数据的交换.
+JSON'JavaScript Object Notation'JS对象表示法: 基于文本、独立于语言的轻量级数据交换格式 
+  PS: 利用JS中的一些模式来表示结构化数据,广泛用于数据的传送和数据的交换, 
     每个JSON对象只能是一个值,即每个JSON文档只能包含一个值;
-  JSON值类型和格式
-    简单类型: String Number,只能十进制 Boolean Null
-      不能使用 NaN Infinity undifined
-      String 必须使用双引号
-    复合类型: Array Object 不能为函数、正则、日期对象
-      对象的键必须用双引号引起来 ,
-      数组或对象的最后一个成员不能加逗号
-    Example:
+    ES5对解析JSON的行为进行了规范,定义了全局对象JSON对象
+  JSON值类型和格式 
+    null Boolean Number[只能十进制] String Array Object 
+    不能为: NaN Infinity undefined 
+    不能为: 函数、正则、日期对象 
+    String 必须使用双引号  
+    对象的键必须用双引号引起来,数组或对象的最后一个成员不能加逗号 
+    Example: 
       JSON.stringify("aoo"); // ""aoo""
       JSON.stringify("aoo") === "\"aoo\"";  // true
       JSON.stringify("aoo") === ""aoo"";    // 报错
@@ -2777,18 +2775,12 @@ JSON'JavaScript Object Notation'JS对象表示法
       { "aoo" : "style="color:red;"" }
       格式错误,可改为
       { "aoo" : "style=\"color:red;\"" }
-      或 { "aoo" : "style='color:red;'" }
-  ◆JSON对象 的两个方法
-    PS:ECMAScript5 对解析 JSON 的行为进行了规范,定义了全局对象 JSON对象
-    Example:
-      var s = JSON.stringify([1,2,3,4]);
-      //"[1,2,3,4]",为string类型
-      var a = JSON.parse(s);
-      //[1,2,3,4],object类型(数组为object类型)
-  JSON.stringify(val[,arr/foo,num/str]); 序列化,将JS值转换为JSON字符串
-    PS:序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中
-    val       需序列化的值
-    arr/foo   可选,过滤器,数组或函数
+      或 
+      { "aoo" : "style='color:red;'" }
+  JSON.stringify(val[,arr/foo,num/str])   序列化,将JS值转换为JSON字符串 
+    PS: 序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中 
+    val       需序列化的值 
+    arr/foo   可选,过滤器,数组或函数 
       若为数组则,结果中将只包含数组中列出的属性 
         Example: :
         var book ={
@@ -2825,30 +2817,30 @@ JSON'JavaScript Object Notation'JS对象表示法
         });
         // {"title":"Professional Javascript","authors":"abc","year":5000}
         其中为值undefined的被忽略
-    num/str   可选,缩进排版选项,数值或字符
+    num/str   可选,缩进排版选项,数值或字符 
       当为数值时范围为'1-10'[超过10仍取10],表示最大缩进空格数(不会改变数据(SelfThink))
       若为字符串时,则该字符串将在JSON字符串中被用作缩进字符[代替空格]
         可将缩进字符设置为制表符等
         缩进字符串最长长度不能超过10个字符,否则只使用前10个字符
-    Example: :
-      会将属性值为undefined的属性忽略,NaN、Infinity 转换为null,
+    Example: 
+      会将属性值为undefined的属性忽略,NaN、Infinity 转换为 null,
       时间表示转换为字符串的表示
       var obj ={a:undefined,b:NaN,c:Infinity,d:new Date()};
       JSON.stringify(obj);
       // "{"b":null,"c":null,"d":"2016-12-28T07:45:24.152Z"}"
-    当'对象'成员的值为'undefined''函数'或'XML对象'时,则该成员会被过滤 
+    当'对象'成员的值为'undefined'、'函数'或'XML对象'时,则该成员会被过滤 
         var obj = {
           aoo:1,
           boo:undefined,
           coo:function(){ }
         };
         JSON.stringify(obj); // "{"aoo":1}"
-    当'数组'成员为'undefined'、'函数'或'XML对象'时,将被转换成null
+    当'数组'成员为'undefined'、'函数'或'XML对象'时,将被转换成null 
       var arr = [undefined,function(){ }];
       JSON.stringify(arr); // "[null,null]"
-    '正则'会被转换为空对象{}
+    '正则'会被转换为空对象{} 
       JSON.stringify(/aoo/); // "{}"
-    忽略对象的不可遍历属性
+    忽略对象的不可遍历属性 
       var obj = {};
       Object.defineProperties(obj,{
         'aoo' : {
@@ -2917,11 +2909,11 @@ JSON'JavaScript Object Notation'JS对象表示法
       var rst2 = JSON.stringify(obj2);
       console.log(rst1); // {"a":1,"b":"aa"}
       console.log(rst2); // "自定义的返回值"
-  JSON.parse(JSONstr[,foo(key,val)]);     反序列化,将 JSON字符 串转换为JS值
-    PS:若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
+  JSON.parse(JSONstr[,foo(key,val)])      反序列化,将 JSON字符 串转换为JS值
+    PS: 若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
     JSONstr 需要解析的JSON字符串
     foo     可选 
-  应用:
+  应用: 
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
 ------------------------------------------------------------------------------- 
@@ -2977,12 +2969,11 @@ JS运行过程机理
           将变量对应到缓存中,重名时,后面覆盖前面['参数'和'变量'同等对待]
 'Scope'作用域: 在运行时,代码中变量、函数和对象的可访问性 
   PS: 即作用域决定了代码区块中变量和其他资源的可见性 
-  JS中两种类型的作用域: 
-    全局作用域 
-    局部作用域 
-      定义在函数内部的变量具有局部作用域; 
-      每个函数在被调用时都会创建一个新的作用域。
-      函数内定义的变量在局部作用域中 
+  全局作用域: JS运行的最外层  
+  局部作用域: 函数体内部  
+    定义在函数内部的变量具有局部作用域; 
+    每个函数在被调用时都会创建一个新的作用域。
+    函数内定义的变量在局部作用域中 
   动态作用域: JS不具备
     function foo(){
       console.log(aoo)
@@ -3151,6 +3142,6 @@ Question&Suggestion
     自我实现: 
       在函数内定义 arguments.callee.args = arguments
       然后 foo.args 就可以获取的传入的参数了 
------------------------------------------------------------------------待整理 
+-----------------------------------------------------------------------待整理   
 
 

@@ -53,6 +53,7 @@
     obj       对象
     any       任意类型 
     expr      表达式  
+    statement 语句 
     idx       数组的下标/字符串字符下标  
     bgn       开始 begin
     end       结束 

@@ -270,19 +270,13 @@ Object 对象扩展
       4、通过实例化后的对象调用类的方法或者属性。
       注意:面向对象是一种编程思想,并不是具体的工具。
 Function 函数扩展 
-  参数的默认值
-    传统的实现方式
-      function person(n,a){
-        var name = n || 'Zhangsan';
-        var age  = a ||  25;
-      }
-    ES6实现
-      function person(name = 'Zhangsan',age = 25){
-        console.log(name,age);
-      }
-      person();//结果:Zhangsan  25
-      person('Lisi',18);//结果:Lisi  18
-    只有当传入的参数为undefined,才会触发默认值赋值
+  默认参数: 在定义函数时,将参数赋值   
+    function person(name='aoo',age=25){
+      console.log(name,age);
+    }
+    person();         // aoo 25
+    person('boo',18); // boo 18
+    只有当传入的参数为 undefined,才会触发默认值赋值 
       function person(age = 12){
         console.log(age);
       }
@@ -290,22 +284,8 @@ Function 函数扩展
       person(undefined); // 12
       person(0);         // 0
       person(null);      // null
-    函数的参数是默认声明的,不能再次声明,否则会报错的
-      function person(age = 12){
-        var age = 25;//错误,再次声明age
-        let age = 25;//错误,再次声明age
-      }
-      person();
-    默认参数:在定义函数时,可先将将参数赋值 [ES6+]
-      function foo(b,c=3){ 
-        console.log(b,c); 
-      }
-      foo();           //undefined 3
-      foo(1);          //1 3,当未传参时默认参数
-      foo(1,4);        //1 4,当传入参数时则使用传入的值
-      foo(1,c=5);      //1 5
-  ...aoo  restArgument,获取函数剩下部分的参数,类型为数组
-    在实参中,除了指定参数以外,剩余的参数都会被...values获取到
+  ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组 
+    在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
       function sum(result,...values){ //求和函数,得到的结果赋值到result 
         console.log(values); // [1,2,3,4]
         values.forEach(function (v,i) { //进行求和
@@ -315,7 +295,7 @@ Function 函数扩展
       }
       var res = 0; // 存储求和结果的变量res
       sum(res,1,2,3,4);  //调用sum函数
-    rest参数必须是函数的最后一个参数,后面不能再跟其他参数
+    rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
       //错误写法
       function sum(result, ...values, mult){
         //rest参数...values后面还有一个参数mult
@@ -324,10 +304,10 @@ Function 函数扩展
       function sum(result, mult, ...values){
         //rest参数...values放在最后
       }
-  (arg1,arg2) =>{语句}  箭头函数 
-    PS: 箭头函数没有'arguments'对象,若要多参数,则需用'...'扩展符
-    相当于: function(参数1,参数2){ return 语句 }
-    传入多个参数使用括号(),复杂操作使用{}
+  ([arg1,arg2,..]) =>{statement}  箭头函数 
+    PS: 箭头函数中无'arguments'对象,若要多参数,则需用'...'扩展符
+    相当于: function(参数1,参数2){ return statement }
+    传入多个参数使用括号(),复杂操作使用{} 
       若参数超过1个的话,需要用小括号（）括起来,
       函数体语句超过1条的时候,需要用大括号{ }括起来。
       var sum = (a,b) => {return a+b}
@@ -788,9 +768,8 @@ RegExp 正则扩展
     Example:
       使用给定的代码点来产生相应的单个字符
       console.log(String.fromCodePoint(134071));  // "𠮷"
-Symbol 标记,表示独一无二的值[原始数据类型] 
-  PS: JS的第七种数据类型,不可变,用来产生唯一的标识 
-    ES5中对象的key键名的类型要求一定是字符串,ES6已经允许属性名的类型是 Symbol
+Symbol 标记,JS的第七种数据类型,表示独一无二的值[原始数据类型] 
+  PS: 不可改变,用来产生唯一的标识,ES6已经允许属性名的类型是 Symbol
   创建标记 
     var sym = Symbol([arg])   创建标记 
       PS:Symbol函数前不能使用new命令,否则会报错。
@@ -1365,7 +1344,7 @@ Blob  二进制数据的基本对象
     若类型未知,则该值为空字符串 
     在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
   blob.close() 关闭 Blob 对象,以便能释放底层资源 
-ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口  
+ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口 
   PS:ArrayBuffer对象、TypedArray视图和DataView视图,这些对象早就存在,属于独立的规格, 
     ES6将其纳入ECMAScript规格,并且增加了新的方法,
     都是以数组的语法处理二进制数据,故统称为二进制数组,
@@ -1726,7 +1705,7 @@ Promise 同步书写异步模式
   Promise.prototype.constructor 'Promise'函数 
   Promise.prototype.then()  
   Promise.prototype.catch() 
-Generator 生成器函数: 可控制函数的内部状态,让函数暂停执行或者继续执行  
+Generator 生成器函数: 可控制函数内部状态,暂停或继续  
   PS: 中途退出后又重新进入执行,函数内定义的变量的状态都会保留 
   function* foo(){} 声明Generator函数
     Example: 
@@ -1736,6 +1715,7 @@ Generator 生成器函数: 可控制函数的内部状态,让函数暂停执行�
         yield `bye`;
       }
     'yield'关键字: 相当于暂停执行并且返回信息 
+      yield命令后面只能是Thunk函数或Promise对象 
       Generator函数可以有多个yield
       yield代表的是暂停执行,后续通过调用生成器的next()方法,可以恢复执行 
     'yield*'关键字: 调用另一个Generator函数 
@@ -1823,87 +1803,127 @@ Generator 生成器函数: 可控制函数的内部状态,让函数暂停执行�
       console.log(gen.next()); // { value: undefined, done: true }
   使用Generator函数实现异步操作 
     原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
-Proxy 对象代理 
-  PS:作用:将一个对象交给了Proxy代理,然后通过编写处理函数,来拦截目标对象的操作
-  new Proxy(target,params) Proxy创建-Proxy的实现 
-    target 代理的目标对象
-    params 配置对象 
-      get     代理对象的读操作,传入参数 (target,prop) 
-        target 表示代理的目标对象 
-        prop   占位符,表示代理对象的属性 
-        Example:
-          var person = {"name":"张三"};
-          var pro = new Proxy(person,{  //创建代理对象pro,代理person的读写操作
-            get : function(target,property){
-              return "李四"
-            }
-          });
-          pro.name; //李四
-      set     代理对象的写操作,传入参数 (target,prop,value)  
-        target  同'set'
-        prop    同'set'
-        value   设置的值 
-        Example:
-          var bankAccount = {"RMB":1000,"dollar":0};
-          var banker = new Proxy(bankAccount,{ //创建一个Proxy代理实例
-            get : function(target,property){      //编写get处理程序
-              if(target[property] > 0){  //判断余额是否大于0
-                return target[property]; //有余额,就返回余额值
+Proxy 对象代理: 用于代理外界对对象的访问   
+  PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
+    要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作
+  pObj = new Proxy(obj,config) 创建代理对象  
+    obj    代理的目标对象
+    config = { // 配置对象,用于代理的行为 
+        PS: 若没有设置任何代理操作,则等同于直接通向原对象
+        get: function(target,key,receiver){        // 代理读 
+          // target 代理的目标对象 
+          // key    读的属性 
+          Example:
+            var person = {"name":"张三"};
+            var pPerson = new Proxy(person,{ 
+              get: function(target,property){
+                console.log('1',target,property);
+                return "李四"
+              }
+            });
+            console.log(pPerson.name); //李四
+        },     
+        set: function(target,key,val,receiver){  // 代理写 
+          // target  同'set'
+          // key     同'set'
+          // val     设置的值 
+          Example: 
+            var bankAccount = {"RMB":1000,"dollar":0};
+            var pBankAccount = new Proxy(bankAccount,{  
+              get: function(target,property){  
+                if(target[property] > 0){  
+                  return target[property];
+                }
+                else{
+                  return "余额不足"; 
+                }    
+              },
+              set: function(target,property,value){  
+                if(!Number.isInteger(value)){ // 存入的数额必须是一个数字类型
+                  console.log(value,'数值不正确');
+                  return "请设置正确的数值";
+                }
+                else {
+                  target[property] = value;  // 修改属性的值
+                  console.log('存款成功');
+                }
+              }
+            });
+            pBankAccount.RMB;    // 1000,查款
+            pBankAccount.dollar; // 余额不足,查款
+            pBankAccount.dollar = "五百"; // 五百 数值不正确,存款
+            pBankAccount.dollar;          // 余额不足,查款
+            pBankAccount.dollar = 500;    // 存款成功,存款
+            pBankAccount.dollar;          // 500,查款
+        },
+        has: function(target,key){ // 代理 key in obj 操作 
+          Example: 
+          var person = { "name":"张三", "age":20 };
+          var proxy = new Proxy(person, {
+            has : function(target, prop) {
+              if(target[prop] === undefined){
+                return false;
               }
               else{
-                return "余额不足"; //没钱了
-              }    
-            },
-            set : function(target,property,value){ //编写set处理程序
-              if(!Number.isInteger(value)){ //存入的数额必须是一个数字类型
-                console.log(value,'数值不正确');
-                return "请设置正确的数值";
-              }
-              else {
-                target[property] = value;  //修改属性的值
-                console.log('存款成功');
+                return true;
               }
             }
           });
-          banker.RMB;    // 1000,查款
-          banker.dollar; // 余额不足,查款
-          banker.dollar = "五百"; // 五百 数值不正确,存款
-          banker.dollar;          // 余额不足,查款
-          banker.dollar = 500;    // 存款成功,存款
-          banker.dollar;          // 500,查款
-      ownKeys 代理对象的keys集合[通过 Object.keys()来查看] 
-        let person = {"name":"老王","age":40,"height":1.5};
-        let proxy = new Proxy(person,{ 
-          ownKeys : function(target){  // ownKeys过滤对对象的属性遍历
-            return ["name","age"] 
-          }
-        });
-        Object.keys(person); // ["name", "age","height"],未使用代理
-        Object.keys(proxy);  // ["name", "age"]
-      has     代理对象的属性查询[通过 key in obj 来查看]
-        var person = { "name":"张三", "age":20 };
-        var proxy = new Proxy(person, {
-          has : function(target, prop) {
-            if(target[prop] === undefined){
-              return false;
+          "name" in proxy;   // true
+          "height" in proxy; // false
+        },
+        deleteProperty: function(target,key){ // 代理 delete proxy[propKey]
+        },
+        ownKeys: function(target){ 
+          // 代理:   
+          // Object.getOwnPropertyNames(proxy)、
+          // Object.getOwnPropertySymbols(proxy)、
+          // Object.keys(proxy)
+          let person = {"name":"老王","age":40,"height":1.5};
+          let proxy = new Proxy(person,{ 
+            ownKeys : function(target){  // ownKeys过滤对对象的属性遍历
+              return ["name","age"] 
             }
-            else{
-              return true;
+          });
+          Object.keys(person); // ["name", "age","height"],未使用代理
+          Object.keys(proxy);  // ["name", "age"]
+        },
+        getOwnPropertyDescriptor: function(target,key){ 
+          // 代理 Object.getOwnPropertyDescriptor(obj,key)
+        },
+        defineProperty: function(target,key,propDesc){
+          // 代理 
+          // Object.defineProperty(proxy, propKey, propDesc）
+          // Object.defineProperties(proxy, propDescs)
+        },
+        preventExtensions: function(target){
+          // 代理 Object.preventExtensions(proxy) 
+        },
+        getPrototypeOf: function(target){
+          // 代理 Object.getPrototypeOf(proxy) 
+        },
+        isExtensible: function(target){
+          // 代理 Object.isExtensible(proxy) 
+        },
+        setPrototypeOf: function(target, proto){
+          // 代理 Object.setPrototypeOf(proxy, proto) 
+        },
+        // 如果目标对象是函数 
+        apply: function(target, object, args){ // 代理函数对象的执行 
+          // 代理 如 proxy(...args)、proxy.call(object, ...args)、proxy.apply(...) 等 
+          let foo = function(){
+            console.log('我是原始函数');
+          };
+          let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
+            apply : function(){
+              console.log('我是代理函数');
             }
-          }
-        });
-        "name" in proxy;   // true
-        "height" in proxy; // false
-      apply   代理函数对象的执行 
-        let foo = function(){
-          console.log('我是原始函数');
-        };
-        let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
-          apply : function(){
-            console.log('我是代理函数');
-          }
-        });
-        proxy(); // 我是代理函数
+          });
+          proxy(); // 我是代理函数
+        },
+        construct: function(target, args){ // 代理构造函数调用的操作,如new proxy(...args)
+        }
+      }
   var obj = Proxy.revocable() 代理及取消代理,返回一个对象 
     obj.proxy    Proxy的代理实例对象
     obj.revoke() 用于取消代理
@@ -1918,66 +1938,48 @@ Proxy 对象代理
       obj.proxy.name; // 李四
       obj.revoke();   //调用返回对象obj的revoke方法,取消代理
       obj.proxy.name; //报错,代理被取消
-  defineProperty() 
-  deleteProperty() 
-  enumerate()
-  getOwnPropertyDescriptor()
-  getPrototypeOf()
-  isExtensible()
-  preventExtensions()
-  setPrototypeOf()
 Reflect  为操作对象提供的API 
-  Reflect对象的设计目的 
-    将Object对象的一些明显属于语言内部的方法[如 Object.defineProperty],放到Reflect对象上。
-      现阶段,某些方法同时在Object和Reflect对象上部署,未来的新方法将只部署在Reflect对象上。
-      也就是说,从Reflect对象上可以拿到语言内部的方法。
-    修改某些Object方法的返回结果,让其变得更合理。
-      比如,Object.defineProperty(obj, name, desc)在无法定义属性时,会抛出一个错误,而Reflect.defineProperty(obj, name, desc)则会返回false。
-      // 老写法
-      try {
-        Object.defineProperty(target, property, attributes);
-        // success
-      } 
-      catch (e) {
-        // failure
-      }
-      
-      // 新写法
-      if (Reflect.defineProperty(target, property, attributes)) {
-        // success
-      } 
-      else {
-        // failure
-      }
-    让Object操作都变成函数行为
-      某些Object操作是命令式,比如name in obj和delete obj[name],
-      而Reflect.has(obj, name)和Reflect.deleteProperty(obj, name)让它们变成了函数行为。
-      // 老写法
-      'assign' in Object // true
-      // 新写法
-      Reflect.has(Object, 'assign') // true
-    Reflect对象的方法与Proxy对象的方法一一对应
-      只要是Proxy对象的方法,就能在Reflect对象上找到对应的方法。
-      这就让Proxy对象可以方便地调用对应的Reflect方法,完成默认行为,作为修改行为的基础。
-      也就是说,不管Proxy怎么修改默认行为,你总可以在Reflect上获取默认行为。
-      Proxy(target, {
-        set: function(target, name, value, receiver) {
-          var success = Reflect.set(target,name, value, receiver);
-          if (success) {
-            log('property ' + name + ' on ' + target + ' set to ' + value);
-          }
-          return success;
-        }
-      });
-      上面代码中,Proxy方法拦截target对象的属性赋值行为。
-      它采用 Reflect.set 方法将值赋值给对象的属性,确保完成原有的行为,然后再部署额外的功能 
+  目的:  
+  将对象上一些明显属于语言内部的方法[如 Object.defineProperty]放到Reflect 
+  Reflect方法操作失败返回false[而不像其他的操作失败可能会报错]
+  让Object操作都变成函数行为 
+    命令式如:  key in obj;  delete obj[key];
+    函数行为:
+    Reflect.has(obj, key)
+    Reflect.deleteProperty(obj, key) 
   ◆Reflect对象一共有13个静态方法 
-    PS:这些方法的作用大部分与Object对象的同名方法的作用都是相同的,
-      而且它与Proxy对象的方法是一一对应的
-    Reflect.apply(target,thisArg,args)
+    PS: 大部分与Object对象的同名方法的作用都是相同的,且与Proxy对象的方法是一一对应 
+    Reflect.get(obj,key,receiver)    返回对象的key,否则返回undefined 
+      obj  操作的目标对象,若不是对象则报错  
+      如果name属性部署了读取函数（getter）,则读取函数的this绑定receiver 
+        var myObject = {
+          foo: 1,
+          bar: 2,
+          get baz() {
+            return this.foo + this.bar;
+          },
+        };
+        var myReceiverObject = {
+          foo: 4,
+          bar: 4,
+        };
+        Reflect.get(myObject, 'baz', myReceiverObject) // 8
+    Reflect.set(obj,key,val,receiver) 设置对象的key为val 
+      如果name属性设置了赋值函数,则赋值函数的this绑定receiver。
+      var myObject = {
+        foo: 4,
+        set bar(value) {
+          return this.foo = value;
+        },
+      };
+      var myReceiverObject = {
+        foo: 0,
+      };
+      Reflect.set(myObject, 'bar', 1, myReceiverObject);
+      myObject.foo // 4
+      myReceiverObject.foo // 1
+    Reflect.apply(target,context,args)
     Reflect.construct(target,args)
-    Reflect.get(target,name,receiver)
-    Reflect.set(target,name,value,receiver)
     Reflect.defineProperty(target,name,desc)
     Reflect.deleteProperty(target,name)
     Reflect.has(target,name)
@@ -1988,9 +1990,8 @@ Reflect  为操作对象提供的API
     Reflect.getPrototypeOf(target)
     Reflect.setPrototypeOf(target, prototype)
 ◆变量扩展 
-'lexical scopes'词法作用域,也叫'块作用域' 
-  PS: 会在函数内部、代码块,即'{}'内创建,任何一对花括号'{}'中的语句都属于一个块,
-    块级作用域是很多类C语言的工作机制,可增强JS的灵活性,又能与其它编程语言保持一致 
+'lexical scopes'词法作用域,也叫'块作用域',在函数内部、代码块,即'{}'内创建  
+  PS: 任何一对花括号'{}'中的语句都属于一个块,
   if (true) { 
     var aoo = 1; 
     let boo = 2;
@@ -2054,7 +2055,7 @@ let   定义块级变量
     注:let 声明在上述循环内部中的表现是在规范中特别定义的,
     实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
 const 定义块级常量 
-  PS:只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
+  PS: 只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
   const aoo =2;
   aoo = 2;     // 报错 ,常量不可改变
   delete aoo;  // 报错 
@@ -2133,7 +2134,7 @@ const 定义块级常量
         console.log(aoo); 
       }
       demo({});
-'spread'扩展运算符: 把数组解开成单独的值 
+'Spread'扩展运算符: 把数组解开成单独的值 
   PS:除了用在rest参数中,还有其他用途
   结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
     function sum(a,b) {
@@ -2158,12 +2159,11 @@ const 定义块级常量
     foo(1,2,3,4);  // 1 [2, 3, 4]
     //  将其余的参数放在数组 boo 中
 for(var val of iterator){}  遍历 
-  PS:可遍历的对象包括数组,对象,字符串,set和map结构等具有'iterator'接口的数据结构 
-    原生具备Iterator接口的数据结构: Array Map Set String TypedArray arguments'函数参数对象'
+  PS: 当使用for...of循环遍历某种数据结构时,该循环会自动去寻找Iterator接口
+    原生具备Iterator接口的数据结构: Array Map Set String TypedArray arguments NodeList对象 
   数组遍历 
     var arr = ['a','b','c','d','e'];
     for(let val of arr){
-      // console.log(typeof );
       console.log(val); // a b c d e
     }
   字符串遍历 
@@ -2263,32 +2263,24 @@ for(var val of iterator){}  遍历
     for(let index of arr.keys()){
       console.log(index); // 0 1 2 3 4
     }
-'Iterator'遍历器: 一种接口,为各种不同的数据结构提供统一的访问机制 
-  PS:JS原有的表示“集合”的数据结构,主要是数组Array和对象Object,ES6又添加了Map和Set 
-    用户还可以组合使用它们,定义自己的数据结构[比如数组的成员是Map,Map的成员是对象] 
+'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口   
+  PS: JS表'集合'的数据结构有: Array、Object、Map&Set  
+    也可组合使用,定义自己的数据结构,如数组的成员是Map,Map的成员是对象,
     这样就需要一种统一的接口机制,来处理所有不同的数据结构 
-    任何数据结构只要部署Iterator接口,就可以完成遍历操作,即依次处理该数据结构的所有成员 
-  Iterator的作用 
-    为各种数据结构,提供一个统一的、简便的访问接口
-    使得数据结构的成员能够按某种次序排列 
-    主要供for...of消费 
-  遍历过程 
+    部署了Iterator接口数据结构都可完成遍历操作,即依次处理该数据结构的所有成员  
+  遍历过程:  
     创建一个指针对象,指向当前数据结构的起始位置 
     第一次调用指针对象的next方法,可以将指针指向数据结构的第一个成员 
     第二次调用指针对象的next方法,指针就指向数据结构的第二个成员 
     不断调用指针对象的next方法,直到它指向数据结构的结束位置 
-    每一次调用next方法,都会返回数据结构的当前成员的信息。
-    具体来说,就是返回一个包含value和done两个属性的对象。
+    每一次调用next方法,都会返回数据结构的当前成员的信息 
+    具体来说,就是返回一个包含value和done两个属性的对象 
     其中,value属性是当前成员的值,done属性是一个布尔值,表示遍历是否结束。
-  默认Iterator接口 
-    当使用for...of循环遍历某种数据结构时,该循环会自动去寻找Iterator接口 
-    一种数据结构只要部署了 Iterator 接口,就称这种数据结构是”可遍历的“
-    ES6规定,默认的Iterator接口部署在数据结构的 Symbol.iterator 属性,
-    或者说,一个数据结构只要具有 Symbol.iterator 属性,就可以认为是“可遍历的”
-    Symbol.iterator 属性本身是一个函数,就是当前数据结构默认的遍历器生成函数。
+  Iterator接口: 部署了Iterator接口的数据结构就称可遍历的  
+    或者说,一个数据结构只要具有 Symbol.iterator 属性,就可以认为是可遍历的
+    数据结构的[Symbol.iterator]属性就是当前数据结构默认的遍历器生成函数 
     执行这个函数,就会返回一个遍历器。
-    属性名 Symbol.iterator 是一个表达式,返回Symbol对象的iterator属性,
-    这是一个预定义好的、类型为 Symbol 的特殊值 
+    Symbol.iterator 是一个预定义好的、类型为 Symbol 的特殊值 
     Example:
       数组的 Symbol.iterator 属性 
         let arr = ['a', 'b', 'c'];
@@ -2298,6 +2290,17 @@ for(var val of iterator){}  遍历
         var aoo3 = iter.next() // { value: 'c', done: false }
         var aoo4 = iter.next() // { value: undefined, done: true }
         console.log(aoo1,aoo2,aoo3,aoo4);
+  会默认调用Iterator接口的场合:  
+    for-of  循环 
+    解构赋值: 对数组和Set结构进行解构赋值时,会默认调用[Symbol.iterator]方法 
+    扩展运算符 
+    yield*后面跟的是一个可遍历的结构,它会调用该结构的遍历器接口 
+    其他场合: 由于数组的遍历会调用遍历器接口,所以接受数组作为参数的场合,会调用遍历器接口 
+      如: 
+      Array.from()
+      Map(), Set(), WeakMap(), WeakSet()（比如new Map([['a',1],['b',2]])）
+      Promise.all()
+      Promise.race()
 'Modules'模块化规范 
   PS: ES6模块默认采用严格模式"use strict"; 
     ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
@@ -2422,7 +2425,7 @@ for(var val of iterator){}  遍历
     if (x === 1) { 
       import { foo } from 'module1'; // 报错
     } 
-  proms = import('path')   动态加载,返回Promise对象  
+  promise = import('path')   动态加载,返回Promise对象  
     PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
       固然有利于编译器提高效率,但也导致无法在运行时加载模块,
       require是运行时加载模块,import命令无法取代require的动态加载功能;
@@ -2553,13 +2556,12 @@ for(var val of iterator){}  遍历
       console.log(height); // undefined,不会抛出异常,只是值为undefined
 --------------------------------------------------------------------------------
 ES7 
-ASYNC  用来取代回调函数、解决异步操作的一种方法 
-  PS:async函数与Promise、Generator函数类似,本质上是 Generator 函数的语法糖 
-  var pms = async function(){}  函数表达式定义async函数
-  async function foo() {}        函数声明
-    PS:同一般函数声明相同,使用'async function'代替'function'来声明异步函数
-      函数执行时,遇到await就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
-    Example:
+ASYNC 用来取代回调函数、解决异步操作的一种方法 
+  PS: async函数与Promise、Generator函数类似,本质上是Generator函数的语法糖 
+  var promise = async function(){}  函数表达式声明async函数
+  async function foo() {}           声明async函数
+    PS: 函数执行时,遇到'await'就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
+    Example: 
       function timeout(ms) {
         return new Promise((resolve) => {
           setTimeout(resolve, ms);
@@ -2582,25 +2584,8 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         console.log(value);
       }
       asyncPrint('hello world', 1000);
-    async函数返回值和return返回值
-      async函数返回值为Promise对象,可使用then方法添加回调函数
-        async函数返回的Promise对象,必须等到内部所有await命令后面的Promise对象执行完,
-        才会发生状态改变,除非遇到return语句或者抛出错误
-      return返回值为then方法回调的参数 
-      Example:
-        async function f() {
-          return 'hello world';
-        }
-        f().then(v => console.log(v)) // "hello world"
-        async函数内部抛出错误,使Promise对象变为reject状态
-        async function f() {
-          throw new Error('出错了');
-        }
-        f().then( v => console.log(v)
-        , e => console.log(e) )  // Error: 出错了
-    await proms 
-      PS:await命令只能用在async函数之中,用在普通函数会报错 
-      proms   Promise对象,否则被转成一个立即resolve的Promise对象 
+    await promise 
+      promise   Promise对象,否则被转成一个立即resolve的Promise对象 
       Example:
         async function f() {
           return await 123;
@@ -2635,6 +2620,22 @@ ASYNC  用来取代回调函数、解决异步操作的一种方法
         let barPromise = getBar();
         let foo = await fooPromise;
         let bar = await barPromise;
+    async函数返回值和return返回值
+      async函数返回值为Promise对象,可使用then方法添加回调函数
+        async函数返回的Promise对象,必须等到内部所有await命令后面的Promise对象执行完,
+        才会发生状态改变,除非遇到return语句或者抛出错误
+      return返回值为then方法回调的参数 
+      Example:
+        async function f() {
+          return 'hello world';
+        }
+        f().then(v => console.log(v)) // "hello world"
+        async函数内部抛出错误,使Promise对象变为reject状态
+        async function f() {
+          throw new Error('出错了');
+        }
+        f().then( v => console.log(v)
+        , e => console.log(e) )  // Error: 出错了
     采用异步函数作为回调 
       将forEach方法的参数改成async函数存在问题 
         let docs = [{}, {}, {}];

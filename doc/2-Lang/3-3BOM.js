@@ -3330,15 +3330,16 @@ IndexedDB 浏览器端数据库 [HTML5]
     }  
   Example:
 Drag&Drop 拖放[IE9+ HTML5] 
-  PS:Web开发人员一直在用jQuery完成拖放,现已原生支持 
-    IE4最早加入拖放功能,只能拖放文本框
-  定义拖动元素 
-    PS:若是图片则需加载后拖放,当图片加载失败则不可拖放.
-    HTML中,在要拖动元素的标签中,添加属性 draggable="true",
-  定义目标元素 
-    PS:默认的所有的元素都不能做为放置的目标元素,
-      通过阻止拖放时触发事件的默认行为来达到可放置的效果,
-      仅仅是光标的显示不同,DOM结构的变化还需自己设置.
+  PS: IE4最早加入拖放功能,只能拖放文本框
+  拖放源,被拖放的元素 
+    若是图片则需加载后拖放,当图片加载失败则不可拖放
+    在需拖动元素的标签中,添加属性 draggable="true",
+    图像和链接的draggable属性自动被设置成了true
+  拖放目标,要放置的目标元素  
+    默认的在外观显示上所有的元素都不能做为放置的目标元素,
+    通过阻止拖放目标'dragover'事件的默认行为来达到可拖放,
+    达到的效果: 光标显示可放置的效果,拖放后会触发拖放目标的'drop'事件 
+    但DOM结构的变化还需自己设置
     Example:
       var dropTarget = document.querySelector("#aoo");
       dropTarget.ondragover =function(e){
@@ -3348,17 +3349,18 @@ Drag&Drop 拖放[IE9+ HTML5]
         e.preventDefault();
       }
   Event拖放事件 
-    ◆在拖放元素上触发
+    ◆在拖放源上触发 
     dragstart 开始拖动
     drag      拖放期间持续触发
-    dragend   被放置后(无论放置在哪)都会触发
-    ◆在放置目标元素上触发
-    dragenter  被拖放元素开始进入目标元素范围时触发
-    dragover   被拖放元素处于目标元素上方时触发
-    dragleave  被拖放元素离开目标元素的范围时触发
-    drop       被拖放元素放置到目标元素后触发
+    dragend   被放置后触发[无论放置位置] 
+    ◆在拖放目标元素上触发 
+    dragenter  拖放源开始进入目标元素范围时触发 
+    dragleave  拖放源离开目标元素的范围时触发
+    dragover   拖放源处于目标元素上方时持续触发 
+    drop       拖放源放置到目标元素后触发 
+      Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
     e.dataTransfer 拖放事件的属性对象 
-      PS:IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
+      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
       ◆数据传递
         为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
         IE自定义了'text'和'URL'两种有效的数据类型,而HTML5对此扩展,允许指定MIME类型.
@@ -3410,7 +3412,6 @@ Drag&Drop 拖放[IE9+ HTML5]
       Example:
       elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
     firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
-    firefox的drop事件默认打开被放到放置目标上的URL.为了正常拖放,要取消其drop事件的默认行为
   Example:
     <div id="dragElem" draggable="true">拖放元素</div>
     <div id="targetElem" >放置目标元素</div>
@@ -3656,7 +3657,6 @@ deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5]
 orientationchange  在屏幕发生翻转时触发[HTML5] 
   window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;
 -------------------------------------------------------------------------待整理 
-
 
 
 

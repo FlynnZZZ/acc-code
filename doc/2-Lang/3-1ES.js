@@ -139,8 +139,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   基本类型: 也叫原始类型,存储在'stack'栈中,占据空间小、大小固定 
   undefined 表示未定义的值 
     在声明变量时没有对其初始化,则变量的值就是 undefined 
-    console.log(typeof undefined);  // "undefined" 
-  null      表示"无"的对象 
+  null      表示空指针  
     PS: 将来用于保存对象的变量,可初始化为 null 
     Example: 
     console.log(null==undefined); // true ,undefined派生于null
@@ -183,33 +182,31 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       十进制    
       八进制     0 开头,且最大数值不超过7 
         若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
-        八进制字面量在严格模式下是无效的,会导致支持的JS引擎抛错  
+        八进制字面量在严格模式下是无效的,会导致JS引擎抛错  
       十六进制数 必须使用0x或0X开头,最大字符不超过f 
-    科学计数 
+    科学计数: 
       e E 可大写,可小写
       默认情况下,ECMAScript会将小数点后面有6个零以上的浮点数使用科学计数法表示
       var a = 2E3;//或者2e3
       console.log(a); //2000
       2e3;  //2000
       0.000000005; //5e-9
-    浮点类型 
-      PS: 浮点数值中必须包含一个小数点,并且小数点后面至少有一位数字 
+    浮点类型: 小数点后至少有一位非零数字 
       浮点数可省略前导0,但不推荐使用,如 .8  
-      浮点数占用的内存比整型数大两倍,默认将可转换为整型的浮点数值转换成整型
+      浮点数占用的内存比整型数大两倍,默认将可转换为整型的浮点数值转换成整型 
         console.log(8.0);   // 8
       浮点数最高精度是17位小数,但算术运算中可能会不精确 
         // 不要使用浮点数做判断
         console.log(0.1+0.2);   // 0.300000000000004
     特殊数值 
-      Infinity   正无穷 
-      -Infinity  负无穷 
-      NaN'not a number'非数值 
-        PS: 该数值用于表示一个本来要返回数值的操作数未返回数值的情况,而不报错; 
-          在其他语言中,任何数值除以零都会导致错误而终止程序执行,
-          但在ECMAScript中会返回特殊的值,不会影响程序执行.
+      Infinity/-Infinity   正/负无穷 
+        无穷是不能参加计算的数值  
+      NaN'not a number'非数值: 表示一本应为数值而不是数值的情况,而不报错 
+        PS: 在其他语言中,任何数值除以零都会导致错误而终止程序执行,
+          但ECMAScript会返回特殊的值,不会影响程序执行.
         不和任何值相等,包括自己  
           console.log(NaN == NaN); // false
-        任何与NaN进行运算的结果均为 NaN 
+        任何与NaN进行运算的结果均为 NaN  
           console.log(NaN+1); // NaN
         Example:
         console.log(0/0);  // NaN
@@ -221,8 +218,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         console.log(1*"2",typeof (1*'2'));  // 2 number  
         console.log(1+"1",typeof (1+'1'));  // 11 string
       Number()、parseInt()、parseFloat()、obj.valueOf()、obj.toString() 显式转换为 
-  String  字符串 
-    PS: 表示若干个16位Unicode字符组成的字符序列;可使用双引号或单引号,但必须成对出现;
+  String  字符串: 由若干个16位Unicode字符组成的字符序列 
+    PS: 可使用双引号或单引号,但必须成对出现;
     特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
       '\"' 双引号
       '\'' 单引号
@@ -268,7 +265,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
 引用类型: 对象 
-  PS: 无序的名值的合集,一般没有长度,
+  PS: 无序名值的合集,一般没有长度,
     分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
   'key-val'键值对表现形式: 对象成员都是用一个名称来标记的  
     PS: 访问对象不存在的属性,返回'undefined' 
@@ -572,25 +569,20 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       -box;               //-1
       typeof box;         //String类型
       typeof -box;        //Number类型
-    str = typeof val; 检测值类型 
-      PS:typeof是操作符而非函数,因此后面的括号可有可无.
-      val   操作数,可以是变量,也可以是字面量 
-      返回值类型为字符串,为如下6种之一
-      'undefined' 未定义
-      'boolean'   布尔值
-      'string'    字符串
-      'number'    数值
-      'object'    对象或null
-      'function'  函数[不是数据类型,但是可以使用typeof操作符]
-      Example: 
-        typeof a;         // "undefined",检测未声明的变量不会报错  
-        typeof "fan";     // 'string'
-        typeof NaN;       // "number"
-        var nul = null;
-        typeof nul;       // "object",空对象
-        typeof [1,2];     // "object"
-        function foo(){}
-        typeof foo;       // "function"
+    str = typeof val  检测值类型 
+      PS: typeof是操作符而非函数,因此后面的括号可有可无 
+      val   被检测的值,可以是变量或字面量 
+        返回值类型为字符串,为如下6种之一: 
+        'undefined' 未定义
+        'boolean'   布尔值
+        'string'    字符串
+        'number'    数值
+          typeof NaN;       // "number"
+        'object'    对象 或 null
+          typeof null;       // "object",空对象
+        'function'  函数 
+      检测未声明的变量不会报错,而返回 undefined   
+        typeof aoo;         // "undefined"
     bol = delete val; 删除数组、对象等中的成员,返回是否删除成功的布尔值  
       PS: 若删除不存在的值也会返回true 
       删除数组成员,相当于将该成员值变成'undefined',数组长度不变化 
@@ -1154,13 +1146,21 @@ Global|Window 全局对象
       console.log(Boolean(''));        // false
       其余皆转换为true
     num = Number(val)   转换为数值  
-      Number(number)     // 对应的值
+      Number(undefined)  // NaN 
+      Number(null);      // 0 
       Number(true);      // 1
       Number(false);     // 0 
-      Number(null);      // 0 
-      Number(undefined)  // NaN 
+      Number(number)     // 对应的值 
+        console.log(Number(070)); // 56
       Number("")         // 0
-      若为对象,先后调用'vaueOf'、'toString'方法,直到转换为数值,否则报错  
+      只包含数值的字符串 
+        有效的十六进制格式: 
+        console.log(Number('0x10')); // 16 
+        其他格式转换成十进制数值,若包含前导0则自动去掉 
+        console.log(Number('070')); // 70 
+      包含非数值的字符串,返回 NaN 
+        console.log(Number('123abc123')); // NaN
+      转换对象,先后调用其'vaueOf'、'toString'方法,直到转换为数值,否则报错  
         var obj = {
           valueOf: function() { // 未返回原始值 
             console.log(1);
@@ -1173,52 +1173,42 @@ Global|Window 全局对象
         }
         Number(obj); 
         // 1 2 Uncaught TypeError: Cannot convert object to primitive value
-      其他规则:
-        只包含数值的字符串,会直接转换成十进制数值,若包含前导0则自动去掉.
-          Number('070'); // 70
-          Number(070);   // 56
-        只包含浮点数值的字符串,会直接转换成浮点数值,若包含前导0则自动去掉.
-        若不是以上三种字符串类型,则返回NaN 
-          console.log(Number('123abc123')); // NaN
-    num = parseInt(str[,radix])  将字符串转换成整数值 
-      PS:由于'Number'转换字符串时比较复杂且不够合理,更常用的是parseInt
-        忽略字符串前面的空格,直至找到第一个非空格字符,若其不是数字或负号,则返回NaN
-        从数字字符开始解析,直到非数字字符为止,返回解析的数值,后续被忽略[.也被忽略]
-        可以识别十六进制,即字符串以"0x"开头且后面跟数字字符,就会被当作十六进制整数
-      str   被转换的字符串,支持科学计数法形式的转换 
-      radix 可选,用于解决各种进制的转换,为避免错误解析建议始终指定基数,默认为十进制   
+    num = parseInt(str/num[,radix])  将字符串或数值转换成整数值 
+      str/num 待转换的字符串/数值  
+        转换从第一个非空格字符开始,到第一个非数字结束 
+        console.log(parseInt(' 3.14'));  // 3 
+        console.log(parseInt(' 1a2b'))   // 1 
+        若第一个非空格字符不是数字或负号,则返回 NaN 
+        console.log(parseInt(' abc123')) // NaN 
+        可识别十六进制,即字符串以"0x"开头且后面跟数字字符 
+        console.log(parseInt('0xALabc')); // 10,labc被自动过滤掉了 
+        支持科学计数法形式的转换 
+      radix   可选,用于指定各种进制的转换
         2    二进制
         8    二进制
-        10   二进制
+        10   二进制,非以'0x'开头字符的默认值 
         16  十六进制
         Example:
-        parseInt('oxA');     //10,十六进制
-        parseInt('070');     //70,十进制
-        parseInt('0xALabc'); //10,labc被自动过滤掉了
-        parseInt('0xAF');    //175,十六进制
-        parseInt('AF',16);   //175,第二参数指定16进制,可以去掉0x前导
-        parseInt('AF');      //NaN
+        parseInt('0xA');     // 10,十六进制
+        parseInt('070');     // 70,十进制
+        parseInt('0xAF');    // 175,十六进制
+        parseInt('AF',16);   // 175,指定16进制,可去掉 0x 前导
+        parseInt('AF');      // NaN
       Example:
-        console.log(parseInt('abc123')) //NaN,第一个不是数字会返回NaN
-        console.log(parseInt('1a2b'))   //1,从第一个数值开始取直到非数字结束
-        console.log(parseInt('3.14'));   //3,小数点不是数值.
-
-        Number(""); //为0;
+        Number("");   //为0;
         parseInt(""); //为NaN
-      ES3和ES5的分歧 : ES5不再具备解析八进制,需指定基数 
+      ES3和ES5的分歧: ES5不再具备解析八进制,需指定基数 
         parseInt("070");  // ECMAScript 3 认为是 56(八进制)
         parseInt("070");  // ECMAScript 5 认为是 70(十进制)
-    num = parseFloat(str)        将字符串转换成浮点数值 
-      PS:类似'parseInt',区别是数字中可以包含一个'.'点; 只能解析为10进制数
-      若字符串包含的是一个可解析为整数的数,没有小数点或小数点后都是零,则返回整数
-        parseFloat('12.0');  // 12
-      十六进制始终转成零 
-        parseFloat('0xA');     //0,不识别十六进制
-      Example:
-        parseFloat('123abc');  //123,去掉不识别的部分
-        parseFloat('12.3.4');  //12.3,只认一个小数点
-        parseFloat('01.20');   //1.2,去掉前、后导0
-        parseFloat('1.2e7');   //12000000,把科学计数法转化成普通数值
+    num = parseFloat(str)      将字符串转换成整数值/浮点数值  
+      PS: 类似'parseInt',区别是数字中可包含一个'.'点; 只能解析为10进制数
+      Example: 
+      parseFloat('12.0');  // 12,优先转换为整数值 
+      parseFloat('123abc');  // 123,去掉不识别的部分
+      parseFloat('12.3.4');  // 12.3,只认一个小数点
+      parseFloat('0xA');  // 0,不识别十六进制,x后面的字符被忽略 
+      parseFloat('01.20');   // 1.2,去掉前、后导0
+      parseFloat('1.2e7');   // 12000000,把科学计数法转化成普通数值
     str= String(val)     将任意类型值转换为字符串 
       PS: 若值存在'toString'方法,则调用该方法,否则,
       String(undefined) "undefined"
@@ -1253,14 +1243,14 @@ Global|Window 全局对象
     ★判断方法 
     bol = isFinite(num) 数值是否有限  
       isFinite(10); // true
-    bol = isNaN(val)    检查值否能转换为NaN 
-      PS:先后调用'valueOf''toString'方法,试图将值转换为数值进行判断 
+    bol = isNaN(val)    能否转换为NaN 
+      PS: 先后调用'valueOf''toString'方法,试图将值转换为数值进行判断 
       Example:
-      console.log(isNaN(1));      //false
-      console.log(isNaN('1'));    //false,'1'是一个字符串数值,可以转换成数值
-      console.log(isNaN(true));   //false,true可以转换为1
-      console.log(isNaN('abc'));  //true,'abc'不能转换为数值.
-      console.log(isNaN(NaN));    //true
+      console.log(isNaN(1));      // false
+      console.log(isNaN('1'));    // false,'1'是一个字符串数值,可以转换成数值
+      console.log(isNaN(true));   // false,true可以转换为1
+      console.log(isNaN('abc'));  // true,'abc'不能转换为数值.
+      console.log(isNaN(NaN));    // true
     ★其他方法 
     eval(str) 字符串解析器,将JavaScript字符串当作脚本来执行 
       PS:是一种由函数执行的动态代码,比直接执行脚本慢很多;

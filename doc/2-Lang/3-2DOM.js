@@ -1,108 +1,96 @@
-'Document Object Model'DOM,文档对象模型: 提供访问和操作网页内容的方法和接口  
-  PS: 由W3C规定,给文档提供了一种结构化的表示方法,可改变文档的内容和呈现方式, 
-    DOM标准的目标:让'任何一种程序设计语言'能操控使用'任何一种标记语言'编写出的'任何一份文档'
-  DOM树 
-    将整个HTML文件、标签看成一个由对象组成的树, 
-    每个DOM最上面都有一个document对象,然后是HTML及其他元素,
-    document表示浏览器中的整个页面,包含完整的DOM;
-    IE中所有DOM对象都是以COM对象的形式实现的,使用object来表示获取到的元素,
-    意味着IE中DOM对象与原生JS对象有差异;
+DOM'Document Object Model'文档对象模型: 提供访问和操作网页内容的方法和接口  
+  PS: 由W3C规定,提供了一种结构化表示文档的方法,可改变文档的内容和呈现方式, 
+  DOM树: 将整个HTML文件、标签看成一个由对象组成的树 
+    DOM树的根节点为'document',然后是'HTML'、'body'...
+    'document'表示浏览器中的整个页面,包含完整的DOM;
     对DOM的任何修改都会在浏览器呈现DOM时立即反映出来;
     DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计,
-    并不是只有JS有DOM API,其他的程序设计语言如Java也有对应的DOM API;
-◆'Node'节点 
-  PS:DOM可将任何HTML或XML文档描绘成一个由多层节点构成的结构 
-    节点分为几种不同的类型,每种类型分别表示文档中不同的信息或标记
+    IE中DOM对象以COM对象形式实现,故IE与原生JS对象有差异;
+◆Node 节点类,所有节点类型都继承自Node类型 
+  PS: DOM可将HTML文档描绘成一个由多层节点构成的结构 
+    节点分不同类型,分别表示文档中不同的信息或标记,
     每个节点都有自己的特点、数据和方法,也与其他节点间存在关系
-    整个HTML文档可以表示为以一个特定节点为根节点的树形结构
-    文档节点就是文档的根节点,根节点只有一个子节点即 <HTML>元素
-    <HTML>元素,也被称为文档元素,文档元素是文档的最外层元素.
-    DOM1 定义了 Node 接口,用于实现DOM中所有节点
-    Node 接口作为Node类型实现.(除IE外所有浏览器可访问到Node类型)
-    JS中所有节点类型都继承自Node类型,都有一个 nodeType 属性表明节点的类型
-    并非所有节点类型都受到Web浏览器的支持,最常用的节点类型为 元素节点 和 文本节点
-    后续使用 nod 来表示一个 Node类型 的实例 (SelfSet)
-    文档中所有的节点之间都存在着关系,同一类型节点间的关系可类比为家族关系,
-    HTML 的子元素中有 body,body 的同胞元素有 head ... 等等
-    虽然所有节点类型都继承自Node,但并非每种节点都有子节点.
-  nod.nodeType  节点类型[共12种]
-    PS:IE中不可使用如 Node.DOCUMENT_NODE 来进行判断[IE没有公开Node类型的构造函数],
-      为跨浏览器兼容,最好将nodeType属性与数值 1-12 进行比较.
-    Node.DOCUMENT_NODE     9,文档的根节点
+    并非所有节点类型浏览器都支持,最常用的节点类型为'元素节点'和'文本节点' 
+  Node.xx  
+    PS: IE未公开Node类型的构造函数,故无 Node 的属性/方法 
+    Node.DOCUMENT_NODE     9,'document'节点
     Node.ELEMENT_NODE      1,元素节点 
-    Node.TEXT_NODE         3,文本节点,元素的文本内容
-    Node.PROCESSING_INSETUCTION_NODE; 7,文档处理程序使用的特有指令
-    Node.COMMENT_NODE;     8,注释节点,表示一个注释,形式为<!-- comment text -->
-    Node.DOCUMENT_TYPE_NODE;       10,文档类型的定义
-    Node.DOCUMENT_FRAGMENT_NODE;   11,文档片段
-    DOM4已弃用的节点类型
-      Node.ATTRIBUTE_NODE;  // 2,元素的耦合属性
-      Node.CDATA_SECTION_NODE;  // 4,在XML文档中表示Character Data(字符数据)部分
-      Node.ENTITY_REFERENCE_NODE; // 5,表示一个实体引用
-      Node.ENTITY_NODE;  // 6,在XML文档中表示一个实体
-      Node.NOTATION_NODE; // 12,在XML文档中表示一个符号
-    Example: :  document.nodeType == Node.DOCUMENT_NODE;  // true
-  nod.nodeName  节点名称[不同类型节点返回的形式不同]
-    元素节点返回大写字母表示的元素名称; 属性节点返回属性名称; 文本节点返回 #text;
-  nod.nodeValue;  值(具体定义取决于节点的类型)
-    元素节点无value值,返回null;
-    属性节点返回属性值;
-    文本节点返回文本内容(不包含html)
-  nod.attributes; 获取当前元素节点的所有属性节点集合数组
-    使用下标访问属性节点,遍历时是从后向前的.
-    使用属性名直接得到对应的属性节点
-    Example: box.attributes['title']
-  ◆节点关系类
-  nod.childNodes; 返回值为 NodeList 类数组对象,保存着一组有序的节点
-    当nod为元素节点时,其子节点有可能是元素、文本节点、注释或处理指令.
-      且不同的浏览器在看待这些节点方面存在显著的不同
-    NodeList 是动态实时的,DOM 改变后 NodeList 也会变化
-    可以通过[]下标法或 item() 方法来访问节点
-      nod.childNodes[0];
-      nod.childNodes.item(0);
-    nod.childNodes.length;  节点的个数
-  nod.parentNode; 父节点
-  nod.previousSibling; 前一个兄弟节点(第一个节点的该属性为null)
-  nod.nextSibling;     后一个兄弟节点(最后一个节点的该属性为null)
-  nod.firstChild;    第一个子节点(若没有子节点则为null)
-  nod.lastChild;     最后一个子节点(若没有子节点则为null)
-  nod.ownerDocument;   表示整个文档的文档节点即document
-  ◆节点操作
-  Nod.hasChildNodes(nod); 是否包含节点
-  Nod.appendChild(nod); 在父节点 Nod 内的最后位置添加一个子节点 nod
-    若子nod为文档中的节点,则是移动操作(原位置消失,在插入位置出现)
-  Nod.insertBefore(INnod,BEnod); Nod内BEnod前插入INnod,返回值为INnod
-    若BEnod为null,则等同于appendChild
-  insertAfter 无该API
-  Nod.replaceChild(NEWnod,OLDnod); Nod内替换OLDnod为NEWnod,返回值为OLDnod
-  Nod.removeChild(nod); 删除子节点nod,并返回
-  ◆其他操作
-  nod.cloneNode(bool);   复制节点[但未添加到文档结构中] 
-    PS:不会复制节点中JS添加的属性(如事件等),只复制特性.
-      IE中存在bug会复制事件处理程序,可以通过复制前移除事件来决解.
-    bool 一个布尔值
-      true  深复制,复制节点及其整个子节点树
-      false 浅复制,只复制节点本身(只有标签)
-  isSupported(); 和 document.implementation.hasFeature()方法类似
-    Arguments: 接受两个参数 特性名和特性版本号
-    RetValue:返回值为布尔值
-    存在和document.implementation.hasFeature();同样的问题,测试不一定准确
-  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相同 [DOM3]
-    相同指的是两个节点引用的是同一个对象
-  nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相等 [DOM3]
-    相等指的是两个节点是相同的类型,具有相等的属性(如nodeName),
-    且attributes和childNodes属性也相等.
-  nod.setUserData(键名,数据值(任何类型),处理函数); 给一节点添加额外数据
-    处理函数接收5个参数:
-      num 表示操作类型的数值(1 表示复制,2 导入,3 删除,4 重命名)
-      数据键
-      数据值
-      原节点    在删除节点时,原节点是null
-      目标节点  在复制节点时,目标节点是null
-    Example: :
-    设置与获取额外数据
-    document.body.setUserData("aoo","boo",function(){});
-    var aoo =document.body.getUserData("aoo");
+    Node.TEXT_NODE         3,文本节点 
+    Node.COMMENT_NODE      8,注释节点,表示一注释 
+    Node.DOCUMENT_TYPE_NODE        10,文档类型的定义
+    Node.DOCUMENT_FRAGMENT_NODE    11,文档片段
+    Node.PROCESSING_INSETUCTION_NODE  7,文档处理程序使用的特有指令
+    DOM4已弃用的节点类型 
+      Node.ATTRIBUTE_NODE   // 2,元素的耦合属性
+      Node.CDATA_SECTION_NODE   // 4,在XML文档中表示Character Data(字符数据)部分
+      Node.ENTITY_REFERENCE_NODE  // 5,表示一个实体引用
+      Node.ENTITY_NODE   // 6,在XML文档中表示一个实体
+      Node.NOTATION_NODE  // 12,在XML文档中表示一个符号
+  Node.prototype.xx 
+    num = node.nodeType  节点类型  
+    str = node.nodeName  节点名称 
+      标签的大写形式 元素节点
+      属性名称      属性节点 
+      '#text'      文本节点返回 
+    node.nodeValue   节点值, 
+      元素节点无节点值,返回 null
+      属性节点返回属性值;
+      文本节点返回文本内容[不包含html]
+    node.attributes  获取当前元素节点的所有属性节点集合数组
+      使用下标访问属性节点,遍历时是从后向前的.
+      使用属性名直接得到对应的属性节点
+      Example: box.attributes['title']
+    ◆节点关系类
+    node.childNodes; 返回值为 NodeList 类数组对象,保存着一组有序的节点
+      当nod为元素节点时,其子节点有可能是元素、文本节点、注释或处理指令.
+        且不同的浏览器在看待这些节点方面存在显著的不同
+      NodeList 是动态实时的,DOM 改变后 NodeList 也会变化
+      可以通过[]下标法或 item() 方法来访问节点
+        node.childNodes[0];
+        node.childNodes.item(0);
+      node.childNodes.length;  节点的个数
+    node.parentNode; 父节点
+    node.previousSibling; 前一个兄弟节点(第一个节点的该属性为null)
+    node.nextSibling;     后一个兄弟节点(最后一个节点的该属性为null)
+    node.firstChild;    第一个子节点(若没有子节点则为null)
+    node.lastChild;     最后一个子节点(若没有子节点则为null)
+    node.ownerDocument;   表示整个文档的文档节点即document
+    ◆节点操作
+    node1.hasChildNodes(nod); 是否包含节点
+    node1.appendChild(nod); 在父节点 Nod 内的最后位置添加一个子节点 nod
+      若子nod为文档中的节点,则是移动操作(原位置消失,在插入位置出现)
+    node1.insertBefore(INnod,BEnod); Nod内BEnod前插入INnod,返回值为INnod
+      若BEnod为null,则等同于appendChild
+    insertAfter 无该API
+    node1.replaceChild(NEWnod,OLDnod); Nod内替换OLDnod为NEWnod,返回值为OLDnod
+    node1.removeChild(nod); 删除子节点nod,并返回
+    ◆其他操作
+    node.cloneNode(bool);   复制节点[但未添加到文档结构中] 
+      PS:不会复制节点中JS添加的属性(如事件等),只复制特性.
+        IE中存在bug会复制事件处理程序,可以通过复制前移除事件来决解.
+      bool 一个布尔值
+        true  深复制,复制节点及其整个子节点树
+        false 浅复制,只复制节点本身(只有标签)
+    isSupported(); 和 document.implementation.hasFeature()方法类似
+      Arguments: 接受两个参数 特性名和特性版本号
+      RetValue:返回值为布尔值
+      存在和document.implementation.hasFeature();同样的问题,测试不一定准确
+    nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相同 [DOM3]
+      相同指的是两个节点引用的是同一个对象
+    nod1.isSameNode(nod2);  返回布尔值表示两个节点是否相等 [DOM3]
+      相等指的是两个节点是相同的类型,具有相等的属性(如nodeName),
+      且attributes和childNodes属性也相等.
+    node.setUserData(键名,数据值(任何类型),处理函数); 给一节点添加额外数据
+      处理函数接收5个参数:
+        num 表示操作类型的数值(1 表示复制,2 导入,3 删除,4 重命名)
+        数据键
+        数据值
+        原节点    在删除节点时,原节点是null
+        目标节点  在复制节点时,目标节点是null
+      Example: :
+      设置与获取额外数据
+      document.body.setUserData("aoo","boo",function(){});
+      var aoo =document.body.getUserData("aoo");
 document 文档根节点: 'HTMLDocument'的实例,表示整个HTML页面 
   PS: 也是window对象的一个属性,可作为全局对象来访问 
   ★属性 
@@ -462,7 +450,7 @@ document 文档根节点: 'HTMLDocument'的实例,表示整个HTML页面
     tex.replaceData(offset,num,tex1); 用tex1替换从offset的位置后到的num个文本
     tex.substringData(offset,num);  返回从offset位置开始的num个字符串
     tex.length;  字符数量; 等价于nodeValue.length 或 data.length
-    nod.normalize(); 合并同一级别的文本节点
+    node.normalize(); 合并同一级别的文本节点
       浏览器在解析文档时不会创建相邻的文本节点
       当在一个元素节点中相邻添加多个文本节点时,外观上是合并在一起,访问时仍是保持独立的
     tex.splitText(num); 原文本节点将包含从开始的num个字符,新文本节点将包含剩下的文本
@@ -660,7 +648,7 @@ document 文档根节点: 'HTMLDocument'的实例,表示整个HTML页面
       读取值时,它会按照有浅入深的顺序将子文档树中的所有文本拼接起来
       写入值时,则会取代元素的所有子节点
         会对文本中存在的HTML语法字符(如小于号等)进行编码转义(如&lt;)在网页中如实显示出.
-    nod.textContent; 取/设元素中包含的所有文本内容  [DOM Level3] [IE9=+支持]
+    node.textContent; 取/设元素中包含的所有文本内容  [DOM Level3] [IE9=+支持]
       PS:innerText 返回值会忽略行内样式和脚本,但textContent则会返回行内样式和脚本代码.
         对象为 Document,DocumentType 或者 Notation 类型节点,则 textContent 返回 null
         若你要获取整个文档的文本以及CDATA数据,
@@ -715,7 +703,7 @@ DOM操作归纳总结
       elem.options[index].text;
     document.createElement("元素名a"); 创建元素对象,创建一个空元素a 
       (详见: 节点类型&详解 Document 创建)
-    nod.cloneNode(bool); 复制节点[详见: Node节点] 
+    node.cloneNode(bool); 复制节点[详见: Node节点] 
   获取 elem 
     快捷方法获取
       document.documentElement  HTML元素
@@ -748,7 +736,7 @@ DOM操作归纳总结
         若匹配不到,则返回 null
       elem.parentElement 父元素
         返回值为子元素elem 的父元素对象(包括elem的兄弟元素及后代元素)
-      nod.parentNode 父节点
+      node.parentNode 父节点
         [详见 Node节点]
       elem.previousElementSibling 前一个兄弟元素(previousSibling 的元素版)
         [详见 扩展 DOM扩展]
@@ -767,13 +755,13 @@ DOM操作归纳总结
        (详见: DOM扩展 HTML5)
       elem1.insertAdjacentElement("位置",elem2)  在elem1中插入elem2
         PS:返回值为elem2
-      Nod.appendChild(子元素a)  在父元素b内的最后位置添加一个子元素a
+      node1.appendChild(子元素a)  在父元素b内的最后位置添加一个子元素a
         (详见:节点 Node节点)
-      Nod.insertBefore() 在父元素b内添加一个子元素a
+      node1.insertBefore() 在父元素b内添加一个子元素a
         (详见:节点 Node节点)
-      Nod.removeChild()  删除子元素 
+      node1.removeChild()  删除子元素 
         (详见: Node操作部分)
-      Nod.replaceChild() 替换子元素[详见Node操作部分] 
+      node1.replaceChild() 替换子元素[详见Node操作部分] 
       elem.remove()      删除元素[IE11不支持?]
     元素尺寸、位置 
       PS:为方便描述,设定 元素的边界宽为content+padding+border+margin,
@@ -1762,7 +1750,7 @@ Example:
         }
       }
 --------------------------------------------------------------------------------
-◆Mobile 移动端
+◆Mobile 移动端 
 Special 
   ios移动设备上,长按<a>标签,会弹出浏览器的原生菜单
     在JS中设置取消的方法
@@ -3473,3 +3461,5 @@ Performance 当前页面加载相关的性能信息
     // setTimeout(function(){
     //   $('#test1').focus();
     // },10000);
+
+

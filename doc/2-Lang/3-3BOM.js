@@ -2933,7 +2933,7 @@ WebSocket 网络通信协议[HTML5] [IE10+]
     connection.onmessage = function(e) {
       console.log(e.data.byteLength); // ArrayBuffer对象有byteLength属性
     };
-'Web Storage' 网页本地存储 [IE8+ HTML5]
+'Web Storage' 网页本地存储 [IE8+ HTML5] 
   PS: JS提供了sessionStorage和globalStorage,
     在HTML5中提供了localStorage来取代globalStorage;
   localStorage   本地存储 [IE8+]
@@ -2981,37 +2981,217 @@ WebSocket 网络通信协议[HTML5] [IE10+]
     localStorage 在所有同源窗口中都是共享的；
     cookie 也是在所有同源窗口中都是共享的.
   IE中localStorage中存在问题 ?
-'Application Cache',appcache  应用离线缓存 [HTML5]
-  PS:让Web应用在离线状态下继续使用, 通过 manifest 文件指明需要缓存的资源;
-    使用 HTML5,通过创建 cache manifest 文件,可以轻松地创建 web 应用的离线版本;
-    每个指定了 manifest 的页面在用户对其访问时都会被缓存;
-    若未指定 manifest 属性,则页面不会被缓存,除非在 manifest 文件中直接指定了该页面;
-    manifest 文件需要配置正确的 MIME-type,即 "text/cache-manifest";
-    必须在 web 服务器上进行配置;
-    如需启用应用程序缓存,需在文档的 <html> 标签中包含 manifest 属性;
-    manifest 文件的建议的文件扩展名是:".appcache";
-    移动端支持度比较好;
-  manifest 文件可分为三个部分:
-    CACHE MANIFEST //此标题下列出的文件将在首次下载后进行缓存
-    NETWORK        //此标题下列出的文件需要与服务器的连接,且不会被缓存
-    FALLBACK       //此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面
+Drag&Drop 拖放[IE9+ HTML5] 
+  PS: IE4最早加入拖放功能,只能拖放文本框
+  拖放源,被拖放的元素 
+    若是图片则需加载后拖放,当图片加载失败则不可拖放
+    在需拖动元素的标签中,添加属性 draggable="true",
+    图像和链接的draggable属性自动被设置成了true
+  拖放目标,要放置的目标元素  
+    默认的在外观显示上所有的元素都不能做为放置的目标元素,
+    通过阻止拖放目标'dragover'事件的默认行为来达到可拖放,
+    达到的效果: 光标显示可放置的效果,拖放后会触发拖放目标的'drop'事件 
+    但DOM结构的变化还需自己设置
     Example:
-      CACHE MANIFEST
-      #version n.n
-      
+      var dropTarget = document.querySelector("#aoo");
+      dropTarget.ondragover =function(e){
+        e.preventDefault();
+      }
+      dropTarget.ondragenter =function(e){
+        e.preventDefault();
+      }
+  Event拖放事件 
+    ◆在拖放源上触发 
+    dragstart 开始拖动
+    drag      拖放期间持续触发
+    dragend   被放置后触发[无论放置位置] 
+    ◆在拖放目标元素上触发 
+    dragenter  拖放源开始进入目标元素范围时触发 
+    dragleave  拖放源离开目标元素的范围时触发
+    dragover   拖放源处于目标元素上方时持续触发 
+    drop       拖放源放置到目标元素后触发 
+      Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
+    e.dataTransfer 拖放事件的属性对象 
+      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
+      ◆数据传递
+        为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
+        IE自定义了'text'和'URL'两种有效的数据类型,而HTML5对此扩展,允许指定MIME类型.
+        为了兼容,HTML5也支持'text'和'URL',但会被映射为'text/plain'和'text/uri-list'.
+        dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL.
+      e.dataTransfer.setData('text',str);  设置传递数据及数据类型
+        PS:拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
+          将拖动的文本以"text"格式保存在dataTransfer对象中.
+          在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
+          这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
+          也可以自定义保存的信息.
+        str 字符串,表示保存的数据类型,取值为'text'或'URL'
+      e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
+        PS:保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
+        Example:
+        设置和接收文本数据
+        e.dataTransfer.setData('text','some text');
+        var text =e.dataTransfer.getData('text');
+        设置和接收URL
+        e.dataTransfer.setData('URL','https://www.baidu.com');
+        var url =e.dataTransfer.getData('URL');
+      ◆改变拖放的光标显示
+      e.dataTransfer.dropEffect   操作拖放元素
+        'none'    不能把拖放元素放在这,文本框外的默认值
+        'move'    把拖放的元素移动到目标位置
+        'copy'    把拖放的元素复制到目标位置
+        'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
+      e.dataTransfer.effectAllowed 操控dropEffect属性
+        PS:必须在ondragstart事件处理程序中设置effectAllowed属性
+        'uninitialized'  没有给拖放元素设置任何放置行为
+        'none'           被拖放的元素不能有任何行为
+        'copy'           只允许值为'copy'的dropEffect
+        'link'           只允许值为'link'的dropEffect
+        'move'           只允许值为'move'的dropEffect
+        'copyLink'       允许值为'copy'和'link'的dropEffect
+        'copyMove'       允许值为'link'和'move'的dropEffect
+        'linkMove'       允许值为'link'和'move'的dropEffect
+        'all'            允许任意dropEffect
+      ◆其他
+      e.dataTransfer.clearData(format); 清除以特定格式保存的数据
+      e.dataTransfer.setDrageImage(elem,x,y); 指定图像,在拖动时,显示在光标下方. [兼容问题]
+        其中elem可以时图像也可以是其他元素,若为图像则显示图像,其他元素则显示渲染后的元素.
+      e.dataTransfer.addElement(elem); 为拖动操作添加一个元素
+      e.dataTransfer.types  当前保存的数据类型,如'text'
+      e.dataTransfer.items  返回 DataTransferItemList 对象
+      e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
+  兼容 
+    IE9-不支持draggable属性,但可通过mousedown事件来模拟 
+      Example:
+      elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
+    firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
+  Example:
+    <div id="dragElem" draggable="true">拖放元素</div>
+    <div id="targetElem" >放置目标元素</div>
+    #dragElem{ 
+      height:30px; 
+      width:130px; 
+      background:pink; 
+      float:left; 
+    }
+    #targetElem{ 
+      float:right; 
+      height: 200px; 
+      width:200px; 
+      background:lightblue; 
+    }
+    dragElem.onmousedown = function(){
+      //兼容IE8-浏览器
+      if(this.dragDrop){ this.dragDrop(); }
+    }
+    dragElem.ondragstart = function(){
+      this.style.backgroundColor = 'lightgreen';
+      this.innerHTML = '开始拖动';
+    }
+    dragElem.ondrag = function(){ }
+    dragElem.ondragend = function(){
+      this.innerHTML = '结束拖动';
+      this.style.backgroundColor = 'pink';
+    }
+    targetElem.ondragenter = function(e){
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(){
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(){
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+
+    <div>请将从这堆内容不同乱七八糟的文字中挑选一些移动到拖放目标中</div>
+    <div id="targetElem" >拖放目标</div>
+    <div id="result"></div>
+    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
+    targetElem.ondragenter = function(e){
+      e = e || event;
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e = e || event;
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(e){
+      e = e || event;
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(e){
+      e = e || event;
+      e.preventDefault();
+      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+
+    <div id="dragElem" draggable="true" data-value="这是一个秘密">拖动源</div>
+    <div id="targetElem" >拖放目标</div>
+    <div id="result"></div>
+    #dragElem{ height:30px;width:100px;background:pink; }
+    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
+    dragElem.onmousedown = function(){
+      //兼容IE8-浏览器
+      if(this.dragDrop){ this.dragDrop(); }
+    }
+    dragElem.ondragstart = function(e){
+      e = e || event;
+      e.dataTransfer.setData('text',dragElem.getAttribute('data-value'));
+    }
+    targetElem.ondragenter = function(e){
+      e = e || event;
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e = e || event;
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(e){
+      e = e || event;
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(e){
+      e = e || event;
+      e.preventDefault();
+      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+'Application Cache'应用离线缓存: 让Web应用在离线状态下可继续使用 [HTML5]
+  PS: 通过manifest文件指明需要缓存的资源; 移动端支持度比较好;
+  指定页面缓存: 
+    在文档的<html>标签中包含'manifest'属性,值为manifest文件的路径 
+    若未指定manifest属性,则页面不会被缓存,除非在manifest文件中直接指定了该页面;
+  'xx.appcache'manifest文件: 
+    PS: 需在web服务器上配置正确的 MIME-type,即 "text/cache-manifest"; 
+    CACHE MANIFEST # 此标题下列出的文件将在首次下载后进行缓存 
+      # 2012-02-21 v1.0.0
       CACHE:
-      #需要缓存的文件
-      /css/sample.css
-      /img/image.png
-      
-      NETWORK:
-      #每次重新拉取的文件
+      /theme.css
+      /logo.gif
+      /main.js
+    NETWORK:       # 此标题下列出的文件需要与服务器的连接,且不会被缓存 
+      # 每次重新拉取的文件
       * [表示除 CACHE 中指定的文件其他全部]
-      
-      FALLBACK
-      #离线状态下代替文件
-      /offline.html
-  Example: :
+      login.asp
+    FALLBACK:      # 此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面 
+      # 离线状态下代替文件 
+      /404.html 
+  Example: 
     // manifest文件中
     CACHE MANIFEST
     #version 1.1
@@ -3329,198 +3509,8 @@ IndexedDB 浏览器端数据库 [HTML5]
       }
     }  
   Example:
-Drag&Drop 拖放[IE9+ HTML5] 
-  PS: IE4最早加入拖放功能,只能拖放文本框
-  拖放源,被拖放的元素 
-    若是图片则需加载后拖放,当图片加载失败则不可拖放
-    在需拖动元素的标签中,添加属性 draggable="true",
-    图像和链接的draggable属性自动被设置成了true
-  拖放目标,要放置的目标元素  
-    默认的在外观显示上所有的元素都不能做为放置的目标元素,
-    通过阻止拖放目标'dragover'事件的默认行为来达到可拖放,
-    达到的效果: 光标显示可放置的效果,拖放后会触发拖放目标的'drop'事件 
-    但DOM结构的变化还需自己设置
-    Example:
-      var dropTarget = document.querySelector("#aoo");
-      dropTarget.ondragover =function(e){
-        e.preventDefault();
-      }
-      dropTarget.ondragenter =function(e){
-        e.preventDefault();
-      }
-  Event拖放事件 
-    ◆在拖放源上触发 
-    dragstart 开始拖动
-    drag      拖放期间持续触发
-    dragend   被放置后触发[无论放置位置] 
-    ◆在拖放目标元素上触发 
-    dragenter  拖放源开始进入目标元素范围时触发 
-    dragleave  拖放源离开目标元素的范围时触发
-    dragover   拖放源处于目标元素上方时持续触发 
-    drop       拖放源放置到目标元素后触发 
-      Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
-    e.dataTransfer 拖放事件的属性对象 
-      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
-      ◆数据传递
-        为拖放操作实现数据交换,用于从被拖放元素向目标元素传递字符串格式的数据.
-        IE自定义了'text'和'URL'两种有效的数据类型,而HTML5对此扩展,允许指定MIME类型.
-        为了兼容,HTML5也支持'text'和'URL',但会被映射为'text/plain'和'text/uri-list'.
-        dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL.
-      e.dataTransfer.setData('text',str);  设置传递数据及数据类型
-        PS:拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
-          将拖动的文本以"text"格式保存在dataTransfer对象中.
-          在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
-          这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
-          也可以自定义保存的信息.
-        str 字符串,表示保存的数据类型,取值为'text'或'URL'
-      e.dataTransfer.getData('text'); 通过数据类型获取由setData方法保存的值
-        PS:保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
-        Example:
-        设置和接收文本数据
-        e.dataTransfer.setData('text','some text');
-        var text =e.dataTransfer.getData('text');
-        设置和接收URL
-        e.dataTransfer.setData('URL','https://www.baidu.com');
-        var url =e.dataTransfer.getData('URL');
-      ◆改变拖放的光标显示
-      e.dataTransfer.dropEffect   操作拖放元素
-        'none'    不能把拖放元素放在这,文本框外的默认值
-        'move'    把拖放的元素移动到目标位置
-        'copy'    把拖放的元素复制到目标位置
-        'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
-      e.dataTransfer.effectAllowed 操控dropEffect属性
-        PS:必须在ondragstart事件处理程序中设置effectAllowed属性
-        'uninitialized'  没有给拖放元素设置任何放置行为
-        'none'           被拖放的元素不能有任何行为
-        'copy'           只允许值为'copy'的dropEffect
-        'link'           只允许值为'link'的dropEffect
-        'move'           只允许值为'move'的dropEffect
-        'copyLink'       允许值为'copy'和'link'的dropEffect
-        'copyMove'       允许值为'link'和'move'的dropEffect
-        'linkMove'       允许值为'link'和'move'的dropEffect
-        'all'            允许任意dropEffect
-      ◆其他
-      e.dataTransfer.clearData(format); 清除以特定格式保存的数据
-      e.dataTransfer.setDrageImage(elem,x,y); 指定图像,在拖动时,显示在光标下方. [兼容问题]
-        其中elem可以时图像也可以是其他元素,若为图像则显示图像,其他元素则显示渲染后的元素.
-      e.dataTransfer.addElement(elem); 为拖动操作添加一个元素
-      e.dataTransfer.types  当前保存的数据类型,如'text'
-      e.dataTransfer.items  返回 DataTransferItemList 对象
-      e.dataTransfer.files　存放一些拖放的本地文件,若没有拖放文件,则此列表为空
-  兼容 
-    IE9-不支持draggable属性,但可通过mousedown事件来模拟 
-      Example:
-      elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
-    firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
-  Example:
-    <div id="dragElem" draggable="true">拖放元素</div>
-    <div id="targetElem" >放置目标元素</div>
-    #dragElem{ 
-      height:30px; 
-      width:130px; 
-      background:pink; 
-      float:left; 
-    }
-    #targetElem{ 
-      float:right; 
-      height: 200px; 
-      width:200px; 
-      background:lightblue; 
-    }
-    dragElem.onmousedown = function(){
-      //兼容IE8-浏览器
-      if(this.dragDrop){ this.dragDrop(); }
-    }
-    dragElem.ondragstart = function(){
-      this.style.backgroundColor = 'lightgreen';
-      this.innerHTML = '开始拖动';
-    }
-    dragElem.ondrag = function(){ }
-    dragElem.ondragend = function(){
-      this.innerHTML = '结束拖动';
-      this.style.backgroundColor = 'pink';
-    }
-    targetElem.ondragenter = function(e){
-      e.preventDefault();
-      this.innerHTML = '有元素进入目标区域';
-      this.style.background = 'red';
-    }
-    targetElem.ondragover = function(e){
-      e.preventDefault();
-    }
-    targetElem.ondragleave = function(){
-      this.innerHTML = '元素已离开目标区域';
-      this.style.backgroundColor = 'lightblue';
-    }
-    targetElem.ondrop = function(){
-      this.innerHTML = '元素已落在目标区域';
-      this.style.backgroundColor = 'orange';
-    }
-
-    <div>请将从这堆内容不同乱七八糟的文字中挑选一些移动到拖放目标中</div>
-    <div id="targetElem" >拖放目标</div>
-    <div id="result"></div>
-    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
-    targetElem.ondragenter = function(e){
-      e = e || event;
-      e.preventDefault();
-      this.innerHTML = '有元素进入目标区域';
-      this.style.background = 'red';
-    }
-    targetElem.ondragover = function(e){
-      e = e || event;
-      e.preventDefault();
-    }
-    targetElem.ondragleave = function(e){
-      e = e || event;
-      this.innerHTML = '元素已离开目标区域';
-      this.style.backgroundColor = 'lightblue';
-    }
-    targetElem.ondrop = function(e){
-      e = e || event;
-      e.preventDefault();
-      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
-      this.innerHTML = '元素已落在目标区域';
-      this.style.backgroundColor = 'orange';
-    }
-
-    <div id="dragElem" draggable="true" data-value="这是一个秘密">拖动源</div>
-    <div id="targetElem" >拖放目标</div>
-    <div id="result"></div>
-    #dragElem{ height:30px;width:100px;background:pink; }
-    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
-    dragElem.onmousedown = function(){
-      //兼容IE8-浏览器
-      if(this.dragDrop){ this.dragDrop(); }
-    }
-    dragElem.ondragstart = function(e){
-      e = e || event;
-      e.dataTransfer.setData('text',dragElem.getAttribute('data-value'));
-    }
-    targetElem.ondragenter = function(e){
-      e = e || event;
-      e.preventDefault();
-      this.innerHTML = '有元素进入目标区域';
-      this.style.background = 'red';
-    }
-    targetElem.ondragover = function(e){
-      e = e || event;
-      e.preventDefault();
-    }
-    targetElem.ondragleave = function(e){
-      e = e || event;
-      this.innerHTML = '元素已离开目标区域';
-      this.style.backgroundColor = 'lightblue';
-    }
-    targetElem.ondrop = function(e){
-      e = e || event;
-      e.preventDefault();
-      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
-      this.innerHTML = '元素已落在目标区域';
-      this.style.backgroundColor = 'orange';
-    }
 Fullscreen 全屏操作[HTML5] 
-  PS:全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
+  PS: 全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
     目前各大浏览器的最新版本都支持这个API[包括IE11],但是使用的时候需要加上浏览器前缀
     放大一个节点时,Firefox和Chrome在行为上略有不同。
     Firefox自动为该节点增加一条CSS规则,将该元素放大至全屏状态,width:100%; height:100%,
@@ -3617,7 +3607,7 @@ Fullscreen 全屏操作[HTML5]
     }
 WebGL 
 --------------------------------------------------------------------------------
-移动端
+移动端 
 devicelight    设备屏幕亮度变化事件 [HTML5]
   PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
   var DLRun = function(event) { }

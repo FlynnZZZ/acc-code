@@ -1,9 +1,8 @@
-介绍_概念_说明_定义 
-  HTML,'Hyper Text Markup Language'超文本标记语言
-    'markup language'标记语言,通过使用一套标记标签'markup tag'来描述网页;
-    Web浏览器读取HTML文档,以网页的形式显示,用标签来解释页面的内容;
+HTML'Hyper Text Markup Language'超文本标记语言
+  'markup language'标记语言: 通过使用一套标记标签'markup tag'来描述网页 
+  Web浏览器读取HTML文档,以网页的形式显示,用标签来解释页面的内容;
   XHTML: 一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性 
-    2000年底,W3C发布XHTML1.0版本,是一种在HTML4.0基础上优化和改进的的新语言
+  2000年底,W3C发布XHTML1.0版本,是一种在HTML4.0基础上优化和改进的的新语言 
 语法规则 
   文档结构 
     所有的网页文件,通常有四对标记来构成文档的骨架
@@ -14,7 +13,7 @@
     <body> <!-- 表示网页文件的主体部分 -->
     </body>
     </html>
-  <tag>标签: 也叫标记、元素,用于浏览器识别 
+  <tag/>标签: 也叫标记、元素,用于浏览器识别 
     PS: 标签大小写不敏感['<p>'等同于'<P>'],推荐使用小写;
       HTML元素指从开始标签'start tag'到结束标签'end tag'的所有代码;
     双标记: <tag>内容</tag>
@@ -73,7 +72,7 @@
     高度默认为0; 背景色会向上渲染将整个浏览器铺满
     建议不要对body进行样式控制,使用一个其他的盒子代替[Self] 
   <head>  用于定义文档的头部,所有头部元素的容器 
-    头部元素有<title> <script> <style> <link> <meta>等标签;
+    头部元素有<title/> <script/> <style/> <link/> <meta/>等标签;
   <meta/>  提供有关页面的元信息'meta-information' 
     PS:用于设置一些头信息,对网页文件进行说明,放置于<head></head>之间
       如便于搜索引擎查找;元数据不会显示在页面上,但是对于机器是可读的 
@@ -259,7 +258,7 @@
     'href'    定义页面中a链接以此为跟路径
     'target'  可选,定义页面中a链接的打开方式,如'_blank' 
 引入类 
-  <style>  嵌入样式 
+  <style/>  嵌入样式 
   <link>  外部样式 
     rel  规定当前文档与被链接文档/资源之间的关系 
       只有当使用 href 属性时,才能使用 rel 属性.
@@ -321,7 +320,7 @@
       projection 用于投影媒体
       tv    电视
       ...
-  <script> JS引入 
+  <script/> JS引入 
     PS:用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
       存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;
       在加载和解析script代码时,网页会暂停对其他内容的加载和解析;
@@ -846,14 +845,14 @@ Table表格
 Form表单  
   PS:表单字段也叫表单控件,如input、button等元素[self] 
   <fieldset></fieldset> 表单信息分组
-    PS:默认有一个细线边框,可设置border属性为none关闭它.
+    PS: 默认有一个细线边框,可设置border控制 
     Example: 
-      <fieldset>
-        <legend>框线上显示的文字</legend>
-        <form action="">
-        // 其他字段
-        </form>
-      </fieldset>
+    <fieldset>
+      <legend>框线上显示的文字</legend>
+      <form action="">
+      <!--  其他字段 -->
+      </form>
+    </fieldset>
   <legend>     显示fieldset边框上的信息文字
     PS:legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制.
@@ -866,11 +865,11 @@ Form表单
       HTML5中,一个文档中的多个form当中,name必须唯一而不仅仅是一个空字符串。
     action="url"  表单提交的地址,处理该form信息程序所在的URL 
       该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
-    method=    提交表单的HTTP方法 
+    method=""   提交表单的HTTP方法 
       get  默认值 ,将表单数据附加到请求URL中 
         提交信息会显示在url中不适合密码传输,传递少量信息[256 byte]
       post 表单数据会包含在表单体内然后发送给服务器 
-    target    指示提交表单之后,显示收到回复的位置 
+    target=""    指示提交表单之后,显示收到回复的位置 
       PS: 通过该属性指向一个iframe来实现无刷新表单提交 
       HTML4: 一个用于frame的名字/关键字,默认'_self' 
       HTML5: 一个用于'browsing context'浏览器上下文的名字/关键字 
@@ -885,11 +884,13 @@ Form表单
         如果没有父级,和_self的行为一致。
       iframename: 返回值在指定frame中加载 
       HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载[覆盖]    
-    autocomplete=   是否启用表单的自动完成功能 [HTML5]
-      当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果.
-      "on"
-      "off"
-    novalidate   表示表单不进行验证
+    autocomplete   是否启用表单的自动完成功能 [HTML5] 
+      PS: 当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果 
+        该设定可被属于该form的子元素的'autocomplete'属性覆盖 
+      "on"    浏览器能够根据用户之前在form里输入的值自动补全 
+      "off"   浏览器不自动补全输入
+    novalidate   表单不进行验证 [HTML5] 
+      可被该<form>的<button>或<input>元素中的 formnovalidate 属性覆盖
     enctype      当method为post时,enctype 是提交form给服务器的内容的 MIME 类型 
       PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type]
         可认为是表单数据的'content type'[MIME type],
@@ -916,15 +917,8 @@ Form表单
     accept-charset 一个空格分隔或逗号分隔的列表 
       列表包括了服务器支持的字符编码。浏览器以这些编码被列举的顺序使用它们。
       默认值是一个保留字符串“UNKNOWN”。 
-    autocomplete 指示 input 元素是否能够拥有一个默认值[由浏览器自动补全] [HTML5] 
-      该设定可以被属于这个form的子元素的'autocomplete'属性覆盖 
-      "off" 浏览器不自动补全输入
-      "on"  浏览器能够根据用户之前在form里输入的值自动补全 
-    novalidate  [布尔类型的属性]当提交时form是否没有被验证 [HTML5] 
-      如果这个属性没有指定 (因此这个 form 是验证通过的),
-      该设置可以被属于这个form的 <button> 或者 <input> 元素中的 formnovalidate 属性覆盖
     可以提交表单的按钮 
-      PS:用于提交表单的按钮需放置在表单<form>内,
+      PS: 用于提交表单的按钮需放置在表单<form>内,
         以下三种任意一按钮都可用于提交表单
         点击提交按钮或[获得焦点时]在表单字段中回车可提交表单,
         <textarea>字段例外,在文本区中回车会换行,
@@ -983,15 +977,15 @@ Form表单
       radio    单选按钮 
         name    有多个单选按钮时,多个name的属性值相同才能起到单选的作用
         checked 定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用]
-      submit   提交按钮
+      submit   提交按钮 
         value="显示的名称"
-      reset    重置按钮
+      reset    重置按钮 
         value="显示的名称"
-      button   普通按钮
+      button   普通按钮 
         value="显示的名称"
-      image    图片按钮
+      image    图片按钮 
         src="图片路径"
-      file     文件上传
+      file     文件上传 
         size="显示长度"
         action   指将请求提交给的对象
         method   定义提交方法,默认为get
@@ -1002,7 +996,7 @@ Form表单
         multiple 是否可以选择多个文件,多个文件时其value值为第一个文件的虚拟路径
           Example: 多文件上传
             <input id="fileId2" type="file" multiple="multiple" name="file" />
-      hidden   隐藏域
+      hidden   隐藏域 
         value="提交值"
       ◆HTML5新增
       range   拖动条,带有 slider 控件 
@@ -1033,8 +1027,8 @@ Form表单
         适用所有的表单元素都有效,包括select, radio, checkbox, button等
       readonly   只读
         适用 type=text / password 的input 和textarea ;
-      size =          显示的字数
-      maxlength =     最多容纳字符数
+      size=          显示的字数
+      maxlength=     最多容纳字符数
       readonly 和 disabled 的区别
         表单提交
           disabled: 元素的值不会被提交,
@@ -1048,46 +1042,16 @@ Form表单
           适用于 <form> 标签,以及以下类型的 <input> 标签,
           type= text, search, url, telephone, email, 
             password, datepickers, range 以及 color;
-      autofocus  当页面加载完自动获得焦点
-        适用于所有 <input> 标签的类型
-      form       规定输入域所属的一个或多个表单
-        PS:适用于所有 <input> 标签的类型;
-          form 属性必须引用所属表单的 id,
-          如需引用一个以上的表单,请使用空格分隔的列表;
+      autofocus  当页面加载完自动获得焦点 
+        适用<input>的所有类型 
+      form       规定输入域所属的表单,值为<form>的id 
+        PS: 适用<input>的所有类型;若需引用多个表单,使用空格分隔;
         Example:
           <form action="demo_form.asp" method="get" id="user_form">
             First name:<input type="text" name="fname" />
             <input type="submit" />
           </form>
           Last name: <input type="text" name="lname" form="user_form" />
-      form override attributes  重写form元素的某些属性设定
-        PS: 适用于type=submit/image 的<input>表单元素;
-          方便创建不同的提交按钮;
-        表单重写属性有:
-        formaction:     重写表单的 action 属性
-          formaction="提交位置" (提交按钮的属性)
-            新属性,可选,适用于提交按钮(包括button和input)
-            用于改变form的action
-            Example: 
-              <form action="demo_form.asp" method="get">
-                <input type="text" name="fname" />
-                <button type="submit">提交</button><br />
-                <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
-                /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
-              </form>
-        formenctype:    重写表单的 enctype 属性
-        formmethod:     重写表单的 method 属性
-        formnovalidate: 重写表单的 novalidate 属性
-        formtarget:     重写表单的 target 属性
-        Example:
-          <form action="demo_form.asp" method="get" id="user_form">
-            E-mail: <input type="email" name="userid" /><br />
-            <input type="submit" value="Submit" /> <br />
-            <input type="submit" formaction="demo_admin.asp" value="Submit as admin" />
-            <br />
-            <input type="submit" formnovalidate="true" value="Submit without validation" />
-            <br />
-          </form>
       height/width   image类型input标签的图像宽高
         PS:只适用于type=image 的 <input> 标签
         Example: <input type="image" src="img.gif" width="99" height="99" />
@@ -1131,34 +1095,23 @@ Form表单
         <input type="submit" />
         </form>
         亲自试一试
-      pattern 属性
-        pattern 属性规定用于验证 input 域的模式(pattern)。
-        模式(pattern)是正则表达式。您可以在我们的 JavaScript 教程中学习到有关正则表达式的内容。
-        注释:pattern 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email 以及 password。
-        下面的例子显示了一个只能包含三个字母的文本域(不含数字及特殊字符):
-        实例
-        Country code: <input type="text" name="country_code"
-        pattern="[A-z]{3}" title="Three letter country code" />
-        
-        pattern   属性值为一个正则表达式,用于匹配文本框中的值(HTML5新增) 
-          Example: :
-          只能在文本框中输入数值
-          <input type="text" pattern="\d+" name="xx"/>
-      placeholder 提示文本
+      pattern=""  自定义验证规则,值为正则表达式  [HTML5]
+        适用<input>的类型: text, search, url, telephone, email, password 
+        Example: 
+        <input type="text" name="code" pattern="[A-z]{3}" />
+        <input type="text" pattern="\d+" name="xx"/>
+      placeholder  占位符,提示文本
         placeholder 属性提供一种提示(hint),描述输入域所期待的值。
         注释:placeholder 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email 以及 password。
         提示(hint)会在输入域为空时显示出现,会在输入域获得焦点时消失:
         实例
         <input type="search" name="user_search"  placeholder="Search W3School" />
         亲自试一试
-      required 属性 
-        required 属性规定必须在提交之前填写输入域(不能为空)。
-        注释:required 属性适用于以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, number, checkbox, radio 以及 file。
-        实例
-        Name: <input type="text" name="usr_name" required="required" />          
-        required (提交时)检测内容是否为空(HTML5新增)
-          需在form中,且点击submit提交时触发
-          适用于 input textarea select
+      required 提交时输入域不能为空 [HTML5]
+        PS: 需在form中,且点击submit提交时触发
+        适用于 <input> 标签的如下类型: 
+          text, search, url, telephone, email, password, date pickers, 
+          number, checkbox, radio 、 file 
   <button type="" >      定义按钮 
     在 button 元素内部,可以放置文本或图像.(与 input 创建的按钮的不同之处)
     type 
@@ -1211,14 +1164,38 @@ Form表单
         <option></option>
         ...
       </optgroup>
-  表单通用属性 
+  通用属性 
     name     表单名称 
       当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
     disabled 禁用禁用 
-     如input 用户不可输入
-     disabled="disabled"
+      如input 用户不可输入
+      disabled="disabled"
+    ★'form override attributes'重写<form>的某些属性设定,适用于提交表单元素  
+      PS: 便于创建不同的提交按钮;
+      Example:
+      <form action="form.asp" method="get" id="user_form">
+        E-mail: <input type="email" name="userid" /><br />
+        <input type="submit" value="Submit" /> <br />
+        <input type="submit" formaction="demo_admin.asp" value="admin" />
+        <input type="submit" formnovalidate="true" value="validation" />
+      </form>
+    formaction=""      重写表单的 action 属性 
+      formaction="提交位置" (提交按钮的属性)
+        新属性,可选,适用于提交按钮(包括button和input)
+        用于改变form的action
+        Example: 
+          <form action="demo_form.asp" method="get">
+            <input type="text" name="fname" />
+            <button type="submit">提交</button><br />
+            <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
+            /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
+          </form>
+    formenctype=""     重写表单的 enctype 属性
+    formmethod=""      重写表单的 method 属性
+    formnovalidate=""  重写表单的 novalidate 属性
+    formtarget=""      重写表单的 target 属性
   Remarks: 
-    type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?]
+    type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?] 
 其他标签 
   ★无语义标签 : 无任何特殊含义
     存在的意义就是为了应用css样式,一个块元素一个行内元素 
@@ -1556,18 +1533,6 @@ HTML全局属性
         <keygen> 生成加密字符串
         <output> 不可当做数据提交？
         <meter> 表示度量器,不建议用作进度条
-      3 表单属性 
-        placeholder 占位符
-        autofocus 获取焦点
-        multiple 文件上传多选或多个邮箱地址
-        autocomplete 自动完成,用于 form 元素,也可用于部分 input,默认值 on
-        form 指定表单项属于哪个 form,处理复杂表单时会需要
-        novalidate 关闭验证,可用于<form>标签,(只适应用 form)
-        required 验证条件,必填项
-        pattern 正则表达式 自定义验证规则
-        表单重写没有提及,自行验证,共包含
-        formaction、formenctype、formtarget、formmethod、formnovalidate
-        应用于提交按钮上,如:<input type="submit" formaction="xxx.php">
       4 表单事件 
         oninput 用户输入内容时触发,可用于移动端输入字数统计
         oninvalid 验证不通过时触发
@@ -1639,4 +1604,3 @@ Collection
 习题及精解 
 Question&Idea 
 --------------------------------------------------------------------以下待整理 
-

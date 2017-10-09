@@ -1389,13 +1389,12 @@ Object 基础类: ECMAscript中所有对象的基类
         否则,调用'toString',若返回值为基本类型,则返回该基本类型,
         否则报错 
       只定义'toString'方法时  
-        转换为基本类型时,直接调用'toString',当返回值为基本类型,则直接返回,
-        否则报错 
+        转换为基本类型时,直接调用'toString',当返回值为基本类型则返回, 否则报错 
         var obj2 = {key1:1} 
         obj2.toString = function(){
           return 100;
         }
-        console.log(+obj2); // 100 
+        console.log(+obj2);   // 100 
         console.log(''+obj2); // 100 
     str = obj.toString([radix]) 对象转换为基本类型 
       num.toString([radix]); 返回数值的字符串 
@@ -1409,8 +1408,11 @@ Object 基础类: ECMAscript中所有对象的基类
           console.log(1);
         }
         foo.toString(); //"function(){ console.log(1); }"
-      arr.toString(); 将数组元素转换连接为字符串返回
-        和 arr.join('') 效果一样.
+      arr.toString(); 将数组成员通过','连接为字符串返回[和 .join(',') 效果一样] 
+        会对数组的每一项调用 toString() 
+          undefined 和 null 会被转换成空字符串 
+          var arr = ['aoo',{boo:'boo'},33] 
+          console.log(arr.toString());  // aoo,[object Object],33 
       obj.toString(); 返回"[object Object]" 
         var obj = {};
         obj.toString(); // "[object Object]"
@@ -1453,80 +1455,78 @@ String 字符类: 处理字符串的'包装对象'
   var str = new String([val])   创建字符串基本包装对象  
     console.log(new String('abc'));
     // String {0: "a", 1: "b", 2: "c", length: 3, [[PrimitiveValue]]: "abc"} 
-  ★字符获取 
-  num = str.length  只读,字符长度 
-    "abc".length;    // 3
-    "abc"['length']; // 3
-  str1 = str[idx] 下标法访问字符 
-    console.log('abc'[1]); // b 
-  str1 = str.charAt(idx)  返回指定下标对应的字符 
-    console.log("abc".charAt(1)); // "b"
-  num = str.charCodeAt(idx)  以Unicode编码形式显示索引位置的字符 
-    var num1 = 'Ab'.charCodeAt(1)   
-    var num2 = 'abc'.charCodeAt(0)  
-    console.log(num1,num2,typeof num1) // 98 97 "number"
-  ★字符串获取 
-  str1 = str.slice(bgn[,end])  字符截取[详见 arr.slice()] 
-  str1 = str.substr(bgn[,num]) 从指定位置开始的num个字符 
-    当只有一个参数且负数时,同 slice 
-    当n为负数或0时,返回空字符串 
-  str1 = str.substring(idx1,idx2)  两点间截取 
-    PS:以参数中较小者作为起始位置,较大者作为结束位置的前闭后开区间的字符
-    idx1 数值,必须,若为负数返回全部字符串
-    idx2 数值,可选,若省略表示到最后,若为负,则取0
-    Example:
-      var str = 'abcde'
-      var s1 = str.substring(1,2) 
-      var s2 = str.substring(2,1)
-      console.log(s1,s2); // b b
-  ★字符串对比 
-  str1.includes(str2)    str1中是否包含str2的布尔值  
-  str1.indexOf(str2,bgn) 从指定位置向后首个指定字符串的下标
-    当bgn不存在时,直接从头开始
-    RetValue:检测字符不存在则返回-1
-    Example:
-    'abcdef'.indexOf('bc')   // 1
-    'abcdef'.indexOf('ac')   // -1
-  str1.lastIndexOf(str2,bgn)  从指定位置向前的首个指定字符串的下标
-    当bgn不存在时,表示从末尾开始搜索.
-    RetValue:搜索字符不存在时,返回-1
-  str1.search(str2)   返回字符串的位置
-  str1.match(str2)    返回查找到的字符str2或null
-  str1.localCompare(str2)  返回两个字符串比较的数值表示
-    若str1和str2相同,返回0;
-    第一个不同字符,str1在str2前,返回1,否则返回-1
-  str1.localeCompare(str2) 使用本地特定的顺序来比较字符串 
-    若str1大则返回1,相等返回0,否则返回-1
-  ★字符串修改
-  str1 = str.replace(regexp/str,replacement)  字符替换
-    返回值为'使用replacement替换[str1中]第一个str2的'结果字符串
-    Example: 'abcde'.replace('ab','11'); // "11cde"
-  str1.split(str2)    通过字符分割成数组 
-    与 join 或互为反操作
-    str.split("字符x") 将str字符串通过其中的字符x作为分割,返回字符串数组
-    str.split()        则将str作为一个元素放入一数组中.
-    Example:
-      将arr使用-进行分割成数组
-      var arr = "1-2-3"
-      arr.split("-"); //返回值为["1","2","3"]
-
-      var aoo = '1020304';
-      aoo.split('0').join(''); // "1234"
-  str.concat(str1,str2,...)   字符串拼接,返回新串 
-  str.trim() 去除字符串开始和结束的空格 
-    var str = ' 12 3 ';
-    var res = str.trim();
-    console.log("|" + res + "|" ); // |12 3|
-  ★字符串转换
-    PS:只有几种语言如土耳其语[]具有地方特有的大小写本地性,一般是否本地化效果是一致的 
-  str.toUpperCase()  转换为大写,返回转换后的值
-  str.toLowerCase()  转换为小写,返回转换后的值
-  str.toLocaleLowerCase()   将字符串全部转换为小写,并且本地化
-  str.toLocaleUpperCase()   将字符串全部转换为大写,并且本地化
-  ★静态方法
-  String.fromCharCode(num,num...)  得到指定的Unicode值对应的字符 
-    Example: :
-    String.fromCharCode(72,69,76,76,79); // "HELLO"
+  String.prototype.xx 
+    ★字符获取 
+    num = str.length  只读,字符长度 
+      console.log("abc"['length']);    // 3
+    str1 = str[idx] 下标法访问字符 
+      console.log('abc'[1]); // b 
+    str1 = str.charAt(idx)  返回指定下标对应的字符 
+      console.log("abc".charAt(1)); // "b"
+    num = str.charCodeAt(idx)  以Unicode编码形式显示索引位置的字符 
+      var num1 = 'Ab'.charCodeAt(1)   
+      var num2 = 'abc'.charCodeAt(0)  
+      console.log(num1,num2,typeof num1) // 98 97 "number"
+    ★字符串获取 
+    str1 = str.slice(bgn[,end])  字符截取[详见 arr.slice()] 
+    str1 = str.substr(bgn[,num]) 从指定位置开始的num个字符 
+      当只有一个参数且负数时,同 slice 
+      当n为负数或0时,返回空字符串 
+    str1 = str.substring(idx1,idx2)  两点间截取 
+      PS:以参数中较小者作为起始位置,较大者作为结束位置的前闭后开区间的字符
+      idx1 数值,必须,若为负数返回全部字符串
+      idx2 数值,可选,若省略表示到最后,若为负,则取0
+      Example:
+        var str = 'abcde'
+        var s1 = str.substring(1,2) 
+        var s2 = str.substring(2,1)
+        console.log(s1,s2); // b b
+    ★字符串对比 
+    bol = str.includes(str1)  str中是否包含str2 
+    idx = str.search(str1)   字符串中首个指定字符串的下标,否则返回-1  
+    idx = str.indexOf(str1[,bgn]) 指定位置向后首个指定字符串的下标,否则返回-1 
+      bgn  可选,开始查询的下标,默认为 0 
+      Example:
+      'abcdef'.indexOf('bc')   // 1
+      'abcdef'.indexOf('ac')   // -1
+    idx = str.lastIndexOf(str1[,bgn]) 指定位置向前的首个指定字符串的下标,否则返回-1 
+      bgn  可选,开始查询的下标,默认为 str.length  
+    str0 = str1.match(str2)    返回查找到的字符str2或 null
+    num = str1.localeCompare(str2)  字符串比较 
+      两个字符串相等,返回 0 
+      第一个不同的字母,若str1大,则返回 1,否则返回 -1 
+    ★字符串修改
+    str1 = str.replace(targetStr,replaceStr)  返回替换后的字符串 
+      targetStr   rgep/str,将被替换的字符串 
+      replaceStr  用于替换的字符 
+      Example: 
+      console.log('abcde'.replace('ab','11'));  // "11cde"
+    arr = str1.split([str2])   返回str2字符分割成的数组 [与 join 或互为反操作]
+      str2   用于分割的字符串,可选,默认为str1中不存在的字符  
+      当分割字符不在目标字符中时,返回仅有该字符串一个成员的数组 
+        var str = 'abcdefg'
+        console.log(str.split('z')); // ["abcdefg"]
+        console.log(str.split());    // ["abcdefg"] 
+      Example: 
+      var str = "1-2-3";
+      console.log(str.split("-")); //返回值为["1","2","3"]
+    str = str0.concat(str1,str2,...)   返回拼接后的字符串 
+      var str = 'abc'
+      console.log(str.concat('a','b')); // abcab 
+    str1 = str.trim()  返回去除头尾空格后的字符串  
+      var str = ' 12 3 ';
+      var res = str.trim();
+      console.log("|" + res + "|" ); // |12 3|
+    ★字符串转换 
+      PS: 只有几种语言[如土耳其语]具有大小写本地性,一般是否本地化效果是一致的 
+    str1 = str.toUpperCase()  返回转换为大写的字符串 
+    str1 = str.toLowerCase()  返回转换为小写的字符串 
+    str1 = str.toLocaleUpperCase()  返回转换为本地大写的字符串 
+    str1 = str.toLocaleLowerCase()  返回转换为本地小写的字符串 
+  String.xx 
+    str = String.fromCharCode(num,num...)  返回指定Unicode值对应的字符串  
+      Example: :
+      String.fromCharCode(72,69,76,76,79); // "HELLO"
   ★借用方法
   Array.prototype.join.call(str1,str2)   使用str2来间隔str1 
     Example: :
@@ -1536,8 +1536,8 @@ String 字符类: 处理字符串的'包装对象'
       var str ="1-2-3-4-5-6";
       var s ="=";
       Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
-Array 数组类 
-  PS: 数组是JS内置的一种特殊类型的对象,可类比成有序数据的对象;数组最大长度为 2^23-1 
+Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象  
+  PS: 数组最大长度为 2^23-1 
   'idx-val'结构: '索引-元素'组成的有序集合 
     idx数组索引 
       下标可设置为[非自然数]数字和字符,但不将其计算在数组的长度中
@@ -1623,32 +1623,27 @@ Array 数组类
         若为负,则为 bgn+arr.length 
     idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左][ES5] 
     ◆改变原数组
-    arr1 = arr.reverse() 颠倒数组所有成员的顺序并返回  
+    arr1 = arr.reverse() 返回颠倒所有成员后的数组   
       Example: :
       var arr = [1, 2, 3];
       var result = arr.reverse();
       console.log(arr);  // [3, 2, 1] 
       console.log(result===arr);  // true 
-    val = arr.pop()   删除并返回尾部成员  
+    num = arr.push(val1[,val2,...]) 末尾添加成员,返回新数组长度 
+      val 在原数组尾部添加的成员,添加多个成员用逗号隔开
+      Example:
+      var arr = [1];
+      console.log(arr.push(2)); // 2 
+      console.log(arr);         // [1, 2]
+    val = arr.pop()    返回删除的尾部成员  
       PS: 无参数;若原数组为空,则无操作,并返回 undefined 值 
       Example: 
       var obj = [1,2,3];
       var member1 = obj.pop();  
       console.log(member1); // 3
       console.log(obj);     // [1, 2]
-    val = arr.shift()  删除并返回首部成员 
-    num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
-      val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
-      Example:
-        var arr = [1];
-        arr.push(2);
-        // 相当于  arr[arr.length] = 2;
-        console.log(arr); // [1, 2]
-      
-        var aoo = [1,2,3];
-        aoo.push("d","e",12);  // 6
-        console.log(aoo);   // [1, 2, 3, "d", "e", 12]
-    num = arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组的长度值 
+    num = arr.unshift(val1[,val2,...]) 头部添加元素,返回新数组长度 
+    val = arr.shift()  返回删除的头部成员 
     arr1 = arr.splice(bgn[,num][,v1,v2,...]) 删除[添加]元素,返回由删除元素组成的数组
       PS:删除若干个元素,使用参数列表中声明的值从被删除的元素处插入,
         添加的元素的个数可大于、等于或小于删除元素的个数; 
@@ -1665,31 +1660,6 @@ Array 数组类
         var aoo = arr.splice
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
-    arr.sort([foo])  根据回调布尔值排序元素 
-      foo 可选,传入参数: 数组的两个元素,用于排序用;返回值为true则调序,否则不变;
-        通过冒泡的算法大小排序[SlSt];
-        若省略,元素按照转换为的字符串的诸个字符的Unicode位点进行排序
-        var arr =[31,1,2,5,4]
-        var resArr = arr.sort();
-        console.log(arr,'\n',resArr); 
-        // [1, 2, 31, 4, 5]
-        // [1, 2, 31, 4, 5]
-      Example: : 传入 foo 定义函数
-        从下到达排序
-        var arr = [5,2,4,17];
-        var resArr = arr.sort(function(val1,val2){
-          return val1 - val2;
-        });
-        console.log(arr); // (4) [2, 4, 5, 17] 
-        console.log(resArr); // (4) [2, 4, 5, 17]
-        
-        颠倒数组元素顺序
-        var arr = ['a','b','c'];
-        var resArr = arr.sort(function(val1,val2){
-          return true;
-        });
-        console.log(arr); // ["c", "b", "a"]
-        console.log(resArr); // ["c", "b", "a"]
     ◆不改变原数组
     arr1 = arr.slice([bgn][,end]); 片段复制 
       PS:截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
@@ -1719,35 +1689,32 @@ Array 数组类
         }
         var aoo = list(1, 2, 3);
         console.log(aoo); // [1, 2, 3]
-    arr1 = arr.concat(val1[val2,..]);  拼接数组或元素 
-      val 可为数组或数组的元素 
-      Example:
-        拼接元素 
-        var arr = [1,2,3];
-        var rstArr = arr.concat(4,5);
-        console.log(rstArr); // [1, 2, 3, 4, 5]  
-        拼接数组
-        var arr1 = [1,2,3];
-        var arr2 = [4,5];
-        var arr3 = [6,7,8,9];
-        var resArr = arr1.concat(arr2,arr3);
-        console.log(resArr); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        var arr4 = ['a',['b','c']]
-        var rstArr = arr1.concat(arr4)
-        console.log(rstArr); // [1,2,3,'a',['b','c']]
+    arr1 = arr.concat(val1[val2,..]);  返回拼接后的新数组  
+      val  数组或数组成员  
+      Example: 
+      var arr = [1,2,3];
+      var arr1 = arr.concat(4,5);
+      var arr2 = arr.concat([4],5);
+      var arr3 = arr.concat([4,[5]],6);
+      console.log(arr);  // [1, 2, 3] 
+      console.log(arr1); // [1, 2, 3, 4, 5]  
+      console.log(arr2); // [1, 2, 3, 4, 5]  
+      console.log(arr3); // [1, 2, 3, 4, [5], 6]  
     str1 = arr.join([str])  使用str串连每个元素 
-      str 可选,默认为逗号',',表示用于连接的字符
-      Example: 将[1,2,3]输出为字符串"1-2-3"
-        var arr = [1,2,3];
-        var str = arr.join("-"); 
-        console.log(arr); // [1, 2, 3]
-        console.log(str); // 1-2-3
-      Extend:
-        重复字符串
-          function repeatStr(str,n){ 
-            return new Array(n+1).join(str); 
-          };
-          repeatStr("a",6); // "aaaaaa"
+      str   可选,默认为逗号',',表示用于连接的字符
+      为 null 和 undefined 的成员,用空字符串表示 
+        function repeatStr(str,n){ // 重复字符串 
+          var arr = new Array(n+1) // [undefined × 4] 
+          console.log(arr);
+          return arr.join(str); 
+        };
+        console.log(repeatStr("aoo",3)); // aooaooaoo 
+      Example: 
+      将 [1,2,3] 输出为字符串"1-2-3"
+      var arr = [1,2,3];
+      var str = arr.join("-"); 
+      console.log(arr); // [1, 2, 3]
+      console.log(str); // 1-2-3 
     ◆遍历方法
       以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
     arr.forEach(foo [,thisArr])  对数组的每个元素执行操作[ES5]
@@ -1796,6 +1763,28 @@ Array 数组类
         catch (e) {
           console.log('执行了');
         } 
+    arr = arr.sort([foo(val1,val2)])   返回排序后的数组[改变原数组]  
+      foo 可选,传入数组相邻的两个元素,返回值为true则调序,否则不变; 
+        通过冒泡的算法大小排序[SlSt];
+        若省略,元素按照转换为的字符串的首个字符的Unicode位点进行排序
+        var arr =[31,1,2,5,4]
+        arr.sort();
+        console.log(arr); // [1, 2, 31, 4, 5]
+      Example:  
+        // 从小到大排序
+        var arr = [5,2,4,17];
+        arr.sort(function(val1,val2){
+          return val1 - val2;
+        });
+        console.log(arr); // (4) [2, 4, 5, 17] 
+        
+        // 颠倒数组元素顺序
+        var arr = ['a','b','c'];
+        var resArr = arr.sort(function(val1,val2){
+          return true;
+        });
+        console.log(arr);    // ["c", "b", "a"]
+        console.log(resArr); // ["c", "b", "a"]
     bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真[ES5]
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;

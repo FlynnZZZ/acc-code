@@ -1023,20 +1023,17 @@ DOM操作归纳总结
       btn.onclick =function(){ };  // 绑定事件
       btn.onclick =null;            // 解除绑定
   DOM2级事件处理程序: addEventListener&removeEventListener
-    PS:DOM2级事件定义了两个方法,用于添加事件和删除事件处理程序的操作 
-      所有DOM节点中都包含这两个方法.
-      当一个元素被绑定多个相同类型事件时,都会执行,无覆盖
-      同一元素的绑定不同的事件其被调用的顺序不依赖于绑定的顺序,
-      绑定多个相同的事件则会按照定义的先后顺序来触发.
-      IE8及之前不支持DOM2级事件绑定[IE9+支持]
-    elem.addEventListener("事件名",事件函数,bool);   事件绑定
-      PS:通过该方式添加的事件,只能使用removeEventListener来移除
-      bool  可选,表示是否使用捕获的布尔值,默认为false
-    elem.removeEventListener();     解除绑定
-      Arguments:传入与addEventListener()同样的三个参数,
+    PS: 
+    ★添加事件和删除事件 [IE9+] 
+      PS: 所有DOM节点中都包含这两个方法,
+        绑定多个相同的事件,不会覆盖,按照定义的先后顺序来触发 
+    elem.addEventListener("事件名",cfoo[,bol]);   事件绑定
+      PS: 通过该方式添加的事件,只能使用removeEventListener来移除 
+      bol  可选,是否使用捕获,默认为 false
+    elem.removeEventListener(["事件名",cfoo]);    解除绑定
+      PS: :传入与 addEventListener() 同样的三个参数,
         执行函数必须是同一引用而非相同的不同引用.
-        若要要移除事件,需使用外部函数,
-        若为匿名函数,则该事件无法移除.
+        若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除.
       Remarks:
         在使用 innerHTML 移除有事件绑定的元素时,
         可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
@@ -1925,7 +1922,7 @@ WeiXin 微信
 'Image'图片 
   img = new Image();   创建图像DOM元素 
 'Form'表单及表单字段脚本 
-  PS:HTML中,表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示
+  PS: HTML中表单由<form>元素表示,JS中表单使用 HTMLFormElement 类型表示 
     HTMLFormElement 继承了 HTMLElement ,因而与其他HTML元素具有相同的默认属性;
     表单字段为表单中的元素,如input button textarea select 等等
   表单元素  [self: 使用formElem表示表单元素]
@@ -2031,7 +2028,7 @@ WeiXin 微信
     只发送勾选的复选框和单选按钮
     多选选择框中的每个选中的值单独一个条目
     单击提交按钮也会发送提交按钮,否则,不发送提交按钮(包括type为image的input元素)
-    select元素的值,就是选中的option元素的value特性的值,若option元素没有value特性,则是其文本值
+    <select>的值,就是选中的<option>的value值,若<option>没有value特性,则是其文本值 
   input[type="text"] 和 textarea 文本框
     在其文本框中输入的内容保存在他们的value中
     text.select()  选择文本框中所有的文本
@@ -2120,15 +2117,14 @@ WeiXin 微信
         }
         </script>
         若用户未做任何选择,则selected就为undefined。
-  label 元素
+  label 元素 
     Exp:
       该元素绑定'click'事件会触发两次[使用的jQuery绑定],
       使用'mouseup'事件来代替'click'事件来使用;
-  Extend:利用iframe让form的submit不刷新页面进行上传
-    form的submit会导致页面的刷新,把form的target指定到一个看不见的iframe,
-    那么返回的数据就会被这个iframe接受,于是乎就只有这个iframe会刷新。
-    而它又是看不见的,用户自然就感知不到了。
-    
+  相关事件 
+    oninvalid   验证失败时触发 
+  Extend: 利用<iframe>让<form>的submit不刷新页面进行上传 
+    默认的表单提交会导致页面刷新,把<form>的target指定到一<iframe>,从而让其代替页面刷新  
     window.__iframeCount = 0;
     var hiddenframe = document.createElement("iframe");
     var frameName = "upload-iframe" + ++window.__iframeCount;
@@ -2139,7 +2135,7 @@ WeiXin 微信
     
     var form = document.getElementById("myForm");
     form.target = frameName;
-    然后响应iframe的onload事件,获取response
+    // 然后响应iframe的onload事件,获取response
     hiddenframe.onload = function(){
       // 获取iframe的内容,即服务返回的数据
       var resData = this.contentDocument.body.textContent || this.contentWindow.document.body.textContent;
@@ -2151,56 +2147,28 @@ WeiXin 微信
         _frame.parentNode.removeChild(_frame);
       }, 100);
     }
-    
-    JSONP 实现跨域
-      若文件上传的地址与当前页面不在同一个域下就会出现跨域问题,
-      导致iframe的onload回调里的访问服务返回的数据失败。
-      首先在上传之前注册一个全局的函数,把函数名发给服务器。
-      服务器需要配合在response里让浏览器直接调用这个函数。
-      // 生成全局函数名,避免冲突
-      var CALLBACK_NAME = 'CALLBACK_NAME';
-      var genCallbackName = (function () {
-        var i = 0;
-        return function () {
-          return CALLBACK_NAME + ++i;
-        };
-      })();
-      
-      var curCallbackName = genCallbackName();
-      window[curCallbackName] = function(res) {
-        // 处理response 。。。
-        
-        // 删除iframe
-        var _frame = document.getElementById(frameName);
-        _frame.parentNode.removeChild(_frame);
-        // 删除全局函数本身
-        window[curCallbackName] = undefined;
-      }
-      
-      // 若已有其他参数,这里需要判断一下,改为拼接 &callback=
-      form.action = form.action + '?callback=' + curCallbackName;        
 'iframe'框架元素 
-  <iframe id="frame1" name='firstIframe' src="/cpt/top_nav.html" ></iframe>
-  var iframeElem = document.querySelector("#frame1");  框架的DOM元素对象 
-  ★获取iframe元素嵌入页的window对象 
-    var iframe = frames[iframeName]    通过iframe的'name'属性值来获取 
-      Example:
-      var iframe = frames['firstIframe'];
-  ★iframe的属性 
+  <iframe id="frameId1" name='frameName1' src="/cpt/top_nav.html" ></iframe>
+  var iframeElem = document.querySelector("#frameId1");  框架的DOM元素对象 
+  var iframe = frames[iframeName]      获取iframe元素嵌入页的window对象
+    通过iframe的'name'属性值来获取 
+    Example:
+    var iframe = frames['frameName1'];
+  iframe的属性 
     ▼标签属性 
     iframe.frameBorder = 0      去掉iframe的边框
     iframe.scrolling = 'no'     去掉iframe的滚动条 
     ▼对象属性 
     iframe.document    框架的document对象 
-  'load'事件,在<iframe>加载后才能获取到其加载的内容 
-    $('#frame1').on("load",function(e){
-      var html = window.frames['firstIframe'].document.querySelector("#topNav");
-      var style = window.frames['firstIframe'].document.querySelector("style");
-      var script = window.frames['firstIframe'].document.querySelector("script");
-      $(this).after(html).remove();
-      $('head').append()(style);
-      $('html').append(script);
-    });
+  事件 
+    'load'事件  <iframe>加载后在其本身触发
+      Example: 
+      $('#frameId1').on("load",function(e){
+        var document1 = window.frames['frameName1'].document;
+        var style = document1.querySelector("style");
+        var html = document1.querySelector("#aoo");
+        var script = document1.querySelector("script");
+      });
 'audio'&'video' [详见 JavaScript高级程序设计 486 页][HTML5] 
   元素对象的标签属性'attributes'&对象属性'properties'&方法'methods'
     ★共有 

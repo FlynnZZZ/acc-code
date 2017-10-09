@@ -409,10 +409,9 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
 数据结构 
   数据结构就是存储数据的方式
   队列 
-  堆栈 
-    堆、栈都是一种数据项按序排列的数据结构,只能在一端[称为'top'栈顶]对数据项进行插入和删除 
-    'heap'堆,先进先出[FIFO'first in first out']  
-    'stack'栈,先进后出[FILO'first-in/last-out']  
+  堆栈: 一种数据项按序排列的数据结构,只能在一端[称为'top'栈顶]对数据项进行插入和删除 
+    'stack'栈: 一种后进先出[LIFO'Last In First Out']的数据结构  
+    'heap'堆: 一种先进先出[FIFO'first in first out']的数据结构 
   链表
     将零散的东西连起来,从而进行有序的操作.
     Example:

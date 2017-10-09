@@ -66,7 +66,17 @@ NodeJS的运行方式及编程风格
       若没有发生错误,'callback'的第一个参数就传入null 
       好处: 通过判断'callback'的第一个参数来确定是否出错 
 --------------------------------------------------------------------------------
-基础语法 
+基础 
+  NODE_PATH node环境变量 
+    与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径。
+    NODE_PATH环境变量中包含一到多个目录路径,路径之间在Linux下使用:分隔,在Windows下使用;分隔。
+    Example: 
+      例如定义了以下NODE_PATH环境变量：
+      $ NODE_PATH=/home/user/lib:/home/lib
+      当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径。
+      /home/user/lib/foo/bar
+      /home/lib/foo/bar
+语法 
   this 
     全局作用域下的'this' 
       浏览器中,等价于window,声明的全局变量会作为this的属性 

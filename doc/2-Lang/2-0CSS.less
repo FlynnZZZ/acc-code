@@ -131,7 +131,7 @@ Selector,选择器
     使用'大小写字母''_''-'和'数字'组成
     驼峰法间隔单词,'数字'和'_'一般用来排序区分;
   ◆单体选择器 
-  简单选择器  
+  简单选择器 
     *  通配符选择器 
       用于定义所有的html元素的样式.
       Example: *{margin:0;padding:0}
@@ -206,47 +206,55 @@ Selector,选择器
             h1:before{ content:open-quote; }
             h1:after{ content:close-quote; }
         配合属性:计数器 counter
-          content:counter(自定义名称,编号种类);  定义计数器(种类)
-            可以使用list-style-type属性的值来指定编号的种类
-            比如指定大写字母编号时,使用"upper-alpha"属性.
-            种类可选,默认为阿拉伯数字
-          counter-reset:计数器名称 重置编号;  计数器重置为"重置编号"
-          counter-increment:计数器名称 num;  变化间隔
-            当num为 -2 则,每次减少2个,若为3则每次增加3个
-          Example:
-            <body>
-              <h1>HTML tutorials</h1>
-                <h2>HTML Tutorial</h2>
-                <h2>XHTML Tutorial</h2>
-                <h2>CSS Tutorial</h2>
-              <h1>Scripting tutorials</h1>
-                <h2>JavaScript</h2>
-                <h2>VBScript</h2>
-              <h1>XML tutorials</h1>
-                <h2>XML</h2>
-                <h2>XSL</h2>
-            </body>
+          content: counter(name,type);  定义计数器(种类) 
+            name  计数器名称,相当于一个占位符 
+            type  编号种类,可选,默认阿拉伯数字 
+              可以使用 list-style-type 属性的值来指定编号的种类
+              比如指定大写字母编号时,使用"upper-alpha"属性.
+          counter-reset: name val;      重置计数器 
+            name   计数器名称 
+            val    重置编号
+          counter-increment: name step; 指定计数器的步距 
+            name  计数器名称 
+            step  步距 
+              当num为 -2 则,每次减少2个,若为3则每次增加3个
+          Example: 
+            <div class="wp">
+              <div class="tl">tl</div>
+              <div class="ct">1111</div>
+              <div class="ct">1111</div>
+              <div class="ct">1111</div>
+              <div class="ct">1111</div>
+            </div>
+            <div class="wp">
+              <div class="tl">tl</div>
+              <div class="ct">22222</div>
+              <div class="ct">22222</div>
+              <div class="ct">22222</div>
+              <div class="ct">22222</div>
+            </div>
+            <div class="wp">
+              <div class="tl">tl</div>
+              <div class="ct">3333</div>
+              <div class="ct">3333</div>
+              <div class="ct">3333</div>
+              <div class="ct">3333</div>
+            </div>
             body {counter-reset:section ;}
-            h1 {counter-reset:subsection ;}
-            h1:before {
-              content:"Section " counter(section) ". ";
+            .tl {counter-reset:subsection ;}
+            .tl:before {
+              content:"tittle " counter(section) "、 ";
               counter-increment:section;
+              color: red;
             }
-            h2:before  {
+            .ct:before  {
               content:counter(section) "." counter(subsection) " ";
               counter-increment:subsection;
+              color: blue;
             }
-            效果:
-              Section 1. HTML tutorials
-                1.1 HTML Tutorial
-                1.2 XHTML Tutorial
-                1.3 CSS Tutorial
-              Section 2. Scripting tutorials
-                1.1 JavaScript
-                1.2 VBScript
-              Section 3. XML tutorials
-                1.1 XML
-                1.2 XSL
+            .wp:nth-child(2n+1) .tl:before{
+              counter-reset:section 11;
+            }
       :first-letter 元素中的第一个字符 
         Exp:
           首字母下沉 
@@ -799,8 +807,8 @@ Declaration,样式声明
         若客户端无设置的字体则显示浏览器默认字体,
         绝大部分中文字体里包含英文字母,而英文字体是不包含中文字符的
         因此字体设置,英文在前,中文在后,可避免中文字体改变英文字符     
-        当使用很特殊的字体时,可采用图片的形式决解,
-      name  表示字体名称,定义多个字体,用逗号隔开 
+        当使用很特殊的字体时,可采用图片的形式决解 
+      name  字体名称,定义多个字体用逗号','隔开,当字体名称存在空格需使用引号  
       Example:  
         font-family:"微软雅黑";
         font-family:"Microsoft Yahei"; // 兼容性更好
@@ -1820,8 +1828,7 @@ Layout,布局
     ◆浮动
     ◆定位
   table布局: 早期使用表格table布局,现已很少使用纯表格布局
-  box布局 
-    PS:基于盒状模型,依赖display属性+position属性+float属性。
+  box布局: 基于盒状模型,依赖display属性+position属性+float属性
     display:inline、display:block、display:inline-block
       inline元素又叫行内元素,width和height属性无效果,
         可使用 line-height 来控制行高,但自身的content、padding尺寸无影响,
@@ -2018,13 +2025,12 @@ Layout,布局
         scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
         auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
         visible  默认值,内容不会被修剪,会呈现在元素框之外。
-    float    浮动
-      PS:如最初的 float 只是用来实现文字环绕图片的效果.
-        浮动元素垂直外边距不会合并.
-      float
-        left  左浮动
+    float    浮动 
+      PS: 最初是用来实现文字环绕图片的效果; 浮动元素垂直外边距不会合并 
+      float: left; 
+        left  左浮动 
           该元素向左移动,直到接触到父元素的左b边界或上一个浮动元素为止
-        right 右浮动
+        right 右浮动 
           使该元素向右移动,直到接触到其父元素的右边界或上一个浮动元素为止为止.
         none  无浮动
       浮动的特点
@@ -2069,17 +2075,17 @@ Layout,布局
       clear 使浮动元和非浮动元素不同行 [非浮动元素的 左侧|右侧 无浮动元素]
         left/right/both/none
       浮动子元素不支撑父元素导致无高度的决解方法或清除浮动的方法:
-        PS:子元素为浮动元素,则其父元素不会被支撑,浮动元素会溢出
+        PS: 子元素为浮动元素,则其父元素不会被支撑,浮动元素会溢出 
           当父元素没有指定高度时,且其子元素有浮动,则该父父元素的高度不会自动增加.
         方法一:定义父元素的height
-        方法二:在父元素内部的结尾处增加一个空块元素并将其浮动清除
+        方法二:在父元素内部的结尾处增加一个空块元素并将其浮动清除 
           原理:让空元素新起一行,且其必定被父元素包含,所以会撑起父元素.
         方法三:父元素 overflow:auto/hidden; 浮动的子元素不会被隐藏,但是父元素高度会被支撑
-        方法四:使用 :after 伪选择器来达到和方法二相同的效果
+        方法四:使用 :after 伪选择器来达到和方法二相同的效果 
           父元素 :after{display:block; clear:both; content:""; } 
             会在父元素的内部尾部添加一个空的块元素,并清除浮动.
           父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
-        方法五:父元素也浮动
+        方法五:父元素也浮动 
     position 定位 
       PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
       'static'   无定位,默认值 

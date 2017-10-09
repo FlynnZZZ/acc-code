@@ -707,10 +707,11 @@ DOM操作归纳总结
   获取 elem 
     快捷方法获取
       document.documentElement  HTML元素
-      document.body HTML的body
+      document.body HTML的body 
         等价于 document.querySelector("body");
-      document.head HTML的head节点
-      id名称 JS中直接使用元素的id名称即代表该元素
+      document.head HTML的head节点 
+      document.all  页面中所有元素的类数组集合 
+      id名称 JS中直接使用元素的id名称即代表该元素 
         前提是id名称是一符合标准的变量名称
         Example:
           <div id="box"> </div>
@@ -1005,7 +1006,7 @@ DOM操作归纳总结
     //是否支持方向转换事件
     console.log('onorientationchange' in window);  // false
 事件绑定、解绑及触发 
-  PS:响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
+  PS: 响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
     事件处理程序的名字以"on"开头加上事件名
     函数中 this 等于 事件的目标元素
   HTML事件处理程序[也叫内联事件处理程序] 
@@ -1549,8 +1550,8 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
     var t = document.getElementById('test');
     trigger(t, 'click');
 创建和触发事件 
-  var event = new Event(eNameStr); Event构造函数创建自定义事件[IE11+]  
-    eNameStr 字符串,创建的事件名
+  var event = new Event(str); Event构造函数创建自定义事件[IE11+]  
+    str  创建的事件名
   var event = new CustomEvent(eNameStr,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
     传递的数据对象通过 e.detail 来获取 
   elem.addEventListener(eNameStr,cfoo,bool);   监听事件 

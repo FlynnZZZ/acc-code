@@ -103,7 +103,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
     ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
     一个值可由多个变量名称指向,但一个变量只能指向一个值;
-  var valName   定义变量,相当于给window添加属性,但不可'delete'删除 
+  var valName;   定义变量,相当于给window添加属性,但不可'delete'删除 
     PS: 变量定义但未赋值,默认为'undefined'
     不用用var声明的变量: 相当于给window添加属性,但可用'delete'删除  
       var aoo = 1; 
@@ -135,8 +135,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     /xxx/ig        // 正则表达式字面量
     {x:1,y:2}      // 对象字面量表达式
     [1,2,3,4,5]    // 数组字面量表达式
-基本类型 
-  基本类型: 也叫原始类型,存储在'stack'栈中,占据空间小、大小固定 
+基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
+  基本类型: 变量的赋值,会创建该值的一个副本  
   undefined 表示未定义的值 
     在声明变量时没有对其初始化,则变量的值就是 undefined 
   null      表示空指针  
@@ -221,30 +221,32 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   String  字符串: 由若干个16位Unicode字符组成的字符序列 
     PS: 可使用双引号或单引号,但必须成对出现;
     特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
-      '\"' 双引号
-      '\'' 单引号
-      '\n' 换行符
-      '\r' 回车符
-      '\t' Tab制表符 
-      '\0' Null字节
-      '\b' 退格符
-      '\f' 换页符
-      '\v' 垂直制表符
-      '\\' \反斜杠字符
-      '\123'   由从0到377最多三位八进制数表示的'Latin-1'字符 
-        PS: 严格模式下,不能使用八进制转义字符。
-        '\251' 版权符号的八进制序列 
-        '\55'  "-"
-      '\x00'   由从00和FF的两位十六进制数字XX表示的'Latin-1'字符 
-        '\xA9'   版权符号的十六进制序列 
-      '\u1234' 由四位十六进制数字表示的Unicode序列字符 
-        '\u00A9' 版权符号 
-      '\u{12345}' Unicode代码点'code point'转义字符 
-        '\u{2F804}' 相当于Unicode转义字符\uD87E\uDC04的简写,'你' 
+      枚举: 
+        '\"' 双引号
+        '\'' 单引号
+        '\n' 换行符
+        '\r' 回车符
+        '\b' 空格 
+        '\t' Tab制表符 
+        '\0' Null字节
+        '\f' 换页符
+        '\v' 垂直制表符
+        '\\' \反斜杠字符
+        '\123'   最多三位0到377八进制数表示的'Latin-1'字符 
+          PS: 严格模式下,不能使用八进制转义字符 
+          console.log('\251'==='©');  // true  
+          console.log('\55');   // -
+          console.log('\055');  // -
+        '\x12'   二位00和FF的十六进制数字表示的'Latin-1'字符 
+          console.log('\xA9'==='©'); // true 
+        '\u1234' 四位十六进制数字表示的Unicode序列字符 
+          console.log('\u00A9'==='©');  // true 
+        '\u{12345}' Unicode代码点'code point'转义字符 
+          console.log('\u{2F804}'==='你'); // true 
       作为一个字符来解释 
-      console.log('\t\n'.length); // 2
+        console.log('\t\n'.length); // 2
       Example: 
-      console.log("read \"book\""); // read "book"
+        console.log("read \"book\""); // read "book"
     创建字符串 
       str = 'xx' 字面量法创建
       str = new String() 构造函数创建
@@ -264,9 +266,11 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         var str2 = '100';
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
-引用类型: 对象 
-  PS: 无序名值的合集,一般没有长度,
-    分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
+引用类型: 引用类型的值是对象,保存在堆内存中
+  PS: 包含引用类型值的变量是一个指向对象的指针,
+    变量赋值,复制的其实是指针,因此两个变量最终都指向同一个对象 
+    对象是若干名值的合集,一般没有长度
+    对象分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
   'key-val'键值对表现形式: 对象成员都是用一个名称来标记的  
     PS: 访问对象不存在的属性,返回'undefined' 
       对象默认是可扩展的,可以向对象中添加、删除属性和方法
@@ -570,7 +574,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       typeof box;         //String类型
       typeof -box;        //Number类型
     str = typeof val  检测值类型 
-      PS: typeof是操作符而非函数,因此后面的括号可有可无 
+      PS: typeof是操作符而非函数,因此后面的括号可有可无;不能有效的区分对象的类型;  
       val   被检测的值,可以是变量或字面量 
         返回值类型为字符串,为如下6种之一: 
         'undefined' 未定义
@@ -671,12 +675,13 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       1==true;    //true
       1===true;   //false
       NaN==NaN;   //false
-    bol = obj instanceof Foo; 检测构造函数的'prototype'属性是否存在于对象的原型链中 
-      PS: 检测的对象必须和构造函数处于同一个同一个iframe或window中,否则返回false
+    bol = obj instanceof Foo; 原型链检测 
+      PS: 检测构造函数的'prototype'属性是否存在于对象的原型链中 
+        检测的对象必须和构造函数处于同一个同一个iframe或window中,否则返回false
       obj  用于检测的对象,若为基本类型则直接返回'false' 
-        123.1 instanceof Number;  // false
-        "a" instanceof String;    // false
-        new Number(123) instanceof Number; //true
+        console.log(123.1 instanceof Number);  // false
+        console.log("a" instanceof String);    // false
+        console.log(new Number(123) instanceof Number); // true
       Foo  被检测的构造器,若为非构造函数则报错 
       Example: 
         function Foo(name){ 
@@ -694,7 +699,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         Foo.prototype;       // Goo {age: 18}
         aoo instanceof Foo.constructor;  //false
         aoo instanceof Foo.prototype;  // 报错
-    var bol = prop in obj;  属性是否在对象中[包括原型链上的]  
+    bol = prop in obj;  属性是否在对象中[包括原型对象的属性]  
       prop 所要检测的对象的属性 
       obj  被检测的对象 
         可以是一个String包装对象,但不能是一个字符串原始值
@@ -787,12 +792,12 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       操作数是数值0、空字符串、null、NaN、undefined,返回 true;
       操作数是一个非空字符串,返回 false;
       操作数是任意非0和infinity,返回 false;
-    ◆位运算符 : 按内存中表示数值的位来操作数值 
-     PS:一般应用中,基本用不到位运算符; 比较基于底层,性能和速度会非常好;
-       ECMAScript中的所有数值都以'IEEE-754''64位'格式存储,
-       但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
-       然后执行操作,最后在将结果转换回64位,
-       对于开发人员来说,由于64位存储格式是透明的,因此整个过程就像是只存在32位的整数一样;
+    ◆位运算符: 按内存中表示数值的位来操作数值 
+      PS: 一般应用中,基本用不到位运算符; 比较基于底层,性能和速度会非常好;
+        ECMAScript中的所有数值都以'IEEE-754''64位'格式存储,
+        但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
+        然后执行操作,最后在将结果转换回64位,
+        对于开发人员来说,由于64位存储格式是透明的,因此整个过程就像是只存在32位的整数一样;
       ~   位非NOT
       &   位与AND
       |   位或OR
@@ -1194,30 +1199,27 @@ Global|Window 全局对象
         parseInt('0xAF');    // 175,十六进制
         parseInt('AF',16);   // 175,指定16进制,可去掉 0x 前导
         parseInt('AF');      // NaN
-      Example:
-        Number("");   //为0;
-        parseInt(""); //为NaN
       ES3和ES5的分歧: ES5不再具备解析八进制,需指定基数 
         parseInt("070");  // ECMAScript 3 认为是 56(八进制)
         parseInt("070");  // ECMAScript 5 认为是 70(十进制)
-    num = parseFloat(str)      将字符串转换成整数值/浮点数值  
+      Example: 
+        Number("");   // 为0;
+        parseInt(""); // 为NaN
+    num = parseFloat(str)   将字符串转换成整数值/浮点数值  
       PS: 类似'parseInt',区别是数字中可包含一个'.'点; 只能解析为10进制数
       Example: 
-      parseFloat('12.0');  // 12,优先转换为整数值 
-      parseFloat('123abc');  // 123,去掉不识别的部分
-      parseFloat('12.3.4');  // 12.3,只认一个小数点
-      parseFloat('0xA');  // 0,不识别十六进制,x后面的字符被忽略 
-      parseFloat('01.20');   // 1.2,去掉前、后导0
-      parseFloat('1.2e7');   // 12000000,把科学计数法转化成普通数值
-    str= String(val)     将任意类型值转换为字符串 
-      PS: 若值存在'toString'方法,则调用该方法,否则,
-      String(undefined) "undefined"
-      String(null)      "null"
-      String(true)      "true"
-      String(false)     "false"
-      String(num)       "数值"
-      String(str)       "字符串" 
-      其他对象先后调用'toString'、'valueOf'方法进行转换 
+      console.log(parseFloat(' 12.0'));   // 12,优先转换为整数值 
+      console.log(parseFloat(' 01.20'));  // 1.2,去掉前、后导0
+      console.log(parseFloat('123abc'));  // 123,去掉不识别的部分
+      console.log(parseFloat('12.3.4'));  // 12.3,只认一个小数点
+      console.log(parseFloat('0xA'));     // 0,不识别十六进制,x后面的字符被忽略 
+      console.log(parseFloat('1.2e7'));   // 12000000,把科学计数法转化成普通数值
+    str = String(val)     将任意类型值转换为字符串 
+      undefined、null 分别转换为'undefined'、'null'
+        console.log(String(undefined));  // "undefined"
+        console.log(String(null));       // "null"
+      其他值,先后调用其'toString'、'valueOf'方法 
+        若有返回值为基本类型则返回该值,否则最后报错  
         var obj = {
           valueOf: function() { // 未返回原始值 
             console.log(1);
@@ -1228,7 +1230,7 @@ Global|Window 全局对象
             return {};
           } 
         }
-        String(obj); // 2 1 报错
+        console.log(String(obj));  // 2 1 报错
     uriStr = encodeURI(str) 将字符串编码为URI 
       PS: 有效的URI中不能包含某些字符,如空格,否则需转换
         不会对本身属于URI的特殊字符",/?:@&=+$#"等ASCII标点符号进行转义 
@@ -1261,7 +1263,7 @@ Global|Window 全局对象
         var val = eval(str);
         console.log(num,val); // 100 undefined 
   window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
-Object 基础类: JS所有对象的基类 
+Object 基础类: ECMAscript中所有对象的基类 
   JS中所有的构造函数都继承自Object类型
     Object.prototype.foo = function(){ // 所有类型的对象都会继承到 
       return '来自 Object'
@@ -1377,6 +1379,7 @@ Object 基础类: JS所有对象的基类
     Object.freeze(obj)   属性不可扩展、不可写、不可配置[最严格的防篡改级别][ES5]
       PS: 只是对对象操作,对其原型链无影响
   Object.prototype.xx 
+    foo = obj.constructor  实例的构造函数 
     val = obj.valueOf()  对象转换为基本类型,通常与'toString'返回值相同  
       不一定能转换成基本类型 
         var obj1 = {key1:1}.valueOf();
@@ -1394,13 +1397,12 @@ Object 基础类: JS所有对象的基类
         }
         console.log(+obj2); // 100 
         console.log(''+obj2); // 100 
-    str = obj.toString() 对象转换为基本类型 
+    str = obj.toString([radix]) 对象转换为基本类型 
       num.toString([radix]); 返回数值的字符串 
         radix 可选,默认为10,表示进制,一般为 2、8、16 等 
         var num = 10;
-        num.toString();    //返回值为'10'
-        num.toString(2);   //返回值为'1010',二进制输出
-        // 123.toString(); // 报错 ,默认将点.作为了小数点
+        num.toString();    // '10'
+        num.toString(2);   // '1010',二进制输出
         123.1.toString(); // "123.1"
       foo.toString(); 返回定义该函数对象的字符串[函数的源代码]
         var foo = function(){
@@ -1409,22 +1411,21 @@ Object 基础类: JS所有对象的基类
         foo.toString(); //"function(){ console.log(1); }"
       arr.toString(); 将数组元素转换连接为字符串返回
         和 arr.join('') 效果一样.
-      obj.toString(); 返回"[object Object]"
+      obj.toString(); 返回"[object Object]" 
         var obj = {};
         obj.toString(); // "[object Object]"
       自定义'toString'方法 [详见 'valueOf']
     str = obj.toLocaleString() 对象的本地字符串表示,通常与toString的返回值相同 
-    bol = obj.hasOwnProperty(key)       查询属性是否存在[不包括原型链]   
+    bol = obj.hasOwnProperty(key)       是否存在该属性[不包括原型链]   
       var obj = {key1: 1}
       console.log(obj.hasOwnProperty('key1'));  // true
     bol = obj.propertyIsEnumerable(key) 查询属性是否能通过'for-in'语句枚举 
-    bol = obj.isPrototypeOf(targetObj)  查询对象是否为目标对象的原型对象 
+    bol = proto.isPrototypeOf(obj)  是否是对象的原型对象 
       Example:
       function Foo(){};
       var aoo = new Foo();
-      Foo.prototype.isPrototypeOf(aoo);    // true
-      Object.prototype.isPrototypeOf(aoo); // true
-    foo = obj.constructor  创建当前对象的构造函数 
+      console.log(Foo.prototype.isPrototypeOf(aoo));    // true
+      console.log(Object.prototype.isPrototypeOf(aoo)); // true
     obj.__proto__ === Foo.prototype 实例的原型对象 [详见 原型]
 Boolean 布尔类: 处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
@@ -1596,7 +1597,7 @@ Array 数组类
         var arr = new Array(1,3,true,"abc"); 
         console.log(arr);  // [1, 3, true, "abc"]
   Array.xx  
-    bol = Array.isArray(arr)  判断是否为布尔值[ES5] 
+    bol = Array.isArray(arr)  是否为数组 [IE9+ ES5] 
   Array.prototype.xx 
     ◆信息查询 
     val = arr[idx]   读写数组元素 
@@ -1622,18 +1623,20 @@ Array 数组类
         若为负,则为 bgn+arr.length 
     idx = arr.lastIndexOf(val[,bgn]) 查询元素的索引[从右向左][ES5] 
     ◆改变原数组
-    arr.reverse() 颠倒数组元素的顺序 
+    arr1 = arr.reverse() 颠倒数组所有成员的顺序并返回  
       Example: :
-        var arr = [1, 2, 3];
-        var result = arr.reverse();
-        console.log(arr,':',result); // [3, 2, 1] ":" [3, 2, 1]
-    arr.pop()    删除末尾的一个元素 
-      无参数;若原数组为空,则无操作,并返回 undefined 值 
-      Example: :
-        var obj = [1,2,3];
-        obj.pop(); // 3
-        console.log(obj);// [1, 2]
-    val = arr.shift()  删除头部的一元素并返回删除的元素   
+      var arr = [1, 2, 3];
+      var result = arr.reverse();
+      console.log(arr);  // [3, 2, 1] 
+      console.log(result===arr);  // true 
+    val = arr.pop()   删除并返回尾部成员  
+      PS: 无参数;若原数组为空,则无操作,并返回 undefined 值 
+      Example: 
+      var obj = [1,2,3];
+      var member1 = obj.pop();  
+      console.log(member1); // 3
+      console.log(obj);     // [1, 2]
+    val = arr.shift()  删除并返回首部成员 
     num = arr.push(val1[,val2,...]) 末尾添加元素,返回新数组的长度值 
       val 在原arr的最后增加的新元素,同时添加多个元素使用逗号隔开
       Example:
@@ -2914,16 +2917,15 @@ JSON'JavaScript Object Notation'JS对象表示法: 基于文本、独立于语�
     闭包过多容易导致内存泄漏,
     闭包会造成对象引用的生命周期脱离当前函数的上下文,
     从严格意义上讲,这是程序员自己的bug,而不是闭包的错 
-'GC'垃圾回收机制 
-  程序员只需要申请内存,而不需要关注内存的释放 
-  垃圾回收器'GC'会在适当的时候将已经终止生命周期的变量的内存给释放掉 
+'Garbage Collecation'垃圾回收机制: 只需申请内存,而不需关注内存的释放  
+  垃圾回收器会在适当的时候将已经终止生命周期的变量的内存给释放掉 
   JS会自行管理内存分配及无用内存的回收 
-  优化内存的最佳方案: 一旦数据不再有用,则将其设置为null来释放引用,也叫解除引用 
+  内存优化方案: 一旦数据不再有用,则将其设为null来释放引用,也叫解除引用'dereferencing' 
   解除引用适用于大多数全局变量和全局对象 
   var a = {
     name:"abc"
   };
-  a = null;  //解除对象引用,等待垃圾收集器回收
+  a = null;  //解除对象引用,等待垃圾收集器回收 
 JS引擎: 真正执行JS代码的地方,
   常见的引擎有V8[目前最快JS引擎、Google生产]、JS core;
   JS引擎主要做了下面几件事情:

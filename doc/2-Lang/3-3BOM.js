@@ -773,10 +773,10 @@ window的属性对象
       'https://www.baidu.com/?aoo=2&boo=c'
       location.search;   //  "?aoo=2&boo=c"
     location.assign(url)   跳转到指定页面 
-      location.assign('https://www.baidu.com')    //跳转到百度主页
-      以下两行代码与显示调用assign()方法效果完全一样(会调用assign方法)
-      window.location ="https://www.baidu.com";
-      location.href ="https://www.baidu.com";
+      location.assign('https://www.baidu.com')    // 跳转到百度主页
+      以下两行代码与显示调用assign()方法效果完全一样[会调用assign方法]
+      window.location = "https://www.baidu.com";
+      location.href = "https://www.baidu.com";
     location.replace(url)  跳转到指定页面,无历史记录,不可后退
       Example: :
       location.replace('https://www.baidu.com'); // 跳转到百度

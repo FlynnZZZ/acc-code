@@ -533,50 +533,34 @@
     vspace      定义图像顶部和底部的空白(垂直边距)
     hspace      定义图像左侧和右侧的空白(水平边距)
     注:align、space及hspace为处理图片和周围文字的关系.
-  <a>   anchor锚点元素超链接 
-    PS:可链接到外部地址实现页面跳转,也可在当前页面实现内部导航的锚点功能
-    href   链接地址
-      网址:链接到指定网页
-      锚点:链接网页指定部位
-        格式:href="#id名称" 或 href="#另一个a元素的name属性的值"
-      锚点:链接到指定网页的指定部位.
-        格式:href="网页地址/#id名称"
-    target 定义链接打开的位置
-      _self    在自身窗口中打开(默认值)
-      _blank   在新窗口中打开
-      _parent  父窗口(本窗口的上一级窗口),框架会经常使用
-      _top     在浏览器的整个窗口中打开,忽略任何框架
-      框架的名称
-    ◆链接分类
-    站点链接
-      当前文档与目标文档在同一站点内
-        可使用<a href=目标文档位置及全称>
-      站外链接
-        <a href=URL>
-    html文档链接
-      HTML文档名称(Example: href="a.HTML")
-    href='mailto:address1?key=value'     E-mail 链接
-      PS:各个键值对间使用&连接;value可选多个,之间使用分号;隔开;
-      address1       必须,收件人邮箱
-      key=value      可选,其他可选参数
-        subject=title  title为邮件标题
-        body=content   content为邮件内容
-        cc=address2    address2为抄送人邮箱
-        bcc=address3   address3为密抄人邮箱
-      Example:    <a href="mailto:example@gmail.com?subject=测试用标题&body=测试内容&cc=example2@qq.com&bcc=example3@163.com">click me</a>
-    锚点链接:可跳转到某个页面的某个位置
-      创建锚点:
-        <a name="锚点名称">显示内容</a>
-      链接锚点:
-        <a href="＃锚点名称">显示内容</a>
-    空链接
-      没有目标端点的链接.
-      格式<a href="＃">显示内容</a>
-      Example:
-        设为首页
-        <a href="＃" onclick="this.style.behavior='url(＃default＃homepage)'; this.sethomepage('http:WWW.sohu.com')"> 设为首页</a>
-    脚本链接
-      是一种特殊的链接,当单击设置脚本链接的文本或图像时,可以运行相应的javascript语句.
+  <a>   'anchor'锚点元素、超链接 
+    PS: 可链接到外部地址实现页面跳转,也可在当前页面实现内部导航的锚点功能
+    href=""   链接地址 
+      网址: 链接到指定网页
+      锚点: 链接网页指定部位 
+        href="#id名称" 
+        或 href="#另一个a元素的name属性的值"
+      下载: href="aoo.zip" 
+        格式不可为'.html'、'.js'、'.txt'等等 
+      发送邮件: href='mailto:address?key1=val1' 
+        PS: 键值对间使用'&'连接;val可选多个,之间使用分号';'隔开;
+        address   必须,收件人邮箱地址 
+        key=val   可选,其他可选参数 
+          subject='邮件标题'  
+          body='邮件内容'   
+          cc='抄送人邮箱'    
+          bcc='密抄人邮箱'   
+        Example:    
+        <a href="mailto:收件人@qq.com?subject=标题&body=邮件内容&cc=抄送人1@qq.com;抄送人2@qq.com">发送邮件</a> 
+      脚本链接: 单击设置脚本的链接时执行相应的javascript语句 
+        Example: 
+        <a href="javascript:alert('hello')">hello</a>
+    target="keywords" 定义链接打开的位置 
+      '_self'    在自身窗口中打开(默认值)
+      '_blank'   在新窗口中打开
+      '_parent'  父窗口(本窗口的上一级窗口),框架会经常使用
+      '_top'     在浏览器的整个窗口中打开,忽略任何框架
+      框架的名称  
   <ul>  无序列表
     type 列表显示样式
       none    无

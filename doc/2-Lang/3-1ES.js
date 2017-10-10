@@ -1431,6 +1431,21 @@ Object 基础类: ECMAscript中所有对象的基类
     obj.__proto__ === Foo.prototype 实例的原型对象 [详见 原型]
 Boolean 布尔类: 处理布尔值的'包装对象' 
   var bol = new Boolean(); 创建布尔值基本包装对象 
+  Boolean.prototype.xx  
+    bol = bol.valueOf()   返回当前布尔值 
+      对 Object.prototype.valueOf 进行了改写 
+      console.log(Boolean.prototype.valueOf == Object.prototype.valueOf); // false 
+      console.log(true.valueOf()); // true 
+      console.log(false.valueOf()); // false 
+      console.log(typeof false.valueOf()); // boolean 
+    str = bol.toString()  转换为字符串 
+      对 Object.prototype.toString 进行了改写
+        console.log(Boolean.prototype.toString == Object.prototype.toString); // false 
+      console.log(true.toString());  // true   
+      console.log(false.toString()); // fasle  
+      console.log(typeof alse.toString()); // string   
+    bol.toLocaleString()  继承自 Object 
+      console.log(Boolean.prototype.toLocaleString);
 Number 数值类: 处理数值的'包装对象' 
   num = new Number([val]);  创建数值基本包装对象  
     var num1 = new Number();
@@ -1536,7 +1551,7 @@ String 字符类: 处理字符串的'包装对象'
       var str ="1-2-3-4-5-6";
       var s ="=";
       Array.prototype.join.call(str,s,'-'); // "1=-=2=-=3=-=4=-=5=-=6"
-Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象  
+Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象 
   PS: 数组最大长度为 2^23-1 
   'idx-val'结构: '索引-元素'组成的有序集合 
     idx数组索引 
@@ -1661,34 +1676,29 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
     ◆不改变原数组
-    arr1 = arr.slice([bgn][,end]); 片段复制 
-      PS:截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
+    arr1 = arr.slice([bgn][,end]); 返回复制的片段 
+      PS: 截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
         当bgn或end有为负数时,则使其加上 str.length 来代替
-      bgn  可选,开始下标,默认为0 
+      bgn  num,开始下标,可选,默认为 0 
         var arr = [1,2,3];
         var aoo = arr.slice();
         console.log(aoo); // [1,2,3]
-      end  可选,结束下标,默认为 arr.length  
-      Extend : 将'Array-like'类数组对象转换成数组 
-        将该方法绑定到类数组对象上即可
-        函数中的 arguments 就是一个类数组对象
+      end  num,结束下标,可选,默认为 arr.length 
+      Example: 
+        将'Array-like'类数组对象转换成数组 
         function list() { 
           console.log(arguments,typeof arguments);
+          // 将该方法绑定到 arguments 类数组对象上 
           return Array.prototype.slice.call(arguments); 
           // 也可用 [].slice.call(arguments) 来代替.
         }
-        var aoo = list(1, 2, 3); 
-        //  [1, 2, 3, callee: function, Symbol(Symbol.iterator): function] "object"
-        console.log(aoo); // [1, 2, 3]
-        
-        使用 bind 来简化该过程 
-        var foo = Array.prototype.slice;
-        var slice = Function.prototype.call.bind(foo);
+        console.log(list(1, 2, 3)); // [1, 2, 3]
+        // 使用 bind 来简化该过程 
+        var slice = Function.prototype.call.bind(Array.prototype.slice);
         function list() { 
           return slice(arguments); 
         }
-        var aoo = list(1, 2, 3);
-        console.log(aoo); // [1, 2, 3]
+        console.log(list(1, 2, 3)); // [1, 2, 3]
     arr1 = arr.concat(val1[val2,..]);  返回拼接后的新数组  
       val  数组或数组成员  
       Example: 
@@ -1715,19 +1725,18 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
       var str = arr.join("-"); 
       console.log(arr); // [1, 2, 3]
       console.log(str); // 1-2-3 
-    ◆遍历方法
+    ◆遍历方法 
       以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
-    arr.forEach(foo [,thisArr])  对数组的每个元素执行操作[ES5]
-      PS:已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
+    arr.forEach(foo(val,idx,arr)[,context])  数组遍历 [ES5] 
+      PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
         无法中止或跳出forEach循环,除非报错.
-      foo    函数为每个元素执行,接收三个参数:
-        value 可选,元素
-        index 可选,元素的索引
-        arr   可选,数组对象本身
-      thisArr 可选,表示数组本身,当执行回调函数时用作this的值[参考对象].
-        若给forEach传递了thisArr 参数,它将作为 foo 函数的执行上下文,
-        类似执行如下函数foo.call(thisArr, element, index, array).
-        若 thisArr 值为 undefined 或 null,
+      foo  遍历函数 
+      val  数组成员 
+      idx  成员索引 
+      arr  数组本身 
+      context   foo的执行上下文,可选,默认为数组本身  
+        类似执行如下函数 foo.call(context, element, index, array).
+        若 context 值为 undefined 或 null,
         函数的 this 值取决于当前执行环境是否为严格模式,
         严格模式下为 undefined,非严格模式下为全局对象.
         function Counter() {
@@ -1785,15 +1794,15 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    bol = arr.every(f(val,idx,arr)[,thisArr]); 返回值是否全部为真[ES5]
+    bol = arr.every(f(val,idx,arr)[,context]) 返回值是否全部为真[ES5]
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
         在调用 every 之后添加到数组中的元素不会被 foo 访问到,
         若数组中存在的元素被更改,则他们传入 foo 的值是 every 访问到他们那一刻的值,
         那些被删除的元素或从来未被赋值的元素将不会被访问到;
-      thisArr 执行 callback 时使用的 this 值 
-        若为 every 提供一个 thisArr 参数,在该参数为调用 callback 时的 this 值。
+      context 执行 callback 时使用的 this 值 
+        若为 every 提供一个 context 参数,在该参数为调用 callback 时的 this 值。
         若省略该参数,则 callback 被调用时的 this 值,
         在非严格模式下为全局对象,在严格模式下传入 undefined。
       Example: 判断是否所有元素大于18 
@@ -1802,14 +1811,14 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(f(val,idx,arr)[,thisArr]);  返回值是否存在为真[ES5]
+    bol = arr.some(f(val,idx,arr)[,context])  返回值是否存在为真[ES5]
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
         在调用 some 后被添加到数组中的值不会被 foo 访问到,
         若数组中存在且还未被访问到的元素被 foo 改变了,
         则其传递给 foo 的值是 some 访问到它那一刻的值;
-      thisArr  可选,将会把它传给被调用的 foo,作为 this 值.
+      context  可选,将会把它传给被调用的 foo,作为 this 值.
         否则,在非严格模式下将会是全局对象,严格模式下是 undefined.
       Example: :  是否存在大于18的元素 
         var arr = [19, 10, 9];
@@ -1817,11 +1826,11 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    arr1 = arr.map(f(val,idx,arr)[,thisArr]) 返回值组成的数组[ES5] 
+    arr1 = arr.map(f(val,idx,arr)[,context]) 返回值组成的数组[ES5] 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
-      thisArr 可选,数组本身,执行 foo 函数时 this 指向的对象 
+      context 可选,数组本身,执行 foo 函数时 this 指向的对象 
       Example:
         arr = [1, 2, 3];
         arr.map(String);  // ["1", "2", "3"]
@@ -1851,10 +1860,10 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    arr1 = arr.filter(foo [,thisArr]) 返回值为true的元素组成的数组[ES5]
+    arr1 = arr.filter(foo[,context]) 返回值为true的元素组成的数组[ES5]
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
-      thisArr 可选,执行函数时的用于 this 的值
+      context 可选,执行函数时的用于 this 的值
       Example: 筛选数组arr中小于12的数
         var arr = [10, 2, 34, 4, 11, 12];
         var res = arr.filter(function(val,idx,arr){
@@ -1862,7 +1871,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    val = arr.reduce(foo [,initVal]) 条件缩减,最后一次回调值[ES5]
+    val = arr.reduce(foo[,initVal]) 条件缩减,最后一次回调值[ES5]
       PS:接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
         为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
         若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
@@ -2002,7 +2011,7 @@ Function 函数类
         return ;
         2;
       }
-  foo()函数调用  
+  函数调用  
     foo()  直接调用 
     obj.foo() 方法调用 
     new Foo() 构造器调用 
@@ -2053,187 +2062,184 @@ Function 函数类
         }
       }
   不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数不同而进行区分] 
-  ◆属性/方法 
-  foo.length    获取函数声明时定义的参数的个数 
-    Example: :
-    function box(a,b){ return a+b; }
-    console.log(box.length);  // 2,表示box的参数有两个.
-  foo.name      函数的名字
-  foo.caller    返回调用当前函数的函数[当前函数的直接父函数] 
-    function foo(){
-      console.log(foo.caller);
-    };
-    function goo(){
-      foo();
-    };
-    goo(); // function goo(){ foo(); }
-  foo.prototype [构造]函数的原型对象[详见 原型] 
-  Function.prototype.call(context[,arg1,arg2,...]) 改变上下文this指向 
-    context 在foo函数运行时指定的'this'值,为'null'或'undefined'时,不改变指向 
-      原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象
-    arg     指定的参数列表
-    Example: 
-      var foo = function(){
-        console.log(this);
-      }
-      console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
-      console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
-      console.log(foo.call(null)); // window 
-      console.log(foo.call(undefined)); // window 
-      
-      function add(arg1,arg2){ 
-        return arg1 + this;
-      }
-      var aoo = add.call(7,2,4);
-      console.log(aoo); // 9 
-      
-      console.log({}.toString()); // [object Object]
-      function foo(arg){ 
-        console.log(Object.prototype.toString.call(arg)); 
+  Function.prototype  Function类的原型对象,也是一个函数 
+    console.log(typeof Function.prototype); // function 
+    num = foo.length    获取函数声明时定义的参数的个数 
+      Example: :
+      function box(a,b){ return a+b; }
+      console.log(box.length);  // 2,表示box的参数有两个.
+    str = foo.name      函数的名字
+    foo0 = foo.caller    函数执行时的上层函数 
+      function foo(){
+        return arguments.callee.caller;
       };
-      console.log(foo(7)); // [object Number]
-      等价于
-      function foo(){ 
-        console.log(Object.prototype.toString.call(this)); 
+      function goo(){
+        console.log(arguments.callee === foo() ); // true 
+        console.log(arguments.callee.caller);     // null 
       };
-      foo.call(7); // [object Number]
-    实现继承的效果 
-      function Pet(words){
-        this.words = words;
-        this.speak = function (){
-          console.log(this.words);
+      goo(); 
+    obj = foo.prototype [构造]函数的原型对象[详见 原型] 
+    foo.call(context[,arg1,arg2,...]) 改变函数的执行上下文this 
+      context  函数执行时'this'的值,为'null'或'undefined'时,不改变指向 
+        原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象 
+        相当于 context.foo([arg,..])  [Self]
+      arg      函数的参数列表
+      Example: 
+        var foo = function(){
+          console.log(this);
+        }
+        console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
+        console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
+        console.log(foo.call(null)); // window 
+        console.log(foo.call(undefined)); // window 
+        
+        console.log({}.toString()); // [object Object]
+        function foo(arg){ 
+          console.log(Object.prototype.toString.call(arg)); 
         };
-      };
-      function Dog(words){
-        Pet.call(this,words);
-      };
-      var dog1 = new Dog('wang!');
-      dog1.speak(); // wang!
-      console.log(dog1); // Dog {words: "wang!", speak: function}
-  Function.prototype.apply(context[,arr/arrLike])  改变上下文this指向 
-    PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
-      都是函数对象的方法,区别在于接收参数的形式不同.
-      改变this的好处:对象不需要与方法发生任何耦合关系
-    context  在foo函数运行时指定的 this 值 
-      非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
-      原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
-    arr/arrLike  数组或类数组对象,函数传入的参数, 
-      其中的数组元素将作为单独的参数传给 foo 函数
-      若该参数的值为null或undefined,则表示不需要传入任何参数 
-      从ES5开始可以使用类数组对象 
-    Example: 
-      function Pet(words){
-        this.words =words;
-        this.speak =function(){console.log(this.words);}
-      }
-      function Dog(words){ Pet.call(this,words); }
-      // 或者 Pet.apply(this,arguments);
-      var dog =new Dog("wang");
-      dog.speak(); // wang
+        console.log(foo(7)); // [object Number]
+        等价于
+        function foo(){ 
+          console.log(Object.prototype.toString.call(this)); 
+        };
+        foo.call(7); // [object Number]
+      实现继承的效果 
+        function Pet(words){
+          this.words = words;
+          this.speak = function (){
+            console.log(this.words);
+          };
+        };
+        function Dog(words){
+          Pet.call(this,words);
+        };
+        var dog1 = new Dog('wang!');
+        dog1.speak(); // wang!
+        console.log(dog1); // Dog {words: "wang!", speak: function}
+    foo.apply(context[,arr/arrLike])  改变函数的执行上下文this 
+      PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
+        都是函数对象的方法,区别在于接收参数的形式不同.
+        改变this的好处:对象不需要与方法发生任何耦合关系
+      context  在foo函数运行时指定的 this 值 
+        非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
+        原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
+        相当于 context.foo([arg,..])  [Self]
+      arr/arrLike  数组或类数组对象,函数传入的参数, 
+        其中的数组元素将作为单独的参数传给 foo 函数
+        若该参数的值为null或undefined,则表示不需要传入任何参数 
+        从ES5开始可以使用类数组对象 
+      Example: 
+        function Pet(words){
+          this.words =words;
+          this.speak =function(){console.log(this.words);}
+        }
+        function Dog(words){ Pet.call(this,words); }
+        // 或者 Pet.apply(this,arguments);
+        var dog =new Dog("wang");
+        dog.speak(); // wang
 
-      var box={
-        color:"蓝色",
-        sayColor:function(){ console.log(this.color); }
-      }
-      box.sayColor();  //蓝色,box调用函数 this就表示box
+        var box={
+          color:"蓝色",
+          sayColor:function(){ console.log(this.color); }
+        }
+        box.sayColor();  //蓝色,box调用函数 this就表示box
 
-      var aoo = 1;
-      var obj = {aoo: 2};
-      function foo(a){console.log(this[a]);}
-      foo.call(null,"aoo"); // 1
-      foo.call(obj,"aoo");  // 2
-    apply和call继承 
-      将函数指向对象后,对象将获取到函数的属性
-      Example:
-        function foo(){ this.name ="abc" }
-        var obj ={};
-        console.log(obj.name); //undefined
-        foo.call(obj);
-        console.log(obj.name); //abc
+        var aoo = 1;
+        var obj = {aoo: 2};
+        function foo(a){console.log(this[a]);}
+        foo.call(null,"aoo"); // 1
+        foo.call(obj,"aoo");  // 2
+      apply和call继承 
+        将函数指向对象后,对象将获取到函数的属性
+        Example:
+          function foo(){ this.name ="abc" }
+          var obj ={};
+          console.log(obj.name); //undefined
+          foo.call(obj);
+          console.log(obj.name); //abc
 
-        仿造new
-          function Person(name,age){
-            this.name =name;
-            this.age =age;
-          }
-          var p1 =new Person("aoo",19); //使用new 创建
-          function New(func){
-            return function(){
-              var obj ={"__proto__":func.prototype};
-              func.apply(obj,arguments); //使对象获取到传入函数的属性
-              return obj;
+          仿造new
+            function Person(name,age){
+              this.name =name;
+              this.age =age;
             }
+            var p1 =new Person("aoo",19); //使用new 创建
+            function New(func){
+              return function(){
+                var obj ={"__proto__":func.prototype};
+                func.apply(obj,arguments); //使对象获取到传入函数的属性
+                return obj;
+              }
+            }
+            var p2 =New(Person)("boo",18); //使用仿造的new
+            console.log(p1); //Person {name: "aoo", age: 19}
+            console.log(p2); //Person {name: "boo", age: 18}
+    foo0 = foo.bind(context[,arg1,arg2,...]) 返回改变函数this和初始化参数后的拷贝[ES5]
+      context 返回函数被调用时,作为其 this  
+        相当于 context.foo([arg,..])  [Self]
+        当使用 new 操作符() 调用绑定函数时,该参数无效 
+      arg     返回函数被调用时,作为其参数 
+      使用bind固定参数值 
+        function foo(arg1,arg2,arg3){ 
+          return arg1 + arg2 + arg3; 
+        };
+        // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
+        var foo1 = foo.bind(undefined,100);
+        foo1(1,2); // 103 ,第二、三个参数分别为1、2
+        var f2 = foo1.bind(undefined,10);
+        foo2(1); // 111
+      使用new时,会忽略绑定 
+        function Foo(){ 
+          this.b = 1; 
+          return this.a; 
+        };
+        var Goo = Foo.bind({a:2});
+        Goo(); // 2
+        new Goo(); // {b:1} 
+        var Hoo = Foo.bind({a:{aoo:3}})
+        Hoo();
+        new Hoo(); // {b:1} 
+      Example: 
+        var x = 9;
+        var obj = {
+          x: 81,
+          getX: function() { 
+            return this.x; 
           }
-          var p2 =New(Person)("boo",18); //使用仿造的new
-          console.log(p1); //Person {name: "aoo", age: 19}
-          console.log(p2); //Person {name: "boo", age: 18}
-  Function.prototype.bind(context[,arg1,arg2,...]) 改变this指向且始终保持绑定状态 'ES5+'
-    PS:bind()方法会创建一个新函数 
-      当这个新函数被调用时,bind()的第一个参数将作为它运行时的 this,
-      之后的一序列参数将会在传递的实参前传入作为它的参数;
-      返回值为由指定的this值和初始化参数改造后的原函数拷贝;
-    context 绑定函数被调用时,代替原函数运行时的'this'指向 
-      当使用new 操作符调用绑定函数时,该参数无效.
-    arg     绑定函数被调用时,这些参数将将于实参之前传递函数
-    使用bind固定参数值 
-      function foo(arg1,arg2,arg3){ 
-        return arg1 + arg2 + arg3; 
-      };
-      // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
-      var foo1 = foo.bind(undefined,100);
-      foo1(1,2); // 103 ,第二、三个参数分别为1、2
-      var f2 = foo1.bind(undefined,10);
-      foo2(1); // 111
-    使用new时,会忽略绑定 
-      function Foo(){ 
-        this.b = 1; 
-        return this.a; 
-      };
-      var Goo = Foo.bind({a:2});
-      Goo(); // 2
-      new Goo(); // {b:1} 
-      var Hoo = Foo.bind({a:{aoo:3}})
-      Hoo();
-      new Hoo(); // {b:1} 
-    Example: :
-      var x = 9;
-      var obj = {
-        x: 81,
-        getX: function() { return this.x; }
-      };
-      obj.getX(); // 返回 81
-      var foo = obj.getX;
-      foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
-      var goo = foo.bind(obj);
-      goo(); // 返回 81
+        };
+        obj.getX(); // 返回 81
+        var foo = obj.getX;
+        foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
+        var goo = foo.bind(obj);
+        goo(); // 返回 81
 
-      var obj = {
-        foo : 1,
-        bar : function(){
-          return this.foo;
+        var obj = {
+          foo : 1,
+          bar : function(){
+            return this.foo;
+          }
         }
-      }
-      obj.bar();  //1
-      var a =obj.bar;
-      a();        //undefined
-      var b =obj.bar.bind(obj)
-      obj.bar.bind(obj)() // 1
-      b()         //1
-      obj.foo =12;
-      b()         //12
+        obj.bar();  //1
+        var a =obj.bar;
+        a();        //undefined
+        var b =obj.bar.bind(obj)
+        obj.bar.bind(obj)() // 1
+        b()         //1
+        obj.foo =12;
+        b()         //12
 
-      var person = {
-        name :'a',
-        job : '1',
-        sayHello : function(){ 
-          return this.name + this.job; 
+        var person = {
+          name :'a',
+          job : '1',
+          sayHello : function(){ 
+            return this.name + this.job; 
+          }
         }
-      }
-      person.sayHello()     //"a1"
-      var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
-      anotherGuySayHello()  //"b2"
+        person.sayHello()     //"a1"
+        var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
+        anotherGuySayHello()  //"b2"
 Date 日期时间类: 处理时间和日期,内置获取和设置日期时间信息的方法   
-  PS: ECMAScript中的Date类型是在早期java中 java.util.Date 类基础上构建的 
+  PS: 在早期java中 java.util.Date 类基础上构建的 
     Date对象基于1970年1月1日0时世界协调时间开始的毫秒数 
   date = new Date([val]) 构造函数创建时间对象 
     PS: 无字面量格式; 以常规函数调用即不加new操作符,也会返回一个字符串,但不是时间对象;
@@ -2248,11 +2254,11 @@ Date 日期时间类: 处理时间和日期,内置获取和设置日期时间信
       console.log(date1,date2);
       // Thu Apr 12 2007 00:00:00 GMT+0800(中国标准时间)
     date = new Date(y,m[,d,h,m,s,ms]);  最少指定年月 
-      m   表示'月'的参数,从0开始表示1月 
-      d   表示'天'的参数,默认为1,为0时表示上一个月的最后一天
+      m   '月'参数,范围 0-11  
+      d   '天'参数,默认为 1, 0 则表示上一个月的最后一天 
       Example: 
-        var t1 = new Date(2016,1,1); // 2月
-        var t2 = new Date(2016,1,0); // 1月 ,根据此特性可求出某月份的天数
+        var t1 = new Date(2016,1,1); // 2月 
+        var t2 = new Date(2016,1,0); // 1月,根据此特性可求出某月份的天数
         var t3 = new Date(2016,1);   // 2月
         console.log(t1); //Mon Feb 01 2016 00:00:00 GMT+0800(中国标准时间)
         console.log(t2); //Sun Jan 31 2016 00:00:00 GMT+0800(中国标准时间)

@@ -641,8 +641,21 @@ PC端
       b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->'
       return b.getElementsByTagName('i').length === 1
     }
-
 自我实现 
+  查看对象的属性 
+    var obj = String.prototype
+    console.log(obj);
+    var tObj = Object.getOwnPropertyNames(obj)
+    var num = 1000;
+    for(var key in tObj){
+      try {
+        console.log(tObj[key],obj[tObj[key]],++num,typeof obj[tObj[key]]);
+      } 
+      catch (e) {
+        console.log(tObj[key],++num);
+      } 
+      // console.log(1111);
+    };
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>
     function isScrollBottom(wrap,content,callback,arg1){

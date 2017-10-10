@@ -754,7 +754,7 @@ window的属性对象
         var url = new URL(location);
         var foo = url.searchParams.get('foo') || 'somedefault';      
   window.location  管理URL 
-    PS:提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
+    PS: 提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
       既是window的属性也是document的属性,
       即 window.location 和 document.location 引用的是同一个对象
       每次修改location的属性[hash除外],页面都会以新URL重新加载,且生成一条历史记录

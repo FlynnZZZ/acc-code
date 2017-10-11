@@ -35,10 +35,20 @@
   
 myFra
 
-canvas 的压缩质量 具体压缩后的体积 ? 
-移动端 Android  返回键导致退出 web的bug ？
+canvas 的压缩质量 具体压缩后的体积  
+移动端 Android  返回键导致退出 web的bug  
 
 前端模块化方案  
+
+
+
+
+
+
+
+
+
+
 
 
 

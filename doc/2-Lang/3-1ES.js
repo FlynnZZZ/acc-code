@@ -348,13 +348,16 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       缺点: 无法继承; 无法识别对象的类型 
     obj = new Foo() 自定义构构造函数[类]实例化对象 
       混合的构造函数: 构造函数+原型对象  
-        用构造函数定义对象的独有的属性/方法,用原型方式定义共有属性/方法
-        function Car(name,color) { 
-          this.name=name; 
-          this.color=color; 
+        构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
+        Example: 
+        function Foo(arg1,arg2) { 
+          this.key1 = arg1; 
+          this.key2 = arg2; 
         }
-        Car.prototype.showColor = function() {
-          console.log(this.color+" is beautiful");
+        Foo.prototype = {
+          constructor: Foo,
+          foo1: function(){
+          },
         }
       构造函数创建对象的过程: 
         1 创建一个新对象'newObj' 
@@ -438,7 +441,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         p1.friends = ["1"];  // 定义 p1 实例中的属性
         console.log(p1.friends);  // ["1"]
         console.log(p2.friends);  // ["a", "b", "c"]
-      重设原型对象导致原型的'constructor'属性被覆盖[不再指回构造函数]  
+      重设原型对象: 
+      ★导致原型的'constructor'属性被覆盖,不再指回构造函数 
         决解方案: 强制指定 constructor
         Example: 
         function Box(){}
@@ -453,7 +457,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
             return 1;
           }
         }
-      重设原型对象后,已创建实例的原型不变,但会改变后续再实例化的对象的原型 
+      ★已创建实例的原型不变,但会改变后续再实例化的对象的原型 
+        即构造函数和实例间可存在多个原型对象   
         function Foo(name){
           this.name = name; 
         }
@@ -470,7 +475,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         // 但更改了后续实例的原型 
         var obj2 = new Foo('bb');
         console.log(obj2.constructor.prototype === Object.prototype); // true 
-  继承: 通过原型对象实现实例继承,通过原型对象的继承实现原型链继承[Self]  
+  原型链继承: 通过实例对象继承原型对象的原理,原型对象继承其他对象,从而实现原型链继承[Self]  
+    Example: 
     var Foo = function(name){
       this.name = name;
     }
@@ -495,6 +501,17 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     console.log(obj1.aoo);  // 1 
     console.log(obj1.age1); // undefined
     console.log(obj1.boo);  // {a: 1}  
+    原型链继承的缺点: 
+    ★在原型中定义的引用类型的属性可被所有实例共享 
+      var Foo = function(){ }
+      Foo.prototype = {
+        key1: [1,2]
+      }
+      var obj1 = new Foo();
+      var obj2 = new Foo();
+      obj1.key1.push(3);
+      console.log(obj2.key1); //  [1, 2, 3] 
+    ★在创建子类型的实例时,不能向超类型的构造函数中传递参数 
   对象类型检测的方法:  
     PS: 无直接访问对象类型的方式,可间接通过以下方式来获取
     Object.prototype.toString.call(val); 获取值类型 

@@ -1,132 +1,127 @@
-'Browser Object Model'BOM,浏览器对象模型: 提供与浏览器交互的方法和接口 
+BOM'Browser Object Model'浏览器对象模型: 提供与浏览器交互的方法和接口 
   PS: 访问和操作浏览器窗口[显示的页面以外的部分],
     BOM由一系列相关的对象构成,且每个对象都提供了许多方法与属性,用来访问浏览器功能
-    BOM只是ECMAScript的一个扩展,没有任何相关标准 
-window 表示浏览器的一个实例 
-  PS: window对象处于JS结构的最顶层,对于每个打开的窗口,系统都会自动为其定义window对象 
-    在网页中定义的任何对象、变量和函数,都以window作为其Global对象 
-    ECMAScript中不能直接访问Global对象,浏览器将其作为window的一部分加以实现,
-    window为JS[而非ECMAScript]最顶层的对象 
+    BOM只是ECMAScript的一个扩展,没有相关标准,W3C已将BOM的主要部分纳入HTML5规范中; 
+window: BOM的核心对象,表示浏览器的一个实例 
+  PS: 具有双重角色,既是通过JS访问浏览器窗口的一个接口,又是ECMAScript规定的Global对象; 
   全局作用域中声明的所有变量和函数,都为window对象的属性和方法  
     var a =1;
     window.a; //1 ,a就是window.a
-  框架  
-    PS:若页面中包含框架,则每个框架都拥有自己的window对象,并且保存在frames集合中 
-      (更多内容参见 JavaScript高级程序设计 196 页)
-    window.name    表示窗口/框架的名称 
-    window.frames  框架集[详见 window.frames] 
-    window.length  窗口中的框架数量
-    window.parent  指向包含另一个窗口的窗口(有框架使用)
-    window.top     包含特定窗口的最顶层窗口(由框架使用)
-      window.top == window.frames.top;  // true 
-  窗口 
-    window.self           指示当前窗口
-    window.window          指示当前窗口,与self等效
-    win = open([url],[target],[params],[bol])  打开/新建窗口,返回打开窗口的window对象
-      PS:查找一个已经存在的窗口或者新建的浏览器窗口
-        若指定的窗口目标是已有的窗口或框架,则在目标窗口中加载指定的url;
-        否则打开新窗口并命名
-        若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错
-      url    :     可选,将要导航到的URL;
-        若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档.
-      target : 可选,窗口目标,被打开窗口的名称/位置
-        _self   在当前窗口显示目标网页
-        _top    在所有框架之外的最顶层窗口中打开   sUrl   .假如当前窗口无框架结构,此参数值等同于   _self   .
-        _blank  新建一个窗口,默认值
+  'frame'框架: 一个网页/窗口中可能包含多个框架,每个框架都有自己的window对象  
+    PS: 若网页包含框架,则每个框架都有自己的window对象[保存在frames集合中] 
+    window.frames 框架集,包含页面所有框架的window对象 
+      同时也是页面的window: console.log(frames === window); // true 
+      var frame = frames[idx]  通过下标获取框架的window[从0开始,从左至右,从上至下]  
+      var frame = frames[name] 通过框架的'name'属性获取框架的window  
+      frame.parent  框架的父框架,在没有框架的情况下,parent等于top
+      frame.self    当前框架自身 
+      frame.length  框架内的子框架数量 
+      frame.name    框架的名称 
+    window.top    最外层框架,即浏览器窗口window对象 
+  窗口位置与尺寸  
+    返回值类型为num,单位px 
+    ◆浏览器位置
+    num = window.screenLeft/window.screenTop  浏览器窗口相对桌面屏幕 「DiBs」 
+      Firefox不支持 
+      IE窗口内边缘距屏幕的距离;
+      Chrome窗口外边缘距屏幕边缘的距离 
+    num = window.screenX/window.screenY       浏览器窗口相对桌面屏幕 「DiBs」 
+      Firefox全屏时值分别为 -8,-8 
+      IE9+,全屏时值分别为 -8,-8 
+    跨浏览器兼容方法: 
+      var lftPos=(typeof screenLeft=="number")?screenLeft:screenX;
+      var topPos=(typeof screenTop=="number")?screenTop:screenY;
+    window.moveTo(x,y)    将浏览器位置移动到x,y坐标 
+      PS: 不适用于框架,只能对最外层的window对象使用 
+      Chrome、Firefox中默认被禁用 
+    window.moveBy(x,y)    将浏览器位置向下移动xpx向右移动ypx 
+      PS: 不适用于框架,只能对最外层的window对象使用
+      Chrome、Firefox中默认被禁用 
+    ◆浏览器尺寸  
+    num = window.outerWidth/window.outerHeight 浏览器窗口外侧宽/高 [IE9+] 
+      包含浏览器的工具栏、边框、滚动条
+    num = window.innerWidth/window.innerHeight 浏览器显示窗口宽/高 [IE9+] 
+      不包含边框和工具栏等,但包含滚动条 
+    window.resizeTo(num1,num2) 将浏览器窗口调整为宽num1,高num2 
+      PS: 不适用于框架,只能对最外层的window对象使用
+      Chrome、Firefox中默认禁用的 
+    window.resizeBy(num1,num2) 缩放差值[正数为放大,负数为缩小] 
+      PS: 不适用于框架,只能对最外层的window对象使用;默认被浏览器禁用的 
+  窗口其他操作 
+    win = window.open([url][,target][,params][,bol])  导航或新建窗口 
+      PS: 若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错 
+      url     可选,将要导航到的URL;
+        若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档 
+      target  可选,打开窗口的位置 
+        '_blank'  新建窗口或标签[视浏览器而定],默认值 
+        '_self'   在当前框架中打开  
+        '_parent' 在当前框架的父框架内打开.若当前框架无父框架,等同于'_self' 
+        '_top'    在顶层框架中打开,在无框架页面中等同于'_self' 
           不打开新新窗口的情况下会忽略第三个参数
-        _parent 在当前框架的父框架内打开.假如当前框架无父框架,此参数值等同于   _self   .
-        str     命名打开的窗口,后续凡是以该名称打开的窗口都在这个窗口中加载
-          相同 name 的窗口只能创建一个,要想创建多个窗口则 name 不能相同.
-          name 不能包含有空格
-      params :  可选,设置窗口参数,各参数用逗号隔开
-        PS:字符串中不可出现空格
-        width   数值,窗口宽度,不能小于100
-        height  数值,窗口高度,不能小于100
-        top     数值,窗口顶部距屏幕顶部的px值[不可为负]
-        left    数值,窗口左端距屏幕左端的px值[不能是负值]
-        menubar    yes/no,菜单栏显示,默认为no
-        scrollbars yes/no,滚动条显示,默认为no
-        toolbar    yes/no,工具栏显示,默认为no
-        status     yes/no,状态栏显示,默认为no
-        resizable  yes/no,能否拖动改变窗口大小,默认为no
-        scrollable yes/no,能否滚动,默认为no 
-        location   yes/no,是否在显示地址栏
-          不同浏览器的默认值不同,操作方式也不同(可能隐藏,可能禁用)
-        fullscreen yes/no,浏览器窗口是否最大化[仅限IE]
-      bol    : 表示新页面是否取代浏览器记录中当前加载页面的布尔值
-      window.opener   表示打开它的原始窗口window对象.
-        PS:
-          打开的窗口(新窗口)关联着原始窗口(老窗口);
-          打开新窗口后,若新窗口运行在独立的进程中,则两个window对象间不能通信 ?
-          在本地file协议下,大部分该对象属性不可用,需要在服务器上运行.
-          使用超链接打开的新窗口也可以.
-        newWin.opener =null;  切断联系
-          表示在单独的进程中运行新标签页,告诉浏览器他们不需要通信,
-          联系一旦切断就无法恢复了
-        自我总结:
-          当打开的新窗口在当前窗口显示(即 _self、_parent或_top等),
-          则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口.
-          window.opener.document.querySelector(); 获取到父元素的DOM对象
-      Example:
-        open('https://www.baidu.com','abc',width=300,height=300,top=100)
-        若设置了参数属性,则会在新的浏览器窗口中打开窗口,
-        因为现存的窗口风格和需要打开的新窗口风格不同.
-
-        在新打开的窗口中弹出警告栏
-        var box =open('https://www.baidu.com','abc')
-        box.alert('abc')
-
-        子窗口操作父窗口:点击新打开的窗口在父窗口输入一行字
-        var aoo =window.open('https://www.baidu.com','abc',"width=300,height=300,top=100");
-        document.onclick =function(){ aoo.opener.document.write("点击了子窗口"); }
-        结果为:点击父窗口在父窗口打印.(Chrome中测试)
-      Exp:
-        微信中兼容性问题
+        frameName 命名的框架,不存在则相当于'_blank',并将其命名为改值 
+      params  可选,设置窗口参数,参数间逗号隔开 
+        PS: 字符串中不可出现空格
+        width=num   窗口宽度,不能小于100
+        height=num  窗口高度,不能小于100
+        top=num     窗口顶部距屏幕顶部的px值[不可为负]
+        left=num    窗口左端距屏幕左端的px值[不能是负值]
+        menubar=yes/no     菜单栏显示,默认为no
+        scrollbars=yes/no  滚动条显示,默认为no
+        toolbar=yes/no     工具栏显示,默认为no
+        status=yes/no      状态栏显示,默认为no
+        resizable=yes/no   能否拖动改变窗口大小,默认为no
+        scrollable=yes/no  能否滚动,默认为no 
+        location=yes/no    是否在显示地址栏
+          不同浏览器的默认值不同,操作方式也不同[可能隐藏,可能禁用]
+        fullscreen=yes/no  浏览器窗口是否最大化[仅限IE]
+        Example: 
+        一般在新标签中打开,若设置了参数属性,则会打开新窗口,因为窗口风格不同
+        open('https://www.baidu.com','frame1','width=300,height=300,top=100')
+      bol     在浏览器记录中,新页面是否取代当前页面 
+      win  新页面的window对象,若打开窗口失败则返回 null  
+        PS: 默认可用 moveTo、moveBy、resizeTo、resizeBy 等方法 
+        Example: 
+        var win1 = open('https://www.baidu.com','_blank');
+        win1.moveTo(0,0);  // 将新窗口移动到左上角 
+      Exp: 
+        当打开的窗口加载后才能获取到其DOM,且有同源限制  
+          var win1 = window.open("./aoo.html?v=3","_blank")
+          // var win1 = window.open("https://www.baidu.com","_blank") // 不同源 
+          // console.log(win1.document.body); // 获取不到实际的DOM 
+          win1.onload = function(){ // 若不同源则,win1对象不可用  
+            console.log(win1.document.body); 
+          }
+        微信中兼容性问题 
           android: 不管窗口目标是是什么,始终在当前页面打开,
-          ios    : 只有目标窗口为'_self'时才有效[不填写也不行],其他则该方法不生效;
-    bol = close();   关闭窗口,返回表示是否成功操作的布尔值
-    window.opener          打开当前窗口的窗口
-    window.closed          当窗口关闭时返回true
-    window.defaultStatus   底部状态栏默认显示(可读写)
+          ios : 只有目标窗口为'_self'时才有效[不填写也不行],其他则该方法不生效;
+    window.opener  打开当网页的源网页window对象 [open()方法或超链接打开] 
+      PS: 在本地file协议下,大部分该对象属性不可用,需要在服务器上运行 
+      window.opener = null;  切断联系,表示在单独的进程中运行新标签页 
+        联系一旦切断就无法恢复了
+      Exp:  
+        当打开的新窗口在当前窗口显示[即 _self、_parent或_top等],
+        则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口
+        window.opener.document.querySelector(); 获取到父元素的DOM对象
+    window.close()   关闭打开的窗口或在打开的窗口中关闭自己  
+      不能关闭当前窗口 
+      window.close(); // Scripts may close only the windows that were opened by it 
+      关闭新打开的窗口 
+      var win1 = window.open("./a","_blank");
+      setTimeout(function(){
+        win1.close(); // 1s后关闭打开的窗口  
+      },1000)
+      在新打开的窗口中关闭自己  
+      var win1 = window.open("./aoo.html","_blank");
+      window.close(); // 在 aoo.html 中,关闭自己 
+    bol = window.closed    检测[打开的]窗口是否关闭 
+      PS: 当窗口关闭后,其窗口的引用仍然还在,可通过该属性来检测是否关闭 
+    window.defaultStatus   读写,底部状态栏默认显示
       读写 浏览器底部状态栏默认显示值
       defaultStatus="状态栏默认显示文本";
     window.status          底部状态栏条件显示的值
       浏览器在某种条件下显示的值,当条件不成立时则不显示.
       描述由用户交互导致的状态栏的临时消息
       status="状态栏文本";
-    window.blur()        将焦点从窗口移除
-    window.focus()       将焦点移至窗口
-  位置与尺寸  
-    返回值类型为num,单位px 
-    ◆浏览器位置
-    num = window.screenLeft 浏览器窗口相对于电脑屏幕左边的距离,可为负
-      screenLeft/Top  火狐不支持
-        ie 浏览器的内边缘距离屏幕边缘的距离
-        chrome 浏览器的外边缘距离屏幕边缘的距离
-    num = window.screenTop  浏览器窗口相对于电脑屏幕上边的距离,可为负
-    num = window.screenX    浏览器窗口相对于电脑屏幕左边的距离,可为负
-      IE不支持
-      Example:  typeof screenLeft; // "number"
-    num = window.screenY    浏览器窗口相对于电脑屏幕上边的距离,可以负
-    跨浏览器兼容方法:
-      var leftX=(typeof screenLeft=="number")?screenLeft:screenX;
-      var topY=(typeof screenTop=="number")?screenTop:screenY;
-    ◆浏览器宽高 
-      返回值类型为数值,单位都为px;
-      谷歌浏览器中 innerWidth 和 outerWidth 相同,都为视口大小;
-    num = window.outerWidth 浏览器窗口外侧宽[包含浏览器的工具栏、边框、滚动条][IE9+]
-    num = window.outerWidth 浏览器窗口外侧高[包含浏览器的工具栏、边框、滚动条]
-    num = window.innerWidth  浏览器显示窗口宽[不包含page_tab和工具栏等,但包含滚动条][IE9+]
-    num = window.innerHeight 浏览器显示窗口高[不包含page_tab和工具栏等,但包含滚动条]
-    window.moveTo(x,y) 调整浏览器位置,移动到x,y坐标 
-      PS:不适用于框架,只能对最完成的window对象使用
-    window.moveBy(x,y) 调整浏览器位置,向下移动xpx,向右移动ypx
-      PS:不适用于框架,只能对最完成的window对象使用
-    window.resizeTo(num1,num2) 调整浏览器窗口大小,宽为num1,高为num2
-      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
-    window.resizeBy(num1,num2) 缩放大小[正数为放大,负数为缩小]
-      PS:IE7+中默认是被禁止的;不适用于框架,只能对最外层的window对象使用
-      PS:moveTo moveBy resizeTo resizeBy 被浏览器禁用较多,用处不大
     window.scroll(x,y)   滚动到 
       x 值表示你想要置于左上角的px点的横坐标
       y 值表示你想要置于左上角的px点的纵坐标
@@ -137,7 +132,7 @@ window 表示浏览器的一个实例
       y 把文档向下滚动的px数
     num = window.pageXOffset 页面水平滚动距离 
     num = window.pageYOffset 页面垂直滚动距离 
-    window.matchMedia(str); 返回一个MediaQueryList对象
+    window.matchMedia(str); 返回一个MediaQueryList对象 
       PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
       str 一个mediaQuery语句的字符串
       window.matchMedia(str).media; 返回所查询的mediaQuery语句字符串.
@@ -161,7 +156,9 @@ window 表示浏览器的一个实例
         } else {
           console.log('页面宽度大于700px');
         }
-  计时器/函数调用 延时调用&间时调用&动画调用API 
+    window.blur()        将焦点从窗口移除  
+    window.focus()       将焦点移至窗口    
+  延时调用&间时调用&动画调用API 
     JS单线程异步执行的机制 
       JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
       setTimeout 
@@ -203,15 +200,17 @@ window 表示浏览器的一个实例
         19:44:750
         19:44:760
         19:44:770
-    id =setTimeout(foo,num[,arg1,arg2...]) 在指定的时间后执行代码 
-      Arguments:
-        foo 需延时调用的函数名
-        num 数值,延时的时间,单位为毫秒,未指定默认为0
-        arg 可选,传入foo的参数
-      RetValue:返回表示该超时调用的id的数值
-      有解析功能,第一个参数可以是字符串代码
+    id = setTimeout(foo/str,num [,arg1,arg2...]) 指定时间后回调,返回一id值  
+      foo 回调函数 
+      str 字符串代码,有解析功能相当于eval
         不推荐此种写法,容易出错,不易扩展,损失性能
         setTimeout("alert('abc')",2000);  // 2秒后执行代码块
+      num 延时的时间,单位ms,默认为 0
+      arg 可选,传入回调函数的参数 
+        setTimeout(function(arg){
+          console.log(arguments); // ["abc", callee: ƒ, Symbol(Symbol.iterator): ƒ] 
+          console.log(arg);      // abc 
+        },1000,'abc')
     clearTimeout(id) 通过返回id值解除延时调用 
       Example:
       var aoo=setTimeout(function(){ alert("abc");},2000);
@@ -220,17 +219,18 @@ window 表示浏览器的一个实例
       等价于
       clearTimeout(50500);
       但此种写法可能存在问题,因为id值可能会变,非一直为定值
-    id =setInterval(foo,num) 每隔指定时间执行一次代码 
-      Arguments:
-        foo 需延时调用的函数名
-        num 数值,延时的时间,单位为毫秒
+    id = setInterval(foo/str,num [,arg1,arg2...]) 每隔指定时间回调,返回一id值  
+      foo 回调函数 
+      str 字符串代码,有解析功能相当于eval
+      num 间隔时间,单位ms 
+      arg 可选,传入回调函数的参数 
     clearInterval(id) 通过返回id值解除间时调用 
       Example:
       var box=setInterval(function(){ alert("abc"); },1000);
       clearInterval(box); // 取消调用
       console.log(box);   // 1518 ,虽然已取消调用 但box值仍存在
     使用'setTimeout'仿造'setInterval' 
-      在开发环境下,很少使用真正的间歇调用,因为需要根据情况来取消,可能造成同步的一些问题.
+      在开发环境下,很少使用真正的间歇调用,后一个间歇调用可能会在前一个间歇调用结束之前启动
       Example:
       使用超时调用设置定时器
       <div id="a"></div>
@@ -249,21 +249,29 @@ window 表示浏览器的一个实例
         box();
       </script>
     id = requestAnimationFrame(foo) 浏览器专门为动画提供的API 
-      原理跟setTimeout/setInterval类似,
+      原理同setTimeout类似; 
       通过递归调用同一方法来不断更新画面以达到动起来的效果,
       浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
-      常用操作:在函数体内使用 requestAnimationFrame 来调用该函数来实现效果.
+      常用操作: 在函数体内使用 requestAnimationFrame 来调用该函数来实现效果 
+      Example: 
+      var n = 0;
+      !function(){
+        if (n<99) {
+          ++n;
+          requestAnimationFrame(arguments.callee)
+          console.log(n);
+        }
+      }();
     cancelAnimationFrame(id)   通过返回ID值取消动画 
-  系统对话框 
-    PS:系统对话框的外观由操作系统或浏览器设置决定 
-    alert(str)   警告对话框,显示一条信息 
+  系统对话框: 其外观由操作系统或浏览器决定 
+    显示alert、confirm、prompt对话框时代码会停止执行,关掉后再恢复执行 
+    alert(str)   提示对话框  
       显示对话框的时候代码会停止执行,关掉后恢复
-    bol = confirm(str) 需用户确认的对话框,返回一个布尔值 
-      有确定和取消按钮,点击确定返回'true',点击取消返回'false'
-    prompt("提示文字","默认显示文字");  信息输入框 
-      点击确定,则返回值为用户输入的值;点击取消,则返回null.
-    find()    调出查找对话框,异步显示[IE不支持] 
-    print()   调出打印对话框,异步显示 
+    bol = confirm(str)  用户确认对话框,确定返回'true',取消返回'false' 
+    str = prompt("提示文字","默认输入文字")  用户输入框对话框,返回输入字符或 null   
+      点击确定,返回用户输入值;点击取消,则返回 null 
+    print()   打印对话框,异步显示 
+    find(str)  网页字符查找,异步显示 [IE不支持] 
   base64编码&解码 
     var bs64Str = window.btoa(btStr)  base64编码处理,返回base64字符串[HTML5 IE10+] 
       btStr  二进制数据组成的Unicode字符串 
@@ -339,8 +347,8 @@ window 表示浏览器的一个实例
           xhr.send(window.atob(data));
         }
   ◆其他接口 
-  length  当前窗口中frames的数量[包括iframe],等价于 window.frames.length 
-  window.Notification   浏览器通知接口[DiBs HTML5] 
+  window.length  当前页面中框架的数量,等价于 window.frames.length 
+  window.Notification   浏览器通知接口 [DiBs HTML5] 
     PS:用于在用户的桌面,而非网页上显示通知信息, 
       桌面电脑和手机都适用,比如通知用户收到了一封Email。
       具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
@@ -421,7 +429,7 @@ window 表示浏览器的一个实例
         notice.onshow = function() {
           console.log('Notification shown');
         };
-  window.getSelection();  返回表示选中的文字的Selection对象 
+  window.getSelection() 返回表示选中的文字的Selection对象 
     PS:可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串, 
       当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
       对象的 toString() 方法会被自动调用,而不用手动转换.
@@ -454,11 +462,8 @@ window的属性对象
       在IE下 这个方法  document.selection.createRange() 不支持,因此为了修复这个bug和在IE10+以上的话,
       今天又特意研究了下, 在file控件下获取焦点情况下 document.selection.createRange() 将会拒绝访问,
       所以我们要失去下焦点。我们可以再加一句代码就可以支持了 file.blur();
-    document.location 等价于 window.location
-    document.documentElement.clientWidth
-      IE 下可使用 DOM 方法获取(其他浏览器也支持)
-      DOM操作比原生方法差一些,优先使用原生属性/方法
-    document.documentElement.clientHeight
+    document.documentElement.clientWidth  页面视口宽 
+    document.documentElement.clientHeight 页面视口高  
     document.cookie  读写当前网页的cookie 
       PS:网站为了标示用户身份而储存在Client Side[用户本地终端]上的数据,通常经过加密;
         可访问的前提下,http请求中cookie始终会被携带,
@@ -754,20 +759,17 @@ window的属性对象
         var url = new URL(location);
         var foo = url.searchParams.get('foo') || 'somedefault';      
   window.location  管理URL 
-    PS: 提供了与当前窗口中加载的文档有关的信息(包含url信息),还提供了一些导航功能
-      既是window的属性也是document的属性,
-      即 window.location 和 document.location 引用的是同一个对象
-      每次修改location的属性[hash除外],页面都会以新URL重新加载,且生成一条历史记录
-    location.href      读写整个url
-      返回值为当前的位置
-      Example: :
-      location.href = 'https://www.baidu.com'; //当前网页跳转到百度
-    location.hash      读写URL锚点部分[#后面的部分][若无返回'']
-    location.host      主机名:端口名[省略默认的80端口]
-    location.hostname  读写,主机名/服务器名
-    location.pathname  读写,路径名(URL中的目录和文件名)
-    location.port      读写,端口号[若url中不包含端口号则返回'']
+    PS: 修改除hash外的location属性,页面都会重载,且生成一条历史记录
+    console.log(document.location === window.location); // true 
+    location.href      读写,整个url 
+      Example: 
+      location.href = 'https://www.baidu.com'; // 当前网页跳转到百度
     location.protocol  协议[通常是 http: 或 https:]
+    location.host      读写,主机名:端口名[省略默认的80端口]
+    location.hostname  读写,主机名/服务器名
+    location.port      读写,端口号[若url中不包含端口号则返回'']
+    location.hash      读写URL锚点部分[#后面的部分][若无返回'']
+    location.pathname  读写,路径名(URL中的目录和文件名)
     location.search    读写,URL的查询字符串[以问号?开头的部分,包括?]
       设置查询字符串会刷新网页
       'https://www.baidu.com/?aoo=2&boo=c'
@@ -975,10 +977,6 @@ window的属性对象
     screen.availLeft;
     screen.availTop;
     screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
-  window.frames    包含窗口所有框架[iframe]的对象 
-    PS: 若一个网页中包含框架,则每个框架都有自己的window对象,并且保存在frame集合中 
-    window.frames[num]  通过下标来获取到ifrme[从0开始,从左至右,从上至下]  
-    window.frames[name] 通过iframe的'name'属性值来获取到iframe 
   window.CSS    CSS接口涵盖了CSS相关的方法 [W3C][IE不支持] 
     PS:CSS接口是一个工具接口,因此无法创建该类型的对象:其内部只定义了静态的方法 
     CSS.supports()  检测浏览器是否支持CSS的某些功能  

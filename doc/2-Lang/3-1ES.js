@@ -25,7 +25,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     公有属性/方法: '实例对象'的方法/属性,一般把共用的方法,都放在'原型对象'当中 
       若放在构造函数中,会重复创建共同的方法
     私有属性/方法: '函数内部'定义的属性/方法,外部无法访问
-    特权方法: 有权访问私有变量和私有函数的'公有方法'
+    特权方法: 有权访问私有变量和私有函数的'公有方法' 
       利用的闭包原理,即通过作用域链,
       让内部函数能够访问上层函数的变量对象[即该函数的私有变量、私有方法] 
       
@@ -1386,7 +1386,7 @@ Function 函数类: ECMAscript中所有[构造]函数的基类
     高阶函数: 作为函数参数的函数  
     递归: 一个函数调用本身或者两个函数相互调用 
       PS: 递归必须要定义终止条件,否则无限递归.
-        一般递归效率较低,但处理探测或者处理多分支的问题,则递归效率较高
+        一般递归效率较低,但处理探测或者处理多分支的问题,则效率较高 
       Example:
       用递归求斐波那契数
       斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
@@ -1585,40 +1585,40 @@ Function 函数类: ECMAscript中所有[构造]函数的基类
         anotherGuySayHello()  //"b2"
   ◆函数内部属性
   arguments [在函数体内]表示实际传入函数的参数组成的类数组 
-      Example: 
-        对若干个数值进行累加
-        function sum(){
-          var sum = 0;
-          for(var i = 0;i < arguments.length;i++){
-            sum = sum + arguments[i];
-          }
-          return sum;
+    Example: 
+      对若干个数值进行累加
+      function sum(){
+        var sum = 0;
+        for(var i = 0;i < arguments.length;i++){
+          sum = sum + arguments[i];
         }
-        sum(5,6,1); // 12
-      arguments.length 在函数体内表示实际传入参数的数量 
-      arguments[idx]   读写相应的参数 
-        在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
-      arguments.callee 在函数体内表示函数本身 
-        该属性是一个指针,指向拥有这个arguments对象的函数 
-        Example:
-          若在函数内部通过函数名调用自身,当改变函数名时,内部需逐一修改
-          可使用 arguments.callee 来代替来代替函数名来表示函数本身 
-          function sum(num){
-            if(num<=1){
-              return 1;
-            }else{
-              return num*sum(num-1);
-            }
-          }
-          function box(sum){
+        return sum;
+      }
+      sum(5,6,1); // 12
+    arguments.length 在函数体内表示实际传入参数的数量 
+    arguments[idx]   读写相应的参数 
+      在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
+    arguments.callee 在函数体内表示函数本身 
+      该属性是一个指针,指向拥有这个arguments对象的函数 
+      Example:
+        若在函数内部通过函数名调用自身,当改变函数名时,内部需逐一修改
+        可使用 arguments.callee 来代替来代替函数名来表示函数本身 
+        function sum(num){
           if(num<=1){
             return 1;
-          }
-          else{
-            return num*arguments.callee(num-1);
-            //此时arguments.callee等价于box
+          }else{
+            return num*sum(num-1);
           }
         }
+        function box(sum){
+        if(num<=1){
+          return 1;
+        }
+        else{
+          return num*arguments.callee(num-1);
+          //此时arguments.callee等价于box
+        }
+      }
   this  函数据以执行的环境对象,执行函数时的'context'上下文对象   
     PS: 函数执行的场合不同this值也不同,但始终指向当前运行的对象;
       在绝大多数情况下,函数的调用方式决定了this的值;
@@ -3338,11 +3338,11 @@ JS运行过程机理
     goo(); // 报错, aoo未定义
     若支持动态作用域,则为结果为 1
 'Closure'闭包: 当内部函数尝试访问其外部函数的作用域链,会创建一个闭包 
-  PS: 闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存.
-    过度使用闭包可能会导致内存占用过多.
+  PS: 闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存 
+    过度使用闭包可能会导致内存占用过多 
     虽然V8等优化后的JS引擎会尝试回收被闭包占用的内存,但还是要慎重使用.
-    创建闭包的常见的方式:在函数F内部创建函数G,通过G访问函数F内的变量 
-    作用: 保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量.
+  创建闭包的常见的方式,在函数内部创建另一个函数 
+  作用: 保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量 
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
 Question&Suggestion 

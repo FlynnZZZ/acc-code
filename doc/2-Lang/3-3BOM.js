@@ -555,23 +555,20 @@ window的属性对象
         }
     document.designMode = 'on'   网页中所有元素可编辑  
       'off'
-  window.history   保存着用户上网的记录,从窗口被打开的那一刻算起 
-    PS:每个浏览器窗口、标签页及框架,都有自己特定的window对象及其history对象;
+  window.history   用户上网的记录,从窗口被打开的那一刻算起 
+    PS: 每个浏览器窗口、标签页及框架,都有自己特定的window对象及其history对象;
       安全考虑,得不到用户浏览过的URL,但可在用户访问过的页面列表中进行选择;
-    history.length      历史记录数量
+    history.length      历史记录数量 
       对于加载到窗口、标签页或框架中的第一个页面而言,history.length 为 0;
       当页面的URL改变时(包括hash的改变),就会生成一条历史记录,
       因此,设置 location.hash; 会在浏览器中生成一条新的历史记录
     history.forward()   模仿浏览器的前进按钮
     history.back()      模仿浏览器的前进按钮
-    history.go(num/str) 在历史记录中跳转
-      Arguments:
-        num为正,表示向前进num个记录
-        num为负,表示向后退num个记录
-        0 相当于刷新当前页面。
-      为字符串时,跳转到历史记录中包含该字符串的第一个位置
-        可能前进也可能后退,决定于那个位置最近
-        若历史记录中不包含该字符串则什么也不做
+    history.go(num/str) 在历史记录中跳转 
+      num  正数,表示向前进num个记录,负数,表示向后退num个记录,0 相当于刷新当前页 
+      str  为字符串时,跳转到历史记录中包含该字符串的第一个位置
+        可能前进也可能后退,决定于那个位置最近 
+        若历史记录中不包含该字符串则什么也不做 
     history.pushState  [HTML5] 
       检查当前浏览器是否支持
         if (!!(window.history && history.pushState)){
@@ -759,7 +756,7 @@ window的属性对象
         var url = new URL(location);
         var foo = url.searchParams.get('foo') || 'somedefault';      
   window.location  管理URL 
-    PS: 修改除hash外的location属性,页面都会重载,且生成一条历史记录
+    PS: 修改URL都会生成一条历史记录[可前进后退], 且除hash外,页面也都会重载 
     console.log(document.location === window.location); // true 
     location.href      读写,整个url 
       Example: 
@@ -768,51 +765,67 @@ window的属性对象
     location.host      读写,主机名:端口名[省略默认的80端口]
     location.hostname  读写,主机名/服务器名
     location.port      读写,端口号[若url中不包含端口号则返回'']
-    location.hash      读写URL锚点部分[#后面的部分][若无返回'']
     location.pathname  读写,路径名(URL中的目录和文件名)
-    location.search    读写,URL的查询字符串[以问号?开头的部分,包括?]
-      设置查询字符串会刷新网页
-      'https://www.baidu.com/?aoo=2&boo=c'
-      location.search;   //  "?aoo=2&boo=c"
-    location.assign(url)   跳转到指定页面 
+    location.search    读写,URL的查询字符串[以问号?开头的部分,包括?] 
+      Example:
+      'https://www.baidu.com/?key1=val1&key2=val2'
+      location.search;   // "?key1=val1&key2=val2"
+    location.hash      读写URL锚点部分[#后面的部分][若无返回'']
+    location.assign(url)   导航页面,并产生一条历史记录  
       location.assign('https://www.baidu.com')    // 跳转到百度主页
-      以下两行代码与显示调用assign()方法效果完全一样[会调用assign方法]
-      window.location = "https://www.baidu.com";
-      location.href = "https://www.baidu.com";
-    location.replace(url)  跳转到指定页面,无历史记录,不可后退
+      对 window.location location.href 赋值则调用assign方法实现跳转  
+    location.replace(url)  导航页面,不产生历史记录 
       Example: :
       location.replace('https://www.baidu.com'); // 跳转到百度
-    location.reload()      重载当前url
-      location.reload();
-      最有效的重新加载,有可能从缓存加载(即页面自从上次请求以来并没有改变过)
-      location.reload(true);
-      强制加载,从服务器重新加载
-      Remarks:
-        位于reload调用之后的代码可能会也可能不执行,取决于网络延迟或系统资源等因素
-  window.navigator 浏览器检测 
-    PS: 由Netscape引入,现在已成为识别客户端浏览器的事实标准 
-      与其他BOM对象一样,每个浏览器所包含的内容并不完全相同
-    ◆浏览器相关
-    navigator.appCodeName;  浏览器名称,通常为Mozilla[即使非Mozilla浏览器也如此]
-    navigator.appName;      浏览器名称,该属性不能精确区分出浏览器
-      navigator.appName; //"Netscape",谷歌浏览器中的返回值
-    navigator.appVersion;      浏览器版本.一般不与实际版本对应.
-    navigator.appMinorVersion; 次版本信息
-    navigator.buildID;         浏览器编译版本
-    navigator.product;         产品名称[如 Gecko]
-    navigator.productSub;      产品的次要信息[如 Gecko的版本]
-    navigator.vendor;      浏览器的品牌
-    navigator.vendorSub;   有关供应商的次要信息
-    navigator.userAgent; 用户代理字符串,显示浏览器的信息[也将兼容的浏览器的信息列出]
-      navigator.userAgent;  //"Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
-    navigator.plugins;  返回浏览器安装插件的信息,类型为数组
-      navigator.plugins[i].name;        //插件名
-      navigator.plugins[i].filename;    //插件的磁盘文件名
-      navigator.plugins[i].length;      //plugins数组的元素个数
-      navigator.plugins[i].description; //插件的描述信息
-      IE浏览器控件检测(IE浏览器不支持插件)
-        IE是以COM对象的方式实现插件的,
-        而COM对象使用唯一标识符来表示
+    location.reload([bol]) 重载当前页面 
+      PS: 位于 reload() 之后的代码不一定会执行,取决于网络延迟或系统资源等因素,
+        故推荐将其置于代码最后一行 
+      bol  是否无缓存重载,默认 false
+  window.navigator 客户端识别 「DiBs」 
+    不太有用的属性/方法 
+      navigator.userAgent    用户代理字符串
+        console.log(navigator.userAgent);
+        // "Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
+      navigator.appCodeName  浏览器名称
+        PS: 通常为'Mozilla',即使非Mozilla浏览器 
+        console.log(navigator.appCodeName); // Mozilla,Chrome中结果  
+      navigator.appName      浏览器名称,不能精确区分浏览器 
+        console.log(navigator.appName); // Netscape,Chrome中结果 
+      navigator.appMinorVersion 次版本信息 [Chrome不支持]
+      navigator.appVersion      浏览器版本,一般不与实际版本对应 
+        console.log(navigator.appVersion); 
+        // 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36,Chrome中结果 
+      navigator.buildID         浏览器编译版本 [Chrome不支持] 
+      navigator.product         产品名称,通常为'Gecko'
+      navigator.productSub      产品的次要信息,如Gecko的版本 [IE不支持]
+      navigator.oscpu      客户端计算机的操作系统或CPU [Chrome和IE不支持]
+      navigator.cpuClass   CPU类型 [Chrome不支持]
+      navigator.systemLanguage  操作系统的语言 [Chrome不支持]
+      navigator.userLanguage    操作系统的默认语言 [IE5+] [Chrome不支持]
+      navigator.userProfile   借以访问用户个人信息的对象 [Chrome不支持]
+      navigator.preference()  设置用户的首选项 [Chrome不支持]
+      navigator.registerContentHandler() 针对特定的MIME类型将一个站点注册为处理程序 [Chrome不支持]
+      navigator.registerProtocolHandler() 针对特定的协议将一个站点注册为处理程序 [Chrome不支持] 
+      navigator.opsProfile     已废弃    
+      navigator.securityPolicy 已废弃  
+      navigator.taintEnabled() 已废弃 
+    ◆浏览器相关 
+    navigator.vendor      浏览器品牌 [IE不支持]
+    navigator.vendorSub   有关供应商的次要信息 [IE和Chrome不支持] 
+    navigator.language   浏览器的主语言 [IE11+] 
+      'zh-CN'
+      'en'
+      'en-US'
+    navigator.mimeTypes  在浏览器中注册的MIME类型集合 
+    navigator.plugins    浏览器安装的插件信息集合 [IE11+] 
+      navigator.plugins.refresh([bol])  刷新插件或刷新页面 
+      var plug = navigator.plugins[i];
+      plug.name        // 插件名
+      plug.filename    // 插件的磁盘文件名
+      plug.length      // 插件所处理的MIME 类型数量
+      plug.description // 插件的描述信息 
+      IE浏览器控件检测 
+        IE是以COM对象的方式实现插件的,而COM对象使用唯一标识符来表示 
         Example:
         检测IE是否安装flash控件
         flash的标识符是 ShckwaveFlash.ShockwaveFlash
@@ -826,31 +839,185 @@ window的属性对象
           }
         }
         console.log(hasIEPlugin('ShockwaveFlash.ShockwaveFlash'));
-    navigator.language  获取到浏览器的语言设置 [IE11+] 
-      'zh-CN'
-      'en'
-      'en-US'
-    navigator.userLanguage   操作系统的默认语言 [IE5+]
-    navigator.systemLanguage; 操作系统的主语言
-    navigator.preference(); 设置用户的首选项
-    navigator.userProfile; 借以访问用户个人信息的对象
-    navigator.mimeTypes; 在浏览器中注册的MIME类型数组
-    navigator.onLine;   返回浏览器是否链接到了因特网的布尔值 [HTML5]
-    navigator.cookieEnabled;  返回浏览器是否支持[启用]cookie的布尔值
+    bol = navigator.onLine   是否联网  
+    bol = navigator.cookieEnabled  浏览器是否启用cookie 
       启用cookie返回true,否则返回false
       cookieEnabled属性说明
         通常可以在浏览器的临时文件夹中保存一个文件,
         此文件可以包含用户信息(比如浏览过什么页面,是否选择了自动登录)等,
         这个文件被称作cookie,
         通过cookieEnabled属性可以判断浏览器是否启用了此功能
-    navigator.javaEnabled();  浏览器是否启用Java
+    bol = navigator.javaEnabled()  浏览器是否启用Java 
     ◆系统相关
     navigator.platform  所在系统平台,如 "Win32"
-    navigator.cpuClass; 客户端计算机使用的CPU类型['x86''68K''Alpha'、PPC或Other]
-    navigator.oscpu;    客户端计算机的操作系统或使用的CPU[chrome和IE不支持]
-    navigator.registerContentHandler()
-    navigator.registerProtocolHandler()
-
+    客户端检测 
+      JavaScript高级程序设计 228 页 
+      var client = function(){
+        var engine = { //呈现引擎
+          ie: 0,
+          gecko: 0,
+          webkit: 0,
+          khtml: 0,
+          opera: 0,
+          //完整的版本号
+          ver: null
+        };
+        var browser = { //浏览器
+          //主要浏览器
+          ie: 0,
+          firefox: 0,
+          safari: 0,
+          konq: 0,
+          opera: 0,
+          chrome: 0,
+          //具体的版本号
+          ver: null
+        };
+        var system = { //平台、设备和操作系统
+          win: false,
+          mac: false,
+          x11: false,
+          //移动设备
+          iphone: false,
+          ipod: false,
+          ipad: false,
+          ios: false,
+          android: false,
+          nokiaN: false,
+          winMobile: false,
+          //游戏系统
+          wii: false,
+          ps: false
+        };
+        //检测呈现引擎和浏览器
+        var ua = navigator.userAgent;
+        if (window.opera){
+          engine.ver = browser.ver = window.opera.version();
+          engine.opera = browser.opera = parseFloat(engine.ver);
+        } 
+        else if (/AppleWebKit\/(\S+)/.test(ua)){
+          engine.ver = RegExp["$1"];
+          engine.webkit = parseFloat(engine.ver);
+          //确定是Chrome 还是Safari
+          if (/Chrome\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.chrome = parseFloat(browser.ver);
+          } 
+          else if (/Version\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.safari = parseFloat(browser.ver);
+          } 
+          else {
+            //近似地确定版本号
+            var safariVersion = 1;
+            if (engine.webkit < 100){
+              safariVersion = 1;
+            } 
+            else if (engine.webkit < 312){
+              safariVersion = 1.2;
+            } 
+            else if (engine.webkit < 412){
+              safariVersion = 1.3;
+            } 
+            else {
+              safariVersion = 2;
+            }
+            browser.safari = browser.ver = safariVersion;
+          }
+        } 
+        else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+          engine.ver = browser.ver = RegExp["$1"];
+          engine.khtml = browser.konq = parseFloat(engine.ver);
+        } 
+        else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){
+          engine.ver = RegExp["$1"];
+          engine.gecko = parseFloat(engine.ver);
+          //确定是不是Firefox
+          if (/Firefox\/(\S+)/.test(ua)){
+            browser.ver = RegExp["$1"];
+            browser.firefox = parseFloat(browser.ver);
+          }
+        } 
+        else if (/MSIE ([^;]+)/.test(ua)){
+          engine.ver = browser.ver = RegExp["$1"];
+          engine.ie = browser.ie = parseFloat(engine.ver);
+        }
+        //检测浏览器
+        browser.ie = engine.ie;
+        browser.opera = engine.opera;
+        //检测平台
+        var p = navigator.platform;
+        system.win = p.indexOf("Win") == 0;
+        system.mac = p.indexOf("Mac") == 0;
+        system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+        //检测Windows 操作系统
+        if (system.win){
+          if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+            if (RegExp["$1"] == "NT"){
+              switch(RegExp["$2"]){
+                case "5.0":
+                system.win = "2000";
+                break;
+                case "5.1":
+                system.win = "XP";
+                break;
+                case "6.0":
+                system.win = "Vista";
+                break;
+                case "6.1":
+                system.win = "7";
+                break;
+                default:
+                system.win = "NT";
+                break;
+              }
+            } 
+            else if (RegExp["$1"] == "9x"){
+              system.win = "ME";
+            } 
+            else {
+              system.win = RegExp["$1"];
+            }
+          }
+        }
+        //移动设备
+        system.iphone = ua.indexOf("iPhone") > -1;
+        system.ipod = ua.indexOf("iPod") > -1;
+        system.ipad = ua.indexOf("iPad") > -1;
+        system.nokiaN = ua.indexOf("NokiaN") > -1;
+        //windows mobile
+        if (system.win == "CE"){
+          system.winMobile = system.win;
+        } 
+        else if (system.win == "Ph"){
+          if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+            system.win = "Phone";
+            system.winMobile = parseFloat(RegExp["$1"]);
+          }
+        }
+        //检测iOS 版本
+        if (system.mac && ua.indexOf("Mobile") > -1){
+          if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+            system.ios = parseFloat(RegExp.$1.replace("_", "."));
+          } 
+          else {
+            system.ios = 2; //不能真正检测出来，所以只能猜测
+          }
+        }
+        //检测Android 版本
+        if (/Android (\d+\.\d+)/.test(ua)){
+          system.android = parseFloat(RegExp.$1);
+        }
+        //游戏系统
+        system.wii = ua.indexOf("Wii") > -1;
+        system.ps = /playstation/i.test(ua);
+        //返回这些对象
+        return {
+          engine: engine,
+          browser: browser,
+          system: system
+        };
+      }();
     navigator.geolocation 地理定位 [HTML5]
       PS:在地理定位API中,使用小数值来表示经纬度[西经和南纬都用负数表示]
       浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
@@ -968,15 +1135,22 @@ window的属性对象
       battery.addEventListener("chargingchange",function(e){
       })
   window.screen    用户屏幕相关 
-    PS:JS中有几个对象在编程中用处不大,而screen对象就是其中之一;
-      基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
-    screen.height 设备屏幕高,单位px
-    screen.width  设备屏幕宽,单位px
-    screen.availHeight; 屏幕可用高度[不包含任务栏高度]
-    screen.availWidth;  屏幕可用宽度[当任务栏在上下时,和 screen.width 相等]
-    screen.availLeft;
-    screen.availTop;
-    screen.colorDepth;  表现颜色的位数,一般为16[表示16-bit]或24[表示24-bit]
+    PS: 基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同;
+    num = screen.height/screen.width  屏幕宽/高度像素值 
+    num = screen.availHeight/screen.availWidth  屏幕可用宽/高度[不包含系统部件的占用]
+    num = screen.availLeft/screen.availTop  未被系统部件占用的左/上方的像素值 
+      PS: 一般为0,当系统任务栏在左/上方时,则为任务栏的高度 
+    num = screen.colorDepth  用于表现颜色的位数,值一般为 16、24、32 
+    num = screen.pixelDepth  屏幕的位深 
+    screen.bufferDepth 读写用于呈现屏外位图的位数 [Chrome不支持]
+    screen.deviceXDPI 屏幕实际的水平DPI [Chrome不支持]
+    screen.deviceYDPI 屏幕实际的垂直DPI [Chrome不支持]
+    screen.fontSmoothingEnabled 是否启用了字体平滑 [Chrome不支持]
+    screen.left   当前屏幕距左边的像素距离 [Chrome不支持] 
+    screen.top    当前屏幕距上边的像素距离 [Chrome不支持] 
+    screen.logicalXDPI 屏幕逻辑的水平DPI [Chrome不支持] 
+    screen.logicalYDPI 屏幕逻辑的垂直DPI [Chrome不支持] 
+    screen.updateInterval 读写,屏幕刷新时间间隔,单位ms 
   window.CSS    CSS接口涵盖了CSS相关的方法 [W3C][IE不支持] 
     PS:CSS接口是一个工具接口,因此无法创建该类型的对象:其内部只定义了静态的方法 
     CSS.supports()  检测浏览器是否支持CSS的某些功能  
@@ -1155,23 +1329,6 @@ window的属性对象
       });
       console.log("出错了！");
       // 2014-05-18T09:00.000Z 出错了！
-  客户端检测[详细见 JavaScript高级程序设计 228 页] 
-    PS:
-      由于浏览器之间的差异,客户端检测除了是一种补救措施外,
-      更是一种很难过行之有效的开发策略;
-      先设计最通用的方案,在使用特定于浏览器的技术增强方案.
-    能力检测: 能力检测又称为特性检测,识别浏览器的某些特性
-    怪癖检测: 识别浏览器的特殊行为
-      但与能力检测确认浏览器支持什么能力不同, 怪癖检测是想要知道浏览器存在什么缺陷(bug).
-      bug一般属于个别浏览器独有,在大多数新版本中被修复.
-    用户代理检测:通过检测用户代理字符串来确定实际使用的浏览器
-      在每一次http请求过程中,用户代理字符串是作为响应首部发送的
-      用户代理字符串可以通过JS的 navigator.userAgent 属性访问.
-      通过用户代理字符串,获取当前浏览器的版本号、浏览器名称、系统名称.
-      在服务器端,通过检测用户代理字符串确定用户使用的浏览器是一种比较广为接收的做法.
-      但在客户端,这种测试被当作是一种万不得已的做法,且饱受争议,
-      其优先级排在能力检测或怪癖检测之后.
-      饱受争议的原因是因为它具有一定的欺骗性.
 'Asynchronous JavaScript and_XML'AJAX: 浏览器提供的使用http协议收发数据的接口 
   PS: 'file://'协议无法使用AJAX,只有'http'和'https'协议才可以使用AJAX;
     提供了与服务器异步通信的能力; W3C在2006年发布了AJAX的国际标准 

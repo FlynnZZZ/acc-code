@@ -2021,15 +2021,13 @@ String 字符类: 处理字符串的'包装对象'
     str1 = str.substr(bgn[,num]) 从指定位置开始的num个字符 
       当只有一个参数且负数时,同 slice 
       当n为负数或0时,返回空字符串 
-    str1 = str.substring(idx1,idx2)  两点间截取 
-      PS:以参数中较小者作为起始位置,较大者作为结束位置的前闭后开区间的字符
-      idx1 数值,必须,若为负数返回全部字符串
-      idx2 数值,可选,若省略表示到最后,若为负,则取0
-      Example:
-        var str = 'abcde'
-        var s1 = str.substring(1,2) 
-        var s2 = str.substring(2,1)
-        console.log(s1,s2); // b b
+    str1 = str.substring(idx1[,idx2])  返回截取的字符串
+      idx1  必须,若为负数返回全部字符串
+      idx2  默认到最后,若为负,则取0 
+      截取的范围为[idx1,idx2) 或 [idx2,idx1)  
+        var str = 'abcde' 
+        console.log(str.substring(1,2)); // b 
+        console.log(str.substring(2,1)); // b 
     ★字符串对比 
     bol = str.includes(str1)  str中是否包含str2 
     idx = str.indexOf(str1[,bgn]) 指定位置向后首个指定字符串的下标,否则返回-1 

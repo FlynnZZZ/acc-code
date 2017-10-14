@@ -40,6 +40,7 @@ PC端
     var myFile = document.getElementById('fileChoose');
     myFile.onchange = function(event) {
       var selectedFile = event.target.files[0];
+      e.target.value = ""; // 清空 
       var reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = function(){
@@ -643,18 +644,20 @@ PC端
     }
 自我实现 
   查看对象的属性 
-    var obj = String.prototype
-    console.log(obj);
+    var obj = Node  
+    // console.log('查询的对象:',obj);
     var tObj = Object.getOwnPropertyNames(obj)
-    var num = 1000;
     for(var key in tObj){
+      var k = tObj[key];
       try {
-        console.log(tObj[key],obj[tObj[key]],++num,typeof obj[tObj[key]]);
+        console.log(typeof obj[k],k,obj[k], '#####' );
       } 
       catch (e) {
-        console.log(tObj[key],++num);
+        console.log( '------',k, '#####' );
       } 
-      // console.log(1111);
+      // if (k == 'attributes') { // 查询某个具体的属性 
+      //   console.log('==========================================');
+      // }
     };
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>

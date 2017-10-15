@@ -9,9 +9,6 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
     如img元素,它由文档本身之外的一个图像文件来替换
   'nonreplaced element'非替换元素
     大多数HTML元素都是非替换元素,其内容由用户代理在元素本身生成的框中显示.
-  流式布局 
-    使用非固定像素来定义网页内容,也叫百分比布局
-    通过盒子的宽度设置成百分比来根据屏幕的宽度来进行伸缩
   CSS层叠/覆盖原理 
     PS:即产生冲突的规则
     样式的特点
@@ -87,8 +84,8 @@ CSS引入
   四种引入方式的优先级: 
     内联式[行内样式]> 内嵌样式[内部式]> 链接式[外部式]> '@import'[导入式]
     引入时,后引入的具有优先
-Config,设置配置 
-  '@font-face'自定义字体
+Config,设置、配置 
+  '@font-face'自定义字体 
     PS:从CSS2.1中去除,CSS3加入[?];将自定义的字体文件放置在服务器,浏览器下载后使用 
       自定义字体在英文网站总使用较多,因为英文只有26个字母,字体文件小,下载速度快;
     Example:
@@ -1798,9 +1795,441 @@ Declaration,样式声明
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  [iOS]
       -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-Layout,布局 
-  布局一般分为四种类型:固定布局、可切换的固定布局、弹性布局、混合布局。
-    PS:可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式:
+模式相关 
+  'block'块级元素: 独占一行,默认width为100% 
+    PS: 使元素变成块级元素的display值有'block'、'list-item'、'table'等 
+    line-height 属性会增加自身的content的高度 
+    块元素中可以包含快元素和行内元素
+  'inline'行内元素: width和height属性无效果 
+    可使用 line-height 来控制行高,但自身的content、padding尺寸无影响,
+    会产生将其他元素支撑的效果或定位自身content的作用,但背景却无法渲染出来.
+    行内元素中只能包含行内元素,若包含块元素则起不到包含作用 
+    无 margin-top 和 margin-bottom 属性 
+  'inline-block'行内块元素: 同时具有行内元素和块元素的特点 [CSS2.1] 
+  'Containing Block'包含块: 盒子的大小和位置根据其包含块的矩形边框进行计算 
+    盒子不会受包含块限制,可能会溢出 
+    包含块判断: 一元素大小设置百分比时相对的元素就是其包含块
+      根元素、fixed元素,包含块为视窗
+      relative元素或static元素,包含块为最近的块级祖先元素的Content内容区 
+      absolute元素,包含块为最近的非static的祖先元素的Padding区 
+  Box盒模型 
+    PS: html元素都可以看成一个盒子,CSS布局主要通过盒子模型来实现 
+    ◆盒子模型的四要素 
+    margin  外边距 [margin可为负]  
+      PS: 由于各浏览器的margin默认值不同,通常清零方便操作
+        详细属性: margin-top margin-right margin-bottom margin-left
+      缩写方法: [同padding缩写方式]
+        margin:1px 2px 3px 4px; 上 右 下 左 
+        margin:10px 20px 30px;  上 右左 下
+        margin:10px 20px;       上下 左右 
+        margin:10px;            上下左右 
+      auto  浏览器计算外边距
+      pixel 长度值
+      %     参考父元素宽度'width' 
+        在默认的 writing-mode:horizontal-tb 和 direction:ltr 的情况下
+      margin的特点 
+        垂直外边距合并
+          PS:只有普通文档流中块框的垂直外边距才会发生外边距合并,
+            行内框、浮动框或绝对定位之间的外边距不会合并.
+            合并后的外边距的高度等于较大者的外边距的尺寸.
+          在垂直方向,只要有margin相互接触且没有 border 或 padding 隔离,就会发生合并,如:
+            一元素的 margin-bottom 和另一个元素的 margin-top 发生合并.
+            父盒子的 margin-top 和 子盒子的 margin-top 发生合并
+            自身的 margin-top 和 margin-bottom 发生合并
+        对于 inline 元素,margin-top 和 margin-bottom 无效 
+          (inline-block 和 block 元素无影响)
+        margin:0 auto; 使元素在其父盒子中水平居中
+          但该方法无法使元素垂直居中
+    border  边框 
+      border  边框 [简写方式] 
+        PS:缩写中 border-style 属性是必须的;
+          color属性控制文本字体颜色和盒子边框颜色,当border-color未指定时使用color的值;
+        border[-top/right/bottom/left]-width 边框宽度[可分别设置每条边] 
+          PS:border-width : 1px 2px 3px 4px; 分别定义四条边的宽度 
+          pixels
+          thin
+          medium
+          thick
+          inherit
+        border[-left/right/top/bottom]-style 边框风格 
+          none    无
+          solid   实线
+          dashed  虚线
+          dotted  点虚线
+          double
+          groove
+          ridge
+          inset
+          outset
+          inherit
+        border[-top/right/bottom/left]-color 边框颜色 
+          PS:border-color : red green blue gray; 分别定义四条边的颜色
+        -moz-border-color  火狐专有样式 
+          在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
+          每种颜色显示1px的宽度。
+          若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
+          Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
+        Example: border:solid 2px red；
+      border-radius 边框圆角 [简写方式] [CSS3] 
+        PS:IE9+不加前缀支持 
+          当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
+          使用 -webkit 和-moz 前缀兼容浏览器
+        可单独定义的样式 
+          border-top-left-radius:rX rY;      左上圆角 
+          border-top-right-radius:rX rY;     右上圆角 
+          border-bottom-right-radius:rX rY;  右下圆角 
+          border-bottom-left-radius:rX rY;   左下圆角 
+        border-radius: rX [/ rY];
+          PS:水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
+          rX   水平半径,(length|%){1,4} 上右下左 
+          rY   垂直半径,(length|%){0,4} 上右下左,可选,默认等于水平半径 
+        Example: 
+          border-radius: 2em 1em 4em / 0.5em 3em;
+          等价于
+          border-top-left-radius: 2em 0.5em;
+          border-top-right-radius: 1em 3em;
+          border-bottom-right-radius: 4em 0.5em;
+          border-bottom-left-radius: 1em 3em;
+      border-image  边框图片 [简写方式] [CSS3] 
+        PS:IE支持效果不好,IE11可以支持 
+          使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
+          虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
+        可分别设置的样式 
+          border-top-img     上边框
+          ...
+          border-top-left-image     左上角
+          border-top-right-image    右上角 
+          border-bottom-left-image  左下角 
+          border-bottom-right-image 右下角 
+          border-corner-image       4个角 
+          border-image-source  图片资源 
+            none  默认值,无背景
+            img   使用绝对或相对 url 地址指定背景图像
+          border-image-slice:(length|%){1,4}  图片裁切 
+            默认值为100% 
+            Example:
+              .aoo{
+                border-image-slice: len1 len2 len3 len4;
+                // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
+                // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
+                // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
+                // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
+              }
+          border-image-width:(length|%){1,4}  边框宽度 
+          border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
+          border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
+            kw  keyword可取值如下:
+            stretch  拉伸,默认值
+            repeat   重复
+            round    平铺 
+        border-image:source slice{1,4}/width{1,4} style repeat; 
+          source  背景图片资源
+          slice   图片裁切,上右下左 
+          width   边框宽度,上右下左 
+          repeat  重复样式 
+        Example:
+          border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
+      border:none 与 border:0 的区别
+        border:0 相当于 border-width:0,
+        浏览器依然对border-width、border-color 进行了渲染占用了内存
+        border:none 实际效果等同于border-style:none,
+        浏览器解析“none”时将不作出渲染动作不会消耗内存
+        IE6、IE7中,border为“none”时,标签button、input边框依然存在
+    padding 内填充 
+      PS:属性值不能为负值
+      %   参考对象都是父元素的宽度width
+      inline元素的padding的上下无效果(仅产生背景)
+        padding的左右可将其他元素支撑或将自己的content定位,
+        上下无作用,唯一效果会使背景渲染出来(即当无背景色时相当于无上下padding),
+        且将背景会覆盖到前后其他块元素的背景上,但不会覆盖其他元素的内容,
+        后面的inline元素背景覆盖前面的背景.
+    Content 内容 
+      PS:当父元素无高度依靠子元素的高度将其撑开时,
+        父元素在显示上等于子元素高度,实际上其他子元素继承不到其高度;
+        width height 即定义content的宽高
+      width  宽度 
+        auto          默认值。浏览器可计算出实际的宽度。
+        length        使用 px、cm 等单位定义宽度。
+        %             父元素宽度的百分比(给父元素设定的宽度,而非父元素计算后的宽度)
+      height 高度 
+        auto          默认。浏览器会计算出实际的高度。
+        length        使用 px、cm 等单位定义高度。
+        %             其父元素的百分比高度(给父元素设定的高度,而非父元素计算后的高度)
+        inherit 规定应该从父元素继承 height 属性的值。
+      max-width    最大宽度
+      max-height   最大高度
+      min-width    最小宽度
+      min-height   最小高度
+    盒模型特点 
+      盒子模型有两种,分别是'IE盒模型'和标准'W3C盒模型'
+        那应该选择哪中盒子模型呢？当然是“标准 w3c 盒子模型”
+        怎么样才算是选择了“标准 w3c 盒子模型”呢？很简单,就是在网页的顶部加上 doctype 声明。
+        假如不加 doctype 声明,那么各个浏览器会根据自己的行为去理解网页,
+        即 ie 浏览器会采用 ie 盒子模型去解释你的盒子,
+        而 ff 会采用标准 w3c 盒子模型解释你的盒子,所以网页在不同的浏览器中就显示的不一样了。
+        反之,假如加上了 doctype 声明,那么所有浏览器都会采用标准 w3c 盒子模型去解释你的盒子,
+        网页就能在各个浏览器中显示一致了。
+      盒模型要素设置为 auto时 
+        当没有属性为auto,且存在冲突时,会强制margin-right为auto,
+        当有一个值为auto时,会自动调节设置为auto属性的值使元素框的宽度等于父元素的width,
+        当margin-left和margin-right为auto时,会被设置为相等的宽度,从而达到内容居中的效果,
+        当width和一margin为auto时,该margin会被设置为0,
+        当三个值都为auto时,两个外边距都会被设置为0,即默认的情况
+        正常流中,margin-top或margin-bottom设置为auto,会被重置为0,
+        height为auto时,则显示其高度会尽可能的小,
+    相关样式 
+      box-sizing 盒模型定义类型 [CSS3]
+        content-box;  默认值,width height 为content的宽、高尺寸
+        border-box;   width height 为border的宽、高尺寸
+      box-shadow 盒子阴影 [CSS3] 
+        box-shadow: h-shadow v-shadow [blur spread color inset];
+          h-shadow 水平偏移距离,可为负值
+          v-shadow 垂直偏移距离,可为负值
+          blur     模糊距离,可选
+          spread   阴影尺寸,可选
+          color    阴影颜色,可选,默认为黑色  
+          inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
+        同时使用多个阴影,之间使用逗号','隔开
+          box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
+    overflow 溢出显示方式
+      PS:规定当内容溢出元素框时发生的事情
+        overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
+      hidden   内容被修剪,且隐藏超出的内容
+      scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
+      auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
+      visible  默认值,内容不会被修剪,会呈现在元素框之外。
+  float浮动 
+    PS: 最初是用来实现文字环绕图片的效果; 浮动元素垂直外边距不会合并 
+    float: xxx; 指定一元素应沿其容器的左侧或右侧放置 
+      PS: 从网页的正常流动中移除 
+        浮动元素一直平移直到碰到了所处的容器的边框,或者碰到另外一个浮动的元素 
+        根据上一元素的类型判断位置,若上一个是浮动的,则跟随他,放不下就挤到下一行 
+        若上一个是标准流的元素,则浮动元素的相对垂直高度不变,顶部和其底部对齐 
+      特点: 
+        允许文本和内联元素环绕 
+        行内元素浮动后可定义宽高,其默认宽高由内容决定 
+        浮动元素会脱离文档流,但非浮动元素仍会受到浮动元素的影响;
+      left  左浮动 
+      right 右浮动 
+      none  无浮动
+      Example: 
+        <div class="container">
+          <span class="part1">
+            我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要这众生,都明白我意,
+          </span>
+          <div class="middle">
+            <img class="float" src="a.jpg">
+          </div>
+          <span class="part2">
+            要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散!
+            123456789132456789
+          </span>
+        </div>
+        .container{ background-color: #1dac24; }
+        .middle{ display: inline-block; background-color: #8a7b72; }
+        .float{
+          float: left;
+          width: 50px;
+          background-color: #38b8e0;
+          width: 55px; 
+          height: 55px;
+        }
+    clear: left/right/both/none; 使浮动元和非浮动元素不同行 
+      
+    浮动子元素不支撑父元素导致无高度的决解方法或清除浮动的方法: 
+      PS: 子元素为浮动元素,则其父元素不会被支撑,浮动元素会溢出 
+        当父元素没有指定高度时,且其子元素有浮动,则该父父元素的高度不会自动增加.
+      方法一:定义父元素的height
+      方法二:在父元素内部的结尾处增加一个空块元素并将其浮动清除 
+        原理:让空元素新起一行,且其必定被父元素包含,所以会撑起父元素.
+      方法三:父元素 overflow:auto/hidden; 浮动的子元素不会被隐藏,但是父元素高度会被支撑
+      方法四:使用 :after 伪选择器来达到和方法二相同的效果 
+        父元素 :after{display:block; clear:both; content:""; } 
+          会在父元素的内部尾部添加一个空的块元素,并清除浮动.
+        父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
+      方法五:父元素也浮动 
+      
+    清除浮动
+      引入空隙,父元素使用::after伪元素
+      浮动元素限制成BFC,使用overflow:hidden
+      clear属性      
+      
+      
+  position定位 
+    PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
+    'static'   无定位,默认值 
+      元素出现在正常的流中 
+      忽略'top''bottom''left''right'和'z-index'声明 
+    'relative' 相对定位 : 相对自身元素定位 
+      PS:相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流 
+        相当于'transform'的'translate',元素只是在显示上进行了偏移[SelfThink] ,
+        其显示的优先级被提升,偏移时可能会遮盖其他元素[包括背景和内容] 
+      e.g:  
+        #aoo{
+          position:relative;
+          left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
+          top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
+        }
+    'absolute' 绝对定位 : 相对和自己最接近的那个非标准流的祖先元素进行定位 
+      PS:元素脱离文档流,元素从原来的位置脱离并让出自己的空间(后面元素占用让出的位置)
+        通常做法是给其父元素添加相对定位.若不存在这样的父元素,则向上一级寻找,直到以body为参考.
+        若不想覆盖下层的元素,可以设置z-index值达到效果。
+      clip 裁剪绝对定位元素 (可配合使用的属性)
+        PS:clip定义一个剪裁矩形。
+          对于一个绝对定位元素,在这个矩形内的内容才可见。
+          出了这个剪裁区域的内容会根据 overflow 的值来处理。
+          剪裁区域可能比元素的内容区大,也可能比内容区小。
+        可能的值:
+          rect(top,right,bottom,left)
+          auto    默认值,不应用任何剪裁。
+          inherit 规定应该从父元素继承 clip 属性的值。
+        Example:
+        img{position:absolute;clip:rect(0px 50px 200px 0px);}
+    'fixed'    固定定位 : 相对浏览器窗口的定位 
+      PS:脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化] 
+        默认处在视窗的左边中间位置
+      生成堆叠上下文的元素,使其子元素不再相对'Viewport'视口定位 
+        所有能够生成堆叠上下文的元素,会使其子元素的position:fixed相对其定位 
+        [详情见'Stacking Context'] 
+    'inherit'  继承父元素的定位属性 
+    ★配合属性
+    'left''right''top'和'bottom'   位置偏移 
+      %     'left''right'参照宽;'top''bottom'参照高 
+        relative 若其父元素脱离文档流则参考自身的宽高,否则参考父元素的宽高[SelfThink] 
+        absolute/fixed 参照其定位元素的宽高[SelfThink]
+      pixel 像素值 
+      达到确定'width'和'height'的效果[当定位元素未定义width和height时] 
+        Example: 
+        <div class="a">
+          <div class="aa"></div>
+        </div>
+        .a{ 
+          position: relative; 
+          background-color: blue; 
+          width: 500px; 
+          height: 500px; 
+        }
+        .aa{ 
+          background: green; 
+          position: absolute; 
+          left: 100px; 
+          right:100px; 
+          top: 200px; 
+          bottom: 100px; 
+        }
+      导致尺寸冲突时 
+        left 和 top 优先级高于 right 和 bottom;
+          如定义width后,同时定义left和right,则right属性不生效
+          (比如:left + width + right 小于 定位参考元素的width时) 
+        margin:auto; 调和尺寸冲突,使定位元素尽可能处于中间位置 
+          应用:使 left=right=top=bottom + margin:auto 达到居中的效果 
+          
+          top : -888px;
+          bottom : -888px;
+          left : -999px;
+          right : -999px;
+          margin : auto;
+    z-index      设置元素的堆叠顺序 [无单位]
+      PS:只有relative、absolute、fixed定位元素才有该属性[即static时该属性无效]
+      auto    默认,堆叠顺序与父元素相等
+      number  数值,可为负,数值较大则处于上层显示
+      inherit 规定应该从父元素继承的值
+      覆盖关系
+        同级元素: 
+          未设置时,后面元素覆盖前面元素
+          设置z-index值,值大者覆盖小者
+        父子元素关系: 默认子元素在父元素上,其他情况如下:
+          PS:设置z-index 和不设置,有区别
+          当父元素设置z-index,但不为auto,则子元素z-index设置任意值始终在父元素上,
+          若父元素不设置z-index或设置z-index为auto,子元素z-index为负,则子元素在父元素下
+  vertical-align  定义行内元素或替换元素使其相对于所在行的基线的垂直对齐方式
+    PS: 该部分讨论的行是指所有共行的行内元素共同组成的一个包含行,
+      而非特指行内元素的父元素,即改变父元素的高度对定位无影响,
+      但改变行高inline-height会有影响.
+    比较时,可假想该行中存在一和行内元素并列的文本.
+    ◆定义无文本内容的行内元素或替换元素和有文本内容的行内元素情况有不同,
+      后续便于说明简称为无文本元素和有文本元素,
+      对齐时有文本元素对齐的是其内容中文字的基线,无文本元素对齐的是其底边,
+      后续默认基线为文字的基线或元素的底边.
+      元素基线与行基线的关系
+    baseline   默认,元素基线和所在行的基线对齐
+    length     通过值(可正负)调整两基线的位置
+      '0px'等同于'baseline'
+    %          通过相对行的line-height的百分比值(可正负)调整两基线的位置
+      0% 等同于 baseline 
+    super      元素基线相对于行基线升高到上标位置
+      规范并未定义元素升高的距离,对于不同的用户代理,这个距离可能有所不同,
+      字体大小不会改变.
+    sub        元素基线相对于行基线下降到下标位置
+    ◆有无文本元素都表现同无文本元素
+      元素上边、下边或中部与行上边、下边或中部(一般为基线上方0.5ex处)位置关系
+    top      将元素顶端与行框的顶端对齐
+    middle   将行内元素框的中点与父元素基线上方0.5ex处对齐
+      此处,1ex相对与父元素的font-size定义,大多数用户代理的1ex为0.5em
+    bottom   将元素底端与行框的底端对齐
+    ◆有无文本元素都表现同有文本元素
+      对齐时,比较的情况为假设当前行存在文字,和inline元素存在同样大小文字时,
+      两个文字的顶部平齐或底部平齐,而产生的定位,
+      故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
+    text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
+    text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
+  vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置
+    baseline
+    top
+    middle
+    bottom
+  'Formatting Context': 指页面中的一个渲染区域,且拥有一套渲染规则 
+    决定了其子元素如何定位,以及与其他元素的相互关系和作用 
+  BFC'Block Formatting Context'块格式化上下文   [CSS2.1] 
+    PS: 独立的渲染区域,容器内的子元素不会影响到外面元素,反之亦然 
+    生成BFC: 
+      根元素 
+      float浮动元素 
+      overflow不为visible的块级盒子  
+      position为absolute 或fixed 
+      'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
+        display:table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
+    特点: 
+      子元素在垂直方向按序放置,且相邻的上下margin会发生重叠
+      子元素的左'margin'与包含块的左'border'相触[对于从左往右的格式化,否者相反]
+      BFC的区域不会与'float box'重叠
+      计算BFC的高度时,浮动元素也参与计算 
+      子元素的margin可支撑包含块的高度 
+    Example: 
+      使用BFC将浮动元素和block元素同行且不会影响到block元素,即浮动元素不会浮在block元素上 
+      <div class="aoo"> 1111 </div>
+      <div class="boo"> 222222 </div>
+      .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
+      .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
+      /*使用 overflow: hidden 生成 BFC*/
+  IFC'Inline Formatting Contexts'内联格式化上下文: 仅包含内联元素的块元素  [CSS2.1] 
+    特性
+      从包含块顶部水平方向排列
+      排列情况和浮动与否会改变行盒的高度
+      当一个行盒被分割,margin,border,padding都不会再有视觉效果了
+  GFC'GridLayout Formatting Contexts' [CSS3]
+  FFC'Flex Formatting Context'  [CSS3]
+  'Stacking Context'堆叠上下文: 元素的三维概念,影响其层叠关系  
+    PS: 元素在一条假想的相对于面向视窗或者网页的用户的z轴上延伸,
+      HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间 
+    触发一个元素形成堆叠上下文的方法: 
+      PS:所有设置了下面属性样式的元素,都有使其子元素的 position: fixed 失效的能力。
+      根元素HTML,
+      'transform'值不为'none'的元素[即具有'transform'属性],
+      'z-index'非'auto'的绝对/相对定位,
+      'z-index'非'auto'的'flex'项目,即父元素'display: flex|inline-flex',
+      'opacity'值小于 1 的元素[参考 the specification for opacity],
+      'mix-blend-mode'属性值不为'normal'的元素,
+      'filter'值不为'none'的元素,
+      'perspective'值不为'none'的元素,
+      'isolation'属性被设置为'isolate'的元素,
+      position: fixed
+      在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
+      '-webkit-overflow-scrolling'属性被设置'touch'的元素
+  'stacking level'层叠顺序 
+Layout,布局  
+  布局一般分为四种类型:固定布局、可切换的固定布局、弹性布局、混合布局 
+    PS: 可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式:
       其中可切换的固定布局的实现成本最低,但拓展性比较差；
       而弹性布局与混合布局效果具响应性,都是比较理想的响应式布局实现方式。
       只是对于不同类型的页面排版布局实现响应式设计,需要采用不用的实现方式。
@@ -1814,395 +2243,15 @@ Layout,布局
       并能完美利用有效空间展现最佳效果；
     混合布局:同弹性布局类似,可以适应一定范围内所有尺寸的设备屏幕及浏览器宽度,
       并能完美利用有效空间展现最佳效果；只是混合像素、和百分比两种单位作为页面单位。
-  CSS的3种基本定位机制
-    ◆css文档流,Flow
-    流:在网页设计中就是指元素(标签)的排列方式.
-    标准流:在网页布局中,排在前面的元素(标签)内容出现在前面,排在后面的元素(标签)内容出现在后面.
-    非标准流:当某个元素(标签)脱离了标准流(如相对定位、绝对定位等)我们统称为非标准流. 
+  CSS的3种基本定位机制 
+    ◆CSS文档流
+    'Flow'流: 在网页设计中就是指元素标签的排列方式 
+    标准流: 在网页布局中,排在前面的元素(标签)内容出现在前面,排在后面的元素(标签)内容出现在后面.
+    非标准流: 当某个元素(标签)脱离了标准流(如相对定位、绝对定位等)我们统称为非标准流. 
     ◆浮动
     ◆定位
-  table布局: 早期使用表格table布局,现已很少使用纯表格布局
-  box布局: 基于盒状模型,依赖display属性+position属性+float属性
-    display:inline、display:block、display:inline-block
-      inline元素又叫行内元素,width和height属性无效果,
-        可使用 line-height 来控制行高,但自身的content、padding尺寸无影响,
-        会产生将其他元素支撑的效果或定位自身content的作用,但背景却无法渲染出来.
-        行内元素中只能包含行内元素,若包含块元素则起不到包含作用.
-      block元素又叫块元素,默认width为100%,
-        line-height属性会增加自身的content的高度.
-        块元素中可以包含快元素和行内元素.
-      inline-block行内块元素,同时具有行内元素和块元素的特点. (CSS2.1新增)
-    box      盒子模型篇 
-      PS: html元素都可以看成一个盒子,css布局主要通过盒子模型来实现.
-      ◆盒子模型的四要素
-        PS:只有外边距margin可为负
-      margin  外边距 
-        PS:由于各浏览器的margin默认值不同,通常清零方便操作
-          详细属性: margin-top margin-right margin-bottom margin-left
-        缩写方法: [同padding缩写方式]
-          margin:1px 2px 3px 4px; 上 右 下 左 
-          margin:10px 20px 30px;  上 右左 下
-          margin:10px 20px;       上下 左右 
-          margin:10px;            上下左右 
-        auto  浏览器计算外边距
-        pixel 长度值
-        %     参考父元素宽度'width' 
-          在默认的 writing-mode:horizontal-tb 和 direction:ltr 的情况下
-        margin的特点 
-          垂直外边距合并
-            PS:只有普通文档流中块框的垂直外边距才会发生外边距合并,
-              行内框、浮动框或绝对定位之间的外边距不会合并.
-              合并后的外边距的高度等于较大者的外边距的尺寸.
-            在垂直方向,只要有margin相互接触且没有 border 或 padding 隔离,就会发生合并,如:
-              一元素的 margin-bottom 和另一个元素的 margin-top 发生合并.
-              父盒子的 margin-top 和 子盒子的 margin-top 发生合并
-              自身的 margin-top 和 margin-bottom 发生合并
-          对于 inline 元素,margin-top 和 margin-bottom 无效 
-            (inline-block 和 block 元素无影响)
-          margin:0 auto; 使元素在其父盒子中水平居中
-            但该方法无法使元素垂直居中
-      border  边框 
-        border  边框 [简写方式] 
-          PS:缩写中 border-style 属性是必须的;
-            color属性控制文本字体颜色和盒子边框颜色,当border-color未指定时使用color的值;
-          border[-top/right/bottom/left]-width 边框宽度[可分别设置每条边] 
-            PS:border-width : 1px 2px 3px 4px; 分别定义四条边的宽度 
-            pixels
-            thin
-            medium
-            thick
-            inherit
-          border[-left/right/top/bottom]-style 边框风格 
-            none    无
-            solid   实线
-            dashed  虚线
-            dotted  点虚线
-            double
-            groove
-            ridge
-            inset
-            outset
-            inherit
-          border[-top/right/bottom/left]-color 边框颜色 
-            PS:border-color : red green blue gray; 分别定义四条边的颜色
-          -moz-border-color  火狐专有样式 
-            在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
-            每种颜色显示1px的宽度。
-            若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
-            Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
-          Example: border:solid 2px red；
-        border-radius 边框圆角 [简写方式] [CSS3] 
-          PS:IE9+不加前缀支持 
-            当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
-            使用 -webkit 和-moz 前缀兼容浏览器
-          可单独定义的样式 
-            border-top-left-radius:rX rY;      左上圆角 
-            border-top-right-radius:rX rY;     右上圆角 
-            border-bottom-right-radius:rX rY;  右下圆角 
-            border-bottom-left-radius:rX rY;   左下圆角 
-          border-radius: rX [/ rY];
-            PS:水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
-            rX   水平半径,(length|%){1,4} 上右下左 
-            rY   垂直半径,(length|%){0,4} 上右下左,可选,默认等于水平半径 
-          Example: 
-            border-radius: 2em 1em 4em / 0.5em 3em;
-            等价于
-            border-top-left-radius: 2em 0.5em;
-            border-top-right-radius: 1em 3em;
-            border-bottom-right-radius: 4em 0.5em;
-            border-bottom-left-radius: 1em 3em;
-        border-image  边框图片 [简写方式] [CSS3] 
-          PS:IE支持效果不好,IE11可以支持 
-            使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
-            虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
-          可分别设置的样式 
-            border-top-img     上边框
-            ...
-            border-top-left-image     左上角
-            border-top-right-image    右上角 
-            border-bottom-left-image  左下角 
-            border-bottom-right-image 右下角 
-            border-corner-image       4个角 
-            border-image-source  图片资源 
-              none  默认值,无背景
-              img   使用绝对或相对 url 地址指定背景图像
-            border-image-slice:(length|%){1,4}  图片裁切 
-              默认值为100% 
-              Example:
-                .aoo{
-                  border-image-slice: len1 len2 len3 len4;
-                  // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
-                  // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
-                  // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
-                  // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
-                }
-            border-image-width:(length|%){1,4}  边框宽度 
-            border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
-            border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
-              kw  keyword可取值如下:
-              stretch  拉伸,默认值
-              repeat   重复
-              round    平铺 
-          border-image:source slice{1,4}/width{1,4} style repeat; 
-            source  背景图片资源
-            slice   图片裁切,上右下左 
-            width   边框宽度,上右下左 
-            repeat  重复样式 
-          Example:
-            border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
-        border:none 与 border:0 的区别
-          border:0 相当于 border-width:0,
-          浏览器依然对border-width、border-color 进行了渲染占用了内存
-          border:none 实际效果等同于border-style:none,
-          浏览器解析“none”时将不作出渲染动作不会消耗内存
-          IE6、IE7中,border为“none”时,标签button、input边框依然存在
-      padding 内填充 
-        PS:属性值不能为负值
-        %   参考对象都是父元素的宽度width
-        inline元素的padding的上下无效果(仅产生背景)
-          padding的左右可将其他元素支撑或将自己的content定位,
-          上下无作用,唯一效果会使背景渲染出来(即当无背景色时相当于无上下padding),
-          且将背景会覆盖到前后其他块元素的背景上,但不会覆盖其他元素的内容,
-          后面的inline元素背景覆盖前面的背景.
-      Content 内容 
-        PS:当父元素无高度依靠子元素的高度将其撑开时,
-          父元素在显示上等于子元素高度,实际上其他子元素继承不到其高度;
-          width height 即定义content的宽高
-        width  宽度 
-          auto          默认值。浏览器可计算出实际的宽度。
-          length        使用 px、cm 等单位定义宽度。
-          %             父元素宽度的百分比(给父元素设定的宽度,而非父元素计算后的宽度)
-        height 高度 
-          auto          默认。浏览器会计算出实际的高度。
-          length        使用 px、cm 等单位定义高度。
-          %             其父元素的百分比高度(给父元素设定的高度,而非父元素计算后的高度)
-          inherit 规定应该从父元素继承 height 属性的值。
-        max-width    最大宽度
-        max-height   最大高度
-        min-width    最小宽度
-        min-height   最小高度
-      盒模型特点 
-        盒子模型有两种,分别是'IE盒模型'和标准'W3C盒模型'
-          那应该选择哪中盒子模型呢？当然是“标准 w3c 盒子模型”
-          怎么样才算是选择了“标准 w3c 盒子模型”呢？很简单,就是在网页的顶部加上 doctype 声明。
-          假如不加 doctype 声明,那么各个浏览器会根据自己的行为去理解网页,
-          即 ie 浏览器会采用 ie 盒子模型去解释你的盒子,
-          而 ff 会采用标准 w3c 盒子模型解释你的盒子,所以网页在不同的浏览器中就显示的不一样了。
-          反之,假如加上了 doctype 声明,那么所有浏览器都会采用标准 w3c 盒子模型去解释你的盒子,
-          网页就能在各个浏览器中显示一致了。
-        盒模型要素设置为 auto时
-          当没有属性为auto,且存在冲突时,会强制margin-right为auto,
-          当有一个值为auto时,会自动调节设置为auto属性的值使元素框的宽度等于父元素的width,
-          当margin-left和margin-right为auto时,会被设置为相等的宽度,从而达到内容居中的效果,
-          当width和一margin为auto时,该margin会被设置为0,
-          当三个值都为auto时,两个外边距都会被设置为0,即默认的情况
-          正常流中,margin-top或margin-bottom设置为auto,会被重置为0,
-          height为auto时,则显示其高度会尽可能的小,
-      相关样式 
-        box-sizing 盒模型定义类型 [CSS3]
-          content-box;  默认值,width height 为content的宽、高尺寸
-          border-box;   width height 为border的宽、高尺寸
-        box-shadow 盒子阴影 [CSS3] 
-          box-shadow: h-shadow v-shadow [blur spread color inset];
-            h-shadow 水平偏移距离,可为负值
-            v-shadow 垂直偏移距离,可为负值
-            blur     模糊距离,可选
-            spread   阴影尺寸,可选
-            color    阴影颜色,可选,默认为黑色  
-            inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
-          同时使用多个阴影,之间使用逗号','隔开
-            box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
-      overflow 溢出显示方式
-        PS:规定当内容溢出元素框时发生的事情
-          overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
-        hidden   内容被修剪,且隐藏超出的内容
-        scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
-        auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
-        visible  默认值,内容不会被修剪,会呈现在元素框之外。
-    float    浮动 
-      PS: 最初是用来实现文字环绕图片的效果; 浮动元素垂直外边距不会合并 
-      float: left; 
-        left  左浮动 
-          该元素向左移动,直到接触到父元素的左b边界或上一个浮动元素为止
-        right 右浮动 
-          使该元素向右移动,直到接触到其父元素的右边界或上一个浮动元素为止为止.
-        none  无浮动
-      浮动的特点
-        元素左、右浮动,默认不会超出父元素的左、右边界 
-          (可通过设置负margin超出)
-        元素浮动后都变成 block,但不换行 可以自定义宽高,其默认宽高由内容决定 .
-        浮动浮动元素的若干个兄弟元素,他们会一行排列,行末自动换行.
-          新起行的起始高度由上一行最后一元素高度决定,从其高度向前滑动,卡住为止.
-          可通过负margin将下一行的元素移到上一行,但会覆盖上一行的元素.
-        浮动元素会脱离文档流,但非浮动元素仍会受到浮动元素的影响;
-          PS:为表述方便定义浮动元素为 floatElem,用于说明的元素为 targeElem
-          非浮动的父元素
-          非浮动的兄弟元素
-            targeElem及targeElem的block子元素位于floatElem下
-            targeElem的文字等内容、行内后代元素都会被floatElem挤开,成'围绕'样式,
-            即位于floatElem的右、下方.
-          非浮动的子元素
-          非浮动的非同分支元素:会将targeElem中的文字挤开,但不会'围绕'
-            只会位于floatElem下方,而不会位于floatElem右边
-            Example:
-              <div class="container">
-                <span class="part1">
-                  我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要这众生,都明白我意,
-                </span>
-                <div class="middle">
-                  <img class="float" src="http://pic6.huitu.com/res/20130116/84481_20130116142820494200_1.jpg" alt="">
-                </div>
-                <span class="part2">
-                  要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散! 我要这天,再遮不住我眼,要这地,再埋不了我心,要这众生,都明白我意,要那诸佛,都烟消云散!
-                  123456789132456789
-                </span>
-              </div>
-              .container{ background-color: #1dac24; }
-              .middle{ display: inline-block; background-color: #8a7b72; }
-              .float{
-                float: left;
-                width: 50px;
-                background-color: #38b8e0;
-                width: 55px; 
-                height: 55px;
-              }
-      clear 使浮动元和非浮动元素不同行 [非浮动元素的 左侧|右侧 无浮动元素]
-        left/right/both/none
-      浮动子元素不支撑父元素导致无高度的决解方法或清除浮动的方法:
-        PS: 子元素为浮动元素,则其父元素不会被支撑,浮动元素会溢出 
-          当父元素没有指定高度时,且其子元素有浮动,则该父父元素的高度不会自动增加.
-        方法一:定义父元素的height
-        方法二:在父元素内部的结尾处增加一个空块元素并将其浮动清除 
-          原理:让空元素新起一行,且其必定被父元素包含,所以会撑起父元素.
-        方法三:父元素 overflow:auto/hidden; 浮动的子元素不会被隐藏,但是父元素高度会被支撑
-        方法四:使用 :after 伪选择器来达到和方法二相同的效果 
-          父元素 :after{display:block; clear:both; content:""; } 
-            会在父元素的内部尾部添加一个空的块元素,并清除浮动.
-          父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
-        方法五:父元素也浮动 
-    position 定位 
-      PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
-      'static'   无定位,默认值 
-        元素出现在正常的流中 
-        忽略'top''bottom''left''right'和'z-index'声明 
-      'relative' 相对定位 : 相对自身元素定位 
-        PS:相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流 
-          相当于'transform'的'translate',元素只是在显示上进行了偏移[SelfThink] ,
-          其显示的优先级被提升,偏移时可能会遮盖其他元素[包括背景和内容] 
-        e.g:  
-          #aoo{
-            position:relative;
-            left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
-            top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
-          }
-      'absolute' 绝对定位 : 相对和自己最接近的那个非标准流的祖先元素进行定位 
-        PS:元素脱离文档流,元素从原来的位置脱离并让出自己的空间(后面元素占用让出的位置)
-          通常做法是给其父元素添加相对定位.若不存在这样的父元素,则向上一级寻找,直到以body为参考.
-          若不想覆盖下层的元素,可以设置z-index值达到效果。
-        clip 裁剪绝对定位元素 (可配合使用的属性)
-          PS:clip定义一个剪裁矩形。
-            对于一个绝对定位元素,在这个矩形内的内容才可见。
-            出了这个剪裁区域的内容会根据 overflow 的值来处理。
-            剪裁区域可能比元素的内容区大,也可能比内容区小。
-          可能的值:
-            rect(top,right,bottom,left)
-            auto    默认值,不应用任何剪裁。
-            inherit 规定应该从父元素继承 clip 属性的值。
-          Example:
-          img{position:absolute;clip:rect(0px 50px 200px 0px);}
-      'fixed'    固定定位 : 相对浏览器窗口的定位 
-        PS:脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化] 
-          默认处在视窗的左边中间位置
-        生成堆叠上下文的元素,使其子元素不再相对'Viewport'视口定位 
-          所有能够生成堆叠上下文的元素,会使其子元素的position:fixed相对其定位 
-          [详情见'Stacking Context'] 
-      'inherit'  继承父元素的定位属性 
-      ★配合属性
-      'left''right''top'和'bottom'   位置偏移 
-        %     'left''right'参照宽;'top''bottom'参照高 
-          relative 若其父元素脱离文档流则参考自身的宽高,否则参考父元素的宽高[SelfThink] 
-          absolute/fixed 参照其定位元素的宽高[SelfThink]
-        pixel 像素值 
-        达到确定'width'和'height'的效果[当定位元素未定义width和height时] 
-          Example: 
-          <div class="a">
-            <div class="aa"></div>
-          </div>
-          .a{ 
-            position: relative; 
-            background-color: blue; 
-            width: 500px; 
-            height: 500px; 
-          }
-          .aa{ 
-            background: green; 
-            position: absolute; 
-            left: 100px; 
-            right:100px; 
-            top: 200px; 
-            bottom: 100px; 
-          }
-        导致尺寸冲突时 
-          left 和 top 优先级高于 right 和 bottom;
-            如定义width后,同时定义left和right,则right属性不生效
-            (比如:left + width + right 小于 定位参考元素的width时) 
-          margin:auto; 调和尺寸冲突,使定位元素尽可能处于中间位置 
-            应用:使 left=right=top=bottom + margin:auto 达到居中的效果 
-            
-            top : -888px;
-            bottom : -888px;
-            left : -999px;
-            right : -999px;
-            margin : auto;
-      z-index      设置元素的堆叠顺序 [无单位]
-        PS:只有relative、absolute、fixed定位元素才有该属性[即static时该属性无效]
-        auto    默认,堆叠顺序与父元素相等
-        number  数值,可为负,数值较大则处于上层显示
-        inherit 规定应该从父元素继承的值
-        覆盖关系
-          同级元素: 
-            未设置时,后面元素覆盖前面元素
-            设置z-index值,值大者覆盖小者
-          父子元素关系: 默认子元素在父元素上,其他情况如下:
-            PS:设置z-index 和不设置,有区别
-            当父元素设置z-index,但不为auto,则子元素z-index设置任意值始终在父元素上,
-            若父元素不设置z-index或设置z-index为auto,子元素z-index为负,则子元素在父元素下
-    vertical-align  定义行内元素或替换元素使其相对于所在行的基线的垂直对齐方式
-      PS: 该部分讨论的行是指所有共行的行内元素共同组成的一个包含行,
-        而非特指行内元素的父元素,即改变父元素的高度对定位无影响,
-        但改变行高inline-height会有影响.
-      比较时,可假想该行中存在一和行内元素并列的文本.
-      ◆定义无文本内容的行内元素或替换元素和有文本内容的行内元素情况有不同,
-        后续便于说明简称为无文本元素和有文本元素,
-        对齐时有文本元素对齐的是其内容中文字的基线,无文本元素对齐的是其底边,
-        后续默认基线为文字的基线或元素的底边.
-        元素基线与行基线的关系
-      baseline   默认,元素基线和所在行的基线对齐
-      length     通过值(可正负)调整两基线的位置
-        '0px'等同于'baseline'
-      %          通过相对行的line-height的百分比值(可正负)调整两基线的位置
-        0% 等同于 baseline 
-      super      元素基线相对于行基线升高到上标位置
-        规范并未定义元素升高的距离,对于不同的用户代理,这个距离可能有所不同,
-        字体大小不会改变.
-      sub        元素基线相对于行基线下降到下标位置
-      ◆有无文本元素都表现同无文本元素
-        元素上边、下边或中部与行上边、下边或中部(一般为基线上方0.5ex处)位置关系
-      top      将元素顶端与行框的顶端对齐
-      middle   将行内元素框的中点与父元素基线上方0.5ex处对齐
-        此处,1ex相对与父元素的font-size定义,大多数用户代理的1ex为0.5em
-      bottom   将元素底端与行框的底端对齐
-      ◆有无文本元素都表现同有文本元素
-        对齐时,比较的情况为假设当前行存在文字,和inline元素存在同样大小文字时,
-        两个文字的顶部平齐或底部平齐,而产生的定位,
-        故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
-      text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
-      text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
-    vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置
-      baseline
-      top
-      middle
-      bottom
+  Table布局: 早期使用表格table布局,现已很少使用纯表格布局
+  Box布局: 基于盒状模型,依赖display+position+float 
   Flex 布局   [CSS3 IE10] 
     PS:常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
@@ -2303,53 +2352,8 @@ Layout,布局
         none | hidden | dotted | dashed | solid 
         double | groove |  ridge | inse | outset
       column-rule-color  颜色
-  BFC'Block Formatting Context': 独立的渲染区域,只有'Block-level Box'参与 
-    PS: 规定了内部的'Block-level Box'的布局不受区域外的影响 
-      块级元素: 使元素变成块级元素的display值有'block''list-item''table'等
-      'Formatting Context':指页面中的一个渲染区域,并且拥有一套渲染规则,
-      决定了其子元素如何定位,以及与其他元素的相互关系和作用 
-    布局规则: 
-      内部的Box会在垂直方向,一个接一个的放置
-      同属于一个BFC的两相邻的box的margin会发生重叠
-      每个元素的'margin box'的左边,与包含块'border box'的左边相接触[对于从左往右的格式化,否者相反]
-      BFC的区域不会与'float box'重叠
-      BFC就是页面上的一个隔离的独立容器,容器内的子元素不会影响到外面元素,反之亦然.
-      计算BFC的高度时,浮动元素也参与计算 
-    生成BFC的元素  
-      float属性不为none 
-      overflow不为visible 
-      根元素 
-      position为absolute 或fixed 
-      'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
-        display:table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
-    Example:
-      使用BFC将浮动元素和block元素同行且不会影响到block元素(即浮动元素不会浮在block元素上)
-      <div class="aoo"> 1111 </div>
-      <div class="boo"> 222222 </div>
-      .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
-      .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
-      /*使用 overflow: hidden 生成 BFC*/
-  'Stacking Context'堆叠上下文
-    PS:堆叠上下文是HTML元素的三维概念,这些HTML元素在一条假想的相对于面向视窗或者网页的用户的 z 轴上延伸,
-      HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间 
-      生成了'Stacking Context'的元素会影响该元素的层叠关系与定位关系 
-    触发一个元素形成堆叠上下文的方法:
-      PS:所有设置了下面属性样式的元素,都有使其子元素的 position: fixed 失效的能力。
-      根元素HTML,
-      'transform'值不为'none'的元素[即具有'transform'属性],
-      'z-index'非'auto'的绝对/相对定位,
-      'z-index'非'auto'的'flex'项目,即父元素'display: flex|inline-flex',
-      'opacity'值小于 1 的元素[参考 the specification for opacity],
-      'mix-blend-mode'属性值不为'normal'的元素,
-      'filter'值不为'none'的元素,
-      'perspective'值不为'none'的元素,
-      'isolation'属性被设置为'isolate'的元素,
-      position: fixed
-      在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
-      '-webkit-overflow-scrolling'属性被设置'touch'的元素
-  'stacking level'层叠顺序
-  已废弃
-    弹性盒模型  display:box
+  已废弃 
+    弹性盒模型  display:box 
       已被 display:flex 取代
       使元素宽度跟随浏览器窗口变化而变化,使盒子布局变成弹性盒子布局.
       存在兼容性问题需加上前缀 -webkit- 或 -moz-

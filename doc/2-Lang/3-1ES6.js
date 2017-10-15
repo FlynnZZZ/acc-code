@@ -1371,7 +1371,7 @@ ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口
     Float32   4     float            32 位浮点数                    
     Float64   8     double           64 位浮点数                    
 'Class'类: 基于原型的实现的封装 
-  class Klass {} 创建类 
+  class className {} 创建类 
     PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
       class内部不可定义原型属性和静态属性;
       类名后面的括号{}里面的内容称之为类体 

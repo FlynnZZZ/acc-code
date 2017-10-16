@@ -112,7 +112,7 @@ Config,设置、配置
           font-family : Arial;
           src : local("Arial");
         }
-Selector,选择器 
+Selector选择器 
   PS: css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
     selector{
       key1:val1;
@@ -746,7 +746,7 @@ Selector,选择器
       @media screen and (max-width:800px) {div{width:100%}}
       @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
       @media screen and (min-width:1201px) {div{width:33.33%}}
-Declaration,样式声明 
+Declaration样式声明 
   字体&文本
     ◆'letter'字
     letter-spacing  字符间距 
@@ -1795,12 +1795,17 @@ Declaration,样式声明
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  [iOS]
       -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-模式相关 
+Layout布局 
+  ◆相关概念 
+  CSS文档流 
+    'Flow'流: 在网页设计中就是指元素标签的排列方式 
+    标准流: 网页布局中,排在前面的元素出现在前面,排在后面的元素出现在后面 
+    非标准流: 当某个元素脱离了标准流如相对定位、绝对定位等,则称为非标准流 
   'block'块级元素: 独占一行,默认width为100% 
     PS: 使元素变成块级元素的display值有'block'、'list-item'、'table'等 
     line-height 属性会增加自身的content的高度 
     块元素中可以包含快元素和行内元素
-  'inline'行内元素: width和height属性无效果 
+  'inline'行内元素: width和height属性无效 
     可使用 line-height 来控制行高,但自身的content、padding尺寸无影响,
     会产生将其他元素支撑的效果或定位自身content的作用,但背景却无法渲染出来.
     行内元素中只能包含行内元素,若包含块元素则起不到包含作用 
@@ -1812,8 +1817,66 @@ Declaration,样式声明
       根元素、fixed元素,包含块为视窗
       relative元素或static元素,包含块为最近的块级祖先元素的Content内容区 
       absolute元素,包含块为最近的非static的祖先元素的Padding区 
-  Box盒模型 
-    PS: html元素都可以看成一个盒子,CSS布局主要通过盒子模型来实现 
+  'Stacking Context'层叠上下文: 元素的三维概念,影响其层叠关系  
+    PS: 元素在一条假想的相对于面向视窗或者网页的用户的z轴上延伸 
+      元素依据自身属性按照优先级顺序占用层叠上下文的空间 
+      当一元素的z-index赋值除auto以外的值,就创建了一独立于其他的层叠上下文的新层叠上下文 
+    触发一个元素形成堆叠上下文的方法: 
+      PS: 所有设置了下面属性样式的元素,都有使其子元素的 position: fixed 失效的能力。
+      根元素HTML 
+      'transform'值不为'none'的元素[即具有'transform'属性] 
+      'z-index'非'auto'的绝对/相对定位 
+      'z-index'非'auto'的'flex'项目,即父元素'display: flex|inline-flex',
+      'opacity'值小于 1 的元素[参考 the specification for opacity],
+      'mix-blend-mode'属性值不为'normal'的元素,
+      'filter'值不为'none'的元素,
+      'perspective'值不为'none'的元素,
+      'isolation'属性被设置为'isolate'的元素,
+      position: fixed
+      在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
+      '-webkit-overflow-scrolling'属性被设置'touch'的元素
+  'stacking level'层叠顺序 
+    一个层叠上下文中一共可有的7种层叠等级: 
+    1 背景和边框 —— 形成层叠上下文的元素的背景和边框。 层叠上下文中的最低等级。
+    2 负z-index值 —— 层叠上下文内有着负z-index值的子元素。
+    3 块级盒 —— 文档流中非行内非定位子元素。
+    4 浮动盒 —— 非定位浮动元素。
+    5 行内盒 —— 文档流中行内级别非定位子元素。
+    6 z-index: 0 —— 定位元素。 这些元素形成了新的层叠上下文。
+    7 正z-index值 —— 定位元素。 层叠上下文中的最高等级。
+  FC'Formatting Context'格式化上下文: 页面中拥有一套渲染规则的渲染区域 
+    决定了其子元素如何定位,以及与其他元素的相互关系和作用 
+  BFC'Block Formatting Context'块格式化上下文   [CSS2.1] 
+    PS: 独立的渲染区域,容器内的子元素不会影响到外面元素,反之亦然 
+    生成BFC: 
+      根元素 
+      float浮动元素 
+      overflow不为visible的块级盒子  
+      position为absolute 或fixed 
+      'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
+        display:table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
+    特点: 
+      子元素在垂直方向按序放置,且相邻的上下margin会发生重叠
+      子元素的左'margin'与包含块的左'border'相触[对于从左往右的格式化,否者相反]
+      BFC的区域不会与'float box'重叠
+      计算BFC的高度时,浮动元素也参与计算 
+      子元素的margin可支撑包含块的高度 
+    Example: 
+      使用BFC将浮动元素和block元素同行且不会影响到block元素,即浮动元素不会浮在block元素上 
+      <div class="aoo"> 1111 </div>
+      <div class="boo"> 222222 </div>
+      .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
+      .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
+      /*使用 overflow: hidden 生成 BFC*/
+  IFC'Inline Formatting Contexts'内联格式化上下文: 仅包含内联元素的块元素 [CSS2.1] 
+    特性
+      从包含块顶部水平方向排列
+      排列情况和浮动与否会改变行盒的高度
+      当一个行盒被分割,margin,border,padding都不会再有视觉效果了
+  GFC'GridLayout Formatting Contexts' [CSS3]
+  FFC'Flex Formatting Context'  [CSS3]
+  ◆布局属性 
+  Box盒模型: HTML元素都可以看成一个盒子,CSS布局主要通过盒子模型来实现 
     ◆盒子模型的四要素 
     margin  外边距 [margin可为负]  
       PS: 由于各浏览器的margin默认值不同,通常清零方便操作
@@ -1991,23 +2054,24 @@ Declaration,样式声明
           inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
         同时使用多个阴影,之间使用逗号','隔开
           box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
-    overflow 溢出显示方式
+    overflow 溢出显示方式 
       PS:规定当内容溢出元素框时发生的事情
         overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
       hidden   内容被修剪,且隐藏超出的内容
       scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
       auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
       visible  默认值,内容不会被修剪,会呈现在元素框之外。
-  float浮动 
-    PS: 最初是用来实现文字环绕图片的效果; 浮动元素垂直外边距不会合并 
-    float: xxx; 指定一元素应沿其容器的左侧或右侧放置 
-      PS: 从网页的正常流动中移除 
+  Float浮动 
+    float: left/right/none; 指定一元素应沿其容器的左/右侧放置 
+      PS: 最初是用来实现文字环绕图片的效果; 
         浮动元素一直平移直到碰到了所处的容器的边框,或者碰到另外一个浮动的元素 
         根据上一元素的类型判断位置,若上一个是浮动的,则跟随他,放不下就挤到下一行 
         若上一个是标准流的元素,则浮动元素的相对垂直高度不变,顶部和其底部对齐 
       特点: 
+        从网页的正常流动中移除 
         允许文本和内联元素环绕 
         行内元素浮动后可定义宽高,其默认宽高由内容决定 
+        垂直外边距不会合并 
         浮动元素会脱离文档流,但非浮动元素仍会受到浮动元素的影响;
       left  左浮动 
       right 右浮动 
@@ -2034,8 +2098,11 @@ Declaration,样式声明
           width: 55px; 
           height: 55px;
         }
-    clear: left/right/both/none; 使浮动元和非浮动元素不同行 
-      
+    clear: left/right/both/none; 使浮动元素和非浮动元素不同行 
+      清除浮动: 
+      引入空隙,父元素使用::after伪元素
+      浮动元素包含块限制成BFC,使用overflow:hidden
+      clear属性      
     浮动子元素不支撑父元素导致无高度的决解方法或清除浮动的方法: 
       PS: 子元素为浮动元素,则其父元素不会被支撑,浮动元素会溢出 
         当父元素没有指定高度时,且其子元素有浮动,则该父父元素的高度不会自动增加.
@@ -2048,53 +2115,45 @@ Declaration,样式声明
           会在父元素的内部尾部添加一个空的块元素,并清除浮动.
         父元素{zoom:1};可有可无,用于解决ie6,ie7浮动问题,触发IE hasLayout
       方法五:父元素也浮动 
-      
-    清除浮动
-      引入空隙,父元素使用::after伪元素
-      浮动元素限制成BFC,使用overflow:hidden
-      clear属性      
-      
-      
-  position定位 
-    PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
-    'static'   无定位,默认值 
-      元素出现在正常的流中 
-      忽略'top''bottom''left''right'和'z-index'声明 
-    'relative' 相对定位 : 相对自身元素定位 
-      PS:相对自己原来的位置进行定位,其原占有的空间仍被保留,元素未脱离文档流 
-        相当于'transform'的'translate',元素只是在显示上进行了偏移[SelfThink] ,
-        其显示的优先级被提升,偏移时可能会遮盖其他元素[包括背景和内容] 
-      e.g:  
-        #aoo{
-          position:relative;
-          left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
-          top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
-        }
-    'absolute' 绝对定位 : 相对和自己最接近的那个非标准流的祖先元素进行定位 
-      PS:元素脱离文档流,元素从原来的位置脱离并让出自己的空间(后面元素占用让出的位置)
-        通常做法是给其父元素添加相对定位.若不存在这样的父元素,则向上一级寻找,直到以body为参考.
-        若不想覆盖下层的元素,可以设置z-index值达到效果。
-      clip 裁剪绝对定位元素 (可配合使用的属性)
-        PS:clip定义一个剪裁矩形。
-          对于一个绝对定位元素,在这个矩形内的内容才可见。
-          出了这个剪裁区域的内容会根据 overflow 的值来处理。
-          剪裁区域可能比元素的内容区大,也可能比内容区小。
-        可能的值:
+  Position定位
+    position: <keywords>; 
+      PS: 除'static'外,元素定位后会变成类似于'inline-block'元素
+      static 无定位,默认值,元素出现在正常的流中 
+        忽略'top''bottom''left''right'和'z-index'声明 
+      relative 相对定位,相对自身文档流中的位置进行定位,原占有空间被保留,未脱离文档流  
+        PS: 其显示的优先级被提升,偏移时可能会遮盖其他元素 [包括背景和内容] 
+          相当于'transform'的'translate',元素只是在显示上进行了偏移 [SelfThink] ,
+        Example:   
+          #aoo{
+            position:relative;
+            left:40px;/*相对原来的位置向右移动40px,若需向左移动,则值是负数*/
+            top:100px:/*相对原来的位置向下移动100px,若需向上移动则值是负数*/
+          }
+      absolute 绝对定位,相对于自身最近的非标准流的祖先元素进行定位 
+        PS: 元素脱离文档流,原空间不被保留,后面元素占用让出的位置 
+          若不存在非标准流的祖先元素,则以body为参考 
+          若不想覆盖下层的元素,可以设置z-index值达到效果 
+        clip: <keywords>; 裁剪绝对定位元素 [可配合使用的属性] 
+          PS: clip定义一个剪裁矩形。
+            对于一个绝对定位元素,在这个矩形内的内容才可见。
+            出了这个剪裁区域的内容会根据 overflow 的值来处理。
+            剪裁区域可能比元素的内容区大,也可能比内容区小。
           rect(top,right,bottom,left)
           auto    默认值,不应用任何剪裁。
           inherit 规定应该从父元素继承 clip 属性的值。
-        Example:
-        img{position:absolute;clip:rect(0px 50px 200px 0px);}
-    'fixed'    固定定位 : 相对浏览器窗口的定位 
-      PS:脱离文档流,定位参照为视窗本身[不会随浏览器窗口的滚动条滚动而变化] 
-        默认处在视窗的左边中间位置
-      生成堆叠上下文的元素,使其子元素不再相对'Viewport'视口定位 
-        所有能够生成堆叠上下文的元素,会使其子元素的position:fixed相对其定位 
-        [详情见'Stacking Context'] 
-    'inherit'  继承父元素的定位属性 
-    ★配合属性
-    'left''right''top'和'bottom'   位置偏移 
-      %     'left''right'参照宽;'top''bottom'参照高 
+          Example: 
+          img{
+            position:absolute;
+            clip:rect(0px 50px 200px 0px);
+          }
+      fixed  固定定位,脱离文档流,相对浏览器窗口的定位[不随窗口滚动条滚动]  
+        PS: 默认处在视窗的左边中间位置
+        生成堆叠上下文的元素,使其子元素不再相对'Viewport'视口定位 
+          所有能够生成堆叠上下文的元素,会使其子元素的position:fixed相对其定位 
+          [详情见'Stacking Context'] 
+      inherit  继承父元素的定位属性 
+    left/right/top/bottom: length; 位置偏移 
+      %     left/right 参照宽;top/bottom 参照高 
         relative 若其父元素脱离文档流则参考自身的宽高,否则参考父元素的宽高[SelfThink] 
         absolute/fixed 参照其定位元素的宽高[SelfThink]
       pixel 像素值 
@@ -2129,12 +2188,12 @@ Declaration,样式声明
           left : -999px;
           right : -999px;
           margin : auto;
-    z-index      设置元素的堆叠顺序 [无单位]
+    z-index: num;      设置元素堆叠顺序 
       PS:只有relative、absolute、fixed定位元素才有该属性[即static时该属性无效]
       auto    默认,堆叠顺序与父元素相等
       number  数值,可为负,数值较大则处于上层显示
       inherit 规定应该从父元素继承的值
-      覆盖关系
+      覆盖关系 
         同级元素: 
           未设置时,后面元素覆盖前面元素
           设置z-index值,值大者覆盖小者
@@ -2142,7 +2201,7 @@ Declaration,样式声明
           PS:设置z-index 和不设置,有区别
           当父元素设置z-index,但不为auto,则子元素z-index设置任意值始终在父元素上,
           若父元素不设置z-index或设置z-index为auto,子元素z-index为负,则子元素在父元素下
-  vertical-align  定义行内元素或替换元素使其相对于所在行的基线的垂直对齐方式
+  vertical-align  定义行内元素或替换元素使其相对于所在行的基线的垂直对齐方式 
     PS: 该部分讨论的行是指所有共行的行内元素共同组成的一个包含行,
       而非特指行内元素的父元素,即改变父元素的高度对定位无影响,
       但改变行高inline-height会有影响.
@@ -2173,86 +2232,12 @@ Declaration,样式声明
       故改变行文字的font-size会有影响,但改变inline元素的font-size无影响.
     text-top       将元素内文本(假设存在)的顶端与行文本(假设存在)的顶端对齐
     text-bottom    将元素内文本(假设存在)的底端与行文本(假设存在)的底端对齐
-  vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置
+  vertical-align  定义 display:table-cell 元素(典型的就是td),决定其内容垂直位置 
     baseline
     top
     middle
     bottom
-  'Formatting Context': 指页面中的一个渲染区域,且拥有一套渲染规则 
-    决定了其子元素如何定位,以及与其他元素的相互关系和作用 
-  BFC'Block Formatting Context'块格式化上下文   [CSS2.1] 
-    PS: 独立的渲染区域,容器内的子元素不会影响到外面元素,反之亦然 
-    生成BFC: 
-      根元素 
-      float浮动元素 
-      overflow不为visible的块级盒子  
-      position为absolute 或fixed 
-      'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
-        display:table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
-    特点: 
-      子元素在垂直方向按序放置,且相邻的上下margin会发生重叠
-      子元素的左'margin'与包含块的左'border'相触[对于从左往右的格式化,否者相反]
-      BFC的区域不会与'float box'重叠
-      计算BFC的高度时,浮动元素也参与计算 
-      子元素的margin可支撑包含块的高度 
-    Example: 
-      使用BFC将浮动元素和block元素同行且不会影响到block元素,即浮动元素不会浮在block元素上 
-      <div class="aoo"> 1111 </div>
-      <div class="boo"> 222222 </div>
-      .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
-      .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
-      /*使用 overflow: hidden 生成 BFC*/
-  IFC'Inline Formatting Contexts'内联格式化上下文: 仅包含内联元素的块元素  [CSS2.1] 
-    特性
-      从包含块顶部水平方向排列
-      排列情况和浮动与否会改变行盒的高度
-      当一个行盒被分割,margin,border,padding都不会再有视觉效果了
-  GFC'GridLayout Formatting Contexts' [CSS3]
-  FFC'Flex Formatting Context'  [CSS3]
-  'Stacking Context'堆叠上下文: 元素的三维概念,影响其层叠关系  
-    PS: 元素在一条假想的相对于面向视窗或者网页的用户的z轴上延伸,
-      HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间 
-    触发一个元素形成堆叠上下文的方法: 
-      PS:所有设置了下面属性样式的元素,都有使其子元素的 position: fixed 失效的能力。
-      根元素HTML,
-      'transform'值不为'none'的元素[即具有'transform'属性],
-      'z-index'非'auto'的绝对/相对定位,
-      'z-index'非'auto'的'flex'项目,即父元素'display: flex|inline-flex',
-      'opacity'值小于 1 的元素[参考 the specification for opacity],
-      'mix-blend-mode'属性值不为'normal'的元素,
-      'filter'值不为'none'的元素,
-      'perspective'值不为'none'的元素,
-      'isolation'属性被设置为'isolate'的元素,
-      position: fixed
-      在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
-      '-webkit-overflow-scrolling'属性被设置'touch'的元素
-  'stacking level'层叠顺序 
-Layout,布局  
-  布局一般分为四种类型:固定布局、可切换的固定布局、弹性布局、混合布局 
-    PS: 可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式:
-      其中可切换的固定布局的实现成本最低,但拓展性比较差；
-      而弹性布局与混合布局效果具响应性,都是比较理想的响应式布局实现方式。
-      只是对于不同类型的页面排版布局实现响应式设计,需要采用不用的实现方式。
-      通栏、等分结构的适合采用弹性布局方式、而对于非等分的多栏结构往往需要采用混合布局的实现方式。
-      布局响应时不可避免地需要对模块布局做一些变化,
-      发生布局改变的临界点称之为断点;
-    固定布局:以像素作为页面的基本单位,不管设备屏幕及浏览器宽度,只设计一套尺寸;
-    可切换的固定布局:同样以像素作为页面单位,参考主流设备尺寸,设计几套不同宽度的布局。
-      通过设别的屏幕尺寸或浏览器宽度,选择最合适的那套宽度布局；
-    弹性布局:以百分比作为页面的基本单位,可适应一定范围内所有尺寸的设备屏幕及浏览器宽度,
-      并能完美利用有效空间展现最佳效果；
-    混合布局:同弹性布局类似,可以适应一定范围内所有尺寸的设备屏幕及浏览器宽度,
-      并能完美利用有效空间展现最佳效果；只是混合像素、和百分比两种单位作为页面单位。
-  CSS的3种基本定位机制 
-    ◆CSS文档流
-    'Flow'流: 在网页设计中就是指元素标签的排列方式 
-    标准流: 在网页布局中,排在前面的元素(标签)内容出现在前面,排在后面的元素(标签)内容出现在后面.
-    非标准流: 当某个元素(标签)脱离了标准流(如相对定位、绝对定位等)我们统称为非标准流. 
-    ◆浮动
-    ◆定位
-  Table布局: 早期使用表格table布局,现已很少使用纯表格布局
-  Box布局: 基于盒状模型,依赖display+position+float 
-  Flex 布局   [CSS3 IE10] 
+  Flex'Flexible Box'弹性布局  [CSS3] [IE10+]
     PS:常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
     Flex布局产生的影响
       子元素的 float、clear、vertical-align 等属性将失效
@@ -2329,7 +2314,7 @@ Layout,布局
       baseline
       stretch  占满父元素
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
-  Column 多栏布局 [CSS3]   
+  Column多栏布局 [CSS3]  
     column-count  显示栏目数
       number 元素内容将被划分的列数
       auto   由其他属性决定列数,比如 "column-width"。
@@ -2352,6 +2337,24 @@ Layout,布局
         none | hidden | dotted | dashed | solid 
         double | groove |  ridge | inse | outset
       column-rule-color  颜色
+  ◆布局 
+  布局一般分为四种类型:固定布局、可切换的固定布局、弹性布局、混合布局 
+    PS: 可切换的固定布局、弹性布局、混合布局都是目前可被采用的响应式布局方式:
+      其中可切换的固定布局的实现成本最低,但拓展性比较差；
+      而弹性布局与混合布局效果具响应性,都是比较理想的响应式布局实现方式。
+      只是对于不同类型的页面排版布局实现响应式设计,需要采用不用的实现方式。
+      通栏、等分结构的适合采用弹性布局方式、而对于非等分的多栏结构往往需要采用混合布局的实现方式。
+      布局响应时不可避免地需要对模块布局做一些变化,
+      发生布局改变的临界点称之为断点;
+    固定布局:以像素作为页面的基本单位,不管设备屏幕及浏览器宽度,只设计一套尺寸;
+    可切换的固定布局:同样以像素作为页面单位,参考主流设备尺寸,设计几套不同宽度的布局。
+      通过设别的屏幕尺寸或浏览器宽度,选择最合适的那套宽度布局；
+    弹性布局:以百分比作为页面的基本单位,可适应一定范围内所有尺寸的设备屏幕及浏览器宽度,
+      并能完美利用有效空间展现最佳效果；
+    混合布局:同弹性布局类似,可以适应一定范围内所有尺寸的设备屏幕及浏览器宽度,
+      并能完美利用有效空间展现最佳效果；只是混合像素、和百分比两种单位作为页面单位。
+  Table布局: 早期使用表格table布局,现已很少使用纯表格布局
+  Box布局: 基于盒状模型,依赖display+position+float 
   已废弃 
     弹性盒模型  display:box 
       已被 display:flex 取代

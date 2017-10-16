@@ -423,9 +423,9 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       原型对象的'constructor'属性指向构造函数
     原型对象的获取方法:   
       Foo.prototype   通过定义获取 
-      Object.getPrototypeOf(obj); 通过实例获取 [ES5] 
+      Object.getPrototypeOf(obj) 通过实例获取 [ES5] 
       obj.constructor.prototype   通过实例间接获取 
-      obj.__proto__               通过实例获取 [非标准 IE11+]  
+      obj.__proto__               通过实例获取 [非标][IE11+]  
     原型的'修改'与'重设' 
       修改原型对象会影响到其他实例 
         function Person(){ };
@@ -1799,15 +1799,16 @@ Object 基础类: ECMAscript中所有对象的基类
         boo: 'a'
       }
       Object.defineProperty(obj,'coo',{
-        value : 11,
+        value : 11
       });
+      obj.__proto__.doo = '111111111';
+      console.log(obj); // {aoo: 1, boo: "a", coo: 11} 
+      console.log(Object.getOwnPropertyNames(obj)); // ["aoo", "boo", "coo"] 
       var arr = [];
       for(var key in obj){
         arr.push(key);
       };
-      console.log(obj); // {aoo: 1, boo: "a", coo: 11} 
-      console.log(arr); // ["aoo", "boo"] 
-      console.log(Object.getOwnPropertyNames(obj)); // ["aoo", "boo", "coo"] 
+      console.log(arr); // ["aoo", "boo", "doo"] 
     ★原型相关 
     proto = Object.getPrototypeOf(obj) 返回原型对象  
     Object.setPrototypeOf() 

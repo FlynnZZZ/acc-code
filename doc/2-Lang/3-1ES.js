@@ -212,7 +212,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         console.log(0/0);  // NaN
     转换为数值  
       隐式转换为数值 
-        undefined 为 NaN;null false 为 0;true 为 1;
+        undefined 为 NaN; null false 为 0; true 为 1;
         其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
         Example:
         console.log(1*"2",typeof (1*'2'));  // 2 number  

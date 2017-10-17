@@ -11,8 +11,9 @@ DOM树: 将整个HTML文件、标签看成一个由对象组成的树
 Node 节点类,所有节点类型都继承自Node类型 
   PS: 节点分不同类型,分别表示文档中不同的信息或标记,共有12种 
     并非所有节点类型浏览器都支持,最常用的节点类型为'元素节点'和'文本节点' 
+    一节点不能同时存在多个文档中,也不能同时出现在一文档的多个位置  
+    IE未公开Node类型的构造函数,故无 Node 的静态属性/方法 
   Node.xx  
-    PS: IE未公开Node类型的构造函数,故无 Node 的属性/方法 
     ◆节点类型的数值表示  
     9===Node.DOCUMENT_NODE    document节点
     1===Node.ELEMENT_NODE    元素节点 
@@ -34,13 +35,13 @@ Node 节点类,所有节点类型都继承自Node类型
     8===Node.DOCUMENT_POSITION_CONTAINS   
     16===Node.DOCUMENT_POSITION_CONTAINED_BY   
     32===Node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC   
-  Node.prototype.xx 
-    ◆节点  
+  ◆Node.prototype.xx 
+  ★节点信息 
     num = node.nodeType  节点类型 
     str = node.nodeName  节点名称 
       标签的大写形式 元素节点
       属性名称      属性节点 
-      "#document"  document节点
+      "#document"  文档节点document
       '#text'      文本节点  
       "#comment"   注释节点  
       "#document-fragment" 文档片段节点 
@@ -50,9 +51,36 @@ Node 节点类,所有节点类型都继承自Node类型
       文本节点返回文本内容[不包含html] 
       注释节点值为注释的内容 
       文档片段节点无节点值,返回 null 
-    str = node.textContent 读写,节点及其内部节点的文本内容 [DOM3][IE9+][专有扩展] 
+    str = node.baseURI  当前节点所在文档的基URI,若无法获取则返回null 
+      一般情况下,基URL为 document.location ,但是它受诸多方面因素的影响,
+      例如 HTML 的 <base> 元素和 XML xml:base 属性
+    bol = node.isConnected  
+  ★节点关系 
+    document = node.ownerDocument   文档节点document 
+    pElem = cNode.parentElement  父元素节点[包括元素内的后代元素]  
+    pNode = cNode.parentNode  父节点 
+      属性节点无父节点,为 null 
+      文档片段节点无父节点,为 null 
+    node0 = node1.previousSibling  前一兄弟节点[第一个节点的该属性为null] 
+    node1 = node0.nextSibling      后一个兄弟节点[最后一个节点的该属性为null] 
+    cNode = pNode.firstChild  第一个子节点[若没有子节点则为null]  
+    cNode = pNode.lastChild   最后一个子节点[若没有子节点则为null] 
+    bol = nod1.isSameNode(nod2)  是否为同一节点 [DOM3] 
+      相同指的是两个节点引用的是同一个对象
+    bol = node.isEqualNode(node1)  判断两个节点是否相等 [DOM3]  
+    bol = pNode.hasChildNodes(cNode)  是否有该子节点 
+    bol = node.contains(targeNode)  是否包含目标节点 [专有扩展] 
+    num = node.compareDocumentPosition(targetNode) 确定节点间的关系  [DOM3][IE9+]
+      返回数值,表示该关系的位掩码'bitmask'
+      1     无关,给定的节点不再当前文档中 
+      2     居前,给定的节点在DOM树中位于参考节点之前 
+      4     居后,给定的节点在DOM树中位于参考节点之后 
+      8     包含,给定的节点是参考节点的祖先 
+      16    被包含,给定的节点是参考节点的后代 
+  ★节点操作 
+    str = node.textContent 读写,节点及其内部节点的文本内容 [DOM3][IE9+] 
       PS:innerText 返回值会忽略行内样式和脚本,但textContent则会返回行内样式和脚本代码.
-        对象为 Document,DocumentType 或者 Notation 类型节点,则 textContent 返回 null
+        若对象为 Document,DocumentType 或者 Notation 类型节点,则 textContent 返回 null
         若你要获取整个文档的文本以及CDATA数据,
         可以使用 document.documentElement.textContent.
         若节点是个CDATA片段,注释,ProcessingInstruction节点或一个文本节点,
@@ -61,98 +89,120 @@ Node 节点类,所有节点类型都继承自Node类型
         除了注释、ProcessingInstruction节点.
         若该节点没有子节点的话,返回一个空字符串.
         在节点上设置 textContent 属性的话,会删除它的所有子节点,并替换为给定的文本节点.
-    str = node.baseURI      
-    bol = node.isConnected  
-    ◆节点关系 
-    document = node.ownerDocument    根节点document
-    pElem = cNode.parentElement  父元素节点[包括元素内的后代元素] 
-    pNode = cNode.parentNode  父节点 
-      属性节点无父节点,为 null 
-      文档片段节点无父节点,为 null 
-    node0 = node1.previousSibling  前一兄弟节点[第一个节点的该属性为null]
-    node1 = node0.nextSibling      后一个兄弟节点[最后一个节点的该属性为null]
-    cNode = pNode.firstChild  第一个子节点[若没有子节点则为null] 
-    cNode = pNode.lastChild   最后一个子节点[若没有子节点则为null]
-    ◆节点操作 
-    document = node.getRootNode() 根节点document 
-    bol = pNode.hasChildNodes(cNode)  是否有该子节点
+    document = node.getRootNode() 文档节点document 
     cNode = pNode.appendChild(cNode)  节点内部尾部添加子节点  
       cNode 子节点,若为文档中的节点,则是移动操作[原位置消失,在插入位置出现] 
     cNode = pNode.insertBefore(cNode,flagNode)  节点内的指定节点前插入子节点 
       flagNode  父节点内指定的节点,为 null 时,等同于 appendChild 
     cNode = pNode.removeChild(cNode)  删除子节点 
     oldNode = pNode.replaceChild(newNode,oldNode) 在节点内用新节点替换旧节点 
-    ◆其他操作
     node = node1.cloneNode(bol)  复制节点[但未添加到文档结构中] 
       PS: 不会复制节点中JS添加的属性,如事件等,只复制特性 
         IE中存在bug会复制事件处理程序,可以通过复制前移除事件来决解 
       bol   true 复制节点及其整个子节点树;false 只复制节点本身[只有标签]
-    bol = nod1.isSameNode(nod2)  是否为同一节点 [DOM3] 
-      相同指的是两个节点引用的是同一个对象
-    node.normalize()  合并节点 
-    node.isEqualNode()  
-    num = node.compareDocumentPosition() 确定节点间的关系  [DOM3] 
-      返回数值,表示该关系的位掩码'bitmask'
-      1     无关(给定的节点不再当前文档中)
-      2     居前(给定的节点在DOM树中位于参考节点之前)
-      4     居后(给定的节点在DOM树中位于参考节点之后)
-      8     包含(给定的节点是参考节点的祖先)
-      16    被包含(给定的节点是参考节点的后代)
-    bol = node.contains(targeNode)  是否包含目标节点 [专有扩展] 
-      PS: IE率先引入的方法
-    node.lookupPrefix()  
+    node.normalize()  合并同一级别的文本节点 
+      浏览器在解析文档时不会创建相邻的文本节点
+      当在一个元素节点中相邻添加多个文本节点时,外观上是合并在一起,访问时仍是保持独立的
+      var element = document.createElement("div");
+      element.className = "message";
+      var textNode = document.createTextNode("Hello world!");
+      element.appendChild(textNode);
+      var anotherTextNode = document.createTextNode("Yippee!");
+      element.appendChild(anotherTextNode);
+      document.body.appendChild(element);
+      alert(element.childNodes.length); //2
+      element.normalize();
+      alert(element.childNodes.length); //1
+      alert(element.firstChild.nodeValue); // "Hello world!Yippee!"
+  ★常量 
+    1===node.ELEMENT_NODE  
+    2===node.ATTRIBUTE_NODE  
+    3===node.TEXT_NODE  
+    4===node.CDATA_SECTION_NODE  
+    5===node.ENTITY_REFERENCE_NODE  
+    6===node.ENTITY_NODE  
+    7===node.PROCESSING_INSTRUCTION_NODE  
+    8===node.COMMENT_NODE  
+    9===node.DOCUMENT_NODE  
+    10===node.DOCUMENT_TYPE_NODE  
+    11===node.DOCUMENT_FRAGMENT_NODE  
+    12===node.NOTATION_NODE  
+    1===node.DOCUMENT_POSITION_DISCONNECTED  
+    2===node.DOCUMENT_POSITION_PRECEDING  
+    4===node.DOCUMENT_POSITION_FOLLOWING  
+    8===node.DOCUMENT_POSITION_CONTAINS  
+    16===node.DOCUMENT_POSITION_CONTAINED_BY  
+    32===node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC  
+  ★命名空间相关 
+    bol = node.isDefaultNamespace()  
     node.lookupNamespaceURI()  
-    node.isDefaultNamespace()  
-    ◆常量 
-      1===node.ELEMENT_NODE  
-      2===node.ATTRIBUTE_NODE  
-      3===node.TEXT_NODE  
-      4===node.CDATA_SECTION_NODE  
-      5===node.ENTITY_REFERENCE_NODE  
-      6===node.ENTITY_NODE  
-      7===node.PROCESSING_INSTRUCTION_NODE  
-      8===node.COMMENT_NODE  
-      9===node.DOCUMENT_NODE  
-      10===node.DOCUMENT_TYPE_NODE  
-      11===node.DOCUMENT_FRAGMENT_NODE  
-      12===node.NOTATION_NODE  
-      1===node.DOCUMENT_POSITION_DISCONNECTED  
-      2===node.DOCUMENT_POSITION_PRECEDING  
-      4===node.DOCUMENT_POSITION_FOLLOWING  
-      8===node.DOCUMENT_POSITION_CONTAINS  
-      16===node.DOCUMENT_POSITION_CONTAINED_BY  
-      32===node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC  
-      Node===node.constructor  
-    ◆已废弃 
-      node.setUserData()   节点添加额外数据 
+    node.lookupPrefix()  
+  ★已废弃 
+    node.setUserData()   节点添加额外数据 
 document DOM根节点,表示浏览器中的整个页面,包含完整的DOM 
-  Document  [继承 Node]
+  子节点可为: 
+    DocumentType[最多一个]、Element[最多一个]、ProcessingInstruction 或 Comment
+  Document  [继承 Node] 
     console.log(Document.prototype.__proto__.constructor===Node); // true,继承 Node  
-    Document.prototype.xx  
+    ◆Document.prototype.xx  
+    ★页面信息  
+      str = document.referrer 获取跳转页的URL,即获取从哪个网址跳转过来的 
+        PS:若当前文档不是通过超级链接访问的,则为空字符串''
+          这个属性允许客户端JS访问HTTP引用头部 
+      str = document.URL      当前页完整URL 
+      str = document.defaultCharset  根据浏览器及操作系统的设置,当前文档默认的字符集 [HTML5]
+        [Chrome不支持?] 
+      str = document.readyState  文档的加载状态 [HTML5] 
+        'loading'  正在加载文档 
+        'complete' 已加载完文档 
+      str = document.compatMode  浏览器渲染模式 [HTML5] 
+        IE6开始区分渲染页面的模式是标准的还是混杂的,IE为此给document添加了'compatMode'属性 
+        "CSS1Compat" 标准模式 
+        "BackCompat" 混杂模式 
+      bol = document.hasFocus()  检测文档是否获得了焦点  [HTML5] 
+    ★操作页面 
+      str = document.domain   读写,当前页域名 
+        出于安全方面的限制,可设置的值存在限制 
+          不能将这个属性设置为URL中不包含的域,
+          如果URL中包含一个子域名,例如p2p.wrox.com,则只能将domain设置为"wrox.com"
+        当页面中包含其他子域的框架或内嵌框架时,可设置 document.domain 后从而可通信 
+          由于跨域安全限制,来自不同子域的页面无法通过JS通信。
+          通过将每个页面的 document.domain 设置为相同的值,就可互相访问对方的JS对象了
+          Example: 
+          假设有一个页面加载自www.wrox.com,其中包含一个内嵌框架,框架内的页面加载自p2p.wrox.com。
+          由于document.domain 字符串不一样,内外两个页面之间无法相互访问对方的JavaScript 对象。
+          但如 果将这两个页面的document.domain 值都设置为"wrox.com",它们之间就可以通信了。
+        当域名是'loose'松散的,则不可将其再设为'tight'紧绷的 
+          在将document.domain 设置为"wrox.com"之后,
+          就不能再将其设置回"p2p.wrox.com",否则报错 
+      str = document.charset  读写,文档实际使用的字符集 [HTML5] 
+        也可通过<meta>元素、响应头部修改 
+      str = document.characterSet  字符集 
+      str = document.title    读写,网页标题 
+      str = document.cookie 
+    ★元素快捷获取 
       document.defaultView  当前document对应的window对象,不存在则为 null [DOM2] 
         IE不支持该属性,有一个 document.parentWindow 属性和其等价
         console.log(document.defaultView === window); // true  
-        document.defaultView.getComputedStyle(elem,str) 返回CSSStyleDeclaration 
-          PS:等价于 window.getComputedStyle(elem,str/null);
-            表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果.
-            CSSStyleDeclaration对象中包含当前元素的所有计算的样式
-          Arguments:
-            str 为一伪元素字符串(如":after"),若不需要可为null或''
-              IE不支持获取伪类 [?]
-          Example:
-            var color = window.getComputedStyle(elm, ':before').color;
-            var color = window.getComputedStyle(elm, ':before')
-            .getPropertyValue('color');
-            var color = window.getComputedStyle(elm, null).color;
-          IE9以下不支持defaultView,使用 elem.currentStyle 属性代替 [非标准属性]
-            这个属性是CSSStyleDeclaration的实例
-          计算样式的 CSSStyleDeclaration 对象与内联样式的 CSSStyleDeclaration 对象的区别
-            计算样式的属性是只读的；
-            计算样式的值是绝对值,类似百分比和点之类相对的单位将全部转换为以'px'为后缀的字符串绝对值,
-            其值是颜色的属性将以“rgb(#,#,#)”或“rgba(#,#,#,#)”的格式返回;
-            不计算复合属性,只基于最基础的属性,如不要查询margin,而单独查询marginTop等;
-            计算样式对象未定义cssText属性；
-            计算样式同时具有欺骗性,在查询某些属性时的返回值不一定精准,如查询font-family；
+      document.defaultView.getComputedStyle(elem,str/null) CSSStyleDeclaration,计算的样式  
+        PS: 表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果 
+          等价于 window.getComputedStyle(elem,str/null);
+        str   一伪元素字符串(如":after"),若不需要可为null或'' 
+          IE不支持获取伪类 [?]
+        Example: 
+          var color = window.getComputedStyle(elm, ':before').color;
+          var color = window.getComputedStyle(elm, ':before')
+          .getPropertyValue('color');
+          var color = window.getComputedStyle(elm, null).color;
+        IE9以下不支持defaultView,使用 elem.currentStyle 属性代替 [非标准属性]
+          这个属性是CSSStyleDeclaration的实例
+        计算样式的 CSSStyleDeclaration 对象与内联样式的 CSSStyleDeclaration 对象的区别
+          计算样式的属性是只读的；
+          计算样式的值是绝对值,类似百分比和点之类相对的单位将全部转换为以'px'为后缀的字符串绝对值,
+          其值是颜色的属性将以“rgb(#,#,#)”或“rgba(#,#,#,#)”的格式返回;
+          不计算复合属性,只基于最基础的属性,如不要查询margin,而单独查询marginTop等;
+          计算样式对象未定义cssText属性；
+          计算样式同时具有欺骗性,在查询某些属性时的返回值不一定精准,如查询font-family；
         window.getComputedStyle(elem) 指定元素节点的最终样式信息的对象 
           所谓“最终样式信息”,指的是各种CSS规则叠加后的结果
           还可以接受第二个参数,表示指定节点的伪元素,比如:before、:after、:first-letter等
@@ -170,231 +220,215 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
             但是IE中每个元素有自己的currentStyle属性.
             var styleObj = getComputedStyle ? getComputedStyle(elem, "") : elem.currentStyle;
             var width = styleObj.width;　　//100px;
-      信息快捷获取 
-        str = document.referrer 获取跳转页的URL,即获取从哪个网址跳转过来的 
-          PS:若当前文档不是通过超级链接访问的,则为空字符串''
-            这个属性允许客户端JS访问HTTP引用头部 
-        str = document.domain  当前页域名 
-        str = document.readyState    文档的加载状态['loading'和'complete'] [HTML5] 
-        str = document.compatMode   浏览器渲染模式 [HTML5] 
-          IE6开始区分渲染页面的模式是标准的还是混杂的,IE为此给document添加了'compatMode'属性 
-          "CSS1Compat" 标准模式 
-          "BackCompat" 混杂模式 
-        str = document.title  读写,网页标题 
-        str = document.cookie 
-      元素快捷获取 
-        document.documentElement  <html>元素 
-          document.documentElement.clientWidth   获取视口的宽度
-          document.documentElement.clientHeight  获取视口的宽度
-          document.documentElement.textContent   获取整个文档的文本以及CDATA数据
-        document.head 
-        document.head HTML的head节点 
-        document.body   <body>元素 
-          等价于 document.querySelector("body");
-      元素相关 
-        document.childElementCount 
-      document.hasFocus()  检测文档是否获得了焦点,返回布尔值 [HTML5] 
-      document.createElement('tagName'[,options])  返回创建的元素对象 
-        PS:只是创建了一个元素,还没添加到html中,驻留在内存中 
-          只是创建了一个空元素(只有标签),无属性和内容(?)
-          当指定未定义的元素时,创建一个HTMLUnknownElement
-        'tagName' 指定将要创建的元素类型的字符串 
-          创建的element的nodeName会被初始化为tagName的值.
-          该方法不接受带条件的元素名字(例如: html:a).
-        options 是一个可选的'ElementCreationOptions'对象 
-        IE中可传入HTML代码来创建HTML元素
-          var div =document.createElement("<div class="a" id="b"></div>");
-      document.createTextNode("文本")      创建一文本节点
-      document.createAttribute("attrName") 创建属性节点 
-        创建时已经确定了属性的name,后续不需再赋值 
-      document.createDocumentFragment("文本") 创建文档片段
-      document.createComment("文本")   创建一注释节点[Chrome、IE不支持] 
-      document.importNode(nod,bol) 复制插入节点[HTML中不常用,XML中常用] 
-        PS:将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中
+      document.documentElement  <html>元素 
+        document.documentElement.clientWidth   获取视口的宽度
+        document.documentElement.clientHeight  获取视口的宽度
+        document.documentElement.textContent   获取整个文档的文本以及CDATA数据
+      document.head   <head>元素[HTML5]  
+      document.body   <body>元素 
+        等价于 document.querySelector("body");
+    ★元素获取 
+      document.childElementCount [ElementTraversal]
+      document.firstElementChild [ElementTraversal]
+      document.lastElementChild  [ElementTraversal]
+      document.children 
+      document.rootElement 
+      document.activeElement   DOM中当前获得了焦点的元素[HTML5] 
+        默认情况下,文档刚加载完时,document.activeElement 为 document.body 
+        文档加载期间,document.activeElement 为 null
+      elem = document.getElementById("idName")  通过id值获取对应的第一个元素 
+        id值区分大小写;不存则返回 null 
+      document.querySelector()       [SelectorsAPI]
+    ★元素操作 
+      document.prepend()  
+      document.append()  
+      node = document.importNode(nod,bol) 复制节点,插入并返回  [DOM2]
+        PS: 将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中 
           源节点不会从外部文档中删除,被导入的节点是源节点的一个拷贝 
+          HTML中不常用,XML中常用 
         Example:
         var iframe = document.getElementsByTagName("iframe")[0];
         var oldNode = iframe.contentDocument.getElementById("myNode");
         var newNode = document.importNode(oldNode, true);
         document.getElementById("container").appendChild(newNode);
-      document.write(str)    在网页上输出字符串
-        PS: 可以使用该方法动态的包含外部资源,比如JavaScript文件
-          注意不能在字符串中直接包含"</script>",否则会导致被解析为脚本块的结束
-        document.write() 输出内容和前面内容的输出关系 
+    ★创建节点 
+      elem = document.createElement('tagName'[,options])  创建元素对象 
+        PS: 只是创建了一空元素[只有标签],无属性和内容,还没添加到html中[驻留在内存中] 
+        'tagName' str,待创建元素的标签名  
+          HTML中不区分大小写,XML中区分大小写 
+        options   可选,'ElementCreationOptions'对象 
+        IE中可传入HTML代码来创建HTML元素 
+          var div =document.createElement("<div class="a" id="b"></div>");
+        当指定未定义的元素时,创建一个 HTMLUnknownElement 
+          console.log(HTMLUnknownElement===document.createElement('abc').constructor); // true 
+      txt = document.createTextNode("文本")      创建一文本节点
+      comt = document.createComment("文本")   创建一注释节点[Chrome、IE不支持] 
+      atr = document.createAttribute("attrName") 创建属性节点 
+      frag = document.createDocumentFragment("文本") 创建文档片段
+    ★文档流写入、打开、关闭 
+      document.write(str)    将输出流写入到网页中  
+        可使用该方法动态的包含外部资源,比如JS文件 
+          document.write("<script type=\"text/javascript\" src=\"file.js\"><\/script>");
+          注意不能在字符串中直接包含"</script>",需进行转义为'<\/script>' 
+          否则会导致被解析为脚本块的结束
         清空原网页输出&叠加输出  
           文档加载完毕后,文档流已经关闭 
           当执行document.write()时,会先调用document.open()创建一个新的文档流,
           在写入新的内容,再通过浏览器展现,会导致原内容被清空 
-          当文档未加载完毕,文档流未关闭,执行 document.wirte()会叠加输出  
-      document.writeln(str)  同write相同,会在字符串的末尾添加一个换行符(\n)
+          当文档未加载完毕,且文档流未关闭时,执行 document.wirte() 会叠加输出  
+      document.writeln(str)  换行输出,类似write,会在输出末尾加一换行符'\n' 
       document.open(url,str,target)  新建新建窗口,并打开文档流 
         url 打开窗口的网址,默认为在当前网址后增加,使用'http://xxx'则表示一新网址 
         target 打开窗口的位置,可选'_blank'...
       document.close() 关闭手动创建的文档流 
-      document.getElementById("idName")   通过id获取元素对象 
-        返回值为HTMLDivElement对象,若不存在返回null.
-      待整理 
-        document.xmlEncoding 
-        document.xmlVersion 
-        document.xmlStandalone 
-        document.anchors 
-        document.applets 
-        document.selectedStylesheetSet 
-        document.preferredStylesheetSet 
-        document.scrollingElement 
-        document.hidden 
-        document.visibilityState 
-        document.webkitVisibilityState 
-        document.webkitHidden 
-        document.fonts 
-        document.webkitIsFullScreen 
-        document.webkitCurrentFullScreenElement 
-        document.webkitFullscreenEnabled 
-        document.webkitFullscreenElement 
-        document.activeElement 
-        document.pointerLockElement 
-        document.children 
-        document.firstElementChild 
-        document.lastElementChild 
-        document.rootElement 
-        document.getElementsByTagName()  
-        document.getElementsByTagNameNS()  
-        document.getElementsByClassName()  
-        document.createCDATASection()  
-        document.createProcessingInstruction()  
-        document.adoptNode()  
-        document.createAttributeNS()  
-        document.createEvent()  
-        document.createRange()  
-        document.createNodeIterator()  
-        document.createTreeWalker()  
-        document.write()  
-        document.execCommand()  
-        document.queryCommandEnabled()  
-        document.queryCommandIndeterm()  
-        document.queryCommandState()  
-        document.queryCommandSupported()  
-        document.queryCommandValue()  
-        document.exitPointerLock()  
-        document.registerElement()  
-        document.createElementNS()  
-        document.caretRangeFromPoint()  
-        document.webkitCancelFullScreen()  
-        document.webkitExitFullscreen()  
-        document.getSelection()  
-        document.elementFromPoint()  
-        document.elementsFromPoint()  
-        document.querySelector()  
-        document.querySelectorAll()  
-        document.createExpression()  
-        document.createNSResolver()  
-        document.evaluate()  
-        document.prepend()  
-        document.append()  
-      事件相关 
-        document.onreadystatechange 
-        document.onpointerlockchange 
-        document.onpointerlockerror 
-        document.onwebkitfullscreenchange 
-        document.onwebkitfullscreenerror 
-        document.onabort 
-        document.onblur 
-        document.oncancel 
-        document.oncanplay 
-        document.oncanplaythrough 
-        document.onchange 
-        document.onclick 
-        document.onclose 
-        document.oncontextmenu 
-        document.oncuechange 
-        document.ondblclick 
-        document.ondrag 
-        document.ondragend 
-        document.ondragenter 
-        document.ondragleave 
-        document.ondragover 
-        document.ondragstart 
-        document.ondrop 
-        document.ondurationchange 
-        document.onemptied 
-        document.onended 
-        document.onerror 
-        document.onfocus 
-        document.oninput 
-        document.oninvalid 
-        document.onkeydown 
-        document.onkeypress 
-        document.onkeyup 
-        document.onload 
-        document.onloadeddata 
-        document.onloadedmetadata 
-        document.onloadstart 
-        document.onmousedown 
-        document.onmouseenter  
-        document.onmouseleave  
-        document.onmousemove 
-        document.onmouseout 
-        document.onmouseover 
-        document.onmouseup 
-        document.onmousewheel 
-        document.onpause 
-        document.onplay 
-        document.onplaying 
-        document.onprogress 
-        document.onratechange 
-        document.onreset 
-        document.onresize 
-        document.onscroll 
-        document.onseeked 
-        document.onseeking 
-        document.onselect 
-        document.onshow 
-        document.onstalled 
-        document.onsubmit 
-        document.onsuspend 
-        document.ontimeupdate 
-        document.ontoggle 
-        document.onvolumechange 
-        document.onwaiting 
-        document.onbeforecopy 
-        document.onbeforecut 
-        document.onbeforepaste 
-        document.oncopy 
-        document.oncut 
-        document.onpaste 
-        document.onsearch 
-        document.onselectionchange 
-        document.onselectstart 
-        document.onwheel 
-        document.onauxclick 
-        document.ongotpointercapture 
-        document.onlostpointercapture 
-        document.onpointercancel 
-        document.onpointerdown 
-        document.onpointerenter 
-        document.onpointerleave 
-        document.onpointermove 
-        document.onpointerout 
-        document.onpointerover 
-        document.onpointerup 
-      不常用 
-        document.currentScript 
-        str = document.URL    当前页的完整URL 
-        str = document.documentURI  url地址 
-        str = document.origin       协议+域名  
-        str = document.characterSet  字符集,默认'UTF-8'
-        str = document.charset       读写,文档使用的字符集 [HTML5]
-        str = document.inputEncoding 默认'UTF-8'
-        str = document.contentType 默认'text/html'
-        document.lastModified 
-        document.dir 
-        document.images 
-        document.embeds 
-        document.plugins 
-        document.links 
-        document.forms 
-        document.scripts 
-        document.designMode 
+    ★待整理 
+      document.xmlEncoding 
+      document.xmlVersion 
+      document.xmlStandalone 
+      document.anchors 
+      document.applets 
+      document.selectedStylesheetSet 
+      document.preferredStylesheetSet 
+      document.scrollingElement 
+      document.hidden 
+      document.visibilityState 
+      document.fonts 
+      document.pointerLockElement 
+      document.createCDATASection()  
+      document.createProcessingInstruction()  
+      document.adoptNode()  
+      document.createRange()  
+      document.createNodeIterator()  
+      document.createTreeWalker()  
+      document.write()  
+      document.execCommand()  
+      document.queryCommandEnabled()  
+      document.queryCommandIndeterm()  
+      document.queryCommandState()  
+      document.queryCommandSupported()  
+      document.queryCommandValue()  
+      document.exitPointerLock()  
+      document.registerElement()  
+      document.caretRangeFromPoint()  
+      document.getSelection()  
+      document.elementFromPoint()  
+      document.elementsFromPoint()  
+      document.createExpression()  
+      document.createNSResolver()  
+      document.evaluate()  
+    ★事件相关 
+      document.onreadystatechange 
+      document.onpointerlockchange 
+      document.onpointerlockerror 
+      document.onwebkitfullscreenchange 
+      document.onwebkitfullscreenerror 
+      document.onabort 
+      document.onblur 
+      document.oncancel 
+      document.oncanplay 
+      document.oncanplaythrough 
+      document.onchange 
+      document.onclick 
+      document.onclose 
+      document.oncontextmenu 
+      document.oncuechange 
+      document.ondblclick 
+      document.ondrag 
+      document.ondragend 
+      document.ondragenter 
+      document.ondragleave 
+      document.ondragover 
+      document.ondragstart 
+      document.ondrop 
+      document.ondurationchange 
+      document.onemptied 
+      document.onended 
+      document.onerror 
+      document.onfocus 
+      document.oninput 
+      document.oninvalid 
+      document.onkeydown 
+      document.onkeypress 
+      document.onkeyup 
+      document.onload 
+      document.onloadeddata 
+      document.onloadedmetadata 
+      document.onloadstart 
+      document.onmousedown 
+      document.onmouseenter  
+      document.onmouseleave  
+      document.onmousemove 
+      document.onmouseout 
+      document.onmouseover 
+      document.onmouseup 
+      document.onmousewheel 
+      document.onpause 
+      document.onplay 
+      document.onplaying 
+      document.onprogress 
+      document.onratechange 
+      document.onreset 
+      document.onresize 
+      document.onscroll 
+      document.onseeked 
+      document.onseeking 
+      document.onselect 
+      document.onshow 
+      document.onstalled 
+      document.onsubmit 
+      document.onsuspend 
+      document.ontimeupdate 
+      document.ontoggle 
+      document.onvolumechange 
+      document.onwaiting 
+      document.onbeforecopy 
+      document.onbeforecut 
+      document.onbeforepaste 
+      document.oncopy 
+      document.oncut 
+      document.onpaste 
+      document.onsearch 
+      document.onselectionchange 
+      document.onselectstart 
+      document.onwheel 
+      document.onauxclick 
+      document.ongotpointercapture 
+      document.onlostpointercapture 
+      document.onpointercancel 
+      document.onpointerdown 
+      document.onpointerenter 
+      document.onpointerleave 
+      document.onpointermove 
+      document.onpointerout 
+      document.onpointerover 
+      document.onpointerup 
+    ★命名空间相关 
+      document.createElementNS()  
+      document.createAttributeNS()  
+      document.getElementsByTagNameNS()  
+    ★不常用 
+      document.currentScript 
+      str = document.documentURI  url地址 
+      str = document.origin       协议+域名  
+      str = document.inputEncoding 默认'UTF-8'
+      str = document.contentType 默认'text/html'
+      document.lastModified 
+      document.dir 
+      document.images 
+      document.embeds 
+      document.plugins 
+      document.links 
+      document.forms 
+      document.scripts 
+      document.designMode 
+      document.webkitIsFullScreen 
+      document.webkitCurrentFullScreenElement 
+      document.webkitFullscreenEnabled 
+      document.webkitFullscreenElement 
+      document.webkitVisibilityState 
+      document.webkitHidden 
+      document.webkitCancelFullScreen()  
+      document.webkitExitFullscreen()  
   HTMLDocument===document.constructor  [继承 Document] 
     HTMLDocument.prototype.__proto__.constructor===Document // true,继承 Document  
     HTMLDocument.prototype.xx  [属性/方法都已废弃] 
@@ -412,50 +446,39 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
   DOMImplementation===document.implementation.constructor 
     PS: DOM1级只为其规定了'hasFeature'一个方法 
     var tmp = document.implementation  
-    DOMImplementation.prototype.xxx  
-      bol = tmp.hasFeature(feature,version)  浏览器检测 
-        PS: 检测结果不一定准确,如 safari2.x 及更早版本即使未完全实现某些DOM功能也会返回true 
-        feature   待检测的DOM功能名称
-        version   DOM功能的版本号
-        ★枚举:
-        Core        1.0 2.0 3.0 基本的DOM,用于描述表现文档的节点树
-        XML         1.0 2.0 3.0 Core的XML扩展,添加了对CDATA、处理指令及实体的支持
-        HTML        1.0 2.0     XML的HTML扩展,添加了对HTML特有元素及实体的支持
-        Views       2.0         基于某些样式完成文档的格式化
-        StyleSheets 2.0         将样式表关联到文档
-        CSS         2.0         对层叠样式表1级的支持
-        CSS2        2.0         对层叠样式表2级的支持
-        Events      2.0 3.0     常规的DOM事件
-        UIEvents    2.0 3.0     用户界面事件
-        MouseEvents 2.0 3.0     由鼠标引发的事件
-        MulationEvents 2.0 3.0  DOM树变化时引发的事件
-        HTMLEvents  2.0         HTML 4.01 事件
-        Range       2.0         用于操作DOM树中某个范围的对象和方法
-        Traversal   2.0         遍历DOM树的方法
-        LS          3.0         文件与DOM树之间的同步加载和保存
-        LS-Async    3.0         文件与DOM树之间的异步加载和保存
-        Validation  3.0         在确保有效的前提下修改DOM树的方法
-        Example:
-        document.implementation.hasFeature("CSS","2.0")
-        document.implementation.hasFeature("CSS2","2.0")
-        document.implementation.hasFeature("HTML","1.0")
-      tmp.createDocumentType()  创建HTML5之前的doctype相关
-      tmp.createDocument()  创建新文档
-      tmp.createHTMLDocument(titlename)  创建一个完整的HTML文档 [只有Opera和Safari支持]  
-        PS: 包括 <html> <head> <title> <body>元素
-          通过该方法创建的文档为'HTMLDocument'类型的实例
-        'titlename'   放在<title>元素中的字符串
-  DocumentType===document.doctype.constructor [继承 Node]  [DiBs] 
-    var tmp = document.doctype  文档类型,<!DOCTYPE>的引用
-    DocumentType.prototype.xx 
-      tmp.name     'html'
-      tmp.remove()  
-      tmp.before()  
-      tmp.after()  
-      tmp.replaceWith()  
-      不常用: 
-        tmp.publicId  获取HTML5之前的doctype声明中的部分信息
-        tmp.systemId  获取HTML5之前的doctype声明中的部分信息
+    ◆DOMImplementation.prototype.xxx  
+    bol = tmp.hasFeature(feature,version)  浏览器功能检测 [DOM1] 
+      PS: 检测结果不一定准确,如 safari2.x 及更早版本即使未完全实现某些DOM功能也会返回true 
+      feature   待检测的DOM功能名称
+      version   DOM功能的版本号
+      ★枚举:
+      Core        1.0 2.0 3.0 基本的DOM,用于描述表现文档的节点树
+      XML         1.0 2.0 3.0 Core的XML扩展,添加对CDATA、处理指令及实体的支持
+      HTML        1.0 2.0     XML的HTML扩展,添加了对HTML特有元素及实体的支持
+      Views       2.0         基于某些样式完成文档的格式化
+      StyleSheets 2.0         将样式表关联到文档
+      CSS         2.0         对层叠样式表1级的支持
+      CSS2        2.0         对层叠样式表2级的支持
+      Events      2.0 3.0     常规的DOM事件
+      UIEvents    2.0 3.0     用户界面事件
+      MouseEvents 2.0 3.0     由鼠标引发的事件
+      MulationEvents 2.0 3.0  DOM树变化时引发的事件
+      HTMLEvents  2.0         HTML4.01 事件
+      Range       2.0         用于操作DOM树中某个范围的对象和方法
+      Traversal   2.0         遍历DOM树的方法
+      LS          3.0         文件与DOM树之间的同步加载和保存
+      LS-Async    3.0         文件与DOM树之间的异步加载和保存
+      Validation  3.0         在确保有效的前提下修改DOM树的方法
+      Example:
+      document.implementation.hasFeature("CSS","2.0")
+      document.implementation.hasFeature("CSS2","2.0")
+      document.implementation.hasFeature("HTML","1.0")
+    tmp.createDocumentType()  创建HTML5之前的doctype相关 [DOM2] 
+    tmp.createDocument()  创建新文档 [DOM2] 
+    tmp.createHTMLDocument(titlename) 创建一个完整的HTML文档 [只有Opera和Safari支持] [DOM2] 
+      PS: 包括 <html> <head> <title> <body>元素 
+        通过该方法创建的文档为'HTMLDocument'类型的实例
+      'titlename'   放在<title>元素中的字符串
   StyleSheetList===document.styleSheets.constructor 
     var shets = document.styleSheets  样式表集合 
     StyleSheetList.prototype.xxx 
@@ -520,31 +543,6 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       shet.rules 
       shet.addRule() 
       shet.removeRule() 
-  CSSRuleList===<shet>.cssRules.constructor 
-    CSSRuleList.prototype.xxx 
-      rules.length 
-      rules.item() 
-  CSSStyleRule===<shet>.cssRules[0].constructor [继承 CSSRule]
-    CSSStyleRule.prototype.xxx 
-      rule.selectorText 
-      rule.style 
-  CSSRule===CSSStyleRule.prototype.__proto__.constructor  
-    CSSRule.prototype.xxx 
-      常量 
-        1===rule.STYLE_RULE 
-        2===CHARSET_RULE 
-        3===IMPORT_RULE 
-        4===MEDIA_RULE 
-        5===FONT_FACE_RULE 
-        6===PAGE_RULE 
-        7===KEYFRAMES_RULE 
-        8===KEYFRAME_RULE 
-        10===NAMESPACE_RULE 
-        12===SUPPORTS_RULE 
-      rule.type 
-      rule.cssText 
-      rule.parentRule 
-      rule.parentStyleSheet 
   StyleSheet===CSSStyleSheet.prototype.__proto__.constructor 
     StyleSheet.prototype.xxx 
       shet.type  返回StyleSheet对象的type值,通常是text/css 
@@ -563,106 +561,44 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
         PS: 若样式被禁用返回true,否则为false.
           一旦样式表设置了disabled属性,这张样式表就将失效
         sheet.disabled = true ;  禁用该样式
+  CSSRuleList===<shet>.cssRules.constructor 
+    CSSRuleList.prototype.xxx 
+      rules.length 
+      rules.item() 
+  CSSStyleRule===<shet>.cssRules[0].constructor [继承 CSSRule]
+    CSSStyleRule.prototype.xxx 
+      rule.selectorText 
+      rule.style 
+  CSSRule===CSSStyleRule.prototype.__proto__.constructor  
+    CSSRule.prototype.xxx 
+      常量 
+        1===rule.STYLE_RULE 
+        2===rule.CHARSET_RULE 
+        3===rule.IMPORT_RULE 
+        4===rule.MEDIA_RULE 
+        5===rule.FONT_FACE_RULE 
+        6===rule.PAGE_RULE 
+        7===rule.KEYFRAMES_RULE 
+        8===rule.KEYFRAME_RULE 
+        10===rule.NAMESPACE_RULE 
+        12===rule.SUPPORTS_RULE 
+      rule.type 
+      rule.cssText 
+      rule.parentRule 
+      rule.parentStyleSheet 
 Element 元素节点类型,用于表现XML或HTML元素 [继承 Node] 
   元素节点可能的子节点: 
     Element Text Comment ProcessingInstruction 
     CDATASection EntityReference
-  console.log(Element.prototype.__proto__.constructor===Node); // true,继承 Node 
-  Element.prototype.xx 
-    elem.tagName  元素标签名 
+  Element.prototype.__proto__.constructor===Node // true,继承 Node 
+  ◆Element.prototype.xx 
+  ★元素信息 
+    elem.tagName  元素标签名,在HTML中,标签名始终以全部大写表示 
       等价于 elem.nodeName 
       因为返回标签名的字符串存在大小写的问题,推荐的做法为统一转换为小写字符在做比较
-      Example: 
-      elem.tagName.toLowerCase() == "div";
-    elem.id  读写,元素id值 
-    str = elem.className 读写,元素的class字符串形式包括空格 
-    elem.children  所有子元素的集合 [专有扩展] 
-      PS: HTMLCollection的实例;当只包含子元素节点时,children和childNodes相同
-        每个子元素包含其所有的自身后代元素
-        此属性不是符合W3C标准规范的属性,可以获取指定元素的子元素,
-        支持的浏览器有IE5+ Firefox Safari Opera Chrome
-        IE8及更早版本的children属性中会包含注释节点,IE9后则只包含元素节点
-    ◆标签相关 
-    str = elem.outerHTML 获取元素自身标签及其innerHTML [HTML5]
-    str = elem.innerHTML 读写,元素标签内的所有内容的字符串表示 [HTML5] 
-      PS: 各个浏览器返回的值可能不完全一样(如是否带空格,大小写问题等)
-        在大多数浏览器中通过该方法插入<script>元素并不会执行其中的脚本
-        并非所有元素都支持innerHTML属性,不支持的元素有:
-          col colgroup frameset head html style table tbody thead tfoot tr
-      关于常用的innerHTML属性和节点操作方法发的比较,
-        在插入大量HTML标记时使用innerHTML的效率明显要高很多.
-        在设置innerHTML时,会创建一个HTML解析器.
-        这个解析器是浏览器级别的(C++编写),因此执行javascript会快的多
-      IE8提供了一个类似的方法 window.toStaticHTML()方法
-        接收一个HTML字符串,
-        返回一个经过处理后的版本(从原HTML中删除所有脚本节点和事件处理程序属性)
-      Example: :
-      当创建和销毁HTML解析器也会带来性能损失,最好控制在最合理的范围内.如下:
-      for(var i=0;i<10;i++){ ul.innerHTML="<li>items</li>";  }
-      //每次循环创建解析器,影响性能
-      改为
-      for(var i=0;i<10;i++){ a=a+"<li>items</li>"; }
-      //临时保存
-      ul.innerHTML=a;
-    elem.insertAdjacentHTML("pos","htmlStr") 在指定位置插入HTML代码 [HTML5] 
-      PS: 该方法最早在IE中出现;html字符串会在网页中自动转换为html元素
-        无返回值 
-      pos  插入的位置 
-        'beforebegin'
-        'afterbegin'
-        'beforeend'
-        'afterend' 
-      Example:
-      var htmlStr = `<a href="https://www.baidu.com">这是一个到百度的链接</a>`
-      a.insertAdjacentHTML("beforeBegin",htmlstr);
-    innerHTML outerHTML insertAdjacentHTML 的使用说明 
-      该方法可能导致浏览器的内存占用问题,IE中问题更加明显,
-      如删除某个元素后,元素与事件处理程序之间的绑定关系并未删除,若频繁出现导致内存占用过多
-      最好先手工删除要被替换的元素的所有事件处理程序和JS对象属性
-    elem.insertAdjacentElement('pos',targetElem)  插入目标元素并返回 
-    elem.remove()  删除元素 [IE20+] 
-    elem.querySelector('selector')  后代元素中,对应的第一个元素对象 [DOM扩展] 
-      PS: 在该元素的后代元素内查找匹配的元素,没有则为null 
-      selector 可为标签、类、id等等,也可以为组合选择器如 div.wrap 
-        slt 中的字符不可包含括号"()"字符
-        若传入了不被支持的选择符,querySelector会抛出错误
-    elem.querySelectorAll('selector')  后代元素中,对应的元素集  [DOM扩展] 
-      返回值为一个"静态"不会自动更新,只包含元素的NodeList,无匹配项则为空 NodeList
-      可通过下标或 item() 方法来获取单个元素
-    elem.setAttributeNode()  将创建的特性添加到元素中
-    elem.getAttributeNode()  获取元素的特性
-    elem.closest('selector')  最近的祖先元素 [IE20+] 
-      PS: 也可以是当前元素本身;未匹配到,则返回 null
-    ◆元素相关 
+        elem.tagName.toLowerCase() == "div";
     elem.childElementCount 子元素数量 [ElementTraversal]
-    elem.firstElementChild 第一个子元素 [ElementTraversal]
-    elem.lastElementChild  最后一个子元素 [ElementTraversal]
-    elem.previousElementSibling 前一个兄弟元素 [ElementTraversal] 
-    elem.nextElementSibling   后一个兄弟元素 [ElementTraversal]
-    ◆属性 
-    bol = elem.hasAttributes() 元素是否有属性的布尔值
-    bol = elem.hasAttribute("atrName") 是否有指定的属性 
-    elem.hasAttribute()  
-    elem.getAttribute("atrName") 获取指定属性的值  
-      Example: :
-      elem.getAttribute("value") input表单中value的值 [不会实时动态的更新]
-      elem.getAttribute("class/className"); 获取 class类
-      IE使用class,其他浏览器使用className(?)
-    elem.setAttribute("atrName","val") 设置特性,若存在则修改,否则创建 
-      使用元素属性方法来自定义属性不起作用,如 div.mycolor ="red"; 需使用setAttribute方法
-      Example: 
-        document.getElementById("box").setAttribute("align","center");
-        document.getElementById("box").setAttribute("style","color:green");
-        elem.setAttribute("contenteditable","true");
-        添加内置样式表
-        var style = document.createElement('style');
-        style.setAttribute('media', 'screen');
-        // 或者
-        style.setAttribute("media","@media only screen and(max-width:1024px)");
-    elem.removeAttribute("atrName") 删除属性及属性值 
-      Example:
-      elem.removeAttribute("class");
-    ◆元素尺寸、位置 
+  ★元素尺寸、位置 
     elem.clientWidth/elem.clientHeight 只读,元素内宽/高 
       PS: 元素内容及其内边距所占空间大小[边框以内不包括边框、滚动条等]
       不包括边框[IE包括]、滚动条部分 
@@ -689,13 +625,6 @@ Element 元素节点类型,用于表现XML或HTML元素 [继承 Node]
     elem.scrollWidth/elem.scrollHeight  布局宽/高+滚动隐藏宽/高 
       包括元素的padding,但不包括元素的margin
       document.body.scrollWidth 在其布局宽和浏览器宽中取较大者,高度同理; 
-    elem.scrollLeft/elem.scrollTop  读写,元素水平/垂直滚动距离 
-      PS: 被隐藏的内容左/上侧的像素值,通过设置可改变元素滚动位置
-    elem.scrollIntoView([bol]) 通过滚动浏览器窗口或某个容器元素使元素出现在视口中 [HTML5] 
-      PS: 实际上,为某个元素设置焦点也会导致浏览器滚动并显示出该元素
-      bol  默认 true
-        true 让调用元素的顶部与视口顶部尽可能平齐
-        true 让调用元素尽可能全部出现在视口中(若可能的话,会使底部与底部平齐)
     elem.getBoundingClientRect() 返回一对象,用于获得元素相对视口的位置 [DiBs] 
       elem.getBoundingClientRect().width  元素宽
       elem.getBoundingClientRect().height 元素高
@@ -703,73 +632,202 @@ Element 元素节点类型,用于表现XML或HTML元素 [继承 Node]
       elem.getBoundingClientRect().bottom 元素底部到视口顶部的距离
       elem.getBoundingClientRect().left   元素左侧到视口左侧的距离
       elem.getBoundingClientRect().right  元素右侧到视口左侧的距离
-    elem.scrollIntoViewIfNeeded(bol) 将不再视口中的元素滚到到视口中  [专有扩展]
-      当参数设置为true时,则表示尽量将元素显示在视口中部[垂直方向]
-    ◆ 
-    elem.classList  DOMTokenList,元素所有class的集合 [HTML5] 
-      PS: firefox 和 Chrome 支持该属性
-      elem.classList.length  获取类的个数
-      elem.classList[] 或 elem.classList.item();  获取元素
-      elem.classList.contains("类名"); 返回是否包含指定类的布尔值
-      elem.classList.add("类名");      将指定类加到元素的类列表中
-        若存在类b,则不添加,否则添加(即始终只存在一个类b)
-      elem.classList.remove("类名");   从元素的类列表中删除指定类
-        若存在类b则删除,否则无动作
-      elem.classList.toggle("类名");   元素列表中若有该类则删除,没有则加上
-    ◆事件相关 
-      elem.onbeforecopy 
-      elem.onbeforecut 
-      elem.onbeforepaste 
-      elem.oncopy 
-      elem.oncut 
-      elem.onpaste 
-      elem.onsearch 
-      elem.onselectstart 
-      elem.onwheel 
-      elem.onwebkitfullscreenchange 
-      elem.onwebkitfullscreenerror 
-    不常用 
-      elem.namespaceURI 返回元素的命名空间,DOM4前,该API在Node接口中定义
-      elem.prefix 
-      elem.localName 
-      elem.slot 
-      elem.shadowRoot 
-      elem.assignedSlot 
-      elem.getAttributeNS()  
-      elem.setAttributeNS()  
-      elem.removeAttributeNS()  
-      elem.hasAttributeNS()  
-      elem.getAttributeNodeNS()  
-      elem.setAttributeNodeNS()  
-      elem.removeAttributeNode()  
-      elem.matches()  
-      elem.webkitMatchesSelector()  
-      elem.attachShadow()  
-      elem.getElementsByTagNameNS()  
-      elem.insertAdjacentText()  
-      elem.requestPointerLock()  
-      elem.getClientRects()  
-      elem.createShadowRoot()  
-      elem.getDestinationInsertionPoints()  
-      elem.animate()  
-      elem.webkitRequestFullScreen()  
-      elem.webkitRequestFullscreen()  
-      elem.setPointerCapture()  
-      elem.releasePointerCapture()  
-      elem.hasPointerCapture()  
-      elem.before()  
-      elem.after()  
-      elem.replaceWith()  
-      elem.prepend()  
-      elem.append()  
+  ★HTML标签相关 
+    str = elem.innerHTML 读写,元素标签内的所有标签及文本 [HTML5] 
+      PS: 各个浏览器返回的值可能不完全一样[如是否带空格,大小写问题等] 
+        在大多数浏览器中通过该方法插入<script>元素并不会执行其中的脚本
+        为innerHTML设置HTML字符串后,浏览器会将其解析为相应的DOM树 
+      并非所有元素都支持innerHTML属性,不支持的元素有[?]: 
+        col colgroup frameset head html style table tbody thead tfoot tr
+      关于常用的innerHTML属性和节点操作方法发的比较 
+        在插入大量HTML标记时使用innerHTML的效率明显要高很多.
+        在设置innerHTML时,会创建一个HTML解析器.
+        这个解析器是浏览器级别的[C++编写],因此执行JS会快的多 
+    str = elem.outerHTML 读写,元素自身标签及其innerHTML [HTML5]
+    elem.insertAdjacentHTML("pos","htmlStr") 在指定位置插入HTML代码 [HTML5] 
+      PS: 该方法最早在IE中出现;html字符串会在网页中自动转换为html元素
+        无返回值 
+      pos  插入的位置 
+        'beforebegin' 在当前元素前插入同级元素 
+        'afterbegin'  作为第一个子元素插入  
+        'beforeend'   作为最后一子元素插入  
+        'afterend'    在当前元素后插入同级元素 
+      Example:
+      var htmlStr = `<a href="https://www.baidu.com">这是一个到百度的链接</a>`
+      a.insertAdjacentHTML("beforeBegin",htmlstr);
+    innerHTML outerHTML insertAdjacentHTML 使用说明 
+      该方法可能导致浏览器的内存占用问题,IE中问题更加明显,
+      如删除某个元素后,元素与事件处理程序之间的绑定关系并未删除,若频繁出现导致内存占用过多
+      最好先手工删除要被替换的元素的所有事件处理程序和JS对象属性
+  ★特性相关 
+    elem.<atrName>  读写,元素特性值 
+      str = elem.id  读写,元素id值 
+      str = elem.className  读写,元素class特性字符串[包括空格] 
+    bol = elem.hasAttributes() 标签中是否存在特性 
+    bol = elem.hasAttribute("atrName") 是否有指定的特性  
+    elem.hasAttribute()  
+    str = elem.getAttribute("atrName") 获取指定特性的值,包括自定义的特性   
+      Example: 
+      elem.getAttribute("value") input表单中value的值 [不会实时动态的更新]
+      elem.getAttribute("class/className"); 获取 class类
+      elem.getAttribute("style"); 得到相应的代码字符串
+      elem.getAttribute("onclick"); 得到相应的代码字符串
+      IE使用class,其他浏览器使用className(?)
+    elem.setAttribute("atrName","val") 设置特性,若存在则修改,否则创建 
+      使用元素属性方法来自定义属性不起作用,如 div.mycolor ="red"; 需使用setAttribute方法
+      Example: 
+        document.getElementById("box").setAttribute("align","center");
+        document.getElementById("box").setAttribute("style","color:green");
+        elem.setAttribute("contenteditable","true");
+        添加内置样式表
+        var style = document.createElement('style');
+        style.setAttribute('media', 'screen');
+        // 或者
+        style.setAttribute("media","@media only screen and(max-width:1024px)");
+    elem.removeAttribute("atrName") 删除属性及属性值 
+      Example:
+      elem.removeAttribute("class");
+    elem.setAttributeNode()  将创建的特性添加到元素中
+    elem.getAttributeNode()  获取元素的特性
+  ★元素获取 
+    elem.firstElementChild 第一个子元素 [ElementTraversal]
+    elem.lastElementChild  最后一个子元素 [ElementTraversal]
+    elem.previousElementSibling 前一个兄弟元素 [ElementTraversal] 
+    elem.nextElementSibling   后一个兄弟元素 [ElementTraversal] 
+    elem.children  所有子元素的集合 [专有扩展] 
+      PS: HTMLCollection的实例;当只包含子元素节点时,children和childNodes相同
+        每个子元素包含其所有的自身后代元素
+        此属性不是符合W3C标准规范的属性,可以获取指定元素的子元素,
+        支持的浏览器有IE5+ Firefox Safari Opera Chrome
+        IE8及更早版本的children属性中会包含注释节点,IE9后则只包含元素节点
+    elem.querySelector('selector')  后代元素中,对应的第一个元素对象 [SelectorsAPI] 
+      PS: 在该元素的后代元素内查找匹配的元素,没有则为null 
+      selector 可为标签、类、id等等,也可以为组合选择器如 div.wrap 
+        slt 中的字符不可包含括号"()"字符
+        若传入了不被支持的选择符,querySelector会抛出错误
+    elem.closest('selector')  最近的祖先元素 [IE20+] 
+      PS: 也可以是当前元素本身;未匹配到,则返回 null
+  ★元素操作 
+    elem.scrollLeft/elem.scrollTop  读写,元素水平/垂直滚动距离 
+      PS: 被隐藏的内容左/上侧的像素值,通过设置可改变元素滚动位置
+    elem.scrollIntoView([bol]) 通过滚动浏览器窗口或某个容器元素使元素出现在视口中 [HTML5] 
+      PS: 实际上,为某个元素设置焦点也会导致浏览器滚动并显示出该元素
+      bol  默认 true
+        true  让调用元素的顶部与视口顶部尽可能平齐 
+        false 让调用元素尽可能全部出现在视口中,若可能的话,会使底部与底部平齐 
+    elem.scrollIntoViewIfNeeded(bol) 将不再视口中的元素滚到到视口中,否则无操作  [专有扩展]
+      当参数设置为true时,则表示尽量将元素显示在视口中部[垂直方向] 
+    elem.insertAdjacentElement('pos',targetElem)  插入目标元素并返回 
+    elem.remove()  删除元素 [IE20+] 
+  ★事件相关 
+    elem.onbeforecopy 
+    elem.onbeforecut 
+    elem.onbeforepaste 
+    elem.oncopy 
+    elem.oncut 
+    elem.onpaste 
+    elem.onsearch 
+    elem.onselectstart 
+    elem.onwheel 
+    elem.onwebkitfullscreenchange 
+    elem.onwebkitfullscreenerror 
+  ★兼容相关 
+    bol = elem.matchesSelector() 调用元素是否与该选择符匹配 [Selectors API Level 2] 
+      elem.msMatchesSelector()     [IE9+]  
+      elem.webkitMatchesSelector()   
+      elem.mozMatchesSelector() 
+    elem.webkitRequestFullScreen()  
+    elem.webkitRequestFullscreen()  
+  ★不常用 
+    elem.slot 
+    elem.shadowRoot 
+    elem.assignedSlot 
+    elem.removeAttributeNode()  
+    elem.matches()  
+    elem.attachShadow()  
+    elem.insertAdjacentText()  
+    elem.requestPointerLock()  
+    elem.getClientRects()  
+    elem.createShadowRoot()  
+    elem.getDestinationInsertionPoints()  
+    elem.animate()  
+    elem.setPointerCapture()  
+    elem.releasePointerCapture()  
+    elem.hasPointerCapture()  
+    elem.before()  
+    elem.after()  
+    elem.replaceWith()  
+    elem.prepend()  
+    elem.append()  
+  ★命名空间相关 
+    elem.localName 
+    elem.namespaceURI 返回元素的命名空间,DOM4前,该API在Node接口中定义
+    elem.prefix 
+    elem.hasAttributeNS()  
+    elem.getAttributeNS()  
+    elem.setAttributeNS()  
+    elem.removeAttributeNS()  
+    elem.getAttributeNodeNS()  
+    elem.setAttributeNodeNS()  
+    elem.getElementsByTagNameNS()  
+  DOMTokenList===<elem>.classList.constructor  元素class类的集合[HTML5]
+    PS: Firefox 和 Chrome 支持该属性 
+    ◆DOMTokenList.prototype.xxx  
+    bol = list.contains('className')  是否包含指定类 
+    num = list.length   获取类的个数 
+    list.value 
+    list.item(idx) 或[idx]下标法  获取成员 
+    list.add('className')   将指定类加到元素的类列表中 
+      若存在该类,则不添加,否则添加 
+    list.remove('className')  从类列表中删除指定类,若存在则删除,否则无动作 
+    list.toggle('className')  元素列表中若有该类则删除,没有则加上
+    list.supports() 
+    list.toString() 
+    list.entries() 
+    list.forEach() 
+    list.keys() 
+    list.values() 
 HTMLElement [继承 Element] 
   PS: 可以直接通过 == 来比较[不同于ECMAScript中的对象] [SelfPoint]
-  console.log(HTMLElement.prototype.__proto__.constructor===Element); // true,继承 Element 
-  HTMLElement.prototype.xxx 
-    elem.title  有关元素的附加说明信息,一般通过工具提示条显示出来
-    elem.属性名  任何元素的所有特性也都可以通过DOM元素本身的属性来访问
-      不过,只有公认的、非自定义的特性才会以属性的方式添加到DOM对象中
-    elem.<onEvents> 事件,返回相应的JS函数
+    HTMLElement.prototype.__proto__.constructor===Element  // true,继承 Element 
+  ◆HTMLElement.prototype.xxx 
+  ★元素信息 
+    PS: 为方便描述,设定 元素的边界宽为content+padding+border+margin,
+      元素布局宽为content+padding+border,元素内宽为content+padding,
+      元素宽为content的宽度[在box-sizing:content-box的默认条件下]
+      高度同理;
+      当元素出现滚动条时,元素不会'膨胀',只会'挤压'其内部元素;
+    elem.offsetWidth/elem.offsetHeight 元素布局宽/高 [DiBs] 
+      包含scrollbar
+      和元素内部的内容是否超出元素无关,只和width和border有关
+    elem.offsetParent  只读,最近的包含该元素的定位元素 
+      PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
+    elem.offsetTop/elem.offsetLeft  元素相对其offsetParent[定位的父元素]的top/left 
+      PS: 元素左/上边框到父元素左/上边框间的像素值 ? 
+    elem.tabIndex  当前元素的切换[Tab]序号
+  ★HTML标签及文本相关 
+    elem.outerText  读写,元素及其包含的所有文本内容 [HTML5]
+    elem.innerText  读写,元素中包含的所有文本内容 [HTML5] 
+      PS: IE 引入的 element.innerText
+        只能在body的范围内起作用
+      innerText 会受样式的影响,它不返回隐藏元素的文本,但 textContent 返回.
+      由于 innerText 受 CSS 样式的影响,它会触发重排(reflow),但textContent 不会.
+      与 textContent 不同的是, 在 IE11=- 中对 innerText 进行修改,不仅会移除当前元素的子节点,而且还会永久性地销毁所有内部文本节点(由此导致无法再将这些被销毁的文本节点插入到当前元素或任何其他元素中).
+      读取值时,它会按照有浅入深的顺序将子文档树中的所有文本拼接起来
+      写入值时,则会取代元素的所有子节点
+        会对文本中存在的HTML语法字符(如小于号等)进行编码转义(如&lt;)在网页中如实显示出.
+  ★特性相关 
+    elem.<atrName>  读写,元素特性值  
+      PS: 只有公认的、非自定义的特性才会以属性的方式添加到DOM对象中 
+      elem.title  有关元素的附加说明信息,一般通过工具提示条显示出来
+      elem.contentEditable 
+      elem.value  读写input的值,即输入框中的字符,实时动态的值
+      elem.lang   元素内容的语言代码  [较少使用] 
+      elem.dir    语言的方向  [较少使用]
+        "ltr"   left-to-right从左至右
+        "rtl"   right-to-left从右至左
+  ★事件相关 
+    elem.<onEvents> 事件,返回相应的JS函数 
       onabort 
       onblur 
       oncancel 
@@ -829,107 +887,66 @@ HTMLElement [继承 Element]
       ontoggle 
       onvolumechange 
       onwaiting 
-      如 elem.onclick;等类似的事件处理程序
-      elem.getAttribute("onclick"); 得到相应的代码字符串
-    elem.tabIndex  当前元素的切换[Tab]序号
+      如 elem.onclick 等类似的事件处理程序
+  ★元素操作 
     elem.focus() 使元素获得焦点 
       在ios中该方法存在限制,
         直接调用失效; load、input等事件cfoo中失效,click事件cfoo中成功;
         当click中的cfoo可执行时,而通过其他方法或事件触发click,则无法获取焦点;
     elem.blur()  使元素失焦 
     elem.click() 点击元素 
-    ◆HTML标签及文本相关 
-    elem.outerText  读写,元素及其包含的所有文本内容 [HTML5]
-    elem.innerText  读写,元素中包含的所有文本内容 [专有扩展] 
-      PS: IE 引入的 element.innerText
-        只能在body的范围内起作用
-      innerText 会受样式的影响,它不返回隐藏元素的文本,但 textContent 返回.
-      由于 innerText 受 CSS 样式的影响,它会触发重排(reflow),但textContent 不会.
-      与 textContent 不同的是, 在 IE11=- 中对 innerText 进行修改,不仅会移除当前元素的子节点,而且还会永久性地销毁所有内部文本节点(由此导致无法再将这些被销毁的文本节点插入到当前元素或任何其他元素中).
-      读取值时,它会按照有浅入深的顺序将子文档树中的所有文本拼接起来
-      写入值时,则会取代元素的所有子节点
-        会对文本中存在的HTML语法字符(如小于号等)进行编码转义(如&lt;)在网页中如实显示出.
-    ◆属性 
-    elem.<artName>  读写元素属性值  
-      elem.contentEditable 
-      elem.value  读写input的值,即输入框中的字符,实时动态的值
-    elem.dataset  自定义属性对象 [HTML5] 
-      PS: HTML5规定可以为元素添加非标准的属性,
-        但要添加前缀 data-,目的是为元素提供与渲染无关的信息或提供语义信息
-        elem.dataset 是 DOMStringMap 的一个实例
-      IE下html标签自定义属性 
-        元素对象.属性名 方式来获取(仅IE支持该方式)
-        使用 元素对象.getAttribute("属性名") 来获取
-        Example:
-          定义div标签的abc属性,值为aaa
-          <div abc="aaa">123</div>
-      elem.dataset.XX;  获取自定义元素属性的值,类型为字符串  
-      elem.dataset.XX = 'XXX' 设置自定义属性的值 [DOM中出现 data-XX='XXX']
-      delete elem.dataset.XX 删除指定属性的值
-    ◆元素尺寸、位置 
-      PS: 为方便描述,设定 元素的边界宽为content+padding+border+margin,
-        元素布局宽为content+padding+border,元素内宽为content+padding,
-        元素宽为content的宽度[在box-sizing:content-box的默认条件下]
-        高度同理;
-        当元素出现滚动条时,元素不会'膨胀',只会'挤压'其内部元素;
-    elem.offsetWidth/elem.offsetHeight 元素布局宽/高 [DiBs] 
-      包含scrollbar
-      和元素内部的内容是否超出元素无关,只和width和border有关
-    elem.offsetParent  只读,最近的包含该元素的定位元素 
-      PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
-    elem.offsetTop/elem.offsetLeft  元素相对其offsetParent[定位的父元素]的top/left 
-      PS: 元素左/上边框到父元素左/上边框间的像素值 ? 
-    不常用 
-      elem.lang   元素内容的语言代码  
-      elem.dir    语言的方向  
-        "ltr"   left-to-right 从左至右
-        "rtl"   right-to-left 从右至左
-      elem.translate 
-      elem.hidden 
-      elem.accessKey 
-      elem.draggable 
-      elem.spellcheck 
-      elem.isContentEditable 
-      elem.onauxclick 
-      elem.ongotpointercapture 
-      elem.onlostpointercapture 
-      elem.onpointercancel 
-      elem.onpointerdown 
-      elem.onpointerenter 
-      elem.onpointerleave 
-      elem.onpointermove 
-      elem.onpointerout 
-      elem.onpointerover 
-      elem.onpointerup 
-    非标 
-      elem.runtimeStyle; 计算的样式 [仅IE6支持]
+  ★不常用 
+    elem.translate 
+    elem.hidden 
+    elem.accessKey 
+    elem.draggable 
+    elem.spellcheck 
+    elem.isContentEditable 
+    elem.onauxclick 
+    elem.ongotpointercapture 
+    elem.onlostpointercapture 
+    elem.onpointercancel 
+    elem.onpointerdown 
+    elem.onpointerenter 
+    elem.onpointerleave 
+    elem.onpointermove 
+    elem.onpointerout 
+    elem.onpointerover 
+    elem.onpointerup 
+  ★非标 
+    elem.runtimeStyle; 计算的样式 [仅IE6支持]
+  DOMStringMap===<elem>.dataset.constructor  自定义属性对象 [HTML5] 
+    PS: 'data-xxx'是HTML5规定为元素添加非标准的属性的格式 
+      目的是为元素提供与渲染无关的信息或提供语义信息
+    str = elem.dataset.xxx   读写,元素自定义属性的值 
+    delete elem.dataset.xxx  删除指定自定义属性的值
+    Example: 
+      <div id="div" data-aoo="aaa" data-boo="bbb"></div>
+      var div = document.querySelector("#div");
+      div.dataset.aoo = 'abc';  // 修改 data-aoo 
+      delete div.dataset.boo;  // 删除 data-boo 
+    IE下HTML标签自定义属性 
+      elem.<attrName> 方式来获取[仅IE支持该方式]
+      elem.getAttribute("attrName") 来获取
+      Example:
+        定义div标签的abc属性,值为aaa
+        <div abc="aaa">123</div>
   CSSStyleDeclaration===<elem>.style.constructor   内联样式对象 
     PS: 包含着通过HTML的style特性指定的所有样式信息 
-      不包括外部样式表或嵌入样式表的样式.
-      在style中指定的任何CSS属性都将表现为这个style对象的相应属性.
-      对于使用短划线(如background-color)的CSS属性,需改写为驼峰形式才能访问,
-      只有一个不能直接使用转换的CSS属性访问就是float,因为float为JS保留字,
-      DOM2级 规定使用cssFloat 代替,IE则使用styleFloat.
       若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
-      style对象的属性值都是字符串,设置时必须包括单位.
-      elem.getAttribute("style"); 得到相应的代码字符串
+      style对象的属性值都是字符串,设置时必须包括单位
     var styDec = elem.style 
-    CSSStyleDeclaration.prototype.xxx 
+    CSSStyleDeclaration.prototype.xxx  
+      styDec.length   CSS属性的数量  
       str = styDec.cssText  读写'style'属性中的CSS代码 
         elem.style.cssText ='background-color:red;'+'border:1px solid black;';
-      styDec.length   CSS属性的数量
-      styDec.parentRule; CSS信息的CSSRule对象
-      styDec.ssFloat 
-      styDec.item(idx);   返回指定位置的CSS属性的名称,也可使用[]形式
-      styDec.getPropertyValue(样式声明) 返回指定样式声明的字符串值
-      styDec.getPropertyPriority(属性名) 返回优先级声明,存在为"important",否则为""
-      styDec.removeProperty(属性名);   从样式中删除指定属性;
-      styDec.setProperty(属性名,value,"!import"/""); 设置属性及值,并加上"!important"或""
       styDec.xx   读写内联样式 
         PS: style.xx 的值需要事先定义在html标签里[CSS中也不行],否则获取不到,
           返回值为字符串,如 style.left 返回 '20px';
           当设置的值为非正常的值时,则不生效,设置为 null/'' 时可清除该样式 
           使用"-"连接的属选采用驼峰命名法来代替,如font-size,改写为fontSize;
+          只有一个不能直接使用转换的CSS属性访问就是float,因为float为JS保留字,
+          DOM2级 规定使用cssFloat 代替,IE则使用styleFloat.
         elem.style.color     读写字体颜色 
           elm.style.color = 'black';
         elem.style.fontSize  读写字体大小 
@@ -948,6 +965,13 @@ HTMLElement [继承 Element]
         elm.style.cssText ='color:red;line-height:30px';
         elm.style.removeProperty('color');
         elm.style.setProperty('color', 'green', 'important');
+      styDec.parentRule  CSS信息的CSSRule对象
+      styDec.cssFloat 
+      styDec.item(idx)    返回指定位置的CSS属性的名称,也可使用[]形式
+      styDec.getPropertyValue(样式声明) 返回指定样式声明的字符串值
+      styDec.getPropertyPriority(属性名) 返回优先级声明,存在为"important",否则为""
+      styDec.removeProperty(属性名)  从样式中删除指定属性 
+      styDec.setProperty(属性名,value,"!import"/"")  设置属性及值,并加上"!important"或""
       不常用 
         styDec.animationPlayState
         styDec.webkitAnimationPlayState 
@@ -956,422 +980,559 @@ HTMLElement [继承 Element]
           "running"   播放
       已废弃 
         styDec.getPropertyCSSValue(属性名); 返回包含指定属性的 CSSValue 对象
-  ◆每个HTML元素都有 HTMLElement 的子类型[继承 HTMLElement]:  
-  HTMLHeadElement  <head> 
-    console.log(document.head.constructor===HTMLHeadElement); // true 
-    document.head  引用文档的<head>元素 [HTML5] 
-      支持该属性的浏览器有Chrome和safari 
-  HTMLBodyElement  <body> 
-    console.log(document.activeElement.constructor===HTMLBodyElement); // true 
-    console.log(document.body.constructor===HTMLBodyElement); // true 
-    document.activeElement  始终表示DOM中当前获得焦点的元素 [HTML5] 
-      默认情况下,文档刚加载完,document.activeElement 中保存的是document.body 元素
-      加载期间 document.activeElement 的值为 null
-    document.body  表示<body>元素,得到body标签及其包含的所有内容 
-      document.body === document.querySelector("body")  // true
-      [其他属性详见 DOM操作归纳总结->elem]
-  HTMLLinkElement  <link> 
-    HTMLLinkElement.prototype.xxx 
-      link.href  读写,样式表路径 
-      link.disabled 
-      link.crossOrigin 
-      link.rel 
-      link.relList 
-      link.media 
-      link.hreflang 
-      link.type 
-      link.as 
-      link.referrerPolicy 
-      link.sizes 
-      link.charset 
-      link.rev 
-      link.target 
-      link.import 
-      link.integrity 
-    CSSStyleSheet===link.sheet.constructor 
-      link.stylesheet; // IE的方法
-  HTMLStyleElement <style> 
-    HTMLStyleElement.prototype.xxx 
-      style.disabled 
-      style.media 
-      style.type 
-    CSSStyleSheet===style.sheet.constructor 
-  HTMLElement          <i> 
-  HTMLDivElement       <div> 
-  HTMLSpanElement      <span> 
-  HTMLParagraphElement <p>   
-  HTMLButtonElement    <button> 
-  HTMLFormElement   <form> 
-    PS: 表单字段为表单中的元素,如input button textarea select 等等
-    HTMLFormElement.prototype.xxx
-      form.acceptCharset  服务器能够处理的字符集 
-        等价于HTML中的 accept-charset 特性
-      form.action  接收请求的URL,等价于HTML中的action特性
-      form.autocomplete 
-      form.enctype  请求的编码类型,等价于HTML中的enctype特性
-      form.encoding 
-      form.method  要发送的HTTP请求类型,等价于HTML的method特性
-      form.name  表单的名称,等价于HTML的name特性
-      form.noValidate  读写,将原生的表单验证关闭 
-        formElem.noValidate = true;    
-        原生的表单验证不完全符合需要,而且出错信息无法指定样式。
-        这时,可能需要使用表单对象的noValidate属性,将原生的表单验证关闭。
-        Example: 
-        关闭原生的表单验证,然后指定submit事件时,让JavaScript接管表单验证
-        var form = document.getElementById("myform");
-        form.noValidate = true;
-        form.onsubmit = validateForm;
-      form.target  发送请求和接收响应的窗口名称,等价于HTML的target特性
-      form.elements  表单中所有控件的集合,HTMLCollection
-        表单字段在elements中出现的顺序和它们在标记中出现的顺序相同
-        可通过下标或name索引,其中name索引返回的为一个数组NodeList
-      form.length  表单中控件的数量
-      form.submit()  提交表单,可不需提交按钮存在
-      form.reset()   重置所有表单域 
-      form.checkValidity()  检测表单是否有无效字段(值不符合要求),若有则返回false
-        若验证通过返回true。若验证失败,则会触发一个invalid事件。
-        使用该方法以后,会设置validity对象的值。
-      form.reportValidity()  
-      form.<fieldName>  通过表单元素中表单字段的name属性来获取表单字段 
-    事件 
-      submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发
-        submit 和 click 事件: 不同的浏览器触发的先后顺序不一样
-      reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发
-    Extend: 利用<iframe>让<form>的submit不刷新页面进行上传 
-      默认的表单提交会导致页面刷新,把<form>的target指定到一<iframe>,从而让其代替页面刷新  
-      window.__iframeCount = 0;
-      var hiddenframe = document.createElement("iframe");
-      var frameName = "upload-iframe" + ++window.__iframeCount;
-      hiddenframe.name = frameName;
-      hiddenframe.id = frameName;
-      hiddenframe.setAttribute("style", "width:0;height:0;display:none");
-      document.body.appendChild(hiddenframe);
-      
-      var form = document.getElementById("myForm");
-      form.target = frameName;
-      // 然后响应iframe的onload事件,获取response
-      hiddenframe.onload = function(){
-        // 获取iframe的内容,即服务返回的数据
-        var resData = this.contentDocument.body.textContent || this.contentWindow.document.body.textContent;
-        // 处理数据 。。。
+  ◆每个HTML元素都有 HTMLElement 的子类型[继承 HTMLElement][IE8+可访问]:  
+    HTMLElement   <i> <code> <dt> <tt> 
+    HTMLHtmlElement  <HTML> 
+    HTMLHeadElement  <head> 
+      console.log(document.head.constructor===HTMLHeadElement); // true 
+      document.head  引用文档的<head>元素 [HTML5] 
+        支持该属性的浏览器有Chrome和safari 
+    HTMLBodyElement  <body> 
+      console.log(document.body.constructor===HTMLBodyElement); // true 
+      document.activeElement  始终表示DOM中当前获得焦点的元素 [HTML5] 
+        默认情况下,文档刚加载完,document.activeElement 中保存的是document.body 元素
+        加载期间 document.activeElement 的值为 null
+      document.body  表示<body>元素,得到body标签及其包含的所有内容 
+        document.body === document.querySelector("body")  // true
+        [其他属性详见 DOM操作归纳总结->elem]
+    HTMLLinkElement  <link> 
+      HTMLLinkElement.prototype.xxx 
+        link.href      读写,样式表路径 
+        link.disabled  
+        link.crossOrigin 
+        link.rel 
+        link.relList 
+        link.media 
+        link.hreflang 
+        link.type 
+        link.as 
+        link.referrerPolicy 
+        link.sizes 
+        link.charset 
+        link.rev 
+        link.target 
+        link.import 
+        link.integrity 
+      CSSStyleSheet===<link>.sheet.constructor 
+        link.stylesheet; // IE的方法
+    HTMLStyleElement <style> 
+      HTMLStyleElement.prototype.xxx 
+        style.disabled 
+        style.media 
+        style.type 
+      CSSStyleSheet===<style>.sheet.constructor 
+    HTMLDivElement       <div> 
+    HTMLSpanElement      <span> 
+    HTMLAnchorElement  <a>  
+    HTMLHeadingElement  <h1> <h2> <h3> <h4> <h5> <h6> 
+    HTMLParagraphElement <p>   
+    HTMLOListElement  <ol>  
+    HTMLUListElement  <ul> 
+    HTMLLIElement  <li> 
+    HTMLTableElement  <table> 
+    HTMLFormElement   <form> 
+      PS: 表单字段为表单中的元素,如input button textarea select 等等
+      HTMLFormElement.prototype.xxx
+        form.acceptCharset  服务器能够处理的字符集 
+          等价于HTML中的 accept-charset 特性
+        form.action  接收请求的URL,等价于HTML中的action特性
+        form.autocomplete 
+        form.enctype  请求的编码类型,等价于HTML中的enctype特性
+        form.encoding 
+        form.method  要发送的HTTP请求类型,等价于HTML的method特性
+        form.name  表单的名称,等价于HTML的name特性
+        form.noValidate  读写,将原生的表单验证关闭 
+          formElem.noValidate = true;    
+          原生的表单验证不完全符合需要,而且出错信息无法指定样式。
+          这时,可能需要使用表单对象的noValidate属性,将原生的表单验证关闭。
+          Example: 
+          关闭原生的表单验证,然后指定submit事件时,让JavaScript接管表单验证
+          var form = document.getElementById("myform");
+          form.noValidate = true;
+          form.onsubmit = validateForm;
+        form.target  发送请求和接收响应的窗口名称,等价于HTML的target特性
+        form.elements  表单中所有控件的集合,HTMLCollection
+          表单字段在elements中出现的顺序和它们在标记中出现的顺序相同
+          可通过下标或name索引,其中name索引返回的为一个数组NodeList
+        form.length  表单中控件的数量
+        form.submit()  提交表单,可不需提交按钮存在
+        form.reset()   重置所有表单域 
+        form.checkValidity()  检测表单是否有无效字段(值不符合要求),若有则返回false
+          若验证通过返回true。若验证失败,则会触发一个invalid事件。
+          使用该方法以后,会设置validity对象的值。
+        form.reportValidity()  
+        form.<fieldName>  通过表单元素中表单字段的name属性来获取表单字段 
+      事件 
+        submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发
+          submit 和 click 事件: 不同的浏览器触发的先后顺序不一样
+        reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发
+      Extend: 利用<iframe>让<form>的submit不刷新页面进行上传 
+        默认的表单提交会导致页面刷新,把<form>的target指定到一<iframe>,从而让其代替页面刷新  
+        window.__iframeCount = 0;
+        var hiddenframe = document.createElement("iframe");
+        var frameName = "upload-iframe" + ++window.__iframeCount;
+        hiddenframe.name = frameName;
+        hiddenframe.id = frameName;
+        hiddenframe.setAttribute("style", "width:0;height:0;display:none");
+        document.body.appendChild(hiddenframe);
         
-        //删除iframe
-        setTimeout(function(){
-          var _frame = document.getElementById(frameName);
-          _frame.parentNode.removeChild(_frame);
-        }, 100);
-      }
-  HTMLInputElement  <input>  
-    HTMLInputElement.prototype.xx 
-      input.validity    返回一个包含字段有效信息的对象 (详参 js高程 430 页)
-        每一个表单元素都有一个validity对象,有以下属性:
-        valid         若该元素通过验证,则返回true。
-        valueMissing  若用户没填必填项,则返回true。
-        typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
-        patternMismatch 若不匹配指定的正则表达式,则返回true。
-        tooLong       若超过最大长度,则返回true。
-        tooShort      若小于最短长度,则返回true。
-        rangeUnderFlow  若小于最小值,则返回true。
-        rangeOverflow   若大于最大值,则返回true。
-        stepMismatch    若不匹配步长(step),则返回true。
-        badInput      若不能转为值,则返回true。
-        customError   若该栏有自定义错误,则返回true。
-      input.type      当前字段的类型(如 "checkbox" "radio"等等)
-        <input> 和 <button> 的type属性可读写
-        <select>元素的type属性只读
-      input.value     当前字段将被提交给服务器的值
-        对于 type=file 该属性只读,包含着文件在计算机中的路径
-        input、textarea、password、select等元素都可以通过value属性取到它们的值
-      input.willValidate = true;  开启单个表单字段验证
-        对于那些不支持的浏览器(比如IE8),该属性等于undefined。
-        即使willValidate属性为true,也不足以表示浏览器支持所有种类的表单验证。
-        比如,Firefox 29 不支持date类型的输入框,会自动将其改为text类型,
-        而此时它的willValidate属性为true。
-        为了解决这个问题,必须确认input输入框的类型(type)未被浏览器改变。
-        if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
-            // 浏览器不支持该种表单验证,需自行部署JavaScript验证
+        var form = document.getElementById("myForm");
+        form.target = frameName;
+        // 然后响应iframe的onload事件,获取response
+        hiddenframe.onload = function(){
+          // 获取iframe的内容,即服务返回的数据
+          var resData = this.contentDocument.body.textContent || this.contentWindow.document.body.textContent;
+          // 处理数据 。。。
+          
+          //删除iframe
+          setTimeout(function(){
+            var _frame = document.getElementById(frameName);
+            _frame.parentNode.removeChild(_frame);
+          }, 100);
         }
-      input.disabled  布尔值,表示当前表单字段是否被禁用
-      input.form      表示当前字段所属的表单,只读
-      input.name      当前字段的名称
-      input.readOnly  布尔值,表示当前字段是否只读
-      input.defaultValue;  默认值
-      formElem.setCustomValidity() 用于自定义错误信息 
-        该提示信息也反映在该输入框的 validationMessage 属性中 
-        若将setCustomValidity设为空字符串,则意味该项目验证通过        
-    不常用 
-      input.accept  
-      input.alt  
-      input.autocomplete  
-      input.autofocus  
-      input.defaultChecked  
-      input.checked  
-      input.dirName  
-      input.files  
-      input.formAction  
-      input.formEnctype  
-      input.formMethod  
-      input.formNoValidate  
-      input.formTarget  
-      input.height  
-      input.indeterminate  
-      input.list  
-      input.max  
-      input.maxLength  
-      input.min  
-      input.minLength  
-      input.multiple  
-      input.pattern  
-      input.placeholder  
-      input.required  
-      input.size  
-      input.src  
-      input.step  
-      input.valueAsDate  
-      input.valueAsNumber  
-      input.width  
-      input.validationMessage  
-      input.labels  
-      input.selectionStart  
-      input.selectionEnd  
-      input.selectionDirection  
-      input.align  
-      input.useMap  
-      input.autocapitalize  
-      input.webkitdirectory  
-      input.incremental  
-      input.stepUp()    
-      input.stepDown()    
-      input.checkValidity()    
-      input.reportValidity()    
-      input.select()    
-      input.setRangeText()    
-      input.setSelectionRange()    
-      input.webkitEntries  
-  HTMLSelectElement <select> 
-    HTMLSelectElement.prototype.xxx 
-      select.autofocus 
-      select.disabled 
-      select.form 
-      select.multiple 
-      select.name 
-      select.required 
-      select.size 
-      select.type 
-      select.length 
-      select.selectedOptions 
-      select.selectedIndex 
-      select.value 
-      select.willValidate 
-      select.validity 
-      select.validationMessage 
-      select.labels 
-      select.item()   
-      select.namedItem()   
-      select.add()   
-      select.remove()   
-      select.checkValidity()   
-      select.reportValidity()   
-      select.setCustomValidity()   
-    HTMLOptionsCollection===<select>.options.constructor  [继承 HTMLCollection]
-      console.log(HTMLOptionsCollection.prototype.__proto__.constructor ===HTMLCollection); // true 
-      HTMLOptionsCollection.prototype.xxx 
-        options.length 
-        options.selectedIndex 
-        options.add()   
-        options.remove()   
-        options.namedItem()   
-  HTMLOptionElement <option> 
-    HTMLOptionElement.prototype.xxx 
-      option.disabled 
-      option.form 
-      option.label 
-      option.defaultSelected 
-      option.selected 
-      option.value 
-      option.text 
-      option.index 
-  'formField'表单字段总结  
-    change  表单值改变时触发 
-      支持该事件的 JavaScript 对象: fileUpload, select, text, textarea 等
-      input或textarea元素值变化且失焦时触发
-      select元素其选项改变时触发
-      input+type=range   划条拖动松开鼠标时响应
-      松开鼠标前拖动时不会实时响应,使用函数改变值也不会响应
-      input+type=file    选择文件加载到浏览器上时触发
-      change 和 blur 事件的关系:在不同的浏览器中触发的先后顺序不一致
-    select  选中文本框的文本松开鼠标时触发 
-      使用 elem.select()也会触发
-    表单发送的规则 
-      对表单字段的名称和值进行URL编码,使用&分割
-      不发送禁用的表单字段
-      只发送勾选的复选框和单选按钮
-      多选选择框中的每个选中的值单独一个条目
-      单击提交按钮也会发送提交按钮,否则,不发送提交按钮(包括type为image的input元素)
-      <select>的值,就是选中的<option>的value值,若<option>没有value特性,则是其文本值 
-    input[type="text"] 和 textarea 文本框
-      在其文本框中输入的内容保存在他们的value中
-      text.select()  选择文本框中所有的文本
-      text.selectionStart  光标选中文本开始的字符下标表示 [HTML5新增]
-        Example: : 获取所选字符
-          text.value.substring(text.selectionStart,text.selectionEnd);
-      text.selectionEnd    光标选中文本结束的字符下标表示
-      text.value.setSelectionRange(begin,end)   获取部分字符
-    input[type="file"]  处于内存中的元素仍能起作用 
-      必须手动执行,才会打开本地文件 
-        <img src="../../../2Resource/2Img/Wallpaper/160521133443-9.jpg" id="img" class="img">
-        <button type="button" id="_btn">click</button>
-        var file = $('<input type="file" id="__file">').appendTo($('body'))
-        setTimeout(function(){ // 执行了 
-          file.click();    
-          $('#_btn').click();
-          console.log(11); 
-        },2000);
-        $('#_btn').on("click",function(e){ // 执行了 
-          file.click();
-          console.log(22); 
-        })
-    select 和 option  下拉列表 
-      ◆HTMLSelectElement 类型表示选择框<select>提供了下列属性和方法
-        也拥有表单字段共有的属性和方法
-      selecElem.size 选择框中可见的行数,等价于HTML中的size特性
-      selecElem.multiple 是否允许多项选择的布尔值,等价于HTML中的multiple特性
-      selecElem.selectedIndex; 选中项的索引值,若没有选中项,则值为-1
-        selectElem[selectElem.selectedIndex]  表示被选中的选项元素的元素对象
-      selecElem.options 控件中所有<option>元素的HTMLCollection
-        selecElem.options.length=0; // 删除所有选项option
-        selecElem.options[index]=new Option("新文本","新值"); // 修改选项option
-      selecElem.add(newOption[,relOption]); 在relOption之前插入newOption元素
-        若要在最后添加,则relOption为null/undefined
-        selecElem.add(new Option("文本","值")); // 这个只能在IE中有效
-        selecElem.options.add(new Option("text","value")); // 这个兼容IE与firefox
-      selecElem.remove(index); 移除给定位置的选项
-        移除也可使用DOM的removeChild()方法
-        或将该项设置为null(DOM出现之前的处理方式)
-      选择框的value属性由当前选中项决定
-        若没有选中的项,则value属性返回空字符串""
-        若有一个选中项,且该项的value特性已经在HTML中指定,则选择框的value属性等于选中项的value特性
-          若该项的value特性在HTML中未指定,则选择框的value属性等于该项的文本
-        若有多个选中项,则为第一个选中项的值
-      <select name="categories" id="categories" multiple></select> 设置为多选时
-        设为多选时,value只返回选中的第一个选项。
-        要取出所有选中的值,就必须遍历select的所有选项,检查每一项的selected属性。
-        var selected = [] , count = elem.options.length ;
-        for (var i = 0 ; i < count; i++) {
-          if (elem.options[i].selected) {
-            selected.push(elem.options[i].value);
+    HTMLLabelElement  <label> 
+    HTMLInputElement  <input>  
+      HTMLInputElement.prototype.xx 
+        input.validity    返回一个包含字段有效信息的对象 (详参 js高程 430 页)
+          每一个表单元素都有一个validity对象,有以下属性:
+          valid         若该元素通过验证,则返回true。
+          valueMissing  若用户没填必填项,则返回true。
+          typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
+          patternMismatch 若不匹配指定的正则表达式,则返回true。
+          tooLong       若超过最大长度,则返回true。
+          tooShort      若小于最短长度,则返回true。
+          rangeUnderFlow  若小于最小值,则返回true。
+          rangeOverflow   若大于最大值,则返回true。
+          stepMismatch    若不匹配步长(step),则返回true。
+          badInput      若不能转为值,则返回true。
+          customError   若该栏有自定义错误,则返回true。
+        input.type      当前字段的类型(如 "checkbox" "radio"等等)
+          <input> 和 <button> 的type属性可读写
+          <select>元素的type属性只读
+        input.value     当前字段将被提交给服务器的值
+          对于 type=file 该属性只读,包含着文件在计算机中的路径
+          input、textarea、password、select等元素都可以通过value属性取到它们的值
+        input.willValidate = true;  开启单个表单字段验证
+          对于那些不支持的浏览器(比如IE8),该属性等于undefined。
+          即使willValidate属性为true,也不足以表示浏览器支持所有种类的表单验证。
+          比如,Firefox 29 不支持date类型的输入框,会自动将其改为text类型,
+          而此时它的willValidate属性为true。
+          为了解决这个问题,必须确认input输入框的类型(type)未被浏览器改变。
+          if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
+              // 浏览器不支持该种表单验证,需自行部署JavaScript验证
           }
-        }
-      ◆HTMLOptionElement 对象表示<option>元素,有下列属性
-        PS:也可以使用常规DOM功能来访问,但效率比较低下
-      创建选择项的方法
-        方式一:使用DOM创建 设定 再添加到DOM中
-        方式二:使用构造函数创建 new Option("文本text","值value") 再添加到DOM中
-          该方法在DOM出现之前就有,一直遗留到现在
-      optElem.index  当前项在options集合中的索引z值
-      optElem.label  当前选项的标签,等价于HTML中的label特性
-      optElem.selected 布尔值,表示当前选项是否被选中,可读写
-        单选情况下,设置一选项的该属性为true,会取消对其他选项的选择
-          设置该属性为false,不产生影响(?)
-        多选情况下,设置一选项的该属性为true,其他选项无影响
-      optElem.text  选项的文本
-      optElem.value  选项的值,等价于HTML中的value特性
-    checkbox 多选框控件
-      checkboxElem.checked  可写,返回一个布尔值,表示用户是否选中
-    radio 单选框控件 
-      radioElem.checked 
-        Example:只有通过遍历,才能获得用户选中的那个选择框的value。
-          <input type="radio" name="gender" value="Male"> Male </input>
-          <input type="radio" name="gender" value="Female"> Female </input>
-          <script>
-          var radios = document.getElementsByName('gender');
-          var selected;
-          for (var i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-              selected = radios[i].value;
-              break;
+        input.disabled  布尔值,表示当前表单字段是否被禁用
+        input.form      表示当前字段所属的表单,只读
+        input.name      当前字段的名称
+        input.readOnly  布尔值,表示当前字段是否只读
+        input.defaultValue;  默认值
+        formElem.setCustomValidity() 用于自定义错误信息 
+          该提示信息也反映在该输入框的 validationMessage 属性中 
+          若将setCustomValidity设为空字符串,则意味该项目验证通过        
+      不常用 
+        input.accept  
+        input.alt  
+        input.autocomplete  
+        input.autofocus  
+        input.defaultChecked  
+        input.checked  
+        input.dirName  
+        input.files  
+        input.formAction  
+        input.formEnctype  
+        input.formMethod  
+        input.formNoValidate  
+        input.formTarget  
+        input.height  
+        input.indeterminate  
+        input.list  
+        input.max  
+        input.maxLength  
+        input.min  
+        input.minLength  
+        input.multiple  
+        input.pattern  
+        input.placeholder  
+        input.required  
+        input.size  
+        input.src  
+        input.step  
+        input.valueAsDate  
+        input.valueAsNumber  
+        input.width  
+        input.validationMessage  
+        input.labels  
+        input.selectionStart  
+        input.selectionEnd  
+        input.selectionDirection  
+        input.align  
+        input.useMap  
+        input.autocapitalize  
+        input.webkitdirectory  
+        input.incremental  
+        input.stepUp()    
+        input.stepDown()    
+        input.checkValidity()    
+        input.reportValidity()    
+        input.select()    
+        input.setRangeText()    
+        input.setSelectionRange()    
+        input.webkitEntries  
+    HTMLSelectElement <select> 
+      HTMLSelectElement.prototype.xxx 
+        select.autofocus 
+        select.disabled 
+        select.form 
+        select.multiple 
+        select.name 
+        select.required 
+        select.size 
+        select.type 
+        select.length 
+        select.selectedOptions 
+        select.selectedIndex 
+        select.value 
+        select.willValidate 
+        select.validity 
+        select.validationMessage 
+        select.labels 
+        select.item()   
+        select.namedItem()   
+        select.add()   
+        select.remove()   
+        select.checkValidity()   
+        select.reportValidity()   
+        select.setCustomValidity()   
+      HTMLOptionsCollection===<select>.options.constructor  [继承 HTMLCollection]
+        console.log(HTMLOptionsCollection.prototype.__proto__.constructor ===HTMLCollection); // true 
+        HTMLOptionsCollection.prototype.xxx 
+          options.length 
+          options.selectedIndex 
+          options.add()   
+          options.remove()   
+          options.namedItem()   
+    HTMLOptionElement <option> 
+      HTMLOptionElement.prototype.xxx 
+        option.disabled 
+        option.form 
+        option.label 
+        option.defaultSelected 
+        option.selected 
+        option.value 
+        option.text 
+        option.index 
+    HTMLButtonElement    <button> 
+    'formField'表单字段总结  
+      change  表单值改变时触发 
+        支持该事件的 JavaScript 对象: fileUpload, select, text, textarea 等
+        input或textarea元素值变化且失焦时触发
+        select元素其选项改变时触发
+        input+type=range   划条拖动松开鼠标时响应
+        松开鼠标前拖动时不会实时响应,使用函数改变值也不会响应
+        input+type=file    选择文件加载到浏览器上时触发
+        change 和 blur 事件的关系:在不同的浏览器中触发的先后顺序不一致
+      select  选中文本框的文本松开鼠标时触发 
+        使用 elem.select()也会触发
+      表单发送的规则 
+        对表单字段的名称和值进行URL编码,使用&分割
+        不发送禁用的表单字段
+        只发送勾选的复选框和单选按钮
+        多选选择框中的每个选中的值单独一个条目
+        单击提交按钮也会发送提交按钮,否则,不发送提交按钮(包括type为image的input元素)
+        <select>的值,就是选中的<option>的value值,若<option>没有value特性,则是其文本值 
+      input[type="text"] 和 textarea 文本框
+        在其文本框中输入的内容保存在他们的value中
+        text.select()  选择文本框中所有的文本
+        text.selectionStart  光标选中文本开始的字符下标表示 [HTML5新增]
+          Example: : 获取所选字符
+            text.value.substring(text.selectionStart,text.selectionEnd);
+        text.selectionEnd    光标选中文本结束的字符下标表示
+        text.value.setSelectionRange(begin,end)   获取部分字符
+      input[type="file"]  处于内存中的元素仍能起作用 
+        必须手动执行,才会打开本地文件 
+          <img src="../../../2Resource/2Img/Wallpaper/160521133443-9.jpg" id="img" class="img">
+          <button type="button" id="_btn">click</button>
+          var file = $('<input type="file" id="__file">').appendTo($('body'))
+          setTimeout(function(){ // 执行了 
+            file.click();    
+            $('#_btn').click();
+            console.log(11); 
+          },2000);
+          $('#_btn').on("click",function(e){ // 执行了 
+            file.click();
+            console.log(22); 
+          })
+      select 和 option  下拉列表 
+        ◆HTMLSelectElement 类型表示选择框<select>提供了下列属性和方法
+          也拥有表单字段共有的属性和方法
+        selecElem.size 选择框中可见的行数,等价于HTML中的size特性
+        selecElem.multiple 是否允许多项选择的布尔值,等价于HTML中的multiple特性
+        selecElem.selectedIndex; 选中项的索引值,若没有选中项,则值为-1
+          selectElem[selectElem.selectedIndex]  表示被选中的选项元素的元素对象
+        selecElem.options 控件中所有<option>元素的HTMLCollection
+          selecElem.options.length=0; // 删除所有选项option
+          selecElem.options[index]=new Option("新文本","新值"); // 修改选项option
+        selecElem.add(newOption[,relOption]); 在relOption之前插入newOption元素
+          若要在最后添加,则relOption为null/undefined
+          selecElem.add(new Option("文本","值")); // 这个只能在IE中有效
+          selecElem.options.add(new Option("text","value")); // 这个兼容IE与firefox
+        selecElem.remove(index); 移除给定位置的选项
+          移除也可使用DOM的removeChild()方法
+          或将该项设置为null(DOM出现之前的处理方式)
+        选择框的value属性由当前选中项决定
+          若没有选中的项,则value属性返回空字符串""
+          若有一个选中项,且该项的value特性已经在HTML中指定,则选择框的value属性等于选中项的value特性
+            若该项的value特性在HTML中未指定,则选择框的value属性等于该项的文本
+          若有多个选中项,则为第一个选中项的值
+        <select name="categories" id="categories" multiple></select> 设置为多选时
+          设为多选时,value只返回选中的第一个选项。
+          要取出所有选中的值,就必须遍历select的所有选项,检查每一项的selected属性。
+          var selected = [] , count = elem.options.length ;
+          for (var i = 0 ; i < count; i++) {
+            if (elem.options[i].selected) {
+              selected.push(elem.options[i].value);
             }
           }
-          if (selected) {
-            // 用户选中了某个选项
-          }
-          </script>
-          若用户未做任何选择,则selected就为undefined。
-    label 元素 
-      Exp:
-        该元素绑定'click'事件会触发两次[使用的jQuery绑定],
-        使用'mouseup'事件来代替'click'事件来使用;
-    相关事件 
-      oninvalid    验证失败时触发 
-  HTMLImageElement    <img> 
-    HTMLImageElement.prototype.xxx 
-      img.alt 
-      img.src  读写,图片地址 
-      img.naturalWidth/img.naturalHeight 只读,图片真实的宽/高
-      img.srcset 
-      img.sizes 
-      img.crossOrigin 
-      img.useMap 
-      img.isMap 
-      img.width 
-      img.height 
-      img.complete 
-      img.currentSrc 
-      img.referrerPolicy 
-      img.name 
-      img.lowsrc 
-      img.align 
-      img.hspace 
-      img.vspace 
-      img.longDesc 
-      img.border 
-      img.x 
-      img.y 
-  HTMLIFrameElement  <iframe> 
-    <iframe id="frameId1" name='frameName1' src="/cpt/top_nav.html" ></iframe>
-    var frame = document.querySelector("#frameId1");  框架的DOM元素对象 
-    HTMLIFrameElement.prototype.xxx 
-      frame.src 
-      frame.srcdoc 
-      frame.name 
-      frame.sandbox 
-      frame.allowFullscreen 
-      frame.width 
-      frame.height 
-      frame.referrerPolicy 
-      frame.align 
-      frame.scrolling  iframe的滚动条  
-        iframe.scrolling = 'no'     去掉iframe的滚动条 
-      frame.frameBorder  iframe的边框 
-        iframe.frameBorder = 0      去掉iframe的边框
-      frame.longDesc 
-      frame.marginHeight 
-      frame.marginWidth 
-      frame.allow 
-      frame.contentDocument 表示执行框架的文档对象 [DOM2][IE8+] 
-        此前无法直接通过元素获取到文档对象,只能使用frames集合.
-      frame.contentWindow   返回框架的window对象 
-        然后.document 再获取到document对象 
-      frame.getSVGDocument()  
-    var iframe = frames[iframeName]  通过'name'属性值获取框架的window对象
-      Example:
-      var iframe = frames['frameName1'];
-      iframe.document    框架的document对象 
-    事件 
-      'load'事件  <iframe>加载后在其本身触发
-        Example: 
-        $('#frameId1').on("load",function(e){
-          var document1 = window.frames['frameName1'].document;
-          var style = document1.querySelector("style");
-          var html = document1.querySelector("#aoo");
-          var script = document1.querySelector("script");
-        });
-  已废弃 
-    HTMLFrameElement 框架 
-其他节点类  
+        ◆HTMLOptionElement 对象表示<option>元素,有下列属性
+          PS:也可以使用常规DOM功能来访问,但效率比较低下
+        创建选择项的方法
+          方式一:使用DOM创建 设定 再添加到DOM中
+          方式二:使用构造函数创建 new Option("文本text","值value") 再添加到DOM中
+            该方法在DOM出现之前就有,一直遗留到现在
+        optElem.index  当前项在options集合中的索引z值
+        optElem.label  当前选项的标签,等价于HTML中的label特性
+        optElem.selected 布尔值,表示当前选项是否被选中,可读写
+          单选情况下,设置一选项的该属性为true,会取消对其他选项的选择
+            设置该属性为false,不产生影响(?)
+          多选情况下,设置一选项的该属性为true,其他选项无影响
+        optElem.text  选项的文本
+        optElem.value  选项的值,等价于HTML中的value特性
+      checkbox 多选框控件
+        checkboxElem.checked  可写,返回一个布尔值,表示用户是否选中
+      radio 单选框控件 
+        radioElem.checked 
+          Example:只有通过遍历,才能获得用户选中的那个选择框的value。
+            <input type="radio" name="gender" value="Male"> Male </input>
+            <input type="radio" name="gender" value="Female"> Female </input>
+            <script>
+            var radios = document.getElementsByName('gender');
+            var selected;
+            for (var i = 0; i < radios.length; i++) {
+              if (radios[i].checked) {
+                selected = radios[i].value;
+                break;
+              }
+            }
+            if (selected) {
+              // 用户选中了某个选项
+            }
+            </script>
+            若用户未做任何选择,则selected就为undefined。
+      label 元素 
+        Exp:
+          该元素绑定'click'事件会触发两次[使用的jQuery绑定],
+          使用'mouseup'事件来代替'click'事件来使用;
+      相关事件 
+        oninvalid    验证失败时触发 
+    HTMLImageElement    <img> 
+      HTMLImageElement.prototype.xxx 
+        img.alt 
+        img.src  读写,图片地址 
+        img.naturalWidth/img.naturalHeight 只读,图片真实的宽/高
+        img.srcset 
+        img.sizes 
+        img.crossOrigin 
+        img.useMap 
+        img.isMap 
+        img.width 
+        img.height 
+        img.complete 
+        img.currentSrc 
+        img.referrerPolicy 
+        img.name 
+        img.lowsrc 
+        img.align 
+        img.hspace 
+        img.vspace 
+        img.longDesc 
+        img.border 
+        img.x 
+        img.y 
+    HTMLIFrameElement  <iframe> 
+      HTMLIFrameElement.prototype.xxx 
+        frame.src 
+        frame.srcdoc 
+        frame.name 
+        frame.sandbox 
+        frame.allowFullscreen 
+        frame.width 
+        frame.height 
+        frame.referrerPolicy 
+        frame.align 
+        frame.scrolling  iframe的滚动条  
+          iframe.scrolling = 'no'     去掉iframe的滚动条 
+        frame.frameBorder  iframe的边框 
+          iframe.frameBorder = 0      去掉iframe的边框
+        frame.longDesc 
+        frame.marginHeight 
+        frame.marginWidth 
+        frame.allow 
+        frame.contentDocument 表示执行框架的文档对象 [DOM2][IE8+] 
+          此前无法直接通过元素获取到文档对象,只能使用frames集合.
+        frame.contentWindow   返回框架的window对象 
+          然后.document 再获取到document对象 
+        frame.getSVGDocument()  
+      <iframe id="frameId1" name='frameName1' src="/cpt/top_nav.html" ></iframe>
+      var frame = document.querySelector("#frameId1") 框架的DOM元素对象 
+      var iframe = frames[iframeName]  通过'name'属性值获取框架的window对象
+        Example:
+        var iframe = frames['frameName1'];
+        iframe.document    框架的document对象 
+      事件 
+        'load'事件  <iframe>加载后在其本身触发
+          Example: 
+          $('#frameId1').on("load",function(e){
+            var document1 = window.frames['frameName1'].document;
+            var style = document1.querySelector("style");
+            var html = document1.querySelector("#aoo");
+            var script = document1.querySelector("script");
+          });
+    待整理 
+      HTMLElement  <abbr> <em> <acronym> <address> <b> <bdo> <big> <cite> <dd> <kbd> <dfn> <strong> <noframes> <noscript> <sub> <sup> <samp> <small> <var> 
+      HTMLFieldSetElement  <fieldset> 
+      HTMLAreaElement  <area>  
+      HTMLBaseElement  <base>  
+      HTMLQuoteElement  <blockquote>  
+      HTMLBRElement  <br>  
+      HTMLHRElement  <hr> 
+      HTMLTableCaptionElement  <caption>  
+      HTMLTableColElement  <col>  
+      HTMLModElement  <ins> 
+      HTMLTableColElement  <colgroup>  
+      HTMLModElement  <del>  
+      HTMLLegendElement  <legend> 
+      HTMLDListElement  <dl>  
+      HTMLMapElement  <map> 
+      HTMLMetaElement  <meta>  
+      HTMLObjectElement  <object>  
+      HTMLOptGroupElement  <optgroup>  
+      HTMLTableSectionElement  <tbody> 
+      HTMLTableCellElement  <td> 
+      HTMLTextAreaElement  <textarea> 
+      HTMLParamElement  <param>  
+      HTMLTableSectionElement  <tfoot> 
+      HTMLPreElement  <pre>  
+      HTMLTableCellElement  <th> 
+      HTMLQuoteElement  <q>  
+      HTMLTableSectionElement  <thead> 
+      HTMLTitleElement  <title> 
+      HTMLTableRowElement  <tr> 
+      HTMLScriptElement  <script>  
+    不推荐使用 
+      HTMLElement  <center> <s> <strike> <u> 
+      HTMLFontElement  <font> 
+      HTMLMenuElement  <menu> 
+      HTMLDirectoryElement  <dir>  
+      HTMLFrameElement  <frame> 
+      HTMLFrameSetElement  <frameset> 
+    已废弃 
+      HTMLAppletElement  <applet>  
+      HTMLIsIndexElement  <isindex> 
+      HTMLBaseFontElement  <basefont>  
+◆集合类 
+HTMLCollection 包含元素[顺序为文档流中的顺序]的通用集合 
+  PS: 动态的,随着DOM的改变会相应的变化 
+    HTMLCollection===document.forms.constructor
+    HTMLCollection===document.images.constructor
+    HTMLCollection===document.links.constructor
+    HTMLCollection===document.anchors.constructor
+    HTMLCollection===document.applets.constructor
+    HTMLCollection===document.getElementsByTagName('').constructor
+    HTMLCollection===document.getElementsByClassName('').constructor 
+    HTMLCollection===<elem>.getElementsByTagName('').constructor 
+    HTMLCollection===<elem>.getElementsByClassName('').constructor 
+  HTMLCollection.prototype.xx  
+    els.length 
+    els.item(idx)   或使用[idx]访问
+    els.namedItem() 通过name属性值索引 
+    els.[idx/str] 
+      在[]中传入数值,则后台就会调用items()方法
+      []中也可传入字符串,则调用namedItem()方法
+  els = document.anchors 具有name特性的所有<a>元素 
+  els = document.links   具有href特性的所有<a>元素 
+  els = document.forms   所有<form>元素 
+  els = document.images  所有<img>元素
+  els = document.applets 所有<applet>元素 [已几乎不用了]  
+  els = document.getElementsByTagName('tagName') 
+    *  表示获取页面所有元素 
+  els = document.getElementsByClassName('clsName') [HTML5][IE9+] 
+  els = elem.getElementsByTagName("tagName")  通过元素名获取元素集合 
+  els = elem.getElementsByClassName('clsName'[,parent]); 通过类名获取元素集合 [HTML5][IE9+]
+    clsName  str,若干个类名的字符串,类名间用空格隔开,无顺序影响 
+    Example:  
+    获取所有包含"user"和"name"类的元素 
+    var aoo =document.getElementsByClassName("user name");
+NodeList 节点列表类 
+  PS: NodeList 是动态实时的,DOM 改变后 NodeList 也会变化 
+    NodeList===<node>.childNodes.constructor  
+    NodeList===document.getElementsByName('').constructor 
+    NodeList===document.querySelectorAll("abc").constructor 
+    NodeList===<elem>.querySelectorAll("abc").constructor 
+  NodeList.prototype.xxx 
+    list.length  
+    list.item(idx)  访问节点,也可通过[idx]下标法
+    list.entries()    
+    list.forEach()    
+    list.keys()    
+    list.values()    
+  cNodes = pNode.childNodes  一组有序的各种类型的子节点 
+    cNodes  成员可为元素节点、文本节点、注释或处理指令等 
+      且不同的浏览器返回值不一定相同 [?]  
+  list = document.getElementsByName("nameVal")  通过name属性值获取元素节点集合 
+    PS: 一般用于获取单选按钮 
+      IE中若该元素本身不包括name属性[但自行添加了],获取时会获取不到
+    nameValue  name属性的值 
+  list = document.querySelectorAll("selector")  获取元素节点集合 [SelectorsAPI]
+  list = <elem>.querySelectorAll("selector")  后代元素中,对应的元素集 [SelectorsAPI]
+    返回值为一个"静态"不会自动更新,只包含元素的NodeList,无匹配项则为空 NodeList
+    可通过下标或 item() 方法来获取单个元素
+NamedNodeMap===<elem>.attributes.constructor  元素节点当前具有的特性节点集合 
+  PS: 是一个"动态"集合;IE7及之前会返回元素所有可能的节点  
+  var atrs = <elem>.attributes 
+  NamedNodeMap.prototype.xx 
+    atrs.length  属性节点个数 
+    atrs.item(idx)   返回特性节点或使用[idx]下标法 
+    atrs.getNamedItem(str)  返回nodeName为str的节点 
+      获取元素的id值 
+      var id = atrs.getNamedItem("id").nodeValue;
+    atrs.setNamedItem(atr)  向列表中添加atr属性节点
+    atrs.removeNamedItem(str)  从列表中移除nodeName为str的节点并返回 
+    命名空间相关 
+      atrs.getNamedItemNS()  
+      atrs.setNamedItemNS()  
+      atrs.removeNamedItemNS()  
+  Attr===<elem>.attributes[idx].constructor  
+  Example: 
+    设置元素的id值
+    atrs.["id"].nodeValue = "xxx";
+其他节点类 
+  DocumentType===document.doctype.constructor [继承 Node][DiBs] 
+    PS: 父节点为document;无子节点;
+    var tmp = document.doctype  文档类型,<!DOCTYPE>的引用 
+    ◆DocumentType.prototype.xx 
+    str = tmp.name     文档类型的名称 'html'/"HTML"
+    tmp.remove()  
+    tmp.before()  
+    tmp.after()  
+    tmp.replaceWith()  
+    不常用: 
+      tmp.publicId  获取HTML5之前的doctype声明中的部分信息 [DOM2]
+      tmp.systemId  获取HTML5之前的doctype声明中的部分信息 [DOM2]
   Attr 属性节点类型 [继承 Node] 
     PS: 元素的特性在DOM中以Attr类型表示,不被认为是DOM文档树的一部分
-    子节点: HTML中不支持[没有]子节点;XML中可以为 Text 或 EntityReference
+    子节点: 
+      HTML中不支持[没有]子节点;
+      XML中可以为 Text 或 EntityReference
     Attr.prototype.xxx 
       atr.namespaceURI 
       atr.prefix 
@@ -1380,46 +1541,8 @@ HTMLElement [继承 Element]
       atr.value  与nodeValue的值相同
       bol = atr.specified 用于区别特性是自行添加的还是默认的 
       atr.ownerElement 
-  Text 文本节点类型 [继承 CharacterData、Node] 
-    PS: 无子节点
-    元素节点和文本节点的关系 
-      Example: :
-      <div></div>  <!-- 没有内容,没有文本节点 -->
-      <div> </div>  <!-- 有空格,有一个文本节点 -->
-      <div>hello word</div>  <!-- 有内容,有一个文本节点 -->
-      则该文本节点为元素节点的第一个子节点
-      var tex =div.firstChild;
-    Text.prototype.xxx 
-      text.wholeText 
-      text.assignedSlot 
-      text.Text()  
-      text.splitText(num); 原文本节点将包含从开始的num个字符,新文本节点将包含剩下的文本 
-      text.getDestinationInsertionPoints()  
-    console.log(Text.prototype.__proto__.__proto__.constructor===Node); // true 
-      node.normalize() 合并同一级别的文本节点 
-        浏览器在解析文档时不会创建相邻的文本节点
-        当在一个元素节点中相邻添加多个文本节点时,外观上是合并在一起,访问时仍是保持独立的
-  Comment 注释类型 [继承 CharacterData、Node] 
-    PS: 不支持[没有]子节点
-  CharacterData 
-    console.log(CharacterData===Text.prototype.__proto__.constructor); // true 
-    console.log(CharacterData===Comment.prototype.__proto__.constructor); // true 
-    CharacterData.prototype.xxx 
-      text.data  取/设文本,等价于nodeValue
-      text.length  字符数量,等价于nodeValue.length 或 data.length
-      text.previousElementSibling 
-      text.nextElementSibling 
-      text.substringData(offset,num);  返回从offset位置开始的num个字符串
-      text.appendData(tex1); 将tex1添加到节点的末尾
-      text.insertData(offset,tex1); 在offset的位置插入tex1
-      text.deleteData(begin,num); 从begin的位置开始删除num个字符
-      text.replaceData(offset,num,tex1); 用tex1替换从offset的位置后到的num个文本
-      text.remove() 
-      text.before() 
-      text.after() 
-      text.replaceWith() 
   DocumentFragment'document fragment'文档片段类型 [继承 Node] 
-    PS: 一种 "轻量级"的文档,可以包含和控制节点,但不会像完整的文档那样占用额外的资源.
+    PS: 一种 "轻量级"的文档,可包含和控制节点,但不会像完整的文档那样占用额外的资源 
       不能把文档片段直接添加到文档中,但可将其作为一个"仓库"来使用,
       即可以在里面保存将来可能会添加到文档中的节点.
       若将文档中的节点添加到文档片段中,就会从文档树中移除该节点.
@@ -1431,19 +1554,19 @@ HTMLElement [继承 Element]
       Element ProcessingInstruction Text
       Commnet CDATASection EntityReference
     DocumentFragment.prototype.xxx 
-      frag.children 
-      frag.firstElementChild 
-      frag.lastElementChild 
-      frag.childElementCount 
-      frag.getElementById()  
-      frag.querySelector()  
-      frag.querySelectorAll()  
-      frag.prepend()  
-      frag.append()  
+    frag.children 
+    frag.childElementCount [ElementTraversal]
+    frag.firstElementChild [ElementTraversal]
+    frag.lastElementChild  [ElementTraversal]
+    frag.getElementById()  
+    frag.querySelector()  
+    frag.querySelectorAll()  
+    frag.prepend()  
+    frag.append()  
     Example: 
       通过文档片段来保存多个元素然后一次添加[若逐个添加,将导致浏览器反复渲染]
       <ul id="myList"></ul>
-      var fragment = document.createDocumentFragment();
+      var fragment = document.createDocumentFragment() 
       var ul = document.getElementById("myList");
       var li = null;
       for(var i = 0; i < 3; i++) {
@@ -1452,66 +1575,45 @@ HTMLElement [继承 Element]
         fragment.appendChild(li);
       }
       ul.appendChild(fragment);
-集合类 
-  HTMLCollection 包含元素[顺序为文档流中的顺序]的通用集合 
-    PS: 动态的,随着DOM的改变会相应的变化 
-    console.log(HTMLCollection===document.forms.constructor); // true 
-    console.log(HTMLCollection===document.images.constructor); // true 
-    console.log(HTMLCollection===document.links.constructor); // true 
-    console.log(HTMLCollection===document.anchors.constructor); // true 
-    console.log(HTMLCollection===document.applets.constructor); // true
-    HTMLCollection===<elem>.getElementsByTagName('').constructor 
-    HTMLCollection===<elem>.getElementsByClassName('').constructor 
-    els = document.forms   文档中所有的<form>元素 
-    els = document.images  文档中所有的<img>元素
-    els = document.links   文档中所有带href特性的<a>元素
-    els = document.anchors 文档中所有带name特性的<a>元素
-    els = document.applets 文档中所有的<applet>元素 [已经几乎不用了]  
-    els = elem.getElementsByTagName("tagName")  通过元素名获取元素集合 
-    els = elem.getElementsByClassName(clsName[,parent]); 通过类名获取元素集合 [IE9+]
-      PS:  
-      clsName  str,若干个类名的字符串,类名间用空格隔开,无顺序影响 
-      Example:  
-      获取所有包含"user"和"name"类的元素 
-      var aoo =document.getElementsByClassName("user name");
-    HTMLCollection.prototype.xx  
-      els.length 
-      els.item(idx)   或使用[idx]访问
-      els.namedItem() 通过name属性值索引 
-      els.[idx/str] 
-        在[]中传入数值,则后台就会调用items()方法
-        []中也可传入字符串,则调用namedItem()方法
-  NodeList===<node>.childNodes.constructor  
-    console.log(document.getElementsByName('').constructor===NodeList); // true 
-    cNodes = pNode.childNodes  一组有序的各种类型的子节点 
-      cNodes  NodeList,类数组对象,成员可能为元素节点、文本节点、注释或处理指令等 
-        且不同的浏览器返回值不一定相同 [?]  
-      NodeList 是动态实时的,DOM 改变后 NodeList 也会变化
-      可以通过[]下标法或 item() 方法来访问节点 
-      node.childNodes[0];
-      node.childNodes.item(0);
-      node.childNodes.length;  节点的个数
-    document.getElementsByName("nameValue")  通过name属性值获取元素集合 
-      PS: 一般用于获取单选按钮 
-        IE中若该元素本身不包括name属性[但自行添加了],获取时会获取不到
-      nameValue  name属性的值 
-  NamedNodeMap===<elem>.attributes.constructor  元素节点所有属性节点的类数组集合 
-    PS: 是一个"动态"集合
-    var atrs = <elem>.attributes 
-    NamedNodeMap.prototype.xx 
-      atrs.length  属性节点个数 
-      atrs.item(num);   返回位于num位置处的特性节点
-      atrs.getNamedItem(str)  返回nodeName为str的节点 
-        获取元素的id值 
-        var id = atrs.getNamedItem("id").nodeValue;
-      atrs.setNamedItem(node)  向列表中添加node属性节点
-      atrs.removeNamedItem(str)  从列表中移除nodeName为str的节点并返回 
-      atrs.getNamedItemNS()  
-      atrs.setNamedItemNS()  
-      atrs.removeNamedItemNS()  
-    Example: 
-      设置元素的id值
-      atrs.["id"].nodeValue = "xxx";
+  Text 文本节点类型 [继承 CharacterData、Node] 
+    PS: 无子节点; 文本中可以包含转义后的HTML字符,但不能包含HTML代码
+      Node===Text.prototype.__proto__.__proto__.constructor 继承 Node 类型 
+    元素节点和文本节点的关系 
+      Example: :
+      <div></div>  <!-- 没有内容,没有文本节点 -->
+      <div> </div>  <!-- 有空格,有一个文本节点 -->
+      <div>hello word</div>  <!-- 有内容,有一个文本节点 -->
+        该文本节点为元素节点的第一个子节点
+        var tex = div.firstChild;
+    Text.prototype.xxx 
+      text.wholeText 
+      text.assignedSlot 
+      text.Text()  
+      text.splitText(idx)  分割文本节点,从指定位置将当前文本节点分成两个文本节点 
+      text.getDestinationInsertionPoints()  
+  Comment 注释类型 [继承 CharacterData、Node] 
+    PS: 不支持[没有]子节点
+  CharacterData 
+    CharacterData===Text.prototype.__proto__.constructor 
+    CharacterData===Comment.prototype.__proto__.constructor
+    CharacterData.prototype.xxx 
+      text.length  字符数量,等价于 nodeValue.length 或 data.length
+      text.data  读写文本,等价于nodeValue 
+        在修改文本节点时,字符串会经过HTML[或XML,取决于文档类型]编码
+        Example: 
+        div.firstChild.nodeValue = "Some <strong>other</strong> message";
+        // 输出结果是"Some &lt;strong&gt;other&lt;/strong&gt; message" 
+      text.previousElementSibling [ElementTraversal] 
+      text.nextElementSibling     [ElementTraversal] 
+      text.substringData(offset,num)   返回从offset位置开始的num个字符串
+      text.appendData(tex1)  将tex1添加到节点的末尾
+      text.insertData(offset,tex1)  在offset的位置插入tex1
+      text.deleteData(begin,num)  从begin的位置开始删除num个字符
+      text.replaceData(offset,num,tex1)  用tex1替换从offset的位置后到的num个文本
+      text.remove() 
+      text.before() 
+      text.after() 
+      text.replaceWith() 
 兼容性相关 
   ◆IE专属 
   document.documentMode 识别文档模式 [IE8+] 
@@ -1522,16 +1624,22 @@ HTMLElement [继承 Element]
     7   ----- in IE7 mode
     8   ----- in IE8 mode
     9   ----- in IE9 mode
-  document.defaultCharset  浏览器及操作系统charset的默认设置 [HTML5] 
+  window.toStaticHTML('HTMLStr')  [IE8+] 
+    返回一个经过处理后的版本,从原HTML中删除所有脚本节点和事件处理程序属性 
 XML相关 
   ProcessingInstruction [继承 CharacterData] 
-  CDATASection 类型: 只针对基于XML的文档,表示CDATA区域 
+  CDATASection 类型: 针对基于XML的文档,表示CDATA区域 
+    与Comment类似;继承自Text类型;无子节点 
   EntityReference 
+  XML命名空间: 不同XML文档的元素就可混合在一起,共同构成格式良好的文档,而不必担心发生命名冲突
+    HTML不支持XML命名空间,但XHTML支持XML命名空间 
 相关规范 
-  ElementTraversal 规范 
+  ElementTraversal 元素遍历规范 [IE9+]
     对于元素间的空格,IE9及之前版本不会返回文本节点,
     而其他浏览器都会返回文本节点,导致使用childNodes firstchildNodes等属性不一致
     为了弥补这一差异,同时保持DOM规范不变,ElementTraversal 规范新定义了一组属性
+  SelectorsAPI 由W3C发起制定的一个标准,致力于让浏览器原生支持CSS查询 
+    Selectors API Level 1  [IE8+] 
   DOM扩展 
     elem.matchSelector(slt); 返回布尔值,表示该元素是否与该选择符匹配 
       Selector API Level 2 规范为 Element 类型新增的一个方法
@@ -1539,9 +1647,9 @@ XML相关
     文档模式 
       IE8引入了一个新的概念叫"文档模式",
       文档模式决定了可以使用什么功能,以及如何对待文档类型(doctype)
-    elem.scrollByLines(num);  将元素的内容滚动指定的行高
+    elem.scrollByLines(num)  将元素的内容滚动指定的行高
       num值可为正或负
-    elem.scrollByPages(num);  将元素的内容滚动指定的页面高度,具体高度有元素的高度决定
+    elem.scrollByPages(num)  将元素的内容滚动指定的页面高度,具体高度由元素的高度决定
   DOM2遍历和范围  [更多详见 JavaScript高级程序设计 327 页]
 其他总结 
   JS中直接使用元素的id名称即代表该元素 
@@ -1586,9 +1694,8 @@ XML相关
     var file = $('<input type="file" id="file1">')
     file.click()  // 仍可打开图片选择框 
 --------------------------------------------------------------------------------
-◆Event 事件: 用来处理响应的一个机制 
-  PS: JS与HTML的交互是通过事件实现的,当用户执行某些操作的时候,在去执行一些列代码
-    响应可来自于用户,也可以来自浏览器[如文件下载完了].
+◆Event事件: 用来处理响应的一个机制,JS与HTML的交互通过事件实现  
+  PS: 响应可来自用户,也可以来自浏览器,如文件下载完了  
   事件流: 描述页面中接收事件的顺序 
     "Capture"事件捕获: W3C规定的标准事件模型,从外向内传递 
       由'window'-'document'-'html'-'body'-..-事件绑定元素  
@@ -1598,137 +1705,284 @@ XML相关
       事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡 
   事件支持检测 
     var div = document.createElement('div');
-    //是否支持触摸事件
-    console.log('ontouchstart' in div);            // false
-    //是否支持方向转换事件
-    console.log('onorientationchange' in window);  // false
-EventTarget 
+    console.log('ontouchstart' in div); // false, 是否支持触摸事件
+    console.log('onorientationchange' in window); // false, 是否支持方向转换事件 
 事件绑定、解绑及触发 
   PS: 响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
-    事件处理程序的名字以"on"开头加上事件名
-    函数中 this 等于 事件的目标元素
-  HTML事件处理程序[也叫内联事件处理程序] 
-    在内联模型中,事件处理函数是html标签的一个属性,用于处理指定事件.
-    Example: :
+    函数中 this 为事件的目标元素
+  内联事件处理程序: 事件处理函数作为HTML标签的一个属性  
+    Example: 
     <input type="button" value="clickme" onclick="alert('点击')">
   DOM0级事件处理程序: 将一个函数赋值给一个事件处理程序属性
-    PS:事件处理组成:元素对象.事件处理函数=函数
-      当添加多个相同[即使执行函数不同]的事件,会产生覆盖
-    Example: :
+    PS: 当添加多个相同[即使执行函数不同]的事件,会产生覆盖
+    事件处理组成: elem.on<event>=foo 
+      Example: 
       document.onclick=function(){ alert("abc"); }; //单击文档任意处
 
       bar btn =document.getElementById("myBtn");
       btn.onclick =function(){ };  // 绑定事件
       btn.onclick =null;            // 解除绑定
-  DOM2级事件处理程序: addEventListener&removeEventListener
-    PS: 
-    ★添加事件和删除事件 [IE9+] 
-      PS: 所有DOM节点中都包含这两个方法,
-        绑定多个相同的事件,不会覆盖,按照定义的先后顺序来触发 
-    elem.addEventListener("事件名",cfoo[,bol]);   事件绑定
-      PS: 通过该方式添加的事件,只能使用removeEventListener来移除 
-      bol  可选,是否使用捕获,默认为 false
-    elem.removeEventListener(["事件名",cfoo]);    解除绑定
-      PS: :传入与 addEventListener() 同样的三个参数,
-        执行函数必须是同一引用而非相同的不同引用.
-        若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除.
-      Remarks:
-        在使用 innerHTML 移除有事件绑定的元素时,
-        可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
-        可在移除元素前解除该元素事件的绑定.
-  IE事件处理程序 attachEvent&detachEvent
-    PS:IE实现了与DOM中类似的两个方法
-      执行函数中的this为window
-      同DOM方法类似,可以添加多个相同的事件(执行函数不同),而不产生覆盖
-      绑定多个事件,执行的先后顺序为先添加后执行(与DOM方法相反)
-    elem.attachEvent("on事件名",函数);  绑定事件
+  DOM2级事件处理程序: addEventListener&removeEventListener [IE9+] 
+    PS: 绑定多个相同的事件,不会覆盖,按照定义的先后顺序来触发 
+  IE事件处理程序: attachEvent&detachEvent [IE8-IE10] 
+    PS: 执行函数中的 this 为 window 
+      同DOM方法类似,可以添加多个执行函数不同的相同事件,而不产生覆盖
+      绑定多个事件,执行的先后顺序为先添加后执行[与DOM方法相反]
+    elem.attachEvent("on事件名",函数)  绑定事件
       Example: :
       elem.attachEvent("onclick",function(){ });
     elem.detachEvent();   解除绑定
       匿名函数不可解除绑定
       和attachEvent接收同样的参数(同一个函数的引用,而非相同的不同引用)
-  事件处理函数返回值
-    大多数情况下,事件处理函数返回false,可以阻止默认事件行为
-      仅仅是在HTML事件属性和DOM0级事件处理方法中,
-      才能通过返回 return false 的形式阻止事件宿主的默认行为(?)
-    Example: :
+  在内联事件及DOM0级事件中,一般的,事件处理函数返回false,可阻止默认事件行为  
+    Example: 
     点击链接,返回false,阻止跳转
     <a id="a" href="https://www.baidu.com">点我也不会跳转</a>
     var a =document.querySelector("#a");
     a.onclick =function(){ return false; };
-    a.addEventListener("click",function(){return false; });// 不生效
-  事件的绑定与移除
-    PS:
-      若要移除事件句柄,addEventListener() 的执行函数必须使用外部函数,
-      匿名函数,类似 "elem.removeEventListener("event", function(){ myScript });" 该事件是无法移除的
-    elem.addEventListener("mousemove", myFunction);    // 向 元素添加事件句柄
-    elem.removeEventListener("mousemove", myFunction); // 移除 元素的事件句柄
-    定义和用法
-    removeEventListener() 方法用于移除由 addEventListener() 方法添加的事件句柄
-Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该参数表示该事件对象本身 
-  PS:在触发DOM上的某个事件是,会产生一个事件对象event,
-    这个对象包含着所有与事件有关的信息.
+    a.addEventListener("click",function(){return false; }); // 不生效
+EventTarget===Node.prototype.__proto__.constructor  [IE9+][DOM2]  
+  EventTarget.prototype.xxx 
+    tagt.addEventListener("eventName",cfoo[,bol])   事件绑定
+      PS: 通过该方式添加的事件,只能使用removeEventListener来移除 
+      bol  可选,是否使用捕获,默认为 false
+    tagt.removeEventListener(["eventName",cfoo])   解除addEventListener绑定的事件 
+      PS: 若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除 
+      传入与 addEventListener() 同样的三个参数,执行函数必须是同一引用 
+      Remarks: 
+        在使用 innerHTML 移除有事件绑定的元素时,
+        可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
+        可在移除元素前解除该元素事件的绑定 
+    tagt.dispatchEvent()  触发事件 
+  EventTarget===Performance.prototype.__proto__.constructor 当前页面加载相关的性能信息 
+    PS: 用于精确度量、控制、增强浏览器的性能表现;精度可达千分之一毫秒  
+      还可获取后台事件的时间进度 
+      浏览器支持: IE10+、Chrome20+、Firefox15+、Opera15+ 
+    Example: 获取脚本运行的准确耗时 
+      传统的做法: 
+      var start = new Date().getTime();
+      // do something here
+      var now = new Date().getTime();
+      var latency = now - start;
+      console.log("任务运行时间:" + latency);
+      不足之处: 
+      精度: 只能精确到毫秒级别 
+      局限: 无法获取一些后台事件的时间进度,如浏览器从服务器加载网页的时间  
+    performance.timing  包含了各种与浏览器性能有关的时间数据   
+      PS: 提供浏览器处理网页各个阶段的耗时。
+      以下属性全部为只读
+      navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳 
+        若没有前一个网页,则等于'fetchStart'属性。
+        performance.timing.navigationStart   // 13260687
+        表示距离浏览器开始处理当前网页,已经过了13260687毫秒
+      unloadEventStart 若前一个网页与当前网页属于同一个域名,则返回前一个网页的unload事件发生时的Unix毫秒时间戳。
+        若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
+      unloadEventEnd   若前一个网页与当前网页属于同一个域名,则返回前一个网页unload事件的回调函数结束时的Unix毫秒时间戳。
+        若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
+      redirectStart    返回第一个HTTP跳转开始时的Unix毫秒时间戳。
+        若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
+      redirectEnd      返回最后一个HTTP跳转结束时,即跳转回应的最后一个字节接受完成时的Unix毫秒时间戳。
+        若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
+      fetchStart:返回浏览器准备使用HTTP请求读取文档时的Unix毫秒时间戳。该事件在网页查询本地缓存之前发生。
+      domainLookupStart:返回域名查询开始时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
+      domainLookupEnd:返回域名查询结束时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
+      connectStart:返回HTTP请求开始向服务器发送时的Unix毫秒时间戳。若使用持久连接(persistent connection),则返回值等同于fetchStart属性的值。
+      connectEnd:返回浏览器与服务器之间的连接建立时的Unix毫秒时间戳。若建立的是持久连接,则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
+      secureConnectionStart:返回浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。若当前网页不要求安全连接,则返回0。
+      requestStart:返回浏览器向服务器发出HTTP请求时(或开始读取本地缓存时)的Unix毫秒时间戳。
+      responseStart:返回浏览器从服务器收到(或从本地缓存读取)第一个字节时的Unix毫秒时间戳。
+      responseEnd:返回浏览器从服务器收到(或从本地缓存读取)最后一个字节时(若在此之前HTTP连接已经关闭,则返回关闭时)的Unix毫秒时间戳。
+      domLoading:返回当前网页DOM结构开始解析时(即Document.readyState属性变为“loading”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
+      domInteractive:返回当前网页DOM结构结束解析、开始加载内嵌资源时(即Document.readyState属性变为“interactive”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
+      domContentLoadedEventStart:返回当前网页DOMContentLoaded事件发生时(即DOM结构解析完毕、所有脚本开始运行时)的Unix毫秒时间戳。
+      domContentLoadedEventEnd:返回当前网页所有需要执行的脚本执行完成时的Unix毫秒时间戳。
+      domComplete:返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
+      loadEventStart:返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
+      loadEventEnd:返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
+    Example:
+      var t = performance.timing;
+      var pageloadtime = t.loadEventStart - t.navigationStart; 
+      //页面加载的耗时
+      var dns = t.domainLookupEnd - t.domainLookupStart; 
+      // 域名解析的耗时
+      var tcp = t.connectEnd - t.connectStart; 
+      //TCP连接的耗时
+      var ttfb = t.responseStart - t.navigationStart;
+      // 读取页面第一个字节之前的耗时
+    待整理
+      根据上面这些属性,可以计算出网页加载各个阶段的耗时。比如,网页加载整个过程的耗时的计算方法如下:
+      
+      
+      var t = performance.timing; 
+      var pageLoadTime = t.loadEventEnd - t.navigationStart;
+      
+      performance.now()
+      performance.now方法返回当前网页自从performance.timing.navigationStart到当前时间之间的微秒数(毫秒的千分之一)。也就是说,它的精度可以达到100万分之一秒。
+      
+      performance.now() 
+      // 23493457.476999998
+      
+      Date.now() - (performance.timing.navigationStart + performance.now())
+      // -0.64306640625
+      上面代码表示,performance.timing.navigationStart加上performance.now(),近似等于Date.now(),也就是说,Date.now()可以替代performance.now()。但是,前者返回的是毫秒,后者返回的是微秒,所以后者的精度比前者高1000倍。
+      
+      通过两次调用performance.now方法,可以得到间隔的准确时间,用来衡量某种操作的耗时。
+      
+      var start = performance.now();
+      doTasks();
+      var end = performance.now();
+      
+      console.log('耗时:' + (end - start) + '微秒。');
+      performance.mark()
+      mark方法用于为相应的视点做标记。
+      
+      window.performance.mark('mark_fully_loaded');
+      clearMarks方法用于清除标记,若不加参数,就表示清除所有标记。
+      
+      window.peformance.clearMarks('mark_fully_loaded');
+      
+      window.performance.clearMarks();
+      performance.getEntries()
+      浏览器获取网页时,会对网页中每一个对象(脚本文件、样式表、图片文件等等)发出一个HTTP请求。performance.getEntries方法以数组形式,返回这些请求的时间统计信息,有多少个请求,返回数组就会有多少个成员。
+      
+      由于该方法与浏览器处理网页的过程相关,所以只能在浏览器中使用。
+      
+      
+      window.performance.getEntries()[0]
+      
+      // PerformanceResourceTiming { 
+      //   responseEnd: 4121.6200000017125, 
+      //   responseStart: 4120.0690000005125, 
+      //   requestStart: 3315.355000002455, 
+      //   ...
+      // }
+      
+      上面代码返回第一个HTTP请求(即网页的HTML源码)的时间统计信息。该信息以一个高精度时间戳的对象形式返回,每个属性的单位是微秒(microsecond),即百万分之一秒。
+      
+      performance.navigation对象
+      除了时间信息,performance还可以提供一些用户行为信息,主要都存放在performance.navigation对象上面。
+      
+      它有两个属性:
+      
+      (1)performance.navigation.type
+      
+      该属性返回一个整数值,表示网页的加载来源,可能有以下4种情况:
+      
+      0:网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载,相当于常数performance.navigation.TYPE_NAVIGATENEXT。
+      
+      1:网页通过“重新加载”按钮或者location.reload()方法加载,相当于常数performance.navigation.TYPE_RELOAD。
+      
+      2:网页通过“前进”或“后退”按钮加载,相当于常数performance.navigation.TYPE_BACK_FORWARD。
+      
+      255:任何其他来源的加载,相当于常数performance.navigation.TYPE_UNDEFINED。
+      
+      (2)performance.navigation.redirectCount
+      
+      该属性表示当前网页经过了多少次重定向跳转。  
+Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数,该参数表示该事件对象本身 
+  PS: 触发DOM上的事件时,会产生一个事件对象event,该对象包含着所有与事件有关的信息 
     事件对象包括导致事件的元素、事件的类型、以及其他与特定事件相关的信息.
     所有浏览器都支持event对象,但支持的方式不一定相同.
     event会被作为参数传到执行函数中.
     event对象与创建的事件有关,触发的事件类型不一样可用的属性/方法也不同
     只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁]
-  Example: 验证隐藏的参数
-    //普通空参函数
-    function box(){console.log(arguments.length);}
-    box(); // 0,没有得到任何传递的参数
+  Example: 
+    验证隐藏的参数 
     document.onclick =function(){
       console.log(arguments.length); // 1,得到一个隐藏参数
-      console.log(arguments[0]);     //MouseEvent {……},鼠标事件对象
+      console.log(arguments[0]);     // MouseEvent {……},鼠标事件对象
     通过参数获取事件对象
-      window.onload=function(){
-        document.onclick=function(evt){
-          // 兼容模式
-          var e=evt||window.event;
-          // IE使用window.event来表示事件对象
-          alert(e);
-        };
-      };
+    document.onclick=function(evt){
+      var e=evt||window.event; // 兼容IE 
+    };
+  var event = new Event('eName')  创建自定义事件[IE11+]  
+  var event = document.createEvent(eTypeStr)  创建事件对象  
+    PS: 该方式已过时,请使用构造函数替代 
+      早期的创建事件的方法使用了受Java启发的API
+    Example: 
+      console.log(document.createEvent('MouseEvent').constructor===MouseEvent); // true 
+    var event = document.createEvent('Event');  创建事件
+    event.initEvent('build', true, true);  定义事件
+      事件名为'build'
+    document.addEventListener('build', function (e) {  监听事件 
+      // e.target matches document from above
+    }, false);
+    document.dispatchEvent(event); 触发事件
+    自定义事件[DOM3] 
+    var evt = document.createEvent("CustomEvent");   创建事件 
+    evt.initEvent('customEvent',true,true);          定义事件类型 
+    evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
+      str  触发的事件类型 type
+      bol 表示事件是否应该冒泡
+      bol 表示事件是否可以取消
+      obj  任意值,保存在event对象的detail属性中.
+    elem.addEventListener('customEvent',cfoo,false); 监听事件 
+    elem.dispatchEvent(evt);     触发事件
+  Event.prototype.xxx 
+    常量 
+      0===e.NONE 
+      1===e.CAPTURING_PHASE  
+      2===e.AT_TARGET  
+      3===e.BUBBLING_PHASE  
+    e.type         事件类型
+    e.target       触发事件的目标元素  
+      目标元素在文档中是事件冒泡的前提,即删除目标元素也会阻止事件冒泡 
+    e.currentTarget   绑定事件的元素[即函数中的this] 
+      若直接将事件绑定在目标元素上,则this currentTarget target 相同
+    e.eventPhase  调用事件处理程序阶段的描述数值 
+      1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
+      Example: :
+      var btn =document.getElementById("myBtn");
+      btn.onclick =function(e){console.log(e.eventPhase);} // 2
+      document.body.addEventListener("click",function(){
+        console.log(e.eventPhase);  // 1
+      },true)
+      document.body.onclick =function(e){
+        console.log(e.eventPhase);  // 3
+      }
+      当eventphase等于2是,this target currentTarget 是相等的
+    bol = e.bubbles      事件是否冒泡 
+    bol = e.cancelable   是否可取消事件默认行为 
+    bol = e.defaultPrevented  是否已调用了preventDefault()来阻止默认事件 [DOM3]
+    e.composed 
+    e.timeStamp 
+    e.srcElement 
+    e.returnValue 
+    e.cancelBubble 
+    e.path 
+    e.stopPropagation()  取消事件的进一步捕获或冒泡 
+      PS:前提bubbles为true,用于阻止事件的传递.
+      Example: :
+      var btn =document.getElementById("myBtn") 
+      btn.onclick =function(e){
+        alert("1") 
+        e.stopPropagation()   // 否则会触发body的点击事件
+      }
+      document.body.onclick =function(){
+        alert("2") 
+      }
+    e.stopImmediatePropagation()  取消事件传递,并阻止处理程序调用 [DOM3]
+    e.preventDefault()   阻止事件的默认行为
+      若cancelable是true则可以使用该方法
+    e.composedPath()  
+    e.initEvent()  
+  ★子类型事件类型,继承 Event:  
+  UIEvent 
+    UIEvent===MouseEvent.prototype.__proto__.constructor  
+    MouseEvent===WheelEvent.prototype.__proto__.constructor  
+    UIEvent===TouchEvent.prototype.__proto__.constructor  
+    UIEvent===KeyboardEvent.prototype.__proto__.constructor  
+    UIEvent===FocusEvent.prototype.__proto__.constructor 焦点事件对象类 
+    UIEvent===InputEvent.prototype.__proto__.constructor  
+    UIEvent===CompositionEvent.prototype.__proto__.constructor  
+  CustomEvent [IE11+] 
+    var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
+      传递的数据对象通过 e.detail 来获取 
+待整理 
   ◆公有属性/方法
-  e.target;      事件的目标
-    目标元素在文档中是事件冒泡的前提(即删除目标元素也会阻止事件冒泡)
-  e.currentTarget;  表示绑定的元素[即在函数中的this]
-    若直接将事件绑定在目标元素上,则this currentTarget target 相同
-  e.type;        返回事件类型
-  e.preventDefault();  阻止事件的默认行为
-    若cancelable是true则可以使用该方法
-  e.stopPropagation(); 取消事件的进一步捕获或冒泡
-    PS:前提bubbles为true,用于阻止事件的传递.
-    Example: :
-    var btn =document.getElementById("myBtn");
-    btn.onclick =function(e){
-      alert("1");
-      e.stopPropagation();  // 否则会触发body的点击事件
-    }
-    document.body.onclick =function(){
-      alert("2");
-    }
-  e.bubbles;     表示事件是否冒泡的布尔值
-  e.cancelable;  表名是否可以取消事件默认行为的布尔值
-  e.defaultPrevented; 表示是否已经调用了preventDefault()的布尔值
-    DOM3级事件中新增
-  e.detail;     与事件相关的细节信息
-  e.eventPhase; 调用事件处理程序阶段的描述数值 
-    1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
-    Example: :
-    var btn =document.getElementById("myBtn");
-    btn.onclick =function(e){console.log(e.eventPhase);} // 2
-    document.body.addEventListener("click",function(){
-      console.log(e.eventPhase);  // 1
-    },true)
-    document.body.onclick =function(e){
-      console.log(e.eventPhase);  // 3
-    }
-    当eventphase等于2是,this target currentTarget 是相等的
-  e.stopImmediatePropagation()  取消事件传递,并阻止处理程序调用
-   (DOM3新增)
-  e.trusted;    表示事件是否为浏览器生成的布尔值[DOM3]
-  e.view;       与事件关联的抽象视图,等同于发生事件的window对象
+  e.detail      与事件相关的细节信息
+  e.trusted     表示事件是否为浏览器生成的布尔值[DOM3]
+  e.view        与事件关联的抽象视图,等同于发生事件的window对象
   ◆鼠标事件的位置信息
   e.screenX     相对于设备屏幕左上角的坐标
   e.clientX     相对浏览器可视区左上角的坐标
@@ -1764,8 +2018,8 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
 事件分类 
   ◆DOM3级规定了一下几类事件
   'User-Interface'用户界面,UI事件 当用户与页面上的元素交互时触发 
-    PS:不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
-    DOMActivate 表示元素已经被用户操作[通过鼠标或键盘]激活 [DOM3级中废弃]
+    PS: 不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
+    DOMActivate 表示元素已经被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
     load    加载完后触发 
       window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
       iframe.onload 框架加载完毕时触发 
@@ -1945,7 +2199,7 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
   hashchange URL变化时在window上触发[IE8+] 
   // 设备相关事件
   [详参 JavaScript高级程序设计 395 页]
-  ◆其他事件:
+  ◆其他事件: 
     propertychange [IE专有] 
      不管js操作还是键盘鼠标手动操作,只要HTML元素属性发生改变即可立即捕获到.
     input    监听表单值改变[IE9+] 
@@ -2068,15 +2322,15 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
     页面刷新时先执行'beforeunload',然后'unload',最后'load' 
     页面关闭时先执行'beforeunload',最后'unload' 
 事件委托 
-  PS: 在创建GUI的语言(如C#)中,为GUI中的每个按钮添加一个onclick事件处理程序很常见,
+  PS: 在创建GUI的语言[如C#]中,为GUI中的每个按钮添加一个onclick事件处理程序很常见 
     但是在JavaScript中添加到页面上的事件处理程序数量直接关系到页面的整体运行性能,
     每当绑定事件时,浏览器代码会与支持页面交互的JS代码间建立一个链接,
-    链接越多页面执行起来就越慢
+    链接越多页面执行起来就越慢: 
     原因1:每个函数都是对象会占用内存
     原因2:绑定事件增加DOM访问次数,会延迟整个页面的交互就绪时间
     利用冒泡/捕获的原理,把事件加到父级上,触发子元素执行效果
     使用事件委托技术能避免对特定的每个节点添加事件监听器
-  Example: :
+  Example: 
     a 是b的父元素,b是c和d的父元素,通过给a添加click事件,删除c和d.
     // 给父元素a绑定事件
     a.addEventListener('click', function(event){
@@ -2090,7 +2344,7 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
       }
     })
 事件模拟 
-  PS:使用JS来触发特定的事件, DOM2级规范了模拟特定事件的方式 
+  PS: 使用JS来触发特定的事件, DOM2级规范了模拟特定事件的方式 
     IE有自己的模拟方式 
   document.createEvent(str);  创建event对象
     str   表示要创建的事件类型的字符串
@@ -2144,49 +2398,9 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
 
     var t = document.getElementById('test');
     trigger(t, 'click');
-创建和触发事件 
-  var event = new Event(str); Event构造函数创建自定义事件[IE11+]  
-    str  创建的事件名
-  var event = new CustomEvent(eNameStr,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
-    传递的数据对象通过 e.detail 来获取 
-  elem.addEventListener(eNameStr,cfoo,bol);   监听事件 
-    cfoo 回调函数,传送参数 e[事件对象]
-  elem.dispatchEvent(event);  触发事件 
-  Exp:
-    var on = function(eName,foo,elem) {
-      var el = elem || document;
-      el.addEventListener(eName, function(e){
-        foo(e,e.detail);
-      }, false);
-    }
-    var tr = function(eName,data,elem){
-      var event = new CustomEvent(eName, { 'detail': data });
-      var el = elem || document;
-      el.dispatchEvent(event);
-    }
-  老式的方式
-    这种创建 events 的方式已经过时了,请使用 event 构造函数来替代
-    早期的创建事件的方法使用了受Java启发的API
-    var event = document.createEvent('Event');  创建事件
-    event.initEvent('build', true, true);  定义事件
-      事件名为'build'
-    document.addEventListener('build', function (e) {  监听事件 
-      // e.target matches document from above
-    }, false);
-    document.dispatchEvent(event); 触发事件
-    自定义事件[DOM3] 
-    var evt = document.createEvent("CustomEvent");   创建事件 
-    evt.initEvent('customEvent',true,true);          定义事件类型 
-    evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
-      str  触发的事件类型 type
-      bol 表示事件是否应该冒泡
-      bol 表示事件是否可以取消
-      obj  任意值,保存在event对象的detail属性中.
-    elem.addEventListener('customEvent',cfoo,false); 监听事件 
-    elem.dispatchEvent(evt);     触发事件
-采用对象封装法使事件兼容处理: 
+事件兼容处理: 
   var eventCompat ={
-    add:function(elem,type,func){
+    add: function(elem,type,func){
       if(elem.addEventListener) {
         elem.addEventListener(type,func);
       }
@@ -2197,7 +2411,7 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
         elem["on"+type]=func;
       }
     },
-    remove:function(elem,type,func){
+    remove: function(elem,type,func){
       if(elem.addEventListener) {
         elem.removeEventListener(type,func);
       }
@@ -2208,16 +2422,16 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
         elem["on"+type]=null;
       }
     },
-    gete:function(e){
+    gete: function(e){
       return e?e:window.e;
     },
-    getType:function(e){
+    getType: function(e){
       return e.type;
     },
-    getElem:function(e){
+    getElem: function(e){
       return e.target || e.srcElement;
     },
-    preventDefault:function(e){
+    preventDefault: function(e){
       if(e.preventDefault) {
         e.preventDefault();
       }
@@ -2225,7 +2439,7 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
         e.returnValue =false;
       }
     },
-    stopPropagation:function(e){
+    stopPropagation: function(e){
       if(e.stopPropagation) {  // 使用属性的形式来判断
         e.stopPropagation();
       }
@@ -2254,7 +2468,7 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
   事件枚举及分类
     ◆在window上触发的事件 
     popstate   当活动历史记录条目更改时,在window上触发[HTML5 IE10+]
-      PS:调用history.pushState()或history.replaceState()不会触发该事件,
+      PS: 调用history.pushState()或history.replaceState()不会触发该事件,
         只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
         或者在JS代码中调用 history.back();
         不同的浏览器在加载页面时处理popstate事件的形式存在差异。
@@ -2314,40 +2528,21 @@ Event事件对象: 浏览器默认给事件响应函数传入的一个参数,该
         }
         $(this).addClass('aoo');
       })
-Example:  
-  给按钮添加一个点击click事件
-    获取按钮          var bu = document.querySelector("#xxx");
-    声明响应的动作.点击后执行   var cli = function(){ console.log("点到我了"); }
-    添加事件/监听事件  元素a.addEventListener("事件名称b",执行的函数c,true/false)
-      PS:当在元素a上发生事件b时,执行函数c.
-        事件响应时,浏览器会给执行的函数传一个参数,该参数表示事件本身.
-      true/false 可选填,默认为false.
-      此处为 bu.addEventListener("click",cli)
-  给多个元素添加同一事件
-    ⒈  获取多个元素;
-      var b = document.querySelectorAll(".xx")
-      // 获得具有 .XX 类的所有元素,并用一个数组表示.
-    ⒉  遍历每个元素,并绑定事件
-      for(var i = 0; i < b.length; i++) {
-        b[i].addEventListener("click",function(e){
-          // 浏览器定义 事件响应函数的参数,表示事件本身.
-          var s = e.target
-          // 使用b.target得到响应事件的元素.
-          s.classList.add("XX")
-          // add用来添加一个class
-          c();
-          // c为自定义函数,目的是将包含.XX样式的元素中移除.XX样式
-        })
-      }
-      function c(){
-        var a = document.querySelector('.xx');
-        if(a!=null) {
-          a.classList.remove("xx")
-        }
-      }
+自我总结 
+  创建和触发事件 
+    var on = function(eName,foo,elem) {
+      var el = elem || document;
+      el.addEventListener(eName, function(e){
+        foo(e,e.detail);
+      }, false);
+    }
+    var tr = function(eName,data,elem){
+      var event = new CustomEvent(eName, { 'detail': data });
+      var el = elem || document;
+      el.dispatchEvent(event);
+    }
 --------------------------------------------------------------------------------
 ◆Mobile 移动端 
-Special 
   ios移动设备上,长按<a>标签,会弹出浏览器的原生菜单
     在JS中设置取消的方法
     document.documentElement.style.webkitTouchCallout = 'none';
@@ -3432,7 +3627,7 @@ WYSIWYG'what you see is what you get'所见即所得,富文本编辑 [详参 JS�
     Example: :
     转换粗体文本
     frames["XX"].document.execCommand("bold",false,null);
-'Web Workers' 工作线程[HTML5]
+'Web Workers'工作线程[HTML5]
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.
   通过 window["Worker"] 来查看是否支持Web工作线程.
@@ -3505,131 +3700,6 @@ WYSIWYG'what you see is what you get'所见即所得,富文本编辑 [详参 JS�
             postMessage("pong")
           }
         }
-Performance 当前页面加载相关的性能信息 
-  PS: 用于精确度量、控制、增强浏览器的性能表现;精度可达千分之一毫秒  
-    还可获取后台事件的时间进度 
-    浏览器支持: IE10+、Chrome20+、Firefox15+、Opera15+ 
-  Example: 获取脚本运行的准确耗时 
-    传统的做法: 
-    var start = new Date().getTime();
-    // do something here
-    var now = new Date().getTime();
-    var latency = now - start;
-    console.log("任务运行时间:" + latency);
-    不足之处: 
-    精度: 只能精确到毫秒级别 
-    局限: 无法获取一些后台事件的时间进度,如浏览器从服务器加载网页的时间  
-  performance.timing  包含了各种与浏览器性能有关的时间数据   
-    PS: 提供浏览器处理网页各个阶段的耗时。
-    以下属性全部为只读
-    navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳 
-      若没有前一个网页,则等于'fetchStart'属性。
-      performance.timing.navigationStart   // 13260687
-      表示距离浏览器开始处理当前网页,已经过了13260687毫秒
-    unloadEventStart 若前一个网页与当前网页属于同一个域名,则返回前一个网页的unload事件发生时的Unix毫秒时间戳。
-      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-    unloadEventEnd   若前一个网页与当前网页属于同一个域名,则返回前一个网页unload事件的回调函数结束时的Unix毫秒时间戳。
-      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-    redirectStart    返回第一个HTTP跳转开始时的Unix毫秒时间戳。
-      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-    redirectEnd      返回最后一个HTTP跳转结束时,即跳转回应的最后一个字节接受完成时的Unix毫秒时间戳。
-      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-    fetchStart:返回浏览器准备使用HTTP请求读取文档时的Unix毫秒时间戳。该事件在网页查询本地缓存之前发生。
-    domainLookupStart:返回域名查询开始时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-    domainLookupEnd:返回域名查询结束时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-    connectStart:返回HTTP请求开始向服务器发送时的Unix毫秒时间戳。若使用持久连接(persistent connection),则返回值等同于fetchStart属性的值。
-    connectEnd:返回浏览器与服务器之间的连接建立时的Unix毫秒时间戳。若建立的是持久连接,则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
-    secureConnectionStart:返回浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。若当前网页不要求安全连接,则返回0。
-    requestStart:返回浏览器向服务器发出HTTP请求时(或开始读取本地缓存时)的Unix毫秒时间戳。
-    responseStart:返回浏览器从服务器收到(或从本地缓存读取)第一个字节时的Unix毫秒时间戳。
-    responseEnd:返回浏览器从服务器收到(或从本地缓存读取)最后一个字节时(若在此之前HTTP连接已经关闭,则返回关闭时)的Unix毫秒时间戳。
-    domLoading:返回当前网页DOM结构开始解析时(即Document.readyState属性变为“loading”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-    domInteractive:返回当前网页DOM结构结束解析、开始加载内嵌资源时(即Document.readyState属性变为“interactive”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-    domContentLoadedEventStart:返回当前网页DOMContentLoaded事件发生时(即DOM结构解析完毕、所有脚本开始运行时)的Unix毫秒时间戳。
-    domContentLoadedEventEnd:返回当前网页所有需要执行的脚本执行完成时的Unix毫秒时间戳。
-    domComplete:返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
-    loadEventStart:返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-    loadEventEnd:返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-  Example:
-    var t = performance.timing;
-    var pageloadtime = t.loadEventStart - t.navigationStart; 
-    //页面加载的耗时
-    var dns = t.domainLookupEnd - t.domainLookupStart; 
-    // 域名解析的耗时
-    var tcp = t.connectEnd - t.connectStart; 
-    //TCP连接的耗时
-    var ttfb = t.responseStart - t.navigationStart;
-    // 读取页面第一个字节之前的耗时
-
-  根据上面这些属性,可以计算出网页加载各个阶段的耗时。比如,网页加载整个过程的耗时的计算方法如下:
-  
-  
-  var t = performance.timing; 
-  var pageLoadTime = t.loadEventEnd - t.navigationStart;
-  
-  performance.now()
-  performance.now方法返回当前网页自从performance.timing.navigationStart到当前时间之间的微秒数(毫秒的千分之一)。也就是说,它的精度可以达到100万分之一秒。
-  
-  performance.now() 
-  // 23493457.476999998
-  
-  Date.now() - (performance.timing.navigationStart + performance.now())
-  // -0.64306640625
-  上面代码表示,performance.timing.navigationStart加上performance.now(),近似等于Date.now(),也就是说,Date.now()可以替代performance.now()。但是,前者返回的是毫秒,后者返回的是微秒,所以后者的精度比前者高1000倍。
-  
-  通过两次调用performance.now方法,可以得到间隔的准确时间,用来衡量某种操作的耗时。
-  
-  var start = performance.now();
-  doTasks();
-  var end = performance.now();
-  
-  console.log('耗时:' + (end - start) + '微秒。');
-  performance.mark()
-  mark方法用于为相应的视点做标记。
-  
-  window.performance.mark('mark_fully_loaded');
-  clearMarks方法用于清除标记,若不加参数,就表示清除所有标记。
-  
-  window.peformance.clearMarks('mark_fully_loaded');
-  
-  window.performance.clearMarks();
-  performance.getEntries()
-  浏览器获取网页时,会对网页中每一个对象(脚本文件、样式表、图片文件等等)发出一个HTTP请求。performance.getEntries方法以数组形式,返回这些请求的时间统计信息,有多少个请求,返回数组就会有多少个成员。
-  
-  由于该方法与浏览器处理网页的过程相关,所以只能在浏览器中使用。
-  
-  
-  window.performance.getEntries()[0]
-  
-  // PerformanceResourceTiming { 
-  //   responseEnd: 4121.6200000017125, 
-  //   responseStart: 4120.0690000005125, 
-  //   requestStart: 3315.355000002455, 
-  //   ...
-  // }
-  
-  上面代码返回第一个HTTP请求(即网页的HTML源码)的时间统计信息。该信息以一个高精度时间戳的对象形式返回,每个属性的单位是微秒(microsecond),即百万分之一秒。
-  
-  performance.navigation对象
-  除了时间信息,performance还可以提供一些用户行为信息,主要都存放在performance.navigation对象上面。
-  
-  它有两个属性:
-  
-  (1)performance.navigation.type
-  
-  该属性返回一个整数值,表示网页的加载来源,可能有以下4种情况:
-  
-  0:网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载,相当于常数performance.navigation.TYPE_NAVIGATENEXT。
-  
-  1:网页通过“重新加载”按钮或者location.reload()方法加载,相当于常数performance.navigation.TYPE_RELOAD。
-  
-  2:网页通过“前进”或“后退”按钮加载,相当于常数performance.navigation.TYPE_BACK_FORWARD。
-  
-  255:任何其他来源的加载,相当于常数performance.navigation.TYPE_UNDEFINED。
-  
-  (2)performance.navigation.redirectCount
-  
-  该属性表示当前网页经过了多少次重定向跳转。  
 ◆其他 
   XML 命名空间
     有了XML命名空间,不同XML文档的元素就可以混合在一起,而不发生命名冲突

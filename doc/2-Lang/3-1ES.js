@@ -719,15 +719,15 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         Foo.prototype;       // Goo {age: 18}
         aoo instanceof Foo.constructor;  //false
         aoo instanceof Foo.prototype;  // 报错
-    bol = prop in obj;  属性是否在对象中[包括原型对象的属性]  
-      prop 所要检测的对象的属性 
+    bol = prop in obj;  属性是否在对象中[包括原型中属性]  
+      prop num/str,待检测的对象的属性 
       obj  被检测的对象 
         可以是一个String包装对象,但不能是一个字符串原始值
         var color1 = new String("green");
         "length" in color1; // true
         var color2 = "coral";
         "length" in color2; // 报错(color2不是对象)
-      Example: :
+      Example: 
         数组
         var trees = new Array("redwood", "bay", "cedar", "oak", "maple");
         0 in trees        // true

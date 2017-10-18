@@ -65,9 +65,8 @@ Node 节点类,所有节点类型都继承自Node类型
     node1 = node0.nextSibling      后一个兄弟节点[最后一个节点的该属性为null] 
     cNode = pNode.firstChild  第一个子节点[若没有子节点则为null]  
     cNode = pNode.lastChild   最后一个子节点[若没有子节点则为null] 
-    bol = nod1.isSameNode(nod2)  是否为同一节点 [DOM3] 
-      相同指的是两个节点引用的是同一个对象
-    bol = node.isEqualNode(node1)  判断两个节点是否相等 [DOM3]  
+    bol = nod1.isSameNode(nod2)  是否为同一节点引用 [DOM3] 
+    bol = node.isEqualNode(node1) 两个节点是否具有同样类型、属性、子节点等 [DOM3]  
     bol = pNode.hasChildNodes(cNode)  是否有该子节点 
     bol = node.contains(targeNode)  是否包含目标节点 [专有扩展] 
     num = node.compareDocumentPosition(targetNode) 确定节点间的关系  [DOM3][IE9+]
@@ -138,7 +137,7 @@ Node 节点类,所有节点类型都继承自Node类型
     node.lookupNamespaceURI()  
     node.lookupPrefix()  
   ★已废弃 
-    node.setUserData()   节点添加额外数据 
+    node.setUserData()   节点添加额外数据 [DOM3]
 document DOM根节点,表示浏览器中的整个页面,包含完整的DOM 
   子节点可为: 
     DocumentType[最多一个]、Element[最多一个]、ProcessingInstruction 或 Comment
@@ -182,44 +181,8 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       str = document.cookie 
     ★元素快捷获取 
       document.defaultView  当前document对应的window对象,不存在则为 null [DOM2] 
-        IE不支持该属性,有一个 document.parentWindow 属性和其等价
+        IE不支持该属性,有 document.parentWindow 和其等价
         console.log(document.defaultView === window); // true  
-      document.defaultView.getComputedStyle(elem,str/null) CSSStyleDeclaration,计算的样式  
-        PS: 表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果 
-          等价于 window.getComputedStyle(elem,str/null);
-        str   一伪元素字符串(如":after"),若不需要可为null或'' 
-          IE不支持获取伪类 [?]
-        Example: 
-          var color = window.getComputedStyle(elm, ':before').color;
-          var color = window.getComputedStyle(elm, ':before')
-          .getPropertyValue('color');
-          var color = window.getComputedStyle(elm, null).color;
-        IE9以下不支持defaultView,使用 elem.currentStyle 属性代替 [非标准属性]
-          这个属性是CSSStyleDeclaration的实例
-        计算样式的 CSSStyleDeclaration 对象与内联样式的 CSSStyleDeclaration 对象的区别
-          计算样式的属性是只读的；
-          计算样式的值是绝对值,类似百分比和点之类相对的单位将全部转换为以'px'为后缀的字符串绝对值,
-          其值是颜色的属性将以“rgb(#,#,#)”或“rgba(#,#,#,#)”的格式返回;
-          不计算复合属性,只基于最基础的属性,如不要查询margin,而单独查询marginTop等;
-          计算样式对象未定义cssText属性；
-          计算样式同时具有欺骗性,在查询某些属性时的返回值不一定精准,如查询font-family；
-        window.getComputedStyle(elem) 指定元素节点的最终样式信息的对象 
-          所谓“最终样式信息”,指的是各种CSS规则叠加后的结果
-          还可以接受第二个参数,表示指定节点的伪元素,比如:before、:after、:first-letter等
-          返回的CSS值都是绝对单位
-            比如,长度都是像素单位(返回值包括px后缀)
-            颜色是rgb(#, #, #)或rgba(#, #, #, #)格式.
-          CSS规则的简写形式无效
-            比如,想读取margin属性的值,不能直接读,
-            只能读marginLeft、marginTop等属性.
-          若一个元素不是绝对定位,top和left属性总是返回auto.
-          该方法返回的样式对象的cssText属性无效,返回undefined.
-          该方法返回的样式对象是只读的,若想设置样式,应该使用元素节点的style属性.
-          兼容写法
-            getComputedStyle方法在IE8以及更早的版本中没有实现,
-            但是IE中每个元素有自己的currentStyle属性.
-            var styleObj = getComputedStyle ? getComputedStyle(elem, "") : elem.currentStyle;
-            var width = styleObj.width;　　//100px;
       document.documentElement  <html>元素 
         document.documentElement.clientWidth   获取视口的宽度
         document.documentElement.clientHeight  获取视口的宽度
@@ -297,9 +260,6 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       document.createCDATASection()  
       document.createProcessingInstruction()  
       document.adoptNode()  
-      document.createRange()  
-      document.createNodeIterator()  
-      document.createTreeWalker()  
       document.write()  
       document.execCommand()  
       document.queryCommandEnabled()  
@@ -407,6 +367,28 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       document.createAttributeNS()  
       document.getElementsByTagNameNS()  
     ★不常用 
+      document.createNodeIterator(node,num,filter/foo,bol)  创建NodeIterator对象 
+        node  作为搜索起点的树中的节点 
+        num   表示要访问哪些节点的数字代码 
+          一个位掩码,通过应用一或多个过滤器来确定要访问哪些节点。
+          这个参数的值以常量形式在NodeFilter类型中定义 
+          NodeFilter.SHOW_ALL      显示所有类型的节点 
+          NodeFilter.SHOW_ELEMENT  显示元素节点 
+          NodeFilter.SHOW_TEXT     显示文本节点 
+          NodeFilter.SHOW_COMMENT  显示注释节点
+          NodeFilter.SHOW_DOCUMENT 显示文档节点
+          NodeFilter.SHOW_ATTRIBUTE 显示特性节点,由于DOM结构原因,实际上不能使用这个值 
+          NodeFilter.SHOW_CDATA_SECTION     显示CDATA节点,对HTML页面没有用 
+          NodeFilter.SHOW_ENTITY_REFERENCE  显示实体引用节点,对HTML页面没有用
+          NodeFilter.SHOW_ENTITYE           显示实体节点,对HTML页面没有用
+          NodeFilter.SHOW_DOCUMENT_TYPE     显示文档类型节点
+          NodeFilter.SHOW_DOCUMENT_FRAGMENT 显示文档片段节点,对HTML页面没有用
+          NodeFilter.SHOW_NOTATION          显示符号节点,对HTML页面没有用
+          NodeFilter.SHOW_PROCESSING_INSTRUCTION  显示处理指令节点,对HTML页面没有用
+        filter/foo 一个NodeFilter对象,或一个表示应该接受还是拒绝某种特定节点的函数 
+        bol   表示是否要扩展实体引用,该参数在HTML页面中没有用,因为其中的实体引用不能扩展 
+      document.createTreeWalker()  创建TreeWalker对象 
+      document.createRange()  创建DOM范围 
       document.currentScript 
       str = document.documentURI  url地址 
       str = document.origin       协议+域名  
@@ -421,6 +403,7 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       document.forms 
       document.scripts 
       document.designMode 
+    ★兼容性 
       document.webkitIsFullScreen 
       document.webkitCurrentFullScreenElement 
       document.webkitFullscreenEnabled 
@@ -479,113 +462,6 @@ document DOM根节点,表示浏览器中的整个页面,包含完整的DOM
       PS: 包括 <html> <head> <title> <body>元素 
         通过该方法创建的文档为'HTMLDocument'类型的实例
       'titlename'   放在<title>元素中的字符串
-  StyleSheetList===document.styleSheets.constructor 
-    var shets = document.styleSheets  样式表集合 
-    StyleSheetList.prototype.xxx 
-      shets.length 
-      shets.item() 
-  CSSStyleSheet===document.styleSheets[0].constructor  [继承 StyleSheet] 
-    var shet = document.styleSheets[idx]  样式表对象 
-    CSSStyleSheet.prototype.xxx  
-      shet.insertRule(str,idx)  向样式表中插入一条新规则 [IE9-为addRule]
-        str  表示CSS规则的字符串
-        idx  插入位置
-        Example: 
-        document.styleSheets[0].insertRule('#block { color:white }', 0);
-      shet.deleteRule(idx) 从样式表中删除一条规则 [IE9-使用removeRule]
-        PS:
-        Example:document.styleSheets[0].deleteRule(0); //删除样式表中的第一条规则
-      shet.cssRules  CSSRuleList [IE9-为rules] 
-        PS: CSSRuleList 为样式表的CSS规则组成的类数组对象
-        rule = shet.cssRules[0]  样式表的一条规则 
-          PS: 一条CSS规则包括两个部分:CSS选择器和样式声明 
-            CSSRule 对象表示样式表中的一条规则,是一个供其他多种类型继承的基类型,
-            其中常见的就是 CSSStyleRule 类型
-        rule.selectorText  当前规则的选择器 
-          Example:document.styleSheets[0].cssRules[0].selectorText; // ".myClass"
-        rule.style   规则样式声明,即选择器大括号内的部分 
-          Example:
-          document.styleSheets[0].cssRules[0].style.color = 'red';
-        rule.cssText  返回该规则的字符串表示 
-          // "body { background-color: red; margin: 20px; }"
-        rule.parentStyleSheet; 返回定义当前规则的样式表对象
-        rule.parentRule; 返回包含当前规则的那条CSS规则
-          若当前规则是顶层规则,则该属性返回null.
-        rule.media; [当一条规则为@media代码块]返回@media代码块的media规则
-        IE获取rules方法 
-          sheet.rules;
-          sheet.removeRules(0);
-          sheet.addRule("body","background-color:red",0);
-        兼容写法 
-          window.onload =function(){
-            var sheet = document.styleSheets[0];
-            var rules = sheet.cssRules||sheet.rules;
-            var rule1 = rules[0];
-            rule1.style.color ='red';
-          }
-        Example: 
-          假设这条规则位于页面中的第一个样式表中,且样式表中只有这一条规则
-          div.box{ background-color:blue; width:100px; }
-          var sheet =document.styleSheets[0];
-          var rules =sheet.cssRules || sheet.rules;  // 取得规则列表,兼容写法
-          var rule =rules[0];
-          console.log(rule.selectorText);          // "div.box"
-          console.log(rule.style.cssText);         // 完整的CSS代码
-          console.log(rule.style.backgroundColor); // "blue"
-          console.log(rule.style.width);           // "100px"
-          rule.style.backgroundColor ="red";  // 设置背景色
-  
-          document.styleSheets[0].cssRules[0].selectorText; //返回选择器字符串
-          document.styleSheets[0].cssRules[0].cssText; //返回规则字符串,含选择器
-          document.styleSheets[0].cssRules[0].style.border;
-          document.styleSheets[0].cssRules[0].style.cssText; //返回当前规则的所有样式声明字符串
-      shet.ownerRule 
-      shet.rules 
-      shet.addRule() 
-      shet.removeRule() 
-  StyleSheet===CSSStyleSheet.prototype.__proto__.constructor 
-    StyleSheet.prototype.xxx 
-      shet.type  返回StyleSheet对象的type值,通常是text/css 
-      shet.href  只读,返回样式表链接的地址 
-        对于内嵌的style节点,该属性等于null；
-      shet.ownerNode 返回对象所在的DOM节点,通常是<link>或<style>
-        对于那些由其他样式表引用的样式表,该属性为null
-      shet.parentStyleSheet 
-        因为CSS的@import命令允许在样式表中加载其他样式表,就有了parentStyleSheet属性,
-        它返回包括了当前样式表的那张样式表.
-        若当前样式表是顶层样式表,则该属性返回null
-      shet.title  返回StyleSheet对象的title值；
-      shet.media  只读,默认值是screen；
-        表示这个样式表是用于屏幕(screen),还是用于打印(print),或两者都适用(all)
-      bol = shet.disabled  读写,是否禁用样式表,值为true或disabled 
-        PS: 若样式被禁用返回true,否则为false.
-          一旦样式表设置了disabled属性,这张样式表就将失效
-        sheet.disabled = true ;  禁用该样式
-  CSSRuleList===<shet>.cssRules.constructor 
-    CSSRuleList.prototype.xxx 
-      rules.length 
-      rules.item() 
-  CSSStyleRule===<shet>.cssRules[0].constructor [继承 CSSRule]
-    CSSStyleRule.prototype.xxx 
-      rule.selectorText 
-      rule.style 
-  CSSRule===CSSStyleRule.prototype.__proto__.constructor  
-    CSSRule.prototype.xxx 
-      常量 
-        1===rule.STYLE_RULE 
-        2===rule.CHARSET_RULE 
-        3===rule.IMPORT_RULE 
-        4===rule.MEDIA_RULE 
-        5===rule.FONT_FACE_RULE 
-        6===rule.PAGE_RULE 
-        7===rule.KEYFRAMES_RULE 
-        8===rule.KEYFRAME_RULE 
-        10===rule.NAMESPACE_RULE 
-        12===rule.SUPPORTS_RULE 
-      rule.type 
-      rule.cssText 
-      rule.parentRule 
-      rule.parentStyleSheet 
 Element 元素节点类型,用于表现XML或HTML元素 [继承 Node] 
   元素节点可能的子节点: 
     Element Text Comment ProcessingInstruction 
@@ -599,13 +475,11 @@ Element 元素节点类型,用于表现XML或HTML元素 [继承 Node]
         elem.tagName.toLowerCase() == "div";
     elem.childElementCount 子元素数量 [ElementTraversal]
   ★元素尺寸、位置 
-    elem.clientWidth/elem.clientHeight 只读,元素内宽/高 
-      PS: 元素内容及其内边距所占空间大小[边框以内不包括边框、滚动条等]
-      不包括边框[IE包括]、滚动条部分 
-        windows 中出现滚动条时为 content+padding-滚动条的宽度
-        mac 中滚动条在未拖动时自动隐藏,因此不影响 
-      无padding和滚动条时clientWidth等于元素设置的宽度
-      Example: : 获取浏览器窗口的高和宽
+    当元素中出现滚动条时: 
+      Windows中: width/height包含滚动条 
+      Mac中: 滚动条在未拖动时自动隐藏,无不影响 
+    elem.clientWidth/elem.clientHeight 只读,width/height+padding  
+      Example:  获取浏览器窗口的高和宽
         function getViewport(){
           var obj = {};
           if(document.compatMode == "BackCompat"){
@@ -622,16 +496,16 @@ Element 元素节点类型,用于表现XML或HTML元素 [继承 Node]
         但IE6的quirks模式中,document.body.clientWidth 返回正确的值,
         因此函数中加入了对文档模式的判断;
     elem.clientLeft/elem.clientTop  'border-left-width'/'border-top-width'的值 
-    elem.scrollWidth/elem.scrollHeight  布局宽/高+滚动隐藏宽/高 
-      包括元素的padding,但不包括元素的margin
-      document.body.scrollWidth 在其布局宽和浏览器宽中取较大者,高度同理; 
-    elem.getBoundingClientRect() 返回一对象,用于获得元素相对视口的位置 [DiBs] 
+    elem.scrollWidth/elem.scrollHeight  元素内容实际大小,width/height+padding+滚动隐藏值  
+      通常<html>元素是在Web浏览器的视口中滚动的元素,IE6-运行在混杂模式下时是<body>元素 
+    elem.getBoundingClientRect()  ClientRect对象,用于获得元素相对视口的位置 [DiBs] 
       elem.getBoundingClientRect().width  元素宽
       elem.getBoundingClientRect().height 元素高
       elem.getBoundingClientRect().top    元素顶部到视口顶部的距离
       elem.getBoundingClientRect().bottom 元素底部到视口顶部的距离
       elem.getBoundingClientRect().left   元素左侧到视口左侧的距离
       elem.getBoundingClientRect().right  元素右侧到视口左侧的距离
+    num = elem.scrollLeft/elem.scrollTop  读写,元素水平/垂直滚动距离 
   ★HTML标签相关 
     str = elem.innerHTML 读写,元素标签内的所有标签及文本 [HTML5] 
       PS: 各个浏览器返回的值可能不完全一样[如是否带空格,大小写问题等] 
@@ -708,8 +582,6 @@ Element 元素节点类型,用于表现XML或HTML元素 [继承 Node]
     elem.closest('selector')  最近的祖先元素 [IE20+] 
       PS: 也可以是当前元素本身;未匹配到,则返回 null
   ★元素操作 
-    elem.scrollLeft/elem.scrollTop  读写,元素水平/垂直滚动距离 
-      PS: 被隐藏的内容左/上侧的像素值,通过设置可改变元素滚动位置
     elem.scrollIntoView([bol]) 通过滚动浏览器窗口或某个容器元素使元素出现在视口中 [HTML5] 
       PS: 实际上,为某个元素设置焦点也会导致浏览器滚动并显示出该元素
       bol  默认 true
@@ -792,19 +664,19 @@ HTMLElement [继承 Element]
     HTMLElement.prototype.__proto__.constructor===Element  // true,继承 Element 
   ◆HTMLElement.prototype.xxx 
   ★元素信息 
-    PS: 为方便描述,设定 元素的边界宽为content+padding+border+margin,
+    PS: 为方便描述,设定元素的边界宽为content+padding+border+margin,
       元素布局宽为content+padding+border,元素内宽为content+padding,
       元素宽为content的宽度[在box-sizing:content-box的默认条件下]
       高度同理;
-      当元素出现滚动条时,元素不会'膨胀',只会'挤压'其内部元素;
-    elem.offsetWidth/elem.offsetHeight 元素布局宽/高 [DiBs] 
-      包含scrollbar
-      和元素内部的内容是否超出元素无关,只和width和border有关
+    num = elem.offsetWidth/elem.offsetHeight   width/height+border+scrollbar [DiBs] 
     elem.offsetParent  只读,最近的包含该元素的定位元素 
       PS: 若无定位元素,则为body;当元素display:none,其offsetParent为null;
-    elem.offsetTop/elem.offsetLeft  元素相对其offsetParent[定位的父元素]的top/left 
-      PS: 元素左/上边框到父元素左/上边框间的像素值 ? 
-    elem.tabIndex  当前元素的切换[Tab]序号
+    num = elem.offsetLeft/elem.offsetTop  元素外边框相对其offsetParent的内边框的距离 
+      一般元素的offsetParent为其父元素
+      定位元素为其相对定位的元素 
+      <td>元素的offsetParent是作为其祖先元素的<table>元素 
+      ..
+    num = elem.tabIndex  当前元素的切换[Tab]序号,不存在则为-1 
   ★HTML标签及文本相关 
     elem.outerText  读写,元素及其包含的所有文本内容 [HTML5]
     elem.innerText  读写,元素中包含的所有文本内容 [HTML5] 
@@ -931,55 +803,6 @@ HTMLElement [继承 Element]
       Example:
         定义div标签的abc属性,值为aaa
         <div abc="aaa">123</div>
-  CSSStyleDeclaration===<elem>.style.constructor   内联样式对象 
-    PS: 包含着通过HTML的style特性指定的所有样式信息 
-      若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
-      style对象的属性值都是字符串,设置时必须包括单位
-    var styDec = elem.style 
-    CSSStyleDeclaration.prototype.xxx  
-      styDec.length   CSS属性的数量  
-      str = styDec.cssText  读写'style'属性中的CSS代码 
-        elem.style.cssText ='background-color:red;'+'border:1px solid black;';
-      styDec.xx   读写内联样式 
-        PS: style.xx 的值需要事先定义在html标签里[CSS中也不行],否则获取不到,
-          返回值为字符串,如 style.left 返回 '20px';
-          当设置的值为非正常的值时,则不生效,设置为 null/'' 时可清除该样式 
-          使用"-"连接的属选采用驼峰命名法来代替,如font-size,改写为fontSize;
-          只有一个不能直接使用转换的CSS属性访问就是float,因为float为JS保留字,
-          DOM2级 规定使用cssFloat 代替,IE则使用styleFloat.
-        elem.style.color     读写字体颜色 
-          elm.style.color = 'black';
-        elem.style.fontSize  读写字体大小 
-          font-size需改写为fontSize,返回值如'20px'
-        elem.style.left      读写,相对于具有定位属性父元素的left 
-        elem.style.width     读写,元素宽
-        elem.style.cursor    显示的指针[光标]的类型
-        ...
-        elem.style.cssFloat;       非IE浏览器调用方法
-        elem.style.styleFloat;     IE浏览器调用方法
-        跨浏览器兼容总结 
-          elem.style.cssFloat || elem.style.styleFloat;
-          typeof elem.style.cssFloat!="undefined" ? 
-          elem.style.cssFloat="right" : elem.style.styleFloat="right";
-        Example:
-        elm.style.cssText ='color:red;line-height:30px';
-        elm.style.removeProperty('color');
-        elm.style.setProperty('color', 'green', 'important');
-      styDec.parentRule  CSS信息的CSSRule对象
-      styDec.cssFloat 
-      styDec.item(idx)    返回指定位置的CSS属性的名称,也可使用[]形式
-      styDec.getPropertyValue(样式声明) 返回指定样式声明的字符串值
-      styDec.getPropertyPriority(属性名) 返回优先级声明,存在为"important",否则为""
-      styDec.removeProperty(属性名)  从样式中删除指定属性 
-      styDec.setProperty(属性名,value,"!import"/"")  设置属性及值,并加上"!important"或""
-      不常用 
-        styDec.animationPlayState
-        styDec.webkitAnimationPlayState 
-          animation-play-state属性可以控制动画的状态,暂停/播放,需加上浏览器前缀
-          "paused"    暂停
-          "running"   播放
-      已废弃 
-        styDec.getPropertyCSSValue(属性名); 返回包含指定属性的 CSSValue 对象
   ◆每个HTML元素都有 HTMLElement 的子类型[继承 HTMLElement][IE8+可访问]:  
     HTMLElement   <i> <code> <dt> <tt> 
     HTMLHtmlElement  <HTML> 
@@ -996,31 +819,28 @@ HTMLElement [继承 Element]
         document.body === document.querySelector("body")  // true
         [其他属性详见 DOM操作归纳总结->elem]
     HTMLLinkElement  <link> 
-      HTMLLinkElement.prototype.xxx 
-        link.href      读写,样式表路径 
-        link.disabled  
-        link.crossOrigin 
-        link.rel 
-        link.relList 
-        link.media 
-        link.hreflang 
-        link.type 
-        link.as 
-        link.referrerPolicy 
-        link.sizes 
-        link.charset 
-        link.rev 
-        link.target 
-        link.import 
-        link.integrity 
-      CSSStyleSheet===<link>.sheet.constructor 
-        link.stylesheet; // IE的方法
+      ★HTMLLinkElement.prototype.xxx 
+      link.href      读写,样式表路径 
+      link.disabled  
+      link.crossOrigin 
+      link.rel 
+      link.relList 
+      link.media 
+      link.hreflang 
+      link.type 
+      link.as 
+      link.referrerPolicy 
+      link.sizes 
+      link.charset 
+      link.rev 
+      link.target 
+      link.import 
+      link.integrity 
     HTMLStyleElement <style> 
-      HTMLStyleElement.prototype.xxx 
-        style.disabled 
-        style.media 
-        style.type 
-      CSSStyleSheet===<style>.sheet.constructor 
+      ★HTMLStyleElement.prototype.xxx 
+      style.disabled 
+      style.media 
+      style.type 
     HTMLDivElement       <div> 
     HTMLSpanElement      <span> 
     HTMLAnchorElement  <a>  
@@ -1377,10 +1197,8 @@ HTMLElement [继承 Element]
         frame.marginHeight 
         frame.marginWidth 
         frame.allow 
-        frame.contentDocument 表示执行框架的文档对象 [DOM2][IE8+] 
-          此前无法直接通过元素获取到文档对象,只能使用frames集合.
-        frame.contentWindow   返回框架的window对象 
-          然后.document 再获取到document对象 
+        frame.contentWindow   框架的window对象 
+        frame.contentDocument 框架的document文档对象 [DOM2][IE8+] 
         frame.getSVGDocument()  
       <iframe id="frameId1" name='frameName1' src="/cpt/top_nav.html" ></iframe>
       var frame = document.querySelector("#frameId1") 框架的DOM元素对象 
@@ -1515,7 +1333,145 @@ NamedNodeMap===<elem>.attributes.constructor  元素节点当前具有的特性�
   Example: 
     设置元素的id值
     atrs.["id"].nodeValue = "xxx";
-其他节点类 
+◆样式类 
+  按照结构依次为: 样式表集-样式表-规则集-规则-声明 
+StyleSheetList===document.styleSheets.constructor  样式表集合 
+  ★StyleSheetList.prototype.xxx 
+  shets.length 
+  shets.item() 
+CSSStyleSheet   一张样式表 [继承 StyleSheet] 
+  CSSStyleSheet===document.styleSheets[0].constructor 样式表对象  
+  CSSStyleSheet===<link>.sheet.constructor  <link>元素引入的样式表对象 
+    <link>.stylesheet; // IE的方法
+  CSSStyleSheet===<style>.sheet.constructor <style>元素引入的样式表对象 
+    <style>.stylesheet; // IE的方法
+  ★CSSStyleSheet.prototype.xxx  
+  shet.ownerRule  若样式表是通过'@import'导入的,则指向导入的规则;否则,值为null [IE不支持]  
+  shet.insertRule(ruleStr,idx) 向样式表中插入一条规则 [IE9+] 
+    ruleStr CSS规则字符串
+    idx     插入的位置
+    Example: 
+    document.styleSheets[0].insertRule('#block { color:white }', 0);
+  shet.addRule(ruleStr,idx)    向样式表中插入一条规则 [IE9-]
+  shet.deleteRule(idx) 从样式表中删除一条规则 [IE9+] 
+    Example:document.styleSheets[0].deleteRule(0); // 删除样式表中的第一条规则
+  shet.removeRule(idx) 从样式表中删除一条规则 [IE9-]
+StyleSheet===CSSStyleSheet.prototype.__proto__.constructor 一张样式表 
+  ★StyleSheet.prototype.xxx 
+  str = shet.type  样式表类型,通常是'text/css' 
+  str = shet.href  只读,样式表链接地址,否则为 null  
+  shet.ownerNode   所在的DOM节点,通常是<link>或<style> 
+    若当前样式表由'@import'导入的,则该值为 null;IE不支持这个属性 
+  str = shet.title  所在节点的的title属性值 
+  shet.parentStyleSheet 在当前样式表是通过'@import'导入的情况下,该属性为指向导入它的样式表的指针 
+    因为CSS的@import命令允许在样式表中加载其他样式表,就有了parentStyleSheet属性,
+    它返回包括了当前样式表的那张样式表.
+    若当前样式表是顶层样式表,则该属性返回null
+  shet.media  当前样式表支持的所有媒体类型的集合 
+    如果集合是空列表,表示样式表适用于所有媒体 
+    在IE中,media是一个反映<link>和<style>元素media特性值的字符串
+  bol = shet.disabled  读写,是否禁用样式表,值为true或disabled 
+CSSRuleList===shet.cssRules.constructor 样式表CSS规则集 [IE9+]  
+CSSRuleList===shet.rules.constructor    样式表CSS规则集 [IE9-]  
+  兼容写法 
+  var sheet = document.styleSheets[0];
+  var rules = sheet.cssRules||sheet.rules;
+  var rule1 = rules[0];
+  rule1.style.color ='red';
+CSSStyleRule===shet.cssRules[0].constructor  一条CSS规则 [继承 CSSRule] 
+  rule = shet.cssRules[0]  样式表的一条规则,包括两个部分: CSS选择器和样式声明 
+  ★CSSStyleRule.prototype.xxx 
+  str = rule.selectorText  当前规则的选择器文本 
+    Example:document.styleSheets[0].cssRules[0].selectorText; // ".myClass"
+CSSRule===CSSStyleRule.prototype.__proto__.constructor 一条CSS规则 
+  ★CSSRule.prototype.xxx 
+  rule.parentStyleSheet  当前规则的所属的样式表对象 [IE不支持]
+  rule.parentRule  若规则是导入的,则该属性即导入规则,否则,为 null [IE不支持该属性] 
+  num = rule.type 规则类型的常量值,对于样式规则为1 [IE不支持]
+  str = rule.cssText  当前规则的字符串 
+  常量 
+    1===rule.STYLE_RULE 
+    2===rule.CHARSET_RULE 
+    3===rule.IMPORT_RULE 
+    4===rule.MEDIA_RULE 
+    5===rule.FONT_FACE_RULE 
+    6===rule.PAGE_RULE 
+    7===rule.KEYFRAMES_RULE 
+    8===rule.KEYFRAME_RULE 
+    10===rule.NAMESPACE_RULE 
+    12===rule.SUPPORTS_RULE 
+CSSStyleDeclaration  CSS规则的声明  
+  CSSStyleDeclaration===rule.style.constructor 一张样式表中的一条规则的声明  
+  CSSStyleDeclaration===<elem>.style.constructor  内联样式对象 
+    PS: 包含着通过HTML的style特性指定的所有样式信息 
+      若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
+  CSSStyleDeclaration===getComputedStyle(<elem>,str/null).constructor 计算后的样式对象[IE9+][DOM2]
+    PS: 表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果 
+      等价于 document.defaultView.getComputedStyle(<elem>,str/null);
+      或 window.getComputedStyle(<elem>,str/null);
+    str   一伪元素字符串,如":after",若不需要可为null或'' 
+      IE不支持获取伪类 [?]
+    Example: 
+      var color = window.getComputedStyle(elm, ':before').color;
+      var color = window.getComputedStyle(elm, ':before')
+      .getPropertyValue('color');
+      var color = window.getComputedStyle(elm, null).color;
+    IE9-不支持'defaultView',使用 elem.currentStyle 属性代替 [非标] 
+      兼容写法
+      var styleObj = getComputedStyle?getComputedStyle(elem,""):elem.currentStyle;
+      var width = styleObj.width;　　//100px;
+  计算样式对象与内联样式对象的区别: 
+    计算样式的属性是只读的 
+    计算样式的值是绝对值,类似百分比和点之类相对的单位将全部转换为以'px'为后缀的字符串绝对值,
+    颜色属性值格式各浏览器不一定相同,一般以'rgb(#,#,#)'或'rgba(#,#,#,#)'的格式返回;
+    不计算复合属性,只基于最基础的属性
+      比如,不可获取margin的值,只能读marginLeft、marginTop等值 
+    计算样式对象的cssText属性无效,返回undefined 
+    计算样式同时具有欺骗性,在查询某些属性时的返回值不一定精准,如查询font-family；
+    若一个元素不是绝对定位,top和left属性总是返回auto.
+  ★CSSStyleDeclaration.prototype.xxx  
+  dec.parentRule 当前规则声明的CSS规则 
+  str = dec.xx   读写内联样式 
+    PS: style对象的属性值都是字符串,设置时必须包括单位
+      当设置的值为非正常的值时,则不生效,设置为 null/''时可清除该样式 
+      使用"-"连接的属选采用驼峰命名法来代替,如font-size,改写为fontSize;
+    'float'为JS保留字,DOM2级规定使用'cssFloat'代替,IE则使用'styleFloat'
+    elem.style.cssFloat;       非IE浏览器调用方法
+    elem.style.styleFloat;     IE浏览器调用方法
+    elem.style.color     读写字体颜色 
+      elm.style.color = 'black';
+    elem.style.fontSize  读写字体大小 
+      font-size需改写为fontSize,返回值如'20px'
+    elem.style.left      读写,相对于具有定位属性父元素的left 
+    elem.style.width     读写,元素宽
+    elem.style.cursor    显示的指针[光标]的类型
+    ...
+    跨浏览器兼容总结 
+      elem.style.cssFloat || elem.style.styleFloat;
+      typeof elem.style.cssFloat!="undefined" ? 
+      elem.style.cssFloat="right" : elem.style.styleFloat="right";
+    Example:
+    elm.style.cssText ='color:red;line-height:30px';
+    elm.style.removeProperty('color');
+    elm.style.setProperty('color', 'green', 'important');
+  str = dec.cssText  读写,整个'style'属性中的CSS代码[DOM2] 
+    elem.style.cssText ='background-color:red;'+'border:1px solid black;';
+  num = dec.length   应用给元素的CSS属性的数量[DOM2]  
+  dec.cssFloat 
+  str = dec.item(idx)  指定位置的属性名称,或使用[idx]形式
+  str = dec.getPropertyValue('propName') 返回指定属性的字符串值
+  str = dec.getPropertyPriority('propName') 返回优先级声明,存在为"important",否则为""
+  dec.setProperty('propName','value',"!import"/"")  设置属性及值,并加上"!important"或""
+  dec.removeProperty('propName')  删除指定属性 
+  不常用 
+    dec.animationPlayState
+  兼容性相关  
+    dec.webkitAnimationPlayState 
+      animation-play-state属性可以控制动画的状态,暂停/播放,需加上浏览器前缀
+      "paused"    暂停
+      "running"   播放
+    dec.getPropertyCSSValue(属性名); 返回包含指定属性的 CSSValue 对象 [Chrome不支持]
+其他类 
   DocumentType===document.doctype.constructor [继承 Node][DiBs] 
     PS: 父节点为document;无子节点;
     var tmp = document.doctype  文档类型,<!DOCTYPE>的引用 
@@ -1614,6 +1570,9 @@ NamedNodeMap===<elem>.attributes.constructor  元素节点当前具有的特性�
       text.before() 
       text.after() 
       text.replaceWith() 
+  NodeIterator   遍历 [DOM2] [JS高程 326 页]
+  TreeWalker     遍历 [DOM2] [JS高程 330 页]
+  Range       范围 [DOM2] [JS高程 332 页]
 兼容性相关 
   ◆IE专属 
   document.documentMode 识别文档模式 [IE8+] 
@@ -1696,32 +1655,32 @@ XML相关
 --------------------------------------------------------------------------------
 ◆Event事件: 用来处理响应的一个机制,JS与HTML的交互通过事件实现  
   PS: 响应可来自用户,也可以来自浏览器,如文件下载完了  
+    事件机制属于观察者模式的模型 
   事件流: 描述页面中接收事件的顺序 
-    "Capture"事件捕获: W3C规定的标准事件模型,从外向内传递 
-      由'window'-'document'-'html'-'body'-..-事件绑定元素  
-      事件从最外层向内传递,直到传递到触发事件的该元素为止 
-    "Bubbling"事件冒泡: IE的事件流,从内向外传递 
+    "event bubbling"事件冒泡: IE的事件流,从内向外传递 
+      PS: 事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡 
       事件绑定元素-..-'body'-'html'-'document'-'window'
-      事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡 
+    "event capturing"事件捕获: 事件从最外层向内传递,直到传递到触发事件的该元素为止 
+      由'window'-'document'-'html'-'body'-..-事件绑定元素  
+    'DOM2级事件'规定的事件流包括三个阶段：事件捕获阶段、处于目标阶段和事件冒泡阶段 
   事件支持检测 
     var div = document.createElement('div');
     console.log('ontouchstart' in div); // false, 是否支持触摸事件
     console.log('onorientationchange' in window); // false, 是否支持方向转换事件 
 事件绑定、解绑及触发 
-  PS: 响应某个事件的函数就叫做事件处理程序[或事件侦听器] 
+  PS: 响应某个事件的函数就叫做事件处理程序或事件侦听器 
     函数中 this 为事件的目标元素
   内联事件处理程序: 事件处理函数作为HTML标签的一个属性  
     Example: 
     <input type="button" value="clickme" onclick="alert('点击')">
-  DOM0级事件处理程序: 将一个函数赋值给一个事件处理程序属性
+  DOM0级事件处理程序: 将一个函数赋值给元素的一个事件处理程序属性 
     PS: 当添加多个相同[即使执行函数不同]的事件,会产生覆盖
-    事件处理组成: elem.on<event>=foo 
-      Example: 
-      document.onclick=function(){ alert("abc"); }; //单击文档任意处
-
-      bar btn =document.getElementById("myBtn");
-      btn.onclick =function(){ };  // 绑定事件
-      btn.onclick =null;            // 解除绑定
+    绑定: elem.on<eventName>=foo 
+    解绑: elem.on<eventName>=null;
+    Example: 
+      var btn = document.getElementById("myBtn");
+      btn.onclick = function(){ };  // 绑定事件
+      btn.onclick = null;            // 解除绑定
   DOM2级事件处理程序: addEventListener&removeEventListener [IE9+] 
     PS: 绑定多个相同的事件,不会覆盖,按照定义的先后顺序来触发 
   IE事件处理程序: attachEvent&detachEvent [IE8-IE10] 
@@ -1742,18 +1701,18 @@ XML相关
     a.onclick =function(){ return false; };
     a.addEventListener("click",function(){return false; }); // 不生效
 EventTarget===Node.prototype.__proto__.constructor  [IE9+][DOM2]  
-  EventTarget.prototype.xxx 
-    tagt.addEventListener("eventName",cfoo[,bol])   事件绑定
-      PS: 通过该方式添加的事件,只能使用removeEventListener来移除 
-      bol  可选,是否使用捕获,默认为 false
-    tagt.removeEventListener(["eventName",cfoo])   解除addEventListener绑定的事件 
-      PS: 若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除 
-      传入与 addEventListener() 同样的三个参数,执行函数必须是同一引用 
-      Remarks: 
-        在使用 innerHTML 移除有事件绑定的元素时,
-        可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
-        可在移除元素前解除该元素事件的绑定 
-    tagt.dispatchEvent()  触发事件 
+  ★EventTarget.prototype.xxx 
+  tagt.addEventListener("eventName",cfoo[,bol])  事件绑定
+    PS: 通过该方式添加的事件,只能使用'removeEventListener'来移除 
+    bol  可选,true 在捕获阶段调用,默认 false 在冒泡阶段调用 
+  tagt.removeEventListener(["eventName",cfoo])   解除addEventListener绑定的事件 
+    PS: 若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除 
+    传入与 addEventListener() 同样的三个参数,执行函数必须是同一引用 
+    Remarks: 
+      在使用 innerHTML 移除有事件绑定的元素时,
+      可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
+      可在移除元素前解除该元素事件的绑定 
+  tagt.dispatchEvent()  触发事件 
   EventTarget===Performance.prototype.__proto__.constructor 当前页面加载相关的性能信息 
     PS: 用于精确度量、控制、增强浏览器的性能表现;精度可达千分之一毫秒  
       还可获取后台事件的时间进度 
@@ -1885,7 +1844,8 @@ Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数
     所有浏览器都支持event对象,但支持的方式不一定相同.
     event会被作为参数传到执行函数中.
     event对象与创建的事件有关,触发的事件类型不一样可用的属性/方法也不同
-    只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁]
+    只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁] 
+    浏览器中可能发生的事件有很多类型,不同的事件类型具有不同的信息 
   Example: 
     验证隐藏的参数 
     document.onclick =function(){
@@ -1924,12 +1884,12 @@ Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数
       1===e.CAPTURING_PHASE  
       2===e.AT_TARGET  
       3===e.BUBBLING_PHASE  
-    e.type         事件类型
-    e.target       触发事件的目标元素  
+    str = e.type         事件类型
+    elem = e.target       触发事件的目标元素  
       目标元素在文档中是事件冒泡的前提,即删除目标元素也会阻止事件冒泡 
-    e.currentTarget   绑定事件的元素[即函数中的this] 
+    elem = e.currentTarget   绑定事件的元素[即函数中的this] 
       若直接将事件绑定在目标元素上,则this currentTarget target 相同
-    e.eventPhase  调用事件处理程序阶段的描述数值 
+    num = e.eventPhase  调用事件处理程序的阶段 
       1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
       Example: :
       var btn =document.getElementById("myBtn");
@@ -1946,10 +1906,11 @@ Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数
     bol = e.defaultPrevented  是否已调用了preventDefault()来阻止默认事件 [DOM3]
     e.composed 
     e.timeStamp 
-    e.srcElement 
-    e.returnValue 
-    e.cancelBubble 
     e.path 
+    elem = e.srcElement 事件目标,同 e.target 
+    bol = e.cancelBubble 读写,取消事件冒泡,默认 false 
+    bol = e.returnValue  读写,允许事件默认行为,默认 true  
+    bol = e.trusted   事件是否为浏览器生成 [DOM3] [仅IE支持]
     e.stopPropagation()  取消事件的进一步捕获或冒泡 
       PS:前提bubbles为true,用于阻止事件的传递.
       Example: :
@@ -1967,59 +1928,112 @@ Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数
     e.composedPath()  
     e.initEvent()  
   ★子类型事件类型,继承 Event:  
-  UIEvent 
+  Event===UIEvent.prototype.__proto__.constructor  
+    UIEvent.prototype.xxx 
+      e.view        与事件关联的抽象视图,等同于发生事件的window对象
+      e.detail      与事件相关的细节信息
+      e.sourceCapabilities 
+      e.which 
+      e.initUIEvent() 
     UIEvent===MouseEvent.prototype.__proto__.constructor  
+      ★MouseEvent.prototype.xxx 
+      e.screenX/e.screenY     相对于设备屏幕左上角的坐标
+      e.clientX/e.clientY     相对浏览器可视区左上角的坐标 
+        不含浏览器的工具栏、边框和滚动条
+        返回值类型为数值,但默认是以px为单位返回的数值.
+      e.pageX/e.pageY       相对于整个网页左上角的坐标
+        页面没滚动时 clientX 和 pageX 相等
+      e.offsetX/e.offsetY     相对于事件源左上角的坐标
+        如点击一div,则表示到该div左上叫的坐标
+      e.x/e.y      相对于CSS定位的最内层包容元素的左上角
+        IE最先引入,现在主流浏览器基本都支持;
+        在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
+      e.movementX  
+      e.movementY  
+      e.layerX  
+      e.layerY  
+      bol = e.shiftKey  该键是否被按下
+      bol = e.ctrlKey   该键是否被按下
+      bol = e.altKey    该键是否被按下
+      bol = e.metaKey   该键是否被按下
+      e.button  
+      e.buttons  
+      e.relatedTarget  
+      e.fromElement  
+      e.toElement  
+      e.getModifierState()    
+      e.initMouseEvent()    
     MouseEvent===WheelEvent.prototype.__proto__.constructor  
+      ★WheelEvent.prototype.xxx 
+      常量
+      0===e.DOM_DELTA_PIXEL  
+      1===e.DOM_DELTA_LINE  
+      2===e.DOM_DELTA_PAGE  
+      e.deltaX 
+      e.deltaY 
+      e.deltaZ 
+      e.deltaMode 
+      e.wheelDeltaX 
+      e.wheelDeltaY 
+      e.wheelDelta 
     UIEvent===TouchEvent.prototype.__proto__.constructor  
+      ★TouchEvent.prototype.xxx 
+      e.touches  
+      e.targetTouches  
+      e.changedTouches  
+      e.altKey  
+      e.metaKey  
+      e.ctrlKey  
+      e.shiftKey  
     UIEvent===KeyboardEvent.prototype.__proto__.constructor  
+      ★KeyboardEvent.prototype.xxx 
+      常量: 
+        0 = e.DOM_KEY_LOCATION_STANDARD   
+        1 = e.DOM_KEY_LOCATION_LEFT   
+        2 = e.DOM_KEY_LOCATION_RIGHT   
+        3 = e.DOM_KEY_LOCATION_NUMPAD   
+      e.key  
+      e.code  
+      e.location  
+      e.ctrlKey  
+      e.shiftKey  
+      e.altKey  
+      e.metaKey  Windows中为Windows键,Mac中为Cmd键 
+      e.repeat  
+      e.isComposing  
+      e.charCode  
+      e.keyCode  
+      e.getModifierState()    
+      e.initKeyboardEvent()    
     UIEvent===FocusEvent.prototype.__proto__.constructor 焦点事件对象类 
+      ★FocusEvent.prototype.xxx 
+      e.relatedTarget 
     UIEvent===InputEvent.prototype.__proto__.constructor  
+      ★InputEvent.prototype.xxx 
+      e.data  
+      e.isComposing  
+      e.inputType  
+      e.dataTransfer  
+      e.getTargetRanges() 
     UIEvent===CompositionEvent.prototype.__proto__.constructor  
+      ★CompositionEvent.prototype.xxx 
+      e.data 
+      e.initCompositionEvent()   
   CustomEvent [IE11+] 
     var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
       传递的数据对象通过 e.detail 来获取 
-待整理 
-  ◆公有属性/方法
-  e.detail      与事件相关的细节信息
-  e.trusted     表示事件是否为浏览器生成的布尔值[DOM3]
-  e.view        与事件关联的抽象视图,等同于发生事件的window对象
-  ◆鼠标事件的位置信息
-  e.screenX     相对于设备屏幕左上角的坐标
-  e.clientX     相对浏览器可视区左上角的坐标
-    不含浏览器的工具栏、边框和滚动条
-    返回值类型为数值,但默认是以px为单位返回的数值.
-  e.pageX       相对于整个网页左上角的坐标
-    页面没滚动时 clientX 和 pageX 相等
-  e.offsetX     相对于事件源左上角的坐标
-    如点击一div,则表示到该div左上叫的坐标
-  e.x           相对于CSS定位的最内层包容元素的左上角
-    IE最先引入,现在主流浏览器基本都支持;
-    在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
-  ◆修改键[鼠标、键盘事件]
-    在按下鼠标时键盘上某些键的状态也可以影响到所要采取的操作
-    修改键如:Shift Ctrl Alt Meta(Windows中为Windows键,Mac中为Cmd键)
-  e.shiftKey 布尔值,表示该键是否被按下
-  e.ctrlKey  布尔值,表示该键是否被按下
-  e.altKey   布尔值,表示该键是否被按下
-  e.metaKey  布尔值,表示该键是否被按下
-  IE中的事件对象
+  IE中的事件对象 
     ◆DOM1级中,event作为window对象的属性存在,IE8及之前
       Example: :
       var btn =document.getElementById("myBtn");
       btm.onclick =function(){var e = window.event;console.log(e.type);} // click
-    ◆DOM2级中,attachEvent将event作为事件函数的参数,也可使用window.event 访问.
+    ◆DOM2级中,attachEvent将event作为事件函数的参数,也可使用 window.event 访问 
       属性/方法的获取也同DOM的event一样
-    e.srcElement 返回事件目标(同e.target)
-    e.type
-    e.cancelBubble
-      e.cancelBubble =true;  取消事件冒泡
-    e.returnValue
-      e.returnValue =false; 阻止事件默认行为
 事件分类 
   ◆DOM3级规定了一下几类事件
   'User-Interface'用户界面,UI事件 当用户与页面上的元素交互时触发 
     PS: 不一定与用户操作有关; 除DOMActivate之外,其他事件在DOM2中都归为HTML事件
-    DOMActivate 表示元素已经被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
+    DOMActivate  元素已被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
     load    加载完后触发 
       window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
       iframe.onload 框架加载完毕时触发 
@@ -2541,7 +2555,7 @@ Event 事件对象类: 浏览器默认给事件响应函数传入的一个参数
       var el = elem || document;
       el.dispatchEvent(event);
     }
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------- 
 ◆Mobile 移动端 
   ios移动设备上,长按<a>标签,会弹出浏览器的原生菜单
     在JS中设置取消的方法
@@ -2710,7 +2724,7 @@ WeiXin 微信
       $(document).on('touchmove',function(e){
         e.preventDefault();
       })
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------- 
 ◆专题 
 Image.prototype===HTMLImageElement.prototype <img>标签 
   img = new Image();   创建图像DOM对象  

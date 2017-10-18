@@ -1,122 +1,29 @@
-jQuery : 快速简洁的JS库 
-  PS:jQuery是一个JS的库,提供了DOM操作、Ajax封装和、兼容性等功能
-    2.0+版本不再支持IE8及以下 
-  核心特性总结 
-    具有独特的链式语法和短小清晰的多功能接口；
-    具有高效灵活的css选择器,并且可对CSS选择器进行扩展；
-    拥有便捷的插件扩展机制和丰富的插件.
-    jQuery兼容各种主流浏览器,如 IE 6.0+、FF 1.5+、Safari 2.0+、Opera 9.0+等。
-    jQuery操作即使Jelem不存在也不会报错
-      $("#aoo").css("height"); 
-      即使$("#aoo")不存在也不会报错;
+jQuery: 快速简洁的JS库 
+  PS: 提供了DOM操作、AJAX封装和、兼容性等功能; 2.0+版本不再支持IE8-  
+    在jQuery中 $ 等价于 jQuery,$为快捷方式;
+  核心特性总结:  
+    命名清晰精简,
+    链式语法: 一条语句同时设置一个或多个节点两个或两个以上的操作  
+    具有高效灵活的CSS选择器,并且可对CSS选择器进行扩展；
+    便捷的插件扩展机制和丰富的插件
+    兼容各种主流浏览器,如IE6+ 
+    操作即便不存在的Jelem也不会报错 
+      $("#aoo").css("height"); 即使$("#aoo")不存在也不会报错;
       且$("#aoo")仍为一个对象,
       if ($("#aoo")) { } 不可用来做为节点是否存在的判断,
       可使用$("#aoo").length 或 $("#aoo")[0] 来判断
-  封装库方法 
-    函数式封装
-    对象式封装
-  链式操作 :一条语句同时设置一个或多个节点两个或两个以上的操作 
-      实现连缀操作,需要改写库函数的封装方式,使用函数式对象写法
-      Example:
-        <div id="box"> 123 </div>
-        $().getId('box').css("color","red").html('内容').click(function(){alert('a')});
-        结果为: <div id="box" style="color: red;">内容</div>
-      使用函数式对象写法封装库 示例:
-        // 前台调用
-        var $ =function (){ return new Base(); }
-        // 基础库
-        function Base(){
-          this.elements =[];// 创建一个数组,来保存获取的节点和节点数组
-          this.getId =function(id){ // 获取id节点
-            this.elements.push(document.getElementById(id));
-            return this;
-          }
-          this.getTagName =function(tag){ // 获取元素节点
-            var tags =document.getElementsByTagName(tag);
-            for(var i =0;i<tags.length;i++){
-              this.elements.push(tags[i]);
-            }
-            return this;
-          }
-        }
-        //设置css
-        Base.prototype.css =function(attr,value){
-          for (var i =0;i<this.elements.length;i++){
-            this.elements[i].style[attr] =value;
-          }
-          return this;
-        }
-        // 设置innerHTML
-        Base.prototype.html =function(str){
-          for(var i =0;i<this.elements.length;i++){
-            this.elements[i].innerHTML =str;
-          }
-          return this;
-        }
-        // 触发点击事件
-        Base.prototype.click =function (f){
-          for(var i =0;i<this.elements.length;i++){
-            this.elements[i].onclick =f;
-          }
-          return this;
-        }
-      .end() 方法,使得结果集可以后退一步 
-        $('div')
-        .find('h3')
-        .eq(2)
-        .html('Hello')
-        .end() //退回到选中所有的h3元素的那一步
-        .eq(0) //选中第一个h3元素
-        .html('World'); //将它的内容改为World
-  jQuery 引入 
-    本地引入
-      下载jQuery的JS文件到本地,通过script标签引入
-    引入网络文件
-      当可以访问网络时,可以直接引用jQuery的网址即可.
-      Example: 
-      通过网站 "http://www.bootcdn.cn/jquery/" 选择需要的版本使用script引入
-      <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.js"></script>
-    调试页引入jQuery
-      在没有使用jQuery的页面,从调试窗口手动添加代码引入.(刷新后失效)
-      使用JS DOM将<script src="cdn.bootcss.com/jquery/3.1.1/core.js"></script>插入到head中.
-      Example: 
-      将下面代码插入到调试页即可
-      document.querySelector("head").insertAdjacentHTML("afterbegin",`<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.js"></script>`)
-    设置将HTML加载完后再加载JS
-      ready函数会在文档加载完成后才执行.
-      $("document").ready(function(){
-        // code
-      })
-    $ 或 jQuery 符号冲突决解
-      var $jq = jQuery.noConflict(); 
-      $jq('#id').show();
   jQuery 配置 
     jQuery.noConflict()   移交$的控制权
-      var J = jQuery.noConflict(); 自定义快捷方式为J
-    jQuery(function(J){
-      // 此作用域中,J 等价于 jQuery
+      var jq = jQuery.noConflict(); 自定义快捷方式为'jq'
+    jQuery(function(jq){
+      // 此作用域中,jq 等价于 jQuery
     })
-    (function(J){
-      // 此作用域中 J 等价于 jQuery
+    (function(jq){
+      // 此作用域中 jq 等价于 jQuery
     })(jQuery);
 DOM操作 
-  PS:使用JQ方法获取的HTML元素,为JQ DOM元素对象,
-    jQuery对象是通过jQuery包装DOM对象产生的对象,
-    Jelem 类似于数组,未获取到元素则为空数组,
-    数组中每个元素为原生JS的DOM元素对象;
-    在jQuery中 $ 等价于 jQuery,$为快捷方式;
-  $(document) 独有的属性和方法[简写为 $()] 
-    .ready(function () {})   [参见事件]+
-    ◆全局Ajax事件处理器
-    .ajaxComplete(foo)   每当一Ajax请求完成时触发 
-      PS:从 1.8+ 开始该方法只能绑定到document元素
-      foo  依次传入参数 (event, xhr, options)
-    .ajaxError(foo)      每当一AJAX请求出错时触发 
-      foo  依次传入参数 (event, xhr, options)
-    .ajaxSend(foo)       每当一AJAX请求发送前时触发 
-      foo  依次传入参数 (event, xhr, options)
-    .ajaxStart(foo)      每当一Ajax请求即将发送,若其他Ajax请求都完成则触发 
-      foo  无参数 
+  PS: jQuery元素对象: 使用JQ方法获取的HTML元素,通过jQuery包装DOM对象产生的对象 
+    Jelem 类似于数组,未获取到元素则为空数组, 数组中每个元素为原生JS的DOM元素对象;
   Jelem 创建 
     var Jelem = $(HTMLStr)  通过HTML创建Jelem
     Jelem.clone([bool]) 复制元素
@@ -309,7 +216,7 @@ DOM操作
         $containerLi = $container.find('li'), 
         $containerLiSpan= $containerLi.find('span');
   Jelem 操作 
-    PS:若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
+    PS: 若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
     转换为原始DOM元素对象elem 
       PS:使用原生JS的方法时,需将Jelem转换为elem对象
       var elem = Jelem[index]     获取对应下标的DOM元素
@@ -897,8 +804,8 @@ DOM操作
       $.support.opera
       $.support.msie && $.support.version <= 6 // Target IE6 and below
       $.support.msie && $.support.version > 6  // Target anything above IE6
-Event,事件 
-  PS:Jelem绑定事件,则为列表中的每个对象进行了绑定
+Event事件 
+  PS: Jelem绑定事件,则为列表中的每个对象进行了绑定
   ◆事件绑定与取消 
     PS:bind,live,delegate,on;对应解除为 unbind、die、undelegate、off 
       live on delegate 均支持未来新添加元素的事件绑定 [使用委托的方式才会生效]
@@ -1067,8 +974,8 @@ Event,事件
     Jelem.eventName();   快捷触发 
       Jelem.click();  触发点击 
         PS:不会产生鼠标点击的效果,如下拉选项不会弹出
-  Event 对象
-    PS:jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
+  Event 对象 
+    PS: jQuery在遵循W3C规范下,对event事件对象的常用属性进行了封装,
       使得事件处理在各大浏览器下都可以正常的运行而不需要进行浏览器类型判断。
     e.type 获取事件的类型[jQuery封装属性]  
     e.preventDefault()  阻止事件默认行为
@@ -1146,7 +1053,7 @@ Event,事件
       注:直接使用CSS实现该效果可能是更好的解决方案,但你仍然有必要知道该方法。
   Exp:
 AJAX 
-  PS:低于'1.5.0'版本,返回的是XHR对象,高于'1.5.0'版本,返回的是deferred对象
+  PS: '1.5.0-'版本返回的是XHR对象,'1.5.0+'版本返回的是deferred对象
   'Content-Type' 请求数据的格式 
     'application/x-www-form-urlencoded' 默认方式,表单提交 
       数据的URL方式编码,由jQuery来做,
@@ -1271,17 +1178,13 @@ AJAX
     type 服务端返回数据的格式 : 'xml' 'html' 'script' 'json' 'text' 'default' 
   $.post(url[,data][,cfoo][,type])  POST请求 
   ◆通用型
-  $.ajaxSetup([options])  设置全局Ajax默认选项 
-    PS:可以设置Ajax请求的一些全局性选项值,
-      设置完成后,后面的Ajax请求将不需要再添加这些选项值,它的调用格式为:
-    options 可选,对象,通过该对象设置Ajax请求时的全局选项值。
-      {
-        dataType : 'xxx',
-        success  : function(data){
-        }
-        ...
-      }
-    Example:
+  $.ajaxSetup({  // 设置全局Ajax默认选项  
+    // PS: 设置Ajax请求的一些全局性选项值,后续请求不需再设置则默认使用改值  
+    dataType: 'xxx',
+    success: function(data){
+    }
+    ...
+    Example: 
       $.ajaxSetup({
         url : 'xx'
       });
@@ -1295,9 +1198,9 @@ AJAX
         success  : function(backData,textStatus,obj){
         }, 
       });
-  jQuery最底层的AJAX实现 
-    PS:在回调函数中,'this'表示该次AJAX请求的参数对象 
-  $.ajax({
+  })  
+  $.ajax({        // jQuery中最底层的AJAX实现 
+    // PS: 在回调函数中,'this'表示该次AJAX请求的参数对象 
     'type': "GET",   // 请求方式,默认为"GET"      
       // 'GET'   键值对将改为'&key1=val1&key2=val2'的形式附在URL上
       // 'POST'
@@ -1450,7 +1353,9 @@ AJAX
     PS:cfoo回调函数中,$(this)表示为'Jelem' 
   Jelem.ajaxStart(cfoo)  Ajax请求发出前响应 
   Jelem.ajaxStop(cfoo)   Ajax请求结束后响应 
-  Jelem.ajaxComplete(cfoo)  Ajax请求完成时响应 
+  Jelem.ajaxComplete(cfoo)  每当一Ajax请求完成时触发  
+    PS: '1.8+'开始该方法只能绑定到 $(document)
+    foo  依次传入参数 (event, xhr, options)
   Jelem.ajaxError(cfoo)  Ajax请求发生错误时响应 
   Jelem.ajaxSend(cfoo)  Ajax请求发送前响应 
   Jelem.ajaxSuccess(cfoo)  Ajax请求成功时响应 
@@ -1972,7 +1877,7 @@ jQuery插件
         })
     jQuery UI Events事件 
       slidechange   滑条改变事件
-'jQuery_Mobile' 
+'jQuery Mobile' 
   引入 
     <link rel="stylesheet" href='jquery.mobile.css'>  // 引入样式文件 
     <script src="jquery.js"></script>                 // jQuery依赖
@@ -2000,3 +1905,4 @@ Suggestion:
 Question&Idea
   如何在 AJAX 的回调中获取请求的数据 [?]
 ---------------------------------------------------------------------以下待整理 
+

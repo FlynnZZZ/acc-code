@@ -163,7 +163,9 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   Boolean 布尔值 
     PS: ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
     隐式转换为布尔值 
-      规则: undefined、null、0、NaN、""转换为 false;其余转换为 true
+      规则: 
+      undefined、null、0、NaN、""转换为 false;
+      其余转换为 true,包括 '0'、
       Example: 
       var box = ''; 
       if(box){ //条件语句中()内必须是布尔值
@@ -895,7 +897,11 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   三元表达式 
     expr1?expr2:expr3;  三元条件运算符,当expr1为真则执行expr2,否则执行expr3 
       PS: 三元条件运算符相当于if语句的简写形式 
-      var box=5>4?'对':'错';    //对,5>4赋值第一个'对'给box.否则第二个.
+      var box=5>4?'对':'错';    //对,5>4赋值第一个'对'给box.否则第二个. 
+      console.log(true?'真':'假'); // 真 
+      console.log(false?'真':'假'); // 假 
+      console.log('0'?'真':'假'); // 真 
+      console.log('1'?'真':'假'); // 真 
   ◆运算优先级 
     一般运算中,不必考虑运算符的优先级,因为可以通过圆括号来解决这种问题.
     简易版

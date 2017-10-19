@@ -843,7 +843,7 @@ Table表格
         或列组中的所有单元格和表头单元格绑定起来[由 <col> 或 <colgroup> 标签定义]  
       rowgroup 规定单元格是行组的表头
 Form表单  
-  PS:表单字段也叫表单控件,如input、button等元素[self] 
+  PS: 表单字段也叫表单控件,如input、button等元素[self] 
   <fieldset></fieldset> 表单信息分组
     PS: 默认有一个细线边框,可设置border控制 
     Example: 
@@ -854,15 +854,14 @@ Form表单
       </form>
     </fieldset>
   <legend>     显示fieldset边框上的信息文字
-    PS:legend就像fieldset的标题,处于fieldset的顶部,
-      legend很难应用样式,不可使用内、外边距 定位等机型控制.
-  <form>       表单域  
-    PS:为用户输入创建表单,向服务器传输数据;客户端与服务器端进行信息交流的途径之一;
-      用于包含其他表单元素[如文本框、单选框等]的容器,
+    PS: legend就像fieldset的标题,处于fieldset的顶部,
+      legend很难应用样式,不可使用内、外边距 定位等机型控制 
+  <form>       表单域,用于包含其他表单元素[如文本框、单选框等]的容器   
+    PS: 户端与服务器端进行信息交流的途径之一;
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
-    name  表单的名字
-      在HTML4中,这个用法不被推荐(应该使用id). 
-      HTML5中,一个文档中的多个form当中,name必须唯一而不仅仅是一个空字符串。
+    name=""  表单名称 
+      HTML4中,推荐使用id  
+      HTML5中,多个form中的name须唯一 
     action="url"  表单提交的地址,处理该form信息程序所在的URL 
       该值可以被<button>或者<input>元素中的'formaction'属性重载[覆盖] 
     method=""   提交表单的HTTP方法 
@@ -889,7 +888,7 @@ Form表单
         该设定可被属于该form的子元素的'autocomplete'属性覆盖 
       "on"    浏览器能够根据用户之前在form里输入的值自动补全 
       "off"   浏览器不自动补全输入
-    novalidate   表单不进行验证 [HTML5] 
+    novalidate   表单是否不进行验证 [HTML5] 
       可被该<form>的<button>或<input>元素中的 formnovalidate 属性覆盖
     enctype      当method为post时,enctype 是提交form给服务器的内容的 MIME 类型 
       PS:规定了对表单提交给服务器时表单数据编码的内容类型[Content Type]
@@ -941,112 +940,75 @@ Form表单
         var frame = frames['frame1'].document.querySelector("body")
         console.log(frame);
       })
-  <label for="">内容</label>                表单标签  // todo
-    PS:标签为input元素定义标注,标记; 
-      label元素不会向用户呈现特殊效果;
-    点击label,使关联表单控件获得焦点,使关联的按钮被点击 
-      PS:产生效果的前提:使用"for"属性把label绑定到另外一个元素,
-        即把"for"属性的值设置为相关元素的id属性的值.
-      显示方式关联
-        label和input进行了关联,点击label会选中input
-        <label for="man">男</label>
-        <input id="man" type='radio' name='sex' value='男'/>
-      隐式方式关联
-        将input标签放在label中也可达到如上效果[需去掉 for="" ]
-        <label><input type='radio' name='sex' value='男'/>男</label>
-  <input type="类型" name="name" value="">  表单控件 
-    PS:input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等等.
-      type 属性和 name 属性是必需的
-      ios平台的微信中,input默认有圆角;
-    type 属性 
-      规定input元素的类型,该属性不是必需的,但是最好始终使用该属性;
-      text     默认,单行文本框
-        默认是 20 个字符
-      password 密码框
-      checkbox 复选框
-        checked属性
-          若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
-          使用JS 控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
-          Example: 以下都表示默认被选中
-            <input type="checkbox" name="name"  checked>
-            <input type="checkbox" name="name"  checked="">
-            <input type="checkbox" name="name"  checked="1">
-            <input type="checkbox" name="name"  checked="false">
-            <input type="checkbox" name="name"  checked=false>
-        value="提交值" 
-      radio    单选按钮 
+  <label for="">内容</label>      字段标签  
+    PS: label元素不会向用户呈现特殊效果;
+      点击label,使关联表单字段获得焦点且被点击 
+      产生效果的前提是:label的"for"属性值设置为相关元素的id值进行关联,
+      或将表单字段放置其标签内进行关联;
+    for=""关联
+      label和input进行了关联,点击label会选中input
+      <label for="man">男</label>
+      <input id="man" type='radio' name='sex' value='男'/>
+    包含关联[需去掉 for=""]
+      将input标签放在label中也可达到如上效果
+      <label><input type='radio' name='sex' value='男'/>男</label>
+  <input type="类型" name="name" value="">  表单字段  
+    PS: input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等 
+      IOS的微信中,input默认有圆角; 
+    type=""  规定元素类型,虽不是必需,推荐始终使用 
+      'text'     默认,单行文本字段  
+        默认是20个字符
+      'password' 密码框文本字段 
+      'checkbox' 复选框 
+      'radio'    单选按钮 
         name    有多个单选按钮时,多个name的属性值相同才能起到单选的作用
-        checked 定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用]
-      submit   提交按钮 
-        value="显示的名称"
-      reset    重置按钮 
-        value="显示的名称"
-      button   普通按钮 
-        value="显示的名称"
-      image    图片按钮 
+        checked定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用]
+      'submit'   提交按钮 
+      'reset'    重置按钮 
+      'button'   普通按钮 
+      'image'    图片按钮 
         src="图片路径"
-      file     文件上传 
-        size="显示长度"
-        action   指将请求提交给的对象
-        method   定义提交方法,默认为get
-        accept   表示可以选择的文件MIME类型,多个MIME类型用英文逗号分开
+      'file'     文件上传,文件字段 
+        可覆盖表单中的'action'、'method'属性 ?  
+        accept   表示可以选择的文件MIME类型,多个MIME类型用英文逗号分开 
           Example: 只能选择png和gif图片 
-            <input type="file" accept="image/png,image/gif"/>  Chrome中显示为'自定义文件'
-            <input type="file" accept="image/*"/>  表示为图片文件 
-        multiple 是否可以选择多个文件,多个文件时其value值为第一个文件的虚拟路径
+          <input type="file" accept="image/png,image/gif"/>  Chrome中显示为'自定义文件'
+          <input type="file" accept="image/*"/>  表示为图片文件 
+        multiple 是否可多选,多个文件时其value值为第一个文件的虚拟路径 
           Example: 多文件上传
-            <input id="fileId2" type="file" multiple="multiple" name="file" />
-      hidden   隐藏域 
+          <input id="fileId2" type="file" multiple name="file" />
+      'hidden'   隐藏域 
         value="提交值"
       ◆HTML5新增
       range   拖动条,带有 slider 控件 
       color   拾色器  
-      email    邮件地址  
+      email   邮件地址  
         要求输入的文本需符合电子邮件地址的格式
-      url      URL类型   
+      url     URL类型   
         要求输入的文本需符合URL的模式
-      search   定义用于搜索的文本字段。
-      number     数字字段[带有spinner控件][ios微信不兼容] 
+      search  搜索文本字段 
+      number  数字字段[带有spinner控件][ios微信不兼容] 
         可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
-      tel        定义用于电话号码的文本字段 
-      date             
-      calendar         
+      tel     定义用于电话号码的文本字段 
+      date    日期
+      calendar  日历 
       datetime        日期字段 [带有calendar和time控件] [Chrome无效]
       datetime-local  日期字段 [带有calendar和time控件]
       month           日期字段的月 [带有calendar控件]
       week            日期字段的周 [带有calendar控件]
       time            日期字段的时分秒 [带有time控件]
-    name=""    命名input控件
-      将表单数据发送到服务器需要name数据
-    value=""   表单值
-      提交数据到服务器的值,后台程序php使用;
-      可为文本框输入设置默认值,起到提示作用,一般使用placeholder;
-      当为按钮时,按钮显示的内容
-    功能属性
-      disabled   禁用
-        适用所有的表单元素都有效,包括select, radio, checkbox, button等
-      readonly   只读
-        适用 type=text / password 的input 和textarea ;
-      size="<num>"          显示的字数
-      maxlength="<num>"     最多容纳字符数
-      readonly 和 disabled 的区别
-        表单提交
-          disabled: 元素的值不会被提交,
-          readonly: 正常提交;
-        选中、复制
-          disabled: 元素不可被选中,
-          readonly: 元素可被选中和复制;
-      ◆HTML5+
-      autocomplete  规定form或input域应该拥有自动完成功能
-        PS: 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项;
-          适用于 <form> 标签,以及以下类型的 <input> 标签,
-          type= text, search, url, telephone, email, 
-            password, datepickers, range 以及 color;
-      autofocus  当页面加载完自动获得焦点 
-        适用<input>的所有类型 
-      form       规定输入域所属的表单,值为<form>的id 
-        PS: 适用<input>的所有类型;若需引用多个表单,使用空格分隔;
-        Example:
+    value="" 表单字段值/按钮名称  
+      提交到服务器的数据值;当为按钮时,按钮显示的内容
+    功能属性 
+      size="<num>"       显示的字数 
+      maxlength="<num>"  最多容纳字符数 
+      ◆HTML5 
+      autocomplete  是否自动完成,具有记忆功能,适用:<form>、部分<input> 
+        PS: 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项; 
+      autofocus  当页面加载完是否自动获得焦点,适用:所有<input>类型 
+      form=""   规定输入域所属的表单,值为<form>的id 
+        PS: 若需引用多个表单,使用空格分隔;
+        Example: 
           <form action="demo_form.asp" method="get" id="user_form">
             First name:<input type="text" name="fname" />
             <input type="submit" />
@@ -1107,11 +1069,12 @@ Form表单
         实例
         <input type="search" name="user_search"  placeholder="Search W3School" />
         亲自试一试
-      required 提交时输入域不能为空 [HTML5]
+      required 提交时输入域不能为空 [HTML5] 
         PS: 需在form中,且点击submit提交时触发
         适用于 <input> 标签的如下类型: 
           text, search, url, telephone, email, password, date pickers, 
           number, checkbox, radio 、 file 
+    公用属性 
   <button type="" >      定义按钮 
     在 button 元素内部,可以放置文本或图像.(与 input 创建的按钮的不同之处)
     type 
@@ -1164,13 +1127,25 @@ Form表单
         <option></option>
         ...
       </optgroup>
-  通用属性 
-    name     表单名称 
+  字段通用属性 
+    name=""    表单名称 
+      将表单数据发送到服务器需要name 
       当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
-    disabled 禁用禁用 
-      如input 用户不可输入
-      disabled="disabled"
-    ★'form override attributes'重写<form>的某些属性设定,适用于提交表单元素  
+    checked   是否默认选中的 
+      若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
+      使用JS控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
+      Example: 以下都表示默认被选中
+        <input type="checkbox" name="name"  checked>
+        <input type="checkbox" name="name"  checked="">
+        <input type="checkbox" name="name"  checked="1">
+        <input type="checkbox" name="name"  checked="false">
+        <input type="checkbox" name="name"  checked=false>
+    disabled  是否禁用表单,如input不可输入 
+    readonly  是否只读,适用: 部分<input>和<textarea> 
+    readonly 和 disabled 的区别 
+      disabled: 元素的值不会被提交,
+      readonly: 正常提交;
+    ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
       PS: 便于创建不同的提交按钮;
       Example:
       <form action="form.asp" method="get" id="user_form">

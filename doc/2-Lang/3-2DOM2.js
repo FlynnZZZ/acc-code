@@ -207,7 +207,7 @@ EventTarget===Node.prototype.__proto__.constructor  [IE9+][DOM2]
       (2)performance.navigation.redirectCount
       
       该属性表示当前网页经过了多少次重定向跳转。  
-Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表示该事件对象本身
+Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表示该事件对象本身 
   PS: 事件对象event包含着所有与事件有关的信息,作为参数传到执行函数中 
     只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁] 
     浏览器中可能发生的事件有很多类型,不同的事件类型具有不同的信息 
@@ -221,7 +221,7 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
       }
     DOM2级中,attachEvent将event作为事件函数的参数,也可使用 window.event 访问 
       属性/方法的获取也同DOM的event一样
-  var event = new Event('eName')  创建自定义事件[IE11+]  
+  var event = new Event('eName')  创建自定义事件[IE不支持]  
   var event = document.createEvent(eTypeStr)  创建事件对象  
     PS: 该方式已过时,请使用构造函数替代,
       早期的创建事件的方法使用了受Java启发的API
@@ -244,6 +244,7 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
       obj  任意值,保存在event对象的detail属性中.
     elem.addEventListener('customEvent',cfoo,false); 监听事件 
     elem.dispatchEvent(evt);     触发事件
+  document.createEventObject()  IE的创建方式 
   Event.prototype.xxx 
     常量 
       0===e.NONE 
@@ -270,13 +271,13 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
     bol = e.bubbles      事件是否冒泡 
     bol = e.cancelable   是否可取消事件默认行为 
     bol = e.defaultPrevented  是否已调用了preventDefault()来阻止默认事件 [DOM3]
+    bol = e.trusted   事件是否为浏览器生成 [DOM3] 
     e.composed 
     e.timeStamp 
     e.path 
     elem = e.srcElement 事件目标,同 e.target 
     bol = e.cancelBubble 读写,取消事件冒泡,默认 false 
     bol = e.returnValue  读写,允许事件默认行为,默认 true  
-    bol = e.trusted   事件是否为浏览器生成 [DOM3] [仅IE支持]
     e.stopPropagation()  取消事件的进一步捕获或冒泡 
       PS:前提bubbles为true,用于阻止事件的传递.
       Example: :
@@ -293,225 +294,440 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
       若cancelable是true则可以使用该方法
     e.composedPath()  
     e.initEvent()  
-  事件枚举: 
-    load    加载完后触发 
-      window.onload 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源 
-      elem.onload  元素加载完毕后触发 
-    unload  卸载时触发 
-      只要用户从一个页面切换到另一个页面就会发生unload事件 
-      触发元素: window、window.frames、<object>
-        当页面完全卸载后在window上触发,
-        所有框架都卸载后在框架集'frames'上触发,
-        嵌入的内容卸载完毕后在<object>元素上触发
-    resize  当窗口或框架的大小变化时在window或框架上触发 
-      Firefox只会在用户停止调整窗口大小时才触发事件
-      IE Safari Chrome Opera 会在浏览器窗口变化过程中持续触发 
-      浏览器窗口在最小化或最大化时,也会触发resize事件
-    scroll  移动滚动条时持续触发 
-    error   发生错误时触发,不会冒泡  
-      PS: 支持该事件的HTML标签: <img>, <object>, <style>
-        支持该事件的JS对象: window, image
-      当发生JS错误时在window上面触发,
-      无法加载图像时在<img>元素触发,
-      无法加载嵌入内容在<object>元素上触发,
-      有框架无法加载时在框架集上触发 [?]
-    select  当用户选择文本框中的字符时触发 
-      支持该事件的标签:<input type="text">, <textarea>
-  ★Event子类型: 
-  Event===UIEvent.prototype.__proto__.constructor  
-    UIEvent.prototype.xxx 
-      e.view        与事件关联的抽象视图,等同于发生事件的window对象
-      e.detail      与事件相关的细节信息
-      e.sourceCapabilities 
-      e.which 
-      e.initUIEvent() 
-  UIEvent===MouseEvent.prototype.__proto__.constructor  
-    ★MouseEvent.prototype.xxx 
-      e.screenX/e.screenY     相对于设备屏幕左上角的坐标
-      e.clientX/e.clientY     相对浏览器可视区左上角的坐标 
-        不含浏览器的工具栏、边框和滚动条
-        返回值类型为数值,但默认是以px为单位返回的数值.
-      e.pageX/e.pageY       相对于整个网页左上角的坐标
-        页面没滚动时 clientX 和 pageX 相等
-      e.offsetX/e.offsetY     相对于事件源左上角的坐标
-        如点击一div,则表示到该div左上叫的坐标
-      e.x/e.y      相对于CSS定位的最内层包容元素的左上角
-        IE最先引入,现在主流浏览器基本都支持;
-        在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
-      e.movementX  
-      e.movementY  
-      e.layerX  
-      e.layerY  
-      bol = e.shiftKey  该键是否被按下
-      bol = e.ctrlKey   该键是否被按下
-      bol = e.altKey    该键是否被按下
-      bol = e.metaKey   该键是否被按下
-      num = e.button  对应表示鼠标的按钮 
-        0 左键 [IE中为 1] 
-        1 中键 [IE中为 4] 
-        2 右键 [IE中为 2] 
-        兼容处理: 
-        function getButton(e){
-          if(e){
-            return e.button;
-          }
-          else if(window.event){
-            switch(window.event.button){
-              case 1:
-              return 0;
-              case 4:
-              return 1;
-              case 2:
-              return 2;
-            }
-          }
-        }
-      e.buttons  
-      e.relatedTarget  
-      e.fromElement  
-      e.toElement  
-      e.getModifierState()    
-      e.initMouseEvent()    
-    ★事件枚举: 
-      click    在左键按下后,弹起来时触发或按下回车键时触发
-        同一个元素上相继触发mousedown和mouseup事件才会触发click事件
-        (若有一个被取消就不会触发click事件)
-      dblclick   鼠标双击
-        触摸设备不支持dblclick事件,双击浏览器窗口会放大画面而且没有办法改变该行为
-      mousedown  用户按下任意鼠标按钮触发
-      mouseup    鼠标弹起触发
-      mouseenter 光标从元素外部移动到元素范围内时触发,不冒泡 
-      mouseleave 光标从元素范围内移到范围外时触发,不冒泡
-      mousemove  光标在元素内移动时持续触发 
-      mouseout   光标从一个元素到另一个元素时触发 
-        另一个元素可能位于该元素外,也可能是该元素的子元素
-      mouseover  光标移到元素上时触发 
-      当事件是'mouseover'和'mouseout'时 
-        e.relatedTarget  属性的值表示:移到/移出触发事件的元素最近的那个元素
-        对于其他事件该属性值为 null
-        IE的处理方式: e.toElement; e.fromElement;
-  MouseEvent===WheelEvent.prototype.__proto__.constructor  
-    ★WheelEvent.prototype.xxx 
-      常量
-        0===e.DOM_DELTA_PIXEL  
-        1===e.DOM_DELTA_LINE  
-        2===e.DOM_DELTA_PAGE  
-      e.deltaX 
-      e.deltaY 
-      e.deltaZ 
-      e.deltaMode 
-      e.wheelDeltaX 
-      e.wheelDeltaY 
-      e.wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
-    ★事件枚举 
-      mousewheel 使用鼠标滚轮或类似设备时触发 
-  UIEvent===TouchEvent.prototype.__proto__.constructor  
-    ★TouchEvent.prototype.xxx 
-    e.touches  
-    e.targetTouches  
-    e.changedTouches  
-    e.altKey  
-    e.metaKey  
-    e.ctrlKey  
-    e.shiftKey  
-  UIEvent===KeyboardEvent.prototype.__proto__.constructor  
-    ★KeyboardEvent.prototype.xxx 
-      常量: 
-        0 = e.DOM_KEY_LOCATION_STANDARD   
-        1 = e.DOM_KEY_LOCATION_LEFT   
-        2 = e.DOM_KEY_LOCATION_RIGHT   
-        3 = e.DOM_KEY_LOCATION_NUMPAD   
-      str = e.key  按键字符 [DOM3] 
-      e.code  
-      e.ctrlKey  
-      e.shiftKey  
-      e.altKey  
-      e.metaKey  Windows中为Windows键,Mac中为Cmd键 
-      e.repeat  
-      e.isComposing  
-      e.charCode  [DOM3废弃]
-      num = e.keyCode  按键字符对应ASCII码中小写字母或数值的编码 
-        Backspace   8
-        Tab         9
-        Enter       13
-        Shift       16
-        Alt         18
-        Pause/Break 19
-        CapsLock    20
-        Esc         27
-        Page Up     33
-        Page Down   34
-        End         35
-        Home        36
-        Left Arrow  37
-        Up Arrow    38
-        Right Arrow 39
-        Down Arrow  40
-        ...
-        a           65 [与Shift键的状态无关] 
-      e.initKeyboardEvent()   
-      bol = e.getModifierState(str)  检测修改键[IE9+] 
-        str 可为"Control" "Shift" "AltGraph" "Meta" 
-      兼容性: 
-        num = e.location 键盘区域  [DOM3][DiBs] 
-          0 表示默认键盘
-          1 左侧位置,如左位的Alt键 
-          2 右侧位置,如右位的Shift键
-          3 数字小键盘
-          4 移动设备键盘,虚拟键盘 
-          5 手柄
-        e.char [DOM3] [Chrome不支持]
-    ★事件枚举: 
-      keydown    按下任意键时触发,长按则持续触发 
-      keypress   按下字符键时触发,长按则持续触发 
-        任何获得焦点的元素都可以触发keypress事件
-      keyup      释放按键时触发
-  UIEvent===FocusEvent.prototype.__proto__.constructor 焦点事件  
-    ★FocusEvent.prototype.xxx 
-    e.relatedTarget 
-    ★事件枚举: 
-    blur  元素失去焦点时触发,不冒泡 
-    focus 元素获得焦点时触发,不冒泡 
-    focusin 与focus等价,冒泡,不支持DOM0绑定  
-    focusout 元素失焦时触发,冒泡,不支持DOM0绑定
-  UIEvent===InputEvent.prototype.__proto__.constructor  
-    ★InputEvent.prototype.xxx 
-    e.data  
-    e.isComposing  
-    e.inputType  
-    e.dataTransfer  
-    e.getTargetRanges() 
-  UIEvent===TextEvent.prototype.__proto__.constructor  文本事件 
-    ★TextEvent.prototype.xx 
-    str = e.data  输入的字符 
-    e.initTextEvent() 
-    ★事件枚举: 
-    textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
-      PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
-  UIEvent===CompositionEvent.prototype.__proto__.constructor 合成事件[DOM3]  
-    PS: 当为IME['Iput Method Editor'输入法编辑器]输入字符时触发 
-      IME可以让用户输入在物理键盘上找不到的字符,如输入中文;
-      浏览器支持率度不高
-    ★CompositionEvent.prototype.xxx 
-    str = e.data  操作的文本数据 
-    e.initCompositionEvent()  
-    ★事件枚举:  
-    compositionstart  在IME打开时触发,表示要开始输入了,不支持DOM0绑定 
-      e.data 包含正在编辑的文本,如已经选中的需要马上替换的文本 
-    compositionupdate 在向输入字段中输入字符时触发,不支持DOM0绑定  
-      e.data  正在插入的文本
-    compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
-      e.data  包含此次输入会话中插入的所有字符
+  ★事件枚举: 
+  DOMContentLoaded 形成完整DOM树后触发,不支持DOM0绑定 [HTML5][IE9+] 
+    在window或document上触发 
+    无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
+  load    加载完后触发 
+    window 上触发: 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源  
+    window.frames 上触发: 所有框架加载完毕 
+    <img>上触发: 图像加载完毕 
+    <object>上触发:  嵌入内容加载完毕 
+    <script> 
+    ..
+  unload  卸载时触发 
+    PS: 从一个页面切换到另一个页面就会发生unload事件 
+    当页面完全卸载后在 window 上触发
+    所有框架都卸载后在框架集 window.frames 上触发,
+    嵌入的内容卸载完毕后在 <object> 元素上触发
+  readystatechange  加载状态,在document上触发 [HTML5] 
+  resize  当窗口或框架的大小变化时在window或框架上触发 
+    Firefox只会在用户停止调整窗口大小时才触发事件
+    IE Safari Chrome Opera 会在浏览器窗口变化过程中持续触发 
+    浏览器窗口在最小化或最大化时,也会触发resize事件
+  scroll  移动滚动条时在包含该滚动条的元素上持续触发 
+  select      当用户选中文本框中的字符时触发 
+    支持该事件的标签:<input type="text">, <textarea>
+  selectstart 目标对象被选中时触发,即选中动作刚开始但未被选中时  
+    PS: 该事件常使用于使目标对象'禁止变蓝',
+      比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
+      而当我们要避免这种情况时就可以使用该事件
+    Example: 
+    <div onselectstart="return false">该文字不可被选中</div>
+  change   当文本框[input或textarea]内容改变且失去焦点后触发
+  online  网络从离线变成在线时在window上触发,不冒泡  [HTML5] 
+  offline 网络从在线变成离线时触发 [HTML5] 
+  error  发生错误时触发,不冒泡  
+    PS: 支持该事件的HTML标签: <img>, <object>, <style>
+      支持该事件的JS对象: window, image
+    当发生JS错误时在 window 上触发 
+    无法加载图像时在 <img> 上触发 
+    无法加载嵌入内容在 <object> 上触发 
+    当一个或多个框架无法加载时在框架集 window.frames 上触发 
   待整理事件: 
-    abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发
+    abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发 
+    transitionEnd  CSS的过渡效果transition结束后触发 
+     事件对象的属性 
+       propertyName:发生transition效果的CSS属性名.
+       elapsedTime: transition效果持续的秒数,不含transition-delay的时间.
+       pseudoElement:若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
+         若不发生在伪元素上,则返回一个空字符串.
+     Example:
+     elem.addEventListener('transitionend',function(){},false);
+     实际使用transitionend事件时,可能需要添加浏览器前缀.
+     el.addEventListener('webkitTransitionEnd',function() {});
+    animationstart 动画开始时触发
+    animationend   动画结束时触发
+    animationiteration 开始新一轮动画循环时触发
+     若animation-iteration-count属性等于1,该事件不触发,
+     即只播放一轮的CSS动画,不会触发animationiteration事件.
+     这三个事件的事件对象
+       都有animationName属性(返回产生过渡效果的CSS属性名)
+       elapsedTime属性(动画已经运行的秒数)
+       对于animationstart事件,elapsedTime属性等于0,除非animation-delay属性等于负值.
+    propertychange  HTML元素属性发生改变触发 [IE专有] 
+     不管js操作还是键盘鼠标手动操作,都可捕获到 
+   移动端事件 
+    touchstart
+    touchend
+    touchmove
   已废弃事件: 
     DOMActivate  元素已被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
-  Event===CustomEvent.prototype.__proto__.constructor [IE11+] 
-    ★CustomEvent.prototype.xxx 
-    e.detail 
-    e.initCustomEvent() 
-    var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
-      传递的数据对象通过 e.detail 来获取 
+  事件总结: 
+    页面的加载与卸载 
+      页面加载: 'DOMContentLoaded'-'load' 
+      页面刷新: 'beforeunload'-'unload'-'load' 
+      页面关闭: 'beforeunload'-'unload' 
+Event===PageTransitionEvent.prototype.__proto__.constructor 
+  ★PageTransitionEvent.prototype.xxx 
+  bol = e.persisted   
+  ★事件枚举: 
+  pageshow  网页重载时触发 
+   PS: 重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
+     虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
+   bol = e.persisted  页面是否来自bfcache 
+   Example: 
+     var EventUtil = {
+       addHandler: function (element, type, handler) {
+         if (element.addEventListener) {
+           element.addEventListener(type, handler, false);
+         } 
+         else if (element.attachEvent) {
+           element.attachEvent("on" + type, handler);
+         } 
+         else {
+           element["on" + type] = handler;
+         }
+       }
+     };
+     (function () {
+       var showCount = 0;
+       EventUtil.addHandler(window, "load", function () {
+         console.log("Load fired");
+       });
+       EventUtil.addHandler(window, "pageshow", function (event) {
+         showCount++;
+         console.log("Show has been fired " + showCount + " times.");
+       });
+     })();
+     当页面首次加载完成时,showCount的值为0
+     若离开包含以上代码的页面后,又“后退”到该页面,showCount就会递增;
+     因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
+     若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
+  pagehide  页面卸载前触发[unload事件之前] 
+   PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
+     指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
+     因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
+   event.persisted  返回页面是否将保存在bfcache中的布尔值
+     若在Firefox浏览器中, 当第一次触发pageshow时,persisted的值一定是false,
+     而在第一次触发pagehide时,persisted 为true
+Event===ErrorEvent.prototype.__proto__.constructor 
+  ★ErrorEvent.prototype.xxx 
+  e.message 
+  e.filename 
+  e.lineno 
+  e.colno 
+  e.error 
+  ★事件枚举 
+  error  任何没通过try-catch处理的错误都会触发window对象的error事件 
+   和其他事件不同的是,error事件不会创建event对象,
+   取而代之的是三个参数:错误消息、错误所在的URL和行号
+   Example: :
+   window.onerror = function(message,url,line){
+     ...
+     return false; // 可阻止浏览器报告错误的默认行为
+   }
+   图像的error事件:只要图像加载失败或显示失败就会触发error事件,会生成event对象
+Event===HashChangeEvent.prototype.__proto__.constructor 
+  ★HashChangeEvent.prototype.xxx 
+  str = e.oldURL 变化前的URL
+  str = e.newURL 变化后的URL
+  ★事件枚举: 
+  hashchange   hash变化时在window上触发[IE8+] [HTML5]
+Event===PopStateEvent.prototype.__proto__.constructor 
+  ★PopStateEvent.prototype.xxx 
+  e.state
+  ★事件枚举: 
+  popstate   当活动历史记录条目变更时,在window上触发,不冒泡 [HTML5][IE10+]
+    PS: 调用history.pushState()或history.replaceState()不会触发该事件,
+      只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
+      或者在JS代码中调用 history.back();
+      不同的浏览器在加载页面时处理popstate事件的形式存在差异。
+      页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
+      若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
+      或者受到对 history.replaceState() 的调用的影响,
+      e.state 属性为包含历史条目的状态对象的副本,为pushState的第一个参数;
+    Example:
+      window.addEventListener("popstate",function(e){
+        var state1 = e.state;
+        // state1 就是 pushState 的第一个参数,详情常见BOM history
+        console.log(state1)
+      })
+Event===BeforeUnloadEvent.prototype.__proto__.constructor 
+  ★BeforeUnloadEvent.prototype.__proto__ 
+  e.returnValue 
+  ★事件枚举: 
+  beforeunload  离开关闭/刷新网页时,在window上触发,不冒泡  [HTML5] 
+    PS: 目的是让开发人员能在页面卸载前阻止这一操作, 
+      通过以返回值的形式来显示给用户提示[无返回值则无提示],
+      chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
+    Example:
+      $(window).on('beforeunload',function(e){
+        return '您输入的内容尚未保存,确定离开此页面吗？';
+      });
+      //解除绑定,一般放在提交触发事件中
+      $(window).off('beforeunload');
+    在Chrome中,使用原生绑定不会触发 ? 
+      window.addEventListener("beforeunload",function(e){
+        return '您输入的内容尚未保存,确定离开此页面吗？';
+      })
+Event===ClipboardEvent.prototype.__proto__.constructor 剪贴版事件 [HTML5]
+  ★ClipboardEvent.prototype.xxx 
+  e.clipboardData  DataTransfer 对象
+  ★事件枚举: 
+  beforecopy 复制前触发  [HTML5]
+  copy       复制时触发  [HTML5]
+  beforecut  剪切前触发  [HTML5]
+  cut        剪切时触发  [HTML5]
+  beforepaste 粘贴前触发 [HTML5]
+  paste      粘贴时触发  [HTML5] 
+  访问剪贴板中的数据 
+    $('#a').on("copy",function(e){
+      if (window.getSelection) {
+        text = window.getSelection().toString();
+        console.log(1);
+      } 
+      else if (document.selection && document.selection.createRange) {
+        text = document.selection.createRange().text;
+        console.log(2);
+      }
+      console.log(text);
+    });
+    clipboardData对象 [无该对象?]
+    使用 clipboardData 对象,IE中其为window的属性,其他浏览器为事件对象event的属性
+    clipboardData.getData(formatstr);   从剪贴板中取得数据
+      formatstr     数据格式的字符串
+        IE中有两种格式 "text" "URL"
+        其他浏览器 该参数是一种MIME类型[可使用"text"代表"text/plain"]
+    clipboardData.setData(formatstr,str); 设置剪贴板中的数据,返回布尔值表示是否成功操作
+       Arguments:formatstr 仍然是数据类型(但其他浏览器已不能识别 "text")
+         第二个参数为要更换的字符串
+    clipboardData.clearData(); 从剪贴板中清除数据
+Event===MutationEvent.prototype.__proto__.constructor  变动事件[IE9+] 
+  PS: 当底层DOM结构发生变化时触发 
+    变动事件是为XML或HTML DOM设计的,不特定于某种语言 
+    兼容性检测 
+    var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
+  ★MutationEvent.prototype.xxx 
+  常量
+    1===e.MODIFICATION   
+    2===e.ADDITION   
+    3===e.REMOVAL   
+  e.relatedNode  
+  e.prevValue  
+  e.newValue  
+  e.attrName  
+  e.attrChange  
+  e.initMutationEvent() 
+  ★事件枚举: 
+  'DOMSubtreeModified'   在DOM结构中发生任何变化时触发,不支持DOM0绑定 [DOM2][已废弃] 
+  'DOMNodeInserted'   节点被插入另一节点时触发 [DOM2][已废弃] 
+  'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发,不支持DOM0绑定 [DOM2][已废弃] 
+    该事件在 DOMNodeInserted 后触发
+  'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2][已废弃]  
+  'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发,不支持DOM0绑定 [DOM2][已废弃]  
+    该事件在 DOMNodeRemoved 之后触发
+  'DOMAttrModified'            特性被修改后触发,不支持DOM0绑定 [DOM2][已废弃]  
+  'DOMCharacterDataModified'  文本节点值发生变化时触发,不支持DOM0绑定 [DOM2][已废弃]  
+Event===CustomEvent.prototype.__proto__.constructor 自定义事件[DOM3][IE11+] 
+  ★CustomEvent.prototype.xxx 
+  e.detail 
+  e.initCustomEvent() 
+  var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
+    传递的数据对象通过 e.detail 来获取 
+Event===UIEvent.prototype.__proto__.constructor  
+  ★UIEvent.prototype.xxx 
+  e.view        与事件关联的抽象视图,等同于发生事件的window对象
+  e.detail      与事件相关的细节信息
+  e.sourceCapabilities 
+  e.which 
+  e.initUIEvent() 
+UIEvent===InputEvent.prototype.__proto__.constructor 
+  ★InputEvent.prototype.xxx 
+  e.data 
+  e.isComposing 
+  e.inputType 
+  e.dataTransfer 
+  e.getTargetRanges() 
+  ★事件枚举: 
+  input  监听表单值改变[IE9+] [HTML5] 
+    PS: 粘贴可触发; 在Chrome中通过JS改变表单的值,不会触发该事件 
+    适用元素: input type=text , textarea
+    IOS微信中,自定义获取焦点存在问题
+UIEvent===MouseEvent.prototype.__proto__.constructor  
+  ★MouseEvent.prototype.xxx 
+  num = e.screenX/e.screenY   相对设备屏幕左上角的距离,单位px 
+  num = e.clientX/e.clientY   相对视口左上角的距离,单位px  
+    不含浏览器的工具栏、边框和滚动条
+  num = e.pageX/e.pageY     相对页面左上角的距离,单位px 
+    页面没滚动时 clientX 和 pageX 相等
+  e.offsetX/e.offsetY     相对于事件源左上角的坐标
+    如点击一div,则表示到该div左上叫的坐标
+  e.x/e.y      相对于CSS定位的最内层包容元素的左上角
+    IE最先引入,现在主流浏览器基本都支持;
+    在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
+  e.movementX  
+  e.movementY  
+  e.layerX  
+  e.layerY  
+  bol = e.shiftKey  'Shif'键是否被按下
+  bol = e.ctrlKey   'Ctrl'键是否被按下
+  bol = e.altKey    'Alt'键是否被按下
+  bol = e.metaKey   'Meta'键是否被按下,Windows中为Windows键,Mac中为Cmd键 [IE9+] 
+  num = e.button  对应表示鼠标的按钮 
+    0 左键 [IE中为 1] 
+    1 中键 [IE中为 4] 
+    2 右键 [IE中为 2] 
+    兼容处理: 
+    function getButton(e){
+      if(e){
+        return e.button;
+      }
+      else if(window.event){
+        switch(window.event.button){
+          case 1:
+          return 0;
+          case 4:
+          return 1;
+          case 2:
+          return 2;
+        }
+      }
+    }
+  e.buttons  
+  e.relatedTarget  
+  e.fromElement  
+  e.toElement  
+  e.getModifierState()    
+  e.initMouseEvent()    
+  ★事件枚举: 
+  mousedown  用户按下任意鼠标按钮触发
+  mouseup    鼠标弹起触发
+  click    在左键按下后,弹起来时触发或按下回车键时触发
+    同一个元素上相继触发mousedown和mouseup事件才会触发click事件,若有一个被取消就不会触发click事件 
+  dblclick   鼠标双击 [DOM3]
+    只有触发两次click事件,才会触发一次dblclick事件。
+    如果有代码阻止了连续两次触发click事件,可能是直接取消click事件,
+    也可能通过取消mousedown或mouseup间接实现,那么就不会触发dblclick事件了 
+    触摸设备不支持dblclick事件,双击浏览器窗口会放大画面而且没有办法改变该行为 
+  mouseenter 光标从元素外部移动到元素范围内时触发,不冒泡 [DOM3][IE9+]
+  mouseleave 光标从元素范围内移到范围外时触发,不冒泡 [DOM3]  
+  mousemove  光标在元素内移动时持续触发 
+  mouseout   光标从一个元素到另一个元素时触发 
+    另一个元素可能位于该元素外,也可能是该元素的子元素
+  mouseover  光标移到元素上时触发 
+  当事件是'mouseover'和'mouseout'时 
+    e.relatedTarget  属性的值表示:移到/移出触发事件的元素最近的那个元素
+    对于其他事件该属性值为 null
+    IE的处理方式: e.toElement; e.fromElement;
+  contextmenu  上下文菜单事件 [HTML5] 
+    右击网页时,会自动出现Windows自带的菜单
+    使用 contextmenu 事件来修改指定的菜单,前提将默认行为取消  
+MouseEvent===WheelEvent.prototype.__proto__.constructor  滚轮事件 [HTML5] 
+  ★WheelEvent.prototype.xxx 
+  常量
+    0===e.DOM_DELTA_PIXEL  
+    1===e.DOM_DELTA_LINE  
+    2===e.DOM_DELTA_PAGE  
+  e.deltaX 
+  e.deltaY 
+  e.deltaZ 
+  e.deltaMode 
+  e.wheelDeltaX 
+  e.wheelDeltaY 
+  e.wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
+  ★事件枚举 
+  mousewheel 使用鼠标滚轮或类似设备时触发 
+UIEvent===TouchEvent.prototype.__proto__.constructor  
+  ★TouchEvent.prototype.xxx 
+  e.touches  
+  e.targetTouches  
+  e.changedTouches  
+  e.altKey  
+  e.metaKey  Windows中为Windows键,Mac中为Cmd键  
+  e.ctrlKey  
+  e.shiftKey  
+UIEvent===KeyboardEvent.prototype.__proto__.constructor 键盘事件[DOM3] 
+  ★KeyboardEvent.prototype.xxx 
+  常量: 
+    0 = e.DOM_KEY_LOCATION_STANDARD   
+    1 = e.DOM_KEY_LOCATION_LEFT   
+    2 = e.DOM_KEY_LOCATION_RIGHT   
+    3 = e.DOM_KEY_LOCATION_NUMPAD   
+  str = e.key  按键字符 [DOM3][DiBs]  
+  num = e.keyCode  按键字符对应ASCII码中小写字母或数值的编码 
+    Backspace   8
+    Tab         9
+    Enter       13
+    Shift       16
+    Alt         18
+    Pause/Break 19
+    CapsLock    20
+    Esc         27
+    Page Up     33
+    Page Down   34
+    End         35
+    Home        36
+    Left Arrow  37
+    Up Arrow    38
+    Right Arrow 39
+    Down Arrow  40
+    ...
+    a           65 [与Shift键的状态无关] 
+  e.code  
+  e.ctrlKey  
+  e.shiftKey  
+  e.altKey  
+  e.metaKey  Windows中为Windows键,Mac中为Cmd键 
+  e.repeat  
+  e.isComposing  
+  e.initKeyboardEvent()   
+  bol = e.getModifierState(str)  检测修改键[IE9+] 
+    str 可为"Control" "Shift" "AltGraph" "Meta" 
+  兼容性: 
+    num = e.location 键盘区域  [DOM3][DiBs] 
+      0 表示默认键盘
+      1 左侧位置,如左位的Alt键 
+      2 右侧位置,如右位的Shift键
+      3 数字小键盘
+      4 移动设备键盘,虚拟键盘 
+      5 手柄
+    e.charCode  [DOM3废弃] 
+    e.char [DOM3] [Chrome不支持]
+  ★事件枚举: 
+  keydown    按下任意键时触发,长按则持续触发 
+  keypress   按下字符键时触发,长按则持续触发 
+    任何获得焦点的元素都可以触发keypress事件
+  keyup      释放按键时触发
+UIEvent===FocusEvent.prototype.__proto__.constructor 焦点事件  
+  ★FocusEvent.prototype.xxx 
+  e.relatedTarget 
+  ★事件枚举: 
+  blur  元素失去焦点时触发,不冒泡 
+  focus 元素获得焦点时触发,不冒泡 
+  focusin 与focus等价,冒泡,不支持DOM0绑定  [DOM3] 
+  focusout 元素失焦时触发,冒泡,不支持DOM0绑定 [DOM3] 
+UIEvent===TextEvent.prototype.__proto__.constructor  文本事件 
+  ★TextEvent.prototype.xx 
+  str = e.data  输入的字符 
+  e.initTextEvent() 
+  ★事件枚举: 
+  textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
+    PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
+UIEvent===CompositionEvent.prototype.__proto__.constructor 合成事件[DOM3]  
+  PS: 当为IME['Iput Method Editor'输入法编辑器]输入字符时触发 
+    IME可以让用户输入在物理键盘上找不到的字符,如输入中文;
+    浏览器支持率度不高
+  ★CompositionEvent.prototype.xxx 
+  str = e.data  操作的文本数据 
+  e.initCompositionEvent()  
+  ★事件枚举:  
+  compositionstart  在IME打开时触发,表示要开始输入了,不支持DOM0绑定 
+    e.data 包含正在编辑的文本,如已经选中的需要马上替换的文本 
+  compositionupdate 在向输入字段中输入字符时触发,不支持DOM0绑定  
+    e.data  正在插入的文本
+  compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
+    e.data  包含此次输入会话中插入的所有字符
 事件兼容处理: 
   var eventCompat = {
     add: function(elem,type,foo){
@@ -583,178 +799,6 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
         // 删除c的父元素b(其中b包括c和d),达到删除元素c和d
       }
     })
-    
-// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
-变动事件 当底层DOM结构发生变化时触发[IE9+]
-  PS: 变动事件是为XML或HTML DOM设计的,不特定于某种语言
-  兼容性检测 
-    var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
-  DOM2 级定义了如下变动事件[已废弃,但目前仍可用] 
-  'DOMSubtreeModified'   在DOM结构中发生任何变化时触发
-  'DOMNodeInserted'              节点被插入另一节点时触发
-  'DOMNodeInsertedIntoDocument'  节点被直接插入文档或通过子树间接插入文档后触发
-    该事件在 DOMNodeInserted 后触发
-  'DOMNodeRemoved'             节点被删除时触发
-  'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发
-    该事件在 DOMNodeRemoved 之后触发
-  'DOMAttrModified'            特性被修改后触发 
-  'DOMCharacterDataModified'  文本节点值发生变化时触发
-  (详情参见 JavaScript高级程序设计384页)
-  Exp:
-    使用 on+eventName 的方式不生效,需使用 addEventListener 的方式绑定 
-变动名称事件 当元素或属性名变动时触发[已被废弃]
-◆HTML5事件 
-  PS:DOM规范没有涵盖所有浏览器支持的事件,HTML5详尽列出了浏览器应该支持的所有事件
-contextmenu  上下文菜单事件
-  当点击网页时,会自动出现Windows自带的菜单
-  使用contextmenu 事件来修改指定的菜单(前提将默认行为取消)
-beforeunload  离开关闭/刷新网页时,在window上触发事件 
-  PS:目的是让开发人员能在页面卸载前阻止这一操作, 
-    通过以返回值的形式来显示给用户提示[无返回值则无提示],
-    chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
-  Example:
-    $(window).bind('beforeunload',function(e){
-      return '您输入的内容尚未保存,确定离开此页面吗？';
-    });
-    //解除绑定,一般放在提交触发事件中
-    $(window).unbind('beforeunload');
-DOMContentLoaded 形成完整的DOM树后触发[IE9+]
-  无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
-readystatechange
-  e.readyState;
-    返回值
-    uninitialized   对象存在但尚未初始化
-    loading  对象正在加载数据
-    loaded 对象加载数据完成
-    interactive  可以操作对象了,但还没有完全加载
-    complete 对象已经加载完毕
-hashchange URL变化时在window上触发[IE8+] 
-// 设备相关事件
-[详参 JavaScript高级程序设计 395 页]
-◆其他事件: 
-  propertychange [IE专有] 
-   不管js操作还是键盘鼠标手动操作,只要HTML元素属性发生改变即可立即捕获到.
-  input    监听表单值改变[IE9+] 
-    适用元素: input type=text , textarea
-    使用情景: 粘贴可触发;
-    HTML5中的标准事件
-    在Chrome中通过JS改变表单的值,不会触发该事件 
-    ios微信中,自定义获取焦点存在问题
-  selectstart 其触发时间为目标对象被开始选中时(即选中动作刚开始,尚未实质性被选中)
-   该事件常使用于使目标对象“禁止变蓝”,比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
-   而当我们要避免这种情况时就可以使用该事件
-   Example: <div onselectstart="return false">该文字不可被选中</div>
-  change:当文本框(input或textarea)内容改变且失去焦点后触发
-  error  任何没通过try-catch处理的错误都会触发window对象的error事件
-   和其他事件不同的是,error事件不会创建event对象,
-   取而代之的是三个参数:错误消息、错误所在的URL和行号
-   Example: :
-   window.onerror =function(message,url,line){
-     ...
-     return false; // 可阻止浏览器报告错误的默认行为
-   }
-   图像的error事件:只要图像加载失败或显示失败就会触发error事件,会生成event对象
-  online 网络从离线变成在线时触发 (HTML5新增)
-  offline 网络从在线变成离线时触发(HTML5新增)
-  transitionEnd  CSS的过渡效果transition结束后触发
-   事件对象的属性
-     propertyName:发生transition效果的CSS属性名.
-     elapsedTime: transition效果持续的秒数,不含transition-delay的时间.
-     pseudoElement:若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
-       若不发生在伪元素上,则返回一个空字符串.
-   Example:
-   elem.addEventListener('transitionend',function(){},false);
-   实际使用transitionend事件时,可能需要添加浏览器前缀.
-   el.addEventListener('webkitTransitionEnd',function() {});
-  animationstart 动画开始时触发
-  animationend   动画结束时触发
-  animationiteration 开始新一轮动画循环时触发
-   若animation-iteration-count属性等于1,该事件不触发,
-   即只播放一轮的CSS动画,不会触发animationiteration事件.
-   这三个事件的事件对象
-     都有animationName属性(返回产生过渡效果的CSS属性名)
-     elapsedTime属性(动画已经运行的秒数)
-     对于animationstart事件,elapsedTime属性等于0,除非animation-delay属性等于负值.
-  checkbox选中时的事件是什么 [?]
-  pageshow  网页重载时触发
-   PS:重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
-     虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
-   Example:
-     var EventUtil = {
-       addHandler: function (element, type, handler) {
-         if (element.addEventListener) {
-           element.addEventListener(type, handler, false);
-         } 
-         else if (element.attachEvent) {
-           element.attachEvent("on" + type, handler);
-         } 
-         else {
-           element["on" + type] = handler;
-         }
-       }
-     };
-     (function () {
-       var showCount = 0;
-       EventUtil.addHandler(window, "load", function () {
-         console.log("Load fired");
-       });
-       EventUtil.addHandler(window, "pageshow", function (event) {
-         showCount++;
-         console.log("Show has been fired " + showCount + " times.");
-       });
-     })();
-     当页面首次加载完成时,showCount的值为0
-     若离开包含以上代码的页面后,又“后退”到该页面,showCount就会递增;
-     因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
-     若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
-   event.persisted  返回表示页面是否来自bfcache的布尔值
-  pagehide  在浏览器卸载页面的时候触发 [unload事件之前]
-   PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
-     指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
-     因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
-   event.persisted  返回页面是否将保存在bfcache中的布尔值
-     若在Firefox浏览器中, 当第一次触发pageshow时,persisted的值一定是false,
-     而在第一次触发pagehide时,persisted 为true
-◆剪贴版事件
-IE率先使用,HTML5纳入规范
-beforecopy 在发生复制操作前触发
-copy       在发生复制操作时触发
-beforecut  在发生剪切操作前触发
-cut        在发生剪切操作时触发
-beforepaste 在发生粘贴操作前触发
-paste      在发生粘贴操作时触发
-访问剪贴板中的数据 
-  $('#a').on("copy",function(e){
-    if (window.getSelection) {
-      text = window.getSelection().toString();
-      console.log(1);
-    } 
-    else if (document.selection && document.selection.createRange) {
-      text = document.selection.createRange().text;
-      console.log(2);
-    }
-    console.log(text);
-  });
-  clipboardData对象 [无该对象?]
-  使用 clipboardData 对象,IE中其为window的属性,其他浏览器为事件对象event的属性
-  clipboardData.getData(formatstr);   从剪贴板中取得数据
-    formatstr     数据格式的字符串
-      IE中有两种格式 "text" "URL"
-      其他浏览器 该参数是一种MIME类型[可使用"text"代表"text/plain"]
-  clipboardData.setData(formatstr,str); 设置剪贴板中的数据,返回布尔值表示是否成功操作
-     Arguments:formatstr 仍然是数据类型(但其他浏览器已不能识别 "text")
-       第二个参数为要更换的字符串
-  clipboardData.clearData(); 从剪贴板中清除数据
-◆移动端事件 
- touchstart
- touchend
- touchmove
-Exp: 
-  页面加载时只执行'load'事件 
-  页面刷新时先执行'beforeunload',然后'unload',最后'load' 
-  页面关闭时先执行'beforeunload',最后'unload' 
-// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 
-  
 事件模拟 
   PS: 使用JS来触发特定的事件,DOM2级规范了模拟特定事件的方式,IE有自己的模拟方式 
   document.createEvent(str);  创建event对象
@@ -825,71 +869,215 @@ Exp:
       this.className="blue";
       this.onclick=toRed;
     }
-事件归纳总结 
-  事件枚举及分类
-    ◆在window上触发的事件 
-    popstate   当活动历史记录条目更改时,在window上触发[HTML5 IE10+]
-      PS: 调用history.pushState()或history.replaceState()不会触发该事件,
-        只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
-        或者在JS代码中调用 history.back();
-        不同的浏览器在加载页面时处理popstate事件的形式存在差异。
-        页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
-        若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
-        或者受到对 history.replaceState() 的调用的影响,
-        e.state 属性为包含历史条目的状态对象的副本,为pushState的第一个参数;
+移动端事件 
+  orientationchange 屏幕旋转事件 
+  deviceorientation 在加速计检测到设备方向变化时在window对象上触发 
+  devicemotion  设备移动事件
+  Touch触摸事件
+    PS: 由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
+    ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现]
+    touchstart  当手指放在屏幕上触发,始终会触发,而不管是否改为滑动
+      即使已经有一个手指放在了屏幕上也会触发 
+    touchmove   当手指在屏幕上滑动时持续触发 
+      事件发生期间,调用preventDefault() 可以阻止滚动。
       Example:
-        window.addEventListener("popstate",function(e){
-          var state1 = e.state;
-          // state1 就是 pushState 的第一个参数,详情常见BOM history
-          console.log(state1)
+        指定滑动一定距离执行动作 [self]
+        var flagYear =true; // 用于记录滑动起始点的 布尔值
+        year.on('touchmove',function(e){
+          if (flagYear) {   // 仅记录滑动初始的位置
+            starty =e.originalEvent.changedTouches[0].pageY;
+            flagYear =false;
+          }
+          var endy = e.originalEvent.changedTouches[0].pageY;
+          if (endy - starty < -20 ) { // 下滑距离20执行动作
+            // 执行的代码
+            
+            starty =endy;
+          }
+          if (endy - starty > 20 ) {   // 上滑距离20执行动作
+            // 执行的代码
+            
+            starty =endy;
+          }
         })
-    hashchange URL变化时在window上触发[IE8+] 
-      PS:当#值发生变化时也会触发这个事件
-      e.oldURL; 变化前的URL
-      e.newURL; 变化后的URL
-    ◆
-    scroll     滚动[带滚动条的]元素时在该元素上触发[网页滚动在window上触发]
-      window.onscroll =function(){
-        console.log('网页滚动');
-      }
-  事件绑定
-    var addEvent = function(elem, type, handle, capture) {
-      if(elem.addEventListener) {
-        elem.addEventListener(type, handle, capture);
-      } else if(elem.attachEvent) {
-        elem.attachEvent("on" + type, handle);
-      }
-    };
+        year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
+          flagYear =true;
+        })
+    touchend    当手指从屏幕上离开时触发,始终会触发,而不管是否改为滑动
+    ◆额外的三个触摸事件[DiBs]
+    touchenter   移动的手指进入一个DOM元素
+    touchleave   移动手指离开一个DOM元素
+    touchcancel  触摸被中断
     Example:
-      var t = document.getElementById('test');
-      addEvent(t, 'click', function(){});
-  事件移除
-    var deleteEvent = function(elem, type, handle) {
-      if(elem.removeEventListener) {
-        elem.removeEventListener(type, handle);
-      } else if(elem.detachEvent) {
-        elem.detachEvent('on' + type, handle);
-      }
-    };
-    Example:
-      var t = document.getElementById('test');
-      deleteEvent(t, 'click', fn);
-  对事件的认识
-    Example:
-      $('#btn').on('click',function(){
-        $(this).addClass('aoo');
-        if ($(this).hasClass('aoo')) { 
-          console.log('该元素点击之前无aoo类时,也会执行该语句'); 
+      var EventUtil = {
+        addHandler: function(element,type,handler) {
+          if(element.addEventListener) {
+            element.addEventListener(type,handler,false);
+          }else if(element.attachEvent) {
+            element.attachEvent("on"+type,handler);
+          }else {
+            element["on" +type] = handler;
+          }
+        },
+        removeHandler: function(element,type,handler){
+          if(element.removeEventListener) {
+            element.removeEventListener(type,handler,false);
+          }else if(element.detachEvent) {
+            element.detachEvent("on"+type,handler);
+          }else {
+            element["on" +type] = null;
+          }
         }
+      };
+      var touch = document.getElementById("touch");
+      EventUtil.addHandler(touch,"touchstart",function(event){
+        console.log(event);
+      })；
+      
+      // 连续滑动触发
+      EventUtil.addHandler(window,"touchmove",function(event){
+        alert(1);
+      })；
+      //当手指从屏幕上离开时触发;
+      EventUtil.addHandler(window,"touchend",function(event){
+        alert(1);
       })
-      改为
-      $('#btn').on('click',function(){
-        if ($(this).hasClass('aoo')) { 
-          console.log('该元素点击之前有aoo类时,才会执行该语句'); 
+    TouchEvent事件对象  
+    e.touches    当前位于屏幕上的所有手指的一个列表 当前跟踪的触摸操作的Touch对象的数组
+      event.touches.length  表示屏幕上触摸的手指个数 
+      touch = e.touches[idx] 
+      touch.clientX 触摸目标在视口中的x 坐标
+      touch.clientY 触摸目标在视口中的y 坐标
+      touch.identifier 标识触摸的唯一ID
+      touch.pageX 触摸目标在页面中的x 坐标
+      touch.pageY 触摸目标在页面中的y 坐标
+      touch.screenX 触摸目标在屏幕中的x 坐标
+      touch.screenY 触摸目标在屏幕中的y 坐标
+      touch.target 触摸的DOM 节点目标 
+    e.targetTouches    位于当前DOM元素上的手指的一个列表
+      PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
+      event.touches.length  表示元素上触摸的手指个数
+    e.targetTouchs    特定于事件目标的Touch 对象的数组。
+    e.originalEvent.changedTouches   
+      e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
+      e.originalEvent.changedTouches[0].clientX     触摸目标在视口中的X坐标
+      e.originalEvent.changedTouches[0].clientY     触摸目标在视口中的Y坐标
+      e.originalEvent.changedTouches[0].pageX    页面中的X坐标
+      e.originalEvent.changedTouches[0].pageY    页面中的Y坐标
+      e.originalEvent.changedTouches[0].screenX     触摸目标在屏幕中的X坐标
+      e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
+      e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
+    e.changeTouches  表示自上次触摸以来发生了什么改变的Touch 对象的数组。
+    event.preventDefault();  阻止滚动 [?]
+      一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
+      当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
+  Gestures手势事件
+    PS: 该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发 
+      当两个手指触摸屏幕时就会产生手势,手势通常会改变显示项的大小,或者旋转显示项
+    gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发 
+    gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
+    gestureend    当任何一个手指从屏幕上面移开时触发。
+  触摸事件和手势事件的关系 
+    当一个手指放在屏幕上时,会触发touchstart事件,
+    而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
+    若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
+    但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
+    手势的专有属性:
+      rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
+      scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
+  其他 
+    navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
+    autocapitalize  autocorrect   自动大写与自动修正
+      <input type="text" autocapitalize="off" autocorrect="off" />
+    -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
+    -webkit-user-select:none      禁止用户选中文字
+    关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
+      this.value = this.value.replace(/\u2006/g, ‘‘);
+    input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
+    判断是否为微信浏览器；
+      function is_weixn(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+          return true;
+        } else {
+          return false;
         }
-        $(this).addClass('aoo');
-      })
-自我总结 
+      }
+  键盘调出与关闭事件: 使用resize间接实现
+    var wh1 = window.innerHeight; 
+    //获取初始可视窗口高度
+    $(window).resize(function() {      
+      //监测窗口大小的变化事件
+      var wh2 = window.innerHeight;    
+      //当前可视窗口高度
+      var viewTop = $(window).scrollTop();   
+      //可视窗口高度顶部距离网页顶部的距离
+      if(wh1 > wh2){          
+        //可作为虚拟键盘弹出事件
+      }
+      else{                      
+        //可作为虚拟键盘关闭事件
+      }
+    });
+  click点击事件 
+    click会在'touchend'事件后触发 
+    click延迟
+      PS: 移动端需判断是否为双击,故单击后不能立刻触发,需等300ms,直到确认不是双击才触发 
+      去掉click延迟的方法 
+      把viewport设置成设备的实际像素 Chrome和Safari生效 
+        <meta name="viewport" content="width=device-width">
+      设置initial-scale=1.0   Chrome生效 
+        <meta name="viewport" content="initial-scale=1.0">
+      设置CSS     Chrome和Safari都生效 
+        html{
+          touch-action: manipulation;
+        }
+-------------------------------------------------------------------------------- 
+DataTransfer 
+  .dropEffect  
+  .effectAllowed  
+  .items  
+  .types  
+  .files  
+  .setDragImage()    
+  .getData()    
+  .setData()    
+  .clearData()    
+--------------------------------------------------------------------------------
+SelfSummary: 
+  事件对象分析: 
+    var eventStr = 'DOMSubtreeModified' 
+    var targetElem = input1
+    console.log('是否支持DOM0事件:',eventStr,'on'+eventStr in targetElem);
+    function isEventSupport(eventStr,elem){
+      var bol = false;
+      var foo = function(){
+        bol = true;
+        console.log('是否支持DOM2事件:',eventStr,bol);
+      }
+      elem.addEventListener(eventStr,foo)
+      var e = new Event(eventStr)
+      elem.dispatchEvent(e)
+      elem.removeEventListener(eventStr,foo)
+      if (!bol) {
+        console.log('是否支持DOM2事件:',eventStr,bol);
+      }
+    }
+    isEventSupport(eventStr,targetElem);
+    targetElem['on'+eventStr] = function(e){
+      console.log('事件对象:',e);
+      console.log('是否冒泡:',e.bubbles);
+      console.log('事件类型:',e.constructor);
+      // console.log(':',e.targetElem.constructor);
+      console.log('------------------------------------------------------');
+    }
+    targetElem.addEventListener(eventStr,function(e){
+      console.log('事件对象:',e);
+      console.log('是否冒泡:',e.bubbles);
+      console.log('事件类型:',e.constructor);
+      // console.log(':',e.targetElem.constructor);
+      console.log('======================================================');
+    })
   创建和触发事件 
     var on = function(eName,foo,elem) {
       var el = elem || document;
@@ -902,4 +1090,8 @@ Exp:
       var el = elem || document;
       el.dispatchEvent(event);
     }
--------------------------------------------------------------------------------- 
+  checkbox选中时的事件是什么 change? 
+
+  
+  
+  

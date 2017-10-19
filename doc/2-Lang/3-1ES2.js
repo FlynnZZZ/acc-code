@@ -2126,3 +2126,22 @@ JSON'JavaScript Object Notation'JS对象表示法: 基于文本、独立于语�
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
 ------------------------------------------------------------------------------- 
+SelfSummary 
+  对象分析: 
+    var obj = Array.prototype     
+    console.log('查询的对象:',obj);
+    console.log('查询的对象的类型:',typeof obj,obj.toString().slice(7,-1));
+    var tObj = Object.getOwnPropertyNames(obj)
+    for(var key in tObj){
+      var k = tObj[key];
+      try {
+        console.log(typeof obj[k],k,obj[k], '#####' );
+        // console.log(obj[k].toString(),k,obj[k], '#####' );
+      } 
+      catch (e) {
+        console.log( '------',k, '#####' );
+      } 
+      if (k == 'id') { // 查询某个具体的属性 
+        console.log('==========================================');
+      }
+    };

@@ -514,7 +514,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       obj1.key1.push(3);
       console.log(obj2.key1); //  [1, 2, 3] 
     ★在创建子类型的实例时,不能向超类型的构造函数中传递参数 
-  对象类型检测的方法:  
+  对象类型检测方法:  
     PS: 无直接访问对象类型的方式,可间接通过以下方式来获取
     Object.prototype.toString.call(val); 获取值类型 
       var type = Object.prototype.toString;
@@ -532,10 +532,10 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       console.log(getType({})); // object
       console.log(getType([])); // Array
       console.log(getType(new Date())); // Date
-    'duck type' 鸭子类型,根据其表现来确定其身份 
     typeof val;               [详参 一元运算符]
     obj instanceof Object;    [详参 关系运算符]
     obj.constructor           查询对象的构造函数 
+    'duck type' 鸭子类型,根据其表现来确定其身份 
 'Evaluation Strategy'求值策略: 决定变量之间、函数调用时实参和形参之间值的传递方式 
   读写引用类型值 
     引用存储: 栈内存中存储指针[指向堆内存],堆内存中存储实际值 

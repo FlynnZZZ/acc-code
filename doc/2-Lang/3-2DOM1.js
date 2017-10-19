@@ -853,15 +853,20 @@ HTMLElement [继承 Element]
   HTMLFormElement   <form> 
     PS: 表单字段为表单中的元素,如input button textarea select 等等
     HTMLFormElement.prototype.xxx
-      form.acceptCharset  服务器能够处理的字符集 
-        等价于HTML中的 accept-charset 特性
-      form.action  接收请求的URL,等价于HTML中的action特性
+      form.acceptCharset  服务器能够处理的字符集,对应标签'accept-charset'特性 
+      form.method  要发送的HTTP请求类型,对应标签'method'特性
+      form.action  接收请求的URL,对应标签'action'特性 
+      form.enctype  请求的编码类型,对应标签'enctype'特性 
+      form.name  表单的名称,对应标签'name'特性 
+      form.target  发送请求和接收响应的窗口名称,对应标签'target'特性
       form.autocomplete 
-      form.enctype  请求的编码类型,等价于HTML中的enctype特性
       form.encoding 
-      form.method  要发送的HTTP请求类型,等价于HTML的method特性
-      form.name  表单的名称,等价于HTML的name特性
-      form.noValidate  读写,将原生的表单验证关闭 
+      form.elements  表单中所有控件的有序集合,HTMLCollection 
+        表单字段在elements中出现的顺序和它们在标记中出现的顺序相同
+        可通过下标或表单控件的name特性值索引,
+        若存在多个表单控件使用相同的name,如单选按钮,则会返回一NodeList 
+      form.length  表单中控件的数量 
+      bol = form.noValidate  读写,将原生的表单验证关闭 
         formElem.noValidate = true;    
         原生的表单验证不完全符合需要,而且出错信息无法指定样式。
         这时,可能需要使用表单对象的noValidate属性,将原生的表单验证关闭。
@@ -870,11 +875,6 @@ HTMLElement [继承 Element]
         var form = document.getElementById("myform");
         form.noValidate = true;
         form.onsubmit = validateForm;
-      form.target  发送请求和接收响应的窗口名称,等价于HTML的target特性
-      form.elements  表单中所有控件的集合,HTMLCollection
-        表单字段在elements中出现的顺序和它们在标记中出现的顺序相同
-        可通过下标或name索引,其中name索引返回的为一个数组NodeList
-      form.length  表单中控件的数量
       form.submit()  提交表单,可不需提交按钮存在
       form.reset()   重置所有表单域 
       form.checkValidity()  检测表单是否有无效字段(值不符合要求),若有则返回false
@@ -883,9 +883,9 @@ HTMLElement [继承 Element]
       form.reportValidity()  
       form.<fieldName>  通过表单元素中表单字段的name属性来获取表单字段 
     事件 
-      submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发
+      submit 提交表单事件,点击提交按钮或提交按钮获取焦点按Enter时在form元素上触发 
         submit 和 click 事件: 不同的浏览器触发的先后顺序不一样
-      reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发
+      reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发 
     Extend: 利用<iframe>让<form>的submit不刷新页面进行上传 
       默认的表单提交会导致页面刷新,把<form>的target指定到一<iframe>,从而让其代替页面刷新  
       window.__iframeCount = 0;
@@ -1042,7 +1042,30 @@ HTMLElement [继承 Element]
       option.text 
       option.index 
   HTMLButtonElement    <button> 
-  'formField'表单字段总结  
+  'formField'表单字段总结 
+    共有的表单字段属性/方法  
+      PS: 除了<fieldset>元素之外,所有表单字段都拥有相同的一组属性 
+        由于<input>类型可以表示多种表单字段,因此有些属性只适用于某些字段,
+        但还有一些属性是所有字段所共有的
+      .disabled  bol,当前字段是否被禁用 
+      .readOnly  bol,当前字段是否只读 
+      .tabIndex  num,当前字段的切换tab序号
+      .name      str,当前字段的名称 
+      .form      只读,指向当前字段所属表单的指针 
+      .type      str,当前字段的类型,如"checkbox"、"radio" 等等 
+        对于<input>元素,该值等于其特性type的值,其他元素,见下表 
+        说明             HTML示例                       type属性的值
+        单选列表       <select>...</select>             "select-one"
+        多选列表       <select multiple>...</select>    "select-multiple"
+        自定义按钮     <button>...</button>             "submit"
+        自定义非提交按钮 <button type="button">...</button> "button"
+        自定义重置按钮 <button type="reset">...</buton>  "reset"
+        自定义提交按钮 <button type="submit">...</buton> "submit"
+        <input>和<button>元素的type属性是可以动态修改的,而<select>元素的type属性则是只读的
+      .value     str,当前字段将被提交给服务器的值 
+        对文件字段来说,这个属性是只读的,包含着文件在计算机中的路径
+      .focus()  获得焦点,激活表单字段,只能对可见的表单字段使用   
+      .blur()   失去焦点 
     change  表单值改变时触发 
       支持该事件的 JavaScript 对象: fileUpload, select, text, textarea 等
       input或textarea元素值变化且失焦时触发
@@ -1127,7 +1150,7 @@ HTMLElement [继承 Element]
         多选情况下,设置一选项的该属性为true,其他选项无影响
       optElem.text  选项的文本
       optElem.value  选项的值,等价于HTML中的value特性
-    checkbox 多选框控件
+    checkbox 多选框控件 
       checkboxElem.checked  可写,返回一个布尔值,表示用户是否选中
     radio 单选框控件 
       radioElem.checked 
@@ -1652,175 +1675,6 @@ XML相关
   存在内存中的元素,而非插入到DOM中,仍起作用 
     var file = $('<input type="file" id="file1">')
     file.click()  // 仍可打开图片选择框 
---------------------------------------------------------------------------------
-◆Mobile 移动端 
-  IOS移动设备上,长按<a>标签,会弹出浏览器的原生菜单 
-    在JS中设置取消的方法
-    document.documentElement.style.webkitTouchCallout = 'none';
-    代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
-Event 事件 
-  Touch 触摸事件
-    PS:由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
-    ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现]
-    touchstart  当手指放在屏幕上触发,始终会触发,而不管是否改为滑动
-    touchmove   当手指在屏幕上滑动时,连续地触发;
-      Example:
-        指定滑动一定距离执行动作 [self]
-        var flagYear =true; // 用于记录滑动起始点的 布尔值
-        year.on('touchmove',function(e){
-          if (flagYear) {   // 仅记录滑动初始的位置
-            starty =e.originalEvent.changedTouches[0].pageY;
-            flagYear =false;
-          }
-          var endy = e.originalEvent.changedTouches[0].pageY;
-          if (endy - starty < -20 ) { // 下滑距离20执行动作
-            // 执行的代码
-            
-            starty =endy;
-          }
-          if (endy - starty > 20 ) {   // 上滑距离20执行动作
-            // 执行的代码
-            
-            starty =endy;
-          }
-        })
-        year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
-          flagYear =true;
-        })
-    touchend    当手指从屏幕上离开时触发,始终会触发,而不管是否改为滑动
-    ◆额外的三个触摸事件[DiBs]
-    touchenter   移动的手指进入一个DOM元素
-    touchleave   移动手指离开一个DOM元素
-    touchcancel  触摸被中断
-    Example:
-      var EventUtil = {
-        addHandler: function(element,type,handler) {
-          if(element.addEventListener) {
-            element.addEventListener(type,handler,false);
-          }else if(element.attachEvent) {
-            element.attachEvent("on"+type,handler);
-          }else {
-            element["on" +type] = handler;
-          }
-        },
-        removeHandler: function(element,type,handler){
-          if(element.removeEventListener) {
-            element.removeEventListener(type,handler,false);
-          }else if(element.detachEvent) {
-            element.detachEvent("on"+type,handler);
-          }else {
-            element["on" +type] = null;
-          }
-        }
-      };
-      var touch = document.getElementById("touch");
-      EventUtil.addHandler(touch,"touchstart",function(event){
-        console.log(event);
-      })；
-      
-      // 连续滑动触发
-      EventUtil.addHandler(window,"touchmove",function(event){
-        alert(1);
-      })；
-      //当手指从屏幕上离开时触发;
-      EventUtil.addHandler(window,"touchend",function(event){
-        alert(1);
-      })
-  TouchEvent 事件对象  
-    e.touches          当前位于屏幕上的所有手指的一个列表
-      event.touches.length  表示屏幕上触摸的手指个数
-    e.targetTouches    位于当前DOM元素上的手指的一个列表
-      PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
-      event.touches.length  表示元素上触摸的手指个数
-    e.originalEvent.changedTouches   
-      e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
-      e.originalEvent.changedTouches[0].clientX     触摸目标在视口中的X坐标
-      e.originalEvent.changedTouches[0].clientY     触摸目标在视口中的Y坐标
-      e.originalEvent.changedTouches[0].pageX    页面中的X坐标
-      e.originalEvent.changedTouches[0].pageY    页面中的Y坐标
-      e.originalEvent.changedTouches[0].screenX     触摸目标在屏幕中的X坐标
-      e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
-      e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
-    event.preventDefault();  阻止滚动 [?]
-      一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
-      当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
-  Gestures 触摸事件
-    PS:该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发。
-    Gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发。
-    Gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
-    Gestureend    当任何一个手指从屏幕上面移开时触发。
-  触摸事件和手势事件的关系 
-    当一个手指放在屏幕上时,会触发touchstart事件,
-    而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
-    若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
-    但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
-    手势的专有属性:
-      rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
-      scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
-  其他 
-    navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
-    autocapitalize  autocorrect   自动大写与自动修正
-      <input type="text" autocapitalize="off" autocorrect="off" />
-    -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
-    -webkit-user-select:none      禁止用户选中文字
-    关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
-      this.value = this.value.replace(/\u2006/g, ‘‘);
-    input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
-    判断是否为微信浏览器；
-      function is_weixn(){
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i)=="micromessenger") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-  屏幕旋转事件 orientationchange
-  键盘调出与关闭事件: 使用resize间接实现
-    var wh1 = window.innerHeight; 
-    //获取初始可视窗口高度
-    $(window).resize(function() {      
-      //监测窗口大小的变化事件
-      var wh2 = window.innerHeight;    
-      //当前可视窗口高度
-      var viewTop = $(window).scrollTop();   
-      //可视窗口高度顶部距离网页顶部的距离
-      if(wh1 > wh2){          
-        //可作为虚拟键盘弹出事件
-      }
-      else{                      
-        //可作为虚拟键盘关闭事件
-      }
-    });
-  click点击事件 
-    click会在'touchend'事件后触发 
-    click延迟
-      PS: 移动端需判断是否为双击,故单击后不能立刻触发,需等300ms,直到确认不是双击才触发 
-      去掉click延迟的方法 
-      把viewport设置成设备的实际像素 Chrome和Safari生效 
-        <meta name="viewport" content="width=device-width">
-      设置initial-scale=1.0   Chrome生效 
-        <meta name="viewport" content="initial-scale=1.0">
-      设置CSS     Chrome和Safari都生效 
-        html{
-          touch-action: manipulation;
-        }
-WeiXin 微信 
-  不支持的功能 
-    模板字符串  ios中支持,android中不支持[20170124]
-    可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
-    不支持进行跳转到上一步url中带有参数 的url地址  [?]
-      比如:一个查询列表页的url是: http://someweb?city=beijing
-      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如: 
-      location.href=document.referrer的时候   
-      跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
-      解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
-      把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
-  event 事件
-    禁止下滑显示网址 
-      $(document).on('touchmove',function(e){
-        e.preventDefault();
-      })
 -------------------------------------------------------------------------------- 
 ◆专题 
 Image.prototype===HTMLImageElement.prototype <img>标签 
@@ -2915,6 +2769,28 @@ WYSIWYG'what you see is what you get'所见即所得,富文本编辑 [详参 JS�
       使用 is 属性来声明一个扩展的类型
       Web Components 标准中:createElement 和 createElementNS 支持元素扩展:
         const hello = document.createElement('button', 'button-hello')
+--------------------------------------------------------------------------------
+◆Mobile移动端 
+  IOS移动设备上,长按<a>标签,会弹出浏览器的原生菜单 
+    在JS中设置取消的方法
+    document.documentElement.style.webkitTouchCallout = 'none';
+    代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
+WeiXin 微信 
+  不支持的功能 
+    模板字符串  ios中支持,android中不支持[20170124]
+    可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
+    不支持进行跳转到上一步url中带有参数的url地址  [?]
+      比如:一个查询列表页的url是: http://someweb?city=beijing
+      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如: 
+      location.href=document.referrer的时候   
+      跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
+      解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
+      把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
+  event 事件 
+    禁止下滑显示网址 
+      $(document).on('touchmove',function(e){
+        e.preventDefault();
+      })
 ------------------------------------------------------------------------待整理 
   input表单无法获取焦点 
     <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>

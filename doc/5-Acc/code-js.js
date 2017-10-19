@@ -1,37 +1,34 @@
-插件 
-  使用 全局函数
-    function foo(aoo){
-      alert(aoo);
+编写插件的方式:  
+  全局函数 
+  使用闭包封装 
+    function(){
+      // code
+      window.aoo = aoo; // 暴露接口
     }
-    foo('12')
-  使用 原型方法
+  面向对象的方式 
+    将一个插件作为一个对象,通过构造函数/类来生成,
+    调用插件方法来完成需要的功能 
     // 创建
     var Aoo = function(obj){
       this.a = obj.a;
       this.b = obj.b;
-      console.log('初始化时就运行了');
       this.do2();
     }
-    Aoo.prototype.do1 = function () {
-      console.log(this.a);
-    };
-    Aoo.prototype.do2 = function () {
-      console.log(this.b);
-    };
+    Aoo.prototype = {
+      constructor: Aoo,
+      do1: function () {
+        console.log(this.a);
+      },
+      do2: function () {
+        console.log(this.b);
+      },
+    }
     // 使用
     var aoo = new Aoo({
       a : '第一个参数',
       b : '第二个参数',
     }); 
-    //  初始化时就运行了
-    // 第二个参数
     aoo.do1(); 
-    // 第一个参数
-  使用 闭包
-    function(){
-      // code
-      window.aoo = aoo; // 暴露接口
-    }
 --------------------------------------------------------------------------------
 PC端
 网络收集 

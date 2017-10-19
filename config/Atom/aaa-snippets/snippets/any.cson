@@ -1,211 +1,206 @@
 # 所有格式的补全 
 '*':
   # 名词 ---------------------------------------------------------------------
-  '-any abstract':
+  '-* abstract':
     'prefix': 'abstract'
     'body': """abstract""" 
-  '-any async':
-    'prefix': 'async'
-    'body': 'async'
-  '-any autoprefixer':
+  '-* autoprefixer':
     'prefix': 'autoprefixer'
     'body': 'autoprefixer'
-  '-any bundle':
+  '-* bundle':
     'prefix': 'bundle'
     'body': """bundle""" 
-  '-any config':
+  '-* config':
     'prefix': 'config'
     'body': """config""" 
-  '-any data':
+  '-* data':
     'prefix': 'data'
     'body': """data""" 
-  '-any double':
+  '-* double':
     'prefix': 'double'
     'body': """double""" 
-  '-any error':
+  '-* error':
     'prefix': 'error'
     'body': 'error'
-  '-any fail':
+  '-* fail':
     'prefix': 'fail'
     'body': """fail""" 
-  '-any success':
+  '-* success':
     'prefix': 'success'
     'body': 'success'
-  '-any from':
+  '-* from':
     'prefix': 'from'
     'body': """from""" 
-  '-any function':
+  '-* function':
     'prefix': 'function'
     'body': 'function'
-  '-any handle':
+  '-* handle':
     'prefix': 'handle'
     'body': """handle""" 
-  '-any header':
+  '-* header':
     'prefix': 'header'
     'body': """header""" 
-  '-any global':
+  '-* global':
     'prefix': 'global'
     'body': 'global'
-  '-any volatile':
+  '-* volatile':
     'prefix': 'volatile'
     'body': """volatile""" 
-  '-any source':
+  '-* source':
     'prefix': 'source'
     'body': 'source'
-  '-any that':
+  '-* that':
     'prefix': 'that'
     'body': 'that'
-  '-any synchronized':
+  '-* synchronized':
     'prefix': 'synchronized'
     'body': """synchronized""" 
-  '-any transient':
+  '-* transient':
     'prefix': 'transient'
     'body': """transient""" 
-  '-any route':
+  '-* route':
     'prefix': 'route'
     'body': 'route'
-  '-any socket':
+  '-* socket':
     'prefix': 'socket'
     'body': """socket""" 
-  '-any install':
+  '-* install':
     'prefix': 'install'
     'body': 'install'
-  '-any interface':
+  '-* interface':
     'prefix': 'interface'
     'body': """interface""" 
-  '-any loader':
+  '-* loader':
     'prefix': 'loader'
     'body': """loader""" 
-  '-any method':
+  '-* method':
     'prefix': 'method'
     'body': """method""" 
-  '-any multiple':
+  '-* multiple':
     'prefix': 'multiple'
     'body': """multiple""" 
-  '-any native':
+  '-* native':
     'prefix': 'native'
     'body': """native""" 
-  '-any package':
+  '-* package':
     'prefix': 'package'
     'body': """package""" 
-  '-any private':
+  '-* private':
     'prefix': 'private'
     'body': """private""" 
-  '-any prop':
+  '-* prop':
     'prefix': 'prop'
     'body': """prop""" 
-  '-any protect':
+  '-* protect':
     'prefix': 'protect'
     'body': """protect""" 
   # js ---------------------------------------------------------------------
-  '-Object':
-    'prefix': 'Object1' 
-    # 存在bug
-    'body': 'Object'
-  '-any blur':
+  '-* blur':
     'prefix': 'blur'
     'body': 'blur'
-  '-any break':
+  '-* break':
     'prefix': 'break'
     'body': """break""" 
-  '-any click':
+  '-* click':
     'prefix': 'click'
     'body': 'click'
-  '-any component':
+  '-* component':
     'prefix': 'component'
     'body': """component""" 
-  '-any template':
-    'prefix': 'template-any' # exit bug 
+  '-* template':
+    'prefix': 'template1' # exit bug 
     'body': """template""" 
-  '-any compute':
+  '-* compute':
     'prefix': 'compute'
     'body': """compute""" 
-  '-any continue':
+  '-* continue':
     'prefix': 'continue'
     'body': 'continue'
-  '-any default':
+  '-* default':
     'prefix': 'default'
     'body': 'default'
-  '-any delete':
+  '-* delete':
     'prefix': 'delete'
     'body': 'delete'
-  '-any directive':
+  '-* directive':
     'prefix': 'directive'
     'body': """directive""" 
-  '-any document':
+  '-* document':
     'prefix': 'document'
     'body': 'document'
-  '-any false':
+  '-* false':
     'prefix': 'false'
     'body': """false""" 
-  '-any finally':
+  '-* finally':
     'prefix': 'finally'
     'body': """finally""" 
-  '-any focus':
+  '-* focus':
     'prefix': 'focus'
     'body': 'focus'
-  '-any implements':
+  '-* implements':
     'prefix': 'implements'
     'body': """implements""" 
-  '-any inseanceof':
+  '-* inseanceof':
     'prefix': 'inseanceof'
     'body': """inseanceof""" 
-  '-any length':
+  '-* length':
     'prefix': 'length'
     'body': 'length'
-  '-any public':
+  '-* public':
     'prefix': 'public'
     'body': """public""" 
-  '-any request':
+  '-* request':
     'prefix': 'request'
     'body': """request""" 
-  '-any resolve':
+  '-* resolve':
     'prefix': 'resolve'
     'body': 'resolve'
-  '-any reject':
+  '-* reject':
     'prefix': 'reject'
     'body': 'reject'
-  '-any result':
+  '-* result':
     'prefix': 'result'
     'body': """result""" 
-  '-any return':
+  '-* return':
     'prefix': 'return'
     'body': 'return '
-  '-any static':
+  '-* static':
     'prefix': 'static'
     'body': """static""" 
-  '-any strict':
+  '-* strict':
     'prefix': 'strict'
     'body': """strict""" 
-  '-any switch':
+  '-* switch':
     'prefix': 'switch1'
     'body': """switch""" 
-  '-any target.':
+  '-* target.':
     'prefix': 'target'
     'body': 'target'
-  '-any this':
+  '-* this':
     'prefix': 'this'
     'body': 'this'
-  '-any throw':
+  '-* throw':
     'prefix': 'throw'
     'body': """throw""" 
-  '-any catch':
+  '-* catch':
     'prefix': 'catch'
     'body': """catch""" 
-  '-any undefined':
+  '-* undefined':
     'prefix': 'undefined'
     'body': 'undefined' 
-  '-any value':
+  '-* value':
     'prefix': 'value'
     'body': 'value' 
   # html------------------------------------------------------------------------
-  '-any <tag>$1</tag>':
+  '-* <tag>$1</tag>':
     'prefix': 'tag couple'
     'body': '<${1:tag}></${1:tag}>'
-  '-any <tag/>':
+  '-* <tag/>':
     'prefix': 'tag single'
     'body': '<${1:tag}/>'
   # http------------------------------------------------------------------------
-  '-any Content-Type':
+  '-* Content-Type':
     'prefix': 'Content-Type'
     'body': """\"Content-Type\"""" 
+
+

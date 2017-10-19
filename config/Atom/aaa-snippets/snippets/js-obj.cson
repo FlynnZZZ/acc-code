@@ -34,6 +34,10 @@
   '-obj .call(this[,arg1,arg2,...])':
     'prefix': 'call'
     'body': """call(${1:this},${2:arg1,arg2,..})"""
+  '-obj Object':
+    'prefix': 'Object-obj' 
+    # 存在bug
+    'body': 'Object'
   '-obj Object.create(protoObj[,configObj])':
     'prefix': 'Object-create'
     'body': 'Object.create($1)'
@@ -49,17 +53,17 @@
   '-obj Object.getPrototypeOf(obj)':
     'prefix': 'Object-getPrototypeOf'
     'body': 'Object.getPrototypeOf($1)'
-  '-obj Object.defineProperty(obj,key,configObj)':
+  '-obj Object.defineProperty(obj,key,{})':
     'prefix': 'Object-defineProperty'
     'body': '''Object.defineProperty(${1:obj},key,{
-        // get : function (){
+        // get: function (){
         // },
-        // set : function (){
+        // set: function (){
         // },
-        value : val,
-        writable : bool,
-        enumerable : bool, 
-        configurable : bool
+        value: val,
+        writable: true,
+        enumerable: true, 
+        configurable: true
       })'''
   '-obj Object.defineProperties(obj,configObj)':
     'prefix': 'Object-defineProperties'
@@ -116,20 +120,20 @@
     'body': 'configurable' 
   # bol ------------------------------------------------
   '-bol Boolean':
-    'prefix': 'Boolean'
+    'prefix': 'Boolean-bol'
     'body': 'Boolean'
   '-bol Boolean($1)':
-    'prefix': 'Boolean1'
+    'prefix': 'Boolean'
     'body': 'Boolean($1)'
   # num ------------------------------------------------
   '-num Infinity':
     'prefix': 'Infinity'
     'body': 'Infinity'
   '-num Number':
-    'prefix': 'Number1 '
+    'prefix': 'Number-num '
     'body': 'Number'
   '-num Number($1)':
-    'prefix': 'Number num'
+    'prefix': 'Number'
     'body': 'Number($1)'
   '-num Number.NaN':
     'prefix': 'Number.NaN'
@@ -157,10 +161,10 @@
     'body': 'toPrecision($1)'
   # str ------------------------------------------------
   '-str String':
-    'prefix': 'String str'
+    'prefix': 'String-str'
     'body': 'String'
   '-str String($1)':
-    'prefix': 'String1'
+    'prefix': 'String'
     'body': 'String($1)'
   '-str String.fromCharCode(num,num...)':
     'prefix': 'String-fromCharCode'
@@ -183,9 +187,9 @@
   '-str .match(str/rgep)':
     'prefix': 'match'
     'body': 'match($1)'
-  '-str .localCompare(str)':
-    'prefix': 'localCompare'
-    'body': 'localCompare($1)'
+  '-str .localeCompare(str)':
+    'prefix': 'localeCompare'
+    'body': 'localeCompare($1)'
   '-str .replace(regexp/str,replacement)':
     'prefix': 'replace'
     'body': 'replace($1,$2)'
@@ -227,7 +231,7 @@
     'body': 'compile($1)'
   # arr ------------------------------------------------
   '-arr Array':
-    'prefix': 'Array arr'
+    'prefix': 'Array-arr'
     'body': 'Array'
   '-arr Array.isArray(arr)':
     'prefix': 'Array-isArray'
@@ -294,21 +298,27 @@
       return $2 
     },${1:initVal})"""
   # fn ------------------------------------------------
+  '-fn Function':
+    'prefix': 'Function-fn'
+    'body': 'Function'
   '-fn arguments':
     'prefix': 'arguments'
     'body': 'arguments'
-  '-fn caller':
+  '-fn callee':
+    'prefix': 'callee'
+    'body': 'callee'
+  '-fn foo.caller':
     'prefix': 'caller'
     'body': 'caller'
   '-fn .prototype':
     'prefix': 'prototype'
     'body': 'prototype'
   '-fn function(){\n}$1':
-    'prefix': 'function1'
+    'prefix': 'function-1'
     'body': 'function(){\n}$1'
   '-fn function $1($2){$3\n}':
-    'prefix': 'function2'
+    'prefix': 'function-2'
     'body': 'function $1($2){$3\n}'
   '-fn (function ($1){$3\n})($2)':
-    'prefix': 'function3'
+    'prefix': 'function-3'
     'body': '(function ($1){$3\n})($2)'

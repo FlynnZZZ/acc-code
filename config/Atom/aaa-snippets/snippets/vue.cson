@@ -1,40 +1,4 @@
 # vue  .vue ------------------------------------------------------------------- 
-'.text.html.vue':
-  # html------------------------------------------------------------------------
-  '-vue <template>$1</template>':
-    'prefix': 'template'
-    'body': '<template>$1</template>' 
-  '-vue <router-view></router-view>':
-    'prefix': 'router-view'
-    'body': '<router-view>$1</router-view>' 
-  '-vue <router-link></router-link>':
-    'prefix': 'router-link'
-    'body': '<router-link>$1</router-view>' 
-  '-vue lang=':
-    'prefix': 'lang'
-    'body': """lang=\"$1\"""" 
-  '-vue <template> ...':
-    'prefix': 'template package'
-    'body': """
-    <template lang="html">
-      $1
-    </template>
-    <script>
-    export default {
-    }
-    </script>
-    <style lang="css" scoped>
-    </style>
-    """
-  # css-------------------------------------------------------------------------
-  '-vue test':
-    'prefix': 'test'
-    'body': """test""" 
-  # js--------------------------------------------------------------------------
-  '-vue test':
-    'prefix': 'test'
-    'body': """test""" 
-
 '.text.html.basic,.text.html.vue': 
   '-vue v-if':
     'prefix': 'vif'
@@ -93,7 +57,6 @@
   '-vue ref="$1"':
     'prefix': 'ref-vue'
     'body': 'ref="$1"'
-
 '.source.js,.text.html.vue':
   '-Vue.extend({});':
     'prefix': 'vueextend'
@@ -230,3 +193,38 @@
     function(error){
       console.log('某接口--失败',error)
     })""" 
+'.text.html.vue':
+  # html------------------------------------------------------------------------
+  '-vue <template>$1</template>':
+    'prefix': 'template'
+    'body': '<template>$1</template>' 
+  '-vue <router-view></router-view>':
+    'prefix': 'router-view'
+    'body': '<router-view>$1</router-view>' 
+  '-vue <router-link></router-link>':
+    'prefix': 'router-link'
+    'body': '<router-link>$1</router-view>' 
+  '-vue lang=':
+    'prefix': 'lang'
+    'body': """lang=\"$1\"""" 
+  '-vue <template> ...':
+    'prefix': 'template package'
+    'body': """
+    <template lang="html">
+      $1
+    </template>
+    <script>
+    export default {
+    }
+    </script>
+    <style lang="css" scoped>
+    </style>
+    """
+  # css-------------------------------------------------------------------------
+  '-vue test':
+    'prefix': 'test'
+    'body': """test""" 
+  # js--------------------------------------------------------------------------
+  '-vue test':
+    'prefix': 'test'
+    'body': """test""" 

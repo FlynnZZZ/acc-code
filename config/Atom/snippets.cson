@@ -14,9 +14,6 @@
   '--module':
     'prefix': 'module'
     'body': 'module'
-  '--exports':
-    'prefix': 'exports'
-    'body': 'exports'
   '--Example:':
     'prefix': 'Example'
     'body': 'Example: '
@@ -51,6 +48,9 @@
   '--name="$1"':
     'prefix': 'name'
     'body': 'name="$1"'
+  '--data-xxx=val':
+    'prefix': 'data-xxx'
+    'body': 'data-$1="$2"'
   # php----------------------------------
   '--php test':
     'prefix': 'test-php'
@@ -136,7 +136,6 @@
   '-wx test':
     'prefix': 'test'
     'body': 'test'
-  #  TODO .wxml-------------------------------------------
 
 '.source.css,.source.css.less':
   # 选择器--------------------------------
@@ -194,10 +193,9 @@
     'prefix': 'test-less'
     'body': 'test'
 '.source.css':
-  '-test test':
+  '--test test':
     'prefix': 'test'
     'body': 'test'
-  #  TODO  .wxss -------------------------------------------------------------
 
 '.source.js':
   '--/* $1 */':
@@ -233,7 +231,7 @@
     };"""
   # 自定义组合 ---------------------
   '--ajax pack':
-    'prefix': 'ajax pack'
+    'prefix': 'ajax-pack'
     'body':  """
       var xhr = new XMLHttpRequest();
       xhr.open('Method', 'Url', true);
@@ -254,10 +252,21 @@
       var data = JSON.stringify(aoo);
       xhr.send(data); 
       """
-  # TODO  ----------------------------------------------------------------------
   '-DM test':
     'prefix': 'test dom'
     'body': 'test'
+  '-win window.screenLeft':
+    'prefix': 'win-screenLeft'
+    'body': 'window.screenLeft'
+  '-win window.screenTop':
+    'prefix': 'win-screenTop'
+    'body': 'window.screenTop'
+  '-win window.screenX':
+    'prefix': 'win-screenX'
+    'body': 'window.screenX'
+  '-win window.screenY':
+    'prefix': 'win-screenY'
+    'body': 'window.screenY'
 
 '.text.html.vue':
   '-vue test':

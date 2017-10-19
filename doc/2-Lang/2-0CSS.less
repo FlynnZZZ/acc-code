@@ -942,13 +942,13 @@ Declaration样式声明
     text-overflow   文本溢出显示方式 
       PS:该属性只在当盒子中的文本在水平方向上超出时有效.
       ellipsis  单行文本溢出显示为省略号
-        单行溢出显示
-          width:xxx [也可以使用 max-width 代替 width]
-          overflow:hidden
-          white-space: nowrap
+        单行溢出显示 
+          width:xxx; [也可以使用 max-width 代替 width]
+          overflow:hidden;
+          white-space: nowrap;
           /*前三个为前提条件*/
           text-overflow:ellipsis
-        多行溢出显示
+        多行溢出显示 
           不支持多行文本溢出显示省略号
           可使用:after 来模拟
           Example:

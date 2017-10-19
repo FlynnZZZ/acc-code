@@ -4,17 +4,108 @@
   '-6 Promise':
     'prefix': 'Promise'
     'body': 'Promise'
+  # num 
+  '-6 Number.MAX_SAFE_INTEGER':
+    'prefix': 'Number-MAX_SAFE_INTEGER'
+    'body': 'Number.MAX_SAFE_INTEGER'
+  '-6 Number.MIN_SAFE_INTEGER':
+    'prefix': 'Number-MIN_SAFE_INTEGER'
+    'body': 'Number.MIN_SAFE_INTEGER'
+  '-6 Number.EPSILON':
+    'prefix': 'Number-EPSILON'
+    'body': 'Number.EPSILON'
+  '-6 Number.isNaN(val)':
+    'prefix': 'Number-isNaN'
+    'body': 'Number.isNaN($1)'
+  '-6 Number.isFinite(val)':
+    'prefix': 'Number-isFinite'
+    'body': 'Number.isFinite($1)'
+  '-6 Number.parseInt(str)':
+    'prefix': 'Number-parseInt'
+    'body': 'Number.parseInt($1)'
+  '-6 Number.parseFloat(str)':
+    'prefix': 'Number-parseFloat'
+    'body': 'Number.parseFloat($1)'
+  '-6 Number.isInteger(num)':
+    'prefix': 'Number-isInteger'
+    'body': 'Number.isInteger($1)'
+  '-6 Number.isSafeInteger(num)':
+    'prefix': 'Number-isSafeInteger'
+    'body': 'Number.isSafeInteger($1)'
+  # str 
+  '-6 String.fromCodePoint(num)':
+    'prefix': 'String-fromCodePoint'
+    'body': 'String.fromCodePoint($1)'
+  '-6 str .repeat(num)':
+    'prefix': 'repeat'
+    'body': 'repeat($1)'
+  '-6 str .includes(str)':
+    'prefix': 'includes'
+    'body': 'includes($1)'
+  '-6 str .startsWith(str[,idx])':
+    'prefix': 'startsWith'
+    'body': 'startsWith($1)'
+  '-6 str .endsWith(str[,idx])':
+    'prefix': 'endsWith'
+    'body': 'endsWith($1)'
+  '-6 str .codePointAt()':
+    'prefix': 'codePointAt'
+    'body': 'codePointAt()'
   # arr 
   '-6 Array.from(arrLike [,mapFoo] [,thisArr])':
     'prefix': 'Array-from'
     'body': 'Array.from(arrLike ${1:,foo})'
+  '-6 Array.of(val1,val2,..)':
+    'prefix': 'Array-of'
+    'body': 'Array.of($1)'
+  '-6 arr .find(foo(member))':
+    'prefix': 'find arr'
+    'body': '''.find(function(val){
+        $1
+      }))'''
+  '-6 arr .findIndex(foo(member))':
+    'prefix': 'findIndex arr'
+    'body': '''.findIndex(function(val){
+        $1
+      }))'''
+  # function 
+  '-6 gen iterator':
+    'prefix': 'iterator'
+    'body': 'iterator'
+  '-6 gen function* name(){}':
+    'prefix': 'function-gen'
+    'body': '''function* $1($2){
+        $3
+      }'''
+  '-6 gen yield':
+    'prefix': 'yield'
+    'body': 'yield'
+  '-6 gen yield*':
+    'prefix': 'yield1'
+    'body': 'yield*'
+  '-6 async function name(){}':
+    'prefix': 'function-async'
+    'body': '''async function $1($2){
+        $3
+      }'''
+  '-6 async function (){}':
+    'prefix': 'function-async1'
+    'body': '''async function ($2){
+        $3
+      }'''
+  '-6 asy await $1':
+    'prefix': 'await'
+    'body': 'await $1'
   # module 
-  '-*-import':
+  '-6 import':
     'prefix': 'import'
     'body': 'import'
   '-6 import xx from "./";':
     'prefix': 'import from'
     'body': 'import ${1:xx} from "${2:./}";'
+  '-6 import($1)':
+    'prefix': 'import1'
+    'body': 'import($1)'
   '-6 export':
     'prefix': 'export default'
     'body': 'export default $1'

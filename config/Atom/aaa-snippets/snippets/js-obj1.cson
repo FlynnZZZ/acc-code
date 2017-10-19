@@ -1,6 +1,9 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
   # window ------------------------------------------------
+  '-win window.frames':
+    'prefix': 'win-frames'
+    'body': 'window.frames'
   '-win parseInt(str[,radix])':
     'prefix': 'parseInt'
     'body': 'parseInt(str,${1:radix})'
@@ -121,6 +124,9 @@
   '-RE .exec(str)':
     'prefix': 'exec'
     'body': 'exec($1)'
+  '-RE RegExp':
+    'prefix': 'RegExp-rgep'
+    'body': 'RegExp'
   '-RE RegExp.input':
     'prefix': 'RegExp.input'
     'body': 'RegExp.input'
@@ -140,6 +146,9 @@
     'prefix': 'RegExpRightContext'
     'body': 'RegExp.rightContext'
   # math ------------------------------------------------
+  '-Math':
+    'prefix': 'Math-math'
+    'body': 'Math'
   '-Math.PI':
     'prefix': 'Math.PI'
     'body': 'Math.PI'
@@ -222,9 +231,9 @@
   '-cso console':
     'prefix': 'console'
     'body': 'console'
-  '-cso console.log("$1--",$2)':
+  '-cso console.log(111111,$1)':
     'prefix': 'console.log'
-    'body': 'console.log(" --$1 ",$2)'
+    'body': 'console.log(111111,$1)'
   '-cso console.log("%c"+$1,"background:#afffee")':
     'prefix': 'log color'
     'body': 'console.log("%c"+$1,"background:#afffee")'

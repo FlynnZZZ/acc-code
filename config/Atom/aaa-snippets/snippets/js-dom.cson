@@ -1,5 +1,12 @@
 # DOM .js --------------------------------------------------------------------- 
 '.source.js':
+  # window -------------------------------------
+  '-DM setTimeout(${1:funName},${2:time})':
+    'prefix': 'setTimeout'
+    'body': 'setTimeout(${1:funName},${2:1000})'
+  '-DM setInterval(${1:funName},${2:time})':
+    'prefix': 'setInterval'
+    'body': 'setInterval(${1:funName},${2:1000})'
   # elem -------------------------------------
   '-DM .cloneNode(bool)':
     'prefix': 'cloneNode'

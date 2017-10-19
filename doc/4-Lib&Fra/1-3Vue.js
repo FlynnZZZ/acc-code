@@ -989,8 +989,7 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
       }
       也可在数组语法中使用对象语法 
       <div v-bind:class="[{ active: isActive },errorClass]"> 
-    :class="str/obj/arr"  'class'类样式 
-      标签之前的class不会被覆盖 
+    :class="str/obj/arr"  'class'类样式[之前的class不会被覆盖]  
       用在组件上 
         在组件上用到class属性时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
         Vue.component('my-component',{

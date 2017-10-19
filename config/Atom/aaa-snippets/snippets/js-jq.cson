@@ -22,7 +22,7 @@
     'prefix': 'closest'
     'body': 'closest($1)'
   '-jq .next(["selector"])':
-    'prefix': 'next'
+    'prefix': 'next-jq'
     'body': 'next($1)'
   '-jq .nextAll(["selector"])':
     'prefix': 'nextAll'
@@ -236,48 +236,56 @@
     'prefix': 'toggleClass'
     'body': 'toggleClass("$1");'
   # AJAX -----------------------------------------
-  '-jq ajaxStart(cfoo);':
-    'prefix': 'ajaxStart'
+  '-jq Jel.ajaxStart(cfoo);':
+    'prefix': 'ajaxStart-jq'
     'body': 'ajaxStart(function(){$1})'
-  '-jq ajaxStop(cfoo);':
-    'prefix': 'ajaxStop'
+  '-jq Jel.ajaxStop(cfoo);':
+    'prefix': 'ajaxStop-jq'
     'body': 'ajaxStop(function(){$1})'
+  '-jq $.ajax({})':
+    'prefix': 'ajax-jq'
+    'body': """$.ajax({ // 某接口
+        url: 'url',
+        data: {
+          key : val,
+        }, 
+        // type: 'GET',
+        // dataType: 'json',
+        // xhrFields: { withCredentials: true  },
+        // crossDomain: true, 
+        // contentType:'application/json',
+        // beforeSend: function(){ }, 
+        // complete: function(xhr,status){ }, 
+        // cache: true,  
+      })
+      .then(function(backData,statusTxt,xhr){
+        console.log('某接口',statusTxt,backData);
+      }
+      ,function(xhr,status,errorTrown){
+        console.warn('某接口 fail:',status);
+      }) """
   '-jq $.getScript(url,cfoo);':
-    'prefix': 'getScript'
+    'prefix': 'getScript-jq'
     'body': """$.getScript("../js.js",function(){
         $1
       });""" 
-  '-jq request()':
-    'prefix': 'requestJQ'
-    'body': 'request(url,function(err,response,data,){$1});'
+  '-jq $.ajaxSetup({})':
+    'prefix': 'ajaxSetup-jq'
+    'body': """$.ajaxSetup({ 
+        type: 'GET',
+        dataType: 'json',
+        xhrFields: { withCredentials: true  },
+        crossDomain: true, 
+        // url: 'url',
+        // data: { key : val, }, 
+        // contentType:'application/json',
+        // cache: true,  
+      }) """
   # 方法 -----------------------------------------
   '-jq each(function(){})':
     'prefix': 'each'
     'body': """each(function(idx,elem){
       $1
       })"""
-  # 自定义封装 
-  '-jq ajax ':
-    'prefix': 'ajax-jq'
-    'body': """$.ajax({ // 某接口
-        type : 'GET',
-        url  : 'url',
-        data : {
-          key : val,
-        }, 
-        dataType : 'json',
-        xhrFields: { withCredentials: true  },
-        crossDomain: true, 
-        // contentType:'application/json',
-        beforeSend : function(){ }, 
-        complete : function(xhr,status){ }, 
-        cache : true , 
-      })
-      .then(function(backData,statusTxt,xhr){
-        console.log('某接口',statusTxt,backData);
-      }
-      ,function(xhr,status,errorTrown){
-        console.warn('某接口 fail: ',status);
-      }) """
     
     

@@ -21,5 +21,5 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;  
   margin: 0;  
 }  
-
+[v-cloak]{font-size: 0 !important;} 
 

@@ -980,15 +980,15 @@ Form表单
       'hidden'   隐藏域 
         value="提交值"
       ◆HTML5新增
+      'email'   邮件地址  
+        要求输入的文本需符合电子邮件地址的格式
+      'url'     URL类型   
+        要求输入的文本需符合URL的模式
+      number  数字字段[带有spinner控件][IOS微信不兼容] 
+        可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
       range   拖动条,带有 slider 控件 
       color   拾色器  
-      email   邮件地址  
-        要求输入的文本需符合电子邮件地址的格式
-      url     URL类型   
-        要求输入的文本需符合URL的模式
       search  搜索文本字段 
-      number  数字字段[带有spinner控件][ios微信不兼容] 
-        可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
       tel     定义用于电话号码的文本字段 
       date    日期
       calendar  日历 
@@ -997,7 +997,7 @@ Form表单
       month           日期字段的月 [带有calendar控件]
       week            日期字段的周 [带有calendar控件]
       time            日期字段的时分秒 [带有time控件]
-    value="" 表单字段值/按钮名称  
+    value="" 表单字段值/显示值/按钮名称  
       提交到服务器的数据值;当为按钮时,按钮显示的内容
     功能属性 
       size="<num>"       显示的字数 
@@ -1057,8 +1057,8 @@ Form表单
         <input type="submit" />
         </form>
         亲自试一试
-      pattern=""  自定义验证规则,值为正则表达式  [HTML5]
-        适用<input>的类型: text, search, url, telephone, email, password 
+      pattern=""  rgep,自定义文本字段验证规则  [HTML5] 
+        模式的开头和末尾不用加^和$符号[假定已经有了],须从头到尾都与模式匹配 
         Example: 
         <input type="text" name="code" pattern="[A-z]{3}" />
         <input type="text" pattern="\d+" name="xx"/>
@@ -1069,23 +1069,17 @@ Form表单
         实例
         <input type="search" name="user_search"  placeholder="Search W3School" />
         亲自试一试
-      required 提交时输入域不能为空 [HTML5] 
-        PS: 需在form中,且点击submit提交时触发
-        适用于 <input> 标签的如下类型: 
-          text, search, url, telephone, email, password, date pickers, 
-          number, checkbox, radio 、 file 
     公用属性 
   <button type="" >      定义按钮 
     在 button 元素内部,可以放置文本或图像.(与 input 创建的按钮的不同之处)
     type 
       可选,IE的默认为 "button",而其他浏览器中(包括 W3C 规范)的默认值是 "submit"
       其他值和input表示按钮的type值相同
-  <textarea name="" >    多行的文本区 
-    PS:文本区中可以容纳无限数量的文本.
-    cols       数字,规定文本区内的可见宽度
-    row        数字,规定文本区内的可见行数 
-      更好的办法是使用css的height和width来控制尺寸.
-      在css中不可设置rows或cols的值.
+  <textarea name="" >    多行文本区,容纳文本不受限制  
+    row=""     num,文本区可见字符行数 
+      更好的办法是使用css的height和width来控制尺寸
+      但CSS中无法设置rows或cols 
+    cols=""    num,文本区可见字符列数 
     name       规定文本区的名称.
     disabled   禁用该文本区
     readonly   规定文本区只读 
@@ -1145,6 +1139,8 @@ Form表单
     readonly 和 disabled 的区别 
       disabled: 元素的值不会被提交,
       readonly: 正常提交;
+    required 提交时输入域不能为空,适用: <input> <textarea> <select>  [HTML5]  
+      PS: 需在form中且点击submit提交时触发
     ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
       PS: 便于创建不同的提交按钮;
       Example:
@@ -1169,6 +1165,14 @@ Form表单
     formmethod=""      重写表单的 method 属性
     formnovalidate=""  重写表单的 novalidate 属性
     formtarget=""      重写表单的 target 属性
+  表单将数据发送给服务器规则: 
+    对表单字段的名称和值进行URL编码使用和号'&'分隔 
+    不发送禁用的表单字段
+    只发送勾选的复选框和单选按钮
+    不发送type 为"reset"和"button"的按钮
+    多选选择框中的每个选中的值单独一个条目
+    在单击提交按钮提交表单的情况下会发送提交按钮,否则不发送,包括type为"image"的input元素 
+    select元素值为选中的option元素的value特性的值,若option元素无value特性则为其元素文本值 
   Remarks: 
     type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?] 
 其他标签 
@@ -1302,7 +1306,7 @@ HTML全局属性
     Example: <div role="navigation"></div>
   contenteditable  元素内容可编辑 
     PS: 在编辑的内容里进行回车会换行
-    true/false/insert 
+    true/false/inherit  
   contextmenu    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
   draggable    规定元素是否可拖动 
   dropzone    规定在拖动被拖动数据时是否进行复制、移动或链接 

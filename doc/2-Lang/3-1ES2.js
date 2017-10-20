@@ -841,7 +841,7 @@ Number 数值类: 处理数值的'包装对象'
     Number.parseInt()                   
   Number.prototype.xx 
     1..constructor === Number  // true 
-    str = num.toFixed(x)  将保留x位小数  [会四舍五入] 
+    str = num.toFixed(x)  四舍五入保留x位小数  
     str = num.toExponential(x)  以科学计数法表示并保留x位小数 
     str = num.toPrecision(x)   以指数或点形式来表示[根据x的长度来决定形式] 
       console.log( 123.111.toPrecision(1)); // 1e+2 
@@ -1191,7 +1191,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
     ◆遍历方法 
       以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
     arr.forEach(foo(val,idx,arr)[,context])  数组遍历 [ES5] 
-      PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过
+      PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过 
         无法中止或跳出forEach循环,除非报错.
       foo  遍历函数 
       val  数组成员 
@@ -1257,7 +1257,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    bol = arr.every(f(val,idx,arr)[,context]) 返回值是否全部为真[ES5]
+    bol = arr.every(f(val,idx,arr)[,context]) 回调返回值是否全部为真[ES5]
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -1274,7 +1274,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    bol = arr.some(f(val,idx,arr)[,context])  返回值是否存在为真[ES5]
+    bol = arr.some(f(val,idx,arr)[,context])  回调返回值是否存在为真[ES5]
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -1289,7 +1289,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    arr1 = arr.map(f(val,idx,arr)[,context]) 返回值组成的数组[ES5] 
+    arr1 = arr.map(f(val,idx,arr)[,context]) 返回回调返回值值组成的数组[ES5] 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -1323,7 +1323,7 @@ Array 数组类: 一种特殊类型的对象,可类比成有序数据的对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    arr1 = arr.filter(foo[,context]) 返回值为true的元素组成的数组[ES5]
+    arr1 = arr.filter(foo[,context]) 返回回调返回值为true的元素组成的数组[ES5]
       foo     回调函数,传入参数: (val,idx,arr) 
         返回true表示保留该元素,通过测试,false则不保留;
       context 可选,执行函数时的用于 this 的值

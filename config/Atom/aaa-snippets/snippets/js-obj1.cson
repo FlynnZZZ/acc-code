@@ -1,268 +1,268 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
   # window ------------------------------------------------
-  '-win window.frames':
-    'prefix': 'win-frames'
+  '-win window.frames 框架集':
+    'prefix': 'frames-win'
     'body': 'window.frames'
-  '-win parseInt(str[,radix])':
-    'prefix': 'parseInt'
+  '-win parseInt(str/num[,radix])  num,返回指定进制的整数值':
+    'prefix': 'parseInt-win'
     'body': 'parseInt(str,${1:radix})'
-  '-win parseFloat(str)':
-    'prefix': 'parseFloat'
+  '-win parseFloat(str/num)  num,返回整数值/浮点数值':
+    'prefix': 'parseFloat-win'
     'body': 'parseFloat($1)'
-  '-win encodeURI(str)':
-    'prefix': 'encodeURI'
+  '-win encodeURI(str)  str,编码为URI':
+    'prefix': 'encodeURI-win'
     'body': 'encodeURI($1)'
-  '-win decodeURI(uri)':
-    'prefix': 'decodeURI'
+  '-win decodeURI(uri)  str,解码URI':
+    'prefix': 'decodeURI-win'
     'body': 'decodeURI($1)'
-  '-win encodeURIComponent(str)':
-    'prefix': 'encodeURIComponent'
+  '-win encodeURIComponent(str)  str,编码为URI[完全编码]':
+    'prefix': 'encodeURIComponent-win'
     'body': 'encodeURIComponent($1)'
-  '-win decodeURIComponent(uri)':
-    'prefix': 'decodeURIComponent'
+  '-win decodeURIComponent(uri)  str,解码URI[完全解码]':
+    'prefix': 'decodeURIComponent-win'
     'body': 'decodeURIComponent($1)'
-  '-win escape(str)':
-    'prefix': 'escape'
+  '-win escape(str)  str,编码字符串':
+    'prefix': 'escape-win'
     'body': 'escape($1)'
-  '-win unescape(str)':
-    'prefix': 'unescape'
+  '-win unescape(str)  str,解码由escape编码的字符串':
+    'prefix': 'unescape-win'
     'body': 'unescape($1)'
-  '-win isFinite(num)':
-    'prefix': 'isFinite'
+  '-win isFinite(num)  bol,数值是否有限':
+    'prefix': 'isFinite-win'
     'body': 'isFinite($1)'
-  '-win isNaN(val)':
-    'prefix': 'isNaN'
+  '-win isNaN(val)  bol,能否转换为NaN':
+    'prefix': 'isNaN-win'
     'body': 'isNaN($1)'
   '-win eval(JSStr)':
-    'prefix': 'eval'
+    'prefix': 'eval-win'
     'body': 'eval($1)'
   # json ------------------------------------------------
-  '-jsn JSON.parse(JSONstr[,foo(key,val)])':
+  '-jsn JSON.parse(JSONstr[,foo(key,val)]) obj,解析':
     'prefix': 'JSON.parse'
     'body': 'JSON.parse($1)'
-  '-jsn JSON.stringify(val[,arr/foo,num/str])':
+  '-jsn JSON.stringify(val[,arr/foo,num/str]) str,序列化':
     'prefix': 'JSON.stringify'
     'body': 'JSON.stringify($1)'
   # date ------------------------------------------------
   '-dt Date()':
     'prefix': 'Date'
     'body': 'Date()'
-  '-dt Date.now()':
-    'prefix': 'Date.now'
+  '-dt Date.now()  num,自世界协调时间至今的毫秒数':
+    'prefix': 'Date-now'
     'body': 'Date.now()'
-  '-dt Date.parse(str/date)':
+  '-dt Date.parse(str/date)  num,日期解析的毫秒数':
     'prefix': 'Date-parse'
     'body': 'Date.parse($1)'
-  '-dt Date.UTC(year,month[,...])':
+  '-dt Date.UTC(year,month[,...]) num,表示日期的毫秒数':
     'prefix': 'Date-UTC'
     'body': 'Date.UTC($1)'
-  '-dt .getDate()':
-    'prefix': 'getDate'
+  '-dt .getDate()  num,日数值,1-31':
+    'prefix': 'getDate-date'
     'body': 'getDate()'
-  '-dt .getDay()':
-    'prefix': 'getDay'
+  '-dt .getDay()  num,星期数值,0-6':
+    'prefix': 'getDay-date'
     'body': 'getDay()'
-  '-dt .getFullYear()':
-    'prefix': 'getFullYear'
+  '-dt .getFullYear()  num,年份数值,1970-275760':
+    'prefix': 'getFullYear-date'
     'body': 'getFullYear()'
-  '-dt .getHours()':
-    'prefix': 'getHours'
+  '-dt .getHours()  num,小时数值,0-23':
+    'prefix': 'getHours-date'
     'body': 'getHours()'
-  '-dt .getMonth()':
-    'prefix': 'getMonth'
+  '-dt .getMonth()  num,月份数值,0-11':
+    'prefix': 'getMonth-date'
     'body': 'getMonth()'
-  '-dt .getMinutes()':
-    'prefix': 'getMinutes'
+  '-dt .getMinutes()  num,分钟数值,0-59':
+    'prefix': 'getMinutes-date'
     'body': 'getMinutes()'
-  '-dt .getMilliseconds()':
-    'prefix': 'getMilliseconds'
+  '-dt .getMilliseconds()  num,毫秒数值,0-999':
+    'prefix': 'getMilliseconds-date'
     'body': 'getMilliseconds()'
-  '-dt .getSeconds()':
-    'prefix': 'getSeconds'
+  '-dt .getSeconds()  num,秒数值,0-59':
+    'prefix': 'getSeconds-date'
     'body': 'getSeconds()'
-  '-dt .getTime()':
-    'prefix': 'getTime'
+  '-dt .getTime()  num,时间的毫秒值':
+    'prefix': 'getTime-date'
     'body': 'getTime()'
-  '-dt .getTimezoneOffset()':
-    'prefix': 'getTimezoneOffset'
+  '-dt .getTimezoneOffset()  num,当前时区和GMT格林威治时间相差的分钟数值':
+    'prefix': 'getTimezoneOffset-date'
     'body': 'getTimezoneOffset()'
   '-dt .toDateString()':
-    'prefix': 'toDateString'
+    'prefix': 'toDateString-date'
     'body': 'toDateString()'
   '-dt .toLocaleString()':
-    'prefix': 'toLocaleString'
+    'prefix': 'toLocaleString-date'
     'body': 'toLocaleString()'
   '-dt .toLocaleDateString()':
-    'prefix': 'toLocaleDateString'
+    'prefix': 'toLocaleDateString-date'
     'body': 'toLocaleDateString()'
   '-dt .toLocaleTimeString()':
-    'prefix': 'toLocaleTimeString'
+    'prefix': 'toLocaleTimeString-date'
     'body': 'toLocaleTimeString()'
   '-dt .toTimeString()':
-    'prefix': 'toTimeString'
+    'prefix': 'toTimeString-date'
     'body': 'toTimeString()'
   '-dt .toUTCString()':
-    'prefix': 'toUTCString'
+    'prefix': 'toUTCString-date'
     'body': 'toUTCString()'
   # RegExp ------------------------------------------------
-  '-RE multiline':
-    'prefix': 'multiline'
-    'body': 'multiline'
-  '-RE lastIndex':
-    'prefix': 'lastIndex'
-    'body': 'lastIndex'
-  '-RE ignoreCase':
-    'prefix': 'ignoreCase'
-    'body': 'ignoreCase'
-  '-RE new RegExp($1)':
-    'prefix': 'newRegExp'
-    'body': 'new RegExp($1)'
-  '-RE .test(str)':
-    'prefix': 'test'
-    'body': 'test($1)'
-  '-RE .exec(str)':
-    'prefix': 'exec'
-    'body': 'exec($1)'
   '-RE RegExp':
     'prefix': 'RegExp-rgep'
     'body': 'RegExp'
-  '-RE RegExp.input':
-    'prefix': 'RegExp.input'
+  '-RE RegExp($1)':
+    'prefix': 'RegExp'
+    'body': 'RegExp($1)'
+  '-RE RegExp.input  str,当前被匹配的字符串':
+    'prefix': 'RegExp-input'
     'body': 'RegExp.input'
-  '-RE RegExp.lastMatch':
-    'prefix': 'RegExpLastMatch'
+  '-RE RegExp.lastMatch  str,最后一个匹配的字符串':
+    'prefix': 'RegExp-lastMatch'
     'body': 'RegExp.lastMatch'
-  '-RE RegExp.lastParen':
-    'prefix': 'RegExpLastParen'
+  '-RE RegExp.lastParen  str,最后一对圆括号内的匹配子串':
+    'prefix': 'RegExp-lastParen'
     'body': 'RegExp.lastParen'
-  '-RE RegExp.leftContext':
-    'prefix': 'RegExpLeftContext'
+  '-RE RegExp.leftContext  str,最后一次匹配前的子串':
+    'prefix': 'RegExp-leftContext'
     'body': 'RegExp.leftContext'
-  '-RE RegExp.multiline':
-    'prefix': 'RegExpMultiline'
+  '-RE RegExp.multiline  bol,指定是否所的表达式都用于多行的布尔值':
+    'prefix': 'RegExp-multiline'
     'body': 'RegExp.multiline'
-  '-RE RegExp.rightContext':
-    'prefix': 'RegExpRightContext'
+  '-RE RegExp.rightContext  str,在上次匹配之后的子串':
+    'prefix': 'RegExp-rightContext'
     'body': 'RegExp.rightContext'
+  '-RE .multiline  bol,是否多行匹配':
+    'prefix': 'multiline-re'
+    'body': 'multiline'
+  '-RE .lastIndex  num,读写下次匹配字符位置的数值表示[在全局匹配时生效],从0开始':
+    'prefix': 'lastIndex-re'
+    'body': 'lastIndex'
+  '-RE .ignoreCase   bol,是否忽略大小写':
+    'prefix': 'ignoreCase-re'
+    'body': 'ignoreCase'
+  '-RE .test(str)  bol,是否存在于字符串中':
+    'prefix': 'test-re'
+    'body': 'test($1)'
+  '-RE .exec(str)  arr,正则匹配到的字符串组成的数组':
+    'prefix': 'exec-re'
+    'body': 'exec($1)'
   # math ------------------------------------------------
   '-Math':
     'prefix': 'Math-math'
     'body': 'Math'
-  '-Math.PI':
-    'prefix': 'Math.PI'
+  '-Math.PI  π的值':
+    'prefix': 'Math-PI'
     'body': 'Math.PI'
-  '-Math.SQRT2':
-    'prefix': 'Math.SQRT2'
+  '-Math.SQRT2  2的平方根':
+    'prefix': 'Math-SQRT2'
     'body': 'Math.SQRT2'
-  '-Math.SQRT1_2':
-    'prefix': 'Math.SQRT1_2'
+  '-Math.SQRT1_2  1/2的平方根':
+    'prefix': 'Math-SQRT1_2'
     'body': 'Math.SQRT1_2'
-  '-Math.E':
-    'prefix': 'Math.E'
+  '-Math.E  自然对数的底数':
+    'prefix': 'Math-E'
     'body': 'Math.E'
-  '-Math.LN10':
-    'prefix': 'Math.LN10'
+  '-Math.LN10  10的自然对数':
+    'prefix': 'Math-LN10'
     'body': 'Math.LN10'
-  '-Math.LN2':
-    'prefix': 'Math.LN2'
+  '-Math.LN2  2的自然对数':
+    'prefix': 'Math-LN2'
     'body': 'Math.LN2'
-  '-Math.LOG2E':
-    'prefix': 'Math.LOG2E'
+  '-Math.LOG2E  以2为底e的对数':
+    'prefix': 'Math-LOG2E'
     'body': 'Math.LOG2E'
-  '-Math.LOG10E':
-    'prefix': 'Math.LOG10E'
+  '-Math.LOG10E  以10为底e的对数':
+    'prefix': 'Math-LOG10E'
     'body': 'Math.LOG10E'
-  '-Math.random()':
-    'prefix': 'Math.random'
+  '-Math.random() 0-1间的随机数':
+    'prefix': 'Math-random'
     'body': 'Math.random()'
-  '-Math.abs(num)':
-    'prefix': 'Math.abs'
+  '-Math.abs(num) 求绝对值':
+    'prefix': 'Math-abs'
     'body': 'Math.abs($1)'
   '-Math.ceil($1) 向上取整':
-    'prefix': 'Math.ceil'
+    'prefix': 'Math-ceil'
     'body': 'Math.ceil($1)'
   '-Math.floor($1) 向下取整':
-    'prefix': 'Math.floor'
+    'prefix': 'Math-floor'
     'body': 'Math.floor($1)'
-  '-Math.round($1)  四舍五入':
-    'prefix': 'Math.round'
+  '-Math.round($1)  四舍五入取整':
+    'prefix': 'Math-round'
     'body': 'Math.round($1)'
-  '-Math.exp(num)':
-    'prefix': 'Math.exp'
+  '-Math.exp(num)  Math.E的num次幂':
+    'prefix': 'Math-exp'
     'body': 'Math.exp($1)'
-  '-Math.log(num)':
-    'prefix': 'Math.log'
+  '-Math.log(num)  num的自然对数':
+    'prefix': 'Math-log'
     'body': 'Math.log($1)'
-  '-Math.pow($1) 幂':
-    'prefix': 'Math.pow'
+  '-Math.pow(num,power) num的power次幂':
+    'prefix': 'Math-pow'
     'body': 'Math.pow($1)'
-  '-Math.sqrt(num)':
-    'prefix': 'Math.sqrt'
+  '-Math.sqrt(num) 平方根':
+    'prefix': 'Math-sqrt'
     'body': 'Math.sqrt($1)'
   '-Math.max(num1,num2,..)':
-    'prefix': 'Math.max'
+    'prefix': 'Math-max'
     'body': 'Math.max($1)'
   '-Math.min(num1,num2,..)':
-    'prefix': 'Math.min'
+    'prefix': 'Math-min'
     'body': 'Math.min($1)'
   '-Math.cos(弧度值)':
-    'prefix': 'Math.cos'
+    'prefix': 'Math-cos'
     'body': 'Math.cos($1)'
   '-Math.sin(弧度值)':
-    'prefix': 'Math.sin'
+    'prefix': 'Math-sin'
     'body': 'Math.sin($1)'
   '-Math.tan(弧度值)':
-    'prefix': 'Math.tan'
+    'prefix': 'Math-tan'
     'body': 'Math.tan($1)'
   '-Math.asin(num)':
-    'prefix': 'Math.asin'
+    'prefix': 'Math-asin'
     'body': 'Math.asin($1)'
   '-Math.acos(num)':
-    'prefix': 'Math.acos'
+    'prefix': 'Math-acos'
     'body': 'Math.acos($1)'
   '-Math.atan(num)':
-    'prefix': 'Math.atan'
+    'prefix': 'Math-atan'
     'body': 'Math.atan($1)'
-  '-Math.atan2(num)':
-    'prefix': 'Math.atan2'
+  '-Math.atan2(num)  num1/num2的反正切值':
+    'prefix': 'Math-atan2'
     'body': 'Math.atan2($1)'
   # console ----------------------------------------------------
-  '-cso console':
+  '-con console':
     'prefix': 'console'
     'body': 'console'
-  '-cso console.log(111111,$1)':
-    'prefix': 'console.log'
+  '-con .log(111111,$1)  输出日志':
+    'prefix': 'log-console'
     'body': 'console.log(111111,$1)'
-  '-cso console.log("%c"+$1,"background:#afffee")':
-    'prefix': 'log color'
-    'body': 'console.log("%c"+$1,"background:#afffee")'
-  '-cso console.clear()':
-    'prefix': 'console.clear'
-    'body': 'console.clear()'
-  '-cso console.dir($1)':
-    'prefix': 'console.dir'
-    'body': 'console.dir($1)'
-  '-cso console.warn($1)':
-    'prefix': 'console.warn'
+  '-con .warn(val1,val2,..)  警告输出':
+    'prefix': 'warn-console'
     'body': 'console.warn($1)'
-  '-cso console.table($1)':
-    'prefix': 'consoleTable'
-    'body': 'console.table($1)'
-  '-cso console.error($1)':
-    'prefix': 'console.error'
+  '-con .log("%c"+$1,"background:#afffee")':
+    'prefix': 'log-console-color'
+    'body': 'console.log("%c"+$1,"background:#afffee")'
+  '-con .clear()  清除输出':
+    'prefix': 'clear-console'
+    'body': 'console.clear()'
+  '-con .error($1)  错误输出':
+    'prefix': 'error-console'
     'body': 'console.error($1)'
-  '-cso console.group($1)':
-    'prefix': 'console.group'
+  '-con .dir($1)':
+    'prefix': 'dir-console'
+    'body': 'console.dir($1)'
+  '-con .table($1)':
+    'prefix': 'table-console'
+    'body': 'console.table($1)'
+  '-con .group($1)':
+    'prefix': 'group-console'
     'body': 'console.group($1)'
-  '-cso console.groupEnd()':
-    'prefix': 'console.groupEnd'
+  '-con .groupEnd()':
+    'prefix': 'groupEnd-console'
     'body': 'console.groupEnd()'
-  '-cso console.time()':
-    'prefix': 'console.time'
+  '-con .time()':
+    'prefix': 'time-console'
     'body': 'console.time()'
-  '-cso console.timeEnd($1)':
-    'prefix': 'console.timeEnd'
+  '-con .timeEnd($1)':
+    'prefix': 'timeEnd-console'
     'body': 'console.timeEnd($1)'
   
   

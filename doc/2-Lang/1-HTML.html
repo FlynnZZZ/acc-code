@@ -603,9 +603,12 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <dd>  描述列表中的项目
   ★HTML5新增 
   <canvas> 画布,专门用来绘制图形 
-    PS:canvas标签提供一块画布,可以访问画布中的像素点 
+    PS: canvas标签提供一块画布,可访问画布中的像素点 
       画布默认为透明的 ,canvas标签只是图形容器,图形需脚本来绘制 
-      主要用途:游戏或高级复杂的图像效果 
+      主要用途: 游戏或高级复杂的图像效果 
+      通过'width'和'height'两个标签属性设定尺寸,默认宽300px、高150px; 
+      若CSS的尺寸与初始画布的比例不一致,会导致画布的内容进行相应的缩放; 
+      即CSS中控制的宽高只影响HTML布局,而不会对画布内部尺寸产生影响 
     <canvas width="600" height="200">您的浏览器不支持画布,请升级</canvas> 添加画布标签
     当不支持画布的浏览器,会显示出标签中的内容,支持的会忽略 
   <video>  视频 
@@ -617,10 +620,10 @@ HTML'Hyper Text Markup Language'超文本标记语言
       auto     让浏览器做决定,一般预加载全部的视频或音频,默认值 
       metadata 只预加载媒体元数据,如视频的总长度与第一帧画面 
       none     页面加载后不载入视频,若指定了'autoplay' 则忽略该特性 
-    poster="XXX.png"  图片展示替换方案,可选  
-      PS:当视频不可播放或者未播放的时候,使用该属性向用户展示一张图片代替视频
     loop     可选,是否循环播放
-    error
+    poster="imgURL"  图片展示替换方案,可选  
+      PS: 当视频不可播放或未播放时,使用该属性向用户展示一张图片代替视频
+    error 
       读取过程中一旦发生错误,返回一个media error对象,这个对象的code返回对应的错误状态,
       默认情况下video和audio的error属性都是null.
       1 取回过程被用户终止
@@ -629,7 +632,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
       4 媒体不可用或者不支持音频/视频
     src      可选,可通过src或source标签来指定
     Example: 
-      <video width="750" height="500" src="XXX.mp4">(您的浏览器不支持video元素)</video>
+      <video width="750" height="500" src="XXX.mp4">该浏览器不支持video标签</video>
       设定好长和宽和src属性就可以了.
       兼容格式如下:
       <video width="750" height="500" controls>

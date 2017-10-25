@@ -8,73 +8,90 @@
     'prefix': 'setInterval'
     'body': 'setInterval(${1:funName},${2:1000})'
   # elem -------------------------------------
-  '-DM .cloneNode(bool)':
+  '-el .cloneNode(bool)':
     'prefix': 'cloneNode'
     'body': 'cloneNode($1)'
-  '-DM .createElement("$1")':
+  '-el .createElement("$1")':
     'prefix': 'createElement'
     'body': 'createElement("$1")'
-  '-DM .parentElement':
+  '-el .parentElement':
     'prefix': 'parentElement'
     'body': 'parentElement'
-  '-DM .innerHTML("$1")':
+  '-el .innerHTML("$1")':
     'prefix': 'innerHTML'
     'body': 'innerHTML("$1")'
-  '-DM .innerText("$1")':
+  '-el .innerText("$1")':
     'prefix': 'innerText'
     'body': 'innerText("$1")'
-  '-DM .insertAdjacentHTML("${1:beforeend}",html)':
+  '-el .insertAdjacentHTML("${1:beforeend}",html)':
     'prefix': 'insertAdjacentHTML'
     'body': 'insertAdjacentHTML("${1:beforeend}",html)'
-  '-DM .querySelector("$1")':
+  '-el .querySelector("$1")':
     'prefix': 'querySelector'
     'body': 'querySelector("$1")'
-  '-DM .querySelectorAll("$1")':
+  '-el .querySelectorAll("$1")':
     'prefix': 'querySelectorAll'
     'body': 'querySelectorAll("$1")'
-  '-DM .getAttribute("$1")':
+  '-el .getAttribute("$1")':
     'prefix': 'getAttribute'
     'body': 'getAttribute("$1")'
-  '-DM .setAttribute("$1","$2")':
+  '-el .setAttribute("$1","$2")':
     'prefix': 'setAttribute'
     'body': 'setAttribute("$1","$2")'
-  # event ------------------------------------
-  '-DM touchstart':
-    'prefix': 'touchstart'
-    'body': 'touchstart'
-  '-DM touchend':
-    'prefix': 'touchend'
-    'body': 'touchend'
-  '-DM touchmove':
-    'prefix': 'touchmove'
-    'body': 'touchmove'
-  '-DM readystatechange':
-    'prefix': 'readystatechange'
-    'body': 'readystatechange'
-  '-DM .addEventListener("",foo)':
-    'prefix': 'addEventListener'
+  '-el .addEventListener("",foo)':
+    'prefix': 'addEventListener-elem'
     'body': """addEventListener("${1:click}",function(e){
-      $2
-    })
-    """
-  '-DM .preventDefault()':
-    'prefix': 'preventDefault'
-    'body': 'preventDefault()'
-  '-DM .stopPropagation()':
-    'prefix': 'stopPropagation'
-    'body': 'stopPropagation()'
-  '-DM pageX':
-    'prefix': 'pageX'
-    'body': 'pageX'
-  '-DM pageY':
-    'prefix': 'pageY'
-    'body': 'pageY'
-  '-DM currentTarget':
-    'prefix': 'currentTarget'
+        $2
+      })"""
+  # event ------------------------------------ 
+  '-e touchstart':
+    'prefix': 'touchstart-event'
+    'body': 'touchstart'
+  '-e touchend':
+    'prefix': 'touchend-event'
+    'body': 'touchend'
+  '-e touchmove':
+    'prefix': 'touchmove-event'
+    'body': 'touchmove'
+  '-e readystatechange':
+    'prefix': 'readystatechange-event'
+    'body': 'readystatechange'
+  '-e .type  事件类型':
+    'prefix': 'type-Event'
+    'body': """type""" 
+  '-e .bubbles  bol,事件是否冒泡':
+    'prefix': 'bubbles-Event'
+    'body': """bubbles""" 
+  '-e .cancelable  bol,是否可取消事件默认行为':
+    'prefix': 'cancelable-Event'
+    'body': """cancelable""" 
+  '-e .trusted  bol,是否可取消事件默认行为':
+    'prefix': 'trusted-Event'
+    'body': """trusted""" 
+  '-e .target  触发事件的目标元素':
+    'prefix': 'target-Event'
+    'body': """target""" 
+  '-e .srcElement  事件目标,同.target':
+    'prefix': 'srcElement-Event'
+    'body': """srcElement""" 
+  '-e .currentTarget  绑定事件的元素[即函数中的this]':
+    'prefix': 'currentTarget-Event'
     'body': """currentTarget""" 
+  '-e .preventDefault()  阻止事件的默认行为':
+    'prefix': 'preventDefault-Event'
+    'body': 'preventDefault()'
+  '-e .stopPropagation()  阻止冒泡':
+    'prefix': 'stopPropagation-Event'
+    'body': 'stopPropagation()'
+  '-e .pageX':
+    'prefix': 'pageX-MouseEvent'
+    'body': 'pageX'
+  '-e .pageY':
+    'prefix': 'pageY-MouseEvent'
+    'body': 'pageY'
   # canvas 
   # FileReader 
-  '-DM .readAsDataURL()':
+  '-cvs .readAsDataURL()':
     'prefix': 'readAsDataURL'
     'body': """readAsDataURL($1)"""
   # 

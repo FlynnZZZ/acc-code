@@ -101,14 +101,16 @@
         
       });""" 
   '-vue new Vue({$1});':
-    'prefix': 'newVue'
+    'prefix': 'new-Vue'
     'body': """new Vue({
         el: '#xxx',
         data: {},
         computed: {},
         watch: {},
         methods: {},
-        created: function (){},
+        created: function (){
+          var that = this;
+        },
         mounted: function (){
           var that = this;
           this.$nextTick(function () { });
@@ -116,59 +118,59 @@
         },
       });""" 
   '-vue new VueRouter();':
-    'prefix': 'newVueRouter'
+    'prefix': 'new-VueRouter'
     'body': """new VueRouter({
         routes : $1,
       });""" 
   '-vue Vue.use($1)':
-    'prefix': 'Vue.use'
+    'prefix': 'Vue-use'
     'body': 'Vue.use($1)'
+  '-vue computed':
+    'prefix': 'computed-vue'
+    'body': """computed""" 
   '-vue watch':
-    'prefix': 'watch'
+    'prefix': 'watch-vue'
     'body': """watch""" 
   '-vue filters':
-    'prefix': 'filters'
+    'prefix': 'filters-vue'
     'body': """filters""" 
-  '-vue beforeCreate':
-    'prefix': 'beforeCreate'
+  '-vue beforeCreate  实例刚创建':
+    'prefix': 'beforeCreate-vue'
     'body': """beforeCreate""" 
-  '-vue created':
-    'prefix': 'created'
+  '-vue created  实例创建完毕':
+    'prefix': 'created-vue'
     'body': """created""" 
-  '-vue beforeMount':
-    'prefix': 'beforeMount'
+  '-vue beforeMount  DOM渲染前':
+    'prefix': 'beforeMount-vue'
     'body': """beforeMount""" 
-  '-vue mounted':
-    'prefix': 'mounted'
+  '-vue mounted  DOM渲染完毕':
+    'prefix': 'mounted-vue'
     'body': """mounted""" 
-  '-vue beforeUpdate':
-    'prefix': 'beforeUpdate'
+  '-vue beforeUpdate  更新前':
+    'prefix': 'beforeUpdate-vue'
     'body': """beforeUpdate""" 
-  '-vue updated':
-    'prefix': 'updated'
+  '-vue updated  数据模型更新':
+    'prefix': 'updated-vue'
     'body': """updated""" 
-  '-vue activated':
-    'prefix': 'activated'
+  '-vue activated  组件被激活时':
+    'prefix': 'activated-vue'
     'body': """activated""" 
-  '-vue deactivated':
-    'prefix': 'deactivated'
+  '-vue deactivated  组件被移除时':
+    'prefix': 'deactivated-vue'
     'body': """deactivated""" 
-  '-vue beforeDestroy':
-    'prefix': 'beforeDestroy'
+  '-vue beforeDestroy  销毁前':
+    'prefix': 'beforeDestroy-vue'
     'body': """beforeDestroy""" 
-  '-vue destroyed':
-    'prefix': 'destroyed'
+  '-vue destroyed  销毁观察、组件及事件':
+    'prefix': 'destroyed-vue'
     'body': """destroyed""" 
-  '-vue .srcElement':
-    'prefix': 'srcElement'
-    'body': """srcElement""" 
-  '-vue .$set':
+  '-vue .$set(obj,key,val)':
     'prefix': 'set-vue'
     'body': """$set(obj,key,val)""" 
-  '-vue .$emit':
+  '-vue .$emit("eventName",data)':
     'prefix': 'emit-vue'
     'body': """$emit('eventName',data)""" 
-  '-vue .$on':
+  '-vue .$on("eventName",function (){})':
     'prefix': 'on-vue'
     'body': """$on('eventName',function (){})""" 
   '-vue .$refs':
@@ -221,10 +223,4 @@
     </style>
     """
   # css-------------------------------------------------------------------------
-  '-vue test':
-    'prefix': 'test'
-    'body': """test""" 
   # js--------------------------------------------------------------------------
-  '-vue test':
-    'prefix': 'test'
-    'body': """test""" 

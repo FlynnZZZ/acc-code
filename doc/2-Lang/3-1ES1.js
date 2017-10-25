@@ -1,6 +1,6 @@
 JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言 
-  I/O[输入/输出]相关的API[如网络、存储和图形等]都靠宿主环境提供[JS本身不提供],
-  嵌入JS的宿主环境有多种,如浏览器、Node环境等;
+  PS: I/O相关的API,如网络、存储和图形等,都靠宿主环境提供,
+    嵌入JS的宿主环境有多种,如浏览器、Node环境等;
   JS内容划分: 
     除ECMAScript外,各种宿主环境提供额外的API,以便JS调用;
     以浏览器为例,它提供的额外API可以分成三大类:
@@ -8,16 +8,17 @@ JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言
     DOM类: 操作网页的各种元素,
     Web类: 实现互联网的各种功能;
     若宿主环境是服务器[如Node],则会提供各种操作系统的API,比如文件操作、网络通信等;
-  多态:同一操作作用于不同的对象,可以有不同的解释,产生不同的执行结果,JS无多态  
 ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能 
-  PS: 任何基于此规范实现的脚本语言都要遵守其约定;是宿主环境中脚本语言的国际Web标准;
-    本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等;
-    'ECMA-262'要求支持Unicode标准[从而支持多语言开发],第五版发布于2009年;
+  PS: 任何基于此规范实现的脚本语言都要遵守其约定; 
+    是宿主环境中脚本语言的国际Web标准; 
+    本身并非脚本语言,实现它的语言有JavaScript、JScript、ActionScript等; 
+    'ECMA-262'要求支持Unicode标准,从而支持多语言开发,第五版发布于2009年;
+    ES6于2015年6月发布 
     浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
 说明&定义 
-  函数和方法的区别 
+  函数和方法的区别: 
     函数基于过程,写法: foo()
-    方法就是对象的函数,基于对象,调用写法: obj.foo()
+    方法基于对象,就是对象的函数,调用写法: obj.foo()
   '实例': 类的具象化;在面向对象中,通过类创建对象的过程称为实例化; 
   '静态'、'公有'、'私有'、'特权'属性和方法 
     PS:静态、公有、私有属性/方法 是相对于类来说的.
@@ -44,20 +45,20 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     Foo.say =function(){};   // 静态方法
     var aoo =new Foo(1,2);
   IE8支持部分ES5功能,IE9+支持ES5 
+  多态: 同一操作作用于不同的对象,可以有不同的解释,产生不同的执行结果,JS无多态  
+  'first-class function'一等函数
 语法规则 
-  PS: 语法源自Java,基于原型继承来自Self;'first-class function'一等函数来自Scheme;
+  PS: 语法源自Java,基于原型继承来自Self;一等函数来自Scheme; 
   标识符: 指变量、函数、属性或函数的参数的名字 
-    区分大小写
-    第一个字符必须是'字母'、'_'或"$";其他字符可以是'字母'、"_"、'$'或'数字'
+    区分大小写的若干个字符 
+    首字符需为'字母'、'_'或"$";其他字符可为'字母'、"_"、'$'或'数字'
     不能使用关键字、保留字作为标识符
-    可以一个或多个字符
     标识符中的字母也可以包含扩展的ASCII或 Unicode字母字符,但不推荐使用
-  关键字和保留字 
-    有些名称有特殊意义,不可作为变量名
+  关键字和保留字: 有特殊意义,不可作为变量名的名称 
     关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
     保留字: 还没有特定的用途,但可能在将来被用作关键字,如'class''int' ... 
   单、双引号需交错、成对使用 
-  多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释
+  多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释 
   ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
   \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
@@ -98,43 +99,128 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       eval和arguments不能被重新赋值
       增加了保留字[如 protected static 和 interface] 
 ------------------------------------------------------------------------------- 
-◆数据类型 
-变量&常量&字面量 
+数据类型 
   PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
     ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
     一个值可由多个变量名称指向,但一个变量只能指向一个值;
-  var valName;   定义变量,相当于给window添加属性,但不可'delete'删除 
-    PS: 变量定义但未赋值,默认为'undefined'
-    不用用var声明的变量: 相当于给window添加属性,但可用'delete'删除  
-      var aoo = 1; 
-      boo = 2;
-      console.log(window.aoo); // 1
-      console.log(window.boo); // 2
-      var bol1 = delete aoo; // 删除失败 
-      var bol2 = delete boo; // 删除成功
-      console.log(bol1,aoo); // fasle 1
-      console.log(bol2);     // true
-      console.log(boo);  // 报错 boo 未定义, 因为boo已被删除而无法访问
-    全局变量与window属性的差异 
-      准确的说应该是显式声明的全局变量无法delete,window属性则可以
-      访问未声明的变量会报错,而未声明window对象的属性则为undefined 
-    重复的var声明: 相当于赋值操作产生覆盖 
-      var box = "fan";
-      var box = "abc";  // 相当于 box = "abc";
-      console.log(box); // abc
-    'var' 与','运算符 [参见:逗号运算符,变量声明]     
-      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
-      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
-      (var aoo);           // Uncaught SyntaxError: Unexpected token var
-      var aoo = 1, window.boo = 2; // Unexpected token .
-  'literal'字面量  直接显示出来的数据值 
-    100            // 数字字面量
-    "abc"          // 字符串字面量
-    false          // 布尔字面量
-    null           // 对象字面量
-    /xxx/ig        // 正则表达式字面量
-    {x:1,y:2}      // 对象字面量表达式
-    [1,2,3,4,5]    // 数组字面量表达式
+'literal'字面量,直接显示出来的数据值 
+  100            // 数字字面量
+  "abc"          // 字符串字面量
+  false          // 布尔字面量
+  null           // 对象字面量
+  /xxx/ig        // 正则表达式字面量
+  {x:1,y:2}      // 对象字面量表达式
+  [1,2,3,4,5]    // 数组字面量表达式
+var,定义变量,相当于给window添加属性,但不可'delete'删除 
+  PS: 变量定义但未赋值,默认为'undefined' 
+  全局变量与window属性的差异:  
+    显式声明的全局变量无法 delete 删除,但window属性则可以
+    访问未声明的变量会报错,而未声明window对象的属性则为undefined 
+  不用用var声明的变量: 相当于给window添加属性,且可用'delete'删除  
+    var aoo = 1; 
+    boo = 2;
+    console.log(window.aoo); // 1
+    console.log(window.boo); // 2
+    var bol1 = delete aoo; // 删除失败 
+    var bol2 = delete boo; // 删除成功
+    console.log(bol1,aoo); // fasle 1
+    console.log(bol2);     // true
+    console.log(boo);  // 报错 boo 未定义, 因为boo已被删除而无法访问
+  重复的var声明: 相当于赋值操作产生覆盖 
+    var box = "fan";
+    var box = "abc";  // 相当于 box = "abc";
+    console.log(box); // abc
+  'var' 与','运算符 [参见:逗号运算符,变量声明]     
+    (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
+    (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
+    (var aoo);           // Uncaught SyntaxError: Unexpected token var
+    var aoo = 1, window.boo = 2; // Unexpected token .
+'lexical scopes'块作用域,在函数内部、代码块,即'{}'内创建[ES6]  
+  PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块
+  if (true) { 
+    var aoo = 1; 
+    let boo = 2;
+  }
+  console.log(aoo); // 1
+  console.log(boo); // 报错,boo is not defined
+'Global Block Bindings'全局块级绑定[ES6] 
+  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
+    这意味着全局对象的属性可能会意外地被重写覆盖
+    var RegExp = "Hello!";
+    console.log(window.RegExp);     // "Hello!"
+  若在全局作用域使用'let'或'const',绑定也发生在全局作用域内,但不会向全局对象添加属性 
+    let RegExp = "Hello!";
+    console.log(RegExp);           // "Hello!"
+    console.log(window.RegExp);    // function RegExp() { [native code] }
+let,定义块级变量   [ES6] 
+  PS: 块级作用域限制,只在定义的块级作用域中存在;
+  无变量提升 
+    var aoo = 1;
+    var boo = 2;
+    function foo(){
+      console.log(aoo); // undefined,变量提升
+      console.log(boo); // 报错
+      var aoo = 3; 
+      let boo = 4; 
+    }
+  重复声明报错 
+    Example:
+      var aoo = 1;
+      var aoo = 2;
+      let aoo = 3; // 报错,Identifier 'aoo' has already been declared
+      let boo = 4;
+      let boo = 5; // 报错,Identifier 'boo' has already been declared
+    函数内重新声明函数的参数报错
+      function foo(aoo){
+        var aoo = 1;
+        let aoo = 2;  //报错,Identifier 'aoo' has already been declared
+        console.log(aoo);
+      }
+  'Let Declarations in Loops'循环中的'let'声明 
+    var arr =[];
+    for(var i = 0; i < 10; i++) { 
+      arr.push(i); 
+    }
+    console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    var fooArr =[];
+    for(var i = 0; i < 10; i++) {
+      fooArr.push(function(){console.log(i); });
+    }
+    console.log(fooArr[0]); // function(){console.log(i); }
+    // i 是以引用的方式存在函数中的
+    console.log(fooArr[0]()); // 10
+    使用let的声明方式
+    var fooArr =[];
+    for(let i = 0; i < 10; i++) {
+      fooArr.push(function(){console.log(i); });
+    }
+    console.log(fooArr[0]); // function(){console.log(i); }
+    // i 是以引用的方式存在函数中的
+    console.log(fooArr[0]()); // 0
+    注:let 声明在上述循环内部中的表现是在规范中特别定义的,
+    实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
+const,定义块级常量 [ES6] 
+  PS: 只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
+  const aoo =2;
+  aoo = 2;     // 报错 ,常量不可改变
+  delete aoo;  // 报错 
+  const boo;   // 报错 ,定义时必须赋值
+  不可传值改变,只能传址改变; 
+    不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
+    传值赋值和传址赋值
+    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用],而非原始数据或者数据的拷贝
+    const arr =[1,2,3];
+    arr = [1];    // 报错
+    arr.push(4); // 允许
+    arr[4] =5;   // 允许
+    arr;         // [1, 2, 3, 4, 5]
+    
+    const person = { name: "Nicholas" };
+    person.name = "Greg"; // 正常
+    person = { name: "Greg" }; // 抛出错误
+    person 变量一开始已经和包含一个属性的对象绑定.
+    修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
+    但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
 基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
   基本类型: 变量的赋值,会创建该值的一个副本  
   undefined 表示未定义的值 
@@ -268,7 +354,55 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         var str2 = '100';
         console.log(str1>str2);   // true , 非想要的结果 
         console.log(str1-str2>0); // false
-引用类型: 引用类型的值是对象,保存在堆内存中
+    `a${1+2}b` 模版字符串,可以跨越多行,使用反引号引起来[ES6] 
+      `${val/expr}` 模板占位符 
+    'Strings and Regular Expressions'字符串与正则表达式[ES6] 
+      PS: ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成'UTF-16' 
+        每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
+        所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
+        曾经,16 位的容量对于任意字符的存放都是足够的,
+        然而 Unicode 引入了扩展字符集(expanded character set)使得限制字符的长度在 16 位以内,
+        所以难以满足 Unicode 意图给世界上所有字符提供全局唯一标识符的雄心壮志.
+        UTF-16 的前 2^16 个代码点由单个 16 位代码单元表示.
+        这个范围被称作基本多语言面(Basic Multilingual Plane,BMP).
+        任何超出该范围的部分都是增补的语言面(supplementary plane),
+        代码点将不能被单一的 16 位代码单元表示.
+        因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
+        这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
+        也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
+      Example: 
+        var text = "𠮷";
+        console.log(text.length);           // 2
+        单个 Unicode 字符 "𠮷" 由代理项对表示,
+        因此,本例中 JavaScript 在操作该字符串时会将它视为两个 16 位字符.
+      str.codePointAt(index); 返回指定下标字符的经过扩展后的UTF-16 编码
+        为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
+        它可以提取给定位置字符串的对应 Unicode 代码点.
+        该方法接收代码单元而非字符的位置并返回一个整型值.
+        Example:
+          var text = "𠮷a";
+          console.log(text.charCodeAt(0));    // 55362
+          console.log(text.charCodeAt(1));    // 57271
+          console.log(text.charCodeAt(2));    // 97
+          console.log(text.codePointAt(0));   // 134071
+          console.log(text.codePointAt(1));   // 57271
+          console.log(text.codePointAt(2));   // 97
+          示例中的首个字符并没有位于 BMP 范围内,因此它包含两个代码单元,
+          意味着 length 属性是 3 而不是 2 .
+          charCodeAt() 方法返回的只是处于位置 0 的第一个代码单元,
+          而 codePointAt() 返回的是完整的代码点,即使它分配给了多个代码单元.
+    
+          对一个字符调用 codePointAt() 方法是判断它所包含代码单元数量的最容易的方法
+          function is32Bit(c) { return c.codePointAt(0) > 0xFFFF; }
+          console.log(is32Bit("𠮷"));    // true
+          console.log(is32Bit("a"));     // false
+      String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
+        PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
+          针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
+        Example:
+          使用给定的代码点来产生相应的单个字符
+          console.log(String.fromCodePoint(134071));  // "𠮷"
+引用类型: 引用类型的值是对象,保存在堆内存中 
   PS: 包含引用类型值的变量是一个指向对象的指针,
     变量赋值,复制的其实是指针,因此两个变量最终都指向同一个对象 
     对象是若干名值的合集,一般没有长度
@@ -425,8 +559,8 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       原型对象的'constructor'属性指向构造函数
     原型对象的获取方法:   
       Foo.prototype   通过定义获取 
-      Object.getPrototypeOf(obj) 通过实例获取 [ES5] 
       obj.constructor.prototype   通过实例间接获取 
+      Object.getPrototypeOf(obj)  通过实例获取 [ES5] 
       obj.__proto__               通过实例获取 [非标][IE11+]  
     原型的'修改'与'重设' 
       修改原型对象会影响到其他实例 
@@ -536,6 +670,193 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     obj instanceof Object;    [详参 关系运算符]
     obj.constructor           查询对象的构造函数 
     'duck type' 鸭子类型,根据其表现来确定其身份 
+'Class'类: 基于原型的实现的封装[ES6] 
+  class className {} 创建类 
+    PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
+      class内部不可定义原型属性和静态属性;
+      类名后面的括号{}里面的内容称之为类体 
+    Example: 
+      ES5 : 
+      var Animal = function(name){
+        this.name = name;
+      }
+      animal.prototype = {
+        speak: function(){
+          console.log("I am"+this.name);
+        }
+      }
+      var animal = new Animal("cat");
+      animal.speak();  //I am cat
+      ES6 : 
+      class Animal {
+        constructor(name){
+          this.name = name;
+        }
+        speak(){
+          console.log("I am "+this.name);
+        }
+      }
+      const animal = new Animal("cat");
+      animal.speak();    //I am cat
+    ◆类体中的方法 
+    constructor(){}   构造方法,声明实例属性/方法 
+      PS: 实例化时,会调用此方法来初始化实例对象;内部的 this 表示实例对象;  
+        若无'constructor'方法,执行时会使用一个空的constructor方法 
+        具有唯一性,一个类体不能含有多个constructor构造方法 
+    foo(){}           声明原型方法 
+      PS: 内部的 this 表示实例对象;  
+      [val] () {}  属性名可使用表达式 
+        var  aoo = 'sayHello';
+        class Klass{
+          [aoo] () {
+            console.log('hello');
+          }
+        }
+        var klass = new Klass();
+        klass.sayHello(); // 1
+    static foo(){}    声明静态方法 
+      class Klass {
+        static foo(){
+          console.log('静态方法');
+        }
+      }
+      Klass.foo();  // 静态方法
+    get foo(){}  取值函数 
+    set foo(){}  存值函数 
+      使用get和set关键字,对某个属性设置存值函数和取值函数 
+      class MyClass {
+        get prop() {
+          return 'getter';
+        }
+        set prop(value) {
+          console.log("setter:" + value);
+        }
+      }
+      var inst = new MyClass();
+      inst.prop = 123; // setter: 123
+      inst.prop ;      // 'getter'
+  class Child extends Parent {} 继承全部静态方法、实例属性/方法,选择性继承原型方法  
+    Example: 
+      class Animal { 
+        constructor(name){ 
+          this.name = name; 
+        }
+        say(){ 
+          return 'This is a animal'; 
+        }
+      }
+      class Dog extends Animal { 
+        constructor(name,color){
+          super(name);  // 调用父类的构造方法,继承实例属性/方法   
+          this.color = color;
+          this.say = super.say();
+        }
+        gerInfo(){
+          return super.say()+',name is: '+this.name+',color is: '+this.color;
+          // 父类中定义了say方法,想在子类中调用父类的say方法,使用super.say()即可实现
+        }
+      }
+      let doge = new Dog("dog","black"); 
+      doge.gerInfo(); // This is a animal,name is: dog,color is: black 
+    使用继承的方式创建的实例对象既是子类的实例,也是父类的实例 
+      class Child extends Parent {}
+      var child = new Child();
+      child instanceof Child ; // true
+      child instanceof Parent; // true
+    super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
+      PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+      若子类未显式定义'constructor',则下面的代码将被默认添加 
+        constructor(...args){
+          super(...args)
+        }
+      super()  子类的'constructor'构造函数中调用 
+        子类的constructor方法必须调用super方法,否则不能新建实例 
+        因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
+        只有调用了super方法后,才可使用this,否则报错;
+      super.xx 父类中的静态方法或原型方法 
+        子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
+        class Foo{
+          static fooSay(){
+            console.log('foo say');
+          }
+        }
+        class Bar extends Foo{
+          sing(){
+            // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
+            console.log('hello');
+          }
+          static barSay(){
+            super.fooSay();
+            console.log('bar say')
+          }
+        }
+        Bar.fooSay() // foo say 
+        Bar.barSay() // foo say   bar say 
+    ES5继承和ES6继承的区别 
+      在ES5中,继承实质上是子类先创建属于自己的this,
+      然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
+      或者 this.__proto__ [即Child.prototype = new Parent()]上;
+      而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
+  klass = new Klass(arg) 创建类实例 
+    PS: 创建实例时会自动执行类体中的'constructor'方法 
+    klass.constructor             创建该实例的类 
+    klass.constructor.prototype   该实例的原型对象 
+    new Klass{}(arg) 立即执行的class 
+      let point = new class{
+        constructor(x = 0, y = 0) {
+          this.x = x;
+          this.y = y;
+        }
+        toString() {
+          return this.x + this.y;
+        }
+      }(1, 2);
+      console.log(point.toString()); // 3
+  ◆相关操作
+  str = Klass.name;  获取类的名字 
+'Decorator'修饰器: 用来修改类的行为[ES7] 
+'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口   
+  PS: JS表'集合'的数据结构有: Array、Object、Map&Set  
+    也可组合使用,定义自己的数据结构,如数组的成员是Map,Map的成员是对象,
+    这样就需要一种统一的接口机制,来处理所有不同的数据结构 
+    部署了Iterator接口数据结构都可完成遍历操作,即依次处理该数据结构的所有成员  
+  遍历过程:  
+    创建一个指针对象,指向当前数据结构的起始位置 
+    第一次调用指针对象的next方法,可以将指针指向数据结构的第一个成员 
+    第二次调用指针对象的next方法,指针就指向数据结构的第二个成员 
+    不断调用指针对象的next方法,直到它指向数据结构的结束位置 
+    每一次调用next方法,都会返回数据结构的当前成员的信息 
+    具体来说,就是返回一个包含value和done两个属性的对象 
+    其中,value属性是当前成员的值,done属性是一个布尔值,表示遍历是否结束。
+  Iterator接口: 部署了Iterator接口的数据结构就称可遍历的  
+    或者说,一个数据结构只要具有 Symbol.iterator 属性,就可以认为是可遍历的
+    数据结构的[Symbol.iterator]属性就是当前数据结构默认的遍历器生成函数 
+    执行这个函数,就会返回一个遍历器。
+    Symbol.iterator 是一个预定义好的、类型为 Symbol 的特殊值 
+    Example:
+      数组的 Symbol.iterator 属性 
+        let arr = ['a', 'b', 'c'];
+        let iter = arr[Symbol.iterator]();
+        var aoo1 = iter.next() // { value: 'a', done: false }
+        var aoo2 = iter.next() // { value: 'b', done: false }
+        var aoo3 = iter.next() // { value: 'c', done: false }
+        var aoo4 = iter.next() // { value: undefined, done: true }
+        console.log(aoo1,aoo2,aoo3,aoo4);
+  会默认调用Iterator接口的场合:  
+    for-of  循环 
+    解构赋值: 对数组和Set结构进行解构赋值时,会默认调用[Symbol.iterator]方法 
+    扩展运算符 
+    yield*后面跟的是一个可遍历的结构,它会调用该结构的遍历器接口 
+    其他场合: 由于数组的遍历会调用遍历器接口,所以接受数组作为参数的场合,会调用遍历器接口 
+      如: 
+      Array.from()
+      Map(), Set(), WeakMap(), WeakSet()（比如new Map([['a',1],['b',2]])）
+      Promise.all()
+      Promise.race()
 'Evaluation Strategy'求值策略: 决定变量之间、函数调用时实参和形参之间值的传递方式 
   读写引用类型值 
     引用存储: 栈内存中存储指针[指向堆内存],堆内存中存储实际值 
@@ -577,9 +898,9 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       goo(obj);
       console.log(obj); // {x: 2},被修改了 
 ------------------------------------------------------------------------------- 
-表达式: 解释器通过计算将表达式转换为一个值 
+'expression'表达式: 解释器通过计算将表达式转换为一个值 
   PS: 最简单的表达式是字面量或变量名; 通过合并简单的表达式来创建复杂的表达式 
-运算符: 用于操作数据值的运算符,也叫操作符 
+'operator'运算符: 用于操作数据值的运算符,也叫操作符 
   PS: ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
     运用于对象时,通常会调用对象的'valueOf'和'toString'方法,以便取得相应的值;
   一元运算符 : 只能操作一个值的运算符 
@@ -595,7 +916,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       -box;               //-1
       typeof box;         //String类型
       typeof -box;        //Number类型
-    str = typeof val  检测值类型 
+    str = typeof val  值类型检测 
       PS: typeof是操作符而非函数,因此后面的括号可有可无;不能有效的区分对象的类型;  
       val   被检测的值,可以是变量或字面量 
         返回值类型为字符串,为如下6种之一: 
@@ -609,7 +930,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         'function'  函数 
       检测未声明的变量不会报错,而返回 undefined   
         typeof aoo;         // "undefined"
-    bol = delete val; 删除数组、对象等中的成员,返回是否删除成功的布尔值  
+    bol = delete val  删除对象中的成员[值],返回是否删除成功的布尔值  
       PS: 若删除不存在的值也会返回true 
       删除数组成员,相当于将该成员值变成'undefined',数组长度不变化 
         var arr = ['a','b','c']
@@ -653,7 +974,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       var aoo = 10 + {};
       console.log(aoo);       // 10[object Object]
       console.log(typeof aoo); // string
-    -  减运算
+    -  减运算 
       var box=100-'';         //100,空自动转换为0
       var box=100-'80';
       //20,'80'转换成了80(因为-不同于+可作为字符串连接符)
@@ -661,13 +982,13 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       var box=100-'abc';      //NaN,abc转换成NaN
       var box = 100 - 对象;   //NaN,若有toString()或alueOf(),返回10-返回值
     *  乘运算
-    /  除运算
+    /  除运算 
       不同于C语言,得到的结果为浮点数.
       var box=100/'';                 //infinity,''转换成了0
       var box=100/null;               //infinity,null转换成了0
       3%-8; //3,其中%后面的符号不起作用
       -3%8; //-3
-    %  取余
+    %  取余 
        var box=100%'';                 //NaN
        var box=100%null;               //NaN
        var box=100%"abc";             //NaN
@@ -697,7 +1018,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       1==true;    //true
       1===true;   //false
       NaN==NaN;   //false
-    bol = obj instanceof Foo; 原型链检测 
+    bol = obj instanceof Foo; 原型链继承检测 
       PS: 检测构造函数的'prototype'属性是否存在于对象的原型链中 
         检测的对象必须和构造函数处于同一个同一个iframe或window中,否则返回false
       obj  用于检测的对象,若为基本类型则直接返回'false' 
@@ -894,6 +1215,87 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
         var 2==3;          // Uncaught SyntaxError: Unexpected number
         1 , 2==3,function(){ console.log(4); }() // 4;
+    'Destructuring'解构赋值: 按照一定模式,从数组和对象中取值,对变量进行赋值[ES6] 
+      PS:
+      Example:
+        var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
+        console.log(a,b,c);// 1 2 3 
+      解构嵌套 
+        var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
+        console.log(c1,c2); // 3.1 3.2
+      不完全解构 
+        赋值不成功,变量的值为undefined
+        var [a,b,c] = [1,2];
+        console.log(a,b,c); // 1 2 undefined 
+      设定默认值 
+        var [a,b,c=3] = [1,2];
+        console.log(a,b,c); // 1 2 3 
+        覆盖默认值 
+        var [a,b,c=3] =[1,2,4];
+        console.log(a,b,c); // 1 2 4
+      对象的解构赋值:不受属性的顺序影响,和属性名对应 
+        PS:默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
+        Example:
+          var {a,b,c} = {"a":1,"b":2,"c":3};
+          console.log(a,b,c); // 1 2 3 
+          改变顺序
+          var { a,b,c } = {"a":1,"c":3,"b":2};
+          console.log(a,b,c); // 1 2 3 
+          
+          var { a } = {"b":2};
+          console.log(a); // undefined
+        给一个变量名与属性名不一样的变量解构赋值 
+          var { b:a } = {"b":2};
+          console.log(a); // 2
+      对象解构赋值嵌套
+        var {a:{b}} = {"a":{"b":1}};
+        console.log(b);//结果:b的值为1
+      对象解构指定默认值 
+        var {a,b=2} = {"a":1}; 
+        console.log(b); // 2
+      字符串的解构赋值 
+        PS:解构赋值的过程中,字符串被转换成了一个类似数组的对象
+        var [a,b,c,d,e] = "12345";
+        console.log(a,b,c,d,e); // 1 2 3 4 5 
+      使用举例  
+        交换变量的值 
+          var x = 1;
+          var y = 2;
+          [x,y] = [y,x]; 
+        定义函数参数 
+          function foo({a,b,c}){ 
+            console.log(a,b,c); 
+          }
+          foo({a:1,b:2,c:3,d:4}); // 1 2 3 
+        函数参数的默认值 
+          function demo({aoo=1}){ 
+            console.log(aoo); 
+          }
+          demo({});
+    'Spread'扩展运算符: 把数组解开成单独的值[ES6] 
+      PS:除了用在rest参数中,还有其他用途
+      结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
+        function sum(a,b) {
+          return  a+b ;
+        }
+        let arr = [2,3];
+        // ...arr  // 报错
+        sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
+        // sum( ...arr ) 的效果相当于sum( 2,3 ) 
+      Example:
+        var aoo =[1,2,3];
+        var boo =[...aoo,4];
+        console.log(boo);  //[1, 2, 3, 4]
+        console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
+        // 相当于
+        console.log.apply(null,aoo); // 1 2 3
+        ...aoo;            //报错
+      函数中将部分参数组成的数组 
+        var foo = function(aoo,...boo){ 
+          console.log(aoo,boo); 
+        }
+        foo(1,2,3,4);  // 1 [2, 3, 4]
+        //  将其余的参数放在数组 boo 中
   三元表达式 
     expr1?expr2:expr3;  三元条件运算符,当expr1为真则执行expr2,否则执行expr3 
       PS: 三元条件运算符相当于if语句的简写形式 
@@ -989,7 +1391,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
       可以在后面加括号,并立即执行函数的代码。
       加括号是最安全的做法,因为！、+、-等运算符会和函数的返回值进行运算,有时造成不必要的麻烦。
     val/expr, function(){ }() 
-语句: 比表达式更大的单位 
+'statement'语句: 比表达式更大的单位 
   PS: 程序由语句组成,最简单的语句由一个表达式和表达式后的分号组成.
     在ECMAScript中,所有的代码都是有语句来构成的.
     语句表明执行过程中的流程、限定与约定
@@ -1063,6 +1465,111 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
         rst += key +':'+ obj[key]
       }
       console.log(rst); // aoo:aboo:11
+  for(var val of iterator){}  遍历[ES6] 
+    PS: 当使用for...of循环遍历某种数据结构时,该循环会自动去寻找Iterator接口
+      原生具备Iterator接口的数据结构: Array Map Set String TypedArray arguments NodeList对象 
+    数组遍历 
+      var arr = ['a','b','c','d','e'];
+      for(let val of arr){
+        console.log(val); // a b c d e
+      }
+    字符串遍历 
+      let word = "abcde";
+      for(let w of word){
+        console.log(w); // a  b  c  d  e
+      }
+    类数组遍历,如'DOM List'
+      <p>1</p>
+      <p>2</p>
+      <p>3</p>
+      //假设有3个p元素
+      let pList = document.querySelectorAll('p');
+      for(let p of pList){
+        console.log(p); // <p>1</p>  <p>2</p>  <p>3</p> 
+      }
+    set和map解构的遍历
+    不能遍历'Object' 
+      PS:要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
+        而数组、Set和Map结构,内置了遍历器Iterator,它们的原型中都有一个 Symbol.iterator 方法 
+        而Object对象并没有实现这个接口,所以无法被for...of遍历 
+      Example: 遍历对象报错
+        let obj = {"name":"前端君"};
+        for(let v of obj){  
+          console.log(v);
+        }
+        // 报错, undefined is not a function
+      验证原型中的'Symbol.iterator'方法 
+        'Symbol.iterator'是一个特殊的Symbol值,其作为prototype对象属性名时,需使用'[]'的形式;
+        prototype[Symbol.iterator] [不能使用点形式获取:prototype.Symbol.iterator]
+        即只要一数据结构拥有[Symbol.iterator]()方法的数据结构,就可被'for-of'遍历,称为可遍历对象 
+        var arr = Array.prototype[Symbol.iterator];  
+        var str = String.prototype[Symbol.iterator]; 
+        var set = Set.prototype[Symbol.iterator];    
+        var map = Map.prototype[Symbol.iterator];    
+        var obj = Object.prototype[Symbol.iterator]; 
+        console.log(arr); // function values() { [native code] }
+        console.log(str); // function [Symbol.iterator]() { [native code] }
+        console.log(set); // function values() { [native code] }
+        console.log(map); // function entries() { [native code] }
+        console.log(obj); // undefined
+      Iterator遍历器的原理
+        当可遍历对象被for...of遍历的时候,[Symbol.iterator]()就会被调用,
+        返回一个iterator对象,其中还有一个很重要的方法:next();
+        先调用可遍历对象的[Symbol.iterator]( )方法,得到一个iterator遍历器对象,
+        然后就在遍历器上不断调用next()方法,直到done的值为true的时候,就表示遍历完成结束了。
+        let arr = ['a','b','c']; //数组:一个可遍历对象
+        let iter = arr[Symbol.iterator](); //调用数组的Symbol.iterator()方法
+        iter.next(); // {value: "a", done: false}
+        // 第1次调用next():返回第1个元素:“a”,以及done的值为fasle,表示循环没有结束,继续遍历。
+        iter.next(); // {value: "b", done: false}
+        // 第2次调用next():返回第2个元素:“b”,以及done的值还是为fasle,循环没有结束,继续遍历。
+        iter.next(); // {value: "c", done: false}
+        // 第3次调用next():返回第3个元素:“c”,以及done的值依然为fasle,循环没有结束,继续遍历。
+        iter.next(); // {value: undefined, done: true}
+        // 第4次调用next():返回的value值为undefined,以及done的值变成了true,表示遍历结束。
+      自定义对象的Iterator遍历器
+        给Object对象加上[Symbol.iterator]()方法
+        let obj = { //定义一个的Object对象
+          0:"我是0",
+          1:"我是1",
+          2:"我是2",
+          length:3,
+          //添加[Symbol.iterator]方法
+          [Symbol.iterator] : function() { 
+            let _this = this;
+            let index = 0;
+            return {
+              next:() => {
+                let value = _this[index];
+                let done = (index >= _this.length);
+                index++;
+                return {value,done}
+              }
+            }
+          }
+        };
+        for(let v of obj){
+          console.log(v); // "我是0" // "我是1" // "我是2"
+        }
+    'break'终止循环 
+      var arr = [1,2,3,4,5];
+      for(let val of arr){
+        if(value == 3){ break; } 
+        console.log(val); // 1 2
+      }
+    'continue'继续[后面的]循环 
+      var arr = [1,2,3,4,5];
+      for(let val of arr){
+        if(val == 3){ continue; } // 跳过当前循环,继续后面的循环
+        console.log(val); // 1 2 4  5
+      }
+    使用数组的扩展keys()获取键名再遍历,index为数字类型
+      var arr = [1,2,3,4,5];
+      var rstArr = arr.keys();
+      console.log(resArr); 
+      for(let index of arr.keys()){
+        console.log(index); // 0 1 2 3 4
+      }
   ◆控制结构
   break 和 continue  只能用于循环语句中,精确控制代码的执行 
     continue [跳出当前循环]继续下一次循环
@@ -1148,7 +1655,292 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     该例子中定义的lab标签可以在将来由break或continue语句引用.
     加标签的语句一般都要与for语句等循环语句配合使用.
 ------------------------------------------------------------------------------- 
-内存 
+'Modules'模块化规范[ES6] 
+  PS: ES6模块默认采用严格模式"use strict"; 
+    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
+    设计思想: 尽量静态化,使编译时能确定模块的依赖关系,及输入和输出的变量 
+  ★输出接口,对外暴露属性方法 
+  export default foo/{}   // 默认输出 
+    PS: 导入时可自定义名称 
+    一个模块只能有一个默认输出[即'export default'命令只能使用一次] 
+      本质上,export default 就是输出一个叫做default的变量或方法 
+      然后输入时,系统允许你为它取任意名字。
+    默认输出和正常输出的比较 
+      // export default时,对应的 import 不需要使用大括号 
+      export default function foo() { } // 输出
+      import goo from 'xx';             // 输入
+      // 正常时,对应的import语句需要使用大括号 
+      export function foo() { }; // 输出
+      import {goo} from 'xx';    // 输入
+    'export default'后不能跟变量声明语句
+      PS: 因为export default命令其实只是输出一个叫做default的变量
+        export default 本质是将该命令后面的值,赋给default变量以后再默认
+      export default var a = 1; // 错误
+  export var aoo = val/function foo() {}  // 单个变量/函数输出 
+    对外部输出三个变量: aoo boo coo
+    export var aoo = 'aa';
+    export var boo = 'bb';
+    export var coo = 1958;
+  export {aoo,..}   // 批量导出,使用大括号指定所要输出的一组变量 
+    var aoo = 'aa',boo = 'bb',coo = 1958;
+    export {aoo, boo, coo};
+  export {curName1 as outName1,..}    // 重命名输出变量 
+  export {aoo,..}  from 'path' // 先后输入输出同一个模块 
+    等价于:
+    import {aoo,..} from 'my_module';
+    export {aoo,..};
+    Example:
+    export { foo as myFoo } from 'my_module' 接口改名 
+    export { default } from 'foo';           默认接口 
+    export * from 'my_module';               整体输出 
+    export { aoo as default } from './someModule'  具名接口改为默认接口 
+    export { default as es6 } from './someModule'  默认接口改为具名接口 
+    下面三种import语句,没有对应的复合写法。
+      import * as someIdentifier from "someModule";
+      import someIdentifier from "someModule";
+      import someIdentifier, { namedIdentifier } from "someModule";
+      为了做到形式的对称,现在有提案,提出补上这三种复合写法。
+      export * as someIdentifier from "someModule";
+      export someIdentifier from "someModule";
+      export someIdentifier, { namedIdentifier } from "someModule";
+  'export'需在模块顶层作用域定义,否则报错  
+    PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
+    function foo() { 
+      export default 'bar'  // SyntaxError
+    } 
+    foo();
+  输出的值是实时动态的 
+    PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
+    export var aoo = 'bar';
+    setTimeout(() => aoo = 'baz', 500);
+    输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
+  Example: 
+    export 1; // 报错 
+    
+    var m = 1;
+    export m; // 报错
+    单变量输出需采用
+    export var m = 1;
+    或
+    var m = 1;
+    export {m};
+    或
+    var n = 1;
+    export {n as m};
+    
+    function f() {}
+    export f;  // 报错
+    改为:
+    export function f() {};
+    或
+    function f() {}
+    export {f};
+  ★导入接口,导入其他模块的属性方法 
+  import 'path'  
+    import语句会执行所加载的模块 
+    import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
+    多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
+    import 'lodash';
+    import 'lodash'; // 未执行
+  import {name1 [,name2,..]} from 'path' // 加载JS文件,并从中输入变量 
+    PS: 变量名必须与导出名称相同,位置顺序则无要求 
+    from   模块文件的位置,可是相对路径、绝对路径或模块名,'.js'可省略 
+    import语句是'Singleton'模式 
+      import { foo } from 'my_module';
+      import { bar } from 'my_module';
+      等同于
+      import { foo, bar } from 'my_module';
+  import { aoo as boo } from 'path' // 重命名导入的变量 
+  import * as aoo from 'path'   模块的整体加载 
+    PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
+    // export.js 
+    export function foo() { }
+    export function goo() { }
+    // import.js 
+    import * as aoo from './export'; 
+    aoo.foo()
+    aoo.goo()
+    模块整体加载所在的对象不允许运行时改变  
+    import * as aoo from './export';
+    // 下面两行都是不允许的
+    aoo.foo = 'hello';
+    aoo.goo = function () {};
+  import命令引入提升,会提升到整个模块的头部,首先执行 
+    foo();
+    import { foo } from 'my_module';
+    import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
+  由于import静态执行,不能使用表达式和变量 
+    这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
+    import { 'f' + 'oo' } from 'my_module'; // 报错
+    
+    let module = 'my_module'; // 报错
+    import { foo } from module;
+    
+    if (x === 1) { 
+      import { foo } from 'module1'; // 报错
+    } 
+  promise = import('path')   动态加载,返回Promise对象  
+    PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
+      固然有利于编译器提高效率,但也导致无法在运行时加载模块,
+      require是运行时加载模块,import命令无法取代require的动态加载功能;
+      因此,有一个提案,建议引入import()函数,完成动态加载 
+      import()函数可以用在任何地方,不仅仅是模块,非模块的脚本也可以使用。
+      import()类似于Node的require方法,区别主要是前者是异步加载,后者是同步加载 
+    适用场景:  
+    按需加载 
+      import()可以在需要的时候,再加载某个模块。
+      button.addEventListener('click', event => {
+        import('./dialogBox.js')
+        .then(dialogBox => { dialogBox.open(); })
+        .catch(error => { /* Error handling */ })
+      });
+    条件加载
+      if (condition) {
+        import('moduleA').then(...);
+      } 
+      else {
+        import('moduleB').then(...);
+      }
+    动态的模块路径
+      import(f()) // 根据函数f的返回结果,加载不同的模块 
+      .then(...);
+    加载模块成功以后,这个模块会作为一个对象,当作then方法的参数 
+        因此,可以使用对象解构赋值的语法,获取输出接口。
+        import('./myModule.js')
+        .then(({export1, export2}) => {
+          // ...·
+        });
+        上面代码中,export1 和 export2 都是 myModule.js 的输出接口,可以解构获得。
+    同时加载多个模块 
+      Promise.all([
+        import('./module1.js'),
+        import('./module2.js'),
+        import('./module3.js'),
+      ])
+      .then(([module1, module2, module3]) => {
+         ···
+      });
+    用在async函数中 
+      async function main() {
+        const myModule = await import('./myModule.js');
+        const {export1, export2} = await import('./myModule.js');
+        const [module1, module2, module3] =
+          await Promise.all([
+            import('./module1.js'),
+            import('./module2.js'),
+            import('./module3.js'),
+          ]);
+      }
+      main();    
+  ★其他
+  模块的继承 
+    Example: 
+      假设有一个circleplus模块,继承了circle模块。
+      // circleplus.js
+      export * from 'circle';
+      export var e = 2.71828182846;
+      export default function(x) { return Math.exp(x); }
+      上面代码中的export *,表示再输出circle模块的所有属性和方法。
+      注意,export *命令会忽略circle模块的default方法。
+      然后,上面代码又输出了自定义的e变量和默认方法。
+      这时,也可以将circle的属性或方法,改名后再输出。
+      // circleplus.js
+      export { area as circleArea } from 'circle';
+      上面代码表示,只输出circle模块的area方法,且将其改名为circleArea。
+      加载上面模块的写法如下。
+      // main.js
+      import * as math from 'circleplus';
+      import exp from 'circleplus';
+      console.log(exp(math.e));
+      上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
+  跨模块常量 
+    const声明的常量只在当前代码块有效。
+    若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
+    可以采用下面的写法。
+    // constants.js 模块
+    export const A = 1;
+    export const B = 3;
+    export const C = 4;
+    // test1.js 模块
+    import * as constants from './constants';
+    console.log(constants.A); // 1
+    console.log(constants.B); // 3
+    // test2.js 模块
+    import {A, B} from './constants';
+    console.log(A); // 1
+    console.log(B); // 3
+    若要使用的常量非常多,可以建一个专门的constants目录,
+    将各种常量写在不同的文件里面,保存在该目录下。
+    // constants/db.js
+    export const db = {
+      url: 'http://my.couchdbserver.local:5984',
+      admin_username: 'admin',
+      admin_password: 'admin password'
+    };
+    // constants/user.js
+    export const users = ['root', 'admin', 'staff', 'ceo', 'chief', 'moderator'];
+    然后,将这些文件输出的常量,合并在index.js里面。
+    // constants/index.js
+    export {db} from './db';
+    export {users} from './users';
+    使用的时候,直接加载index.js就可以了。
+    // script.js
+    import {db, users} from './constants';
+  注意事项 
+    声明的变量,对外都是只读的 
+      //---module-B.js文件------
+      var name = "前端君"
+      export {name}
+      //---module-A.js文件------
+      import {name} from "./module-B.js";
+      name = "修改字符串变量"; //报错:name is read-only
+    若模块B导出的是对象类型的值,可[部分]修改。
+      //---module-B.js文件---
+      var person = {"name":"前端君"}
+      export { person }
+      //---module-A.js文件------
+      import {person} from "./module-B.js";
+      person.name = "修改字符串变量"; //修改成功
+    导入不存在的变量,值为undefined。
+      //---module-B.js文件---
+      var name = "前端君";
+      export {name}
+      //---module-A.js文件------
+      import { height } from "./module-B.js";
+      console.log(height); // undefined,不会抛出异常,只是值为undefined
+JS引擎: 真正执行JS代码的地方 
+  常见的引擎有V8[目前最快JS引擎、Google生产]、JS core;
+  JS引擎主要做了下面几件事情:
+  一套与宿主环境相联系的规则;
+  JS引擎内核[基本语法规范、逻辑、命令和算法];
+  一组内置对象和API;
+  其他约定 
+JS运行过程机理 
+  PS: 从上到下顺序执行代码; 
+    执行阶段分: 预处理阶段 和 执行阶段 
+    代码执行环境分: 全局环境window 和 函数作用域环境 
+  JS代码运行过程分析: 
+    PS: 在父环境不可访问子环境的缓存,反之可以 
+      在子环境运行时,优先访问自己的缓存,若无再向上级寻找 
+      子环境执行完毕,环境会被销毁[闭包则不会],缓存不存在;后续再执行则重新再创建 
+      同类型的,变量重名或函数重名,后面的覆盖前面的 
+    解析器接收到JS代码,此时处于全局环境下 
+    1 进入预处理阶段: 扫描所有代码 
+      PS: 缓存中,当函数名和变量名重名,函数优先级高[覆盖变量名] 
+      将'全局变量'['var'声明的]和'函数'添加到缓存中,变量设为'undefined',函数名指向函数 
+      非var的声明的变量不记录  
+    2 执行阶段 
+      PS: 直接跳过函数,因为已存在缓存中 
+      在全局环境中  
+        遇到变量声明则将其对应到缓存中,若遇到重名则后面覆盖前面  
+      在入子环境中[函数的局部作用域] 
+        进入子环境预处理阶段: 和全局类似 
+          将'变量'、'函数'和'参数'添加到子环境的'缓存'中 
+          当重名时,'函数'优先级最高覆盖其他,'变量'和'参数'互不影响 
+        进入子环境执行阶段: 同全局类似
+          顺序执行 
+          将变量对应到缓存中,重名时,后面覆盖前面['参数'和'变量'同等对待]
+内存相关 
   一般来说,确保占用最少的内存可以让页面获得更好的性能 
   内存泄漏: 无法销毁驻留在内存中的数据 [参见 函数>闭包>]
     IE6时代有bug,闭包会造成内存泄漏,这个现在已经无须考虑了 
@@ -1164,40 +1956,7 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     name:"abc"
   };
   a = null;  //解除对象引用,等待垃圾收集器回收 
-JS引擎: 真正执行JS代码的地方,
-  常见的引擎有V8[目前最快JS引擎、Google生产]、JS core;
-  JS引擎主要做了下面几件事情:
-  一套与宿主环境相联系的规则;
-  JS引擎内核[基本语法规范、逻辑、命令和算法];
-  一组内置对象和API;
-  其他约定.
-JS运行过程机理 
-  可近似做如下理解: 
-  从上到下顺序执行代码; 
-  执行阶段分: 预处理阶段 和 执行阶段 
-  代码执行环境分: 全局环境window 和 函数作用域环境 
-  JS代码运行过程分析: 
-    PS: 在父环境不可访问子环境的缓存,反之可以 
-      在子环境运行时,优先访问自己的缓存,若无再向上级寻找 
-      子环境执行完毕,环境会被销毁[闭包则不会],缓存不存在;后续再执行则重新再创建 
-      同类型的,变量和变量重名或函数和函数重名 ,则后面的覆盖前面的 
-    解析器接收到JS代码,此时处于全局环境下 
-    1 进入预处理阶段: 扫描所有代码 
-      PS: 缓存中,当函数名和变量名重名,函数优先级高[覆盖变量名] 
-      将'var'声明的'全局变量'和'函数'添加到缓存中,变量设为'undefined',函数名指向函数 
-      未使用var的变量不记录  
-    2 执行阶段 
-      PS: 直接跳过函数,因为已存在缓存中 
-      在全局环境中  
-        遇到变量声明则将其对应到缓存中,若遇到重名则后面覆盖前面  
-      在入子环境中[函数的局部作用域] 
-        进入子环境预处理阶段: 和全局类似 
-          将'变量'、'函数'和'参数'添加到子环境的'缓存'中 
-          当重名时,'函数'优先级最高覆盖其他,'变量'和'参数'互不影响 
-        进入子环境执行阶段: 同全局类似
-          顺序执行 
-          将变量对应到缓存中,重名时,后面覆盖前面['参数'和'变量'同等对待]
-'Scope'作用域: 在运行时,代码中变量、函数和对象的可访问性 
+'Scope'作用域,在运行时,代码中变量、函数和对象的可访问性 
   PS: 即作用域决定了代码区块中变量和其他资源的可见性 
   全局作用域: JS运行的最外层  
   局部作用域: 函数体内部  
@@ -1214,7 +1973,7 @@ JS运行过程机理
     }
     goo(); // 报错, aoo未定义
     若支持动态作用域,则为结果为 1
-'Closure'闭包: 当内部函数尝试访问其外部函数的作用域链,会创建一个闭包 
+'Closure'闭包,当内部函数尝试访问其外部函数的作用域链,会创建一个闭包 
   PS: 闭包会携带包含它的函数的作用域,因此会比其他函数占用更多的内存 
     过度使用闭包可能会导致内存占用过多 
     虽然V8等优化后的JS引擎会尝试回收被闭包占用的内存,但还是要慎重使用.
@@ -1228,4 +1987,5 @@ Question&Suggestion
       在函数内定义 arguments.callee.args = arguments
       然后 foo.args 就可以获取的传入的参数了 
 -----------------------------------------------------------------------待整理   
+
 

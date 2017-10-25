@@ -119,6 +119,15 @@ URI&URL&URN 资源标识定位
         上一级,书写为:folderName/fileName;
         ../ 表示上一级目录; ./ 表示当前目录; / 表示相对根路径
   URN'Uniform Resource Name'通过名称来识别资源,和位置无关  
+URL协议 
+  'javascript:'协议,调用URL时会执行对应的JS代码 
+    Example: <a href="Javascript:console.log(111);">11111111</a>
+    浏览器地址栏也支持'javascript:'协议
+    Example: 
+    若JS代码返回的为字符串,则浏览器会在页面中显示出该字符串
+    Chrome: 清空当前页面,显示出返回的字符串
+    <a href="Javascript:'aaa'" target="_blank">11111111</a>  
+    javascript:"aaa"   // 在浏览器地址栏中键入
 'Socket'套接字: 源IP地址及其端口号和目的IP地址及其端口号的组合称为套接字 
   用于标识客户端请求的服务器和服务,是网络通信过程中端点的抽象表示;
   包含进行网络通信必需的五种信息: 通信协议,本地IP和端口,远程IP和端口; 

@@ -68,195 +68,69 @@
     var a =document.querySelector("#a");
     a.onclick =function(){ return false; };
     a.addEventListener("click",function(){return false; }); // 不生效
-EventTarget===Node.prototype.__proto__.constructor  [IE9+][DOM2]  
-  ★EventTarget.prototype.xxx 
-  tagt.addEventListener("eventName",cfoo[,bol])  事件绑定
-    PS: 通过该方式添加的事件,只能使用'removeEventListener'来移除 
-    bol  可选,true 在捕获阶段调用,默认 false 在冒泡阶段调用 
-  tagt.removeEventListener(["eventName",cfoo])   解除addEventListener绑定的事件 
-    PS: 若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除 
-    传入与 addEventListener() 同样的三个参数,执行函数必须是同一引用 
-    Remarks: 
-      在使用 innerHTML 移除有事件绑定的元素时,
-      可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
-      可在移除元素前解除该元素事件的绑定 
-  bol = tagt.dispatchEvent(event)  派发事件,返回是否阻止默认行为  
-    event   被派发的事件对象  
-  EventTarget===Performance.prototype.__proto__.constructor 当前页面加载相关的性能信息 
-    PS: 用于精确度量、控制、增强浏览器的性能表现;精度可达千分之一毫秒  
-      还可获取后台事件的时间进度 
-      浏览器支持: IE10+、Chrome20+、Firefox15+、Opera15+ 
-    Example: 获取脚本运行的准确耗时 
-      传统的做法: 
-      var start = new Date().getTime();
-      // do something here
-      var now = new Date().getTime();
-      var latency = now - start;
-      console.log("任务运行时间:" + latency);
-      不足之处: 
-      精度: 只能精确到毫秒级别 
-      局限: 无法获取一些后台事件的时间进度,如浏览器从服务器加载网页的时间  
-    performance.timing  包含了各种与浏览器性能有关的时间数据   
-      PS: 提供浏览器处理网页各个阶段的耗时。
-      以下属性全部为只读
-      navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳 
-        若没有前一个网页,则等于'fetchStart'属性。
-        performance.timing.navigationStart   // 13260687
-        表示距离浏览器开始处理当前网页,已经过了13260687毫秒
-      unloadEventStart 若前一个网页与当前网页属于同一个域名,则返回前一个网页的unload事件发生时的Unix毫秒时间戳。
-        若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-      unloadEventEnd   若前一个网页与当前网页属于同一个域名,则返回前一个网页unload事件的回调函数结束时的Unix毫秒时间戳。
-        若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
-      redirectStart    返回第一个HTTP跳转开始时的Unix毫秒时间戳。
-        若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-      redirectEnd      返回最后一个HTTP跳转结束时,即跳转回应的最后一个字节接受完成时的Unix毫秒时间戳。
-        若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
-      fetchStart:返回浏览器准备使用HTTP请求读取文档时的Unix毫秒时间戳。该事件在网页查询本地缓存之前发生。
-      domainLookupStart:返回域名查询开始时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-      domainLookupEnd:返回域名查询结束时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
-      connectStart:返回HTTP请求开始向服务器发送时的Unix毫秒时间戳。若使用持久连接(persistent connection),则返回值等同于fetchStart属性的值。
-      connectEnd:返回浏览器与服务器之间的连接建立时的Unix毫秒时间戳。若建立的是持久连接,则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
-      secureConnectionStart:返回浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。若当前网页不要求安全连接,则返回0。
-      requestStart:返回浏览器向服务器发出HTTP请求时(或开始读取本地缓存时)的Unix毫秒时间戳。
-      responseStart:返回浏览器从服务器收到(或从本地缓存读取)第一个字节时的Unix毫秒时间戳。
-      responseEnd:返回浏览器从服务器收到(或从本地缓存读取)最后一个字节时(若在此之前HTTP连接已经关闭,则返回关闭时)的Unix毫秒时间戳。
-      domLoading:返回当前网页DOM结构开始解析时(即Document.readyState属性变为“loading”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-      domInteractive:返回当前网页DOM结构结束解析、开始加载内嵌资源时(即Document.readyState属性变为“interactive”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
-      domContentLoadedEventStart:返回当前网页DOMContentLoaded事件发生时(即DOM结构解析完毕、所有脚本开始运行时)的Unix毫秒时间戳。
-      domContentLoadedEventEnd:返回当前网页所有需要执行的脚本执行完成时的Unix毫秒时间戳。
-      domComplete:返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
-      loadEventStart:返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-      loadEventEnd:返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
-    Example:
-      var t = performance.timing;
-      var pageloadtime = t.loadEventStart - t.navigationStart; 
-      //页面加载的耗时
-      var dns = t.domainLookupEnd - t.domainLookupStart; 
-      // 域名解析的耗时
-      var tcp = t.connectEnd - t.connectStart; 
-      //TCP连接的耗时
-      var ttfb = t.responseStart - t.navigationStart;
-      // 读取页面第一个字节之前的耗时
-    待整理
-      根据上面这些属性,可以计算出网页加载各个阶段的耗时。比如,网页加载整个过程的耗时的计算方法如下:
-      
-      
-      var t = performance.timing; 
-      var pageLoadTime = t.loadEventEnd - t.navigationStart;
-      
-      performance.now()
-      performance.now方法返回当前网页自从performance.timing.navigationStart到当前时间之间的微秒数(毫秒的千分之一)。也就是说,它的精度可以达到100万分之一秒。
-      
-      performance.now() 
-      // 23493457.476999998
-      
-      Date.now() - (performance.timing.navigationStart + performance.now())
-      // -0.64306640625
-      上面代码表示,performance.timing.navigationStart加上performance.now(),近似等于Date.now(),也就是说,Date.now()可以替代performance.now()。但是,前者返回的是毫秒,后者返回的是微秒,所以后者的精度比前者高1000倍。
-      
-      通过两次调用performance.now方法,可以得到间隔的准确时间,用来衡量某种操作的耗时。
-      
-      var start = performance.now();
-      doTasks();
-      var end = performance.now();
-      
-      console.log('耗时:' + (end - start) + '微秒。');
-      performance.mark()
-      mark方法用于为相应的视点做标记。
-      
-      window.performance.mark('mark_fully_loaded');
-      clearMarks方法用于清除标记,若不加参数,就表示清除所有标记。
-      
-      window.peformance.clearMarks('mark_fully_loaded');
-      
-      window.performance.clearMarks();
-      performance.getEntries()
-      浏览器获取网页时,会对网页中每一个对象(脚本文件、样式表、图片文件等等)发出一个HTTP请求。performance.getEntries方法以数组形式,返回这些请求的时间统计信息,有多少个请求,返回数组就会有多少个成员。
-      
-      由于该方法与浏览器处理网页的过程相关,所以只能在浏览器中使用。
-      
-      
-      window.performance.getEntries()[0]
-      
-      // PerformanceResourceTiming { 
-      //   responseEnd: 4121.6200000017125, 
-      //   responseStart: 4120.0690000005125, 
-      //   requestStart: 3315.355000002455, 
-      //   ...
-      // }
-      
-      上面代码返回第一个HTTP请求(即网页的HTML源码)的时间统计信息。该信息以一个高精度时间戳的对象形式返回,每个属性的单位是微秒(microsecond),即百万分之一秒。
-      
-      performance.navigation对象
-      除了时间信息,performance还可以提供一些用户行为信息,主要都存放在performance.navigation对象上面。
-      
-      它有两个属性:
-      
-      (1)performance.navigation.type
-      
-      该属性返回一个整数值,表示网页的加载来源,可能有以下4种情况:
-      
-      0:网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载,相当于常数performance.navigation.TYPE_NAVIGATENEXT。
-      
-      1:网页通过“重新加载”按钮或者location.reload()方法加载,相当于常数performance.navigation.TYPE_RELOAD。
-      
-      2:网页通过“前进”或“后退”按钮加载,相当于常数performance.navigation.TYPE_BACK_FORWARD。
-      
-      255:任何其他来源的加载,相当于常数performance.navigation.TYPE_UNDEFINED。
-      
-      (2)performance.navigation.redirectCount
-      
-      该属性表示当前网页经过了多少次重定向跳转。  
-Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表示该事件对象本身 
+EventTarget,事件目标  [IE9+][DOM2]  
+  Extend: Object 
+    console.log(EventTarget.prototype.__proto__.constructor===Object); // true 
+  Proto: 
+    .addEventListener("eventName",cfoo[,bol])  事件绑定
+      PS: 通过该方式添加的事件,只能使用'removeEventListener'来移除 
+      bol  可选,true 在捕获阶段调用,默认 false 在冒泡阶段调用 
+    .removeEventListener(["eventName",cfoo])   解除addEventListener绑定的事件 
+      PS: 若要要移除事件,需使用外部函数,若为匿名函数,则该事件无法移除 
+      传入与 addEventListener() 同样的三个参数,执行函数必须是同一引用 
+      Remarks: 
+        在使用 innerHTML 移除有事件绑定的元素时,
+        可能导致元素被移除后事件仍保留在内存中,大量的类似操作导致内存占用过多,
+        可在移除元素前解除该元素事件的绑定 
+    .dispatchEvent(event)  bol,派发事件,返回是否阻止默认行为  
+      event   被派发的事件对象  
+Event,事件对象基础类,浏览器默认给事件响应函数传入一参数,表示该事件对象本身 
   PS: 事件对象event包含着所有与事件有关的信息,作为参数传到执行函数中 
     只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁] 
     浏览器中可能发生的事件有很多类型,不同的事件类型具有不同的信息 
-  IE中的事件对象 
-    DOM1级中,event作为window对象的属性存在[IE8-] 
-      Example: :
-      var btn = document.getElementById("myBtn");
-      btn.onclick = function(){
-        var e = window.event;
-        console.log(e.type); // click
-      }
-    DOM2级中,attachEvent将event作为事件函数的参数,也可使用 window.event 访问 
-      属性/方法的获取也同DOM的event一样
-  var event = new Event('eName')  创建自定义事件[IE不支持]  
-  var event = document.createEvent(eTypeStr)  创建事件对象  
-    PS: 该方式已过时,请使用构造函数替代,
-      早期的创建事件的方法使用了受Java启发的API
-    Example: 
-      console.log(document.createEvent('MouseEvent').constructor===MouseEvent); // true 
-    var event = document.createEvent('Event');  创建事件
-    event.initEvent('build',true,true);  定义事件 
-      事件名为'build'
-    document.addEventListener('build', function (e) {  监听事件 
-      // e.target matches document from above
-    });
-    document.dispatchEvent(event); 触发事件
-    自定义事件[DOM3] 
-    var evt = document.createEvent("CustomEvent");   创建事件 
-    evt.initEvent('customEvent',true,true);          定义事件类型 
-    evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
-      str  触发的事件类型 type
-      bol 表示事件是否应该冒泡
-      bol 表示事件是否可以取消
-      obj  任意值,保存在event对象的detail属性中.
-    elem.addEventListener('customEvent',cfoo,false); 监听事件 
-    elem.dispatchEvent(evt);     触发事件
-  document.createEventObject()  IE的创建方式 
-  Event.prototype.xxx 
+  Extend：Object 
+    console.log(Event.prototype.__proto__.constructor===Object); // true  
+  Instance: 
+    var event = new Event('eName')  创建自定义事件[IE不支持]  
+    var event = document.createEvent(eTypeStr)  创建事件对象  
+      PS: 该方式已过时,请使用构造函数替代,
+        早期的创建事件的方法使用了受Java启发的API
+      Example: 
+        console.log(document.createEvent('MouseEvent').constructor===MouseEvent); // true 
+      var event = document.createEvent('Event');  创建事件
+      event.initEvent('build',true,true);  定义事件 
+        事件名为'build'
+      document.addEventListener('build', function (e) {  监听事件 
+        // e.target matches document from above
+      });
+      document.dispatchEvent(event); 触发事件
+      自定义事件[DOM3] 
+      var evt = document.createEvent("CustomEvent");   创建事件 
+      evt.initEvent('customEvent',true,true);          定义事件类型 
+      evt.initCustomEvent(str,boo,boo,obj);            初始化事件 
+        str  触发的事件类型 type
+        bol 表示事件是否应该冒泡
+        bol 表示事件是否可以取消
+        obj  任意值,保存在event对象的detail属性中.
+      elem.addEventListener('customEvent',cfoo,false); 监听事件 
+      elem.dispatchEvent(evt);     触发事件
+    document.createEventObject()  IE的创建方式 
+  Proto: 
     常量 
-      0===e.NONE 
-      1===e.CAPTURING_PHASE  
-      2===e.AT_TARGET  
-      3===e.BUBBLING_PHASE  
-    str = e.type         事件类型
-    elem = e.target       触发事件的目标元素  
+      .NONE              0 
+      .CAPTURING_PHASE   1  
+      .AT_TARGET         2  
+      .BUBBLING_PHASE    3  
+    .type         str,事件类型
+    .bubbles      bol,事件是否冒泡 
+    .cancelable   bol,是否可取消事件默认行为 
+    .trusted      bol,事件是否为浏览器生成 [DOM3] 
+    .target          elem,触发事件的目标元素  
       目标元素在文档中是事件冒泡的前提,即删除目标元素也会阻止事件冒泡 
-    elem = e.currentTarget   绑定事件的元素[即函数中的this] 
+    .srcElement      elem,事件目标,同 .target 
+    .currentTarget   elem,绑定事件的元素[即函数中的this] 
       若直接将事件绑定在目标元素上,则this currentTarget target 相同
-    num = e.eventPhase  调用事件处理程序的阶段 
+    .eventPhase   num,调用事件处理程序的阶段 
       1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
       Example: :
       var btn =document.getElementById("myBtn");
@@ -268,18 +142,14 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
         console.log(e.eventPhase);  // 3
       }
       当eventphase等于2是,this target currentTarget 是相等的
-    bol = e.bubbles      事件是否冒泡 
-    bol = e.cancelable   是否可取消事件默认行为 
-    bol = e.defaultPrevented  是否已调用了preventDefault()来阻止默认事件 [DOM3]
-    bol = e.trusted   事件是否为浏览器生成 [DOM3] 
-    e.composed 
-    e.timeStamp 
-    e.path 
-    elem = e.srcElement 事件目标,同 e.target 
-    bol = e.cancelBubble 读写,取消事件冒泡,默认 false 
-    bol = e.returnValue  读写,允许事件默认行为,默认 true  
-    e.stopPropagation()  取消事件的进一步捕获或冒泡 
-      PS:前提bubbles为true,用于阻止事件的传递.
+    .defaultPrevented  bol,是否已调用了preventDefault()来阻止默认事件 [DOM3]
+    .composed   
+    .timeStamp 
+    .path 
+    .cancelBubble bol,读写,取消事件冒泡,默认 false 
+    .returnValue  bol,读写,允许事件默认行为,默认 true  
+    .stopPropagation()  取消事件的进一步捕获或冒泡 
+      PS: 前提bubbles为true,用于阻止事件的传递
       Example: :
       var btn =document.getElementById("myBtn") 
       btn.onclick =function(e){
@@ -289,446 +159,673 @@ Event 事件对象类: 浏览器默认给事件响应函数传入一参数,表�
       document.body.onclick =function(){
         alert("2") 
       }
-    e.stopImmediatePropagation()  取消事件传递,并阻止处理程序调用 [DOM3]
-    e.preventDefault()   阻止事件的默认行为
+    .stopImmediatePropagation()  取消事件传递,并阻止处理程序调用 [DOM3]
+    .preventDefault()   阻止事件的默认行为 
       若cancelable是true则可以使用该方法
-    e.composedPath()  
-    e.initEvent()  
-  ★事件枚举: 
-  DOMContentLoaded 形成完整DOM树后触发,不支持DOM0绑定 [HTML5][IE9+] 
-    在window或document上触发 
-    无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
-  load    加载完后触发 
-    window 上触发: 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源  
-    window.frames 上触发: 所有框架加载完毕 
-    <img>上触发: 图像加载完毕 
-    <object>上触发:  嵌入内容加载完毕 
-    <script> 
-    ..
-  unload  卸载时触发 
-    PS: 从一个页面切换到另一个页面就会发生unload事件 
-    当页面完全卸载后在 window 上触发
-    所有框架都卸载后在框架集 window.frames 上触发,
-    嵌入的内容卸载完毕后在 <object> 元素上触发
-  readystatechange  加载状态,在document上触发 [HTML5] 
-  resize  当窗口或框架的大小变化时在window或框架上触发 
-    Firefox只会在用户停止调整窗口大小时才触发事件
-    IE Safari Chrome Opera 会在浏览器窗口变化过程中持续触发 
-    浏览器窗口在最小化或最大化时,也会触发resize事件
-  scroll  移动滚动条时在包含该滚动条的元素上持续触发 
-  select      当用户选中文本框中的字符时触发 
-    支持的标签: <input type="text">, <textarea> ... 
-  selectstart 目标对象被选中时触发,即选中动作刚开始但未被选中时  
-    PS: 该事件常使用于使目标对象'禁止变蓝',
-      比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
-      而当我们要避免这种情况时就可以使用该事件
-    Example: 
-    <div onselectstart="return false">该文字不可被选中</div>
-  change   当文本框[input或textarea]内容改变且失去焦点后触发
-  online  网络从离线变成在线时在window上触发,不冒泡  [HTML5] 
-  offline 网络从在线变成离线时触发 [HTML5] 
-  error  发生错误时触发,不冒泡  
-    PS: 支持该事件的HTML标签: <img>, <object>, <style>
-      支持该事件的JS对象: window, image
-    当发生JS错误时在 window 上触发 
-    无法加载图像时在 <img> 上触发 
-    无法加载嵌入内容在 <object> 上触发 
-    当一个或多个框架无法加载时在框架集 window.frames 上触发 
-  待整理事件: 
-    abort   在用户停止下载过程时,若嵌入的内容没有加载则在<object>上触发 
-    transitionEnd  CSS的过渡效果transition结束后触发 
-     事件对象的属性 
-       propertyName:发生transition效果的CSS属性名.
-       elapsedTime: transition效果持续的秒数,不含transition-delay的时间.
-       pseudoElement:若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
-         若不发生在伪元素上,则返回一个空字符串.
-     Example:
-     elem.addEventListener('transitionend',function(){},false);
-     实际使用transitionend事件时,可能需要添加浏览器前缀.
-     el.addEventListener('webkitTransitionEnd',function() {});
-    animationstart 动画开始时触发
-    animationend   动画结束时触发
-    animationiteration 开始新一轮动画循环时触发
-     若animation-iteration-count属性等于1,该事件不触发,
-     即只播放一轮的CSS动画,不会触发animationiteration事件.
-     这三个事件的事件对象
-       都有animationName属性(返回产生过渡效果的CSS属性名)
-       elapsedTime属性(动画已经运行的秒数)
-       对于animationstart事件,elapsedTime属性等于0,除非animation-delay属性等于负值.
-    propertychange  HTML元素属性发生改变触发 [IE专有] 
-     不管js操作还是键盘鼠标手动操作,都可捕获到 
-   移动端事件 
-    touchstart
-    touchend
-    touchmove
-  已废弃事件: 
-    DOMActivate  元素已被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
-  事件总结: 
-    页面的加载与卸载 
-      页面加载: 'DOMContentLoaded'-'load' 
-      页面刷新: 'beforeunload'-'unload'-'load' 
-      页面关闭: 'beforeunload'-'unload' 
-Event===PageTransitionEvent.prototype.__proto__.constructor 
-  ★PageTransitionEvent.prototype.xxx 
-  bol = e.persisted   
-  ★事件枚举: 
-  pageshow  网页重载时触发 
-   PS: 重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
-     虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
-   bol = e.persisted  页面是否来自bfcache 
-   Example: 
-     var EventUtil = {
-       addHandler: function (element, type, handler) {
-         if (element.addEventListener) {
-           element.addEventListener(type, handler, false);
-         } 
-         else if (element.attachEvent) {
-           element.attachEvent("on" + type, handler);
-         } 
-         else {
-           element["on" + type] = handler;
+    .composedPath()  
+    .initEvent()  
+  Expand: 
+    IE中的事件对象 
+      DOM1级中,event作为window对象的属性存在[IE8-] 
+        Example: :
+        var btn = document.getElementById("myBtn");
+        btn.onclick = function(){
+          var e = window.event;
+          console.log(e.type); // click
+        }
+      DOM2级中,attachEvent将event作为事件函数的参数,也可使用 window.event 访问 
+        属性/方法的获取也同DOM的event一样
+  Accu: 
+    DOMContentLoaded 形成完整DOM树后触发,不支持DOM0绑定 [HTML5][IE9+] 
+      在window或document上触发 
+      无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
+    load    加载完后触发 
+      window 上触发: 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源  
+      window.frames 上触发: 所有框架加载完毕 
+      <img>上触发: 图像加载完毕 
+      <object>上触发:  嵌入内容加载完毕 
+      <script> 
+      ..
+    unload  卸载时触发 
+      PS: 从一个页面切换到另一个页面就会发生unload事件 
+      当页面完全卸载后在 window 上触发
+      所有框架都卸载后在框架集 window.frames 上触发,
+      嵌入的内容卸载完毕后在 <object> 元素上触发
+    readystatechange  加载状态,在document上触发 [HTML5] 
+    resize  当窗口或框架的大小变化时在window或框架上触发 
+      Firefox只会在用户停止调整窗口大小时才触发事件
+      IE Safari Chrome Opera 会在浏览器窗口变化过程中持续触发 
+      浏览器窗口在最小化或最大化时,也会触发resize事件
+    scroll  移动滚动条时在包含该滚动条的元素上持续触发 
+    select      当用户选中文本框中的字符时触发 
+      支持的标签: <input type="text">, <textarea> ... 
+    selectstart 目标对象被选中时触发,即选中动作刚开始但未被选中时  
+      PS: 该事件常使用于使目标对象'禁止变蓝',
+        比如在很多地方当用户双击时,一些元素会变成蓝色(选中状态)
+        而当我们要避免这种情况时就可以使用该事件
+      Example: 
+      <div onselectstart="return false">该文字不可被选中</div>
+    change   当文本框[input或textarea]内容改变且失去焦点后触发
+    online  网络从离线变成在线时在window上触发,不冒泡  [HTML5] 
+    offline 网络从在线变成离线时触发 [HTML5] 
+    error  发生错误时触发,不冒泡  
+      PS: 支持该事件的HTML标签: <img>, <object>, <style>
+        支持该事件的JS对象: window, image
+      当发生JS错误时在 window 上触发 
+      无法加载图像时在 <img> 上触发 
+      无法加载嵌入内容在 <object> 上触发 
+      当一个或多个框架无法加载时在框架集 window.frames 上触发 
+    canplay         当视频缓冲完毕可播放时触发,不冒泡 
+    canplaythrough  媒体缓冲完毕且播放不会停顿时触发  
+    ended           媒体播放完毕时触发,不冒泡 
+    play            媒体开始播放时触发,不冒泡 
+    playing         当媒体播放时触发,不冒泡   
+    pause           当媒体暂停时触发,不冒泡   
+    durationchange  当视频的时长已更改时 
+    emptied         当目前的播放列表为空时 
+    loadstart       下载已开始  
+    loadeddata      媒体的第一帧已加载完成 
+    timeupdate      媒体播放时持续触发,频率每秒一次  
+      具体触发情况: 
+      播放音频/视频(audio/video)时
+      移动音频/视频(audio/video)播放位置时
+    volumechange    音量改变时触发 
+    progress        正在下载 
+    ratechange      播放媒体的速度改变
+    seeking         正移动到新位置 
+    seeked          搜索结束 
+    waiting         播放暂停，等待下载更多数据
+    vstalled        不支持DOM0绑定
+    suspend         
+    事件总结: 
+      页面的加载与卸载 
+        页面加载: 'DOMContentLoaded'-'load' 
+        页面刷新: 'beforeunload'-'unload'-'load' 
+        页面关闭: 'beforeunload'-'unload' 
+    待整理事件: 
+      abort    停止下载时,触发
+        若嵌入的内容没有加载则在<object>上触发 
+        放弃视频加载时,在<video>上触发  
+      transitionEnd  CSS的过渡效果transition结束后触发 
+       事件对象的属性 
+         propertyName:发生transition效果的CSS属性名.
+         elapsedTime: transition效果持续的秒数,不含transition-delay的时间.
+         pseudoElement:若transition效果发生在伪元素,会返回该伪元素的名称,以“::”开头.
+           若不发生在伪元素上,则返回一个空字符串.
+       Example:
+       elem.addEventListener('transitionend',function(){},false);
+       实际使用transitionend事件时,可能需要添加浏览器前缀.
+       el.addEventListener('webkitTransitionEnd',function() {});
+      animationstart 动画开始时触发
+      animationend   动画结束时触发
+      animationiteration 开始新一轮动画循环时触发
+       若animation-iteration-count属性等于1,该事件不触发,
+       即只播放一轮的CSS动画,不会触发animationiteration事件.
+       这三个事件的事件对象
+         都有animationName属性(返回产生过渡效果的CSS属性名)
+         elapsedTime属性(动画已经运行的秒数)
+         对于animationstart事件,elapsedTime属性等于0,除非animation-delay属性等于负值.
+      propertychange  HTML元素属性发生改变触发 [IE专有] 
+       不管js操作还是键盘鼠标手动操作,都可捕获到 
+     移动端事件 
+      touchstart
+      touchend
+      touchmove
+    已废弃事件: 
+      DOMActivate  元素已被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
+PageTransitionEvent, 
+  Extend: Event 
+    console.log(PageTransitionEvent.prototype.__proto__.constructor===Event); // true 
+  Proto: 
+    .persisted   bol, 
+  Accu: 
+    pageshow  网页重载时触发 
+     PS: 重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
+       虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
+     bol = e.persisted  页面是否来自bfcache 
+     Example: 
+       var EventUtil = {
+         addHandler: function (element, type, handler) {
+           if (element.addEventListener) {
+             element.addEventListener(type, handler, false);
+           } 
+           else if (element.attachEvent) {
+             element.attachEvent("on" + type, handler);
+           } 
+           else {
+             element["on" + type] = handler;
+           }
          }
-       }
-     };
-     (function () {
-       var showCount = 0;
-       EventUtil.addHandler(window, "load", function () {
-         console.log("Load fired");
-       });
-       EventUtil.addHandler(window, "pageshow", function (event) {
-         showCount++;
-         console.log("Show has been fired " + showCount + " times.");
-       });
-     })();
-     当页面首次加载完成时,showCount的值为0
-     若离开包含以上代码的页面后,又“后退”到该页面,showCount就会递增;
-     因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
-     若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
-  pagehide  页面卸载前触发[unload事件之前] 
-   PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
-     指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
-     因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
-   event.persisted  返回页面是否将保存在bfcache中的布尔值
-     若在Firefox浏览器中, 当第一次触发pageshow时,persisted的值一定是false,
-     而在第一次触发pagehide时,persisted 为true
-Event===ErrorEvent.prototype.__proto__.constructor 
-  ★ErrorEvent.prototype.xxx 
-  e.message 
-  e.filename 
-  e.lineno 
-  e.colno 
-  e.error 
-  ★事件枚举 
-  error  任何没通过try-catch处理的错误都会触发window对象的error事件 
-   和其他事件不同的是,error事件不会创建event对象,
-   取而代之的是三个参数:错误消息、错误所在的URL和行号
-   Example: :
-   window.onerror = function(message,url,line){
-     ...
-     return false; // 可阻止浏览器报告错误的默认行为
-   }
-   图像的error事件:只要图像加载失败或显示失败就会触发error事件,会生成event对象
-Event===HashChangeEvent.prototype.__proto__.constructor 
-  ★HashChangeEvent.prototype.xxx 
-  str = e.oldURL 变化前的URL
-  str = e.newURL 变化后的URL
-  ★事件枚举: 
-  hashchange   hash变化时在window上触发[IE8+] [HTML5]
-Event===PopStateEvent.prototype.__proto__.constructor 
-  ★PopStateEvent.prototype.xxx 
-  e.state
-  ★事件枚举: 
-  popstate   当活动历史记录条目变更时,在window上触发,不冒泡 [HTML5][IE10+]
-    PS: 调用history.pushState()或history.replaceState()不会触发该事件,
+       };
+       (function () {
+         var showCount = 0;
+         EventUtil.addHandler(window, "load", function () {
+           console.log("Load fired");
+         });
+         EventUtil.addHandler(window, "pageshow", function (event) {
+           showCount++;
+           console.log("Show has been fired " + showCount + " times.");
+         });
+       })();
+       当页面首次加载完成时,showCount的值为0
+       若离开包含以上代码的页面后,又“后退”到该页面,showCount就会递增;
+       因为该变量及整个页面的状态,都保存在了内存中,当返回时,变量的状态得到了恢复;
+       若刷新浏览器,则showCount的值会被重置为0,因为页面已经完全重新加载了。
+    pagehide  页面卸载前触发[unload事件之前] 
+     PS:与pageshow一样,在document上面触发,但必须要绑定在Windows对象上;
+       指定了unload事件处理程序的页面会被自动排除在bfcache之外,即使事件处理程序是空的。
+       因为unload常用于撤销在load中所执行的操作,而跳过load后显示页面可能导致页面异常  
+     event.persisted  返回页面是否将保存在bfcache中的布尔值
+       若在Firefox浏览器中, 当第一次触发pageshow时,persisted的值一定是false,
+       而在第一次触发pagehide时,persisted 为true
+ErrorEvent,错误事件 
+  Extend：Event 
+    console.log(ErrorEvent.prototype.__proto__.constructor===Event); // true 
+  Proto: 
+    .message 
+    .filename 
+    .lineno 
+    .colno 
+    .error 
+  事件枚举:  
+    error  任何没通过try-catch处理的错误都会触发window对象的error事件 
+     和其他事件不同的是,error事件不会创建event对象,
+     取而代之的是三个参数:错误消息、错误所在的URL和行号
+     Example: :
+     window.onerror = function(message,url,line){
+       ...
+       return false; // 可阻止浏览器报告错误的默认行为
+     }
+     图像的error事件:只要图像加载失败或显示失败就会触发error事件,会生成event对象
+HashChangeEvent,URL锚点改变事件 
+  Extend: Event 
+    console.log(HashChangeEvent.prototype.__proto__.constructor===Event); 
+  Proto: 
+    .oldURL str,变化前的URL
+    .newURL str,变化后的URL
+  Accu: 
+    hashchange   hash变化时在window上触发[IE8+] [HTML5]
+PopStateEvent,历史记录状态事件 [HTML5][IE10+] 
+  Extend: Event 
+    console.log(PopStateEvent.prototype.__proto__.constructor===Event); // true 
+  Proto: 
+    .state  obj,当前历史记录对应的状态对象的副本,即pushState的第一个参数
+  Accu: 
+    popstate   历史记录变化时,在window上触发,不冒泡 
+      PS: 调用history.pushState()或history.replaceState()不会触发该事件,
+        不同的浏览器在加载页面时处理popstate事件的形式存在差异。
+        页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
+        若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
+        或者受到对 history.replaceState() 的调用的影响,
       只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
-      或者在JS代码中调用 history.back();
-      不同的浏览器在加载页面时处理popstate事件的形式存在差异。
-      页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
-      若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
-      或者受到对 history.replaceState() 的调用的影响,
-      e.state 属性为包含历史条目的状态对象的副本,为pushState的第一个参数;
-    Example:
-      window.addEventListener("popstate",function(e){
-        var state1 = e.state;
-        // state1 就是 pushState 的第一个参数,详情常见BOM history
-        console.log(state1)
-      })
-Event===BeforeUnloadEvent.prototype.__proto__.constructor 
-  ★BeforeUnloadEvent.prototype.__proto__ 
-  e.returnValue 
-  ★事件枚举: 
-  beforeunload  离开关闭/刷新网页时,在window上触发,不冒泡  [HTML5] 
-    PS: 目的是让开发人员能在页面卸载前阻止这一操作, 
-      通过以返回值的形式来显示给用户提示[无返回值则无提示],
-      chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
-    Example:
-      $(window).on('beforeunload',function(e){
-        return '您输入的内容尚未保存,确定离开此页面吗？';
+      或者在调用 back、forward、go 方法时才会触发  
+BeforeUnloadEvent, 
+  Extend: Event 
+    console.log(BeforeUnloadEvent.prototype.__proto__.constructor===Event);
+  Proto: 
+    .returnValue 
+  Accu: 
+    beforeunload  离开关闭/刷新网页时,在window上触发,不冒泡  [HTML5] 
+      PS: 目的是让开发人员能在页面卸载前阻止这一操作, 
+        通过以返回值的形式来显示给用户提示[无返回值则无提示],
+        chrome中不会显示返回值内容而是浏览器的默认提示:'系统可能不会保存您所做的更改'; 
+      Example:
+        $(window).on('beforeunload',function(e){
+          return '您输入的内容尚未保存,确定离开此页面吗？';
+        });
+        //解除绑定,一般放在提交触发事件中
+        $(window).off('beforeunload');
+      在Chrome中,使用原生绑定不会触发 ? 
+        window.addEventListener("beforeunload",function(e){
+          return '您输入的内容尚未保存,确定离开此页面吗？';
+        })
+ClipboardEvent,剪贴版事件 [HTML5] 
+  Extend: Event 
+    console.log(ClipboardEvent.prototype.__proto__.constructor===Event);
+  Proto: 
+    .clipboardData  DataTransfer, 
+  Accu: 
+    beforecopy 复制前触发  [HTML5]
+    copy       复制时触发  [HTML5]
+    beforecut  剪切前触发  [HTML5]
+    cut        剪切时触发  [HTML5]
+    beforepaste 粘贴前触发 [HTML5]
+    paste      粘贴时触发  [HTML5] 
+    访问剪贴板中的数据 
+      document.selection  obj,保存着用户在整个文档范围内选择的文本信息 [IE8-] 
+      $('#a').on("copy",function(e){
+        if (window.getSelection) {
+          text = window.getSelection().toString();
+          console.log(1);
+        } 
+        else if (document.selection && document.selection.createRange) {
+          text = document.selection.createRange().text;
+          console.log(2);
+        }
+        console.log(text);
       });
-      //解除绑定,一般放在提交触发事件中
-      $(window).off('beforeunload');
-    在Chrome中,使用原生绑定不会触发 ? 
-      window.addEventListener("beforeunload",function(e){
-        return '您输入的内容尚未保存,确定离开此页面吗？';
-      })
-Event===ClipboardEvent.prototype.__proto__.constructor 剪贴版事件 [HTML5]
-  ★ClipboardEvent.prototype.xxx 
-  e.clipboardData  DataTransfer 对象
-  ★事件枚举: 
-  beforecopy 复制前触发  [HTML5]
-  copy       复制时触发  [HTML5]
-  beforecut  剪切前触发  [HTML5]
-  cut        剪切时触发  [HTML5]
-  beforepaste 粘贴前触发 [HTML5]
-  paste      粘贴时触发  [HTML5] 
-  访问剪贴板中的数据 
-    document.selection  obj,保存着用户在整个文档范围内选择的文本信息 [IE8-] 
-    $('#a').on("copy",function(e){
-      if (window.getSelection) {
-        text = window.getSelection().toString();
-        console.log(1);
-      } 
-      else if (document.selection && document.selection.createRange) {
-        text = document.selection.createRange().text;
-        console.log(2);
-      }
-      console.log(text);
-    });
-    clipboardData = e.clipboardData || window.clipboardData  
-      IE中为window属性,其他浏览器为事件对象属性 
-    clipboardData.getData(formatstr)   从剪贴板中取得数据
-      formatstr  str,数据格式 
-        IE中有两种格式 "text" "URL"
-        其他浏览器  一种MIME类型[可使用"text"代表"text/plain"]
-    bol = clipboardData.setData(formatstr,str) 设置剪贴板中的数据,返回是否成功操作 
-      formatstr  数据类型,但其他浏览器已不能识别 "text" 
-      str        要更换的字符串
-    clipboardData.clearData() 从剪贴板中清除数据
-Event===MutationEvent.prototype.__proto__.constructor  变动事件[IE9+] 
+      clipboardData = e.clipboardData || window.clipboardData  
+        IE中为window属性,其他浏览器为事件对象属性 
+      clipboardData.getData(formatstr)   从剪贴板中取得数据
+        formatstr  str,数据格式 
+          IE中有两种格式 "text" "URL"
+          其他浏览器  一种MIME类型[可使用"text"代表"text/plain"]
+      bol = clipboardData.setData(formatstr,str) 设置剪贴板中的数据,返回是否成功操作 
+        formatstr  数据类型,但其他浏览器已不能识别 "text" 
+        str        要更换的字符串
+      clipboardData.clearData() 从剪贴板中清除数据
+MutationEvent,变动事件[IE9+] 
   PS: 当底层DOM结构发生变化时触发 
     变动事件是为XML或HTML DOM设计的,不特定于某种语言 
     兼容性检测 
     var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
-  ★MutationEvent.prototype.xxx 
-  常量
-    1===e.MODIFICATION   
-    2===e.ADDITION   
-    3===e.REMOVAL   
-  e.relatedNode  
-  e.prevValue  
-  e.newValue  
-  e.attrName  
-  e.attrChange  
-  e.initMutationEvent() 
-  ★事件枚举: 
-  'DOMSubtreeModified'   在DOM结构中发生任何变化时触发,不支持DOM0绑定 [DOM2][已废弃] 
-  'DOMNodeInserted'   节点被插入另一节点时触发 [DOM2][已废弃] 
-  'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发,不支持DOM0绑定 [DOM2][已废弃] 
-    该事件在 DOMNodeInserted 后触发
-  'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2][已废弃]  
-  'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发,不支持DOM0绑定 [DOM2][已废弃]  
-    该事件在 DOMNodeRemoved 之后触发
-  'DOMAttrModified'            特性被修改后触发,不支持DOM0绑定 [DOM2][已废弃]  
-  'DOMCharacterDataModified'  文本节点值发生变化时触发,不支持DOM0绑定 [DOM2][已废弃]  
-Event===CustomEvent.prototype.__proto__.constructor 自定义事件[DOM3][IE11+] 
-  ★CustomEvent.prototype.xxx 
-  e.detail 
-  e.initCustomEvent() 
-  var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
-    传递的数据对象通过 e.detail 来获取 
-Event===UIEvent.prototype.__proto__.constructor  
-  ★UIEvent.prototype.xxx 
-  e.view        与事件关联的抽象视图,等同于发生事件的window对象
-  e.detail      与事件相关的细节信息
-  e.sourceCapabilities 
-  e.which 
-  e.initUIEvent() 
-UIEvent===InputEvent.prototype.__proto__.constructor 
-  ★InputEvent.prototype.xxx 
-  e.data 
-  e.isComposing 
-  e.inputType 
-  e.dataTransfer 
-  e.getTargetRanges() 
-  ★事件枚举: 
-  input  监听表单值改变[IE9+] [HTML5] 
-    PS: 粘贴可触发; 在Chrome中通过JS改变表单的值,不会触发该事件 
-    适用元素: input type=text , textarea
-    IOS微信中,自定义获取焦点存在问题
-UIEvent===MouseEvent.prototype.__proto__.constructor  
-  ★MouseEvent.prototype.xxx 
-  num = e.screenX/e.screenY   相对设备屏幕左上角的距离,单位px 
-  num = e.clientX/e.clientY   相对视口左上角的距离,单位px  
-    不含浏览器的工具栏、边框和滚动条
-  num = e.pageX/e.pageY     相对页面左上角的距离,单位px 
-    页面没滚动时 clientX 和 pageX 相等
-  e.offsetX/e.offsetY     相对于事件源左上角的坐标
-    如点击一div,则表示到该div左上叫的坐标
-  e.x/e.y      相对于CSS定位的最内层包容元素的左上角
-    IE最先引入,现在主流浏览器基本都支持;
-    在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
-  e.movementX  
-  e.movementY  
-  e.layerX  
-  e.layerY  
-  bol = e.shiftKey  'Shif'键是否被按下
-  bol = e.ctrlKey   'Ctrl'键是否被按下
-  bol = e.altKey    'Alt'键是否被按下
-  bol = e.metaKey   'Meta'键是否被按下,Windows中为Windows键,Mac中为Cmd键 [IE9+] 
-  num = e.button  对应表示鼠标的按钮 
-    0 左键 [IE中为 1] 
-    1 中键 [IE中为 4] 
-    2 右键 [IE中为 2] 
-    兼容处理: 
-    function getButton(e){
-      if(e){
-        return e.button;
-      }
-      else if(window.event){
-        switch(window.event.button){
-          case 1:
-          return 0;
-          case 4:
-          return 1;
-          case 2:
-          return 2;
+  Extend: Event 
+    console.log(MutationEvent.prototype.__proto__.constructor===Event);
+  Proto: 
+    常量
+      1===e.MODIFICATION   
+      2===e.ADDITION   
+      3===e.REMOVAL   
+    .relatedNode  
+    .prevValue  
+    .newValue  
+    .attrName  
+    .attrChange  
+    .initMutationEvent() 
+  Accu: 
+    已废弃 
+      'DOMSubtreeModified' 在DOM结构中发生任何变化时触发,不支持DOM0绑定[DOM2] 
+      'DOMNodeInserted'    节点被插入另一节点时触发[DOM2] 
+      'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发[DOM2] 
+        该事件在 DOMNodeInserted 后触发
+      'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2]  
+      'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发[DOM2]  
+        该事件在 DOMNodeRemoved 之后触发
+      'DOMAttrModified'           特性被修改后触发,不支持DOM0绑定 [DOM2]  
+      'DOMCharacterDataModified'  文本节点值发生变化时触发,不支持DOM0绑定 [DOM2]  
+CustomEvent,自定义事件[DOM3][IE11+] 
+  Extend：Event 
+    console.log(CustomEvent.prototype.__proto__.constructor===Event); // true 
+  Instance: 
+    var event = new CustomEvent(eName,{'detail':data}); 创建事件并为event对象添加的数据[IE11+] 
+      传递的数据对象通过 e.detail 来获取 
+  Proto: 
+    .detail 
+    .initCustomEvent() 
+UIEvent, 
+  Extend: Event 
+    console.log(UIEvent.prototype.__proto__.constructor===Event);
+  Proto: 
+    .view        与事件关联的抽象视图,等同于发生事件的window对象
+    .detail      与事件相关的细节信息
+    .sourceCapabilities 
+    .which 
+    .initUIEvent() 
+InputEvent, 
+  Extend: UIEvent 
+    console.log(InputEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .data 
+    .isComposing 
+    .inputType 
+    .dataTransfer 
+    .getTargetRanges() 
+  Accu: 
+    input  监听表单值改变[IE9+][HTML5] 
+      PS: 粘贴可触发; 在Chrome中通过JS改变表单的值,不会触发该事件 
+      适用元素: input type=text , textarea
+      IOS微信中,自定义获取焦点存在问题
+MouseEvent, 
+  Expand: UIEvent 
+    console.log(MouseEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .screenX/.screenY   num,相对设备屏幕左上角的距离,单位px 
+    .clientX/.clientY   num,相对视口左上角的距离,单位px  
+      不含浏览器的工具栏、边框和滚动条
+    .pageX/.pageY       num,相对页面左上角的距离,单位px 
+      页面没滚动时 clientX 和 pageX 相等
+    .offsetX/.offsetY     相对于事件源左上角的坐标
+      如点击一div,则表示到该div左上叫的坐标
+    .x/.y      相对于CSS定位的最内层包容元素的左上角
+      IE最先引入,现在主流浏览器基本都支持;
+      在Chrome中和clientX相同;在IE中当设置了定位则和offsetX相同,否则和clientX相同;
+    .movementX  
+    .movementY  
+    .layerX  
+    .layerY  
+    .shiftKey  bol,'Shif'键是否被按下
+    .ctrlKey   bol,'Ctrl'键是否被按下
+    .altKey    bol,'Alt'键是否被按下
+    .metaKey   bol,'Meta'键是否被按下,Windows中为Windows键,Mac中为Cmd键 [IE9+] 
+    .button    num,对应表示鼠标的按钮 
+      0 左键 [IE中为 1] 
+      1 中键 [IE中为 4] 
+      2 右键 [IE中为 2] 
+      兼容处理: 
+      function getButton(e){
+        if(e){
+          return e.button;
+        }
+        else if(window.event){
+          switch(window.event.button){
+            case 1:
+            return 0;
+            case 4:
+            return 1;
+            case 2:
+            return 2;
+          }
         }
       }
+    .buttons  
+    .relatedTarget  
+    .fromElement  
+    .toElement  
+    .getModifierState()    
+    .initMouseEvent()    
+  Accu: 
+    mousedown  用户按下任意鼠标按钮触发
+    mouseup    鼠标弹起触发
+    click    在左键按下后,弹起来时触发或按下回车键时触发
+      同一个元素上相继触发mousedown和mouseup事件才会触发click事件,若有一个被取消就不会触发click事件 
+    dblclick   鼠标双击 [DOM3]
+      只有触发两次click事件,才会触发一次dblclick事件。
+      如果有代码阻止了连续两次触发click事件,可能是直接取消click事件,
+      也可能通过取消mousedown或mouseup间接实现,那么就不会触发dblclick事件了 
+      触摸设备不支持dblclick事件,双击浏览器窗口会放大画面而且没有办法改变该行为 
+    mouseenter 光标从元素外部移动到元素范围内时触发,不冒泡 [DOM3][IE9+]
+    mouseleave 光标从元素范围内移到范围外时触发,不冒泡 [DOM3]  
+    mousemove  光标在元素内移动时持续触发 
+    mouseout   光标从一个元素到另一个元素时触发 
+      另一个元素可能位于该元素外,也可能是该元素的子元素
+    mouseover  光标移到元素上时触发 
+    当事件是'mouseover'和'mouseout'时 
+      e.relatedTarget  属性的值表示:移到/移出触发事件的元素最近的那个元素
+      对于其他事件该属性值为 null
+      IE的处理方式: e.toElement; e.fromElement;
+    contextmenu  上下文菜单事件 [HTML5] 
+      右击网页时,会自动出现Windows自带的菜单
+      使用 contextmenu 事件来修改指定的菜单,前提将默认行为取消  
+WheelEvent,滚轮事件 [HTML5] 
+  Extend: MouseEvent 
+    console.log(WheelEvent.prototype.__proto__.constructor===MouseEvent);
+  Proto: 
+    常量
+      0===e.DOM_DELTA_PIXEL  
+      1===e.DOM_DELTA_LINE  
+      2===e.DOM_DELTA_PAGE  
+    .deltaX 
+    .deltaY 
+    .deltaZ 
+    .deltaMode 
+    .wheelDeltaX 
+    .wheelDeltaY 
+    .wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
+  Accu: 
+    mousewheel 使用鼠标滚轮或类似设备时触发 
+DragEvent,拖放事件 [IE9+][HTML5] 
+  PS: IE4最早加入拖放功能,只能拖放文本框 [JS高程 482 页]
+  Extend：MouseEvent 
+    console.log(DragEvent.prototype.__proto__.constructor===MouseEvent);
+  Proto: 
+    .dataTransfer  DataTransfer, 
+      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
+  Expand: 
+    拖放源,被拖放的元素 
+      若是图片则需加载后拖放,当图片加载失败则不可拖放
+      在需拖动元素的标签中,添加属性 draggable="true",
+      图像和链接的draggable属性自动被设置成了true
+    拖放目标,要放置的目标元素  
+      默认的在外观显示上所有的元素都不能做为放置的目标元素,
+      通过阻止拖放目标'dragover'事件的默认行为来达到可拖放,
+      达到的效果: 光标显示可放置的效果,拖放后会触发拖放目标的'drop'事件 
+      但DOM结构的变化还需自己设置
+      Example:
+        var dropTarget = document.querySelector("#aoo");
+        dropTarget.ondragover =function(e){
+          e.preventDefault();
+        }
+        dropTarget.ondragenter =function(e){
+          e.preventDefault();
+        }
+    兼容 
+      IE9-不支持draggable属性,但可通过mousedown事件来模拟 
+        Example:
+        elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
+      firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
+  Accu: 
+    ◆在拖放源上触发 
+    ondragstart 开始拖动
+    ondrag      拖放期间持续触发
+    ondragend   被放置后触发[无论放置位置] 
+    ◆在拖放目标元素上触发 
+    ondragenter  拖放源开始进入目标元素范围时触发 
+    ondragleave  拖放源离开目标元素的范围时触发
+    ondragover   拖放源处于目标元素上方时持续触发 
+    ondrop       拖放源放置到目标元素后触发 
+      Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
+  Example: 
+    <div id="dragElem" draggable="true">拖放元素</div>
+    <div id="targetElem" >放置目标元素</div>
+    #dragElem{ 
+      height:30px; 
+      width:130px; 
+      background:pink; 
+      float:left; 
     }
-  e.buttons  
-  e.relatedTarget  
-  e.fromElement  
-  e.toElement  
-  e.getModifierState()    
-  e.initMouseEvent()    
-  ★事件枚举: 
-  mousedown  用户按下任意鼠标按钮触发
-  mouseup    鼠标弹起触发
-  click    在左键按下后,弹起来时触发或按下回车键时触发
-    同一个元素上相继触发mousedown和mouseup事件才会触发click事件,若有一个被取消就不会触发click事件 
-  dblclick   鼠标双击 [DOM3]
-    只有触发两次click事件,才会触发一次dblclick事件。
-    如果有代码阻止了连续两次触发click事件,可能是直接取消click事件,
-    也可能通过取消mousedown或mouseup间接实现,那么就不会触发dblclick事件了 
-    触摸设备不支持dblclick事件,双击浏览器窗口会放大画面而且没有办法改变该行为 
-  mouseenter 光标从元素外部移动到元素范围内时触发,不冒泡 [DOM3][IE9+]
-  mouseleave 光标从元素范围内移到范围外时触发,不冒泡 [DOM3]  
-  mousemove  光标在元素内移动时持续触发 
-  mouseout   光标从一个元素到另一个元素时触发 
-    另一个元素可能位于该元素外,也可能是该元素的子元素
-  mouseover  光标移到元素上时触发 
-  当事件是'mouseover'和'mouseout'时 
-    e.relatedTarget  属性的值表示:移到/移出触发事件的元素最近的那个元素
-    对于其他事件该属性值为 null
-    IE的处理方式: e.toElement; e.fromElement;
-  contextmenu  上下文菜单事件 [HTML5] 
-    右击网页时,会自动出现Windows自带的菜单
-    使用 contextmenu 事件来修改指定的菜单,前提将默认行为取消  
-MouseEvent===WheelEvent.prototype.__proto__.constructor  滚轮事件 [HTML5] 
-  ★WheelEvent.prototype.xxx 
-  常量
-    0===e.DOM_DELTA_PIXEL  
-    1===e.DOM_DELTA_LINE  
-    2===e.DOM_DELTA_PAGE  
-  e.deltaX 
-  e.deltaY 
-  e.deltaZ 
-  e.deltaMode 
-  e.wheelDeltaX 
-  e.wheelDeltaY 
-  e.wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
-  ★事件枚举 
-  mousewheel 使用鼠标滚轮或类似设备时触发 
-UIEvent===TouchEvent.prototype.__proto__.constructor  
-  ★TouchEvent.prototype.xxx 
-  e.touches  
-  e.targetTouches  
-  e.changedTouches  
-  e.altKey  
-  e.metaKey  Windows中为Windows键,Mac中为Cmd键  
-  e.ctrlKey  
-  e.shiftKey  
-UIEvent===KeyboardEvent.prototype.__proto__.constructor 键盘事件[DOM3] 
-  ★KeyboardEvent.prototype.xxx 
-  常量: 
-    0 = e.DOM_KEY_LOCATION_STANDARD   
-    1 = e.DOM_KEY_LOCATION_LEFT   
-    2 = e.DOM_KEY_LOCATION_RIGHT   
-    3 = e.DOM_KEY_LOCATION_NUMPAD   
-  str = e.key  按键字符 [DOM3][DiBs]  
-  num = e.keyCode  按键字符对应ASCII码中小写字母或数值的编码 
-    Backspace   8
-    Tab         9
-    Enter       13
-    Shift       16
-    Alt         18
-    Pause/Break 19
-    CapsLock    20
-    Esc         27
-    Page Up     33
-    Page Down   34
-    End         35
-    Home        36
-    Left Arrow  37
-    Up Arrow    38
-    Right Arrow 39
-    Down Arrow  40
-    ...
-    a           65 [与Shift键的状态无关] 
-  e.code  
-  e.ctrlKey  
-  e.shiftKey  
-  e.altKey  
-  e.metaKey  Windows中为Windows键,Mac中为Cmd键 
-  e.repeat  
-  e.isComposing  
-  e.initKeyboardEvent()   
-  bol = e.getModifierState(str)  检测修改键[IE9+] 
-    str 可为"Control" "Shift" "AltGraph" "Meta" 
-  兼容性: 
-    num = e.location 键盘区域  [DOM3][DiBs] 
-      0 表示默认键盘
-      1 左侧位置,如左位的Alt键 
-      2 右侧位置,如右位的Shift键
-      3 数字小键盘
-      4 移动设备键盘,虚拟键盘 
-      5 手柄
-    e.charCode  [DOM3废弃] 
-    e.char [DOM3] [Chrome不支持]
-  ★事件枚举: 
-  keydown    按下任意键时触发,长按则持续触发 
-  keypress   按下字符键时触发,长按则持续触发 
-    任何获得焦点的元素都可以触发keypress事件
-  keyup      释放按键时触发
-UIEvent===FocusEvent.prototype.__proto__.constructor 焦点事件  
-  ★FocusEvent.prototype.xxx 
-  e.relatedTarget 
-  ★事件枚举: 
-  blur  元素失去焦点时触发,不冒泡 
-  focus 元素获得焦点时触发,不冒泡 
-  focusin 与focus等价,冒泡,不支持DOM0绑定  [DOM3] 
-  focusout 元素失焦时触发,冒泡,不支持DOM0绑定 [DOM3] 
-UIEvent===TextEvent.prototype.__proto__.constructor  文本事件 
-  ★TextEvent.prototype.xx 
-  str = e.data  输入的字符 
-  e.initTextEvent() 
-  ★事件枚举: 
-  textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
-    PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
-UIEvent===CompositionEvent.prototype.__proto__.constructor 合成事件[DOM3]  
+    #targetElem{ 
+      float:right; 
+      height: 200px; 
+      width:200px; 
+      background:lightblue; 
+    }
+    dragElem.onmousedown = function(){
+      //兼容IE8-浏览器
+      if(this.dragDrop){ this.dragDrop(); }
+    }
+    dragElem.ondragstart = function(){
+      this.style.backgroundColor = 'lightgreen';
+      this.innerHTML = '开始拖动';
+    }
+    dragElem.ondrag = function(){ }
+    dragElem.ondragend = function(){
+      this.innerHTML = '结束拖动';
+      this.style.backgroundColor = 'pink';
+    }
+    targetElem.ondragenter = function(e){
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(){
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(){
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+
+    <div>请将从这堆内容不同乱七八糟的文字中挑选一些移动到拖放目标中</div>
+    <div id="targetElem" >拖放目标</div>
+    <div id="result"></div>
+    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
+    targetElem.ondragenter = function(e){
+      e = e || event;
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e = e || event;
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(e){
+      e = e || event;
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(e){
+      e = e || event;
+      e.preventDefault();
+      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+
+    <div id="dragElem" draggable="true" data-value="这是一个秘密">拖动源</div>
+    <div id="targetElem" >拖放目标</div>
+    <div id="result"></div>
+    #dragElem{ height:30px;width:100px;background:pink; }
+    #targetElem{ margin-top:20px;height: 100px;width:200px;background:lightblue; }
+    dragElem.onmousedown = function(){
+      //兼容IE8-浏览器
+      if(this.dragDrop){ this.dragDrop(); }
+    }
+    dragElem.ondragstart = function(e){
+      e = e || event;
+      e.dataTransfer.setData('text',dragElem.getAttribute('data-value'));
+    }
+    targetElem.ondragenter = function(e){
+      e = e || event;
+      e.preventDefault();
+      this.innerHTML = '有元素进入目标区域';
+      this.style.background = 'red';
+    }
+    targetElem.ondragover = function(e){
+      e = e || event;
+      e.preventDefault();
+    }
+    targetElem.ondragleave = function(e){
+      e = e || event;
+      this.innerHTML = '元素已离开目标区域';
+      this.style.backgroundColor = 'lightblue';
+    }
+    targetElem.ondrop = function(e){
+      e = e || event;
+      e.preventDefault();
+      result.innerHTML = '落入目标区域的文字为:' + e.dataTransfer.getData('text');
+      this.innerHTML = '元素已落在目标区域';
+      this.style.backgroundColor = 'orange';
+    }
+TouchEvent, 
+  Extend: UIEvent 
+    console.log(TouchEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .touches  
+    .targetTouches  
+    .changedTouches  
+    .altKey  
+    .metaKey  Windows中为Windows键,Mac中为Cmd键  
+    .ctrlKey  
+    .shiftKey  
+KeyboardEvent,键盘事件[DOM3] 
+  Extend: UIEvent 
+    console.log(KeyboardEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    常量: 
+      0 = e.DOM_KEY_LOCATION_STANDARD   
+      1 = e.DOM_KEY_LOCATION_LEFT   
+      2 = e.DOM_KEY_LOCATION_RIGHT   
+      3 = e.DOM_KEY_LOCATION_NUMPAD   
+    .key  str,按键字符 [DOM3][DiBs]  
+    .keyCode  num,按键字符对应ASCII码中小写字母或数值的编码 
+      Backspace   8
+      Tab         9
+      Enter       13
+      Shift       16
+      Alt         18
+      Pause/Break 19
+      CapsLock    20
+      Esc         27
+      Page Up     33
+      Page Down   34
+      End         35
+      Home        36
+      Left Arrow  37
+      Up Arrow    38
+      Right Arrow 39
+      Down Arrow  40
+      ...
+      a           65 [与Shift键的状态无关] 
+    .code  
+    .ctrlKey  
+    .shiftKey  
+    .altKey  
+    .metaKey  Windows中为Windows键,Mac中为Cmd键 
+    .repeat  
+    .isComposing  
+    .initKeyboardEvent()   
+    .getModifierState(str)  bol,检测修改键[IE9+] 
+      str 可为"Control" "Shift" "AltGraph" "Meta" 
+    兼容性: 
+      .location  num,键盘区域  [DOM3][DiBs] 
+        0 表示默认键盘
+        1 左侧位置,如左位的Alt键 
+        2 右侧位置,如右位的Shift键
+        3 数字小键盘
+        4 移动设备键盘,虚拟键盘 
+        5 手柄
+      .charCode  [DOM3废弃] 
+      .char      [DOM3] [Chrome不支持]
+  Accu: 
+    keydown    按下任意键时触发,长按则持续触发 
+    keypress   按下字符键时触发,长按则持续触发 
+      任何获得焦点的元素都可以触发keypress事件
+    keyup      释放按键时触发
+FocusEvent,焦点事件  
+  Extend: UIEvent 
+    console.log(FocusEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .relatedTarget 
+  Accu: 
+    blur  元素失去焦点时触发,不冒泡 
+    focus 元素获得焦点时触发,不冒泡 
+    focusin 与focus等价,冒泡,不支持DOM0绑定  [DOM3] 
+    focusout 元素失焦时触发,冒泡,不支持DOM0绑定 [DOM3] 
+TextEvent,文本事件 
+  Extend: UIEvent 
+    console.log(TextEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .data  str,输入的字符 
+    .initTextEvent() 
+  Accu: 
+    textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
+      PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
+CompositionEvent,合成事件[DOM3]  
   PS: 当为IME['Iput Method Editor'输入法编辑器]输入字符时触发 
     IME可以让用户输入在物理键盘上找不到的字符,如输入中文;
     浏览器支持率度不高
-  ★CompositionEvent.prototype.xxx 
-  str = e.data  操作的文本数据 
-  e.initCompositionEvent()  
-  ★事件枚举:  
-  compositionstart  在IME打开时触发,表示要开始输入了,不支持DOM0绑定 
-    e.data 包含正在编辑的文本,如已经选中的需要马上替换的文本 
-  compositionupdate 在向输入字段中输入字符时触发,不支持DOM0绑定  
-    e.data  正在插入的文本
-  compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
-    e.data  包含此次输入会话中插入的所有字符
+  Extend: UIEvent 
+    console.log(CompositionEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .data  str,操作的文本数据 
+    .initCompositionEvent()  
+  Accu: 
+    compositionstart  在IME打开时触发,表示要开始输入了,不支持DOM0绑定 
+      e.data 包含正在编辑的文本,如已经选中的需要马上替换的文本 
+    compositionupdate 在向输入字段中输入字符时触发,不支持DOM0绑定  
+      e.data  正在插入的文本
+    compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
+      e.data  包含此次输入会话中插入的所有字符
+FontFaceSetLoadEvent 
+TrackEvent 
+SpeechSynthesisEvent 
+DeviceOrientationEvent 
+DeviceMotionEvent 
+BlobEvent 
+AudioProcessingEvent 
+MessageEvent 
+PointerEvent 
+ProgressEvent 
+StorageEvent 
+MIDIConnectionEvent 
+IDBVersionChangeEvent 
+GamepadEvent 
+CloseEvent 
 事件兼容处理: 
   var eventCompat = {
     add: function(elem,type,foo){
@@ -1034,16 +1131,199 @@ UIEvent===CompositionEvent.prototype.__proto__.constructor 合成事件[DOM3]
           touch-action: manipulation;
         }
 -------------------------------------------------------------------------------- 
-DataTransfer 
-  .dropEffect  
-  .effectAllowed  
-  .items  
-  .types  
-  .files  
-  .setDragImage()    
-  .getData()    
-  .setData()    
-  .clearData()    
+DataTransfer,数据传递  
+  PS: 为实现数据交换,IE自定义了'text'和'URL'两种有效的数据类型,
+    而HTML5对此扩展,允许指定MIME类型,为了兼容,HTML5也支持'text'和'URL',
+    但会被映射为'text/plain'和'text/uri-list'.
+    dataTransfer对象可以为每种MIME类型都保存一个值,如同时保存一段文本和一个URL 
+  Extend: Object 
+    console.log(DataTransfer.prototype.__proto__.constructor===Object);
+  Proto: 
+    .dropEffect    控制拖放元素光标显示  
+      'none'    不能把拖放元素放在这,文本框外的默认值
+      'move'    把拖放的元素移动到目标位置
+      'copy'    把拖放的元素复制到目标位置
+      'link'    放置拖放元素到目标位置并打开拖动的元素(前提是拖放元素是一个链接有URL)
+    .effectAllowed 操控dropEffect属性 
+      PS:必须在ondragstart事件处理程序中设置effectAllowed属性
+      'uninitialized'  没有给拖放元素设置任何放置行为
+      'none'           被拖放的元素不能有任何行为
+      'copy'           只允许值为'copy'的dropEffect
+      'link'           只允许值为'link'的dropEffect
+      'move'           只允许值为'move'的dropEffect
+      'copyLink'       允许值为'copy'和'link'的dropEffect
+      'copyMove'       允许值为'link'和'move'的dropEffect
+      'linkMove'       允许值为'link'和'move'的dropEffect
+      'all'            允许任意dropEffect
+    .types   当前保存的数据类型,如'text'
+    .files　 存放一些拖放的本地文件,若没有拖放文件,则此列表为空
+    .setDragImage()    
+    .getData('text')      通过数据类型获取由setData方法保存的值
+      PS:保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.
+      Example:
+      设置和接收文本数据
+      e.dataTransfer.setData('text','some text');
+      var text =e.dataTransfer.getData('text');
+      设置和接收URL
+      e.dataTransfer.setData('URL','https://www.baidu.com');
+      var url =e.dataTransfer.getData('URL');
+    .setData('text',str)  设置传递数据及数据类型
+      PS:拖动文本框中的文本时(选中的文字而非元素),浏览器自动调用setData()方法,
+        将拖动的文本以"text"格式保存在dataTransfer对象中.
+        在拖放链接或图像时,浏览器自动调用setData()方法保存URL,
+        这些元素被拖放到放置目标时,就可以通过getData()读到这些数据了.
+        也可以自定义保存的信息.
+      str 字符串,表示保存的数据类型,取值为'text'或'URL'
+    .clearData(format)    清除以特定格式保存的数据
+    .items   DataTransferItemList, 
+    兼容问题 
+      .setDrageImage(elem,x,y) 指定图像,在拖动时,显示在光标下方 [Chrome不支持]
+        其中elem可以时图像也可以是其他元素,若为图像则显示图像,其他元素则显示渲染后的元素.
+      .addElement(elem) 为拖动操作添加一个元素
+DataTransferItemList, 
+  Extend: Object 
+    console.log(DataTransferItemList.prototype.__proto__.constructor===Object);
+  Proto: 
+    .length  
+    .add()   
+    .remove()  
+    .clear()  
+DataTransferItem, 
+  Extend: Object 
+    console.log(DataTransferItem.prototype.__proto__.constructor===Object);
+  Proto: 
+    .kind 
+    .type 
+    .getAsString()  
+    .getAsFile()  
+    .webkitGetAsEntry()  
+Performance,当前页面加载相关的性能信息 
+  PS: 用于精确度量、控制、增强浏览器的性能表现;精度可达千分之一毫秒  
+    还可获取后台事件的时间进度 
+    浏览器支持: IE10+、Chrome20+、Firefox15+、Opera15+ 
+  Extend: EventTarget 
+    console.log(Performance.prototype.__proto__.constructor===EventTarget);
+  Example: 获取脚本运行的准确耗时 
+    传统的做法: 
+    var start = new Date().getTime();
+    // do something here
+    var now = new Date().getTime();
+    var latency = now - start;
+    console.log("任务运行时间:" + latency);
+    不足之处: 
+    精度: 只能精确到毫秒级别 
+    局限: 无法获取一些后台事件的时间进度,如浏览器从服务器加载网页的时间  
+  performance.timing  包含了各种与浏览器性能有关的时间数据   
+    PS: 提供浏览器处理网页各个阶段的耗时。
+    以下属性全部为只读
+    navigationStart  当前浏览器窗口的前一个网页关闭,发生unload事件时的Unix毫秒时间戳 
+      若没有前一个网页,则等于'fetchStart'属性。
+      performance.timing.navigationStart   // 13260687
+      表示距离浏览器开始处理当前网页,已经过了13260687毫秒
+    unloadEventStart 若前一个网页与当前网页属于同一个域名,则返回前一个网页的unload事件发生时的Unix毫秒时间戳。
+      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
+    unloadEventEnd   若前一个网页与当前网页属于同一个域名,则返回前一个网页unload事件的回调函数结束时的Unix毫秒时间戳。
+      若没有前一个网页,或者之前的网页跳转不是在同一个域名内,则返回值为0。
+    redirectStart    返回第一个HTTP跳转开始时的Unix毫秒时间戳。
+      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
+    redirectEnd      返回最后一个HTTP跳转结束时,即跳转回应的最后一个字节接受完成时的Unix毫秒时间戳。
+      若没有跳转,或者不是同一个域名内部的跳转,则返回值为0。
+    fetchStart:返回浏览器准备使用HTTP请求读取文档时的Unix毫秒时间戳。该事件在网页查询本地缓存之前发生。
+    domainLookupStart:返回域名查询开始时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
+    domainLookupEnd:返回域名查询结束时的Unix毫秒时间戳。若使用持久连接,或者信息是从本地缓存获取的,则返回值等同于fetchStart属性的值。
+    connectStart:返回HTTP请求开始向服务器发送时的Unix毫秒时间戳。若使用持久连接(persistent connection),则返回值等同于fetchStart属性的值。
+    connectEnd:返回浏览器与服务器之间的连接建立时的Unix毫秒时间戳。若建立的是持久连接,则返回值等同于fetchStart属性的值。连接建立指的是所有握手和认证过程全部结束。
+    secureConnectionStart:返回浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。若当前网页不要求安全连接,则返回0。
+    requestStart:返回浏览器向服务器发出HTTP请求时(或开始读取本地缓存时)的Unix毫秒时间戳。
+    responseStart:返回浏览器从服务器收到(或从本地缓存读取)第一个字节时的Unix毫秒时间戳。
+    responseEnd:返回浏览器从服务器收到(或从本地缓存读取)最后一个字节时(若在此之前HTTP连接已经关闭,则返回关闭时)的Unix毫秒时间戳。
+    domLoading:返回当前网页DOM结构开始解析时(即Document.readyState属性变为“loading”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
+    domInteractive:返回当前网页DOM结构结束解析、开始加载内嵌资源时(即Document.readyState属性变为“interactive”、相应的readystatechange事件触发时)的Unix毫秒时间戳。
+    domContentLoadedEventStart:返回当前网页DOMContentLoaded事件发生时(即DOM结构解析完毕、所有脚本开始运行时)的Unix毫秒时间戳。
+    domContentLoadedEventEnd:返回当前网页所有需要执行的脚本执行完成时的Unix毫秒时间戳。
+    domComplete:返回当前网页DOM结构生成时(即Document.readyState属性变为“complete”,以及相应的readystatechange事件发生时)的Unix毫秒时间戳。
+    loadEventStart:返回当前网页load事件的回调函数开始时的Unix毫秒时间戳。若该事件还没有发生,返回0。
+    loadEventEnd:返回当前网页load事件的回调函数运行结束时的Unix毫秒时间戳。若该事件还没有发生,返回0。
+  Example:
+    var t = performance.timing;
+    var pageloadtime = t.loadEventStart - t.navigationStart; 
+    //页面加载的耗时
+    var dns = t.domainLookupEnd - t.domainLookupStart; 
+    // 域名解析的耗时
+    var tcp = t.connectEnd - t.connectStart; 
+    //TCP连接的耗时
+    var ttfb = t.responseStart - t.navigationStart;
+    // 读取页面第一个字节之前的耗时
+  待整理
+    根据上面这些属性,可以计算出网页加载各个阶段的耗时。比如,网页加载整个过程的耗时的计算方法如下:
+    
+    
+    var t = performance.timing; 
+    var pageLoadTime = t.loadEventEnd - t.navigationStart;
+    
+    performance.now()
+    performance.now方法返回当前网页自从performance.timing.navigationStart到当前时间之间的微秒数(毫秒的千分之一)。也就是说,它的精度可以达到100万分之一秒。
+    
+    performance.now() 
+    // 23493457.476999998
+    
+    Date.now() - (performance.timing.navigationStart + performance.now())
+    // -0.64306640625
+    上面代码表示,performance.timing.navigationStart加上performance.now(),近似等于Date.now(),也就是说,Date.now()可以替代performance.now()。但是,前者返回的是毫秒,后者返回的是微秒,所以后者的精度比前者高1000倍。
+    
+    通过两次调用performance.now方法,可以得到间隔的准确时间,用来衡量某种操作的耗时。
+    
+    var start = performance.now();
+    doTasks();
+    var end = performance.now();
+    
+    console.log('耗时:' + (end - start) + '微秒。');
+    performance.mark()
+    mark方法用于为相应的视点做标记。
+    
+    window.performance.mark('mark_fully_loaded');
+    clearMarks方法用于清除标记,若不加参数,就表示清除所有标记。
+    
+    window.peformance.clearMarks('mark_fully_loaded');
+    
+    window.performance.clearMarks();
+    performance.getEntries()
+    浏览器获取网页时,会对网页中每一个对象(脚本文件、样式表、图片文件等等)发出一个HTTP请求。performance.getEntries方法以数组形式,返回这些请求的时间统计信息,有多少个请求,返回数组就会有多少个成员。
+    
+    由于该方法与浏览器处理网页的过程相关,所以只能在浏览器中使用。
+    
+    
+    window.performance.getEntries()[0]
+    
+    // PerformanceResourceTiming { 
+    //   responseEnd: 4121.6200000017125, 
+    //   responseStart: 4120.0690000005125, 
+    //   requestStart: 3315.355000002455, 
+    //   ...
+    // }
+    
+    上面代码返回第一个HTTP请求(即网页的HTML源码)的时间统计信息。该信息以一个高精度时间戳的对象形式返回,每个属性的单位是微秒(microsecond),即百万分之一秒。
+    
+    performance.navigation对象
+    除了时间信息,performance还可以提供一些用户行为信息,主要都存放在performance.navigation对象上面。
+    
+    它有两个属性:
+    
+    (1)performance.navigation.type
+    
+    该属性返回一个整数值,表示网页的加载来源,可能有以下4种情况:
+    
+    0:网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载,相当于常数performance.navigation.TYPE_NAVIGATENEXT。
+    
+    1:网页通过“重新加载”按钮或者location.reload()方法加载,相当于常数performance.navigation.TYPE_RELOAD。
+    
+    2:网页通过“前进”或“后退”按钮加载,相当于常数performance.navigation.TYPE_BACK_FORWARD。
+    
+    255:任何其他来源的加载,相当于常数performance.navigation.TYPE_UNDEFINED。
+    
+    (2)performance.navigation.redirectCount
+    
+    该属性表示当前网页经过了多少次重定向跳转。  
 --------------------------------------------------------------------------------
 SelfSummary: 
   事件对象分析: 
@@ -1091,8 +1371,8 @@ SelfSummary:
       var el = elem || document;
       el.dispatchEvent(event);
     }
-  checkbox选中时的事件是什么 change? 
+  checkbox选中时的事件 change? 
 
   
   
-  
+

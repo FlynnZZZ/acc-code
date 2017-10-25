@@ -88,9 +88,12 @@
   '-* private':
     'prefix': 'private'
     'body': """private""" 
-  '-* prop':
+  '-* prop  属性,组成部分':
     'prefix': 'prop'
     'body': """prop""" 
+  '-* attr  特性,修饰部分':
+    'prefix': 'attr'
+    'body': """attr""" 
   '-* protect':
     'prefix': 'protect'
     'body': """protect""" 
@@ -119,9 +122,6 @@
   '-* default':
     'prefix': 'default'
     'body': 'default'
-  '-* delete':
-    'prefix': 'delete'
-    'body': 'delete'
   '-* directive':
     'prefix': 'directive'
     'body': """directive""" 
@@ -140,9 +140,6 @@
   '-* implements':
     'prefix': 'implements'
     'body': """implements""" 
-  '-* inseanceof':
-    'prefix': 'inseanceof'
-    'body': """inseanceof""" 
   '-* length':
     'prefix': 'length'
     'body': 'length'

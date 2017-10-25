@@ -6,6 +6,10 @@ window.pub = { // 通用
   
   
 };  
+$.ajaxSetup({
+  xhrFields: { withCredentials: true  },
+  crossDomain: true 
+})
 
 
 

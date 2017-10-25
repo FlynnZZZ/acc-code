@@ -565,9 +565,9 @@ vm = new Vue({{}})  创建'ViewModel'Vue实例,简称vm
     清理它与其它实例的连接,解绑它的全部指令及事件监听器 
     触发 beforeDestroy 和 destroyed 的钩子。
 'Model'更新及监控 
-  'mutation_method'变异方法 会改变调用该方法的原数据的方法 
+  'mutation method'变异方法 会改变调用该方法的原数据的方法 
     push()  pop() shift() unshift() splice() sort() reverse()
-  'non-mutating_method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
+  'non-mutating method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
     如: filter(),concat(),slice()  
   重塑数组 : 当使用非变异方法时,可以用新数组替换旧数组
     example1.items = example1.items.filter(function (item) {

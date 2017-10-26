@@ -1179,7 +1179,8 @@ AJAX
   $.post(url[,data][,cfoo][,type])  POST请求 
   ◆通用型
   $.ajaxSetup({  // 设置全局Ajax默认选项  
-    // PS: 设置Ajax请求的一些全局性选项值,后续请求不需再设置则默认使用改值  
+    // PS: 设置Ajax请求的一些全局性选项值,请求未设置则默认使用该值  
+    //   当使用第三方插件时,可能导致问题 
     dataType: 'xxx',
     success: function(data){
     }
@@ -1902,7 +1903,7 @@ Exp:
      return false;
    })
 Suggestion: 
-Question&Idea
+Question&Idea 
   如何在 AJAX 的回调中获取请求的数据 [?]
 ---------------------------------------------------------------------以下待整理 
 

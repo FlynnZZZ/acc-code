@@ -14,10 +14,9 @@
       HTMLCanvasElement 使用另一个 <canvas> 元素作为图片源 
       ImageBitmap  可从上述的所有源以及其它几种源中生成 
         一个高性能的位图,可低延迟地绘制 
-      使用其它域名下的图片 
-        在 HTMLImageElement 上使用'crossOrigin'属性,可请求加载其它域名上的图片.
-        若图片的服务器允许跨域访问这个图片,则可使用该图片而不污染canvas, 
-        否则,使用这个图片将会污染canvas.
+      使用跨域图片: 
+        1 若图片的服务器允许跨域访问该图片,则不会污染canvas,否则会污染canvas
+        2 设置 img.crossOrigin = 'anonymous'  
     ★绘制矩形: canvas只支持一种原生的图形绘制: 矩形[不同于SVG]  
       PS: 矩形是唯一一种可以直接在2D 上下文中绘制的形状
     .strokeRect(x,y,w,h)  绘制左上角为(x,y)、宽w、高h的描边矩形 

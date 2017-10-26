@@ -1344,7 +1344,9 @@ HTMLElement,HTML元素节点
     .naturalWidth/img.naturalHeight 只读,图片真实的宽/高
     .srcset 
     .sizes 
-    .crossOrigin 
+    .crossOrigin  kw,读写,
+      'anonymous'  对此元素的CORS请求不设置凭据标志,一般在canvas中跨域使用图片时设置该值  
+      'use-credentials'  对此元素的CORS请求设置凭证标志,即请求需提供凭据 
     .useMap 
     .isMap 
     .width 

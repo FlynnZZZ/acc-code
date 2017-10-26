@@ -1,73 +1,107 @@
 '*':
-  '--TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ ':
-    'prefix': 'todo self'
+  '- TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ ':
+    'prefix': 'todo-self'
     'body': '// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ '
-  '--localStorage':
-    'prefix': 'localStorage'
-    'body': 'localStorage'
-  '--sessionStorage':
-    'prefix': 'sessionStorage'
-    'body': 'sessionStorage'
-  '--template':
-    'prefix': 'template'
+  # word 
+  '- template':
+    'prefix': 'template-word'
     'body': 'template'
-  '--module':
-    'prefix': 'module'
+  '- module':
+    'prefix': 'module-word'
     'body': 'module'
-  '--Example:':
-    'prefix': 'Example'
+  '- PS: ':
+    'prefix': 'ps-word'
+    'body': 'PS: '
+  '- Example: ':
+    'prefix': 'Example-word'
     'body': 'Example: '
+  '- Extend: ':
+    'prefix': 'extend-word'
+    'body': 'Extend: '
+  '- Relate: ':
+    'prefix': 'relate-word'
+    'body': 'Relate: '
+  '- Static: ':
+    'prefix': 'static-word'
+    'body': 'Static: '
+  '- Proto: ':
+    'prefix': 'proto-word'
+    'body': 'Proto: '
+  '- Instance: ':
+    'prefix': 'instance-word'
+    'body': 'Instance: '
+  '- Member: ':
+    'prefix': 'member-word'
+    'body': 'Member: '
+  '- Feature: ':
+    'prefix': 'feature-word'
+    'body': 'Feature: '
+  '- Accu: ':
+    'prefix': 'accu-word'
+    'body': 'Accu: '
+  '- Self: ':
+    'prefix': 'self-word'
+    'body': 'Self: '
+  '- More: ':
+    'prefix': 'more-word'
+    'body': 'More: '
+  '- Expand: ':
+    'prefix': 'expand-word'
+    'body': 'Expand: '
+  '- Question: ':
+    'prefix': 'question-word'
+    'body': 'Question: '
 
 '.text.html.basic,.text.xml,.text.html.php':
   # 标签 ----------------------------
-  '--<div>$1</div>':
+  '- <div>$1</div>':
     'prefix': 'div'
     'body': '<div>$1</div>'
-  '--<div class="">$1</div>':
+  '- <div class="">$1</div>':
     'prefix': 'div-class'
     'body': '<div class="">$1</div>'
-  '--<div id="">$1</div>':
+  '- <div id="">$1</div>':
     'prefix': 'div-id'
     'body': '<div id="">$1</div>'
-  '--<template>$1</template>':
+  '- <template>$1</template>':
     'prefix': 'template'
     'body': '<template>$1</template>'
   # 属性----------------------------------
-  '--style="$1"':
+  '- style="$1"':
     'prefix': 'style'
     'body': 'style="$1"'
-  '--class="$1"':
+  '- class="$1"':
     'prefix': 'class'
     'body': 'class="$1"'
-  '--id="$1"':
+  '- id="$1"':
     'prefix': 'id'
     'body': 'id="$1"'
-  '--placeholder="$1"':
+  '- placeholder="$1"':
     'prefix': 'placeholder'
     'body': 'placeholder="$1"'
-  '--name="$1"':
+  '- name="$1"':
     'prefix': 'name'
     'body': 'name="$1"'
-  '--data-xxx=val':
+  '- data-xxx=val':
     'prefix': 'data-xxx'
     'body': 'data-$1="$2"'
   # php----------------------------------
-  '--php test':
+  'php test':
     'prefix': 'test-php'
     'body': 'test'
 '.text.html.basic':
   # HTML------------------------------------------------------------------------
-  '--<meta name="viewport" content="...">':
+  '- <meta name="viewport" content="...">':
     'prefix': 'metaViewport'
     'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
-  '--<style>$1</style>':
+  '- <style>$1</style>':
     'prefix': 'style-inset'
     'body': '<style>\n\t$1\n</style>'
-  '--<script src="$1" charset="utf-8"></script>':
+  '- <script src="$1" charset="utf-8"></script>':
     'prefix': 'script-src'
     'body': '<script src="$1" charset="utf-8"></script>'
   # 自定义组合--------------------------------
-  '--self html':
+  '- html-self':
     'prefix': 'html-self'
     'body': """
     <!DOCTYPE html>
@@ -81,7 +115,7 @@
     <body>
     </body>
     </html>"""
-  '--self html-mobile':
+  '- html-mobile':
     'prefix': 'html-mobile'
     'body': """
     <!DOCTYPE html>
@@ -95,7 +129,7 @@
     <body>
     </body>
     </html>"""
-  '--self cptTemplate':
+  '- cptTemplate':
     'prefix': 'cpt-template'
     'body': """
     <style>
@@ -108,7 +142,7 @@
     })
     </script>
     """ 
-  '--self cptTemplate child':
+  '- cptTemplate-child':
     'prefix': 'cpt-template-child'
     'body': """
     <style>
@@ -133,17 +167,17 @@
     </script>
     """ 
 '.text.xml':   
-  '-wx test':
+  'wx test':
     'prefix': 'test'
     'body': 'test'
 
 '.source.css,.source.css.less':
   # 选择器--------------------------------
-  '--nth-child($1){$2}':
+  '- nth-child($1){$2}':
     'prefix': 'nthChild'
     'body': 'nth-child($1)'
   # 属性----------------------------------
-  '--@keyframes ${1:name}{}':
+  '- @keyframes ${1:name}{}':
     'prefix': 'keyframes'
     'body': """@keyframes ${1:name}{
       form{
@@ -151,86 +185,100 @@
       to{
       }
     }"""
-  '--animation:${1:name} 2s linear 1s infinite alternate;':
+  '- animation:${1:name} 2s linear 1s infinite alternate;':
     'prefix': 'animation'
     'body': 'animation:${1:name} 2s linear 1s infinite alternate;'
-  '--background-color: #b9e4e7;':
+  '- background-color: #b9e4e7;':
     'prefix': 'backgroundColorFast'
     'body': 'background-color: #b9e4e7;'
-  '--border: solid blue 1px;':
+  '- border: solid blue 1px;':
     'prefix': 'border-fast'
     'body': 'border: solid blue 1px;'
-  '--no-repeat':
+  '- no-repeat':
     'prefix': 'noRepeat1'
     'body': 'no-repeat'
-  '--transform:${1:translate(len1,len2)};':
+  '- transform:${1:translate(len1,len2)};':
     'prefix': 'transform'
     'body': 'transform:${1:translate(len1,len2)};'
-  '--transition:all 5s ease 0.5s;':
+  '- transition:all 5s ease 0.5s;':
     'prefix': 'transition'
     'body': 'transition:all 5s ease 0.5s;'
-  '--translate(len1,len2)':
+  '- translate(len1,len2)':
     'prefix': 'translate'
     'body': 'translate(len1,len2)'
-  '--user-select':
+  '- user-select':
     'prefix': 'user-select'
     'body': 'user-select:'
   # 值----------------------------------
-  '--Microsoft YaHei':
+  '- Microsoft YaHei':
     'prefix': 'MicrosoftYaHei'
     'body': 'Microsoft YaHei'
-  '--no-repeat':
+  '- no-repeat':
     'prefix': 'no-repeat1'
     'body': 'no-repeat'
-  '--transparent':
+  '- transparent':
     'prefix': 'transparent'
     'body': 'transparent'
   # 操作--------------------------------
-  '--/* */':
+  '- /* */':
     'prefix': 'zs'
     'body': '/* $1 */'
-  '-less test':
+  'less test':
     'prefix': 'test-less'
     'body': 'test'
 '.source.css':
-  '--test test':
+  '- test test':
     'prefix': 'test'
     'body': 'test'
 
 '.source.js':
-  '--/* $1 */':
+  '- /* $1 */':
     'prefix': 'zs'
     'body': '/* $1 */'
-  # operator 操作符  statement 语句  
-  '--typeof':
-    'prefix': 'typeof'
+  '- prop  属性,组成部分':
+    'prefix': 'prop-word'
+    'body': """prop""" 
+  '- attr  特性,修饰部分':
+    'prefix': 'attr-word'
+    'body': """attr""" 
+  '- typeof val;  str,值类型检测':
+    'prefix': 'typeof-operat'
     'body': 'typeof '
-  '--instanceof':
-    'prefix': 'instanceof'
-    'body': 'instanceof'
-  '--void':
-    'prefix': 'void'
-    'body': 'void'
-  '--try-catch':
-    'prefix': 'try catch'
+  '- obj instanceof Foo;  bol,原型链继承检测':
+    'prefix': 'instanceof-operat'
+    'body': """instanceof""" 
+  '- delete val;  bol,删除对象中的成员[值],返回是否删除成功的布尔值':
+    'prefix': 'delete-operat'
+    'body': 'delete '
+  '- prop in obj;  bol,属性是否在对象中[包括原型中属性]':
+    'prefix': 'in-operat'
+    'body': 'in '
+  '- void expr;  undefined,执行表达式':
+    'prefix': 'void-operat'
+    'body': 'void '
+  '- expr1?expr2:expr3;  三元条件运算符':
+    'prefix': 'expr3-operat'
+    'body': '?expr2:expr3'
+  '- try-catch':
+    'prefix': 'try-catch'
     'body': """try {
       } 
       catch (e) {
       } 
       finally {
       }"""
-  '--for (var i = 0; i < $1; i++) { }':
-    'prefix': 'for'
+  '- for (var i = 0; i < $1; i++) { }':
+    'prefix': 'for-es'
     'body': """for (var i = 0; i < $1; i++) {
       $2
     }"""
-  '--for-in;':
-    'prefix': 'forin'
+  '- for-in;':
+    'prefix': 'for-in-es'
     'body': """for(var ${1:key} in ${2:obj}){
       $3
     };"""
   # 自定义组合 ---------------------
-  '--ajax pack':
+  '- ajax-pack':
     'prefix': 'ajax-pack'
     'body':  """
       var xhr = new XMLHttpRequest();
@@ -252,50 +300,52 @@
       var data = JSON.stringify(aoo);
       xhr.send(data); 
       """
-  '-DM test':
-    'prefix': 'test dom'
-    'body': 'test'
-  '-win window.screenLeft':
-    'prefix': 'win-screenLeft'
+  '- window.screenLeft':
+    'prefix': 'screenLeft-window'
     'body': 'window.screenLeft'
-  '-win window.screenTop':
-    'prefix': 'win-screenTop'
+  '- window.screenTop':
+    'prefix': 'screenTop-window'
     'body': 'window.screenTop'
-  '-win window.screenX':
-    'prefix': 'win-screenX'
+  '- window.screenX':
+    'prefix': 'screenX-window'
     'body': 'window.screenX'
-  '-win window.screenY':
-    'prefix': 'win-screenY'
+  '- window.screenY':
+    'prefix': 'screenY-window'
     'body': 'window.screenY'
 
 '.text.html.vue':
-  '-vue test':
+  'vue test':
     'prefix': 'test-vue'
     'body': 'test'
 
 
 # 使用说明 
 # e.g.:
-#   # 提示 显示为
-#   '-console.log()':
-#     # 激活提示的词
-#     'prefix': 'con'
-#     # 最终的结果
-#     'body': 'console.log($1);'
+#   '-console.log()':            # 提示 显示为
+#     'prefix': 'log'            # 激活提示的词 
+#     'body': 'console.log($1);' # 最终的结果 
 # 语法注释
-# $1 表示光标的默认位置
-# $2 按下 tab 键,光标跳到的第二个位置,以此类推
-# ${1:name} 表示第一次会将 name 选中
-# \n表示换行 \t tab缩进
-# 提示 显示 字符开始不可使用下划线符号_
-# """内容""" 创建保持格式的代码块 「"""...""" 代替'...'」
+#   $1 表示光标的默认位置
+#   $2 按下 tab 键,光标跳到的第二个位置,以此类推
+#   ${1:name} 表示第一次会将 name 选中
+#   \n表示换行 \t tab缩进
+#   提示 显示 字符开始不可使用下划线符号_
+#   """内容""" 创建保持格式的代码块 「"""...""" 代替'...'」
 # 当激活字符一样时,后面的会覆盖掉前面的.
 # 自定义Snippets的扩展词时,定义的格式的确定
 #   在要定义的文档类型下,ctrl-Shift-p 输入代码  Editor: Log Cursor Scope
 #   弹出字符如 txt格式的为 text.plain ,则.text.plain类似于.source.js表示一种文件格式
 #   注意在前面加一个点.
+# 自定义的分类: 
+#   按大类划分文档: 避免一个文件中条目过多  
+#   文档内的规则: 
+#     -obj/Object .xxx  xxxx 类简写或类 
+#     -word 单词
+#     -eN   事件名 
+#     -operat  操作符
+#     -xxx  其他 
 # Question:
-#   如何同时定义多个类型文件的代码提示
+#   
 
 # 原始文档说明 留存 
 # Your snippets

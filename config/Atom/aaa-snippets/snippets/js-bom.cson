@@ -1,43 +1,55 @@
 # BOM  .js ---------------------------------------------------------------------
 '.source.js': 
   # clss --------------------------------------------
-  '-BM XMLHttpRequest':
+  'BOM XMLHttpRequest':
     'prefix': 'XMLHttpRequest'
     'body': 'XMLHttpRequest'
-  '-BM FileReader':
+  'BOM FileReader':
     'prefix': 'FileReader'
     'body': """FileReader"""
-  '-BM WebSocket':
+  'BOM WebSocket':
     'prefix': 'WebSocket'
     'body': 'WebSocket'
   # window ------------------------------------------
-  '-BM window':
+  'BOM window':
     'prefix': 'window'
     'body': 'window'
-  '-BM history':
+  'BOM history':
     'prefix': 'history'
     'body': 'history'
-  '-BM location':
+  'BOM location':
     'prefix': 'location'
     'body': 'location'
-  '-BM navigator':
+  'BOM navigator':
     'prefix': 'navigator'
     'body': 'navigator'
-  '-BM alert($1)':
+  'BOM localStorage':
+    'prefix': 'localStorage'
+    'body': 'localStorage'
+  'BOM sessionStorage':
+    'prefix': 'sessionStorage'
+    'body': 'sessionStorage'
+  'BOM alert($1)  提示窗':
     'prefix': 'alert'
     'body': 'alert($1)'
-  '-BM confirm(str)':
+  'BOM confirm(str)':
     'prefix': 'confirm'
     'body': 'confirm($1)'
-  '-BM clearInterval($1)':
-    'prefix': 'clearInterval'
-    'body': 'clearInterval($1)'
-  '-BM clearTimeout($1)':
-    'prefix': 'clearTimeout'
-    'body': 'clearTimeout($1)'
-  '-BM open()':
+  'BOM open()':
     'prefix': 'open'
     'body': 'open("${1:url}","_self")'
-  '-BM prompt("提示文字","默认输入文字")':
+  'BOM prompt("提示文字","默认输入文字")':
     'prefix': 'prompt'
     'body': 'prompt("${1:提示文字}","${2:默认输入文字}")'
+  'BOM setTimeout(${1:funName},${2:time})':
+    'prefix': 'setTimeout'
+    'body': 'setTimeout(${1:funName},${2:1000})'
+  'BOM setInterval(${1:funName},${2:time})':
+    'prefix': 'setInterval'
+    'body': 'setInterval(${1:funName},${2:1000})'
+  'BOM clearInterval($1)':
+    'prefix': 'clearInterval'
+    'body': 'clearInterval($1)'
+  'BOM clearTimeout($1)':
+    'prefix': 'clearTimeout'
+    'body': 'clearTimeout($1)'

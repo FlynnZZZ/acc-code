@@ -1,34 +1,34 @@
 # js .js 对象及其属性方法--------------------------------------------------------
 '.source.js':
   # obj ------------------------------------------------
-  '-obj writable':
+  'O writable':
     'prefix': 'writable'
     'body': 'writable' 
-  '-obj enumerable':
+  'O enumerable':
     'prefix': 'enumerable'
     'body': 'enumerable' 
-  '-obj configurable':
+  'O configurable':
     'prefix': 'configurable'
     'body': 'configurable' 
-  '-obj Object':
+  'O Object':
     'prefix': 'Object-obj' # 存在bug
     'body': 'Object'
-  '-obj Object.create(protoObj[,configObj]) obj,生成对象':
+  'O Object.create(protoObj[,configObj]) obj,生成对象':
     'prefix': 'Object-create'
     'body': 'Object.create($1)'
-  '-obj Object.is(val1,val2) bol,值是否相同(按外形比较)':
+  'O Object.is(val1,val2) bol,值是否相同(按外形比较)':
     'prefix': 'Object-is'
     'body': 'Object.is($1)'
-  '-obj Object.keys(obj) arr,获取可枚举的自有成员':
+  'O Object.keys(obj) arr,获取可枚举的自有成员':
     'prefix': 'Object-keys'
     'body': 'Object.keys($1)'
-  '-obj Object.assign(obj1,obj2,..) obj,返回合并后的对象':
+  'O Object.assign(obj1,obj2,..) obj,返回合并后的对象':
     'prefix': 'Object-assign'
     'body': 'Object.assign($1)'
-  '-obj Object.getPrototypeOf(obj) obj,原型对象':
+  'O Object.getPrototypeOf(obj) obj,原型对象':
     'prefix': 'Object-getPrototypeOf'
     'body': 'Object.getPrototypeOf($1)'
-  '-obj Object.defineProperty(obj,key,{}) 定义对象的成员及其特性':
+  'O Object.defineProperty(obj,key,{}) 定义对象的成员及其特性':
     'prefix': 'Object-defineProperty'
     'body': '''Object.defineProperty(${1:obj},key,{
         // get: function (){
@@ -40,7 +40,7 @@
         enumerable: true, 
         configurable: true
       })'''
-  '-obj Object.defineProperties(obj,configObj) 同时定义多个成员及特性':
+  'O Object.defineProperties(obj,configObj) 同时定义多个成员及特性':
     'prefix': 'Object-defineProperties'
     'body': '''Object.defineProperties(${1:obj},{
         aoo: {
@@ -60,288 +60,290 @@
           configurable: true
         }
       })'''
-  '-obj Object.getOwnPropertyDescriptor(obj,key) obj,成员的特性配置':
+  'O Object.getOwnPropertyDescriptor(obj,key) obj,成员的特性配置':
     'prefix': 'Object-getOwnPropertyDescriptor'
     'body': 'Object.getOwnPropertyDescriptor($1)'
-  '-obj Object.getOwnPropertyDescriptors(obj) obj,所有成员的特性配置':
+  'O Object.getOwnPropertyDescriptors(obj) obj,所有成员的特性配置':
     'prefix': 'Object-getOwnPropertyDescriptors'
     'body': 'Object.getOwnPropertyDescriptors($1)'
-  '-obj Object.getOwnPropertyNames() arr,所有[包括不可枚]的自有成员':
+  'O Object.getOwnPropertyNames() arr,所有[包括不可枚]的自有成员':
     'prefix': 'Object-getOwnPropertyNames'
     'body': 'Object.getOwnPropertyNames()'
-  '-obj Object.isExtensible(obj) bol,能否增加成员':
+  'O Object.isExtensible(obj) bol,能否增加成员':
     'prefix': 'Object-isExtensible'
     'body': 'Object.isExtensible($1)'
-  '-obj Object.isSealed(obj)':
+  'O Object.isSealed(obj)':
     'prefix': 'Object-isSealed'
     'body': 'Object.isSealed($1)'
-  '-obj Object.isFrozen(obj)':
+  'O Object.isFrozen(obj)':
     'prefix': 'Object-isFrozen'
     'body': 'Object.isFrozen($1)'
-  '-obj Object.preventExtensions(obj) 阻止给对象新增属性':
+  'O Object.preventExtensions(obj) 阻止给对象新增属性':
     'prefix': 'Object-preventExtensions'
     'body': 'Object.preventExtensions($1)'
-  '-obj Object.seal(obj) 不可扩展、配置':
+  'O Object.seal(obj) 不可扩展、配置':
     'prefix': 'Object-seal'
     'body': 'Object.seal($1)'
-  '-obj Object.freeze(obj) 不可写、扩展、配置':
+  'O Object.freeze(obj) 不可写、扩展、配置':
     'prefix': 'Object-freeze'
     'body': 'Object.freeze($1)'
-  '-obj .__proto__':
-    'prefix': 'proto1' # 存在bug
+  'O .__proto__':
+    'prefix': 'proto-obj' 
     'body': '__proto__'
-  '-obj .constructor fn,构造函数':
+  'O .constructor fn,构造函数':
     'prefix': 'constructor-obj' # 存在bug,当为 'prefix': 'constructor' 时
     'body': 'constructor'
-  '-obj .valueOf()':
+  'O .valueOf()':
     'prefix': 'valueOf-obj'
     'body': 'valueOf()'
-  '-obj .toString()':
+  'O .toString()':
     'prefix': 'toString-obj'
     'body': 'toString()'
-  '-obj .toLocaleString()':
+  'O .toLocaleString()':
     'prefix': 'toLocaleString-obj'
     'body': 'toLocaleString()'
-  '-obj .hasOwnProperty(key) bol,属性是否存在(不包括原型)':
+  'O .hasOwnProperty(key) bol,属性是否存在(不包括原型)':
     'prefix': 'hasOwnProperty-obj' # 存在bug 
     'body': 'hasOwnProperty($1)'
-  '-obj .propertyIsEnumerable(key) bol,属性能否for-in枚举':
+  'O .propertyIsEnumerable(key) bol,属性能否for-in枚举':
     'prefix': 'propertyIsEnumerable-obj'
     'body': 'propertyIsEnumerable($1)'
-  '-obj .isPrototypeOf(obj) bol,是否处于目标对象原型链上':
+  'O .isPrototypeOf(obj) bol,是否处于目标对象原型链上':
     'prefix': 'isPrototypeOf-obj'
     'body': 'isPrototypeOf($1)'
   # bol ------------------------------------------------
-  '-bol Boolean':
+  'O Boolean':
     'prefix': 'Boolean-bol'
     'body': 'Boolean'
-  '-bol Boolean($1)':
+  'O Boolean($1)':
     'prefix': 'Boolean'
     'body': 'Boolean($1)'
   # num ------------------------------------------------
-  '-num Infinity':
+  'O Infinity':
     'prefix': 'Infinity'
     'body': 'Infinity'
-  '-num Number':
+  'O Number':
     'prefix': 'Number-num '
     'body': 'Number'
-  '-num Number($1)':
+  'O Number($1)':
     'prefix': 'Number'
     'body': 'Number($1)'
-  '-num Number.NaN':
+  'O Number.NaN':
     'prefix': 'Number-NaN'
     'body': 'Number.NaN'
-  '-num Number.MAX_VALUE':
+  'O Number.MAX_VALUE':
     'prefix': 'Number-MAX_VALUE'
     'body': 'Number.MAX_VALUE'
-  '-num Number.MIN_VALUE':
+  'O Number.MIN_VALUE':
     'prefix': 'Number-MIN_VALUE'
     'body': 'Number.MIN_VALUE'
-  '-num Number.NEGATIVE_INFINITY':
+  'O Number.NEGATIVE_INFINITY':
     'prefix': 'Number-NEGATIVE_INFINITY'
     'body': 'Number.NEGATIVE_INFINITY'
-  '-num Number.POSITIVE_INFINITY':
+  'O Number.POSITIVE_INFINITY':
     'prefix': 'Number-POSITIVE_INFINITY'
     'body': 'Number.POSITIVE_INFINITY'
-  '-num Number.isFinite()':
+  'O Number.isFinite()':
     'prefix': 'Number-isFinite'
     'body': 'Number.isFinite()'
-  '-num Number.isInteger()':
+  'O Number.isInteger()':
     'prefix': 'Number-isInteger'
     'body': 'Number.isInteger()'
-  '-num Number.isNaN()':
+  'O Number.isNaN()':
     'prefix': 'Number-isNaN'
     'body': 'Number.isNaN()'
-  '-num Number.isSafeInteger()':
+  'O Number.isSafeInteger()':
     'prefix': 'Number-isSafeInteger'
     'body': 'Number.isSafeInteger()'
-  '-num Number.parseFloat()':
+  'O Number.parseFloat()':
     'prefix': 'Number-parseFloat'
     'body': 'Number.parseFloat()'
-  '-num Number.parseInt()':
+  'O Number.parseInt()':
     'prefix': 'Number-parseInt'
     'body': 'Number.parseInt()'
-  '-num .toFixed(num) str,四舍五入保留num位小数':
+  'O .toFixed(num) str,四舍五入保留num位小数':
     'prefix': 'toFixed-num'
     'body': 'toFixed($1)'
-  '-num .toExponential(x) str,以科学计数法表示并保留x位小数 ':
+  'O .toExponential(x) str,以科学计数法表示并保留x位小数 ':
     'prefix': 'toExponential-num'
     'body': 'toExponential($1)'
-  '-num .toPrecision(x) str,以指数或点形式来表示[根据x的长度来决定形式]':
+  'O .toPrecision(x) str,以指数或点形式来表示[根据x的长度来决定形式]':
     'prefix': 'toPrecision-num'
     'body': 'toPrecision($1)'
+  # str/arr 
+  'O .slice(begin[,end]) str,字符截取':
+    'prefix': 'slice-str/arr'
+    'body': 'slice($1)'
+  'O .includes(str/val)  bol,是否包含指定字符串':
+    'prefix': 'includes-str/arr'
+    'body': 'includes("$1")'
+  'O .indexOf(str[,bgn])  idx,指定位置向后首个指定字符串的下标,否则返回-1':
+    'prefix': 'indexOf-str/arr'
+    'body': 'indexOf($1,0$2)$3'
+  'O .lastIndexOf(str[,bgn])  idx,指定位置向前的首个指定字符串的下标,否则返回-1':
+    'prefix': 'lastIndexOf-str/arr'
+    'body': 'lastIndexOf($1)'
+  'O .concat($1)  str,返回拼接后的字符串':
+    'prefix': 'concat-str/arr'
+    'body': 'concat($1)'
+  # str/rgep 
+  'O .compile(rgep,modifier)':
+    'prefix': 'compile-str/rgep'
+    'body': 'compile($1)'
   # str ------------------------------------------------
-  '-str String':
+  'O String':
     'prefix': 'String-str'
     'body': 'String'
-  '-str String($1)':
+  'O String($1)':
     'prefix': 'String'
     'body': 'String($1)'
-  '-str String.fromCharCode(num,num...) str,指定Unicode值对应的字符串':
+  'O String.fromCharCode(num,num...) str,指定Unicode值对应的字符串':
     'prefix': 'String-fromCharCode'
     'body': 'String.fromCharCode($1)'
-  '-str .charAt(idx)  str,指定下标对应的字符':
+  'O .charAt(idx)  str,指定下标对应的字符':
     'prefix': 'charAt-str'
     'body': 'charAt($1)'
-  '-str .charCodeAt(idx)  num,以Unicode编码形式显示指定位置的字符':
+  'O .charCodeAt(idx)  num,以Unicode编码形式显示指定位置的字符':
     'prefix': 'charCodeAt-str'
     'body': 'charCodeAt($1)'
-  '-str .substr(begin[,num])  str,截取num个字符 ':
+  'O .substr(begin[,num])  str,截取num个字符 ':
     'prefix': 'substr-str'
     'body': 'substr($1)'
-  '-str .substring(idx1,idx2)  str,截取字符串':
+  'O .substring(idx1,idx2)  str,截取字符串':
     'prefix': 'substring-str'
     'body': 'substring($1)'
-  '-str .match(str/rgep)  arr,指定字符匹配到的数组':
+  'O .match(str/rgep)  arr,指定字符匹配到的数组':
     'prefix': 'match-str'
     'body': 'match($1)'
-  '-str .localeCompare(str)  num,字符串比较':
+  'O .localeCompare(str)  num,字符串比较':
     'prefix': 'localeCompare-str'
     'body': 'localeCompare($1)'
-  '-str .replace(rgep/str,replacement)  str,返回替换后的字符串':
+  'O .replace(rgep/str,replacement)  str,返回替换后的字符串':
     'prefix': 'replace-str'
     'body': 'replace($1,$2)'
-  '-str .split(str/rgep)  arr,使用包含的指定字符分割成数组':
+  'O .split(str/rgep)  arr,使用包含的指定字符分割成数组':
     'prefix': 'split-str'
     'body': 'split($1)'
-  '-str .trim()  str,去除头尾空格并返回':
+  'O .trim()  str,去除头尾空格并返回':
     'prefix': 'trim-str'
     'body': 'trim()'
-  '-str .toUpperCase()  str,转换为大写并返回':
+  'O .toUpperCase()  str,转换为大写并返回':
     'prefix': 'toUpperCase-str'
     'body': 'toUpperCase()'
-  '-str .toLowerCase()  str,转换为小写并返回':
+  'O .toLowerCase()  str,转换为小写并返回':
     'prefix': 'toLowerCase-str'
     'body': 'toLowerCase()'
-  '-str .toLocaleLowerCase()  str,转换为本地小写并返回':
+  'O .toLocaleLowerCase()  str,转换为本地小写并返回':
     'prefix': 'toLocaleLowerCase-str'
     'body': 'toLocaleLowerCase()'
-  '-str .toLocaleUpperCase()  str,转换为本地大写并返回':
+  'O .toLocaleUpperCase()  str,转换为本地大写并返回':
     'prefix': 'toLocaleUpperCase-str'
     'body': 'toLocaleUpperCase()'
-  '-str/arr .slice(begin[,end]) str,字符截取':
-    'prefix': 'slice-str'
-    'body': 'slice($1)'
-  '-str/arr .includes(str/val)  bol,是否包含指定字符串':
-    'prefix': 'includes-str'
-    'body': 'includes("$1")'
-  '-str/arr .indexOf(str[,bgn])  idx,指定位置向后首个指定字符串的下标,否则返回-1':
-    'prefix': 'indexOf-str'
-    'body': 'indexOf($1,0$2)$3'
-  '-str/arr .lastIndexOf(str[,bgn])  idx,指定位置向前的首个指定字符串的下标,否则返回-1':
-    'prefix': 'lastIndexOf-str'
-    'body': 'lastIndexOf($1)'
-  '-str .search(str/rgep)  idx,首个指定字符串的下标,否则返回-1':
+  'O .search(str/rgep)  idx,首个指定字符串的下标,否则返回-1':
     'prefix': 'search-str'
     'body': 'search($1)'
-  '-str/arr .concat($1)  str,返回拼接后的字符串':
-    'prefix': 'concat-str'
-    'body': 'concat($1)'
-  '-str/RE .compile(rgep,modifier)':
-    'prefix': 'compile-str'
-    'body': 'compile($1)'
   # arr ------------------------------------------------
-  '-arr Array':
+  'O Array':
     'prefix': 'Array-arr'
     'body': 'Array'
-  '-arr Array.isArray(arr)  bol,是否为数组':
+  'O Array.isArray(arr)  bol,是否为数组':
     'prefix': 'Array-isArray'
     'body': 'Array.isArray($1)'
-  '-arr .pop()  val,返回删除的尾部成员':
+  'O .pop()  val,返回删除的尾部成员':
     'prefix': 'pop-arr'
     'body': 'pop()'
-  '-arr .shift()  val,返回删除的头部成员':
+  'O .shift()  val,返回删除的头部成员':
     'prefix': 'shift-arr'
     'body': 'shift()'
-  '-arr .push($1)  num,末尾添加成员,返回新数组长度':
+  'O .push($1)  num,末尾添加成员,返回新数组长度':
     'prefix': 'push-arr'
     'body': 'push($1)'
-  '-arr .unshift(val1[,val2,...])  num,头部添加元素,返回新数组长度':
+  'O .unshift(val1[,val2,...])  num,头部添加元素,返回新数组长度':
     'prefix': 'unshift-arr'
     'body': 'unshift($1)'
-  '-arr .splice(begin ,num ,v1,v2,...)  arr,删除[添加]元素,返回由删除的成员组成的数组':
+  'O .splice(begin ,num ,v1,v2,...)  arr,删除[添加]元素,返回由删除的成员组成的数组':
     'prefix': 'splice-arr'
     'body': 'splice(${1:begin},${2:num},${3:v1,v2,...})'
-  '-arr .reverse()  arr,颠倒所有成员后返回':
+  'O .reverse()  arr,颠倒所有成员后返回':
     'prefix': 'reverse-arr'
     'body': 'reverse()'
-  '-arr .sort([foo])  返回排序后的数组[改变原数组]':
+  'O .sort([foo])  返回排序后的数组[改变原数组]':
     'prefix': 'sort-arr'
     'body': """sort(${1:function(val1,val2){
       return ${2:true[改变顺序]}
     }})"""
-  '-arr .join([str])  str,使用指定字符串连成员':
+  'O .join([str])  str,使用指定字符串连成员':
     'prefix': 'join-arr'
     'body': 'join($1)'
-  '-arr .forEach(foo)':
+  'O .forEach(foo)':
     'prefix': 'forEach-arr'
     'body': """forEach(function(val,idx,arr){
       $1
     })"""
-  '-arr .map(cfoo[,this])  arr,返回回调返回值组成的数组':
+  'O .map(cfoo[,this])  arr,返回回调返回值组成的数组':
     'prefix': 'map-arr'
     'body': """map(function(val,idx,arr1){
       return $2
     }${1:,this})"""
-  '-arr .every(foo [,this])  bol,回调返回值是否全部为真':
+  'O .every(foo [,this])  bol,回调返回值是否全部为真':
     'prefix': 'every-arr'
     'body': """every(function(val,idx,arr){
       return ${2:[全部为真时,才为真]}
     },${1:this})"""
-  '-arr .some(foo [,this])  bol,回调返回值是否有':
+  'O .some(foo [,this])  bol,回调返回值是否有':
     'prefix': 'some-arr'
     'body': """some(function(val,idx,arr){
       return ${2:[若存在返回值为真则返回真]}
     } ${1:,this})"""
-  '-arr .filter(foo [,this])  arr,回调返回值为true的元素组成的数组':
+  'O .filter(foo [,this])  arr,回调返回值为true的元素组成的数组':
     'prefix': 'filter-arr'
     'body': """filter(function(val,idx,arr){
         return ${2:true[保留]}
       } ,${1:this})"""
-  '-arr .reduce(foo[,initVal])  val,条件缩减,返回最后一次回调值':
+  'O .reduce(foo[,initVal])  val,条件缩减,返回最后一次回调值':
     'prefix': 'reduce-arr'
     'body': """reduce(function(retVal,currVal,idx,arr){ 
       return $2 
     },${1:initVal})"""
-  '-arr .reduceRight(foo[,initVal])  val,和reduce类似,只是从右到左遍历':
+  'O .reduceRight(foo[,initVal])  val,和reduce类似,只是从右到左遍历':
     'prefix': 'reduceRight-arr'
     'body': """reduceRight(function(retVal,currVal,idx,arr){ 
       return $2 
     },${1:initVal})"""
   # fn ------------------------------------------------
-  '-fn Function':
+  'O Function':
     'prefix': 'Function-fn'
     'body': 'Function'
-  '-fn arguments':
+  'O arguments':
     'prefix': 'arguments'
     'body': 'arguments'
-  '-fn arguments.callee  在函数体内表示函数本身':
+  'O arguments.callee  在函数体内表示函数本身':
     'prefix': 'callee-arguments'
     'body': 'callee'
-  '-fn .name 函数的名字':
+  'O .name 函数的名字':
     'prefix': 'name-fn'
     'body': 'name'
-  '-fn .caller  fn,函数执行时的上层函数':
+  'O .caller  fn,函数执行时的上层函数':
     'prefix': 'caller-fn'
     'body': 'caller'
-  '-fn .prototype  构造函数原型':
+  'O .prototype  构造函数原型':
     'prefix': 'prototype-fn'
     'body': 'prototype'
-  '-fn .apply(this[,arr])':
+  'O .apply(this[,arr])':
     'prefix': 'apply-fn'
     'body': 'apply(${1:this},${2:arrays})'
-  '-fn .bind(this[,arg1,arg2,...])':
+  'O .bind(this[,arg1,arg2,...])':
     'prefix': 'bind-fn'
     'body': 'bind(${1:this},${2:arg1,arg2,..})'
-  '-fn .call(this[,arg1,arg2,...])':
+  'O .call(this[,arg1,arg2,...])':
     'prefix': 'call-fn'
     'body': """call(${1:this},${2:arg1,arg2,..})"""
-  '-fn function(){\n}$1':
+  'O function(){\n}$1':
     'prefix': 'function-1'
     'body': 'function(){\n}$1'
-  '-fn function $1($2){$3\n}':
+  'O function $1($2){$3\n}':
     'prefix': 'function-2'
     'body': 'function $1($2){$3\n}'
-  '-fn (function ($1){$3\n})($2)':
+  'O (function ($1){$3\n})($2)':
     'prefix': 'function-3'
     'body': '(function ($1){$3\n})($2)'

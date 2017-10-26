@@ -245,24 +245,24 @@
   '-jq $.ajax({})':
     'prefix': 'ajax-jq'
     'body': """$.ajax({ // 某接口
-        url: 'url',
-        data: {
+        url: 'url'
+        ,data: {
           key : val,
-        }, 
-        // type: 'GET',
-        // dataType: 'json',
-        // xhrFields: { withCredentials: true  },
-        // crossDomain: true, 
-        // contentType:'application/json',
-        // beforeSend: function(){ }, 
-        // complete: function(xhr,status){ }, 
-        // cache: true,  
+        }
+        ,dataType: 'json'
+        // ,type: 'GET'
+        // ,xhrFields: { withCredentials: true  }
+        // ,crossDomain: true
+        // ,contentType:'application/json'
+        // ,beforeSend: function(){ }
+        // ,complete: function(xhr,status){ } 
+        // ,cache: true  
       })
       .then(function(backData,statusTxt,xhr){
         console.log('某接口',statusTxt,backData);
       }
       ,function(xhr,status,errorTrown){
-        console.warn('某接口 fail:',status);
+        console.warn('某接口',status);
       }) """
   '-jq $.getScript(url,cfoo);':
     'prefix': 'getScript-jq'

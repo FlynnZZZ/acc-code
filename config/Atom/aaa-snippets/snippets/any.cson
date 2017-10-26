@@ -88,12 +88,6 @@
   '-* private':
     'prefix': 'private'
     'body': """private""" 
-  '-* prop  属性,组成部分':
-    'prefix': 'prop'
-    'body': """prop""" 
-  '-* attr  特性,修饰部分':
-    'prefix': 'attr'
-    'body': """attr""" 
   '-* protect':
     'prefix': 'protect'
     'body': """protect""" 

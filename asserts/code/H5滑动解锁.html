@@ -1,0 +1,156 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>H5滑动解锁</title>  
+  <style type="text/css"> 
+    html,body{ margin: 0; padding: 0; } 
+  </style>  
+</head>  
+<body>  
+  <canvas id="canvasTag"></canvas>  
+</body>  
+<script type="text/javascript">  
+window.onload = function () {  
+  // config 
+  var href = 'https://www.baidu.com';
+  var finalPassword = '1236'; 
+  var colorBg = '#ccc';
+  var colorOut = "#627eed";
+  var colorMid = "#e1f6e0";
+  var colorIn = "#d0cc96";
+  var colorLine = "#bb7f7f";
+  var canvasWidth = document.body.offsetWidth; //网页可见区域宽  
+  var canvasHeight = canvasWidth*0.8;  // 画布高度
+  var OffsetX = canvasWidth*0.18; // 左偏移
+  var OffsetY = canvasHeight*0.18;  // 右偏移 
+  var radius= canvasWidth*0.077;  // 半径
+  var lineW = radius*0.4;
+
+  var circleArr = [];  
+  function createCirclePoint() {  
+    for (var row = 0; row < 3; row++) {  
+      for (var col = 0; col < 3; col++) {  
+        // 计算圆心坐标  
+        var Point = {  
+          X : (OffsetX + col *( canvasWidth*0.3)),  
+          Y : (OffsetY + row *( canvasHeight*0.3))  
+        };  
+        circleArr.push(Point);  
+      }  
+    }  
+  }  
+  function Draw(cxt, circleArr, pwdArr,touchPoint) {  
+    if (pwdArr.length > 0) {  
+      cxt.beginPath();  
+      for (var i = 0; i < pwdArr.length; i++) {  
+        var pointIndex = pwdArr[i];  
+        cxt.lineTo(circleArr[pointIndex].X, circleArr[pointIndex].Y);  
+      }  
+      cxt.lineWidth = lineW;  
+      cxt.strokeStyle = colorLine;  
+      cxt.stroke();  
+      cxt.closePath();  
+      if(touchPoint!=null){  
+        var lastPointIndex=pwdArr[pwdArr.length-1];  
+        var lastPoint=circleArr[lastPointIndex];  
+        cxt.beginPath();  
+        cxt.moveTo(lastPoint.X,lastPoint.Y);  
+        cxt.lineTo(touchPoint.X,touchPoint.Y);  
+        cxt.stroke();  
+        cxt.closePath();  
+      }  
+    }  
+    for (var i = 0; i < circleArr.length; i++) {  
+      var Point = circleArr[i];  
+      cxt.fillStyle = colorOut;  
+      cxt.beginPath();  
+      cxt.arc(Point.X, Point.Y, radius, 0, Math.PI * 2, true);  
+      cxt.closePath();  
+      cxt.fill();  
+      cxt.fillStyle = colorMid;  
+      cxt.beginPath();  
+      cxt.arc(Point.X, Point.Y, radius*0.88, 0, Math.PI * 2, true);  
+      cxt.closePath();  
+      cxt.fill();  
+      if(pwdArr.indexOf(i)>=0){  
+        cxt.fillStyle = colorIn;  
+        cxt.beginPath();  
+        cxt.arc(Point.X, Point.Y, radius*0.45, 0, Math.PI * 2, true);  
+        cxt.closePath();  
+        cxt.fill();  
+      }  
+    }  
+  }  
+  // 计算选中的密码 
+  function getSelectPwd(touches,pwdArr){  
+    for (var i = 0; i < circleArr.length; i++) {  
+      var currentPoint = circleArr[i];  
+      var xdiff = Math.abs(currentPoint.X - touches.pageX);  
+      var ydiff = Math.abs(currentPoint.Y - touches.pageY);  
+      var dir = Math.pow((xdiff * xdiff + ydiff * ydiff), 0.5);  
+      if(dir > radius|| pwdArr.indexOf(i) >= 0){
+        continue;  
+      }  
+      pwdArr.push(i);  
+      break;  
+    }  
+  }  
+  //  给画布绑定事件  
+  function bindEvent(canvas, cxt) {  
+    var pwdArr = [];  
+    canvas.addEventListener("touchstart", function (e) {  
+      getSelectPwd(e.touches[0],pwdArr); 
+    }, false);  
+    canvas.addEventListener("touchmove", function (e) {  
+      e.preventDefault();  
+      var touches = e.touches[0];  
+      getSelectPwd(touches,pwdArr);  
+      cxt.clearRect(0,0,canvasWidth,canvasHeight);  
+      Draw(cxt,circleArr,pwdArr,{X:touches.pageX,Y:touches.pageY});  
+    }, false);  
+    canvas.addEventListener("touchend", function (e) {  
+      cxt.clearRect(0,0,canvasWidth,canvasHeight);  
+      Draw(cxt,circleArr,pwdArr,null);  
+      var password = pwdArr.join("");
+      if (password.length<4) {
+        pwdArr=[];  
+        cxt.clearRect(0,0,canvasWidth,canvasHeight);  
+        Draw(cxt,circleArr,pwdArr,null);  
+        console.log('连接数小于4个',password);
+      }
+      else {
+        var finalPassword1 = '';
+        for (var i = 0; i < finalPassword.length; i++) {
+          finalPassword1 += finalPassword[i]-1;
+        }
+        console.log("密码结果是："+password,finalPassword1);
+        if (password == finalPassword1) {
+          location.href = href;
+        }
+      }
+      pwdArr=[];  
+      setTimeout(function(){
+        cxt.clearRect(0,0,canvasWidth,canvasHeight);  
+        Draw(cxt,circleArr,pwdArr,null);  
+      },1500);
+    }, false);  
+  }  
+  
+  function init(){
+    var canvas = document.getElementById("canvasTag");  
+    canvas.style.backgroundColor= colorBg;
+    canvas.width = canvasWidth;  
+    canvas.height = canvasHeight;  
+    var cxt = canvas.getContext("2d");  
+    
+    createCirclePoint();  
+    Draw(cxt, circleArr, [],null);  
+    
+    bindEvent(canvas, cxt);  
+  };
+  init();
+}  
+</script>  
+</html>  

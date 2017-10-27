@@ -3,7 +3,8 @@ Cordova: 一个移动开发框架
   Hybrid: 将HTML、CSS、JS封装为原生APP 
 Cordova CLI: 
 开发环境搭建: 
-  $ npm i -g cordova // 安装Cordova
+  $ npm i -g cordova // 安装Cordova 
+    可能需要配置环境变量  
   $ cordova create <project> <com.hello.world>  // 创建Cordova项目
   $ cordova platform add <platform> --save    // 添加开发平台
     android 

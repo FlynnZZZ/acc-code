@@ -1,4 +1,4 @@
-'node package manager'NPM: node包管理器 
+NPM'node package manager': node包管理器 
   PS:随同NodeJS一起安装的包管理工具,用于node插件管理[包括安装、卸载、管理依赖等], 
     允许用户从NPM服务器下载别人编写的第三方包到本地使用. 
     允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用. 

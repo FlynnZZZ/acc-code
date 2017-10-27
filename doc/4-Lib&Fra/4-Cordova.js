@@ -33,8 +33,3 @@ Cordova CLI:
 
 
 
-
-
-
-
-

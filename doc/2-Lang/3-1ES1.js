@@ -111,21 +111,30 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   /xxx/ig        // 正则表达式字面量
   {x:1,y:2}      // 对象字面量表达式
   [1,2,3,4,5]    // 数组字面量表达式
-var,定义变量,相当于给window添加属性,但不可'delete'删除 
+var,定义变量,相当于给window添加不可配置的window属性 
   PS: 变量定义但未赋值,默认为'undefined' 
-  全局变量与window属性的差异:  
-    显式声明的全局变量无法 delete 删除,但window属性则可以
+  全局变量与window属性的差异: 
+    显式声明的全局变量无法 delete 删除,但window属性则可以 
+      var aoo = 1;
+      window.boo = 2;
+      var o1 = Object.getOwnPropertyDescriptor(window,'aoo')
+      var o2 = Object.getOwnPropertyDescriptor(window,'boo')
+      console.log(o1); 
+      // {value: 1, writable: true, enumerable: true, configurable: false} 
+      console.log(o2); 
+      // {value: 2, writable: true, enumerable: true, configurable: true} 
     访问未声明的变量会报错,而未声明window对象的属性则为undefined 
-  不用用var声明的变量: 相当于给window添加属性,且可用'delete'删除  
+      console.log(window.aoo); // undefined 
+      console.log(aoo); // 报错 
+  不用用var声明的变量,相当于给window添加可配置的属性  
     var aoo = 1; 
-    boo = 2;
     console.log(window.aoo); // 1
+    console.log(delete aoo); // fasle,删除失败 
+    console.log(aoo); // 1 
+    boo = 2;
     console.log(window.boo); // 2
-    var bol1 = delete aoo; // 删除失败 
-    var bol2 = delete boo; // 删除成功
-    console.log(bol1,aoo); // fasle 1
-    console.log(bol2);     // true
-    console.log(boo);  // 报错 boo 未定义, 因为boo已被删除而无法访问
+    console.log(delete boo); // true,删除成功 
+    console.log(boo);  // 报错,变量未定义 
   重复的var声明: 相当于赋值操作产生覆盖 
     var box = "fan";
     var box = "abc";  // 相当于 box = "abc";

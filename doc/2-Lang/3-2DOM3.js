@@ -185,6 +185,31 @@ Event,事件对象基础类,浏览器默认给事件响应函数传入一参数,
       <img>上触发: 图像加载完毕 
       <object>上触发:  嵌入内容加载完毕 
       <script> 
+        当通过 jQuery append() 添加的<script>则不会触发 load 事件,
+        通过 document.write() 添加的<script>则会触发该事件 
+        通过 document.createElement("script") 则会触发该事件 
+          function loadScript(url, callback) {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            // IE
+            if (script.readyState) {
+              script.onreadystatechange = function () {
+                if (script.readyState == "loaded" || script.readyState == "complete") {
+                  script.onreadystatechange = null;
+                  callback(111);
+                }
+              };
+            } else { // others
+              script.onload = function () {
+                callback(222);
+              };
+            }
+            script.src = url;
+            document.body.appendChild(script);
+          }
+          loadScript("http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js", function (arg) {
+            alert(arg+'loaded');
+          });
       ..
     unload  卸载时触发 
       PS: 从一个页面切换到另一个页面就会发生unload事件 

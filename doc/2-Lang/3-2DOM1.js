@@ -1799,7 +1799,7 @@ NamedNodeMap,元素节点当前具有的特性节点集合
       .getNamedItemNS()  
       .setNamedItemNS()  
       .removeNamedItemNS()  
-◆其他类
+◆其他类 
 DOMStringMap,标签自定义属性 [HTML5] 
   PS: 'data-xxx'是HTML5规定为元素添加非标准的属性的格式 
     目的是为元素提供与渲染无关的信息或提供语义信息

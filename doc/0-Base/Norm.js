@@ -5,6 +5,7 @@
     无需访问源码,或理解内部工作机制的细节;
     提供了一组对象,方法和属性,可以用来访问这些技术的所有功能
     对方定义的一种信息交互的方式[Self]
+  CLI'Command Line Interface for batch scripting'命令行界面  
   'scripting language'脚本语言 
     不具备开发操作系统的能力,而是用来编写控制其他大型应用程序的'脚本';
   'host environment'宿主环境 :语言在运行时的环境 

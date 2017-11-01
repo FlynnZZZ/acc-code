@@ -1,3 +1,15 @@
+'Angular CLI'Angular2的构建工具 
+  PS: 可以创建项目、添加文件以及执行一大堆开发任务,比如测试、打包和发布 
+相关命令 
+  npm install -g @angular/cli   全局安装 
+    ng version   查看版本信息 
+  ng new my-app [-skip-install]    创建项目 
+    -skip-install 阻止安装依赖,后续通过 cnpm install 来进行安装 
+  cd my-app         进入项目目录,并启动服务器 
+  ng serve --open   启动开发服务器,监听文件变化,在修改文件时重新构建应用 
+    --open [或-o] 参数可以自动打开浏览器并访问 
+目录结构 
+--------------------------------------------------------------------------------
 AngularJS1 
   PS: 于09年在Google诞生;在12年6月正式推出'1.0.0'版本,'1.3'版本放弃支持IE8-;
   不足 : 

@@ -1258,7 +1258,30 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(arr); // [1, 2, 3]
       console.log(str); // 1-2-3 
     ◆遍历方法 
-      以下方法中,函数内修改元素'val',不会改变原数组,但修改'arr[idx]',则会改变原数组 
+      PS: 回调参数'val'为指向数组成员的一指针,遍历时依次指向每个元素  
+    .sort([foo(val1,val2)])   arr,返回排序后的数组[改变原数组]  
+      foo       可选,返回值为true则调序,否则不变; 
+        通过冒泡的算法大小排序[SlSt];
+        若省略,元素按照转换为的字符串的首个字符的Unicode位点进行排序
+        var arr =[31,1,2,5,4]
+        arr.sort();
+        console.log(arr); // [1, 2, 31, 4, 5]
+      val1,val2 数组相邻的两个元素 
+      Example:  
+        // 从小到大排序
+        var arr = [5,2,4,17];
+        arr.sort(function(val1,val2){
+          return val1 - val2;
+        });
+        console.log(arr); // (4) [2, 4, 5, 17] 
+        
+        // 颠倒数组元素顺序
+        var arr = ['a','b','c'];
+        var resArr = arr.sort(function(val1,val2){
+          return true;
+        });
+        console.log(arr);    // ["c", "b", "a"]
+        console.log(resArr); // ["c", "b", "a"]
     .forEach(foo(val,idx,arr)[,context])  数组遍历 [ES5] 
       PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过 
         无法中止或跳出forEach循环,除非报错.
@@ -1304,28 +1327,6 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         catch (e) {
           console.log('执行了');
         } 
-    .sort([foo(val1,val2)])   arr,返回排序后的数组[改变原数组]  
-      foo 可选,传入数组相邻的两个元素,返回值为true则调序,否则不变; 
-        通过冒泡的算法大小排序[SlSt];
-        若省略,元素按照转换为的字符串的首个字符的Unicode位点进行排序
-        var arr =[31,1,2,5,4]
-        arr.sort();
-        console.log(arr); // [1, 2, 31, 4, 5]
-      Example:  
-        // 从小到大排序
-        var arr = [5,2,4,17];
-        arr.sort(function(val1,val2){
-          return val1 - val2;
-        });
-        console.log(arr); // (4) [2, 4, 5, 17] 
-        
-        // 颠倒数组元素顺序
-        var arr = ['a','b','c'];
-        var resArr = arr.sort(function(val1,val2){
-          return true;
-        });
-        console.log(arr);    // ["c", "b", "a"]
-        console.log(resArr); // ["c", "b", "a"]
     .every(f(val,idx,arr)[,context])  bol,回调返回值是否全部为真[ES5]
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
@@ -1402,29 +1403,29 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    .reduce(foo(retVal,curVal,idx,arr)[,initVal])  val,条件缩减,返回最后一次回调值[ES5]
-      PS: 接收一个函数作为累加器,数组中的每个值从左到右开始缩减,最终为一个值 
-        为数组中的每一个元素依次执行回调函数,不包括数组中被删除或未被赋值的元素 
-        若数组是空的并且没有initialValue参数,将会抛出TypeError错误.
-        若数组只有一个元素并且没有initialValue, 或者有initialValue但数组是空的,
-        这个唯一的值直接被返回而不会调用回调函数.
-        通常来说提供一个initialValue初始值更安全一点,因为没有的话会出现3种可能的输出结果,
-      foo     执行数组中每个值的函数 
-        retVal 上一次回调函数的返回值 
-          或提供的初始值(initialValue),或数组第一个值(此时curVal为数组第二个值)
-        curVal 数组中当前被处理的元素
-        idx    当前被处理元素在数组中的索引idx
-        arr    调用 reduce 的数组
-      initVal 可选,作为首次调用 foo 时,代替它的第一个参数
+    .reduce(foo(retVal,val,idx,arr)[,initVal])  条件缩减,返回最后一次回调值[ES5]
+      PS: 数组成员依次传入回调,最终返回值为最后一次的回调值,不会改变原数组 
+        仅有唯一值时[一个成员+无初始值、空数组+初始值],则直接返回该值而不调用函数 
+        空数组且无初始值时,将报错
+      foo     遍历函数 
+      retVal  回调返回值/初始值,initVal?initVal:firstMeber 
+      val     当前成员/下一成员,initVal?firstMeber:secondMeber 
+      idx     被处理成员的索引 
+      arr     可选,当前数组 
+      initVal 可选,指定初始返回值 
       Example: 
-        元素累加
-        var arr = [1, 2, 3, 4, 5];
-        var res = arr.reduce(function(retVal,curVal,idx,arr){ 
-          return retVal + curVal; 
+        var num = 0;
+        var arr = [1, 2, 3, 4, 5]
+        arr.reduce(function(retVal,val,idx,arr){ 
+          num++;
         });
-        console.log(arr); // [1, 2, 3, 4, 5]
-        console.log(res); // 15
-    .reduceRight(foo(retVal,curVal,idx,arr)[,initVal])  val,和reduce类似,只是从右到左遍历[ES5]
+        console.log(num);  // 4,无初始值,val从第二个成员开始 
+        var num1 = 0;
+        arr.reduce(function(retVal,val,idx,arr){ 
+          num1++;
+        },0);
+        console.log(num1); // 5,有初始值,val从第一个成员开始  
+    .reduceRight(foo(retVal,val,idx,arr)[,initVal])  同reduce,只是从右到左遍历[ES5]
     ◆待整理
     .find(f(member))  val,返回数组中符合条件的第一个成员[ES6] 
       member  分别为数组中的每个成员  

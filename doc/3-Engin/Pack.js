@@ -1177,6 +1177,8 @@ Suggestion&Question:
       }
     },
   vue-loader    把'.vue'文件转换成webpack包,和整个打包过程融合起来 
+    在Webpack的'loader API'基础上开发,可用'.vue'单文件格式来写Vue组件 
+    VueJS支持对组件的异步加载,配合Webpack的分块打包功能,可轻松实现组件的异步按需加载;
     默认情况,vue-loader是自动用css-loader 
     { 
       test: /\.vue$/,

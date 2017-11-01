@@ -44,6 +44,10 @@ ueditor,百度富文本编辑器
       将 'switch' 中 'embeb'项中的如下字符删除:  
       str = '<embed type="application/x-shockwave-flash" class="' + classname + '" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
   视频上传 
+  API 
+    var ue = UE.getEditor(<id>) 
+    ue.getContent()  获取编辑器的HTML 
+    ue.setContent (htmlStr)  设置编辑器内容  
 UMeditor,
 --------------------------------------------------------------------------------
 网络收集 

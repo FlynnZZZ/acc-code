@@ -1,5 +1,4 @@
-Modernizr : 检测浏览器的支持情况 
-  PS: 一开源JS库,提供了一个统一的接口来检测浏览器支持 
+Modernizr,检测浏览器的支持情况 
   引入 
     通过script标签引入库文件 
     下载页地址:'https://modernizr.com/download/?setclasses'

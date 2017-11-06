@@ -572,7 +572,7 @@ JS代码引入、执行
   Remarks: 
     原则上,将其放在html头部,但视情况可以将其放在网页的任何部分.
     一个html文件可以有几个<script>...</script>,且可以共享方法和变量.
-'back-forward_cache'简称'bfcache',往返缓存 
+BFCache'back-forward cache',往返缓存 
   Firefox和Opera独有特性,可在用户使用浏览器的'后退'和'前进'按钮时加快页面的转换速度。
   该缓存中不仅保存着页面数据,还保存了DOM和JS的状态；
   实际上是将整个页面都保存在了内存里。

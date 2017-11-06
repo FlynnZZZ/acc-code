@@ -134,70 +134,116 @@ URL协议
 TCP/IP  
   物理层
     将二进制的0和1、电压高低、光的闪灭及电波的强弱信号进行转换 
-HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进行通信的规则  
-  PS: 一种无状态协议,不建立持久的连接;使客户端能向服务器请求信息和服务; 
+◆网络传输协议 
+HTTP、HTTPS'Hypertext Transfer Protocol'超文本传送协议   
+  PS: 一种无状态协议,不建立持久的连接; 
     在网络中请求和响应的数据都以二进制传输的[?]
+    网站是基于HTTP协议的,如图片、CSS、JS等传输;
+  HTTP传输过程  
+    1 从网址到IP 
+      输入地址回车,浏览器搜索自身DNS缓存,
+      若未找到或缓存失效时,浏览器搜索操作系统的DNS缓存,
+      若未找到,浏览器读取本地HOST文件,
+      若未找到,浏览器发起DNS查询,系统向宽带运营商查询DNS,
+      宽带运营商服务器查找自身缓存,
+      若未成功,运营商服务器发起一个迭代DNS解析的请求,逐层向上查询,
+      运营商服务器把结果返回操作系统,同时缓存起来,并返回给浏览器 
+    2 浏览器发起HTTP"三次握手",建立'TCP/IP'连接 
+    3 浏览器向服务器发送HTTP请求  
+      浏览器向服务器发送请求命令
+      浏览器发送请求头信息 
+    4 服务器端接收请求,返回响应 
+      根据路径及参数,经过后端的处理之后,把结果数据发送给浏览器,如请求页面 
+      Web服务器发送应答信息 
+      Web服务器向浏览器发送数据 
+      Web服务器关闭TCP连接
+    5 浏览器获取HTML页面,并解析和渲染页面 
+    6 HTML中的JS、CSS、图片等静态资源,同样也通过HTTP请求来获取 
+    7 最终浏览器渲染成功呈现页面  
   HTTP报文: 在HTTP应用程序之间发送的数据块,分为'请求报文'和'响应报文' 
     请求报文 
-      请求方法   URL    协议版本 
-      请求头部字段     // 可选,包含一些客户端环境信息,身份验证信息等   
+      <Method> <URL> <Protocol>/<version>   // 请求行 
+      key1: val1                            // 可选,请求头 
+        Cache-Control:    缓存控制 
+        Connection:       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
+          'close'      指服务器像明确断开连接
+          'Keep-Alive' 保持持久连接,'HTTP/1.1'前默认为非持久性的
+            如需要保存持久连接,需要增加此字段
+        Update:           给出了发送端可能想要升级使用新版本或协议
+        Date:             日期,报文创建时间
+        Via:              显示了报文经过的中间节点（代理、网关）
+        Trailer:          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
+        Trailer-Encoding: 告诉接收端对报文采用什么编码格式
+        Pragma:           早期的随报文传送指示方式
+        Host: yihuo.lcltst.com     // 客户端主机名及端口号 
+        Proxy-Connection: keep-alive 
+        Content-Length: 376  // 请求体大小 
+        Pragma: no-cache 
+        Cache-Control: no-cache // 缓存控制 
+        User-Agent:      // 浏览器相关信息 
+        'Accept: */*'  // 客户端能够处理的内容类型及相对优先级 ?  
+        Origin: http:\/\/yihuo.lcltst.com  // 
+        Content-Type:  // 请求体类型,GET无,POST存在  
+          Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+        Referer:       // 当前url,表明当前的位置 
+          该英文的正确拼法为referrer 
+        Accept-Encoding:   // 浏览器支持的内容编码及优先级级  
+          Accept-Encoding:gzip, deflate, sdch
+        Accept-Language:  // 浏览器支持的语言 
+          Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
+        Cookie:           // 浏览器cookies 
+        Accept-Charset:      // 浏览器能识别的字符集 
+        Authorization       客户端的认证信息 
+        Client-IP           客户端IP
+        From                客户端邮件地址
+        Expect              允许客户端列出请求所要求的服务器行为
+        If-Match            如果ETag和文档当前ETag匹配,就获取文档
+        If-Modified-Since   除非在某个指定日期之后修改过,否则限制这个请求
+        If-None-Match       如果ETag和当前文档ETag不符合,获取资源
+        If-Range            允许对文档否个范围内的条件请求
+        If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
       // 空行 
-      内容实体        // 包含客户提交的查询字符串信息,表单信息等  
+      key1: val1                            // 可选,请求体 
+        // 包含客户提交的查询字符串信息,表单信息等  
     响应报文 
-      协议版本  状态码  状态码描述短语 
-      响应头部字段    // 可选,包含如服务器类型、日期时间、内容类型和长度等信息   
+      <Protocol>/<version> StatusCode  StatusText // 响应行 
+      key1: val1                                  // 可选,响应头 
+        PS: 包含如服务器类型、日期时间、内容类型和长度等信息   
+        Cache-Control    缓存控制 
+        Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
+        Update:           给出了发送端可能想要升级使用新版本或协议
+        Date             日期,报文创建时间
+        Via              显示了报文经过的中间节点（代理、网关）
+        Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
+        Trailer-Encoding 告诉接收端对报文采用什么编码格式
+        Pragma           早期的随报文传送指示方式
+        Content-Length: <num>   // 响应体的大小  
+        Accept-Ranges: bytes
+        Content-Type:      // 响应体MIME 
+          application/javascript
+        Date: Sat, 04 Nov 2017 07:43:44 GMT
+        Etag: "4a67-55cfb373dc45b"
+        Keep-Alive: timeout=38
+        Last-Modified    实体最后一次修改时间 
+          Last-Modified: Thu, 02 Nov 2017 07:48:36 GMT
+        Server:         // 服务器软件名称及版本 
+          Server: Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30
+        Content-Encoding 主体编码格式 
+        Content-Language 解析主体时适用的语言 
+        Content-Base     解析主体中相对URL的基础URL 
+        Content-Location 资源实际位置 
+        Content-MD5      主体的MD5校验和 
+        Content-Range    在整个资源中此实体部分的字节范围  
+        Set-Cookie       设置cookie 
+        Age              响应持续时间 
+        Allow            列出了可用的请求方法 
+        Location         告诉客户端实在在哪里,用于定向 
+        ETag             主体的实体标记  
+        Expires          过期时间  
       // 空行 
-      内容实体  
-    头部字段 
-      ◆通用首部: 客户端和服务器都可以使用 
-      首部                     描述
-      Cache-Control    缓存控制 
-      Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
-        'close'      指服务器像明确断开连接
-        'Keep-Alive' 保持持久连接,HTTP/1.1前默认连接是非持久性的,如需要保存持久连接,需要增加此字段
-      Update           给出了发送端可能想要升级使用新版本或协议
-      Date             日期,报文创建时间
-      Via              显示了报文经过的中间节点（代理、网关）
-      Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
-      Trailer-Encoding 告诉接收端对报文采用什么编码格式
-      Pragma           早期的随报文传送指示方式
-      ◆请求首部 
-      Accept       表明客户端能够处理的内容类型及相对优先级 
-      Accept-Encoding  客户端支持的内容编码及优先级级  
-      Accept-Charset      客户端能识别的字符集 
-      Accept-Language     告诉服务器能够发送那些语言 
-      Authorization       客户端的认证信息 
-      Host         告知服务器请求的主机名和端口号[当一个IP下存在多个域名时] 
-      Referer             提供了包含当前请求URI的文档的URL,告诉服务器自己来源 
-        该英文的正确拼法为referrer 
-      User-Agent    浏览器及用户代理字符串等信息  
-      Cookie              客户端字符串
-      Client-IP           客户端IP
-      From                客户端邮件地址
-      Expect              允许客户端列出请求所要求的服务器行为
-      If-Match            如果ETag和文档当前ETag匹配,就获取文档
-      If-Modified-Since   除非在某个指定日期之后修改过,否则限制这个请求
-      If-None-Match       如果ETag和当前文档ETag不符合,获取资源
-      If-Range            允许对文档否个范围内的条件请求
-      If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
-      ◆响应首部 
-      Content-Type     主体的MIME,返回的响应内容的类型  
-      Content-Length   主体的长度或尺寸 
-      Content-Encoding 主体编码格式 
-      Content-Language 解析主体时适用的语言 
-      Content-Base     解析主体中相对URL的基础URL 
-      Content-Location 资源实际位置 
-      Content-MD5      主体的MD5校验和 
-      Content-Range    在整个资源中此实体部分的字节范围  
-      Server           服务器应用软件名称和版本 
-      Set-Cookie       设置cookie 
-      Age              响应持续时间 
-      Allow            列出了可用的请求方法 
-      Location         告诉客户端实在在哪里,用于定向 
-      ETag             主体的实体标记  
-      Expires          过期时间  
-      Last-Modified    实体最后一次修改时间 
+      key1: val1                                  // 可选,响应体   
   网址的组成  
+    PS: 可用字符: 0-9,a-z,A-Z,其他用十六进制表示,并在每个字符前加%
     协议: 如http、https超文本传输协议[收发的信息是文本信息] 
     主机/域名/ip地址
       ip地址: 32 位2进制的数字[四个八位的数字] 
@@ -226,10 +272,6 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       清除缓存 
         'http://www.aa.com' 和 'http://www.aa.com?11'
         两个url打开的页面一样,但查询字符串不同,而认为是一个新地址,重新读取 
-  URL地址字符转换 
-    url的可用字符: 0-9,a-z,A-Z,其他用十六进制表示,并在每个字节前加%
-    url编码:encodeURIComponent('字符')
-    url解码:decodeURIComponent('字符')
   'Status Code'状态码: 表示请求的结果 
     PS:由三位数值组成,第一位表示其类别
     状态码被分为五大类：
@@ -302,71 +344,40 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
     503  Service Unavailable    服务器端暂时无法处理请求[可能是过载或维护] 
     504  Gateway Timeout 由作为代理或网关的服务器使用,表示不能及时地从远程服务器获得应答 [HTTP1.1] 
     505  HTTP Version Not Supported 服务器不支持请求中所指明的HTTP版本  [HTTP1.1]  
-  'Method':发送请求的类型
-    PS:http 1.0 定义了8种方法,主要使用'GET'和'POST';
-    GET  请求
-      最常见的请求类型,常用于向服务器查询信息.
+  'Method':发送请求的类型 
+    PS: 'http1.0'定义了8种方法,主要使用'GET'和'POST';
+    GET,最常见的请求类型,常用于向服务器查询信息 
       一般用于信息获取.
-      使用URL传递参数.(发送的信息可见)
+      使用URL传递参数,发送的信息可见 
       对发送信息的数量有限制,一般在2000个字符内.
       必要时可将查询字符串参数追加到URL的末尾以便将信息发送给服务器.
       对于xhr而言,位于open方法的URL末尾的查询字符串必须经过正确的编码才行,
       查询字符串中每个参数的名称和值都需使用encodeURIComponent()进行编码,
       名值对必须由&分割.
-    POST 请求
-      通常用于向服务器发送应该被保存的数据.
+    POST,通常用于向服务器发送应该被保存的数据 
       一般用于修改服务器上的资源.
       对发送信息的数量无限制.
       Remarks:
         表单提交时 Content-Type 为 application/x-www-form-urlencoded
-    PUT  请求更新服务器端数据
-    HEAD 检查一个对象是否存在 
+    PUT,请求更新服务器端数据
+    HEAD,检查一个对象是否存在 
       在服务器的响应中没有资源的内容,只有资源的一些基本信息
       主要用于
       1 在不获取资源的情况下获取资源信息（类型、大小等）
       2 通过状态码产看资源是否存在
       3 通过查看首部,测试资源是否被修改了
-    DELETE  请求删除数据
-    CONNECT 对通道提供支持
-    TRACE   跟踪到服务器的路径
-    OPTIONS 查询Web服务器的性能 
+    DELETE,请求删除数据 
+    CONNECT,对通道提供支持 
+    TRACE,跟踪到服务器的路径 
+    OPTIONS,查询Web服务器的性能 
     GET 和 POST 的区别
-      大体上讲,向服务器发送客户端数据有两种方式:查询字符串和请求正文.
-      通常,若是使用查询字符串,就发起了一个GET请求；
-      若是使用请求正文,就发起了一个POST请求
-     (若你反过来做,HTTP协议并不会阻止你,但这是没有必要的:最好在这里坚持标准实践).
-      有一种普遍的误解是POST请求是安全的,而GET请求不安全.
-      事实上若使用HTTPS协议,两者都是安全的；若不使用,则都不安全.
-      若不使用HTTPS协议,入侵者会像查看GET请求的查询字符串一样,轻松查看POST请求的报文数据.
-      使用GET请求,用户会在查询字符串中看到所有的输入数据(包括隐藏域),这是丑陋而且凌乱的.
-      浏览器会限制查询字符串的长度(对请求正文没有长度限制).
-      基于这些原因,一般推荐使用POST进行表单提交.
+      一般的,向服务器发请求有两种方式:查询字符串和请求正文,
+      通常,GET使用查询字符串,POST使用请求正文[若反过来也可,但无必要] 
+      使用GET请求,可在查询字符串中看到所有的数据,包括隐藏域,且会限制查询字符串的长度,
+      POST请求体无长度限制 
   'HTTP'和'TCP'的区别
     TPC/IP 传输层协议: 解决数据如何在网络中传输,是一种'经过三次握手'的可靠的传输方式 
     HTTP 应用层协议: 是Web联网的基础,是建立在TCP协议之上的一种应用 
-  HTTP 传输过程  
-    建立TCP连接 
-      输入地址,然后回车
-      Chrome搜索自身的DNS缓存 ,当没有找到或缓存失效时
-      Chrome搜索操作系统自身的DNS缓存,若仍没找到,
-      Chrome读取本地的HOST文件,若仍没找到,
-      Chrome 发起一个DNS的一个系统调用 ,一般向宽带运营商查询DNS,
-      宽带运营商服务器查找自身缓存,若未成功,
-      运营商服务器发起一个迭代DNS解析的请求 ,逐层向上查询,
-      运营商服务器把结果返回操作系统内核,同时缓存起来,
-      操作系统内核把结果返回浏览器
-      最终,浏览器得到 www.baidu.com 对应的ip地址,
-      获取ip地址后,浏览器发起HTTP "三次握手",建立 TCP/IP 连接,
-    浏览器就可以向服务器发送HTTP请求了,如get方法发送请求
-      Web浏览器向Web服务器发送请求命令
-      Web浏览器发送请求头信息
-    服务器端接收到请求,根据路径参数,经过后端的处理之后,把结果数据发送给浏览器,如请求页面
-      Web服务器发送应答信息 
-      Web服务器向浏览器发送数据 
-      Web服务器关闭TCP连接
-    浏览器拿到完整的HTML页面代码,解析和渲染该页面,
-    同时其中的JS、CSS、图片等静态资源,同样也是一个个HTTP请求都需要经过上面的步骤来获取 
-    最终浏览器渲染成功呈现页面 
   HTTP 缓存 
     PS:缓存:存储指定资源的一份拷贝,并在下次请求该资源时提供该拷贝的技术 
     缓存控制--头信息 
@@ -414,6 +425,8 @@ HTTP'Hypertext Transfer Protocol'超文本传送协议: 计算机通过网络进
       需要根据Cookie,认证信息等决定输入内容的动态请求是不能被缓存的
     不使用缓存的方法 
       使用查询字符串来避免缓存,缓存以URL为依据 [古老的方法] 
+FTP,文件传输协议 
+SMTP,简单邮件传输协议 
 --------------------------------------------------------------------------------
 数据结构 
   数据结构就是存储数据的方式

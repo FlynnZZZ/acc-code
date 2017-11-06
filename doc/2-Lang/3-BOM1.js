@@ -2026,9 +2026,11 @@ WebKit相关
   WebAssembly 
 ◆技术综合  
 AJAX'Asynchronous JavaScript and XML'浏览器提供的使用HTTP协议收发数据的接口 
-  PS: 'file://'协议无法使用AJAX,只有'http'和'https'协议才可以使用AJAX;
+  PS: 'file://'协议无法使用AJAX,只有'http'和'https'协议才可以使用AJAX; 
     提供了与服务器异步通信的能力; W3C在2006年发布了AJAX的国际标准 
-    使用JS来操作'XMLHttpRequest'对象接口和服务器进行异步通信;
+    使用JS来操作'XMLHttpRequest'对象接口和服务器进行异步通信 
+  使用步骤: 
+    建立连接[设置请求行]-设置请求头-设定响应事件-发送请求体 
   AJAX缺点 
     不支持使用后退功能,对搜索引擎的支持比较弱
     ◆Level1 的限制
@@ -2056,14 +2058,12 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       userName    可选,用户名,默认为空字符串
       passWord    可选,密码,默认为空字符串
     .setRequestHeader(key,val) // 设定请求头信息 
-      PS:需在'open'方法之后,'send'方法前使用; 
-        若该方法多次调用,设定同一个字段,则每次设置的值会被合并成一个单一的值发送 
-      ★key 
-      'Content-Type'   发送的数据格式[编码类型] 
-        PS:请求头中Content-Type决定发送数据的编码类型,
+      PS: 需在'open'后,'send'前使用; 
+        若多次设置同一字段,则最终发送每次设置值的合并值  
+      'Content-Type'   发送的数据格式,编码类型  
+        PS: 请求头中Content-Type决定POST发送数据的编码类型[GET没有请求体],
           不同的值对应不同的提交和回调处理方式;
           有常见的五种'Content-Type'发送数据的方式; 
-          method都是POST方式,若是GET方式是没有请求数据体的,数据直接加在URL后面;
         'text/plain' 默认值 
           若未设定且数据不是 FormData 和 XML Document,则默认为'text/plain';
         'application/json' JSON格式的数据
@@ -2100,51 +2100,12 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       'Content-Length' 发送的数据长度
         num  
           xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
-    .withCredentials  // 读写,跨域时,是否允许获取用户信息,默认'false'  
+    .withCredentials  // bol,读写,是否允许跨域获取用户信息,默认 false  
       PS: 用户信息,比如Cookie和认证的HTTP头信息,
       为让该属性生效,服务器必须显式返回'Access-Control-Allow-Credentials'头信息 
-        Access-Control-Allow-Credentials: true
-        'withCredentials'属性打开的话,不仅会发送Cookie,还会设置远程主机指定的Cookie.
-        注意,此时你的脚本还是遵守同源政策,
-        无法从document.cookie 或者HTTP回应的头信息之中,读取这些Cookie.
-    .send(data)  // 发送请求数据 
-      PS: 事件须在 send() 方法调用前设定
-      data 发送的数据,类型可为'ArrayBufferView''Blob''Document''String''FormData' 
-        可以为空,即发送请求但不发送数据内容,可写作 xhr.send(null) 或 xhr.send()
-        若不带参数,就表示HTTP请求只包含头信息,也就是只有一个URL典型例子就是GET请求；
-        若带有参数,就表示除了头信息,还带有包含具体数据的信息体,典型例子就是POST请求.
-      Example: 
-        发送二进制数据,最好使用ArrayBufferView或Blob对象,这使得通过Ajax上传文件成为可能 
-          function sendArrayBuffer() {
-            var xhr = new XMLHttpRequest();
-            var uInt8Array = new Uint8Array([1, 2, 3]);
-            xhr.open('POST', '/server', true);
-            xhr.onload = function(e) { ... };
-            xhr.send(uInt8Array.buffer);
-          }
-        FormData类型可以用于构造表单数据 
-          var formData = new FormData();
-          formData.append('username', '张三');
-          formData.append('email', 'zhangsan@example.com');
-          formData.append('birthDate', 1940);
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", "/register");
-          xhr.send(formData);
-          效果与点击下面表单的submit按钮一样
-          <form id='registration' name='registration' action='/register'>
-            <input type='text' name='username' value='张三'>
-            <input type='email' name='email' value='zhangsan@example.com'>
-            <input type='number' name='birthDate' value='1940'>
-            <input type='submit' onclick='return sendForm(this.form);'>
-          </form>
-    .responseText 只读,获取字符串形式的响应数据 
-      PS:若本次请求没有成功或者数据不完整,该属性就会等于null.
-        若服务器返回的数据格式是JSON,则该属性为JSON字符串.
-    .response     只读,返回接收到的数据体,即body部分
-      PS:其类型可以是ArrayBuffer、Blob、Document、JSON对象、或者一个字符串,
-        由 responseType 属性的值决定.
-        若请求没有成功或者数据不完整,该属性就会等于null
-    .responseType 用来指定服务器返回数据(xhr.response)的类型
+      Access-Control-Allow-Credentials: true
+        发送Cookie,且会设置服务器指定的Cookie 
+    .responseType // str,指定响应体类型 
       ''            默认值,字符串
       'text'        字符串,适合大多数情况
       'json'        JSON对象
@@ -2169,14 +2130,65 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
           }
         };
       xhr.send();
-    .responseXML  只读,获取XML形式的响应数据,若响应数据为XML格式.
-      PS:若响应的内容类型为text/xml或application/xml,
-        则该属性保存着响应数据的XML DOM文档,
-        否则该属性的值为null.
-    .getResponseHeader(key);  获取指定响应头信息
-      Example:
-      xhr.getResponseHeader('Content-Type');
-    .overrideMimeType() 重写由服务器返回的MIMEtype [IE不支持] [level2]
+    .timeout     // num,超时设定,单位ms[DiBs][level2]
+      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
+        若该属性等于0,就表示没有时间限制.
+        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
+        Opera、Firefox 和 IE 10 支持该属性,
+        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
+        而 Chrome 和 Safari 还不支持
+    .send([data])     // 发送请求数据 
+      data 发送的数据,类型可为'ArrayBufferView''Blob''Document''String''FormData' 
+        若为空,表示HTTP请求只包含头信息,而无请求体,如GET请求
+          可写作 xhr.send(null) 或 xhr.send()
+        不为空,表示除了头信息,也包含请求体,如POST请求 
+      Example: 
+        发送二进制数据,最好使用ArrayBufferView或Blob对象,这使得通过Ajax上传文件成为可能 
+          function sendArrayBuffer() {
+            var xhr = new XMLHttpRequest();
+            var uInt8Array = new Uint8Array([1, 2, 3]);
+            xhr.open('POST', '/server', true);
+            xhr.onload = function(e) { ... };
+            xhr.send(uInt8Array.buffer);
+          }
+        FormData类型可以用于构造表单数据 
+          var formData = new FormData();
+          formData.append('username', '张三');
+          formData.append('email', 'zhangsan@example.com');
+          formData.append('birthDate', 1940);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "/register");
+          xhr.send(formData);
+          效果与点击下面表单的submit按钮一样
+          <form id='registration' name='registration' action='/register'>
+            <input type='text' name='username' value='张三'>
+            <input type='email' name='email' value='zhangsan@example.com'>
+            <input type='number' name='birthDate' value='1940'>
+            <input type='submit' onclick='return sendForm(this.form);'>
+          </form>
+    .sendAsBinary(BinaryString) // 发送二进制字符串[Chrome中移除] 
+      自行实现如下 
+      XMLHttpRequest.prototype.sendAsBinary = function(text){
+        var data = new ArrayBuffer(text.length);
+        var ui8a = new Uint8Array(data, 0);
+        for (var i = 0; i < text.length; i++){ 
+          ui8a[i] = (text.charCodeAt(i) & 0xff);
+        }
+        this.send(ui8a);
+      }
+      每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
+    .response     // obj/str,响应体 
+      PS: 其类型可为str、ArrayBuffer、Blob、Document、JSON 
+        由 responseType 属性的值决定 
+        若请求没有成功或者数据不完整,该属性就会等于 null
+    .responseText // str,响应体文本 
+      PS:若本次请求没有成功或者数据不完整,该属性就会等于null.
+        若服务器返回的数据格式是JSON,则该属性为JSON字符串.
+    .responseXML  // str,只读,获取XML形式的响应体 
+      若响应体类型为'text/xml'或'application/xml',则获取到XML文档,否则为 null 
+    .responseStream  // 服务器返回的数据流
+    .responseURL  
+    .overrideMimeType() // 重写由服务器返回的MIMEtype [IE不支持][level2]
       PS:该方法需在send方法之前调用
         Firefox最早引入该方法用于重写xhr响应的MIME类型
         该方法被XMLHttpRequest2级纳入规范中
@@ -2186,16 +2198,25 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       xhr.overrideMimeType("text/XML");
       xhr.send(null);
       强制使xhr对象将响应当作XML而非纯文本来处理
-    .readyState  只读,请求的状态码,异步时检测使用 
-      PS:在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
-      0   未初始化  尚未调用open()方法
-      1   启动      已调用open() 连接已建立,但未调用send()方法
-      2   发送      已调用send(),尚未接收响应
-      3   接收      正在接收服务器传来的body部分的数据
-      4   完成      已经接收到全部响应数据,或者本次接收已失败
+    .getResponseHeader(key)  // str,获取指定响应头信息 
+      Example:
+      xhr.getResponseHeader('Content-Type');
+    .getAllResponseHeader()  // str,获取所有响应头信息  
+    .abort()    // 终止连接 
+      调用该方法后,xhr对象会停止触发事件 
+      而且也不再允许访问任何与响应有关的对象属性
+      在终止请求后,还应该对xhr对象进行解引用操作.
+      若请求已经被发送,则立刻中止请求.
+    .readyState  // num,只读,响应状态码 
+      PS: 在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
+      0   未初始化  尚未调用open方法建立连接 
+      1   启动      已调用open建立连接,但未发送数据 
+      2   发送      接收到响应头
+      3   接收      接收到响应体 
+      4   完成      已接收到全部响应数据,或本次接收已失败 
       Remarks:
         xhr.onreadystatechange =function(e){}, 此时 e.target 即为 xhr
-    .status      只读,HTTP响应的状态码 
+    .status      // num,只读,HTTP状态码 
       200, OK,访问正常
       301, Moved Permanently,永久移动
       302, Move temporarily,暂时移动
@@ -2205,28 +2226,19 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       403, Forbidden,禁止访问
       404, Not Found,未发现指定网址
       500, Internal Server Error,服务器发生错误
-    .statusText  只读,HTTP响应的文本描述,比如'200 OK' 
-    .timeout     超时设定,值为整数,单位'ms'[可能存在兼容性][level2]
-      PS:表示多少毫秒后,若请求仍然没有得到结果,就会自动终止.
-        若该属性等于0,就表示没有时间限制.
-        在规定的时间内浏览器没有收到响应,就会触发xhr的 timeout 事件
-        Opera、Firefox 和 IE 10 支持该属性,
-        IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
-        而 Chrome 和 Safari 还不支持
-    .abort()    终止连接
-      调用该方法后,xhr对象会停止触发事件,
-      而且也不再允许访问任何与响应有关的对象属性
-      在终止请求后,还应该对xhr对象进行解引用操作.
-      若请求已经被发送,则立刻中止请求.
-    .onreadystatechange  readyState值改变时触发该事件 
-      PS:异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态
+      ...
+    .statusText  // str,只读,响应状态的文本描述,比如'OK' 
+    .onreadystatechange  // readyState值改变时触发事件 
+      PS: 异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态 
         只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
-      Example: :
-      xhr.onreadystatechange =function(){
-        if(xhr.readyState ===4 && xhr.status === 200) { }
+      Example: 
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState ===4 && xhr.status === 200) {
+          // 
+        }
       };
-    .upload  
-    .upload.onprogress  上传的进度,触发频率50ms/次[level2] 
+    .upload 
+    .upload.onprogress  // 上传进度事件,触发频率50ms/次[level2] 
       文件太小网络环境好的时候是直接到100%的;
       Event时间对象及其属性/方法 
       e.lengthComputable   bol,能否获取到上传数据的大小   
@@ -2251,24 +2263,7 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
           xhr.send(blobOrFile);
         }
         upload(new Blob(['hello world'], {type: 'text/plain'}));
-    .responseURL  
-    .getAllResponseHeaders    
-    .overrideMimeType    
     ◆待整理
-    xhr.responseStream   服务器返回的数据流
-    xhr.responseBody 服务器返回的主体,非文本格式 
-    xhr.sendAsBinary(BinaryString) // 发送二进制字符串 [Chrome中移除] 
-      自行实现如下 
-      XMLHttpRequest.prototype.sendAsBinary = function(text){
-        var data = new ArrayBuffer(text.length);
-        var ui8a = new Uint8Array(data, 0);
-        for (var i = 0; i < text.length; i++){ 
-          ui8a[i] = (text.charCodeAt(i) & 0xff);
-        }
-        this.send(ui8a);
-      }
-    xhr.getAllResponseHeader(); 获取整个响应头信息,格式为字符串
-      每个头信息之间使用CRLF分隔,若没有收到服务器回应,该属性返回null.
     ◆其他 
       接收二进制数据 
         PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
@@ -2613,10 +2608,11 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
         t.update('708',{task:'111'})
         // 通过id来删除info元素
         t.delete("709")
-XMLHttpRequestEventTarget, 
+XMLHttpRequestEventTarget,AJAX请求相关的事件 
   Extend: EventTarget 
     console.log(XMLHttpRequestEventTarget.prototype.__proto__.constructor===EventTarget);
   Proto: 
+    PS: 事件须在'send'方法调用前设定
     .onloadstart 在接收到响应数据的第一个字节时触发 [level2] 
     .onprogress  在接收响应期间持续不断的触发[level2]
       PS: 下载的'progress'事件属于'xhr'对象,上传的'progress'事件属于'xhr.upload'对象

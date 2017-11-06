@@ -453,11 +453,11 @@ Selector选择器
         Example: input:default{}
   ◆选择器组合: 将以上单体选择器进行组合使用 
     PS:此处使用A、B来当作选择器,进行表示
-  A,B  所有 
+  A,B  A、B共同 
     <div class="aoo"> aoo</div>
     <div class="boo"> boo</div>
     .aoo,.boo{color: red;} /*两个标签的字体都为红色*/
-  A B  后代 
+  A B  后代B 
     <div class="aoo">
       <div class="boo">
         123123
@@ -465,10 +465,10 @@ Selector选择器
       </div>
     </div>
     .aoo .coo{ color: red; }
-  AB   同时拥有 
+  AB   同时拥有A和B 
     <div class="aoo boo"> 2 </div>
     .aoo.boo{color:red;}
-  A>B  子元素 [CSS2.1] 
+  A>B  子元素B [CSS2.1] 
     <div class="aoo">
       <div class="boo">
         字体变红
@@ -476,8 +476,8 @@ Selector选择器
       </div>
     </div>
     .aoo>.boo{color: red;}
-  A+B  同级相邻后者 [CSS2.1] 
-  A~B  同级后者 [CSS3]
+  A+B  同级相邻B [CSS2.1] 
+  A~B  同级B [CSS3]
     <div class="aoo">123 </div>
     <div class="boo">字体变红 </div>
     <div class="coo">123 </div>
@@ -940,38 +940,42 @@ Declaration样式声明
           text-shadow: 0 0 3px #000;
         }
     text-overflow   文本溢出显示方式 
-      PS:该属性只在当盒子中的文本在水平方向上超出时有效.
+      PS: 该属性只在当盒子中的文本在水平方向上超出时有效 
       ellipsis  单行文本溢出显示为省略号
-        单行溢出显示 
-          width:xxx; [也可以使用 max-width 代替 width]
-          overflow:hidden;
-          white-space: nowrap;
-          /*前三个为前提条件*/
-          text-overflow:ellipsis
-        多行溢出显示 
-          不支持多行文本溢出显示省略号
-          可使用:after 来模拟
-          Example:
-          <div class="wrap">
-            很多年以后,奥雷连诺上校站在行刑队面前,准会想起父亲带他去参观冰块的那个遥远的下午。当时,马孔多是个二十户人家的村庄,一座座土房都盖在河岸上,河水清澈,沿着遍布石头的河床流去,河里的石头光滑、洁白,活像史前的巨蛋。----加西亚·马尔克斯
-            knowing something of everything and everything of something.
-          </div>
-          .wrap{
-            width: 300px;
-            height: 54px;
-            text-overflow : ellipsis;
+        单行溢出省略 
+          .wraper {
+            text-overflow:ellipsis
+            /*以下三项必须设定,否则不生效*/
+            width: xxx;  /* 也可用 max-width 代替 */
             overflow: hidden;
-            position: relative;
+            white-space: nowrap;
           }
-          .wrap:after{
-            content: '...';
-            position: absolute;
-            bottom: 2px;
-            right: 0;
-            background-color: #fff;
-            width: 30px;
-            height: 20px;
-          }
+        多行溢出省略 
+          PS: text-overflow: ellipsis;不支持多行文本溢出显示省略号 
+          WebKit浏览器及移动端专属  
+            .wraper {
+              overflow: hidden;
+              display: -webkit-box;  // 将对象作为弹性伸缩盒子模型显示 
+              -webkit-line-clamp: 3; // 显示的行数 
+              -webkit-box-orient: vertical; // 设置或检索伸缩盒对象的子元素的排列方式 
+            }
+          使用:after 来模拟 
+            缺点: 当未溢出时仍存在'...',需配合JS来判断使用 
+            .wrap{
+              line-height: 20px;
+              max-height: 40px; // 行高的倍数 
+              overflow: hidden;
+              position: relative;
+            }
+            .wrap::after{
+              content: "...";
+              position: absolute; bottom: 0; right: 0;
+              padding-left: 40px;
+              background: -webkit-linear-gradient(left, transparent, #fff 55%);
+              background: -o-linear-gradient(right, transparent, #fff 55%);
+              background: -moz-linear-gradient(right, transparent, #fff 55%);
+              background: linear-gradient(to right, transparent, #fff 55%);
+            }
     text-transform  文本大小写转换 
       none
       uppercase  字母大写

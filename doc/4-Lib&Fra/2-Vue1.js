@@ -10,8 +10,8 @@
     import VueResource from 'vue-resource' // 引入 vue-resource 
     Vue.use(VueResource)  // 安装 vue-resource   
 API 
-  PS: vm.$http 和 Vue.http 等价 
-    回调函数中的 this 仍指向Vue实例 
+  ◆组件注入属性/方法 vm.$http 
+    PS: 回调函数中的 this 仍指向Vue实例 
   ★http请求方法 
     请求方法返回值为 Promise 对象,可使用以下方法 
     .then(function(data1 ){ // 成功的回调 
@@ -64,7 +64,7 @@ API
     .json() obj,以JSON对象形式返回response body
     .blob() Blob,以二进制形式返回response body
   ◆Vue.http.xx 
-    PS: 同样有对应 vm.$http.xx 方法 
+    PS: 和 vm.$http 等价 
     Vue.http.options.xhr = { withCredentials: true } ? 
     Vue.http.options.emulateJSON = true 
     ★Vue.http.options 对象 
@@ -396,18 +396,17 @@ router = new VueRouter({  // 路由实例'router instance'
         <viewname> : cptB, // 命名视图,在<router-view name="viewname">中指定  
         // ..
       }
-      ,children: []   // 路由嵌套,子路由 
-        PS: 被路由加载的组件同样可包含自己的<router-view> 
-        [
-          {  // 子路由记录 
-            path: 'aa',
-            component: cptA,
-          },
-          {
-            path: 'bb',
-            component: cptB,
-          }
-        ]
+      ,children: [   // 路由嵌套,子路由 
+        // PS: 被路由加载的组件同样可包含自己的<router-view> 
+        {  // 子路由记录 
+          path: 'aa',     // 相对于当前路由记录的路径 
+          component: cptA,
+        }
+        ,{
+          path: 'bb',
+          component: cptB,
+        }
+        ...
         Example: 
           const User = {
             template: `
@@ -456,6 +455,7 @@ router = new VueRouter({  // 路由实例'router instance'
               }
             ]
           })
+      ]   
       ,redirect: '/coo' // 重定向,地址和内容都变化 
         PS: 如当访问'/a'时,URL将会被替换成'/b',且匹配路由也为'/b' 
         redirect: {  // 使用对象进行配置 
@@ -564,10 +564,12 @@ router = new VueRouter({  // 路由实例'router instance'
     replace="bol"  导航后是否留下history记录 
     append="bol"   是否在当前跳转前加上该页路径 
       从'/a'导航到一个相对路径'b',若未配置append,则路径为'/b',若配了,则为'/a/b' 
-    active-class=""   设置链接激活时使用的CSS类名,默认值"router-link-active"
+    active-class="aoo"   设置链接激活时的CSS类名 
+      PS: 当<router-link>被激活时会被添加一个class,默认为"router-link-active" 
+        对应的路由匹配成功,"router-link-active"class将自动添加  
+        可通过此项来自定义class名称 
       默认值可以通过路由的构造选项 linkActiveClass 来全局配置
-    class="router-link-active"  对应的路由匹配成功,将自动添加  
-    exact="bol"    是否激活 
+    exact="bol"     是否激活 
     event="str/arr"  声明可以用来触发导航的事件,默认值'click' 
   ◆配合使用的组件 
   <transition></transition> 实现跳转动画 
@@ -588,76 +590,76 @@ router = new VueRouter({  // 路由实例'router instance'
   <keep-alive></keep-alive> 缓存,加快路由切换速度 
 API 
   ◆Router实例的属性/方法  
-  router.app   配置了router的Vue根实例 
-  router.mode  str,路由使用的模式 
-  router.currentRoute  当前路由对应的路由信息对象 
-  router.beforeResolve(guard) 此时异步组件已经加载完成 '2.5.0+' 
-  router.getMatchedComponents(location?)  返回目标位置或是当前路由匹配的组件数组
-    是数组的定义/构造类,不是实例,通常在服务端渲染的数据预加载时时候。
-  router.resolve(location, current?, append?)   '2.1.0+'
-    解析目标位置(格式和 <router-link> 的 to 属性一样),返回包含如下属性的对象：
-    {
-      location: Location;
-      route: Route;
-      href: string;
-    }
-  router.addRoutes(routes) 动态添加更多的路由规则 '2.2.0+' 
-    参数必须是一个符合 routes 选项要求的数组。
-  router.onReady(callback)  添加一个会在第一次路由跳转完成时被调用的回调函数 '2.2.0+'
-    此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
-  ★导航钩子 
-    PS: '导航'表示路由正在发生改变;导航钩子主要用来拦截导航,让它完成跳转或取消 
-  router.beforeEach(function(to, from, next){  // 注册全局before钩子 
-    PS: 当一个导航触发时,全局的 before 钩子按照创建顺序调用。
-      钩子是异步解析执行,此时导航在所有钩子 resolve 完之前一直处于 等待中。
-    to     obj,即将要进入的目标 
-    from   obj,当前导航正要离开的路由
-    next   foo,需调用该方法来'resolve'该钩子,执行效果依赖'next'方法的调用参数 
-      确保要调用'next'方法,否则钩子就不会被'resolved' 
-      next()  进行管道中的下一个钩子
-        如果全部钩子执行完了,则导航的状态就是'confirmed'确认的 
-      next(false)  中断当前的导航
-        如果浏览器的URL改变了[可能是用户手动或者浏览器后退按钮],
-        那么URL地址会重置到'from'路由对应的地址 
-      next('/') / next({ path: '/' }) 跳转到一个不同的地址
-        当前的导航被中断,然后进行一个新的导航 
-  }) 
-  router.afterEach(function(route){  // 注册全局after钩子 
-    // after钩子没有next方法,不能改变导航 
-  })
-  ★编程式的导航 
-    PS: 除了使用<router-link>创建<a>标签来定义导航链接,
-      还可以借助router的实例方法,通过编写代码来实现。
-      vue-router的导航方法'push''replace''go'是效仿 window.history API 
-      window.history.pushState、 
-      window.history.replaceState 
-      window.history.go
-      但其在各类路由模式 history、 hash 和 abstract 下表现一致
-  router.push(location, onComplete?, onAbort?) 向history栈添加一新的记录 
-    PS: 当用户点击浏览器后退按钮时,则回到之前的URL 
-      当点击<router-link>时,这个方法会在内部调用,
-      点击 <router-link :to="..."> 等同于调用 router.push(...) 
-    location   字符串路径/描述地址的对象 
-      <router-link :to="..."> router.push(...)
-    routerMap.push('home') // 字符串
-    routerMap.push({ path: 'home' }) // 对象
-    routerMap.push({ name: 'user', params: { userId: 123 }}) // 命名的路由
-    routerMap.push({ path: 'register', query: { plan: 'private' }})
-    // 带查询参数,变成 /register?plan=private
-  router.replace(location, onComplete?, onAbort?) 替换掉当前的history记录
-    相当于 <router-link :to="..." replace>  
-  router.go(<num>) 在history记录中向前多少步,类似 window.history.go(num) 
-    Example:
-    routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
-    routerMap.go(-1)   // 后退一步记录,等同于 history.back()
-    routerMap.go(3)    // 前进 3 步记录
-    routerMap.go(-100)
-    routerMap.go(100) // 若history记录不够用,不操作 
-  router.back()
-  router.forward()  动态的导航到一个新url 
-  ◆对组件的注入 
-  vm.$router router实例 
-  vm.$route  只读,当前激活的路由信息对象,表示当前激活的路由的状态信息  
+    router.app   配置了router的Vue根实例 
+    router.mode  str,路由使用的模式 
+    router.currentRoute  当前路由对应的路由信息对象 
+    router.beforeResolve(guard) 此时异步组件已经加载完成 '2.5.0+' 
+    router.getMatchedComponents(location?)  返回目标位置或是当前路由匹配的组件数组
+      是数组的定义/构造类,不是实例,通常在服务端渲染的数据预加载时时候。
+    router.resolve(location, current?, append?)   '2.1.0+'
+      解析目标位置(格式和 <router-link> 的 to 属性一样),返回包含如下属性的对象：
+      {
+        location: Location;
+        route: Route;
+        href: string;
+      }
+    router.addRoutes(routes) 动态添加更多的路由规则 '2.2.0+' 
+      参数必须是一个符合 routes 选项要求的数组。
+    router.onReady(callback)  添加一个会在第一次路由跳转完成时被调用的回调函数 '2.2.0+'
+      此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
+    ★导航钩子 
+      PS: '导航'表示路由正在发生改变;导航钩子主要用来拦截导航,让它完成跳转或取消 
+    router.beforeEach(function(to, from, next){  // 注册全局before钩子 
+      PS: 当一个导航触发时,全局的 before 钩子按照创建顺序调用。
+        钩子是异步解析执行,此时导航在所有钩子 resolve 完之前一直处于 等待中。
+      to     obj,即将要进入的目标 
+      from   obj,当前导航正要离开的路由
+      next   foo,需调用该方法来'resolve'该钩子,执行效果依赖'next'方法的调用参数 
+        确保要调用'next'方法,否则钩子就不会被'resolved' 
+        next()  进行管道中的下一个钩子
+          如果全部钩子执行完了,则导航的状态就是'confirmed'确认的 
+        next(false)  中断当前的导航
+          如果浏览器的URL改变了[可能是用户手动或者浏览器后退按钮],
+          那么URL地址会重置到'from'路由对应的地址 
+        next('/') / next({ path: '/' }) 跳转到一个不同的地址
+          当前的导航被中断,然后进行一个新的导航 
+    }) 
+    router.afterEach(function(route){  // 注册全局after钩子 
+      // after钩子没有next方法,不能改变导航 
+    })
+    ★编程式的导航 
+      PS: 除了使用<router-link>创建<a>标签来定义导航链接,
+        还可以借助router的实例方法,通过编写代码来实现。
+        vue-router的导航方法'push''replace''go'是效仿 window.history API 
+        window.history.pushState、 
+        window.history.replaceState 
+        window.history.go
+        但其在各类路由模式 history、 hash 和 abstract 下表现一致
+    router.push(location, onComplete?, onAbort?) 向history栈添加一新的记录,并跳转 
+      PS: 当用户点击浏览器后退按钮时,则回到之前的URL 
+        当点击<router-link>时,这个方法会在内部调用,
+        点击 <router-link :to="..."> 等同于调用 router.push(...) 
+      location   字符串路径/描述地址的对象 
+        <router-link :to="..."> router.push(...)
+      routerMap.push('home') // 字符串
+      routerMap.push({ path: 'home' }) // 对象
+      routerMap.push({ name: 'user', params: { userId: 123 }}) // 命名的路由
+      routerMap.push({ path: 'register', query: { plan: 'private' }})
+      // 带查询参数,变成 /register?plan=private
+    router.replace(location, onComplete?, onAbort?) 替换掉当前的history记录
+      相当于 <router-link :to="..." replace>  
+    router.go(<num>) 在history记录中向前多少步,类似 window.history.go(num) 
+      Example:
+      routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
+      routerMap.go(-1)   // 后退一步记录,等同于 history.back()
+      routerMap.go(3)    // 前进 3 步记录
+      routerMap.go(-100)
+      routerMap.go(100) // 若history记录不够用,不操作 
+    router.back()
+    router.forward()  动态的导航到一个新url 
+  ◆对组件注入的属性/方法  
+  vm.$router // router实例 
+  vm.$route  // 当前路由信息对象,可获取当前激活的路由的状态信息  
     PS: 不可变的'immutable',每次成功的导航后都会产生一个新的对象 
     ★出现的位置 
     vm.$route 和 vm.$route watcher 回调,监测变化处理 
@@ -771,71 +773,75 @@ API
   });
 store = new Vuex.store({ // 实例化数据中心'store'  
   state: {  // 状态,用于储存数据  
-    stateData0: val,
+    stateData1: val1 
     // .. 
-  },
-  getters: { // 相当于'computed',对'state'的处理返回 
+  }
+  ,mutations: { // 函数集,一般用于直接操作'state'中的数据 
+    foo: function(state[,data]){  // 不可执行异步操作 
+      // state 储存数据的state对象 
+      // data  commit()传入的数据 
+    }
+    // ..
+  }
+  ,getters: { // 在组件中使用以获得'state'中的数据 
+    // PS: 相当于'computed',对'state'的处理返回
     getData1: function(state,getters){
-      // state 传入的状态对象 
+      // state   储存数据的state对象 
       // getters 当前getters对象 
       return state.xx;
-    },
+    }
     // 可通过让 getter 返回一个函数,来实现给 getter 传参 
     // store.getters.getData2(2) 传参调用 
-    getData2: function(state, getters){
+    ,getData2: function(state, getters){
       return function(id){
         return state.todos.find(todo => todo.id === id)
       };
-    },
+    }
     // .. 
-  },
-  mutations: { // 函数集合,不可异步执行,一般用于直接操作'state'中的数据 
-    foo: function(state[,data]){  
-      // state  储存数据的state对象,
-      // data   commit()传入的数据 
-    },
-    // ..
-  },
-  actions: {   // 函数集合,一般是异步的,常和后端API交互、执行'mutations'中的函数  
-    // 用于执行'mutations',通过'mutations'更改'state',而不能直接更改'state' 
-    goo: function(context[,data]){
+  }
+  ,actions: {   // 函数集,执行'mutations'中的方法  
+    goo: function(context[,data]){ // 不能直接更改'state',常和后端API交互[异步操作]
       // context 表示该实例'store' 
-        // 一般用来执行'mutations'中的函数,context.commit('foo',data1) 
+        // 可执行'mutations'中的函数,context.commit('foo',data1) 
         // 也可通过 context.state 和 context.getters 来获取 state 和 getters
       // data    dispatch()传入的数据 
-    },
+    }
     // ..
-  },
+  }
 })  
 API 
-  组件中: 一般通过'computed'属性来承接 this.$store.state 中的数据   
-  this.$store  事件对象 
-  this.$store.state.xx   使用数据 
-  this.$store.getters.xx 使用数据 
-  thi.$store.commit('foo'[,data])   提交,执行'mutations'中的方法 
-  thi.$store.dispatch('goo'[,data]) 执行'actions'中的方法 
-采用模块的状态管理: 每个模块维护不同的状态,然后合并到一个总数据中心中 
+  ◆组件注入的属性/方法 
+  ★this.$store  // 数据中心对象 
+    PS: 组件中: 一般通过'computed'属性来承接 this.$store.state 中的数据   
+  this.$store.state.xx   // 使用数据 
+  this.$store.getters.xx // 使用数据 
+  thi.$store.commit('foo'[,data])   // 执行'mutations'中的方法 
+  thi.$store.dispatch('goo'[,data]) // 执行'actions'中的方法 
+采用模块的状态管理: 每个模块维护一套状态,然后合并到一总数据中心中 
   const moduleA = {
-    state : {},
-    getters : {},
-    actions : {
-    },
-    mutations : {},
+    state : {}
+    ,getters : {}
+    ,actions : {}
+    ,mutations : {}
   }
   const moduleB = {
-    state : {},
-    getters : {},
-    actions : {},
-    mutations : {},
+    state : {}
+    ,getters : {}
+    ,actions : {}
+    ,mutations : {}
   }
   const store = new Vuex.store({
     modules : {
-      aoo: moduleA,
-      boo: moduleB,
+      aoo: moduleA
+      ,boo: moduleB
     }
+    ,mutations: {  // 公用的 mutations 
+      // 
+    }
+    ...
   })
-  // store.state.aoo  获取moduleA中的state 
-  // store.state.boo  获取moduleB中的state 
+  // store.state.aoo  moduleA中的state对象 
+  // store.state.boo  moduleB中的state对象 
 --------------------------------------------------------------------------------
 'vue-validator'表单验证 
 'vue-touch'移动端 

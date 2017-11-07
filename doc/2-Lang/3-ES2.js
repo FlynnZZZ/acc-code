@@ -3003,54 +3003,109 @@ Blob,二进制数据的基本对象[ES6]
     若类型未知,则该值为空字符串 
     在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
   blob.close() 关闭 Blob 对象,以便能释放底层资源 
-ArrayBuffer&TypedArray&DataView: JS操作二进制数据的接口[ES6] 
-  PS: ArrayBuffer、TypedArray和 DataView,这些对象早就存在,属于独立的规格, 
-    ES6将其纳入ECMAScript规格,并且增加了新的方法,
-    都是以数组的语法处理二进制数据,故统称为二进制数组,
-  由来 
-    这个接口的原始设计目的,与WebGL项目有关。
-    所谓WebGL,就是指浏览器与显卡之间的通信接口,为了满足JS与显卡之间大量的、实时的数据交换,
-    它们之间的数据通信必须是二进制的,而不能是传统的文本格式,
-    文本格式传递一个32位整数,两端的JS脚本与显卡都要进行格式转化,将非常耗时。
-    这时要是存在一种机制,可以像C语言那样,直接操作字节,
-    将4个字节的32位整数,以二进制形式原封不动地送入显卡,脚本的性能就会大幅提升,
-    二进制数组就是在这种背景下诞生的,
-    很像C语言的数组,允许开发者以数组下标的形式,直接操作内存,
-    使得开发者能通过JS与操作系统的原生接口进行二进制通信 
-  ◆二进制数组由三类对象组成 
-    它们支持的数据类型一共有'9'种(DataView对象支持除Uint8C以外的其他8种)。
-  ArrayBuffer 对象,代表原始的二进制数据,内存中的一段二进制数据 
-  TypedArray 视图,用来读写简单类型的二进制数据,代表确定类型的二进制数据 
-    通过9个构造函数,可以生成9种数据格式的视图
-    Uint8Array   [无符号8位整数]数组视图
-    Int16Array   [16位整数]数组视图 
-    Float32Array [32位浮点数]数组视图
+◆二进制数组,以数组的语法处理二进制数据 [ES6] 
+  PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
+    它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
+    该接口的原始设计目的,与WebGL项目有关
+    浏览器与显卡间的通信接口,使用二进制才能满足大量的、实时的数据交换, 
+    直接操作字节,脚本的性能大幅提升,二进制数组就是在这种背景下诞生的 
+ArrayBuffer,内存中的一段二进制数据 
+  Extend：Object 
+  Instance: new ArrayBuffer(num) 
+    var buffer = new ArrayBuffer(20);  // 在内存中分配20B 
+  Proto: 
+    .byteLength // 包含的字节数 
+    .slice()    
+数据类型 字节长度 对应C语言中的类型  含义 
+  Int8     1     signed char      8 位整数 
+  Uint8    1     unsigned char    8 位无符号整数 
+  Uint8C   1     unsigned char    8 位无符号整数[自动过滤溢出] 
+  Int16    2     short            16 位整数 
+  Uint16   2     unsigned short   16 位无符号整数 
+  Int32    4     int              32 位整数 
+  Uint32   4     unsigned int     32 位无符号的整数 
+  Float32  4     float            32 位浮点数 
+  Float64  8     double           64 位浮点数 
+DataView,不确定类型的二进制数据  
+  PS: 支持除'Uint8C'外的其他8种组成的集合  
+    比如第一个字节是Uint8,第二个字节是Int16,第三个字节是Float32等等  
+  Extend: Object 
+  Instance: 
+    var view = new DataView(buffer[,bgn[,length]]) // 通过Buffer类型创建  
+      buffer  ArrayBuffer对象 
+      bgn     num,可选,字节偏移量,从该字节开始选择 \
+        //创建一个开始于字节9 的新视图
+        var view = new DataView(buffer, 9);
+      length  num,可选,要选择的字节数 
+        //创建一个从字节9 开始到字节18 的新视图
+        var view = new DataView(buffer, 9, 10);
+  Proto: 
+    .buffer       // 获取buffer对象 
+    .byteOffset   // 偏移量 
+    .byteLength   // 字节长度 
+    ★读写方法 
+      PS: 保存不同类型的数据,需要的空间不同,如无符号8 位整数要用1B,而32 位浮点数则要用4B
+        使用DataView,需自己来管理这些细节,即要明确知道数据需要多少字节,并选择正确的读写方法
+      offset   num,字节偏移量,表示要从哪个字节开始读取或写入 
+      littleEndian  bol,表示读写数值时是否采用小端字节序 
+        即将数据的最低有效位保存在低内存地址中 
+    .getInt8(offset)  
+    .getUint8(offset)  
+    .getInt16(offset,littleEndian)  
+    .getUint16(offset,littleEndian)  
+    .getInt32(offset,littleEndian)  
+    .getUint32(offset,littleEndian)  
+    .getFloat32(offset,littleEndian)  
+    .getFloat64(offset,littleEndian)  
+    .setInt8(offset,val)  
+    .setUint8(offset,val)  
+    .setInt16(offset,val,littleEndian)  
+    .setUint16(offset,val,littleEndian)  
+    .setInt32(offset,val,littleEndian)  
+    .setUint32(offset,val,littleEndian)  
+    .setFloat32(offset,val,littleEndian)  
+    .setFloat64(offset,val,littleEndian)  
+TypedArray,类型化数组,确定类型的二进制数据,无可访问的构造函数  
+  PS: 以下9种数据格式的原型对象类型为TypedArray   
+  ★该类型具有的属性方法: 
+  .buffer 
+  .byteLength 
+  .byteOffset 
+<TypedArray> 
+  Relate: <TypedArray>.prototype   TypedArray对象 
+  Static: 
+    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
+    Uint8Array.BYTES_PER_ELEMENT    1 
+    Float32Array.BYTES_PER_ELEMENT  4 
     ...
-  DataView 视图,用来读写复杂类型的二进制数据,代表不确定类型的二进制数据  
-    比如第一个字节是Uint8[无符号8位整数]、
-    第二个字节是Int16[16位整数]、
-    第三个字节是Float32[32位浮点数]等等 
-  ◆TypedArray,用来生成内存的视图 
-  数据类型 字节长度  对应的C语言类型    含义 
-    Int8      1     signed char      8 位带符号整数               
-    Uint8     1     unsigned char    8 位不带符号整数               
-    Uint8C    1     unsigned char    8 位不带符号整数(自动过滤溢出)
-    Int16     2     short            16 位带符号整数               
-    Uint16    2     unsigned short   16 位不带符号整数               
-    Int32     4     int              32 位带符号整数               
-    Uint32    4     unsigned int     32 位不带符号的整数             
-    Float32   4     float            32 位浮点数                    
-    Float64   8     double           64 位浮点数                    
-Uint8Array  
-Int8Array  
-Uint16Array  
-Int16Array  
-Uint32Array  
-Int32Array  
-Float32Array  
-Float64Array  
+    Example: 利用该属性来辅助初始化
+    // 需要10 个元素空间
+    var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
+  Instance: 
+    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
+    var typedArray = new <TypedArray>(num); 
+      // 创建一个数组保存10 个8 位整数[10 字节] 
+      var int8s = new Int8Array(10); 
+      // 创建一个数组保存10 个16 位整数[20 字节] 
+      var int16s = new Int16Array(10); 
+    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
+      PS: 用默认值来初始化类型化视图的最佳方式 
+      // 创建一个数组保存5 个8 位整数[5 字节]
+      var int8s = new Int8Array([10, 20, 30, 40, 50]);
+  Example: 
+    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
+    var int8s = new Int8Array(buffer, 0, 10);
+    var uint16s = new Uint16Array(buffer, 11, 10);
+    
+Int8Array 
+Uint8Array 
 Uint8ClampedArray  
-DataView  
+Int16Array    
+Uint16Array    
+Int32Array    
+Uint32Array  
+Float32Array   
+Float64Array  
 Promise,同步书写异步模式[ES6] 
   PS:采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 

@@ -675,8 +675,8 @@ const,定义块级常量 [ES6]
       console.log(getType({})); // object
       console.log(getType([])); // Array
       console.log(getType(new Date())); // Date
-    typeof val;               [详参 一元运算符]
-    obj instanceof Object;    [详参 关系运算符]
+    typeof val;               [详参 一元运算符] 
+    obj instanceof Object;    [详参 关系运算符] 
     obj.constructor           查询对象的构造函数 
     'duck type' 鸭子类型,根据其表现来确定其身份 
 'Class'类: 基于原型的实现的封装[ES6] 

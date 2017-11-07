@@ -21,7 +21,8 @@
   ◆启动项目/构建发布  
   $ npm run dev     // 启动测试服务器  
   $ npm run build   // 运行构建,生成生产环境可发布的代码 
-项目目录及文件说明 
+项目目录、文件说明 
+  PS: 进行了部分更改 
   build         // 构建的配置文件 
     build.js 
       require('./check-versions')()  
@@ -440,11 +441,9 @@
       module.exports = webpackConfig        
   config        // webpack 的配置文件
     dev.env.js
-    index.js
-      index.js 中有 dev 和 production 两种环境的配置
-      
-      var path = require('path')
-      
+    index.js 
+      PS: 配置了开发和生产两种环境 
+      var path = require('path'); 
       module.exports = {
         build: { // production 环境
           env: require('./prod.env'), // 使用 config/prod.env.js 中定义的编译环境
@@ -460,13 +459,16 @@
           productionGzip: false, // 是否开启 gzip
           productionGzipExtensions: ['js', 'css'] // 需要使用 gzip 压缩的文件扩展名
         },
-        dev: { // dev 环境
-          env: require('./dev.env'), // 使用 config/dev.env.js 中定义的编译环境
-          port: 8080, // 运行测试页面的端口
-          assetsSubDirectory: 'static', // 编译输出的二级目录
-          assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
-          proxyTable: {}, // 需要 proxyTable 代理的接口（可跨域）
-          cssSourceMap: false // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
+        dev: {   // dev 环境
+          env: require('./dev.env') // 使用 config/dev.env.js 中定义的编译环境
+          ,port: 8080 // 运行测试页面的端口
+          ,assetsSubDirectory: 'static' // 编译输出的二级目录
+          ,assetsPublicPath: '/' // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
+          ,proxyTable: { // 代理设置 
+            '/api/': 'http://localhost:8081' // 即访问'/api'则相当于访问后面指定的地址 
+          }
+          ,cssSourceMap: false 
+            // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
         }
       }        
   dist          // 打包构建好的代码 
@@ -474,11 +476,27 @@
     index.html 
   node_modules  // node模块
   src           // 开发目录 
-    assets         静态资源目录 
-    components     组件目录 
-    App.vue        主入口视图文件 
-    main.js        主入口JS文件 
-  static        // 静态文件夹  
+    assets         // 资源目录  
+      imgs 
+      data 
+      plugs 
+      scripts 
+      styles 
+    components     // 公用组件 
+      xx.vue 
+      ... 
+    pages          // 页面划分 
+      member 
+        access.vue
+        xxx.vue 
+        ...
+      news   
+        access.vue
+        xxx.vue 
+        ...
+      ..
+    main.js        // 入口JS 
+  static        // 静态文件夹 
     src目录下的资源只能import或require,
     而该文件夹下的文件可直接在HTML中引入,最终打包到'dist/static'中 
   .babelrc      // babel配置文件
@@ -2233,7 +2251,8 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       Example: 
         <div id="p">
           <p>{{ total }}</p>
-          <cpt-aoo v-on:fromChild="foo"></cpt-aoo>
+          <cpt-aoo v-on:fromChild="foo('a1',$event)"></cpt-aoo> 
+          // 默认传参,传入默认参数:字符串'a1',使用 $event 来承接从子组件传来的值 
         </div>
         Vue.component('cpt-aoo', {
           template: '<button v-on:click="clickFoo">{{ counter }}</button>',

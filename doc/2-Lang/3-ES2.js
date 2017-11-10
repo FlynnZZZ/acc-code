@@ -3065,22 +3065,48 @@ DataView,不确定类型的二进制数据
     .setUint32(offset,val,littleEndian)  
     .setFloat32(offset,val,littleEndian)  
     .setFloat64(offset,val,littleEndian)  
-TypedArray,类型化数组,确定类型的二进制数据,无可访问的构造函数  
-  PS: 以下9种数据格式的原型对象类型为TypedArray   
-  ★该类型具有的属性方法: 
-  .buffer 
-  .byteLength 
-  .byteOffset 
+TypedArray,类型化数组,确定类型的二进制数据,无可直接访问的构造函数  
+  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
+  Proto:  
+    .buffer 
+    .byteLength 
+    .byteOffset 
+    .length 
+    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
+    .entries() 
+    .keys() 
+    .values() 
+    .copyWithin() 
+    .fill() 
+    .includes() 
+    .indexOf() 
+    .lastIndexOf() 
+    .slice() 
+    .set() 
+    .find() 
+    .findIndex() 
+    .toLocaleString() 
+    .join() 
+    .toString() 
+    .forEach() 
+    .every() 
+    .map() 
+    .reverse() 
+    .reduce() 
+    .reduceRight() 
+    .some() 
+    .filter() 
+    .sort() 
 <TypedArray> 
-  Relate: <TypedArray>.prototype   TypedArray对象 
   Static: 
     <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
     Uint8Array.BYTES_PER_ELEMENT    1 
     Float32Array.BYTES_PER_ELEMENT  4 
     ...
-    Example: 利用该属性来辅助初始化
-    // 需要10 个元素空间
-    var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
+    Example: 
+      利用该属性来辅助初始化
+      // 需要10 个元素空间
+      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
   Instance: 
     var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
     var typedArray = new <TypedArray>(num); 
@@ -3092,11 +3118,17 @@ TypedArray,类型化数组,确定类型的二进制数据,无可访问的构造�
       PS: 用默认值来初始化类型化视图的最佳方式 
       // 创建一个数组保存5 个8 位整数[5 字节]
       var int8s = new Int8Array([10, 20, 30, 40, 50]);
+  Feature: 
+    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
+      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
+      保存65537,那实际保存的值是1,依此类推。
+      var uint16s = new Uint16Array(10);
+      uint16s[0] = 65537;
+      console.log(uint16s[0]); // 1
   Example: 
     // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
     var int8s = new Int8Array(buffer, 0, 10);
     var uint16s = new Uint16Array(buffer, 11, 10);
-    
 Int8Array 
 Uint8Array 
 Uint8ClampedArray  

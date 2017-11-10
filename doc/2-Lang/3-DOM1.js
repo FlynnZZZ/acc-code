@@ -1376,25 +1376,24 @@ HTMLElement,HTML元素节点
       本地网页的域为'file://,如:file:///home/summer/Desktop/test.html',
       本地图片不是以'file://'开头的,如 'c:\tmp\test.png'
     检测浏览器是否支持画布: 检测'canvas.getContext'方法是否存在 
-      if(canvas.getContext) {
-      }
-      else {
-      }
-    .width 
-    .height 
-    .toDataURL(type,quality)  str,返回图片的'dataURI'[需将图片预先放入canvas] 
-      PS: 若画布的高度或宽度是0,那么会返回字符串'data:,';
-      type     str,可选,图像的MIME类型格式,默认会将图像编码为PNG格式 
-        PS: 图片的分辨率为96dpi;
-          若传入非'image/png',但返回的以'data:image/png'开头,则表示传入类型不支持;
-        'image/png' 默认值 
-        Chrome支持'image/webp'类型。
-      quality  0-1,可选,设置得到图片的质量, 
-        在指定图片格式为'image/jpeg'或'image/webp'时;若超出范围,默认使用 0.92 
-    .getContext(keywords)   CanvasRenderingContext2D,获取上下文对象 
-      '2d'
-    .toBlob()   
-    .captureStream()   
+      if(canvas.getContext) { }
+      else { }
+    Proto: 
+      .width 
+      .height 
+      .toDataURL(type,quality)  str,返回图片的'dataURI'[需将图片预先放入canvas] 
+        PS: 若画布的高度或宽度是0,那么会返回字符串'data:,';
+        type     str,可选,图像的MIME类型格式,默认会将图像编码为PNG格式 
+          PS: 图片的分辨率为96dpi;
+            若传入非'image/png',但返回的以'data:image/png'开头,则表示传入类型不支持;
+          'image/png' 默认值 
+          Chrome支持'image/webp'类型。
+        quality  0-1,可选,设置得到图片的质量, 
+          在指定图片格式为'image/jpeg'或'image/webp'时;若超出范围,默认使用 0.92 
+      .getContext(keywords)   CanvasRenderingContext2D,获取上下文对象 
+        '2d'
+      .toBlob()   
+      .captureStream()   
   HTMLAudioElement   <audio> [继承 HTMLMediaElement] [HTML5] 
     PS: 改变音频的src,会立即切换播放;但改变其<source>需重新加载才会切换播放
       在iOS中,调用p lay()时会弹出一个对话框,得到用户的许可后才能播放声音。
@@ -1414,91 +1413,6 @@ HTMLElement,HTML元素节点
     .webkitExitFullscreen()   退出全屏 
     .webkitExitFullScreen()   
     .webkitEnterFullScreen()   
-  HTMLMediaElement   [继承 HTMLElement] 
-    常量 
-      .NETWORK_EMPTY     0  
-      .NETWORK_IDLE      1  
-      .NETWORK_LOADING   2  
-      .NETWORK_NO_SOURCE 3  
-      .HAVE_NOTHING       0  
-      .HAVE_METADATA      1  
-      .HAVE_CURRENT_DATA  2  
-      .HAVE_FUTURE_DATA   3  
-      .HAVE_ENOUGH_DATA   4  
-    .src       读写,路径 
-      对于<video>、<audio>推荐使用子元素<source>实现
-    .autoplay  bol,读写,是否自动播放 
-    .controls  bol,读写,是否显示操作控件
-    .loop      bol,读写,是否应在结束时再次播放
-    .paused    bol,读写,是否暂停播放
-    .currentTime    num,读写,当前播放时长,单位s  
-    .duration       num,读写,时长,单位s  
-      在加载完音频/视频前,获取不到,返回NaN,往往和canplay事件配合使用
-    .playbackRate  num,读写,播放速度,1.0 为正常速度
-    .volume    num,读写,音量,范围 0-1 
-    .muted  读写,是否关闭声音
-    .defaultPlaybackRate  读写,默认播放速度
-    .defaultMuted  读写,默认是否静音
-    .ended   bol,播放是否已结束
-    .currentSrc  str,当前媒体的URL
-    .networkState  当前网络状态 
-    .preload       读写,预加载状态  
-      auto 
-      metadata 
-      none 
-    .error        MediaError,错误对象
-    .buffered     TimeRanges,已缓冲部分对象 
-    .played       TimeRanges,视频已播放部分对象
-    .seekable     TimeRanges,视频可寻址部分的对象
-    .textTracks   TextTrackList,可用文本轨道对象
-    .readyState   视频当前的就绪状态  
-    .seeking      bol,用户是否正在视频中进行查找
-    .controlsList  
-    .crossOrigin  
-    .mediaKeys  
-    .onencrypted  
-    .onwaitingforkey  
-    .srcObject  
-    .sinkId  
-    .remote  
-    .disableRemotePlayback  
-    .canPlayType(type)  str,检测编解码器的支持情况  
-      PS: 返回值为: ''、"maybe"或"probably" 
-        若浏览器无法播放该格式,返回空字符串""
-        若浏览器认为有可能播放该格式,返回"maybe"
-        若浏览器认为能够播放改格式,返回"probably"
-      type  资源格式 
-      Example:
-      video.canPlayType("video/ogg")
-      只传入一个短形式的格式,只可能得到""或"maybe"
-      video.canPlayType('video/ogg; codecs="theora,vorbis"')
-      若传入带编解码的具体类型,就可能达到到""、"maybe"或"probably"作为答案
-    .load()        重新载入音频 
-    .play()        播放 
-    .pause()       暂停 
-    .addTextTrack()  添加新的文本轨道
-    .setSinkId()    
-    .captureStream()    
-    .webkitAudioDecodedByteCount  
-    .webkitVideoDecodedByteCount  
-    MediaError  媒体错误对象 
-      常量 
-        .MEDIA_ERR_ABORTED           1  
-        .MEDIA_ERR_NETWORK           2  
-        .MEDIA_ERR_DECODE            3  
-        .MEDIA_ERR_SRC_NOT_SUPPORTED 4  
-      .code     错误码 
-      .message  
-    TimeRanges 
-      .length 
-      .start()  
-      .end()  
-    TextTrackList [继承 EventTarget]
-      .length 
-      .onchange 
-      .onaddtrack 
-      .onremovetrack 
-      .getTrackById() 
   HTMLIFrameElement  <iframe> 
     var frame = document.querySelector("#frameId1")   框架的DOM元素对象 
     var iframe = window.frames[iframeName]  通过'name'属性值获取框架的window对象 
@@ -1527,22 +1441,22 @@ HTMLElement,HTML元素节点
     .allow        
     .getSVGDocument()  
   // TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★   
-  HTMLUnknownElement
-  HTMLTrackElement
-  HTMLTitleElement
-  HTMLTimeElement
-  HTMLTemplateElement
-  HTMLTableSectionElement
-  HTMLTableRowElement
-  HTMLTableColElement
-  HTMLTableCellElement
-  HTMLTableCaptionElement
-  HTMLSourceElement
-  HTMLSlotElement
-  HTMLShadowElement
-  HTMLQuoteElement
-  HTMLProgressElement
-  HTMLPreElement
+  HTMLUnknownElement 
+  HTMLTrackElement 
+  HTMLTitleElement 
+  HTMLTimeElement 
+  HTMLTemplateElement 
+  HTMLTableSectionElement 
+  HTMLTableRowElement 
+  HTMLTableColElement 
+  HTMLTableCellElement 
+  HTMLTableCaptionElement 
+  HTMLSourceElement 
+  HTMLSlotElement 
+  HTMLShadowElement 
+  HTMLQuoteElement 
+  HTMLProgressElement 
+  HTMLPreElement 
   HTMLPictureElement
   HTMLParamElement
   HTMLOutputElement
@@ -1577,6 +1491,94 @@ HTMLElement,HTML元素节点
   HTMLAudioElement
   HTMLAreaElement
   HTMLAllCollection
+HTMLMediaElement,HTML媒体元素   
+  Extend: HTMLElement 
+  Proto: 
+    常量 
+      .NETWORK_EMPTY     0  
+      .NETWORK_IDLE      1  
+      .NETWORK_LOADING   2  
+      .NETWORK_NO_SOURCE 3  
+      .HAVE_NOTHING       0  
+      .HAVE_METADATA      1  
+      .HAVE_CURRENT_DATA  2  
+      .HAVE_FUTURE_DATA   3  
+      .HAVE_ENOUGH_DATA   4  
+    .src  str,读写,路径 
+      对于<video>、<audio>推荐使用子元素<source>实现
+    .autoplay   bol,读写,是否自动播放 
+    .controls   bol,读写,是否显示操作控件
+    .loop  bol,读写,是否应在结束时再次播放
+    .paused   bol,读写,是否暂停播放
+    .currentTime   num,读写,当前播放时长,单位s  
+    .duration    num,读写,时长,单位s  
+      在加载完音频/视频前,获取不到,返回NaN,往往和canplay事件配合使用
+    .playbackRate   num,读写,播放速度,1.0 为正常速度
+    .volume   num,读写,音量,范围 0-1 
+    .muted    bol,读写,是否关闭声音
+    .defaultPlaybackRate    读写,默认播放速度
+    .defaultMuted    读写,默认是否静音
+    .ended    bol,播放是否已结束
+    .currentSrc   str,当前媒体的URL
+    .networkState   当前网络状态 
+    .preload       读写,预加载状态  
+      auto 
+      metadata 
+      none 
+    .error        MediaError,错误对象
+    .buffered     TimeRanges,已缓冲部分对象 
+    .played       TimeRanges,视频已播放部分对象
+    .seekable     TimeRanges,视频可寻址部分的对象
+    .textTracks   TextTrackList,可用文本轨道对象
+    .readyState   视频当前的就绪状态  
+    .seeking      bol,用户是否正在视频中进行查找
+    .controlsList  
+    .crossOrigin  
+    .mediaKeys   
+    .onencrypted  
+    .onwaitingforkey  
+    .srcObject  
+    .sinkId  
+    .remote  
+    .disableRemotePlayback  
+    .canPlayType(type)  str,检测编解码器的支持情况  
+      PS: 返回值为: ''、"maybe"或"probably" 
+        若浏览器无法播放该格式,返回空字符串""
+        若浏览器认为有可能播放该格式,返回"maybe"
+        若浏览器认为能够播放改格式,返回"probably"
+      type  资源格式 
+      Example:
+      video.canPlayType("video/ogg")
+      只传入一个短形式的格式,只可能得到""或"maybe"
+      video.canPlayType('video/ogg; codecs="theora,vorbis"')
+      若传入带编解码的具体类型,就可能达到到""、"maybe"或"probably"作为答案
+    .load()        重新载入音频 
+    .play()        播放 
+    .pause()       暂停 
+    .addTextTrack()  添加新的文本轨道
+    .setSinkId()    
+    .captureStream()    
+    .webkitAudioDecodedByteCount  
+    .webkitVideoDecodedByteCount  
+MediaError,媒体错误对象 
+  常量 
+    .MEDIA_ERR_ABORTED           1  
+    .MEDIA_ERR_NETWORK           2  
+    .MEDIA_ERR_DECODE            3  
+    .MEDIA_ERR_SRC_NOT_SUPPORTED 4  
+  .code     错误码 
+  .message  
+TimeRanges 
+  .length 
+  .start()  
+  .end()  
+TextTrackList  
+  Extend: EventTarget 
+  .length 
+  .onchange 
+  .onaddtrack 
+  .onremovetrack 
+  .getTrackById() 
 Image,img元素 
   PS: 需将图片元素插入到DOM中才会加载图片资源  
   Relate: Image.prototype===HTMLImageElement.prototype  
@@ -1596,7 +1598,7 @@ Option,option元素
         elem.options.remove(idx); // 根据下标删除选项option
         elem.options[idx].text;
 Audio,audio元素 
-  PS: 与Image相似,但Audio不用插入到文档中,就可加载音频资源 
+  PS: 与Image相似,但Audio不用插入到文档中,即可加载音频资源 
   Relate: Audio.prototype===HTMLAudioElement.prototype 
   Instance: 
     Example: 
@@ -2528,28 +2530,6 @@ XML相关
       使用 is 属性来声明一个扩展的类型
       Web Components 标准中:createElement 和 createElementNS 支持元素扩展:
         const hello = document.createElement('button', 'button-hello')
---------------------------------------------------------------------------------
-◆Mobile移动端 
-  IOS移动设备上,长按<a>标签,会弹出浏览器的原生菜单 
-    在JS中设置取消的方法
-    document.documentElement.style.webkitTouchCallout = 'none';
-    代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
-WeiXin 微信 
-  不支持的功能 
-    模板字符串  ios中支持,android中不支持[20170124]
-    可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
-    不支持进行跳转到上一步url中带有参数的url地址  [?]
-      比如:一个查询列表页的url是: http://someweb?city=beijing
-      当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如: 
-      location.href=document.referrer的时候   
-      跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
-      解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
-      把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
-  event 事件 
-    禁止下滑显示网址 
-      $(document).on('touchmove',function(e){
-        e.preventDefault();
-      })
 ------------------------------------------------------------------------待整理 
   input表单无法获取焦点 
     <script src="./pubJs/jq-subscribe.js" charset="utf-8"></script>

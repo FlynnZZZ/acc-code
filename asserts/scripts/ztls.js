@@ -17,8 +17,8 @@ window.ztls = { // 工具函数
         foo(obj);
       }
     })
-  },
-  dealImg: function (imgSrc,param,resolve){ // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
+  }
+  ,dealImg: function (imgSrc,param,resolve){ // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
     // var defe = new $.Deferred();
     // param = {
     //   width : num,
@@ -60,8 +60,8 @@ window.ztls = { // 工具函数
       var dealedImgSrc = canvas.toDataURL('image/jpeg', quality );
       resolve(dealedImgSrc);
     }
-  },
-  strVerify: function (currentVal,standardVal,minLen,maxLen){ // 字符验证 
+  }
+  ,strVerify: function (currentVal,standardVal,minLen,maxLen){ // 字符验证 
     var bool1 = true ,
     bool2 = true ,
     bool3 = true ;
@@ -76,8 +76,8 @@ window.ztls = { // 工具函数
     }
     // console.log(bool1,bool2,bool3);
     return  bool1 && bool2 && bool3 ;
-  },
-  localObj: function(objName,key,val){ // localstorage 读写,本地存储 
+  }
+  ,localObj: function(objName,key,val){ // localstorage 读写,本地存储 
     if (localStorage[objName] === undefined) { // 不存在则初始化为一对象 
       localStorage[objName] = JSON.stringify({});
     }
@@ -93,13 +93,13 @@ window.ztls = { // 工具函数
     else {
       return obj[key];
     }
-  },
-  put: function (ename,data,elem){ // 信息传递的推送和获取[先推送] 
+  }
+  ,put: function (ename,data,elem){ // 信息传递的推送和获取[先推送] 
     var el = elem || $('body');
     el.data(ename,data);
     el.trigger(ename,[data]);
-  },
-  get: function (ename,foo,bool,elem){ 
+  }
+  ,get: function (ename,foo,bool,elem){ 
     var el = elem || $('body');
     var data1 = el.data(ename);
     if (data1) { // 当接受者为后出现时 
@@ -116,8 +116,8 @@ window.ztls = { // 工具函数
         foo(data2) 
       })
     }
-  },
-  popUp: function(param) { // 弹窗效果 
+  }
+  ,popUp: function(param) { // 弹窗效果 
     // param = {
     //   title : '标题', // 可选 
     //   txt : '提示文字', // 可选 
@@ -229,8 +229,8 @@ window.ztls = { // 工具函数
       pop.remove();
       param.cancelClick();
     })
-  },
-  tipPop: function(param){ // 提示弹窗[会自动消失]
+  }
+  ,tipPop: function(param){ // 提示弹窗[会自动消失]
     // param = {
     //   title : '使用的是默认标题', // 该项可选,默认为''
     //   txt : '使用的是默认提示文字', // 默认提示文字
@@ -310,8 +310,8 @@ window.ztls = { // 工具函数
         }
       },time);
     }
-  },
-  queryObj: function(){ // 查询字符串 对象化 
+  }
+  ,queryObj: function(){ // 查询字符串 对象化 
     var resultObj = {};
     var arr1 = location.search.slice(1).split("&");
     arr1.forEach(function(val,indx,arr){
@@ -319,8 +319,8 @@ window.ztls = { // 工具函数
       resultObj[arr2[0]] = arr2[1];
     } );
     return resultObj;
-  },
-  setQuery: function(obj){ // 设置查询字符串  依赖'queryObj'
+  }
+  ,setQuery: function(obj){ // 设置查询字符串  依赖'queryObj'
     // {
     //   's1' : 1,
     //   's3' : 3,
@@ -334,8 +334,8 @@ window.ztls = { // 工具函数
       resStr += k +'='+o[k]+'&';
     };
     return location.pathname+resStr.slice(0,-1);
-  },
-  loadVm: function(params){ // 初始vm实例加载 
+  }
+  ,loadVms: function(params){ // 初始vm实例加载 
     // var params = [
     //   [ url,pos ],
     //   [ url,pos ],
@@ -346,10 +346,7 @@ window.ztls = { // 工具函数
     var arr = [];
     for (var i = 0; i < params.length; i++) {
       (function (i){
-        arr[i] =  $.ajax({
-          type : 'get',
-          url  : params[i][0],
-        })
+        arr[i] =  $.ajax({ url  : params[i][0] })
         .fail(function (xhr,status,errorTrown){
           console.log('load component fail,url:',params[i][0]);
         })
@@ -368,10 +365,10 @@ window.ztls = { // 工具函数
       })(i);
     }
     return $.when.apply(null,arr);
-  },
-  loadCpts: function(args){ // 异步子组件加载  
-    // 需先在Vue实例中放置子标签且使用v-if="false" 
-    // 异步执行函数,当组件加载到HTML后v-if='true'执行渲染 
+  }
+  ,loadCpts: function(args){ // 异步子组件加载  
+    // 加载完HTML后再实例化Vue实例  
+    // 或 先使用v-if="false",当加载HTML后 v-if='true' 执行渲染 
     // 当有一个子组件被渲染其他未被隐藏的子组件都会被渲染出来 
     // var args = [
     //   './c-test.html',
@@ -392,7 +389,7 @@ window.ztls = { // 工具函数
         .done(function(backData,textStatus,xhr){
           var ct = $(backData)
           var ct1,ct2;
-          if (ct[1] == '#text') {
+          if (ct[1].nodeName == '#text') { // 确保标签之间有'间隙'
             ct1 = ct[2];
             ct2 = ct[4];
           }
@@ -400,13 +397,13 @@ window.ztls = { // 工具函数
             ct1 = ct[1];
             ct2 = ct[2];
           }
-          head.append(ct[0]).append(ct1)
-          body.append(ct2);
+          head.append(ct[0])
+          body.prepend(ct1).append(ct2)
         })      
       )
     }
     return $.when.apply(null,arr);
-  },
+  }
   // 初始子组件加载  在Vue实例的beforeMonted之前执行即可 // 相当于 loadCpts+自动触发渲染  
   // var args = [ '#body', [
   //   './c-test.html',
@@ -449,12 +446,12 @@ window.ztls = { // 工具函数
   //   })
   //   return $.when.apply(null,arr);
   // },
-  isIE: function(num){ // 检测是否为IE  num可选 7、8、9 
+  ,isIE: function(num){ // 检测是否为IE  num可选 7、8、9 
     var b = document.createElement('b');
     b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->';
     return b.getElementsByTagName('i').length === 1;
-  },
-  formVerify: function(arg){ // 表单验证   依赖'tipPop' 
+  }
+  ,formVerify: function(arg){ // 表单验证   依赖'tipPop' 
     // var arg = [
     //   [ '1771234560', /^1\d{10}$/, '手机号填写错误' ],
     // ]
@@ -475,11 +472,11 @@ window.ztls = { // 工具函数
       }
       return __bol;
     });
-  },
+  }
   
 
   // 选用 ----------------------------------------------------------------------
-  adrsSlct: function(pro,city,area,data){ // 地址选择
+  ,adrsSlct: function(pro,city,area,data){ // 地址选择
     var proName = Object.keys(data);
     var html = '<option value="0">请选择</option>';
     var value = '';
@@ -506,8 +503,8 @@ window.ztls = { // 工具函数
       } );
       area.html(html2);
     })
-  },
-  dateSlct: function(yJelem,mJelem,dJelem,length){ // 时间选择
+  }
+  ,dateSlct: function(yJelem,mJelem,dJelem,length){ // 时间选择
     var currentT = new Date();
     var currentY = currentT.getFullYear();
     
@@ -573,8 +570,8 @@ window.ztls = { // 工具函数
         
       }
     })
-  },
-  pagesChange: function(params){ // 翻页功能
+  }
+  ,pagesChange: function(params){ // 翻页功能
     // var params = {
     //   wrapElem : pagesElem,
     //   currentElem : currentElem,
@@ -609,8 +606,8 @@ window.ztls = { // 工具函数
         currentFirstElems.eq(i).removeClass(params.hideClass);
       }
     }
-  },
-  delayRun: function(slct,foo,argObj){ // 延迟执行 : slct 存在时执行 
+  }
+  ,delayRun: function(slct,foo,argObj){ // 延迟执行 : slct 存在时执行 
     if ($(slct).length) {
       foo(argObj);
     }
@@ -621,7 +618,7 @@ window.ztls = { // 工具函数
         // console.log('------'); // to delete
       },240);
     }
-  },
+  }
   // 加载动画 
   //   // param = {
   //   //   txt : '使用的是默认提示文字', // 可选,默认提示文字

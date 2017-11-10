@@ -1358,6 +1358,9 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
         <p>Paragraph 1</p>
         <p>Paragraph 2</p>
       </template>
+    Accu: 
+      同时绑定多个 v-if 只有第一个生效 [Self]
+        <div v-if='bol1' v-if='bol2'></div>
   v-else-if="drctVal" 条件渲染 ['2.1.0'+] 
     v-else-if 必须跟在 v-if 或者 v-else-if之后
       <div v-if="type === 'A'"> A </div>
@@ -2116,7 +2119,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       new Vue({
         el: '#example'
       })
-  <tag is="cptname"></tag> 在父组件中指定子组件位置 
+  <<tag> is="cptname"></<tag>> 在父组件中指定子组件位置 
     :is="cptname"属性实现动态组件 
       <div id="parent">
         <button type="button" name="button" @click='changeFoo' >switchBtn</button>
@@ -2529,7 +2532,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       </body>
       <script>
         Vue.component("my-component", {
-          template:"#myTemp", //对应上面定义的template标签中的选择器
+          template:"#myTemp", // 对应上面定义的template标签中的选择器
           data: function(){
             return {
               msg: 'aaaa'

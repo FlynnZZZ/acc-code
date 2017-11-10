@@ -658,7 +658,7 @@ History,历史记录对象
     str  为字符串时,跳转到历史记录中包含该字符串的第一个位置
       可能前进也可能后退,决定于那个位置最近 
       若历史记录中不包含该字符串则什么也不做 
-  .pushState(state,title,path)    增加当前记录[不会跳转][HTML5] 
+  .pushState(state,title,path)    增加当前记录[不会跳转][HTML5][IE10+] 
     PS: 只增加历史记录,而不跳转页面,相当于增加当前页面的一个状态; 
     state  obj,自定义的会与指定网址关联的状态对象,一般用于传递信息  
       popstate事件触发时,该对象的副本为 e.state  

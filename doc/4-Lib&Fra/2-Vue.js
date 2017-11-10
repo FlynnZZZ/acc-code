@@ -1,533 +1,8 @@
-'vue-cli'官方提供的脚手架工具,用于初始化一个Vue项目 
-  PS: 成熟的Vue项目架构设计;热加载本地测试服务器;集成打包上线方案;  
-    使用要求: NodeJS大于'4.0'版本; 安装Git,用于下载代码 
-  ◆工具安装[初始安装一次即可] 
-  // $ npm i -g webpack   // 全局安装webpack 
-  $ npm i -g vue-cli   // 全局安装vue-cli 
-    $ vue -V    // 查看Vue版本 
-  // $ npm i -g vue       // 全局安装最新稳定版vue 
-  ◆初始化项目 
-  $ vue list  // 查看官方提供的template模版方案 
-    browserify         
-    browserify-simple  
-    pwa               
-    simple            
-    webpack           
-    webpack-simple    
-  $ vue init <template> <path>  // 创建Vue项目  
-  // $ npm init  // npm初始化,创建'package.json'文件  
-  $ npm i     // 根据'package.json'文件配置安装依赖文件 
-  $ npm i --S vue-resource vue-router vuex // 安装相关插件 
-  ◆启动项目/构建发布  
-  $ npm run dev     // 启动测试服务器  
-  $ npm run build   // 运行构建,生成生产环境可发布的代码 
-项目目录、文件说明 
-  PS: 进行了部分更改 
-  build         // 构建的配置文件 
-    build.js 
-      require('./check-versions')()  
-      require('shelljs/global')   // 引入'shelljs'插件,可在node代码中使用shell命令  
-      env.NODE_ENV = 'production'
-      
-      var path = require('path') // 不再赘述
-      var config = require('../config') // 加载 config.js
-      var ora = require('ora')  //  loading 插件
-      var webpack = require('webpack') // 加载 webpack
-      var webpackConfig = require('./webpack.prod.conf') // 加载 webpack.prod.conf
-      
-      console.log( //  输出提示信息 ～ 提示用户请在 http 服务下查看本页面,否则为空白页
-        '  Tip:\n' +
-        '  Built files are meant to be served over an HTTP server.\n' +
-        '  Opening index.html over file:// won\'t work.\n'
-      )
-      
-      var spinner = ora('building for production...') // 使用 ora 打印出 loading + log
-      spinner.start() // 开始 loading 动画
-      
-      /* 拼接编译输出文件路径 */
-      var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory) 
-      /* 删除这个文件夹 （递归删除） */
-      rm('-rf', assetsPath)
-      /* 创建此文件夹 */ 
-      mkdir('-p', assetsPath)
-      /* 复制 static 文件夹到我们的编译输出目录 */
-      cp('-R', 'static/*', assetsPath)
-      
-      //  开始 webpack 的编译
-      webpack(webpackConfig, function (err, stats) {
-        // 编译成功的回调函数
-        spinner.stop()
-        if (err) throw err
-        process.stdout.write(stats.toString({
-          colors: true,
-          modules: false,
-          children: false,
-          chunks: false,
-          chunkModules: false
-        }) + '\n')
-      })        
-    check-versions.js  // 检查 Node 和 npm 版本 
-    dev-client.js
-    dev-server.js 
-      require('./check-versions')() // 检查 Node 和 npm 版本
-      var config = require('../config') // 获取 config/index.js 的默认配置
-      
-      /* 
-      ** 若 Node 的环境无法判断当前是 dev / product 环境
-      ** 使用 config.dev.env.NODE_ENV 作为当前的环境
-      */
-      
-      if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
-      var path = require('path') // 使用 NodeJS 自带的文件路径工具
-      var express = require('express') // 使用 express
-      var webpack = require('webpack') // 使用 webpack
-      var opn = require('opn') // 一个可以强制打开浏览器并跳转到指定 url 的插件
-      var proxyMiddleware = require('http-proxy-middleware') // 使用 proxyTable 
-      var webpackConfig = require('./webpack.dev.conf') // 使用 dev 环境的 webpack 配置
-      
-      /* 若没有指定运行端口,使用 config.dev.port 作为运行端口 */
-      var port = process.env.PORT || config.dev.port
-      
-      /* 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置 */
-      /* 项目参考 https://github.com/chimurai/http-proxy-middleware */
-      var proxyTable = config.dev.proxyTable
-      
-      /* 使用 express 启动一个服务 */
-      var app = express()
-      var compiler = webpack(webpackConfig) // 启动 webpack 进行编译
-      
-      /* 启动 webpack-dev-middleware,将 编译后的文件暂存到内存中 */
-      var devMiddleware = require('webpack-dev-middleware')(compiler, {
-        publicPath: webpackConfig.output.publicPath,
-        stats: {
-          colors: true,
-          chunks: false
-        }
-      })
-      
-      /* 启动 webpack-hot-middleware,也就是我们常说的 Hot-reload */
-      var hotMiddleware = require('webpack-hot-middleware')(compiler)
-      
-      /* 当 html-webpack-plugin 模板更新的时候强制刷新页面 */
-      compiler.plugin('compilation', function (compilation) {
-        compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-          hotMiddleware.publish({ action: 'reload' })
-          cb()
-        })
-      })
-      
-      // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-      Object.keys(proxyTable).forEach(function (context) {
-        var options = proxyTable[context]
-        if (typeof options === 'string') {
-          options = { target: options }
-        }
-        app.use(proxyMiddleware(context, options))
-      })
-      
-      // 使用 connect-history-api-fallback 匹配资源,若不匹配就可以重定向到指定地址
-      app.use(require('connect-history-api-fallback')())
-      
-      // 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
-      app.use(devMiddleware)
-      
-      // 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
-      app.use(hotMiddleware)
-      
-      // 拼接 static 文件夹的静态资源路径
-      var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-      // 为静态资源提供响应服务
-      app.use(staticPath, express.static('./static'))
-      
-      // 让我们这个 express 服务监听 port 的请求,并且将此服务作为 dev-server.js 的接口暴露
-      module.exports = app.listen(port, function (err) {
-        if (err) {
-          console.log(err)
-          return
-        }
-        var uri = 'http://localhost:' + port
-        console.log('Listening at ' + uri + '\n')
-        
-        // 若不是测试环境,自动打开浏览器并跳到我们的开发地址
-        if (process.env.NODE_ENV !== 'testing') {
-          opn(uri)
-        }
-      })
-    utils.js
-    webpack.base.conf.js        webpack 基础配置 
-      var path = require('path') // 使用 NodeJS 自带的文件路径插件
-      var config = require('../config') // 引入 config/index.js
-      var utils = require('./utils') // 引入一些小工具
-      var projectRoot = path.resolve(__dirname, '../') // 拼接我们的工作区路径为一个绝对路径
-      
-      /* 将 NodeJS 环境作为我们的编译环境 */
-      var env = process.env.NODE_ENV
-      /* 是否在 dev 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
-      var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
-      /* 是否在 production 环境下开启 cssSourceMap ,在 config/index.js 中可配置 */
-      var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
-      /* 最终是否使用 cssSourceMap */
-      var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
-      
-      module.exports = {
-        entry: {
-          app: './src/main.js' // 编译文件入口
-        },
-        output: {
-          path: config.build.assetsRoot, // 编译输出的静态资源根路径
-          publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath, // 正式发布环境下编译输出的上线路径的根路径
-          filename: '[name].js' // 编译输出的文件名
-        },
-        resolve: {
-          // 自动补全的扩展名
-          extensions: ['', '.js', '.vue'],
-          // 不进行自动补全或处理的文件或者文件夹
-          fallback: [path.join(__dirname, '../node_modules')],
-          alias: {
-          // 默认路径代理,例如 import Vue from 'vue',会自动到 'vue/dist/vue.common.js'中寻找
-            'vue$': 'vue/dist/vue.common.js',
-            'src': path.resolve(__dirname, '../src'),
-            'assets': path.resolve(__dirname, '../src/assets'),
-            'components': path.resolve(__dirname, '../src/components')
-          }
-        },
-        resolveLoader: {
-          fallback: [path.join(__dirname, '../node_modules')]
-        },
-        module: {
-          preLoaders: [
-            // 预处理的文件及使用的 loader
-            {
-              test: /\.vue$/,
-              loader: 'eslint',
-              include: projectRoot,
-              exclude: /node_modules/
-            },
-            {
-              test: /\.js$/,
-              loader: 'eslint',
-              include: projectRoot,
-              exclude: /node_modules/
-            }
-          ],
-          loaders: [
-            // 需要处理的文件及使用的 loader
-            {
-              test: /\.vue$/,
-              loader: 'vue'
-            },
-            {
-              test: /\.js$/,
-              loader: 'babel',
-              include: projectRoot,
-              exclude: /node_modules/
-            },
-            {
-              test: /\.json$/,
-              loader: 'json'
-            },
-            {
-              test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-              loader: 'url',
-              query: {
-                limit: 10000,
-                name: utils.assetsPath('img/[name].[hash:7].[ext]')
-              }
-            },
-            {
-              test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-              loader: 'url',
-              query: {
-                limit: 10000,
-                name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-              }
-            }
-          ]
-        },
-        eslint: {
-          // eslint 代码检查配置工具
-          formatter: require('eslint-friendly-formatter')
-        },
-        vue: {
-          // .vue 文件配置 loader 及工具 (autoprefixer)
-          loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-          postcss: [
-            require('autoprefixer')({
-              browsers: ['last 2 versions']
-            })
-          ]
-        }
-      }        
-    webpack.dev.conf.js 
-      var config = require('../config') // 同样的使用了 config/index.js
-      var webpack = require('webpack') // 使用 webpack
-      var merge = require('webpack-merge') // 使用 webpack 配置合并插件
-      var utils = require('./utils') // 使用一些小工具
-      var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf
-      /* 使用 html-webpack-plugin 插件,这个插件可以帮我们自动生成 html 并且注入到 .html 文件中 */
-      var HtmlWebpackPlugin = require('html-webpack-plugin') 
-      
-      // 将 Hol-reload 相对路径添加到 webpack.base.conf 的 对应 entry 前
-      Object.keys(baseWebpackConfig.entry).forEach(function (name) {
-        baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-      })
-      
-      /* 将我们 webpack.dev.conf.js 的配置和 webpack.base.conf.js 的配置合并 */
-      module.exports = merge(baseWebpackConfig, {
-        module: {
-          // 使用 styleLoaders
-          loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
-        },
-        // 使用 #eval-source-map 模式作为开发工具,此配置可参考 DDFE 往期文章详细了解
-        devtool: '#eval-source-map',
-        plugins: [
-          /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
-          new webpack.DefinePlugin({
-            'process.env': config.dev.env
-          }),
-          // 参考项目 https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-          new webpack.optimize.OccurenceOrderPlugin(),
-          /* HotModule 插件在页面进行变更的时候只会重回对应的页面模块,不会重绘整个 html 文件 */
-          new webpack.HotModuleReplacementPlugin(),
-          /* 使用了 NoErrorsPlugin 后页面中的报错不会阻塞,但是会在编译结束后报错 */
-          new webpack.NoErrorsPlugin(),
-          // 参考项目 https://github.com/ampedandwired/html-webpack-plugin
-          /* 将 index.html 作为入口,注入 html 代码后生成 index.html文件 */
-          new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: 'index.html',
-            inject: true
-          })
-        ]
-      })      
-    webpack.prod.conf.js 
-      var path = require('path') 
-      var config = require('../config') // 加载 confi.index.js
-      var utils = require('./utils') // 使用一些小工具
-      var webpack = require('webpack') // 加载 webpack
-      var merge = require('webpack-merge') // 加载 webpack 配置合并工具
-      var baseWebpackConfig = require('./webpack.base.conf') // 加载 webpack.base.conf.js
-      /* 一个 webpack 扩展,可以提取一些代码并且将它们和文件分离开 */ 
-      /* 若我们想将 webpack 打包成一个文件 css js 分离开,那我们需要这个插件 */
-      var ExtractTextPlugin = require('extract-text-webpack-plugin')
-      /* 一个可以插入 html 并且创建新的 .html 文件的插件 */
-      var HtmlWebpackPlugin = require('html-webpack-plugin')
-      var env = config.build.env
-      
-      /* 合并 webpack.base.conf.js */
-      var webpackConfig = merge(baseWebpackConfig, {
-        module: {
-          /* 使用的 loader */
-          loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
-        },
-        /* 是否使用 #source-map 开发工具,更多信息可以查看 DDFE 往期文章 */
-        devtool: config.build.productionSourceMap ? '#source-map' : false,
-        output: {
-          /* 编译输出目录 */
-          path: config.build.assetsRoot,
-          /* 编译输出文件名 */
-          filename: utils.assetsPath('js/[name].[chunkhash].js'), // 我们可以在 hash 后加 :6 决定使用几位 hash 值
-          // 没有指定输出名的文件输出的文件名
-          chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-        },
-        vue: {
-          /* 编译 .vue 文件时使用的 loader */
-          loaders: utils.cssLoaders({
-            sourceMap: config.build.productionSourceMap,
-            extract: true
-          })
-        },
-        plugins: [
-          /* 使用的插件 */
-          /* definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串 */
-          new webpack.DefinePlugin({
-            'process.env': env
-          }),
-          /* 压缩 js (同样可以压缩 css) */
-          new webpack.optimize.UglifyJsPlugin({
-            compress: {
-              warnings: false
-            }
-          }),
-          new webpack.optimize.OccurrenceOrderPlugin(),
-          /* 将 css 文件分离出来 */
-          new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
-          /* 构建要输出的 index.html 文件, HtmlWebpackPlugin 可以生成一个 html 并且在其中插入你构建生成的资源 */
-          new HtmlWebpackPlugin({
-            filename: config.build.index, // 生成的 html 文件名
-            template: 'index.html', // 使用的模板
-            inject: true, // 是否注入 html (有多重注入方式,可以选择注入的位置)
-            minify: { // 压缩的方式
-              removeComments: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true
-              // 更多参数可查看 https://github.com/kangax/html-minifier#options-quick-reference
-            },
-            chunksSortMode: 'dependency'
-          }),
-          
-          // 此处增加 @OYsun 童鞋补充
-          // CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js
-          
-          new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function (module, count) {
-              // 依赖的 node_modules 文件会被提取到 vendor 中
-              return (
-                module.resource &&
-                /\.js$/.test(module.resource) &&
-                module.resource.indexOf(
-                  path.join(__dirname, '../node_modules')
-                ) === 0
-              )
-            }
-          }),
-          new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
-          })
-          
-        ]
-      })
-      
-      /* 开启 gzip 的情况下使用下方的配置 */
-      if (config.build.productionGzip) {
-        /* 加载 compression-webpack-plugin 插件 */
-        var CompressionWebpackPlugin = require('compression-webpack-plugin')
-        /* 向webpackconfig.plugins中加入下方的插件 */
-        webpackConfig.plugins.push(
-          /* 使用 compression-webpack-plugin 插件进行压缩 */
-          new CompressionWebpackPlugin({
-            asset: '[path].gz[query]',
-            algorithm: 'gzip',
-            test: new RegExp(
-              '\\.(' +
-              config.build.productionGzipExtensions.join('|') +
-              ')$'
-            ),
-            threshold: 10240,
-            minRatio: 0.8
-          })
-        )
-      }
-      
-      // split vendor js into its own file
-       /* 没有指定输出文件名的文件输出的静态文件名 */
-     new webpack.optimize.CommonsChunkPlugin({
-           name: 'vendor',
-           minChunks: function (module, count) {
-             // any required modules inside node_modules are extracted to vendor
-             return (
-               module.resource &&
-               /\.js$/.test(module.resource) &&
-               module.resource.indexOf(
-                 path.join(__dirname, '../node_modules')
-               ) === 0
-             )
-           }
-         }),
-         // extract webpack runtime and module manifest to its own file in order to
-         // prevent vendor hash from being updated whenever app bundle is updated
-         /* 没有指定输出文件名的文件输出的静态文件名 */
-         new webpack.optimize.CommonsChunkPlugin({
-           name: 'manifest',
-           chunks: ['vendor']
-         })
-     CommonsChunkPlugin用于生成在入口点之间共享的公共模块（比如jquery,vue）的块并将它们分成独立的包而为什么要new两次这个插件,这是一个很经典的bug的解决方案,在webpack的一个issues有过深入的讨论webpack/webpack#1315 .----为了将项目中的第三方依赖代码抽离出来,官方文档上推荐使用这个插件,当我们在项目里实际使用之后,发现一旦更改了 app.js 内的代码,vendor.js 的 hash 也会改变,那么下次上线时,用户仍然需要重新下载 vendor.js 与 app.js——这样就失去了缓存的意义了所以第二次new就是解决这个问题的,请你好好看vue-cli那个英文原注释
-     
-     // extract webpack runtime and module manifest to its own file in order to
-     // prevent vendor hash from being updated whenever app bundle is updated        
-      
-      module.exports = webpackConfig        
-  config        // webpack 的配置文件
-    dev.env.js
-    index.js 
-      PS: 配置了开发和生产两种环境 
-      var path = require('path'); 
-      module.exports = {
-        build: { // production 环境
-          env: require('./prod.env'), // 使用 config/prod.env.js 中定义的编译环境
-          index: path.resolve(__dirname, '../dist/index.html'), // 编译输入的 index.html 文件
-          assetsRoot: path.resolve(__dirname, '../dist'), // 编译输出的静态资源路径
-          assetsSubDirectory: 'static', // 编译输出的二级目录
-          assetsPublicPath: '/', // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
-          productionSourceMap: true, // 是否开启 cssSourceMap
-          // Gzip off by default as many popular static hosts such as
-          // Surge or Netlify already gzip all static assets for you.
-          // Before setting to `true`, make sure to:
-          // npm install --save-dev compression-webpack-plugin
-          productionGzip: false, // 是否开启 gzip
-          productionGzipExtensions: ['js', 'css'] // 需要使用 gzip 压缩的文件扩展名
-        },
-        dev: {   // dev 环境
-          env: require('./dev.env') // 使用 config/dev.env.js 中定义的编译环境
-          ,port: 8080 // 运行测试页面的端口
-          ,assetsSubDirectory: 'static' // 编译输出的二级目录
-          ,assetsPublicPath: '/' // 编译发布的根目录,可配置为资源服务器域名或 CDN 域名
-          ,proxyTable: { // 代理设置 
-            '/api/': 'http://localhost:8081' // 即访问'/api'则相当于访问后面指定的地址 
-          }
-          ,cssSourceMap: false 
-            // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
-        }
-      }        
-  dist          // 打包构建好的代码 
-    static 
-    index.html 
-  node_modules  // node模块
-  src           // 开发目录 
-    assets         // 资源目录  
-      imgs 
-      data 
-      plugs 
-      scripts 
-      styles 
-    components     // 公用组件 
-      xx.vue 
-      ... 
-    pages          // 页面划分 
-      member 
-        access.vue
-        xxx.vue 
-        ...
-      news   
-        access.vue
-        xxx.vue 
-        ...
-      ..
-    main.js        // 入口JS 
-  static        // 静态文件夹 
-    src目录下的资源只能import或require,
-    而该文件夹下的文件可直接在HTML中引入,最终打包到'dist/static'中 
-  .babelrc      // babel配置文件
-  .gitignore    // 忽略无需git控制的文件,比如node_modules 
-  index.html 
-  package.json  // 
-    "scripts": {
-      "dev": "node build/dev-server.js",
-      "build": "node build/build.js"
-    }
-    "dependencies": {
-      "vue": "^2.4.2",
-      "vue-resource": "^1.3.4",
-      "vue-router": "^2.7.0",
-      "vuex": "^2.4.0",
-      "jquery": "^3.2.1"
-    },
-  README.md     // 说明文件 
-  ...
-Question: 
-  如何将自定义的工具JS引入到全局可用,类似引入jQuery[使用Webpack插件] 
-    自我决解办法: 将工具函数暴露到全局window对象中 
-  当刷新SPA后,如何维持通过之前操作获取的状态? 
-    通过 localStorage sessionStorage [Self]
-    Vue的Webpack模版 
---------------------------------------------------------------------------------
-VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架 
+VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架 [IE9+] 
   介绍 
-    支持IE9+[使用了ES5特性];非压缩版有错误提示和警告,而压缩版则没有;
+    压缩版无错误提示和警告;
     API设计受AngularJS、KnockoutJS、RactiveJS和RivetsJS影响;
-    Vue受MVVM启发,但没有完全遵循;
+    Vue受MVVM启发,但未完全遵循;
   说明 
     标签属性、标签名、事件名不区分大小写 
 安装|启动 
@@ -555,42 +30,147 @@ VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架
         });
   'vue-cli'Vue脚手架 
 View&Model 
-  e.g.：
-    View
+  视图'View',Vue实例管理的DOM节点 
+  模型'Model',一个轻微改动过的原生JS对象 
+    VueJS把数据对象的属性都转换成了ES5中的 getter/setters,
+    以达到无缝的数据观察效果:无需脏值检查,也不需要刻意给Vue任何更新视图的信号 
+    每当数据变化时,视图都会在下一帧自动更新
+    Vue实例代理了它们观察到的数据对象的所有属性
+    vm.$data.a 等价于 vm.a  
+    根据引用修改数据和修改 vm.$data 具有相同的效果,即多个Vue实例可观察同一份数据
+    在较大型的应用程序中,推荐将Vue实例作为纯粹的视图看待,
+    同时把数据处理逻辑放在更独立的外部数据层 
+    一旦数据被观察,VueJS就不会再侦测到新加入或删除的属性了
+    作为弥补,为被观察的对象增加'$add','$set' 和'$delete'方法 
+  Example: 
+    ◆View
     <div id="app"> awesome {{name}}</div>
-    Model 
+    ◆Model 
     var myData = {
       name: 'Vue.js'
     }
-    ViewModel : 创建一个Vue实例,连接上面的view和model 
+    ◆ViewModel: Vue实例,连接view和model 
     new Vue({
-      el: '#app',
-      data: myData
+      el: '#app'
+      ,data: {}
     });
     渲染结果: awesome Vue.js    
-  'View'视图  Vue实例管理的DOM节点 
-    当一Vue实例被创建时,它会递归遍历根元素的所有子节点,同时完成必要的数据绑定,
-    当视图被编译后,它就会自动响应数据的变化,
-    使用VueJS时,除了自定义指令,几乎不必直接接触 DOM,
-    当数据发生变化时,视图将会自动触发更新,
-    这些更新的粒度精确到一个文字节点,
-    同时为了更好的性能,这些更新是批量异步执行的;
-  'Model'模型 一个轻微改动过的原生JS对象 
-    VueJS中的模型就是普通的JS对象——也可以称为数据对象 
-    一旦某对象被作为Vue实例中的数据,它就成为一个 “反应式” 的对象了
-    可操作它们的属性,同时正在观察它的 Vue 实例也会收到提示
-    VueJS把数据对象的属性都转换成了ES5中的 getter/setters,
-    以此达到无缝的数据观察效果:无需脏值检查,也不需要刻意给 Vue 任何更新视图的信号
-    每当数据变化时,视图都会在下一帧自动更新
-    Vue实例代理了它们观察到的数据对象的所有属性
-    所以一旦一个对象 { a: 1 } 被观察,那么 vm.$data.a 和 vm.a 将会返回相同的值,
-    而设置 vm.a = 2 则也会修改 vm.$data
-    数据对象是被就地转化的,所以根据引用修改数据和修改 vm.$data 具有相同的效果
-    这也意味着多个 Vue 实例可以观察同一份数据
-    在较大型的应用程序中,我们也推荐将 Vue 实例作为纯粹的视图看待,
-    同时把数据处理逻辑放在更独立的外部数据层 
-    一旦数据被观察,VueJS 就不会再侦测到新加入或删除的属性了
-    作为弥补,我们会为被观察的对象增加'$add','$set' 和'$delete'方法 
+  'Model'更新及监控 
+    'mutation method'变异方法 会改变调用该方法的原数据的方法 
+      push()  pop() shift() unshift() splice() sort() reverse()
+    'non-mutating method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
+      如: filter(),concat(),slice()  
+    重塑数组 : 当使用非变异方法时,可以用新数组替换旧数组
+      example1.items = example1.items.filter(function (item) {
+        return item.message.match(/Foo/)
+      })
+      你可能认为这将导致Vue丢弃现有DOM并重新渲染整个列表
+      但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
+      所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
+    由于JS的限制,Vue不能检测以下变动的数据 
+      当[函数内仅有]数组通过索引index直接设置某一项时
+        如: vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
+        可使用以下方式将达到效果触发状态更新
+        ◆Vue.set
+        Vue.set(arr,index,newVal)
+        this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
+        ◆Array.prototype.splice
+        arr.splice(indx,1,newVal)
+        ◆同时在当前函数内改变会引起视图变化的操作 
+          <div class="slct" >
+            <div v-for="item1 in items">{{item1}}</div>
+            <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
+            <button type="button" @click="changeItems">click</button>
+          </div>
+          var vm = new Vue({
+            el : '.slct',
+            data : {
+              items :[ 1, 2, 3, 4, 5 ],
+              items1 :[{a:1},{a:2},{a:3},{a:4}],
+              n : 1,
+            },
+            methods : {
+              changeItems : function(){
+                console.log(this.items);
+                this.items[0] = ++this.n;
+                // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
+              },
+            },
+          });
+  
+      当你修改数组的长度时,如: vm.items.length = newLength 
+        使用 splice 替代直接长度的修改
+        example1.items.splice(newLength)
+    vm实例创建后新增的数据不能被监控到 
+      受现代js的限制[以及废弃 Object.observe],Vue不能检测到对象属性的添加或删除。
+      由于Vue会在初始化实例时对属性执行getter/setter转化过程,
+      所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的。
+      Example::
+        var vm = new Vue({
+          data:{
+            a:1
+          }
+        })
+        // `vm.a` 是响应的
+        vm.b = 2
+        // `vm.b` 是非响应的
+      ◆决解办法:
+      预选定义一个值 
+      Vue.set(object, key, value);  将响应属性添加到嵌套的对象
+        Vue不允许在已经创建的实例上动态添加新的根级响应式属性[root-level reactive property]
+        但可使用 Vue.set 来添加 
+        Example: Vue.set(vm.someObject, 'b', 2)
+      vm.$set 实例方法[全局 Vue.set 方法的别名] 
+        this.$set(this.someObject,'b',2)
+      创建一个新的对象,让其包含原对象的属性和新的属性
+        有时向已有对象上添加一些属性,例如使用 Object.assign() 或 _.extend() 方法来添加属性。
+        但是,添加到对象上的新属性不会触发更新。
+        this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+        // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
+    异步更新队列 
+      当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
+      若同一个'watcher'被多次触发,只会一次推入到队列中。
+      这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
+      然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
+      Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
+      若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
+      Example:
+        当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
+        当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
+        多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
+        虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
+      Vue.nextTick(callback)  在数据变化之后使用使其操作插队[SlPt]
+        <div id="example">{{message}}</div>
+        var vm = new Vue({
+          el: '#example',
+          data: {
+            message: '123'
+          }
+        })
+        vm.message = 'new message' // 更改数据
+        vm.$el.textContent === 'new message' // false
+        Vue.nextTick(function () {
+          vm.$el.textContent === 'new message' // true
+        })
+        在组件内使用 vm.$nextTick() 实例方法特别方便,因为它不需要全局 Vue ,
+        并且回调函数中的 this 将自动绑定到当前的 Vue 实例上:
+        Vue.component('example', {
+          template: '<span>{{ message }}</span>',
+          data: function () {
+            return {
+              message: '没有更新'
+            }
+          },
+          methods: {
+            updateMessage: function () {
+              this.message = '更新完成'
+              console.log(this.$el.textContent) // => '没有更新'
+              this.$nextTick(function () {
+                console.log(this.$el.textContent) // => '更新完成'
+              })
+            }
+          }
+        })
 'Vue.xx'静态属性/方法 
   Vue.config  Vue的全局配置对象,可在启动应用前修改配置  
     Vue.config.devtools = bol  是否允许'vue-devtools'检查代码 
@@ -599,7 +179,7 @@ View&Model
     Vue.config.optionMergeStrategies  自定义合并策略选项 [详参'Mixins']
     Vue.config.keyCodes     自定义键位别名 [详见'Modifiers'] 
     Vue.config.productionTip  设置为'false'以阻止vue在启动时生成生产提示 ['2.2.0+'] 
-  Vue1 = Vue.extend(params) 扩展Vue构造器,用预定义选项创建可复用的组件构造器 
+  Vue1 = Vue.extend(params) Vue,扩展Vue构造器,用预定义选项创建可复用的组件构造器 
     PS: 所有的Vue组件都是被扩展的Vue实例 
       在多数情况下建议将组件构造器注册为一个自定义元素,然后声明式地用在模板中 
       data 在 Vue.extend() 中它必须是函数 
@@ -614,12 +194,12 @@ View&Model
     若对象是响应式的,确保删除能触发更新视图
     仅在'2.2.0+'版本中支持 Array + index 用法 
     目标对象不能是一个Vue实例或Vue实例的根数据对象 
-  Vue.component(tagname,options);  注册全局组件[详见组件] 
+  Vue.component(tagname,options)  注册全局组件[详见组件] 
   Vue.use(obj/foo)  安装VueJS插件 
     如果插件是一个对象,必须提供install方法。
     如果插件是一个函数,它会被作为install方法,并作为Vue的参数调用 
     当install方法被同一个插件多次调用,插件将只会被安装一次
-  Vue.compile(str)  在'render'函数中编译模板字符串,只在独立构建时有效
+  Vue.compile(str)  在'render'函数中编译模板字符串,只在独立构建时有效 
     var res = Vue.compile('<div><span>{{ msg }}</span></div>')
     new Vue({
       data: {
@@ -628,345 +208,359 @@ View&Model
       render: res.render,
       staticRenderFns: res.staticRenderFns
     })
-  str = Vue.version   Vue版本号 
+  Vue.version   str,VueJS版本号 
     console.log(Vue.version); // 2.3.0
-vm = new Vue({})  创建'ViewModel'Vue实例,简称vm 
-  PS: 模板语法声明式的将数据渲染进DOM系统; 
-    VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的;
-    所有的VueJS组件其实都是被扩展的Vue实例;
-    在实例选项中,方法里的'this'即表示为'vm';
-  {  // 实例选项,参数包括数据、模板、挂载元素、方法、生命周期钩子等选项 
-    // ◆数据选项 
-    data: {},     // 数据,用于渲染、交互的数据 
-      PS: Vue实例默认代理其'data'对象,使用'this'表示,
-        其优先级高于其他,即'this.xx'优先在'data'中寻找 
-      Example:
-        var obj = { a: 1 };
-        var vm = new Vue({
-          data: obj
-        });
-        console.log(vm.a === obj.a); // true
-        // 设置属性也会影响到原始数据
-        vm.a = 2;
-        console.log(obj.a); // 2
-        // 修改样式数据也会影响到data对象
-        obj.a = 3;
-        console.log(vm.a); // 3
-        若在实例创建之后添加新的属性到实例上,它不会触发视图更新
-      不能改变data变量,因为这样完全破坏了data与vm的引用关系 
-        var userInfo = {name:'aaa',age:20}
-        var vm = new Vue({
-          …… 
-          data : userInfo,
-        });
-        userInfo.age = 15; // DOM渲染成15
-        vm.age = 16; // DOM渲染成16
-        userInfo = {name:'bbb',age:22}; // 引用关系被破坏,DOM不会重新渲染
-        userInfo.age = 25; // 引用关系被破坏,DOM不会重新渲染
-        vm.age = 23; // DOM被渲染成23
-    props: arr/obj,  // 注册标签属性,用于接收父组件的数据[大小写不敏感] 
-      PS:在父组件中添加注册的attr,通过属性值来向子组件传递信息 
-      ['prop0',..] 
-      {
-        prop0: Number,          // 只接收数值类型,否则报错 
-        prop0: [Number,String], // 接收数值和字符串 
-        prop0: {
-          type : Array , // 接收的类型为数组 
-          default : [],  // 设定初始值 
-        }
+vm = new Vue({   // Vue实例,'ViewModel'简称vm  
+  PS: VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的; 
+  //   所有的VueJS组件其实都是被扩展的Vue实例;
+  //   在实例选项中,方法里的'this'即表示为'vm';
+  el: <selector>, // 实例挂载元素 
+    PS: 不推荐挂载根实例到<html>或<body>上 
+    selector  CSS选择器或 HTMLElement 实例 
+      当选择器指向多个元素时,只接管第一个 
+    挂载编译 
+      该选项在实例化时是有效的,实例将立即进入编译过程,
+      否则,需显式调用 vm.$mount() 手动开启编译 
+    render函数和template属性不存在时 
+      挂载DOM元素的HTML会被提取出来用作模板,
+      此时,必须使用 Runtime + Compiler 构建的 Vue 库
+  ◆数据选项 
+  data: obj,      // 数据,用于渲染、交互的数据 
+    实例中默认代理其'data',使用'this'表示 
+      其优先级高于其他,即'this.xx'优先在'data'中寻找 
+    Example:
+      var obj = { a: 1 };
+      var vm = new Vue({
+        data: obj
+      });
+      console.log(vm.a === obj.a); // true
+      // 设置属性也会影响到原始数据
+      vm.a = 2;
+      console.log(obj.a); // 2
+      // 修改样式数据也会影响到data对象
+      obj.a = 3;
+      console.log(vm.a); // 3
+      若在实例创建之后添加新的属性到实例上,它不会触发视图更新
+    不可覆盖'data',会破坏了'data'与vm的引用关系 
+      var myData = { name: 'aaa',age: 20 } 
+      var vm = new Vue({ 
+        data: myData
+        ...
+      });
+      myData.age = 15; // DOM渲染成15
+      vm.age = 16;     // DOM渲染成16
+      myData = { name: 'bbb',age: 22 }; // 覆盖导致引用关系被破坏,DOM不会重新渲染 
+        Self: 改变了变量到内存中的指向,而vm实例中的'data'仍指向原内存数据 
+      myData.age = 25;                 // DOM不会重新渲染
+      vm.age = 23; // DOM被渲染成23,
+  props: arr/obj, // 接收父组件传递的数据[大小写不敏感] 
+    PS: 父组件中的子组件标签上添加属性及对应的值,属性在子组件中的'props'内注册,
+      从而在子组件中获取到从父组件传递的属性值   
+      在子组件中使用同'data'中的值类似,
+      子组件中改变'props'中的值会影响到父组件中[由于JS对象的按引用传递] 
+    ['prop0',..]   
+    {
+      prop0: Number,          // 定义接收数值类型,实际不符则报错 
+      prop1: [Number,String], // 接收数值和字符串 
+      prop2: {
+        type: Array      // 接收的类型为数组 
+        ,default: <val>, // 设定初始值  
       }
-    propsData: {   // 只用于new创建的实例中,创建实例时传递props,主要作用是方便测试 
-      <key>: <val>
-      // Example: 
-      // var Comp = Vue.extend({
-      //   props: ['msg'],
-      //   template: '<div>{{ msg }}</div>'
-      // })
-      // var vm = new Comp({
-      //   propsData: {
-      //     msg: 'hello'
-      //   }
-      // })
-    },
-    computed: {  // 依赖于其他数据而返回的数据,计算属性会被混入到Vue实例中  
-      // PS: 相当于经过处理的data数据,根据其依赖的data数据变化而变化 [SlPt]
-      <computedVal>: function(){  // 不能传参,computedVal为函数返回值   
-        return val;
-      },
-      <computedVal>: {  // 默认只有 get,也可提供 set 
-        get: function () {     // getter,computedVal为函数返回值  
-          return xx; 
-        },
-        set: function (val) {  // setter,当设置 computedVal = newValue 时,被调用  
-        }
-      },
-    },  
-    watch: {       // 监听数据的变化  
-      <key>: function(val,oldVal){ // 方式一 
-      },
-      <key>: 'someMethod',  // 方式二,为一方法名  
-      <key>: {       // 方式三,使用对象的方式进行配置  
-        handler: function (val, oldVal) { },
-        deep: true // 深度 watch 
-      }
-    },      
-    methods: {     // 定义的方法,methods会被混入到Vue实例中  
-      foo1: function(){
-      }
-    },
-    // ◆DOM选项
-    el: selector, // 提供一在页面上已存在的DOM元素作为Vue实例的挂载目标 
-      // 可以是 CSS 选择器,也可以是一个 HTMLElement 实例
-      // 当选择器指向多个标签时,只接管第一个 
-      // 该选项在实例化时是有效的,则实例将立即进入编译过程,
-      // 否则,需显式调用 vm.$mount()手动开启编译 
-      // 不推荐挂载 root 实例到 <html> 或者 <body> 上 
-      // 如果 render 函数和 template 属性都不存在,
-      // 挂载 DOM 元素的 HTML 会被提取出来用作模板,
-      // 此时,必须使用 Runtime + Compiler 构建的 Vue 库
-    template: HTMLStr, // 模版,会替换挂载元素及其内部元素,除非模板的内容有分发插槽 
-      //若Vue选项中有'render'渲染函数,该模板将被忽略 
-    render: function(createElem){  // 渲染函数,相当于'template'的作用  
-      // 渲染函数接收一个 createElement 方法作为第一个参数用来创建 VNode 
-      // 如果组件是一个函数组件,渲染函数还会接收一个额外的 context 参数,为没有实例的函数组件提供上下文信息
-      // render 函数若存在,则 Vue 构造函数不会从 template 选项
-      // 或通过 el 选项指定的挂载元素中提取出的 HTML 模板编译渲染函数 
-      return createElem(
-        str/obj/foo // 必填参数
-          str  // 一个 HTML 标签字符串,如'div'
-          obj  // 组件选项对象 
-          foo  // 一个返回值类型为 String/Object 的函数
-        ,obj  // 一个包含模板相关属性的数据对象,可选参数 
-          在VNode数据对象中,下列属性名是级别最高的字段。
-          该对象也允许你绑定普通的HTML特性,就像DOM属性一样,
-          比如'innerHTML',会取代'v-html'指令 
-          {
-            'class': { // 和`v-bind:class`一样的 API
-              foo: true,
-              bar: false
-            },
-            style: { // 和`v-bind:style`一样的 API
-              color: 'red',
-              fontSize: '14px'
-            },
-            attrs: { // 正常的 HTML 特性
-              id: 'foo'
-            },
-            props: { // 组件 props
-              myProp: 'bar'
-            },
-            domProps: { // DOM 属性
-              innerHTML: 'baz'
-            },
-            // 事件监听器基于 `on`, 所以不再支持如 `v-on:keyup.enter` 修饰器,需要手动匹配 keyCode 
-            on: {
-              click: this.clickHandler
-            },
-            // 仅对于组件,用于监听原生事件,而不是组件内部使用 `vm.$emit` 触发的事件 
-            nativeOn: {
-              click: this.nativeClickHandler
-            },
-            // 自定义指令。注意事项：不能对绑定的旧值设值
-            directives: [
-              {
-                name: 'my-custom-directive',
-                value: '2',
-                expression: '1 + 1',
-                arg: 'foo',
-                modifiers: {
-                  bar: true
-                }
-              }
-            ],
-            // Scoped slots in the form of
-            // { name: props => VNode | Array<VNode> }
-            scopedSlots: {
-              default: props => createElement('span', props.text)
-            },
-            // 如果组件是其他组件的子组件,需为插槽指定名称
-            slot: 'name-of-slot',
-            // 其他特殊顶层属性
-            key: 'myKey',
-            ref: 'myRef'
-          }
-        ,str/arr // 子节点,可选参数  
-          str // 使用字符串来生成'文本节点'
-          arr // 子节点'VNodes',由'createElem()'构建而成 
-          [
-            '先写一些文字',
-            createElement('h1', '一则头条'),
-            createElement(MyComponent, {
-              props: {
-                someProp: 'foobar'
-              }
-            })
-          ]
-      )
-    },
-    renderError: function(h, err){ // 当'render'出错时,提供另外一种渲染输出  ['2.2.0+'] 
-      // 只在开发者环境下工作 
-      // 其错误将会作为第二个参数传递到 renderError。这个功能配合 hot-reload 非常实用
-      // Example: 
-      // new Vue({
-      //   render (h) {
-      //     throw new Error('oops')
-      //   },
-      //   renderError (h, err) {
-      //     return h('pre', { style: { color: 'red' }}, err.stack)
-      //   }
-      // }).$mount('#app')
-    },
-    // ◆生命周期钩子选项 
-    beforeCreate: function(){ // 在实例初始化后,数据观测和'event/watcher'事件配置前被调用 
-      // ..
-    }, 
-    created: function(){ // 实例创建完成后立即调用
-      // 此时实例已完成的配置：'data observer'数据观测、属性和方法的运算、watch/event事件回调 
-      // 但挂载阶段还没开始,$el 属性目前不可见 
     }
-    beforeMount: function(){ // 在挂载前被调用：相关的 render 函数首次被调用 
-      // 该钩子在服务器端渲染期间不被调用
-    }
-    mounted: function(){ // el被新创建的vm.$el替换,并挂载到实例后调用 
-      // 该钩子在服务器端渲染期间不被调用 
-      // 如果 root 实例挂载了一个文档内元素,当 mounted 被调用时 vm.$el 也在文档内。
-      this.$nextTick(function () {
-        // 注意 mounted 不会承诺所有的子组件也都一起被挂载。
-        // 如果希望等到整个视图都渲染完毕,可用 vm.$nextTick()  
+  propsData: {    // 传递props,主要用于测试 [只用于new创建的实例中]
+    <key>: <val>
+    Example: 
+      var vm = new Comp({
+        el: '#root'
+        props: ['msg']
+        ,propsData: { // 自己向自己传递props数据  
+          msg: 'hello'
+        }
       })
+  },
+  computed: {     // 依赖'data'或'props'数据得到的数据 
+    计算属性会被混入到Vue实例中,使用方法类似'data'中的数据   
+      对计算值进行赋值,无变化,
+      若修改引用类型的计算值,[由于JS引用类型按引用传递]会改变值,但视图不会主动更新 
+        当其他数据改变引起视图更新时,才会在视图中更新该计算值 
+      若依赖于 计算值 的 计算值不会随依赖变化 [SlPt]
+    <computedVal>: function(){  // 不能传参 
+      return val; // 返回值作为该计算值的值 
     },
-    beforeUpdate: function(){ // 数据更新时调用,发生在虚拟 DOM 重新渲染和打补丁前 
-      // 可在该钩子中进一步地更改状态,但会触发附加的重渲染过程 
-      // 该钩子在服务器端渲染期间不被调用     
+    <computedVal>: {  // 默认只有 get,也可提供 set 
+      get: function () {     // getter 
+        return xx; // 返回值作为该计算值的值 
+      },
+      set: function (val) {  // setter
+        // 当设置 computedVal = newValue 时,被调用  
+        // 实现改变计算值: 在此处改变 get 的依赖值/返回值  
+      }
+    },
+  },  
+  ◆方法选项 
+  watch: {        // 监听数据的变化  
+    <key>: function(val,oldVal){ // 方式一 
+    },
+    <key>: 'someMethod',  // 方式二,为一方法名  
+    <key>: {       // 方式三,使用对象的方式进行配置  
+      deep: true // 深度 watch 
+      ,handler: function (val,oldVal) {
+        // 
+      }
     }
-    updated: function(){  // 当这个钩子被调用时,组件 DOM 已经更新
-      // 由于数据更改导致的虚拟DOM重新渲染和打补丁后会调用该钩子 
-      // 'updated'不会承诺所有的子组件也都一起被重绘。
-      // 若希望等到整个视图都重绘完毕,可以用 vm.$nextTick() 
-    },
-    activated: function(){  // <keep-alive>组件激活时调用。
-      // 该钩子在服务器端渲染期间不被调用。
-    },
-    deactivated: function(){  //  <keep-alive>组件停用时调用。
-      // 该钩子在服务器端渲染期间不被调用。
-    },
-    beforeDestroy: function(){  // 实例销毁前调用,此时实例仍然可用 
-      // 该钩子在服务器端渲染期间不被调用
-    },
-    destroyed: function(){  // Vue实例销毁后调用 
-      // 该钩子在服务器端渲染期间不被调用
-      // 调用后,Vue 实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁。
-    },
-    // ◆资源选项 
-    directives: { // 定义指令,包含Vue实例可用指令的哈希表 
+    'aoo.boo': foo/{} // 方法四,watch对象的成员 
+    Question: 
+      当对象变化时,如何确定是某一成员变化导致的? 方法四间接实现
+  },      
+  methods: {      // 定义的方法
+    PS: methods会被混入到Vue实例中,自己使用'this.xx'调用 
+    foo1: function(){
       // 
-    }  
-    filters: { // 定义过滤器,包含Vue实例可用过滤器的哈希表 
-      // 
-    }     
-    components: { // 定义组件,包含Vue实例可用组件的哈希表 
-      // 
-    }  
-    // ◆组合选项 
-    parent: vm,  // 指定已创建的实例之父实例,在两者之间建立父子关系
-      // 子实例可以用 this.$parent 访问父实例,子实例被推入父实例的 $children 数组中 
-      // 节制地使用 $parent 和 $children - 它们的主要目的是作为访问组件的应急方法。
-      // 更推荐用 props 和 events 实现父子组件通信
-    mixins: [],  // 混合 
-      接受一个混合对象的数组,这些混合实例对象可以像正常的实例对象一样包含选项,
-      他们将在 Vue.extend() 里最终选择使用相同的选项合并逻辑合并。
-      举例：如果你混合包含一个钩子而创建组件本身也有一个,两个函数将被调用。
-      Mixin 钩子按照传入顺序依次调用,并在调用组件自身的钩子之前被调用。
-    extends: obj/foo,  // 允许声明扩展另一个组件(可是一个简单的选项对象或构造函数) 
-      // 和 mixins 类似,区别在于,组件自身的选项会比要扩展的源组件具有更高的优先级 
-      // Example: 
-      // var CompA = { ... } 
-      // 在没有调用 `Vue.extend` 时候继承 CompA
-      // var CompB = {
-      //   extends: CompA,
-      //   ...
-      // }
-    'provide'和'inject'主要为高阶插件/组件库提供用例,并不推荐直接用于应用程序代码中 
-      // 这对选项需一起使用,以允许一个祖先组件向其所有子孙后代注入一个依赖,不论组件层次有多深, 
-      // 并在起上下游关系成立的时间里始终生效 
-      // provide 和 inject 绑定并不是可响应的。这是刻意为之的。
-      // 然而,如果你传入了一个可监听的对象,那么其对象的属性还是可响应的。
-    provide: obj/foo,      '2.2.0+' 
-      // 该对象包含可注入其子孙的属性 
-      // 参数为一个对象或返回一个对象的函数
-    inject: arr/obj,       '2.2.0+' 
-      // 参数为一个字符串数组或一个对象,该对象的 key 代表了本地绑定的名称,
-      // value 为其 key 以在可用的注入中搜索。
-      Example: 
-      var Provider = {
-        provide: {
-          foo: 'bar'
-        },
-        // ...
-      }
-      var Child = {
-        inject: ['foo'],
-        created () {
-          console.log(this.foo) // => "bar"
-        }
-        // ...
-      }
-      接下来 2 个例子只工作在 Vue 2.2.1 或更高版本。
-      低于这个版本时,注入的值会在 props 和 data 初始化之后得到。
-      使用一个注入的值作为一个属性的默认值：
-      const Child = {
-        inject: ['foo'],
-        props: {
-          bar: {
-            default () {
-              return this.foo
+    }
+  },
+  filters: {      // 定义过滤器 
+    // 
+  },    
+  directives: {   // 定义指令 
+    // 
+  }  
+  ◆视图选项
+  template: htmlStr, // 模版,会替换挂载元素及其内部元素,除非模板的内容有分发插槽 
+    //若Vue选项中有'render'渲染函数,该模板将被忽略 
+  render: function(createElem){  // 渲染函数,相当于'template'的作用  
+    // 渲染函数接收一个 createElement 方法作为第一个参数用来创建 VNode 
+    // 如果组件是一个函数组件,渲染函数还会接收一个额外的 context 参数,为没有实例的函数组件提供上下文信息
+    // render 函数若存在,则 Vue 构造函数不会从 template 选项
+    // 或通过 el 选项指定的挂载元素中提取出的 HTML 模板编译渲染函数 
+    return createElem(
+      str/obj/foo // 必填参数
+        str  // 一个 HTML 标签字符串,如'div'
+        obj  // 组件选项对象 
+        foo  // 一个返回值类型为 String/Object 的函数
+      ,obj  // 一个包含模板相关属性的数据对象,可选参数 
+        在VNode数据对象中,下列属性名是级别最高的字段。
+        该对象也允许你绑定普通的HTML特性,就像DOM属性一样,
+        比如'innerHTML',会取代'v-html'指令 
+        {
+          'class': { // 和`v-bind:class`一样的 API
+            foo: true,
+            bar: false
+          },
+          style: { // 和`v-bind:style`一样的 API
+            color: 'red',
+            fontSize: '14px'
+          },
+          attrs: { // 正常的 HTML 特性
+            id: 'foo'
+          },
+          props: { // 组件 props
+            myProp: 'bar'
+          },
+          domProps: { // DOM 属性
+            innerHTML: 'baz'
+          },
+          // 事件监听器基于 `on`, 所以不再支持如 `v-on:keyup.enter` 修饰器,需要手动匹配 keyCode 
+          on: {
+            click: this.clickHandler
+          },
+          // 仅对于组件,用于监听原生事件,而不是组件内部使用 `vm.$emit` 触发的事件 
+          nativeOn: {
+            click: this.nativeClickHandler
+          },
+          // 自定义指令。注意事项：不能对绑定的旧值设值
+          directives: [
+            {
+              name: 'my-custom-directive',
+              value: '2',
+              expression: '1 + 1',
+              arg: 'foo',
+              modifiers: {
+                bar: true
+              }
             }
-          }
+          ],
+          // Scoped slots in the form of
+          // { name: props => VNode | Array<VNode> }
+          scopedSlots: {
+            default: props => createElement('span', props.text)
+          },
+          // 如果组件是其他组件的子组件,需为插槽指定名称
+          slot: 'name-of-slot',
+          // 其他特殊顶层属性
+          key: 'myKey',
+          ref: 'myRef'
         }
-      }
-      使用一个注入的值作为数据入口：
-      const Child = {
-        inject: ['foo'],
-        data () {
-          return {
-            bar: this.foo
-          }
-        }
-      }
-    // ◆其他选项 
-    name: str,  // 命令组件,只有作为组件选项时起作用 
-      允许组件模板递归地调用自身;
-      组件在全局用 Vue.component() 注册时,全局 ID 自动作为组件的 name
-      指定 name 选项的另一个好处是便于调试。有名字的组件有更友好的警告信息。
-      当在有 vue-devtools,未命名组件将显示成 <AnonymousComponent>,这很没有语义。
-      通过提供 name 选项,可以获得更有语义信息的组件树。
-    delimiters: arr,   // 改变纯文本插入分隔符 
-      // 该选项只在完整构建版本中的浏览器内编译时可用 
-      // 默认值：["{{", "}}"]
-      // Example:  改为 ES6 模板字符串的风格
-      // new Vue({
-      //   delimiters: ['${', '}']
-      // })
-    functional: bol,  // 使组件无状态[没有 data]和无实例[没有 this 上下文] 
-      // 用一个简单的 render 函数返回虚拟节点使他们更容易渲染 
-    model: { // 允许一个自定义组件在使用 v-model 时定制 prop 和 event  '2.2.0+'
-      // 默认情况下,一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event,
-      // 但是一些输入类型比如单选框和复选框按钮可能像使用 value prop 来达到不同的目的。
-      // 使用 model 选项可以回避这些情况产生的冲突。
-      prop: '',
-      event: ''
-    } 
-    inheritAttrs: bol, // 默认值:true  '2.4.0+'
-      // 默认情况下父作用域的不被认作 props 的特性绑定 (attribute bindings) 
-      // 将会“回退”且作为普通的 HTML 特性应用在子组件的根元素上。
-      // 当撰写包裹一个目标元素或另一个组件的组件时,这可能不会总是符合预期行为。
-      // 通过设置 inheritAttrs 到 false,这些默认行为将会被去掉。
-      // 而通过 (同样是 2.4 新增的) 实例属性 $attrs 可以让这些特性生效,
-      // 且可以通过 v-bind 显性的绑定到非根元素上。
-      // 这个选项不影响 class 和 style 绑定。
-    comments: bol,  // 是否保留且渲染模板中的HTML注释,默认：false  '2.4.0+'
-      // 该选项只在完整构建版本中的浏览器内编译时可用。
+      ,str/arr // 子节点,可选参数  
+        str // 使用字符串来生成'文本节点'
+        arr // 子节点'VNodes',由'createElem()'构建而成 
+        [
+          '先写一些文字',
+          createElement('h1', '一则头条'),
+          createElement(MyComponent, {
+            props: {
+              someProp: 'foobar'
+            }
+          })
+        ]
+    )
+  },
+  renderError: function(h, err){ // 当'render'出错时,提供另外一种渲染输出  ['2.2.0+'] 
+    // 只在开发者环境下工作 
+    // 其错误将会作为第二个参数传递到 renderError。这个功能配合 hot-reload 非常实用
+    // Example: 
+    // new Vue({
+    //   render (h) {
+    //     throw new Error('oops')
+    //   },
+    //   renderError (h, err) {
+    //     return h('pre', { style: { color: 'red' }}, err.stack)
+    //   }
+    // }).$mount('#app')
+  },
+  components: { // 定义组件,包含Vue实例可用组件的哈希表 
+    // 
+  }  
+  ◆生命周期选项 
+  beforeCreate: function(){ // 在实例初始化后,数据观测和'event/watcher'事件配置前被调用 
+    // ..
+  }, 
+  created: function(){ // 实例创建完成后立即调用
+    // 此时实例已完成的配置：'data observer'数据观测、属性和方法的运算、watch/event事件回调 
+    // 但挂载阶段还没开始,$el 属性目前不可见 
   }
+  beforeMount: function(){ // 在挂载前被调用：相关的 render 函数首次被调用 
+    // 该钩子在服务器端渲染期间不被调用
+  }
+  mounted: function(){ // el被新创建的vm.$el替换,并挂载到实例后调用 
+    // 该钩子在服务器端渲染期间不被调用 
+    // 如果 root 实例挂载了一个文档内元素,当 mounted 被调用时 vm.$el 也在文档内。
+    this.$nextTick(function () {
+      // 注意 mounted 不会承诺所有的子组件也都一起被挂载。
+      // 如果希望等到整个视图都渲染完毕,可用 vm.$nextTick()  
+    })
+  },
+  beforeUpdate: function(){ // 数据更新时调用,发生在虚拟 DOM 重新渲染和打补丁前 
+    // 可在该钩子中进一步地更改状态,但会触发附加的重渲染过程 
+    // 该钩子在服务器端渲染期间不被调用     
+  }
+  updated: function(){  // 当这个钩子被调用时,组件 DOM 已经更新
+    // 由于数据更改导致的虚拟DOM重新渲染和打补丁后会调用该钩子 
+    // 'updated'不会承诺所有的子组件也都一起被重绘。
+    // 若希望等到整个视图都重绘完毕,可以用 vm.$nextTick() 
+  },
+  activated: function(){  // <keep-alive>组件激活时调用。
+    // 该钩子在服务器端渲染期间不被调用。
+  },
+  deactivated: function(){  //  <keep-alive>组件停用时调用。
+    // 该钩子在服务器端渲染期间不被调用。
+  },
+  beforeDestroy: function(){  // 实例销毁前调用,此时实例仍然可用 
+    // 该钩子在服务器端渲染期间不被调用
+  },
+  destroyed: function(){  // Vue实例销毁后调用 
+    // 该钩子在服务器端渲染期间不被调用
+    // 调用后,Vue 实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁。
+  },
+  ◆组合选项 
+  parent: vm,  // 指定已创建的实例之父实例,在两者之间建立父子关系 
+    // 子实例可以用 this.$parent 访问父实例,子实例被推入父实例的 $children 数组中 
+    // 节制地使用 $parent 和 $children - 它们的主要目的是作为访问组件的应急方法 
+    // 更推荐用 props 和 events 实现父子组件通信
+  mixins: [],  // 混合 
+    接受一个混合对象的数组,这些混合实例对象可以像正常的实例对象一样包含选项,
+    他们将在 Vue.extend() 里最终选择使用相同的选项合并逻辑合并。
+    举例：如果你混合包含一个钩子而创建组件本身也有一个,两个函数将被调用。
+    Mixin 钩子按照传入顺序依次调用,并在调用组件自身的钩子之前被调用。
+  extends: obj/foo,  // 允许声明扩展另一个组件(可是一个简单的选项对象或构造函数) 
+    // 和 mixins 类似,区别在于,组件自身的选项会比要扩展的源组件具有更高的优先级 
+    // Example: 
+    // var CompA = { ... } 
+    // 在没有调用 `Vue.extend` 时候继承 CompA
+    // var CompB = {
+    //   extends: CompA,
+    //   ...
+    // }
+  'provide'和'inject'主要为高阶插件/组件库提供用例,并不推荐直接用于应用程序代码中 
+    // 这对选项需一起使用,以允许一个祖先组件向其所有子孙后代注入一个依赖,不论组件层次有多深, 
+    // 并在起上下游关系成立的时间里始终生效 
+    // provide 和 inject 绑定并不是可响应的。这是刻意为之的。
+    // 然而,如果你传入了一个可监听的对象,那么其对象的属性还是可响应的。
+  provide: obj/foo,      ['2.2.0+'] 
+    // 该对象包含可注入其子孙的属性 
+    // 参数为一个对象或返回一个对象的函数
+  inject: arr/obj,       ['2.2.0+'] 
+    // 参数为一个字符串数组或一个对象,该对象的 key 代表了本地绑定的名称,
+    // value 为其 key 以在可用的注入中搜索。
+    Example: 
+    var Provider = {
+      provide: {
+        foo: 'bar'
+      },
+      // ...
+    }
+    var Child = {
+      inject: ['foo'],
+      created () {
+        console.log(this.foo) // => "bar"
+      }
+      // ...
+    }
+    接下来 2 个例子只工作在 Vue 2.2.1 或更高版本。
+    低于这个版本时,注入的值会在 props 和 data 初始化之后得到。
+    使用一个注入的值作为一个属性的默认值：
+    const Child = {
+      inject: ['foo'],
+      props: {
+        bar: {
+          default () {
+            return this.foo
+          }
+        }
+      }
+    }
+    使用一个注入的值作为数据入口：
+    const Child = {
+      inject: ['foo'],
+      data () {
+        return {
+          bar: this.foo
+        }
+      }
+    }
+  // ◆其他选项 
+  name: str,  // 命令组件,只有作为组件选项时起作用 
+    允许组件模板递归地调用自身;
+    组件在全局用 Vue.component() 注册时,全局 ID 自动作为组件的 name
+    指定 name 选项的另一个好处是便于调试。有名字的组件有更友好的警告信息。
+    当在有 vue-devtools,未命名组件将显示成 <AnonymousComponent>,这很没有语义。
+    通过提供 name 选项,可以获得更有语义信息的组件树。
+  delimiters: arr,   // 改变纯文本插入分隔符 
+    // 该选项只在完整构建版本中的浏览器内编译时可用 
+    // 默认值：["{{", "}}"]
+    // Example:  改为 ES6 模板字符串的风格
+    // new Vue({
+    //   delimiters: ['${', '}']
+    // })
+  functional: bol,  // 使组件无状态[没有 data]和无实例[没有 this 上下文] 
+    // 用一个简单的 render 函数返回虚拟节点使他们更容易渲染 
+  model: { // 允许一个自定义组件在使用 v-model 时定制 prop 和 event  '2.2.0+'
+    // 默认情况下,一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event,
+    // 但是一些输入类型比如单选框和复选框按钮可能像使用 value prop 来达到不同的目的。
+    // 使用 model 选项可以回避这些情况产生的冲突。
+    prop: '',
+    event: ''
+  } 
+  inheritAttrs: bol, // 默认值:true  '2.4.0+'
+    // 默认情况下父作用域的不被认作 props 的特性绑定 (attribute bindings) 
+    // 将会“回退”且作为普通的 HTML 特性应用在子组件的根元素上。
+    // 当撰写包裹一个目标元素或另一个组件的组件时,这可能不会总是符合预期行为。
+    // 通过设置 inheritAttrs 到 false,这些默认行为将会被去掉。
+    // 而通过 (同样是 2.4 新增的) 实例属性 $attrs 可以让这些特性生效,
+    // 且可以通过 v-bind 显性的绑定到非根元素上。
+    // 这个选项不影响 class 和 style 绑定。
+  comments: bol,  // 是否保留且渲染模板中的HTML注释,默认：false  '2.4.0+'
+    // 该选项只在完整构建版本中的浏览器内编译时可用。
+})  
 'vm.xx'实例属性/方法/事件 
   PS: vm.$xx [带有前缀$的]实例方法/属性,在配置对象中使用'this'代替'vm' 
   ◆实例属性 
@@ -1089,141 +683,8 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
   vm.$destroy()      完全销毁一个实例
     清理它与其它实例的连接,解绑它的全部指令及事件监听器 
     触发 beforeDestroy 和 destroyed 的钩子。
-'Model'更新及监控 
-  'mutation method'变异方法 会改变调用该方法的原数据的方法 
-    push()  pop() shift() unshift() splice() sort() reverse()
-  'non-mutating method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
-    如: filter(),concat(),slice()  
-  重塑数组 : 当使用非变异方法时,可以用新数组替换旧数组
-    example1.items = example1.items.filter(function (item) {
-      return item.message.match(/Foo/)
-    })
-    你可能认为这将导致Vue丢弃现有DOM并重新渲染整个列表
-    但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
-    所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
-  由于JS的限制,Vue不能检测以下变动的数据 
-    当[函数内仅有]数组通过索引index直接设置某一项时
-      如: vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
-      可使用以下方式将达到效果触发状态更新
-      ◆Vue.set
-      Vue.set(arr,index,newVal)
-      this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
-      ◆Array.prototype.splice
-      arr.splice(indx,1,newVal)
-      ◆同时在当前函数内改变会引起视图变化的操作 
-        <div class="slct" >
-          <div v-for="item1 in items">{{item1}}</div>
-          <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
-          <button type="button" @click="changeItems">click</button>
-        </div>
-        var vm = new Vue({
-          el : '.slct',
-          data : {
-            items :[ 1, 2, 3, 4, 5 ],
-            items1 :[{a:1},{a:2},{a:3},{a:4}],
-            n : 1,
-          },
-          methods : {
-            changeItems : function(){
-              console.log(this.items);
-              this.items[0] = ++this.n;
-              // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
-            },
-          },
-        });
-
-    当你修改数组的长度时,如: vm.items.length = newLength 
-      使用 splice 替代直接长度的修改
-      example1.items.splice(newLength)
-  vm实例创建后新增的数据不能被监控到 
-    受现代js的限制[以及废弃 Object.observe],Vue不能检测到对象属性的添加或删除。
-    由于Vue会在初始化实例时对属性执行getter/setter转化过程,
-    所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的。
-    Example::
-      var vm = new Vue({
-        data:{
-          a:1
-        }
-      })
-      // `vm.a` 是响应的
-      vm.b = 2
-      // `vm.b` 是非响应的
-    ◆决解办法:
-    预选定义一个值 
-    Vue.set(object, key, value);  将响应属性添加到嵌套的对象
-      Vue不允许在已经创建的实例上动态添加新的根级响应式属性[root-level reactive property]
-      但可使用 Vue.set 来添加 
-      Example: Vue.set(vm.someObject, 'b', 2)
-    vm.$set 实例方法[全局 Vue.set 方法的别名] 
-      this.$set(this.someObject,'b',2)
-    创建一个新的对象,让其包含原对象的属性和新的属性
-      有时向已有对象上添加一些属性,例如使用 Object.assign() 或 _.extend() 方法来添加属性。
-      但是,添加到对象上的新属性不会触发更新。
-      this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
-      // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
-  异步更新队列 
-    当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
-    若同一个'watcher'被多次触发,只会一次推入到队列中。
-    这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
-    然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
-    Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
-    若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
-    Example:
-      当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
-      当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
-      多数情况我们不需要关心这个过程,但是若你想在 DOM 状态更新后做点什么,这就可能会有些棘手。
-      虽然Vuejs通常鼓励开发人员沿着“数据驱动”的方式思考,避免直接接触 DOM,但是有时我们确实要这么做。
-    Vue.nextTick(callback)  在数据变化之后使用使其操作插队[SlPt]
-      <div id="example">{{message}}</div>
-      var vm = new Vue({
-        el: '#example',
-        data: {
-          message: '123'
-        }
-      })
-      vm.message = 'new message' // 更改数据
-      vm.$el.textContent === 'new message' // false
-      Vue.nextTick(function () {
-        vm.$el.textContent === 'new message' // true
-      })
-      在组件内使用 vm.$nextTick() 实例方法特别方便,因为它不需要全局 Vue ,
-      并且回调函数中的 this 将自动绑定到当前的 Vue 实例上:
-      Vue.component('example', {
-        template: '<span>{{ message }}</span>',
-        data: function () {
-          return {
-            message: '没有更新'
-          }
-        },
-        methods: {
-          updateMessage: function () {
-            this.message = '更新完成'
-            console.log(this.$el.textContent) // => '没有更新'
-            this.$nextTick(function () {
-              console.log(this.$el.textContent) // => '更新完成'
-            })
-          }
-        }
-      })
-'Lifecycle hooks'生命周期钩子: 实例的生命周期 
-  PS: 钩子:某个阶段开始或者结束前、后等过程中被触发的函数;  
-    组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'概念];
-    钩子的'this'指向调用它的Vue实例; 
-  'beforeCreate'  实例刚创建 
-    设置'data'中的数据无效 
-  'created'       实例创建完毕 
-    可设置'data'中的数据 
-  'beforeMount'   DOM渲染前
-  'mounted'       DOM渲染完毕 [替换'1.x'版本的'ready'] 
-  'beforeUpdate'  更新前 
-  'updated'       数据模型更新 
-  'activated'     组件被激活时 
-  'deactivated'   组件被移除时 
-  'beforeDestroy' 销毁前 
-  'destroyed'     销毁观察、组件及事件 
-'Mustache'插值 
-  PS: 基于HTML的模版语法,声明式地将DOM绑定至底层Vue实例的数据;
-    在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
+插值'Mustache'声明式的将Model关联到View上  
+  PS: 在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
     结合响应系统,应用状态改变时,Vue以最小代价重新渲染组件并应用到DOM操作上;
     也可不用模板,直接写渲染[render]函数,使用可选的 JSX 语法;  
     不能在HTML属性中使用[应使用 v-bind 指令];
@@ -1248,7 +709,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       // <!-- 流控制也不会生效,请使用三元表达式 -->
       {{ if (ok) { return message } }}
   {{foo}}  计算属性插值[params.computed.foo]
-    PS:像绑定普通属性一样在模板中绑定计算属性 
+    PS: 像绑定普通属性一样在模板中绑定计算属性 
   {{foo(arg)}} 方法调用插值[params.methods.foo]
     PS:计算属性是基于它的依赖缓存,只有在其的相关依赖发生改变时才会重新取值;
       若依赖未改变,多次访问计算属性会立即返回之前的计算结果[有缓存];
@@ -1269,13 +730,9 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
         }
       }
   Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-'Filters'过滤器 
-  PS: 过滤器只能在'Mustache'和'v-bind'表达式['2.1.0+']中使用 
-    类似Linux中的管道,vuejs也使用的是'|'; 
-    因为过滤器设计目的就是用于文本转换
-    为了在其他指令中实现更复杂的数据变换,应该使用计算属性
-    过滤器函数总接受"|"左边的值作为第一个参数
-  Vue.filter('ftName',foo(val[,arg1,..])); 全局过滤器 [可在所有实例中使用] 
+过滤器'Filters'在'Mustache'和'v-bind'表达式['2.1.0+']中对值进行处理  
+  PS: 设计目的是用于文本转换,复杂的数据变换应使用计算属性
+  Vue.filter('ftName',foo(val[,arg1,..])); 全局过滤器[可在所有实例中使用] 
     val 表示'|'左边的值,
     arg 可选,表示使用时传入的额外参数 
     Example: 
@@ -1283,7 +740,8 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       Vue.filter('reverse',function (value) {
         return value.split('').reverse().join('')
       })
-  '|'管道符配合使用:  
+  '|'管道符配合使用:类似Linux中的管道  
+    过滤器函数总接受"|"左边的值作为第一个参数
     'Mustache'中使用: 添加在JS表达式的尾部,由管道符"|"指示 
     {{ message | flt }}
     'v-bind'中使用
@@ -1293,7 +751,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
     // arg1作为第二个参数,arg2作为第三个参数 
   过滤器串联 
     {{ message | filterA | filterB }}
-'Directives'指令: model和view的交互 
+指令'Directives'model和view的交互 
   PS:将vm和DOM进行关联,做为HTML标签的属性,让Vue对DOM元素做各种处理,
     职责为当其表达式的值改变时相应地将某些行为应用到 DOM 上;
   v-text="str"   纯文本 
@@ -1685,7 +1143,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
     可隐藏未编译的'Mustache'标签直到实例准备完毕 
   v-pre   跳过该元素及其子元素的编译  
     可以用来显示原始'Mustache'标签,跳过大量没有指令的节点会加快编译 
-'Custom Directives'自定义指令[在HTML中指定,不区分大小写] 
+自定义指令'Custom Directives'[在HTML中指定,不区分大小写] 
   v-name:arg.mdf1.mdf2="val"   用于对DOM元素进行底层操作 
   'name'  指令名称 
   'arg'   指令的参数,可选 
@@ -1815,7 +1273,7 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
       modifiers: {"a":true,"b":true}
       vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
       oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-'Mixins'混合: 分发Vue组件中可复用功能的方式 
+混合'Mixins'分发Vue组件中可复用功能的方式 
   与混合对象含有同名选项时 
     同名钩子函数将混合为一个数组,故都将被调用;且混合对象的钩子将在组件自身钩子前调用 
     'methods'、'components'及'directives'等,将被混合为一个对象,冲突时,组件对象优先级高 
@@ -1854,151 +1312,22 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
         actions: merge(toVal.actions, fromVal.actions)
       }
     }
-'Tag'&'Attr'内置标签及属性
-  ◆标签
-  <component is="cptname"></component>   // 放置组件 
-  <keep-alive ></keep-alive>  保留组件状态、避免重新渲染 
-    PS: 抽象组件,自身不会渲染成DOM元素,也不会出现在父组件链中 
-      当组件在<keep-alive>内被切换,
-      其'activated'和'deactivated'这两个生命周期钩子函数将会被对应执行。
-      在 2.2.0 及其更高版本中,activated和deactivated将会在<keep-alive>树内的所有嵌套组件中触发  
-    ★Props：
-    include="str/rgep/arr"  只有匹配的组件会被缓存       '2.1.0+'
-    exclude="str/rgep/arr"  任何匹配的组件都不会被缓存   '2.1.0+'
-    允许组件有条件地缓存,可使用逗号分隔字符串、正则表达式或一个数组来表示 
-    匹配首先检查组件自身的 name 选项,
-    如果 name 选项不可用,则匹配它的局部注册名称[父组件components选项的键值] 
-    匿名组件不能被匹配。
-    // <!-- 逗号分隔字符串 -->
-    <keep-alive include="a,b">
-      <component :is="view"></component>
-    </keep-alive>
-    // <!-- 正则表达式 (使用 `v-bind`) -->
-    <keep-alive :include="/a|b/">
-      <component :is="view"></component>
-    </keep-alive>
-    // <!-- 数组 (使用 `v-bind`) -->
-    <keep-alive :include="['a', 'b']">
-      <component :is="view"></component>
-    </keep-alive>
-  <transition ></transition>   // 过渡 
-    ★Props 
-    name="str"   用于自动生成 CSS 过渡类名。
-      例如：name: 'fade' 将自动拓展为.fade-enter,.fade-enter-active等。默认类名为 "v"
-    appear="bol" 是否在初始渲染时使用过渡。默认为 false。
-    css="bol"    是否使用 CSS 过渡类。默认为 true 
-      果设置为 false,将只通过组件事件触发注册的 JavaScript 钩子。
-    type="keywords"   指定过渡事件类型,侦听过渡何时结束 
-      默认VueJS将自动检测出持续时间长的为过渡事件类型 
-      "transition" 
-      "animation"。
-    mode="keywords"   控制离开/进入的过渡时间序列 
-      默认同时生效 
-      "out-in" 
-      "in-out" 
-    enter-class="str"  
-    leave-class="str"
-    appear-class="str"
-    enter-to-class="str"
-    leave-to-class="str"
-    appear-to-class="str"
-    enter-active-class="str"
-    leave-active-class="str"
-    appear-active-class="str"
-    ★Events  
-    before-enter="foo"
-    before-leave="foo"
-    before-appear="foo"
-    enter="foo"
-    leave="foo"
-    appear="foo"
-    after-enter="foo"
-    after-leave="foo"
-    after-appear="foo"
-    enter-cancelled="foo"
-    leave-cancelled="foo"    [v-show only]
-    appear-cancelled="foo"
-  <transition-group></transition-group>  // 过渡 
-    <transition-group>元素作为多个元素/组件的过渡效果。
-    <transition-group> 渲染一个真实的DOM元素。
-    默认渲染 <span>,可以通过 tag 属性配置哪个元素应该被渲染。
-    每个 <transition-group> 的子节点必须有独立的'key' ,动画才能正常工作
-    <transition-group> 支持通过 CSS transform 过渡移动。
-    当一个子节点被更新,从屏幕上的位置发生变化,它将会获取应用 CSS 移动类 ,
-    通过 name 属性或配置 move-class 属性自动生成。
-    如果 CSS transform 属性是“可过渡”属性,当应用移动类时,
-    将会使用 FLIP 技术 使元素流畅地到达动画终点。
-    ★Props：
-    tag="str"  默认为'span'
-    move-class="str"  覆盖移动过渡期间应用的CSS类 
-    除了'mode',其他特性和 <transition> 相同。
-    ★Events 
-    <transition> 相同。
-    Example: 
-    <transition-group tag="ul" name="slide">
-      <li v-for="item in items" :key="item.id">
-        {{ item.text }}
-      </li>
-    </transition-group>
-  <slot name="slotName"></slot>         // 插槽  
-  <template></template>    HTML5标签 
-  ◆属性 
-  key="arg"  标识DOM节点 
-    管理元素复用 
-      Vue尽可能高效的渲染元素,通常会复用已有元素[而不是从头开始渲染]
-      <div id="bbb">
-        <template v-if="loginType === 'username'">
-          <label>Username</label>
-          <input placeholder="Enter your username">
-        </template>
-        <template v-else>
-          <label>Email</label>
-          <input placeholder="Enter your email address">
-        </template>
-      </div>
-      var vm = new Vue({
-        el : '#bbb',
-        data : {
-          loginType : 'username',
-        },
-      });
-      setTimeout(function(){
-        vm.loginType = '1'
-      },5000);
-      两个模版由于使用了相同的元素,<input>会被复用,仅仅是替换了他们的'placeholder'
-      初始在表单中输入值,当切换渲染后表单中存在之前的输入 
-      可通过添加属性'key'来控制是否复用元素[key 必须带有唯一的值]
-      <div id="bbb">
-        <template v-if="loginType === 'username'">
-          <label>Username</label>
-          <input placeholder="Enter your username" key="input1">
-        </template>
-        <template v-else>
-          <label>Email</label>
-          <input placeholder="Enter your email address" key="input2">
-        </template>
-      </div>
-      var vm = new Vue({
-        el : '#bbb',
-        data : {
-          loginType : 'username',
-        },
-      });
-      setTimeout(function(){
-        vm.loginType = '1'
-      },5000);
-      初始在表单输入的值,在5s后消失[input元素被重新渲染了]
-      当两个'key'值相同时,相当与没有'key'时的默认情况 
-      但<label> 元素仍然会被高效地复用,因为它们没有添加 key 属性。
-  is="arg"   指定组件 
-  ref="str"  给元素或子组件注册引用信息 
-    引用信息将会注册在父组件的 $refs 对象上。
-    如果在普通的 DOM 元素上使用,引用指向的就是 DOM 元素；
-    如果用在子组件上,引用就指向组件实例：
-    Example: 
-    <p ref="p">hello</p>    //  vm.$refs.p 为DOM节点 
-    <cpt-a ref="child"></cpt-a>  // vm.$refs.child 为Vue实例 
-  slot="str" 
+生命周期钩子'Lifecycle hooks'实例的生命周期 
+  PS: 钩子:某个阶段开始或者结束前、后等过程中被触发的函数;  
+    组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'概念];
+    钩子的'this'指向调用它的Vue实例; 
+  'beforeCreate'  实例刚创建 
+    设置'data'中的数据无效 
+  'created'       实例创建完毕 
+    可设置'data'中的数据 
+  'beforeMount'   DOM渲染前
+  'mounted'       DOM渲染完毕 [替换'1.x'版本的'ready'] 
+  'beforeUpdate'  更新前 
+  'updated'       数据模型更新 
+  'activated'     组件被激活时 
+  'deactivated'   组件被移除时 
+  'beforeDestroy' 销毁前 
+  'destroyed'     销毁观察、组件及事件 
 'Component'组件 
   PS: 组件的'data'需是一个函数 
     需在插入的Vue实例前定义[否则要触发该实例的任意一组件渲染,如通过'v-if'],才会渲染出该组件 
@@ -2651,6 +1980,151 @@ vm = new Vue({})  创建'ViewModel'Vue实例,简称vm
         }
       }
     </style>
+'Tag'&'Attr'内置标签及属性
+  ◆标签
+  <component is="cptname"></component>   // 放置组件 
+  <keep-alive ></keep-alive>  保留组件状态、避免重新渲染 
+    PS: 抽象组件,自身不会渲染成DOM元素,也不会出现在父组件链中 
+      当组件在<keep-alive>内被切换,
+      其'activated'和'deactivated'这两个生命周期钩子函数将会被对应执行。
+      在 2.2.0 及其更高版本中,activated和deactivated将会在<keep-alive>树内的所有嵌套组件中触发  
+    ★Props：
+    include="str/rgep/arr"  只有匹配的组件会被缓存       '2.1.0+'
+    exclude="str/rgep/arr"  任何匹配的组件都不会被缓存   '2.1.0+'
+    允许组件有条件地缓存,可使用逗号分隔字符串、正则表达式或一个数组来表示 
+    匹配首先检查组件自身的 name 选项,
+    如果 name 选项不可用,则匹配它的局部注册名称[父组件components选项的键值] 
+    匿名组件不能被匹配。
+    // <!-- 逗号分隔字符串 -->
+    <keep-alive include="a,b">
+      <component :is="view"></component>
+    </keep-alive>
+    // <!-- 正则表达式 (使用 `v-bind`) -->
+    <keep-alive :include="/a|b/">
+      <component :is="view"></component>
+    </keep-alive>
+    // <!-- 数组 (使用 `v-bind`) -->
+    <keep-alive :include="['a', 'b']">
+      <component :is="view"></component>
+    </keep-alive>
+  <transition ></transition>   // 过渡 
+    ★Props 
+    name="str"   用于自动生成 CSS 过渡类名。
+      例如：name: 'fade' 将自动拓展为.fade-enter,.fade-enter-active等。默认类名为 "v"
+    appear="bol" 是否在初始渲染时使用过渡。默认为 false。
+    css="bol"    是否使用 CSS 过渡类。默认为 true 
+      果设置为 false,将只通过组件事件触发注册的 JavaScript 钩子。
+    type="keywords"   指定过渡事件类型,侦听过渡何时结束 
+      默认VueJS将自动检测出持续时间长的为过渡事件类型 
+      "transition" 
+      "animation"。
+    mode="keywords"   控制离开/进入的过渡时间序列 
+      默认同时生效 
+      "out-in" 
+      "in-out" 
+    enter-class="str"  
+    leave-class="str"
+    appear-class="str"
+    enter-to-class="str"
+    leave-to-class="str"
+    appear-to-class="str"
+    enter-active-class="str"
+    leave-active-class="str"
+    appear-active-class="str"
+    ★Events  
+    before-enter="foo"
+    before-leave="foo"
+    before-appear="foo"
+    enter="foo"
+    leave="foo"
+    appear="foo"
+    after-enter="foo"
+    after-leave="foo"
+    after-appear="foo"
+    enter-cancelled="foo"
+    leave-cancelled="foo"    [v-show only]
+    appear-cancelled="foo"
+  <transition-group></transition-group>  // 过渡 
+    <transition-group>元素作为多个元素/组件的过渡效果。
+    <transition-group> 渲染一个真实的DOM元素。
+    默认渲染 <span>,可以通过 tag 属性配置哪个元素应该被渲染。
+    每个 <transition-group> 的子节点必须有独立的'key' ,动画才能正常工作
+    <transition-group> 支持通过 CSS transform 过渡移动。
+    当一个子节点被更新,从屏幕上的位置发生变化,它将会获取应用 CSS 移动类 ,
+    通过 name 属性或配置 move-class 属性自动生成。
+    如果 CSS transform 属性是“可过渡”属性,当应用移动类时,
+    将会使用 FLIP 技术 使元素流畅地到达动画终点。
+    ★Props：
+    tag="str"  默认为'span'
+    move-class="str"  覆盖移动过渡期间应用的CSS类 
+    除了'mode',其他特性和 <transition> 相同。
+    ★Events 
+    <transition> 相同。
+    Example: 
+    <transition-group tag="ul" name="slide">
+      <li v-for="item in items" :key="item.id">
+        {{ item.text }}
+      </li>
+    </transition-group>
+  <slot name="slotName"></slot>         // 插槽  
+  <template></template>    HTML5标签 
+  ◆属性 
+  key="arg"  标识DOM节点 
+    管理元素复用 
+      Vue尽可能高效的渲染元素,通常会复用已有元素[而不是从头开始渲染]
+      <div id="bbb">
+        <template v-if="loginType === 'username'">
+          <label>Username</label>
+          <input placeholder="Enter your username">
+        </template>
+        <template v-else>
+          <label>Email</label>
+          <input placeholder="Enter your email address">
+        </template>
+      </div>
+      var vm = new Vue({
+        el : '#bbb',
+        data : {
+          loginType : 'username',
+        },
+      });
+      setTimeout(function(){
+        vm.loginType = '1'
+      },5000);
+      两个模版由于使用了相同的元素,<input>会被复用,仅仅是替换了他们的'placeholder'
+      初始在表单中输入值,当切换渲染后表单中存在之前的输入 
+      可通过添加属性'key'来控制是否复用元素[key 必须带有唯一的值]
+      <div id="bbb">
+        <template v-if="loginType === 'username'">
+          <label>Username</label>
+          <input placeholder="Enter your username" key="input1">
+        </template>
+        <template v-else>
+          <label>Email</label>
+          <input placeholder="Enter your email address" key="input2">
+        </template>
+      </div>
+      var vm = new Vue({
+        el : '#bbb',
+        data : {
+          loginType : 'username',
+        },
+      });
+      setTimeout(function(){
+        vm.loginType = '1'
+      },5000);
+      初始在表单输入的值,在5s后消失[input元素被重新渲染了]
+      当两个'key'值相同时,相当与没有'key'时的默认情况 
+      但<label> 元素仍然会被高效地复用,因为它们没有添加 key 属性。
+  is="arg"   指定组件 
+  ref="str"  给元素或子组件注册引用信息 
+    引用信息将会注册在父组件的 $refs 对象上。
+    如果在普通的 DOM 元素上使用,引用指向的就是 DOM 元素；
+    如果用在子组件上,引用就指向组件实例：
+    Example: 
+    <p ref="p">hello</p>    //  vm.$refs.p 为DOM节点 
+    <cpt-a ref="child"></cpt-a>  // vm.$refs.child 为Vue实例 
+  slot="str" 
 'Transition'过渡效果 
   会产生过渡效果的条件: 
     条件渲染 [使用 v-if]

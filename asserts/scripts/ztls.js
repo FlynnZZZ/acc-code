@@ -366,14 +366,18 @@ window.ztls = { // 工具函数
     }
     return $.when.apply(null,arr);
   }
-  ,loadCpts: function(args){ // 异步子组件加载  
-    // 加载完HTML后再实例化Vue实例  
-    // 或 先使用v-if="false",当加载HTML后 v-if='true' 执行渲染 
-    // 当有一个子组件被渲染其他未被隐藏的子组件都会被渲染出来 
+  ,loadCpts: function(args){ // 子组件加载  
     // var args = [
     //   './c-test.html',
     //   './c-test1.html',
     // ]
+    
+    // 同步加载: 加载完HTML后再实例化Vue实例  
+    // 异步加载:
+    // 先使用v-if="false",当加载HTML后 v-if='true' 执行渲染 
+    // 当有一个子组件被渲染其他未被隐藏的子组件都会被渲染出来 
+    
+    // 兼容IE浏览器 添加 template{ display: none; } 
     var head = $('head');
     var body = $('body');
     var arr = [];
@@ -403,6 +407,8 @@ window.ztls = { // 工具函数
       )
     }
     return $.when.apply(null,arr);
+    // 待决解问题: 
+    // 1 样式作用域
   }
   // 初始子组件加载  在Vue实例的beforeMonted之前执行即可 // 相当于 loadCpts+自动触发渲染  
   // var args = [ '#body', [

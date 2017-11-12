@@ -1580,7 +1580,7 @@ TextTrackList
   .onremovetrack 
   .getTrackById() 
 Image,img元素 
-  PS: 需将图片元素插入到DOM中才会加载图片资源  
+  PS: 不用插入到DOM中即可加载图片资源  
   Relate: Image.prototype===HTMLImageElement.prototype  
   Instance: 
     img = new Image();   创建图像DOM对象  
@@ -1598,11 +1598,11 @@ Option,option元素
         elem.options.remove(idx); // 根据下标删除选项option
         elem.options[idx].text;
 Audio,audio元素 
-  PS: 与Image相似,但Audio不用插入到文档中,即可加载音频资源 
   Relate: Audio.prototype===HTMLAudioElement.prototype 
   Instance: 
     Example: 
     var audio = new Audio("./sound.mp3");
+      不用插入到文档中,即可加载音频资源 
     audio.addEventListener("canplaythrough",function(e){
     this.play();
   })
@@ -2546,5 +2546,7 @@ XML相关
     // setTimeout(function(){
     //   $('#test1').focus();
     // },10000);
+  控制网页http请求,如<script>的src需指定域名才可加载 
+    案例: 使用百度收藏 收藏知乎的网页失败 
 
 

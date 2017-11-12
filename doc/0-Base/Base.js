@@ -183,7 +183,7 @@ HTTP、HTTPS'Hypertext Transfer Protocol'超文本传送协议
         User-Agent:      // 浏览器相关信息 
         'Accept: */*'  // 客户端能够处理的内容类型及相对优先级 ?  
         Origin: http:\/\/yihuo.lcltst.com  // 
-        Content-Type:  // 请求体类型,GET无,POST存在  
+        Content-Type:  // 请求体类型,GET无 
           Content-Type: application/x-www-form-urlencoded; charset=UTF-8
         Referer:       // 当前url,表明当前的位置 
           该英文的正确拼法为referrer 
@@ -204,7 +204,8 @@ HTTP、HTTPS'Hypertext Transfer Protocol'超文本传送协议
         If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
       // 空行 
       key1: val1                            // 可选,请求体 
-        // 包含客户提交的查询字符串信息,表单信息等  
+        包含客户提交的查询字符串信息,表单信息等  
+        GET请求无请求体,信息放在URL中 
     响应报文 
       <Protocol>/<version> StatusCode  StatusText // 响应行 
       key1: val1                                  // 可选,响应头 

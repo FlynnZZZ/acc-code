@@ -13,7 +13,7 @@ jQuery: 快速简洁的JS库
       if ($("#aoo")) { } 不可用来做为节点是否存在的判断,
       可使用$("#aoo").length 或 $("#aoo")[0] 来判断
   jQuery 配置 
-    jQuery.noConflict()   移交$的控制权
+    jQuery.noConflict()   指定jQuery代理
       var jq = jQuery.noConflict(); 自定义快捷方式为'jq'
     jQuery(function(jq){
       // 此作用域中,jq 等价于 jQuery
@@ -161,12 +161,15 @@ DOM操作
     通过Jelem获取 
       $('selector',Jelem)  在Jelem中查找'selector'
       ★自身条件筛选 
-      Jelem.first()   选择第一个 
+      Jelem.first()   jEl,jEl的第一个  
       Jelem.eq(index) 下标选取 
         index为整数,指示元素的位置[从0开始]
         若是负数,则从集合中的最后一个元素往回计数。
       Jelem.not('selector'/Jelem) 非筛选 
-        Jelem.not(function(index){}); 用于检测集合中每个元素的函数 
+      Jelem.not(function(idx){  // jEl,用于检测集合中每个元素的函数 
+        $(this) jEl集中的当前jEl  
+        return bol; // 是否排除当前jEl  
+      }); 
       Jelem.has('selector');   包含筛选 
       Jelem.filter('selector');   相等筛选  
       ★层级关系筛选 
@@ -241,14 +244,6 @@ DOM操作
       Jelem.after('htmlCode'/Jelem)      外部尾部插入
       Jelem.insertAfter("selector"/Jelem) 被插入到外部尾部 [与after相反]
         将元素/内容content插入到元素外部尾部  
-      Jelem.html(str/foo); 设置/获取元素内容
-        无参数:以字符串形式返回元素内容,包括HTML标签
-        有参数:参数为字符串,将元素中内容替换为字符串,会将HTML标记转换为HTML元素
-        当 Jelem 包含多个 elem时,则默认将其获取的每个元素的字符串合并为一个字符串.
-        和JS中的.innerHTML 相似
-      Jelem.text(str/foo); 设置/获取元素文本
-        无参数:获取元素的内容文本
-        有参数:设置元素内容文本
       Jelem.wrap("HTML代码"/Jelem)          每个元素外包裹元素
       Jelem.wrapAll("HTML代码"/Jelem)       所有元素整体外包裹元素
       Jelem.unwrap("HTML代码"/Jelem)        元素外包裹的元素去除[?]
@@ -257,6 +252,17 @@ DOM操作
           $('.aoo').unwrap('a');
           结果为: <div class="aoo"> 123123 </div>
       Jelem.wrapInner("HTML代码"/Jelem)     将每个元素的内容包裹
+      Jelem1.replaceWith("HTML代码"/Jelem)  元素1代替为元素2
+      Jelem1.replaceAll("selector"/Jelem2)  元素2代替为元素1 [与replaceWith相反]
+        $("HTML代码")/Jelem1.replaceAll("selector"/Jelem2); 
+      Jelem.html(str/foo); 设置/获取元素内容
+        无参数:以字符串形式返回元素内容,包括HTML标签
+        有参数:参数为字符串,将元素中内容替换为字符串,会将HTML标记转换为HTML元素
+        当 Jelem 包含多个 elem时,则默认将其获取的每个元素的字符串合并为一个字符串.
+        和JS中的.innerHTML 相似
+      Jelem.text(str/foo); 设置/获取元素文本
+        无参数:获取元素的内容文本
+        有参数:设置元素内容文本
       Jelem.remove()   删除元素
         删除该元素和其子元素及以下的所有内容(包括自身标签)
         所有与元素相关的数据也会被删除(event handlers、internally cached data)
@@ -269,9 +275,6 @@ DOM操作
       Jelem.removeAttr('属性名')  删除属性
         Example:
           Jelem.removeAttr('class'); 
-      Jelem1.replaceWith("HTML代码"/Jelem)  元素1代替为元素2
-      Jelem1.replaceAll("selector"/Jelem2)  元素2代替为元素1 [与replaceWith相反]
-        $("HTML代码")/Jelem1.replaceAll("selector"/Jelem2); 
       Jelem.css() 设置/获取元素的style样式 [设置为行内样式] [获取为计算后的属性]
         Example: 
           Jelem.css('height'); //获取元素的高度
@@ -618,59 +621,49 @@ DOM操作
     bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
 工具方法 
   ◆遍历相关 
-  $.each(obj,f(key,val))  对象遍历
-    当obj为数组时,key表示下标
-    var obj = { 
-      one : 1, 
-      two : 2, 
-      three : 3, 
-      four : 4
-    };
-    $.each(obj, function(key, val) { 
-      console.log(key, val); 
-    });
-    // one,1,two,2,three,four,4
-  $.map(arr, foo)     对每个数组中的元素调用函数得到返回值组成新的数组
-    arr    用于遍历的数组
-    foo    遍历执行的函数,传入 value值和下标index;
-    retn   一个新数组
+  $.each(obj,function(key,val){ // 对象遍历 
+    key  当obj为数组时,key表示下标 
+  })  
+  $.map(arr,function(val,idx){  // arr,遍历得到返回值组成新的数组 
+    return xxx;
     Example:
       var foo =[1,2,3,4]
       var a =$.map(foo,function(v){
         return v*v
       })
       a;    //[1, 4, 9, 16]
-  $.grep(arr, foo)    对数组中每个元素进行筛选,返回符合条件的成员 
-    arr  用于筛选的数组
-    foo  筛选函数,依次传入arr的 val,indx 
+  })     
+  $.grep(arr,function(val,idx){ // arr,遍历筛选,返回符合条件的成员组成的数组 
+    return bol; // 是否包含该元素 
     Example:
       var foo =[1,2,3,4,5];
       var arr =$.grep(foo,function(val,indx){
         return val % 2 == 0;
       })
       arr;      //[2, 4]
+  })    
   ◆数组相关 
-  var bol = $.isArray(arr)         判断是否为数组
-  var idx = $.inArray(item, array) 元素在数组的位置,不存在返回-1 
-  $.makeArray()          将对象转化为数组 
-  $.merge(arr1,arr2)   合并两个数组 
-  $.unique(arr)     删除数组中的重复元素[不能用于普通数组]
+  $.isArray(val)  // bol,是否为数组
+  $.inArray(item,arr)  // num,元素在数组的位置,不存在返回-1 
+  $.merge(arr1,arr2)   // arr,合并两个数组 
+  $.unique(arr)    // arr,去除后续重复元素
+  $.makeArray()        将对象转化为数组 
   ◆字符串相关 
-  $.trim(str)  去除字符串中开始和结尾的空格[不能删除字符串中间的空格]
+  $.trim(str)  // str,去除字符串首尾空格[不能删除字符串中间的空格] 
     Example:
       $.trim('a bc '); // "a bc"
   $.stringify({obj}) 序列化为JSON
   $.parseJSON(jsonStr) 解析JSON字符串 
   $.parseXML(str) 解析一字符串到一个XML文件 
-  ◆其他检测相关
-  $.type(obj)    判断JS对象的类型[函数对象、日期对象、数组对象、正则对象等] 
-  var bol = $.isNumberic(val)   判断是否为数值 
-  var bol = $.isFunction(obj)   判断是否为函数 
-  var bol = $.isEmptyObject(obj)   检测对象是否为空 
-  var bol = $.isPlainObject(obj)   检测对象是否为原始对象 
+  ◆其他检测相关 
+  $.type(val) // str,判断JS对象的类型[函数对象、日期对象、数组对象、正则对象等] 
+  $.isNumberic(val)   // bol,是否为数值  
+  $.isFunction(obj)   // bol,是否为函数 
+  $.isEmptyObject(obj)  // bol,对象是否为空 
+  $.isPlainObject(obj)  // bol,对象是否为原始对象 
     检测对象是否为通过{}或new Object()关键字创建的原始对象
-  var bol = $.isWindow(obj)     是否为window对象 
-  var bol = $.contains(elem1,elem2) 检测elem1中是否包含elem2 
+  $.isWindow(obj)     // bol,是否为window对象 
+  $.contains(elem1,elem2) bol,检测elem1中是否包含elem2 
     elem1  一个DOM对象节点元素,用于包含其他节点的容器
     elem2  另一个DOM对象节点元素,用于被其他容器所包含 
   ◆jQuery扩展 

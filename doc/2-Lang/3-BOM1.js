@@ -1525,7 +1525,7 @@ WebKit相关
   Atomics 
   WebAssembly 
 ◆对象 
-console,控制台对象,用于调试的对象  
+console,用于调试的控制台对象  
   PS: 由IE的JScript引擎提供的调试工具,后来逐渐成为浏览器的事实标准 
     NodeJS沿用了这个标准,提供与习惯行为一致的console对象,
     用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
@@ -2041,8 +2041,8 @@ AJAX'Asynchronous JavaScript and XML'浏览器提供的使用HTTP协议收发数
     仅支持文本数据传输,无法读取和上传二进制文件数据;
     传输数据时,没有进度信息提示, 只能提示是否完成;
     没有超时机制,不方便掌控ajax请求节奏;
-XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法实现各种功能  
-  PS: IE5最先引入XMLHttpRequest对象,通过MSXML库中的一个ActiveX对象实现 
+XMLHttpRequest,AJAX实现的核心 
+  PS: IE5最先引入该对象,通过MSXML库中的一个ActiveX对象实现 
     请求发送到服务器端,在收到响应后,响应的数据会自动填充xhr对象的属性,
     即调用xhr的属性可以得到响应的信息;
   Extend: XMLHttpRequestEventTarget 
@@ -2050,18 +2050,16 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
   Instance:
     xhr = new XMLHttpRequest()  创建xhr对象 
   Proto: 
-    .open(method,url[,async])  // 建立请求,以备后续数据发送 
+    .open(method,url[,bol])  // 建立请求,以备后续数据发送 
       PS: 若对使用过open()方法的请求,再次使用该方法,等同于调用.abort() 
-      method      GET、POST等,发送请求的类型 
-      url         请求的地址(即向哪个地方发送请求,向谁请求)
-        可使用相对地址或绝对地址.
-      async       可选,布尔值,默认为true异步
-        异步通信方式(true):客户端就不等待服务器的响应,而可以继续执行后面的操作
-        同步方式(false):客户端就要等到服务器返回消息后才去执行其他操作
-      userName    可选,用户名,默认为空字符串
-      passWord    可选,密码,默认为空字符串
-    .setRequestHeader(key,val) // 设定请求头信息 
-      PS: 需在'open'后,'send'前使用; 
+      method  发送请求的类型,如GET、POST等, 
+      url     请求的地址 
+        可使用相对地址或绝对地址 
+      bol     可选,是否异步,默认:true 
+      userName    str,可选,用户名,默认空字符串
+      passWord    str,可选,密码,默认空字符串
+    .setRequestHeader(key,val) // 设定请求头 
+      PS: 'open'后'send'前使用; 
         若多次设置同一字段,则最终发送每次设置值的合并值  
       'Content-Type'   发送的数据格式,编码类型  
         PS: 请求头中Content-Type决定POST发送数据的编码类型[GET没有请求体],
@@ -2141,8 +2139,9 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
         IE 8 和 IE 9 的这个属性属于 XDomainRequest 对象,
         而 Chrome 和 Safari 还不支持
     .send([data])     // 发送请求数据 
-      data 发送的数据,类型可为'ArrayBufferView''Blob''Document''String''FormData' 
-        若为空,表示HTTP请求只包含头信息,而无请求体,如GET请求
+      data 发送的数据
+        类型可为obj,str,'FormData''ArrayBufferView''Blob''Document'等 
+        若为空,表示HTTP请求只包含头信息,而无请求体,如GET请求 
           可写作 xhr.send(null) 或 xhr.send()
         不为空,表示除了头信息,也包含请求体,如POST请求 
       Example: 
@@ -2212,11 +2211,11 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       若请求已经被发送,则立刻中止请求.
     .readyState  // num,只读,响应状态码 
       PS: 在通信过程中,每当发生状态变化的时候,readyState属性的值就会发生改变
-      0   未初始化  尚未调用open方法建立连接 
-      1   启动      已调用open建立连接,但未发送数据 
-      2   发送      接收到响应头
-      3   接收      接收到响应体 
-      4   完成      已接收到全部响应数据,或本次接收已失败 
+      0   未初始化  还未调用 xhr.open() 
+      1   启动      已调用 xhr.open(),但未发送数据 
+      2   发送      浏览器接收到响应头
+      3   接收      浏览器接收到响应体 
+      4   完成      浏览器已接收到全部响应数据,或本次接收已失败 
       Remarks:
         xhr.onreadystatechange =function(e){}, 此时 e.target 即为 xhr
     .status      // num,只读,HTTP状态码 
@@ -2231,9 +2230,7 @@ XMLHttpRequest,AJAX技术实现的核心,通过调用该对象的属性和方法
       500, Internal Server Error,服务器发生错误
       ...
     .statusText  // str,只读,响应状态的文本描述,比如'OK' 
-    .onreadystatechange  // readyState值改变时触发事件 
-      PS: 异步调用时,触发readystatechange事件,然后检测 readyState 属性检测状态 
-        只要readyState属性的值由一个值变成另一个值就会触发一次readystatechange事件
+    .onreadystatechange  // xhr.readyState 值改变时触发事件 
       Example: 
       xhr.onreadystatechange = function(){
         if(xhr.readyState ===4 && xhr.status === 200) {

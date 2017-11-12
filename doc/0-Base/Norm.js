@@ -53,10 +53,6 @@
   Self:   自己相关 
   More:   扩展 
   Expand: 扩展 
-  ★提示片段定义
-  '文件标识 querySelector  说明':
-    'prefix': 'querySelector-所属类'
-    'body': 'querySelector("$1")'
 状态表示  
   参数表示 
     '[]'包裹起来的表示可选参数 

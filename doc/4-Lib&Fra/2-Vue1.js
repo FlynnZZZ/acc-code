@@ -524,94 +524,6 @@ Question:
     通过 localStorage sessionStorage [Self]
     Vue的Webpack模版 
 --------------------------------------------------------------------------------
-'vue-resource'HTTP请求封装插件 
-  PS: 通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 
-引入安装   
-  通过<script>引入 
-    在vue后引入后引入vue-resource 
-    默认安装了 
-  通过npm下载引入 
-    $ npm i --S vue-resource  // 下载并写入依赖 
-    // main.js 中引入、安装   
-    import VueResource from 'vue-resource' // 引入 vue-resource 
-    Vue.use(VueResource)  // 安装 vue-resource   
-API 
-  ◆组件注入属性/方法 vm.$http 
-    PS: 回调函数中的 this 仍指向Vue实例 
-  ★http请求方法 
-    请求方法返回值为 Promise 对象,可使用以下方法 
-    .then(function(data1 ){ // 成功的回调 
-      // data1,response对象,进行了Vue封装 
-    }
-    ,function(data2 ){ // 失败的回调 
-      // data2,response对象,进行了Vue封装 
-    })  
-    .catch(function(data){
-      // 
-    })
-  vm.$http.get('url',{    // GET请求  
-    // 可选,请求的参数 
-  })
-  vm.$http.post('url',{   // POST请求
-    // 可选参数
-  })
-  vm.$http.delete(url[,options]) 
-  vm.$http.put(url[,body][,options]) 
-  ...
-  vm.$http.jsonp('url',{  // JSONP请求  
-    // 可选参数 
-  }) 
-  vm.$http({  // 通用写法 
-    url: 'url'
-    ,method: 'GET'
-    ,data: { 
-      key1: val1 
-      ,key2: val2
-    }
-    ,headers: {"X-Requested-With": "XMLHttpRequest"}
-    ,emulateJSON: true
-  })
-  ★其他方法 
-  vm.$http.head(url, [options]) 
-  vm.$http.patch(url, [body], [options]) 
-  ★response响应对象
-    .ok     bol,响应的HTTP状态码在 200-299 该属性为 true,其余为 false
-    .status num,响应的HTTP状态码 
-    .statusText str,响应的状态文本
-    .headers  obj,响应头
-    .body       接口响应的数据 
-    .bodyText   未经转义的响应数据 
-    .headers    相关的头信息 
-    .ok         bol,是否请求成功 
-    .status     状态码 
-    .statusText 状态描述 
-    .url        请求的地址  
-    .text() str,以字符串形式返回response body
-    .json() obj,以JSON对象形式返回response body
-    .blob() Blob,以二进制形式返回response body
-  ◆Vue.http.xx 
-    PS: 和 vm.$http 等价 
-    Vue.http.options.xhr = { withCredentials: true } ? 
-    Vue.http.options.emulateJSON = true 
-    ★Vue.http.options 对象 
-    .url     str,请求的URL 
-    .method  str,请求的HTTP方法,如'GET','POST'或其他HTTP方法 
-    .body    obj,FormData string request body 
-    .params  obj,请求的URL参数对象 
-    .headers obj,request header 
-    .timeout num,请求超时时间,单位ms[0 表示无超时时间] 
-    .before    foo,请求发送前的处理函数,类似于jQuery的beforeSend函数
-    .progress  foo,ProgressEvent回调处理函数
-    .credentials bol,表示跨域请求时是否需要使用凭证
-    .emulateHTTP bol,发送PUT,PATCH,DELETE请求时以HTTP POST的方式发送 
-      若Web服务器无法处理PUT,PATCH和DELETE这种REST风格的请求,可启用enulateHTTP选项。
-      启用该选项后,请求会以普通的POST方法发出,
-      并且HTTP头信息的X-HTTP-Method-Override属性会设置为实际的HTTP方法。
-      Vue.http.options.emulateHTTP = true;
-    .emulateJSON bok,将request body以application/x-www-form-urlencoded content type发送 
-      如果Web服务器无法处理编码为application/json的请求,可启用emulateJSON选项。
-      启用后,请求会以'application/x-www-form-urlencoded'作为MIME type,就像普通的HTML表单一样 
-      Vue.http.options.emulateJSON = true;
 'axios'基于Promise的HTTP库,可用在浏览器和NodeJS中 
   PS: 类似'vue-resource'的插件,'vue2.0+'不再对vue-resource更新,而推荐使用axios 
     基于 Promise 的 HTTP 请求客户端,可同时在浏览器和 NodeJS 中使用 
@@ -1368,6 +1280,95 @@ API
   })
   // store.state.aoo  moduleA中的state对象 
   // store.state.boo  moduleB中的state对象 
+--------------------------------------------------------------------------------
+'vue-resource'HTTP请求封装插件 
+  PS: 通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 
+引入安装   
+  通过<script>引入 
+    在vue后引入后引入vue-resource 
+    默认安装了 
+  通过npm下载引入 
+    $ npm i --S vue-resource  // 下载并写入依赖 
+    // main.js 中引入、安装   
+    import VueResource from 'vue-resource' // 引入 vue-resource 
+    Vue.use(VueResource)  // 安装 vue-resource   
+API 
+  ◆组件注入属性/方法 vm.$http 
+    PS: 回调函数中的 this 仍指向Vue实例 
+  ★http请求方法 
+    请求方法返回值为 Promise 对象,可使用以下方法 
+    .then(function(data1 ){ // 成功的回调 
+      // data1,response对象,进行了Vue封装 
+    }
+    ,function(data2 ){ // 失败的回调 
+      // data2,response对象,进行了Vue封装 
+    })  
+    .catch(function(data){
+      // 
+    })
+  vm.$http.get('url',{    // GET请求  
+    // 可选,请求的参数 
+  })
+  vm.$http.post('url',{   // POST请求
+    // 可选参数
+  })
+  vm.$http.delete(url[,options]) 
+  vm.$http.put(url[,body][,options]) 
+  ...
+  vm.$http.jsonp('url',{  // JSONP请求  
+    // 可选参数 
+  }) 
+  vm.$http({  // 通用写法 
+    url: 'url'
+    ,method: 'GET'
+    ,data: { 
+      key1: val1 
+      ,key2: val2
+    }
+    ,headers: {"X-Requested-With": "XMLHttpRequest"}
+    ,emulateJSON: true
+  })
+  ★其他方法 
+  vm.$http.head(url, [options]) 
+  vm.$http.patch(url, [body], [options]) 
+  ★response响应对象
+    .ok     bol,响应的HTTP状态码在 200-299 该属性为 true,其余为 false
+    .status num,响应的HTTP状态码 
+    .statusText str,响应的状态文本
+    .headers  obj,响应头
+    .body       接口响应的数据 
+    .bodyText   未经转义的响应数据 
+    .headers    相关的头信息 
+    .ok         bol,是否请求成功 
+    .status     状态码 
+    .statusText 状态描述 
+    .url        请求的地址  
+    .text() str,以字符串形式返回response body
+    .json() obj,以JSON对象形式返回response body
+    .blob() Blob,以二进制形式返回response body
+  ◆Vue.http.xx 
+    PS: 和 vm.$http 等价 
+    Vue.http.options.xhr = { withCredentials: true } ? 
+    Vue.http.options.emulateJSON = true 
+    ★Vue.http.options 对象 
+    .url     str,请求的URL 
+    .method  str,请求的HTTP方法,如'GET','POST'或其他HTTP方法 
+    .body    obj,FormData string request body 
+    .params  obj,请求的URL参数对象 
+    .headers obj,request header 
+    .timeout num,请求超时时间,单位ms[0 表示无超时时间] 
+    .before    foo,请求发送前的处理函数,类似于jQuery的beforeSend函数
+    .progress  foo,ProgressEvent回调处理函数
+    .credentials bol,表示跨域请求时是否需要使用凭证
+    .emulateHTTP bol,发送PUT,PATCH,DELETE请求时以HTTP POST的方式发送 
+      若Web服务器无法处理PUT,PATCH和DELETE这种REST风格的请求,可启用enulateHTTP选项。
+      启用该选项后,请求会以普通的POST方法发出,
+      并且HTTP头信息的X-HTTP-Method-Override属性会设置为实际的HTTP方法。
+      Vue.http.options.emulateHTTP = true;
+    .emulateJSON bok,将request body以application/x-www-form-urlencoded content type发送 
+      如果Web服务器无法处理编码为application/json的请求,可启用emulateJSON选项。
+      启用后,请求会以'application/x-www-form-urlencoded'作为MIME type,就像普通的HTML表单一样 
+      Vue.http.options.emulateJSON = true;
 --------------------------------------------------------------------------------
 'vue-validator'表单验证 
 'vue-touch'移动端 

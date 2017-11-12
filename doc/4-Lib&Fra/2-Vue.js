@@ -1,4 +1,4 @@
-VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架 [IE9+] 
+VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架[IE9+] 
   介绍 
     压缩版无错误提示和警告;
     API设计受AngularJS、KnockoutJS、RactiveJS和RivetsJS影响;
@@ -744,6 +744,7 @@ v-pre    跳过该元素及其子元素的编译
       当两个'key'值相同时,相当与没有'key'时的默认情况 
       但<label> 元素仍然会被高效地复用,因为它们没有添加 key 属性。
   is="arg"   指定组件 
+  slot="str" 
   ref="str"  给元素或子组件注册引用信息 
     引用信息将会注册在父组件的 $refs 对象上。
     如果在普通的 DOM 元素上使用,引用指向的就是 DOM 元素；
@@ -751,7 +752,6 @@ v-pre    跳过该元素及其子元素的编译
     Example: 
     <p ref="p">hello</p>    //  vm.$refs.p 为DOM节点 
     <cpt-a ref="child"></cpt-a>  // vm.$refs.child 为Vue实例 
-  slot="str" 
 'Transition'过渡效果 
   会产生过渡效果的条件: 
     条件渲染 [使用 v-if]
@@ -1656,7 +1656,7 @@ vm.xxx.实例属性/方法/事件
   inserted: function(el,binding,vnode){ // 被绑定元素插入父节点时调用
     PS: 父节点存在即可调用,不必存在于'document'中 
   } 
-  update: function(el,binding,vnode,oldVnode){ // 所在组件的VNode更新时调用 
+  update: function(el,binding,vnode,oldVnode){ // 所在组件的vnode更新时调用 
     指令的值可能发生了改变也可能没有,
     但可通过比较更新前后的值绑定值'binds.value'和'binds.oldValue'来忽略不必要的模板更新 
     Example:  
@@ -1691,7 +1691,7 @@ vm.xxx.实例属性/方法/事件
         },
       })
   }
-  // 所在组件的VNode及其孩子的VNode全部更新时调用  
+  // 所在组件的VNode及其后代VNode全部更新时调用  
   componentUpdated: function(el,binding,vnode,oldVnode){ 
     // 
   }
@@ -1844,7 +1844,7 @@ vm.xxx.实例属性/方法/事件
         })
         三个组件共享了同一个 data ,因此 counter 会影响所有组件 
     } 
-    name: 'aoo',       // 命名组件 [Self] 
+    name: 'aoo',       // 命名组件,用于递归调用 
   })  
   Vue.component("c-name",function(rs,rj){  // 异步全局组件 
     rs({}) // 可在适当的时候进行 
@@ -2215,23 +2215,22 @@ vm.xxx.实例属性/方法/事件
       因为在路由切换前就会提前加载所需要的异步组件。
       如果要在路由组件中使用上述写法,需要使用 vue-router '2.4.0+'
   'Recursive Components'递归组件: 当有'name'选项时,组件在其模板内可递归调用自己 
-    使用 Vue.component 全局注册组件,其全局的ID使用其name选项值,被自动设置;
+    使用 Vue.component() 全局注册组件,其全局的ID使用其name选项值,被自动设置;
     若不谨慎,递归组件可能导致死循环 
       name: 'stack-overflow',
       template: '<div><stack-overflow></stack-overflow></div>'
       导致错误 “max stack size exceeded” ,
       要确保递归调用有终止条件[如递归调用时使用 v-if 最终返回 false] 
   'Circular References Between Components'组件间循环引用: 两个组件互为对方的父、子节点 
-    使用'Vue.component'注册为全局组件时,框架会自动解决依赖的矛盾 
+    使用 Vue.component() 注册为全局组件时,框架会自动解决依赖的矛盾 
     使用'Webpack'或'Browserify'等模块化管理工具,requiring/importing时,会报错:
       'Failed to mount component: template or render function not defined.'
       决解办法: 在'beforeCreate'钩子中解决依赖问题 
       beforeCreate: function () {
-        this.$options.components.aoo = require('./boo.vue')..default
+        this.$options.components.aoo = require('./boo.vue').default
       }
-'.vue'单文件组件 
+'.vue'单文件组件,一个'.vue'文件就是一个组件 
   PS: 使用一个'.vue'格式文件将'HTML''CSS''JS'组装起来,方便开发,也方便复用和维护;
-    一个'.vue'文件就是一个组件;
     组件的通信方式同样使用'props'和'event' 
     单文件组件的写法需要编译工具才能最终在浏览器端工作;
   Example: 
@@ -2270,10 +2269,10 @@ vm.xxx.实例属性/方法/事件
       //   }
       // }
     </script>
-    <style>
+    <style scoped>
+      // scoped 可选,保证组件内的CSS只对该组件起作用
       ...
     </style>
-  <style scoped></style>  保证组件内的CSS只对该组件起作用 
   lang="" 使用预处理器 
     在'.vue'文件中使用其他预处理器[需安装对应的loader] 
     当使用 lang="less" 即使用Less,需安装如下依赖

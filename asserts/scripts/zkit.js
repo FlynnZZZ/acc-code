@@ -1,6 +1,7 @@
 !function(){ // 以下方法基于jQuery
-window.ztls = { // 工具函数 
-  getLocalImg: function(jInput,foo){ // 通过 input type=file 获取到本地图片的 base64
+window.zkit = { // 工具函数 
+  getLocalImg: function(jInput,foo){ 
+    // 通过 input type=file 获取到本地图片的 base64
     // var defe = new $.Deferred();
     jInput.on("change",function(e){
       var img = e.target.files[0];
@@ -18,7 +19,8 @@ window.ztls = { // 工具函数
       }
     })
   }
-  ,dealImg: function (imgSrc,param,resolve){ // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
+  ,dealImg: function (imgSrc,param,resolve){ 
+    // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
     // var defe = new $.Deferred();
     // param = {
     //   width : num,
@@ -61,7 +63,8 @@ window.ztls = { // 工具函数
       resolve(dealedImgSrc);
     }
   }
-  ,strVerify: function (currentVal,standardVal,minLen,maxLen){ // 字符验证 
+  ,strVerify: function (currentVal,standardVal,minLen,maxLen){ 
+    // 字符验证 
     var bool1 = true ,
     bool2 = true ,
     bool3 = true ;
@@ -77,13 +80,14 @@ window.ztls = { // 工具函数
     // console.log(bool1,bool2,bool3);
     return  bool1 && bool2 && bool3 ;
   }
-  ,localObj: function(objName,key,val){ // localstorage 读写,本地存储 
+  ,localObj: function(objName,key,val){ 
+    // localstorage 读写,本地存储 
     if (localStorage[objName] === undefined) { // 不存在则初始化为一对象 
       localStorage[objName] = JSON.stringify({});
     }
     else if (typeof JSON.parse(localStorage[objName]) != 'object') {
       localStorage[objName] = JSON.stringify({});
-      console.log('localStorage[objName] isnot object --ztls.localObj');
+      console.log('localStorage[objName] isnot object --zkit.localObj');
     }
     var obj = JSON.parse(localStorage[objName]);
     if (val) {
@@ -94,7 +98,8 @@ window.ztls = { // 工具函数
       return obj[key];
     }
   }
-  ,put: function (ename,data,elem){ // 信息传递的推送和获取[先推送] 
+  ,put: function (ename,data,elem){ 
+    // 信息传递的推送和获取[先推送] 
     var el = elem || $('body');
     el.data(ename,data);
     el.trigger(ename,[data]);
@@ -117,7 +122,8 @@ window.ztls = { // 工具函数
       })
     }
   }
-  ,popUp: function(param) { // 弹窗效果 
+  ,popUp: function(param) { 
+    // 弹窗效果 
     // param = {
     //   title : '标题', // 可选 
     //   txt : '提示文字', // 可选 
@@ -230,7 +236,8 @@ window.ztls = { // 工具函数
       param.cancelClick();
     })
   }
-  ,tipPop: function(param){ // 提示弹窗[会自动消失]
+  ,tipPop: function(param){ 
+    // 提示弹窗[会自动消失]
     // param = {
     //   title : '使用的是默认标题', // 该项可选,默认为''
     //   txt : '使用的是默认提示文字', // 默认提示文字
@@ -311,7 +318,8 @@ window.ztls = { // 工具函数
       },time);
     }
   }
-  ,queryObj: function(){ // 查询字符串 对象化 
+  ,queryObj: function(){ 
+    // 查询字符串 对象化 
     var resultObj = {};
     var arr1 = location.search.slice(1).split("&");
     arr1.forEach(function(val,indx,arr){
@@ -320,13 +328,14 @@ window.ztls = { // 工具函数
     } );
     return resultObj;
   }
-  ,setQuery: function(obj){ // 设置查询字符串  依赖'queryObj'
+  ,setQuery: function(obj){ 
+    // 设置查询字符串  依赖'queryObj'
     // {
     //   's1' : 1,
     //   's3' : 3,
     // }
     var resStr = '?';
-    var o = ztls.queryObj();
+    var o = zkit.queryObj();
     for(var key in obj){
       o[key] = obj[key];
     };
@@ -335,7 +344,8 @@ window.ztls = { // 工具函数
     };
     return location.pathname+resStr.slice(0,-1);
   }
-  ,loadVms: function(params){ // 初始vm实例加载 
+  ,loadVms: function(params){ 
+    // 初始vm实例加载 
     // var params = [
     //   [ url,pos ],
     //   [ url,pos ],
@@ -366,7 +376,8 @@ window.ztls = { // 工具函数
     }
     return $.when.apply(null,arr);
   }
-  ,loadCpts: function(args){ // 子组件加载  
+  ,loadCpts: function(args){ 
+    // 子组件加载  
     // var args = [
     //   './c-test.html',
     //   './c-test1.html',
@@ -452,18 +463,22 @@ window.ztls = { // 工具函数
   //   })
   //   return $.when.apply(null,arr);
   // },
-  ,isIE: function(num){ // 检测是否为IE  num可选 7、8、9 
+  ,isIE: function(num){ 
+    // 检测是否为IE  num可选 7、8、9 
+    // PS: 网络收集 
     var b = document.createElement('b');
     b.innerHTML = '<!--[if IE ' + num + ']><i></i><![endif]-->';
     return b.getElementsByTagName('i').length === 1;
   }
-  ,formVerify: function(arg){ // 表单验证   依赖'tipPop' 
+  ,formVerify: function(arg){ 
+    // bol,是否通过验证   
+    // 依赖'tipPop' 
     // var arg = [
     //   [ '1771234560', /^1\d{10}$/, '手机号填写错误' ],
     // ]
     return arg.every(function(val,idx,arr){
       if (val[0] == undefined) {
-        ztls.tipPop({
+        zkit.tipPop({
           txt : val[2], 
           icon : 'fa-exclamation-circle redColor',
         })
@@ -471,7 +486,7 @@ window.ztls = { // 工具函数
       }
       var __bol = val[1].test(val[0])
       if (!__bol) {
-        ztls.tipPop({
+        zkit.tipPop({
           txt : val[2], 
           icon : 'fa-exclamation-circle redColor',
         })
@@ -479,7 +494,56 @@ window.ztls = { // 工具函数
       return __bol;
     });
   }
-  
+  ,getExplore: function () {
+    // str,浏览器类型和版本
+    // PS: 网络收集 
+    var sys = {},
+    ua = navigator.userAgent.toLowerCase(),
+    s;
+    (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
+    (s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1] :
+    (s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
+    (s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1] :
+    (s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1] :
+    (s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
+    (s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
+    // 根据关系进行判断
+    if (sys.ie) return ('IE: ' + sys.ie)
+    if (sys.edge) return ('EDGE: ' + sys.edge)
+    if (sys.firefox) return ('Firefox: ' + sys.firefox)
+    if (sys.chrome) return ('Chrome: ' + sys.chrome)
+    if (sys.opera) return ('Opera: ' + sys.opera)
+    if (sys.safari) return ('Safari: ' + sys.safari)
+    return 'Unkonwn'
+  }
+  ,getOS: function () {
+    // str,获取操作系统类型
+    // PS: 网络收集 
+    var userAgent = 'navigator' in window 
+    && 'userAgent' in navigator 
+    && navigator.userAgent.toLowerCase() || '';
+    var vendor = 'navigator' in window 
+    && 'vendor' in navigator 
+    && navigator.vendor.toLowerCase() || '';
+    var appVersion = 'navigator' in window 
+    && 'appVersion' in navigator 
+    && navigator.appVersion.toLowerCase() || '';
+    
+    if (/mac/i.test(appVersion)) return 'MacOSX'
+    if (/win/i.test(appVersion)) return 'windows'
+    if (/linux/i.test(appVersion)) return 'linux'
+    if (/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipod/i.test(userAgent)) 'ios'
+    if (/android/i.test(userAgent)) return 'android'
+    if (/win/i.test(appVersion) && /phone/i.test(userAgent)) return 'windowsPhone'
+  }
+  ,isSupportWebP: function () {
+    // bol,浏览器是否支持webP格式图片
+    // PS: 网络收集 
+    return !![].map &&
+    document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;
+    // [].map 用于判断是否 IE9+,以确保有 toDataURL 方法
+  }
+
 
   // 选用 ----------------------------------------------------------------------
   ,adrsSlct: function(pro,city,area,data){ // 地址选择
@@ -651,6 +715,6 @@ window.ztls = { // 工具函数
   
 }; 
 }();
-window.qObj = ztls.queryObj();
+window.qObj = zkit.queryObj();
 
 

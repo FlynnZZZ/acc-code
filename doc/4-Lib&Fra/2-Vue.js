@@ -467,11 +467,13 @@ v-bind:attrname="str/arr/obj"  属性绑定[简写':attrname']
         如果浏览器支持不带浏览器前缀的 flexbox,那么渲染结果会是 display: flex 
     arr  将多个'样式对象'应用到一个元素上 
     Vue会自动添加相应的前缀 
-v-bind="obj"  无参数时,可绑定到一对象 
+v-bind="obj"  无参数绑定到对象,使用对象的'key'作为参数  
   PS: 该模式下'class'和'style'绑定不支持数组和对象 
-  obj  一个包含"{attr:val}"键值对的对象 
+  obj   包含"{attr:val}"键值对的对象 
   Example: 
-  <div v-bind="{ id: someProp, 'other-attr': otherProp }"></div> 
+    <div v-bind="{ aoo: 11, boo: 22 }">abc</div> 
+    相当于: 
+    <div v-bind:aoo="11" v-bind:boo="22">abc</div> 
 v-on:ename="foo/expr" 事件绑定[简写'@ename'] [事件名不区分大小写] 
   PS: 当ViewModel被销毁时,所有事件处理器都会自动被删除,无须自己清理 
   foo    函数,事件触发时执行回调 
@@ -1129,13 +1131,13 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       propB: [String,Number], // arr,可为多种类型 
         // null 则表示任何类型都可以
       propC: {                // obj,详细配置 
-        default: 100,    // 默认值 
-        default: function () { // 数组／对象的默认值应当由一个工厂函数返回 
+        default: 100          // 原始类型默认值可直接定义  
+        default: function () { // 引用类型的默认值需由工厂函数返回 
           return { 
             message: 'hello' 
           };
-        },
-        type: String,  // 类型 
+        }
+        ,type: String,  // 类型 
           String
           Number
           Boolean
@@ -1144,10 +1146,10 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
           Array
           Symbol
           自定义构造器函数,使用 instanceof 检测 
-        validator: function (value) {  // 自定义验证函数
+        ,required: true,  // 是否必须 
+        ,validator: function (value) {  // 自定义验证函数
           return value > 10
-        },
-        required: true,  // 是否必须 
+        }
       }
     }
   propsData: {    // 传递props,主要用于测试 [只用于new创建的实例中]
@@ -1972,9 +1974,21 @@ vm.xxx.实例属性/方法/事件
         当父组件赋给属性的值,子组件内可获取到 
         当动态绑定属性时,子组件内也会实时响应 
       'props'单向数据流 
-        而在子组件内部改变prop,Vue会在控制台给出警告;
-        在js中对象和数组是引用类型,指向同一个内存空间,
-        若 prop 是一个对象或数组,在子组件内部改变它会影响父组件的状态;
+        PS: 而在子组件内部改变prop,Vue会在控制台给出警告; 
+          在js中对象和数组是引用类型,指向同一个内存空间,
+          若 prop 是一个对象或数组,在子组件内部改变它会影响父组件的状态;
+        定义一局部变量,用 prop 的值初始化 
+          props: ['parentData'],
+          data: function () {
+            return { aoo: this.parentData }
+          }
+        定义一计算属性,处理 prop 的值并返回 
+          props: ['parentData'],
+          computed: {
+            normalizedSize: function () {
+              return this.parentData.trim().toLowerCase()
+            }
+          }
     'events up'子组件向父组件通信 
       父组件中,子组件标签上绑定自定义事件并指定回调函数,  
       子组件内通过'$emit'触发该事件并传递数据,

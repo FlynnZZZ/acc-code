@@ -237,6 +237,7 @@ const,定义块级常量 [ES6]
   null      表示空指针  
     PS: 将来用于保存对象的变量,可初始化为 null 
     Example: 
+    console.log(null === null);
     console.log(null==undefined); // true ,undefined派生于null
     console.log(typeof null); // object
   基本包装类型: 基本类型的变体,一定条件下有对象的性质[如可调用方法、设置属性等] 
@@ -1027,9 +1028,8 @@ const,定义块级常量 [ES6]
       1==true;    //true
       1===true;   //false
       NaN==NaN;   //false
-    bol = obj instanceof Foo; 原型链继承检测 
-      PS: 检测构造函数的'prototype'属性是否存在于对象的原型链中 
-        检测的对象必须和构造函数处于同一个同一个iframe或window中,否则返回false
+    obj instanceof Foo; bol,对象是否继承至构造函数  
+      PS: 对象须和构造函数处于同一iframe或window中,否则返回false
       obj  用于检测的对象,若为基本类型则直接返回'false' 
         console.log(123.1 instanceof Number);  // false
         console.log("a" instanceof String);    // false
@@ -1595,14 +1595,15 @@ const,定义块级常量 [ES6]
         }
       }
   return   函数返回
-  throw val  异常触发,用于随之抛出自定义错误 
-    PS:在遇到throw操作时,代码会立即停止执行
-    val 类型无要求
-  try{}catch(err){} 异常捕获与处理[ECMA-262 第3版增加] 
-    PS:与Java中的 try-catch 语句完全相同,catch 和 finally 必须存在一个
-      IE7存在bug:除非有catch否则不执行finally
+  throw val  异常触发,用于抛出自定义错误 
+    PS: 在遇到throw操作时,代码会立即停止执行
+    val any,类型无要求
+  try{}catch(err){} 异常捕获与处理[ES3+] 
+    PS: 与Java中的 try-catch 完全相同
+      IE7存在bug: 除非有catch否则不执行finally
     try{
       // 可能会导致错误的代码
+      // catch 和 finally 必须存在一个 
     } 
     catch(error){
       // 发生错误时执行的代码
@@ -1990,6 +1991,10 @@ JS运行过程机理
   作用: 保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量 
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
+--------------------------------------------------------------------------------
+◆总结优化技巧
+惰性载入函数 
+
 Question&Suggestion 
   如何通过函数名来获取到函数传入的参数 ? 
     自我实现: 

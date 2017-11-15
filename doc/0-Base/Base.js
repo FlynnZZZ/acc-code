@@ -164,44 +164,147 @@ HTTP、HTTPS'Hypertext Transfer Protocol'超文本传送协议
     请求报文 
       <Method> <URL> <Protocol>/<version>   // 请求行 
       key1: val1                            // 可选,请求头 
-        Cache-Control:    缓存控制 
-        Connection:       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
+        ★当前页信息 
+        Host: yihuo.lcltst.com    // 请求页所在的域 
+        Referer:       // 请求页的URI 
+          该英文的正确拼法为referrer 
+        Origin: 'http://yihuo.lcltst.com'  // 
+        User-Agent:    // 浏览器相关信息,浏览器的用户代理字符串 
+        Client-IP      // 客户端IP 
+        ★能力说明 
+        Accept:     // 客户端能够处理的内容类型及相对优先级   
+        Accept-Charset:      // 浏览器能识别显示的字符集 
+        Accept-Encoding:   // 浏览器能够处理的压缩编码及优先级级  
+          Accept-Encoding:gzip, deflate, sdch
+        Accept-Language:  // 浏览器当前设置的语言 
+          Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
+        ★请求内容信息 
+        Content-Length: 376  // 请求体大小 
+        Content-Type:  // 请求体类型,GET无该项  
+          application/x-www-form-urlencoded 默认方式,表单提交 
+              只需在$.ajax({})参数中设置 processData = true[也是默认,可省略];
+              Example:
+                $.ajax({
+                  method: 'POST',
+                  url: '...',
+                  data: dataToSend, 
+                  /* dataToSend为Object类型的表单数据,否则jQuery会抛出异常 */
+                  contentType: 'application/x-www-form-urlencoded',  // 可省略
+                  processData: true,        // 可省略
+                  success: function() {}
+                });
+            'multipart/form-data'  适合用于上传文件
+              首先,对表单数据构建成FormData的HTML5对象,代码如下。
+              /* dataToSend 是FormData对象,可直接作为数据传输到后端 */
+              var dataToSend= new FormData();      // HTML5对象, IE11以下不支持
+              for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                  dataToSend.append(key, data[key]);
+                }
+              }
+              用$.ajax()方法传输数据
+                processData与contentType必须设定为false,避免FormData对象被转换成URL编码
+              $.ajax({
+                method: 'POST',
+                url: '...',
+                data: dataToSend,          // dataToSend 是FormData对象
+                
+                contentType: false,        // contentType 必须设置为false
+                processData: false,        // processData 必须设置为false
+                
+                success: function() { ... }
+              });
+            'text/plain'  传输字符串
+              $.ajax({
+                method: 'POST',
+                url: '...',
+                data: dataToSend,         
+                
+                contentType: 'text/plain',       
+                processData: false,      // processData 设置为false则不会转换成URL编码
+                
+                success: function() { ... }
+              });
+            'application/json'  传输JSON字符串
+              要用函数JSON.stringify()处理表单数据
+              /* data 为表单Object类型的数据 */
+              dataToSend = JSON.stringify(data);
+              $.ajax({
+                method: 'POST',
+                url: '...',
+                data: dataToSend,         
+                
+                contentType: 'application/json',       
+                processData: false,     // processData 设置为false则不会转换成URL编码
+                
+                success: function() { ... }
+              });
+              若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
+              需要转换成Object类型[而Angular不需要];
+              $.ajax({
+                ...
+                success: function(data) {
+                  var jsonData = JSON.parse(data);
+                  ...
+                }
+              });
+            'text/xml'  传输XML
+              首先,构建XML文档对象,存入表单数据,代码如下。
+              /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
+              var dataToSend = document.implementation.createDocument("", "formdata", null);
+              var tempData = dataToSend.documentElement;
+              for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                  var keyElement = doc.createElement(key);
+                  keyElement.appendChild(doc.createTextNode(data[key]));
+                  tempData.appendChild(keyElement);
+                }
+              }
+              /*
+              xml文档格式示意:
+              <formdata>
+              <key1> value1 </key1>
+              <key2> value2 </key2>
+              </formdata>
+              */
+              发送数据dataToSend
+              $.ajax({
+                method: 'POST',
+                url: '...',
+                data: dataToSend,
+                
+                contentType: false,  // contentType 可设为false也可写成具体的'text/xml'等    
+                processData: false,  // processData 必须设为false
+                
+                success: function() { ... }
+              });
+
+        Cookie:       // 请求页Cookies  
+        ★状态描述 
+        Connection:      // 浏览器与服务器间连接的类型 
           'close'      指服务器像明确断开连接
           'Keep-Alive' 保持持久连接,'HTTP/1.1'前默认为非持久性的
             如需要保存持久连接,需要增加此字段
-        Update:           给出了发送端可能想要升级使用新版本或协议
-        Date:             日期,报文创建时间
-        Via:              显示了报文经过的中间节点（代理、网关）
-        Trailer:          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
-        Trailer-Encoding: 告诉接收端对报文采用什么编码格式
-        Pragma:           早期的随报文传送指示方式
-        Host: yihuo.lcltst.com     // 客户端主机名及端口号 
-        Proxy-Connection: keep-alive 
-        Content-Length: 376  // 请求体大小 
-        Pragma: no-cache 
-        Cache-Control: no-cache // 缓存控制 
-        User-Agent:      // 浏览器相关信息 
-        'Accept: */*'  // 客户端能够处理的内容类型及相对优先级 ?  
-        Origin: http:\/\/yihuo.lcltst.com  // 
-        Content-Type:  // 请求体类型,GET无 
-          Content-Type: application/x-www-form-urlencoded; charset=UTF-8
-        Referer:       // 当前url,表明当前的位置 
-          该英文的正确拼法为referrer 
-        Accept-Encoding:   // 浏览器支持的内容编码及优先级级  
-          Accept-Encoding:gzip, deflate, sdch
-        Accept-Language:  // 浏览器支持的语言 
-          Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
-        Cookie:           // 浏览器cookies 
-        Accept-Charset:      // 浏览器能识别的字符集 
-        Authorization       客户端的认证信息 
-        Client-IP           客户端IP
-        From                客户端邮件地址
-        Expect              允许客户端列出请求所要求的服务器行为
+        ★控制信息 
+        Cache-Control:  // 缓存控制 
+          no-cache
+        Pragma:      // 早期的随报文传送指示方式 
+          no-cache 
         If-Match            如果ETag和文档当前ETag匹配,就获取文档
         If-Modified-Since   除非在某个指定日期之后修改过,否则限制这个请求
         If-None-Match       如果ETag和当前文档ETag不符合,获取资源
         If-Range            允许对文档否个范围内的条件请求
         If-Unmodified-Since 在某个指定日期之后没有修改过,否则现在请求
+        ★
+        Update:           给出了发送端可能想要升级使用新版本或协议
+        Date:             日期,报文创建时间
+        Via:              显示了报文经过的中间节点（代理、网关）
+        Trailer:          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
+        Trailer-Encoding: 告诉接收端对报文采用什么编码格式
+        Proxy-Connection: keep-alive 
+        Authorization       客户端的认证信息 
+        From                客户端邮件地址
+        Expect              允许客户端列出请求所要求的服务器行为
       // 空行 
       key1: val1                            // 可选,请求体 
         包含客户提交的查询字符串信息,表单信息等  
@@ -376,6 +479,7 @@ HTTP、HTTPS'Hypertext Transfer Protocol'超文本传送协议
       通常,GET使用查询字符串,POST使用请求正文[若反过来也可,但无必要] 
       使用GET请求,可在查询字符串中看到所有的数据,包括隐藏域,且会限制查询字符串的长度,
       POST请求体无长度限制 
+      POST比GET请求消耗的资源多一些 
   'HTTP'和'TCP'的区别
     TPC/IP 传输层协议: 解决数据如何在网络中传输,是一种'经过三次握手'的可靠的传输方式 
     HTTP 应用层协议: 是Web联网的基础,是建立在TCP协议之上的一种应用 

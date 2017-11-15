@@ -84,8 +84,8 @@ EventTarget,事件目标  [IE9+][DOM2]
         可在移除元素前解除该元素事件的绑定 
     .dispatchEvent(event)  bol,派发事件,返回是否阻止默认行为  
       event   被派发的事件对象  
-Event,事件对象基础类,浏览器默认给事件响应函数传入一参数,表示该事件对象本身 
-  PS: 事件对象event包含着所有与事件有关的信息,作为参数传到执行函数中 
+Event,事件基础类 
+  PS: 事件对象包含着所有与事件有关的信息,作为参数传到事件响应函数中 
     只有在事件处理程序执行期间,event对象才存在[一旦执行完则会被销毁] 
     浏览器中可能发生的事件有很多类型,不同的事件类型具有不同的信息 
   Extend：Object 
@@ -175,7 +175,7 @@ Event,事件对象基础类,浏览器默认给事件响应函数传入一参数,
         }
       DOM2级中,attachEvent将event作为事件函数的参数,也可使用 window.event 访问 
         属性/方法的获取也同DOM的event一样
-  Accu: 
+  事件枚举: 
     DOMContentLoaded 形成完整DOM树后触发,不支持DOM0绑定 [HTML5][IE9+] 
       在window或document上触发 
       无需等待图像、JS文件、CSS文件或其他资源是否下载完毕,在load之前触发
@@ -233,13 +233,22 @@ Event,事件对象基础类,浏览器默认给事件响应函数传入一参数,
     change   当文本框[input或textarea]内容改变且失去焦点后触发
     online  网络从离线变成在线时在window上触发,不冒泡  [HTML5] 
     offline 网络从在线变成离线时触发 [HTML5] 
-    error  发生错误时触发,不冒泡  
-      PS: 支持该事件的HTML标签: <img>, <object>, <style>
+    error   发生错误时触发,不冒泡  
+      PS: 支持该事件的HTML标签: <img>, <object>, <style> 
         支持该事件的JS对象: window, image
-      当发生JS错误时在 window 上触发 
+      window.onerror = function(msg,url,line){ // 当JS发生错误时 
+        PS: 任何未通过'try-catch'处理的错误都会触发window的错误事件 
+          该事件是浏览器最早支持的事件之一,为保持兼容而未修改[DiBs] 
+          不会创建event对象,代替的是接收三个参数 
+          只支持DOM0级绑定 
+        msg  错误消息 
+        url  错误所在的URL 
+        line 行号 
+        return true; // 可阻止报告错误 
+      }    
+      当一个或多个框架无法加载时在框架集 window.frames 上触发 
       无法加载图像时在 <img> 上触发 
       无法加载嵌入内容在 <object> 上触发 
-      当一个或多个框架无法加载时在框架集 window.frames 上触发 
     canplay         当视频缓冲完毕可播放时触发,不冒泡 
     canplaythrough  媒体缓冲完毕且播放不会停顿时触发  
     ended           媒体播放完毕时触发,不冒泡 
@@ -303,7 +312,7 @@ PageTransitionEvent,
     console.log(PageTransitionEvent.prototype.__proto__.constructor===Event); // true 
   Proto: 
     .persisted   bol, 
-  Accu: 
+  事件枚举:  
     pageshow  网页重载时触发 
      PS: 重载时会在load事件触发后触发,若页面来自bfcache,则在页面状态完全恢复时触发;
        虽然这个事件的目标是 document,但必须将其事件处理程序添加到 window 上;
@@ -368,14 +377,14 @@ HashChangeEvent,URL锚点改变事件
   Proto: 
     .oldURL str,变化前的URL
     .newURL str,变化后的URL
-  Accu: 
+  事件枚举: 
     hashchange   hash变化时在window上触发[IE8+] [HTML5]
 PopStateEvent,历史记录状态事件 [HTML5][IE10+] 
   Extend: Event 
     console.log(PopStateEvent.prototype.__proto__.constructor===Event); // true 
   Proto: 
     .state  obj,当前历史记录对应的状态对象的副本,即pushState的第一个参数
-  Accu: 
+  事件枚举: 
     popstate   历史记录变化时,在window上触发,不冒泡 
       PS: 调用history.pushState()或history.replaceState()不会触发该事件,
         不同的浏览器在加载页面时处理popstate事件的形式存在差异。
@@ -389,7 +398,7 @@ BeforeUnloadEvent,
     console.log(BeforeUnloadEvent.prototype.__proto__.constructor===Event);
   Proto: 
     .returnValue 
-  Accu: 
+  事件枚举: 
     beforeunload  离开关闭/刷新网页时,在window上触发,不冒泡  [HTML5] 
       PS: 目的是让开发人员能在页面卸载前阻止这一操作, 
         通过以返回值的形式来显示给用户提示[无返回值则无提示],
@@ -409,7 +418,7 @@ ClipboardEvent,剪贴版事件 [HTML5]
     console.log(ClipboardEvent.prototype.__proto__.constructor===Event);
   Proto: 
     .clipboardData  DataTransfer, 
-  Accu: 
+  事件枚举: 
     beforecopy 复制前触发  [HTML5]
     copy       复制时触发  [HTML5]
     beforecut  剪切前触发  [HTML5]
@@ -457,7 +466,7 @@ MutationEvent,变动事件[IE9+]
     .attrName  
     .attrChange  
     .initMutationEvent() 
-  Accu: 
+  事件枚举: 
     已废弃 
       'DOMSubtreeModified' 在DOM结构中发生任何变化时触发,不支持DOM0绑定[DOM2] 
       'DOMNodeInserted'    节点被插入另一节点时触发[DOM2] 
@@ -477,7 +486,7 @@ CustomEvent,自定义事件[DOM3][IE11+]
   Proto: 
     .detail 
     .initCustomEvent() 
-UIEvent, 
+UIEvent,UI事件 
   Extend: Event 
     console.log(UIEvent.prototype.__proto__.constructor===Event);
   Proto: 
@@ -486,7 +495,7 @@ UIEvent,
     .sourceCapabilities 
     .which 
     .initUIEvent() 
-InputEvent, 
+InputEvent,输入事件 
   Extend: UIEvent 
     console.log(InputEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
@@ -495,12 +504,12 @@ InputEvent,
     .inputType 
     .dataTransfer 
     .getTargetRanges() 
-  Accu: 
+  事件枚举: 
     input  监听表单值改变[IE9+][HTML5] 
       PS: 粘贴可触发; 在Chrome中通过JS改变表单的值,不会触发该事件 
       适用元素: input type=text , textarea
       IOS微信中,自定义获取焦点存在问题
-MouseEvent, 
+MouseEvent,鼠标事件  
   Expand: UIEvent 
     console.log(MouseEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
@@ -548,7 +557,7 @@ MouseEvent,
     .toElement  
     .getModifierState()    
     .initMouseEvent()    
-  Accu: 
+  事件枚举: 
     mousedown  用户按下任意鼠标按钮触发
     mouseup    鼠标弹起触发
     click    在左键按下后,弹起来时触发或按下回车键时触发
@@ -586,7 +595,7 @@ WheelEvent,滚轮事件 [HTML5]
     .wheelDeltaX 
     .wheelDeltaY 
     .wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
-  Accu: 
+  事件枚举: 
     mousewheel 使用鼠标滚轮或类似设备时触发 
 DragEvent,拖放事件 [IE9+][HTML5] 
   PS: IE4最早加入拖放功能,只能拖放文本框 [JS高程 482 页]
@@ -618,7 +627,7 @@ DragEvent,拖放事件 [IE9+][HTML5]
         Example:
         elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
       firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
-  Accu: 
+  事件枚举: 
     ◆在拖放源上触发 
     ondragstart 开始拖动
     ondrag      拖放期间持续触发
@@ -736,7 +745,7 @@ DragEvent,拖放事件 [IE9+][HTML5]
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
     }
-TouchEvent, 
+TouchEvent,触摸事件  
   Extend: UIEvent 
     console.log(TouchEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
@@ -796,7 +805,7 @@ KeyboardEvent,键盘事件[DOM3]
         5 手柄
       .charCode  [DOM3废弃] 
       .char      [DOM3] [Chrome不支持]
-  Accu: 
+  事件枚举: 
     keydown    按下任意键时触发,长按则持续触发 
     keypress   按下字符键时触发,长按则持续触发 
       任何获得焦点的元素都可以触发keypress事件
@@ -806,7 +815,7 @@ FocusEvent,焦点事件
     console.log(FocusEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
     .relatedTarget 
-  Accu: 
+  事件枚举: 
     blur  元素失去焦点时触发,不冒泡 
     focus 元素获得焦点时触发,不冒泡 
     focusin 与focus等价,冒泡,不支持DOM0绑定  [DOM3] 
@@ -817,7 +826,7 @@ TextEvent,文本事件
   Proto: 
     .data  str,输入的字符 
     .initTextEvent() 
-  Accu: 
+  事件枚举: 
     textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
       PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
 CompositionEvent,合成事件[DOM3]  
@@ -829,7 +838,7 @@ CompositionEvent,合成事件[DOM3]
   Proto: 
     .data  str,操作的文本数据 
     .initCompositionEvent()  
-  Accu: 
+  事件枚举: 
     compositionstart  在IME打开时触发,表示要开始输入了,不支持DOM0绑定 
       e.data 包含正在编辑的文本,如已经选中的需要马上替换的文本 
     compositionupdate 在向输入字段中输入字符时触发,不支持DOM0绑定  

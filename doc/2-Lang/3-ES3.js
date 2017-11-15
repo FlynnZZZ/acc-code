@@ -207,75 +207,64 @@ Math,数学对象
     Math.log10(x)   返回以 10 为底的x的对数 [ES6]
     Math.log2(x)    返回以 2 为底的 x 的对数 [ES6]
     Math.tanh(x)    返回 x 的双曲正切 [ES6]
-JSON'JavaScript Object Notation': 基于文本、独立于语言的轻量级数据交换格式 
-  PS: 非构造函数/类,实际为对象 
+JSON'JavaScript Object Notation'JavaScript对象表示法 [IE8+]
+  PS: 基于文本、独立于语言的轻量级数据交换格式;非构造函数/类,实际为对象 
     利用JS中的一些模式来表示结构化数据,广泛用于数据的传送和数据的交换, 
     每个JSON对象只能是一个值,即每个JSON文档只能包含一个值;
     ES5对解析JSON的行为进行了规范,定义了全局对象JSON对象
   Member: 
     JSON.stringify(val[,arr/foo,num/str])   str,序列化,将JS值转换为JSON字符串 
-      PS: 序列化JS对象时,所有函数及原型成员都会被有意忽略,不体现在结果中 
+      PS: 所有函数及原型成员都会被有意忽略 
       val       需序列化的值 
-      arr/foo   可选,过滤器,数组或函数 
-        若为数组则,结果中将只包含数组中列出的属性 
-          Example: :
-          var book ={
-            "title":"Professional JavaScript",
-            "authors":['abc'],
-            "edition":3,
-            year:2011
+      arr/foo   可选,过滤器,当为 null 时表示不过滤  
+        ◆arr 结果中将只包含数组中列出的属性 
+        var obj = {
+          aoo: 1
+          ,boo: 'abc'
+          ,coo: ['abc',11]
+        }
+        console.log(JSON.stringify(obj,["aoo","coo"]));
+        // {"aoo":1,"coo":["abc",11]} 
+        ◆foo(key,val),结果为函数返回值 
+        当值为非键值对结构时,键名可为空字符串
+        var obj = {
+          aoo: 1
+          ,boo: 'abc'
+          ,coo: [11,22]
+        }
+        var jsonStr = JSON.stringify(obj,function(key,val){
+          switch(key) {
+            case 'aoo':
+              return 1;
+              break;
+            case 'coo':
+              return 3;
+              break;
+            default:
+              return val;
           }
-          var jsonText =JSON.stringify(book,["title","edition"]);
-          // {"title":"Professional JavaScript","edition":3}
-        若为函数,函数接收两个参数:属性名和属性值,结果为函数返回值 
-          当值为非键值对结构的值时,键名可以为空字符串
-          Example: :
-          var book ={
-            "title":"Professional JavaScript",
-            "authors":['abc'],
-            "edition":3,
-            year:2011
-          }
-          var jsonText =JSON.stringify(book,function(key,value){
-            switch(key) {
-              case "authors":
-                return value.join(",");
-                break;
-              case "year":
-                return 5000;
-                break;
-              case "edition":
-                return undefined;
-                break;
-              default:
-                return value;
-            }
-          });
-          // {"title":"Professional Javascript","authors":"abc","year":5000}
-          其中为值undefined的被忽略
-      num/str   可选,缩进排版选项,数值或字符 
-        当为数值时范围为'1-10'[超过10仍取10],表示最大缩进空格数(不会改变数据(SelfThink))
-        若为字符串时,则该字符串将在JSON字符串中被用作缩进字符[代替空格]
-          可将缩进字符设置为制表符等
-          缩进字符串最长长度不能超过10个字符,否则只使用前10个字符
+        });
+        console.log(jsonStr);
+        // {"aoo":1,"boo":"abc","coo":3} 
+        其中为值undefined的被忽略
+      num/str   可选,缩进排版选项  
+        ◆num  每级缩进的空格数,范围'1-10'[超过10仍取10] 
+        ◆str  作为缩进字符,字符长度不可超过10  
+        var obj = {
+          key1: 1
+          ,key2: 2
+        }
+        console.log(JSON.stringify(obj,null,2));
+        // {
+        //   "key1": 1,
+        //   "key2": 2
+        // }
+        console.log(JSON.stringify(obj,null,'=='));
+        // {
+        // =="key1": 1,
+        // =="key2": 2
+        // }
       Example: 
-        会将属性值为undefined的属性忽略,NaN、Infinity 转换为 null,
-        时间表示转换为字符串的表示
-        var obj ={a:undefined,b:NaN,c:Infinity,d:new Date()};
-        JSON.stringify(obj);
-        // "{"b":null,"c":null,"d":"2016-12-28T07:45:24.152Z"}"
-      当'对象'成员的值为'undefined'、'函数'或'XML对象'时,则该成员会被过滤 
-          var obj = {
-            aoo:1,
-            boo:undefined,
-            coo:function(){ }
-          };
-          JSON.stringify(obj); // "{"aoo":1}"
-      当'数组'成员为'undefined'、'函数'或'XML对象'时,将被转换成null 
-        var arr = [undefined,function(){ }];
-        JSON.stringify(arr); // "[null,null]"
-      '正则'会被转换为空对象{} 
-        JSON.stringify(/aoo/); // "{}"
       忽略对象的不可遍历属性 
         var obj = {};
         Object.defineProperties(obj,{
@@ -289,7 +278,7 @@ JSON'JavaScript Object Notation': 基于文本、独立于语言的轻量级数�
           }
         });
         JSON.stringify(obj); // "{"aoo":1}"
-      对象中使用 toJSON 指定序列化的规则
+      对象中使用 toJSON 指定序列化的规则 
         PS:若 JSON.stringify 的参数对象有自定义的toJSON方法,
           则其使用该方法的返回值代替参数对象.
         Date 对象有一个自己的toJSON 方法
@@ -325,7 +314,7 @@ JSON'JavaScript Object Notation': 基于文本、独立于语言的轻量级数�
             }
           }
           JSON.stringify(user); // "{"coo":"c","doo":"d"}"
-      使用'toJSON'
+        使用'toJSON'
         将正则转化为字符串
         RegExp.prototype.toJSON = RegExp.prototype.toString;
         JSON.stringify(/aoo/); // ""/aoo/""
@@ -345,21 +334,63 @@ JSON'JavaScript Object Notation': 基于文本、独立于语言的轻量级数�
         var rst2 = JSON.stringify(obj2);
         console.log(rst1); // {"a":1,"b":"aa"}
         console.log(rst2); // "自定义的返回值"
-    JSON.parse(JSONstr[,foo(key,val)])      val,反序列化,将JSON字符串转换为JS值
-      PS: 若还原中存在undefined会被删除, 若参数不是有效的JSON格式,将报错
-      JSONstr 需要解析的JSON字符串
-      foo     可选 
+    JSON.parse(JSONstr[,foo(key,val)])   val,反序列化,将JSON字符串转换为JS值 
+      PS: 若还原中存在undefined会被删除 
+      JSONstr  有效的JSON字符串,否则报错
+      foo(key,val)  可选,还原函数 
+        若返回 undefined,则表示删除相应的键,否则将该值插入到结果中 
+        函数共进行 n+1 次,其余每次对应改变相应的值,最后一次返回值表示最终值 
+        var obj = {
+          key1: 1
+          ,key2: 2
+        }
+        var str = JSON.stringify(obj)
+        var obj1 = JSON.parse(str,function(key,val){
+          if (key == 'key1') {
+            return 11;
+          }
+          else {
+            return val;
+          }
+        })
+        console.log(obj1); // {key1: 11, key2: 2} 
   Feature: 
     JSON值类型和格式:  
     null Boolean Number[只能十进制] String Array Object 
-    不能为: NaN Infinity undefined 
-    不能为: 函数、正则、日期对象 
-    String 必须使用双引号  
-    对象的键必须用双引号引起来,数组或对象的最后一个成员不能加逗号 
+    String、对象的键需用"双引号",数组或对象的最后一个成员不能加逗号 
+    不能表示: undefined NaN Infinity,函数,时间对象,正则对象    
+      ◆当为对象时:
+      undefined 项将被忽略 
+      NaN、Infinity 转换为 null
+      函数项将被忽略 
+      时间对象转换为字符串表示 
+      正则对象转换为空对象表示 
+      Example: 
+      var obj = { 
+        a: undefined,
+        b: NaN,
+        c: Infinity,
+        d: new Date(),
+        e: function(){
+          console.log(11);
+        },
+        f: /aoo/
+      };
+      console.log(JSON.stringify(obj));
+      // {"b":null,"c":null,"d":"2017-11-15T07:04:42.793Z","f":{}} 
+      ◆当为数组时
+      undefined、函数 转换为 null 
+      var arr = [
+        function(){
+          console.log(11);
+        },
+        undefined
+      ]
+      console.log(JSON.stringify(arr));
+      // [null,null] 
     Example: 
       JSON.stringify("aoo"); // ""aoo""
       JSON.stringify("aoo") === "\"aoo\"";  // true
-      JSON.stringify("aoo") === ""aoo"";    // 报错
       引号使用\转义, 将来还原时,双引号让JS引擎知道aoo为字符串而非变量名
       
       { "aoo" : "style="color:red;"" }
@@ -370,3 +401,6 @@ JSON'JavaScript Object Notation': 基于文本、独立于语言的轻量级数�
   Accu:  
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
+
+
+

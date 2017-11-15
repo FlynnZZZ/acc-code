@@ -60,51 +60,53 @@
     '<>' 表示自定义的值 
       $(<selector>) 
   短语表示 
-    tag       标签
-    attr      特性 
-    prop      属性 
-    selector  选择器 
-    bol       布尔值 
-    num       数值
-    int       整数 
-    float     浮点数 
-    str       字符串
-    arr       数组
-    obj       对象
-    any       任意类型 
-    expr      表达式  
-    statement 语句 
-    idx       数组的下标/字符串字符下标  
-    bgn       开始 begin
-    end       结束 
-    elem      DOM对象  
-    Jelem     jQuery对象 
-    member    数组成员,集合成员 
-    key       对象的键,或属性等
-    val       对象的值/值
-    foo       [无属性]函数
-    cfo       [回调型]函数 cfoo 
-    arg       [无属性]参数
-    params    [配置项]参数  
-    options   [配置项]参数  
-    typ       类型 type
-    DiBs      在浏览器中有差异,有兼容性问题  Different in Browsers
-    acc       总结,积累
-    rec       记录
-    todo      待处理,待整理
-    tmp       暂时,临时
-    xxx+      表示其及其后续 
+    tag     标签
+    attr    特性 
+    prop    属性 
+    slctor  选择器 selector
+    bol     布尔值 
+    num     数值
+    int     整数 
+    float   浮点数 
+    str     字符串
+    arr     数组
+    obj     对象
+    any     任意类型 
+    expr    表达式  
+    stmt    语句  statement 
+    idx     数组的下标/字符串字符下标  
+    bgn     开始 begin
+    end     结束 
+    elem    DOM对象  
+    jEl     jQuery对象 
+    member  数组成员,集合成员 
+    key     对象的键,或属性等
+    val     对象的值/值
+    foo     [无属性]函数
+    cfo     [回调型]函数 cfoo 
+    arg     [无属性]参数
+    params  [配置项]参数  
+    option  [配置项]参数  
+    typ     类型 type
+    init    初始的 
+    hdl     操作 handle 
+    DiBs    在浏览器中有差异,有兼容性问题  Different in Browsers
+    acc     总结,积累
+    rec     记录
+    todo    待处理,待整理
+    tmp     暂时,临时
+    xxx+    表示其及其后续 
       如 IE9+ 表示IE9和IE9以后
       CSS3+ CSS3及以后
       HTML5 HTML5及以后
       ES5+  ES5新增
       ES6+  ES6新增
       ...
-    more      其他的,更多的
-    moIn      更多参见 more in
-    self      自己的,自定义的
-    SlPt      自我观点、认为 SelfPoint
-    SlSt      自我设置 SelfSet
+    more    其他的,更多的
+    moIn    更多参见 more in
+    self    自己的,自定义的
+    SlPt    自我观点、认为 SelfPoint
+    SlSt    自我设置 SelfSet
 命名规范 
   起步_基础 
     在统计到的128985个单词中,以字母开头的个数  
@@ -113,12 +115,11 @@
   变量名: aoo,boo,..  aux,bux,..  axx,bxx,..
   函数名  foo, goo hoo ioo joo koo
   常用词语缩写 
-    handle  操作
-    hint    提示
-    pop     弹出
-    column  栏目
-    sort    类别
-    pw      密码
+    hint    提示 
+    pop     弹出 
+    column  栏目 
+    sort    类别 
+    pw      密码 
 自定义规范 
   前后端数据交互规范 
     初始化数据和需提交的数据保持同样的格式和结构 

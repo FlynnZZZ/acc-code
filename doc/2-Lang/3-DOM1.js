@@ -780,7 +780,8 @@ HTMLElement,HTML元素节点
     .blur()  使元素失焦 
     .click() 点击元素 
     事件相关 
-      .<onevents> 事件,返回相应的JS函数 
+      .<onevents>  事件,返回相应的JS函数? 
+      .onerror     见:Event 
       .onabort 
       .onblur 
       .oncancel 
@@ -802,7 +803,6 @@ HTMLElement,HTML元素节点
       .ondurationchange 
       .onemptied 
       .onended 
-      .onerror 
       .onfocus 
       .oninput 
       .oninvalid  验证失败时触发 
@@ -866,7 +866,10 @@ HTMLElement,HTML元素节点
         若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
 ★HTMLXXXElement,具体的HTML元素节点,继承 HTMLElement [IE8+可访问]:  
   待整理 
-    HTMLElement  <abbr> <em> <acronym> <address> <b> <bdo> <big> <cite> <dd> <kbd> <dfn> <strong> <noframes> <noscript> <sub> <sup> <samp> <small> <var> 
+    HTMLElement  
+      <abbr> <em> <acronym> <address> <b> <bdo> <big> <cite> 
+      <dd> <kbd> <dfn> <strong> <noframes> <noscript> <sub> 
+      <sup> <samp> <small> <var> 
     HTMLFieldSetElement  <fieldset> 
     HTMLAreaElement  <area>  
     HTMLBaseElement  <base>  
@@ -895,7 +898,56 @@ HTMLElement,HTML元素节点
     HTMLTableSectionElement  <thead> 
     HTMLTitleElement  <title> 
     HTMLTableRowElement  <tr> 
-    HTMLScriptElement  <script>  
+    HTMLUnknownElement 
+    HTMLTrackElement 
+    HTMLTitleElement 
+    HTMLTimeElement 
+    HTMLTemplateElement 
+    HTMLTableSectionElement 
+    HTMLTableRowElement 
+    HTMLTableColElement 
+    HTMLTableCellElement 
+    HTMLTableCaptionElement 
+    HTMLSourceElement 
+    HTMLSlotElement 
+    HTMLShadowElement 
+    HTMLQuoteElement 
+    HTMLProgressElement 
+    HTMLPreElement 
+    HTMLPictureElement
+    HTMLParamElement
+    HTMLOutputElement
+    HTMLOptionsCollection
+    HTMLOptGroupElement
+    HTMLObjectElement
+    HTMLModElement
+    HTMLMeterElement
+    HTMLMetaElement
+    HTMLMenuElement
+    HTMLMarqueeElement
+    HTMLMapElement
+    HTMLLegendElement
+    HTMLLabelElement
+    HTMLLIElement
+    HTMLHRElement
+    HTMLFrameSetElement
+    HTMLFrameElement
+    HTMLFormControlsCollection
+    HTMLFontElement
+    HTMLFieldSetElement
+    HTMLEmbedElement
+    HTMLDirectoryElement
+    HTMLDialogElement
+    HTMLDetailsElement
+    HTMLDataListElement
+    HTMLDataElement
+    HTMLDListElement
+    HTMLContentElement
+    HTMLBaseElement
+    HTMLBRElement
+    HTMLAudioElement
+    HTMLAreaElement
+    HTMLAllCollection
   不推荐使用 
     HTMLElement  <center> <s> <strike> <u> 
     HTMLFontElement  <font> 
@@ -932,7 +984,7 @@ HTMLElement,HTML元素节点
     .target 
     .import 
     .integrity 
-  HTMLScriptElement <script>
+  HTMLScriptElement <script> 
     .src 
     .type 
     .charset 
@@ -1338,30 +1390,33 @@ HTMLElement,HTML元素节点
         使用'mouseup'事件来代替'click'事件来使用;
     相关事件 
       oninvalid    验证失败时触发 
-  HTMLImageElement   <img> 
-    .alt 
-    .src  读写,图片地址 
-    .naturalWidth/img.naturalHeight 只读,图片真实的宽/高
-    .srcset 
-    .sizes 
-    .crossOrigin  kw,读写,
-      'anonymous'  对此元素的CORS请求不设置凭据标志,一般在canvas中跨域使用图片时设置该值  
-      'use-credentials'  对此元素的CORS请求设置凭证标志,即请求需提供凭据 
-    .useMap 
-    .isMap 
-    .width 
-    .height 
-    .complete 
-    .currentSrc 
-    .referrerPolicy 
-    .name 
-    .lowsrc 
-    .align 
-    .hspace 
-    .vspace 
-    .longDesc 
-    .border 
-    .x/.y 
+  HTMLImageElement    
+    Extend: HTMLElement 
+    Instance: <img>元素 
+    Proto: 
+      .alt 
+      .src  读写,图片地址 
+      .naturalWidth/img.naturalHeight 只读,图片真实的宽/高
+      .srcset 
+      .sizes 
+      .crossOrigin  kw,读写,
+        'anonymous'  对此元素的CORS请求不设置凭据标志,一般在canvas中跨域使用图片时设置该值  
+        'use-credentials'  对此元素的CORS请求设置凭证标志,即请求需提供凭据 
+      .useMap 
+      .isMap 
+      .width 
+      .height 
+      .complete 
+      .currentSrc 
+      .referrerPolicy 
+      .name 
+      .lowsrc 
+      .align 
+      .hspace 
+      .vspace 
+      .longDesc 
+      .border 
+      .x/.y 
   HTMLCanvasElement  <canvas> [IE9+][HTML5] 
     PS: JS可对canvas图像进行像素级的操作,可直接处理图像的二进制原始数据, 
       canvas提供了常用的图像格式转换功能,可使用JS更改图像的编码方式 
@@ -1441,56 +1496,6 @@ HTMLElement,HTML元素节点
     .allow        
     .getSVGDocument()  
   // TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★   
-  HTMLUnknownElement 
-  HTMLTrackElement 
-  HTMLTitleElement 
-  HTMLTimeElement 
-  HTMLTemplateElement 
-  HTMLTableSectionElement 
-  HTMLTableRowElement 
-  HTMLTableColElement 
-  HTMLTableCellElement 
-  HTMLTableCaptionElement 
-  HTMLSourceElement 
-  HTMLSlotElement 
-  HTMLShadowElement 
-  HTMLQuoteElement 
-  HTMLProgressElement 
-  HTMLPreElement 
-  HTMLPictureElement
-  HTMLParamElement
-  HTMLOutputElement
-  HTMLOptionsCollection
-  HTMLOptGroupElement
-  HTMLObjectElement
-  HTMLModElement
-  HTMLMeterElement
-  HTMLMetaElement
-  HTMLMenuElement
-  HTMLMarqueeElement
-  HTMLMapElement
-  HTMLLegendElement
-  HTMLLabelElement
-  HTMLLIElement
-  HTMLHRElement
-  HTMLFrameSetElement
-  HTMLFrameElement
-  HTMLFormControlsCollection
-  HTMLFontElement
-  HTMLFieldSetElement
-  HTMLEmbedElement
-  HTMLDirectoryElement
-  HTMLDialogElement
-  HTMLDetailsElement
-  HTMLDataListElement
-  HTMLDataElement
-  HTMLDListElement
-  HTMLContentElement
-  HTMLBaseElement
-  HTMLBRElement
-  HTMLAudioElement
-  HTMLAreaElement
-  HTMLAllCollection
 HTMLMediaElement,HTML媒体元素   
   Extend: HTMLElement 
   Proto: 
@@ -2144,18 +2149,19 @@ FileReader,文件读取,一种异步的文件读取机制
       this.send(ui8a);
     }
 FormData,表单模拟: 序列化表单、创建与表单格式相同的数据 [HTML5]
-  PS: 不用明确的设置请求头,xhr对象能够识别传入的数据类型是FormData,并配置适当头信息 
+  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息 
   Extend：Object 
     console.log(FormData.prototype.__proto__.constructor===Object); // true 
   Instance: 
     fd = new FormData([formElem]) 创建FormData对象 
-      Example: 通过表单元素创建
-      var fd = new FormData(document.forms[0]);
+      formElem  可选,<form>元素 
+    Example: 通过表单元素创建
+    var fd = new FormData(document.forms[0]);
   Proto: 
-    .append(key,val [,name])    向fd中添加字段 
+    .append(key,val[,name])    向fd中添加字段 
       PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
-      key   表单的控件名 
-      val   实际的值 
+      key   数据键名  
+      val   数据值  
       name  可选,通常是文件名 
     .delete() 
     .get() 
@@ -2195,7 +2201,7 @@ NodeIterator,遍历 [DOM2][JS高程 326 页]
     .nextNode()   
     .previousNode()   
     .detach()   
-TreeWalker,遍历 [DOM2] [JS高程 330 页] 
+TreeWalker,遍历 [DOM2][JS高程 330 页] 
   Extend: Object 
     console.log(TreeWalker.prototype.__proto__.constructor===Object); // true 
   Proto: 

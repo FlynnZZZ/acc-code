@@ -394,7 +394,7 @@ CanvasGradient
 ★WebGL,针对canvas的3D上下文,非W3C标准 [JS高程 464 页] 
   PS: 浏览器中使用的WebGL基于Khronos Group设计的 OpenGL ES 2.0 
 WebGLRenderingContext,canvas的'3D'上下文对象 
-  PS: 也可使用'experimental-webgl' 
+  PS: 
   Feature: 
     视口内坐标原点为视口的中心点 
   Extend: Object 
@@ -697,6 +697,7 @@ WebGLRenderingContext,canvas的'3D'上下文对象
       .DEPTH_ATTACHMENT 36096  
       .DEPTH_STENCIL_ATTACHMENT 33306  
   Instance: gl = canvas.getContext('webgl'[,{ 
+    // 也可使用'experimental-webgl'  
     // 可选配置 
     alpha: bol // 是否为上下文创建一个Alpha通道缓冲区,默认 true 
     ,depth: bol // 是否可使用16位深缓冲区,默认 true 

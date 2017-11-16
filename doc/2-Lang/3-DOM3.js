@@ -472,6 +472,7 @@ MutationEvent,变动事件[IE9+]
       'DOMNodeInserted'    节点被插入另一节点时触发[DOM2] 
       'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发[DOM2] 
         该事件在 DOMNodeInserted 后触发
+        貌似无效 ? 
       'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2]  
       'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发[DOM2]  
         该事件在 DOMNodeRemoved 之后触发

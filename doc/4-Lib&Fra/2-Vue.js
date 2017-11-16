@@ -56,77 +56,71 @@ View&Model
     });
     渲染结果: awesome Vue.js    
   'Model'更新及监控 
-    'mutation method'变异方法 会改变调用该方法的原数据的方法 
+    'mutation method'变异方法,会改变调用该方法的原数据的方法 
+      变异方法会使数据得到更新且能保证处于Vue的监控中 
       push()  pop() shift() unshift() splice() sort() reverse()
-    'non-mutating method'非变异方法 : 不会改变原始数组,但总是返回一个新数组
+    'non-mutating method'非变异方法,不改变原数组,返回一新数组 
       如: filter(),concat(),slice()  
-    重塑数组 : 当使用非变异方法时,可以用新数组替换旧数组
-      example1.items = example1.items.filter(function (item) {
-        return item.message.match(/Foo/)
-      })
-      你可能认为这将导致Vue丢弃现有DOM并重新渲染整个列表
-      但事实并非如此,Vue实现了一些智能启发式方法来最大化DOM元素重用,
-      所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
-    由于JS的限制,Vue不能检测以下变动的数据 
-      当[函数内仅有]数组通过索引index直接设置某一项时
-        如: vm.items[num] = newValue ,虽然model中数据已经改变,当视图无渲染 
-        可使用以下方式将达到效果触发状态更新
-        ◆Vue.set
+    Vue无法检测数据变动的情况及决解办法 
+      PS: 由于JS的限制,有些操作改变数据后Vue不能检测到数据的变动,而无法触发视图更新 
+        原因: 受现代js的限制[以及废弃 Object.observe]等 
+      ◆Vue无法监控数据的情况 
+      ★vm实例创建后新增的根级别的响应式属性 
+        由于Vue会在初始化实例时对属性执行getter/setter转化过程,
+        所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的 
+      ★对象属性的添加或删除 
+        new Vue({
+          data: {
+            aoo: {
+              a: 1
+            }
+          }
+          ,created: function (){
+            setTimeout(function(){
+              this.aoo.b = 2;
+              // b 属性不会被vue监控
+            },1000)
+          }
+        });
+      ★[当函数内仅有]数组通过索引index直接设置成员时 
+        Example: 
+        vm.items[num] = newValue ,虽然model中数据已经改变,但视图无渲染 
+      ★修改数组长度时 
+        vm.items.length = newLength 
+      ◆解决办法 
+      ★在vm实例中预定义一个值,即使为空值,针对根级别的属性  
+      ★变异方法 
+        arr.splice(indx,1,newVal)
+      ★重塑数组/对象: 用新数组/对象替换旧数组/对象 
+        example1.items = example1.items.filter(function (item) {
+          return item.message.match(/Foo/)
+        })
+        Vue实现了一些智能启发式方法来最大化DOM元素重用,
+        所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
+      ★Vue.set/vm.$set 
         Vue.set(arr,index,newVal)
         this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
-        ◆Array.prototype.splice
-        arr.splice(indx,1,newVal)
-        ◆同时在当前函数内改变会引起视图变化的操作 
-          <div class="slct" >
-            <div v-for="item1 in items">{{item1}}</div>
-            <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
-            <button type="button" @click="changeItems">click</button>
-          </div>
-          var vm = new Vue({
-            el : '.slct',
-            data : {
-              items :[ 1, 2, 3, 4, 5 ],
-              items1 :[{a:1},{a:2},{a:3},{a:4}],
-              n : 1,
-            },
-            methods : {
-              changeItems : function(){
-                console.log(this.items);
-                this.items[0] = ++this.n;
-                // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
-              },
-            },
-          });
-  
-      当你修改数组的长度时,如: vm.items.length = newLength 
-        使用 splice 替代直接长度的修改
-        example1.items.splice(newLength)
-    vm实例创建后新增的数据不能被监控到 
-      受现代js的限制[以及废弃 Object.observe],Vue不能检测到对象属性的添加或删除。
-      由于Vue会在初始化实例时对属性执行getter/setter转化过程,
-      所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的。
-      Example::
+      ★同时在当前函数内改变会引起视图变化的操作 
+        <div class="slct" >
+          <div v-for="item1 in items">{{item1}}</div>
+          <div v-for="i in items1" style="display:none;" >{{i.a}}</div>
+          <button type="button" @click="changeItems">click</button>
+        </div>
         var vm = new Vue({
-          data:{
-            a:1
-          }
-        })
-        // `vm.a` 是响应的
-        vm.b = 2
-        // `vm.b` 是非响应的
-      ◆决解办法:
-      预选定义一个值 
-      Vue.set(object, key, value);  将响应属性添加到嵌套的对象
-        Vue不允许在已经创建的实例上动态添加新的根级响应式属性[root-level reactive property]
-        但可使用 Vue.set 来添加 
-        Example: Vue.set(vm.someObject, 'b', 2)
-      vm.$set 实例方法[全局 Vue.set 方法的别名] 
-        this.$set(this.someObject,'b',2)
-      创建一个新的对象,让其包含原对象的属性和新的属性
-        有时向已有对象上添加一些属性,例如使用 Object.assign() 或 _.extend() 方法来添加属性。
-        但是,添加到对象上的新属性不会触发更新。
-        this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
-        // 代替 `Object.assign(this.someObject, { a: 1, b: 2 })`
+          el : '.slct',
+          data : {
+            items :[ 1, 2, 3, 4, 5 ],
+            items1 :[{a:1},{a:2},{a:3},{a:4}],
+            n : 1,
+          },
+          methods : {
+            changeItems : function(){
+              console.log(this.items);
+              this.items[0] = ++this.n;
+              // this.items1[0].a = this.n; // 存在以否决定 items 是否会触发更新
+            },
+          },
+        });
     异步更新队列 
       当Vue观察到数据变化,将开启一个队列,并缓冲在同一事件循环中发生的所有数据改变。
       若同一个'watcher'被多次触发,只会一次推入到队列中。
@@ -238,8 +232,7 @@ v-for="(val,key,idx) in list"   循环渲染
     不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
     <template id="cpt1">
       <li> 
-        {{ txt }} 
-        <button @click="$emit('remove')">X</button> 
+        {{ txt }} <button @click="$emit('remove')">X</button> 
       </li> 
     </template>
     <div id="todoList">

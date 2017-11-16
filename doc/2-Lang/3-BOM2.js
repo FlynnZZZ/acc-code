@@ -491,7 +491,7 @@ WebRTC'Web Real Time Communication'网络实时通信 [HTML5]
     progress  在文件下载应用缓存的过程中持续不断的触发
     updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
     cached    在应用缓存完整可用时触发
-IndexedDB 浏览器端数据库 [HTML5] 
+IndexedDB,浏览器端数据库 [HTML5] 
   PS: IE 10+支持,但是Safari完全不支持[?];
     能够在客户端持久的储存结构化数据的数据库,并且提供了丰富的查询能力;
     按域名分配独立空间[如a.qq.com 和 b.qq.com],一个域名下可以创建多个数据库,
@@ -747,7 +747,7 @@ IndexedDB 浏览器端数据库 [HTML5]
       }
     }  
   Example:
-Fullscreen 全屏操作[HTML5] 
+Fullscreen,全屏操作[HTML5] 
   PS: 全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
     目前各大浏览器的最新版本都支持这个API[包括IE11],但是使用的时候需要加上浏览器前缀
     放大一个节点时,Firefox和Chrome在行为上略有不同。

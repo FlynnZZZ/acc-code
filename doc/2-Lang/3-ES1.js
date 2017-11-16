@@ -1992,8 +1992,22 @@ JS运行过程机理
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
 --------------------------------------------------------------------------------
-◆总结优化技巧
-惰性载入函数 
+◆总结、技巧 
+函数节流,对消耗资源过多的操作的频率进行限制 
+  如IE中onresize的连续触发操作DOM,高频率的更改可能会让浏览器崩溃 
+  function throttle(method, context) {
+    clearTimeout(method.tId);
+    method.tId= setTimeout(function(){
+      method.call(context);
+    }, 100);
+  }
+  function resizeDiv(){
+    var div = document.getElementById("myDiv");
+    div.style.height = div.offsetWidth + "px";
+  }
+  window.onresize = function(){
+    throttle(resizeDiv);
+  };
 
 Question&Suggestion 
   如何通过函数名来获取到函数传入的参数 ? 

@@ -38,7 +38,7 @@ Object,对象基础类,ES中所有对象的基类
     ★对象成员操作 
     Object.keys(obj)  arr,获取可枚举的自有成员 [ES5] 
       Object.keys(obj).length;    获取对象的"长度"
-    Object.getOwnPropertyNames(obj)  arr,所有[包括不可枚]的自有成员 [ES5] 
+    Object.getOwnPropertyNames(obj)  arr,所有[包括不可枚举]的自有成员 [ES5] 
       var obj = {
         aoo: 1,
         boo: 'a'
@@ -55,7 +55,7 @@ Object,对象基础类,ES中所有对象的基类
       };
       console.log(arr); // ["aoo", "boo", "doo"] 
     ★原型相关 
-    Object.getPrototypeOf() obj,获取对象的prototype属性[ES6] 
+    Object.getPrototypeOf(obj)  obj,获取对象的prototype属性[ES6] 
       function Person(){ //自定义一个Person类（函数）
       } 
       Person.prototype = { //函数都有一个预属性prototype对象
@@ -68,7 +68,7 @@ Object,对象基础类,ES中所有对象的基类
       allen.say(); // hello,调用类的say方法
       Object.getPrototypeOf(allen); //{say:function(){.....}}
       // 获取allen对象的prototype属性
-    Object.setPrototypeOf() 设置对象的prototype属性[ES6] 
+    Object.setPrototypeOf(obj,prot)  设置对象的prototype属性[ES6] 
       function Person(){ }
       Person.prototype = {
         say(){
@@ -83,7 +83,7 @@ Object,对象基础类,ES中所有对象的基类
         } 
       });
       allen.say(); // hi
-      javascript的面向对象
+      javascript的面向对象 
         Javascript本身不是一种面向对象的编程语言,
         在ES5中,它的语法中也没有class（类的关键字）,
         但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发。
@@ -106,13 +106,6 @@ Object,对象基础类,ES中所有对象的基类
         4、通过实例化后的对象调用类的方法或者属性。
         注意:面向对象是一种编程思想,并不是具体的工具。
     ★属性特性相关 
-    Object.getOwnPropertyDescriptor(obj,key)  obj,成员的特性配置 [ES5] 
-      PS: 可对DOM或BOM对象使用该方法;若查询的属性不存在则返回 undefined 
-        如果是访问器属性,这个对象的属性有configurable、enumerable、get 和set;
-        如果是数据属性,这个对象的属性有configurable、enumerable、writable 和value 
-      console.log(Object.getOwnPropertyDescriptor({aoo:"a"},"aoo"));
-      // Object {value: "a", writable: true, enumerable: true, configurable: true}
-    Object.getOwnPropertyDescriptors(obj)  obj,所有成员的特性配置 [ES5]
     Object.defineProperty(obj,key,{   // 定义对象的成员及其特性[ES5]  
       value: val,       // 默认为原始值  
       writable: bol,    // 默认 false
@@ -178,15 +171,20 @@ Object,对象基础类,ES中所有对象的基类
       }
       ...
     });  
-    Object.isExtensible(obj) bol,能否增加成员[ES5] 
-    Object.isSealed(obj)     bol,是否被密封[ES5] 
-    Object.isFrozen(obj)     bol,是否被冻结[ES5] 
-    Object.preventExtensions(obj)  阻止给对象新增属性[ES5] 
-      PS: 但可修改和删除已有属性; 只是对对象操作,对其原型链无影响
-    Object.seal(obj)     不可扩展、配置  [ES5]
-      PS: 只是对对象操作,对其原型链无影响
-    Object.freeze(obj)   不可写、扩展、配置[最严格的防篡改级别][ES5] 
-      PS: 只是对对象操作,对其原型链无影响
+    Object.preventExtensions(obj)  不可新增成员,仍可修改、删除成员[ES5] 
+    Object.seal(obj)     不可新增、删除成员,仍可修改成员[ES5] 
+      PS: 使用 isExtensible 检查也会返回 false 
+    Object.freeze(obj)   不可新增、删除、修改成员[最严格的防篡改级别][ES5] 
+    Object.isExtensible(obj) bol,能否新增成员[ES5] 
+    Object.isSealed(obj)     bol,能否新增、删除成员[ES5] 
+    Object.isFrozen(obj)     bol,能否新增、删除及修改成员[ES5] 
+    Object.getOwnPropertyDescriptor(obj,key)  obj,成员的特性配置信息[ES5] 
+      PS: 可对DOM或BOM对象使用该方法;若查询的属性不存在则返回 undefined 
+        如果是访问器属性,这个对象的属性有configurable、enumerable、get 和set;
+        如果是数据属性,这个对象的属性有configurable、enumerable、writable 和value 
+      console.log(Object.getOwnPropertyDescriptor({aoo:"a"},"aoo"));
+      // Object {value: "a", writable: true, enumerable: true, configurable: true}
+    Object.getOwnPropertyDescriptors(obj)  obj,所有成员的特性配置信息[ES5]
   Proto:  
     .constructor  fn,实例的构造函数 
     .valueOf()  对象转换为基本类型,通常与'toString'返回值相同  
@@ -347,7 +345,7 @@ Function,函数基础类,ES中所有函数的基类
       };
       goo(); 
     .toString()   转换为字符串   
-    .call(context[,arg1,arg2,...]) 改变函数的执行上下文this 
+    .call(context[,arg1,arg2,...]) 改变函数的运行环境/函数借用 
       context  函数执行时'this'的值,为'null'或'undefined'时,不改变指向 
         原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象 
         相当于 context.foo([arg,..])  [Self]
@@ -384,7 +382,7 @@ Function,函数基础类,ES中所有函数的基类
         var dog1 = new Dog('wang!');
         dog1.speak(); // wang!
         console.log(dog1); // Dog {words: "wang!", speak: function}
-    .apply(context[,arr/arrLike])  改变函数的执行上下文this 
+    .apply(context[,arr/arrLike])  改变函数的运行环境/函数借用 
       PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
         都是函数对象的方法,区别在于接收参数的形式不同.
         改变this的好处:对象不需要与方法发生任何耦合关系
@@ -442,11 +440,11 @@ Function,函数基础类,ES中所有函数的基类
             var p2 =New(Person)("boo",18); //使用仿造的new
             console.log(p1); //Person {name: "aoo", age: 19}
             console.log(p2); //Person {name: "boo", age: 18}
-    .bind(context[,arg1,arg2,...]) fn,返回改变函数this和初始化参数后的拷贝[ES5]
-      context 返回函数被调用时,作为其 this  
+    .bind(context[,arg1,arg2,...]) fn,返回绑定运行环境及初始化参数后的函数拷贝[ES5][IE9+]
+      context 返回的函数被调用时,作为其 this  
         相当于 context.foo([arg,..])  [Self]
         当使用 new 操作符() 调用绑定函数时,该参数无效 
-      arg     返回函数被调用时,作为其参数 
+      arg     返回的函数被调用时,作为其前若干个参数 
       使用bind固定参数值 
         function foo(arg1,arg2,arg3){ 
           return arg1 + arg2 + arg3; 
@@ -467,6 +465,12 @@ Function,函数基础类,ES中所有函数的基类
         var Hoo = Foo.bind({a:{aoo:3}})
         Hoo();
         new Hoo(); // {b:1} 
+      手动实现bind函数 
+        function bind(fn, context){
+          return function(){
+            return fn.apply(context, arguments);
+          };
+        }
       Example: 
         var x = 9;
         var obj = {
@@ -645,6 +649,71 @@ Function,函数基础类,ES中所有函数的基类
             return fib(n-2) + fib(n-1)
           }
         }
+    惰性载入函数: 改变函数自身,以优化多次在相同条件下执行的函数 
+      Example: 
+      首次执行返回两参数的和,后续返回两参数的积 
+      一般: 
+      var foo = function(arg1,arg2){
+        if (!arguments.callee.aoo) {
+          arguments.callee.aoo = true;
+          return arg1+arg2;
+        }
+        else {
+          return arg1*arg2;
+        }
+      }
+      console.log(foo(3,4));
+      console.log(foo(3,4));
+      console.log(foo(3,4));
+      惰性载入函数: goo被替换了,不用每次都判断aoo的值 
+      var goo = function(arg1,arg2){
+        goo = function(arg1,arg2){
+          return arg1*arg2;
+        }
+        return arg1+arg2;
+      } 
+      console.log(goo(3,4));
+      console.log(goo(3,4));
+      console.log(goo(3,4));
+      由给定值aoo是否为0,来决定函数foo为求和还是求积函数 
+      一般: 
+      var foo = function(arg1,arg2){
+        if (aoo == 0) {
+          return arg1+arg2;
+        }
+        else {
+          return arg1*arg2;
+        }
+      }
+      惰性载入函数: goo被替换了,不用每次都判断aoo的值 
+      var goo = function(arg1,arg2){
+        if (aoo == 0) {
+          return function(arg1,arg2){
+            return arg1+arg2;
+          };
+        }
+        else {
+          return function(arg1,arg2){
+            return arg1*arg2;
+          };
+        }
+      }
+    函数柯里化: 科里化后的[多参数]函数可固化前若干个参数  
+      function curry (foo){ // 创建柯里化函数的通用方式
+        // 获取传入额外的参数组成的数组 
+        var args1 = Array.prototype.slice.call(arguments,1) 
+        return function(){
+          // 类数组数组化 
+          var args2 = Array.prototype.slice.call(arguments) 
+          var args = args1.concat(args2) 
+          return foo.apply(null,args);
+        };
+      }
+      var foo = function(num1,num2){
+        return num1+num2;
+      }
+      var goo = curry(foo,3); // 
+      console.log(goo(4)); // 7 
     不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
     函数内部属性 

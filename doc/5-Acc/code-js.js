@@ -633,22 +633,64 @@ PC端
       data[pos*4 +2] =brightness;
     }
 自我实现 
-  查看对象的属性 
-    var obj = Node  
-    // console.log('查询的对象:',obj);
-    var tObj = Object.getOwnPropertyNames(obj)
-    for(var key in tObj){
-      var k = tObj[key];
-      try {
-        console.log(typeof obj[k],k,obj[k], '#####' );
-      } 
-      catch (e) {
-        console.log( '------',k, '#####' );
-      } 
-      // if (k == 'attributes') { // 查询某个具体的属性 
-      //   console.log('==========================================');
-      // }
-    };
+  检查对象的自身的属性 
+    function checkOwnProp(checkObj,isProto){
+      // checkObj // 查询的对象 
+      // isProto  // 可选,是否是检测对象的原型对象,默认:false 
+      var obj = checkObj   
+      if (isProto) { obj = obj.prototype } 
+      console.log('查询的对象:',obj);
+      // console.log('对象的类型:',typeof obj,obj.toString().slice(7,-1));
+      console.log('_________________________________________________');
+      var tObj = Object.getOwnPropertyNames(obj)
+      for(var key in tObj){
+        var k = tObj[key];
+        try {
+          console.log(typeof obj[k],k,obj[k], '#####' );
+          // console.log(obj[k].toString(),k,obj[k], '#####' );
+        } 
+        catch (e) {
+          console.log( '------',k, '#####' );
+        } 
+        if (k == 'upload') { // 查询某个具体的属性 
+          console.log('==========================================');
+        }
+      };
+      console.log('_________________________________________________');
+    }
+  检查目标是否有该事件 
+    function checkEvent(eventName,eventTarget) {
+      var eventStr = eventName 
+      var target = eventTarget   
+      console.log('是否支持DOM0事件:',eventStr,'on'+eventStr in target);
+      function isEventSupport(eventStr,elem){
+        var bol = false;
+        var foo = function(){
+          bol = true;
+          console.log('是否支持DOM2事件:',eventStr,bol);
+        }
+        var e = new Event(eventStr)
+        elem.addEventListener(eventStr,foo)
+        elem.dispatchEvent(e)
+        elem.removeEventListener(eventStr,foo)
+        if (!bol) {
+          console.log('是否支持DOM2事件:',eventStr,bol);
+        }
+      }
+      isEventSupport(eventStr,target);
+      target['on'+eventStr] = function(e){
+        console.log('事件对象:',e);
+        console.log('是否冒泡:',e.bubbles);
+        console.log('事件类型:',e.constructor);
+        console.log('------------------------------------------------------');
+      }
+      target.addEventListener(eventStr,function(e){
+        console.log('事件对象:',e);
+        console.log('是否冒泡:',e.bubbles);
+        console.log('事件类型:',e.constructor);
+        console.log('======================================================');
+      })
+    }
   滚动条滑动到底端的判断 
     <div class="wrap"> <div class="content"> </div> </div>
     function isScrollBottom(wrap,content,callback,arg1){

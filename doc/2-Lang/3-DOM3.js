@@ -231,8 +231,6 @@ Event,事件基础类
       Example: 
       <div onselectstart="return false">该文字不可被选中</div>
     change   当文本框[input或textarea]内容改变且失去焦点后触发
-    online  网络从离线变成在线时在window上触发,不冒泡  [HTML5] 
-    offline 网络从在线变成离线时触发 [HTML5] 
     error   发生错误时触发,不冒泡  
       PS: 支持该事件的HTML标签: <img>, <object>, <style> 
         支持该事件的JS对象: window, image
@@ -270,6 +268,8 @@ Event,事件基础类
     seeked          搜索结束 
     waiting         播放暂停,等待下载更多数据
     vstalled        不支持DOM0绑定
+    online  [见window对象] 
+    offline  [见window对象] 
     suspend         
     事件总结: 
       页面的加载与卸载 
@@ -976,7 +976,7 @@ CloseEvent
   (详参 JavaScript高级程序设计 407 页)
   // 模拟其他事件
   (详参 JavaScript高级程序设计 409 页)
-  兼容写法
+  兼容写法 
     function trigger(elem, type) {
       if (document.createEvent) {
         var event = document.createEvent('HTMLEvents');
@@ -1169,6 +1169,44 @@ CloseEvent
         html{
           touch-action: manipulation;
         }
+自定义事件 
+  // 实现自定义事件 
+  function MyEventTarget() {
+    this.msg = '自定义的事件对象'
+    this.store = {};
+  }
+  MyEventTarget.prototype = {
+    constructor: MyEventTarget
+    ,listen: function(which,foo){
+      if ( typeof this.store[which] == 'undefined') {
+        this.store[which] = []
+      }
+      this.store[which].push(foo);
+    }
+    ,run: function(which,data){
+      var tmp = this.store[which]
+      if (typeof tmp != 'undefined') {
+        for (var i = 0; i < tmp.length; i++) {
+          tmp[i](data)
+        }
+      }
+      else {
+        console.log('该事件没有监听');
+      }
+    }
+    ,clear: function(which,foo){
+      var tmp = this.store[which];
+      if (typeof tmp == 'undefined') {
+        console.log('未监听,不用清理');
+      }
+      else {
+        this.store[which] = tmp.filter(function(val,idx,arr){
+          return val != foo
+        })
+      }
+    }
+  }
+  var myET = new MyEventTarget();
 -------------------------------------------------------------------------------- 
 DataTransfer,数据传递  
   PS: 为实现数据交换,IE自定义了'text'和'URL'两种有效的数据类型,

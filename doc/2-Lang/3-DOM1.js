@@ -142,6 +142,7 @@ DOM'Document Object Model'文档对象模型: 提供访问和操作网页内容�
 Document,文档 
   Extend: Node 
     console.log(Document.prototype.__proto__.constructor===Node); // true 
+  Instance: document 
   Proto: 
     ★页面信息  
     .referrer str,获取跳转页的URL,即获取从哪个网址跳转过来的 
@@ -177,66 +178,112 @@ Document,文档
       也可通过<meta>元素、响应头部修改 
     .characterSet  str,字符集 
     .title    str,读写,网页标题 
-    .cookie   str,读写当前网页的cookie 
-      PS:网站为了标示用户身份而储存在Client Side[用户本地终端]上的数据,通常经过加密;
-        可访问的前提下,http请求中cookie始终会被携带,
-        即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
-        在子域名中设置的cookie会始终在该子域名的http请求中携带;
-        客户端的磁盘上,每个域名大小在4kb以内;
-        每个特定的域名下最多生成 20 个cookie[DiBs];
-        重要数据不建议保存在cookie中,
+    .cookie   str,读写,当前页面所有可用的cookie的字符串 
+      PS: 根据域、路径、失效时间和安全设置等来确定是否可用;  
+        网站为了标示用户身份而储存在客户端的数据,通常经过加密; 
+        储存空间大小为每个域名4kb,超过部分被忽略;
+        存储个数每个域50个,各个浏览器不尽相同;
         cookie同源政策不要求传输协议,即http和https之间读写无限制
-      cookie之间使用分号分割,需手动取出每一个cookie 
+      cookie的构成 
+        ◆内容,会发送到服务器的部分 
+        key=val  必须,cookie的内容 
+          一般不区分大小写[但可能服务器处理时会区分]
+          键值都需为有效的URL字符,否则需用encodeURIComponent转义 
+        ◆属性,不会发送到服务器,只是用于控制该cookie   
+        domain=xxx   可选,限制域名访问,必须为当前发送Cookie域名的一部分 
+          PS: 只有访问的域名匹配domain属性,Cookie才会发送到服务器
+          Example: 
+          example.com 
+          .example.com  // 对所有子域名生效
+          subdomain.example.com
+        path=xxx     可选,限制路径访问,只有在该路径及以下才会发送cookie
+        expires=xxx  可选,指定过期时间,即过了该时间,cookie被清理 
+          PS: 使用格式采用 Date.toUTCString() 格式,参照时间为本地时间, 
+            若未设置或为null,当窗口关闭时Cookie被清理; 
+            若设置为之前的时间或0,则cookie会被立刻删除 
+          Example: 
+          设置7天后cookie过期
+          var date = new Date();
+          date.setDate((date,getDate()-1));
+          document.cookie = 'user='+encodeURIComponent('张三')+';expires='+date;
+          decodeURICompinent(document.cookie);
+        max-age=xxx  可选,指定有效时长,单位s,如 60*60*24*365 [一年31536000秒] 
+        secure   可选,是否只对https协议发送cookie  
+          cookie只有在使用SSL连接的时候才发送到服务器 
+        HttpOnly 可选,能否被JS读取,主要为了防止XSS攻击盗取Cookie 
+          Set-Cookie: key = value; HttpOnly
+          该cookie,JS无法获取,AJAX操作也无法获取
+      服务器写入: 响应头中设置Cookie 
+        Set-Cookie: key1=val1; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
+        Set-Cookie: key2=val2; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
+        ...
+      客户端发送: 请求头中携带Cookie 
+        PS: 可访问的前提下,http请求中cookie始终会被携带, 
+          即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
+          在子域名中设置的cookie会始终在该子域名的http请求中携带;
+        Cookie: key1=val1  
+      JS读cookie: cookie间使用分号分割,需手动取出每一个cookie 
+        PS: 键和值可用decodeURIComponent来解码 
         var cookie = document.cookie.split(';');
         for (var i = 0; i < cookie.length; i++) {
           console.log(cookie[i]);
         }
-      document.cookie = str;  写入cookie 
-        PS:不会对原有的cookie进行覆盖,只会进行增加 
-          分号、逗号、空格不可作为cookie的值,可使用encodeURIComponent方法进行转义;
-        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure';
-        key=val  必须,cookie的内容
-        expires  可选,过期时间,即过了该时间,cookie被清理
-          PS:使用格式采用 Date.toUTCString() 格式, 参照时间为本地时间,
-            若未设置或设置为null,当窗口关闭时Cookie被清理;
-          Example: 设置7天后cookie过期
-            var date =new Date();
-            date.setDate((date,getDate()-1));
-            document.cookie ='user='+encodeURIComponent('张三')+';expires='+date;
-            decodeURICompinent(document.cookie);
-        domain   可选,限制域名访问,必须为当前发送Cookie域名的一部分
-          PS:只有访问的域名匹配domain属性,Cookie才会发送到服务器
-          Example:
-            example.com
-            .example.com    // 对所有子域名生效
-            subdomain.example.com
-        path     可选,限制路径访问,只有在该路径及其下才可访问该cookie
-        secure   可选,指定是否使用https协议
-          该属性为一个开关,不需指定值,若通信为https协议,则其自动打开
-        max-age  指定Cookie有效期,如 60*60*24*365 [一年31536000秒]
-        HttpOnly 设置Cookie是否被JS读取,主要为了防止XSS攻击盗取Cookie
-          Set-Cookie: key = value;HttpOnly
-          该Cookie JS无法获取;AJAX操作也无法获取
-      document.cookie 一次只能写入一个cookie;向浏览器发送时,将全部发送
-        服务器在浏览器储存cookie时分行指定
-        HTTP/1.0 200 OK
-        Content-type: text/html
-        Set-Cookie  : key1 = value1 
-        Set-Cookie  : key2 = value2
-        Set-Cookie字段用于服务器向浏览器写入Cookie,一行一个
-      browser对Cookie的限制 
-        Firefox中每个域名限制Cookie数量为50,Safari和Chrome无数量限制;
-        Cookie累加长度限制为4kb,超过部分被忽略;
-          通过使用其他符号分割,避免Cookie的数量限制,读取时再自行解析
-          Example: name=a&b=c&d=e&f=g
-      修改cookie 
-        若服务器想改变一个已存在的cookie,则修改时key、domain、path、secure需都匹配,
-        否则,则是新建一cookie;
-      设置Cookie的expires为0或者过期时间 删除cookie 
-      Cookie 隔离[即请求时不带cookie] 
-        若静态文件放在主域名下,则静态文件请求时都会带cookie提交给server,
-        cookie有域的限制,也不能跨域传递,故使用非主要域名的时候,请求头中就不会带有cookie数据,
-        不发送cookie也减少了Web Server对cookie的处理分析环节,
+      JS写cookie: document.cookie = str  新增或覆盖已存在的cookie  
+        PS: 一次只能写入一个cookie
+          改变已存在的cookie,key、domain、path、secure需都匹配,否则为新建cookie;
+        // 格式同相应头中的格式  
+        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'; 
+        var cookieHandle = { // 自定义增删查的方法 
+          get: function (name){
+            var cookieName = encodeURIComponent(name) + "=",
+            cookieStart = document.cookie.indexOf(cookieName),
+            cookieValue = null;
+            if (cookieStart > -1){ // 存在该cookie 
+              var cookieEnd = document.cookie.indexOf(";", cookieStart);
+              if (cookieEnd == -1){ // 最后一个cookie 
+                cookieEnd = document.cookie.length;
+              }
+              cookieValue = decodeURIComponent(document.cookie.substring(
+                cookieStart + cookieName.length
+                ,cookieEnd
+              ));
+            }
+            return cookieValue;
+          },
+          set: function (name,value,option) {
+            // option --  { // 可选 
+            //   expires: obj   // Date
+            //   ,path: str
+            //   ,domain: str
+            //   ,secure: bol
+            // }
+            var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+            if (option) {
+              if (option.expires instanceof Date) {
+                cookieText += "; expires=" + option.expires.toGMTString();
+              }
+              if (option.path) {
+                cookieText += "; path=" + option.path;
+              }
+              if (option.domain) {
+                cookieText += "; domain=" + option.domain;
+              }
+              if (option.secure) {
+                cookieText += "; secure";
+              }
+            }
+            document.cookie = cookieText;
+            return cookieText;
+          },
+          del: function (name,path,domain,secure){
+            this.set(name,"", {
+              expires: new Date(0)   
+              ,path: path 
+              ,domain: domain 
+              ,secure: secure 
+            });
+          }
+        };
     ★元素快捷获取 
     .defaultView  当前document对应的window对象,不存在则为 null [DOM2] 
       IE不支持该属性,有 document.parentWindow 和其等价
@@ -1390,7 +1437,7 @@ HTMLElement,HTML元素节点
         使用'mouseup'事件来代替'click'事件来使用;
     相关事件 
       oninvalid    验证失败时触发 
-  HTMLImageElement    
+  HTMLImageElement,<img>对象   
     Extend: HTMLElement 
     Instance: <img>元素 
     Proto: 
@@ -1468,34 +1515,51 @@ HTMLElement,HTML元素节点
     .webkitExitFullscreen()   退出全屏 
     .webkitExitFullScreen()   
     .webkitEnterFullScreen()   
-  HTMLIFrameElement  <iframe> 
-    var frame = document.querySelector("#frameId1")   框架的DOM元素对象 
-    var iframe = window.frames[iframeName]  通过'name'属性值获取框架的window对象 
-      Example:
-      var iframe = frames['frameName1'];
-      iframe.document    框架的document对象 
-    .contentDocument  框架的document文档对象 [DOM2][IE8+] 
-    .contentWindow    框架的window对象 
-    .<attr> 
-      .src    
-      .srcdoc 
-      .name   
-      .width 
-      .height 
-      .align 
-    .scrolling   读写,iframe的滚动条  
-        iframe.scrolling = 'no'     去掉iframe的滚动条 
-    .frameBorder num,iframe的边框 
-        iframe.frameBorder = 0      去掉iframe的边框
-    .sandbox    
-    .allowFullscreen 
-    .referrerPolicy  
-    .longDesc     
-    .marginHeight 
-    .marginWidth  
-    .allow        
-    .getSVGDocument()  
-  // TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★   
+  HTMLIFrameElement,<iframe>对象  
+    Extend: HTMLElement 
+    Instance: 
+      var frame = document.querySelector("#frameId1")   框架的DOM元素对象 
+      var iframe = window.frames[iframeName]  通过'name'属性值获取框架的window对象 
+        Example:
+        var iframe = frames['frameName1'];
+        iframe.document    框架的document对象 
+    Proto: 
+      .<attr>标签属性 
+        .src    
+        .srcdoc 
+        .name   
+        .width 
+        .height 
+        .align 
+      .contentDocument  框架的document文档对象 [DOM2][IE8+] 
+      .contentWindow    框架的window对象 
+      .scrolling   读写,iframe的滚动条  
+          iframe.scrolling = 'no'     去掉iframe的滚动条 
+      .frameBorder num,iframe的边框 
+          iframe.frameBorder = 0      去掉iframe的边框
+      .sandbox    
+      .allowFullscreen 
+      .referrerPolicy  
+      .longDesc     
+      .marginHeight 
+      .marginWidth  
+      .allow        
+      .getSVGDocument()  
+    iframe,可在当前网页之中,嵌入其他网页 
+      每个iframe元素形成自己的窗口,即有自己的window对象。
+      iframe窗口之中的脚本,可以获得父窗口和子窗口。
+      但是,只有在同源的情况下,父窗口和子窗口才能通信；
+      若跨域,就无法拿到对方的DOM。
+      比如,父窗口运行下面的命令,若iframe窗口不是同源,就会报错。
+      document.getElementById("myIFrame").contentWindow.document
+      // Uncaught DOMException: Blocked a frame from accessing a cross-origin frame.
+      上面命令中,父窗口想获取子窗口的DOM,因为跨域导致报错。
+      反之亦然,子窗口获取主窗口的DOM也会报错。
+      window.parent.document.body  // 报错
+      这种情况不仅适用于iframe窗口,还适用于 window.open 方法打开的窗口,
+      只要跨域,父窗口与子窗口之间就无法通信。
+      若两个窗口一级域名相同,只是二级域名不同,
+      那么设置上一节介绍的 document.domain 属性,就可以规避同源政策,拿到DOM。
 HTMLMediaElement,HTML媒体元素   
   Extend: HTMLElement 
   Proto: 

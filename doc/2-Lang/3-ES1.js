@@ -1995,18 +1995,29 @@ JS运行过程机理
 ◆总结、技巧 
 函数节流,对消耗资源过多的操作的频率进行限制 
   如IE中onresize的连续触发操作DOM,高频率的更改可能会让浏览器崩溃 
-  function throttle(method, context) {
+  简陋版节流: 频率过高导致只执行最后一次 
+  function simpleThrottle(method, context) {
     clearTimeout(method.tId);
-    method.tId= setTimeout(function(){
+    method.tId = setTimeout(function(){
       method.call(context);
     }, 100);
   }
+  限定为一定频率的节流:  
+  function throttle(foo,context,time){
+    if(!foo._1_){
+      foo._1_ = setTimeout(function(){
+        foo.call(context);
+        foo._1_ = false;
+      },time)
+    }
+  }
+  Example: 
   function resizeDiv(){
     var div = document.getElementById("myDiv");
     div.style.height = div.offsetWidth + "px";
   }
   window.onresize = function(){
-    throttle(resizeDiv);
+    simpleThrottle(resizeDiv);
   };
 
 Question&Suggestion 

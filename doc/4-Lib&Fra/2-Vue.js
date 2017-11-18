@@ -32,16 +32,11 @@ VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架[IE9+]
 View&Model 
   视图'View',Vue实例管理的DOM节点 
   模型'Model',一个轻微改动过的原生JS对象 
-    VueJS把数据对象的属性都转换成了ES5中的 getter/setters,
-    以达到无缝的数据观察效果:无需脏值检查,也不需要刻意给Vue任何更新视图的信号 
-    每当数据变化时,视图都会在下一帧自动更新
     Vue实例代理了它们观察到的数据对象的所有属性
     vm.$data.a 等价于 vm.a  
     根据引用修改数据和修改 vm.$data 具有相同的效果,即多个Vue实例可观察同一份数据
     在较大型的应用程序中,推荐将Vue实例作为纯粹的视图看待,
     同时把数据处理逻辑放在更独立的外部数据层 
-    一旦数据被观察,VueJS就不会再侦测到新加入或删除的属性了
-    作为弥补,为被观察的对象增加'$add','$set' 和'$delete'方法 
   Example: 
     ◆View
     <div id="app"> awesome {{name}}</div>
@@ -55,7 +50,13 @@ View&Model
       ,data: {}
     });
     渲染结果: awesome Vue.js    
-  'Model'更新及监控 
+  响应原理及不会响应的情况 
+    原理: 
+      Vue把数据对象的属性都转换成了ES5中的 getter/setters,
+      以达到数据观察效果:无需脏值检查,也不需要刻意给Vue更新视图的信号 
+      每当数据变化时,视图都会在下一帧自动更新
+      一旦数据被观察,VueJS就不会再侦测到新加入或删除的属性了
+      作为弥补,为被观察的对象增加'$add','$set' 和'$delete'方法 
     'mutation method'变异方法,会改变调用该方法的原数据的方法 
       变异方法会使数据得到更新且能保证处于Vue的监控中 
       push()  pop() shift() unshift() splice() sort() reverse()
@@ -1186,6 +1187,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     <key>: 'someMethod',  // 方式二,为一方法名  
     <key>: {       // 方式三,使用对象的方式进行配置  
       deep: true // 深度 watch 
+        监听对象属性的变化,需使用深度watch,监听数组的变动则不需要 
       ,handler: function (val,oldVal) {
         // 
       }
@@ -1969,19 +1971,22 @@ vm.xxx.实例属性/方法/事件
       'props'单向数据流 
         PS: 而在子组件内部改变prop,Vue会在控制台给出警告; 
           在js中对象和数组是引用类型,指向同一个内存空间,
-          若 prop 是一个对象或数组,在子组件内部改变它会影响父组件的状态;
-        定义一局部变量,用 prop 的值初始化 
+          若prop是一对象或数组,在子组件内部改变它会影响父组件的状态;
+        定义'data'属性,用prop值初始化: 不会动态响应父组件传递的数据  
           props: ['parentData'],
           data: function () {
-            return { aoo: this.parentData }
+            return { 
+              aoo: this.parentData 
+            }
           }
-        定义一计算属性,处理 prop 的值并返回 
+        定义计算属性,处理prop值并返回: 不可进行覆盖操作,需定义set  
           props: ['parentData'],
           computed: {
             normalizedSize: function () {
               return this.parentData.trim().toLowerCase()
             }
           }
+        定义'data'属性,用prop值初始化,并监听prop值进行动态响应  
     'events up'子组件向父组件通信 
       父组件中,子组件标签上绑定自定义事件并指定回调函数,  
       子组件内通过'$emit'触发该事件并传递数据,

@@ -1162,6 +1162,64 @@ URLSearchParams,处理URL中的查询字符串 [IE不支持]
       console.log(p);
     }
   URLSearchParams实例可当作POST数据发送,所有数据都会URL编码 
+MutationObserver,观察者对象[IE11+]
+  PS: 能在某个范围内的DOM树发生变化时作出适当反应的能力 
+    该API设计用来替换掉在DOM3事件规范中引入的Mutation事件 
+  Extend: Object 
+  Instance: 
+    new MutationObserver(function(arr,self){ 
+      PS: 回调函数会在指定的DOM节点[目标节点]发生变化时被调用
+      arr   若干个 MutationRecord 对象的数组 
+      self  该观察者对象本身
+    })
+  Proto: 
+    .observe(node,{  // 观察目标节点注册,目标节点或其后代节点发生DOM变化时收到通知 
+      PS: 向一个元素添加 observer 和 addEventListener 类似
+        同一元素多次使用相同的配置注册观察,仅第一次生效,
+        若不同的配置则取配置的并集,若回调对象不同,则同时多个观察者
+      // 用来配置观察者对象行为的对象 
+      // childList,attributes,或 characterData 三者至少有一个为 true
+      childList: bol   // 是否需要观察子节点的增删
+        PS: 不包括除子节点的后代节点 
+      ,attributes: bol // 是否需要观察目标节点的属性节点变化[增删改]
+      ,characterData:bol // 目标节点为characterData节点时,是否也要观察其文本内容的变化 
+        characterData节点:一种抽象接口,具体可以为文本节点,注释节点,以及处理指令节点 
+      ,subtree: bol  //  是否观察目标节点所有后代节点的上述三种节点变化 
+      ,attributeOldValue: bol // 是否在MutationRecord对象的oldValue中记录attributes值 
+        PS: attributes为true前提下
+      ,characterDataOldValue: bol // 是否在MutationRecord对象的oldValue中记录characterData文本内容 
+        PS: 在characterData属性已经设为true的前提下 
+      ,attributeFilter: [ // 要观察的属性名的数组
+        PS: 只有该数组中包含的属性名发生变化时才会被观察到 
+      ] 
+    })     
+    .disconnect()  停止观测 
+    .takeRecords() 清空观察者对象的记录队列,并返回里面的内容.
+      返回一个包含了MutationRecord对象的数组 
+MutationRecord,变动记录对象 
+  Expand: Object 
+  Instance: 作为第一个参数的成员传递给观察者对象的回调函数 
+  Proto: 
+    .type  str,发生变化的类型 
+      'attributes'     属性发生变化 
+      'characterData'  CharacterData节点发生变化 
+      'childList'     目标节点的子节点发生了变化 
+    .target  Node,此次变化影响到的节点
+      具体返回那种节点类型是根据type值的不同而不同的. 
+      如果type为attributes,则返回发生变化的属性节点所在的元素节点,
+      如果type值为characterData,则返回发生变化的这个characterData节点.
+      如果type为childList,则返回发生变化的子节点的父节点.
+    .addedNodes  NodeList,被添加的节点,或 null 
+    .removedNodes  NodeList,被删除的节点,或 null 
+    .previousSibling  Node,被添加或被删除的节点的前一个兄弟节点,或 null 
+    .nextSibling  Node,被添加或被删除的节点的后一个兄弟节点,或 null 
+    .attributeName  str,变更属性的本地名称,或 null 
+    .attributeNamespace  str,变更属性的命名空间,或 null 
+    .oldValue  str,之前的值
+      根据type值的不同,返回的值也会不同.
+      如果type为 attributes,则返回该属性变化之前的属性值.
+      如果type为characterData,则返回该节点变化之前的文本数据.
+      如果type为childList,则返回null.
 DOMStringList 
   .length  
   .item()    
@@ -1492,7 +1550,6 @@ WebKit相关
   PageTransitionEvent
   NodeFilter
   MutationRecord
-  MutationObserver
   MessagePort
   MessageChannel
   InputDeviceCapabilities

@@ -1,6 +1,6 @@
 ◆Event事件: 用来处理响应的一个机制,JS与HTML的交互通过事件实现  
   PS: 响应可来自用户,也可以来自浏览器,如文件下载完了  
-    事件机制属于观察者模式的模型 
+    事件机制属于观察者的设计模式
   事件流: 描述页面中接收事件的顺序 
     "event bubbling"事件冒泡: IE的事件流,从内向外传递 
       PS: 事件冒泡的前提是目标元素在文档中,移除目标文件则会阻止冒泡 
@@ -268,7 +268,7 @@ Event,事件基础类
     ratechange      播放媒体的速度改变
     seeking         正移动到新位置 
     seeked          搜索结束 
-    waiting         播放暂停，等待下载更多数据
+    waiting         播放暂停,等待下载更多数据
     vstalled        不支持DOM0绑定
     suspend         
     事件总结: 
@@ -448,11 +448,11 @@ ClipboardEvent,剪贴版事件 [HTML5]
         formatstr  数据类型,但其他浏览器已不能识别 "text" 
         str        要更换的字符串
       clipboardData.clearData() 从剪贴板中清除数据
-MutationEvent,变动事件[IE9+] 
+MutationEvent,变动事件[IE9+][已废弃] 
   PS: 当底层DOM结构发生变化时触发 
     变动事件是为XML或HTML DOM设计的,不特定于某种语言 
-    兼容性检测 
-    var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
+    已从Web标准中删除[因为API的设计有缺陷],
+    虽然一些浏览器目前仍然支持它,但不推荐使用该特性
   Extend: Event 
     console.log(MutationEvent.prototype.__proto__.constructor===Event);
   Proto: 
@@ -466,18 +466,22 @@ MutationEvent,变动事件[IE9+]
     .attrName  
     .attrChange  
     .initMutationEvent() 
+  Feature: 
+    兼容性检测 
+    var isSupported = document.implementation.hasFeature("MutationEvents","2.0");
   事件枚举: 
-    已废弃 
-      'DOMSubtreeModified' 在DOM结构中发生任何变化时触发,不支持DOM0绑定[DOM2] 
-      'DOMNodeInserted'    节点被插入另一节点时触发[DOM2] 
-      'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发[DOM2] 
-        该事件在 DOMNodeInserted 后触发
-        貌似无效 ? 
-      'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2]  
-      'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发[DOM2]  
-        该事件在 DOMNodeRemoved 之后触发
-      'DOMAttrModified'           特性被修改后触发,不支持DOM0绑定 [DOM2]  
-      'DOMCharacterDataModified'  文本节点值发生变化时触发,不支持DOM0绑定 [DOM2]  
+    'DOMSubtreeModified' 在DOM结构中发生任何变化时触发,不支持DOM0绑定[DOM2] 
+    'DOMNodeInserted'    节点被插入另一节点时触发[DOM2] 
+    'DOMNodeInsertedIntoDocument' 节点被直接插入文档或通过子树间接插入文档后触发[DOM2] 
+      该事件在 DOMNodeInserted 后触发
+      貌似无效 ? 
+    'DOMNodeRemoved'      节点被删除时触发,不支持DOM0绑定 [DOM2]  
+    'DOMNodeRemovedFromDocument' 节点从文档中删除或通过子树间接从文档中删除前触发[DOM2]  
+      该事件在 DOMNodeRemoved 之后触发
+    'DOMAttrModified'           特性被修改后触发,不支持DOM0绑定 [DOM2]  
+    'DOMCharacterDataModified'  文本节点值发生变化时触发,不支持DOM0绑定 [DOM2]  
+    DOMAttributeNameChanged
+    DOMElementNameChanged
 CustomEvent,自定义事件[DOM3][IE11+] 
   Extend：Event 
     console.log(CustomEvent.prototype.__proto__.constructor===Event); // true 

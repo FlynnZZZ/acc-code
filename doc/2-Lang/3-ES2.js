@@ -86,7 +86,7 @@ Object,对象基础类,ES中所有对象的基类
       javascript的面向对象 
         Javascript本身不是一种面向对象的编程语言,
         在ES5中,它的语法中也没有class（类的关键字）,
-        但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发。
+        但是,开发者可以利用对象的原型prototype属性来模拟面向对象进行编程开发.
         function Dog(name){ //构造函数模拟创建一个Dog类
           this.name = name;
         }
@@ -103,8 +103,8 @@ Object,对象基础类,ES中所有对象的基类
         1、构造函数；
         2、给prototype对象添加属性和方法；
         3、实例化；
-        4、通过实例化后的对象调用类的方法或者属性。
-        注意:面向对象是一种编程思想,并不是具体的工具。
+        4、通过实例化后的对象调用类的方法或者属性.
+        注意:面向对象是一种编程思想,并不是具体的工具.
     ★属性特性相关 
     Object.defineProperty(obj,key,{   // 定义对象的成员及其特性[ES5]  
       value: val,       // 默认为原始值  
@@ -285,7 +285,7 @@ Object,对象基础类,ES中所有对象的基类
       obj[aoo] = 1;
       obj['aoo'] = 2;
       console.log(obj); // Object {boo: 1, aoo: 2}
-Function,函数基础类,ES中所有函数的基类  
+Function,函数基础类,ES中所有函数的基类 
   PS: JS中函数是唯一能创建新作用域的地方;  
   Extend：Object 
     Function.prototype instanceof Object // true 
@@ -601,7 +601,7 @@ Function,函数基础类,ES中所有函数的基类
         相当于: function(参数1,参数2){ return statement }
         传入多个参数使用括号(),复杂操作使用{} 
           若参数超过1个的话,需要用小括号（）括起来,
-          函数体语句超过1条的时候,需要用大括号{ }括起来。
+          函数体语句超过1条的时候,需要用大括号{ }括起来.
           var sum = (a,b) => {return a+b}
           sum(1,2);//结果:3
         箭头函数中的this指向的是定义时的this,而非执行时的this 
@@ -628,7 +628,7 @@ Function,函数基础类,ES中所有函数的基类
             }
           };
           obj.show(); // 100
-          定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x。
+          定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
           而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
       递归: 一个函数调用本身或者两个函数相互调用 
         PS: 递归必须要定义终止条件,否则无限递归.
@@ -927,7 +927,7 @@ Number,数值类: 处理数值的'包装对象'
     Number.NaN                 NaN
     Number.EPSILON  2.220446049250313e-16,一个极小的数值[ES6] 
       PS: Number.EPSILON 的出现是用来判断浮点数的计算误差,
-        若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差。
+        若浮点数计算得到的误差不超过Number.EPSILON 的值,就表示可以接受这样的误差.
       console.log(Number.EPSILON); // 2.220446049250313e-16
       2.220446049250313e-16 是一个极小的数值,约等于 0.00000000000000022204
     Number.MAX_SAFE_INTEGER  最大的安全整数: 9007199254740991[ES6] 
@@ -1047,14 +1047,14 @@ String,字符类: 处理字符串的'包装对象'
       replaceStr  用于替换的字符 
         ▼一些特殊的字符序列,将正则表达式操作得到的值插入到结果字符串中 
         $$       $
-        $&       匹配整个模式的子字符串。与RegExp.lastMatch的值相同
-        "$'"     匹配的子字符串之前的子字符串。与RegExp.leftContext的值相同
-        "$`"     匹配的子字符串之后的子字符串。与RegExp.rightContext的值相同
+        $&       匹配整个模式的子字符串.与RegExp.lastMatch的值相同
+        "$'"     匹配的子字符串之前的子字符串.与RegExp.leftContext的值相同
+        "$`"     匹配的子字符串之后的子字符串.与RegExp.rightContext的值相同
         $n       匹配第n个捕获组的子字符串,其中n等于 0-9 
-          $1是匹配第一个捕获组的子字符串,$2是匹配第二个捕获组的子字符串,以此类推。
+          $1是匹配第一个捕获组的子字符串,$2是匹配第二个捕获组的子字符串,以此类推.
           如果正则表达式中没有定义捕获组,则使用空字符串
         $nn      匹配第nn个捕获组的子字符串,其中nn等于 01-99 
-          $01是匹配第一个捕获组的子字符串,$02 是匹配第二个捕获组的子字符串,以此类推。
+          $01是匹配第一个捕获组的子字符串,$02 是匹配第二个捕获组的子字符串,以此类推.
           如果正则表达式中没有定义捕获组,则使用空字符串
         Example: 
         var text = "cat, bat, sat, fat";
@@ -1404,9 +1404,9 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         若数组中存在的元素被更改,则他们传入 foo 的值是 every 访问到他们那一刻的值,
         那些被删除的元素或从来未被赋值的元素将不会被访问到;
       context 执行 callback 时使用的 this 值 
-        若为 every 提供一个 context 参数,在该参数为调用 callback 时的 this 值。
+        若为 every 提供一个 context 参数,在该参数为调用 callback 时的 this 值.
         若省略该参数,则 callback 被调用时的 this 值,
-        在非严格模式下为全局对象,在严格模式下传入 undefined。
+        在非严格模式下为全局对象,在严格模式下传入 undefined.
       Example: 判断是否所有元素大于18 
         var arr = [19, 20, 22];
         var res = arr.every(function(val,idx,arr){
@@ -1616,7 +1616,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         arr[0].push(1);
         console.log(arr[0]);  // [0, 1] 
         console.log(arr1[0]); // [0] 
-Date,日期时间类: 处理时间和日期,内置获取和设置日期时间信息的方法   
+Date,日期时间类: 处理时间和日期,内置获取和设置日期时间信息的方法 
   PS: 在早期java中 java.util.Date 类基础上构建;  
     Date对象基于1970年1月1日0时世界协调时间开始的毫秒数 
   Extend: Object 
@@ -1723,7 +1723,7 @@ Date,日期时间类: 处理时间和日期,内置获取和设置日期时间信
       console.log(date+1); // Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)1
       console.log(+date);  // 0 
     日期的比较: 使用变量名比较时,对象的变量名指向的是地址,需转换为毫秒数进行比较
-RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法规则字符串的规则 
+RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法规则字符串的规则 
   Expand: Object 
     console.log(RegExp.prototype.__proto__.constructor===Object); // true  
   Static: 
@@ -2100,57 +2100,57 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       new RegExp(/abc/ig, 'i').flags // "i" 
       上面代码中,原有正则对象的修饰符是ig,它会被第二个参数i覆盖 
     字符串的正则方法 
-      字符串对象共有4个方法,可以使用正则表达式:match()、replace()、search()和split()。
+      字符串对象共有4个方法,可以使用正则表达式:match()、replace()、search()和split().
       ES6将这4个方法,在语言内部全部调用RegExp的实例方法,
-      从而做到所有与正则相关的方法,全都定义在RegExp对象上。
+      从而做到所有与正则相关的方法,全都定义在RegExp对象上.
       String.prototype.match 调用 RegExp.prototype[Symbol.match]
       String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
       String.prototype.search 调用 RegExp.prototype[Symbol.search]
       String.prototype.split 调用 RegExp.prototype[Symbol.split]
     u修饰符 
       ES6对正则表达式添加了u修饰符,含义为“Unicode模式”,
-      用来正确处理大于\uFFFF的Unicode字符。
-      也就是说,会正确处理四个字节的UTF-16 编码。
+      用来正确处理大于\uFFFF的Unicode字符.
+      也就是说,会正确处理四个字节的UTF-16 编码.
       /^\uD83D/u.test('\uD83D\uDC2A')
       // false
       /^\uD83D/.test('\uD83D\uDC2A')
       // true
-      上面代码中,\uD83D\uDC2A是一个四个字节的UTF-16 编码,代表一个字符。
-      ES5不支持四个字节的UTF-16 编码,会将其识别为两个字符,导致第二行代码结果为true。
-      加了u修饰符以后,ES6就会识别其为一个字符,所以第一行代码结果为false。
-      一旦加上u修饰符号,就会修改下面这些正则表达式的行为。
+      上面代码中,\uD83D\uDC2A是一个四个字节的UTF-16 编码,代表一个字符.
+      ES5不支持四个字节的UTF-16 编码,会将其识别为两个字符,导致第二行代码结果为true.
+      加了u修饰符以后,ES6就会识别其为一个字符,所以第一行代码结果为false.
+      一旦加上u修饰符号,就会修改下面这些正则表达式的行为.
       (1)点字符
-        点(.)字符在正则表达式中,含义是除了换行符以外的任意单个字符。
-        对于码点大于0xFFFF的Unicode字符,点字符不能识别,必须加上u修饰符。
+        点(.)字符在正则表达式中,含义是除了换行符以外的任意单个字符.
+        对于码点大于0xFFFF的Unicode字符,点字符不能识别,必须加上u修饰符.
         var s = '𠮷';
         /^.$/.test(s) // false
         /^.$/u.test(s) // true
-        上面代码表示,若不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败。
+        上面代码表示,若不添加u修饰符,正则表达式就会认为字符串为两个字符,从而匹配失败.
       (2)Unicode字符表示法
-        ES6新增了使用大括号表示Unicode字符,这种表示法在正则表达式中必须加上u修饰符,才能识别。
+        ES6新增了使用大括号表示Unicode字符,这种表示法在正则表达式中必须加上u修饰符,才能识别.
         /\u{61}/.test('a') // false
         /\u{61}/u.test('a') // true
         /\u{20BB7}/u.test('𠮷') // true
-        上面代码表示,若不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u。
+        上面代码表示,若不加u修饰符,正则表达式无法识别\u{61}这种表示法,只会认为这匹配61个连续的u.
       (3)量词
-        使用u修饰符后,所有量词都会正确识别码点大于0xFFFF的Unicode字符。
+        使用u修饰符后,所有量词都会正确识别码点大于0xFFFF的Unicode字符.
   
         /a{2}/.test('aa') // true
         /a{2}/u.test('aa') // true
         /𠮷{2}/.test('𠮷𠮷') // false
         /𠮷{2}/u.test('𠮷𠮷') // true
-        另外,只有在使用u修饰符的情况下,Unicode表达式当中的大括号才会被正确解读,否则会被解读为量词。
+        另外,只有在使用u修饰符的情况下,Unicode表达式当中的大括号才会被正确解读,否则会被解读为量词.
   
         /^\u{3}$/.test('uuu') // true
-        上面代码中,由于正则表达式没有u修饰符,所以大括号被解读为量词。加上u修饰符,就会被解读为Unicode表达式。
+        上面代码中,由于正则表达式没有u修饰符,所以大括号被解读为量词.加上u修饰符,就会被解读为Unicode表达式.
       (4)预定义模式
-        u修饰符也影响到预定义模式,能否正确识别码点大于0xFFFF的Unicode字符。
+        u修饰符也影响到预定义模式,能否正确识别码点大于0xFFFF的Unicode字符.
   
         /^\S$/.test('𠮷') // false
         /^\S$/u.test('𠮷') // true
-        上面代码的\S是预定义模式,匹配所有不是空格的字符。只有加了u修饰符,它才能正确匹配码点大于0xFFFF的Unicode字符。
+        上面代码的\S是预定义模式,匹配所有不是空格的字符.只有加了u修饰符,它才能正确匹配码点大于0xFFFF的Unicode字符.
   
-        利用这一点,可以写出一个正确返回字符串长度的函数。
+        利用这一点,可以写出一个正确返回字符串长度的函数.
   
         function codePointLength(text) {
           var result = text.match(/[\s\S]/gu);
@@ -2161,14 +2161,14 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
         codePointLength(s) // 2
       (5)i修饰符
   
-        有些Unicode字符的编码不同,但是字型很相近,比如,\u004B与\u212A都是大写的K。
+        有些Unicode字符的编码不同,但是字型很相近,比如,\u004B与\u212A都是大写的K.
   
         /[a-z]/i.test('\u212A') // false
         /[a-z]/iu.test('\u212A') // true
-        上面代码中,不加u修饰符,就无法识别非规范的K字符。
+        上面代码中,不加u修饰符,就无法识别非规范的K字符.
     y 修饰符 
-      除了u修饰符,ES6还为正则表达式添加了y修饰符,叫做“粘连”(sticky)修饰符。
-      y修饰符的作用与g修饰符类似,也是全局匹配,后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于,g修饰符只要剩余位置中存在匹配就可,而y修饰符确保匹配必须从剩余的第一个位置开始,这也就是“粘连”的涵义。
+      除了u修饰符,ES6还为正则表达式添加了y修饰符,叫做“粘连”(sticky)修饰符.
+      y修饰符的作用与g修饰符类似,也是全局匹配,后一次匹配都从上一次匹配成功的下一个位置开始.不同之处在于,g修饰符只要剩余位置中存在匹配就可,而y修饰符确保匹配必须从剩余的第一个位置开始,这也就是“粘连”的涵义.
       var s = 'aaa_aa_a';
       var r1 = /a+/g;
       var r2 = /a+/y;
@@ -2178,15 +2178,15 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
   
       r1.exec(s) // ["aa"]
       r2.exec(s) // null
-      上面代码有两个正则表达式,一个使用g修饰符,另一个使用y修饰符。这两个正则表达式各执行了两次,第一次执行的时候,两者行为相同,剩余字符串都是_aa_a。由于g修饰没有位置要求,所以第二次执行会返回结果,而y修饰符要求匹配必须从头部开始,所以返回null。
-      若改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了。
+      上面代码有两个正则表达式,一个使用g修饰符,另一个使用y修饰符.这两个正则表达式各执行了两次,第一次执行的时候,两者行为相同,剩余字符串都是_aa_a.由于g修饰没有位置要求,所以第二次执行会返回结果,而y修饰符要求匹配必须从头部开始,所以返回null.
+      若改一下正则表达式,保证每次都能头部匹配,y修饰符就会返回结果了.
       var s = 'aaa_aa_a';
       var r = /a+_/y;
   
       r.exec(s) // ["aaa_"]
       r.exec(s) // ["aa_"]
-      上面代码每次匹配,都是从剩余字符串的头部开始。
-      使用lastIndex属性,可以更好地说明y修饰符。
+      上面代码每次匹配,都是从剩余字符串的头部开始.
+      使用lastIndex属性,可以更好地说明y修饰符.
   
       const REGEX = /a/g;
   
@@ -2204,9 +2204,9 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
   
       // 4号位开始匹配失败
       REGEX.exec('xaxa') // null
-      上面代码中,lastIndex属性指定每次搜索的开始位置,g修饰符从这个位置开始向后搜索,直到发现匹配为止。
+      上面代码中,lastIndex属性指定每次搜索的开始位置,g修饰符从这个位置开始向后搜索,直到发现匹配为止.
   
-      y修饰符同样遵守lastIndex属性,但是要求必须在lastIndex指定的位置发现匹配。
+      y修饰符同样遵守lastIndex属性,但是要求必须在lastIndex指定的位置发现匹配.
   
       const REGEX = /a/y;
   
@@ -2223,13 +2223,13 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       const match = REGEX.exec('xaxa');
       match.index // 3
       REGEX.lastIndex // 4
-      进一步说,y修饰符号隐含了头部匹配的标志^。
+      进一步说,y修饰符号隐含了头部匹配的标志^.
   
       /b/y.exec('aba')
       // null
-      上面代码由于不能保证头部匹配,所以返回null。y修饰符的设计本意,就是让头部匹配的标志^在全局匹配中都有效。
+      上面代码由于不能保证头部匹配,所以返回null.y修饰符的设计本意,就是让头部匹配的标志^在全局匹配中都有效.
   
-      在split方法中使用y修饰符,原字符串必须以分隔符开头。这也意味着,只要匹配成功,数组的第一个成员肯定是空字符串。
+      在split方法中使用y修饰符,原字符串必须以分隔符开头.这也意味着,只要匹配成功,数组的第一个成员肯定是空字符串.
   
       // 没有找到匹配
       'x##'.split(/#/y)
@@ -2238,24 +2238,24 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       // 找到两个匹配
       '##x'.split(/#/y)
       // [ '', '', 'x' ]
-      后续的分隔符只有紧跟前面的分隔符,才会被识别。
+      后续的分隔符只有紧跟前面的分隔符,才会被识别.
   
       '#x#'.split(/#/y)
       // [ '', 'x#' ]
   
       '##'.split(/#/y)
       // [ '', '', '' ]
-      下面是字符串对象的replace方法的例子。
+      下面是字符串对象的replace方法的例子.
   
       const REGEX = /a/gy;
       'aaxa'.replace(REGEX, '-') // '--xa'
-      上面代码中,最后一个a因为不是出现下一次匹配的头部,所以不会被替换。
+      上面代码中,最后一个a因为不是出现下一次匹配的头部,所以不会被替换.
   
-      单单一个y修饰符对match方法,只能返回第一个匹配,必须与g修饰符联用,才能返回所有匹配。
+      单单一个y修饰符对match方法,只能返回第一个匹配,必须与g修饰符联用,才能返回所有匹配.
   
       'a1a2a3'.match(/a\d/y) // ["a1"]
       'a1a2a3'.match(/a\d/gy) // ["a1", "a2", "a3"]
-      y修饰符的一个应用,是从字符串提取token(词元),y修饰符确保了匹配之间不会有漏掉的字符。
+      y修饰符的一个应用,是从字符串提取token(词元),y修饰符确保了匹配之间不会有漏掉的字符.
   
       const TOKEN_Y = /\s*(\+|[0-9]+)\s*/y;
       const TOKEN_G  = /\s*(\+|[0-9]+)\s*/g;
@@ -2273,21 +2273,21 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
         }
         return result;
       }
-      上面代码中,若字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的。但是,一旦出现非法字符,两者的行为就不一样了。
+      上面代码中,若字符串里面没有非法字符,y修饰符与g修饰符的提取结果是一样的.但是,一旦出现非法字符,两者的行为就不一样了.
   
       tokenize(TOKEN_Y, '3x + 4')
       // [ '3' ]
       tokenize(TOKEN_G, '3x + 4')
       // [ '3', '+', '4' ]
-      上面代码中,g修饰符会忽略非法字符,而y修饰符不会,这样就很容易发现错误。
+      上面代码中,g修饰符会忽略非法字符,而y修饰符不会,这样就很容易发现错误.
   
       sticky属性
-      与y修饰符相匹配,ES6的正则对象多了sticky属性,表示是否设置了y修饰符。
+      与y修饰符相匹配,ES6的正则对象多了sticky属性,表示是否设置了y修饰符.
   
       var r = /hello\d/y;
       r.sticky // true
       flags属性
-      ES6为正则表达式新增了flags属性,会返回正则表达式的修饰符。
+      ES6为正则表达式新增了flags属性,会返回正则表达式的修饰符.
   
       // ES5的source属性
       // 返回正则表达式的正文
@@ -2299,7 +2299,7 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       /abc/ig.flags
       // 'gi'
       RegExp.escape()
-      字符串必须转义,才能作为正则模式。
+      字符串必须转义,才能作为正则模式.
   
       function escapeRegExp(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -2308,10 +2308,10 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       let str = '/path/to/resource.html?search=query';
       escapeRegExp(str)
       // "\/path\/to\/resource\.html\?search=query"
-      上面代码中,str是一个正常字符串,必须使用反斜杠对其中的特殊字符转义,才能用来作为一个正则匹配的模式。
+      上面代码中,str是一个正常字符串,必须使用反斜杠对其中的特殊字符转义,才能用来作为一个正则匹配的模式.
   
-      已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7。
-      2015 年7月,TC39认为,该方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求。
+      已经有提议将这个需求标准化,作为RegExp对象的静态方法RegExp.escape(),放入ES7.
+      2015 年7月,TC39认为,该方法有安全风险,又不愿这个方法变得过于复杂,没有同意将其列入ES7,但这不失为一个真实的需求.
   
       RegExp.escape('The Quick Brown Fox');
       // "The Quick Brown Fox"
@@ -2321,20 +2321,20 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
   
       RegExp.escape('(*.*)');
       // "\(\*\.\*\)"
-      字符串转义以后,可以使用RegExp构造函数生成正则模式。
+      字符串转义以后,可以使用RegExp构造函数生成正则模式.
   
       var str = 'hello. how are you?';
       var regex = new RegExp(RegExp.escape(str), 'g');
       assert.equal(String(regex), '/hello\. how are you\?/g');
-      目前,该方法可以用上文的escapeRegExp函数或者垫片模块regexp.escape实现。
+      目前,该方法可以用上文的escapeRegExp函数或者垫片模块regexp.escape实现.
   
       var escape = require('regexp.escape');
       escape('hi. how are you?');
       // "hi\\. how are you\\?"
     s 修饰符:dotAll 模式 
-      正则表达式中,点(.)是一个特殊字符,代表任意的单个字符,但是行终止符(line terminator character)除外。
+      正则表达式中,点(.)是一个特殊字符,代表任意的单个字符,但是行终止符(line terminator character)除外.
   
-      以下四个字符属于”行终止符“。
+      以下四个字符属于”行终止符“.
   
       U+000A 换行符(\n)
       U+000D 回车符(\r)
@@ -2342,16 +2342,16 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       U+2029 段分隔符(paragraph separator)
       /foo.bar/.test('foo\nbar')
       // false
-      上面代码中,因为.不匹配\n,所以正则表达式返回false。
+      上面代码中,因为.不匹配\n,所以正则表达式返回false.
   
-      但是,很多时候我们希望匹配的是任意单个字符,这时有一种变通的写法。
+      但是,很多时候我们希望匹配的是任意单个字符,这时有一种变通的写法.
   
       /foo[^]bar/.test('foo\nbar')
       // true
-      这种解决方案毕竟不太符合直觉,所以现在有一个提案,引入/s修饰符,使得.可以匹配任意单个字符。
+      这种解决方案毕竟不太符合直觉,所以现在有一个提案,引入/s修饰符,使得.可以匹配任意单个字符.
   
       /foo.bar/s.test('foo\nbar') // true
-      这被称为dotAll模式,即点(dot)代表一切字符。所以,正则表达式还引入了一个dotAll属性,返回一个布尔值,表示该正则表达式是否处在dotAll模式。
+      这被称为dotAll模式,即点(dot)代表一切字符.所以,正则表达式还引入了一个dotAll属性,返回一个布尔值,表示该正则表达式是否处在dotAll模式.
   
       const re = /foo.bar/s;
       // 另一种写法
@@ -2360,68 +2360,68 @@ RegExp'Regular Expression'正则类: 描述、匹配一系列符合某个语法�
       re.test('foo\nbar') // true
       re.dotAll // true
       re.flags // 's'
-      /s修饰符和多行修饰符/m不冲突,两者一起使用的情况下,.匹配所有字符,而^和$匹配每一行的行首和行尾。
+      /s修饰符和多行修饰符/m不冲突,两者一起使用的情况下,.匹配所有字符,而^和$匹配每一行的行首和行尾.
     后行断言 
-      JavaScript 语言的正则表达式,只支持先行断言(lookahead)和先行否定断言(negative lookahead),不支持后行断言(lookbehind)和后行否定断言(negative lookbehind)。
+      JavaScript 语言的正则表达式,只支持先行断言(lookahead)和先行否定断言(negative lookahead),不支持后行断言(lookbehind)和后行否定断言(negative lookbehind).
   
-      目前,有一个提案,引入后行断言。V8 引擎4.9版已经支持,Chrome 浏览器49版打开”experimental JavaScript features“开关(地址栏键入about:flags),就可以使用这项功能。
+      目前,有一个提案,引入后行断言.V8 引擎4.9版已经支持,Chrome 浏览器49版打开”experimental JavaScript features“开关(地址栏键入about:flags),就可以使用这项功能.
   
-      ”先行断言“指的是,x只有在y前面才匹配,必须写成/x(?=y)/。比如,只匹配百分号之前的数字,要写成/\d+(?=%)/。”先行否定断言“指的是,x只有不在y前面才匹配,必须写成/x(?!y)/。比如,只匹配不在百分号之前的数字,要写成/\d+(?!%)/。
+      ”先行断言“指的是,x只有在y前面才匹配,必须写成/x(?=y)/.比如,只匹配百分号之前的数字,要写成/\d+(?=%)/.”先行否定断言“指的是,x只有不在y前面才匹配,必须写成/x(?!y)/.比如,只匹配不在百分号之前的数字,要写成/\d+(?!%)/.
   
       /\d+(?=%)/.exec('100% of US presidents have been male')  // ["100"]
       /\d+(?!%)/.exec('that’s all 44 of them')                 // ["44"]
-      上面两个字符串,若互换正则表达式,就会匹配失败。另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的。
+      上面两个字符串,若互换正则表达式,就会匹配失败.另外,还可以看到,”先行断言“括号之中的部分((?=%)),是不计入返回结果的.
   
-      “后行断言”正好与“先行断言”相反,x只有在y后面才匹配,必须写成/(?<=y)x/。比如,只匹配美元符号之后的数字,要写成/(?<=\$)\d+/。”后行否定断言“则与”先行否定断言“相反,x只有不在y后面才匹配,必须写成/(?<!y)x/。比如,只匹配不在美元符号后面的数字,要写成/(?<!\$)\d+/。
+      “后行断言”正好与“先行断言”相反,x只有在y后面才匹配,必须写成/(?<=y)x/.比如,只匹配美元符号之后的数字,要写成/(?<=\$)\d+/.”后行否定断言“则与”先行否定断言“相反,x只有不在y后面才匹配,必须写成/(?<!y)x/.比如,只匹配不在美元符号后面的数字,要写成/(?<!\$)\d+/.
   
       /(?<=\$)\d+/.exec('Benjamin Franklin is on the $100 bill')  // ["100"]
       /(?<!\$)\d+/.exec('it’s is worth about €90')                // ["90"]
-      上面的例子中,“后行断言”的括号之中的部分((?<=\$)),也是不计入返回结果。
+      上面的例子中,“后行断言”的括号之中的部分((?<=\$)),也是不计入返回结果.
   
-      “后行断言”的实现,需要先匹配/(?<=y)x/的x,然后再回到左边,匹配y的部分。这种“先右后左”的执行顺序,与所有其他正则操作相反,导致了一些不符合预期的行为。
+      “后行断言”的实现,需要先匹配/(?<=y)x/的x,然后再回到左边,匹配y的部分.这种“先右后左”的执行顺序,与所有其他正则操作相反,导致了一些不符合预期的行为.
   
-      首先,”后行断言“的组匹配,与正常情况下结果是不一样的。
+      首先,”后行断言“的组匹配,与正常情况下结果是不一样的.
   
       /(?<=(\d+)(\d+))$/.exec('1053') // ["", "1", "053"]
       /^(\d+)(\d+)$/.exec('1053') // ["1053", "105", "3"]
-      上面代码中,需要捕捉两个组匹配。没有"后行断言"时,第一个括号是贪婪模式,第二个括号只能捕获一个字符,所以结果是105和3。而"后行断言"时,由于执行顺序是从右到左,第二个括号是贪婪模式,第一个括号只能捕获一个字符,所以结果是1和053。
+      上面代码中,需要捕捉两个组匹配.没有"后行断言"时,第一个括号是贪婪模式,第二个括号只能捕获一个字符,所以结果是105和3.而"后行断言"时,由于执行顺序是从右到左,第二个括号是贪婪模式,第一个括号只能捕获一个字符,所以结果是1和053.
   
-      其次,"后行断言"的反斜杠引用,也与通常的顺序相反,必须放在对应的那个括号之前。
+      其次,"后行断言"的反斜杠引用,也与通常的顺序相反,必须放在对应的那个括号之前.
   
       /(?<=(o)d\1)r/.exec('hodor')  // null
       /(?<=\1d(o))r/.exec('hodor')  // ["r", "o"]
-      上面代码中,若后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以。
+      上面代码中,若后行断言的反斜杠引用(\1)放在括号的后面,就不会得到匹配结果,必须放在前面才可以.
     Unicode属性类 
-      目前,有一个提案,引入了一种新的类的写法\p{...}和\P{...},允许正则表达式匹配符合Unicode某种属性的所有字符。
+      目前,有一个提案,引入了一种新的类的写法\p{...}和\P{...},允许正则表达式匹配符合Unicode某种属性的所有字符.
   
       const regexGreekSymbol = /\p{Script=Greek}/u;
       regexGreekSymbol.test('π') // u
-      上面代码中,\p{Script=Greek}指定匹配一个希腊文字母,所以匹配π成功。
+      上面代码中,\p{Script=Greek}指定匹配一个希腊文字母,所以匹配π成功.
   
-      Unicode属性类要指定属性名和属性值。
+      Unicode属性类要指定属性名和属性值.
   
       \p{UnicodePropertyName=UnicodePropertyValue}
-      对于某些属性,可以只写属性名。
+      对于某些属性,可以只写属性名.
   
       \p{UnicodePropertyName}
-      \P{…}是\p{…}的反向匹配,即匹配不满足条件的字符。
+      \P{…}是\p{…}的反向匹配,即匹配不满足条件的字符.
   
-      注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符。若不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类。
+      注意,这两种类只对Unicode有效,所以使用的时候一定要加上u修饰符.若不加u修饰符,正则表达式使用\p和\P会报错,ECMAScript预留了这两个类.
   
-      由于Unicode的各种属性非常多,所以这种新的类的表达能力非常强。
+      由于Unicode的各种属性非常多,所以这种新的类的表达能力非常强.
   
       const regex = /^\p{Decimal_Number}+$/u;
       regex.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // true
-      上面代码中,属性类指定匹配所有十进制字符,可以看到各种字型的十进制字符都会匹配成功。
+      上面代码中,属性类指定匹配所有十进制字符,可以看到各种字型的十进制字符都会匹配成功.
   
-      \p{Number}甚至能匹配罗马数字。
+      \p{Number}甚至能匹配罗马数字.
   
       // 匹配所有数字
       const regex = /^\p{Number}+$/u;
       regex.test('²³¹¼½¾') // true
       regex.test('㉛㉜㉝') // true
       regex.test('ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ') // true
-      下面是其他一些例子。
+      下面是其他一些例子.
   
       // 匹配各种文字的所有字母,等同于Unicode版的\w
       [\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
@@ -2454,9 +2454,9 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
         }
         [1, 2, 3] instanceof new MyClass() // true
         该实例的 Symbol.hasInstance 方法,在进行instanceof运算时自动调用,
-        判断左侧的运算子是否为Array的实例。
+        判断左侧的运算子是否为Array的实例.
     Symbol.species      对象的该属性指向其构造函数
-      创造实例时,默认会调用这个方法,即使用这个属性返回的函数当作构造函数,来创造新的实例对象。
+      创造实例时,默认会调用这个方法,即使用这个属性返回的函数当作构造函数,来创造新的实例对象.
     Symbol.match   当执行str.match(obj)时,若该属性存在,会调用它,返回该方法的返回值 
       String.prototype.match(regexp)
       // 等同于
@@ -2472,13 +2472,13 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       String.prototype.replace(searchValue, replaceValue)
       // 等同于
       searchValue[Symbol.replace](this, replaceValue)
-      下面是一个例子。
+      下面是一个例子.
       const x = {};
       x[Symbol.replace] = (...s) => console.log(s);
       
       'Hello'.replace(x, 'World') // ["Hello", "World"]
-      Symbol.replace方法会收到两个参数,第一个参数是replace方法正在作用的对象,上面例子是Hello,第二个参数是替换后的值,上面例子是World。
-    Symbol.search   当对象被 String.prototype.search 方法调用时,会返回该方法的返回值。
+      Symbol.replace方法会收到两个参数,第一个参数是replace方法正在作用的对象,上面例子是Hello,第二个参数是替换后的值,上面例子是World.
+    Symbol.search   当对象被 String.prototype.search 方法调用时,会返回该方法的返回值.
       String.prototype.search(regexp)
       // 等同于
       regexp[Symbol.search](this)
@@ -2496,7 +2496,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       String.prototype.split(separator, limit)
       // 等同于
       separator[Symbol.split](this, limit)
-      下面是一个例子。
+      下面是一个例子.
       
       class MySplitter {
         constructor(value) {
@@ -2523,7 +2523,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       'foobar'.split(new MySplitter('baz'))
       // 'foobar'
       上面方法使用Symbol.split方法,重新定义了字符串对象的split方法的行为,
-    Symbol.iterator 对象的 Symbol.iterator 属性,指向该对象的默认遍历器方法。
+    Symbol.iterator 对象的 Symbol.iterator 属性,指向该对象的默认遍历器方法.
       var myIterable = {};
       myIterable[Symbol.iterator] = function* () {
         yield 1;
@@ -2532,7 +2532,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       };
       
       [...myIterable] // [1, 2, 3]
-      对象进行for...of循环时,会调用Symbol.iterator方法,返回该对象的默认遍历器,详细介绍参见《Iterator和for...of循环》一章。
+      对象进行for...of循环时,会调用Symbol.iterator方法,返回该对象的默认遍历器,详细介绍参见《Iterator和for...of循环》一章.
       
       class Collection {
         *[Symbol.iterator]() {
@@ -2553,9 +2553,9 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       }
       // 1
       // 2
-    Symbol.toPrimitive 对象的 Symbol.toPrimitive 属性,指向一个方法。
-      该对象被转为原始类型的值时,会调用这个方法,返回该对象对应的原始类型值。
-      Symbol.toPrimitive 被调用时,会接受一个字符串参数,表示当前运算的模式,一共有三种模式。
+    Symbol.toPrimitive 对象的 Symbol.toPrimitive 属性,指向一个方法.
+      该对象被转为原始类型的值时,会调用这个方法,返回该对象对应的原始类型值.
+      Symbol.toPrimitive 被调用时,会接受一个字符串参数,表示当前运算的模式,一共有三种模式.
       Number:该场合需要转成数值
       String:该场合需要转成字符串
       Default:该场合可以转成数值,也可以转成字符串
@@ -2579,7 +2579,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
       obj == 'default' // true
       String(obj) // 'str'
       Symbol.toStringTag
-      对象的Symbol.toStringTag属性,指向一个方法。在该对象上面调用Object.prototype.toString方法时,若这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型。也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串。
+      对象的Symbol.toStringTag属性,指向一个方法.在该对象上面调用Object.prototype.toString方法时,若这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型.也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串.
       
       // 例一
       ({[Symbol.toStringTag]: 'Foo'}.toString())
@@ -2596,7 +2596,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
   Instance: 
     创建标记 
     var sym = Symbol([arg])   创建标记 
-      PS:Symbol函数前不能使用new命令,否则会报错。
+      PS:Symbol函数前不能使用new命令,否则会报错.
         因为生成的Symbol是一个原始类型的值,不是对象,也不能添加属性
       arg  可选,表示对Symbol实例的描述,可为字符串或对象 
         主要是为了在控制台显示,或者转为字符串时,比较容易区分 
@@ -2687,7 +2687,7 @@ Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二�
         Object.defineProperty(a, mySymbol, { value: 'Hello!' });
         // 以上写法都得到同样结果
         a[mySymbol] // "Hello!"
-      Symbol值作为对象属性名时,不能用点运算符。
+      Symbol值作为对象属性名时,不能用点运算符.
         var mySymbol = Symbol();
         var a = {};
         a.mySymbol = 'Hello!';
@@ -2801,10 +2801,10 @@ Set,集合[ES6]
     let arr = [1,2,2,3,4,4,4];  // 目标数组arr,要求去重
     let s = new Set(arr);       // Set {1,2,3,4}
     let newArr = Array.from(s); // [1,2,3,4],完成去重
-WeakSet, [ES6]
-  PS:WeakSet结构同样不会存储重复的值;
+WeakSet, [ES6] 
+  PS: WeakSet结构同样不会存储重复的值;
     且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象]
-    实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数。比如:数组。
+    实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数,如:数组.
   new WeakSet(arr);
     arr 数组,且其成员必须是对象类型的值,否则就会报错
     let ws = new WeakSet([{"age":18}]); // WeakSet {Object {age: 18}}
@@ -2817,7 +2817,7 @@ WeakSet, [ES6]
   ws.delete() 作用与用法跟Set结构完全一致
   ws.has()    作用与用法跟Set结构完全一致
   WeakSet结构不可遍历
-    因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失。
+    因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失.
     所以WeakSet结构无keys(),values(),entries(),forEach() 等方法和 size 属性
 Map,字典[ES6] 
   var map = new Map([arr]) 定义Map 
@@ -2882,7 +2882,7 @@ Map,字典[ES6]
     // age  25
   keys()   返回实例所有键名的遍历器
   values() 返回实例所有键值的遍历器
-    keys方法和values方法的使用方式一致,只是返回的结果不同。
+    keys方法和values方法的使用方式一致,只是返回的结果不同.
     let m = new Map([
       ["name","van"],
       ["age",25]
@@ -2928,13 +2928,13 @@ Map,字典[ES6]
       也没有属性size
       理由跟WeakSet结构一样:键名中的引用类型是弱引用,
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
-      若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失。
+      若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失.
 Blob,二进制数据的基本对象[ES6] 
   PS: 一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
-    Blob表示的数据不一定是一个JavaScript原生格式。 
-    File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件。
-    要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档。
-    接受Blob对象的APIs也被列在 File 文档中。
+    Blob表示的数据不一定是一个JavaScript原生格式. 
+    File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件.
+    要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档.
+    接受Blob对象的APIs也被列在 File 文档中.
   创建blob对象 
     var bb = new Blob(blobParts[, options])  返回创建的Blob对象 
       PS:其内容由参数中给定的数组串联组成 
@@ -2973,7 +2973,7 @@ Blob,二进制数据的基本对象[ES6]
     var blob = new Blob([typedArray], {type: "application/octet-binary"});
     
     // 会产生一个类似blob:d3958f5c-0777-0845-9dcf-2cb28783acaf 这样的URL字符串
-    // 你可以像使用一个普通URL那样使用它,比如用在img.src上。
+    // 你可以像使用一个普通URL那样使用它,比如用在img.src上.
     var url = URL.createObjectURL(blob);
   从Blob中读取内容的唯一方法是使用 FileReader
     以下代码将 Blob 的内容作为类型数组读取:
@@ -2982,16 +2982,16 @@ Blob,二进制数据的基本对象[ES6]
        // reader.result contains the contents of blob as a typed array
     });
     reader.readAsArrayBuffer(blob);
-    使用 FileReader 以外的方法读取到的内容可能会是字符串或是数据 URL。  
+    使用 FileReader 以外的方法读取到的内容可能会是字符串或是数据 URL.  
   blob.slice()  创建一个包含另一个blob的数据子集的blob
     blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
-    slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数。
-    若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据。
+    slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
+    若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
     slice 方法在某些浏览器和版本上仍带有供应商前缀:
       Firefox 12 及更早版本的 blob.mozSlice() 
       Safari 中的 blob.webkitSlice()
-      slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时。 
-      使用Firefox 30 删除了对 blob.mozSlice() 的支持。
+      slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
+      使用Firefox 30 删除了对 blob.mozSlice() 的支持.
     Example:  使用XMLHttpRequest对象,将大文件分割上传
       var inputElem = document.querySelector('input[type="file"]');
       function upload(blobOrFile) {
@@ -3013,7 +3013,7 @@ Blob,二进制数据的基本对象[ES6]
         }
       }, false);
   blob.isClosed 只读 布尔值,指示 Blob.close() 是否在该对象上调用过
-    关闭的 blob 对象不可读。
+    关闭的 blob 对象不可读.
   blob.size 只读, Blob对象中所包含数据的大小,单位为字节
   blob.type 只读,字符串,Blob对象所包含数据的MIME类型 
     若类型未知,则该值为空字符串 
@@ -3161,7 +3161,7 @@ Promise,同步书写异步模式[ES6]
       // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
       // 实例2操作失败
       由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
-      所以最后输出的是:实例2操作失败。
+      所以最后输出的是:实例2操作失败.
   pms = Promise.reject(val)     传递失败的信息,返回一状态为失败的Promise对象 
   val = Promise.resolve(pms/thenable/primitive)  传递成功的信息,返回Promise对象 
     pms,'Promise'对象,返回值直接为该Promise 
@@ -3292,7 +3292,7 @@ Generator,生成器函数: 可控制函数内部状态,暂停或继续[ES6]
       console.log(gen.next()); // { value: undefined, done: true }
   使用Generator函数实现异步操作 
     原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
-Proxy,对象代理: 用于代理外界对对象的访问[ES6]   
+Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
   PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
     要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作
   pObj = new Proxy(obj,config) 创建代理对象  
@@ -3436,9 +3436,9 @@ Reflect,为操作对象提供的API[ES6]
     函数行为:
     Reflect.has(obj, key)
     Reflect.deleteProperty(obj, key) 
-  ◆Reflect对象一共有13个静态方法 
+  Static: 
     PS: 大部分与Object对象的同名方法的作用都是相同的,且与Proxy对象的方法是一一对应 
-    Reflect.get(obj,key,receiver)    返回对象的key,否则返回undefined 
+    .get(obj,key,receiver)    返回对象的key,否则返回undefined 
       obj  操作的目标对象,若不是对象则报错  
       如果name属性部署了读取函数（getter）,则读取函数的this绑定receiver 
         var myObject = {
@@ -3453,8 +3453,8 @@ Reflect,为操作对象提供的API[ES6]
           bar: 4,
         };
         Reflect.get(myObject, 'baz', myReceiverObject) // 8
-    Reflect.set(obj,key,val,receiver) 设置对象的key为val 
-      如果name属性设置了赋值函数,则赋值函数的this绑定receiver。
+    .set(obj,key,val,receiver) 设置对象的key为val 
+      如果name属性设置了赋值函数,则赋值函数的this绑定receiver.
       var myObject = {
         foo: 4,
         set bar(value) {
@@ -3467,18 +3467,18 @@ Reflect,为操作对象提供的API[ES6]
       Reflect.set(myObject, 'bar', 1, myReceiverObject);
       myObject.foo // 4
       myReceiverObject.foo // 1
-    Reflect.apply(target,context,args)
-    Reflect.construct(target,args)
-    Reflect.defineProperty(target,name,desc)
-    Reflect.deleteProperty(target,name)
-    Reflect.has(target,name)
-    Reflect.ownKeys(target)
-    Reflect.isExtensible(target)
-    Reflect.preventExtensions(target)
-    Reflect.getOwnPropertyDescriptor(target, name)
-    Reflect.getPrototypeOf(target)
-    Reflect.setPrototypeOf(target, prototype)
-ASYNC,用来取代回调函数、解决异步操作的一种方法[ES7] 
+    .apply(target,context,args)
+    .construct(target,args)
+    .defineProperty(target,name,desc)
+    .deleteProperty(target,name)
+    .has(target,name)
+    .ownKeys(target)
+    .isExtensible(target)
+    .preventExtensions(target)
+    .getOwnPropertyDescriptor(target, name)
+    .getPrototypeOf(target)
+    .setPrototypeOf(target, prototype)
+'ASYNC'用来取代回调函数、解决异步操作的一种方法[ES7] 
   PS: async函数与Promise、Generator函数类似,本质上是Generator函数的语法糖 
   var promise = async function(){}  函数表达式声明async函数
   async function foo() {}           声明async函数
@@ -3565,7 +3565,7 @@ ASYNC,用来取代回调函数、解决异步操作的一种方法[ES7]
           await db.post(doc);
         });
         上面代码可能不会正常工作,原因是这时三个 db.post 操作将是并发执行,
-        也就是同时执行,而不是继发执行。
+        也就是同时执行,而不是继发执行.
         正确的写法: 采用for循环 
         let docs = [{}, {}, {}];
         for (let doc of docs) {
@@ -3574,7 +3574,7 @@ ASYNC,用来取代回调函数、解决异步操作的一种方法[ES7]
   'Async Iterator'异步遍历器 
     PS:Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
       该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
-      其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束。
+      其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束.
     遍历器的next方法必须是同步的,只要调用就必须立刻返回值 
       也就是说,一旦执行next方法,就必须同步地得到value和done这两个属性 
       若遍历指针正好指向同步操作,当然没有问题,但对于异步操作,就不太合适了 
@@ -3590,194 +3590,6 @@ ASYNC,用来取代回调函数、解决异步操作的一种方法[ES7]
       const genObj = gen();
       genObj.next().then(x => console.log(x)); // { value: 'hello', done: false }
       执行后返回一个异步Iterator对象,该对象调用next方法,返回一个Promise对象 
-◆二进制数组,以数组的语法处理二进制数据 [ES6] 
-  PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
-    它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
-    该接口的原始设计目的,与WebGL项目有关
-    浏览器与显卡间的通信接口,使用二进制才能满足大量的、实时的数据交换, 
-    直接操作字节,脚本的性能大幅提升,二进制数组就是在这种背景下诞生的 
-ArrayBuffer,内存中的一段二进制数据 
-  Extend：Object 
-  Instance: new ArrayBuffer(num) 
-    var buffer = new ArrayBuffer(20);  // 在内存中分配20B 
-  Proto: 
-    .byteLength // 包含的字节数 
-    .slice()    
-数据类型 字节长度 对应C语言中的类型  含义 
-  Int8     1     signed char      8 位整数 
-  Uint8    1     unsigned char    8 位无符号整数 
-  Uint8C   1     unsigned char    8 位无符号整数[自动过滤溢出] 
-  Int16    2     short            16 位整数 
-  Uint16   2     unsigned short   16 位无符号整数 
-  Int32    4     int              32 位整数 
-  Uint32   4     unsigned int     32 位无符号的整数 
-  Float32  4     float            32 位浮点数 
-  Float64  8     double           64 位浮点数 
-DataView,不确定类型的二进制数据  
-  PS: 支持除'Uint8C'外的其他8种组成的集合  
-    比如第一个字节是Uint8,第二个字节是Int16,第三个字节是Float32等等  
-  Extend: Object 
-  Instance: 
-    var view = new DataView(buffer[,bgn[,length]]) // 通过Buffer类型创建  
-      buffer  ArrayBuffer对象 
-      bgn     num,可选,字节偏移量,从该字节开始选择 \
-        //创建一个开始于字节9 的新视图
-        var view = new DataView(buffer, 9);
-      length  num,可选,要选择的字节数 
-        //创建一个从字节9 开始到字节18 的新视图
-        var view = new DataView(buffer, 9, 10);
-  Proto: 
-    .buffer       // 获取buffer对象 
-    .byteOffset   // 偏移量 
-    .byteLength   // 字节长度 
-    ★读写方法 
-      PS: 保存不同类型的数据,需要的空间不同,如无符号8 位整数要用1B,而32 位浮点数则要用4B
-        使用DataView,需自己来管理这些细节,即要明确知道数据需要多少字节,并选择正确的读写方法
-      offset   num,字节偏移量,表示要从哪个字节开始读取或写入 
-      littleEndian  bol,表示读写数值时是否采用小端字节序 
-        即将数据的最低有效位保存在低内存地址中 
-    .getInt8(offset)  
-    .getUint8(offset)  
-    .getInt16(offset,littleEndian)  
-    .getUint16(offset,littleEndian)  
-    .getInt32(offset,littleEndian)  
-    .getUint32(offset,littleEndian)  
-    .getFloat32(offset,littleEndian)  
-    .getFloat64(offset,littleEndian)  
-    .setInt8(offset,val)  
-    .setUint8(offset,val)  
-    .setInt16(offset,val,littleEndian)  
-    .setUint16(offset,val,littleEndian)  
-    .setInt32(offset,val,littleEndian)  
-    .setUint32(offset,val,littleEndian)  
-    .setFloat32(offset,val,littleEndian)  
-    .setFloat64(offset,val,littleEndian)  
-TypedArray,类型化数组,确定类型的二进制数据,无可直接访问的构造函数  
-  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
-  Proto:  
-    .buffer 
-    .byteLength 
-    .byteOffset 
-    .length 
-    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
-    .entries() 
-    .keys() 
-    .values() 
-    .copyWithin() 
-    .fill() 
-    .includes() 
-    .indexOf() 
-    .lastIndexOf() 
-    .slice() 
-    .set() 
-    .find() 
-    .findIndex() 
-    .toLocaleString() 
-    .join() 
-    .toString() 
-    .forEach() 
-    .every() 
-    .map() 
-    .reverse() 
-    .reduce() 
-    .reduceRight() 
-    .some() 
-    .filter() 
-    .sort() 
-<TypedArray> 
-  Static: 
-    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
-    Uint8Array.BYTES_PER_ELEMENT    1 
-    Float32Array.BYTES_PER_ELEMENT  4 
-    ...
-    Example: 
-      利用该属性来辅助初始化
-      // 需要10 个元素空间
-      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
-  Instance: 
-    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
-    var typedArray = new <TypedArray>(num); 
-      // 创建一个数组保存10 个8 位整数[10 字节] 
-      var int8s = new Int8Array(10); 
-      // 创建一个数组保存10 个16 位整数[20 字节] 
-      var int16s = new Int16Array(10); 
-    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
-      PS: 用默认值来初始化类型化视图的最佳方式 
-      // 创建一个数组保存5 个8 位整数[5 字节]
-      var int8s = new Int8Array([10, 20, 30, 40, 50]);
-  Feature: 
-    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
-      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
-      保存65537,那实际保存的值是1,依此类推。
-      var uint16s = new Uint16Array(10);
-      uint16s[0] = 65537;
-      console.log(uint16s[0]); // 1
-  Example: 
-    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
-    var int8s = new Int8Array(buffer, 0, 10);
-    var uint16s = new Uint16Array(buffer, 11, 10);
-Int8Array 
-Uint8Array 
-Uint8ClampedArray  
-Int16Array    
-Uint16Array    
-Int32Array    
-Uint32Array  
-Float32Array   
-Float64Array  
-◆Error,错误类 
-  PS: JS解析或执行时,当发生错误就会抛出一错误对象,并且程序中断在发生错误的地方 
-    JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例 
-    ECMA-262 定义了7种错误类型,Error是其他六种的父类型
-  Extend: Object 
-    console.log(Error.prototype.__proto__.constructor===Object); // true 
-  Static: 
-    Error.captureStackTrace() 
-    Error.stackTraceLimit 
-  Instance: 
-    自定义错误对象 
-    error = new Error(str);
-    error = new RangeError(str);
-    ...
-    通过原型链继承Error来创建自定义错误类型 
-      Example: :
-      function CustomError(message){
-        this.name ="CustomError";
-        this.message =message;
-      }
-      CustomError.prototype = new Error();
-      throw new CustomError('abc')
-  Proto: 
-    .message   可以读取的错误消息 [标准属性]
-    .name      错误名称   [非标]
-    .description  可以读取的错误消息 [IE定义]
-    .number   错误数量 [IE定义]
-    .stack    错误的堆栈 [非标] 
-      function throwIt() { throw new Error(''); }
-      function catchIt() {
-        try { throwIt(); } 
-        catch(e) { console.log(e.stack); }
-      }
-      catchIt();
-      // Error
-      //    at throwIt (~/examples/throwcatch.js:9:11)
-      //    at catchIt (~/examples/throwcatch.js:3:9)
-      //    at repl:1:5
-      代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
-    .toString() 
-TypeError      变量或参数不是预期类型时发生的错误 
-  比如,对字符串、布尔值、数值等原始类型的值使用new命令,就会抛出这种错误,
-  因为new命令的参数应该是一个构造函数
-ReferenceError 引用一个不存在的变量时发生的错误 
-  另一种触发场景,将一个值分配给无法分配的对象,比如对函数的运行结果或者this赋值
-RangeError     一个值超出有效范围时发生的错误 
-  主要场景: 数组长度为负数,Number对象的方法参数超出范围,函数堆栈超过最大值
-URIError       URI相关函数的参数不正确时抛出的错误 
-  主要涉及 encodeURI() decodeURI() encodeURIComponent() 
-  decodeURIComponent() escape() unescape() 六个函数
-SyntaxError    解析代码时发生的语法错误 
-EvalError      使用 eval()发生异常时抛出 
-  已不再在ES5中出现,仅为了保持兼容 
 ------------------------------------------------------------------------------- 
 SelfSummary 
   对象分析: 

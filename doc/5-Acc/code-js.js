@@ -634,57 +634,63 @@ PC端
     }
 自我实现 
   检查对象的自身的属性 
-    function checkOwnProp(checkObj,isProto){
+    function checkOwnProp(checkObj,checkProp){
       // checkObj // 查询的对象 
-      // isProto  // 可选,是否是检测对象的原型对象,默认:false 
-      var obj = checkObj   
-      if (isProto) { obj = obj.prototype } 
-      console.log('查询的对象:',obj);
-      // console.log('对象的类型:',typeof obj,obj.toString().slice(7,-1));
+      // checkProp  // 可选,待检测的属性 
       console.log('_________________________________________________');
+      var obj = checkObj   
+      console.log('当前查询的对象:',obj);
+      try {
+        console.log('对象的类型:',typeof obj,obj.toString().slice(7,-1));
+      } 
+      catch (e) {
+        console.log('查询对象类型出错');
+      } 
       var tObj = Object.getOwnPropertyNames(obj)
+      var isExistProp = false;
+      console.log('对象继承自:',obj.__proto__);
+      console.log('对象属性如下:','________________'); 
       for(var key in tObj){
         var k = tObj[key];
         try {
           console.log(typeof obj[k],k,obj[k], '#####' );
-          // console.log(obj[k].toString(),k,obj[k], '#####' );
         } 
         catch (e) {
           console.log( '------',k, '#####' );
         } 
-        if (k == 'upload') { // 查询某个具体的属性 
-          console.log('==========================================');
-        }
+        if (checkProp && k == checkProp) { isExistProp = true; }
       };
+      if (checkProp) { console.log('是否存在属性:',checkProp,isExistProp); }
       console.log('_________________________________________________');
     }
   检查目标是否有该事件 
-    function checkEvent(eventName,eventTarget) {
-      var eventStr = eventName 
-      var target = eventTarget   
-      console.log('是否支持DOM0事件:',eventStr,'on'+eventStr in target);
-      function isEventSupport(eventStr,elem){
+    function checkEvent(eName,eTarget) {
+      // eName   检测的事件名称 
+      // eTarget 事件绑定的目标 
+      console.log('______________________________________');
+      console.log('是否支持DOM0事件:',eName,'on'+eName in eTarget);
+      function isEventSupport(eName,elem){
         var bol = false;
         var foo = function(){
           bol = true;
-          console.log('是否支持DOM2事件:',eventStr,bol);
+          console.log('是否支持DOM2事件:',eName,bol);
         }
-        var e = new Event(eventStr)
-        elem.addEventListener(eventStr,foo)
+        var e = new Event(eName)
+        elem.addEventListener(eName,foo)
         elem.dispatchEvent(e)
-        elem.removeEventListener(eventStr,foo)
+        elem.removeEventListener(eName,foo)
         if (!bol) {
-          console.log('是否支持DOM2事件:',eventStr,bol);
+          console.log('是否支持DOM2事件:',eName,bol);
         }
       }
-      isEventSupport(eventStr,target);
-      target['on'+eventStr] = function(e){
+      isEventSupport(eName,eTarget);
+      eTarget['on'+eName] = function(e){
         console.log('事件对象:',e);
         console.log('是否冒泡:',e.bubbles);
         console.log('事件类型:',e.constructor);
         console.log('------------------------------------------------------');
       }
-      target.addEventListener(eventStr,function(e){
+      eTarget.addEventListener(eName,function(e){
         console.log('事件对象:',e);
         console.log('是否冒泡:',e.bubbles);
         console.log('事件类型:',e.constructor);

@@ -1,5 +1,5 @@
 JavaScript: 解释型的、基于对象和事件驱动的客户端脚本语言 
-  PS: I/O相关的API,如网络、存储和图形等,都靠宿主环境提供,
+  PS: I/O相关的API,如网络、存储和图形等,都靠宿主环境提供, 
     嵌入JS的宿主环境有多种,如浏览器、Node环境等;
   JS内容划分: 
     除ECMAScript外,各种宿主环境提供额外的API,以便JS调用;
@@ -21,10 +21,9 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     方法基于对象,就是对象的函数,调用写法: obj.foo()
   '实例': 类的具象化;在面向对象中,通过类创建对象的过程称为实例化; 
   '静态'、'公有'、'私有'、'特权'属性和方法 
-    PS:静态、公有、私有属性/方法 是相对于类来说的.
+    PS: 静态、公有、私有属性/方法 是相对于类来说的
     静态属性/方法: '构造函数'的属性/方法[无需实例化通过类名来访问] 
-    公有属性/方法: '实例对象'的方法/属性,一般把共用的方法,都放在'原型对象'当中 
-      若放在构造函数中,会重复创建共同的方法
+    公有属性/方法: 即其原型对象的属性/方法 
     私有属性/方法: '函数内部'定义的属性/方法,外部无法访问
     特权方法: 有权访问私有变量和私有函数的'公有方法' 
       利用的闭包原理,即通过作用域链,
@@ -46,7 +45,6 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     var aoo =new Foo(1,2);
   IE8支持部分ES5功能,IE9+支持ES5 
   多态: 同一操作作用于不同的对象,可以有不同的解释,产生不同的执行结果,JS无多态  
-  'first-class function'一等函数
 语法规则 
   PS: 语法源自Java,基于原型继承来自Self;一等函数来自Scheme; 
   标识符: 指变量、函数、属性或函数的参数的名字 
@@ -68,36 +66,6 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
     across multiple\
     lines";
     console.log(str);   // string is broken across multiplelines.
-  'use strict'; 使用严格模式 [IE10+]
-    在需使用的作用域中使用 
-      在函数的作用域中使用严格模式 
-        function foo(){
-          'use strict';
-          // ...
-        };
-      在整个脚本顶部添加 
-    严格模式下的限制 
-      不可使用 with(){} 语句
-      未声明的变量赋值报错 
-      arguments[num] 变成静态副本,按共享传递 
-        在函数中修改arguments[num]不会影响到函数的参数,
-        当修改 arguments[num].xx 会影响 
-      不能使用arguments.callee
-      不能使用arguments.caller
-      不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
-      初始化时重复定义对象属性报错
-        Example: var obj = {a:1,a:2}
-      禁止8进制的字面量
-        console.log(0123); // 83,严格模式下则报错 
-        不能使用前缀0表示八进制数 
-      禁止this指向全局对象
-      函数的参数不能有同名属性,否则报错
-      不能对只读属性赋值,否则报错
-      不能删除不可删除的属性,否则报错
-      不能删除变量delete prop,会报错,只能删除属性delete global[prop]
-      eval不会在它的外层作用域引入变量
-      eval和arguments不能被重新赋值
-      增加了保留字[如 protected static 和 interface] 
 ------------------------------------------------------------------------------- 
 数据类型 
   PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
@@ -161,7 +129,7 @@ var,定义变量,相当于给window添加不可配置的window属性
     let RegExp = "Hello!";
     console.log(RegExp);           // "Hello!"
     console.log(window.RegExp);    // function RegExp() { [native code] }
-let,定义块级变量   [ES6] 
+let,定义块级变量[ES6] 
   PS: 块级作用域限制,只在定义的块级作用域中存在;
   无变量提升 
     var aoo = 1;
@@ -208,7 +176,7 @@ let,定义块级变量   [ES6]
     console.log(fooArr[0]()); // 0
     注:let 声明在上述循环内部中的表现是在规范中特别定义的,
     实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
-const,定义块级常量 [ES6] 
+const,定义块级常量[ES6] 
   PS: 只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
   const aoo =2;
   aoo = 2;     // 报错 ,常量不可改变
@@ -829,7 +797,7 @@ const,定义块级常量 [ES6]
   ◆相关操作
   str = Klass.name;  获取类的名字 
 'Decorator'修饰器: 用来修改类的行为[ES7] 
-'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口   
+'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口 
   PS: JS表'集合'的数据结构有: Array、Object、Map&Set  
     也可组合使用,定义自己的数据结构,如数组的成员是Map,Map的成员是对象,
     这样就需要一种统一的接口机制,来处理所有不同的数据结构 
@@ -1957,7 +1925,7 @@ JS运行过程机理
     闭包过多容易导致内存泄漏,
     闭包会造成对象引用的生命周期脱离当前函数的上下文,
     从严格意义上讲,这是程序员自己的bug,而不是闭包的错 
-'Garbage Collecation'垃圾回收机制: 只需申请内存,而不需关注内存的释放  
+'Garbage Collecation'垃圾回收机制: 只需申请内存,而不需关注内存的释放 
   垃圾回收器会在适当的时候将已经终止生命周期的变量的内存给释放掉 
   JS会自行管理内存分配及无用内存的回收 
   内存优化方案: 一旦数据不再有用,则将其设为null来释放引用,也叫解除引用'dereferencing' 
@@ -1991,18 +1959,48 @@ JS运行过程机理
   作用: 保存自己的私有变量,通过提供的接口(方法)给外部使用,但外部不能直接访问该变量 
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
+'use strict'; 使用严格模式[IE10+]
+  在需使用的作用域中使用 
+    在函数的作用域中使用严格模式 
+      function foo(){
+        'use strict';
+        // ...
+      };
+    在整个脚本顶部添加 
+  严格模式下的限制 
+    不可使用 with(){} 语句
+    未声明的变量赋值报错 
+    arguments[num] 变成静态副本,按共享传递 
+      在函数中修改arguments[num]不会影响到函数的参数,
+      当修改 arguments[num].xx 会影响 
+    不能使用arguments.callee
+    不能使用arguments.caller
+    不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
+    初始化时重复定义对象属性报错
+      Example: var obj = {a:1,a:2}
+    禁止8进制的字面量
+      console.log(0123); // 83,严格模式下则报错 
+      不能使用前缀0表示八进制数 
+    禁止this指向全局对象
+    函数的参数不能有同名属性,否则报错
+    不能对只读属性赋值,否则报错
+    不能删除不可删除的属性,否则报错
+    不能删除变量delete prop,会报错,只能删除属性delete global[prop]
+    eval不会在它的外层作用域引入变量
+    eval和arguments不能被重新赋值
+    增加了保留字[如 protected static 和 interface] 
 --------------------------------------------------------------------------------
 ◆总结、技巧 
 函数节流,对消耗资源过多的操作的频率进行限制 
   如IE中onresize的连续触发操作DOM,高频率的更改可能会让浏览器崩溃 
-  简陋版节流: 频率过高导致只执行最后一次 
+  ★简陋版节流: 频率过高导致只执行最后一次 
   function simpleThrottle(method, context) {
     clearTimeout(method.tId);
     method.tId = setTimeout(function(){
       method.call(context);
     }, 100);
   }
-  限定为一定频率的节流:  
+  ★限定为一定频率的节流:  
   function throttle(foo,context,time){
     if(!foo._1_){
       foo._1_ = setTimeout(function(){
@@ -2019,7 +2017,6 @@ JS运行过程机理
   window.onresize = function(){
     simpleThrottle(resizeDiv);
   };
-
 Question&Suggestion 
   如何通过函数名来获取到函数传入的参数 ? 
     自我实现: 

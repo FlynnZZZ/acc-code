@@ -8,49 +8,25 @@ window,表示浏览器的一个实例,BOM的核心对象
     console.log(window.boo);
     console.log(delete boo); // true 
     console.log(boo); // 报错不存在,已被删除  
-  'frame'框架: 一个网页/窗口中可能包含多个框架,每个框架都有自己的window对象  
-    PS: 若网页包含框架,则每个框架都有自己的window对象[保存在frames集合中] 
-    window.frames 框架集,包含页面所有框架的window对象 
-    同时也是页面的window: console.log(frames===window); // true 
-    var frame = frames[idx]  通过下标获取框架的window[从0开始,从左至右,从上至下]  
-    var frame = frames[name] 通过框架的'name'属性获取框架的window  
-    frame.parent  框架的父框架,在没有框架的情况下,parent等于top
-    frame.self    当前框架自身 
-    frame.length  框架内的子框架数量 
-    frame.name    框架的名称 
-    window.top    最外层框架,即浏览器窗口window对象 
-    window.length  当前页面中框架的数量,等价于 window.frames.length 
-  窗口位置与尺寸 
-    返回值类型为num,单位px 
-    ◆浏览器位置
-    screenLeft/screenTop  num,浏览器窗口相对桌面屏幕 「DiBs」 
-      Firefox不支持 
-      IE窗口内边缘距屏幕的距离;
-      Chrome窗口外边缘距屏幕边缘的距离 
-    screenX/screenY       num,浏览器窗口相对桌面屏幕 「DiBs」 
-      Firefox全屏时值分别为 -8,-8 
-      IE9+,全屏时值分别为 -8,-8 
-    跨浏览器兼容方法: 
-      var lftPos=(typeof screenLeft=="number")?screenLeft:screenX;
-      var topPos=(typeof screenTop=="number")?screenTop:screenY;
-    moveTo(x,y)    将浏览器位置移动到x,y坐标 
+  ◆Env: 
+    window.moveTo(x,y)  将浏览器位置移动到x,y坐标 
       PS: 不适用于框架,只能对最外层的window对象使用 
       Chrome、Firefox中默认被禁用 
-    moveBy(x,y)    将浏览器位置向下移动xpx向右移动ypx 
+    window.moveBy(x,y)  将浏览器位置向下移动xpx向右移动ypx 
       PS: 不适用于框架,只能对最外层的window对象使用
       Chrome、Firefox中默认被禁用 
-    ◆浏览器尺寸  
-    outerWidth/outerHeight num,浏览器窗口外侧宽/高 [IE9+] 
+    window.outerHeight  num,浏览器窗口外侧高[IE9+] 
       包含浏览器的工具栏、边框、滚动条
-    innerWidth/innerHeight num,浏览器显示窗口宽/高 [IE9+] 
+    window.outerWidth
+    window.innerHeight num,浏览器显示窗口高[IE9+] 
       不包含边框和工具栏等,但包含滚动条 
-    resizeTo(num1,num2) 将浏览器窗口调整为宽num1,高num2 
+    window.innerWidth
+    window.resizeTo(num1,num2) 将浏览器窗口调整为宽num1,高num2 
       PS: 不适用于框架,只能对最外层的window对象使用
       Chrome、Firefox中默认禁用的 
-    resizeBy(num1,num2) 缩放差值[正数为放大,负数为缩小] 
+    window.resizeBy(num1,num2) 缩放差值[正数为放大,负数为缩小] 
       PS: 不适用于框架,只能对最外层的window对象使用;默认被浏览器禁用的 
-  窗口其他操作 
-    win = window.open([url][,target][,params][,bol])  导航或新建窗口 
+    window.open([url][,target][,params][,bol])  win,导航或新建窗口 
       PS: 若浏览器扩展或其他程序阻止弹出窗口,open()通常会报错 
       url     可选,将要导航到的URL;
         若省略这个参数,或者它的值是空字符串,那么窗口就不显示任何文档 
@@ -115,12 +91,36 @@ window,表示浏览器的一个实例,BOM的核心对象
       在新打开的窗口中关闭自己  
       var win1 = window.open("./aoo.html","_blank");
       window.close(); // 在 aoo.html 中,关闭自己 
-    bol = window.closed    检测[打开的]窗口是否关闭 
+    window.closed    bol,检测[打开的]窗口是否关闭 
       PS: 当窗口关闭后,其窗口的引用仍然还在,可通过该属性来检测是否关闭 
-    window.defaultStatus   读写,底部状态栏默认显示
+  ◆Pag: 
+    ★框架相关 
+    window.parent  框架的父框架,在没有框架的情况下,parent等于top
+    window.self    当前框架自身 
+    window.length  框架内的子框架数量 
+    window.name    框架的名称 
+    window.top     最外层框架,即浏览器窗口window对象 
+    window.length  当前页面中框架的数量,无其他框架时为 0 
+    ★
+    window.origin  str,如'http://tst.lcltst.com'  
+    ★窗口位置与尺寸 
+      返回值类型为num,单位px 
+    window.screenTop  num,浏览器窗口相对桌面屏幕[DiBs] 
+      Firefox不支持 
+      IE窗口内边缘距屏幕的距离;
+      Chrome窗口外边缘距屏幕边缘的距离 
+    window.screenLeft
+    window.screenY   num,浏览器窗口相对桌面屏幕[DiBs] 
+      Firefox全屏时值分别为 -8,-8 
+      IE9+,全屏时值分别为 -8,-8 
+    window.screenX
+    跨浏览器兼容方法: 
+      var lftPos=(typeof screenLeft=="number")?screenLeft:screenX;
+      var topPos=(typeof screenTop=="number")?screenTop:screenY;
+    window.defaultStatus   读写,底部状态栏默认显示 
       读写 浏览器底部状态栏默认显示值
       defaultStatus="状态栏默认显示文本";
-    window.status          底部状态栏条件显示的值
+    window.status          底部状态栏条件显示的值 
       浏览器在某种条件下显示的值,当条件不成立时则不显示.
       描述由用户交互导致的状态栏的临时消息
       status="状态栏文本";
@@ -132,9 +132,9 @@ window,表示浏览器的一个实例,BOM的核心对象
       PS:要使此方法工作 window 滚动条的可见属性必须设置为true
       x 把文档向右滚动的px数
       y 把文档向下滚动的px数
-    num = window.pageXOffset 页面水平滚动距离 
-    num = window.pageYOffset 页面垂直滚动距离 
-    window.matchMedia(str); 返回一个MediaQueryList对象 
+    window.pageXOffset  num,页面水平滚动距离 
+    window.pageYOffset  num,页面垂直滚动距离 
+    window.matchMedia(str) 返回一个MediaQueryList对象 
       PS:若window.matchMedia 无法解析参数,matches返回的总是false,而不是报错.
       str 一个mediaQuery语句的字符串
       window.matchMedia(str).media; 返回所查询的mediaQuery语句字符串.
@@ -160,50 +160,51 @@ window,表示浏览器的一个实例,BOM的核心对象
         }
     window.blur()        将焦点从窗口移除  
     window.focus()       将焦点移至窗口    
-  延时调用&间时调用&动画调用API 
-    JS单线程异步执行的机制 
-      JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
-      setTimeout,实际执行的时间大于等于定时器设置的值 
-        被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
-        异步队列会在同步队列所有代码执行完,JS引擎空闲后,
-        在计时结束时,开始执行延时代码.
-        若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
-        指定的时间间隔表示何时将定时器的代码添加到队列,而不是何时实际执行代码
-        Example:
-        console.log(1);
-        setTimeout(function() {console.log('a')}, 9);
-        setTimeout(function() {console.log('b')}, 3);
-        setTimeout(function() {console.log('c')}, 0);
-        var sum = 0;
-        for(var i = 0; i < 1000000; i ++) { sum += 1; }
-        console.log(sum);
-        setTimeout(function() {console.log('d');}, 0);
-        // 1 → 1000000 → c → b → d → a
-      setInterval,实际执行时间尽量接近指定值[可多可少]
-        依次向异步列队中添加延时调用,
-        每个延时调用分别计时,不会互相影响.
-        当只有第n个延时被阻塞且阻塞时间小于间隔时间,
-        则n-1 到 n 的间隔时间大于指定间隔时间, n 到 n+1 小于间隔时间.
-        当阻塞时间大于间隔时间,则前面的调用被抛弃且立即调用下次,
-        保证间时最接近指定值 
-        console.log(1)
-        var siId = setInterval(function() {
-          var date = new Date();
-          console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
-        }, 10);
-        var sum = 0;
-        for(var i = 0; i < 10000000; i ++) { sum += i; }
-        console.log(2);
-        // 清除定时器,避免卡死浏览器
-        setTimeout(function() { clearInterval(siId); }, 30);
-        运行结果
-        1
-        2
-        19:44:733
-        19:44:750
-        19:44:760
-        19:44:770
-    id = setTimeout(foo/str,num [,arg1,arg2...]) 指定时间后回调,返回一id值  
+  ◆Kit: 
+    ★延时调用&间时调用&动画调用API 
+      JS单线程异步执行的机制 
+        JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
+        setTimeout,实际执行的时间大于等于定时器设置的值 
+          被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
+          异步队列会在同步队列所有代码执行完,JS引擎空闲后,
+          在计时结束时,开始执行延时代码.
+          若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
+          指定的时间间隔表示何时将定时器的代码添加到队列,而不是何时实际执行代码
+          Example:
+          console.log(1);
+          setTimeout(function() {console.log('a')}, 9);
+          setTimeout(function() {console.log('b')}, 3);
+          setTimeout(function() {console.log('c')}, 0);
+          var sum = 0;
+          for(var i = 0; i < 1000000; i ++) { sum += 1; }
+          console.log(sum);
+          setTimeout(function() {console.log('d');}, 0);
+          // 1 → 1000000 → c → b → d → a
+        setInterval,实际执行时间尽量接近指定值[可多可少]
+          依次向异步列队中添加延时调用,
+          每个延时调用分别计时,不会互相影响.
+          当只有第n个延时被阻塞且阻塞时间小于间隔时间,
+          则n-1 到 n 的间隔时间大于指定间隔时间, n 到 n+1 小于间隔时间.
+          当阻塞时间大于间隔时间,则前面的调用被抛弃且立即调用下次,
+          保证间时最接近指定值 
+          console.log(1)
+          var siId = setInterval(function() {
+            var date = new Date();
+            console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
+          }, 10);
+          var sum = 0;
+          for(var i = 0; i < 10000000; i ++) { sum += i; }
+          console.log(2);
+          // 清除定时器,避免卡死浏览器
+          setTimeout(function() { clearInterval(siId); }, 30);
+          运行结果
+          1
+          2
+          19:44:733
+          19:44:750
+          19:44:760
+          19:44:770
+    setTimeout(foo/str,num [,arg1,arg2...])  numId,指定时间后回调  
       foo 回调函数 
       str 字符串代码,有解析功能相当于eval
         不推荐此种写法,容易出错,不易扩展,损失性能
@@ -222,7 +223,7 @@ window,表示浏览器的一个实例,BOM的核心对象
       等价于
       clearTimeout(50500);
       但此种写法可能存在问题,因为id值可能会变,非一直为定值
-    id = setInterval(foo/str,num [,arg1,arg2...]) 每隔指定时间回调,返回一id值  
+    setInterval(foo/str,num [,arg1,arg2...]) numId,每隔指定时间回调  
       foo 回调函数 
       str 字符串代码,有解析功能相当于eval
       num 间隔时间,单位ms 
@@ -251,7 +252,7 @@ window,表示浏览器的一个实例,BOM的核心对象
         }
         box();
       </script>
-    id = requestAnimationFrame(foo) 浏览器专门为动画提供的API 
+    requestAnimationFrame(foo) numId,浏览器专门为动画提供的API 
       原理同setTimeout类似; 
       通过递归调用同一方法来不断更新画面以达到动起来的效果,
       浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
@@ -266,8 +267,8 @@ window,表示浏览器的一个实例,BOM的核心对象
         }
       }();
     cancelAnimationFrame(id)   通过返回ID值取消动画 
-  系统对话框: 其外观由操作系统或浏览器决定 
-    显示alert、confirm、prompt对话框时代码会停止执行,关掉后再恢复执行 
+    ★系统对话框:其外观由操作系统或浏览器决定 
+      显示alert、confirm、prompt对话框时代码会停止执行,关掉后再恢复执行 
     alert(str)    提示对话框  
       显示对话框的时候代码会停止执行,关掉后恢复
     confirm(str)  bol,用户确认对话框,确定返回'true',取消返回'false' 
@@ -275,34 +276,8 @@ window,表示浏览器的一个实例,BOM的核心对象
       点击确定,返回用户输入值;点击取消,则返回 null 
     print()    打印对话框,异步显示 
     find(str)  网页字符查找,异步显示 [IE不支持] 
-  base64编码&解码 
-    btoa(btStr)  str,base64编码处理,返回base64字符串[HTML5 IE10+] 
-      btStr  二进制数据组成的Unicode字符串 
-    atob(bs64Str)  str,base64解码处理[HTML5 IE10+] 
-      PS:返回二进制数据组成的Unicode字符串
-        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
-        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
-        DOM Level 0 规范
-      bs64Str  经过base64编码后的字符串 
+    ★base64编码&解码 
       Example:
-        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
-        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
-      Unicode 字符串 
-        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
-        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
-        function utf8_to_b64( str ) {
-          return window.btoa(unescape(encodeURIComponent( str )));
-        }
-        function b64_to_utf8( str ) {
-          return decodeURIComponent(escape(window.atob( str )));
-        }
-
-        // Usage:
-        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
-        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
-        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
-        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
-    Example:
         当服务器数据库中保存的是图片的二进制数据及图片文件的格式时,根据此二进制数据来渲染图片
         <input type="file" id="file"/>
         <input type="button" value="读取图像" onclick="readPicture()" id="btnReadPicture"/>
@@ -349,144 +324,66 @@ window,表示浏览器的一个实例,BOM的核心对象
           xhr.open("POST","uploadImg.php");
           xhr.send(window.atob(data));
         }
-  ◆其他接口 
-  window.Notification   浏览器通知接口[DiBs HTML5] 
-    PS:用于在用户的桌面,而非网页上显示通知信息, 
-      桌面电脑和手机都适用,比如通知用户收到了一封Email。
-      具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
-      若网页代码调用这个API,浏览器会询问用户是否接受。
-      只有在用户同意的情况下,通知信息才会显示。
-    浏览器兼容性检测 
-      目前,Chrome和Firefox在桌面端部署了这个API,
-      Firefox和Blackberry在手机端部署了这个API; 
-      if (window.Notification) {
-        console.log('该浏览器支持Notification接口');
-      } 
-      else {
-        console.log('该浏览器不支持Notification接口');
-      }
-    Example:
-      当前浏览器支持Notification对象,并当前用户准许使用该对象,
-      然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
-      if(window.Notification && Notification.permission !== "denied") {
-        Notification.requestPermission(function(status) {
-          var n = new Notification('通知标题', { body: '这里是通知内容!'}); 
-        });
-      }
-    ◆Notification对象的属性和方法
-    Notification.permission  只读,用户给予的权限 
-      'default' 用户还没有做出许可,因此不会弹出通知 
-      'granted' 用户明确同意接收通知 
-      'denied'  用户明确拒绝接收通知 
-    Notification.requestPermission(foo)  获取用户授权
-      foo  回调函数,参数为 status[用户授权状态] 
-      Example: 若用户拒绝接收通知,用alert方法代替 
-        Notification.requestPermission(function (status) {
-          if (status === "granted") {
-            var n = new Notification("Hi!");
-          } 
-          else {
-            alert("Hi!");
-          }
-        });
-    var notice = new Notification(title [,options]);  生成一条通知
-      title   字符串,必须,用来指定通知的标题
-      options 对象,可选,用来设定各种设置
-        属性都是可读写的
-        dir   文字方向,
-          'auto'
-          'ltr'  从左到右
-          'rtl'  从右到左
-        lang  使用的语种
-          'en-US'
-          'zh-CN'
-          ...
-        body  通知内容,值为字符串,用来进一步说明通知的目的
-        tag   通知的ID,值为字符串 
-          一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示。
-        icon  图表的URL,用来显示在通知上
+    btoa(btStr)  str,base64编码处理,返回base64字符串[HTML5 IE10+] 
+      btStr  二进制数据组成的Unicode字符串 
+    atob(bs64Str)  str,base64解码处理[HTML5 IE10+] 
+      PS:返回二进制数据组成的Unicode字符串
+        由于一些网络通讯协议的限制,必须使用该方法对原数据进行编码后,才能进行发送.
+        接收方使用相当于 window.atob 的方法对接受到的base64数据进行解码,得到原数据.
+        DOM Level 0 规范
+      bs64Str  经过base64编码后的字符串 
       Example:
-        var notice = new Notification('收到新邮件', {
-          body: '您总共有3封未读邮件。'
-        });
-        notice.title // "收到新邮件"
-        notice.body // "您总共有3封未读邮件。"
-      notice.title  通知标题
-      notice.body   通知内容
-    notice.close();    关闭通知
-      var n = new Notification("Hi!");
-      // 手动关闭
-      n.close();
-      // 自动关闭
-      n.onshow = function () { 
-        setTimeout(n.close.bind(n), 5000); 
-      }
-      上面代码说明,并不能从通知的close事件,判断它是否为用户手动关闭。
-    notice_event 通知对象的事件
-      show  通知显示给用户时触发
-      click 用户点击通知时触发
-      close 用户关闭通知时触发
-      error 通知出错时触发,大多数发生在通知无法正确显示时 
-      Example:
-        notice.onshow = function() {
-          console.log('Notification shown');
-        };
-  window.getSelection() 返回表示选中的文字的Selection对象 
-    PS:可通过连接一个空字符串 "" 或使用  toString() 方法,获取文本字符串, 
-      当该对象被传递给期望字符串作为参数的函数中时,如 window.alert 或 document.write,
-      对象的 toString() 方法会被自动调用,而不用手动转换.
-    var selectText = window.getSelection();  
-    var str1 = selectText + ''         获取选中的字符串
-    var str2 = selectText.toString();  获取选中的字符串
-    Example: 打印出文档中被选中的的文字 
-      $(document).mouseup(function (e) {
-        var txt = window.getSelection();
-        if (txt.toString().length >= 1) { 
-          console.log(txt);  // 返回一个对象
-          console.log(txt+''); // 返回选中的文字
-          console.log(txt.toString()); // 返回选中的文字
-          alert(txt); // 返回选中的文字
+        var encodedData = window.btoa("Hello, world"); // 编码 ,SGVsbG8sIHdvcmxk
+        var decodedData = window.atob(encodedData);    // 解码 ,Hello, world
+      Unicode 字符串 
+        在各浏览器中,使用 window.btoa 对Unicode字符串进行编码都会触发一个字符越界的异常.
+        先把Unicode字符串转换为UTF-8 编码,可以解决这个问题
+        function utf8_to_b64( str ) {
+          return window.btoa(unescape(encodeURIComponent( str )));
         }
-      });
+        function b64_to_utf8( str ) {
+          return decodeURIComponent(escape(window.atob( str )));
+        }
+
+        // Usage:
+        utf8_to_b64('? à la mode');          // "4pyTIMOgIGxhIG1vZGU="
+        b64_to_utf8('4pyTIMOgIGxhIG1vZGU='); // "? à la mode"
+        在js引擎内部, encodeURIComponent(str) 相当于 escape(unicodeToUTF8(str)) 
+        所以可以推导出 unicodeToUTF8(str) 等同于 unescape(encodeURIComponent(str))
+    ★其他接口 
+    getSelection()  Selection,
+    toStaticHTML(HTMLStr) str,返回经过处理后的版本[IE专属][IE8+] 
+      从原HTML中删除所有脚本节点和事件处理程序属性 
   其他属性方法 
-    window.onload
-    window.offscreenBuffering 用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
-  SpeechRecognitionEvent()  
-  SpeechRecognitionError()  
-  SpeechRecognition()  
-  SpeechGrammarList()  
-  SpeechGrammar()  
-  window.origin  str,如'http://tst.lcltst.com'  
-  window.name   
-  window.status   
-  window.frameElement   
-  window.external 
-  window.devicePixelRatio 
-  window.clientInformation 
-  window.defaultstatus   
-  styleMedia StyleMedia {type: "screen"}  
-  onanimationend    
-  onanimationiteration    
-  onanimationstart    
-  onsearch    
-  ontransitionend    
-  onwebkitanimationend    
-  onwebkitanimationiteration    
-  onwebkitanimationstart    
-  onwebkittransitionend    
-  isSecureContext   
+    window.offscreenBuffering bol,用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
+    window.frameElement   
+    window.external 
+    window.devicePixelRatio 
+    window.clientInformation 
+    window.defaultstatus   
+    window.isSecureContext   
   ◆事件相关 
-    .onerror 见:Event 
-    .onstorage   Storage事件[仅IE支持] 
+    window.onerror 见:Event 
+    window.onstorage   Storage事件[仅IE支持] 
       修改 localStorage 或 sessionStorage 时触发
-    ononline  网络从离线变成在线时触发,不冒泡[HTML5]   
-    onoffline  网络从在线变成离线时触发[HTML5]   
+    window.onload
+    window.ononline  网络从离线变成在线时触发,不冒泡[HTML5]   
+    window.onoffline  网络从在线变成离线时触发[HTML5]   
     onabort    
     onblur    
     oncancel    
     oncanplay    
     oncanplaythrough    
     onchange    
+    onanimationend    
+    onanimationiteration    
+    onanimationstart    
+    onsearch    
+    ontransitionend    
+    onwebkitanimationend    
+    onwebkitanimationiteration    
+    onwebkitanimationstart    
+    onwebkittransitionend    
     onclick    
     onclose    
     oncontextmenu    
@@ -560,47 +457,26 @@ window,表示浏览器的一个实例,BOM的核心对象
     onrejectionhandled    
     onunhandledrejection    
     onunload    
+    onappinstalled    
+    onbeforeinstallprompt    
+    ondevicemotion    
+    ondeviceorientation    
+    ondeviceorientationabsolute    
+    onauxclick    
   stop()    
-  open()    
-  alert()    
-  confirm()    
-  prompt()    
-  print()    
-  requestAnimationFrame()    
-  cancelAnimationFrame()    
   requestIdleCallback()    
   cancelIdleCallback()    
   captureEvents()    
   releaseEvents()    
   getComputedStyle()    
   matchMedia()    
-  moveTo()    
-  moveBy()    
-  resizeTo()    
-  resizeBy()    
-  getSelection()    
-  find()    
   getMatchedCSSRules()    
   webkitRequestAnimationFrame()    
   webkitCancelAnimationFrame()    
-  btoa()    
-  atob()    
-  setTimeout()    
-  clearTimeout()    
-  setInterval()    
-  clearInterval()    
   createImageBitmap()    
-  scroll()    
-  scrollTo()    
-  scrollBy()    
-  onappinstalled    
-  onbeforeinstallprompt    
-  ondevicemotion    
-  ondeviceorientation    
-  ondeviceorientationabsolute    
-  onauxclick    
   openDatabase()  
   待整理 
+    StyleMedia 
     ByteLengthQueuingStrategy 
     CountQueuingStrategy 
     ReadableStream 
@@ -624,7 +500,6 @@ window,表示浏览器的一个实例,BOM的核心对象
     PaymentRequestUpdateEvent
     PaymentRequest
     PaymentAddress
-    Notification
     CanvasCaptureMediaStreamTrack
     PhotoCapabilities
     ImageCapture
@@ -693,12 +568,6 @@ window,表示浏览器的一个实例,BOM的核心对象
     MIDIAccess
     ImageBitmapRenderingContext
     IIRFilterNode
-    IDBOpenDBRequest
-    IDBObjectStore
-    IDBKeyRange
-    IDBIndex
-    IDBCursorWithValue
-    IDBCursor
     Headers
     Gamepad
     GamepadButton
@@ -795,6 +664,11 @@ window,表示浏览器的一个实例,BOM的核心对象
     SharedArrayBuffer 
     Atomics 
     WebAssembly 
+window.frames,框架集,包含页面所有框架的window对象 
+  PS: 一个网页/窗口中可能包含多个框架,每个框架都有自己的window对象  
+  console.log(window.frames===window); // true,同时也是页面的window: 
+  window.frames[idx]  通过下标获取框架的window[从0开始,从左至右,从上至下]  
+  window.frames[name] 通过框架的'name'属性获取框架的window  
 window.location,管理URL 
   PS: 修改URL都会生成一条历史记录[可前进后退], 且除hash外,页面也都会重载 
     存在 Location 构造函数,但 location 的属性/方法都存在对象中,而非其原型中 
@@ -827,6 +701,10 @@ window.location,管理URL
     .origin  
     .toString() 
     .valueOf() 
+window.document, 
+  Member: 
+    document.location  等价于 window.location 
+      console.log(document.location===window.location); // true 
 window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持] 
   PS: XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,

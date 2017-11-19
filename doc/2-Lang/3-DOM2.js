@@ -1,5 +1,25 @@
-◆专题 
-★'canvas'画布  [HTML5][IE9+] 
+◆相关规范与技术 
+'what you see is what you get'WYSIWYG所见即所得,富文本编辑 
+  PS: 本质为在页面中嵌入一个包含空HTML页面的iframe 
+    通过设置其designMode属性为'on',使其页面<body>元素的HTML代码可被编辑,
+    由IE引入,已成事实标准;
+  需要页面完全加载之后才能设置为iframe为可编辑状态,一般使用load事件监听 
+    designMode="on/off" "on"可编辑,"off"不可编辑 
+    Example: 
+    window.onload = function(){
+      frames['frame1'].document.designMode = 'on'
+    }
+  document.execCommand(key,bol,val)  bol,文本操作,返回操作是否被支持或被启用的布尔值  
+  document.queryCommandEnabled(key)  bol,是否可针对当前选择的文本或当前插入字符所在位置执行某个命令 
+  bol = document.queryCommandState(key)    是否已将指定命令应用到了选择的文本 
+    例如,要确 定当前选择的文本是否已经转换成了粗体,可以使用如下代码。
+    var isBold = frames["richedit"].document.queryCommandState("bold");
+  document.queryCommandValue()    用于取得执行命令时传入的值 
+    即 document.execCommand() 的第三个参数 
+    例如,在对一段文本应用"fontsize"命令时如果传入了7,那么下面的代码就会返回"7"：
+    var fontSize = frames["richedit"].document.queryCommandValue("fontsize");
+  document.getSelection()/window.getSelection()  返回一表示当前选择文本的Selection对象  
+'canvas'画布  [HTML5][IE9+] 
 CanvasRenderingContext2D,canvas的'2D'上下文对象 
   PS: 使用上下文的属性和方法来操作画布,是画布的核心对象 
     目前只支持2D绘图,将来可能还会有其他上下文类型 
@@ -355,9 +375,9 @@ CanvasRenderingContext2D,canvas的'2D'上下文对象
     .isPointInPath()   
     .createImageData()   
     .ellipse()   
-CanvasPattern 
-CanvasGradient 
-★Path2D 对象 用来缓存或记录绘画命令,这样就能快速地回顾路径
+CanvasPattern, 
+CanvasGradient,  
+Path2D,用来缓存或记录绘画命令,这样就能快速地回顾路径 
   PS:为了简化代码和提高性能,Path2D对象已可以在较新版本的浏览器中使用
     所有的路径方法比如 moveTo, rect, arc 或 quadraticCurveTo等,都可以在Path2D中使用
   ★创建 Path2D
@@ -391,7 +411,7 @@ CanvasGradient
       这条路径将先移动到点 (M10 10) 然后再水平移动80个单位 (h 80),
       然后下移80个单位 (v 80),接着左移80个单位 (h -80),再回到起点处 (z).
       var p = new Path2D("M10 10 h 80 v 80 h -80 Z");
-★WebGL,针对canvas的3D上下文,非W3C标准 [JS高程 464 页] 
+'WebGL'针对canvas的3D上下文,非W3C标准 [JS高程 464 页] 
   PS: 浏览器中使用的WebGL基于Khronos Group设计的 OpenGL ES 2.0 
 WebGLRenderingContext,canvas的'3D'上下文对象 
   PS: 
@@ -1153,24 +1173,24 @@ WebGLRenderingContext,canvas的'3D'上下文对象
     if (gl) { // 兼容性检测 
       // 支持 WebGL 
     }
-▼类型化数组'typed arrays',元素被设置为特定类型的值的数组 
+'typed arrays'类型化数组,元素被设置为特定类型的值的数组 
   PS: 因JS无法满足需要,WebGL引入的概念
-WebGL2RenderingContext 
-WebGLVertexArrayObject
-WebGLUniformLocation
-WebGLTransformFeedback
-WebGLTexture
-WebGLSync
-WebGLShaderPrecisionFormat
-WebGLShader
-WebGLSampler
-WebGLRenderbuffer
-WebGLQuery
-WebGLProgram
-WebGLFramebuffer
-WebGLContextEvent
-WebGLBuffer
-WebGLActiveInfo
+WebGL2RenderingContext,  
+WebGLVertexArrayObject,  
+WebGLUniformLocation, 
+WebGLTransformFeedback, 
+WebGLTexture, 
+WebGLSync,  
+WebGLShaderPrecisionFormat, 
+WebGLShader, 
+WebGLSampler, 
+WebGLRenderbuffer, 
+WebGLQuery, 
+WebGLProgram, 
+WebGLFramebuffer, 
+WebGLContextEvent, 
+WebGLBuffer, 
+WebGLActiveInfo, 
 'Web Workers'工作线程[HTML5] 
   JavaScript是单线程,一次只能做一件事.
   HTML5 可使JS创建多个Web工作线程.

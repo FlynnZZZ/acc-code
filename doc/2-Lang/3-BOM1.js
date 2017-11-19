@@ -88,63 +88,7 @@ Navigator,客户端识别
         这个文件被称作cookie,
         通过cookieEnabled属性可以判断浏览器是否启用了此功能
     .javaEnabled()  bol,浏览器是否启用Java 
-    .geolocation 地理定位 [HTML5]
-      PS:在地理定位API中,使用小数值来表示经纬度[西经和南纬都用负数表示]
-      浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
-      单位转换
-        可使用一下函数将使用度、分、秒表示的经纬度转换为小数
-          function degreesToDecimal(degrees,minutes,seconds){
-            return degrees +(minutes / 60 ) +(seconds / 3600);
-          }
-      检查是否支持该接口
-        if (navigator.geolocation) {
-          // 支持
-        }
-        else {
-          // 不支持
-        }
-        该API兼容性较好,IE9及以前都支持
-      Example:
-        navigator.geolocation.getCurrentPosition(function(position){
-        var latitude = position.coords.latitude;
-        // 维度值
-        var longitude = position.coords.longitude;
-        // 经度值
-      })
-      包含整个地理定位 API
-      navigator.geolocation.getCurrentPosition(suc,err,options)  是否同意授权后回调
-        var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
-          event.coords.latitude    纬度
-          event.coords.longitude   经度
-          event.coords.accuracy    精度
-          以下属性支持与否取决于设备,桌面浏览器一般没有
-          event.coords.altitude          海拔
-          event.coords.altitudeAccuracy  海拔精度[m]
-          event.coords.heading           以360度表示的方向
-          event.coords.speed             速度 [m/s]
-          event.timestamp 事件戳,表示获取位置时的时间
-        var err = function(event){ }  回调函数,无法确定位置[如用户拒绝授权时],调用
-          event.code    错误码
-            0  Unknown error,相当于 event.UNKNOWN_ERROR
-            1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
-            2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
-            3  超时响应      ,相当于 event.TIMEOUT
-          event.message 错误信息
-        options                       可选,对象,设置定位的参数
-          var options = {
-              enableHighAccuracy:true, // 是否高精度,默认为false
-              timeout:5000,            // 超时时限,默认为Infinity,单位ms
-              maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
-            }
-      var watchId=navigator.geolocation.watchPosition(suc,err,options) 监听位置变化
-        PS:位置改变时重复调用成功处理程序,
-          回调函数传入的event对象和getCurrentPosition用法类似
-      navigator.geolocation.clearWatch(watchId) 取消watchPosition监听
-      Google Maps API [非HTML5规范]
-        该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
-        引入 API 放置在 HTML head中
-          <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-          sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
+    .geolocation   Geolocation,地理定位
     .vibrate()     设备震动 [HTML5] 
       PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
         显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
@@ -495,13 +439,16 @@ Storage,本地存储[IE8+][HTML5]
     .remainingSpace   num,剩余的可用空间的字节数[仅IE支持] 
   Question: 
     IE中localStorage中存在问题 ?
-URL,用于对二进制数据生成URL,生成指向File对象或Blob对象的URL  [IE10+]
+URL,用于对二进制数据生成URL,生成指向File对象或Blob对象的URL[IE10+] 
+  PS: 引用保存在File或Blob中数据的URL.
+    使用对象URL的好处是可以不必把文件内容读取到JS中而直接使用文件内容.
+    只要在需要文件内容的地方提供对象URL即可
   Extend: Object 
   Static: 
     .createObjectURL(blob)  str,创建url对象实例,将二进制数据生成一个URL 
       同样的二进制数据, 每调用一次该方法,就会得到一个不同的URL,
       这个URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
-      除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效。
+      除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效.
       类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
       这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性
     .revokeObjectURL(url)   使生成的URL失效 
@@ -662,20 +609,175 @@ MutationRecord,变动记录对象
       如果type为 attributes,则返回该属性变化之前的属性值.
       如果type为characterData,则返回该节点变化之前的文本数据.
       如果type为childList,则返回null.
-DOMStringList 
+Geolocation[仅在IE中可直接访问],地理定位[HTML5][IE9+]   
+  PS: 在地理定位API中,使用小数值来表示经纬度[西经和南纬都用负数表示]
+    浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
+  Relate:  navigator.geolocation.constructor 间接访问 
+  Proto: 
+    .getCurrentPosition(suc,err,options)  是否同意授权后回调
+      var suc = function(event){ }  回调函数,若浏览器能成功的确定位置,调用
+        event.coords.latitude    纬度
+        event.coords.longitude   经度
+        event.coords.accuracy    精度
+        以下属性支持与否取决于设备,桌面浏览器一般没有
+        event.coords.altitude          海拔
+        event.coords.altitudeAccuracy  海拔精度[m]
+        event.coords.heading           以360度表示的方向
+        event.coords.speed             速度 [m/s]
+        event.timestamp 事件戳,表示获取位置时的时间
+      var err = function(event){ }  回调函数,无法确定位置[如用户拒绝授权时],调用
+        event.code    错误码
+          0  Unknown error,相当于 event.UNKNOWN_ERROR
+          1  用户拒绝授权  ,相当于 event.PERMISSION_DENIED
+          2  无法定位      ,相当于 event.POSIRION_UNAVSILSBLE
+          3  超时响应      ,相当于 event.TIMEOUT
+        event.message 错误信息
+      options                       可选,对象,设置定位的参数
+        var options = {
+            enableHighAccuracy:true, // 是否高精度,默认为false
+            timeout:5000,            // 超时时限,默认为Infinity,单位ms
+            maximumAge:600           // 缓存时限,0表示不缓存,infinity表示只读取缓存
+          }
+      Example: 
+      navigator.geolocation.getCurrentPosition(function(position){
+        var latitude = position.coords.latitude;
+        // 维度值
+        var longitude = position.coords.longitude;
+        // 经度值
+      })
+    .watchPosition()  
+    .watchPosition(suc,err,options) numId,监听位置变化
+      PS: 位置改变时重复调用成功处理程序,
+        回调函数传入的event对象和getCurrentPosition用法类似
+    .clearWatch(watchId) 取消watchPosition监听
+  Expand: 
+    检查是否支持该接口 
+      if (navigator.geolocation) {
+        // 支持
+      }
+      else {
+        // 不支持
+      }
+    单位转换 
+      可使用一下函数将使用度、分、秒表示的经纬度转换为小数
+        function degreesToDecimal(degrees,minutes,seconds){
+          return degrees +(minutes / 60 ) +(seconds / 3600);
+        }
+    'Google Maps API' [非HTML5规范]
+      该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
+      引入 API 放置在 HTML head中
+        <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
+Notification,浏览器通知接口[HTML5][DiBs] 
+  PS: 可在用户的桌面,而非网页上显示通知信息, 
+    桌面电脑和手机都适用,比如通知用户收到了一封Email。
+    具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
+    若网页代码调用这个API,浏览器会询问用户是否接受。
+    只有在用户同意的情况下,通知信息才会显示。
+  Feature: 
+    浏览器兼容性检测 
+      目前,Chrome和Firefox在桌面端部署了这个API,
+      Firefox和Blackberry在手机端部署了这个API; 
+      if (window.Notification) {
+        console.log('该浏览器支持Notification接口');
+      } 
+      else {
+        console.log('该浏览器不支持Notification接口');
+      }
+  Static: 
+    .permission  str,用户给予的权限状态  
+      'default' 用户还没有做出许可,因此不会弹出通知 
+      'granted' 用户明确同意接收通知 
+      'denied'  用户明确拒绝接收通知 
+    .maxActions  num, 
+    .requestPermission(function(status){  // 获取用户授权 
+      // status 用户授权状态  
+      Example: 若用户拒绝接收通知,用alert方法代替 
+        Notification.requestPermission(function (status) {
+          if (status === "granted") {
+            var n = new Notification("Hi!");
+          } 
+          else {
+            alert("Hi!");
+          }
+        });
+    })  
+  Instance: 
+    var notice = new Notification(title [,options]);  生成一条通知
+      title   str,用来指定通知的标题
+      options -- { // 可选,用来设定各种设置 
+        dir: kw,  // 文字方向
+          'auto'
+          'ltr'  从左到右
+          'rtl'  从右到左
+        lang: kw, // 使用的语种
+          'en-US'
+          'zh-CN'
+          ...
+        body: str, // 通知内容,用来进一步说明通知的目的 
+        tag: str, // 通知的ID 
+          一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示 
+        icon: url // 图表的URL,用来显示在通知上
+      }
+    Example:
+      var notice = new Notification('收到新邮件', {
+        body: '您总共有3封未读邮件。'
+      });
+      notice.title // "收到新邮件"
+      notice.body // "您总共有3封未读邮件。"
+      notice.title  通知标题
+      notice.body   通知内容
+  Proto: 
+    .title 
+    .dir 
+    .lang 
+    .body 
+    .tag 
+    .icon 
+    .vibrate 
+    .timestamp 
+    .renotify 
+    .silent 
+    .requireInteraction 
+    .data 
+    .actions 
+    .badge 
+    .image 
+    .close()  关闭通知 
+      var n = new Notification("Hi!");
+      // 手动关闭
+      n.close();
+      // 自动关闭
+      n.onshow = function () { 
+        setTimeout(n.close.bind(n), 5000); 
+      }
+      不能从通知的close事件,判断是否为用户手动关闭 
+    ★Evt: 
+    .onshow  通知显示给用户时触发
+    .onclick 用户点击通知时触发
+    .onclose 用户关闭通知时触发
+    .onerror 通知出错时触发,大多数发生在通知无法正确显示时 
+  Example:
+    当前浏览器支持Notification对象,并当前用户准许使用该对象,
+    然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
+    if(window.Notification && Notification.permission !== "denied") {
+      Notification.requestPermission(function(status) {
+        var n = new Notification('通知标题', { body: '这里是通知内容!'}); 
+      });
+    }
+DOMStringList, 
   .length  
   .item()    
   .contains(key)   bol,是否包含该成员  
-Intl 
-WeakMap 
-BarProp 
+Intl, 
+WeakMap, 
+BarProp, 
   .locationbar   
   .menubar   
   .personalbar   
   .scrollbars   
   .statusbar   
   .toolbar   
-WeakSet 
 USB相关 
   USBOutTransferResult 
   USBIsochronousOutTransferResult 

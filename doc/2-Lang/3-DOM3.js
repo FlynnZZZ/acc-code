@@ -68,7 +68,7 @@
     var a =document.querySelector("#a");
     a.onclick =function(){ return false; };
     a.addEventListener("click",function(){return false; }); // 不生效
-EventTarget,事件目标  [IE9+][DOM2]  
+EventTarget,事件目标[IE9+][DOM2]  
   Extend: Object 
     console.log(EventTarget.prototype.__proto__.constructor===Object); // true 
   Proto: 
@@ -379,7 +379,7 @@ HashChangeEvent,URL锚点改变事件
     .newURL str,变化后的URL
   事件枚举: 
     hashchange   hash变化时在window上触发[IE8+] [HTML5]
-PopStateEvent,历史记录状态事件 [HTML5][IE10+] 
+PopStateEvent,历史记录状态事件[HTML5][IE10+] 
   Extend: Event 
     console.log(PopStateEvent.prototype.__proto__.constructor===Event); // true 
   Proto: 
@@ -413,7 +413,7 @@ BeforeUnloadEvent,
         window.addEventListener("beforeunload",function(e){
           return '您输入的内容尚未保存,确定离开此页面吗？';
         })
-ClipboardEvent,剪贴版事件 [HTML5] 
+ClipboardEvent,剪贴版事件[HTML5] 
   Extend: Event 
     console.log(ClipboardEvent.prototype.__proto__.constructor===Event);
   Proto: 
@@ -514,7 +514,7 @@ InputEvent,输入事件
       PS: 粘贴可触发; 在Chrome中通过JS改变表单的值,不会触发该事件 
       适用元素: input type=text , textarea
       IOS微信中,自定义获取焦点存在问题
-MouseEvent,鼠标事件  
+MouseEvent,鼠标事件 
   Expand: UIEvent 
     console.log(MouseEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
@@ -585,7 +585,7 @@ MouseEvent,鼠标事件
     contextmenu  上下文菜单事件 [HTML5] 
       右击网页时,会自动出现Windows自带的菜单
       使用 contextmenu 事件来修改指定的菜单,前提将默认行为取消  
-WheelEvent,滚轮事件 [HTML5] 
+WheelEvent,滚轮事件[HTML5] 
   Extend: MouseEvent 
     console.log(WheelEvent.prototype.__proto__.constructor===MouseEvent);
   Proto: 
@@ -602,7 +602,7 @@ WheelEvent,滚轮事件 [HTML5]
     .wheelDelta 向前滚动鼠标时,wheelDelta是120的倍数,向后为 -120 的倍数
   事件枚举: 
     mousewheel 使用鼠标滚轮或类似设备时触发 
-DragEvent,拖放事件 [IE9+][HTML5] 
+DragEvent,拖放事件[IE9+][HTML5] 
   PS: IE4最早加入拖放功能,只能拖放文本框 [JS高程 482 页]
   Extend：MouseEvent 
     console.log(DragEvent.prototype.__proto__.constructor===MouseEvent);
@@ -815,7 +815,7 @@ KeyboardEvent,键盘事件[DOM3]
     keypress   按下字符键时触发,长按则持续触发 
       任何获得焦点的元素都可以触发keypress事件
     keyup      释放按键时触发
-FocusEvent,焦点事件  
+FocusEvent,焦点事件 
   Extend: UIEvent 
     console.log(FocusEvent.prototype.__proto__.constructor===UIEvent);
   Proto: 
@@ -850,21 +850,21 @@ CompositionEvent,合成事件[DOM3]
       e.data  正在插入的文本
     compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
       e.data  包含此次输入会话中插入的所有字符
-FontFaceSetLoadEvent 
-TrackEvent 
-SpeechSynthesisEvent 
-DeviceOrientationEvent 
-DeviceMotionEvent 
-BlobEvent 
-AudioProcessingEvent 
-MessageEvent 
-PointerEvent 
-ProgressEvent 
-StorageEvent 
-MIDIConnectionEvent 
-IDBVersionChangeEvent 
-GamepadEvent 
-CloseEvent 
+FontFaceSetLoadEvent,   
+TrackEvent,   
+SpeechSynthesisEvent,   
+DeviceOrientationEvent,   
+DeviceMotionEvent,   
+BlobEvent,   
+AudioProcessingEvent,   
+MessageEvent,   
+PointerEvent,   
+ProgressEvent,   
+StorageEvent,   
+MIDIConnectionEvent,   
+IDBVersionChangeEvent,   
+GamepadEvent, 
+CloseEvent,   
 事件兼容处理: 
   var eventCompat = {
     add: function(elem,type,foo){

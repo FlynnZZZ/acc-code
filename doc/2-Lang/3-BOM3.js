@@ -1495,173 +1495,9 @@ ApplicationCache,应用离线缓存对象[HTML5]
       .DOWNLOADING  num,3 
       .UPDATEREADY  num,4 
       .OBSOLETE  num,5 
-
-indexedDB,浏览器数据库对象  
-  ◆数据库事务对象
-  var dbt = db.transaction(arr,option);  返回一个事务对象 
-    PS: 向数据库添加数据之前,必须先创建数据库事务.
-    arr     数组,里面是所涉及的对象仓库,通常是只有一个
-    option  字符串,表示操作类型,目前,操作类型只有两种
-      添加数据使用readwrite,读取数据使用readonly.
-      readonly  只读
-      readwrite 读写
-  var store = dbt.objectStore("firstOS");  用于获取指定的对象仓库
-  事务对象的三个事件,可以用来定义回调函数
-    abort    事务中断
-    complete 事务完成
-    error    事务出错
-    var dbt = db.transaction(["note"], "readonly");  
-    dbt.oncomplete = function(event) {
-      // some code
-    };
-  ◆事务对象的方法,用于操作数据.
-  var request = store.add(o,1); 添加数据
-    获取对象仓库以后,就可以用add方法往里面添加数据了.
-    var store = dbt.objectStore("firstOS");
-    var o = {p: 123};
-    var request = store.add(o,1);
-    add方法的第一个参数是所要添加的数据,
-    第二个参数是这条数据对应的键名(key),上面代码将对象o的键名设为1.
-    若在创建数据仓库时,对键名做了设置,这里也可以不指定键名.
-    success和error事件
-      add方法是异步的,有自己的success和error事件
-      var request = store.add(o,1);
-      request.onerror = function(e) {
-        // error handler
-        console.log("Error",e.target.error.name); 
-      }
-      request.onsuccess = function(e) {
-        console.log("数据添加成功！");
-      }
-  var ob = store.get(x); 读取数据
-    参数是数据的键名
-    var t = db.transaction(["test"], "readonly");
-    var store = dbt.objectStore("test");
-    var ob = store.get(x);
-    get方法也是异步的,会触发自己的success和error事件,可以对它们指定回调函数.
-      var ob = store.get(x);
-      ob.onsuccess = function(e) {
-        // ...
-      }
-  从创建事务到读取数据,所有操作方法也可以写成下面这样链式形式.
-    db.transaction(["test"], "readonly")
-    .objectStore("test")
-    .get(X)
-    .onsuccess = function(e){}
-  var request = store.put(o, 1); 更新记录
-    put方法的用法与add方法相近.
-    var o = { p:456 };
-    var request = store.put(o, 1);
-  var request = store.delete(thisId); 删除记录
-    var t = db.transaction(["people"], "readwrite");
-    var request = dbt.objectStore("people").delete(thisId);
-    delete方法的参数是数据的键名.另外,delete也是一个异步操作,可以为它指定回调函数.
-  var cursor = store.openCursor(); 遍历数据
-    若想要遍历数据,就要openCursor方法,它在当前对象仓库里面建立一个读取光标(cursor).
-    var t = db.transaction(["test"], "readonly");
-    var store = dbt.objectStore("test");
-    var cursor = store.openCursor();
-    openCursor方法也是异步的,有自己的success和error事件,可以对它们指定回调函数.
-      cursor.onsuccess = function(e) {
-        var res = e.target.result;
-        if(res) {
-          console.log("Key", res.key);
-          console.dir("Data", res.value);
-          res.continue();
-        }
-      }
-      回调函数接受一个事件对象作为参数,该对象的 target.result 属性指向当前数据对象.
-      当前数据对象的 key 和 value 分别返回键名和键值[即实际存入的数据].
-      continue 方法将光标移到下一个数据对象,
-      若当前数据对象已经是最后一个数据了,则光标指向null.
-    openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,
-      其他可能的值为prev、nextunique和prevunique.
-      后两个值表示若遇到重复值,会自动跳过.
-  store.createIndex 用于创建索引
-    假定对象仓库中的数据对象都是下面person类型的.
-    var person = {
-      name:name,
-      email:email,
-      created:new Date()
-    }
-    可以指定这个数据对象的某个属性来建立索引.
-    var store = db.createObjectStore("people", { autoIncrement:true });
-    store.createIndex("name","name", {unique:false});
-    store.createIndex("email","email", {unique:true});
-    createIndex方法接受三个参数,
-    第一个是索引名称,
-    第二个是建立索引的属性名,
-    第三个是参数对象,用来设置索引特性.
-    unique表示索引所在的属性是否有唯一值,上面代码表示name属性不是唯一值,email属性是唯一值.
-  var request = index.get(name); 从对象仓库返回指定的索引
-    有了索引以后,就可以针对索引所在的属性读取数据.
-    var t = db.transaction(["people"],"readonly");
-    var store = dbt.objectStore("people");
-    var index = store.index("name");
-    var request = index.get(name);
-    上面代码打开对象仓库以后,先用index方法指定索引在name属性上面,
-    然后用get方法读取某个name属性所在的数据.
-    若没有指定索引的那一行代码,get方法只能按照键名读取数据,
-    而不能按照name属性读取数据.
-    需要注意的是,这时get方法有可能取回多个数据对象,因为name属性没有唯一值.
-    另外,get是异步方法,读取成功以后,只能在success事件的回调函数中处理数据.
-  IDBKeyRange对象
-    索引的有用之处,还在于可以指定读取数据的范围.
-    这需要用到浏览器原生的IDBKeyRange对象.
-    IDBKeyRange对象的作用是生成一个表示范围的Range对象.生成方法有四种:
-    lowerBound方法:指定范围的下限.
-    upperBound方法:指定范围的上限.
-    bound方法:指定范围的上下限.
-    only方法:指定范围中只有一个值.
-    下面是一些代码实例:
-    // All keys ≤ x  
-    var r1 = IDBKeyRange.upperBound(x);
-    
-    // All keys < x  
-    var r2 = IDBKeyRange.upperBound(x, true);
-    
-    // All keys ≥ y  
-    var r3 = IDBKeyRange.lowerBound(y);
-    
-    // All keys > y  
-    var r4 = IDBKeyRange.lowerBound(y, true);
-    
-    // All keys ≥ x && ≤ y  
-    var r5 = IDBKeyRange.bound(x, y);
-    
-    // All keys > x &&< y  
-    var r6 = IDBKeyRange.bound(x, y, true, true);
-    
-    // All keys > x && ≤ y  
-    var r7 = IDBKeyRange.bound(x, y, true, false);
-    
-    // All keys ≥ x &&< y  
-    var r8 = IDBKeyRange.bound(x, y, false, true);
-    
-    // The key = z  
-    var r9 = IDBKeyRange.only(z);
-    前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性.
-    
-    生成Range对象以后,将它作为参数输入openCursor方法,就可以在所设定的范围内读取数据.
-    var t = db.transaction(["people"],"readonly");
-    var store = dbt.objectStore("people");
-    var index = store.index("name");
-    
-    var range = IDBKeyRange.bound('B', 'D');
-    
-    index.openCursor(range).onsuccess = function(e) {
-      var cursor = e.target.result;
-      if(cursor) {
-        console.log(cursor.key + ":");
-        for(var field in cursor.value) {
-          console.log(cursor.value[field]);
-        }
-        cursor.continue();
-      }
-    }  
-  Example:
-IDBFactory,浏览器数据库对象[HTML5][IE10+]   
+IDBFactory,浏览器数据库对象[HTML5][IE10+] 
   PS: Safari完全不支持?; 
+    隐式模式下不可用 
     目的: 方便存取JS对象,且支持查询及搜索 
     事务型数据库系统,类似于基于SQL的RDBMS
     按域名分配独立空间[如a.qq.com 和 b.qq.com],
@@ -1715,17 +1551,26 @@ IDBFactory,浏览器数据库对象[HTML5][IE10+]
       5、储存空间大 
         IE的储存上限是250MB,Chrome和Opera是剩余空间的某个百分比,Firefox则没有上限 
       6、支持二进制储存 
+    错误处理: 
+      错误事件都是针对导致错误的请求,
+      错误事件会冒泡出来,冒泡到事务,最终到数据库对象,
+      代替为所有请求都增加错误处理程序,可仅对数据库对象添加一个错误处理程序 
+      db.onerror = function(event) {
+        console.log(event.target.errorCode);
+      };
 IDBOpenDBRequest,数据库打开请求对象  
   Extend: IDBRequest 
   Instance: 打开数据库的返回对象
   Proto: 
     .onblocked 上一次的数据库连接还未关闭 
-    .onupgradeneeded  首次打开该数据库,或数据库版本发生变化时触发 
+    .onupgradeneeded  数据库版本变化时触发 
+      PS: 首次打开该数据库也相对版本变化,也会触发该事件 
       先触发该事件,后触发打开成功/失败事件 
-IDBRequest,数据库请求对象  
+IDBRequest,数据库请求对象 
   Extend: EventTarget 
   Proto: 
-    .result   IDBDatabase,打开的数据库对象 
+    .result   操作产生的结果对象,会因为操作不同返回不同的对象 
+      打开数据库成功返回 IDBDatabase,打开的数据库对象 
     .error    num,错误码,表示问题的性质 
       1,意外错误,无法归类 
       2,操作不合法 
@@ -1760,7 +1605,13 @@ IDBDatabase,打开的数据库对象,用于操作数据库
           通常使用该键来访问数据  
         autoIncrement: bol, // 可选,是否使用自动递增的整数作为键名,默认:false 
       }    
-    .transaction([str/arr[,num]])   创建事务 
+    .transaction([store[,kw]])   IDBTransaction,创建事务 
+      PS: 向数据库添加数据之前,必须先创建数据库事务.
+      store  arr,所涉及的对象仓库 
+        指定为空数组可跨越所有的对象存储空间
+      kw     操作类型,默认:只读事务 
+        "readwrite"  读写事务 
+        'readonly'  只读
     .close()   
     .deleteObjectStore()  
     .IDBDatabase()  
@@ -1768,20 +1619,219 @@ IDBDatabase,打开的数据库对象,用于操作数据库
     .onclose 
     .onerror 
     .onversionchange 
-IDBTransaction,数据库事物对象 
+IDBTransaction,数据库事务对象 
   Extend: EventTarget 
   Proto: 
     .objectStoreNames 
     .mode  
     .db  
     .error  
-    .objectStore()   
+    .objectStore(str)   IDBObjectStore,获取指定的对象仓库 
     .IDBTransaction()   
     .abort()  
-    .onabort 
-    .oncomplete 
-    .onerror 
-
+    ◆事件 
+    .onabort  事务中断 
+    .oncomplete  事务完成 
+    .onerror  事务出错 
+IDBObjectStore,数据库对象储存空间对象 
+  Extend: Object 
+  Proto: 
+    .name  
+    .keyPath  
+    .indexNames  
+    .transaction  
+    .autoIncrement  
+    .add(val)     增加数据,若已存在则会报错 
+      获取对象仓库以后,就可以用add方法往里面添加数据了.
+      var store = dbt.objectStore("firstOS");
+      var o = {p: 123};
+      var request = store.add(o,1);
+      add方法的第一个参数是所要添加的数据,
+      第二个参数是这条数据对应的键名(key),上面代码将对象o的键名设为1.
+      若在创建数据仓库时,对键名做了设置,这里也可以不指定键名.
+      success和error事件
+        add方法是异步的,有自己的success和error事件
+        var request = store.add(o,1);
+        request.onerror = function(e) {
+          // error handler
+          console.log("Error",e.target.error.name); 
+        }
+        request.onsuccess = function(e) {
+          console.log("数据添加成功！");
+        }
+    .put(val)     增加或修改数据 
+      put方法的用法与add方法相近.
+      var o = { p:456 };
+      var request = store.put(o, 1);
+    .get()        读取数据 
+      var ob = store.get(x); 
+        参数是数据的键名
+        var t = db.transaction(["test"], "readonly");
+        var store = dbt.objectStore("test");
+        var ob = store.get(x);
+        get方法也是异步的,会触发自己的success和error事件,可以对它们指定回调函数.
+          var ob = store.get(x);
+          ob.onsuccess = function(e) {
+            // ...
+          }
+    .delete(str)  删除数据 
+      var t = db.transaction(["people"], "readwrite");
+      var request = dbt.objectStore("people").delete(thisId);
+      delete方法的参数是数据的键名.另外,delete也是一个异步操作,可以为它指定回调函数.
+    .clear()   
+    .getKey()   
+    .getAll()  
+    .getAllKeys()   
+    .count()   
+    .openCursor()  遍历数据 
+      若想要遍历数据,就要openCursor方法,它在当前对象仓库里面建立一个读取光标(cursor).
+      var t = db.transaction(["test"], "readonly");
+      var store = dbt.objectStore("test");
+      var cursor = store.openCursor();
+      openCursor方法也是异步的,有自己的success和error事件,可以对它们指定回调函数.
+        cursor.onsuccess = function(e) {
+          var res = e.target.result;
+          if(res) {
+            console.log("Key", res.key);
+            console.dir("Data", res.value);
+            res.continue();
+          }
+        }
+        回调函数接受一个事件对象作为参数,该对象的 target.result 属性指向当前数据对象.
+        当前数据对象的 key 和 value 分别返回键名和键值[即实际存入的数据].
+        continue 方法将光标移到下一个数据对象,
+        若当前数据对象已经是最后一个数据了,则光标指向null.
+      openCursor方法还可以接受第二个参数,表示遍历方向,默认值为next,
+        其他可能的值为prev、nextunique和prevunique.
+        后两个值表示若遇到重复值,会自动跳过.
+    .openKeyCursor()  
+    .index()  
+    .createIndex()   创建索引
+      假定对象仓库中的数据对象都是下面person类型的.
+      var person = {
+        name:name,
+        email:email,
+        created:new Date()
+      }
+      可以指定这个数据对象的某个属性来建立索引.
+      var store = db.createObjectStore("people", { autoIncrement:true });
+      store.createIndex("name","name", {unique:false});
+      store.createIndex("email","email", {unique:true});
+      createIndex方法接受三个参数,
+      第一个是索引名称,
+      第二个是建立索引的属性名,
+      第三个是参数对象,用来设置索引特性.
+      unique表示索引所在的属性是否有唯一值,上面代码表示name属性不是唯一值,email属性是唯一值.
+    .deleteIndex()  
+IDBKeyRange, 
+  Extend: Object 
+  Static: 
+    .only()  
+    .lowerBound()  
+    .upperBound()  
+    .bound()  
+  Proto: 
+    .lower 
+    .upper 
+    .lowerOpen 
+    .upperOpen 
+    .includes() 
+  Example: 
+    索引的有用之处,还在于可以指定读取数据的范围.
+    这需要用到浏览器原生的IDBKeyRange对象.
+    IDBKeyRange对象的作用是生成一个表示范围的Range对象.生成方法有四种:
+    lowerBound方法:指定范围的下限.
+    upperBound方法:指定范围的上限.
+    bound方法:指定范围的上下限.
+    only方法:指定范围中只有一个值.
+    下面是一些代码实例:
+    // All keys ≤ x  
+    var r1 = IDBKeyRange.upperBound(x);
+    
+    // All keys < x  
+    var r2 = IDBKeyRange.upperBound(x, true);
+    
+    // All keys ≥ y  
+    var r3 = IDBKeyRange.lowerBound(y);
+    
+    // All keys > y  
+    var r4 = IDBKeyRange.lowerBound(y, true);
+    
+    // All keys ≥ x && ≤ y  
+    var r5 = IDBKeyRange.bound(x, y);
+    
+    // All keys > x &&< y  
+    var r6 = IDBKeyRange.bound(x, y, true, true);
+    
+    // All keys > x && ≤ y  
+    var r7 = IDBKeyRange.bound(x, y, true, false);
+    
+    // All keys ≥ x &&< y  
+    var r8 = IDBKeyRange.bound(x, y, false, true);
+    
+    // The key = z  
+    var r9 = IDBKeyRange.only(z);
+    前三个方法(lowerBound、upperBound和bound)默认包括端点值,可以传入一个布尔值,修改这个属性.
+    
+    生成Range对象以后,将它作为参数输入openCursor方法,就可以在所设定的范围内读取数据.
+    var t = db.transaction(["people"],"readonly");
+    var store = dbt.objectStore("people");
+    var index = store.index("name");
+    
+    var range = IDBKeyRange.bound('B', 'D');
+    
+    index.openCursor(range).onsuccess = function(e) {
+      var cursor = e.target.result;
+      if(cursor) {
+        console.log(cursor.key + ":");
+        for(var field in cursor.value) {
+          console.log(cursor.value[field]);
+        }
+        cursor.continue();
+      }
+    }  
+IDBIndex, 
+  Extend: Object 
+  Proto: 
+    .name  
+    .objectStore  
+    .keyPath  
+    .multiEntry  
+    .unique  
+    .get()  从对象仓库返回指定的索引 
+      有了索引以后,就可以针对索引所在的属性读取数据.
+      var t = db.transaction(["people"],"readonly");
+      var store = dbt.objectStore("people");
+      var index = store.index("name");
+      var request = index.get(name);
+      上面代码打开对象仓库以后,先用index方法指定索引在name属性上面,
+      然后用get方法读取某个name属性所在的数据.
+      若没有指定索引的那一行代码,get方法只能按照键名读取数据,
+      而不能按照name属性读取数据.
+      需要注意的是,这时get方法有可能取回多个数据对象,因为name属性没有唯一值.
+      另外,get是异步方法,读取成功以后,只能在success事件的回调函数中处理数据.
+    .getKey() 
+    .getAll() 
+    .getAllKeys() 
+    .count() 
+    .openCursor() 
+    .openKeyCursor() 
+IDBCursorWithValue, 
+  Extend: IDBCursor 
+  Proto: 
+    .value 
+IDBCursor, 
+  Extend: Object 
+  Proto: 
+    .source 
+    .direction 
+    .key 
+    .primaryKey 
+    .advance() 
+    .continue() 
+    .continuePrimaryKey() 
+    .update() 
+    .delete() 
 Fullscreen,全屏操作[HTML5] 
   PS: 全屏API可以控制浏览器的全屏显示,让一个Element节点[以及子节点]占满用户的整个屏幕
     目前各大浏览器的最新版本都支持这个API[包括IE11],但是使用的时候需要加上浏览器前缀

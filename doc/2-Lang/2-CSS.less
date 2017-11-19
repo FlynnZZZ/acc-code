@@ -112,7 +112,7 @@ Config,设置、配置
           font-family : Arial;
           src : local("Arial");
         }
-Selector选择器 
+Selector,选择器 
   PS: css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
     selector{
       key1:val1;
@@ -746,7 +746,7 @@ Selector选择器
       @media screen and (max-width:800px) {div{width:100%}}
       @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
       @media screen and (min-width:1201px) {div{width:33.33%}}
-Declaration样式声明 
+Declaration,样式声明 
   字体&文本
     ◆'letter'字
     letter-spacing  字符间距 
@@ -1693,13 +1693,16 @@ Declaration样式声明
       a:hover   光标悬停在链接上的状态
       a:active  链接被点击的状态
     Table表格相关 
-      table 表格 
+      <table>表格 
         PS: display默认为table,独占一行 
           display:inline-table; 定义一个行内表格,可以和其他行内元素共处一行.
           表格的行高度通过指定表格的高度和行的高度来设定[self] 
-        border-collapse 定义表格决定其单元格边框样式 
-          separate  默认值,分隔,表框会被分开,相邻的单元格都拥有独立的边框 
-          collapse  合并,表格边框合并为一个单一的边框,使单元格之间没有边框间距 
+        table-layout    表格列宽度的指定方式 
+          auto  默认值,列宽度由单元格的内容长度定 
+          fixed 列宽度通过指定表格的宽度和列宽度进行设定 
+        border-collapse 表格单元格边框样式 
+          separate  默认值,分隔,相邻的单元格有独立的边框 
+          collapse  合并,单元格间无边框间距 
         border-spacing  单元格间距 
           border-spacing:length length;
           规定相邻单元格之间的距离,仅用于边框分离模式下
@@ -1709,38 +1712,35 @@ Declaration样式声明
           show    默认值,在空单元格周围绘制边框
           hide    不在空单元格周围绘制边框
           inherit
-        table-layout    表格列宽度的指定方式 
-          auto  默认值,列宽度由单元格的内容长度定 
-          fixed 列宽度通过指定表格的宽度和列宽度进行设定 
         caption-side    表格标题位置 
           top     默认值,表格标题定位在表格之上 
           bottom
           inherit
         text-align      水平对齐方式 
-      thead 表头
+      <thead>表头 
         display:table-header-group; 
-      tbody 表体 
+      <tbody>表体 
         display:table-row-group; 
-      tfoot 表脚  
+      <tfoot>表脚  
         display:table-footer-group; 
-      colgroup 
+      <colgroup> 
         display:table-column-group
-      col 
+      <col> 
         display:table-column;
-      caption 表格标题 
+      <caption>表格标题 
         PS:其display:table-caption;
         caption-side
           top 默认值
           bottom 
-      tr 行
+      <tr>行 
         display : table-row; 
         padding、margin、border  无效 
         height 在其内容上增加,即0为内容撑起状态  
-      td 列 
-        PS: 其display为table-cell;
+      <td>列 
+        PS: 其display为table-cell; 
           table-layout 模式下,定义首行td的宽度才会生效,且该列宽度都如此 
         margin 无效 
-      th 
+      <th> 
     Form表单相关 
       <input> 表单
         padding 
@@ -1799,7 +1799,7 @@ Declaration样式声明
         -webkit-tap-highlight-color: rgba(255,0,0,0.5);
     -webkit-touch-callout        长按弹出菜单控制  [iOS]
       -webkit-touch-callout:none;  //禁用长按页面时的弹出菜单() ,img和a标签都要加    
-Layout布局 
+Layout,布局 
   ◆相关概念 
   CSS文档流 
     'Flow'流: 在网页设计中就是指元素标签的排列方式 

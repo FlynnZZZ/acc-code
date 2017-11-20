@@ -162,59 +162,55 @@ window,表示浏览器的一个实例,BOM的核心对象
     window.focus()       将焦点移至窗口    
   ◆Kit: 
     ★延时调用&间时调用&动画调用API 
-      JS单线程异步执行的机制 
-        JS引擎只有一个线程,异步事件排队等待被执行,不会在同时执行两条命令 
-        setTimeout,实际执行的时间大于等于定时器设置的值 
-          被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
-          异步队列会在同步队列所有代码执行完,JS引擎空闲后,
-          在计时结束时,开始执行延时代码.
-          若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
-          指定的时间间隔表示何时将定时器的代码添加到队列,而不是何时实际执行代码
-          Example:
-          console.log(1);
-          setTimeout(function() {console.log('a')}, 9);
-          setTimeout(function() {console.log('b')}, 3);
-          setTimeout(function() {console.log('c')}, 0);
-          var sum = 0;
-          for(var i = 0; i < 1000000; i ++) { sum += 1; }
-          console.log(sum);
-          setTimeout(function() {console.log('d');}, 0);
-          // 1 → 1000000 → c → b → d → a
-        setInterval,实际执行时间尽量接近指定值[可多可少]
-          依次向异步列队中添加延时调用,
-          每个延时调用分别计时,不会互相影响.
-          当只有第n个延时被阻塞且阻塞时间小于间隔时间,
-          则n-1 到 n 的间隔时间大于指定间隔时间, n 到 n+1 小于间隔时间.
-          当阻塞时间大于间隔时间,则前面的调用被抛弃且立即调用下次,
-          保证间时最接近指定值 
-          console.log(1)
-          var siId = setInterval(function() {
-            var date = new Date();
-            console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
-          }, 10);
-          var sum = 0;
-          for(var i = 0; i < 10000000; i ++) { sum += i; }
-          console.log(2);
-          // 清除定时器,避免卡死浏览器
-          setTimeout(function() { clearInterval(siId); }, 30);
-          运行结果
-          1
-          2
-          19:44:733
-          19:44:750
-          19:44:760
-          19:44:770
+      JS引擎单线程,异步事件排队等待被执行,不会在同时执行两条命令 
     setTimeout(foo/str,num [,arg1,arg2...])  numId,指定时间后回调  
+      PS: 实际执行的时间大于等于定时器设置的值  
+        被延时执行的代码会被从同步任务队列放置到异步执行队列,并开始计时
+        异步队列会在同步队列所有代码执行完,JS引擎空闲后,
+        在计时结束时,开始执行延时代码.
+        若异步队列在执行的时被阻塞了,那么它将会被推迟到下一个可能的执行点,
       foo 回调函数 
-      str 字符串代码,有解析功能相当于eval
+      str 字符串代码,有解析功能相当于eval 
         不推荐此种写法,容易出错,不易扩展,损失性能
         setTimeout("alert('abc')",2000);  // 2秒后执行代码块
-      num 延时的时间,单位ms,默认为 0
+      num 延时的时间,单位ms,默认:0
+        范围: 1-2147483647,超过该范围,自动改为 1
       arg 可选,传入回调函数的参数 
         setTimeout(function(arg){
           console.log(arguments); // ["abc", callee: ƒ, Symbol(Symbol.iterator): ƒ] 
           console.log(arg);      // abc 
         },1000,'abc')
+      指定的时间表示何时将定时器的代码添加到队列,而非何时实际执行代码 
+        Example:
+        console.log(1);
+        setTimeout(function() {console.log('a')}, 9);
+        setTimeout(function() {console.log('b')}, 3);
+        setTimeout(function() {console.log('c')}, 0);
+        var sum = 0;
+        for(var i = 0; i < 1000000; i ++) { sum += 1; }
+        console.log(sum);
+        setTimeout(function() {console.log('d');}, 0);
+        // 1 → 1000000 → c → b → d → a
+      使用'setTimeout'仿造'setInterval' 
+        后一间歇调用可能会在前一间歇调用结束前启动? 
+        Example: 
+        function interval(foo,time,conditionFoo,isFirst) {
+          // foo  fn,待执行的函数 
+          // time  num,间隔时间 
+          // conditionFoo fn,终止条件,根据其返回值判断 
+          // isFirst  bol,是否首次运行 
+          var args = arguments
+          ,num = time;
+          if (isFirst) { num = 0 }
+          setTimeout(function(){
+            foo();
+            if (!conditionFoo()) {
+              setTimeout(function(){
+                args.callee(foo,time,conditionFoo,isFirst)
+              },time)
+            }
+          },num)
+        }
     clearTimeout(id) 通过返回id值解除延时调用 
       Example:
       var aoo=setTimeout(function(){ alert("abc");},2000);
@@ -224,38 +220,42 @@ window,表示浏览器的一个实例,BOM的核心对象
       clearTimeout(50500);
       但此种写法可能存在问题,因为id值可能会变,非一直为定值
     setInterval(foo/str,num [,arg1,arg2...]) numId,每隔指定时间回调  
+      PS: 实际执行时间尽量接近指定值[可多可少]  
+        依次向异步列队中添加延时调用,
+        每个延时调用分别计时,不会互相影响.
+        当只有第n个延时被阻塞且阻塞时间小于间隔时间,
+        则n-1 到 n 的间隔时间大于指定间隔时间, n 到 n+1 小于间隔时间.
+        当阻塞时间大于间隔时间,则前面的调用被抛弃且立即调用下次,
       foo 回调函数 
       str 字符串代码,有解析功能相当于eval
-      num 间隔时间,单位ms 
+      num 间隔时间,单位:ms 
       arg 可选,传入回调函数的参数 
+      保证间时最接近指定值 
+        console.log(1)
+        var siId = setInterval(function() {
+          var date = new Date();
+          console.log(date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds());
+        }, 10);
+        var sum = 0;
+        for(var i = 0; i < 10000000; i ++) { sum += i; }
+        console.log(2);
+        // 清除定时器,避免卡死浏览器
+        setTimeout(function() { clearInterval(siId); }, 30);
+        运行结果
+        1
+        2
+        19:44:733
+        19:44:750
+        19:44:760
+        19:44:770
     clearInterval(id) 通过返回id值解除间时调用 
       Example:
       var box=setInterval(function(){ alert("abc"); },1000);
       clearInterval(box); // 取消调用
       console.log(box);   // 1518 ,虽然已取消调用 但box值仍存在
-    使用'setTimeout'仿造'setInterval' 
-      在开发环境下,很少使用真正的间歇调用,后一个间歇调用可能会在前一个间歇调用结束之前启动
-      Example:
-      使用超时调用设置定时器
-      <div id="a"></div>
-      <script>
-        var num =0;
-        var max =5;
-        function box(){
-          num++;
-          document.getElementById('a').innerHTML +=num;
-          if(num ==max){
-            alert('5秒到了!');
-          }else{
-            setTimeout(box,1000);
-          }
-        }
-        box();
-      </script>
     requestAnimationFrame(foo) numId,浏览器专门为动画提供的API 
-      原理同setTimeout类似; 
-      通过递归调用同一方法来不断更新画面以达到动起来的效果,
-      浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
+      PS: 浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
+        原理同setTimeout类似;通过递归调用同一方法来不断更新画面以达到动画效果;
       常用操作: 在函数体内使用 requestAnimationFrame 来调用该函数来实现效果 
       Example: 
       var n = 0;
@@ -273,7 +273,6 @@ window,表示浏览器的一个实例,BOM的核心对象
       显示对话框的时候代码会停止执行,关掉后恢复
     confirm(str)  bol,用户确认对话框,确定返回'true',取消返回'false' 
     prompt("提示文字","默认输入文字")  str,用户输入框对话框,返回输入字符或 null   
-      点击确定,返回用户输入值;点击取消,则返回 null 
     print()    打印对话框,异步显示 
     find(str)  网页字符查找,异步显示 [IE不支持] 
     ★base64编码&解码 
@@ -1089,53 +1088,40 @@ console,用于调试的控制台对象
     NodeJS沿用了这个标准,提供与习惯行为一致的console对象,
     用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
   Member: 
-    .log([val1][, ...])   向标准输出流打印字符并以换行符结束
-      PS: 该方法接收若干个参数,若只有一个参数,则输出这个参数的字符串形式.
-        若有多个参数,则以类似于C语言 printf() 命令的格式输出
-      格式占位符
-        PS:log方法将占位符替换以后的内容,显示在console窗口
+    .log([val1][, ...])   在控制台输出若干个数据 
+      格式占位符[DiBs]
+        PS: log方法将占位符替换以后的内容,显示在console窗口
         %s     字符串
         %d     整数
         %i     整数
         %f     浮点数
         %o     对象的链接
-        %c     CSS格式字符串
+        %c     CSS格式字符串 
           对输出的内容进行CSS渲染
-          console.log('%c this text is styled!','color:red;font-size:24px;');
+          console.log('%c%s','color:red;font-size:24px;','abc');
           输出的内容将显示为红色的24px的字体
         Example:
-          console.log(" %s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
+          console.log("%s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
           上面代码的 %s 表示字符串的占位符
-
-          两种参数格式,可以结合在一起使用.
-          console.log(" %s + %s ", 1, 1, "= 2")
-          // 1 + 1  = 2
-    .info([val][, ...])   返回信息性消息 
+          function colorLog(arg){
+            console.log("%c%s","background:#afffee",arg)
+          }
+    .info([val][, ...])   在控制台输出若干个信息性消息 
       这个命令与 console.log 差别并不大,
       除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
-    .error([val1][, ...]) 输出错误消息 
+    .error([val1][, ...]) 在控制台输出若干个错误消息 
       控制台在出现错误时会显示是红色的叉子.
-    .warn([val1][, ...])  输出警告消息 
+    .warn([val1][, ...])  在控制台输出若干个警告消息 
       控制台出现有黄色的惊叹号 
-    .dir(obj[, options])  用来对一个对象进行检查[inspect],并以易于阅读和打印的格式显示 
-      可读性较好,一般用于输出显示DOM节点
-      Node中可指定以高亮形式输出
+    .clear()    清空控制台,光标回到第一行 
+    .trace(msg) 当前执行的代码在堆栈中的调用路径 
+      PS: 给待测试的函数中加入 console.trace() 就行了 
+      msg   str,标识信息 
+    .dir(obj[,options])  优化对对象的输出,单参数输出 
+      PS: 以易于阅读的形式显示,可读性较好,一般用于输出显示DOM节点
+      Node中可指定以高亮形式输出 
         console.dir(obj,{color:true})
-    .trace(message[,...]) 当前执行的代码在堆栈中的调用路径 
-      这个测试函数运行很有帮助,只要给想测试的函数里面加入 console.trace 就行了.
-    .assert([bool][,val]) 用于判断某个表达式或变量是否为真 
-      PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
-        只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
-      bool  布尔值,默认为false 
-      Example:
-        若为假,则显示一条事先指定的错误信息
-        console.assert(true === false,"判断条件不成立")
-        // Assertion failed: 判断条件不成立
-        判断子节点的个数是否大于等于500.
-        console.assert(list.childNodes.length < 500, "节点个数大于等于500")
-    .dirxml()             主要用于以目录树形式显示DOM节点
-      若参数不是DOM节点,则等同于dir
-    .table()              对于某些复合类型的数据将其转为表格显示
+    .table(val)   以表格形式显示,单参数输出 
       Example: :
       var languages = [
         { name: "JavaScript", fileExtension: ".js" },
@@ -1159,8 +1145,8 @@ console,用于调试的控制台对象
        (index) name paradigm
         csharp "C#" "object-oriented"
         fsharp "F#" "functional"
-    .count([val])         用于计数,输出被调用的次数 
-      接收一个参数作为标签,进行相应的次数统计
+    .count([counterName])   计数器,输出被调用的次数 
+      counterName  str,计数器名称,默认:"" 
       Example:
         console.count('a');  // a: 1
         console.count('a');  // a: 2
@@ -1173,30 +1159,40 @@ console,用于调试的控制台对象
         // : 3
         // : 4
         // : 5
-    .clear()         清空控制台,光标回到第一行
     ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
-    .time()         计时开始
-    .timeEnd(val)   计时结束
-      val 为计时器的名称
       Example:
-        console.time();
+        console.time('aoo');
         var array = new Array(1000000);
         for(var i = array.length - 1; i >= 0; i--) {
           array[i] = new Object();
         };
         console.timeEnd("aoo"); 
-        // aoo: 242ms
-      调用timeEnd方法之后,console窗口会显示'计时器名称: 所耗费的时间'.
+        // aoo: 214.47802734375ms 
+    .time(timerName)     计时器开始计时 
+      timerName  str,计时器名称 
+    .timeEnd(timerName)  计时器结束计时并输出 
+      timerName  str,计时器名称 
+    ◆分组显示,在group和groupEnd间输出的信息作为一个'组'
+      PS: 在输出大量信息时有用 
+    .group([val1,val2,...])  '组'的开始 
+    .groupEnd()              '组'的结束 
     ◆性能测试
     .profile()     
     .profileEnd()   
-    ◆分组显示
-    .group(val)   '组'的开始
-    .groupEnd()   '组'的结束 
-      str  作为'组'的名称
-      在group和groupEnd之间打印的信息可作为一个'组'进行展开或折叠,在输出大量信息时有用
     ◆其他 
-    .debug(val)     Chrome不支持 
+    .assert([bool][,val]) 用于判断某个表达式或变量是否为真 
+      PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
+        只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+      bool  布尔值,默认为false 
+      Example:
+        若为假,则显示一条事先指定的错误信息
+        console.assert(true === false,"判断条件不成立")
+        // Assertion failed: 判断条件不成立
+        判断子节点的个数是否大于等于500.
+        console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+    .dirxml()  以目录树形式显示DOM节点 
+      若参数不是DOM节点,则等同于dir
+    .debug(val)     Chrome不支持? 
   Expand: 
     修改/定义console方法 
       因为console对象的所有方法,都可以被覆盖

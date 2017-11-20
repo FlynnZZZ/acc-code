@@ -112,10 +112,12 @@
       ES6+  ES6新增
       ...
     more    其他的,更多的
-    moIn    更多参见 more in
     self    自己的,自定义的
     SlPt    自我观点、认为 SelfPoint
     SlSt    自我设置 SelfSet
+    ★组合短语 
+    moIn    更多参见 more in 
+    NdA     Nondirect availability,不可直接使用  
 命名规范 
   起步_基础 
     在统计到的128985个单词中,以字母开头的个数  

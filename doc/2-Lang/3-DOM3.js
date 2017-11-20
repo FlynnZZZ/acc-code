@@ -864,7 +864,7 @@ StorageEvent,
 MIDIConnectionEvent,   
 IDBVersionChangeEvent,   
 GamepadEvent, 
-CloseEvent,   
+CloseEvent,  
 事件兼容处理: 
   var eventCompat = {
     add: function(elem,type,foo){

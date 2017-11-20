@@ -2123,151 +2123,6 @@ CSSStyleDeclaration,CSS规则的声明
         "paused"    暂停
         "running"   播放
     .getPropertyCSSValue(属性名)  CSSValue, [Chrome不支持]
-FileList,File对象集合,表示用户选择的文件列表[HTML5] 
-  PS: HTML5中[通过添加multiple属性],input[file]内能一次选中多个文件, 
-    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表
-    HTML4中,file控件内只能选中一个文件 
-  Extend: Object 
-    console.log(FileList.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    e.target.files   input[type='file']的'change'事件的事件对象   
-      Example:
-      <input type="file" id="file" multiple>
-      document.querySelector("#file").addEventListener("change",function(e){
-        console.log(this.files);
-      })
-        
-      采用拖放方式,也可以得到FileList对象 [?]
-      var dropZone = document.getElementById('drop_zone');
-      dropZone.addEventListener('drop', handleFileSelect, false);
-      function handleFileSelect(evt) {
-          evt.stopPropagation();
-          evt.preventDefault();
-          var files = evt.dataTransfer.files; // FileList object.
-          // ...
-        }
-    document.querySelector("input[type='file']").files  
-  Proto: 
-    .length 
-    .item(idx) File,文件 
-File,文件 
-  Extend: Blob 
-    console.log(File.prototype.__proto__.constructor===Blob); // true 
-  Proto: 
-    .name  本地文件系统中的文件名 
-    .lastModified  
-    .lastModified   文件的上次修改时间,格式为时间戳。
-    .lastModifiedDate   文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-    .webkitRelativePath  
-FileReader,文件读取,一种异步的文件读取机制 
-  Extend: EventTarget  
-    console.log(FileReader.prototype.__proto__.constructor===EventTarget); // true 
-  Instance: 
-    fr = new FileReader([file/blob])  创建fr对象 
-  Proto: 
-    常量: 
-      .EMPTY    0 
-      .LOADING  1 
-      .DONE     2 
-    .readyState  
-    .error  
-    .result   文件的URI数据,读取文件后该属性将被填充 
-    .abort()  中断文件读取  
-    .readAsBinaryString(Blob|File) 得到文件的二进制字符串 
-      PS: 通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
-        该字符串每个字节包含一个0到255之间的整数
-        可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
-        配合 xhr.sendAsBinary(),可上传任意文件到服务器 
-      Example: 
-        var fr = new FileReader();
-        fr.onload = function(e) {
-          var rawData = fr.result;
-        }
-        fr.readAsBinaryString(file);
-    .readAsDataURL(Blob|File);     得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
-      PS: 将文件数据进行Base64编码,可将返回值作为图像的src 
-    .readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
-      返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
-      在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
-      var fr = new FileReader();
-      fr.onload = function(e) {
-        var arrayBuffer = fr.result;
-      }
-      fr.readAsArrayBuffer(file);
-    .readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
-      encoding   可选,指定编码类型,默认为'UTF-8' 
-    ★事件 
-    .onloadstart 数据读取开始时触发
-    .onprogress  数据读取中触发,每50ms左右触发一次 
-      Example: 用来显示读取进度 
-      var fr = new FileReader();
-      fr.onprogress = function (e) {
-        if (e.lengthComputable) {
-          var percentLoaded = Math.round((e.loaded / e.totalEric Bidelman) * 100);
-          var progress = document.querySelector('.percent');
-          if (percentLoaded < 100) {
-            progress.style.width = percentLoaded + '%';
-            progress.textContent = percentLoaded + '%';
-          }
-        }
-      }
-    .onabort     读取中断或调用 fr.abort() 时触发 
-    .onerror     数据读取出错时触发  
-      触发error事件时,相关的信息在 fr.error.code 中,表示错误码
-      1 未找到文件 
-      2 安全性错误
-      3 表示读取中断
-      4 文件不可读
-      5 编码错误
-      Example:
-        var fr = new FileReader();
-        fr.onerror = errorHandler;
-        function errorHandler(evt) {
-          switch(evt.target.error.code) {
-            case evt.target.error.NOT_FOUND_ERR:
-            alert('File Not Found!');
-            break;
-            case evt.target.error.NOT_READABLE_ERR:
-            alert('File is not readable');
-            break;
-            case evt.target.error.ABORT_ERR:
-            break;
-            default:
-            alert('An error occurred reading this file.');
-          };
-        }
-    .onload      读取成功后触发 
-      load事件的回调函数接受一个事件对象,e.target.result 就是文件的内容 
-      <input type="file" >
-      var fr = new FileReader();
-      fr.onload = function(e) {
-        document.createElement('img').src = e.target.result;
-        // 此时 fr.result === e.target.result 
-      };
-      document.querySelector("input[type='file']")
-      .addEventListener("change",function(e){
-        fr.readAsDataURL(e.target.files[0]);
-      })
-    .onloadend   读取完成后触发,不管是否成功 
-      触发顺序排在onload或onerror后  
-  Example: 
-    读取文件内容后直接以二进制格式上传 
-    var fr = new FileReader();
-    fr.onload = function(){
-      xhr.sendAsBinary(this.result); // chrome已移除 xhr.sendAsBinary 
-    }
-    // 把从input里读取的文件内容,放到fileReader的result字段里
-    fr.readAsBinaryString(file);
-    XMLHttpRequest.prototype.sendAsBinary = function(text){
-      var data = new ArrayBuffer(text.length);
-      var ui8a = new Uint8Array(data, 0);
-      for (var i = 0; i < text.length; i++){ 
-        ui8a[i] = (text.charCodeAt(i) & 0xff);
-      }
-      // 将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
-      // 再把整个数组发送出去。
-      this.send(ui8a);
-    }
 FormData,表单模拟,序列化表单、创建与表单格式相同的数据[HTML5] 
   PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息 
   Extend：Object 
@@ -2412,6 +2267,10 @@ Selection,网页中选中的内容对象[HTML5][IE9+]
     .modify()    
     .toString() str,选区所包含的文本内容 
     .reomveRange(range)   从选区中移除指定的DOM范围 [Chrome不支持]
+DOMStringList, 
+  .length  
+  .item()    
+  .contains(key)   bol,是否包含该成员  
 XML相关 
   ProcessingInstruction [继承 CharacterData] 
   CDATASection 类型: 针对基于XML的文档,表示CDATA区域 

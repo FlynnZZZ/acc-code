@@ -6,7 +6,7 @@ NodeJS: 于2009年发布,一个事件驱动I/O服务端JS运行环境
     $ node <fileName> 执行文件 
     $ node -e <codeStr>   使用-e参数,可执行代码字符串 
       node -e 'console.log("Hello World")'
-    REPL 命令 
+    REPL命令 
       PS: 'NodeJS REPL'Node的交互式解释器 
         Node的交互式解释器可以很好的调试JS代码;相当于浏览器的Console控制台[SlPt]
       $ node                // 启动Node终端,进入node运行环境 
@@ -25,7 +25,7 @@ NodeJS: 于2009年发布,一个事件驱动I/O服务端JS运行环境
       ctrl+d   退出 Node REPL
       tab      列出当前命令
       up/down  查看输入的历史命令
-    node 升级 
+    node升级 
       方式一: n: NodeJS版本管理 
         npm install -g n     安装n模块 
         n stable   升级nodejs到最新稳定版 
@@ -59,7 +59,7 @@ NodeJS的运行方式及编程风格
           callback(new Error("Value is not true!"));
         }
       }
-      上面代码就把进一步的处理,交给回调函数callback。
+      上面代码就把进一步的处理,交给回调函数callback 
     Node回调函数的约定 
       若一函数需要'callback'作为参数,则'callback'作为最后一个参数 
       'callback'的第一个参数,为上一步传入的错误对象'error' 
@@ -68,12 +68,12 @@ NodeJS的运行方式及编程风格
 --------------------------------------------------------------------------------
 基础 
   NODE_PATH node环境变量 
-    与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径。
-    NODE_PATH环境变量中包含一到多个目录路径,路径之间在Linux下使用:分隔,在Windows下使用;分隔。
+    与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径 
+    NODE_PATH环境变量中包含一到多个目录路径,路径间,在Linux下使用:分隔,在Windows下使用;分隔 
     Example: 
       例如定义了以下NODE_PATH环境变量：
       $ NODE_PATH=/home/user/lib:/home/lib
-      当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径。
+      当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径 
       /home/user/lib/foo/bar
       /home/lib/foo/bar
 语法 
@@ -118,26 +118,26 @@ NodeJS的运行方式及编程风格
         绝对路径的文件 /pathtomodule/mod等
         name  非原生模块的文件模块,通过配置文件指定 
           若模块目录中没有 package.json 文件,
-          nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载。
+          nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
       当模块重名时,加载的优先级:  
         Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
 'Global Object'全局对象: 可在程序的任何地方访问 
   PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
-  global  Node所在的全局环境,类似浏览器的window对象 
+  global,Node所在的全局环境,类似浏览器的window对象 
     最根本的作用是作为全局变量的宿主
     global 和 window 的不同 
       在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
         var x = 1;
         // 等同于设置 
         window.x = 1;
-      在模块中不是这样,[REPL环境的行为与浏览器一致]。
+      在模块中不是这样,[REPL环境的行为与浏览器一致] 
         在模块文件中
         var x = 1;
         该变量不是global对象的属性
-        global.x // undefined。
+        global.x // undefined 
         因为模块的全局变量都是该模块私有的,其他模块无法取到 
-  global.process 用于描述当前Node进程状态  
+  global.process,用于描述当前Node进程状态  
     PS: 表示Node所处的当前进程,允许开发者与该进程互动,提供了一个与操作系统的简单接口
     ◆属性
     obj = process.env  成员为当前shell的环境变量 
@@ -254,10 +254,8 @@ NodeJS的运行方式及编程风格
       10 Internal JS Run-Time Failure JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
       12 Invalid Debug Argument 设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
       >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
-  Date    时间类 
-  console 用于提供控制台标准输出[详见浏览器调试] 
   __filename 当前正在执行的脚本的路径和文件名 
-    PS:将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
+    PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
       在模块中,返回的值是模块文件的路径 
     Example:
       创建文件 main.js ,代码如下所示:
@@ -275,32 +273,6 @@ NodeJS的运行方式及编程风格
       $ node main.js
       /web/com/runoob/nodejs
   ◆全局函数 
-  setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
-    PS:实际的调用间隔,还取决于系统因素;
-      间隔的毫秒数在1毫秒到2,147,483,647 毫秒（约 24.8 天）之间,
-      若超过这个范围,会被自动改为1毫秒;
-    setTimeout(function (){ 
-      console.log( "Hello, World!"); 
-    }, 2000);
-    执行 main.js 文件 : node main.js
-    两秒后输出
-    // Hello, World!
-  clearTimeout(num)      通过一定时器编号来终止该定时器 
-    num   setTimeout函数创建的定时器返回的编号 
-    Example:
-      // 两秒后执行函数
-      var num = setTimeout(function (){ 
-        console.log( "Hello, World!"); 
-      }, 2000);
-      // 清除定时器
-      clearTimeout(num);
-      执行 main.js 文件: node main.js
-  setInterval(foo, time) 指定毫秒数后执行函数,返回一整数代表定时器的编号 
-    由于系统因素,可能无法保证每次调用之间正好间隔指定的毫秒数,
-    但只会多于这个间隔,而不会少于它;
-    指定的毫秒数必须是 1 到 2,147,483,647（大约 24.8 天）之间的整数,
-    若超过这个范围,会被自动改为1毫秒;
-  clearInterval(num)     终止一个用setInterval方法新建的定时器 
   require() 用于加载模块 
   Buffer()  用于操作二进制数据 
   ◆伪全局变量 
@@ -308,16 +280,26 @@ NodeJS的运行方式及编程风格
   module
   module.exports
   exports
-'Events'事件模块 
-  PS:events 模块只提供了一个对象: events.EventEmitter, 
+  ◆其他同浏览器中JS相同的类、对象 
+  Date,时间类 
+  console,用于提供控制台标准输出[详见浏览器调试] 
+  setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
+  clearTimeout(num)      通过一定时器编号来终止该定时器 
+  setInterval(foo,time) 指定毫秒数后执行函数,返回一整数代表定时器的编号 
+    具体执行时间大于等于该间隔,而不会少于它?;
+  clearInterval(num)     终止一个用setInterval方法新建的定时器 
+◆类 
+◆模块 
+events,事件模块 
+  PS: events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
     NodeJS 里面的许多对象都会分发事件:
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
       所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-    大多数时候不会直接使用 EventEmitter,而是在对象中继承它。
-    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类。
+    大多数时候不会直接使用 EventEmitter,而是在对象中继承它 
+    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类 
   var events = require('events');   引入events模块 
   ★EventEmitter 类
   var EventEmitter = events.EventEmitter;  获取到事件对象的类 
@@ -393,15 +375,15 @@ NodeJS的运行方式及编程风格
     首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
     其次 JS 的对象机制是基于原型的,支持 部分多重继承,
     继承 EventEmitter 不会打乱对象原有的继承关系.
-'Buffer'缓冲区: 处理二进制数据的接口[用于保存原始数据] 
-  PS:JS只有字符串数据类型,没有二进制数据类型, 
+Buffer,缓冲区: 处理二进制数据的接口[用于保存原始数据] 
+  PS: JS只有字符串数据类型,没有二进制数据类型, 
     处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
     用来创建一个专门存放二进制数据的缓存区;
     在NodeJS中,Buffer类是随Node内核一起发布的核心库;
     Buffer 库为 Node.js 带来了一种存储原始数据的方法,
-    每当需要在 Node.js 中处理I/O操作中移动的数据时,就有可能使用 Buffer 库。
-    原始数据存储在 Buffer 类的实例中。
-    一个 Buffer 类似于一个整数数组,对应于 V8 堆内存之外的一块原始内存。
+    每当需要在 Node.js 中处理I/O操作中移动的数据时,就有可能使用 Buffer 库 
+    原始数据存储在 Buffer 类的实例中 
+    一个 Buffer 类似于一个整数数组,对应于 V8 堆内存之外的一块原始内存 
   var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
     PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
     ◆val可为以下类型:
@@ -515,8 +497,8 @@ NodeJS的运行方式及编程风格
     buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
       参数列表只有一个成员,就直接返回该成员
     length  可选,默认为总长度,指定新buf对象的长度
-      省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算。
-      因此,显式提供这个参数,能提供运行速度。 
+      省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
+      因此,显式提供这个参数,能提供运行速度  
     Example:
       var buf1 = new Buffer('11');
       var buf2 = new Buffer('22');
@@ -533,15 +515,15 @@ NodeJS的运行方式及编程风格
   Buffer.compare(buf1,buf2)    比较两份Buffer对象 
   bufer = Buffer.from(str)    把字符串转会成Buffer 
   与二进制数组的关系 
-    TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组。
-    比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组。
-    注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]）。
-    另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的。
-    二进制数组的buffer属性,保留指向原Buffer对象的指针。
-    二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异。
-    比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view）。
-'Stream'流: 用于暂存和移动数据[以bufer的形式存在] 
-  PS:Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+    TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
+    比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
+    注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]） 
+    另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的 
+    二进制数组的buffer属性,保留指向原Buffer对象的指针 
+    二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
+    比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
+stream,流: 用于暂存和移动数据[以bufer的形式存在] 
+  PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
   var steam = require('stream');  // 
@@ -1597,13 +1579,13 @@ NodeJS的运行方式及编程风格
         }
         var expected = add(1,2);
         assert( expected === 3, '预期1加2等于3');
-        // 无任何输出,因为assert方法的第一个参数是true。
+        // 无任何输出,因为assert方法的第一个参数是true 
         assert( expected === 4, '预期1加2等于3')
         // AssertionError: 预期1加2等于3
-        会抛出一个错误,因为assert方法的第一个参数是false。
+        会抛出一个错误,因为assert方法的第一个参数是false 
     assert.ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
     assert.equal(actVal,expVal [,tip]);
-      PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算。
+      PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算 
       actVal  实际值
       expVal  预期值
       tip     字符串,错误的提示信息 
@@ -1622,7 +1604,7 @@ NodeJS的运行方式及编程风格
         assert.equal(expected, 3, '预期1+2等于3');
     assert.notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
       PS:notEqual方法的用法与equal方法类似
-        内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算。
+        内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算 
       Example:
         var assert = require('assert');
         function add (a, b) {
@@ -1634,7 +1616,7 @@ NodeJS的运行方式及编程风格
         assert.ok(expected != 4, '预期不等于4');
         assert.notEqual(expected, 4, '预期不等于4');
     assert.deepEqual(actVal,expVal [,tip]); 比较两个对象
-      两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误。
+      两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误 
       Example:
         var assert = require('assert');
         var list1 = [1, 2, 3, 4, 5];
@@ -1684,7 +1666,7 @@ NodeJS的运行方式及编程风格
         '不符合预期的错误类型'
       );
       assert.doesNotThrow()
-    assert.doesNotThrow(block, [message])     预期某个代码块不抛出错误。
+    assert.doesNotThrow(block, [message])     预期某个代码块不抛出错误 
       assert.doesNotThrow(
         function() {
           console.log("Nothing to see here");
@@ -1692,8 +1674,8 @@ NodeJS的运行方式及编程风格
         '预期不抛出错误' 
       );
     assert.ifError(val)  断言某个表达式是否false
-      如果该表达式对应的布尔值等于true,就抛出一个错误。
-      它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误。
+      如果该表达式对应的布尔值等于true,就抛出一个错误 
+      它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误 
       Example:
         function sayHello(name, callback) {
           var error = false;
@@ -1705,10 +1687,10 @@ NodeJS的运行方式及编程风格
           assert.ifError(err);
           // ...
         })
-    assert.fail(actual, expected, message, operator)   用于抛出一个错误。
-      该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误。
+    assert.fail(actual, expected, message, operator)   用于抛出一个错误 
+      该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误 
       如果message参数对应的布尔值不为false,抛出的错误信息就是message,
-      否则错误信息就是“实际值 + 分隔符 + 预期值”。    
+      否则错误信息就是“实际值 + 分隔符 + 预期值”     
       Example:
         var assert = require('assert');
         assert.fail(21, 42, 'Test Failed', '###')
@@ -1761,7 +1743,7 @@ NodeJS的运行方式及编程风格
     PS:表单提交到服务器一般使用 GET/POST 请求
     获取 GET 请求内容 
       PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
-        因此可手动解析后面的内容作为GET请求的参数。
+        因此可手动解析后面的内容作为GET请求的参数 
       Example:
         var http = require('http');
         var url = require('url');
@@ -1802,12 +1784,12 @@ NodeJS的运行方式及编程风格
         }).listen(3000);
         在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
         返回结果:
-    获取 POST 请求内容
+    获取 POST 请求内容 
       PS:POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
-        原因是等待请求体传输可能是一件耗时的工作。
+        原因是等待请求体传输可能是一件耗时的工作 
         比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
         恶意的POST请求会大大消耗服务器的资源,
-        所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做。
+        所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做 
       基本语法结构 
         var http = require('http');
         var querystring = require('querystring');
@@ -1820,7 +1802,7 @@ NodeJS的运行方式及编程风格
             post += chunk;
           });
           
-          // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回。
+          // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回 
           req.on('end', function(){    
             post = querystring.parse(post);
             res.end(util.inspect(post));

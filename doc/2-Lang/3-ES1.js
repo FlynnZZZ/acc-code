@@ -648,7 +648,7 @@ const,定义块级常量[ES6]
     obj instanceof Object;    [详参 关系运算符] 
     obj.constructor           查询对象的构造函数 
     'duck type' 鸭子类型,根据其表现来确定其身份 
-'Class'类: 基于原型的实现的封装[ES6] 
+class,类,基于原型的实现的封装[ES6] 
   class className {} 创建类 
     PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
       class内部不可定义原型属性和静态属性;
@@ -685,20 +685,20 @@ const,定义块级常量[ES6]
       PS: 内部的 this 表示实例对象;  
       [val] () {}  属性名可使用表达式 
         var  aoo = 'sayHello';
-        class Klass{
+        class Clas{
           [aoo] () {
             console.log('hello');
           }
         }
-        var klass = new Klass();
-        klass.sayHello(); // 1
+        var clas = new Clas();
+        clas.sayHello(); // 1
     static foo(){}    声明静态方法 
-      class Klass {
+      class Clas {
         static foo(){
           console.log('静态方法');
         }
       }
-      Klass.foo();  // 静态方法
+      Clas.foo();  // 静态方法
     get foo(){}  取值函数 
     set foo(){}  存值函数 
       使用get和set关键字,对某个属性设置存值函数和取值函数 
@@ -779,11 +779,11 @@ const,定义块级常量[ES6]
       然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
       或者 this.__proto__ [即Child.prototype = new Parent()]上;
       而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
-  klass = new Klass(arg) 创建类实例 
+  inst = new Clas(arg) 创建实例 
     PS: 创建实例时会自动执行类体中的'constructor'方法 
-    klass.constructor             创建该实例的类 
-    klass.constructor.prototype   该实例的原型对象 
-    new Klass{}(arg) 立即执行的class 
+    inst.constructor             创建该实例的类 
+    inst.constructor.prototype   该实例的原型对象 
+    new Clas{}(arg) 立即执行的class 
       let point = new class{
         constructor(x = 0, y = 0) {
           this.x = x;
@@ -795,7 +795,7 @@ const,定义块级常量[ES6]
       }(1, 2);
       console.log(point.toString()); // 3
   ◆相关操作
-  str = Klass.name;  获取类的名字 
+  str = Clas.name;  获取类的名字 
 'Decorator'修饰器: 用来修改类的行为[ES7] 
 'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口 
   PS: JS表'集合'的数据结构有: Array、Object、Map&Set  
@@ -1976,40 +1976,6 @@ Function,函数基础类,ES中所有函数的基类
         任何函数都可通过new来调用作为构造函数;若不用new来调用,即为执行函数;
       高阶函数: 在参数中传递函数的函数 
         函数也是对象可以向其他值一样作为参数传递
-      ([arg1,arg2,..]) =>{statement}  箭头函数[ES6] 
-        PS: 箭头函数中无'arguments'对象,若要多参数,则需用'...'扩展符
-        相当于: function(参数1,参数2){ return statement }
-        传入多个参数使用括号(),复杂操作使用{} 
-          若参数超过1个的话,需要用小括号（）括起来,
-          函数体语句超过1条的时候,需要用大括号{ }括起来.
-          var sum = (a,b) => {return a+b}
-          sum(1,2);//结果:3
-        箭头函数中的this指向的是定义时的this,而非执行时的this 
-          var obj = {  //定义一个对象
-            x:100,     //属性x
-            show(){
-              setTimeout( function(){   //延迟500毫秒,输出x的值
-                //匿名函数
-                console.log(this.x);
-              }, 500 );
-            }
-          };
-          obj.show(); // undefined
-          当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
-          [setTimeout是window对象的方法],已经不再是obj对象了,
-          所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
-          
-          var obj = {
-            x:100, 
-            show(){
-              setTimeout( () => {   // 箭头函数
-                console.log(this.x);
-              }, 500 );
-            }
-          };
-          obj.show(); // 100
-          定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
-          而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
       递归: 一个函数调用本身或者两个函数相互调用 
         PS: 递归必须要定义终止条件,否则无限递归.
           一般递归效率较低,但处理探测或者处理多分支的问题,则效率较高 
@@ -2096,6 +2062,43 @@ Function,函数基础类,ES中所有函数的基类
       console.log(goo(4)); // 7 
     不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
+'Arrow functions'箭头函数: ([arg1,arg2,..]) => { statement }[ES6] 
+  PS: 相当于: function([arg1,arg2,..]){ return statement }
+  传入多个参数使用括号(),复杂操作使用{} 
+    若参数超过1个的话,需要用小括号（）括起来,
+    函数体语句超过1条的时候,需要用大括号{ }括起来.
+    var sum = (a,b) => {return a+b}
+    sum(1,2);//结果:3
+  this指向的是定义时的this,而非执行时的this 
+    var obj = {  //定义一个对象
+      x:100,     //属性x
+      show(){
+        setTimeout( function(){   //延迟500毫秒,输出x的值
+          //匿名函数
+          console.log(this.x);
+        }, 500 );
+      }
+    };
+    obj.show(); // undefined
+    当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
+    [setTimeout是window对象的方法],已经不再是obj对象了,
+    所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
+    
+    var obj = {
+      x:100, 
+      show(){
+        setTimeout( () => {   // 箭头函数
+          console.log(this.x);
+        }, 500 );
+      }
+    };
+    obj.show(); // 100
+    定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
+    而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
+  无'arguments'对象,若要多参数,则需用'...'扩展符 
+    var log = (...args) => {
+      console.log.apply(console,args)
+    }
 'Generator'生成器函数,可控制函数内部状态,暂停或继续[ES6] 
   PS: 中途退出后又重新进入执行,函数内定义的变量的状态都会保留 
   function* foo(){} 声明Generator函数

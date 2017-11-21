@@ -121,9 +121,279 @@ NodeJS的运行方式及编程风格
           nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
       当模块重名时,加载的优先级:  
         Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-'Global Object'全局对象: 可在程序的任何地方访问 
+'Global Object'全局变量,可在程序的任何地方访问 
   PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
+  ◆类
+  Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
+    PS: 用来创建一个专门存放二进制数据的缓存区; 
+      可在 TCP 流或文件操作中处理二进制数据流 
+      Buffer类以一种更优化的方式实现了 Uint8Array 
+      Buffer实例大小固定[被创建时确定,且无法调整]、在V8堆外分配物理内存 
+    Extend: Uint8Array  
+    Static: 
+      .poolSize  
+      .alloc(len[,fill[,encoding]])  创建指定长度的Buffer 
+        PS: 比Buffer.allocUnsafe()慢,但能确保新建的Buffer实例的内容不包含敏感数据  
+        len  int,创建Buffer的长度,范围:[0-buffer.constants.MAX_LENGTH] 
+        fill  int/str/buf,初始填充值,默认:0  
+          PS: 若指定了fill,则会调用 buf.fill(fill) 初始化分配的Buffer 
+        encoding kw,fill为字符串时的字符编码,默认:'utf8' 
+          PS: 若指定了fill和encoding,则会调用 buf.fill(fill,encoding) 初始化分配的Buffer 
+        Example: 
+          // 创建一个长度为 10、且用 0x1 填充的 Buffer。 
+          const buf2 = Buffer.alloc(10, 1);
+      .allocUnsafe(len)  创建指定长度未初始化的Buffer实例 
+        PS: 该方式创建的实例的底层内存未初始化,内容未知,可能包含敏感数据
+        len  num,指定新建Buffer的长度 
+        可用 buf.fill(0) 初始化实例为0 
+          Example: 
+          const buf = Buffer.allocUnsafe(10);
+          // 输出: (内容可能不同): <Buffer a0 8b 28 3f 01 00 00 00 50 32>
+          console.log(buf);
+          buf.fill(0);
+          // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
+          console.log(buf);
+      .allocUnsafeSlow(len)  创建指定长度未初始化的Buffer实例 
+      .from(val[,..])  通过其他值Buffer 
+        (arr)  通过一八位字节的数组创建Buffer 
+          // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
+          const buf4 = Buffer.from([1, 2, 3]);
+        (arrBuf[,byteOffset[,length]])  创建一共享内存的Buffer 
+          arrBuf  ArrayBuffer,共享源  
+          byteOffset  开始拷贝的索引,默认:0
+          length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
+          Example: 
+            const arr = new Uint16Array(2);
+            arr[0] = 5000;
+            arr[1] = 4000;
+            const buf = Buffer.from(arr.buffer);
+            // 输出: <Buffer 88 13 a0 0f>
+            console.log(buf);
+            // 与 `arr` 共享内存,改变原始的 Uint16Array 也会改变 Buffer
+            arr[1] = 6000;
+            // 输出: <Buffer 88 13 70 17>
+            console.log(buf);
+        (buf)  返回Buffer的拷贝 
+        (str[,encoding])  
+          str  要编码的字符串 
+          encoding  kw,字符编码,默认:'utf8' 
+            'latin1'  Latin-1 
+            'ascii'   
+            ...
+          Example: 
+            // 创建一个包含 UTF-8 字节 [0x74, 0xc3, 0xa9, 0x73, 0x74] 的 Buffer 
+            const buf5 = Buffer.from('tést');
+            // 创建一个包含 Latin-1 字节 [0x74, 0xe9, 0x73, 0x74] 的 Buffer 
+            const buf6 = Buffer.from('tést', 'latin1');
+      .concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
+        buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
+          参数列表只有一个成员,就直接返回该成员
+        length  可选,默认为总长度,指定新buf对象的长度
+          省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
+          因此,显式提供这个参数,能提供运行速度  
+        Example:
+          var buf1 = new Buffer('11');
+          var buf2 = new Buffer('22');
+          var buf3 = Buffer.concat([buf1,buf2]);
+          console.log(buf3.toString());   // 1122
+      .isEncoding(typ)  bol,表示Buffer实例是否为指定编码 
+        Buffer.isEncoding('utf8'); // true
+      .isBuffer(obj)    bol,判断对象是否为Buffer实例的 
+        Buffer.isBuffer(Date) // false
+      .byteLength(str [,typ]) 返回字符串实际占据的字节长度 
+        str  检测的字符串
+        typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
+        Buffer.byteLength('Hello', 'utf8') // 5
+      .compare(buf1,buf2)    比较两份Buffer对象 
+    Instance: 
+      var bufer = new Buffer(val)  通过Buffer类来创建bufer对象[已废弃][6.0-] 
+        PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
+        ◆val可为以下类型:
+        num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
+          var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
+        bufer       bufer对象,通过拷贝来创建新buffer对象 
+          var buffer = new Buffer([1, 1, 2, 2, 3]);
+          console.log(buffer); // <Buffer 01 01 02 02 03>
+        str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
+          type  编码方式,默认为'utf-8',其他可选值为 
+            "base64"  
+            "ascii"   
+            "utf8"    
+            "utf-8"    
+            "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
+            "ucs2"    utf16le的别名
+            "hex"     将每个字节转为两个十六进制字符
+          Example:
+            var bufer1 = new Buffer("abcdefg", "utf-8"); 
+            var bufer2 = new Buffer("abcdefg", "base64"); 
+            console.log(bufer1,bufer2);
+            // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
+        arr         数组,数组成员必须是整数值 
+          var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
+          console.log(hello.toString()); // 'Hello'
+      Buffer.from()  
+      Buffer.alloc()  
+      Buffer.allocUnsafe()  
+    Proto: 
+      .parent 
+      .offset 
+      .copy()  
+      .toString()  
+      .write()  
+      .toJSON()  
+      .readUIntLE()  
+      .readUIntBE()  
+      .readUInt8()  
+      .readUInt16LE()  
+      .readUInt16BE()  
+      .readUInt32LE()  
+      .readUInt32BE()  
+      .readIntLE()  
+      .readIntBE()  
+      .readInt8()  
+      .readInt16LE()  
+      .readInt16BE()  
+      .readInt32LE()  
+      .readInt32BE()  
+      .writeUIntLE()  
+      .writeUIntBE()  
+      .writeUInt8()  
+      .writeUInt16LE()  
+      .writeUInt16BE()  
+      .writeUInt32LE()  
+      .writeUInt32BE()  
+      .writeIntLE()  
+      .writeIntBE()  
+      .writeInt8()  
+      .writeInt16LE()  
+      .writeInt16BE()  
+      .writeInt32LE()  
+      .writeInt32BE()  
+      .toLocaleString()  
+      .asciiSlice()  
+      .base64Slice()  
+      .latin1Slice()  
+      .hexSlice()  
+      .ucs2Slice()  
+      .utf8Slice()  
+      .asciiWrite()  
+      .base64Write()  
+      .latin1Write()  
+      .hexWrite()  
+      .ucs2Write()  
+      .utf8Write()  
+      .equals()  
+      .inspect()  
+      .compare()  
+      .indexOf()  
+      .lastIndexOf()  
+      .includes()  
+      .fill()  
+      .slice()  
+      .readFloatLE()  
+      .readFloatBE()  
+      .readDoubleLE()  
+      .readDoubleBE()  
+      .writeFloatLE()  
+      .writeFloatBE()  
+      .writeDoubleLE()  
+      .writeDoubleBE()  
+      .swap16()  
+      .swap32()  
+      .swap64()  
+    ◆Buffer实例的属性方法 
+    bufer[idx]  下标访问
+    bufer.length  读写,bufer对象所占据的内存长度  
+      PS:改值与Buffer对象的内容无关;
+        如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+      var buf1 = new Buffer('1234567');
+      var buf2 = new Buffer(8);
+      console.log(buf1.length); // 7
+      console.log(buf2.length); // 8
+    bufer.byteLength   文件的体积大小 
+    bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
+      PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
+      str   写入缓冲区的字符串 
+      idx   缓冲区开始写入的索引值,默认为 0 
+      len   写入的字节数,默认为 buffer.length 
+      typ   使用的编码.默认为'utf8' 
+      Example: 
+        var buf = new Buffer('abcdefg');
+        var len = buf.write("1234");
+        console.log("写入字节数 : "+ len);  // 写入字节数 : 4
+        console.log(buf.toString()); // 1234efg
+    bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
+      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+      bgn    开始读取的索引位置,默认为 0 
+      end    结束位置,默认为缓冲区的末尾 
+      Example:
+        var buf = new Buffer(26);
+        for (var i = 0 ; i < 26 ; i++) { 
+          buf[i] = i + 97; 
+        }
+        console.log(buf);
+        // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+        console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+        console.log( buf.toString('ascii',0,5));   // 输出: abcde
+        console.log( buf.toString('utf8',0,5));    // 输出: abcde
+        console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+    bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
+      PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+      Example:
+        var bufer = new Buffer('abc');
+        var json = bufer.toJSON();
+        console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+        console.log(typeof json); // object
+        
+        var buf = new Buffer('test');
+        var json = JSON.stringify(buf);
+        console.log(json); // '[116,101,115,116]'
+        var copy = new Buffer(JSON.parse(json));
+        console.log(copy); // <Buffer 74 65 73 74>
+    bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
+      begin 可选,默认为 0
+      end   可选,默认为 bufer.length
+      Example:
+        var buf1 = new Buffer('123');
+        var buf2 = buf1.slice(0,2);
+        console.log(buf2); // <Buffer 31 32>
+    bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
+      bufer1   复制的目标bufer对象 
+      bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
+      bfBgn    数字,可选,默认为 0 
+      bfEnd    数字,可选,默认为 buf.length 
+      Example: 
+        var buf1 = new Buffer('abcdefghi');
+        var buf2 = new Buffer(6);
+        for (var i = 0; i < buf2.length; i++) {
+          buf2[i] = 65;
+        }
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+        buf1.copy(buf2,2,3,5);
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+        var bufStr1 = buf1.toString();
+        var bufStr2 = buf2.toString();
+        console.log(bufStr1,bufStr2);
+        // abcdefghi AAdeAA
+    bufer.compare(buf)  比较 
+      Example:
+        var buf1 = new Buffer('10');
+        var buf2 = new Buffer('11');
+        var result = buf1.compare(buf2);
+        console.log(result); // -1
+    bufer.equals(bufer1)
+    与二进制数组的关系 
+      TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
+      比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
+      注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]） 
+      另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的 
+      二进制数组的buffer属性,保留指向原Buffer对象的指针 
+      二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
+      比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
+  ◆对象 
   global,Node所在的全局环境,类似浏览器的window对象 
     最根本的作用是作为全局变量的宿主
     global 和 window 的不同 
@@ -279,7 +549,7 @@ NodeJS的运行方式及编程风格
     模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
-  exports
+  exports 
   ◆其他同浏览器中JS相同的类、对象 
   Date,时间类 
   console,用于提供控制台标准输出[详见浏览器调试] 
@@ -375,153 +645,6 @@ events,事件模块
     首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
     其次 JS 的对象机制是基于原型的,支持 部分多重继承,
     继承 EventEmitter 不会打乱对象原有的继承关系.
-Buffer,缓冲区: 处理二进制数据的接口[用于保存原始数据] 
-  PS: JS只有字符串数据类型,没有二进制数据类型, 
-    处理TCP流或文件流时,需使用二进制数据,因此NodeJS定义了一Buffer类,
-    用来创建一个专门存放二进制数据的缓存区;
-    在NodeJS中,Buffer类是随Node内核一起发布的核心库;
-    Buffer 库为 Node.js 带来了一种存储原始数据的方法,
-    每当需要在 Node.js 中处理I/O操作中移动的数据时,就有可能使用 Buffer 库 
-    原始数据存储在 Buffer 类的实例中 
-    一个 Buffer 类似于一个整数数组,对应于 V8 堆内存之外的一块原始内存 
-  var bufer = new Buffer(val)   通过Buffer类来创建bufer对象 
-    PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
-    ◆val可为以下类型:
-    num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
-      var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
-    bufer       bufer对象,通过拷贝来创建新buffer对象 
-      var buffer = new Buffer([1, 1, 2, 2, 3]);
-      console.log(buffer); // <Buffer 01 01 02 02 03>
-    str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
-      type  编码方式,默认为'utf-8',其他可选值为 
-        "base64"  
-        "ascii"   
-        "utf8"    
-        "utf-8"    
-        "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
-        "ucs2"    utf16le的别名
-        "hex"     将每个字节转为两个十六进制字符
-      Example:
-        var bufer1 = new Buffer("abcdefg", "utf-8"); 
-        var bufer2 = new Buffer("abcdefg", "base64"); 
-        console.log(bufer1,bufer2);
-        // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
-    arr         数组,数组成员必须是整数值 
-      var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
-      console.log(hello.toString()); // 'Hello'
-  ◆Buffer实例的属性方法 
-  bufer[idx]  下标访问
-  bufer.length  读写,bufer对象所占据的内存长度  
-    PS:改值与Buffer对象的内容无关;
-      如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
-    var buf1 = new Buffer('1234567');
-    var buf2 = new Buffer(8);
-    console.log(buf1.length); // 7
-    console.log(buf2.length); // 8
-  bufer.byteLength   文件的体积大小 
-  bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
-    PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
-    str   写入缓冲区的字符串 
-    idx   缓冲区开始写入的索引值,默认为 0 
-    len   写入的字节数,默认为 buffer.length 
-    typ   使用的编码.默认为'utf8' 
-    Example: 
-      var buf = new Buffer('abcdefg');
-      var len = buf.write("1234");
-      console.log("写入字节数 : "+ len);  // 写入字节数 : 4
-      console.log(buf.toString()); // 1234efg
-  bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
-    typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
-    bgn    开始读取的索引位置,默认为 0 
-    end    结束位置,默认为缓冲区的末尾 
-    Example:
-      var buf = new Buffer(26);
-      for (var i = 0 ; i < 26 ; i++) { 
-        buf[i] = i + 97; 
-      }
-      console.log(buf);
-      // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-      console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-      console.log( buf.toString('ascii',0,5));   // 输出: abcde
-      console.log( buf.toString('utf8',0,5));    // 输出: abcde
-      console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-  bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
-    PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-    Example:
-      var bufer = new Buffer('abc');
-      var json = bufer.toJSON();
-      console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-      console.log(typeof json); // object
-      
-      var buf = new Buffer('test');
-      var json = JSON.stringify(buf);
-      console.log(json); // '[116,101,115,116]'
-      var copy = new Buffer(JSON.parse(json));
-      console.log(copy); // <Buffer 74 65 73 74>
-  bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
-    begin 可选,默认为 0
-    end   可选,默认为 bufer.length
-    Example:
-      var buf1 = new Buffer('123');
-      var buf2 = buf1.slice(0,2);
-      console.log(buf2); // <Buffer 31 32>
-  bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
-    bufer1   复制的目标bufer对象 
-    bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
-    bfBgn    数字,可选,默认为 0 
-    bfEnd    数字,可选,默认为 buf.length 
-    Example: 
-      var buf1 = new Buffer('abcdefghi');
-      var buf2 = new Buffer(6);
-      for (var i = 0; i < buf2.length; i++) {
-        buf2[i] = 65;
-      }
-      console.log(buf1,buf2);
-      // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
-      buf1.copy(buf2,2,3,5);
-      console.log(buf1,buf2);
-      // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
-      var bufStr1 = buf1.toString();
-      var bufStr2 = buf2.toString();
-      console.log(bufStr1,bufStr2);
-      // abcdefghi AAdeAA
-  bufer.compare(buf)  比较 
-    Example:
-      var buf1 = new Buffer('10');
-      var buf2 = new Buffer('11');
-      var result = buf1.compare(buf2);
-      console.log(result); // -1
-  bufer.equals(bufer1)
-  ◆静态属性方法 
-  Buffer.concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
-    buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-      参数列表只有一个成员,就直接返回该成员
-    length  可选,默认为总长度,指定新buf对象的长度
-      省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
-      因此,显式提供这个参数,能提供运行速度  
-    Example:
-      var buf1 = new Buffer('11');
-      var buf2 = new Buffer('22');
-      var buf3 = Buffer.concat([buf1,buf2]);
-      console.log(buf3.toString());   // 1122
-  Buffer.isEncoding(typ)  返回布尔值,表示Buffer实例是否为指定编码 
-    Buffer.isEncoding('utf8'); // true
-  Buffer.isBuffer(obj)    返回布尔值,判断对象是否为Buffer实例的 
-    Buffer.isBuffer(Date) // false
-  Buffer.byteLength(str [,typ]) 返回字符串实际占据的字节长度 
-    str  检测的字符串
-    typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
-    Buffer.byteLength('Hello', 'utf8') // 5
-  Buffer.compare(buf1,buf2)    比较两份Buffer对象 
-  bufer = Buffer.from(str)    把字符串转会成Buffer 
-  与二进制数组的关系 
-    TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
-    比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
-    注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]） 
-    另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的 
-    二进制数组的buffer属性,保留指向原Buffer对象的指针 
-    二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
-    比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
 stream,流: 用于暂存和移动数据[以bufer的形式存在] 
   PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
@@ -2062,4 +2185,7 @@ Question&Suggestion:
 其他相关 
   electron 开发桌面程序 
 ----------------------------------------------------------------------以下待整理
+
+
+
 

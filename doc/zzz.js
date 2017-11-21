@@ -40,9 +40,9 @@ canvas 的压缩质量 具体压缩后的体积
 
 前端模块化方案  
 
-输入 in      I
-操作 handle  H 
-输出 out     O  
+输入 In      I
+操作 Handle  H 
+输出 Out     O  
 
 
 将使用单一知识点实现的功能从代码段移到知识点处  

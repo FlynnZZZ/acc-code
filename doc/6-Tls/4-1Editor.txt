@@ -586,9 +586,9 @@ VSCode
 WebStorm 
   设置 
   快捷键 
-    Settings                      Atom           设置                 
-    Collapse all                  Atom           折叠所有             
-    Expand all                    Atom           展开所有折叠          
+    Settings                      Atom           设置     
+    Collapse all                  Atom           折叠所有   
+    Expand all                    Atom           展开所有折叠  
     Duplicate line or Selection   Atom           复制行 
     Delete line                   Atom           删除行 
     Comment with line comment     Atom           行注释  

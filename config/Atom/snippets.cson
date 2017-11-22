@@ -1,7 +1,77 @@
 '*':
-  '- TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ ':
+  # self  
+  '- TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★  待处理':
     'prefix': 'todo-self'
-    'body': '// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ '
+    'body': '// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ '
+  '- PS:  说明':
+    'prefix': 'ps-self'
+    'body': 'PS: '
+  '- Example:  例子':
+    'prefix': 'Example-self'
+    'body': 'Example: '
+  '- Extend:  继承':
+    'prefix': 'extend-self'
+    'body': 'Extend: '
+  '- Relate:  相关的':
+    'prefix': 'relate-self'
+    'body': 'Relate: '
+  '- Static:  静态属性':
+    'prefix': 'static-self'
+    'body': 'Static: '
+  '- Proto:  原型属性':
+    'prefix': 'proto-self'
+    'body': 'Proto: '
+  '- Instance:  类的实例':
+    'prefix': 'instance-self'
+    'body': 'Instance: '
+  '- Member:  对象的成员':
+    'prefix': 'member-self'
+    'body': 'Member: '
+  '- Feature:  特性':
+    'prefix': 'feature-self'
+    'body': 'Feature: '
+  '- Accu:  总结,积累':
+    'prefix': 'accu-self'
+    'body': 'Accu: '
+  '- Self:  自己相关':
+    'prefix': 'self-self'
+    'body': 'Self: '
+  '- More:  更多':
+    'prefix': 'more-self'
+    'body': 'More: '
+  '- Expand:  扩展':
+    'prefix': 'expand-self'
+    'body': 'Expand: '
+  '- Question:  问题':
+    'prefix': 'question-self'
+    'body': 'Question: '
+  '- Env:  网站':
+    'prefix': 'env-self'
+    'body': 'Env: '
+  '- Sit:  网站':
+    'prefix': 'sit-self'
+    'body': 'Sit: '
+  '- Win:  窗口':
+    'prefix': 'win-self'
+    'body': 'Win: '
+  '- Pag:  页面/文档':
+    'prefix': 'pag-self'
+    'body': 'Pag: '
+  '- Elm:  DOM/元素':
+    'prefix': 'elm-self'
+    'body': 'Elm: '
+  '- Atr:  元素属性':
+    'prefix': 'atr-self'
+    'body': 'Atr: '
+  '- Evt:  事件':
+    'prefix': 'evt-self'
+    'body': 'Evt: '
+  '- Kit:  事件':
+    'prefix': 'kit-self'
+    'body': 'Kit: '
+  '- NdA  不可直接使用':
+    'prefix': 'NdA-self'
+    'body': 'NdA'
   # word 
   '- template':
     'prefix': 'template-word'
@@ -9,81 +79,42 @@
   '- module':
     'prefix': 'module-word'
     'body': 'module'
-  '- PS: ':
-    'prefix': 'ps-word'
-    'body': 'PS: '
-  '- Example: ':
-    'prefix': 'Example-word'
-    'body': 'Example: '
-  '- Extend: ':
-    'prefix': 'extend-word'
-    'body': 'Extend: '
-  '- Relate: ':
-    'prefix': 'relate-word'
-    'body': 'Relate: '
-  '- Static: ':
-    'prefix': 'static-word'
-    'body': 'Static: '
-  '- Proto: ':
-    'prefix': 'proto-word'
-    'body': 'Proto: '
-  '- Instance: ':
-    'prefix': 'instance-word'
-    'body': 'Instance: '
-  '- Member: ':
-    'prefix': 'member-word'
-    'body': 'Member: '
-  '- Feature: ':
-    'prefix': 'feature-word'
-    'body': 'Feature: '
-  '- Accu: ':
-    'prefix': 'accu-word'
-    'body': 'Accu: '
-  '- Self: ':
-    'prefix': 'self-word'
-    'body': 'Self: '
-  '- More: ':
-    'prefix': 'more-word'
-    'body': 'More: '
-  '- Expand: ':
-    'prefix': 'expand-word'
-    'body': 'Expand: '
-  '- Question: ':
-    'prefix': 'question-word'
-    'body': 'Question: '
+  '- option':
+    'prefix': 'option-word'
+    'body': 'option'
 
 '.text.html.basic,.text.xml,.text.html.php':
   # 标签 ----------------------------
   '- <div>$1</div>':
-    'prefix': 'div'
+    'prefix': 'div-tag'
     'body': '<div>$1</div>'
   '- <div class="">$1</div>':
-    'prefix': 'div-class'
+    'prefix': 'div-class-tag'
     'body': '<div class="">$1</div>'
   '- <div id="">$1</div>':
-    'prefix': 'div-id'
+    'prefix': 'div-id-tag'
     'body': '<div id="">$1</div>'
   '- <template>$1</template>':
-    'prefix': 'template'
+    'prefix': 'template-tag'
     'body': '<template>$1</template>'
   # 属性----------------------------------
   '- style="$1"':
-    'prefix': 'style'
+    'prefix': 'style-attr'
     'body': 'style="$1"'
   '- class="$1"':
-    'prefix': 'class'
+    'prefix': 'class-attr'
     'body': 'class="$1"'
   '- id="$1"':
-    'prefix': 'id'
+    'prefix': 'id-attr'
     'body': 'id="$1"'
-  '- placeholder="$1"':
-    'prefix': 'placeholder'
+  '- placeholder="$1"  表单的默认显示':
+    'prefix': 'placeholder-attr'
     'body': 'placeholder="$1"'
   '- name="$1"':
-    'prefix': 'name'
+    'prefix': 'name-attr'
     'body': 'name="$1"'
-  '- data-xxx=val':
-    'prefix': 'data-xxx'
+  '- data-xxx="val"  自定义数据':
+    'prefix': 'data-xxx-attr'
     'body': 'data-$1="$2"'
   # php----------------------------------
   'php test':
@@ -92,7 +123,7 @@
 '.text.html.basic':
   # HTML------------------------------------------------------------------------
   '- <meta name="viewport" content="...">':
-    'prefix': 'metaViewport'
+    'prefix': 'meta-viewport-tag'
     'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
   '- <style>$1</style>':
     'prefix': 'style-inset'
@@ -101,7 +132,7 @@
     'prefix': 'script-src'
     'body': '<script src="$1" charset="utf-8"></script>'
   # 自定义组合--------------------------------
-  '- html-self':
+  '- html-self  自定义模版':
     'prefix': 'html-self'
     'body': """
     <!DOCTYPE html>
@@ -115,7 +146,7 @@
     <body>
     </body>
     </html>"""
-  '- html-mobile':
+  '- html-mobile  自定义的移动端模版':
     'prefix': 'html-mobile'
     'body': """
     <!DOCTYPE html>
@@ -129,7 +160,7 @@
     <body>
     </body>
     </html>"""
-  '- cptTemplate':
+  '- cpt-template  自定义的vue组件模版':
     'prefix': 'cpt-template'
     'body': """
     <style>
@@ -142,7 +173,7 @@
     })
     </script>
     """ 
-  '- cptTemplate-child':
+  '- cpt-Template-child  自定义的vue子组件模版':
     'prefix': 'cpt-template-child'
     'body': """
     <style>
@@ -153,18 +184,42 @@
       </div>
     </template>
     <script type="text/javascript">
-      Vue.component("c-xxx",{
-        template : "#c-xxx",
-        props : [],
-        data : function(){
-          return {
-            msg: ''
+      // in props: 
+        
+      // put props: 
+        
+      // get event: 
+        
+      // out event: 
+      Vue.component('c-name',{
+        template: '#xxx_xx'
+        ,props: []
+        ,props: {
+          prop0: {
+            default: function () {
+              return 
+            }
+            // default: xxx
+            // ,type: Number 
+            // ,required: bol  
+            // ,validator: function (val) { 
+            //   return bol;
+            // }
           }
-        },
-        computed : {},
-        methods : {},
+          // ,prop1: Number 
+          // ,prop1: [Number,String] 
+        }
+        ,data: function(){
+          return {
+            
+          }
+        }
+        ,created: function(){
+          
+        }
       });
     </script>
+    
     """ 
 '.text.xml':   
   'wx test':
@@ -244,7 +299,7 @@
   '- typeof val;  str,值类型检测':
     'prefix': 'typeof-operat'
     'body': 'typeof '
-  '- obj instanceof Foo;  bol,原型链继承检测':
+  '- obj instanceof Foo;  bol,对象是否继承至构造函数':
     'prefix': 'instanceof-operat'
     'body': """instanceof""" 
   '- delete val;  bol,删除对象中的成员[值],返回是否删除成功的布尔值':

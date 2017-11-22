@@ -89,8 +89,7 @@
   'alt-8': 'unset!'
   'alt-9': 'unset!'
   'alt-w': 'unset!'
-  
-  
+
 # PS:须将同一类的放置在一起否则会不起作用,如'atom-workspace atom-text-editor:not([mini])':的一类必须放在一起
 
 

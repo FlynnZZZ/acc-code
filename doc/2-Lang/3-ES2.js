@@ -715,14 +715,14 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(str); // 1-2-3 
     ◆遍历方法 
       PS: 回调参数'val'为指向数组成员的一指针,遍历时依次指向每个元素  
-    .sort([foo(val1,val2)])   arr,返回排序后的数组[改变原数组]  
-      foo       可选,返回值为true则调序,否则不变; 
+    .sort(function(val1,val2){  // arr,返回排序后的数组[改变原数组]  
+      val1,val2   数组相邻的两个元素 
+      return bol; // true则数组两个成员调序,否则不变;
+      该回调函数可选,默认元素按转换为的字符串的首个字符的Unicode位点进行排序
         通过冒泡的算法大小排序[SlSt];
-        若省略,元素按照转换为的字符串的首个字符的Unicode位点进行排序
         var arr =[31,1,2,5,4]
         arr.sort();
         console.log(arr); // [1, 2, 31, 4, 5]
-      val1,val2 数组相邻的两个元素 
       Example:  
         // 从小到大排序
         var arr = [5,2,4,17];
@@ -738,7 +738,8 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    .forEach(foo(val,idx,arr)[,context])  数组遍历 [ES5] 
+    })   
+    .forEach(foo(val,idx,arr)[,context])  数组遍历[ES5] 
       PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过 
         无法中止或跳出forEach循环,除非报错.
       foo  遍历函数 
@@ -883,13 +884,15 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         console.log(num1); // 5,有初始值,val从第一个成员开始  
     .reduceRight(foo(retVal,val,idx,arr)[,initVal])  同reduce,只是从右到左遍历[ES5]
     ◆待整理
-    .find(f(member))  val,返回数组中符合条件的第一个成员[ES6] 
-      member  分别为数组中的每个成员  
-        回调函数返回true时,find函数就会返回该成员的值,否则最终返回 undefined  
-      var aoo = [1,2,3,4,5,6].find(function(value){ 
-        return value > 2; 
-      });
-      console.log(aoo); // 3
+    .find(function(mber){  // val,返回回调值为true的首个成员[ES6]  
+      // mber  分别为数组中的每个成员  
+      return bol; // 若未有true,find方法最终返回 undefined 
+      Example: 
+        var aoo = [1,2,3,4,5,6].find(function(value){ 
+          return value > 2; 
+        });
+        console.log(aoo); // 3
+    })  
     .findIndex(f(member)) idx,返回数组中符合条件的第一个成员的下标[ES6] 
       回调返回值为true时,该成员的下标,否则最终返回 -1 
       var idx1 = [7,8,9,10].findIndex(function(value){ 

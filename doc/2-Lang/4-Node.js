@@ -121,6 +121,9 @@ NodeJS的运行方式及编程风格
           nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
       当模块重名时,加载的优先级:  
         Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
+      加载模块,会将模块内的内容执行一次 
+        当直接运行时,在模块内 require.main === module 
+        可以此来判断直接运行还是加载运行  
 'Global Object'全局变量,可在程序的任何地方访问 
   PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 

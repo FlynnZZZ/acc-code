@@ -13,22 +13,25 @@
   'O Object':
     'prefix': 'Object-obj' # 存在bug
     'body': 'Object'
-  'O Object.create(protoObj[,configObj]) obj,生成对象':
+  'O Object.create(protoObj[,configObj])  obj,生成对象':
     'prefix': 'Object-create'
     'body': 'Object.create($1)'
-  'O Object.is(val1,val2) bol,值是否相同(按外形比较)':
+  'O Object.is(val1,val2)  bol,值是否相同(按外形比较)':
     'prefix': 'Object-is'
     'body': 'Object.is($1)'
-  'O Object.keys(obj) arr,获取可枚举的自有成员':
+  'O Object.keys(obj)  arr,获取可枚举的自有成员':
     'prefix': 'Object-keys'
     'body': 'Object.keys($1)'
-  'O Object.assign(obj1,obj2,..) obj,返回合并后的对象':
+  'O Object.assign(obj1,obj2,..)  obj,返回合并后的对象':
     'prefix': 'Object-assign'
     'body': 'Object.assign($1)'
-  'O Object.getPrototypeOf(obj) obj,原型对象':
+  'O Object.getPrototypeOf(obj)  obj,原型对象':
     'prefix': 'Object-getPrototypeOf'
     'body': 'Object.getPrototypeOf($1)'
-  'O Object.defineProperty(obj,key,{}) 定义对象的成员及其特性':
+  'O Object.setPrototypeOf(obj,proto)  obj,设置对象的原型对象':
+    'prefix': 'Object-setPrototypeOf'
+    'body': 'Object.setPrototypeOf(obj,proto)'
+  'O Object.defineProperty(obj,key,{})  定义对象的成员及其特性':
     'prefix': 'Object-defineProperty'
     'body': '''Object.defineProperty(${1:obj},key,{
         // get: function (){
@@ -40,7 +43,7 @@
         enumerable: true, 
         configurable: true
       })'''
-  'O Object.defineProperties(obj,configObj) 同时定义多个成员及特性':
+  'O Object.defineProperties(obj,configObj)  同时定义多个成员及特性':
     'prefix': 'Object-defineProperties'
     'body': '''Object.defineProperties(${1:obj},{
         aoo: {
@@ -60,37 +63,37 @@
           configurable: true
         }
       })'''
-  'O Object.getOwnPropertyDescriptor(obj,key) obj,成员的特性配置':
+  'O Object.getOwnPropertyDescriptor(obj,key)  obj,成员的特性配置信息':
     'prefix': 'Object-getOwnPropertyDescriptor'
     'body': 'Object.getOwnPropertyDescriptor($1)'
-  'O Object.getOwnPropertyDescriptors(obj) obj,所有成员的特性配置':
+  'O Object.getOwnPropertyDescriptors(obj)  obj,所有成员的特性配置信息':
     'prefix': 'Object-getOwnPropertyDescriptors'
     'body': 'Object.getOwnPropertyDescriptors($1)'
-  'O Object.getOwnPropertyNames() arr,所有[包括不可枚]的自有成员':
+  'O Object.getOwnPropertyNames()  arr,所有[包括不可枚举]的自有成员':
     'prefix': 'Object-getOwnPropertyNames'
     'body': 'Object.getOwnPropertyNames()'
-  'O Object.isExtensible(obj) bol,能否增加成员':
-    'prefix': 'Object-isExtensible'
-    'body': 'Object.isExtensible($1)'
-  'O Object.isSealed(obj)':
-    'prefix': 'Object-isSealed'
-    'body': 'Object.isSealed($1)'
-  'O Object.isFrozen(obj)':
-    'prefix': 'Object-isFrozen'
-    'body': 'Object.isFrozen($1)'
-  'O Object.preventExtensions(obj) 阻止给对象新增属性':
+  'O Object.preventExtensions(obj)  不可新增成员,仍可修改、删除成员':
     'prefix': 'Object-preventExtensions'
     'body': 'Object.preventExtensions($1)'
-  'O Object.seal(obj) 不可扩展、配置':
+  'O Object.seal(obj)  不可新增、删除成员,仍可修改成员':
     'prefix': 'Object-seal'
     'body': 'Object.seal($1)'
-  'O Object.freeze(obj) 不可写、扩展、配置':
+  'O Object.freeze(obj)  不可新增、删除、修改成员':
     'prefix': 'Object-freeze'
     'body': 'Object.freeze($1)'
-  'O .__proto__':
+  'O Object.isExtensible(obj)  bol,能否新增成员':
+    'prefix': 'Object-isExtensible'
+    'body': 'Object.isExtensible($1)'
+  'O Object.isSealed(obj)  bol,能否新增、删除成员':
+    'prefix': 'Object-isSealed'
+    'body': 'Object.isSealed($1)'
+  'O Object.isFrozen(obj)  bol,能否新增、删除及修改成员':
+    'prefix': 'Object-isFrozen'
+    'body': 'Object.isFrozen($1)'
+  'O .__proto__  obj,对象的原型对象':
     'prefix': 'proto-obj' 
     'body': '__proto__'
-  'O .constructor fn,构造函数':
+  'O .constructor  fn,构造函数':
     'prefix': 'constructor-obj' # 存在bug,当为 'prefix': 'constructor' 时
     'body': 'constructor'
   'O .valueOf()':
@@ -102,13 +105,13 @@
   'O .toLocaleString()':
     'prefix': 'toLocaleString-obj'
     'body': 'toLocaleString()'
-  'O .hasOwnProperty(key) bol,属性是否存在(不包括原型)':
+  'O .hasOwnProperty(key)  bol,属性是否存在(不包括原型)':
     'prefix': 'hasOwnProperty-obj' # 存在bug 
     'body': 'hasOwnProperty($1)'
-  'O .propertyIsEnumerable(key) bol,属性能否for-in枚举':
+  'O .propertyIsEnumerable(key)  bol,属性能否for-in枚举':
     'prefix': 'propertyIsEnumerable-obj'
     'body': 'propertyIsEnumerable($1)'
-  'O .isPrototypeOf(obj) bol,是否处于目标对象原型链上':
+  'O .isPrototypeOf(obj)  bol,是否处于目标对象原型链上':
     'prefix': 'isPrototypeOf-obj'
     'body': 'isPrototypeOf($1)'
   # bol ------------------------------------------------
@@ -300,14 +303,14 @@
     'body': """filter(function(val,idx,arr){
         return ${2:true[保留]}
       } ,${1:this})"""
-  'O .reduce(foo[,initVal])  val,条件缩减,返回最后一次回调值':
+  'O .reduce(foo[,initVal])  条件缩减,返回最后一次回调值':
     'prefix': 'reduce-arr'
-    'body': """reduce(function(retVal,currVal,idx,arr){ 
+    'body': """reduce(function(retVal,val,idx,arr){ 
       return $2 
     },${1:initVal})"""
-  'O .reduceRight(foo[,initVal])  val,和reduce类似,只是从右到左遍历':
+  'O .reduceRight(foo[,initVal])  同.reduce,只是从右到左遍历':
     'prefix': 'reduceRight-arr'
-    'body': """reduceRight(function(retVal,currVal,idx,arr){ 
+    'body': """reduceRight(function(retVal,val,idx,arr){ 
       return $2 
     },${1:initVal})"""
   # fn ------------------------------------------------
@@ -338,12 +341,16 @@
   'O .call(this[,arg1,arg2,...])':
     'prefix': 'call-fn'
     'body': """call(${1:this},${2:arg1,arg2,..})"""
-  'O function(){\n}$1':
+  'O function(){}  匿名函数':
     'prefix': 'function-1'
     'body': 'function(){\n}$1'
-  'O function $1($2){$3\n}':
+  'O function foo(){}  定义函数':
     'prefix': 'function-2'
     'body': 'function $1($2){$3\n}'
-  'O (function ($1){$3\n})($2)':
+  'O (function (){})()  立即执行的匿名函数':
     'prefix': 'function-3'
     'body': '(function ($1){$3\n})($2)'
+
+
+
+

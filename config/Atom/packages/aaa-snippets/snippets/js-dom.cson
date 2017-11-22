@@ -26,6 +26,12 @@
   'DOM .parentElement  父元素节点':
     'prefix': 'parentElement-Node'
     'body': 'parentElement'
+  'DOM .appendChild(node)  内部尾部添加子节点':
+    'prefix': 'appendChild-Node'
+    'body': 'appendChild($1)'
+  'DOM .insertBefore(cNode,flagNode)  节点内的指定节点前插入子节点':
+    'prefix': 'insertBefore-Node'
+    'body': 'insertBefore(node,flagNode)'
   # Document  
   'DOM .createElement("$1")  创建元素节点':
     'prefix': 'createElement-Document'

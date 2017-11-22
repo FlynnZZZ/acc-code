@@ -14,7 +14,7 @@
     'body': 'v-show="${1:key}"' 
   '-vue v-for':
     'prefix': 'v-for'
-    'body': 'v-for="(${1:---}I,${1:---}K) in list"' 
+    'body': 'v-for="(val,key) in list"' 
   '-vue v-text':
     'prefix': 'v-text'
     'body': 'v-text="${1:key}"' 
@@ -45,6 +45,9 @@
   '-vue scope="$1"':
     'prefix': 'scope-vue'
     'body': 'scope="$1"' 
+  '-vue inline-template="$1"':
+    'prefix': 'inline-template-vue'
+    'body': 'inline-template="$1"' 
   '-vue is="$1"':
     'prefix': 'is-vue'
     'body': 'is="$1"' 
@@ -57,83 +60,152 @@
   '-vue ref="$1"':
     'prefix': 'ref-vue'
     'body': 'ref="$1"'
+  '-vue scoped':
+    'prefix': 'scoped-vue'
+    'body': 'scoped'
+  '-vue text/x-template':
+    'prefix': 'text/x-template-vue'
+    'body': '"text/x-template"'
 '.source.js,.text.html.vue':
-  '-Vue.extend({});':
-    'prefix': 'vueextend'
+  '-Vue.extend({});  扩展Vue构造器':
+    'prefix': 'vue-extend'
     'body': """Vue.extend({
-        
+        $1
       });""" 
-  '-Vue.component("xx",{});':
-    'prefix': 'vueComponent'
-    'body': """Vue.component("${1:xx}",{
-      template : "",
-      props : [],
-      data : function(){
+  '-Vue.component("c-name",{})  全局组件':
+    'prefix': 'vue-component'
+    'body': """Vue.component('c-name',{
+      template: ''
+      ,props: []
+      ,props: {
+        prop0: {
+          default: xxx
+          default: function () {
+            return 
+          }
+          ,type: Number 
+          ,required: bol  
+          ,validator: function (val) { 
+            return bol;
+          }
+        }
+        ,prop1: Number 
+        ,prop1: [Number,String] 
+      }
+      ,data: function(){
         return {
           
         }
-      },
-      computed : {},
-      methods : {},
+      }
+      ,created: function(){
+      }
     });""" 
-  '-Vue.directive("xx-xx",{});':
+  '-Vue.component("c-name",foo)  异步全局组件':
+    'prefix': 'vue-component-async'
+    'body': """Vue.component("c-name",function(rs,rj){
+      rs({
+        template: ''
+        ,props: []
+        ,props: {
+          prop0: {
+            default: xxx
+            default: function () {
+              return 
+            }
+            ,type: Number 
+            ,required: bol  
+            ,validator: function (val) { 
+              return bol;
+            }
+          }
+          ,prop1: Number 
+          ,prop1: [Number,String] 
+        }
+        ,data: function(){
+          return {
+            
+          }
+        }
+        ,created: function(){
+        }
+      })
+    });""" 
+  '-Vue.directive("xx-xx",{});  全局指令':
     'prefix': 'vueDirective'
-    'body': """Vue.directive('${1:xx-xx}', {
+    'body': """Vue.directive('xxx-xxx', {
       bind : function(el,binds,vn){
         // binds{name,value,expression,arg,modifiers}
-      },
-      inserted : function(el,binds,vn){
+      }
+      ,inserted : function(el,binds,vn){
         
-      },
-      update : function(el,binds,vn,oVn){
+      }
+      ,update : function(el,binds,vn,oVn){
         // binds{name,value,expression,arg,modifiers,oldValue}
-      },
-      componentUpdated : function(el,binds,vn,oVn){
+      }
+      ,componentUpdated : function(el,binds,vn,oVn){
         // binds{name,value,expression,arg,modifiers,oldValue}
-      },
-      unbind : function(el,binds,vn,oVn){
+      }
+      ,unbind : function(el,binds,vn,oVn){
         
       }
     });""" 
-  '-Vue.filter("xxXX",foo);':
-    'prefix': 'vuefilter'
-    'body': """Vue.filter('xxXX',function(val,arg2,arg3){
-        
+  '-Vue.filter("xxx",foo);  全局过滤器':
+    'prefix': 'vue-filter'
+    'body': """Vue.filter('xxx',function(val,arg2,arg3){
+        $1 
       });""" 
+  '-Vue.use($1)':
+    'prefix': 'vue-use'
+    'body': 'Vue.use($1)'
   '-vue new Vue({$1});':
-    'prefix': 'new-Vue'
+    'prefix': 'new-vue'
     'body': """new Vue({
-        el: '#xxx',
-        data: {},
-        computed: {},
-        watch: {},
-        methods: {},
-        created: function (){
+        el: '#xxx'
+        ,data: {}
+        ,computed: {}
+        ,watch: {}
+        ,methods: {}
+        ,created: function (){
           var that = this;
-        },
-        mounted: function (){
+        }
+        ,mounted: function (){
           var that = this;
           this.$nextTick(function () { });
           
-        },
+        }
       });""" 
   '-vue new VueRouter();':
     'prefix': 'new-VueRouter'
     'body': """new VueRouter({
-        routes : $1,
+        routes : $1
       });""" 
-  '-vue Vue.use($1)':
-    'prefix': 'Vue-use'
-    'body': 'Vue.use($1)'
+  '-vue props':
+    'prefix': 'props-vue'
+    'body': """props""" 
+  '-vue propsData':
+    'prefix': 'propsData-vue'
+    'body': """propsData""" 
   '-vue computed':
     'prefix': 'computed-vue'
     'body': """computed""" 
   '-vue watch':
     'prefix': 'watch-vue'
     'body': """watch""" 
+  '-vue methods':
+    'prefix': 'methods-vue'
+    'body': """methods""" 
   '-vue filters':
     'prefix': 'filters-vue'
     'body': """filters""" 
+  '-vue directives':
+    'prefix': 'directives-vue'
+    'body': """directives""" 
+  '-vue mixins':
+    'prefix': 'mixins-vue'
+    'body': """mixins""" 
+  '-vue components':
+    'prefix': 'components-vue'
+    'body': """components""" 
   '-vue beforeCreate  实例刚创建':
     'prefix': 'beforeCreate-vue'
     'body': """beforeCreate""" 
@@ -172,7 +244,9 @@
     'body': """$emit('eventName',data)""" 
   '-vue .$on("eventName",function (){})':
     'prefix': 'on-vue'
-    'body': """$on('eventName',function (){})""" 
+    'body': """$on('eventName',function (data){
+      $1
+    })""" 
   '-vue .$refs':
     'prefix': 'refs-vue'
     'body': """$refs""" 
@@ -224,3 +298,5 @@
     """
   # css-------------------------------------------------------------------------
   # js--------------------------------------------------------------------------
+
+

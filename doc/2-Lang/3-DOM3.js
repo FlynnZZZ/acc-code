@@ -1216,6 +1216,7 @@ DataTransfer,数据传递
   Extend: Object 
     console.log(DataTransfer.prototype.__proto__.constructor===Object);
   Proto: 
+    .files　 FileList,存放一些拖放的本地文件,若无拖放文件,则为空 
     .dropEffect    控制拖放元素光标显示  
       'none'    不能把拖放元素放在这,文本框外的默认值
       'move'    把拖放的元素移动到目标位置
@@ -1233,7 +1234,6 @@ DataTransfer,数据传递
       'linkMove'       允许值为'link'和'move'的dropEffect
       'all'            允许任意dropEffect
     .types   当前保存的数据类型,如'text'
-    .files　 存放一些拖放的本地文件,若没有拖放文件,则此列表为空
     .setDragImage()    
     .getData('text')      通过数据类型获取由setData方法保存的值
       PS:保存在dataTransfer对象中的数据只能在 drop 事件处理程序中读取.

@@ -1125,7 +1125,7 @@ HTMLElement,HTML元素节点
   HTMLSpanElement,<span> 
   HTMLAnchorElement,<a>  
     .target  
-    .download  
+    .download  str,当下载文件时,设定下载文件默认名称   
     .ping  
     .rel  
     .hreflang  
@@ -1217,101 +1217,105 @@ HTMLElement,HTML元素节点
   HTMLInputElement,<input>  
     Extend: HTMLElement  
     Proto: 
-    .<attr> 
-      .type   str,当前字段的类型,如"checkbox"、"radio"等 
-        <input> 和 <button> 的type属性可读写
-        <select>元素的type属性只读
-        对于<input>元素,该值等于其特性type的值,其他元素,见下表 
-        说明             HTML示例                       type属性的值
-        单选列表       <select>...</select>             "select-one"
-        多选列表       <select multiple>...</select>    "select-multiple"
-        自定义按钮     <button>...</button>             "submit"
-        自定义非提交按钮 <button type="button">...</button> "button"
-        自定义重置按钮 <button type="reset">...</buton>  "reset"
-        自定义提交按钮 <button type="submit">...</buton> "submit"
-        <input>和<button>元素的type属性是可以动态修改的,而<select>元素的type属性则是只读的
-      .name   当前字段的名称
-      .readOnly  bol,是否只读
-      .accept  
-      .alt  
-      .autocomplete  
-      .autofocus  
-      .checked  
-      .max  
-      .maxLength  
-      .min  
-      .minLength  
-      .pattern  [HTML5] 
-      .placeholder  
-      .required  
-      .size  
-      .src  
-      .step  
-    .validity    返回一个包含字段有效信息的对象 [详参 JS高程 430 页]
-      每一个表单元素都有一个validity对象,有以下属性:
-      valid         若该元素通过验证,则返回true。
-      valueMissing  若用户没填必填项,则返回true。
-      typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
-      patternMismatch 若不匹配指定的正则表达式,则返回true。
-      tooLong       若超过最大长度,则返回true。
-      tooShort      若小于最短长度,则返回true。
-      rangeUnderFlow  若小于最小值,则返回true。
-      rangeOverflow   若大于最大值,则返回true。
-      stepMismatch    若不匹配步长(step),则返回true。
-      badInput      若不能转为值,则返回true。
-      customError   若该栏有自定义错误,则返回true。
-    .value     当前字段将被提交给服务器的值 
-      对于type=file,该属性只读,包含着文件在计算机中的路径
-      input、textarea、password、select等元素都可以通过value属性取到它们的值
-    .willValidate = true;  开启单个表单字段验证
-      对于那些不支持的浏览器(比如IE8),该属性等于undefined。
-      即使willValidate属性为true,也不足以表示浏览器支持所有种类的表单验证。
-      比如,Firefox 29 不支持date类型的输入框,会自动将其改为text类型,
-      而此时它的willValidate属性为true。
-      为了解决这个问题,必须确认input输入框的类型(type)未被浏览器改变。
-      if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
-          // 浏览器不支持该种表单验证,需自行部署JavaScript验证
-      }
-    .disabled  bol,表示当前表单字段是否被禁用
-    .form   只读,当前字段所属的表单
-    .defaultValue  默认值
-    .selectionStart num,选中字符的开始下标 
-    .selectionEnd   num,选中字符的结束下标 
-    .setCustomValidity() 用于自定义错误信息 
-      该提示信息也反映在该输入框的 validationMessage 属性中 
-      若将setCustomValidity设为空字符串,则意味该项目验证通过        
-    不常用 
-    .defaultChecked  
-    .dirName  
-    .files  
-    .formAction  
-    .formEnctype  
-    .formMethod  
-    .formNoValidate  
-    .formTarget  
-    .height  
-    .indeterminate  
-    .list  
-    .multiple  
-    .valueAsDate  
-    .valueAsNumber  
-    .width  
-    .validationMessage  
-    .labels  
-    .selectionDirection  
-    .align  
-    .useMap  
-    .autocapitalize  
-    .webkitdirectory  
-    .incremental  
-    .stepUp([num])     在当前数值上加num,num默认为1[HTML5]
-    .stepDown([num])   在当前数值上减num,num默认为1[HTML5]
-    .checkValidity()  bol,字段是否有效,判断依据为标签中添加的约束
-    .reportValidity()    
-    .select()    
-    .setRangeText()    
-    .setSelectionRange()    
-    .webkitEntries  
+      .files  FileList, 
+        <input type="file" id="file" multiple>
+        document.querySelector("#file").addEventListener("change",function(e){
+          console.log(this.files);
+        })
+      .<attr> 
+        .type   str,当前字段的类型,如"checkbox"、"radio"等 
+          <input> 和 <button> 的type属性可读写
+          <select>元素的type属性只读
+          对于<input>元素,该值等于其特性type的值,其他元素,见下表 
+          说明             HTML示例                       type属性的值
+          单选列表       <select>...</select>             "select-one"
+          多选列表       <select multiple>...</select>    "select-multiple"
+          自定义按钮     <button>...</button>             "submit"
+          自定义非提交按钮 <button type="button">...</button> "button"
+          自定义重置按钮 <button type="reset">...</buton>  "reset"
+          自定义提交按钮 <button type="submit">...</buton> "submit"
+          <input>和<button>元素的type属性是可以动态修改的,而<select>元素的type属性则是只读的
+        .name   当前字段的名称
+        .readOnly  bol,是否只读
+        .accept  
+        .alt  
+        .autocomplete  
+        .autofocus  
+        .checked  
+        .max  
+        .maxLength  
+        .min  
+        .minLength  
+        .pattern  [HTML5] 
+        .placeholder  
+        .required  
+        .size  
+        .src  
+        .step  
+      .validity    返回一个包含字段有效信息的对象 [详参 JS高程 430 页]
+        每一个表单元素都有一个validity对象,有以下属性:
+        valid         若该元素通过验证,则返回true。
+        valueMissing  若用户没填必填项,则返回true。
+        typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
+        patternMismatch 若不匹配指定的正则表达式,则返回true。
+        tooLong       若超过最大长度,则返回true。
+        tooShort      若小于最短长度,则返回true。
+        rangeUnderFlow  若小于最小值,则返回true。
+        rangeOverflow   若大于最大值,则返回true。
+        stepMismatch    若不匹配步长(step),则返回true。
+        badInput      若不能转为值,则返回true。
+        customError   若该栏有自定义错误,则返回true。
+      .value     当前字段将被提交给服务器的值 
+        对于type=file,该属性只读,包含着文件在计算机中的路径
+        input、textarea、password、select等元素都可以通过value属性取到它们的值
+      .willValidate = true;  开启单个表单字段验证
+        对于那些不支持的浏览器(比如IE8),该属性等于undefined。
+        即使willValidate属性为true,也不足以表示浏览器支持所有种类的表单验证。
+        比如,Firefox 29 不支持date类型的输入框,会自动将其改为text类型,
+        而此时它的willValidate属性为true。
+        为了解决这个问题,必须确认input输入框的类型(type)未被浏览器改变。
+        if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
+            // 浏览器不支持该种表单验证,需自行部署JavaScript验证
+        }
+      .disabled  bol,表示当前表单字段是否被禁用
+      .form   只读,当前字段所属的表单
+      .defaultValue  默认值
+      .selectionStart num,选中字符的开始下标 
+      .selectionEnd   num,选中字符的结束下标 
+      .setCustomValidity() 用于自定义错误信息 
+        该提示信息也反映在该输入框的 validationMessage 属性中 
+        若将setCustomValidity设为空字符串,则意味该项目验证通过        
+      不常用 
+      .defaultChecked  
+      .dirName  
+      .formAction  
+      .formEnctype  
+      .formMethod  
+      .formNoValidate  
+      .formTarget  
+      .height  
+      .indeterminate  
+      .list  
+      .multiple  
+      .valueAsDate  
+      .valueAsNumber  
+      .width  
+      .validationMessage  
+      .labels  
+      .selectionDirection  
+      .align  
+      .useMap  
+      .autocapitalize  
+      .webkitdirectory  
+      .incremental  
+      .stepUp([num])     在当前数值上加num,num默认为1[HTML5]
+      .stepDown([num])   在当前数值上减num,num默认为1[HTML5]
+      .checkValidity()  bol,字段是否有效,判断依据为标签中添加的约束
+      .reportValidity()    
+      .select()    
+      .setRangeText()    
+      .setSelectionRange()    
+      .webkitEntries  
   HTMLTextAreaElement,<textarea> 
     .autofocus  
     .cols  
@@ -1693,6 +1697,24 @@ HTMLElement,HTML元素节点
       .captureStream()    
       .webkitAudioDecodedByteCount  
       .webkitVideoDecodedByteCount  
+FileList,File对象集合,表示用户选择的文件列表[HTML5] 
+  PS: HTML5中[通过添加multiple属性],input[file]内能一次选中多个文件, 
+    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表
+    HTML4中,file控件内只能选中一个文件 
+  Extend: Object 
+    console.log(FileList.prototype.__proto__.constructor===Object); // true 
+  Proto: 
+    .length 
+    .item(idx) File,文件 
+File,文件 
+  Extend: Blob 
+    console.log(File.prototype.__proto__.constructor===Blob); // true 
+  Proto: 
+    .name  本地文件系统中的文件名 
+    .lastModified  
+    .lastModified   文件的上次修改时间,格式为时间戳。
+    .lastModifiedDate   文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
+    .webkitRelativePath  
 MediaError,媒体错误对象 
   Extend: Object 
   Static: 

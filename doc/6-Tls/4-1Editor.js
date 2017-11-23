@@ -1,126 +1,25 @@
 Atom 
-  设置 
-    编辑器设置
-      悬挂缩进 设置为2
-      字体设置  Consolas,楷体
-        PS:consolas为atom默认字体
-          字体间使用逗号隔开,第一个定义英文字体,第二个定义中文字体.
-      取消勾选 ctrl+滚轮 调整字体大小
-      忽略的文件
-        .git, .hg, *.svn, .dS_Store, ._*, thumbs.db,
-        *.docx, *.doc, *.pdf,*.jpg,*.project,*.lnk,*.ini,*.exe
-      editor 
-        Non Word Characters [非实体字符]
-          /\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-[]【】〖〗『』《》
-    自定义样式设置
-      文件-用户样式设置
-        // 目录树
-        .tree-view { padding: 0; margin: 0; }
-        .list-tree.has-collapsable-children .list-nested-item > { // 目录树 缩进
-          .list-tree > li{ padding-left: 6px; }
-          }
-          
-        // 文档主体
-        atom-text-editor {
-          // background-color:  rgba(255, 255, 255, 0.1)  ;
-          // color: black;
-          //备选颜色   #EfEfDf #E5E5E6  rgb(199, 237, 204) rgba(199, 237, 204, 0.5)
-          &.editor .cursor { // 光标
-            // border-color: red;  // 亮色
-            border-color: #fbf215; // 暗色
-          }
-          // &::shadow .cursor { // 光标
-          //   border-color: red;
-          // }
-        }
-
-        // 设置页
-        .settings-view { 
-          font-size: 14px; 
-        }
-
-        // 文件标题
-        // [theme-one-light-ui-tabsizing="auto"] .tab .title {
-        //   font-size: 12px;
-        //   color: #d54940 ;
-        // }
-        // [theme-one-dark-ui-tabsizing="auto"] .tab .title {
-        //   font-size: 12px;
-        //   // color: #d54940 ;  // 亮色背景
-        //   color: gold ;        // 暗色背景
-        // }
-        // 升级到 1.17.0 的样式设置
-        // .tab-bar .title {
-        //   font-size: 12px;
-        //   // color: #d54940 ;  // 亮色背景
-        //   color: gold ;        // 暗色背景
-        // }
-
-        // 匹配括号的 高亮样式
-        atom-text-editor.editor .bracket-matcher .region {
-          border-bottom: 3px solid #ff09c9;
-          // background-color: rgba(121, 99, 23, 0.3) ;   // 亮色背景方案 
-          background-color: rgba(238, 14, 200, 0.3);      // 深色背景方案
-        }
-
-        // minimap
-        atom-text-editor atom-text-editor-minimap {
-          background-color: rgba(78, 180, 230, 0.1); // 背景色
-          .minimap-visible-area::after {
-            background-color: rgba(60, 91, 167, 0.3); // 可视区背景色
-          }
-        }
-        .minimap .highlight-selected {
-          // 缩略图选中高亮
-          background: red !important;
-        }
-        atom-text-editor[with-minimap] .vertical-scrollbar { // 隐藏滚动条
-          opacity: 0;
-          width: 0;
-        }
-
-        // 所在行高亮  Highlight-line 插件样式设置
-        atom-text-editor.editor {
-          .line.highlight-line {
-            background: rgba(85, 97, 171, 0.1) !important;
-          }
-        }
-
-        // 选中高亮 [非插件功能]
-        .highlights>.selection>.region{
-          background-color: rgba(16, 59, 157, 0.5) !important;
-        }
-        
-        atom-text-editor::shadow {
-          .line.highlight-line {
-            background: rgba(85, 97, 171, 0.1) !important;
-          }
-        }
-        // 所在行高亮  highlight-line 插件样式设置
-        atom-text-editor.editor {
-          .line.highlight-line {
-            background: rgba(75, 97, 212, 0.1) !important;
-          }
-
-          .line.highlight-line-multi-line-solid-bottom {
-            border-bottom-color: red ;
-          }
-
-          .line.highlight-line-multi-line-solid-top {
-            border-top-color: red;
-          }
-        }
-        
-        // 设置技巧
-        // 通过 ctrl-shift-i 打开调试面板,然后设置样式控制
-  快捷键 
-    常用 
+  用户全局设置: 'C:/Users/f/.atom/config.cson' 
+    悬挂缩进: 2
+    字体设置: Consolas,楷体 
+      PS: consolas为atom默认字体
+        字体间使用逗号隔开,第一个定义英文字体,第二个定义中文字体.
+    取消勾选: ctrl+滚轮,调整字体大小
+    忽略的文件: 
+      .git, .hg, *.svn, .dS_Store, ._*, thumbs.db,
+      *.docx, *.doc, *.pdf,*.jpg,*.project,*.lnk,*.ini,*.exe
+    非实体字符'Non Word Characters' 
+      // @/\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-[]【】〖〗『』《》
+  用户键盘映射: 'C:/Users/f/.atom/keymap.cson' 
+    枚举: 
+      ctrl-,         设置 
+      f1             删除 
       f2             跳到当前文件的下一条书签
       ctrl-alt-↑/↓   光标多选
       ctr-→/←        单词单位移动光标
-      ctrl+↑/↓       上下移动
       ctrl-f2        列出当前工程所有书签
-      ctrl-d         选取和当前单词相同的下一处
+      ctrl-e         取消选中  
+      ctrl-p         选中所有 
       ctrl/alt-→/←   移动到单词开始/末尾
       ctrl-Enter     在当前行的末尾回车
       ctrl+o         打开文件
@@ -131,14 +30,16 @@ Atom
       ctrl-click     增加新光标
       ctrl-\         显示/隐藏目录树
       ctrl-f         在buffer中查找
-      ctrl-,         设置 
+      ctrl+↑/↓       行移动
       alt-f3         选中选择文件中的所有匹配项
       ◆文件目录树下 
       ctrl-shift-f 在整个工程中查找 
       a            新增文件 
       m            修改文件名  
       delete       删除文件 
-    不常用 
+      ◆默认 
+      ctrl-d         选取和当前单词相同的下一处
+      ◆不常用 
       ctrl-shift-s   保存所有打开的文件
       ctrl-t/ctrl-p  查找文件
       ctrl-shift-u   调出切换编码选项
@@ -146,24 +47,28 @@ Atom
       ctrl-n         新建文件
       ctrl-home      移到文档开始
       ctrl+end       移到文档结束
-    已更改 : 见 C:\Users\xxx\.atom\keymap.cson 
-    未占用键汇总 
-      ◆左
-      alt-f1 f2
-      alt-`
-      alt-r
-      alt-g
-      ctrl-3 4
-      ◆右
-      alt- f7 f8 f9 f10
-      alt-6 7 8 9 0 - =
-      alt-y [ ]
-      alt-h j k l ; '
-      alt-, . /
-      ctrl-`
-      ctrl-u i
-      ctrl-j k ; '
-      ctrl-n m , . /
+    未占用键汇总: 
+      ★左
+      // alt-f1 f2
+      // alt-`
+      // alt-r 
+      // alt-g
+      // ctrl-3 4
+      ★右
+      // alt- f7 f8 f9 f10
+      // alt-6 7 8 9 0 - =
+      // alt-y [ ]
+      // alt-h j k l ; '
+      // alt-, . /
+      // ctrl-`
+      // ctrl-u i
+      // ctrl-j k ; '
+      // ctrl-n m , . /
+    Question: 
+      如何切换到下一个和当前词相同的词
+  用户样式设置: 'C:/Users/f/.atom/styles.less' 
+    // 设置技巧: ctrl-shift-i 打开调试面板,然后调试样式 
+  用户代码片段: 'C:/Users/f/.atom/snippets.cson' 
   插件 
     自带插件 
       about                  关于Atom的信息查看 [help-about Atom]
@@ -353,6 +258,8 @@ Atom
           统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
             若无项目文件夹,则默认不加载
           记录状态 如 标签等
+    自定义插件
+      aaa-snippets: 用于自定义的代码片段 
   总结 
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
@@ -449,8 +356,72 @@ Notepad2
     中文字体及非中文字体单独设置
     将打开的多个文件放在一个窗口中,通过标签切换.
     自定义快捷键
-Hbuilder 
-  设置
+VSCode 
+  设置 
+    文件 首选项 用户设置
+
+    文件 首选项 键盘快捷方式
+  快捷键: 'C:/Users/f/AppData/Roaming/Code/User/keybindings.json' 
+    PS: 参照Atom快捷键设置 
+    枚举: 
+      ★参照Atom修改 
+      editor.action.commentLine              ctrl+q     行注释 
+      editor.action.deleteLines              alt+d      行删除 
+      editor.action.joinLines                alt+z      行合并 
+      editor.action.outdentLines             alt+a      行减少缩进 
+      editor.action.indentLines              alt+s      行增加缩进 
+      editor.action.copyLinesDownAction      alt+v      行向下复制 
+      editor.action.moveLinesDownAction      ctrl+down  行下移 
+      editor.action.moveLinesUpAction        ctrl+up    行上移 
+      editor.action.insertLineAfter          ctrl+enter 行下插入 
+      editor.action.insertLineBefore         alt+enter  行上插入 
+      editor.unfoldAll                       alt+2      展开所有 
+      editor.foldAll                         alt+1      折叠所有 
+      deleteLeft                             f1         删除 
+      ★异于Atom 
+      ★暂时设置
+      workbench.action.showCommands          ctrl+f1    显示所有命令
+      ★默认 
+      f5                                                调试 
+  用户代码片段: 'C:/Users/f/AppData/Roaming/Code/User/snippets/xxx.xx'
+  插件 
+    ★外观
+    vscode-icons  文件图标主题
+    One Dark Theme  Atom的oneDark主题
+    ★功能
+    open in browser 在浏览器中打开文件 
+      快捷键 alt-b
+    Path Intellisense  路径提示 
+    VS Color Picker  颜色选取 
+      自定义快捷键 ctrl+alt+c 
+    ★HTML
+    Auto Rename Tag  同时修改HTML标签
+    HTML Snippets HTML语言代码提示 
+    ★JS
+    JavaScript Snippet Pack  ES5及以下的代码提示
+    JavaScript (ES6) code snippets  ES6代码提示 
+    jQuery Code Snippets jQuery代码提示 
+  Suggestion&Question 
+    如何在折叠后的文字后新增新的文字
+    折叠功能
+      折叠后将后面所用的空行也折叠进去了,无法在折叠状态下,再在接着的后一行添加内容
+WebStorm 
+  设置 
+  快捷键 
+    Settings                      Atom           设置     
+    Collapse all                  Atom           折叠所有   
+    Expand all                    Atom           展开所有折叠  
+    Duplicate line or Selection   Atom           复制行 
+    Delete line                   Atom           删除行 
+    Comment with line comment     Atom           行注释  
+    Move line up                  Atom           上移行  
+    Move line down                Atom           下移行  
+    start new line                atom           在上一行插入 
+    start new line before current atom           在下一行插入 
+    join lines                    atom           合并行 
+  插件 
+  总结 
+  Suggestion&Question:
 Notepad++ 
   设置
   快捷键 [参照Atom快捷键设置] 
@@ -554,53 +525,7 @@ Notepad++
       在自定义扩展名中填入需要的格式后缀 如 txt rec
     取消代码折叠后的下划线
     自定义扩展词 [snippet?]
-VSCode 
-  设置 
-    文件 首选项 用户设置
-
-    文件 首选项 键盘快捷方式
-  快捷键 [参照Atom快捷键设置]
-    ★不同于Atom的
-    Alt+E    移动到下一个选中项 
-  插件 
-    ★外观
-    vscode-icons  文件图标主题
-    One Dark Theme  Atom的oneDark主题
-    ★功能
-    open in browser 在浏览器中打开文件 
-      快捷键 alt-b
-    Path Intellisense  路径提示 
-    VS Color Picker  颜色选取 
-      自定义快捷键 ctrl+alt+c 
-    ★HTML
-    Auto Rename Tag  同时修改HTML标签
-    HTML Snippets HTML语言代码提示 
-    ★JS
-    JavaScript Snippet Pack  ES5及以下的代码提示
-    JavaScript (ES6) code snippets  ES6代码提示 
-    jQuery Code Snippets jQuery代码提示 
-  Suggestion&Question 
-    如何在折叠后的文字后新增新的文字
-    折叠功能
-      折叠后将后面所用的空行也折叠进去了,无法在折叠状态下,再在接着的后一行添加内容
-WebStorm 
-  设置 
-  快捷键 
-    Settings                      Atom           设置     
-    Collapse all                  Atom           折叠所有   
-    Expand all                    Atom           展开所有折叠  
-    Duplicate line or Selection   Atom           复制行 
-    Delete line                   Atom           删除行 
-    Comment with line comment     Atom           行注释  
-    Move line up                  Atom           上移行  
-    Move line down                Atom           下移行  
-    start new line                atom           在上一行插入 
-    start new line before current atom           在下一行插入 
-    join lines                    atom           合并行 
-  插件 
-  总结 
-  Suggestion&Question:
-Sublime text3 
+SublimeText3 
   ◆设置 
     缩进宽度         查看   缩进 标签宽度:2
     自动换行         查看   自动换行
@@ -613,7 +538,7 @@ Sublime text3
     默认快捷键
       ctrl+x         未选中文字的情况下,剪切光标所在行
       ctrl+shift+m   选择括号内的内容
-      ctrl+shift+`   选择文本的包裹标签   [需要Emmet插件]
+      // ctrl+shift+`   选择文本的包裹标签   [需要Emmet插件]
       ctrl+shift+a   类似于ctrl+d,向上一层扩展选中 [需要Emmet插件]
       ctrl+shift+d   复制行或选中项,若已选中文本则复制,否则复制光标所在行
       ctrl+shift+v   粘贴并复制格式
@@ -701,6 +626,8 @@ Sublime text3
       53BD0E0957882DC55B87E77C4131B14F
       BD045138673EA9B3F3A28D84A8F9C3AE
       0312B06CB39656D268F6F81C9586DFDF
+Hbuilder 
+  设置
 --------------------------------------------------------------------------------
 键盘的键值码 
   ◆字母和数字键的键码值
@@ -797,7 +724,7 @@ Sublime text3
     -_         189
     .>         190
     /?         191
-    `~         192
+    // `~         192
     [{         219
     /|         220
     ]}         221

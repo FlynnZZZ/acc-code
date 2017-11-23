@@ -439,42 +439,6 @@ Storage,本地存储[IE8+][HTML5]
     .remainingSpace   num,剩余的可用空间的字节数[仅IE支持] 
   Question: 
     IE中localStorage中存在问题 ?
-FileList,File对象集合,表示用户选择的文件列表[HTML5] 
-  PS: HTML5中[通过添加multiple属性],input[file]内能一次选中多个文件, 
-    控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表
-    HTML4中,file控件内只能选中一个文件 
-  Extend: Object 
-    console.log(FileList.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    e.target.files   input[type='file']的'change'事件的事件对象   
-      Example:
-      <input type="file" id="file" multiple>
-      document.querySelector("#file").addEventListener("change",function(e){
-        console.log(this.files);
-      })
-        
-      采用拖放方式,也可以得到FileList对象 [?]
-      var dropZone = document.getElementById('drop_zone');
-      dropZone.addEventListener('drop', handleFileSelect, false);
-      function handleFileSelect(evt) {
-          evt.stopPropagation();
-          evt.preventDefault();
-          var files = evt.dataTransfer.files; // FileList object.
-          // ...
-        }
-    document.querySelector("input[type='file']").files  
-  Proto: 
-    .length 
-    .item(idx) File,文件 
-File,文件 
-  Extend: Blob 
-    console.log(File.prototype.__proto__.constructor===Blob); // true 
-  Proto: 
-    .name  本地文件系统中的文件名 
-    .lastModified  
-    .lastModified   文件的上次修改时间,格式为时间戳。
-    .lastModifiedDate   文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-    .webkitRelativePath  
 FileReader,文件读取,一种异步的文件读取机制 
   Extend: EventTarget  
     console.log(FileReader.prototype.__proto__.constructor===EventTarget); // true 
@@ -591,12 +555,15 @@ URL,用于对二进制数据生成URL,生成指向File对象或Blob对象的URL[
   Extend: Object 
   Static: 
     .createObjectURL(blob)  str,创建url对象实例,将二进制数据生成一个URL 
-      同样的二进制数据, 每调用一次该方法,就会得到一个不同的URL,
-      这个URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
-      除此之外,也可以手动调用 URL.revokeObjectURL 方法,使URL失效.
-      类似于 "blob:http%3A//test.com/666e6730-f45c-47c1-8012-ccc706f17191"
-      这个URL可以放置于任何通常可以放置URL的地方,比如img标签的src属性
-    .revokeObjectURL(url)   使生成的URL失效 
+      PS: 同样的二进制数据,每调用一次该方法,就会得到一个不同的URL, 
+        该URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
+      Example: 
+        // 传入一个合适的MIME类型
+        var blob = new Blob([typedArray], {type: "application/octet-binary"});
+        // 产生一类似'blob:d3958f5c-0777-0845-9dcf-2cb28783acaf'的URL字符串 
+        // 同普通URL使用方式相同,如用在img.src上 
+        var url = URL.createObjectURL(blob);
+    .revokeObjectURL(url)   使createObjectURL生成的URL失效 
   Proto: 
     .href  
     .origin  

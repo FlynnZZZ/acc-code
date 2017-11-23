@@ -1,7 +1,38 @@
 'CommonJS'模块化规范 
-  PS: 一般情况可省略'.js'拓展名,可以使用相对路径,也可以使用绝对路径,
-    系统内置模块可直接使用模块名 
-    require是同步的,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
+  PS: 
+  ◆模块公开  
+    PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
+  module.exports = val  把模块希望输出的内容放入该对象 
+    hello.js 文件中 
+      function world() { 
+        console.log(1);
+      }; 
+      module.exports = world;
+      // module.exports.aoo = world;
+    main.js  文件中 
+      var word = require('./hello'); 
+      world(); // 1
+      // world.aoo(); // 1
+  module.exports.xx = val  
+  exports 指向 module.exports 的一个引用, exports === module.exports 
+  ◆模块引入 
+  require(moduleName)  模块引入,返回模块的 module.exports 
+    PS: 省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
+      模块被加载后会缓存,后续加载返回缓存中的版本,即模块加载最多执行一次模块代码, 
+      若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
+    moduleName  str,'模块名'或'文件路径'  
+      name     原生模块或通过配置文件指定 
+        原生模块,可直接使用模块名 
+        若模块目录中没有 package.json 文件,
+        会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
+      相对路径  如:'./mod' 
+      绝对路径  如:'/pathtomodule/mod' 
+    当模块重名时,加载的优先级:  
+      Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
+  加载模块,会将模块内的内容执行一次 
+    当直接运行时,在模块内 require.main === module 
+    可以此来判断直接运行还是加载运行  
+  require是同步的,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
   运行时加载: 只能在运行时确定 
     比如,CommonJS 模块就是对象,输入时必须查找对象属性 
     // CommonJS模块
@@ -15,14 +46,16 @@
     然后再从这个对象上面读取3个方法。
     这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
     导致完全没办法在编译时做“静态优化”。
-  module.exports 模块输出: 把模块希望输出的内容放入该对象 
-  require() 加载模块的方法: 该方法读取一文件并执行,返回内部的 module.exports 对象 
+  ◆Expand: 
+  循环引用,也叫循环依赖,会导致其中一个引入为空 
+    方法一: 将需公用的部分提取出来作为一个独立模块 
+    方法二: 动态引入,在需要时引入,如在函数内部 
 AMD'Asynchronous Module Definition'规范,异步模块定义 
   PS: 异步:有效避免了采用同步加载方式中导致页面假死现象 
     模块定义:每个模块必须按照一定的格式编写  
     主要接口有两个:'define'和'require' 
   由于原生JS不支持,需用库函数如RequireJS 
-CMD'Common Module Definition'通用模块定义
+CMD'Common Module Definition'通用模块定义 
   CMD规范是国内发展出来的,就像AMD有个requireJS,CMD有个浏览器的实现SeaJS,
   SeaJS要解决的问题和requireJS一样,只不过在模块定义方式和模块加载时机上有所不同
   区别:在模块定义时对依赖的处理不同
@@ -516,29 +549,38 @@ API
   grunt-contrib-connect  建立本地服务器 
 --------------------------------------------------------------------------------
 Gulp: 自动化构建工具 
-  PS: 基于Nodejs的自动任务运行器,
+  PS: 基于Nodejs的自动任务运行器, 
     能自动化地完成 JS/coffee/sass/less/html/image/css 等文件的
     测试、检查、合并、压缩、格式化、浏览器自动刷新、部署文件生成,
     并监听文件在改动后重复指定的这些步骤等等 
     借鉴了Unix操作系统的管道'pipe'思想,前一级的输出,直接变成后一级的输入,使得在操作上非常简单 
+    和Grunt类似,但Gulp的流操作,能更快地更便捷地完成构建工作 
     'gulp4.0'中已引入同步机制   
   相关命令 
     $ npm i -g gulp   // 全局安装gulp 
+      $ gulp -v     // 查看版本号 
     $ npm i -D gulp   // 项目中安装并写入开发依赖 
+    $ gulp <taskName> // 执行配置的任务 
+  使用webstorm运行gulp任务 
+    说明:使用webstorm可视化运行gulp任务；
+    使用方法:
+      将项目导入webstorm,右键gulpfile.js 选择”Show Gulp Tasks”打开Gulp窗口,
+      若出现”No task found”,选择右键”Reload tasks”,双击要运行的任务即可。
 'gulpfile.js'配置文件[项目根目录创建] 
-  var gulp = require('gulp'),  // 加载插件 
-    sass = require('gulp-ruby-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
-    uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    livereload = require('gulp-livereload'),
-    del = require('del');
+  // 加载插件 
+  var gulp = require('gulp') 
+  ,sass = require('gulp-ruby-sass')
+  ,autoprefixer = require('gulp-autoprefixer')
+  ,minifycss = require('gulp-minify-css')
+  ,jshint = require('gulp-jshint')
+  ,uglify = require('gulp-uglify')
+  ,imagemin = require('gulp-imagemin')
+  ,rename = require('gulp-rename')
+  ,concat = require('gulp-concat')
+  ,notify = require('gulp-notify')
+  ,cache = require('gulp-cache')
+  ,livereload = require('gulp-livereload')
+  ,del = require('del');
     
   // 设置默认任务'default', $ gulp 执行  
   gulp.task('default', ['clean'], function() {
@@ -568,7 +610,7 @@ Gulp: 自动化构建工具
     gulp.watch('src/scripts/**/*.js', ['scripts']);
     gulp.watch('src/images/**/*', ['images']);
   });
-  gulp.task('watch', function() { // 自动刷新页面
+  gulp.task('watch', function() { // 自动刷新页面 
     livereload.listen(); // Create LiveReload server
     gulp.watch(['dist/**']).on('change', livereload.changed);
   });

@@ -2326,90 +2326,72 @@ Blob,二进制数据的基本对象[ES6]
     File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件.
     要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档.
     接受Blob对象的APIs也被列在 File 文档中.
-  创建blob对象 
-    var bb = new Blob(blobParts[, options])  返回创建的Blob对象 
-      PS:其内容由参数中给定的数组串联组成 
+  Extend: Object 
+  Instance: 
+    new Blob(blobParts[,options])  创建Blob对象 
+      PS: 其内容由参数中给定的数组串联组成 
       blobParts 一个包含实际数据的数组
-      options   数据的类型 
-      使用其它对象创建一个 Blob 对象
-        Example:用字符串构建一个 blob:
+      options = {  // 可选,配置项 
+        type: 'text/plain'  
+      }  
+      Example:
+        用字符串构建一个blob
         var debug = {hello: "world"};
-        var blob = new Blob([JSON.stringify(debug, null, 2)],{type : 'application/json'});
-      Example: 利用Blob对象,生成可下载文件 
-        var blob = new Blob(["文件内容"]);
-        var a = document.createElement("a");
-        a.href = window.URL.createObjectURL(blob);
-        a.download = "文件名.txt";
-        a.textContent = "点击下载";
-        document.body.appendChild(a);
-        最终HTML中显示为: 
-        <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
-        点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
-    blob.slice() 使用blob对象创建blob对象
-    通过<input type="file">获取Blob对象 
-      <input type="file" id="file" multiple size="80" accept="image/*"/>
-      <input type="button" onclick="ShowFileType();" value="显示文件信息"/>
-      function ShowFileType() {
-        var file = document.getElementById("file").files[0];
-        console.log(file);
-      }
-  BlobBuilder 接口提供了另外一种创建Blob对象的方式 [已废弃]
+        var blob = new Blob([JSON.stringify(debug)],{type: 'application/json'});
+  Proto: 
+    .size 只读, Blob对象中所包含数据的大小,单位为字节
+    .type 只读,字符串,Blob对象所包含数据的MIME类型 
+      若类型未知,则该值为空字符串 
+      在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
+    .slice()  Blob,创建一个包含另一个blob的数据子集的blob 
+      blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
+      slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
+      若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
+      slice 方法在某些浏览器和版本上仍带有供应商前缀:
+        Firefox 12 及更早版本的 blob.mozSlice() 
+        Safari 中的 blob.webkitSlice()
+        slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
+        使用Firefox 30 删除了对 blob.mozSlice() 的支持.
+      Example:  使用XMLHttpRequest对象,将大文件分割上传
+        var inputElem = document.querySelector('input[type="file"]');
+        function upload(blobOrFile) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/server', true);
+          xhr.onload = function(e) { ... };
+          xhr.send(blobOrFile);
+        }
+        inputElem.addEventListener('change', function(e) {
+          var blob = this.files[0];
+          const BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
+          const SIZE = blob.size;
+          var start = 0 , end = BYTES_PER_CHUNK;
+          while(start < SIZE) {
+            var upBlob = blob.slice(start, end) ;
+            upload(upBlob);
+            start = end;
+            end = start + BYTES_PER_CHUNK;
+          }
+        }, false);
+    兼容性 
+      blob.isClosed bol,指示 Blob.close() 是否在该对象上调用过
+        关闭的 blob 对象不可读.
+      blob.close() 关闭 Blob 对象,以便能释放底层资源 
+  Expand: 
+    利用Blob对象,生成可下载文件 
+      var blob = new Blob(["文件内容"]);
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "文件名.txt";
+      a.textContent = "点击下载";
+      document.body.appendChild(a);
+      最终HTML中显示为: 
+      <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
+      点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
+  BlobBuilder,创建Blob对象[已废弃] 
     var builder = new BlobBuilder();
     var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
     builder.append(fileParts[0]);
     var myBlob = builder.getBlob('text/xml');
-  使用类型数组和 Blob 创建一个 URL
-    var typedArray = GetTheTypedArraySomehow();
-    // 传入一个合适的MIME类型
-    var blob = new Blob([typedArray], {type: "application/octet-binary"});
-    
-    // 会产生一个类似blob:d3958f5c-0777-0845-9dcf-2cb28783acaf 这样的URL字符串
-    // 你可以像使用一个普通URL那样使用它,比如用在img.src上.
-    var url = URL.createObjectURL(blob);
-  从Blob中读取内容的唯一方法是使用 FileReader
-    以下代码将 Blob 的内容作为类型数组读取:
-    var reader = new FileReader();
-    reader.addEventListener("loadend", function() {
-       // reader.result contains the contents of blob as a typed array
-    });
-    reader.readAsArrayBuffer(blob);
-    使用 FileReader 以外的方法读取到的内容可能会是字符串或是数据 URL.  
-  blob.slice()  创建一个包含另一个blob的数据子集的blob
-    blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
-    slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
-    若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
-    slice 方法在某些浏览器和版本上仍带有供应商前缀:
-      Firefox 12 及更早版本的 blob.mozSlice() 
-      Safari 中的 blob.webkitSlice()
-      slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
-      使用Firefox 30 删除了对 blob.mozSlice() 的支持.
-    Example:  使用XMLHttpRequest对象,将大文件分割上传
-      var inputElem = document.querySelector('input[type="file"]');
-      function upload(blobOrFile) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/server', true);
-        xhr.onload = function(e) { ... };
-        xhr.send(blobOrFile);
-      }
-      inputElem.addEventListener('change', function(e) {
-        var blob = this.files[0];
-        const BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
-        const SIZE = blob.size;
-        var start = 0 , end = BYTES_PER_CHUNK;
-        while(start < SIZE) {
-          var upBlob = blob.slice(start, end) ;
-          upload(upBlob);
-          start = end;
-          end = start + BYTES_PER_CHUNK;
-        }
-      }, false);
-  blob.isClosed 只读 布尔值,指示 Blob.close() 是否在该对象上调用过
-    关闭的 blob 对象不可读.
-  blob.size 只读, Blob对象中所包含数据的大小,单位为字节
-  blob.type 只读,字符串,Blob对象所包含数据的MIME类型 
-    若类型未知,则该值为空字符串 
-    在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
-  blob.close() 关闭 Blob 对象,以便能释放底层资源 
 Promise,同步书写异步模式[ES6] 
   PS:采用'同步'形式的代码来决解异步函数间的层层嵌套,将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 

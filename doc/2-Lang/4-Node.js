@@ -66,8 +66,8 @@ NodeJS的运行方式及编程风格
       若没有发生错误,'callback'的第一个参数就传入null 
       好处: 通过判断'callback'的第一个参数来确定是否出错 
 --------------------------------------------------------------------------------
-基础 
-  NODE_PATH node环境变量 
+基础&语法 
+  NODE_PATH,node环境变量 
     与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径 
     NODE_PATH环境变量中包含一到多个目录路径,路径间,在Linux下使用:分隔,在Windows下使用;分隔 
     Example: 
@@ -76,7 +76,6 @@ NodeJS的运行方式及编程风格
       当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径 
       /home/user/lib/foo/bar
       /home/lib/foo/bar
-语法 
   this 
     全局作用域下的'this' 
       浏览器中,等价于window,声明的全局变量会作为this的属性 
@@ -91,47 +90,13 @@ NodeJS的运行方式及编程风格
         当构造函数使用new生成实例时,this指向其prototype.
       正常的方式调用函数[直接执行而无前缀],[浏览器和node环境]this指代全局的this
         使用严格模式,this就会变成undefined
-  CommonJS规范: 模块化,模块导出、引入 
-    ◆模块公开的接口 
-      PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
-    module.exports = val  
-      hello.js 文件中 
-        function world() { 
-          console.log(1);
-        }; 
-        module.exports = world;
-        // module.exports.aoo = world;
-      main.js  文件中 
-        var word = require('./hello'); 
-        world(); // 1
-        // world.aoo(); // 1
-    module.exports.xx = val  
-    exports.xx = val  
-    ◆obj = require(arg)    模块引入接口[相当于获取暴露的'exports'对象] 
-      PS: 加载时可省略脚本文件的后缀名,依次查找'.js'-'.json'-'.node'-其他; 
-        模块被加载以后,会被系统缓存,后续再加载该模块,会返回缓存中的版本,
-        意味着模块加载实际上只会执行一次, 
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
-      arg  可为'模块名'或'文件路径'  
-        原生模块       http、fs、path等模块名
-        相对路径的文件 ./mod或../mod等
-        绝对路径的文件 /pathtomodule/mod等
-        name  非原生模块的文件模块,通过配置文件指定 
-          若模块目录中没有 package.json 文件,
-          nodejs会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
-      当模块重名时,加载的优先级:  
-        Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-      加载模块,会将模块内的内容执行一次 
-        当直接运行时,在模块内 require.main === module 
-        可以此来判断直接运行还是加载运行  
-'Global Object'全局变量,可在程序的任何地方访问 
+◆'Global Object'全局变量,可在程序的任何地方访问 
   PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
     所有全局变量[除了global本身以外]都是'global'对象的属性 
-  ◆类
+★类 
   Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
     PS: 用来创建一个专门存放二进制数据的缓存区; 
       可在 TCP 流或文件操作中处理二进制数据流 
-      Buffer类以一种更优化的方式实现了 Uint8Array 
       Buffer实例大小固定[被创建时确定,且无法调整]、在V8堆外分配物理内存 
     Extend: Uint8Array  
     Static: 
@@ -239,12 +204,90 @@ NodeJS的运行方式及编程风格
       Buffer.alloc()  
       Buffer.allocUnsafe()  
     Proto: 
+      [idx]  下标访问
+      .length  读写,bufer对象所占据的内存长度  
+        PS:改值与Buffer对象的内容无关;
+          如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+        var buf1 = new Buffer('1234567');
+        var buf2 = new Buffer(8);
+        console.log(buf1.length); // 7
+        console.log(buf2.length); // 8
+      .byteLength   文件的体积大小 
       .parent 
       .offset 
-      .copy()  
-      .toString()  
-      .write()  
-      .toJSON()  
+      .write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
+        PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
+        str   写入缓冲区的字符串 
+        idx   缓冲区开始写入的索引值,默认为 0 
+        len   写入的字节数,默认为 buffer.length 
+        typ   使用的编码.默认为'utf8' 
+        Example: 
+          var buf = new Buffer('abcdefg');
+          var len = buf.write("1234");
+          console.log("写入字节数 : "+ len);  // 写入字节数 : 4
+          console.log(buf.toString()); // 1234efg
+      .toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
+        typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+        bgn    开始读取的索引位置,默认为 0 
+        end    结束位置,默认为缓冲区的末尾 
+        Example:
+          var buf = new Buffer(26);
+          for (var i = 0 ; i < 26 ; i++) { 
+            buf[i] = i + 97; 
+          }
+          console.log(buf);
+          // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+          console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+          console.log( buf.toString('ascii',0,5));   // 输出: abcde
+          console.log( buf.toString('utf8',0,5));    // 输出: abcde
+          console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+      .toJSON()    返回将bufer对象转换为JSON格式对象 
+        PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+        Example:
+          var bufer = new Buffer('abc');
+          var json = bufer.toJSON();
+          console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+          console.log(typeof json); // object
+          
+          var buf = new Buffer('test');
+          var json = JSON.stringify(buf);
+          console.log(json); // '[116,101,115,116]'
+          var copy = new Buffer(JSON.parse(json));
+          console.log(copy); // <Buffer 74 65 73 74>
+      .slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
+        begin 可选,默认为 0
+        end   可选,默认为 bufer.length
+        Example:
+          var buf1 = new Buffer('123');
+          var buf2 = buf1.slice(0,2);
+          console.log(buf2); // <Buffer 31 32>
+      .copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
+        bufer1   复制的目标bufer对象 
+        bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
+        bfBgn    数字,可选,默认为 0 
+        bfEnd    数字,可选,默认为 buf.length 
+        Example: 
+          var buf1 = new Buffer('abcdefghi');
+          var buf2 = new Buffer(6);
+          for (var i = 0; i < buf2.length; i++) {
+            buf2[i] = 65;
+          }
+          console.log(buf1,buf2);
+          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+          buf1.copy(buf2,2,3,5);
+          console.log(buf1,buf2);
+          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+          var bufStr1 = buf1.toString();
+          var bufStr2 = buf2.toString();
+          console.log(bufStr1,bufStr2);
+          // abcdefghi AAdeAA
+      .compare(buf)  比较 
+        Example:
+          var buf1 = new Buffer('10');
+          var buf2 = new Buffer('11');
+          var result = buf1.compare(buf2);
+          console.log(result); // -1
+      .equals(bufer1)
       .readUIntLE()  
       .readUIntBE()  
       .readUInt8()  
@@ -286,14 +329,11 @@ NodeJS的运行方式及编程风格
       .hexWrite()  
       .ucs2Write()  
       .utf8Write()  
-      .equals()  
       .inspect()  
-      .compare()  
       .indexOf()  
       .lastIndexOf()  
       .includes()  
       .fill()  
-      .slice()  
       .readFloatLE()  
       .readFloatBE()  
       .readDoubleLE()  
@@ -305,89 +345,6 @@ NodeJS的运行方式及编程风格
       .swap16()  
       .swap32()  
       .swap64()  
-    ◆Buffer实例的属性方法 
-    bufer[idx]  下标访问
-    bufer.length  读写,bufer对象所占据的内存长度  
-      PS:改值与Buffer对象的内容无关;
-        如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
-      var buf1 = new Buffer('1234567');
-      var buf2 = new Buffer(8);
-      console.log(buf1.length); // 7
-      console.log(buf2.length); // 8
-    bufer.byteLength   文件的体积大小 
-    bufer.write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
-      PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
-      str   写入缓冲区的字符串 
-      idx   缓冲区开始写入的索引值,默认为 0 
-      len   写入的字节数,默认为 buffer.length 
-      typ   使用的编码.默认为'utf8' 
-      Example: 
-        var buf = new Buffer('abcdefg');
-        var len = buf.write("1234");
-        console.log("写入字节数 : "+ len);  // 写入字节数 : 4
-        console.log(buf.toString()); // 1234efg
-    bufer.toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
-      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
-      bgn    开始读取的索引位置,默认为 0 
-      end    结束位置,默认为缓冲区的末尾 
-      Example:
-        var buf = new Buffer(26);
-        for (var i = 0 ; i < 26 ; i++) { 
-          buf[i] = i + 97; 
-        }
-        console.log(buf);
-        // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-        console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-        console.log( buf.toString('ascii',0,5));   // 输出: abcde
-        console.log( buf.toString('utf8',0,5));    // 输出: abcde
-        console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-    bufer.toJSON()    返回将bufer对象转换为JSON格式对象 
-      PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-      Example:
-        var bufer = new Buffer('abc');
-        var json = bufer.toJSON();
-        console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-        console.log(typeof json); // object
-        
-        var buf = new Buffer('test');
-        var json = JSON.stringify(buf);
-        console.log(json); // '[116,101,115,116]'
-        var copy = new Buffer(JSON.parse(json));
-        console.log(copy); // <Buffer 74 65 73 74>
-    bufer.slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
-      begin 可选,默认为 0
-      end   可选,默认为 bufer.length
-      Example:
-        var buf1 = new Buffer('123');
-        var buf2 = buf1.slice(0,2);
-        console.log(buf2); // <Buffer 31 32>
-    bufer.copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
-      bufer1   复制的目标bufer对象 
-      bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
-      bfBgn    数字,可选,默认为 0 
-      bfEnd    数字,可选,默认为 buf.length 
-      Example: 
-        var buf1 = new Buffer('abcdefghi');
-        var buf2 = new Buffer(6);
-        for (var i = 0; i < buf2.length; i++) {
-          buf2[i] = 65;
-        }
-        console.log(buf1,buf2);
-        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
-        buf1.copy(buf2,2,3,5);
-        console.log(buf1,buf2);
-        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
-        var bufStr1 = buf1.toString();
-        var bufStr2 = buf2.toString();
-        console.log(bufStr1,bufStr2);
-        // abcdefghi AAdeAA
-    bufer.compare(buf)  比较 
-      Example:
-        var buf1 = new Buffer('10');
-        var buf2 = new Buffer('11');
-        var result = buf1.compare(buf2);
-        console.log(result); // -1
-    bufer.equals(bufer1)
     与二进制数组的关系 
       TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
       比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
@@ -396,7 +353,7 @@ NodeJS的运行方式及编程风格
       二进制数组的buffer属性,保留指向原Buffer对象的指针 
       二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
       比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
-  ◆对象 
+★对象&常量 
   global,Node所在的全局环境,类似浏览器的window对象 
     最根本的作用是作为全局变量的宿主
     global 和 window 的不同 
@@ -410,28 +367,28 @@ NodeJS的运行方式及编程风格
         该变量不是global对象的属性
         global.x // undefined 
         因为模块的全局变量都是该模块私有的,其他模块无法取到 
-  global.process,用于描述当前Node进程状态  
+  process,用于描述当前Node进程状态  
     PS: 表示Node所处的当前进程,允许开发者与该进程互动,提供了一个与操作系统的简单接口
-    ◆属性
-    obj = process.env  成员为当前shell的环境变量 
-      process.env.aoo  即为在命令行中输入的  aoo=xx
-    process.stdout      标准输出流
-    process.stderr      标准错误流
-    process.stdin       标准输入流
-    process.argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
+    ▼成员: 
+    .env     obj,其成员为当前shell的环境变量 
+      process.env.aoo  即在命令行中输入 aoo=xx 的值xx 
+    .stdout      标准输出流
+    .stderr      标准错误流
+    .stdin       标准输入流
+    .argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
       它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
-    process.execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-    arr = process.execArgv  成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
-    process.exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
-    process.version     Node 的版本,比如v0.10.18.
-    process.versions    一个属性,包含了 node 的版本和依赖.
-    process.config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
+    .execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
+    .execArgv  arr,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
+    .exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
+    .version     Node 的版本,比如v0.10.18.
+    .versions    一个属性,包含了 node 的版本和依赖.
+    .config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
       它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
-    process.pid         当前进程的进程号.
-    process.title       进程名,默认值为"node",可以自定义该值.
-    process.arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
-    process.platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
-    process.mainModule  require.main 的备选方法.
+    .pid         当前进程的进程号.
+    .title       进程名,默认值为"node",可以自定义该值.
+    .arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
+    .platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
+    .mainModule  require.main 的备选方法.
       不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
       可以认为,这两者引用了同一个模块.
     Example:
@@ -449,36 +406,35 @@ NodeJS的运行方式及编程风格
       1: /web/www/node/main.js
       /usr/local/node/0.10.36/bin/node
       darwin
-    ◆方法
-    process.abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
-    process.chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
-    process.cwd()   返回当前进程的工作目录
-    process.exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
-    process.getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
+    .abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
+    .chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
+    .cwd()   返回当前进程的工作目录
+    .exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
+    .getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.setgid(id) 设置进程的群组标识(参见 setgid(2)).
+    .setgid(id) 设置进程的群组标识(参见 setgid(2)).
       可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
+    .getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.setuid(id) 设置进程的用户标识(参见setuid(2)).
+    .setuid(id) 设置进程的用户标识(参见setuid(2)).
       接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
+    .getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
+    .setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
+    .initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
       这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
       注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    process.kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
+    .kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
       信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
-    process.memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
-    process.nextTick(callback) 一旦当前事件循环结束,调用回到函数.
-    process.umask([mask]) 设置或读取进程文件的掩码.
+    .memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
+    .nextTick(callback) 一旦当前事件循环结束,调用回到函数.
+    .umask([mask]) 设置或读取进程文件的掩码.
       子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
-    process.uptime() 返回 Node 已经运行的秒数.
-    process.hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
+    .uptime() 返回 Node 已经运行的秒数.
+    .hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
       它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
       主要用途是可以通过精确的时间间隔,来衡量程序的性能.
       你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
@@ -492,7 +448,7 @@ NodeJS的运行方式及编程风格
       当前目录: /web/com/runoob/nodejs
       当前版本: v0.10.36
       { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
-    ◆事件
+    ▼事件
     exit       当进程准备退出时触发.
     beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
       通常来说,当没有进程安排时 node 退出,
@@ -513,7 +469,7 @@ NodeJS的运行方式及编程风格
       $ node main.js
       程序执行结束
       退出码为: 0
-    ◆退出状态码
+    ▼退出状态码
       状态码 名称 & 描述
       1 Uncaught Fatal Exception 有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
       2 Unused 保留
@@ -545,231 +501,225 @@ NodeJS的运行方式及编程风格
       执行 main.js 文件,代码如下所示:
       $ node main.js
       /web/com/runoob/nodejs
-  ◆全局函数 
+★模块导出&引入 [MoIn: Pack]
+  PS: 模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用 
   require() 用于加载模块 
-  Buffer()  用于操作二进制数据 
-  ◆伪全局变量 
-    模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用
   module
   module.exports
   exports 
-  ◆其他同浏览器中JS相同的类、对象 
+★其他同浏览器中JS相同的类、对象 
   Date,时间类 
   console,用于提供控制台标准输出[详见浏览器调试] 
-  setTimeout(foo, time)  指定毫秒数后执行指定函数,返回一整数代表定时器的编号 
-  clearTimeout(num)      通过一定时器编号来终止该定时器 
-  setInterval(foo,time) 指定毫秒数后执行函数,返回一整数代表定时器的编号 
-    具体执行时间大于等于该间隔,而不会少于它?;
-  clearInterval(num)     终止一个用setInterval方法新建的定时器 
-◆类 
-◆模块 
-events,事件模块 
-  PS: events 模块只提供了一个对象: events.EventEmitter, 
-    EventEmitter 的核心就是事件触发与事件监听器功能的封装;
-    NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
-    NodeJS 里面的许多对象都会分发事件:
-      一个 net.Server 对象会在每次有新连接时分发一个事件,
-      一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-      所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-    大多数时候不会直接使用 EventEmitter,而是在对象中继承它 
-    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类 
-  var events = require('events');   引入events模块 
-  ★EventEmitter 类
-  var EventEmitter = events.EventEmitter;  获取到事件对象的类 
-  var evEm = new EventEmitter(); 创建事件功能对象 
-    EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
-    当添加新的监听器时,'newListener' 事件会触发,
-    当监听器被移除时,'removeListener' 事件被触发.
-  ▼实例属性方法
-  evEm.on('eName',foo);    监听事件 
-    PS: 此处'on'也可以换成'addEventListener' 
-    foo 回调函数,参数为[手动]触发时传入的值 
-  evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
-  evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-  evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
-    当事件触发时,注册到这个事件的事件监听器被依次调用
-  evEm.removeListener('eName',fooName)  移除指定事件的监听 
-    PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
-    fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
-    Example: 
-      var callback = function(stream) { };
-      server.on('connection', callback);
-      server.removeListener('connection', callback);
-  evEm.removeAllListeners(['eName'])  移除所有监听器
-    eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
-  evEm.setMaxListeners(num)   设置事件最大的监听数量 
-    默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
-  evEm.listeners('eName')     返回指定事件的监听函数的数组 
-  evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
-  ▼类属性方法
-  EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
-  ▼EventEmitter 事件 
-  error  在实例化时发生错误触发 
-    当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
-    Node.js 会把它当作异常,退出程序并输出错误信息,
-    为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
-  newListener     在添加新监听器时被触发 
-    event - 字符串,事件名称
-    listener - 处理事件函数
-  removeListener  从指定监听器数组中删除一个监听器
-    此操作将会改变处于被删监听器之后的那些监听器的索引
-    event - 字符串,事件名称
-    listener - 处理事件函数
-  Example: 
-    var events = require('events');
-    var event = new events.EventEmitter();
-    var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
-    var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
-    // 绑定 connection 事件,处理函数为 listener1 
-    event.addListener('connection', listener1);
-    // 绑定 connection 事件,处理函数为 listener2
-    event.on('connection', listener2);
-    var eventListeners = events.EventEmitter.listenerCount(event,'connection');
-    console.log(eventListeners + " 个监听器监听连接事件");
-    event.emit('connection'); // 激活事件
-    event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
-    console.log("listener1 不再受监听");
-    event.emit('connection'); // 触发事件
-    eventListeners = events.EventEmitter.listenerCount(event,'connection');
-    console.log(eventListeners + " 个监听器监听连接事件");
-    console.log("程序执行完毕");
-    执行结果
-      2 个监听器监听连接事件
-      监听器 listener1 执行
-      监听器 listener2 执行
-      listener1 不再受监听
-      监听器 listener2 执行
-      1 个监听器监听连接事件
-      程序执行完毕
-  继承 EventEmitter 
-    大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
-    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-    为什么要这样做呢？原因有两点:
-    首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
-    其次 JS 的对象机制是基于原型的,支持 部分多重继承,
-    继承 EventEmitter 不会打乱对象原有的继承关系.
-stream,流: 用于暂存和移动数据[以bufer的形式存在] 
-  PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
-    如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
-    所有的 Stream 对象都是 EventEmitter 的实例 
-  var steam = require('stream');  // 
-  四种Stream流类型:
-    Readable  可读流,读取数据并暂存于bufer中 
-      可'pause'和'resume' 
-    Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
-    Duplex    可读可写操作 
-    Transform 可读写,操作被写入数据,然后读出结果
-  ◆stm流对象的方法属性
-  stm.pause()    暂停流传输 
-  stm.resume()   启动流传输 
-  writerStream.write(data,'UTF8')   使用 utf8 编码写入数据 
-    var readStream = fs.createReadStream('video.mp4');
-    var writerStream = fs.createWriteStream('video1.mp4');
-    readStream.on("data",function(chunk){
-      if (writerStream.write(chunk) == false) {
-        readStream.pause();
-      }
-    })
-    readStream.on("end",function(){
-      writerStream.end;
-    })
-    writerStream.on("drain",function(){
-      readStream.resume();
-    })
-  writerStream.end()      标记文件末尾
-  readerStream.setEncoding('UTF8');  设置编码为 utf8
-  pipe 管道 
-    PS:管道提供了一个输出流到输入流的机制 
-      通常用于从一个流中获取数据并将数据传递到另外一个流中 
-      慢慢的实现大文件的复制过程 
-    Example:
-      读取一文件内容并将数据写入到另外一文件中
-      设置 input.txt 文件内容如下:
-        菜鸟教程官网地址:www.runoob.com
-      创建 main.js 文件, 代码如下:
-        var fs = require("fs");
-        var rs = fs.createReadStream('input.txt');// 创建一个可读流
-        var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
-        // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
-        rs.pipe(writerStream); // 管道读写操作
-        console.log("程序执行完毕");
-      程序执行完毕,查看 output.txt 文件的内容:
-        菜鸟教程官网地址:www.runoob.com
-    链式流,通过连接输出流到另外一个流并创建多个对个流操作链的机制,一般用于管道操作
-      Example:
-      用管道和链式来压缩文件 
-        创建 compress.js 文件, 代码如下:
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 压缩 input.txt 文件为 input.txt.gz
-        fs.createReadStream('input.txt')
-        .pipe(zlib.createGzip())
-        .pipe(fs.createWriteStream('input.txt.gz'));
-        console.log("文件压缩完成.");
-        执行后,当前目录下生成压缩文件 input.txt.gz 
-      用管道和链式来解压文件 
-        创建 decompress.js 文件,代码如下:
-        var fs = require("fs");
-        var zlib = require('zlib');
-        // 解压 input.txt.gz 文件为 input.txt
-        fs.createReadStream('input.txt.gz')
-        .pipe(zlib.createGunzip())
-        .pipe(fs.createWriteStream('input.txt'));
-        console.log("文件解压完成.");
-  ◆Event 常用事件 
-    所有的 Stream 对象都是 EventEmitter 的实例
-  data     当steam数据传递时时触发 
-    stm.on("data",function(chunk){
-      // chunk 数据块,Buffer类型 
-    })
-  readable 可读时触发 
-  drain    
-  end      数据传递完成时触发[之后目标不再可写] 
-  close    流传输关闭时 
-  error    在接收和写入过程中发生错误时触发
-  finish   所有数据已被写入到底层系统时触发
-  Example: 
-    从文件中读取数据 
-      创建 input.txt 文件,内容如下:
-        菜鸟教程官网地址:www.runoob.com
-      创建 main.js 文件, 代码如下:
-        var fs = require("fs");
-        var data = '';
-        var rs = fs.createReadStream('input.txt'); // 创建可读流
-        rs.setEncoding('UTF8'); // 设置编码为 utf8.
-        // 处理流事件 data  end error
-        rs.on('data', function(chunk) { data += chunk; });
-        rs.on('end',function(){ console.log(data); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上代码执行结果如下:
-        程序执行完毕
-        菜鸟教程官网地址:www.runoob.com
-    将数据写入文件
-      创建 main.js 文件, 代码如下:
-        var fs = require("fs");
-        var data = '菜鸟教程官网地址:www.runoob.com';
-        // 创建一个可以写入的流,写入到文件 output.txt 中
-        var rs = fs.createWriteStream('output.txt');
-        // 使用 utf8 编码写入数据
-        rs.write(data,'UTF8');
-        rs.end(); // 标记文件末尾
-        // 处理流事件 
-        rs.on('finish', function() { console.log("写入完成."); });
-        rs.on('error', function(err){ console.log(err.stack); });
-        console.log("程序执行完毕");
-      以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下:
-        程序执行完毕
-        写入完成.
-      查看 output.txt 文件的内容:
-        菜鸟教程官网地址:www.runoob.com
-模块,Nodejs应用程序的基本组成部分,可让Nodejs的文件可以相互调用 
-  PS:文件和模块是一一对应的,即一个NodeJS文件就是一个模块,
-    文件可能是JS代码、JSON或者编译过的C/C++扩展等等;
+  setTimeout(foo,time)  numId,延时调用  
+  clearTimeout(numId)   清除延时调用  
+  setInterval(foo,time) numId,间时调用 
+  clearInterval(numId)  清除间时调用 
+◆模块: Nodejs应用程序的基本组成部分,模块间可相互调用 
+  PS: 一个NodeJS文件[可能是JS代码、JSON或编译过的C/C++扩展等]就是一个模块
     按照CommonJS规范定义和使用模块
-  ◆核心模块: Node自带模块不用安装即可使用  
-    源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
-    核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
+★核心模块: Node自带模块不用安装即可使用  
+  源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
+  核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
+  events,事件模块 
+    PS: events 模块只提供了一个对象: events.EventEmitter, 
+      EventEmitter 的核心就是事件触发与事件监听器功能的封装;
+      NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
+      NodeJS 里面的许多对象都会分发事件:
+        一个 net.Server 对象会在每次有新连接时分发一个事件,
+        一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
+        所有这些产生事件的对象都是 events.EventEmitter 的实例; 
+      大多数时候不会直接使用 EventEmitter,而是在对象中继承它 
+      包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类 
+    var events = require('events');   引入events模块 
+    ★EventEmitter 类
+    var EventEmitter = events.EventEmitter;  获取到事件对象的类 
+    var evEm = new EventEmitter(); 创建事件功能对象 
+      EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
+      当添加新的监听器时,'newListener' 事件会触发,
+      当监听器被移除时,'removeListener' 事件被触发.
+    ▼实例属性方法
+    evEm.on('eName',foo);    监听事件 
+      PS: 此处'on'也可以换成'addEventListener' 
+      foo 回调函数,参数为[手动]触发时传入的值 
+    evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
+    evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+    evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
+      当事件触发时,注册到这个事件的事件监听器被依次调用
+    evEm.removeListener('eName',fooName)  移除指定事件的监听 
+      PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
+      fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
+      Example: 
+        var callback = function(stream) { };
+        server.on('connection', callback);
+        server.removeListener('connection', callback);
+    evEm.removeAllListeners(['eName'])  移除所有监听器
+      eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
+    evEm.setMaxListeners(num)   设置事件最大的监听数量 
+      默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
+    evEm.listeners('eName')     返回指定事件的监听函数的数组 
+    evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
+    ▼类属性方法
+    EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
+    ▼EventEmitter 事件 
+    error  在实例化时发生错误触发 
+      当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
+      Node.js 会把它当作异常,退出程序并输出错误信息,
+      为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
+    newListener     在添加新监听器时被触发 
+      event - 字符串,事件名称
+      listener - 处理事件函数
+    removeListener  从指定监听器数组中删除一个监听器
+      此操作将会改变处于被删监听器之后的那些监听器的索引
+      event - 字符串,事件名称
+      listener - 处理事件函数
+    Example: 
+      var events = require('events');
+      var event = new events.EventEmitter();
+      var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
+      var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
+      // 绑定 connection 事件,处理函数为 listener1 
+      event.addListener('connection', listener1);
+      // 绑定 connection 事件,处理函数为 listener2
+      event.on('connection', listener2);
+      var eventListeners = events.EventEmitter.listenerCount(event,'connection');
+      console.log(eventListeners + " 个监听器监听连接事件");
+      event.emit('connection'); // 激活事件
+      event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
+      console.log("listener1 不再受监听");
+      event.emit('connection'); // 触发事件
+      eventListeners = events.EventEmitter.listenerCount(event,'connection');
+      console.log(eventListeners + " 个监听器监听连接事件");
+      console.log("程序执行完毕");
+      执行结果
+        2 个监听器监听连接事件
+        监听器 listener1 执行
+        监听器 listener2 执行
+        listener1 不再受监听
+        监听器 listener2 执行
+        1 个监听器监听连接事件
+        程序执行完毕
+    继承 EventEmitter 
+      大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
+      包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
+      为什么要这样做呢？原因有两点:
+      首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
+      其次 JS 的对象机制是基于原型的,支持 部分多重继承,
+      继承 EventEmitter 不会打乱对象原有的继承关系.
+  stream,流: 用于暂存和移动数据[以bufer的形式存在] 
+    PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+      如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
+      所有的 Stream 对象都是 EventEmitter 的实例 
+    var steam = require('stream');  // 
+    四种Stream流类型:
+      Readable  可读流,读取数据并暂存于bufer中 
+        可'pause'和'resume' 
+      Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
+      Duplex    可读可写操作 
+      Transform 可读写,操作被写入数据,然后读出结果
+    ◆stm流对象的方法属性
+    stm.pause()    暂停流传输 
+    stm.resume()   启动流传输 
+    writerStream.write(data,'UTF8')   使用 utf8 编码写入数据 
+      var readStream = fs.createReadStream('video.mp4');
+      var writerStream = fs.createWriteStream('video1.mp4');
+      readStream.on("data",function(chunk){
+        if (writerStream.write(chunk) == false) {
+          readStream.pause();
+        }
+      })
+      readStream.on("end",function(){
+        writerStream.end;
+      })
+      writerStream.on("drain",function(){
+        readStream.resume();
+      })
+    writerStream.end()      标记文件末尾
+    readerStream.setEncoding('UTF8');  设置编码为 utf8
+    pipe 管道 
+      PS:管道提供了一个输出流到输入流的机制 
+        通常用于从一个流中获取数据并将数据传递到另外一个流中 
+        慢慢的实现大文件的复制过程 
+      Example:
+        读取一文件内容并将数据写入到另外一文件中
+        设置 input.txt 文件内容如下:
+          菜鸟教程官网地址:www.runoob.com
+        创建 main.js 文件, 代码如下:
+          var fs = require("fs");
+          var rs = fs.createReadStream('input.txt');// 创建一个可读流
+          var writerStream = fs.createWriteStream('output.txt'); // 创建一个可写流
+          // 读取 input.txt 文件内容,并将内容写入到 output.txt 文件中
+          rs.pipe(writerStream); // 管道读写操作
+          console.log("程序执行完毕");
+        程序执行完毕,查看 output.txt 文件的内容:
+          菜鸟教程官网地址:www.runoob.com
+      链式流,通过连接输出流到另外一个流并创建多个对个流操作链的机制,一般用于管道操作
+        Example:
+        用管道和链式来压缩文件 
+          创建 compress.js 文件, 代码如下:
+          var fs = require("fs");
+          var zlib = require('zlib');
+          // 压缩 input.txt 文件为 input.txt.gz
+          fs.createReadStream('input.txt')
+          .pipe(zlib.createGzip())
+          .pipe(fs.createWriteStream('input.txt.gz'));
+          console.log("文件压缩完成.");
+          执行后,当前目录下生成压缩文件 input.txt.gz 
+        用管道和链式来解压文件 
+          创建 decompress.js 文件,代码如下:
+          var fs = require("fs");
+          var zlib = require('zlib');
+          // 解压 input.txt.gz 文件为 input.txt
+          fs.createReadStream('input.txt.gz')
+          .pipe(zlib.createGunzip())
+          .pipe(fs.createWriteStream('input.txt'));
+          console.log("文件解压完成.");
+    ◆Event 常用事件 
+      所有的 Stream 对象都是 EventEmitter 的实例
+    data     当steam数据传递时时触发 
+      stm.on("data",function(chunk){
+        // chunk 数据块,Buffer类型 
+      })
+    readable 可读时触发 
+    drain    
+    end      数据传递完成时触发[之后目标不再可写] 
+    close    流传输关闭时 
+    error    在接收和写入过程中发生错误时触发
+    finish   所有数据已被写入到底层系统时触发
+    Example: 
+      从文件中读取数据 
+        创建 input.txt 文件,内容如下:
+          菜鸟教程官网地址:www.runoob.com
+        创建 main.js 文件, 代码如下:
+          var fs = require("fs");
+          var data = '';
+          var rs = fs.createReadStream('input.txt'); // 创建可读流
+          rs.setEncoding('UTF8'); // 设置编码为 utf8.
+          // 处理流事件 data  end error
+          rs.on('data', function(chunk) { data += chunk; });
+          rs.on('end',function(){ console.log(data); });
+          rs.on('error', function(err){ console.log(err.stack); });
+          console.log("程序执行完毕");
+        以上代码执行结果如下:
+          程序执行完毕
+          菜鸟教程官网地址:www.runoob.com
+      将数据写入文件
+        创建 main.js 文件, 代码如下:
+          var fs = require("fs");
+          var data = '菜鸟教程官网地址:www.runoob.com';
+          // 创建一个可以写入的流,写入到文件 output.txt 中
+          var rs = fs.createWriteStream('output.txt');
+          // 使用 utf8 编码写入数据
+          rs.write(data,'UTF8');
+          rs.end(); // 标记文件末尾
+          // 处理流事件 
+          rs.on('finish', function() { console.log("写入完成."); });
+          rs.on('error', function(err){ console.log(err.stack); });
+          console.log("程序执行完毕");
+        以上程序会将 data 变量的数据写入到 output.txt 文件中.代码执行结果如下:
+          程序执行完毕
+          写入完成.
+        查看 output.txt 文件的内容:
+          菜鸟教程官网地址:www.runoob.com
   url   一个实例对象,用于解析URL 
     obj = url.parse(url [,bol1] [,bol2])  将URL解析为对象[方便后续其他操作]
       url   字符串,传入需要解析的URL字符串
@@ -1840,8 +1790,8 @@ stream,流: 用于暂存和移动数据[以bufer的形式存在]
     dns.lookup(host,(error,ip,ipv) => {
       console.log(ip,ipv); // 118.178.213.186  4 
     })
-  ◆第三方模块: 需通过npm安装到本地  
-  cheerio html文件源码操作模块 
+★第三方模块: 通过npm安装到本地  
+  cheerio,html文件源码操作模块 
     PS:像使用jquery一样方便快捷地操作抓取到的源码
     npm install cheerio -g   安装cheerio模块
     var cheerio = require("cheerio"); 引入cheerio模块
@@ -1855,7 +1805,7 @@ stream,流: 用于暂存和移动数据[以bufer的形式存在]
       Example:
       var $ =cheerio.load(data);
       var a =$('a'); // 获取所有的a元素对象,操作类似与jQuery
-  request 请求模块 
+  request,请求模块 
     var request =require('request'); 引入request模块
     request(url,function(err,response,data){ }); 向URL发送请求
       回调函数传入err response data三个参数
@@ -1863,7 +1813,7 @@ stream,流: 用于暂存和移动数据[以bufer的形式存在]
         response 请求
           response.statusCode   http响应状态码,如200为成功
         data     响应的数据
-  ◆本地模块: 自定义的JS文件  
+★本地模块: 自定义的JS文件  
 操作总结 
   GET/POST 请求信息获取  
     PS:表单提交到服务器一般使用 GET/POST 请求

@@ -28,6 +28,12 @@ HTML'Hyper Text Markup Language'超文本标记语言
       字符开头的空格,不论多少都不显示,代码中所有连续的空格或空行都会被算作一个空格;
   其他 
     <!-- 注释内容  -->
+    只对IE生效的注释 
+      <!--[if lt IE 7]>
+        <link rel="stylesheet" type="text/css" media="screen" href="path/to/ie.css" />
+      <![endif]-->
+        这些代码的意思是:若用户浏览器是IE6及以下,那这段代码才会生效。
+        若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
   浏览器解析HTML方式 
     PS:一个不含任何DOCTYPE的网页将会以'quirks'怪异模式渲染 
       HTML5提供的<DOCTYPE html>是标准模式,向后兼容的,等同于开启了标准模式;
@@ -35,7 +41,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
       如去掉html文档中的声明则进入怪异模式
     standards mode,标准模式: 按照HTML与CSS的定义渲染
     quirks mode,怪异模式: 尝试模拟更旧的浏览器的行为 
-    参见 document.compatMode 和 document.documentMode
+    参见 document.compatMode 和 document.documentMode 
   自我设定 
     标签使用'tag'表示,属性使用'attr'表示,布尔值属性用'prop'表示
 --------------------------------------------------------------------------------

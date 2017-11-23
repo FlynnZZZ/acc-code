@@ -44,18 +44,12 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
   css样式可引入html,jsp,php,asp,net等中使用 
   注释 
     /*注释*/
-    只对IE生效的注释
-      <!--[if lt IE 7]>
-        <link rel="stylesheet" type="text/css" media="screen" href="path/to/ie.css" />
-      <![endif]-->
-        这些代码的意思是:若用户浏览器是IE6及以下,那这段代码才会生效。
-        若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
   IE8才开始支持css3 
-  CSS规则  CSS文件由多个CSS规则组成 
+  CSS规则,CSS文件由多个CSS规则组成 
     每个规则都有两个基本部分:选择器'selector'和声明块'declaration block', 
     'selector'           区分大小写 
     'declaration block'  声明块,声明集合 
-    'declaration'        一条声明,'prop-val'对 
+    'one declaration'    一条声明,'prop-val'对 
     'prop'               声明属性 
     'val'                声明值   
     若声明中使用了不正确的属性或者不正确的值,整个声明都会被忽略 
@@ -747,6 +741,23 @@ Selector,选择器
       @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
       @media screen and (min-width:1201px) {div{width:33.33%}}
 Declaration,样式声明 
+  尺寸&单位 
+    ◆单位
+    <num>px 
+    <num>em 
+    <num>rem 
+    <num>vw   <num>vh 
+    <num>vmin  <num>vmax 
+    <num>%  
+    ◆关键字 
+    auto 
+    inherit 
+    available [DiBs] 
+    border-box [DiBs] 
+    content-box [DiBs] 
+    max-content [DiBs] 
+    min-content [DiBs] 
+    fit-content [DiBs] 
   字体&文本
     ◆'letter'字
     letter-spacing  字符间距 
@@ -1044,7 +1055,7 @@ Declaration,样式声明
     background背景 
       background : color url() 重复 位置; [简写]
         Example: background:green url(data:image/s...) no-repeat 20px center;
-      background-color      背景颜色
+      background-color      背景颜色 
         PS:为元素设置一种纯色
           颜色会填充元素的内容、内边距和边框区域,扩展到元素边框的外边界,但不包括外边距
           若边框有透明部分,如虚线边框或透明色,会透过这些透明部分显示出背景色
@@ -1054,7 +1065,7 @@ Declaration,样式声明
           hex_number  规定颜色值为十六进制值的背景颜色(比如 #ff0000)。
           rgb_number  规定颜色值为 rgb 代码的背景颜色(比如 rgb(255,0,0))。
           inherit     规定应该从父元素继承 background-color 属性的设置。
-      background-image      背景图片
+      background-image      背景图片 
         PS:背景图片的显示覆盖在背景颜色上
         background-image:url(图片地址);
           url('URL')  指向图像的路径
@@ -1062,13 +1073,13 @@ Declaration,样式声明
           inherit 规定应该从父元素继承 background-image 属性的设置。
         一个元素中可设置多个背景图片
           background-image:url(url),(url)...; 位置顺序依次是上右下左
-      background-repeat     背景图片重复
+      background-repeat     背景图片重复 
         repeat     默认,背景图像将在垂直方向和水平方向重复
         repeat-x   背景图像将在水平方向重复
         repeat-y   背景图像将在垂直方向重复
         no-repeat  背景图像将仅显示一次
         inherit    规定应该从父元素继承 background-repeat 属性的设置
-      background-position   背景位置
+      background-position   背景位置 
         PS:若仅规定了一个值,另一个值默认为50%,可以混合使用 % 和 position 值,
           但最好不要混用固定值和百分比(实质关键字也是百分比),可能导致错误.
         Exp: background-position:X轴 Y轴; 设置背景图像的起始位置
@@ -1078,7 +1089,7 @@ Declaration,样式声明
         position  关键字:top、right、bottom、left和center
         %         左上角是 0% 0%。右下角是 100% 100%
         length    尺寸值
-      background-size       背景图像尺寸[CSS3]
+      background-size       背景图像尺寸[CSS3] 
         CSS3属性,支持IE9+
         auto    默认值,保持图片的原始宽、高
         length  设置背景图像的高度和宽度。
@@ -1092,9 +1103,9 @@ Declaration,样式声明
         contain 把图像图像扩展至最大尺寸,使其宽度和高度完全适应内容区域 
           图片保持宽高比缩放,长宽有一个铺满即可(可能会有漏白)
       background-clip       指定背景的显示范围[CSS3]
-        border-box   默认值,背景在border区域内进行填充,超出部分将被裁剪掉;
-        padding-box  背景在padding区域内进行填充,超过padding区域的背景将被裁剪掉;
-        content-box  背景在content区域内进行填充,超过content区域的背景将被裁剪掉;
+        border-box   默认值,背景从border外侧进行填充,超出部分被隐藏;
+        padding-box  背景从padding外侧进行填充,超出部分被隐藏;
+        content-box  背景从content外侧进行填充,超出部分被隐藏;
       background-origin     指定背景图像时的填充起点[CSS3]
         border-box  起始位置从border的外边缘开始显示背景图片;
         padding-box 默认值,背景图像相对于内边距框来定位
@@ -1268,8 +1279,8 @@ Declaration,样式声明
           filter : grayscale(0);
         }
   变换&过渡&动画  
-    transform  变换处理 [IE9+ CSS3] 
-      PS:IE9+支持2D变换,IE10+支持3D变换;只对block元素生效;
+    transform  变换处理 [CSS3][IE9+] 
+      PS: IE9+支持2D变换,IE10+支持3D变换;只对block元素生效;
       transform-origin : x [y];      定义变换原点 
         PS:搭配属性,用于定义运动点;默认为盒子的中心为运动点 
         x   X方向的值
@@ -1303,8 +1314,9 @@ Declaration,样式声明
           }
       transform : translateX(len);        平移 
       transform : translateY(len);        平移 
-      transform : rotate(XXdeg);         2D[顺时针]旋转
-        deg  css3中的角度单位
+      transform : rotate(XXdeg/turn);      2D[顺时针]旋转
+        deg  css3中的角度单位 
+        turn  
       transform : rotate3d(x,y,z,XXdeg); 3D旋转
         PS:运动量由指定的角度定义,若为正,运动将为顺时针,若为负,则为逆时针;
           在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
@@ -1930,13 +1942,24 @@ Layout,布局
           outset
           inherit
         border[-top/right/bottom/left]-color 边框颜色 
-          PS:border-color : red green blue gray; 分别定义四条边的颜色
+          PS: 颜色值适合所有表示方式[关键字、十六进制、RGB...] 
+          border-color: red green blue gray; 分别定义四条边的颜色
         -moz-border-color  火狐专有样式 
           在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
           每种颜色显示1px的宽度。
           若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
           Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
-        Example: border:solid 2px red；
+        Example: 
+          border:solid 2px red；
+        Accu: 
+          透明边框 
+            #aoo{
+              border: solid rgba(100, 100, 100, 0.2) 10px;
+              background-clip: padding-box;
+              background-color: #ccc;
+              height: 100px;
+              width: 100px;
+            }
       border-radius 边框圆角 [简写方式] [CSS3] 
         PS:IE9+不加前缀支持 
           当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
@@ -2044,20 +2067,20 @@ Layout,布局
         当三个值都为auto时,两个外边距都会被设置为0,即默认的情况
         正常流中,margin-top或margin-bottom设置为auto,会被重置为0,
         height为auto时,则显示其高度会尽可能的小,
-    相关样式 
-      box-sizing 盒模型定义类型 [CSS3]
-        content-box;  默认值,width height 为content的宽、高尺寸
-        border-box;   width height 为border的宽、高尺寸
-      box-shadow 盒子阴影 [CSS3] 
-        box-shadow: h-shadow v-shadow [blur spread color inset];
-          h-shadow 水平偏移距离,可为负值
-          v-shadow 垂直偏移距离,可为负值
-          blur     模糊距离,可选
-          spread   阴影尺寸,可选
-          color    阴影颜色,可选,默认为黑色  
-          inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
-        同时使用多个阴影,之间使用逗号','隔开
-          box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
+    ★相关样式 
+    box-sizing 盒模型定义类型 [CSS3]
+      content-box;  默认值,width height 为content的宽、高尺寸
+      border-box;   width height 为border的宽、高尺寸
+    box-shadow 盒子阴影 [CSS3] 
+      box-shadow: h-shadow v-shadow [blur spread color inset];
+        h-shadow 水平偏移距离,可为负值
+        v-shadow 垂直偏移距离,可为负值
+        blur     模糊距离,可选
+        spread   阴影尺寸,可选
+        color    阴影颜色,可选,默认为黑色  
+        inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
+      同时使用多个阴影,之间使用逗号','隔开
+        box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
     overflow 溢出显示方式 
       PS:规定当内容溢出元素框时发生的事情
         overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
@@ -3006,7 +3029,7 @@ var() CSS变量
       margin-left:-50%;
       }
       
-  CSS创建三角形
+  CSS创建三角形 
     原理:四条边框边框并无重叠的部分
     div{
       width: 0;
@@ -3015,6 +3038,54 @@ var() CSS变量
       border-color: transparent transparent red transparent;
       /*上、左、右三条边隐藏(颜色设为 transparent透明)*/
     }
+  平行四边形 
+    #aoo{
+      position: relative;
+      display: inline-block;
+      width: 100px;
+      height: 50px;
+      padding: 3px;
+    }
+    #aoo::before{
+      content: '';
+      position: absolute;
+      top:0;bottom: 0;right: 0;left: 0;
+      transform: skew(-45deg);
+      background-color: red;
+    }
+  扇形图 
+    #aoo{
+      background-color: red;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      position: relative;
+    }
+    #aoo::after{
+      content: '';
+      position: absolute;
+      left: 50%;
+      top:0;
+      bottom: 0;
+      right: 0;
+      background-color: #000;
+      border-radius: 0 100% 100% 0 / 50%;
+    }
+    #aoo::before{
+      content: '';
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top:0;
+      bottom: 0;
+      right: 0;
+      background-color: red;
+      border-radius: 0 100% 100% 0 / 50%;
+      transform-origin: left center;
+      transform:rotate(45deg);
+    }
+
+    
     
   CSS优化、提高性能的方法有哪些？
     关键选择器(key selector)。选择器的最后面的部分为关键选择器(即用来匹配目标元素的部分)；

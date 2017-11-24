@@ -605,7 +605,7 @@ NodeJS的运行方式及编程风格
       首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
       其次 JS 的对象机制是基于原型的,支持 部分多重继承,
       继承 EventEmitter 不会打乱对象原有的继承关系.
-  stream,流: 用于暂存和移动数据[以bufer的形式存在] 
+  stream,流,用于暂存和移动数据[以bufer的形式存在] 
     PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
       如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
       所有的 Stream 对象都是 EventEmitter 的实例 
@@ -720,7 +720,7 @@ NodeJS的运行方式及编程风格
           写入完成.
         查看 output.txt 文件的内容:
           菜鸟教程官网地址:www.runoob.com
-  url   一个实例对象,用于解析URL 
+  url,一个实例对象,用于解析URL 
     obj = url.parse(url [,bol1] [,bol2])  将URL解析为对象[方便后续其他操作]
       url   字符串,传入需要解析的URL字符串
       bol1  默认'false',是否将'query'字段转换为对象表示 
@@ -761,7 +761,7 @@ NodeJS的运行方式及编程风格
         
         url.resolve('http://example.com/one', '/two')
         // 'http://example.com/two'
-  querystring  解析URL的查询字符串 
+  querystring,解析URL的查询字符串 
     var querystring = require("querystring"); 引入querystring模块
     querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
       obj  需序列化的对象
@@ -798,7 +798,7 @@ NodeJS的运行方式及编程风格
     querystring.unescapeBuffer() 
     querystring.encode()
     querystring.decode()
-  http   http服务模块,提供HTTP服务器功能 
+  http,http服务模块,提供HTTP服务器功能 
     PS:主要用于搭建HTTP服务端和客户端; 
     Web服务器 
       Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
@@ -986,7 +986,7 @@ NodeJS的运行方式及编程风格
         var server = require("./server");
         var router = require("./router");
         server.start(router.route);
-  https  https服务模块 
+  https,https服务模块 
     PS:和http模块类似,在搭建https服务器时需SSl证书
     搭建https服务器 
       var https = require("https");
@@ -1000,7 +1000,7 @@ NodeJS的运行方式及编程风格
         res.end('hello');
       })
       .listen(8080);
-  fs     file system,文件系统模块,与文件系统交互
+  fs,文件系统模块'file system',与文件系统交互 
     PS:fs模块可用于对系统文件及目录进行读写操作.
       NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
       也可使用 fs.read 和 fs.write 读写文件,
@@ -1292,8 +1292,8 @@ NodeJS的运行方式及编程风格
       为异步操作,不会阻塞后续代码执行 
       var readStream = fs.createReadStream('1.pm4');
     fs.createWriteStream(path,options); 创建可写的stream流 
-  crypto 提供加密和解密功能,基本上是对OpenSSL的包装
-  util   提供常用函数的集合 
+  crypto,提供加密和解密功能,基本上是对OpenSSL的包装
+  util,提供常用函数的集合 
     PS:用于弥补核心JS 的功能 过于精简的不足
     util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
       PS:JS 的面向对象特性是基于原型的,与常见的基于类的不同.
@@ -1364,7 +1364,7 @@ NodeJS的运行方式及编程风格
         util.isError(new Error()) // true
         util.isError(new TypeError()) // true
         util.isError({ name: 'Error', message: 'an error occurred' }) // false      
-  child_process 创建子进程 
+  child_process,创建子进程 
     child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
       command: 字符串, 将要运行的命令,参数使用空格隔开
       options :对象,可以是:
@@ -1486,28 +1486,28 @@ NodeJS的运行方式及编程风格
         子进程已退出,退出码 0
         进程 2 执行.
         子进程已退出,退出码 0
-  path   处理文件路径 
+  path,处理文件路径 
     PS:
-    var path = require("path"); 引入path模块
-    path.normalize(p) 规范化路径,注意'..' 和 '.'.
-    path.join([path1][, path2][, ...]) 用于连接路径
-      该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
-    path.resolve([path1],path2) 将path2解析为绝对路径 
-      Example:
-      var path1 = path.resolve('e://a','./b')
-      console.log(path1); // e://a/b 
-    path.isAbsolute(path) 判断参数 path 是否是绝对路径.
-    path.relative(from, to) 用于将相对路径转为绝对路径.
-    path.dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
-    path.basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
-    path.extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
-      若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
-    path.parse(pathString) 返回路径字符串的对象.
-    path.format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
-    path.sep 平台的文件路径分隔符,'\\' 或 '/'
-    path.delimiter 平台的分隔符, ; or ':'.
-    path.posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
-    path.win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
+    var path = require("path")  // 引入path模块
+      .normalize(p)  规范化路径,注意'..' 和 '.'.
+      .join([path1][, path2][, ...])  str,返回连接路径 
+        该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
+      .resolve([path1],path2) 将path2解析为绝对路径 
+        Example:
+        var path1 = path.resolve('e://a','./b')
+        console.log(path1); // e://a/b 
+      .isAbsolute(path) 判断参数 path 是否是绝对路径.
+      .relative(from, to) 用于将相对路径转为绝对路径.
+      .dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
+      .basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
+      .extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
+        若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
+      .parse(pathString) 返回路径字符串的对象.
+      .format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
+      .sep 平台的文件路径分隔符,'\\' 或 '/'
+      .delimiter 平台的分隔符, ; or ':'.
+      .posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
+      .win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
     Example:
       创建 main.js 文件,代码如下所示:
         var path = require("path");
@@ -1524,7 +1524,7 @@ NodeJS的运行方式及编程风格
         joint path : /test/test1/2slashes/1slash
         resolve : /web/com/1427176256_27423/main.js
         ext name : .js    
-  os   模块提供了一些基本的系统操作函数
+  os,模块提供了一些基本的系统操作函数 
     PS:
     var os = require("os"); 引入os模块
     os.tmpdir() 返回操作系统的默认临时文件夹.
@@ -1556,7 +1556,7 @@ NodeJS的运行方式及编程风格
         platform : linux
         total memory : 25103400960 bytes.
         free memory : 20676710400 bytes.
-  net  底层的网络通信工具,包含创建服务器/客户端的方法 
+  net,底层的网络通信工具,包含创建服务器/客户端的方法 
     const net = require("net");       引入 net模块
     const server = new net.Server();  创建服务器 
     server.listen(port,host,foo)      监听客户端请求,监听到请求后回调 
@@ -1628,11 +1628,23 @@ NodeJS的运行方式及编程风格
         client.destroy(); 
       });        
       client.on('close', function() { }) 
-  tls : https的创建 
-  dns  模块用于解析域名 
+  tls,https的创建 
+  dns,模块用于解析域名 
     PS:
-    var dns = require("dns"); 引入dns模块
-  domain  域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
+    var dns = require("dns")  // 引入dns模块 
+      .lookup(host,function(error,ip,ipv){  // 查询网址的IP 
+        host  查询的网址 
+        error 错误对象 
+        ip    查询的ip  
+        ipv   '4'或'6',表示ipv4或ipv6   
+        Example: 
+          const dns = require('dns');
+          const host = 'zhihu.com';
+          dns.lookup(host,(error,ip,ipv) => {
+            console.log(ip,ipv); // 118.178.213.186  4 
+          })
+      })     
+  domain,域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
     PS: domain模块,把处理多个不同的IO的操作作为一个组.
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
       domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
@@ -1641,7 +1653,7 @@ NodeJS的运行方式及编程风格
         隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
         显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
     var domain = require("domain"); 引入domain模块
-  assert  主要用于断言,如果表达式不符合预期,就抛出一个错误 
+  assert,主要用于断言,如果表达式不符合预期,就抛出一个错误 
     PS:Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
     assert(bol,str); 
       bol  布尔值
@@ -1775,21 +1787,8 @@ NodeJS的运行方式及编程风格
         // AssertionError: Test Failed
         assert.fail(21, 42, undefined, '###')
         // AssertionError: 21 ### 42
-  Promise  同步形式执行异步操作　
+  Promise,同步形式执行异步操作　
     var Promise = require("Promise");   模块引入　
-  dns  : 查询网址的ip 
-    dns.lookup(host,foo)    查询网址的IP 
-      host  查询的网址 
-      foo   执行的回调,依次传入参数 (error,ip,ipv) 
-        error 错误对象 
-        ip    查询的ip  
-        ipv   '4'或'6',表示ipv4或ipv6   
-    Example: 
-    const dns = require('dns');
-    const host = 'zhihu.com';
-    dns.lookup(host,(error,ip,ipv) => {
-      console.log(ip,ipv); // 118.178.213.186  4 
-    })
 ★第三方模块: 通过npm安装到本地  
   cheerio,html文件源码操作模块 
     PS:像使用jquery一样方便快捷地操作抓取到的源码

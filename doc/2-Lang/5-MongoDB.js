@@ -1,4 +1,4 @@
-概念
+基础理论  
   'RDMBSs'关系数据库管理系统 
     关系型数据库遵循ACID规则,有如下四个特性:
     A,Atomicity   原子性
@@ -89,7 +89,7 @@
     CA - 单点集群,满足一致性,可用性的系统,通常在可扩展性上不太强大 ,
     CP - 满足一致性,分区容忍性的系统,通常性能不是特别高 ,
     AP - 满足可用性,分区容忍性的系统,通常可能对一致性要求低一些 ,
-  BASE Basically Available, Soft-state, Eventually Consistent ,
+  BASE'Basically Available','Soft-state','Eventually Consistent' ,
     CAP理论的核心是:一个分布式系统不可能同时很好的满足一致性,可用性和分区容错性这三个需求,
     最多只能同时较好的满足两个 ,
     BASE是NoSQL数据库通常对可用性及一致性的弱要求原则:
@@ -106,78 +106,216 @@ MongoDB: 基于分布式文件存储的数据库
     无数据结构限制: 没有表结构的概念,每条记录可以有不同的结构,无需先定义表结构再使用 
     完全的索引支持: 单键索引,多键索引,数组索引,全文索引,地理位置索引等 
     方便的冗余与扩展   
-  MongoDB相关概念 
-    'document'文档: MongoDB的一条记录,一个包含多个字段的数据结构,类似于JSON格式 
-      同一集合内的文档不需要具有同样的字段或结构 
-      每个文档必须有一个'_id'字段作为主键 
-    'collection'集合: 一组MongoDB文档,相当关系型数据库'RDBMS'中的表 
-    数据库: 集合的实际容器,一个MongoDB服务器通常有多个数据库 
-相关命令 
-  ◆安装及启动数据库 
-  先安装MongoDB,然后配置PATH环境变量 
-  创建结构目录 
-    project
+相关概念 
+  SQL_term      MongoDB_term  解释/说明 
+  database      database      数据库,集合的实际容器 
+    MongoDB的单个实例可容纳多个独立的数据库,
+      每一个都有自己的集合和权限,不同的数据库也放置在不同的文件中
+    数据库命名规范 
+      数据库也是通过名字来标识
+      ★数据库名可以是满足以下条件的任意'UTF-8'字符串:
+      应全部小写,最多64字节 
+      不能是空字符串"",不可含有空格' '、'.'、'$'、'/'、\和'\0'空字符 
+    特殊作用的数据库: 可直接访问 
+      admin: "root"数据库 
+        若将一个用户添加到这个数据库,该用户自动继承所有数据库的权限.
+        一些特定的服务器端命令也只能从这个数据库运行,
+        比如列出所有的数据库或者关闭服务器.
+      local: 这个数据永远不会被复制,可以用来存储限于本地单台服务器的任意集合 
+      config: 当Mongo用于分片设置时,config数据库在内部使用,用于保存分片的相关信息 
+      test: 默认的数据库 
+  table         collection    表/集合,一组MongoDB文档  
+    集合没有固定的结构
+      即集合可插入不同格式和类型的数据
+      但通常插入集合的数据都会有一定的关联性 
+      Example: 
+        将以下不同数据结构的文档插入到集合中：
+        {"site":"www.baidu.com"}
+        {"site":"www.google.com","name":"Google"}
+        {"site":"www.runoob.com","name":"菜鸟教程","num":5}
+    当第一个文档插入时,集合就会被创建 
+    集合命名规范:   
+      不能是空字符串""、'$' 
+      不能含有'\0'空字符,该字符表示集合名的结尾 
+      集合名不能以"system."开头,系统集合保留的前缀 
+    'capped collections'固定大小的collection 
+      有很高的性能以及队列过期的特性[过期按照插入的顺序],和"RRD"概念类似 
+        高性能自动的维护对象的插入顺序,非常适合类似记录日志的功能 
+      必须要显式的创建 
+        指定一个collection的大小,单位是字节,
+        collection的数据存储空间值提前分配的,
+        要注意的是指定的存储大小包含了数据库的头信息 
+        db.createCollection("mycoll", {capped:true, size:100000})
+        在capped collection中,你能添加新的对象。
+        能进行更新,然而,对象不会增加存储空间。如果增加,更新就会失败  
+        数据库不允许进行删除。使用drop()方法删除collection所有的行 
+        注意: 删除之后,你必须显式的重新创建这个collection 
+        在32bit机器中,capped collection最大存储为1e9个字节 
+  row           document      记录行/文档,MongoDB的一条记录  
+    一组键值对'key-val'集,类似于JSON格式 
+      文档中的键/值对是有序的 
+      MongoDB的文档不能有重复的键 
+    与关系型数据库的区别 
+      MongoDB的文档不需要设置相同的字段,
+      且相同的字段不需要相同的数据类型,
+      每个文档必须有一个'_id'字段作为主键  
+    文档键命名规范:  
+      不能含有'\0'空字符,该字符用来表示键的结尾 
+      '.'和'$'有特别的意义,只有在特定环境下才能使用 
+      以下划线"_"开头的键是保留的,约定而非严格要求 
+    Example: 
+      一个简单的文档：
+      {
+        "site":"www.runoob.com", 
+        "name":"菜鸟教程"
+      }
+  column        field         字段/域,文档的一个'key-val'键值对  
+    字段值可包含其他文档、数组及文档数组  
+  index         index         索引 
+  table joins                 表连接,MongoDB不支持 
+  primary key   primary key   主键,MongoDB自动将_id字段设置为主键 
+  ★元数据 
+    数据库的信息集 
+      使用了系统的命名空间,是包含多种系统信息的特殊集合,格式: <dbname>.system.xxx 
+      集合命名空间                描述
+      dbname.system.namespaces   列出所有名字空间 
+      dbname.system.indexes      列出所有索引 
+      dbname.system.profile      包含数据库概要'profile'信息 
+      dbname.system.users        列出所有可访问数据库的用户 
+      dbname.local.sources       包含复制对端'slave'的服务器信息和状态 
+      对于修改系统集合中的对象的限制 
+        在{{system.indexes}}插入数据,可以创建索引 
+        但除此之外该表信息是不可变的(特殊的drop index命令将自动更新相关信息) 
+        {{system.users}}是可修改的  
+        {{system.profile}}是可删除的 
+  ★支持的数据类型: 
+    Boolean      布尔值  
+    Integer      整型数值,根据使用服务器可分为 32/64 位 
+    Double       双精度浮点值 
+    Timestamp    时间戳,记录文档修改或添加的具体时间 
+    String       字符串,在MongoDB中,'UTF-8'编码的字符串才是合法的 
+    Null         用于创建空值 
+    Arrays       用于将数组或列表或多个值存储为一个键 
+    Object       用于内嵌文档 
+    Object ID    对象ID,用于创建文档的ID
+    Date         日期时间,用'UNIX'时间格式来存储当前日期或时间,
+      可指定自己的日期时间：创建Date对象,传入年月日信息 
+    Symbol       符号,该数据类型基本上等同于字符串类型,但不同的是,它一般用于采用特殊符号类型的语言 
+    Binary Data  二进制数据 ,用于存储二进制数据 
+    Code         代码类型,用于在文档中存储JS代码 
+    Regular expression   正则表达式类型,用于存储正则表达式 
+    Min/Max keys  将一个值与BSON[二进制的JSON]元素的最低值和最高值相对比  
+  ★其他术语: 
+    BSON: 是一种类json的一种二进制形式的存储格式,简称'Binary JSON'
+安装&使用&启动: 
+  下载安装包进行安装[位置可自定义],将 bin 目录,配置到环境变量中  
+  项目目录结构 
+    db_project
       data   // 存放数据库  
         db   // 存放数据 
-      log    // 日志
+      log    // 日志 
       conf   // 配置文件 
-  $ mongod --dbpath ./data/db   // 指定数据库目录 
-  $ mongo   // 运行数据库 
-  ◆数据库操作
-  $ show dbs  // 检测数据库列表 
-  $ db        // 检查当前选定的数据库 
-  $ use <dbName>  // 存在则返回,否则新建数据库 
-  $ db.dropDatabase() // 删除当前使用的数据库 
-  ◆集合操作 
-  $ db.createCollection(<clcName>, <options>)  // 创建集合 
-    clcName    str,需创建的集合名称
+        mongod.cfg 
+  $ mongod --dbpath e:\db_project\data\db     // 指定数据库目录 
+  $ mongo   // 连接到数据库 
+'mongod.cfg'配置文件 
+  $ mongod --config  'C:/mongodb/mongod.cfg'  // 通过配置文件,指定数据库目录  
+  内容详情: 
+    systemLog:  // 必须项 
+      destination: file
+      path: c:\data\log\mongod.log
+    // 其他可选项 
+    storage: 
+      dbPath: c:\data\db
+◆相关命令 
+★数据库'db'操作 
+  $ show dbs  // 以列表形式显示所有数据库 
+  $ db        // 显示当前数据库对象或集合 
+  $ use <dbName>  // 使用或创建数据库 
+    存在则切换到该数据库,否则新建数据库 
+  $ db.<dbName>.insert({"name":"菜鸟教程"})
+  $ db.dropDatabase() // 删除当前使用的数据库  
+  $ db.createCollection(<ctName>,<options>)  // 创建集合 
+    ctName    str,需创建的集合名称
     options obj,可选的选项  
       capped: bol  默认'false',若为'true',则创建固定集合,即有着固定大小的集合 
         当达到最大值时,会自动覆盖最早的文档,且必须指定'size'参数 
       size: num    为固定集合指定一个最大值,单位byte  
       max: num     指定固定集合中包含文档的最大数量 
       autoIndexID: bol   默认'false',若为'true',自动在'_id'字段创建索引 
-  $ show collections  // 查看创建的集合 [?]  
-  $ db.<clcName>.drop()  // 删除集合,删除成功返回true,否则返回false  
-  ◆文档操作 
-  $ db.<clcName>.insert(doc) // 在集合中插入文档,若clcName集合不存在则会自动创建  
-  $ db.<clcName>.save(doc)   // 类似于'insert',但指定'_id'时,会覆盖文档 
-  $ db.<clcName>.find()      // 以非结构化的方式显示所有文档 
-    'AND'条件: 传入多个键,用逗号','分隔 
-      db.mycol.find({key1:val1, key2:val2}) 
-    'OR'条件: 使用关键字'$or' 
-      db.mycol.find(
-        {
-          $or: [
-            {key1: value1}, {key2:value2}
-          ]
-        }
+★集合'ct'操作 
+  $ db.<ctName>.insert(<dc>)   // 向指定集合中插入文档 
+    PS: 若该集合不存在,则创建后插入 
+  $ db.<ctName>.save(<newDc>[options])  // 插入/替换文档 
+    PS: 未指定'_id'字段,同 insert(),指定'_id'字段,则会更新该'_id'的数据 
+    newDc  插入/更新的文档 
+    option = {  // 可选,配置对象 
+      writeConcern: <dc>  // 可选,抛出异常的级别 
+    }
+  $ db.<ctName>.find(<query>,projection)  // 以非结构化的方式显示文档 
+    query  可选,查询条件,默认:{},所有文档 
+    projection  可选,使用投影操作符指定返回的键,默认省略 
+  $ db.<ctName>.findOne()  // 只返回一个文档 
+  $ db.<ctName>.find().pretty()   // 用格式化方式显示结果 
+  $ db.<ctName>.findOne()   // 只返回一个文档 
+  $ db.<ctName>.update(<query>,{$xxx:<newDc>}[,option]) // 更新已存在的文档  
+    query  update的查询条件,类似sql update查询内where后面的 
+    $xxx   更新的操作符,如:$set、$inc 
+    newDc  update的对象,也可以理解为sql update查询内set后面的
+    option = { // 可选,配置项 
+      upsert: bol, // 可选,当不存在update的记录,是否插入,默认:false,不插入 
+      multi: bol,  // 是否更新查出的全部记录,默认:false,只更新第一条记录 
+      writeConcern: <dc> // 可选,抛出异常的级别 
+    }  
+    Example: 
+      db.mycol.update(
+        {'title':'MongoDB Overview'}
+        ,{$set:{'title':'New MongoDB Tutorial'}}
       )
-  $ db.<clcName>.find().pretty()   // 用格式化方式显示结果 
-  $ db.<clcName>.findOne()   // 只返回一个文档 
-  $ db.<clcName>.update(doc,{$set:newDoc}[,options])  // 更新文档 
-    db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}})
-    // 默认只更新单个文档,要想更新多个文档,需要把参数 multi 设为 true   
-    db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}},{multi:true})
-  $ db.<clcName>.remove(condition,justOne)  // 删除指定条件的文档 
-    condition  可选,删除文档的标准,默认 {} 将集合中的所有文档删除  
-    justOne    可选,如果设为 true 或 1,则只删除一个文档 
-    // 删除其中所有标题为 'MongoDB Overview' 的文档 
-    db.mycol.remove({'title':'MongoDB Overview'}) 
-  $ <docs>.limit(<num>)  // 限制文档数量 
+  $ db.<ctName>.remove(<query>[,option])  // 删除指定条件的文档 
+    query  可选,删除文档的标准,默认:{},将集合中的所有文档删除  
+    option  = { // 可选,如果设为 true 或 1,则只删除一个文档 
+      justOne: bol, // 可选,是否只删除一个文档,默认false
+        只删除一个文档可为 true 或 1 
+      writeConcern: <dc>  // 可选,抛出异常的级别 
+    }  
+  $ db.<ctName>.drop()  // 删除指定集合,返回是否删除成功的布尔值   
+★文档'dc'操作 
+  ▼单个文档操作 
+  ▼多个文档操作 
+  $ <dcs>.limit(<num>)  // 限制显示的文档数量 
     num  数值,当num不存在将显示所有文档 
-  $ <docs>.skip(<num>)  // 显示第num+1个文档 
-    num 默认为0,显示第一个文档 
-  $ <docs>.sort({<key>:1/-1,..})  // 排序,1 正序、-1 倒序 
+  $ <dcs>.skip(<num>)   // 跳过num个文档 
+    num 可选,默认:0,不跳过 
+  $ <dcs>.sort({<key>:1/-1,..})  // 通过指定字段来排序,1:升序、-1:降序 
+    PS: 默认按照升序排序 
     // 按照降序排列标题的文档 
     db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
-  ◆索引: 实现高效查询 
-    若无索引,则需扫描集合中的所有文档,才能找到匹配查询语句的文档;
-    索引是一种特殊的数据结构,将一小块数据集保存为容易遍历的形式   
-    索引能够存储某种特殊字段或字段集的值,并按照索引指定的方式将字段值进行排序   
-  $ db.<clcName>.ensureIndex({<key>:1/-1})  // 创建索引 
-    key  想创建索引的字段名称
-    1 代表按升序排列字段值;-1 代表按降序排列
+◆索引,实现高效查询 
+  PS: 无索引时,读取数据则需扫描集合中的所有文档,才能找到匹配查询语句的文档;
+    索引是一种特殊的数据结构,存储在一个易于遍历读取的数据集合中    
+    索引能够存储某种特殊字段或字段集的值,并按照指定的方式将字段值进行排序  
+  $ db.<ctName>.ensureIndex(  // 创建索引  
+    { 
+      PS: 可使用多个字段创建索引[关系型数据库中称作复合索引]
+      <key>: 1/-1 
+      key  创建索引的字段名称
+      1 代表按升序排列字段值;-1 代表按降序排列
+    }
+    ,{  // 可选,配置选项
+      background: bol  // 可选,是否后台创建,默认:false  
+        建索引过程会阻塞其它数据库操作,background可指定以后台方式创建索引,即增加 "background" 可选参数。 "background" 默认值为false。
+      ,unique Boolean 建立的索引是否唯一。指定为true创建唯一索引。默认值为false.
+      name string 索引的名称。如果未指定,MongoDB的通过连接索引的字段名和排序顺序生成一个索引名称。
+      dropDups Boolean 在建立唯一索引时是否删除重复记录,指定 true 创建唯一索引。默认值为 false.
+      sparse Boolean 对文档中不存在的字段数据不启用索引；这个参数需要特别注意,如果设置为true的话,在索引字段中不会查询出不包含对应字段的文档.。默认值为 false.
+      expireAfterSeconds integer 指定一个以秒为单位的数值,完成 TTL设定,设定集合的生存时间。
+      v index version 索引的版本号。默认的索引版本取决于mongod创建索引时运行的版本。
+      weights document 索引权重值,数值在 1 到 99,999 之间,表示该索引相对于其他索引字段的得分权重。
+      default_language string 对于文本索引,该参数决定了停用词及词干和词器的规则的列表。 默认为英语
+      language_override string 对于文本索引,该参数指定了包含在文档中的字段名,语言覆盖默认的language,默认值为 language.
+    }
+  )  
     可选参数: 
     参数  类型  描述
     background  bol,是否在后台构建索引,从而不干扰数据库的其他活动,默认'false' 
@@ -196,7 +334,7 @@ MongoDB: 基于分布式文件存储的数据库
       对文本索引而言,指定了文档所包含的字段名,该语言将覆盖默认语言
   聚合: 能够处理数据记录并返回计算结果
     聚合操作能将多个文档中的值组合起来,对成组数据执行各种操作,返回单一的结果 
-  $ db.<clcName>.aggregate(options)  
+  $ db.<ctName>.aggregate(options)  
     // 从集合中归纳出一个列表,以显示每个用户写的教程数量 
     db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : 1}}}]) 
     聚合表达式列表:    
@@ -226,7 +364,7 @@ MongoDB: 基于分布式文件存储的数据库
       $unwind  解开使用数组的文档 
         当使用数组时,数据处于预连接状态,通过该操作,数据重新回归为各个单独的文档的状态
         利用该阶段性操作可增加下一阶段性操作的文档数量 
-  ◆复制: 在多个服务器上同步数据的过程 
+  ★复制: 在多个服务器上同步数据的过程 
     通过在不同的数据库服务器上实现多个数据副本,复制能够实现数据冗余,提高数据的可用性,
     从而避免了仅仅因为一台服务器故障后就会产生的数据库灾难 
     复制的运作方式 
@@ -238,54 +376,70 @@ MongoDB: 基于分布式文件存储的数据库
       副本集具有 2 个或多个节点（但一般最少需要 3 个节点） 
       当发生自动故障转移或维护时,会重新推举一个新的主节点 
       当失败节点恢复后,该节点重新又连接到副本集中,重新作为从节点 
-  ◆分片: 在多台机器上存储数据记录的操作
+  ★分片: 在多台机器上存储数据记录的操作
     为应对数据增长需求而采取的办法 
     当数据量增长时,单台机器有可能无法存储数据或可接受的读取写入吞吐量,通过横向扩展,分片技术解决该问题 
     利用分片技术,可以添加更多的机器来应对数据量增加以及读写操作的要求 
-  ◆创建备份:将服务器上的所有数据都转储到dump目录中 
+创建备份:将服务器上的所有数据都转储到dump目录中 
   $ mongodump     // 备份 
   $ mongorestore  // 恢复备份 
-  ◆其他
+  ★其他
   $ mongostat  检查所有运行中的mongod实例的状态 
   $ mongotop [<time>]  记录并报告MongoDB实例基于每个集合的读写活动,默认每秒返回一次结果 
     mongotop 30  // 每 30 秒返回 
-  
-     
-  条件查询文档: 
-    操作          格式                     RDBMS中的类似语句
-    =         {<key>:<value>}             where by = 'tutorials point'
-      db.mycol.find({"by":"tutorials point"}).pretty()  
-    <         {<key>:{$lt:<value>}}       where likes < 50
-      db.mycol.find({"likes":{$lt:50}}).pretty()  
-    <=        {<key>:{$lte:<value>}}      where likes <= 50
-      db.mycol.find({"likes":{$lte:50}}).pretty()  
-    >         {<key>:{$gt:<value>}}       where likes > 50
-      db.mycol.find({"likes":{$gt:50}}).pretty()  
-    >=        {<key>:{$gte:<value>}}      where likes >= 50
-      db.mycol.find({"likes":{$gte:50}}).pretty()  
-    !         {<key>:{$ne:<value>}}       where likes != 50
-      db.mycol.find({"likes":{$ne:50}}).pretty()  
-MongoDB支持的数据类型: 
-  String：字符串,在MongoDB中,'UTF-8'编码的字符串才是合法的 
-  Integer：整型数值,根据所采用的服务器可分为 32 位或 64 位 
-  Boolean：布尔值  
-  Double：双精度浮点值 
-  Arrays：用于将数组或列表或多个值存储为一个键 
-  Timestamp：时间戳,记录文档修改或添加的具体时间 
-  Object：用于内嵌文档 
-  Null：用于创建空值 
-  Symbol：符号,该数据类型基本上等同于字符串类型,但不同的是,它一般用于采用特殊符号类型的语言 
-  Date：日期时间,用'UNIX'时间格式来存储当前日期或时间,可指定自己的日期时间：创建Date对象,传入年月日信息 
-  Object ID：对象ID,用于创建文档的ID
-  Binary Data：二进制数据 ,用于存储二进制数据 
-  Code：代码类型,用于在文档中存储JS代码 
-  Regular expression：正则表达式类型,用于存储正则表达式 
-  Min/Max keys：将一个值与 BSON（二进制的 JSON）元素的最低值和最高值相对比  
-
-
-
-
-
+<query>条件语句查询规则：
+  ★条件操作符 
+  操作             格式                    RDBMS中的类似语句 
+  ='equal'        {<key>:<value>}         where by = '菜鸟教程' 
+    db.col.find({"by":"菜鸟教程"}).pretty()  
+  !='not equal'   {<key>:{$ne:<value>}}   where likes != 50 
+    db.col.find({"likes":{$ne:50}}).pretty()  
+  <'less than'    {<key>:{$lt:<value>}}   where likes < 50 
+    db.col.find({"likes":{$lt:50}}).pretty()  
+  <='lt equal'    {<key>:{$lte:<value>}}  where likes <= 50 
+    db.col.find({"likes":{$lte:50}}).pretty()  
+  >'greater than' {<key>:{$gt:<value>}}   where likes > 50 
+    db.col.find({"likes":{$gt:50}}).pretty()  
+  >='gt equal'    {<key>:{$gte:<value>}}  where likes >= 50 
+    db.col.find({"likes":{$gte:50}}).pretty()  
+  $type,条件操作符,基于BSON类型来检索集合中匹配的数据类型 
+    类型                     数字      备注
+    Double                   1   
+    String                   2   
+    Object                   3   
+    Array                    4   
+    Binary data              5   
+    Undefined                6        已废弃 
+    Object id                7   
+    Boolean                  8   
+    Date                     9   
+    Null                     10   
+    Regular Expression       11   
+    JavaScript               13   
+    Symbol                   14   
+    JavaScript(with scope)   15   
+    32-bit integer           16   
+    Timestamp                17   
+    64-bit integer           18   
+    Min key                  255  Query with -1.
+    Max key                  127   
+    Example: 
+      获取"col"集合中'title'为 String 的数据 
+      db.col.find({"title": {$type: 2}})
+  操作符组合 
+    db.col.find({likes: {$lt: 200, $gt: 100}}) 
+  ★条件组合 
+  'AND'条件: 传入多个键,用逗号','分隔 
+    db.mycol.find({key1:val1, key2:val2}) 
+  'OR'条件: 使用关键字'$or' 
+    db.mycol.find(
+      {
+        $or: [
+          {key1: value1}
+          ,{key2:value2}
+        ]
+      }
+    )
 
 
 

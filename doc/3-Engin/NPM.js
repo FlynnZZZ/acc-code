@@ -46,8 +46,8 @@ NPM'node package manager',node包管理器
       当目录下有 npm-shrinkwrap.json 时,
       运行 npm install 时优先使用 npm-shrinkwrap.json 进行安装 
       如果 node_modules 下存在某个模块,如直接通过 npm install xxx 安装的,
-      而 package.json 中没有，运行 npm shrinkwrap 则会报错。
-      npm shrinkwrap 只会生成 dependencies 的依赖，不会生成 devDependencies 的
+      而 package.json 中没有,运行 npm shrinkwrap 则会报错。
+      npm shrinkwrap 只会生成 dependencies 的依赖,不会生成 devDependencies 的
   ◆安装/卸载/升级/查看的配置参数,可选,可多选   
     '-S'和'-D'的区别 
       '-D' 是开发时候依赖的东西
@@ -289,5 +289,8 @@ json-server 接口Mock数据
   var jsonServer = require('json-sever'); 引入json-server 
   ...
 iron-node  调试Node代码 
+supervisor: 开发时,用于检测代码变更自动重启程序 
+  检测当前目录下'.node'和'.js'文件,当这些文件发生改动时,supervisor 会自动重启程序
+  $ npm i -g supervisor 
 其他工具 
 

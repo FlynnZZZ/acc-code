@@ -1089,7 +1089,7 @@ console,用于调试的控制台对象
     用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
   Member: 
     .log([val1][, ...])   在控制台输出若干个数据 
-      格式占位符[DiBs]
+      格式占位符[DiBs] 
         PS: log方法将占位符替换以后的内容,显示在console窗口
         %s     字符串
         %d     整数
@@ -1102,8 +1102,8 @@ console,用于调试的控制台对象
           输出的内容将显示为红色的24px的字体
         Example:
           console.log("%s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
-          上面代码的 %s 表示字符串的占位符
-          function colorLog(arg){
+          console.log("访问地址为 http://%s:%s",host,port) 
+          function colorLog(arg){  // 带颜色输出 
             console.log("%c%s","background:#afffee",arg)
           }
     .info([val][, ...])   在控制台输出若干个信息性消息 

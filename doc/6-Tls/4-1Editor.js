@@ -383,7 +383,15 @@ VSCode
       workbench.action.showCommands          ctrl+f1    显示所有命令
       ★默认 
       f5                                                调试 
-  用户代码片段: 'C:/Users/f/AppData/Roaming/Code/User/snippets/xxx.xx'
+      ctrl-``                                           切换集成终端   
+  用户代码片段: 'C:/Users/f/AppData/Roaming/Code/User/snippets/xxx.xx' 
+  自定义样式: '安装目录/resources/app/out/vs/workbench/workbench.main.css' 
+    PS: 该方式非正常渠道,编辑器会显示'文件被破环,是否重新安装' 
+    /*自定义样式*/
+    .mtki {  
+      /*注释*/
+      color: #1ca3a3 !important;
+    }
   插件 
     ★外观
     vscode-icons  文件图标主题

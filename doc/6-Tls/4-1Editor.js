@@ -12,46 +12,80 @@ Atom
       // @/\()"':,.;<>~!#$%^&*|+=[]{}`?…、◆★●■▲▼（）,。-[]【】〖〗『』《》
   用户键盘映射: 'C:/Users/f/.atom/keymap.cson' 
     枚举: 
-      ctrl-,         设置 
-      f1             删除 
-      f2             跳到当前文件的下一条书签
-      ctrl-alt-↑/↓   光标多选
-      ctr-→/←        单词单位移动光标
-      ctrl-f2        列出当前工程所有书签
-      ctrl-e         取消选中  
-      ctrl-p         选中所有 
-      ctrl/alt-→/←   移动到单词开始/末尾
-      ctrl-Enter     在当前行的末尾回车
-      ctrl+o         打开文件
-      ctrl-shift-o   打开目录
-      ctrl-g         跳转到指定的行
-      ctrl-r         当前文档中查询变量、符号
-      ctrl-w         关闭当前标签
-      ctrl-click     增加新光标
-      ctrl-\         显示/隐藏目录树
-      ctrl-f         在buffer中查找
-      ctrl+↑/↓       行移动
-      alt-f3         选中选择文件中的所有匹配项
-      ◆文件目录树下 
-      ctrl-shift-f 在整个工程中查找 
-      a            新增文件 
-      m            修改文件名  
-      delete       删除文件 
-      ◆默认 
-      ctrl-d         选取和当前单词相同的下一处
-      ◆不常用 
-      ctrl-shift-s   保存所有打开的文件
-      ctrl-t/ctrl-p  查找文件
-      ctrl-shift-u   调出切换编码选项
-      ctrl-.         key-binding-resolver:toggle,激活 查看键位的绑定情况
-      ctrl-n         新建文件
-      ctrl-home      移到文档开始
-      ctrl+end       移到文档结束
+      自定义 
+        Now         Prev              功能   
+        ★键盘键位更改  
+        f1          backspace         删除  
+        f5          enter             换行  
+        ★显示/隐藏/打开/关闭 
+        alt-n       ctrl-shift-N      新建窗口 
+        alt-m       ctrl-shift-A      添加项目文件夹 
+        alt-l       ctrl-shift-T      恢复关闭的页面  
+        alt-\       ctrl-|            在文件目录中定位当前文档 
+        alt-1       ctrl-alt-{        折叠所有 
+        alt-2       ctrl-alt-}        展开所有 
+        alt-3       ctrl-alt-[        折叠当前 
+        alt-4       ctrl-alt-]        展开当前 
+        alt-b       ctrl-alt-o        浏览器中打开文档 
+        alt-p                         浏览器兼容写法 
+        ★查询/选中  
+        f4          shift-f3          查找时,到上一个 
+        ctrl-e      ctrl-u            取消'ctrl-d'的选中 
+        ctrl-p      alt-f3            选中所有匹配项   
+        alt-q       ctrl-alt-,        选中括号内内容 
+        alt-t       ctrl-alt-backspace  删除匹配括号 
+        alt-f       ctrl-m            标签跳转 
+        ★行操作 
+        alt-c       ctrl-l            行选中 
+        alt-v       ctrl-shift-D      行复制  
+        ctrl-q      ctrl-/            行注释 
+        alt-a       ctrl-[            行负缩进 
+        alt-s       ctrl-]            行缩进 
+        alt-z       ctrl-j            行合并  
+        alt-enter   ctrl-shift-enter  行前插入 
+        alt-x       ctrl-alt-f2       行标记 
+        alt-d       ctrl-shift-K      行删除 
+        ★不常用 
+        alt-u       ctrl-k ctrl-u     字母大写 
+        alt-i       ctrl-k ctrl-l     字母小写 
+      默认  
+        ★显示/隐藏/打开/关闭  
+        ctrl-,         打开设置面板 
+        ctrl-o         打开文件 
+        ctrl-n         新建页面  
+        ctrl-w         关闭当前标签 
+        ctrl-\         开关目录树 
+        ctrl-space     激活代码提示 
+        ctrl-shift-o   打开文件夹 
+        ctrl-home      移到文档开始
+        ctrl-end       移到文档结束
+        ctrl-shift-s   保存所有打开的文件
+        ctrl-shift-u   调出切换编码选项
+        ★查询相关 
+        f2             跳到当前文件的下一条书签
+        ctrl-d         选取和当前单词相同的下一处
+        ctrl-f2        列出当前工程所有书签
+        ctrl-g         跳转到指定的行
+        ctrl-f         当前页查找
+        ctrl-shift-f   在整个文件夹中查找  
+        ★行操作 
+        ctrl+↑/↓       行移动
+        ctrl-enter     在当前行的末尾回车
+        ★光标操作  
+        ctrl-click     增加新光标 
+        ctr-→/←        单词单位移动 
+        alt-→/←        单词单位移动 
+        ctrl-alt-↑/↓   光标多选
+        ★文件目录树操作  
+        a             新增文件 
+        m             修改文件名  
+        delet         删除文件 
+        ★不常用 
     未占用键汇总: 
       ★左
       // alt-f1 f2
       // alt-`
-      // alt-r 
+      // alt-w e r 
       // alt-g
       // ctrl-3 4
       ★右
@@ -96,10 +130,11 @@ Atom
         将'.'号从'非实体字符'中去除
       language-sass          sass语言支持
         将'.'号从'非实体字符'中去除
-      settings-view          设置页面
+      settings-view          设置页面 
         快捷键
           ctrl-,    打开设置页
-          ctrl-.    打开快捷键绑定页 [self]
+          ctrl-.    打开快捷键绑定页[self] 
+            PS: '1.22.1' 不再支持该快捷键 
             '.platform-win32, .platform-linux':
               'ctrl-.': 'settings-view:show-keybindings'
       snippets      自动补全功能 
@@ -199,24 +234,12 @@ Atom
             Ensure Single trailing Newline      自动去掉文档最后的空行
             ignore Whitespace On Current line
             remove trailing Whitespace          自动删除行末空格
-    社区扩展 
-      ◆常用扩展 
+    社区扩展: 'C:/Users/f/.atom/packages'  
+      aaa-snippets               自定义的代码片段   
       minimap                    缩略图 
-        样式设置
-          atom-text-editor atom-text-editor-minimap {
-            background-color: rgba(78, 180, 230, 0.05); // 背景色
-            .minimap-visible-area::after {
-              background-color: rgba(60, 91, 167, 0.15); // 可视区背景色
-            }
-          }
-          .minimap .highlight-selected {
-            background: black !important;
-          }
-          atom-text-editor[with-minimap] .vertical-scrollbar { // 隐藏滚动条
-            opacity: 0;
-            width: 0;
-          }
-        absolute-mode     在缩略图下方显示代码      取消勾选
+        相关设置: 
+        Absolute Mode   在缩略图下方显示代码  true 
+        Char Width      缩略图代码宽度比例    0.7     
       minimap-highlight-selected 缩略图高亮
       color-picker               快捷颜色选择 
         颜色选取插件,点击颜色值弹出颜色选择板进行颜色选择,
@@ -231,7 +254,6 @@ Atom
         安装此插件会在编辑器下方添加浏览器的小图标,点击在浏览器中打开正在编辑的文档.
       atom-wx                    '.wxml','.wxss'语法高亮 
       language-vue               '.vue'语法高亮 
-      zzz-snippets               自定义的补全插件 
       选用插件 
         atom-beautify              代码格式美化
         autocomplete-cocos2d-js    cocos的补全插件
@@ -258,8 +280,6 @@ Atom
           统一全部关闭,则该插件不能准确的记住窗口下次打开的先后顺序
             若无项目文件夹,则默认不加载
           记录状态 如 标签等
-    自定义插件
-      aaa-snippets: 用于自定义的代码片段 
   总结 
     使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
     正则查找
@@ -736,8 +756,12 @@ Hbuilder
     [{         219
     /|         220
     ]}         221
-Question & Idea
+Question&Idea 
 ----------------------------------------------------------------------以下待整理
+
+
+
+
 
 
 

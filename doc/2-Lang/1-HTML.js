@@ -1326,110 +1326,111 @@ HTML全局属性
   spellcheck  对元素进行拼写和语法检查  
   translate   规定是否应该翻译元素内容 
   tableindex=3  使用table键跳转时,按照定义的数字顺序 
-◆'character entities'字符实体 
-  PS:HTML 中,某些字符是预留的,如小于号'<'和大于号'>'可能导致浏览器会误认为标签。
-    若希望正确地显示预留字符,可在 HTML 源代码中使用字符实体;
-    实体名称比实体编号好记,但浏览器可能并不支持所有实体名称,而支持所有实体数字;
-    实体名称对大小写敏感;
-    HTML 4.01 支持 ISO 8859-1(Latin-1)字符集,
-    ISO-8859-1 的较低部分(从 1 到 127 之间的代码)是最初的 7 比特 ASCII,
-    ISO-8859-1 的较高部分(从 160 到 255 之间的代码)全都有实体名称;
-    这些符号中的大多数都可以在不进行实体引用的情况下使用,
-    但是实体名称或实体编号为那些不容易通过键盘键入的符号提供了表达的方法;
-  non-breaking space,不间断空格  &nbsp;
-    浏览器总是会截短 HTML 页面中的空格。
-    如在文本中写 10 个空格,在显示该页面之前,浏览器会删除它们中的 9 个。
-    如需在页面中增加空格的数量,需要使用 &nbsp; 字符实体。
-  ★实体名称   实体编号   显示结果  描述           备注
-  &nbsp;   &#160;    ' '     空格
-  &quot;   &#34;     '"'     双引号 
-  &apos;   &#39;     "'"     单引号        实体名称 IE不支持
-  &lt;     &#60;     <       小于号 
-  &gt;     &#62;     >       大于号 
-  &amp;    &#38;     &       和号  
-  &times;  &#215;    ×       乘号 
-  &divide; &#247;    ÷       除号
-  &plusmn; &#177;    ±       plus-or-minus  
-  &deg;    &#176;    °       degree 
-  &raquo;  &#187;    »       angle quotation mark(right)
-  &laquo;  &#171;    «       angle quotation mark(left)
-  &sup1;   &#185;    ¹       superscript 1 
-  &sup2;   &#178;    ²       superscript 2 
-  &sup3;   &#179;    ³       superscript 3 
-  &frac14; &#188;    ¼       fraction 1/4 
-  &frac12; &#189;    ½       fraction 1/2 
-  &frac34; &#190;    ¾       fraction 3/4 
-  &copy;   &#169;    ©       版权号
-  &reg;    &#174;    ®       注册商标
-  &trade;  &#8482;   ™       商标 
-  &yen;    &#165;    ¥       元(yen)
-  &euro;   &#8364;   €       欧元(euro)
-  &pound;  &#163;    ￡      英镑符号
-  &cent;   &#162;    ￠      分(cent)
-  &sect;   &#167;    §       小节 
-  &radic;  &#8730;   √       square root 
-  &bull;   &#8226;   •       bullet 
-  &hellip; &#8230;   …       horizontal ellipsis 
-  &permil; &#8240;   ‰       per mille 
-  &prime;  &#8242;   ′       minutes 
-  &Prime;  &#8243;   ″       seconds 
-  &lsaquo; &#8249;   ‹       single left angle quotation  
-  &rsaquo; &#8250;   ›       single right angle quotation 
-  &oline;  &#8254;   ‾       overline 
-  &euro;   &#8364;   €       euro 
-  &trade;  &#8482;   ™       trademark 
-  &larr;   &#8592;   ←       left arrow 
-  &uarr;   &#8593;   ↑       up arrow 
-  &rarr;   &#8594;   →       right arrow 
-  &darr;   &#8595;   ↓       down arrow                   
-  &harr;   &#8596;   ↔       left right arrow             
-  &crarr;  &#8629;   ↵       carriage return arrow        
-  &lceil;  &#8968;   ⌈       left ceiling                 
-  &rceil;  &#8969;   ⌉       right ceiling                
-  &lfloor; &#8970;   ⌊       left floor                   
-  &rfloor; &#8971;   ⌋       right floor                  
-  &loz;    &#9674;   ◊       lozenge                      
-  &spades; &#9824;   ♠       spade                        
-  &clubs;  &#9827;   ♣       club                         
-  &hearts; &#9829;   ♥       heart                        
-  &diams;  &#9830;   ♦       diamond                      
-  &oplus;  &#8853;   ⊕      circled plus                 
-  &otimes; &#8855;   ⊗      cirled times                 
-  &forall; &#8704;   ∀       for all                      
-  &part;   &#8706;   ∂       part                         
-  &exists; &#8707;   ∃       exists                       
-  &empty;  &#8709;   ∅       empty                        
-  &nabla;  &#8711;   ∇       nabla                        
-  &isin;   &#8712;   ∈       isin                         
-  &notin;  &#8713;   ∉       notin                        
-  &ni;     &#8715;   ∋       ni                           
-  &prod;   &#8719;   ∏       prod                         
-  &sum;    &#8721;   ∑       sum                          
-  &minus;  &#8722;   −       minus                        
-  &lowast; &#8727;   ∗       lowast                       
-  &radic;  &#8730;   √       square root                  
-  &prop;   &#8733;   ∝       proportional to              
-  &infin;  &#8734;   ∞       infinity                     
-  &ang;    &#8736;   ∠       angle                        
-  &and;    &#8743;   ∧       and                          
-  &or;     &#8744;   ∨       or                           
-  &cap;    &#8745;   ∩       cap                          
-  &cup;    &#8746;   ∪       cup                          
-  &int;    &#8747;   ∫       integral                     
-  &there4; &#8756;   ∴       therefore                    
-  &sim;    &#8764;   ∼       simular to                   
-  &cong;   &#8773;   ≅       approximately equal          
-  &asymp;  &#8776;   ≈       almost equal                 
-  &ne;     &#8800;   ≠       not equal                    
-  &equiv;  &#8801;   ≡       equivalent                   
-  &le;     &#8804;   ≤       less or equal                
-  &ge;     &#8805;   ≥       greater or equal             
-  &sub;    &#8834;   ⊂       subset of                    
-  &sup;    &#8835;   ⊃       superset of                  
-  &nsub;   &#8836;   ⊄       not subset of                
-  &sube;   &#8838;   ⊆       subset or equal              
-  &supe;   &#8839;   ⊇       superset or equal            
-  &perp;   &#8869;   ⊥       perpendicular                
+◆特殊字符 
+  'character entities'字符实体 
+    PS: HTML中,某些字符是预留的,如'<'和'>'可能导致浏览器误认为标签 
+      可在HTML源代码中使用'字符实体',来显示预留字符 
+      其中大多数符号可在不进行实体引用的情况下使用 
+      但为那些不容易通过键盘键入的符号提供了表达的方法;
+    '实体字符'可用'实体名称'或'实体编号'表示 
+      '实体名称'比'实体编号'好记,但浏览器对'实体编码'支持性更好 
+      实体名称对大小写敏感;
+    ★实体名称  实体编号   显示     描述          
+    &nbsp;      &#160;    ' '     'non-breaking space'不间断空格 
+      浏览器总是会截短HTML页面中的空格。
+      如在文本中写10个空格,在显示该页面之前,浏览器会删除它们中的9个。
+      可使用 &nbsp; 字符实体,在页面中增加空格的数量 
+    &quot;      &#34;     '"'     双引号 
+    &apos;      &#39;     "'"     单引号        
+      该符号实体名称,IE不支持
+    &lt;        &#60;     <       小于号 
+    &gt;        &#62;     >       大于号 
+    &amp;       &#38;     &       和号  
+    &times;     &#215;    ×       乘号 
+    &divide;    &#247;    ÷       除号
+    &plusmn;    &#177;    ±       加减号   
+    &deg;       &#176;    °       度  
+    &raquo;     &#187;    »       angle quotation mark[right]
+    &laquo;     &#171;    «       angle quotation mark[left]
+    &sup1;      &#185;    ¹       superscript 1 
+    &sup2;      &#178;    ²       superscript 2 
+    &sup3;      &#179;    ³       superscript 3 
+    &frac14;    &#188;    ¼       fraction 1/4 
+    &frac12;    &#189;    ½       fraction 1/2 
+    &frac34;    &#190;    ¾       fraction 3/4 
+    &copy;      &#169;    ©       版权号
+    &reg;       &#174;    ®       注册商标
+    &trade;     &#8482;   ™       商标 
+    &yen;       &#165;    ¥       元(yen)
+    &euro;      &#8364;   €       欧元(euro)
+    &pound;     &#163;    ￡      英镑符号
+    &cent;      &#162;    ￠      分(cent)
+    &sect;      &#167;    §       小节 
+    &radic;     &#8730;   √       square root 
+    &bull;      &#8226;   •       bullet 
+    &hellip;    &#8230;   …       horizontal ellipsis 
+    &permil;    &#8240;   ‰       per mille 
+    &prime;     &#8242;   ′       minutes 
+    &Prime;     &#8243;   ″       seconds 
+    &lsaquo;    &#8249;   ‹       single left angle quotation  
+    &rsaquo;    &#8250;   ›       single right angle quotation 
+    &oline;     &#8254;   ‾       overline 
+    &euro;      &#8364;   €       euro 
+    &trade;     &#8482;   ™       trademark 
+    &larr;      &#8592;   ←       left arrow 
+    &uarr;      &#8593;   ↑       up arrow 
+    &rarr;      &#8594;   →       right arrow 
+    &darr;      &#8595;   ↓       down arrow                   
+    &harr;      &#8596;   ↔       left right arrow             
+    &crarr;     &#8629;   ↵       carriage return arrow        
+    &lceil;     &#8968;   ⌈       left ceiling                 
+    &rceil;     &#8969;   ⌉       right ceiling                
+    &lfloor;    &#8970;   ⌊       left floor                   
+    &rfloor;    &#8971;   ⌋       right floor                  
+    &loz;       &#9674;   ◊       lozenge                      
+    &spades;    &#9824;   ♠       spade                        
+    &clubs;     &#9827;   ♣       club                         
+    &hearts;    &#9829;   ♥       heart                        
+    &diams;     &#9830;   ♦       diamond                      
+    &oplus;     &#8853;   ⊕      circled plus                 
+    &otimes;    &#8855;   ⊗      cirled times                 
+    &forall;    &#8704;   ∀       for all                      
+    &part;      &#8706;   ∂       part                         
+    &exists;    &#8707;   ∃       exists                       
+    &empty;     &#8709;   ∅       empty                        
+    &nabla;     &#8711;   ∇       nabla                        
+    &isin;      &#8712;   ∈       isin                         
+    &notin;     &#8713;   ∉       notin                        
+    &ni;        &#8715;   ∋       ni                           
+    &prod;      &#8719;   ∏       prod                         
+    &sum;       &#8721;   ∑       sum                          
+    &minus;     &#8722;   −       minus                        
+    &lowast;    &#8727;   ∗       lowast                       
+    &radic;     &#8730;   √       square root                  
+    &prop;      &#8733;   ∝       proportional to              
+    &infin;     &#8734;   ∞       infinity                     
+    &ang;       &#8736;   ∠       angle                        
+    &and;       &#8743;   ∧       and                          
+    &or;        &#8744;   ∨       or                           
+    &cap;       &#8745;   ∩       cap                          
+    &cup;       &#8746;   ∪       cup                          
+    &int;       &#8747;   ∫       integral                     
+    &there4;    &#8756;   ∴       therefore                    
+    &sim;       &#8764;   ∼       simular to                   
+    &cong;      &#8773;   ≅       approximately equal          
+    &asymp;     &#8776;   ≈       almost equal                 
+    &ne;        &#8800;   ≠       not equal                    
+    &equiv;     &#8801;   ≡       equivalent                   
+    &le;        &#8804;   ≤       less or equal                
+    &ge;        &#8805;   ≥       greater or equal             
+    &sub;       &#8834;   ⊂       subset of                    
+    &sup;       &#8835;   ⊃       superset of                  
+    &nsub;      &#8836;   ⊄       not subset of                
+    &sube;      &#8838;   ⊆       subset or equal              
+    &supe;      &#8839;   ⊇       superset or equal            
+    &perp;      &#8869;   ⊥       perpendicular                
+  &#x<Unicode编码>;  表示一字符 
+    如 &#x1d306;   表示:𝌆  
 --------------------------------------------------------------------------------
 ◆HTML5 
   介绍 

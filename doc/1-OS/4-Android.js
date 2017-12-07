@@ -5,11 +5,16 @@ JDK'Java Development Kit',Java语言的软件开发工具包SDK
 开发环境搭建: 
   安装'Java JDK' 
     下载'Java JDK'进行安装[可改变安装路径]  
+      将安装 jdk 和 jre 
+      Self:分别安装到: 'D:/devkits/java/' 下 [开发工具目录]
     将JDK的bin目录添加到Path环境变量中 
     $ java -version // 版本信息 
   安装'Android SDK' 
     PS: 可单独安装,也可通过'Android Studio'安装 
     1 安装'Android Studio' 
+      self: 
+        安装studio到 'D:/devkits/android/studio'
+        安装sdk到 'D:/devkits/android/sdk' 
     2 安装必要组件  
     3 配置环境变量 
       ANDROID_HOME: sdk所在目录 

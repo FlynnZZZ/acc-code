@@ -135,19 +135,19 @@ Selector,选择器
       用于定义只出现一次的样式,虽然多次使用可以起作用,但不推荐 
     [attrName]  属性选择器 [IE7+] 
       PS:属性值可使用引号引起来或不用引号,效果相同 
-      [attr]        带有指定属性的元素 
-      [attr='aoo']  属性值等于'aoo'字符
-      [attr*='aoo'] 属性值包含'aoo'字符 [CSS3]
-      [attr^=aoo]   属性值以'aoo'字符开头[CSS3]
-      [attr$=aoo]   属性值以'aoo'结尾[CSS3]
-      [attr~=aoo]   属性值包含'aoo'单词[即以空格分开的'aoo'字符] 
-      [attr|=aoo]   属性值包含'aoo'或以'aoo-'开头 
-      Example:
+      [<attr>]          带有指定属性的元素 
+      [<attr>="aoo"]    属性值等于'aoo'字符
+      [<attr>*="aoo"]   包含'aoo'字符[CSS3] 
+      [<attr>^="aoo"]   以'aoo'字符开头[CSS3] 
+      [<attr>$="aoo"]   以'aoo'字符结尾[CSS3] 
+      [<attr>~="aoo"]   包含'aoo'单词[即以空格分开的'aoo'字符] 
+      [<attr>|="aoo"]   包含'aoo'或以'aoo-'开头  [?] 
+      Example: 
         [title] { color:red; }
         [title='W3School'] { border:5px solid blue; }
         [title=W3C] { border:5px solid blue; }
         [title~='hello'] { color:red; }
-  关系选择器  
+  关系选择器 
   伪类选择器 
     元素伪类 
       在CSS3中伪元素由单冒号':'改为双冒号'::',但仍兼容单冒号   
@@ -326,7 +326,7 @@ Selector,选择器
           <p lang="zh">22</p>
           P:lang(lv){ color: red; }
           P:lang(zh){ color: blue; }
-    状态伪类 : 用于标记UI元素当前的状态 
+    状态伪类: 用于标记UI元素当前的状态 
       PS:只当元素处于某种状态下时,才起作用,默认状态下不起作用 
       :checked     当表单中的radio单选框或者时checkbox复选框处于选取状态时的样式 
         Example: input:checked{}
@@ -344,7 +344,14 @@ Selector,选择器
           当单独使用 body{ background-color: :pink; } 整个文档也被渲染了,
           是因为 单独指定body影响到了上面的样式 或许就是一个bug (?)
       ★子元素过滤伪类 
-      :nth-child(arg)      所有子元素过滤伪类的蓝本  [CSS3] 
+      :first-child          指定任意元素的第一个子元素的样式 
+        Example: 
+          li:first-child{ background:red; }
+      :last-child           当元素为最后一个子元素时 
+        Example:  :last-child {outline:dashed 1px red;}
+      :only-child           当元素仅有一个子元素时 
+        Example:  :only-child{ outline:dashed 1px red; }
+      :nth-child(arg)       所有子元素过滤伪类的蓝本  [CSS3] 
         :nth-child(num)    父元素的第'num'个子元素,从1开始
         :nth-child(Xn+X)   父元素的第'Xn+X'个子元素,X表示数字,n表示从0开始的数 
           Example:
@@ -382,17 +389,8 @@ Selector,选择器
             <p></p>
             <p>有背景</p>
           </div>
-      :nth-last-child(arg) 同'nth-child(arg)',顺序为逆序 
-      :first-child   指定任意元素的第一个子元素的样式 
-        Example: 
-          li:first-child{ background:red; }
-      :last-child    当元素为最后一个子元素时 
-        Example:  :last-child {outline:dashed 1px red;}
-      :only-child    当元素仅有一个子元素时 
-        Example:  :only-child{ outline:dashed 1px red; }
-      :nth-of-type(arg)       和'nth-child'类似,按照标签类型来判断 
-      :nth-last-of-type(arg)  ':nth-of-type'的逆序 
-      :first-of-type 指定同一级别中,任意一类元素中的第一个的样式
+      :nth-last-child(arg)  同'nth-child(arg)',顺序为逆序 
+      :first-of-type          指定同一级别中,任意一类元素中的第一个的样式
         Example: 
           <div>1
             <p>11</p>
@@ -401,16 +399,18 @@ Selector,选择器
           </div>
           <div>2</div>
           如 1 11 13 为指定的元素
-      :last-of-type  指定同一级别中,任意一类元素中的最后一个的样式
-      :only-of-type  同一级别中,任意一类元素中只有一个时,指定其样式
+      :last-of-type           指定同一级别中,任意一类元素中的最后一个的样式
+      :only-of-type           同一级别中,任意一类元素中只有一个时,指定其样式
+      :nth-of-type(arg)       和'nth-child'类似,按照标签类型来判断 
+      :nth-last-of-type(arg)  ':nth-of-type'的逆序 
       ★空伪类
       :empty      当元素中内容为空[允许存在注释节点] 
         Example:  :empty{ background:blue; }
     ★其他状态 
-      ::selection 当元素处于选中状态时[CSS3] 
+      ::selection  当元素处于选中状态时[CSS3] 
         Example: 
           网页中文字被选中时 
-          ::selection{
+          ::selection{ 
             background-color: red;
           }
           文本框中的文字被选中时
@@ -441,6 +441,9 @@ Selector,选择器
           而且已经指定了required属性的input元素、select元素以及textarea元素的样式
         optional伪类选择器用来指定允许使用required属性
           而且未指定required属性的input元素、select元素以及textarea元素的样式.
+      :enabled  
+        Example: 
+        input:enabled  每个启用的input元素  
       :default 
         该属性只支持火狐浏览器
         用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
@@ -471,7 +474,7 @@ Selector,选择器
     </div>
     .aoo>.boo{color: red;}
   A+B  同级相邻B [CSS2.1] 
-  A~B  同级B [CSS3]
+  A~B  A同级的B [CSS3]
     <div class="aoo">123 </div>
     <div class="boo">字体变红 </div>
     <div class="coo">123 </div>
@@ -994,7 +997,7 @@ Declaration,样式声明
       lowercase  小写字母
       inherit    继承
     ◆其他
-    color      字体颜色
+    color      字体颜色 
       当边框颜色未设置时,该属性的颜色值会应用到边框上 
     direction  文本方向 
       PS:对于行内元素,只有当unicode-bidi属性设置为embed或bidi-override时才会应用该属性
@@ -1052,11 +1055,12 @@ Declaration,样式声明
     opacity:0-1; 透明度[CSS3+]
       指定元素的不透明度,值从0.0(完全透明)到1.0(完全不透明)
       指定父元素的透明度后,其子元素的透明度不可改变 [?]
-    background背景 
-      background : color url() 重复 位置; [简写]
-        Example: background:green url(data:image/s...) no-repeat 20px center;
-      background-color      背景颜色 
-        PS:为元素设置一种纯色
+    'background'背景 
+      background: color url() 重复 位置; [简写] 
+        Example: background: green url(data:image/s...) no-repeat 20px center;
+      ★分别定义 
+      background-color: <color>;   背景颜色 
+        PS:为元素设置一种纯色 
           颜色会填充元素的内容、内边距和边框区域,扩展到元素边框的外边界,但不包括外边距
           若边框有透明部分,如虚线边框或透明色,会透过这些透明部分显示出背景色
         属性值:
@@ -1065,44 +1069,43 @@ Declaration,样式声明
           hex_number  规定颜色值为十六进制值的背景颜色(比如 #ff0000)。
           rgb_number  规定颜色值为 rgb 代码的背景颜色(比如 rgb(255,0,0))。
           inherit     规定应该从父元素继承 background-color 属性的设置。
-      background-image      背景图片 
-        PS:背景图片的显示覆盖在背景颜色上
-        background-image:url(图片地址);
-          url('URL')  指向图像的路径
-          none    默认值,不显示背景图像
-          inherit 规定应该从父元素继承 background-image 属性的设置。
-        一个元素中可设置多个背景图片
+      background-image: val;       背景图片 
+        PS: 背景图片的显示覆盖在背景颜色上
+        url('URL')  指向图像的路径
+        none    默认值,不显示背景图像
+        inherit 规定应该从父元素继承 background-image 属性的设置。
+        一个元素中可设置多个背景图片 
           background-image:url(url),(url)...; 位置顺序依次是上右下左
-      background-repeat     背景图片重复 
+      background-repeat: kw;       背景图片重复 
         repeat     默认,背景图像将在垂直方向和水平方向重复
         repeat-x   背景图像将在水平方向重复
         repeat-y   背景图像将在垂直方向重复
         no-repeat  背景图像将仅显示一次
         inherit    规定应该从父元素继承 background-repeat 属性的设置
-      background-position   背景位置 
-        PS:若仅规定了一个值,另一个值默认为50%,可以混合使用 % 和 position 值,
+      background-position: X Y?;   设置背景图像的起始位置  
+        PS: 可混合使用 % 和 position 值,
           但最好不要混用固定值和百分比(实质关键字也是百分比),可能导致错误.
-        Exp: background-position:X轴 Y轴; 设置背景图像的起始位置
+        X  水平值 
           使用固定值,表示背景的左上角相对于元素边框外侧左上角的坐标;
           使用百分比或position关键字,表示相对于背景左上角百分比(参考背景自身)的坐标点,
-            相对于元素边框外侧左上角的百分比(相对于元素)的坐标.
-        position  关键字:top、right、bottom、left和center
-        %         左上角是 0% 0%。右下角是 100% 100%
-        length    尺寸值
-      background-size       背景图像尺寸[CSS3] 
-        CSS3属性,支持IE9+
-        auto    默认值,保持图片的原始宽、高
-        length  设置背景图像的高度和宽度。
-          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
-        %       以父元素的百分比来设置背景图像的宽度和高度。
-          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
-          设置 background-size:100% 100%; 就可以图片自适应宽高了.
+          相对于元素边框外侧左上角的百分比(相对于元素)的坐标.
+          position  关键字:top、right、bottom、left和center
+          %         左上角是 0% 0%。右下角是 100% 100%
+          length    尺寸值
+        Y  可选,数值值,默认:50% 
+      background-size: val;        背景图像尺寸[CSS3][IE9+] 
+        auto    默认值,保持图片的原始宽、高 
         cover   把背景图像扩展至足够大,使背景图像完全覆盖背景区域 
           背景图像的某些部分也许无法显示在背景定位区域中。
           图片保持宽高比缩放,长宽都铺满为止(可能会有溢出)
         contain 把图像图像扩展至最大尺寸,使其宽度和高度完全适应内容区域 
           图片保持宽高比缩放,长宽有一个铺满即可(可能会有漏白)
-      background-clip       指定背景的显示范围[CSS3]
+        length  设置背景图像的高度和宽度。
+          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
+        %       以父元素的百分比来设置背景图像的宽度和高度。
+          第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
+          设置 background-size:100% 100%; 就可以图片自适应宽高了.
+      background-clip: kw;         指定背景的显示范围[CSS3]
         border-box   默认值,背景从border外侧进行填充,超出部分被隐藏;
         padding-box  背景从padding外侧进行填充,超出部分被隐藏;
         content-box  背景从content外侧进行填充,超出部分被隐藏;
@@ -1279,9 +1282,9 @@ Declaration,样式声明
           filter : grayscale(0);
         }
   变换&过渡&动画  
-    transform  变换处理 [CSS3][IE9+] 
+    transform,变换处理 [CSS3][IE9+] 
       PS: IE9+支持2D变换,IE10+支持3D变换;只对block元素生效;
-      transform-origin : x [y];      定义变换原点 
+      transform-origin: X Y Z;  定义变换原点,默认:50% 50% 0 
         PS:搭配属性,用于定义运动点;默认为盒子的中心为运动点 
         x   X方向的值
           'center'[默认值]  
@@ -1295,63 +1298,63 @@ Declaration,样式声明
           'bottom'
           %
           pixel
-      transform : translate(lenX[,lenY]); 2D平移 
-        lenX  x轴平移距离
-        lenY  y轴平移距离,默认为0
+      transform: translateX(len);   水平方向平移 
+      transform: translateY(len);   垂直方向平移 
+      transform: translate(x,y?);   2D平移 
+        X  x轴平移距离
+        Y  可选,y轴平移距离,默认:0
         Example:
-          <div class=""> 123123 </div>
-          div{
+          <div class="aoo"> 123123 </div>
+          .aoo{
             width: 50px;
             height: 50px;
             background-color: #b9e4e7;
-            transform:translate(5px,30px);
             transition:all 1s ease 0s;
           }
-          div:hover{
+          .aoo:hover{
             transform:translate(30px);
-            // 等价于
-            // transform:translate(30px,0);
           }
-      transform : translateX(len);        平移 
-      transform : translateY(len);        平移 
-      transform : rotate(XXdeg/turn);      2D[顺时针]旋转
+      transform: rotate(<num>deg/turn);     2D[顺时针]旋转 
         deg  css3中的角度单位 
         turn  
-      transform : rotate3d(x,y,z,XXdeg); 3D旋转
+      transform: rotateX(<num>deg);         以x轴3D旋转 
+      transform: rotateY(<num>deg);         以y轴3D旋转 
+      transform: rotate3d(x,y,z,<num>deg);  3D旋转 
         PS:运动量由指定的角度定义,若为正,运动将为顺时针,若为负,则为逆时针;
           在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
           并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
           若这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
           非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
-        x   num,表示旋转轴X坐标方向的矢量
-        y   num,表示旋转轴Y坐标方向的矢量
-        z   num类型,表示旋转轴Z坐标方向的矢量
+        x   num,表示旋转轴X坐标方向的矢量 
+        y   num,表示旋转轴Y坐标方向的矢量 
+        z   num类型,表示旋转轴Z坐标方向的矢量 
         XX  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
-        Example:transform: rotate3d(1,0,0,60deg);
-      transform : scale(numX[,numY]); 2D缩放 
-        numX   X轴缩放倍数,不可为负
-        numY   Y轴缩放倍数,可选,默认等于numX,不可为负
-      transform : scaleX(num);        仅x轴缩放
-      transform : scaleY(num);        仅y轴缩放
-      transform : skew(numXdeg,numYdeg); 变形 
+        Example: 
+        transform: rotate3d(1,0,0,60deg);
+      transform: scaleX(num);   仅x轴缩放 
+      transform: scaleY(num);   仅y轴缩放 
+      transform: scale(X,Y?);   2D缩放 
+        X   x轴缩放倍数,不可为负
+        Y   y轴缩放倍数,可选,默认等于x轴,不可为负
+      transform: skewX(<num>deg);            水平方向变形 
+      transform: skewY(<num>deg);            垂直方向变形 
+      transform: skew(<numX>deg,<numY>deg?); 变形 
         numX  X轴变形角度
-        numY  Y轴变形角度,可选,默认为0.即只在水平方向上倾斜
-      transform : skewX(numdeg);         变形 
-      transform : skewY(numdeg);         变形 
-      transform : matrix(a,b,c,d,e,f);  混合变形 
+        numY  可选,Y轴变形角度,默认:0,即只在水平方向上倾斜
+      transform: matrix(a,b,c,d,e,f);  混合变形 
       同时使用多个变形时,多个变形方法间使用空格连接[只声明一个'transform'] 
         transform:方法1 方法2...;
-    transition 指定变化的过渡效果 [IE10+ CSS3] 
+    transition,指定变化的过渡效果 [CSS3][IE10+] 
       PS:使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始; 
         并非所有的CSS属性都支持transition[如 ?];
         过渡需要事件触发[如:hover]
-      transition-property:         指定参与过渡的属性 
+      transition-property: kw         指定参与过渡的属性 
         规定应用过渡效果的css属性的名称
         all       值所有属性都将获得过渡效果,默认值 
         none      没有属性会获得过渡效果
         p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
-      transition-duration:         过渡持续时间,单位s或ms 
-      transition-timing-function:  速度变化 
+      transition-duration: <num>s     过渡持续时间,单位s或ms 
+      transition-timing-function: kw  速度变化 
         ease        慢速开始中间快速慢速结束,默认值 
           cubic-bezier(0.25,0.1,0.25,1)
         linear      匀速 
@@ -1363,39 +1366,42 @@ Declaration,样式声明
         ease-in-out 慢速开始中间匀速慢速结束 
           cubic-bezier(0.42,0,0.58,1)
         cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
-      transition-delay:            延迟时间,单位s或ms 
+      transition-delay: <num>s        延迟时间,单位s或ms 
         0  默认值 
-      transition: [property] duration [accelerate] [delay]; [简写方式] 
-        PS:同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s; 
-        property   可选,默认为所有属性,指定变化的属性 
-        duration   过渡持续时间 
-        accelerate 可选,过渡的速度变化  
-        delay      可选,默认为 0,开始执行的延迟时间 
-      Example :
-        <div>  </div>
-        div { 
+      transition: property? duration accelerate? delay?; [简写方式] 
+        property   kw,可选,指定变化的属性,默认:所有属性 
+          all   所有属性 
+        duration   <num>s,过渡持续时间 
+        accelerate kw,可选,过渡的速度变化,默认:ease   
+        delay      <num>s,可选,开始执行的延迟时间,默认:0 
+        同时指定多个动画用逗号分隔 
+          transition: width 2s,height 2s; 
+      Example: 
+        <div id="aoo">  </div>
+        .aoo { 
           width:100px; height:100px; background:blue;
-          transition:width 2s;
+          transition: width 2s;
           // -webkit-transition:width 2s; /* Safari and Chrome */
           // -moz-transition:width 2s;    /* Firefox 4 */
           // -o-transition:width 2s;      /* Opera */
         }
-        div:hover { width:300px; }
-    animations 自定义关键帧动画 [IE10+ CSS3]  
+        .aoo:hover { width:300px; }
+    animations,自定义关键帧动画 [CSS3][IE10+]  
       PS: 通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果 
-      animation : name duration accelerate delay counts direction; 简写方式 
-        name       关键帧名称 
-        duration   完成动画的时间[需带单位为s秒或ms毫秒,0则无动画] 
-        accelerate 动画速度变化的曲线 
-        delay      动画开始前的延迟 
-        counts     动画执行的次数 
-        direction  是否轮流反向播放动画 
+      animation: name duration accelerate delay counts direction pause; 简写方式 
+        name       str,关键帧名称 
+        duration   <num>s,一个动画周期的时间[单位s或ms,0则无动画] 
+        accelerate kw,动画速度曲线,默认:ease 
+        delay      <num>s,动画开始前的延迟,默认:0  
+        counts     num,动画执行的次数,默认:1  
+        direction  kw,下一周期播放顺序,默认:normal  
+        pause      kw,是否暂停动画,默认:running 
         ◆分别定义
-        animation-name       关键帧名称 
+        animation-name: str            关键帧名称 
           keyframename 自定义的关键帧名称
           none          无动画效果[可以用于覆盖来自于级联的动画] 
-        animation-duration   动画持续时间,默认为0无动画效果,单位s或ms  
-        animation-timing-function 动画的速度曲线 
+        animation-duration: <num>s     持续时间,默认为0无动画效果,单位s或ms  
+        animation-timing-function: kw  速度曲线 
           ease        慢速开始中间快速慢速结束,默认值 
             cubic-bezier(0.25,0.1,0.25,1.0) 
           linear      匀速 
@@ -1407,26 +1413,26 @@ Declaration,样式声明
           ease-in-out 慢速开始中间匀速慢速结束 
             cubic-bezier(0.42,0,0.58,1.0)
           cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
-        animation-delay      动画开始前的延迟,默认为0 
-        animation-iteration-count 动画执行的次数 
-          num      自定义次数,默认为1 
+        animation-delay: <num>s        延迟,默认:0 
+        animation-iteration-count: kw  执行次数,默认:1  
+          num      自定义次数 
           infinite 无限次
-        animation-direction  动画在下一周期是否反向播放 
+        animation-direction: kw        下一周期播放顺序 
           normal      默认,首次正序运行,每周期结束从头到尾运行
           alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
             比如 ease-in 反向时成为ease-out
           reverse     首次反向运行,每周期结束动画由尾到头运行 
           alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
-        animation-play-state 定义动画暂停或播放状态 
+        animation-play-state: kw       暂停或播放状态 
           通过该属性可以灵活的控制动画的播放状态
           running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
           paused   暂停,暂停时动画会保持暂停时的状态
-        animation-fill-mode  对象在动画播放时间外的状态 
-          none      回到最初状态,默认值 
-          backwards 动画完成后回到最初的CSS样式 
-          forwards  动画完成后保持最后CSS样式不变 
+        animation-fill-mode: kw        动画播放时间外[延时时间和动画结束后]的状态 
+          none      不改变默认行为,默认值 
+          backwards 动画执行前的状态,即延时时间内[在第一个关键帧中定义] 
+          forwards  动画完成后保持最后CSS样式不变[在最后一个关键帧中定义] 
             最后样式取决于'animation-direction'和'animation-iteration-count'
-          both      根据animation-direction（见后）轮流应用forwards和backwards规则
+          both      向前和向后填充模式都被应用 
       @keyframes  创建关键帧 
         PS:以百分比%规定动画阶段;"from"和"to"等价于0%[动画开始]和100%[动画结束];
           为了获得最佳的浏览器支持,应始终定义0%和100%;  
@@ -1920,37 +1926,54 @@ Layout,布局
         margin:0 auto; 使元素在其父盒子中水平居中
           但该方法无法使元素垂直居中
     border  边框 
-      border  边框 [简写方式] 
-        PS:缩写中 border-style 属性是必须的;
-          color属性控制文本字体颜色和盒子边框颜色,当border-color未指定时使用color的值;
-        border[-top/right/bottom/left]-width 边框宽度[可分别设置每条边] 
-          PS:border-width : 1px 2px 3px 4px; 分别定义四条边的宽度 
+      'border'边框 
+        border: style width? color?; [简写方式] 
+          style  边框风格 
+          width  边框宽度 
+          color  边框颜色 
+        ★分别定义 
+        border-style: kw;           边框风格 
+          none    无
+          solid   实线
+          dashed  虚线
+          dotted  点虚线
+          double  
+          groove  
+          ridge  
+          inset  
+          outset 
+          inherit
+          ★分别定义每条边 
+          border-top-style: kw;     
+          border-right-style: kw;   
+          border-bottom-style: kw;  
+          border-left-style: kw;    
+        border-width: val{1,4};     边框宽度 
           pixels
           thin
           medium
           thick
           inherit
-        border[-left/right/top/bottom]-style 边框风格 
-          none    无
-          solid   实线
-          dashed  虚线
-          dotted  点虚线
-          double
-          groove
-          ridge
-          inset
-          outset
-          inherit
-        border[-top/right/bottom/left]-color 边框颜色 
-          PS: 颜色值适合所有表示方式[关键字、十六进制、RGB...] 
+          ★分别定义每条边 
+          border-top-width: val;     
+          border-right-width: val;   
+          border-bottom-width: val;  
+          border-left-width: val;    
+        border-color: <color>{1,4}; 边框颜色 
+          默认使用字体颜色 
+          ★分别定义每条边 
+          border-top-color: <color>;
+          border-right-color: <color>;
+          border-bottom-color: <color>;
+          border-left-color: <color>;
+          Example:  
           border-color: red green blue gray; 分别定义四条边的颜色
         -moz-border-color  火狐专有样式 
           在火狐中,若设置了border的宽度是X px,可在这个border上使用X种颜色,
           每种颜色显示1px的宽度。
           若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
           Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
-        Example: 
-          border:solid 2px red；
+        Example: border:solid 2px red;
         Accu: 
           透明边框 
             #aoo{
@@ -1960,65 +1983,71 @@ Layout,布局
               height: 100px;
               width: 100px;
             }
-      border-radius 边框圆角 [简写方式] [CSS3] 
-        PS:IE9+不加前缀支持 
+      'border-radius'边框圆角 [CSS3] 
+        PS: 使用 -webkit 和-moz 前缀兼容浏览器,IE9+不加前缀支持 
           当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
-          使用 -webkit 和-moz 前缀兼容浏览器
-        可单独定义的样式 
-          border-top-left-radius:rX rY;      左上圆角 
-          border-top-right-radius:rX rY;     右上圆角 
-          border-bottom-right-radius:rX rY;  右下圆角 
-          border-bottom-left-radius:rX rY;   左下圆角 
-        border-radius: rX [/ rY];
-          PS:水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
-          rX   水平半径,(length|%){1,4} 上右下左 
-          rY   垂直半径,(length|%){0,4} 上右下左,可选,默认等于水平半径 
+        border-radius: rX{1,4} / rY{1,4}?; [简写方式]  
+          PS: 水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
+          rX   length|%,水平半径 
+          rY   可选,length|%,上右下左,默认等于水平半径 
+        ★可单独定义的样式 
+        border-top-left-radius: rX rY;      左上圆角 
+        border-top-right-radius: rX rY;     右上圆角 
+        border-bottom-right-radius: rX rY;  右下圆角 
+        border-bottom-left-radius: rX rY;   左下圆角 
         Example: 
-          border-radius: 2em 1em 4em / 0.5em 3em;
+          border-radius: 2px 1px 4px / 5px 3px;
           等价于
-          border-top-left-radius: 2em 0.5em;
-          border-top-right-radius: 1em 3em;
-          border-bottom-right-radius: 4em 0.5em;
-          border-bottom-left-radius: 1em 3em;
-      border-image  边框图片 [简写方式] [CSS3] 
-        PS:IE支持效果不好,IE11可以支持 
+          border-top-left-radius: 2px 5px;
+          border-top-right-radius: 1px 3px;
+          border-bottom-right-radius: 4px 5px;
+          border-bottom-left-radius: 1px 3px;
+      'border-image'图片边框 [CSS3] 
+        PS: IE支持效果不好,IE11可以支持 
           使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
           虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
-        可分别设置的样式 
+        border-image:source slice{1,4}|width{1,4}? outset? style?; [简写方式] 
+          source  url,图片资源 
+          slice   图片裁切,上右下左,图像边界向内偏移 
+          width   图片边框宽度,上右下左,图像边界的宽度  
+          outset  在边框外部绘制偏移的量,默认:0  
+          repeat  重复样式 
+            stretch  拉伸,默认值
+            round    铺满 
+            repeat   重复 
+          ★分别定义每条边/角  
           border-top-img     上边框
-          ...
+          border-right-img   右边框
+          border-bottom-img  下边框
+          border-left-img    左边框
           border-top-left-image     左上角
           border-top-right-image    右上角 
           border-bottom-left-image  左下角 
           border-bottom-right-image 右下角 
-          border-corner-image       4个角 
-          border-image-source  图片资源 
-            none  默认值,无背景
-            img   使用绝对或相对 url 地址指定背景图像
-          border-image-slice:(length|%){1,4}  图片裁切 
-            默认值为100% 
-            Example:
-              .aoo{
-                border-image-slice: len1 len2 len3 len4;
-                // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
-                // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
-                // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
-                // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
-              }
-          border-image-width:(length|%){1,4}  边框宽度 
-          border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
-          border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
-            kw  keyword可取值如下:
-            stretch  拉伸,默认值
-            repeat   重复
-            round    平铺 
-        border-image:source slice{1,4}/width{1,4} style repeat; 
-          source  背景图片资源
-          slice   图片裁切,上右下左 
-          width   边框宽度,上右下左 
-          repeat  重复样式 
-        Example:
+          border-corner-image       四个角 
+          Example:
           border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
+        ★可分别设置的样式 
+        border-image-source                 图片资源 
+          none  默认值,无背景
+          img   使用绝对或相对 url 地址指定背景图像
+        border-image-slice:(length|%){1,4}  图片裁切 
+          默认:100%  
+          Example:
+          .aoo{
+            border-image-slice: len1 len2 len3 len4;
+            // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
+            // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
+            // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
+            // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
+          }
+        border-image-width:(length|%){1,4}  边框宽度 
+        border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
+        border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
+          kw  keyword可取值如下:
+          stretch  拉伸,默认值
+          repeat   重复
+          round    平铺 
       border:none 与 border:0 的区别
         border:0 相当于 border-width:0,
         浏览器依然对border-width、border-color 进行了渲染占用了内存
@@ -2072,13 +2101,13 @@ Layout,布局
       content-box;  默认值,width height 为content的宽、高尺寸
       border-box;   width height 为border的宽、高尺寸
     box-shadow 盒子阴影 [CSS3] 
-      box-shadow: h-shadow v-shadow [blur spread color inset];
-        h-shadow 水平偏移距离,可为负值
-        v-shadow 垂直偏移距离,可为负值
-        blur     模糊距离,可选
-        spread   阴影尺寸,可选
-        color    阴影颜色,可选,默认为黑色  
-        inset/outset 定义内/外部阴影,可选,默认为'outset'外部阴影
+      box-shadow: lenH lenV blur? spread? color? inset?; 
+        lenH    length,水平偏移距离,可为负值
+        lenV    length,垂直偏移距离,可为负值
+        blur    length,模糊距离,可选
+        spread  length,阴影尺寸,可选
+        color   阴影颜色,可选,默认为黑色  
+        inset/outset 可选,定义内/外部阴影,默认:'outset'外部阴影
       同时使用多个阴影,之间使用逗号','隔开
         box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
     overflow 溢出显示方式 

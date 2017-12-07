@@ -861,7 +861,7 @@ class,类,基于原型的实现的封装[ES6]
   'call by reference'按引用传递: 传递的为原始值的隐式引用 
     PS: 当传递的值被改变时原始值也会被改变[两者同时指向相同的值]
       按引用传递会使函数调用的追踪更加困难,有时也会引起一些微妙的BUG 
-  'call by sharing'按共享传递: 也叫按对象传递,JS中对象类型按共享传递的
+  'call by sharing'按共享传递: 也叫按对象传递,JS中对象类型按共享传递的 
     PS: 该求值策略被用于Python、Java、Ruby、JS等多种语言 
     对象实际值存放于堆内存,传递的为指针引用,修改时则改变堆内存对象,重置则改变指针指向 
       var obj = {x : 1};
@@ -875,6 +875,24 @@ class,类,基于原型的实现的封装[ES6]
       console.log(obj); // {x : 1},obj并未被修改 
       goo(obj);
       console.log(obj); // {x: 2},被修改了 
+      
+      var obj1 = {
+        aoo: 111
+        ,foo: function(cfoo){
+          cfoo('aaa')
+        }
+      }
+      var obj2 = {
+        aoo: 222 
+        ,foo: function(arg){
+          console.log(this.aoo,arg);
+        }
+      }
+      obj1.foo(obj2.foo) // undefined 'aaa' 
+      相当于: 
+      var foo = obj2.foo 
+      obj1.foo(foo) 
+      即: 传递的值A为指向实际的对象值B的引用,可修改影响实际值但覆盖则不会影响 
 ------------------------------------------------------------------------------- 
 'expression'表达式: 解释器通过计算将表达式转换为一个值 
   PS: 最简单的表达式是字面量或变量名; 通过合并简单的表达式来创建复杂的表达式 
@@ -1897,7 +1915,7 @@ Function,函数基础类,ES中所有函数的基类
           console.log(arguments[0],arguments[1]); 
         };
         foo(1); // 1 undefined
-      参数按共享传递 [moIn 'Evaluation Strategy']
+      参数按共享传递 [moIn 'Evaluation Strategy'] 
     默认参数: 在定义函数时,将参数赋值[ES6]   
       function person(name='aoo',age=25){
         console.log(name,age);
@@ -2062,43 +2080,68 @@ Function,函数基础类,ES中所有函数的基类
       console.log(goo(4)); // 7 
     不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
-'Arrow functions'箭头函数: ([arg1,arg2,..]) => { statement }[ES6] 
-  PS: 相当于: function([arg1,arg2,..]){ return statement }
-  传入多个参数使用括号(),复杂操作使用{} 
-    若参数超过1个的话,需要用小括号（）括起来,
-    函数体语句超过1条的时候,需要用大括号{ }括起来.
-    var sum = (a,b) => {return a+b}
-    sum(1,2);//结果:3
-  this指向的是定义时的this,而非执行时的this 
-    var obj = {  //定义一个对象
-      x:100,     //属性x
-      show(){
-        setTimeout( function(){   //延迟500毫秒,输出x的值
-          //匿名函数
-          console.log(this.x);
-        }, 500 );
+'Arrow functions'箭头函数 [ES6] 
+  Feature: 
+    变化形式: ([arg1,arg2,..]) => { statements } 
+      相当于: function([arg1,arg2,..]){ statement }
+      ◆参数: 
+      无参数时,必须使用一个括号来表示  () => {} 
+      单参数时,可省略括号 arg => {} 
+      多参数时,不可省略括号 
+      ◆函数体: 
+      单条语句时,可省略大括号,且该条语句作为函数返回值: () => expr 
+        相当于 function(){ return expr } 
+          var rst = [1,2,3,4].map( val => val+100 )
+          console.log(rst); // [101, 102, 103, 104] 
+        可使用括号来'封装'单语句
+          var foo = () => ('abc')
+          console.log(foo()); // abc 
+          
+          () => ({key1: 'val1'}) // 返回对象存在歧义时 
+          相当于: function(){ return {key1: 'val1'}; }
+      多条语句时,不可省略大括号 
+    不能用作构造器,否则报错  
+      var Foo = () => {};
+      var foo = new Foo(); // TypeError: Foo is not a constructor
+    不绑定 this 
+      不创建自己的 this,而使用封闭执行上下文的 this  
+        var obj = {  //定义一个对象
+          x: 100,     //属性x
+          show: function(){
+            setTimeout( function(){ //匿名函数 
+              console.log(this.x);
+            }, 500 );
+          }
+        };
+        obj.show(); // undefined
+        setTimeout() 中的匿名函数在 window 上下文中执行,this 表示的为 window 
+        
+        var obj = {
+          x: 100, 
+          show: function (){
+            setTimeout( () => {   // 箭头函数
+              console.log(this.x);
+            }, 500 );
+          }
+        };
+        obj.show(); // 100
+        定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
+        而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
+      严格模式中与 this 相关的规则都将被忽略 
+        因为 this 是词法层面上的 
+      使用 call 或 apply 调用时,对this指向无影响,只是改变传参 
+        因为 this 已在词法层面完成了绑定 
+    不绑定'arguments'对象 
+      var foo = () => { console.log(arguments); }
+      foo() // 报错: arguments is not defined 
+      
+      使用'剩余参数'间接实现类似功能 
+      var log = (...args) => {
+        console.log.apply(console,args)
       }
-    };
-    obj.show(); // undefined
-    当代码执行到了 setTimeout() 时,此时的this已经变成了window对象
-    [setTimeout是window对象的方法],已经不再是obj对象了,
-    所以用 this.x 获取的时候,获取的不是 obj.x 的值,而是 window.x 的值
-    
-    var obj = {
-      x:100, 
-      show(){
-        setTimeout( () => {   // 箭头函数
-          console.log(this.x);
-        }, 500 );
-      }
-    };
-    obj.show(); // 100
-    定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
-    而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
-  无'arguments'对象,若要多参数,则需用'...'扩展符 
-    var log = (...args) => {
-      console.log.apply(console,args)
-    }
+    无'prototype'属性 
+      var Foo = () => {};
+      console.log(Foo.prototype); // undefined
 'Generator'生成器函数,可控制函数内部状态,暂停或继续[ES6] 
   PS: 中途退出后又重新进入执行,函数内定义的变量的状态都会保留 
   function* foo(){} 声明Generator函数
@@ -2455,6 +2498,16 @@ this,JS代码执行时的'context'上下文对象
       }
     }
     console.log(obj.foo()());  // 2
+  Self: 
+    作为函数的参数,不会改变this指向[仅在函数体中会改变] 
+    var obj = {
+      aoo: 100
+      ,foo: function(){
+        // 不会将 this 绑定到 console 对象中 
+        console.log(this.aoo);
+      }
+    }
+    obj.foo() // 100 
 ------------------------------------------------------------------------------- 
 'Modules'模块化规范[ES6] 
   PS: ES6模块默认采用严格模式"use strict"; 

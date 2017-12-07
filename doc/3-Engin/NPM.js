@@ -286,13 +286,13 @@ Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭�
     添加 js到 所需的调试的html的头部
       <script src="http://192.168.0.102:8099/target/target-script-min.js#anonymous"></script> 
 Bower 
-json-server 接口Mock数据 
+json-server,接口Mock数据 
   npm install json-server --save  安装依赖 
   在'dev-server.js'文件中进行配置
   var jsonServer = require('json-sever'); 引入json-server 
   ...
-iron-node  调试Node代码 
-supervisor: 开发时,用于检测代码变更自动重启程序 
+iron-node,调试Node代码 
+supervisor,开发时,用于检测代码变更自动重启程序 
   检测当前目录下'.node'和'.js'文件,当这些文件发生改动时,supervisor 会自动重启程序
   $ npm i -g supervisor 
 其他工具 

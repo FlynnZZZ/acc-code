@@ -12,7 +12,9 @@ jQuery: 快速简洁的JS库
       且$("#aoo")仍为一个对象,
       if ($("#aoo")) { } 不可用来做为节点是否存在的判断,
       可使用$("#aoo").length 或 $("#aoo")[0] 来判断
-  jQuery 配置 
+  安装引入 
+    $ npm i -S jquery 
+  jQuery配置 
     jQuery.noConflict()   指定jQuery代理
       var jq = jQuery.noConflict(); 自定义快捷方式为'jq'
     jQuery(function(jq){
@@ -368,14 +370,17 @@ DOM操作
         若有,则删除;没有,则加上
     元素信息 
       ◆尺寸位置信息 
-        PS:对于$(window)和$(document)其 width() innerWidth() outerWidth() 相同
-          且为只读,也和其 margin border padding 无关 ,
-          推荐使用width来代替innerWidth、outerWidth获取; 高度同理;
-          其中$(window)表示的为可视区,而$(document)为网页的总高度;
+        $(window) 和 $(document) 的宽高尺寸 
+          他们的 .height() .innerHeight() .outerHeight() 都相同
+          且为只读,也和其 margin border padding 无关,
+          推荐使用 height 来代替 innerHeight、outerHeight 获取; 宽度同理;
+          $(window).height()   表示为可视区高度 
+          $(document).height() 表示网页的总高度 
       jEl.width([num/foo])   读写元素content的width 
-        PS:当元素display:none;时宽度为0;
+        PS: 当元素display:none;时宽度为0;
         num      用于设置元素的宽度值,单位px
-        foo(indx,oldWidth){} 
+        foo = function(indx,oldWidth){
+        }
       jEl.height([num/foo])  读写元素content的height 
         需要设置 height 的值,如单行文字只设置line-height则该方法获取不到数值;
       jEl.innerWidth([num/foo])  读写元素宽,content+padding 
@@ -383,12 +388,12 @@ DOM操作
       jEl.outerWidth([bool])   元素宽,content+padding+border[+margin] 
         bool  可选,默认为false,是否包括margin的布尔值
       jEl.outerHeight([bool])  元素高,content+padding+border[+margin] 
-      jEl.scrollTop()   读写元素相对滚动条顶部的偏移 
-        PS:此处的jEl为拥有滚动条的元素;
+      jEl.scrollTop()   读写,元素相对滚动条顶部的偏移 
+        PS: 此处的jEl为拥有滚动条的元素;
       jEl.scrollLeft()  读写元素相对滚动条左侧的偏移
-      jEl.offset([{top:num1,left:num2}]) 读写元素相对可视区左上角的top和left 
-        PS:返回包含top和left属性的对象;
-          元素相对与document的top和left;
+      jEl.offset([{top:num1,left:num2}]) 读写,元素相对文档左上角的top和left 
+        PS: 返回包含top和left属性的对象; 
+          元素相对与document的top和left,若需获取到视口则需减去滚动距离;
           此方法只对可见元素有效;
         Example:
           $(".a").offset(); // {top: 24, left: 0}

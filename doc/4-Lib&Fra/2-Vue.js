@@ -18,7 +18,7 @@ VueJS,数据驱动、组件化开发模式的渐进式前端类MVVM框架[IE9+]
         <div id="app1">
           <head-com></head-com>
         </div>
-        Vue.component('head-com', function (resolve, reject) {
+        Vue.component('head-com',function (resolve,reject) {
           $.get("./head.html").then(function (res) {
             resolve({
               template: res
@@ -110,7 +110,7 @@ View&Model
         var vm = new Vue({
           el : '.slct',
           data : {
-            items :[ 1, 2, 3, 4, 5 ],
+            items :[ 1,2,3,4,5 ],
             items1 :[{a:1},{a:2},{a:3},{a:4}],
             n : 1,
           },
@@ -128,7 +128,7 @@ View&Model
       这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
       然后,在下一个的事件循环“tick”中,Vue 刷新队列并执行实际[已去重的]工作。
       Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MutationObserver,
-      若执行环境不支持,会采用 setTimeout(fn, 0) 代替。
+      若执行环境不支持,会采用 setTimeout(fn,0) 代替。
       Example:
         当设置 vm.someData = 'new value' ,该组件不会立即重新渲染。
         当刷新队列时,组件会在事件循环队列清空时的下一个“tick”更新。
@@ -149,7 +149,7 @@ View&Model
         })
         在组件内使用 vm.$nextTick() 实例方法特别方便,因为它不需要全局 Vue ,
         并且回调函数中的 this 将自动绑定到当前的 Vue 实例上:
-        Vue.component('example', {
+        Vue.component('example',{
           template: '<span>{{ message }}</span>',
           data: function () {
             return {
@@ -347,7 +347,7 @@ v-model="str/arr" 双向绑定[表单]数据值
     Example: 
       <select  v-model='key'>
         <option value="">{{val}}</option>
-        // 当存在 value="xx" 时 , v-model 的值为 "xx",否则为val
+        // 当存在 value="xx" 时 ,v-model 的值为 "xx",否则为val
         // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
       </select>
     当选项中不存在被绑定的值时,绑定值会被默认重置为 undefined
@@ -457,7 +457,7 @@ v-bind:attrname="str/arr/obj"  属性绑定[简写':attrname']
         }
       可为属性提供一个包含多个值的数组,常用于提供多个带前缀的值 ['2.3.0+']
         会渲染数组中最后一个被浏览器支持的值。
-        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+        <div :style="{ display: ['-webkit-box','-ms-flexbox','flex'] }"></div>
         如果浏览器支持不带浏览器前缀的 flexbox,那么渲染结果会是 display: flex 
     arr  将多个'样式对象'应用到一个元素上 
     Vue会自动添加相应的前缀 
@@ -465,7 +465,7 @@ v-bind="obj"  无参数绑定到对象,使用对象的'key'作为参数
   PS: 该模式下'class'和'style'绑定不支持数组和对象 
   obj   包含"{attr:val}"键值对的对象 
   Example: 
-    <div v-bind="{ aoo: 11, boo: 22 }">abc</div> 
+    <div v-bind="{ aoo: 11,boo: 22 }">abc</div> 
     相当于: 
     <div v-bind:aoo="11" v-bind:boo="22">abc</div> 
 v-on:ename="foo/expr" 事件绑定[简写'@ename'] [事件名不区分大小写] 
@@ -521,7 +521,7 @@ v-on="obj"  无参数时,可绑定到一对象  '2.4.0+'
   PS: 使用对象语法时,不支持任何修饰器 
   obj 为'{事件:监听器}'键值对的对象 
   Example: 
-  <button v-on="{ mousedown: doThis, mouseup: doThat }"></button>
+  <button v-on="{ mousedown: doThis,mouseup: doThat }"></button>
 'Modifiers'修饰符,让指令以特殊方式绑定,适用'v-on'、'v-model'、'v-bind' 
   PS: 修饰符是以点号'.'指明的特殊后缀;指令可以串联;
   通用事件修饰符 
@@ -551,7 +551,7 @@ v-on="obj"  无参数时,可绑定到一对象  '2.4.0+'
         v: 86,
         f1: 112,
         mediaPlayPause: 179,
-        up: [38, 87]
+        up: [38,87]
       }
     .enter   Enter键,'.13'等价于'.enter'
     .tab     
@@ -620,7 +620,7 @@ v-pre    跳过该元素及其子元素的编译
       <component :is="view"></component>
     </keep-alive>
     // <!-- 数组 (使用 `v-bind`) -->
-    <keep-alive :include="['a', 'b']">
+    <keep-alive :include="['a','b']">
       <component :is="view"></component>
     </keep-alive>
     <keep-alive> 缓存切换的组件 
@@ -632,7 +632,7 @@ v-pre    跳过该元素及其子元素的编译
       </keep-alive>
   <transition ></transition>   // 过渡 
     ★Props 
-    name="str"   用于自动生成 CSS 过渡类名。
+    name="str"   用于自动生成 CSS 过渡类名 
       例如：name: 'fade' 将自动拓展为.fade-enter,.fade-enter-active等。默认类名为 "v"
     appear="bol" 是否在初始渲染时使用过渡。默认为 false。
     css="bol"    是否使用 CSS 过渡类。默认为 true 
@@ -785,13 +785,13 @@ v-pre    跳过该元素及其子元素的编译
       'v-leave-to' leave的结束状态: 删除'v-leave'的同时添加,leave完成后移除 ['2.1.8+'] 
     CSS过渡: 主要使用CSS3的'transition'来实现 
       Example:
-        .fade1-enter-active, .fade1-leave-active {
+        .fade1-enter-active,.fade1-leave-active {
           transition: opacity 0.5s;
         }
-        .fade1-enter, .fade1-leave-to {
+        .fade1-enter,.fade1-leave-to {
           opacity: 0
         }
-        .fade2-enter-active, .fade2-leave-active {
+        .fade2-enter-active,.fade2-leave-active {
           transition: all 1s ease-out;
         }
         .fade2-enter {
@@ -818,7 +818,7 @@ v-pre    跳过该元素及其子元素的编译
         })
     CSS动画: 主要使用CSS3的'animation'来实现 
       用法类似CSS过渡,
-      区别: 在动画中'v-enter'类名在节点插入DOM后不会立即删除, 
+      区别: 在动画中'v-enter'类名在节点插入DOM后不会立即删除,
       而是在'animationend'事件触发[即动画进入动画结束]时删除 
       Example: 
         p{ background : #aaa; }
@@ -918,7 +918,7 @@ v-pre    跳过该元素及其子元素的编译
         },
         // 此回调函数是可选项的设置
         // 与 CSS 结合时使用
-        enter: function (el, done) {
+        enter: function (el,done) {
           // ...
           done() // 表示进入过程结束,必须要调用的 
         },
@@ -930,7 +930,7 @@ v-pre    跳过该元素及其子元素的编译
         },
         // 此回调函数是可选项的设置
         // 与 CSS 结合时使用
-        leave: function (el, done) {
+        leave: function (el,done) {
           // ...
           done() // 表示离开过程结束,必须要调用的 
         },
@@ -1002,7 +1002,7 @@ v-pre    跳过该元素及其子元素的编译
     PS: 默认为根元素的第一个'transitionend'或'animationend'事件
     <transition :duration="1000">...</transition>
     // 也可定制进入和移出的持续时间 
-    <transition :duration="{ enter: 500, leave: 800 }">...</transition>
+    <transition :duration="{ enter: 500,leave: 800 }">...</transition>
   'appear'初始渲染的过渡: 设置节点的在初始渲染的过渡 
     <transition appear>
       <!-- ... -->
@@ -1073,7 +1073,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
   PS: VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的; 
     所有的VueJS组件其实都是被扩展的Vue实例;
     在实例选项中,方法里的'this'即表示为'vm';
-  el: <selector>, // 实例挂载元素 
+  el: <selector>,// 实例挂载元素 
     PS: 不推荐挂载根实例到<html>或<body>上 
     selector  CSS选择器或 HTMLElement 实例 
       当选择器指向多个元素时,只接管第一个 
@@ -1084,7 +1084,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       挂载DOM元素的HTML会被提取出来用作模板,
       此时,必须使用 Runtime + Compiler 构建的 Vue 库
   ◆数据选项 
-  data: obj,      // 数据,用于渲染、交互的数据 
+  data: obj,     // 数据,用于渲染、交互的数据 
     实例中默认代理其'data',使用'this'表示 
       其优先级高于其他,即'this.xx'优先在'data'中寻找 
     Example:
@@ -1112,7 +1112,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
         Self: 改变了变量到内存中的指向,而vm实例中的'data'仍指向原内存数据 
       myData.age = 25;                 // DOM不会重新渲染
       vm.age = 23; // DOM被渲染成23,
-  props: arr/obj, // 接收父组件传递的数据[大小写不敏感] 
+  props: arr/obj,// 接收父组件传递的数据[大小写不敏感] 
     PS: 父组件中的子组件标签上添加属性及对应的值,属性在子组件中的'props'内注册,
       从而在子组件中获取到从父组件传递的属性值   
       在子组件中使用同'data'中的值类似,
@@ -1121,8 +1121,8 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     {   // 对象的形式进行详细定义 
       若接收数据不符合规格,开发版本会发出警告 
       校验在组件实例创建前进行,此时data、computed或methods等属性还无法使用 
-      propA: Number,          // str,接收的指定类型  
-      propB: [String,Number], // arr,可为多种类型 
+      propA: Number,         // str,接收的指定类型  
+      propB: [String,Number],// arr,可为多种类型 
         // null 则表示任何类型都可以
       propC: {                // obj,详细配置 
         default: 100          // 原始类型默认值可直接定义  
@@ -1131,7 +1131,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
             message: 'hello' 
           };
         }
-        ,type: String,  // 类型 
+        ,type: String, // 类型 
           String
           Number
           Boolean
@@ -1140,8 +1140,8 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
           Array
           Symbol
           自定义构造器函数,使用 instanceof 检测 
-        ,required: true,  // 是否必须 
-        ,validator: function (value) {  // 自定义验证函数
+        ,required: true, // 是否必须 
+        ,validator: function (value) {  // 自定义验证函数 
           return value > 10
         }
       }
@@ -1179,12 +1179,12 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       让计算值传参? 
         方式一: 使用方法来代替 
         方式二: 通过提供 set 来间接实现所需功能 
-  },  
+  }, 
   ◆方法选项 
   watch: {        // 监听数据的变化  
     <key>: function(val,oldVal){ // 方式一 
     },
-    <key>: 'someMethod',  // 方式二,为一方法名  
+    <key>: 'someMethod', // 方式二,为一方法名  
     <key>: {       // 方式三,使用对象的方式进行配置  
       deep: true // 深度 watch 
         监听对象属性的变化,需使用深度watch,监听数组的变动则不需要 
@@ -1195,7 +1195,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     'aoo.boo': foo/{} // 方法四,watch对象的成员 
     Question: 
       当对象变化时,如何确定是某一成员变化导致的? 方法四间接实现
-  },      
+  },     
   methods: {      // 定义的方法
     PS: methods会被混入到Vue实例中,自己使用'this.xx'调用 
     foo1: function(){
@@ -1204,12 +1204,12 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
   },
   filters: {      // 定义过滤器,详见过滤器  
     // 
-  },    
+  },   
   directives: {   // 定义指令,详见指令 
     // 
   }  
   ◆视图选项
-  template: htmlStr, // 模版,会替换挂载元素及其内部元素,除非模板的内容有分发插槽 
+  template: htmlStr,// 模版,会替换挂载元素及其内部元素,除非模板的内容有分发插槽 
     //若Vue选项中有'render'渲染函数,该模板将被忽略 
   components: { // 定义组件 
     // 
@@ -1246,7 +1246,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
           domProps: { // DOM 属性
             innerHTML: 'baz'
           },
-          // 事件监听器基于 `on`, 所以不再支持如 `v-on:keyup.enter` 修饰器,需要手动匹配 keyCode 
+          // 事件监听器基于 `on`,所以不再支持如 `v-on:keyup.enter` 修饰器,需要手动匹配 keyCode 
           on: {
             click: this.clickHandler
           },
@@ -1269,7 +1269,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
           // Scoped slots in the form of
           // { name: props => VNode | Array<VNode> }
           scopedSlots: {
-            default: props => createElement('span', props.text)
+            default: props => createElement('span',props.text)
           },
           // 如果组件是其他组件的子组件,需为插槽指定名称
           slot: 'name-of-slot',
@@ -1282,8 +1282,8 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
         arr // 子节点'VNodes',由'createElem()'构建而成 
         [
           '先写一些文字',
-          createElement('h1', '一则头条'),
-          createElement(MyComponent, {
+          createElement('h1','一则头条'),
+          createElement(MyComponent,{
             props: {
               someProp: 'foobar'
             }
@@ -1291,7 +1291,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
         ]
     )
   },
-  renderError: function(h, err){ // 当'render'出错时,提供另外一种渲染输出  ['2.2.0+'] 
+  renderError: function(h,err){ // 当'render'出错时,提供另外一种渲染输出  ['2.2.0+'] 
     // 只在开发者环境下工作 
     // 其错误将会作为第二个参数传递到 renderError。这个功能配合 hot-reload 非常实用
     // Example: 
@@ -1299,8 +1299,8 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     //   render (h) {
     //     throw new Error('oops')
     //   },
-    //   renderError (h, err) {
-    //     return h('pre', { style: { color: 'red' }}, err.stack)
+    //   renderError (h,err) {
+    //     return h('pre',{ style: { color: 'red' }},err.stack)
     //   }
     // }).$mount('#app')
   },
@@ -1309,7 +1309,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       组件的自定义逻辑可以分布在这些钩子中[Vue无'控制器'概念];
       钩子的'this'指向调用它的Vue实例; 
   beforeCreate: function(){ // 实例刚创建 
-    设置'data'中的数据无效 
+    'data'中的数据还未生效  
   },
   created: function(){      // 实例创建完毕 
     实例已完成的配置：
@@ -1318,42 +1318,41 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       watch/event事件回调 
     挂载阶段还没开始,$el 属性目前不可见 
   },
-  beforeMount: function(){  // DOM渲染前 
+  beforeMount: function(){    // 模版编译挂载/DOM渲染前 
     在挂载前被调用：相关的 render 函数首次被调用 
     该钩子在服务器端渲染期间不被调用
   },
-  mounted: function(){      // DOM渲染完毕 [替换'1.x'版本的'ready']  
-    // el被新创建的vm.$el替换,并挂载到实例后调用 
-    // 该钩子在服务器端渲染期间不被调用 
-    // 如果 root 实例挂载了一个文档内元素,当 mounted 被调用时 vm.$el 也在文档内。
+  mounted: function(){        // DOM渲染完毕 
+    PS: 替换'1.x'版本的'ready'   
+    el被新创建的 vm.$el 替换,并挂载到实例后调用 
+    该钩子在服务器端渲染期间不被调用 
+    如果 root 实例挂载了一个文档内元素,当 mounted 被调用时 vm.$el 也在文档内 
     this.$nextTick(function () {
       // 注意 mounted 不会承诺所有的子组件也都一起被挂载。
       // 如果希望等到整个视图都渲染完毕,可用 vm.$nextTick()  
     })
   },
-  beforeUpdate: function(){ // 数据更新时调用
+  beforeUpdate: function(){ // 组件更新前  
     发生在虚拟 DOM 重新渲染和打补丁前 
     可在该钩子中进一步地更改状态,但会触发附加的重渲染过程 
     该钩子在服务器端渲染期间不被调用     
   }
-  updated: function(){      // 数据模型更新 
+  updated: function(){      // 组件更新后 
     当这个钩子被调用时,组件 DOM 已经更新
     由于数据更改导致的虚拟DOM重新渲染和打补丁后会调用该钩子 
     'updated'不会承诺所有的子组件也都一起被重绘。
     若希望等到整个视图都重绘完毕,可以用 vm.$nextTick() 
   },
-  activated: function(){    // 组件被激活时 
-    <keep-alive>组件激活时调用 
+  activated: function(){      // <keep-alive>组件激活时 
     该钩子在服务器端渲染期间不被调用 
   },
-  deactivated: function(){  // 组件被移除时 
-    <keep-alive>组件停用时调用 
+  deactivated: function(){    // <keep-alive>组件移除时 
     该钩子在服务器端渲染期间不被调用 
   },
-  beforeDestroy: function(){  // 实例销毁前调用,此时实例仍然可用 
+  beforeDestroy: function(){    // 实例销毁前,此时实例仍然可用 
     该钩子在服务器端渲染期间不被调用
   },
-  destroyed: function(){  // Vue实例销毁后调用 
+  destroyed: function(){        // 组件销毁后 
     销毁观察、组件及事件 
     该钩子在服务器端渲染期间不被调用
     调用后,Vue实例指示的所有东西都会解绑,
@@ -1361,14 +1360,14 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     所有的子实例也会被销毁 
   },
   ◆组合选项 
-  parent: vm,  // 指定已创建的实例之父实例,在两者之间建立父子关系 
+  parent: vm, // 指定已创建的实例之父实例,在两者之间建立父子关系 
     // 子实例可以用 this.$parent 访问父实例,子实例被推入父实例的 $children 数组中 
     // 节制地使用 $parent 和 $children - 它们的主要目的是作为访问组件的应急方法 
     // 更推荐用 props 和 events 实现父子组件通信
-  mixins: [],  // 混合,详见混合  
+  mixins: [], // 混合,详见混合  
     接受一个混合对象的数组,这些混合实例对象可以像正常的实例对象一样包含选项,
     Mixin 钩子按照传入顺序依次调用,并在调用组件自身的钩子之前被调用 
-  extends: obj/foo,  // 允许声明扩展另一个组件(可是一个简单的选项对象或构造函数) 
+  extends: obj/foo, // 允许声明扩展另一个组件(可是一个简单的选项对象或构造函数) 
     // 和 mixins 类似,区别在于,组件自身的选项会比要扩展的源组件具有更高的优先级 
     // Example: 
     // var CompA = { ... } 
@@ -1378,14 +1377,14 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     //   ...
     // }
   'provide'和'inject'主要为高阶插件/组件库提供用例,并不推荐直接用于应用程序代码中 
-    // 这对选项需一起使用,以允许一个祖先组件向其所有子孙后代注入一个依赖,不论组件层次有多深, 
+    // 这对选项需一起使用,以允许一个祖先组件向其所有子孙后代注入一个依赖,不论组件层次有多深,
     // 并在起上下游关系成立的时间里始终生效 
     // provide 和 inject 绑定并不是可响应的。这是刻意为之的。
     // 然而,如果你传入了一个可监听的对象,那么其对象的属性还是可响应的。
-  provide: obj/foo,      ['2.2.0+'] 
+  provide: obj/foo,     ['2.2.0+'] 
     // 该对象包含可注入其子孙的属性 
     // 参数为一个对象或返回一个对象的函数
-  inject: arr/obj,       ['2.2.0+'] 
+  inject: arr/obj,      ['2.2.0+'] 
     // 参数为一个字符串数组或一个对象,该对象的 key 代表了本地绑定的名称,
     // value 为其 key 以在可用的注入中搜索。
     Example: 
@@ -1425,20 +1424,20 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       }
     }
   // ◆其他选项 
-  name: str,  // 命令组件,只有作为组件选项时起作用 
+  name: str, // 命令组件,只有作为组件选项时起作用 
     允许组件模板递归地调用自身;
     组件在全局用 Vue.component() 注册时,全局 ID 自动作为组件的 name
     指定 name 选项的另一个好处是便于调试。有名字的组件有更友好的警告信息。
     当在有 vue-devtools,未命名组件将显示成 <AnonymousComponent>,这很没有语义。
     通过提供 name 选项,可以获得更有语义信息的组件树。
-  delimiters: arr,   // 改变纯文本插入分隔符 
+  delimiters: arr,  // 改变纯文本插入分隔符 
     // 该选项只在完整构建版本中的浏览器内编译时可用 
-    // 默认值：["{{", "}}"]
+    // 默认值：["{{","}}"]
     // Example:  改为 ES6 模板字符串的风格
     // new Vue({
-    //   delimiters: ['${', '}']
+    //   delimiters: ['${','}']
     // })
-  functional: bol,  // 使组件无状态[没有 data]和无实例[没有 this 上下文] 
+  functional: bol, // 使组件无状态[没有 data]和无实例[没有 this 上下文] 
     // 用一个简单的 render 函数返回虚拟节点使他们更容易渲染 
   model: { // 允许一个自定义组件在使用 v-model 时定制 prop 和 event  '2.2.0+'
     // 默认情况下,一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event,
@@ -1447,7 +1446,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     prop: '',
     event: ''
   } 
-  inheritAttrs: bol, // 默认值:true  '2.4.0+'
+  inheritAttrs: bol,// 默认值:true  '2.4.0+'
     // 默认情况下父作用域的不被认作 props 的特性绑定 (attribute bindings) 
     // 将会“回退”且作为普通的 HTML 特性应用在子组件的根元素上。
     // 当撰写包裹一个目标元素或另一个组件的组件时,这可能不会总是符合预期行为。
@@ -1455,7 +1454,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     // 而通过 (同样是 2.4 新增的) 实例属性 $attrs 可以让这些特性生效,
     // 且可以通过 v-bind 显性的绑定到非根元素上。
     // 这个选项不影响 class 和 style 绑定。
-  comments: bol,  // 是否保留且渲染模板中的HTML注释,默认：false  '2.4.0+'
+  comments: bol, // 是否保留且渲染模板中的HTML注释,默认：false  '2.4.0+'
     // 该选项只在完整构建版本中的浏览器内编译时可用。
 })  
 vm.xxx.实例属性/方法/事件 
@@ -1475,7 +1474,7 @@ vm.xxx.实例属性/方法/事件
     <child-a v-bind="$props"></child-a> 
     // 通过 $props 将父组件的 props 一起传给子组件 
   vm.$nextTick(foo)        DOM更新后立即调用 
-    Vue.component('example', {
+    Vue.component('example',{
       template: '<span>{{ message }}</span>',
       data: function () {
         return {
@@ -1514,7 +1513,7 @@ vm.xxx.实例属性/方法/事件
     key  data对象中的属性,一个表达式或计算属性函数 
       表达式只接受监督的键路径。对于更复杂的表达式,用一个函数取代。
       // 键路径
-      vm.$watch('a.b.c', function (newVal, oldVal) {
+      vm.$watch('a.b.c',function (newVal,oldVal) {
         // 做点什么
       })
       // 函数
@@ -1522,28 +1521,28 @@ vm.xxx.实例属性/方法/事件
         function () {
           return this.a + this.b
         },
-        function (newVal, oldVal) {
+        function (newVal,oldVal) {
           // 做点什么
         }
       )
     f    回调函数
     options = {
-      deep: bol,  // 为了发现对象内部值的变化,可以在选项参数中指定 deep: true 
-        vm.$watch('someObject', callback, {
+      deep: bol, // 为了发现对象内部值的变化,可以在选项参数中指定 deep: true 
+        vm.$watch('someObject',callback,{
           deep: true
         })
         vm.someObject.nestedValue = 123
       immediate: bol  // immediate: true 将立即以表达式的当前值触发回调
-        vm.$watch('a', callback, {
+        vm.$watch('a',callback,{
           immediate: true
         })
         // 立即以 `a` 的当前值触发回调
     }
     返回一个取消观察函数,用来停止触发回调：
-      var unwatch = vm.$watch('a', cb)
+      var unwatch = vm.$watch('a',cb)
       unwatch() // 取消观察
     Example: 
-      vm.$watch('a', function (newVal, oldVal) {
+      vm.$watch('a',function (newVal,oldVal) {
           // 回调将在`vm.a`值改变后调用 
       })
   vm.$set(obj/arr,key/idx,val) 返回设置的值,效果同Vue.set()  
@@ -1613,8 +1612,8 @@ vm.xxx.实例属性/方法/事件
   'val'   可选,指令的值 
     指令值为对象字面量 
       指令函数能够接受所有合法类型的JS表达式 
-      <div v-demo="{ color: 'white', text: 'hello!' }"></div>
-      Vue.directive('demo', function (el, binding) {
+      <div v-demo="{ color: 'white',text: 'hello!' }"></div>
+      Vue.directive('demo',function (el,binding) {
         console.log(binding.value.color) // => "white"
         console.log(binding.value.text)  // => "hello!"
       })    
@@ -1627,17 +1626,17 @@ vm.xxx.实例属性/方法/事件
         ...
       }
     foo   简写为函数: 在'bind'和'update'钩子上做重复动作,而不关心其它的钩子函数 
-      Vue.directive('color-swatch', function (el, binding) {
+      Vue.directive('color-swatch',function (el,binding) {
         el.style.backgroundColor = binding.value
       })
   directives: {                 // 注册组件指令  
     focus: {
       // 指令定义钩子函数  
     }
-  },               
+  },              
   Example: 
     <div id="aoo"> <input v-focus > </div>
-    Vue.directive('focus', {
+    Vue.directive('focus',{
       inserted: function (el) {
         el.focus();
         console.log(11111);
@@ -1646,7 +1645,7 @@ vm.xxx.实例属性/方法/事件
     new Vue({
       el : '#aoo',
     });
-  ◆<hookName>: foo, 指令定义[钩子]函数 
+  ◆<hookName>: foo,指令定义[钩子]函数 
   bind: function(el,binding,vnode){  // 指令初始化
     // 指令第一次绑定到元素时调用,只调用一次 
   }     
@@ -1669,7 +1668,7 @@ vm.xxx.实例属性/方法/事件
         <input type="text" v-test1="inputIsFocus">
         <button type="button" @click="inputFocus">click</button>
       </div>
-      Vue.directive('test1', {
+      Vue.directive('test1',{
         update : function(el,binds,vn,oVn){
           el.focus();
           console.log(11);
@@ -1704,22 +1703,22 @@ vm.xxx.实例属性/方法/事件
   binding  对象,包含以下属性 
     'name'       指令名,不包括'v-'前缀 
     'value'      绑定值[即'drctVal'] 
-      例如: v-my-directive="1 + 1", value 的值是 2
+      例如: v-my-directive="1 + 1",value 的值是 2
     'expression' 绑定值的字符串形式['drctVal'的字符串形式] 
-      例如 v-my-directive="1 + 1" , expression 的值是 "1 + 1" 
+      例如 v-my-directive="1 + 1" ,expression 的值是 "1 + 1" 
     'arg'        传给指令的参数[即'drctArg'] 
-      例如 v-my-directive:foo, arg 的值是 "foo"
+      例如 v-my-directive:foo,arg 的值是 "foo"
     'modifiers'  一个包含修饰符的对象['mdf'组成的对象] 
-      例如: v-my-directive.foo.bar, 
-      修饰符对象 modifiers 的值是 { foo: true, bar: true }
+      例如: v-my-directive.foo.bar,
+      修饰符对象 modifiers 的值是 { foo: true,bar: true }
     'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
       无论值是否改变都可用
   vnode    Vue编译生成的虚拟节点 
   oldVnode 上一个虚拟节点 
     Example:
       <div id="map" v-drct:arg.a.b="msg"></div>
-      Vue.directive('drct', {
-        bind: function (el, binds, vnode,oldVnode) {
+      Vue.directive('drct',{
+        bind: function (el,binds,vnode,oldVnode) {
           var s = JSON.stringify
           el.innerHTML = 
             'name: '       + s(binds.name) + '<br>' +
@@ -1734,7 +1733,7 @@ vm.xxx.实例属性/方法/事件
       new Vue({
         el: '#map',
         data: {
-          msg: 'thisisamessage', 
+          msg: 'thisisamessage',
         }
       });
       显示为:
@@ -1746,7 +1745,7 @@ vm.xxx.实例属性/方法/事件
       vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
       oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
 'Mixins'混合,分发Vue组件中可复用功能的方式 
-  PS: 混合对象可以包含任意组件选项, 
+  PS: 混合对象可以包含任意组件选项,
     使用混合时,所有混合对象的选项将被混入该组件本身的选项 
   Vue.mixin({..})   全局混合,会混入之后所有创建的Vue实例 
     Example: 
@@ -1793,7 +1792,7 @@ vm.xxx.实例属性/方法/事件
   Vue.config.optionMergeStrategies  自定义选项合并策略 [todo]
     自定义选项将使用默认策略,即简单地覆盖已有值
     向 Vue.config.optionMergeStrategies 添加一个函数,以自定义逻辑合并
-    Vue.config.optionMergeStrategies.myOption = function (toVal, fromVal) {
+    Vue.config.optionMergeStrategies.myOption = function (toVal,fromVal) {
       // return mergedVal
     }
     对于大多数对象选项,可以使用 methods 的合并策略：
@@ -1801,13 +1800,13 @@ vm.xxx.实例属性/方法/事件
     strategies.myOption = strategies.methods 
     更多高级的例子可以在 Vuex 的 1.x 混合策略里找到：
     const merge = Vue.config.optionMergeStrategies.computed
-    Vue.config.optionMergeStrategies.vuex = function (toVal, fromVal) {
+    Vue.config.optionMergeStrategies.vuex = function (toVal,fromVal) {
       if (!toVal) return fromVal
       if (!fromVal) return toVal
       return {
-        getters: merge(toVal.getters, fromVal.getters),
-        state: merge(toVal.state, fromVal.state),
-        actions: merge(toVal.actions, fromVal.actions)
+        getters: merge(toVal.getters,fromVal.getters),
+        state: merge(toVal.state,fromVal.state),
+        actions: merge(toVal.actions,fromVal.actions)
       }
     }
 'Component'组件 
@@ -1841,14 +1840,14 @@ vm.xxx.实例属性/方法/事件
         })
         三个组件共享了同一个 data ,因此 counter 会影响所有组件 
     } 
-    name: 'aoo',       // 命名组件,用于递归调用 
+    name: 'aoo',      // 命名组件,用于递归调用 
   })  
   Vue.component("c-name",function(rs,rj){  // 异步全局组件 
     rs({}) // 可在适当的时候进行 
   });
   'components': {     // vue实例中局部注册 
     PS: 仅能在该实例/组件的作用域中使用 
-    'cpt-name1' : cpt, 
+    'cpt-name1' : cpt,
       cpt 可为:   
       import xx from "./cpt.js";  // 模块化引入的组件
       Vue.component(cpt,{})       // 定义的全局组件 
@@ -1856,7 +1855,7 @@ vm.xxx.实例属性/方法/事件
         template: '<div>A custom component! {{aoo}}</div>',
       }
     // ..
-  }, 
+  },
   ◆使用
   <cpt-name></cpt-name>    在父组件中指定子组件位置 
     要确保在初始化根实例之前注册了组件 
@@ -1942,8 +1941,8 @@ vm.xxx.实例属性/方法/事件
         <my-component></my-component>
         <my-component></my-component>
       </div>
-      Vue.component("my-component", {
-        template:"#myTemp", // 对应上面定义的template标签中的选择器
+      Vue.component("my-component",{
+        template:"#myTemp",// 对应上面定义的template标签中的选择器
         data: function(){
           return {
             msg: 'aaaa'
@@ -1988,7 +1987,7 @@ vm.xxx.实例属性/方法/事件
           }
         定义'data'属性,用prop值初始化,并监听prop值进行动态响应  
     'events up'子组件向父组件通信 
-      父组件中,子组件标签上绑定自定义事件并指定回调函数,  
+      父组件中,子组件标签上绑定自定义事件并指定回调函数, 
       子组件内通过'$emit'触发该事件并传递数据,
       父组件中的回调函数会执行并获取到该数据  
       childVm.$emit('event-name',data) 触发事件并传递数据'data'
@@ -2198,11 +2197,11 @@ vm.xxx.实例属性/方法/事件
       },1000)
     })
     使用Webpack的代码分割功能 
-      Vue.component('async-webpack-example', function (resolve) {
+      Vue.component('async-webpack-example',function (resolve) {
         // 这个特殊的 require 语法告诉 webpack
         // 自动将编译后的代码分割成不同的块,
         // 这些块将通过 Ajax 请求自动下载 
-        require(['./my-async-component'], resolve)
+        require(['./my-async-component'],resolve)
       })
       Webpack2+ES2015 的语法返回一个 Promise resolve 函数：
       Vue.component( 'async-webpack-example',
@@ -2217,11 +2216,11 @@ vm.xxx.实例属性/方法/事件
       })        
     高级异步组件 ['2.3.0+'] 
       Vue.component("xx",() => ({ 
-        component: import('./MyComp.vue'), // 需要加载的组件。应当是一个 Promise
-        loading: LoadingComp, // loading 时应当渲染的组件
-        error: ErrorComp, // 出错时渲染的组件
-        delay: 200, // 渲染 loading 组件前的等待时间。默认：200ms。
-        timeout: 3000, // 最长等待时间。超出此时间则渲染 error 组件。默认：Infinity
+        component: import('./MyComp.vue'),// 需要加载的组件。应当是一个 Promise
+        loading: LoadingComp,// loading 时应当渲染的组件
+        error: ErrorComp,// 出错时渲染的组件
+        delay: 200,// 渲染 loading 组件前的等待时间。默认：200ms。
+        timeout: 3000,// 最长等待时间。超出此时间则渲染 error 组件。默认：Infinity
       }));
       当一个异步组件被作为 vue-router 的路由组件使用时,这些高级选项都是无效的,
       因为在路由切换前就会提前加载所需要的异步组件。
@@ -2316,12 +2315,59 @@ Question&Suggestion:
     new Vue({
       // ..
       components: {
-        aoo: appCpt, // 控制该组件 
+        aoo: appCpt,// 控制该组件 
       }
     });
 自我总结: 
   在Vue实例中,所有能通过 this.xx 访问的值,都可在插值中使用 {{xx}}
+--------------------------------------------------------------------------------
+组件懒加载 
+  PS: 也叫延迟加载,即在需要的时候进行加载,随用随载 
+    仅首次加载,加载后会缓存,供后续使用 
+    异步加载的组件将会比页面中其他元素滞后出现,页面会有瞬间闪跳影响 
+  与webpack配合实现组件懒加载 
+    在webpack配置文件中的'output'路径配置'chunkFilename'属性 
+      output: {
+        path: resolve(__dirname,'dist'),
+        filename: options.dev ? '[name].js' : '[name].js?[chunkhash]',
+        publicPath: options.dev ? '/assets/' : publicPath,
+        // chunkFilename路径将会作为组件懒加载的路径,vue-cli的Webpack模版已默认配置  
+        chunkFilename: 'chunk[id].js?[chunkhash]' 
+      }
+    配合webpack支持的异步加载方法 
+      resolve => require([url],resolve)  // 支持性好
+      () => import(url)   // webpack2推荐使用
+        属于ES7,需配合babel的'syntax-dynamic-import'插件使用 [vue-cli的Webpack模版中已默认安装]
+        // 安装插件 
+        $ npm i -D babel-core babel-loader babel-plugin-syntax-dynamic-import babel-preset-es2015
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: [['es2015',{modules: false}]],
+            plugins: ['syntax-dynamic-import']
+          }
+        }]
+      () => system.import(url)       // 已废除,不推荐使用
+    具体实例中实现懒加载 
+      路由中配置异步组件 
+        export default new Router({
+          routes: [
+            {
+              path: '/my'
+              ,name: 'my'
+              ,component:  resolve => require(['../page/my/my.vue'],resolve) // 懒加载
+            },
+          ]
+        })
+      实例中配置异步组件 
+        components: {
+          // 懒加载
+          historyTab: resolve => {require(['../../component/historyTab/historyTab.vue'],resolve)},
+          //historyTab: () => import('../../component/historyTab/historyTab.vue')
+        },
+      全局注册异步组件 
+        Vue.component('mideaHeader',() => import(url)) 
 ---------------------------------------------------------------------以下待整理  
-
+异步组件,加载完毕后执行某些操作,如何监控何时加载完毕 ? 
 
 

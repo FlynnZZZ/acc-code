@@ -1365,13 +1365,13 @@ Declaration,样式声明
         cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
       transition-delay:            延迟时间,单位s或ms 
         0  默认值 
-      transition : [property] duration [accelerate] [delay]; [简写方式] 
+      transition: [property] duration [accelerate] [delay]; [简写方式] 
         PS:同时指定多个动画用逗号分隔,如 transition:width 2s,height 2s; 
         property   可选,默认为所有属性,指定变化的属性 
         duration   过渡持续时间 
         accelerate 可选,过渡的速度变化  
         delay      可选,默认为 0,开始执行的延迟时间 
-      Example: :
+      Example :
         <div>  </div>
         div { 
           width:100px; height:100px; background:blue;
@@ -2276,64 +2276,64 @@ Layout,布局
       display:flex; 容器元素独占一行
       display:inline-flex; 容器元素类似于inline-block
     ◆flex容器 属性
-    flex-flow       flex-direction & flex-wrap 简写方式
-    flex-direction  定义项目的排列方向[水平或垂直、顺序或逆序]
-      row             默认值,水平排列,顺序从左向右
-      row-reverse     水平排列,顺序从右向左排列
-      column          垂直排列,顺序从上向下排列
-      column-reverse  垂直排列,顺序从下向上排列
-    justify-content 排列方向上的对齐方式 [水平或垂直和flex-direction有关] 
+    justify-content: kw   排列方向上的对齐方式 [水平或垂直和flex-direction有关] 
       当flex-direction定义为垂直排列时,表示为垂直方向上的对齐方式
       flex-start    默认值,左对齐
       flex-end      右对齐
       center        居中对齐
       space-between 两端对齐,项目之间的间隔都相等。
       space-around  平铺[项目之间的间隔会比项目与边框的间隔大一倍]
-    align-items     垂直排列方向上的对齐方式[和flex-direction有关] 
+    align-items: kw   垂直排列方向上的对齐方式[和flex-direction有关] 
       stretch     默认值,[若项目高度未设置尺寸或为auto时,则高度方向项目占满容器]
-        即若未设置尺寸或为auto时,
-        水平排列,项目高度为容器的100%,
-        垂直排列,项目的宽度为容器的100%;
+        即若未设置尺寸或为auto时, 
+        水平排列,项目高度为容器的100%, 
+        垂直排列,项目的宽度为容器的100%; 
       flex-start  左或上对齐
       flex-end    右或下对齐
       center      居中对齐
       baseline    文字基线对齐
         后续项目的第一行文字的基线与第一个项目的第一行的文字的基线对齐;
-    flex-wrap       [水平排列时]是否换行及换行后的排列顺序 
-      nowrap  默认值,不换行
-      wrap          [一行放不下时]换行,从上往下排列[顺序]
-      wrap-reverse  [一行放不下时]换行,从下往上排列[逆序]
-    align-content   [水平排列且换行时]多行的对齐方式
+    align-content:kw   [水平排列且换行时]多行的对齐方式 
       stretch       默认值,多个行占满父元素的高度.
       flex-start    多行向上堆积,第一行与父元素的顶部对齐.
       flex-end      多行向下堆积,最后一行与父元素的底部对齐
       center        多行向中间堆积,多行处于父元素的中间位置
       space-between 上下行与父元素的两端对齐,行之间的间隔平均分布。
       space-around  每行的上下间距都相等。所以,行之间的间隔比行与父元素上下边的间隔大一倍。
+    flex-flow: flex-direction & flex-wrap 简写方式
+    flex-direction: kw  定义项目的排列方向[水平或垂直、顺序或逆序] 
+      row             默认值,水平排列,顺序从左向右
+      row-reverse     水平排列,顺序从右向左排列
+      column          垂直排列,顺序从上向下排列
+      column-reverse  垂直排列,顺序从下向上排列
+    flex-wrap: kw       [水平排列时]是否换行及换行后的排列顺序 
+      nowrap  默认值,不换行
+      wrap          [一行放不下时]换行,从上往下排列[顺序]
+      wrap-reverse  [一行放不下时]换行,从下往上排列[逆序]
     ◆flex项目 属性
-    order:num  项目的排列顺序,数值越小,排列越靠前,默认为0;
     flex:  flex-grow、flex-shrink 和 flex-basis 的简写[后两个属性可选]
       flex:0 1 auto; 默认值
       有两个快捷值:auto (1 1 auto) 和 none (0 0 auto)
         建议优先使用这个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值。
-    flex-grow:num    项目弹性扩展比例 [会相对于其他项目进行对比]
+    flex-grow: num    项目弹性扩展比例 [会相对于其他项目进行对比]
       默认为0,即宽度固定不会伸缩
       若一项目的 flex-grow 值为1,其他为默认0,则该项自动占满剩余空间;
       若所有项的 flex-grow 比值为1,若存在剩余空间则它们将等分
       若一项目的 flex-grow 值为2,其他项目都为 1,则前者占据的剩余空间是其他项的两倍;
-    flex-shrink:num  项目弹性缩小比例 [负值无效]
+    flex-shrink: num  项目弹性缩小比例 [负值无效] 
       1   默认值,即当空间不足,该项目将缩小;
         若所有项目的flex-shrink都为1,则当空间不足时,都将等比例缩小
-      num 其他缩放比例;
       0   当空间不足时,该项不缩小;
+      num 其他缩放比例;
       Remarks: 
         bug: 使用 flex-shrink:0; 决解左右布局时,一边某一个宽度与其他不同
-    flex-basis     项目在排列方向上占据的空间 [和flex-direction有关]
+    flex-basis: auto/length/%  项目在排列方向上占据的空间 [和flex-direction有关]
       水平排列时,相当于width;垂直排列时,相当于height;
-      auto   默认值,即项目的本来大小。
+      auto   默认值,即项目的本来大小 
       length 项目将占据固定空间[如350px]
       百分比  
-    align-self 允许单个项目与其他项目不一样的对齐方式 [可覆盖'align-items'属性]
+    order: num  项目的排列顺序,数值越小,排列越靠前,默认为0;
+    align-self: kw  允许单个项目与其他项目不一样的对齐方式 [可覆盖'align-items'属性]
       auto 默认值,表示继承父元素的align-items属性,若无父元素,则等同于stretch
       flex-start
       flex-end

@@ -1,71 +1,98 @@
 # vue  .vue ------------------------------------------------------------------- 
 '.text.html.basic,.text.html.vue': 
-  '-vue v-if':
-    'prefix': 'vif'
-    'body': 'v-if="${1:key}"' 
-  '-vue v-else-if':
-    'prefix': 'v-else-if'
-    'body': 'v-else-if="${1:key}"' 
-  '-vue v-else':
-    'prefix': 'v-else'
-    'body': 'v-else'
-  '-vue v-show':
-    'prefix': 'v-show'
-    'body': 'v-show="${1:key}"' 
-  '-vue v-for':
-    'prefix': 'v-for'
-    'body': 'v-for="(val,key) in list"' 
-  '-vue v-text':
-    'prefix': 'v-text'
-    'body': 'v-text="${1:key}"' 
-  '-vue v-html':
-    'prefix': 'v-html'
-    'body': 'v-html="${1:key}"' 
-  '-vue v-model':
-    'prefix': 'v-model'
-    'body': 'v-model="${1:key}"'
-  '-vue v-bind':
-    'prefix': 'v-bind'
-    'body': ':${1:class}="${2:arg}"'
-  '-vue v-on':
-    'prefix': 'v-on'
-    'body': '@${1:click}="${2:arg}"' 
-  '-vue v-once':
-    'prefix': 'v-once'
-    'body': """v-once""" 
-  '-vue v-cloak':
-    'prefix': 'v-cloak'
-    'body': """v-cloak""" 
-  '-vue v-pre':
-    'prefix': 'v-pre'
-    'body': """v-pre""" 
-  '-vue slot="$1"':
-    'prefix': 'slot-vue'
-    'body': 'slot="$1"' 
-  '-vue scope="$1"':
-    'prefix': 'scope-vue'
-    'body': 'scope="$1"' 
-  '-vue inline-template="$1"':
-    'prefix': 'inline-template-vue'
-    'body': 'inline-template="$1"' 
-  '-vue is="$1"':
-    'prefix': 'is-vue'
-    'body': 'is="$1"' 
-  '-vue <keep-alive>$1</keep-alive>':
+  '-vue <slot name="xxx">$1</slot>  子组件中对应分发的内容':
+    'prefix': 'slot-tag'
+    'body': '<slot name="xxx">$1</slot>'
+  '-vue <keep-alive>$1</keep-alive>  ':
     'prefix': 'keep-alive'
     'body': '<keep-alive>$1</keep-alive>'
-  '-vue to="$1"':
+  '-vue <transition>$1</transition>  ':
+    'prefix': 'transition'
+    'body': '<transition name="$1">$2</transition>'
+  '-vue <router-view></router-view>  ':
+    'prefix': 'router-view-couple'
+    'body': '<router-view name="$2">$1</router-view>' 
+  '-vue <router-view />  ':
+    'prefix': 'router-view'
+    'body': '<router-view name="$1" />' 
+  '-vue <router-link></router-link>  ':
+    'prefix': 'router-link'
+    'body': '<router-link>$1</router-link>' 
+  '-vue v-if  ':
+    'prefix': 'vif'
+    'body': 'v-if="${1:key}"' 
+  '-vue v-else-if  ':
+    'prefix': 'v-else-if'
+    'body': 'v-else-if="${1:key}"' 
+  '-vue v-else  ':
+    'prefix': 'v-else'
+    'body': 'v-else'
+  '-vue v-show  ':
+    'prefix': 'v-show'
+    'body': 'v-show="${1:key}"' 
+  '-vue v-for  ':
+    'prefix': 'v-for'
+    'body': 'v-for="(val,key) in list"' 
+  '-vue v-text  ':
+    'prefix': 'v-text'
+    'body': 'v-text="${1:key}"' 
+  '-vue v-html  ':
+    'prefix': 'v-html'
+    'body': 'v-html="${1:key}"' 
+  '-vue v-model  ':
+    'prefix': 'v-model'
+    'body': 'v-model="${1:key}"'
+  '-vue v-bind  ':
+    'prefix': 'v-bind'
+    'body': ':${1:class}="${2:arg}"'
+  '-vue v-on  ':
+    'prefix': 'v-on'
+    'body': '@${1:click}="${2:arg}"' 
+  '-vue v-once  ':
+    'prefix': 'v-once'
+    'body': """v-once""" 
+  '-vue v-cloak  ':
+    'prefix': 'v-cloak'
+    'body': """v-cloak""" 
+  '-vue v-pre  ':
+    'prefix': 'v-pre'
+    'body': """v-pre""" 
+  '-vue lang="$1" ':
+    'prefix': 'lang'
+    'body': """lang=\"$1\"""" 
+  '-vue slot="$1"  父组件中具名的分发内容':
+    'prefix': 'slot-vue'
+    'body': 'slot="$1"' 
+  '-vue scope="$1"  ':
+    'prefix': 'scope-vue'
+    'body': 'scope="$1"' 
+  '-vue is="$1"  ':
+    'prefix': 'is-vue'
+    'body': 'is="$1"' 
+  '-vue to="$1"  ':
     'prefix': 'to-vue'
     'body': 'to="$1"'
-  '-vue ref="$1"':
+  '-vue ref="$1"  ':
     'prefix': 'ref-vue'
     'body': 'ref="$1"'
-  '-vue scoped':
+  '-vue name="$1"  ':
+    'prefix': 'name-vue'
+    'body': 'name="$1"'
+  '-vue scoped  ':
     'prefix': 'scoped-vue'
     'body': 'scoped'
-  '-vue text/x-template':
+  '-vue inline-template="$1"  ':
+    'prefix': 'inline-template-vue'
+    'body': 'inline-template="$1"' 
+  '-vue text/x-template  ':
     'prefix': 'text/x-template-vue'
     'body': '"text/x-template"'
+  '-vue active-class="$1"  路径匹配激活class':
+    'prefix': 'active-class-router'
+    'body': 'active-class="$1"'
+  '-vue exact-active-class="$1"  路径精确匹配激活class':
+    'prefix': 'exact-active-class-router'
+    'body': 'exact-active-class="$1"'
 '.source.js,.text.html.vue':
   '-Vue.extend({});  扩展Vue构造器':
     'prefix': 'vue-extend'
@@ -251,6 +278,9 @@
     'prefix': 'refs-vue'
     'body': """$refs""" 
   # 插件 
+  '-vue redirect  kw,重定向':
+    'prefix': 'redirect-kw'
+    'body': """redirect""" 
   '-vue $http.get().then':
     'prefix': 'http.get'
     'body': """$http.get('url',{})  // 某接口
@@ -271,30 +301,30 @@
     })""" 
 '.text.html.vue':
   # html------------------------------------------------------------------------
-  '-vue <template>$1</template>':
-    'prefix': 'template'
-    'body': '<template>$1</template>' 
-  '-vue <router-view></router-view>':
-    'prefix': 'router-view'
-    'body': '<router-view>$1</router-view>' 
-  '-vue <router-link></router-link>':
-    'prefix': 'router-link'
-    'body': '<router-link>$1</router-view>' 
-  '-vue lang=':
-    'prefix': 'lang'
-    'body': """lang=\"$1\"""" 
-  '-vue <template> ...':
-    'prefix': 'template package'
+  '-vue .vue文件模版':
+    'prefix': 'template-package'
     'body': """
     <template lang="html">
-      $1
+      <section class="">
+        $1
+      </section>
     </template>
+    
     <script>
     export default {
+      name: "xxx"
+      ,data: function(){
+        return {
+          
+        };
+      }
     }
     </script>
-    <style lang="css" scoped>
+    
+    <style lang="less" scoped>
+      
     </style>
+    
     """
   # css-------------------------------------------------------------------------
   # js--------------------------------------------------------------------------

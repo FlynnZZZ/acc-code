@@ -1,74 +1,77 @@
 '*':
   # self  
   '- TODO ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★  待处理':
-    'prefix': 'todo-self'
+    'prefix': 'TODO-self'
     'body': '// TODO: ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ '
   '- PS:  说明':
-    'prefix': 'ps-self'
+    'prefix': 'PS-self'
     'body': 'PS: '
   '- Example:  例子':
     'prefix': 'Example-self'
     'body': 'Example: '
   '- Extend:  继承':
-    'prefix': 'extend-self'
+    'prefix': 'Extend-self'
     'body': 'Extend: '
   '- Relate:  相关的':
-    'prefix': 'relate-self'
+    'prefix': 'Relate-self'
     'body': 'Relate: '
   '- Static:  静态属性':
-    'prefix': 'static-self'
+    'prefix': 'Static-self'
     'body': 'Static: '
   '- Proto:  原型属性':
-    'prefix': 'proto-self'
+    'prefix': 'Proto-self'
     'body': 'Proto: '
   '- Instance:  类的实例':
-    'prefix': 'instance-self'
+    'prefix': 'Instance-self'
     'body': 'Instance: '
   '- Member:  对象的成员':
-    'prefix': 'member-self'
+    'prefix': 'Member-self'
     'body': 'Member: '
   '- Feature:  特性':
-    'prefix': 'feature-self'
+    'prefix': 'Feature-self'
     'body': 'Feature: '
   '- Accu:  总结,积累':
-    'prefix': 'accu-self'
+    'prefix': 'Accu-self'
     'body': 'Accu: '
   '- Self:  自己相关':
-    'prefix': 'self-self'
+    'prefix': 'Self-self'
     'body': 'Self: '
   '- More:  更多':
-    'prefix': 'more-self'
+    'prefix': 'More-self'
     'body': 'More: '
   '- Expand:  扩展':
-    'prefix': 'expand-self'
+    'prefix': 'Expand-self'
     'body': 'Expand: '
   '- Question:  问题':
-    'prefix': 'question-self'
+    'prefix': 'Question-self'
     'body': 'Question: '
-  '- Env:  网站':
-    'prefix': 'env-self'
+  '- Env:  环境':
+    'prefix': 'Env-self'
     'body': 'Env: '
   '- Sit:  网站':
-    'prefix': 'sit-self'
+    'prefix': 'Sit-self'
     'body': 'Sit: '
   '- Win:  窗口':
-    'prefix': 'win-self'
+    'prefix': 'Win-self'
     'body': 'Win: '
   '- Pag:  页面/文档':
-    'prefix': 'pag-self'
+    'prefix': 'Pag-self'
     'body': 'Pag: '
   '- Elm:  DOM/元素':
-    'prefix': 'elm-self'
+    'prefix': 'Elm-self'
     'body': 'Elm: '
   '- Atr:  元素属性':
-    'prefix': 'atr-self'
+    'prefix': 'Atr-self'
     'body': 'Atr: '
   '- Evt:  事件':
-    'prefix': 'evt-self'
+    'prefix': 'Evt-self'
     'body': 'Evt: '
-  '- Kit:  事件':
-    'prefix': 'kit-self'
+  '- Kit:  工具/方法':
+    'prefix': 'Kit-self'
     'body': 'Kit: '
+  '- MoIn:  更多':
+    'prefix': 'MoIn-self'
+    'body': 'MoIn: '
   '- NdA  不可直接使用':
     'prefix': 'NdA-self'
     'body': 'NdA'
@@ -82,18 +85,21 @@
   '- option':
     'prefix': 'option-word'
     'body': 'option'
+  '- alias':
+    'prefix': 'alias-word'
+    'body': 'alias'
 
 '.text.html.basic,.text.xml,.text.html.php':
   # 标签 ----------------------------
   '- <div>$1</div>':
     'prefix': 'div-tag'
     'body': '<div>$1</div>'
-  '- <div class="">$1</div>':
+  '- <div class="$1">$2</div>':
     'prefix': 'div-class-tag'
-    'body': '<div class="">$1</div>'
-  '- <div id="">$1</div>':
+    'body': '<div class="$1">$2</div>'
+  '- <div id="$1">$2</div>':
     'prefix': 'div-id-tag'
-    'body': '<div id="">$1</div>'
+    'body': '<div id="$1">$2</div>'
   '- <template>$1</template>':
     'prefix': 'template-tag'
     'body': '<template>$1</template>'

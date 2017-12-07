@@ -142,7 +142,9 @@
     minimumLength: 1
     timeout: 10
   minimap:
+    absoluteMode: true
     autoToggle: true
+    charWidth: 0.7
     moveCursorOnMinimapClick: true
     plugins:
       "highlight-selected": true

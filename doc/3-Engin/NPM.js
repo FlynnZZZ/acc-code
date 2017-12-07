@@ -25,7 +25,7 @@ NPM'node package manager',node包管理器
       npm install -g lodash    全局安装 
       npm install -g npm       升级npm版本[会更新所有npm的包]
   $ npm uninstall <name>  卸载包 
-    PS:不要直接删除本地插件包
+    PS: 不要直接删除本地插件包
     Example:
     npm uninstall gulp-less gulp-uglify gulp-concat  一次性删除多个插件
   $ npm update [<name>]   更新插件 
@@ -259,6 +259,9 @@ http-server: 本地调试及移动端调试服务器
     -p 8080       指定端口号 
     -s            阻止命令行中打印信息 
     -o            启动服务后自动在浏览器中打开地址 
+    移动端预览: 
+      将手机和当前PC处于同于局域网内,
+      使用手机访问命令行中出现的第一个URL即可 
 Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭建服务器用于本地调试 
   npm install anywhere -g   npm全局安装anythere
   执行参数

@@ -10,9 +10,9 @@
 */
 
 // To style other content in the text editor's shadow DOM, use the ::shadow expression
-atom-text-editor::shadow .cursor {
-  // border-color: red;
-}
+// atom-text-editor::shadow .cursor {
+//   // border-color: red;
+// }
 
 
 // --------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ atom-text-editor::shadow .cursor {
           padding-left: 0;
         }
         .directory.entry~.file.entry{
-          margin-left: 3.5px ;
+          margin-left: 5.5px ;
           padding-left: 0;
         }
       }
@@ -76,7 +76,9 @@ atom-text-editor { // 文档主体
   .vertical-scrollbar { // 隐藏滚动条
     display: none;
   }
-  atom-text-editor-minimap { // minimap
+  atom-text-editor-minimap { // minimap插件 
+    // 整体宽度
+    width: 9% !important; flex: 0 1 auto !important;
     background-color: rgba(78, 180, 230, 0.1); // 背景色
     .minimap-visible-area::after {
       background-color: rgba(60, 91, 167, 0.3); // 可视区背景色

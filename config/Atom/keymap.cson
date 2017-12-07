@@ -33,51 +33,50 @@
 
 # --------------------------------------------------------------------------------
 '.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
-  'f4': 'find-and-replace:find-previous'   # 查找时到上一个
-  'ctrl-e': 'find-and-replace:select-undo' # 取消ctrl-d的选中 
+  'f4': 'find-and-replace:find-previous'    # 查找时,到上一个
+  'ctrl-e': 'find-and-replace:select-undo'  # 取消ctrl-d的选中 
+  'ctrl-p': 'find-and-replace:select-all'   # 选中所有 
   
 'atom-workspace atom-text-editor:not([mini])':
-  'alt-v': 'editor:duplicate-lines'       # 复制行
-  'ctrl-q': 'editor:toggle-line-comments' # 添加/取消行注释
   'alt-1': 'editor:fold-all'              # 折叠所有
   'alt-2': 'editor:unfold-all'            # 展开所有
   'alt-3': 'editor:fold-current-row'      # 折叠当前
   'alt-4': 'editor:unfold-current-row'    # 展开当前 
+  'ctrl-q': 'editor:toggle-line-comments' # 行注释
+  'alt-v': 'editor:duplicate-lines'       # 行复制
   'alt-s': 'editor:indent-selected-rows'  # 行缩进
   'alt-a': 'editor:outdent-selected-rows' # 行负缩进
-  'alt-z': 'editor:join-lines'            # 合并行
-  'alt-enter': 'editor:newline-above'     # 在上一行插入 
+  'alt-z': 'editor:join-lines'            # 行合并 
+  'alt-enter': 'editor:newline-above'     # 行前插入 
   
 '.platform-win32, .platform-linux':
   'alt-\\': 'tree-view:reveal-active-file' # 在文件目录中定位当前文档 
   
 '.platform-win32 atom-text-editor':
-  'alt-x': 'bookmarks:toggle-bookmark'                # 行标记
   'alt-q': 'bracket-matcher:select-inside-brackets'   # 选中括号内的内容
   'alt-t': 'bracket-matcher:remove-matching-brackets' # 删除匹配括号
+  'alt-x': 'bookmarks:toggle-bookmark'                # 行标记
   
 'atom-workspace atom-text-editor':
   'alt-u': 'editor:upper-case'   # 字母大写 
   'alt-i': 'editor:lower-case'   # 字母小写 
-  'alt-c': 'editor:select-line'  # 选中行
-  'ctrl-l': 'unset!'             # 选中行 
+  'alt-c': 'editor:select-line'  # 行选中 
+  'ctrl-l': 'unset!'             # 行选中  
   
 'atom-text-editor:not([mini])':
-  'alt-d': 'editor:delete-line'         # 删除行
+  'f5': 'editor:newline'                # 换行 
+  'alt-d': 'editor:delete-line'         # 行删除
   
 'atom-text-editor':
-  'alt-e': 'autocomplete-plus:activate' # 激活补全提示
   'alt-p': 'autoprefixer'               # 浏览器兼容写法
   'alt-f': 'bracket-matcher:go-to-matching-bracket' # 标签跳转 [bracket matcher] 
   
 'atom-workspace':
-  'alt-w': 'wrap-in-tag:wrap'        # 插件 Atom Wrap In Tag 快捷键
-  'alt-b': 'open-in-browsers:toggle' # 在默认浏览器打开当前文档 
+  'alt-b': 'open-in-browsers:toggle' # 浏览器中打开文档 
   
 'body':
   'f1': 'core:backspace'                    # 退格键、删除键 
   'alt-m': 'application:add-project-folder' # 添加项目文件夹 
-  'alt-o': 'application:open-file'          # 在当前文件的文件夹内打开文件 
   'alt-n': 'application:new-window'         # 新建窗口 
   'alt-l': 'pane:reopen-closed-item'        # 恢复关闭的文档 
   # 取消的快捷键  使快捷键不起作用 
@@ -89,11 +88,8 @@
   'alt-8': 'unset!'
   'alt-9': 'unset!'
   'alt-w': 'unset!'
+   
 
+  
 # PS:须将同一类的放置在一起否则会不起作用,如'atom-workspace atom-text-editor:not([mini])':的一类必须放在一起
-
-
-
-
-
 

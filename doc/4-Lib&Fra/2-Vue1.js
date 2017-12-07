@@ -4,9 +4,10 @@
     热加载本地测试服务器;
     集成打包上线方案;  
   使用要求: NodeJS大于'4.0'版本; 安装Git,用于下载代码 
+使用 
   ◆工具安装[初始安装一次即可] 
-  // $ npm i -g webpack // 全局安装webpack 
-  $ npm i -g vue-cli    // 全局安装vue-cli 
+  $ npm i -g webpack  // 全局安装webpack 
+  $ npm i -g vue-cli  // 全局安装vue-cli 
     $ vue -V    // 查看 vue-cli 版本 
   ◆初始化项目 
   $ vue list  // 查看官方提供的'template'模版方案 
@@ -16,13 +17,14 @@
     simple            
     webpack           
     webpack-simple    
-  $ vue init <template> <path>  // 创建Vue项目  
-  $ npm i     // 根据'package.json'文件配置安装依赖文件 
-  $ npm i --S vue-router vuex axios vue-resource // 安装相关插件 
+  $ vue init <模版方案> <项目文件夹名称>  // 创建Vue项目  
+  $ npm i     // 根据'package.json'安装依赖 
+  $ npm i -S vue-router vuex axios vue-resource // 安装相关插件 
   ◆启动项目/构建发布  
-  $ npm run dev     // 启动测试服务器  
   $ npm run build   // 运行构建,生成生产环境可发布的代码 
-项目目录、文件说明 
+  $ npm run dev     // 启动测试服务器  
+    在'dev'命令中增加 --open --watch 选项,及时打开网页并启用实时监控 
+webpack模版项目目录及文件说明:  
   PS: 进行了部分更改 
   build         // 构建的配置文件 
     build.js 
@@ -472,10 +474,10 @@
             // 是否开启 cssSourceMap(因为一些 bug 此选项默认关闭,详情可参考 https://github.com/webpack/css-loader#sourcemaps)
         }
       }        
+  node_modules  // node模块
   dist          // 打包构建好的代码 
     static 
     index.html 
-  node_modules  // node模块
   src           // 开发目录 
     assets         // 资源目录  
       imgs 
@@ -501,9 +503,11 @@
     src目录下的资源只能import或require,
     而该文件夹下的文件可直接在HTML中引入,最终打包到'dist/static'中 
   .babelrc      // babel配置文件
+  .editorconfig // 
   .gitignore    // 忽略无需git控制的文件,比如node_modules 
-  index.html 
-  package.json  // 
+  .postcssrc.js // 
+  index.html    // 
+  package.json      // 
     "scripts": {
       "dev": "node build/dev-server.js",
       "build": "node build/build.js"
@@ -515,8 +519,8 @@
       "vuex": "^2.4.0",
       "jquery": "^3.2.1"
     },
+  package-lock.json // 
   README.md     // 说明文件 
-  ...
 Question: 
   如何将自定义的工具JS引入到全局可用,类似引入jQuery[使用Webpack插件] 
     自我决解办法: 将工具函数暴露到全局window对象中 
@@ -768,6 +772,9 @@ API
 --------------------------------------------------------------------------------
 'vue-router'前端路由 
   PS: 'vue-router2.x'只适用于'Vue2.x'版本 
+  原理: 将组件'components'映射到路由'routes',然后指定组件的渲染位置 
+  术语&概念: 
+    路由记录: 路由映射表'routes'数组中成员的副本[包括children数组的成员]
 引入安装路由 
   <script>引入 
     在Vue后面加载'vue-router',默认自动安装的
@@ -788,125 +795,134 @@ API
   const app = new Vue({ // 在Vue根实例中注册,从而让整个应用都有路由功能   
     el : '#app'  // 挂载点方式1 
     ,router : routerMap    // 注册 
-    
   }) // .$mount('#app') // 挂载点方式2 
 router = new VueRouter({  // 路由实例'router instance'  
-  routes: [ // 映射表 
+  routes: [ // 路由映射表 
     {   // 一个路由对象,也叫一个路由记录 
-      path: '/boo'         // 定义地址URL  
-        PS: 当同一个路径匹配多个路由时,则先定义的路由优先级高 
-        '/path/:param' 动态路径参数路由,配任意的'/path/xx'[类似于于地址中的查询字符串] 
-          PS: '/xx'必须存在否则匹配不到? 
-          this.$route.params 在组件内获取当前的具体的路径的对象 
-            在HTML中可直接使用 {{$route.params.xx}} 来取匹配到的地址参数 
-            在一个路由中设置多段路径参数 
-              模式             匹配路径       $route.params
-              /a/:aoo         /a/bar         { aoo: 'bar' }
-              /a/:aoo/b/:boo  /a/bar/b/123   { aoo: 'bar', boo: 123 }
-          this.$route.query  [若URL中有查询参数]获取查询参数 
-            对于路径 /foo?user=1,则有 $route.query.user == 1,若没有查询参数,则是个空对象 
-          this.$route.hash   当前路由的hash值,若无hash,则为空字符串 
-          this.$route.path  
+      path: str  // 定义地址URL  
+        PS: 当同一个路径匹配多个路由时,则先定义的优先级高 
+        '/path/:param'  动态路由匹配,配任意的'/path/xx' 
+          PS: '/xx'必须存在否则匹配不到 
+          动态参数可从 vm.$route.params 中获取 
           响应路由参数的变化 
-            当使用路由参数时,例如从 /user/foo 导航到 user/bar,原来的组件实例会被复用 
-            因为两个路由都渲染同个组件,比起销毁再创建,复用则显得更加高效。
-            不过,这也意味着组件的生命周期钩子不会再被调用。
-            复用组件时,想对路由参数的变化作出响应的话,你可以简单地 watch[监测变化]$route对象 
-            const User = {
-              template: '...',
-              watch: {
-                '$route' (to, from) {
-                  // 对路由变化作出响应...
+            当使用路由参数时,在不同参数的动态路由间跳转,组件声明周期钩子不会被调用 
+              如从'/user/foo'导航到'user/bar',原来的组件实例会被复用 
+              比起销毁再创建,复用则更加高效
+            解决复用组件时,响应路由参数的变化
+            方式一: 'watch'观察$route对象 
+              const User = {
+                template: '...',
+                watch: {
+                  '$route' (to, from) {
+                    // 对路由变化作出响应...
+                  }
                 }
               }
-            }
-      ,name: 'routername'  // 命名路由,在<router-link>中指定  
-        通过名称来标识路由显得更方便 
+            方式二: beforeRouteUpdate 
+              const User = {
+                template: '...',
+                beforeRouteUpdate (to, from, next) {
+                  // react to route changes...
+                  // don't forget to call next()
+                }
+              }
+          支持类似正则匹配的高级模式  [moIn 文档] 
+            如：可选的动态路径参数、匹配零个或多个、一个或多个,甚至是自定义正则匹配 
+            *  任意字符 
+              path: '/aoo/*'  // 匹配'/aoo'下的任意路径 
+            ?  存在最多一个 
+              path: '/aoo/:foo?'  // 可匹配'/aoo'、'/aoo/xxx' 
+              path: '/aoo/(foo/)?bar' // 可匹配'/aoo/bar'、'/aoo/foo/bar' 
+            \d 数字 
+              path: '/aoo/:id(\\d+)'  // ':id'需为纯数字时才会匹配 
+      ,name: str        // 可选,命名路由,通过名称来标识路由 
+        <router-link to=""> 或 router.push(location) 中指定 
         Example: 
-        通过给<router-link>的'to'属性传一对象来链接到一个命名路由
-        <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
-        这跟代码调用 router.push() 是一回事:
-        router.push({ name: 'user', params: { userId: 123 }})
-        这两种方式都会把路由导航到 /user/123 路径 
-      ,component: cptA  // 当只有一个组件时可直接使用组件名  
-      ,components: {    // 展示的组件 
-        default: cptA,
-        <viewname> : cptB, // 命名视图,在<router-view name="viewname">中指定  
-        // ..
+        导航到'/user/123' 
+        <router-link :to="{name: 'user',params: {userId: 123}}">User</router-link>
+        router.push({name: 'user',params: {userId: 123}})
+      // 组件在上一级组件中通过<router-view>指定 
+      ,component: cptA  // 可选,展示单组件  
+        component: () => import('')  // 懒加载 
+      ,components: {    // 可选,具名组件,展示多组件,与component互斥  
+        default: cptA
+        ,<viewname>: cptB // 命名视图,通过名称来标识视图组件 
+          <router-view name="viewname">'name'属性中指定  
+        ...
       }
-      ,children: [   // 路由嵌套,子路由 
-        // PS: 被路由加载的组件同样可包含自己的<router-view> 
+      ,children: [      // 可选,嵌套路由,子路由   
+        PS: 被路由加载的组件同样可包含自己的<router-view> 
         {  // 子路由记录 
           path: 'aa',     // 相对于当前路由记录的路径 
-          component: cptA,
+            PS: 以'/'开头的路径将从根路径开始  
+          component: cptA, // 子路由,在上级路由组件中通过<router-view>指定    
         }
-        ,{
-          path: 'bb',
-          component: cptB,
-        }
+        ,{ path: 'bb', component: cptB }
+        // 空字符串,当未匹配到子路由时,使用的子路由 
+        ,{ path: '', component: cptX }
         ...
-        Example: 
+      ]   
+      ,redirect: str/obj/foo // 可选,重定向,当前路由最终定位到的路由 
+        PS: 如当访问'/a'时,URL将会被替换成'/b',且匹配路由也为'/b' 
+        str  具体的路径 
+          redirect: '/b'
+        obj  通过对象指定一具名的路由 
+          redirect: { name: 'foo' } 
+        foo  动态返回重定向目标 
+          redirect: function(to){  
+            // to  目标路由 
+            return   ; // 重定向的字符串路径/路径对象
+          },
+      ,alias: str/strArr     // 可选,别名,访问别名指定的路由时,使用当前路由的视图 
+        '/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a' 
+      ,props: bol/obj/foo    // 可选,向视图组件传递信息 
+        bol  如果props被设置为true,route.params 将会被设置为组件属性 
           const User = {
-            template: `
-            <div class="user">
-            <h2>User {{ $route.params.id }}</h2>
-            <router-view></router-view>
-            </div>
-            `
+            props: ['id'],
+            template: '<div>User {{ id }}</div>'
           }
           const router = new VueRouter({
             routes: [
-              { 
-                path: '/user/:id', 
-                component: User, // 需在该组件的HTML中定义<router-view>
-                children: [ 
-                  {
-                    // 当 /user/:id/profile 匹配成功,
-                    // UserProfile 会被渲染在 User 的 <router-view> 中
-                    path: 'profile',
-                    component: UserProfile
-                  },
-                  {
-                    // 当 /user/:id/posts 匹配成功
-                    // UserPosts 会被渲染在 User 的 <router-view> 中
-                    path: 'posts',
-                    component: UserPosts
-                  }
-                ]
-              }
-            ]
-          })  
-          基于上面的配置,访问'/user/foo'时,User的出口是不会渲染任何东西,
-          因为没有匹配到合适的子路由,若想要渲染点什么,可以提供一个空的子路由: 
-          const router = new VueRouter({
-            routes: [
+              { path: '/user/:id', component: User, props: true }
+              
+              // 对于包含命名视图的路由,你必须分别为每个命名视图添加props选项：
               {
-                path: '/user/:id', 
-                component: User,
-                children: [
-                  // 当 /user/:id 匹配成功,
-                  // UserHome 会被渲染在 User 的 <router-view> 中
-                  { path: '', component: UserHome },
-                  
-                  // ... 其他子路由 
-                ]
+                path: '/user/:id',
+                components: { 
+                  default: User, 
+                  sidebar: Sidebar 
+                },
+                props: { 
+                  default: true, 
+                  sidebar: false 
+                }
               }
             ]
           })
-      ]   
-      ,redirect: '/coo' // 重定向,地址和内容都变化 
-        PS: 如当访问'/a'时,URL将会被替换成'/b',且匹配路由也为'/b' 
-        redirect: {  // 使用对象进行配置 
-           name: 'foo' // 重定向的目标也可以是一个命名的路由 : 
-         }
-        redirect: function(to){ // 使用方法,动态返回重定向目标 
-          // to  目标路由
-          return   ;// 重定向的字符串路径/路径对象
-        },
-      ,alias: '/b'      // 别名,地址不变内容变化   
-        可自由地将UI结构映射到任意的URL,而不受限于配置的嵌套路由结构 
-        若'/a'的别名是'/b',即访问'/b'时,URL保持为'/b',但路由匹配为'/a',就像访问'/a'
-      ,meta: {}  // 路由元信息  
+        obj  按原样设置为组件属性,当props是静态的时候有用 
+          const router = new VueRouter({
+            routes: [
+              { 
+                path: '/promotion/from-newsletter', 
+                component: Promotion, 
+                props: { newsletterPopup: false } 
+              }
+            ]
+          })
+        foo  通过函数返回props的值,可将将静态值与基于路由的值结合 
+          const router = new VueRouter({
+            routes: [
+              { 
+                path: '/search', 
+                component: SearchUser, 
+                props: function(route){
+                  return { query: route.query.q };
+                }
+              }
+            ]
+          })
+          Url: /search?key1=val1 会将 {key1: "val1"} 作为属性传递给SearchUser组件 
+      ,meta: any  // 可选,路由元信息  
         {
           requiresAuth: true 
         }
@@ -922,46 +938,65 @@ router = new VueRouter({  // 路由实例'router instance'
                 path: '/login',
                 query: { redirect: to.fullPath }
               })
-            } else {
+            } 
+            else {
               next()
             }
-          } else {
+          } 
+          else {
             next() // 确保一定要调用 next()
           }
         })      
-      ,beforeEnter: (to, from, next) => {  // 路由钩子 
-        // 与全局 before 钩子的方法参数是一样 
+      ,caseSensitive: bol;       // 可选,匹配规则是否大小写敏感,默认:false '2.6.0+'
+      ,pathToRegexpOptions: obj; // 可选,编译正则的选项 '2.6.0+' 
+      ,beforeEnter: (to,from,next) => {  // 可选,路由守卫  
+        PS: 通过调用 next() 可控制路由是否导航 
       } 
     }
     ... 
   ]
-  ,mode: '' // 模式 
+  ,mode: kw // 模式 
     'hash'      默认值,使用URL的hash来模拟一个完整的URL 
       利用当hash改变时,页面不会重新加载的特性  
+      支持所有浏览器,包括不支持 HTML5 History Api 的浏览器。
     'history'   利用'history.pushState'API来完成URL跳转而无须重新加载页面 
+      依赖 HTML5 History API 和服务器配置 
+      在服务端增加一个覆盖所有情况的候选资源: 
+      如果 URL 匹配不到任何静态资源,则应该返回同一个 index.html 页面,
+      这个页面就是你 app 依赖的页面
     "abstract"  支持所有JS运行环境,如NodeJS服务器端 
       若发现无浏览器的 API,路由会自动强制进入这个模式 
-  ,base: str  // 应用的基路径,默认为"/" 
-    如果整个单页应用服务在 /app/ 下,然后 base 就应该设为 "/app/"。
-  ,linkActiveClass: str // 全局配置<router-link>的默认激活class类名
+  ,base: str  // 应用的基路径,默认:"/" 
+    若整个单页应用服务在'/app/'下,则应设为"/app/" 
+  ,linkActiveClass: str // 全局配置<router-link>的默认激活class类名 
     默认值:"router-link-active"
-  ,scrollBehavior: function(to,from,savedPosition){ // 滚动行为及位置 
-    // PS:  只在'history'模式下可用
-    // to   路由对象
-    // from 路由对象
-    // savedPosition  当且仅当'popstate'导航[通过浏览器的 前进/后退 按钮触发]时才可用 
-    return obj;  // 期望滚动的位置对象 
-      若返回一个假的布尔值,或者是一个空对象,那么不会发生滚动 
+  ,linkExactActiveClass: str // 全局配置<router-link>精确激活的默认的class '2.5.0+'
+    默认:"router-link-exact-active"
+  ,fallback: bol // 当浏览器不支持history.pushState控制路由是否回退到hash模式 '2.6.0+'
+    默认:true
+    IE9中,设置为 false 会使得每个 router-link 导航都触发整页刷新 
+    它可用于工作在 IE9 下的服务端渲染应用,因为一个 hash 模式的 URL 并不支持服务端渲染 
+  ,scrollBehavior: function(to,from,pos){ // 滚动行为及位置 
+    PS: 控制导航路由后的滚动位置,仅在'history'模式下可用 
+    to   导航到路由信息对象 
+    from 离开的路由信息对象 
+    pos  之前路由滚动的位置,不一定存在 
+      当且仅当'popstate'导航[通过浏览器的 前进/后退 按钮触发]时才可用 
+      格式: { x: num, y: num } 
+    return { x: num, y: num } | { selector: str } | {};  // 期望滚动的位置对象 
+      若返回一个假的布尔值,或者是一个空对象,则不会发生滚动 
       { x: num, y: num }  到具体位置 
-        scrollBehavior (to, from, savedPosition) {
-          if (savedPosition) {
-            return savedPosition
-          } else {
+        scrollBehavior (to, from, pos) {
+          if (pos) {
+            return pos
+          } 
+          else {
             return { x: 0, y: 0 }
           }
         }
-      { selector: str }   模拟滚动到锚点的行为 
-        scrollBehavior (to, from, savedPosition) {
+      { selector: str,offset?: { x: num, y: num } }   模拟滚动到锚点的行为 
+        offset   '2.6.0+'
+        scrollBehavior (to, from, pos) {
           if (to.hash) {
             return {
               selector: to.hash
@@ -969,11 +1004,17 @@ router = new VueRouter({  // 路由实例'router instance'
           }
         }
   }
+  ,parseQuery: function(){ // 提供自定义查询字符串的解析函数 '2.4.0+' 
+    PS: 用于覆盖默认行为 
+  }
+  ,stringifyQuery: function(){ // 提供自定义查询字符串的反解析函数 '2.4.0+'
+    PS: 用于覆盖默认行为 
+  }
 })  
 标签 
   <router-view> // 渲染路径匹配到的视图组件 
     PS: 在挂载点范围内都可以 [?] 
-    name="viewname"   具名视图,对应路由实例中路由名,默认值"default"  
+    name="str"  // 渲染对应的路由配置中components下的相应组件,默认:"default"  
     配合<transition></transition>进行视图过渡效果 
     配合<keep-alive></keep-alive>进行缓存 
     如果两个结合一起用,要确保在内层使用<keep-alive> 
@@ -984,74 +1025,118 @@ router = new VueRouter({  // 路由实例'router instance'
       </transition>
   <router-link> // 路由导航: 在页面中指定跳转的链接 
     PS: <router-link>默认会被渲染成一个<a>标签 
-    to=""   指定链接地址 
-      to="pathStr"   // 指定路径 
-        to="aoo"    // 相当于'./aoo' 
-        to="/aoo"   // 相对于根目录  
-      :to="val"      // 动态绑定 
-        :to={        // 传入对象 
-          name: 'aoo'   // 具名路由   
-          ,path: 'aoo'  // 跳转路径,与具名路由互斥 
-          ,param: {     // 路由参数 
-            key1 : val1
-            ...
-          }
-        }  
-        :to="'aoo'"  
-    tag='name'  指定<router-link>渲染成的标签,如'div'、'li'等 
-    replace="bol"  导航后是否留下history记录 
-    append="bol"   是否在当前跳转前加上该页路径 
+    to="str/obj"  // 表示目标路由的链接 
+      PS: 当被点击后,内部会立刻把 to 的值传到 router.push()
+      str   一个字符串
+        "aoo"    // 相当于'./aoo' 
+        "/aoo"   // 相对于根目录  
+        <router-link to="home">Home</router-link>
+        <router-link :to="'home'">Home</router-link>
+      obj   描述目标位置的对象 
+        <router-link :to="{ path: 'home' }">Home</router-link>
+        // <!-- 命名的路由 -->
+        <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+        // <!-- 带查询参数,下面的结果为 /register?plan=private -->
+        <router-link :to="{ path: 'register', query: { plan: 'private' }}">Register</router-link>
+    tag="str"   //指定<router-link>渲染成的标签,默认:'a' 
+      其他的如如'div'、'li'等 
+    replace="bol"  // 导航后是否留下history记录,默认:false  
+      设置replace后,当点击时,会调用 router.replace() 而不是 router.push(),
+      导航后不会留下 history 记录 
+      <router-link :to="{ path: '/abc'}" replace></router-link>
+    append="bol"   // 是否在当前跳转前加上该页路径,默认:false  
       从'/a'导航到一个相对路径'b',若未配置append,则路径为'/b',若配了,则为'/a/b' 
-    active-class="aoo"   设置链接激活时的CSS类名 
-      PS: 当<router-link>被激活时会被添加一个class,默认为"router-link-active" 
+    exact="bol"    // 激活类和路径是否使用精确匹配 
+      默认:false,激活使用全包含匹配 
+      当为true时,若路径为'/',所有的激活类将被匹配到 
+    active-class="str"        // 路径匹配时使用的CSS类名 
+      默认: "router-link-active" 
         对应的路由匹配成功,"router-link-active"class将自动添加  
-        可通过此项来自定义class名称 
-      默认值可以通过路由的构造选项 linkActiveClass 来全局配置
-    exact="bol"     是否激活 
-    event="str/arr"  声明可以用来触发导航的事件,默认值'click' 
+      默认值可通过路由的构造选项 linkActiveClass 来全局配置 
+    exact-active-class="str"  // 路径精确匹配时使用的CSS类名 ['2.5.0+'] 
+      默认值: "router-link-exact-active"
+      默认值可通过路由构造函数选项 linkExactActiveClass 进行全局配置 
+    event="str/strArr"  // 声明可用来触发导航的事件,默认:'click' '2.1.0+'
   ◆配合使用的组件 
-  <transition></transition> 实现跳转动画 
-    基于路由的动态过渡: 基于当前路由与目标路由的变化关系,动态设置过渡效果 
-      <!-- 使用动态的 transition name -->
-      <transition :name="transitionName">
-      <router-view></router-view>
-      </transition>
-      // 接着在父组件内
-      // watch $route 决定使用哪种过渡
-      watch: {
-        '$route' (to, from) {
-          const toDepth = to.path.split('/').length
-          const fromDepth = from.path.split('/').length
-          this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-        }
-      }
+  <transition></transition> 实现过渡动画效果 
   <keep-alive></keep-alive> 缓存,加快路由切换速度 
 API 
-  ◆Router实例的属性/方法  
-    router.app   配置了router的Vue根实例 
-    router.mode  str,路由使用的模式 
-    router.currentRoute  当前路由对应的路由信息对象 
-    router.beforeResolve(guard) 此时异步组件已经加载完成 '2.5.0+' 
-    router.getMatchedComponents(location?)  返回目标位置或是当前路由匹配的组件数组
-      是数组的定义/构造类,不是实例,通常在服务端渲染的数据预加载时时候。
-    router.resolve(location, current?, append?)   '2.1.0+'
-      解析目标位置(格式和 <router-link> 的 to 属性一样),返回包含如下属性的对象：
-      {
+  ◆对组件注入的属性/方法  
+  vm.$router // router实例对象  
+    .app   obj,挂载路由的Vue根实例 
+    .mode  str,路由使用的模式 
+    .currentRoute  Route,当前路由对应的路由信息对象 
+    .getMatchedComponents(location?)  // 返回目标位置或当前路由匹配的组件数组 
+      是数组的定义/构造类,不是实例,
+      通常在服务端渲染的数据预加载时时候。
+    .resolve(location,current?,append?) //  '2.1.0+'
+      PS: 解析目标位置[格式同<router-link>的'to'] 
+      current 当前默认的路由 
+      append  允许在 current 路由上附加路径,如同 router-link 
+      返回包含如下属性的对象： {
         location: Location;
         route: Route;
         href: string;
       }
-    router.addRoutes(routes) 动态添加更多的路由规则 '2.2.0+' 
+    .addRoutes(routes)  // 动态添加更多的路由规则 '2.2.0+' 
       参数必须是一个符合 routes 选项要求的数组。
-    router.onReady(callback)  添加一个会在第一次路由跳转完成时被调用的回调函数 '2.2.0+'
+    .onReady(callback,errorCallback?)  //  '2.2.0+'
       此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
-    ★导航钩子 
-      PS: '导航'表示路由正在发生改变;导航钩子主要用来拦截导航,让它完成跳转或取消 
-    router.beforeEach(function(to, from, next){  // 注册全局before钩子 
-      PS: 当一个导航触发时,全局的 before 钩子按照创建顺序调用。
-        钩子是异步解析执行,此时导航在所有钩子 resolve 完之前一直处于 等待中。
+      该方法把一个回调排队,在路由完成初始导航时调用,
+      这意味着它可以解析所有的异步进入钩子和路由初始化相关联的异步组件。
+      这可以有效确保服务端渲染时服务端和客户端输出的一致。
+      第二个参数 errorCallback 只在 2.4+ 支持。
+      它会在初始化路由解析运行出错 (比如解析一个异步组件失败) 时被调用。
+    .onError(callback) // 路由导航过程中出错时被调用 '2.4.0+'
+      被调用的错误必须是下列情形中的一种：
+      错误在一个路由守卫函数中被同步抛出；
+      错误在一个路由守卫函数中通过调用 next(err) 的方式异步捕获并处理；
+      渲染一个路由的过程中,需要尝试解析一个异步组件时发生错误。
+    ★编程式的导航: 对应<router-link>的导航方式,通过JS代码来实现 
+      PS: vue-router的导航方法'push''replace''go'效仿 window.history API 
+        但其在各类路由模式 history、 hash 和 abstract 下表现一致
+        window.history.pushState、 
+        window.history.replaceState 
+        window.history.go
+    .push(location,onComplete?,onAbort?)  // 相当于<router-link :to=""> 
+      PS: 向history栈添加一新的记录,并跳转,浏览器后退按钮,则回到之前的URL 
+        当点击<router-link>时,这个方法会在内部调用 
+      location    str/obj,路径 
+        str,跳转字符串路径 
+        obj,描述地址的对象 
+          同时使用'path'和'params','params'不生效 
+            同样的规则也适用于 <router-link> 组件的 to 属性 
+            // 这里的 params 不生效
+            router.push({ path: '/user', params: { userId: 123 }}) 
+            方法一: 提供路由的'name'来代替使用'path' 
+              router.push({ name: 'user', params: { userId:123 }}) 
+            方法二: 提供完整的带有参数的'path'  
+              router.push({ path: `/user/${userId}` }) // -> /user/123
+      onComplete = function(){ // 可选,导航成功完成触发 ' 2.2.0+' 
+        PS: 所有的异步钩子被解析之后触发 
+      }
+      onAbort = function(){    // 可选,导航终止时触发 ' 2.2.0+' 
+        PS: 导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由触发  
+      }
+    .replace(location,onComplete?,onAbort?) // 相当于 <router-link :to="" replace> 
+      PS: 替换掉当前的history记录  
+    .go(<num>) // 类似 window.history.go(num) 
+      PS: 在history记录中向前多少步 
+      num  整数,可为负数  
+      当history记录不够用时,则不会操作 
+        routerMap.go(-100) 
+        routerMap.go(100)  
+      Example:
+      routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
+      routerMap.go(-1)   // 后退一步记录,等同于 history.back()
+      routerMap.go(3)    // 前进 3 步记录
+    .back()    
+    .forward()  // 动态的导航到一个新url 
+    ★全局守卫/钩子 
+    .beforeEach(function(to,from,next){  // 全局导航前置守卫 
+      PS: 路由跳转时,调用全局前置守卫,在所有守卫 resolve 完前,路由导航一直处于等待中 
       to     obj,即将要进入的目标 
-      from   obj,当前导航正要离开的路由
+      from   obj,当前导航正要离开的路由 
       next   foo,需调用该方法来'resolve'该钩子,执行效果依赖'next'方法的调用参数 
         确保要调用'next'方法,否则钩子就不会被'resolved' 
         next()  进行管道中的下一个钩子
@@ -1059,136 +1144,103 @@ API
         next(false)  中断当前的导航
           如果浏览器的URL改变了[可能是用户手动或者浏览器后退按钮],
           那么URL地址会重置到'from'路由对应的地址 
-        next('/') / next({ path: '/' }) 跳转到一个不同的地址
+        next('/') / next({ path: '/' }) 跳转到一个不同的地址 
           当前的导航被中断,然后进行一个新的导航 
+        next(error)  '2.4.0+' 
+          若参数为一 Error 实例,则导航会被终止
+          且该错误会被传递给 router.onError() 注册过的回调 
+      参数或查询的改变并不会触发导航守卫,需使用'beforeRouteUpdate'或watch $route 
     }) 
-    router.afterEach(function(route){  // 注册全局after钩子 
-      // after钩子没有next方法,不能改变导航 
+    .beforeResolve(function(to,from,next){  // 全局导航解析守卫 '2.5.0+' 
+      PS: 导航被确认前,所有组件内守卫和异步路由组件被解析后调用 
+        此时异步组件已经加载完成  
     })
-    ★编程式的导航 
-      PS: 除了使用<router-link>创建<a>标签来定义导航链接,
-        还可以借助router的实例方法,通过编写代码来实现。
-        vue-router的导航方法'push''replace''go'是效仿 window.history API 
-        window.history.pushState、 
-        window.history.replaceState 
-        window.history.go
-        但其在各类路由模式 history、 hash 和 abstract 下表现一致
-    router.push(location, onComplete?, onAbort?) 向history栈添加一新的记录,并跳转 
-      PS: 当用户点击浏览器后退按钮时,则回到之前的URL 
-        当点击<router-link>时,这个方法会在内部调用,
-        点击 <router-link :to="..."> 等同于调用 router.push(...) 
-      location   字符串路径/描述地址的对象 
-        <router-link :to="..."> router.push(...)
-      routerMap.push('home') // 字符串
-      routerMap.push({ path: 'home' }) // 对象
-      routerMap.push({ name: 'user', params: { userId: 123 }}) // 命名的路由
-      routerMap.push({ path: 'register', query: { plan: 'private' }})
-      // 带查询参数,变成 /register?plan=private
-    router.replace(location, onComplete?, onAbort?) 替换掉当前的history记录
-      相当于 <router-link :to="..." replace>  
-    router.go(<num>) 在history记录中向前多少步,类似 window.history.go(num) 
-      Example:
-      routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
-      routerMap.go(-1)   // 后退一步记录,等同于 history.back()
-      routerMap.go(3)    // 前进 3 步记录
-      routerMap.go(-100)
-      routerMap.go(100) // 若history记录不够用,不操作 
-    router.back()
-    router.forward()  动态的导航到一个新url 
-  ◆对组件注入的属性/方法  
-  vm.$router // router实例 
-  vm.$route  // 当前路由信息对象,可获取当前激活的路由的状态信息  
+    .afterEach(function(to,from){  // 全局后置钩子 
+      // 不会接受 next 函数也不会改变导航本身 
+    }) 
+  vm.$route  // 路由信息对象,当前激活的路由的状态信息  
     PS: 不可变的'immutable',每次成功的导航后都会产生一个新的对象 
-    ★出现的位置 
-    vm.$route 和 vm.$route watcher 回调,监测变化处理 
-    router.match(location) 的返回值 
-    导航钩子的参数：
-      router.beforeEach((to, from, next) => {
-        // to 和 from 都是 路由信息对象
-      })
-    scrollBehavior 方法的参数:
-      scrollBehavior (to, from, savedPosition) {
-        // to 和 from 都是 路由信息对象
-      }
-    ★属性 
-    .path   str,对应当前路由的路径,总是解析为绝对路径,如 "/foo/bar"。
-    .params obj,包含了 动态片段 和 全匹配片段,如果没有路由参数,就是一个空对象 
-    .query  obj,表示URL查询参数,若无查询参数,则为空对象 
-    .hash   str,当前路由的hash值,若无hash值,则为空字符串 
+    .name      str,当前路由的名称,如果有的话    
     .fullPath  str,完成解析后的URL,包含查询参数和hash的完整路径 
-    .matched  arr,包含当前路由的所有嵌套路径片段的路由记录的数组
-    .name     当前路由的名称,如果有的话    
-  ◆组件新增配置  
-  ,beforeRouteEnter (to, from, next) {
-    // 在渲染该组件的对应路由被 confirm 前调用
-    // 不！能！获取组件实例 `this`
-    // 因为当钩子执行前,组件实例还没被创建
-    beforeRouteEnter 钩子 不能 访问 this,因为钩子在导航确认前被调用,因此即将登场的新组件还没被创建。
-    不过,你可以通过传一个回调给 next来访问组件实例。
-    在导航被确认的时候执行回调,并且把组件实例作为回调方法的参数。
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        // 通过 `vm` 访问组件实例
-      })
-    }
+    .path      str,对应当前路由的路径,总是解析为绝对路径,如 "/foo/bar" 
+    .hash      str,当前路由的hash值[包括"#"],若无hash值,则为空字符串 
+    .params   obj,动态路由匹配的参数信息对象,如果无路由参数,则为空对象  
+      包含了'动态片段'和'全匹配片段', 
+      在HTML中可直接使用 {{$route.params.xx}} 来取匹配到的地址参数 
+      在一个路由中设置多段路径参数 
+        模式              匹配路径         $route.params
+        '/a/:aoo'         '/a/bar'        { aoo: 'bar' }
+        '/a/:aoo/b/:boo'  '/a/bar/b/123'  { aoo: 'bar', boo: 123 }
+    .query    obj,查询参数信息对象,若无查询参数,则为空对象 
+    .matched  arr,包含当前路由的所有嵌套路径片段的路由记录 
+      PS: 路由记录就是 routes 配置数组中的对象副本,还有在 children 数组 
+    .meta     obj,
+  ◆路由组件新增配置 
+  ,beforeRouteEnter (to,from,next) {  // 路由被确认前调用 
+    该回调中不能访问 this,因为回调在导航确认前被调用 
+    可通过传一个回调给 next来访问组件实例 
+      在导航被确认的时候执行回调,并且把组件实例作为回调方法的参数。
+      beforeRouteEnter (to, from, next) {
+        next(vm => {
+          // 通过 `vm` 访问组件实例
+        })
+      }
   }
-  ,beforeRouteLeave (to, from, next) {
-    // 导航离开该组件的对应路由时调用
-    // 可以访问组件实例 `this`
-    你可以 在 beforeRouteLeave 中直接访问 this。
-    这个 leave 钩子通常用来禁止用户在还未保存修改前突然离开。可以通过 next(false) 来取消导航。
+  ,beforeRouteLeave (to,from,next) {  // 离开路由时调用 
+    PS: 通常用于禁止用户在还未保存修改前突然离开  
+    可访问组件实例 `this`
   }
-  ,beforeRouteUpdate (to, from, next) { // '2.2+' 
-    // 在当前路由改变,但是该组件被复用时调用 
-    // 举例来说,对于一个带有动态参数的路径 /foo/:id,在 /foo/1 和 /foo/2 之间跳转的时候,
-    // 由于会渲染同样的 Foo 组件,因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
-    // 可以访问组件实例 `this`
+  ,beforeRouteUpdate (to,from,next) { // 当前路由改变,但该组件被复用时调用 '2.2+'  
+    如动态参数路径 /foo/:id,在 /foo/1 和 /foo/2 间跳转时,
+    组件实例会被复用,则钩子会在该情况下被调用 
+    可以访问组件实例 `this`
   }
 路由懒加载 
   PS: 把不同路由对应的组件分割成不同的代码块,当路由被访问的时候才加载对应组件 
     结合Vue的'异步组件'和Webpack的'code splitting feature'实现路由组件的懒加载 
   定义一个能够被webpack自动代码分割的异步组件
-    一: 将异步组件定义为返回一个 Promise 的工厂函数[该函数返回的Promise应该 resolve 组件本身] 
-      const aoo = () => Promise.resolve({ /*  组件定义对象 */ })
+    一: 将异步组件定义为返回一个 Promise 的工厂函数 
+      const aoo = () => Promise.resolve({ /*  组件定义对象 */ }) 
     二: 在webpack2中,使用动态import语法来定义代码分块点'split point' 
       import('./aoo.vue') // returns a Promise 
-      如果使用的是babel,需添加'syntax-dynamic-import'插件,才能使babel可以正确地解析语法
-    由一、二得到: const aoo = () => import('./aoo.vue')
     三: 在路由配置中像往常一样使用 
+      在vue-cli的Webpack模版中已满足一、二  
+      const aoo = () => import('./aoo.vue') 
     const router = new VueRouter({
       routes: [
         { 
           path: '/foo'
           ,component: aoo 
+            或 ,component: () => import('./aoo.vue')  
         }
       ]
     })
-  把组件按组分块
+  把组件按组分块 
     有时候想把某个路由下的所有组件都打包在同个异步块(chunk)中。
     需要使用命名 chunk,一个特殊的注释语法来提供'chunk name' ['webpack2.4+'] 
     const Foo = () => import(/* webpackChunkName: "group-foo" */ './Foo.vue')
     const Bar = () => import(/* webpackChunkName: "group-foo" */ './Bar.vue')
     const Baz = () => import(/* webpackChunkName: "group-foo" */ './Baz.vue')
-    webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中。
-异步组件 ['vue-router2.4.0+'] 
-  const AsyncComp = () => ({  
-    component: import('./MyComp.vue') // 需加载的组件,应是一 Promise 
-    ,loading: LoadingComp // loading 时应当渲染的组件
-    ,error: ErrorComp // 出错时渲染的组件
-    ,delay: 200 // 渲染 loading 组件前的等待时间,默认200ms 
-    ,timeout: 3000 // 最长等待时间 
-      // 超出此时间则渲染 error 组件。默认：Infinity
-  })
-  const routes = [
-    { 
-      path: '/test', 
-      component: (resolve) => require(['./components/test.vue'], resolve) 
-    },
-    { 
-      path: '/index', 
-      component: (resolve) => require(['./components/index.vue'], resolve) 
-    }
-  ];
+    webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中 
+  异步组件 ['vue-router2.4.0+'] 
+    const AsyncComp = () => ({  
+      component: import('./MyComp.vue') // 需加载的组件,应是一 Promise 
+      ,loading: LoadingComp // loading 时应当渲染的组件
+      ,error: ErrorComp // 出错时渲染的组件
+      ,delay: 200 // 渲染 loading 组件前的等待时间,默认200ms 
+      ,timeout: 3000 // 最长等待时间 
+        // 超出此时间则渲染 error 组件。默认：Infinity
+    })
+    const routes = [
+      { 
+        path: '/test', 
+        component: (resolve) => require(['./components/test.vue'], resolve) 
+      },
+      { 
+        path: '/index', 
+        component: (resolve) => require(['./components/index.vue'], resolve) 
+      }
+    ];
 --------------------------------------------------------------------------------
 'Vuex'状态管理 
 引入安装 

@@ -4,6 +4,11 @@
     'prefix': 'import less'
     'body': '@import "${1:../a.less}";'
   # 自定义 ------------------------------------
-  '-less *@wu':
-    'prefix': 'wu'
-    'body': '*@wu'
+  '-less *@w  视口宽单位,类比px':
+    'prefix': 'unit-width-less'
+    'body': '*@w'
+  '-less @w: 100vw/375;  自定义视口宽单位,iPhone6基准':
+    'prefix': 'unit-set-less'
+    'body': '@w: 100vw/375;'
+
+

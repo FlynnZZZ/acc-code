@@ -93,7 +93,7 @@ MongoDB: 基于分布式文件存储的数据库
     完全的索引支持: 单键索引,多键索引,数组索引,全文索引,地理位置索引等 
     方便的冗余与扩展   
   数据描述术语   
-    MongoDB      SQL            解释/说明 
+    Mongo        SQL            解释/说明 
     database     database       数据库,集合的实际容器 
       MongoDB的单个实例可容纳多个独立的数据库,
         每一个都有自己的集合和权限,不同的数据库也放置在不同的文件中
@@ -186,52 +186,67 @@ MongoDB: 基于分布式文件存储的数据库
     Date,日期时间,用'UNIX'时间格式来存储当前日期或时间,
       可指定自己的日期时间:创建Date对象,传入年月日信息 
     Symbol,符号,该数据类型基本上等同于字符串类型,但不同的是,它一般用于采用特殊符号类型的语言 
-    Binary Data,二进制数据 ,用于存储二进制数据 
+    'Binary Data',二进制数据 ,用于存储二进制数据 
     Code,代码类型,用于在文档中存储JS代码 
-    Regular expression,正则表达式类型,用于存储正则表达式 
-    Min/Max keys,将一个值与BSON[二进制的JSON]元素的最低值和最高值相对比  
+    'Regular expression',正则表达式类型,用于存储正则表达式 
+    'Min/Max keys',将一个值与BSON[二进制的JSON]元素的最低值和最高值相对比  
   其他术语: 
     BSON: 是一种类json的一种二进制形式的存储格式,简称'Binary JSON'
-bin目录下提供的一系列有用的工具 
-  mongod.exe    MongoDB服务启动工具
-  mongo         客户端命令行工具,也是一JS解释器,支持JS语法
-  mongostat     自带的状态检测工具
-  mongotop      跟踪一个MongoDB的实例,查看哪些大量的时间花费在读取和写入数据
-  mongosniff    监测工具,作用类似于 tcpdump
-  mongoexport   数据导出工具
-  mongos        分片路由,如果使用了 sharding 功能,则应用程序连接的是 mongos 而不是 mongod
-  mongodump     MongoDB数据备份工具
-  mongorestore  MongoDB数据恢复工具
-  bsondump      将BSON格式的文件转储为JSON格式的数据 
-  mongoimport   Mongodb数据导入工具
-  mongofiles    GridFS 管理工具,可实现二制文件的存取    
-  mongooplog  
-  mongoperf  
 安装&使用&启动: 
   下载安装包安装[位置可自定义],将安装目录下的'bin'目录,配置到环境变量   
+  bin目录下提供的一系列有用的工具 
+    mongod.exe    MongoDB服务启动工具
+    mongo         客户端命令行工具,也是一JS解释器,支持JS语法
+    mongostat     自带的状态检测工具
+    mongotop      跟踪一个MongoDB的实例,查看哪些大量的时间花费在读取和写入数据
+    mongosniff    监测工具,作用类似于 tcpdump
+    mongoexport   数据导出工具
+    mongos        分片路由,如果使用了 sharding 功能,则应用程序连接的是 mongos 而不是 mongod
+    mongodump     MongoDB数据备份工具
+    mongorestore  MongoDB数据恢复工具
+    bsondump      将BSON格式的文件转储为JSON格式的数据 
+    mongoimport   Mongodb数据导入工具
+    mongofiles    GridFS 管理工具,可实现二制文件的存取    
+    mongooplog  
+    mongoperf  
   项目目录结构 
-    db_project
-      data   // 存放数据库  
-        db   // 存放数据 
-      log    // 日志 
-      conf   // 配置文件 
-        mongod.cfg 
-  $ mongod --dbpath e:\db_project\data\db // 指定数据库目录 
-  $ mongo   // 连接到数据库 
+    db_project 
+      conf  // 配置文件目录 
+        mongo.conf // 配置文件 
+      db    // 数据库目录   
+      log   // 日志文件目录 
+        mongo.log // 日志 
+  $ mongod --dbpath 'e:/db_project/db' // 指定mongo项目的数据库目录  
+    ★mongod.exe 常用参数: 
+    --bind_ip   绑定服务IP 
+      若绑定127.0.0.1,则只能本机访问,不指定默认本地所有IP
+    --port      指定服务端口号,默认:27017
+    --dbpath    指定数据库路径 
+    --logpath   指定定MongoDB日志文件[而非目录] 
+    --logappend 使用追加的方式写日志
+    --serviceName         指定服务名称
+    --serviceDisplayName  指定服务名称,有多个mongodb服务时执行 
+    --install     作为一个Windows服务安装 
+  $ mongo   // 连接到数据库[需启动新的命令行窗口] 
   $ show dbs  // 以列表形式显示所有数据库 
   $ db        // 显示当前数据库对象或集合 
   $ use <dbName>  // 使用或创建数据库 
     存在则切换到该数据库,否则新建数据库 
-'mongod.cfg'配置文件 
-  $ mongod --config  'C:/mongodb/mongod.cfg'  // 通过配置文件,指定数据库目录  
+'mongo.conf'配置文件 
+  $ mongod --config  'e:/db_project/conf/mongo.conf'  // 通过配置文件启动   
   内容详情: 
-    // 必须项 
-    systemLog:  
-      destination: file
-      path: c:\data\log\mongod.log
-    // 其他可选项 
-    storage: 
-      dbPath: c:\data\db
+    // #数据库存放目录 
+    dbpath = e:\db_project\db\
+    // #日志文件 
+    logpath = e:\db_project\log\mongodb.log
+    // #错误日志采用追加模式,日志会写在一个文件中,而非多个文件 
+    logappend = true
+    // #启用日志,默认:启用 
+    journal = true
+    // #过滤掉一些无用的日志信息,若需要调试使用请设置为false
+    quiet = false
+    // #端口号 默认:27017
+    port = 27017
 ◆Shell操作 
 数据库'db'操作 
   db.<dbName>.insert({"name":"菜鸟教程"})
@@ -343,34 +358,34 @@ bin目录下提供的一系列有用的工具
   db.<ctName>.updateMany() 修改集合中的多条数据
   db.<ctName>.validate() 执行对集合验证操作
 游标'cs'操作 
-  <cs>.batchSize()	
-  <cs>.close()	
-  <cs>.comment()	
-  <cs>.count()	
-  <cs>.explain()	
-  <cs>.forEach()	
-  <cs>.hasNext()	
-  <cs>.hint()	
-  <cs>.itcount()	
-  <cs>.limit()	
-  <cs>.map()	
-  <cs>.maxScan()	
-  <cs>.maxTimeMS()	
-  <cs>.max()	
-  <cs>.min()	
-  <cs>.next()	
-  <cs>.noCursorTimeout()	
-  <cs>.objsLeftInBatch()	
-  <cs>.pretty()	
-  <cs>.readConcern()	
-  <cs>.readPref()	
-  <cs>.returnKey()	
-  <cs>.showRecordId()	
-  <cs>.size()	
-  <cs>.skip()	
-  <cs>.snapshot()	
-  <cs>.sort()	
-  <cs>.tailable()	
+  <cs>.batchSize() 
+  <cs>.close() 
+  <cs>.comment() 
+  <cs>.count() 
+  <cs>.explain() 
+  <cs>.forEach() 
+  <cs>.hasNext() 
+  <cs>.hint() 
+  <cs>.itcount() 
+  <cs>.limit() 
+  <cs>.map() 
+  <cs>.maxScan() 
+  <cs>.maxTimeMS() 
+  <cs>.max() 
+  <cs>.min() 
+  <cs>.next() 
+  <cs>.noCursorTimeout() 
+  <cs>.objsLeftInBatch() 
+  <cs>.pretty() 
+  <cs>.readConcern() 
+  <cs>.readPref() 
+  <cs>.returnKey() 
+  <cs>.showRecordId() 
+  <cs>.size() 
+  <cs>.skip() 
+  <cs>.snapshot() 
+  <cs>.sort() 
+  <cs>.tailable() 
   <cs>.toArray()
 文档'dc'操作 
   ▼单个文档操作 
@@ -387,7 +402,7 @@ bin目录下提供的一系列有用的工具
   PS: 原子操作,即只有操作成功或操作无效两种状态    
     mongodb不支持事务,但提供了许多原子操作,如文档的保存,修改,删除等 
 查询操作符 
-  'query-comparison Method'比较查询操作符 
+  'query-comparison'比较查询操作符 
     格式                    操作               RDBMS中的类似语句 
     $eq                     =等于
     {<key>:<value>}         ='equal'          where by = '菜鸟教程' 
@@ -406,9 +421,7 @@ bin目录下提供的一系列有用的工具
     $nin                    不包含
     组合使用 
       db.col.find({likes: {$lt: 200, $gt: 100}}) 
-  'query-logical Method'逻辑查询操作符 
-    $nor 
-    $not 
+  'query-logical'逻辑查询操作符 
     $and 
       传入多个键,用逗号','分隔 
       db.mycol.find({key1:val1, key2:val2}) 
@@ -421,7 +434,9 @@ bin目录下提供的一系列有用的工具
           ]
         }
       )
-  'query-element Method'元查询操作符 
+    $nor 
+    $not 
+  'query-element'元查询操作符 
     $type,基于BSON类型来检索集合中匹配的数据类型 
       类型                     数字      备注
       Double                   1   
@@ -447,17 +462,19 @@ bin目录下提供的一系列有用的工具
         获取"col"集合中'title'为 String 的数据 
         db.col.find({"title": {$type: 2}})
     $exists,判断字段是否存在 
-  'query-evaluation Method'评价查询操作符 
+  'query-evaluation'评价查询操作符 
     $where 
     $text 
     $regex 
     $mod,取模计算
-  'query-array Method'数组查询操作符 
+  'query-array'数组查询操作符 
     $all,匹配所有
     $elemMatch,
     $size,匹配数组元素个数
+  'query-geospatial'地理查询操作符 
+  'query-bitwise'位查询操作符  
 更新操作符 
-  'update-field Method'字段更新操作符 
+  'update-field'字段更新操作符 
     {$set: {<field>: <val>}} 更新指定字段,不存在则创建[原子操作]
     {$unset: {<field>: 1}}   删除字段[原子操作]
     {$inc: {<field>: <num>}} 对数字类型的字段进行增减操作[原子操作] 
@@ -467,7 +484,7 @@ bin目录下提供的一系列有用的工具
     $min  
     $setOnInsert  
     $mul  
-  'update-array Method'数组更新操作符 
+  'update-array'数组更新操作符 
     {$push: {<field>: <val>}} 追加成员,若该字段不存在,则新增并追加  [原子操作]
     {$pushAll: {<field>: <val_arr>}} 同$push,一次追加多个成员 [原子操作]
     $addToSet,当无该成员时,则增加[原子操作]
@@ -477,10 +494,10 @@ bin目录下提供的一系列有用的工具
     $position,
     $each,
     $sort,
-  'update-bitwise Method'位更新操作符 
+  'update-bitwise'位更新操作符 
     {$bit: {<field>: {and: 5}}} [原子操作]   
 聚合管道操作符 
-  'aggregation-group Method'group查询操作符 
+  'aggregation-group'group查询操作符 
     $sum,计算总和
     $avg,计算平均值
     $first,根据资源文档的排序获取第一个文档数据 
@@ -491,7 +508,7 @@ bin目录下提供的一系列有用的工具
     $addToSet,在结果文档中插入值到一个数组中,但不创建副本 
     $stdDevPop,
     $stdDevSamp,
-  'aggregation-pipeline Method'管道聚合阶段 
+  'aggregation-pipeline'管道聚合阶段 
     $project,修改输入文档的结构
       可以用来重命名、增加或删除域,也可以用于创建计算结果以及嵌套文档。
     $match,用于过滤数据,只输出符合条件的文档
@@ -722,11 +739,68 @@ MongoDB数据库引用
         "dob": "01-01-1991",
         "name": "Tom Benzamin"  
       }  
-
-
-
-
-
-
-
+--------------------------------------------------------------------------------
+◆MongoDB驱动 
+  mongodb是连接MongoDB的基础库,Mongoose库是对mongodb库的封装 
+  $ npm i mongodb  // 安装 mongodb库 
+  通过'MongoClient'连接数据库 
+    var MongoClient = require('mongodb').MongoClient;
+    var url = 'mongodb://localhost:27017/dbname';
+    MongoClient.connect(url, function(err, db) {
+      // db  数据库对象 
+      if(err){
+        console.error(err);
+        return;
+      }
+      else{
+        console.log("Connected correctly to server");
+        db.close();
+      }
+    });
+  db.collection(<ctName>)   ct,返回指定的集合  
+  ct.insert(dc,function(err,rst){     // 添加文档 
+    Example: 
+    collection.insert({name:"myName",age:"myAge"},function(err,result){
+      if(err){
+        console.error(err);
+      }
+      else{
+        console.log("insert result:");
+        console.log(result);
+      }
+    })
+  })   
+  ct.insertMany(dc,function(err,rst){ // 添加文档  
+  })    
+  ct.updateOne(<dcName>,)
+  更新记录
+  调用collection的 updateOne 方法更新单个记录。
+  collection.updateOne({ a : 2 }, { $set: { b : 1 } }, function(err, result) {
+    if(err){
+      console.error(err);
+    }else{
+      console.log("update result:");
+      console.log(result);
+    }
+  });
+  删除记录
+  调用collection的deleteOne方法更新单个记录。
+  collection.deleteOne({ a : 3 }, function(err, result) {
+    if(err){
+      console.error(err);
+    }else{
+      console.log("delete result:");
+      console.log(result);
+    }
+  });
+  查询记录
+  调用collection的find方法查找记录,find方法的参数为查找条件。
+  collection.find({}).toArray(function(err, docs) {
+    if(err){
+      console.error(err);
+    }else{
+      console.log("find result:");
+      console.log(result);
+    }
+  });
 

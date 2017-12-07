@@ -332,15 +332,15 @@
   'O .prototype  构造函数原型':
     'prefix': 'prototype-fn'
     'body': 'prototype'
-  'O .apply(this[,arr])':
+  'O .apply(this[,arr])  方法在指定对象上调用':
     'prefix': 'apply-fn'
-    'body': 'apply(${1:this},${2:arrays})'
-  'O .bind(this[,arg1,arg2,...])':
-    'prefix': 'bind-fn'
-    'body': 'bind(${1:this},${2:arg1,arg2,..})'
-  'O .call(this[,arg1,arg2,...])':
+    'body': 'apply(${1:this},${2:arr})'
+  'O .call(this[,arg1,arg2,...])  方法在指定对象上调用':
     'prefix': 'call-fn'
     'body': """call(${1:this},${2:arg1,arg2,..})"""
+  'O .bind(this[,arg1,arg2,...])  fn,将借用的方法返回':
+    'prefix': 'bind-fn'
+    'body': 'bind(${1:this},${2:arg1,arg2,..})'
   'O function(){}  匿名函数':
     'prefix': 'function-1'
     'body': 'function(){\n}$1'

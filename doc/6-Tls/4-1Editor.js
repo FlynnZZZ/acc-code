@@ -68,6 +68,8 @@ Atom
         ctrl-g         跳转到指定的行
         ctrl-f         当前页查找
         ctrl-shift-f   在整个文件夹中查找  
+        ctrl-shift-p   调出命令查询框 
+          可查询并执行命令
         ★行操作 
         ctrl+↑/↓       行移动
         ctrl-enter     在当前行的末尾回车
@@ -114,31 +116,7 @@ Atom
         'autocomplete-plus:activate' 将其快捷键 从 ctrl-space 改为 alt-e
           默认的ctrl-space 快捷键未生效
       autocomplete-Snippets  
-      autoflow               功能未知
-      autosave               失焦或关闭时自动保存
-      bookmarks              书签功能支持
-      bracket-matcher        括号匹配功能
-        设置
-          autocomplete characters [激活括号特性匹配的字符对]
-            (), [], {}, "", '', ``, “”, ‘’, «», ‹›,<>,《》,（）,[],『』,【】,〖〗,><
-          pairs with extra newline[在其中间换行时,自动多添加一行]
-            (), [], {}
-      command-palette        命令面板 
-        快捷键  ctrl-shift-p
-      language-css           css语言支持
-        将'.'号从'非实体字符'中去除
-      language-less          less语言支持
-        将'.'号从'非实体字符'中去除
-      language-sass          sass语言支持
-        将'.'号从'非实体字符'中去除
-      settings-view          设置页面 
-        快捷键
-          ctrl-,    打开设置页
-          ctrl-.    打开快捷键绑定页[self] 
-            PS: '1.22.1' 不再支持该快捷键 
-            '.platform-win32, .platform-linux':
-              'ctrl-.': 'settings-view:show-keybindings'
-      snippets      自动补全功能 
+      snippets               代码片段 
         通过关键词来扩展为代码块——tab/enter 
           使用alt+shift+s来查看所有的扩展 (?)
         Atom-自定义自动填充代码 Snippets(在这里我把 snippet 理解为代码块。)
@@ -194,20 +172,60 @@ Atom
         自定义Snippets的扩展词时,定义的格式的确定
           在要定义的文档类型下,ctrl-shift-p   输入代码Editor: log Cursor Scope
           弹出字符如 txt格式的为 text.plain ,则.text.plain类似于.source.js表示一种文件格式
+      autoflow               功能未知
+      autosave               失焦或关闭时自动保存
+      bookmarks              书签功能支持
+      bracket-matcher        括号匹配功能 
+        设置
+          autocomplete characters [激活括号特性匹配的字符对]
+            (), [], {}, "", '', ``, “”, ‘’, «», ‹›,<>,《》,（）,[],『』,【】,〖〗,><
+          pairs with extra newline[在其中间换行时,自动多添加一行]
+            (), [], {}
+      find-and-replace       查找和替换 
+        正则查找 
+          将查找内容的部分进行替换 
+            Example:
+            查找 1122 将其替换为 11AA
+            (11)22;
+            $1AA;
+            
+            查找大写字符,在其前加上换行
+            ([A-Z])
+            \n$1
+          清除空行:  \r\n\r\n   替换为 \r\n 
+          在字符后换行:  a          替换为 a\n\t 
+          查找词: \b<word>\b     
+      go-to-line             跳转到指定行 
+      command-palette        命令面板 
+        快捷键  ctrl-shift-p
+      settings-view          设置页面 
+        快捷键
+          ctrl-,    打开设置页
+          ctrl-.    打开快捷键绑定页[self] 
+            PS: '1.22.1' 不再支持该快捷键 
+            '.platform-win32, .platform-linux':
+              'ctrl-.': 'settings-view:show-keybindings'
       symbols-view          查看变量
         变量、函数 查找快捷键 ctrl-r
       tabs                  标签栏
         add new tabs at end  始终在最后打开文件
       timecop               统计加载时间
-      tree-view             文件目录
+      tree-view             文件目录 
         设置
           focus on reveal  激活文件时,在文件目录定位
         快捷键
           ctrl-\         toggle,开关文件目录
           ctrl-shift-\   reveal active file,在目录中定位到当前文件
       wrap-guide            标尺线
-      markdown-preview      在编辑器中以markdown展示
+      markdown-preview      在编辑器中以markdown展示 
         快捷键 ctrl-shift-m
+      ★语言支持类插件 
+      language-css           css语言支持 
+        将'.'号从'非实体字符'中去除
+      language-less          less语言支持 
+        将'.'号从'非实体字符'中去除
+      language-sass          sass语言支持 
+        将'.'号从'非实体字符'中去除
       可禁用列表 
         about             关于Atom的介绍相关 
         archive-view       
@@ -282,19 +300,6 @@ Atom
             若无项目文件夹,则默认不加载
           记录状态 如 标签等
   总结 
-    使用 ctrl+shift+p 调出命令查询框,可查询并执行命令
-    正则查找
-      将查找内容的部分进行替换
-        Example:
-          查找 1122 将其替换为 11AA
-          (11)22;
-          $1AA;
-          
-          查找大写字符,在其前加上换行
-          ([A-Z])
-          \n$1
-      清除空行      \r\n\r\n   替换为 \r\n
-      在字符后换行  a          替换为 a\n\t
     可在命令行中使用Atom打开当前文件: atom ./ 
     1.18.0 折叠正常,1.19.0 折叠非标准内容的文件存在bug,并且也不能记住折叠的状态  
     1.20.0 开启atom-beautify导致内存占用过高  

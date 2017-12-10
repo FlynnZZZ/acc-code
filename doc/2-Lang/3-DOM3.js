@@ -750,17 +750,6 @@ DragEvent,拖放事件[IE9+][HTML5]
       this.innerHTML = '元素已落在目标区域';
       this.style.backgroundColor = 'orange';
     }
-TouchEvent,触摸事件  
-  Extend: UIEvent 
-    console.log(TouchEvent.prototype.__proto__.constructor===UIEvent);
-  Proto: 
-    .touches  
-    .targetTouches  
-    .changedTouches  
-    .altKey  
-    .metaKey  Windows中为Windows键,Mac中为Cmd键  
-    .ctrlKey  
-    .shiftKey  
 KeyboardEvent,键盘事件[DOM3] 
   Extend: UIEvent 
     console.log(KeyboardEvent.prototype.__proto__.constructor===UIEvent);
@@ -834,7 +823,7 @@ TextEvent,文本事件
   事件枚举: 
     textInput  将文本插入文本框前触发,不支持DOM0绑定 [DOM3] 
       PS: 只有可编辑区域才能触发该事件;键盘输入、粘贴操作都会触发 
-CompositionEvent,合成事件[DOM3]  
+CompositionEvent,合成事件[DOM3] 
   PS: 当为IME['Iput Method Editor'输入法编辑器]输入字符时触发 
     IME可以让用户输入在物理键盘上找不到的字符,如输入中文;
     浏览器支持率度不高
@@ -850,21 +839,21 @@ CompositionEvent,合成事件[DOM3]
       e.data  正在插入的文本
     compositionend    在IME关闭时触发,表示返回正常键盘输入状态,不支持DOM0绑定 
       e.data  包含此次输入会话中插入的所有字符
-FontFaceSetLoadEvent,   
-TrackEvent,   
-SpeechSynthesisEvent,   
-DeviceOrientationEvent,   
-DeviceMotionEvent,   
-BlobEvent,   
-AudioProcessingEvent,   
-MessageEvent,   
-PointerEvent,   
-ProgressEvent,   
-StorageEvent,   
-MIDIConnectionEvent,   
-IDBVersionChangeEvent,   
+FontFaceSetLoadEvent, 
+TrackEvent, 
+SpeechSynthesisEvent, 
+DeviceOrientationEvent, 
+DeviceMotionEvent, 
+BlobEvent, 
+AudioProcessingEvent, 
+MessageEvent, 
+PointerEvent, 
+ProgressEvent, 
+StorageEvent, 
+MIDIConnectionEvent, 
+IDBVersionChangeEvent, 
 GamepadEvent, 
-CloseEvent,  
+CloseEvent, 
 事件兼容处理: 
   var eventCompat = {
     add: function(elem,type,foo){
@@ -1006,169 +995,176 @@ CloseEvent,
       this.className="blue";
       this.onclick=toRed;
     }
+--------------------------------------------------------------------------------
 移动端事件 
-  orientationchange 屏幕旋转事件 
-  deviceorientation 在加速计检测到设备方向变化时在window对象上触发 
-  devicemotion  设备移动事件
-  Touch触摸事件
-    PS: 由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
-    ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现]
-    touchstart  当手指放在屏幕上触发,始终会触发,而不管是否改为滑动
-      即使已经有一个手指放在了屏幕上也会触发 
-    touchmove   当手指在屏幕上滑动时持续触发 
-      事件发生期间,调用preventDefault() 可以阻止滚动。
-      Example:
-        指定滑动一定距离执行动作 [self]
-        var flagYear =true; // 用于记录滑动起始点的 布尔值
-        year.on('touchmove',function(e){
-          if (flagYear) {   // 仅记录滑动初始的位置
-            starty =e.originalEvent.changedTouches[0].pageY;
-            flagYear =false;
-          }
-          var endy = e.originalEvent.changedTouches[0].pageY;
-          if (endy - starty < -20 ) { // 下滑距离20执行动作
-            // 执行的代码
-            
-            starty =endy;
-          }
-          if (endy - starty > 20 ) {   // 上滑距离20执行动作
-            // 执行的代码
-            
-            starty =endy;
-          }
-        })
-        year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
-          flagYear =true;
-        })
-    touchend    当手指从屏幕上离开时触发,始终会触发,而不管是否改为滑动
-    ◆额外的三个触摸事件[DiBs]
-    touchenter   移动的手指进入一个DOM元素
-    touchleave   移动手指离开一个DOM元素
-    touchcancel  触摸被中断
-    Example:
-      var EventUtil = {
-        addHandler: function(element,type,handler) {
-          if(element.addEventListener) {
-            element.addEventListener(type,handler,false);
-          }else if(element.attachEvent) {
-            element.attachEvent("on"+type,handler);
-          }else {
-            element["on" +type] = handler;
-          }
-        },
-        removeHandler: function(element,type,handler){
-          if(element.removeEventListener) {
-            element.removeEventListener(type,handler,false);
-          }else if(element.detachEvent) {
-            element.detachEvent("on"+type,handler);
-          }else {
-            element["on" +type] = null;
-          }
-        }
-      };
-      var touch = document.getElementById("touch");
-      EventUtil.addHandler(touch,"touchstart",function(event){
-        console.log(event);
-      })；
-      
-      // 连续滑动触发
-      EventUtil.addHandler(window,"touchmove",function(event){
-        alert(1);
-      })；
-      //当手指从屏幕上离开时触发;
-      EventUtil.addHandler(window,"touchend",function(event){
-        alert(1);
-      })
-    TouchEvent事件对象  
-    e.touches    当前位于屏幕上的所有手指的一个列表 当前跟踪的触摸操作的Touch对象的数组
-      event.touches.length  表示屏幕上触摸的手指个数 
-      touch = e.touches[idx] 
-      touch.clientX 触摸目标在视口中的x 坐标
-      touch.clientY 触摸目标在视口中的y 坐标
-      touch.identifier 标识触摸的唯一ID
-      touch.pageX 触摸目标在页面中的x 坐标
-      touch.pageY 触摸目标在页面中的y 坐标
-      touch.screenX 触摸目标在屏幕中的x 坐标
-      touch.screenY 触摸目标在屏幕中的y 坐标
-      touch.target 触摸的DOM 节点目标 
-    e.targetTouches    位于当前DOM元素上的手指的一个列表
-      PS:touch事件会冒泡,所以我们可以使用这个属性指出目标对象.
-      event.touches.length  表示元素上触摸的手指个数
-    e.targetTouchs    特定于事件目标的Touch 对象的数组。
-    e.originalEvent.changedTouches   
-      e.originalEvent.changedTouches.Identifier  标示触摸的唯一ID [不存在?]
-      e.originalEvent.changedTouches[0].clientX     触摸目标在视口中的X坐标
-      e.originalEvent.changedTouches[0].clientY     触摸目标在视口中的Y坐标
-      e.originalEvent.changedTouches[0].pageX    页面中的X坐标
-      e.originalEvent.changedTouches[0].pageY    页面中的Y坐标
-      e.originalEvent.changedTouches[0].screenX     触摸目标在屏幕中的X坐标
-      e.originalEvent.changedTouches[0].screenY     触摸目标在屏幕中的Y坐标
-      e.originalEvent.changedTouches[0].target      触摸的DOM节点目标
-    e.changeTouches  表示自上次触摸以来发生了什么改变的Touch 对象的数组。
-    event.preventDefault();  阻止滚动 [?]
+TouchEvent,触摸事件 
+  Extend: UIEvent 
+    console.log(TouchEvent.prototype.__proto__.constructor===UIEvent);
+  Proto: 
+    .touches  当前位于屏幕上的所有手指的列表 
+      PS: 'touchend'事件该列表无成员 
+      .length  表示屏幕上触摸的手指个数 
+      .touches[idx]  Touch, 
+    .targetTouches  位于当前DOM元素上的手指的一个列表
+      'touchend'事件该列表无成员 
+      .targetTouches[idx]  Touch, 
+    .changedTouches 
+      .changedTouches[idx]  Touch, 
+    .altKey  
+    .metaKey  Windows中为Windows键,Mac中为Cmd键  
+    .ctrlKey  
+    .shiftKey  
+    event.preventDefault()  阻止滚动 [?]
       一些移动设备有缺省的touchmove行为,比如说经典的iOSoverscroll效果,
       当滚动超出了内容的界限时就引发视图反弹,这种做法在许多多点触控应用中会带来混乱。
-  Gestures手势事件
-    PS: 该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发 
-      当两个手指触摸屏幕时就会产生手势,手势通常会改变显示项的大小,或者旋转显示项
-    gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发 
-    gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
-    gestureend    当任何一个手指从屏幕上面移开时触发。
-  触摸事件和手势事件的关系 
-    当一个手指放在屏幕上时,会触发touchstart事件,
-    而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
-    若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
-    但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
-    手势的专有属性:
-      rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
-      scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
-  其他 
-    navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
-    autocapitalize  autocorrect   自动大写与自动修正
-      <input type="text" autocapitalize="off" autocorrect="off" />
-    -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
-    -webkit-user-select:none      禁止用户选中文字
-    关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
-      this.value = this.value.replace(/\u2006/g, ‘‘);
-    input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
-    判断是否为微信浏览器；
-      function is_weixn(){
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i)=="micromessenger") {
-          return true;
-        } else {
-          return false;
+Touch, 
+  Extend: Object 
+  Proto: 
+    .identifier 标识触摸的唯一ID
+    .target 触摸的DOM节点目标 
+    .screenX 触摸目标在屏幕中的X坐标 
+    .screenY 触摸目标在屏幕中的Y坐标 
+    .clientX 触摸目标在视口中的X坐标 
+    .clientY 触摸目标在视口中的Y坐标 
+    .pageX 触摸目标在页面中的X坐标 
+    .pageY 触摸目标在页面中的Y坐标 
+    .radiusX 
+    .radiusY 
+    .rotationAngle 
+    .force 
+orientationchange屏幕旋转事件 
+deviceorientation在加速计检测到设备方向变化时在window对象上触发 
+devicemotion设备移动事件
+Touch触摸事件 
+  PS: 由于触摸会导致屏幕滚动,在事件函数内使用 e.preventDefault() 阻止掉默认事件(默认滚动)
+  ◆基本触摸事件[在规范中列出并获得跨移动设备广泛实现]
+  touchstart  当手指放在屏幕上触发,始终会触发,而不管是否改为滑动
+    即使已经有一个手指放在了屏幕上也会触发 
+  touchmove   当手指在屏幕上滑动时持续触发 
+    事件发生期间,调用preventDefault() 可以阻止滚动。
+    Example:
+      指定滑动一定距离执行动作 [self]
+      var flagYear =true; // 用于记录滑动起始点的 布尔值
+      year.on('touchmove',function(e){
+        if (flagYear) {   // 仅记录滑动初始的位置
+          starty =e.changedTouches[0].pageY;
+          flagYear =false;
+        }
+        var endy = e.changedTouches[0].pageY;
+        if (endy - starty < -20 ) { // 下滑距离20执行动作
+          // 执行的代码
+          
+          starty =endy;
+        }
+        if (endy - starty > 20 ) {   // 上滑距离20执行动作
+          // 执行的代码
+          
+          starty =endy;
+        }
+      })
+      year.on('touchend',function(){  // 重置flagYear 用于下一次滑动
+        flagYear =true;
+      })
+  touchend    当手指从屏幕上离开时触发,始终会触发,而不管是否改为滑动
+  ◆额外的三个触摸事件[DiBs]
+  touchenter   移动的手指进入一个DOM元素
+  touchleave   移动手指离开一个DOM元素
+  touchcancel  触摸被中断
+  Example:
+    var EventUtil = {
+      addHandler: function(element,type,handler) {
+        if(element.addEventListener) {
+          element.addEventListener(type,handler,false);
+        }else if(element.attachEvent) {
+          element.attachEvent("on"+type,handler);
+        }else {
+          element["on" +type] = handler;
+        }
+      },
+      removeHandler: function(element,type,handler){
+        if(element.removeEventListener) {
+          element.removeEventListener(type,handler,false);
+        }else if(element.detachEvent) {
+          element.detachEvent("on"+type,handler);
+        }else {
+          element["on" +type] = null;
         }
       }
-  键盘调出与关闭事件: 使用resize间接实现
-    var wh1 = window.innerHeight; 
-    //获取初始可视窗口高度
-    $(window).resize(function() {      
-      //监测窗口大小的变化事件
-      var wh2 = window.innerHeight;    
-      //当前可视窗口高度
-      var viewTop = $(window).scrollTop();   
-      //可视窗口高度顶部距离网页顶部的距离
-      if(wh1 > wh2){          
-        //可作为虚拟键盘弹出事件
+    };
+    var touch = document.getElementById("touch");
+    EventUtil.addHandler(touch,"touchstart",function(event){
+      console.log(event);
+    })；
+    
+    // 连续滑动触发
+    EventUtil.addHandler(window,"touchmove",function(event){
+      alert(1);
+    })；
+    //当手指从屏幕上离开时触发;
+    EventUtil.addHandler(window,"touchend",function(event){
+      alert(1);
+    })
+Gestures手势事件
+  PS: 该事件针对IOS设备,一个Gestures事件在两个或更多手指触摸屏幕时触发 
+    当两个手指触摸屏幕时就会产生手势,手势通常会改变显示项的大小,或者旋转显示项
+  gesturestart  当一个手指已经按在屏幕上,而另一个手指又触摸在屏幕时触发 
+  gesturechange 当触摸屏幕的任何一个手指的位置发生改变的时候触发。
+  gestureend    当任何一个手指从屏幕上面移开时触发。
+触摸事件和手势事件的关系 
+  当一个手指放在屏幕上时,会触发touchstart事件,
+  而另一个手指触摸在屏幕上时触发gesturestart事件,随后触发基于该手指的touchstart事件。
+  若一个或两个手指在屏幕上滑动时,将会触发gesturechange事件,
+  但是只要有一个手指移开时候,则会触发gestureend事件,紧接着会触发touchend事件。
+  手势的专有属性:
+    rotation 表示手指变化引起的旋转角度,负值表示逆时针,正值表示顺时针,从0开始；
+    scale    表示2个手指之间的距离情况,向内收缩会缩短距离,这个值从1开始的,并随距离拉大而增长。
+其他 
+  navigator.platform.indexOf(‘iPad‘) != -1    判断是否为iPhone
+  autocapitalize  autocorrect   自动大写与自动修正
+    <input type="text" autocapitalize="off" autocorrect="off" />
+  -webkit-touch-callout:none    禁止 iOS 弹出各种操作窗口
+  -webkit-user-select:none      禁止用户选中文字
+  关于 iOS 系统中,中文输入法输入英文时,字母之间可能会出现一个六分之一空格
+    this.value = this.value.replace(/\u2006/g, ‘‘);
+  input::-webkit-input-speech-button {display: none}    Andriod 上去掉语音输入按钮
+  判断是否为微信浏览器；
+    function is_weixn(){
+      var ua = navigator.userAgent.toLowerCase();
+      if(ua.match(/MicroMessenger/i)=="micromessenger") {
+        return true;
+      } else {
+        return false;
       }
-      else{                      
-        //可作为虚拟键盘关闭事件
+    }
+键盘调出与关闭事件: 使用resize间接实现 
+  var wh1 = window.innerHeight; 
+  //获取初始可视窗口高度
+  $(window).resize(function() {      
+    //监测窗口大小的变化事件
+    var wh2 = window.innerHeight;    
+    //当前可视窗口高度
+    var viewTop = $(window).scrollTop();   
+    //可视窗口高度顶部距离网页顶部的距离
+    if(wh1 > wh2){          
+      //可作为虚拟键盘弹出事件
+    }
+    else{                      
+      //可作为虚拟键盘关闭事件
+    }
+  });
+click点击事件 
+  click会在'touchend'事件后触发 
+  click延迟
+    PS: 移动端需判断是否为双击,故单击后不能立刻触发,需等300ms,直到确认不是双击才触发 
+    去掉click延迟的方法 
+    把viewport设置成设备的实际像素 Chrome和Safari生效 
+      <meta name="viewport" content="width=device-width">
+    设置initial-scale=1.0   Chrome生效 
+      <meta name="viewport" content="initial-scale=1.0">
+    设置CSS     Chrome和Safari都生效 
+      html{
+        touch-action: manipulation;
       }
-    });
-  click点击事件 
-    click会在'touchend'事件后触发 
-    click延迟
-      PS: 移动端需判断是否为双击,故单击后不能立刻触发,需等300ms,直到确认不是双击才触发 
-      去掉click延迟的方法 
-      把viewport设置成设备的实际像素 Chrome和Safari生效 
-        <meta name="viewport" content="width=device-width">
-      设置initial-scale=1.0   Chrome生效 
-        <meta name="viewport" content="initial-scale=1.0">
-      设置CSS     Chrome和Safari都生效 
-        html{
-          touch-action: manipulation;
-        }
 自定义事件 
   // 实现自定义事件 
   function MyEventTarget() {

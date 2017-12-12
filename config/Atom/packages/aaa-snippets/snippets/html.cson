@@ -1,0 +1,101 @@
+'.text.html.basic':
+  # HTML------------------------------------------------------------------------
+  '- <meta name="viewport" content="...">':
+    'prefix': 'meta-viewport-tag'
+    'body': '<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">'
+  '- <style>$1</style>':
+    'prefix': 'style-inset'
+    'body': '<style>\n\t$1\n</style>'
+  '- <script src="$1" charset="utf-8"></script>':
+    'prefix': 'script-src'
+    'body': '<script src="$1" charset="utf-8"></script>'
+  # 自定义组合--------------------------------
+  '- html-self  自定义模版':
+    'prefix': 'html-self'
+    'body': """
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>$1</title>
+      <link rel="stylesheet" href="./css.css">
+      <script src="./js/js.js" charset="utf-8"></script>
+    </head>
+    <body>
+    </body>
+    </html>"""
+  '- html-mobile  自定义的移动端模版':
+    'prefix': 'html-mobile'
+    'body': """
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+      <title>$1</title>
+      <link rel="stylesheet" href="../css.css">
+    </head>
+    <body>
+    </body>
+    </html>"""
+  '- cpt-template  自定义的vue组件模版':
+    'prefix': 'cpt-template'
+    'body': """
+    <style>
+    </style>
+    <div>
+    $1
+    </div>
+    <script type="text/javascript">
+    $(function(){
+    })
+    </script>
+    """ 
+  '- cpt-Template-child  自定义的vue子组件模版':
+    'prefix': 'cpt-template-child'
+    'body': """
+    <style>
+    </style>
+    <template id="c-xxx">
+      <div id="xxx">
+        $1
+      </div>
+    </template>
+    <script type="text/javascript">
+      // in props: 
+        
+      // put props: 
+        
+      // get event: 
+        
+      // out event: 
+      Vue.component('c-name',{
+        template: '#xxx_xx'
+        ,props: []
+        ,props: {
+          prop0: {
+            default: function () {
+              return 
+            }
+            // default: xxx
+            // ,type: Number 
+            // ,required: bol  
+            // ,validator: function (val) { 
+            //   return bol;
+            // }
+          }
+          // ,prop1: Number 
+          // ,prop1: [Number,String] 
+        }
+        ,data: function(){
+          return {
+            
+          }
+        }
+        ,created: function(){
+          
+        }
+      });
+    </script>
+    
+    """ 

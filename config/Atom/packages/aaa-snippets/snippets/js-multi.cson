@@ -1,0 +1,210 @@
+# js & vue 
+'.source.js,.text.html.vue':
+  '-Vue.extend({});  扩展Vue构造器':
+    'prefix': 'vue-extend'
+    'body': """Vue.extend({
+        $1
+      });""" 
+  '-Vue.component("c-name",{})  全局组件':
+    'prefix': 'vue-component'
+    'body': """Vue.component('c-name',{
+      template: ''
+      ,props: []
+      ,props: {
+        prop0: {
+          default: xxx
+          default: function () {
+            return 
+          }
+          ,type: Number 
+          ,required: bol  
+          ,validator: function (val) { 
+            return bol;
+          }
+        }
+        ,prop1: Number 
+        ,prop1: [Number,String] 
+      }
+      ,data: function(){
+        return {
+          
+        }
+      }
+      ,created: function(){
+      }
+    });""" 
+  '-Vue.component("c-name",foo)  异步全局组件':
+    'prefix': 'vue-component-async'
+    'body': """Vue.component("c-name",function(rs,rj){
+      rs({
+        template: ''
+        ,props: []
+        ,props: {
+          prop0: {
+            default: xxx
+            default: function () {
+              return 
+            }
+            ,type: Number 
+            ,required: bol  
+            ,validator: function (val) { 
+              return bol;
+            }
+          }
+          ,prop1: Number 
+          ,prop1: [Number,String] 
+        }
+        ,data: function(){
+          return {
+            
+          }
+        }
+        ,created: function(){
+        }
+      })
+    });""" 
+  '-Vue.directive("xx-xx",{});  全局指令':
+    'prefix': 'vueDirective'
+    'body': """Vue.directive('xxx-xxx', {
+      bind : function(el,binds,vn){
+        // binds{name,value,expression,arg,modifiers}
+      }
+      ,inserted : function(el,binds,vn){
+        
+      }
+      ,update : function(el,binds,vn,oVn){
+        // binds{name,value,expression,arg,modifiers,oldValue}
+      }
+      ,componentUpdated : function(el,binds,vn,oVn){
+        // binds{name,value,expression,arg,modifiers,oldValue}
+      }
+      ,unbind : function(el,binds,vn,oVn){
+        
+      }
+    });""" 
+  '-Vue.filter("xxx",foo);  全局过滤器':
+    'prefix': 'vue-filter'
+    'body': """Vue.filter('xxx',function(val,arg2,arg3){
+        $1 
+      });""" 
+  '-Vue.use($1)':
+    'prefix': 'vue-use'
+    'body': 'Vue.use($1)'
+  '-vue new Vue({$1});':
+    'prefix': 'new-vue'
+    'body': """new Vue({
+        el: '#xxx'
+        ,data: {}
+        ,computed: {}
+        ,watch: {}
+        ,methods: {}
+        ,created: function (){
+          var that = this;
+        }
+        ,mounted: function (){
+          var that = this;
+          this.$nextTick(function () { });
+          
+        }
+      });""" 
+  '-vue new VueRouter();':
+    'prefix': 'new-VueRouter'
+    'body': """new VueRouter({
+        routes : $1
+      });""" 
+  '-vue props':
+    'prefix': 'props-vue'
+    'body': """props""" 
+  '-vue propsData':
+    'prefix': 'propsData-vue'
+    'body': """propsData""" 
+  '-vue computed':
+    'prefix': 'computed-vue'
+    'body': """computed""" 
+  '-vue watch':
+    'prefix': 'watch-vue'
+    'body': """watch""" 
+  '-vue methods':
+    'prefix': 'methods-vue'
+    'body': """methods""" 
+  '-vue filters':
+    'prefix': 'filters-vue'
+    'body': """filters""" 
+  '-vue directives':
+    'prefix': 'directives-vue'
+    'body': """directives""" 
+  '-vue mixins':
+    'prefix': 'mixins-vue'
+    'body': """mixins""" 
+  '-vue components':
+    'prefix': 'components-vue'
+    'body': """components""" 
+  '-vue beforeCreate  实例刚创建':
+    'prefix': 'beforeCreate-vue'
+    'body': """beforeCreate""" 
+  '-vue created  实例创建完毕':
+    'prefix': 'created-vue'
+    'body': """created""" 
+  '-vue beforeMount  DOM渲染前':
+    'prefix': 'beforeMount-vue'
+    'body': """beforeMount""" 
+  '-vue mounted  DOM渲染完毕':
+    'prefix': 'mounted-vue'
+    'body': """mounted""" 
+  '-vue beforeUpdate  更新前':
+    'prefix': 'beforeUpdate-vue'
+    'body': """beforeUpdate""" 
+  '-vue updated  数据模型更新':
+    'prefix': 'updated-vue'
+    'body': """updated""" 
+  '-vue activated  组件被激活时':
+    'prefix': 'activated-vue'
+    'body': """activated""" 
+  '-vue deactivated  组件被移除时':
+    'prefix': 'deactivated-vue'
+    'body': """deactivated""" 
+  '-vue beforeDestroy  销毁前':
+    'prefix': 'beforeDestroy-vue'
+    'body': """beforeDestroy""" 
+  '-vue destroyed  销毁观察、组件及事件':
+    'prefix': 'destroyed-vue'
+    'body': """destroyed""" 
+  '-vue .$set(obj,key,val)':
+    'prefix': 'set-vue'
+    'body': """$set(obj,key,val)""" 
+  '-vue .$emit("eventName",data)':
+    'prefix': 'emit-vue'
+    'body': """$emit('eventName',data)""" 
+  '-vue .$on("eventName",function (){})':
+    'prefix': 'on-vue'
+    'body': """$on('eventName',function (data){
+      $1
+    })""" 
+  '-vue .$refs':
+    'prefix': 'refs-vue'
+    'body': """$refs""" 
+  # 插件 
+  '-vue redirect  kw,重定向':
+    'prefix': 'redirect-kw'
+    'body': """redirect""" 
+  '-vue .$http.get().then':
+    'prefix': 'http.get'
+    'body': """$http.get('url',{})  // 某接口
+    .then(function(data){
+      console.log('某接口--成功',data)
+    },
+    function(error){
+      console.log('某接口--失败',error)
+    })""" 
+  '-vue .$http.post().then':
+    'prefix': 'http.post'
+    'body': """$http.post('url',{})  // 某接口
+    .then(function(data){
+      console.log('某接口--成功',data)
+    },
+    function(error){
+      console.log('某接口--失败',error)
+    })""" 
+  '-vue .$router  路由实例':
+    'prefix': 'router-vue'
+    'body': """$router""" 

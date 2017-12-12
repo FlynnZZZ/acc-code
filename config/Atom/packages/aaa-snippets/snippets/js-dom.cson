@@ -1,6 +1,6 @@
 # DOM .js --------------------------------------------------------------------- 
 '.source.js':
-  #  multi  
+  # multi  
   'DOM .querySelector("$1")':
     'prefix': 'querySelector-el'
     'body': 'querySelector("$1")'
@@ -54,15 +54,6 @@
     'prefix': 'innerText-HTMLElement'
     'body': 'innerText("$1")'
   # event name   
-  'DOM touchstart':
-    'prefix': 'touchstart-eventName'
-    'body': 'touchstart'
-  'DOM touchend':
-    'prefix': 'touchend-eventName'
-    'body': 'touchend'
-  'DOM touchmove':
-    'prefix': 'touchmove-eventName'
-    'body': 'touchmove'
   'DOM readystatechange':
     'prefix': 'readystatechange-eventName'
     'body': 'readystatechange'
@@ -225,4 +216,28 @@
   '-DOM .readAsText':
     'prefix': 'readAsText'
     'body': 'readAsText'
+'.source.js,.text.html.vue':
+  # event name   
+  'DOM touchstart':
+    'prefix': 'touchstart-eventName'
+    'body': 'touchstart'
+  'DOM touchend':
+    'prefix': 'touchend-eventName'
+    'body': 'touchend'
+  'DOM touchmove':
+    'prefix': 'touchmove-eventName'
+    'body': 'touchmove'
+
+
+
+
+
+
+
+
+
+
+
+
+
 

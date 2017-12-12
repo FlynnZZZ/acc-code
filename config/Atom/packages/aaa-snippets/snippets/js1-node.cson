@@ -1,0 +1,11 @@
+# Node  .js ---------------------------------------------------------------------
+'.source.js':
+  '-nd require($1)':
+    'prefix': 'require'
+    'body': 'require($1)'
+  '-nd exports':
+    'prefix': 'exports'
+    'body': 'exports'
+  '-nd module.exports':
+    'prefix': 'module-exports'
+    'body': 'module.exports'

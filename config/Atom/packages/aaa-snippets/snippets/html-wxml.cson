@@ -1,0 +1,222 @@
+# 微信小程序 .wxml 文件----------------------------------------------------------
+'.text.xml':
+  # 标签&属性----------------------------------- 
+  '-wx <block>$1</block>':
+    'prefix': 'block'
+    'body': """<block >$1</block>""" 
+  '-wx <template name="">$1</template>':
+    'prefix': 'template wx'
+    'body': """<template name="">$1</template>""" 
+  '-wx template 1 is="$1"':
+    'prefix': 'template 1 is'
+    'body': 'is="$1"'
+  '-wx template 1 name="$1"':
+    'prefix': 'template 1 name'
+    'body': 'name="$1"'
+  '-wx template 1 data="$1"':
+    'prefix': 'template 1 data wx'
+    'body': 'data="$1"'
+  '-wx <view>$1</view>':
+    'prefix': 'view'
+    'body': """<view >$1</view>""" 
+  '-wx <scroll-view>$1</scroll-view>':
+    'prefix': 'scroll-view'
+    'body': """<scroll-view scroll-y>
+      $1
+    </scroll-view>""" 
+  '-wx scroll-view 1 scroll-x':
+    'prefix': 'scroll-view 1 scroll-x'
+    'body': """scroll-x""" 
+  '-wx scroll-view 1 scroll-y':
+    'prefix': 'scroll-view 1 scroll-y'
+    'body': """scroll-y""" 
+  '-wx scroll-view 1 scroll-with-animation':
+    'prefix': 'scroll-view 1 scroll-with-animation'
+    'body': """scroll-with-animation""" 
+  '-wx scroll-view 1 enable-back-to-top':
+    'prefix': 'scroll-view 1 enable-back-to-top'
+    'body': """enable-back-to-top""" 
+  '-wx scroll-view 1 scroll-top=':
+    'prefix': 'scroll-view 1 scroll-top'
+    'body': """scroll-top=\"$1\"""" 
+  '-wx scroll-view 1 scroll-left=':
+    'prefix': 'scroll-view 1 scroll-left'
+    'body': """scroll-left=\"$1\"""" 
+  '-wx scroll-view 1 scroll-into-view=':
+    'prefix': 'scroll-view 1 scroll-into-view'
+    'body': """scroll-into-view=\"$1\"""" 
+  '-wx scroll-view 1 upper-threshold=':
+    'prefix': 'scroll-view 1 upper-threshold'
+    'body': """upper-threshold=\"$1\"""" 
+  '-wx scroll-view 1 lower-threshold=':
+    'prefix': 'scroll-view 1 lower-threshold'
+    'body': """lower-threshold=\"$1\"""" 
+  '-wx scroll-view 1 bindscrolltoupper=':
+    'prefix': 'scroll-view 1 bindscrolltoupper'
+    'body': """bindscrolltoupper=\"$1\"""" 
+  '-wx scroll-view 1 bindscrolltolower=':
+    'prefix': 'scroll-view 1 bindscrolltolower'
+    'body': """bindscrolltolower=\"$1\"""" 
+  '-wx scroll-view 1 bindscroll=':
+    'prefix': 'scroll-view 1 bindscroll'
+    'body': """bindscroll=\"$1\"""" 
+  '-wx <movable-area>$1</movable-area>':
+    'prefix': 'movable-area'
+    'body': """<movable-area >$1</movable-area>""" 
+  '-wx <movable-view>$1</movable-view>':
+    'prefix': 'movable-view'
+    'body': """<movable-view x="" y="">$1</movable-view>""" 
+  '-wx movable-view 1 inertia':
+    'prefix': 'movable-view 1 inertia'
+    'body': """inertia""" 
+  '-wx movable-view 1 out-of-bounds':
+    'prefix': 'movable-view 1 out-of-bounds'
+    'body': """out-of-bounds""" 
+  '-wx movable-view 1 direction=':
+    'prefix': 'movable-view 1 direction'
+    'body': """direction=\"$1\"""" 
+  '-wx movable-view 1 damping=':
+    'prefix': 'movable-view 1 damping'
+    'body': """damping=\"$1\"""" 
+  '-wx movable-view 1 friction=':
+    'prefix': 'movable-view 1 friction'
+    'body': """friction=\"$1\"""" 
+  '-wx <swiper>$1</swiper>':
+    'prefix': 'swiper'
+    'body': """<swiper >$1</swiper>""" 
+  '-wx swiper 1 indicator-dots':
+    'prefix': 'swiper 1 indicator-dots'
+    'body': """indicator-dots""" 
+  '-wx swiper 1 autoplay':
+    'prefix': 'swiper 1 autoplay'
+    'body': """autoplay""" 
+  '-wx swiper 1 vertical':
+    'prefix': 'swiper 1 vertical'
+    'body': """vertical""" 
+  '-wx swiper 1 indicator-color=':
+    'prefix': 'swiper 1 indicator-color'
+    'body': """indicator-color=\"${1:rgba(0,0,0,0.2)}\"""" 
+  '-wx swiper 1 indicator-active-color=':
+    'prefix': 'swiper 1 indicator-active-color'
+    'body': """indicator-active-color=\"${1:#000}\"""" 
+  '-wx swiper 1 interval=':
+    'prefix': 'swiper 1 interval'
+    'body': """interval=\"${1:5000}\"""" 
+  '-wx swiper 1 duration=':
+    'prefix': 'swiper 1 duration'
+    'body': """duration=\"${1:500}\"""" 
+  '-wx swiper 1 circular=':
+    'prefix': 'swiper 1 circular'
+    'body': """circular""" 
+  '-wx swiper 1 current=':
+    'prefix': 'swiper 1 current'
+    'body': """current=\"${1:0}\"""" 
+  '-wx <swiper-item>$1</swiper-item>':
+    'prefix': 'swiper-item'
+    'body': """<swiper-item >$1</swiper-item>""" 
+  '-wx <cover-view>$1</cover-view>':
+    'prefix': 'cover-view'
+    'body': """<cover-view>$1</cover-view>""" 
+  '-wx <cover-image src="$1"/>':
+    'prefix': 'cover-image'
+    'body': """<cover-image src="$1"/>""" 
+  '-wx <image src="$1"/>':
+    'prefix': 'image'
+    'body': """<image src="$1"/>""" 
+  '-wx image 1 lazyload':
+    'prefix': 'image 1 lazyload'
+    'body': """lazyload""" 
+  '-wx image 1 mode=':
+    'prefix': 'image 1 mode'
+    'body': """mode=\"$1\"""" 
+  '-wx image 2 scaleToFill mode':
+    'prefix': 'image 2 scaleToFill'
+    'body': """scaleToFill""" 
+  '-wx image 2 aspectFit mode':
+    'prefix': 'image 2 aspectFit'
+    'body': """aspectFit""" 
+  '-wx image 2 aspectFill mode':
+    'prefix': 'image 2 aspectFill'
+    'body': """aspectFill""" 
+  '-wx image 2 widthFix mode':
+    'prefix': 'image 2 widthFix'
+    'body': """widthFix""" 
+  '-wx image 1 binderror=':
+    'prefix': 'image 1 binderror'
+    'body': """binderror=\"$1\"""" 
+  '-wx image 1 bindload=':
+    'prefix': 'image 1 bindload'
+    'body': """bindload=\"$1\"""" 
+  '-wx <icon type="" size="12" color=""/>':
+    'prefix': 'icon'
+    'body': """<icon type="$1" size="12" color="#ccc"/>""" 
+  '-wx <text >$1</text>':
+    'prefix': 'text'
+    'body': """<text >$1</text>""" 
+  '-wx text 1 selectable':
+    'prefix': 'text 1 selectable'
+    'body': """selectable""" 
+  '-wx text 1 decode':
+    'prefix': 'text 1 decode'
+    'body': """decode""" 
+  '-wx text 1 space=':
+    'prefix': 'text 1 space='
+    'body': """space=\"$1\"""" 
+  '-wx <navigator >$1</navigator>':
+    'prefix': 'navigator'
+    'body': """<navigator url="$1" open-type="navigate">$1</navigator>""" 
+  '-wx <rich-text nodes="{{nodes}}"><rich-text>':
+    'prefix': 'rich-text'
+    'body': '<rich-text nodes="{{${1:nodes}}}"></rich-text>'
+  '-wx rich-text 1 nodes="{{}}"':
+    'prefix': 'rich-text 1 nodes'
+    'body': 'nodes="{{$1}}"'
+  # 多用属性------------------------------ 
+  '-wx bindtap=':
+    'prefix': 'bindtap'
+    'body': """bindtap=\"$1\"""" 
+  '-wx bindchange=':
+    'prefix': 'bindchange'
+    'body': """bindchange=\"$1\"""" 
+  '-wx hover-class=':
+    'prefix': 'hover-class'
+    'body': """hover-class=\"$1\"""" 
+  '-wx hover-start-time=':
+    'prefix': 'hover-start-time'
+    'body': """hover-start-time=\"$1\"""" 
+  '-wx hover-stay-time=':
+    'prefix': 'hover-stay-time'
+    'body': """hover-stay-time=\"$1\"""" 
+  '-wx hover-stop-propagation':
+    'prefix': 'hover-stop-propagation'
+    'body': """hover-stop-propagation""" 
+  # 动态绑定------------------------------ 
+  '-wx wx:for="{{}}"':
+    'prefix': 'wx:for1'
+    'body': """wx:for=\"{{$1}}\"""" 
+  '-wx wx:for-item':
+    'prefix': 'wx:for-item'
+    'body': """wx:for-item=\"$1\"""" 
+  '-wx wx:for-index':
+    'prefix': 'wx:for-index'
+    'body': """wx:for-index=\"$1\"""" 
+  '-wx wx:key="{{key/*this}}"':
+    'prefix': 'wx:key="{{key/*this}}"'
+    'body': """wx:key=\"{{${1:key/*this}}}\"""" 
+  '-wx wx:if="{{val}}"':
+    'prefix': 'wx:if="{{val}}"'
+    'body': """wx:if=\"{{${1:key/*this}}}\"""" 
+  '-wx wx:elif="{{val}}"':
+    'prefix': 'wx:elif="{{val}}"'
+    'body': """wx:elif=\"{{${1:key/*this}}}\"""" 
+  '-wx wx:else':
+    'prefix': 'wx:else'
+    'body': """wx:else""" 
+  # 功能---------------------------------- 
+  '-wx <import src="$1"/>':
+    'prefix': 'import-wx'
+    'body': """<import src="$1"/>""" 
+  '-wx <include src="$1"/>':
+    'prefix': 'include-wx'
+    'body': """<include src="$1"/>""" 
+  # ---------------------------------------------------------------------------- 

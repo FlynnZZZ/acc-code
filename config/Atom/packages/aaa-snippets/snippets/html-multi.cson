@@ -1,0 +1,133 @@
+# html & vue 
+'.text.html.basic,.text.html.vue': 
+  '-HM <slot name="xxx">$1</slot>  子组件中对应分发的内容':
+    'prefix': 'slot-tag'
+    'body': '<slot name="xxx">$1</slot>'
+  '-HM <keep-alive>$1</keep-alive>  ':
+    'prefix': 'keep-alive'
+    'body': '<keep-alive>$1</keep-alive>'
+  '-HM <transition>$1</transition>  ':
+    'prefix': 'transition'
+    'body': '<transition name="$1">$2</transition>'
+  '-HM <router-view></router-view>  ':
+    'prefix': 'router-view-couple'
+    'body': '<router-view name="$2">$1</router-view>' 
+  '-HM <router-view />  ':
+    'prefix': 'router-view'
+    'body': '<router-view name="$1" />' 
+  '-HM <router-link></router-link>  ':
+    'prefix': 'router-link'
+    'body': '<router-link>$1</router-link>' 
+  '-HM v-if  ':
+    'prefix': 'vif'
+    'body': 'v-if="${1:key}"' 
+  '-HM v-else-if  ':
+    'prefix': 'v-else-if'
+    'body': 'v-else-if="${1:key}"' 
+  '-HM v-else  ':
+    'prefix': 'v-else'
+    'body': 'v-else'
+  '-HM v-show  ':
+    'prefix': 'v-show'
+    'body': 'v-show="${1:key}"' 
+  '-HM v-for  ':
+    'prefix': 'v-for'
+    'body': 'v-for="(val,key) in list"' 
+  '-HM v-text  ':
+    'prefix': 'v-text'
+    'body': 'v-text="${1:key}"' 
+  '-HM v-html  ':
+    'prefix': 'v-html'
+    'body': 'v-html="${1:key}"' 
+  '-HM v-model  ':
+    'prefix': 'v-model'
+    'body': 'v-model="${1:key}"'
+  '-HM v-bind  ':
+    'prefix': 'v-bind'
+    'body': ':${1:class}="${2:arg}"'
+  '-HM v-on  ':
+    'prefix': 'v-on'
+    'body': '@${1:click}="${2:arg}"' 
+  '-HM v-once  ':
+    'prefix': 'v-once'
+    'body': """v-once""" 
+  '-HM v-cloak  ':
+    'prefix': 'v-cloak'
+    'body': """v-cloak""" 
+  '-HM v-pre  ':
+    'prefix': 'v-pre'
+    'body': """v-pre""" 
+  '-HM lang="$1" ':
+    'prefix': 'lang'
+    'body': """lang=\"$1\"""" 
+  '-HM slot="$1"  父组件中具名的分发内容':
+    'prefix': 'slot-vue'
+    'body': 'slot="$1"' 
+  '-HM scope="$1"  ':
+    'prefix': 'scope-vue'
+    'body': 'scope="$1"' 
+  '-HM is="$1"  ':
+    'prefix': 'is-vue'
+    'body': 'is="$1"' 
+  '-HM to="$1"  ':
+    'prefix': 'to-vue'
+    'body': 'to="$1"'
+  '-HM ref="$1"  ':
+    'prefix': 'ref-vue'
+    'body': 'ref="$1"'
+  '-HM name="$1"  ':
+    'prefix': 'name-vue'
+    'body': 'name="$1"'
+  '-HM scoped  ':
+    'prefix': 'scoped-vue'
+    'body': 'scoped'
+  '-HM inline-template="$1"  ':
+    'prefix': 'inline-template-vue'
+    'body': 'inline-template="$1"' 
+  '-HM text/x-template  ':
+    'prefix': 'text/x-template-vue'
+    'body': '"text/x-template"'
+  '-HM active-class="$1"  路径匹配激活class':
+    'prefix': 'active-class-router'
+    'body': 'active-class="$1"'
+  '-HM exact-active-class="$1"  路径精确匹配激活class':
+    'prefix': 'exact-active-class-router'
+    'body': 'exact-active-class="$1"'
+# html & vue & xml & php  
+'.text.html.basic,.text.xml,.text.html.php,.text.html.vue':
+  # 标签 ----------------------------
+  '-HM <div>$1</div>':
+    'prefix': 'div-tag'
+    'body': '<div>$1</div>'
+  '-HM <div class="$1">$2</div>':
+    'prefix': 'div-class-tag'
+    'body': '<div class="$1">$2</div>'
+  '-HM <div id="$1">$2</div>':
+    'prefix': 'div-id-tag'
+    'body': '<div id="$1">$2</div>'
+  '-HM <template>$1</template>':
+    'prefix': 'template-tag'
+    'body': '<template>$1</template>'
+  # 属性----------------------------------
+  '-HM style="$1"':
+    'prefix': 'style-attr'
+    'body': 'style="$1"'
+  '-HM class="$1"':
+    'prefix': 'class-attr'
+    'body': 'class="$1"'
+  '-HM id="$1"':
+    'prefix': 'id-attr'
+    'body': 'id="$1"'
+  '-HM placeholder="$1"  表单的默认显示':
+    'prefix': 'placeholder-attr'
+    'body': 'placeholder="$1"'
+  '-HM name="$1"':
+    'prefix': 'name-attr'
+    'body': 'name="$1"'
+  '-HM data-xxx="val"  自定义数据':
+    'prefix': 'data-xxx-attr'
+    'body': 'data-$1="$2"'
+
+
+
+

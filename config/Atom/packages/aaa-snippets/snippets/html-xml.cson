@@ -1,0 +1,4 @@
+'.text.xml':   
+  'wx test':
+    'prefix': 'test'
+    'body': 'test'

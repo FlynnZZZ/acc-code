@@ -183,6 +183,33 @@ Cordova CLI:
       <preference name="AppendUserAgent" value="My Browser" /> 
       <preference name="SplashMaintainAspectRatio" value="true" /> 
         设置为true的话,那么图片会适应手机分辨率,不会出现拉伸情况。
+API 
+  存储: 
+    localStorage 同浏览器端 
+    IndexedDB 
+    WebSQL 
+    相关插件: 未原生支持,但可通过插件来实现 
+    FileSystem API 仅Chrome实现  [W3C规范]  
+  事件 
+    .addEventListener() 方法注册 
+    ◆事件枚举: 
+    ★'Lifecycle'生命周期
+    Cordova事件  粗略的Android等效   含义
+    deviceready  onCreate()        应用程序开始[不是从背景]
+      只有该事件被调用后,才表示cordova其它各个接口可以使用 
+      经常在该事件中注册其它事件的Listener 
+    pause        onPause()         应用程序移动到背景时 
+    resume       onResume()        应用程序返回到前景时  
+    ★其他
+    backbutton       用户点击退回按钮时被调用 
+    menubutton       用户点击菜单按钮时被调用 
+    searchbutton     用户点击搜索按钮时被调用 
+    volumedownbutton 用户点击音量加按钮时被调用 
+    volumeupbutton   用户点击音量减按钮时被调用 
+    load 
+    deviceready 
+    offline 
+    online 
 插件: 提供原生组件的JS接口  
   PS: 默认的,创建的Cordova项目不包含任何插件 
   命令行: 
@@ -200,13 +227,14 @@ Cordova CLI:
     var ref = cordova.InAppBrowser.open('http://apache.org', '_blank', 'location=yes'); 
   cordova-plug-file-transfer 
   cordova-plugin-camera   // 相机插件 
-  cordova-plugin-console   // 调试控制台Console 
+  cordova-plugin-console  // 调试控制台Console 
     让程序可以在控制台中打印输出日志 
   splash 
     navigator.splashscreen.show();
     navigator.splashscreen.hide();
-  cordova plugin add cordova-plugin-splashscreen 更改app图标
+  cordova-plugin-splashscreen 更改app图标 
     1 首先下载插件
+    cordova plugin add cordova-plugin-splashscreen
     2 在config.xml 文件中添加下面的内容
     <platform name="android">
     <!-- you can use any density that exists in the Android project -->
@@ -248,6 +276,8 @@ Cordova CLI:
     </platform>
     
     <preference name="SplashScreenDelay" value="10000" />//这个值表示这个图标显示10000毫秒后消失。
+  cordova-plugin-crosswalk-webview  使用chromium代替默认的webview 
+    $ cordova plugin add --save cordova-plugin-crosswalk-webview 
   JS调用插件 
     采用NodeJS的CommonJS的模块方式
     var cordova = require('cordova'); //  声明cordova：
@@ -376,33 +406,6 @@ Cordova CLI:
         target：目标文件,目录相对于android工程根目录 
         示例：
         <resource-file src="src/android/java/activity_preview.xml" target="res/layout/activity_preview.xml" />
-API 
-  存储: 
-    localStorage 同浏览器端 
-    IndexedDB 
-    WebSQL 
-    相关插件: 未原生支持,但可通过插件来实现 
-    FileSystem API 仅Chrome实现  [W3C规范]  
-  事件 
-    .addEventListener() 方法注册 
-    ◆事件枚举: 
-    ★'Lifecycle'生命周期
-    Cordova事件  粗略的Android等效   含义
-    deviceready  onCreate()        应用程序开始[不是从背景]
-      只有该事件被调用后,才表示cordova其它各个接口可以使用 
-      经常在该事件中注册其它事件的Listener 
-    pause        onPause()         应用程序移动到背景时 
-    resume       onResume()        应用程序返回到前景时  
-    ★其他
-    backbutton       用户点击退回按钮时被调用 
-    menubutton       用户点击菜单按钮时被调用 
-    searchbutton     用户点击搜索按钮时被调用 
-    volumedownbutton 用户点击音量加按钮时被调用 
-    volumeupbutton   用户点击音量减按钮时被调用 
-    load 
-    deviceready 
-    offline 
-    online 
 vue-cordova项目,基于vue的cordova项目 
   自我配置: 
     先创建基于webpack的vue项目 

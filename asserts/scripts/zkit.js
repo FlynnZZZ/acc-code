@@ -2,9 +2,9 @@
 window.zkit = { // 工具函数 
   getLocalImg: function(jInput,foo){ 
     // 通过 input type=file 获取到本地图片的 base64
-    // var defe = new $.Deferred();
     jInput.on("change",function(e){
       var img = e.target.files[0];
+      this.value = '' // 清空选择的图片 
       var fr = new FileReader();
       fr.readAsDataURL(img);
       // fr.readAsBinaryString(img);
@@ -21,7 +21,6 @@ window.zkit = { // 工具函数
   }
   ,dealImg: function (imgSrc,param,resolve){ 
     // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
-    // var defe = new $.Deferred();
     // param = {
     //   width : num,
     //   height: num,

@@ -129,7 +129,8 @@ Event,事件基础类
       目标元素在文档中是事件冒泡的前提,即删除目标元素也会阻止事件冒泡 
     .srcElement      elem,事件目标,同 .target 
     .currentTarget   elem,绑定事件的元素[即函数中的this] 
-      若直接将事件绑定在目标元素上,则this currentTarget target 相同
+      具有'时效性',只在触发的瞬间可见 
+      若直接将事件绑定在目标元素上,则'this'、'currentTarget'、'target'三者相同 
     .eventPhase   num,调用事件处理程序的阶段 
       1 表示捕获阶段;2 表示"处于目标";3 冒泡阶段
       Example: :

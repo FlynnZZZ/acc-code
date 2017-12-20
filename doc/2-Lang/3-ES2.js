@@ -613,18 +613,18 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(arr); // [1,2,3]
       arr.length = 4;
       console.log(arr); // [1, 2, 3, undefined ]
-    .includes(val[,idx])  bol,成员是否存在 
+    .includes(val,idx?)  bol,成员是否存在 
       val   需要查找的元素值;
       idx 可选,默认为 0,从该索引处开始向后查找 
       Example:
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    .indexOf(val[,bgn])     idx,成员索引[ES5] 
+    .indexOf(val,bgn?)     idx,成员索引[ES5] 
       PS:返回值为下标值,若找不到则返回-1 
       bgn  表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    .lastIndexOf(val[,bgn]) idx,成员索引[从右向左][ES5] 
+    .lastIndexOf(val,bgn?) idx,成员索引[从右向左][ES5] 
     ◆改变原数组
     .reverse()  arr,颠倒所有成员后返回   
       Example: :
@@ -632,7 +632,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       var result = arr.reverse();
       console.log(arr);  // [3, 2, 1] 
       console.log(result===arr);  // true 
-    .push(val1[,val2,...])  num,末尾添加成员,返回新数组长度 
+    .push(val1?...)  num,末尾添加成员,返回新数组长度 
       val 在原数组尾部添加的成员,添加多个成员用逗号隔开
       Example:
       var arr = [1];
@@ -645,9 +645,9 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       var member1 = obj.pop();  
       console.log(member1); // 3
       console.log(obj);     // [1, 2]
-    .unshift(val1[,val2,...])  num,头部添加元素,返回新数组长度 
+    .unshift(val1?...)  num,头部添加元素,返回新数组长度 
     .shift()  val,返回删除的头部成员 
-    .splice(bgn[,num][,v1,v2,...]) arr,删除[添加]元素,返回由删除的成员组成的数组 
+    .splice(bgn,num?,v1?...) arr,删除[添加]元素,返回由删除的成员组成的数组 
       PS:删除若干个元素,使用参数列表中声明的值从被删除的元素处插入,
         添加的元素的个数可大于、等于或小于删除元素的个数; 
         若没有删除元素,则返回空数组;
@@ -664,14 +664,12 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
     ◆不改变原数组
-    .slice([bgn][,end])  arr,返回复制的片段 
-      PS: 截取的内容为'[bgn,end)'前闭后开区间,长度为'end-bgn'
-        当bgn或end有为负数时,则使其加上 str.length 来代替
-      bgn  num,开始下标,可选,默认为 0 
+    .slice(bgn?,end?)  arr,返回'[bgn,end)'的复制 
+      PS: 当'bgn'或'end'存在负数时,最终效果为使其加上 arr.length 来代替 
+      bgn  num,可选,开始下标,默认:0 
         var arr = [1,2,3];
-        var aoo = arr.slice();
-        console.log(aoo); // [1,2,3]
-      end  num,结束下标,可选,默认为 arr.length 
+        console.log(arr.slice()); // [1,2,3]
+      end  num,可选,结束下标,默认:arr.length 
       Example: 
         将'Array-like'类数组对象转换成数组 
         function list() { 
@@ -687,7 +685,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return slice(arguments); 
         }
         console.log(list(1, 2, 3)); // [1, 2, 3]
-    .concat(val1[val2,..])  arr,返回拼接后的新数组  
+    .concat(val1?..)  arr,返回拼接后的新数组  
       val  数组或数组成员  
       Example: 
       var arr = [1,2,3];
@@ -698,7 +696,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(arr1); // [1, 2, 3, 4, 5]  
       console.log(arr2); // [1, 2, 3, 4, 5]  
       console.log(arr3); // [1, 2, 3, 4, [5], 6]  
-    .join([str])  str,使用指定字符串连成员 
+    .join(str?)  str,使用指定字符串连成员 
       str   可选,默认为逗号',',表示用于连接的字符
       为 null 和 undefined 的成员,用空字符串表示 
         function repeatStr(str,n){ // 重复字符串 
@@ -739,7 +737,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
     })   
-    .forEach(foo(val,idx,arr)[,context])  数组遍历[ES5] 
+    .forEach(foo(val,idx?,arr?),context?)  数组遍历[ES5] 
       PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过 
         无法中止或跳出forEach循环,除非报错.
       foo  遍历函数 
@@ -784,7 +782,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         catch (e) {
           console.log('执行了');
         } 
-    .every(f(val,idx,arr)[,context])  bol,回调返回值是否全部为真[ES5]
+    .every(f(val,idx?,arr?),context?)  bol,回调返回值是否全部为真[ES5] 
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -801,7 +799,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    .some(f(val,idx,arr)[,context])  bol,回调返回值是否有真[ES5]
+    .some(f(val,idx?,arr?),context?)  bol,回调返回值是否有真[ES5] 
       PS: 一旦 foo 返回值为真,some 将会立即返回 true,后续不再遍历;
         foo 只会在那些”有值“的索引上被调用,不会在那些被删除或从来未被赋值的索引上调用;
         some 遍历的元素的范围在第一次调用 foo 时就已经确定了,
@@ -816,7 +814,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return val > 18;
         });
         console.log(res); // true
-    .map(f(val,idx,arr)[,context])  arr,返回回调返回值组成的数组[ES5] 
+    .map(f(val,idx?,arr?),context?)  arr,返回回调返回值组成的数组[ES5] 
       val 数组中当前被传递的元素 
       idx 数组中当前被传递的元素的索引 
       arr 调用map方法的数组 
@@ -850,7 +848,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         // 2
         // [1, 3, 5]
         console.log(res); // [1, 1, 1]
-    .filter(f(val,idx,arr)[,context])  arr,回调返回值为true的元素组成的数组[ES5]
+    .filter(f(val,idx?,arr?),context?)  arr,回调返回值为true的元素组成的数组[ES5] 
       foo     回调函数,返回true表示保留该元素,通过测试,false则不保留;
       context 可选,执行函数时的用于 this 的值
       Example: 筛选数组arr中小于12的数
@@ -860,12 +858,12 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    .reduce(foo(retVal,val,idx,arr)[,initVal])  条件缩减,返回最后一次回调值[ES5]
+    .reduce(foo(retVal,val?,idx?,arr?),initVal?)  条件缩减,返回最后一次回调值[ES5] 
       PS: 数组成员依次传入回调,最终返回值为最后一次的回调值,不会改变原数组 
         仅有唯一值时[一个成员+无初始值、空数组+初始值],则直接返回该值而不调用函数 
         空数组且无初始值时,将报错
       foo     遍历函数 
-      retVal  回调返回值/初始值,initVal?initVal:firstMeber 
+      retVal  上一次回调返回值/初始值,initVal?initVal:firstMeber 
       val     当前成员/下一成员,initVal?firstMeber:secondMeber 
       idx     被处理成员的索引 
       arr     可选,当前数组 
@@ -882,7 +880,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
           num1++;
         },0);
         console.log(num1); // 5,有初始值,val从第一个成员开始  
-    .reduceRight(foo(retVal,val,idx,arr)[,initVal])  同reduce,只是从右到左遍历[ES5]
+    .reduceRight(foo(retVal,val?,idx?,arr?),initVal?)  同reduce,只是从右到左遍历[ES5]
     ◆待整理
     .find(function(mber){  // val,返回回调值为true的首个成员[ES6]  
       // mber  分别为数组中的每个成员  
@@ -899,7 +897,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         return value > 8; 
       }); 
       console.log(idx1); // 2
-    .fill(val[,beginIndex,endIndex]) 返回一个用指定的值,覆盖数组中的元素的新数组[ES6] 
+    .fill(val,beginIndex?,endIndex?) 返回一个用指定的值,覆盖数组中的元素的新数组[ES6] 
       let arr = [1,2,3];
       arr.fill(4); // [4,4,4]
       

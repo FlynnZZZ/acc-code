@@ -741,7 +741,7 @@ MongoDB数据库引用
       }  
 --------------------------------------------------------------------------------
 ◆MongoDB驱动 
-  mongodb是连接MongoDB的基础库,Mongoose库是对mongodb库的封装 
+mongodb,连接MongoDB的基础库 
   $ npm i mongodb  // 安装 mongodb库 
   通过'MongoClient'连接数据库 
     var MongoClient = require('mongodb').MongoClient;
@@ -803,4 +803,6 @@ MongoDB数据库引用
       console.log(result);
     }
   });
+Mongoose,对mongodb库的封装 
+  $ npm install mongoose // 
 

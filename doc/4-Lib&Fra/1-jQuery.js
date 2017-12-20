@@ -230,8 +230,8 @@ DOM操作
       var elem = jEl.get(num)   获取对应数字的DOM元素 
         num  数值,从0开始,可为负,为负值时,表示第 num+jEl.length 个
     增删改 
-      jEl.prepend('htmlCode'/jEl)    内部头部插入
-      jEl.prependTo("selector"/jEl)  被插入到内部头部 [与prepend相反]
+      jEl.prepend('htmlCode'/jEl)    内部头部插入参数目标 
+      jEl.prependTo("selector"/jEl)  插入参数目标的内部头部 
         将元素/内容content插入到元素内部头部
       jEl.append('htmlCode'/jEl)     内部尾部插入
         也可以将style标签内的css代码添加到head中
@@ -277,18 +277,24 @@ DOM操作
       jEl.removeAttr('属性名')  删除属性
         Example:
           jEl.removeAttr('class'); 
-      jEl.css() 设置/获取元素的style样式 [设置为行内样式] [获取为计算后的属性]
+      jEl.css(arg?)  读写,元素的style样式  
+        PS: 设置为行内样式; 获取为计算后的属性 
         Example: 
           jEl.css('height'); //获取元素的高度
           jEl.css("color");  // 获取元素的字体颜色
           jEl.css("color","red"); // 设置元素的字体颜色为红色
         jEl.css(attrArr);  获取多个属性值
           Example:
-            jEl.css(["color","font-size"]); 
+          jEl.css(["color","font-size"]); 
         jEl.css(attrObj);  设置多个属性
-          Example:  jEl.css({"background-color":"red",color:"yellow"});  
-        jEl.css("color",function(index,oldValue){ }); 传入函数
-          // 设置返回值(即 return的值)为属性值.
+          Example:  
+          jEl.css({
+            "background-color": "red"
+            ,color: "yellow"
+          });  
+        jEl.css("color",function(index,oldValue){ // 传入函数 
+          return val;  // 返回值为属性值 
+        }); 
     元素属性 
       ◆添加属性
       jEl.attr();  读写属性值 
@@ -303,7 +309,7 @@ DOM操作
           jEl.attr('data-foo'); // 获取自定义元素属性的值
             注:自定义属性一般设置格式为 data-**="xxxx"
           $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      jEl.prop();  读写属性值,和attr类似 [1.6 新增] 
+      jEl.prop();  读写属性值,和attr类似 ‹'1.6+'› 
         $(selector).prop(property,value)
         $(selector).prop(property,function(index,currentvalue){...})
         $(selector).prop({property:value, property:value,...})
@@ -1811,3 +1817,7 @@ Suggestion:
 Question&Idea 
   如何在 AJAX 的回调中获取请求的数据 [?]
 ---------------------------------------------------------------------以下待整理 
+
+
+
+

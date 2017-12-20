@@ -253,7 +253,6 @@ XMLHttpRequest,AJAX实现的核心
         }
         upload(new Blob(['hello world'], {type: 'text/plain'}));
     }  
-    ◆待整理
     ◆其他 
       接收二进制数据 
         PS:老版本的XMLHttpRequest对象,只能从服务器取回文本数据,新版则可以取回二进制数据.
@@ -611,108 +610,143 @@ XMLHttpRequestEventTarget,AJAX请求相关的事件
     'XMLHttpRequest level2'可跨域发出HTTP请求;
     使用"跨域资源共享"的前提: 需浏览器支持该功能,且服务器需同意该"跨域", 
     整个CORS通信过程,都是浏览器自动完成,不需要用户参与 
-    实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可以跨源通信 
-  浏览器将CORS请求分成:'simple request'简单请求和'not-so-simple request'非简单请求 
-    简单请求: HEAD GET POST 的请求,且HTTP的头信息不超出以下几种字段 
-      Accept
-      Accept-Language
-      Content-Language
-      Last-Event-ID
-      Content-Type: 只限于三个值
-      application/x-www-form-urlencoded、multipart/form-data、text/plain
-      
-      对于简单请求,浏览器直接发出CORS请求,在头信息之中,增加一个Origin字段 
-      服务器根据这个值,决定是否同意这次请求 
-      若Origin指定的源,不在许可范围内,服务器会返回一个正常的HTTP回应.
-      浏览器发现,这个回应的头信息没有包含Access-Control-Allow-Origin,就知道出错了,
-      从而抛出一个错误,被XMLHttpRequest的onerror回调函数捕获.
-      注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200.
-      若Origin指定的域名在许可范围内,服务器返回的响应,会多出几个头信息字段.
-      Access-Control-Allow-Origin: http://api.bob.com
-        // 表示允许请求的域,若为*,则允许所有请求 
-      Access-Control-Allow-Credentials: true 
-        // 表示是否允许发送Cookie
-        // 另一方面,开发者必须在AJAX请求中打开withCredentials属性 
-        // var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
-        // 若省略withCredentials设置,有的浏览器还是会一起发送Cookie.这时,可以显式关闭withCredentials.
-        // xhr.withCredentials = false;
-        // 这个值也只能设为true,若服务器不要浏览器发送Cookie,删除该字段即可.
-      Access-Control-Expose-Headers: FooBar
-        // CORS请求时,xhr.getResponseHeader()方法只能拿到6个基本字段:
-        // Cache-Control、
-        // Content-Language、
-        // Content-Type、
-        // Expires、
-        // Last-Modified、
-        // Pragma.
-        // 若想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定
-        // 上面的例子指定,xhr.getResponseHeader('FooBar')可以返回FooBar字段的值.
-    非简单请求: 凡是不同时满足上面两个条件的请求  
-      'preflight'预检请求: 在正式通信之前,增加一次HTTP查询请求 
-        浏览器先询问服务器,当前网页所在的域名是否在服务器的许可名单之中,
-        以及可以使用哪些HTTP动词和头信息字段.
-        只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则就报错.
-      非简单请求,浏览器会自动发出一个预检请求,要求服务器确认可以这样请求
-      预检请求的HTTP头信息
-        OPTIONS /cors HTTP/1.1
-        // “预检”请求用的请求方法是OPTIONS,表示这个请求是用来询问的.
-        Origin: http://api.bob.com
-        // 头信息里面,关键字段是Origin,表示请求来自哪个源.
-        Access-Control-Request-Method: PUT
-        // 用来列出浏览器的CORS请求会用到哪些HTTP方法,本例是PUT.
-        Access-Control-Request-Headers: X-Custom-Header
-        // 该字段是一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段,本例是X-Custom-Header.
-        Host: api.alice.com
+    实现CORS通信的关键是服务器,只要服务器实现了CORS接口,就可跨源通信 
+  '简单请求'&'非简单请求' ‹浏览器对待的方式不同› 
+    'simple request': 
+      'HEAD'、'GET'、'POST'请求,
+      且头信息不超出以下字段的CROS请求  
+        Accept
+        Accept-Language
+        Content-Language
+        Content-Type ‹只限于三个值›  
+          application
+          x-www-form-urlencoded、multipart
+          form-data、text/plain
+        DPR
+        Downlink
+        Save-Data
+        Viewport-Width
+        Width
+      请求详情: 
+        GET http://democode.likecto.hkbao.com/user,isLogin HTTP/1.1
+        Host: democode.likecto.hkbao.com
+        Proxy-Connection: keep-alive
+        Pragma: no-cache
+        Cache-Control: no-cache
+        Accept: application/json, text/plain, '*/*'
+        Origin: http://localhost:8080 
+          浏览器直接发出CORS请求,在头信息中增加该字段 
+        User-Agent: ... 
+        Referer: http://localhost:8080/
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+        
+        HTTP/1.1 200 OK
+        Date: Thu, 14 Dec 2017 10:58:18 GMT+0800
+        Server: nginx/1.10.3
+        Content-Type: text/html; charset=utf-8
+        Access-Control-Allow-Credentials: true 
+          是否允许发送Cookie
+          前端须在AJAX请求中打开withCredentials属性 
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            若省略withCredentials设置,有的浏览器还是会一起发送Cookie.这时,可以显式关闭withCredentials.
+            xhr.withCredentials = false;
+            这个值也只能设为true,若服务器不要浏览器发送Cookie,删除该字段即可.
+          该项为true时,服务器不可设置 Access-Control-Allow-Origin: *,否则请求将会失败  ‹?›
+        Access-Control-Allow-Headers: x-requested-with,content-type 
+          CORS请求时,xhr.getResponseHeader()方法只能拿到6个基本字段:
+            Cache-Control、
+            Content-Language、
+            Content-Type、
+            Expires、
+            Last-Modified、
+            Pragma.
+          若想拿到其他字段,就必须在Access-Control-Expose-Headers里面指定
+        Access-Control-Allow-Methods: GET
+        Access-Control-Allow-Origin: http://localhost:8080
+          当浏览器发现响应头中无该头信息或不包括该请求域则报错,
+          执行XMLHttpRequest的onerror回调 
+          注意,这种错误无法通过状态码识别,因为HTTP回应的状态码有可能是200.
+          表示允许请求的域,若为*,则允许所有请求 
+    'not-so-simple request': 不满足'simple request'的CROS请求   
+      浏览器会在正式通信之前,增加一次'preflight'预检请求   
+        浏览器先询问服务器,是否允许该CROS请求,
+        只有得到肯定答复,浏览器才会发出正式的XMLHttpRequest请求,否则报错 
+      预检请求详情:  
+        PS: 服务器收到'预检请求'后,检查'Origin'、'Access-Control-Request-Method'及
+          'Access-Control-Request-Headers'等字段后,对是否允许跨源请求做出回应 
+          若服务器未返回任何CORS相关的头信息字段,则浏览器认定不可跨域,
+          XMLHttpRequest对象的onerror回调会执行 
+        OPTIONS /cors HTTP/1.1 
+          浏览器的'预检请求'使用OPTIONS方法  
+        Host: api.alice.com 
+        Origin: http://api.bob.com 
+          请求来源  
+        Access-Control-Request-Method: PUT 
+          非简单请求使用的方法‹本例是PUT› 
+        Access-Control-Request-Headers: X-Custom-Header 
+          一个逗号分隔的字符串,指定浏览器CORS请求会额外发送的头信息字段 
+          ‹本例是X-Custom-Header›
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,'*/*';q=0.8
+        Accept-Encoding: gzip,deflate
         Accept-Language: en-US
         Connection: keep-alive
         User-Agent: Mozilla/5.0...
-      预检请求的回应 
-        服务器收到“预检”请求以后,检查了Origin、Access-Control-Request-Method
-        和Access-Control-Request-Headers字段以后,确认允许跨源请求,就可以做出回应.
+        
         HTTP/1.1 200 OK
         Date: Mon, 01 Dec 2008 01:15:39 GMT
         Server: Apache/2.0.61 (Unix)
-        Access-Control-Allow-Origin: http://api.bob.com
-        // 表示可请求的源 
-        // 若服务器否定了“预检”请求,会返回一个正常的HTTP回应,但是没有任何CORS相关的头信息字段.
-        // 这时,浏览器就会认定,服务器不同意预检请求,因此触发一个错误,
-        // 被XMLHttpRequest对象的onerror回调函数捕获.控制台会打印出如下的报错信息.
-        Access-Control-Allow-Methods: GET, POST, PUT
-        // 逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法.
-        // 注意,返回的是所有支持的方法,而不单是浏览器请求的那个方法.这是为了避免多次“预检”请求.
-        Access-Control-Allow-Headers: X-Custom-Header
-        // 若浏览器请求包括Access-Control-Request-Headers字段,
-        // 则Access-Control-Allow-Headers字段是必需的.
-        // 它也是一个逗号分隔的字符串,表明服务器支持的所有头信息字段,不限于浏览器在“预检”中请求的字段.
+        Access-Control-Allow-Origin: http://api.bob.com 
+          允许访问的请求地址   
+        Access-Control-Allow-Methods: GET, POST, PUT 
+          逗号分隔的一个字符串,表明服务器支持的所有跨域请求的方法 
+          返回的是所有支持的方法,而不单是浏览器请求的那个方法‹为了避免多次"预检请求"› 
+        Access-Control-Allow-Headers: X-Custom-Header 
+          一个逗号分隔的字符串,表明服务器允许的额外头信息字段 
+          且不限于浏览器在预检中请求的字段.
+          若浏览器请求包括Access-Control-Request-Headers字段,
+          则Access-Control-Allow-Headers字段是必需的.
         Access-Control-Allow-Credentials: true 
-        // 该字段与简单请求时的含义相同.
-        Access-Control-Max-Age: 1728000
-        // 用来指定本次预检请求的有效期,单位为秒.
-        // 该例中有效期是20天(1728000秒),即允许缓存该条回应1728000秒(即20天),
-        // 在此期间,不用发出另一条预检请求.
+          是否允许发送Cookie 
+        Access-Control-Max-Age: 1728000 
+          指定本次预检请求的有效期,单位:秒 
+          该例中有效期是20天,即该条请求在此期间,不用发出另一条预检请求 
         Content-Type: text/html; charset=utf-8
         Content-Encoding: gzip
         Content-Length: 0
         Keep-Alive: timeout=2, max=100
         Connection: Keep-Alive
         Content-Type: text/plain
-      通过了预检请求后: 
-        以后每次浏览器正常的CORS请求,就都跟简单请求一样,会有一个Origin头信息字段.
-        服务器的回应,也都会有一个Access-Control-Allow-Origin头信息字段.
-        预检请求后,浏览器的正常CORS请求: 
+        Set-Cookie: ...
+      通过了预检请求后的CROS请求: 
         PUT /cors HTTP/1.1
-        Origin: http://api.bob.com 
-        // Origin 字段,浏览器自动添加的 
         Host: api.alice.com
+        Origin: http://api.bob.com 
+          Origin 字段,浏览器自动添加的 
+        Content-Type: application/json;charset=UTF-8
         X-Custom-Header: value
         Accept-Language: en-US
         Connection: keep-alive
         User-Agent: Mozilla/5.0...
-        服务器正常的回应: 
-        Access-Control-Allow-Origin: http://api.bob.com
-        // Access-Control-Allow-Origin字段是每次回应都必定包含的.
+        
+        HTTP/1.1 200 OK
+        Date: Thu, 14 Dec 2017 11:24:01 GMT+0800
+        Server: nginx/1.10.3
+        Access-Control-Allow-Origin: http://api.bob.com 
+          Access-Control-Allow-Origin字段是每次回应都必定包含的.
+        Access-Control-Allow-Credentials: true
+        Access-Control-Allow-Headers: x-requested-with,content-type
+        Access-Control-Allow-Methods: GET
         Content-Type: text/html; charset=utf-8
+        Set-Cookie: ... 
+      PHP的设置 
+        header("Access-Control-Allow-Origin:*"); 
+        header("Access-Control-Allow-Headers:content-type"); 
+        header("Access-Control-Request-Method:GET,POST"); 
+        if(strtoupper($_SERVER['REQUEST_METHOD']) == 'OPTIONS'){ 
+          exit; 
+        } 
   与JSONP的比较
     JSONP只支持GET请求,CORS支持所有类型的HTTP请求.
     JSONP的优势在于支持老式浏览器,以及可以向不支持CORS的网站请求数据.      

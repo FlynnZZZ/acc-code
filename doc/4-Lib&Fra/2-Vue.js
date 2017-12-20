@@ -380,6 +380,9 @@ v-model="str/arr" 双向绑定[表单]数据值
       </select>
       <div>Selected: {{ selected }}</div>
     </div>
+  绑定其他表单 
+    textarea 
+    ...
   当表单值为对象,获取到对应的对象 
     <select v-model="selected"> 
       // <!-- 内联对象字面量 --> 
@@ -1764,6 +1767,11 @@ vm.xxx.实例属性/方法/事件
       // "hello!"
   mixins: [mix1,..] 组件的混合 
     var myMixin = { // 定义一个混合对象 
+      data: function(){ // 需使用函数返回值的形式 
+        return {
+          
+        };
+      }
       methods: {
         hello: function () {
           console.log('hello from mixin!')
@@ -1773,7 +1781,7 @@ vm.xxx.实例属性/方法/事件
         this.hello()
       }
     }
-    var new Vue({
+    var vm = new Vue({
       el: '#test'
       ,data: {}
       ,methods: {}

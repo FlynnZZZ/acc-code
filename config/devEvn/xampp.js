@@ -9,7 +9,7 @@
   'xampp/apache/conf/extra/httpd-vhosts.conf',虚拟主机的配置 
     <VirtualHost *:80>                                     
       ServerAdmin webmaster@dummy-host2.example.com
-      DocumentRoot "E:/project/"            3
+      DocumentRoot "E:/project/"                           3
       ServerName    project.localtst.com                   4
       ErrorLog "logs/dummy-host2.example.com-error.log"
       CustomLog "logs/dummy-host2.example.com-access.log" common

@@ -5,7 +5,7 @@
     'prefix': 'template-package'
     'body': """
     <template lang="html">
-      <section class="">
+      <section class="xxx">
         $1
       </section>
     </template>

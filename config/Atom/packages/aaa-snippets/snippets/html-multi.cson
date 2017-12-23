@@ -96,13 +96,13 @@
 # html & vue & xml & php  
 '.text.html.basic,.text.xml,.text.html.php,.text.html.vue':
   # 标签 ----------------------------
-  '-HM <div>$1</div>':
-    'prefix': 'div-tag'
+  '-HM <div>$1</div>  仅div标签':
+    'prefix': 'div-only-tag'
     'body': '<div>$1</div>'
-  '-HM <div class="$1">$2</div>':
+  '-HM <div class="$1">$2</div>  class属性的div':
     'prefix': 'div-class-tag'
     'body': '<div class="$1">$2</div>'
-  '-HM <div id="$1">$2</div>':
+  '-HM <div id="$1">$2</div>  id属性的div':
     'prefix': 'div-id-tag'
     'body': '<div id="$1">$2</div>'
   '-HM <template>$1</template>':

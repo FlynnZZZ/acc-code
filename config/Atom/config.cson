@@ -24,6 +24,7 @@
       indent_size: 2
   "autocomplete-plus":
     enableExtendedUnicodeSupport: true
+    maxVisibleSuggestions: 20
   autoprefixer:
     remove: false
   autosave:
@@ -110,7 +111,6 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "Consolas,KaiTi"
-    fontSize: 13
     invisibles:
       cr: " "
       eol: " "
@@ -202,6 +202,9 @@
   editor:
     preferredLineLength: 111
     softWrapHangingIndent: 2
+".css.less.source":
+  editor:
+    showInvisibles: true
 ".css.source":
   editor:
     autoIndent: true
@@ -210,6 +213,9 @@
 ".html.php.text":
   editor:
     nonWordCharacters: "/\\()\"':,.;<>~!#%^&*|+=[]{}`?…、◆★●■▲▼（），。-"
+".html.text.vue":
+  editor:
+    nonWordCharacters: "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?…-"
 ".makefile.source":
   editor:
     showInvisibles: true

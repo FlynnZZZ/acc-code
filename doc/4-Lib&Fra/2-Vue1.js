@@ -1053,12 +1053,17 @@ router = new VueRouter({  // 路由实例'router instance'
         "/aoo"   // 相对于根目录  
         <router-link to="home">Home</router-link>
         <router-link :to="'home'">Home</router-link>
-      obj   描述目标位置的对象 
-        <router-link :to="{ path: 'home' }">Home</router-link>
-        // <!-- 命名的路由 -->
-        <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
-        // <!-- 带查询参数,下面的结果为 /register?plan=private -->
-        <router-link :to="{ path: 'register', query: { plan: 'private' }}">Register</router-link>
+      obj   描述目标位置的对象‹需在动态绑定状态下使用› 
+        {
+          path: <str>    // 可选,指定跳转的路径 
+            <router-link :to="{ path: 'home' }">Home</router-link>
+          ,name: <str>   // 可选,指定命名的路由 
+            <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+          ,params: <obj> // 可选, 
+          ,query: <obj>  // 可选,带查询参数 
+            // <!-- 带查询参数,下面的结果为 /register?plan=private -->
+            <router-link :to="{ path: 'register', query: { plan: 'private' }}">Register</router-link>
+        }
     tag="str"   //指定<router-link>渲染成的标签,默认:'a' 
       其他的如如'div'、'li'等 
     replace="bol"  // 导航后是否留下history记录,默认:false  
@@ -1316,6 +1321,7 @@ store = new Vuex.Store({ // 实例化数据中心'store'
         也可通过 context.state 和 context.getters 来获取'state'和'getters' 
       data     可选,.dispatch()传入的数据 
       context.commit(foo,{}) 
+      
     }
     ,goo1: function({commit}){ //  使用参数解构来简化书写  
       commit(foo,{})

@@ -19,7 +19,7 @@ JDK'Java Development Kit',Java语言的软件开发工具包SDK
       在 SDK Manager 中进行相关选择安装  
     3 配置环境变量 
       ANDROID_HOME: sdk所在目录 
-      'Path'中配置SDK的'tools'子目录和'platform-tools'子目录  
+      'Path'中配置: SDK的'tools'子目录和'platform-tools'子目录  
 
 
 

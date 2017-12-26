@@ -76,18 +76,21 @@
     'prefix': 'NdA-self'
     'body': 'NdA'
   # word 
-  '- template':
+  '- template  模板':
     'prefix': 'template-word'
     'body': 'template'
-  '- module':
+  '- module  模块':
     'prefix': 'module-word'
     'body': 'module'
-  '- option':
+  '- option  选项':
     'prefix': 'option-word'
     'body': 'option'
-  '- alias':
+  '- alias  别名':
     'prefix': 'alias-word'
     'body': 'alias'
+  '- params  参数':
+    'prefix': 'params-word'
+    'body': 'params'
   # 符号
   '- kh1  括号1':
     'prefix': 'kh1-fh'

@@ -396,6 +396,9 @@ DOM操作
       jEl.outerHeight([bool])  元素高,content+padding+border[+margin] 
       jEl.scrollTop()   读写,元素相对滚动条顶部的偏移 
         PS: 此处的jEl为拥有滚动条的元素;
+        Self: 
+          当滚动条向下滚动时‹值变大›,增量值最小需大于1,否则无滚动且不触发滚动事件 
+          而向上滚动时‹值变小›,则增量大小无要求  
       jEl.scrollLeft()  读写元素相对滚动条左侧的偏移
       jEl.offset([{top:num1,left:num2}]) 读写,元素相对文档左上角的top和left 
         PS: 返回包含top和left属性的对象; 

@@ -1331,8 +1331,11 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     该钩子在服务器端渲染期间不被调用 
     如果 root 实例挂载了一个文档内元素,当 mounted 被调用时 vm.$el 也在文档内 
     this.$nextTick(function () {
-      // 注意 mounted 不会承诺所有的子组件也都一起被挂载。
-      // 如果希望等到整个视图都渲染完毕,可用 vm.$nextTick()  
+      注意 mounted 不会承诺所有的子组件也都一起被挂载。
+      如果希望等到整个视图都渲染完毕,可用 vm.$nextTick()  
+      Self: 
+        使用jQuery此时仍获取不到子组件的DOM元素,
+        需在子组件中的mounted内才能获取到子组件中‹包括其他子组件中›的DOM 
     })
   },
   beforeUpdate: function(){ // 组件更新前  

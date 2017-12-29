@@ -1007,7 +1007,7 @@ TouchEvent,触摸事件
       .length  表示屏幕上触摸的手指个数 
       .touches[idx]  Touch, 
     .targetTouches  位于当前DOM元素上的手指的一个列表
-      'touchend'事件该列表无成员 
+      PS: 'touchend'事件该列表无成员 
       .targetTouches[idx]  Touch, 
     .changedTouches 
       .changedTouches[idx]  Touch, 

@@ -1594,6 +1594,7 @@ API
   vm.$store.state.aoo.xx       // 相当于'命名空间' 
   vm.$store.getters.xx         // 混合到了store中 
   $store.commit('foo',data)    // 混合到了store中  
+    当未存在命名空间时,$store.commit('aoo/foo',data) 
   $store.dispatch('goo',data)  // 混合到了store中  
   模块动态注册 
     在 store 创建之后,你可以使用 store.registerModule 方法注册模块：

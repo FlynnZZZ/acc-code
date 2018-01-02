@@ -293,7 +293,7 @@
     'body': """every(function(val,idx,arr){
       return ${2:[全部为真时,才为真]}
     },${1:this})"""
-  'O .some(foo [,this])  bol,回调返回值是否有':
+  'O .some(foo [,this])  bol,回调返回值是否存在真':
     'prefix': 'some-arr'
     'body': """some(function(val,idx,arr){
       return ${2:[若存在返回值为真则返回真]}

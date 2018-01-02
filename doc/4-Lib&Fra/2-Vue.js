@@ -2251,8 +2251,8 @@ vm.xxx.实例属性/方法/事件
       beforeCreate: function () {
         this.$options.components.aoo = require('./boo.vue').default
       }
-'.vue'单文件组件,一个'.vue'文件就是一个组件 
-  PS: 使用一个'.vue'格式文件将'HTML''CSS''JS'组装起来,方便开发,也方便复用和维护;
+'.vue'单文件组件 
+  PS: 一个'.vue'文件就是一个组件,将'HTML''CSS''JS'组装起来,方便开发、复用和维护;
     组件的通信方式同样使用'props'和'event' 
     单文件组件的写法需要编译工具才能最终在浏览器端工作;
   Example: 
@@ -2321,6 +2321,10 @@ vm.xxx.实例属性/方法/事件
         }
       }
     </style>
+  Q&A 
+    如何仅在组件及其子组件中共享样式 
+      添加'scoped'属性,避免污染其他组件的样式 
+      将共享的样式单独放到一'.less'中,然后在样式部分导入 
 Question&Suggestion: 
   如何操作Vue实例的组件选项,如控制组件  
     new Vue({

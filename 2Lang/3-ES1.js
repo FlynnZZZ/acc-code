@@ -1916,40 +1916,6 @@ Function,函数基础类,ES中所有函数的基类
         };
         foo(1); // 1 undefined
       参数按共享传递 [moIn 'Evaluation Strategy'] 
-    默认参数: 在定义函数时,将参数赋值[ES6]   
-      function person(name='aoo',age=25){
-        console.log(name,age);
-      }
-      person();         // aoo 25
-      person('boo',18); // boo 18
-      只有当传入的参数为 undefined,才会触发默认值赋值 
-        function person(age = 12){
-          console.log(age);
-        }
-        person();          // 12
-        person(undefined); // 12
-        person(0);         // 0
-        person(null);      // null
-    ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组[ES6] 
-      在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
-        function sum(result,...values){ //求和函数,得到的结果赋值到result 
-          console.log(values); // [1,2,3,4]
-          values.forEach(function (v,i) { //进行求和
-            result += v; //求和得到的结果存到result
-          });
-          console.log(result); // 10
-        }
-        var res = 0; // 存储求和结果的变量res
-        sum(res,1,2,3,4);  //调用sum函数
-      rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
-        //错误写法
-        function sum(result, ...values, mult){
-          //rest参数...values后面还有一个参数mult
-        }
-        //正确的写法
-        function sum(result, mult, ...values){
-          //rest参数...values放在最后
-        }
     return 函数返回值 
       PS: 函数执行到'return'后直接返回值,后面代码不再执行 
       使用'return'关键字返回值,若没有return默认返回'undefined' 
@@ -2080,6 +2046,41 @@ Function,函数基础类,ES中所有函数的基类
       console.log(goo(4)); // 7 
     不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
+    默认参数: 在定义函数时,将参数赋值[ES6]   
+      Example: 
+        function person(name='aoo',age=25){
+          console.log(name,age);
+        }
+        person();         // aoo 25
+        person('boo',18); // boo 18
+      当传入的参数为非 undefined 值时,才会覆盖该对应的默认参数  
+        function person(age = 12){
+          console.log(age);
+        }
+        person();          // 12
+        person(undefined); // 12
+        person(0);         // 0
+        person(null);      // null
+    ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组[ES6] 
+      在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
+        function sum(result,...values){ //求和函数,得到的结果赋值到result 
+          console.log(values); // [1,2,3,4]
+          values.forEach(function (v,i) { //进行求和
+            result += v; //求和得到的结果存到result
+          });
+          console.log(result); // 10
+        }
+        var res = 0; // 存储求和结果的变量res
+        sum(res,1,2,3,4);  //调用sum函数
+      rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
+        //错误写法
+        function sum(result, ...values, mult){
+          //rest参数...values后面还有一个参数mult
+        }
+        //正确的写法
+        function sum(result, mult, ...values){
+          //rest参数...values放在最后
+        }
 'Arrow functions'箭头函数 [ES6] 
   Feature: 
     变化形式: ([arg1,arg2,..]) => { statements } 

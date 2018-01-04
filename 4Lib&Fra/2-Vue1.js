@@ -763,7 +763,8 @@ webpack模版项目目录及文件说明‹2017.11›:
     main.js        // 入口JS 
   static        // 静态文件夹 
     src目录下的资源只能import或require,
-    而该文件夹下的文件可直接在HTML中引入,最终打包到'dist/static'中 
+    而该文件夹下的文件可直接在HTML中引入,
+    最终打包到'dist/static'中 
   .babelrc      // babel配置文件
   .editorconfig // 
   .gitignore    // 忽略无需git控制的文件,比如node_modules 

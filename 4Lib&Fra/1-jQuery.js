@@ -408,8 +408,10 @@ DOM操作
           $(".a").offset(); // {top: 24, left: 0}
           $(".a").offset().left = 20; // ? 
           $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
-      jEl.position()  元素相对于其offsetParent的top和left [只读?]
+      jEl.position()  obj,元素相对于其'offsetParent'的top和left [只读?]
         PS:只对可见元素有效
+          offsetParent可为: 该元素的相对定位元素或该元素的父元素
+          返回包含top、left属性的对象 
         Example:
           .parent{
             position: relative;

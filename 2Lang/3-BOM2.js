@@ -93,6 +93,7 @@ window,表示浏览器的一个实例,BOM的核心对象
       window.close(); // 在 aoo.html 中,关闭自己 
     window.closed    bol,检测[打开的]窗口是否关闭 
       PS: 当窗口关闭后,其窗口的引用仍然还在,可通过该属性来检测是否关闭 
+    window.devicePixelRatio  num,设备物理像素和设备独立像素的比值  
   ◆Pag: 
     ★框架相关 
     window.parent  框架的父框架,在没有框架的情况下,parent等于top
@@ -357,7 +358,6 @@ window,表示浏览器的一个实例,BOM的核心对象
     window.offscreenBuffering bol,用于绘制新窗口内容并在完成后复制已存在的内容,控制屏幕更新
     window.frameElement   
     window.external 
-    window.devicePixelRatio 
     window.clientInformation 
     window.defaultstatus   
     window.isSecureContext   

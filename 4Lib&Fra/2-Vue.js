@@ -1500,14 +1500,16 @@ vm.xxx.实例属性/方法/事件
     })
   vm.$parent     只读,父实例[若存在的话]
   vm.$root       只读,当前组件树的根Vue实例,若当前实例无父实例,则是其自己 
-  vm.$children   只读,当前实例的直接子组件
-    $children 并不保证顺序,也不是响应式的。
+  vm.$children   只读,当前实例的直接子组件 
+    $children 并不保证顺序,也不是响应式的 
   vm.$slots      只读,用来访问被插槽分发的内容
     每个具名插槽 有其相应的属性 (例如：slot="foo" 中的内容将会在 vm.$slots.foo 中被找到)。
     default 属性包括了所有没有被包含在具名插槽中的节点。 
   vm.$scopedSlots 只读,用来访问作用域插槽   '2.1.0+' 
     对于包括 默认 slot 在内的每一个插槽,该对象都包含一个返回相应 VNode 的函数。
   vm.$refs        只读,包含已注册过'ref'的所有子组件的对象 
+    Example: 
+      vm.$refs.aoo 表示 <cpt-a ref="aoo"> 子组件 
   vm.$isServer    只读,当前Vue实例是否运行于服务器的布尔值 
   vm.$attrs       只读,包含了父作用域中不被认为[且不预期为]'props'的特性绑定 [class 和 style 除外] 
     当一个组件没有声明任何 props 时,这里会包含所有父作用域的绑定 (class 和 style 除外),
@@ -2181,7 +2183,7 @@ vm.xxx.实例属性/方法/事件
       template: '#cpt1'
     })    
   ref="aoo"&vm.$refs.aoo,子组件索引 
-    PS: 使用'ref'属性为子组件指定索引ID,便于JS直接访问子组件;
+    PS: 使用'ref'属性为子组件指定索引ID,便于在父组件中直接访问子组件;
       仅仅作为一个直接访问子组件的应急方案,应当避免在模版或计算属性中使用 $refs 
       $refs 只在组件渲染完成后才填充,并且它是非响应式的,
       当 ref 和 v-for 一起使用时,ref 是一个数组或对象,包含相应的子组件

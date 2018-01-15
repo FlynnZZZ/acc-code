@@ -1387,6 +1387,9 @@ API
         })
       }
     }
+  在函数中间接访问vue实例 
+    通过'mutations'或'actions'函数将vue实例作为参数传递  
+    若保存到'state'中,则整个store‹'mutations'、'getters'、'actions'函数›都可访问到该实例  
 模块化管理: 每个模块维护一套状态,然后合并到一总数据中心中 
   const moduleA = {
     state: {}

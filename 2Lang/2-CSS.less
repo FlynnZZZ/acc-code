@@ -2464,14 +2464,16 @@ Size,尺寸
     一个抽象的单位 
       在不同的设备或环境中,CSS像素的1px所代表的设备物理像素值可能不同 
       CSS中的1px并不是总代表设备像素上的1px,尤其是在移动设备上
-  'Device independent Pixel'DIP,设备独立像素 
-    也称为逻辑像素,等价于CSS像素 
+  'Device independent Pixel'DIP,设备独立像素或逻辑像素 
+    等价于CSS像素 
   'Device Pixel Ratio'DPR,设备像素比 
     设备物理像素和设备独立像素的比例,即: 物理像素/独立像素 
     window.devicePixelRatio 的值 
       在Retina屏中,devicePixelRatio的值为2,即1个css像素相当于2个物理像素。
       devicePixelRatio在不同的浏览器中可能存在兼容性问题
   像素密度: 
+    PS: 目前PPI‹主要是iOS›和DPI‹Android中›都会用在计算机显示设备的参数描述中,
+      并且二者的意思是一样的,都是代表像屏幕素密度
     'dots per inch'DPI: 打印机每英寸可喷的墨汁点数 
       用于印刷行业中度量空间点的密度 
     'pixels per inch'PPI: 屏幕每英寸的像素数量 
@@ -2482,71 +2484,49 @@ Size,尺寸
         160-240: 中密度 
         240-320: 高密度 
         320以上: 超高密度‹Apple总称为Retina› 
-    目前PPI(主要是iOS)和DPI(比如在Android中)都会用在计算机显示设备的参数描述中,
-    并且二者的意思是一样的,都是代表像屏幕素密度
   页面缩放: 
     并非改变元素的CSS尺寸,而是将CSS像素的1px对应缩放比倍数的物理像素 
     例如,当用户把页面放大一倍,那么CSS中1px所代表的物理像素也会增加一倍；
-  Viewport 
-    PS:移动设备上的viewport就是设备的屏幕上能用来显示我们的网页的那一块区域,
-      在具体一点,就是浏览器上(也可能是一个app中的webview)用来显示网页的那部分区域,
-      但viewport又不局限于浏览器可视区域的大小,
-      它可能比浏览器的可视区域要大,也可能比浏览器的可视区域要小。
-      在默认情况下,一般来讲,移动设备上的viewport都是要大于浏览器可视区域的,
-      这是因为考虑到移动设备的分辨率相对于桌面电脑来说都比较小,
-      所以为了能在移动设备上正常显示那些传统的为桌面浏览器设计的网站,
-      移动设备上的浏览器都会把自己默认的viewport设为980px或1024px
-      （也可能是其它值,这个是由设备自己决定的）,
-      但带来的后果就是浏览器会出现横向滚动条,
-      因为浏览器可视区域的宽度是比这个默认的viewport的宽度要小的。
-    layout viewport(布局视口)
-      PS:浏览器默认情况下把viewport设为一个较宽的值,比如980px,
-        这样的话即使是那些为桌面设计的网站也能在移动浏览器上正常显示了
-        layout viewport 的宽度是大于浏览器可视区域的宽度的
-      通过document.documentElement.clientWidth和-Height可以获取layout viewport的尺寸 
-      兼容性:这种获取方式在Android 和IPhone手机上完全支持。 
-    visual viewport(可视视口)
-      PS:浏览器可视区域的大小,是页面当前显示在屏幕上的部分。
-      用户可以通过滚动来改变他所看到的页面的部分,或者通过缩放来改变visual viewport的大小。
-        浏览器可视区域(visual viewport)的宽度小于等于layout viewport的宽度
-      对于visual viewport,它是通过window.innerWidth/Height来进行度量的。
-      很明显当用户缩小或者放大的时候,度量的尺寸会发生变化。 
-      兼容性:IPhone上完全支持,在Android 2,Oprea mini 和 UC 8中无法正确获取。 
-    ideal viewport(理想视口)
-      ideal viewport并没有一个固定的尺寸,不同的设备拥有有不同的ideal viewport
-      ideal viewport的宽度 = 屏幕的逻辑像素宽度
+  Viewport,视口  
+    PS: 浏览器上‹或app中的webview›用来显示网页的那部分区域,
+      但又不局限于浏览器可视区域的大小,可能大于或小于浏览器的可视区域 
+      默认情况下,移动设备上的viewport大于浏览器可视区域,
+      一般情况下移动设备上,浏览器默认的viewport宽度为980px或1024px
+    'layout viewport'布局视口 
+      移动设备默认的视口,一般宽度为980px 
+      document.documentElement.clientWidth 获取布局视口尺寸 
+        兼容性:Android和IOS完全支持。 
+    'visual viewport'可视视口 
+      PS:浏览器可视区域的大小,页面当前显示在屏幕上的部分。
+      window.innerWidth 获取可视视口尺寸 
+        兼容性:IOS上支持,在Android 2,Oprea mini 和 UC 8中无法正确获取 
+    'ideal viewport'理想视口 
+      不同设备有不同的理想视口,理想视口的宽等于屏幕的逻辑像素宽 
       Example:
-        iphone5的ideal viewport宽度是320px,
-          也就是说在iphone5中,css中的320px就代表iphone屏幕的宽度
+        iphone5的理想视口宽是320px,即iphone5中,css中的320px就代表iphone屏幕的宽度 
         安卓设备比较复杂,有320px的,有360px的,有384px的等等
-    meta标签控制viewport
-      移动设备默认的viewport是layout viewport,
-      在进行移动设备网站的开发时,我们需要的是ideal viewport.可使用meta标签来设置
-      <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        其中width为layout viewport的宽度,
-      该标签的作用是让layout viewport的宽度等于设备的屏幕宽度,再等于ideal viewport的宽度
-        width=device-width和initial-scale=1.0的功能基本一样,
-        但 width=device-width在IPhone和IPad上存在兼容问题； 
-        initial-scale=1.0在IE上存在兼容问题
-      Remarks:
-        若不设置meta viewport标签,那么移动设备上浏览器默认的layout viewport宽度值为980px,1024px等这些,总之是大于屏幕宽度的（这里的宽度所用的单位px都是指css中的px,它跟代表实际屏幕物理像素的px不是一回事）。 若不设置meta viewport标签,一个PC的页面在移动设备上会进行缩放并完整显示出来！
-    滚动距离Scrolling offset
-      visual viewport当前相对于layout viewport的位置。
-      这是滚动距离,并且就像在桌面一样,它被存储在window.pageX/YOffset之中。
-      完全支持iPhone,Android,Symbian,Iris,MicroB,Skyfire,Obigo。
-      问题:Opera,Bolt,Firefox和NetFront一直返回0。
-      Samsung WebKit只有当<meta viewport>被应用到页面上时候才返回正确的值。
-      不支持IE,BlackBerry。IE把值存在document.documentElement.scrollLeft/Top之中。
-    HTML尺寸
-      document.documentElement.offsetWidth/Height 提供了以CSS像素为单位的<html>元素的整个尺寸。
-      完全支持Opera,iPhone,Android,Symbian,Samsung,Iris,Bolt,Firefox,MicroB,Skyfire,BlackBerry,Obigo。
-      问题:NetFront的值只在100%缩放比例的情况下才正确。
-      IE中,document.body.clientWidth/Height中获取正确的值。
-    媒体查询Media queries
-      媒体查询和其在桌面环境上的工作方式一样。
-      width/height使用layout　viewport做为参照物,并且以CSS像素进行度量,
-      device-width/height使用设备屏幕,并且以设备像素进行度量。
-        可使用<meta viewport>将width=device-width,从而不必使用device-width媒体查询
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"> 
+      进行移动设备网站开发时,需要的是理想视口,用meta标签进行设置
+      作用: 让布局视口宽==设备屏幕宽==理想视口宽
+        width=device-width 和 initial-scale=1.0 的功能相同 
+        width=device-width 在IOS上存在兼容问题 
+        initial-scale=1.0 在IE上存在兼容问题 
+        故同时使用 
+      width: 布局视口宽 
+      device-width: 设备屏幕宽
+    'scrolling offset'滚动距离 
+      可视视口相对布局视口的位置 
+      window.pageX 获取滚动尺寸 
+        兼容性: Opera、Bolt、Firefox和NetFront始终返回0 
+          Samsung WebKit只有当<meta viewport>被应用到页面上时候才返回正确的值。
+          不支持IE、BlackBerry。
+      document.documentElement.scrollLeft IE获取方式 
+  HTML尺寸
+    document.documentElement.offsetWidth 以CSS像素为单位的<html>尺寸 
+    document.body.clientWidth IE获取方式 
+  'media queries'媒体查询 
+    width/height 为布局视口尺寸,以CSS像素进行度量 
+    device-width/height 为设备屏幕尺寸,以设备像素进行度量 
 不支持 
   css 不支持 变量 计算
 零碎点 

@@ -83,184 +83,175 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <head>  用于定义文档的头部,所有头部元素的容器 
     头部元素有<title/> <script/> <style/> <link/> <meta/>等标签;
   <meta/>  提供有关页面的元信息'meta-information' 
-    PS:用于设置一些头信息,对网页文件进行说明,放置于<head></head>之间
-      如便于搜索引擎查找;元数据不会显示在页面上,但是对于机器是可读的 
-    name=  可选,表示content的类型 
-      PS: 'http-equiv'指明下面要设置的项目;'content'指明该项目设置的内容
-      'viewport'    视口,设置不同设备下的显示属性[HTML5]
-        PS:Viewport指的是网页的显示区域,
-          也就是不借助滚动条的情况下,用户可以看到的部分网页大小,中文译为'视口';
-          正常情况下,viewport和浏览器的显示窗口是一样大小的.
-          但是,在移动设备上,两者可能不是一样大小.
-          比如,手机浏览器的窗口宽度可能是640px,这时viewport宽度就是640px,
-          但是网页宽度有950px,正常情况下,浏览器会提供横向滚动条,让用户查看窗口容纳不下的310个px.
-          另一种方法则是,将viewport设成950px,也就是说,浏览器的显示宽度还是640px,
-          但是网页的显示区域达到950px,整个网页缩小了,在浏览器中可以看清楚全貌.
-          这样一来,手机浏览器就可以看到网页在桌面浏览器上的显示效果.
-        ★content对应值 : "key1=val1,key2=val2,..."一串由多个键值对组成的字符串 
-        width   viewport宽度 
-          num          单位为像素
-          device-width 设备宽度
-        height  viewport高度 
-          num  单位为像素
-          device-height 设备高度
-        initial-scale 初始缩放比例 
-          num   缩放比例值,范围为 0.01-10
-        maximum-scale 最大缩放比例 
-          num  缩放比例值
-        minimum-scale 最小缩放比例 
-          num  缩放比例值
-        user-scalable 是否允许用户缩放 
-          yes
-          no
-        Example:
-          viewport缩放规则 [在HTML网页的head部分指定] 
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-          上面代码指定,viewport的缩放规则: 
-          缩放到当前设备的屏幕宽度[device-width],
-          初始缩放比例[initial-scale]为1倍,
-          禁止用户缩放[user-scalable];
-          
-          <meta name="viewport" content="width=320, initial-scale=2.3, user-scalable=no">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, user-scalable=yes">
-      'description' 页面的简短描述[限制150字符],有时该描述被用作搜索结果展示片段的一部分 
-        <meta name="description" content="描述1,描述2..."> // 使用','分割多个描述词 
-      'keywords'    页面关键词 
-      'referrer'    控制http请求中的referrer 
-        ★content="" 
-        'never'     不发送referrer[删除http头中的referer]  
-        'always'    始终发送referrer 
-          不改变http header 中的 referer 的值
-          即使当前页使用https协议,且加载资源使用http,加载资源的请求头中仍带referer
-        'origin'    只发送origin部分
-        'default'   若前页面使用https,而加载资源使用http,则不发送referrer
-      'author'      设置作者 
-        <meta name="author" content="作者名"> 
-      'robots'      定义网页搜索引擎索引方式 
-        <meta name="robots" content="index,follow">   // 所有搜索引擎        
-        robotterms是一组使用','分割的值,
-        取值如下：none,noindex,nofollow,all,index和follow。
-      'copyright'   版权声明 
-        <meta name="copyright" content="声明内容"/>
-      'generator'   代码生成软件说明 
-        表示该文件使用什么软件生成的 
-        <meta name="generator" content="Notepad2"/>
-      'application-name' Web应用名称,仅当网站被用作为一个应用时才使用 
-        <meta name="application-name" content="应用名称">    
-      在桌面开发时让IE浏览器以最新的模式渲染页面 
-      <meta http-equiv="x-ua-compatible" content="ie=edge"> 
-      <meta name="googlebot" content="index,follow">  // 控制搜索引擎的抓取和索引行为,仅对Google有效  
-      <meta name="google" content="nositelinkssearchbox"> // 告诉Google不显示网站链接的搜索框
-      <meta name="google" content="notranslate"> //告诉Google不提供此页面的翻译
-      <meta name="google-site-verification" content="verification_token"> // 验证Google搜索控制台的所有权
-      <meta name="yandex-verification" content="verification_token"> // 验证Yandex网站管理员的所有权
-      <meta name="msvalidate.01" content="verification_token"> // 验证Bing网站管理员中心的所有权
-      <meta name="alexaVerifyID" content="verification_token"> // 验证Alexa控制台的所有权 
-      <meta name="p:domain_verify" content="code from pinterest"> // 验证Pinterest控制台的所有权 
-      <meta name="norton-safeweb-site-verification" content="norton code"> // 验证Norton安全站点的所有权 
-      <meta name="subject" content="你的网站主题"> // 关于网站主题的简短描述
-      <meta name="rating" content="General"> // 基于网站内容给出一般的年龄分级 
-      <meta name="format-detection" content="telephone=no"> // 禁用自动检测和格式化可能的电话号码
-      <meta http-equiv="x-dns-prefetch-control" content="off"> // 通过设置为 “off” 完全退出 DNS 预取 
-      在客户端存储 cookie,web 浏览器的客户端识别 
-      <meta http-equiv="set-cookie" content="name=value; expires=date; path=url"> 
-      <meta http-equiv="Window-Target" content="_value"> // 指定要显示在一个特定框架中的页面 
-      地理标签
-      <meta name="ICBM" content="latitude, longitude">
-      <meta name="geo.position" content="latitude;longitude">
-      <meta name="geo.region" content="country[-state]">
-        国家代码 (ISO 3166-1): 强制性, 州代码 (ISO 3166-2): 可选; 如 content="US" / content="US-NY" 
-      <meta name="geo.placename" content="city/town">
-        如 content="New York City" 
-    http-equiv= 可选,把'content'属性关联到HTTP头 
-      'refresh' 定时跳转/刷新 
-        Example: 
-        <meta http-equiv="refresh" content="2" URL="网址">
-        content="2" 两秒后刷新 
-        URL         可选,当无URL时则默认刷新当前页面,
-      'expires' 设置缓存时间 
-        <meta http-equiv="expires" content="0"/>
-        此设置表示不缓存,方便代码调试
-        expires 期限,0 为缓存的时间,过期的时间;
-      'pragma'  代理服务器缓存设置 
-        <meta http-equiv="pragma" content="no-cache"/>  // 禁止页面缓存 
-      'set-cookie'
-      'content-type'
-      'X-UA-Compatible' IE8新加的设置 
-        对于IE8以下的浏览器是不识别 
-        通过在meta中设置X-UA-Compatible的值,可以指定网页的兼容性模式设置。
-        在网页中指定的模式优先权高于服务器中(通过HTTP Header)所指定的模式
-      
-        <meta http-equiv="X-UA-Compatible" content="IE=7">  
-        #以上代码告诉IE浏览器,无论是否用DTD声明文档标准,IE8/9 都会以IE7引擎来渲染页面。  
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">  
-        #以上代码告诉IE浏览器,IE8/9 及以后的版本都会以最高版本IE来渲染页面。  
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-        #以上代码IE=edge告诉IE使用最新的引擎渲染网页,chrome=1 则可以激活Chrome Frame.
+    PS: 设置头信息,放置于<head></head>间 
+      对网页进行说明‹如便于搜索引擎查找› 
+      元数据不会显示在页面上,但是对于机器是可读的 
+    Sort: 
+      name=""  可选,表示content的类型 
+        PS: 'http-equiv'指明下面要设置的项目;'content'指明该项目设置的内容
+        'description' 页面的简短描述[限制150字符],有时该描述被用作搜索结果展示片段的一部分 
+          <meta name="description" content="描述1,描述2..."> // 使用','分割多个描述词 
+        'keywords'    页面关键词 
+        'referrer'    控制http请求中的referrer 
+          ★content="" 
+          'never'     不发送referrer[删除http头中的referer]  
+          'always'    始终发送referrer 
+            不改变http header 中的 referer 的值
+            即使当前页使用https协议,且加载资源使用http,加载资源的请求头中仍带referer
+          'origin'    只发送origin部分
+          'default'   若前页面使用https,而加载资源使用http,则不发送referrer
+        'author'      设置作者 
+          <meta name="author" content="作者名"> 
+        'robots'      定义网页搜索引擎索引方式 
+          <meta name="robots" content="index,follow">   // 所有搜索引擎        
+          robotterms是一组使用','分割的值,
+          取值如下：none,noindex,nofollow,all,index和follow。
+        'copyright'   版权声明 
+          <meta name="copyright" content="声明内容"/>
+        'generator'   代码生成软件说明 
+          表示该文件使用什么软件生成的 
+          <meta name="generator" content="Notepad2"/>
+        'application-name' Web应用名称,仅当网站被用作为一个应用时才使用 
+          <meta name="application-name" content="应用名称">    
+        在桌面开发时让IE浏览器以最新的模式渲染页面 
+        <meta http-equiv="x-ua-compatible" content="ie=edge"> 
+        <meta name="googlebot" content="index,follow">  // 控制搜索引擎的抓取和索引行为,仅对Google有效  
+        <meta name="google" content="nositelinkssearchbox"> // 告诉Google不显示网站链接的搜索框
+        <meta name="google" content="notranslate"> //告诉Google不提供此页面的翻译
+        <meta name="google-site-verification" content="verification_token"> // 验证Google搜索控制台的所有权
+        <meta name="yandex-verification" content="verification_token"> // 验证Yandex网站管理员的所有权
+        <meta name="msvalidate.01" content="verification_token"> // 验证Bing网站管理员中心的所有权
+        <meta name="alexaVerifyID" content="verification_token"> // 验证Alexa控制台的所有权 
+        <meta name="p:domain_verify" content="code from pinterest"> // 验证Pinterest控制台的所有权 
+        <meta name="norton-safeweb-site-verification" content="norton code"> // 验证Norton安全站点的所有权 
+        <meta name="subject" content="你的网站主题"> // 关于网站主题的简短描述
+        <meta name="rating" content="General"> // 基于网站内容给出一般的年龄分级 
+        <meta name="format-detection" content="telephone=no"> // 禁用自动检测和格式化可能的电话号码
+        <meta http-equiv="x-dns-prefetch-control" content="off"> // 通过设置为 “off” 完全退出 DNS 预取 
+        在客户端存储 cookie,web 浏览器的客户端识别 
+        <meta http-equiv="set-cookie" content="name=value; expires=date; path=url"> 
+        <meta http-equiv="Window-Target" content="_value"> // 指定要显示在一个特定框架中的页面 
+        地理标签
+        <meta name="ICBM" content="latitude, longitude">
+        <meta name="geo.position" content="latitude;longitude">
+        <meta name="geo.region" content="country[-state]">
+          国家代码 (ISO 3166-1): 强制性, 州代码 (ISO 3166-2): 可选; 如 content="US" / content="US-NY" 
+        <meta name="geo.placename" content="city/town">
+          如 content="New York City" 
+      http-equiv=" "可选,把'content'属性关联到HTTP头 
+        'refresh' 定时跳转/刷新 
+          Example: 
+          <meta http-equiv="refresh" content="2" URL="网址">
+          content="2" 两秒后刷新 
+          URL         可选,当无URL时则默认刷新当前页面,
+        'expires' 设置缓存时间 
+          <meta http-equiv="expires" content="0"/>
+          此设置表示不缓存,方便代码调试
+          expires 期限,0 为缓存的时间,过期的时间;
+        'pragma'  代理服务器缓存设置 
+          <meta http-equiv="pragma" content="no-cache"/>  // 禁止页面缓存 
+        'set-cookie'
+        'content-type'
+        'X-UA-Compatible' IE8新加的设置 
+          对于IE8以下的浏览器是不识别 
+          通过在meta中设置X-UA-Compatible的值,可以指定网页的兼容性模式设置。
+          在网页中指定的模式优先权高于服务器中(通过HTTP Header)所指定的模式
         
-        Google Chrome Frame 百科
-          “IE=Edge,chrome=1″这样简单快捷,但是弊端是代码将无法通过W3C验证。
-          其实这并不是问题,毕竟标准只是标准,如果只有这一个“错误”完全不会有任何不良的影响。
-        IE文档兼容性模式所有可能的值:
-          Emulate IE8 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
-            Standards mode指令会显示成IE8 Standards mode而quirks mode会显示成IE5 mode。
-            不同于IE8 mode,Emulate IE8 mode重视<!DOCTYPE>指令。
-          Emulate IE7 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
-            Standards mode指令会显示成IE7 Standards mode而quirks mode会显示成IE5 mode。
-            不同于IE7 mode,Emulate IE7 mode重视<!DOCTYPE>指令。
-            对于许多网页来说这是最推荐的兼容性模式。
-          IE5 mode #编译内容如同IE7的quirks mode之显示状况,和IE5中显示的非常类似。
-          IE7 mode #编译内容如同IE7的standards mode之显示状况,无论网页是否含有<!DOCTYPE>指令。
-          IE8 mode #提供对业界标准的最高支持,
-            包含 W3C Cascading Style Sheets Level 2.1 Specification和W3C Selectors API,
-            并有限的支持 W3C Cascading Style Sheets Level 3 Specification(Working Draft)。
-          Edge mode #指示IE以目前可用的最高模式显示内容。
-            当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE,
-            使用Edge mode的页面会使用该版本能支持的最高模式来显示内容。
-            同样的那些页面在使用IE8浏览时仍会照常显示。
-        注意事项:
-          1,根据官网定义X-UA-compatible 标头不区分大小写；
-            不过,它必须显示在网页中除 title 元素和其他 meta 元素以外的所有其他元素之前。
-            如果不是的话,它不起作用
-          2,content的内容是IE=8,或者IE=edge等值,
-            注意不是IE8或者直接写个edge的值,否则不起作用
-          如果对WEb服务器了解,可以直接配置一下VirtualHost: Apache:
-            <IfModule mod_setenvif.c>
-              <IfModule mod_headers.c>
-                BrowserMatch MSIE ie
-                Header set X-UA-Compatible "IE=Edge" env=ie
-                BrowserMatch chromeframe gcf
-                Header append X-UA-Compatible "chrome=1" env=gcf
+          <meta http-equiv="X-UA-Compatible" content="IE=7">  
+          #以上代码告诉IE浏览器,无论是否用DTD声明文档标准,IE8/9 都会以IE7引擎来渲染页面。  
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+          #以上代码告诉IE浏览器,IE8/9 及以后的版本都会以最高版本IE来渲染页面。  
+          <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+          #以上代码IE=edge告诉IE使用最新的引擎渲染网页,chrome=1 则可以激活Chrome Frame.
+          
+          Google Chrome Frame 百科
+            “IE=Edge,chrome=1″这样简单快捷,但是弊端是代码将无法通过W3C验证。
+            其实这并不是问题,毕竟标准只是标准,如果只有这一个“错误”完全不会有任何不良的影响。
+          IE文档兼容性模式所有可能的值:
+            Emulate IE8 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
+              Standards mode指令会显示成IE8 Standards mode而quirks mode会显示成IE5 mode。
+              不同于IE8 mode,Emulate IE8 mode重视<!DOCTYPE>指令。
+            Emulate IE7 mode #指示IE使用<!DOCTYPE>指令来决定如何编译内容。
+              Standards mode指令会显示成IE7 Standards mode而quirks mode会显示成IE5 mode。
+              不同于IE7 mode,Emulate IE7 mode重视<!DOCTYPE>指令。
+              对于许多网页来说这是最推荐的兼容性模式。
+            IE5 mode #编译内容如同IE7的quirks mode之显示状况,和IE5中显示的非常类似。
+            IE7 mode #编译内容如同IE7的standards mode之显示状况,无论网页是否含有<!DOCTYPE>指令。
+            IE8 mode #提供对业界标准的最高支持,
+              包含 W3C Cascading Style Sheets Level 2.1 Specification和W3C Selectors API,
+              并有限的支持 W3C Cascading Style Sheets Level 3 Specification(Working Draft)。
+            Edge mode #指示IE以目前可用的最高模式显示内容。
+              当使用IE8时其等同于IE8 mode。若(假定)未来放出支持更高兼容性模式的IE,
+              使用Edge mode的页面会使用该版本能支持的最高模式来显示内容。
+              同样的那些页面在使用IE8浏览时仍会照常显示。
+          注意事项:
+            1,根据官网定义X-UA-compatible 标头不区分大小写；
+              不过,它必须显示在网页中除 title 元素和其他 meta 元素以外的所有其他元素之前。
+              如果不是的话,它不起作用
+            2,content的内容是IE=8,或者IE=edge等值,
+              注意不是IE8或者直接写个edge的值,否则不起作用
+            如果对WEb服务器了解,可以直接配置一下VirtualHost: Apache:
+              <IfModule mod_setenvif.c>
+                <IfModule mod_headers.c>
+                  BrowserMatch MSIE ie
+                  Header set X-UA-Compatible "IE=Edge" env=ie
+                  BrowserMatch chromeframe gcf
+                  Header append X-UA-Compatible "chrome=1" env=gcf
+                </IfModule>
               </IfModule>
-            </IfModule>
-            < IfModule mod_setenvif .c >
-            < IfModule mod_headers .c >
-            BrowserMatch MSIE ie
-            Header set X - UA - Compatible "IE=Edge" env = ie
-            BrowserMatch chromeframe gcf
-            Header append X - UA - Compatible "chrome=1" env = gcf
-            < / IfModule >
-            < / IfModule >
-            
-            Nginx: 详细参考: 例子
-            add_header "X-UA-Compatible" "IE=Edge,chrome=1";
-            add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
-      <meta http-equiv="Cache-Control" content="no-siteapp"/>  // 禁止搜索引擎转码 
-      Example:
-      <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    content=  可选,定义与'http-equiv'或'name'属性相关的元信息
-    charset="UTF-8"  可选,设置字符集 [HTML5]
-      Example:
-      // 需放置在head的其他前面 
-      <meta charset="UTF-8"> 
-      <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> // HTML5之前的写法 
-    rel=        可选,    
-      'perfetch'  预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5] 
-        <link rel="prefetch" href="url">
-        url可为一网页地址或图片地址
-      "stylesheet" 
-        HTML5中可省略 
-        <link rel="stylesheet" type="text/css" href="XXX.css" />
+              < IfModule mod_setenvif .c >
+              < IfModule mod_headers .c >
+              BrowserMatch MSIE ie
+              Header set X - UA - Compatible "IE=Edge" env = ie
+              BrowserMatch chromeframe gcf
+              Header append X - UA - Compatible "chrome=1" env = gcf
+              < / IfModule >
+              < / IfModule >
+              
+              Nginx: 详细参考: 例子
+              add_header "X-UA-Compatible" "IE=Edge,chrome=1";
+              add _ header "X-UA-Compatible" "IE=Edge,chrome=1" ;
+        <meta http-equiv="Cache-Control" content="no-siteapp"/>  // 禁止搜索引擎转码 
+        Example:
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+      content=""  可选,定义与'http-equiv'或'name'属性相关的元信息
+      charset="UTF-8"  可选,设置字符集 [HTML5]
+        Example:
+        // 需放置在head的其他前面 
+        <meta charset="UTF-8"> 
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> // HTML5之前的写法 
+      rel=""       可选,    
+        'perfetch'  预加载网页内容,为浏览者提供一个平滑的浏览体验[HTML5] 
+          <link rel="prefetch" href="url">
+          url可为一网页地址或图片地址
+        "stylesheet" 
+          HTML5中可省略 
+          <link rel="stylesheet" type="text/css" href="XXX.css" />
+    Enum: 
+      'viewport'视口设置 ‹HTML5›
+        PS: Viewport指的是网页的显示区域,即不滑动滚动条时,可看到的部分网页大小 
+          当网页宽大于视口宽时,默认会出现滚动条,而设置视口宽为网页时则可以刚好显示所有 
+        <meta 
+          name="viewport" // 视口设置 
+          content=“       
+            width=device-width|‹px›      // 视口宽 
+              // device-width 设备宽 
+            ,height=device-height|‹px›   // 视口高 
+              // device-height 设备高  
+            ,initial-scale=<float>       // 初始缩放比例 
+              // 范围: 0.01-10 
+            ,maximum-scale=<float>       // 最大缩放比例 
+            ,minimum-scale=<float>       // 最小缩放比例 
+            ,user-scalable=‹KW›          // 是否允许用户缩放 
+              // KW: yes | no 
+            ,target-desitydpi=‹KW›|<float>  // 像素密度  
+              KW: 
+                device-dpi // 设备默认像素密度 
+                height-dpi // 高像素密度 
+                medium-dpi // 中像素密度 
+                low-dpi    // 低像素密度 
+            ”
+        />
   <title>  网页标题
   <base href="http://aoo/" target="_blank">  定义超链接的根目录 [HTML5]  
     PS: 在head中使用 

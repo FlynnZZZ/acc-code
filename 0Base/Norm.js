@@ -1,11 +1,14 @@
 名词&术语 
-  IDE: 'Integrated Development Environment'集成开发环境 
-  API: 'Application Programming interfaces'应用编程接口 
+  IDE,'integrated development environment'集成开发环境 
+  API,'application programming interfaces'应用编程接口 
     目的是给应用程序与开发人员基于某软件或硬件得以访问一组例程的能力,
     无需访问源码,或理解内部工作机制的细节;
     提供了一组对象,方法和属性,可以用来访问这些技术的所有功能
     对方定义的一种信息交互的方式[Self]
-  CLI'Command Line Interface for batch scripting'命令行界面  
+  CLI,'command line interface for batch scripting'命令行界面  
+  UTC,'coordinated universeal time'国际协调时间,又称世界统一时间 
+    UTC 日期值得是在没有时区偏差的情况下的日期值
+    UTC和北京时间相差8个小时,北京属于东八区
   'scripting language'脚本语言 
     不具备开发操作系统的能力,而是用来编写控制其他大型应用程序的'脚本';
   'host environment'宿主环境 :语言在运行时的环境 
@@ -14,65 +17,22 @@
   'localhost' :计算机网络中,意为'本地主机',指'这台计算机' 
     是给loopback回路网络接口的一个标准主机名;
     相对应的IP地址为'127.0.0.1'[IPv4]和'::1'[IPv6]
-  UTC'coordinated universeal time'国际协调时间,又称世界统一时间 
-    UTC 日期值得是在没有时区偏差的情况下的日期值
-    UTC和北京时间相差8个小时,北京属于东八区
---------------------------------------------------------------------------------
-常用约定
-缩写词 
-  bin   binary 二进制 
-  src   source 来源 
-  dist  distribute 分发 
-  dest  destination 目的地 
-  repo  repository 仓库 
-  spec  specification 说明书 
+常用约定 
+  缩写词 
+    bin   binary 二进制 
+    src   source 来源 
+    dist  distribute 分发 
+    dest  destination 目的地 
+    repo  repository 仓库 
+    spec  specification 说明书 
 --------------------------------------------------------------------------------
 ◆自我设定 
-文档规范 
-  ★Foo,xx对象 
-  Extend: Xxx  可选,继承自 
-  Relate:      可选,关系 
-  Static:      可选,静态属性/方法 
-    Foo.aoo 
-    ...
-  Instance: xx 可选,实例对象 
-    .aoo 
-    ...
-  Proto:       可选,原型属性/方法 
-    .aoo         
-    ... 
-  ★obj,xx对象 
-  Member:   可选,成员 
-    .aoo 
-    ...
-  ★通用定义 
-  PS:      说明 
-  Example: 举例子 
-  Feature: 特征 
-  Accu:   总结 
-  Self:   自己相关 
-  More:   扩展 
-  Expand: 扩展 
-  ★方法/属性/对象/类 所属部分 
-  Env: 环境 
-  Sit: 站点/网站/整站  
-  Win: 窗口 
-  Pag: 页面/文档
-  Elm: DOM/元素/元素内容 
-  Atr: 元素属性 
-  Evt: 事件
-  Kit: 工具方法 
-状态表示 
-  参数表示 
-    '[]'包裹起来的表示可选参数 
-      str.slice(beginSlice[, endSlice])  表示第二个参数为可选 
-    '<>' 表示自定义的值 
-      $(<selector>) 
-  短语表示 
+文档记录规范 
+  常用词: 
     tag     标签
     attr    特性 
     prop    属性 
-    slctor  选择器 selector
+    slctor  选择器 slctor 
     bol     布尔值 
     num     数值
     int     整数 
@@ -118,19 +78,53 @@
     ★组合短语 
     moIn    更多参见 more in 
     NdA     Nondirect availability,不可直接使用  
-命名规范 
-  起步_基础 
-    在统计到的128985个单词中,以字母开头的个数  
-    X < Y < Z < Q < J < K < V < N < W < O < I
-    暴露的变量,统一采用前缀'z'或'Z'
-  变量名: aoo,boo,..  aux,bux,..  axx,bxx,..
-  函数名  foo, goo hoo ioo joo koo
-  常用词语缩写 
+    ★其他 
     hint    提示 
     pop     弹出 
     column  栏目 
     sort    类别 
     pw      密码 
+  符号表示: 
+    '[]'包裹: 表示可选 
+      Example: tr.slice(beginSlice[,endSlice])  表示第二个参数为可选 
+    ?作为结尾: 表示可选 
+      Example: str.slice(beginSlice,endSlice?)   表示第二个参数为可选 
+    <描述词>|‹描述词›: 表示描述值  
+      Example: $(<selector>) 表示传入的参数为选择器 
+  划分、描述记录对象的关键词 
+    ★通用定义 
+    PS:       说明 
+    DefDec:   定义说明 
+    Example:  举例子 
+    Feature:  特征 
+    Enum:     枚举 
+    Sort:     分类 
+    Accu:     总结 
+    Self:     自己相关 
+    More:     更多  
+    MoIn:     更多  
+    Expand:   扩展 
+    Q&I:   问题及想法 
+    Env:   环境 
+    Sit:   站点/网站/整站  
+    Win:   窗口 
+    Pag:   页面/文档
+    Elm:   DOM/元素/元素内容 
+    Atr:   元素属性 
+    Evt:   事件
+    Kit:   工具方法 
+    ★类描述常用的关键词: 
+    Extend:   继承自 
+    Relate:   关系 
+    Static:   静态属性/方法 
+    Instance: 实例对象 
+    Proto:    原型属性/方法 
+    ★对象描述常用的关键词:  
+    Member:   成员 
+自定义命名 
+  用于标记: __ 或 zzz 
+  变量名: aoo,boo,..;axx,bxx,..; 
+  函数名  foo, goo hoo ioo joo koo
 自定义规范 
   前后端数据交互规范 
     初始化数据和需提交的数据保持同样的格式和结构 

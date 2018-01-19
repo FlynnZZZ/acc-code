@@ -619,9 +619,9 @@ XMLHttpRequestEventTarget,AJAX请求相关的事件
         Accept-Language
         Content-Language
         Content-Type ‹只限于三个值›  
-          application
-          x-www-form-urlencoded、multipart
-          form-data、text/plain
+          application/x-www-form-urlencoded 
+          multipart/form-data 
+          text/plain 
         DPR
         Downlink
         Save-Data

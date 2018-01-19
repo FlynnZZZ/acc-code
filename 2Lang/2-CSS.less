@@ -187,7 +187,9 @@ Selector,选择器
         content:attr(属性名)    将元素的指定属性的属性值插入
           Example:
           在链接后增加 (链接地址)
-          a:after {content: " (" attr(href) ")";}
+          a:after {
+            content: " (" attr(href) ")";
+          }
         配合属性:定义符号 quotes 
           PS:quote字符类型(使用双引号""的时候需要使用转义字符\)
             open-quote开始字符;close-quote结尾字符
@@ -3166,6 +3168,7 @@ Accu:
       hd-x & bd-x | tl-x & ct-x 
       pt-x | it-x | ck-x 
       sg-x 
+      top-x & btm-x | lft-x & rit-x 
     其他常用词: 
       actived-x | choosed-x | current-x 
 --------------------------------------------------------------------以下待整理 

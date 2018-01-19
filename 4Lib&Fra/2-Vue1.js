@@ -1761,9 +1761,19 @@ API
   // 使用全局对象 axios 进行http请求 
   // axios并非vue插件,不能使用Vue.use(),所以只能在每个需要发送请求的组件中即时引入
   // 但可在引入axios后,通过手动修改原型链,来更方便的使用 
+  var qs = require('qs'); // 用于序列化请求数据 
   Vue.prototype.$http = axios.create({
     baseURL: 'http://democode.likecto.hkbao.com/'
-  })  
+    ,withCredentials: true  // 携带cookies 
+    ,headers: { 
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" // 避免预检请求 
+    }
+    ,transformRequest: [ // 序列化请求数据 
+      function(data){
+        return qs.stringify(data)
+      }
+    ]
+  }) 
 API 
   ◆请求方法: 
   axios({   // 通用方法 

@@ -2145,8 +2145,9 @@ CSSStyleDeclaration,CSS规则的声明
         "paused"    暂停
         "running"   播放
     .getPropertyCSSValue(属性名)  CSSValue, [Chrome不支持]
-FormData,表单模拟,序列化表单、创建与表单格式相同的数据[HTML5] 
-  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息 
+FormData,表单模拟 [HTML5] 
+  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
+  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
   Extend：Object 
     console.log(FormData.prototype.__proto__.constructor===Object); // true 
   Instance: 

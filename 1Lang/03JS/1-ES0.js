@@ -119,7 +119,7 @@ JS运行过程机理
     eval不会在它的外层作用域引入变量
     eval和arguments不能被重新赋值
     增加了保留字[如 protected static 和 interface] 
-'Modules'模块化规范
+'Modules'模块化规范 
   'CommonJS'模块化规范 
     PS: 
     ◆模块公开  

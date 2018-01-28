@@ -2156,7 +2156,7 @@ FormData,表单模拟 [HTML5]
     Example: 通过表单元素创建
     var fd = new FormData(document.forms[0]);
   Proto: 
-    .append(key,val[,name])    向fd中添加字段 
+    .append(key,val ,name?)    向fd中添加字段 
       PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
       key   数据键名  
       val   数据值  

@@ -1261,6 +1261,7 @@ store = new Vuex.Store({ // 实例化数据中心'store'
   ,mutations: { // 函数集,一般用于直接操作'state'中的数据 
     foo: function(state,data){  // 不可执行异步操作 
       state  储存数据的state对象 
+        vue-cli 中,不可使用 {xxx} 将对象结构 
       data   可选,.commit()传入的数据 
     }
     ...
@@ -1391,267 +1392,274 @@ API
     通过'mutations'或'actions'函数将vue实例作为参数传递  
     若保存到'state'中,则整个store‹'mutations'、'getters'、'actions'函数›都可访问到该实例  
 模块化管理: 每个模块维护一套状态,然后合并到一总数据中心中 
-  const moduleA = {
-    state: {}
-    ,mutations: {
-      foo: function(state){
-        state 模块的局部状态对象 
-      }
-    }
-    ,getters: {
-      geter1: function(state,getters,rootState){
-        state     模块的局部状态对象 
-        getters   模块的局部计算对象 
-        rootState 根节点状态对象
-      }
-    }
-    ,actions: {
-      goo: function(context){
-        context.state      模块的局部状态对象 
-        context.rootState  根节点状态对象 
-      }
-    }
-    ,namespaced: bol // 命名空间,默认:false 
-      默认情况下,模块内的'getter'、'mutation'和'action'都是注册在全局命名空间的 
-      namespaced: true,成为命名空间模块,模块具有更高的封装度和复用性 
-        所有 'getter'、'mutation'及'action'都会自动根据模块注册的路径调整命名 
-      Example: 
-        const store = new Vuex.Store({
+  PS: 默认情况下,模块内的'getter'、'mutation'和'action'都是注册在全局命名空间的 
+    namespaced: true,成为命名空间模块,模块具有更高的封装度和复用性 
+    所有 'getter'、'mutation'及'action'都会自动根据模块注册的路径调整命名 
+  Example: 
+    const store = new Vuex.Store({
+      modules: {
+        account: {
+          namespaced: true,
+          
+          // 模块内容（module assets）
+          state: { ... }, // 模块内的状态已经是嵌套的了,使用 `namespaced` 属性不会对其产生影响
+          getters: {
+            isAdmin () { ... } // -> getters['account/isAdmin']
+          },
+          mutations: {
+            login () { ... } // -> commit('account/login')
+          },
+          actions: {
+            login () { ... } // -> dispatch('account/login')
+          },
+          
+          // 嵌套模块
           modules: {
-            account: {
+            // 继承父模块的命名空间
+            myPage: {
+              state: { ... },
+              getters: {
+                profile () { ... } // -> getters['account/profile']
+              }
+            },
+            
+            // 进一步嵌套命名空间
+            posts: {
               namespaced: true,
               
-              // 模块内容（module assets）
-              state: { ... }, // 模块内的状态已经是嵌套的了,使用 `namespaced` 属性不会对其产生影响
+              state: { ... },
               getters: {
-                isAdmin () { ... } // -> getters['account/isAdmin']
-              },
-              mutations: {
-                login () { ... } // -> commit('account/login')
-              },
-              actions: {
-                login () { ... } // -> dispatch('account/login')
-              },
-              
-              // 嵌套模块
-              modules: {
-                // 继承父模块的命名空间
-                myPage: {
-                  state: { ... },
-                  getters: {
-                    profile () { ... } // -> getters['account/profile']
-                  }
-                },
-                
-                // 进一步嵌套命名空间
-                posts: {
-                  namespaced: true,
-                  
-                  state: { ... },
-                  getters: {
-                    popular () { ... } // -> getters['account/posts/popular']
-                  }
-                }
+                popular () { ... } // -> getters['account/posts/popular']
               }
             }
           }
-        })
-      'Global Assets'在命名空间模块内访问全局内容 
-        如果你希望使用全局 state 和 getter,rootState 和 rootGetter 会作为第三和第四参数传入 getter,
-        也会通过 context 对象的属性传入 action。
-        若需要在全局命名空间内分发 action 或提交 mutation,
-        将 { root: true } 作为第三参数传给 dispatch 或 commit 即可。
-        modules: {
-          foo: {
-            namespaced: true,
-            
-            getters: {
-              // 在这个模块的 getter 中,`getters` 被局部化了
-              // 你可以使用 getter 的第四个参数来调用 `rootGetters`
-              someGetter (state, getters, rootState, rootGetters) {
-                getters.someOtherGetter // -> 'foo/someOtherGetter'
-                rootGetters.someOtherGetter // -> 'someOtherGetter'
-              },
-              someOtherGetter: state => { ... }
-            },
-            
-            actions: {
-              // 在这个模块中, dispatch 和 commit 也被局部化了
-              // 他们可以接受 `root` 属性以访问根 dispatch 或 commit
-              someAction ({ dispatch, commit, getters, rootGetters }) {
-                getters.someGetter // -> 'foo/someGetter'
-                rootGetters.someGetter // -> 'someGetter'
-                
-                dispatch('someOtherAction') // -> 'foo/someOtherAction'
-                dispatch('someOtherAction', null, { root: true }) // -> 'someOtherAction'
-                
-                commit('someMutation') // -> 'foo/someMutation'
-                commit('someMutation', null, { root: true }) // -> 'someMutation'
-              },
-              someOtherAction (ctx, payload) { ... }
-            }
+        }
+      }
+    })
+  Feature: 
+    模块化,但模块中'namespaced'为'false' 
+      PS: 'state'进行命名空间区分,'getters'、'mutations'及'actions'则不区分<混合到一起>
+      const moduleA = {
+        state: {}
+        ,mutations: {
+          foo: function(state){
+            state 模块的局部状态对象 
           }
         }
-      带命名空间的绑定函数 
-        当使用 'mapState', 'mapGetters', 'mapActions' 和 'mapMutations' 来绑定命名空间模块时,
-        写起来可能比较繁琐：
-          computed: {
-            ...mapState({
-              a: state => state.some.nested.module.a,
-              b: state => state.some.nested.module.b
-            })
-          },
-          methods: {
-            ...mapActions([
-              'some/nested/module/foo',
-              'some/nested/module/bar'
-            ])
+        ,getters: {
+          geter1: function(state,getters,rootState){
+            state     模块的局部状态对象 
+            getters   模块的局部计算对象 
+            rootState 根节点状态对象
           }
-        简化方法: 
-          将模块的空间名称字符串作为第一个参数传递给上述函数,
-          这样所有绑定都会自动将该模块作为上下文,
+        }
+        ,actions: {
+          goo: function(context){
+            context.state      模块的局部状态对象 
+            context.rootState  根节点状态对象 
+          }
+        }
+        ,namespaced: bol // 命名空间,默认:false 
+      }
+      const moduleB = {
+        state: {}
+        ,mutations: {}
+        ,getters: {}
+        ,actions: {}
+      }
+      const store = new Vuex.Store({
+        modules : {
+          aoo: moduleA
+          ,boo: moduleB
+        }
+        ,mutations: {  // 公用的 mutations 
+          // 
+        }
+        ...
+      })
+      读取/执行分块中的数据/方法  
+      vm.$store.state.aoo.xx       // 有命名空间区分 
+      vm.$store.getters.xx         // 混合到了一起 
+      $store.commit('foo',data)    // 混合到了一起 
+      $store.dispatch('goo',data)  // 混合到了一起 
+    模块化,且'namespaced'为'true' 
+      PS: 'state'、'getters'、'mutations'及'actions'均存在命名空间 
+    'Global Assets'在命名空间模块内访问全局内容 
+      modules: {
+        foo: {
+          namespaced: true,
+          
+          // 全局内容'rootState'和'rootGetter'将作为第三、四个参数传入 
+          getters: {
+            // 在这个模块的 getter 中,`getters` 被局部化了
+            // 你可以使用 getter 的第四个参数来调用 `rootGetters`
+            someGetter (state, getters, rootState, rootGetters) {
+              getters.someOtherGetter // -> 'foo/someOtherGetter'
+              rootGetters.someOtherGetter // -> 'someOtherGetter'
+            }
+            ,someOtherGetter: state => { ... } 
+          },
+          // 全局内容'rootState'通过第三个参数传入 <?>
+          mutations: {
+            someMutation (state, data, rootState) { }
+            ,someMutation1: state => { ... }
+          },
+          // 全局内容通过context对象的属性传入  
+          actions: {
+            // 在这个模块中, dispatch 和 commit 也被局部化了
+            // 他们可以接受 `root` 属性以访问根 dispatch 或 commit
+            someAction ({ dispatch,commit,state,getters,rootState,rootGetters }) {
+              getters.someGetter // -> 'foo/someGetter'
+              rootGetters.someGetter // -> 'someGetter'
+              
+              dispatch('someOtherAction') // -> 'foo/someOtherAction'
+              dispatch('someOtherAction', null, { root: true }) // -> 'someOtherAction'
+              
+              commit('someMutation') // -> 'foo/someMutation'
+              commit('someMutation', null, { root: true }) // -> 'someMutation'
+            }
+            ,someOtherAction (ctx, payload) { ... }
+          }
+        }
+      }
+      全局命名空间内触发'action'或'mutation',使用{root:true}作为'dispatch'或'commit'的第三个参数 
+    带命名空间的绑定函数 
+      当使用 'mapState', 'mapGetters', 'mapActions' 和 'mapMutations' 来绑定命名空间模块时,
+      写起来可能比较繁琐：
+        computed: {
+          ...mapState({
+            a: state => state.some.nested.module.a,
+            b: state => state.some.nested.module.b
+          })
+        },
+        methods: {
+          ...mapActions([
+            'some/nested/module/foo',
+            'some/nested/module/bar'
+          ])
+        }
+      简化方法: 
+        将模块的空间名称字符串作为第一个参数传递给上述函数,
+        这样所有绑定都会自动将该模块作为上下文,
+        computed: {
+          ...mapState('some/nested/module', {
+            a: state => state.a,
+            b: state => state.b
+          })
+        },
+        methods: {
+          ...mapActions('some/nested/module', [
+            'foo',
+            'bar'
+          ])
+        }
+      创建基于某个命名空间绑定函数 
+        通过使用 createNamespacedHelpers 创建基于某个命名空间绑定函数。
+        它返回一个对象,对象里有新的绑定在给定命名空间值上的组件绑定绑定函数：
+        import { createNamespacedHelpers } from 'vuex'
+        const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
+        export default {
           computed: {
-            ...mapState('some/nested/module', {
+            // 在 `some/nested/module` 中查找
+            ...mapState({
               a: state => state.a,
               b: state => state.b
             })
           },
           methods: {
-            ...mapActions('some/nested/module', [
+            // 在 `some/nested/module` 中查找
+            ...mapActions([
               'foo',
               'bar'
             ])
           }
-        创建基于某个命名空间绑定函数 
-          通过使用 createNamespacedHelpers 创建基于某个命名空间绑定函数。
-          它返回一个对象,对象里有新的绑定在给定命名空间值上的组件绑定绑定函数：
-          import { createNamespacedHelpers } from 'vuex'
-          const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
-          export default {
-            computed: {
-              // 在 `some/nested/module` 中查找
-              ...mapState({
-                a: state => state.a,
-                b: state => state.b
-              })
+        }
+    模块动态注册 
+      在 store 创建之后,你可以使用 store.registerModule 方法注册模块：
+      
+      // 注册模块 `myModule`
+      store.registerModule('myModule', {
+        // ...
+      })
+      // 注册嵌套模块 `nested/myModule`
+      store.registerModule(['nested', 'myModule'], {
+        // ...
+      })
+      之后就可以通过 store.state.myModule 和 store.state.nested.myModule 访问模块的状态。
+      
+      模块动态注册功能使得其他 Vue 插件可以通过在 store 中附加新模块的方式来使用 Vuex 管理状态。
+      例如,vuex-router-sync 插件就是通过动态注册模块将 vue-router 和 vuex 结合在一起,实现应用的路由状态管理。
+      
+      你也可以使用 store.unregisterModule(moduleName) 来动态卸载模块。
+      注意,你不能使用此方法卸载静态模块（即创建 store 时声明的模块）。
+      
+      在注册一个新 module 时,你很有可能想保留过去的 state,例如从一个服务端渲染的应用保留 state。
+      你可以通过 preserveState 选项将其归档：
+      store.registerModule('a', module, { preserveState: true })。
+    模块重用 
+      有时我们可能需要创建一个模块的多个实例,例如：
+      
+      创建多个 store,他们公用同一个模块 (例如当 runInNewContext 选项是 false 或 'once' 时,
+      为了在服务端渲染中避免有状态的单例)
+      在一个 store 中多次注册同一个模块
+      如果我们使用一个纯对象来声明模块的状态,那么这个状态对象会通过引用被共享,
+      导致状态对象被修改时 store 或模块间数据互相污染的问题。
+      
+      实际上这和 Vue 组件内的 data 是同样的问题。
+      因此解决办法也是相同的——使用一个函数来声明模块状态（仅 2.3.0+ 支持）：
+      
+      const MyReusableModule = {
+        state () {
+          return {
+            foo: 'bar'
+          }
+        },
+        // mutation, action 和 getter 等等...
+      }
+    表单处理 
+      当在严格模式中使用 Vuex 时,在属于 Vuex 的 state 上使用 v-model 会比较棘手：
+        <input v-model="obj.message">
+        假设这里的 obj 是在计算属性中返回的一个属于 Vuex store 的对象,
+        在用户输入时,v-model 会试图直接修改 obj.message。
+        在严格模式中,由于这个修改不是在 mutation 函数中执行的, 这里会抛出一个错误。
+      用“Vuex 的思维”去解决这个问题的方法是：
+        给 <input> 中绑定 value,然后侦听 input 或者 change 事件,在事件回调中调用 action:
+        <input :value="message" @input="updateMessage">
+        // ...
+        computed: {
+          ...mapState({
+            message: state => state.obj.message
+          })
+        },
+        methods: {
+          updateMessage (e) {
+            this.$store.commit('updateMessage', e.target.value)
+          }
+        }
+        下面是 mutation 函数：
+        
+        // ...
+        mutations: {
+          updateMessage (state, message) {
+            state.obj.message = message
+          }
+        }
+      双向绑定的计算属性 
+        必须承认,这样做比简单地使用“v-model + 局部状态”要啰嗦得多,
+        并且也损失了一些 v-model 中很有用的特性。
+        另一个方法是使用带有 setter 的双向绑定计算属性：
+        <input v-model="message">
+        // ...
+        computed: {
+          message: {
+            get () {
+              return this.$store.state.obj.message
             },
-            methods: {
-              // 在 `some/nested/module` 中查找
-              ...mapActions([
-                'foo',
-                'bar'
-              ])
+            set (value) {
+              this.$store.commit('updateMessage', value)
             }
           }
-  }
-  const moduleB = {
-    state: {}
-    ,mutations: {}
-    ,getters: {}
-    ,actions: {}
-  }
-  const store = new Vuex.Store({
-    modules : {
-      aoo: moduleA
-      ,boo: moduleB
-    }
-    ,mutations: {  // 公用的 mutations 
-      // 
-    }
-    ...
-  })
-  读取/执行分块中的数据/方法  
-  vm.$store.state.aoo.xx       // 相当于'命名空间' 
-  vm.$store.getters.xx         // 混合到了store中 
-  $store.commit('foo',data)    // 混合到了store中  
-    当未存在命名空间时,$store.commit('aoo/foo',data) 
-  $store.dispatch('goo',data)  // 混合到了store中  
-  模块动态注册 
-    在 store 创建之后,你可以使用 store.registerModule 方法注册模块：
-    
-    // 注册模块 `myModule`
-    store.registerModule('myModule', {
-      // ...
-    })
-    // 注册嵌套模块 `nested/myModule`
-    store.registerModule(['nested', 'myModule'], {
-      // ...
-    })
-    之后就可以通过 store.state.myModule 和 store.state.nested.myModule 访问模块的状态。
-    
-    模块动态注册功能使得其他 Vue 插件可以通过在 store 中附加新模块的方式来使用 Vuex 管理状态。
-    例如,vuex-router-sync 插件就是通过动态注册模块将 vue-router 和 vuex 结合在一起,实现应用的路由状态管理。
-    
-    你也可以使用 store.unregisterModule(moduleName) 来动态卸载模块。
-    注意,你不能使用此方法卸载静态模块（即创建 store 时声明的模块）。
-    
-    在注册一个新 module 时,你很有可能想保留过去的 state,例如从一个服务端渲染的应用保留 state。
-    你可以通过 preserveState 选项将其归档：
-    store.registerModule('a', module, { preserveState: true })。
-  模块重用 
-    有时我们可能需要创建一个模块的多个实例,例如：
-    
-    创建多个 store,他们公用同一个模块 (例如当 runInNewContext 选项是 false 或 'once' 时,
-    为了在服务端渲染中避免有状态的单例)
-    在一个 store 中多次注册同一个模块
-    如果我们使用一个纯对象来声明模块的状态,那么这个状态对象会通过引用被共享,
-    导致状态对象被修改时 store 或模块间数据互相污染的问题。
-    
-    实际上这和 Vue 组件内的 data 是同样的问题。
-    因此解决办法也是相同的——使用一个函数来声明模块状态（仅 2.3.0+ 支持）：
-    
-    const MyReusableModule = {
-      state () {
-        return {
-          foo: 'bar'
         }
-      },
-      // mutation, action 和 getter 等等...
-    }
-表单处理 
-  当在严格模式中使用 Vuex 时,在属于 Vuex 的 state 上使用 v-model 会比较棘手：
-    <input v-model="obj.message">
-    假设这里的 obj 是在计算属性中返回的一个属于 Vuex store 的对象,
-    在用户输入时,v-model 会试图直接修改 obj.message。
-    在严格模式中,由于这个修改不是在 mutation 函数中执行的, 这里会抛出一个错误。
-  用“Vuex 的思维”去解决这个问题的方法是：
-    给 <input> 中绑定 value,然后侦听 input 或者 change 事件,在事件回调中调用 action:
-    <input :value="message" @input="updateMessage">
-    // ...
-    computed: {
-      ...mapState({
-        message: state => state.obj.message
-      })
-    },
-    methods: {
-      updateMessage (e) {
-        this.$store.commit('updateMessage', e.target.value)
-      }
-    }
-    下面是 mutation 函数：
-    
-    // ...
-    mutations: {
-      updateMessage (state, message) {
-        state.obj.message = message
-      }
-    }
-  双向绑定的计算属性 
-    必须承认,这样做比简单地使用“v-model + 局部状态”要啰嗦得多,
-    并且也损失了一些 v-model 中很有用的特性。
-    另一个方法是使用带有 setter 的双向绑定计算属性：
-    <input v-model="message">
-    // ...
-    computed: {
-      message: {
-        get () {
-          return this.$store.state.obj.message
-        },
-        set (value) {
-          this.$store.commit('updateMessage', value)
-        }
-      }
-    }
 --------------------------------------------------------------------------------
 'vue-resource'HTTP请求封装插件 
   PS: 通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 

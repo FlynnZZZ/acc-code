@@ -1425,7 +1425,12 @@ WebSocket,网络通信协议[HTML5][IE10+]
 'Application Cache'Appcache,应用离线缓存[HTML5] 
   PS: 让Web应用在离线状态下可继续使用;移动端支持度较好;
   'xx.appcache'描述文件'manifest file': 列出要下载和缓存的资源 
-    PS: 需在web服务器上配置正确的 MIME-type,即 "text/cache-manifest"; 
+    PS: 需在服务器上配置该文件的'MIME-type'为"text/cache-manifest"; 
+    HTML中指定缓存描述文件: 
+      PS: 若未指定manifest属性,则页面不会被缓存,除非在manifest文件中直接指定了该页面;
+      // 在文档的<html>标签中包含'manifest'属性,值为manifest文件的路径 
+      <html manifest="/offline.manifest">
+    ★文件详情: 
     CACHE MANIFEST # 此标题下列出的文件将在首次下载后进行缓存 
       # 2012-02-21 v1.0.0
       CACHE:
@@ -1439,11 +1444,6 @@ WebSocket,网络通信协议[HTML5][IE10+]
     FALLBACK:      # 此标题下列出的文件规定当页面无法访问时的回退页面,比如 404 页面 
       # 离线状态下代替文件 
       /404.html 
-  HTML中指定缓存描述文件: 
-    PS: 若未指定manifest属性,则页面不会被缓存,除非在manifest文件中直接指定了该页面;
-      文件的MIME类型须为'text/cache-manifest' 
-    // 在文档的<html>标签中包含'manifest'属性,值为manifest文件的路径 
-    <html manifest="/offline.manifest">
   Example: 
     // manifest文件中
     CACHE MANIFEST
@@ -1507,20 +1507,21 @@ ApplicationCache,应用离线缓存对象[HTML5]
       1  闲置,应用缓存未得到更新
       2  检查中,正在下载描述文件并检查更新
       3  下载中,应用缓存正在下载描述文件中指定的资源
-      4  更新完成,应用缓存已经更新了资源,且所有资源都已下载完毕,可通过swapCache()来使用了
+      4  更新完成,应用缓存已经更新了资源,且所有资源都已下载完毕,可通过 swapCache()来使用了
       5  废弃,应用缓存的描述文件已经不存在了,此页面无法再访问应用缓存
-    .update()  检测更新并更新 
-      会触发'checking'事件,可能触发'cached'或'updateready'事件 
+    .update()     检测缓存更新并更新 
+      触发'checking'事件检测更新,
+      若触发'updateready',则需使用 swapCache()来启用新缓存 
     .swapCache()  启用最新缓存 
     .abort()  
     ◆相关事件 
-    .onchecking  在浏览器为应用缓存查找更新时触发
-    .onerror  在检查更新或下载资源期间发生错误时触发
-    .onnoupdate  在检查描述文件发现文件无变化时触发
-    .ondownloading  在开始下载应用缓存资源时触发
-    .onprogress  在文件下载应用缓存的过程中持续不断的触发
-    .onupdateready  在页面新的应用缓存下载完毕且可以通过swapCache()使用时触发
-    .oncached  在应用缓存完整可用时触发
+    .onchecking    在浏览器为应用缓存查找更新时触发
+    .onerror       在检查更新或下载资源期间发生错误时触发
+    .onnoupdate    在检查描述文件发现文件无变化时触发
+    .ondownloading 在开始下载应用缓存资源时触发
+    .onprogress    在文件下载应用缓存的过程中持续触发 
+    .onupdateready 新的缓存下载完毕且可通过swapCache()使用时触发
+    .oncached      在应用缓存完整可用时触发
     .onobsolete 
     常量: 
       .UNCACHED  num,0 

@@ -1181,7 +1181,10 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
       var rgep = /\da/;
       console.log(rgep.toString()); // /\da/ 
     .test(str)   bol,是否存在于字符串中 
-      console.log(/bc/.test('abcd'));    // true 
+      Example: console.log(/bc/.test('abcd'));    // true 
+      会进行隐式转换: 
+        /false/.test(false) // true 
+        相当于: /false/.test(false+'') // true 
       使用全局匹配,由于正则的lastIndex的属性,匹配多次可能返回错误值 
         var re = /\w/g;
         console.log(re.test("a")); // true

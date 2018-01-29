@@ -150,111 +150,6 @@ Document,文档
       PS:若当前文档不是通过超级链接访问的,则为空字符串''
         这个属性允许客户端JS访问HTTP引用头部 
     .cookie   str,读写,当前页面所有可用的cookie的字符串 
-      PS: 根据域、路径、失效时间和安全设置等来确定是否可用;  
-        网站为了标示用户身份而储存在客户端的数据,通常经过加密; 
-        储存空间大小为每个域名4kb,超过部分被忽略;
-        存储个数每个域50个,各个浏览器不尽相同;
-        cookie同源政策不要求传输协议,即http和https之间读写无限制
-      cookie的构成 
-        ◆内容,会发送到服务器的部分 
-        key=val  必须,cookie的内容 
-          一般不区分大小写[但可能服务器处理时会区分]
-          键值都需为有效的URL字符,否则需用encodeURIComponent转义 
-        ◆属性,不会发送到服务器,只是用于控制该cookie   
-        domain=xxx   可选,限制域名访问,必须为当前发送Cookie域名的一部分 
-          PS: 只有访问的域名匹配domain属性,Cookie才会发送到服务器
-          Example: 
-          example.com 
-          .example.com  // 对所有子域名生效
-          subdomain.example.com
-        path=xxx     可选,限制路径访问,只有在该路径及以下才会发送cookie
-        expires=xxx  可选,指定过期时间,即过了该时间,cookie被清理 
-          PS: 使用格式采用 Date.toUTCString() 格式,参照时间为本地时间, 
-            若未设置或为null,当窗口关闭时Cookie被清理; 
-            若设置为之前的时间或0,则cookie会被立刻删除 
-          Example: 
-          设置7天后cookie过期
-          var date = new Date();
-          date.setDate((date,getDate()-1));
-          document.cookie = 'user='+encodeURIComponent('张三')+';expires='+date;
-          decodeURICompinent(document.cookie);
-        max-age=xxx  可选,指定有效时长,单位s,如 60*60*24*365 [一年31536000秒] 
-        secure   可选,是否只对https协议发送cookie  
-          cookie只有在使用SSL连接的时候才发送到服务器 
-        HttpOnly 可选,能否被JS读取,主要为了防止XSS攻击盗取Cookie 
-          Set-Cookie: key = value; HttpOnly
-          该cookie,JS无法获取,AJAX操作也无法获取
-      服务器写入: 响应头中设置Cookie 
-        Set-Cookie: key1=val1; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
-        Set-Cookie: key2=val2; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
-        ...
-      客户端发送: 请求头中携带Cookie 
-        PS: 可访问的前提下,http请求中cookie始终会被携带, 
-          即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
-          在子域名中设置的cookie会始终在该子域名的http请求中携带;
-        Cookie: key1=val1  
-      JS读cookie: cookie间使用分号分割,需手动取出每一个cookie 
-        PS: 键和值可用decodeURIComponent来解码 
-        var cookie = document.cookie.split(';');
-        for (var i = 0; i < cookie.length; i++) {
-          console.log(cookie[i]);
-        }
-      JS写cookie: document.cookie = str  新增或覆盖已存在的cookie  
-        PS: 一次只能写入一个cookie
-          改变已存在的cookie,key、domain、path、secure需都匹配,否则为新建cookie;
-        // 格式同相应头中的格式  
-        document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'; 
-        var cookieHandle = { // 自定义增删查的方法 
-          get: function (name){
-            var cookieName = encodeURIComponent(name) + "=",
-            cookieStart = document.cookie.indexOf(cookieName),
-            cookieValue = null;
-            if (cookieStart > -1){ // 存在该cookie 
-              var cookieEnd = document.cookie.indexOf(";", cookieStart);
-              if (cookieEnd == -1){ // 最后一个cookie 
-                cookieEnd = document.cookie.length;
-              }
-              cookieValue = decodeURIComponent(document.cookie.substring(
-                cookieStart + cookieName.length
-                ,cookieEnd
-              ));
-            }
-            return cookieValue;
-          },
-          set: function (name,value,option) {
-            // option --  { // 可选 
-            //   expires: obj   // Date
-            //   ,path: str
-            //   ,domain: str
-            //   ,secure: bol
-            // }
-            var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-            if (option) {
-              if (option.expires instanceof Date) {
-                cookieText += "; expires=" + option.expires.toGMTString();
-              }
-              if (option.path) {
-                cookieText += "; path=" + option.path;
-              }
-              if (option.domain) {
-                cookieText += "; domain=" + option.domain;
-              }
-              if (option.secure) {
-                cookieText += "; secure";
-              }
-            }
-            document.cookie = cookieText;
-            return cookieText;
-          },
-          del: function (name,path,domain,secure){
-            this.set(name,"", {
-              expires: new Date(0)   
-              ,path: path 
-              ,domain: domain 
-              ,secure: secure 
-            });
-          }
-        };
     .domain   str,读写,当前页域名 
       出于安全方面的限制,可设置的值存在限制 
         不能将这个属性设置为URL中不包含的域,
@@ -622,6 +517,115 @@ Document,文档
         在IE下 这个方法  document.selection.createRange() 不支持,因此为了修复这个bug和在IE10+以上的话,
         今天又特意研究了下, 在file控件下获取焦点情况下 document.selection.createRange() 将会拒绝访问,
         所以我们要失去下焦点。我们可以再加一句代码就可以支持了 file.blur();
+Cookie 
+  PS: 网站为了标示用户身份而储存在客户端的数据,通常经过加密; 
+    根据域、路径、失效时间和安全设置等来确定是否可用;  
+    储存空间大小为每个域名4kb,超过部分被忽略;
+    存储个数每个域50个,各个浏览器不尽相同;
+    cookie同源政策不要求传输协议,即http和https之间读写无限制
+  cookie的构成 
+    ◆内容,会发送到服务器的部分 
+    key=val      必须,cookie的内容 
+      key Cookie名称,一般不区分大小写[但可能服务器处理时会区分] 
+      val Cookie值,储存在cookie中的字符串值
+        值必须被URL编码,否则需用encodeURIComponent转义 
+    ◆属性,不会发送到服务器,只是用于控制该cookie   
+    domain=xxx   可选,限制接收的域
+      PS: 只有访问的域名匹配domain属性,Cookie才会发送到服务器
+        默认为当前文档的主机‹不包含子域名› 
+        如果指定了domain,则一般包含其子域名 
+      Example: 
+      example.com   // 对所有子域名生效 
+      .example.com  // 对所有子域名生效
+      subdomain.example.com // 
+    path=xxx     可选,限制路径访问,请求该路径及其子路径才会发送cookie 
+    expires=xxx  可选,指定过期时间,即过了该时间,cookie被清理 
+      PS: 使用格式采用 Date.toUTCString() 格式,参照时间为本地时间, 
+        若未设置或为null,当窗口关闭时Cookie被清理; 
+        若设置为之前的时间或0,则cookie会被立刻删除 
+      Example: 
+      设置7天后cookie过期
+      var date = new Date();
+      date.setDate((date,getDate()-1));
+      document.cookie = 'user='+encodeURIComponent('张三')+';expires='+date;
+      decodeURICompinent(document.cookie);
+    max-age=xxx  可选,指定有效时长,单位s,如 60*60*24*365 [一年31536000秒] 
+    secure       可选,是否只对https协议发送cookie  
+      cookie只有在使用SSL连接的时候才发送到服务器 
+    HttpOnly     可选,能否被JS读取,主要为了防止XSS攻击盗取Cookie 
+      Set-Cookie: key = value; HttpOnly
+      该cookie,JS无法获取,AJAX操作也无法获取
+  服务器写入: 响应头中设置Cookie 
+    Set-Cookie: key1=val1; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
+    Set-Cookie: key2=val2; expires=xxx; Max-Age=xxx; path=xx; domain=xxx
+    ...
+  客户端发送: 请求头中携带Cookie 
+    PS: 可访问的前提下,http请求中cookie始终会被携带, 
+      即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
+      在子域名中设置的cookie会始终在该子域名的http请求中携带;
+    Cookie: key1=val1  
+  JS读cookie: cookie间使用分号分割,需手动取出每一个cookie 
+    PS: 键和值可用decodeURIComponent来解码 
+    var cookie = document.cookie.split(';');
+    for (var i = 0; i < cookie.length; i++) {
+      console.log(cookie[i]);
+    }
+  JS写cookie: document.cookie = str  新增或覆盖已存在的cookie  
+    PS: 一次只能写入一个cookie
+      改变已存在的cookie,key、domain、path、secure需都匹配,否则为新建cookie;
+    // 格式同相应头中的格式  
+    document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'; 
+    var cookieHandle = { // 自定义增删查的方法 
+      get: function (name){
+        var cookieName = encodeURIComponent(name) + "=",
+        cookieStart = document.cookie.indexOf(cookieName),
+        cookieValue = null;
+        if (cookieStart > -1){ // 存在该cookie 
+          var cookieEnd = document.cookie.indexOf(";", cookieStart);
+          if (cookieEnd == -1){ // 最后一个cookie 
+            cookieEnd = document.cookie.length;
+          }
+          cookieValue = decodeURIComponent(document.cookie.substring(
+            cookieStart + cookieName.length
+            ,cookieEnd
+          ));
+        }
+        return cookieValue;
+      },
+      set: function (name,value,option) {
+        // option --  { // 可选 
+        //   expires: obj   // Date
+        //   ,path: str
+        //   ,domain: str
+        //   ,secure: bol
+        // }
+        var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+        if (option) {
+          if (option.expires instanceof Date) {
+            cookieText += "; expires=" + option.expires.toGMTString();
+          }
+          if (option.path) {
+            cookieText += "; path=" + option.path;
+          }
+          if (option.domain) {
+            cookieText += "; domain=" + option.domain;
+          }
+          if (option.secure) {
+            cookieText += "; secure";
+          }
+        }
+        document.cookie = cookieText;
+        return cookieText;
+      },
+      del: function (name,path,domain,secure){
+        this.set(name,"", {
+          expires: new Date(0)   
+          ,path: path 
+          ,domain: domain 
+          ,secure: secure 
+        });
+      }
+    };
 HTMLDocument,HTML文档 
   Extend: Document 
     console.log(HTMLDocument.prototype.__proto__.constructor===Document); // true 

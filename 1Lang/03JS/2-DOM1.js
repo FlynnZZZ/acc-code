@@ -149,7 +149,6 @@ Document,文档
     .referrer str,获取跳转页的URL,即获取从哪个网址跳转过来的 
       PS:若当前文档不是通过超级链接访问的,则为空字符串''
         这个属性允许客户端JS访问HTTP引用头部 
-    .cookie   str,读写,当前页面所有可用的cookie的字符串 
     .domain   str,读写,当前页域名 
       出于安全方面的限制,可设置的值存在限制 
         不能将这个属性设置为URL中不包含的域,
@@ -184,44 +183,6 @@ Document,文档
       也可通过<meta>元素、响应头部修改 
     .characterSet  str,字符集 
     .title    str,读写,网页标题 
-    .hidden   bol,页面是否隐藏 [HTML5]  
-      PS: 隐藏包括页面在后台标签页中或浏览器最小化 
-      页面不可见时播放中的视频暂停,可见时视频继续播放
-        <video id="video" 
-        autoplay="autoplay" 
-        loop="loop" 
-        src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> 
-        </video>
-        var video = document.getElementById('video') ;
-        var Prefix = null;
-        getHidden();
-        //获取当前浏览器的hidden属性
-        function getHidden(){
-          ['webkit','ms','moz','o'].forEach(function(prefix){
-            if((prefix+'Hidden') in document){
-              Prefix = prefix;
-            }
-          });
-          if(Prefix == null){
-            alert('你的浏览器不支持Page Visibility API');
-          }
-        }
-        //为visibilitychange事件绑定处理程序
-        document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
-        function handleVisibilityChange(){
-          switch (document.hidden){
-            case true: //返回hidden = true,页面不可见
-              video.pause();
-              break;
-            case false: //返回hidden = false,页面可见
-              video.play();
-              break;
-          }
-        }
-    .visibilityState  str,页面隐藏或显示的状态[DiBs] 
-      'hidden' 
-      'visible'
-      'prerender'
     ★Elm: 
     .images  HTMLCollection,所有<img>元素 
     .forms   HTMLCollection,所有<form>元素 
@@ -364,7 +325,6 @@ Document,文档
       .evaluate()  
     ★事件相关 
       .createEvent() 
-      .onvisibilitychange  当文档从可见变为不可见或从不可见变为可见时触发事件[IE10+]
       .onreadystatechange 
       .onpointerlockchange 
       .onpointerlockerror 
@@ -517,7 +477,7 @@ Document,文档
         在IE下 这个方法  document.selection.createRange() 不支持,因此为了修复这个bug和在IE10+以上的话,
         今天又特意研究了下, 在file控件下获取焦点情况下 document.selection.createRange() 将会拒绝访问,
         所以我们要失去下焦点。我们可以再加一句代码就可以支持了 file.blur();
-Cookie 
+[Cookie] 
   PS: 网站为了标示用户身份而储存在客户端的数据,通常经过加密; 
     根据域、路径、失效时间和安全设置等来确定是否可用;  
     储存空间大小为每个域名4kb,超过部分被忽略;
@@ -564,68 +524,107 @@ Cookie
       即在主域名中设置的cookie会始终在同源的主域名和其子域名的http请求中携带,
       在子域名中设置的cookie会始终在该子域名的http请求中携带;
     Cookie: key1=val1  
-  JS读cookie: cookie间使用分号分割,需手动取出每一个cookie 
-    PS: 键和值可用decodeURIComponent来解码 
-    var cookie = document.cookie.split(';');
-    for (var i = 0; i < cookie.length; i++) {
-      console.log(cookie[i]);
-    }
-  JS写cookie: document.cookie = str  新增或覆盖已存在的cookie  
-    PS: 一次只能写入一个cookie
-      改变已存在的cookie,key、domain、path、secure需都匹配,否则为新建cookie;
-    // 格式同相应头中的格式  
-    document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'; 
-    var cookieHandle = { // 自定义增删查的方法 
-      get: function (name){
-        var cookieName = encodeURIComponent(name) + "=",
-        cookieStart = document.cookie.indexOf(cookieName),
-        cookieValue = null;
-        if (cookieStart > -1){ // 存在该cookie 
-          var cookieEnd = document.cookie.indexOf(";", cookieStart);
-          if (cookieEnd == -1){ // 最后一个cookie 
-            cookieEnd = document.cookie.length;
-          }
-          cookieValue = decodeURIComponent(document.cookie.substring(
-            cookieStart + cookieName.length
-            ,cookieEnd
-          ));
-        }
-        return cookieValue;
-      },
-      set: function (name,value,option) {
-        // option --  { // 可选 
-        //   expires: obj   // Date
-        //   ,path: str
-        //   ,domain: str
-        //   ,secure: bol
-        // }
-        var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-        if (option) {
-          if (option.expires instanceof Date) {
-            cookieText += "; expires=" + option.expires.toGMTString();
-          }
-          if (option.path) {
-            cookieText += "; path=" + option.path;
-          }
-          if (option.domain) {
-            cookieText += "; domain=" + option.domain;
-          }
-          if (option.secure) {
-            cookieText += "; secure";
-          }
-        }
-        document.cookie = cookieText;
-        return cookieText;
-      },
-      del: function (name,path,domain,secure){
-        this.set(name,"", {
-          expires: new Date(0)   
-          ,path: path 
-          ,domain: domain 
-          ,secure: secure 
-        });
+  document.cookie   str,读写,当前页所有可用的cookie 
+    JS读cookie: cookie间使用分号分割,需手动取出每一个cookie 
+      PS: 键和值可用decodeURIComponent来解码 
+      var cookie = document.cookie.split(';');
+      for (var i = 0; i < cookie.length; i++) {
+        console.log(cookie[i]);
       }
-    };
+    JS写cookie: document.cookie = str  新增或覆盖已存在的cookie  
+      PS: 一次只能写入一个cookie
+        改变已存在的cookie,key、domain、path、secure需都匹配,否则为新建cookie;
+      // 格式同相应头中的格式  
+      document.cookie ='key=val;expires=time;domain=域名;path=路径;secure'; 
+      var cookieHandle = { // 自定义增删查的方法 
+        get: function (name){
+          var cookieName = encodeURIComponent(name) + "=",
+          cookieStart = document.cookie.indexOf(cookieName),
+          cookieValue = null;
+          if (cookieStart > -1){ // 存在该cookie 
+            var cookieEnd = document.cookie.indexOf(";", cookieStart);
+            if (cookieEnd == -1){ // 最后一个cookie 
+              cookieEnd = document.cookie.length;
+            }
+            cookieValue = decodeURIComponent(document.cookie.substring(
+              cookieStart + cookieName.length
+              ,cookieEnd
+            ));
+          }
+          return cookieValue;
+        },
+        set: function (name,value,option) {
+          // option --  { // 可选 
+          //   expires: obj   // Date
+          //   ,path: str
+          //   ,domain: str
+          //   ,secure: bol
+          // }
+          var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+          if (option) {
+            if (option.expires instanceof Date) {
+              cookieText += "; expires=" + option.expires.toGMTString();
+            }
+            if (option.path) {
+              cookieText += "; path=" + option.path;
+            }
+            if (option.domain) {
+              cookieText += "; domain=" + option.domain;
+            }
+            if (option.secure) {
+              cookieText += "; secure";
+            }
+          }
+          document.cookie = cookieText;
+          return cookieText;
+        },
+        del: function (name,path,domain,secure){
+          this.set(name,"", {
+            expires: new Date(0)   
+            ,path: path 
+            ,domain: domain 
+            ,secure: secure 
+          });
+        }
+      };
+[Page Visibility API] [HTML5] 
+  PS: 获取页面是否是可见的,如后台标签页或浏览器最小化  
+    如轮询服务器或某些动画效果,可在页面不可见时停下来 
+  document.hidden   bol,页面是否隐藏   
+    页面不可见时播放中的视频暂停,可见时视频继续播放 
+      <video id="video" autoplay="autoplay" loop="loop" 
+      src="http://www.w3school.com.cn/example/html5/mov_bbb.mp4"> </video>
+      var video = document.getElementById('video') ;
+      var Prefix = null;
+      getHidden();
+      //获取当前浏览器的hidden属性
+      function getHidden(){
+        ['webkit','ms','moz','o'].forEach(function(prefix){
+          if((prefix+'Hidden') in document){
+            Prefix = prefix;
+          }
+        });
+        if(Prefix == null){
+          alert('你的浏览器不支持Page Visibility API');
+        }
+      }
+      //为visibilitychange事件绑定处理程序
+      document.addEventListener(Prefix+'visibilitychange',handleVisibilityChange,false) ;
+      function handleVisibilityChange(){
+        switch (document.hidden){
+          case true: //返回hidden = true,页面不可见
+            video.pause();
+            break;
+          case false: //返回hidden = false,页面可见
+            video.play();
+            break;
+        }
+      }
+  document.visibilityState  str,页面隐藏或显示的状态[DiBs] 
+    'hidden' 
+    'visible'
+    'prerender'
+  document.onvisibilitychange  当文档可见性变化时触发事件[IE10+]
 HTMLDocument,HTML文档 
   Extend: Document 
     console.log(HTMLDocument.prototype.__proto__.constructor===Document); // true 
@@ -1701,24 +1700,250 @@ HTMLElement,HTML元素节点
       .captureStream()    
       .webkitAudioDecodedByteCount  
       .webkitVideoDecodedByteCount  
-FileList,File对象集合,表示用户选择的文件列表[HTML5] 
+[File API] [HTML5] [IE10+] 
   PS: HTML5中[通过添加multiple属性],input[file]内能一次选中多个文件, 
     控件内的每一个被选择的文件都是一个file对象,而FileList对象是file对象的列表
     HTML4中,file控件内只能选中一个文件 
-  Extend: Object 
-    console.log(FileList.prototype.__proto__.constructor===Object); // true 
+  FileList,File对象集合,表示用户选择的文件列表[HTML5] 
+    Extend: Object 
+      console.log(FileList.prototype.__proto__.constructor===Object); // true 
+    Instance: <文件输入元素>.files 
+    Proto: 
+      .length 
+      .item(idx) File,文件 
+  File,文件 
+    Extend: Blob 
+      console.log(File.prototype.__proto__.constructor===Blob); // true 
+    Proto: 
+      .name           str,本地文件系统中的文件名 
+      .lastModified  
+      .lastModified   文件的上次修改时间,格式为时间戳。
+      .lastModifiedDate   文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
+      .webkitRelativePath  
+  FileReader,文件读取,一种异步的文件读取机制 
+    Extend: EventTarget  
+      console.log(FileReader.prototype.__proto__.constructor===EventTarget); // true 
+    Instance: 
+      fr = new FileReader([file/blob])  创建fr对象 
+    Proto: 
+      常量: 
+        .EMPTY    0 
+        .LOADING  1 
+        .DONE     2 
+      .readyState  
+      .error  
+      .result   文件的URI数据,读取文件后该属性将被填充 
+      .abort()  中断文件读取  
+      .readAsBinaryString(Blob|File) 得到文件的二进制字符串 
+        PS: 通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
+          该字符串每个字节包含一个0到255之间的整数
+          可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
+          配合 xhr.sendAsBinary(),可上传任意文件到服务器 
+        Example: 
+          var fr = new FileReader();
+          fr.onload = function(e) {
+            var rawData = fr.result;
+          }
+          fr.readAsBinaryString(file);
+      .readAsDataURL(Blob|File);     得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
+        PS: 将文件数据进行Base64编码,可将返回值作为图像的src 
+      .readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
+        返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
+        在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
+        var fr = new FileReader();
+        fr.onload = function(e) {
+          var arrayBuffer = fr.result;
+        }
+        fr.readAsArrayBuffer(file);
+      .readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
+        encoding   可选,指定编码类型,默认为'UTF-8' 
+      ★事件 
+      .onloadstart 数据读取开始时触发
+      .onprogress  数据读取中触发,每50ms左右触发一次 
+        Example: 用来显示读取进度 
+        var fr = new FileReader();
+        fr.onprogress = function (e) {
+          if (e.lengthComputable) {
+            var percentLoaded = Math.round((e.loaded / e.totalEric Bidelman) * 100);
+            var progress = document.querySelector('.percent');
+            if (percentLoaded < 100) {
+              progress.style.width = percentLoaded + '%';
+              progress.textContent = percentLoaded + '%';
+            }
+          }
+        }
+      .onabort     读取中断或调用 fr.abort() 时触发 
+      .onerror     数据读取出错时触发  
+        触发error事件时,相关的信息在 fr.error.code 中,表示错误码
+        1 未找到文件 
+        2 安全性错误
+        3 表示读取中断
+        4 文件不可读
+        5 编码错误
+        Example:
+          var fr = new FileReader();
+          fr.onerror = errorHandler;
+          function errorHandler(evt) {
+            switch(evt.target.error.code) {
+              case evt.target.error.NOT_FOUND_ERR:
+              alert('File Not Found!');
+              break;
+              case evt.target.error.NOT_READABLE_ERR:
+              alert('File is not readable');
+              break;
+              case evt.target.error.ABORT_ERR:
+              break;
+              default:
+              alert('An error occurred reading this file.');
+            };
+          }
+      .onload      读取成功后触发 
+        load事件的回调函数接受一个事件对象,e.target.result 就是文件的内容 
+        <input type="file" >
+        var fr = new FileReader();
+        fr.onload = function(e) {
+          document.createElement('img').src = e.target.result;
+          // 此时 fr.result === e.target.result 
+        };
+        document.querySelector("input[type='file']")
+        .addEventListener("change",function(e){
+          fr.readAsDataURL(e.target.files[0]);
+        })
+      .onloadend   读取完成后触发,不管是否成功 
+        触发顺序排在onload或onerror后  
+    Example: 
+      读取文件内容后直接以二进制格式上传 
+      var fr = new FileReader();
+      fr.onload = function(){
+        xhr.sendAsBinary(this.result); // chrome已移除 xhr.sendAsBinary 
+      }
+      // 把从input里读取的文件内容,放到fileReader的result字段里
+      fr.readAsBinaryString(file);
+      XMLHttpRequest.prototype.sendAsBinary = function(text){
+        var data = new ArrayBuffer(text.length);
+        var ui8a = new Uint8Array(data, 0);
+        for (var i = 0; i < text.length; i++){ 
+          ui8a[i] = (text.charCodeAt(i) & 0xff);
+        }
+        // 将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
+        // 再把整个数组发送出去。
+        this.send(ui8a);
+      }
+  URL,用于对二进制数据生成URL,生成指向File对象或Blob对象的URL[IE10+] 
+    PS: 引用保存在File或Blob中数据的URL.
+      使用对象URL的好处是可以不必把文件内容读取到JS中而直接使用文件内容.
+      只要在需要文件内容的地方提供对象URL即可
+    Extend: Object 
+    Static: 
+      .createObjectURL(blob)  str,创建url对象实例,将二进制数据生成一个URL 
+        PS: 同样的二进制数据,每调用一次该方法,就会得到一个不同的URL, 
+          该URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
+        Example: 
+          // 传入一个合适的MIME类型
+          var blob = new Blob([typedArray], {type: "application/octet-binary"});
+          // 产生一类似'blob:d3958f5c-0777-0845-9dcf-2cb28783acaf'的URL字符串 
+          // 同普通URL使用方式相同,如用在img.src上 
+          var url = URL.createObjectURL(blob);
+      .revokeObjectURL(url)   使createObjectURL生成的URL失效并释放内存  
+    Proto: 
+      .href  
+      .origin  
+      .protocol  
+      .username  
+      .password  
+      .host  
+      .hostname  
+      .port  
+      .pathname  
+      .search  
+      .searchParams  
+      .hash  
+      .toString() 
+    Example: 
+      在网页插入图片
+      var img = document.createElement("img");
+      img.src = window.URL.createObjectURL(files[0]);
+      img.height = 60;
+      img.onload = function(e) {
+        window.URL.revokeObjectURL(this.src);
+      }
+      docment.body.appendChild(img);
+      var info = document.createElement("span");
+      info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
+      docment.body.appendChild(info);
+      
+      本机视频预览
+      var video = document.getElementById('video');
+      var obj_url = window.URL.createObjectURL(blob);
+      video.src = obj_url;
+      video.play()
+      window.URL.revokeObjectURL(obj_url);  
+      
+      function html5Reader(file) {         
+        var fileObj = file.files[0],
+        img = document.getElementById("img");   
+        // URL.createObjectURL  safari不支持
+        img.src = URL.createObjectURL(fileObj);
+        img.onload =function() {
+          var data = getBase64Image(img);
+          console.log(data);  // 打印出base64编码
+        }
+      }
+      function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/"+ext);
+        return dataURL;
+      }
+  拖放事件: 从桌面上把文件拖放到浏览器中也会触发拖放事件 
+    e.dataTransfer.files 获取到拖放到元素上的文件列表 
+FormData,表单模拟 [HTML5] 
+  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
+  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
+  Extend：Object 
+    console.log(FormData.prototype.__proto__.constructor===Object); // true 
+  Instance: 
+    fd = new FormData([formElem]) 创建FormData对象 
+      formElem  可选,<form>元素 
+    Example: 通过表单元素创建
+    var fd = new FormData(document.forms[0]);
   Proto: 
-    .length 
-    .item(idx) File,文件 
-File,文件 
-  Extend: Blob 
-    console.log(File.prototype.__proto__.constructor===Blob); // true 
-  Proto: 
-    .name  本地文件系统中的文件名 
-    .lastModified  
-    .lastModified   文件的上次修改时间,格式为时间戳。
-    .lastModifiedDate   文件上一次被修改的时间,格式为Date对象实例 [仅Chrome支持]
-    .webkitRelativePath  
+    .append(key,val ,name?)    向fd中添加字段 
+      PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
+      key   数据键名  
+      val   数据值  
+      name  可选,通常是文件名 
+    .delete() 
+    .get() 
+    .getAll() 
+    .has() 
+    .set() 
+    .keys() 
+    .values() 
+    .forEach() 
+    .entries() 
+  Example: 文件上传 
+    var inputFile = document.querySelector('input[type="file"]');
+    inputFile.addEventListener('change', function(e) {
+      var formData = new FormData();
+      formData.append(this.files[0].name, this.files[0]);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/server');
+      xhr.onload = function(e) {
+        console.log('上传完成!');
+      };
+      xhr.send(formData);  // multipart/form-data
+    });
+    
+    加入JS生成的文件 
+    var content = '<a id="a"><b id="b">hey!</b></a>';
+    var blob = new Blob([content], { type: "text/xml"});
+    formData.append("webmasterfile", blob);
 MediaError,媒体错误对象 
   Extend: Object 
   Static: 
@@ -2149,48 +2374,6 @@ CSSStyleDeclaration,CSS规则的声明
         "paused"    暂停
         "running"   播放
     .getPropertyCSSValue(属性名)  CSSValue, [Chrome不支持]
-FormData,表单模拟 [HTML5] 
-  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
-  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
-  Extend：Object 
-    console.log(FormData.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    fd = new FormData([formElem]) 创建FormData对象 
-      formElem  可选,<form>元素 
-    Example: 通过表单元素创建
-    var fd = new FormData(document.forms[0]);
-  Proto: 
-    .append(key,val ,name?)    向fd中添加字段 
-      PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
-      key   数据键名  
-      val   数据值  
-      name  可选,通常是文件名 
-    .delete() 
-    .get() 
-    .getAll() 
-    .has() 
-    .set() 
-    .keys() 
-    .values() 
-    .forEach() 
-    .entries() 
-  Example: 文件上传 
-    var inputFile = document.querySelector('input[type="file"]');
-    inputFile.addEventListener('change', function(e) {
-      var formData = new FormData();
-      formData.append(this.files[0].name, this.files[0]);
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/server');
-      xhr.onload = function(e) {
-        console.log('上传完成!');
-      };
-      xhr.send(formData);  // multipart/form-data
-    });
-    
-    加入JS生成的文件 
-    var content = '<a id="a"><b id="b">hey!</b></a>';
-    var blob = new Blob([content], { type: "text/xml"});
-    formData.append("webmasterfile", blob);
 NodeIterator,遍历[DOM2][JS高程 326 页] 
   Extend: Object 
     console.log(NodeIterator.prototype.__proto__.constructor===Object); // true 

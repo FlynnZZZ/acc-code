@@ -2190,8 +2190,7 @@ Set,集合[ES6]
   Set的用途
     实现数组去重
     let arr = [1,2,2,3,4,4,4];  // 目标数组arr,要求去重
-    let s = new Set(arr);       // Set {1,2,3,4}
-    let newArr = Array.from(s); // [1,2,3,4],完成去重
+    let newArr = Array.from(new Set(arr)); // [1,2,3,4],完成去重
 WeakSet, [ES6] 
   PS: WeakSet结构同样不会存储重复的值;
     且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象]
@@ -2340,8 +2339,8 @@ Blob,二进制数据的基本对象[ES6]
         var debug = {hello: "world"};
         var blob = new Blob([JSON.stringify(debug)],{type: 'application/json'});
   Proto: 
-    .size 只读, Blob对象中所包含数据的大小,单位为字节
-    .type 只读,字符串,Blob对象所包含数据的MIME类型 
+    .size     只读, Blob对象中所包含数据的大小,单位:字节
+    .type     只读,字符串,Blob对象所包含数据的MIME类型 
       若类型未知,则该值为空字符串 
       在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
     .slice()  Blob,创建一个包含另一个blob的数据子集的blob 
@@ -2755,5 +2754,6 @@ Reflect,为操作对象提供的API[ES6]
     .getPrototypeOf(target)
     .setPrototypeOf(target, prototype)
 ------------------------------------------------------------------------------- 
+
 
 

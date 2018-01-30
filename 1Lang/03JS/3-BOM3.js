@@ -1963,6 +1963,96 @@ Fullscreen,全屏操作[HTML5]
       width: 100%;
       height: 100%;
     }
+Worker,'Web Workers'工作线程 [HTML5] [IE10+] 
+  PS: JS是单线程<只能同时做一件事>,'Web Workers'可使JS创建多个Web工作线程 
+  Instance: 
+    var worker = new Worker("worker.js") 
+      PS: 通过一JS文件创建一个工作线程对象<在主JS中>  
+        'worker.js'表示一JS文件的路径,且该JS文件不需引入到HTML中 
+        创建时浏览器会自动下载该JS文件 
+        也可通过一JS文件创建多个对象
+        工作线程不能访问DOM,也无法通过任何方式影响页面的外观 
+    定义工作线程JS文件 
+      PS: worker只有接收到消息才会执行文件中的代码 
+      'message'事件,响应页面消息  
+        event.data  接收到的数据 
+        Example:  
+          this.onmessage = function(event){
+            var data = event.data;
+            //处理数据 ... 
+          };
+      this.postMessage(<news>)  给页面发送数据,异步执行   
+      this.close         停止工作 
+      importScripts(<url>,..)  加载脚本并执行 
+        PS: 每个加载过程都是异步进行的,所有脚本加载并执行后,importScripts()才会执行, 
+          脚本的执行顺序和书写的先后有关,而和加载完成的时间无关 
+        Example: 
+          多个JS间使用逗号分割 
+          importScripts("http://big.com/a.js","https://www.baidu.com/b.js")
+          
+          也可使用 importScripts 建立JSONP请求
+          function makeServerRequest(){
+            importScripts("http://SomeServer.com?callback=handleRequest");
+            function handleRequest(response){
+              postMessage(response);
+            }
+          }
+          makeServerRequest();
+    全局对象是worker对象本身 
+      该特殊的全局作用域中,this 引用的是worker对象
+      为便于处理数据,worker本身也是一个最小化的运行环境 
+        最小化的 navigator 对象,包括的属性如下 
+          .onLine
+          .appName
+          .appVersion
+          .userAgent
+          .platform
+        只读的 location 对象 
+        setTimeout()  
+        clearTimeout()  
+        setInterval()  
+        clearInterval()  
+        XMLHttpRequest 构造函数
+  Feature: 
+    通过 window.Worker 来查看是否支持Web工作线程 
+  Proto: 
+    .postMessage(<news>)  给工作线程发送通知,异步执行  
+      PS: worker中接收到的数据是经过备份的,而非直接引用 
+      news  发送的消息 
+        消息内容可以是任何能够被序列化的值
+        一般来说,可序列化为JSON结构的任何值都可作为参数传递 
+        如可以为 str/arr/obj‹,但不可为函数 
+    .terminate()          立即停止工作线程 
+      worker中的代码会立即停止执行,后续的所有过程都不会再发生
+      包括'error'和'message'事件也不会再触发 
+    .terminate()  若工作线程在运行,则会使其异常停止,且无法再启用,只能再新建 
+    ★事件 
+    'message'  工作线程JS传来消息时触发 
+      事件对象 event 
+        .data   工作线程发回的数据 
+        .target 发出消息的工作线程 
+    'error'    工作线程中错误时触发 
+      事件对象 event 
+        .filename  发生错误的文件名 
+        .lineno    代码行号
+        .message   完整的错误消息
+  Example: 工作线程JS 接收命令执行操作 并返回
+     (谷歌浏览器报错,其他浏览器可以使用)
+      manager.js 文件中(需要链接到HTML文件中)
+        window.onload =function(){
+          var worker =new Worker("worker.js");
+          worker.postMesage("ping");
+          worker.onmessage =function(event){
+            var message ="工作线程JS返回的消息:"+event.data;
+            alert(message);
+          }
+        }
+      worker.js 文件中(不需引入HTML文件中)
+        onmessage =function(event){
+          if(event.data == "ping"){
+            postMessage("pong")
+          }
+        }
 --------------------------------------------------------------------------------
 移动端 
 devicelight    设备屏幕亮度变化事件 [HTML5] 

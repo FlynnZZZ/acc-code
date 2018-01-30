@@ -14,19 +14,25 @@ CMD,一个32位的命令行程序,
   alt+printScreen   截取当前命令窗[需在画板中粘贴]
   enter[选中文字下]  复制
 ★文件操作类 
-  cd XX      进入XX文件夹
+  cd XX      进入XX文件夹 
     cd ./    当前文件夹
     cd ../   到上级文件夹
     cd /     到该磁盘的根目录
     cd \     到该磁盘的根目录
-  <x>:       进入磁盘
+  <x>:       进入磁盘 
     Example: : e:  进入到E盘 ;  c:  进入到c盘
-  dir        列出目录下的所有文件
-  mkdir <folderName>  创建文件夹
+  dir        列出目录下的所有文件 
+  mkdir <folderName>  创建文件夹 
   md <folderName>  创建文件夹 
   <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
   type <fileName> 参看文件内容
-  start <folderName> 打开文件夹
+  start <folderName> 打开文件夹 
+  copy</b?> <路径文件名> <路径文件名> 合并复制文件到..  
+    Example: 
+      copy/b D:\video\*.ts D:\video-all\all.ts 
+      // 将 D:\video\ 目录下面所有的.ts文件合并成all.ts,并放在video-all文件夹里
+      // 文件的合并顺序是通过文件名排序的,另外文件名中不要有空格 
+      '/b' 可选,默认将作为作为文本合并,而'/b'表示使用二进制合并 
 ★命令行相关 
   cls       清屏 
 ★信息查看类 

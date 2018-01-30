@@ -63,38 +63,49 @@
   {x:1,y:2}      // 对象字面量表达式
   [1,2,3,4,5]    // 数组字面量表达式
 var,定义变量,相当于给window添加不可配置的window属性 
-  PS: 变量定义但未赋值,默认为'undefined' 
-  全局变量与window属性的差异: 
-    显式声明的全局变量无法 delete 删除,但window属性则可以 
-      var aoo = 1;
-      window.boo = 2;
-      var o1 = Object.getOwnPropertyDescriptor(window,'aoo')
-      var o2 = Object.getOwnPropertyDescriptor(window,'boo')
-      console.log(o1); 
-      // {value: 1, writable: true, enumerable: true, configurable: false} 
-      console.log(o2); 
-      // {value: 2, writable: true, enumerable: true, configurable: true} 
-    访问未声明的变量会报错,而未声明window对象的属性则为undefined 
-      console.log(window.aoo); // undefined 
-      console.log(aoo); // 报错 
-  不用用var声明的变量,相当于给window添加可配置的属性  
-    var aoo = 1; 
-    console.log(window.aoo); // 1
-    console.log(delete aoo); // fasle,删除失败 
-    console.log(aoo); // 1 
-    boo = 2;
-    console.log(window.boo); // 2
-    console.log(delete boo); // true,删除成功 
-    console.log(boo);  // 报错,变量未定义 
-  重复的var声明: 相当于赋值操作产生覆盖 
-    var box = "fan";
-    var box = "abc";  // 相当于 box = "abc";
-    console.log(box); // abc
-  'var' 与','运算符 [参见:逗号运算符,变量声明]     
-    (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
-    (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
-    (var aoo);           // Uncaught SyntaxError: Unexpected token var
-    var aoo = 1, window.boo = 2; // Unexpected token .
+  Feature: 
+    定义变量但未赋值,默认:'undefined' 
+      var num ;
+      console.log(num); // undefined 
+    重复的var声明: 相当于赋值操作产生覆盖 
+      var box = "fan";
+      var box = "abc";  // 相当于 box = "abc";
+      console.log(box); // abc
+    函数内,产生变量提升 
+      var num = 1;
+      !function(){
+        // 函数内此时num还未定义,所以为undefined 
+        console.log(num); // undefined,变量提升
+        var num = 2;
+      }()
+  Relate: 
+    全局变量与window属性 
+      不用用var声明的变量,相当于给window添加可配置的属性  
+        var aoo = 1; 
+        console.log(window.aoo); // 1
+        console.log(delete aoo); // fasle,删除失败 
+        console.log(aoo); // 1 
+        boo = 2;
+        console.log(window.boo); // 2
+        console.log(delete boo); // true,删除成功 
+        console.log(boo);  // 报错,变量未定义 
+      显式声明的全局变量无法 delete 删除,但window属性则可以 
+        var aoo = 1;
+        window.boo = 2;
+        var o1 = Object.getOwnPropertyDescriptor(window,'aoo')
+        var o2 = Object.getOwnPropertyDescriptor(window,'boo')
+        console.log(o1); 
+        // {value: 1, writable: true, enumerable: true, configurable: false} 
+        console.log(o2); 
+        // {value: 2, writable: true, enumerable: true, configurable: true} 
+      访问未声明的变量会报错,而未声明window对象的属性则为undefined 
+        console.log(window.aoo); // undefined 
+        console.log(aoo); // 报错 
+    'var' 与','运算符 [参见:逗号运算符,变量声明]     
+      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
+      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
+      (var aoo);           // Uncaught SyntaxError: Unexpected token var
+      var aoo = 1, window.boo = 2; // Unexpected token .
 'lexical scopes'块作用域,在函数内部、代码块,即'{}'内创建[ES6]  
   PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块
   if (true) { 
@@ -114,7 +125,7 @@ var,定义变量,相当于给window添加不可配置的window属性
     console.log(window.RegExp);    // function RegExp() { [native code] }
 let,定义块级变量[ES6] 
   PS: 块级作用域限制,只在定义的块级作用域中存在;
-  无变量提升 
+  函数内无变量提升 
     var aoo = 1;
     var boo = 2;
     function foo(){
@@ -160,11 +171,27 @@ let,定义块级变量[ES6]
     注:let 声明在上述循环内部中的表现是在规范中特别定义的,
     实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
 const,定义块级常量[ES6] 
-  PS: 只能在声明时赋予;不能被删除;只在块级作用域生效;无变量提升
-  const aoo =2;
-  aoo = 2;     // 报错 ,常量不可改变
-  delete aoo;  // 报错 
-  const boo;   // 报错 ,定义时必须赋值
+  Feature: 
+    在声明时需赋值,否则报错
+      const num;   // 报错,定义时必须赋值 
+    在同一作用域中,常量名不能与其他变量或函数名重名,否则报错 
+      const num = 1;
+      var num = 2; // 报错,重名  
+    不可‹覆盖›改变常量值,否则报错   
+      const num = 1, obj = { key: 1 }
+      obj.key = 2;
+      console.log(obj); // { key: 2 },对对象进行了引用修改 
+      num = 2;          // 报错,不可改变常量值 
+    只在块级作用域生效 
+      if (true) { const num = 1; }
+      console.log(num); // 报错,num未定义 
+    函数内无变量提升 
+      !function(){
+        console.log(num1);  // undefined,变量提升 
+        console.log(num2);  // 报错,变量未定义,无提升  
+        var  num1 = 1
+        const num2 = 2 
+      }() 
   不可传值改变,只能传址改变; 
     不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
     传值赋值和传址赋值

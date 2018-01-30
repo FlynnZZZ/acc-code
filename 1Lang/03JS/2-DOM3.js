@@ -635,14 +635,14 @@ DragEvent,拖放事件[IE9+][HTML5]
       firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
   事件枚举: 
     ◆在拖放源上触发 
-    ondragstart 开始拖动
-    ondrag      拖放期间持续触发
-    ondragend   被放置后触发[无论放置位置] 
+    'dragstart' 开始拖动
+    'drag'      拖放期间持续触发
+    'dragend'   被放置后触发[无论放置位置] 
     ◆在拖放目标元素上触发 
-    ondragenter  拖放源开始进入目标元素范围时触发 
-    ondragleave  拖放源离开目标元素的范围时触发
-    ondragover   拖放源处于目标元素上方时持续触发 
-    ondrop       拖放源放置到目标元素后触发 
+    'dragenter'  拖放源开始进入目标元素范围时触发 
+    'dragleave'  拖放源离开目标元素的范围时触发
+    'dragover'   拖放源处于目标元素上方时持续触发 
+    'drop'       拖放源放置到目标元素后触发 
       Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
   Example: 
     <div id="dragElem" draggable="true">拖放元素</div>

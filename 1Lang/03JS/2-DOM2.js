@@ -1,5 +1,5 @@
 ◆相关规范与技术 
-'what you see is what you get'WYSIWYG所见即所得,富文本编辑 
+['what you see is what you get'WYSIWYG]所见即所得,富文本编辑 
   PS: 本质为在页面中嵌入一个包含空HTML页面的iframe 
     通过设置其designMode属性为'on',使其页面<body>元素的HTML代码可被编辑,
     由IE引入,已成事实标准;
@@ -1191,77 +1191,4 @@ WebGLFramebuffer,
 WebGLContextEvent, 
 WebGLBuffer, 
 WebGLActiveInfo, 
-'Web Workers'工作线程[HTML5] 
-  JavaScript是单线程,一次只能做一件事.
-  HTML5 可使JS创建多个Web工作线程.
-  通过 window["Worker"] 来查看是否支持Web工作线程.
-  工作线程对象(在主JS中)
-    工作线程由一个单独的JavaScript文件定义
-    无法访问主浏览器代码能够访问的很多数据
-    创建一个工作线程对象
-      通过一JS文件创建一个工作线程对象.
-      var worker =new Worker("worker.js")
-      可以通过一个JS文件创建多个对象,也可通过不同的JS文件创建其他的对象
-      worker.js 表示一个JS文件的路径,且该JS文件不需引入到HTML中.
-    属性
-      onmessage  定义从 工作线程JS 传来的消息的处理程序
-        为该属性定义一个处理函数,收到一个消息就会调用这个处理函数
-        处理函数的参数的data属性即为 工作线程发回的消息
-        event.data   表示 工作线程JS 发送的消息
-        event.target 表示发出消息的这个工作线程
-        Example:
-          worker.onmessage =function(event){
-            var message =event.data;
-          }
-      onerror    处理工作线程中的错误
-        worker.onerror =function(error){
-          console.log("There was an error in" + error.filename + "at line number" + error.lineno + ":" + error.message);
-        }
-    方法
-      postMessage  发送消息给工作线程
-        worker.postMessage()
-        参数可可以是:字符串、数组、对象等(但不能发送函数)
-      terminate    终止工作线程
-      worker.terminate() 若工作线程在运行,则会使其异常停止,且无法再启用,只能再新建
-  定义工作线程JS文件
-    使用一个onmessage定义一个 接到消息后进行 处理的程序
-      Example: onmessage = PP;
-        function PP(event){
-          // 若主程序发来"ping",则工作线程JS 回复"pong"
-          if(event.data =="ping"){
-            postMessage("pong")
-          }
-        }
-    importScripts 函数
-      使用 importScripts 可向工作线程JS文件中导入一个或多个JS文件
-      importScripts("http://big.com/a.js","https://www.baidu.com/b.js")
-      多个JS间使用逗号分割.
-      也可使用 importScripts 建立JSONP请求
-        Example:
-          function makeServerRequest(){
-            importScripts("http://SomeServer.com?callback=handleRequest");
-            function handleRequest(response){
-              postMessage(response);
-            }
-          }
-          makeServerRequest();
-    close         停止工作
-      close() 让工作线程停止工作.
-  Example: 工作线程JS 接收命令执行操作 并返回
-     (谷歌浏览器报错,其他浏览器可以使用)
-      manager.js 文件中(需要链接到HTML文件中)
-        window.onload =function(){
-          var worker =new Worker("worker.js");
-          worker.postMesage("ping");
-          worker.onmessage =function(event){
-            var message ="工作线程JS返回的消息:"+event.data;
-            alert(message);
-          }
-        }
-      worker.js 文件中(不需引入HTML文件中)
-        onmessage =function(event){
-          if(event.data == "ping"){
-            postMessage("pong")
-          }
-        }
  

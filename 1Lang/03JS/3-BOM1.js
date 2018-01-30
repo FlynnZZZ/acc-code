@@ -272,14 +272,14 @@ window,表示浏览器的一个实例,BOM的核心对象
         原理同setTimeout类似;通过递归调用同一方法来不断更新画面以达到动画效果;
       常用操作: 在函数体内使用 requestAnimationFrame 来调用该函数来实现效果 
       Example: 
-      var n = 0;
-      !function(){
-        if (n<99) {
-          ++n;
-          requestAnimationFrame(arguments.callee)
-          console.log(n);
+        function updateProgress(){
+          var div = document.getElementById("status");
+          div.style.width = (parseInt(div.style.width, 10) + 5) + "%";
+          if (div.style.left != "100%"){
+            requestAnimationFrame(updateProgress);
+          }
         }
-      }();
+        requestAnimationFrame(updateProgress);
     cancelAnimationFrame(id)   通过返回ID值取消动画 
     ★系统对话框:其外观由操作系统或浏览器决定 
       显示alert、confirm、prompt对话框时代码会停止执行,关掉后再恢复执行 
@@ -614,7 +614,6 @@ window,表示浏览器的一个实例,BOM的核心对象
     XPathResult
     XPathExpression
     XPathEvaluator
-    Worker
     ValidityState
     VTTCue
     URLSearchParams
@@ -633,14 +632,11 @@ window,表示浏览器的一个实例,BOM的核心对象
     RadioNodeList
     PromiseRejectionEvent
     ProcessingInstruction
-    PerformanceTiming
     PerformanceResourceTiming
-    PerformanceNavigation
     PerformanceMeasure
     PerformanceMark
     PerformanceLongTaskTiming
     PerformanceEntry
-    Performance
     PageTransitionEvent
     NodeFilter
     MutationRecord
@@ -720,7 +716,7 @@ window.document,
 window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持] 
   PS: XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
-    而Fetch是将它们分散在几个不同的对象上,设计更合理；
+    而Fetch是将它们分散在几个不同的对象上,设计更合理;
     二是Fetch操作返回Promise对象,避免了嵌套的回调函数.
   检查浏览器是否部署 Fetch API
     if (fetch in window){ /* 支持 */ } 
@@ -806,12 +802,12 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     传统的XMLHTTPRequest对象不支持数据流,所有的数据必须放在缓存里,
     等到全部拿到后,再一次性吐出来.    
   fetch() 方法
-    第一个参数可以是URL字符串,也可以是Request对象实例。
-    Fetch方法返回一个Promise对象,并将一个response对象传给回调函数。
+    第一个参数可以是URL字符串,也可以是Request对象实例 
+    Fetch方法返回一个Promise对象,并将一个response对象传给回调函数 
     response 对象
       response.ok 属性
-        若返回的状态码在200到299之间(即请求成功),这个属性为true,否则为false。
-        因此,判断请求是否成功的代码可以写成下面这样。
+        若返回的状态码在200到299之间(即请求成功),这个属性为true,否则为false 
+        因此,判断请求是否成功的代码可以写成下面这样 
     
     fetch('./api/some.json').then(function (response) {
       if (response.ok) {
@@ -826,7 +822,7 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     , function(err) {
       console.log('出错:', err);
     });
-    response对象除了json方法,还包含了服务器HTTP回应的元数据。
+    response对象除了json方法,还包含了服务器HTTP回应的元数据 
     
     fetch('users.json').then(function(response) {
       console.log(response.headers.get('Content-Type'));
@@ -837,11 +833,11 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
       console.log(response.url);
     });
     上面代码中,response对象有很多属性,
-    其中的 response.type 属性比较特别,表示HTTP回应的类型,它有以下三个值。
+    其中的 response.type 属性比较特别,表示HTTP回应的类型,它有以下三个值 
     basic:正常的同域请求
     cors:CORS机制下的跨域请求
     opaque:非CORS机制下的跨域请求,这时无法读取返回的数据,也无法判断是否请求成功
-    若需要在CORS机制下发出跨域请求,需要指明状态。
+    若需要在CORS机制下发出跨域请求,需要指明状态 
     fetch('http://some-site.com/cors-enabled/some.json', {mode: 'cors'})
     .then(function(response) {
       return response.text();
@@ -853,10 +849,10 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
       log('Request failed', error)
     });
     除了指定模式,fetch方法的第二个参数还可以用来配置其他值,
-    比如指定cookie连同HTTP请求一起发出。
+    比如指定cookie连同HTTP请求一起发出 
     fetch(url, { credentials: 'include' })
     
-    发出POST请求的写法如下。
+    发出POST请求的写法如下 
     fetch("http://www.example.org/submit.php", {
       method: "POST",
       headers: {
@@ -876,11 +872,11 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
       console.log("Error submitting form!");
     });
     目前,还有一些XMLHttpRequest对象可以做到,但是Fetch API还没做到的地方,
-    比如中途中断HTTP请求,以及获取HTTP请求的进度。
-    这些不足与Fetch返回的是Promise对象有关。    
+    比如中途中断HTTP请求,以及获取HTTP请求的进度 
+    这些不足与Fetch返回的是Promise对象有关     
   Headers
-    Fetch API引入三个新的对象(也是构造函数):Headers, Request和Response。
-    其中,Headers对象用来构造/读取HTTP数据包的头信息。
+    Fetch API引入三个新的对象(也是构造函数):Headers, Request和Response 
+    其中,Headers对象用来构造/读取HTTP数据包的头信息 
     
     var content = 'Hello World';
     var headers = new Headers();
@@ -888,14 +884,14 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     headers.append("Content-Type", "text/plain");
     headers.append("Content-Length", content.length.toString());
     headers.append("X-Custom-Header", "ProcessThisImmediately");
-    Headers对象的实例,除了使用append方法添加属性,也可以直接通过构造函数一次性生成。
+    Headers对象的实例,除了使用append方法添加属性,也可以直接通过构造函数一次性生成 
     
     reqHeaders = new Headers({
       "Content-Type": "text/plain",
       "Content-Length": content.length.toString(),
       "X-Custom-Header": "ProcessThisImmediately",
     });
-    Headers对象实例还提供了一些工具方法。
+    Headers对象实例还提供了一些工具方法 
     
     reqHeaders.has("Content-Type") // true
     reqHeaders.has("Set-Cookie") // false
@@ -907,7 +903,7 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     
     reqHeaders.delete("X-Custom-Header")
     reqHeaders.getAll("X-Custom-Header") // []
-    生成Header实例以后,可以将它作为第二个参数,传入Request方法。
+    生成Header实例以后,可以将它作为第二个参数,传入Request方法 
     
     var headers = new Headers();
     headers.append('Accept', 'application/json');
@@ -916,7 +912,7 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     fetch(request).then(function(response) {
       console.log(response.headers);
     });
-    同样地,Headers实例可以用来构造Response方法。
+    同样地,Headers实例可以用来构造Response方法 
     
     var headers = new Headers({
       'Content-Type': 'application/json',
@@ -931,10 +927,10 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     response.json().then(function(json) {
       insertPhotos(json);
     });
-    上面代码中,构造了一个HTTP回应。
+    上面代码中,构造了一个HTTP回应 
     目前,浏览器构造HTTP回应没有太大用处,但是随着Service Worker的部署,
-    不久浏览器就可以向Service Worker发出HTTP回应。    
-  Request 对象,用来构造HTTP请求。
+    不久浏览器就可以向Service Worker发出HTTP回应     
+  Request 对象,用来构造HTTP请求 
     var req = new Request(url,options); 
       var uploadReq = new Request("/uploadImage", {
         method: "POST",
@@ -961,7 +957,7 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     .text()  
     req.method // "GET"
     req.url // "http://example.com/index.html"
-    下面是另一个例子。
+    下面是另一个例子 
     
     var req = new Request(URL, {method: 'GET', cache: 'reload'});
     fetch(req).then(function(response) {
@@ -970,18 +966,18 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     .then(function(json) {
       someOperator(json);
     });
-    上面代码中,指定请求方法为GET,并且要求浏览器不得缓存response。
+    上面代码中,指定请求方法为GET,并且要求浏览器不得缓存response 
     
-    Request对象实例有两个属性是只读的,不能手动设置。
-    一个是referrer属性,表示请求的来源,由浏览器设置,有可能是空字符串。
+    Request对象实例有两个属性是只读的,不能手动设置 
+    一个是referrer属性,表示请求的来源,由浏览器设置,有可能是空字符串 
     另一个是context属性,表示请求发出的上下文,
     若是image,表示是从img标签发出,
-    若是worker,表示是从worker脚本发出,若是fetch,表示是从fetch函数发出的。
+    若是worker,表示是从worker脚本发出,若是fetch,表示是从fetch函数发出的 
     Request对象实例的mode属性,用来设置是否跨域,合法的值有以下三种:
       same-origin、
       no-cors(默认值)、
-      cors。
-      当设置为same-origin时,只能向同域的URL发出请求,否则会报错。
+      cors 
+      当设置为same-origin时,只能向同域的URL发出请求,否则会报错 
     
     var arbitraryUrl = document.getElementById("url-input").value;
     fetch(arbitraryUrl, { mode: "same-origin" })
@@ -991,11 +987,11 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     ,function(e) {
       console.log("Please enter a same-origin URL!");
     });
-    上面代码中,若用户输入的URL不是同域的,将会报错,否则就会发出请求。
+    上面代码中,若用户输入的URL不是同域的,将会报错,否则就会发出请求 
     
     若mode属性为no-cors,就与默认的浏览器行为没有不同,
-    类似script标签加载外部脚本文件、img标签加载外部图片。
-    若mode属性为cors,就可以向部署了CORS机制的服务器,发出跨域请求。
+    类似script标签加载外部脚本文件、img标签加载外部图片 
+    若mode属性为cors,就可以向部署了CORS机制的服务器,发出跨域请求 
     
     var u = new URLSearchParams();
     u.append('method', 'flickr.interestingness.getList');
@@ -1016,21 +1012,21 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
         console.log(photo.title);
       });
     });
-    上面代码是向Flickr API发出图片请求的例子。
+    上面代码是向Flickr API发出图片请求的例子 
     
-    Request对象的一个很有用的功能,是在其他Request实例的基础上,生成新的Request实例。
+    Request对象的一个很有用的功能,是在其他Request实例的基础上,生成新的Request实例 
     
     var postReq = new Request(req, {method: 'POST'});    
   Response 
-    fetch方法返回Response对象实例,它有以下属性。
+    fetch方法返回Response对象实例,它有以下属性 
     
     status:整数值,表示状态码(比如200)
     statusText:字符串,表示状态信息,默认是“OK”
     ok:布尔值,表示状态码是否在200-299 的范围内
     headers:Headers对象,表示HTTP回应的头信息
     url:字符串,表示HTTP请求的网址
-    type:字符串,合法的值有五个basic、cors、default、error、opaque。basic表示正常的同域请求；cors表示CORS机制的跨域请求；error表示网络出错,无法取得信息,status属性为0,headers属性为空,并且导致fetch函数返回Promise对象被拒绝；opaque表示非CORS机制的跨域请求,受到严格限制。
-    Response对象还有两个静态方法。
+    type:字符串,合法的值有五个basic、cors、default、error、opaque basic表示正常的同域请求;cors表示CORS机制的跨域请求;error表示网络出错,无法取得信息,status属性为0,headers属性为空,并且导致fetch函数返回Promise对象被拒绝;opaque表示非CORS机制的跨域请求,受到严格限制 
+    Response对象还有两个静态方法 
     
     Response.error() 返回一个type属性为error的Response对象实例
     Response.redirect(url, status) 返回的Response对象实例会重定向到另一个URL
@@ -1042,7 +1038,7 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
       }
     });
   body属性 
-    Request对象和Response对象都有body属性,表示请求的内容。body属性可能是以下的数据类型。
+    Request对象和Response对象都有body属性,表示请求的内容 body属性可能是以下的数据类型 
     
     ArrayBuffer
     ArrayBufferView (Uint8Array等)
@@ -1055,16 +1051,16 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
       method: "POST",
       body: form
     })
-    上面代码中,Request对象的body属性为表单数据。
+    上面代码中,Request对象的body属性为表单数据 
     
-    Request对象和Response对象都提供以下方法,用来读取body。
+    Request对象和Response对象都提供以下方法,用来读取body 
     
     arrayBuffer()
     blob()
     json()
     text()
     formData()
-    注意,上面这些方法都只能使用一次,第二次使用就会报错,也就是说,body属性只能读取一次。Request对象和Response对象都有bodyUsed属性,返回一个布尔值,表示body是否被读取过。
+    注意,上面这些方法都只能使用一次,第二次使用就会报错,也就是说,body属性只能读取一次 Request对象和Response对象都有bodyUsed属性,返回一个布尔值,表示body是否被读取过 
     
     var res = new Response("one time use");
     console.log(res.bodyUsed); // false
@@ -1076,11 +1072,11 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
     res.text().catch(function(e) {
       console.log("Tried to read already consumed Response");
     });
-    上面代码中,第二次通过text方法读取Response对象实例的body时,就会报错。
+    上面代码中,第二次通过text方法读取Response对象实例的body时,就会报错 
     
-    这是因为body属性是一个stream对象,数据只能单向传送一次。这样的设计是为了允许JavaScript处理视频、音频这样的大型文件。
+    这是因为body属性是一个stream对象,数据只能单向传送一次 这样的设计是为了允许JavaScript处理视频、音频这样的大型文件 
     
-    若希望多次使用body属性,可以使用Response对象和Request对象的clone方法。它必须在body还没有读取前调用,返回一个新的body,也就是说,需要使用几次body,就要调用几次clone方法。
+    若希望多次使用body属性,可以使用Response对象和Request对象的clone方法 它必须在body还没有读取前调用,返回一个新的body,也就是说,需要使用几次body,就要调用几次clone方法 
     
     addEventListener('fetch', function(evt) {
       var sheep = new Response("Dolly");
@@ -1096,6 +1092,52 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
         return sheep;
       });
     });    
+window.performance  Performance, 
+  PS: Web计时机制的核心对象,对页面的所有度量信息都包含在该对象中 
+  Member: 
+    .memory 
+    .navigation  PerformanceNavigation,与页面导航相关 
+      .redirectCount  num,页面加载前的重定向次 
+      .type   num,刚刚发生的导航类型 
+        performance.navigation.TYPE_NAVIGATE: 0  页面第一次加载 
+        performance.navigation.TYPE_RELOAD: 1    页面重载过 
+        performance.navigation.TYPE_BACK_FORWARD: 2  页面是通过“后退”或“前进”打开的 
+    .timing  PerformanceTiming,包含各种时间戳,不同的事件会产生不同的时间值 [IE10+] 
+      PS: 可全面了解页面在被加载到浏览器的过程中都经历的时间 
+      .navigationStart   开始导航到当前页面的时间 
+      .unloadEventStart  前一个页面的'unload'事件开始的时间 
+        只有在前一个页面与当前页面来自同一个域时这个属性才会有值;否则,值为0 
+      .unloadEventEnd    前一个页面的'unload'事件结束的时间 
+        但只有在前一个页面与当前页面来自同一个域时这个属性才会有值;否则,值为0 
+      .redirectStart     到当前页面的重定向开始的时间 
+        但只有在重定向的页面来自同一个域时这个属性才会有值;否则,值为0 
+      .redirectEnd       到当前页面的重定向结束的时间 
+        但只有在重定向的页面来自同一个域时这个属性才会有值;否则,值为0  
+      .fetchStart        开始通过HTTP GET 取得页面的时间 
+      .domainLookupStart 开始查询当前页面DNS的时间 
+      .domainLookupEnd   查询当前页面DNS结束的时间 
+      .connectStart      浏览器尝试连接服务器的时间 
+      .connectEnd        浏览器成功连接到服务器的时间 
+      .secureConnectionStart 浏览器尝试以SSL 方式连接服务器的时间 
+        不使用SSL方式连接时,这个属性的值为0 
+      .requestStart      浏览器开始请求页面的时间 
+      .responseStart     浏览器接收到页面第一字节的时间 
+      .responseEnd       浏览器接收到页面所有内容的时间 
+      .domLoading        document.readyState 变为"loading"的时间 
+      .domInteractive    document.readyState 变为"interactive"的时间 
+      .domContentLoadedEventStart  发生DOMContentLoaded 事件的时间 
+      .domContentLoadedEventEnd    DOMContentLoaded事件已经发生且执行完所有事件处理程序的时间 
+      .domComplete       document.readyState 变为"complete"的时间 
+      .loadEventStart    发生load 事件的时间 
+      .loadEventEnd      load 事件已经发生且执行完所有事件处理程序的时间 
+    .onresourcetimingbufferfull  
+    .timeOrigin   
+PerformanceNavigation 
+  Static: 
+    .TYPE_NAVIGATE      0 
+    .TYPE_RELOAD        1 
+    .TYPE_BACK_FORWARD  2 
+PerformanceTiming 
 Location, 
   Extend: Object 
   Instance: window.location 
@@ -1173,7 +1215,6 @@ Navigator,客户端识别
         这个文件被称作cookie,
         通过cookieEnabled属性可以判断浏览器是否启用了此功能
     .javaEnabled()  bol,浏览器是否启用Java 
-    .geolocation   Geolocation,地理定位
     .vibrate()     设备震动 [HTML5] 
       PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
         显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
@@ -1451,6 +1492,88 @@ Navigator,客户端识别
         system: system
       };
     }();
+[Geolocation API] [HTML5] 
+  PS: 地理定位能够在用户同意后访问到用户当前的位置信息 
+  navigator.geolocation   Geolocation,地理定位对象 
+  Geolocation[仅在IE中可直接访问],地理定位 [IE9+]   
+    PS: 在地理定位API中,使用小数值来表示经纬度[西经和南纬都用负数表示]
+      浏览器通过 蜂窝电话、Wi-Fi、GPS、ip地址 等任意一种途径来获取位置信息
+    Relate:  navigator.geolocation.constructor 间接访问 
+    Proto: 
+      .getCurrentPosition( // 发起授权请求并执行相应的回调 
+        // PS: 会触发请求用户共享地理定位信息的对话框 
+          // 现在只会在安全的上下文触发,如使用https协议的网页 
+        function(e){  // 浏览器能成功确定位置时调用 
+          e    Position, 
+        }
+        ,function(e){ // 可选,无法确定位置[如用户拒绝授权时]时调用
+          e   PositionError, 
+        }
+        ,{ // 可选,设置定位的参数  
+          enableHighAccuracy: true // 是否高精度,默认:false
+          ,timeout: 5000           // 超时时限,默认:Infinity,单位:ms
+          ,maximumAge: 600         // 缓存时限,不缓存:0,只读取缓存:infinity,单位:ms
+        }
+      )    
+      .watchPosition(  // numId,监听位置变化  
+        PS: 位置改变时调用成功处理程序,
+        function(e){
+          e    Position, 
+        }
+        ,function(e){
+          e   PositionError, 
+        }
+        ,{
+        }
+      ) 
+      .clearWatch(watchId) 取消watchPosition监听
+    Expand: 
+      检查是否支持该接口 
+        if (navigator.geolocation) {
+          // 支持
+        }
+        else {
+          // 不支持
+        }
+      单位转换 
+        可使用一下函数将使用度、分、秒表示的经纬度转换为小数
+          function degreesToDecimal(degrees,minutes,seconds){
+            return degrees +(minutes / 60 ) +(seconds / 3600);
+          }
+      'Google Maps API' [非HTML5规范]
+        该 API 未提供可视化表示工具,使用第三方工具 Google Maps(非HTML5规范)
+        引入 API 放置在 HTML head中
+          <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+          sensor=true 表示代码中用到自己的位置;若不用自己位置可设置为false
+  Position[NdA], 
+    Extend: Object 
+    Proto: 
+      .coords   Coordinates,  
+      .timestamp  时间戳 
+  Coordinates[NdA], 
+    Extend: Object 
+    Proto: 
+      .latitude    十进制表示的纬度 
+      .longitude   十进制表示的经度 
+      .accuracy    经纬度坐标精度,单位:m 
+      以下属性支持与否取决于设备,桌面浏览器一般没有
+      .altitude      海拔高度,不存在则为 null,单位:m
+      .altitudeAccuracy  海拔高度的精度,数值越小精度越高,单位:m 
+      .heading    方向,0°表示正北,NaN 表示没有检测到数据 
+      .speed     速度,未检测到则为 null,单位:m/s 
+  PositionError[NdA], 
+    Extend: Object 
+    Proto: 
+      .code    错误码 
+        0  Unknown error 
+        1  用户拒绝授权   
+        2  无法定位       
+        3  超时响应       
+      .message 错误信息 
+      常量 
+        .PERMISSION_DENIED    num,1  
+        .POSITION_UNAVAILABLE num,2  
+        .TIMEOUT              num,3  
 Screen,用户屏幕相关 
   PS: 基本上只用来表明客户端的能力,每个浏览器中的screen对象包含的属性不尽相同; 
   Extend: Object 
@@ -1494,7 +1617,7 @@ Storage,本地存储[IE8+][HTML5]
       Feature: 
         子域名间或子域名和主域名间不共享;
         不同协议、端口间不共享;
-        不同窗口间可共享；
+        不同窗口间可共享;
         本质是在读写文件,数据多的话会比较卡,firefox会一次性将数据导入内存,
         不能被爬虫爬取,不要用它完全取代URL传参,
         隐私模式下不可读取 
@@ -1524,186 +1647,6 @@ Storage,本地存储[IE8+][HTML5]
     .remainingSpace   num,剩余的可用空间的字节数[仅IE支持] 
   Question: 
     IE中localStorage中存在问题 ?
-FileReader,文件读取,一种异步的文件读取机制 
-  Extend: EventTarget  
-    console.log(FileReader.prototype.__proto__.constructor===EventTarget); // true 
-  Instance: 
-    fr = new FileReader([file/blob])  创建fr对象 
-  Proto: 
-    常量: 
-      .EMPTY    0 
-      .LOADING  1 
-      .DONE     2 
-    .readyState  
-    .error  
-    .result   文件的URI数据,读取文件后该属性将被填充 
-    .abort()  中断文件读取  
-    .readAsBinaryString(Blob|File) 得到文件的二进制字符串 
-      PS: 通常将其传送到服务器端,服务器端可以通过这段字符串存储文件 
-        该字符串每个字节包含一个0到255之间的整数
-        可以读取任意类型的文件,而不仅仅是文本文件,返回文件的原始的二进制内容
-        配合 xhr.sendAsBinary(),可上传任意文件到服务器 
-      Example: 
-        var fr = new FileReader();
-        fr.onload = function(e) {
-          var rawData = fr.result;
-        }
-        fr.readAsBinaryString(file);
-    .readAsDataURL(Blob|File);     得到文件的'Data URL'的形式[基于Base64编码的'data-uri'对象] 
-      PS: 将文件数据进行Base64编码,可将返回值作为图像的src 
-    .readAsArrayBuffer(Blob|File)      得到文件的ArrayBuffer对象  
-      返回一个类型化数组(ArrayBuffer),即固定长度的二进制缓存数据。
-      在文件操作时(比如将JPEG图像转为PNG图像),这个方法非常方便。
-      var fr = new FileReader();
-      fr.onload = function(e) {
-        var arrayBuffer = fr.result;
-      }
-      fr.readAsArrayBuffer(file);
-    .readAsText(Blob|File[,encoding])  得到文件的纯文本表现形式 
-      encoding   可选,指定编码类型,默认为'UTF-8' 
-    ★事件 
-    .onloadstart 数据读取开始时触发
-    .onprogress  数据读取中触发,每50ms左右触发一次 
-      Example: 用来显示读取进度 
-      var fr = new FileReader();
-      fr.onprogress = function (e) {
-        if (e.lengthComputable) {
-          var percentLoaded = Math.round((e.loaded / e.totalEric Bidelman) * 100);
-          var progress = document.querySelector('.percent');
-          if (percentLoaded < 100) {
-            progress.style.width = percentLoaded + '%';
-            progress.textContent = percentLoaded + '%';
-          }
-        }
-      }
-    .onabort     读取中断或调用 fr.abort() 时触发 
-    .onerror     数据读取出错时触发  
-      触发error事件时,相关的信息在 fr.error.code 中,表示错误码
-      1 未找到文件 
-      2 安全性错误
-      3 表示读取中断
-      4 文件不可读
-      5 编码错误
-      Example:
-        var fr = new FileReader();
-        fr.onerror = errorHandler;
-        function errorHandler(evt) {
-          switch(evt.target.error.code) {
-            case evt.target.error.NOT_FOUND_ERR:
-            alert('File Not Found!');
-            break;
-            case evt.target.error.NOT_READABLE_ERR:
-            alert('File is not readable');
-            break;
-            case evt.target.error.ABORT_ERR:
-            break;
-            default:
-            alert('An error occurred reading this file.');
-          };
-        }
-    .onload      读取成功后触发 
-      load事件的回调函数接受一个事件对象,e.target.result 就是文件的内容 
-      <input type="file" >
-      var fr = new FileReader();
-      fr.onload = function(e) {
-        document.createElement('img').src = e.target.result;
-        // 此时 fr.result === e.target.result 
-      };
-      document.querySelector("input[type='file']")
-      .addEventListener("change",function(e){
-        fr.readAsDataURL(e.target.files[0]);
-      })
-    .onloadend   读取完成后触发,不管是否成功 
-      触发顺序排在onload或onerror后  
-  Example: 
-    读取文件内容后直接以二进制格式上传 
-    var fr = new FileReader();
-    fr.onload = function(){
-      xhr.sendAsBinary(this.result); // chrome已移除 xhr.sendAsBinary 
-    }
-    // 把从input里读取的文件内容,放到fileReader的result字段里
-    fr.readAsBinaryString(file);
-    XMLHttpRequest.prototype.sendAsBinary = function(text){
-      var data = new ArrayBuffer(text.length);
-      var ui8a = new Uint8Array(data, 0);
-      for (var i = 0; i < text.length; i++){ 
-        ui8a[i] = (text.charCodeAt(i) & 0xff);
-      }
-      // 将字符串转成8位无符号整型,然后存放到一个8位无符号整型数组里面,
-      // 再把整个数组发送出去。
-      this.send(ui8a);
-    }
-URL,用于对二进制数据生成URL,生成指向File对象或Blob对象的URL[IE10+] 
-  PS: 引用保存在File或Blob中数据的URL.
-    使用对象URL的好处是可以不必把文件内容读取到JS中而直接使用文件内容.
-    只要在需要文件内容的地方提供对象URL即可
-  Extend: Object 
-  Static: 
-    .createObjectURL(blob)  str,创建url对象实例,将二进制数据生成一个URL 
-      PS: 同样的二进制数据,每调用一次该方法,就会得到一个不同的URL, 
-        该URL的存在时间,等同于网页的存在时间,一旦网页刷新或卸载,该URL将失效 
-      Example: 
-        // 传入一个合适的MIME类型
-        var blob = new Blob([typedArray], {type: "application/octet-binary"});
-        // 产生一类似'blob:d3958f5c-0777-0845-9dcf-2cb28783acaf'的URL字符串 
-        // 同普通URL使用方式相同,如用在img.src上 
-        var url = URL.createObjectURL(blob);
-    .revokeObjectURL(url)   使createObjectURL生成的URL失效 
-  Proto: 
-    .href  
-    .origin  
-    .protocol  
-    .username  
-    .password  
-    .host  
-    .hostname  
-    .port  
-    .pathname  
-    .search  
-    .searchParams  
-    .hash  
-    .toString() 
-  Example: 
-    在网页插入图片
-    var img = document.createElement("img");
-    img.src = window.URL.createObjectURL(files[0]);
-    img.height = 60;
-    img.onload = function(e) {
-      window.URL.revokeObjectURL(this.src);
-    }
-    docment.body.appendChild(img);
-    var info = document.createElement("span");
-    info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
-    docment.body.appendChild(info);
-    
-    本机视频预览
-    var video = document.getElementById('video');
-    var obj_url = window.URL.createObjectURL(blob);
-    video.src = obj_url;
-    video.play()
-    window.URL.revokeObjectURL(obj_url);  
-    
-    function html5Reader(file) {         
-      var fileObj = file.files[0],
-      img = document.getElementById("img");   
-      // URL.createObjectURL  safari不支持
-      img.src = URL.createObjectURL(fileObj);
-      img.onload =function() {
-        var data = getBase64Image(img);
-        console.log(data);  // 打印出base64编码
-      }
-    }
-    function getBase64Image(img) {
-      var canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-      var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
-      var dataURL = canvas.toDataURL("image/"+ext);
-      return dataURL;
-    }
 CSS,CSS相关的方法[IE不支持]   
   PS: 一个工具接口,无法创建该类型的对象,其内部只定义了静态方法 
   Extend: Object 
@@ -1748,6 +1691,281 @@ URLSearchParams,处理URL中的查询字符串[IE不支持]
         console.log(p);
       }
     URLSearchParams实例可当作POST数据发送,所有数据都会URL编码 
+console,用于调试的控制台对象  
+  PS: 由IE的JScript引擎提供的调试工具,后来逐渐成为浏览器的事实标准 
+    NodeJS沿用了这个标准,提供与习惯行为一致的console对象,
+    用于向标准输出流(stdout)或标准错误流(stderr)输出字符.
+  Member: 
+    .log([val1][, ...])   在控制台输出若干个数据 
+      格式占位符[DiBs] 
+        PS: log方法将占位符替换以后的内容,显示在console窗口
+        %s     字符串
+        %d     整数
+        %i     整数
+        %f     浮点数
+        %o     对象的链接
+        %c     CSS格式字符串 
+          对输出的内容进行CSS渲染
+          console.log('%c%s','color:red;font-size:24px;','abc');
+          输出的内容将显示为红色的24px的字体
+        Example:
+          console.log("%s + %s = %s", 1, 1, 2);  //  1 + 1 = 2
+          console.log("访问地址为 http://%s:%s",host,port) 
+          function colorLog(arg){  // 带颜色输出 
+            console.log("%c%s","background:#afffee",arg)
+          }
+    .info([val][, ...])   在控制台输出若干个信息性消息 
+      这个命令与 console.log 差别并不大,
+      除了在chrome中只会输出文字外,其余的会显示一个蓝色的惊叹号.
+    .error([val1][, ...]) 在控制台输出若干个错误消息 
+      控制台在出现错误时会显示是红色的叉子.
+    .warn([val1][, ...])  在控制台输出若干个警告消息 
+      控制台出现有黄色的惊叹号 
+    .clear()    清空控制台,光标回到第一行 
+    .trace(msg) 当前执行的代码在堆栈中的调用路径 
+      PS: 给待测试的函数中加入 console.trace() 就行了 
+      msg   str,标识信息 
+    .dir(obj[,options])  优化对对象的输出,单参数输出 
+      PS: 以易于阅读的形式显示,可读性较好,一般用于输出显示DOM节点
+      Node中可指定以高亮形式输出 
+        console.dir(obj,{color:true})
+    .table(val)   以表格形式显示,单参数输出 
+      Example: :
+      var languages = [
+        { name: "JavaScript", fileExtension: ".js" },
+        { name: "TypeScript", fileExtension: ".ts" },
+        { name: "CoffeeScript", fileExtension: ".coffee" }
+      ];
+      console.table(languages);
+      上面代码的language,转为表格显示如下.
+     (index) name fileExtension
+      0 "JavaScript" ".js"
+      1 "TypeScript" ".ts"
+      2 "CoffeeScript" ".coffee"
+      复合型数据转为表格显示的条件是,必须拥有主键.
+        对于上面的数组来说,主键就是数字键.对于对象来说,主键就是它的最外层键.
+        var languages = {
+          csharp: { name: "C#", paradigm: "object-oriented" },
+          fsharp: { name: "F#", paradigm: "functional" }
+        };
+        console.table(languages);
+        上面代码的language,转为表格显示如下.
+       (index) name paradigm
+        csharp "C#" "object-oriented"
+        fsharp "F#" "functional"
+    .count([counterName])   计数器,输出被调用的次数 
+      counterName  str,计数器名称,默认:"" 
+      Example:
+        console.count('a');  // a: 1
+        console.count('a');  // a: 2
+      
+        for (var i = 0; i < 5; i++) { 
+          console.count(); 
+        }
+        // : 1
+        // : 2
+        // : 3
+        // : 4
+        // : 5
+    ◆用于记录time和timeEnd间经历的时间,可计算一个操作所花费的准确时间 
+      Example:
+        console.time('aoo');
+        var array = new Array(1000000);
+        for(var i = array.length - 1; i >= 0; i--) {
+          array[i] = new Object();
+        };
+        console.timeEnd("aoo"); 
+        // aoo: 214.47802734375ms 
+    .time(timerName)     计时器开始计时 
+      timerName  str,计时器名称 
+    .timeEnd(timerName)  计时器结束计时并输出 
+      timerName  str,计时器名称 
+    ◆分组显示,在group和groupEnd间输出的信息作为一个'组'
+      PS: 在输出大量信息时有用 
+    .group([val1,val2,...])  '组'的开始 
+    .groupEnd()              '组'的结束 
+    ◆性能测试
+    .profile()     
+    .profileEnd()   
+    ◆其他 
+    .assert([bool][,val]) 用于判断某个表达式或变量是否为真 
+      PS:接收两个参数,第一个参数是表达式,第二个参数是字符串.
+        只有当第一个参数为false,才会输出第二个参数,否则不会有任何结果.
+      bool  布尔值,默认为false 
+      Example:
+        若为假,则显示一条事先指定的错误信息
+        console.assert(true === false,"判断条件不成立")
+        // Assertion failed: 判断条件不成立
+        判断子节点的个数是否大于等于500.
+        console.assert(list.childNodes.length < 500, "节点个数大于等于500")
+    .dirxml()  以目录树形式显示DOM节点 
+      若参数不是DOM节点,则等同于dir
+    .debug(val)     Chrome不支持? 
+  Expand: 
+    修改/定义console方法 
+      因为console对象的所有方法,都可以被覆盖
+      
+      使用自定义的console.log方法,在显示结果添加当前时间
+      ["log", "info", "error"].forEach(function(method) {
+        console[method] = console[method].bind(console,new Date().toISOString());
+      });
+      console.log("出错了！");
+      // 2014-05-18T09:00.000Z 出错了！
+MutationObserver,观察者对象[IE11+] 
+  PS: 能在某个范围内的DOM树发生变化时作出适当反应的能力 
+    该API设计用来替换掉在DOM3事件规范中引入的Mutation事件 
+  Extend: Object 
+  Instance: 
+    new MutationObserver(function(arr,self){ 
+      PS: 回调函数会在指定的DOM节点[目标节点]发生变化时被调用
+      arr   若干个 MutationRecord 对象的数组 
+      self  该观察者对象本身
+    })
+  Proto: 
+    .observe(node,{  // 观察目标节点注册,目标节点或其后代节点发生DOM变化时收到通知 
+      PS: 向一个元素添加 observer 和 addEventListener 类似
+        同一元素多次使用相同的配置注册观察,仅第一次生效,
+        若不同的配置则取配置的并集,若回调对象不同,则同时多个观察者
+      // 用来配置观察者对象行为的对象 
+      // childList,attributes,或 characterData 三者至少有一个为 true
+      childList: bol   // 是否需要观察子节点的增删
+        PS: 不包括除子节点的后代节点 
+      ,attributes: bol // 是否需要观察目标节点的属性节点变化[增删改]
+      ,characterData:bol // 目标节点为characterData节点时,是否也要观察其文本内容的变化 
+        characterData节点:一种抽象接口,具体可以为文本节点,注释节点,以及处理指令节点 
+      ,subtree: bol  //  是否观察目标节点所有后代节点的上述三种节点变化 
+      ,attributeOldValue: bol // 是否在MutationRecord对象的oldValue中记录attributes值 
+        PS: attributes为true前提下
+      ,characterDataOldValue: bol // 是否在MutationRecord对象的oldValue中记录characterData文本内容 
+        PS: 在characterData属性已经设为true的前提下 
+      ,attributeFilter: [ // 要观察的属性名的数组
+        PS: 只有该数组中包含的属性名发生变化时才会被观察到 
+      ] 
+    })     
+    .disconnect()  停止观测 
+    .takeRecords() 清空观察者对象的记录队列,并返回里面的内容.
+      返回一个包含了MutationRecord对象的数组 
+MutationRecord,变动记录对象 
+  Expand: Object 
+  Instance: 作为第一个参数的成员传递给观察者对象的回调函数 
+  Proto: 
+    .type  str,发生变化的类型 
+      'attributes'     属性发生变化 
+      'characterData'  CharacterData节点发生变化 
+      'childList'     目标节点的子节点发生了变化 
+    .target  Node,此次变化影响到的节点
+      具体返回那种节点类型是根据type值的不同而不同的. 
+      如果type为attributes,则返回发生变化的属性节点所在的元素节点,
+      如果type值为characterData,则返回发生变化的这个characterData节点.
+      如果type为childList,则返回发生变化的子节点的父节点.
+    .addedNodes  NodeList,被添加的节点,或 null 
+    .removedNodes  NodeList,被删除的节点,或 null 
+    .previousSibling  Node,被添加或被删除的节点的前一个兄弟节点,或 null 
+    .nextSibling  Node,被添加或被删除的节点的后一个兄弟节点,或 null 
+    .attributeName  str,变更属性的本地名称,或 null 
+    .attributeNamespace  str,变更属性的命名空间,或 null 
+    .oldValue  str,之前的值
+      根据type值的不同,返回的值也会不同.
+      如果type为 attributes,则返回该属性变化之前的属性值.
+      如果type为characterData,则返回该节点变化之前的文本数据.
+      如果type为childList,则返回null.
+Notification,浏览器通知接口[HTML5][DiBs] 
+  PS: 可在用户的桌面,而非网页上显示通知信息, 
+    桌面电脑和手机都适用,比如通知用户收到了一封Email。
+    具体的实现形式由浏览器自行部署,对于手机来说,一般显示在顶部的通知栏。
+    若网页代码调用这个API,浏览器会询问用户是否接受。
+    只有在用户同意的情况下,通知信息才会显示。
+  Feature: 
+    浏览器兼容性检测 
+      目前,Chrome和Firefox在桌面端部署了这个API,
+      Firefox和Blackberry在手机端部署了这个API; 
+      if (window.Notification) {
+        console.log('该浏览器支持Notification接口');
+      } 
+      else {
+        console.log('该浏览器不支持Notification接口');
+      }
+  Static: 
+    .permission  str,用户给予的权限状态  
+      'default' 用户还没有做出许可,因此不会弹出通知 
+      'granted' 用户明确同意接收通知 
+      'denied'  用户明确拒绝接收通知 
+    .maxActions  num, 
+    .requestPermission(function(status){  // 获取用户授权 
+      // status 用户授权状态  
+      Example: 若用户拒绝接收通知,用alert方法代替 
+        Notification.requestPermission(function (status) {
+          if (status === "granted") {
+            var n = new Notification("Hi!");
+          } 
+          else {
+            alert("Hi!");
+          }
+        });
+    })  
+  Instance: 
+    var notice = new Notification(title [,options]);  生成一条通知
+      title   str,用来指定通知的标题
+      options -- { // 可选,用来设定各种设置 
+        dir: kw,  // 文字方向
+          'auto'
+          'ltr'  从左到右
+          'rtl'  从右到左
+        lang: kw, // 使用的语种
+          'en-US'
+          'zh-CN'
+          ...
+        body: str, // 通知内容,用来进一步说明通知的目的 
+        tag: str, // 通知的ID 
+          一组相同tag的通知,不会同时显示,只会在用户关闭前一个通知后,在原位置显示 
+        icon: url // 图表的URL,用来显示在通知上
+      }
+    Example:
+      var notice = new Notification('收到新邮件', {
+        body: '您总共有3封未读邮件。'
+      });
+      notice.title // "收到新邮件"
+      notice.body // "您总共有3封未读邮件。"
+      notice.title  通知标题
+      notice.body   通知内容
+  Proto: 
+    .title 
+    .dir 
+    .lang 
+    .body 
+    .tag 
+    .icon 
+    .vibrate 
+    .timestamp 
+    .renotify 
+    .silent 
+    .requireInteraction 
+    .data 
+    .actions 
+    .badge 
+    .image 
+    .close()  关闭通知 
+      var n = new Notification("Hi!");
+      // 手动关闭
+      n.close();
+      // 自动关闭
+      n.onshow = function () { 
+        setTimeout(n.close.bind(n), 5000); 
+      }
+      不能从通知的close事件,判断是否为用户手动关闭 
+    ★Evt: 
+    .onshow  通知显示给用户时触发
+    .onclick 用户点击通知时触发
+    .onclose 用户关闭通知时触发
+    .onerror 通知出错时触发,大多数发生在通知无法正确显示时 
+  Example:
+    当前浏览器支持Notification对象,并当前用户准许使用该对象,
+    然后调用 Notification.requestPermission 方法,向用户弹出一条通知。
+    if(window.Notification && Notification.permission !== "denied") {
+      Notification.requestPermission(function(status) {
+        var n = new Notification('通知标题', { body: '这里是通知内容!'}); 
+      });
+    }
 -------------------------------------------------------------------------待整理 
 
 

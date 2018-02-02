@@ -1009,7 +1009,7 @@ TouchEvent,触摸事件
     .targetTouches  位于当前DOM元素上的手指的一个列表
       PS: 'touchend'事件该列表无成员 
       .targetTouches[idx]  Touch, 
-    .changedTouches 
+    .changedTouches 手指列表 
       .changedTouches[idx]  Touch, 
     .altKey  
     .metaKey  Windows中为Windows键,Mac中为Cmd键  

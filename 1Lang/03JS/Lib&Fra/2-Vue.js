@@ -520,7 +520,7 @@ v-on:ename="foo/expr" 事件绑定[简写'@ename'] [事件名不区分大小写]
         }
       }
     })    
-v-on="obj"  无参数时,可绑定到一对象  '2.4.0+'  
+v-on="obj"  对象表示法,同时绑定多个事件  '2.4.0+'  
   PS: 使用对象语法时,不支持任何修饰器 
   obj 为'{事件:监听器}'键值对的对象 
   Example: 
@@ -1618,21 +1618,21 @@ vm.xxx.实例属性/方法/事件
     })
 'Custom Directives'自定义指令[在HTML中指定,不区分大小写] 
   v-name:arg.mdf1.mdf2="val"   用于对DOM元素进行底层操作 
-  'name'  指令名称 
-  'arg'   可选,指令的参数 
-  'mdf'   可选,指令的修改器  
-  'val'   可选,指令的值 
-    指令值为对象字面量 
-      指令函数能够接受所有合法类型的JS表达式 
-      <div v-demo="{ color: 'white',text: 'hello!' }"></div>
-      Vue.directive('demo',function (el,binding) {
-        console.log(binding.value.color) // => "white"
-        console.log(binding.value.text)  // => "hello!"
-      })    
+    'name'  指令名称 
+    'arg'   可选,指令的参数 
+    'mdf'   可选,指令的修改器  
+    'val'   可选,指令的值 
+      指令值为对象字面量 
+        指令函数能够接受所有合法类型的JS表达式 
+        <div v-demo="{ color: 'white',text: 'hello!' }"></div>
+        Vue.directive('demo',function (el,binding) {
+          console.log(binding.value.color) // => "white"
+          console.log(binding.value.text)  // => "hello!"
+        })    
   Vue.directive('name',obj/foo) // 定义全局指令 
     name  指令名称 
     obj   {  // 配置对象 
-        hookName: function(){  // 指令定义钩子函数
+        <hookName>: function(){  // 指令定义钩子函数
           // 
         }
         ...
@@ -1658,104 +1658,132 @@ vm.xxx.实例属性/方法/事件
       el : '#aoo',
     });
   ◆<hookName>: foo,指令定义[钩子]函数 
-  bind: function(el,binding,vnode){  // 指令初始化
-    // 指令第一次绑定到元素时调用,只调用一次 
-  }     
-  inserted: function(el,binding,vnode){ // 被绑定元素插入父节点时调用
-    PS: 父节点存在即可调用,不必存在于'document'中 
-  } 
-  update: function(el,binding,vnode,oldVnode){ // 所在组件的vnode更新时调用 
-    指令的值可能发生了改变也可能没有,
-    但可通过比较更新前后的值绑定值'binds.value'和'binds.oldValue'来忽略不必要的模板更新 
-    Example:  
-      当DOM渲染有更新时
-      <div id="demo1" >
-        <input type="text"  v-test1>
-        <button type="button"  @click="inputFocus">click</button>
-        <span>{{inputIsFocus}}</span>
-        <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
-      </div>
-      或改为: 当指令的值有变化时 
-      <div id="demo1" >
-        <input type="text" v-test1="inputIsFocus">
-        <button type="button" @click="inputFocus">click</button>
-      </div>
-      Vue.directive('test1',{
-        update : function(el,binds,vn,oVn){
-          el.focus();
-          console.log(11);
-        },
-      });
-      new Vue({
-        el: '#demo1',
-        data: {
-          inputIsFocus : false,
-        },
-        methods : {
-          inputFocus : function(){
-            this.inputIsFocus = !this.inputIsFocus;
-            console.log(this.inputIsFocus);
+    bind: function(el,binding,vnode){      // 指令初始化 
+      // 指令第一次绑定到元素时调用,只调用一次 
+    }     
+    inserted: function(el,binding,vnode){  // 被绑定元素插入父节点时调用 
+      PS: 仅保证父节点存在,但不一定已被插入文档中,父节点存在即可调用,不必存在于'document'中 
+    } 
+    update: function(el,binding,vnode,oldVnode){ // 所在组件的vnode更新时调用 
+      指令的值可能发生了改变也可能没有,
+      但可通过比较更新前后的值绑定值'binds.value'和'binds.oldValue'来忽略不必要的模板更新 
+      Example:  
+        当DOM渲染有更新时
+        <div id="demo1" >
+          <input type="text"  v-test1>
+          <button type="button"  @click="inputFocus">click</button>
+          <span>{{inputIsFocus}}</span>
+          <!-- // 是否存在span元素直接决定钩子函数是否执行 -->
+        </div>
+        或改为: 当指令的值有变化时 
+        <div id="demo1" >
+          <input type="text" v-test1="inputIsFocus">
+          <button type="button" @click="inputFocusFn">click</button>
+        </div>
+        Vue.directive('test1',{
+          update : function(el,binds,vn,oVn){
+            el.focus();
+            console.log(11);
           },
-        },
-      })
-  }
-  // 所在组件的VNode及其后代VNode全部更新时调用  
-  componentUpdated: function(el,binding,vnode,oldVnode){ 
-    // 
-  }
-  unbind: function(el,binding,vnode){ // 指令与元素解绑时调用,只调用一次 
-    // 
-  }
-  ★钩子函数的参数 
-    除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
-    若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
-  el       指令所绑定的元素,可以用来直接操作DOM 
-    el.focus()   表单获得焦点
-    el.select()  表单值被选中
-  binding  对象,包含以下属性 
-    'name'       指令名,不包括'v-'前缀 
-    'value'      绑定值[即'drctVal'] 
-      例如: v-my-directive="1 + 1",value 的值是 2
-    'expression' 绑定值的字符串形式['drctVal'的字符串形式] 
-      例如 v-my-directive="1 + 1" ,expression 的值是 "1 + 1" 
-    'arg'        传给指令的参数[即'drctArg'] 
-      例如 v-my-directive:foo,arg 的值是 "foo"
-    'modifiers'  一个包含修饰符的对象['mdf'组成的对象] 
-      例如: v-my-directive.foo.bar,
-      修饰符对象 modifiers 的值是 { foo: true,bar: true }
-    'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
-      无论值是否改变都可用
-  vnode    Vue编译生成的虚拟节点 
-  oldVnode 上一个虚拟节点 
-    Example:
-      <div id="map" v-drct:arg.a.b="msg"></div>
-      Vue.directive('drct',{
-        bind: function (el,binds,vnode,oldVnode) {
-          var s = JSON.stringify
-          el.innerHTML = 
-            'name: '       + s(binds.name) + '<br>' +
-            'value: '      + s(binds.value) + '<br>' +
-            'expression: ' + s(binds.expression) + '<br>' +
-            'argument: '   + s(binds.arg) + '<br>' +
-            'modifiers: '  + s(binds.modifiers) + '<br>' +
-            'vnode keys: ' + Object.keys(vnode).join(',') +'<br>'+
-            'oldVnode keys: ' + Object.keys(oldVnode).join(',') 
-        }
-      });
-      new Vue({
-        el: '#map',
-        data: {
-          msg: 'thisisamessage',
-        }
-      });
-      显示为:
-      name: "drct"
-      value: "thisisamessage"
-      expression: "msg"
-      argument: "arg"
-      modifiers: {"a":true,"b":true}
-      vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
-      oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
+        });
+        new Vue({
+          el: '#demo1',
+          data: {
+            inputIsFocus : false,
+          },
+          methods : {
+            inputFocusFn : function(){
+              this.inputIsFocus = !this.inputIsFocus;
+              console.log(this.inputIsFocus);
+            },
+          },
+        })
+    }
+    componentUpdated: function(el,binding,vnode,oldVnode){ 
+      PS: 所在组件的VNode及其后代VNode全部更新时调用  
+    }
+    unbind: function(el,binding,vnode){    // 指令与元素解绑时调用,只调用一次 
+      // 
+    }
+    ★钩子函数的参数 
+      PS: 除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
+        若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+    el       指令所绑定的元素,可用于操作DOM 
+      el.focus()   表单获得焦点
+      el.select()  表单值被选中
+    binding  对象,包含以下属性 
+      'name'       指令名,不包括'v-'前缀 
+      'value'      指令绑定值,即自定义指令等号右边的值 
+        例如: v-my-directive="1 + 1",value 的值是 2
+      'expression' 指令绑定值的字符串形式 
+        例如 v-my-directive="1 + 1" ,expression 的值是 "1 + 1" 
+      'arg'        指令参数 
+        例如 v-my-directive:foo,arg 的值是 "foo"
+      'modifiers'  一个包含该指令所有修饰符的对象 
+        Example: 
+          例如: v-my-directive.foo.bar,
+          修饰符对象 modifiers 的值是 { foo: true,bar: true }
+      'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
+        无论值是否改变都可用
+    vnode    Vue编译生成的虚拟节点 
+    oldVnode 上一个虚拟节点 
+      Example:
+        <div id="map" v-drct:arg.a.b="msg"></div>
+        Vue.directive('drct',{
+          bind: function (el,binds,vnode,oldVnode) {
+            var s = JSON.stringify
+            el.innerHTML = 
+              'name: '       + s(binds.name) + '<br>' +
+              'value: '      + s(binds.value) + '<br>' +
+              'expression: ' + s(binds.expression) + '<br>' +
+              'argument: '   + s(binds.arg) + '<br>' +
+              'modifiers: '  + s(binds.modifiers) + '<br>' +
+              'vnode keys: ' + Object.keys(vnode).join(',') +'<br>'+
+              'oldVnode keys: ' + Object.keys(oldVnode).join(',') 
+          }
+        });
+        new Vue({
+          el: '#map',
+          data: {
+            msg: 'thisisamessage',
+          }
+        });
+        显示为:
+        name: "drct"
+        value: "thisisamessage"
+        expression: "msg"
+        argument: "arg"
+        modifiers: {"a":true,"b":true}
+        vnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce
+        oldVnode keys: tag,data,children,text,elm,ns,context,functionalContext,key,componentOptions,componentInstance,parent,raw,isStatic,isRootInsert,isComment,isCloned,isOnce 
+  ★Self: 
+    自定义指令,实现回调及传参 
+      PS: 传递的参数不要对其进行更改<尽量只读>,可能存在bug<有时不会触发变更,即使修改对象> 
+      Example: 自定义指令实现点击事件及传参 
+        <div v-self-click="{fn: clickFn, arg: argData}"></div>
+        new Vue({
+          data: {
+            argData: 1
+          }
+          ,methods: {
+            clickFn: function(arg){
+              console.log(arg);
+            }
+          }
+          ,directives: {
+            'self-click': {
+              inserted : function(el,binds,vn){
+                el.addEventListener("click",function(e){
+                  var obj = binds.value 
+                  obj.fn(obj.arg)
+                })
+              }
+            }
+          }
+        });
+      传参需通过绑定值为对象的形式来实现,而直接绑定传参函数,会导致函数直接执行了 
+        如 v-self-click="clickFn(argData)"  
+        默认在vue解析绑定值时,就将函数执行了 
 'Mixins'混合,分发Vue组件中可复用功能的方式 
   PS: 混合对象可以包含任意组件选项,
     使用混合时,所有混合对象的选项将被混入该组件本身的选项 
@@ -2344,6 +2372,9 @@ Question&Suggestion:
     解决方法一: 
       父组件中定义ref,通过$refs获取到子组件实例 
       问题: 父组件访问子组件的应急方案<详见官方文档> 
+  父组件中定义子组件样式或调整子组件样式 
+    决解方法一: 给子组件添加CSS类来控制,如 class="spec-num" 
+      在父组件或子组件中定义该CSS类的样式 
 自我总结: 
   在Vue实例中,所有能通过 this.xx 访问的值,都可在插值中使用 {{xx}}
 --------------------------------------------------------------------------------

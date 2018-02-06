@@ -23,618 +23,628 @@ jQuery: 快速简洁的JS库
     (function(jq){
       // 此作用域中 jq 等价于 jQuery
     })(jQuery);
-DOM操作 
+◆DOM操作 
   PS: jQuery元素对象: 使用JQ方法获取的HTML元素,通过jQuery包装DOM对象产生的对象 
     jEl 类似于数组,未获取到元素则为空数组, 数组中每个元素为原生JS的DOM元素对象;
-  jEl 创建 
-    var jEl = $(HTMLStr)  通过HTML创建jEl
-    jEl.clone([bool]) 复制元素
-      bool   布尔值,默认为false,若为true,则复制 Event 和 Data
-  jEl 获取 
-    $("selector")  通过选择器获取jEl 
-      PS:等价于 jQuery("selector"); 
-      selector 选择器,可为组合选择器,CSS选择器几乎可全部适用 
-      :xx  筛选  
-        Example:
-          $('.a:first')    // 获取第一个.a元素
-          $('#a :first')   // 获取 #a 内的第一个元素
-          $('#a p:first')  // 获取 #a 内的第一个p元素
-        :first 第一个元素
-        :last  最后一个元素 
-        :even  下标为偶数的[实质上第奇数个元素被选中] 
-        :odd   下标为奇数的[实质上第偶数个元素被选中] 
-        :eq(n) 指定下标的元素 
-          Example: 
-            $("p:eq(1)"); 选择第二个p元素 
-        :gt(n) 下标大于n的元素
-        :lt(n) 下标小于n的元素
-        :only-child  唯一子元素 
-        :nth-child(index/even/odd/equation) 下标/偶数/奇数/xn+m表达式
-        :first-child 第一个子元素
-        :last-child  最后一个子元素 
-        :input    所有input、textarea、select、button等元素
-        :text     单行文本框
-        :password 密码框
-        :radio    单选框
-        :checkbox 多选框
-        :submit   提交按钮
-        :image    图像按钮
-        :reset    重置按钮
-        :button   按钮
-        :file     上传域
-        :visible  可见的元素 
-        :hidden       所有 display:none visibility:hidden type='hidden' 的元素
-        :animated 当前处于动画状态的元素
-        :focus        当前所用获取焦点的元素
-        :enabled    可用元素
-        :disabled   不可用
-        :checked    被选中 [单选框、复选框]
-        :selected   被选中 [下拉列表]
-        :empty      内容为空的元素
-        :parent     含有子元素或文本的元素
-        :header     标题元素,h1、h2...
-        :contains(str)  内容包含字符str[相当于判断 innerText 包含]
-          Example: 
-            $("div:contains(abc)");  // 选取所有内容包含abc的div元素 
-        :not(selector) 非选择器
-          selector 为所有jQuery支持的选择器
-          Example: 
-            $("li:not(li:first)") 
-            $('.mask-selected:not(.none)')
-        :has(selector) 元素包含后代元素selector对应的元素
-          Example:
-            <div class="aoo "> 1</div>
-            <div class="aoo boo"> 2
-              <div class="boo">
-                11
-              </div>
-            console.log( $('.aoo:has(.boo)').is($('.aoo').eq(1)) ); // true
-      []   属性选择器
-          $("div[class]");        选取所有 有class属性 的div元素
-          $("div[XX="XXX"]");     选取所有 XX="XXX" 的div元素
-          $("div[XX!="XXX"]");    不等
-          $("div[XX^="XXX"]");    以XXX开头
-          $("div[XX$="XXX"]");    以XXX结尾
-          $("div[XX*="XXX"]");    包含XXX字符
-          $("div[XX|="XXX"]");    XX为前缀
-          $("div[XX~="XXX"]");    空格分割的值中包含XXX
-            <div class="aoo boo"> </div>
-            $("div[class~="aoo"]");
-          $("a[XX*="XXX"][class]");    //可多个组合使用
-      组合 
-        > 子元素 
-          $("#playlist > li") 
-        * 通配
-        , 多选
-        + 同级后一元素 
-          J(".one+div") <=> J('.one').next('div')
-        ~ 同级后面元素 
-          J('.one~div') <=> J('.one').nextAll('div')
-      其他 
-        Xpath选择器 [1.2 版本去掉]
-      '\\'选择器中的特殊字符转义 
-        <div id="aoo#boo"> </div>
-        $('#aoo#boo');   正确为  $('#aoo\\#b');
-      特殊值 
-        $('html') 等价于 document.documentElement
-        $('head') 等价于 document.head
-        $('body') 等价于 document.body
-        $(window)   浏览器显示网页内容的部分
-        $(document) 整个网页文档流
-        $("body")   就是body
-      自定义筛选器 
-        PS:jQuery的选择符解析器首先会使用一组正则表达式来解析选择器,
-          然后针对解析出的每个选择符执行一个函数,称为选择器函数,
-          最后根据这个选择器函数的返回值[true或false]来决定是否保留该元素
-          已存在的筛选器有 lt、gt、eq 
-        'gt'筛选器实现原理分析 
-          $('div:gt(1)')  
-          该选择器首先获取所有<div>元素,然后隐式遍历并逐个将<div>元素和'1'作为参数,
-          传递给gt对应的选择器函数进行判断,若函数返回true,则保留该<div>元素,否则不保留, 
-          最终得到一个符合要求的<div>元素集 
-          :gt() 选择器在jQuery源文件中的代码
-          gt : function(a,i,m){
-            return i>m[3]-0
-          }
-          参数说明 
-          a  指向当前遍历到的DOM元素 
-          i  当前遍历到的DOM元素的索引值 
-          m  一个数组
-            m[0]  表示选择器进一步将要匹配的内容,如 $('div:gt(1)')中的':gt(1)'部分 
-            m[1]  选择器引导符,如 $('div:gt(1)')中的':',用户还可自定义其他选择器引导符 
-            m[2]  选择器函数,如 $('div:gt(1)')中的'gt' 
-            m[3]  选择器函数的参数,如 $('div:gt(1)')中的'1' 
-            m[4]  
-        自定义一个'between'选择器
-          如 $('div:between(2,4)') 实现获取索引值为3、4 元素的功能 
-          构建选择器函数
-          var foo = function(a,i,m){
-            var temp = m[3].split(","); // 将传递的参数转成一个数组
-            return temp[0]-0<i && i<temp[1]-0 
-          }
-          ;(function ($){  // 在函数前加';'避免被其他未加';'的代码影响 
-            $.extend($.expr[':'],{
-              between : foo
-            })
-          })(jQuery);
-          选择器仅仅是 jQuery.expr[':'] 对象的一部分,可直接扩展 
-    var jEl = $(elem)  通过elem获取,返回jEl 
-        Example: $(document); // 获取整个文档
-    通过jEl获取 
-      $('selector',jEl)  在jEl中查找'selector'
-      ★自身条件筛选 
-      jEl.first()   jEl,jEl的第一个  
-      jEl.eq(index) 下标选取 
-        index为整数,指示元素的位置[从0开始]
-        若是负数,则从集合中的最后一个元素往回计数。
-      jEl.not('selector'/jEl) 非筛选 
-      jEl.not(function(idx){  // jEl,用于检测集合中每个元素的函数 
-        $(this) jEl集中的当前jEl  
-        return bol; // 是否排除当前jEl  
-      }); 
-      jEl.has('selector');   包含筛选 
-      jEl.filter('selector');   相等筛选  
-      ★层级关系筛选 
-      jEl.parents(["selector"])  所有祖先元素
-      jEl.closest("selector")    最近的第一个祖先元素
-      jEl.parent(["selector"])   父级及以上的一个元素  [无参时,为父元素]
-      jEl.siblings(["selector"]) 从同级元素中获取jEl [无参,为所有同级元素]
-      jEl.prev(["selector"])   同级前一个元素 [无参时,为同级前一元素]
-      jEl.prevAll("selector")  同级前所有元素
-        获取到的元素在集合中为从后向前排列;
-      jEl.next(["selector"])   同级后元素 [无参时,为同级后一元素]
-      jEl.nextAll("selector")  同级后所有元素
-      jEl.andSelf("selector")  获取指定元素后边的所有同级元素,之后加上指定的元素
-      jEl.find('selector')        从后代元素中获取jEl
-        自身jEl若find自己则获取不到
-      jEl.children(['selector'])  和find类似,只是从子元素中获取
-      ★属性筛选 
-      jEl.offsetParent() 最近的祖先定位元素 
-        定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
-    性能优化
-      关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器 
-      因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是; 
-      
-      $('#nav').find('a.home'); // 3 
-      $('#nav a.home'); // 2 
-      $('.home'); // 1 
-      推荐优先使用前两种
-      
-      为选择器指定范围 
-        默认情况下,当把一个选择器传递给jQuery时,它将遍历整个DOM,
-        jQuery方法还具有一个未充分利用的参数,既可以将一个上下文参数传入jQuery,
-        以限制它只搜索DOM中特定的一部分。
-        //糟糕,会遍历整个DOM
-        $(".class");
-        //建议,只搜索#id元素内
-        $(".class","#id");
-        
-        jQuery选择器的性能比较:
-        $(".class","#id") > $("#id .class") > $(".class")
-      缓存jQuery对象 
-        // 糟糕 
-        var $container = $('#container'), 
-        $containerLi = $('#container li'), 
-        $containerLiSpan = $('#container li span'); 
-        // 建议 (高效) 
-        var $container = $('#container '), 
-        $containerLi = $container.find('li'), 
-        $containerLiSpan= $containerLi.find('span');
-  jEl 操作 
-    PS: 若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
-    转换为原始DOM元素对象elem 
-      PS:使用原生JS的方法时,需将jEl转换为elem对象
-      var elem = jEl[index]     获取对应下标的DOM元素
-      var elemArr = jEl.toArray() 返回DOM元素组成的数组 
-      var elemArr = jEl.get()   返回DOM元素组成的数组 
-      var elem = jEl.get(num)   获取对应数字的DOM元素 
-        num  数值,从0开始,可为负,为负值时,表示第 num+jEl.length 个
-    增删改 
-      jEl.prepend('htmlCode'/jEl)    内部头部插入参数目标 
-      jEl.prependTo("selector"/jEl)  插入参数目标的内部头部 
-        将元素/内容content插入到元素内部头部
-      jEl.append('htmlCode'/jEl)     内部尾部插入
-        也可以将style标签内的css代码添加到head中
-      jEl1.appendTo("selector"/jEl2) 被插入到内部尾部 [与append顺序相反]
-        Example:
-          .aoo{ background-color:pink;}
-          $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
-          // 在所有的p标签中添加粗体的Hello,且背景为pink
-      jEl.before('htmlCode'/jEl)     将html代码/jEl添加到元素外部头部
-      jEl.insertBefore("selector"/jEl) 被插入到外部头部 [与before相反]
-        将元素/内容content插入到元素外部尾部 
-      jEl.after('htmlCode'/jEl)      外部尾部插入
-      jEl.insertAfter("selector"/jEl) 被插入到外部尾部 [与after相反]
-        将元素/内容content插入到元素外部尾部  
-      jEl.wrap("HTML代码"/jEl)          每个元素外包裹元素
-      jEl.wrapAll("HTML代码"/jEl)       所有元素整体外包裹元素
-      jEl.unwrap("HTML代码"/jEl)        元素外包裹的元素去除[?]
-        Example:
-          <a href="#"><div class="aoo"> 123123 </div></a>
-          $('.aoo').unwrap('a');
-          结果为: <div class="aoo"> 123123 </div>
-      jEl.wrapInner("HTML代码"/jEl)     将每个元素的内容包裹
-      jEl1.replaceWith("HTML代码"/jEl)  元素1代替为元素2
-      jEl1.replaceAll("selector"/jEl2)  元素2代替为元素1 [与replaceWith相反]
-        $("HTML代码")/jEl1.replaceAll("selector"/jEl2); 
-      jEl.html(str/foo); 设置/获取元素内容
-        无参数:以字符串形式返回元素内容,包括HTML标签
-        有参数:参数为字符串,将元素中内容替换为字符串,会将HTML标记转换为HTML元素
-        当 jEl 包含多个 elem时,则默认将其获取的每个元素的字符串合并为一个字符串.
-        和JS中的.innerHTML 相似
-      jEl.text(str/foo); 设置/获取元素文本
-        无参数:获取元素的内容文本
-        有参数:设置元素内容文本
-      jEl.remove()   删除元素
-        删除该元素和其子元素及以下的所有内容(包括自身标签)
-        所有与元素相关的数据也会被删除(event handlers、internally cached data)
-        返回值为删除的元素
-      jEl.detach()   删除元素[保留绑定事件、附加数据等]
-        detach 后的返回值(元素)再添加到其他地方,元素的event事件仍存在.
-      jEl.empty()    清空内容
-        删除该元素的子元素及以下的所有内容(不包括自身标签)
-        返回值为清空后的元素
-      jEl.removeAttr('属性名')  删除属性
-        Example:
-          jEl.removeAttr('class'); 
-      jEl.css(arg?)  读写,元素的style样式  
-        PS: 设置为行内样式; 获取为计算后的属性 
-        Example: 
-          jEl.css('height'); //获取元素的高度
-          jEl.css("color");  // 获取元素的字体颜色
-          jEl.css("color","red"); // 设置元素的字体颜色为红色
-        jEl.css(attrArr);  获取多个属性值
-          Example:
-          jEl.css(["color","font-size"]); 
-        jEl.css(attrObj);  设置多个属性
-          Example:  
-          jEl.css({
-            "background-color": "red"
-            ,color: "yellow"
-          });  
-        jEl.css("color",function(index,oldValue){ // 传入函数 
-          return val;  // 返回值为属性值 
-        }); 
-    元素属性 
-      ◆添加属性
-      jEl.attr();  读写属性值 
-        jEl.attr('属性名')     返回选定属性的属性值
-        jEl.attr('属性名',str/boolean) 设定选定属性的属性值
-          Example:
-            jEl.attr('disabled',false); // 取消表单禁用
-        jEl.attr(attribute,function(index,oldvalue){...}) 通过函数来操作属性
-        jEl.attr({attribute:value, attribute:value ...})  同时设置多组属性值
-        Example:
-          jEl.attr('class'); // 获取class属性的值
-          jEl.attr('data-foo'); // 获取自定义元素属性的值
-            注:自定义属性一般设置格式为 data-**="xxxx"
-          $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
-      jEl.prop();  读写属性值,和attr类似 ‹'1.6+'› 
-        $(selector).prop(property,value)
-        $(selector).prop(property,function(index,currentvalue){...})
-        $(selector).prop({property:value, property:value,...})
-      prop 和 attr 的区别 
-        有的属性写法要求不同,如disabled 和 checked,可写成 disabled = "disabled",
-        或单独 disabled 或 disabled=true [HTML5规定,可等于任何字符,最终都为true]
-        jEl.attr('disabled') 返回 disabled
-        jEl.prop('disabled') 返回 true
-        使用prop不会在DOM中反应出来
-        Example:
-          <input type="checkbox" name="" value="">
-          $('#checkbox').on("click",function(e){
-            var aoo = $(this).prop('checked');
-            var boo = $(this).attr('checked');
-            console.log(aoo,boo);
-          })
-          // true undefined
-          // false undefined
-          // true undefined
-          // false undefined
-          // ...
-          
-          反复切换选中状态
-          <input type="text" name="" value="" class="checkbox1">
-          <input type="text" name="" value="" class="checkbox2">
-          var checkbox1 = $('.checkbox1');
-          var checkbox2 = $('.checkbox2');
-          var cal = 0;
-          var aoo = setInterval(function(){
-            if (cal % 2 == 0) {
-              checkbox1.prop('checked',true);
-              checkbox2.prop('checked',true);
-            }
-            else {
-              checkbox1.prop('checked',false);
-              checkbox2.prop('checked',false);
-            }
-            cal++;
-          },1000);
-          attr在HTML文档中有'checked'属性开关显示,但在网页视图中无切换显示,
-          prop在HTML文档中无'checked'属性开关显示,但在网页视图中有切换显示
-          
-          <button type="button" name="button">点击我</button>
-          $('button').click(function(){
-            $(this).css('display','none');
-            console.log($(this).attr('style')); // display: none;
-            console.log($(this).prop('style'));
-            //  CSSStyleDeclaration {0: "display", alignContent: "", alignItems: "", alignSelf: "", alignmentBaseline: "", all: ""…}
-          })
-      jEl.val(str/foo); 读写值 [实时动态的]
-        使用元素
-          input元素的value的值 
-          textarea 的内容
-          select 的 value 值(而非显示值)
-        返回第一个匹配元素的 value 属性的值 
-      ◆class相关
-      jEl.hasClass('className')    检测class类
-        返回值类型为Boolean,若存在返回true,否则false.
-      jEl.addClass('className')    添加class类
-        若为多个元素,则每个元素中都添加该类
-      jEl.removeClass('className') 移除class类
-        jEl.removeClass("aoo boo"); 移除class aoo 和 class boo
-      jEl.toggleClass('className') 开关class类
-        若有,则删除;没有,则加上
-    元素信息 
-      ◆尺寸位置信息 
-        $(window) 和 $(document) 的宽高尺寸 
-          他们的 .height() .innerHeight() .outerHeight() 都相同
-          且为只读,也和其 margin border padding 无关,
-          推荐使用 height 来代替 innerHeight、outerHeight 获取; 宽度同理;
-          $(window).height()   表示为可视区高度 
-          $(document).height() 表示网页的总高度 
-      jEl.width([num/foo])   读写元素content的width 
-        PS: 当元素display:none;时宽度为0;
-        num      用于设置元素的宽度值,单位px
-        foo = function(indx,oldWidth){
-        }
-      jEl.height([num/foo])  读写元素content的height 
-        需要设置 height 的值,如单行文字只设置line-height则该方法获取不到数值;
-      jEl.innerWidth([num/foo])  读写元素宽,content+padding 
-      jEl.innerHeight([num/foo]) 读写元素高,content+padding
-      jEl.outerWidth([bool])   元素宽,content+padding+border[+margin] 
-        bool  可选,默认为false,是否包括margin的布尔值
-      jEl.outerHeight([bool])  元素高,content+padding+border[+margin] 
-      jEl.scrollTop()   读写,元素相对滚动条顶部的偏移 
-        PS: 此处的jEl为拥有滚动条的元素;
-        Self: 
-          当滚动条向下滚动时‹值变大›,增量值最小需大于1,否则无滚动且不触发滚动事件 
-          而向上滚动时‹值变小›,则增量大小无要求  
-      jEl.scrollLeft()  读写元素相对滚动条左侧的偏移
-      jEl.offset([{top:num1,left:num2}]) 读写,元素相对文档左上角的top和left 
-        PS: 返回包含top和left属性的对象; 
-          元素相对与document的top和left,若需获取到视口则需减去滚动距离;
-          此方法只对可见元素有效;
-        Example:
-          $(".a").offset(); // {top: 24, left: 0}
-          $(".a").offset().left = 20; // ? 
-          $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
-      jEl.position()  obj,元素相对于其'offsetParent'的top和left [只读?]
-        PS:只对可见元素有效
-          offsetParent可为: 该元素的相对定位元素或该元素的父元素
-          返回包含top、left属性的对象 
-        Example:
-          .parent{
-            position: relative;
-          }
-          .child{
-            position: absolute;
-            top: 10px;left: 20px;
-          }
-          <div class="parent"> <div class="child"></div> </div>
-          var pos = $('.child').position();
-          console.log(pos); //  Object {top: 10, left: 20}
-      ◆自定义数据
-      jEl.data(key,value) 绑定自定义数据 [DOM中无任何变化]
-        Example:
-        $('#box').data('name', 'TG'); 
-      jEl.data(key)       读取自定义数据 
-        Example:
-          <div class="aoo" data-id='111'> 23423 </div>
-          var jEl = $('.aoo');
-          var id = jEl.data('id');
-          console.log(id); // 111
-      jEl.removeDate(key) 移除自定义数据
-        Example:
-          $('#box').removeDate('name');
-      ◆其他信息
-      jEl.size()         元素个数
-      num = jEl.index([jEl/selector]) 获取元素在其父元素jEl中的下标[从1开始]
-        jelem.index();   无参数,返回该元素在同级元素中的索引位置
-        Example: 点击获取当前为第几个li 
-          <ul>
-            <li>aaaaa</li>
-            <li>bbbbb</li>
-            <li>ccccc</li>
-          </ul>
-          $("li").click(function(){ 
-            console.log( $(this).index()); 
-          });
-      jEl1.is(jEl2) 判断
-        jEl1.is(jEl2) 判断两个节点是否相同
-        jEl1.is(":checked") 判断是否被选中
-    状态改变 
-      jEl.focus();   获得焦点
-      jEl.blur();    失焦
-      jEl.click();   点击元素 [会触发事件]
-      jEl.select();  选中文字 
-        选中如input、textarea等元素类的文字,
-        不可选中因增加contenteditable属性而可编辑的元素的文字;
-    性能优化 
-      繁重的操作中分离元素
-        若你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
-        建议首先分离元素然后在添加。
-        // 糟糕
-        var $container = $("#container"),
-        $containerLi = $("#container li"),
-        $element = null;
-        $element = $containerLi.first();
-        //... 许多复杂的操作
-        // better
-        var $container = $("#container"),
-        $containerLi = $container.find("li"),
-        $element = null;
-        $element = $containerLi.first().detach();
-        //... 许多复杂的操作
-        $container.append($element);
-    jEl.each(foo)  为每个匹配成员规定执行的函数,返回 
-      foo  回调函数,依次传入参数 (indx,elem) 
-        其中 elem 为DOMElem,通过 $(elem) 转换为 jEl
-        返回 'false' 将停止循环,就像在普通的循环中使用 'break'
-        返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
-      Example:
-        jEl.each(function(){ 
-          // 输出每个dom元素
-          console.log(this); 
-          // 输入每个jEl
-          console.log($(this)); 
-        })
-        
-        $('.todo-cell').each(function()){ 
-          console.log(arguments) 
-        }
-        或写成
-        $('.todo-cell').each(function(i,e)){ 
-          console.log(i,e) 
-        }
-  Animation 动画 
-    time   数值,过渡的时间,单位毫秒,默认一般为0 
-      number  如 1500 
-      "normal"
-      "slow"
-      "fast"
-      "swing"    
-      "linear"   匀速
-    cfoo   回调函数,在动画执行完后调用 
-    ◆可见性变化 
-    jEl.show([time] [,cfoo])   'height'&'widht'&'opacity'恢复到原始
-    jEl.hide([time] [,cfoo])   'height'&'widht'&'opacity'过渡到0 
-    jEl.toggle([time][,cfoo])  切换'show'和'hide'
-    jEl.fadeIn([time] [,cfoo])      'opacity'从0过渡到1 
-    jEl.fadeOut([time] [,cfoo])     'opacity'从1过渡到0  
-    jEl.fadeToggle([time] [,cfoo])  切换'fadeIn'和'fadeOut' 
-    jEl.fadeTo(time,opacity,cfoo) 透明度过渡到指定值'opacity' 
-      opacity   透明度,0-1 之间取值
-    ◆尺寸变化
-    jEl.slideDown(time,cfoo)   向下'height'从0展开到初始值 
-    jEl.slideUp(time,cfoo)     向上'height'从原始值收缩到0 
-    jEl.slideToggle(time,cfoo) 切换'slideDown'和'slideUp' 
-    ◆自定义变化 
-      当定义样式的值时,单位默认为'px',如 '100px'或'100'等价
-    jEl.animate(finalStyle[,time][,duration][,cfoo])  定义变化及变化的过程 
-      {  // 必须,元素的最终样式状态,由样式声明属性和其值组成的对象 
-        styleAttr : styleVal,
-        // styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
-        // styleVal 可通过 -=、+= 等在原值上进行便捷计算 
-        //   $(".aoo").animate({
-        //     width:"+=10px", // 在原来的基础上加10px
-        //     height:"-=100%"
-        //   },1000)
-        ... 
-        非CSS样式的属性列举 
-          scrollTop 定义滚动条的滚动距离
-            $('.aoo').animate({
-              scrollTop : '+=33'
-            },100)
-      }
-      time       可选,执行时间 
-        number    毫秒,如 1500
-        "normal"  默认值
-        "slow"
-        "fast"
-      duration   延时 
-      cfoo       执行结束的回调 
-    jEl.animate(finalStyle,options)    定义变化及变化的过程  
-      {   // 最终样式 
-        left : 100
-      }
-      {   // 配置选项 
-        duration: 1000, // 延迟 
-        step: function(now,fx){ 
-        },
-        complete: foo,  // 动画执行完成后的回调 
-      }
-    jEl.stop([bool1] [,bool2]) 停止动画 
-      bool1  默认为false,是否清空未执行完的动画队列 
-      bool2  默认false,是否将动画调到最后状态 
-    jEl.delay(time)            延缓动画 
-      Example:
-        $('#aoo').animate({
-          width : '+=30'
-        },1000)
-        .delay(500)
-        .animate({
-          height : '+=30'
-        },1000)
-    ◆其他
-    $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
-    $.fx.interval     读写动画的频率,单位毫秒 
-    Example:
-      左右滑动效果
-      <div class="wrap">
-        <div class="num">
-          <span class="page">1</span>/
-          <span class="total">9</span>
-        </div>
-        <div class="imgs">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-          <img src="../publicImg/地图1.png" alt="" class="img">
-        </div>
-      </div>
-      .wrap {
-        height: 100vh;
-        width: 100vw;
-        background-color: #646464;
-        position: relative;
-      }
-      .wrap .num {
-        font-size: 4.26666667vw;
-        width: 100%;
-        color: white;
-        position: absolute;
-        text-align: center;
-        bottom: 4vw;
-      }
-      .wrap .imgs {
-        font-size: 0;
-        white-space: nowrap;
-        overflow-x: scroll;
-      }
-      .wrap .imgs img {
-        outline: 1px solid gray;
-        margin-top: 20%;
-        width: 100%;
-      }
-      var width = $('.img').width();
-      $('.imgs').on('touchend',function(e){
-        var distance = $('.imgs').scrollLeft();
-        var d = distance % width;
-        var n = Math.floor(distance /width);
-        if (d > width/2) {
-          $(this).animate({scrollLeft : (n+1)*width },300);
-          $('.page').text(n + 2 +'');
-        }else {
-          $(this).animate({scrollLeft : n*width},300);
-          $('.page').text(n + 1+ '');
-        }
-        setTimeout(function(){
-          var val = $('.imgs').scrollLeft() / width;
-          $('.imgs').scrollLeft(Math.round(val)*width );
-        },1000);
-      })
-    动画队列 : 将一元素的多个动画按顺序书写,会按顺序执行,而非同时执行 
-      或使用链式操作,也会按顺序执行[前一个动画执行完了,才会执行下一个] 
-    var bol = jEl.is(':animated') 判断元素是否处于动画状态 
   新奇用法 
     $(this)[bol?'removeClass':'addClass']('redColor');
     等价于 
     bol?$(this).removeClass('redColor'):$(this).addClass('redColor') 
+jEl 创建 
+  var jEl = $(HTMLStr)  通过HTML创建jEl
+  jEl.clone([bool]) 复制元素
+    bool   布尔值,默认为false,若为true,则复制 Event 和 Data
+jEl 获取 
+  $("selector")  通过选择器获取jEl 
+    PS:等价于 jQuery("selector"); 
+    selector 选择器,可为组合选择器,CSS选择器几乎可全部适用 
+    :xx  筛选  
+      Example:
+        $('.a:first')    // 获取第一个.a元素
+        $('#a :first')   // 获取 #a 内的第一个元素
+        $('#a p:first')  // 获取 #a 内的第一个p元素
+      :first 第一个元素
+      :last  最后一个元素 
+      :even  下标为偶数的[实质上第奇数个元素被选中] 
+      :odd   下标为奇数的[实质上第偶数个元素被选中] 
+      :eq(n) 指定下标的元素 
+        Example: 
+          $("p:eq(1)"); 选择第二个p元素 
+      :gt(n) 下标大于n的元素
+      :lt(n) 下标小于n的元素
+      :only-child  唯一子元素 
+      :nth-child(index/even/odd/equation) 下标/偶数/奇数/xn+m表达式
+      :first-child 第一个子元素
+      :last-child  最后一个子元素 
+      :input    所有input、textarea、select、button等元素
+      :text     单行文本框
+      :password 密码框
+      :radio    单选框
+      :checkbox 多选框
+      :submit   提交按钮
+      :image    图像按钮
+      :reset    重置按钮
+      :button   按钮
+      :file     上传域
+      :visible  可见的元素 
+      :hidden       所有 display:none visibility:hidden type='hidden' 的元素
+      :animated 当前处于动画状态的元素
+      :focus        当前所用获取焦点的元素
+      :enabled    可用元素
+      :disabled   不可用
+      :checked    被选中 [单选框、复选框]
+      :selected   被选中 [下拉列表]
+      :empty      内容为空的元素
+      :parent     含有子元素或文本的元素
+      :header     标题元素,h1、h2...
+      :contains(str)  内容包含字符str[相当于判断 innerText 包含]
+        Example: 
+          $("div:contains(abc)");  // 选取所有内容包含abc的div元素 
+      :not(selector) 非选择器
+        selector 为所有jQuery支持的选择器
+        Example: 
+          $("li:not(li:first)") 
+          $('.mask-selected:not(.none)')
+      :has(selector) 元素包含后代元素selector对应的元素
+        Example:
+          <div class="aoo "> 1</div>
+          <div class="aoo boo"> 2
+            <div class="boo">
+              11
+            </div>
+          console.log( $('.aoo:has(.boo)').is($('.aoo').eq(1)) ); // true
+    []   属性选择器
+        $("div[class]");        选取所有 有class属性 的div元素
+        $("div[XX="XXX"]");     选取所有 XX="XXX" 的div元素
+        $("div[XX!="XXX"]");    不等
+        $("div[XX^="XXX"]");    以XXX开头
+        $("div[XX$="XXX"]");    以XXX结尾
+        $("div[XX*="XXX"]");    包含XXX字符
+        $("div[XX|="XXX"]");    XX为前缀
+        $("div[XX~="XXX"]");    空格分割的值中包含XXX
+          <div class="aoo boo"> </div>
+          $("div[class~="aoo"]");
+        $("a[XX*="XXX"][class]");    //可多个组合使用
+    组合 
+      > 子元素 
+        $("#playlist > li") 
+      * 通配
+      , 多选
+      + 同级后一元素 
+        J(".one+div") <=> J('.one').next('div')
+      ~ 同级后面元素 
+        J('.one~div') <=> J('.one').nextAll('div')
+    其他 
+      Xpath选择器 [1.2 版本去掉]
+    '\\'选择器中的特殊字符转义 
+      <div id="aoo#boo"> </div>
+      $('#aoo#boo');   正确为  $('#aoo\\#b');
+    特殊值 
+      $('html') 等价于 document.documentElement
+      $('head') 等价于 document.head
+      $('body') 等价于 document.body
+      $(window)   浏览器显示网页内容的部分
+      $(document) 整个网页文档流
+      $("body")   就是body
+    自定义筛选器 
+      PS:jQuery的选择符解析器首先会使用一组正则表达式来解析选择器,
+        然后针对解析出的每个选择符执行一个函数,称为选择器函数,
+        最后根据这个选择器函数的返回值[true或false]来决定是否保留该元素
+        已存在的筛选器有 lt、gt、eq 
+      'gt'筛选器实现原理分析 
+        $('div:gt(1)')  
+        该选择器首先获取所有<div>元素,然后隐式遍历并逐个将<div>元素和'1'作为参数,
+        传递给gt对应的选择器函数进行判断,若函数返回true,则保留该<div>元素,否则不保留, 
+        最终得到一个符合要求的<div>元素集 
+        :gt() 选择器在jQuery源文件中的代码
+        gt : function(a,i,m){
+          return i>m[3]-0
+        }
+        参数说明 
+        a  指向当前遍历到的DOM元素 
+        i  当前遍历到的DOM元素的索引值 
+        m  一个数组
+          m[0]  表示选择器进一步将要匹配的内容,如 $('div:gt(1)')中的':gt(1)'部分 
+          m[1]  选择器引导符,如 $('div:gt(1)')中的':',用户还可自定义其他选择器引导符 
+          m[2]  选择器函数,如 $('div:gt(1)')中的'gt' 
+          m[3]  选择器函数的参数,如 $('div:gt(1)')中的'1' 
+          m[4]  
+      自定义一个'between'选择器
+        如 $('div:between(2,4)') 实现获取索引值为3、4 元素的功能 
+        构建选择器函数
+        var foo = function(a,i,m){
+          var temp = m[3].split(","); // 将传递的参数转成一个数组
+          return temp[0]-0<i && i<temp[1]-0 
+        }
+        ;(function ($){  // 在函数前加';'避免被其他未加';'的代码影响 
+          $.extend($.expr[':'],{
+            between : foo
+          })
+        })(jQuery);
+        选择器仅仅是 jQuery.expr[':'] 对象的一部分,可直接扩展 
+  var jEl = $(elem)  通过elem获取,返回jEl 
+      Example: $(document); // 获取整个文档
+  通过jEl获取 
+    $('selector',jEl)  在jEl中查找'selector'
+    ★自身条件筛选 
+    jEl.first()   jEl,jEl的第一个  
+    jEl.eq(index) 下标选取 
+      index为整数,指示元素的位置[从0开始]
+      若是负数,则从集合中的最后一个元素往回计数。
+    jEl.not('selector'/jEl) 非筛选 
+    jEl.not(function(idx){  // jEl,用于检测集合中每个元素的函数 
+      $(this) jEl集中的当前jEl  
+      return bol; // 是否排除当前jEl  
+    }); 
+    jEl.has('selector');   包含筛选 
+    jEl.filter('selector');   相等筛选  
+    ★层级关系筛选 
+    jEl.parents(["selector"])  所有祖先元素
+    jEl.closest("selector")    最近的第一个祖先元素
+    jEl.parent(["selector"])   父级及以上的一个元素  [无参时,为父元素]
+    jEl.siblings(["selector"]) 从同级元素中获取jEl [无参,为所有同级元素]
+    jEl.prev(["selector"])   同级前一个元素 [无参时,为同级前一元素]
+    jEl.prevAll("selector")  同级前所有元素
+      获取到的元素在集合中为从后向前排列;
+    jEl.next(["selector"])   同级后元素 [无参时,为同级后一元素]
+    jEl.nextAll("selector")  同级后所有元素
+    jEl.andSelf("selector")  获取指定元素后边的所有同级元素,之后加上指定的元素
+    jEl.find('selector')        从后代元素中获取jEl
+      自身jEl若find自己则获取不到
+    jEl.children(['selector'])  和find类似,只是从子元素中获取
+    ★属性筛选 
+    jEl.offsetParent() 最近的祖先定位元素 
+      定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
+  性能优化
+    关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器 
+    因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是; 
+    
+    $('#nav').find('a.home'); // 3 
+    $('#nav a.home'); // 2 
+    $('.home'); // 1 
+    推荐优先使用前两种
+    
+    为选择器指定范围 
+      默认情况下,当把一个选择器传递给jQuery时,它将遍历整个DOM,
+      jQuery方法还具有一个未充分利用的参数,既可以将一个上下文参数传入jQuery,
+      以限制它只搜索DOM中特定的一部分。
+      //糟糕,会遍历整个DOM
+      $(".class");
+      //建议,只搜索#id元素内
+      $(".class","#id");
+      
+      jQuery选择器的性能比较:
+      $(".class","#id") > $("#id .class") > $(".class")
+    缓存jQuery对象 
+      // 糟糕 
+      var $container = $('#container'), 
+      $containerLi = $('#container li'), 
+      $containerLiSpan = $('#container li span'); 
+      // 建议 (高效) 
+      var $container = $('#container '), 
+      $containerLi = $container.find('li'), 
+      $containerLiSpan= $containerLi.find('span');
+jEl 操作 
+  PS: 若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
+  转换为原始DOM元素对象elem 
+    PS:使用原生JS的方法时,需将jEl转换为elem对象
+    var elem = jEl[index]     获取对应下标的DOM元素
+    var elemArr = jEl.toArray() 返回DOM元素组成的数组 
+    var elemArr = jEl.get()   返回DOM元素组成的数组 
+    var elem = jEl.get(num)   获取对应数字的DOM元素 
+      num  数值,从0开始,可为负,为负值时,表示第 num+jEl.length 个
+  增删改 
+    jEl.prepend('htmlCode'/jEl)    内部头部插入参数目标 
+    jEl.prependTo("selector"/jEl)  插入参数目标的内部头部 
+      将元素/内容content插入到元素内部头部
+    jEl.append('htmlCode'/jEl)     内部尾部插入
+      也可以将style标签内的css代码添加到head中
+    jEl1.appendTo("selector"/jEl2) 被插入到内部尾部 [与append顺序相反]
+      Example:
+        .aoo{ background-color:pink;}
+        $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
+        // 在所有的p标签中添加粗体的Hello,且背景为pink
+    jEl.before('htmlCode'/jEl)     将html代码/jEl添加到元素外部头部
+    jEl.insertBefore("selector"/jEl) 被插入到外部头部 [与before相反]
+      将元素/内容content插入到元素外部尾部 
+    jEl.after('htmlCode'/jEl)      外部尾部插入
+    jEl.insertAfter("selector"/jEl) 被插入到外部尾部 [与after相反]
+      将元素/内容content插入到元素外部尾部  
+    jEl.wrap("HTML代码"/jEl)          每个元素外包裹元素
+    jEl.wrapAll("HTML代码"/jEl)       所有元素整体外包裹元素
+    jEl.unwrap("HTML代码"/jEl)        元素外包裹的元素去除[?]
+      Example:
+        <a href="#"><div class="aoo"> 123123 </div></a>
+        $('.aoo').unwrap('a');
+        结果为: <div class="aoo"> 123123 </div>
+    jEl.wrapInner("HTML代码"/jEl)     将每个元素的内容包裹
+    jEl1.replaceWith("HTML代码"/jEl)  元素1代替为元素2
+    jEl1.replaceAll("selector"/jEl2)  元素2代替为元素1 [与replaceWith相反]
+      $("HTML代码")/jEl1.replaceAll("selector"/jEl2); 
+    jEl.html(str/foo); 设置/获取元素内容
+      无参数:以字符串形式返回元素内容,包括HTML标签
+      有参数:参数为字符串,将元素中内容替换为字符串,会将HTML标记转换为HTML元素
+      当 jEl 包含多个 elem时,则默认将其获取的每个元素的字符串合并为一个字符串.
+      和JS中的.innerHTML 相似
+    jEl.text(str/foo); 设置/获取元素文本
+      无参数:获取元素的内容文本
+      有参数:设置元素内容文本
+    jEl.remove()   删除元素
+      删除该元素和其子元素及以下的所有内容(包括自身标签)
+      所有与元素相关的数据也会被删除(event handlers、internally cached data)
+      返回值为删除的元素
+    jEl.detach()   删除元素[保留绑定事件、附加数据等]
+      detach 后的返回值(元素)再添加到其他地方,元素的event事件仍存在.
+    jEl.empty()    清空内容
+      删除该元素的子元素及以下的所有内容(不包括自身标签)
+      返回值为清空后的元素
+    jEl.removeAttr('属性名')  删除属性
+      Example:
+        jEl.removeAttr('class'); 
+    jEl.css(arg?)  读写,元素的style样式  
+      PS: 设置为行内样式; 获取为计算后的属性 
+      Example: 
+        jEl.css('height'); //获取元素的高度
+        jEl.css("color");  // 获取元素的字体颜色
+        jEl.css("color","red"); // 设置元素的字体颜色为红色
+      jEl.css(attrArr);  获取多个属性值
+        Example:
+        jEl.css(["color","font-size"]); 
+      jEl.css(attrObj);  设置多个属性
+        Example:  
+        jEl.css({
+          "background-color": "red"
+          ,color: "yellow"
+        });  
+      jEl.css("color",function(index,oldValue){ // 传入函数 
+        return val;  // 返回值为属性值 
+      }); 
+  元素属性 
+    ◆添加属性
+    jEl.attr();  读写属性值 
+      jEl.attr('属性名')     返回选定属性的属性值
+      jEl.attr('属性名',str/boolean) 设定选定属性的属性值
+        Example:
+          jEl.attr('disabled',false); // 取消表单禁用
+      jEl.attr(attribute,function(index,oldvalue){...}) 通过函数来操作属性
+      jEl.attr({attribute:value, attribute:value ...})  同时设置多组属性值
+      Example:
+        jEl.attr('class'); // 获取class属性的值
+        jEl.attr('data-foo'); // 获取自定义元素属性的值
+          注:自定义属性一般设置格式为 data-**="xxxx"
+        $('a[href^="http://"]').attr("target", "_blank"); // 在新窗口打开链接
+    jEl.prop();  读写属性值,和attr类似 ‹'1.6+'› 
+      $(selector).prop(property,value)
+      $(selector).prop(property,function(index,currentvalue){...})
+      $(selector).prop({property:value, property:value,...})
+    prop 和 attr 的区别 
+      有的属性写法要求不同,如disabled 和 checked,可写成 disabled = "disabled",
+      或单独 disabled 或 disabled=true [HTML5规定,可等于任何字符,最终都为true]
+      jEl.attr('disabled') 返回 disabled
+      jEl.prop('disabled') 返回 true
+      使用prop不会在DOM中反应出来
+      Example:
+        <input type="checkbox" name="" value="">
+        $('#checkbox').on("click",function(e){
+          var aoo = $(this).prop('checked');
+          var boo = $(this).attr('checked');
+          console.log(aoo,boo);
+        })
+        // true undefined
+        // false undefined
+        // true undefined
+        // false undefined
+        // ...
+        
+        反复切换选中状态
+        <input type="text" name="" value="" class="checkbox1">
+        <input type="text" name="" value="" class="checkbox2">
+        var checkbox1 = $('.checkbox1');
+        var checkbox2 = $('.checkbox2');
+        var cal = 0;
+        var aoo = setInterval(function(){
+          if (cal % 2 == 0) {
+            checkbox1.prop('checked',true);
+            checkbox2.prop('checked',true);
+          }
+          else {
+            checkbox1.prop('checked',false);
+            checkbox2.prop('checked',false);
+          }
+          cal++;
+        },1000);
+        attr在HTML文档中有'checked'属性开关显示,但在网页视图中无切换显示,
+        prop在HTML文档中无'checked'属性开关显示,但在网页视图中有切换显示
+        
+        <button type="button" name="button">点击我</button>
+        $('button').click(function(){
+          $(this).css('display','none');
+          console.log($(this).attr('style')); // display: none;
+          console.log($(this).prop('style'));
+          //  CSSStyleDeclaration {0: "display", alignContent: "", alignItems: "", alignSelf: "", alignmentBaseline: "", all: ""…}
+        })
+    jEl.val(str/foo); 读写值 [实时动态的]
+      使用元素
+        input元素的value的值 
+        textarea 的内容
+        select 的 value 值(而非显示值)
+      返回第一个匹配元素的 value 属性的值 
+    ◆class相关
+    jEl.hasClass('className')    检测class类
+      返回值类型为Boolean,若存在返回true,否则false.
+    jEl.addClass('className')    添加class类
+      若为多个元素,则每个元素中都添加该类
+    jEl.removeClass('className') 移除class类
+      jEl.removeClass("aoo boo"); 移除class aoo 和 class boo
+    jEl.toggleClass('className') 开关class类
+      若有,则删除;没有,则加上
+  元素信息 
+    ◆尺寸位置信息 
+      $(window) 和 $(document) 的宽高尺寸 
+        他们的 .height() .innerHeight() .outerHeight() 都相同
+        且为只读,也和其 margin border padding 无关,
+        推荐使用 height 来代替 innerHeight、outerHeight 获取; 宽度同理;
+        $(window).height()   表示为可视区高度 
+        $(document).height() 表示网页的总高度 
+    jEl.width([num/foo])   读写元素content的width 
+      PS: 当元素display:none;时宽度为0;
+      num      用于设置元素的宽度值,单位px
+      foo = function(indx,oldWidth){
+      }
+    jEl.height([num/foo])  读写元素content的height 
+      需要设置 height 的值,如单行文字只设置line-height则该方法获取不到数值;
+    jEl.innerWidth([num/foo])  读写元素宽,content+padding 
+    jEl.innerHeight([num/foo]) 读写元素高,content+padding
+    jEl.outerWidth([bool])   元素宽,content+padding+border[+margin] 
+      bool  可选,默认为false,是否包括margin的布尔值
+    jEl.outerHeight([bool])  元素高,content+padding+border[+margin] 
+    jEl.scrollTop()   读写,元素相对滚动条顶部的偏移 
+      PS: 此处的jEl为拥有滚动条的元素;
+      Self: 
+        当滚动条向下滚动时‹值变大›,增量值最小需大于1,否则无滚动且不触发滚动事件 
+        而向上滚动时‹值变小›,则增量大小无要求  
+    jEl.scrollLeft()  读写元素相对滚动条左侧的偏移
+    jEl.offset([{top:num1,left:num2}]) 读写,元素相对文档左上角的top和left 
+      PS: 返回包含top和left属性的对象; 
+        元素相对与document的top和left,若需获取到视口则需减去滚动距离;
+        此方法只对可见元素有效;
+      Example:
+        $(".a").offset(); // {top: 24, left: 0}
+        $(".a").offset().left = 20; // ? 
+        $( "p:last" ).offset({top:10,left:30}); // 使用此方法进行 写操作
+    jEl.position()  obj,元素相对于其'offsetParent'的top和left [只读?]
+      PS:只对可见元素有效
+        offsetParent可为: 该元素的相对定位元素或该元素的父元素
+        返回包含top、left属性的对象 
+      Example:
+        .parent{
+          position: relative;
+        }
+        .child{
+          position: absolute;
+          top: 10px;left: 20px;
+        }
+        <div class="parent"> <div class="child"></div> </div>
+        var pos = $('.child').position();
+        console.log(pos); //  Object {top: 10, left: 20}
+    ◆自定义数据
+    jEl.data(key,value) 绑定自定义数据 [DOM中无任何变化]
+      Example:
+      $('#box').data('name', 'TG'); 
+    jEl.data(key)       读取自定义数据 
+      Example:
+        <div class="aoo" data-id='111'> 23423 </div>
+        var jEl = $('.aoo');
+        var id = jEl.data('id');
+        console.log(id); // 111
+    jEl.removeDate(key) 移除自定义数据
+      Example:
+        $('#box').removeDate('name');
+    ◆其他信息
+    jEl.size()         元素个数
+    num = jEl.index([jEl/selector]) 获取元素在其父元素jEl中的下标[从1开始]
+      jelem.index();   无参数,返回该元素在同级元素中的索引位置
+      Example: 点击获取当前为第几个li 
+        <ul>
+          <li>aaaaa</li>
+          <li>bbbbb</li>
+          <li>ccccc</li>
+        </ul>
+        $("li").click(function(){ 
+          console.log( $(this).index()); 
+        });
+    jEl1.is(jEl2) 判断
+      jEl1.is(jEl2) 判断两个节点是否相同
+      jEl1.is(":checked") 判断是否被选中
+  状态改变 
+    jEl.focus();   获得焦点
+    jEl.blur();    失焦
+    jEl.click();   点击元素 [会触发事件]
+    jEl.select();  选中文字 
+      选中如input、textarea等元素类的文字,
+      不可选中因增加contenteditable属性而可编辑的元素的文字;
+  性能优化 
+    繁重的操作中分离元素
+      若你打算对DOM元素做大量操作（连续设置多个属性或css样式）,
+      建议首先分离元素然后在添加。
+      // 糟糕
+      var $container = $("#container"),
+      $containerLi = $("#container li"),
+      $element = null;
+      $element = $containerLi.first();
+      //... 许多复杂的操作
+      // better
+      var $container = $("#container"),
+      $containerLi = $container.find("li"),
+      $element = null;
+      $element = $containerLi.first().detach();
+      //... 许多复杂的操作
+      $container.append($element);
+  jEl.each(foo)  为每个匹配成员规定执行的函数,返回 
+    foo  回调函数,依次传入参数 (indx,elem) 
+      其中 elem 为DOMElem,通过 $(elem) 转换为 jEl
+      返回 'false' 将停止循环,就像在普通的循环中使用 'break'
+      返回 'true' 跳至下一个循环,就像在普通的循环中使用'continue'
+    Example:
+      jEl.each(function(){ 
+        // 输出每个dom元素
+        console.log(this); 
+        // 输入每个jEl
+        console.log($(this)); 
+      })
+      
+      $('.todo-cell').each(function()){ 
+        console.log(arguments) 
+      }
+      或写成
+      $('.todo-cell').each(function(i,e)){ 
+        console.log(i,e) 
+      }
+Animation 动画 
+  time   数值,过渡的时间,单位毫秒,默认一般为0 
+    number  如 1500 
+    "normal"
+    "slow"
+    "fast"
+    "swing"    
+    "linear"   匀速
+  cfoo   回调函数,在动画执行完后调用 
+  ◆可见性变化 
+  jEl.show([time] [,cfoo])   'height'&'widht'&'opacity'恢复到原始
+  jEl.hide([time] [,cfoo])   'height'&'widht'&'opacity'过渡到0 
+  jEl.toggle([time][,cfoo])  切换'show'和'hide'
+  jEl.fadeIn([time] [,cfoo])      'opacity'从0过渡到1 
+  jEl.fadeOut([time] [,cfoo])     'opacity'从1过渡到0  
+  jEl.fadeToggle([time] [,cfoo])  切换'fadeIn'和'fadeOut' 
+  jEl.fadeTo(time,opacity,cfoo) 透明度过渡到指定值'opacity' 
+    opacity   透明度,0-1 之间取值
+  ◆尺寸变化
+  jEl.slideDown(time,cfoo)   向下'height'从0展开到初始值 
+  jEl.slideUp(time,cfoo)     向上'height'从原始值收缩到0 
+  jEl.slideToggle(time,cfoo) 切换'slideDown'和'slideUp' 
+  ◆自定义变化 
+    当定义样式的值时,单位默认为'px',如 '100px'或'100'等价
+  jEl.animate(finalStyle[,time][,duration][,cfoo])  定义变化及变化的过程 
+    {  // 必须,元素的最终样式状态,由样式声明属性和其值组成的对象 
+      styleAttr : styleVal,
+      // styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
+      // styleVal 可通过 -=、+= 等在原值上进行便捷计算 
+      //   $(".aoo").animate({
+      //     width:"+=10px", // 在原来的基础上加10px
+      //     height:"-=100%"
+      //   },1000)
+      ... 
+      非CSS样式的属性列举 
+        scrollTop 定义滚动条的滚动距离
+          $('.aoo').animate({
+            scrollTop : '+=33'
+          },100)
+    }
+    time       可选,执行时间 
+      number    毫秒,如 1500
+      "normal"  默认值
+      "slow"
+      "fast"
+    duration   延时 
+    cfoo       执行结束的回调 
+  jEl.animate(finalStyle,options)    定义变化及变化的过程  
+    {   // 最终样式 
+      left : 100
+    }
+    {   // 配置选项 
+      duration: 1000, // 延迟 
+      step: function(now,fx){ 
+      },
+      complete: foo,  // 动画执行完成后的回调 
+    }
+  jEl.stop([bool1] [,bool2]) 停止动画 
+    bool1  默认为false,是否清空未执行完的动画队列 
+    bool2  默认false,是否将动画调到最后状态 
+  jEl.delay(time)            延缓动画 
+    Example:
+      $('#aoo').animate({
+        width : '+=30'
+      },1000)
+      .delay(500)
+      .animate({
+        height : '+=30'
+      },1000)
+  ◆其他
+  $.fx.off = true   禁用jQuery动画效果[关闭所有网页特效]
+  $.fx.interval     读写动画的频率,单位毫秒 
+  Example:
+    左右滑动效果
+    <div class="wrap">
+      <div class="num">
+        <span class="page">1</span>/
+        <span class="total">9</span>
+      </div>
+      <div class="imgs">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+        <img src="../publicImg/地图1.png" alt="" class="img">
+      </div>
+    </div>
+    .wrap {
+      height: 100vh;
+      width: 100vw;
+      background-color: #646464;
+      position: relative;
+    }
+    .wrap .num {
+      font-size: 4.26666667vw;
+      width: 100%;
+      color: white;
+      position: absolute;
+      text-align: center;
+      bottom: 4vw;
+    }
+    .wrap .imgs {
+      font-size: 0;
+      white-space: nowrap;
+      overflow-x: scroll;
+    }
+    .wrap .imgs img {
+      outline: 1px solid gray;
+      margin-top: 20%;
+      width: 100%;
+    }
+    var width = $('.img').width();
+    $('.imgs').on('touchend',function(e){
+      var distance = $('.imgs').scrollLeft();
+      var d = distance % width;
+      var n = Math.floor(distance /width);
+      if (d > width/2) {
+        $(this).animate({scrollLeft : (n+1)*width },300);
+        $('.page').text(n + 2 +'');
+      }else {
+        $(this).animate({scrollLeft : n*width},300);
+        $('.page').text(n + 1+ '');
+      }
+      setTimeout(function(){
+        var val = $('.imgs').scrollLeft() / width;
+        $('.imgs').scrollLeft(Math.round(val)*width );
+      },1000);
+    })
+  动画队列 : 将一元素的多个动画按顺序书写,会按顺序执行,而非同时执行 
+    或使用链式操作,也会按顺序执行[前一个动画执行完了,才会执行下一个] 
+  var bol = jEl.is(':animated') 判断元素是否处于动画状态 
+Accu: 
+  元素可滚动时,判断是否滚动到底部 
+    HTML结构: 
+      <div class="win">
+        <div class="wrap">
+          .....           
+        </div>
+      </div>
+    滚动到底部的条件: $('.win').scrollTop() == $('.wrap') - $('.win')
+--------------------------------------------------------------------------------
 工具方法 
   ◆遍历相关 
   $.each(obj,function(key,val){ // 对象遍历 
@@ -1574,6 +1584,7 @@ AJAX
     timeout(1000).then(function() {
       console.log('等待了1秒钟！');
     });
+--------------------------------------------------------------------------------
 jQuery插件 
   'jQuery-File-Upload': 文件上传插件 
   'Validation'表单验证插件 

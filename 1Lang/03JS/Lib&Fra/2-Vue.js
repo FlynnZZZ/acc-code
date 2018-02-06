@@ -1088,8 +1088,13 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
       此时,必须使用 Runtime + Compiler 构建的 Vue 库
   ◆数据选项 
   data: obj,     // 数据,用于渲染、交互的数据 
-    实例中默认代理其'data',使用'this'表示 
-      其优先级高于其他,即'this.xx'优先在'data'中寻找 
+    Feature: 
+      实例中默认代理其'data',使用'this'表示 
+        其优先级高于其他,即'this.xx'优先在'data'中寻找 
+      对象中的键名不可以'_'开头,否则无效
+        {
+          _key: true // 无效
+        }
     Example:
       var obj = { a: 1 };
       var vm = new Vue({
@@ -1663,10 +1668,18 @@ vm.xxx.实例属性/方法/事件
     }     
     inserted: function(el,binding,vnode){  // 被绑定元素插入父节点时调用 
       PS: 仅保证父节点存在,但不一定已被插入文档中,父节点存在即可调用,不必存在于'document'中 
+      Feature: 
+        该钩子函数中,无法检查到绑定值的变化,'update'钩子中才能检测到 
+          如在绑定的事件回调中,无法通过绑定值变化来执行不同的逻辑 
     } 
     update: function(el,binding,vnode,oldVnode){ // 所在组件的vnode更新时调用 
-      指令的值可能发生了改变也可能没有,
-      但可通过比较更新前后的值绑定值'binds.value'和'binds.oldValue'来忽略不必要的模板更新 
+      导致vnode更新的一些时机  
+        绑定值变化话时<在指令钩子函数中绑定值最好只读> 
+        视图中渲染的数据变化时  
+        ... 
+      指令的值可能发生了改变也可能没有 
+        可通过比较更新前后的值绑定值'binding.value'和'binding.oldValue'
+        来忽略不必要的模板更新 
       Example:  
         当DOM渲染有更新时
         <div id="demo1" >
@@ -1726,6 +1739,7 @@ vm.xxx.实例属性/方法/事件
       'oldValue'   指令绑定的前一个值,仅在'update'和'componentUpdated'钩子中可用 
         无论值是否改变都可用
     vnode    Vue编译生成的虚拟节点 
+      vnode.context vm,该自定义指令所属的vm实例对象  
     oldVnode 上一个虚拟节点 
       Example:
         <div id="map" v-drct:arg.a.b="msg"></div>
@@ -2080,8 +2094,40 @@ vm.xxx.实例属性/方法/事件
       但'class'和'style'这两个特性的值都会做合并'merge'操作 
     Example: 
       <cpt-aoo style="color:red;"></cpt-aoo> // 在子组件中会直接生效 
-  slot="xxx"&<slot name="xxx">,分发内容,父子组件模版通信,父组件定制子组件DOM内容 
-    父组件中,定义HTML标签放置在子组件标签的内部 
+  'Slot'分发内容,父子组件模版通信,父组件定制子组件DOM内容 
+    PS: 父组件中'slot'的值和子组件中'name'的值进行匹配,相等则替换; 
+      可以有一个匿名slot,为默认slot,作为找不到匹配的内容片段的备用插槽
+      若无默认的<slot>,找不到匹配的内容片段将被抛弃 
+    Example:
+      // 父组件模版
+      <div id="parent">
+        <cpt-child>
+          <h1 slot="header">111</h1>
+          <p>222</p>
+          <p>333</p>
+          <h2 slot="footer">444</h2>
+        </cpt-child>
+      </div>
+      // 子组件 
+      <template id="child">
+        <div>
+          <header> <slot name="header"></slot> </header>
+          <main> <slot></slot> </main>
+          <footer> <slot name="footer"></slot> </footer>
+        </div>
+      </template>
+      // 渲染结果 
+      <div id="parent">
+        <div>
+          <header> <h1>这里可能是一个页面标题</h1> </header>
+          <main>
+            <p>主要内容的一个段落</p>
+            <p>另一个主要段落</p>
+          </main>
+          <footer> <h2>这里有一些联系信息</h2> </footer>
+        </div>
+      </div>
+    父组件中,定义HTML标签放置在子组件标签的内部: <tag slot="xxx"></tag> 
       <div id="parent">
         <cpt-child>
           <p>这是一些初始内容</p>
@@ -2089,7 +2135,7 @@ vm.xxx.实例属性/方法/事件
         </cpt-child>
       </div>
       可用'slot'属性具名 
-    子组件中,通过<slot>标签指定替换的位置及默认内容 
+    子组件中,通过<slot>标签指定替换的位置及默认内容: <slot name="xxx"> 
       <template id='child'>
         <div>
           <slot> 当没有要分发的内容时会显示 </slot>
@@ -2098,39 +2144,6 @@ vm.xxx.实例属性/方法/事件
         </div>
       </template>
       可用'name'属性具名 
-    <tag slot="aoo"></tag> & <slot name="aoo"> 具名插槽 
-      PS: 子组件中'name'的值和父组件中'slot'的值进行匹配,相等则替换; 
-        可以有一个匿名slot,为默认slot,作为找不到匹配的内容片段的备用插槽
-        若无默认的<slot>,找不到匹配的内容片段将被抛弃 
-      Example:
-        // 父组件模版
-        <div id="parent">
-          <cpt-child>
-            <h1 slot="header">111</h1>
-            <p>222</p>
-            <p>333</p>
-            <h2 slot="footer">444</h2>
-          </cpt-child>
-        </div>
-        // 子组件 
-        <template id="child">
-          <div>
-            <header> <slot name="header"></slot> </header>
-            <main> <slot></slot> </main>
-            <footer> <slot name="footer"></slot> </footer>
-          </div>
-        </template>
-        // 渲染结果 
-        <div id="parent">
-          <div>
-            <header> <h1>这里可能是一个页面标题</h1> </header>
-            <main>
-              <p>主要内容的一个段落</p>
-              <p>另一个主要段落</p>
-            </main>
-            <footer> <h2>这里有一些联系信息</h2> </footer>
-          </div>
-        </div>
     编译作用域、组件作用域 
       父组件模板的内容在父组件作用域内编译;子组件模板的内容在子组件作用域内编译; 
       分发内容是在父作用域内编译 

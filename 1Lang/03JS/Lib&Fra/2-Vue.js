@@ -2094,63 +2094,66 @@ vm.xxx.实例属性/方法/事件
       但'class'和'style'这两个特性的值都会做合并'merge'操作 
     Example: 
       <cpt-aoo style="color:red;"></cpt-aoo> // 在子组件中会直接生效 
-  'Slot'分发内容,父子组件模版通信,父组件定制子组件DOM内容 
+  'Slot'父子组件模版通信 
     PS: 父组件中'slot'的值和子组件中'name'的值进行匹配,相等则替换; 
       可以有一个匿名slot,为默认slot,作为找不到匹配的内容片段的备用插槽
       若无默认的<slot>,找不到匹配的内容片段将被抛弃 
-    Example:
-      // 父组件模版
-      <div id="parent">
-        <cpt-child>
-          <h1 slot="header">111</h1>
-          <p>222</p>
-          <p>333</p>
-          <h2 slot="footer">444</h2>
-        </cpt-child>
-      </div>
-      // 子组件 
-      <template id="child">
-        <div>
-          <header> <slot name="header"></slot> </header>
-          <main> <slot></slot> </main>
-          <footer> <slot name="footer"></slot> </footer>
+    内容分发,父组件定制子组件DOM内容 
+      Example:
+        // 父组件模版
+        <div id="parent">
+          <cpt-child>
+            <h1 slot="header">111</h1>
+            <p>222</p>
+            <p>333</p>
+            <h2 slot="footer">444</h2>
+          </cpt-child>
         </div>
-      </template>
-      // 渲染结果 
-      <div id="parent">
-        <div>
-          <header> <h1>这里可能是一个页面标题</h1> </header>
-          <main>
-            <p>主要内容的一个段落</p>
-            <p>另一个主要段落</p>
-          </main>
-          <footer> <h2>这里有一些联系信息</h2> </footer>
+        // 子组件 
+        <template id="child">
+          <div>
+            <header> <slot name="header"></slot> </header>
+            <main> <slot></slot> </main>
+            <footer> <slot name="footer"></slot> </footer>
+          </div>
+        </template>
+        // 渲染结果 
+        <div id="parent">
+          <div>
+            <header> <h1>这里可能是一个页面标题</h1> </header>
+            <main>
+              <p>主要内容的一个段落</p>
+              <p>另一个主要段落</p>
+            </main>
+            <footer> <h2>这里有一些联系信息</h2> </footer>
+          </div>
         </div>
-      </div>
-    父组件中,定义HTML标签放置在子组件标签的内部: <tag slot="xxx"></tag> 
-      <div id="parent">
-        <cpt-child>
-          <p>这是一些初始内容</p>
-          <p>这是更多的初始内容</p>
-        </cpt-child>
-      </div>
-      可用'slot'属性具名 
-    子组件中,通过<slot>标签指定替换的位置及默认内容: <slot name="xxx"> 
-      <template id='child'>
-        <div>
-          <slot> 当没有要分发的内容时会显示 </slot>
-          // <slot>内的任何内容都被视为备用内容,没有要替换的内容时会显示备用内容 
-          // 子组件模板需至少有一个<slot>插口,否则父组件的内容将会被丢弃  
+      父组件中,定义HTML标签放置在子组件标签的内部: <tag slot="xxx"></tag> 
+        <div id="parent">
+          <cpt-child>
+            <p>这是一些初始内容</p>
+            <p>这是更多的初始内容</p>
+          </cpt-child>
         </div>
-      </template>
-      可用'name'属性具名 
+        可用'slot'属性具名 
+      子组件中,通过<slot>标签指定替换的位置及默认内容: <slot name="xxx"> 
+        <template id='child'>
+          <div>
+            <slot> 当没有要分发的内容时会显示 </slot>
+            // <slot>内的任何内容都被视为备用内容,没有要替换的内容时会显示备用内容 
+            // 子组件模板需至少有一个<slot>插口,否则父组件的内容将会被丢弃  
+          </div>
+        </template>
+        可用'name'属性具名 
     编译作用域、组件作用域 
-      父组件模板的内容在父组件作用域内编译;子组件模板的内容在子组件作用域内编译; 
+      父组件模板的内容在父组件作用域内编译;
+      子组件模板的内容在子组件作用域内编译; 
       分发内容是在父作用域内编译 
-    <template scope="aoo"><template> & <slot boo="val">  作用域插槽['2.1.0+'] 
-      PS: 在父组件中,aoo.boo 表示 val 的值 
-      子组件定义父组件中分发内容的数据 
-      作用域插槽也可以是具名的['slot'属性]; 
+    作用域插槽,子组件提供父组件中分发内容的数据  ['2.1.0+'] 
+      PS: 作用域插槽也可以是具名的['slot'属性] 
+      子组件,key、val的形式提供数据: <slot ‹key›="val"> 
+      父组件,scope指定数据对象: <template scope="‹objName›"><template> 
+        在父组件的模版中,<objName>.<key> 表示 val 的值 
       Example: 
         // 父组件中 
         <div id="parent">

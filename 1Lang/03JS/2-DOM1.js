@@ -1288,6 +1288,7 @@ HTMLElement,HTML元素节点
       .setCustomValidity() 用于自定义错误信息 
         该提示信息也反映在该输入框的 validationMessage 属性中 
         若将setCustomValidity设为空字符串,则意味该项目验证通过        
+      .select()         选中表单的值  
       不常用 
       .defaultChecked  
       .dirName  
@@ -1315,7 +1316,6 @@ HTMLElement,HTML元素节点
       .stepDown([num])   在当前数值上减num,num默认为1[HTML5]
       .checkValidity()  bol,字段是否有效,判断依据为标签中添加的约束
       .reportValidity()    
-      .select()    
       .setRangeText()    
       .setSelectionRange()    
       .webkitEntries  

@@ -130,6 +130,8 @@ NPM'node package manager',node包管理器
       "license":"MIT",        // 项目许可协议  
       "scripts": {            // 指定运行脚本命令的npm命令行缩写 
         "start": "node index.js", // 命令行中 npm run start 执行该命令 
+        此处调用的命令为安装在项目中的,而非全局的 
+          "build": "webpack --config webpack.config.js" // webpack 为安装项目中的 
       },
       "dependencies": {       // 生产环境依赖的模块 
         // npm install xxx -S 安装,并写入  

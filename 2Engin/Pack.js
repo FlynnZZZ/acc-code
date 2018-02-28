@@ -933,7 +933,27 @@ Suggestion&Question:
     
     module: {},  // 决定了如何处理项目中的不同类型的模块 [详见'Loaders']
     plugins: [], // 插件 [详见'Plugins'] 
-    devServer: {}, // 'webpack-dev-server'配置 [详见'webpack-dev-server']
+    devServer: { // 'webpack-dev-server'配置 [详见'webpack-dev-server'] 
+      // PS: webpack2.0新增,用于集中处理'webpack-dev-server'的相关配置 
+      port: 8000
+      ,host: '0.0.0.0'
+      ,overlay: {
+        errors: true // 编译错误时,显示在网页上 
+      }
+      ,open: true   // 是否自动打开浏览器 
+      ,historyFallback: {  // 将不识别的地址映射到指定地址 
+        
+      }
+      ,hot: true // 是否热更新 
+    }, 
+    devtool: 'source-map', // 浏览器调试用的选项  
+      'source-map'  // 牺牲构建速度的'source-map'是最详细的 
+      "cheap-module-source-map" // 调试时只能寻找到对应的行,不能对应到具体符号 
+      "eval-source-map"   // 用于开发环境  
+      "eval"         // 没有模块映射,而是命名模块,以牺牲细节达到最快 
+      "inline-source-map" // 嵌入到源文件中
+      "hidden-source-map" // 'SourceMap'不在源文件中引用
+      'null'        // 无'source-map'
     
     resolve: { // 解析模块请求的选项,用来配置要被打包的模块解析的处理细节  
       modules: [  // 用于查找模块的目录  
@@ -953,14 +973,6 @@ Suggestion&Question:
       // 可尝试设置 resolve.fallback 和 resolveLoader.fallback 来解决问题
     },
     watch: true, // 监控文件改变,动态更新 
-    devtool: 'source-map', // 浏览器调试用的选项  
-      'source-map'  // 牺牲构建速度的'source-map'是最详细的 
-      "cheap-module-source-map" // 调试时只能寻找到对应的行,不能对应到具体符号 
-      "eval-source-map"   // 用于开发环境  
-      "eval"         // 没有模块映射,而是命名模块,以牺牲细节达到最快 
-      "inline-source-map" // 嵌入到源文件中
-      "hidden-source-map" // 'SourceMap'不在源文件中引用
-      'null'        // 无'source-map'
     sourceMapFilename: "[file].map", // 'source map'位置的文件名模板
       "sourcemaps/[file].map" 
     devtoolModuleFilenameTemplate: "webpack:///[resource-path]", // 'devtool'中模块的文件名模板 

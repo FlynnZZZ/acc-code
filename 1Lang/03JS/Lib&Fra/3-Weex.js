@@ -9,12 +9,14 @@ weex-toolkit: 官方提供的脚手架命令行工具,可进行Weex项目创建�
     $ weex -v // 查看当前weex版本 
   $ weex init <dirName>    // 初始化weex项目 
     // $ weex create <dirName>  // 创建项目 
-  $ npm i                  // 安装项目依赖 
+  $ npm i                  // <进入项目>安装依赖 
   package.json 中已配置的 npm script:  
     serve: 开启静态服务器
     dev: webpack watch模式,方便开发
     build: 源码打包,生成JS Bundle
     debug: 调试模式
+    // npm run serve 
+    // npm run dev  
   $ weex src/aoo.vue // 预览指定文件 
     浏览器会自动弹出页面,可看到所编辑的 Weex页面的具体效果和页面布局。
     使用Playground扫描二维码,可在Android/IOS设备查看效果 
@@ -49,6 +51,64 @@ weex-toolkit: 官方提供的脚手架命令行工具,可进行Weex项目创建�
       比如 your/we/path/index.we 可以通过 http://lcoalhost:8088/weex/index.js 访问。
       your/we/path/demo/test.we 可以通过 http://lcoalhost:8088/weex/demo/index.js 。
       -e 参数可以指定一个入口的 .we 文件,这个文件的地址会显示在调试主页上(作为二维码)。
+样式 
+  适配和缩略 
+    长度值目前只支持像素值px
+      不支持相对单位em、rem 
+      适配宽度以750px为标准 
+    不支持border、background的组合写法 
+      支持的写法: 
+      border-width
+      border-color
+      background-color
+      ...
+  定位 
+    目前不支持 z-index 设置层级关系,但后面的元素层级更高 
+    Android端,超出元素容器边界不可见,overflow默认为hidden 
+  其他 
+    支持线性渐变 linear-gradient,不支持径向渐变 radial-gradient 
+    box-shadow 仅IOS中可用 
+    <image>组件无法定义一个或几个角的圆角,只能同时定义4个 
+    flexbox是默认且唯一的布局模型,每个元素默认拥有 display: flex; 属性 
+内建组件 
+  PS: 共 15 个组件 ‹2017.06.14›
+  <text>  文本组件 
+  <a>: 地址指向打包后的js地址,而不能跳转到HTML页面  
+    无法添加文本,需使用<text>组件才能添加文本 
+    子组件不支持自己 
+    不要添加click事件  
+  <web>: 用于嵌入网页 
+    src属性指定资源地址 
+    不支持任何子组件 
+    事件: 
+      pagestart,该组件加载时执行 
+      pagefinish,该组件加载完毕时执行 
+      error,该组件加载错误时执行 
+  <list>: 垂直列表功能的核心组件 
+    事件: 
+    loadmore,加载更多时触发 
+    scroll,列表滚动时触发 
+    属性: 
+    loadmoreoffset=‹num›  触发loadmore事件所需距离 
+    offset-accuracy=‹num› 控制scroll事件的触发频率,默认10px  
+  <cell>: <list>的子组件 
+  <header>: 到达屏幕顶部时,吸附在屏幕顶部 
+  <refresh>: <scroller>和<list>的子组件,提供下拉刷新、下载等功能 
+    事件: 
+    refresh,<scroller>或<list>组件被下拉时触发 
+    pullingdown,<scroller>或<list>组件被下拉时触发
+      可从事件的参数对象中获取: dy,pullingDistance,viewHeight,type 
+内建模块 
+  webview: <web>组件的操作接口  
+    const webview = weex.requireModule('webview');  // 引入 
+    // 属性&方法
+    .goBack(‹webEl›)     // 后退 
+      webEl  <web>组件的DOM元素,可通过 this.$refs.xxx 来获取到 
+    .goForward(‹webEl›)  // 前进 
+    .reload(‹webEl›)     // 刷新  
+插件使用 
+  vue-router 
+    weex内置 vue-router,只需引入即可  
 weexpack 
   能够帮助开发者通过命令行创建 Weex 工程，添加相应平台的 Weex app 模版，
   并基于模版从本地，GitHub 或者 Weex 应用市场安装插件，
@@ -72,6 +132,7 @@ weexpack
   $ weexpack build ios // 构建ipa包
   $ weexpack build web // 打包html5平台：
   $ weexpack run web // 在 html5 平台运行：
-
-
+--------------------------------------------------------------------------------
+  开发者需在APP中嵌入weex的SDK 
+  调试工具 weexplayground 
 

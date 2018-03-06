@@ -5,119 +5,157 @@ Cordova: 一个移动开发框架
   PS: 前提为系统配置了Android开发环境 
   $ npm i -g cordova // 安装Cordova 
     PS: 保证npm目录在环境变量中 'C:\Users\<username>\AppData\Roaming\npm' 
+    cordova -v  // 8.0.0  安装的cordova版本号
   设置模拟器: 
     PS: 在Android模拟器上面运行Cordova应用,需要一Android虚拟设备'AVD'
   $ cordova run --list // 运行并查看模拟器 
 Cordova CLI:  
-  1 创建Cordova项目: 
-  $ cordova create <path> [id [name [config]]] [options] 
-    path  项目目录名称 
-    id    应用包名,采用反域名命名规则,全部使用小写字母 
-      PS: Android程序的安装是以包名'package name'进行区分的,即同样的包名会被认作是同一个程序。
-        这样就可以进行升级、替换。但是包名是一个可以被查看的字符串,这样就可能被伪造,
-        然后其他人就可以自己创建一个应用去替代你的应用。
-        而签名就是为了防止这样的情况发生,当你的程序被签名后安装,
-        只有同样包名与签名的程序才能被替换安装。
-        而签名是不可能简单被伪造的,从而保证了程序的安全性。 
-      一级包名为com,二级包名为xx[可为公司或个人等等], 
-      三级包名根据应用进行命名,四级包名为模块名或层级名 
-    Example:  
-      cordova create demo1 com.aoo.boo appOne  
-  2 构建平台管理:  
-  $ cordova platform add --save <platform>     // 添加开发平台
-    PS: --save 表示将保存在 config.xml 配置文件中 
-    android 
-    ios
-    blackberry 
-    browser    // 一般是用于开发阶段调试 
-    ...
-    指定版本,如 android@4.2.0 
-    Example: cordova platform add android --save
-  $ cordova platform remove  --save <platform> // 移除开发平台 
-  $ cordova platform ls  // 枚举已添加的平台  
-  $ cordova requirements // 检测是否满足构建平台的要求 
+  1 创建项目  
+    $ cordova create <dirName> [<packName> [<projectName> [<config>]]] [<options>] 
+      dirName      项目目录名  
+      packName     应用包名   
+        PS: Android程序的安装是以包名'package name'进行区分的,
+          即同样的包名会被认作是同一个程序,从而进行升级、替换 
+          包名是一个可被查看的字符串,可能被伪造替换  
+        采用反域名命名规则,全部使用小写字母 
+        一级包名为com, 
+        二级包名为xx[可为公司或个人等等], 
+        三级包名根据应用进行命名, 
+        四级包名为模块名或层级名 
+      projectName  项目名‹可在'config.xml'中查看› 
+      config         
+      options         
+      Example:  
+        cordova create demo1 com.aoo.boo appOne  
+    $ cd ‹dirName› // 进入项目目录 
+  2 构建平台  
+    $ cordova platform add --save <platform>    // 添加开发平台  
+      PS: platforms文件夹中会生成一个对应的文件夹‹如android› 
+      --save    表示将保存在 config.xml 配置文件中 
+      platform  kw,平台名称 
+        android     // 安卓 
+          指定版本,如 android@4.2.0 
+        ios         // 苹果 
+        browser     // 一般是用于开发阶段调试 
+        blackberry  
+        ...
+      Example: cordova platform add android --save
+    $ cordova platform remove --save <platform> // 移除开发平台 
+    $ cordova platform ls  // 枚举已添加的平台  
   3 测试 
-  $ cordova emulate <android> // 在模拟器上运行[前提是创建好AVD]
-  $ cordova run <android>     // 打包并在手机上测试App 
-  $ cordova serve <android>   // 在浏览器运行
+    $ cordova serve <android>   // 在浏览器运行
+    $ cordova run <android>     // 打包并在手机上测试App 
+    $ cordova emulate <android> // 在模拟器上运行[前提是创建好AVD]
   4 打包 
     PS: Android打包分'debug'和'release'两种版本,'release'是用来发布到应用商店的版本 
       默认打包的为debug版本,而release版本需开发者自己生成证书文件并签名 
-    sign,为APK签名 
-      PS: debug和release版本都须数字签名后才能安装到设备上 
-      签名需对应的证书'keystore',通常APK都采用的自签名证书,即自己生成证书给应用签名 
-    // 生成签名证书文件'.keystore',该文件只需要生成一次,以后每次sign都需使用   
-    $ keytool -genkey -v -keyalg RSA -keysize 2048 -keystore <keystore> -alias <alias> -validity <num>  
-      PS: 过程中会要求设置'keystore'和'key'的密码,待后续使用  
-        使用keytool生成私钥[证书],keytool位于JDK中的bin目录中 
-        windows下,git bash 中使用存在bug,最好在cmd中使用
-      -genkey   表示执行的是生成数字证书操作
-      -v        将生成证书的详细信息打印出来 
-      -keyalg RSA    采用RSA算法  
-      -keysize 2048  生成2048位密钥对 
-      -keystore <keystore>  生成的证书及其存放路径,默认命令行打开的目录 
-      -alias <alias>        证书的别名 
-      -validity <num>       证书的有效期天数  
+      打包最终的 .apk 文件位置为: '项目/platforms/android/app/build/outputs/apk/'
+    $ cordova requirements // 检测是否满足构建平台的要求 
+      // 输出内容如下: 
+      Java JDK: installed 1.8.0  
+      Android SDK: installed true
+      Android target: installed android-27,android-26,android-23,Google Inc.:Google APIs:23
+      Gradle: installed D:\kit\dev\android\studio\gradle\gradle-4.1\bin\gradle 
+        // 当未检测到时,可将其添加到环境变量 
+    步骤一: sign,为APK签名 
+      PS: 只有同样包名与签名的程序才能被替换安装, 
+        而签名是不可能简单被伪造的,从而保证了程序的安全性。 
+        debug和release版本都须数字签名后才能安装到设备上 
+        签名需对应的证书'keystore',通常APK都采用的自签名证书,即自己生成证书给应用签名 
+        数字签名证书是给APK打包所必需的文件,所以先要把数字签名证书生成  
+      // 生成签名证书文件'.keystore',该文件只需要生成一次,以后每次sign都需使用   
+      $ keytool -genkey -v -keyalg RSA -keysize 2048 -keystore <path> -alias <name> -validity <num>  
+        PS: 过程中会要求设置'keystore'和'key'的密码,待后续使用  
+          使用keytool生成私钥[证书],keytool位于JDK中的bin目录中 
+          windows下,git bash 中使用存在bug,最好在cmd中使用
+        -genkey   表示执行的是生成数字证书操作
+        -v        将生成证书的详细信息打印出来 
+        -keyalg RSA    采用RSA算法  
+        -keysize 2048  生成2048位密钥对 
+        -keystore <path>  生成的证书及其存放路径 
+          path   表示生成的证书及其存放路径,直接写文件名则默认生成在用户当前目录下 
+        -alias <name>        证书的别名 
+          name  证书的别名,默认是'mykey'
+        -validity <num>       证书的有效期天数  
+        根据指令输入密钥库口令[不可见]
+        依次输入显示的问题[可直接回车],最后到【否】那里时输入y后回车 
+        再输入密钥口令,若与密钥库口令相同,直接回车 [这两个口令后面签名会使用到]
+        最后生成 xxx.keystore 文件,即签名文件 
       Example: 
-      $ keytool -genkey -v -keyalg RSA -keysize 2048 -keystore k1.keystore -alias k2 -validity 10000   
-    方式一: 通过先生成未签名的release版然后再签名 
-      $ cordova build android --release // 构建未签名的release版本 
-        生成'android-release-unsigned.apk'文件 
-      // 使用生成的签名文件对未签名的release版本A签名 
-      $ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystore> <待签名的apk> <alias>  
-        PS: 签名过程中需要先后输入 keystore 和 key 的密码 
-          命令运行完后,APK就已经改变了,过程没有生成新文件,改名后即可发布了  
-        -verbose 表示将签名过程中的详细信息打印出来 
-        <keystore>  证书名 
-        <alias>     证书别名 
-    方式二: 直接使用签名证书来构建release版本 
-      $ cordova build android --release -- --keystore="xxx.keystore" --alias=<alias> --storePassword=<pw1> --password=<pw2> 
-    方式三: 使用构建配置文件'build.json'打包 
-      PS: 安全性考虑,'release'中不要填写密码,build时会弹出窗口,提示输入密码 
-      {
-        "android": {
-          "release": {
-            "keystore": "./xxx.keystore"
-            ,"storePassword": "xxx"
-            ,"alias": "xxx"
-            ,"password" : "xxx"
-            ,"keystoreType": ""
+        $ keytool -genkey -v -keyalg RSA -keysize 2048 -keystore android.jks -alias my-alias -validity 10000   
+    步骤二: 打包 
+      方式一: 直接使用签名证书来构建release版本 [推荐使用] 
+        $ cordova build android --release -- --keystore="xxx.keystore" 
+        --alias=<alias> --storePassword=<pw1> --password=<pw2> 
+          PS: 在相关平台的输出目录下直接生成一个'android-release.apk'
+          keystore      指定数字签名证书
+          –alias        指定别名 
+          storePassword 指定密钥库口令 
+          password      指定密钥口令
+        Example: 
+          cordova build android --release -- --keystore="android.keystore" --alias=my-alias --storePassword=123456 --password=123456 
+      方式二: 通过先生成未签名的release版然后再签名 
+        1 构建未签名的release版本 
+          $ cordova build android --release
+          // 生成'android-release-unsigned.apk'文件 
+        2 使用生成的签名文件对未签名的release版本A签名 
+          $ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 
+          -keystore <keystore> <待签名的apk> <alias>  
+            PS: 签名过程中需要先后输入 keystore 和 key 的密码 
+              命令运行完后,APK就已经改变了,过程没有生成新文件,改名后即可发布   
+            -verbose    表示将签名过程中的详细信息打印出来 
+            <keystore>  证书名 
+            <alias>     证书别名 
+            Example: 
+              jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore mytest.keystore app-release-unsigned.apk mytest
+      方式三: 使用构建配置文件'build.json'打包  [推荐使用]
+        PS: 支持命令行参数和 build.json 参数混合,命令行中的参数优先 
+          安全性考虑,'release'中不要填写密码,build时会弹出窗口,提示输入密码 
+        在cordova根目录新建 build.json 文件,内容如下: 
+          {
+            "android": {      // 安卓平台 
+              "release": {    // 签名版 
+                "keystore": "./xxx.keystore"  // 指定签名文件 
+                ,"alias": "xxx"               // 别名
+                ,"storePassword": "xxx"       // 密钥库口令
+                ,"password" : "xxx"           // 密钥口令
+                ,"keystoreType": ""
+              }
+              ,"debug": {     
+                "keystore": "./xxx.keystore"
+                ,"alias": "xxx"
+                ,"storePassword": "xxx"
+                ,"password" : "xxx"
+                ,"keystoreType": ""
+              }
+            }
           }
-          ,"debug": {
-            "keystore": "./xxx.keystore"
-            ,"storePassword": "xxx"
-            ,"alias": "xxx"
-            ,"password" : "xxx"
-            ,"keystoreType": ""
-          }
-        }
-      }
-      $ cordova build --release // 构建release版本   
-      $ cordova build --debug   // 构建debug版本   
-    方式四: 用Gradle配置打包 
-      Gradle,一个Android的自动化构建工具,cordova build android 的过程其实就是使用它 
-      在 platforms/android 目录下建立'release-signing.properties'文件,内容类似下面这样 
-      storeFile=relative/path/to/keystore
-      keyAlias=ALIAS_NAME
-      storePassword=SECRET1
-      keyPassword=SECRET2
-      这个文件的名称和位置也是可以通过 Gradle 的配置 'cdvReleaseSigningPropertiesFile' 修改的
-    // 用zipalign压缩和优化APK,优化后会减少app运行时的内存开销 
-    $ zipalign -v 4 <待优化的APK> <优化后的apk> 
-      zipalign.exe 位于SDK/build-tools/某一版本下 
-      将需优化的apk复制到该目录,并执行以上命令 
-      Example: 
-      zipalign -v 4 android-release.apk xx.apk 
-  $ cordova build // 构建所有添加的平台 
-  $ cordova build android   // 构建debug版本的android应用 
-  $ cordova run <platform> [options] // 打包并运行应用 
-    options: 
-      --devices 运行在真机上 
-  $ cordova clean  // 清理项目
+        $ cordova build --release // 构建release版本   
+        $ cordova build --debug   // 构建debug版本   
+      方式四: 用Gradle配置打包 
+        Gradle,一个Android的自动化构建工具,cordova build android 的过程其实就是使用它 
+        在 platforms/android 目录下建立'release-signing.properties'文件,内容类似下面这样 
+        storeFile=relative/path/to/keystore
+        keyAlias=ALIAS_NAME
+        storePassword=SECRET1
+        keyPassword=SECRET2
+        这个文件的名称和位置也是可以通过 Gradle 的配置 'cdvReleaseSigningPropertiesFile' 修改的
+      $ cordova build android   // 构建debug版本的android应用 
+      $ cordova build           // 构建所有添加的平台 
+    $ cordova run <platform> [options] // 打包并运行应用 
+      options: 
+        --devices 运行在真机上 
+    $ cordova clean  // 清理项目 
+    用zipalign压缩和优化APK,优化后会减少app运行时的内存开销 
+      $ zipalign -v 4 <待优化的APK> <优化后的apk> 
+        zipalign.exe 位于SDK/build-tools/某一版本下 
+        将需优化的apk复制到该目录,并执行以上命令 
+        Example: 
+        zipalign -v 4 android-release.apk xx.apk 
 目录及文件说明:  
   hooks: 存放自定义cordova命令的脚本文件 
     每个project命令都可以定义before和after的Hook 
-  platforms: 添加的平台 
+  platforms: 运行平台对应的 Cordova 库  
   plugins: 引入的插件 
   res: 
     icon   不同平台的图标 
@@ -127,6 +165,7 @@ Cordova CLI:
   www: 开发目录 
     index.html 项目主页 
   config.xml: 项目配置文件 
+    PS: 包含应用相关信息,使用到的插件以及面向的平台 
     version   版本号 
     <widget>  
       id  app的反转域名标识符 
@@ -136,6 +175,7 @@ Cordova CLI:
       <description>  简述,将出现在appStore介绍中 
       <author>   开发者信息,包含联系方式 
       <content>  app启动页,默认www目录下 index.html 
+        PS: 可填写线上的网址,从而将该网站打包成APP 
       <access>   一组允许app访问的外部服务器地址,* 表示所有
       <allow-intent>  定义app向系统询问是否打开的URL地址 
       <platform>  指定平台参数,不同平台可显示不同效果 
@@ -407,18 +447,18 @@ API
         示例：
         <resource-file src="src/android/java/activity_preview.xml" target="res/layout/activity_preview.xml" />
 vue-cordova项目,基于vue的cordova项目 
-  自我配置: 
-    先创建基于webpack的vue项目 
-    然后在根目录创建cordova项目 
-    将cordova项目的'/www/index.html'中所有<meta>拷贝到vue项目的'/index.html'中 
-    将cordova的'/www/index.html'中关于'cordova.js'的<script>拷贝到vue的'/index.html'中 
-      方式一: 直接在vue项目的入口 index.html 中插入 <script> 
-      方式二: 通过vue项目的入口'/src/main.js'中插入 
-        var cordovaScript = document.createElement('script')
-        cordovaScript.setAttribute('type', 'text/javascript')
-        cordovaScript.setAttribute('src', 'cordova.js')
-        document.body.appendChild(cordovaScript)
-    在webpack中修改打包的配置文件'./config/index.js' 
+  项目创建步骤[Self]:  
+    1 先创建基于webpack的vue项目 
+    2 然后在根目录创建cordova项目 
+      将cordova项目的'/www/index.html'中所有<meta>拷贝到vue项目的'/index.html'中 
+      将cordova的'/www/index.html'中关于'cordova.js'的<script>拷贝到vue的'/index.html'中 
+        方式一: 直接在vue项目的入口 index.html 中插入 <script> 
+        方式二: 通过vue项目的入口'/src/main.js'中插入 
+          var cordovaScript = document.createElement('script')
+          cordovaScript.setAttribute('type', 'text/javascript')
+          cordovaScript.setAttribute('src', 'cordova.js')
+          document.body.appendChild(cordovaScript)
+    3 在webpack中修改打包的配置文件'./config/index.js' 
       build: {
         index: path.resolve(__dirname, '../dist/index.html'),
         assetsRoot: path.resolve(__dirname, '../dist'),

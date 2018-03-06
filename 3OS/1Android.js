@@ -13,10 +13,10 @@ JDK'Java Development Kit',Java语言的软件开发工具包SDK
     PS: 可单独安装,也可通过'Android Studio'安装 
     1 安装'Android Studio' 
       self: 
-        安装studio到 'D:/devkits/android/studio'
-        安装sdk到 'D:/devkits/android/sdk' 
+        安装studio到 'D:/dev/android/studio'
+        安装sdk到 'D:/dev/android/sdk' 
     2 安装必要组件 
-      选择 Custom 安装,自定义安装位置 'd:/dev/android/sdk' 
+      选择 Custom 安装,自定义安装位置 'D:/dev/android/sdk' 
       在 SDK Manager 中进行相关选择安装  
     3 配置环境变量 
       ANDROID_HOME: sdk所在目录 

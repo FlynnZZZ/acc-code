@@ -677,6 +677,334 @@ window.frames,框架集,包含页面所有框架的window对象
   console.log(window.frames===window); // true,同时也是页面的window: 
   window.frames[idx]  通过下标获取框架的window[从0开始,从左至右,从上至下]  
   window.frames[name] 通过框架的'name'属性获取框架的window  
+window.document, 
+  Member: 
+    document.location  等价于 window.location 
+      console.log(document.location===window.location); // true 
+Navigator,客户端识别 
+  Extend: Object 
+  Instance: window.navigator 
+  Proto: 
+    ◆系统相关
+    .platform  所在系统平台,如 "Win32"
+    ◆浏览器相关 
+    .vendor   浏览器品牌 [IE不支持]
+    .vendorSub   有关供应商的次要信息 [IE和Chrome不支持] 
+    .language   浏览器的主语言 [IE11+] 
+      'zh-CN'
+      'en'
+      'en-US'
+    .mimeTypes  在浏览器中注册的MIME类型集合 
+    .plugins    浏览器安装的插件信息集合 [IE11+] 
+      navigator.plugins.refresh([bol])  刷新插件或刷新页面 
+      var plug = navigator.plugins[i];
+      plug.name        // 插件名
+      plug.filename    // 插件的磁盘文件名
+      plug.length      // 插件所处理的MIME 类型数量
+      plug.description // 插件的描述信息 
+      IE浏览器控件检测 
+        IE是以COM对象的方式实现插件的,而COM对象使用唯一标识符来表示 
+        Example:
+        检测IE是否安装flash控件
+        flash的标识符是 ShckwaveFlash.ShockwaveFlash
+        function hasIEPlugin(name){
+          try{
+            new ActiveXObject(name)
+            // 此处的name表示的是控件的唯一标识符id
+            return true;
+          }catch(e){
+            return false;
+          }
+        }
+        console.log(hasIEPlugin('ShockwaveFlash.ShockwaveFlash'));
+    .cookieEnabled  bol,浏览器是否启用cookie 
+      启用cookie返回true,否则返回false
+      cookieEnabled属性说明
+        通常可以在浏览器的临时文件夹中保存一个文件,
+        此文件可以包含用户信息(比如浏览过什么页面,是否选择了自动登录)等,
+        这个文件被称作cookie,
+        通过cookieEnabled属性可以判断浏览器是否启用了此功能
+    .javaEnabled()  bol,浏览器是否启用Java 
+    .vibrate()     设备震动 [HTML5] 
+      PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
+        显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
+        由于振动操作很耗电,在低电量时最好取消该操作.
+      使用下面的代码检查该接口是否可用.
+        目前,只有Chrome和Firefox的Android平台最新版本支持它.
+        navigator.vibrate = navigator.vibrate
+          || navigator.webkitVibrate
+          || navigator.mozVibrate
+          || navigator.msVibrate;
+        if (navigator.vibrate) {
+          // 支持
+        }
+      navigator.vibrate(num/arr);  震动
+        num 数值,振动持续的毫秒数
+        arr 数组,间时震动,表示振动的模式.
+          偶数位置的数组成员表示振动的毫秒数,奇数位置的数组成员表示等待的毫秒数.
+          navigator.vibrate([500, 300, 100]);
+          表示,设备先振动500毫秒,然后等待300毫秒,再接着振动100毫秒.
+        vibrate是一个非阻塞式的操作,即手机振动的同时,JavaScript代码继续向下运行.
+        停止振动: 将0毫秒或者一个空数组传入vibrate方法.
+          navigator.vibrate(0);
+          navigator.vibrate([]);
+        持续震动: 可使用setInterval不断调用vibrate.
+          var vibrateInterval;
+          function startVibrate(duration) {
+            navigator.vibrate(duration);
+          }
+          function stopVibrate() {
+            if(vibrateInterval) clearInterval(vibrateInterval);
+            navigator.vibrate(0);
+          }
+          function startPeristentVibrate(duration, interval) {
+            vibrateInterval = setInterval(function() {
+              startVibrate(duration);
+            }, interval);
+          }
+    .permissions 
+    .permissions.query()   许可查询 [HTML5] 
+      PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
+        Permissions API就是用来查询某个接口的许可情况.
+      // 查询地理位置接口的许可情况
+      navigator.permissions.query({ name: 'geolocation' })
+      .then(function(result) {
+        // 状态为 prompt,表示查询地理位置时,
+        // 用户会得到提示,是否许可本次查询
+        /* result.status = "prompt" */
+  
+        // 状态为 granted,表示用户已经给予了许可
+        /* result.status = "granted" */
+      });
+      有了这个API,就可以自动查询用户的态度.
+      当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
+    .battery     电池API,针对移动设备用于检测设备的电池信息 [HTML5] 
+      var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+      battery.charging;
+      battery.level;
+      battery.dischargingTime;
+      battery.addEventListener("chargingchange",function(e){
+      })
+    ◆状态相关 
+    .onLine   bol,是否联网[IE6+]  
+    不常用  
+      .credentials 
+      .presentation 
+      .storage 
+      .userAgent    用户代理字符串
+        console.log(navigator.userAgent);
+        // "Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
+      .appCodeName  浏览器名称
+        PS: 通常为'Mozilla',即使非Mozilla浏览器 
+        console.log(navigator.appCodeName); // Mozilla,Chrome中结果  
+      .appName      浏览器名称,不能精确区分浏览器 
+        console.log(navigator.appName); // Netscape,Chrome中结果 
+      .appMinorVersion 次版本信息 [Chrome不支持]
+      .appVersion      浏览器版本,一般不与实际版本对应 
+        console.log(navigator.appVersion); 
+        // 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36,Chrome中结果 
+      .buildID         浏览器编译版本 [Chrome不支持] 
+      .product         产品名称,通常为'Gecko'
+      .productSub      产品的次要信息,如Gecko的版本 [IE不支持]
+      .oscpu      客户端计算机的操作系统或CPU [Chrome和IE不支持]
+      .cpuClass   CPU类型 [Chrome不支持]
+      .systemLanguage  操作系统的语言 [Chrome不支持]
+      .userLanguage    操作系统的默认语言 [IE5+] [Chrome不支持]
+      .userProfile   借以访问用户个人信息的对象 [Chrome不支持]
+      .maxTouchPoints  
+      .hardwareConcurrency  
+      .languages  
+      .doNotTrack  
+      .mediaDevices  
+      .connection  
+      .webkitTemporaryStorage  
+      .webkitPersistentStorage  
+      .serviceWorker  
+      .getBattery()    
+      .sendBeacon()    
+      .getGamepads()    
+      .webkitGetUserMedia()    
+      .requestMIDIAccess()    
+      .getUserMedia()    
+      .unregisterProtocolHandler()    
+      .requestMediaKeySystemAccess()  
+      .preference()  设置用户的首选项 [Chrome不支持]
+      .registerContentHandler() 针对特定的MIME类型将一个站点注册为处理程序[Chrome不支持]
+      .registerProtocolHandler() 针对特定的协议将一个站点注册为处理程序[Chrome不支持] 
+      .opsProfile     [已废弃]    
+      .securityPolicy [已废弃]  
+      .taintEnabled() [已废弃] 
+  Expand: 
+    客户端检测总结: JavaScript高级程序设计 228 页 
+    var client = function(){
+      var engine = { //呈现引擎
+        ie: 0,
+        gecko: 0,
+        webkit: 0,
+        khtml: 0,
+        opera: 0,
+        //完整的版本号
+        ver: null
+      };
+      var browser = { //浏览器
+        //主要浏览器
+        ie: 0,
+        firefox: 0,
+        safari: 0,
+        konq: 0,
+        opera: 0,
+        chrome: 0,
+        //具体的版本号
+        ver: null
+      };
+      var system = { //平台、设备和操作系统
+        win: false,
+        mac: false,
+        x11: false,
+        //移动设备
+        iphone: false,
+        ipod: false,
+        ipad: false,
+        ios: false,
+        android: false,
+        nokiaN: false,
+        winMobile: false,
+        //游戏系统
+        wii: false,
+        ps: false
+      };
+      //检测呈现引擎和浏览器
+      var ua = navigator.userAgent;
+      if (window.opera){
+        engine.ver = browser.ver = window.opera.version();
+        engine.opera = browser.opera = parseFloat(engine.ver);
+      } 
+      else if (/AppleWebKit\/(\S+)/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.webkit = parseFloat(engine.ver);
+        //确定是Chrome 还是Safari
+        if (/Chrome\/(\S+)/.test(ua)){
+          browser.ver = RegExp["$1"];
+          browser.chrome = parseFloat(browser.ver);
+        } 
+        else if (/Version\/(\S+)/.test(ua)){
+          browser.ver = RegExp["$1"];
+          browser.safari = parseFloat(browser.ver);
+        } 
+        else {
+          //近似地确定版本号
+          var safariVersion = 1;
+          if (engine.webkit < 100){
+            safariVersion = 1;
+          } 
+          else if (engine.webkit < 312){
+            safariVersion = 1.2;
+          } 
+          else if (engine.webkit < 412){
+            safariVersion = 1.3;
+          } 
+          else {
+            safariVersion = 2;
+          }
+          browser.safari = browser.ver = safariVersion;
+        }
+      } 
+      else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.khtml = browser.konq = parseFloat(engine.ver);
+      } 
+      else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){
+        engine.ver = RegExp["$1"];
+        engine.gecko = parseFloat(engine.ver);
+        //确定是不是Firefox
+        if (/Firefox\/(\S+)/.test(ua)){
+          browser.ver = RegExp["$1"];
+          browser.firefox = parseFloat(browser.ver);
+        }
+      } 
+      else if (/MSIE ([^;]+)/.test(ua)){
+        engine.ver = browser.ver = RegExp["$1"];
+        engine.ie = browser.ie = parseFloat(engine.ver);
+      }
+      //检测浏览器
+      browser.ie = engine.ie;
+      browser.opera = engine.opera;
+      //检测平台
+      var p = navigator.platform;
+      system.win = p.indexOf("Win") == 0;
+      system.mac = p.indexOf("Mac") == 0;
+      system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+      //检测Windows 操作系统
+      if (system.win){
+        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+          if (RegExp["$1"] == "NT"){
+            switch(RegExp["$2"]){
+              case "5.0":
+              system.win = "2000";
+              break;
+              case "5.1":
+              system.win = "XP";
+              break;
+              case "6.0":
+              system.win = "Vista";
+              break;
+              case "6.1":
+              system.win = "7";
+              break;
+              default:
+              system.win = "NT";
+              break;
+            }
+          } 
+          else if (RegExp["$1"] == "9x"){
+            system.win = "ME";
+          } 
+          else {
+            system.win = RegExp["$1"];
+          }
+        }
+      }
+      //移动设备
+      system.iphone = ua.indexOf("iPhone") > -1;
+      system.ipod = ua.indexOf("iPod") > -1;
+      system.ipad = ua.indexOf("iPad") > -1;
+      system.nokiaN = ua.indexOf("NokiaN") > -1;
+      //windows mobile
+      if (system.win == "CE"){
+        system.winMobile = system.win;
+      } 
+      else if (system.win == "Ph"){
+        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
+          system.win = "Phone";
+          system.winMobile = parseFloat(RegExp["$1"]);
+        }
+      }
+      //检测iOS 版本
+      if (system.mac && ua.indexOf("Mobile") > -1){
+        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
+          system.ios = parseFloat(RegExp.$1.replace("_", "."));
+        } 
+        else {
+          system.ios = 2; //不能真正检测出来,所以只能猜测
+        }
+      }
+      //检测Android 版本
+      if (/Android (\d+\.\d+)/.test(ua)){
+        system.android = parseFloat(RegExp.$1);
+      }
+      //游戏系统
+      system.wii = ua.indexOf("Wii") > -1;
+      system.ps = /playstation/i.test(ua);
+      //返回这些对象
+      return {
+        engine: engine,
+        browser: browser,
+        system: system
+      };
+    }();
+Location, 
+  Extend: Object 
+  Instance: window.location 
 window.location,管理URL 
   PS: 修改URL都会生成一条历史记录[可前进后退], 且除hash外,页面也都会重载 
     存在 Location 构造函数,但 location 的属性/方法都存在对象中,而非其原型中 
@@ -709,10 +1037,6 @@ window.location,管理URL
     .origin  
     .toString() 
     .valueOf() 
-window.document, 
-  Member: 
-    document.location  等价于 window.location 
-      console.log(document.location===window.location); // true 
 window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持] 
   PS: XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,
@@ -1138,9 +1462,6 @@ PerformanceNavigation
     .TYPE_RELOAD        1 
     .TYPE_BACK_FORWARD  2 
 PerformanceTiming 
-Location, 
-  Extend: Object 
-  Instance: window.location 
 History,历史记录对象,从窗口被打开的那一刻算起  
   PS: 基于安全考虑,其他的window中得不到用户浏览过的URL,但可在其中进行选择; 
   Extend: Object 
@@ -1171,327 +1492,6 @@ History,历史记录对象,从窗口被打开的那一刻算起
         history.pushState(null,'a','/abcd')
     .replaceState(state,title,path) 替换当前记录[不会跳转][HTML5] 
       和pushState类似,但不是增加而是替换 
-Navigator,客户端识别 
-  Extend: Object 
-  Instance: window.navigator 
-  Proto: 
-    ◆系统相关
-    .platform  所在系统平台,如 "Win32"
-    ◆浏览器相关 
-    .vendor   浏览器品牌 [IE不支持]
-    .vendorSub   有关供应商的次要信息 [IE和Chrome不支持] 
-    .language   浏览器的主语言 [IE11+] 
-      'zh-CN'
-      'en'
-      'en-US'
-    .mimeTypes  在浏览器中注册的MIME类型集合 
-    .plugins    浏览器安装的插件信息集合 [IE11+] 
-      navigator.plugins.refresh([bol])  刷新插件或刷新页面 
-      var plug = navigator.plugins[i];
-      plug.name        // 插件名
-      plug.filename    // 插件的磁盘文件名
-      plug.length      // 插件所处理的MIME 类型数量
-      plug.description // 插件的描述信息 
-      IE浏览器控件检测 
-        IE是以COM对象的方式实现插件的,而COM对象使用唯一标识符来表示 
-        Example:
-        检测IE是否安装flash控件
-        flash的标识符是 ShckwaveFlash.ShockwaveFlash
-        function hasIEPlugin(name){
-          try{
-            new ActiveXObject(name)
-            // 此处的name表示的是控件的唯一标识符id
-            return true;
-          }catch(e){
-            return false;
-          }
-        }
-        console.log(hasIEPlugin('ShockwaveFlash.ShockwaveFlash'));
-    .cookieEnabled  bol,浏览器是否启用cookie 
-      启用cookie返回true,否则返回false
-      cookieEnabled属性说明
-        通常可以在浏览器的临时文件夹中保存一个文件,
-        此文件可以包含用户信息(比如浏览过什么页面,是否选择了自动登录)等,
-        这个文件被称作cookie,
-        通过cookieEnabled属性可以判断浏览器是否启用了此功能
-    .javaEnabled()  bol,浏览器是否启用Java 
-    .vibrate()     设备震动 [HTML5] 
-      PS:Vibration接口用于在浏览器中发出命令,使得设备振动.
-        显然,这个API主要针对手机,适用场合是向用户发出提示或警告,游戏中尤其会大量使用.
-        由于振动操作很耗电,在低电量时最好取消该操作.
-      使用下面的代码检查该接口是否可用.
-        目前,只有Chrome和Firefox的Android平台最新版本支持它.
-        navigator.vibrate = navigator.vibrate
-          || navigator.webkitVibrate
-          || navigator.mozVibrate
-          || navigator.msVibrate;
-        if (navigator.vibrate) {
-          // 支持
-        }
-      navigator.vibrate(num/arr);  震动
-        num 数值,振动持续的毫秒数
-        arr 数组,间时震动,表示振动的模式.
-          偶数位置的数组成员表示振动的毫秒数,奇数位置的数组成员表示等待的毫秒数.
-          navigator.vibrate([500, 300, 100]);
-          表示,设备先振动500毫秒,然后等待300毫秒,再接着振动100毫秒.
-        vibrate是一个非阻塞式的操作,即手机振动的同时,JavaScript代码继续向下运行.
-        停止振动: 将0毫秒或者一个空数组传入vibrate方法.
-          navigator.vibrate(0);
-          navigator.vibrate([]);
-        持续震动: 可使用setInterval不断调用vibrate.
-          var vibrateInterval;
-          function startVibrate(duration) {
-            navigator.vibrate(duration);
-          }
-          function stopVibrate() {
-            if(vibrateInterval) clearInterval(vibrateInterval);
-            navigator.vibrate(0);
-          }
-          function startPeristentVibrate(duration, interval) {
-            vibrateInterval = setInterval(function() {
-              startVibrate(duration);
-            }, interval);
-          }
-    .permissions 
-    .permissions.query()   许可查询 [HTML5] 
-      PS:很多操作需要用户许可,比如脚本想要知道用户的位置,或者操作用户机器上的摄像头.
-        Permissions API就是用来查询某个接口的许可情况.
-      // 查询地理位置接口的许可情况
-      navigator.permissions.query({ name: 'geolocation' })
-      .then(function(result) {
-        // 状态为 prompt,表示查询地理位置时,
-        // 用户会得到提示,是否许可本次查询
-        /* result.status = "prompt" */
-  
-        // 状态为 granted,表示用户已经给予了许可
-        /* result.status = "granted" */
-      });
-      有了这个API,就可以自动查询用户的态度.
-      当用户已经明确拒绝的时候,就可以不必再次询问用户许可了.
-    .battery     电池API,针对移动设备用于检测设备的电池信息 [HTML5] 
-      var battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
-      battery.charging;
-      battery.level;
-      battery.dischargingTime;
-      battery.addEventListener("chargingchange",function(e){
-      })
-    ◆状态相关 
-    .onLine   bol,是否联网[IE6+]  
-    不常用  
-      .credentials 
-      .presentation 
-      .storage 
-      .userAgent    用户代理字符串
-        console.log(navigator.userAgent);
-        // "Mozilla/5.0(Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",谷歌浏览器
-      .appCodeName  浏览器名称
-        PS: 通常为'Mozilla',即使非Mozilla浏览器 
-        console.log(navigator.appCodeName); // Mozilla,Chrome中结果  
-      .appName      浏览器名称,不能精确区分浏览器 
-        console.log(navigator.appName); // Netscape,Chrome中结果 
-      .appMinorVersion 次版本信息 [Chrome不支持]
-      .appVersion      浏览器版本,一般不与实际版本对应 
-        console.log(navigator.appVersion); 
-        // 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36,Chrome中结果 
-      .buildID         浏览器编译版本 [Chrome不支持] 
-      .product         产品名称,通常为'Gecko'
-      .productSub      产品的次要信息,如Gecko的版本 [IE不支持]
-      .oscpu      客户端计算机的操作系统或CPU [Chrome和IE不支持]
-      .cpuClass   CPU类型 [Chrome不支持]
-      .systemLanguage  操作系统的语言 [Chrome不支持]
-      .userLanguage    操作系统的默认语言 [IE5+] [Chrome不支持]
-      .userProfile   借以访问用户个人信息的对象 [Chrome不支持]
-      .maxTouchPoints  
-      .hardwareConcurrency  
-      .languages  
-      .doNotTrack  
-      .mediaDevices  
-      .connection  
-      .webkitTemporaryStorage  
-      .webkitPersistentStorage  
-      .serviceWorker  
-      .getBattery()    
-      .sendBeacon()    
-      .getGamepads()    
-      .webkitGetUserMedia()    
-      .requestMIDIAccess()    
-      .getUserMedia()    
-      .unregisterProtocolHandler()    
-      .requestMediaKeySystemAccess()  
-      .preference()  设置用户的首选项 [Chrome不支持]
-      .registerContentHandler() 针对特定的MIME类型将一个站点注册为处理程序[Chrome不支持]
-      .registerProtocolHandler() 针对特定的协议将一个站点注册为处理程序[Chrome不支持] 
-      .opsProfile     [已废弃]    
-      .securityPolicy [已废弃]  
-      .taintEnabled() [已废弃] 
-  Expand: 
-    客户端检测总结: JavaScript高级程序设计 228 页 
-    var client = function(){
-      var engine = { //呈现引擎
-        ie: 0,
-        gecko: 0,
-        webkit: 0,
-        khtml: 0,
-        opera: 0,
-        //完整的版本号
-        ver: null
-      };
-      var browser = { //浏览器
-        //主要浏览器
-        ie: 0,
-        firefox: 0,
-        safari: 0,
-        konq: 0,
-        opera: 0,
-        chrome: 0,
-        //具体的版本号
-        ver: null
-      };
-      var system = { //平台、设备和操作系统
-        win: false,
-        mac: false,
-        x11: false,
-        //移动设备
-        iphone: false,
-        ipod: false,
-        ipad: false,
-        ios: false,
-        android: false,
-        nokiaN: false,
-        winMobile: false,
-        //游戏系统
-        wii: false,
-        ps: false
-      };
-      //检测呈现引擎和浏览器
-      var ua = navigator.userAgent;
-      if (window.opera){
-        engine.ver = browser.ver = window.opera.version();
-        engine.opera = browser.opera = parseFloat(engine.ver);
-      } 
-      else if (/AppleWebKit\/(\S+)/.test(ua)){
-        engine.ver = RegExp["$1"];
-        engine.webkit = parseFloat(engine.ver);
-        //确定是Chrome 还是Safari
-        if (/Chrome\/(\S+)/.test(ua)){
-          browser.ver = RegExp["$1"];
-          browser.chrome = parseFloat(browser.ver);
-        } 
-        else if (/Version\/(\S+)/.test(ua)){
-          browser.ver = RegExp["$1"];
-          browser.safari = parseFloat(browser.ver);
-        } 
-        else {
-          //近似地确定版本号
-          var safariVersion = 1;
-          if (engine.webkit < 100){
-            safariVersion = 1;
-          } 
-          else if (engine.webkit < 312){
-            safariVersion = 1.2;
-          } 
-          else if (engine.webkit < 412){
-            safariVersion = 1.3;
-          } 
-          else {
-            safariVersion = 2;
-          }
-          browser.safari = browser.ver = safariVersion;
-        }
-      } 
-      else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)){
-        engine.ver = browser.ver = RegExp["$1"];
-        engine.khtml = browser.konq = parseFloat(engine.ver);
-      } 
-      else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)){
-        engine.ver = RegExp["$1"];
-        engine.gecko = parseFloat(engine.ver);
-        //确定是不是Firefox
-        if (/Firefox\/(\S+)/.test(ua)){
-          browser.ver = RegExp["$1"];
-          browser.firefox = parseFloat(browser.ver);
-        }
-      } 
-      else if (/MSIE ([^;]+)/.test(ua)){
-        engine.ver = browser.ver = RegExp["$1"];
-        engine.ie = browser.ie = parseFloat(engine.ver);
-      }
-      //检测浏览器
-      browser.ie = engine.ie;
-      browser.opera = engine.opera;
-      //检测平台
-      var p = navigator.platform;
-      system.win = p.indexOf("Win") == 0;
-      system.mac = p.indexOf("Mac") == 0;
-      system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
-      //检测Windows 操作系统
-      if (system.win){
-        if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
-          if (RegExp["$1"] == "NT"){
-            switch(RegExp["$2"]){
-              case "5.0":
-              system.win = "2000";
-              break;
-              case "5.1":
-              system.win = "XP";
-              break;
-              case "6.0":
-              system.win = "Vista";
-              break;
-              case "6.1":
-              system.win = "7";
-              break;
-              default:
-              system.win = "NT";
-              break;
-            }
-          } 
-          else if (RegExp["$1"] == "9x"){
-            system.win = "ME";
-          } 
-          else {
-            system.win = RegExp["$1"];
-          }
-        }
-      }
-      //移动设备
-      system.iphone = ua.indexOf("iPhone") > -1;
-      system.ipod = ua.indexOf("iPod") > -1;
-      system.ipad = ua.indexOf("iPad") > -1;
-      system.nokiaN = ua.indexOf("NokiaN") > -1;
-      //windows mobile
-      if (system.win == "CE"){
-        system.winMobile = system.win;
-      } 
-      else if (system.win == "Ph"){
-        if(/Windows Phone OS (\d+.\d+)/.test(ua)){;
-          system.win = "Phone";
-          system.winMobile = parseFloat(RegExp["$1"]);
-        }
-      }
-      //检测iOS 版本
-      if (system.mac && ua.indexOf("Mobile") > -1){
-        if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)){
-          system.ios = parseFloat(RegExp.$1.replace("_", "."));
-        } 
-        else {
-          system.ios = 2; //不能真正检测出来,所以只能猜测
-        }
-      }
-      //检测Android 版本
-      if (/Android (\d+\.\d+)/.test(ua)){
-        system.android = parseFloat(RegExp.$1);
-      }
-      //游戏系统
-      system.wii = ua.indexOf("Wii") > -1;
-      system.ps = /playstation/i.test(ua);
-      //返回这些对象
-      return {
-        engine: engine,
-        browser: browser,
-        system: system
-      };
-    }();
 [Geolocation API] [HTML5] 
   PS: 地理定位能够在用户同意后访问到用户当前的位置信息 
   navigator.geolocation   Geolocation,地理定位对象 

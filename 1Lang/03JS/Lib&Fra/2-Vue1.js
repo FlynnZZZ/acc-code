@@ -756,6 +756,10 @@ Question:
   当刷新SPA后,如何维持通过之前操作获取的状态? 
     通过 localStorage sessionStorage [Self]
     Vue的Webpack模版 
+  不同的路由对应不同的网页标题 
+    方法一: 将 <title></title> 标签放置到 app.vue 组件中,通过动态绑定来改变 
+      1 组件通信 
+      2 vuex 
 --------------------------------------------------------------------------------
 'vue-router'前端路由 
   PS: 'vue-router2.x'只适用于'Vue2.x'版本 

@@ -1359,7 +1359,7 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
     若希望等到整个视图都重绘完毕,可以用 vm.$nextTick() 
   },
   activated: function(){      // <keep-alive>组件激活时 
-    该钩子在服务器端渲染期间不被调用 
+    PS: 该钩子在服务器端渲染期间不被调用 
   },
   deactivated: function(){    // <keep-alive>组件移除时 
     该钩子在服务器端渲染期间不被调用 

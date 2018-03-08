@@ -1173,6 +1173,7 @@ API
       PS: 路由记录就是 routes 配置数组中的对象副本,还有在 children 数组 
     .meta     obj,
   ◆路由组件新增配置 
+    PS: 在路由配置中引入的组件才有 
   ,beforeRouteEnter (to,from,next) {  // 路由被确认前调用 
     该回调中不能访问 this,因为回调在导航确认前被调用 
     可通过传一个回调给 next来访问组件实例 

@@ -107,13 +107,33 @@ var,定义变量,相当于给window添加不可配置的window属性
       (var aoo);           // Uncaught SyntaxError: Unexpected token var
       var aoo = 1, window.boo = 2; // Unexpected token .
 'lexical scopes'块作用域,在函数内部、代码块,即'{}'内创建[ES6]  
-  PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块
-  if (true) { 
-    var aoo = 1; 
-    let boo = 2;
-  }
-  console.log(aoo); // 1
-  console.log(boo); // 报错,boo is not defined
+  PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块 
+  Relate: 
+    'var'变量、函数存在块作用域,但可跨块作用域访问  
+      存在块作用域:  
+      { 
+        {
+          function foo(){
+            return 1;
+          }
+          var aoo = 1;
+          console.log(foo(),aoo); // 1 1
+        }
+        {
+          var aoo = 2;
+          function foo(){
+            return 2;
+          }
+          console.log(foo(),aoo); // 2 2 
+        }
+      }
+      可跨块作用域访问: 
+      if (true) { 
+        var aoo = 1; 
+        let boo = 2;
+      }
+      console.log(aoo); // 1,可跨块作用域访问 
+      console.log(boo); // 报错,boo is not defined
 'Global Block Bindings'全局块级绑定[ES6] 
   全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
     这意味着全局对象的属性可能会意外地被重写覆盖
@@ -172,7 +192,7 @@ let,定义块级变量[ES6]
     实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
 const,定义块级常量[ES6] 
   Feature: 
-    在声明时需赋值,否则报错
+    在声明时需赋值,否则报错 
       const num;   // 报错,定义时必须赋值 
     在同一作用域中,常量名不能与其他变量或函数名重名,否则报错 
       const num = 1;
@@ -208,6 +228,14 @@ const,定义块级常量[ES6]
     person 变量一开始已经和包含一个属性的对象绑定.
     修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
     但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
+  Expand: 
+    ES5中可通过定义window不可变属性来模拟常量 
+      Object.defineProperty(window,'const1',{
+        value: '自定义的常量',
+        writable: false,
+        enumerable: false, 
+        configurable: false
+      })
 基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
   基本类型: 变量的赋值,会创建该值的一个副本  
   undefined 表示未定义的值 

@@ -1442,7 +1442,7 @@ API
       }
     })
   Feature: 
-    模块化,但模块中'namespaced'为'false' 
+    模块化,但模块中'namespaced'为'false'时  
       PS: 'state'进行命名空间区分,'getters'、'mutations'及'actions'则不区分<混合到一起>
       const moduleA = {
         state: {}
@@ -1487,7 +1487,7 @@ API
       vm.$store.getters.xx         // 混合到了一起 
       $store.commit('foo',data)    // 混合到了一起 
       $store.dispatch('goo',data)  // 混合到了一起 
-    模块化,且'namespaced'为'true' 
+    模块化,且'namespaced'为'true'时  
       PS: 'state'、'getters'、'mutations'及'actions'均存在命名空间 
     'Global Assets'在命名空间模块内访问全局内容 
       modules: {

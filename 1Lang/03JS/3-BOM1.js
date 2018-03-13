@@ -1416,7 +1416,8 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
         return sheep;
       });
     });    
-window.performance  Performance, 
+Performance 
+window.performance 
   PS: Web计时机制的核心对象,对页面的所有度量信息都包含在该对象中 
   Member: 
     .memory 

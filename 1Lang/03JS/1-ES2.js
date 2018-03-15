@@ -672,19 +672,22 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       end  num,可选,结束下标,默认:arr.length 
       Example: 
         将'Array-like'类数组对象转换成数组 
-        function list() { 
-          console.log(arguments,typeof arguments);
-          // 将该方法绑定到 arguments 类数组对象上 
-          return Array.prototype.slice.call(arguments); 
-          // 也可用 [].slice.call(arguments) 来代替.
-        }
-        console.log(list(1, 2, 3)); // [1, 2, 3]
-        // 使用 bind 来简化该过程 
-        var slice = Function.prototype.call.bind(Array.prototype.slice);
-        function list() { 
-          return slice(arguments); 
-        }
-        console.log(list(1, 2, 3)); // [1, 2, 3]
+          function list() { 
+            console.log(arguments,typeof arguments);
+            // 将该方法绑定到 arguments 类数组对象上 
+            return Array.prototype.slice.call(arguments); 
+            // 也可用 [].slice.call(arguments) 来代替.
+          }
+          console.log(list(1, 2, 3)); // [1, 2, 3]
+          // 使用 bind 来简化该过程 
+          var slice = Function.prototype.call.bind(Array.prototype.slice);
+          function list() { 
+            return slice(arguments); 
+          }
+          console.log(list(1, 2, 3)); // [1, 2, 3]
+        获取数组最后一个、倒数第二个成员 
+          arr.slice(-1) 
+          arr.slice(-2,-1)
     .concat(val1?..)  arr,返回拼接后的新数组  
       val  数组或数组成员  
       Example: 

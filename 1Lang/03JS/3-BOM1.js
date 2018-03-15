@@ -1416,17 +1416,11 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
         return sheep;
       });
     });    
-Performance 
-window.performance 
-  PS: Web计时机制的核心对象,对页面的所有度量信息都包含在该对象中 
-  Member: 
-    .memory 
-    .navigation  PerformanceNavigation,与页面导航相关 
-      .redirectCount  num,页面加载前的重定向次 
-      .type   num,刚刚发生的导航类型 
-        performance.navigation.TYPE_NAVIGATE: 0  页面第一次加载 
-        performance.navigation.TYPE_RELOAD: 1    页面重载过 
-        performance.navigation.TYPE_BACK_FORWARD: 2  页面是通过“后退”或“前进”打开的 
+Performance,获取到当前页面与性能相关的信息  
+  Extend: EventTarget 
+  Proto: 
+    .onresourcetimingbufferfull  触发resourcetimingbufferfull事件时调用 
+    .onwebkitresourcetimingbufferfull 
     .timing  PerformanceTiming,包含各种时间戳,不同的事件会产生不同的时间值 [IE10+] 
       PS: 可全面了解页面在被加载到浏览器的过程中都经历的时间 
       .navigationStart   开始导航到当前页面的时间 
@@ -1455,14 +1449,38 @@ window.performance
       .domComplete       document.readyState 变为"complete"的时间 
       .loadEventStart    发生load 事件的时间 
       .loadEventEnd      load 事件已经发生且执行完所有事件处理程序的时间 
-    .onresourcetimingbufferfull  
-    .timeOrigin   
-PerformanceNavigation 
+    .navigation   PerformanceNavigation,与页面导航相关 
+    .memory     获取基本内存使用情况 [Chrome的非标准扩展] 
+    .now()      DOMHighResTimeStamp,从参考时刻开始经过的毫秒量       
+    .getEntries()      
+    .getEntriesByType() 
+    .getEntriesByName()  
+    .clearResourceTimings()  
+    .setResourceTimingBufferSize() 
+    .webkitClearResourceTimings() 
+    .webkitSetResourceTimingBufferSize() 
+    .mark()   移除给定的mark,从浏览器的性能输入缓冲区中
+    .clearMarks() 
+    .measure() 
+    .clearMeasures() 
+window.performance 
+  PS: Web计时机制的核心对象,对页面的所有度量信息都包含在该对象中 
+PerformanceNavigation,页面导航相关信息 
   Static: 
     .TYPE_NAVIGATE      0 
     .TYPE_RELOAD        1 
     .TYPE_BACK_FORWARD  2 
-PerformanceTiming 
+  Proto: 
+    .TYPE_NAVIGATE      0 
+    .TYPE_RELOAD        1 
+    .TYPE_BACK_FORWARD  2 
+    .TYPE_RESERVED      255 
+    .type            num,上次发生的导航类型 
+      0  页面第一次加载,对应.TYPE_NAVIGATE 
+      1  页面重载过,对应.TYPE_RELOAD  
+      2  页面通过'后退'或'前进'打开的,对应.TYPE_BACK_FORWARD 
+    .redirectCount   num,页面加载前的重定向次 
+PerformanceTiming,包含延迟相关的性能信息  
 History,历史记录对象,从窗口被打开的那一刻算起  
   PS: 基于安全考虑,其他的window中得不到用户浏览过的URL,但可在其中进行选择; 
   Extend: Object 
@@ -1812,6 +1830,16 @@ console,用于调试的控制台对象
       });
       console.log("出错了！");
       // 2014-05-18T09:00.000Z 出错了！
+  Feature: 
+    脚本在DevTools环境下打印时,运行速度较慢,可根据运行时间来判断脚本当前是否正在被调试 
+      var startTime = performance.now()
+      for (var check = 0; check < 1000; check++){
+        console.log(check);
+      }
+      if (performance.now() - startTime > 200){ 
+        // 打开控制台会打印会弹窗,否则不弹窗 
+        alert("打开了控制台"); 
+      }
 MutationObserver,观察者对象[IE11+] 
   PS: 能在某个范围内的DOM树发生变化时作出适当反应的能力 
     该API设计用来替换掉在DOM3事件规范中引入的Mutation事件 

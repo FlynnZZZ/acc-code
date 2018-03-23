@@ -17,9 +17,10 @@ less
         部分系统下可能需要在前面加上sudo切换为超级管理员权限
       ★命令行 命令
         执行 lessc 且不带任何参数,就会在命令行上输出所有可用选项的列表
-      npm install -g less  // 通过 npm 安装编译器
-      lessc styles.less    // 执行 Less 编译器,将输出编译之后的 CSS 代码到 stdout
-        lessc styles.less > ./styles.css // 可以将输出重定向到一个文件
+      $ npm i -g less     //  安装编译器
+        $ lessc -v  // 查询less版本 
+      $ lessc ./styles.less ./styles.css // 将.less文件编译成CSS 
+      $ lessc ./styles.less  // 命令行中打印.less  
       ★额外选用命令
       -x  // 输出压缩过的 CSS
       --clean-css  // 启用 Clean CSS 进行压缩,获得更好的压缩效果

@@ -168,9 +168,8 @@ jEl 获取
     $('selector',jEl)  在jEl中查找'selector'
     ★自身条件筛选 
     jEl.first()   jEl,jEl的第一个  
-    jEl.eq(index) 下标选取 
-      index为整数,指示元素的位置[从0开始]
-      若是负数,则从集合中的最后一个元素往回计数。
+    jEl.eq(idx)   jEl,返回对应下标的jEL  
+      idx num,jEl集合中的下标,若为负则等价与(idx+jEl.length)
     jEl.not('selector'/jEl) 非筛选 
     jEl.not(function(idx){  // jEl,用于检测集合中每个元素的函数 
       $(this) jEl集中的当前jEl  
@@ -195,7 +194,7 @@ jEl 获取
     ★属性筛选 
     jEl.offsetParent() 最近的祖先定位元素 
       定位元素指的是position 属性被设置为 relative、absolute 或 fixed 的元素. 
-  性能优化
+  性能优化 
     关于jQuery选择器的性能优先级,ID选择器快于元素选择器,元素选择器快于class选择器 
     因为ID选择器和元素选择器是原生的JavaScript操作,而类选择器不是; 
     
@@ -224,13 +223,17 @@ jEl 获取
       var $container = $('#container '), 
       $containerLi = $container.find('li'), 
       $containerLiSpan= $containerLi.find('span');
+  其他说明 
+    jQuery无法获取伪元素 
+      伪元素不属于DOM元素,不存在文档中 
+      解决方法: window.getComputedStyle()  
 jEl 操作 
   PS: 若操作的元素是从html中获取到的,则位置操作都是移动操作,即原来的就没有了
   转换为原始DOM元素对象elem 
     PS:使用原生JS的方法时,需将jEl转换为elem对象
     var elem = jEl[index]     获取对应下标的DOM元素
     var elemArr = jEl.toArray() 返回DOM元素组成的数组 
-    var elemArr = jEl.get()   返回DOM元素组成的数组 
+    var elemArr = jEl.get()     返回DOM元素组成的数组 
     var elem = jEl.get(num)   获取对应数字的DOM元素 
       num  数值,从0开始,可为负,为负值时,表示第 num+jEl.length 个
   增删改 
@@ -258,7 +261,7 @@ jEl 操作
         $('.aoo').unwrap('a');
         结果为: <div class="aoo"> 123123 </div>
     jEl.wrapInner("HTML代码"/jEl)     将每个元素的内容包裹
-    jEl1.replaceWith("HTML代码"/jEl)  元素1代替为元素2
+    jEl1.replaceWith("HTML代码"/el/jEl)  参数元素替换当前元素 
     jEl1.replaceAll("selector"/jEl2)  元素2代替为元素1 [与replaceWith相反]
       $("HTML代码")/jEl1.replaceAll("selector"/jEl2); 
     jEl.html(str/foo); 设置/获取元素内容
@@ -306,8 +309,12 @@ jEl 操作
       jEl.attr('属性名',str/boolean) 设定选定属性的属性值
         Example:
           jEl.attr('disabled',false); // 取消表单禁用
-      jEl.attr(attribute,function(index,oldvalue){...}) 通过函数来操作属性
-      jEl.attr({attribute:value, attribute:value ...})  同时设置多组属性值
+      jEl.attr({attr1:value, attr2:value ...})  同时设置多组属性值
+      jEl.attr('attr',function(idx,oldVal){  // 通过函数来操作属性 
+        // idx  
+        // oldVal  原始值
+        return str;  // 返回值为属性设置的值 
+      }) 
       Example:
         jEl.attr('class'); // 获取class属性的值
         jEl.attr('data-foo'); // 获取自定义元素属性的值
@@ -442,8 +449,8 @@ jEl 操作
         $('#box').removeDate('name');
     ◆其他信息
     jEl.size()         元素个数
-    num = jEl.index([jEl/selector]) 获取元素在其父元素jEl中的下标[从1开始]
-      jelem.index();   无参数,返回该元素在同级元素中的索引位置
+    num = jEl.index([jEl/selector]) 获取元素在其父元素jEl中的下标[从1开始] [待整理]
+      jEl.index()   idx,返回该元素在同级元素中的索引位置[从0开始]
       Example: 点击获取当前为第几个li 
         <ul>
           <li>aaaaa</li>
@@ -524,8 +531,8 @@ Animation 动画
   jEl.slideToggle(time,cfoo) 切换'slideDown'和'slideUp' 
   ◆自定义变化 
     当定义样式的值时,单位默认为'px',如 '100px'或'100'等价
-  jEl.animate(finalStyle[,time][,duration][,cfoo])  定义变化及变化的过程 
-    {  // 必须,元素的最终样式状态,由样式声明属性和其值组成的对象 
+  jEl.animate(<styleObj>,<time?>,<rate?>,cfoo?)  定义变化及变化的过程 
+    styleObj: {        // 必选,元素的最终样式状态,由样式声明属性和其值组成的对象 
       styleAttr : styleVal,
       // styleAttr 由'-'连接改为驼峰写法,如 'font-size'改为'fontSize'
       // styleVal 可通过 -=、+= 等在原值上进行便捷计算 
@@ -535,18 +542,23 @@ Animation 动画
       //   },1000)
       ... 
       非CSS样式的属性列举 
-        scrollTop 定义滚动条的滚动距离
+        scrollTop 定义滚动条的滚动距离 
           $('.aoo').animate({
-            scrollTop : '+=33'
+            scrollTop : '+=33'  // 页面滚动元素为html 
           },100)
     }
-    time       可选,执行时间 
-      number    毫秒,如 1500
-      "normal"  默认值
-      "slow"
-      "fast"
-    duration   延时 
-    cfoo       执行结束的回调 
+    time: <num>/<KW>   // 可选,动画执行时间 
+      num      毫秒,如 1500
+      KW       关键字 
+        "normal" 默认值
+        "slow"   慢 
+        "fast"   快 
+    rate: KW           // 可选,过渡使用的缓动函数  
+      'swing'   // 默认值,先快后慢  
+      'linear'  // 匀速 
+    cfoo: function(){  // 可选,动画结束时的回调 
+      this  // 当前执行动画的元素 
+    }     
   jEl.animate(finalStyle,options)    定义变化及变化的过程  
     {   // 最终样式 
       left : 100
@@ -557,9 +569,9 @@ Animation 动画
       },
       complete: foo,  // 动画执行完成后的回调 
     }
-  jEl.stop([bool1] [,bool2]) 停止动画 
-    bool1  默认为false,是否清空未执行完的动画队列 
-    bool2  默认false,是否将动画调到最后状态 
+  jEl.stop(bol1? ,bol2?) 停止动画 
+    bol1  默认:false,是否清空未执行完的动画队列 
+    bol2  默认:false,是否将动画调到最后状态 
   jEl.delay(time)            延缓动画 
     Example:
       $('#aoo').animate({

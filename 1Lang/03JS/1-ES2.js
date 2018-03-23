@@ -1484,7 +1484,7 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
   Question: 
     只包含中文和字母a的正则 
       中文表示为 [\u0391-\uFFE5]
-      为 /[\u0391-\uFFE5a]/ ?
+      为 /[\u0391-\uFFE5]/ ?
     指定初始开始匹配的字符的下标,如'abcde',指定从第二个字符开始匹配 
   todo
   RegExp 正则扩展[ES6] 

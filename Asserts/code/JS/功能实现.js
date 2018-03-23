@@ -1101,22 +1101,23 @@ PC端
         $('.phone .img .resize').addClass('none');
       }
     })
-  图片宽高自适应 
-    var bg = $('#zIF1>img');
-    bg.css('width','100%');
-    bg.css('height','100%');
-    bg.on("load",function(e){
-      console.log('load');
-      var elem = $(this);
-      var rate1 = elem.parent().width()/ elem.parent().height();
-      var rate2 = elem.width()/ elem.height();
+  图片宽高自适应   
+    $('.img').on("load",function(e){
+      console.log('img load');
+      // 1 铺满居中 
+      // 2 长宽铺满 
+      // 3 ...
+      var img = $(this)
+      ,imgWp = img.parent()
+      ,rate1 = imgWp.width()/ imgWp.height()
+      ,rate2 = img.width()/ img.height()
       if (rate1-rate2 > 0) {
-        elem.css('width','100%')
-        elem.css('height','auto')
+        img.css('width','100%')
+        img.css('height','auto')
       }
       else {
-        elem.css('height','100%')
-        elem.css('width','auto')
+        img.css('height','100%')
+        img.css('width','auto')
       }
     })
 --------------------------------------------------------------------------------

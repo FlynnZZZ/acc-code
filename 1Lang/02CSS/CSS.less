@@ -977,9 +977,11 @@ Declaration,样式声明
             }
           使用:after 来模拟 
             缺点: 当未溢出时仍存在'...',需配合JS来判断使用 
+            <div class="wrap">
+              <div class="content"> 很多会溢出的文字 </div>
+            </div>
             .wrap{
-              line-height: 20px;
-              max-height: 40px; // 行高的倍数 
+              max-height: 6*1.3em; // 6行 
               overflow: hidden;
               position: relative;
             }
@@ -987,10 +989,12 @@ Declaration,样式声明
               content: "...";
               position: absolute; bottom: 0; right: 0;
               padding-left: 40px;
-              background: -webkit-linear-gradient(left, transparent, #fff 55%);
-              background: -o-linear-gradient(right, transparent, #fff 55%);
-              background: -moz-linear-gradient(right, transparent, #fff 55%);
-              background: linear-gradient(to right, transparent, #fff 55%);
+              padding-right: 40px;
+              background: linear-gradient(to right, transparent, #fff 50%);
+            }
+            .hiddenAfter::after { content: ''; }
+            if ( $('.wrap').height() - $('.content').height() - > 0) {
+              $('.wrap').addClass('hiddenAfter')
             }
     text-transform  文本大小写转换 
       none

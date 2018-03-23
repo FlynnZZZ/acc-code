@@ -1831,7 +1831,7 @@ console,用于调试的控制台对象
       console.log("出错了！");
       // 2014-05-18T09:00.000Z 出错了！
   Feature: 
-    脚本在DevTools环境下打印时,运行速度较慢,可根据运行时间来判断脚本当前是否正在被调试 
+    控制台打开时,console的方法才会执行,且打印方法有运行较慢  
       var startTime = performance.now()
       for (var check = 0; check < 1000; check++){
         console.log(check);
@@ -1840,6 +1840,12 @@ console,用于调试的控制台对象
         // 打开控制台会打印会弹窗,否则不弹窗 
         alert("打开了控制台"); 
       }
+    控制台打印元素时,控制台会获取元素的id值 
+      var div = document.createElement('div');
+      Object.defineProperty(div,"id", {get: () => {
+        alert("控制台打开了");
+      }});
+      console.log(div);
 MutationObserver,观察者对象[IE11+] 
   PS: 能在某个范围内的DOM树发生变化时作出适当反应的能力 
     该API设计用来替换掉在DOM3事件规范中引入的Mutation事件 

@@ -227,12 +227,13 @@ window,表示浏览器的一个实例,BOM的核心对象
         }
     clearTimeout(id) 通过返回id值解除延时调用 
       Example:
-      var aoo=setTimeout(function(){ alert("abc");},2000);
-      console.log(aoo);  // 50500,延时调用的id值
-      clearTimeout(aoo); // 取消调用
-      等价于
-      clearTimeout(50500);
-      但此种写法可能存在问题,因为id值可能会变,非一直为定值
+        var setTimeoutId = setTimeout(function(){ 
+          console.log('执行setTimeout');
+        },2000);
+        console.log(setTimeoutId);  // 50500,延时调用的id值
+        clearTimeout(setTimeoutId); // 取消调用
+        // 等价于
+        clearTimeout(50500); // 此种写法可能存在问题,因为id值可能会变,非一直为定值
     setInterval(foo/str,num [,arg1,arg2...]) numId,每隔指定时间回调  
       PS: 实际执行时间尽量接近指定值[可多可少]  
         依次向异步列队中添加延时调用,
@@ -264,9 +265,11 @@ window,表示浏览器的一个实例,BOM的核心对象
         19:44:770
     clearInterval(id) 通过返回id值解除间时调用 
       Example:
-      var box=setInterval(function(){ alert("abc"); },1000);
-      clearInterval(box); // 取消调用
-      console.log(box);   // 1518 ,虽然已取消调用 但box值仍存在
+        var setIntervalId = setInterval(function(){ 
+          console.log('执行 setInterval');
+        },1000);
+        clearInterval(setIntervalId); // 取消调用
+        console.log(setIntervalId);   // 1518 ,虽已取消调用,但box值仍存在
     requestAnimationFrame(foo) numId,浏览器专门为动画提供的API 
       PS: 浏览器会自动优化方法的调用,如页面非激活状态下,动画会自动暂停,节省了CPU开销
         原理同setTimeout类似;通过递归调用同一方法来不断更新画面以达到动画效果;

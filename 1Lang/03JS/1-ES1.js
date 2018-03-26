@@ -2392,15 +2392,15 @@ this,JS代码执行时的'context'上下文对象
     在绝大多数情况下,函数的调用方式决定了this的值;
     this不能在执行期间被赋值;
     当在严格模式中调用函数,上下文将默认为 undefined 
-  在全局运行上下文中[在任何函数体外部],指向全局对象'window' 
-    NodeJS环境,全局作用域中上下文中始终是Global对象 
-    console.log(this === window); // true 
-    var aoo = 1; 
-    console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性
-    this.boo = 2;
-    console.log(boo); // 2 
-  函数中: 'this'取决于函数是如何调用的 
-    普通函数调用:this始终指向'window'[严格模式下指向 undefined]
+  运行场景枚举: 
+    全局上下文中[在任何函数体外部]: 指向全局对象'window' 
+      NodeJS环境,全局作用域中上下文中始终是Global对象 
+      console.log(this === window); // true 
+      var aoo = 1; 
+      console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性
+      this.boo = 2;
+      console.log(boo); // 2 
+    普通/匿名函数执行时: this始终指向'window'[严格模式下指向 undefined] 
       var aoo = 1;
       function foo(){
         var aoo = 2;
@@ -2433,7 +2433,13 @@ this,JS代码执行时的'context'上下文对象
         }
       }
       console.log(obj.foo()());  // 1
-    作为构造函数:this表示一空对象,其原型为 Foo.prototype 对象 
+      
+      [1,2,3,4,5].map(function(val,idx ){  
+        // 匿名函数作为参数传入map方法中,然后执行该匿名函数 
+        console.log(this);  // window 
+        return this
+      } )
+    构造函数执行时: this表示一空对象,其原型为 Foo.prototype 对象 
       var aoo = 1;
       function Foo(){ 
         this.aoo = 2;
@@ -2445,55 +2451,60 @@ this,JS代码执行时的'context'上下文对象
       var obj1 = new Foo();
       var obj2 = new Goo();
       console.log(obj1.aoo,obj2.aoo); // 2 4 
-    使用对象方法调用:this指向调用方法的对象 
-      var obj = {aoo:100};
+    对象方法执行时: this指向调用方法的对象 
+      var obj = {
+        aoo: 100
+      };
       function foo(){ 
         return this.aoo; 
       };
       obj.goo = foo;
       console.log(obj.goo()); // 100
-  对象内 
-    在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
-    var aoo = 1;
-    function foo(){ 
-      console.log(this.aoo);  
-    }
-    var obj = { aoo: 2,  foo : foo }
-    obj.foo(); // 2 ,obj调用的this指向obj
-    var goo = obj.foo;
-    goo();     // 1 
-    相当于 window.goo(); this指向window
-
-    var aoo = 1;
-    var obj = {
-      aoo : 2,
-      foo : function(){
-        return function(){ 
-          return this.aoo; 
-        }
-      },
-    }
-    var val = obj.foo()(); // 相当于 (obj.foo())(); 
-    console.log(val);  // 1 
-    
-    var obj = {
-      name : "小明",
-      age : 12,
-      sex : "男",
-      sayhi : function(){
-        return "say";
-      },
-      info : function(){ //使用this访问当前对象的属性
-        return this.name+"年龄"+this.age; 
+    箭头函数执行时: this为上一层中的this,即不改变this的指向 
+    [ES6的]类的静态方法执行时: this表示该类 
+    [ES6的]类的原型方法执行时: this表示实例 
+    对象内 
+      在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
+      var aoo = 1;
+      function foo(){ 
+        console.log(this.aoo);  
       }
-    }
-    obj.info(); // 小明年龄12
-  DOM中 
-    var el = document.querySelector("#el");
-    el.addEventListener("click",function(){
-      console.log(this);
-    })
-    //表示被点击的那个元素对象
+      var obj = { aoo: 2,  foo : foo }
+      obj.foo(); // 2 ,obj调用的this指向obj
+      var goo = obj.foo;
+      goo();     // 1 
+      相当于 window.goo(); this指向window
+
+      var aoo = 1;
+      var obj = {
+        aoo : 2,
+        foo : function(){
+          return function(){ 
+            return this.aoo; 
+          }
+        },
+      }
+      var val = obj.foo()(); // 相当于 (obj.foo())(); 
+      console.log(val);  // 1 
+      
+      var obj = {
+        name : "小明",
+        age : 12,
+        sex : "男",
+        sayhi : function(){
+          return "say";
+        },
+        info : function(){ //使用this访问当前对象的属性
+          return this.name+"年龄"+this.age; 
+        }
+      }
+      obj.info(); // 小明年龄12
+    DOM中 
+      var el = document.querySelector("#el");
+      el.addEventListener("click",function(){
+        console.log(this);
+      })
+      //表示被点击的那个元素对象
   Example: 
     var aoo = 1;
     var obj = { 
@@ -2544,5 +2555,4 @@ this,JS代码执行时的'context'上下文对象
     }
     obj.foo() // 100 
 -----------------------------------------------------------------------待整理   
-
 

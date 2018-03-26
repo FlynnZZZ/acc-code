@@ -1102,24 +1102,28 @@ PC端
       }
     })
   图片宽高自适应   
-    $('.img').on("load",function(e){
+    $('img').on("load",function(e){
       console.log('img load');
-      // 1 铺满居中 
-      // 2 长宽铺满 
-      // 3 ...
       var img = $(this)
       ,imgWp = img.parent()
       ,rate1 = imgWp.width()/ imgWp.height()
       ,rate2 = img.width()/ img.height()
-      if (rate1-rate2 > 0) {
-        img.css('width','100%')
-        img.css('height','auto')
+      
+      if (img.hasClass("fill")) { // 无死角覆盖  
+        if (rate1-rate2 > 0) {
+          img.css('width','100%')
+          img.css('height','auto')
+        }
+        else {
+          img.css('height','100%')
+          img.css('width','auto')
+        }
       }
-      else {
-        img.css('height','100%')
-        img.css('width','auto')
+      if (true) {  // 
+        
       }
     })
+
 --------------------------------------------------------------------------------
 移动端
 网络收集 

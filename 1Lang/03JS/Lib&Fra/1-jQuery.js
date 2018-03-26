@@ -548,7 +548,7 @@ Animation 动画
           },100)
     }
     time: <num>/<KW>   // 可选,动画执行时间 
-      num      毫秒,如 1500
+      num      毫秒,如 1500,当为字符串时不生效 
       KW       关键字 
         "normal" 默认值
         "slow"   慢 

@@ -1038,19 +1038,19 @@ Form表单
         要求输入的文本需符合电子邮件地址的格式
       'url'     URL类型   
         要求输入的文本需符合URL的模式
-      number  数字字段[带有spinner控件][IOS微信不兼容] 
+      'number'  数字字段[带有spinner控件][IOS微信不兼容] 
         可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
-      range   拖动条,带有 slider 控件 
-      color   拾色器  
-      search  搜索文本字段 
-      tel     定义用于电话号码的文本字段 
-      date    日期
-      calendar  日历 
-      datetime        日期字段 [带有calendar和time控件] [Chrome无效]
-      datetime-local  日期字段 [带有calendar和time控件]
-      month           日期字段的月 [带有calendar控件]
-      week            日期字段的周 [带有calendar控件]
-      time            日期字段的时分秒 [带有time控件]
+      'range'   拖动条,带有 slider 控件 
+      'color'   拾色器  
+      'search'  搜索文本字段 
+      'tel'     定义用于电话号码的文本字段 
+      'date'    日期
+      'calendar'  日历 
+      'datetime'        日期字段 [带有calendar和time控件] [Chrome无效]
+      'datetime-local'  日期字段 [带有calendar和time控件]
+      'month'           日期字段的月 [带有calendar控件]
+      'week'            日期字段的周 [带有calendar控件]
+      'time'            日期字段的时分秒 [带有time控件]
     value="" 表单字段值/显示值/按钮名称  
       提交到服务器的数据值;当为按钮时,按钮显示的内容
     功能属性 
@@ -1617,18 +1617,20 @@ HTML全局属性
     strike
     tt
 移动端HTML 
-  ★meta
-  <meta name="apple-mobile-web-app-capable" content="yes">  
-    让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
-    就是类似隐藏ios的上下状态栏, 实现全屏,禁止弹性拖拽,修改顶部颜色等
-  ▼清除缓存
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <a href="tel: 123456789"> </a> 点击拨号  
-  ★默认调出数字键盘  
-  <input type="tel" >     显示数字键盘
-  <input type="number" >  显示数字键盘,且只能输入数字
+  meta  
+    <meta name="apple-mobile-web-app-capable" content="yes">  
+      让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
+      就是类似隐藏ios的上下状态栏, 实现全屏,禁止弹性拖拽,修改顶部颜色等
+    ▼清除缓存
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <a href="tel: 123456789"> </a> 点击拨号  
+  键盘  
+    input表单中,右下角键显示为'开始',textarea中显示为'换行'  
+    <input type="tel" >     // 默认调出数字键盘
+    <input type="number" >  // 默认调出数字键盘,且只能输入数字 
+    <input type="search" value="搜索">  // 键盘上的右下角键将显示为'搜索'  
 --------------------------------------------------------------------------------
 Collection 
 自我总结 

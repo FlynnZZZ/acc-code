@@ -1063,10 +1063,10 @@ API
     .app   obj,挂载路由的Vue根实例 
     .mode  str,路由使用的模式 
     .currentRoute  Route,当前路由对应的路由信息对象 
-    .getMatchedComponents(location?)  // 返回目标位置或当前路由匹配的组件数组 
+    .getMatchedComponents(location?)    // 返回目标位置或当前路由匹配的组件数组 
       是数组的定义/构造类,不是实例,
       通常在服务端渲染的数据预加载时时候。
-    .resolve(location,current?,append?) //  '2.1.0+'
+    .resolve(location,current?,append?) // 解析目标位置,返回对象形式的信息  '2.1.0+'
       PS: 解析目标位置[格式同<router-link>的'to'] 
       current 当前默认的路由 
       append  允许在 current 路由上附加路径,如同 router-link 
@@ -1188,10 +1188,13 @@ API
     PS: 通常用于禁止用户在还未保存修改前突然离开  
     可访问组件实例 `this`
   }
-  ,beforeRouteUpdate (to,from,next) { // 当前路由改变,但该组件被复用时调用 '2.2+'  
-    如动态参数路径 /foo/:id,在 /foo/1 和 /foo/2 间跳转时,
-    组件实例会被复用,则钩子会在该情况下被调用 
-    可以访问组件实例 `this`
+  ,beforeRouteUpdate (to,from,next) { // 当前路由改变且该组件被复用时调用 '2.2+'  
+    PS: 可以访问组件实例`this`
+    适用场景: 
+      动态参数路径 
+        如/foo/1 跳转到 /foo/2 时 
+      查询字符串变化 
+        如 /prod?id=1 跳转到 /prod?id=2 时 
   }
 路由懒加载 
   PS: 把不同路由对应的组件分割成不同的代码块,当路由被访问的时候才加载对应组件 

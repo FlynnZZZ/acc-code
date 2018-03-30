@@ -2080,14 +2080,8 @@ Function,函数基础类,ES中所有函数的基类
       console.log(goo(4)); // 7 
     不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
-    默认参数: 在定义函数时,将参数赋值[ES6]   
-      Example: 
-        function person(name='aoo',age=25){
-          console.log(name,age);
-        }
-        person();         // aoo 25
-        person('boo',18); // boo 18
-      当传入的参数为非 undefined 值时,才会覆盖该对应的默认参数  
+    默认参数: 定义函数时将参数赋默认值 [ES6]   
+      执行函数时,对应参数为 undefined,则使用默认值,否则使用传入的值 
         function person(age = 12){
           console.log(age);
         }

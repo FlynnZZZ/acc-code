@@ -1267,14 +1267,16 @@ store = new Vuex.Store({ // 实例化数据中心'store'
     // .. 
   }
   ,mutations: { // 函数集,一般用于直接操作'state'中的数据 
-    foo: function(state,data){  // 不可执行异步操作 
+    foo1: function(state,data){  // 不可执行异步操作 
       state  储存数据的state对象 
-        vue-cli 中,不可使用 {xxx} 将对象结构 
+        vue-cli 中,不可使用 {xxx} 将对象解构  
       data   可选,.commit()传入的数据 
+    }
+    ,foo2: function(state,data){   
     }
     ...
   }
-  ,getters: { // store 的计算属性 
+  ,getters: { // 相当于 store 的计算属性 
     // PS: 相当于'computed',对'state'的处理返回
     getData1: function(state,getters){
       // state   储存数据的state对象 
@@ -1282,7 +1284,7 @@ store = new Vuex.Store({ // 实例化数据中心'store'
       return state.xx;
     }
     // 通过让getter返回一函数,来实现getter传参 
-    ,getData2: function(state, getters){
+    ,getData2: function({ stateData1, stateData2 }, getters){
       // 传参调用: store.getters.getData2(2)  
       return function(id){
         return state.todos.find(todo => todo.id === id)
@@ -1299,7 +1301,7 @@ store = new Vuex.Store({ // 实例化数据中心'store'
       context.commit(foo,{}) 
       
     }
-    ,goo1: function({commit}){ //  使用参数解构来简化书写  
+    ,goo1: function({commit},data){ //  使用参数解构来简化书写  
       commit(foo,{})
     }
     ...

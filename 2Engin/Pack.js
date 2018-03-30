@@ -848,7 +848,7 @@ Suggestion&Question:
     'chunk'块,被entry所依赖的额外的代码块 
 相关命令 
   ◆安装相关 
-  $ npm i -g webpack  // 全局安装Webpack  
+  $ npm i -g webpack  // 全局安装Webpack的cli环境  
   $ npm init  // npm初始化,创建'package.json'文件 
   $ npm i -D webpack  在项目中安装webpack并写入依赖配置文件  
   ◆安装后可用的其他相关命令  

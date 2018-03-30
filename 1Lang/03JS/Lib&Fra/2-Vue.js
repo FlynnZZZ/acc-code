@@ -1150,7 +1150,9 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
           自定义构造器函数,使用 instanceof 检测 
         ,required: true, // 是否必须 
         ,validator: function (value) {  // 自定义验证函数 
-          return value > 10
+          return value > 10  // 返回值为false,vue会抛出警告[开发版] ? 
+          // prop会在组件实例创建之前进行校验,所以在 default 或 validator 函数里,
+          // data、computed 或 methods 等实例属性还无法使用 
         }
       }
     }
@@ -1196,8 +1198,8 @@ vm = new Vue({   // Vue实例,'ViewModel'简称vm
   watch: {        // 监听数据的变化  
     <key>: function(val,oldVal){ // 方式一 
     },
-    <key>: 'someMethod', // 方式二,为一方法名  
-    <key>: {       // 方式三,使用对象的方式进行配置  
+    <key>: 'someMethod',         // 方式二,为一方法名  
+    <key>: {                     // 方式三,使用对象的方式进行配置  
       deep: true // 深度 watch 
         监听对象属性的变化,需使用深度watch,监听数组的变动则不需要 
       ,handler: function (val,oldVal) {
@@ -2030,21 +2032,40 @@ vm.xxx.实例属性/方法/事件
         PS: 而在子组件内部改变prop,Vue会在控制台给出警告; 
           在js中对象和数组是引用类型,指向同一个内存空间,
           若prop是一对象或数组,在子组件内部改变它会影响父组件的状态;
-        定义'data'属性,用prop值初始化: 不会动态响应父组件传递的数据  
+        定义'data'属性,用prop值初始化 
+          PS: 修改'data'属性时[而非覆盖],仍会改变父组件内用于传递的数据,此做法仅仅是为了避免警告 ?  
+          此情况下,子组件数据对父组件数据的响应情况   
+            当父组件数据变化时[覆盖变化],后续子组件不响应,[SlPt:可通过监听prop值进行动态响应]  
+            ,当父组件数据修改时,后续子组件仍响应 
           props: ['parentData'],
           data: function () {
             return { 
               aoo: this.parentData 
             }
           }
-        定义计算属性,处理prop值并返回: 不可进行覆盖操作,需定义set  
+        定义计算属性,处理prop值并返回 
+          不可进行覆盖操作,需定义set ?  
           props: ['parentData'],
           computed: {
-            normalizedSize: function () {
-              return this.parentData.trim().toLowerCase()
+            childData: function () {
+              return this.parentData 
             }
           }
-        定义'data'属性,用prop值初始化,并监听prop值进行动态响应  
+      动态绑定: 使用'v-bind' 
+        单个属性动态绑定:  :attr1="dataVal1"
+        同时动态绑定多个属性: v-bind="dataVal2"
+          Example: 
+            data: function(){     // 父组件中的数据
+              return {
+                dataVal2: {
+                  key1: 'abc',
+                  key2: 123
+                }
+              };
+            }
+            <cpt-child v-bind="dataVal2"></cpt-child>
+            将等价于：
+            <cpt-child v-bind:key1="dataVal2.key1" v-bind:key2="dataVal2.key2" ></cpt-child>
     'events up'子组件向父组件通信 
       父组件中,子组件标签上绑定自定义事件并指定回调函数, 
       子组件内通过'$emit'触发该事件并传递数据,
@@ -2392,7 +2413,12 @@ Question&Suggestion:
     决解方法一: 给子组件添加CSS类来控制,如 class="spec-num" 
       在父组件或子组件中定义该CSS类的样式 
 自我总结: 
-  在Vue实例中,所有能通过 this.xx 访问的值,都可在插值中使用 {{xx}}
+  在Vue实例中,所有能通过 this.xx 访问的值,都可在插值中使用 {{xx}},可以该值进行watch 
+  对依赖于其他值的值x进行修改 
+    如修改用户名,初始值依赖于vuex中的数据,后续需进行修改后提交 
+    方法一: 通过设置computed的set来改变x依赖值
+    方法二: 将x改为依赖于默认为false的备用值和初始依赖值的并集,通过set来改变备用值 
+    方法三: 将x作为data中的值,通过watch初始依赖值来初始化x 
 --------------------------------------------------------------------------------
 组件懒加载 
   PS: 也叫延迟加载,即在需要的时候进行加载,随用随载 
@@ -2442,5 +2468,4 @@ Question&Suggestion:
         Vue.component('mideaHeader',() => import(url)) 
 ---------------------------------------------------------------------以下待整理  
 异步组件,加载完毕后执行某些操作,如何监控何时加载完毕 ? 
-
 

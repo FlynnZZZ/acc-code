@@ -1462,6 +1462,8 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
       var regp = /^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
       var str = "fols.van@126.com";
       console.log(regp.test(str)); // true 
+    至少一个汉字、数字、字母、下划线
+      /[a-zA-Z0-9_\u4e00-\u9fa5]+/　　
     删除首尾空格 
       使用两次正则 
         var pattern=/^\s+/;

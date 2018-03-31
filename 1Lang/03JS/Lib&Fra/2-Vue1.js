@@ -1172,9 +1172,8 @@ API
     .matched  arr,包含当前路由的所有嵌套路径片段的路由记录 
       PS: 路由记录就是 routes 配置数组中的对象副本,还有在 children 数组 
     .meta     obj,
-  ◆路由组件新增配置 
-    PS: 在路由配置中引入的组件才有 
-  ,beforeRouteEnter (to,from,next) {  // 路由被确认前调用 
+  ◆路由组件新增配置: 在路由配置中引入的组件才有 
+  ,beforeRouteEnter: function(to,from,next){ // 路由被确认前调用  
     该回调中不能访问 this,因为回调在导航确认前被调用 
     可通过传一个回调给 next来访问组件实例 
       在导航被确认的时候执行回调,并且把组件实例作为回调方法的参数。
@@ -1183,12 +1182,13 @@ API
           // 通过 `vm` 访问组件实例
         })
       }
-  }
-  ,beforeRouteLeave (to,from,next) {  // 离开路由时调用 
+  } 
+  ,beforeRouteLeave: function (to,from,next) {  // 离开路由时调用 
     PS: 通常用于禁止用户在还未保存修改前突然离开  
     可访问组件实例 `this`
   }
-  ,beforeRouteUpdate (to,from,next) { // 当前路由改变且该组件被复用时调用 '2.2+'  
+  // 当前路由改变且该组件被复用时调用 '2.2+'  
+  ,beforeRouteUpdate: function (to,from,next) { 
     PS: 可以访问组件实例`this`
     适用场景: 
       动态参数路径 

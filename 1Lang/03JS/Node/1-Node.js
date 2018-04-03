@@ -2,10 +2,10 @@ NodeJS: 于2009年发布,一个事件驱动I/O服务端JS运行环境
   PS: 内部采用V8引擎,作为JS解释器,通过自行开发的libuv库,调用操作系统资源 
     偶数位为稳定版本,如: 0.6.X、0.8.X; 奇数为非稳定版本,如: 0.7.X、0.9.X 
   相关命令 
-    $ node -v         查看所安装node的版本信息
-    $ node <fileName> 执行文件 
-    $ node -e <codeStr>   使用-e参数,可执行代码字符串 
-      node -e 'console.log("Hello World")'
+    $ node -v           // 查看所安装node的版本信息
+    $ node <fileName>   // 执行文件 
+    $ node -e <codeStr>  //  使用-e参数,可执行代码字符串 
+      Example: node -e 'console.log("Hello World")'
     REPL命令 
       PS: 'NodeJS REPL'Node的交互式解释器 
         Node的交互式解释器可以很好的调试JS代码;相当于浏览器的Console控制台[SlPt]

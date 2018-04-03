@@ -210,23 +210,24 @@ url,一个实例对象,用于解析URL
     url        // str,传入需要解析的URL字符串  
     ,bol1?     // 是否将'query'字段转换为对象表示,默认: false 
     ,bol2?     // 当URL不全时更智能的识别,默认: false 
+    // 返回的对象及其字段说明 
+    {          
+      // url.parse("https://www.baidu.com?key=val");
+      protocol: 'https:',            // str,协议
+      slashes: true,                 // bol,是否有协议的双斜线
+      host: 'www.baidu.com',         // str,ip地址或域名
+      hostname: 'www.baidu.com',     // str,主机名
+      port: null,                    // num,端口,默认:80 显示为null,否则会指明
+      path: '/',                     // 路径
+      pathname: '/',                 // 路径名,
+      search: '?key=val',            // str,查询字符串 
+      query: 'key=val',              // str|obj,查询字符串
+        当第二个参数为true时,则为对象形式 
+      hash: null,                    // hash值,锚点
+      auth: null,                    // 
+      href: 'https://www.baidu.com/' // str,完整超链接
+    } 
   ) 
-  <=> {          // 返回的对象及其字段说明 
-    // url.parse("https://www.baidu.com?key=val");
-    protocol: 'https:',            // str,协议
-    slashes: true,                 // bol,是否有协议的双斜线
-    host: 'www.baidu.com',         // str,ip地址或域名
-    hostname: 'www.baidu.com',     // str,主机名
-    port: null,                    // num,端口,默认:80 显示为null,否则会指明
-    path: '/',                     // 路径
-    pathname: '/',                 // 路径名,
-    search: '?key=val',            // str,查询字符串 
-    query: 'key=val',              // str|obj,查询字符串
-      当第二个参数为true时,则为对象形式 
-    hash: null,                    // hash值,锚点
-    auth: null,                    // 
-    href: 'https://www.baidu.com/' // str,完整超链接
-  } 
   url.format(    // str,将url对象格式化为url字符串
     obj       // url对象 
     Example: :
@@ -287,8 +288,8 @@ querystring,解析URL的查询字符串
   querystring.unescapeBuffer() 
   querystring.encode()
   querystring.decode()
-http,http服务模块,提供HTTP服务器功能 
-  PS:主要用于搭建HTTP服务端和客户端; 
+http: http服务模块,提供HTTP服务器功能 
+  PS: 主要用于搭建HTTP服务端和客户端; 
   Web服务器 
     Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
     Web服务器的基本功能就是提供Web信息浏览服务.
@@ -335,9 +336,9 @@ http,http服务模块,提供HTTP服务器功能
     <num>    // 监听的端口
     ,<str>?  // 监听的ip,如: "127.0.0.1" 
   );   
-  http.request(options [,foo])  从后台发送http请求
-    PS:返回可写的request实例流
-    options  配置项参数,可为str或obj
+  http.request(       // 从后台发送http请求 
+    PS: 返回可写的request实例流
+    options          // str/obj,配置项参数 
       str  字符串,将被 url.parse 解析为对象
       obj  对象 
         host           服务器域名或ip地址
@@ -352,8 +353,9 @@ http,http服务模块,提供HTTP服务器功能
         agent          代理 
         keepAlive      
         keepAliveMsecs     
-    foo      参数为 (res) 
-      res 服务器的响应 
+    ,function(res){  // 可选
+      // res 服务器的响应 
+    }
     Example: 慕课网评论的提交 
       var http = require("http");
       var querystring = require("querystring");
@@ -406,14 +408,18 @@ http,http服务模块,提供HTTP服务器功能
       });
       req.write(postData); // 将请求数据写入请求体 
       req.end(); // 结束请求,请始终加上
-  http.get(url,foo);   使用get方法请求指定url的数据 
-    PS:基于 http.request 的封装,
+  )  
+  http.get(           // 使用get方法请求指定url的数据  
+    PS: 基于 http.request 的封装,
       相对于request,将请求方法默认为get,且自动调用req.end();
-    foo   传入参数 (res) 
+    url 
+    ,function (res){ 
       res.on('data',foo); 监听请求的数据传输,会不断的触发 
         PS:将回调函数中所有的data数据串起来就是完整的响应数据了
         foo  传入参数 (data) 
       res.on('end',foo);  请求数据下载完毕触发
+    }
+  );   
   Example: 
     在该目录下创建一个 index.htm 文件[用于读取] 
     创建Web服务器 

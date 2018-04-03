@@ -687,17 +687,67 @@ const,定义块级常量[ES6]
     obj.constructor           查询对象的构造函数 
     'duck type' 鸭子类型,根据其表现来确定其身份 
 class,类,基于原型的实现的封装[ES6] 
-  class className {} 创建类 
+  class className {   // 创建类 
     PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
       class内部不可定义原型属性和静态属性;
       类名后面的括号{}里面的内容称之为类体 
+    // 类体中可能出现的几种形式 
+    constructor(){  // 构造方法,声明实例属性/方法 
+      PS: 实例化时,会调用此方法来初始化实例对象;
+        若无'constructor'方法,执行时会使用一个空的constructor方法 
+        具有唯一性,一个类体不能含有多个constructor构造方法 
+      // 内部的 this 表示实例对象;  
+      this.aoo = 1
+      this.foo = function(){ }
+    }    
+    foo(){          // 声明原型方法  
+      // 内部的 this 表示实例对象;  
+      Expand: 
+        [val] () {}  属性名可使用表达式 
+          var  aoo = 'sayHello';
+          class Clas{
+            [aoo] () {
+              console.log('hello');
+            }
+          }
+          var clas = new Clas();
+          clas.sayHello(); // 1
+    }           
+    static foo(){   // 声明静态方法  
+      Example: 
+        class Clas {
+          static foo(){
+            console.log('静态方法');
+          }
+        }
+        Clas.foo();  // 静态方法
+    }    
+    get foo(){      // 取值函数 
+      return xx
+    }  
+    set foo(){      // 存值函数  
+      Example: 
+        使用get和set关键字,对某个属性设置存值函数和取值函数 
+        class MyClass {
+          get prop() {
+            return 'getter';
+          }
+          set prop(value) {
+            console.log("setter:" + value);
+          }
+        }
+        var inst = new MyClass();
+        inst.prop = 123; // setter: 123
+        inst.prop ;      // 'getter'
+    }  
     Example: 
       ES5 : 
       var Animal = function(name){
         this.name = name;
       }
-      animal.prototype = {
-        speak: function(){
+      Animal.prototype = {
+        constructor: Animal
+        ,speak: function(){
           console.log("I am"+this.name);
         }
       }
@@ -714,43 +764,7 @@ class,类,基于原型的实现的封装[ES6]
       }
       const animal = new Animal("cat");
       animal.speak();    //I am cat
-    ◆类体中的方法 
-    constructor(){}   构造方法,声明实例属性/方法 
-      PS: 实例化时,会调用此方法来初始化实例对象;内部的 this 表示实例对象;  
-        若无'constructor'方法,执行时会使用一个空的constructor方法 
-        具有唯一性,一个类体不能含有多个constructor构造方法 
-    foo(){}           声明原型方法 
-      PS: 内部的 this 表示实例对象;  
-      [val] () {}  属性名可使用表达式 
-        var  aoo = 'sayHello';
-        class Clas{
-          [aoo] () {
-            console.log('hello');
-          }
-        }
-        var clas = new Clas();
-        clas.sayHello(); // 1
-    static foo(){}    声明静态方法 
-      class Clas {
-        static foo(){
-          console.log('静态方法');
-        }
-      }
-      Clas.foo();  // 静态方法
-    get foo(){}  取值函数 
-    set foo(){}  存值函数 
-      使用get和set关键字,对某个属性设置存值函数和取值函数 
-      class MyClass {
-        get prop() {
-          return 'getter';
-        }
-        set prop(value) {
-          console.log("setter:" + value);
-        }
-      }
-      var inst = new MyClass();
-      inst.prop = 123; // setter: 123
-      inst.prop ;      // 'getter'
+  } 
   class Child extends Parent {} 继承全部静态方法、实例属性/方法,选择性继承原型方法  
     Example: 
       class Animal { 

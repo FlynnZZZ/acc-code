@@ -308,15 +308,16 @@ http: http服务模块,提供HTTP服务器功能
     function(   // 服务响应回调 
       req   // obj,请求 
         .url            // str,请求的地址 
-        .setEncoding(                   // 设置请求的格式为UTF-8
+        .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
+          PS: 通常用于获取POST请求数据  
+          part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
+        ){ })
+        .on("end",function(  ){ // 请求数据传送完毕时触发  
+          PS: GET、POST 请求都会触发该事件 
+        })
+        .setEncoding(                   // 设置请求的格式 
           type  // str,设置的格式,如: 'utf8'
         ) 
-        .addListener( "data" ,function( // data事件,接收请求时触发,会触发多次
-          PS: 通常用于获取POST请求数据  
-          part // 每次的信息,将所有信息串起来就是请求的信息了  
-        ) { } ); 
-        .addListener("end",function(    // end事件,请求信息传送完毕时触发 
-        ){}); 
       ,res  // obj,响应 
         .writeHead(   // 设置响应头
           code  // num,状态码,如 200  
@@ -1332,6 +1333,5 @@ request,请求模块
         response.statusCode   http响应状态码,如200为成功
       data     响应的数据
 ◆本地模块: 自定义的JS文件  
-
 
 

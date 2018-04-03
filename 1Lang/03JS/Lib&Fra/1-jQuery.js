@@ -290,10 +290,12 @@ jEl 操作
         jEl.css('height'); //获取元素的高度
         jEl.css("color");  // 获取元素的字体颜色
         jEl.css("color","red"); // 设置元素的字体颜色为红色
-      jEl.css(attrArr);  获取多个属性值
-        Example:
-        jEl.css(["color","font-size"]); 
-      jEl.css(attrObj);  设置多个属性
+      jEl.css([attr1,attr2,..]);  // 获取多个属性值
+        Example: jEl.css(["color","font-size"]); 
+      jEl.css({                   // 设置多个属性 
+        attr1: val1 
+        ,...
+      });  
         Example:  
         jEl.css({
           "background-color": "red"

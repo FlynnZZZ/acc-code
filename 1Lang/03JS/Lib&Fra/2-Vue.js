@@ -557,6 +557,7 @@ v-on="obj"  对象表示法,同时绑定多个事件  '2.4.0+'
         up: [38,87]
       }
     .enter   Enter键,'.13'等价于'.enter'
+      当为搜索框时<input type="search" >,在微信中 需使用 @keyup.13, @keyup.enter 无效 
     .tab     
     .delete  '删除'和'退格'键
     .esc     

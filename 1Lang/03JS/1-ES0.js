@@ -119,323 +119,259 @@ JS运行过程机理
     eval不会在它的外层作用域引入变量
     eval和arguments不能被重新赋值
     增加了保留字[如 protected static 和 interface] 
-'Modules'模块化规范 
-  'CommonJS'模块化规范 
-    PS: 
-    ◆模块公开  
-      PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
-    module.exports = val  把模块希望输出的内容放入该对象 
-      hello.js 文件中 
-        function world() { 
-          console.log(1);
-        }; 
-        module.exports = world;
-        // module.exports.aoo = world;
-      main.js  文件中 
-        var word = require('./hello'); 
-        world(); // 1
-        // world.aoo(); // 1
-    module.exports.xx = val  
-    exports 指向 module.exports 的一个引用, exports === module.exports 
-    ◆模块引入 
-    require(moduleName)  模块引入,返回模块的 module.exports 
-      PS: 省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
-        模块被加载后会缓存,后续加载返回缓存中的版本,即模块加载最多执行一次模块代码, 
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
-      moduleName  str,'模块名'或'文件路径'  
-        name     原生模块或通过配置文件指定 
-          原生模块,可直接使用模块名 
-          若模块目录中没有 package.json 文件,
-          会尝试在模块目录中寻找 index.js 或 index.node 文件进行加载 
-        相对路径  如:'./mod' 
-        绝对路径  如:'/pathtomodule/mod' 
-      当模块重名时,加载的优先级:  
-        Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-    加载模块,会将模块内的内容执行一次 
-      当直接运行时,在模块内 require.main === module 
-      可以此来判断直接运行还是加载运行  
-    require是同步的,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
-    运行时加载: 只能在运行时确定 
-      比如,CommonJS 模块就是对象,输入时必须查找对象属性 
-      // CommonJS模块
-      let { stat, exists, readFile } = require('fs');
-      // 等同于
-      let _fs = require('fs');
-      let stat = _fs.stat;
-      let exists = _fs.exists;
-      let readfile = _fs.readfile;
-      上面代码的实质是整体加载fs模块[即加载fs的所有方法],生成一个对象(_fs),
-      然后再从这个对象上面读取3个方法。
-      这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
-      导致完全没办法在编译时做“静态优化”。
-    ◆Expand: 
-    循环引用,也叫循环依赖,会导致其中一个引入为空 
-      方法一: 将需公用的部分提取出来作为一个独立模块 
-      方法二: 动态引入,在需要时引入,如在函数内部 
-  AMD'Asynchronous Module Definition'规范,异步模块定义 
-    PS: 异步:有效避免了采用同步加载方式中导致页面假死现象 
-      模块定义:每个模块必须按照一定的格式编写  
-      主要接口有两个:'define'和'require' 
-    由于原生JS不支持,需用库函数如RequireJS 
-  CMD'Common Module Definition'通用模块定义 
-    CMD规范是国内发展出来的,就像AMD有个requireJS,CMD有个浏览器的实现SeaJS,
-    SeaJS要解决的问题和requireJS一样,只不过在模块定义方式和模块加载时机上有所不同
-    区别:在模块定义时对依赖的处理不同
-    AMD推崇依赖前置,在定义模块的时候就要声明其依赖的模块 
-    CMD推崇就近依赖,只有在用到某个模块的时候再去require 
-  ES6 Modules 
-    PS: ES6模块默认采用严格模式"use strict"; 
-      ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
-      设计思想: 尽量静态化,使编译时能确定模块的依赖关系,及输入和输出的变量 
-    ★输出接口,对外暴露属性方法 
-    export default foo/{}   // 默认输出 
-      PS: 导入时可自定义名称 
-      一个模块只能有一个默认输出[即'export default'命令只能使用一次] 
-        本质上,export default 就是输出一个叫做default的变量或方法 
-        然后输入时,系统允许你为它取任意名字。
-      默认输出和正常输出的比较 
-        // export default时,对应的 import 不需要使用大括号 
-        export default function foo() { } // 输出
-        import goo from 'xx';             // 输入
-        // 正常时,对应的import语句需要使用大括号 
-        export function foo() { }; // 输出
-        import {goo} from 'xx';    // 输入
-      'export default'后不能跟变量声明语句
-        PS: 因为export default命令其实只是输出一个叫做default的变量
-          export default 本质是将该命令后面的值,赋给default变量以后再默认
-        export default var a = 1; // 错误
-    export var aoo = val/function foo() {}  // 单个变量/函数输出 
-      对外部输出三个变量: aoo boo coo
-      export var aoo = 'aa';
-      export var boo = 'bb';
-      export var coo = 1958;
-    export {aoo,..}   // 批量导出,使用大括号指定所要输出的一组变量 
-      var aoo = 'aa',boo = 'bb',coo = 1958;
-      export {aoo, boo, coo};
-    export {curName1 as outName1,..}    // 重命名输出变量 
-    export {aoo,..}  from 'path' // 先后输入输出同一个模块 
-      等价于:
-      import {aoo,..} from 'my_module';
-      export {aoo,..};
-      Example:
-      export { foo as myFoo } from 'my_module' 接口改名 
-      export { default } from 'foo';           默认接口 
-      export * from 'my_module';               整体输出 
-      export { aoo as default } from './someModule'  具名接口改为默认接口 
-      export { default as es6 } from './someModule'  默认接口改为具名接口 
-      下面三种import语句,没有对应的复合写法。
-        import * as someIdentifier from "someModule";
-        import someIdentifier from "someModule";
-        import someIdentifier, { namedIdentifier } from "someModule";
-        为了做到形式的对称,现在有提案,提出补上这三种复合写法。
-        export * as someIdentifier from "someModule";
-        export someIdentifier from "someModule";
-        export someIdentifier, { namedIdentifier } from "someModule";
-    'export'需在模块顶层作用域定义,否则报错  
-      PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
-      function foo() { 
-        export default 'bar'  // SyntaxError
-      } 
-      foo();
-    输出的值是实时动态的 
-      PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
-      export var aoo = 'bar';
-      setTimeout(() => aoo = 'baz', 500);
-      输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
-    Example: 
-      export 1; // 报错 
-      
-      var m = 1;
-      export m; // 报错
-      单变量输出需采用
-      export var m = 1;
-      或
-      var m = 1;
-      export {m};
-      或
-      var n = 1;
-      export {n as m};
-      
-      function f() {}
-      export f;  // 报错
-      改为:
-      export function f() {};
-      或
-      function f() {}
-      export {f};
-    ★导入接口,导入其他模块的属性方法 
-    import 'path'  
-      import语句会执行所加载的模块 
-      import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
-      多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
-      import 'lodash';
-      import 'lodash'; // 未执行
-    import {name1 [,name2,..]} from 'path' // 加载JS文件,并从中输入变量 
-      PS: 变量名必须与导出名称相同,位置顺序则无要求 
-      from   模块文件的位置,可是相对路径、绝对路径或模块名,'.js'可省略 
-      import语句是'Singleton'模式 
-        import { foo } from 'my_module';
-        import { bar } from 'my_module';
-        等同于
-        import { foo, bar } from 'my_module';
-    import { aoo as boo } from 'path' // 重命名导入的变量 
-    import * as aoo from 'path'   模块的整体加载 
-      PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
-      // export.js 
-      export function foo() { }
-      export function goo() { }
-      // import.js 
-      import * as aoo from './export'; 
-      aoo.foo()
-      aoo.goo()
-      模块整体加载所在的对象不允许运行时改变  
-      import * as aoo from './export';
-      // 下面两行都是不允许的
-      aoo.foo = 'hello';
-      aoo.goo = function () {};
-    import命令引入提升,会提升到整个模块的头部,首先执行 
-      foo();
+ES6 Modules 
+  PS: ES6模块默认采用严格模式"use strict"; 
+    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
+    设计思想: 尽量静态化,使编译时能确定模块的依赖关系,及输入和输出的变量 
+  ★输出接口,对外暴露属性方法 
+  export default foo/{}   // 默认输出 
+    PS: 导入时可自定义名称 
+    一个模块只能有一个默认输出[即'export default'命令只能使用一次] 
+      本质上,export default 就是输出一个叫做default的变量或方法 
+      然后输入时,系统允许你为它取任意名字。
+    默认输出和正常输出的比较 
+      // export default时,对应的 import 不需要使用大括号 
+      export default function foo() { } // 输出
+      import goo from 'xx';             // 输入
+      // 正常时,对应的import语句需要使用大括号 
+      export function foo() { }; // 输出
+      import {goo} from 'xx';    // 输入
+    'export default'后不能跟变量声明语句
+      PS: 因为export default命令其实只是输出一个叫做default的变量
+        export default 本质是将该命令后面的值,赋给default变量以后再默认
+      export default var a = 1; // 错误
+  export var aoo = val/function foo() {}  // 单个变量/函数输出 
+    对外部输出三个变量: aoo boo coo
+    export var aoo = 'aa';
+    export var boo = 'bb';
+    export var coo = 1958;
+  export {aoo,..}   // 批量导出,使用大括号指定所要输出的一组变量 
+    var aoo = 'aa',boo = 'bb',coo = 1958;
+    export {aoo, boo, coo};
+  export {curName1 as outName1,..}    // 重命名输出变量 
+  export {aoo,..}  from 'path' // 先后输入输出同一个模块 
+    等价于:
+    import {aoo,..} from 'my_module';
+    export {aoo,..};
+    Example:
+    export { foo as myFoo } from 'my_module' 接口改名 
+    export { default } from 'foo';           默认接口 
+    export * from 'my_module';               整体输出 
+    export { aoo as default } from './someModule'  具名接口改为默认接口 
+    export { default as es6 } from './someModule'  默认接口改为具名接口 
+    下面三种import语句,没有对应的复合写法。
+      import * as someIdentifier from "someModule";
+      import someIdentifier from "someModule";
+      import someIdentifier, { namedIdentifier } from "someModule";
+      为了做到形式的对称,现在有提案,提出补上这三种复合写法。
+      export * as someIdentifier from "someModule";
+      export someIdentifier from "someModule";
+      export someIdentifier, { namedIdentifier } from "someModule";
+  'export'需在模块顶层作用域定义,否则报错  
+    PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
+    function foo() { 
+      export default 'bar'  // SyntaxError
+    } 
+    foo();
+  输出的值是实时动态的 
+    PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
+    export var aoo = 'bar';
+    setTimeout(() => aoo = 'baz', 500);
+    输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
+  Example: 
+    export 1; // 报错 
+    
+    var m = 1;
+    export m; // 报错
+    单变量输出需采用
+    export var m = 1;
+    或
+    var m = 1;
+    export {m};
+    或
+    var n = 1;
+    export {n as m};
+    
+    function f() {}
+    export f;  // 报错
+    改为:
+    export function f() {};
+    或
+    function f() {}
+    export {f};
+  ★导入接口,导入其他模块的属性方法 
+  import 'path'  
+    import语句会执行所加载的模块 
+    import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
+    多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
+    import 'lodash';
+    import 'lodash'; // 未执行
+  import {name1 [,name2,..]} from 'path' // 加载JS文件,并从中输入变量 
+    PS: 变量名必须与导出名称相同,位置顺序则无要求 
+    from   模块文件的位置,可是相对路径、绝对路径或模块名,'.js'可省略 
+    import语句是'Singleton'模式 
       import { foo } from 'my_module';
-      import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
-    由于import静态执行,不能使用表达式和变量 
-      这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
-      import { 'f' + 'oo' } from 'my_module'; // 报错
-      
-      let module = 'my_module'; // 报错
-      import { foo } from module;
-      
-      if (x === 1) { 
-        import { foo } from 'module1'; // 报错
+      import { bar } from 'my_module';
+      等同于
+      import { foo, bar } from 'my_module';
+  import { aoo as boo } from 'path' // 重命名导入的变量 
+  import * as aoo from 'path'   模块的整体加载 
+    PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
+    // export.js 
+    export function foo() { }
+    export function goo() { }
+    // import.js 
+    import * as aoo from './export'; 
+    aoo.foo()
+    aoo.goo()
+    模块整体加载所在的对象不允许运行时改变  
+    import * as aoo from './export';
+    // 下面两行都是不允许的
+    aoo.foo = 'hello';
+    aoo.goo = function () {};
+  import命令引入提升,会提升到整个模块的头部,首先执行 
+    foo();
+    import { foo } from 'my_module';
+    import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
+  由于import静态执行,不能使用表达式和变量 
+    这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
+    import { 'f' + 'oo' } from 'my_module'; // 报错
+    
+    let module = 'my_module'; // 报错
+    import { foo } from module;
+    
+    if (x === 1) { 
+      import { foo } from 'module1'; // 报错
+    } 
+  promise = import('path')   动态加载,返回Promise对象  
+    PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
+      固然有利于编译器提高效率,但也导致无法在运行时加载模块,
+      require是运行时加载模块,import命令无法取代require的动态加载功能;
+      因此,有一个提案,建议引入import()函数,完成动态加载 
+      import()函数可以用在任何地方,不仅仅是模块,非模块的脚本也可以使用。
+      import()类似于Node的require方法,区别主要是前者是异步加载,后者是同步加载 
+    适用场景:  
+    按需加载 
+      import()可以在需要的时候,再加载某个模块。
+      button.addEventListener('click', event => {
+        import('./dialogBox.js')
+        .then(dialogBox => { dialogBox.open(); })
+        .catch(error => { /* Error handling */ })
+      });
+    条件加载
+      if (condition) {
+        import('moduleA').then(...);
       } 
-    promise = import('path')   动态加载,返回Promise对象  
-      PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
-        固然有利于编译器提高效率,但也导致无法在运行时加载模块,
-        require是运行时加载模块,import命令无法取代require的动态加载功能;
-        因此,有一个提案,建议引入import()函数,完成动态加载 
-        import()函数可以用在任何地方,不仅仅是模块,非模块的脚本也可以使用。
-        import()类似于Node的require方法,区别主要是前者是异步加载,后者是同步加载 
-      适用场景:  
-      按需加载 
-        import()可以在需要的时候,再加载某个模块。
-        button.addEventListener('click', event => {
-          import('./dialogBox.js')
-          .then(dialogBox => { dialogBox.open(); })
-          .catch(error => { /* Error handling */ })
+      else {
+        import('moduleB').then(...);
+      }
+    动态的模块路径
+      import(f()) // 根据函数f的返回结果,加载不同的模块 
+      .then(...);
+    加载模块成功以后,这个模块会作为一个对象,当作then方法的参数 
+        因此,可以使用对象解构赋值的语法,获取输出接口。
+        import('./myModule.js')
+        .then(({export1, export2}) => {
+          // ...·
         });
-      条件加载
-        if (condition) {
-          import('moduleA').then(...);
-        } 
-        else {
-          import('moduleB').then(...);
-        }
-      动态的模块路径
-        import(f()) // 根据函数f的返回结果,加载不同的模块 
-        .then(...);
-      加载模块成功以后,这个模块会作为一个对象,当作then方法的参数 
-          因此,可以使用对象解构赋值的语法,获取输出接口。
-          import('./myModule.js')
-          .then(({export1, export2}) => {
-            // ...·
-          });
-          上面代码中,export1 和 export2 都是 myModule.js 的输出接口,可以解构获得。
-      同时加载多个模块 
-        Promise.all([
-          import('./module1.js'),
-          import('./module2.js'),
-          import('./module3.js'),
-        ])
-        .then(([module1, module2, module3]) => {
-           ···
-        });
-      用在async函数中 
-        async function main() {
-          const myModule = await import('./myModule.js');
-          const {export1, export2} = await import('./myModule.js');
-          const [module1, module2, module3] =
-            await Promise.all([
-              import('./module1.js'),
-              import('./module2.js'),
-              import('./module3.js'),
-            ]);
-        }
-        main();    
-    ★其他
-    模块的继承 
-      Example: 
-        假设有一个circleplus模块,继承了circle模块。
-        // circleplus.js
-        export * from 'circle';
-        export var e = 2.71828182846;
-        export default function(x) { return Math.exp(x); }
-        上面代码中的export *,表示再输出circle模块的所有属性和方法。
-        注意,export *命令会忽略circle模块的default方法。
-        然后,上面代码又输出了自定义的e变量和默认方法。
-        这时,也可以将circle的属性或方法,改名后再输出。
-        // circleplus.js
-        export { area as circleArea } from 'circle';
-        上面代码表示,只输出circle模块的area方法,且将其改名为circleArea。
-        加载上面模块的写法如下。
-        // main.js
-        import * as math from 'circleplus';
-        import exp from 'circleplus';
-        console.log(exp(math.e));
-        上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
-    跨模块常量 
-      const声明的常量只在当前代码块有效。
-      若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
-      可以采用下面的写法。
-      // constants.js 模块
-      export const A = 1;
-      export const B = 3;
-      export const C = 4;
-      // test1.js 模块
-      import * as constants from './constants';
-      console.log(constants.A); // 1
-      console.log(constants.B); // 3
-      // test2.js 模块
-      import {A, B} from './constants';
-      console.log(A); // 1
-      console.log(B); // 3
-      若要使用的常量非常多,可以建一个专门的constants目录,
-      将各种常量写在不同的文件里面,保存在该目录下。
-      // constants/db.js
-      export const db = {
-        url: 'http://my.couchdbserver.local:5984',
-        admin_username: 'admin',
-        admin_password: 'admin password'
-      };
-      // constants/user.js
-      export const users = ['root', 'admin', 'staff', 'ceo', 'chief', 'moderator'];
-      然后,将这些文件输出的常量,合并在index.js里面。
-      // constants/index.js
-      export {db} from './db';
-      export {users} from './users';
-      使用的时候,直接加载index.js就可以了。
-      // script.js
-      import {db, users} from './constants';
-    注意事项 
-      声明的变量,对外都是只读的 
-        //---module-B.js文件------
-        var name = "前端君"
-        export {name}
-        //---module-A.js文件------
-        import {name} from "./module-B.js";
-        name = "修改字符串变量"; //报错:name is read-only
-      若模块B导出的是对象类型的值,可[部分]修改。
-        //---module-B.js文件---
-        var person = {"name":"前端君"}
-        export { person }
-        //---module-A.js文件------
-        import {person} from "./module-B.js";
-        person.name = "修改字符串变量"; //修改成功
-      导入不存在的变量,值为undefined。
-        //---module-B.js文件---
-        var name = "前端君";
-        export {name}
-        //---module-A.js文件------
-        import { height } from "./module-B.js";
-        console.log(height); // undefined,不会抛出异常,只是值为undefined
+        上面代码中,export1 和 export2 都是 myModule.js 的输出接口,可以解构获得。
+    同时加载多个模块 
+      Promise.all([
+        import('./module1.js'),
+        import('./module2.js'),
+        import('./module3.js'),
+      ])
+      .then(([module1, module2, module3]) => {
+         ···
+      });
+    用在async函数中 
+      async function main() {
+        const myModule = await import('./myModule.js');
+        const {export1, export2} = await import('./myModule.js');
+        const [module1, module2, module3] =
+          await Promise.all([
+            import('./module1.js'),
+            import('./module2.js'),
+            import('./module3.js'),
+          ]);
+      }
+      main();    
+  ★其他
+  模块的继承 
+    Example: 
+      假设有一个circleplus模块,继承了circle模块。
+      // circleplus.js
+      export * from 'circle';
+      export var e = 2.71828182846;
+      export default function(x) { return Math.exp(x); }
+      上面代码中的export *,表示再输出circle模块的所有属性和方法。
+      注意,export *命令会忽略circle模块的default方法。
+      然后,上面代码又输出了自定义的e变量和默认方法。
+      这时,也可以将circle的属性或方法,改名后再输出。
+      // circleplus.js
+      export { area as circleArea } from 'circle';
+      上面代码表示,只输出circle模块的area方法,且将其改名为circleArea。
+      加载上面模块的写法如下。
+      // main.js
+      import * as math from 'circleplus';
+      import exp from 'circleplus';
+      console.log(exp(math.e));
+      上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
+  跨模块常量 
+    const声明的常量只在当前代码块有效。
+    若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
+    可以采用下面的写法。
+    // constants.js 模块
+    export const A = 1;
+    export const B = 3;
+    export const C = 4;
+    // test1.js 模块
+    import * as constants from './constants';
+    console.log(constants.A); // 1
+    console.log(constants.B); // 3
+    // test2.js 模块
+    import {A, B} from './constants';
+    console.log(A); // 1
+    console.log(B); // 3
+    若要使用的常量非常多,可以建一个专门的constants目录,
+    将各种常量写在不同的文件里面,保存在该目录下。
+    // constants/db.js
+    export const db = {
+      url: 'http://my.couchdbserver.local:5984',
+      admin_username: 'admin',
+      admin_password: 'admin password'
+    };
+    // constants/user.js
+    export const users = ['root', 'admin', 'staff', 'ceo', 'chief', 'moderator'];
+    然后,将这些文件输出的常量,合并在index.js里面。
+    // constants/index.js
+    export {db} from './db';
+    export {users} from './users';
+    使用的时候,直接加载index.js就可以了。
+    // script.js
+    import {db, users} from './constants';
+  注意事项 
+    声明的变量,对外都是只读的 
+      //---module-B.js文件------
+      var name = "前端君"
+      export {name}
+      //---module-A.js文件------
+      import {name} from "./module-B.js";
+      name = "修改字符串变量"; //报错:name is read-only
+    若模块B导出的是对象类型的值,可[部分]修改。
+      //---module-B.js文件---
+      var person = {"name":"前端君"}
+      export { person }
+      //---module-A.js文件------
+      import {person} from "./module-B.js";
+      person.name = "修改字符串变量"; //修改成功
+    导入不存在的变量,值为undefined。
+      //---module-B.js文件---
+      var name = "前端君";
+      export {name}
+      //---module-A.js文件------
+      import { height } from "./module-B.js";
+      console.log(height); // undefined,不会抛出异常,只是值为undefined
 --------------------------------------------------------------------------------
 ◆总结、技巧 
 函数节流,对消耗资源过多的操作的频率进行限制 

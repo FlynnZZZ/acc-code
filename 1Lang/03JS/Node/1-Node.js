@@ -90,430 +90,483 @@ NodeJS的运行方式及编程风格
         当构造函数使用new生成实例时,this指向其prototype.
       正常的方式调用函数[直接执行而无前缀],[浏览器和node环境]this指代全局的this
         使用严格模式,this就会变成undefined
-◆'Global Object'全局变量,可在程序的任何地方访问 
-  PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
-    所有全局变量[除了global本身以外]都是'global'对象的属性 
+  'Global Object'全局变量,可在程序的任何地方访问 
+    PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
+      所有全局变量[除了global本身以外]都是'global'对象的属性 
+module,'CommonJS'模块化规范 
+  Feature: 
+    加载模块,会将模块内的内容执行一次 
+      当直接运行时,在模块内 require.main === module 
+      可以此来判断直接运行还是加载运行  
+    同步加载,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
+    运行时加载: 只能在运行时确定 
+      比如,CommonJS 模块就是对象,输入时必须查找对象属性 
+      // CommonJS模块
+      let { stat, exists, readFile } = require('fs');
+      // 等同于
+      let _fs = require('fs');
+      let stat = _fs.stat;
+      let exists = _fs.exists;
+      let readfile = _fs.readfile;
+      上面代码的实质是整体加载fs模块[即加载fs的所有方法],生成一个对象(_fs),
+      然后再从这个对象上面读取3个方法。
+      这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
+      导致完全没办法在编译时做“静态优化”。
+  模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用 ? 
+  ◆模块引入 
+  require(moduleName)  模块引入,返回模块的 module.exports 
+    Feature: 
+      省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
+      省略文件名时,依次查找'index'、 ? 
+      模块被加载后会缓存,后续加载返回缓存中的版本
+        即模块加载最多执行一次模块代码, 
+        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
+      当模块重名时,加载的优先级:  
+        Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
+    moduleName  str,'模块名'/'文件路径'  
+      使用模块名引入原生模块或放到'node_modules'下的自定义模块 
+      使用文件路径引入自定义模块
+        相对路径  如:'./mod' 
+        绝对路径  如:'/pathtomodule/mod' 
+  ◆模块公开  
+    PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
+  module.exports = val     把模块希望输出的内容放入该对象[覆盖模式] 
+    hello.js 文件中 
+      function world() { 
+        console.log(1);
+      }; 
+      module.exports = world;
+      // module.exports.aoo = world;
+    main.js  文件中 
+      var word = require('./hello'); 
+      world(); // 1
+      // world.aoo(); // 1
+  module.exports.xx = val  把模块希望输出的内容放入该对象[修改模式] 
+  exports.xxx = val        把模块希望输出的内容放入该对象[只有修改模式] 
+  exports 指向 module.exports 的一个引用, exports === module.exports 
+  ◆Expand: 
+  循环引用,也叫循环依赖,会导致其中一个引入为空 
+    方法一: 将需公用的部分提取出来作为一个独立模块 
+    方法二: 动态引入,在需要时引入,如在函数内部 
+Command Line Options,命令行参数 
+  -v, --version  // Node版本 
 ★类 
-  Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
-    PS: 用来创建一个专门存放二进制数据的缓存区; 
-      可在 TCP 流或文件操作中处理二进制数据流 
-      Buffer实例大小固定[被创建时确定,且无法调整]、在V8堆外分配物理内存 
-    Extend: Uint8Array  
-    Static: 
-      .poolSize  
-      .alloc(len[,fill[,encoding]])  创建指定长度的Buffer 
-        PS: 比Buffer.allocUnsafe()慢,但能确保新建的Buffer实例的内容不包含敏感数据  
-        len  int,创建Buffer的长度,范围:[0-buffer.constants.MAX_LENGTH] 
-        fill  int/str/buf,初始填充值,默认:0  
-          PS: 若指定了fill,则会调用 buf.fill(fill) 初始化分配的Buffer 
-        encoding kw,fill为字符串时的字符编码,默认:'utf8' 
-          PS: 若指定了fill和encoding,则会调用 buf.fill(fill,encoding) 初始化分配的Buffer 
+Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
+  PS: 用来创建一个专门存放二进制数据的缓存区; 
+    可在 TCP 流或文件操作中处理二进制数据流 
+    Buffer实例大小固定[被创建时确定,且无法调整]、在V8堆外分配物理内存 
+  Extend: Uint8Array  
+  Static: 
+    .poolSize  
+    .alloc(len[,fill[,encoding]])  创建指定长度的Buffer 
+      PS: 比Buffer.allocUnsafe()慢,但能确保新建的Buffer实例的内容不包含敏感数据  
+      len  int,创建Buffer的长度,范围:[0-buffer.constants.MAX_LENGTH] 
+      fill  int/str/buf,初始填充值,默认:0  
+        PS: 若指定了fill,则会调用 buf.fill(fill) 初始化分配的Buffer 
+      encoding kw,fill为字符串时的字符编码,默认:'utf8' 
+        PS: 若指定了fill和encoding,则会调用 buf.fill(fill,encoding) 初始化分配的Buffer 
+      Example: 
+        // 创建一个长度为 10、且用 0x1 填充的 Buffer。 
+        const buf2 = Buffer.alloc(10, 1);
+    .allocUnsafe(len)  创建指定长度未初始化的Buffer实例 
+      PS: 该方式创建的实例的底层内存未初始化,内容未知,可能包含敏感数据
+      len  num,指定新建Buffer的长度 
+      可用 buf.fill(0) 初始化实例为0 
         Example: 
-          // 创建一个长度为 10、且用 0x1 填充的 Buffer。 
-          const buf2 = Buffer.alloc(10, 1);
-      .allocUnsafe(len)  创建指定长度未初始化的Buffer实例 
-        PS: 该方式创建的实例的底层内存未初始化,内容未知,可能包含敏感数据
-        len  num,指定新建Buffer的长度 
-        可用 buf.fill(0) 初始化实例为0 
-          Example: 
-          const buf = Buffer.allocUnsafe(10);
-          // 输出: (内容可能不同): <Buffer a0 8b 28 3f 01 00 00 00 50 32>
-          console.log(buf);
-          buf.fill(0);
-          // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
-          console.log(buf);
-      .allocUnsafeSlow(len)  创建指定长度未初始化的Buffer实例 
-      .from(val[,..])  通过其他值Buffer 
-        (arr)  通过一八位字节的数组创建Buffer 
-          // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
-          const buf4 = Buffer.from([1, 2, 3]);
-        (arrBuf[,byteOffset[,length]])  创建一共享内存的Buffer 
-          arrBuf  ArrayBuffer,共享源  
-          byteOffset  开始拷贝的索引,默认:0
-          length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
-          Example: 
-            const arr = new Uint16Array(2);
-            arr[0] = 5000;
-            arr[1] = 4000;
-            const buf = Buffer.from(arr.buffer);
-            // 输出: <Buffer 88 13 a0 0f>
-            console.log(buf);
-            // 与 `arr` 共享内存,改变原始的 Uint16Array 也会改变 Buffer
-            arr[1] = 6000;
-            // 输出: <Buffer 88 13 70 17>
-            console.log(buf);
-        (buf)  返回Buffer的拷贝 
-        (str[,encoding])  
-          str  要编码的字符串 
-          encoding  kw,字符编码,默认:'utf8' 
-            'latin1'  Latin-1 
-            'ascii'   
-            ...
-          Example: 
-            // 创建一个包含 UTF-8 字节 [0x74, 0xc3, 0xa9, 0x73, 0x74] 的 Buffer 
-            const buf5 = Buffer.from('tést');
-            // 创建一个包含 Latin-1 字节 [0x74, 0xe9, 0x73, 0x74] 的 Buffer 
-            const buf6 = Buffer.from('tést', 'latin1');
-      .concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
-        buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-          参数列表只有一个成员,就直接返回该成员
-        length  可选,默认为总长度,指定新buf对象的长度
-          省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
-          因此,显式提供这个参数,能提供运行速度  
-        Example:
-          var buf1 = new Buffer('11');
-          var buf2 = new Buffer('22');
-          var buf3 = Buffer.concat([buf1,buf2]);
-          console.log(buf3.toString());   // 1122
-      .isEncoding(typ)  bol,表示Buffer实例是否为指定编码 
-        Buffer.isEncoding('utf8'); // true
-      .isBuffer(obj)    bol,判断对象是否为Buffer实例的 
-        Buffer.isBuffer(Date) // false
-      .byteLength(str [,typ]) 返回字符串实际占据的字节长度 
-        str  检测的字符串
-        typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
-        Buffer.byteLength('Hello', 'utf8') // 5
-      .compare(buf1,buf2)    比较两份Buffer对象 
-    Instance: 
-      var bufer = new Buffer(val)  通过Buffer类来创建bufer对象[已废弃][6.0-] 
-        PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
-        ◆val可为以下类型:
-        num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
-          var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
-        bufer       bufer对象,通过拷贝来创建新buffer对象 
-          var buffer = new Buffer([1, 1, 2, 2, 3]);
-          console.log(buffer); // <Buffer 01 01 02 02 03>
-        str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
-          type  编码方式,默认为'utf-8',其他可选值为 
-            "base64"  
-            "ascii"   
-            "utf8"    
-            "utf-8"    
-            "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
-            "ucs2"    utf16le的别名
-            "hex"     将每个字节转为两个十六进制字符
-          Example:
-            var bufer1 = new Buffer("abcdefg", "utf-8"); 
-            var bufer2 = new Buffer("abcdefg", "base64"); 
-            console.log(bufer1,bufer2);
-            // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
-        arr         数组,数组成员必须是整数值 
-          var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
-          console.log(hello.toString()); // 'Hello'
-      Buffer.from()  
-      Buffer.alloc()  
-      Buffer.allocUnsafe()  
-    Proto: 
-      [idx]  下标访问
-      .length  读写,bufer对象所占据的内存长度  
-        PS:改值与Buffer对象的内容无关;
-          如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
-        var buf1 = new Buffer('1234567');
-        var buf2 = new Buffer(8);
-        console.log(buf1.length); // 7
-        console.log(buf2.length); // 8
-      .byteLength   文件的体积大小 
-      .parent 
-      .offset 
-      .write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
-        PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
-        str   写入缓冲区的字符串 
-        idx   缓冲区开始写入的索引值,默认为 0 
-        len   写入的字节数,默认为 buffer.length 
-        typ   使用的编码.默认为'utf8' 
+        const buf = Buffer.allocUnsafe(10);
+        // 输出: (内容可能不同): <Buffer a0 8b 28 3f 01 00 00 00 50 32>
+        console.log(buf);
+        buf.fill(0);
+        // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
+        console.log(buf);
+    .allocUnsafeSlow(len)  创建指定长度未初始化的Buffer实例 
+    .from(val[,..])  通过其他值Buffer 
+      (arr)  通过一八位字节的数组创建Buffer 
+        // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
+        const buf4 = Buffer.from([1, 2, 3]);
+      (arrBuf[,byteOffset[,length]])  创建一共享内存的Buffer 
+        arrBuf  ArrayBuffer,共享源  
+        byteOffset  开始拷贝的索引,默认:0
+        length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
         Example: 
-          var buf = new Buffer('abcdefg');
-          var len = buf.write("1234");
-          console.log("写入字节数 : "+ len);  // 写入字节数 : 4
-          console.log(buf.toString()); // 1234efg
-      .toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
-        typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
-        bgn    开始读取的索引位置,默认为 0 
-        end    结束位置,默认为缓冲区的末尾 
-        Example:
-          var buf = new Buffer(26);
-          for (var i = 0 ; i < 26 ; i++) { 
-            buf[i] = i + 97; 
-          }
+          const arr = new Uint16Array(2);
+          arr[0] = 5000;
+          arr[1] = 4000;
+          const buf = Buffer.from(arr.buffer);
+          // 输出: <Buffer 88 13 a0 0f>
           console.log(buf);
-          // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
-          console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
-          console.log( buf.toString('ascii',0,5));   // 输出: abcde
-          console.log( buf.toString('utf8',0,5));    // 输出: abcde
-          console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
-      .toJSON()    返回将bufer对象转换为JSON格式对象 
-        PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
-        Example:
-          var bufer = new Buffer('abc');
-          var json = bufer.toJSON();
-          console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
-          console.log(typeof json); // object
-          
-          var buf = new Buffer('test');
-          var json = JSON.stringify(buf);
-          console.log(json); // '[116,101,115,116]'
-          var copy = new Buffer(JSON.parse(json));
-          console.log(copy); // <Buffer 74 65 73 74>
-      .slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
-        begin 可选,默认为 0
-        end   可选,默认为 bufer.length
-        Example:
-          var buf1 = new Buffer('123');
-          var buf2 = buf1.slice(0,2);
-          console.log(buf2); // <Buffer 31 32>
-      .copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
-        bufer1   复制的目标bufer对象 
-        bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
-        bfBgn    数字,可选,默认为 0 
-        bfEnd    数字,可选,默认为 buf.length 
+          // 与 `arr` 共享内存,改变原始的 Uint16Array 也会改变 Buffer
+          arr[1] = 6000;
+          // 输出: <Buffer 88 13 70 17>
+          console.log(buf);
+      (buf)  返回Buffer的拷贝 
+      (str[,encoding])  
+        str  要编码的字符串 
+        encoding  kw,字符编码,默认:'utf8' 
+          'latin1'  Latin-1 
+          'ascii'   
+          ...
         Example: 
-          var buf1 = new Buffer('abcdefghi');
-          var buf2 = new Buffer(6);
-          for (var i = 0; i < buf2.length; i++) {
-            buf2[i] = 65;
-          }
-          console.log(buf1,buf2);
-          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
-          buf1.copy(buf2,2,3,5);
-          console.log(buf1,buf2);
-          // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
-          var bufStr1 = buf1.toString();
-          var bufStr2 = buf2.toString();
-          console.log(bufStr1,bufStr2);
-          // abcdefghi AAdeAA
-      .compare(buf)  比较 
+          // 创建一个包含 UTF-8 字节 [0x74, 0xc3, 0xa9, 0x73, 0x74] 的 Buffer 
+          const buf5 = Buffer.from('tést');
+          // 创建一个包含 Latin-1 字节 [0x74, 0xe9, 0x73, 0x74] 的 Buffer 
+          const buf6 = Buffer.from('tést', 'latin1');
+    .concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
+      buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
+        参数列表只有一个成员,就直接返回该成员
+      length  可选,默认为总长度,指定新buf对象的长度
+        省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
+        因此,显式提供这个参数,能提供运行速度  
+      Example:
+        var buf1 = new Buffer('11');
+        var buf2 = new Buffer('22');
+        var buf3 = Buffer.concat([buf1,buf2]);
+        console.log(buf3.toString());   // 1122
+    .isEncoding(typ)  bol,表示Buffer实例是否为指定编码 
+      Buffer.isEncoding('utf8'); // true
+    .isBuffer(obj)    bol,判断对象是否为Buffer实例的 
+      Buffer.isBuffer(Date) // false
+    .byteLength(str [,typ]) 返回字符串实际占据的字节长度 
+      str  检测的字符串
+      typ  可选,编码类型,默认编码为'utf8'[不同编码其长度不同]
+      Buffer.byteLength('Hello', 'utf8') // 5
+    .compare(buf1,buf2)    比较两份Buffer对象 
+  Instance: 
+    var bufer = new Buffer(val)  通过Buffer类来创建bufer对象[已废弃][6.0-] 
+      PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
+      ◆val可为以下类型:
+      num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
+        var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
+      bufer       bufer对象,通过拷贝来创建新buffer对象 
+        var buffer = new Buffer([1, 1, 2, 2, 3]);
+        console.log(buffer); // <Buffer 01 01 02 02 03>
+      str[,type]  字符串和编码类型,通过字符串来创建bufer对象 
+        type  编码方式,默认为'utf-8',其他可选值为 
+          "base64"  
+          "ascii"   
+          "utf8"    
+          "utf-8"    
+          "utf16le" UTF-16 的小端编码,支持大于 U+10000 的四字节字符
+          "ucs2"    utf16le的别名
+          "hex"     将每个字节转为两个十六进制字符
         Example:
-          var buf1 = new Buffer('10');
-          var buf2 = new Buffer('11');
-          var result = buf1.compare(buf2);
-          console.log(result); // -1
-      .equals(bufer1)
-      .readUIntLE()  
-      .readUIntBE()  
-      .readUInt8()  
-      .readUInt16LE()  
-      .readUInt16BE()  
-      .readUInt32LE()  
-      .readUInt32BE()  
-      .readIntLE()  
-      .readIntBE()  
-      .readInt8()  
-      .readInt16LE()  
-      .readInt16BE()  
-      .readInt32LE()  
-      .readInt32BE()  
-      .writeUIntLE()  
-      .writeUIntBE()  
-      .writeUInt8()  
-      .writeUInt16LE()  
-      .writeUInt16BE()  
-      .writeUInt32LE()  
-      .writeUInt32BE()  
-      .writeIntLE()  
-      .writeIntBE()  
-      .writeInt8()  
-      .writeInt16LE()  
-      .writeInt16BE()  
-      .writeInt32LE()  
-      .writeInt32BE()  
-      .toLocaleString()  
-      .asciiSlice()  
-      .base64Slice()  
-      .latin1Slice()  
-      .hexSlice()  
-      .ucs2Slice()  
-      .utf8Slice()  
-      .asciiWrite()  
-      .base64Write()  
-      .latin1Write()  
-      .hexWrite()  
-      .ucs2Write()  
-      .utf8Write()  
-      .inspect()  
-      .indexOf()  
-      .lastIndexOf()  
-      .includes()  
-      .fill()  
-      .readFloatLE()  
-      .readFloatBE()  
-      .readDoubleLE()  
-      .readDoubleBE()  
-      .writeFloatLE()  
-      .writeFloatBE()  
-      .writeDoubleLE()  
-      .writeDoubleBE()  
-      .swap16()  
-      .swap32()  
-      .swap64()  
-    与二进制数组的关系 
-      TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
-      比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
-      注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]） 
-      另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的 
-      二进制数组的buffer属性,保留指向原Buffer对象的指针 
-      二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
-      比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
-★对象&常量 
-  global,Node所在的全局环境,类似浏览器的window对象 
-    最根本的作用是作为全局变量的宿主
-    global 和 window 的不同 
-      在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
-        var x = 1;
-        // 等同于设置 
-        window.x = 1;
-      在模块中不是这样,[REPL环境的行为与浏览器一致] 
-        在模块文件中
-        var x = 1;
-        该变量不是global对象的属性
-        global.x // undefined 
-        因为模块的全局变量都是该模块私有的,其他模块无法取到 
-  process,用于描述当前Node进程状态  
-    PS: 表示Node所处的当前进程,允许开发者与该进程互动,提供了一个与操作系统的简单接口
-    ▼成员: 
-    .env     obj,其成员为当前shell的环境变量 
-      process.env.aoo  即在命令行中输入 aoo=xx 的值xx 
-    .stdout      标准输出流
-    .stderr      标准错误流
-    .stdin       标准输入流
-    .argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
-      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
-    .execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-    .execArgv  arr,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
-    .exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
-    .version     Node 的版本,比如v0.10.18.
-    .versions    一个属性,包含了 node 的版本和依赖.
-    .config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
-      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
-    .pid         当前进程的进程号.
-    .title       进程名,默认值为"node",可以自定义该值.
-    .arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
-    .platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
-    .mainModule  require.main 的备选方法.
-      不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
-      可以认为,这两者引用了同一个模块.
-    Example:
-      创建文件 main.js ,代码如下所示:
-      process.stdout.write("Hello World!" + "\n"); // 输出到终端
-      process.argv.forEach(function(val, index, array) { // 通过参数读取
-       console.log(index + ': ' + val);
-      });
-      console.log(process.execPath); // 获取执行路局
-      console.log(process.platform); // 平台信息
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      Hello World!
-      0: node
-      1: /web/www/node/main.js
-      /usr/local/node/0.10.36/bin/node
-      darwin
-    .abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
-    .chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
-    .cwd()   返回当前进程的工作目录
-    .exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
-    .getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .setgid(id) 设置进程的群组标识(参见 setgid(2)).
-      可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .setuid(id) 设置进程的用户标识(参见setuid(2)).
-      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
-      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-    .kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
-      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
-    .memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
-    .nextTick(callback) 一旦当前事件循环结束,调用回到函数.
-    .umask([mask]) 设置或读取进程文件的掩码.
-      子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
-    .uptime() 返回 Node 已经运行的秒数.
-    .hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
-      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
-      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
-      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
-    Example:
-      创建文件 main.js ,代码如下所示:
-      console.log('当前目录: ' + process.cwd()); // 输出当前目录
-      console.log('当前版本: ' + process.version); // 输出当前版本
-      console.log(process.memoryUsage()); // 输出内存使用情况
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      当前目录: /web/com/runoob/nodejs
-      当前版本: v0.10.36
-      { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
-    ▼事件
-    exit       当进程准备退出时触发.
-    beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
-      通常来说,当没有进程安排时 node 退出,
-      但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
-    uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
-      若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
-    signal 当进程接收到信号时就触发.
-      信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
-    Example:
-      process.on('exit', function(code) {
-        setTimeout(function() {  // 该代码永远不会执行
-          console.log("该代码不会执行"); 
-        }, 0);
-        console.log('退出码为:', code);
-      });
-      console.log("程序执行结束");
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      程序执行结束
-      退出码为: 0
-    ▼退出状态码
-      状态码 名称 & 描述
-      1 Uncaught Fatal Exception 有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
-      2 Unused 保留
-      3 Internal JS Parse Error JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
-      4 Internal JS Evaluation Failure JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
-      5 Fatal Error V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
-      6 'Non-function' Internal Exception Handler 未捕获异常,内部异常处理函数不知为何设置为'on-function',并且不能被调用.
-      7 Internal Exception Handler Run-Time Failure 未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
-      8 Unused 保留
-      9 Invalid Argument 可能是给了未知的参数,或者给的参数没有值.
-      10 Internal JS Run-Time Failure JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
-      12 Invalid Debug Argument 设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
-      >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
-  __filename 当前正在执行的脚本的路径和文件名 
-    PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
-      在模块中,返回的值是模块文件的路径 
-    Example:
-      创建文件 main.js ,代码如下所示:
-      // 输出全局变量 __filename 的值
-      console.log( __filename );
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      /web/com/runoob/nodejs/main.js
-  __dirname  当前执行脚本所在的目录 
-    Example:
-      创建文件 main.js ,代码如下所示:
-      // 输出全局变量 __dirname 的值
-      console.log( __dirname );
-      执行 main.js 文件,代码如下所示:
-      $ node main.js
-      /web/com/runoob/nodejs
-★模块导出&引入 [MoIn: Pack]
-  PS: 模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用 
-  require() 用于加载模块 
-  module
-  module.exports
-  exports 
-★其他同浏览器中JS相同的类、对象 
-  Date,时间类 
-  console,用于提供控制台标准输出[详见浏览器调试] 
+          var bufer1 = new Buffer("abcdefg", "utf-8"); 
+          var bufer2 = new Buffer("abcdefg", "base64"); 
+          console.log(bufer1,bufer2);
+          // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
+      arr         数组,数组成员必须是整数值 
+        var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
+        console.log(hello.toString()); // 'Hello'
+    Buffer.from()  
+    Buffer.alloc()  
+    Buffer.allocUnsafe()  
+  Proto: 
+    [idx]  下标访问
+    .length  读写,bufer对象所占据的内存长度  
+      PS:改值与Buffer对象的内容无关;
+        如果想知道一个字符串所占据的字节长度,可以将其传入 Buffer.byteLength 方法
+      var buf1 = new Buffer('1234567');
+      var buf2 = new Buffer(8);
+      console.log(buf1.length); // 7
+      console.log(buf2.length); // 8
+    .byteLength   文件的体积大小 
+    .parent 
+    .offset 
+    .write(str[,idx][,len][,typ]) 将字符串写入bufer对象,返回实际写入的长度 
+      PS:若bufer空间不足[长度不够],则只会写入[覆盖]部分字符串,其余被忽略; 
+      str   写入缓冲区的字符串 
+      idx   缓冲区开始写入的索引值,默认为 0 
+      len   写入的字节数,默认为 buffer.length 
+      typ   使用的编码.默认为'utf8' 
+      Example: 
+        var buf = new Buffer('abcdefg');
+        var len = buf.write("1234");
+        console.log("写入字节数 : "+ len);  // 写入字节数 : 4
+        console.log(buf.toString()); // 1234efg
+    .toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
+      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+      bgn    开始读取的索引位置,默认为 0 
+      end    结束位置,默认为缓冲区的末尾 
+      Example:
+        var buf = new Buffer(26);
+        for (var i = 0 ; i < 26 ; i++) { 
+          buf[i] = i + 97; 
+        }
+        console.log(buf);
+        // <Buffer 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a>
+        console.log( buf.toString('ascii'));       // 输出: abcdefghijklmnopqrstuvwxyz
+        console.log( buf.toString('ascii',0,5));   // 输出: abcde
+        console.log( buf.toString('utf8',0,5));    // 输出: abcde
+        console.log( buf.toString(undefined,0,5)); // 使用 'utf8' 编码, 并输出: abcde
+    .toJSON()    返回将bufer对象转换为JSON格式对象 
+      PS:如果 JSON.stringify 方法调用Buffer实例,默认会先调用toJSON方法 
+      Example:
+        var bufer = new Buffer('abc');
+        var json = bufer.toJSON();
+        console.log(json); // { type: 'Buffer', data: [ 97, 98, 99 ] }
+        console.log(typeof json); // object
+        
+        var buf = new Buffer('test');
+        var json = JSON.stringify(buf);
+        console.log(json); // '[116,101,115,116]'
+        var copy = new Buffer(JSON.parse(json));
+        console.log(copy); // <Buffer 74 65 73 74>
+    .slice([bgn[,end]])  bufer剪切,返回剪切的新缓冲区 
+      begin 可选,默认为 0
+      end   可选,默认为 bufer.length
+      Example:
+        var buf1 = new Buffer('123');
+        var buf2 = buf1.slice(0,2);
+        console.log(buf2); // <Buffer 31 32>
+    .copy(bufer1[,bf1Bgn[,bfBgn[,bfEnd]]])  拷贝bufer到bufer1中,返回undefined
+      bufer1   复制的目标bufer对象 
+      bf1Bgn   数字,可选,默认为 0,开始复制插入的下标 
+      bfBgn    数字,可选,默认为 0 
+      bfEnd    数字,可选,默认为 buf.length 
+      Example: 
+        var buf1 = new Buffer('abcdefghi');
+        var buf2 = new Buffer(6);
+        for (var i = 0; i < buf2.length; i++) {
+          buf2[i] = 65;
+        }
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 41 41 41 41>
+        buf1.copy(buf2,2,3,5);
+        console.log(buf1,buf2);
+        // <Buffer 61 62 63 64 65 66 67 68 69> <Buffer 41 41 64 65 41 41>
+        var bufStr1 = buf1.toString();
+        var bufStr2 = buf2.toString();
+        console.log(bufStr1,bufStr2);
+        // abcdefghi AAdeAA
+    .compare(buf)  比较 
+      Example:
+        var buf1 = new Buffer('10');
+        var buf2 = new Buffer('11');
+        var result = buf1.compare(buf2);
+        console.log(result); // -1
+    .equals(bufer1)
+    .readUIntLE()  
+    .readUIntBE()  
+    .readUInt8()  
+    .readUInt16LE()  
+    .readUInt16BE()  
+    .readUInt32LE()  
+    .readUInt32BE()  
+    .readIntLE()  
+    .readIntBE()  
+    .readInt8()  
+    .readInt16LE()  
+    .readInt16BE()  
+    .readInt32LE()  
+    .readInt32BE()  
+    .writeUIntLE()  
+    .writeUIntBE()  
+    .writeUInt8()  
+    .writeUInt16LE()  
+    .writeUInt16BE()  
+    .writeUInt32LE()  
+    .writeUInt32BE()  
+    .writeIntLE()  
+    .writeIntBE()  
+    .writeInt8()  
+    .writeInt16LE()  
+    .writeInt16BE()  
+    .writeInt32LE()  
+    .writeInt32BE()  
+    .toLocaleString()  
+    .asciiSlice()  
+    .base64Slice()  
+    .latin1Slice()  
+    .hexSlice()  
+    .ucs2Slice()  
+    .utf8Slice()  
+    .asciiWrite()  
+    .base64Write()  
+    .latin1Write()  
+    .hexWrite()  
+    .ucs2Write()  
+    .utf8Write()  
+    .inspect()  
+    .indexOf()  
+    .lastIndexOf()  
+    .includes()  
+    .fill()  
+    .readFloatLE()  
+    .readFloatBE()  
+    .readDoubleLE()  
+    .readDoubleBE()  
+    .writeFloatLE()  
+    .writeFloatBE()  
+    .writeDoubleLE()  
+    .writeDoubleBE()  
+    .swap16()  
+    .swap32()  
+    .swap64()  
+  与二进制数组的关系 
+    TypedArray构造函数可以接受Buffer实例作为参数,生成一个二进制数组 
+    比如,new Uint32Array(new Buffer([1, 2, 3, 4])),生成一个4个成员的二进制数组 
+    注意,新数组的成员有四个,而不是只有单个成员（[0x1020304]或者[0x4030201]） 
+    另外,这时二进制数组所对应的内存是从Buffer对象拷贝的,而不是共享的 
+    二进制数组的buffer属性,保留指向原Buffer对象的指针 
+    二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
+    比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
+★函数 
+定时器相关 
   setTimeout(foo,time)  numId,延时调用  
   clearTimeout(numId)   清除延时调用  
   setInterval(foo,time) numId,间时调用 
   clearInterval(numId)  清除间时调用 
+★对象&常量 
+global,Node所在的全局环境,类似浏览器的window对象 
+  最根本的作用是作为全局变量的宿主
+  global 和 window 的不同 
+    在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
+      var x = 1;
+      // 等同于设置 
+      window.x = 1;
+    在模块中不是这样,[REPL环境的行为与浏览器一致] 
+      在模块文件中
+      var x = 1;
+      该变量不是global对象的属性
+      global.x // undefined 
+      因为模块的全局变量都是该模块私有的,其他模块无法取到 
+process,用于描述当前Node进程状态  
+  PS: 一个全局对象,表示Node所处的当前进程,
+    允许开发者与该进程互动,提供了一个与操作系统的简单接口
+  ▼成员: 
+  .env     obj,其成员为当前shell的环境变量 
+    process.env.aoo  即在命令行中输入 aoo=xx 的值xx 
+  .stdout      标准输出流
+  .stderr      标准错误流
+  .stdin       标准输入流
+  .argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
+    它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
+  .execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
+  .execArgv  arr,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
+  .exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
+  .version     Node 的版本,比如v0.10.18.
+  .versions    一个属性,包含了 node 的版本和依赖.
+  .config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
+    它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
+  .pid         当前进程的进程号.
+  .title       进程名,默认值为"node",可以自定义该值.
+  .arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
+  .platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
+  .mainModule  require.main 的备选方法.
+    不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
+    可以认为,这两者引用了同一个模块.
+  Example:
+    创建文件 main.js ,代码如下所示:
+    process.stdout.write("Hello World!" + "\n"); // 输出到终端
+    process.argv.forEach(function(val, index, array) { // 通过参数读取
+     console.log(index + ': ' + val);
+    });
+    console.log(process.execPath); // 获取执行路局
+    console.log(process.platform); // 平台信息
+    执行 main.js 文件,代码如下所示:
+    $ node main.js
+    Hello World!
+    0: node
+    1: /web/www/node/main.js
+    /usr/local/node/0.10.36/bin/node
+    darwin
+  .abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
+  .chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
+  .cwd()   返回当前进程的工作目录
+  .exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
+  .getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .setgid(id) 设置进程的群组标识(参见 setgid(2)).
+    可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .setuid(id) 设置进程的用户标识(参见setuid(2)).
+    接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
+    这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+  .kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
+    信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
+  .memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
+  .nextTick(callback) 一旦当前事件循环结束,调用回到函数.
+  .umask([mask]) 设置或读取进程文件的掩码.
+    子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
+  .uptime() 返回 Node 已经运行的秒数.
+  .hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
+    它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
+    主要用途是可以通过精确的时间间隔,来衡量程序的性能.
+    你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
+  Example:
+    创建文件 main.js ,代码如下所示:
+    console.log('当前目录: ' + process.cwd()); // 输出当前目录
+    console.log('当前版本: ' + process.version); // 输出当前版本
+    console.log(process.memoryUsage()); // 输出内存使用情况
+    执行 main.js 文件,代码如下所示:
+    $ node main.js
+    当前目录: /web/com/runoob/nodejs
+    当前版本: v0.10.36
+    { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
+  ▼事件
+  exit       当进程准备退出时触发.
+  beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
+    通常来说,当没有进程安排时 node 退出,
+    但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
+  uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
+    若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
+  signal 当进程接收到信号时就触发.
+    信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
+  Example:
+    process.on('exit', function(code) {
+      setTimeout(function() {  // 该代码永远不会执行
+        console.log("该代码不会执行"); 
+      }, 0);
+      console.log('退出码为:', code);
+    });
+    console.log("程序执行结束");
+    执行 main.js 文件,代码如下所示:
+    $ node main.js
+    程序执行结束
+    退出码为: 0
+  ▼退出状态码
+    状态码 名称 & 描述
+    1 Uncaught Fatal Exception 有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
+    2 Unused 保留
+    3 Internal JS Parse Error JS的源码启动 Node 进程时引起解析错误.非常罕见,仅会在开发 Node 时才会有.
+    4 Internal JS Evaluation Failure JS 的源码启动 Node 进程,评估时返回函数失败.非常罕见,仅会在开发 Node 时才会有.
+    5 Fatal Error V8 里致命的不可恢复的错误.通常会打印到 stderr ,内容为: FATAL ERROR
+    6 'Non-function' Internal Exception Handler 未捕获异常,内部异常处理函数不知为何设置为'on-function',并且不能被调用.
+    7 Internal Exception Handler Run-Time Failure 未捕获的异常, 并且异常处理函数处理时自己抛出了异常.例如,若 process.on('uncaughtException') 或 domain.on('error') 抛出了异常.
+    8 Unused 保留
+    9 Invalid Argument 可能是给了未知的参数,或者给的参数没有值.
+    10 Internal JS Run-Time Failure JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
+    12 Invalid Debug Argument 设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
+    >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
+__filename 当前正在执行的脚本的路径和文件名 
+  PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
+    在模块中,返回的值是模块文件的路径 
+  Example:
+    创建文件 main.js ,代码如下所示:
+    // 输出全局变量 __filename 的值
+    console.log( __filename );
+    执行 main.js 文件,代码如下所示:
+    $ node main.js
+    /web/com/runoob/nodejs/main.js
+__dirname  当前执行脚本所在的目录 
+  Example:
+    创建文件 main.js ,代码如下所示:
+    // 输出全局变量 __dirname 的值
+    console.log( __dirname );
+    执行 main.js 文件,代码如下所示:
+    $ node main.js
+    /web/com/runoob/nodejs
+Date,时间类 
+console,用于提供控制台标准输出[详见浏览器调试] 
 操作总结 
   GET/POST 请求信息获取  
     PS:表单提交到服务器一般使用 GET/POST 请求

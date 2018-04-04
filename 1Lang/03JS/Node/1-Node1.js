@@ -206,29 +206,29 @@ stream,流,用于暂存和移动数据[以bufer的形式存在]
         菜鸟教程官网地址:www.runoob.com
 url,一个实例对象,用于解析URL 
   const url = require('url')    // 引入url模块 
-  url.parse(     // obj,将URL解析为对象[方便后续其他操作]
-    url        // str,传入需要解析的URL字符串  
-    ,bol1?     // 是否将'query'字段转换为对象表示,默认: false 
-    ,bol2?     // 当URL不全时更智能的识别,默认: false 
-    // 返回的对象及其字段说明 
-    {          
+  url.parse(url,bol1,bol2)      // obj,将URL解析为对象[方便后续其他操作]
+    Input: 
+      url       str,传入需要解析的URL字符串  
+      bol1?     是否将'query'字段转换为对象表示,默认: false 
+      bol2?     当URL不全时更智能的识别,默认: false  
+    Output: 返回一对象,属性枚举如下:  
       // url.parse("https://www.baidu.com?key=val");
-      protocol: 'https:',            // str,协议
-      slashes: true,                 // bol,是否有协议的双斜线
-      host: 'www.baidu.com',         // str,ip地址或域名
-      hostname: 'www.baidu.com',     // str,主机名
-      port: null,                    // num,端口,默认:80 显示为null,否则会指明
-      path: '/',                     // 路径
-      pathname: '/',                 // 路径名,
-      search: '?key=val',            // str,查询字符串 
-      query: 'key=val',              // str|obj,查询字符串
-        当第二个参数为true时,则为对象形式 
-      hash: null,                    // hash值,锚点
-      auth: null,                    // 
-      href: 'https://www.baidu.com/' // str,完整超链接
-    } 
-  ) 
-  url.format(    // str,将url对象格式化为url字符串
+      {          
+        protocol: 'https:',            // str,协议
+        slashes: true,                 // bol,是否有协议的双斜线
+        host: 'www.baidu.com',         // str,ip地址或域名
+        hostname: 'www.baidu.com',     // str,主机名
+        port: null,                    // num,端口,默认:80 显示为null,否则会指明
+        path: '/',                     // 路径
+        pathname: '/',                 // 路径名,
+        search: '?key=val',            // str,查询字符串 
+        query: 'key=val',              // str|obj,查询字符串
+          当第二个参数为true时,则为对象形式 
+        hash: null,                    // hash值,锚点
+        auth: null,                    // 
+        href: 'https://www.baidu.com/' // str,完整超链接
+      } 
+  url.format(    // str,将url对象格式化为url字符串 
     obj       // url对象 
     Example: :
       var obj =url.parse("https://www.baidu.com");
@@ -263,22 +263,23 @@ querystring,解析URL的查询字符串
         from:""
       })
       // 'name=Scott&course=Java&course=Node&from='
-  querystring.parse(   // obj,将查询字符串解析为对象格式 
-    str       // 需要解析的字符串
-    ,str1?    // 可选,参数连接符,默认: '&' 
-      Example:
-      var str = 'name=Scott-course=Java-course=Node-from=';
-      var obj1 = querystring.parse(str);
-      var obj2 = querystring.parse(str,'-');
-      console.log(obj1,'/n',obj2);
-      // { name: 'Scott-course=Java-course=Node-from=' } 
-      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-    ,str2?    // 可选,键值分割符,默认: '=' 
-    ,options? // 其他配置 
-    Example: :
+  querystring.parse(query,link1?,link2?,options?) // obj,将查询字符串解析为对象格式 
+    Input: 
+      query    str,需要解析的字符串
+      link1?   str,可选,键值连接符,默认: '&' 
+        Example:
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      link2?   str,可选,字段连接符,默认: '=' 
+      options? 其他配置 
+    Output: obj  解析成键值对形式的对象
+    Example: 
       querystring.parse('name=Scott&course=Java&course=Node&from=');
       // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-  )     
   querystring.escape(str); 转义为URL可用的字符串
     Example: : 
       querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
@@ -303,60 +304,60 @@ http: http服务模块,提供HTTP服务器功能
     Business 业务层,通过Web服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等
     Data     数据层,一般由数据库组成 
   var http = require("http");          // 引入http模块 
-    PS:使用HTTP服务器或客户端功能必须调用该模块
-  var server = http.createServer(      // 创建服务器 
-    function(   // 服务响应回调 
-      req   // obj,请求 
-        .url            // str,请求的地址 
-        .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
-          PS: 通常用于获取POST请求数据  
-          part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
-        ){ })
-        .on("end",function(  ){ // 请求数据传送完毕时触发  
-          PS: GET、POST 请求都会触发该事件 
-        })
-        .setEncoding(                   // 设置请求的格式 
-          type  // str,设置的格式,如: 'utf8'
-        ) 
-      ,res  // obj,响应 
-        .writeHead(   // 设置响应头
-          code  // num,状态码,如 200  
-          ,{     // 设置响应头信息的对象 
-            "Content-Type":"text/plain"
-          }
-        ); 
-        .write(       // 发送响应  
-          data  // str|binary,发送的响应数据 
-        )  
-        .end(         // 结束响应 
-          data?  // 可选,str|binary,若存在会将其发送 
-        )   
-    ) { }
-  ); 
-  server.listen(                       // 监听ip及端口 
-    <num>    // 监听的端口
-    ,<str>?  // 监听的ip,如: "127.0.0.1" 
-  );   
-  http.request(       // 从后台发送http请求 
-    PS: 返回可写的request实例流
-    options          // str/obj,配置项参数 
-      str  字符串,将被 url.parse 解析为对象
-      obj  对象 
-        host           服务器域名或ip地址
-        hostname       host别名
-        port           端口
-        localAddress   
-        socketPath     
-        method         请求方法,默认为'get'
-        path           请求的路径 
-        headers        请求头对象 
-        auth           计算认证头的认证,一般为 user 和 password 
-        agent          代理 
-        keepAlive      
-        keepAliveMsecs     
-    ,function(res){  // 可选
-      // res 服务器的响应 
-    }
+  var server = http.createServer(fn)   // 创建服务器 
+    Input: fn 回调函数,服务响应时回调  
+      Arguments:  
+        req    obj,请求 
+          .url            // str,请求的地址 
+          .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
+            PS: 通常用于获取POST请求数据  
+            part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
+          ){ })
+          .on("end",function(  ){ // 请求数据传送完毕时触发  
+            PS: GET、POST 请求都会触发该事件 
+          })
+          .setEncoding(                   // 设置请求的格式 
+            type  // str,设置的格式,如: 'utf8'
+          ) 
+        res    obj,响应 
+          .writeHead(   // 设置响应头
+            code  // num,状态码,如 200  
+            ,{     // 设置响应头信息的对象 
+              "Content-Type":"text/plain"
+            }
+          ); 
+          .write(       // 发送响应  
+            data  // str|binary,发送的响应数据 
+          )  
+          .end(         // 结束响应 
+            data?  // 可选,str|binary,若存在会将其发送 
+          )   
+    Output: server  创建的服务器对象  
+  server.listen(port,ip?)              // 服务器监听ip及端口 
+    Input: 
+      port   num,监听的端口 
+      ip     str,监听的ip地址,如: "127.0.0.1" 
+    Output:  
+  http.request( options, fn? )    // 从后台发送http请求 
+    Input: 
+      options           str/obj,配置项参数 
+        str  字符串,将被 url.parse 解析为对象
+        obj  对象 
+          host           服务器域名或ip地址
+          hostname       host别名
+          port           端口
+          localAddress   
+          socketPath     
+          method         请求方法,默认为'get'
+          path           请求的路径 
+          headers        请求头对象 
+          auth           计算认证头的认证,一般为 user 和 password 
+          agent          代理 
+          keepAlive      
+          keepAliveMsecs     
+      function(res){}   可选,回调函数  
+        res   服务器的响应 
+    Output:  可写的request实例流 
     Example: 慕课网评论的提交 
       var http = require("http");
       var querystring = require("querystring");
@@ -409,18 +410,15 @@ http: http服务模块,提供HTTP服务器功能
       });
       req.write(postData); // 将请求数据写入请求体 
       req.end(); // 结束请求,请始终加上
-  )  
-  http.get(           // 使用get方法请求指定url的数据  
+  http.get( url, fn)              // 使用get方法请求指定url的数据  
     PS: 基于 http.request 的封装,
       相对于request,将请求方法默认为get,且自动调用req.end();
-    url 
-    ,function (res){ 
-      res.on('data',foo); 监听请求的数据传输,会不断的触发 
-        PS:将回调函数中所有的data数据串起来就是完整的响应数据了
-        foo  传入参数 (data) 
-      res.on('end',foo);  请求数据下载完毕触发
-    }
-  );   
+    Input: 
+      url               str,请求的URL地址 
+      function (res){}  请求的回调  
+        res.on('data',foo) 
+        res.on('end',foo) 
+    Output: 
   Example: 
     在该目录下创建一个 index.htm 文件[用于读取] 
     创建Web服务器 
@@ -512,6 +510,8 @@ https,https服务模块
       res.end('hello');
     })
     .listen(8080);
+tls,安全传输层 
+  const tls = require('tls'); 
 fs,文件系统模块'file system',与文件系统交互 
   PS:fs模块可用于对系统文件及目录进行读写操作.
     NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
@@ -885,7 +885,9 @@ util,提供常用函数的集合
       util.isError(new TypeError()) // true
       util.isError({ name: 'Error', message: 'an error occurred' }) // false      
 child_process,创建子进程 
-  child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出,并将子进程的输出以回调函数参数的形式返回.
+  const child_process = require('child_process');  // 引入 
+  child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出
+    将子进程的输出以回调函数参数的形式返回.
     command: 字符串, 将要运行的命令,参数使用空格隔开
     options :对象,可以是:
     cwd ,字符串,子进程的当前工作目录
@@ -1006,6 +1008,10 @@ child_process,创建子进程
       子进程已退出,退出码 0
       进程 2 执行.
       子进程已退出,退出码 0
+cluster,集群 
+  const cluster = require('cluster');
+crypto,加密 
+  const crypto = require('crypto');
 path,处理文件路径 
   PS:
   var path = require("path")  // 引入path模块
@@ -1044,6 +1050,8 @@ path,处理文件路径
       joint path : /test/test1/2slashes/1slash
       resolve : /web/com/1427176256_27423/main.js
       ext name : .js    
+string_decoder,字符串解码器 
+  const string_decoder = require('string_decoder');
 os,模块提供了一些基本的系统操作函数 
   PS:
   var os = require("os"); 引入os模块
@@ -1149,32 +1157,25 @@ net,底层的网络通信工具,包含创建服务器/客户端的方法
     });        
     client.on('close', function() { }) 
 tls,https的创建 
-dns,模块用于解析域名 
+dns,域名解析 
   PS:
   var dns = require("dns")  // 引入dns模块 
-    .lookup(host,function(error,ip,ipv){  // 查询网址的IP 
-      host  查询的网址 
-      error 错误对象 
-      ip    查询的ip  
-      ipv   '4'或'6',表示ipv4或ipv6   
-      Example: 
-        const dns = require('dns');
-        const host = 'zhihu.com';
-        dns.lookup(host,(error,ip,ipv) => {
-          console.log(ip,ipv); // 118.178.213.186  4 
-        })
-    })     
-domain,域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常
-  PS: domain模块,把处理多个不同的IO的操作作为一个组.
-    注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
-    domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
-    与process.on('uncaughtException')不同.
-    Domain 模块可分为隐式绑定和显式绑定:
-      隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
-      显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
-  var domain = require("domain"); 引入domain模块
+  .getServers()  // 获取ip 
+  .lookup(host,function(error,ip,ipv){  // 查询网址的IP 
+    host  查询的网址 
+    error 错误对象 
+    ip    查询的ip  
+    ipv   '4'或'6',表示ipv4或ipv6   
+    Example: 
+      const dns = require('dns');
+      const host = 'zhihu.com';
+      dns.lookup(host,(error,ip,ipv) => {
+        console.log(ip,ipv); // 118.178.213.186  4 
+      })
+  })     
 assert,主要用于断言,如果表达式不符合预期,就抛出一个错误 
   PS:Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
+  const assert = require('assert')  // 引入 
   assert(bol,str); 
     bol  布尔值
       为true时,无任何提示,返回undefined;
@@ -1309,6 +1310,27 @@ assert,主要用于断言,如果表达式不符合预期,就抛出一个错误
       // AssertionError: 21 ### 42
 Promise,同步形式执行异步操作　
   var Promise = require("Promise");   模块引入　
+tty,终端 
+  PS: 连接到远端的命令行 
+  const tty = require('tty');
+v8,v8引擎相关 
+  const v8 = require('v8');
+vm,虚拟机
+  const vm = require('vm');
+zlib,压缩 
+  const zlib = require('zlib');
+已废弃 
+  domain,域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常 
+    PS: domain模块,把处理多个不同的IO的操作作为一个组.
+      注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
+      domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
+      与process.on('uncaughtException')不同.
+      Domain 模块可分为隐式绑定和显式绑定:
+        隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
+        显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
+    var domain = require("domain"); 引入domain模块
+  punycode
+    const punycode = require('punycode');
 ◆第三方模块: 通过npm安装到本地  
 cheerio,html文件源码操作模块 
   PS:像使用jquery一样方便快捷地操作抓取到的源码

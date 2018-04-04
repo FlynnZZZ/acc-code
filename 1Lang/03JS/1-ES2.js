@@ -620,13 +620,12 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    .indexOf(      // idx,成员索引[ES5] 
+    .indexOf(val,bgn)    idx,成员索引[ES5] 
       PS:返回值为下标值,若找不到则返回-1 
       val    // 查询的成员值 
         [ {txt: 'a'} ,{txt: 'b'} ]
       ,bgn?  // 可选,表示开始查询的索引位置,默认为0 
         若为负,则为 bgn+arr.length 
-    )      
     .lastIndexOf(val,bgn?) idx,成员索引[从右向左][ES5] 
     ◆改变原数组
     .reverse()  arr,颠倒所有成员后返回   

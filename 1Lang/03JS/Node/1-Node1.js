@@ -305,33 +305,29 @@ http: http服务模块,提供HTTP服务器功能
     Data     数据层,一般由数据库组成 
   var http = require("http");          // 引入http模块 
   var server = http.createServer(fn)   // 创建服务器 
-    Input: fn 回调函数,服务响应时回调  
-      Arguments:  
-        req    obj,请求 
-          .url            // str,请求的地址 
-          .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
-            PS: 通常用于获取POST请求数据  
-            part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
-          ){ })
-          .on("end",function(  ){ // 请求数据传送完毕时触发  
-            PS: GET、POST 请求都会触发该事件 
-          })
-          .setEncoding(                   // 设置请求的格式 
-            type  // str,设置的格式,如: 'utf8'
-          ) 
-        res    obj,响应 
-          .writeHead(   // 设置响应头
-            code  // num,状态码,如 200  
-            ,{     // 设置响应头信息的对象 
-              "Content-Type":"text/plain"
-            }
-          ); 
-          .write(       // 发送响应  
-            data  // str|binary,发送的响应数据 
-          )  
-          .end(         // 结束响应 
-            data?  // 可选,str|binary,若存在会将其发送 
-          )   
+    Input: function(req,res){ }   响应回调   
+      req    obj,请求 
+        .url            // str,请求的地址 
+        .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
+          PS: 通常用于获取POST请求数据  
+          part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
+        ){ })
+        .on("end",function(  ){ // 请求数据传送完毕时触发  
+          PS: GET、POST 请求都会触发该事件 
+        })
+        .setEncoding(                   // 设置请求的格式 
+          type  // str,设置的格式,如: 'utf8'
+        ) 
+      res    obj,响应 
+        .writeHead( code ,{ <key1>: <val1>, ... } )   // 设置响应头
+          Input: 
+            code    num,状态码,如 200 
+            key:val 设置响应头信息的对象,如 "Content-Type":"text/plain" 
+        .write( data ) // 发送响应  
+          data   str/binary,发送的响应数据 
+        .end(         // 结束响应 
+          data?  // 可选,str|binary,若存在会将其发送 
+        )   
     Output: server  创建的服务器对象  
   server.listen(port,ip?)              // 服务器监听ip及端口 
     Input: 

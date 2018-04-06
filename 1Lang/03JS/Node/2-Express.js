@@ -10,48 +10,16 @@ express,简洁灵活的NodeJS的Web框架
     $ npm i -S express@4.14.0  // 指定版本安装 
 --------------------------------------------------------------------------------
 const express = require('express') // 引入模块 
-express.static(path)  // 设置静态文件路径 
-  将图片, CSS, JavaScript 文件放在 public 目录下,你可以这么写:
-  app.use(express.static('public'));
-  Example: 
-    我们可以到 public/images 目录下放些图片,如下所示:
-      node_modules
-      server.js
-      public/
-      public/images
-      public/images/logo.png
-    让我们再修改下 "Hello Word" 应用添加处理静态文件的功能 
-      创建 express_demo3.js 文件,代码如下所示:
-      var express = require('express');
-      var app = express();
-      
-      app.use(express.static('public'));
-      
-      app.get('/', function (req, res) {
-         res.send('Hello World');
-      })
-      
-      var server = app.listen(8081, function () {
-      
-        var host = server.address().address
-        var port = server.address().port
-      
-        console.log("应用实例,访问地址为 http://%s:%s", host, port)
-      
-      })
-    执行以上代码:
-      $ node express_demo3.js 
-      应用实例,访问地址为 http://0.0.0.0:8081
-    在浏览器中访问 http://127.0.0.1:8081/images/logo.png
-    (本实例采用了菜鸟教程的logo),结果如下图所示:
-const router = express.Router()   // 生成路由实例[MoIn: 路由]
-var app = express()      // 实例化 
-app.listen( port, ip)    // 启动服务器  
-app.use()                // 使用中间件 
-app.use(path?,fn,next?)  // 处理请求 
+◆服务 
+const app = express()   // 实例化服务 
+app.listen(port,fn)     // 启动服务器  
+  port            nun,监听的端口 
+  function(){ }   回调函数 
+app.use(path?,fn,next?) // 处理请求 
   Input: 
     path                 可选,str,监听的路径,默认监听所有路径  
-      *     任意匹配符,如: '/ab*cd'  
+      *     任意匹配符
+        '/ab*cd'  可匹配 'abcd'、'abxcd'、'ab123cd'等等 
       :aoo  占位符,如:'/users/:aoo' 
         可通过 req.params.aoo 获取到实际值 
     function(req,res){ } 响应函数 
@@ -120,13 +88,13 @@ app.use(path?,fn,next?)  // 处理请求
         .type()    设置Content-Type的MIME类型        
     next                 fn,可选,是否进行队列执行 
       next()  则接着执行下一个相同的响应[监听同样的路径的] 
-app.get(path,fn )        // 处理get请求 
+app.get(path,fn )       // 处理get请求 
   Input: 
     path                  str,监听路径 
     function(req,res){}   响应回调 
       req  HTTP请求,包含了请求查询字符串,参数,内容,HTTP头部等属性 
       res  HTTP响应,即在接收到请求时向客户端发送的 HTTP响应数据  
-app.post(path,fn )       // 处理post请求 
+app.post(path,fn )      // 处理post请求 
   Input: 
     path                    str,监听路径  
     function(req,res){}     响应回调 
@@ -243,89 +211,81 @@ app.post(path,fn )       // 处理post请求
     执行以上代码:
       $ node server.js 
     浏览器访问 http://127.0.0.1:8081/index.htm
-app.set()                // 
+app.set()               // 
   app.set('view engine', 'ejs')// 设置模板引擎为 ejs
   app.set('views', path.join(__dirname, 'views'))// 设置存放模板文件的目录
-var server = app.listen(端口[,callback]) // 监听端口 
-  ◆server的属性/方法 
-  .address()  obj,地址信息对象 
-    .address str,地址 
-    .port    str,端口号 
---------------------------------------------------------------------------------
-路由,决定了由谁[哪个脚本]去响应请求 
+◆路由: 集中分配,分治管理 
+  Self: 将地址的监听及响应分发到各个模块中进行处理,通过一个主文件进行对应起来 
   Example: 
-    创建 express_demo2.js 文件,代码如下所示:
-      var express = require('express');
-      var app = express();
-      app.get('/', function (req, res) { //  主页输出 "Hello World"
-         console.log("主页 GET 请求");
-         res.send('Hello GET');
+    routes 
+    news.js    // 用于处理 news 相关的模块 
+      const express = require('express')
+      const router = express.Router()
+      
+      router.get('/', function (req, res) {
+        res.send('hello, express')
       })
-      app.post('/', function (req, res) { //  POST 请求
-         console.log("主页 POST 请求");
-         res.send('Hello POST');
+      
+      module.exports = router
+    users.js   // 用于处理 users 相关的模块
+      const express = require('express')
+      const router = express.Router()
+      
+      router.get('/:name', function (req, res) {
+        res.send('hello, ' + req.params.name)
       })
-      app.get('/del_user', function (req, res) { //  /del_user 页面响应
-         console.log("/del_user 响应 DELETE 请求");
-         res.send('删除页面');
-      })
-      app.get('/list_user', function (req, res) { //  /list_user 页面 GET 请求
-         console.log("/list_user GET 请求");
-         res.send('用户列表页面');
-      })
-      // 对页面 abcd, abxcd, ab123cd等 响应 GET 请求
-      app.get('/ab*cd', function(req, res) { 
-         console.log("/ab*cd GET 请求");
-         res.send('正则匹配');
-      })
-      var server = app.listen(8081, function () {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log("应用实例,访问地址为 http://%s:%s", host, port)
-      })
-    执行以上代码:  node express_demo2.js 
-    访问地址
-      访问 'http://127.0.0.1:8081 不同的地址,查看效果 '
-      访问 'http://127.0.0.1:8081/list_user'
-        浏览器显示为:正则匹配
-      访问 'http://127.0.0.1:8081/abcd,'
-        浏览器显示为:用户列表页
-      访问 'http://127.0.0.1:8081/abcdefg'
-        浏览器显示为: cannot get /abcdefg  无法解析该地址
-  Example: 
-    将'/'和'/users/:name'的路由分别放到'routes/index.js'和'routes/users.js'中,
-    每个路由文件通过生成一个 express.Router 实例router,并导出,
-    通过 app.use 挂载到不同的路径 
-    文件目录: 
-    index.js 
+      
+      module.exports = router
+    index.js   // 路由map文件 
       const express = require('express')
       const app = express()
-      const indexRouter = require('./routes/index')
+      const newsRouter = require('./routes/index')
       const userRouter = require('./routes/users')
       
-      app.use('/', indexRouter)
+      app.use('/news', newsRouter)
       app.use('/users', userRouter)
       
       app.listen(3000)
-    routes 
-      index.js 
-        const express = require('express')
-        const router = express.Router()
-        router.get('/', function (req, res) {
-          res.send('hello, express')
-        })
-        module.exports = router
-      users.js  
-        const express = require('express')
-        const router = express.Router()
-        
-        router.get('/:name', function (req, res) {
-          res.send('hello, ' + req.params.name)
-        })
-        
-        module.exports = router
---------------------------------------------------------------------------------
-'middleware'中间件,express的设计精髓 
+const router = express.Router()   // 生成路由实例 
+app.use(path,router)              // 路由分配 
+const childRouter = express.Router() 
+router.use(path,childRouter)      // 子路由 
+◆其他
+express.static(path)  // 设置静态文件路径 
+  将图片, CSS, JavaScript 文件放在 public 目录下,你可以这么写:
+  app.use(express.static('public'));
+  Example: 
+    我们可以到 public/images 目录下放些图片,如下所示:
+      node_modules
+      server.js
+      public/
+      public/images
+      public/images/logo.png
+    让我们再修改下 "Hello Word" 应用添加处理静态文件的功能 
+      创建 express_demo3.js 文件,代码如下所示:
+      var express = require('express');
+      var app = express();
+      
+      app.use(express.static('public'));
+      
+      app.get('/', function (req, res) {
+         res.send('Hello World');
+      })
+      
+      var server = app.listen(8081, function () {
+      
+        var host = server.address().address
+        var port = server.address().port
+      
+        console.log("应用实例,访问地址为 http://%s:%s", host, port)
+      
+      })
+    执行以上代码:
+      $ node express_demo3.js 
+      应用实例,访问地址为 http://0.0.0.0:8081
+    在浏览器中访问 http://127.0.0.1:8081/images/logo.png
+    (本实例采用了菜鸟教程的logo),结果如下图所示:
+◆'middleware'中间件,express的设计精髓 
   '流水线'式操作 
     当处理相同的请求地址时,可使用'流水线'式操作 
     ,当一个中间件处理完,可通过调用 next() 传递给下一个中间件 
@@ -346,6 +306,7 @@ var server = app.listen(端口[,callback]) // 监听端口
     })
     
     app.listen(3000)
+app.use(<middleware>)       // 使用中间件 
 express-session  session中间件,实现对会话的支持 
   app.use(session(options)) 
   session 中间件会在 req 上添加 session 对象,即 req.session 初始值为 {},
@@ -367,7 +328,7 @@ express-static,处理静态文件
   const expressStatic = require('express-static') 
   app.use(expressStatic(path))   // 当访问静态文件时,则从对应的位置去读  
     path   str,读取静态文件的位置  
-body-parser,用于处理 JSON、Raw、Text 和 URL 编码的数据 
+body-parser,用于处理POST请求的数据,但不能处理上传的文件  
   $ npm i -S body-parser  
   const bodyParser = require('body-parser') 
   app.use(bodyParser.urlencoded({
@@ -391,8 +352,24 @@ cookie-session,处理session[依赖于cookie-parser]
     ,name: str     // 可选,自定义名称 
     ,maxAge: num   // 可选,过期时间,单位ms 
   }))
-multer,用于处理 enctype="multipart/form-data" 的表单数据  
+multer,用于处理 enctype="multipart/form-data" 的表单数据,即文件上传  
   $ npm i -S multer  
+  const multer = require('multer')
+  var multerObj = multer(options?) 
+    options   obj,可选,配置对象 
+      dest: <str>   // 文件存放目录 
+    .single(<field>)  // 只接受一个指定的上传文件 
+    .any()            // 接收任意的上传文件 
+  app.use(multerObj.any())  
+  经过中间件处理后,访问 req.files  获取上传的文件 
+consolidate,为express适配模版引擎 
+  $  npm i -S consolidate
+  const consolidate = require('consolidate') 
+  // 配置模版引擎 
+  app.set('view engine','html')         // 输出文件类型: HTML 
+  app.set('view','./views')             // 读取模版的位置 
+  app.engine('html',consolidate.ejs)    // 输出该文件所用的模版引擎 
+  res.render(path,args)   // 回调中,用于解析文件并返回   
 --------------------------------------------------------------------------------
 常与express搭配的插件/模块 
 config-lite,一个轻量的读取配置文件的模块
@@ -430,13 +407,81 @@ config-lite,一个轻量的读取配置文件的模块
       // mongodb 的地址,以 mongodb:// 协议开头,myblog 为 db 名
       mongodb: 'mongodb://localhost:27017/myblog'
     }
-marked   markdown 解析
-moment   时间格式化
-mongolass   mongodb 驱动
-winston   日志
-objectid-to-timestamp   根据 ObjectId 生成时间戳
-sha1   sha1 加密,用于密码加密
-ejs,一款与express集成良好的模版引擎 
+marked,markdown 解析
+moment,时间格式化
+mongolass,mongodb 驱动
+winston,日志
+objectid-to-timestamp,根据 ObjectId 生成时间戳
+sha1,sha1 加密,用于密码加密 
+jade,模版引擎 
+  Feature: 
+    模版文件格式'.jade' 
+    缩进来表示层级 
+      Example: 
+        html 
+          head 
+            style 
+          body 
+            div 
+  $ npm i -S jade  
+  API 
+    ◆JS相关 
+    const jade = require('jade') 
+    jade.render(str)   // 渲染标签,将字符串转化成对应的标签,并返回 
+      jade.render('html')  // <html></html>
+    jade.renderFile(path,options)  // 同步解析模版,将模版转换成对应的HTM,并返回 
+      path    str,模版文件路径 
+      options obj,配置、参数对象 
+        {
+          pretty: <bol>   // 是否将HTML美化输出,默认: false   
+          ,<key1>: val1   // 自定义键值,可用于模版中渲染数据 
+        }
+    ◆模版相关 
+    <tagName>(<attrName1>="xx",<attrName2>="xx",..)     // 属性表示 
+      Example: script(src="./a.js")  
+    <tagName>&attributes({<attrName1>: val1,...})       // 属性的对象表示法  
+    'style'属性的额外表示: style={key1: val1,..}  
+      PS: 该对象可直接来自模版解析配置参数 
+    'class'属性的额外表示: 
+      class=[className1,..]  
+        PS: 该数组可直接来自模版解析配置参数 
+      <tagName>.className1 
+    'id'属性的额外表示: <tagName>#idName 
+    <tagName> <content>   // 内容填写[标签后空格再写内容],但不可换行 
+    |xxx   // 原样输出 
+      Example: 
+        // 原样输出内容 
+        div
+          |div
+        编译成: 
+        <div>
+          div
+        </div>
+        // 原样输出JS代码 
+        script
+          | var str = 'abc'
+          | console.log(str);
+    -xxx   // 运行代码[不会显示在页面中] 
+      Example: 
+        div 
+          - var num1 = 1
+          - var num2 = 2 
+          合计: #{a+b} 
+    <tagName>.   // 该层级以下原样输出 
+      Example: 
+        script. 
+          var str = 'abc'
+          console.log(str);
+    include <path>   // 引入[js、css、html等]文件嵌入到模版中  
+    #{<表达式>}  // 渲染数据 
+      PS: 表达式中的变量来自于解析模版时传入的配置参数对象 
+    =xx         // 渲染数据[简化版] 
+      Example: 
+        div #{key1}
+        等价于: 
+        div=key1 
+    !=xx        // 非转义输出HTML代码 
+ejs,模版引擎 
   PS: 'Template Engine'模板引擎: 将页面模板和数据结合起来生成html的工具 
   相关命令 
     $ npm i -S ejs  // 
@@ -458,25 +503,31 @@ ejs,一款与express集成良好的模版引擎
       </body>
     </html>
   API 
-    <% code %>    运行JS代码,不输出 
+    ★JS相关 
+    const ejs = require('ejs') 
+    ejs.render()
+    ejs.renderFile(path,options,fn)   // 同步解析模版 
+      path           str,模版文件路径 
+      options        obj,配置数据 
+        可在模版指令中使用 
+          Example:  
+            ejs.renderFile(path,{name: 'abc'},fn)   
+            <div>我的名字叫: <%= name %> </div>
+      function(err,data){ }  解析模版后的回调 
+        err    obj,错误对象,解析成功为 null 
+        data   str,解析成功后的HTML 
+    ★模版相关 
+    ▼模版指令 
+    <% code %>    运行代码,不输出 
       Example: 
-        Data: 
-          supplies: ['mop', 'broom', 'duster']
-        Template: 
-          <ul>
-            <% for(var i=0; i<supplies.length; i++) { %>
-            <li><%= supplies[i] %></li>
-            <% } %>
-          </ul>
-        Result: 
-          <ul>
-            <li>mop</li>
-            <li>broom</li>
-            <li>duster</li>
-          </ul>
-    <%= code %>   显示转义后的HTML内容  
-    <%- code %>   显示原始HTML内容 
-    includes(path)  引入其他模版 
+        <ul>
+          <% for(var i=0; i<supplies.length; i++) { %>
+          <li><%= supplies[i] %></li>
+          <% } %>
+        </ul>
+    <%= code %>   运行代码,[转义HTML]输出 
+    <%- code %>   运行代码,[不转义HTML]输出 
+    <% includes(path) %>  引入其他文件内容 
       views/header.ejs
         <!DOCTYPE html>
         <html>

@@ -800,14 +800,70 @@ fs,文件系统模块'file system',与文件系统交互
         读取相同的文件
         site:www.r
         文件关闭成功          
-  fs.rename(oldPath, newPath, callback) 
-    回调函数没有参数,但可能抛出异常          
+  fs.rename(oldPath, newPath, fn) 
+    oldPath   str,旧文件路径 
+    newPath   str,新文件路径 
+    function(err){ }  回调函数 
   fs.exists(path)   检测文件是否存在 
   ★流相关 
   fs.createReadStream(path,options);  创建可读的stream流 
     为异步操作,不会阻塞后续代码执行 
     var readStream = fs.createReadStream('1.pm4');
   fs.createWriteStream(path,options); 创建可写的stream流 
+path,处理文件路径 
+  PS:
+  var path = require("path")  // 引入path模块
+  .normalize(p)  规范化路径,注意'..' 和 '.'.
+  .join([path1][, path2][, ...])  str,返回连接路径 
+    该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
+  .resolve([path1],path2) 将path2解析为绝对路径 
+    Example:
+    var path1 = path.resolve('e://a','./b')
+    console.log(path1); // e://a/b 
+  .isAbsolute(path) 判断参数 path 是否是绝对路径.
+  .relative(from, to) 用于将相对路径转为绝对路径.
+  .dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
+  .basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
+  .extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
+    若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
+  .parse(<path>)  解析文件路径 
+    Input: path  str,解析的文件路径 
+    Output: 文件路径的对象表示 
+      root: 根目录 
+      dir: 目录部分
+      base: 文件名及扩展名  
+      name: 文件名 
+      ext: 扩展名 
+    Example: 
+      'D:\\asserts\\img\\qq.png'
+      { 
+        root: 'D:\\',
+        dir: 'D:\\asserts\\img',
+        base: 'qq.png',
+        ext: '.png',
+        name: 'qq' 
+      }
+  .format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
+  .sep 平台的文件路径分隔符,'\\' 或 '/'
+  .delimiter 平台的分隔符, ; or ':'.
+  .posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
+  .win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
+  Example:
+    创建 main.js 文件,代码如下所示:
+      var path = require("path");
+      // 格式化路径
+      console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
+      // 连接路径
+      console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
+      // 转换为绝对路径
+      console.log('resolve:'+path.resolve('main.js'));
+      // 路径中文件的后缀名
+      console.log('ext name:'+path.extname('main.js'));
+    代码执行结果如下:
+      normalization : /test/test1/2slashes/1slash
+      joint path : /test/test1/2slashes/1slash
+      resolve : /web/com/1427176256_27423/main.js
+      ext name : .js    
 crypto,提供加密和解密功能,基本上是对OpenSSL的包装
 util,提供常用函数的集合 
   PS:用于弥补核心JS 的功能 过于精简的不足
@@ -1008,44 +1064,6 @@ cluster,集群
   const cluster = require('cluster');
 crypto,加密 
   const crypto = require('crypto');
-path,处理文件路径 
-  PS:
-  var path = require("path")  // 引入path模块
-    .normalize(p)  规范化路径,注意'..' 和 '.'.
-    .join([path1][, path2][, ...])  str,返回连接路径 
-      该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
-    .resolve([path1],path2) 将path2解析为绝对路径 
-      Example:
-      var path1 = path.resolve('e://a','./b')
-      console.log(path1); // e://a/b 
-    .isAbsolute(path) 判断参数 path 是否是绝对路径.
-    .relative(from, to) 用于将相对路径转为绝对路径.
-    .dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
-    .basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
-    .extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
-      若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
-    .parse(pathString) 返回路径字符串的对象.
-    .format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
-    .sep 平台的文件路径分隔符,'\\' 或 '/'
-    .delimiter 平台的分隔符, ; or ':'.
-    .posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
-    .win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
-  Example:
-    创建 main.js 文件,代码如下所示:
-      var path = require("path");
-      // 格式化路径
-      console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
-      // 连接路径
-      console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
-      // 转换为绝对路径
-      console.log('resolve:'+path.resolve('main.js'));
-      // 路径中文件的后缀名
-      console.log('ext name:'+path.extname('main.js'));
-    代码执行结果如下:
-      normalization : /test/test1/2slashes/1slash
-      joint path : /test/test1/2slashes/1slash
-      resolve : /web/com/1427176256_27423/main.js
-      ext name : .js    
 string_decoder,字符串解码器 
   const string_decoder = require('string_decoder');
 os,模块提供了一些基本的系统操作函数 

@@ -20,13 +20,20 @@ MySQL: 一种关联数据库管理系统
     NodeJS-程序中使用  
       $ npm i -S mysql // 安装MySql模块,用于连接到服务端请求数据 
       const mysql = require('mysql')
-      var db = mysql.createConnection({ // 连接到MySql服务器 
+      const db = mysql.createConnection({ // 连接到MySql服务器 
         host: 'localhost'    // 需连接的MySql主机 
         ,port: 3306          // 端口,默认: 3306 
         ,user: 'root'        // 用户名
         ,password: '111111'  // 密码 
         ,database: 'dtdemo1' // 连接到指定的数据库 
       })  
+      const db = mysql.createPool({       // 连接池,用于连接到MySql服务器 
+        host: 'localhost'    // 需连接的MySql主机 
+        ,port: 3306          // 端口,默认: 3306 
+        ,user: 'root'        // 用户名
+        ,password: '111111'  // 密码 
+        ,database: 'dtdemo1' // 连接到指定的数据库 
+      })
       db.query(KW,fn)     // 查询 
         KW      具体的操作,SQL语句  
         function(err,data){ }  回调函数 

@@ -171,6 +171,8 @@
     UPDATE <tb-name>
     SET col1=val1,col2=val2,... 
     WHERE <condition>   // WHERE 可选,去掉后修改所有行 
+    Example: 
+      UPDATE news_tb SET view_num=view_num+1 WHERE ID=1  // 将id为1的记录的view_num加1 
   DELETE 删除记录 
     DELETE FROM <tb-name> 
     WHERE <condition>;    // WHERE 可选,去掉则删除所有行 
@@ -182,27 +184,36 @@
   GRANT  赋予用户特权
   REVOKE 收回赋予用户的特权 
   ★子句 
+    子句的书写顺序: WHERE GROUP ORDER LIMIT 
   WHERE     有条件地从单个表中取回数据或者将多个表进行合并 
     PS: 可用于 SELECT、UPDATE、DELETE 等语句 
     WHERE <condition> // 条件   
       Example: 
         SELECT name FROM group WHERE age=18  
-  TOP       从一张数据表中取回前 N 个或者 X% 的记录,所有的数据库系统都不支持 TOP 子句
-  LIMIT     MySql中的 TOP
-  ROWNUM    Oracle中的 TOP 
-  ORDER BY  根据一列或者多列的值,按照升序或者降序排列数据 
-    某些数据库默认以升序排列查询结果 
-    SELECT <col_list> 
-    FROM <tb_name> 
-    [WHERE <condition>] 
-    [ORDER BY <col_list>] [ASC | DESC];
-  GROUP BY  与 SELECT 语句结合在一起使用,将相同数据分成一组 
+  GROUP BY  聚类,将相同数据分成一组 
     PS: 通常需结合 函数 来使用 
     SELECT <col_list> 
     FROM <tb_name> 
     WHERE [<conditions>] 
     GROUP BY <col_list> 
     ORDER BY <col_list> 
+  ORDER BY  根据一列或者多列的值,按照升序或者降序排列数据 
+    PS: 某些数据库默认以升序排列查询结果 
+    SELECT <col_list> 
+    FROM <tb_name> 
+    [WHERE <condition>] 
+    [ORDER BY col1 [ASC|DESC],col2 [ASC|DESC], ...  ] ;
+      ASC   升序,从小到大 
+      DESC  降序,从大到小 
+    Example: 
+      价格升序,若价格相同,再按照销量降序排列 
+      ORDER BY price ASC,sales DESC 
+  TOP       从一张数据表中取回前 N 个或者 X% 的记录,所有的数据库系统都不支持 TOP 子句
+  LIMIT     MySql中的 TOP 
+    LIMIT <num>     // 前num条数据 
+    LIMIT idx,num2  // 从第idx开始,共num2条数据 
+      idx  从0开始计数  
+  ROWNUM    Oracle中的 TOP 
   JOIN      用于将数据库中两个或者两个以上表中的记录组合起来,连接通过共有值将不同表中的字段组合在一起 
     INNER JOIN: 内连接,当两个表中都存在匹配时,才返回行 
       SELECT table1.column1, table2.column2... 
@@ -282,15 +293,15 @@
   !=      返回两个操作数的值是否相等的布尔值 
   XX      检查两个操作数的值是否相等,如果不等则返回 true 
   >       返回左边的操作数是否大于右边的操作数的布尔值 
-  <       返回左边操作数是否小于右边操作数的布尔值 
   >=      返回左边的操作数是否大于或等于右边操作数的布尔值 
+  <       返回左边操作数是否小于右边操作数的布尔值 
   <=      返回左边的操作数是否小于或等于右边的操作数的布尔值 
   !<      返回左边的操作数是否不小于右边的操作数的布尔值 
   !>      返回左边的操作数是否不大于右边的操作数的布尔值 
   ★逻辑运算符 
-  ALL     用于将一个值同另一个值集中所有的值进行比较 
   AND     返回连接的所有条件是否都为真的布尔值 
   OR      返回连接的条件中是否有真的布尔值 
+  ALL     用于将一个值同另一个值集中所有的值进行比较 
   AND     运算符使得在 WHERE 子句中可以同时存在多个条件 
   ANY     运算符用于将一个值同条件所指定的列表中的任意值相比较 
   BETWEEN 给定最小值和最大值,BETWEEN 运算符可以用于搜索区间内的值。
@@ -316,14 +327,14 @@
   _    单个数字或者字符 
 函数 
   用于在表上或者表中的特定列上执行聚合数据运算
-  COUNT()  
-  MAX()  
-  MIN()  
-  AVG()
-  SUM()
-  SQRT()
-  RAND()
-  CONCAT()
+  COUNT(<col>)   记录数量 
+  SUM(<col>)     总和 
+  AVG(<col>)     平均值
+  MAX(<col>)     最大值
+  MIN(<col>)     最小值
+  SQRT(<col>)
+  RAND(<col>)
+  CONCAT(<col>)
   日期函数 
     下面的列表中是 SQL 中所有与日期和时间相关的重要函数。
     你所用的 RDBMS 可能会支持更多其他的函数。

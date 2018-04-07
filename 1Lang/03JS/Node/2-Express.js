@@ -370,6 +370,9 @@ consolidate,为express适配模版引擎
   app.set('view','./views')             // 读取模版的位置 
   app.engine('html',consolidate.ejs)    // 输出该文件所用的模版引擎 
   res.render(path,args)   // 回调中,用于解析文件并返回   
+express-route,  
+  $ npm i express-route 
+  const expressRoute = require('express-route') 
 --------------------------------------------------------------------------------
 常与express搭配的插件/模块 
 config-lite,一个轻量的读取配置文件的模块

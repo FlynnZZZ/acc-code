@@ -1054,7 +1054,9 @@ Date,日期时间类: 处理时间和日期,内置获取和设置日期时间信
       console.log( date1.valueOf()); // 100 
       console.log(+date1); // 100 
     ◆组件方法 
-    .getTime()   num,从1970年1月1日到当前时间的毫秒数值 
+    .getTime()   num,返回从1970年1月1日到当前时间的毫秒数值 
+    .setTime(timestamp)   根据传入的时间戳更改时间对象对应的时间  
+      timestamp   num,传入的时间戳,单位: ms 
     .getDay()          num,星期数值,0-6  
     .getFullYear()     num,年份数值,1970-275760  
     .getMonth()        num,月份数值,0-11 
@@ -1311,10 +1313,12 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
     锚点字符 
       ^   首匹配,位于正则字符串的开始 
         Example: 
-        /^n/ 匹配任何开头为 n 的字符串.
+          /^n/    // 匹配任何开头为 n 的字符串 
+          /^/gm   // 匹配所有行首 
       $   尾匹配,位于正则字符的末尾 
         Example: 
-        /n$/ 匹配任何结尾为n的字符串 
+          /n$/    // 匹配任何结尾为n的字符串 
+          /$/gm   // 匹配所有行尾  
       ?=n 匹配其后紧接为指定字符串n  
       ?!n 匹配其后紧接着的不是字符串n  
         包含'ab'但不包含'cd'的正则: /ab.(?!cd)./ 

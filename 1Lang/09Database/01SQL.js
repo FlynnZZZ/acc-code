@@ -154,17 +154,19 @@
   USE <db_name> // 选择数据库 
     若数据库架构中有多个数据库同时存在,则在开始操作前必须先选定其中一个 
   SELECT 检索,从数据库的表中取回所需的数据,并以表的形式返回,返回的表被称作结果集  
-    SELECT <field>  // 需查询的字段名
-      // *          表示[表中的]所有字段
-      // 逗号分隔    具体的多个字段,如: name,age,sex 
-    FROM <table>    // 查询的表名  
+    SELECT <field> FROM <table>;    
+      field    // 需查询的字段名 
+        *          表示[表中的]所有字段
+        逗号分隔    具体的多个字段,如: name,age,sex 
+      table    // 查询的表名  
+      Example: SELECT * FROM `user_tb`
   INSERT 插入记录 
-    // key对应val添加数据
-    INSERT INTO <tb_name> (<col1>, <col2>, ...)   
-    VALUES (<val1>, <val2>, ...);  
-    // 当省略keys时表示为所有字段添加值,但值必须按照表中的顺序   
-    INSERT INTO <tb_name> 
-    VALUES (<val1>, <val2>, ...); 
+    // col对应val添加数据
+    INSERT INTO <tb_name> (<col_list>) VALUES (<val_list>);  
+      INSERT INTO `user_tb` (`ID`,`username`,`password`) VALUES (0,'清风','111111');  
+        ID 一般为自增,此处对应 0,即表示为自增  
+    // 当省略字段列表时表示为所有字段添加值,但值必须按照表中的顺序   
+    INSERT INTO <tb_name> VALUES (<val1>, <val2>, ...); 
   UPDATE 修改记录 
     UPDATE <tb-name>
     SET col1=val1,col2=val2,... 

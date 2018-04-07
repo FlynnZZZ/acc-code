@@ -17,7 +17,30 @@ MySQL: 一种关联数据库管理系统
     安装: 
   client端: 
     Navicate-管理工具 
-    NodeJS-程序编写 
+    NodeJS-程序中使用  
+      $ npm i -S mysql // 安装MySql模块,用于连接到服务端请求数据 
+      const mysql = require('mysql')
+      var db = mysql.createConnection({ // 连接到MySql服务器 
+        host: 'localhost'    // 需连接的MySql主机 
+        ,port: 3306          // 端口,默认: 3306 
+        ,user: 'root'        // 用户名
+        ,password: '111111'  // 密码 
+        ,database: 'dtdemo1' // 连接到指定的数据库 
+      })  
+      db.query(KW,fn)     // 查询 
+        KW      具体的操作,SQL语句  
+        function(err,data){ }  回调函数 
+          JSON.stringify(data) 直接将数据JSON化 
+        Example: 
+          db.query("SELECT * FROM `user_tb`;",function(err,data){
+            if (err) {
+              
+            }
+            else {
+              console.log(data);
+              console.log(JSON.stringify(data));
+            }
+          })     
 数据类型 
   1、整型
   tinyint(m)    1 个字节  范围(-128~127)

@@ -84,7 +84,7 @@ app.use(path?,fn,next?) // 处理请求
         .download()     传送指定路径的文件
         .get()       返回指定的HTTP头
         .location()  只设置响应的Location HTTP头,不设置状态码或者close response
-        .redirect()  设置响应的Location HTTP头,并且设置状态码302
+        .redirect()  重定向,设置响应的Location HTTP头,并且设置状态码302
         .type()    设置Content-Type的MIME类型        
     next                 fn,可选,是否进行队列执行 
       next()  则接着执行下一个相同的响应[监听同样的路径的] 

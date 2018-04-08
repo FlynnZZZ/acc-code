@@ -864,7 +864,12 @@ path,处理文件路径
       joint path : /test/test1/2slashes/1slash
       resolve : /web/com/1427176256_27423/main.js
       ext name : .js    
-crypto,提供加密和解密功能,基本上是对OpenSSL的包装
+crypto,提供加密和解密功能,基本上是对OpenSSL的包装 
+  const crypto = require('crypto') 
+  var obj = crypto.createHash('md5')   // 使用MD5加密 
+  obj.update(<str>)    // 加密指定字符 
+  obj.digest('hex')    // 返回16进制表示的加密值 
+  
 util,提供常用函数的集合 
   PS:用于弥补核心JS 的功能 过于精简的不足
   util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承

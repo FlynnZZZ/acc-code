@@ -284,7 +284,15 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
         console.log("写入字节数 : "+ len);  // 写入字节数 : 4
         console.log(buf.toString()); // 1234efg
     .toString([typ][,bgn][,end])  解码buf缓冲区数据并使用指定的编码返回字符串 
-      typ    使用的编码,默认为 'utf8'[后续有参数时需用undefined来占位]  
+      typ    使用的编码[后续有参数时需用undefined来占位]  
+        'utf8'    默认字
+        'ascii'   
+        'hex'     16 进制 
+        'ascii'
+        'ucs2'
+        'base64'
+        'gbk'不支持
+        'gb2312'不支持
       bgn    开始读取的索引位置,默认为 0 
       end    结束位置,默认为缓冲区的末尾 
       Example:

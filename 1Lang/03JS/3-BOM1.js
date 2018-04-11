@@ -1026,6 +1026,8 @@ window.location,管理URL
       'https://www.baidu.com/?key1=val1&key2=val2'
       location.search;   // "?key1=val1&key2=val2"
     .hash  读写URL锚点部分[#后面的部分][若无返回'']
+    .ancestorOrigins  DOMStringList,
+    .origin  
     .assign(url)  导航页面,并产生一条历史记录  
       location.assign('https://www.baidu.com')    // 跳转到百度主页
       对 window.location location.href 赋值则调用assign方法实现跳转  
@@ -1036,10 +1038,9 @@ window.location,管理URL
       PS: 位于 reload() 之后的代码不一定会执行,取决于网络延迟或系统资源等因素,
         故推荐将其置于代码最后一行 
       bol  是否无缓存重载,默认 false
-    .ancestorOrigins  DOMStringList,
-    .origin  
-    .toString() 
-    .valueOf() 
+    .toString()  DOMString,包含整个URL
+      和读取 .href 的效果相同,但不能够修改Location的值 
+    .valueOf()  
 window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持] 
   PS: XMLHttpRequest对象,输入、输出状态都在同一接口管理,容易导致代码混乱;
     Fetch主要有两个特点,一是接口合理化,Ajax是将所有不同性质的接口都放在XHR对象上,

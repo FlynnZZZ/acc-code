@@ -869,7 +869,6 @@ crypto,提供加密和解密功能,基本上是对OpenSSL的包装
   var obj = crypto.createHash('md5')   // 使用MD5加密 
   obj.update(<str>)    // 加密指定字符 
   obj.digest('hex')    // 返回16进制表示的加密值 
-  
 util,提供常用函数的集合 
   PS:用于弥补核心JS 的功能 过于精简的不足
   util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
@@ -1374,5 +1373,7 @@ request,请求模块
         response.statusCode   http响应状态码,如200为成功
       data     响应的数据
 ◆本地模块: 自定义的JS文件  
+
+
 
 

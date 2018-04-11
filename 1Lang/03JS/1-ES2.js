@@ -620,11 +620,15 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         [1, 2, 3].includes(2);     // true
         [1, 2, 3].includes(4);     // false
         [1, 2, 3].includes(3, 3);  // false
-    .indexOf(val,bgn)    idx,成员索引[ES5] 
-      PS:返回值为下标值,若找不到则返回-1 
-      val    // 查询的成员值 
-        [ {txt: 'a'} ,{txt: 'b'} ]
-      ,bgn?  // 可选,表示开始查询的索引位置,默认为0 
+    .indexOf(val,bgn?)    idx,成员索引[ES5] 
+      PS: 返回值为下标值,若找不到则返回-1 
+      val    查询的成员值,通常不可为引用类型的值  
+        Example: 
+          var arr = [ {txt: 'a'} ,{txt: 'b'} ] 
+          ,idx1 = arr.indexOf( arr[1] )  
+          ,idx2 = arr.indexOf( {txt: 'b'} )  
+          console.log(idx1,idx2);  // 1 -1 
+      ,bgn?  num,可选,表示开始查询的索引位置,默认: 0 
         若为负,则为 bgn+arr.length 
     .lastIndexOf(val,bgn?) idx,成员索引[从右向左][ES5] 
     ◆改变原数组
@@ -640,7 +644,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       var arr = [1];
       console.log(arr.push(2)); // 2 
       console.log(arr);         // [1, 2]
-    .pop()    val,返回删除的尾部成员  
+    .pop()    meb,返回删除的尾部成员  
       PS: 无参数;若原数组为空,则无操作,并返回 undefined 值 
       Example: 
       var obj = [1,2,3];
@@ -886,22 +890,28 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         },0);
         console.log(num1); // 5,有初始值,val从第一个成员开始  
     .reduceRight(foo(retVal,val?,idx?,arr?),initVal?)  同reduce,只是从右到左遍历[ES5]
-    ◆待整理
-    .find(function(mber){  // val,返回回调值为true的首个成员[ES6]  
-      // mber  分别为数组中的每个成员  
-      return bol; // 若未有true,find方法最终返回 undefined 
+    .find(fn)   meber,成员查询 [ES6]  
+      Input: function(meber){  // 回调函数  
+        // meber  分别为数组中的每个成员  
+        return bol; // 若未有true,find方法最终返回 undefined 
+      }   
+      Output: 首个回调值为true对应的成员 
       Example: 
         var aoo = [1,2,3,4,5,6].find(function(value){ 
           return value > 2; 
         });
         console.log(aoo); // 3
-    })  
-    .findIndex(f(member)) idx,返回数组中符合条件的第一个成员的下标[ES6] 
-      回调返回值为true时,该成员的下标,否则最终返回 -1 
+    .findIndex(fn)   idx,成员查询 [ES6] 
+      Input: function(meber){  // 回调函数 
+        // meber 数组中的每个成员 
+        return bol;
+      }
+      Output: 回调返回值为true时,对应成员的下标,否则最终返回 -1 
       var idx1 = [7,8,9,10].findIndex(function(value){ 
         return value > 8; 
       }); 
       console.log(idx1); // 2
+    ◆待整理
     .fill(val,beginIndex?,endIndex?) 返回一个用指定的值,覆盖数组中的元素的新数组[ES6] 
       let arr = [1,2,3];
       arr.fill(4); // [4,4,4]
@@ -2471,7 +2481,7 @@ Promise,同步书写异步模式[ES6]
         // 2-3
         // 当前 3 上一步: 2
         // 3-4
-      返回非'Promise'类型,继续使用.then ,将作为其参数; 
+      返回非'Promise'类型,继续使用 .then ,将作为其参数; 
         new Promise(function(rs,rj){
           setTimeout(function(){
             console.log('开始'); 
@@ -2479,21 +2489,21 @@ Promise,同步书写异步模式[ES6]
           },1000) 
         })
         .then(function(res){
-          console.log('当前: '+'1','上一步: '+res); 
+          console.log('当前:1','上一步: '+res); 
           return '1'; 
         })
         .then(function(res){
-          console.log('当前: '+'2','上一步是:'+res); 
+          console.log('当前:2','上一步: '+res); 
           return '2'; 
         })
         .then(function(res){ 
-          console.log('当前 :'+'3','上一步是:'+res); 
+          console.log('当前:3','上一步: '+res); 
         }) 
         // 延迟1s
         // 开始 
-        // 当前: 1 上一步: 开始
-        // 当前: 2 上一步是:1
-        // 当前 :3 上一步是:2  
+        // 当前:1 上一步: 开始
+        // 当前:2 上一步: 1
+        // 当前:3 上一步: 2  
     foo2 可选,失败/出错后的回调 
   pms1 = pms.catch(foo)  用于处理操作异常,返回promise对象 
     pms.catch(function (error) {
@@ -2765,6 +2775,7 @@ Reflect,为操作对象提供的API[ES6]
     .getPrototypeOf(target)
     .setPrototypeOf(target, prototype)
 ------------------------------------------------------------------------------- 
+
 
 
 

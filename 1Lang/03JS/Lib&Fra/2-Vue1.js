@@ -1795,9 +1795,9 @@ API
 API 
   ◆请求方法: 
   axios({   // 通用方法 
-    url: 'url'
-    ,baseURL: 'https://some-domain.com/api/' // 将被添加到`url`前面,除非`url`是绝对的 
-    ,params: {  // 与请求一起发送的URL参数
+    baseURL: 'https://some-domain.com/api/' // 将被添加到`url`前面,除非`url`是绝对的 
+    ,url: 'url'
+    ,params: {  // 与请求一起发送的URL参数 
       // 须是纯对象或URLSearchParams对象
       ID: 12345
     }
@@ -1818,7 +1818,7 @@ API
         // 数组中的最后一个函数必须返回一个字符串,一个 ArrayBuffer或一个 Stream
         return data;
       }
-      ..
+      ,...
     ]
     ,method: 'post' // 默认get 
     ,headers: { // 自定义 headers

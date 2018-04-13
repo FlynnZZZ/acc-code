@@ -638,7 +638,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       var result = arr.reverse();
       console.log(arr);  // [3, 2, 1] 
       console.log(result===arr);  // true 
-    .push(val1?...)  num,末尾添加成员,返回新数组长度 
+    .push(val1,val2?...)  num,末尾添加成员,返回新数组长度 
       val 在原数组尾部添加的成员,添加多个成员用逗号隔开
       Example:
       var arr = [1];

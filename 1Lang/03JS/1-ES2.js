@@ -2429,6 +2429,86 @@ Promise,同步书写异步模式[ES6]
       首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
       其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
       第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
+  Static: 
+    Promise.length    '1',构造器参数的数目 
+    Promise.all(pmsArr)  pms,全局模式,所有成功才成功[有一个失败则失败] 
+      PS: 成功时传递值为多个rs传递的值按顺序组成的数组,失败时为传递的失败信息; 
+      pmsArr  由Promise实例组成的数组
+      Example:
+        let pms1 = new Promise(function(resolve){
+          setTimeout(function () {
+            resolve('实例1操作成功');
+          },5000);
+        });
+        let pms2 = new Promise(function(resolve){
+          setTimeout(function () {
+            resolve('实例2操作成功');
+          },1000);
+        });
+        // 5秒之后控制台才会输出结果
+        Promise.all([pro1,pro2])
+        .then(function(result){
+          console.log(result);
+        });
+        // ["实例1操作成功", "实例2操作成功"]
+    Promise.race(pmsArr) pms,竞速模式,任意一个成功或失败则结束 
+      PS: 结束后,其他实例中再发生变化,也不管了 
+      arr  由Promise实例组成的数组 
+      Example:
+        let pms1 = new Promise(function(resolve){
+          setTimeout(function () {
+            resolve('实例1操作成功');
+          },4000);
+        });
+        let pms2 = new Promise(function(resolve,reject){
+          setTimeout(function () {
+            reject('实例2操作失败');
+          },2000);
+        });
+        Promise.race([pro2,pro1])
+        .then(function(result){
+          console.log(result);
+        })
+        .catch(function(error){
+          console.log(error);
+        });
+        // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
+        // 实例2操作失败
+        由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
+        所以最后输出的是:实例2操作失败.
+    Promise.resolve(val)    pms,传递成功的信息 
+      Input: 参数可为如下值: 
+        pms       Promise,返回值直接为该Promise  
+          Promise.resolve(new Promise(function(rs,rj){
+            setTimeout(function(){
+              rs('aoo')
+            },1000)
+          }))
+          .then(function(msg){
+            console.log(msg);
+          })
+        thenable  带有'then'方法的非Promise对象,返回Promise对象[状态由then方法执行决定] 
+          var likePms = {
+            then : function(rs,rj){
+              // console.log(arg(11),'thenable');
+              // rs('boo')
+              rj('boo1')
+            }
+          }
+          Promise.resolve(likePms).then(function(a){
+            console.log(a);
+          }
+          ,function(msg){
+            console.log(msg);
+          })
+        primitive 原始类型,返回fulfilled状态的Promise对象 
+          Promise.resolve('coo').then(function(msg){
+            console.log(msg);
+          })
+      Output: Promise对象 
+    Promise.reject(val)     pms,传递失败的信息
+      Input: 
+      Output: 返回一状态为失败的Promise对象 
   Instance: 
     new Promise(foo(resolve,reject)) pms,创建Promise对象 
     PS:Promise在创建时,参数函数就会执行 
@@ -2525,86 +2605,6 @@ Promise,同步书写异步模式[ES6]
         // 操作失败的处理程序
       });
     .finally(fn)                 
-  Static: 
-    Promise.length    '1',构造器参数的数目 
-    Promise.all(pmsArr)  pms,全局模式,所有成功才成功[有一个失败则失败] 
-      PS: 成功时传递值为多个rs传递的值按顺序组成的数组,失败时为传递的失败信息; 
-      pmsArr  由Promise实例组成的数组
-      Example:
-        let pms1 = new Promise(function(resolve){
-          setTimeout(function () {
-            resolve('实例1操作成功');
-          },5000);
-        });
-        let pms2 = new Promise(function(resolve){
-          setTimeout(function () {
-            resolve('实例2操作成功');
-          },1000);
-        });
-        // 5秒之后控制台才会输出结果
-        Promise.all([pro1,pro2])
-        .then(function(result){
-          console.log(result);
-        });
-        // ["实例1操作成功", "实例2操作成功"]
-    Promise.race(pmsArr) pms,竞速模式,任意一个成功或失败则结束 
-      PS: 结束后,其他实例中再发生变化,也不管了 
-      arr  由Promise实例组成的数组 
-      Example:
-        let pms1 = new Promise(function(resolve){
-          setTimeout(function () {
-            resolve('实例1操作成功');
-          },4000);
-        });
-        let pms2 = new Promise(function(resolve,reject){
-          setTimeout(function () {
-            reject('实例2操作失败');
-          },2000);
-        });
-        Promise.race([pro2,pro1])
-        .then(function(result){
-          console.log(result);
-        })
-        .catch(function(error){
-          console.log(error);
-        });
-        // Promise {[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined}
-        // 实例2操作失败
-        由于pro2实例中2000毫秒之后就执行reject方法,早于实例pro1的4000毫秒,
-        所以最后输出的是:实例2操作失败.
-    Promise.resolve(val)    pms,传递成功的信息 
-      Input: 参数可为如下值: 
-        pms       Promise,返回值直接为该Promise  
-          Promise.resolve(new Promise(function(rs,rj){
-            setTimeout(function(){
-              rs('aoo')
-            },1000)
-          }))
-          .then(function(msg){
-            console.log(msg);
-          })
-        thenable  带有'then'方法的非Promise对象,返回Promise对象[状态由then方法执行决定] 
-          var likePms = {
-            then : function(rs,rj){
-              // console.log(arg(11),'thenable');
-              // rs('boo')
-              rj('boo1')
-            }
-          }
-          Promise.resolve(likePms).then(function(a){
-            console.log(a);
-          }
-          ,function(msg){
-            console.log(msg);
-          })
-        primitive 原始类型,返回fulfilled状态的Promise对象 
-          Promise.resolve('coo').then(function(msg){
-            console.log(msg);
-          })
-      Output: Promise对象 
-    Promise.reject(val)     pms,传递失败的信息
-      Input: 
-      Output: 返回一状态为失败的Promise对象 
 Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
   PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
     要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作

@@ -289,6 +289,91 @@ querystring,解析URL的查询字符串
   querystring.unescapeBuffer() 
   querystring.encode()
   querystring.decode()
+net,底层的网络通信工具,包含创建服务器/客户端的方法 
+  const net = require("net")       // 引入 net模块
+  const server = new net.Server()  // 创建服务器 
+    .listen(port,host,fn)      // 监听请求并执行回调 
+      Input: 
+        port   num,端口,1024-65535 之间, 1024 以下端口需管理员权限才能使用
+        host   str,域名,空字符串""表示接受任意ip地址的连接 
+        function(){ }  回调函数
+      Output: 
+    .address()    // obj,获取服务器的ip地址、ip协议及端口号 
+      Output: { 
+        address: <str>   // 监听ip,如: '127.0.0.1' 
+        ,family: <str>   // ip协议,如: 'IPv4' 
+        ,port: <num>     // 监听的端口号,如: 8080 
+      } 
+    .on('connection',fn)   // 'connection'事件,有连接建立时触发 
+      Input: function(socket){ }   回调函数 
+        socket 表示请求方信息的对象 
+          PS: socket.io 是对websocket的封装,socket的一些属性表示连接的客户端的信息 
+          .remoteAddress 
+          .remotePort       操作系统分配给客户端的  
+          .remoteFamily 
+          .localAddress     客户端IP 
+          .on('data',fn)    接收完数据时触发'data'事件 
+            Input: function(data){ }  // 回调函数 
+              data  buffer,接收到的数据[包括请求头和请求体]  
+                通过.toString() 转换为字符串 
+                  POST <path> HTTP/1.1   // 响应行 
+                  Host:                 // 若干头信息 
+                  ...
+                  // 空行 
+                  // 请求体
+          .write(response)  发送响应数据[可发送多次] 
+            response  响应的数据,可为'String'或"Buffer"类型 
+            格式为: 'HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!';
+            Content-Length 可选,告诉浏览器响应数据量,避免一直等待可和'destroy'二选一 
+          .destroy()        结束本次服务器的响应[若不结束,浏览器会一直等待接收数据] 
+      Output: 
+    .on("error",foo)            服务器出错时触发'error'事件 
+      foo  传入参数 (error) 
+    .on("close",foo)            服务器关闭时触发'close'事件 
+  const client = new net.Socket()  // 创建客户端 
+    .connect(port,host,foo)     向服务器发送连接请求,连接成功后回调  
+      port   连接的端口 
+      host   ip或域名[不可带'http://']
+      foo    执行的回调,传入参数 () 
+    .write(request)             发送请求  
+      request   请求内容,格式为:'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n' 
+    .on("data",foo)         监听响应,接收数据完毕触发'data'事件[SelfThink] 
+      foo  回调,传入参数 (data) 
+        data  响应的数据,默认为Buffer类型,可通过'toString'方法转换成字符串 
+    .destroy()              关闭请求连接 
+    .on("close",foo)        监听关闭,关闭连接时触发'close'事件 
+  Example: 
+    创建服务端 
+    server.listen(2000, '', () => { 
+      console.log('listening.', server.address()); 
+    })
+    server.on('connection', (socket) => { 
+      console.log('connected client info', 
+        socket.remoteAddress, 
+        socket.remotePort, 
+        socket.remoteFamily
+      )
+      socket.on('data', (dat) => { 
+        console.log('接受到的原始数据',dat.toString());
+        socket.write('HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!');  
+        socket.destroy(); 
+      })
+    })
+    server.on('error', (error) => {  
+      console.log('server error', error)
+    })
+    server.on('close', () => {     
+      console.log('server closed')
+    })
+    创建客户端 
+    client.connect('80','59.111.160.197',() => { 
+      client.write('GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n'); 
+    });
+    client.on('data', (dat) => {   
+      console.log('dat:', dat.toString());
+      client.destroy(); 
+    });        
+    client.on('close', function() { }) 
 http: http服务模块,提供HTTP服务器功能 
   PS: 主要用于搭建HTTP服务端和客户端; 
   Web服务器 
@@ -1102,78 +1187,6 @@ os,模块提供了一些基本的系统操作函数
       platform : linux
       total memory : 25103400960 bytes.
       free memory : 20676710400 bytes.
-net,底层的网络通信工具,包含创建服务器/客户端的方法 
-  const net = require("net");       引入 net模块
-  const server = new net.Server();  创建服务器 
-  server.listen(port,host,foo)      监听客户端请求,监听到请求后回调 
-    port 端口,数字,1024-65535 之间, 1024 以下端口需管理员权限才能使用
-    host 域名,字符串,空字符串""表示接受任意ip地址的连接 
-    foo  回调,传入参数 () 
-  server.address();                 服务器的ip地址、ip 协议及端口号[以 ipv6 格式显示] 
-  server.on('connection',foo)       有连接建立时,触发'connection'事件 
-    foo 回调,传入参数 (socket) 
-      socket 表示请求方信息的对象 
-        socket.io 是对 websocket 的封装
-        socket的一些属性表示连接的客户端的信息
-      socket.remoteAddress 
-      socket.remotePort       操作系统分配给客户端的  
-      socket.remoteFamily 
-      socket.localAddress     客户端IP 
-      socket.on('data',foo)   接收完数据时触发'data'事件 
-        foo  回调,传入参数 (data) 
-          data 接收到的数据,包括请求头和请求体,Buffer类型
-      socket.write(response)  发送响应数据[可发送多次] 
-        response  响应的数据,可为'String'或"Buffer"类型 
-        格式为: 'HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!';
-        Content-Length 可选,告诉浏览器响应数据量,避免一直等待可和'destroy'二选一 
-      socket.destroy()        结束本次服务器的响应[若不结束,浏览器会一直等待接收数据] 
-  server.on("error",foo)            服务器出错时触发'error'事件 
-    foo  传入参数 (error) 
-  server.on("close",foo)            服务器关闭时触发'close'事件 
-  const client = new net.Socket()   创建客户端
-  client.connect(port,host,foo)     向服务器发送连接请求,连接成功后回调  
-    port   连接的端口 
-    host   ip或域名[不可带'http://']
-    foo    执行的回调,传入参数 () 
-  client.write(request)             发送请求  
-    request   请求内容,格式为:'GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n' 
-  client.on("data",foo)         监听响应,接收数据完毕触发'data'事件[SelfThink] 
-    foo  回调,传入参数 (data) 
-      data  响应的数据,默认为Buffer类型,可通过'toString'方法转换成字符串 
-  client.destroy()              关闭请求连接 
-  client.on("close",foo)        监听关闭,关闭连接时触发'close'事件 
-  Example: 
-    创建服务端 
-    server.listen(2000, '', () => { 
-      console.log('listening.', server.address()); 
-    })
-    server.on('connection', (socket) => { 
-      console.log('connected client info', 
-        socket.remoteAddress, 
-        socket.remotePort, 
-        socket.remoteFamily
-      )
-      socket.on('data', (dat) => { 
-        console.log('接受到的原始数据',dat.toString());
-        socket.write('HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello world!');  
-        socket.destroy(); 
-      })
-    })
-    server.on('error', (error) => {  
-      console.log('server error', error)
-    })
-    server.on('close', () => {     
-      console.log('server closed')
-    })
-    创建客户端 
-    client.connect('80','59.111.160.197',() => { 
-      client.write('GET / HTTP/1.1\r\nHost: music.163.com\r\n\r\n'); 
-    });
-    client.on('data', (dat) => {   
-      console.log('dat:', dat.toString());
-      client.destroy(); 
-    });        
-    client.on('close', function() { }) 
 tls,https的创建 
 dns,域名解析 
   PS:

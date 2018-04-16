@@ -1399,43 +1399,43 @@ Declaration,样式声明
         counts     num,动画执行的次数,默认:1  
         direction  kw,下一周期播放顺序,默认:normal  
         pause      kw,是否暂停动画,默认:running 
-        ◆分别定义
-        animation-name: str            关键帧名称 
-          keyframename 自定义的关键帧名称
-          none          无动画效果[可以用于覆盖来自于级联的动画] 
-        animation-duration: <num>s     持续时间,默认为0无动画效果,单位s或ms  
-        animation-timing-function: kw  速度曲线 
-          ease        慢速开始中间快速慢速结束,默认值 
-            cubic-bezier(0.25,0.1,0.25,1.0) 
-          linear      匀速 
-            cubic-bezier(0.0,0.0,1.0,1.0)
-          ease-in     慢速开始匀速结束 
-            cubic-bezier(0.42,0,1.0,1.0)
-          ease-out    匀速开始慢速结束 
-            cubic-bezier(0,0,0.58,1.0)
-          ease-in-out 慢速开始中间匀速慢速结束 
-            cubic-bezier(0.42,0,0.58,1.0)
-          cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
-        animation-delay: <num>s        延迟,默认:0 
-        animation-iteration-count: kw  执行次数,默认:1  
-          num      自定义次数 
-          infinite 无限次
-        animation-direction: kw        下一周期播放顺序 
-          normal      默认,首次正序运行,每周期结束从头到尾运行
-          alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
-            比如 ease-in 反向时成为ease-out
-          reverse     首次反向运行,每周期结束动画由尾到头运行 
-          alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
-        animation-play-state: kw       暂停或播放状态 
-          通过该属性可以灵活的控制动画的播放状态
-          running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
-          paused   暂停,暂停时动画会保持暂停时的状态
-        animation-fill-mode: kw        动画播放时间外[延时时间和动画结束后]的状态 
-          none      不改变默认行为,默认值 
-          backwards 动画执行前的状态,即延时时间内[在第一个关键帧中定义] 
-          forwards  动画完成后保持最后CSS样式不变[在最后一个关键帧中定义] 
-            最后样式取决于'animation-direction'和'animation-iteration-count'
-          both      向前和向后填充模式都被应用 
+      ◆分别定义
+      animation-name: str            关键帧名称 
+        keyframename 自定义的关键帧名称
+        none          无动画效果[可以用于覆盖来自于级联的动画] 
+      animation-duration: <num>s     持续时间,默认为0无动画效果,单位s或ms  
+      animation-timing-function: kw  速度曲线 
+        ease        慢速开始中间快速慢速结束,默认值 
+          cubic-bezier(0.25,0.1,0.25,1.0) 
+        linear      匀速 
+          cubic-bezier(0.0,0.0,1.0,1.0)
+        ease-in     慢速开始匀速结束 
+          cubic-bezier(0.42,0,1.0,1.0)
+        ease-out    匀速开始慢速结束 
+          cubic-bezier(0,0,0.58,1.0)
+        ease-in-out 慢速开始中间匀速慢速结束 
+          cubic-bezier(0.42,0,0.58,1.0)
+        cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
+      animation-delay: <num>s        延迟,默认:0 
+      animation-iteration-count: kw  执行次数,默认:1  
+        num      自定义次数 
+        infinite 无限次
+      animation-direction: kw        下一周期播放顺序 
+        normal      默认,首次正序运行,每周期结束从头到尾运行
+        alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
+          比如 ease-in 反向时成为ease-out
+        reverse     首次反向运行,每周期结束动画由尾到头运行 
+        alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
+      animation-play-state: kw       暂停或播放状态 
+        通过该属性可以灵活的控制动画的播放状态
+        running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
+        paused   暂停,暂停时动画会保持暂停时的状态
+      animation-fill-mode: kw        动画播放时间外[延时时间和动画结束后]的状态 
+        none      不改变默认行为,默认值 
+        backwards 动画执行前的状态,即延时时间内[在第一个关键帧中定义] 
+        forwards  动画完成后保持最后CSS样式不变[在最后一个关键帧中定义] 
+          最后样式取决于'animation-direction'和'animation-iteration-count'
+        both      向前和向后填充模式都被应用 
       @keyframes  创建关键帧 
         PS:以百分比%规定动画阶段;"from"和"to"等价于0%[动画开始]和100%[动画结束];
           为了获得最佳的浏览器支持,应始终定义0%和100%;  
@@ -1482,6 +1482,92 @@ Declaration,样式声明
         //   75%  {top:200px;}
         //   100% {top:200px; background:yellow; width:300px;} 
         // }
+  盒子相关 
+    box-sizing 盒模型定义类型 [CSS3]
+      content-box;  默认值,width height 为content的宽、高尺寸
+      border-box;   width height 为border的宽、高尺寸
+    box-shadow 盒子阴影 [CSS3] 
+      box-shadow: lenH lenV blur? spread? color? inset?; 
+        lenH         length,水平偏移距离,可为负值
+        lenV         length,垂直偏移距离,可为负值
+        blur         length,模糊距离,可选
+        spread       length,阴影尺寸,可选
+        color        阴影颜色,可选,默认为黑色  
+        inset/outset 可选,定义内/外部阴影,默认:'outset'外部阴影
+      同时使用多个阴影,之间使用逗号','隔开
+        box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
+    overflow 溢出显示方式 
+      PS:规定当内容溢出元素框时发生的事情
+        overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
+      hidden   内容被修剪,且隐藏超出的内容
+      scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
+      auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
+      visible  默认值,内容不会被修剪,会呈现在元素框之外。
+    'border-radius'边框圆角 [CSS3] 
+      PS: 使用 -webkit 和-moz 前缀兼容浏览器,IE9+不加前缀支持 
+        当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
+      border-radius: rX{1,4} / rY{1,4}?; [简写方式]  
+        PS: 水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
+        rX   length|%,水平半径 
+        rY   可选,length|%,上右下左,默认等于水平半径 
+      ★可单独定义的样式 
+      border-top-left-radius: rX rY;      左上圆角 
+      border-top-right-radius: rX rY;     右上圆角 
+      border-bottom-right-radius: rX rY;  右下圆角 
+      border-bottom-left-radius: rX rY;   左下圆角 
+      Example: 
+        border-radius: 2px 1px 4px / 5px 3px;
+        等价于
+        border-top-left-radius: 2px 5px;
+        border-top-right-radius: 1px 3px;
+        border-bottom-right-radius: 4px 5px;
+        border-bottom-left-radius: 1px 3px;
+    'border-image'图片边框 [CSS3] 
+      PS: IE支持效果不好,IE11可以支持 
+        使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
+        虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
+      border-image:source slice|width? outset? style?; [简写方式] 
+        source  url,图片资源 
+        slice   图片裁切,上右下左,图像边界向内偏移 
+        width   图片边框宽度,上右下左,图像边界的宽度  
+        outset  在边框外部绘制偏移的量,默认:0  
+        repeat  KW,重复样式 
+          stretch  拉伸,默认值
+          round    铺满 
+          repeat   重复 
+        ★分别定义每条边/角  
+        border-top-img     上边框
+        border-right-img   右边框
+        border-bottom-img  下边框
+        border-left-img    左边框
+        border-top-left-image     左上角
+        border-top-right-image    右上角 
+        border-bottom-left-image  左下角 
+        border-bottom-right-image 右下角 
+        border-corner-image       四个角 
+        Example:
+        border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
+      ★可分别设置的样式:  
+      border-image-source                 图片资源 
+        none  默认值,无背景
+        img   使用绝对或相对 url 地址指定背景图像
+      border-image-slice:(length|%){1,4}  图片裁切 
+        默认:100%  
+        Example:
+        .aoo{
+          border-image-slice: len1 len2 len3 len4;
+          // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
+          // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
+          // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
+          // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
+        }
+      border-image-width:(length|%){1,4}  边框宽度 
+      border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
+      border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
+        kw  keyword可取值如下:
+        stretch  拉伸,默认值
+        repeat   重复
+        round    平铺 
   通用样式 
     length尺寸 
       单位 
@@ -1826,30 +1912,43 @@ Layout,布局
       'Flow'流: 在网页设计中就是指元素标签的排列方式 
       标准流: 网页布局中,排在前面的元素出现在前面,排在后面的元素出现在后面 
       非标准流: 当某个元素脱离了标准流如相对定位、绝对定位等,则称为非标准流 
-    'block'块级元素: 独占一行,默认width为100% 
+    'Block'块级元素: 独占一行,默认width为100% 
       PS: 使元素变成块级元素的display值有'block'、'list-item'、'table'等 
       line-height 属性会增加自身的content的高度 
       块元素中可以包含快元素和行内元素
-    'inline'行内元素: width和height属性无效 
+    'Inline'行内元素: width和height属性无效 
       可使用 line-height 来控制行高,但自身的content、padding尺寸无影响,
       会产生将其他元素支撑的效果或定位自身content的作用,但背景却无法渲染出来.
       行内元素中只能包含行内元素,若包含块元素则起不到包含作用 
       无 margin-top 和 margin-bottom 属性 
-    'inline-block'行内块元素: 同时具有行内元素和块元素的特点 [CSS2.1] 
-    'containing block'包含块: 盒子的大小和位置根据其包含块的矩形边框进行计算 
+    'Inline-Block'行内块元素: 同时具有行内元素和块元素的特点 [CSS2.1] 
+    'Containing Block'包含块: 盒子的大小和位置根据其包含块的矩形边框进行计算 
       Feature: 
         盒子不会受包含块限制,可能会溢出 
         height、top 和 bottom 依据内容块的 height 值进行百分比计算
           若内容块是 static 或 relative且未设置高度,则这些值都会变成 0 
         width、left、right、padding、margin 依据内容块的 width 值进行百分比计算 
       包含块判断: 一元素大小设置百分比时相对的元素就是其包含块
-        static 或 relative 元素,包含块为其最近的块级祖先元素的内容框'content-box' 
+        static/relative 元素,包含块为其最近的块级祖先元素的内容框'content-box' 
         absolute 元素,包含块为最近的非static的祖先元素的填充框'padding-box' 
         fixed 元素、根元素,包含块为视窗
         absolute 或 fixed 时,其包含块也可能是有下列特殊情况的最近的父元素的填充框'padding-box' 
           transform 或 perspective 被设置过或将被设置不为 none 
           filter 被设置或将被设置不为 none 
-    'stacking context'层叠上下文: 元素的三维概念,影响其层叠关系  
+    'Controlling Box'控制框 
+    'Block Box'块框: 块级元素生成 
+      占据一整行,用来包含子box和生成的内容 
+    行内框: 行内元素生成 
+    行内级块框: 行内块元素生成 
+    匿名块框: 块框内生成 
+      块框内只能包含块框或行内框,混杂时,行内元素会被匿名块框包围 
+      Example: 
+        <div>
+          Some text
+          <p>More text</p>
+        </div>
+    匿名行内框: 
+    'Stacking Context'层叠上下文: 元素的三维概念,影响其层叠关系  
       PS: 元素在一条假想的相对于面向视窗或者网页的用户的z轴上延伸 
         元素依据自身属性按照优先级顺序占用层叠上下文的空间 
         当一元素的z-index赋值除auto以外的值,就创建了一独立于其他的层叠上下文的新层叠上下文 
@@ -1867,7 +1966,7 @@ Layout,布局
         position: fixed
         在'will-change'中指定了任意 CSS 属性,即便你没有直接指定这些属性的值
         '-webkit-overflow-scrolling'属性被设置'touch'的元素
-    'stacking level'层叠顺序 
+    'Stacking Level'层叠顺序 
       一个层叠上下文中一共可有的7种层叠等级: 
       1 背景和边框 —— 形成层叠上下文的元素的背景和边框。 层叠上下文中的最低等级。
       2 负z-index值 —— 层叠上下文内有着负z-index值的子元素。
@@ -1876,18 +1975,18 @@ Layout,布局
       5 行内盒 —— 文档流中行内级别非定位子元素。
       6 z-index: 0 —— 定位元素。 这些元素形成了新的层叠上下文。
       7 正z-index值 —— 定位元素。 层叠上下文中的最高等级。
-    FC'formatting context'格式化上下文: 页面中拥有一套渲染规则的渲染区域 
+    FC'Formatting Context'格式化上下文: 页面中拥有一套渲染规则的渲染区域 
       决定了其子元素如何定位,以及与其他元素的相互关系和作用 
-    BFC'block formatting context'块格式化上下文   [CSS2.1] 
+    BFC'Block Formatting Context'块格式化上下文   [CSS2.1] 
       PS: 独立的渲染区域,容器内的子元素不会影响到外面元素,反之亦然 
       生成BFC: 
         根元素 
         float浮动元素 
         overflow不为visible的块级盒子  
-        position为absolute 或fixed 
+        position为 absolute 或 fixed 
         'display'为'inline-block''table-cell''table-caption''flex''inline-flex' 
           display:table也认为可以生成BFC,原因在于Table会默认生成一个匿名的table-cell
-      特点: 
+      Feature:  
         子元素在垂直方向按序放置,且相邻的上下margin会发生重叠
         子元素的左'margin'与包含块的左'border'相触[对于从左往右的格式化,否者相反]
         BFC的区域不会与'float box'重叠
@@ -1900,43 +1999,46 @@ Layout,布局
         .aoo{ float: left; background-color:#b9e4e7; margin-left: 55px; }
         .boo{ background-color:#65c5cc; height: 66px; overflow: hidden; }
         /*使用 overflow: hidden 生成 BFC*/
-    IFC'inline formatting contexts'内联格式化上下文: 仅包含内联元素的块元素 [CSS2.1] 
-      特性
+    IFC'Inline Formatting Contexts'内联格式化上下文: 仅包含内联元素的块元素 [CSS2.1] 
+      Feature: 
         从包含块顶部水平方向排列
         排列情况和浮动与否会改变行盒的高度
         当一个行盒被分割,margin,border,padding都不会再有视觉效果了
-    GFC'gridLayout formatting contexts' [CSS3]
-    FFC'flex formatting context'  [CSS3]
+    GFC'GridLayout Formatting Contexts' [CSS3]
+    FFC'Flex Formatting Context'  [CSS3]
   ◆布局属性 
   Box盒模型: HTML元素都可以看成一个盒子,CSS布局主要通过盒子模型来实现 
     ◆盒子模型的四要素 
     margin  外边距 [margin可为负]  
-      PS: 由于各浏览器的margin默认值不同,通常清零方便操作
+      PS: 由于各浏览器的margin默认值不同,通常清零方便操作 
         详细属性: margin-top margin-right margin-bottom margin-left
-      缩写方法: [同padding缩写方式]
+      DefDec: 
+        margin: kw/len/%;  
+          auto  浏览器计算外边距
+          pixel 长度值
+          %     参考父元素宽度'width' 
+            在默认的 writing-mode:horizontal-tb 和 direction:ltr 的情况下
+        缩写方法: [同padding缩写方式]
         margin:1px 2px 3px 4px; 上 右 下 左 
         margin:10px 20px 30px;  上 右左 下
         margin:10px 20px;       上下 左右 
         margin:10px;            上下左右 
-      auto  浏览器计算外边距
-      pixel 长度值
-      %     参考父元素宽度'width' 
-        在默认的 writing-mode:horizontal-tb 和 direction:ltr 的情况下
-      margin的特点 
-        垂直外边距合并
-          PS:只有普通文档流中块框的垂直外边距才会发生外边距合并,
-            行内框、浮动框或绝对定位之间的外边距不会合并.
-            合并后的外边距的高度等于较大者的外边距的尺寸.
-          在垂直方向,只要有margin相互接触且没有 border 或 padding 隔离,就会发生合并,如:
-            一元素的 margin-bottom 和另一个元素的 margin-top 发生合并.
-            父盒子的 margin-top 和 子盒子的 margin-top 发生合并
-            自身的 margin-top 和 margin-bottom 发生合并
-        对于 inline 元素,margin-top 和 margin-bottom 无效 
-          (inline-block 和 block 元素无影响)
-        margin:0 auto; 使元素在其父盒子中水平居中
-          但该方法无法使元素垂直居中
+      Feature: 
+        margin的特点 
+          垂直外边距合并
+            PS:只有普通文档流中块框的垂直外边距才会发生外边距合并,
+              行内框、浮动框或绝对定位之间的外边距不会合并.
+              合并后的外边距的高度等于较大者的外边距的尺寸.
+            在垂直方向,只要有margin相互接触且没有 border 或 padding 隔离,就会发生合并,如:
+              一元素的 margin-bottom 和另一个元素的 margin-top 发生合并.
+              父盒子的 margin-top 和 子盒子的 margin-top 发生合并
+              自身的 margin-top 和 margin-bottom 发生合并
+          对于 inline 元素,margin-top 和 margin-bottom 无效 
+            (inline-block 和 block 元素无影响)
+          margin:0 auto; 使元素在其父盒子中水平居中
+            但该方法无法使元素垂直居中
     border  边框 
-      'border'边框 
+      DefDec: 
         border: style width? color?; [简写方式] 
           style  边框风格 
           width  边框宽度 
@@ -1983,87 +2085,23 @@ Layout,布局
           每种颜色显示1px的宽度。
           若border的宽度值大于设置的颜色个数,则最后一个颜色作为剩下宽度的颜色;
           Example: -moz-border-bottom-colors: red orange yellow green blue purple ;
-        Example: border:solid 2px red;
-        Accu: 
-          透明边框 
-            #aoo{
-              border: solid rgba(100, 100, 100, 0.2) 10px;
-              background-clip: padding-box;
-              background-color: #ccc;
-              height: 100px;
-              width: 100px;
-            }
-      'border-radius'边框圆角 [CSS3] 
-        PS: 使用 -webkit 和-moz 前缀兼容浏览器,IE9+不加前缀支持 
-          当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
-        border-radius: rX{1,4} / rY{1,4}?; [简写方式]  
-          PS: 水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
-          rX   length|%,水平半径 
-          rY   可选,length|%,上右下左,默认等于水平半径 
-        ★可单独定义的样式 
-        border-top-left-radius: rX rY;      左上圆角 
-        border-top-right-radius: rX rY;     右上圆角 
-        border-bottom-right-radius: rX rY;  右下圆角 
-        border-bottom-left-radius: rX rY;   左下圆角 
-        Example: 
-          border-radius: 2px 1px 4px / 5px 3px;
-          等价于
-          border-top-left-radius: 2px 5px;
-          border-top-right-radius: 1px 3px;
-          border-bottom-right-radius: 4px 5px;
-          border-bottom-left-radius: 1px 3px;
-      'border-image'图片边框 [CSS3] 
-        PS: IE支持效果不好,IE11可以支持 
-          使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
-          虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
-        border-image:source slice{1,4}|width{1,4}? outset? style?; [简写方式] 
-          source  url,图片资源 
-          slice   图片裁切,上右下左,图像边界向内偏移 
-          width   图片边框宽度,上右下左,图像边界的宽度  
-          outset  在边框外部绘制偏移的量,默认:0  
-          repeat  重复样式 
-            stretch  拉伸,默认值
-            round    铺满 
-            repeat   重复 
-          ★分别定义每条边/角  
-          border-top-img     上边框
-          border-right-img   右边框
-          border-bottom-img  下边框
-          border-left-img    左边框
-          border-top-left-image     左上角
-          border-top-right-image    右上角 
-          border-bottom-left-image  左下角 
-          border-bottom-right-image 右下角 
-          border-corner-image       四个角 
-          Example:
-          border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
-        ★可分别设置的样式 
-        border-image-source                 图片资源 
-          none  默认值,无背景
-          img   使用绝对或相对 url 地址指定背景图像
-        border-image-slice:(length|%){1,4}  图片裁切 
-          默认:100%  
-          Example:
-          .aoo{
-            border-image-slice: len1 len2 len3 len4;
-            // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
-            // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
-            // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
-            // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
+      Example: border:solid 2px red;
+      Expand: 
+        border:none 与 border:0 的区别
+          border:0 相当于 border-width:0,
+          浏览器依然对border-width、border-color 进行了渲染占用了内存
+          border:none 实际效果等同于border-style:none,
+          浏览器解析“none”时将不作出渲染动作不会消耗内存
+          IE6、IE7中,border为“none”时,标签button、input边框依然存在
+      Accu: 
+        透明边框 
+          #aoo{
+            border: solid rgba(100, 100, 100, 0.2) 10px;
+            background-clip: padding-box;
+            background-color: #ccc;
+            height: 100px;
+            width: 100px;
           }
-        border-image-width:(length|%){1,4}  边框宽度 
-        border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
-        border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
-          kw  keyword可取值如下:
-          stretch  拉伸,默认值
-          repeat   重复
-          round    平铺 
-      border:none 与 border:0 的区别
-        border:0 相当于 border-width:0,
-        浏览器依然对border-width、border-color 进行了渲染占用了内存
-        border:none 实际效果等同于border-style:none,
-        浏览器解析“none”时将不作出渲染动作不会消耗内存
-        IE6、IE7中,border为“none”时,标签button、input边框依然存在
     padding 内填充 
       PS:属性值不能为负值
       %   参考对象都是父元素的宽度width
@@ -2106,27 +2144,6 @@ Layout,布局
         当三个值都为auto时,两个外边距都会被设置为0,即默认的情况
         正常流中,margin-top或margin-bottom设置为auto,会被重置为0,
         height为auto时,则显示其高度会尽可能的小,
-    ★相关样式 
-    box-sizing 盒模型定义类型 [CSS3]
-      content-box;  默认值,width height 为content的宽、高尺寸
-      border-box;   width height 为border的宽、高尺寸
-    box-shadow 盒子阴影 [CSS3] 
-      box-shadow: lenH lenV blur? spread? color? inset?; 
-        lenH    length,水平偏移距离,可为负值
-        lenV    length,垂直偏移距离,可为负值
-        blur    length,模糊距离,可选
-        spread  length,阴影尺寸,可选
-        color   阴影颜色,可选,默认为黑色  
-        inset/outset 可选,定义内/外部阴影,默认:'outset'外部阴影
-      同时使用多个阴影,之间使用逗号','隔开
-        box-shadow: 10px 20px 3px 5px #6cd5b5 inset ,20px 30px 4px 8px #e9b0b0;
-    overflow 溢出显示方式 
-      PS:规定当内容溢出元素框时发生的事情
-        overflow-x 和 overflow-y 单独指定在水平或者垂直方向上的显示方式
-      hidden   内容被修剪,且隐藏超出的内容
-      scroll   出现水平与垂直的滚动条,超出的内容被滚动显示.
-      auto     根据需要出现水平滚动或者是垂直滚动条,滚动显示超出的内容.
-      visible  默认值,内容不会被修剪,会呈现在元素框之外。
   Float,浮动 
     float: left/right/none; 指定一元素应沿其容器的左/右侧放置 
       PS: 最初是用来实现文字环绕图片的效果; 

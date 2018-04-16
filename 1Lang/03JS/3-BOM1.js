@@ -1420,10 +1420,10 @@ window.fetch(),用来取代XMLHttpRequest的一种新规范 [IE不支持]
         return sheep;
       });
     });    
-Performance,获取到当前页面与性能相关的信息  
+Performance,当前页面与性能相关信息  
   Extend: EventTarget 
   Proto: 
-    .onresourcetimingbufferfull  触发resourcetimingbufferfull事件时调用 
+    .onresourcetimingbufferfull  触发'resourcetimingbufferfull'事件时调用 
     .onwebkitresourcetimingbufferfull 
     .timing  PerformanceTiming,包含各种时间戳,不同的事件会产生不同的时间值 [IE10+] 
       PS: 可全面了解页面在被加载到浏览器的过程中都经历的时间 
@@ -1456,19 +1456,21 @@ Performance,获取到当前页面与性能相关的信息
     .navigation   PerformanceNavigation,与页面导航相关 
     .memory     获取基本内存使用情况 [Chrome的非标准扩展] 
     .now()      DOMHighResTimeStamp,从参考时刻开始经过的毫秒量       
-    .getEntries()      
-    .getEntriesByType() 
-    .getEntriesByName()  
+    .getEntries()  返回一个 PerformanceEntry 对象的列表,基于给定的 filter
+    .getEntriesByType()  返回一个 PerformanceEntry 对象的列表,基于给定的 entry type
+    .getEntriesByName()  返回一个 PerformanceEntry 对象的列表,基于给定的 name 和 entry type
     .clearResourceTimings()  
+      移除所有的 entryType 是 "resource" 的 performance entries,从浏览器的性能数据缓冲区中
     .setResourceTimingBufferSize() 
+      将浏览器的资源 timing 缓冲区的大小设置为 "resource" type performance entry 对象的指定数量    
     .webkitClearResourceTimings() 
     .webkitSetResourceTimingBufferSize() 
-    .mark()   移除给定的mark,从浏览器的性能输入缓冲区中
-    .clearMarks() 
+    .mark()  在浏览器的性能输入缓冲区中创建一个 timestamp,基于给定的 name
+    .clearMarks() 移除给定的 mark,从浏览器的性能输入缓冲区中
     .measure() 
-    .clearMeasures() 
-window.performance 
-  PS: Web计时机制的核心对象,对页面的所有度量信息都包含在该对象中 
+      在浏览器的指定 start mark 和 end mark 间的性能输入缓冲区中创建一个指定的 timestamp
+    .clearMeasures()  移除给定的 measure,从浏览器的性能输入缓冲区中
+  Instance: window.performance  
 PerformanceNavigation,页面导航相关信息 
   Static: 
     .TYPE_NAVIGATE      0 

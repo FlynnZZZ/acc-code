@@ -4,6 +4,91 @@
 ◆核心模块: Node自带模块不用安装即可使用  
   源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
   核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
+url,一个实例对象,用于解析URL 
+  const url = require('url')    // 引入url模块 
+  url.parse(url,bol1,bol2)      // obj,将URL解析为对象[方便后续其他操作]
+    Input: 
+      url       str,传入需要解析的URL字符串  
+      bol1?     是否将'query'字段转换为对象表示,默认: false 
+      bol2?     当URL不全时更智能的识别,默认: false  
+    Output: 返回一对象,属性枚举如下:  
+      // url.parse("https://www.baidu.com?key=val");
+      {          
+        protocol: 'https:',            // str,协议
+        slashes: true,                 // bol,是否有协议的双斜线
+        host: 'www.baidu.com',         // str,ip地址或域名
+        hostname: 'www.baidu.com',     // str,主机名
+        port: null,                    // num,端口,默认:80 显示为null,否则会指明
+        path: '/',                     // 路径
+        pathname: '/',                 // 路径名,
+        search: '?key=val',            // str,查询字符串 
+        query: 'key=val',              // str|obj,查询字符串
+          当第二个参数为true时,则为对象形式 
+        hash: null,                    // hash值,锚点
+        auth: null,                    // 
+        href: 'https://www.baidu.com/' // str,完整超链接
+      } 
+  url.format(    // str,将url对象格式化为url字符串 
+    obj       // url对象 
+    Example: :
+      var obj =url.parse("https://www.baidu.com");
+      url.format(obj); // 'https://www.baidu.com/'
+  )      
+  url.resolve(str1,str2)  // str,拼接为URL 
+    Example: :
+      url.resolve("https://imooc.com","/course/list");
+      // 'https://imooc.com/course/list'
+      
+      url.resolve('/one/two/three', 'four')
+      // '/one/two/four'
+      
+      url.resolve('http://example.com/', '/one')
+      // 'http://example.com/one'
+      
+      url.resolve('http://example.com/one/', 'two')
+      // 'http://example.com/one/two'
+      
+      url.resolve('http://example.com/one', '/two')
+      // 'http://example.com/two'
+querystring,解析URL的查询字符串 
+  var querystring = require("querystring") // 引入querystring模块
+  querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
+    obj  需序列化的对象
+    str1 可选,默认为'&',参数连接符
+    str2 可选,默认为'=',键值分割符
+    Example: :
+      querystring.stringify({
+        name:"Scott",
+        course:["Java","Node"],
+        from:""
+      })
+      // 'name=Scott&course=Java&course=Node&from='
+  querystring.parse(query,link1?,link2?,options?)  将查询字符串解析为对象格式 
+    Input: 
+      query    str,需要解析的字符串
+      link1?   str,可选,键值连接符,默认: '&' 
+        Example:
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      link2?   str,可选,字段连接符,默认: '=' 
+      options? 可选,其他配置  
+    Output: obj  解析成键值对形式的对象
+    Example: 
+      querystring.parse('name=Scott&course=Java&course=Node&from=');
+      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+  querystring.escape(str); 转义为URL可用的字符串
+    Example: : 
+      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
+  querystring.unescape(str); 反转义 
+    Example: :
+      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
+  querystring.unescapeBuffer() 
+  querystring.encode()
+  querystring.decode()
 events,事件模块 
   PS: events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
@@ -204,91 +289,6 @@ stream,流,用于暂存和移动数据[以bufer的形式存在]
         写入完成.
       查看 output.txt 文件的内容:
         菜鸟教程官网地址:www.runoob.com
-url,一个实例对象,用于解析URL 
-  const url = require('url')    // 引入url模块 
-  url.parse(url,bol1,bol2)      // obj,将URL解析为对象[方便后续其他操作]
-    Input: 
-      url       str,传入需要解析的URL字符串  
-      bol1?     是否将'query'字段转换为对象表示,默认: false 
-      bol2?     当URL不全时更智能的识别,默认: false  
-    Output: 返回一对象,属性枚举如下:  
-      // url.parse("https://www.baidu.com?key=val");
-      {          
-        protocol: 'https:',            // str,协议
-        slashes: true,                 // bol,是否有协议的双斜线
-        host: 'www.baidu.com',         // str,ip地址或域名
-        hostname: 'www.baidu.com',     // str,主机名
-        port: null,                    // num,端口,默认:80 显示为null,否则会指明
-        path: '/',                     // 路径
-        pathname: '/',                 // 路径名,
-        search: '?key=val',            // str,查询字符串 
-        query: 'key=val',              // str|obj,查询字符串
-          当第二个参数为true时,则为对象形式 
-        hash: null,                    // hash值,锚点
-        auth: null,                    // 
-        href: 'https://www.baidu.com/' // str,完整超链接
-      } 
-  url.format(    // str,将url对象格式化为url字符串 
-    obj       // url对象 
-    Example: :
-      var obj =url.parse("https://www.baidu.com");
-      url.format(obj); // 'https://www.baidu.com/'
-  )      
-  url.resolve(str1,str2)  // str,拼接为URL 
-    Example: :
-      url.resolve("https://imooc.com","/course/list");
-      // 'https://imooc.com/course/list'
-      
-      url.resolve('/one/two/three', 'four')
-      // '/one/two/four'
-      
-      url.resolve('http://example.com/', '/one')
-      // 'http://example.com/one'
-      
-      url.resolve('http://example.com/one/', 'two')
-      // 'http://example.com/one/two'
-      
-      url.resolve('http://example.com/one', '/two')
-      // 'http://example.com/two'
-querystring,解析URL的查询字符串 
-  var querystring = require("querystring") // 引入querystring模块
-  querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
-    obj  需序列化的对象
-    str1 可选,默认为'&',参数连接符
-    str2 可选,默认为'=',键值分割符
-    Example: :
-      querystring.stringify({
-        name:"Scott",
-        course:["Java","Node"],
-        from:""
-      })
-      // 'name=Scott&course=Java&course=Node&from='
-  querystring.parse(query,link1?,link2?,options?) // obj,将查询字符串解析为对象格式 
-    Input: 
-      query    str,需要解析的字符串
-      link1?   str,可选,键值连接符,默认: '&' 
-        Example:
-        var str = 'name=Scott-course=Java-course=Node-from=';
-        var obj1 = querystring.parse(str);
-        var obj2 = querystring.parse(str,'-');
-        console.log(obj1,'/n',obj2);
-        // { name: 'Scott-course=Java-course=Node-from=' } 
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-      link2?   str,可选,字段连接符,默认: '=' 
-      options? 其他配置 
-    Output: obj  解析成键值对形式的对象
-    Example: 
-      querystring.parse('name=Scott&course=Java&course=Node&from=');
-      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-  querystring.escape(str); 转义为URL可用的字符串
-    Example: : 
-      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
-  querystring.unescape(str); 反转义 
-    Example: :
-      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
-  querystring.unescapeBuffer() 
-  querystring.encode()
-  querystring.decode()
 net,底层的网络通信工具,包含创建服务器/客户端的方法 
   const net = require("net")       // 引入 net模块
   const server = new net.Server()  // 创建服务器 
@@ -404,15 +404,17 @@ http: http服务模块,提供HTTP服务器功能
           type  // str,设置的格式,如: 'utf8'
         ) 
       res    obj,响应 
-        .writeHead( code ,{ <key1>: <val1>, ... } )   // 设置响应头
+        .writeHead(statusCode,headersObj)   设置响应状态码及响应头 
           Input: 
-            code    num,状态码,如 200 
-            key:val 设置响应头信息的对象,如 "Content-Type":"text/plain" 
+            statusCode    num,状态码,如: 200 
+            headersObj    obj,设置响应头信息的对象,格式如下: 
+              {
+                "Content-Type":"text/plain; charset=utf-8" 
+              }
         .write( data ) // 发送响应  
           data   str/binary,发送的响应数据 
-        .end(         // 结束响应 
-          data?  // 可选,str|binary,若存在会将其发送 
-        )   
+        .end(data?)         结束响应并发送信息  
+          data    str|binary,可选,若存在会将其发送 
     Output: server  创建的服务器对象  
   server.listen(port,ip?)              // 服务器监听ip及端口 
     Input: 
@@ -659,17 +661,20 @@ fs,文件系统模块'file system',与文件系统交互
 
         flag传值,r代表读取文件,w代表写文件,a代表追加 
   ) 
-  fs.writeFileSync()   写文件的同步写法 
-  fs.readFile(   // 读取文件内容 
-    <str>      // 读取的文件路径及文件名 
-    ,{         // 可选,配置项 
-      encoding: <str|null> // 编码,默认: null 
-      ,flag: <str>         // 默认:'r'
-    }?     
-    ,function( // 回调函数
-      err     // 读取文件出错时触发的错误对象 
-      ,data   // Buffer,从文件读取的数据 
-    ){ }
+  fs.writeFileSync()   // [同步]写文件 
+  fs.readFile( <path>,<options>?, fn)    // 读取文件内容 
+    Input: 
+      path       str,读取的文件路径及文件名 
+      options    obj,可选,配置项 
+        {         
+          encoding: <str|null> // 编码,默认: null 
+          ,flag: <str>         // 默认:'r'
+        }     
+      function(err,data){ // 回调函数 
+        err     读取文件出错时触发的错误对象 
+        data   buffer,从文件读取的数据 
+      }   
+    Output: 
     Example:
       一个文本文件: text.txt 内容如下:
         line one
@@ -696,7 +701,7 @@ fs,文件系统模块'file system',与文件系统交互
             console.log('utf-8: ', data);
           });
   );  
-  fs.readFileSync()     readFile的同步写法[就是没有回调函数] 
+  fs.readFileSync()     // 同步读文件  
   fs.unlink(path,callback); 删除文件
     Arguments:
       path 字符串,路径及文件名
@@ -1191,19 +1196,20 @@ tls,https的创建
 dns,域名解析 
   PS:
   var dns = require("dns")  // 引入dns模块 
-  .getServers()  // 获取ip 
-  .lookup(host,function(error,ip,ipv){  // 查询网址的IP 
-    host  查询的网址 
-    error 错误对象 
-    ip    查询的ip  
-    ipv   '4'或'6',表示ipv4或ipv6   
-    Example: 
-      const dns = require('dns');
-      const host = 'zhihu.com';
-      dns.lookup(host,(error,ip,ipv) => {
-        console.log(ip,ipv); // 118.178.213.186  4 
-      })
-  })     
+    .getServers()      // 获取ip 
+    .lookup(host,fn)   // 查询网址的IP 
+      Input: 
+        host   str,查询的网址 
+        function(error,ip,ipv){}  
+          error  错误对象 
+          ip     str,查询的ip  
+          ipv    '4'或'6',表示ipv4或ipv6   
+      Example: 
+        const dns = require('dns');
+        const host = 'zhihu.com';
+        dns.lookup(host,(error,ip,ipv) => {
+          console.log(ip,ipv); // 118.178.213.186  4 
+        })
 assert,主要用于断言,如果表达式不符合预期,就抛出一个错误 
   PS:Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
   const assert = require('assert')  // 引入 

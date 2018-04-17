@@ -143,7 +143,6 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
                 
                 success: function() { ... }
               });
-
         Cookie:       // 请求页Cookies  
         ★状态描述 
         Connection:      // 浏览器与服务器间连接的类型 
@@ -177,37 +176,36 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
     响应报文 
       <Protocol>/<version> StatusCode  StatusText // 响应行 
       key1: val1                                  // 可选,响应头 
-        PS: 包含如服务器类型、日期时间、内容类型和长度等信息   
-        Cache-Control    缓存控制 
+        PS: 包含如服务器类型、日期时间、内容类型和长度等信息  
+        Content-Type:            响应MIME及编码  
+          text/html; charset=utf8   HTML文件 
+          application/javascript    JS文件
+        Content-Encoding:        主体编码格式 
+        Content-Length: <num>    响应的大小   
+        Content-Language         解析主体时适用的语言 
+        Content-Base             解析主体中相对URL的基础URL 
+        Content-Location         资源实际位置 
+        Content-MD5              主体的MD5校验和 
+        Content-Range            在整个资源中此实体部分的字节范围  
+        Set-Cookie       设置cookie 
         Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
+        Pragma           早期的随报文传送指示方式
+        Cache-Control    缓存控制 
+        ETag: "4a67-55cfb373dc45b" 主体的实体标记  
         Update:           给出了发送端可能想要升级使用新版本或协议
-        Date             日期,报文创建时间
         Via              显示了报文经过的中间节点（代理、网关）
         Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
         Trailer-Encoding 告诉接收端对报文采用什么编码格式
-        Pragma           早期的随报文传送指示方式
-        Content-Length: <num>   // 响应体的大小  
         Accept-Ranges: bytes
-        Content-Type:      // 响应体MIME 
-          application/javascript
-        Date: Sat, 04 Nov 2017 07:43:44 GMT
-        Etag: "4a67-55cfb373dc45b"
+        Date: Sat, 04 Nov 2017 07:43:44 GMT   日期,报文创建时间
         Keep-Alive: timeout=38
         Last-Modified    实体最后一次修改时间 
           Last-Modified: Thu, 02 Nov 2017 07:48:36 GMT
         Server:         // 服务器软件名称及版本 
           Server: Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30
-        Content-Encoding 主体编码格式 
-        Content-Language 解析主体时适用的语言 
-        Content-Base     解析主体中相对URL的基础URL 
-        Content-Location 资源实际位置 
-        Content-MD5      主体的MD5校验和 
-        Content-Range    在整个资源中此实体部分的字节范围  
-        Set-Cookie       设置cookie 
         Age              响应持续时间 
         Allow            列出了可用的请求方法 
         Location         告诉客户端实在在哪里,用于定向 
-        ETag             主体的实体标记  
         Expires          过期时间  
       // 空行 
       key1: val1                                  // 可选,响应体   

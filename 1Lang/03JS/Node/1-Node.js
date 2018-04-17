@@ -148,7 +148,7 @@ module,'CommonJS'模块化规范
   循环引用,也叫循环依赖,会导致其中一个引入为空 
     方法一: 将需公用的部分提取出来作为一个独立模块 
     方法二: 动态引入,在需要时引入,如在函数内部 
-Command Line Options,命令行参数 
+'Command Line Options'命令行参数 
   -v, --version  // Node版本 
 ★类 
 Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
@@ -180,43 +180,45 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
         // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
         console.log(buf);
     .allocUnsafeSlow(len)  创建指定长度未初始化的Buffer实例 
-    .from(val[,..])  通过其他值Buffer 
-      (arr)  通过一八位字节的数组创建Buffer 
-        // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
-        const buf4 = Buffer.from([1, 2, 3]);
-      (arrBuf[,byteOffset[,length]])  创建一共享内存的Buffer 
-        arrBuf  ArrayBuffer,共享源  
-        byteOffset  开始拷贝的索引,默认:0
-        length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
-        Example: 
-          const arr = new Uint16Array(2);
-          arr[0] = 5000;
-          arr[1] = 4000;
-          const buf = Buffer.from(arr.buffer);
-          // 输出: <Buffer 88 13 a0 0f>
-          console.log(buf);
-          // 与 `arr` 共享内存,改变原始的 Uint16Array 也会改变 Buffer
-          arr[1] = 6000;
-          // 输出: <Buffer 88 13 70 17>
-          console.log(buf);
-      (buf)  返回Buffer的拷贝 
-      (str[,encoding])  
-        str  要编码的字符串 
-        encoding  kw,字符编码,默认:'utf8' 
-          'latin1'  Latin-1 
-          'ascii'   
-          ...
-        Example: 
-          // 创建一个包含 UTF-8 字节 [0x74, 0xc3, 0xa9, 0x73, 0x74] 的 Buffer 
-          const buf5 = Buffer.from('tést');
-          // 创建一个包含 Latin-1 字节 [0x74, 0xe9, 0x73, 0x74] 的 Buffer 
-          const buf6 = Buffer.from('tést', 'latin1');
-    .concat(buflist[,length]); 合并bufer,返回合并后的新buffer对象 
-      buflist 用于合并的buf对象数组列表,如[buf1,buf2,buf3]
-        参数列表只有一个成员,就直接返回该成员
-      length  可选,默认为总长度,指定新buf对象的长度
-        省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
-        因此,显式提供这个参数,能提供运行速度  
+    .from( val )  将其他值使用buffer表示  
+      Input: 参数可分为以下几种形式: 
+        arr         通过一八位字节的数组创建Buffer 
+          // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
+          const buf4 = Buffer.from([1, 2, 3]);
+        arrBuf[,byteOffset[,length]]  创建一共享内存的Buffer 
+          arrBuf  ArrayBuffer,共享源  
+          byteOffset  开始拷贝的索引,默认:0
+          length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
+          Example: 
+            const arr = new Uint16Array(2);
+            arr[0] = 5000;
+            arr[1] = 4000;
+            const buf = Buffer.from(arr.buffer);
+            // 输出: <Buffer 88 13 a0 0f>
+            console.log(buf);
+            // 与 `arr` 共享内存,改变原始的 Uint16Array 也会改变 Buffer
+            arr[1] = 6000;
+            // 输出: <Buffer 88 13 70 17>
+            console.log(buf);
+        buffer      返回Buffer的拷贝 
+        str,encoding?   将字符串转换成buffer格式    
+          str       要编码的字符串 
+          encoding  kw,可选,字符编码,默认:'utf8' 
+            'latin1'  Latin-1 
+            'ascii'   
+            ...
+          Example: 
+            const buf = Buffer.from('test');
+            const buf = Buffer.from('test', 'latin1');
+      Output: buffer,转换后的buffer 
+    .concat(<bufList>,<length>?)   bufer拼接 
+      Input: 
+        bufList   待合并的buf组成的数组,如[buf1,buf2,buf3]
+          参数列表只有一个成员,就直接返回该成员
+        length    num,可选,默认为总长度,指定新buf对象的长度 
+          省略第二个参数时,Node内部会计算出这个值,然后再据此进行合并运算 
+          因此,显式提供这个参数,能提供运行速度  
+      Output: buffer,返回合并后的新buffer对象 
       Example:
         var buf1 = new Buffer('11');
         var buf2 = new Buffer('22');
@@ -257,9 +259,6 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
       arr         数组,数组成员必须是整数值 
         var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
         console.log(hello.toString()); // 'Hello'
-    Buffer.from()  
-    Buffer.alloc()  
-    Buffer.allocUnsafe()  
   Proto: 
     [idx]  下标访问
     .length  读写,bufer对象所占据的内存长度  
@@ -424,20 +423,17 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
   clearTimeout(numId)   清除延时调用  
   setInterval(foo,time) numId,间时调用 
   clearInterval(numId)  清除间时调用 
-★对象&常量 
-global,Node所在的全局环境,类似浏览器的window对象 
-  最根本的作用是作为全局变量的宿主
+★全局变量&对象  
+global,Node所在的全局环境对象 
+  最根本的作用是作为全局变量的宿主,相当于浏览器的window对象 
   global 和 window 的不同 
     在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
       var x = 1;
       // 等同于设置 
       window.x = 1;
-    在模块中不是这样,[REPL环境的行为与浏览器一致] 
-      在模块文件中
-      var x = 1;
-      该变量不是global对象的属性
-      global.x // undefined 
-      因为模块的全局变量都是该模块私有的,其他模块无法取到 
+    NodeJS中 
+      相同模块中,和浏览器表现一致 
+      不同模块中,则不同,因为模块的全局变量都是该模块私有的,其他模块无法取到  
 process,用于描述当前Node进程状态  
   PS: 一个全局对象,表示Node所处的当前进程,
     允许开发者与该进程互动,提供了一个与操作系统的简单接口
@@ -575,115 +571,7 @@ __dirname  当前执行脚本所在的目录
     /web/com/runoob/nodejs
 Date,时间类 
 console,用于提供控制台标准输出[详见浏览器调试] 
-操作总结 
-  GET/POST 请求信息获取  
-    PS:表单提交到服务器一般使用 GET/POST 请求
-    获取 GET 请求内容 
-      PS:由于GET请求直接被嵌入在路径中,URL是完整的请求路径,包括了?后面的部分,
-        因此可手动解析后面的内容作为GET请求的参数 
-      Example:
-        var http = require('http');
-        var url = require('url');
-        var util = require('util');
-        http.createServer(function(req, res){
-          res.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
-          res.end(util.inspect(url.parse(req.url, true)));
-        }).listen(3000);
-        在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
-        网页显示:
-        Url {
-          protocol: null,
-          slashes: null,
-          auth: null,
-          host: null,
-          port: null,
-          hostname: null,
-          hash: null,
-          search: '?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
-          query: { name: '菜鸟教程', url: 'www.runoob.com' },
-          pathname: '/user',
-          path: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com',
-          href: '/user?name=%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B&url=www.runoob.com' 
-        }
-      获取 URL 的参数
-        使用 url.parse 方法来解析 URL 中的参数
-        var http = require('http');
-        var url = require('url');
-        var util = require('util');
-        http.createServer(function(req, res){
-          res.writeHead(200, {'Content-Type': 'text/plain'});
-          // 解析 url 参数
-          var params = url.parse(req.url, true).query;
-          res.write("网站名:" + params.name);
-          res.write("\n");
-          res.write("网站 URL:" + params.url);
-          res.end();
-        }).listen(3000);
-        在浏览器中访问 'http://localhost:3000/user?name=菜鸟教程&url=www.runoob.com' 
-        返回结果:
-    获取 POST 请求内容 
-      PS:POST 请求的内容全部的都在请求体中,http.ServerRequest 并没有一个属性内容为请求体,
-        原因是等待请求体传输可能是一件耗时的工作 
-        比如上传文件,而很多时候我们可能并不需要理会请求体的内容,
-        恶意的POST请求会大大消耗服务器的资源,
-        所有nodejs默认是不会解析请求体的,当需要的时候,需要手动来做 
-      基本语法结构 
-        var http = require('http');
-        var querystring = require('querystring');
-        http.createServer(function(req, res){
-          // 定义了一个post变量,用于暂存请求体的信息
-          var post = '';     
-          
-          // 通过req的data事件监听函数,每当接受到请求体的数据,就累加到post变量中
-          req.on('data', function(chunk){    
-            post += chunk;
-          });
-          
-          // 在end事件触发后,通过querystring.parse将post解析为真正的POST请求格式,然后向客户端返回 
-          req.on('end', function(){    
-            post = querystring.parse(post);
-            res.end(util.inspect(post));
-          });
-        }).listen(3000);
-      Example:
-        表单通过 POST 提交并输出数据:
-        var http = require('http');
-        var querystring = require('querystring');
-        var postHTML = 
-        '<html><head><meta charset="utf-8"><title>菜鸟教程 Node.js 实例</title></head>' +
-        '<body>' +
-        '<form method="post">' +
-        '网站名: <input name="name"><br>' +
-        '网站 URL: <input name="url"><br>' +
-        '<input type="submit">' +
-        '</form>' +
-        '</body></html>';
-        http.createServer(function (req, res) {
-          var body = "";
-          req.on('data', function (chunk) {
-            body += chunk;
-          });
-          req.on('end', function () {
-            // 解析参数
-            body = querystring.parse(body);
-            // 设置响应头部信息及编码
-            res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-            
-            if(body.name && body.url) { // 输出提交的数据
-              res.write("网站名:" + body.name);
-              res.write("<br>");
-              res.write("网站 URL:" + body.url);
-            } 
-            else {  // 输出表单
-              res.write(postHTML);
-            }
-            res.end();
-          });
-        }).listen(3000);
-  Cookie 操作 
-    写入cookie 
-      在响应头中设定 'Set-Cookie' = 'xx=xxx'
-Question&Suggestion: 
+Q&A: 
 --------------------------------------------------------------------------------
 'Representational State Transfer'RESTful API: 表述性状态传递,一种软件架构风格  
   PS: 满足这些架构约束条件和原则的应用程序或设计就是RESTful 
@@ -896,8 +784,6 @@ Question&Suggestion:
         profession: 'clerk',
         id: 3 } 
       }  
-其他相关 
-  electron 开发桌面程序 
 ----------------------------------------------------------------------以下待整理
 
 

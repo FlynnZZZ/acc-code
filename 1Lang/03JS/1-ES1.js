@@ -687,59 +687,12 @@ const,定义块级常量[ES6]
     obj.constructor           查询对象的构造函数 
     'duck type' 鸭子类型,根据其表现来确定其身份 
 class,类,基于原型的实现的封装[ES6] 
-  class className {   // 创建类 
-    PS: 类内部定义的方法都是不可枚举的;类和模块内部默认采取严格模式; 
+  class className {}     创建类 
+    PS: 类名后面的括号{}里面的内容称之为类体  
+    Feature: 
+      类内部定义的方法都是不可枚举的;
+      类和模块内部默认采取严格模式; 
       class内部不可定义原型属性和静态属性;
-      类名后面的括号{}里面的内容称之为类体 
-    // 类体中可能出现的几种形式 
-    constructor(){  // 构造方法,声明实例属性/方法 
-      PS: 实例化时,会调用此方法来初始化实例对象;
-        若无'constructor'方法,执行时会使用一个空的constructor方法 
-        具有唯一性,一个类体不能含有多个constructor构造方法 
-      // 内部的 this 表示实例对象;  
-      this.aoo = 1
-      this.foo = function(){ }
-    }    
-    foo(){          // 声明原型方法  
-      // 内部的 this 表示实例对象;  
-      Expand: 
-        [val] () {}  属性名可使用表达式 
-          var  aoo = 'sayHello';
-          class Clas{
-            [aoo] () {
-              console.log('hello');
-            }
-          }
-          var clas = new Clas();
-          clas.sayHello(); // 1
-    }           
-    static foo(){   // 声明静态方法  
-      Example: 
-        class Clas {
-          static foo(){
-            console.log('静态方法');
-          }
-        }
-        Clas.foo();  // 静态方法
-    }    
-    get foo(){      // 取值函数 
-      return xx
-    }  
-    set foo(){      // 存值函数  
-      Example: 
-        使用get和set关键字,对某个属性设置存值函数和取值函数 
-        class MyClass {
-          get prop() {
-            return 'getter';
-          }
-          set prop(value) {
-            console.log("setter:" + value);
-          }
-        }
-        var inst = new MyClass();
-        inst.prop = 123; // setter: 123
-        inst.prop ;      // 'getter'
-    }  
     Example: 
       ES5 : 
       var Animal = function(name){
@@ -764,7 +717,53 @@ class,类,基于原型的实现的封装[ES6]
       }
       const animal = new Animal("cat");
       animal.speak();    //I am cat
-  } 
+  类体中可能出现的几种形式:  
+  constructor(){}   构造方法,声明实例属性/方法 
+    PS: 实例化时,会调用此方法来初始化实例对象; 
+      若无'constructor'方法,执行时会使用一个空的constructor方法 
+      具有唯一性,一个类体不能含有多个constructor构造方法 
+    // 内部的 this 表示实例对象;  
+    this.aoo = 1
+    this.foo = function(){ }
+  foo(){}           声明原型方法  
+    // 内部的 this 表示实例对象;  
+    Expand: 
+      [val] () {}  属性名可使用表达式 
+        var  aoo = 'sayHello';
+        class Clas{
+          [aoo] () {
+            console.log('hello');
+          }
+        }
+        var clas = new Clas();
+        clas.sayHello(); // 1
+  static foo(){}    声明静态方法  
+    函数内 this 表示该类本身 
+      this.name   str,类名 
+    Example: 
+      class Clas {
+        static foo(){
+          console.log('静态方法');
+        }
+      }
+      Clas.foo();  // 静态方法
+  get foo(){        // 取值函数 
+    return xx
+  }  
+  set foo(){}       // 存值函数   
+    Example: 
+      使用get和set关键字,对某个属性设置存值函数和取值函数 
+      class MyClass {
+        get prop() {
+          return 'getter';
+        }
+        set prop(value) {
+          console.log("setter:" + value);
+        }
+      }
+      var inst = new MyClass();
+      inst.prop = 123; // setter: 123
+      inst.prop ;      // 'getter'
   class Child extends Parent {} 继承全部静态方法、实例属性/方法,选择性继承原型方法  
     Example: 
       class Animal { 
@@ -793,45 +792,45 @@ class,类,基于原型的实现的封装[ES6]
       var child = new Child();
       child instanceof Child ; // true
       child instanceof Parent; // true
-    super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
-      PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
-      若子类未显式定义'constructor',则下面的代码将被默认添加 
-        constructor(...args){
-          super(...args)
+  super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
+    PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+    若子类未显式定义'constructor',则下面的代码将被默认添加 
+      constructor(...args){
+        super(...args)
+      }
+    super()  子类的'constructor'构造函数中调用 
+      子类的constructor方法必须调用super方法,否则不能新建实例 
+      因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
+      只有调用了super方法后,才可使用this,否则报错;
+    super.xx 父类中的静态方法/原型方法[根据调用场合而不同] 
+      子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
+        但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+      子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
+        但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+      子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
+      class Foo{
+        static fooSay(){
+          console.log('foo say');
         }
-      super()  子类的'constructor'构造函数中调用 
-        子类的constructor方法必须调用super方法,否则不能新建实例 
-        因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
-        只有调用了super方法后,才可使用this,否则报错;
-      super.xx 父类中的静态方法或原型方法 
-        子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
-          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
-        子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
-          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
-        子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
-        class Foo{
-          static fooSay(){
-            console.log('foo say');
-          }
+      }
+      class Bar extends Foo{
+        sing(){
+          // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
+          console.log('hello');
         }
-        class Bar extends Foo{
-          sing(){
-            // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
-            console.log('hello');
-          }
-          static barSay(){
-            super.fooSay();
-            console.log('bar say')
-          }
+        static barSay(){
+          super.fooSay();
+          console.log('bar say')
         }
-        Bar.fooSay() // foo say 
-        Bar.barSay() // foo say   bar say 
-    ES5继承和ES6继承的区别 
-      在ES5中,继承实质上是子类先创建属于自己的this,
-      然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
-      或者 this.__proto__ [即Child.prototype = new Parent()]上;
-      而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
-  inst = new Clas(arg) 创建实例 
+      }
+      Bar.fooSay() // foo say 
+      Bar.barSay() // foo say   bar say 
+  ES5继承和ES6继承的区别 
+    在ES5中,继承实质上是子类先创建属于自己的this,
+    然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
+    或者 this.__proto__ [即Child.prototype = new Parent()]上;
+    而在ES6中,则是先创建父类的实例对象this,然后再用子类的构造函数修改this;
+  var inst = new Clas(arg) 创建实例 
     PS: 创建实例时会自动执行类体中的'constructor'方法 
     inst.constructor             创建该实例的类 
     inst.constructor.prototype   该实例的原型对象 

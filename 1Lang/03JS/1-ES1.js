@@ -450,11 +450,38 @@ const,定义块级常量[ES6]
     obj.<key>() 方法调用 
   创建对象: 'class'类,语言提供的自定义数据类型的机制,用于创建对象 
     PS: 类就是对象的数据类型,对象就是类的具象化 
-    obj = {}  字面量创建对象 
-      var box = null  // 初始化对象
-      var obj = {}    // 空对象,没有任何属性的对象
-      var obj = {key1:val1,...}   // 名值对间使用逗号隔开
-    obj = new Object(any/expr) 构造函数创建对象 
+    var obj = {}  字面量创建对象 
+      {     
+        key1: val1      
+        ,...          // 名值对间使用逗号隔开
+        // getter/setter 用以创建伪属性,不可在具有真实值的属性上同时拥有getter/setter 
+        ,get key1() { return val; }   // 取值函数 
+          key1   可使用[expr]表达式的返回值[ES2015] 
+            var expr = 'foo';
+            var obj = {
+              get [expr]() { return 'bar'; }
+            };
+            console.log(obj.foo); // "bar"
+          this  表示该对象 
+          可通过 delete 操作符删除 getter 
+            delete obj.key1;
+          延时执行: 在访问前不会计算属性的值 
+        ,set key1() {}                // 存值函数 
+          key1  可使用[expr]表达式的返回值[ES2015] 
+            var expr = 'foo';
+            var obj = {
+              set [expr](val) { console.log(val); }
+            };
+            obj.foo = 1 // 1 
+          this  表示当前对象  
+          可用delete操作来移除 
+            delete obj.key1;
+        ,...
+      }   
+      Example: 
+        var obj = {}    // 空对象,没有任何属性的对象
+        var box = null  // 初始化对象
+    var obj = new Object(any/expr) 构造函数创建对象 
       PS: 若无参数可省略括号 new Object 但不推荐使用
       Example: 
       var obj1 = new Object(2); // Object类型,值是2
@@ -463,7 +490,7 @@ const,定义块级常量[ES6]
       var obj2 = {a:1} 
       console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
       console.log(new Object({x:1}));  // Object {x : 1} 
-    obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
+    var obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
       proto   创建对象的原型对象  
         console.log(Object.create(null)); // {},'纯净的空对象',没有原型 
         Object.create(Object.prototype);  // {} ,一个空对象
@@ -484,7 +511,7 @@ const,定义块级常量[ES6]
           }
         });
     仿造类的实现方式:
-    obj = foo()  工厂模式: 创建一对象并返回 
+    var obj = foo()  工厂模式: 创建一对象并返回 
       PS: 工厂模式使软件领域一种广为人知的设计模式 
       function createObject(name,age){    // 创建工厂函数 
         var obj = new Object();           //创建对象
@@ -498,7 +525,7 @@ const,定义块级常量[ES6]
       var aoo = createObject("lee",100);       //创建第一个对象
       aoo.run();    // "lee100运行中"
       缺点: 无法继承; 无法识别对象的类型 
-    obj = new Foo() 自定义构构造函数[类]实例化对象 
+    var obj = new Foo() 自定义构构造函数[类]实例化对象 
       混合的构造函数: 构造函数+原型对象  
         构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
         Example: 
@@ -717,53 +744,62 @@ class,类,基于原型的实现的封装[ES6]
       }
       const animal = new Animal("cat");
       animal.speak();    //I am cat
-  类体中可能出现的几种形式:  
-  constructor(){}   构造方法,声明实例属性/方法 
-    PS: 实例化时,会调用此方法来初始化实例对象; 
-      若无'constructor'方法,执行时会使用一个空的constructor方法 
-      具有唯一性,一个类体不能含有多个constructor构造方法 
-    // 内部的 this 表示实例对象;  
-    this.aoo = 1
-    this.foo = function(){ }
-  foo(){}           声明原型方法  
-    // 内部的 this 表示实例对象;  
-    Expand: 
-      [val] () {}  属性名可使用表达式 
-        var  aoo = 'sayHello';
-        class Clas{
-          [aoo] () {
-            console.log('hello');
+    类体中可能出现的几种形式:  
+    constructor(){}   构造方法,声明实例属性/方法 
+      PS: 实例化时,会调用此方法来初始化实例对象; 
+        若无'constructor'方法,执行时会使用一个空的constructor方法 
+        具有唯一性,一个类体不能含有多个constructor构造方法 
+      // 内部的 this 表示实例对象;  
+      this.aoo = 1
+      this.foo = function(){ }
+    foo(){}           声明原型方法  
+      // 内部的 this 表示实例对象;  
+      Expand: 
+        [val] () {}  属性名可使用表达式 
+          var  aoo = 'sayHello';
+          class Clas{
+            [aoo] () {
+              console.log('hello');
+            }
+          }
+          var clas = new Clas();
+          clas.sayHello(); // 1
+    prop = val        定义原型属性,暂不支持,提案中 
+      可使用 className.prototype.prop = val 
+    static foo(){}    声明静态方法  
+      函数内 this 表示该类本身 
+        this.name   str,类名 
+      Example: 
+        class Clas {
+          static foo(){
+            console.log('静态方法');
           }
         }
-        var clas = new Clas();
-        clas.sayHello(); // 1
-  static foo(){}    声明静态方法  
-    函数内 this 表示该类本身 
-      this.name   str,类名 
-    Example: 
-      class Clas {
-        static foo(){
-          console.log('静态方法');
+        Clas.foo();  // 静态方法
+    static prop = val 定义静态属性,展不支持,提案中 
+      可使用 className.prop1 = val 来直接定义 
+    get prop1(){ return val }  取值函数,访问实例的该属性时返回指定值  
+      // this   表示实例 
+    set prop1(arg){}           存值函数,设置实例的该属性时进行回调  
+      // this  表示实例 
+      Example: 
+        使用get和set关键字,对某个属性设置存值函数和取值函数 
+        class MyClass {
+          constructor(val){
+            this.aoo = val 
+          }
+          get prop() {
+            console.log('get');
+            return this.aoo;
+          }
+          set prop(val) {
+            console.log('set',val);
+            this.aoo = val 
+          }
         }
-      }
-      Clas.foo();  // 静态方法
-  get foo(){        // 取值函数 
-    return xx
-  }  
-  set foo(){}       // 存值函数   
-    Example: 
-      使用get和set关键字,对某个属性设置存值函数和取值函数 
-      class MyClass {
-        get prop() {
-          return 'getter';
-        }
-        set prop(value) {
-          console.log("setter:" + value);
-        }
-      }
-      var inst = new MyClass();
-      inst.prop = 123; // setter: 123
-      inst.prop ;      // 'getter'
+        var inst = new MyClass();
+        inst.prop = 123; // set 123 
+        inst.prop ;      // get 
   class Child extends Parent {} 继承全部静态方法、实例属性/方法,选择性继承原型方法  
     Example: 
       class Animal { 
@@ -792,39 +828,39 @@ class,类,基于原型的实现的封装[ES6]
       var child = new Child();
       child instanceof Child ; // true
       child instanceof Parent; // true
-  super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
-    PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
-    若子类未显式定义'constructor',则下面的代码将被默认添加 
-      constructor(...args){
-        super(...args)
-      }
-    super()  子类的'constructor'构造函数中调用 
-      子类的constructor方法必须调用super方法,否则不能新建实例 
-      因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
-      只有调用了super方法后,才可使用this,否则报错;
-    super.xx 父类中的静态方法/原型方法[根据调用场合而不同] 
-      子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
-        但可使用 '父类名.方法()' 的方式调用父类的静态方法 
-      子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
-        但可使用 '父类名.方法()' 的方式调用父类的静态方法 
-      子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
-      class Foo{
-        static fooSay(){
-          console.log('foo say');
+    super 关键字,在子类中进行调用父类中的构造方法,从而继承实例属性/方法  
+      PS: 由于对象总是继承于其它对象,所以可以在ES6的任何一个对象中使用super关键字 
+      若子类未显式定义'constructor',则下面的代码将被默认添加 
+        constructor(...args){
+          super(...args)
         }
-      }
-      class Bar extends Foo{
-        sing(){
-          // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
-          console.log('hello');
+      super()  子类的'constructor'构造函数中调用 
+        子类的constructor方法必须调用super方法,否则不能新建实例 
+        因为子类没有属于自己的this对象,而是继承了父类的this对象而对其进行加工 
+        只有调用了super方法后,才可使用this,否则报错;
+      super.xx 父类中的静态方法/原型方法[根据调用场合而不同] 
+        子类的构造方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的原型方法中,只能调用父类的原型方法,而不能调用静态方法 
+          但可使用 '父类名.方法()' 的方式调用父类的静态方法 
+        子类的静态方法中,只能调用父类的静态方法,而不能调用原型方法  
+        class Foo{
+          static fooSay(){
+            console.log('foo say');
+          }
         }
-        static barSay(){
-          super.fooSay();
-          console.log('bar say')
+        class Bar extends Foo{
+          sing(){
+            // super.fooSay(); // 报错,因为 super.fooSay() 是父类的静态方法 
+            console.log('hello');
+          }
+          static barSay(){
+            super.fooSay();
+            console.log('bar say')
+          }
         }
-      }
-      Bar.fooSay() // foo say 
-      Bar.barSay() // foo say   bar say 
+        Bar.fooSay() // foo say 
+        Bar.barSay() // foo say   bar say 
   ES5继承和ES6继承的区别 
     在ES5中,继承实质上是子类先创建属于自己的this,
     然后再将父类的方法添加到this [也就是使用 Parent.apply(this) 的方式],
@@ -1319,7 +1355,7 @@ class,类,基于原型的实现的封装[ES6]
           }
           demo({});
     'Spread'扩展运算符: 把数组解开成单独的值[ES6] 
-      PS:除了用在rest参数中,还有其他用途
+      PS: 除了用在rest参数中,还有其他用途
       结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
         function sum(a,b) {
           return  a+b ;

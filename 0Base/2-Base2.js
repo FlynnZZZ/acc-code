@@ -175,6 +175,7 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         GET请求无请求体,信息放在URL中 
     响应报文 
       <Protocol>/<version> StatusCode  StatusText // 响应行 
+        当状态码为: 302 时,浏览器会自动重定向到 头部字段 Location: <url> 指定的地址 
       key1: val1                                  // 可选,响应头 
         PS: 包含如服务器类型、日期时间、内容类型和长度等信息  
         Content-Type:            响应MIME及编码  

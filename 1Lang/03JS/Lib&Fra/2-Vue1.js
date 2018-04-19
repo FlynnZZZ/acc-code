@@ -787,7 +787,7 @@ Question:
     el : '#app'  // 挂载点方式1 
     ,router : routerMap    // 注册 
   }) // .$mount('#app') // 挂载点方式2 
-router = new VueRouter({  // 路由实例'router instance'  
+router = new VueRouter({  // 路由实例 
   routes: [ // 路由映射表 
     {   // 一个路由对象,也叫一个路由记录 
       path: str  // 定义地址URL  
@@ -1003,200 +1003,216 @@ router = new VueRouter({  // 路由实例'router instance'
     PS: 用于覆盖默认行为 
   }
 })  
-标签 
-  <router-view> // 渲染路径匹配到的视图组件 
-    PS: 在挂载点范围内都可以 [?] 
-    name="str"  // 渲染对应的路由配置中components下的相应组件,默认:"default"  
-    配合<transition></transition>进行视图过渡效果 
-    配合<keep-alive></keep-alive>进行缓存 
-    如果两个结合一起用,要确保在内层使用<keep-alive> 
-      <transition>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </transition>
-  <router-link> // 路由导航: 在页面中指定跳转的链接 
-    PS: <router-link>默认会被渲染成一个<a>标签 
-    to="str/obj"  // 表示目标路由的链接 
-      PS: 当被点击后,内部会立刻把 to 的值传到 router.push()
-      str   一个字符串
-        "aoo"    // 相当于'./aoo' 
-        "/aoo"   // 相对于根目录  
-        <router-link to="home">Home</router-link>
-        <router-link :to="'home'">Home</router-link>
-      obj   描述目标位置的对象‹需在动态绑定状态下使用› 
-        {
-          path: <str>    // 可选,指定跳转的路径 
-            <router-link :to="{ path: 'home' }">Home</router-link>
-          ,name: <str>   // 可选,指定命名的路由 
-            <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
-          ,params: <obj> // 可选, 
-          ,query: <obj>  // 可选,带查询参数 
-            // <!-- 带查询参数,下面的结果为 /register?plan=private -->
-            <router-link :to="{ path: 'register', query: { plan: 'private' }}">Register</router-link>
-        }
-    tag="str"   //指定<router-link>渲染成的标签,默认:'a' 
-      其他的如如'div'、'li'等 
-    replace="bol"  // 导航后是否留下history记录,默认:false  
-      设置replace后,当点击时,会调用 router.replace() 而不是 router.push(),
-      导航后不会留下 history 记录 
-      <router-link :to="{ path: '/abc'}" replace></router-link>
-    append="bol"   // 是否在当前跳转前加上该页路径,默认:false  
-      从'/a'导航到一个相对路径'b',若未配置append,则路径为'/b',若配了,则为'/a/b' 
-    exact="bol"    // 激活类和路径是否使用精确匹配 
-      默认:false,激活使用全包含匹配 
-      当为true时,若路径为'/',所有的激活类将被匹配到 
-    active-class="str"        // 路径匹配时使用的CSS类名 
-      默认: "router-link-active" 
-        对应的路由匹配成功,"router-link-active"class将自动添加  
-      默认值可通过路由的构造选项 linkActiveClass 来全局配置 
-    exact-active-class="str"  // 路径精确匹配时使用的CSS类名 ['2.5.0+'] 
-      默认值: "router-link-exact-active"
-      默认值可通过路由构造函数选项 linkExactActiveClass 进行全局配置 
-    event="str/strArr"  // 声明可用来触发导航的事件,默认:'click' '2.1.0+'
-  ◆配合使用的组件 
-  <transition></transition> 实现过渡动画效果 
-  <keep-alive></keep-alive> 缓存,加快路由切换速度 
-API 
-  ◆对组件注入的属性/方法  
-  vm.$router // router实例对象  
-    .app   obj,挂载路由的Vue根实例 
-    .mode  str,路由使用的模式 
-    .currentRoute  Route,当前路由对应的路由信息对象 
-    .getMatchedComponents(location?)    // 返回目标位置或当前路由匹配的组件数组 
-      是数组的定义/构造类,不是实例,
-      通常在服务端渲染的数据预加载时时候。
-    .resolve(location,current?,append?) // 解析目标位置,返回对象形式的信息  '2.1.0+'
-      PS: 解析目标位置[格式同<router-link>的'to'] 
-      current 当前默认的路由 
-      append  允许在 current 路由上附加路径,如同 router-link 
-      返回包含如下属性的对象： {
-        location: Location;
-        route: Route;
-        href: string;
+◆标签 
+<router-view> // 渲染路径匹配到的视图组件 
+  PS: 在挂载点范围内都可以 [?] 
+  name="str"  // 渲染对应的路由配置中components下的相应组件,默认:"default"  
+  配合<transition></transition>进行视图过渡效果 
+  配合<keep-alive></keep-alive>进行缓存 
+  如果两个结合一起用,要确保在内层使用<keep-alive> 
+    <transition>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
+<router-link> // 路由导航: 在页面中指定跳转的链接 
+  PS: <router-link>默认会被渲染成一个<a>标签 
+  to="str/obj"  // 表示目标路由的链接 
+    PS: 当被点击后,内部会立刻把 to 的值传到 router.push()
+    str   一个字符串
+      "aoo"    // 相当于'./aoo' 
+      "/aoo"   // 相对于根目录  
+      <router-link to="home">Home</router-link>
+      <router-link :to="'home'">Home</router-link>
+    obj   描述目标位置的对象‹需在动态绑定状态下使用› 
+      {
+        path: <str>    // 可选,指定跳转的路径 
+          <router-link :to="{ path: 'home' }">Home</router-link>
+        ,name: <str>   // 可选,指定命名的路由 
+          <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+        ,params: <obj> // 可选, 
+        ,query: <obj>  // 可选,带查询参数 
+          // <!-- 带查询参数,下面的结果为 /register?plan=private -->
+          <router-link :to="{ path: 'register', query: { plan: 'private' }}">Register</router-link>
       }
-    .addRoutes(routes)  // 动态添加更多的路由规则 '2.2.0+' 
-      参数必须是一个符合 routes 选项要求的数组。
-    .onReady(callback,errorCallback?)  //  '2.2.0+'
-      此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
-      该方法把一个回调排队,在路由完成初始导航时调用,
-      这意味着它可以解析所有的异步进入钩子和路由初始化相关联的异步组件。
-      这可以有效确保服务端渲染时服务端和客户端输出的一致。
-      第二个参数 errorCallback 只在 2.4+ 支持。
-      它会在初始化路由解析运行出错 (比如解析一个异步组件失败) 时被调用。
-    .onError(callback) // 路由导航过程中出错时被调用 '2.4.0+'
-      被调用的错误必须是下列情形中的一种：
-      错误在一个路由守卫函数中被同步抛出；
-      错误在一个路由守卫函数中通过调用 next(err) 的方式异步捕获并处理；
-      渲染一个路由的过程中,需要尝试解析一个异步组件时发生错误。
-    ★编程式的导航: 对应<router-link>的导航方式,通过JS代码来实现 
-      PS: vue-router的导航方法'push''replace''go'效仿 window.history API 
-        但其在各类路由模式 history、 hash 和 abstract 下表现一致
-        window.history.pushState、 
-        window.history.replaceState 
-        window.history.go
-    .push(location,onComplete?,onAbort?)  // 相当于<router-link :to=""> 
-      PS: 向history栈添加一新的记录,并跳转,浏览器后退按钮,则回到之前的URL 
-        当点击<router-link>时,这个方法会在内部调用 
-      location    str/obj,路径 
-        str,跳转字符串路径 
-        obj,描述地址的对象 
-          同时使用'path'和'params','params'不生效 
-            同样的规则也适用于 <router-link> 组件的 to 属性 
-            // 这里的 params 不生效
-            router.push({ path: '/user', params: { userId: 123 }}) 
-            方法一: 提供路由的'name'来代替使用'path' 
-              router.push({ name: 'user', params: { userId:123 }}) 
-            方法二: 提供完整的带有参数的'path'  
-              router.push({ path: `/user/${userId}` }) // -> /user/123
-      onComplete = function(){ // 可选,导航成功完成触发 ' 2.2.0+' 
-        PS: 所有的异步钩子被解析之后触发 
-      }
-      onAbort = function(){    // 可选,导航终止时触发 ' 2.2.0+' 
-        PS: 导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由触发  
-      }
-    .replace(location,onComplete?,onAbort?) // 相当于 <router-link :to="" replace> 
-      PS: 替换掉当前的history记录  
-    .go(<num>) // 类似 window.history.go(num) 
-      PS: 在history记录中向前多少步 
-      num  整数,可为负数  
-      当history记录不够用时,则不会操作 
-        routerMap.go(-100) 
-        routerMap.go(100)  
-      Example:
-      routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
-      routerMap.go(-1)   // 后退一步记录,等同于 history.back()
-      routerMap.go(3)    // 前进 3 步记录
-    .back()    
-    .forward()  // 动态的导航到一个新url 
-    ★全局守卫/钩子 
-    .beforeEach(function(to,from,next){  // 全局导航前置守卫 
-      PS: 路由跳转时,调用全局前置守卫,在所有守卫 resolve 完前,路由导航一直处于等待中 
-      to     obj,即将要进入的目标 
-      from   obj,当前导航正要离开的路由 
-      next   foo,需调用该方法来'resolve'该钩子,执行效果依赖'next'方法的调用参数 
-        确保要调用'next'方法,否则钩子就不会被'resolved' 
-        next()  进行管道中的下一个钩子
-          如果全部钩子执行完了,则导航的状态就是'confirmed'确认的 
-        next(false)  中断当前的导航
-          如果浏览器的URL改变了[可能是用户手动或者浏览器后退按钮],
-          那么URL地址会重置到'from'路由对应的地址 
-        next('/') / next({ path: '/' }) 跳转到一个不同的地址 
-          当前的导航被中断,然后进行一个新的导航 
-        next(error)  '2.4.0+' 
-          若参数为一 Error 实例,则导航会被终止
-          且该错误会被传递给 router.onError() 注册过的回调 
-      参数或查询的改变并不会触发导航守卫,需使用'beforeRouteUpdate'或watch $route 
-    }) 
-    .beforeResolve(function(to,from,next){  // 全局导航解析守卫 '2.5.0+' 
-      PS: 导航被确认前,所有组件内守卫和异步路由组件被解析后调用 
-        此时异步组件已经加载完成  
-    })
-    .afterEach(function(to,from){  // 全局后置钩子 
-      // 不会接受 next 函数也不会改变导航本身 
-    }) 
-  vm.$route  // 路由信息对象,当前激活的路由的状态信息  
-    PS: 不可变的'immutable',每次成功的导航后都会产生一个新的对象 
-    .name      str,当前路由的名称,如果有的话    
-    .fullPath  str,完成解析后的URL,包含查询参数和hash的完整路径 
-    .path      str,对应当前路由的路径,总是解析为绝对路径,如 "/foo/bar" 
-    .hash      str,当前路由的hash值[包括"#"],若无hash值,则为空字符串 
-    .params   obj,动态路由匹配的参数信息对象,如果无路由参数,则为空对象  
-      包含了'动态片段'和'全匹配片段', 
-      在HTML中可直接使用 {{$route.params.xx}} 来取匹配到的地址参数 
-      在一个路由中设置多段路径参数 
-        模式              匹配路径         $route.params
-        '/a/:aoo'         '/a/bar'        { aoo: 'bar' }
-        '/a/:aoo/b/:boo'  '/a/bar/b/123'  { aoo: 'bar', boo: 123 }
-    .query    obj,查询参数信息对象,若无查询参数,则为空对象 
-    .matched  arr,包含当前路由的所有嵌套路径片段的路由记录 
-      PS: 路由记录就是 routes 配置数组中的对象副本,还有在 children 数组 
-    .meta     obj,
-  ◆路由组件新增配置: 在路由配置中引入的组件才有 
-  ,beforeRouteEnter: function(to,from,next){ // 路由被确认前调用  
-    该回调中不能访问 this,因为回调在导航确认前被调用 
-    可通过传一个回调给 next来访问组件实例 
-      在导航被确认的时候执行回调,并且把组件实例作为回调方法的参数。
-      beforeRouteEnter (to, from, next) {
-        next(vm => {
-          // 通过 `vm` 访问组件实例
-        })
-      }
-  } 
-  ,beforeRouteLeave: function (to,from,next) {  // 离开路由时调用 
-    PS: 通常用于禁止用户在还未保存修改前突然离开  
-    可访问组件实例 `this`
-  }
-  // 当前路由改变且该组件被复用时调用 '2.2+'  
-  ,beforeRouteUpdate: function (to,from,next) { 
-    PS: 可以访问组件实例`this`
-    适用场景: 
-      动态参数路径 
-        如/foo/1 跳转到 /foo/2 时 
-      查询字符串变化 
-        如 /prod?id=1 跳转到 /prod?id=2 时 
-  }
-路由懒加载 
+  tag="str"   //指定<router-link>渲染成的标签,默认:'a' 
+    其他的如如'div'、'li'等 
+  replace="bol"  // 导航后是否留下history记录,默认:false  
+    设置replace后,当点击时,会调用 router.replace() 而不是 router.push(),
+    导航后不会留下 history 记录 
+    <router-link :to="{ path: '/abc'}" replace></router-link>
+  append="bol"   // 是否在当前跳转前加上该页路径,默认:false  
+    从'/a'导航到一个相对路径'b',若未配置append,则路径为'/b',若配了,则为'/a/b' 
+  exact="bol"    // 激活类和路径是否使用精确匹配 
+    默认:false,激活使用全包含匹配 
+    当为true时,若路径为'/',所有的激活类将被匹配到 
+  active-class="str"        // 路径匹配时使用的CSS类名 
+    默认: "router-link-active" 
+      对应的路由匹配成功,"router-link-active"class将自动添加  
+    默认值可通过路由的构造选项 linkActiveClass 来全局配置 
+  exact-active-class="str"  // 路径精确匹配时使用的CSS类名 ['2.5.0+'] 
+    默认值: "router-link-exact-active"
+    默认值可通过路由构造函数选项 linkExactActiveClass 进行全局配置 
+  event="str/strArr"  // 声明可用来触发导航的事件,默认:'click' '2.1.0+'
+★配合使用的组件 
+<transition></transition> 实现过渡动画效果 
+<keep-alive></keep-alive> 缓存,加快路由切换速度 
+◆API 
+vm.$router/new VueRouter() // 路由实例  
+  .app   obj,挂载路由的Vue根实例 
+  .mode  str,路由使用的模式 
+  .currentRoute  Route,当前路由对应的路由信息对象 
+  .getMatchedComponents(location?)    // 返回目标位置或当前路由匹配的组件数组 
+    是数组的定义/构造类,不是实例,
+    通常在服务端渲染的数据预加载时时候。
+  .resolve(location,current?,append?) // 解析目标位置,返回对象形式的信息  '2.1.0+'
+    PS: 解析目标位置[格式同<router-link>的'to'] 
+    current 当前默认的路由 
+    append  允许在 current 路由上附加路径,如同 router-link 
+    返回包含如下属性的对象： {
+      location: Location;
+      route: Route;
+      href: string;
+    }
+  .addRoutes(routes)  // 动态添加更多的路由规则 '2.2.0+' 
+    参数必须是一个符合 routes 选项要求的数组。
+  .onReady(callback,errorCallback?)  //  '2.2.0+'
+    此方法通常用于等待异步的导航钩子完成,比如在进行服务端渲染的时候。
+    该方法把一个回调排队,在路由完成初始导航时调用,
+    这意味着它可以解析所有的异步进入钩子和路由初始化相关联的异步组件。
+    这可以有效确保服务端渲染时服务端和客户端输出的一致。
+    第二个参数 errorCallback 只在 2.4+ 支持。
+    它会在初始化路由解析运行出错 (比如解析一个异步组件失败) 时被调用。
+  .onError(callback) // 路由导航过程中出错时被调用 '2.4.0+'
+    被调用的错误必须是下列情形中的一种：
+    错误在一个路由守卫函数中被同步抛出；
+    错误在一个路由守卫函数中通过调用 next(err) 的方式异步捕获并处理；
+    渲染一个路由的过程中,需要尝试解析一个异步组件时发生错误。
+  ★编程式的导航: 对应<router-link>的导航方式,通过JS代码来实现 
+    PS: vue-router的导航方法'push''replace''go'效仿 window.history API 
+      但其在各类路由模式 history、 hash 和 abstract 下表现一致
+      window.history.pushState、 
+      window.history.replaceState 
+      window.history.go
+  .push(location,onComplete?,onAbort?)  // 相当于<router-link :to=""> 
+    PS: 向history栈添加一新的记录,并跳转,浏览器后退按钮,则回到之前的URL 
+      当点击<router-link>时,这个方法会在内部调用 
+    location    str/obj,路径 
+      str,跳转字符串路径 
+      obj,描述地址的对象 
+        同时使用'path'和'params','params'不生效 
+          同样的规则也适用于 <router-link> 组件的 to 属性 
+          // 这里的 params 不生效
+          router.push({ path: '/user', params: { userId: 123 }}) 
+          方法一: 提供路由的'name'来代替使用'path' 
+            router.push({ name: 'user', params: { userId:123 }}) 
+          方法二: 提供完整的带有参数的'path'  
+            router.push({ path: `/user/${userId}` }) // -> /user/123
+    onComplete = function(){ // 可选,导航成功完成触发 ' 2.2.0+' 
+      PS: 所有的异步钩子被解析之后触发 
+    }
+    onAbort = function(){    // 可选,导航终止时触发 ' 2.2.0+' 
+      PS: 导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由触发  
+    }
+  .replace(location,onComplete?,onAbort?) // 相当于 <router-link :to="" replace> 
+    PS: 替换掉当前的history记录  
+  .go(<num>) // 类似 window.history.go(num) 
+    PS: 在history记录中向前多少步 
+    num  整数,可为负数  
+    当history记录不够用时,则不会操作 
+      routerMap.go(-100) 
+      routerMap.go(100)  
+    Example:
+    routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
+    routerMap.go(-1)   // 后退一步记录,等同于 history.back()
+    routerMap.go(3)    // 前进 3 步记录
+  .back()    
+  .forward()  // 动态的导航到一个新url 
+  ★全局守卫/钩子 
+  .beforeEach(function(to,from,next){  // 全局导航前置守卫 
+    PS: 路由跳转时,调用全局前置守卫,在所有守卫 resolve 完前,路由导航一直处于等待中 
+    to     obj,即将要进入的目标 
+    from   obj,当前导航正要离开的路由 
+    next   foo,需调用该方法来'resolve'该钩子,执行效果依赖'next'方法的调用参数 
+      确保要调用'next'方法,否则钩子就不会被'resolved' 
+      next()  进行管道中的下一个钩子
+        如果全部钩子执行完了,则导航的状态就是'confirmed'确认的 
+      next(false)  中断当前的导航
+        如果浏览器的URL改变了[可能是用户手动或者浏览器后退按钮],
+        那么URL地址会重置到'from'路由对应的地址 
+      next('/') / next({ path: '/' }) 跳转到一个不同的地址 
+        当前的导航被中断,然后进行一个新的导航 
+      next(error)  '2.4.0+' 
+        若参数为一 Error 实例,则导航会被终止
+        且该错误会被传递给 router.onError() 注册过的回调 
+    参数或查询的改变并不会触发导航守卫,需使用'beforeRouteUpdate'或watch $route 
+  }) 
+  .beforeResolve(function(to,from,next){  // 全局导航解析守卫 '2.5.0+' 
+    PS: 导航被确认前,所有组件内守卫和异步路由组件被解析后调用 
+      此时异步组件已经加载完成  
+  })
+  .afterEach(function(to,from){  // 全局后置钩子 
+    // 不会接受 next 函数也不会改变导航本身 
+  }) 
+vm.$route                  // 路由记录 
+  PS: 不可变的'immutable',每次成功的导航后都会产生一个新的对象 
+  .name      str,当前路由的名称,如果有的话    
+  .fullPath  str,完成解析后的URL,包含查询参数和hash的完整路径 
+  .path      str,对应当前路由的路径,总是解析为绝对路径,如 "/foo/bar" 
+  .hash      str,当前路由的hash值[包括"#"],若无hash值,则为空字符串 
+  .params   obj,动态路由匹配的参数信息对象,如果无路由参数,则为空对象  
+    包含了'动态片段'和'全匹配片段', 
+    在HTML中可直接使用 {{$route.params.xx}} 来取匹配到的地址参数 
+    在一个路由中设置多段路径参数 
+      模式              匹配路径         $route.params
+      '/a/:aoo'         '/a/bar'        { aoo: 'bar' }
+      '/a/:aoo/b/:boo'  '/a/bar/b/123'  { aoo: 'bar', boo: 123 }
+  .query    obj,查询参数信息对象,若无查询参数,则为空对象 
+  .matched  arr,包含当前路由记录及其所有上级嵌套路径的路由记录 
+    PS: 路由记录就是 routes 配置数组中的对象副本,还有在 children 数组 
+    Member:路由记录对象 ===  {
+      parent: {            // 当前路由记录的上级路由记录,格式同当前路由记录  
+        parent: {}||undefined 
+        ,path: ''
+        ,...
+      }          
+      ,path: "/my/account"  // 路径
+      ,regex: /^\/my\/account(?:\/(?=$))?$/i // 当前路径的正则表示 
+      ,name: undefined     // 路由名称 
+      ,components: <obj>   // 组件
+      ,meta: {}            // 路由元信息        
+      ,beforeEnter: undefined
+      ,instances: <obj>
+      ,matchAs: undefined
+      ,props: {}
+      ,redirect: undefined
+    }
+  .meta     obj,
+★路由组件新增配置: 在路由配置中引入的组件才有 
+,beforeRouteEnter: function(to,from,next){ // 路由被确认前调用  
+  该回调中不能访问 this,因为回调在导航确认前被调用 
+  可通过传一个回调给 next来访问组件实例 
+    在导航被确认的时候执行回调,并且把组件实例作为回调方法的参数。
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+      })
+    }
+} 
+,beforeRouteLeave: function (to,from,next) {  // 离开路由时调用 
+  PS: 通常用于禁止用户在还未保存修改前突然离开  
+  可访问组件实例 `this`
+}
+// 当前路由改变且该组件被复用时调用 '2.2+'  
+,beforeRouteUpdate: function (to,from,next) { 
+  PS: 可以访问组件实例`this`
+  适用场景: 
+    动态参数路径 
+      如/foo/1 跳转到 /foo/2 时 
+    查询字符串变化 
+      如 /prod?id=1 跳转到 /prod?id=2 时 
+}
+◆路由懒加载 
   PS: 把不同路由对应的组件分割成不同的代码块,当路由被访问的时候才加载对应组件 
     结合Vue的'异步组件'和Webpack的'code splitting feature'实现路由组件的懒加载 
   定义一个能够被webpack自动代码分割的异步组件
@@ -1320,88 +1336,88 @@ store = new Vuex.Store({ // 实例化数据中心'store'
       strict: process.env.NODE_ENV !== 'production'
     })
 })  
-API 
-  ◆组件注入的属性/方法 
-  vm.$store  // 数据中心对象‹可在所有组件中使用›  
-    PS: 组件中: 一般通过'computed'属性来承接 this.$store.state 中的数据   
-    .state.xx   // 使用数据 
-    .getters.xx // 使用数据 
-    .commit('foo',data?)   // 执行'mutations'中的方法 
-    .dispatch('goo',data?) // 执行'actions'中的方法 
-  mapState(obj/arr)   绑定函数,简化'state.xx'的获取  
-    import {mapState} from "vuex"; // 引入方法 
-    export default {
-      // ...
-      ,computed: { // 使用方法一: 
-        ...mapState({ // 使用对象展开运算符将其成员合并到计算属性中 
-          key1: function(state,getters){ // 返回值形式 
-            return state.xxx;  // 获取state数据 
-            // 相当于 this.$store.state.xxx  
-          }
-          ,key2: (state,getters) => getters.xxx  // 获取getters数据 
-            相当于 this.$store.getters.xxx   
-          ,key3: 'axx.bxx'  // 字符串形式,获取state数据 
-            相当于 this.$store.state.axx.bxx  
-        })
-        ,aoo: function(){
-          return this.xxx;
+◆API 
+★组件注入的属性/方法 
+vm.$store  // 数据中心对象‹可在所有组件中使用›  
+  PS: 组件中: 一般通过'computed'属性来承接 this.$store.state 中的数据   
+  .state.xx   // 使用数据 
+  .getters.xx // 使用数据 
+  .commit('foo',data?)   // 执行'mutations'中的方法 
+  .dispatch('goo',data?) // 执行'actions'中的方法 
+mapState(obj/arr)   绑定函数,简化'state.xx'的获取  
+  import {mapState} from "vuex"; // 引入方法 
+  export default {
+    // ...
+    ,computed: { // 使用方法一: 
+      ...mapState({ // 使用对象展开运算符将其成员合并到计算属性中 
+        key1: function(state,getters){ // 返回值形式 
+          return state.xxx;  // 获取state数据 
+          // 相当于 this.$store.state.xxx  
         }
-      }
-      ,computed: mapState({ // 使用方法二: 
-        // PS: 直接覆盖所有计算属性,不能再添加其他计算属性,否则采用第一种  
+        ,key2: (state,getters) => getters.xxx  // 获取getters数据 
+          相当于 this.$store.getters.xxx   
+        ,key3: 'axx.bxx'  // 字符串形式,获取state数据 
+          相当于 this.$store.state.axx.bxx  
       })
-      ,computed: mapState([ // 使用方法三: 简写方式 
-        // PS: 当键名与state中相同时可使用  
-        'aoo'
-        ,'boo'
-        ,.. 
-      ]) 
-    }
-  mapGetters(obj/arr) 绑定函数,简化'getters.xx'的获取 
-    import { mapGetters } from 'vuex' // 引入方法 
-    export default {
-      // ... 
-      ,computed: {
-        ...mapGetters({
-          key1: 'aoo'  // 只有字符串形式,无函数返回值的形式 
-        })
+      ,aoo: function(){
+        return this.xxx;
       }
     }
-  mapMutations(arr/obj) 绑定函数,简化'store.commit("xxx",data)'操作 
-    import { mapMutations } from 'vuex' // 引入方法 
-    export default {
-      // ...
-      ,methods: {
-        ...mapMutations([ 
-          'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
-          // `mapMutations` 也支持载荷：
-          'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.commit('incrementBy', amount)`
-        ])
-        ,...mapMutations({ 
-          add: 'increment' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
-        })
-      }
+    ,computed: mapState({ // 使用方法二: 
+      // PS: 直接覆盖所有计算属性,不能再添加其他计算属性,否则采用第一种  
+    })
+    ,computed: mapState([ // 使用方法三: 简写方式 
+      // PS: 当键名与state中相同时可使用  
+      'aoo'
+      ,'boo'
+      ,.. 
+    ]) 
+  }
+mapGetters(obj/arr) 绑定函数,简化'getters.xx'的获取 
+  import { mapGetters } from 'vuex' // 引入方法 
+  export default {
+    // ... 
+    ,computed: {
+      ...mapGetters({
+        key1: 'aoo'  // 只有字符串形式,无函数返回值的形式 
+      })
     }
-  mapActions(arr/obj)   绑定函数,简化'store.dispatch("xxx",data)'操作  
-    import { mapActions } from 'vuex' 
-    export default {
-      // ...
-      ,methods: {
-        ...mapActions([
-          'increment', // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
-          
-          // `mapActions` 也支持载荷：
-          'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.dispatch('incrementBy', amount)`
-        ])
-        ,...mapActions({
-          add: 'increment' // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
-        })
-      }
+  }
+mapMutations(arr/obj) 绑定函数,简化'store.commit("xxx",data)'操作 
+  import { mapMutations } from 'vuex' // 引入方法 
+  export default {
+    // ...
+    ,methods: {
+      ...mapMutations([ 
+        'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
+        // `mapMutations` 也支持载荷：
+        'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.commit('incrementBy', amount)`
+      ])
+      ,...mapMutations({ 
+        add: 'increment' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+      })
     }
-  在函数中间接访问vue实例 
-    通过'mutations'或'actions'函数将vue实例作为参数传递  
-    若保存到'state'中,则整个store‹'mutations'、'getters'、'actions'函数›都可访问到该实例  
-模块化管理: 每个模块维护一套状态,然后合并到一总数据中心中 
+  }
+mapActions(arr/obj)   绑定函数,简化'store.dispatch("xxx",data)'操作  
+  import { mapActions } from 'vuex' 
+  export default {
+    // ...
+    ,methods: {
+      ...mapActions([
+        'increment', // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
+        
+        // `mapActions` 也支持载荷：
+        'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.dispatch('incrementBy', amount)`
+      ])
+      ,...mapActions({
+        add: 'increment' // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
+      })
+    }
+  }
+在函数中间接访问vue实例 
+  通过'mutations'或'actions'函数将vue实例作为参数传递  
+  若保存到'state'中,则整个store‹'mutations'、'getters'、'actions'函数›都可访问到该实例  
+◆模块化管理: 每个模块维护一套状态,然后合并到一总数据中心中 
   PS: 默认情况下,模块内的'getter'、'mutation'和'action'都是注册在全局命名空间的 
     namespaced: true,成为命名空间模块,模块具有更高的封装度和复用性 
     所有 'getter'、'mutation'及'action'都会自动根据模块注册的路径调整命名 
@@ -1670,364 +1686,4 @@ API
             }
           }
         }
---------------------------------------------------------------------------------
-'vue-resource'HTTP请求封装插件 
-  PS: 通过'XMLHttpRequest'或'JSONP'发起请求并处理响应 
-引入安装   
-  通过<script>引入 
-    在vue后引入后引入vue-resource 
-    默认安装了 
-  通过npm下载引入 
-    $ npm i --S vue-resource  // 下载并写入依赖 
-    // main.js 中引入、安装   
-    import VueResource from 'vue-resource' // 引入 vue-resource 
-    Vue.use(VueResource)  // 安装 vue-resource   
-API 
-  ◆组件注入属性/方法 vm.$http 
-    PS: 回调函数中的 this 仍指向Vue实例 
-  ★http请求方法 
-    请求方法返回值为 Promise 对象,可使用以下方法 
-    .then(function(data1 ){ // 成功的回调 
-      // data1,response对象,进行了Vue封装 
-    }
-    ,function(data2 ){ // 失败的回调 
-      // data2,response对象,进行了Vue封装 
-    })  
-    .catch(function(data){
-      // 
-    })
-  vm.$http.get('url',{    // GET请求  
-    // 可选,请求的参数 
-  })
-  vm.$http.post('url',{   // POST请求
-    // 可选参数
-  })
-  vm.$http.delete(url[,options]) 
-  vm.$http.put(url[,body][,options]) 
-  ...
-  vm.$http.jsonp('url',{  // JSONP请求  
-    // 可选参数 
-  }) 
-  vm.$http({  // 通用写法 
-    url: 'url'
-    ,method: 'GET'
-    ,data: { 
-      key1: val1 
-      ,key2: val2
-    }
-    ,headers: {"X-Requested-With": "XMLHttpRequest"}
-    ,emulateJSON: true
-  })
-  ★其他方法 
-  vm.$http.head(url, [options]) 
-  vm.$http.patch(url, [body], [options]) 
-  ★response响应对象
-    .ok     bol,响应的HTTP状态码在 200-299 该属性为 true,其余为 false
-    .status num,响应的HTTP状态码 
-    .statusText str,响应的状态文本
-    .headers  obj,响应头
-    .body       接口响应的数据 
-    .bodyText   未经转义的响应数据 
-    .headers    相关的头信息 
-    .ok         bol,是否请求成功 
-    .status     状态码 
-    .statusText 状态描述 
-    .url        请求的地址  
-    .text() str,以字符串形式返回response body
-    .json() obj,以JSON对象形式返回response body
-    .blob() Blob,以二进制形式返回response body
-  ◆Vue.http.xx 
-    PS: 和 vm.$http 等价 
-    Vue.http.options.xhr = { withCredentials: true } ? 
-    Vue.http.options.emulateJSON = true 
-    ★Vue.http.options 对象 
-    .url     str,请求的URL 
-    .method  str,请求的HTTP方法,如'GET','POST'或其他HTTP方法 
-    .body    obj,FormData string request body 
-    .params  obj,请求的URL参数对象 
-    .headers obj,request header 
-    .timeout num,请求超时时间,单位ms[0 表示无超时时间] 
-    .before    foo,请求发送前的处理函数,类似于jQuery的beforeSend函数
-    .progress  foo,ProgressEvent回调处理函数
-    .credentials bol,表示跨域请求时是否需要使用凭证
-    .emulateHTTP bol,发送PUT,PATCH,DELETE请求时以HTTP POST的方式发送 
-      若Web服务器无法处理PUT,PATCH和DELETE这种REST风格的请求,可启用enulateHTTP选项。
-      启用该选项后,请求会以普通的POST方法发出,
-      并且HTTP头信息的X-HTTP-Method-Override属性会设置为实际的HTTP方法。
-      Vue.http.options.emulateHTTP = true;
-    .emulateJSON bok,将request body以application/x-www-form-urlencoded content type发送 
-      如果Web服务器无法处理编码为application/json的请求,可启用emulateJSON选项。
-      启用后,请求会以'application/x-www-form-urlencoded'作为MIME type,就像普通的HTML表单一样 
-      Vue.http.options.emulateJSON = true;
---------------------------------------------------------------------------------
-'axios'基于Promise的HTTP库,可用在浏览器和NodeJS中 
-  PS: 类似'vue-resource'的插件,'vue2.0+'推荐使用axios 
-    基于 Promise 的 HTTP 请求客户端,可同时在浏览器和 NodeJS 中使用 
-  功能特性 
-    在浏览器中发送 XMLHttpRequests 请求
-    在NodeJS中发送 http请求
-    支持 Promise API
-    拦截请求和响应
-    转换请求和响应数据
-    取消请求
-    自动转换 JSON 数据
-    客户端支持保护安全免受 CSRF/XSRF 攻击
-使用 
-  $ npm i -S axios // 安装 axios
-  // 入口 main.js 中 
-  import axios from 'axios' // 引入axios 
-  // 使用全局对象 axios 进行http请求 
-  // axios并非vue插件,不能使用Vue.use(),所以只能在每个需要发送请求的组件中即时引入
-  // 但可在引入axios后,通过手动修改原型链,来更方便的使用 
-  var qs = require('qs'); // 用于序列化请求数据 
-  Vue.prototype.$http = axios.create({
-    baseURL: 'http://democode.likecto.hkbao.com/'
-    ,withCredentials: true  // 携带cookies 
-    ,headers: { 
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" // 避免预检请求 
-    }
-    ,transformRequest: [ // 序列化请求数据 
-      function(data){
-        return qs.stringify(data)
-      }
-    ]
-  }) 
-API 
-  ◆请求方法: 
-  axios({   // 通用方法 
-    baseURL: 'https://some-domain.com/api/' // 将被添加到`url`前面,除非`url`是绝对的 
-    ,url: 'url'
-    ,params: {  // 与请求一起发送的URL参数 
-      // 须是纯对象或URLSearchParams对象
-      ID: 12345
-    }
-    ,paramsSerializer: function(params) { // 序列化`params` 
-      return Qs.stringify(params, {arrayFormat: 'brackets'})
-    }
-    ,data: {    // 作为请求主体发送的数据,仅适用于'PUT','POST'和'PATCH'
-      // 当无`transformRequest`选项时,则数据类型需为以下之一: 
-      // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
-      // - Browser only: FormData, File, Blob
-      // - Node only: Stream, Buffer
-      key1: val1
-      ,key2: val2
-    }
-    ,transformRequest: [ // 在请求数据发送到服务器之前对其进行更改 
-      // 只适用于请求方法'PUT','POST'和'PATCH'
-      function (data) { 
-        // 数组中的最后一个函数必须返回一个字符串,一个 ArrayBuffer或一个 Stream
-        return data;
-      }
-      ,...
-    ]
-    ,method: 'post' // 默认get 
-    ,headers: { // 自定义 headers
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-    ,timeout: <num> // 请求超时设置,单位:ms  
-    ,withCredentials: false // 指示是否跨站点访问控制请求 
-    ,transformResponse: [ // 允许在 then / catch之前对响应数据进行更改
-      function (data) { 
-        return data;
-      }
-    ]
-    ,auth: { // 使用HTTP基本认证,并提供凭据 
-      // 将设置一个`Authorization'头,覆盖任何现有的`Authorization'自定义头,使用`headers`设置 
-      username: 'janedoe',
-      password: 's00pers3cret'
-    },
-    ,responseType: 'json', // 表示服务器将响应的数据类型 
-      'json' 默认, 
-      'text'
-      'document'
-      'blob'
-      'arraybuffer'
-      'stream'
-    ,adapter: function (config) { // 自定义处理请求,返回一个promise并提供一个有效的响应 
-      /* ... */
-    }
-    ,onUploadProgress: function (progressEvent) { // 处理上传的进度事件 
-      // 使用本地 progress 事件做任何你想要做的
-    }
-    ,onDownloadProgress: function (progressEvent) { // 处理下载的进度事件 
-      // 
-    }
-    ,maxContentLength: 2000 // 定义允许的http响应内容的最大大小
-    ,xsrfCookieName: 'XSRF-TOKEN' // 用作 xsrf 令牌的值的cookie的名称
-    ,xsrfHeaderName: 'X-XSRF-TOKEN' // 携带xsrf令牌值的http头的名称
-    ,validateStatus: function (status) { // 定义是否解析或拒绝给定的promise 
-      return status >= 200 && status < 300; // default
-      // HTTP响应状态码
-      // 如果`validateStatus`返回`true`或被设置为`null` promise将被解析;
-      // 否则,promise将被拒绝 
-    }
-    ,maxRedirects: 5 // 定义在node.js中要遵循的重定向的最大数量
-      如果设置为0,则不会遵循重定向 
-    // 在node.js中分别执行http和https请求时使用的自定义代理 
-      // 允许配置类似`keepAlive`的选项, 默认情况下不启用。
-    ,httpAgent: new http.Agent({ // node.js中,执行http请求时使用的自定义代理  
-      keepAlive: true 
-    })
-    ,httpsAgent: new https.Agent({ // node.js中,执行https请求时使用的自定义代理  
-      keepAlive: true 
-    })
-    ,proxy: { // 定义代理服务器的主机名和端口
-      // 将设置一个`Proxy-Authorization` header,
-      // 覆盖任何使用`headers`设置的现有的`Proxy-Authorization` 自定义 headers。
-      host: '127.0.0.1',
-      port: 9000,
-      auth: { // 表示HTTP Basic auth应该用于连接到代理,并提供credentials 
-        username: 'mikeymike',
-        password: 'rapunz3l'
-      }
-    }
-    ,cancelToken: new CancelToken(function (cancel) { // 指定可用于取消请求的取消令牌
-      // 
-    })
-  })
-  axios.request(config)
-  axios.get('url',{
-    // 可选,配置参数
-    params: {  // 查询参数 
-      key1: val1
-      ..
-    } 
-  })
-  axios.post('url',{
-    // 可选,请求参数  
-  } ,{  /* 可选,配置 */ })
-  axios.delete(url[, config])
-  axios.put(url[, data[, config]])
-  axios.patch(url[, data[, config]])
-  axios.head(url[, config])
-  axios.options(url[, config])
-  ◆
-  axios.all([  // 所有请求完毕  
-    axios.get()
-    ..
-  ])   
-  .then(axios.spread(function(acct,perms){
-    // 
-  }))
-  response响应 
-    .status      num,
-    .statusText  str, 
-    .data     obj,
-    .headers  obj,
-    .config   obj,
-    .request  obj, 
-  axios.defaults.xx,全局axios默认值 
-    .baseURL = 'url';
-    .headers.common['Authorization'] = AUTH_TOKEN;
-    .headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-  axios.interceptors,拦截器,可截取请求或响应在被'then'或'catch'处理之前 
-    var tmp = axios.interceptors.request.use(function(config){   //添加请求拦截器
-      //在发送请求之前做某事
-      return config;
-    }
-    ,function(error){
-      //请求错误时做些事
-      return Promise.reject(error);
-    });
-    var tmp = axios.interceptors.response.use(function(response){ //添加响应拦截器
-      //对响应数据做些事
-      return response;
-    }
-    ,function(error){
-      //请求错误时做些事
-      return Promise.reject(error);
-    });
-    axios.interceptors.request.eject(tmp) // 删除拦截器 
-  处理错误 
-    axios.get('/ user / 12345')
-    .catch(function(error){
-      if(error.response){ //请求已发出,但状态代码落在2xx的范围外  
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } 
-      else { // 在设置触发错误的请求时发生了错误 
-        console.log('Error',error.message);
-      }}
-      console.log(error.config);
-    });
-    可使用'validateStatus'配置选项定义自定义HTTP状态码错误范围 
-    axios.get('/ user / 12345',{
-      validateStatus：function(status){
-        return status < 500; // 仅当状态代码大于或等于500时拒绝
-      }}
-    })
-  使用取消令牌取消请求 
-    axios cancel token API基于可取消的promise提议,目前处于阶段1
-    可使用 CancelToken.source 工厂创建一个取消令牌,如下所示：
-    var CancelToken = axios.CancelToken;
-    var source = CancelToken.source();
-    
-    axios.get('/user/12345', {
-      cancelToken: source.token
-    })
-    .catch(function(thrown) {
-      if (axios.isCancel(thrown)) {
-        console.log('Request canceled', thrown.message);
-      } 
-      else {
-        // 处理错误
-      }
-    });
-
-    //取消请求(消息参数是可选的)
-    source.cancel('操作被用户取消。');
-
-    还可通过将执行器函数传递给CancelToken构造函数来创建取消令牌：
-    var CancelToken = axios.CancelToken;
-    var cancel;
-    
-    axios.get('/ user / 12345',{
-      cancelToken：new CancelToken(function executor(c){
-        //一个执行器函数接收一个取消函数作为参数
-        cancel = c;
-      })
-    });
-    
-    // 取消请求
-    clear();
-
-    注意：您可以使用相同的取消令牌取消几个请求。
-    使用application / x-www-form-urlencoded格式
-    默认情况下,axios将JavaScript对象序列化为JSON。 要以应用程序/ x-www-form-urlencoded格式发送数据,您可以使用以下选项之一。
-  浏览器 
-    在浏览器中,您可以使用 URLSearchParams API,如下所示：
-    var params = new URLSearchParams();
-    params.append('param1', 'value1');
-    params.append('param2', 'value2');
-    axios.post('/foo', params);
-    请注意,所有浏览器都不支持URLSearchParams,但是有一个 polyfill 可用[确保polyfill全局环境] 
-    或可以使用qs库对数据进行编码：
-    var qs = require('qs');
-    axios.post('/foo', qs.stringify({ 'bar': 123 });
-  NodeJS 
-    在NOdeJS中,可使用querystring模块,如下所示：
-    var querystring = require('querystring');
-    axios.post('http://something.com/', querystring.stringify({ foo: 'bar' });
-  TypeScript 
-    axios包括TypeScript定义。
-    import axios from 'axios';
-    axios.get('/user?ID=12345');
-    axios在很大程度上受到Angular提供的$http服务的启发 
-  自定义axios实例 
-    var instance = axios.create({   // 使用自定义配置创建axios的新实例 
-      baseURL: 'url'
-      ,timeout: 1000
-      ,headers: {'X-Custom-Header': 'foobar'}
-    }) 
-    //在实例创建后改变默认值
-    instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-    // 自定义实例添加拦截器 
-    instance.interceptors.request.use(function () {
-      // 
-    });
---------------------------------------------------------------------------------
-'vue-validator'表单验证 
-'vue-touch'移动端 
-
 

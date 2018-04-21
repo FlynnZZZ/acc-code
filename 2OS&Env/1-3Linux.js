@@ -157,13 +157,15 @@ Shell: 一种命令语言解释器'command-language interpreter',
         -d  查看目录属性 
         -h  人性化显示文件大小 
         -i  显示inode,文件的id号  
+        组合使用:   
+          ls -hl 等价于 ls -h -l 
       name  目录/文件名,默认为当前目录 
       $ ll  即 $ ls -l 的别名 
     $ pwd   查看当前完整路径 
     $ env   查看所有环境变量 
     $ mkdir [-p] [<name>]   创建文件夹 
       -p  递归创建 
-        $ mkdir -p a/b  
+        Example: $ mkdir -p a/b   // 在当前目录下创建目录'a/b'两级目录 
     $ rmdir <目录名>  删除空白目录 
     $ touch <fileName> 新建文件 
     $ rm [<options>] <name>    删除文件 
@@ -171,16 +173,20 @@ Shell: 一种命令语言解释器'command-language interpreter',
         -r   可删除目录 
         -f   强制执行不用确认  
       $ rm -rf <name>   删除目录及其里面的所有文件  
-    $ cp [<options>] <源文件> [<目标位置>] 复制文件 
+    $ cp [<options>] <源文件> [<目标位置>] // 复制文件 
       options 
         -r  用于复制目录 
+          Example: $ cp -r dir1 dir2 // 将 dir1 目录复制到当前目录下并改名为 dir2 
         -p  待文件属性复制 
         -d  若源文件是链接文件,则复制链接属性 
         -a  相当于 -pdr 
+      Example: 
+        cp a.txt b.txt // 将 a.txt 复制到当前目录并改名为 b.txt 
     $ mv <源文件> <目标目录>  前切/重命名 
     $ ln [-s] <源文件> <目标链接文件>  创建链接文件 
     $ locate <文件名>  搜索文件 
     $ updatedb   更新数据库 
+    $ cat <fileName>  // 显示文件内容 
   执行程序 
     which <name>  查看程序位置 
       如 which node ,which vue 

@@ -956,13 +956,40 @@ path,处理文件路径
       ext name : .js    
 crypto,提供加密和解密功能,基本上是对OpenSSL的包装 
   const crypto = require('crypto') 
-  var obj = crypto.createHash(<KW>)   // 使用加密的算法  
-    Input: KW   str,指定词,加密算法  
+  var hash = crypto.createHash(<ways>)   // 使用加密的算法  
+    Input: ways    kw,加密算法  
       'md5'   MD5摘要算法 
       'sha1'  sha1摘要算法 
     Output: 加密对象 
-  obj.update(<str>)    // 加密指定字符,并更新加密对象  
-  obj.digest('hex')    // 返回16进制表示的加密值 
+  hash.update(<pwd>)    // 加密指定字符,并更新加密对象  
+    Input: pwd  str,待加密的密码 
+  hash.digest('hex')    // 返回16进制表示的加密值 
+  var cipher = crypto.createCipher(<ways>,<key>) // 加密 
+    Input: 
+      ways   kw,加密的算法 
+        'aes-256-cbc'  
+      key    str,加密用的key 
+    Output: 加密对象 
+  var pwd1 = cipher.update(<pwd>,<inEncode>,<outEncode>)  // 进行加密 
+    Input: 
+      pwd        str,待加密的密码  
+      inEncode   kw,输入的编码类型 
+        'utf8'
+      outEncode  kw,输出的编码类型 
+        'hex'
+    Output:  返回加密后的字符串
+  pwd1 += cipher.final('hex')   // 加密
+  var decipher = crypto.createDecipher(<ways>,<key>)  // 解密 
+    Input: 
+      ways   kw,解密的算法 
+        'aes-256-cbc'
+    Output:  解密对象 
+  var pwd = decipher.update(<pwd1>,<inEncode>,<outEncode>) // 进行解密 
+    Input: 
+      pwd1       str,加密后的密码 
+      inEncode   kw,输入的编码格式 
+      outEncode  kw,输出的编码格式 
+  pwd += decipher.final('utf8')   // 解密 
 util,提供常用函数的集合 
   PS:用于弥补核心JS 的功能 过于精简的不足
   util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承

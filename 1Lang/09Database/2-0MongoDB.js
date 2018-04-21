@@ -105,9 +105,23 @@ MongoDB: 基于分布式文件存储的数据库
   其他术语: 
     BSON: 是一种类json的一种二进制形式的存储格式,简称'Binary JSON'
 安装&使用&启动: 
-  下载安装包安装[位置可自定义],将安装目录下的'bin'目录,配置到环境变量   
+  1 下载安装包安装[位置可自定义],将安装目录下的'bin'目录,配置到环境变量   
+  2 创建数据存储目录'data/db' 
+    该数据目录不会主动创建,在安装完成后需创建它。
+    数据目录应该放在根目录下,如： C:\ 或 D:\ 等 
+  3 $ mongod.exe --dbpath 'D:/data/db' // 指定mongo项目的数据库目录  
+    ★mongod.exe 常用参数: 
+    --bind_ip   绑定服务IP 
+      若绑定127.0.0.1,则只能本机访问,不指定默认本地所有IP
+    --port      指定服务端口号,默认:27017
+    --dbpath    指定数据库路径 
+    --logpath   指定定MongoDB日志文件[而非目录] 
+    --logappend 使用追加的方式写日志
+    --serviceName         指定服务名称
+    --serviceDisplayName  指定服务名称,有多个mongodb服务时执行 
+    --install     作为一个Windows服务安装 
   bin目录下提供的一系列有用的工具 
-    mongod.exe    MongoDB服务启动工具
+    mongod.exe    MongoDB服务启动工具 
     mongo         客户端命令行工具,也是一JS解释器,支持JS语法
     mongostat     自带的状态检测工具
     mongotop      跟踪一个MongoDB的实例,查看哪些大量的时间花费在读取和写入数据
@@ -128,17 +142,6 @@ MongoDB: 基于分布式文件存储的数据库
       db    // 数据库目录   
       log   // 日志文件目录 
         mongo.log // 日志 
-  $ mongod --dbpath 'e:/db_project/db' // 指定mongo项目的数据库目录  
-    ★mongod.exe 常用参数: 
-    --bind_ip   绑定服务IP 
-      若绑定127.0.0.1,则只能本机访问,不指定默认本地所有IP
-    --port      指定服务端口号,默认:27017
-    --dbpath    指定数据库路径 
-    --logpath   指定定MongoDB日志文件[而非目录] 
-    --logappend 使用追加的方式写日志
-    --serviceName         指定服务名称
-    --serviceDisplayName  指定服务名称,有多个mongodb服务时执行 
-    --install     作为一个Windows服务安装 
   $ mongo   // 连接到数据库[需启动新的命令行窗口] 
   $ show dbs  // 以列表形式显示所有数据库 
   $ db        // 显示当前数据库对象或集合 
@@ -314,125 +317,158 @@ MongoDB: 基于分布式文件存储的数据库
   PS: 原子操作,即只有操作成功或操作无效两种状态    
     mongodb不支持事务,但提供了许多原子操作,如文档的保存,修改,删除等 
 查询操作符 
-  'query-comparison'比较查询操作符 
-    格式                    操作               RDBMS中的类似语句 
-    $eq                     =等于
-    {<key>:<value>}         ='equal'          where by = '菜鸟教程' 
-      db.col.find({"by":"菜鸟教程"}).pretty()  
-    {<key>:{$ne:<value>}}   !='not equal'     where likes != 50 
+★'query-comparison'比较查询操作符 
+  格式              操作               RDBMS中的类似语句 
+  {<key>: <val>}    ='equal'           where by = '菜鸟教程' 
+    db.col.find({"by":"菜鸟教程"}).pretty()  
+  $eq               =等于
+  $ne               !='not equal'      where likes != 50 
+    格式: { 
+      <key>: { 
+        $ne: <val> 
+      }
+    }
+    Example: 
       db.col.find({"likes":{$ne:50}}).pretty()  
-    {<key>:{$lt:<value>}}   <'less than'      where likes < 50 
-      db.col.find({"likes":{$lt:50}}).pretty()  
-    {<key>:{$lte:<value>}}  <='lt equal'      where likes <= 50 
-      db.col.find({"likes":{$lte:50}}).pretty()  
-    {<key>:{$gt:<value>}}   >'greater than'   where likes > 50 
-      db.col.find({"likes":{$gt:50}}).pretty()  
-    {<key>:{$gte:<value>}}  >='gt equal'      where likes >= 50 
-      db.col.find({"likes":{$gte:50}}).pretty()  
-    $in                     包含
-    $nin                    不包含
-    组合使用 
-      db.col.find({likes: {$lt: 200, $gt: 100}}) 
-  'query-logical'逻辑查询操作符 
-    $and 
-      传入多个键,用逗号','分隔 
-      db.mycol.find({key1:val1, key2:val2}) 
-    $or  
-      db.mycol.find(
-        {
-          $or: [
-            {key1: value1}
-            ,{key2:value2}
-          ]
+  $lt               <'less than'       where likes < 50 
+    格式: {
+      <key>: {
+        $lt: <val>
+      }
+    }
+    db.col.find({"likes":{$lt:50}}).pretty()  
+  $lte              <='lt equal'       where likes <= 50 
+    格式: {
+      <key>: {
+        $lte: <val>
+      }
+    } 
+    db.col.find({"likes":{$lte:50}}).pretty()  
+  $gt               >'greater than'    where likes > 50 
+    格式: {
+      <key>: {
+        $gt: <val>
+      }
+    } 
+    db.col.find({"likes":{$gt:50}}).pretty()  
+  $gte              >='gt equal'       where likes >= 50 
+    格式: { 
+      <key>: {
+        $gte: <val>
+      }
+    } 
+    db.col.find({"likes":{$gte:50}}).pretty()  
+  $in               包含 
+  $nin              不包含
+  组合使用 
+    db.col.find({
+      likes: {
+        $lt: 200
+        ,$gt: 100
+      }
+    }) 
+★'query-logical'逻辑查询操作符 
+  $and   交集
+    传入多个键,用逗号','分隔 
+    db.mycol.find({key1:val1, key2:val2}) 
+  $or    并集
+    db.mycol.find( {
+      $or: [
+        { 
+          key1: value1
         }
-      )
-    $nor 
-    $not 
-  'query-element'元查询操作符 
-    $type,基于BSON类型来检索集合中匹配的数据类型 
-      类型                     数字      备注
-      Double                   1   
-      String                   2   
-      Object                   3   
-      Array                    4   
-      Binary data              5   
-      Undefined                6        已废弃 
-      Object id                7   
-      Boolean                  8   
-      Date                     9   
-      Null                     10   
-      Regular Expression       11   
-      JavaScript               13   
-      Symbol                   14   
-      JavaScript(with scope)   15   
-      32-bit integer           16   
-      Timestamp                17   
-      64-bit integer           18   
-      Min key                  255  Query with -1.
-      Max key                  127   
-      Example: 
-        获取"col"集合中'title'为 String 的数据 
-        db.col.find({"title": {$type: 2}})
-    $exists,判断字段是否存在 
-  'query-evaluation'评价查询操作符 
-    $where 
-    $text 
-    $regex 
-    $mod,取模计算
-  'query-array'数组查询操作符 
-    $all,匹配所有
-    $elemMatch,
-    $size,匹配数组元素个数
-  'query-geospatial'地理查询操作符 
-  'query-bitwise'位查询操作符  
+        ,{
+          key2:value2
+        }
+      ]
+    } )
+  $not   取反
+  $nor   
+★'query-element'元查询操作符 
+  $type,基于BSON类型来检索集合中匹配的数据类型 
+    类型                     数字      备注
+    Double                   1   
+    String                   2   
+    Object                   3   
+    Array                    4   
+    Binary data              5   
+    Undefined                6        已废弃 
+    Object id                7   
+    Boolean                  8   
+    Date                     9   
+    Null                     10   
+    Regular Expression       11   
+    JavaScript               13   
+    Symbol                   14   
+    JavaScript(with scope)   15   
+    32-bit integer           16   
+    Timestamp                17   
+    64-bit integer           18   
+    Min key                  255  Query with -1.
+    Max key                  127   
+    Example: 
+      获取"col"集合中'title'为 String 的数据 
+      db.col.find({"title": {$type: 2}})
+  $exists,判断字段是否存在 
+★'query-evaluation'评价查询操作符 
+  $where 
+  $text 
+  $regex 
+  $mod,取模计算
+★'query-array'数组查询操作符 
+  $all,匹配所有
+  $elemMatch,
+  $size,匹配数组元素个数
+  ★'query-geospatial'地理查询操作符 
+★'query-bitwise'位查询操作符  
 更新操作符 
-  'update-field'字段更新操作符 
-    {$set: {<field>: <val>}} 更新指定字段,不存在则创建[原子操作]
-    {$unset: {<field>: 1}}   删除字段[原子操作]
-    {$inc: {<field>: <num>}} 对数字类型的字段进行增减操作[原子操作] 
-    {$rename: {<old_field_name>: <new_field_name>}} 字段的重命名[原子操作]
-    $currentDate  
-    $max  
-    $min  
-    $setOnInsert  
-    $mul  
-  'update-array'数组更新操作符 
-    {$push: {<field>: <val>}} 追加成员,若该字段不存在,则新增并追加  [原子操作]
-    {$pushAll: {<field>: <val_arr>}} 同$push,一次追加多个成员 [原子操作]
-    $addToSet,当无该成员时,则增加[原子操作]
-    {$pull: {<field>: <val>}} 从数组内内删除一等于<val>的成员 [原子操作]
-    $pullAll,同$pull,可一次删除多个成员  
-    {$pop: {<field>: 1}}  删除数组的第一个或最后一个元素[原子操作]
-    $position,
-    $each,
-    $sort,
-  'update-bitwise'位更新操作符 
-    {$bit: {<field>: {and: 5}}} [原子操作]   
+★'update-field'字段更新操作符 
+  {$set: {<field>: <val>}} 更新指定字段,不存在则创建[原子操作]
+  {$unset: {<field>: 1}}   删除字段[原子操作]
+  {$inc: {<field>: <num>}} 对数字类型的字段进行增减操作[原子操作] 
+  {$rename: {<old_field_name>: <new_field_name>}} 字段的重命名[原子操作]
+  $currentDate  
+  $max  
+  $min  
+  $setOnInsert  
+  $mul  
+★'update-array'数组更新操作符 
+  {$push: {<field>: <val>}} 追加成员,若该字段不存在,则新增并追加  [原子操作]
+  {$pushAll: {<field>: <val_arr>}} 同$push,一次追加多个成员 [原子操作]
+  $addToSet,当无该成员时,则增加[原子操作]
+  {$pull: {<field>: <val>}} 从数组内内删除一等于<val>的成员 [原子操作]
+  $pullAll,同$pull,可一次删除多个成员  
+  {$pop: {<field>: 1}}  删除数组的第一个或最后一个元素[原子操作]
+  $position,
+  $each,
+  $sort,
+★'update-bitwise'位更新操作符 
+  {$bit: {<field>: {and: 5}}} [原子操作]   
 聚合管道操作符 
-  'aggregation-group'group查询操作符 
-    $sum,计算总和
-    $avg,计算平均值
-    $first,根据资源文档的排序获取第一个文档数据 
-    $last,根据资源文档的排序获取最后一个文档数据
-    $max,获取集合中所有文档对应值得最大值 
-    $min,获取集合中所有文档对应值得最小值 
-    $push,在结果文档中插入值到一个数组中 
-    $addToSet,在结果文档中插入值到一个数组中,但不创建副本 
-    $stdDevPop,
-    $stdDevSamp,
-  'aggregation-pipeline'管道聚合阶段 
-    $project,修改输入文档的结构
-      可以用来重命名、增加或删除域,也可以用于创建计算结果以及嵌套文档。
-    $match,用于过滤数据,只输出符合条件的文档
-      $match使用MongoDB的标准查询操作。
-    $redact,
-    $limit,用来限制MongoDB聚合管道返回的文档数。
-    $skip,在聚合管道中跳过指定数量的文档,并返回余下的文档。
-    $unwind,将文档中的某一个数组类型字段拆分成多条,每条包含数组中的一个值。
-    $group,将集合中的文档分组,可用于统计结果。
-    $sample,
-    $sort,将输入文档排序后输出。
-    $geoNear,输出接近某一地理位置的有序文档。
+★'aggregation-group'group查询操作符 
+  $sum,计算总和
+  $avg,计算平均值
+  $first,根据资源文档的排序获取第一个文档数据 
+  $last,根据资源文档的排序获取最后一个文档数据
+  $max,获取集合中所有文档对应值得最大值 
+  $min,获取集合中所有文档对应值得最小值 
+  $push,在结果文档中插入值到一个数组中 
+  $addToSet,在结果文档中插入值到一个数组中,但不创建副本 
+  $stdDevPop,
+  $stdDevSamp,
+★'aggregation-pipeline'管道聚合阶段 
+  $project,修改输入文档的结构
+    可以用来重命名、增加或删除域,也可以用于创建计算结果以及嵌套文档。
+  $match,用于过滤数据,只输出符合条件的文档
+    $match使用MongoDB的标准查询操作。
+  $redact,
+  $limit,用来限制MongoDB聚合管道返回的文档数。
+  $skip,在聚合管道中跳过指定数量的文档,并返回余下的文档。
+  $unwind,将文档中的某一个数组类型字段拆分成多条,每条包含数组中的一个值。
+  $group,将集合中的文档分组,可用于统计结果。
+  $sample,
+  $sort,将输入文档排序后输出。
+  $geoNear,输出接近某一地理位置的有序文档。
 ◆详解 
 ObjectId,一个12字节BSON类型数据 
   PS: MongoDB中存储的文档必须有一个"_id"键。
@@ -652,69 +688,4 @@ MongoDB数据库引用
         "name": "Tom Benzamin"  
       }  
 --------------------------------------------------------------------------------
-◆MongoDB驱动 
-mongodb,连接MongoDB的基础库 
-  $ npm i mongodb  // 安装 mongodb库 
-  通过'MongoClient'连接数据库 
-    var MongoClient = require('mongodb').MongoClient;
-    var url = 'mongodb://localhost:27017/dbname';
-    MongoClient.connect(url, function(err, db) {
-      // db  数据库对象 
-      if(err){
-        console.error(err);
-        return;
-      }
-      else{
-        console.log("Connected correctly to server");
-        db.close();
-      }
-    });
-  db.collection(<ctName>)   ct,返回指定的集合  
-  ct.insert(dc,function(err,rst){     // 添加文档 
-    Example: 
-    collection.insert({name:"myName",age:"myAge"},function(err,result){
-      if(err){
-        console.error(err);
-      }
-      else{
-        console.log("insert result:");
-        console.log(result);
-      }
-    })
-  })   
-  ct.insertMany(dc,function(err,rst){ // 添加文档  
-  })    
-  ct.updateOne(<dcName>,)
-  更新记录
-  调用collection的 updateOne 方法更新单个记录。
-  collection.updateOne({ a : 2 }, { $set: { b : 1 } }, function(err, result) {
-    if(err){
-      console.error(err);
-    }else{
-      console.log("update result:");
-      console.log(result);
-    }
-  });
-  删除记录
-  调用collection的deleteOne方法更新单个记录。
-  collection.deleteOne({ a : 3 }, function(err, result) {
-    if(err){
-      console.error(err);
-    }else{
-      console.log("delete result:");
-      console.log(result);
-    }
-  });
-  查询记录
-  调用collection的find方法查找记录,find方法的参数为查找条件。
-  collection.find({}).toArray(function(err, docs) {
-    if(err){
-      console.error(err);
-    }else{
-      console.log("find result:");
-      console.log(result);
-    }
-  });
-Mongoose,对mongodb库的封装 
-  $ npm install mongoose // 
 

@@ -956,8 +956,12 @@ path,处理文件路径
       ext name : .js    
 crypto,提供加密和解密功能,基本上是对OpenSSL的包装 
   const crypto = require('crypto') 
-  var obj = crypto.createHash('md5')   // 使用MD5加密 
-  obj.update(<str>)    // 加密指定字符 
+  var obj = crypto.createHash(<KW>)   // 使用加密的算法  
+    Input: KW   str,指定词,加密算法  
+      'md5'   MD5摘要算法 
+      'sha1'  sha1摘要算法 
+    Output: 加密对象 
+  obj.update(<str>)    // 加密指定字符,并更新加密对象  
   obj.digest('hex')    // 返回16进制表示的加密值 
 util,提供常用函数的集合 
   PS:用于弥补核心JS 的功能 过于精简的不足
@@ -1156,8 +1160,6 @@ child_process,创建子进程
       子进程已退出,退出码 0
 cluster,集群 
   const cluster = require('cluster');
-crypto,加密 
-  const crypto = require('crypto');
 string_decoder,字符串解码器 
   const string_decoder = require('string_decoder');
 os,模块提供了一些基本的系统操作函数 

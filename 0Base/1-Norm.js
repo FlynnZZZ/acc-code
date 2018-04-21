@@ -1,3 +1,4 @@
+// 规范 定义 说明文档 
 名词&术语 
   IDE,'integrated development environment'集成开发环境 
   API,'application programming interfaces'应用编程接口 

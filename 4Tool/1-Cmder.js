@@ -45,7 +45,7 @@ DefDec:
       D:\ 根据你自己需要自定义  
     重启 cmder 之后就可以看到 cmder 已经进入了刚刚设置的 D:\ 目录。 
     同样也可以修改打开cmder的时候进入的操作模式,cmder、PowerShell、bash 等等 
-快捷键:  
+快捷键: 
   ctrl-w     // 关闭命令行窗口 
     
     

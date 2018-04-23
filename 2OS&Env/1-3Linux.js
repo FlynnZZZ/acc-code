@@ -1,24 +1,42 @@
 Linux 
   PS: Linux严格区分大小写 
-  文件及文件类型 
-    PS: Linux中所有内容以文件内容形式保存 
-    不靠文件扩展名区分文件类型 
-      但常用的约定扩展名:
-      压缩包: '.gz'、'.bz2'、'.tgz'
-      二进制软件包: '.rpm'
-      脚本文件: '.sh'
-      配置文件: '.conf' 
-    文件权限信息: 默认为10位,如'-rwxr-xr-x'
-      第一位表示文件类型: Linux中共7种 
-        d 目录
-        - 文件
-        l 软链接文件,即超链接 
-      后九位表示文件权限 
-        三位一组分三组分别对应: u所有人、 g所属组 、o其他人
-        其中'r''w''x'分别表示: r读、w写、x执行 
-VMware: 一虚拟PC软件,可在现有的操作系统上虚拟出一个新的硬件环境 
-  8.0 版本 
-Shell: 一种命令语言解释器'command-language interpreter', 
+文件&文件类型&文件信息  
+  PS: Linux中所有内容以文件内容形式保存 
+  不靠文件扩展名区分文件类型 
+    但常用的约定扩展名:
+    压缩包: '.gz'、'.bz2'、'.tgz'
+    二进制软件包: '.rpm'
+    脚本文件: '.sh'
+    配置文件: '.conf' 
+  文件信息表示 
+    文件权限 文件链接数 文件所有者的用户名 用户组  文件大小 上次修改时间  文件/目录名 
+    drwxr-xr-x   1         fsl          197121    0    Apr 15 23:17  node1/
+    -rw-r--r--   1         fsl          197121  355    Apr 21 09:34  tmp.js
+  文件权限信息: 默认为10位,如'-rwxr-xr-x'
+    第一位表示文件类型: Linux中共7种 
+      d 目录
+      - 文件
+      l 软链接文件,即超链接 
+    后九位表示文件权限,三位一组共三组
+      分别对应: 所属用户、 同组用户 、其他用户 对应的权限 
+      'r'  可读
+      'w'  可写
+      'x'  可执行 
+      '-'  无 
+  修改用户权限: 
+    chmod <user><+|-><limit> <fileName>  
+      user    用户
+        u   文件所有者 
+        g   group,用户组
+        o   其他用户 
+        a   所有用户,即ugo的组合  
+      +|-     增加|去除权限 
+      limit   权限
+        r
+        w 
+        x 
+--------------------------------------------------------------------------------
+Shell: 一种命令语言解释器'command-language interpreter' 
   PS: 用户和Linux内核之间的接口程序 
     在提示符下输入的命令由shell先解释然后传给Linux内核 
     shell也能被系统中其他有效的Linux实用程序和应用程序所调用 
@@ -93,12 +111,17 @@ Shell: 一种命令语言解释器'command-language interpreter',
         alias xx1='xxx1'
         alias xx2='xxx2'
 命令 
+  "~"表示home目录 
   "<"输入重定向 
-  '>'输出重定向 
-    可将输入的内容放置到文件中
+  '>'覆盖式输出重定向 
+    可将输入的内容放置到文件中,文件不存在会默认创建  
+    会将之前的内容覆盖掉 
     可把一个命令的输出当作另一个命令的输入[更简单的方法是使用管道]
     Example:
-      ls > directory.out //  把ls命令的输出保存为'directory.out'的文件
+      ls > directory.out //  把ls命令的输出保存为'directory.out'的文件 
+      echo hello a.txt   //  向 a.txt 中写入 hello
+  '>>'追加式输出重定向 
+    不会将之前的内容覆盖掉,而是新增一行进行追加 
   '|'管道 
     可把一系列命令连接起来,将上一个命令的输出通过管道传给下一个命令的输入
     最终输出的结果为管道行中最后一个命令的输出 
@@ -107,6 +130,9 @@ Shell: 一种命令语言解释器'command-language interpreter',
       // cat <filename>   列出一个文件的内容
       // grep <str>    列出存在str的所有行
       // wc -l         统计输入里的行数 
+  ``执行命令 
+    $ echo pwd   // 表示输出pwd字符 
+    $ echo `pwd` // 将当前目录输出,相当于 $ pwd | echo  
   历史操作 
     history   以列表形式显示所有历史命令 
     history <num> 仅有最后num个历史命令会被列出 
@@ -130,9 +156,9 @@ Shell: 一种命令语言解释器'command-language interpreter',
       若定义的别名和原本的命令名字相同,可使用 \<command> 来执行原原命令 
     unalias <xx>  取消xx临时别名 
   快捷键 
-    ctrl+d  退出命令行 
-    ctrl+c  终止运行  
-    ctrl+l  清屏 
+    ctrl-d  退出命令行 
+    ctrl-c  终止运行  
+    ctrl-l  清屏 
   命令行 
     $ clear   清空命令行输出 
     $ curl <url>  在命令行中显示根据URL获取到的网页内容 
@@ -143,14 +169,16 @@ Shell: 一种命令语言解释器'command-language interpreter',
     $ help   显示bash内部命令的帮助信息。
     $ kill   终止某个进程
   文件相关操作 
-    $ cd <xx> 进入目录 
+    $ pwd     // 查看当前完整路径 
+    $ env     // 查看所有环境变量 
+    $ cd <xx> // 进入目录 
       $ cd /   进入根目录 
       $ cd ~   进入当前用户home目录 
       $ cd     进入当前用户home目录 
       $ cd ..  进入上级目录 
       $ cd .   进入当前目录 
       $ cd -   进入上次目录 
-    $ ls [<options>] [<name>]  查看文件夹的文件 
+    $ ls [<options>] [<name>]  // 查看文件夹的文件 
       options  配置项 
         -a  --all,查看所有文件,包括隐藏文件 
         -l  显示详细信息 
@@ -161,19 +189,19 @@ Shell: 一种命令语言解释器'command-language interpreter',
           ls -hl 等价于 ls -h -l 
       name  目录/文件名,默认为当前目录 
       $ ll  即 $ ls -l 的别名 
-    $ pwd   查看当前完整路径 
-    $ env   查看所有环境变量 
-    $ mkdir [-p] [<name>]   创建文件夹 
+    $ mkdir [-p] [<name>]      // 创建文件夹 
       -p  递归创建 
         Example: $ mkdir -p a/b   // 在当前目录下创建目录'a/b'两级目录 
-    $ rmdir <目录名>  删除空白目录 
-    $ touch <fileName> 新建文件 
-    $ rm [<options>] <name>    删除文件 
+    $ rmdir <dirName>          // 删除空白目录 
+    $ touch <fileName>         // 新建文件
+      如果新建的文件存在,则更新该文件的创建时间 
+    $ rm [<options>] <name>    // 删除文件/目录  
       options 
-        -r   可删除目录 
         -f   强制执行不用确认  
-      $ rm -rf <name>   删除目录及其里面的所有文件  
-    $ cp [<options>] <源文件> [<目标位置>] // 复制文件 
+        -r   删除目录 
+      Example: 
+        $ rm -rf <path>   // 删除目录及其里面的所有文件  
+    $ cp [<options>] <sourceFile> [<finalPath>] // 复制文件 
       options 
         -r  用于复制目录 
           Example: $ cp -r dir1 dir2 // 将 dir1 目录复制到当前目录下并改名为 dir2 
@@ -182,17 +210,27 @@ Shell: 一种命令语言解释器'command-language interpreter',
         -a  相当于 -pdr 
       Example: 
         cp a.txt b.txt // 将 a.txt 复制到当前目录并改名为 b.txt 
-    $ mv <源文件> <目标目录>  前切/重命名 
-    $ ln [-s] <源文件> <目标链接文件>  创建链接文件 
-    $ locate <文件名>  搜索文件 
-    $ updatedb   更新数据库 
-    $ cat <fileName>  // 显示文件内容 
+    $ mv <sourcePath> <finalPath>      // 剪切/重命名 
+    $ cat <fileName>           // 显示文件内容 
+    $ tac <fileName>           // 以行为单位,倒序显示文件内容 
+    $ nl <fileName>            // 显示文件内容,并加上行号 
+    $ more <fileName>          // 分批查看文件内容 
+    $ less <fileName>          // 分批查看文件内容 
+    $ head <fileName>          // 查看文件前10行 
+      可通过指定 -n <num> 来指定查看前num行 
+        $ head -n 20 tmp.js  // 查看文件的前20行 
+    $ tail <fileName>          // 查看文件后10行 
+      $ tail -n 20 tmp.js  // 查看文件的后20行 
+    $ locate <fileName>        // 搜索文件 
+    $ ln [-s] <sourceFile> <finalFile> // 创建链接文件 
+    $ updatedb     // 更新数据库 
   执行程序 
-    which <name>  查看程序位置 
+    which <name>  // 查看程序位置 
       如 which node ,which vue 
-    where <name>  查看程序位置 
+    where <name>  // 查看程序位置 
       如 where node 
-    atom <path>  用Atom打开文件夹 
+    <atom> <path>  // 用Atom打开文件夹 
+    $ kill <pid> // 杀掉进程 
   信息查询 
     $ whoami  当前使用者用户名 
     $ find <搜索范围> [<options>] <搜索条件>  完全匹配搜索 
@@ -213,10 +251,18 @@ Shell: 一种命令语言解释器'command-language interpreter',
           $ find . -size 25k    在当前文件夹下查找文件大小为25k的文件 
           $ find . -size +25k   在当前文件夹下查找文件大于25k的文件 
         -inum <num>   根据i节点来查找 
+    $ uname <options> // 操作系统相关信息 
+      options 
+        -r  内核信息 
+        -a  详细信息 
+    $ grep <str>  // 查询包含指定字符的项 
+    $ ps   // 查看进程 
   逻辑符号 
     -a  逻辑与
     -o  逻辑或 
-
+--------------------------------------------------------------------------------
+VMware: 一虚拟PC软件,可在现有的操作系统上虚拟出一个新的硬件环境 
+  8.0 版本 
 
 
 

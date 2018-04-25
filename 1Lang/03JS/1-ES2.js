@@ -590,14 +590,13 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
        foo.name;            //"fan"
        foo.length;          //2
        console.log(foo)     //[1, 2, name: "fan"]
-    arr = new Array([val1,val2,..]) 内置构造函数创建 
+    new Array( val1?,.. ) 内置构造函数创建 
       PS: 可省略'new'关键字,但不推荐 
       无参数: 创建空数组 []
-      单参数: 作为数组的元素或指定数组的长度 
+      单参数: 当为数字时表示指定数组的长度,否则作为数组的元素  
         var arr1 = new Array("a");
         var arr2 = new Array(6);   //表示该数组的长度为6
-        console.log(arr1);   // ["a"]
-        console.log(arr2);   // [undefined × 6] 
+        console.log(arr1,arr2);   // ["a"]  [undefined × 6] 
       多参数: 将参数作为数组的元素 
         var arr = new Array(1,3,true,"abc"); 
         console.log(arr);  // [1, 3, true, "abc"]

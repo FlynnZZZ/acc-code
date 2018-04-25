@@ -1,197 +1,9 @@
-◆二进制数组,以数组的语法处理二进制数据[ES6] 
-  PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
-    它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
-    该接口的原始设计目的,与WebGL项目有关
-    浏览器与显卡间的通信接口,使用二进制才能满足大量的、实时的数据交换, 
-    直接操作字节,脚本的性能大幅提升,二进制数组就是在这种背景下诞生的 
-ArrayBuffer,内存中的一段二进制数据 
-  Extend：Object 
-  Instance: new ArrayBuffer(num) 
-    var buffer = new ArrayBuffer(20);  // 在内存中分配20B 
-  Proto: 
-    .byteLength // 包含的字节数 
-    .slice()    
-数据类型 字节长度 对应C语言中的类型  含义 
-  Int8     1     signed char      8 位整数 
-  Uint8    1     unsigned char    8 位无符号整数 
-  Uint8C   1     unsigned char    8 位无符号整数[自动过滤溢出] 
-  Int16    2     short            16 位整数 
-  Uint16   2     unsigned short   16 位无符号整数 
-  Int32    4     int              32 位整数 
-  Uint32   4     unsigned int     32 位无符号的整数 
-  Float32  4     float            32 位浮点数 
-  Float64  8     double           64 位浮点数 
-DataView,不确定类型的二进制数据 
-  PS: 支持除'Uint8C'外的其他8种组成的集合  
-    比如第一个字节是Uint8,第二个字节是Int16,第三个字节是Float32等等  
-  Extend: Object 
-  Instance: 
-    var view = new DataView(buffer[,bgn[,length]]) // 通过Buffer类型创建  
-      buffer  ArrayBuffer对象 
-      bgn     num,可选,字节偏移量,从该字节开始选择 \
-        //创建一个开始于字节9 的新视图
-        var view = new DataView(buffer, 9);
-      length  num,可选,要选择的字节数 
-        //创建一个从字节9 开始到字节18 的新视图
-        var view = new DataView(buffer, 9, 10);
-  Proto: 
-    .buffer       // 获取buffer对象 
-    .byteOffset   // 偏移量 
-    .byteLength   // 字节长度 
-    ★读写方法 
-      PS: 保存不同类型的数据,需要的空间不同,如无符号8 位整数要用1B,而32 位浮点数则要用4B
-        使用DataView,需自己来管理这些细节,即要明确知道数据需要多少字节,并选择正确的读写方法
-      offset   num,字节偏移量,表示要从哪个字节开始读取或写入 
-      littleEndian  bol,表示读写数值时是否采用小端字节序 
-        即将数据的最低有效位保存在低内存地址中 
-    .getInt8(offset)  
-    .getUint8(offset)  
-    .getInt16(offset,littleEndian)  
-    .getUint16(offset,littleEndian)  
-    .getInt32(offset,littleEndian)  
-    .getUint32(offset,littleEndian)  
-    .getFloat32(offset,littleEndian)  
-    .getFloat64(offset,littleEndian)  
-    .setInt8(offset,val)  
-    .setUint8(offset,val)  
-    .setInt16(offset,val,littleEndian)  
-    .setUint16(offset,val,littleEndian)  
-    .setInt32(offset,val,littleEndian)  
-    .setUint32(offset,val,littleEndian)  
-    .setFloat32(offset,val,littleEndian)  
-    .setFloat64(offset,val,littleEndian)  
-TypedArray[不可直接访问],类型化数组,确定类型的二进制数据 
-  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
-  Proto:  
-    .buffer 
-    .byteLength 
-    .byteOffset 
-    .length 
-    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
-    .entries() 
-    .keys() 
-    .values() 
-    .copyWithin() 
-    .fill() 
-    .includes() 
-    .indexOf() 
-    .lastIndexOf() 
-    .slice() 
-    .set() 
-    .find() 
-    .findIndex() 
-    .toLocaleString() 
-    .join() 
-    .toString() 
-    .forEach() 
-    .every() 
-    .map() 
-    .reverse() 
-    .reduce() 
-    .reduceRight() 
-    .some() 
-    .filter() 
-    .sort() 
-<TypedArray> 
-  Static: 
-    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
-    Uint8Array.BYTES_PER_ELEMENT    1 
-    Float32Array.BYTES_PER_ELEMENT  4 
-    ...
-    Example: 
-      利用该属性来辅助初始化
-      // 需要10 个元素空间
-      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
-  Instance: 
-    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
-    var typedArray = new <TypedArray>(num); 
-      // 创建一个数组保存10 个8 位整数[10 字节] 
-      var int8s = new Int8Array(10); 
-      // 创建一个数组保存10 个16 位整数[20 字节] 
-      var int16s = new Int16Array(10); 
-    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
-      PS: 用默认值来初始化类型化视图的最佳方式 
-      // 创建一个数组保存5 个8 位整数[5 字节]
-      var int8s = new Int8Array([10, 20, 30, 40, 50]);
-  Feature: 
-    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
-      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
-      保存65537,那实际保存的值是1,依此类推。
-      var uint16s = new Uint16Array(10);
-      uint16s[0] = 65537;
-      console.log(uint16s[0]); // 1
-  Example: 
-    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
-    var int8s = new Int8Array(buffer, 0, 10);
-    var uint16s = new Uint16Array(buffer, 11, 10);
-Int8Array,   
-Uint8Array,   
-Uint8ClampedArray,    
-Int16Array,      
-Uint16Array,      
-Int32Array,      
-Uint32Array,    
-Float32Array,     
-Float64Array,    
-◆Error,错误类 
-  PS: JS解析或执行时,当发生错误就会抛出一错误对象,并且程序中断在发生错误的地方 
-    JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例 
-    ECMA-262 定义了7种错误类型,Error是其他六种的父类型
-  Extend: Object 
-    console.log(Error.prototype.__proto__.constructor===Object); // true 
-  Static: 
-    Error.captureStackTrace() 
-    Error.stackTraceLimit 
-  Instance: 
-    自定义错误对象 
-    error = new Error(str);
-    error = new RangeError(str);
-    ...
-    通过原型链继承Error来创建自定义错误类型 
-      Example: :
-      function CustomError(message){
-        this.name ="CustomError";
-        this.message =message;
-      }
-      CustomError.prototype = new Error();
-      throw new CustomError('abc')
-  Proto: 
-    .message   可以读取的错误消息 [标准属性]
-    .name      错误名称   [非标]
-    .description  可以读取的错误消息 [IE定义]
-    .number   错误数量 [IE定义]
-    .stack    错误的堆栈 [非标] 
-      function throwIt() { throw new Error(''); }
-      function catchIt() {
-        try { throwIt(); } 
-        catch(e) { console.log(e.stack); }
-      }
-      catchIt();
-      // Error
-      //    at throwIt (~/examples/throwcatch.js:9:11)
-      //    at catchIt (~/examples/throwcatch.js:3:9)
-      //    at repl:1:5
-      代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
-    .toString() 
-TypeError,变量或参数不是预期类型时发生的错误 
-  比如,对字符串、布尔值、数值等原始类型的值使用new命令,就会抛出这种错误,
-  因为new命令的参数应该是一个构造函数
-ReferenceError,引用一个不存在的变量时发生的错误 
-  另一种触发场景,将一个值分配给无法分配的对象,比如对函数的运行结果或者this赋值
-RangeError,一个值超出有效范围时发生的错误 
-  主要场景: 数组长度为负数,Number对象的方法参数超出范围,函数堆栈超过最大值
-URIError,URI相关函数的参数不正确时抛出的错误 
-  主要涉及 encodeURI() decodeURI() encodeURIComponent() 
-  decodeURIComponent() escape() unescape() 六个函数
-SyntaxError,解析代码时发生的语法错误 
-EvalError,使用 eval()发生异常时抛出 
-  已不再在ES5中出现,仅为了保持兼容 
---------------------------------------------------------------------------------
-global|window,全局对象 
+Global|window,全局对象 
   PS: global对象未定义如何访问,浏览器中用window对象实现全局访问;
     所有全局作用域中定义的变量和函数,都是Global对象的属性和方法,
     var global = function(){ return this; }  间接获取Global对象
   Member: 
+    ★属性: Infinity NaN undefined null 
     ★转换方法 
     Boolean(val)  bol,转换为的布尔值 
       console.log(Boolean(0));         // false
@@ -320,7 +132,6 @@ global|window,全局对象
     已废弃 
       escape(str)   str,编码字符串[已废弃]
       unescape(str) str,解码由'escape'编码的字符串[已废弃] 
-    window对象的DOM和BOM属性&方法 [详见DOM&BOM] 
 Math,数学对象 
   PS: 非构造函数/类,实际为一对象; 为数学常量和数学函数提供的属性/方法; 
   Member: 
@@ -590,6 +401,195 @@ JSON'JavaScript Object Notation'JavaScript对象表示法[IE8+]
   Accu:  
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
+--------------------------------------------------------------------------------
+◆二进制数组,以数组的语法处理二进制数据[ES6] 
+  PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
+    它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
+    该接口的原始设计目的,与WebGL项目有关
+    浏览器与显卡间的通信接口,使用二进制才能满足大量的、实时的数据交换, 
+    直接操作字节,脚本的性能大幅提升,二进制数组就是在这种背景下诞生的 
+ArrayBuffer,内存中的一段二进制数据 
+  Extend：Object 
+  Instance: new ArrayBuffer(num) 
+    var buffer = new ArrayBuffer(20);  // 在内存中分配20B 
+  Proto: 
+    .byteLength // 包含的字节数 
+    .slice()    
+数据类型 字节长度 对应C语言中的类型  含义 
+  Int8     1     signed char      8 位整数 
+  Uint8    1     unsigned char    8 位无符号整数 
+  Uint8C   1     unsigned char    8 位无符号整数[自动过滤溢出] 
+  Int16    2     short            16 位整数 
+  Uint16   2     unsigned short   16 位无符号整数 
+  Int32    4     int              32 位整数 
+  Uint32   4     unsigned int     32 位无符号的整数 
+  Float32  4     float            32 位浮点数 
+  Float64  8     double           64 位浮点数 
+DataView,不确定类型的二进制数据 
+  PS: 支持除'Uint8C'外的其他8种组成的集合  
+    比如第一个字节是Uint8,第二个字节是Int16,第三个字节是Float32等等  
+  Extend: Object 
+  Instance: 
+    var view = new DataView(buffer[,bgn[,length]]) // 通过Buffer类型创建  
+      buffer  ArrayBuffer对象 
+      bgn     num,可选,字节偏移量,从该字节开始选择 \
+        //创建一个开始于字节9 的新视图
+        var view = new DataView(buffer, 9);
+      length  num,可选,要选择的字节数 
+        //创建一个从字节9 开始到字节18 的新视图
+        var view = new DataView(buffer, 9, 10);
+  Proto: 
+    .buffer       // 获取buffer对象 
+    .byteOffset   // 偏移量 
+    .byteLength   // 字节长度 
+    ★读写方法 
+      PS: 保存不同类型的数据,需要的空间不同,如无符号8 位整数要用1B,而32 位浮点数则要用4B
+        使用DataView,需自己来管理这些细节,即要明确知道数据需要多少字节,并选择正确的读写方法
+      offset   num,字节偏移量,表示要从哪个字节开始读取或写入 
+      littleEndian  bol,表示读写数值时是否采用小端字节序 
+        即将数据的最低有效位保存在低内存地址中 
+    .getInt8(offset)  
+    .getUint8(offset)  
+    .getInt16(offset,littleEndian)  
+    .getUint16(offset,littleEndian)  
+    .getInt32(offset,littleEndian)  
+    .getUint32(offset,littleEndian)  
+    .getFloat32(offset,littleEndian)  
+    .getFloat64(offset,littleEndian)  
+    .setInt8(offset,val)  
+    .setUint8(offset,val)  
+    .setInt16(offset,val,littleEndian)  
+    .setUint16(offset,val,littleEndian)  
+    .setInt32(offset,val,littleEndian)  
+    .setUint32(offset,val,littleEndian)  
+    .setFloat32(offset,val,littleEndian)  
+    .setFloat64(offset,val,littleEndian)  
+TypedArray[不可直接访问],类型化数组,确定类型的二进制数据 
+  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
+  Proto:  
+    .buffer 
+    .byteLength 
+    .byteOffset 
+    .length 
+    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
+    .entries() 
+    .keys() 
+    .values() 
+    .copyWithin() 
+    .fill() 
+    .includes() 
+    .indexOf() 
+    .lastIndexOf() 
+    .slice() 
+    .set() 
+    .find() 
+    .findIndex() 
+    .toLocaleString() 
+    .join() 
+    .toString() 
+    .forEach() 
+    .every() 
+    .map() 
+    .reverse() 
+    .reduce() 
+    .reduceRight() 
+    .some() 
+    .filter() 
+    .sort() 
+<TypedArray> 
+  Static: 
+    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
+    Uint8Array.BYTES_PER_ELEMENT    1 
+    Float32Array.BYTES_PER_ELEMENT  4 
+    ...
+    Example: 
+      利用该属性来辅助初始化
+      // 需要10 个元素空间
+      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
+  Instance: 
+    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
+    var typedArray = new <TypedArray>(num); 
+      // 创建一个数组保存10 个8 位整数[10 字节] 
+      var int8s = new Int8Array(10); 
+      // 创建一个数组保存10 个16 位整数[20 字节] 
+      var int16s = new Int16Array(10); 
+    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
+      PS: 用默认值来初始化类型化视图的最佳方式 
+      // 创建一个数组保存5 个8 位整数[5 字节]
+      var int8s = new Int8Array([10, 20, 30, 40, 50]);
+  Feature: 
+    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
+      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
+      保存65537,那实际保存的值是1,依此类推。
+      var uint16s = new Uint16Array(10);
+      uint16s[0] = 65537;
+      console.log(uint16s[0]); // 1
+  Example: 
+    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
+    var int8s = new Int8Array(buffer, 0, 10);
+    var uint16s = new Uint16Array(buffer, 11, 10);
+Int8Array,   
+Uint8Array,   
+Uint8ClampedArray,    
+Int16Array,      
+Uint16Array,      
+Int32Array,      
+Uint32Array,    
+Float32Array,     
+Float64Array,    
+◆Error,错误类 
+  PS: JS解析或执行时,当发生错误就会抛出一错误对象,并且程序中断在发生错误的地方 
+    JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例 
+    ECMA-262 定义了7种错误类型,Error是其他六种的父类型
+  Extend: Object 
+    console.log(Error.prototype.__proto__.constructor===Object); // true 
+  Static: 
+    Error.captureStackTrace() 
+    Error.stackTraceLimit 
+  Instance: 
+    自定义错误对象 
+    error = new Error(str);
+    error = new RangeError(str);
+    ...
+    通过原型链继承Error来创建自定义错误类型 
+      Example: :
+      function CustomError(message){
+        this.name ="CustomError";
+        this.message =message;
+      }
+      CustomError.prototype = new Error();
+      throw new CustomError('abc')
+  Proto: 
+    .message   可以读取的错误消息 [标准属性]
+    .name      错误名称   [非标]
+    .description  可以读取的错误消息 [IE定义]
+    .number   错误数量 [IE定义]
+    .stack    错误的堆栈 [非标] 
+      function throwIt() { throw new Error(''); }
+      function catchIt() {
+        try { throwIt(); } 
+        catch(e) { console.log(e.stack); }
+      }
+      catchIt();
+      // Error
+      //    at throwIt (~/examples/throwcatch.js:9:11)
+      //    at catchIt (~/examples/throwcatch.js:3:9)
+      //    at repl:1:5
+      代码显示:抛出错误首先在throwIt函数,然后在catchIt函数,最后在函数的运行环境中。        
+    .toString() 
+TypeError,变量或参数不是预期类型时发生的错误 
+  比如,对字符串、布尔值、数值等原始类型的值使用new命令,就会抛出这种错误,
+  因为new命令的参数应该是一个构造函数
+ReferenceError,引用一个不存在的变量时发生的错误 
+  另一种触发场景,将一个值分配给无法分配的对象,比如对函数的运行结果或者this赋值
+RangeError,一个值超出有效范围时发生的错误 
+  主要场景: 数组长度为负数,Number对象的方法参数超出范围,函数堆栈超过最大值
+URIError,URI相关函数的参数不正确时抛出的错误 
+  主要涉及 encodeURI() decodeURI() encodeURIComponent() 
+  decodeURIComponent() escape() unescape() 六个函数
+SyntaxError,解析代码时发生的语法错误 
+EvalError,使用 eval()发生异常时抛出 
+  已不再在ES5中出现,仅为了保持兼容 
 --------------------------------------------------------------------------------
 
 

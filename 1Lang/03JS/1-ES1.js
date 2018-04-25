@@ -267,17 +267,17 @@ const,定义块级常量[ES6]
     隐式转换为布尔值 
       规则: 
       undefined、null、0、NaN、""转换为 false;
-      其余转换为 true,包括 '0'、
+      其余转换为 true,包括 '0'、对象、Infinity 等等 
       Example: 
-      var box = ''; 
-      if(box){ //条件语句中()内必须是布尔值
-        console.log('真');
-      }
-      else{ 
-        console.log('假');
-      } 
-      
-      console.log(!0,!1); // true false
+        var box = ''; 
+        if(box){ //条件语句中()内必须是布尔值
+          console.log('真');
+        }
+        else{ 
+          console.log('假');
+        } 
+        
+        console.log(!0,!1); // true false
     bol = Boolean(any) 显式转换为布尔值 [moIn 'Global']
   Number  数值 
     PS: 可以保存+0 和 -0,且 +0 === -0;
@@ -986,7 +986,7 @@ class,类,基于原型的实现的封装[ES6]
 'operator'运算符: 用于操作数据值的运算符,也叫操作符 
   PS: ECMAScript操作符的特点是能够适用于很多值,进行运算时会将不同的类型进行隐式转换,
     运用于对象时,通常会调用对象的'valueOf'和'toString'方法,以便取得相应的值;
-  一元运算符 : 只能操作一个值的运算符 
+  一元运算符: 只能操作一个值的运算符 
     ++、-- 自增、自减
       前置和后置的区别:
         对赋值有影响;在没有赋值操作时,前置后后置是一样的,
@@ -994,60 +994,108 @@ class,类,基于原型的实现的封装[ES6]
       Example: 
       var num = 100;
       console.log(num++,++num); // 100 , 102 
-    +、-   正、负数
-      var box="1";
-      -box;               //-1
-      typeof box;         //String类型
-      typeof -box;        //Number类型
-    str = typeof val  值类型检测 
-      PS: typeof是操作符而非函数,因此后面的括号可有可无;不能有效的区分对象的类型;  
-      val   被检测的值,可以是变量或字面量 
-        返回值类型为字符串,为如下6种之一: 
-        'undefined' 未定义
-        'boolean'   布尔值
-        'string'    字符串
-        'number'    数值
+    +、-   正、负数 
+      PS: 会进行隐式转换 
+      var str = "1";
+      console.log( -str);        // -1 
+      console.log( typeof str);  // string 
+      console.log( typeof -str); // number 
+      console.log( typeof +str); // number 
+    typeof val  值类型检测 
+      PS: typeof是操作符而非函数,因此后面的括号可有可无;
+        不能有效的区分对象的类型;  
+      Input: val  any,任意值/变量/字面量/未定义的值 
+      Output: 返回如下6种之一的字符串:   
+        'undefined' 
+          typeof undefined // undefined 
+          // 值为undefined的变量 
+          var tmp = undefined 
+          typeof tmp       // undefined
+          // 未定义的变量也是undefined
+          typeof tmp1      // undefined
+        'boolean'  
+        'string' 
+        'number'  
           typeof NaN;       // "number"
-        'object'    对象 或 null
-          typeof null;       // "object",空对象
-        'function'  函数 
+        'object'   
+          typeof null;    // object,空对象
+        'function'  
       检测未声明的变量不会报错,而返回 undefined   
         typeof aoo;         // "undefined"
-    bol = delete val  删除对象中的成员[值],返回是否删除成功的布尔值  
+    delete val  删除对象中的成员[值] 
       PS: 若删除不存在的值也会返回true 
-      删除数组成员,相当于将该成员值变成'undefined',数组长度不变化 
-        var arr = ['a','b','c']
-        delete arr[1]
-        console.log(arr,arr[1]); // ["a", undefined × 1, "c"]  undefined 
-        console.log(arr.length); // 3 
+      Input: 对象的属性 
+      Output: 是否删除成功的布尔值 
+      Feature: 
+        删除数组成员,相当于将该成员值变成'undefined',数组长度不变化 
+          var arr = ['a','b','c']
+          delete arr[1]
+          console.log(arr,arr[1]); // ["a", undefined × 1, "c"]  undefined 
+          console.log(arr.length); // 3 
       Example:
-      var obj = {a:1,b:2,c:3}
-      var bol1 = delete obj.b;
-      console.log(bol1,obj); // true {a: 1, c: 3}
-    obj = new Foo();  初始化对象 
+        var obj = { a: 1, b: 2, c: 3 }
+        var bol1 = delete obj.b;
+        console.log(bol1,obj); // true {a: 1, c: 3}
+    new Foo();  初始化对象,返回实例化的对象  
     void expr;   执行表达式,并始终返回 undefined 
-      PS: 无论void后的表达式是什么,void操作符始终返回 undefined
-      expr  表达式,不可为空,否则报错 
+      PS: 无论void后的表达式是什么,void操作符始终返回 undefined 
+      Input: 待执行的表达式,不可为空,否则报错  
         void ();  // Uncaught SyntaxError: Unexpected token )
-      使用void获取'undefined' 
-        'undefined'不是JS的保留字,有可能被占用 
-        还有一种方式是通过函数调用,如AngularJS的源码里就用这样的方式:
-        (function(undefined) {
-          //此处的 undefined 为undefined
-        })();
-      禁止超链接跳转页面 
-        若链接URL为空,点击会刷新整个页面,
-        点击以 javascript: URI 的链接时,浏览器会对冒号后面的代码进行求值,
-        然后清空页面把求值的结果显示在页面上
-        只有当这段代码的求值结果是 undefined 的时候,浏览器才不会去做显示
-        但不推荐利用 javascript: 伪协议来执行JS代码
-      立即调用的函数表达式 
-        void function(){
-          console.log(1);
-        }();
-  二元表达式 
-    ◆算术运算符 
-      PS:若算术运算的值不是数值,后台会先使用Number()转型函数将其隐式转换为数值.
+      Output: 始终返回 undefined 
+      Expand: 
+        使用void获取'undefined' 
+          'undefined'不是JS的保留字,有可能被占用 
+          还有一种方式是通过函数调用,如AngularJS的源码里就用这样的方式:
+          (function(undefined) {
+            //此处的 undefined 为undefined
+          })();
+        禁止超链接跳转页面 
+          若链接URL为空,点击会刷新整个页面,
+          点击以 javascript: URI 的链接时,浏览器会对冒号后面的代码进行求值,
+          然后清空页面把求值的结果显示在页面上
+          只有当这段代码的求值结果是 undefined 的时候,浏览器才不会去做显示
+          但不推荐利用 javascript: 伪协议来执行JS代码
+        立即调用的函数表达式 
+          void function(){
+            console.log(1);
+          }();
+  布尔操作符/逻辑操作符: 通常用于布尔值的操作,一般和关系运算符配合使用 
+    ! expr1        // 逻辑非 
+      Input: 任何类型值
+      Output: 返回取反后布尔值,会进行隐式转换 
+      Expand: 
+        使用两次逻辑运算符相当于对值进行Boolean()转型函数处理;
+    expr1 && expr2 // 逻辑与  
+      Input: 任意表达式/值  
+      Output: 
+        PS: 尽量返回可转换为 false 的值 
+        第一个值可转换成 false 时,直接返回第一个值,且后续不再执行;
+          var flag = 1
+          var result = 1 && (flag = 4); // 不加括号则报错 
+          console.log(result,flag); // 4 4
+        第一个值可转换为 true 时,返回第二个值[会执行第二个表达式]    
+          fn && fn() 
+          // 相当于 
+          if (fn) {fn()}
+    expr1 || expr2 // 逻辑或 
+      Input: 任意表达式/值 
+      Output: 
+        PS: 尽量返回可转换为 true 的值 
+        第一个值可转换为 true 时,直接返回第一个值,后续不再执行 
+          var num = 10;
+          function foo(){ 
+            num++; 
+            return 'foo函数' ;
+          }
+          var result1 = 1 || foo(); // foo函数未执行
+          console.log(num,result1); // 10  1 
+          var result2 = 0 || foo(); // foo函数执行了
+          console.log(num,result2); // 11  foo函数
+        第一个值可转换为 false 时,直接返回第二个值[会执行第二个表达式] 
+          var result = false || 'abc';
+          console.log(result); // abc
+  算术运算符 
+    PS: 若算术运算的值不是数值,默认会先使用Number()转型函数将其隐式转换为数值 
     +  和运算/字符串连接
       var box=Infinity+-Infinity; //NaN,正负无穷相加为NaN
       var box=100+'100'; //100100,字符串连接先于和运算
@@ -1082,10 +1130,7 @@ class,类,基于原型的实现的封装[ES6]
       var aoo =3;
       var boo =2;
       console.log(aoo**boo); // 9
-    ◆关系运算符 
-      PS:用于进行比较的运算符称作为关系运算符.
-       包括:<、>、<=、>=、==、!=、全等(恒等)===、不全等!==
-       关系运算符大多返回的为布尔值.
+  关系操作符 
     <、>、<=、>=的运算规则:
       两个操作数都是字符串,则比较两个字符串的第一个字符对应的Unicode字符编码值;
       有一个操作数是数值,则将另一个转换为数值,在进行数值比较
@@ -1101,6 +1146,9 @@ class,类,基于原型的实现的封装[ES6]
       1==true;    //true
       1===true;   //false
       NaN==NaN;   //false
+    !==  不全等
+    !=   不等 
+  条件操作符 
     obj instanceof Foo; bol,对象是否继承至构造函数  
       PS: 对象须和构造函数处于同一iframe或window中,否则返回false
       obj  用于检测的对象,若为基本类型则直接返回'false' 
@@ -1155,237 +1203,173 @@ class,类,基于原型的实现的封装[ES6]
         var bol3 = "b" in obj.b.b;   
         var bol4 = "b" in obj.b.b.b; 
         console.log(bol1,bol2,bol3,bol4); // true true true true
-    ◆逻辑运算符 
-      PS:逻辑运算符通常用于布尔值的操作,一般和关系运算符配合使用.
-        逻辑运算符有三个:与&&(AND)、或||(OR)、非!(NOT)
-      逻辑运算的短路现象
-        使用&&时,第一个值为false后面的就不再做运算了;
-        使用||时,第一个值为true,则后面的也不做运算了.
-    && 逻辑与 
-      若两边的操作数有一个操作数不是布尔值时,逻辑与运算就不一定返回布尔值 
-        规则如下:
-          第一个操作数是对象,则返回第一个操作数
-            var box = {}&&(5>3);    //box值为true
-            var box = {}&&5;        //box值为5
-          第二个操作数为对象,在第一个操作数为true时,返回对象;否则返回false;
-            var box =5&&{}  //box为对象{}
-            var box =(5>3)&&{}  //box为对象{}
-          有一个操作数为null或undefined,则返回null或undefined(除去第一个操作数为false时的情况)
-      短路 : 遇到false时,后续不再执行,直接返回false 
-        var flag = 1;
-        var bool1 = 0 && function(){
-          flag = 2;
-        }
-        console.log(bool1,flag); // 0 1
-        var bool2 = 1 && function(){
-          flag = 3;
-        }
-        console.log(bool2,flag); // function (){ flag = 3; } 1
-        var bool3 = 1 && (flag = 4); // 不加括号则报错 
-        console.log(bool3,flag); // 4 4
-        
-        fn && fn() 
-        // 相当于 
-        if (fn) {fn()}
-    || 逻辑或 
-      PS:返回值不一定为布尔值;
-      返回值:
-        规则如下:
-        第一个操作数为对象,则返回该对象
-        第一个操作数为false,第二个任意,返回第二个操作数
-          var boo1 = false || 'abc';
-          console.log(boo1); // abc
-        两个操作数都是null或NaN或undefined时,则对应的返回null或NaN或undefined
-      短路: 执行遇到可表示为true的操作符时,则直接返回该操作符,后续不再执行;
-        var num = 10;
-        function foo(){ 
-          num++; 
-          return 'foo函数' ;
-        }
-        var boo1 = 1 || foo(); // foo函数未执行
-        console.log(num);  // 10
-        console.log(boo1); // 1
-        var boo2 = 0 || foo(); // foo函数执行了
-        console.log(num);  // 11
-        console.log(boo2); // foo函数
-    !  逻辑非 
-      PS:可用于任何类型值,最终结果返回一个布尔值;
-        执行原理:先将这个值转换成布尔值,然后取反;
-        使用两次逻辑运算符相当于对值进行Boolean()转型函数处理;
-      ★规则:
-      操作数是一个对象,返回 false;
-      操作数是数值0、空字符串、null、NaN、undefined,返回 true;
-      操作数是一个非空字符串,返回 false;
-      操作数是任意非0和infinity,返回 false;
-    ◆位运算符: 按内存中表示数值的位来操作数值 
-      PS: 一般应用中,基本用不到位运算符; 比较基于底层,性能和速度会非常好;
-        ECMAScript中的所有数值都以'IEEE-754''64位'格式存储,
-        但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
-        然后执行操作,最后在将结果转换回64位,
-        对于开发人员来说,由于64位存储格式是透明的,因此整个过程就像是只存在32位的整数一样;
-      ~   位非NOT
-      &   位与AND
-      |   位或OR
-      ^   位异或XOR
-      <<  左移
-      >>  有符号右移
-      >>> 无符号右移
-    ◆其他运算符 
-    =  赋值运算符
-     =:将右边的赋值给左边
-     复合赋值运算符
-       +=/-=/*=//=/%=
-    +  字符串连接符
-      PS:进行字符的拼接操作(只要需要有一个操作数是字符串即可)
-        当有字符串和数值进行+操作时,则默认将数值转换为字符串形式进行拼接操作.
-      Example: :
-        3+6+"3a";      //"93a",先进行算术运算然后再进行字符串的连接操作.
-        ""+3+6+"3a";   //"363a",使用空字符串达到字符连接的效果.
-        var a=1,b=2,c=3;
-        ""+a+b+c;      //"123",数值和字符串+运算为字符串,运算顺序从左到右.
-    ,  逗号运算符: 在一条语句中执行多个操作 
-      将多个表达式连接为一个表达式,依次执行每个表达式,最终返回值为最后一个表达式的值 
-        console.log(1),console.log(2),console.log(3); // 1 2 3
-        
-        1,2; // 2
-      
-        var auu=(aoo=1,boo=2,coo=3);
-        console.log(auu);    // 3
-
-        var aoo =(1,2,3); // 3,取最后一个值.
-        
-        self:
-        var aoo = 1,boo = 2;
-        相当于: 
-        var aoo = 1 ;
-        var boo = 2 ;
-        而非:
-        var aoo = 1;
-        boo = 2;
-        验证:
-          function foo(){
-            var aoo = 1, boo = 2; 
-            console.log(aoo); // 1
-            console.log(boo); // 2
-          }
-          foo();
-          console.log(boo); // boo is not defined
-          console.log(aoo);
-          
-          function foo(){
-            var aoo = 1;
-            boo = 2;
-            console.log(aoo); // 1
-            console.log(boo); // 2
-          }
-          foo();
-          console.log(boo); // 2
-          console.log(aoo); // aoo is not defined
-      在for循环中的使用
-        for (var i = 0, j = 9; i <= 9; i++, j--) {
-          console.log("" + i  + j  );
-        }
-      'return'处理之后返回: 在返回值前处理一些操作
-        有最后一个表达式被返回,其他的都只是被求值
-        function foo () {
-          var x = 0;
-          return x++, x;
-        }
-        console.log(foo()); // 1
-      配合'var'关键字,同时定义多个变量  
-        var box="A", age="20", height="175";  // 同时定义多个变量 
-        var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
-        var 2==3;          // Uncaught SyntaxError: Unexpected number
-        1 , 2==3,function(){ console.log(4); }() // 4;
-    'Destructuring'解构赋值: 按照一定模式,从数组和对象中取值,对变量进行赋值[ES6] 
-      PS:
-      Example:
-        var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
-        console.log(a,b,c);// 1 2 3 
-      解构嵌套 
-        var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
-        console.log(c1,c2); // 3.1 3.2
-      不完全解构 
-        赋值不成功,变量的值为undefined
-        var [a,b,c] = [1,2];
-        console.log(a,b,c); // 1 2 undefined 
-      设定默认值 
-        var [a,b,c=3] = [1,2];
-        console.log(a,b,c); // 1 2 3 
-        覆盖默认值 
-        var [a,b,c=3] =[1,2,4];
-        console.log(a,b,c); // 1 2 4
-      对象的解构赋值:不受属性的顺序影响,和属性名对应 
-        PS:默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
-        Example:
-          var {a,b,c} = {"a":1,"b":2,"c":3};
-          console.log(a,b,c); // 1 2 3 
-          改变顺序
-          var { a,b,c } = {"a":1,"c":3,"b":2};
-          console.log(a,b,c); // 1 2 3 
-          
-          var { a } = {"b":2};
-          console.log(a); // undefined
-        给一个变量名与属性名不一样的变量解构赋值 
-          var { b:a } = {"b":2};
-          console.log(a); // 2
-      对象解构赋值嵌套
-        var {a:{b}} = {"a":{"b":1}};
-        console.log(b);//结果:b的值为1
-      对象解构指定默认值 
-        var {a,b=2} = {"a":1}; 
-        console.log(b); // 2
-      字符串的解构赋值 
-        PS:解构赋值的过程中,字符串被转换成了一个类似数组的对象
-        var [a,b,c,d,e] = "12345";
-        console.log(a,b,c,d,e); // 1 2 3 4 5 
-      使用举例  
-        交换变量的值 
-          var x = 1;
-          var y = 2;
-          [x,y] = [y,x]; 
-        定义函数参数 
-          function foo({a,b,c}){ 
-            console.log(a,b,c); 
-          }
-          foo({a:1,b:2,c:3,d:4}); // 1 2 3 
-        函数参数的默认值 
-          function demo({aoo=1}){ 
-            console.log(aoo); 
-          }
-          demo({});
-    'Spread'扩展运算符: 把数组解开成单独的值[ES6] 
-      PS: 除了用在rest参数中,还有其他用途
-      结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
-        function sum(a,b) {
-          return  a+b ;
-        }
-        let arr = [2,3];
-        // ...arr  // 报错
-        sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
-        // sum( ...arr ) 的效果相当于sum( 2,3 ) 
-      Example:
-        var aoo =[1,2,3];
-        var boo =[...aoo,4];
-        console.log(boo);  //[1, 2, 3, 4]
-        console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
-        // 相当于
-        console.log.apply(null,aoo); // 1 2 3
-        ...aoo;            //报错
-      函数中将部分参数组成的数组 
-        var foo = function(aoo,...boo){ 
-          console.log(aoo,boo); 
-        }
-        foo(1,2,3,4);  // 1 [2, 3, 4]
-        //  将其余的参数放在数组 boo 中
-  三元表达式 
-    expr1?expr2:expr3;  三元条件运算符,当expr1为真则执行expr2,否则执行expr3 
+    expr1?expr2:expr3; 三元条件运算符 
+      当expr1为真则执行expr2,否则执行expr3 
       PS: 三元条件运算符相当于if语句的简写形式 
       var box=5>4?'对':'错';    //对,5>4赋值第一个'对'给box.否则第二个. 
       console.log(true?'真':'假'); // 真 
       console.log(false?'真':'假'); // 假 
       console.log('0'?'真':'假'); // 真 
       console.log('1'?'真':'假'); // 真 
+  = 赋值操作符 
+    =:将右边的赋值给左边
+    复合赋值运算符: +=  -=  *=  /=  %=
+  + 字符串连接符
+    PS:进行字符的拼接操作(只要需要有一个操作数是字符串即可)
+      当有字符串和数值进行+操作时,则默认将数值转换为字符串形式进行拼接操作.
+    Example: :
+      3+6+"3a";      //"93a",先进行算术运算然后再进行字符串的连接操作.
+      ""+3+6+"3a";   //"363a",使用空字符串达到字符连接的效果.
+      var a=1,b=2,c=3;
+      ""+a+b+c;      //"123",数值和字符串+运算为字符串,运算顺序从左到右.
+  , 逗号操作符: 在一条语句中执行多个操作 
+    将多个表达式连接为一个表达式,依次执行每个表达式,最终返回值为最后一个表达式的值 
+      console.log(1),console.log(2),console.log(3); // 1 2 3
+      
+      1,2; // 2
+    
+      var auu=(aoo=1,boo=2,coo=3);
+      console.log(auu);    // 3
+
+      var aoo =(1,2,3); // 3,取最后一个值.
+      
+      self:
+      var aoo = 1,boo = 2;
+      相当于: 
+      var aoo = 1 ;
+      var boo = 2 ;
+      而非:
+      var aoo = 1;
+      boo = 2;
+      验证:
+        function foo(){
+          var aoo = 1, boo = 2; 
+          console.log(aoo); // 1
+          console.log(boo); // 2
+        }
+        foo();
+        console.log(boo); // boo is not defined
+        console.log(aoo);
+        
+        function foo(){
+          var aoo = 1;
+          boo = 2;
+          console.log(aoo); // 1
+          console.log(boo); // 2
+        }
+        foo();
+        console.log(boo); // 2
+        console.log(aoo); // aoo is not defined
+    在for循环中的使用
+      for (var i = 0, j = 9; i <= 9; i++, j--) {
+        console.log("" + i  + j  );
+      }
+    'return'处理之后返回: 在返回值前处理一些操作
+      有最后一个表达式被返回,其他的都只是被求值
+      function foo () {
+        var x = 0;
+        return x++, x;
+      }
+      console.log(foo()); // 1
+    配合'var'关键字,同时定义多个变量  
+      var box="A", age="20", height="175";  // 同时定义多个变量 
+      var aoo = 1, 2==3; // Uncaught SyntaxError: Unexpected number
+      var 2==3;          // Uncaught SyntaxError: Unexpected number
+      1 , 2==3,function(){ console.log(4); }() // 4;
+  'Destructuring'解构赋值: 按照一定模式,从数组和对象中取值,对变量进行赋值[ES6] 
+    PS:
+    Example:
+      var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
+      console.log(a,b,c);// 1 2 3 
+    解构嵌套 
+      var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
+      console.log(c1,c2); // 3.1 3.2
+    不完全解构 
+      赋值不成功,变量的值为undefined
+      var [a,b,c] = [1,2];
+      console.log(a,b,c); // 1 2 undefined 
+    设定默认值 
+      var [a,b,c=3] = [1,2];
+      console.log(a,b,c); // 1 2 3 
+      覆盖默认值 
+      var [a,b,c=3] =[1,2,4];
+      console.log(a,b,c); // 1 2 4
+    对象的解构赋值:不受属性的顺序影响,和属性名对应 
+      PS:默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
+      Example:
+        var {a,b,c} = {"a":1,"b":2,"c":3};
+        console.log(a,b,c); // 1 2 3 
+        改变顺序
+        var { a,b,c } = {"a":1,"c":3,"b":2};
+        console.log(a,b,c); // 1 2 3 
+        
+        var { a } = {"b":2};
+        console.log(a); // undefined
+      给一个变量名与属性名不一样的变量解构赋值 
+        var { b:a } = {"b":2};
+        console.log(a); // 2
+    对象解构赋值嵌套
+      var {a:{b}} = {"a":{"b":1}};
+      console.log(b);//结果:b的值为1
+    对象解构指定默认值 
+      var {a,b=2} = {"a":1}; 
+      console.log(b); // 2
+    字符串的解构赋值 
+      PS:解构赋值的过程中,字符串被转换成了一个类似数组的对象
+      var [a,b,c,d,e] = "12345";
+      console.log(a,b,c,d,e); // 1 2 3 4 5 
+    使用举例  
+      交换变量的值 
+        var x = 1;
+        var y = 2;
+        [x,y] = [y,x]; 
+      定义函数参数 
+        function foo({a,b,c}){ 
+          console.log(a,b,c); 
+        }
+        foo({a:1,b:2,c:3,d:4}); // 1 2 3 
+      函数参数的默认值 
+        function demo({aoo=1}){ 
+          console.log(aoo); 
+        }
+        demo({});
+  'Spread'扩展运算符: 把数组解开成单独的值[ES6] 
+    PS: 除了用在rest参数中,还有其他用途
+    结合数组使用,把数组的元素用逗号分隔开来,组成一个序列 
+      function sum(a,b) {
+        return  a+b ;
+      }
+      let arr = [2,3];
+      // ...arr  // 报错
+      sum(...arr);    // 5,用扩展运算法将数组[2,3]转换成2,3
+      // sum( ...arr ) 的效果相当于sum( 2,3 ) 
+    Example:
+      var aoo =[1,2,3];
+      var boo =[...aoo,4];
+      console.log(boo);  //[1, 2, 3, 4]
+      console.log(...aoo); //1 2 3,相当于 console.log(1,2,3)
+      // 相当于
+      console.log.apply(null,aoo); // 1 2 3
+      ...aoo;            //报错
+    函数中将部分参数组成的数组 
+      var foo = function(aoo,...boo){ 
+        console.log(aoo,boo); 
+      }
+      foo(1,2,3,4);  // 1 [2, 3, 4]
+      //  将其余的参数放在数组 boo 中
+  位运算符: 按内存中表示数值的位来操作数值 
+    PS: 一般应用中,基本用不到位运算符; 比较基于底层,性能和速度会非常好;
+      ECMAScript中的所有数值都以'IEEE-754''64位'格式存储,
+      但位操作符并不直接操作64位的值,而是先将64位的值转换成32位的整数,
+      然后执行操作,最后在将结果转换回64位,
+      对于开发人员来说,由于64位存储格式是透明的,因此整个过程就像是只存在32位的整数一样;
+    ~   位非NOT
+    &   位与AND
+    |   位或OR
+    ^   位异或XOR
+    <<  左移
+    >>  有符号右移
+    >>> 无符号右移
   ◆运算优先级 
     PS: 可通过圆括号来提高优先级 
     运算符             优先级  描述                 关联性       
@@ -1676,49 +1660,41 @@ class,类,基于原型的实现的封装[ES6]
       }
       foo(); // 2
   其他语句 
-  with(){};  修改当前作用域
-    PS:运行缓慢,尤其是在已设置了属性值时,尽量少使用;严格模式下不可用 
+  with(){};  修改当前作用域 
+    PS: 运行缓慢,尤其是在已设置了属性值时,尽量少使用;严格模式下不可用 
     Example: :
-    var obj = {
-      "aa":"abc",
-      "bb":11,
-      "cc":true
-    };
-    var aoo = obj.aa;
-    var boo = obj.bb;
-    var coo = obj.cc;
-    console.log(aoo,boo,coo); // abc 11 true
-    等价于
-    var obj = {
-      "aa":"abc",
-      "bb":11,
-      "cc":true
-    };
-    with(obj){ 
-      var aoo = aa; 
-      var boo = bb; 
-      var coo = cc; 
-    }
-    console.log(aoo,boo,coo); // abc 11 true
-
-    var aoo = "hello";
-    aoo.toUpperCase(); // HELLO
-    with(aoo){
-      console.log(toUpperCase());
-    }
-  label   可在代码中添加标签,以便将来使用 
-    var num = 0;
-    lab : for(var i = 0 ; i < 10 ; i++){
-      for(var j = 0 ; j < 10 ; j++){
-        if( i == 2 && j == 2 ){
-          break lab;
+      var obj = {
+        key1: {
+          key11: {
+            ,key111: 'a'
+            ,key112: 'b'
+            ,key113: 'c'
+          }
         }
-        num++;
       }
-    }
-    console.log(num); // 22,2*10+2
-    该例子中定义的lab标签可以在将来由break或continue语句引用.
-    加标签的语句一般都要与for语句等循环语句配合使用.
+      with(obj.key1.key11){ 
+        console.log(key111,key112,key113); // a b c 
+      }
+
+      var aoo = "hello";
+      aoo.toUpperCase(); // HELLO
+      with(aoo){
+        console.log(toUpperCase());
+      }
+  label   可在代码中添加标签,以便将来使用 
+    Example: 
+      var num = 0;
+      lab1: for(var i = 0 ; i < 10 ; i++){
+        for(var j = 0 ; j < 10 ; j++){
+          if( i == 2 && j == 2 ){
+            break lab1;
+          }
+          num++;
+        }
+      }
+      console.log(num); // 22,2*10+2
+      // 该例子中定义的lab标签可以在将来由break或continue语句引用.
+      // 加标签的语句一般都要与for语句等循环语句配合使用.
 Function,函数基础类,ES中所有函数的基类 
   PS: JS中函数是唯一能创建新作用域的地方;  
   Extend：Object 
@@ -2611,4 +2587,5 @@ this,JS代码执行时的'context'上下文对象
     }
     obj.foo() // 100 
 -----------------------------------------------------------------------待整理   
+
 

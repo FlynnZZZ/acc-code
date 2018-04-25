@@ -90,33 +90,48 @@ JS运行过程机理
   闭包包含自己的作用域链,父级的作用域链[包括全局作用域] 
   闭包不仅可以访问其外部函数中定义的变量,还可以访问外部函数的参数 
 'use strict'; 使用严格模式[IE10+] 
-  在需使用的作用域中使用 
-    在函数的作用域中使用严格模式 
+  作用意义: 
+    消除ECMAScript老版本中不合理、不严谨、不安全之处,提升效率,为ES的新版本做准备
+  作用范围: 
+    函数作用域: 在函数内第一行添加 'use strict'; 
       function foo(){
         'use strict';
         // ...
       };
-    在整个脚本顶部添加 
-  严格模式下的限制 
-    不可使用 with(){} 语句
-    未声明的变量赋值报错 
-    arguments[num] 变成静态副本,按共享传递 
-      在函数中修改arguments[num]不会影响到函数的参数,
-      当修改 arguments[num].xx 会影响 
-    不能使用arguments.callee
-    不能使用arguments.caller
-    不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
-    初始化时重复定义对象属性报错
-      Example: var obj = {a:1,a:2}
-    禁止8进制的字面量
-      console.log(0123); // 83,严格模式下则报错 
-      不能使用前缀0表示八进制数 
+    整个脚本范围: 在脚本的顶部添加 'use strict'; 
+  严格模式下的差异 
+    字面量&变量相关: 
+      禁止8进制的字面量 
+        console.log(0123); // 83,严格模式下则报错 
+        不能使用前缀0表示八进制数 
+      未声明的变量赋值报错 
+        即必须使用 var 来声明变量,直接使用变量名赋值则报错 
+      不能删除变量,否则报错
+        只能删除属性delete global[prop]
+    对象相关: 
+      初始化时重复定义对象属性报错 
+        Example: var obj = { key1: 1, key1: 2 }
+      不能对只读属性赋值,否则报错
+      不能删除不可删除的属性,否则报错
+    函数相关: 
+      函数的参数不能存在同名,否则报错
+      arguments[num] 变成静态副本,按共享传递 
+        在函数中修改arguments[num]不会影响到函数的参数,
+        当修改 arguments[num].xx 会影响 
+      不能使用arguments.callee
+      不能使用arguments.caller
+      不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈
+    禁止动态绑定 
+      不可使用 with(){} 语句
+      不可使用 eval 作用域 
     禁止this指向全局对象
-    函数的参数不能有同名属性,否则报错
-    不能对只读属性赋值,否则报错
-    不能删除不可删除的属性,否则报错
-    不能删除变量delete prop,会报错,只能删除属性delete global[prop]
-    eval不会在它的外层作用域引入变量
+    eval会创建作用域  
+      eval('var num = 1')
+      console.log(num);   // 1
+      
+      'use strict';
+      eval('var num = 1')
+      console.log(num);   // 报错,num未定义 
     eval和arguments不能被重新赋值
     增加了保留字[如 protected static 和 interface] 
 ES6 Modules 

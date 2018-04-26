@@ -1,5 +1,7 @@
 MongoDB: 基于分布式文件存储的数据库 
   PS: C++编写,可扩展的高性能数据存储方案,介于关系数据库和非关系数据库之间 
+    原子操作,即只有操作成功或操作无效两种状态    
+    mongodb不支持事务,但提供了许多原子操作,如文档的保存,修改,删除等 
   特点: 
     无数据结构限制: 没有表结构的概念,每条记录可有不同的结构,无需先定义表结构 
     完全的索引支持: 单键索引,多键索引,数组索引,全文索引,地理位置索引等 
@@ -104,13 +106,13 @@ MongoDB: 基于分布式文件存储的数据库
     'Min/Max keys',将一个值与BSON[二进制的JSON]元素的最低值和最高值相对比  
   其他术语: 
     BSON: 是一种类json的一种二进制形式的存储格式,简称'Binary JSON'
-安装&使用&启动: 
+◆服务端 
   1 下载安装包安装[位置可自定义],将安装目录下的'bin'目录,配置到环境变量   
   2 创建数据存储目录'data/db' 
     该数据目录不会主动创建,在安装完成后需创建它。
     数据目录应该放在根目录下,如： C:\ 或 D:\ 等 
   3 $ mongod.exe --dbpath 'D:/data/db' // 指定mongo项目的数据库目录  
-    ★mongod.exe 常用参数: 
+    常用参数: 
     --bind_ip   绑定服务IP 
       若绑定127.0.0.1,则只能本机访问,不指定默认本地所有IP
     --port      指定服务端口号,默认:27017
@@ -120,6 +122,181 @@ MongoDB: 基于分布式文件存储的数据库
     --serviceName         指定服务名称
     --serviceDisplayName  指定服务名称,有多个mongodb服务时执行 
     --install     作为一个Windows服务安装 
+    --shutdown    结束进程 
+◆客户端 
+  $ mongo     // 客户端,命令行工具
+    $ mongo 127.0.0.1:27017 
+  $ show dbs  // 显示所有数据库 
+  $ db        // 显示当前数据库对象或集合 
+  $ use <dbName>  // 使用或创建数据库 
+    存在则切换到该数据库,否则新建数据库 
+  ★Shell操作 
+  数据库'db'操作 
+    db.<dbName>.insert({"name":"菜鸟教程"})
+    db.dropDatabase() // 删除当前使用的数据库  
+    db.createCollection(<ctName>,<options>)  // 创建集合 
+      ctName    str,需创建的集合名称
+      options obj,可选的选项  
+        capped: bol  默认'false',若为'true',则创建固定集合,即有着固定大小的集合 
+          当达到最大值时,会自动覆盖最早的文档,且必须指定'size'参数 
+        size: num    为固定集合指定一个最大值,单位byte  
+        max: num     指定固定集合中包含文档的最大数量 
+        autoIndexID: bol   默认'false',若为'true',自动在'_id'字段创建索引 
+    db.copyDatabase()  从指定的机器上复制指定数据库数据到某个数据库
+    db.cloneDatabase()  从指定主机上克隆数据库
+    db.cloneCollection()  在MongoDB实例之间复制集合数据
+    db.commandHelp()  返回数据库命令的帮助信息
+    db.currentOp()  显示当前正在进行的操作
+    db.fsyncLock()  刷新写入磁盘并锁定该数据库,以防止写入操作,并协助备份操作
+    db.fsyncUnlock()  允许继续进行写入锁住的数据库（解锁)
+    db.getName()  查看当前使用的数据库
+    db.getMongo()  查看当前db的链接机器地址
+    db.getCollection()  得到指定名称的聚集集合（table)
+    db.getCollectionNames()  得到当前db的所有聚集集合
+    db.getCollectionInfos()  返回当前数据库中的所有集合信息
+    db.getLastError()  返回上一次错误,如果没有错误则为空
+    db.getLastErrorObj()  查看完整的错误结果
+    db.getLogComponents()  返回日志消息详细级别
+    db.getPrevError()  返回包含自上次错误复位所有的错误状态文件
+    db.hostInfo()  返回当前数据库主机系统的相关信息
+    db.killOp()  终止指定的操作
+    db.listCommands()  显示公共数据库的命令列表
+    db.logout()  注销登录
+    db.printCollectionStats()  显示当前db所有聚集索引的状态
+    db.repairDatabase()  修复当前数据库
+    db.repairDatabase()  修复当前数据库
+    db.resetError()  重置db.getPrevError()和getPrevError返回的错误信息
+    db.runCommand()  运行一个数据库命令
+    db.stats()  显示当前db状态
+    db.serverStatus()  返回当前数据库状态的概要
+    db.setLogLevel()  设置一个单独的日志信息级别
+    db.setProfilingLevel()  修改当前数据库的分析级别
+    db.shutdownServer()  关闭当前数据库运行实例或安全停止有关操作进程
+    db.version()  查看当前db版本      
+  集合'ct'操作 
+    show collectons   // 查看集合 
+    // 增
+    db.<ctName>.insert(<dc>)            // 向集合中插入文档 
+      PS: 若该集合不存在,则创建后插入 
+      Example: 
+        db.users.insert({"username":"doge"})
+    // 查
+    db.<ctName>.find(<query?>,projection?)  // 以非结构化的方式显示文档,返回游标对象  
+      query  可选,查询条件,默认:{},所有文档 
+        db.users.find({"username": "dog"})
+      projection  可选,使用投影操作符指定返回的键,默认省略 
+    db.<ctName>.find().pretty()   // 用格式化方式显示结果 
+    db.<ctName>.find().count()   // 用格式化方式显示结果 
+    db.<ctName>.findOne()  // 查询单个文档 
+    // 改
+    db.<ctName>.update(<query> ,<handle> ,<option?>) // 更新已存在的文档  
+      query  update的查询条件,类似sql update查询内where后面的 
+      $xxx   更新的操作符,如:$set、$inc 
+      newDc  update的对象,也可以理解为sql update查询内set后面的
+      option = { // 可选,配置项 
+        upsert: bol  // 当不存在update的记录,是否插入,默认:false,不插入 
+        ,multi: bol  // 是否更新查出的全部记录,默认:false,只更新第一条记录 
+        ,writeConcern: <dc> // 抛出异常的级别 
+      }  
+      Example: 
+        db.mycol.update(
+          {'title':'MongoDB Overview'}
+          ,{$set:{'title':'New MongoDB Tutorial'}}
+        )
+    db.<ctName>.updateOne() 修改集合中的一条数据 
+    db.<ctName>.save(<query> ,<handle> ,<option?>)  // 插入/替换文档 
+      Input: 
+        query   查询条件 
+          未指定'_id'字段,同 update()
+          指定'_id'字段时,将指定的文档替换为设置的值[未设置的字段将消失]
+        newDc   插入/更新的文档 
+        option = {  // 可选,配置对象 
+          writeConcern: <dc>  // 可选,抛出异常的级别 
+        }
+    // 删
+    db.<ctName>.drop()  // 删除指定集合及索引,返回是否删除成功的布尔值   
+    db.<ctName>.remove(<query?> ,<option?>)  // 删除符合条件的所有文档 
+      query   删除文档的标准,默认:{},将集合中的所有文档删除  
+      option true/1/ obj,默认: false 
+        如果设为 true 或 1,则只删除一个文档 
+        { 
+          justOne: bol // 是否只删除一个文档,默认: false
+            只删除一个文档可为 true 或 1 
+          ,writeConcern: <dc>  // 可选,抛出异常的级别 
+      }  
+    // 其他 
+    db.<ctName>.aggregate() 聚合,主要用于处理数据(诸如统计平均值,求和等),并返回计算后的数据结果
+    db.<ctName>.bulkWrite() 批量写入
+    db.<ctName>.count() 返回集合总数或匹配查询的结果集总数
+    db.<ctName>.createIndex() 创建一个集合索引
+    db.<ctName>.dataSize() 返回集合的大小
+    db.<ctName>.deleteOne() 删除集合中的一个文档
+    db.<ctName>.deleteMany() 删除集合中的多个文档
+    db.<ctName>.distinct() 返回具有指定字段不同值的文档（去除指定字段的重复数据）
+    db.<ctName>.dropIndex() 删除一个集合中的指定索引
+    db.<ctName>.dropIndexes() 删除一个集合中的所有索引
+    db.<ctName>.ensureIndex() 已过时,现使用db.collection.createIndex()
+    db.<ctName>.explain() 返回各种方法的查询执行信息
+    db.<ctName>.findAndModify() 查询并修改
+    db.<ctName>.findOneAndDelete() 查询单条数据并删除
+    db.<ctName>.findOneAndReplace() 查询单条数据并替换
+    db.<ctName>.findOneAndUpdate() 查询单条数据并更新
+    db.<ctName>.getIndexes() 返回当前集合的所有索引数组
+    db.<ctName>.group() 提供简单的数据聚合功能
+    db.<ctName>.insertOne() 在当前集合插入一条数据
+    db.<ctName>.insertMany() 在当前集合插入多条数据
+    db.<ctName>.isCapped() 判断集合是否为定容量
+    db.<ctName>.reIndex() 重建当前集合的所有索引
+    db.<ctName>.replaceOne() 替换集合中的一个文档（一条数据）
+    db.<ctName>.renameCollection() 重命名集合名称
+    db.<ctName>.stats() 返回当前集合的状态
+    db.<ctName>.storageSize() 返回当前集合已使用的空间大小
+    db.<ctName>.totalSize() 返回当前集合的总占用空间,包括所有文件和所有索引
+    db.<ctName>.totalIndexSize() 返回当前集合所有的索引所占用的空间大小
+    db.<ctName>.updateMany() 修改集合中的多条数据
+    db.<ctName>.validate() 执行对集合验证操作
+  游标'cs'操作 
+    <cs>.batchSize() 
+    <cs>.close() 
+    <cs>.comment() 
+    <cs>.count() 
+    <cs>.explain() 
+    <cs>.forEach() 
+    <cs>.hasNext() 
+    <cs>.hint() 
+    <cs>.itcount() 
+    <cs>.limit() 
+    <cs>.map() 
+    <cs>.maxScan() 
+    <cs>.maxTimeMS() 
+    <cs>.max() 
+    <cs>.min() 
+    <cs>.next() 
+    <cs>.noCursorTimeout() 
+    <cs>.objsLeftInBatch() 
+    <cs>.pretty() 
+    <cs>.readConcern() 
+    <cs>.readPref() 
+    <cs>.returnKey() 
+    <cs>.showRecordId() 
+    <cs>.size() 
+    <cs>.skip() 
+    <cs>.snapshot() 
+    <cs>.sort() 
+    <cs>.tailable() 
+    <cs>.toArray()
+  文档'dc'操作 
+    ▼单个文档操作 
+    ▼多个文档操作 
+    <dcs>.limit(<num>)  // 限制显示的文档数量 
+      num  数值,当num不存在将显示所有文档 
+    <dcs>.skip(<num>)   // 跳过num个文档 
+      num 可选,默认:0,不跳过 
+    <dcs>.sort({<key>:1/-1,..})  // 通过指定字段来排序,1:升序、-1:降序 
+      PS: 默认按照升序排序 
+      // 按照降序排列标题的文档 
+      db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
+◆工具&目录&文件 
   bin目录下提供的一系列有用的工具 
     mongod.exe    MongoDB服务启动工具 
     mongo         客户端命令行工具,也是一JS解释器,支持JS语法
@@ -142,180 +319,22 @@ MongoDB: 基于分布式文件存储的数据库
       db    // 数据库目录   
       log   // 日志文件目录 
         mongo.log // 日志 
-  $ mongo   // 连接到数据库[需启动新的命令行窗口] 
-  $ show dbs  // 以列表形式显示所有数据库 
-  $ db        // 显示当前数据库对象或集合 
-  $ use <dbName>  // 使用或创建数据库 
-    存在则切换到该数据库,否则新建数据库 
-'mongo.conf'配置文件 
-  $ mongod --config  'e:/db_project/conf/mongo.conf'  // 通过配置文件启动   
-  内容详情: 
-    // #数据库存放目录 
-    dbpath = e:\db_project\db\
-    // #日志文件 
-    logpath = e:\db_project\log\mongodb.log
-    // #错误日志采用追加模式,日志会写在一个文件中,而非多个文件 
-    logappend = true
-    // #启用日志,默认:启用 
-    journal = true
-    // #过滤掉一些无用的日志信息,若需要调试使用请设置为false
-    quiet = false
-    // #端口号 默认:27017
-    port = 27017
-◆Shell操作 
-数据库'db'操作 
-  db.<dbName>.insert({"name":"菜鸟教程"})
-  db.dropDatabase() // 删除当前使用的数据库  
-  db.createCollection(<ctName>,<options>)  // 创建集合 
-    ctName    str,需创建的集合名称
-    options obj,可选的选项  
-      capped: bol  默认'false',若为'true',则创建固定集合,即有着固定大小的集合 
-        当达到最大值时,会自动覆盖最早的文档,且必须指定'size'参数 
-      size: num    为固定集合指定一个最大值,单位byte  
-      max: num     指定固定集合中包含文档的最大数量 
-      autoIndexID: bol   默认'false',若为'true',自动在'_id'字段创建索引 
-  db.copyDatabase()  从指定的机器上复制指定数据库数据到某个数据库
-  db.cloneDatabase()  从指定主机上克隆数据库
-  db.cloneCollection()  在MongoDB实例之间复制集合数据
-  db.commandHelp()  返回数据库命令的帮助信息
-  db.currentOp()  显示当前正在进行的操作
-  db.fsyncLock()  刷新写入磁盘并锁定该数据库,以防止写入操作,并协助备份操作
-  db.fsyncUnlock()  允许继续进行写入锁住的数据库（解锁)
-  db.getName()  查看当前使用的数据库
-  db.getMongo()  查看当前db的链接机器地址
-  db.getCollection()  得到指定名称的聚集集合（table)
-  db.getCollectionNames()  得到当前db的所有聚集集合
-  db.getCollectionInfos()  返回当前数据库中的所有集合信息
-  db.getLastError()  返回上一次错误,如果没有错误则为空
-  db.getLastErrorObj()  查看完整的错误结果
-  db.getLogComponents()  返回日志消息详细级别
-  db.getPrevError()  返回包含自上次错误复位所有的错误状态文件
-  db.hostInfo()  返回当前数据库主机系统的相关信息
-  db.killOp()  终止指定的操作
-  db.listCommands()  显示公共数据库的命令列表
-  db.logout()  注销登录
-  db.printCollectionStats()  显示当前db所有聚集索引的状态
-  db.repairDatabase()  修复当前数据库
-  db.repairDatabase()  修复当前数据库
-  db.resetError()  重置db.getPrevError()和getPrevError返回的错误信息
-  db.runCommand()  运行一个数据库命令
-  db.stats()  显示当前db状态
-  db.serverStatus()  返回当前数据库状态的概要
-  db.setLogLevel()  设置一个单独的日志信息级别
-  db.setProfilingLevel()  修改当前数据库的分析级别
-  db.shutdownServer()  关闭当前数据库运行实例或安全停止有关操作进程
-  db.version()  查看当前db版本      
-集合'ct'操作 
-  db.<ctName>.insert(<dc>)   // 向集合中插入文档 
-    PS: 若该集合不存在,则创建后插入 
-  db.<ctName>.save(<newDc>[options])  // 插入/替换文档 
-    PS: 未指定'_id'字段,同 insert(),指定'_id'字段,则会更新该'_id'的数据 
-    newDc  插入/更新的文档 
-    option = {  // 可选,配置对象 
-      writeConcern: <dc>  // 可选,抛出异常的级别 
-    }
-  db.<ctName>.find(<query>,projection)  // 以非结构化的方式显示文档,返回游标对象  
-    query  可选,查询条件,默认:{},所有文档 
-    projection  可选,使用投影操作符指定返回的键,默认省略 
-  db.<ctName>.find().pretty()   // 用格式化方式显示结果 
-  db.<ctName>.findOne()  // 查询单个文档 
-  db.<ctName>.update(<query>,{$xxx:<newDc>}[,option]) // 更新已存在的文档  
-    query  update的查询条件,类似sql update查询内where后面的 
-    $xxx   更新的操作符,如:$set、$inc 
-    newDc  update的对象,也可以理解为sql update查询内set后面的
-    option = { // 可选,配置项 
-      upsert: bol, // 可选,当不存在update的记录,是否插入,默认:false,不插入 
-      multi: bol,  // 是否更新查出的全部记录,默认:false,只更新第一条记录 
-      writeConcern: <dc> // 可选,抛出异常的级别 
-    }  
-    Example: 
-      db.mycol.update(
-        {'title':'MongoDB Overview'}
-        ,{$set:{'title':'New MongoDB Tutorial'}}
-      )
-  db.<ctName>.updateOne() 修改集合中的一条数据
-  db.<ctName>.remove(<query>[,option])  // 删除指定条件的文档 
-    query  可选,删除文档的标准,默认:{},将集合中的所有文档删除  
-    option  = { // 可选,如果设为 true 或 1,则只删除一个文档 
-      justOne: bol, // 可选,是否只删除一个文档,默认false
-        只删除一个文档可为 true 或 1 
-      writeConcern: <dc>  // 可选,抛出异常的级别 
-    }  
-  db.<ctName>.drop()  // 删除指定集合,返回是否删除成功的布尔值   
-  db.<ctName>.aggregate() 聚合,主要用于处理数据(诸如统计平均值,求和等),并返回计算后的数据结果
-  db.<ctName>.bulkWrite() 批量写入
-  db.<ctName>.count() 返回集合总数或匹配查询的结果集总数
-  db.<ctName>.createIndex() 创建一个集合索引
-  db.<ctName>.dataSize() 返回集合的大小
-  db.<ctName>.deleteOne() 删除集合中的一个文档
-  db.<ctName>.deleteMany() 删除集合中的多个文档
-  db.<ctName>.distinct() 返回具有指定字段不同值的文档（去除指定字段的重复数据）
-  db.<ctName>.dropIndex() 删除一个集合中的指定索引
-  db.<ctName>.dropIndexes() 删除一个集合中的所有索引
-  db.<ctName>.ensureIndex() 已过时,现使用db.collection.createIndex()
-  db.<ctName>.explain() 返回各种方法的查询执行信息
-  db.<ctName>.findAndModify() 查询并修改
-  db.<ctName>.findOneAndDelete() 查询单条数据并删除
-  db.<ctName>.findOneAndReplace() 查询单条数据并替换
-  db.<ctName>.findOneAndUpdate() 查询单条数据并更新
-  db.<ctName>.getIndexes() 返回当前集合的所有索引数组
-  db.<ctName>.group() 提供简单的数据聚合功能
-  db.<ctName>.insertOne() 在当前集合插入一条数据
-  db.<ctName>.insertMany() 在当前集合插入多条数据
-  db.<ctName>.isCapped() 判断集合是否为定容量
-  db.<ctName>.reIndex() 重建当前集合的所有索引
-  db.<ctName>.replaceOne() 替换集合中的一个文档（一条数据）
-  db.<ctName>.renameCollection() 重命名集合名称
-  db.<ctName>.stats() 返回当前集合的状态
-  db.<ctName>.storageSize() 返回当前集合已使用的空间大小
-  db.<ctName>.totalSize() 返回当前集合的总占用空间,包括所有文件和所有索引
-  db.<ctName>.totalIndexSize() 返回当前集合所有的索引所占用的空间大小
-  db.<ctName>.updateMany() 修改集合中的多条数据
-  db.<ctName>.validate() 执行对集合验证操作
-游标'cs'操作 
-  <cs>.batchSize() 
-  <cs>.close() 
-  <cs>.comment() 
-  <cs>.count() 
-  <cs>.explain() 
-  <cs>.forEach() 
-  <cs>.hasNext() 
-  <cs>.hint() 
-  <cs>.itcount() 
-  <cs>.limit() 
-  <cs>.map() 
-  <cs>.maxScan() 
-  <cs>.maxTimeMS() 
-  <cs>.max() 
-  <cs>.min() 
-  <cs>.next() 
-  <cs>.noCursorTimeout() 
-  <cs>.objsLeftInBatch() 
-  <cs>.pretty() 
-  <cs>.readConcern() 
-  <cs>.readPref() 
-  <cs>.returnKey() 
-  <cs>.showRecordId() 
-  <cs>.size() 
-  <cs>.skip() 
-  <cs>.snapshot() 
-  <cs>.sort() 
-  <cs>.tailable() 
-  <cs>.toArray()
-文档'dc'操作 
-  ▼单个文档操作 
-  ▼多个文档操作 
-  <dcs>.limit(<num>)  // 限制显示的文档数量 
-    num  数值,当num不存在将显示所有文档 
-  <dcs>.skip(<num>)   // 跳过num个文档 
-    num 可选,默认:0,不跳过 
-  <dcs>.sort({<key>:1/-1,..})  // 通过指定字段来排序,1:升序、-1:降序 
-    PS: 默认按照升序排序 
-    // 按照降序排列标题的文档 
-    db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
-◆操作符汇总 
-  PS: 原子操作,即只有操作成功或操作无效两种状态    
-    mongodb不支持事务,但提供了许多原子操作,如文档的保存,修改,删除等 
+  'mongo.conf'配置文件 
+    $ mongod --config  'e:/db_project/conf/mongo.conf'  // 通过配置文件启动   
+    内容详情: 
+      // #数据库存放目录 
+      dbpath = e:\db_project\db\
+      // #日志文件 
+      logpath = e:\db_project\log\mongodb.log
+      // #错误日志采用追加模式,日志会写在一个文件中,而非多个文件 
+      logappend = true
+      // #启用日志,默认:启用 
+      journal = true
+      // #过滤掉一些无用的日志信息,若需要调试使用请设置为false
+      quiet = false
+      // #端口号 默认:27017
+      port = 27017
+--------------------------------------------------------------------------------
 查询操作符 
 ★'query-comparison'比较查询操作符 
   格式              操作               RDBMS中的类似语句 
@@ -423,10 +442,18 @@ MongoDB: 基于分布式文件存储的数据库
 ★'query-bitwise'位查询操作符  
 更新操作符 
 ★'update-field'字段更新操作符 
-  {$set: {<field>: <val>}} 更新指定字段,不存在则创建[原子操作]
-  {$unset: {<field>: 1}}   删除字段[原子操作]
-  {$inc: {<field>: <num>}} 对数字类型的字段进行增减操作[原子操作] 
-  {$rename: {<old_field_name>: <new_field_name>}} 字段的重命名[原子操作]
+  { $set: {     // 更新指定字段,不存在则创建[原子操作]
+    <field>: <val>
+  } } 
+  { $unset: {   // 删除字段[原子操作]
+    <field>: 1
+  }}   
+  { $inc: {     // 对数字类型的字段进行增减操作[原子操作] 
+    <field>: <num>
+  }} 
+  { $rename: {  // 字段的重命名[原子操作]
+    <old_field_name>: <new_field_name>
+  }} 
   $currentDate  
   $max  
   $min  
@@ -469,6 +496,7 @@ MongoDB: 基于分布式文件存储的数据库
   $sample,
   $sort,将输入文档排序后输出。
   $geoNear,输出接近某一地理位置的有序文档。
+--------------------------------------------------------------------------------
 ◆详解 
 ObjectId,一个12字节BSON类型数据 
   PS: MongoDB中存储的文档必须有一个"_id"键。

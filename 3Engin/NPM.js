@@ -279,6 +279,12 @@ http-server: 本地调试及移动端调试服务器
     出现的问题及解决的方法: 
       PC端可打开,但移动端无法打开网页 
         1 将PC网络断开,再重连一下 
+nodemon,检测代码变动自动执行 
+  $ npm i -g nodemon    // 全局安装 
+  $ nodemon <nodeFile>  // 使用nodemon来执行 
+node-inspector,使用浏览器调试node代码 
+  $ npm i -g node-inspector 
+  $ node-inspector          // 在相应的目录开启
 Anythere 将当前目录变成一个静态文件服务器的根目录,快速搭建服务器用于本地调试 
   npm install anywhere -g   npm全局安装anythere
   执行参数

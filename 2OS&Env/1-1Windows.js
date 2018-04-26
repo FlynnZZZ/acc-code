@@ -25,7 +25,7 @@ CMD,一个32位的命令行程序,
   mkdir <folderName>  创建文件夹 
   md <folderName>  创建文件夹 
   <fileName> 运行/打开该文件[前提是可运行的程序、批处理文件等,可以不带格式后缀]
-  type <fileName> 参看文件内容
+  type <fileName> 参看文件内容 
   start <folderName> 打开文件夹 
   copy</b?> <路径文件名> <路径文件名> 合并复制文件到..  
     Example: 

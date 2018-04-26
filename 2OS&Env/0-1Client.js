@@ -212,24 +212,6 @@ BFCache'back-forward cache',往返缓存
   若页面位于bfcache中,那么再次打开该页面就不会触发load事件。
 --------------------------------------------------------------------------------
 技巧 实现 
-  动态 rem 自适应布局.
-    PS:rem 单位在做移动端的h5开发的时候是最经常使用的单位。
-      采用js动态计算给文档的根节点 font-size 赋值,并以此为尺寸参考进行网页布局.
-      可参考淘宝的布局.
-    使用的时,将下面的代码放到页面的顶部（head标签内）；
-    <script>
-      function changeFont() {
-        var originWidth =375; // 用来设置设计稿原型的屏幕宽度 此处以 Iphone 6为例
-        var currClientWidth = document.documentElement.clientWidth;
-        //设置屏幕的最大和最小值时设定一默认值
-        if (currClientWidth > 640) { currClientWidth = 640; }
-        if (currClientWidth < 320) { currClientWidth = 320; }
-        document.documentElement.style.fontSize = currClientWidth /originWidth ;
-        // 将 1rem 设置为相当于iPhone6 的 1px
-      }
-      changeFont();
-      window.addEventListener('resize', changeFont, false); //注册 resize事件
-    </script>
   spa 页面通信及状态维持
     不同页面间通过 sessionStorage 或 localStorage 实现消息传递
     同一页面内 刷新保持状态 分享链接可获取状态

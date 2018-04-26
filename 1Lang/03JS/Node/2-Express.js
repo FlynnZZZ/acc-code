@@ -20,27 +20,28 @@ app.use(path?,fn,next?) // 处理请求
     path                 可选,str,监听的路径,默认监听所有路径  
       *     任意匹配符
         '/ab*cd'  可匹配 'abcd'、'abxcd'、'ab123cd'等等 
-      :aoo  占位符,如:'/users/:aoo' 
+      :aoo  占位符,动态路由,如:'/users/:aoo' 
         可通过 req.params.aoo 获取到实际值 
     function(req,res){ } 响应函数 
       req    obj,请求,在原生基础上进行了扩展 
-        .app             当callback为外部文件时,用于访问express实例
-        .baseUrl         获取路由当前安装的URL路径
-        .body            请求体 
+        .app         当callback为外部文件时,用于访问express实例
+        .protocol      获取协议类型
+        .ip            IP地址
+        .hostname      主机名
+        .baseUrl       获取路由当前安装的URL路径
+        .path          获取请求路径
+        .params  obj,获取路由的parameters[动态路由的动态部分]
+        .query   obj,URL查询参数串的对象形式 
+        .body    请求体 
           解析后请求体,需使用相关的模块,如 body-parser
+        .headers 请求头 
+        .cookies          obj,未签名的Cookies的对象形式 
         .secret = <str>   // 设置cookie使用的签名字符串  
-        .cookies         obj,未签名的Cookies的对象形式 
         .signedCookies   obj,签名过的Cookies的对象形式 
         .session    obj,读写session 
-        .fresh     判断请求是否还'新鲜' 
+        .fresh      判断请求是否还'新鲜' 
         .stale     
-        .hostname  主机名
-        .ip        IP地址
         .originalUrl   获取原始请求URL
-        .params        obj,获取路由的parameters
-        .path          获取请求路径
-        .protocol      获取协议类型
-        .query   obj,URL查询参数串的对象形式 
         .route   获取当前匹配的路由
         .subdomains    获取子域名
         .acceptsCharsets 
@@ -53,6 +54,7 @@ app.use(path?,fn,next?) // 处理请求
         .send(data)   // 发送数据 
           PS: 加强版 .write()  ,参数可为任意类型[自动进行JSON化?] 
           data  any,发送的数据 
+        .status(num)  设置HTTP状态码
         .cookie(<key>,<val>,options?)  // 设置cookie 
           key      str,一条cookie的名
           val      str,一条cookie的值 
@@ -67,17 +69,17 @@ app.use(path?,fn,next?) // 处理请求
               ,secure: ''
             }
         .clearCookie(<key>)            // 删除Cookie 
+        .contentType()                 // 设置编码类型 
+        .type()                        // 设置Content-Type的MIME类型        
         .sendFile(path[,options][,fn])  响应指定路径的文件 
           会自动根据文件extension设定Content-Type
-        .end(data)  发送响应数据 
-        .json()  传送JSON响应
-        .jsonp() 传送JSONP响应 
+        .json(obj)  传送JSON响应
+        .jsonp()    传送JSONP响应 
         .render(templateName[,dataObj])  响应HTML 
           PS: 将模板和数据结合生成html,并设置响应头'Content-Type: text/html' 
           templateName  模版名称 
           dataObj       传给模板的数据 
         .app     obj,当前express实例,同 req.app 
-        .status(num)  设置HTTP状态码
         .append()  追加指定HTTP头
         .set()  设置HTTP头,传入object可以一次设置多个头
         .clearCookie()  清除Cookie
@@ -85,7 +87,7 @@ app.use(path?,fn,next?) // 处理请求
         .get()       返回指定的HTTP头
         .location()  只设置响应的Location HTTP头,不设置状态码或者close response
         .redirect()  重定向,设置响应的Location HTTP头,并且设置状态码302
-        .type()    设置Content-Type的MIME类型        
+        .end(data)  发送响应数据 
     next                 fn,可选,是否进行队列执行 
       next()  则接着执行下一个相同的响应[监听同样的路径的] 
 app.get(path,fn )       // 处理get请求 
@@ -248,43 +250,20 @@ app.set()               //
       app.listen(3000)
 const router = express.Router()   // 生成路由实例 
 app.use(path,router)              // 路由分配 
-const childRouter = express.Router() 
-router.use(path,childRouter)      // 子路由 
+router.all()   
+router.get()   
+router.post()  
+继续嵌套
+  const childRouter = express.Router()  // 生成路由实例 
+  router.use(path,childRouter)          // 子路由分配 
+  childRouter.all()
+  childRouter.get()
+  childRouter.post()
 ◆其他
-express.static(path)  // 设置静态文件路径 
-  将图片, CSS, JavaScript 文件放在 public 目录下,你可以这么写:
-  app.use(express.static('public'));
+express.static(<path>)  // 设置静态文件目录  
+  PS: 当请求的资源路径和指定的目录中文件对应时则返回该资源 
   Example: 
-    我们可以到 public/images 目录下放些图片,如下所示:
-      node_modules
-      server.js
-      public/
-      public/images
-      public/images/logo.png
-    让我们再修改下 "Hello Word" 应用添加处理静态文件的功能 
-      创建 express_demo3.js 文件,代码如下所示:
-      var express = require('express');
-      var app = express();
-      
-      app.use(express.static('public'));
-      
-      app.get('/', function (req, res) {
-         res.send('Hello World');
-      })
-      
-      var server = app.listen(8081, function () {
-      
-        var host = server.address().address
-        var port = server.address().port
-      
-        console.log("应用实例,访问地址为 http://%s:%s", host, port)
-      
-      })
-    执行以上代码:
-      $ node express_demo3.js 
-      应用实例,访问地址为 http://0.0.0.0:8081
-    在浏览器中访问 http://127.0.0.1:8081/images/logo.png
-    (本实例采用了菜鸟教程的logo),结果如下图所示:
+    app.use(express.static( __dirname + '/public' )); 
 ◆'middleware'中间件,express的设计精髓 
   '流水线'式操作 
     当处理相同的请求地址时,可使用'流水线'式操作 
@@ -331,11 +310,12 @@ express-static,处理静态文件
 body-parser,用于处理POST请求的数据,但不能处理上传的文件  
   $ npm i -S body-parser  
   const bodyParser = require('body-parser') 
-  app.use(bodyParser.urlencoded({
+  app.use(bodyParser.urlencoded({   // 解析 query string类型的body 
     extened: <bol>  // 是否启用扩展模式 
     ,limit: <num>   // 限制接收的数据,默认: 100*1024 [100K]  
   }))
   然后在后续的响应回调中,使用 req.body 获取POST请求数据 
+  app.use(bodyParser.json())  // 解析JSON类型的body
 cookie-parser,签名、解析Cookie  
   $ npm i -S cookie-parser  
   const cookieParser = require('cookie-parser')

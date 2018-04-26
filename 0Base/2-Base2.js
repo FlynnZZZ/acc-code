@@ -28,9 +28,13 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
   HTTP报文: 在HTTP应用程序之间发送的数据块,分为'请求报文'和'响应报文' 
     请求报文 
       <Method> <URL> <Protocol>/<version>   // 请求行 
-      key1: val1                            // 可选,请求头 
+        Method: 请求方法,如 GET/POST/...
+        URL: 请求路径及查询参数 
+        Protocol: 使用的协议,如 http/https 
+        version: 协议版本号 
+      key1: val1                            // 请求头 
         ★当前页信息 
-        Host: yihuo.lcltst.com    // 请求页所在的域 
+        Host: yihuo.lcltst.com    // 必选,请求页所在的域 
         Referer:       // 请求页的URI 
           该英文的正确拼法为referrer 
         Origin: 'http://yihuo.lcltst.com'  // 
@@ -44,11 +48,10 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         Accept-Language:  // 浏览器当前设置的语言 
           Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
         ★请求内容信息 
-        Content-Length: 376  // 请求体大小 
         Content-Type:  // 请求体类型,GET无该项  
-          application/x-www-form-urlencoded 默认方式,表单提交 
-              只需在$.ajax({})参数中设置 processData = true[也是默认,可省略];
-              Example:
+          'application/x-www-form-urlencoded' 默认方式,表单提交 
+            只需在$.ajax({})参数中设置 processData = true[也是默认,可省略];
+            Example:
                 $.ajax({
                   method: 'POST',
                   url: '...',
@@ -58,91 +61,92 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
                   processData: true,        // 可省略
                   success: function() {}
                 });
-            'multipart/form-data'  适合用于上传文件
-              首先,对表单数据构建成FormData的HTML5对象,代码如下。
-              /* dataToSend 是FormData对象,可直接作为数据传输到后端 */
-              var dataToSend= new FormData();      // HTML5对象, IE11以下不支持
-              for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                  dataToSend.append(key, data[key]);
-                }
+          'multipart/form-data'  适合用于上传文件 
+            首先,对表单数据构建成FormData的HTML5对象,代码如下。
+            /* dataToSend 是FormData对象,可直接作为数据传输到后端 */
+            var dataToSend= new FormData();      // HTML5对象, IE11以下不支持
+            for (var key in data) {
+              if (data.hasOwnProperty(key)) {
+                dataToSend.append(key, data[key]);
               }
-              用$.ajax()方法传输数据
-                processData与contentType必须设定为false,避免FormData对象被转换成URL编码
-              $.ajax({
-                method: 'POST',
-                url: '...',
-                data: dataToSend,          // dataToSend 是FormData对象
-                
-                contentType: false,        // contentType 必须设置为false
-                processData: false,        // processData 必须设置为false
-                
-                success: function() { ... }
-              });
-            'text/plain'  传输字符串
-              $.ajax({
-                method: 'POST',
-                url: '...',
-                data: dataToSend,         
-                
-                contentType: 'text/plain',       
-                processData: false,      // processData 设置为false则不会转换成URL编码
-                
-                success: function() { ... }
-              });
-            'application/json'  传输JSON字符串
-              要用函数JSON.stringify()处理表单数据
-              /* data 为表单Object类型的数据 */
-              dataToSend = JSON.stringify(data);
-              $.ajax({
-                method: 'POST',
-                url: '...',
-                data: dataToSend,         
-                
-                contentType: 'application/json',       
-                processData: false,     // processData 设置为false则不会转换成URL编码
-                
-                success: function() { ... }
-              });
-              若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
-              需要转换成Object类型[而Angular不需要];
-              $.ajax({
+            }
+            用$.ajax()方法传输数据
+              processData与contentType必须设定为false,避免FormData对象被转换成URL编码
+            $.ajax({
+              method: 'POST',
+              url: '...',
+              data: dataToSend,          // dataToSend 是FormData对象
+              
+              contentType: false,        // contentType 必须设置为false
+              processData: false,        // processData 必须设置为false
+              
+              success: function() { ... }
+            });
+          'text/plain'           传输字符串 
+            $.ajax({
+              method: 'POST',
+              url: '...',
+              data: dataToSend,         
+              
+              contentType: 'text/plain',       
+              processData: false,      // processData 设置为false则不会转换成URL编码
+              
+              success: function() { ... }
+            });
+          'application/json'     传输JSON字符串 
+            要用函数JSON.stringify()处理表单数据
+            /* data 为表单Object类型的数据 */
+            dataToSend = JSON.stringify(data);
+            $.ajax({
+              method: 'POST',
+              url: '...',
+              data: dataToSend,         
+              
+              contentType: 'application/json',       
+              processData: false,     // processData 设置为false则不会转换成URL编码
+              
+              success: function() { ... }
+            });
+            若后端也返回JSON字符串时,success回调函数里接受到的数据参数仍为字符串,
+            需要转换成Object类型[而Angular不需要];
+            $.ajax({
+              ...
+              success: function(data) {
+                var jsonData = JSON.parse(data);
                 ...
-                success: function(data) {
-                  var jsonData = JSON.parse(data);
-                  ...
-                }
-              });
-            'text/xml'  传输XML
-              首先,构建XML文档对象,存入表单数据,代码如下。
-              /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
-              var dataToSend = document.implementation.createDocument("", "formdata", null);
-              var tempData = dataToSend.documentElement;
-              for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                  var keyElement = doc.createElement(key);
-                  keyElement.appendChild(doc.createTextNode(data[key]));
-                  tempData.appendChild(keyElement);
-                }
               }
-              /*
-              xml文档格式示意:
-              <formdata>
-              <key1> value1 </key1>
-              <key2> value2 </key2>
-              </formdata>
-              */
-              发送数据dataToSend
-              $.ajax({
-                method: 'POST',
-                url: '...',
-                data: dataToSend,
-                
-                contentType: false,  // contentType 可设为false也可写成具体的'text/xml'等    
-                processData: false,  // processData 必须设为false
-                
-                success: function() { ... }
-              });
+            });
+          'text/xml'             传输XML 
+            首先,构建XML文档对象,存入表单数据,代码如下。
+            /* data参数为表单数据组成的对象,dataToSend为待发送给后端的数据 */
+            var dataToSend = document.implementation.createDocument("", "formdata", null);
+            var tempData = dataToSend.documentElement;
+            for (var key in data) {
+              if (data.hasOwnProperty(key)) {
+                var keyElement = doc.createElement(key);
+                keyElement.appendChild(doc.createTextNode(data[key]));
+                tempData.appendChild(keyElement);
+              }
+            }
+            /*
+            xml文档格式示意:
+            <formdata>
+            <key1> value1 </key1>
+            <key2> value2 </key2>
+            </formdata>
+            */
+            发送数据dataToSend
+            $.ajax({
+              method: 'POST',
+              url: '...',
+              data: dataToSend,
+              
+              contentType: false,  // contentType 可设为false也可写成具体的'text/xml'等    
+              processData: false,  // processData 必须设为false
+              
+              success: function() { ... }
+            });
+        Content-Length: 376  // 请求体大小 
         Cookie:       // 请求页Cookies  
         ★状态描述 
         Connection:      // 浏览器与服务器间连接的类型 
@@ -174,8 +178,11 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         包含客户提交的查询字符串信息,表单信息等  
         GET请求无请求体,信息放在URL中 
     响应报文 
-      <Protocol>/<version> StatusCode  StatusText // 响应行 
-        当状态码为: 302 时,浏览器会自动重定向到 头部字段 Location: <url> 指定的地址 
+      <Protocol>/<version> <StatusCode> <StatusText> // 响应行 
+        Protocol: 使用的协议,如 http/https 
+        version: 协议版本号 
+        StatusCode: 响应状态码,详见'Status Code' 
+        StatusText: 响应状态文本描述[仅供查看,而不被浏览器识别]
       key1: val1                                  // 可选,响应头 
         PS: 包含如服务器类型、日期时间、内容类型和长度等信息  
         Content-Type:            响应MIME及编码  
@@ -266,7 +273,7 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
     300  Multiple Choices 客户请求的文档可以在多个位置找到 
       这些位置已经在返回的文档内列出。如果服务器要提出优先选择,则应该在Location应答头指明。
     301  Moved Permanently 永久性重定向,资源已被分配了新的URL 
-      新的URL在Location头中给出,浏览器应该自动地访问新的URL 
+      新的URL在 Location 头中给出,浏览器会自动地访问新的URL 
     302  Found             临时重定向,类似于301 
       注意,在HTTP1.0 中对应的状态信息是“Moved Temporatily”。
       出现该状态代码时,浏览器能够自动访问新的URL,因此它是一个很有用的状态代码。

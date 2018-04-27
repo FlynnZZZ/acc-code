@@ -1102,7 +1102,7 @@ PC端
       }
     })
   图片宽高自适应   
-    $('img').on("load",function(e){
+    $('img').on("load",function(e){   // 读取缓存无效 
       console.log('img load');
       var img = $(this)
       ,imgWp = img.parent()
@@ -1122,6 +1122,45 @@ PC端
       if (true) {  // 
         
       }
+    })
+    $('img').each(function(idx,domElem){
+      var img = $(this) 
+      ,parent = img.parent() 
+      ,rate1 = parent.width()/ parent.height() 
+      ,rate2 = img.width()/ img.height() 
+      ,patternMap = [
+        {
+          klass: 'fill'       // 无死角覆盖  
+          ,effect: function(){
+            if (rate1-rate2 > 0) {
+              img.css('width','100%')
+              img.css('height','auto')
+            }
+            else {
+              img.css('width','auto')
+              img.css('height','100%')
+            }
+          }
+        }
+        ,{
+          klass: '_show'       // 全部展示
+          ,effect: function(){
+            if (rate1-rate2 > 0) {
+              img.css('width','auto')
+              img.css('height','100%')
+            }
+            else {
+              img.css('width','100%')
+              img.css('height','auto')
+            }
+          }
+        }
+      ]
+      
+      patternMap.forEach(function(val,idx ){
+        if ( img.hasClass(val.klass) ) { val.effect() }
+      } )
+      console.log('img load');
     })
 --------------------------------------------------------------------------------
 自我实现 

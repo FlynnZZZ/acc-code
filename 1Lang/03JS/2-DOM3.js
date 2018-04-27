@@ -183,7 +183,7 @@ Event,事件基础类
     load    加载完后触发 
       window 上触发: 页面完全加载后触发,包括所有图像、JS文件、CSS文件等外部资源  
       window.frames 上触发: 所有框架加载完毕 
-      <img>上触发: 图像加载完毕 
+      <img>上触发: 图像加载完毕,若图片来自缓存则不触发  
       <object>上触发:  嵌入内容加载完毕 
       <script> 
         当通过 jQuery append() 添加的<script>则不会触发 load 事件,

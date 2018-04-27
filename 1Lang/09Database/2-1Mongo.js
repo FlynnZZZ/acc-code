@@ -145,13 +145,65 @@ mongodb,连接MongoDB的基础库
     .toArray(callback)        // 转换成数组并回调 
 --------------------------------------------------------------------------------
 Mongoose,对mongodb库的封装 
-  $ npm i mongoose // 
-
-
-
-
-
-
+  $ npm i mongoose // 安装 
+  var mongoose = require("mongoose")
+  var url = 'mongodb://<username>:<password>@<hostname>:<port>/<databasename>' // 完整的资源定位符 
+    username   可选 
+    password   可选 
+    port       可选 
+  var db = mongoose.connect(url)  // 连接数据库
+  var UserSchema = new mongoose.Schema({   // 定义集合的格式 
+    uid: {
+      type: Number
+      ,unique: true  // 唯一 
+    }
+    ,username: {
+      type: String
+      ,default: 'aaa'
+      ,trim: true            // 修饰符,去掉首尾空格 
+      ,set: function(data){  // setter修饰符,设置值时触发
+        return data;  // 返回值作为设置的值 
+      }
+      ,get: function(data){  // getter修饰符,读取值时触发 
+        return data; // 返回值作为读取的值 
+      }
+      ,index: true   // 添加索引 
+    }
+    // ,username: String    // 简写形式
+    ,createtime: {
+      type: Date
+      ,default: Date.now   // 使用函数
+    } 
+    // ,createtime: Date 
+    ,firstName: String  // 姓
+    ,lastName: String   // 名
+  }) 
+  UserSchema.virtual('fullName').get(function(){   // 虚拟属性 
+    return this.firstName+"."+this.lastName;
+  })
+  var User = mongoose.model('User',UserSchema)   // 创建集合 
+    mongoose.model('User',{    // 直接使用对象定义Schema 
+      uid: Number
+      // ,...
+    })   
+  var user = new User({                          // 添加数据,返回添加的文档 
+    uid: 1
+    ,username: 'aaa'
+  })
+  user.save(function(err){
+    if (err) {
+      console.log(err);
+      return ;
+    }
+    // ...
+  })
+  User.find(<condition> ,function(err ,docs){
+    if (err) {
+      console.log(err);
+      return ;
+    }
+    console.log(docs);
+  })
 
 
 

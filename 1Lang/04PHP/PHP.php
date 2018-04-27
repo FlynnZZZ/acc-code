@@ -1,5 +1,6 @@
+<?php 
 介绍 说明 概念 
-  PS:PHP,Hypertext Preprocessor 超文本预处理器,名称来源 Personal_Home_Pages  
+  PS: PHP,'Hypertext Preprocessor'超文本预处理器,名称来源'Personal_Home_Pages'  
     一种创建动态交互性站点的服务器端脚本语言,用于服务器端的存取;
     HTML和js是客户端语言,用于实现页面呈现、特效;
   功能
@@ -13,21 +14,6 @@
     可以输出图像、PDF 文件,甚至 Flash 电影,
     可以输出任意的文本,比如 XHTML 和 XML;
     跨平台,可运行在如Linux、Unix、windows等平台上;
-  说明
-    PS:脚本可以放在文档中的任何位置,以 <?php 开头,以?>结尾[且后面的?>是可省略的];
-      文件的默认文件扩展名是 ".php",可包含文本、HTML、JavaScript代码和 PHP 代码,
-      代码在服务器上执行,结果以纯 HTML 形式返回给浏览器;
-      在本地开发时,调试需开启服务器来访问否则浏览器解析不了[SlPt];
-    注释 
-      <?php
-        // 这是 PHP 单行注释
-        
-        /*
-        这是 
-        PHP 多行
-        注释
-        */
-      ?>
   PHP 安装
     为了使用 PHP,需 找一个支持 PHP 和 MySQL 的 Web 主机
     安装 Web 服务器,然后安装 PHP 和 MySQL
@@ -51,77 +37,91 @@
     XAMPP
       XAMPP 支持 Mac OS 和 Window 系统,
       下载地址:https://www.apachefriends.org/zh_cn/index.html。
----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+说明: 
+  书写: 
+    脚本可以放在文档中的任何位置,以 '<?php' 开头, '?>' 结尾,且后面的'?>'是可省略的 
+    文件的默认文件扩展名是 ".php",可包含文本、HTML、JavaScript代码和 PHP 代码,
+    代码在服务器上执行,结果以纯 HTML 形式返回给浏览器;
+    在本地开发时,调试需开启服务器来访问否则浏览器解析不了[SlPt];
+  注释 
+    // 这是 PHP 单行注释
+    
+    /*
+    这是 
+    PHP 多行
+    注释
+    */
 数据类型 
   PS:由于变量占用的空间单元不一样,分成几种数据类型;
     8种原始类型,其中包括四种标量类型、两种复合类型和两种特殊类型;
-  ◆标量类型
-  NULL    空值
+  ◆四种标量类型
+  NULL    空值 
     表示变量没有值,
     NULL 是数据类型为 NULL 的值。
     可以通过设置变量值为 NULL 来清空变量数据;
     Example:
-      <?php
       $x = "Hello world!";
       $x = null;
       var_dump($x); // NULL
-      ?>
   Boolean 布尔型 
-    不区分大小写,可以是 true 和 false[或者 TRUE 和 FALSE], 通常用于条件判断;
-    <?php 
-    $x = TRUE;
-    $y = false;
-    $man = '男';
-    echo $bool = $man == '男'; // 1
-    echo $x; // 1
-    echo $y; // 无输出
-    ?>
-  Integer 整型 
-    PS:整数是一个没有小数的数字; 
-      可用三种格式来指定:十进制、十六进制(以 0x 为前缀)或八进制(前缀为 0);
-    规则 
-      必须至少有一个数字 (0-9),
-      不能包含逗号或空格,
-      没有小数点,
-      可以是正数或负数,
-    <?php 
-    $x = 5985;
-    var_dump($x); // int(5985)
-    echo "<br>"; 
-    $x = -345; 
-    var_dump($x); // int(-345)
-    echo "<br>"; 
-    $x = 0x8C;    // 十六进制数
-    var_dump($x); // int(140) 
-    echo "<br>";
-    $x = 047;     // 八进制数
-    var_dump($x); // int(39)
-    ?>
-  Float   浮点型
-    带小数部分的数字,或是指数形式[使用e或E来表示,E的英文是exponent,指数的意思]
-    <?php 
-    $x = 10.365;
-    var_dump($x); // float(10.365) 
-    echo "<br>"; 
-    $x = 2.4e3;
-    var_dump($x); // float(2400) 
-    echo "<br>"; 
-    $x = 8E-5;
-    var_dump($x); // float(8.0E-5)
-    ?>
+    不区分大小写,true/false 等价于 TRUE/FALSE 
+    Example: 
+      $x = TRUE;
+      $y = false;
+      $man = '男';
+      echo $bool = $man == '男'; // 1
+      echo $x; // 1
+      echo $y; // 无输出
+  Integer 整型,没有小数的数字 
+    可用于表示的值: 
+      十进制
+      十六进制,前缀为 0x
+      八进制,前缀为 0 
+    Example: 
+      $x = 5985;
+      var_dump($x); // int(5985)
+      echo "<br>"; 
+      $x = -345; 
+      var_dump($x); // int(-345)
+      echo "<br>"; 
+      $x = 0x8C;    // 十六进制数
+      var_dump($x); // int(140) 
+      echo "<br>";
+      $x = 047;     // 八进制数
+      var_dump($x); // int(39)
+  Float   浮点型,带小数部分的数字,或是指数形式,使用e或E来表示 
+    Example: 
+      $x = 10.365;
+      var_dump($x); // float(10.365) 
+      echo "<br>"; 
+      $x = 2.4e3;
+      var_dump($x); // float(2400) 
+      echo "<br>"; 
+      $x = 8E-5;
+      var_dump($x); // float(8.0E-5)
   String  字符串
-    PS: 一个字符串是一串字符的序列,就像 "Hello world!"。
-      可以将任何文本放在'单引号'或"双引号"中:
-      字符串变量用于存储并处理文本。
-      赋一个文本值给变量时,给文本值加上单引号或者双引号。
-    Example:
-      <?php 
+    三种方法定义: 
+    单引号形式: 
+    双引号形式: 
+      双引号中包含变量时,变量会进行替换并连接在一起 
+    Heredoc结构形式   
+      $str1 = <<<xxx
+        dsfadfas
+        sdfsadf
+xxx;
+    Feature: 
+      单双引号可以交替使用,作为引号输出 
+        $str1 = 'a"b"c'
+        $str1 = "a'b'c"
+      \ 转义符,可用来输出引号 
+        $str1 = 'a\'b\'c'
+    Example: 
       $x = "Hello world!";
       echo $x;
       echo "<br>"; 
       $x = 'Hello world!';
       echo $x;
-      ?>
     .  字符串连接符
       <?php echo 'Hi,'.'imooc'.'!';?>
     strlen() 返回字符串的长度[字符数]
@@ -225,12 +225,14 @@
       }
       ?>
       this指向当前对象实例的指针
+  ◆两种复合类型
+  ◆两种特殊类型
 数据量 
   变量: 用于存储信息的"容器"
     PS:PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
     命名规则 
       以 $ 符号开始,后面跟着变量的名称,
-      只能包含'字母'、'数字'、汉字及下划线"_" [A-z、0-9 和 _] [不能包含空格],
+      只能包含'字母'、'数字'、汉字及下划线"_" [A-z、0-9 和 _],不能包含空格,
       只能以'字母'或者下划线'_'开始,
       区分大小写 [$y 和 $Y 是两个不同的变量] ;
     创建变量 
@@ -1026,9 +1028,8 @@ OOP,Object-oriented_programming 面向对象
     $obj = new OtherSubClass();
     // BaseClass 类中构造方法
     ?>
-运算符 
-  .   并置运算符,用于连接字符串 
-    PHP 中,只有一个字符串运算符
+运算符/操作符 
+  .   字符串连接符 
     Example:
       <?php 
       $txt1 = "aa"; 
@@ -1078,32 +1079,35 @@ OOP,Object-oriented_programming 面向对象
     echo "a" <=> "b"; // -1
     echo "b" <=> "a"; // 1
     ?>  
-全局函数与语句 
-  PS:语句间使用分号;分割,且不可省略
-  var_dump(val); 返回变量的数据类型和值
+全局函数&语句 
+  PS: 语句间使用分号;分割,且不可省略
+  echo (val1,val2?,..); 文本输出 
+    PS: 括号可省略: echo 或 echo()
+    Feature: 
+      输出的速度比 print 快,无返回值
+      当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
+      输出布尔类型时,'true'输出的是'1','false'则什么也不输出
+    Example:
+      使用 echo 命令输出字符串[可包含 HTML 标签]:
+      <?php
+      echo "<h2>PHP 很有趣!</h2>"; // 输出HTML 
+      echo "Hello world!<br>";
+      echo "这是一个", "字符串,";  // 输入多个值 
+      echo 2*3;                   // 可进行运算
+      ?>
+  print (val);          文本输出 
+    PS: 括号可省略: print 或 print()。
+    只允许输出一个字符串,返回值总为 1
+  var_dump(val);      返回变量的数据类型和值 
+    Example: 
+      $flag = true 
+      var_dump($flag);  // bool(true) 
   intdiv(val1,val2);  返回val1整除val2的值  [PHP7+]
     <?php
     var_dump(intdiv(10, 3)); // int(3)
     ?>
   memory_get_usage()-val1-val2 ..; 获取当前PHP消耗的内存
-  echo val1[,val2 ...]; 文本输出
-    echo 语言结构,使用的时可不加括号,也可以加上: echo 或 echo()
-    当输入未定义的变量时,不会报错但有提示,默认以字符串形式输出
-    Example:
-      使用 echo 命令输出字符串[可包含 HTML 标签]:
-      <?php
-      echo "<h2>PHP 很有趣!</h2>";
-      echo "Hello world!<br>";
-      echo "我要学 PHP!<br>";
-      echo "这是一个", "字符串,", "使用了", "多个", "参数。";
-      echo 2*3;
-      ?>
-  print val; 文本输出 
-    print 语言结构,可以使用括号或不使用, print 或 print()。
-  echo 和 print 异同 
-    都可浏览器输出文本
-    echo  可以输出一个或多个字符串,输出的速度比 print 快,没有返回值
-    print 只允许输出一个字符串,返回值总为 1
+    PS: 根据操作系统、PHP版本以及PHP的运行方式可能输出结果会不同 
   foreach: 根据数组中每个元素来循环代码块 
     foreach ($array as $value) {
       <!-- 要执行代码; -->
@@ -1761,6 +1765,7 @@ Example:
       echo "员工:" . $_POST["name"] . " 信息保存成功！"; //提示保存成功
     }
   ?>
+
 
 
 

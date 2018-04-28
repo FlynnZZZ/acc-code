@@ -56,14 +56,6 @@
   PS:由于变量占用的空间单元不一样,分成几种数据类型;
     8种原始类型,其中包括四种标量类型、两种复合类型和两种特殊类型;
   ◆四种标量类型
-  NULL    空值 
-    表示变量没有值,
-    NULL 是数据类型为 NULL 的值。
-    可以通过设置变量值为 NULL 来清空变量数据;
-    Example:
-      $x = "Hello world!";
-      $x = null;
-      var_dump($x); // NULL
   Boolean 布尔型 
     不区分大小写,true/false 等价于 TRUE/FALSE 
     Example: 
@@ -106,10 +98,11 @@
     双引号形式: 
       双引号中包含变量时,变量会进行替换并连接在一起 
     Heredoc结构形式   
-      $str1 = <<<xxx
-        dsfadfas
-        sdfsadf
-xxx;
+      PS: 第一行只能存在'<<<xxx',最后一行只能为'xxx;',空格等都不允许存在 
+      // $str1 = <<<xxx
+      //   dsfadfas
+      //   sdfsadf
+      // xxx;
     Feature: 
       单双引号可以交替使用,作为引号输出 
         $str1 = 'a"b"c'
@@ -122,18 +115,7 @@ xxx;
       echo "<br>"; 
       $x = 'Hello world!';
       echo $x;
-    .  字符串连接符
-      <?php echo 'Hi,'.'imooc'.'!';?>
-    strlen() 返回字符串的长度[字符数]
-      <?php 
-        echo strlen("Hello world!"); // 12
-      ?>
-    strpos(str1,str2) 在字符串str1内查找str2
-      如果找到匹配,返回第一个匹配的字符位置;未找到匹配,则返回 FALSE;
-      Example:
-        <?php 
-        echo strpos("0123456789","345"); // 3
-        ?>
+  ◆两种复合类型
   Array   数组
     数组可以在一个变量中存储多个值
     array() 创建数组
@@ -141,14 +123,12 @@ xxx;
       自动分配 ID 键,ID 键总是从 0 开始:
         $arr=array("a","b","c");
       人工分配 ID 键:
-        <?php
         // $arr = array(); // 可以不预先定义,不同于JS
         $arr[0]="a";
         $arr[1]="b";
         $arr[2]="c";
         var_dump($arr)  ;
         // array(3) { [0]=> string(1) "a" [1]=> string(1) "b" [2]=> string(1) "c" }
-        ?>
     数值数组: 带有数字 ID 键的数组
     关联数组: 带有指定的键的数组,每个键关联一个值
       关联数组是使用指定分配给数组键的数组
@@ -160,130 +140,92 @@ xxx;
         $age['coo']="43";
         随后可以在脚本中使用指定的键:
       使用 foreach 循环 遍历关联数组
-        <?php
         $age = array("aoo"=>"35","boo"=>"37","coo"=>"43");
         foreach($age as $x => $x_value) {
           echo "Key=" . $x . ", Value=" . $x_value;
           echo "<br>";
         }
-        ?>
       Example:
-        <?php
         $age = array("aoo"=>"35","boo"=>"37","coo"=>"43");
         echo "aoo is " . $age['aoo'] . " years old.";
-        ?>
     多维数组: 包含一个或多个数组的数组
     Example:
-      <?php 
       $cars=array("Volvo","BMW","Toyota");
       var_dump($cars);
-      ?>
-    print_r()  打印数组
-    count($arr) 返回数组长度
-    ◆数组排序: 数组中的元素可以按字母或数字顺序进行降序或升序排列
-    sort()     对数组进行升序排列 [改变原数组]
-      Example:
-        <?php
-        $aoo = array("aa","abac","ba");
-        sort($aoo); 
-        print_r($aoo) ; // Array ( [0] => aa [1] => abac [2] => ba )
-        ?>
-        <?php
-        $numbers=array(4,6,2,22,11);
-        sort($numbers);
-        print_r($numbers) ; 
-        // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 11 [4] => 22 )
-        ?>
-    rsort()    对数组进行降序排列
-    asort()    根据关联数组的值,对数组进行升序排列
-      Example:
-        <?php
-        $aoo = array("a"=>"35","b"=>"37","ab"=>"43");
-        asort($aoo);
-        print_r($aoo); // Array ( [a] => 35 [b] => 37 [ab] => 43 )
-        ?>
-    arsort()   根据关联数组的值,对数组进行降序排列
-    ksort()    根据关联数组的键,对数组进行升序排列
-      Example:
-        <?php
-        $age = array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
-        ksort($age);
-        print_r($age); // Array ( [Ben] => 37 [Joe] => 43 [Peter] => 35 )
-        ?>
-    krsort()   根据关联数组的键,对数组进行降序排列
   Object  对象
     创建对象
       首先必须使用class关键字声明类对象,类是可以包含属性和方法的结构,
       然后在类中定义数据类型,
       最后在实例化的类中使用数据类型;
     Example:
-      <?php
       class Car {
         var $color;
         function Car($color="green") { $this->color = $color; }
         function what_color() { return $this->color; }
       }
-      ?>
       this指向当前对象实例的指针
-  ◆两种复合类型
-  ◆两种特殊类型
+  ◆两种特殊类型 
+  NULL     空值,表示变量没有值 
+    当被赋值为NULL,或者尚未被赋值,或者被unset(),变量则为NULL
+    可通过设置变量值为 NULL 来清空变量数据 
+    大小写不敏感 
+    Example:
+      $x = "Hello world!";
+      $x = null;
+      var_dump($x); // NULL
+  Resource 资源
+    由专门的函数来建立和使用的,如打开文件、数据连接、图形画布
+    可对资源进行操作[创建、使用和释放]。
+    任何资源,在不需要的时候应该被及时释放。否则,系统自动启用垃圾回收机制,
+    在页面执行完毕后回收资源,以避免内存被消耗殆尽。
+    Example: 
+      // 读取并输出文件 
+      $file_handle = fopen("/data/webroot/resource/php/f.txt","r"); // 打开文件
+      if ($file_handle){
+        while (!feof($file_handle)) {  // 判断是否到最后一行
+          $line = fgets($file_handle); // 读取一行文本
+          echo $line;    // 输出一行文本
+          echo "<br />"; // 换行
+        }
+      }
+      fclose($file_handle); // 关闭文件
+        
+      $con=mysql_connect("localhost","root","root");  //连接数据库
+      $img=imagecreate(100,100);  //图形画布
 数据量 
-  变量: 用于存储信息的"容器"
-    PS:PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
+  变量: 用于存储信息的"容器" 
+    PS: PHP 是一门弱类型语言,会根据变量的值,自动把变量转换为正确的数据类型 
     命名规则 
-      以 $ 符号开始,后面跟着变量的名称,
+      以'$'符号开始,后面跟着变量的名称,
       只能包含'字母'、'数字'、汉字及下划线"_" [A-z、0-9 和 _],不能包含空格,
       只能以'字母'或者下划线'_'开始,
       区分大小写 [$y 和 $Y 是两个不同的变量] ;
     创建变量 
-      PHP 没有声明变量的命令,在第一次赋值时被创建;
-      <?php
+      PHP无声明变量的命令,在第一次赋值时被创建;
         $txt = "Hello world!" ;
         $x = 5 ;
         $y = 10.5 ;
         echo '这是一个 '.$x;
-      ?>
-    作用域
-      有四种不同的变量作用域:    
-      global 全局变量: 在所有函数外部定义的变量
-        PS:拥有全局作用域;
-          全局变量可以被脚本中的任何部分访问,
+    有四种不同的变量作用域:  
+      全局作用域: global全局变量,可被脚本中的任何部分访问  
+        PS: 在所有函数外部定义的变量 
           在函数中访问全局变量,需使用 global 关键字 ;
-        $GLOBALS[index] 数组
-          PS:所有全局变量的存储位置,index 保存变量的名称,
-            该数组可以在函数内部访问,也可以直接用来更新全局变量;
+        global关键字,用于函数内访问全局变量。
           Example:
-            <?php
-            $x = 5;
-            $y = 10;
+            $x = 5 ;
+            $y = 10 ;
             function myTest() {
-              $GLOBALS['y']=$GLOBALS['x']+$GLOBALS['y'];
-            } 
+              global $x , $y ;
+              $y = $x + $y ;
+            }
             myTest();
-            echo $y; // 15
-            ?>
-      global 关键字
-        global 关键字用于函数内访问全局变量。
-        Example:
-        <?php
-          $x = 5 ;
-          $y = 10 ;
-          function myTest() {
-            global $x , $y ;
-            $y = $x + $y ;
-          }
-          myTest();
-          echo $y;  // 输出 15
-        ?>
-      local 局部变量: 在函数内部定义的变量
-        仅能在函数内部访问:
-        可以在不同函数中使用相同的变量名称,因为函数内定义的变量是局部变量;
-      Static 作用域
-        PS:当一个函数完成时,它的所有变量通常都会被删除,
+            echo $y;  // 输出 15
+      函数作用域: local局部变量,在函数内部定义的变量,仅能在函数内部访问
+      static作用域: 
+        PS: 当一个函数完成时,它的所有变量通常都会被删除,
           有时候希望某个局部变量不要被删除,
           要做到这一点,需在第一次声明变量时使用 static 关键字;
         Example:
-          <?php
           function myTest() {
             static $x = 0;
             echo $x;
@@ -292,21 +234,17 @@ xxx;
           myTest(); // 0
           myTest(); // 1
           myTest(); // 2
-          ?>
           每次调用该函数时,该变量将会保留着函数前一次被调用时的值。
           注释:该变量仍然是函数的局部变量。
-      parameter 参数作用域
+      parameter参数作用域: 
         参数是通过调用代码将值传递给函数的局部变量。
         参数是在参数列表中声明的,作为函数声明的一部分:
         Example:
-          <?php
           function myTest($x) {
             echo $x;
           }
           myTest(5);
-          ?>
       Example:
-        <?php 
         $x = 5; // 全局变量 
         function myTest() { 
           $y = 10; // 局部变量 
@@ -320,246 +258,146 @@ xxx;
         echo "变量 x 为: $x";  // 5
         echo "<br>"; 
         echo "变量 y 为: $y";  // 无法访问
-        ?>
-    引用说明
-      可以在 双引号中直接引用变量"" ,但不可在单引号中直接应用''
-        Example:
-          <?php
-          $txt = "Hello!" ;
-          echo "双引号中可以直接引用变量  $txt"; // 双引号中可以直接引用变量 Hello!
-          echo '<br>';
-          echo '单引号中不可直接引用变量  $txt'; // 单引号中不可直接引用变量 $txt
-          ?>
-  常量: 常量值被定义后,在脚本的其他任何地方都不能被改变。
-    PS:常量是一个简单值的标识符;
-      由英文字母、下划线、和数字组成,但数字不能作为首字母出现,
-      常量名不需要加 $ 修饰符;
-    设置常量: 使用 define() 函数
-      define ( $name , $value [, $case_insensitive ] )
-      参数:
-        name :必选,字符串,常量名称,即标志符。
-        value:必选,常量的值。
-        case_insensitive :可选,boolean值,TRUE 表示常量大小写不敏感,默认为false
+  常量: 被定义后不能被改变,默认是全局的,可在整个运行的脚本内使用  
+    PS: 常量是一个简单值的标识符,和变量类似,但不需要加'$'修饰符 
+    define ( <name> ,<value> ,<case_insensitive>? );  定义常量 
+      Input: 
+        name               str,常量名称,即标志符
+        value              常量的值
+        case_insensitive   bol,常量大小写是否敏感,默认: false 
+      Output: 
       Example:
-        创建一个 区分大小写的常量, 常量值为 "abc":
-        <?php
+        // 创建一区分大小写的常量 GREETING,值为"abc"
         define("GREETING", "abc");
         echo GREETING;    // "abc"
         echo '<br>';
-        echo greeting;    // "greeting"
-        ?>
-        创建一个 不区分大小写的常量, 常量值为 "abc":
-        <?php
-        define("GREETING", "abc", true);
+        echo greeting;    // 报错 
+        
+        // 创建一不区分大小写的常量,值为"abc" 
+        define("GREETING" ,"abc" ,true);
         echo greeting;  // 输出 "abc"
-        ?>
-    常量是全局的
-      常量在定义后,默认是全局变量,可以在整个运行的脚本的任何地方使用。
+    defined(<name>)   bol,判断常量是否定义 
+    constant( <name> );  读取常量的值 
+      define('const1' ,'aaa' ,false);
+      $const1 = 'const1'
+      echo constant($const1);  // aaa 
+      echo "<br>";
+      echo constant('const1'); // aaa 
+  超级全局变量: PHP系统中自带的变量[PHP4.1.0+] 
+    $GLOBALS: 存放着用户定义的全局变量的集合,可在全局访问,也可直接更新变量 
       Example:
-        <?php
-        define("GREETING", "abc");
-        function myTest() { echo GREETING; }
-        myTest();    // "abc"
-        ?>        
-  超级全局变量: PHP系统中自带的变量
-    PS:超级全局变量在PHP 4.1.0之后被启用,在一个脚本的全部作用域中都可用
-    $GLOBALS: 存放着用户定义的变量,且可在全局访问的一个组合数组
-      Example:
-        <?php 
-        $x = 75; 
-        $y = 25;
-        echo $GLOBALS['x']; // 75
-        $GLOBALS['x'] = 74 ;
-        echo $x;            // 74
+        $var1 = 75; 
+        $var2 = 25;
+        echo $GLOBALS['var1']; // 75
+        $GLOBALS['var1'] = 74 ;
+        echo $var1;            // 74
         function addition() { 
-          $GLOBALS['z'] = $GLOBALS['x'] + $GLOBALS['y']; 
+          $GLOBALS['var2'] = $GLOBALS['var1'] + $GLOBALS['var2']; 
         }
         addition(); 
-        echo $z; // 99
-        ?>
+        echo $var2; // 99
     $_SERVER: Web服务器信息
-      PS:包含了诸如头信息(header)、路径(path)、
-        以及脚本位置(script locations)等等信息的数组;
-        这个数组中的项目由 Web 服务器创建,
-        不能保证每个服务器都提供全部项目,
-        服务器可能会忽略一些,或者提供一些没有在这里列举出来的项目;
-      Example:
-        <?php 
-        echo $_SERVER['PHP_SELF']; // /test/one.php
-        echo "<br>";
-        echo $_SERVER['SERVER_NAME']; // localhuarun.qilaiwan.com
-        echo "<br>";
-        echo $_SERVER['HTTP_HOST']; // localhuarun.qilaiwan.com
-        echo "<br>";
-        echo $_SERVER['HTTP_REFERER']; 
-        // Notice: Undefined index: HTTP_REFERER in E:\project\test\one.php on line 15
-        echo "<br>";
-        echo $_SERVER['HTTP_USER_AGENT']; 
-        // Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36
-        echo "<br>";
-        echo $_SERVER['SCRIPT_NAME']; // /test/one.php
-        ?>
-      $_SERVER 变量中的重要元素:
-      $_SERVER['PHP_SELF']   当前执行脚本的文件名
-        与 document root 有关。
-        例如,
-        在地址为 http://example.com/test.php/foo.bar 的脚本中,
-        使用 $_SERVER['PHP_SELF'] 将得到 /test.php/foo.bar。
-        __FILE__ 常量包含当前(例如包含)文件的完整路径和文件名。
-        从 PHP 4.3.0 版本开始,如果 PHP 以命令行模式运行,
-        这个变量将包含脚本名。之前的版本该变量不可用。
-      $_SERVER['GATEWAY_INTERFACE']  服务器使用的 CGI 规范的版本
+      PS: 包含了诸如头信息'header'、路径'path'、以及脚本位置'script locations'等信息集合;
+        该集合中的项目由Web服务器创建,不能保证每个服务器都提供全部项目,
+        服务器可能会忽略一些,或者提供一些没有在这里列举出来的项目; 
+      $_SERVER中的重要元素: 
+      // PHP文件相关 
+      $_SERVER['PHP_SELF']           当前脚本的路径及文件名 
+        PS: 与'document root'有关
+        Example: 
+          //  http://example.com/test.php/foo.bar.php 的脚本中
+          $_SERVER['PHP_SELF'];  //  /test.php/foo.bar.php  
+      $_SERVER['SCRIPT_NAME']        当前脚本的路径及文件名 
+      $_SERVER['SCRIPT_FILENAME']    当前执行脚本的绝对路径 
+      // 服务器相关 
+      $_SERVER['GATEWAY_INTERFACE']  服务器使用的CGI规范的版本 
         例如,"CGI/1.1"。
-      $_SERVER['SERVER_ADDR']  当前运行脚本所在的服务器的 IP 地址。
-      $_SERVER['SERVER_NAME']  当前运行脚本所在的服务器的主机名。
-        如果脚本运行于虚拟主机中,该名称是由那个虚拟主机所设置的值决定。
-        (如: www.runoob.com)
-      $_SERVER['SERVER_SOFTWARE']  服务器标识字符串,在响应请求时的头信息中给出。
-         (如:Apache/2.2.24)
-      $_SERVER['SERVER_PROTOCOL']  请求页面时通信协议的名称和版本。
-        例如,"HTTP/1.0"。
-      $_SERVER['REQUEST_METHOD']  访问页面使用的请求方法
-        例如,"GET", "HEAD","POST","PUT"。
-      $_SERVER['REQUEST_TIME']  请求开始时的时间戳  [PHP 5.1.0+可用]
-         如:1377687496
-      $_SERVER['QUERY_STRING']  query string（查询字符串）
-        如果有的话,通过它进行页面访问。
-      $_SERVER['HTTP_ACCEPT']  当前请求头中 Accept: 项的内容,如果存在的话。
-      $_SERVER['HTTP_ACCEPT_CHARSET']  当前请求头中 Accept-Charset: 项的内容,
-        如果存在的话。例如:"iso-8859-1,*,utf-8"。
-      $_SERVER['HTTP_HOST']  当前请求头中 Host: 项的内容,如果存在的话。
-      $_SERVER['HTTP_REFERER']  引导用户代理到当前页的前一页的地址（如果存在）。
-        由 user agent 设置决定。
-        并不是所有的用户代理都会设置该项,
-        有的还提供了修改 HTTP_REFERER 的功能。
-        简言之,该值并不可信
-      $_SERVER['HTTPS']   如果脚本是通过 HTTPS 协议被访问,则被设为一个非空的值。
-      $_SERVER['REMOTE_ADDR']  浏览当前页面的用户的 IP 地址。
-      $_SERVER['REMOTE_HOST']  浏览当前页面的用户的主机名。
-        DNS 反向解析不依赖于用户的 REMOTE_ADDR。
-      $_SERVER['REMOTE_PORT']  用户机器上连接到 Web 服务器所使用的端口号。
-      $_SERVER['SCRIPT_FILENAME']  当前执行脚本的绝对路径。
-      $_SERVER['SERVER_ADMIN'] Apache 服务器配置文件中的 SERVER_ADMIN 参数。
-        如果脚本运行在一个虚拟主机上,则该值是那个虚拟主机的值。
-        如:someone@runoob.com
-      $_SERVER['SERVER_PORT']    Web 服务器使用的端口。默认值为 "80"。
+      $_SERVER['SERVER_ADDR']        当前脚本所在服务器的IP地址 
+      $_SERVER['SERVER_NAME']        当前运行脚本所在的服务器的主机名 
+        如果脚本运行于虚拟主机中,该名称是由虚拟主机所设置的值决定 
+      $_SERVER['SERVER_SOFTWARE']    服务器标识字符串 
+        在响应请求时的头信息中给出,如: Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30  
+      $_SERVER['SERVER_PROTOCOL']    请求页面时通信协议名称和版本 
+        如: HTTP/1.1 
+      $_SERVER['SERVER_PORT']          Web服务器使用的端口,默认: "80" 
         如果使用 SSL 安全连接,则这个值为用户设置的 HTTP 端口。
-      $_SERVER['SERVER_SIGNATURE']  包含了服务器版本和虚拟主机名的字符串。
-      $_SERVER['PATH_TRANSLATED']  当前脚本所在文件系统（非文档根目录）的基本路径。
-        这是在服务器进行虚拟到真实路径的映像后的结果。
-      $_SERVER['SCRIPT_NAME']  包含当前脚本的路径。
-        这在页面需要指向自己时非常有用。
-        __FILE__ 常量包含当前脚本(例如包含文件)的完整路径和文件名。
-      $_SERVER['SCRIPT_URI']  URI 用来指定要访问的页面
-        如 "/index.html"。
-    $_REQUEST: 用于收集HTML表单提交的数据
-      以下实例显示了一个输入字段（input）及提交按钮(submit)的表单(form)。
-      当用户通过点击 "Submit" 按钮提交表单数据时, 
-      表单数据将发送至<form>标签中 action 属性中指定的脚本文件。 
-      在这个实例中,我们指定文件来处理表单数据。
-      如果你希望其他的PHP文件来处理该数据,你可以修改该指定的脚本文件名。 
-      然后,我们可以使用超级全局变量 $_REQUEST 来收集表单中的 input 字段数据:
-      <html>
-      <body>
+      $_SERVER['SERVER_SIGNATURE']     服务器版本和虚拟主机名的字符串 
+        如: Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30 Server at tst.lcl.com Port 80
+      // 请求相关 
+      $_SERVER['REQUEST_METHOD']       访问页面使用的请求方法类型  
+        如: "GET" "HEAD" "POST" "PUT" 
+      $_SERVER['REQUEST_TIME']         请求开始时的时间戳[PHP5.1.0+]
+         如:1377687496
+      $_SERVER['QUERY_STRING']         请求的查询字符串'query string' 
+        无查询字符的话则为空字符 
+      $_SERVER['HTTP_ACCEPT']          当前请求头中Accept的值 
+      $_SERVER['HTTP_USER_AGENT']      当前请求头中User-Agent的值 
+      $_SERVER['HTTP_ACCEPT_CHARSET']  当前请求头中Accept-Charset的值 
+        如果存在的话。例如:"iso-8859-1,*,utf-8"。
+      $_SERVER['HTTP_HOST']            当前请求头中Host的值 
+      $_SERVER['HTTP_REFERER']         引导用户代理到当前页的前一页的地址 
+        由'user agent'设置决定,并非所有的用户代理都会设置该项 
+        有的还提供了修改 HTTP_REFERER 的功能,简言之,该值并不可信
+      $_SERVER['HTTPS']                若脚本是通过HTTPS被访问的,则为一个非空的值 
+      $_SERVER['REMOTE_ADDR']          浏览当前页面的用户的IP地址 
+      $_SERVER['REMOTE_HOST']          浏览当前页面的用户的主机名 
+        DNS 反向解析不依赖于用户的 REMOTE_ADDR。
+      $_SERVER['REMOTE_PORT']          用户机器上连接到Web服务器所使用的端口号 
+      $_SERVER['SERVER_ADMIN']         Apache服务器配置文件中的SERVER_ADMIN参数 
+        如: postmaster@localhost 
+        若脚本运行在虚拟主机上,则该值是虚拟主机的值 
+      $_SERVER['PATH_TRANSLATED']     当前脚本所在文件系统的基本路径 
+      $_SERVER['SCRIPT_URI']          URI用来指定要访问的页面 
+    $_REQUEST: 用于收集HTML表单提交的数据 
+      $_REQUEST[<field>] 
+        field  提交的字段名 
+      Example: 
+        /*  
         <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
           Name: <input type="text" name="fname">
           <input type="submit">
-        </form>
-        <?php 
-        $name = $_REQUEST['fname']; 
-        echo $name; 
-        ?>
-      </body>
-      </html>
-    $_POST: 应用于收集表单数据
-      PS:在HTML form标签的指定该属性:"method="post"。
-      在这个实例中,我们指定文件来处理表单数据。
-      如果你希望其他的PHP文件来处理该数据,你可以修改该指定的脚本文件名。 
-      然后,我们可以使用超级全局变量 $_POST 来收集表单中的 input 字段数据:
-      <html>
-      <body>
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-          Name: <input type="text" name="fname">
-          <input type="submit">
-        </form>
-        <?php 
-        $name = $_POST['fname']; 
-        echo $name; 
-        ?>
-      </body>
-      </html>
-    $_GET: 应用于收集表单数据
-      PS:在HTML form标签的指定该属性:"method="get"。
-      $_GET 也可以收集URL中发送的数据。
-      假定我们有一个包含参数的超链接HTML页面:
-      <html>
-      <body>
-        <a href="test_get.php?subject=PHP&web=runoob.com">Test $GET</a>
-      </body>
-      </html>
-      当用户点击链接 "Test $GET", 参数 "subject" 和 "web" 将发送至"test_get.php",
-      你可以在 "test_get.php" 文件中使用 $_GET 变量来获取这些数据。
-      以下实例显示了 "test_get.php" 文件的代码:
-      <html>
-      <body>
-        <?php 
-        echo "Study " . $_GET['subject'] . " at " . $_GET['web'];
-        ?>
-      </body>
-      </html>    
-    $_FILES
-    $_ENV
-    $_COOKIE
-    $_SESSION
-  魔术变量 
-    PS:PHP提供了大量的预定义常量
-      不过很多常量都是由不同的扩展库定义的,只有在加载了这些扩展库时才会出现,
-      或者动态加载后,或者在编译时已经包括进去了;
-      有八个魔术常量它们的值随着它们在代码中的位置改变而改变。
-      这些特殊的常量不区分大小写;
-    __LINE__: 文件中的当前行号
+        </form>    
+        <?php echo $_REQUEST['fname']; ?>
+        */
+    $_POST: 用于收集POST提交的数据 
+      PS: 在form标签的指定属性: method="post" 
+      $_POST[<field>]   
+        field   字段名 
+    $_GET: 用于收集GET提交的数据
+      PS: 在form标签中指定属性: method="get",也可收集URL中发送的数据 
+    $_FILES: 
+    $_ENV: 
+    $_COOKIE: 
+    $_SESSION: 
+  魔术变量:  
+    PS: PHP提供了大量的预定义常量,很多都是由不同的扩展库定义的 
+      有八个魔术常量它们的值随着其在代码中的位置改变而改变;
+    __FILE__      当前文件的完整路径和文件名[PHP4.3.0+] 
+      自 PHP 4.0.2 起,__FILE__ 总是包含一个绝对路径,
+    __LINE__      代码当前的行号 
       其值依赖于它在脚本中所处的行来决定;
       Example:
-        <?php
         echo '这是第 " '  . __LINE__ . ' " 行'; // 这是第 " 9 " 行
-        ?>
-    __FILE__: 文件的完整路径和文件名
-      PS:如果用在被包含文件中,则返回被包含的文件名。
-        自 PHP 4.0.2 起,__FILE__ 总是包含一个绝对路径,
-        如果是符号连接,则是解析后的绝对路径,
-        而在此之前的版本有时会包含一个相对路径;
-      Example:
-        <?php
-        echo '该文件位于 " '  . __FILE__ . ' " ';
-        // 该文件位于 " E:\project\test\one.php "
-        ?>
-    __DIR__: 文件所在的目录 
+    __DIR__       文件所在目录 
       PS:如果用在被包括文件中,则返回被包括的文件所在的目录。
         它等价于 dirname(__FILE__)。
         除非是根目录,否则目录中名不包括末尾的斜杠。[PHP 5.3.0中新增]
       Example:
-        <?php
         echo '该文件位于 " '  . __DIR__ . ' " ';
         // 该文件位于 " E:\project\test "
-        ?>
-    __FUNCTION__:  函数名称  [PHP 4.3.0 新加]
-      PS:自 PHP 5 起本常量返回该函数被定义时的名字,区分大小写,
-        在 PHP 4 中该值总是小写字母的。
+    __FUNCTION__  函数名称[PHP4.3.0+] 
+      PS: PHP5+返回该函数被定义时的名字,区分大小写,PHP4中该值总是小写字母 
       Example:
-        <?php
         function test() {
           echo  '函数名为:' . __FUNCTION__ ;
         }
         test(); // 函数名为:test
-        ?>
-    __CLASS__: 类的名称      [PHP 4.3.0 新增] 
-      PS:自 PHP 5 起本常量返回该类被定义时的名字,区分大小写;
-        在 PHP 4 中该值总是小写字母的,
-        类名包括其被声明的作用区域（例如 Foo\Bar）,
-        注意自 PHP 5.4 起 __CLASS__ 对 trait 也起作用。
-        当用在 trait 方法中时,__CLASS__ 是调用 trait 方法的类的名字。
+    __CLASS__     类的名称[PHP4.3.0+] 
+      PS: PHP5+返回该类被定义时的名字,区分大小写;PHP4中该值总是小写字母,
+        类名包括其被声明的作用区域,如 Foo\Bar,
+        PHP 5.4+ __CLASS__ 对trait也起作用。
+        当用在trait方法中时,__CLASS__ 是调用trait方法的类的名字 
       Example:
-        <?php
         class test {
           function _print() {
             echo '类名为:'  . __CLASS__ . "<br>";
@@ -568,18 +406,15 @@ xxx;
         }
         $t = new test();
         $t->_print();
-        ?>
-        输出结果为:
-        类名为:test
-        函数名为:_print
-    __TRAIT__:  Trait 的名字 [PHP 5.4.0 新增]
-      PS:自 PHP 5.4.0 起,PHP 实现了代码复用的一个方法,称为 traits。
-        Trait 名包括其被声明的作用区域（例如 Foo\Bar）。
-        从基类继承的成员被插入的 SayWorld Trait 中的 MyHelloWorld 方法所覆盖。
+        // 类名为:test
+        // 函数名为:_print
+    __TRAIT__     Trait的名字[PHP5.4.0+] 
+      PS:自 PHP 5.4.0 起,PHP 实现了代码复用的一个方法,称为 traits 
+        Trait名包括其被声明的作用区域（例如 Foo\Bar）。
+        从基类继承的成员被插入的 SayWorld Trait中的 MyHelloWorld 方法所覆盖。
         其行为 MyHelloWorld 类中定义的方法一致。
-        优先顺序是当前类中的方法会覆盖 trait 方法,而 trait 方法又覆盖了基类中的方法。
+        优先顺序是当前类中的方法会覆盖trait方法,而trait方法又覆盖了基类中的方法。
       Example:
-        <?php
         class Base {
           public function sayHello() {
             echo 'Hello ';
@@ -599,46 +434,150 @@ xxx;
         
         $o = new MyHelloWorld();
         $o->sayHello();
-        ?>
         输出: Hello World!
-    __METHOD__: 类的方法名   [PHP 5.0.0 新加] 
+    __METHOD__    类的方法名[PHP5.0.0+] 
       PS:返回该方法被定义时的名字,区分大小写
       Example:
-        <?php
         function test() {
           echo  '函数名为:' . __METHOD__ ;
         }
         test(); // 函数名为:test
-        ?>
-    __NAMESPACE__: 当前命名空间的名称,区分大小写 [PHP 5.3.0 新增]
-      PS:此常量是在编译时定义的
+    __NAMESPACE__ 当前命名空间的名称,区分大小写[PHP5.3.0+] 
+      PS: 此常量是在编译时定义的
       Example:
-        <?php
         namespace MyProject;
         echo '命名空间为:"', __NAMESPACE__, '"'; 
         // 命名空间为:"MyProject"
-        ?>
-OOP,Object-oriented_programming 面向对象 
-  对象是一个由信息及对信息进行处理的描述所组成的整体,是对现实世界的抽象。
-  对象的主要三个特性:
-    对象的表示:对象的表示就相当于身份证,具体区分在相同的行为与状态下有什么不同。
-    对象的形态:当施加那些方法是对象如何响应,颜色,尺寸,外型。
-    对象的行为:可以对 对象施加那些操作,开灯,关灯就是行为。
-  面向对象内容
-    类:   定义了一件事物的抽象特点。类的定义包含了数据的形式以及对数据的操作
+    PHP_VERSION   当前PHP解析器的版本号 
+      echo PHP_VERSION;  // 5.6.30 
+    PHP_OS        服务器所用的操作系统名称 
+      echo PHP_OS;  // WINNT 
+运算符/操作符 
+  $str1 . $str2;         字符串连接符 
+    Example:
+      $txt1 = "aa"; 
+      $txt2 = "bb!"; 
+      echo $txt1 . " " . $txt2;  // aa bb!
+  expr1 ? expr2 : expr3; 三元运算符 
+  @   错误控制运算符 
+    PS: 对于一些可能会在运行过程中出错的表达式时,可将@放置在一个PHP表达式前,
+      该表达式可能产生的任何错误信息都被忽略掉; 
+      若激活了track_error[在php.ini中设置]特性,
+      表达式所产生的任何错误信息都被存放在变量$php_errormsg中,
+      此变量在每次出错时都会被覆盖,所以如果想用它的话必须尽早检查;
+      错误控制前缀“@”不会屏蔽解析错误的信息,
+      不能把它放在函数或类的定义之前,
+      也不能用于条件结构例如if和foreach等 
+    Example: 
+      $conn = @mysql_connect("localhost","username","password");
+      echo "出错了，错误原因是：".$php_errormsg;
+  算术运算符 
+    +  加 
+    -  减 
+    *  乘 
+    /  除 
+    %  取余 
+  赋值运算符 
+    =   赋值,将右边表达式值复制一份,交给左边的运算数 
+      $var1 = $var2 
+    =&  引用赋值,即两个变量都指向同一个数据,共享一块内存 
+      若该内存存储的数据变了,则两个变量的值都会发生变化 
+    .=  连接赋值 
+      a .= b 等价于 a = a . b 连接两个字符串
+  比较运算符 
+    ==    相等,值相同  
+    ===   恒等,值且类型相同 
+    !=    不等 
+      5 != 8 ; // 1
+    <>    不等 
+      5 <> 8 ; // 1
+    !==   不恒等 
+      x !== y  如果 x 不等于 y,或它们类型不相同,则返回 true
+      5!=="5" 返回 true
+    <     小于 
+    <=    小于等于  
+    >     大于
+    >=    大于等于  
+    <=> 组合比较符[PHP7+] 
+      大于 返回1;等于 返回0;小于 返回-1;
+      // 整型
+      echo 1 <=> 1; // 0
+      echo 1 <=> 2; // -1
+      echo 2 <=> 1; // 1
+      
+      // 浮点型
+      echo 1.5 <=> 1.5; // 0
+      echo 1.5 <=> 2.5; // -1
+      echo 2.5 <=> 1.5; // 1
+       
+      // 字符串
+      echo "a" <=> "a"; // 0
+      echo "a" <=> "b"; // -1
+      echo "b" <=> "a"; // 1
+  逻辑运算符 
+    !$var;   非
+    $var1 and $var2; 与
+    $var1 && $var2;  与
+    $var1 or $var2;  或 
+    $var1 || $var2;  或 
+    $var1 xor $var2 xor $var3 ...; 异或,有且只有一个为true  
+  +     集合
+语句  
+  条件判断 
+    if (condition) {
+      # code...
+    }
+    elseif (condition) {
+      # code...
+    }
+    else {
+      # code...
+    }
+    
+    switch (variable) {
+      case 'value1':
+        # code...
+        break;
+      case 'value2':
+        # code...
+        break;
+      default:
+        # code...
+        break;
+    }
+  循环 
+    while ( condition ) {
+      # code...
+    }
+    
+    do {
+      # code...
+    } while ( condition );
+    
+    for (初始化; 循环条件; 内容变化) { 
+      # code...
+    }
+    
+    // 常用于遍历数组 
+    foreach ($variable as $key => $value) {
+      # code...
+    }
+OOP'Object oriented programming'面向对象 
+  面向对象内容 
+    类: 定义了一件事物的抽象特点。类的定义包含了数据的形式以及对数据的操作
     对象: 类的实例
-    成员变量: 定义在类内部的变量。
+    成员变量: 定义在类内部的变量 
       该变量的值对外是不可见的,但是可以通过成员函数访问,
       在类被实例化为对象后,该变量即可称为对象的属性。
     成员函数: 定义在类的内部,可用于访问对象的数据。
-    继承:  子类自动共享父类数据结构和方法的机制,类之间的一种关系。
+    继承: 子类自动共享父类数据结构和方法的机制,类之间的一种关系。
       在定义和实现一个类的时候,可以在一个已经存在的类的基础之上来进行,
       把这个已经存在的类所定义的内容作为自己的内容,并加入若干新的内容。
-    父类:  一个类被其他类继承,可将该类称为父类,或基类,或超类。
-    子类:  一个类继承其他类称为子类,也可称为派生类。
-    多态:  相同的操作或函数、过程可作用于多种类型的对象上并获得不同的结果。
+    父类: 一个类被其他类继承,可将该类称为父类,或基类,或超类。
+    子类: 一个类继承其他类称为子类,也可称为派生类。
+    多态: 相同的操作或函数、过程可作用于多种类型的对象上并获得不同的结果。
       不同的对象,收到同一消息可以产生不同的结果,这种现象称为多态性。
-    重载:  简单说,就是函数或者方法有同样的名称,但是参数列表不相同的情形,
+    重载: 简单说,就是函数或者方法有同样的名称,但是参数列表不相同的情形,
       这样的同名不同参数的函数或者方法之间,互相称之为重载函数或者方法。
     抽象性: 将具有一致的数据结构（属性）和行为（操作）的对象抽象成类。
       一个类就是这样一种抽象,它反映了与应用有关的重要性质,而忽略其他一些无关内容。
@@ -646,7 +585,7 @@ OOP,Object-oriented_programming 面向对象
     封装: 将某个客体的属性与行为绑定在一起,并放置在一个逻辑单元内。
     构造函数: 主要在创建对象时初始化对象,即为对象成员变量赋初始值,
       总与new运算符一起使用在创建对象的语句中。
-    析构函数: 析构函数(destructor) 与构造函数相反,
+    析构函数: 析构函数'destructor'与构造函数相反 
       当对象结束其生命周期时（例如对象所在的函数已调用完毕）,系统自动执行析构函数。
       析构函数往往用来做"清理善后" 的工作,
       例如在建立对象时用new开辟了一片内存空间,应在退出前在析构函数中用delete释放
@@ -655,7 +594,7 @@ OOP,Object-oriented_programming 面向对象
       $mercedes = new Car ();
       $bmw = new Car ();
       $audi = new Car ();
-  class 关键字 定义类
+  class 关键字定义类
     语法规则
       类使用 class 关键字后加上类名定义。
       类名后的一对大括号({})内可以定义变量和方法。
@@ -1028,58 +967,7 @@ OOP,Object-oriented_programming 面向对象
     $obj = new OtherSubClass();
     // BaseClass 类中构造方法
     ?>
-运算符/操作符 
-  .   字符串连接符 
-    Example:
-      <?php 
-      $txt1 = "aa"; 
-      $txt2 = "bb!"; 
-      echo $txt1 . " " . $txt2;  // aa bb!
-      ?>
-  .=  连接赋值 
-    a .= b 等价于 a = a . b 连接两个字符串
-  !=  不等于 
-    5 != 8 ; //  true
-  <>  不等于 
-    5 <> 8 ; // true
-  !== 不恒等于
-    x !== y  如果 x 不等于 y,或它们类型不相同,则返回 true
-    5!=="5" 返回 true
-  ◆逻辑运算
-  and 与
-  &&  与
-  or  或
-  ||  或
-  !   非
-  xor 异或
-  ◆数组运算符
-  +     集合
-  ==    相等  
-    具有相同的键/值对,则返回 true
-  ===   恒等  
-    具有相同的键/值对,且顺序相同类型相同,则返回 true
-  !=    不相等
-  <>    不相等
-  !== y 不恒等
-  <=> 组合比较符 [PHP7+]
-    大于 返回1;等于 返回0;小于 返回-1;
-    <?php
-    // 整型
-    echo 1 <=> 1; // 0
-    echo 1 <=> 2; // -1
-    echo 2 <=> 1; // 1
-    
-    // 浮点型
-    echo 1.5 <=> 1.5; // 0
-    echo 1.5 <=> 2.5; // -1
-    echo 2.5 <=> 1.5; // 1
-     
-    // 字符串
-    echo "a" <=> "a"; // 0
-    echo "a" <=> "b"; // -1
-    echo "b" <=> "a"; // 1
-    ?>  
-全局函数&语句 
+全局函数
   PS: 语句间使用分号;分割,且不可省略
   echo (val1,val2?,..); 文本输出 
     PS: 括号可省略: echo 或 echo()
@@ -1098,10 +986,53 @@ OOP,Object-oriented_programming 面向对象
   print (val);          文本输出 
     PS: 括号可省略: print 或 print()。
     只允许输出一个字符串,返回值总为 1
+  ceil(val)                减少取整 
   var_dump(val);      返回变量的数据类型和值 
     Example: 
       $flag = true 
       var_dump($flag);  // bool(true) 
+  strlen()            返回字符串的长度[字符数]
+    echo strlen("Hello world!"); // 12
+  strpos(str1,str2)   在字符串str1内查找str2
+    如果找到匹配,返回第一个匹配的字符位置;未找到匹配,则返回 FALSE;
+    Example:
+      echo strpos("0123456789","345"); // 3
+  print_r()   打印数组
+  count($arr) 返回数组长度
+  ◆数组排序: 数组中的元素可以按字母或数字顺序进行降序或升序排列
+  sort()     对数组进行升序排列 [改变原数组]
+    Example:
+      <?php
+      $aoo = array("aa","abac","ba");
+      sort($aoo); 
+      print_r($aoo) ; // Array ( [0] => aa [1] => abac [2] => ba )
+      ?>
+      <?php
+      $numbers=array(4,6,2,22,11);
+      sort($numbers);
+      print_r($numbers) ; 
+      // Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 11 [4] => 22 )
+      ?>
+  rsort()    对数组进行降序排列
+  asort()    根据关联数组的值,对数组进行升序排列
+    Example:
+      <?php
+      $aoo = array("a"=>"35","b"=>"37","ab"=>"43");
+      asort($aoo);
+      print_r($aoo); // Array ( [a] => 35 [b] => 37 [ab] => 43 )
+      ?>
+  arsort()   根据关联数组的值,对数组进行降序排列
+  ksort()    根据关联数组的键,对数组进行升序排列
+    Example:
+      <?php
+      $age = array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+      ksort($age);
+      print_r($age); // Array ( [Ben] => 37 [Joe] => 43 [Peter] => 35 )
+      ?>
+  krsort()   根据关联数组的键,对数组进行降序排列
+  fopen()    打开文件,返回资源类型  
+  imagecreate()  创建图形画布 
+  unset(val) 将值设为null 
   intdiv(val1,val2);  返回val1整除val2的值  [PHP7+]
     <?php
     var_dump(intdiv(10, 3)); // int(3)
@@ -1593,48 +1524,6 @@ OOP,Object-oriented_programming 面向对象
       在类名称前面加上当前命名空间名称变成:A\B\D\E,然后查找该类。
       尝试自动装载类 A\B\D\E。
       为了引用全局命名空间中的全局类,必须使用完全限定名称 new \C()。
---------------------------------------------------------------------------------  
-WAMPServer集成环境 
-  PS:
-    W : windows
-    A : Apache
-    M : MySQL
-    P : PHP
-  配置网站根目录 
-    在 Apache 的配置文件 httpd.conf 中进行配置
-    DocumentRoot "E:/project/test"  
-    <Directory "E:/project/test">
-  多站点配置 
-    首先 在 Apache 的 httpd-vhosts.conf [虚拟目录配置]文件中进行配置,且可配置多个
-      <VirtualHost *:80>
-        ServerAdmin webmaster@dummy-host2.example.com  
-        <!-- 设置管理员邮箱地址,可不用配置 -->
-        DocumentRoot "E:/project/test"
-        <!-- 网站根目录 -->
-        ServerName  xxx.com
-        <!--  主机名-->
-        ErrorLog "logs/localhuarun.hkbao.com-error.log"
-        <!--  错误日志,可不用配置-->
-        CustomLog "logs/localhuarun.hkbao.com-access.log" common
-        <!--  日常日志,可不用配置-->
-      </VirtualHost>
-    然后 配置完后在 httpd.conf 文件中
-      将 Include conf/extra/httpd-vhosts.conf 取消注释[默认是被注释掉的]
-      并设置 将'只有本机IP可访问本地资源'改为所有域名都可访问
-        Apache2.4.9版本的httpd.conf文件为:
-        #   onlineoffline tag - don't remove
-        Require local
-        将“Require local”前面加上#,在下面加上一句:
-        Require all granted
-        保存重启就OK了
-    最后 在系统中配置 hosts 文件
-      127.0.0.1  test01.com
-      127.0.0.1  test02.com
-      ... [可配置多个]
-
-
-
-
 --------------------------------------------------------------------------------
 Example: 
   员工查询和添加

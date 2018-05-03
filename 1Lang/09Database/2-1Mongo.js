@@ -177,11 +177,43 @@ Mongoose,对mongodb库的封装
     // ,createtime: Date 
     ,firstName: String  // 姓
     ,lastName: String   // 名
+    
+    // 验证器 
+    ,key1: {
+      ...
+      ,required: true   // 该字段是否必填 
+      // Number 类型具有的验证器 
+      ,max: <num>  // 允许的最大值 
+      ,min: <num>  // 允许的最小值 
+      // String 类型具有的验证器 
+      ,enum: [ member1,.. ] // 值必须在枚举的列表中  
+      ,match: /\d+/g        // 值需满足指定的正则 
+      // 自定义验证器 
+      ,validate: function(key){
+        return <bol>;  // 验证成功则返回 true 
+      }
+    }
   }) 
   UserSchema.virtual('fullName').get(function(){   // 虚拟属性 
     return this.firstName+"."+this.lastName;
   })
-  var User = mongoose.model('User',UserSchema)   // 创建集合 
+  UserSchema.statics.fn1 = function(arg?,..){    // 定义静态方法,通过创建的模型来直接调用  
+    // 
+  }
+  UserSchema.methods.fn2 = function(arg?,..){    // 定义实例方法,通过模型的实例来调用 
+    // 
+  }
+  中间件: 在某些操作前/后,执行一些自定义的操作 
+    文类中间件: init validate save remove 
+    查询中间件: count find findOne update findOneAndRemove findOneAndUpdate 
+  UserSchema.pre('save', true ,function(next, done){   // 定义前置中间件 
+    next() 
+    done() 
+  })    
+  UserSchema.post('save' ,function(next){    // 定义后置中间件 
+    next() 
+  })   
+  var User = mongoose.model('User',UserSchema)   // 创建模型 
     mongoose.model('User',{    // 直接使用对象定义Schema 
       uid: Number
       // ,...
@@ -204,9 +236,6 @@ Mongoose,对mongodb库的封装
     }
     console.log(docs);
   })
-
-
-
 
 
 

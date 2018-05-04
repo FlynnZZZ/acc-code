@@ -218,15 +218,37 @@ Mongoose,对mongodb库的封装
       uid: Number
       // ,...
     })   
+  DBRef: 集合间的交叉引用,如一个集合中的文档引用另一个集合中的文档 
+  var News = mongoose.model('News',{
+    title: String
+    ,author: {
+      type: mongoose.Schema.ObjectId 
+      ,ref: 'User'
+    }
+  })
   var user = new User({                          // 添加数据,返回添加的文档 
     uid: 1
     ,username: 'aaa'
+  })
+  var news = new News({
+    title: 'aaa'
+    ,author: user 
   })
   user.save(function(err){
     if (err) {
       console.log(err);
       return ;
     }
+    news.save(function(err1){
+      if (err1) {
+        console.log(err1);
+        return ;
+      }
+      
+      News.findOne().populate('author').exec(function(err ,doc){
+        console.log(err, doc); // 
+      })
+    })
     // ...
   })
   User.find(<condition> ,function(err ,docs){
@@ -236,7 +258,7 @@ Mongoose,对mongodb库的封装
     }
     console.log(docs);
   })
-
+  
 
 
 

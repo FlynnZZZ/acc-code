@@ -120,6 +120,10 @@ HTML'Hyper Text Markup Language'超文本标记语言
         DefDec: 通过设置为 “off” 完全退出 DNS 预取 
       <meta http-equiv="window-target" content="_value"> 
         DefDec: 指定要显示在一个特定框架中的页面 
+      清除缓存
+      <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+      <meta http-equiv="Pragma" content="no-cache" />
+      <meta http-equiv="Expires" content="0" />
     name="‹KW›"          把'content'关联到一个名称 
       <meta name="viewport" content="KW1,KW2..."> [HTML5]
         DefDec: 视口设置 ›
@@ -254,7 +258,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
         <meta charset="UTF-8"> 
         // HTML5前的写法 
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> 
-    scheme=""           
+    scheme=""       
+    
   <title>  网页标题
   <base href="http://aoo/" target="_blank">  定义超链接的根目录 [HTML5]  
     PS: 在head中使用 
@@ -1478,7 +1483,6 @@ HTML全局属性
     &#8869;  &perp;     ⊥      perpendicular                
   &#x<Unicode编码>;  表示一字符 
     如 &#x1d306;   表示:𝌆  
---------------------------------------------------------------------------------
 ◆HTML5 
   介绍 
     PS:HTML5 是对 HTML 标准的第五次修订,HTML5是最新版本的HTML,
@@ -1616,21 +1620,6 @@ HTML全局属性
     noframes
     strike
     tt
-移动端HTML 
-  meta  
-    <meta name="apple-mobile-web-app-capable" content="yes">  
-      让普通移动网页被添加到主屏幕后,拥有一些类native的功能,
-      就是类似隐藏ios的上下状态栏, 实现全屏,禁止弹性拖拽,修改顶部颜色等
-    ▼清除缓存
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <a href="tel: 123456789"> </a> 点击拨号  
-  键盘  
-    input表单中,右下角键显示为'开始',textarea中显示为'换行'  
-    <input type="tel" >     // 默认调出数字键盘
-    <input type="number" >  // 默认调出数字键盘,且只能输入数字 
-    <input type="search" >  // 键盘上的右下角键将显示为'搜索'  
 --------------------------------------------------------------------------------
 Collection 
 自我总结 

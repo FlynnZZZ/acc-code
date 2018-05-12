@@ -619,7 +619,7 @@ fs,文件系统模块'file system',与文件系统交互
       console.log('成功删除了 /tmp/shiyanlou');
       同步方法执行完并返回结果后,才能执行后续的代码 
       而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
-  var fs = require('fs') // 引入文件系统模块
+  const fs = require('fs') // 引入文件系统模块
   fs.writeFile(   // 写内容到文件中 
     <path>      // str,路径及文件名 
     ,<data>     // str,写入的内容  

@@ -213,10 +213,10 @@ JSON'JavaScript Object Notation'JavaScript对象表示法[IE8+]
     每个JSON对象只能是一个值,即每个JSON文档只能包含一个值;
     ES5对解析JSON的行为进行了规范,定义了全局对象JSON对象
   Member: 
-    JSON.stringify(val[,arr/foo,num/str])   str,序列化,将JS值转换为JSON字符串 
+    JSON.stringify(val ,<filter>? ,<indent>?)   str,序列化,将JS值转换为JSON字符串 
       PS: 所有函数及原型成员都会被有意忽略 
       val       需序列化的值 
-      arr/foo   可选,过滤器,当为 null 时表示不过滤  
+      filter    可选,过滤器,当为 null 时表示不过滤  
         ◆arr 结果中将只包含数组中列出的属性 
         var obj = {
           aoo: 1
@@ -247,7 +247,7 @@ JSON'JavaScript Object Notation'JavaScript对象表示法[IE8+]
         console.log(jsonStr);
         // {"aoo":1,"boo":"abc","coo":3} 
         其中为值undefined的被忽略
-      num/str   可选,缩进排版选项  
+      indent    可选,缩进排版选项  
         ◆num  每级缩进的空格数,范围'1-10'[超过10仍取10] 
         ◆str  作为缩进字符,字符长度不可超过10  
         var obj = {

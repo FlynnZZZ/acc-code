@@ -66,91 +66,75 @@ NodeJS的运行方式及编程风格
       若没有发生错误,'callback'的第一个参数就传入null 
       好处: 通过判断'callback'的第一个参数来确定是否出错 
 --------------------------------------------------------------------------------
-基础&语法 
-  NODE_PATH,node环境变量 
-    与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径 
-    NODE_PATH环境变量中包含一到多个目录路径,路径间,在Linux下使用:分隔,在Windows下使用;分隔 
-    Example: 
-      例如定义了以下NODE_PATH环境变量：
-      $ NODE_PATH=/home/user/lib:/home/lib
-      当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径 
-      /home/user/lib/foo/bar
-      /home/lib/foo/bar
-  this 
-    全局作用域下的'this' 
-      浏览器中,等价于window,声明的全局变量会作为this的属性 
-      在node里面,有两种执行JS代码的方式: 
-      直接在命令行执行代码: 声明的全局变量会添加到global对象,也会添加给this
-        global 和 this 是等价的 
-      执行JS文件: 声明的全局变量会添加到global对象,但不会自动添加到this
-    'function'函数中的'this' 
-      除了在DOM事件处理程序里,事件处理程序里面的this表示被绑定的元素对象
-      若使用new调用,函数就变成了一个构造函数 
-        就创建了一个实例,this指代这个实例.
-        当构造函数使用new生成实例时,this指向其prototype.
-      正常的方式调用函数[直接执行而无前缀],[浏览器和node环境]this指代全局的this
-        使用严格模式,this就会变成undefined
-  'Global Object'全局变量,可在程序的任何地方访问 
-    PS: 浏览器JS中,'window'是全局对象,Node中的全局对象是'global',
-      所有全局变量[除了global本身以外]都是'global'对象的属性 
-module,'CommonJS'模块化规范 
-  Feature: 
-    加载模块,会将模块内的内容执行一次 
-      当直接运行时,模块内 require.main === module,而模块引入执行时不相等,  
-      可以此来判断直接运行还是加载运行  
-    同步加载,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
-    运行时加载: 只能在运行时确定 
-      比如,CommonJS 模块就是对象,输入时必须查找对象属性 
-      // CommonJS模块
-      let { stat, exists, readFile } = require('fs');
-      // 等同于
-      let _fs = require('fs');
-      let stat = _fs.stat;
-      let exists = _fs.exists;
-      let readfile = _fs.readfile;
-      上面代码的实质是整体加载fs模块[即加载fs的所有方法],生成一个对象(_fs),
-      然后再从这个对象上面读取3个方法。
-      这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
-      导致完全没办法在编译时做“静态优化”。
-  模块内部的全局变量,指向的对象根据模块不同而不同,但是所有模块都适用 ? 
-  ◆模块引入 
-  require(moduleName)  模块引入,返回模块的 module.exports 
-    Feature: 
-      省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
-      省略文件名时,依次查找'index'、 ? 
-      模块被加载后会缓存,后续加载返回缓存中的版本
-        即模块加载最多执行一次模块代码, 
-        若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
-      当模块重名时,加载的优先级:  
-        Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-    moduleName  str,'模块名'/'文件路径'  
-      使用模块名引入原生模块或放到'node_modules'下的自定义模块 
-      使用文件路径引入自定义模块
-        相对路径  如:'./mod' 
-        绝对路径  如:'/pathtomodule/mod' 
-  ◆模块公开  
-    PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
-  module.exports = val     把模块希望输出的内容放入该对象[覆盖模式] 
-    hello.js 文件中 
-      function world() { 
-        console.log(1);
-      }; 
-      module.exports = world;
-      // module.exports.aoo = world;
-    main.js  文件中 
-      var word = require('./hello'); 
-      world(); // 1
-      // world.aoo(); // 1
-  module.exports.xx = val  把模块希望输出的内容放入该对象[修改模式] 
-  exports.xxx = val        把模块希望输出的内容放入该对象[只有修改模式] 
-  exports 指向 module.exports 的一个引用, exports === module.exports 
-  ◆Expand: 
-  循环引用,也叫循环依赖,会导致其中一个引入为空 
-    方法一: 将需公用的部分提取出来作为一个独立模块 
-    方法二: 动态引入,在需要时引入,如在函数内部 
+NODE_PATH,node环境变量 
+  与PATH环境变量类似,NodeJS允许通过NODE_PATH环境变量来指定额外的模块搜索路径 
+  NODE_PATH环境变量中包含一到多个目录路径,路径间,在Linux下使用:分隔,在Windows下使用;分隔 
+  Example: 
+    例如定义了以下NODE_PATH环境变量：
+    $ NODE_PATH=/home/user/lib:/home/lib
+    当使用require('foo/bar')的方式加载模块时,则NodeJS依次尝试以下路径 
+    /home/user/lib/foo/bar
+    /home/lib/foo/bar
 'Command Line Options'命令行参数 
   -v, --version  // Node版本 
-★类 
+global/GLOBAL/root,Node所在的全局环境对象 
+  PS: 全局变量的宿主,相当于浏览器的window对象 
+  Member: 
+    // 类  
+    Function Object Array String Number Boolean Date RegExp
+    Promise Symbol Map Set WeakMap WeakSet Proxy Reflect
+    Error EvalError RangeError ReferenceError SyntaxError TypeError URIError
+    ArrayBuffer Uint8Array Int8Array Uint16Array Int16Array 
+    Uint32Array Int32Array Float32Array Float64Array Uint8ClampedArray
+    Buffer
+    DataView
+    Intl
+    WebAssembly
+    // 对象 
+    Math
+    JSON
+    console
+    process
+    module
+    exports
+    // 函数&方法 
+    parseFloat parseInt 
+    decodeURI decodeURIComponent encodeURI encodeURIComponent
+    isFinite isNaN
+    escape unescape
+    setInterval clearInterval
+    setTimeout clearTimeout
+    setImmediate clearImmediate
+    eval
+    require
+    // 属性 
+    __filename
+    __dirname
+    DTRACE_NET_SERVER_CONNECTION
+    DTRACE_NET_STREAM_END
+    DTRACE_HTTP_SERVER_REQUEST
+    DTRACE_HTTP_SERVER_RESPONSE
+    DTRACE_HTTP_CLIENT_REQUEST
+    DTRACE_HTTP_CLIENT_RESPONSE
+    COUNTER_NET_SERVER_CONNECTION
+    COUNTER_NET_SERVER_CONNECTION_CLOSE
+    COUNTER_HTTP_SERVER_REQUEST
+    COUNTER_HTTP_SERVER_RESPONSE
+    COUNTER_HTTP_CLIENT_REQUEST
+    COUNTER_HTTP_CLIENT_RESPONSE
+    // 值 
+    Infinity
+    NaN
+    undefined
+  和window的差异 
+    在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
+      var x = 1;
+      // 等同于设置 
+      window.x = 1;
+    NodeJS中 
+      相同模块中,和浏览器表现一致 
+      不同模块中,则不同,因为模块的全局变量都是该模块私有的,其他模块无法取到  
+◆Classes
 Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
   PS: 用来创建一个专门存放二进制数据的缓存区; 
     可在 TCP 流或文件操作中处理二进制数据流 
@@ -417,48 +401,109 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
     二进制数组的buffer属性,保留指向原Buffer对象的指针 
     二进制数组的操作,与Buffer对象的操作基本上是兼容的,只有轻微的差异 
     比如,二进制数组的slice方法返回原内存的拷贝,而Buffer对象的slice方法创造原内存的一个视图（view） 
-★函数 
-定时器相关 
-  setTimeout(foo,time)  numId,延时调用  
-  clearTimeout(numId)   清除延时调用  
-  setInterval(foo,time) numId,间时调用 
-  clearInterval(numId)  清除间时调用 
-★全局变量&对象  
-global,Node所在的全局环境对象 
-  最根本的作用是作为全局变量的宿主,相当于浏览器的window对象 
-  global 和 window 的不同 
-    在浏览器中声明一个全局变量,实际上是声明了一个全局对象的属性 
-      var x = 1;
-      // 等同于设置 
-      window.x = 1;
-    NodeJS中 
-      相同模块中,和浏览器表现一致 
-      不同模块中,则不同,因为模块的全局变量都是该模块私有的,其他模块无法取到  
+◆Objects
 process,用于描述当前Node进程状态  
   PS: 一个全局对象,表示Node所处的当前进程,
     允许开发者与该进程互动,提供了一个与操作系统的简单接口
-  ▼成员: 
-  .env     obj,其成员为当前shell的环境变量 
-    process.env.aoo  即在命令行中输入 aoo=xx 的值xx 
-  .stdout      标准输出流
-  .stderr      标准错误流
-  .stdin       标准输入流
-  .argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
-    它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
-  .execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
-  .execArgv  arr,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
-  .exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
-  .version     Node 的版本,比如v0.10.18.
-  .versions    一个属性,包含了 node 的版本和依赖.
-  .config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
-    它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
-  .pid         当前进程的进程号.
-  .title       进程名,默认值为"node",可以自定义该值.
-  .arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
-  .platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
-  .mainModule  require.main 的备选方法.
-    不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
-    可以认为,这两者引用了同一个模块.
+  Member: 
+    .env     obj,其成员为当前shell的环境变量 
+      process.env.aoo  即在命令行中输入 aoo=xx 的值xx 
+    .stdout      标准输出流
+    .stderr      标准错误流
+    .stdin       标准输入流
+    .argv        属性返回一个数组,由命令行执行脚本时的各个参数组成.
+      它的第一个成员总是node,第二个成员是脚本文件名,其余成员是脚本文件的参数.
+    .execPath    返回执行当前脚本的 Node 二进制文件的绝对路径.
+    .execArgv  arr,成员是命令行下执行脚本时,在Node可执行文件与脚本文件之间的命令行参数 
+    .exitCode    进程退出时的代码,若进程优通过 process.exit() 退出,不需要指定退出码.
+    .version     Node 的版本,比如v0.10.18.
+    .versions    一个属性,包含了 node 的版本和依赖.
+    .config      一个包含用来编译当前 node 执行文件的 JS 配置选项的对象.
+      它与运行 ./configure 脚本生成的 "config.gypi" 文件相同.
+    .pid         当前进程的进程号.
+    .title       进程名,默认值为"node",可以自定义该值.
+    .arch        当前 CPU 的架构:'arm'、'ia32' 或者 'x64'.
+    .platform    运行程序所在的平台系统 'darwin', 'freebsd', 'linux', 'sunos' 或 'win32'
+    .mainModule  require.main 的备选方法.
+      不同点,若主模块在运行时改变,require.main可能会继续返回老的模块.
+      可以认为,这两者引用了同一个模块.
+    .abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
+    .chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
+    .cwd()   返回当前进程的工作目录
+    .exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
+    .getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .setgid(id) 设置进程的群组标识(参见 setgid(2)).
+      可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .setuid(id) 设置进程的用户标识(参见setuid(2)).
+      接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
+      这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
+      注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
+    .kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
+      信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
+    .memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
+    .nextTick(callback) 一旦当前事件循环结束,调用回到函数.
+    .umask([mask]) 设置或读取进程文件的掩码.
+      子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
+    .uptime() 返回 Node 已经运行的秒数.
+    .hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
+      它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
+      主要用途是可以通过精确的时间间隔,来衡量程序的性能.
+      你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
+    moduleLoadList
+    release
+    features
+    debugPort
+    reallyExit
+    cpuUsage
+    dlopen
+    binding
+    domain
+    assert
+    emitWarning
+    stderr
+    openStdin
+    argv0
+    // 其他 
+    _promiseRejectEvent
+    _needImmediateCallback
+    _startProfilerIdleNotifier
+    _stopProfilerIdleNotifier
+    _getActiveRequests
+    _getActiveHandles
+    _kill
+    _debugProcess
+    _debugPause
+    _debugEnd
+    _linkedBinding
+    _setupDomainUse
+    _events
+    _rawDebug
+    _eventsCount
+    _maxListeners
+    _fatalException
+    _exiting
+    _tickCallback
+    _tickDomainCallback
+    _eval    
+  Events: 
+    exit       当进程准备退出时触发.
+    beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
+      通常来说,当没有进程安排时 node 退出,
+      但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
+    uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
+      若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
+    signal 当进程接收到信号时就触发.
+      信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
   Example:
     创建文件 main.js ,代码如下所示:
     process.stdout.write("Hello World!" + "\n"); // 输出到终端
@@ -474,39 +519,7 @@ process,用于描述当前Node进程状态
     1: /web/www/node/main.js
     /usr/local/node/0.10.36/bin/node
     darwin
-  .abort()   这将导致 node 触发 abort 事件.会让 node 退出并生成一个核心文件.
-  .chdir(directory)   改变当前工作进程的目录,若操作失败抛出异常.
-  .cwd()   返回当前进程的工作目录
-  .exit([code])   使用指定的 code 结束进程.若忽略,将会使用 code 0.
-  .getgid()   获取进程的群组标识(参见 getgid(2)).获取到得时群组的数字 id,而不是名字.
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .setgid(id) 设置进程的群组标识(参见 setgid(2)).
-    可以接收数字 ID 或者群组名.若指定了群组名,会阻塞等待解析为数字 ID .
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .getuid() 获取进程的用户标识(参见 getuid(2)).这是数字的用户 id,不是用户名.
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .setuid(id) 设置进程的用户标识(参见setuid(2)).
-    接收数字 ID或字符串名字.果指定了群组名,会阻塞等待解析为数字 ID .
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .getgroups() 返回进程的群组 iD 数组.POSIX 系统没有保证一定有,但是 node.js 保证有.
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .setgroups(groups) 设置进程的群组ID.这是授权操作,需root权限,或者有 CAP_SETGID 能力 
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .initgroups(user,extra_group) 读取/etc/group,并初始化群组访问列表,使用成员所在的所有群组
-    这是授权操作,所有你需要有 root 权限,或者有 CAP_SETGID 能力.
-    注意:这个函数仅在 POSIX 平台上可用(例如,非Windows 和 Android).
-  .kill(pid[, signal]) 发送信号给进程. pid 是进程id,并且 signal 是发送的信号的字符串描述
-    信号名是字符串,比如 'SIGINT' 或 'SIGHUP'.若忽略,信号会是 'SIGTERM'.
-  .memoryUsage() 返回一个对象,描述了 Node 进程所用的内存状况,单位为字节.
-  .nextTick(callback) 一旦当前事件循环结束,调用回到函数.
-  .umask([mask]) 设置或读取进程文件的掩码.
-    子进程从父进程继承掩码.若mask 参数有效,返回旧的掩码.否则,返回当前掩码.
-  .uptime() 返回 Node 已经运行的秒数.
-  .hrtime() 返回当前进程的高分辨时间,形式为 [seconds, nanoseconds]数组.
-    它是相对于过去的任意事件.该值与日期无关,因此不受时钟漂移的影响.
-    主要用途是可以通过精确的时间间隔,来衡量程序的性能.
-    你可以将之前的结果传递给当前的 process.hrtime() ,会返回两者间的时间差,用来基准和测量时间间隔.
-  Example:
+  
     创建文件 main.js ,代码如下所示:
     console.log('当前目录: ' + process.cwd()); // 输出当前目录
     console.log('当前版本: ' + process.version); // 输出当前版本
@@ -516,16 +529,7 @@ process,用于描述当前Node进程状态
     当前目录: /web/com/runoob/nodejs
     当前版本: v0.10.36
     { rss: 12541952, heapTotal: 4083456, heapUsed: 2157056 }    
-  ▼事件
-  exit       当进程准备退出时触发.
-  beforeExit 当node清空事件循环,并且没有其他安排时触发这个事件 
-    通常来说,当没有进程安排时 node 退出,
-    但是 'beforeExit' 的监听器可以异步调用,这样 node 就会继续执行.
-  uncaughtException 当一个异常冒泡回到事件循环,触发这个事件.
-    若给异常添加了监视器,默认的操作[打印堆栈跟踪信息并退出]就不会发生.
-  signal 当进程接收到信号时就触发.
-    信号列表详见标准的 POSIX 信号名,如 SIGINT、SIGUSR1 等.
-  Example:
+    
     process.on('exit', function(code) {
       setTimeout(function() {  // 该代码永远不会执行
         console.log("该代码不会执行"); 
@@ -537,7 +541,7 @@ process,用于描述当前Node进程状态
     $ node main.js
     程序执行结束
     退出码为: 0
-  ▼退出状态码
+  退出状态码: 
     状态码 名称 & 描述
     1 Uncaught Fatal Exception 有未捕获异常,并且没有被域或 uncaughtException 处理函数处理.
     2 Unused 保留
@@ -551,6 +555,18 @@ process,用于描述当前Node进程状态
     10 Internal JS Run-Time Failure JS的源码启动 Node 进程时抛出错误,非常罕见,仅会在开发 Node 时才会有.
     12 Invalid Debug Argument 设置了参数--debug 和/或 --debug-brk,但是选择了错误端口.
     >128 Signal Exits 若 Node 接收到致命信号,比如SIGKILL 或 SIGHUP,那么退出代码就是128 加信号代码.这是标准的 Unix 做法,退出信号代码放在高位.
+◆Methods
+setTimeout(foo,time)  numId,延时调用  
+clearTimeout(numId)   清除延时调用  
+setInterval(foo,time) numId,间时调用 
+clearInterval(numId)  清除间时调用 
+setImmediate(fn ,param1?,..)    numId,推迟调用,相当于 setTimeout(fn ,0) 
+  Input: 
+    fn     推迟执行的操作 
+    param  作为fn的若干个参数传入  
+  Output: numId   num,推迟调用的id,用来清除该调用 
+clearImmediate(numId)           清除推迟调用 
+◆Props
 __filename 当前正在执行的脚本的路径和文件名 
   PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
     在模块中,返回的值是模块文件的路径 
@@ -569,9 +585,72 @@ __dirname  当前执行脚本所在的目录
     执行 main.js 文件,代码如下所示:
     $ node main.js
     /web/com/runoob/nodejs
-Date,时间类 
-console,用于提供控制台标准输出[详见浏览器调试] 
-Q&A: 
+◆其他总结 
+'CommonJS'模块化规范 
+  module 
+    Member: 
+      .exports
+      .id
+      .parent
+      .filename
+      .loaded
+      .children
+      .paths
+  exports === module.exports 
+  使用 
+    模块引入 
+    require(moduleName)  模块引入,返回模块的 module.exports 
+      Feature: 
+        省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
+        省略文件名时,依次查找'index'、 ? 
+        模块被加载后会缓存,后续加载返回缓存中的版本
+          即模块加载最多执行一次模块代码, 
+          若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
+        当模块重名时,加载的优先级:  
+          Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
+      moduleName  str,'模块名'/'文件路径'  
+        使用模块名引入原生模块或放到'node_modules'下的自定义模块 
+        使用文件路径引入自定义模块
+          相对路径  如:'./mod' 
+          绝对路径  如:'/pathtomodule/mod' 
+    模块公开  
+      PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
+    module.exports = val     把模块希望输出的内容放入该对象[覆盖模式] 
+      hello.js 文件中 
+        function world() { 
+          console.log(1);
+        }; 
+        module.exports = world;
+        // module.exports.aoo = world;
+      main.js  文件中 
+        var word = require('./hello'); 
+        world(); // 1
+        // world.aoo(); // 1
+    module.exports.xx = val  把模块希望输出的内容放入该对象[修改模式] 
+    exports.xxx = val        把模块希望输出的内容放入该对象[只有修改模式] 
+    exports 指向 module.exports 的一个引用, exports === module.exports 
+  Feature: 
+    加载模块,会将模块内的内容执行一次 
+      当直接运行时,模块内 require.main === module,而模块引入执行时不相等,  
+      可以此来判断直接运行还是加载运行  
+    同步加载,模块系统需要同步读取模块文件内容,并编译执行以得到模块接口 
+    运行时加载: 只能在运行时确定 
+      比如,CommonJS 模块就是对象,输入时必须查找对象属性 
+      // CommonJS模块
+      let { stat, exists, readFile } = require('fs');
+      // 等同于
+      let _fs = require('fs');
+      let stat = _fs.stat;
+      let exists = _fs.exists;
+      let readfile = _fs.readfile;
+      上面代码的实质是整体加载fs模块[即加载fs的所有方法],生成一个对象(_fs),
+      然后再从这个对象上面读取3个方法。
+      这种加载称为“运行时加载”,因为只有运行时才能得到这个对象,
+      导致完全没办法在编译时做“静态优化”。
+  Expand: 
+    循环引用,也叫循环依赖,会导致其中一个引入为空 
+      方法一: 将需公用的部分提取出来作为一个独立模块 
+      方法二: 动态引入,在需要时引入,如在函数内部 
 --------------------------------------------------------------------------------
 'Representational State Transfer'RESTful API: 表述性状态传递,一种软件架构风格  
   PS: 满足这些架构约束条件和原则的应用程序或设计就是RESTful 

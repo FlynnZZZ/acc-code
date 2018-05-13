@@ -2426,7 +2426,10 @@ this,JS代码执行时的'context'上下文对象
     当在严格模式中调用函数,上下文将默认为 undefined 
   运行场景枚举: 
     全局上下文中[在任何函数体外部]: 指向全局对象'window' 
-      NodeJS环境,全局作用域中上下文中始终是Global对象 
+      严格模式下,this为undefined 
+      NodeJS环境 
+        直接在命令行执行代码: 声明的全局变量会添加到global对象,也添加到this 
+        执行JS文件: 声明的全局变量会添加到global对象,但不会自动添加到this 
       console.log(this === window); // true 
       var aoo = 1; 
       console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性

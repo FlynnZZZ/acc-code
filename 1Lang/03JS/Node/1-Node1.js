@@ -330,7 +330,28 @@ net,底层的网络通信工具,包含创建服务器/客户端的方法
     .on("error",foo)            服务器出错时触发'error'事件 
       foo  传入参数 (error) 
     .on("close",foo)            服务器关闭时触发'close'事件 
-  const client = new net.Socket()  // 创建客户端 
+  创建TCP通信 
+    PS: TCP服务器的通信是持续的,且可由服务器主动发送数据到客户端 
+  const app = net.createServer(options? ,fn) // TCP服务端  
+    Input: 
+      options      可选,配置选项 
+      function(socket){    // 执行'connect'事件[客户端连接]时回调 
+        // socket   
+        socket.on("data",function(data){  // 客户端发送数据时响应 
+          // 
+        })
+        socket.on("close",function( ){    // 客户端连接断开时响应 
+          // 
+        })
+      }  
+  socket 
+    Events: 
+      'data'
+      'close'
+    Methods: 
+      .write()  // 向客户端发送数据  
+    Props: 
+  const client = new net.Socket() // TCP客户端   
     .connect(port,host,foo)     向服务器发送连接请求,连接成功后回调  
       port   连接的端口 
       host   ip或域名[不可带'http://']

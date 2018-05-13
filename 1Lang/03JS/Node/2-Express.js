@@ -5,218 +5,241 @@ express,简洁灵活的NodeJS的Web框架
     可设置中间件来响应 HTTP 请求 
     定义路由表用于执行不同的 HTTP 请求动作 
     可通过向模板传递参数来动态渲染 HTML 页面         
-命令行  
+相关命令行  
   $ npm i -S express // 安装 
     $ npm i -S express@4.14.0  // 指定版本安装 
+  $ npm i -g express-generator   // 全局安装命令生成模版 
+  $ express <projectName>        // 使用express-generator生成模版 
 --------------------------------------------------------------------------------
 const express = require('express') // 引入模块 
-◆服务 
 const app = express()   // 实例化服务 
-app.listen(port,fn)     // 启动服务器  
-  port            nun,监听的端口 
-  function(){ }   回调函数 
-app.use(path?,fn,next?) // 处理请求 
-  Input: 
-    path                 可选,str,监听的路径,默认监听所有路径  
-      *     任意匹配符
-        '/ab*cd'  可匹配 'abcd'、'abxcd'、'ab123cd'等等 
-      :aoo  占位符,动态路由,如:'/users/:aoo' 
-        可通过 req.params.aoo 获取到实际值 
-    function(req,res){ } 响应函数 
-      req    obj,请求,在原生基础上进行了扩展 
-        .app         当callback为外部文件时,用于访问express实例
-        .protocol      获取协议类型
-        .ip            IP地址
-        .hostname      主机名
-        .baseUrl       获取路由当前安装的URL路径
-        .path          获取请求路径
-        .params  obj,获取路由的parameters[动态路由的动态部分]
-        .query   obj,URL查询参数串的对象形式 
-        .body    请求体 
-          解析后请求体,需使用相关的模块,如 body-parser
-        .headers 请求头 
-        .cookies          obj,未签名的Cookies的对象形式 
-        .secret = <str>   // 设置cookie使用的签名字符串  
-        .signedCookies   obj,签名过的Cookies的对象形式 
-        .session    obj,读写session 
-        .fresh      判断请求是否还'新鲜' 
-        .stale     
-        .originalUrl   获取原始请求URL
-        .route   获取当前匹配的路由
-        .subdomains    获取子域名
-        .acceptsCharsets 
-        .acceptsEncodings 
-        .acceptsLanguages
-        .accpets()   检查请求的Accept头的请求类型
-        .get()     获取指定的HTTP请求头
-        .is()      判断请求头Content-Type的MIME类型
-      res    obj,响应,在原生基础上进行了扩展  
-        .send(data)   // 发送数据 
-          PS: 加强版 .write()  ,参数可为任意类型[自动进行JSON化?] 
-          data  any,发送的数据 
-        .status(num)  设置HTTP状态码
-        .cookie(<key>,<val>,options?)  // 设置cookie 
-          key      str,一条cookie的名
-          val      str,一条cookie的值 
-          options  obj,选项 
-            {
-              path: <str>     // 路径限制 
-              ,maxAge: <num>  // 过期时间,单位:ms 
-              ,signed: <bol>  // 是否使用签名 
-              ,domain: ''
-              ,expires: ''
-              ,httpOnly: ''
-              ,secure: ''
-            }
-        .clearCookie(<key>)            // 删除Cookie 
-        .contentType()                 // 设置编码类型 
-        .type()                        // 设置Content-Type的MIME类型        
-        .sendFile(path[,options][,fn])  响应指定路径的文件 
-          会自动根据文件extension设定Content-Type
-        .json(obj)  传送JSON响应
-        .jsonp()    传送JSONP响应 
-        .render(templateName[,dataObj])  响应HTML 
-          PS: 将模板和数据结合生成html,并设置响应头'Content-Type: text/html' 
-          templateName  模版名称 
-          dataObj       传给模板的数据 
-        .app     obj,当前express实例,同 req.app 
-        .append()  追加指定HTTP头
-        .set()  设置HTTP头,传入object可以一次设置多个头
-        .clearCookie()  清除Cookie
-        .download()     传送指定路径的文件
-        .get()       返回指定的HTTP头
-        .location()  只设置响应的Location HTTP头,不设置状态码或者close response
-        .redirect()  重定向,设置响应的Location HTTP头,并且设置状态码302
-        .end(data)  发送响应数据 
-    next                 fn,可选,是否进行队列执行 
-      next()  则接着执行下一个相同的响应[监听同样的路径的] 
-app.get(path,fn )       // 处理get请求 
-  Input: 
-    path                  str,监听路径 
-    function(req,res){}   响应回调 
-      req  HTTP请求,包含了请求查询字符串,参数,内容,HTTP头部等属性 
-      res  HTTP响应,即在接收到请求时向客户端发送的 HTTP响应数据  
-app.post(path,fn )      // 处理post请求 
-  Input: 
-    path                    str,监听路径  
-    function(req,res){}     响应回调 
-      // req 和 res 的属性/方法 同GET请求类似 
-      req  
-        .files  上传文件信息集合    
-          [idx]  单个文件信息对象  
-            .originalname 
-      res  
-  Output:  
-  Example: 
-    在表单中通过 POST 方法提交两个参数
-    使用 server.js 文件内的 process_post 路由器来处理输入:
-    index.htm 文件代码修改如下:
-      <html>
-        <body>
-          <form action="http://127.0.0.1:8081/process_post" method="POST">
-            First Name: <input type="text" name="first_name">
-            <br>
-            Last Name: <input type="text" name="last_name">
-            <input type="submit" value="Submit">
-          </form>
-        </body>
-      </html>
-    server.js 文件代码修改如下:
-      var express = require('express');
-      var app = express();
-      var bodyParser = require('body-parser');
-      
-      // 创建 application/x-www-form-urlencoded 编码解析
-      var urlencodedParser = bodyParser.urlencoded({ extended: false })
-      
-      app.use(express.static('public'));
-      app.get('/index.htm', function (req, res) {
-         res.sendFile( __dirname + "/" + "index.htm" );
-      })
-      app.post('/process_post', urlencodedParser, function (req, res) {
-         // 输出 JSON 格式
-         response = {
-             first_name:req.body.first_name,
-             last_name:req.body.last_name
-         };
-         console.log(response);
-         res.end(JSON.stringify(response));
-      })
-      
-      var server = app.listen(8081, function () {
-        var host = server.address().address
-        var port = server.address().port
-        console.log("应用实例,访问地址为 http://%s:%s", host, port)
-      })
-    执行以上代码:
-      $ node server.js
-    浏览器访问 http://127.0.0.1:8081/index.htm 
-  Example: 
-    创建一个用于上传文件的表单,使用 POST 方法,
-    表单 enctype 属性设置为 multipart/form-data 
-    index.htm 文件代码修改如下:
-      <html>
-        <head>
-          <title>文件上传表单</title>
-        </head>
-        <body>
-          <h3>文件上传:</h3>
-          选择一个文件上传: 
-          <br>
-          <form action="/file_upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="image" size="50" />
-            <br>
-            <input type="submit" value="上传文件" />
-          </form>
-        </body>
-      </html>
-    server.js 文件代码修改如下:
-      var express = require('express');
-      var app = express();
-      var fs = require("fs");
-      
-      var bodyParser = require('body-parser');
-      var multer  = require('multer');
-      
-      app.use(express.static('public'));
-      app.use(bodyParser.urlencoded({ extended: false }));
-      app.use(multer({ dest: '/tmp/'}).array('image'));
-      
-      app.get('/index.htm', function (req, res) {
-         res.sendFile( __dirname + "/" + "index.htm" );
-      })
-      
-      app.post('/file_upload', function (req, res) {
-         console.log(req.files[0]);  // 上传的文件信息
-         var des_file = __dirname + "/" + req.files[0].originalname;
-         fs.readFile( req.files[0].path, function (err, data) {
-              fs.writeFile(des_file, data, function (err) {
-               if( err ){
-                    console.log( err );
-               }else{
-                     response = {
-                         message:'File uploaded successfully', 
-                         filename:req.files[0].originalname
-                    };
-                }
-                console.log( response );
-                res.end( JSON.stringify( response ) );
-             });
-         });
-      })
-      
-      var server = app.listen(8081, function () {
-        var host = server.address().address
-        var port = server.address().port
-        console.log("应用实例,访问地址为 http://%s:%s", host, port)
-      })
-    执行以上代码:
-      $ node server.js 
-    浏览器访问 http://127.0.0.1:8081/index.htm
+app.listen(port ,fn)    // 监听端口  
+  port            num,端口号  
+  function(){ }   监听成功后的回调  
 app.set()               // 
   app.set('view engine', 'ejs')// 设置模板引擎为 ejs
   app.set('views', path.join(__dirname, 'views'))// 设置存放模板文件的目录
-◆路由: 集中分配,分治管理 
+响应指定路径 
+  app.use(path? ,fn ,next?) // 处理请求 
+    Input: 
+      path                 可选,str,监听的路径,默认监听所有路径  
+      function(req,res){ } 响应函数 
+        req    obj,请求,在原生基础上进行了扩展 
+          .app         当callback为外部文件时,用于访问express实例
+          .protocol      获取协议类型
+          .ip            IP地址
+          .hostname      主机名
+          .baseUrl       获取路由当前安装的URL路径
+          .path          获取请求路径
+          .params  obj,获取路由的parameters[动态路由的动态部分]
+          .query   obj,URL查询参数串的对象形式 
+          .body    请求体 
+            解析后请求体,需使用相关的模块,如 body-parser
+          .headers 请求头 
+          .cookies          obj,未签名的Cookies的对象形式 
+          .secret = <str>   // 设置cookie使用的签名字符串  
+          .signedCookies   obj,签名过的Cookies的对象形式 
+          .session    obj,读写session 
+          .fresh      判断请求是否还'新鲜' 
+          .stale     
+          .originalUrl   获取原始请求URL
+          .route   获取当前匹配的路由
+          .subdomains    获取子域名
+          .acceptsCharsets 
+          .acceptsEncodings 
+          .acceptsLanguages
+          .accpets()   检查请求的Accept头的请求类型
+          .get()     获取指定的HTTP请求头
+          .is()      判断请求头Content-Type的MIME类型
+        res    obj,响应,在原生基础上进行了扩展  
+          .send(data)   // 发送数据 
+            PS: 加强版 .write()  ,参数可为任意类型[自动进行JSON化?] 
+            data  any,发送的数据 
+          .status(num)  设置HTTP状态码
+          .cookie(<key>,<val>,options?)  // 设置cookie 
+            key      str,一条cookie的名
+            val      str,一条cookie的值 
+            options  obj,选项 
+              {
+                path: <str>     // 路径限制 
+                ,maxAge: <num>  // 过期时间,单位:ms 
+                ,signed: <bol>  // 是否使用签名 
+                ,domain: ''
+                ,expires: ''
+                ,httpOnly: ''
+                ,secure: ''
+              }
+          .clearCookie(<key>)            // 删除Cookie 
+          .contentType()                 // 设置编码类型 
+          .type()                        // 设置Content-Type的MIME类型        
+          .sendFile(path[,options][,fn])  响应指定路径的文件 
+            会自动根据文件extension设定Content-Type
+          .json(obj)  传送JSON响应
+          .jsonp()    传送JSONP响应 
+          .render(templateName[,dataObj])  响应HTML 
+            PS: 将模板和数据结合生成html,并设置响应头'Content-Type: text/html' 
+            templateName  模版名称 
+            dataObj       传给模板的数据 
+          .app     obj,当前express实例,同 req.app 
+          .append()  追加指定HTTP头
+          .set()  设置HTTP头,传入object可以一次设置多个头
+          .clearCookie()  清除Cookie
+          .download()     传送指定路径的文件
+          .get()       返回指定的HTTP头
+          .location()  只设置响应的Location HTTP头,不设置状态码或者close response
+          .redirect()  重定向,设置响应的Location HTTP头,并且设置状态码302
+          .end(data)  发送响应数据 
+      next                 fn,可选,是否进行队列执行 
+        next()  则接着执行下一个相同的响应[监听同样的路径的] 
+  app.get(path ,fn ,next?)  // 处理get请求 
+    Input: 
+      path                  str,监听路径 
+      function(req,res){}   响应回调 
+        req  HTTP请求,包含了请求查询字符串,参数,内容,HTTP头部等属性 
+        res  HTTP响应,即在接收到请求时向客户端发送的 HTTP响应数据  
+  app.post(path ,fn ,next?) // 处理post请求 
+    Input: 
+      path                    str,监听路径  
+      function(req,res){}     响应回调 
+        // req 和 res 的属性/方法 同GET请求类似 
+        req  
+          .files  上传文件信息集合    
+            [idx]  单个文件信息对象  
+              .originalname 
+        res  
+    Output:  
+    Example: 
+      在表单中通过 POST 方法提交两个参数
+      使用 server.js 文件内的 process_post 路由器来处理输入:
+      index.htm 文件代码修改如下:
+        <html>
+          <body>
+            <form action="http://127.0.0.1:8081/process_post" method="POST">
+              First Name: <input type="text" name="first_name">
+              <br>
+              Last Name: <input type="text" name="last_name">
+              <input type="submit" value="Submit">
+            </form>
+          </body>
+        </html>
+      server.js 文件代码修改如下:
+        var express = require('express');
+        var app = express();
+        var bodyParser = require('body-parser');
+        
+        // 创建 application/x-www-form-urlencoded 编码解析
+        var urlencodedParser = bodyParser.urlencoded({ extended: false })
+        
+        app.use(express.static('public'));
+        app.get('/index.htm', function (req, res) {
+           res.sendFile( __dirname + "/" + "index.htm" );
+        })
+        app.post('/process_post', urlencodedParser, function (req, res) {
+           // 输出 JSON 格式
+           response = {
+               first_name:req.body.first_name,
+               last_name:req.body.last_name
+           };
+           console.log(response);
+           res.end(JSON.stringify(response));
+        })
+        
+        var server = app.listen(8081, function () {
+          var host = server.address().address
+          var port = server.address().port
+          console.log("应用实例,访问地址为 http://%s:%s", host, port)
+        })
+      执行以上代码:
+        $ node server.js
+      浏览器访问 http://127.0.0.1:8081/index.htm 
+    Example: 
+      创建一个用于上传文件的表单,使用 POST 方法,
+      表单 enctype 属性设置为 multipart/form-data 
+      index.htm 文件代码修改如下:
+        <html>
+          <head>
+            <title>文件上传表单</title>
+          </head>
+          <body>
+            <h3>文件上传:</h3>
+            选择一个文件上传: 
+            <br>
+            <form action="/file_upload" method="post" enctype="multipart/form-data">
+              <input type="file" name="image" size="50" />
+              <br>
+              <input type="submit" value="上传文件" />
+            </form>
+          </body>
+        </html>
+      server.js 文件代码修改如下:
+        var express = require('express');
+        var app = express();
+        var fs = require("fs");
+        
+        var bodyParser = require('body-parser');
+        var multer  = require('multer');
+        
+        app.use(express.static('public'));
+        app.use(bodyParser.urlencoded({ extended: false }));
+        app.use(multer({ dest: '/tmp/'}).array('image'));
+        
+        app.get('/index.htm', function (req, res) {
+           res.sendFile( __dirname + "/" + "index.htm" );
+        })
+        
+        app.post('/file_upload', function (req, res) {
+           console.log(req.files[0]);  // 上传的文件信息
+           var des_file = __dirname + "/" + req.files[0].originalname;
+           fs.readFile( req.files[0].path, function (err, data) {
+                fs.writeFile(des_file, data, function (err) {
+                 if( err ){
+                      console.log( err );
+                 }else{
+                       response = {
+                           message:'File uploaded successfully', 
+                           filename:req.files[0].originalname
+                      };
+                  }
+                  console.log( response );
+                  res.end( JSON.stringify( response ) );
+               });
+           });
+        })
+        
+        var server = app.listen(8081, function () {
+          var host = server.address().address
+          var port = server.address().port
+          console.log("应用实例,访问地址为 http://%s:%s", host, port)
+        })
+      执行以上代码:
+        $ node server.js 
+      浏览器访问 http://127.0.0.1:8081/index.htm
+  app.route(<path>)     // 返回指定路径的服务 
+    Example: 
+      app.route('/home')
+      .get(function(req ,res){
+      })
+      .post(function(req ,res){
+      })
+动态路径  
+  *     任意匹配符 
+    '/ab*cd'  可匹配 'abcd'、'abxcd'、'ab123cd'等等 
+  :aoo  占位符,动态路由,如:'/users/:aoo' 
+    可通过 req.params.aoo 获取到实际值 
+  app.params(pathParams ,fn)  // 定义路由参数 
+    pathParams            str,路由参数 
+    function(req ,res ,next ,val){  // 
+      // 
+    }  
+    Example: 
+      app.params('newsId' ,function(req ,res ,next ,val){
+        req.newsId = val 
+        next() 
+      })
+      app.get('/news/:newsId' ,function(req ,res){
+        res.end(req.newsId) 
+      })
+子路由: 集中分配,分治管理 
   Self: 将地址的监听及响应分发到各个模块中进行处理,通过一个主文件进行对应起来 
   Example: 
     routes 
@@ -248,20 +271,21 @@ app.set()               //
       app.use('/users', userRouter)
       
       app.listen(3000)
-const router = express.Router()   // 生成路由实例 
-app.use(path,router)              // 路由分配 
-router.all()   
-router.get()   
-router.post()  
-继续嵌套
-  const childRouter = express.Router()  // 生成路由实例 
-  router.use(path,childRouter)          // 子路由分配 
-  childRouter.all()
-  childRouter.get()
-  childRouter.post()
-◆其他
+  const router = express.Router()   // 生成路由实例 
+  app.use(<basePath>,router)        // 路由分配 
+  router.get()   
+  router.post()  
+  router.all()   
+  继续嵌套
+    const childRouter = express.Router()  // 生成路由实例 
+    router.use(path,childRouter)          // 子路由分配 
+    childRouter.all()
+    childRouter.get()
+    childRouter.post()
+◆其他 
 express.static(<path>)  // 设置静态文件目录  
   PS: 当请求的资源路径和指定的目录中文件对应时则返回该资源 
+  Input: path   str,静态文件目录 
   Example: 
     app.use(express.static( __dirname + '/public' )); 
 ◆'middleware'中间件,express的设计精髓 
@@ -286,22 +310,23 @@ express.static(<path>)  // 设置静态文件目录
     
     app.listen(3000)
 app.use(<middleware>)       // 使用中间件 
-express-session  session中间件,实现对会话的支持 
+--------------------------------------------------------------------------------
+express-session,session中间件,实现对会话的支持 
   app.use(session(options)) 
   session 中间件会在 req 上添加 session 对象,即 req.session 初始值为 {},
   当登录后设置 req.session.user = 用户信息,
   返回浏览器的头信息中会带上 set-cookie 将 session id 写到浏览器 cookie 中,
   那么该用户下次请求时,通过带上来的 cookie 中的 session id 我们就可以查找到该用户,
   并将用户信息保存到 req.session.user。
-connect-flash    页面通知的中间件,基于session实现  
+connect-flash,页面通知的中间件,基于session实现  
   原理：
     设置初始值 req.session.flash={}，
     通过 req.flash(name, value) 设置这个对象下的字段和值，
     通过 req.flash(name) 获取这个对象下的值，同时删除这个字段，
     实现了只显示一次刷新后消失的功能。
-connect-mongo    将session存储于mongodb,结合 express-session 使用
-express-formidable   接收表单及文件上传的中间件
-express-winston   express的winston日志中间件 
+connect-mongo,将session存储于mongodb,结合 express-session 使用
+express-formidable,接收表单及文件上传的中间件
+express-winston,express的winston日志中间件 
 express-static,处理静态文件   
   $ npm i -S express-static  
   const expressStatic = require('express-static') 

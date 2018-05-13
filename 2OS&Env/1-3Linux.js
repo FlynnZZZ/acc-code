@@ -161,7 +161,9 @@ Shell: 一种命令语言解释器'command-language interpreter'
     ctrl-l  清屏 
   命令行 
     $ clear   清空命令行输出 
-    $ curl <url>  在命令行中显示根据URL获取到的网页内容 
+    $ curl -X? <url>  在命令行中显示根据URL获取到的网页内容 
+      -X   可选,用于指定请求使用的方法,默认: GET 
+        curl -X POST https://www.baidu.com  // 通过 -X 指定使用请求的方法 
     $ echo <xx>   在命令行显示 
       str  直接显示 
       $PATH  显示环境变量 

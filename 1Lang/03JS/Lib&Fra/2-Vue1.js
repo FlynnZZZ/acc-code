@@ -947,6 +947,12 @@ router = new VueRouter({  // 路由实例
     }
     ... 
   ]
+  ,base: str  // 应用的基路径,默认:"/" 
+    若整个单页应用服务在'/app/'下,则应设为"/app/" 
+  ,linkActiveClass: str // 全局配置<router-link>的默认激活class类名 
+    默认值:"router-link-active"
+  ,linkExactActiveClass: str // 全局配置<router-link>精确激活的默认的class '2.5.0+'
+    默认:"router-link-exact-active"
   ,mode: kw // 模式 
     'hash'      默认值,使用URL的hash来模拟一个完整的URL 
       利用当hash改变时,页面不会重新加载的特性  
@@ -958,12 +964,6 @@ router = new VueRouter({  // 路由实例
       这个页面就是你 app 依赖的页面
     "abstract"  支持所有JS运行环境,如NodeJS服务器端 
       若发现无浏览器的 API,路由会自动强制进入这个模式 
-  ,base: str  // 应用的基路径,默认:"/" 
-    若整个单页应用服务在'/app/'下,则应设为"/app/" 
-  ,linkActiveClass: str // 全局配置<router-link>的默认激活class类名 
-    默认值:"router-link-active"
-  ,linkExactActiveClass: str // 全局配置<router-link>精确激活的默认的class '2.5.0+'
-    默认:"router-link-exact-active"
   ,fallback: bol // 当浏览器不支持history.pushState控制路由是否回退到hash模式 '2.6.0+'
     默认:true
     IE9中,设置为 false 会使得每个 router-link 导航都触发整页刷新 
@@ -1100,6 +1100,14 @@ vm.$router/new VueRouter() // 路由实例
     location    str/obj,路径 
       str,跳转字符串路径 
       obj,描述地址的对象 
+        {
+          path: ''
+          ,query: {
+            k1: val1
+            ,...
+          }
+          ,..
+        }
         同时使用'path'和'params','params'不生效 
           同样的规则也适用于 <router-link> 组件的 to 属性 
           // 这里的 params 不生效

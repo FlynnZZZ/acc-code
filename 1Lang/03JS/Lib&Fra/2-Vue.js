@@ -2033,18 +2033,8 @@ vm.xxx.实例属性/方法/事件
         PS: 而在子组件内部改变prop,Vue会在控制台给出警告; 
           在js中对象和数组是引用类型,指向同一个内存空间,
           若prop是一对象或数组,在子组件内部改变它会影响父组件的状态;
-        同步数据: 定义'data'属性,用prop值初始化 
-          PS: 修改'data'属性时[而非覆盖],仍会改变父组件内用于传递的数据,此做法仅仅是为了避免警告 ?  
-          此情况下,子组件数据对父组件数据的响应情况   
-            当父组件数据变化时[覆盖变化],后续子组件不响应,[SlPt:可通过监听prop值进行动态响应]  
-            ,当父组件数据修改时,后续子组件仍响应 
-          props: ['parentData'],
-          data: function () {
-            return { 
-              aoo: this.parentData 
-            }
-          }
-        异步数据&子组件无修改: 定义计算属性,处理prop值并返回 
+        子组件无修改&同步数据: 直接使用'props'中的数据 
+        子组件无修改&异步数据: 定义'computed'属性,处理prop值并返回 
           不可进行覆盖操作,需定义set ?  
           props: ['parentData'],
           computed: {
@@ -2052,8 +2042,21 @@ vm.xxx.实例属性/方法/事件
               return this.parentData 
             }
           }
-        异步数据&子组件有修改: 
-          方法一: 定义'data'属性承接,且'watch'异步数据到'data'属性中 
+        子组件有修改&同步数据: 定义'data'属性,用prop值初始化 
+          PS: 修改'data'属性时[而非覆盖],仍会改变父组件内用于传递的数据,此做法仅仅是为了避免警告 ?  
+          此情况下,子组件数据对父组件数据的响应情况   
+            当父组件数据变化时[覆盖变化],后续子组件不响应['watch'prop值会响应]  
+            ,当父组件数据修改时,后续子组件仍响应[引用传递] 
+          props: ['parentData'],
+          data: function () {
+            return { 
+              aoo: this.parentData 
+            }
+          }
+        子组件有修改&异步数据: 定义'data'属性,且'watch'异步数据到'data'中 
+          父组件中修改[而非覆盖]异步数据时,'watch'不会触发
+            1 覆盖代替修改 
+            2 深度'watch'或'watch'具体修改的项 
           方法二: 
       动态绑定: 使用'v-bind' 
         单个属性动态绑定:  :attr1="dataVal1"
@@ -2075,10 +2078,11 @@ vm.xxx.实例属性/方法/事件
       子组件内通过'$emit'触发该事件并传递数据,
       父组件中的回调函数会执行并获取到该数据  
       childVm.$emit('event-name',data) 触发事件并传递数据'data'
+    通过'ref'获取子组件数据[见'子组件索引'] 
     <props>.sync,父子组件双向通信,共同维持一份数据 
-      :<propname>.sync="<parentVal>"  父组件内向子组件传递值<parentVal> 
-      <childVm>.$emit('update:<propname>',<data>) 子组件通过事件触发改变<parentVal>
-      父组件及子组件内<parentVal>的值都改变成<data>
+      :<propname>.sync="<parentVal>"  父组件内向子组件传递值'parentVal' 
+      <childVm>.$emit('update:<propname>',<finaData>) 子组件通过事件触发改变'parentVal'
+      父组件及子组件内'parentVal'的值都改变成'finaData'
       Example: 
         <template id='cpt'>
           <div>
@@ -2261,9 +2265,12 @@ vm.xxx.实例属性/方法/事件
     })    
   ref="aoo"&vm.$refs.aoo,子组件索引 
     PS: 使用'ref'属性为子组件指定索引ID,便于在父组件中直接访问子组件;
-      仅仅作为一个直接访问子组件的应急方案,应当避免在模版或计算属性中使用 $refs 
-      $refs 只在组件渲染完成后才填充,并且它是非响应式的,
+      仅仅作为一个直接访问子组件的应急方案 
       当 ref 和 v-for 一起使用时,ref 是一个数组或对象,包含相应的子组件
+    $refs 只在组件渲染完成后才填充 
+      需在父组件'mounted'后才能获取到数据
+      所以避免在父组件的模板或计算属性中使用
+    $refs 是非响应式的? 
     Example: 
       <div id="parent">
         <cpt-aoo ref="aaa"></cpt-aoo>
@@ -2427,6 +2434,34 @@ Question&Suggestion:
     方法一: 通过设置computed的set来改变x依赖值
     方法二: 将x改为依赖于默认为false的备用值和初始依赖值的并集,通过set来改变备用值 
     方法三: 将x作为data中的值,通过watch初始依赖值来初始化x 
+  为原始类型值赋相同值时,'watch'值的变化无响应,改为对象的形式解决  
+    data: {
+      aoo: 1
+    }
+    ,watch: {
+      aoo: function(){
+        console.log('修改了');
+      }
+    }
+    ,methods: {
+      foo: function(){
+        this.aoo = 1
+      }
+    }
+    改为对象形式: 
+    data: {
+      aoo: { val: 1 }
+    }
+    ,watch: {
+      aoo: function(){
+        console.log('修改了');
+      }
+    }
+    ,methods: {
+      foo: function(){
+        this.aoo = {val: 1}
+      }
+    }
 --------------------------------------------------------------------------------
 组件懒加载 
   PS: 也叫延迟加载,即在需要的时候进行加载,随用随载 

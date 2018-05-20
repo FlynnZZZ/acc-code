@@ -1124,6 +1124,7 @@ HTMLElement,HTML元素节点
     .disabled 
     .media 
     .type 
+    .sheet   CSSStyleSheet 
   HTMLDivElement,<div>  
   HTMLSpanElement,<span> 
   HTMLAnchorElement,<a>  
@@ -2226,6 +2227,7 @@ StyleSheetList,样式表集合
   PS: 按照结构依次为: 样式表集-样式表-规则集-规则-声明 
   Extend：Object 
     console.log(StyleSheetList.prototype.__proto__.constructor===Object); // true  
+  Instance: document.styleSheets 
   Proto: 
     .length 
     .item(idx)  CSSStyleSheet,一张样式表 
@@ -2242,9 +2244,9 @@ CSSStyleSheet,一张样式表
     .insertRule(ruleStr,idx) 向样式表中插入一条规则 [IE9+] 
       ruleStr CSS规则字符串
       idx     插入的位置
-      Example: 
-      document.styleSheets[0].insertRule('#block { color:white }', 0);
-    .addRule(ruleStr,idx)    向样式表中插入一条规则 [IE9-]
+      Example: document.styleSheets[0].insertRule('#block { color:white }', 0);
+    .addRule(选择器,键值对)    向样式表中插入一条规则 [IE9-] 
+      Example: document.styleSheets[0].addRule('.red','color: green'); 
     .deleteRule(idx) 从样式表中删除一条规则 [IE9+] 
       Example:document.styleSheets[0].deleteRule(0); // 删除样式表中的第一条规则
     .removeRule(idx) 从样式表中删除一条规则 [IE9-] 
@@ -2312,8 +2314,15 @@ CSSStyleDeclaration,CSS规则的声明
       PS: 表示实际应用在指定元素上的最终样式信息,即各种CSS规则叠加后的结果 
         等价于 document.defaultView.getComputedStyle(<elem>,str/null);
         或 window.getComputedStyle(<elem>,str/null);
-      str   一伪元素字符串,如":after",若不需要可为null或'' 
-        IE不支持获取伪类 [?]
+      str   一伪元素字符串,存在则获取该伪元素的计算后的样式对象 
+        PS: 如":after",若不需要可为null或'' 
+          IE不支持获取伪类 [?]
+        ':after'
+        ':before'
+        ':first-line'
+        ':first-letter'
+        ':selection'
+        ':backdrop'
       Example: 
         var color = window.getComputedStyle(elm, ':before').color;
         var color = window.getComputedStyle(elm, ':before')
@@ -2362,7 +2371,12 @@ CSSStyleDeclaration,CSS规则的声明
     .length   num,应用给元素的CSS属性的数量[DOM2]  
     .cssFloat 
     .item(idx)  str,指定位置的属性名称,或使用[idx]形式
-    .getPropertyValue('propName') str,返回指定属性的字符串值
+    .getPropertyValue('propName')  str,返回指定属性的字符串值[IE9+]
+      PS: 等价于 .xx  
+        IE6~8 中,可使用getAttribute()方法来代替该方法 
+      直接通过属性访问方式与该方法的区别 
+        float属性应使用 style.cssFloat/style.styleFloat 来访问 
+        '-'改写为驼峰形式,如: style.backgroundColor 
     .getPropertyPriority('propName') str,返回优先级声明,存在为"important",否则为""
     .setProperty('propName','value',"!import"/"")  设置属性及值,并加上"!important"或""
     .removeProperty('propName')  删除指定属性 

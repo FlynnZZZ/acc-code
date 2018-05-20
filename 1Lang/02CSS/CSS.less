@@ -107,54 +107,53 @@ Config,设置、配置
           src : local("Arial");
         }
 Selector,选择器 
-  PS: css样式由'选择符'和'声明'组成,声明又由'属性'和'值'组成 
-    selector{
-      key1:val1;
-      key2:val2;
-      ...
-    }
-    selector[也叫选择器]:指明该组样式所要针对的对象,可以是一个html标签,
-    也可以是自定义的id或class标签[然后再在xhtml中进行指定,进行控制即可]
-    key: 选择符的样式属性,如颜色、大小、定位、浮动方式等.
-    val: 即为属性的值;
-    选择器命名大小写敏感;
-  命名规范[SlSt]
-    使用'大小写字母''_''-'和'数字'组成
-    驼峰法间隔单词,'数字'和'_'一般用来排序区分;
-  ◆单体选择器 
-  简单选择器 
-    *  通配符选择器 
-      用于定义所有的html元素的样式.
-      Example: *{margin:0;padding:0}
-      Remarks:通配符的效率最低,一般不使用,只将我们使用到的元素的默认值进行清零即可.
-    tagName 元素选择器: 也叫标签选择器,定义该中元素的样式
-    .aoo 类选择器: 用于定义多个重复的样式  
-      以字母[区分大小写]、数字[非数字开头]、'-'及'_'组成  
-    #aoo id选择器: 具有唯一性,只能出现一次 
-      以字母[区分大小写]、数字[非数字开头]、'-'及'_'组成  
-      用于定义只出现一次的样式,虽然多次使用可以起作用,但不推荐 
-    [attrName]  属性选择器 [IE7+] 
-      PS:属性值可使用引号引起来或不用引号,效果相同 
-      [<attr>]          带有指定属性的元素 
-      [<attr>="aoo"]    属性值等于'aoo'字符
-      [<attr>*="aoo"]   包含'aoo'字符[CSS3] 
-      [<attr>^="aoo"]   以'aoo'字符开头[CSS3] 
-      [<attr>$="aoo"]   以'aoo'字符结尾[CSS3] 
-      [<attr>~="aoo"]   包含'aoo'单词[即以空格分开的'aoo'字符] 
-      [<attr>|="aoo"]   包含'aoo'或以'aoo-'开头  [?] 
-      Example: 
-        [title] { color:red; }
-        [title='W3School'] { border:5px solid blue; }
-        [title=W3C] { border:5px solid blue; }
-        [title~='hello'] { color:red; }
-  关系选择器 
-  伪类选择器 
+  DefDec: 
+    CSS样式由'选择符/选择器'和'声明'组成,声明由'属性'和'值'组成 
+      选择器'selector': 指明该组样式所要针对的对象
+        可以是一html标签、自定义的id或class标签 
+        选择器命名大小写敏感;
+      声明的属性:  选择符的样式属性,如颜色、大小、定位、浮动方式等 
+      声明的值: 即属性的值;
+    命名规范[SlSt]
+      使用'大小写字母''_''-'和'数字'组成
+      驼峰法间隔单词,'数字'和'_'一般用来排序区分;
+  Enum: 
+    ◆单体选择器 
+    简单选择器 
+      *  通配符选择器 
+        用于定义所有的html元素的样式.
+        Example: *{margin:0;padding:0}
+        Remarks:通配符的效率最低,一般不使用,只将我们使用到的元素的默认值进行清零即可.
+      tagName 元素选择器: 也叫标签选择器,定义该中元素的样式
+      .aoo 类选择器: 用于定义多个重复的样式  
+        以字母[区分大小写]、数字[非数字开头]、'-'及'_'组成  
+      #aoo id选择器: 具有唯一性,只能出现一次 
+        以字母[区分大小写]、数字[非数字开头]、'-'及'_'组成  
+        用于定义只出现一次的样式,虽然多次使用可以起作用,但不推荐 
+      [attrName]  属性选择器 [IE7+] 
+        PS:属性值可使用引号引起来或不用引号,效果相同 
+        [<attr>]          带有指定属性的元素 
+        [<attr>="aoo"]    属性值等于'aoo'字符
+        [<attr>*="aoo"]   包含'aoo'字符[CSS3] 
+        [<attr>^="aoo"]   以'aoo'字符开头[CSS3] 
+        [<attr>$="aoo"]   以'aoo'字符结尾[CSS3] 
+        [<attr>~="aoo"]   包含'aoo'单词[即以空格分开的'aoo'字符] 
+        [<attr>|="aoo"]   包含'aoo'或以'aoo-'开头  [?] 
+        Example: 
+          [title] { color:red; }
+          [title='W3School'] { border:5px solid blue; }
+          [title=W3C] { border:5px solid blue; }
+          [title~='hello'] { color:red; }
+    ◆关系选择器 
+    ◆伪类选择器 
     元素伪类 
-      在CSS3中伪元素由单冒号':'改为双冒号'::',但仍兼容单冒号   
-        单冒号与双冒号的区别: 
-        单冒号用于CSS3伪类,如 :active :focus :hover :visited 等等
-        双冒号用于CSS3伪元素,如 ::first-letter ::first-line ::before ::after 等等
-        一般都可以写成单冒号; IE8仅支持:after
+      DefDec: 
+        伪元素默认为'display: inline'
+        在CSS3中伪元素由单冒号':'改为双冒号'::',但仍兼容单冒号   
+          单冒号与双冒号的区别: 
+          单冒号用于CSS3伪类,如 :active :focus :hover :visited 等等
+          双冒号用于CSS3伪元素,如 ::first-letter ::first-line ::before ::after 等等
+          一般都可以写成单冒号; IE8仅支持:after
       :before  元素内部头部定义 
         Example: 
           ::before{
@@ -257,7 +256,18 @@ Selector,选择器
             margin-top: 10px;
             font-size: 22px;
           }
-      :first-line   元素中的第一行文本[通过调整窗口改变第一行,也会响应]
+      :first-line   元素中的第一行文本[通过调整窗口改变第一行,也会响应] 
+      ::selection  当元素处于选中状态时[CSS3] 
+        Example: 
+          网页中文字被选中时 
+          ::selection{ 
+            background-color: red;
+          }
+          文本框中的文字被选中时
+          input[type="text"]::selection{
+            font-size: 22px;
+          }
+      ::backdrop    
     动作伪类 
       ★链接伪类 
       'LVHA'保证生效的先后顺序 :link—:visited—:hover—:active 
@@ -409,16 +419,6 @@ Selector,选择器
       :empty      当元素中内容为空[允许存在注释节点] 
         Example:  :empty{ background:blue; }
     ★其他状态 
-      ::selection  当元素处于选中状态时[CSS3] 
-        Example: 
-          网页中文字被选中时 
-          ::selection{ 
-            background-color: red;
-          }
-          文本框中的文字被选中时
-          input[type="text"]::selection{
-            font-size: 22px;
-          }
       :in-range      在范围内
         指定当元素的有效值被限定在一段范围之内,实际的输入值在该范围之内的样式
         Example: 
@@ -450,301 +450,302 @@ Selector,选择器
         该属性只支持火狐浏览器
         用来指定当页面打开时默认处于选取状态的单选框或复选框的控件的样式
         Example: input:default{}
-  ◆选择器组合: 将以上单体选择器进行组合使用 
-    PS:此处使用A、B来当作选择器,进行表示
-  A,B  A、B共同 
-    <div class="aoo"> aoo</div>
-    <div class="boo"> boo</div>
-    .aoo,.boo{color: red;} /*两个标签的字体都为红色*/
-  A B  后代B 
-    <div class="aoo">
-      <div class="boo">
-        123123
-        <div class="coo"> 字体变红 </div>
+    ◆选择器组合: 将以上单体选择器进行组合使用 
+      PS:此处使用A、B来当作选择器,进行表示
+    A,B  A、B共同 
+      <div class="aoo"> aoo</div>
+      <div class="boo"> boo</div>
+      .aoo,.boo{color: red;} /*两个标签的字体都为红色*/
+    A B  后代B 
+      <div class="aoo">
+        <div class="boo">
+          123123
+          <div class="coo"> 字体变红 </div>
+        </div>
       </div>
-    </div>
-    .aoo .coo{ color: red; }
-  AB   同时拥有A和B 
-    <div class="aoo boo"> 2 </div>
-    .aoo.boo{color:red;}
-  A>B  子元素B [CSS2.1] 
-    <div class="aoo">
-      <div class="boo">
-        字体变红
-        <div class="boo"> 字体不变红 </div>
+      .aoo .coo{ color: red; }
+    AB   同时拥有A和B 
+      <div class="aoo boo"> 2 </div>
+      .aoo.boo{color:red;}
+    A>B  子元素B [CSS2.1] 
+      <div class="aoo">
+        <div class="boo">
+          字体变红
+          <div class="boo"> 字体不变红 </div>
+        </div>
       </div>
-    </div>
-    .aoo>.boo{color: red;}
-  A+B  同级相邻B [CSS2.1] 
-  A~B  A同级的B [CSS3]
-    <div class="aoo">123 </div>
-    <div class="boo">字体变红 </div>
-    <div class="coo">123 </div>
-    .aoo~.boo{color:red;}
-  CSS表达式  
-    attr() 用来获取选择到的元素的某一HTML属性值,并用于其样式[实验性API]
-      PS:它也可以用于伪元素,属性值采用伪元素所依附的元素。
-        attr() 表达式可以用于任何CSS属性。 
-       attr( attribute-name <type-or-unit>? [,<fallback> ]? )
-        attribute-name  是CSS所引用的HTML属性名称。
-        <type-or-unit>  表示所引用的属性值的单位。
-          若该单位相对于所引用的属性值不合法,那么attr()表达式也不合法。
-          若省略,则默认值为string。其合法值包括:
-            string   <string>     属性值将被解析为  <string>  空字符串
-            color    <color>  属性值将被解析为#xxx、#xxxxxx或关键字的形式,且必须为合法CSS <string> 值。
-            前缀与后缀空格将被截掉。  当前颜色
-            url   <uri>  属性值将被解析为可用于url()函数的字符串。
-            相对URL是根据HTML文档的路径解析,而不是样式文件所在的路径。
-            前缀与后缀空格将被截掉。  URL about:invalid,表示资源不存在。
-            integer   <integer>  属性值将被解析为CSS <integer>。若不是合法值（不是整数或超出CSS属性规定的数字范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
-            number   <number>  属性值将被解析为CSS <number>。 若不是合法值（不是数字或超出CSS属性规定的数字范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
-            length   <length>  属性值将被解析为CSS <length>,带单位,比如 12.5em。 若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
-            若属性值是一个相对长度,attr()会将其计算为绝对长度。
-            前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
-            em,ex,px,rem,vw,vh,vmin,vmax,mm,cm,in,pt,or pc   <length>  
-            属性值将被解析为CSS <number>,不带单位,如 12.5,并被解释为带有所规定单位的 <length> 值。若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
-            若属性值是一个相对长度,attr()会将其计算为绝对长度。
-            前缀与后缀空格将被截掉。
-            
-            0,或该属性允许的最小值（若0是不合法的值）。
-            angle   <angle>  属性值将被解析为CSS <angle>,带单位,如30.5deg。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
-            deg,grad,rad   <angle>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <angle> 值。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
-            time   <time>  属性值将被解析为CSS <time>,带单位,如30.5ms。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
-            s,ms   <time>  属性值将被解析为CSS <time>,不带单位,如30.5,并被解释为带有所规定单位的 <time> 值。。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
-            frequency   <frequency>  属性值将被解析为CSS <frequency>,带单位,如12.5kHz)。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
-            Hz,kHz   <frequency>  属性值将被解析为CSS <frequency>,不带单位,如12.5),并被解释为带有所规定单位的<frequency>值。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
-            前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
-            %   <percentage>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <percentage>值。若不是合法值（不是数字或超出CSS属性规定的范围）,则使用默认值。
-            若属性值用作长度,attr()将其计算为绝对长度。
-            前缀与后缀空格将被截掉。  0%,或该属性允许的最小值（若0%是不合法的值）。
-        <fallback>
-          若HTML元素缺少所规定的属性值或属性值不合法,则使用fallback值。
-          该值必须合法,且不能包含另一个attr()表达式。
-          若attr()不是所在CSS属性值的唯一值,其<fallback>值必须为<type-or-unit>所指定的类型,
-          否则CSS会使用相应<type-or-unit>定义的默认值（见上表）。
-      Example:
-        <p data-foo="hello">world</p>
-        p:before { content:attr(data-foo) " "; }
-  选择器的特性 
-    ⒈继承性:css的某些样式是具有继承性的,
-      继承是一种规则,它允许样式不仅应用于某个特定html标签元素,而且应用于其后代.
-      每个标签元素都有其默认的样式,只有某些样式可以继承,其他的样式仍按照其默认值.
-      样式不会向上传播,但有一个例外:应用到body元素的背景样式可以传递到html元素(跟元素)
-    ⒉优先级-权值:当一个元素被设置不同的css样式,而最终的显示样式则根据样式的优先级来定.
-      浏览器根据权值来判断使用哪种css样式,权值高优先级就高.
-      内联样式>嵌入样式>外部样式
-      权值部分具体如下:
-        元素选择器的权值为1
-        类选择器的权值为10
-        id选择器的权值最高为100.
-        使用后代选择器组合则权值为多个选择器权值相加的和
-        注:继承也有权值但很低,有的文献提出它只有0.1,所以可以理解为继承的权值最低.
-    ⒊优先级-覆盖:当css权值相同时,会根据这些css样式的前后顺序来决定,
-      处于后面定义的css样式会覆盖前面的.
-    ⒋优先级-提升权重:使用 !important 来提升
-      PS:
-        当网页制作者未设置css样式时,浏览器会按照自己的一套样式来显示网页
-        且用户也可以在浏览器中设置自己习惯的样式(比如把字好设置大一些).
-        这时样式的优先级为:浏览器默认样式<网页制作者样式<用户自己设置的样式
-        但是!important优先级样式是个例外,权值高于用户自己设置的样式.
-      Example: 
-        p{color:red !important;}
-        p{color:green;}
-  'Media Queries'媒体查询 [IE9+][手机端浏览器都支持][CSS3]
-    PS:根据不同的媒体类型和条件,指定对应的样式
-      媒体查询让css可以更精确作用于不同的媒体或同一媒体的不同条件.
-      媒体查询可以用在css的'@media'和'@import'规则上,也可以被用字html和xml中.
-      用来做响应式设计,即根据条件(如屏幕的宽度)来选用样式
-      Media Queries是css3中的一个和各种媒体相关的重要模块.
-    使用方式 
-      ◆在HTML中使用 
-      <link href="xxx.css" media="screen"/>  适用于计算机彩色屏幕 
-      <link href="xxx.css" media="print"/> 适用于打印预览模式下查看的内容或打印机打印的内容 
-      <link href="xxx.css" media="screen and (min-width:800px)"/>
-      ◆在CSS中使用 
-      @media <type> <connector> (<condition1>) <connector> (<condition2>){ <styleCode> }
-        type      设备类型 
-          all    任何设备
-          screen 常用的类型
-          tv 
-        connector 逻辑连接符 
-          and  交集 
-          or   并集
-        condition 条件 
-          可搭配关键字 not 
-            @media (not min-width:800px){}
-          min-width:  
-          min-height:   
-          max-width:   
-          max-height:  
-          orientation: 屏幕方向 
-            porttrait    
+      .aoo>.boo{color: red;}
+    A+B  同级相邻B [CSS2.1] 
+    A~B  A同级的B [CSS3]
+      <div class="aoo">123 </div>
+      <div class="boo">字体变红 </div>
+      <div class="coo">123 </div>
+      .aoo~.boo{color:red;}
+  Feature: 
+    CSS表达式  
+      attr() 用来获取选择到的元素的某一HTML属性值,并用于其样式[实验性API]
+        PS:它也可以用于伪元素,属性值采用伪元素所依附的元素。
+          attr() 表达式可以用于任何CSS属性。 
+         attr( attribute-name <type-or-unit>? [,<fallback> ]? )
+          attribute-name  是CSS所引用的HTML属性名称。
+          <type-or-unit>  表示所引用的属性值的单位。
+            若该单位相对于所引用的属性值不合法,那么attr()表达式也不合法。
+            若省略,则默认值为string。其合法值包括:
+              string   <string>     属性值将被解析为  <string>  空字符串
+              color    <color>  属性值将被解析为#xxx、#xxxxxx或关键字的形式,且必须为合法CSS <string> 值。
+              前缀与后缀空格将被截掉。  当前颜色
+              url   <uri>  属性值将被解析为可用于url()函数的字符串。
+              相对URL是根据HTML文档的路径解析,而不是样式文件所在的路径。
+              前缀与后缀空格将被截掉。  URL about:invalid,表示资源不存在。
+              integer   <integer>  属性值将被解析为CSS <integer>。若不是合法值（不是整数或超出CSS属性规定的数字范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
+              number   <number>  属性值将被解析为CSS <number>。 若不是合法值（不是数字或超出CSS属性规定的数字范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
+              length   <length>  属性值将被解析为CSS <length>,带单位,比如 12.5em。 若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
+              若属性值是一个相对长度,attr()会将其计算为绝对长度。
+              前缀与后缀空格将被截掉。  0,或该属性允许的最小值（若0是不合法的值）。
+              em,ex,px,rem,vw,vh,vmin,vmax,mm,cm,in,pt,or pc   <length>  
+              属性值将被解析为CSS <number>,不带单位,如 12.5,并被解释为带有所规定单位的 <length> 值。若不是合法值（不是长度值或超出CSS属性规定的范围）,则使用默认值。
+              若属性值是一个相对长度,attr()会将其计算为绝对长度。
+              前缀与后缀空格将被截掉。
+              
+              0,或该属性允许的最小值（若0是不合法的值）。
+              angle   <angle>  属性值将被解析为CSS <angle>,带单位,如30.5deg。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
+              deg,grad,rad   <angle>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <angle> 值。若不是合法值（不是角度值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0deg,或该属性允许的最小值（若0deg是不合法的值）。
+              time   <time>  属性值将被解析为CSS <time>,带单位,如30.5ms。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
+              s,ms   <time>  属性值将被解析为CSS <time>,不带单位,如30.5,并被解释为带有所规定单位的 <time> 值。。若不是合法值（不是时间值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0s,或该属性允许的最小值（若0s是不合法的值）。
+              frequency   <frequency>  属性值将被解析为CSS <frequency>,带单位,如12.5kHz)。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
+              Hz,kHz   <frequency>  属性值将被解析为CSS <frequency>,不带单位,如12.5),并被解释为带有所规定单位的<frequency>值。若不是合法值（不是频率值或超出CSS属性规定的范围）,则使用默认值。
+              前缀与后缀空格将被截掉。  0Hz,或该属性允许的最小值（若0Hz是不合法的值）。
+              %   <percentage>  属性值将被解析为CSS <number>,不带单位,如12.5),并被解释为带有所规定单位的 <percentage>值。若不是合法值（不是数字或超出CSS属性规定的范围）,则使用默认值。
+              若属性值用作长度,attr()将其计算为绝对长度。
+              前缀与后缀空格将被截掉。  0%,或该属性允许的最小值（若0%是不合法的值）。
+          <fallback>
+            若HTML元素缺少所规定的属性值或属性值不合法,则使用fallback值。
+            该值必须合法,且不能包含另一个attr()表达式。
+            若attr()不是所在CSS属性值的唯一值,其<fallback>值必须为<type-or-unit>所指定的类型,
+            否则CSS会使用相应<type-or-unit>定义的默认值（见上表）。
+        Example:
+          <p data-foo="hello">world</p>
+          p:before { content:attr(data-foo) " "; }
+    选择器的特性 
+      ⒈继承性:css的某些样式是具有继承性的,
+        继承是一种规则,它允许样式不仅应用于某个特定html标签元素,而且应用于其后代.
+        每个标签元素都有其默认的样式,只有某些样式可以继承,其他的样式仍按照其默认值.
+        样式不会向上传播,但有一个例外:应用到body元素的背景样式可以传递到html元素(跟元素)
+      ⒉优先级-权值:当一个元素被设置不同的css样式,而最终的显示样式则根据样式的优先级来定.
+        浏览器根据权值来判断使用哪种css样式,权值高优先级就高.
+        内联样式>嵌入样式>外部样式
+        权值部分具体如下:
+          元素选择器的权值为1
+          类选择器的权值为10
+          id选择器的权值最高为100.
+          使用后代选择器组合则权值为多个选择器权值相加的和
+          注:继承也有权值但很低,有的文献提出它只有0.1,所以可以理解为继承的权值最低.
+      ⒊优先级-覆盖:当css权值相同时,会根据这些css样式的前后顺序来决定,
+        处于后面定义的css样式会覆盖前面的.
+      ⒋优先级-提升权重:使用 !important 来提升
+        PS:
+          当网页制作者未设置css样式时,浏览器会按照自己的一套样式来显示网页
+          且用户也可以在浏览器中设置自己习惯的样式(比如把字好设置大一些).
+          这时样式的优先级为:浏览器默认样式<网页制作者样式<用户自己设置的样式
+          但是!important优先级样式是个例外,权值高于用户自己设置的样式.
         Example: 
-          @media (min-width:800px){
-            ...
-          }
-          @media (min-width:800px) and (max-width:1024px){
-            ...
-          }
-      ◆在CSS或HTML中使用 
-      @import url(XXX.css) screen and (min-width:800px);
-    媒体类型
-      all  适用于所有设备
-      print 打印设备
-        Intended for paged material and for documents viewed on screen in print preview mode. Please consult the section on paged media,and the media section of the Getting Started tutorial for information about formatting issues that are specific to paged media.
-      screen 屏幕
-        Intended primarily for color computer screens.
-    逻辑操作符
-      操作符 not,and 和 only 可以用来构建复杂的媒体查询。
-        PS:若使用了 not 或 only 操作符,必须明确指定一个媒体类型。
-      and  组合多个媒体属性,合并到同一条媒体查询中
-        只有当每个属性都为真时,这条查询的结果才为真
-        Example:
-          @media (min-width: 700px) { ... }
-          若你只想在横屏时应用这个,你可以使用 and 操作符合并媒体属性:
-          @media (min-width: 700px) and (orientation: landscape) { ... }
-      not  对一条媒体查询的结果进行取反
-        PS:not 关键字仅能应用于整个查询,而不能单独应用于一个独立的查询
-          在逗号媒体查询列表中 not 仅会否定它应用到的媒体查询上而不影响其它的媒体查询。
-        Example:
-          not 在下面的查询中最后被计算: @media not all and (monochrome) { ... }
-          等价于: @media not (all and (monochrome)) { ... }
-          而不是: @media (not all) and (monochrome) { ... }
-      only 仅在媒体查询匹配成功的情况下应用指定样式
-        可以通过它让选中的样式在老式浏览器中不被应用。
-      ,  将多个媒体查询以逗号分隔放在一起
-        只要其中任何一个为真,整个媒体语句就返回真,相当于 or .
-    媒体属性
-      PS:大多数媒体属性可以带有“min-”或“max-”前缀,用于表达“最低...”或者“最高...”。
-        这避免了使用与HTML和XML冲突的“<”和“>”字符。
-        若你未向媒体属性指定一个值,并且该特性的实际值不为零,则该表达式被解析为真。
-        若浏览器运行的设备上没有该属性值,包含这个属性值的表达式一般返回假。
-          例如,在语音合成器上查询屏幕长宽比总是返回假。
-      width         描述了输出设备渲染区域,如可视区域的宽度或打印机纸盒的宽度
-        PS:可接受 min/max 前缀
-          注意:用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
-        Example:
-          若你想向最小宽度20em的手持设备或屏幕应用样式表,你可以使用这样的查询:
-          @media handheld and (min-width: 20em),screen and (min-width: 20em) { ... }
-          
-          这个媒体查询将向最小宽度8.5英寸的打印机应用样式表:
-          <link rel="stylesheet" media="print and (min-width: 8.5in)"
-              href="http://foo.com/mystyle.css" />
-          
-          这个查询适用于宽度在500px和800px之间的屏幕:
-          @media screen and (min-width: 500px) and (max-width: 800px) { ... }
-      height        描述了输出设备渲染区域,如可视区域的高度或打印机纸盒的高度的高度。
-        PS:可接受 min/max 前缀:是
-          注意:用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
-      device-height 描述了输出设备的高度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
-        PS:可否接受 min/max 前缀
-        Example:
-          向显示在最大宽度800px的屏幕上的文档应用样式表,你可以这样做:
-          <link rel="stylesheet" media="screen and (max-device-width: 799px)" />
-      device-width  描述了输出设备的宽度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
-        PS:可否接受 min/max 前缀
-      aspect-ratio  描述了输出设备目标显示区域的宽高比
-        PS:可接受 min/max 前缀
-          该值包含两个以“/”分隔的正整数。
-          代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        Example:
-          下面为显示区域宽高至少为一比一的设备选择了一个特殊的样式表。
-          这指定了宽高比或者1:1或者更大。换句话说,可视区域或者是正方形或者是宽屏。
-          @media screen and (min-aspect-ratio: 1/1) { ... }
-      device-aspect-ratio  描述了输出设备的宽高比
-        PS:可否接受 min/max 前缀
-          该值包含两个以“/”分隔的正整数。
-          代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
-        Example:
-          下面为宽屏设备选择了一个特殊的样式表。
-          宽高比或者16:9或者16:10。    
-          @media screen and (device-aspect-ratio: 16/9),screen and (device-aspect-ratio: 16/10) { ... }
-      orientation   指定了设备处于横屏(宽度大于高度)模式还是竖屏(高度大于宽度)模式。
-        Example:
-          向竖屏设备应用样式表:
-          @media all and (orientation: portrait) { ... }
-      resolution    指定输出设备的分辨率(像素密度)
-        PS:可接受 min/max 前缀:是
-          分辨率可以用每英寸（dpi）或每厘米（dpcm）的点数来表示。
-        Example:
-          为每英寸至多300点的打印机应用样式:
-          @media print and (min-resolution: 300dpi) { ... }
-          
-          替换老旧的 (min-device-pixel-ratio: 2) 语法:
-          @media screen and (min-resolution: 2dppx) { ... }
-      color         指定输出设备每个像素单元的比特值。若设备不支持输出颜色,则该值为0。
-        PS:可接受 min/max 前缀
-          若每个颜色单元具有不同数量的比特值,则使用最小的。
-            例如,若显示器为蓝色和红色提供5比特,而为绿色提供6比特,
-            则认为每个颜色单元有5比特。
-          若设备使用索引颜色,则使用颜色表中颜色单元的最小比特数。
-        Example:
-          向所有能显示颜色的设备应用样式表:
-          @media all and (color) { ... }
-          
-          向每个颜色单元至少有4个比特的设备应用样式表:
-          @media all and (min-color: 4) { ... }
-      color-index   指定了输出设备中颜色查询表中的条目数量。
-        PS:可接受 min/max 前缀
-        Example:
-          向所有使用索引颜色的设备应用样式表,你可以这么做:
-          @media all and (color-index) { ... }
-          
-          向所有使用至少256个索引颜色的设备应用样式表:
-          <link rel="stylesheet" media="all and (min-color-index: 256)" href="http://foo.bar.com/stylesheet.css" />    
-      grid          判断输出设备是网格设备还是位图设备
-        PS:若设备是基于网格的（例如电传打字机终端或只能显示一种字形的电话）,该值为1,否则为0。
-        Example:
-          向一个15字符宽度或更窄的手持设备应用样式:
-          @media handheld and (grid) and (max-width: 15em) { ... }
-          注意:“em” 在网格设备中有不同的意义；
-          一个“em”的实际宽度不得而知,假设1em相当于一个网格单元的宽高。
-      monochrome    指定了一个黑白（灰度）设备每个像素的比特数。若不是黑白设备,值为0。
-        PS:可接受 min/max 前缀:是
-        Example:
-          向所有黑白设备应用样式表:
-          @media all and (monochrome) { ... }
-          
-          向每个像素至少8比特的黑白设备应用样式表:
-          @media all and (min-monochrome: 8) { ... }
-      scan          描述了电视输出设备的扫描过程。
-        Example:
-          向以顺序方式扫描的电视机上应用样式表:
-          @media tv and (scan: progressive) { ... }
-    主要功能
-      检测媒体的类型.比如 screen  等
-      检测布局视口的特性,比如视口的宽高分辨率等
-        max-width 表示视口的最大宽度
-        max-device-width 表示设备的最大宽度
-      其他
-        orientation:portrait | landscape  定义输出设备中的页面可见区域高度是否大于或等于宽度
-          portrait: 指定输出设备中的页面可见区域高度大于或等于宽度
-          landscape: 除portrait值情况外,都是landscape
-        Example:
-          @media screen and (orientation:portrait){ … }
-          @import url(example.css) screen and (orientation:landscape);
-    Example: 
-      浏览器窗口 不同的宽度使用不同的布局方案
-      <div></div>
-      <div></div>
-      <div></div>
-      *{margin:0;padding:0;}
-      div{
-        height:200px;
-        background-image:url("http://www.simple-style.com/wp-content/uploads/2016/05/2-katie_paterson_hollow_1.jpg");
-        background-repeat: no-repeat;
-        float:left;
-      }
-      @media screen and (max-width:800px) {div{width:100%}}
-      @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
-      @media screen and (min-width:1201px) {div{width:33.33%}}
+          p{color:red !important;}
+          p{color:green;}
+    'Media Queries'媒体查询 [IE9+][手机端浏览器都支持][CSS3]
+      PS:根据不同的媒体类型和条件,指定对应的样式
+        媒体查询让css可以更精确作用于不同的媒体或同一媒体的不同条件.
+        媒体查询可以用在css的'@media'和'@import'规则上,也可以被用字html和xml中.
+        用来做响应式设计,即根据条件(如屏幕的宽度)来选用样式
+        Media Queries是css3中的一个和各种媒体相关的重要模块.
+      使用方式 
+        ◆在HTML中使用 
+        <link href="xxx.css" media="screen"/>  适用于计算机彩色屏幕 
+        <link href="xxx.css" media="print"/> 适用于打印预览模式下查看的内容或打印机打印的内容 
+        <link href="xxx.css" media="screen and (min-width:800px)"/>
+        ◆在CSS中使用 
+        @media <type> <connector> (<condition1>) <connector> (<condition2>){ <styleCode> }
+          type      设备类型 
+            all    任何设备
+            screen 常用的类型
+            tv 
+          connector 逻辑连接符 
+            and  交集 
+            or   并集
+          condition 条件 
+            可搭配关键字 not 
+              @media (not min-width:800px){}
+            min-width:  
+            min-height:   
+            max-width:   
+            max-height:  
+            orientation: 屏幕方向 
+              porttrait    
+          Example: 
+            @media (min-width:800px){
+              ...
+            }
+            @media (min-width:800px) and (max-width:1024px){
+              ...
+            }
+        ◆在CSS或HTML中使用 
+        @import url(XXX.css) screen and (min-width:800px);
+      媒体类型
+        all  适用于所有设备
+        print 打印设备
+          Intended for paged material and for documents viewed on screen in print preview mode. Please consult the section on paged media,and the media section of the Getting Started tutorial for information about formatting issues that are specific to paged media.
+        screen 屏幕
+          Intended primarily for color computer screens.
+      逻辑操作符
+        操作符 not,and 和 only 可以用来构建复杂的媒体查询。
+          PS:若使用了 not 或 only 操作符,必须明确指定一个媒体类型。
+        and  组合多个媒体属性,合并到同一条媒体查询中
+          只有当每个属性都为真时,这条查询的结果才为真
+          Example:
+            @media (min-width: 700px) { ... }
+            若你只想在横屏时应用这个,你可以使用 and 操作符合并媒体属性:
+            @media (min-width: 700px) and (orientation: landscape) { ... }
+        not  对一条媒体查询的结果进行取反
+          PS:not 关键字仅能应用于整个查询,而不能单独应用于一个独立的查询
+            在逗号媒体查询列表中 not 仅会否定它应用到的媒体查询上而不影响其它的媒体查询。
+          Example:
+            not 在下面的查询中最后被计算: @media not all and (monochrome) { ... }
+            等价于: @media not (all and (monochrome)) { ... }
+            而不是: @media (not all) and (monochrome) { ... }
+        only 仅在媒体查询匹配成功的情况下应用指定样式
+          可以通过它让选中的样式在老式浏览器中不被应用。
+        ,  将多个媒体查询以逗号分隔放在一起
+          只要其中任何一个为真,整个媒体语句就返回真,相当于 or .
+      媒体属性
+        PS:大多数媒体属性可以带有“min-”或“max-”前缀,用于表达“最低...”或者“最高...”。
+          这避免了使用与HTML和XML冲突的“<”和“>”字符。
+          若你未向媒体属性指定一个值,并且该特性的实际值不为零,则该表达式被解析为真。
+          若浏览器运行的设备上没有该属性值,包含这个属性值的表达式一般返回假。
+            例如,在语音合成器上查询屏幕长宽比总是返回假。
+        width         描述了输出设备渲染区域,如可视区域的宽度或打印机纸盒的宽度
+          PS:可接受 min/max 前缀
+            注意:用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
+          Example:
+            若你想向最小宽度20em的手持设备或屏幕应用样式表,你可以使用这样的查询:
+            @media handheld and (min-width: 20em),screen and (min-width: 20em) { ... }
+            
+            这个媒体查询将向最小宽度8.5英寸的打印机应用样式表:
+            <link rel="stylesheet" media="print and (min-width: 8.5in)"
+                href="http://foo.com/mystyle.css" />
+            
+            这个查询适用于宽度在500px和800px之间的屏幕:
+            @media screen and (min-width: 500px) and (max-width: 800px) { ... }
+        height        描述了输出设备渲染区域,如可视区域的高度或打印机纸盒的高度的高度。
+          PS:可接受 min/max 前缀:是
+            注意:用户调整窗口大小后,火狐浏览器会根据使用了width和height属性的媒体查询来切换合适的样式表。
+        device-height 描述了输出设备的高度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
+          PS:可否接受 min/max 前缀
+          Example:
+            向显示在最大宽度800px的屏幕上的文档应用样式表,你可以这样做:
+            <link rel="stylesheet" media="screen and (max-device-width: 799px)" />
+        device-width  描述了输出设备的宽度,整个屏幕或页的高度,而不是仅仅像文档窗口一样的渲染区域
+          PS:可否接受 min/max 前缀
+        aspect-ratio  描述了输出设备目标显示区域的宽高比
+          PS:可接受 min/max 前缀
+            该值包含两个以“/”分隔的正整数。
+            代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
+          Example:
+            下面为显示区域宽高至少为一比一的设备选择了一个特殊的样式表。
+            这指定了宽高比或者1:1或者更大。换句话说,可视区域或者是正方形或者是宽屏。
+            @media screen and (min-aspect-ratio: 1/1) { ... }
+        device-aspect-ratio  描述了输出设备的宽高比
+          PS:可否接受 min/max 前缀
+            该值包含两个以“/”分隔的正整数。
+            代表了水平像素数（第一个值）与垂直像素数（第二个值）的比例。
+          Example:
+            下面为宽屏设备选择了一个特殊的样式表。
+            宽高比或者16:9或者16:10。    
+            @media screen and (device-aspect-ratio: 16/9),screen and (device-aspect-ratio: 16/10) { ... }
+        orientation   指定了设备处于横屏(宽度大于高度)模式还是竖屏(高度大于宽度)模式。
+          Example:
+            向竖屏设备应用样式表:
+            @media all and (orientation: portrait) { ... }
+        resolution    指定输出设备的分辨率(像素密度)
+          PS:可接受 min/max 前缀:是
+            分辨率可以用每英寸（dpi）或每厘米（dpcm）的点数来表示。
+          Example:
+            为每英寸至多300点的打印机应用样式:
+            @media print and (min-resolution: 300dpi) { ... }
+            
+            替换老旧的 (min-device-pixel-ratio: 2) 语法:
+            @media screen and (min-resolution: 2dppx) { ... }
+        color         指定输出设备每个像素单元的比特值。若设备不支持输出颜色,则该值为0。
+          PS:可接受 min/max 前缀
+            若每个颜色单元具有不同数量的比特值,则使用最小的。
+              例如,若显示器为蓝色和红色提供5比特,而为绿色提供6比特,
+              则认为每个颜色单元有5比特。
+            若设备使用索引颜色,则使用颜色表中颜色单元的最小比特数。
+          Example:
+            向所有能显示颜色的设备应用样式表:
+            @media all and (color) { ... }
+            
+            向每个颜色单元至少有4个比特的设备应用样式表:
+            @media all and (min-color: 4) { ... }
+        color-index   指定了输出设备中颜色查询表中的条目数量。
+          PS:可接受 min/max 前缀
+          Example:
+            向所有使用索引颜色的设备应用样式表,你可以这么做:
+            @media all and (color-index) { ... }
+            
+            向所有使用至少256个索引颜色的设备应用样式表:
+            <link rel="stylesheet" media="all and (min-color-index: 256)" href="http://foo.bar.com/stylesheet.css" />    
+        grid          判断输出设备是网格设备还是位图设备
+          PS:若设备是基于网格的（例如电传打字机终端或只能显示一种字形的电话）,该值为1,否则为0。
+          Example:
+            向一个15字符宽度或更窄的手持设备应用样式:
+            @media handheld and (grid) and (max-width: 15em) { ... }
+            注意:“em” 在网格设备中有不同的意义；
+            一个“em”的实际宽度不得而知,假设1em相当于一个网格单元的宽高。
+        monochrome    指定了一个黑白（灰度）设备每个像素的比特数。若不是黑白设备,值为0。
+          PS:可接受 min/max 前缀:是
+          Example:
+            向所有黑白设备应用样式表:
+            @media all and (monochrome) { ... }
+            
+            向每个像素至少8比特的黑白设备应用样式表:
+            @media all and (min-monochrome: 8) { ... }
+        scan          描述了电视输出设备的扫描过程。
+          Example:
+            向以顺序方式扫描的电视机上应用样式表:
+            @media tv and (scan: progressive) { ... }
+      主要功能
+        检测媒体的类型.比如 screen  等
+        检测布局视口的特性,比如视口的宽高分辨率等
+          max-width 表示视口的最大宽度
+          max-device-width 表示设备的最大宽度
+        其他
+          orientation:portrait | landscape  定义输出设备中的页面可见区域高度是否大于或等于宽度
+            portrait: 指定输出设备中的页面可见区域高度大于或等于宽度
+            landscape: 除portrait值情况外,都是landscape
+          Example:
+            @media screen and (orientation:portrait){ … }
+            @import url(example.css) screen and (orientation:landscape);
+      Example: 
+        浏览器窗口 不同的宽度使用不同的布局方案
+        <div></div>
+        <div></div>
+        <div></div>
+        *{margin:0;padding:0;}
+        div{
+          height:200px;
+          background-image:url("http://www.simple-style.com/wp-content/uploads/2016/05/2-katie_paterson_hollow_1.jpg");
+          background-repeat: no-repeat;
+          float:left;
+        }
+        @media screen and (max-width:800px) {div{width:100%}}
+        @media screen and (min-width:801px) and (max-width:1200px) {div{width:50%}}
+        @media screen and (min-width:1201px) {div{width:33.33%}}
 Declaration,样式声明 
   尺寸&单位 
     ◆单位

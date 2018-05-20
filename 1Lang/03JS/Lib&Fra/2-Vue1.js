@@ -1359,6 +1359,7 @@ mapState(obj/arr)   绑定函数,简化'state.xx'的获取
     ,computed: { // 使用方法一: 
       ...mapState({ // 使用对象展开运算符将其成员合并到计算属性中 
         key1: function(state,getters){ // 返回值形式 
+          注: 该函数为惰性响应,首次使用到该值时,才会调用该函数 
           return state.xxx;  // 获取state数据 
           // 相当于 this.$store.state.xxx  
         }
@@ -1517,7 +1518,10 @@ mapActions(arr/obj)   绑定函数,简化'store.dispatch("xxx",data)'操作
       $store.commit('foo',data)    // 混合到了一起 
       $store.dispatch('goo',data)  // 混合到了一起 
     模块化,且'namespaced'为'true'时  
-      PS: 'state'、'getters'、'mutations'及'actions'均存在命名空间 
+      vm.$store.state.aoo.xx           // 有命名空间区分 
+      vm.$store.getters['aoo/xx']      // 有命名空间区分 
+      $store.commit('aoo/foo',data)    // 有命名空间区分 
+      $store.dispatch('aoo/goo',data)  // 有命名空间区分 
     'Global Assets'在命名空间模块内访问全局内容 
       modules: {
         foo: {

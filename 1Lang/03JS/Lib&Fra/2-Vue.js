@@ -1637,6 +1637,7 @@ vm.xxx.实例属性/方法/事件
           console.log(binding.value.color) // => "white"
           console.log(binding.value.text)  // => "hello!"
         })    
+      可为'data'/'computed'等中的值,会动态的接收到更新
   Vue.directive('name',obj/foo) // 定义全局指令 
     name  指令名称 
     obj   {  // 配置对象 
@@ -1722,8 +1723,7 @@ vm.xxx.实例属性/方法/事件
       // 
     }
     ★钩子函数的参数 
-      PS: 除了'el'外,其它参数都应该是只读的,尽量不要修改他们 
-        若需要在钩子之间共享数据,建议通过元素的 dataset 来进行
+      PS: 除'el'外,其它参数都应只读,需传递数据可使用元素的 dataset 来进行  
     el       指令所绑定的元素,可用于操作DOM 
       el.focus()   表单获得焦点
       el.select()  表单值被选中

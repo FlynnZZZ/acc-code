@@ -2029,7 +2029,22 @@ vm.xxx.实例属性/方法/事件
       父组件中,子组件标签上设置属性,子组件内声明使用  
         当父组件赋给属性的值,子组件内可获取到 
         当动态绑定属性时,子组件内也会实时响应 
-      'props'单向数据流 
+      动态绑定: 使用'v-bind' 
+        单个属性动态绑定:  :attr1="dataVal1"
+        同时动态绑定多个属性: v-bind="dataVal2"
+          Example: 
+            data: function(){     // 父组件中的数据
+              return {
+                dataVal2: {
+                  key1: 'abc',
+                  key2: 123
+                }
+              };
+            }
+            <cpt-child v-bind="dataVal2"></cpt-child>
+            将等价于：
+            <cpt-child v-bind:key1="dataVal2.key1" v-bind:key2="dataVal2.key2" ></cpt-child>
+      单向数据流 
         PS: 而在子组件内部改变prop,Vue会在控制台给出警告; 
           在js中对象和数组是引用类型,指向同一个内存空间,
           若prop是一对象或数组,在子组件内部改变它会影响父组件的状态;
@@ -2058,21 +2073,7 @@ vm.xxx.实例属性/方法/事件
             1 覆盖代替修改 
             2 深度'watch'或'watch'具体修改的项 
           方法二: 
-      动态绑定: 使用'v-bind' 
-        单个属性动态绑定:  :attr1="dataVal1"
-        同时动态绑定多个属性: v-bind="dataVal2"
-          Example: 
-            data: function(){     // 父组件中的数据
-              return {
-                dataVal2: {
-                  key1: 'abc',
-                  key2: 123
-                }
-              };
-            }
-            <cpt-child v-bind="dataVal2"></cpt-child>
-            将等价于：
-            <cpt-child v-bind:key1="dataVal2.key1" v-bind:key2="dataVal2.key2" ></cpt-child>
+      动态传递一对象,子组件中直接使用,父组件修改/覆盖对象,子组件中实时响应  
     'events up'子组件向父组件通信 
       父组件中,子组件标签上绑定自定义事件并指定回调函数, 
       子组件内通过'$emit'触发该事件并传递数据,
@@ -2118,9 +2119,12 @@ vm.xxx.实例属性/方法/事件
         })
       复杂情况下,使用专门的状态管理模式Vuex 
     Accu: 
-      父子组件通过属性双向通信 
+      组件动态绑定引用类型进行双向通信 [SlSt] 
         当传递的属性值为一引用类型时[如对象]
-        ,在子组件中修改[而非覆盖]属性值,也会使父组件中传递的值产生变化 [JS的引用类型特性] 
+        ,由于JS的引用类型值特性--按引用传递  
+        ,子组件中修改[而非覆盖]'props'时会改变父组件中的值 
+        ,同样的在父组件中修改传入的值也会改变子组件中的'props'
+        ,从而达到'双向通信',维持共同的一份数据 
   父组件内直接定义子组件根节点的属性 
     PS: 可直接传入组件,而不需要定义相应的'prop' 
       一般的,传递给组件的值会覆盖组件本身设定的值,

@@ -38,7 +38,6 @@
   关键字和保留字: 有特殊意义,不可作为变量名的名称 
     关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
     保留字: 还没有特定的用途,但可能在将来被用作关键字,如'class''int' ... 
-  单、双引号需交错、成对使用 
   多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释 
   ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
     加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
@@ -49,193 +48,10 @@
     across multiple\
     lines";
     console.log(str);   // string is broken across multiplelines.
-------------------------------------------------------------------------------- 
 数据类型 
   PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
     ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
     一个值可由多个变量名称指向,但一个变量只能指向一个值;
-'literal'字面量,直接显示出来的数据值 
-  100            // 数字字面量
-  "abc"          // 字符串字面量
-  false          // 布尔字面量
-  null           // 对象字面量
-  /xxx/ig        // 正则表达式字面量
-  {x:1,y:2}      // 对象字面量表达式
-  [1,2,3,4,5]    // 数组字面量表达式
-var,定义变量,相当于给window添加不可配置的window属性 
-  Feature: 
-    定义变量但未赋值,默认:'undefined' 
-      var num ;
-      console.log(num); // undefined 
-    重复的var声明: 相当于赋值操作产生覆盖 
-      var box = "fan";
-      var box = "abc";  // 相当于 box = "abc";
-      console.log(box); // abc
-    函数内,产生变量提升 
-      var num = 1;
-      !function(){
-        // 函数内此时num还未定义,所以为undefined 
-        console.log(num); // undefined,变量提升
-        var num = 2;
-      }()
-  Relate: 
-    全局变量与window属性 
-      不用用var声明的变量,相当于给window添加可配置的属性  
-        var aoo = 1; 
-        console.log(window.aoo); // 1
-        console.log(delete aoo); // fasle,删除失败 
-        console.log(aoo); // 1 
-        boo = 2;
-        console.log(window.boo); // 2
-        console.log(delete boo); // true,删除成功 
-        console.log(boo);  // 报错,变量未定义 
-      显式声明的全局变量无法 delete 删除,但window属性则可以 
-        var aoo = 1;
-        window.boo = 2;
-        var o1 = Object.getOwnPropertyDescriptor(window,'aoo')
-        var o2 = Object.getOwnPropertyDescriptor(window,'boo')
-        console.log(o1); 
-        // {value: 1, writable: true, enumerable: true, configurable: false} 
-        console.log(o2); 
-        // {value: 2, writable: true, enumerable: true, configurable: true} 
-      访问未声明的变量会报错,而未声明window对象的属性则为undefined 
-        console.log(window.aoo); // undefined 
-        console.log(aoo); // 报错 
-    'var' 与','运算符 [参见:逗号运算符,变量声明]     
-      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
-      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
-      (var aoo);           // Uncaught SyntaxError: Unexpected token var
-      var aoo = 1, window.boo = 2; // Unexpected token .
-'lexical scopes'块作用域,在函数内部、代码块,即'{}'内创建[ES6]  
-  PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块 
-  Relate: 
-    'var'变量、函数存在块作用域,但可跨块作用域访问  
-      存在块作用域:  
-      { 
-        {
-          function foo(){
-            return 1;
-          }
-          var aoo = 1;
-          console.log(foo(),aoo); // 1 1
-        }
-        {
-          var aoo = 2;
-          function foo(){
-            return 2;
-          }
-          console.log(foo(),aoo); // 2 2 
-        }
-      }
-      可跨块作用域访问: 
-      if (true) { 
-        var aoo = 1; 
-        let boo = 2;
-      }
-      console.log(aoo); // 1,可跨块作用域访问 
-      console.log(boo); // 报错,boo is not defined
-'Global Block Bindings'全局块级绑定[ES6] 
-  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
-    这意味着全局对象的属性可能会意外地被重写覆盖
-    var RegExp = "Hello!";
-    console.log(window.RegExp);     // "Hello!"
-  若在全局作用域使用'let'或'const',绑定也发生在全局作用域内,但不会向全局对象添加属性 
-    let RegExp = "Hello!";
-    console.log(RegExp);           // "Hello!"
-    console.log(window.RegExp);    // function RegExp() { [native code] }
-let,定义块级变量[ES6] 
-  PS: 块级作用域限制,只在定义的块级作用域中存在;
-  函数内无变量提升 
-    var aoo = 1;
-    var boo = 2;
-    function foo(){
-      console.log(aoo); // undefined,变量提升
-      console.log(boo); // 报错
-      var aoo = 3; 
-      let boo = 4; 
-    }
-  重复声明报错 
-    Example:
-      var aoo = 1;
-      var aoo = 2;
-      let aoo = 3; // 报错,Identifier 'aoo' has already been declared
-      let boo = 4;
-      let boo = 5; // 报错,Identifier 'boo' has already been declared
-    函数内重新声明函数的参数报错
-      function foo(aoo){
-        var aoo = 1;
-        let aoo = 2;  //报错,Identifier 'aoo' has already been declared
-        console.log(aoo);
-      }
-  'Let Declarations in Loops'循环中的'let'声明 
-    var arr =[];
-    for(var i = 0; i < 10; i++) { 
-      arr.push(i); 
-    }
-    console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    var fooArr =[];
-    for(var i = 0; i < 10; i++) {
-      fooArr.push(function(){console.log(i); });
-    }
-    console.log(fooArr[0]); // function(){console.log(i); }
-    // i 是以引用的方式存在函数中的
-    console.log(fooArr[0]()); // 10
-    使用let的声明方式
-    var fooArr =[];
-    for(let i = 0; i < 10; i++) {
-      fooArr.push(function(){console.log(i); });
-    }
-    console.log(fooArr[0]); // function(){console.log(i); }
-    // i 是以引用的方式存在函数中的
-    console.log(fooArr[0]()); // 0
-    注:let 声明在上述循环内部中的表现是在规范中特别定义的,
-    实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
-const,定义块级常量[ES6] 
-  Feature: 
-    在声明时需赋值,否则报错 
-      const num;   // 报错,定义时必须赋值 
-    在同一作用域中,常量名不能与其他变量或函数名重名,否则报错 
-      const num = 1;
-      var num = 2; // 报错,重名  
-    不可‹覆盖›改变常量值,否则报错   
-      const num = 1, obj = { key: 1 }
-      obj.key = 2;
-      console.log(obj); // { key: 2 },对对象进行了引用修改 
-      num = 2;          // 报错,不可改变常量值 
-    只在块级作用域生效 
-      if (true) { const num = 1; }
-      console.log(num); // 报错,num未定义 
-    函数内无变量提升 
-      !function(){
-        console.log(num1);  // undefined,变量提升 
-        console.log(num2);  // 报错,变量未定义,无提升  
-        var  num1 = 1
-        const num2 = 2 
-      }() 
-  不可传值改变,只能传址改变; 
-    不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
-    传值赋值和传址赋值
-    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用],而非原始数据或者数据的拷贝
-    const arr =[1,2,3];
-    arr = [1];    // 报错
-    arr.push(4); // 允许
-    arr[4] =5;   // 允许
-    arr;         // [1, 2, 3, 4, 5]
-    
-    const person = { name: "Nicholas" };
-    person.name = "Greg"; // 正常
-    person = { name: "Greg" }; // 抛出错误
-    person 变量一开始已经和包含一个属性的对象绑定.
-    修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
-    但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
-  Expand: 
-    ES5中可通过定义window不可变属性来模拟常量 
-      Object.defineProperty(window,'const1',{
-        value: '自定义的常量',
-        writable: false,
-        enumerable: false, 
-        configurable: false
-      })
 基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
   基本类型: 变量的赋值,会创建该值的一个副本  
   undefined 表示未定义的值 
@@ -288,6 +104,13 @@ const,定义块级常量[ES6]
         若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
         八进制字面量在严格模式下是无效的,会导致JS引擎抛错  
       十六进制数 必须使用0x或0X开头,最大字符不超过f 
+      ES6中: 
+      '0b***' 声明2进制数 
+        console.log(0b11);  // 3 
+      '0o***' 声明8进制数 
+        console.log(0o10);  // 8 
+      '0x***' 声明16进制数 
+        console.log(0xf);    // 15 
     科学计数: 
       e E 可大写,可小写
       默认情况下,ECMAScript会将小数点后面有6个零以上的浮点数使用科学计数法表示
@@ -364,7 +187,7 @@ const,定义块级常量[ES6]
           数值会转换为数值本身,即数字字符串 
           console.log(123.0.toString(),typeof 123..toString()); // 123 string
       String(val)、obj.valueOf()、obj.toString() 显式转换 
-    Exp: 
+    Accu: 
       数值字符串比较其数值大小,采用相减的方式 
         var str1 = '9';
         var str2 = '100';
@@ -883,6 +706,188 @@ class,类,基于原型的实现的封装[ES6]
       console.log(point.toString()); // 3
   ◆相关操作
   str = Clas.name;  获取类的名字 
+'literal'字面量,直接显示出来的数据值 
+  100            // 数字字面量
+  "abc"          // 字符串字面量
+  false          // 布尔字面量
+  null           // 对象字面量
+  /xxx/ig        // 正则表达式字面量
+  {x:1,y:2}      // 对象字面量表达式
+  [1,2,3,4,5]    // 数组字面量表达式
+var,定义变量,相当于给window添加不可配置的window属性 
+  Feature: 
+    定义变量但未赋值,默认:'undefined' 
+      var num ;
+      console.log(num); // undefined 
+    重复的var声明: 相当于赋值操作产生覆盖 
+      var box = "fan";
+      var box = "abc";  // 相当于 box = "abc";
+      console.log(box); // abc
+    函数内,产生变量提升 
+      var num = 1;
+      !function(){
+        // 函数内此时num还未定义,所以为undefined 
+        console.log(num); // undefined,变量提升
+        var num = 2;
+      }()
+  Relate: 
+    全局变量与window属性 
+      不用用var声明的变量,相当于给window添加可配置的属性  
+        var aoo = 1; 
+        console.log(window.aoo); // 1
+        console.log(delete aoo); // fasle,删除失败 
+        console.log(aoo); // 1 
+        boo = 2;
+        console.log(window.boo); // 2
+        console.log(delete boo); // true,删除成功 
+        console.log(boo);  // 报错,变量未定义 
+      显式声明的全局变量无法 delete 删除,但window属性则可以 
+        var aoo = 1;
+        window.boo = 2;
+        var o1 = Object.getOwnPropertyDescriptor(window,'aoo')
+        var o2 = Object.getOwnPropertyDescriptor(window,'boo')
+        console.log(o1); 
+        // {value: 1, writable: true, enumerable: true, configurable: false} 
+        console.log(o2); 
+        // {value: 2, writable: true, enumerable: true, configurable: true} 
+      访问未声明的变量会报错,而未声明window对象的属性则为undefined 
+        console.log(window.aoo); // undefined 
+        console.log(aoo); // 报错 
+    'var' 与','运算符 [参见:逗号运算符,变量声明]     
+      (var aoo = 1), 2==3; // Uncaught SyntaxError: Unexpected token var
+      (var aoo = 1);       // Uncaught SyntaxError: Unexpected token var
+      (var aoo);           // Uncaught SyntaxError: Unexpected token var
+      var aoo = 1, window.boo = 2; // Unexpected token .
+'lexical scopes'块作用域,在函数内部、代码块,即'{}'内创建[ES6]  
+  PS: 也叫词法作用域,任何一对花括号'{}'中的语句都属于一个块 
+  Relate: 
+    'var'变量、函数存在块作用域,但可跨块作用域访问  
+      存在块作用域:  
+      { 
+        {
+          function foo(){
+            return 1;
+          }
+          var aoo = 1;
+          console.log(foo(),aoo); // 1 1
+        }
+        {
+          var aoo = 2;
+          function foo(){
+            return 2;
+          }
+          console.log(foo(),aoo); // 2 2 
+        }
+      }
+      可跨块作用域访问: 
+      if (true) { 
+        var aoo = 1; 
+        let boo = 2;
+      }
+      console.log(aoo); // 1,可跨块作用域访问 
+      console.log(boo); // 报错,boo is not defined
+'Global Block Bindings'全局块级绑定[ES6] 
+  全局作用域使用'var'声明全局变量,相当于给全局对象[浏览器环境下是 window]添加属性 
+    这意味着全局对象的属性可能会意外地被重写覆盖
+    var RegExp = "Hello!";
+    console.log(window.RegExp);     // "Hello!"
+  若在全局作用域使用'let'或'const',绑定也发生在全局作用域内,但不会向全局对象添加属性 
+    let RegExp = "Hello!";
+    console.log(RegExp);           // "Hello!"
+    console.log(window.RegExp);    // function RegExp() { [native code] }
+let,定义块级变量[ES6] 
+  PS: 块级作用域限制,只在定义的块级作用域中存在;
+  函数内无变量提升 
+    var aoo = 1;
+    var boo = 2;
+    function foo(){
+      console.log(aoo); // undefined,变量提升
+      console.log(boo); // 报错
+      var aoo = 3; 
+      let boo = 4; 
+    }
+  重复声明报错 
+    Example:
+      var aoo = 1;
+      var aoo = 2;
+      let aoo = 3; // 报错,Identifier 'aoo' has already been declared
+      let boo = 4;
+      let boo = 5; // 报错,Identifier 'boo' has already been declared
+    函数内重新声明函数的参数报错
+      function foo(aoo){
+        var aoo = 1;
+        let aoo = 2;  //报错,Identifier 'aoo' has already been declared
+        console.log(aoo);
+      }
+  'Let Declarations in Loops'循环中的'let'声明 
+    var arr =[];
+    for(var i = 0; i < 10; i++) { 
+      arr.push(i); 
+    }
+    console.log(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    var fooArr =[];
+    for(var i = 0; i < 10; i++) {
+      fooArr.push(function(){console.log(i); });
+    }
+    console.log(fooArr[0]); // function(){console.log(i); }
+    // i 是以引用的方式存在函数中的
+    console.log(fooArr[0]()); // 10
+    使用let的声明方式
+    var fooArr =[];
+    for(let i = 0; i < 10; i++) {
+      fooArr.push(function(){console.log(i); });
+    }
+    console.log(fooArr[0]); // function(){console.log(i); }
+    // i 是以引用的方式存在函数中的
+    console.log(fooArr[0]()); // 0
+    注:let 声明在上述循环内部中的表现是在规范中特别定义的,
+    实际上,早期 let 的实现并不会表现中这种效果,是在后来被添加到规范中的 
+const,定义块级常量[ES6] 
+  Feature: 
+    在声明时需赋值,否则报错 
+      const num;   // 报错,定义时必须赋值 
+    在同一作用域中,常量名不能与其他变量或函数名重名,否则报错 
+      const num = 1;
+      var num = 2; // 报错,重名  
+    不可‹覆盖›改变常量值,否则报错   
+      const num = 1, obj = { key: 1 }
+      obj.key = 2;
+      console.log(obj); // { key: 2 },对对象进行了引用修改 
+      num = 2;          // 报错,不可改变常量值 
+    只在块级作用域生效 
+      if (true) { const num = 1; }
+      console.log(num); // 报错,num未定义 
+    函数内无变量提升 
+      !function(){
+        console.log(num1);  // undefined,变量提升 
+        console.log(num2);  // 报错,变量未定义,无提升  
+        var  num1 = 1
+        const num2 = 2 
+      }() 
+  不可传值改变,只能传址改变; 
+    不限制对于值的类型为对象的属性的修改,阻止的是绑定的修改,而不是绑定值的修改
+    传值赋值和传址赋值
+    传址:赋值过程中,变量实存储的是数据的地址[对数据的引用],而非原始数据或者数据的拷贝
+    const arr =[1,2,3];
+    arr = [1];    // 报错
+    arr.push(4); // 允许
+    arr[4] =5;   // 允许
+    arr;         // [1, 2, 3, 4, 5]
+    
+    const person = { name: "Nicholas" };
+    person.name = "Greg"; // 正常
+    person = { name: "Greg" }; // 抛出错误
+    person 变量一开始已经和包含一个属性的对象绑定.
+    修改 person.name 是被允许的因为 person 的值[地址]未发生改变,
+    但是尝试给 person 赋一个新值(代表重新绑定变量和值)的时候会报错.
+  Expand: 
+    ES5中可通过定义window不可变属性来模拟常量 
+      Object.defineProperty(window,'const1',{
+        value: '自定义的常量',
+        writable: false,
+        enumerable: false, 
+        configurable: false
+      })
 'Decorator'修饰器: 用来修改类的行为[ES7] 
 'Iterator'遍历器: 为不同的数据结构提供统一的访问机制的接口 
   PS: JS表'集合'的数据结构有: Array、Object、Map&Set  
@@ -1277,24 +1282,26 @@ class,类,基于原型的实现的封装[ES6]
       var 2==3;          // Uncaught SyntaxError: Unexpected number
       1 , 2==3,function(){ console.log(4); }() // 4;
   'Destructuring'解构赋值: 按照一定模式,从数组和对象中取值,对变量进行赋值[ES6] 
-    PS:
-    Example:
+    PS: 拆分等号左侧的数组或对象的过程,数组或对象可以来自变量、函数或等式 
+    数组解构赋值: 有顺序要求 
       var [a,b,c] = [1,2,3]; //把数组的值分别赋给下面的变量；
       console.log(a,b,c);// 1 2 3 
-    解构嵌套 
+      
+      // 嵌套解构 
       var [ a,b,[ c1,c2 ] ] = [ 1,2,[ 3.1,3.2 ] ];
       console.log(c1,c2); // 3.1 3.2
-    不完全解构 
-      赋值不成功,变量的值为undefined
+      
+      // 不完全解构: 赋值不成功,变量的值为undefined
       var [a,b,c] = [1,2];
       console.log(a,b,c); // 1 2 undefined 
-    设定默认值 
+        
+      // 设定默认值 
       var [a,b,c=3] = [1,2];
       console.log(a,b,c); // 1 2 3 
-      覆盖默认值 
+      // 覆盖默认值 
       var [a,b,c=3] =[1,2,4];
       console.log(a,b,c); // 1 2 4
-    对象的解构赋值:不受属性的顺序影响,和属性名对应 
+    对象的解构赋值: 不受属性的顺序影响,和属性名对应 
       PS:默认的变量名要和属性名一致,才会成功赋值,否则赋值不成功 
       Example:
         var {a,b,c} = {"a":1,"b":2,"c":3};
@@ -1305,17 +1312,19 @@ class,类,基于原型的实现的封装[ES6]
         
         var { a } = {"b":2};
         console.log(a); // undefined
+        
+        // 对象解构赋值嵌套 
+        var {a:{b}} = {"a":{"b":1}};
+        console.log(b);//结果:b的值为1
+        
+        // 对象解构指定默认值 
+        var {a,b=2} = {"a":1}; 
+        console.log(b); // 2
       给一个变量名与属性名不一样的变量解构赋值 
         var { b:a } = {"b":2};
         console.log(a); // 2
-    对象解构赋值嵌套
-      var {a:{b}} = {"a":{"b":1}};
-      console.log(b);//结果:b的值为1
-    对象解构指定默认值 
-      var {a,b=2} = {"a":1}; 
-      console.log(b); // 2
-    字符串的解构赋值 
-      PS:解构赋值的过程中,字符串被转换成了一个类似数组的对象
+    字符串到数组的解构赋值:  
+      PS: 解构赋值的过程中,字符串被转换成了一个类似数组的对象
       var [a,b,c,d,e] = "12345";
       console.log(a,b,c,d,e); // 1 2 3 4 5 
     使用举例  
@@ -1537,7 +1546,7 @@ class,类,基于原型的实现的封装[ES6]
       }
     set和map解构的遍历
     不能遍历'Object' 
-      PS:要能够被for...of正常遍历的,都需要实现一个遍历器Iterator[又叫迭代器] 
+      PS:要能够被for...of正常遍历的,都需要实现一个遍历器Iterator 
         而数组、Set和Map结构,内置了遍历器Iterator,它们的原型中都有一个 Symbol.iterator 方法 
         而Object对象并没有实现这个接口,所以无法被for...of遍历 
       Example: 遍历对象报错
@@ -1578,19 +1587,19 @@ class,类,基于原型的实现的封装[ES6]
       自定义对象的Iterator遍历器
         给Object对象加上[Symbol.iterator]()方法
         let obj = { //定义一个的Object对象
-          0:"我是0",
-          1:"我是1",
-          2:"我是2",
-          length:3,
+          0: "我是0"
+          ,1: "我是1"
+          ,2: "我是2"
+          ,length: 3
           //添加[Symbol.iterator]方法
-          [Symbol.iterator] : function() { 
-            let _this = this;
-            let index = 0;
+          ,[Symbol.iterator]: function() { 
+            let that = this
+            ,_key = 0
             return {
-              next:() => {
-                let value = _this[index];
-                let done = (index >= _this.length);
-                index++;
+              next: () => {
+                let value = that[_key] 
+                ,done = (_key >= that.length);
+                _key++;
                 return {value,done}
               }
             }

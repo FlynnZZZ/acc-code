@@ -183,21 +183,22 @@ Selector,选择器
           '\00AB'  双左箭头
           '\00BB'  双右箭头
         content:url(图片地址)    加入图片
-        content:attr(属性名)    将元素的指定属性的属性值插入
+        content:attr(属性名)    将元素的指定属性的属性值插入 
           Example:
-          在链接后增加 (链接地址)
-          a:after {
-            content: " (" attr(href) ")";
-          }
+            在链接后增加 (链接地址)
+            a:after {
+              content: " (" attr(href) ")";
+            }
         配合属性:定义符号 quotes 
           PS:quote字符类型(使用双引号""的时候需要使用转义字符\)
-            open-quote开始字符;close-quote结尾字符
+          open-quote  开始字符;
+          close-quote 结尾字符
           Example:
             给h1元素内容使用()括起来.
             h1{ quotes:"(" ")" }  /*定义 open-quote 和 close-quote*/
             h1:before{ content:open-quote; }
             h1:after{ content:close-quote; }
-        配合属性:计数器 counter
+        配合属性:计数器 counter 
           content: counter(name,type);  定义计数器(种类) 
             name  计数器名称,相当于一个占位符 
             type  编号种类,可选,默认阿拉伯数字 
@@ -247,7 +248,7 @@ Selector,选择器
             .wp:nth-child(2n+1) .tl:before{
               counter-reset:section 11;
             }
-      :first-letter 元素中的第一个字符 
+      :first-letter 块元素中的第一个字符 
         Exp:
           首字母下沉 
           <div class="aoo"> 12312312312312 </div>
@@ -256,8 +257,9 @@ Selector,选择器
             margin-top: 10px;
             font-size: 22px;
           }
-      :first-line   元素中的第一行文本[通过调整窗口改变第一行,也会响应] 
-      ::selection  当元素处于选中状态时[CSS3] 
+      :first-line   块元素中的第一行文本
+        PS: 通过调整窗口改变第一行的长度,但始终影响第一行  
+      ::selection  当元素处于选中状态时[CSS3][IE9+] 
         Example: 
           网页中文字被选中时 
           ::selection{ 

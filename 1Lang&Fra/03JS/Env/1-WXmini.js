@@ -1,4 +1,4 @@
-miniA微信小程序 
+WxMiniAPP微信小程序 
   介绍:
     微信小程序主要依赖于微信平台,使用微信台提供的'View''Event''Component''Container'等构建,
     可以说是介于 Web App 和 Native App 之间的一种类型。无须Native App的安装,比Web APP更好的体验
@@ -10,7 +10,7 @@ miniA微信小程序
     无APPID时,不可进行发布,但可随意进行网络请求,不限制域名 
   微信对小程序的要求是整体大小不能超过2MB  
   'Component'组件是视图的基本组成单元
-目录结构及文件 
+项目目录&说明  
   程序主体、总体配置信息：'app.js''app.json''app.wxss' 三个文件组成 
     'app.json'  公共设置、全局配置  
       PS: 决定页面'文件路径''窗口表现''网络超时设置''设置多个tab'等
@@ -893,7 +893,7 @@ miniA微信小程序
     show-value      是否显示当前value,默认'false' 
     bindchange    foo,完成一次拖动后触发的事件
       event.detail = {value: value}
-  <'switch'>  开关选择器 
+  '<switch>'  开关选择器 
     PS: switch切换在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
     checked   是否选中,默认'false'
     type      样式
@@ -1421,12 +1421,14 @@ API
       PS: 文件的临时路径,在小程序本次启动期间可以正常使用,
         如需持久保存,需在主动调用 wx.saveFile,在小程序下次启动时才能访问得到。
       {
-        'sourceType': [], // 'album'从相册选视频,'camera'使用相机拍摄,默认为['album','camera']
-        'maxDuration':60, // 拍摄视频最长拍摄时间,单位秒。最长支持'60'秒
-        'camera':'back',  // 默认调起的为前置还是后置摄像头
+        sourceType: [],  // 选择/拍摄视频,默认: ['album','camera'] 
+          'album'   从相册选视频
+          'camera'  使用相机拍摄
+        maxDuration: 60, // 视频最长拍摄时间,单位秒。最长支持'60'秒
+        camera: 'back',  // 默认调起的为前置还是后置摄像头 
           // 在部分Android手机下由于系统ROM不支持无法生效   
-          'front'  前置
           'back'   后置,默认值
+          'front'  前置
         success: function(res){
           // res.tempFilePath 选定视频的临时文件路径
           // res.duration     选定视频的时间长度
@@ -1435,8 +1437,10 @@ API
           // res.width   返回选定视频的宽
         },
         fail: function(){
+          // 
         },
         complete: function(){
+          // 
         },
       }
     wx.saveVideoToPhotosAlbum({}) 保存视频到系统相册 '1.2.0+' 

@@ -10,19 +10,40 @@ mpvue'Vue.js in mini program',使用VueJS开发小程序的前端框架
 操作步骤 
   PS: 快速创建和启动一个带热重载、保存时静态检查、内置代码构建功能的小程序项目 
   $ npm i -g vue-cli                             // 全局安装vue-cli
-  $ vue init mpvue/mpvue-quickstart <my-project> // 使用vue-cli创建mpvue项目 
+  // 使用vue-cli创建一基于 mpvue-quickstart 模板的新项目 
+  $ vue init mpvue/mpvue-quickstart <my-project> 
   $ cd my-project                                // 进入目录 
   $ npm i                                        // 安装依赖 
   $ npm run dev                                  // 运行项目  
-    新增的页面需要重新 npm run dev 来进行编译 
-项目的目录结构 
-  PS: 当源码有改变时项目会自动编译
+项目目录&结构&配置 
+  PS: 当源码有改变时项目会自动编译;新增的页面需重新 npm run dev 进行编译 
+  ◆以下基于'mpvue-quickstart'模版的描述 
+  node_modules 
   build 
   config 
   dist              // 小程序相关代码
-  node_modules 
-  src 
-    app.vue 
+  src               // 开发目录 
+    cptns           // 公用的组件 
+    pages           // 页面 
+      xxx          // xxx页 
+        // <a href="/pages/xxx/main"></a>  // 引用该页面
+        index.vue  // 页面内容 
+        main.js    // 
+          import Vue from 'vue'
+          import App from './index'
+
+          const app = new Vue(App)
+          app.$mount()
+          
+          // 以下可选 
+          export default {
+            config: {
+              navigationBarTitleText: '查看启动日志'  // 设置页面标题 
+            }
+          }
+        store.js   // 可选,vuex部分 
+    utils           
+    App.vue 
     main.js 
   static 
   .babelrc 
@@ -33,7 +54,7 @@ mpvue'Vue.js in mini program',使用VueJS开发小程序的前端框架
   项目目录 
     创建的项目目录[非dist目录] 
   appID   
-    自己小程序的appID或选体验“小程序”[只影响是否可以真机调试]  
+    自己小程序的appID或选体验'小程序'[只影响是否可以真机调试]  
 配套设施  
   PS: mpvue作为小程序版本的VueJS,在框架SDK外,完整的技术体系还包括如下设施 
   mpvue-loader: 提供webpack版本的加载器
@@ -76,9 +97,11 @@ mpvue'Vue.js in mini program',使用VueJS开发小程序的前端框架
           }
         })
   路由: 
-    微信小程序的页面的 query 参数是通过 onLoad 获取的,
-    mpvue 对此进行了优化,直接通过 this.$root.$mp.query 获取相应的参数数据,
-    其调用需要在 onLoad 生命周期触发之后使用,比如 onShow 等
+    不支持 vue-router  
+    页面的 query 参数
+      PS: 通过 onLoad 获取的,mpvue 对此进行了优化
+      通过 this.$root.$mp.query 获取相应的参数数据,
+      其调用需要在 onLoad 生命周期触发之后使用,比如 onShow 等
   模版语法: 
     v-html 不可用 
     模版语法不支持部分复杂的JS表达式
@@ -94,12 +117,6 @@ mpvue'Vue.js in mini program',使用VueJS开发小程序的前端框架
         </li>
       </ul>
     不支持过滤器 
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+

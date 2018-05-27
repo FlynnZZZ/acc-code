@@ -136,35 +136,35 @@ JS运行过程机理
     增加了保留字[如 protected static 和 interface] 
 ES6 Modules 
   PS: ES6模块默认采用严格模式"use strict"; 
-    ES6模块之中,顶层的this指向undefined,即不应该在顶层代码使用this; 
+    ES6模块之中,顶层的this指向undefined,即不应在顶层代码使用this; 
     设计思想: 尽量静态化,使编译时能确定模块的依赖关系,及输入和输出的变量 
-  ★输出接口,对外暴露属性方法 
-  export default foo/{}   // 默认输出 
-    PS: 导入时可自定义名称 
-    一个模块只能有一个默认输出[即'export default'命令只能使用一次] 
+  'export'输出.'import'输入 
+  import 'path'  // 执行所加载的模块,但不输入任何值  
+    import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
+    多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
+    import 'lodash';
+    import 'lodash'; // 未执行
+  export default fn/{}   // 默认输出,导入时可自定义名称 
+    PS: 一个模块只能有一个默认输出,即'export default'只能使用一次 
       本质上,export default 就是输出一个叫做default的变量或方法 
-      然后输入时,系统允许你为它取任意名字。
-    默认输出和正常输出的比较 
-      // export default时,对应的 import 不需要使用大括号 
-      export default function foo() { } // 输出
-      import goo from 'xx';             // 输入
-      // 正常时,对应的import语句需要使用大括号 
-      export function foo() { }; // 输出
-      import {goo} from 'xx';    // 输入
-    'export default'后不能跟变量声明语句
-      PS: 因为export default命令其实只是输出一个叫做default的变量
-        export default 本质是将该命令后面的值,赋给default变量以后再默认
-      export default var a = 1; // 错误
-  export var aoo = val/function foo() {}  // 单个变量/函数输出 
-    对外部输出三个变量: aoo boo coo
-    export var aoo = 'aa';
-    export var boo = 'bb';
-    export var coo = 1958;
-  export {aoo,..}   // 批量导出,使用大括号指定所要输出的一组变量 
-    var aoo = 'aa',boo = 'bb',coo = 1958;
-    export {aoo, boo, coo};
-  export {curName1 as outName1,..}    // 重命名输出变量 
-  export {aoo,..}  from 'path' // 先后输入输出同一个模块 
+      然后输入时,系统允许你为它取任意名字 
+    export default 时,对应的 import 引入变量时不需要使用大括号 
+  import xx from "./xxx" // 加载默认输出 
+  export var aoo = val/function fn() {}  // 单个变量/函数输出 
+    Example: 
+      对外部输出三个变量: aoo boo coo
+      export var aoo = 'aa';
+      export var boo = 'bb';
+      export var coo = 1958;
+  export { aoo ,.. }                     // 批量输出 
+    PS: 使用大括号指定所要输出的一组变量 
+    Example: 
+      var aoo = 'aa'
+      ,boo = 'bb'
+      ,coo = 1958
+      export { aoo ,boo ,coo };
+  export { curName1 as outName1 ,.. }    // 别名输出 
+  export { aoo ,.. }  from 'path'        // 先后输入输出同一个模块 
     等价于:
     import {aoo,..} from 'my_module';
     export {aoo,..};
@@ -182,46 +182,7 @@ ES6 Modules
       export * as someIdentifier from "someModule";
       export someIdentifier from "someModule";
       export someIdentifier, { namedIdentifier } from "someModule";
-  'export'需在模块顶层作用域定义,否则报错  
-    PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
-    function foo() { 
-      export default 'bar'  // SyntaxError
-    } 
-    foo();
-  输出的值是实时动态的 
-    PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
-    export var aoo = 'bar';
-    setTimeout(() => aoo = 'baz', 500);
-    输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
-  Example: 
-    export 1; // 报错 
-    
-    var m = 1;
-    export m; // 报错
-    单变量输出需采用
-    export var m = 1;
-    或
-    var m = 1;
-    export {m};
-    或
-    var n = 1;
-    export {n as m};
-    
-    function f() {}
-    export f;  // 报错
-    改为:
-    export function f() {};
-    或
-    function f() {}
-    export {f};
-  ★导入接口,导入其他模块的属性方法 
-  import 'path'  
-    import语句会执行所加载的模块 
-    import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
-    多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
-    import 'lodash';
-    import 'lodash'; // 未执行
-  import {name1 [,name2,..]} from 'path' // 加载JS文件,并从中输入变量 
+  import { name1 ,.. } from 'path'  // 输入指定变量 
     PS: 变量名必须与导出名称相同,位置顺序则无要求 
     from   模块文件的位置,可是相对路径、绝对路径或模块名,'.js'可省略 
     import语句是'Singleton'模式 
@@ -229,9 +190,9 @@ ES6 Modules
       import { bar } from 'my_module';
       等同于
       import { foo, bar } from 'my_module';
-  import { aoo as boo } from 'path' // 重命名导入的变量 
-  import * as aoo from 'path'   模块的整体加载 
-    PS:使用星号'*'整体加载,指定一个对象,所有输出值都加载在这个对象上面 
+  import { aoo as boo } from 'path' // 别名输入变量 
+  import * as aoo from 'path'       // 别名整体输入  
+    PS: 使用'*'整体加载,指定一个对象,所有输出值都加载在这个对象上 
     // export.js 
     export function foo() { }
     export function goo() { }
@@ -244,21 +205,7 @@ ES6 Modules
     // 下面两行都是不允许的
     aoo.foo = 'hello';
     aoo.goo = function () {};
-  import命令引入提升,会提升到整个模块的头部,首先执行 
-    foo();
-    import { foo } from 'my_module';
-    import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
-  由于import静态执行,不能使用表达式和变量 
-    这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
-    import { 'f' + 'oo' } from 'my_module'; // 报错
-    
-    let module = 'my_module'; // 报错
-    import { foo } from module;
-    
-    if (x === 1) { 
-      import { foo } from 'module1'; // 报错
-    } 
-  promise = import('path')   动态加载,返回Promise对象  
+  promise = import('path')   // 动态加载,返回Promise对象 [提案中]  
     PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
       固然有利于编译器提高效率,但也导致无法在运行时加载模块,
       require是运行时加载模块,import命令无法取代require的动态加载功能;
@@ -311,7 +258,53 @@ ES6 Modules
           ]);
       }
       main();    
-  ★其他
+  'export'需在模块顶层作用域定义,否则报错  
+    PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
+    function foo() { 
+      export default 'bar'  // SyntaxError
+    } 
+    foo();
+  'export'输出的值是实时动态的 
+    PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
+    export var aoo = 'bar';
+    setTimeout(() => aoo = 'baz', 500);
+    输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
+  'import'命令引入提升
+    会提升到整个模块的头部,首先执行 
+    foo();
+    import { foo } from 'my_module';
+    import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
+  'import'静态执行,不能使用表达式和变量 
+    这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
+    import { 'f' + 'oo' } from 'my_module'; // 报错
+    
+    let module = 'my_module'; // 报错
+    import { foo } from module;
+    
+    if (x === 1) { 
+      import { foo } from 'module1'; // 报错
+    } 
+  Example: 
+    export 1; // 报错 
+    
+    var m = 1;
+    export m; // 报错
+    单变量输出需采用
+    export var m = 1;
+    或
+    var m = 1;
+    export { m };
+    或
+    var n = 1;
+    export { n as m };
+    
+    function f() {}
+    export f;  // 报错
+    改为:
+    export function f() {};
+    或
+    function f() {}
+    export { f };
   模块的继承 
     Example: 
       假设有一个circleplus模块,继承了circle模块。

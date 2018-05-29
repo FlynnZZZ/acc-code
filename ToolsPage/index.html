@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>Web开发工具</title>
+  <link rel="stylesheet" href="./asserts/css/common.css">
+  <link rel="stylesheet" href="./index.css">
+  <script src="./asserts/js/vendor.js" charset="utf-8"></script>
+</head>
+
+<body>
+  
+  <article id="aoo"> 
+    <section class="aItme" v-for="item in items"> 
+      <h4>{{item.tl}}</h4>
+      <ul>
+        <li v-for="item1 in item.items">
+          <a :href="item1.href" target="_blank"> {{item1.name}} </a>
+        </li>
+      </ul>
+    </section>
+  </article>
+  
+  <div class="links">
+    <a href="./pages/course/index.html" class="link"> 教程 </a>
+  </div>
+</body>
+<script src="./data.js" charset="utf-8"></script>
+<script type="text/javascript">
+  new Vue({
+    el: '#aoo',
+    data: {
+      items: _data 
+    },
+  });
+</script>
+</html>
+
+
+
+<!-- 
+  分区：
+  常用网址
+  本地工具
+  
+
+
+
+ -->
+ 

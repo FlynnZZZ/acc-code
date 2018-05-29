@@ -7,13 +7,8 @@ MiniProgrom微信小程序
       微信公众平台-小程序-设置-开发设置 
       每种最多可设置两个,只能使用 https 的域名,且申请过程需花费一定时间 
     无APPID时,不可进行发布,但可随意进行网络请求,不限制域名 
-  微信对小程序的要求是整体大小不能超过2MB  
   'Component'组件是视图的基本组成单元 
   ◆运行机制 
-  小程序没有重启的概念 
-    当小程序进入后台,客户端会维持一段时间的运行状态,超过一定时间后（目前是5分钟）会被微信主动销毁
-    置顶的小程序不会被微信主动销毁
-    当收到系统内存告警也会进行小程序的销毁
   前台/后台/销毁: 
     当用户点击左上角关闭/按设备Home键离开微信 进入后台 [小程序并未销毁]
     再次启动微信/再次打开小程序 从后台进入前台 
@@ -22,15 +17,6 @@ MiniProgrom微信小程序
     当用户从扫一扫、转发等入口(场景值为1007, 1008, 1011, 1025)进入小程序,
     且没有置顶小程序的情况下退出,小程序会被销毁。
     小程序运行机制在基础库版本 1.4.0 有所改变,该逻辑在新版本已不适用 
-  再次打开逻辑 '1.4.0+' 
-    用户打开小程序的预期有以下两类场景：
-    A. 打开首页： 场景值有 1001, 1019, 1022, 1023, 1038, 1056
-    B. 打开小程序指定的某个页面： 场景值为除 A 以外的其他
-    当再次打开一个小程序逻辑如下：
-    上一次的场景 当前打开的场景 效果
-    A A 保留原来的状态
-    B A 清空原来的页面栈,打开首页（相当于执行 wx.reLaunch 到首页）
-    A 或 B B 清空原来的页面栈,打开指定页面（相当于执行 wx.reLaunch 到指定页）
   ◆场景值 [基础库1.1.0+] 
     PS: 由于Android系统限制,目前无法获取到按 Home 键退出到桌面,然后从桌面再次进小程序的场景值,
       对于这种情况,会保留上一次的场景值
@@ -184,6 +170,27 @@ MiniProgrom微信小程序
         D.onUnload(), A.onLoad(), A.onShow()
       D[从转发进入] ->  B     
         D.onUnload(), B.onLoad(), B.onShow()      
+  运行机制 
+    冷启动: 用户首次打开或小程序被微信主动销毁后再次打开的情况
+      此时小程序需要重新加载启动 
+    热启动: 用户已打开过小程序,然后在一定时间内再次打开该小程序
+      此时无需重新启动,只需将后台态的小程序切换到前台
+    更新机制 
+      小程序冷启动时如果发现有新版本,将会异步下载新版本的代码包,
+      并同时用客户端本地的包进行启动,即新版本的小程序需要等下一次冷启动才会应用上
+      如果需要马上应用最新版本,可以使用 wx.getUpdateManager API 进行处理。
+    无重启的概念 
+      当小程序进入后台,客户端会维持一段时间的运行状态,超过一定时间后（目前是5分钟）会被微信主动销毁
+      当短时间内（5s）连续收到两次以上收到系统内存告警,会进行小程序的销毁
+    再次打开逻辑 '1.4.0+' 
+      用户打开小程序的预期有以下两类场景：
+      A. 打开首页： 场景值有 1001, 1019, 1022, 1023, 1038, 1056
+      B. 打开小程序指定的某个页面： 场景值为除 A 以外的其他
+      当再次打开一个小程序逻辑如下：
+      上一次的场景 当前打开的场景 效果
+      A            A            保留原来的状态
+      B            A            清空原来的页面栈,打开首页（相当于执行 wx.reLaunch 到首页）
+      A/B          B            清空原来的页面栈,打开指定页面（相当于执行 wx.reLaunch 到指定页）
 项目目录&说明  
   ◆程序总配置 
   'app.json'  必选,全局配置   
@@ -1384,13 +1391,14 @@ MiniProgrom微信小程序
   PS: 将页面内的功能模块抽象成自定义组件,以便在不同的页面中重复使用 
     也可将复杂的页面拆分成多个低耦合的模块,有助于代码维护
     自定义组件在使用时与基础组件非常相似 
-  创建自定义组件
-    一个自定义组件由 json wxml wxss js 四个文件组成 
+  创建自定义组件: 一个自定义组件由 json wxml wxss js 四个文件组成 
     .json 配置设定 
-      {
-        "component": true  // 进行自定义组件声明 
-      }
+      { "component": true    // 声明为自定义组件 
+      ,"usingComponents": {  // 引入其他自定义组件,详见后续 
+        "自定义组件的标签名": "对应的自定义组件文件路径"
+      }}
     .wxml 组件模版 
+      <slot>节点: 用于承载组件引用时提供的子节点 
     .js  
       Component({ // 注册组件,提供组件的属性定义/内部数据/自定义方法 
         // Component 构造器构造的组件也可以作为页面使用 
@@ -1431,7 +1439,6 @@ MiniProgrom微信小程序
           }
           ,..
         }  
-        ,behaviors: []    // 可选,类似于mixins和traits的组件间代码复用机制 
         // 生命周期函数可为函数/methods中定义的方法名 
         ,created: function(){   // 可选,在组件实例进入页面节点树时执行 
           // 此时不能调用 setData
@@ -1448,35 +1455,113 @@ MiniProgrom微信小程序
         ,detached: function(){  // 可选,在组件实例被从页面节点树移除时执行 
           // 
         }  
-        ,relations: {  // 可选,组件间关系定义,参见 组件间关系
-          // 
+        ,relations: {  // 可选,组件间关系定义 
+          './xxx-xx': {  // 需关联的组件的路径作为'key'
+            type: <kw>   // 必选,目标组件相对于当前组件的关系 
+              'ancestor'   祖先节点 
+              'parent'     父节点 
+              'child'      子节点  
+              'descendant' 子孙节点 
+            // 关系生命周期函数
+            ,linked: function(){      // 可选,当关系被建立在页面节点树中时触发 
+              // 触发时机在组件attached生命周期之后
+            }  
+            ,linkChanged: function(){ // 可选,当关系在页面节点树中发生改变时触发 
+              // 触发时机在组件moved生命周期之后
+            }  
+            ,unlinked: function(){    // 当关系脱离页面节点树时触发
+              // 触发时机在组件detached生命周期之后
+            }
+            ,target:                  // 可选
+              如果该项被设置,则它表示关联的目标节点所应具有的behavior,
+              所有拥有这一behavior的组件节点都会被关联
+            }
+          }
         }
+        ,behaviors: [bhv1 ,...]    // 可选,类似于mixins和traits的组件间代码复用机制 
+          PS: 每个 behavior 以包含一组属性、数据、生命周期函数和方法,
+            组件引用它时,它的属性、数据和方法会被合并到组件中,生命周期函数也会在对应时机被调用。
+            每个组件可以引用多个 behavior 
+            behavior 也可以引用其他 behavior  
+          Behavior() 构造器: 定义behaviors 
+            Example: 
+            module.exports = Behavior({
+              behaviors: []
+              ,properties: {
+                myBehaviorProperty: {
+                  type: String
+                }
+              }
+              ,data: {
+                myBehaviorData: {}
+              }
+              ,methods: {
+                myBehaviorMethod: function(){}
+              }
+              ,attached: function(){}
+            })
+          字段的覆盖和组合规则 
+            组件本身的属性/方法优先级高于behavior中的,产生覆盖 
+            引用了多个behavior,在定义段中靠后behavior中的属性或/方法覆盖靠前的属性或方法 
+            同名的数据字段,若数据是对象类型,会进行对象合并,否则进行相互覆盖 
+            生命周期函数不会相互覆盖,而是在对应触发时机被逐个调用。
+            如果同一个 behavior 被一个组件多次引用,它定义的生命周期函数只会被执行一次。
+          内置behaviors 
+            Example: 
+              Component({
+                behaviors: ['wx://form-field']
+                  'wx://form-field'代表一个内置 behavior,使该自定义组件有类似于表单控件的行为 
+              })
+            内置 behavior 往往会为组件添加一些属性
+              在没有特殊说明时,组件可以覆盖这些属性来改变它的 type 或添加 observer 
+            'wx://form-field' 使自定义组件有类似于表单控件的行为
+              form 组件可以识别这些自定义组件,在 submit 事件中返回组件的字段名及其对应字段值。
+              将为它添加以下两个属性
+              name    str,在表单中的字段名 [1.6.7+]
+              value   在表单中的字段值  [1.6.7+]
         ,externalClasses:   // 可选,组件接受的外部样式类 
         ,options:   // 可选,一些组件选项 
       }) 
       组件实例通用的属性/方法 
-      .is       str,组件的文件路径
-      .id       str,节点id
-      .dataset  str,节点dataset
-      .data     obj,组件数据,包括内部数据和属性值
-      .setData()       // 设置data并执行视图层渲染
-      .hasBehavior()   // 检查组件是否具有 behavior 
-        // 检查时会递归检查被直接或间接引入的所有behavior 
-      .triggerEvent('eventname',detail,config)  // 触发事件 
-        eventname  // str,事件名  
-        detail     //obj,detail对象,提供给事件监听函数 
-        config: {  // 触发事件的选项 
-          bubbles: <bol>   // 可选,事件是否冒泡,默认: false 
-          ,composed: <bol> // 可选,事件是否可以穿越组件边界,默认: false 
-            为false时,事件将只能在引用组件的节点树上触发,不进入其他任何组件内部 
-          ,capturePhase: <bol> // 可选,事件是否拥有捕获阶段,默认: false 
-        }      
-      .createSelectorQuery()   // 创建一个 SelectorQuery 对象,选择器选取范围为这个组件实例内
-      .selectComponent()       // 使用选择器选择组件实例节点,返回匹配到的第一个组件实例对象
-      .selectAllComponents()   // 使用选择器选择组件实例节点,返回匹配到的全部组件实例对象组成的数组
-      .getRelationNodes()      // 获取所有这个关系对应的所有关联节点,参见 组件间关系
+        .is       str,组件的文件路径
+        .id       str,节点id
+        .dataset  str,节点dataset
+        .data     obj,组件数据,包括内部数据和属性值
+        .setData()       // 设置data并执行视图层渲染
+        .hasBehavior()   // 检查组件是否具有 behavior 
+          // 检查时会递归检查被直接或间接引入的所有behavior 
+        .triggerEvent('eventname',detail,config)  // 触发事件 
+          eventname  // str,事件名  
+          detail     // obj,detail对象,提供给事件监听函数 
+          config: {  // 触发事件的选项 
+            bubbles: <bol>   // 可选,事件是否冒泡,默认: false 
+            ,composed: <bol> // 可选,事件是否可以穿越组件边界,默认: false 
+              为false时,事件将只能在引用组件的节点树上触发,不进入其他任何组件内部 
+            ,capturePhase: <bol> // 可选,事件是否拥有捕获阶段,默认: false 
+          }      
+        .createSelectorQuery()   // 创建一个 SelectorQuery 对象,选择器选取范围为这个组件实例内
+        .selectComponent()       // 使用选择器选择组件实例节点,返回匹配到的第一个组件实例对象
+        .selectAllComponents()   // 使用选择器选择组件实例节点,返回匹配到的全部组件实例对象组成的数组
+        .getRelationNodes()      // 获取所有这个关系对应的所有关联节点,参见 组件间关系
     .wxss 组件样式 
       组件wxss中不应使用ID选择器/属性选择器/标签名选择器 
+  使用自定义组件: 
+    PS: 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀,否则会报错 
+    先在页面的 .json 文件中进行引用声明
+      {
+        "usingComponents": {
+          // 自定义组件的标签名: 对应的自定义组件文件路径 
+          "component-tag-name": "path/to/the/custom/component"  
+        }
+      }
+    在页面的 wxml 中像使用基础组件一样使用自定义组件
+      节点名即自定义组件的标签名,节点属性即传递给组件的属性值 
+    自定义组件引用自定义组件 
+      引用方法类似于页面引用自定义组件的方式[使用 usingComponents 字段] 
+  抽象节点 
+    有时,自定义组件模版中的一些节点,其对应的自定义组件不是由自定义组件本身确定的,
+    而是自定义组件的调用者确定的。
+    这时可以把这个节点声明为“抽象节点”
 API 
   PS: 多数API在执行后有回调['success''fail''complete'],无特别情况下,使用'cfoo'表示[Self];
   网络 
@@ -3578,6 +3663,70 @@ API
       }
     }
   })
+插件,对一组js接口或自定义组件的封装 [1.9.6+] 
+  用于提供给第三方小程序调用,插件必须嵌入在其他小程序中才能被用户使用 
+  插件开发者可以像开发小程序一样编写一个插件并上传代码,
+  在插件发布之后,其他小程序方可调用。
+  小程序平台会托管插件代码,其他小程序调用时,上传的插件代码会随小程序一起下载运行。
+  相对于普通 js 文件或自定义组件,插件拥有更强的独立性,
+  拥有独立的 API 接口、域名列表等,
+  但同时会受到一些限制,如一些 API 无法调用或功能受限。
+分包加载 [1.7.3+] 
+  PS: 开发者将小程序划分成不同的子包,构建时打包成不同的分包,用户使用时按需加载  
+    对小程序进行分包,可优化首次启动的下载时间,及在多团队共同开发时可更好的解耦协作 
+  主包&分包 
+    PS: 构建小程序分包项目时,构建会输出一个或多个功能的分包,
+      其中每个分包小程序必定含有一个主包 
+      在小程序启动时,默认会下载主包并启动主包内页面,
+      如果用户需要打开分包内某个页面,客户端会把对应分包下载下来,下载完成后再进行展示 
+    主包: 放置默认启动页面/TabBar页面,及一些所有分包都需用到公共资源/JS脚本 
+    分包: 是根据开发者的配置进行划分 
+    目前小程序主/分包限制: 
+      整个小程序所有分包大小不超过4M
+      单个分包/主包大小不能超过2M
+  使用方法 
+    假设支持分包的小程序目录结构如下：
+    ├── app.js
+    ├── app.json
+    ├── app.wxss
+    ├── packageA
+    │   └── pages
+    │       ├── cat
+    │       └── dog
+    ├── packageB
+    │   └── pages
+    │       ├── apple
+    │       └── banana
+    ├── pages
+    │   ├── index
+    │   └── logs
+    └── utils
+    开发者通过在 app.json subPackages 字段声明项目分包结构: 
+    {
+      "pages":[
+        "pages/index"
+        ,"pages/logs"
+      ],
+      "subPackages": [
+        { "root": "packageA" ,"pages": [
+          "pages/cat"
+          ,"pages/dog"
+        ]}
+        ,{ "root": "packageB" ,"pages": [
+          "pages/apple"
+          ,"pages/banana"
+        ]}
+      ]
+    }
+    打包原则
+      声明 subPackages 后,将按 subPackages 配置路径进行打包,subPackages 配置路径外的目录将被打包到 app（主包） 中
+      app（主包）也可以有自己的 pages（即最外层的 pages 字段）
+      subPackage 的根目录不能是另外一个 subPackage 内的子目录
+      首页的 TAB 页面必须在 app（主包）内 
+    引用原则
+      packageA 无法 require packageB JS 文件,但可以 require app、自己 package 内的 JS 文件
+      packageA 无法 import packageB 的 template,但可以 require app、自己 package 内的 template
+      packageA 无法使用 packageB 的资源,但可以使用 app、自己 package 内的资源
 配合组件使用的API 
   获取微信用户绑定的手机号,需先调用login接口 
     PS: 因为需要用户主动触发才能发起获取手机号接口,所以该功能不由 API 来调用,

@@ -2209,23 +2209,23 @@ Function,函数基础类,ES中所有函数的基类
         yield `bye`;
       }
   'yield': 相当于暂停执行并且返回信息 
-    Generator函数内可有多个yield 
-    每次调用生成器的.next()方法则执行完一yield后暂停  
-    返回值默认为 undefined,可通过后一次执行时传入的参数来覆盖 
+    PS: Generator函数内可有多个yield 
+      每次调用生成器的.next()方法则执行完一yield后暂停  
+    返回值: 可通过后一次执行时传入的参数来覆盖,默认: undefined  
     yield表达式如果用在另一个表达式中,须放在圆括号里 
       Example: 
-      function* gen() {
-        console.log('hello' + yield);     // SyntaxError
-        console.log('hello' + yield 123); // SyntaxError
-        
-        console.log('hello' + (yield)); // OK
-        console.log('hello' + (yield 123)); // OK
-      }
-    yield表达式用作函数参数或放在赋值表达式的右边,可不加括号 
-      function* gen() {
-        foo(yield 'a', yield 'b'); // OK
-        let input = yield;         // OK
-      }
+        function* gen() {
+          console.log('hello' + yield);     // SyntaxError
+          console.log('hello' + yield 123); // SyntaxError
+          
+          console.log('hello' + (yield)); // OK
+          console.log('hello' + (yield 123)); // OK
+        }
+      yield表达式用作函数参数或放在赋值表达式的右边,可不加括号 
+        function* gen() {
+          foo(yield 'a', yield 'b'); // OK
+          let input = yield;         // OK
+        }
   'yield*': Generator内调用另一Generator 
     若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
     那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
@@ -2277,8 +2277,7 @@ Function,函数基础类,ES中所有函数的基类
         iterator.next(); //{value: "hello", done: false}
         // 若为 iterator.next(); // {value: undefined, done: false}
         iterator.next("world"); // {value: "world", done: false}
-      Output: 
-        格式: { value: <val> ,done: <bol> }
+      Output:  { value: <val> ,done: <bol> }
         value    any,当前执行的yield后表达式的值 
         done     bol,表示是否遍历结束 
     itrt.throw(arg?)      // 在函数体外抛出错误,在Generator内捕获 
@@ -2319,14 +2318,14 @@ Function,函数基础类,ES中所有函数的基类
     return() 将yield表达式替换成一个return语句 
   使用Generator函数实现异步操作 
     原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
-async函数,替代回调函数、解决异步操作的一种方法[ES2017] 
+'async'函数,替代回调函数、解决异步操作的一种方法[ES2017] 
   PS: 函数执行时,遇到'await'就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
     本质上是Generator函数的语法糖 
   async function asc(arg?) {}       // 声明async函数 
   var asc = async function(arg?){}  // 声明async函数 
-  asc(arg?)                         // 执行async函数,返回Promise对象 
-    async函数返回值: promise对象,可使用then方法添加回调函数
-    return返回值: async函数返回值调用then方法传入的参数 
+  asc(arg?)                         // 执行async函数 
+    函数返回值: promise对象,可使用then方法添加回调函数
+    return返回值: 当调用then方法时,作为参数传入  
     async函数返回的Promise对象状态改变的条件:  
       1 内部所有await后的promise变成成功状态
       2 内部await后的promise变成失败状态   
@@ -2334,12 +2333,12 @@ async函数,替代回调函数、解决异步操作的一种方法[ES2017]
       4 抛出错误 
   await promise/原始类型值           // 执行异步操作 
     Input: 当为原始类型值时,相当于同步[被转成一个立即resolve的Promise对象]  
-    Output: 
+    Output: Promise传递值/原始类型值  
       1 await后promise变成成功状态: 输出值为promise成功状态传递值  
       2 await后promise变成失败状态: 输出值为promise失败状态传递值,并结束async函数 
         且将输出值作为async失败状态的传递值 
     Expand: 
-      前一个异步操作失败,也不中断后面的异步操作的方法
+      前一个异步操作失败,也不中断后面的异步操作的方法 
         1 将await放在'try-catch'结构里 
           async function asc() {
             try {
@@ -2353,7 +2352,7 @@ async函数,替代回调函数、解决异步操作的一种方法[ES2017]
         2 await后的Promise跟一个catch方法,处理可能出现的错误  
           async function asc() {
             await Promise.reject('出错了')
-            .catch(e => console.log(e));
+            .catch((e) => console.log(e))
             return await Promise.resolve('hello world');
           }
           asc().then(v => console.log(v))
@@ -2407,7 +2406,7 @@ async函数,替代回调函数、解决异步操作的一种方法[ES2017]
         await db.post(doc);
       }
   'Async Iterator'异步遍历器 
-    PS:Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
+    PS: Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
       该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
       其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束.
     遍历器的next方法必须是同步的,只要调用就必须立刻返回值 
@@ -2428,6 +2427,56 @@ async函数,替代回调函数、解决异步操作的一种方法[ES2017]
         ai.next().then(x => console.log(x)); // { value: 'hello', done: false }
     var ai = ag(arg?)            // 返回一异步遍历器对象  
       ai.next()  
+  Example: 
+    var fn1 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(1);
+          rs(arg+11)
+          rj()
+        },1000)
+      })
+    }
+    var fn3 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(3);
+          rs(arg+11)
+        },1000)
+      })
+    }
+    var fn2 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(2);
+          rs(arg+12)
+        },1000)
+      })
+    }
+    
+    function fn(num) {
+      return fn1(num) // returns a promise
+      .then(v => {
+        return fn2(v); // returns a promise
+      })
+      .catch(e => {
+        return fn3(num)  // returns a promise
+        .then(v => {
+          return fn2(v); // returns a promise
+        }); 
+      })
+    }
+    // 改写为 async 函数 
+    async function fn(num) {
+      let v;
+      v = await fn1(num)
+      .catch(function(info){
+        console.log('出错了');
+      })
+      console.log(v,'v');
+      if (!v) { v = await fn3(num); }
+      return fn2(v);
+    }
 this,JS代码执行时的'context'上下文对象 
   PS: this根据函数执行的场合不同而变化,但始终指向当前运行的对象; 
     在绝大多数情况下,函数的调用方式决定了this的值;

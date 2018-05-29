@@ -2418,9 +2418,9 @@ Promise,同步书写异步模式[ES6]
     将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
   Feature: 
     Promise的状态 
-      'pending'  : 初始状态,未完成或拒绝 
-      'resolved' : 操作成功 
-      'rejected' : 操作失败 
+      'pending': 初始状态,未完成或拒绝 
+      'resolved': 操作成功 
+      'rejected': 操作失败 
       只有异步操作的结果,可以决定当前是哪一种状态,任何其他操作都无法改变这个状态 
       一旦状态改变,就不会再变,任何时候都可以得到这个结果 
       与事件[Event]不同,事件的特点是,若错过了,再去监听则得不到结果  
@@ -2517,17 +2517,21 @@ Promise,同步书写异步模式[ES6]
       reject(error)  表示该pms被拒绝并传递参数'error'
       // resolve reject 函数根据逻辑需要进行相应的执行
   Proto: 
-    .then(fn1(data),fn2(info)?)  pms,Promise的rs或rj触发foo1或foo2 
-      Input: 
-        fn1  成功后的回调 
-          Input: data   Promise的rs传递的数据 
-          Output: 默认返回: undefined,也可自定义返回值 
-        fn2  可选,失败/出错后的回调 
-          Input: info   Promise的rj传递的数据 
-          Output: 默认返回: undefined,也可自定义返回值 
-          Feature: 
-            当该回调不存在时,失败会继续向后传递,直到遇到错误处理,进行回调;
-            存在则捕获失败状态,本次Promise状态结束 
+    .then(fn1(data),fn2(info)?) // pms,Promise的rs或rj触发foo1或foo2 
+      fn1 -> function(data){ // pms成功状态的回调 
+        // data   Promise的rs传递的数据 
+        return val // 可选,后续 then 时的传递值,默认: undefined 
+          原始类型: 直接将其作为后续then中的参数传递  
+          promise: 后续 then 将在该promise上调用  
+      } 
+      fn2 -> function(info){ // 可选,pms失败/出错后的回调 
+        PS: 当该回调不存在时,失败会继续向后传递,直到遇到错误处理,进行回调;
+          存在则捕获失败状态,本次Promise状态结束 
+        // info   Promise的rj传递的数据 
+        return val // 可选,后续 then 时的传递值,默认: undefined  
+          原始类型: 直接将其作为后续then中的参数传递  
+          promise: 后续 then 将在该promise上调用  
+      }  
       Output: 
         情况1: 默认返回一状态已完成的Promise 
           后续调用.then 则直接执行成功的回调,
@@ -2599,11 +2603,17 @@ Promise,同步书写异步模式[ES6]
           // 2-3
           // 当前 3 上一步: 2
           // 3-4
-    .catch(fn)                   pms,用于处理操作异常 
-      pms.catch(function (info) {
-        // 操作失败的处理程序
-      });
-    .finally(fn)                 
+    .catch(function(info){      // pms,用于处理操作异常 
+      // info  pms变成失败状态时,传递的信息 
+      return val  // 可选,后续 then 时的传递值 
+        原始类型: 直接将其作为后续then中的参数传递  
+        promise: 后续 then 将在该promise上调用  
+    })                   
+    .finally(function(){        // pms,最终将执行的操作 
+      return val // 可选,后续 then 时的传递值 
+        原始类型: 直接将其作为后续then中的参数传递  
+        promise: 后续 then 将在该promise上调用  
+    })                 
 Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
   PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
     要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作

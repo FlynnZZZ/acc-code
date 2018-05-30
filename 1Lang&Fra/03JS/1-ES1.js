@@ -2323,23 +2323,51 @@ Function,函数基础类,ES中所有函数的基类
     本质上是Generator函数的语法糖 
   async function asc(arg?) {}       // 声明async函数 
   var asc = async function(arg?){}  // 声明async函数 
-  asc(arg?)                         // 执行async函数 
-    函数返回值: promise对象,可使用then方法添加回调函数
-    return返回值: 当调用then方法时,作为参数传入  
-    async函数返回的Promise对象状态改变的条件:  
-      1 内部所有await后的promise变成成功状态
-      2 内部await后的promise变成失败状态   
-      3 遇到return语句 
-      4 抛出错误 
   await promise/原始类型值           // 执行异步操作 
     Input: 当为原始类型值时,相当于同步[被转成一个立即resolve的Promise对象]  
-    Output: Promise传递值/原始类型值  
+    Output: Promise传递值[而非promise本身]/非Promise值   
       1 await后promise变成成功状态: 输出值为promise成功状态传递值  
       2 await后promise变成失败状态: 输出值为promise失败状态传递值,并结束async函数 
         且将输出值作为async失败状态的传递值 
+      Feature: 
+        await后的Promise,进行then/catch等处理后[包括多次处理],输出值始终为最后处理的传递值 
+          async function fn(){
+            var _a = await new Promise(function(rs,rj){
+              setTimeout(function(){
+                rj('失败传递值')
+              },1000)
+            })
+            .catch(function(info){
+              console.log(info,0);
+              return new Promise(function(rs,rj){
+                setTimeout(function(){
+                  rs('最终传递值')
+                },1000)
+              })
+            })
+            console.log(_a, 1);
+            return '函数Promise成功时的传递值'
+          }
+          fn()
+          .then(function(data){
+            console.log(data,2);
+          })
+          .catch(function(info){
+            console.log(info,3);
+          })
     Expand: 
       前一个异步操作失败,也不中断后面的异步操作的方法 
-        1 将await放在'try-catch'结构里 
+        1 await后的Promise跟一个catch方法,处理可能出现的错误  
+          PS: 若执行catch后,则该await的返回值则为catch返回的值 
+          async function asc() {
+            await Promise.reject('出错了')
+            .catch((e) => console.log(e))
+            return await Promise.resolve('hello world');
+          }
+          asc().then(v => console.log(v))
+          // 出错了
+          // hello world
+        2 将await放在'try-catch'结构里 
           async function asc() {
             try {
               await Promise.reject('出错了');
@@ -2349,15 +2377,6 @@ Function,函数基础类,ES中所有函数的基类
             return await Promise.resolve('hello world');
           }
           asc().then(v => console.log(v))  // hello world
-        2 await后的Promise跟一个catch方法,处理可能出现的错误  
-          async function asc() {
-            await Promise.reject('出错了')
-            .catch((e) => console.log(e))
-            return await Promise.resolve('hello world');
-          }
-          asc().then(v => console.log(v))
-          // 出错了
-          // hello world
       多个await异步操作,若不存在继发关系,最好同时触发 
         var fn1 = function(){
           return new Promise(function(rs,rj){
@@ -2392,6 +2411,16 @@ Function,函数基础类,ES中所有函数的基类
         asc().then(function(data){
           console.log(data);    // { k1: '操作1数据', k2: '操作2数据' } 
         })
+  asc(arg?)                         // 执行async函数 
+    return返回值: 
+      非Promise值: 作为后续调用then方法时的参数传入  
+      Promise对象: 后续then时,使用该Promise的逻辑 
+    函数输出: promise对象,全部成功时传递值为return值/首次失败的的失败传递值[并结束函数] 
+    async函数返回的Promise对象状态改变的条件:  
+      1 内部所有await后的promise变成成功状态
+      2 内部await后的promise变成失败状态 
+      3 遇到return语句 
+      4 抛出错误 
   采用异步函数作为回调 
     将forEach方法的参数改成async函数存在问题 
       let docs = [{}, {}, {}];

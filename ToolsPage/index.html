@@ -11,29 +11,33 @@
 </head>
 
 <body>
+  <article id="app"> 
+    <div class="links">
+      <a :href="val.src" target="_blank" class="link" 
+      v-for="(val,key) in items1"> {{val.title}} </a>
+    </div>
+    
+    <div class="tools">
+      <section class="aItme" v-for="item in items"> 
+        <h4>{{item.tl}}</h4>
+        <ul>
+          <li v-for="item1 in item.items">
+            <a :href="item1.href" target="_blank"> {{item1.name}} </a>
+          </li>
+        </ul>
+      </section>
+    </div>
   
-  <article id="aoo"> 
-    <section class="aItme" v-for="item in items"> 
-      <h4>{{item.tl}}</h4>
-      <ul>
-        <li v-for="item1 in item.items">
-          <a :href="item1.href" target="_blank"> {{item1.name}} </a>
-        </li>
-      </ul>
-    </section>
   </article>
-  
-  <div class="links">
-    <a href="./pages/course/index.html" class="link"> 教程 </a>
-  </div>
 </body>
 <script src="./data.js" charset="utf-8"></script>
 <script type="text/javascript">
   new Vue({
-    el: '#aoo',
-    data: {
+    el: '#app'
+    ,data: {
       items: _data 
-    },
+      ,items1: _data1 
+    }
   });
 </script>
 </html>

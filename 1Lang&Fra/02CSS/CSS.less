@@ -2578,10 +2578,16 @@ Size,尺寸
         -webkit-box-orient:vertical;
         -moz-box-orient:vertical;
         box-orient:vertical;
-ios 
-  微信 
-    滑动不流畅 
-      解决办法: 添加属性  -webkit-overflow-scrolling: touch;
+IOS  
+  -webkit-overflow-scrolling: <kw>;  使用的滚动方式 
+    PS: 仅iOS设备支持的非标准属性 
+    auto   默认值,普通的无惯性滚动效果 
+    touch  原生的滚动效果  
+      使用此效果会构造一个 'stacking context' 
+      可用于解决: 滑动不流畅,无惯性  
+      会导致的其他问题 
+        1 手势可穿过其他元素触发元素滚动 
+        ...
 --------------------------------------------------------------------------------
 新内容 [可能存在兼容性问题]
 var() CSS变量 

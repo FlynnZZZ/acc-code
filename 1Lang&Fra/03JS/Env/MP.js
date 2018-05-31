@@ -1,4 +1,4 @@
-MiniProgrom微信小程序 
+MiniProgrom,微信小程序 
   依赖于微信平台,使用微信台提供的 View/Event/Component/Container 等构建 
   介于 Web App 和 Native App 之间的一种类型 
 说明 
@@ -85,7 +85,7 @@ MiniProgrom微信小程序
     1097  微信支付签约页
 基础 
   模块化 
-    PS: 文件作用域: 在JS文件中声明的变量和函数只在该文件中有效
+    PS: 文件作用域: 在JS文件中声明的变量和函数只在该文件中有效 
       小程序目前不支持直接引入 node_modules 
       开发者需要使用到 node_modules 时候建议拷贝出相关的代码到小程序的目录中
     通过 module.exports/exports 对外暴露接口 
@@ -1398,7 +1398,14 @@ MiniProgrom微信小程序
         "自定义组件的标签名": "对应的自定义组件文件路径"
       }}
     .wxml 组件模版 
+      <view class="wrapper">
+        <view>这里是组件的内部节点</view>
+        <slot name="slot1"></slot>
+        <slot name="slot2"></slot>
+      </view>
       <slot>节点: 用于承载组件引用时提供的子节点 
+        默认支持单<slot>,添加多个,需在 Component() 中设置
+        多<slot>通过'name'属性来区分 
     .js  
       Component({ // 注册组件,提供组件的属性定义/内部数据/自定义方法 
         // Component 构造器构造的组件也可以作为页面使用 
@@ -1519,8 +1526,10 @@ MiniProgrom微信小程序
               将为它添加以下两个属性
               name    str,在表单中的字段名 [1.6.7+]
               value   在表单中的字段值  [1.6.7+]
-        ,externalClasses:   // 可选,组件接受的外部样式类 
-        ,options:   // 可选,一些组件选项 
+        ,externalClasses: []   // 可选,组件接受的外部样式类 
+        ,options: { // 可选,一些组件选项 
+          multipleSlots: true // 启用多slot支持,默认只支持单slot 
+        }  
       }) 
       组件实例通用的属性/方法 
         .is       str,组件的文件路径
@@ -1544,10 +1553,33 @@ MiniProgrom微信小程序
         .selectAllComponents()   // 使用选择器选择组件实例节点,返回匹配到的全部组件实例对象组成的数组
         .getRelationNodes()      // 获取所有这个关系对应的所有关联节点,参见 组件间关系
     .wxss 组件样式 
-      组件wxss中不应使用ID选择器/属性选择器/标签名选择器 
+      只对组件wxml内的节点生效 
+      选择器的使用选择 
+        不应使用 ID选择器/属性选择器/标签名选择器,而改用 class选择器 
+        组件和引用组件的页面中使用后代选择器[.a .b]在一些极端情况下会有非预期的表现,请避免使用 
+        子元素选择器[.a>.b]只能用于 view 组件与其子节点之间,用于其他组件可能导致非预期的情况 
+      样式继承 
+        继承样式,如 font、color,会从组件外继承到组件内 
+        除继承样式外,app.wxss 中的样式、组件所在页面的的样式对自定义组件无效 
+      组件可指定其所在节点的默认样式,使用 :host 选择器 [1.7.2+] 
+      外部样式类 
+        组件接受外部传入的样式类
+        先在 Component() 中通过'externalClasses'定义段定义若干个外部样式类 [1.9.90+] 
+          在同一个节点上使用普通样式类和外部样式类时,两个类的优先级是未定义的,因此最好避免这种情况。
+        注意：
+        
+        代码示例：
+        
+        /* 组件 custom-component.js */
+        Component({
+          externalClasses: ['my-class']
+        })
+        <!-- 组件 custom-component.wxml -->
+        <custom-component class="my-class">这段文本的颜色由组件外的 class 决定</custom-component>
+        这样,组件的使用者可以指定这个样式类对应的 class ,就像使用普通属性一样。
   使用自定义组件: 
     PS: 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀,否则会报错 
-    先在页面的 .json 文件中进行引用声明
+    先在页面的 .json 文件中进行引用声明 
       {
         "usingComponents": {
           // 自定义组件的标签名: 对应的自定义组件文件路径 
@@ -1556,6 +1588,9 @@ MiniProgrom微信小程序
       }
     在页面的 wxml 中像使用基础组件一样使用自定义组件
       节点名即自定义组件的标签名,节点属性即传递给组件的属性值 
+      <slot> 
+        单<slot>时,默认将组件内的节点替换到定义时的位置 
+        多<slot>时,通过'slot'属性和定义时的'name'属性对应,从而进行匹配   
     自定义组件引用自定义组件 
       引用方法类似于页面引用自定义组件的方式[使用 usingComponents 字段] 
   抽象节点 

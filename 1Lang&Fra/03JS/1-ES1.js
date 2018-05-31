@@ -2319,12 +2319,12 @@ Function,函数基础类,ES中所有函数的基类
   使用Generator函数实现异步操作 
     原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
 'async'函数,替代回调函数、解决异步操作的一种方法[ES2017] 
-  PS: 函数执行时,遇到'await'就会先返回,等到异步操作完成,再接着执行函数体内后面的语句 
+  PS: 函数执行时,遇到'await'等待其后的异步操作完成,再接着执行函数体内后面的语句 
     本质上是Generator函数的语法糖 
   async function asc(arg?) {}       // 声明async函数 
   var asc = async function(arg?){}  // 声明async函数 
-  await promise/原始类型值           // 执行异步操作 
-    Input: 当为原始类型值时,相当于同步[被转成一个立即resolve的Promise对象]  
+  await promise/非Promise值         // 执行异步操作 
+    Input: 为非Promise值时,相当于同步[被转成一个立即resolve的Promise对象]  
     Output: Promise传递值[而非promise本身]/非Promise值   
       1 await后promise变成成功状态: 输出值为promise成功状态传递值  
       2 await后promise变成失败状态: 输出值为promise失败状态传递值,并结束async函数 

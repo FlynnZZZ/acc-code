@@ -2440,10 +2440,6 @@ Promise,同步书写异步模式[ES6]
       Input: 由Promise对象组成的数组 
       Output: 首个'changed'的Promise,状态和传递值由该Promise决定 
     Promise.resolve(val)    返回'fulfilled'状态的Promise  
-      Input: 原始类型 ,Output: 'fulfilled'状态的Promise,传递val值  
-        Promise.resolve('coo').then(function(msg){
-          console.log(msg);
-        })
       Input: Promise ,Output: 该Promise,由该Promise决定传递值  
         Promise.resolve(new Promise(function(rs,rj){
           setTimeout(function(){
@@ -2455,18 +2451,22 @@ Promise,同步书写异步模式[ES6]
         })
         // 传递的信息 
       Input: 带有'then'方法的非Promise对象 ,Output: 状态和传递值由定义的then方法执行决定的Promise 
-        var likePms = {
+        Promise.resolve({
           then: function(rs,rj){
             // console.log(arg(11),'thenable');
             // rs('boo')
             rj('boo1')
           }
-        }
-        Promise.resolve(likePms)
+        })
         .then(function(data){
           console.log(data);
         }
         ,function(msg){
+          console.log(msg);
+        })
+      Input: 其他值 ,Output: 'fulfilled'状态的Promise,传递val值  
+        Promise.resolve('传递的数据')
+        .then(function(msg){
           console.log(msg);
         })
     Promise.reject(val)     返回'rejected'状态的Promise 
@@ -2475,8 +2475,10 @@ Promise,同步书写异步模式[ES6]
       PS: Promise在创建时,参数函数就会执行 
         若在方法的执行过程中抛出了任何异常,那么promise立即'rejected' 
       rs/rj 函数根据逻辑需要进行相应的执行 
-        rs(data) 将该Promise变成'fulfilled',传递data值
+        rs(data) 将该Promise变成'fulfilled',传递data值 
+          传入不同类型的值,函数输出和传递值的逻辑同 Promise.resolve() 
         rj(info) 将该Promise变成'rejected',传递info值 
+          传入不同类型的值,函数输出和传递值的逻辑同 Promise.reject() 
         rs/rj 后,若该函数未return,则会继续向后执行,但不影响Promise的状态和值的传递 
           new Promise(function(rs,rj){
             rs('success')

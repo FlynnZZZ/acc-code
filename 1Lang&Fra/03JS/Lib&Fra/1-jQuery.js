@@ -240,29 +240,29 @@ jEl 操作
     jEl.prepend('htmlCode'/jEl)    内部头部插入参数目标 
     jEl.prependTo("selector"/jEl)  插入参数目标的内部头部 
       将元素/内容content插入到元素内部头部
-    jEl.append('htmlCode'/jEl)     内部尾部插入
+    jEl.append('htmlCode'/jEl)     调用值内部尾部插入参数值 
       也可以将style标签内的css代码添加到head中
-    jEl1.appendTo("selector"/jEl2) 被插入到内部尾部 [与append顺序相反]
+    jEl1.appendTo("selector"/jEl2) 调用值插入到参数值的内部尾部 
       Example:
         .aoo{ background-color:pink;}
         $("<b>Hello</b>",{"class":"aoo"}).appendTo("p");
         // 在所有的p标签中添加粗体的Hello,且背景为pink
-    jEl.before('htmlCode'/jEl)     将html代码/jEl添加到元素外部头部
-    jEl.insertBefore("selector"/jEl) 被插入到外部头部 [与before相反]
+    jEl.before('htmlCode'/jEl)     将html代码/jEl添加到元素外部头部 
+    jEl.insertBefore("selector"/jEl) 被插入到外部头部 [与before相反] 
       将元素/内容content插入到元素外部尾部 
-    jEl.after('htmlCode'/jEl)      外部尾部插入
-    jEl.insertAfter("selector"/jEl) 被插入到外部尾部 [与after相反]
+    jEl.after('htmlCode'/jEl)      外部尾部插入 
+    jEl.insertAfter("selector"/jEl) 被插入到外部尾部 [与after相反] 
       将元素/内容content插入到元素外部尾部  
-    jEl.wrap("HTML代码"/jEl)          每个元素外包裹元素
-    jEl.wrapAll("HTML代码"/jEl)       所有元素整体外包裹元素
-    jEl.unwrap("HTML代码"/jEl)        元素外包裹的元素去除[?]
+    jEl.wrap("HTML代码"/jEl)          每个元素外包裹元素 
+    jEl.wrapAll("HTML代码"/jEl)       所有元素整体外包裹元素 
+    jEl.unwrap("HTML代码"/jEl)        元素外包裹的元素去除[?] 
       Example:
         <a href="#"><div class="aoo"> 123123 </div></a>
         $('.aoo').unwrap('a');
         结果为: <div class="aoo"> 123123 </div>
-    jEl.wrapInner("HTML代码"/jEl)     将每个元素的内容包裹
+    jEl.wrapInner("HTML代码"/jEl)     将每个元素的内容包裹 
     jEl1.replaceWith("HTML代码"/el/jEl)  参数元素替换当前元素 
-    jEl1.replaceAll("selector"/jEl2)  元素2代替为元素1 [与replaceWith相反]
+    jEl1.replaceAll("selector"/jEl2)  元素2代替为元素1 [与replaceWith相反] 
       $("HTML代码")/jEl1.replaceAll("selector"/jEl2); 
     jEl.html(str/foo); 设置/获取元素内容
       无参数:以字符串形式返回元素内容,包括HTML标签

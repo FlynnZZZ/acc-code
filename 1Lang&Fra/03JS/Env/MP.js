@@ -477,7 +477,7 @@ MiniProgrom,微信小程序
     PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
   视图组件 
     <view>         视图容器 
-      hover-stop-propagation 是否阻止节点的祖先节点出现点击态,默认'false'['1.5.0+'] ? 
+      hover-stop-propagation 是否阻止节点的祖先节点出现点击态,默认:false ['1.5.0+'] ? 
       hover-class   指定点击后的样式类 
         "none"   默认值,没有点击态效果 
       hover-start-time  点击后多久出现点击态,单位ms,默认'50'  
@@ -527,6 +527,17 @@ MiniProgrom,微信小程序
       damping   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认'20' 
       friction  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认'2' 
         必须大于0,否则会被设置成默认值
+    <cover-view>   覆盖在原生组件上的文本视图 ['1.4.0+'] 
+      PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
+        文本建议都套上<cover-view>标签,避免排版错误 
+    <cover-image/> 覆盖在原生组件之上的图片视图 ['1.4.0+'] 
+      PS: 可覆盖的原生组件同<cover-view>,避免嵌套在其他组件内 
+        支持嵌套在<cover-view>里 
+        事件模型遵循冒泡模型,但不会冒泡到原生组件 
+        只支持基本的定位、布局、文本样式。不支持设置单边的border、opacity、background-image等。
+        建议子节点不要溢出父节点
+        暂不支持css动画 
+      src  图标路径,支持临时路径,暂不支持base64与网络地址 
     <swiper>       滑块视图容器,也叫轮播组件 
       PS: 其中只能放置<swiper-item>组件,否则会被删除? 
       indicator-dots  是否显示面板指示点,默认'false' 
@@ -595,17 +606,6 @@ MiniProgrom,微信小程序
             })
           }
         })
-    <cover-view>   覆盖在原生组件上的文本视图 ['1.4.0+'] 
-      PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
-        文本建议都套上<cover-view>标签,避免排版错误 
-    <cover-image/> 覆盖在原生组件之上的图片视图 ['1.4.0+'] 
-      PS: 可覆盖的原生组件同<cover-view>,避免嵌套在其他组件内 
-        支持嵌套在<cover-view>里 
-        事件模型遵循冒泡模型,但不会冒泡到原生组件 
-        只支持基本的定位、布局、文本样式。不支持设置单边的border、opacity、background-image等。
-        建议子节点不要溢出父节点
-        暂不支持css动画 
-      src  图标路径,支持临时路径,暂不支持base64与网络地址 
   基础内容 
     <icon/>   图标 
       type   icon的类型 
@@ -746,7 +746,7 @@ MiniProgrom,微信小程序
       hover-stop-propagation 指定是否阻止本节点的祖先节点出现点击态,默认'false'['1.5.0+']
       hover-start-time   按住后多久出现点击态,单位ms,默认'50'  
       hover-stay-time    手指松开后点击态保留时间,单位ms,默认'600' 
-  表单 
+  表单组件  
     <form>   表单 
       PS: 当点击<form>内'formType'为'submit'的<button>组件时,会提交表单 
       report-submit  是否返回formId用于发送模板消息 
@@ -1027,7 +1027,9 @@ MiniProgrom,微信小程序
         'fill'     填充
         'cover'    覆盖 
       poster      默认控件上的音频封面的图片资源地址['controls'需为true]
-  其他 
+    <camera> 系统相机 [1.6.0+] 
+    <live-player> 实时音视频播放 
+  其他组件 
     <map> 地图 
       PS: 客户端创建的原生组件,它的层级是最高的
         请勿在 scroll-view 中使用 map 组件。 css 动画对 map 组件无效。
@@ -1565,18 +1567,7 @@ MiniProgrom,微信小程序
       外部样式类 
         组件接受外部传入的样式类
         先在 Component() 中通过'externalClasses'定义段定义若干个外部样式类 [1.9.90+] 
-          在同一个节点上使用普通样式类和外部样式类时,两个类的优先级是未定义的,因此最好避免这种情况。
-        注意：
-        
-        代码示例：
-        
-        /* 组件 custom-component.js */
-        Component({
-          externalClasses: ['my-class']
-        })
-        <!-- 组件 custom-component.wxml -->
-        <custom-component class="my-class">这段文本的颜色由组件外的 class 决定</custom-component>
-        这样,组件的使用者可以指定这个样式类对应的 class ,就像使用普通属性一样。
+          在同一个节点上使用普通样式类和外部样式类时,两个类的优先级是未定义的,因此最好避免该情况 
   使用自定义组件: 
     PS: 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀,否则会报错 
     先在页面的 .json 文件中进行引用声明 

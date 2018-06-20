@@ -2421,8 +2421,8 @@ Promise,同步书写异步模式[ES6]
       'pending': 初始状态,未完成或拒绝 
       'fulfilled': 成功状态  
       'rejected': 失败状态 
-      'changed': 'fulfilled'和'rejected'的统称 
-      可在'changed'状态下进行回调操作 
+      'settled': 'fulfilled'和'rejected'的统称 
+      可在'settled'状态下进行回调操作 
     Promise的缺点 
       首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
       其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
@@ -2431,14 +2431,14 @@ Promise,同步书写异步模式[ES6]
     Promise.length    '1',构造器参数的数目 
     Promise.all(pmsArr)  Promise,全局模式 
       Input: 由Promise对象组成的数组 
-      Output: 'changed'状态的Promise 
+      Output: 'settled'状态的Promise 
         所有Promise都'fulfilled',则输出'fulfilled'的Promise 
           传递值为每个Promise'fulfilled'状态传递值组成的数组 
         有一个Promise为'rejected'则输出'rejected'的Promise 
           传递值为第一个'rejected'的Promise'rejected'的传递值 
     Promise.race(pmsArr) Promise,竞速模式 
       Input: 由Promise对象组成的数组 
-      Output: 首个'changed'的Promise,状态和传递值由该Promise决定 
+      Output: 首个'settled'的Promise,状态和传递值由该Promise决定 
     Promise.resolve(val)    返回'fulfilled'状态的Promise  
       Input: Promise ,Output: 该Promise,由该Promise决定传递值  
         Promise.resolve(new Promise(function(rs,rj){

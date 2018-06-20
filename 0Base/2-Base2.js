@@ -149,10 +149,13 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         Content-Length: 376  // 请求体大小 
         Cookie:       // 请求页Cookies  
         ★状态描述 
-        Connection:      // 浏览器与服务器间连接的类型 
+        Connection: <KW>       // 浏览器与服务器间连接的类型 
           'close'      指服务器像明确断开连接
           'Keep-Alive' 保持持久连接,'HTTP/1.1'前默认为非持久性的
             如需要保存持久连接,需要增加此字段
+        Proxy-Connection: <KW> // 客户端和服务器间用于传输HTTP数据的TCP连接是否关闭
+          keep-alive 不关闭,客户端再次访问这个服务器上的网页,会继续使用这一条已经建立的连接
+          close      关闭,客户端再次访问这个服务器上的网页,需要重新建立连接 
         ★控制信息 
         Cache-Control:  // 缓存控制 
           no-cache
@@ -169,7 +172,6 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         Via:              显示了报文经过的中间节点（代理、网关）
         Trailer:          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
         Trailer-Encoding: 告诉接收端对报文采用什么编码格式
-        Proxy-Connection: keep-alive 
         Authorization       客户端的认证信息 
         From                客户端邮件地址
         Expect              允许客户端列出请求所要求的服务器行为
@@ -185,7 +187,11 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         StatusText: 响应状态文本描述[仅供查看,而不被浏览器识别]
       key1: val1                                  // 可选,响应头 
         PS: 包含如服务器类型、日期时间、内容类型和长度等信息  
-        Content-Type:            响应MIME及编码  
+        Server: xxx      服务器软件名称及版本 
+          Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30
+          BWS/1.1                                                         
+        ★响应的属性  
+        Content-Type: <KW>         响应的MIME及编码[类型和字符集]  
           text/html; charset=utf8   HTML文件 
           application/javascript    JS文件
         Content-Encoding:        主体编码格式 
@@ -195,26 +201,30 @@ HTTP/HTTPS'Hypertext Transfer Protocol'超文本传送协议
         Content-Location         资源实际位置 
         Content-MD5              主体的MD5校验和 
         Content-Range            在整个资源中此实体部分的字节范围  
-        Set-Cookie       设置cookie 
+        Date: <time>   报文创建时间
+          如: Sat, 04 Nov 2017 07:43:44 GMT 
+        ★缓存控制 
+        Cache-Control: <KW>    缓存控制 
+          private  不能被共享缓存处理,对于其他用户的请求无效 
+        Expires: <time>        缓存过期时间[限定时间内使用缓存]  
+          如: Sat, 05 Aug 2017 04:37:42 GMT 
+        ★其他操作 
+        Set-Cookie: xx=xxx; ..        设置cookie 
+          如: H_PS_PSSID=sdfdfas; path=/; domain=.baidu.com
         Connection       客户端和服务器是否保持连接,浏览器和服务器之间连接的类型 
         Pragma           早期的随报文传送指示方式
-        Cache-Control    缓存控制 
         ETag: "4a67-55cfb373dc45b" 主体的实体标记  
         Update:           给出了发送端可能想要升级使用新版本或协议
         Via              显示了报文经过的中间节点（代理、网关）
         Trailer          如果报文采用分块传输编码方式,可以利用这个首部列出位于报文trailer部分的首部集合
         Trailer-Encoding 告诉接收端对报文采用什么编码格式
         Accept-Ranges: bytes
-        Date: Sat, 04 Nov 2017 07:43:44 GMT   日期,报文创建时间
         Keep-Alive: timeout=38
         Last-Modified    实体最后一次修改时间 
           Last-Modified: Thu, 02 Nov 2017 07:48:36 GMT
-        Server:         // 服务器软件名称及版本 
-          Server: Apache/2.4.25 (Win32) OpenSSL/1.0.2j PHP/5.6.30
         Age              响应持续时间 
         Allow            列出了可用的请求方法 
         Location         告诉客户端实在在哪里,用于定向 
-        Expires          过期时间  
       // 空行 
       key1: val1                                  // 可选,响应体   
   网址的组成  

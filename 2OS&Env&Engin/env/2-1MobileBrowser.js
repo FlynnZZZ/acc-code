@@ -15,23 +15,23 @@ HTML标签
     采用js动态计算给文档的根节点 font-size 赋值,并以此为尺寸参考进行网页布局.
     可参考淘宝的布局.
   使用的时,将下面的代码放到页面的顶部（head标签内）；
-  <script>
-    // Input: {
-    //   maxWidth: ''  // 单位px 
-    //   ,minWidth: ''  // 单位px 
-    // }
-    function changeFont(config) {
-      var originWidth =375; // 用来设置设计稿原型的屏幕宽度 此处以 Iphone 6为例
-      var currClientWidth = document.documentElement.clientWidth;
-      //设置屏幕的最大和最小值时设定一默认值
-      if (currClientWidth > 640) { currClientWidth = 640; }
-      if (currClientWidth < 320) { currClientWidth = 320; }
-      document.documentElement.style.fontSize = currClientWidth /originWidth ;
-      // 将 1rem 设置为相当于iPhone6 的 1px
-    }
-    changeFont();
-    window.addEventListener('resize', changeFont, false); //注册 resize事件
-  </script>
+  // <script>
+  //   // Input: {
+  //   //   maxWidth: ''  // 单位px 
+  //   //   ,minWidth: ''  // 单位px 
+  //   // }
+  //   function changeFont(config) {
+  //     var originWidth =375; // 用来设置设计稿原型的屏幕宽度 此处以 Iphone 6为例
+  //     var currClientWidth = document.documentElement.clientWidth;
+  //     //设置屏幕的最大和最小值时设定一默认值
+  //     if (currClientWidth > 640) { currClientWidth = 640; }
+  //     if (currClientWidth < 320) { currClientWidth = 320; }
+  //     document.documentElement.style.fontSize = currClientWidth /originWidth ;
+  //     // 将 1rem 设置为相当于iPhone6 的 1px
+  //   }
+  //   changeFont();
+  //   window.addEventListener('resize', changeFont, false); //注册 resize事件
+  // </script>
   
   ;(function (doc ,win ,config) {
     var config = config || {}

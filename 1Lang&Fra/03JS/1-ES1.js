@@ -242,61 +242,62 @@
           使用给定的代码点来产生相应的单个字符
           console.log(String.fromCodePoint(134071));  // "𠮷"
 引用类型: 引用类型的值是对象,保存在堆内存中 
-  PS: 包含引用类型值的变量是一个指向对象的指针,
+  PS: 包含引用类型值的变量是一个指向对象的指针 
     变量赋值,复制的其实是指针,因此两个变量最终都指向同一个对象 
     对象是若干名值的合集,一般没有长度
     对象分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
-  'key-val'键值对表现形式: 对象成员都是用一个名称来标记的  
-    PS: 访问对象不存在的属性,返回'undefined' 
-      对象默认是可扩展的,可以向对象中添加、删除属性和方法
-    'key'键  str,属性名或方法名,
-      需用引号的情况: 非合法的变量名,或包含除特殊字符,或以数字开头,或为JS保留字;
-      Example: 
-        var aoo = { "d sd ":1 }
-        console.log(aoo["d sd "]); // 1
-        
-        var obj = {};
-        var obj1 = {a : 1}
-        obj[obj1] = 2;
-        console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
-        console.log(obj[{}]); // 2 
-        console.log(obj[{b:3}]); // 2 
-    'val'值  any/expr,属性值或方法 
-      var obj = {
-        key1 : new Date().getHours()
-      }
-      console.log(obj); // {key1: 21} 
-    obj[<key>]  读写属性值 
-      key    expr,系统将自动转化为字符串 
-    obj.<key>   读写属性值,
-      PS: 属性名不是一个合法的变量名时,只能使用中括号的形式访问;
-    obj.<key>() 方法调用 
   创建对象: 'class'类,语言提供的自定义数据类型的机制,用于创建对象 
     PS: 类就是对象的数据类型,对象就是类的具象化 
+    key: val,键值对表现形式: 对象成员都是用一个名称来标记的  
+      PS: 访问对象不存在的属性,返回'undefined' 
+        对象默认是可扩展的,可以向对象中添加、删除属性和方法
+      'key'键  str,属性名或方法名,
+        需用引号的情况: 非合法的变量名,或包含除特殊字符,或以数字开头,或为JS保留字;
+        Example: 
+          var aoo = { "d sd ":1 }
+          console.log(aoo["d sd "]); // 1
+          
+          var obj = {};
+          var obj1 = {a : 1}
+          obj[obj1] = 2;
+          console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
+          console.log(obj[{}]); // 2 
+          console.log(obj[{b:3}]); // 2 
+      'val'值  any/expr,属性值或方法 
+        var obj = {
+          key1 : new Date().getHours()
+        }
+        console.log(obj); // {key1: 21} 
+      obj[<key>]  读写属性值 
+        key    expr,系统将自动转化为字符串 
+      obj.<key>   读写属性值,
+        PS: 属性名不是一个合法的变量名时,只能使用中括号的形式访问;
+      obj.<key>() 方法调用 
+    get key(){}/set key(){} getter/setter取值、存值函数创建伪属性  
+      PS: 不可在具有真实值的属性上同时拥有getter/setter 
     var obj = {}  字面量创建对象 
       {     
         key1: val1      
         ,...          // 名值对间使用逗号隔开
-        // getter/setter 用以创建伪属性,不可在具有真实值的属性上同时拥有getter/setter 
         ,get key1() { return val; }   // 取值函数 
+          this  表示该对象 
           key1   可使用[expr]表达式的返回值[ES2015] 
             var expr = 'foo';
             var obj = {
               get [expr]() { return 'bar'; }
             };
             console.log(obj.foo); // "bar"
-          this  表示该对象 
           可通过 delete 操作符删除 getter 
             delete obj.key1;
           延时执行: 在访问前不会计算属性的值 
         ,set key1() {}                // 存值函数 
+          this  表示当前对象  
           key1  可使用[expr]表达式的返回值[ES2015] 
             var expr = 'foo';
             var obj = {
               set [expr](val) { console.log(val); }
             };
             obj.foo = 1 // 1 
-          this  表示当前对象  
           可用delete操作来移除 
             delete obj.key1;
         ,...
@@ -333,62 +334,62 @@
             writable : true
           }
         });
-    仿造类的实现方式:
-    var obj = foo()  工厂模式: 创建一对象并返回 
-      PS: 工厂模式使软件领域一种广为人知的设计模式 
-      function createObject(name,age){    // 创建工厂函数 
-        var obj = new Object();           //创建对象
-        obj.name = name;                  //添加属性
-        obj.age = age;
-        obj.run = function(){             //添加方法
-          return this.name+this.age+"运行中";
-        };
-        return obj;                       //返回对象引用
-      }
-      var aoo = createObject("lee",100);       //创建第一个对象
-      aoo.run();    // "lee100运行中"
-      缺点: 无法继承; 无法识别对象的类型 
-    var obj = new Foo() 自定义构构造函数[类]实例化对象 
-      混合的构造函数: 构造函数+原型对象  
-        构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
-        Example: 
-        function Foo(arg1,arg2) { 
-          this.key1 = arg1; 
-          this.key2 = arg2; 
+    仿造类的实现方式: 
+      var obj = foo()  工厂模式: 创建一对象并返回 
+        PS: 工厂模式使软件领域一种广为人知的设计模式 
+        function createObject(name,age){    // 创建工厂函数 
+          var obj = new Object();           //创建对象
+          obj.name = name;                  //添加属性
+          obj.age = age;
+          obj.run = function(){             //添加方法
+            return this.name+this.age+"运行中";
+          };
+          return obj;                       //返回对象引用
         }
-        Foo.prototype = {
-          constructor: Foo,
-          foo1: function(){
-          },
-        }
-      构造函数创建对象的过程: 
-        1 创建一个新对象'newObj' 
-        2 将this就指向了'newObj';
-        3 为'newObj'添加属性/方法;
-        4 返回'newObj'
-      若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
-        若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
-        即返回值的优先级更高
-        var Foo = function(){
-          this.aoo = 1;
-          this.boo = 2;
-          return 1;
-        }
-        var Goo = function(){
-          this.aoo = 1;
-          this.boo = 2;
-          return {a:'a'}
-        }
-        console.log(new Foo(),new Goo()); 
-        // Foo {aoo: 1, boo: 2}    {a: "a"}
-      未使用'new'实例化对象时,相当于直接执行函数,导致'window'属性意外增加 
-        直接执行构造函数,使内部的'this'指向的是全局对象window 
-        function Foo(arg1,arg2){ 
-          this.aoo = arg1; 
-          this.boo = arg2; 
-        }
-        var obj = Foo(2,3);
-        console.log(window.aoo,boo); // 2,3 
+        var aoo = createObject("lee",100);       //创建第一个对象
+        aoo.run();    // "lee100运行中"
+        缺点: 无法继承; 无法识别对象的类型 
+      var obj = new Foo() 自定义构构造函数[类]实例化对象 
+        混合的构造函数: 构造函数+原型对象  
+          构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
+          Example: 
+          function Foo(arg1,arg2) { 
+            this.key1 = arg1; 
+            this.key2 = arg2; 
+          }
+          Foo.prototype = {
+            constructor: Foo,
+            foo1: function(){
+            },
+          }
+        构造函数创建对象的过程: 
+          1 创建一个新对象'newObj' 
+          2 将this就指向了'newObj';
+          3 为'newObj'添加属性/方法;
+          4 返回'newObj'
+        若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
+          若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
+          即返回值的优先级更高
+          var Foo = function(){
+            this.aoo = 1;
+            this.boo = 2;
+            return 1;
+          }
+          var Goo = function(){
+            this.aoo = 1;
+            this.boo = 2;
+            return {a:'a'}
+          }
+          console.log(new Foo(),new Goo()); 
+          // Foo {aoo: 1, boo: 2}    {a: "a"}
+        未使用'new'实例化对象时,相当于直接执行函数,导致'window'属性意外增加 
+          直接执行构造函数,使内部的'this'指向的是全局对象window 
+          function Foo(arg1,arg2){ 
+            this.aoo = arg1; 
+            this.boo = arg2; 
+          }
+          var obj = Foo(2,3);
+          console.log(window.aoo,boo); // 2,3 
   对象成员的特性'attributes' 
     PS: 'writable'、'enumerable'、'configurable'只能通过函数来设定 
       这些特性是为了实现JS引擎用的,在JS中不能直接访问它们。

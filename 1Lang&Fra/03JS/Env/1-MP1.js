@@ -20,7 +20,8 @@
       范围:0-(内容宽-视区宽),大于最大值取最大值,小于最小值取最小值  
     scroll-top="<num>"     设置纵向滚动条位置,单位:px 
       范围:0-(内容宽-视区高),大于最大值取最大值,小于最小值取最小值  
-    scroll-into-view="<str>"   将元素滚动到可视区,值应为某子元素id 
+    scroll-into-view="<str>"   将元素滚动到可视区,值应为某后代元素的id 
+      默认将匹配的元素置于可视区头部 
       优先级高于'scroll-top'
       设置哪个方向可滚动,则在哪个方向滚动到该元素 
     upper-threshold="<num>"   距顶/左部触发'scrolltoupper'事件的距离,单位:px,默认: 50  
@@ -28,14 +29,14 @@
     bind:scrolltoupper="<fn>" 绑定'scrolltoupper'事件 
     bind:scrolltolower="<fn>" 绑定'scrolltolower'事件 
     bind:scroll="<fn>"        滚动时触发 
-      event.detail 此时为: {
-        scrollLeft
-        ,scrollTop
-        ,scrollHeight
-        ,scrollWidth
-        ,deltaX
-        ,deltaY
-      } 
+      event  
+        .detail  
+          .scrollLeft   // 左滚动的距离 
+          .scrollTop    // 上滚动的距离 
+          .scrollHeight // 滑动区高度 
+          .scrollWidth  // 滑动区宽度 
+          .deltaX       // 水平方向滚动的增量 
+          .deltaY       // 竖直方向滚动的增量 
     <scroll-view>的滚动会阻止页面回弹,无法触发'onPullDownRefresh' 
       若要使用下拉刷新,请使用页面的滚动[能通过点击顶部状态栏回到页面顶部],而非<scroll-view> 
     Accu:  
@@ -57,20 +58,45 @@
       必须在<movable-area>组件中,并且必须是直接子节点,否则不能移动 
       当小于<movable-area>时,移动范围是在<movable-area>内；
       当大于<movable-area>时,移动范围为包含<movable-area>
-    x    num,x轴偏移量,改变值会触发动画 
+    x="num/str"    x轴偏移量,改变值会触发动画 
       PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    y    num,y轴偏移量,改变值会触发动画 
+    y="num/str"    y轴偏移量,改变值会触发动画 
       PS: 如果y的值不在可移动范围内,会自动移动到可移动范围 
-    direction   可移动的方向 
+    direction="KW"   可移动的方向 
       'none'  默认
       'all'
       'vertical'
       'horizontal'
-    inertia     移动否带有惯性,默认'false' 
-    out-of-bounds   超过可移动区域后,movable-view是否还可以移动,默认'false' 
-    damping   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认'20' 
-    friction  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认'2' 
+    inertia="bol"    是否移动带有惯性,默认:false  
+    out-of-bounds="bol"   超过可移动区域后,movable-view是否还可以移动,默认:false 
+    damping="num"   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认:20  
+    friction="num"  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认:2  
       必须大于0,否则会被设置成默认值
+    disabled="bol"  是否禁用,默认:false  '1.9.90+'
+    scale="false"      是否支持双指缩放,默认:false  '1.9.90+'
+      默认缩放手势生效区域是在movable-view内  
+    scale-min="num"    定义缩放倍数最小值,默认:0.5  '1.9.90+'
+    scale-max="num"    定义缩放倍数最大值,默认:10  '1.9.90+'
+    scale-value="num"  定义缩放倍数,默认:1 '1.9.90+'
+      取值范围: 0.5 - 10  
+    animation="bol"    是否使用动画,默认:true   '2.1.0+'
+    bind:change="fn"   拖动过程中触发的事件  '1.9.90+'
+      event 
+        .detail 
+          .x 
+          .y  
+          .source   KW,产生移动的原因
+            'touch'                拖动
+            'touch-out-of-bounds'  超出移动范围
+            'out-of-bounds'        超出移动范围后的回弹
+            'friction'             惯性 
+            ''  
+    bind:scale="fn"    缩放过程中触发的事件
+      event  
+        .detail 
+          .x    '2.1.0+'
+          .y    '2.1.0+'
+          .scale  
   <cover-view>   覆盖在原生组件上的文本视图  '1.4.0+' 
     PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
       文本建议都套上<cover-view>标签,避免排版错误 
@@ -289,6 +315,7 @@
       'navigate'  对应 wx.navigateTo() 的功能,默认值  
       'redirect'  对应 wx.redirectTo() 的功能 
       'switchTab' 对应 wx.switchTab() 的功能 
+        PS: 打开tabBar中对应的页面必须使用该方式
       'reLaunch'  对应 wx.reLaunch() 的功能 ['1.1.0+'] 
       'navigateBack' 对应wx.navigateBack()的功能 ['1.1.0+'] 
     delta="num"   表示回退的层数[当'open-type'为'navigateBack'时有效] 
@@ -309,13 +336,13 @@
   <input/> 输入框 
     PS: <input>组件是native组件,字体是系统字体,所以无法设置 
       在<input>聚焦期间,避免使用css动画；
-    value  input值
-    type   input类型  
+    value="str"  input值
+    type="KW"   input类型  
       'text'   文本输入键盘,默认 
       'number' 数字输入键盘
       'idcard' 身份证输入键盘
       'digit'  带小数点的数字键盘
-    password     是否是密码类型,默认'false'  
+    password="bol"     是否是密码类型,默认:false   
     placeholder  输入框为空时占位符 
       微信版本'6.3.30', placeholder 在聚焦时出现重影问题；
     placeholder-style str,指定'placeholder'的样式 
@@ -337,14 +364,14 @@
       'go'     '前往' 
     confirm-hold  点击键盘右下角按钮时是否保持键盘不收起,默认'false' ['1.1.0+']
     cursor        num,指定focus时的光标位置['1.5.0+'] 
-    bindinput   foo,当键盘输入时,触发'input'事件
+    bind:input   foo,当键盘输入时,触发'input'事件
       函数的返回值将替换输入框的内容 
       event.detail = {value, cursor}
-    bindfocus   foo,输入框聚焦时触发 
+    bind:focus   foo,输入框聚焦时触发 
       event.detail = {value: value} 
-    bindblur    foo,输入框失去焦点时触发 
+    bind:blur    foo,输入框失去焦点时触发 
       e.detail.value  输入框的值 
-    bindconfirm foo,点击完成按钮时触发 
+    bind:confirm foo,点击完成按钮时触发 
       event.detail = {value: value}
   <checkbox-group>  多项选择器,内部由多个<checkbox>组成 
     bindchange foo,选中项发生改变时触发'change'事件
@@ -446,7 +473,8 @@
     hover-stay-time="70"   手指松开后点击态保留时间,单位:ms,默认:70   
     open-type="kw"       微信开放能力 '1.1.0+'  
       "getPhoneNumber" 获取用户手机号,可从'bindgetphonenumber'回调用获取到用户信息,解包方式
-      "getUserInfo"    获取用户信息,可从'bindgetuserinfo'回调中获取到用户信息  
+      "getUserInfo"    获取用户信息
+        从'bindgetuserinfo'事件回调中获取到用户信息   
       'contact'        打开客服会话 
       'share'          触发用户转发 
     session-from       str,会话来源 '1.4.0+' 
@@ -462,7 +490,7 @@
   <image/> 图片 
     PS: 默认宽高: 300px,225px
     src="path"   图片资源地址 
-    mode="kw"   图片裁剪、缩放的模式 
+    mode="KW"   图片裁剪、缩放的模式 
       mode 有 13 种模式,其中 4 种是缩放模式,9 种是裁剪模式 
       ★缩放 
       'scaleToFill' 拉伸填满image,默认值 
@@ -511,7 +539,51 @@
     bindtimeupdate foo,当播放进度改变时触发'timeupdate'事件 
       detail = {currentTime, duration}
     bindended      foo,当播放到末尾时触发'ended'事件 
-  <camera> 系统相机 '1.6.0+' 
+  <camera> 系统相机[原生组件] '1.6.0+' 
+    PS: 同一页面只能插入一个 camera 组件 
+      请勿在 scroll-view、swiper、picker-view、movable-view 中使用 camera 组件。
+      需要用户授权 scope.camera
+    mode="KW"   调用相机的功能    '2.1.0+'
+      'normal'    默认值 
+      'scanCode'  扫码 
+    device-position="KW"  前置/后置摄像头 
+      'back'  后置摄像头,默认  
+      'front' 前置摄像头 
+    flash="KW"   闪光灯状态 
+      'auto'  默认 
+      'on'    
+      'off'   
+    scan-area="[x, y, w, h]"   扫码识别区域 '2.1.0+'
+      PS: 仅在 mode="scanCode" 时生效 
+        目前存在识别区域不准的问题,建议先不指定
+      x,y 相对于camera显示区域的左上角; w,h 为区域宽度,单位:px
+    bind:stop="fn"   摄像头在非正常终止时触发,如退出后台等情况 
+    bind:error="fn"  用户不允许使用摄像头时触发 
+    bind:scancode="fn"  成功识别到一维码时触发 '2.1.0+'
+      仅在 mode="scanCode" 时生效 
+    Example: 
+      <!-- camera.wxml -->
+      <camera device-position="back" flash="off" binderror="error" ></camera>
+      <button type="primary" bindtap="takePhoto">拍照</button>
+      <view>预览</view>
+      <image mode="widthFix" src="{{src}}"></image>
+      // camera.js
+      Page({
+        takePhoto: function(){
+          const ctx = wx.createCameraContext()
+          ctx.takePhoto({
+            quality: 'high',
+            success: (res) => {
+              this.setData({
+                src: res.tempImagePath
+              })
+            }
+          })
+        }
+        ,error: function(){
+          console.log(e.detail)
+        }
+      })
   <live-player> 实时音视频播放 
 开放能力 
   <web-view> 承载网页的容器 '1.6.4+' // TODO: 
@@ -628,6 +700,7 @@
       本参数可用于区分用户进入客服会话的来源。
 原生组件 
   PS: 是由客户端原生参与组件的渲染 
+    层级是最高的,不能通过 z-index 控制层级。可使用 cover-view cover-image覆盖在上面。
   <video> 视频 
     PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height 
       video 组件是由客户端创建的原生组件,它的层级是最高的,不能通过 z-index 控制层级 ? 
@@ -635,22 +708,24 @@
       css动画对video组件无效 
     src="path"      视频资源地址 
       不可使用本地资源,否则会出现bug   
+    // 播放相关 
     autoplay="bol"  是否自动播放,默认:false 
     loop="bol"      是否循环播放,默认:false '1.4.0+' 
     muted="bol"     是否静音播放,默认:false '1.4.0+' 
     duration="num"     指定视频时长 '1.1.0+' 
     initial-time="num"  指定视频初始播放位置 '1.6.0' 
+    // 外观|显示 
+    poster="url"     视频封面的图片网络资源地址['controls'需为true]
+    objectFit="KW"   当视频大小与video容器大小不一致时,视频的表现形式 
+      'contain'  包含,默认值 
+      'fill'     填充
+      'cover'    覆盖 
     controls="bol"    是否显示默认播放控件[播放/暂停按钮、播放进度、时间],默认:true  
     enable-danmu="bol"  是否展示弹幕,默认:false 
       只在初始化时有效,不能动态变更 
     danmu-btn="bol"     是否显示弹幕按钮,默认:false 
       只在初始化时有效,不能动态变更
     danmu-list="[{text,color,time}]"     弹幕列表 
-    objectFit   当视频大小与video容器大小不一致时,视频的表现形式 
-      'contain'  包含,默认值 
-      'fill'     填充
-      'cover'    覆盖 
-    poster="url"      视频封面的图片网络资源地址['controls'需为true]
     direction="kw"  设置全屏时视频的方向,不指定则根据宽高比自动判断 '1.7.0+' 
       0   正常竖向
       90  屏幕逆时针90度 
@@ -676,7 +751,12 @@
             'vertical'   
             'horizontal' 
     bind:waiting="fn"    视频出现缓冲时触发  '1.7.0+'
-    bind:error="fn"      视频播放出错时触发  '1.7.0+'      
+    bind:error="fn"      视频播放出错时触发  '1.7.0+'    
+    Accu: 
+      video组件会和其后面的同级元素产生缝隙 
+        演示代码
+          <video></video>
+          <view style="height:100rpx;background-color:red;"></view>
   <map> 地图 
     PS: 客户端创建的原生组件,它的层级是最高的
       请勿在 scroll-view 中使用 map 组件。 css 动画对 map 组件无效。
@@ -813,8 +893,8 @@
   class="str"   组件的样式类   在对应的 WXSS 中定义的样式类
   style="str"   组件的内联样式 可以动态设置的内联样式
   hidden="bol"  组件是否显示   所有组件默认显示
-  data-*="any"  自定义属性     组件上触发的事件时,会发送给事件处理函数
-  bind*/catch* EventHandler 组件的事件     详见事件
+  data-xxx="any"  自定义属性     组件上触发的事件时,会发送给事件处理函数
+  bind:xxx/catch:xxx="fn"  组件的事件     详见事件
 --------------------------------------------------------------------------------
 <template name="templateName"></template> WXML模板 
   PS: 可在模板中定义代码片段,然后在不同的地方调用 
@@ -1222,10 +1302,10 @@ wx:else            条件渲染
       不应使用 ID选择器/属性选择器/标签名选择器,而改用 class选择器 
       组件和引用组件的页面中使用后代选择器[.a .b]在一些极端情况下会有非预期的表现,请避免使用 
       子元素选择器[.a>.b]只能用于 view 组件与其子节点之间,用于其他组件可能导致非预期的情况 
+      :host 选择器,指定其所在节点的默认样式 [1.7.2+] 
     样式继承 
       继承样式,如 font、color,会从组件外继承到组件内 
       除继承样式外,app.wxss 中的样式、组件所在页面的的样式对自定义组件无效 
-    组件可指定其所在节点的默认样式,使用 :host 选择器 [1.7.2+] 
     外部样式类 
       组件接受外部传入的样式类
       先在 Component() 中通过'externalClasses'定义段定义若干个外部样式类 [1.9.90+] 
@@ -1233,12 +1313,11 @@ wx:else            条件渲染
 使用自定义组件 
   PS: 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀,否则会报错 
   '.json'中进行引用声明 
-    {
-      "usingComponents": {
-        // 自定义组件的标签名: 对应的自定义组件文件路径 
-        "component-tag-name": "path/to/the/custom/component"  
-      }
-    }
+    { ,...
+    ,"usingComponents": {
+      // 自定义组件的标签名: 对应的自定义组件文件路径[省略文件的后缀名] 
+      "component-tag-name": "path/to/the/custom/component/index"  
+    }}
   '.wxml'中放置组件标签  
     节点名即自定义组件的标签名,节点属性即传递给组件的属性值 
     <slot> 
@@ -1252,7 +1331,6 @@ wx:else            条件渲染
   有时,自定义组件模版中的一些节点,其对应的自定义组件不是由自定义组件本身确定的,
   而是自定义组件的调用者确定的 
   这时可以把这个节点声明为'抽象节点'  
-
 
 
 

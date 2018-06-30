@@ -866,16 +866,17 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr); // [10, 2, 34, 4, 11, 12]
         console.log(res); // [10, 2, 4, 11]
-    .reduce(foo(retVal,val?,idx?,arr?),initVal?)  条件缩减,返回最后一次回调值[ES5] 
+    .reduce(foo(retVal,val?,idx?,arr?),initVal?)  条件缩减[ES5] 
       PS: 数组成员依次传入回调,最终返回值为最后一次的回调值,不会改变原数组 
         仅有唯一值时[一个成员+无初始值、空数组+初始值],则直接返回该值而不调用函数 
         空数组且无初始值时,将报错
-      foo     遍历函数 
-      retVal  上一次回调返回值/初始值,initVal?initVal:firstMeber 
-      val     当前成员/下一成员,initVal?firstMeber:secondMeber 
-      idx     被处理成员的索引 
-      arr     可选,当前数组 
-      initVal 可选,指定初始返回值 
+      Input: foo     遍历函数 
+        retVal  上一次回调返回值/初始值,initVal?initVal:firstMeber 
+        val     当前成员/下一成员,initVal?firstMeber:secondMeber 
+        idx     被处理成员的索引 
+        arr     可选,当前数组 
+        initVal 可选,指定初始返回值 
+      Output: 最后一次回调的返回值  
       Example: 
         var num = 0;
         var arr = [1, 2, 3, 4, 5]
@@ -1477,27 +1478,30 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
       var regp = /^([\w\.\_]+)@([\w\_]+)\.([a-zA-Z]{2,4})$/;
       var str = "fols.van@126.com";
       console.log(regp.test(str)); // true 
-    至少一个汉字、数字、字母、下划线
+    至少一个汉字、数字、字母、下划线 
       /[a-zA-Z0-9_\u4e00-\u9fa5]+/　　
     删除首尾空格 
       使用两次正则 
-        var pattern=/^\s+/;
-        var str="    goo    gle  ";
-        var result=str.replace(pattern,"");
-        pattern=/\s+$/;
-        result=result.replace(pattern,"");
-        result;            //"goo    gle"
+        function fn(str){
+          var pattern1 = /^\s+/
+          ,pattern2 = /\s+$/ 
+          return str.replace(pattern1,"").replace(pattern2,"");
+        }
+        console.log(1+fn("    goo    gle  ")+1);  // 1goo    gle1 
       使用惰性模式捕获 
-        var pattern=/^\s*(.+?)\s+$/;      //+?是惰性模式
-        var str="  goo gle  ";
+        var pattern = /^\s*(.+?)\s+$/   // +?是惰性模式
+        ,str = "  goo gle  ";
         pattern.exec(str)[1];     //"goo gle",数组的第二个
         //若使用非惰性模式(或贪婪模式)则返回值为:"goo gle "
         // PS-Self:惰性模式即为捕获最少复合要求的字符.
       使用分组捕获 
-        var pattern=/^\s*(.+?)\s+$/;
-        var str="  goo gle  ";
-        var result=str.replace(pattern,"$1");
-        alert("|"+result+"|");
+        var fn = function(str){ 
+          var pattern = /^\s*(.+?)\s+$/
+          return str.replace(pattern,"$1") 
+        }
+        console.log(1+fn("  goo  gle  ")+1);
+    任意100个字符 
+      /^(.|\r|\n){1,100}$/ 
   Question: 
     只包含中文和字母a的正则 
       中文表示为 [\u0391-\uFFE5]

@@ -487,9 +487,9 @@ MiniProgrom,微信小程序
     { "disableScroll": <bol> // 只在 page.json 中有效,无法在 app.json 中设置该项 
       false  默认值 
       true   页面整体不能上下滚动
-    ,"navigationBarBackgroundColor": "#ffffff"
-    ,"navigationBarTextStyle": "black"
-    ,"navigationBarTitleText": "微信接口功能演示"
+    ,"navigationBarBackgroundColor": "#ffffff"  // 
+    ,"navigationBarTextStyle": "black"          
+    ,"navigationBarTitleText": "导航栏标题"
     ,"backgroundColor": "#eeeeee"
     ,"backgroundTextStyle": "light"
     ,"enablePullDownRefresh": true  
@@ -712,7 +712,8 @@ MiniProgrom,微信小程序
   当组件的属性为布尔值时,设置无效时 
     采用 ="{{false}}"/="{{true}}"的形式进行尝试  
 Question&Idea 
-  连接跳转到的页面仍有tabBar,如何实现 
+  其他未在tabBar中注册的页面仍有tabBar,如何实现 
+    1 自己模拟 
 -------------------------------------------------------------------------待整理 
 
 

@@ -1104,9 +1104,9 @@ Declaration,样式声明
         Y  可选,数值值,默认:50% 
       background-size: val;        背景图像尺寸[CSS3][IE9+] 
         auto    默认值,保持图片的原始宽、高 
-        cover   按比例缩放至铺满背景‹可能有溢出› 
-        contain 按比例缩放至铺满背景‹可能有漏白› 
-        length  设置背景图像的高度和宽度。
+        cover   按比例缩放铺满背景[可能溢出] 
+        contain 按比例缩放铺满背景[可能漏白] 
+        length  设置背景图像的高度和宽度 
           第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
         %       以父元素的百分比来设置背景图像的宽度和高度。
           第一个值设置宽度,第二个值设置高度。若只设置一个值,则第二个值会被设置为 "auto"。
@@ -2327,7 +2327,7 @@ Layout,布局
     bottom
   Flex'flexible box'弹性布局  [CSS3] [IE10+]
     PS:常规布局是基于块和内联流方向,而Flex布局是基于flex-flow流
-    Flex布局产生的影响
+    Flex布局产生的影响 
       子元素的 float、clear、vertical-align 等属性将失效
       子元素变成类似inline-block的状态
       子元素默认高度为100% ??
@@ -2354,7 +2354,7 @@ Layout,布局
       center      居中对齐
       baseline    文字基线对齐
         后续项目的第一行文字的基线与第一个项目的第一行的文字的基线对齐;
-    align-content:kw   [水平排列且换行时]多行的对齐方式 
+    align-content: kw   [水平排列且换行时]多行的对齐方式 
       stretch       默认值,多个行占满父元素的高度.
       flex-start    多行向上堆积,第一行与父元素的顶部对齐.
       flex-end      多行向下堆积,最后一行与父元素的底部对齐
@@ -2402,6 +2402,26 @@ Layout,布局
       baseline
       stretch  占满父元素
       该属性可能取6个值,除了auto,其他都与align-items属性完全一致。
+    Feature: 
+      单个项目使用 margin-xxx: auto; 达到调整其对齐方式 
+        .wrap { display: flex; }
+        水平对齐方式 
+          .itm-1 {
+            margin-right: auto; // 该项目先左对齐 
+          }
+          .itm-2 {
+            margin-left: auto;  // 该项目向右对齐 
+          }
+        双居中 
+          .wrap {
+            display: flex;
+          }
+          .itm {
+            margin: auto; 
+            // 相当于 
+            // justify-content: center;
+            // align-items: center;
+          }
   Column多栏布局 [CSS3]  
     column-count  显示栏目数
       number 元素内容将被划分的列数

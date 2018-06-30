@@ -131,7 +131,8 @@ API
       ,complete: function(){// 调用结束的回调
         // 
       }  
-    })
+    }) 
+      PS: 前提是该页面具有tabBar, 否则不生效 
     wx.hideTabBar({  // 隐藏 tabBar '1.9.0+'
       animation: <bol>  // 是否需要动画效果,默认:false 
       ,success: function(){ // 调用成功的回调 
@@ -352,7 +353,7 @@ API
           }
         })
   WXML节点信息 
-    wx.createSelectorQuery() // 返回一 SelectorQuery 对象实例 '1.4.0+' 
+    wx.createSelectorQuery() // 返回 SelectorQuery 实例 '1.4.0+' 
     selectorQuery SelectorQuery对象  
       .in(组件对象) // 将选择器的选取范围更改为自定义组件component内 '1.6.0+'
         初始时,选择器仅选取页面范围的节点,不会选取任何自定义组件中的节点 
@@ -365,10 +366,8 @@ API
               }).exec()
             }
           })
-      .select(selector) // 在当前页面下选择第一个匹配选择器selector的节点
-        返回: 一 NodesRef 对象实例,可用于获取节点信息 
-      .selectAll(selector) // 在当前页面下选择所有匹配选择器selector的节点
-        返回: 一个NodesRef对象实例 
+      .select(selector)    // 当前页面下首个匹配的节点,返回 NodesRef 实例 
+      .selectAll(selector) // 当前页面下所有匹配的节点,返回 NodesRef 实例 
       'selector'类似于CSS的选择器,但仅支持下列语法 
         ID选择器:  #the-id 
         class选择器,可连续指定多个:  .a-class.another-class 
@@ -376,19 +375,16 @@ API
         后代选择器:  .the-ancestor .the-descendant 
         跨自定义组件的后代选择器:  .the-ancestor >>> .the-descendant
         多选择器的并集:  #a-node, .some-other-nodes 
-      .selectViewport() // 选择显示区域
+      .selectViewport() // 选择显示区域,返回 NodesRef 实例 
         PS: 用于获取显示区域的尺寸、滚动位置等信息
-        返回: NodesRef对象实例 
-      .exec(function(){ // 执行所有的请求,请求结果按请求次序构成数组,在回调的第一个参数中返回  
+      .exec(function(res){ // 执行所有请求,请求结果按请求次序构成数组在回调的第一个参数中返回  
         // 
       }?)  
     nodesRef  NodesRef对象 
       .boundingClientRect(function(rect){ // 添加节点的布局位置的查询请求
         PS: 相对于显示区域,单位:px; 其功能类似于DOM的'getBoundingClientRect' 
-        返回: nodesRef对应的selectorQuery 
-          返回的节点信息中,每个节点的位置用 left、right、top、bottom、width、height 字段描述。
-          如果提供了callback回调函数,在执行selectQuery的exec方法后,节点信息会在callback中返回。
-        rect 
+        Arguments: rect 
+          若提供了回调函数,在执行selectQuery的exec方法后,节点信息会在回调中返回 
           .id      // 节点的ID
           .dataset // 节点的dataset
           .left    // 节点的左边界坐标
@@ -431,6 +427,8 @@ API
             }
           })
       }?) 
+        Return: nodesRef对应的 selectorQuery 
+          返回的节点信息中,每个节点的位置用 left、right、top、bottom、width、height 字段描述。
       .scrollOffset(function(res){ // 添加节点的滚动位置查询请求,单位:px 
         PS: 节点必须是 scroll-view/viewport,
         返回: nodesRef对应的selectorQuery 
@@ -468,13 +466,13 @@ API
       }
       ,function(res){
         res 
-          .dataset    // 节点的dataset
-          .width      // 节点的宽度
-          .height     // 节点的高度
-          .scrollLeft // 节点的水平滚动位置
-          .scrollTop  // 节点的竖直滚动位置
-          .scrollX    // 节点 scroll-x 属性的当前值
-          .scrollY    // 节点 scroll-x 属性的当前值
+          .dataset    // 节点的dataset 
+          .width      // 节点的宽度 
+          .height     // 节点的高度 
+          .scrollLeft // 节点的水平滚动位置 
+          .scrollTop  // 节点的竖直滚动位置 
+          .scrollX    // 节点 scroll-x 属性的当前值 
+          .scrollY    // 节点 scroll-x 属性的当前值 
       }?)
         返回: nodesRef 对应的 selectorQuery 
         Example: 
@@ -2338,8 +2336,6 @@ Canvas绘图
     ,complete: function(){ } // 可选,调用结束的回调 
   })
 --------------------------------------------------------------------------------
-
-
 
 
 

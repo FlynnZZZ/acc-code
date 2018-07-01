@@ -2113,8 +2113,8 @@ vm.xxx.实例属性/方法/事件
     非父子组件通信: 事件注册与触发/Vuex  
       简单场景下,用一Vue实例作为中央事件总线  
         var bus = new Vue();
-        bus.$emit('custom-event',data); // 触发事件
-        bus.$on('custom-event',function (data) { // 监听事件
+        bus.$emit('custom-event',data);          // A组件中触发事件
+        bus.$on('custom-event',function (data) { // B组件中监听事件
           // ...
         })
       复杂情况下,使用专门的状态管理模式Vuex 

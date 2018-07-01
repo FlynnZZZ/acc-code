@@ -521,7 +521,9 @@ MiniProgrom,微信小程序
   PS: 'WeiXin Style Sheet',具有CSS大部分特性,同时对CSS进行了扩充以及修改  
   尺寸单位 
     PS: 建议：开发微信小程序时设计师可用iPhone6作为视觉稿的标准 
-    rpx,'responsive pixel': 根据屏幕宽度进行自适应,屏幕宽度等于750rpx 
+    px:  同CSS 
+    vw,vh: 同CSS 
+    rpx'responsive pixel': 根据屏幕宽度进行自适应,屏幕宽度等于750rpx 
       如在iPhone6上,屏幕宽度为375px,共有750个物理像素, 
       则'750rpx = 375px = 750物理像素','1rpx = 0.5px = 1物理像素' 
   布局 

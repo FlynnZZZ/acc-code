@@ -835,31 +835,23 @@ Canvas绘图
   wx.getImageInfo({ // 获取图片信息 
     src: '' // 图片的路径,可为 相对路径/临时文件路径/存储文件路径/网络图片路径 
     ,success: function(res){
-      res
+      res 
         .width   num,图片宽度,单位px
         .height  num,图片高度,单位px
-        .path    返回图片的本地路径
+        .path    返回图片的本地路径 
     }
-    ,fail: function(){
-      // 
-    }
-    ,complete: function(){
-      // 
-    }
+    ,fail: function(){ }
+    ,complete: function(){ }
   })  
   wx.saveImageToPhotosAlbum({ // 保存图片到系统相册 '1.2.0+'
     PS: 需要用户授权 scope.writePhotosAlbum,详见 用户授权 
     filePath: '' // 图片文件路径,可为:临时文件路径/永久文件路径,不支持网络图片路径
     ,success: function(res){
-      res
+      res 
         .errMsg 调用结果
     }
-    ,fail: function(){ 
-      // 
-    }
-    ,complete: function(){ 
-      // 
-    }
+    ,fail: function(){ }
+    ,complete: function(){ }
   }) 
   ◆录音 
   wx.startRecord({ // 开始录音,返回: 录音文件的临时文件路径 

@@ -50,14 +50,15 @@
           dislay: inline-block; 
   <movable-area> <movable-view>的可移动区域 '1.2.0+' 
     PS: 需设置宽高,否则默认10px; 作为<movable-view>的父元素  
+      可同时容纳多个<movable-view>组件 
     scale-area="bol"   默认:false  '1.9.90+'
       当里面的<movable-view>设置为支持双指缩放时,
       设置此值可将缩放手势生效区域修改为整个movable-area  
   <movable-view> 可拖拽滑动的视图容器 '1.2.0+' 
     PS: 宽高默认10px;默认为绝对定位,top和left属性为0px 
-      必须在<movable-area>组件中,并且必须是直接子节点,否则不能移动 
+      必须作为<movable-area>的子节点使用,否则不能移动 
       当小于<movable-area>时,移动范围是在<movable-area>内；
-      当大于<movable-area>时,移动范围为包含<movable-area>
+      当大于<movable-area>时,移动范围为包含<movable-area> 
     x="num/str"    x轴偏移量,改变值会触发动画 
       PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
     y="num/str"    y轴偏移量,改变值会触发动画 
@@ -109,7 +110,7 @@
       暂不支持css动画 
     src  图标路径,支持临时路径,暂不支持base64与网络地址 
   <swiper>       滑块视图容器,也叫轮播组件 
-    PS: 其中只能放置<swiper-item>组件,否则会被删除? 
+    PS: 其中只能放置<swiper-item>组件,否则会导致未定义的行为 
     indicator-dots="bol"           是否显示面板指示点,默认:false  
     indicator-color='color'        指示点颜色,默认:rgba(0,0,0,0.3) '1.1.0+' 
     indicator-active-color="color" 当前选中的指示点颜色,默认:#000  '1.1.0+'
@@ -128,7 +129,7 @@
             'touch'    用户划动引起swiper变化  
             ''         其他原因 
       若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,
-      因而通常情况下请不要这样使用 
+        因而通常情况下请不要这样使用 
   <swiper-item>  轮播中一帧的页面 
     PS: 仅可放置在<swiper>组件中,宽高自动设置为100%;
       通常以循环的方式加载到页面中 
@@ -1073,7 +1074,7 @@ wx:else            条件渲染
         inner view
       </view>
     </view>
-事件对象 
+'evt'事件对象 
   PS: 如无特殊说明,当组件触发事件时,逻辑层绑定该事件的处理函数会收到一个事件对象 
   ◆'BaseEvent'基础事件对象属性列表 
   .type           事件类型
@@ -1113,7 +1114,7 @@ wx:else            条件渲染
       .x       num,距离 Canvas 左上角的距离
       .y       num,距离 Canvas 左上角的距离
 --------------------------------------------------------------------------------
-自定义组件 [1.6.3+] 
+自定义组件 '1.6.3+' 
   PS: 将页面内的功能模块抽象成自定义组件,以便在不同的页面中重复使用 
     也可将复杂的页面拆分成多个低耦合的模块,有助于代码维护
     自定义组件在使用时与基础组件非常相似 
@@ -1134,24 +1135,37 @@ wx:else            条件渲染
     <slot>节点: 用于承载组件引用时提供的子节点 
       默认支持单<slot>,添加多个,需在 Component() 中设置
       多<slot>通过'name'属性来区分 
+  'component.wxss'组件样式 
+    只对组件wxml内的节点生效 
+    选择器的使用选择 
+      不应使用 ID选择器/属性选择器/标签名选择器,而改用 class选择器 
+      组件和引用组件的页面中使用后代选择器[.a .b]在一些极端情况下会有非预期的表现,请避免使用 
+      子元素选择器[.a>.b]只能用于 view 组件与其子节点之间,用于其他组件可能导致非预期的情况 
+      ':host'选择器,指定其所在节点的默认样式 [1.7.2+] 
+    样式继承 
+      继承样式,如 font、color,会从组件外继承到组件内 
+      除继承样式外,app.wxss 中的样式、组件所在页面的的样式对自定义组件无效 
+    外部样式类 
+      组件接受外部传入的样式类
+      先在 Component() 中通过'externalClasses'定义段定义若干个外部样式类 [1.9.90+] 
+        在同一个节点上使用普通样式类和外部样式类时,两个类的优先级是未定义的,因此最好避免该情况 
   'component.js'组件逻辑层 
     Component({ // 注册组件,提供组件的属性定义/内部数据/自定义方法 
       PS: Component 构造器构造的组件也可以作为页面使用 
         通过 this 访问生成的组件实例 
         生命周期函数无法在组件方法中通过 this 访问到 
-      data: {       // 可选,组件的内部数据,和 properties 一同用于组件的模版渲染  
-        // 使用 this.data 可以获取内部数据和属性值,但不要直接修改它们,应使用 setData 修改 
-        // 属性名应避免以 data 开头,即不要命名成 dataXyz 这样的形式,
-        // 因为在 WXML 中, data-xyz="" 会被作为节点 dataset 来处理,而不是组件属性。
-        // 在一个组件的定义和使用时,组件的属性名和data字段相互间都不能冲突 
+      data: {         // 可选,组件的内部数据,和 properties 一同用于组件的模版渲染  
+        PS: 'data'中的字段和'properties'中的字段不能冲突,都可在 WXML 中直接使用
+          this.data.xx 可同时获取到'data'和'properties'中的字段  
         key: val 
         ,...
       }  
-      ,properties: {  // 可选,组件的对外属性,是属性名到属性设置的映射表 
-        // 采用驼峰写法的,在 wxml 中,则对应使用连字符写法
-        // 传入的数据,不管是简单数据类型,还是引用类型,都为值复制,即不会影响到父组件 
-        attr1: {
-          type: <kw>  // 必选,值类型 
+      ,properties: {  // 可选,外界向组件内传入数据 
+        PS: 组件的对外属性,是属性名到属性设置的映射表 
+          采用驼峰写法的,在 wxml 中,则对应使用连字符写法
+          传入的数据,不管是简单数据类型,还是引用类型,都为值复制,即不会影响到父组件 
+        <attr1>: {
+          type: <KW>  // 必选,值类型 
             null    表示任意类型
             String
             Number
@@ -1159,52 +1173,36 @@ wx:else            条件渲染
             Object
             Array
           ,value: val // 可选,初始值 
-          // observer 可选,属性值被更改时的响应函数 
-          ,observer: 'fnName'  // fnName在methods中定义的方法 
-          ,observer: function(newVal ,oldVal){ 
+          ,observer: function(newVal ,oldVal){  // 属性值被更改时的响应函数 
             // 
           } 
+          ,observer: 'fnName'  // 'fnName'是在'methods'中定义的方法 
         }
-        attr2: String // 简化的定义方式 
+        <attr2>: String // 简化的定义方式 
         ,...
       }  
       ,externalClasses: [ // 可选,组件接受的外部样式类 
         PS: 样式类是在父组件中进行定义的 
         'xxx'
       ] 
-      ,methods: {    // 可选,组件的方法,包括事件响应函数和任意的自定义方法 
-        fn: function(){
-        }
+      ,methods: {    // 可选,组件的方法 
+        PS: 包括事件响应函数和任意的自定义方法 
+        fn: function(){}
         ,..
-      }  
-      // 生命周期函数可为函数/methods中定义的方法名 
-      ,created: function(){   // 可选,在组件实例进入页面节点树时执行 
-        // 此时不能调用 setData
-      }  
-      ,attached: function(){  // 可选,在组件实例进入页面节点树时执行 
-        // 
-      }  
-      ,ready: function(){     // 可选,组件布局完成后执行 
-        // 此时可获取节点信息[使用 SelectorQuery] 
-      }  
-      ,moved: function(){     // 可选,在组件实例被移动到节点树另一个位置时执行 
-        // 
-      }  
-      ,detached: function(){  // 可选,在组件实例被从页面节点树移除时执行 
-        // 
       }  
       ,options: { // 可选,一些组件选项 
         multipleSlots: true // 启用多slot支持,默认只支持单slot 
       }  
       ,relations: {        // 可选,组件间关系定义 
-        PS: 当两个组件的relations属性产生关联,互相可捕获到对方,且可相互访问/修改对方的属性 
+        PS: 使两个组件产生关联,从而相互访问/修改对方的属性
+          但不可调用对方的方法 ? 
         './xxx-xx': {  // 需关联的组件的路径作为'key'
-          type: <kw>   // 必选,目标组件相对于当前组件的关系 
+          type: <KW>   // 必选,目标组件相对于当前组件的关系 
             'ancestor'   祖先节点 
             'parent'     父节点 
             'child'      子节点  
             'descendant' 子孙节点 
-          // 关系生命周期函数
+          // 关系生命周期  
           ,linked: function(cpnt){      // 可选,当关系被建立在页面节点树中时触发 
             // 触发时机在组件attached生命周期之后
             // cpnt 关联组件的实例 
@@ -1217,9 +1215,9 @@ wx:else            条件渲染
             // 触发时机在组件detached生命周期之后
             // cpnt 关联组件的实例 
           }
-          ,target:                  // 可选
-            如果该项被设置,则它表示关联的目标节点所应具有的behavior,
-            所有拥有这一behavior的组件节点都会被关联
+          ,target: behaviorObj          // 可选 
+            若该项被设置,表示关联所有具有该behavior且符合'type'条件的组件,
+            关联组件的key不再使用路径表示 
           }
         }
       }
@@ -1264,6 +1262,22 @@ wx:else            条件渲染
             将为它添加以下两个属性
             name    str,在表单中的字段名 [1.6.7+]
             value   在表单中的字段值  [1.6.7+]
+      // 生命周期,函数可为函数/methods中定义的方法名 
+      ,created: function(){   // 可选,组件实例初始化时 
+        // 此时不能调用 setData
+      }  
+      ,attached: function(){  // 可选,组件实例添加到页面节点树时执行 
+        // 
+      }  
+      ,ready: function(){     // 可选,组件视图渲染完成后执行 
+        // 此时可获取节点信息[使用 SelectorQuery] 
+      }  
+      ,moved: function(){     // 可选,在组件实例被移动到节点树另一个位置时执行 
+        // 
+      }  
+      ,detached: function(){  // 可选,组件实例被从页面节点树移除时执行 
+        // 
+      }  
     }) 
     组件实例通用的属性/方法 
       .is       str,组件的文件路径
@@ -1273,15 +1287,7 @@ wx:else            条件渲染
       .setData()       // 设置data并执行视图层渲染
       .hasBehavior()   // 检查组件是否具有 behavior 
         // 检查时会递归检查被直接或间接引入的所有behavior 
-      .triggerEvent('eventname',detail,config)  // 触发事件 
-        eventname  // str,事件名  
-        detail     // obj,detail对象,提供给事件监听函数 
-        config: {  // 触发事件的选项 
-          bubbles: <bol>   // 可选,事件是否冒泡,默认: false 
-          ,composed: <bol> // 可选,事件是否可以穿越组件边界,默认: false 
-            为false时,事件将只能在引用组件的节点树上触发,不进入其他任何组件内部 
-          ,capturePhase: <bol> // 可选,事件是否拥有捕获阶段,默认: false 
-        }      
+      .triggerEvent('eventname',detail,config)  // 触发事件 [详见组件通信]   
       .createSelectorQuery()   // 创建一个 SelectorQuery 对象,选择器选取范围为这个组件实例内
       .selectComponent()       // 使用选择器选择组件实例节点,返回匹配到的第一个组件实例对象
       .selectAllComponents()   // 使用选择器选择组件实例节点,返回匹配到的全部组件实例对象组成的数组
@@ -1292,24 +1298,10 @@ wx:else            条件渲染
         
         // 获取到A组件的数据
         console.log(cpntA.data.name)
-        // 调用对方组件的setData()方法来设置组件的数据
+        // 调用对方组件的setData()方法来更新对方组件的数据
         cpntA.setData({
           xxx: 'xx'
         })
-  'component.wxss'组件样式 
-    只对组件wxml内的节点生效 
-    选择器的使用选择 
-      不应使用 ID选择器/属性选择器/标签名选择器,而改用 class选择器 
-      组件和引用组件的页面中使用后代选择器[.a .b]在一些极端情况下会有非预期的表现,请避免使用 
-      子元素选择器[.a>.b]只能用于 view 组件与其子节点之间,用于其他组件可能导致非预期的情况 
-      :host 选择器,指定其所在节点的默认样式 [1.7.2+] 
-    样式继承 
-      继承样式,如 font、color,会从组件外继承到组件内 
-      除继承样式外,app.wxss 中的样式、组件所在页面的的样式对自定义组件无效 
-    外部样式类 
-      组件接受外部传入的样式类
-      先在 Component() 中通过'externalClasses'定义段定义若干个外部样式类 [1.9.90+] 
-        在同一个节点上使用普通样式类和外部样式类时,两个类的优先级是未定义的,因此最好避免该情况 
 使用自定义组件 
   PS: 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀,否则会报错 
   '.json'中进行引用声明 
@@ -1317,16 +1309,86 @@ wx:else            条件渲染
     ,"usingComponents": {
       // 自定义组件的标签名: 对应的自定义组件文件路径[省略文件的后缀名] 
       "component-tag-name": "path/to/the/custom/component/index"  
+        PS: 定义的组件标签名不能有数字,如'cpnt-name1',则报错  
     }}
   '.wxml'中放置组件标签  
     节点名即自定义组件的标签名,节点属性即传递给组件的属性值 
     <slot> 
-      单<slot>时,默认将组件内的节点替换到定义时的位置 
-      多<slot>时,通过'slot'属性和定义时的'name'属性对应,从而进行匹配   
+      单<slot>时,默认将引入标签内放置的节点替换到组件定义时放置的位置 
+      多<slot>时,在引入标签内的'slot'属性和定义时的'name'属性对应,从而进行匹配替换 
+        Example: 
+          // 定义组件 
+          <view>
+            <slot name="slotflag"></slot>
+          </view>
+          // 使用组件 
+          <cpnt-child>
+            <view slot="slotflag"></view>
+          </cpnt-child>
 组件通信 
-  1 属性绑定父组件向子组件通信,事件触发子组件向父组件通信  
-  2 通过指定'relations'关联来通信 
-    通过 this.getRelationNodes('./path_to_a') 获取到了对方组件的实例 
+  主页面与子组件通信: 组件标签绑定属性向子组件通信,事件触发向父组件通信  
+    属性绑定 
+      // 子组件内预定义
+      properties: {
+        attr_val: {  
+          type: null 
+          ,value: { 
+            // 
+          }
+          ,observer: function(oldVal,newVal){
+            // 
+          }
+        }
+      }
+      // 父组件中定义  
+      <cpnt-child attr_val="{{parentVal}}"></cpnt-child>
+    事件触发 
+      // 子组件内触发
+      this.triggerEvent('event_name',{  // 传递的数据,作为事件的 evt.detail 
+        // 
+      }
+      ,{  // 触发事件的选项 
+        bubbles: <bol>       // 事件是否冒泡,默认:false  
+        ,capturePhase: <bol> // 事件是否有捕获阶段,默认:false 
+        ,composed: <bol>     // 事件是否可穿越组件边界,默认:false  
+          false时,事件将只能在引用组件的节点树上触发,不进入其他任何组件内部 
+      })
+      // 父组件中定义 
+      <cpnt-child bind:event_name="responseFn"></cpnt-child>
+      {
+        responseFn: function(evt){
+          console.log(evt);
+        }
+      }
+  层级组件间通信: 通过指定'relations'关联来通信 
+    PS: 必须两个组件中都设置'relations',否则不生效  
+    // 组件A中
+    {
+      ,relations: {   
+        '../xxx/xx': {  // 关联组件B  
+          type: 'ancestor'   
+          ,linked: function(cpnt){ }  
+          ,linkChanged: function(cpnt){ }  
+          ,unlinked: function(cpnt){ }
+        }
+      }
+    }
+    this.getRelationNodes('../xxx/xx')[<num>] // 获取到对方组件的实例 
+    // 组件B中 
+    {
+      ,relations: {   
+        '../xxx/xx': {  // 关联组件A  
+          type: 'ancestor'   
+          ,linked: function(cpnt){ }  
+          ,linkChanged: function(cpnt){ }  
+          ,unlinked: function(cpnt){ }
+        }
+      }
+    }
+    this.getRelationNodes('../xxx/xx')[<num>] // 获取到对方组件的实例 
+  任意组件间通信: 'relations'&'behaviors' // TODO
+    PS: 'relations'将层级组件关联,同一上层组件通过'behaviors'关联到任意两组件 
+      一组件通过'behaviors'中定义的方法来获取到另一组件[先获取到上层通过上层获取到另一组件]
 抽象节点 
   有时,自定义组件模版中的一些节点,其对应的自定义组件不是由自定义组件本身确定的,
   而是自定义组件的调用者确定的 

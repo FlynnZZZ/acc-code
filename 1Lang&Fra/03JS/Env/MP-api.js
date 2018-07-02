@@ -809,7 +809,7 @@ Canvas绘图
       ,'camera' // 使用相机 
     ]
     ,success : function(res){ 
-      res
+      res 
         .tempFilePaths  图片的本地文件路径列表 
         .tempFiles  图片的本地文件列表,每一项是一个File对象 '1.2.0'
           [

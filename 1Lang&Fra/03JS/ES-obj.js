@@ -906,7 +906,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         // meber 数组中的每个成员 
         return bol;
       }
-      Output: 回调返回值为true时,对应成员的下标,否则最终返回 -1 
+      Output: 首个回调返回值为true成员的下标,否则最终返回 -1 
       var idx1 = [7,8,9,10].findIndex(function(value){ 
         return value > 8; 
       }); 
@@ -1034,19 +1034,19 @@ Date,日期时间类: 处理时间和日期,内置获取和设置日期时间信
       参数中必须有年份和月份
       Date.UTC(2016,10,1,1,1);  //1477962060000
   Instance: 
-    var date = new Date([val]) 创建时间对象 
+    new Date(arg?) 创建时间对象 
       PS: 无字面量格式; 以常规函数调用即不加new操作符,也会返回一个字符串,但不是时间对象;
-      date = new Date()     由系统当前时间创建的时间对象
-      date = new Date(num)  自世界协调时间至今的毫秒数创建时间对象 
+      new Date()     由系统当前时间创建的时间对象
+      new Date(num)  自世界协调时间至今的毫秒数创建时间对象 
         var date = new Date(1000);
         console.log(date); // Thu Jan 01 1970 08:00:01 GMT+0800(中国标准时间)
-      date = new Date(str)  由被 Date.parse() 解析的字符串创建的时间对象  
+      new Date(str)  由被 Date.parse() 解析的字符串创建的时间对象  
         var date1 = new Date("4/12/2007");
         // 等价于
         var date2 = new Date(Date.parse("4/12/2007"));
         console.log(date1); // Thu Apr 12 2007 00:00:00 GMT+0800(中国标准时间)
         console.log(date2); // Thu Apr 12 2007 00:00:00 GMT+0800(中国标准时间)
-      date = new Date(y,m[,d,h,m,s,ms]);  最少指定年月 
+      new Date(y,m[,d,h,m,s,ms]);  最少指定年月 
         m   '月'参数,范围 0-11  
         d   '天'参数,默认为 1, 0 则表示上一个月的最后一天 
         Example: 

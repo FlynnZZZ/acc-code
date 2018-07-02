@@ -309,7 +309,7 @@ MiniProgrom,微信小程序
         // 若无 onPageNotFound 监听,当跳转页面不存在时,将推入微信客户端原生的页面不存在提示页面 
         // 可进行重定向处理,但必须同步处理,异步处理,如 setTimeout,则无效 
         // 若又重定向到另一个不存在的页面,将推入微信客户端原生的页面不存在提示页面,且不在回调 onPageNotFound
-        param
+        param 
           .path  // str,不存在页面的路径
           .query // obj,打开不存在页面的 query
             .key 

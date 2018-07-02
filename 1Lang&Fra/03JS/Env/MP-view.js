@@ -1,12 +1,87 @@
-'Component'内置组件: 可通过组合基础组件进行快速开发 
+◆'Component'内置组件: 可通过组合基础组件进行快速开发 
   PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
-视图组件 
+  ★视图组件 
   <view>         视图容器 
     hover-stop-propagation='<bol>' 是否阻止节点的祖先节点出现点击态,默认:false  '1.5.0+' ? 
     hover-class="<str>"   指定点击后的样式类 
       "none"   默认值,没有点击态效果 
     hover-start-time="<num>"  点击后多久出现点击态,单位ms,默认: 50  
     hover-stay-time="<num>"   手指松开后点击态保留时间,单位ms,默认: 400
+  <swiper>       滑块视图容器/轮播组件 
+    PS: 其中只能放置<swiper-item>组件,否则会导致未定义的行为 
+    indicator-dots="bol"           是否显示面板指示点,默认:false  
+    indicator-color='color'        指示点颜色,默认:rgba(0,0,0,0.3) '1.1.0+' 
+    indicator-active-color="color" 当前选中的指示点颜色,默认:#000  '1.1.0+'
+    autoplay="bol"  是否自动切换,默认:false   
+    interval="num"  自动切换时间间隔,默认:5000 
+    circular="bol"    是否采用衔接滑动,默认:false   
+    duration="num"    滑动动画时长,默认:500  
+    vertical="bol"  是否改为纵向滑动方向,默认:false 
+    current="num"      当前所在页面的index,默认:0  
+    bind:change="fn"   'current'改变时触发'change'事件 
+      event 
+        .detail 
+          .current 
+          .source  // kw,表示导致变更的原因 ['1.4.0+']
+            'autoplay' 自动播放导致swiper变化 
+            'touch'    用户划动引起swiper变化  
+            ''         其他原因 
+      若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,
+        因而通常情况下请不要这样使用 
+    <swiper-item>  轮播中一帧的页面 
+      PS: 仅可放置在<swiper>组件中,宽高自动设置为100%;
+        通常以循环的方式加载到页面中 
+        通过在每一个的 swiper-item 外面包上一个链接标签,以超链接的方式跳转页面 
+      Example: 
+        main.wxml
+        <view>
+          <swiper class="swiper_box" 
+          indicator-dots="{{indicatorDots}}" 
+          vertical="{{vertical}}" 
+          autoplay="{{autoplay}}" 
+          interval="{{interval}}" 
+          duration="{{duration}}" 
+          bind:change="swiperchange">
+            <block wx:for="{{images}}">
+              <swiper-item>
+                <image src="{{item.picurl}}" class="slide-image"/>
+              </swiper-item>
+            </block>
+          </swiper>
+        </view>
+        main.js
+        var app = getApp()    //获取应用实例
+        Page({
+          data: {
+            indicatorDots: true
+            ,vertical: true
+            ,autoplay: true
+            ,interval: 3000
+            ,duration: 1000
+            ,loadingHidden: false  // loading
+          }
+          //事件处理函数
+          ,swiperchange: function(e) { //  轮播 改变时会触发的 change 事件
+          }
+          ,onLoad: function() {
+            console.log('onLoad')
+            var that = this
+            //sliderList
+            wx.request({
+              url: 'http://huanqiuxiaozhen.com/wemall/slider/list',
+              method: 'GET',
+              data: {},
+              header: {
+                'Accept': 'application/json'
+              },
+              success: function(res) {
+                that.setData({
+                  images: res.data
+                })
+              }
+            })
+          }
+        })
   <scroll-view>  可滚动视图区域 
     PS: 不可在组件内中使用 textarea/map/canvas/video 组件 
     scroll-x="<bol>"    横向滚动,默认:false 
@@ -54,50 +129,50 @@
     scale-area="bol"   默认:false  '1.9.90+'
       当里面的<movable-view>设置为支持双指缩放时,
       设置此值可将缩放手势生效区域修改为整个movable-area  
-  <movable-view> 可拖拽滑动的视图容器 '1.2.0+' 
-    PS: 宽高默认10px;默认为绝对定位,top和left属性为0px 
-      必须作为<movable-area>的子节点使用,否则不能移动 
-      当小于<movable-area>时,移动范围是在<movable-area>内；
-      当大于<movable-area>时,移动范围为包含<movable-area> 
-    x="num/str"    x轴偏移量,改变值会触发动画 
-      PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
-    y="num/str"    y轴偏移量,改变值会触发动画 
-      PS: 如果y的值不在可移动范围内,会自动移动到可移动范围 
-    direction="KW"   可移动的方向 
-      'none'  默认
-      'all'
-      'vertical'
-      'horizontal'
-    inertia="bol"    是否移动带有惯性,默认:false  
-    out-of-bounds="bol"   超过可移动区域后,movable-view是否还可以移动,默认:false 
-    damping="num"   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认:20  
-    friction="num"  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认:2  
-      必须大于0,否则会被设置成默认值
-    disabled="bol"  是否禁用,默认:false  '1.9.90+'
-    scale="false"      是否支持双指缩放,默认:false  '1.9.90+'
-      默认缩放手势生效区域是在movable-view内  
-    scale-min="num"    定义缩放倍数最小值,默认:0.5  '1.9.90+'
-    scale-max="num"    定义缩放倍数最大值,默认:10  '1.9.90+'
-    scale-value="num"  定义缩放倍数,默认:1 '1.9.90+'
-      取值范围: 0.5 - 10  
-    animation="bol"    是否使用动画,默认:true   '2.1.0+'
-    bind:change="fn"   拖动过程中触发的事件  '1.9.90+'
-      event 
-        .detail 
-          .x 
-          .y  
-          .source   KW,产生移动的原因
-            'touch'                拖动
-            'touch-out-of-bounds'  超出移动范围
-            'out-of-bounds'        超出移动范围后的回弹
-            'friction'             惯性 
-            ''  
-    bind:scale="fn"    缩放过程中触发的事件
-      event  
-        .detail 
-          .x    '2.1.0+'
-          .y    '2.1.0+'
-          .scale  
+    <movable-view> 可拖拽滑动的视图容器 '1.2.0+' 
+      PS: 宽高默认10px;默认为绝对定位,top和left属性为0px 
+        必须作为<movable-area>的子节点使用,否则不能移动 
+        当小于<movable-area>时,移动范围是在<movable-area>内；
+        当大于<movable-area>时,移动范围为包含<movable-area> 
+      x="num/str"    x轴偏移量,改变值会触发动画 
+        PS: 如果x的值不在可移动范围内,会自动移动到可移动范围 
+      y="num/str"    y轴偏移量,改变值会触发动画 
+        PS: 如果y的值不在可移动范围内,会自动移动到可移动范围 
+      direction="KW"   可移动的方向 
+        'none'  默认
+        'all'
+        'vertical'
+        'horizontal'
+      inertia="bol"    是否移动带有惯性,默认:false  
+      out-of-bounds="bol"   超过可移动区域后,movable-view是否还可以移动,默认:false 
+      damping="num"   阻尼系数,用于控制过界回弹的动画,值越大移动越快,默认:20  
+      friction="num"  摩擦系数,用于控制惯性滑动的动画,值越大滑动越快停止,默认:2  
+        必须大于0,否则会被设置成默认值
+      disabled="bol"  是否禁用,默认:false  '1.9.90+'
+      scale="false"      是否支持双指缩放,默认:false  '1.9.90+'
+        默认缩放手势生效区域是在movable-view内  
+      scale-min="num"    定义缩放倍数最小值,默认:0.5  '1.9.90+'
+      scale-max="num"    定义缩放倍数最大值,默认:10  '1.9.90+'
+      scale-value="num"  定义缩放倍数,默认:1 '1.9.90+'
+        取值范围: 0.5 - 10  
+      animation="bol"    是否使用动画,默认:true   '2.1.0+'
+      bind:change="fn"   拖动过程中触发的事件  '1.9.90+'
+        event 
+          .detail 
+            .x 
+            .y  
+            .source   KW,产生移动的原因
+              'touch'                拖动
+              'touch-out-of-bounds'  超出移动范围
+              'out-of-bounds'        超出移动范围后的回弹
+              'friction'             惯性 
+              ''  
+      bind:scale="fn"    缩放过程中触发的事件
+        event  
+          .detail 
+            .x    '2.1.0+'
+            .y    '2.1.0+'
+            .scale  
   <cover-view>   覆盖在原生组件上的文本视图  '1.4.0+' 
     PS: 可覆盖的原生组件包括<map><video><canvas>,支持嵌套 
       文本建议都套上<cover-view>标签,避免排版错误 
@@ -109,84 +184,9 @@
       建议子节点不要溢出父节点
       暂不支持css动画 
     src  图标路径,支持临时路径,暂不支持base64与网络地址 
-  <swiper>       滑块视图容器,也叫轮播组件 
-    PS: 其中只能放置<swiper-item>组件,否则会导致未定义的行为 
-    indicator-dots="bol"           是否显示面板指示点,默认:false  
-    indicator-color='color'        指示点颜色,默认:rgba(0,0,0,0.3) '1.1.0+' 
-    indicator-active-color="color" 当前选中的指示点颜色,默认:#000  '1.1.0+'
-    autoplay="bol"  是否自动切换,默认:false   
-    interval="num"  自动切换时间间隔,默认:5000 
-    circular="bol"    是否采用衔接滑动,默认:false   
-    duration="num"    滑动动画时长,默认:500  
-    vertical="bol"  是否改为纵向滑动方向,默认:false 
-    current="num"      当前所在页面的index,默认:0  
-    bind:change="fn"   'current'改变时触发'change'事件 
-      event 
-        .detail 
-          .current 
-          .source  // kw,表示导致变更的原因 ['1.4.0+']
-            'autoplay' 自动播放导致swiper变化 
-            'touch'    用户划动引起swiper变化  
-            ''         其他原因 
-      若在'bindchange'事件中使用setData改变current值,有可能导致setData被不停地调用,
-        因而通常情况下请不要这样使用 
-  <swiper-item>  轮播中一帧的页面 
-    PS: 仅可放置在<swiper>组件中,宽高自动设置为100%;
-      通常以循环的方式加载到页面中 
-      通过在每一个的 swiper-item 外面包上一个链接标签,以超链接的方式跳转页面 
-    Example: 
-      main.wxml
-      <view>
-        <swiper class="swiper_box" 
-        indicator-dots="{{indicatorDots}}" 
-        vertical="{{vertical}}" 
-        autoplay="{{autoplay}}" 
-        interval="{{interval}}" 
-        duration="{{duration}}" 
-        bind:change="swiperchange">
-          <block wx:for="{{images}}">
-            <swiper-item>
-              <image src="{{item.picurl}}" class="slide-image"/>
-            </swiper-item>
-          </block>
-        </swiper>
-      </view>
-      main.js
-      var app = getApp()    //获取应用实例
-      Page({
-        data: {
-          indicatorDots: true
-          ,vertical: true
-          ,autoplay: true
-          ,interval: 3000
-          ,duration: 1000
-          ,loadingHidden: false  // loading
-        }
-        //事件处理函数
-        ,swiperchange: function(e) { //  轮播 改变时会触发的 change 事件
-        }
-        ,onLoad: function() {
-          console.log('onLoad')
-          var that = this
-          //sliderList
-          wx.request({
-            url: 'http://huanqiuxiaozhen.com/wemall/slider/list',
-            method: 'GET',
-            data: {},
-            header: {
-              'Accept': 'application/json'
-            },
-            success: function(res) {
-              that.setData({
-                images: res.data
-              })
-            }
-          })
-        }
-      })
-基础内容 
+  ★基础内容 
   <icon/>   图标 
-    type   icon的类型 
+    type="KW"   icon的类型 
       'success'
       'success_no_circle'
       'info'
@@ -196,16 +196,16 @@
       'download'
       'search'
       'clear'
-    size   icon的大小,单位px,默认'23' 
-    color  icon的颜色 
+    size="num"  icon的大小,单位:px,默认:23 
+    color=""    icon的颜色 
   <text>    文本 
     PS: <text>组件内只支持<text>嵌套;除了文本节点以外的其他节点都无法长按选中;
-      各个操作系统的空格标准并不一致。
+      各个操作系统的空格标准并不一致 
       长按复制功能尚未实现
     selectable="bol"  是否文本可选,默认:false  '1.1.0+' 
     decode="bol"  是否解码,默认:false '1.4.0+' 
       可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
-    space="kw"   显示连续空格及方式  '1.4.0+' 
+    space="KW"   显示连续空格及方式  '1.4.0+' 
       'false' 默认值,不显示连续空格 
       'ensp'  中文字符空格一半大小 
       'emsp'  中文字符空格大小 
@@ -213,7 +213,7 @@
   <rich-text>  富文本 '1.4.0+' 
     PS: 组件内屏蔽所有节点的事件 
       如果使用了不受信任的HTML节点,该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
-    nodes  arr/str,节点列表或HTMLStr,默认值'[]' 
+    nodes="arr/str"  节点列表或HTMLStr,默认值:[] 
       PS: 推荐使用arr类型,组件会将str类型转换为arr,因而性能会有所下降 
       现支持两种节点: 
       ★type="node" 元素节点,默认值 
@@ -302,17 +302,17 @@
       })
     支持默认事件,包括：'tap''touchstart''touchmove''touchcancel''touchend'和'longtap' 
   <progress>   进度条 
-    percent      百分比,'0-100'间的浮点数 
-    show-info    是否在进度条右侧显示百分比,默认'false'
-    stroke-width 进度条线的宽度,单位px,默认'6' 
-    color           进度条颜色,默认'#09BB07' 
-    activeColor     已选择的进度条的颜色
-    backgroundColor 未选择的进度条的颜色
-    active          进度条从左往右的动画,默认'false' 
+    percent="float"    百分比,范围:0-100  
+    show-info ="bol"   是否在进度条右侧显示百分比,默认: false 
+    stroke-width="num" 进度条线的宽度,单位:px,默认:6 
+    color=""           进度条颜色,默认:'#09BB07' 
+    activeColor=""     已选择的进度条的颜色
+    backgroundColor="" 未选择的进度条的颜色
+    active =""         进度条从左往右的动画,默认:false  
   <navigator>  页面链接 
     url="path"    跳转链接 
       相对地址,'./'表示当前页面 
-    open-type="kw"     跳转方式 
+    open-type="KW"     跳转方式 
       'navigate'  对应 wx.navigateTo() 的功能,默认值  
       'redirect'  对应 wx.redirectTo() 的功能 
       'switchTab' 对应 wx.switchTab() 的功能 
@@ -327,7 +327,7 @@
     hover-stop-propagation="bol" 是否阻止本节点的祖先节点出现点击态,默认:false '1.5.0+' 
     hover-start-time="num"   按住后多久出现点击态,单位:ms,默认:50  
     hover-stay-time="num"    手指松开后点击态保留时间,单位:ms,默认:600 
-表单组件 
+  ★表单组件 
   <form>   表单 
     PS: 当点击<form>内'formType'为'submit'的<button>组件时,会提交表单 
     report-submit  是否返回formId用于发送模板消息 
@@ -390,6 +390,46 @@
     checked   当前是否选中,默认'false' 
     disabled  是否禁用,默认'false' 
     color     radio的颜色,同css的color
+  <picker>  从底部弹起的滚动选择器 [原生组件] 
+    ★共有属性 
+      bind:change="fn" value改变时触发'change'事件 
+        event.detail = {value: value}
+      disabled   是否禁用,默认'false' 
+    ★现支持五种选择器: 
+    普通选择器[默认值]: mode="selector"  
+      range="arr/objArr"    默认: [] 
+      range-key="str"  当'range'是objArr时,指定对象中key的值作为选择器显示内容 
+      value="num"      表示选择了'range'中的第几个[下标从0开始],默认:0 
+    时间选择器: mode='time' 
+      value="time"   选中的时间,格式:"hh:mm" 
+      start="time"   有效时间范围的开始,格式:"hh:mm" 
+      end="time"     有效时间范围的结束,格式:"hh:mm" 
+    日期选择器: mode='date' 
+      value="time"  选中的日期,格式:"YYYY-MM-DD",默认:0 
+      start="time"  有效日期范围的开始,格式:"YYYY-MM-DD" 
+      end="time"    有效日期范围的结束,格式:"YYYY-MM-DD" 
+      fields="KW"   选择器的粒度 
+        'day'   选择器粒度为天,默认值 
+        'year'  选择器粒度为年 
+        'month' 选择器粒度为月份 
+    省市区选择器: mode='region' '1.4.0+' 
+      value="str"        选中的省市区,默认:每一列的第一个值 
+      custom-item="str"  可为每一列的顶部添加一个自定义的项 '1.5.0+' 
+    多列选择器: mode='multiSelector' '1.4.0+' 
+      range="arrArr"    二维数组,长度表示多少列,数组的每项表示每列的数据,默认:[]  
+        如: [
+          ["a","b"]
+          ,["c","d"]
+        ]
+      range-key="str"   指定数组中对象的key值作为选择器显示内容 
+      value="numArr"    数组的元素表示选择了range对应项中的第几个,下标从0开始,默认:[] 
+      bind:columnchange="fn"  某一列的值改变时触发'columnchange'事件
+        event 
+          .detail 
+            .column   表示改变了第几列,下标从0开始 
+            .value    表示变更值的下标 
+    Accu: 
+      内部放置需其他节点,用于激活picker 
   <slider>  滑动选择器 
     min   最小值,默认'0' 
     max   最大值,默认'100' 
@@ -403,15 +443,17 @@
     show-value      是否显示当前value,默认'false' 
     bindchange    foo,完成一次拖动后触发的事件
       event.detail = {value: value}
-  '<switch>'  开关选择器 
+  <_switch>  开关选择器 
     PS: switch切换在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
-    checked   是否选中,默认'false'
-    type      样式
+    checked="bol"    是否选中,默认:false 
+    type="KW"        样式
       'switch'   默认 
       'checkbox'  
-    bindchange foo, checked改变时触发'change'事件
-      event.detail={ value:checked}
-    color      switch颜色,同css的color
+    color=""         switch颜色,同css的color
+    bind:change="fn" checked改变时触发'change'事件
+      event 
+        .detail 
+          .value  
   <textarea> 多行输入框 
     PS: 微信版本'6.3.30',列表渲染时,新增加的<textarea>在自动聚焦时的位置计算错误 
       <textarea>的blur事件会晚于页面上的tap事件,
@@ -487,7 +529,7 @@
     bind:getuserinfo="fn"    用户点击该按钮时,会返回获取到的用户信息 '1.3.0+' 
       从返回参数的detail中获取到的值同 wx.getUserInfo  
     bind:contact="fn"        客服消息回调 
-媒体组件 
+  ★媒体组件 
   <image/> 图片 
     PS: 默认宽高: 300px,225px
     src="path"   图片资源地址 
@@ -540,6 +582,62 @@
     bindtimeupdate foo,当播放进度改变时触发'timeupdate'事件 
       detail = {currentTime, duration}
     bindended      foo,当播放到末尾时触发'ended'事件 
+  <video> 视频 [原生组件] 
+    PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height 
+      video 组件是由客户端创建的原生组件,它的层级是最高的,不能通过 z-index 控制层级 ? 
+      请勿在scroll-view中使用video组件
+      css动画对video组件无效 
+    src="path"      视频资源地址 
+      不可使用本地资源,否则会出现bug   
+    // 播放相关 
+    autoplay="bol"  是否自动播放,默认:false 
+    loop="bol"      是否循环播放,默认:false '1.4.0+' 
+    muted="bol"     是否静音播放,默认:false '1.4.0+' 
+    duration="num"     指定视频时长 '1.1.0+' 
+    initial-time="num"  指定视频初始播放位置 '1.6.0' 
+    // 外观|显示 
+    poster="url"     视频封面的图片网络资源地址['controls'需为true]
+    objectFit="KW"   当视频大小与video容器大小不一致时,视频的表现形式 
+      'contain'  包含,默认值 
+      'fill'     填充
+      'cover'    覆盖 
+    controls="bol"    是否显示默认播放控件[播放/暂停按钮、播放进度、时间],默认:true  
+    enable-danmu="bol"  是否展示弹幕,默认:false 
+      只在初始化时有效,不能动态变更 
+    danmu-btn="bol"     是否显示弹幕按钮,默认:false 
+      只在初始化时有效,不能动态变更
+    danmu-list="[{text,color,time}]"     弹幕列表 
+    direction="kw"  设置全屏时视频的方向,不指定则根据宽高比自动判断 '1.7.0+' 
+      0   正常竖向
+      90  屏幕逆时针90度 
+      -90 屏幕顺时针90度  
+    page-gesture="bol"   在非全屏模式下,是否开启亮度与音量调节手势,默认:false '1.6.0+' 
+    show-progress="bol"  若不设置,宽度大于240时才会显示,默认:true '1.9.0+' 
+    show-fullscreen-btn="bol"   是否显示全屏按钮,默认:true  '1.9.0+' 
+    show-play-btn="bol"    是否显示视频底部控制栏的播放按钮,默认:true  '1.9.0+' 
+    show-center-play-btn="bol"     是否显示视频中间的播放按钮,默认:true  '1.9.0+' 
+    enable-progress-gesture="bol"  是否开启控制进度的手势,默认:true  '1.9.0+' 
+    bind:play="fn"       开始/继续播放时触发 
+    bind:pause="fn"      暂停播放时触发 
+    bind:ended="fn"      播放到末尾时触发 
+    bind:timeupdate="fn" 播放进度变化时触发[触发频率约250ms/次]
+      event 
+        .detail 
+          .currentTime  当前播放时间 
+    bind:fullscreenchange="fn" 进入/退出全屏是触发 '1.4.0+'
+      event  
+        .detail  
+          .fullScreen  当前全屏状态 
+          .direction    
+            'vertical'   
+            'horizontal' 
+    bind:waiting="fn"    视频出现缓冲时触发  '1.7.0+'
+    bind:error="fn"      视频播放出错时触发  '1.7.0+'    
+    Accu: 
+      video组件会和其后面的同级元素产生缝隙 
+        演示代码
+          <video></video>
+          <view style="height:100rpx;background-color:red;"></view>
   <camera> 系统相机[原生组件] '1.6.0+' 
     PS: 同一页面只能插入一个 camera 组件 
       请勿在 scroll-view、swiper、picker-view、movable-view 中使用 camera 组件。
@@ -586,7 +684,89 @@
         }
       })
   <live-player> 实时音视频播放 
-开放能力 
+  <canvas> 画布 [原生组件] 
+    PS: 由客户端创建的原生组件,它的层级是最高的; 默认宽度300px、高度225px 
+      css 动画对 canvas 组件无效 
+      请勿在 scroll-view 中使用 canvas 组件 
+    canvas-id="<str>"     必选,组件的唯一标识符 
+      同一页面中的 canvas-id 不可重复,
+      如果使用一个已经出现过的 canvas-id,该 canvas 标签对应的画布将被隐藏并不再正常工作
+    disable-scroll="bol" 当在canvas中移动时且有绑定手势事件时,禁止屏幕滚动以及下拉刷新,默认:false  
+    bind:touchstart="fn"  手指触摸动作开始
+    bind:touchmove="fn"   手指触摸后移动
+    bind:touchend="fn"    手指触摸动作结束
+    bind:touchcancel="fn" 手指触摸动作被打断,如来电提醒,弹窗
+    bind:longtap="fn"     手指长按'500ms'之后触发,触发了长按事件后进行移动不会触发屏幕的滚动
+    bind:error="fn"       当发生错误时触发'error'事件
+      detail = {errMsg: 'something wrong'}
+  <map> 地图 [原生组件] 
+    PS: 客户端创建的原生组件,它的层级是最高的
+      请勿在 scroll-view 中使用 map 组件。 css 动画对 map 组件无效。
+      map 组件使用的经纬度是火星坐标系,调用 wx.getLocation 接口需要指定 type 为 gcj02
+      地图组件的经纬度必选, 如果不填经纬度则默认值是北京的经纬度。
+    longitude    num,中心经度 
+    latitude     num,中心纬度 
+    scale    缩放级别,取值范围为'5-18',默认'16'  
+    markers  arr,标记点 
+    covers   arr,即将移除,请使用markers 
+    polyline arr,路线 
+    circles  arr,圆 
+    controls arr,控件 
+    include-points arr,缩放视野以包含所有给定的坐标点 
+    show-location bol,显示带有方向的当前定位点 
+    bindmarkertap    foo,点击标记点时触发 
+    bindcallouttap   foo,点击标记点对应的气泡时触发 '1.2.0+'
+    bindcontroltap   foo,点击控件时触发 
+    bindregionchange foo,视野发生变化时触发 
+    bindtap          foo,点击地图时触发
+    markers  标记点用于在地图上显示标记的位置
+      属性 说明 类型 必选 备注 最低版本
+      id 标记点id Number 否 marker点击事件回调会返回此id 
+      latitude 纬度 Number 是 浮点数,范围 -90 ~ 90 
+      longitude 经度 Number 是 浮点数,范围 -180 ~ 180 
+      title 标注点名 str 否  
+      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径 
+      rotate 旋转角度 Number 否 顺时针旋转的角度,范围 0 ~ 360,默认为 0 
+      alpha 标注的透明度 Number 否 默认1,无透明 
+      width 标注图标宽度 Number 否 默认为图片实际宽度 
+      height 标注图标高度 Number 否 默认为图片实际高度 
+      callout 自定义标记点上方的气泡窗口 Object 否 {content, color, fontSize, borderRadius, bgColor, padding, boxShadow, display} 1.2.0
+      label 为标记点旁边增加标签 Object 否 {color, fontSize, content, x, y},可识别换行符,x,y原点是marker对应的经纬度 1.2.0
+      anchor 经纬度在标注图标的锚点,默认底边中点 Object 否 {x, y},x表示横向(0-1),y表示竖向(0-1)。{x: .5, y: 1} 表示底边中点 1.2.0
+    marker   上的气泡 callout
+    content  文本 str
+      color 文本颜色 str
+      fontSize 文字大小 Number
+      borderRadius callout边框圆角 Number
+      bgColor 背景色 str
+      padding 文本边缘留白 Number
+      display 'BYCLICK':点击显示; 'ALWAYS':常显 str
+    polyline 指定一系列坐标点,从数组第一项连线至最后一项
+      points 经纬度数组 Array 是 [{latitude: 0, longitude: 0}] 
+      color 线的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA 
+      width 线的宽度 Number 否  
+      dottedLine 是否虚线 Boolean 否 默认false 
+      arrowLine 带箭头的线 Boolean 否 默认false,开发者工具暂不支持该属性 1.2.0
+      borderColor 线的边框颜色 str 否  1.2.0
+      borderWidth 线的厚度 Number 否  1.2.0
+    circles 在地图上显示圆
+      latitude 纬度 Number 是 浮点数,范围 -90 ~ 90
+      longitude 经度 Number 是 浮点数,范围 -180 ~ 180
+      color 描边的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
+      fillColor 填充颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
+      radius 半径 Number 是 
+      strokeWidth 描边的宽度 Number 否
+    controls 在地图上显示控件,控件不随着地图移动
+      id 控件id Number 否 在控件点击事件回调会返回此id
+      position 控件在地图的位置 Object 是 控件相对地图位置
+      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径
+      clickable 是否可点击 Boolean 否 默认不可点击
+    position 
+      left 距离地图的左边界多远 Number 否 默认为0
+      top 距离地图的上边界多远 Number 否 默认为0
+      width 控件宽度 Number 否 默认为图片宽度
+      height 控件高度 Number 否 默认为图片高度
+  ★开放能力 
   <web-view> 承载网页的容器 '1.6.4+' // TODO: 
     PS: 会自动铺满整个小程序页面; 个人类型与海外类型的小程序暂不支持使用 
     属性名      类型  默认值  说明
@@ -686,7 +866,7 @@
     每个页面只能有一个<web-view/>,<web-view/>会自动铺满整个页面,并覆盖其他组件。
     <web-view/>网页与小程序之间不支持除JSSDK提供的接口之外的通信。
     在iOS中,若存在JSSDK接口调用无响应的情况,可在<web-view/>的src后面加个#wechat_redirect解决。
-其他组件 
+  ★其他组件 
   <open-data> 用于展示微信开放的数据 '1.4.0+' 
     type       str,开放数据类型
       'groupName' 拉取群名称[只有当前用户在此群内才能拉取到群名称] ['1.4.0+'] 
@@ -699,204 +879,30 @@
       'default-light'
     session-from str,用户从该按钮进入会话时,开发者将收到带上本参数的事件推送 
       本参数可用于区分用户进入客服会话的来源。
-原生组件 
-  PS: 是由客户端原生参与组件的渲染 
-    层级是最高的,不能通过 z-index 控制层级。可使用 cover-view cover-image覆盖在上面。
-  <video> 视频 
-    PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height 
-      video 组件是由客户端创建的原生组件,它的层级是最高的,不能通过 z-index 控制层级 ? 
-      请勿在scroll-view中使用video组件
-      css动画对video组件无效 
-    src="path"      视频资源地址 
-      不可使用本地资源,否则会出现bug   
-    // 播放相关 
-    autoplay="bol"  是否自动播放,默认:false 
-    loop="bol"      是否循环播放,默认:false '1.4.0+' 
-    muted="bol"     是否静音播放,默认:false '1.4.0+' 
-    duration="num"     指定视频时长 '1.1.0+' 
-    initial-time="num"  指定视频初始播放位置 '1.6.0' 
-    // 外观|显示 
-    poster="url"     视频封面的图片网络资源地址['controls'需为true]
-    objectFit="KW"   当视频大小与video容器大小不一致时,视频的表现形式 
-      'contain'  包含,默认值 
-      'fill'     填充
-      'cover'    覆盖 
-    controls="bol"    是否显示默认播放控件[播放/暂停按钮、播放进度、时间],默认:true  
-    enable-danmu="bol"  是否展示弹幕,默认:false 
-      只在初始化时有效,不能动态变更 
-    danmu-btn="bol"     是否显示弹幕按钮,默认:false 
-      只在初始化时有效,不能动态变更
-    danmu-list="[{text,color,time}]"     弹幕列表 
-    direction="kw"  设置全屏时视频的方向,不指定则根据宽高比自动判断 '1.7.0+' 
-      0   正常竖向
-      90  屏幕逆时针90度 
-      -90 屏幕顺时针90度  
-    page-gesture="bol"   在非全屏模式下,是否开启亮度与音量调节手势,默认:false '1.6.0+' 
-    show-progress="bol"  若不设置,宽度大于240时才会显示,默认:true '1.9.0+' 
-    show-fullscreen-btn="bol"   是否显示全屏按钮,默认:true  '1.9.0+' 
-    show-play-btn="bol"    是否显示视频底部控制栏的播放按钮,默认:true  '1.9.0+' 
-    show-center-play-btn="bol"     是否显示视频中间的播放按钮,默认:true  '1.9.0+' 
-    enable-progress-gesture="bol"  是否开启控制进度的手势,默认:true  '1.9.0+' 
-    bind:play="fn"       开始/继续播放时触发 
-    bind:pause="fn"      暂停播放时触发 
-    bind:ended="fn"      播放到末尾时触发 
-    bind:timeupdate="fn" 播放进度变化时触发[触发频率约250ms/次]
-      event 
-        .detail 
-          .currentTime  当前播放时间 
-    bind:fullscreenchange="fn" 进入/退出全屏是触发 '1.4.0+'
-      event  
-        .detail  
-          .fullScreen  当前全屏状态 
-          .direction    
-            'vertical'   
-            'horizontal' 
-    bind:waiting="fn"    视频出现缓冲时触发  '1.7.0+'
-    bind:error="fn"      视频播放出错时触发  '1.7.0+'    
-    Accu: 
-      video组件会和其后面的同级元素产生缝隙 
-        演示代码
-          <video></video>
-          <view style="height:100rpx;background-color:red;"></view>
-  <map> 地图 
-    PS: 客户端创建的原生组件,它的层级是最高的
-      请勿在 scroll-view 中使用 map 组件。 css 动画对 map 组件无效。
-      map 组件使用的经纬度是火星坐标系,调用 wx.getLocation 接口需要指定 type 为 gcj02
-      地图组件的经纬度必选, 如果不填经纬度则默认值是北京的经纬度。
-    longitude    num,中心经度 
-    latitude     num,中心纬度 
-    scale    缩放级别,取值范围为'5-18',默认'16'  
-    markers  arr,标记点 
-    covers   arr,即将移除,请使用markers 
-    polyline arr,路线 
-    circles  arr,圆 
-    controls arr,控件 
-    include-points arr,缩放视野以包含所有给定的坐标点 
-    show-location bol,显示带有方向的当前定位点 
-    bindmarkertap    foo,点击标记点时触发 
-    bindcallouttap   foo,点击标记点对应的气泡时触发 '1.2.0+'
-    bindcontroltap   foo,点击控件时触发 
-    bindregionchange foo,视野发生变化时触发 
-    bindtap          foo,点击地图时触发
-    markers  标记点用于在地图上显示标记的位置
-      属性 说明 类型 必选 备注 最低版本
-      id 标记点id Number 否 marker点击事件回调会返回此id 
-      latitude 纬度 Number 是 浮点数,范围 -90 ~ 90 
-      longitude 经度 Number 是 浮点数,范围 -180 ~ 180 
-      title 标注点名 str 否  
-      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径 
-      rotate 旋转角度 Number 否 顺时针旋转的角度,范围 0 ~ 360,默认为 0 
-      alpha 标注的透明度 Number 否 默认1,无透明 
-      width 标注图标宽度 Number 否 默认为图片实际宽度 
-      height 标注图标高度 Number 否 默认为图片实际高度 
-      callout 自定义标记点上方的气泡窗口 Object 否 {content, color, fontSize, borderRadius, bgColor, padding, boxShadow, display} 1.2.0
-      label 为标记点旁边增加标签 Object 否 {color, fontSize, content, x, y},可识别换行符,x,y原点是marker对应的经纬度 1.2.0
-      anchor 经纬度在标注图标的锚点,默认底边中点 Object 否 {x, y},x表示横向(0-1),y表示竖向(0-1)。{x: .5, y: 1} 表示底边中点 1.2.0
-    marker   上的气泡 callout
-    content  文本 str
-      color 文本颜色 str
-      fontSize 文字大小 Number
-      borderRadius callout边框圆角 Number
-      bgColor 背景色 str
-      padding 文本边缘留白 Number
-      display 'BYCLICK':点击显示; 'ALWAYS':常显 str
-    polyline 指定一系列坐标点,从数组第一项连线至最后一项
-      points 经纬度数组 Array 是 [{latitude: 0, longitude: 0}] 
-      color 线的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA 
-      width 线的宽度 Number 否  
-      dottedLine 是否虚线 Boolean 否 默认false 
-      arrowLine 带箭头的线 Boolean 否 默认false,开发者工具暂不支持该属性 1.2.0
-      borderColor 线的边框颜色 str 否  1.2.0
-      borderWidth 线的厚度 Number 否  1.2.0
-    circles 在地图上显示圆
-      latitude 纬度 Number 是 浮点数,范围 -90 ~ 90
-      longitude 经度 Number 是 浮点数,范围 -180 ~ 180
-      color 描边的颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
-      fillColor 填充颜色 str 否 8位十六进制表示,后两位表示alpha值,如：#000000AA
-      radius 半径 Number 是 
-      strokeWidth 描边的宽度 Number 否
-    controls 在地图上显示控件,控件不随着地图移动
-      id 控件id Number 否 在控件点击事件回调会返回此id
-      position 控件在地图的位置 Object 是 控件相对地图位置
-      iconPath 显示的图标 str 是 项目目录下的图片路径,支持相对路径写法,以'/'开头则表示相对小程序根目录；也支持临时路径
-      clickable 是否可点击 Boolean 否 默认不可点击
-    position 
-      left 距离地图的左边界多远 Number 否 默认为0
-      top 距离地图的上边界多远 Number 否 默认为0
-      width 控件宽度 Number 否 默认为图片宽度
-      height 控件高度 Number 否 默认为图片高度
-  <canvas> 画布 
-    PS: 由客户端创建的原生组件,它的层级是最高的; 默认宽度300px、高度225px 
-      css 动画对 canvas 组件无效 
-      请勿在 scroll-view 中使用 canvas 组件 
-    canvas-id="<str>"     必选,组件的唯一标识符 
-      同一页面中的 canvas-id 不可重复,
-      如果使用一个已经出现过的 canvas-id,该 canvas 标签对应的画布将被隐藏并不再正常工作
-    disable-scroll="bol" 当在canvas中移动时且有绑定手势事件时,禁止屏幕滚动以及下拉刷新,默认:false  
-    bind:touchstart="fn"  手指触摸动作开始
-    bind:touchmove="fn"   手指触摸后移动
-    bind:touchend="fn"    手指触摸动作结束
-    bind:touchcancel="fn" 手指触摸动作被打断,如来电提醒,弹窗
-    bind:longtap="fn"     手指长按'500ms'之后触发,触发了长按事件后进行移动不会触发屏幕的滚动
-    bind:error="fn"       当发生错误时触发'error'事件
-      detail = {errMsg: 'something wrong'}
-  <picker>             从底部弹起的滚动选择器 
-    现支持五种选择器'普通选择器''多列选择器''时间选择器''日期选择器''省市区选择器' 
-    ★共有属性 
-    bindchange foo,value改变时触发'change'事件 
-      event.detail = {value: value}
-    disabled   是否禁用,默认'false' 
-    ★mode="selector" 普通选择器,默认值 
-    range      默认'[]' 
-    range-key  当'range'是objArr时,指定对象中key的值作为选择器显示内容 
-    value      表示选择了'range'中的第几个[下标从0开始],默认'0'
-    ★mode='multiSelector' 多列选择器 ['1.4.0+']
-    range      二维数组,长度表示多少列,数组的每项表示每列的数据,默认'[]' 
-      如[["a","b"], ["c","d"]]
-    range-key  指定数组中对象的key值作为选择器显示内容 
-    value      数组的元素表示选择了range对应项中的第几个,下标从0开始,默认'[]' 
-    bindcolumnchange foo,某一列的值改变时触发'columnchange'事件
-      event.detail = {
-        column: column,  // 表示改变了第几列,下标从0开始 
-        value: value     // 表示变更值的下标 
-      }
-    ★mode='time' 时间选择器 
-    value   表示选中的时间,格式为"hh:mm"
-    start   表示有效时间范围的开始,字符串格式为"hh:mm"
-    end     表示有效时间范围的结束,字符串格式为"hh:mm"
-    ★mode='date' 日期选择器 
-    value  表示选中的日期,格式为"YYYY-MM-DD",默认'0'
-    start  表示有效日期范围的开始,字符串格式为"YYYY-MM-DD"
-    end    表示有效日期范围的结束,字符串格式为"YYYY-MM-DD"
-    fields 表示选择器的粒度 
-      day   选择器粒度为天,默认值 
-      year  选择器粒度为年 
-      month 选择器粒度为月份 
-    ★mode='region' 省市区选择器 ['1.4.0+']
-    value         表示选中的省市区,默认选中每一列的第一个值 
-    custom-item   可为每一列的顶部添加一个自定义的项 '1.5.0+' 
-  <picker-view>        嵌入页面的滚动选择器 
+  ★原生组件 
+    PS: 是由客户端原生参与组件的渲染 
+      层级是最高的,不能通过 z-index 控制层级。可使用 cover-view cover-image覆盖在上面。
+  <picker-view> 嵌入页面的滚动选择器 [原生组件] 
     PS: 其中只可放置<picker-view-column>组件,其他节点不会显示 
       滚动时在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭
-    value    arr,数组中的数字依次表示... 
+    value=""    arr,数组中的数字依次表示... 
       数字大于 picker-view-column 可选项长度时,选择最后一项 
-    indicator-style  设置选择器中间选中框的样式 
-    indicator-class  设置选择器中间选中框的类名['1.1.0+'] 
-    mask-style       设置蒙层的样式['1.5.0'] 
-    mask-class       设置蒙层的类名 ['1.5.0']
-    bindchange   foo,当滚动选择,value 改变时触发'change'事件
+    indicator-style=""  设置选择器中间选中框的样式 
+    indicator-class=""  设置选择器中间选中框的类名 '1.1.0+'  
+    mask-style=""       设置蒙层的样式 '1.5.0+' 
+    mask-class=""       设置蒙层的类名 '1.5.0+' 
+    bind:change="fn"    当滚动选择,value改变时触发'change'事件
       event.detail = {value: value}；
       value为数组,表示 picker-view 内的 picker-view-column 当前选择的是第几项[下标从 0 开始]
-  <picker-view-column> 滚动选择项 
-    仅可放置于<picker-view>中,其子节点的高度会自动设置成与<picker-view>的选中框的高度一致 
-共同属性类型: 所有组件都有的属性 
-  id="str"      组件的唯一标示 保持整个页面唯一
-  class="str"   组件的样式类   在对应的 WXSS 中定义的样式类
-  style="str"   组件的内联样式 可以动态设置的内联样式
-  hidden="bol"  组件是否显示   所有组件默认显示
-  data-xxx="any"  自定义属性     组件上触发的事件时,会发送给事件处理函数
-  bind:xxx/catch:xxx="fn"  组件的事件     详见事件
---------------------------------------------------------------------------------
+    <picker-view-column> 滚动选择项 
+      仅可放置于<picker-view>中,其子节点的高度会自动设置成与<picker-view>的选中框的高度一致 
+  ★共同属性类型: 所有组件都有的属性 
+    id="str"      组件的唯一标示 保持整个页面唯一
+    class="str"   组件的样式类   在对应的 WXSS 中定义的样式类
+    style="str"   组件的内联样式 可以动态设置的内联样式
+    hidden="bol"  组件是否显示   所有组件默认显示
+    data-xxx="any"  自定义属性     组件上触发的事件时,会发送给事件处理函数
+    bind:xxx/catch:xxx="fn"  组件的事件     详见事件
 <template name="templateName"></template> WXML模板 
   PS: 可在模板中定义代码片段,然后在不同的地方调用 
   定义模板: 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
@@ -961,50 +967,48 @@
     <include src="header.wxml"/>
     <view> body </view>
     <include src="footer.wxml"/>
---------------------------------------------------------------------------------
-指令语法 
-{{val}}      "Mustache"语法,插值 
-  适用于'组件文本'/'组件属性' 
-  控制class  class="aoo {{boo}}" 
-wx:for="{{arr/obj/str}}"  列表渲染 
-  当前下标默认为: 'index';当前项默认为: 'item' 
-    <view wx:for="{{items}}">
-      {{index}}: {{item:one}}
+◆指令语法 
+  {{val}}      "Mustache"语法,插值 
+    适用于'组件文本'/'组件属性' 
+    控制class  class="aoo {{boo}}" 
+  wx:for="{{arr/obj/str}}"  列表渲染 
+    当前下标默认为: 'index';当前项默认为: 'item' 
+      <view wx:for="{{items}}">
+        {{index}}: {{item:one}}
+      </view>
+    花括号和引号之间如果有空格,将最终被解析成为字符串 
+      <view wx:for="{{[1,2,3]}} "> {{item}} </view>
+      // 等同于
+      <view wx:for="{{[1,2,3] + ' '}}" > {{item}} </view>
+    值为字符串时,将字符串解析成字符串数组 
+      <view wx:for="abcde"> {{item}} </view>
+      // 等同于
+      <view wx:for="{{['a','b','c','d','e']}}"> {{item}} </view>
+  wx:for-item="itm"  指定当前项 
+  wx:for-index="idx" 指定当前下标 
+    <view wx:for="{{items}}" wx:for-item="name"  wx:for-index="id">
+      {{id}}: {{name.one}}
     </view>
-  花括号和引号之间如果有空格,将最终被解析成为字符串 
-    <view wx:for="{{[1,2,3]}} "> {{item}} </view>
-    // 等同于
-    <view wx:for="{{[1,2,3] + ' '}}" > {{item}} </view>
-  值为字符串时,将字符串解析成字符串数组 
-    <view wx:for="abcde"> {{item}} </view>
-    // 等同于
-    <view wx:for="{{['a','b','c','d','e']}}"> {{item}} </view>
-wx:for-item="itm"  指定当前项 
-wx:for-index="idx" 指定当前下标 
-  <view wx:for="{{items}}" wx:for-item="name"  wx:for-index="id">
-    {{id}}: {{name.one}}
-  </view>
-<block wx:for="{{arr}}"> </block>  列表块渲染 
-wx:key="_key/*this"    指定列表中项目的唯一标识符 
-  PS: 当列表为静态时可不必使用;
-    当数据改变触发渲染层重新渲染时,会校正带有key的组件,进行重排而非重建,
-    以确保使组件保持自身的状态,并提高列表渲染效率 
-  _key   项目中的字段,即表示为'item[key]',该值需是列表中唯一的字符串或数字,且不能动态改变 
-  *this 保留关键字,表示'item'本身,这种表示需item是一个唯一的字符串或者数字
-wx:if="{{val}}"    条件渲染 
-  PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
-wx:elif="{{val}}"  条件渲染 
-wx:else            条件渲染 
-  和 wx:if 必须相邻 
-<block wx:if="{{val}}"> </block>  多组件条件渲染 
-  PS: 一次性判断多个组件标签,可用一个<block/>标签将多个组件包装起来,并使用wx:if控制属性 
-    <block/>并不是一个组件,它仅仅是一个包装元素,不会在页面中做任何渲染,只接受控制属性。
-  <block wx:if="{{true}}">
-    <view> view1 </view>
-    <view> view2 </view>
-  </block>
---------------------------------------------------------------------------------
-'Event'事件 
+  <block wx:for="{{arr}}"> </block>  列表块渲染 
+  wx:key="_key/*this"    指定列表中项目的唯一标识符 
+    PS: 当列表为静态时可不必使用;
+      当数据改变触发渲染层重新渲染时,会校正带有key的组件,进行重排而非重建,
+      以确保使组件保持自身的状态,并提高列表渲染效率 
+    _key   项目中的字段,即表示为'item[key]',该值需是列表中唯一的字符串或数字,且不能动态改变 
+    *this 保留关键字,表示'item'本身,这种表示需item是一个唯一的字符串或者数字
+  wx:if="{{val}}"    条件渲染 
+    PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
+  wx:elif="{{val}}"  条件渲染 
+  wx:else            条件渲染 
+    和 wx:if 必须相邻 
+  <block wx:if="{{val}}"> </block>  多组件条件渲染 
+    PS: 一次性判断多个组件标签,可用一个<block/>标签将多个组件包装起来,并使用wx:if控制属性 
+      <block/>并不是一个组件,它仅仅是一个包装元素,不会在页面中做任何渲染,只接受控制属性。
+    <block wx:if="{{true}}">
+      <view> view1 </view>
+      <view> view2 </view>
+    </block>
+◆'Event'事件 
   PS: 事件是视图层到逻辑层的通讯方式;可将用户的行为反馈到逻辑层进行处理 
     事件可以绑定在组件上,当达到触发事件,就会执行逻辑层中对应的事件处理函数 
     事件对象可以携带额外信息,如id, dataset, touches。
@@ -1113,8 +1117,7 @@ wx:else            条件渲染
       .identifier num,触摸点的标识符 
       .x       num,距离 Canvas 左上角的距离
       .y       num,距离 Canvas 左上角的距离
---------------------------------------------------------------------------------
-自定义组件 '1.6.3+' 
+◆自定义组件 '1.6.3+' 
   PS: 将页面内的功能模块抽象成自定义组件,以便在不同的页面中重复使用 
     也可将复杂的页面拆分成多个低耦合的模块,有助于代码维护
     自定义组件在使用时与基础组件非常相似 

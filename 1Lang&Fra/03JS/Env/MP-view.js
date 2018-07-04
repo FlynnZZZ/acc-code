@@ -337,42 +337,42 @@
   <input/> 输入框 
     PS: <input>组件是native组件,字体是系统字体,所以无法设置 
       在<input>聚焦期间,避免使用css动画；
-    value="str"  input值
+    value="str"  input值 
     type="KW"   input类型  
       'text'   文本输入键盘,默认 
       'number' 数字输入键盘
       'idcard' 身份证输入键盘
       'digit'  带小数点的数字键盘
-    password="bol"     是否是密码类型,默认:false   
-    placeholder  输入框为空时占位符 
+    password="bol"     是否是密码类型,默认:false 
+    placeholder="str"  输入框为空时占位符 
       微信版本'6.3.30', placeholder 在聚焦时出现重影问题；
-    placeholder-style str,指定'placeholder'的样式 
-    placeholder-class 指定'placeholder'的样式类 
+    placeholder-style="str" 指定'placeholder'的样式 
+    placeholder-class="str" 指定'placeholder'的样式类 
       "input-placeholder" 默认 
-    disabled   是否禁用,默认'false'  
-    maxlength  最大输入长度,默认'140' 
+    disabled="bol"   是否禁用,默认:false 
+    maxlength="num"  最大输入长度,默认:140  
       设置为 -1 的时候不限制最大长度 
-    cursor-spacing  指定光标与键盘的距离,单位px ,默认'0' 
+    cursor-spacing="num"  指定光标与键盘的距离,单位:px ,默认:0 
       取 input 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离 
-    auto-focus  自动聚焦,拉起键盘,默认'false' [即将废弃,请直接使用 focus] 
-    focus       获取焦点,默认'false'  
+    auto-focus="bol"  自动聚焦,拉起键盘,默认:false  [即将废弃,请直接使用 focus] 
+    focus="bol"   是否获取焦点,默认:false 
       微信版本'6.3.30', focus 属性设置无效；
-    confirm-type  设置键盘右下角按钮的文字['1.1.0+'] 
+    confirm-type="str"  设置键盘右下角按钮的文字 '1.1.0+' 
       "done"   '完成',默认  
       'send'   '发送' 
       'search' '搜索' 
       'next'   '下一个' 
       'go'     '前往' 
-    confirm-hold  点击键盘右下角按钮时是否保持键盘不收起,默认'false' ['1.1.0+']
-    cursor        num,指定focus时的光标位置['1.5.0+'] 
-    bind:input   foo,当键盘输入时,触发'input'事件
+    confirm-hold="bol"  点击键盘右下角按钮时是否保持键盘不收起,默认:false  '1.1.0+' 
+    cursor="num"        指定focus时的光标位置 '1.5.0+'  
+    bind:input="fn"   当键盘输入时,触发'input'事件
       函数的返回值将替换输入框的内容 
       event.detail = {value, cursor}
-    bind:focus   foo,输入框聚焦时触发 
+    bind:focus="fn"   输入框聚焦时触发 
       event.detail = {value: value} 
-    bind:blur    foo,输入框失去焦点时触发 
+    bind:blur="fn"    输入框失去焦点时触发 
       e.detail.value  输入框的值 
-    bind:confirm foo,点击完成按钮时触发 
+    bind:confirm="fn" 点击完成按钮时触发 
       event.detail = {value: value}
   <checkbox-group>  多项选择器,内部由多个<checkbox>组成 
     bindchange foo,选中项发生改变时触发'change'事件
@@ -1185,8 +1185,9 @@
         ,...
       }  
       ,externalClasses: [ // 可选,组件接受的外部样式类 
-        PS: 样式类是在父组件中进行定义的 
-        'xxx'
+        PS: 样式class是在父组件中进行定义的 
+          在父组件中定义的样式,添加到该数组中则对该组件起作用 ? 
+        'xxx' 
       ] 
       ,methods: {    // 可选,组件的方法 
         PS: 包括事件响应函数和任意的自定义方法 

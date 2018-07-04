@@ -895,7 +895,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         // meber  分别为数组中的每个成员  
         return bol; // 若未有true,find方法最终返回 undefined 
       }   
-      Output: 首个回调值为true对应的成员 
+      Output: 首个回调值为true对应的成员或者 undefined  
       Example: 
         var aoo = [1,2,3,4,5,6].find(function(value){ 
           return value > 2; 

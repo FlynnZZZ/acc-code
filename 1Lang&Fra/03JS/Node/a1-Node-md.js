@@ -4,92 +4,7 @@
 ◆核心模块: Node自带模块不用安装即可使用  
   源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
   核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
-url,一个实例对象,用于解析URL 
-  const url = require('url')    // 引入url模块 
-  url.parse(url,bol1,bol2)      // obj,将URL解析为对象[方便后续其他操作]
-    Input: 
-      url       str,传入需要解析的URL字符串  
-      bol1?     是否将'query'字段转换为对象表示,默认: false 
-      bol2?     当URL不全时更智能的识别,默认: false  
-    Output: 返回一对象,属性枚举如下:  
-      // url.parse("https://www.baidu.com?key=val");
-      {          
-        protocol: 'https:',            // str,协议
-        slashes: true,                 // bol,是否有协议的双斜线
-        host: 'www.baidu.com',         // str,ip地址或域名
-        hostname: 'www.baidu.com',     // str,主机名
-        port: null,                    // num,端口,默认:80 显示为null,否则会指明
-        path: '/',                     // 路径
-        pathname: '/',                 // 路径名,
-        search: '?key=val',            // str,查询字符串 
-        query: 'key=val',              // str|obj,查询字符串
-          当第二个参数为true时,则为对象形式 
-        hash: null,                    // hash值,锚点
-        auth: null,                    // 
-        href: 'https://www.baidu.com/' // str,完整超链接
-      } 
-  url.format(    // str,将url对象格式化为url字符串 
-    obj       // url对象 
-    Example: :
-      var obj =url.parse("https://www.baidu.com");
-      url.format(obj); // 'https://www.baidu.com/'
-  )      
-  url.resolve(str1,str2)  // str,拼接为URL 
-    Example: :
-      url.resolve("https://imooc.com","/course/list");
-      // 'https://imooc.com/course/list'
-      
-      url.resolve('/one/two/three', 'four')
-      // '/one/two/four'
-      
-      url.resolve('http://example.com/', '/one')
-      // 'http://example.com/one'
-      
-      url.resolve('http://example.com/one/', 'two')
-      // 'http://example.com/one/two'
-      
-      url.resolve('http://example.com/one', '/two')
-      // 'http://example.com/two'
-querystring,解析URL的查询字符串 
-  var querystring = require("querystring") // 引入querystring模块
-  querystring.stringify(obj [,str1] [,str2])  序列化为字符串形式 
-    obj  需序列化的对象
-    str1 可选,默认为'&',参数连接符
-    str2 可选,默认为'=',键值分割符
-    Example: :
-      querystring.stringify({
-        name:"Scott",
-        course:["Java","Node"],
-        from:""
-      })
-      // 'name=Scott&course=Java&course=Node&from='
-  querystring.parse(query,link1?,link2?,options?)  将查询字符串解析为对象格式 
-    Input: 
-      query    str,需要解析的字符串
-      link1?   str,可选,键值连接符,默认: '&' 
-        Example:
-        var str = 'name=Scott-course=Java-course=Node-from=';
-        var obj1 = querystring.parse(str);
-        var obj2 = querystring.parse(str,'-');
-        console.log(obj1,'/n',obj2);
-        // { name: 'Scott-course=Java-course=Node-from=' } 
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-      link2?   str,可选,字段连接符,默认: '=' 
-      options? 可选,其他配置  
-    Output: obj  解析成键值对形式的对象
-    Example: 
-      querystring.parse('name=Scott&course=Java&course=Node&from=');
-      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-  querystring.escape(str); 转义为URL可用的字符串
-    Example: : 
-      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
-  querystring.unescape(str); 反转义 
-    Example: :
-      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
-  querystring.unescapeBuffer() 
-  querystring.encode()
-  querystring.decode()
-events,事件模块 
+const events = require('events')   事件模块 
   PS: events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
@@ -97,50 +12,44 @@ events,事件模块
       一个 net.Server 对象会在每次有新连接时分发一个事件,
       一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
       所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-    大多数时候不会直接使用 EventEmitter,而是在对象中继承它 
-    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类 
-  var events = require('events');   引入events模块 
-  ★EventEmitter 类
-  var EventEmitter = events.EventEmitter;  获取到事件对象的类 
+  var EventEmitter = events.EventEmitter  事件对象的类 
+    EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
   var evEm = new EventEmitter(); 创建事件功能对象 
-    EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
-    当添加新的监听器时,'newListener' 事件会触发,
-    当监听器被移除时,'removeListener' 事件被触发.
-  ▼实例属性方法
-  evEm.on('eName',foo);    监听事件 
-    PS: 此处'on'也可以换成'addEventListener' 
-    foo 回调函数,参数为[手动]触发时传入的值 
-  evEm.addListener('eName',listener) 给指定事件添加监听器[同'on'] 
-  evEm.once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-  evEm.emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
-    当事件触发时,注册到这个事件的事件监听器被依次调用
-  evEm.removeListener('eName',fooName)  移除指定事件的监听 
-    PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
-    fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
-    Example: 
-      var callback = function(stream) { };
-      server.on('connection', callback);
-      server.removeListener('connection', callback);
-  evEm.removeAllListeners(['eName'])  移除所有监听器
-    eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
-  evEm.setMaxListeners(num)   设置事件最大的监听数量 
-    默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
-  evEm.listeners('eName')     返回指定事件的监听函数的数组 
-  evEm.emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
-  ▼类属性方法
-  EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
-  ▼EventEmitter 事件 
-  error  在实例化时发生错误触发 
-    当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
-    Node.js 会把它当作异常,退出程序并输出错误信息,
-    为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
-  newListener     在添加新监听器时被触发 
-    event - 字符串,事件名称
-    listener - 处理事件函数
-  removeListener  从指定监听器数组中删除一个监听器
-    此操作将会改变处于被删监听器之后的那些监听器的索引
-    event - 字符串,事件名称
-    listener - 处理事件函数
+    PS: EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
+      当添加新的监听器时,'newListener' 事件会触发,
+      当监听器被移除时,'removeListener' 事件被触发.
+    .on('eName',foo);    监听事件 
+      PS: 此处'on'也可以换成'addEventListener' 
+      foo 回调函数,参数为[手动]触发时传入的值 
+    .addListener('eName',listener) 给指定事件添加监听器[同'on'] 
+    .once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
+    .emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
+      当事件触发时,注册到这个事件的事件监听器被依次调用
+    .removeListener('eName',fooName)  移除指定事件的监听 
+      PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
+      fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
+      Example: 
+        var callback = function(stream) { };
+        server.on('connection', callback);
+        server.removeListener('connection', callback);
+    .removeAllListeners(['eName'])  移除所有监听器
+      eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
+    .setMaxListeners(num)   设置事件最大的监听数量 
+      默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
+    .listeners('eName')     返回指定事件的监听函数的数组 
+    .emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
+  EventEmitter 事件 
+    error  在实例化时发生错误触发 
+      当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
+      Node.js 会把它当作异常,退出程序并输出错误信息,
+      为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
+    newListener     在添加新监听器时被触发 
+      event - 字符串,事件名称
+      listener - 处理事件函数
+    removeListener  从指定监听器数组中删除一个监听器
+      此操作将会改变处于被删监听器之后的那些监听器的索引
+      event - 字符串,事件名称
+      listener - 处理事件函数
   Example: 
     var events = require('events');
     var event = new events.EventEmitter();
@@ -170,10 +79,97 @@ events,事件模块
   继承 EventEmitter 
     大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
     包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-    为什么要这样做呢？原因有两点:
-    首先,具有某个实体功能的对象实现事件符合语义, 事件的监听和发射应该是一个对象的方法.
-    其次 JS 的对象机制是基于原型的,支持 部分多重继承,
-    继承 EventEmitter 不会打乱对象原有的继承关系.
+const url = require('url')  用于解析URL  
+  .parse(url,bol1?,bol2?)    // obj,将URL解析为对象[方便后续其他操作]
+    Input: 
+      url      str,传入需要解析的URL字符串  
+      bol1     可选,是否将'query'字段转换为对象表示,默认:false 
+      bol2     可选,当URL不全时更智能的识别,默认:false  
+    Output: 返回一对象,属性枚举如下:  
+      // url.parse("https://www.baidu.com?key=val");
+      {          
+        protocol: 'https:',            // str,协议
+        slashes: true,                 // bol,是否有协议的双斜线
+        host: 'www.baidu.com',         // str,ip地址或域名
+        hostname: 'www.baidu.com',     // str,主机名
+        port: null,                    // num,端口,默认:80 显示为null,否则会指明
+        path: '/',                     // 路径
+        pathname: '/',                 // 路径名,
+        search: '?key=val',            // str,查询字符串 
+        query: 'key=val',              // str|obj,查询字符串
+          当第二个参数为true时,则为对象形式 
+        hash: null,                    // hash值,锚点
+        auth: null,                    // 
+        href: 'https://www.baidu.com/' // str,完整超链接
+      } 
+  .format(obj)               // str,将url对象格式化为url字符串 
+    Input: obj   url.parse 后的url对象 
+    Output: str,将对象形式还原成字符串的URL 
+    Example: 
+      var obj = url.parse("https://www.baidu.com");
+      url.format(obj); // 'https://www.baidu.com/'
+  .resolve(path1,path2)  // str,拼接为URL 
+    Input: 
+      path1  str,地址 
+      path2  str,地址  
+    Output: str,拼接后的地址
+    Example: 
+      url.resolve("https://imooc.com","/course/list");
+      // 'https://imooc.com/course/list'
+      
+      url.resolve('/one/two/three', 'four')
+      // '/one/two/four'
+      
+      url.resolve('http://example.com/', '/one')
+      // 'http://example.com/one'
+      
+      url.resolve('http://example.com/one/', 'two')
+      // 'http://example.com/one/two'
+      
+      url.resolve('http://example.com/one', '/two')
+      // 'http://example.com/two'
+const querystring = require("querystring")  解析URL的查询字符串  
+  .stringify(obj,link1?,link2?)         对象序列化为字符串 
+    Input: 
+      obj   需序列化的对象
+      link1 可选,参数连接符,默认:'&' 
+      link2 可选,键值连接符,默认:'=' 
+    Output: str,序列化成的字符串 
+    Example: 
+      querystring.stringify({
+        name:"Scott",
+        course:["Java","Node"],
+        from:""
+      })
+      // 'name=Scott&course=Java&course=Node&from='
+  .parse(query,link1?,link2?,options?)  字符串解析成为对象 
+    Input: 
+      query    str,需要解析的字符串
+      link1    str,可选,键值连接符,默认:'&' 
+        Example:
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      link2    str,可选,字段连接符,默认:'=' 
+      options  obj,可选,其他配置  
+    Output: obj,解析成键值对形式的对象
+    Example: 
+      querystring.parse('name=Scott&course=Java&course=Node&from=');
+      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+  .escape(str)    转义为URL可用的字符串 
+    Input: str  待转义的字符串 
+    Output: str,转义后的字符串  
+    Example:  
+      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
+  .unescape(str)  反转义 
+    Example: 
+      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
+  .unescapeBuffer()  
+  .encode() 
+  .decode() 
 stream,流,用于暂存和移动数据[以bufer的形式存在] 
   PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 

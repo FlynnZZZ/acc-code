@@ -578,13 +578,6 @@ __filename 当前正在执行的脚本的路径和文件名
     $ node main.js
     /web/com/runoob/nodejs/main.js
 __dirname  当前执行脚本所在的目录 
-  Example:
-    创建文件 main.js ,代码如下所示:
-    // 输出全局变量 __dirname 的值
-    console.log( __dirname );
-    执行 main.js 文件,代码如下所示:
-    $ node main.js
-    /web/com/runoob/nodejs
 ◆其他总结 
 'CommonJS'模块化规范 
   module 

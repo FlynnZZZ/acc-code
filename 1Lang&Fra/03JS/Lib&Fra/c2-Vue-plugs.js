@@ -1094,9 +1094,9 @@ vm.$router/new VueRouter() // 路由实例
       window.history.pushState、 
       window.history.replaceState 
       window.history.go
-  .push(location,onComplete?,onAbort?)  // 相当于<router-link :to=""> 
-    PS: 向history栈添加一新的记录,并跳转,浏览器后退按钮,则回到之前的URL 
-      当点击<router-link>时,这个方法会在内部调用 
+  .push(location,onComplete?,onAbort?)    跳转,向history栈添加新记录 
+    PS: 浏览器后退按钮,则回到之前的URL 
+      相当于<router-link :to="">,当点击<router-link>时,这个方法会在内部调用 
     location    str/obj,路径 
       str,跳转字符串路径 
       obj,描述地址的对象 
@@ -1122,20 +1122,20 @@ vm.$router/new VueRouter() // 路由实例
     onAbort = function(){    // 可选,导航终止时触发 ' 2.2.0+' 
       PS: 导航到相同的路由、或在当前导航完成之前导航到另一个不同的路由触发  
     }
-  .replace(location,onComplete?,onAbort?) // 相当于 <router-link :to="" replace> 
-    PS: 替换掉当前的history记录  
-  .go(<num>) // 类似 window.history.go(num) 
-    PS: 在history记录中向前多少步 
+  .replace(location,onComplete?,onAbort?) 跳转,删除当前页记录,向history栈添加新记录 
+    PS: 相当于 <router-link :to="" replace> 
+  .go(<num>)   在history记录中向前多少步 
+    PS: 类似 window.history.go(num) 
     num  整数,可为负数  
     当history记录不够用时,则不会操作 
       routerMap.go(-100) 
       routerMap.go(100)  
     Example:
-    routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
-    routerMap.go(-1)   // 后退一步记录,等同于 history.back()
-    routerMap.go(3)    // 前进 3 步记录
-  .back()    
-  .forward()  // 动态的导航到一个新url 
+      routerMap.go(1)    // 在浏览器记录中前进一步,等同于 history.forward()
+      routerMap.go(-1)   // 后退一步记录,等同于 history.back()
+      routerMap.go(3)    // 前进 3 步记录
+  .back()      后退 
+  .forward()   动态的导航到一个新url 
   ★全局守卫/钩子 
   .beforeEach(function(to,from,next){  // 全局导航前置守卫 
     PS: 路由跳转时,调用全局前置守卫,在所有守卫 resolve 完前,路由导航一直处于等待中 

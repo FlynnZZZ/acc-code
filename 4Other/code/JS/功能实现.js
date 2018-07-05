@@ -32,7 +32,16 @@
 --------------------------------------------------------------------------------
 PC端
 网络收集 
-  获取、压缩图片 
+  压缩图片 
+    思路: 
+      接口: filereader、canvas 及 formdata 三个H5的api
+      过程: 
+        用户使用input file上传图片的时候,用filereader读取用户上传的图片数据[base64格式] 
+        把图片数据传入img对象,然后将img绘制到canvas上,调用 canvas.toDataURL 对图片进行压缩
+        获取到压缩后的base64格式图片数据,转成二进制塞入formdata,再通过XmlHttpRequest提交formdata 
+
+  
+  
     <input type="file" name="" value="" id="fileChoose">
     var myFile = document.getElementById('fileChoose');
     myFile.onchange = function(event) {

@@ -1554,17 +1554,27 @@ HTMLElement,HTML元素节点
       .width 
       .height 
       .toDataURL(type,quality)  str,返回图片的'dataURI'[需将图片预先放入canvas] 
-        PS: 若画布的高度或宽度是0,那么会返回字符串'data:,';
-        type     str,可选,图像的MIME类型格式,默认会将图像编码为PNG格式 
-          PS: 图片的分辨率为96dpi;
-            若传入非'image/png',但返回的以'data:image/png'开头,则表示传入类型不支持;
-          'image/png' 默认值 
-          Chrome支持'image/webp'类型。
-        quality  0-1,可选,设置得到图片的质量, 
-          在指定图片格式为'image/jpeg'或'image/webp'时;若超出范围,默认使用 0.92 
+        PS: 若画布的高度或宽度是0,那么会返回字符串'data:,'; 
+        Input: 
+          type     KW,可选,输出图像的MIME类型格式
+            PS: 图片的分辨率为96dpi;
+              若传入非'image/png',但返回的以'data:image/png'开头,则表示传入类型不支持;
+            'image/png'  默认值,默认会将图像编码为PNG格式  
+            'image/webp' [Chrome支持]
+          quality  float,可选,设置得到图片的质量,范围:0-1  
+            在指定图片格式为'image/jpeg'或'image/webp'时;
+            若超出范围,默认使用 0.92 
+      .toBlob(fn,type,quality)  展示canvas上的图片[异步操作] 
+        Input: 
+          function(blobImg){ }  回调函数 
+            blobImg  图片的Blob对象 
+          type                  KW,可选 
+            'image/png'  默认值 
+          quality               float,可选,范围:0-1 
+            当图片格式为'image/jpeg'或'image/webp'时用来指定图片展示质量
+        Output: 无 
       .getContext(keywords)   CanvasRenderingContext2D,获取上下文对象 
         '2d'
-      .toBlob()   
       .captureStream()   
   HTMLAudioElement,<audio>[HTML5] 
     PS: 改变音频的src,会立即切换播放;但改变其<source>需重新加载才会切换播放

@@ -1,9 +1,11 @@
 @charset "utf-8";
 /*重置样式*/
-html,body,div,span,p,a,ul,ol,li,
-table,tbody,thead,tfoot,tr,td,
-form,input,select,textarea,option,label,button,
-article,section,footer,header {
+html ,body 
+,div ,span ,p ,a 
+,article ,section ,footer ,header 
+,form ,input ,select ,textarea ,option ,label ,button
+,ul ,ol ,li
+,table ,tbody ,thead ,tfoot ,tr ,td {
   margin: 0;
   padding: 0;
   font-family: 'sans-serif', 'Microsoft YaHei';

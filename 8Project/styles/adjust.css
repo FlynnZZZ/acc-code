@@ -1,0 +1,43 @@
+@charset "utf-8";
+/*元素类型*/
+.inb { display: inline-block !important; }
+.block { display: block !important;}
+.none { display: none !important; }
+/*布局*/
+.hCenter {text-align: center;}
+.vmWp:before {
+  content: '';
+  display: inline-block;
+  height:100%;
+  width: 0;
+  vertical-align: middle;
+}
+.vmSelf { vertical-align: middle; }
+.fRit { float: right; }
+.fLft { float: left; }
+/*字体*/
+.ftS0 {font-size: 0;}
+.ftS0 *{font-size: initial;}
+/*颜色*/
+.colorRed { }
+.bgRed { }
+/*按钮*/
+.btnRed { }
+/*其他修饰*/
+.pointer {
+  cursor: pointer;
+  user-select:none;
+}
+.rotate180 { transform:rotate(180deg); }
+.hid1 { visibility: hidden !important; }
+.hid2 {
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+
+
+
+
+

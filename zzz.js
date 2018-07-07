@@ -33,6 +33,10 @@ canvas 的压缩质量 具体压缩后的体积
 输入 In      I
 操作 Handle  H 
 输出 Out     O  
+获取 Fetch   F 
+发送 Send    S 
+GET  G  
+POST P 
 
 
 将使用单一知识点实现的功能从代码段移到知识点处  

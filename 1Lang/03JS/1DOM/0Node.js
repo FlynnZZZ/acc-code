@@ -183,6 +183,25 @@ Document,文档
       也可通过<meta>元素、响应头部修改 
     .characterSet  str,字符集 
     .title    str,读写,网页标题 
+    ★创建节点 
+    .createElement( tagName ,options?)  elem,创建元素节点 
+      PS: 只是创建了一空元素[只有标签],无属性和内容,还没添加到html中[驻留在内存中] 
+      Input: 
+        tagName str,待创建元素的标签名  
+          HTML中不区分大小写,XML中区分大小写 
+        options   obj,可选,'ElementCreationOptions'对象 
+          如果这个对象被定义并赋予了一个 is 特性,则创建的element的 is 属性会被初始化为这个特性的值. 
+          如果这个对象没有 is 特性,则值为空.
+      Output: elem  创建的新元素节点对象 
+      Feature: 
+        IE中可传入HTML代码来创建HTML元素 
+          var div = document.createElement("<div class="a" id="b"></div>");
+        当指定未定义的元素时,创建一个 HTMLUnknownElement 
+          console.log(HTMLUnknownElement===document.createElement('abc').constructor); // true 
+    .createTextNode("文本")      txt,创建一文本节点
+    .createComment("文本")   comt,创建一注释节点[Chrome、IE不支持] 
+    .createAttribute("attrName") atr,创建属性节点 
+    .createDocumentFragment("文本") frag,创建文档片段
     ★Elm: 
     .images  HTMLCollection,所有<img>元素 
     .forms   HTMLCollection,所有<form>元素 
@@ -266,20 +285,6 @@ Document,文档
       var oldNode = iframe.contentDocument.getElementById("myNode");
       var newNode = document.importNode(oldNode, true);
       document.getElementById("container").appendChild(newNode);
-    ★创建节点 
-    .createElement('tagName'[,options])  elem,创建元素节点 
-      PS: 只是创建了一空元素[只有标签],无属性和内容,还没添加到html中[驻留在内存中] 
-      'tagName' str,待创建元素的标签名  
-        HTML中不区分大小写,XML中区分大小写 
-      options   可选,'ElementCreationOptions'对象 
-      IE中可传入HTML代码来创建HTML元素 
-        var div = document.createElement("<div class="a" id="b"></div>");
-      当指定未定义的元素时,创建一个 HTMLUnknownElement 
-        console.log(HTMLUnknownElement===document.createElement('abc').constructor); // true 
-    .createTextNode("文本")      txt,创建一文本节点
-    .createComment("文本")   comt,创建一注释节点[Chrome、IE不支持] 
-    .createAttribute("attrName") atr,创建属性节点 
-    .createDocumentFragment("文本") frag,创建文档片段
     ★文档流写入、打开、关闭 
     .write(str)    将输出流写入到网页中  
       可使用该方法动态的包含外部资源,比如JS文件 
@@ -411,7 +416,7 @@ Document,文档
       .onpointerover 
       .onpointerup 
     ★命名空间相关 
-      .createElementNS()  
+      .createElementNS()  创建指定命名空间URI的元素
       .createAttributeNS()  
       .getElementsByTagNameNS()  
     ★不常用 
@@ -1389,7 +1394,7 @@ HTMLElement,HTML元素节点
             'image/webp' [Chrome支持]
           quality  float,可选,设置得到图片的质量,范围:0-1  
             在指定图片格式为'image/jpeg'或'image/webp'时;
-            若超出范围,默认使用 0.92 
+            若超出范围,默认使用 0.92,其他参数则被忽略  
       .toBlob(fn,type,quality)  展示canvas上的图片[异步操作] 
         Input: 
           function(blobImg){ }  回调函数 

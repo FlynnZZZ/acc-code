@@ -1,3 +1,975 @@
+this,JS代码执行时的'context'上下文对象 
+  PS: this根据函数执行的场合不同而变化,但始终指向当前运行的对象; 
+    在绝大多数情况下,函数的调用方式决定了this的值;
+    this不能在执行期间被赋值;
+    当在严格模式中调用函数,上下文将默认为 undefined 
+  运行场景枚举: 
+    全局上下文中[在任何函数体外部]: 指向全局对象'window' 
+      严格模式下,this为undefined 
+      NodeJS环境 
+        直接在命令行执行代码: 声明的全局变量会添加到global对象,也添加到this 
+        执行JS文件: 声明的全局变量会添加到global对象,但不会自动添加到this 
+      console.log(this === window); // true 
+      var aoo = 1; 
+      console.log(this.aoo,window.aoo); // 1 1,定义的全局变量实际上就是window的属性
+      this.boo = 2;
+      console.log(boo); // 2 
+    普通/匿名函数执行时: this始终指向'window'[严格模式下指向 undefined] 
+      var aoo = 1;
+      function foo(){
+        var aoo = 2;
+        console.log(this);   //window
+        console.log(this.aoo); //1
+        this.aoo =3;
+        console.log(this.aoo); //3
+      }
+      foo();
+      相当于
+      window.foo()
+
+      var aoo = 1;
+      function foo(){
+        console.log(this.aoo);
+        var aoo =2
+        function goo(){
+          console.log(this.aoo);
+        }
+        goo();
+      }
+      var obj = {aoo: 3, hoo: foo};
+      obj.hoo(); //3,1
+
+      var aoo =1;
+      var obj ={
+        aoo:2,
+        foo:function(){
+          return function(){return this.aoo;}
+        }
+      }
+      console.log(obj.foo()());  // 1
+      
+      [1,2,3,4,5].map(function(val,idx ){  
+        // 匿名函数作为参数传入map方法中,然后执行该匿名函数 
+        console.log(this);  // window 
+        return this
+      } )
+    构造函数执行时: this表示一空对象,其原型为 Foo.prototype 对象 
+      var aoo = 1;
+      function Foo(){ 
+        this.aoo = 2;
+      }
+      function Goo(){ 
+        this.aoo = 3;
+        return {aoo:4}; 
+      };
+      var obj1 = new Foo();
+      var obj2 = new Goo();
+      console.log(obj1.aoo,obj2.aoo); // 2 4 
+    对象方法执行时: this指向调用方法的对象 
+      var obj = {
+        aoo: 100
+      };
+      function foo(){ 
+        return this.aoo; 
+      };
+      obj.goo = foo;
+      console.log(obj.goo()); // 100
+    箭头函数执行时: this为上一层中的this,即不改变this的指向 
+    [ES6的]类的静态方法执行时: this表示该类 
+    [ES6的]类的原型方法执行时: this表示实例 
+    对象内 
+      在实现对象的方法时,可以使用this指针来获得该对象自身的引用.
+      var aoo = 1;
+      function foo(){ 
+        console.log(this.aoo);  
+      }
+      var obj = { aoo: 2,  foo : foo }
+      obj.foo(); // 2 ,obj调用的this指向obj
+      var goo = obj.foo;
+      goo();     // 1 
+      相当于 window.goo(); this指向window
+
+      var aoo = 1;
+      var obj = {
+        aoo : 2,
+        foo : function(){
+          return function(){ 
+            return this.aoo; 
+          }
+        },
+      }
+      var val = obj.foo()(); // 相当于 (obj.foo())(); 
+      console.log(val);  // 1 
+      
+      var obj = {
+        name : "小明",
+        age : 12,
+        sex : "男",
+        sayhi : function(){
+          return "say";
+        },
+        info : function(){ //使用this访问当前对象的属性
+          return this.name+"年龄"+this.age; 
+        }
+      }
+      obj.info(); // 小明年龄12
+    DOM中 
+      var el = document.querySelector("#el");
+      el.addEventListener("click",function(){
+        console.log(this);
+      })
+      //表示被点击的那个元素对象
+  Example: 
+    var aoo = 1;
+    var obj = { 
+      aoo : 2, 
+      foo : function(){
+        return this.aoo;
+      } 
+    }
+    var val1 = obj.foo();   // 2
+    var val2 = (obj.foo)();  // 2
+    var val3 = (obj.foo = obj.foo)();  // 1
+    var goo = obj.foo;
+    var val4 = goo();  // 1
+    console.log(val1,val2,val3,val4); // 2 2 1 1 
+  声明局部变量来保存this引用 
+    当需要在嵌套函数中读取调用被嵌套函数的对象的属性时
+    var aoo = 1;
+    function foo(){
+      console.log(this.aoo);
+      var that = this;
+      var aoo = 2
+      function goo(){
+        console.log(that.aoo);
+      }
+      goo();
+    }
+    var obj = {aoo: 3, hoo: foo};
+    obj.hoo(); //3,3
+
+    通过把外部作用域中的this对象保存在一个闭包能访问到的变量中,实现闭包访问该对象
+    var aoo =1;
+    var obj ={
+      aoo:2,
+      foo:function(){
+        var that =this;
+        return function(){return that.aoo;}
+      }
+    }
+    console.log(obj.foo()());  // 2
+  Self: 
+    作为函数的参数,不会改变this指向[仅在函数体中会改变] 
+    var obj = {
+      aoo: 100
+      ,foo: function(){
+        // 不会将 this 绑定到 console 对象中 
+        console.log(this.aoo);
+      }
+    }
+    obj.foo() // 100 
+Function,函数基础类,ES中所有函数的基类 
+  PS: JS中函数是唯一能创建新作用域的地方;  
+  Extend：Object 
+    Function.prototype.__proto__.constructor===Object // true 
+  Instance: 
+    PS: 变量名可以使用中文字符来进行命名而不会报错[但最好不要使用中文] 
+    function foo(arg){}        函数声明创建 
+    var foo = function(arg){}  函数表达式创建 
+      var foo = function bar(){ 
+        console.log(1);
+      }
+      foo(); // 1
+      bar(); // 报错:bar未定义,会将赋值变量的函数的函数名忽略 
+    var foo = new Function('arg1',...,"函数体"); 构造函数创建 
+      每个函数都是Function构造器的实例对象  
+        function foo(){}
+        foo.a =1;
+        console.log(foo.a); //1
+      Function创建的函数,其父作用域始终指向 window 
+        function foo(){
+          var aoo = 1;
+          var goo = new Function("","console.log(aoo)");
+          // 函数 goo 父作用域为window ,
+          // 相当于在全局创建的函数,不可访问函数作用域的变量
+          var hoo = function(){
+            console.log(aoo);
+          }
+          hoo();
+          goo();
+        }
+        foo();   //1 报错: aoo is not defined
+      不推荐使用该方法,会导致解析两次代码,影响性能 
+        第一次解析常规ECMAScript代码,第二次是解析传入构造函数中的字符串 
+      var foo1 = function(){}
+      foo1.constructor;  // Function() { [native code] }
+      var foo2 = new Function("a","b","console.log(a+b);");
+      foo2(1,3); // 4
+    不同声明的差异 
+      关键字声明法: 函数的调用可在声明之前[函数声明提升] 
+      变量初始化: 函数的创建需在调用前完成 
+  Proto:   
+    Function的原型对象,也是一个函数 
+      console.log(typeof Function.prototype); // function 
+    .name      str,函数的名字
+    .arguments   Arguments[NdA],在函数内部表示函数接收到的参数 
+      Example: 
+        对若干个数值进行累加
+        function sum(){
+          var sum = 0;
+          for(var i = 0;i < arguments.length;i++){
+            sum = sum + arguments[i];
+          }
+          return sum;
+        }
+        sum(5,6,1); // 12
+      arguments.length 在函数体内表示实际传入参数的数量 
+      arguments[idx]   读写相应的参数 
+        在函数内进行写操作,[非严格模式下]会改变函数的参数[但当参数为 undefined,则不会被改变]
+      arguments.callee 在函数体内表示函数本身 
+        该属性是一个指针,指向拥有这个arguments对象的函数 
+        Example:
+          若在函数内部通过函数名调用自身,当改变函数名时,内部需逐一修改
+          可使用 arguments.callee 来代替来代替函数名来表示函数本身 
+          function sum(num){
+            if(num<=1){
+              return 1;
+            }else{
+              return num*sum(num-1);
+            }
+          }
+          function box(sum){
+          if(num<=1){
+            return 1;
+          }
+          else{
+            return num*arguments.callee(num-1);
+            //此时arguments.callee等价于box
+          }
+        }
+    .length    num,获取函数声明时定义的参数的个数 
+      Example: :
+      function box(a,b){ return a+b; }
+      console.log(box.length);  // 2,表示box的参数有两个.
+    .caller    fn,函数执行时的上层函数,全局作用域中则为 null  
+      function foo(){
+        return arguments.callee.caller;
+      };
+      function goo(){
+        console.log(arguments.callee === foo() ); // true 
+        console.log(arguments.callee.caller);     // null 
+      };
+      goo(); 
+    .toString()   转换为字符串   
+    .call(context[,arg1,arg2,...]) 改变函数的运行环境/函数借用 
+      context  函数执行时'this'的值,为'null'或'undefined'时,不改变指向 
+        原始值[数字,字符串,布尔值]的'this'会指向该原始值的自动包装对象 
+        相当于 context.foo([arg,..])  [Self]
+      arg      函数的参数列表
+      Example: 
+        var foo = function(){
+          console.log(this);
+        }
+        console.log(foo.call(1));    // Number {[[PrimitiveValue]]: 1}
+        console.log(foo.call(true)); // Boolean {[[PrimitiveValue]]: true}
+        console.log(foo.call(null)); // window 
+        console.log(foo.call(undefined)); // window 
+        
+        console.log({}.toString()); // [object Object]
+        function foo(arg){ 
+          console.log(Object.prototype.toString.call(arg)); 
+        };
+        console.log(foo(7)); // [object Number]
+        等价于
+        function foo(){ 
+          console.log(Object.prototype.toString.call(this)); 
+        };
+        foo.call(7); // [object Number]
+      实现继承的效果 
+        function Pet(words){
+          this.words = words;
+          this.speak = function (){
+            console.log(this.words);
+          };
+        };
+        function Dog(words){
+          Pet.call(this,words);
+        };
+        var dog1 = new Dog('wang!');
+        dog1.speak(); // wang!
+        console.log(dog1); // Dog {words: "wang!", speak: function}
+    .apply(context[,arr/arrLike])  改变函数的运行环境/函数借用 
+      PS: 使用一个指定的this值和若干个指定的参数值的前提下调用某个函数或方法 
+        都是函数对象的方法,区别在于接收参数的形式不同.
+        改变this的好处:对象不需要与方法发生任何耦合关系
+      context  在foo函数运行时指定的 this 值 
+        非严格模式下,null 或 undefined 指向全局对象(浏览器中就是window对象),
+        原始值(数字,字符串,布尔值)的 this 会指向该原始值的自动包装对象
+        相当于 context.foo([arg,..])  [Self]
+      arr/arrLike  数组或类数组对象,函数传入的参数, 
+        其中的数组元素将作为单独的参数传给 foo 函数
+        若该参数的值为null或undefined,则表示不需要传入任何参数 
+        从ES5开始可以使用类数组对象 
+      Example: 
+        function Pet(words){
+          this.words = words;
+          this.speak = function(){console.log(this.words);}
+        }
+        function Dog(words){ Pet.call(this,words); }
+        // 或者 Pet.apply(this,arguments);
+        var dog = new Dog("wang");
+        dog.speak(); // wang
+
+        var box = {
+          color:"蓝色"
+          ,sayColor:function(){ console.log(this.color); }
+        }
+        box.sayColor();  //蓝色,box调用函数 this就表示box
+
+        var aoo = 1;
+        var obj = {aoo: 2};
+        function foo(a){console.log(this[a]);}
+        foo.call(null,"aoo"); // 1
+        foo.call(obj,"aoo");  // 2
+      apply和call继承 
+        将函数指向对象后,对象将获取到函数的属性
+        Example:
+          function foo(){ this.name ="abc" }
+          var obj ={};
+          console.log(obj.name); //undefined
+          foo.call(obj);
+          console.log(obj.name); //abc
+
+          仿造new
+            function Person(name,age){
+              this.name =name;
+              this.age =age;
+            }
+            var p1 =new Person("aoo",19); //使用new 创建
+            function New(func){
+              return function(){
+                var obj ={"__proto__":func.prototype};
+                func.apply(obj,arguments); //使对象获取到传入函数的属性
+                return obj;
+              }
+            }
+            var p2 =New(Person)("boo",18); //使用仿造的new
+            console.log(p1); //Person {name: "aoo", age: 19}
+            console.log(p2); //Person {name: "boo", age: 18}
+    .bind(context[,arg1,arg2,...]) fn,返回绑定运行环境及初始化参数后的函数拷贝[ES5][IE9+]
+      context 返回的函数被调用时,作为其 this  
+        相当于 context.foo([arg,..])  [Self]
+        当使用 new 操作符() 调用绑定函数时,该参数无效 
+      arg     返回的函数被调用时,作为其前若干个参数 
+      使用bind固定参数值 
+        function foo(arg1,arg2,arg3){ 
+          return arg1 + arg2 + arg3; 
+        };
+        // undefined 即不改变this的值,100为给 arg1 指定为100,且后续不可变
+        var foo1 = foo.bind(undefined,100);
+        foo1(1,2); // 103 ,第二、三个参数分别为1、2
+        var f2 = foo1.bind(undefined,10);
+        foo2(1); // 111
+      使用new时,会忽略绑定 
+        function Foo(){ 
+          this.b = 1; 
+          return this.a; 
+        };
+        var Goo = Foo.bind({a:2});
+        Goo(); // 2
+        new Goo(); // {b:1} 
+        var Hoo = Foo.bind({a:{aoo:3}})
+        Hoo();
+        new Hoo(); // {b:1} 
+      手动实现bind函数 
+        function bind(fn, context){
+          return function(){
+            return fn.apply(context, arguments);
+          };
+        }
+      Example: 
+        var x = 9;
+        var obj = {
+          x: 81,
+          getX: function() { 
+            return this.x; 
+          }
+        };
+        obj.getX(); // 返回 81
+        var foo = obj.getX;
+        foo(); // 返回 9, 在这种情况下,"this"指向全局作用域
+        var goo = foo.bind(obj);
+        goo(); // 返回 81
+
+        var obj = {
+          foo : 1,
+          bar : function(){
+            return this.foo;
+          }
+        }
+        obj.bar();  //1
+        var a =obj.bar;
+        a();        //undefined
+        var b =obj.bar.bind(obj)
+        obj.bar.bind(obj)() // 1
+        b()         //1
+        obj.foo =12;
+        b()         //12
+
+        var person = {
+          name :'a',
+          job : '1',
+          sayHello : function(){ 
+            return this.name + this.job; 
+          }
+        }
+        person.sayHello()     //"a1"
+        var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
+        anotherGuySayHello()  //"b2"
+  Feature: 
+    函数传参 
+      传入的参数不固定,多则舍去,少则用undefined来补充 
+        function foo(){ 
+          console.log(arguments[0],arguments[1]); 
+        };
+        foo(1); // 1 undefined
+      参数按共享传递 [moIn 'Evaluation Strategy'] 
+    return 函数返回值 
+      PS: 函数执行到'return'后直接返回值,后面代码不再执行 
+      使用'return'关键字返回值,若没有return默认返回'undefined' 
+      'return'后无值,默认返回'undefined' 
+        var foo = function(){
+          return 
+          2;
+        }
+        console.log(foo()); // undefined
+        相当于 
+        var foo = function(){
+          return ;
+          2;
+        }
+    特殊形式的函数及调用  
+      foo()  直接调用 
+      obj.foo() 方法调用 
+      new Foo() 构造器调用 
+      foo.call() call/apply/bind调用 
+      IIFE,立即执行的函数 
+        (function bar(){ 
+          console.log(1);
+        })();
+        或
+        !function(){
+          console.log(1);
+        }();
+        或
+        var foo = function(){ 
+          console.log(1);
+        }();   
+        
+        (function(a,b){
+          console.log(a+b);
+        })(2,3); 
+      全局函数 [moIn window]
+      匿名函数: 未命名的函数 
+        单独定义匿名函数程序报错
+        function(){ return "abc"; } // 报错
+      构造函数: 用于实例化对象[构造函数及其prototype一起相当于类] 
+        将首字母大写[约定写法],用于区别其他的一般函数,
+        任何函数都可通过new来调用作为构造函数;若不用new来调用,即为执行函数;
+      高阶函数: 在参数中传递函数的函数 
+        函数也是对象可以向其他值一样作为参数传递
+      递归: 一个函数调用本身或者两个函数相互调用 
+        PS: 递归必须要定义终止条件,否则无限递归 
+          一般递归效率较低,但处理探测或者处理多分支的问题,则效率较高 
+        Example:
+          求斐波那契数 
+            斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
+            var fib = function(n) {
+              // 若 n 是 1 或者 2 则返回 1 作为结果
+              // 这是递归终止的条件, 必须要有, 否则无限递归了
+              if(n == 1 || n == 2) {
+                return 1
+              } 
+              else {
+                // 若 n 不为 1 和 2, 返回 fib(n-2) + fib(n-1)
+                // 这时候 fib(n-2) fib(n-1) 需要计算
+                // 于是代码进入下一重世界开始计算
+                return fib(n-2) + fib(n-1)
+              }
+            }
+          查找数字的所有因子 
+            如: 6=1*2*3 
+            思路: 从最小的因子开始,剩下部分再递归
+            function findAll(num,resultArr){
+              for (var i = 2; i <= num; i++) {
+                if (num % i == 0) {
+                  resultArr.push(i) 
+                  findAll(num / i,resultArr)
+                  return ;  // 在找到第一个最小因子后结束递归,否则会找到其他多余的因子  
+                }
+              }
+            }
+            var result = []
+            findAll(6,result)
+    惰性载入函数: 改变函数自身,以优化多次在相同条件下执行的函数 
+      Example: 
+      首次执行返回两参数的和,后续返回两参数的积 
+      一般: 
+      var foo = function(arg1,arg2){
+        if (!arguments.callee.aoo) {
+          arguments.callee.aoo = true;
+          return arg1+arg2;
+        }
+        else {
+          return arg1*arg2;
+        }
+      }
+      console.log(foo(3,4));
+      console.log(foo(3,4));
+      console.log(foo(3,4));
+      惰性载入函数: goo被替换了,不用每次都判断aoo的值 
+      var goo = function(arg1,arg2){
+        goo = function(arg1,arg2){
+          return arg1*arg2;
+        }
+        return arg1+arg2;
+      } 
+      console.log(goo(3,4));
+      console.log(goo(3,4));
+      console.log(goo(3,4));
+      由给定值aoo是否为0,来决定函数foo为求和还是求积函数 
+      一般: 
+      var foo = function(arg1,arg2){
+        if (aoo == 0) {
+          return arg1+arg2;
+        }
+        else {
+          return arg1*arg2;
+        }
+      }
+      惰性载入函数: goo被替换了,不用每次都判断aoo的值 
+      var goo = function(arg1,arg2){
+        if (aoo == 0) {
+          return function(arg1,arg2){
+            return arg1+arg2;
+          };
+        }
+        else {
+          return function(arg1,arg2){
+            return arg1*arg2;
+          };
+        }
+      }
+    函数柯里化: 科里化后的[多参数]函数可固化前若干个参数  
+      function curry (foo){ // 创建柯里化函数的通用方式
+        // 获取传入额外的参数组成的数组 
+        var args1 = Array.prototype.slice.call(arguments,1) 
+        return function(){
+          // 类数组数组化 
+          var args2 = Array.prototype.slice.call(arguments) 
+          var args = args1.concat(args2) 
+          return foo.apply(null,args);
+        };
+      }
+      var foo = function(num1,num2){
+        return num1+num2;
+      }
+      var goo = curry(foo,3); // 
+      console.log(goo(4)); // 7 
+    不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
+    obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
+    默认参数: 定义函数时将参数赋默认值 [ES6]   
+      执行函数时,对应参数为 undefined,则使用默认值,否则使用传入的值 
+        function person(age = 12){
+          console.log(age);
+        }
+        person();          // 12
+        person(undefined); // 12
+        person(0);         // 0
+        person(null);      // null
+    ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组[ES6] 
+      在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
+        function sum(result,...values){ //求和函数,得到的结果赋值到result 
+          console.log(values); // [1,2,3,4]
+          values.forEach(function (v,i) { //进行求和
+            result += v; //求和得到的结果存到result
+          });
+          console.log(result); // 10
+        }
+        var res = 0; // 存储求和结果的变量res
+        sum(res,1,2,3,4);  //调用sum函数
+      rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
+        //错误写法
+        function sum(result, ...values, mult){
+          //rest参数...values后面还有一个参数mult
+        }
+        //正确的写法
+        function sum(result, mult, ...values){
+          //rest参数...values放在最后
+        }
+'Arrow functions'箭头函数 [ES6] 
+  var arrFn = (arg1?,..) => { statements }  // 定义箭头函数 
+    相当于: function( arg1?,.. ){ statement }
+    单个参数时,可省略参数传入括号: arg => {} 
+    单条语句时,可省略语句容纳括号: () => singleExpr  
+      且该条语句将作为函数的返回值 
+      相当于 function(){ return expr } 
+      使用括号来'封装'单语句 
+        var foo = () => ('abc')
+        console.log(foo()); // abc 
+        
+        () => ({key1: 'val1'}) // 返回对象存在歧义时 
+        相当于: function(){ return {key1: 'val1'}; }
+  Feature: 
+    不能作为构造器函数,否则报错  
+      var Foo = () => {};
+      var foo = new Foo(); // TypeError: Foo is not a constructor
+    不绑定 this 
+      不创建自己的 this,而使用封闭执行上下文的 this  
+        var obj = {  //定义一个对象
+          x: 100,     //属性x
+          show: function(){
+            setTimeout( function(){ //匿名函数 
+              console.log(this.x);
+            }, 500 );
+          }
+        };
+        obj.show(); // undefined
+        setTimeout() 中的匿名函数在 window 上下文中执行,this 表示的为 window 
+        
+        var obj = {
+          x: 100, 
+          show: function (){
+            setTimeout( () => {   // 箭头函数
+              console.log(this.x);
+            }, 500 );
+          }
+        };
+        obj.show(); // 100
+        定义 obj.show() 方法时,此时的this是指的obj,所以 this.x 指的是 obj.x.
+        而在 show() 被调用时,this依然指向的是被定义时候所指向的对象obj;
+      严格模式中与 this 相关的规则都将被忽略 
+        因为 this 是词法层面上的 
+      使用 call 或 apply 调用时,对this指向无影响,只是改变传参 
+        因为 this 已在词法层面完成了绑定 
+    不绑定'arguments'对象 
+      var foo = () => { console.log(arguments); }
+      foo() // 报错: arguments is not defined 
+      
+      使用'剩余参数'间接实现类似功能 
+      var log = (...args) => {
+        console.log.apply(console,args)
+      }
+    无'prototype'属性 
+      var Foo = () => {};
+      console.log(Foo.prototype); // undefined
+'Generator'生成器函数,可控制函数内部状态,暂停或继续[ES6] 
+  PS: 中途退出后又重新进入执行,函数内定义的变量的状态都会保留 
+  function* gen(arg?){} 声明Generator函数
+    Example: 
+      function* gen(name) {  
+        yield `hello ${name}`;
+        yield `how are you`;
+        yield `bye`;
+      }
+  'yield': 相当于暂停执行并且返回信息 
+    PS: Generator函数内可有多个yield 
+      每次调用生成器的.next()方法则执行完一yield后暂停  
+    返回值: 可通过后一次执行时传入的参数来覆盖,默认: undefined  
+    yield表达式如果用在另一个表达式中,须放在圆括号里 
+      Example: 
+        function* gen() {
+          console.log('hello' + yield);     // SyntaxError
+          console.log('hello' + yield 123); // SyntaxError
+          
+          console.log('hello' + (yield)); // OK
+          console.log('hello' + (yield 123)); // OK
+        }
+      yield表达式用作函数参数或放在赋值表达式的右边,可不加括号 
+        function* gen() {
+          foo(yield 'a', yield 'b'); // OK
+          let input = yield;         // OK
+        }
+  'yield*': Generator内调用另一Generator 
+    若一个Generator函数A执行过程中,进入[调用]了另一个Generator函数B,
+    那么会一直等到Generator函数B全部执行完毕后,才会返回Generator函数A继续执行 
+    function* gen1() {   
+      yield "gen1 start";
+      yield "gen1 end";
+    }
+    function* gen2() {  
+      yield "gen2 start";
+      yield "gen2 end";
+    }
+    function* start() { 
+      yield "start";
+      // 使用关键字yield*来实现调用另外两个Generator函数
+      yield* gen1();
+      yield* gen2();
+      yield "end";
+    }
+    var ite = start(); //调用start函数,创建一个生成器
+    ite.next(); // {value: "start", done: false}
+    ite.next(); // {value: "gen1 start", done: false}
+    ite.next(); // {value: "gen1 end", done: false}
+    ite.next(); // {value: "gen2 start", done: false}
+    ite.next(); // {value: "gen2 end", done: false}
+    ite.next(); // {value: "end", done: false}
+  'return': 和yield类似,但会结束函数 
+    Example: 
+      function* gen() {
+        yield 'aa' 
+        return 'bb'  
+        yield "cc" 
+      }
+      var gen = gen() 
+      console.log(gen.next()) // { value: "aa", done: false }
+      console.log(gen.next()) // { value: "bb", done: true }
+      console.log(gen.next()) // { value: undefined, done: true }
+  var itrt = gen(arg?)  // Generator调用,返回该生成器的迭代器'iterator'对象 
+    itrt.next(arg?)       // 消费一个'yield',并在其位置停止  
+      PS: .next()再次被调用则继续接着往下执行,直到done的值为true 
+      Input: arg    any,可选,替换上一'yield'的返回值,默认: undefined
+        首次传入的参数无效,因为不存在上一个yield 
+        function* foo() {
+          var res = yield `hello`; 
+          // 第一次执行时的返回值为'hello' 
+          // res 的值为第一次执行到yield返回的值[通过第二次执行时传入]  
+          yield res;
+        }
+        let iterator = foo(); // 返回一生成器对象
+        iterator.next(); //{value: "hello", done: false}
+        // 若为 iterator.next(); // {value: undefined, done: false}
+        iterator.next("world"); // {value: "world", done: false}
+      Output:  { value: <val> ,done: <bol> }
+        value    any,当前执行的yield后表达式的值 
+        done     bol,表示是否遍历结束 
+    itrt.throw(arg?)      // 在函数体外抛出错误,在Generator内捕获 
+      var gen = function* () {
+        try {
+          yield;
+        } 
+        catch (e) {
+          console.log('内部捕获', e);
+        }
+      };
+      var itrt = gen();
+      itrt.next();
+      i.throw('a');  // 内部捕获 a 
+    itrt.return(arg?)     // 返回给定的值,并终结Generator 
+      若Generator内有try-finally代码块,则return方法会推迟到finally代码块执行完再执行 
+        function* numbers () {
+          yield 1;
+          try {
+            yield 2;
+            yield 3;
+          } 
+          finally {
+            yield 4;
+            yield 5;
+          }
+          yield 6;
+        }
+        var itrt = numbers();
+        console.log( itrt.next() )      // { value: 1, done: false }
+        console.log( itrt.next() )      // { value: 2, done: false }
+        console.log( itrt.return(100) ) // { value: 4, done: false }
+        console.log( itrt.next() )      // { value: 5, done: false }
+        console.log( itrt.next() )      // { value: 100, done: true }
+    共同点: 
+    next()   将yield表达式替换成一个值 
+    throw()  将yield表达式替换成一个throw语句 
+    return() 将yield表达式替换成一个return语句 
+  使用Generator函数实现异步操作 
+    原理: 将异步操作的语句写到'yield'后面,通过执行next方法进行回调 
+'async'异步函数,替代回调函数、解决异步操作的一种方法[ES7] 
+  PS: 函数执行时,遇到'await'等待其后的异步操作完成,再接着执行函数体内后面的语句 
+    本质上是Generator函数的语法糖 
+  async function asc(arg?) {}       // 声明async函数 
+  var asc = async function(arg?){}  // 声明async函数 
+  await promise/非Promise值         // 执行异步操作 
+    Input: 为非Promise值时,相当于同步[被转成一个立即resolve的Promise对象]  
+    Output: Promise传递值[而非promise本身]/非Promise值   
+      1 await后promise变成成功状态: 输出值为promise成功状态传递值  
+      2 await后promise变成失败状态: 输出值为promise失败状态传递值,并结束async函数 
+        且将输出值作为async失败状态的传递值 
+      Feature: 
+        await后的Promise,进行then/catch等处理后[包括多次处理],输出值始终为最后处理的传递值 
+          async function fn(){
+            var _a = await new Promise(function(rs,rj){
+              setTimeout(function(){
+                rj('失败传递值')
+              },1000)
+            })
+            .catch(function(info){
+              console.log(info,0);
+              return new Promise(function(rs,rj){
+                setTimeout(function(){
+                  rs('最终传递值')
+                },1000)
+              })
+            })
+            console.log(_a, 1);
+            return '函数Promise成功时的传递值'
+          }
+          fn()
+          .then(function(data){
+            console.log(data,2);
+          })
+          .catch(function(info){
+            console.log(info,3);
+          })
+    Expand: 
+      前一个异步操作失败,也不中断后面的异步操作的方法 
+        1 await后的Promise跟一个catch方法,处理可能出现的错误  
+          PS: 若执行catch后,则该await的返回值则为catch返回的值 
+          async function asc() {
+            await Promise.reject('出错了')
+            .catch((e) => console.log(e))
+            return await Promise.resolve('hello world');
+          }
+          asc().then(v => console.log(v))
+          // 出错了
+          // hello world
+        2 将await放在'try-catch'结构里 
+          async function asc() {
+            try {
+              await Promise.reject('出错了');
+            } 
+            catch(e) {
+            }
+            return await Promise.resolve('hello world');
+          }
+          asc().then(v => console.log(v))  // hello world
+      多个await异步操作,若不存在继发关系,最好同时触发 
+        var fn1 = function(){
+          return new Promise(function(rs,rj){
+            setTimeout(function(){
+              console.log('执行操作1');
+              rs('操作1数据')
+            },1000)
+          });
+        }
+        var fn2 = function(){
+          return new Promise(function(rs,rj){
+            setTimeout(function(){
+              console.log('执行操作2');
+              rs('操作2数据')
+            },500)
+          });
+        }
+        // 写法一
+        async function asc(){
+          let [foo, bar] = await Promise.all([fn1(), fn2()]);
+          return [foo, bar];
+        }
+        // 写法二
+        async function asc(){
+          let pms1 = fn1();    // 执行异步操作
+          let pms2 = fn2();    // 执行异步操作 
+          let v1 = await pms1; // 同步获取值 
+          let v2 = await pms2; // 同步获取值 
+          return { k1: v1 ,k2: v2 }; 
+        }
+        // 执行 
+        asc().then(function(data){
+          console.log(data);    // { k1: '操作1数据', k2: '操作2数据' } 
+        })
+  asc(arg?)                         // 执行async函数 
+    return返回值: 
+      非Promise值: 作为后续调用then方法时的参数传入  
+      Promise对象: 后续then时,使用该Promise的逻辑 
+    函数输出: promise对象,全部成功时传递值为return值/首次失败的的失败传递值[并结束函数] 
+    async函数返回的Promise对象状态改变的条件:  
+      1 内部所有await后的promise变成成功状态
+      2 内部await后的promise变成失败状态 
+      3 遇到return语句 
+      4 抛出错误 
+  采用异步函数作为回调 
+    将forEach方法的参数改成async函数存在问题 
+      let docs = [{}, {}, {}];
+      docs.forEach(async function (doc) { // 可能得到错误结果
+        await db.post(doc);
+      });
+      上面代码可能不会正常工作,原因是这时三个 db.post 操作将是并发执行,
+      也就是同时执行,而不是继发执行.
+      正确的写法: 采用for循环 
+      let docs = [{}, {}, {}];
+      for (let doc of docs) {
+        await db.post(doc);
+      }
+  'Async Iterator'异步遍历器 
+    PS: Iterator接口是一种数据遍历的协议,调用遍历器对象的next方法,就会得到一个对象,
+      该对象表示当前遍历指针所在的那个位置的信息,next方法返回的对象的结构是{value, done},
+      其中value表示当前的数据的值,done是一个布尔值,表示遍历是否结束.
+    遍历器的next方法必须是同步的,只要调用就必须立刻返回值 
+      也就是说,一旦执行next方法,就必须同步地得到value和done这两个属性 
+      若遍历指针正好指向同步操作,当然没有问题,但对于异步操作,就不太合适了 
+      目前的解决方法是,Generator函数里面的异步操作,返回一个Thunk函数或者Promise对象,
+      即value属性是一个Thunk函数或Promise对象,等待以后返回真正的值,而done属性则还是同步产生的
+      目前,有一个提案,为异步操作提供原生的遍历器接口,即value和done这两个属性都是异步产生,这称为'异步遍历器'
+  for await(var val of asyncIterator){}   遍历异步的Iterator接口 
+  异步生成器函数: async函数与Generator函数的结合 
+    async function* ag(arg?) { } // 定义异步Gen函数 
+      Example: 
+        async function* ag() {
+          yield 'hello';
+        }
+        const ai = ag();
+        // 执行后返回一异步Iterator对象,该对象调用next方法,返回一Promise对象 
+        ai.next().then(x => console.log(x)); // { value: 'hello', done: false }
+    var ai = ag(arg?)            // 返回一异步遍历器对象  
+      ai.next()  
+  Example: 
+    var fn1 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(1);
+          rs(arg+11)
+          rj()
+        },1000)
+      })
+    }
+    var fn3 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(3);
+          rs(arg+11)
+        },1000)
+      })
+    }
+    var fn2 = function(arg){
+      return new Promise(function(rs,rj){
+        setTimeout(function(){
+          console.log(2);
+          rs(arg+12)
+        },1000)
+      })
+    }
+    
+    function fn(num) {
+      return fn1(num) // returns a promise
+      .then(v => {
+        return fn2(v); // returns a promise
+      })
+      .catch(e => {
+        return fn3(num)  // returns a promise
+        .then(v => {
+          return fn2(v); // returns a promise
+        }); 
+      })
+    }
+    // 改写为 async 函数 
+    async function fn(num) {
+      let v;
+      v = await fn1(num)
+      .catch(function(info){
+        console.log('出错了');
+      })
+      console.log(v,'v');
+      if (!v) { v = await fn3(num); }
+      return fn2(v);
+    }
 Object,对象基础类,ES中所有对象的基类 
   Extend：null 
     console.log(Object.prototype.__proto__); // null  
@@ -1847,874 +2819,6 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
       // 匹配所有的箭头字符
       const regexArrows = /^\p{Block=Arrows}+$/u;
       regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
-Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二的值[ES6] 
-  PS: 不可改变,用来产生唯一的标识,ES6已经允许属性名的类型是 Symbol 
-  Extend: Object 
-    console.log(Symbol.prototype.__proto__.constructor===Object); // true 
-  Static:  
-    PS:ES6提供了11个内置的Symbol值,指向语言内部使用的方法 
-    Symbol.keyFor(sym) 返回登记在全局环境中的symbol值的key,否则返回undefined
-      PS:“被登记在全局环境中”,即该symbol值是被 Symbol.for()创建的,而非 Symbol();
-      let sym1 = Symbol.for('aoo');
-      let sym2 = Symbol('aoo');
-      Symbol.KeyFor(sym1); // aoo
-      Symbol.KeyFor(sym2); // undefined
-    Symbol.hasInstance  对象使用instanceof运算符时,调用的方法 
-      Example:
-        foo instanceof Foo 在语言内部,实际调用的是 Foo[Symbol.hasInstance](foo) 
-        class MyClass {
-          [Symbol.hasInstance](foo) {
-            return foo instanceof Array;
-          }
-        }
-        [1, 2, 3] instanceof new MyClass() // true
-        该实例的 Symbol.hasInstance 方法,在进行instanceof运算时自动调用,
-        判断左侧的运算子是否为Array的实例.
-    Symbol.species      对象的该属性指向其构造函数
-      创造实例时,默认会调用这个方法,即使用这个属性返回的函数当作构造函数,来创造新的实例对象.
-    Symbol.match   当执行str.match(obj)时,若该属性存在,会调用它,返回该方法的返回值 
-      String.prototype.match(regexp)
-      // 等同于
-      regexp[Symbol.match](this)
-      
-      class MyMatcher {
-        [Symbol.match](string) {
-          return 'hello world'.indexOf(string);
-        }
-      }
-      'e'.match(new MyMatcher()) // 1
-    Symbol.replace  当对象被 String.prototype.replace 方法调用时,会返回该方法的返回值 
-      String.prototype.replace(searchValue, replaceValue)
-      // 等同于
-      searchValue[Symbol.replace](this, replaceValue)
-      下面是一个例子.
-      const x = {};
-      x[Symbol.replace] = (...s) => console.log(s);
-      
-      'Hello'.replace(x, 'World') // ["Hello", "World"]
-      Symbol.replace方法会收到两个参数,第一个参数是replace方法正在作用的对象,上面例子是Hello,第二个参数是替换后的值,上面例子是World.
-    Symbol.search   当对象被 String.prototype.search 方法调用时,会返回该方法的返回值.
-      String.prototype.search(regexp)
-      // 等同于
-      regexp[Symbol.search](this)
-      
-      class MySearch {
-        constructor(value) {
-          this.value = value;
-        }
-        [Symbol.search](string) {
-          return string.indexOf(this.value);
-        }
-      }
-      'foobar'.search(new MySearch('foo')) // 0
-    Symbol.split    当对象被 String.prototype.split 方法调用时,会返回该方法的返回值 
-      String.prototype.split(separator, limit)
-      // 等同于
-      separator[Symbol.split](this, limit)
-      下面是一个例子.
-      
-      class MySplitter {
-        constructor(value) {
-          this.value = value;
-        }
-        [Symbol.split](string) {
-          var index = string.indexOf(this.value);
-          if (index === -1) {
-            return string;
-          }
-          return [
-            string.substr(0, index),
-            string.substr(index + this.value.length)
-          ];
-        }
-      }
-      
-      'foobar'.split(new MySplitter('foo'))
-      // ['', 'bar']
-      
-      'foobar'.split(new MySplitter('bar'))
-      // ['foo', '']
-      
-      'foobar'.split(new MySplitter('baz'))
-      // 'foobar'
-      上面方法使用Symbol.split方法,重新定义了字符串对象的split方法的行为,
-    Symbol.iterator 对象的 Symbol.iterator 属性,指向该对象的默认遍历器方法.
-      var myIterable = {};
-      myIterable[Symbol.iterator] = function* () {
-        yield 1;
-        yield 2;
-        yield 3;
-      };
-      
-      [...myIterable] // [1, 2, 3]
-      对象进行for...of循环时,会调用Symbol.iterator方法,返回该对象的默认遍历器,详细介绍参见《Iterator和for...of循环》一章.
-      
-      class Collection {
-        *[Symbol.iterator]() {
-          let i = 0;
-          while(this[i] !== undefined) {
-            yield this[i];
-            ++i;
-          }
-        }
-      }
-      
-      let myCollection = new Collection();
-      myCollection[0] = 1;
-      myCollection[1] = 2;
-      
-      for(let value of myCollection) {
-        console.log(value);
-      }
-      // 1
-      // 2
-    Symbol.toPrimitive 对象的 Symbol.toPrimitive 属性,指向一个方法.
-      该对象被转为原始类型的值时,会调用这个方法,返回该对象对应的原始类型值.
-      Symbol.toPrimitive 被调用时,会接受一个字符串参数,表示当前运算的模式,一共有三种模式.
-      Number:该场合需要转成数值
-      String:该场合需要转成字符串
-      Default:该场合可以转成数值,也可以转成字符串
-      let obj = {
-        [Symbol.toPrimitive](hint) {
-          switch (hint) {
-            case 'number':
-            return 123;
-            case 'string':
-            return 'str';
-            case 'default':
-            return 'default';
-            default:
-            throw new Error();
-          }
-        }
-      };
-      
-      2 * obj // 246
-      3 + obj // '3default'
-      obj == 'default' // true
-      String(obj) // 'str'
-      Symbol.toStringTag
-      对象的Symbol.toStringTag属性,指向一个方法.在该对象上面调用Object.prototype.toString方法时,若这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型.也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串.
-      
-      // 例一
-      ({[Symbol.toStringTag]: 'Foo'}.toString())
-      // "[object Foo]"
-      
-      // 例二
-      class Collection {
-        get [Symbol.toStringTag]() {
-          return 'xxx';
-        }
-      }
-      var x = new Collection();
-      Object.prototype.toString.call(x) // "[object xxx]"    
-  Instance: 
-    创建标记 
-    var sym = Symbol([arg])   创建标记 
-      PS:Symbol函数前不能使用new命令,否则会报错.
-        因为生成的Symbol是一个原始类型的值,不是对象,也不能添加属性
-      arg  可选,表示对Symbol实例的描述,可为字符串或对象 
-        主要是为了在控制台显示,或者转为字符串时,比较容易区分 
-        当参数为对象时,调用该对象的toString方法,将其转为字符串 
-          const obj = {
-            toString() {
-              return 'abc';
-            }
-          };
-          const sym = Symbol(obj);
-          sym // Symbol(abc)
-      参数只是表示对当前Symbol值的描述,相同参数创建的Symbol是不相等的 
-        var s1 = Symbol();
-        var s2 = Symbol();
-        s1 === s2 // false
-        var s3 = Symbol('foo');
-        var s4 = Symbol('foo');
-        s3 === s4 // false
-      Example:
-        var sym1 = Symbol("aoo");
-        var sym2 = Symbol();
-        var str1 = sym1.toString();
-        var str2 = sym2.toString();
-        console.log(sym1,sym2);   // Symbol(aoo) Symbol()
-        console.log(str1,str2);   // Symbol(aoo) Symbol()
-        console.log(typeof sym1); // symbol
-    var sym =   Symbol.for(str) 根据参数在全局环境中搜索该symbol,有则返回,无则创建 
-      PS:Symbol.for()创建的值会被登记在全局环境中,供以后用 Symbol.for() 来搜索,
-        可在不同的 iframe 或 service worker 中取到同一个值;
-        Symbol() 创建的symbol值不会被登记在全局环境中
-      let sym1 = Symbol.for('name');
-      let sym2 = Symbol.for('name');
-      console.log(sym1 === sym2); // true
-      
-      Symbol( )创建的symbol值,用 Symbol.for() 搜索不到 
-      let sym1 = Symbol('name'); // 不会被登记在全局环境中
-      let sym2 = Symbol.for('name');
-      console.log(sym1 === sym2);  // false
-    var symObj = Object(sym)  通过sym创建
-      var sym = Symbol("foo");
-      typeof sym;     // "symbol"
-      var symObj = Object(sym);
-      typeof symObj;  // "object"
-  Proto: 
-    .valueOf()
-    .toString()
-  Feature: 
-    显式转为字符串或布尔值,但不能转为数值 
-      var sym1 = Symbol('My symbol');
-      String(sym1) // 'Symbol(My symbol)'
-      sym1.toString() // 'Symbol(My symbol)'
-      var sym2 = Symbol();
-      Boolean(sym2) // true
-      !sym2  // false
-      if (sym2) {
-        // ...
-      }
-      Number(sym2) // TypeError
-      sym2 + 2 // TypeError
-    不能与其他类型的值进行运算 
-      var sym = Symbol('My symbol');
-      "your symbol is " + sym  // TypeError: can't convert symbol to string
-      `your symbol is ${sym}`  // TypeError: can't convert symbol to string
-    定义常量 
-      var sym1 = Symbol('sm');
-      var sym2 = Symbol('sm');
-      console.log(sym1==sym2,sym1===sym2); // false false
-    作为属性名使用 
-      PS:对象的属性名现在可以有两种类型,一种是原来就有的字符串,另一种就是新增的Symbol类型 
-        凡是属性名属于Symbol类型,就都是独一无二的,可以保证不会与其他属性名产生冲突 
-      Example:
-        let name = Symbol();
-        let age = '年龄'
-        let person = {
-          [name]:"张三",
-          [age] : 15
-        };
-        
-        var mySymbol = Symbol();
-        var a = {};
-        // 第一种写法
-        a[mySymbol] = 'Hello!';
-        // 第二种写法
-        var a = {
-          [mySymbol]: 'Hello!'
-        };
-        // 第三种写法
-        Object.defineProperty(a, mySymbol, { value: 'Hello!' });
-        // 以上写法都得到同样结果
-        a[mySymbol] // "Hello!"
-      Symbol值作为对象属性名时,不能用点运算符.
-        var mySymbol = Symbol();
-        var a = {};
-        a.mySymbol = 'Hello!';
-        a[mySymbol] // undefined
-        a['mySymbol'] // "Hello!"
-        因为点运算符后面总是字符串,所以不会读取mySymbol作为标识名所指代的那个值,
-        导致a的属性名实际上是一个字符串,而不是一个Symbol值
-      Symbol类型属性名的特点 
-        不会出现在'for...in'和'for...of'中
-        不会被 Object.keys()、Object.getOwnPropertyNames()、JSON.stringify() 返回
-        Example:
-          let name = Symbol();
-          let person = {
-            [name]:"张三",  //symbol类型
-            "age":12        //string类型
-          };
-          Object.keys(person); // ["age"]
-          for(let key in person){
-            console.log(key); // age
-          }
-      Object.getOwnPropertySymbols(obj)  获取对象的Symbol类型的属性
-        找到symbol类型的属性并且返回一个数组,数组的成员就是symbol类型的属性值
-        let name = Symbol("name");
-        let age = Symbol("age");
-        let person = {
-          [name]:"张三", 
-          [age]:12       
-        };
-        Object.getOwnPropertySymbols(person); // (2) [Symbol(name), Symbol(age)]
-      Reflect.ownKeys(obj)   获取对象所有类型的属性[包括symbol类型]
-        let person = {
-          [Symbol('name')]:"张三",
-          "age": 21
-        };
-        Reflect.ownKeys(person); // (2) ["age", Symbol(name)]
-    ES6新增内置对象的 Symbol.toStringTag 属性值如下
-      JSON[Symbol.toStringTag]:'JSON'
-      Math[Symbol.toStringTag]:'Math'
-      Module对象M[Symbol.toStringTag]:'Module'
-      ArrayBuffer.prototype[Symbol.toStringTag]:'ArrayBuffer'
-      DataView.prototype[Symbol.toStringTag]:'DataView'
-      Map.prototype[Symbol.toStringTag]:'Map'
-      Promise.prototype[Symbol.toStringTag]:'Promise'
-      Set.prototype[Symbol.toStringTag]:'Set'
-      %TypedArray%.prototype[Symbol.toStringTag]:'Uint8Array'等
-      WeakMap.prototype[Symbol.toStringTag]:'WeakMap'
-      WeakSet.prototype[Symbol.toStringTag]:'WeakSet'
-      %MapIteratorPrototype%[Symbol.toStringTag]:'Map Iterator'
-      %SetIteratorPrototype%[Symbol.toStringTag]:'Set Iterator'
-      %StringIteratorPrototype%[Symbol.toStringTag]:'String Iterator'
-      Symbol.prototype[Symbol.toStringTag]:'Symbol'
-      Generator.prototype[Symbol.toStringTag]:'Generator'
-      GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
-Set,集合[ES6] 
-  PS: Set中的元素无重复项[会自动去掉重复的元素]; Set集合中,key和val为同一个值;
-  Extend: Object 
-    console.log(Set.prototype.__proto__.constructor===Object); // true  
-  Instance:  
-    new Set([arr])  创建set
-      var s1 = new Set();  // 创建一个集合
-      var s2 = new Set([1,2,3,2,4]); //创建并初始化
-      console.log(s2);     // Set {1, 2, 3, 4} , 自动过滤掉了重复的元素
-  Proto: 
-    .size  返回元素的个数,类型为数值
-    .add(val) 添加元素
-    .delete(val) 删除元素,成功返回true,否则为false 
-      var s = new Set([1,2,3]);
-      console.log(s); // Set {1, 2, 3}
-      s.delete(2);    // true
-      s.delete(4);    // false
-      console.log(s); // Set {1, 3}
-    .clear()     删除所有元素
-      var s = new Set([1,2,3]);
-      console.log(s); // Set {1, 2, 3}
-      s.clear();
-      console.log(s); // Set {}
-    .has(val) 检测元素是否存在,存在返回true,否则返回false
-      var s = new Set([1,2,3]);
-      s.has(1); // true
-      s.has(4); // false
-    .entries() 返回一个键值对的遍历器
-      var s = new Set(['a','b','c']);
-      var aoo = s.entries(); 
-      console.log(aoo); // SetIterator {"a", "b", "c"}
-    .keys()   返回键名的遍历器
-    .values() 返回键值的遍历器
-      var s = new Set(['a','b','c']);
-      var aoo = s.keys();  
-      var boo = s.values();
-      console.log(aoo); // SetIterator {"a", "b", "c"}
-      console.log(boo); // SetIterator {"a", "b", "c"}
-    .forEach() 遍历
-      var s = new Set(['a','b','c']);
-      s.forEach(function(value,key){
-        console.log(value,key)
-      });
-      // a  a
-      // b  b
-      // c  c
-  Feature: 
-    'for-of'遍历Set结构
-      var s = new Set(['a','b','c']);
-      for(let [i,v] of s.entries()){
-        console.log(i+' '+v);
-      }
-      // a  a    
-      // b  b   
-      // c  c   
-  Set的用途
-    实现数组去重
-    let arr = [1,2,2,3,4,4,4];  // 目标数组arr,要求去重
-    let newArr = Array.from(new Set(arr)); // [1,2,3,4],完成去重
-WeakSet, [ES6] 
-  PS: WeakSet结构同样不会存储重复的值;
-    且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象]
-    实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数,如:数组.
-  new WeakSet(arr);
-    arr 数组,且其成员必须是对象类型的值,否则就会报错
-    let ws = new WeakSet([{"age":18}]); // WeakSet {Object {age: 18}}
-    let ws = new WeakSet([1,2]); // 报错 ,Invalid value used in weak set
-
-    let arr1 = [1];
-    let arr2 = [2];
-    let ws = new WeakSet([arr1,arr2]); // WeakSet {[1], [2]}
-  ws.add()    作用与用法跟Set结构完全一致
-  ws.delete() 作用与用法跟Set结构完全一致
-  ws.has()    作用与用法跟Set结构完全一致
-  WeakSet结构不可遍历
-    因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失.
-    所以WeakSet结构无keys(),values(),entries(),forEach() 等方法和 size 属性
-Map,字典[ES6] 
-  var map = new Map([arr]) 定义Map 
-    arr  可选,数组
-    var mp1 = new Map()
-    let mp2 = new Map([
-      ["name","aoo"],
-      ["gender",1]
-    ]);
-    console.log(mp2); // Map(2) {"name" => "aoo", "gender" => 1}
-  map.size   获取实例的成员数
-    let map = new Map();
-    map.set(1,3);
-    map.set('1','3');
-    map.size;// 2
-  map.set(key,val) 增加,给实例设置一对键值对,返回map实例
-    key可以为各种类型的值
-      let map = new Map();
-      map.set("name","aoo"); // 添加一个string类型的键名
-      map.set(1,2);          // 添加一个数字类型的键名
-      console.log(map); // Map(2) {"name" => "aoo", 1 => 2}
-      map.set([1],2);            // 数组类型的键名
-      map.set({"age":"15"},2);   // 对象类型的键名
-      map.set(true,2);           // 布尔类型的键名
-      map.set(Symbol('name'),2); // Symbol类型的键名
-      map.set(null,2);           // null为键名
-      map.set(undefined,2);      // undefined为键名
-      console.log(map);
-      // Map(8) {"name" => "aoo", 1 => 2, [1] => 2, Object {age: "15"} => 2, true => 2…}
-    若设置一已经存在的键名,后面的键值会覆盖前面的键值
-      let map = new Map();
-      map.set("aoo","boo");
-      console.log(map);     // Map(1) {"aoo" => "boo"}
-      map.set("aoo","coo"); // 再次设置name的值
-      console.log(map);     // Map(1) {"aoo" => "coo"}
-  map.get(val)     返回指定键名的键值
-    获取存在对应的键值,若键值对存在,就会返回键值;否则,返回undefined;
-    let map = new Map([["aoo","boo"]]);
-    map.get("aoo"); // "boo"
-    map.get("coo"); // undefined
-  map.delete(key)  删除指定的键值对,删除成功返回true,否则返回false
-    let m = new Map();
-    m.set("aoo","boo");
-    m.delete("aoo"); // true
-    m.delete("coo"); // false
-  map.clear()      一次性删除所有键值对
-  map.has(key)     判断Map实例内是否含有指定的键值对,有返回true,否则返回false
-    let map = new Map();
-    map.set("aoo","boo");
-    map.has('aoo'); // true
-    map.has('coo'); // false
-  for...of 遍历Map的键名或者键值
-  entries() 返回实例的键值对遍历器
-    let m = new Map([
-      ["aoo","boo"],
-      ["age",25]
-    ]);
-    for(let [key,value] of m.entries()){
-      console.log(key+'  '+value);
-    }
-    // aoo  boo
-    // age  25
-  keys()   返回实例所有键名的遍历器
-  values() 返回实例所有键值的遍历器
-    keys方法和values方法的使用方式一致,只是返回的结果不同.
-    let m = new Map([
-      ["name","van"],
-      ["age",25]
-    ]);
-    for(let key of m.keys()){  //使用keys方法获取键名
-      console.log(key);
-    }
-    // name
-    // age
-    for(let value of m.values()){ //使用values方法获取键值
-      console.log(value);
-    }
-    // van
-    // 25
-  forEach( ) 遍历
-    let map = new Map([
-      ["name","van"],
-      ["age",25]
-    ]);
-    map.forEach(function(value,key){
-      console.log(key+':'+value);
-    });
-    // name:van
-    // age:25
-  WeakMap结构
-    和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比:数组,对象,函数等
-    let wm = new WeakMap();
-    wm.set(key,val)
-      key 必须为引用类型数据,普通值类型则不允许[如字符串,数字,null,undefined,布尔类型]
-      let wm = new WeakMap();
-      wm.set([1],2);            //数组类型的键名
-      wm.set({'name':'van'},2); //对象类型的键名
-      function fn(){};
-      wm.set(fn,2);             //函数类型的键名
-      console.log(wm);
-      // WeakMap {function => 2, Object {name: "van"} => 2, [1] => 2}
-    ws.get()    和Map用法相同
-    ws.has()    和Map用法相同
-    ws.delete() 和Map用法相同
-    WeakMap不支持的属性方法
-      clear方法,
-      不支持遍历,也就没有了keys、values、entries、forEach这4个方法
-      也没有属性size
-      理由跟WeakSet结构一样:键名中的引用类型是弱引用,
-      你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
-      若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失.
-WeakMap, 
-Blob,二进制数据的基本对象[ES6] 
-  PS: 一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
-    Blob表示的数据不一定是一个JavaScript原生格式. 
-    File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件.
-    要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档.
-    接受Blob对象的APIs也被列在 File 文档中.
-  Extend: Object 
-  Instance: 
-    new Blob(blobParts[,options])  创建Blob对象 
-      PS: 其内容由参数中给定的数组串联组成 
-      blobParts 一个包含实际数据的数组
-      options = {  // 可选,配置项 
-        type: 'text/plain'  
-      }  
-      Example:
-        用字符串构建一个blob
-        var debug = {hello: "world"};
-        var blob = new Blob([JSON.stringify(debug)],{type: 'application/json'});
-  Proto: 
-    .size     只读, Blob对象中所包含数据的大小,单位:字节
-    .type     只读,字符串,Blob对象所包含数据的MIME类型 
-      若类型未知,则该值为空字符串 
-      在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
-    .slice()  Blob,创建一个包含另一个blob的数据子集的blob 
-      blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
-      slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
-      若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
-      slice 方法在某些浏览器和版本上仍带有供应商前缀:
-        Firefox 12 及更早版本的 blob.mozSlice() 
-        Safari 中的 blob.webkitSlice()
-        slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
-        使用Firefox 30 删除了对 blob.mozSlice() 的支持.
-      Example:  使用XMLHttpRequest对象,将大文件分割上传
-        var inputElem = document.querySelector('input[type="file"]');
-        function upload(blobOrFile) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', '/server', true);
-          xhr.onload = function(e) { ... };
-          xhr.send(blobOrFile);
-        }
-        inputElem.addEventListener('change', function(e) {
-          var blob = this.files[0];
-          const BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
-          const SIZE = blob.size;
-          var start = 0 , end = BYTES_PER_CHUNK;
-          while(start < SIZE) {
-            var upBlob = blob.slice(start, end) ;
-            upload(upBlob);
-            start = end;
-            end = start + BYTES_PER_CHUNK;
-          }
-        }, false);
-    兼容性 
-      blob.isClosed bol,指示 Blob.close() 是否在该对象上调用过
-        关闭的 blob 对象不可读.
-      blob.close() 关闭 Blob 对象,以便能释放底层资源 
-  Expand: 
-    利用Blob对象,生成可下载文件 
-      var blob = new Blob(["文件内容"]);
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "文件名.txt";
-      a.textContent = "点击下载";
-      document.body.appendChild(a);
-      最终HTML中显示为: 
-      <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
-      点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
-  BlobBuilder,创建Blob对象[已废弃] 
-    var builder = new BlobBuilder();
-    var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
-    builder.append(fileParts[0]);
-    var myBlob = builder.getBlob('text/xml');
-Promise,同步书写异步模式[ES6] 
-  PS: 将原来异步函数的嵌套关系转变为'同步'的链式关系; 
-    Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
-    将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
-  Feature: 
-    Promise是一个状态机,只能从'pending'状态,转换为'fulfilled'或'rejected'
-      'pending': 初始状态,未完成或拒绝 
-      'fulfilled': 成功状态  
-      'rejected': 失败状态 
-      'settled': 'fulfilled'和'rejected'的统称 
-      可在'settled'状态下进行回调操作 
-    Promise的缺点 
-      首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
-      其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
-      第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
-  Static: 
-    Promise.length    '1',构造器参数的数目 
-    Promise.all(pmsArr)  Promise,全局模式 
-      Input: 由Promise对象组成的数组 
-      Output: 'settled'状态的Promise 
-        所有Promise都'fulfilled',则输出'fulfilled'的Promise 
-          传递值为每个Promise'fulfilled'状态传递值组成的数组 
-        有一个Promise为'rejected'则输出'rejected'的Promise 
-          传递值为第一个'rejected'的Promise'rejected'的传递值 
-    Promise.race(pmsArr) Promise,竞速模式 
-      Input: 由Promise对象组成的数组 
-      Output: 首个'settled'的Promise,状态和传递值由该Promise决定 
-    Promise.resolve(val)    返回'fulfilled'状态的Promise  
-      根据输入不同存在3种情况: 
-      Input: Promise 
-        Output: 该Promise,由该Promise决定传递值  
-          Promise.resolve(new Promise(function(rs,rj){
-            setTimeout(function(){
-              rj('传递的信息')
-            },1000)
-          }))
-          .catch(function(info){
-            console.log(info);
-          })
-          // 传递的信息 
-      Input: 带有'then'方法的非Promise对象 
-        Output: 状态和传递值由定义的then方法执行决定的Promise 
-        Promise.resolve({
-          then: function(rs,rj){
-            // console.log(arg(11),'thenable');
-            // rs('boo')
-            rj('boo1')
-          }
-        })
-        .then(function(data){
-          console.log(data);
-        }
-        ,function(msg){
-          console.log(msg);
-        })
-      Input: 其他值 
-        Output: 'fulfilled'状态的Promise,传递val值  
-        Promise.resolve('传递的数据')
-        .then(function(msg){
-          console.log(msg);
-        })
-    Promise.reject(val)     返回'rejected'状态的Promise 
-  Instance: 
-    new Promise(function(rs ,rj){ // 创建Promise对象 
-      PS: Promise在创建时,参数函数就会执行 
-        若在方法的执行过程中抛出了任何异常,那么promise立即'rejected' 
-      rs/rj 函数根据逻辑需要进行相应的执行 
-        rs(data) 将该Promise变成'fulfilled',传递data值 
-          传入不同类型的值,函数输出和传递值的逻辑同 Promise.resolve() 
-        rj(info) 将该Promise变成'rejected',传递info值 
-          传入不同类型的值,函数输出和传递值的逻辑同 Promise.reject() 
-        rs/rj 后,若该函数未return,则会继续向后执行,但不影响Promise的状态和值的传递 
-          new Promise(function(rs,rj){
-            rs('success')
-            console.log('仍会执行该打印操作');
-          })
-          .then(function(data){
-            console.log(data);
-          })
-          // 仍会执行该打印操作
-          // success
-    })  
-  Proto: 
-    .then(val1 ,val2?)       // Promise,根据调用的Promise的状态进行回调 
-      val1   any,'fulfilled'状态下的回调 
-        function(data){ // 函数类型的值 
-          // data   'fulfilled'状态的传递值  
-          return val // 可选,改变输出Promise及传递值  
-            非Promise值: 输出'fulfilled'的Promise,传递值为该值  
-            promise: 输出该Promise,传递值由该Promise决定  
-        } 
-        非函数值,则默认为: function(arg){ return arg; }
-      val2   any,'rejected'状态下的回调 
-        function(info){ // 函数类型的值  
-          PS: 当该回调不存在时,失败会继续向后传递,直到遇到错误处理,进行回调;
-            存在则捕获失败状态,后续Promise状态为'rejected' 
-          // info   Promise传递的值  
-          return val // 可选,改变输出的Promise及传递值    
-            非Promise值: 输出'fulfilled'的Promise,传递值为该值  
-            promise: 输出该Promise,传递值由该Promise决定  
-        }  
-        非函数值,则默认为: function(arg){ return arg; }
-    .catch(function(info){   // Promise,处理操作异常 
-      // info  'rejected'状态的传递值/报错时的信息  
-      return val  // 可选,改变输出的Promise及传递值 
-        非Promise值: 输出'fulfilled'的Promise,传递值为该值  
-        promise: 输出该Promise,传递值由该Promise决定  
-    })                   
-    .finally(function(){     // Promise,最终将执行的操作 
-      return val // 可选,改变输出的Promise及传递值 
-        非Promise值: 输出'fulfilled'的Promise,传递值为该值  
-        promise: 输出该Promise,传递值由该Promise决定  
-    })                 
-Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
-  PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
-    要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作
-  pObj = new Proxy(obj,config) 创建代理对象  
-    obj    代理的目标对象
-    config = { // 配置对象,用于代理的行为 
-        PS: 若没有设置任何代理操作,则等同于直接通向原对象
-        get: function(target,key,receiver){        // 代理读 
-          // target 代理的目标对象 
-          // key    读的属性 
-          Example:
-            var person = {"name":"张三"};
-            var pPerson = new Proxy(person,{ 
-              get: function(target,property){
-                console.log('1',target,property);
-                return "李四"
-              }
-            });
-            console.log(pPerson.name); //李四
-        },     
-        set: function(target,key,val,receiver){  // 代理写 
-          // target  同'set'
-          // key     同'set'
-          // val     设置的值 
-          Example: 
-            var bankAccount = {"RMB":1000,"dollar":0};
-            var pBankAccount = new Proxy(bankAccount,{  
-              get: function(target,property){  
-                if(target[property] > 0){  
-                  return target[property];
-                }
-                else{
-                  return "余额不足"; 
-                }    
-              },
-              set: function(target,property,value){  
-                if(!Number.isInteger(value)){ // 存入的数额必须是一个数字类型
-                  console.log(value,'数值不正确');
-                  return "请设置正确的数值";
-                }
-                else {
-                  target[property] = value;  // 修改属性的值
-                  console.log('存款成功');
-                }
-              }
-            });
-            pBankAccount.RMB;    // 1000,查款
-            pBankAccount.dollar; // 余额不足,查款
-            pBankAccount.dollar = "五百"; // 五百 数值不正确,存款
-            pBankAccount.dollar;          // 余额不足,查款
-            pBankAccount.dollar = 500;    // 存款成功,存款
-            pBankAccount.dollar;          // 500,查款
-        },
-        has: function(target,key){ // 代理 key in obj 操作 
-          Example: 
-          var person = { "name":"张三", "age":20 };
-          var proxy = new Proxy(person, {
-            has : function(target, prop) {
-              if(target[prop] === undefined){
-                return false;
-              }
-              else{
-                return true;
-              }
-            }
-          });
-          "name" in proxy;   // true
-          "height" in proxy; // false
-        },
-        deleteProperty: function(target,key){ // 代理 delete proxy[propKey]
-        },
-        ownKeys: function(target){ 
-          // 代理:   
-          // Object.getOwnPropertyNames(proxy)、
-          // Object.getOwnPropertySymbols(proxy)、
-          // Object.keys(proxy)
-          let person = {"name":"老王","age":40,"height":1.5};
-          let proxy = new Proxy(person,{ 
-            ownKeys : function(target){  // ownKeys过滤对对象的属性遍历
-              return ["name","age"] 
-            }
-          });
-          Object.keys(person); // ["name", "age","height"],未使用代理
-          Object.keys(proxy);  // ["name", "age"]
-        },
-        getOwnPropertyDescriptor: function(target,key){ 
-          // 代理 Object.getOwnPropertyDescriptor(obj,key)
-        },
-        defineProperty: function(target,key,propDesc){
-          // 代理 
-          // Object.defineProperty(proxy, propKey, propDesc）
-          // Object.defineProperties(proxy, propDescs)
-        },
-        preventExtensions: function(target){
-          // 代理 Object.preventExtensions(proxy) 
-        },
-        getPrototypeOf: function(target){
-          // 代理 Object.getPrototypeOf(proxy) 
-        },
-        isExtensible: function(target){
-          // 代理 Object.isExtensible(proxy) 
-        },
-        setPrototypeOf: function(target, proto){
-          // 代理 Object.setPrototypeOf(proxy, proto) 
-        },
-        // 如果目标对象是函数 
-        apply: function(target, object, args){ // 代理函数对象的执行 
-          // 代理 如 proxy(...args)、proxy.call(object, ...args)、proxy.apply(...) 等 
-          let foo = function(){
-            console.log('我是原始函数');
-          };
-          let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
-            apply : function(){
-              console.log('我是代理函数');
-            }
-          });
-          proxy(); // 我是代理函数
-        },
-        construct: function(target, args){ // 代理构造函数调用的操作,如new proxy(...args)
-        }
-      }
-  var obj = Proxy.revocable() 代理及取消代理,返回一个对象 
-    obj.proxy    Proxy的代理实例对象
-    obj.revoke() 用于取消代理
-    Example:
-      let person = {"name":"张三"};
-      let handle = {  //定义一个代理处理程序
-        get : function(target,prop){
-          return "李四";
-        }
-      };
-      let obj = Proxy.revocable(person,handle); // 使用Proxy.revocable()代理
-      obj.proxy.name; // 李四
-      obj.revoke();   //调用返回对象obj的revoke方法,取消代理
-      obj.proxy.name; //报错,代理被取消
-Reflect,为操作对象提供的API[ES6] 
-  目的:  
-  将对象上一些明显属于语言内部的方法[如 Object.defineProperty]放到Reflect 
-  Reflect方法操作失败返回false[而不像其他的操作失败可能会报错]
-  让Object操作都变成函数行为 
-    命令式如:  key in obj;  delete obj[key];
-    函数行为:
-    Reflect.has(obj, key)
-    Reflect.deleteProperty(obj, key) 
-  Static: 
-    PS: 大部分与Object对象的同名方法的作用都是相同的,且与Proxy对象的方法是一一对应 
-    .get(obj,key,receiver)    返回对象的key,否则返回undefined 
-      obj  操作的目标对象,若不是对象则报错  
-      如果name属性部署了读取函数（getter）,则读取函数的this绑定receiver 
-        var myObject = {
-          foo: 1,
-          bar: 2,
-          get baz() {
-            return this.foo + this.bar;
-          },
-        };
-        var myReceiverObject = {
-          foo: 4,
-          bar: 4,
-        };
-        Reflect.get(myObject, 'baz', myReceiverObject) // 8
-    .set(obj,key,val,receiver) 设置对象的key为val 
-      如果name属性设置了赋值函数,则赋值函数的this绑定receiver.
-      var myObject = {
-        foo: 4,
-        set bar(value) {
-          return this.foo = value;
-        },
-      };
-      var myReceiverObject = {
-        foo: 0,
-      };
-      Reflect.set(myObject, 'bar', 1, myReceiverObject);
-      myObject.foo // 4
-      myReceiverObject.foo // 1
-    .apply(target,context,args)
-    .construct(target,args)
-    .defineProperty(target,name,desc)
-    .deleteProperty(target,name)
-    .has(target,name)
-    .ownKeys(target)
-    .isExtensible(target)
-    .preventExtensions(target)
-    .getOwnPropertyDescriptor(target, name)
-    .getPrototypeOf(target)
-    .setPrototypeOf(target, prototype)
 ------------------------------------------------------------------------------- 
 
 

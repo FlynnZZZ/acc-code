@@ -402,6 +402,875 @@ JSON'JavaScript Object Notation'JavaScript对象表示法[IE8+]
     使用 JSON 的函数进行序列化和反序列化来本地保存
     JSON 可以将JS中一组数据转换为字符串,然后就可以在函数之间轻松地传递这个字符串
 --------------------------------------------------------------------------------
+Promise,同步书写异步模式[ES6] 
+  PS: 将原来异步函数的嵌套关系转变为'同步'的链式关系; 
+    Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
+    将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
+  Feature: 
+    Promise是一个状态机,只能从'pending'状态,转换为'fulfilled'或'rejected'
+      'pending': 初始状态,未完成或拒绝 
+      'fulfilled': 成功状态  
+      'rejected': 失败状态 
+      'settled': 'fulfilled'和'rejected'的统称 
+      可在'settled'状态下进行回调操作 
+    Promise的缺点 
+      首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
+      其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
+      第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
+  Static: 
+    Promise.length    '1',构造器参数的数目 
+    Promise.all(pmsArr)  Promise,全局模式 
+      Input: 由Promise对象组成的数组 
+      Output: 'settled'状态的Promise 
+        所有Promise都'fulfilled',则输出'fulfilled'的Promise 
+          传递值为每个Promise'fulfilled'状态传递值组成的数组 
+        有一个Promise为'rejected'则输出'rejected'的Promise 
+          传递值为第一个'rejected'的Promise'rejected'的传递值 
+    Promise.race(pmsArr) Promise,竞速模式 
+      Input: 由Promise对象组成的数组 
+      Output: 首个'settled'的Promise,状态和传递值由该Promise决定 
+    Promise.resolve(val)    返回'fulfilled'状态的Promise  
+      根据输入不同存在3种情况: 
+      Input: Promise 
+        Output: 该Promise,由该Promise决定传递值  
+          Promise.resolve(new Promise(function(rs,rj){
+            setTimeout(function(){
+              rj('传递的信息')
+            },1000)
+          }))
+          .catch(function(info){
+            console.log(info);
+          })
+          // 传递的信息 
+      Input: 带有'then'方法的非Promise对象 
+        Output: 状态和传递值由定义的then方法执行决定的Promise 
+        Promise.resolve({
+          then: function(rs,rj){
+            // console.log(arg(11),'thenable');
+            // rs('boo')
+            rj('boo1')
+          }
+        })
+        .then(function(data){
+          console.log(data);
+        }
+        ,function(msg){
+          console.log(msg);
+        })
+      Input: 其他值 
+        Output: 'fulfilled'状态的Promise,传递val值  
+        Promise.resolve('传递的数据')
+        .then(function(msg){
+          console.log(msg);
+        })
+    Promise.reject(val)     返回'rejected'状态的Promise 
+  Instance: 
+    new Promise(function(rs ,rj){ // 创建Promise对象 
+      PS: Promise在创建时,参数函数就会执行 
+        若在方法的执行过程中抛出了任何异常,那么promise立即'rejected' 
+      rs/rj 函数根据逻辑需要进行相应的执行 
+        rs(data) 将该Promise变成'fulfilled',传递data值 
+          传入不同类型的值,函数输出和传递值的逻辑同 Promise.resolve() 
+        rj(info) 将该Promise变成'rejected',传递info值 
+          传入不同类型的值,函数输出和传递值的逻辑同 Promise.reject() 
+        rs/rj 后,若该函数未return,则会继续向后执行,但不影响Promise的状态和值的传递 
+          new Promise(function(rs,rj){
+            rs('success')
+            console.log('仍会执行该打印操作');
+          })
+          .then(function(data){
+            console.log(data);
+          })
+          // 仍会执行该打印操作
+          // success
+    })  
+  Proto: 
+    .then(val1 ,val2?)       // Promise,根据调用的Promise的状态进行回调 
+      val1   any,'fulfilled'状态下的回调 
+        function(data){ // 函数类型的值 
+          // data   'fulfilled'状态的传递值  
+          return val // 可选,改变输出Promise及传递值  
+            非Promise值: 输出'fulfilled'的Promise,传递值为该值  
+            promise: 输出该Promise,传递值由该Promise决定  
+        } 
+        非函数值,则默认为: function(arg){ return arg; }
+      val2   any,'rejected'状态下的回调 
+        function(info){ // 函数类型的值  
+          PS: 当该回调不存在时,失败会继续向后传递,直到遇到错误处理,进行回调;
+            存在则捕获失败状态,后续Promise状态为'rejected' 
+          // info   Promise传递的值  
+          return val // 可选,改变输出的Promise及传递值    
+            非Promise值: 输出'fulfilled'的Promise,传递值为该值  
+            promise: 输出该Promise,传递值由该Promise决定  
+        }  
+        非函数值,则默认为: function(arg){ return arg; }
+    .catch(function(info){   // Promise,处理操作异常 
+      // info  'rejected'状态的传递值/报错时的信息  
+      return val  // 可选,改变输出的Promise及传递值 
+        非Promise值: 输出'fulfilled'的Promise,传递值为该值  
+        promise: 输出该Promise,传递值由该Promise决定  
+    })                   
+    .finally(function(){     // Promise,最终将执行的操作 
+      return val // 可选,改变输出的Promise及传递值 
+        非Promise值: 输出'fulfilled'的Promise,传递值为该值  
+        promise: 输出该Promise,传递值由该Promise决定  
+    })                 
+Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二的值[ES6] 
+  PS: 不可改变,用来产生唯一的标识,ES6已经允许属性名的类型是 Symbol 
+  Extend: Object 
+    console.log(Symbol.prototype.__proto__.constructor===Object); // true 
+  Static:  
+    PS:ES6提供了11个内置的Symbol值,指向语言内部使用的方法 
+    Symbol.keyFor(sym) 返回登记在全局环境中的symbol值的key,否则返回undefined
+      PS:“被登记在全局环境中”,即该symbol值是被 Symbol.for()创建的,而非 Symbol();
+      let sym1 = Symbol.for('aoo');
+      let sym2 = Symbol('aoo');
+      Symbol.KeyFor(sym1); // aoo
+      Symbol.KeyFor(sym2); // undefined
+    Symbol.hasInstance  对象使用instanceof运算符时,调用的方法 
+      Example:
+        foo instanceof Foo 在语言内部,实际调用的是 Foo[Symbol.hasInstance](foo) 
+        class MyClass {
+          [Symbol.hasInstance](foo) {
+            return foo instanceof Array;
+          }
+        }
+        [1, 2, 3] instanceof new MyClass() // true
+        该实例的 Symbol.hasInstance 方法,在进行instanceof运算时自动调用,
+        判断左侧的运算子是否为Array的实例.
+    Symbol.species      对象的该属性指向其构造函数
+      创造实例时,默认会调用这个方法,即使用这个属性返回的函数当作构造函数,来创造新的实例对象.
+    Symbol.match   当执行str.match(obj)时,若该属性存在,会调用它,返回该方法的返回值 
+      String.prototype.match(regexp)
+      // 等同于
+      regexp[Symbol.match](this)
+      
+      class MyMatcher {
+        [Symbol.match](string) {
+          return 'hello world'.indexOf(string);
+        }
+      }
+      'e'.match(new MyMatcher()) // 1
+    Symbol.replace  当对象被 String.prototype.replace 方法调用时,会返回该方法的返回值 
+      String.prototype.replace(searchValue, replaceValue)
+      // 等同于
+      searchValue[Symbol.replace](this, replaceValue)
+      下面是一个例子.
+      const x = {};
+      x[Symbol.replace] = (...s) => console.log(s);
+      
+      'Hello'.replace(x, 'World') // ["Hello", "World"]
+      Symbol.replace方法会收到两个参数,第一个参数是replace方法正在作用的对象,上面例子是Hello,第二个参数是替换后的值,上面例子是World.
+    Symbol.search   当对象被 String.prototype.search 方法调用时,会返回该方法的返回值.
+      String.prototype.search(regexp)
+      // 等同于
+      regexp[Symbol.search](this)
+      
+      class MySearch {
+        constructor(value) {
+          this.value = value;
+        }
+        [Symbol.search](string) {
+          return string.indexOf(this.value);
+        }
+      }
+      'foobar'.search(new MySearch('foo')) // 0
+    Symbol.split    当对象被 String.prototype.split 方法调用时,会返回该方法的返回值 
+      String.prototype.split(separator, limit)
+      // 等同于
+      separator[Symbol.split](this, limit)
+      下面是一个例子.
+      
+      class MySplitter {
+        constructor(value) {
+          this.value = value;
+        }
+        [Symbol.split](string) {
+          var index = string.indexOf(this.value);
+          if (index === -1) {
+            return string;
+          }
+          return [
+            string.substr(0, index),
+            string.substr(index + this.value.length)
+          ];
+        }
+      }
+      
+      'foobar'.split(new MySplitter('foo'))
+      // ['', 'bar']
+      
+      'foobar'.split(new MySplitter('bar'))
+      // ['foo', '']
+      
+      'foobar'.split(new MySplitter('baz'))
+      // 'foobar'
+      上面方法使用Symbol.split方法,重新定义了字符串对象的split方法的行为,
+    Symbol.iterator 对象的 Symbol.iterator 属性,指向该对象的默认遍历器方法.
+      var myIterable = {};
+      myIterable[Symbol.iterator] = function* () {
+        yield 1;
+        yield 2;
+        yield 3;
+      };
+      
+      [...myIterable] // [1, 2, 3]
+      对象进行for...of循环时,会调用Symbol.iterator方法,返回该对象的默认遍历器,详细介绍参见《Iterator和for...of循环》一章.
+      
+      class Collection {
+        *[Symbol.iterator]() {
+          let i = 0;
+          while(this[i] !== undefined) {
+            yield this[i];
+            ++i;
+          }
+        }
+      }
+      
+      let myCollection = new Collection();
+      myCollection[0] = 1;
+      myCollection[1] = 2;
+      
+      for(let value of myCollection) {
+        console.log(value);
+      }
+      // 1
+      // 2
+    Symbol.toPrimitive 对象的 Symbol.toPrimitive 属性,指向一个方法.
+      该对象被转为原始类型的值时,会调用这个方法,返回该对象对应的原始类型值.
+      Symbol.toPrimitive 被调用时,会接受一个字符串参数,表示当前运算的模式,一共有三种模式.
+      Number:该场合需要转成数值
+      String:该场合需要转成字符串
+      Default:该场合可以转成数值,也可以转成字符串
+      let obj = {
+        [Symbol.toPrimitive](hint) {
+          switch (hint) {
+            case 'number':
+            return 123;
+            case 'string':
+            return 'str';
+            case 'default':
+            return 'default';
+            default:
+            throw new Error();
+          }
+        }
+      };
+      
+      2 * obj // 246
+      3 + obj // '3default'
+      obj == 'default' // true
+      String(obj) // 'str'
+      Symbol.toStringTag
+      对象的Symbol.toStringTag属性,指向一个方法.在该对象上面调用Object.prototype.toString方法时,若这个属性存在,它的返回值会出现在toString方法返回的字符串之中,表示对象的类型.也就是说,这个属性可以用来定制[object Object]或[object Array]中object后面的那个字符串.
+      
+      // 例一
+      ({[Symbol.toStringTag]: 'Foo'}.toString())
+      // "[object Foo]"
+      
+      // 例二
+      class Collection {
+        get [Symbol.toStringTag]() {
+          return 'xxx';
+        }
+      }
+      var x = new Collection();
+      Object.prototype.toString.call(x) // "[object xxx]"    
+  Instance: 
+    创建标记 
+    var sym = Symbol([arg])   创建标记 
+      PS:Symbol函数前不能使用new命令,否则会报错.
+        因为生成的Symbol是一个原始类型的值,不是对象,也不能添加属性
+      arg  可选,表示对Symbol实例的描述,可为字符串或对象 
+        主要是为了在控制台显示,或者转为字符串时,比较容易区分 
+        当参数为对象时,调用该对象的toString方法,将其转为字符串 
+          const obj = {
+            toString() {
+              return 'abc';
+            }
+          };
+          const sym = Symbol(obj);
+          sym // Symbol(abc)
+      参数只是表示对当前Symbol值的描述,相同参数创建的Symbol是不相等的 
+        var s1 = Symbol();
+        var s2 = Symbol();
+        s1 === s2 // false
+        var s3 = Symbol('foo');
+        var s4 = Symbol('foo');
+        s3 === s4 // false
+      Example:
+        var sym1 = Symbol("aoo");
+        var sym2 = Symbol();
+        var str1 = sym1.toString();
+        var str2 = sym2.toString();
+        console.log(sym1,sym2);   // Symbol(aoo) Symbol()
+        console.log(str1,str2);   // Symbol(aoo) Symbol()
+        console.log(typeof sym1); // symbol
+    var sym =   Symbol.for(str) 根据参数在全局环境中搜索该symbol,有则返回,无则创建 
+      PS:Symbol.for()创建的值会被登记在全局环境中,供以后用 Symbol.for() 来搜索,
+        可在不同的 iframe 或 service worker 中取到同一个值;
+        Symbol() 创建的symbol值不会被登记在全局环境中
+      let sym1 = Symbol.for('name');
+      let sym2 = Symbol.for('name');
+      console.log(sym1 === sym2); // true
+      
+      Symbol( )创建的symbol值,用 Symbol.for() 搜索不到 
+      let sym1 = Symbol('name'); // 不会被登记在全局环境中
+      let sym2 = Symbol.for('name');
+      console.log(sym1 === sym2);  // false
+    var symObj = Object(sym)  通过sym创建
+      var sym = Symbol("foo");
+      typeof sym;     // "symbol"
+      var symObj = Object(sym);
+      typeof symObj;  // "object"
+  Proto: 
+    .valueOf()
+    .toString()
+  Feature: 
+    显式转为字符串或布尔值,但不能转为数值 
+      var sym1 = Symbol('My symbol');
+      String(sym1) // 'Symbol(My symbol)'
+      sym1.toString() // 'Symbol(My symbol)'
+      var sym2 = Symbol();
+      Boolean(sym2) // true
+      !sym2  // false
+      if (sym2) {
+        // ...
+      }
+      Number(sym2) // TypeError
+      sym2 + 2 // TypeError
+    不能与其他类型的值进行运算 
+      var sym = Symbol('My symbol');
+      "your symbol is " + sym  // TypeError: can't convert symbol to string
+      `your symbol is ${sym}`  // TypeError: can't convert symbol to string
+    定义常量 
+      var sym1 = Symbol('sm');
+      var sym2 = Symbol('sm');
+      console.log(sym1==sym2,sym1===sym2); // false false
+    作为属性名使用 
+      PS:对象的属性名现在可以有两种类型,一种是原来就有的字符串,另一种就是新增的Symbol类型 
+        凡是属性名属于Symbol类型,就都是独一无二的,可以保证不会与其他属性名产生冲突 
+      Example:
+        let name = Symbol();
+        let age = '年龄'
+        let person = {
+          [name]:"张三",
+          [age] : 15
+        };
+        
+        var mySymbol = Symbol();
+        var a = {};
+        // 第一种写法
+        a[mySymbol] = 'Hello!';
+        // 第二种写法
+        var a = {
+          [mySymbol]: 'Hello!'
+        };
+        // 第三种写法
+        Object.defineProperty(a, mySymbol, { value: 'Hello!' });
+        // 以上写法都得到同样结果
+        a[mySymbol] // "Hello!"
+      Symbol值作为对象属性名时,不能用点运算符.
+        var mySymbol = Symbol();
+        var a = {};
+        a.mySymbol = 'Hello!';
+        a[mySymbol] // undefined
+        a['mySymbol'] // "Hello!"
+        因为点运算符后面总是字符串,所以不会读取mySymbol作为标识名所指代的那个值,
+        导致a的属性名实际上是一个字符串,而不是一个Symbol值
+      Symbol类型属性名的特点 
+        不会出现在'for...in'和'for...of'中
+        不会被 Object.keys()、Object.getOwnPropertyNames()、JSON.stringify() 返回
+        Example:
+          let name = Symbol();
+          let person = {
+            [name]:"张三",  //symbol类型
+            "age":12        //string类型
+          };
+          Object.keys(person); // ["age"]
+          for(let key in person){
+            console.log(key); // age
+          }
+      Object.getOwnPropertySymbols(obj)  获取对象的Symbol类型的属性
+        找到symbol类型的属性并且返回一个数组,数组的成员就是symbol类型的属性值
+        let name = Symbol("name");
+        let age = Symbol("age");
+        let person = {
+          [name]:"张三", 
+          [age]:12       
+        };
+        Object.getOwnPropertySymbols(person); // (2) [Symbol(name), Symbol(age)]
+      Reflect.ownKeys(obj)   获取对象所有类型的属性[包括symbol类型]
+        let person = {
+          [Symbol('name')]:"张三",
+          "age": 21
+        };
+        Reflect.ownKeys(person); // (2) ["age", Symbol(name)]
+    ES6新增内置对象的 Symbol.toStringTag 属性值如下
+      JSON[Symbol.toStringTag]:'JSON'
+      Math[Symbol.toStringTag]:'Math'
+      Module对象M[Symbol.toStringTag]:'Module'
+      ArrayBuffer.prototype[Symbol.toStringTag]:'ArrayBuffer'
+      DataView.prototype[Symbol.toStringTag]:'DataView'
+      Map.prototype[Symbol.toStringTag]:'Map'
+      Promise.prototype[Symbol.toStringTag]:'Promise'
+      Set.prototype[Symbol.toStringTag]:'Set'
+      %TypedArray%.prototype[Symbol.toStringTag]:'Uint8Array'等
+      WeakMap.prototype[Symbol.toStringTag]:'WeakMap'
+      WeakSet.prototype[Symbol.toStringTag]:'WeakSet'
+      %MapIteratorPrototype%[Symbol.toStringTag]:'Map Iterator'
+      %SetIteratorPrototype%[Symbol.toStringTag]:'Set Iterator'
+      %StringIteratorPrototype%[Symbol.toStringTag]:'String Iterator'
+      Symbol.prototype[Symbol.toStringTag]:'Symbol'
+      Generator.prototype[Symbol.toStringTag]:'Generator'
+      GeneratorFunction.prototype[Symbol.toStringTag]:'GeneratorFunction'    
+Set,集合[ES6] 
+  PS: Set中的元素无重复项[会自动去掉重复的元素]; Set集合中,key和val为同一个值;
+  Extend: Object 
+    console.log(Set.prototype.__proto__.constructor===Object); // true  
+  Instance:  
+    new Set([arr])  创建set
+      var s1 = new Set();  // 创建一个集合
+      var s2 = new Set([1,2,3,2,4]); //创建并初始化
+      console.log(s2);     // Set {1, 2, 3, 4} , 自动过滤掉了重复的元素
+  Proto: 
+    .size  返回元素的个数,类型为数值
+    .add(val) 添加元素
+    .delete(val) 删除元素,成功返回true,否则为false 
+      var s = new Set([1,2,3]);
+      console.log(s); // Set {1, 2, 3}
+      s.delete(2);    // true
+      s.delete(4);    // false
+      console.log(s); // Set {1, 3}
+    .clear()     删除所有元素
+      var s = new Set([1,2,3]);
+      console.log(s); // Set {1, 2, 3}
+      s.clear();
+      console.log(s); // Set {}
+    .has(val) 检测元素是否存在,存在返回true,否则返回false
+      var s = new Set([1,2,3]);
+      s.has(1); // true
+      s.has(4); // false
+    .entries() 返回一个键值对的遍历器
+      var s = new Set(['a','b','c']);
+      var aoo = s.entries(); 
+      console.log(aoo); // SetIterator {"a", "b", "c"}
+    .keys()   返回键名的遍历器
+    .values() 返回键值的遍历器
+      var s = new Set(['a','b','c']);
+      var aoo = s.keys();  
+      var boo = s.values();
+      console.log(aoo); // SetIterator {"a", "b", "c"}
+      console.log(boo); // SetIterator {"a", "b", "c"}
+    .forEach() 遍历
+      var s = new Set(['a','b','c']);
+      s.forEach(function(value,key){
+        console.log(value,key)
+      });
+      // a  a
+      // b  b
+      // c  c
+  Feature: 
+    'for-of'遍历Set结构
+      var s = new Set(['a','b','c']);
+      for(let [i,v] of s.entries()){
+        console.log(i+' '+v);
+      }
+      // a  a    
+      // b  b   
+      // c  c   
+  Set的用途
+    实现数组去重
+    let arr = [1,2,2,3,4,4,4];  // 目标数组arr,要求去重
+    let newArr = Array.from(new Set(arr)); // [1,2,3,4],完成去重
+WeakSet, [ES6] 
+  PS: WeakSet结构同样不会存储重复的值;
+    且其成员必须是对象类型的值[严格来说是:具有 iterable 接口的对象]
+    实际上,任何可遍历的对象,都可以作为WeakSet的初始化参数,如:数组.
+  new WeakSet(arr);
+    arr 数组,且其成员必须是对象类型的值,否则就会报错
+    let ws = new WeakSet([{"age":18}]); // WeakSet {Object {age: 18}}
+    let ws = new WeakSet([1,2]); // 报错 ,Invalid value used in weak set
+
+    let arr1 = [1];
+    let arr2 = [2];
+    let ws = new WeakSet([arr1,arr2]); // WeakSet {[1], [2]}
+  ws.add()    作用与用法跟Set结构完全一致
+  ws.delete() 作用与用法跟Set结构完全一致
+  ws.has()    作用与用法跟Set结构完全一致
+  WeakSet结构不可遍历
+    因为它的成员都是对象的弱引用,随时被回收机制回收,成员消失.
+    所以WeakSet结构无keys(),values(),entries(),forEach() 等方法和 size 属性
+Map,字典[ES6] 
+  var map = new Map([arr]) 定义Map 
+    arr  可选,数组
+    var mp1 = new Map()
+    let mp2 = new Map([
+      ["name","aoo"],
+      ["gender",1]
+    ]);
+    console.log(mp2); // Map(2) {"name" => "aoo", "gender" => 1}
+  map.size   获取实例的成员数
+    let map = new Map();
+    map.set(1,3);
+    map.set('1','3');
+    map.size;// 2
+  map.set(key,val) 增加,给实例设置一对键值对,返回map实例
+    key可以为各种类型的值
+      let map = new Map();
+      map.set("name","aoo"); // 添加一个string类型的键名
+      map.set(1,2);          // 添加一个数字类型的键名
+      console.log(map); // Map(2) {"name" => "aoo", 1 => 2}
+      map.set([1],2);            // 数组类型的键名
+      map.set({"age":"15"},2);   // 对象类型的键名
+      map.set(true,2);           // 布尔类型的键名
+      map.set(Symbol('name'),2); // Symbol类型的键名
+      map.set(null,2);           // null为键名
+      map.set(undefined,2);      // undefined为键名
+      console.log(map);
+      // Map(8) {"name" => "aoo", 1 => 2, [1] => 2, Object {age: "15"} => 2, true => 2…}
+    若设置一已经存在的键名,后面的键值会覆盖前面的键值
+      let map = new Map();
+      map.set("aoo","boo");
+      console.log(map);     // Map(1) {"aoo" => "boo"}
+      map.set("aoo","coo"); // 再次设置name的值
+      console.log(map);     // Map(1) {"aoo" => "coo"}
+  map.get(val)     返回指定键名的键值
+    获取存在对应的键值,若键值对存在,就会返回键值;否则,返回undefined;
+    let map = new Map([["aoo","boo"]]);
+    map.get("aoo"); // "boo"
+    map.get("coo"); // undefined
+  map.delete(key)  删除指定的键值对,删除成功返回true,否则返回false
+    let m = new Map();
+    m.set("aoo","boo");
+    m.delete("aoo"); // true
+    m.delete("coo"); // false
+  map.clear()      一次性删除所有键值对
+  map.has(key)     判断Map实例内是否含有指定的键值对,有返回true,否则返回false
+    let map = new Map();
+    map.set("aoo","boo");
+    map.has('aoo'); // true
+    map.has('coo'); // false
+  for...of 遍历Map的键名或者键值
+  entries() 返回实例的键值对遍历器
+    let m = new Map([
+      ["aoo","boo"],
+      ["age",25]
+    ]);
+    for(let [key,value] of m.entries()){
+      console.log(key+'  '+value);
+    }
+    // aoo  boo
+    // age  25
+  keys()   返回实例所有键名的遍历器
+  values() 返回实例所有键值的遍历器
+    keys方法和values方法的使用方式一致,只是返回的结果不同.
+    let m = new Map([
+      ["name","van"],
+      ["age",25]
+    ]);
+    for(let key of m.keys()){  //使用keys方法获取键名
+      console.log(key);
+    }
+    // name
+    // age
+    for(let value of m.values()){ //使用values方法获取键值
+      console.log(value);
+    }
+    // van
+    // 25
+  forEach( ) 遍历
+    let map = new Map([
+      ["name","van"],
+      ["age",25]
+    ]);
+    map.forEach(function(value,key){
+      console.log(key+':'+value);
+    });
+    // name:van
+    // age:25
+  WeakMap结构
+    和Map结构很类似,但WeakMap结构的键名只支持引用类型的数据,比:数组,对象,函数等
+    let wm = new WeakMap();
+    wm.set(key,val)
+      key 必须为引用类型数据,普通值类型则不允许[如字符串,数字,null,undefined,布尔类型]
+      let wm = new WeakMap();
+      wm.set([1],2);            //数组类型的键名
+      wm.set({'name':'van'},2); //对象类型的键名
+      function fn(){};
+      wm.set(fn,2);             //函数类型的键名
+      console.log(wm);
+      // WeakMap {function => 2, Object {name: "van"} => 2, [1] => 2}
+    ws.get()    和Map用法相同
+    ws.has()    和Map用法相同
+    ws.delete() 和Map用法相同
+    WeakMap不支持的属性方法
+      clear方法,
+      不支持遍历,也就没有了keys、values、entries、forEach这4个方法
+      也没有属性size
+      理由跟WeakSet结构一样:键名中的引用类型是弱引用,
+      你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
+      若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失.
+WeakMap, 
+Blob,二进制数据的基本对象[ES6] 
+  PS: 一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
+    Blob表示的数据不一定是一个JavaScript原生格式. 
+    File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件.
+    要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档.
+    接受Blob对象的APIs也被列在 File 文档中.
+  Extend: Object 
+  Instance: 
+    new Blob(blobParts[,options])  创建Blob对象 
+      PS: 其内容由参数中给定的数组串联组成 
+      blobParts 一个包含实际数据的数组
+      options = {  // 可选,配置项 
+        type: 'text/plain'  
+      }  
+      Example:
+        用字符串构建一个blob
+        var debug = {hello: "world"};
+        var blob = new Blob([JSON.stringify(debug)],{type: 'application/json'});
+  Proto: 
+    .size     只读, Blob对象中所包含数据的大小,单位:字节
+    .type     只读,字符串,Blob对象所包含数据的MIME类型 
+      若类型未知,则该值为空字符串 
+      在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
+    .slice()  Blob,创建一个包含另一个blob的数据子集的blob 
+      blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
+      slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
+      若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
+      slice 方法在某些浏览器和版本上仍带有供应商前缀:
+        Firefox 12 及更早版本的 blob.mozSlice() 
+        Safari 中的 blob.webkitSlice()
+        slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
+        使用Firefox 30 删除了对 blob.mozSlice() 的支持.
+      Example:  使用XMLHttpRequest对象,将大文件分割上传
+        var inputElem = document.querySelector('input[type="file"]');
+        function upload(blobOrFile) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/server', true);
+          xhr.onload = function(e) { ... };
+          xhr.send(blobOrFile);
+        }
+        inputElem.addEventListener('change', function(e) {
+          var blob = this.files[0];
+          const BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
+          const SIZE = blob.size;
+          var start = 0 , end = BYTES_PER_CHUNK;
+          while(start < SIZE) {
+            var upBlob = blob.slice(start, end) ;
+            upload(upBlob);
+            start = end;
+            end = start + BYTES_PER_CHUNK;
+          }
+        }, false);
+    兼容性 
+      blob.isClosed bol,指示 Blob.close() 是否在该对象上调用过
+        关闭的 blob 对象不可读.
+      blob.close() 关闭 Blob 对象,以便能释放底层资源 
+  Expand: 
+    利用Blob对象,生成可下载文件 
+      var blob = new Blob(["文件内容"]);
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "文件名.txt";
+      a.textContent = "点击下载";
+      document.body.appendChild(a);
+      最终HTML中显示为: 
+      <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
+      点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
+  BlobBuilder,创建Blob对象[已废弃] 
+    var builder = new BlobBuilder();
+    var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
+    builder.append(fileParts[0]);
+    var myBlob = builder.getBlob('text/xml');
+Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
+  PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
+    要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作
+  pObj = new Proxy(obj,config) 创建代理对象  
+    obj    代理的目标对象
+    config = { // 配置对象,用于代理的行为 
+        PS: 若没有设置任何代理操作,则等同于直接通向原对象
+        get: function(target,key,receiver){        // 代理读 
+          // target 代理的目标对象 
+          // key    读的属性 
+          Example:
+            var person = {"name":"张三"};
+            var pPerson = new Proxy(person,{ 
+              get: function(target,property){
+                console.log('1',target,property);
+                return "李四"
+              }
+            });
+            console.log(pPerson.name); //李四
+        },     
+        set: function(target,key,val,receiver){  // 代理写 
+          // target  同'set'
+          // key     同'set'
+          // val     设置的值 
+          Example: 
+            var bankAccount = {"RMB":1000,"dollar":0};
+            var pBankAccount = new Proxy(bankAccount,{  
+              get: function(target,property){  
+                if(target[property] > 0){  
+                  return target[property];
+                }
+                else{
+                  return "余额不足"; 
+                }    
+              },
+              set: function(target,property,value){  
+                if(!Number.isInteger(value)){ // 存入的数额必须是一个数字类型
+                  console.log(value,'数值不正确');
+                  return "请设置正确的数值";
+                }
+                else {
+                  target[property] = value;  // 修改属性的值
+                  console.log('存款成功');
+                }
+              }
+            });
+            pBankAccount.RMB;    // 1000,查款
+            pBankAccount.dollar; // 余额不足,查款
+            pBankAccount.dollar = "五百"; // 五百 数值不正确,存款
+            pBankAccount.dollar;          // 余额不足,查款
+            pBankAccount.dollar = 500;    // 存款成功,存款
+            pBankAccount.dollar;          // 500,查款
+        },
+        has: function(target,key){ // 代理 key in obj 操作 
+          Example: 
+          var person = { "name":"张三", "age":20 };
+          var proxy = new Proxy(person, {
+            has : function(target, prop) {
+              if(target[prop] === undefined){
+                return false;
+              }
+              else{
+                return true;
+              }
+            }
+          });
+          "name" in proxy;   // true
+          "height" in proxy; // false
+        },
+        deleteProperty: function(target,key){ // 代理 delete proxy[propKey]
+        },
+        ownKeys: function(target){ 
+          // 代理:   
+          // Object.getOwnPropertyNames(proxy)、
+          // Object.getOwnPropertySymbols(proxy)、
+          // Object.keys(proxy)
+          let person = {"name":"老王","age":40,"height":1.5};
+          let proxy = new Proxy(person,{ 
+            ownKeys : function(target){  // ownKeys过滤对对象的属性遍历
+              return ["name","age"] 
+            }
+          });
+          Object.keys(person); // ["name", "age","height"],未使用代理
+          Object.keys(proxy);  // ["name", "age"]
+        },
+        getOwnPropertyDescriptor: function(target,key){ 
+          // 代理 Object.getOwnPropertyDescriptor(obj,key)
+        },
+        defineProperty: function(target,key,propDesc){
+          // 代理 
+          // Object.defineProperty(proxy, propKey, propDesc）
+          // Object.defineProperties(proxy, propDescs)
+        },
+        preventExtensions: function(target){
+          // 代理 Object.preventExtensions(proxy) 
+        },
+        getPrototypeOf: function(target){
+          // 代理 Object.getPrototypeOf(proxy) 
+        },
+        isExtensible: function(target){
+          // 代理 Object.isExtensible(proxy) 
+        },
+        setPrototypeOf: function(target, proto){
+          // 代理 Object.setPrototypeOf(proxy, proto) 
+        },
+        // 如果目标对象是函数 
+        apply: function(target, object, args){ // 代理函数对象的执行 
+          // 代理 如 proxy(...args)、proxy.call(object, ...args)、proxy.apply(...) 等 
+          let foo = function(){
+            console.log('我是原始函数');
+          };
+          let proxy = new Proxy(foo,{  //创建一个代理实例,代理函数foo
+            apply : function(){
+              console.log('我是代理函数');
+            }
+          });
+          proxy(); // 我是代理函数
+        },
+        construct: function(target, args){ // 代理构造函数调用的操作,如new proxy(...args)
+        }
+      }
+  var obj = Proxy.revocable() 代理及取消代理,返回一个对象 
+    obj.proxy    Proxy的代理实例对象
+    obj.revoke() 用于取消代理
+    Example:
+      let person = {"name":"张三"};
+      let handle = {  //定义一个代理处理程序
+        get : function(target,prop){
+          return "李四";
+        }
+      };
+      let obj = Proxy.revocable(person,handle); // 使用Proxy.revocable()代理
+      obj.proxy.name; // 李四
+      obj.revoke();   //调用返回对象obj的revoke方法,取消代理
+      obj.proxy.name; //报错,代理被取消
+Reflect,为操作对象提供的API[ES6] 
+  目的:  
+  将对象上一些明显属于语言内部的方法[如 Object.defineProperty]放到Reflect 
+  Reflect方法操作失败返回false[而不像其他的操作失败可能会报错]
+  让Object操作都变成函数行为 
+    命令式如:  key in obj;  delete obj[key];
+    函数行为:
+    Reflect.has(obj, key)
+    Reflect.deleteProperty(obj, key) 
+  Static: 
+    PS: 大部分与Object对象的同名方法的作用都是相同的,且与Proxy对象的方法是一一对应 
+    .get(obj,key,receiver)    返回对象的key,否则返回undefined 
+      obj  操作的目标对象,若不是对象则报错  
+      如果name属性部署了读取函数（getter）,则读取函数的this绑定receiver 
+        var myObject = {
+          foo: 1,
+          bar: 2,
+          get baz() {
+            return this.foo + this.bar;
+          },
+        };
+        var myReceiverObject = {
+          foo: 4,
+          bar: 4,
+        };
+        Reflect.get(myObject, 'baz', myReceiverObject) // 8
+    .set(obj,key,val,receiver) 设置对象的key为val 
+      如果name属性设置了赋值函数,则赋值函数的this绑定receiver.
+      var myObject = {
+        foo: 4,
+        set bar(value) {
+          return this.foo = value;
+        },
+      };
+      var myReceiverObject = {
+        foo: 0,
+      };
+      Reflect.set(myObject, 'bar', 1, myReceiverObject);
+      myObject.foo // 4
+      myReceiverObject.foo // 1
+    .apply(target,context,args)
+    .construct(target,args)
+    .defineProperty(target,name,desc)
+    .deleteProperty(target,name)
+    .has(target,name)
+    .ownKeys(target)
+    .isExtensible(target)
+    .preventExtensions(target)
+    .getOwnPropertyDescriptor(target, name)
+    .getPrototypeOf(target)
+    .setPrototypeOf(target, prototype)
+--------------------------------------------------------------------------------
 ◆二进制数组,以数组的语法处理二进制数据[ES6] 
   PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
     它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,

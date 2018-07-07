@@ -9,7 +9,8 @@
     PS: 需将 chrome.exe 配置到环境变量 
     chrome --app="‹网页地址›"  
 
-
+ES6语法支持 
+  <script>标签引入脚本时,添加 type="module" 属性即可,
 
 
 

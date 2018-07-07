@@ -378,7 +378,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
       PS: 以前是必选项,现可省略 
         若设置的type值浏览器不认识,则其中的代码不会执行,但该script节点依然存在于DOM中
       "text/javascript"  默认值,对于老式浏览器推荐设置该值 
-      'application/javascript'   推荐现代浏览器设置
+      'application/javascript'   推荐现代浏览器设置 
+      'module'    使用ES6的模块化 [Chrome支持]
     charset="KW" 可选,指定的字符集 
       "UTF-8"   默认值,由于大多数浏览器忽略它,故较少使用 
     defer="bol"  可选,网页解析完后解析JS [延迟解析,而非延迟下载] [只有IE支持?]

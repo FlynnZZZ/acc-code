@@ -15,6 +15,56 @@ ECMAScript: 由ECMA制定和发布,JS语法核心,提供核心语言功能
   'ECMA-262'要求支持Unicode标准,从而支持多语言开发,第五版发布于2009年;
   ES6即ES2015于2015年6月发布 
   浏览器环境中比如BOM和DOM中的对象,都属于宿主对象,由宿主实现提供和定义;
+说明&定义 
+  函数和方法的区别: 
+    函数基于过程,写法: foo()
+    方法基于对象,就是对象的函数,调用写法: obj.foo()
+  '实例': 类的具象化;在面向对象中,通过类创建对象的过程称为实例化; 
+  '静态'、'公有'、'私有'、'特权'属性和方法 
+    PS: 静态、公有、私有属性/方法 是相对于类来说的
+    静态属性/方法: '构造函数'的属性/方法[无需实例化通过类名来访问] 
+    公有属性/方法: 即其原型对象的属性/方法 
+    私有属性/方法: '函数内部'定义的属性/方法,外部无法访问
+    特权方法: 有权访问私有变量和私有函数的'公有方法' 
+      利用的闭包原理,即通过作用域链,
+      让内部函数能够访问上层函数的变量对象[即该函数的私有变量、私有方法] 
+      
+    function Foo(arg1,arg2){ // 构造函数
+      var name = arg1;   // 私有属性
+      function goo(){};  // 私有方法
+      this.age = arg2;                 // 公有属性,通过实例对象来访问
+      Foo.prototype.do1 = function(){  // 公有方法,通过实例对象来调用
+        console.log(name);
+      }
+      this.do2 = function(){  // 特权方法 
+        console.log(name); // 访问了私有属性
+      }
+    }
+    Foo.name ="abc";         // 静态属性
+    Foo.say =function(){};   // 静态方法
+    var aoo =new Foo(1,2);
+  IE8支持部分ES5功能,IE9+支持ES5 
+  多态: 同一操作作用于不同的对象,可以有不同的解释,产生不同的执行结果,JS无多态  
+语法规则 
+  PS: 语法源自Java,基于原型继承来自Self;一等函数来自Scheme; 
+  标识符: 指变量、函数、属性或函数的参数的名字 
+    区分大小写的若干个字符 
+    首字符需为'字母'、'_'或"$";其他字符可为'字母'、"_"、'$'或'数字'
+    不能使用关键字、保留字作为标识符
+    标识符中的字母也可以包含扩展的ASCII或 Unicode字母字符,但不推荐使用
+  关键字和保留字: 有特殊意义,不可作为变量名的名称 
+    关键字: 程序中已经开始使用的字符,如'var''function''return''if' ... 
+    保留字: 还没有特定的用途,但可能在将来被用作关键字,如'class''int' ... 
+  多行注释 /* 注释内容 */ ; 单行注释 // c风格的注释 
+  ';'语句使用分号结尾可省略,若省略由解析器确定语句的结尾 
+    加上分号会在某些情况下增进代码的性能,解析器不必花时间推测哪里需要插入分号
+  \ 续行符 当一行代码过长,可人为分行,在行尾连接进行代码跨行 
+    PS: 大部分JS引擎都支持,但并非ECMAScript标准;
+    var str = "string \
+    is broken \
+    across multiple\
+    lines";
+    console.log(str);   // string is broken across multiplelines.
 --------------------------------------------------------------------------------
 JS引擎,真正执行JS代码的地方 
   常见的引擎有V8[目前最快JS引擎、Google生产]、JS core;
@@ -134,252 +184,68 @@ JS运行过程机理
       console.log(num);   // 报错,num未定义 
     eval和arguments不能被重新赋值
     增加了保留字[如 protected static 和 interface] 
-ES6 Modules 
-  PS: ES6模块默认采用严格模式"use strict"; 
-    ES6模块之中,顶层的this指向undefined,即不应在顶层代码使用this; 
-    设计思想: 尽量静态化,使编译时能确定模块的依赖关系,及输入和输出的变量 
-  'export'输出.'import'输入 
-  import 'path'  // 执行所加载的模块,但不输入任何值  
-    import 'lodash'; //  仅仅执行lodash模块,但是不输入任何值。
-    多次重复执行同一句import语句,则只会执行一次,而不会执行多次 
-    import 'lodash';
-    import 'lodash'; // 未执行
-  export default fn/{}   // 默认输出,导入时可自定义名称 
-    PS: 一个模块只能有一个默认输出,即'export default'只能使用一次 
-      本质上,export default 就是输出一个叫做default的变量或方法 
-      然后输入时,系统允许你为它取任意名字 
-    export default 时,对应的 import 引入变量时不需要使用大括号 
-  import xx from "./xxx" // 加载默认输出 
-  export var aoo = val/function fn() {}  // 单个变量/函数输出 
-    Example: 
-      对外部输出三个变量: aoo boo coo
-      export var aoo = 'aa';
-      export var boo = 'bb';
-      export var coo = 1958;
-  export { aoo ,.. }                     // 批量输出 
-    PS: 使用大括号指定所要输出的一组变量 
-    Example: 
-      var aoo = 'aa'
-      ,boo = 'bb'
-      ,coo = 1958
-      export { aoo ,boo ,coo };
-  export { curName1 as outName1 ,.. }    // 别名输出 
-  export { aoo ,.. }  from 'path'        // 先后输入输出同一个模块 
-    等价于:
-    import {aoo,..} from 'my_module';
-    export {aoo,..};
-    Example:
-    export { foo as myFoo } from 'my_module' 接口改名 
-    export { default } from 'foo';           默认接口 
-    export * from 'my_module';               整体输出 
-    export { aoo as default } from './someModule'  具名接口改为默认接口 
-    export { default as es6 } from './someModule'  默认接口改为具名接口 
-    下面三种import语句,没有对应的复合写法。
-      import * as someIdentifier from "someModule";
-      import someIdentifier from "someModule";
-      import someIdentifier, { namedIdentifier } from "someModule";
-      为了做到形式的对称,现在有提案,提出补上这三种复合写法。
-      export * as someIdentifier from "someModule";
-      export someIdentifier from "someModule";
-      export someIdentifier, { namedIdentifier } from "someModule";
-  import { name1 ,.. } from 'path'  // 输入指定变量 
-    PS: 变量名必须与导出名称相同,位置顺序则无要求 
-    from   模块文件的位置,可是相对路径、绝对路径或模块名,'.js'可省略 
-    import语句是'Singleton'模式 
-      import { foo } from 'my_module';
-      import { bar } from 'my_module';
-      等同于
-      import { foo, bar } from 'my_module';
-  import { aoo as boo } from 'path' // 别名输入变量 
-  import * as aoo from 'path'       // 别名整体输入  
-    PS: 使用'*'整体加载,指定一个对象,所有输出值都加载在这个对象上 
-    // export.js 
-    export function foo() { }
-    export function goo() { }
-    // import.js 
-    import * as aoo from './export'; 
-    aoo.foo()
-    aoo.goo()
-    模块整体加载所在的对象不允许运行时改变  
-    import * as aoo from './export';
-    // 下面两行都是不允许的
-    aoo.foo = 'hello';
-    aoo.goo = function () {};
-  promise = import('path')   // 动态加载,返回Promise对象 [提案中]  
-    PS: import命令会被JS引擎静态分析,先于模块内的其他模块执行, 
-      固然有利于编译器提高效率,但也导致无法在运行时加载模块,
-      require是运行时加载模块,import命令无法取代require的动态加载功能;
-      因此,有一个提案,建议引入import()函数,完成动态加载 
-      import()函数可以用在任何地方,不仅仅是模块,非模块的脚本也可以使用。
-      import()类似于Node的require方法,区别主要是前者是异步加载,后者是同步加载 
-    适用场景:  
-    按需加载 
-      import()可以在需要的时候,再加载某个模块。
-      button.addEventListener('click', event => {
-        import('./dialogBox.js')
-        .then(dialogBox => { dialogBox.open(); })
-        .catch(error => { /* Error handling */ })
-      });
-    条件加载
-      if (condition) {
-        import('moduleA').then(...);
-      } 
-      else {
-        import('moduleB').then(...);
+数据类型 
+  PS: JS变量不必定义类型,每个变量仅仅是一个用于保存值的占位符;
+    ECMAScript不支持任何创建自定义类型,所有值都为6种数据类型之一[ES6可以了];
+    一个值可由多个变量名称指向,但一个变量只能指向一个值;
+'Evaluation Strategy'求值策略: 决定变量之间、函数调用时实参和形参之间值的传递方式 
+  读写引用类型值 
+    引用存储: 栈内存中存储指针[指向堆内存],堆内存中存储实际值 
+    引用访问: 先从栈中读取内存地址,再通过地址找到堆中的值 
+    引用类型变量: 实际上是一个指向对象的指针,并非对象本身 
+    引用复制: 复制指针,因此两个变量最终都指向同一个对象 
+    引用类型值按引用地址来比较 
+      var aoo = {a:1};
+      var boo = {a:1};
+      var coo = boo;
+      console.log(aoo == boo);  // fasle,值相同但地址不同
+      console.log(coo === boo); // true,引用地址相同
+    修改引用类型的值 和 改变变量的指向 
+      var aoo = { name:'abc', age:19 }; // 让 aoo 指向推内存中的一个对象
+      var boo = aoo;   // 使 aoo 和 boo 指向同一对象
+      console.log(boo); // {name: "abc", age: 19}
+      boo.name = "changed"; // 修改堆内存中的对象
+      console.log(aoo.name); // changed,boo的值也随着变化了
+      aoo = 1;          //改变 aoo,不再指向对象
+      console.log(boo); // {name: "changed", age: 19},boo仍指向对象
+  'call by value'按值传递: 最常用的求值策略,JS中基本类型按值传递 
+    传递的值为拷贝的副本,修改传递的值并不会影响原来值 
+    按值传递由于每次都需要克隆副本,对一些复杂类型,性能较低
+  'call by reference'按引用传递: 传递的为原始值的隐式引用 
+    PS: 当传递的值被改变时原始值也会被改变[两者同时指向相同的值]
+      按引用传递会使函数调用的追踪更加困难,有时也会引起一些微妙的BUG 
+  'call by sharing'按共享传递: 也叫按对象传递,JS中对象类型按共享传递的 
+    PS: 该求值策略被用于Python、Java、Ruby、JS等多种语言 
+    对象实际值存放于堆内存,传递的为指针引用,修改时则改变堆内存对象,重置则改变指针指向 
+      var obj = {x : 1};
+      function foo(o) {
+        o = 100;  // 将指针设置为100 
       }
-    动态的模块路径
-      import(f()) // 根据函数f的返回结果,加载不同的模块 
-      .then(...);
-    加载模块成功以后,这个模块会作为一个对象,当作then方法的参数 
-        因此,可以使用对象解构赋值的语法,获取输出接口。
-        import('./myModule.js')
-        .then(({export1, export2}) => {
-          // ...·
-        });
-        上面代码中,export1 和 export2 都是 myModule.js 的输出接口,可以解构获得。
-    同时加载多个模块 
-      Promise.all([
-        import('./module1.js'),
-        import('./module2.js'),
-        import('./module3.js'),
-      ])
-      .then(([module1, module2, module3]) => {
-         ···
-      });
-    用在async函数中 
-      async function main() {
-        const myModule = await import('./myModule.js');
-        const {export1, export2} = await import('./myModule.js');
-        const [module1, module2, module3] =
-          await Promise.all([
-            import('./module1.js'),
-            import('./module2.js'),
-            import('./module3.js'),
-          ]);
+      function goo(o) {
+        o.x = 2;  // 通过指针修改堆内存中的对象 
       }
-      main();    
-  'export'需在模块顶层作用域定义,否则报错  
-    PS: 可出现在模块的任何位置,但要处于模块顶层,否则无法静态化 
-    function foo() { 
-      export default 'bar'  // SyntaxError
-    } 
-    foo();
-  'export'输出的值是实时动态的 
-    PS: 'CommonJS'输出的是值的缓存,不存在动态更新 
-    export var aoo = 'bar';
-    setTimeout(() => aoo = 'baz', 500);
-    输出变量'aoo',值为'bar',500 毫秒之后变成'baz' 
-  'import'命令引入提升
-    会提升到整个模块的头部,首先执行 
-    foo();
-    import { foo } from 'my_module';
-    import的执行会早于foo的调用,行为本质是import命令是编译阶段执行的,在代码运行前 
-  'import'静态执行,不能使用表达式和变量 
-    这些只有在运行时才能得到结果的语法结构,在静态分析阶段无法得到值  
-    import { 'f' + 'oo' } from 'my_module'; // 报错
-    
-    let module = 'my_module'; // 报错
-    import { foo } from module;
-    
-    if (x === 1) { 
-      import { foo } from 'module1'; // 报错
-    } 
-  Example: 
-    export 1; // 报错 
-    
-    var m = 1;
-    export m; // 报错
-    单变量输出需采用
-    export var m = 1;
-    或
-    var m = 1;
-    export { m };
-    或
-    var n = 1;
-    export { n as m };
-    
-    function f() {}
-    export f;  // 报错
-    改为:
-    export function f() {};
-    或
-    function f() {}
-    export { f };
-  模块的继承 
-    Example: 
-      假设有一个circleplus模块,继承了circle模块。
-      // circleplus.js
-      export * from 'circle';
-      export var e = 2.71828182846;
-      export default function(x) { return Math.exp(x); }
-      上面代码中的export *,表示再输出circle模块的所有属性和方法。
-      注意,export *命令会忽略circle模块的default方法。
-      然后,上面代码又输出了自定义的e变量和默认方法。
-      这时,也可以将circle的属性或方法,改名后再输出。
-      // circleplus.js
-      export { area as circleArea } from 'circle';
-      上面代码表示,只输出circle模块的area方法,且将其改名为circleArea。
-      加载上面模块的写法如下。
-      // main.js
-      import * as math from 'circleplus';
-      import exp from 'circleplus';
-      console.log(exp(math.e));
-      上面代码中的import exp表示,将circleplus模块的默认方法加载为exp方法。
-  跨模块常量 
-    const声明的常量只在当前代码块有效。
-    若想设置跨模块的常量(即跨多个文件),或者说一个值要被多个模块共享,
-    可以采用下面的写法。
-    // constants.js 模块
-    export const A = 1;
-    export const B = 3;
-    export const C = 4;
-    // test1.js 模块
-    import * as constants from './constants';
-    console.log(constants.A); // 1
-    console.log(constants.B); // 3
-    // test2.js 模块
-    import {A, B} from './constants';
-    console.log(A); // 1
-    console.log(B); // 3
-    若要使用的常量非常多,可以建一个专门的constants目录,
-    将各种常量写在不同的文件里面,保存在该目录下。
-    // constants/db.js
-    export const db = {
-      url: 'http://my.couchdbserver.local:5984',
-      admin_username: 'admin',
-      admin_password: 'admin password'
-    };
-    // constants/user.js
-    export const users = ['root', 'admin', 'staff', 'ceo', 'chief', 'moderator'];
-    然后,将这些文件输出的常量,合并在index.js里面。
-    // constants/index.js
-    export {db} from './db';
-    export {users} from './users';
-    使用的时候,直接加载index.js就可以了。
-    // script.js
-    import {db, users} from './constants';
-  注意事项 
-    声明的变量,对外都是只读的 
-      //---module-B.js文件------
-      var name = "前端君"
-      export {name}
-      //---module-A.js文件------
-      import {name} from "./module-B.js";
-      name = "修改字符串变量"; //报错:name is read-only
-    若模块B导出的是对象类型的值,可[部分]修改。
-      //---module-B.js文件---
-      var person = {"name":"前端君"}
-      export { person }
-      //---module-A.js文件------
-      import {person} from "./module-B.js";
-      person.name = "修改字符串变量"; //修改成功
-    导入不存在的变量,值为undefined。
-      //---module-B.js文件---
-      var name = "前端君";
-      export {name}
-      //---module-A.js文件------
-      import { height } from "./module-B.js";
-      console.log(height); // undefined,不会抛出异常,只是值为undefined
+      foo(obj);
+      console.log(obj); // {x : 1},obj并未被修改 
+      goo(obj);
+      console.log(obj); // {x: 2},被修改了 
+      
+      var obj1 = {
+        aoo: 111
+        ,foo: function(cfoo){
+          cfoo('aaa')
+        }
+      }
+      var obj2 = {
+        aoo: 222 
+        ,foo: function(arg){
+          console.log(this.aoo,arg);
+        }
+      }
+      obj1.foo(obj2.foo) // undefined 'aaa' 
+      相当于: 
+      var foo = obj2.foo 
+      obj1.foo(foo) 
+      即: 传递的值A为指向实际的对象值B的引用,可修改影响实际值但覆盖则不会影响 
 --------------------------------------------------------------------------------
 ◆总结、技巧 
 函数节流,对消耗资源过多的操作的频率进行限制 

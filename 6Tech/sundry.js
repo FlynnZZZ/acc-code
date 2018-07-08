@@ -1,4 +1,4 @@
-'Scalable Vector Graphics'SVG,可缩放矢量图 
+SVG'Scalable Vector Graphics'可缩放矢量图 
   PS:一种描述向量图形的XML格式的标记化语言 
     也就是说,SVG本质上是文本文件,格式采用XML,可以在浏览器中显示出矢量图像。
     由于结构是XML格式,使得它可以插入HTML文档,成为DOM的一部分,

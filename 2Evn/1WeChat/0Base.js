@@ -32,6 +32,21 @@
     <a link="tel:400-4000-0000" >
     则可以解决部分安卓机型,（但不是全部的）,有些机型依然不行。
     这个和微信客户端有关。目前没有找到满意的解决办法。
+不支持的功能 
+  模板字符串  ios中支持,android中不支持[20170124]
+  可使用 window.open() 来打开新窗口,但都在当前窗口中打开,不支持 window.opener 来传递信息
+  不支持进行跳转到上一步url中带有参数的url地址  [?]
+    比如:一个查询列表页的url是: http://someweb?city=beijing
+    当从这个页面跳到第二个页面比如详细页, 在详细页再执行返回上一页如: 
+    location.href=document.referrer的时候   
+    跳回的url就不再是 http://someweb?city=beijing   所以页面可能会死掉
+    解决:微信开发中 不要用 带url参数的地址,都用/ ../ ,
+    把上面的 http://someweb?city=beijing   换成   http://someweb/beijing   这种即可
+event 事件 
+  禁止下滑显示网址 
+    $(document).on('touchmove',function(e){
+      e.preventDefault();
+    })
 WeUI:专为开发微信HTML5应用的开源Web UI组件库
   PS:WeUI是一套同微信原生视觉体验一致的基础样式库,
     为微信Web开发量身设计,可以令用户的使用感知更加统一。

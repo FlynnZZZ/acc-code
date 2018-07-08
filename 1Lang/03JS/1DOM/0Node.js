@@ -1542,48 +1542,6 @@ HTMLElement,HTML元素节点
       .captureStream()    
       .webkitAudioDecodedByteCount  
       .webkitVideoDecodedByteCount  
-FormData,表单模拟 [HTML5] 
-  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
-  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
-  Extend：Object 
-    console.log(FormData.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    fd = new FormData([formElem]) 创建FormData对象 
-      formElem  可选,<form>元素 
-    Example: 通过表单元素创建
-    var fd = new FormData(document.forms[0]);
-  Proto: 
-    .append(key,val ,name?)    向fd中添加字段 
-      PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
-      key   数据键名  
-      val   数据值  
-      name  可选,通常是文件名 
-    .delete() 
-    .get() 
-    .getAll() 
-    .has() 
-    .set() 
-    .keys() 
-    .values() 
-    .forEach() 
-    .entries() 
-  Example: 文件上传 
-    var inputFile = document.querySelector('input[type="file"]');
-    inputFile.addEventListener('change', function(e) {
-      var formData = new FormData();
-      formData.append(this.files[0].name, this.files[0]);
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/server');
-      xhr.onload = function(e) {
-        console.log('上传完成!');
-      };
-      xhr.send(formData);  // multipart/form-data
-    });
-    
-    加入JS生成的文件 
-    var content = '<a id="a"><b id="b">hey!</b></a>';
-    var blob = new Blob([content], { type: "text/xml"});
-    formData.append("webmasterfile", blob);
 MediaError,媒体错误对象 
   Extend: Object 
   Static: 
@@ -1613,32 +1571,6 @@ TextTrackList,
     .onaddtrack 
     .onremovetrack 
     .getTrackById() 
-Image,img元素 
-  PS: 不用插入到DOM中即可加载图片资源  
-  Relate: Image.prototype===HTMLImageElement.prototype  
-  Instance: img = new Image();   创建图像DOM对象  
-Option,option元素 
-  Relate: Option.prototype===HTMLOptionElement.prototype 
-  Instance: 
-    var opt = new Option(["文本","值",bol1,bol2]); 创建optionDOM对象 
-      bol1  是否被选中 
-      bol2  是否有效
-      Example:
-        var elem = document.getElementById('mySelect');
-        elem.add(new Option("文本","值")); // 这个只能在IE中有效
-        // 这个兼容IE与firefox
-        elem.options.add(new Option("text","value"));
-        elem.options.remove(idx); // 根据下标删除选项option
-        elem.options[idx].text;
-Audio,audio元素 
-  Relate: Audio.prototype===HTMLAudioElement.prototype 
-  Instance: 
-    Example: 
-    var audio = new Audio("./sound.mp3");
-      不用插入到文档中,即可加载音频资源 
-    audio.addEventListener("canplaythrough",function(e){
-    this.play();
-  })
 Attr,属性节点 
   PS: 元素的特性在DOM中以Attr类型表示,不被认为是DOM文档树的一部分 
   Extend: Node 
@@ -2130,10 +2062,6 @@ Selection,网页中选中的内容对象[HTML5][IE9+]
     .modify()    
     .toString() str,选区所包含的文本内容 
     .reomveRange(range)   从选区中移除指定的DOM范围 [Chrome不支持]
-DOMStringList, 
-  .length  
-  .item()    
-  .contains(key)   bol,是否包含该成员  
 XML相关 
   ProcessingInstruction [继承 CharacterData] 
   CDATASection 类型: 针对基于XML的文档,表示CDATA区域 

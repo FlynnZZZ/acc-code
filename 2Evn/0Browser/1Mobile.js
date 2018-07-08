@@ -10,6 +10,11 @@ HTML标签
   <input type="search" >  // 键盘上的右下角键将显示为'搜索'  
   // 其他 
   <a href="tel: 123456789"> </a> 点击拨号  
+  长按<a>标签,会弹出浏览器的原生菜单 [IOS移动设备] 
+    在JS中设置取消的方法
+    document.documentElement.style.webkitTouchCallout = 'none';
+    代码为全局设置,若只针对某一块元素,则将其写在对应的块中;
+
 动态 rem 自适应布局 
   PS:rem 单位在做移动端的h5开发的时候是最经常使用的单位。
     采用js动态计算给文档的根节点 font-size 赋值,并以此为尺寸参考进行网页布局.

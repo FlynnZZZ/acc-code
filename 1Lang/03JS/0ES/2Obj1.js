@@ -406,17 +406,6 @@ Promise,同步书写异步模式[ES6]
   PS: 将原来异步函数的嵌套关系转变为'同步'的链式关系; 
     Promise对象是一个代理对象,代理了最终返回的值,可以在后期使用; 
     将异步操作封装成Promise对象,然后使用该对象的'then''catch'等方法,进行链式写法完成异步操作;
-  Feature: 
-    Promise是一个状态机,只能从'pending'状态,转换为'fulfilled'或'rejected'
-      'pending': 初始状态,未完成或拒绝 
-      'fulfilled': 成功状态  
-      'rejected': 失败状态 
-      'settled': 'fulfilled'和'rejected'的统称 
-      可在'settled'状态下进行回调操作 
-    Promise的缺点 
-      首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
-      其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
-      第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
   Static: 
     Promise.length    '1',构造器参数的数目 
     Promise.all(pmsArr)  Promise,全局模式 
@@ -465,25 +454,25 @@ Promise,同步书写异步模式[ES6]
         })
     Promise.reject(val)     返回'rejected'状态的Promise 
   Instance: 
-    new Promise(function(rs ,rj){ // 创建Promise对象 
-      PS: Promise在创建时,参数函数就会执行 
-        若在方法的执行过程中抛出了任何异常,那么promise立即'rejected' 
-      rs/rj 函数根据逻辑需要进行相应的执行 
-        rs(data) 将该Promise变成'fulfilled',传递data值 
-          传入不同类型的值,函数输出和传递值的逻辑同 Promise.resolve() 
-        rj(info) 将该Promise变成'rejected',传递info值 
-          传入不同类型的值,函数输出和传递值的逻辑同 Promise.reject() 
-        rs/rj 后,若该函数未return,则会继续向后执行,但不影响Promise的状态和值的传递 
-          new Promise(function(rs,rj){
-            rs('success')
-            console.log('仍会执行该打印操作');
-          })
-          .then(function(data){
-            console.log(data);
-          })
-          // 仍会执行该打印操作
-          // success
-    })  
+    new Promise(fn)  
+      Input: fn  必选,传入参数 (rs,rj)  
+        PS: Promise在创建时,参数函数就会执行 
+          若在方法的执行过程中抛出了任何异常,那么promise立即'rejected' 
+        rs/rj 函数根据逻辑需要进行相应的执行 
+          rs(data) 将该Promise变成'fulfilled',传递data值 
+            传入不同类型的值,函数输出和传递值的逻辑同 Promise.resolve() 
+          rj(info) 将该Promise变成'rejected',传递info值 
+            传入不同类型的值,函数输出和传递值的逻辑同 Promise.reject() 
+          rs/rj 后,若该函数未return,则会继续向后执行,但不影响Promise的状态和值的传递 
+            new Promise(function(rs,rj){
+              rs('success')
+              console.log('仍会执行该打印操作');
+            })
+            .then(function(data){
+              console.log(data);
+            })
+            // 仍会执行该打印操作
+            // success
   Proto: 
     .then(val1 ,val2?)       // Promise,根据调用的Promise的状态进行回调 
       val1   any,'fulfilled'状态下的回调 
@@ -515,6 +504,23 @@ Promise,同步书写异步模式[ES6]
         非Promise值: 输出'fulfilled'的Promise,传递值为该值  
         promise: 输出该Promise,传递值由该Promise决定  
     })                 
+  Feature: 
+    Promise是一个状态机,只能从'pending'状态,转换为'settled'
+      'pending': 初始状态,未完成或拒绝 
+      'fulfilled': 成功状态  
+      'rejected': 失败状态 
+      'settled': 'fulfilled'和'rejected'的统称 
+      可在'settled'状态下进行回调操作 
+    Promise的缺点 
+      首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
+      其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
+      第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
+  Accu: 
+    定一方法,功能:使Promise从'pending'到'settled',并指定传递数据 // TODO 
+      foo(pms,data,bol)
+        pms   Promise对象 
+        data  传递的数据 
+        bol   true 表示状态变为'fulfilled';false 表示状态变为'rejected' 
 Symbol,标记,JS的第七种数据类型[原始数据类型],表示独一无二的值[ES6] 
   PS: 不可改变,用来产生唯一的标识,ES6已经允许属性名的类型是 Symbol 
   Extend: Object 
@@ -1012,78 +1018,6 @@ Map,字典[ES6]
       你永远不知道这个引用对象什么时候会被垃圾回收机制回收了,
       若这个引用类型的值被垃圾机制回收了,WeakMap实例中的对应键值对也会消失.
 WeakMap, 
-Blob,二进制数据的基本对象[ES6] 
-  PS: 一个 Blob对象表示一个不可变的,原始数据的类似文件对象 
-    Blob表示的数据不一定是一个JavaScript原生格式. 
-    File 接口基于Blob,继承 blob功能并将其扩展为支持用户系统上的文件.
-    要从用户文件系统上的一个文件中获取一个Blob对象,请参阅 File文档.
-    接受Blob对象的APIs也被列在 File 文档中.
-  Extend: Object 
-  Instance: 
-    new Blob(blobParts[,options])  创建Blob对象 
-      PS: 其内容由参数中给定的数组串联组成 
-      blobParts 一个包含实际数据的数组
-      options = {  // 可选,配置项 
-        type: 'text/plain'  
-      }  
-      Example:
-        用字符串构建一个blob
-        var debug = {hello: "world"};
-        var blob = new Blob([JSON.stringify(debug)],{type: 'application/json'});
-  Proto: 
-    .size     只读, Blob对象中所包含数据的大小,单位:字节
-    .type     只读,字符串,Blob对象所包含数据的MIME类型 
-      若类型未知,则该值为空字符串 
-      在Ajax操作中,若 xhr.responseType 设为 blob,接收的就是二进制数据 
-    .slice()  Blob,创建一个包含另一个blob的数据子集的blob 
-      blob.slice([start[, end[, contentType]]]) 包含源对象中指定范围内的数据新对象
-      slice 一开始的时候是接受 length 作为第二个参数,以表示复制到新 Blob 对象的字节数.
-      若设置其为 start + length,超出了源 Blob 对象的大小,那返回的 Blob 则是整个源 Blob 的数据.
-      slice 方法在某些浏览器和版本上仍带有供应商前缀:
-        Firefox 12 及更早版本的 blob.mozSlice() 
-        Safari 中的 blob.webkitSlice()
-        slice 方法的旧版本,没有供应商前缀,具有不同的语义,并且已过时. 
-        使用Firefox 30 删除了对 blob.mozSlice() 的支持.
-      Example:  使用XMLHttpRequest对象,将大文件分割上传
-        var inputElem = document.querySelector('input[type="file"]');
-        function upload(blobOrFile) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', '/server', true);
-          xhr.onload = function(e) { ... };
-          xhr.send(blobOrFile);
-        }
-        inputElem.addEventListener('change', function(e) {
-          var blob = this.files[0];
-          const BYTES_PER_CHUNK = 1024 * 1024; // 1MB chunk sizes.
-          const SIZE = blob.size;
-          var start = 0 , end = BYTES_PER_CHUNK;
-          while(start < SIZE) {
-            var upBlob = blob.slice(start, end) ;
-            upload(upBlob);
-            start = end;
-            end = start + BYTES_PER_CHUNK;
-          }
-        }, false);
-    兼容性 
-      blob.isClosed bol,指示 Blob.close() 是否在该对象上调用过
-        关闭的 blob 对象不可读.
-      blob.close() 关闭 Blob 对象,以便能释放底层资源 
-  Expand: 
-    利用Blob对象,生成可下载文件 
-      var blob = new Blob(["文件内容"]);
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "文件名.txt";
-      a.textContent = "点击下载";
-      document.body.appendChild(a);
-      最终HTML中显示为: 
-      <a href="blob:http://main.lcltst.com/c175b53f-6b0c-43b0-bc63-b942461fb5ef" download="文件名.txt">点击下载</a>  
-      点击后提示下载文本文件'文件名.txt',文件内容为'文件内容' 
-  BlobBuilder,创建Blob对象[已废弃] 
-    var builder = new BlobBuilder();
-    var fileParts = ['<a id="a"><b id="b">hey!</b></a>'];
-    builder.append(fileParts[0]);
-    var myBlob = builder.getBlob('text/xml');
 Proxy,对象代理: 用于代理外界对对象的访问[ES6] 
   PS: 将一对象交给了Proxy代理,然后代理对象的读写等操作
     要使得Proxy起作用,必须针对Proxy实例进行操作,而不是针对目标对象进行操作

@@ -475,18 +475,40 @@ Promise,同步书写异步模式[ES6]
             // success
   Proto: 
     .then(val1 ,val2?)       // Promise,根据调用的Promise的状态进行回调 
-      val1   any,'fulfilled'状态下的回调 
+      val1   any,'unfailed'状态下的回调 
         function(data){ // 函数类型的值 
-          // data   'fulfilled'状态的传递值  
-          return val // 可选,改变输出Promise及传递值  
+          // data   'unfailed'状态的传递值  
+          return val // 可选,改变输出Promise/传递值  
             非Promise值: 输出'fulfilled'的Promise,传递值为该值  
             promise: 输出该Promise,传递值由该Promise决定  
         } 
+          Example: 
+            Promise.resolve('100')
+            .then(function(data){  // 'fulfilled'时的回调 
+              console.log(data);  
+              return 111
+            })
+            .then(function(data){  // 'fulfilled'时的回调 
+              console.log(data);
+            })
+            
+            Promise.reject('100')
+            .then(function(data){   // 'rejected'状态,不触发 
+              console.log(data); 
+              return 110 
+            })
+            .catch(function(info){  // 'rejected'被捕获,后续状态变为'unfair'
+              console.log(info);
+              return 111 
+            })
+            .then(function(data){   // 'unfair'时的回调 
+              console.log(data);
+            })
         非函数值,则默认为: function(arg){ return arg; }
       val2   any,'rejected'状态下的回调 
         function(info){ // 函数类型的值  
           PS: 当该回调不存在时,失败会继续向后传递,直到遇到错误处理,进行回调;
-            存在则捕获失败状态,后续Promise状态为'rejected' 
+            存在则捕获失败状态,后续Promise状态为'unfailed' 
           // info   Promise传递的值  
           return val // 可选,改变输出的Promise及传递值    
             非Promise值: 输出'fulfilled'的Promise,传递值为该值  
@@ -508,16 +530,19 @@ Promise,同步书写异步模式[ES6]
     Promise是一个状态机,只能从'pending'状态,转换为'settled'
       'pending': 初始状态,未完成或拒绝 
       'fulfilled': 成功状态  
-      'rejected': 失败状态 
+      'rejected': 失败状态 [当被捕获后,对应状态为'unfailed' ]
       'settled': 'fulfilled'和'rejected'的统称 
+      'unfailed': 自定义的,未'rejected'的'settled'状态 
       可在'settled'状态下进行回调操作 
     Promise的缺点 
       首先,无法取消Promise,一旦新建它就会立即执行,无法中途取消 
       其次,若不设置回调函数,Promise内部抛出的错误,不会反应到外部 
       第三,当处于'Pending'状态时,无法得知目前进展到哪一个阶段,刚刚开始还是即将完成 
   Accu: 
-    定一方法,功能:使Promise从'pending'到'settled',并指定传递数据 // TODO 
-      foo(pms,data,bol)
+    实现功能: 使pms从'pending'到'settled',并指定传递数据 // TODO 
+      pms.then(function(data){ })
+      .catch(function(info){ })   
+      foo(pms,data,bol)  // 改变pms状态,使pms执行对应的回调 
         pms   Promise对象 
         data  传递的数据 
         bol   true 表示状态变为'fulfilled';false 表示状态变为'rejected' 

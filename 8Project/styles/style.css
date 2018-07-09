@@ -1,0 +1,15 @@
+/*风格样式 会根据项目风格不同而不同*/
+@charset "utf-8";
+/*字体*/
+.ftS0 {font-size: 0;}
+.ftS0 *{font-size: initial;}
+/*颜色*/
+.colorRed { }
+.bgRed { }
+/*按钮*/
+.btnRed { }
+
+
+
+
+

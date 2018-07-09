@@ -1,4 +1,6 @@
+/*约束样式*/
 @charset "utf-8";
+
 /*元素类型*/
 .inb { display: inline-block !important; }
 .block { display: block !important;}
@@ -15,26 +17,48 @@
 .vmSelf { vertical-align: middle; }
 .fRit { float: right; }
 .fLft { float: left; }
-/*字体*/
-.ftS0 {font-size: 0;}
-.ftS0 *{font-size: initial;}
-/*颜色*/
-.colorRed { }
-.bgRed { }
-/*按钮*/
-.btnRed { }
+
+
+/*单行文本省略*/
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/*多行文本省略*/
+.texts-ellipsis {
+  -webkit-line-clamp:3; /*设置行数*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  word-break: break-all; 
+}
+
+/*旋转*/
+.rotate90 { transform: rotate(90deg); }
+.rotate180 { transform:rotate(180deg); }
+.rotate270 { transform: rotate(270deg); }
+
+
 /*其他修饰*/
 .pointer {
   cursor: pointer;
   user-select:none;
 }
-.rotate180 { transform:rotate(180deg); }
 .hid1 { visibility: hidden !important; }
 .hid2 {
   width: 0 !important;
   height: 0 !important;
   overflow: hidden !important;
 }
+
+
+
+
+
+
+
 
 
 

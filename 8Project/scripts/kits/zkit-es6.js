@@ -87,9 +87,22 @@ var dataURLToBlob = function(base64){
 }
 // 以上网络收集 --------------------------------------------------------------------------------
 
+// 解析URL中的query成obj 
+// 输出: obj 解析后的对象  
+var urlQueryToObj = function(url){
+  var _result = {}
+  ,_query = url.split('?')[1] 
+  if (!_query) { return {} }
+  var _arr = _query.split('&') || [] 
+  _arr.forEach(function(val,idx ){
+    var _arr1 = val.split('=')
+    _result[_arr1[0]] = _arr1[1]
+  } )
+  return _result 
+}
 // 序列化对象为字符串 
-// 输出: str  序列化后的字符串 
-var objToStr = function(
+// 输出: str  序列化后的字符串,不包含'?' 
+var objToQuery = function(
   obj          // 待序列化的对象 TODO: 当对象为多维时 
   ,link1 = '='  // 键值连接符 
   ,link2 = '&'  // 字段连接符 
@@ -136,6 +149,54 @@ var strCheck =  function(
   if (_bol0) { successFn(arrArr.length) }
   return _bol0 
 }
+// 读写localStorage任意深度的值  
+// 输出: 读时,输出当前最深key对应的值;写时,输出顶层key对应的值   
+var localData = function( 
+  keys    // str,'aoo' 或 'aoo.boo' 等   
+  ,setVal   // any,可选,存在则为写,省略则为读  val 
+){ 
+  var tmpArr = keys.split('.')
+  ,tmpLen = tmpArr.length 
+  ,firstKey = tmpArr[0]
+  ,lastKey = tmpArr[tmpLen-1] 
+  // 根节点  
+  ,rootObj = JSON.parse( localStorage[firstKey] || JSON.stringify({}) )
+  ,parentObj = null   // 最底层节点的父节点   
+  if (tmpLen == 1) { parentObj = rootObj }
+  else {
+    var _objLevel = []
+    parentObj = tmpArr.slice(0,tmpLen-1).reduce(function(retVal ,val ,idx ,arr){ 
+      var _typ = typeof retVal[val] 
+      ,_nextMb = arr[idx+1] 
+      ,_val = null 
+      // 存在对象类型 
+      if ( _typ === 'object' ) { _val = retVal[val] }
+      // 未定义/原始类型 赋值为引用类型  
+      else  { _val = isNaN(parseInt(_nextMb)) ? {} : [] }
+      // TODO 
+      _objLevel.push({ key: val ,val: _val })
+      return _val 
+    },rootObj)
+    // TODO: ★★★★★★★★★ 
+    // function foo(obj ,arr){
+    //   var _arr0 = arr[0]
+    //   console.log(_arr0);
+    //   obj[_arr0.key] = _arr0.val 
+    //   var _newArr = arr.slice(1)
+    //   if ( arr.length > 1) { foo(obj[_arr0.key] ,_newArr) }
+    // }
+    // foo(rootObj ,_objLevel)
+  }
+  
+  if ( setVal === undefined ) {  // 查询 数据  
+    return parentObj[lastKey];
+  }
+  else {                      // 设置/更新 数据  
+    parentObj[lastKey] = setVal 
+    localStorage[firstKey] = JSON.stringify(rootObj)
+    return rootObj;
+  }
+};
 // 获取一张本地图片 异步 
 // 输出: promise 'fulfilled'时传递图片信息对象img
 // img 
@@ -319,8 +380,10 @@ export {
   ,isSupportWebP 
   ,dataURLToBlob  
   
-  ,objToStr 
+  ,urlQueryToObj 
+  ,objToQuery 
   ,strCheck 
+  ,localData  
   ,imgGet  
   ,imgsGet  
   ,imgCompress   

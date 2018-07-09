@@ -2,68 +2,6 @@
 !function(){ 
 window.zkit = { // 工具函数 
   fn: function(){ }
-  ,getLocalImg: function(jInput,foo){ 
-    // 通过 input type=file 获取到本地图片的 base64
-    jInput.on("change",function(e){
-      var img = e.target.files[0];
-      this.value = '' // 清空选择的图片 
-      var fr = new FileReader();
-      fr.readAsDataURL(img);
-      // fr.readAsBinaryString(img);
-      fr.onload = function(){
-        // console.log(fr.result);
-        var obj = {};
-        obj.src = fr.result;
-        obj.size = img.size; // 结果以 b 为单位
-        obj.file = img;
-        obj.more = fr;
-        foo(obj);
-      }
-    })
-  }
-  ,dealImg: function (imgSrc,param,resolve){ 
-    // 通过图片的地址或base64获取图片后,来压缩、裁剪图片
-    // param = {
-    //   width : num,
-    //   height: num,
-    //   // 宽高可只填一个
-    //   quality: num,[0-1 之间]
-    // }
-    var img = new Image();
-    img.src = imgSrc;
-    img.onload = function(){
-      // 默认按比例压缩
-      var w = this.width;
-      var  h = this.height;
-      var  scale = w / h;
-      // 优先使用参数中设置的配置
-      if (param.width && param.height) {
-        w = param.width;
-        h = param.height;
-      }
-      else if (param.width) {
-        w = param.width;
-        h = param.width / scale;
-      }
-      else if (param.height) {
-        w = param.height;
-        h = param.height * scale;
-      }
-      var canvas = document.createElement('canvas');
-      //生成canvas
-      canvas.width = w; 
-      canvas.height = h;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(this, 0, 0, w, h);
-      var quality = 1; 
-      // 图像质量 默认设置为 1,不压缩
-      if(param.quality && param.quality <= 1 && param.quality > 0){
-        quality = param.quality;
-      }
-      var dealedImgSrc = canvas.toDataURL('image/jpeg', quality );
-      resolve(dealedImgSrc);
-    }
-  }
   ,localObj: function(objName,key,val){ 
     // localstorage 读写,本地存储 
     if (localStorage[objName] === undefined) { // 不存在则初始化为一对象 
@@ -278,33 +216,6 @@ window.zkit = { // 工具函数
       },time);
     }
   }
-  ,queryObj: function(){ 
-    // 查询字符串 对象化 
-    var resultObj = {};
-    var arr1 = location.search.slice(1).split("&");
-    arr1.forEach(function(val,indx,arr){
-      var arr2 = val.split("=");
-      resultObj[arr2[0]] = arr2[1];
-    } );
-    return resultObj;
-  }
-  ,setQuery: function(obj){ 
-    // 设置查询字符串  依赖'queryObj'
-    // {
-    //   's1' : 1,
-    //   's3' : 3,
-    // }
-    var resStr = '?';
-    var o = zkit.queryObj();
-    for(var key in obj){
-      o[key] = obj[key];
-    };
-    for(var k in o){
-      resStr += k +'='+o[k]+'&';
-    };
-    return location.pathname+resStr.slice(0,-1);
-  }
-
 
   // 选用 ----------------------------------------------------------------------
   ,put: function (ename,data,elem){ 

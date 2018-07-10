@@ -1035,15 +1035,18 @@
   如<form/>的'submit'事件,<input/>的'input'事件,<scroll-view/>的'scroll'事件
 使用方式 
   在结构的标签中指定 eventname="fn", 在组件中绑定一个事件处理函数 
-    PS: 通过绑定元素的 data-xxx="" 来传参 
+    PS: 通过绑定元素的 data-xxx="xx" 来传参 
     bind<type>="fn"     
     catch<type>="fn"    会阻止冒泡事件向上冒泡 
       Example: 
         <view bindtap="tapFn"></view>
         <view catchtouchstart="touchstartFn"></view>
     bind:<type>="fn"    '1.5.0+'
-    catch:<type>="fn"   会阻止冒泡事件向上冒泡 '1.5.0+'
       <view bind:tap="tapFn"></view>
+    catch:<type>="fn"   会阻止冒泡事件向上冒泡 '1.5.0+'
+    Accu: 
+      绑定的事件处理函数也可使用插值,来动态指定处理函数[本质上作为字符串来处理的?] 
+        bind:tap="{{handle}}"
   Example: 
     点击inner view 会先后触发'handleTap3'和'handleTap2',
     因为tap事件会冒泡到middle view,而middle view阻止了tap事件冒泡,不再向父节点传递,
@@ -1314,8 +1317,8 @@
     { ,...
     ,"usingComponents": {
       // 自定义组件的标签名: 对应的自定义组件文件路径[省略文件的后缀名] 
-      "component-tag-name": "path/to/the/custom/component/index"  
-        PS: 定义的组件标签名不能有数字,如'cpnt-name1',则报错  
+      "component-tag-name": "/components/xxx/index"  
+        PS: 定义的组件标签名不能有数字,如'cpnt-name1',否则报错   
     }}
   '.wxml'中放置组件标签  
     节点名即自定义组件的标签名,节点属性即传递给组件的属性值 

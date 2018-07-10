@@ -1693,7 +1693,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(str); // 1-2-3 
     ◆遍历方法 
       PS: 回调参数'val'为指向数组成员的一指针,遍历时依次指向每个元素  
-    .sort(function(val1,val2){  // arr,返回排序后的数组[改变原数组]  
+    .sort(function(val1,val2){       // arr,返回排序后的数组[改变原数组]  
       val1,val2   数组相邻的两个元素 
       return bol; // true则数组两个成员调序,否则不变;
       该回调函数可选,默认元素按转换为的字符串的首个字符的Unicode位点进行排序
@@ -1717,51 +1717,57 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
     })   
-    .forEach(foo(val,idx?,arr?),context?)  数组遍历[ES5] 
-      PS: 已删除或者从未赋值的项将被跳过,而值为 undefined 的项则不会被跳过 
-        无法中止或跳出forEach循环,除非报错.
-      foo  遍历函数 
-      val  数组成员 
-      idx  成员索引 
-      arr  数组本身 
-      context   foo的执行上下文,可选,默认为数组本身  
-        类似执行如下函数 foo.call(context, element, index, array).
-        若 context 值为 undefined 或 null,
-        函数的 this 值取决于当前执行环境是否为严格模式,
-        严格模式下为 undefined,非严格模式下为全局对象.
-        function Counter() {
-          this.sum = 0;
-          this.count = 0;
-        }
-        Counter.prototype.add = function(array) {
-          array.forEach(function(entry) {
-            this.sum += entry;
-            ++this.count;
-          }, this);
-          console.log(this); // Counter {sum: 16, count: 4}
-        };
-        var obj = new Counter();
-        obj.add([1, 3, 5, 7]);
-        console.log(obj.count); // 4
-        console.log(obj.sum);   // 16
-      遍历范围在第一次函数调用前会确定,之后添加到数组中的项不会被foo访问到 
-        若已经存在的值被改变,则传递给 foo 的值是 forEach 遍历到他们那一刻的值,
-        已删除的项不会被遍历到.
-      无法自定义终止遍历,只有出现错误时会停止[可通过try来抛出异常] 
-        使用try来抛出错误且不影响后续的其他代码执行 
-        var arr = [1,2,3,4,5];
-        try {
-          arr.forEach(function(val,idx,arr){
-            console.log(val,'1');
-            if (val == 3) {
-              console.log(val,'2');
-              throw '1111' ;
-            }
-          });
-        } 
-        catch (e) {
-          console.log('执行了');
-        } 
+    .forEach(function(val,idx ,arr){ // 数组遍历[ES5] 
+      PS: 可通过'return'使本次'return'后续语句不再执行 
+      Input: 
+        val  数组成员 
+        idx  成员索引 
+        arr  数组本身 
+    },context) 
+      Input: 
+        fn,依次遍历每个数组成员进行的回调  
+          已删除或从未赋值的项[空型]将被跳过,而值为 undefined 的项则不会被跳过 
+        context   可选,回调函数的执行上下文,默认为数组本身  
+          类似执行如下函数 foo.call(context, element, index, array).
+          若 context 值为 undefined 或 null,
+          函数的 this 值取决于当前执行环境是否为严格模式,
+          严格模式下为 undefined,非严格模式下为全局对象.
+          function Counter() {
+            this.sum = 0;
+            this.count = 0;
+          }
+          Counter.prototype.add = function(array) {
+            array.forEach(function(entry) {
+              this.sum += entry;
+              ++this.count;
+            }, this);
+            console.log(this); // Counter {sum: 16, count: 4}
+          };
+          var obj = new Counter();
+          obj.add([1, 3, 5, 7]);
+          console.log(obj.count); // 4
+          console.log(obj.sum);   // 16
+      Output: undefined 
+      Feature: 
+        遍历范围在第一次函数调用前会确定,之后添加到数组中的项不会被foo访问到 
+          若已经存在的值被改变,则传递给 foo 的值是 forEach 遍历到他们那一刻的值,
+          已删除的项不会被遍历到.
+        无法自定义终止遍历,只有出现错误时会停止 
+          1 使用try来抛出错误且不影响后续的其他代码执行 
+            var arr = [1,2,3,4,5];
+            try {
+              arr.forEach(function(val,idx,arr){
+                console.log(val,'1');
+                if (val == 3) {
+                  console.log(val,'2');
+                  throw '1111' ;
+                }
+              });
+            } 
+            catch (e) {
+              console.log('执行了');
+            } 
+          2 使用'return'阻止本次'return'后续语句不再执行 
     .every(f(val,idx?,arr?),context?)  bol,回调返回值是否全部为真[ES5] 
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;

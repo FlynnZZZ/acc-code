@@ -1215,7 +1215,7 @@ const,定义块级常量 [ES6]
   while(条件){};  先判断再运行
   do{}while(条件); 先执行后判断,至少会执行一次 
   for(var key in obj){} 无序遍历[会遍历原型链上的属性] [适用'str''arr''obj']  
-    PS: 若原型链上的属性设置为可遍历,则也会将其遍历出来;可使用'break'终止循环 
+    PS: 若原型链上的属性设置为可遍历,则也会将其遍历出来 
     遍历字符串 
       var str = 'abc';
       var rst = '';
@@ -1241,6 +1241,7 @@ const,定义块级常量 [ES6]
         rst += key +':'+ obj[key]
       }
       console.log(rst); // aoo:aboo:11
+    continue 结束本次执行继续下次执行,break 结束循环 
   for(var val of iterator){}  遍历[ES6] 
     PS: 当使用for...of循环遍历某种数据结构时,该循环会自动去寻找Iterator接口
       原生具备Iterator接口的数据结构: Array Map Set String TypedArray arguments NodeList对象 

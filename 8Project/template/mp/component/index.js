@@ -18,8 +18,10 @@ Component({
     'xxx'
   ] 
   ,methods: {    
-    fn: function(){
-    }
+    // func 
+    
+    // event  
+    
   }  
   // 生命周期  
   ,created: function(){   

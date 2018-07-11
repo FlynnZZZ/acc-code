@@ -1043,8 +1043,8 @@ Form表单
       'color'   拾色器  
       'search'  搜索文本字段 
       'tel'     定义用于电话号码的文本字段 
-      'date'    日期
-      'calendar'  日历 
+      'calendar'        日历 
+      'date'            日期
       'datetime'        日期字段 [带有calendar和time控件] [Chrome无效]
       'datetime-local'  日期字段 [带有calendar和time控件]
       'month'           日期字段的月 [带有calendar控件]

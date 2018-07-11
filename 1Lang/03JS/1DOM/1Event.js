@@ -387,13 +387,13 @@ PopStateEvent,历史记录状态事件[HTML5][IE10+]
     .state  obj,当前历史记录对应的状态对象的副本,即pushState的第一个参数
   事件枚举: 
     popstate   历史记录变化时,在window上触发,不冒泡 
-      PS: 调用history.pushState()或history.replaceState()不会触发该事件,
+      PS: 调用 .pushState()/.replaceState()不会触发该事件,
         不同的浏览器在加载页面时处理popstate事件的形式存在差异。
         页面加载时Chrome和Safari通常会触发popstate事件,但Firefox则不会。
         若被激活的历史记录条目是通过对 history.pushState() 的调用创建的,
         或者受到对 history.replaceState() 的调用的影响,
       只有在做出浏览器动作时,才会触发该事件,如用户点击浏览器的回退按钮,
-      或者在调用 back、forward、go 方法时才会触发  
+      或调用 .back()/.forward()/.go() 方法时才会触发  
 BeforeUnloadEvent, 
   Extend: Event 
     console.log(BeforeUnloadEvent.prototype.__proto__.constructor===Event);

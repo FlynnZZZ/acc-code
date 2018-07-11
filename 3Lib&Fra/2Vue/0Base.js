@@ -166,7 +166,8 @@ View&Model
             }
           }
         })
-◆视图相关
+--------------------------------------------------------------------------------
+视图相关
 'Mustache'插值,声明式的将Model关联到View上  
   PS: 在底层的实现上,Vue 将模板编译成虚拟 DOM 渲染函数;
     结合响应系统,应用状态改变时,Vue以最小代价重新渲染组件并应用到DOM操作上;
@@ -214,392 +215,392 @@ View&Model
         }
       }
   Mustache 和 v-text 的区别: 在刷新的瞬间会显示出'{{}}'
-★'Directives'指令,在视图中指定使用,用于'Model'和'View'的交互 
+'Directives'指令,在视图中指定使用,用于'Model'和'View'的交互 
   PS:     
-v-text="str"   插入纯文本 
-v-html="str"   插入HTML 
-v-for="(val,key,idx) in list"   循环渲染  
-  val   any,集合'list'中的成员值 
-  key   str/num,可选,集合'list'中成员的键名/下标 
-  idx   num,可选,当遍历对象时表示对象的第几个元素 
-    按 Object.keys()的结果遍历对象,在不同JS引擎下结果可能不一致 
-  list  arr/obj/num/str,迭代的集合 
-    为num时,表示迭代num次,'item'表示每一次的数字 
-  ★使用 
-  <template>包裹渲染多元素:  <template v-for="item in list">  
-    PS: 最终在DOM中不存在<template>标签,仅用于包裹元素  
-  'key'属性标识元素不复用: <div v-for="item in list" :key="item.id"> </div>  
-  可循环渲染组件 ['2.2.0+'在组件中使用'v-for','key'是必须的] 
-    不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
-    <template id="cpt1">
-      <li> 
-        {{ txt }} <button @click="$emit('remove')">X</button> 
-      </li> 
-    </template>
-    <div id="todoList">
-      <input v-model="newTodoText" @keyup.enter="addNewTodo">
-      <ul>
-        <li is="todo_item" v-for="(todo,idx) in todos" :txt="todo" @remove="todos.splice(idx,1)"></li>
-      </ul>
-    </div>
-    Vue.component('todo_item',{
-      template: '#cpt1',
-      props: ['txt']
-    });
-    new Vue({
-      el: '#todoList',
-      data: {
-        newTodoText: '',
-        todos: [
-          'thing1'
-          ,'thing2'
-          ,'thing3'
-        ]
-      },
-      methods: {
-        addNewTodo: function () {
-          this.todos.push(this.newTodoText);
-          this.newTodoText = '';
+  v-text="str"   插入纯文本 
+  v-html="str"   插入HTML 
+  v-for="(val,key,idx) in list"   循环渲染  
+    val   any,集合'list'中的成员值 
+    key   str/num,可选,集合'list'中成员的键名/下标 
+    idx   num,可选,当遍历对象时表示对象的第几个元素 
+      按 Object.keys()的结果遍历对象,在不同JS引擎下结果可能不一致 
+    list  arr/obj/num/str,迭代的集合 
+      为num时,表示迭代num次,'item'表示每一次的数字 
+    ★使用 
+    <template>包裹渲染多元素:  <template v-for="item in list">  
+      PS: 最终在DOM中不存在<template>标签,仅用于包裹元素  
+    'key'属性标识元素不复用: <div v-for="item in list" :key="item.id"> </div>  
+    可循环渲染组件 ['2.2.0+'在组件中使用'v-for','key'是必须的] 
+      不能自动传递数据到组件里,因为组件有自己独立的作用域,传递迭代数据到组件里需用'props'
+      <template id="cpt1">
+        <li> 
+          {{ txt }} <button @click="$emit('remove')">X</button> 
+        </li> 
+      </template>
+      <div id="todoList">
+        <input v-model="newTodoText" @keyup.enter="addNewTodo">
+        <ul>
+          <li is="todo_item" v-for="(todo,idx) in todos" :txt="todo" @remove="todos.splice(idx,1)"></li>
+        </ul>
+      </div>
+      Vue.component('todo_item',{
+        template: '#cpt1',
+        props: ['txt']
+      });
+      new Vue({
+        el: '#todoList',
+        data: {
+          newTodoText: '',
+          todos: [
+            'thing1'
+            ,'thing2'
+            ,'thing3'
+          ]
+        },
+        methods: {
+          addNewTodo: function () {
+            this.todos.push(this.newTodoText);
+            this.newTodoText = '';
+          }
         }
+      });
+    可用'of'替代'in'作为分隔符: <div v-for="item of list"></div>
+  v-show="bol"    条件显示 
+    PS:'v-show'的元素会始终渲染并保持在DOM中[使用 display:none]
+    v-show不支持<template>标签
+    通常'v-if'有更高的切换消耗,'v-show'有更高的初始渲染消耗 
+      若需频繁切换使用'v-show',若初始运行时使用'v-if'
+    当条件变化时该指令触发过渡效果 
+  v-if="bol"      条件渲染 
+    在切换时元素及其数据绑定/组件被销毁并重建 
+    当条件变化时该指令触发过渡效果 
+    可使用<template>包裹控制渲染 
+      <template v-if="ok">
+        <h1>Title</h1>
+        <p>Paragraph 1</p>
+        <p>Paragraph 2</p>
+      </template>
+    同时绑定多个'v-if'只有第一个生效,后面的都被忽略 [Self]
+      <div v-if='bol1' v-if='bol2'></div>
+  v-else-if="bol" 条件渲染['2.1.0'+] 
+    PS: 须在'v-if'或'v-else-if'后使用 
+    Example: 
+      <div v-if="type===1"> A </div>
+      <div v-else-if="type===2"> B </div>
+      <div v-else-if="type===3"> C </div>
+      <div v-else> Not 1/2/3 </div>
+  v-else          条件渲染 
+    PS: 须在'v-if'或'v-else-if'后使用 
+    Example: 
+      <h1 v-if="ok">Yes</h1>
+      <h1 v-else>No</h1>
+  v-model="str/arr" 双向绑定[表单]数据值 
+    PS: 
+    绑定单个复选框'checkbox'
+      默认的,值为 false/true 
+        <section id="checkbox">
+          <input type="checkbox" value="获取到的不是改值" v-model="checked">
+          {{ checked }}
+        </section>
+        data : {
+          checked : true,
+        },
+        默认选中,通过点击切换,显示'true'或'false'
+      添加'ture-value'及'false-value'属性时,值为对应的提供的值  
+        <section id="checkBox">
+          <input type="checkbox" :true-value="val1" :false-value="val2" v-model="val">
+          <div> {{val}} </div>
+        </section>
+        var vm = new Vue({
+          el : '#checkBox',
+          data : {
+            val1 : '选中'
+            ,val2 : '未选中'
+            ,val : ''
+          },
+        });
+        setTimeout(function(){
+          vm.val = '选中';
+        },2000);
+    绑定多个复选框'checkbox'到一数组,选中项的'value'对应数组成员   
+      <section id="checkBoxs">
+        <input type="checkbox" value="Jack" v-model="checkedNames">
+        <input type="checkbox" value="John" v-model="checkedNames">
+        <input type="checkbox" value="Mike" v-model="checkedNames">
+        <div>Checked names: {{ checkedNames }}</div>
+      </section>
+      data: {
+        checkedNames: []
       }
-    });
-  可用'of'替代'in'作为分隔符: <div v-for="item of list"></div>
-v-show="bol"    条件显示 
-  PS:'v-show'的元素会始终渲染并保持在DOM中[使用 display:none]
-  v-show不支持<template>标签
-  通常'v-if'有更高的切换消耗,'v-show'有更高的初始渲染消耗 
-    若需频繁切换使用'v-show',若初始运行时使用'v-if'
-  当条件变化时该指令触发过渡效果 
-v-if="bol"      条件渲染 
-  在切换时元素及其数据绑定/组件被销毁并重建 
-  当条件变化时该指令触发过渡效果 
-  可使用<template>包裹控制渲染 
-    <template v-if="ok">
-      <h1>Title</h1>
-      <p>Paragraph 1</p>
-      <p>Paragraph 2</p>
-    </template>
-  同时绑定多个'v-if'只有第一个生效,后面的都被忽略 [Self]
-    <div v-if='bol1' v-if='bol2'></div>
-v-else-if="bol" 条件渲染['2.1.0'+] 
-  PS: 须在'v-if'或'v-else-if'后使用 
-  Example: 
-    <div v-if="type===1"> A </div>
-    <div v-else-if="type===2"> B </div>
-    <div v-else-if="type===3"> C </div>
-    <div v-else> Not 1/2/3 </div>
-v-else          条件渲染 
-  PS: 须在'v-if'或'v-else-if'后使用 
-  Example: 
-    <h1 v-if="ok">Yes</h1>
-    <h1 v-else>No</h1>
-v-model="str/arr" 双向绑定[表单]数据值 
-  PS: 
-  绑定单个复选框'checkbox'
-    默认的,值为 false/true 
-      <section id="checkbox">
-        <input type="checkbox" value="获取到的不是改值" v-model="checked">
-        {{ checked }}
+    绑定单选按钮'radio',获取'value'值  
+      <section id="a" >
+        <input type="radio" value="One" v-model="picked">
+        <input type="radio" value="Two" v-model="picked">
+        <div>Picked: {{ picked }}</div>
+        <input type="radio" value="1111" v-model="pick">
+        <div>Picked: {{ pick }}</div>
       </section>
       data : {
-        checked : true,
+        picked : '',
+        pick : '22',
       },
-      默认选中,通过点击切换,显示'true'或'false'
-    添加'ture-value'及'false-value'属性时,值为对应的提供的值  
-      <section id="checkBox">
-        <input type="checkbox" :true-value="val1" :false-value="val2" v-model="val">
-        <div> {{val}} </div>
-      </section>
-      var vm = new Vue({
-        el : '#checkBox',
-        data : {
-          val1 : '选中'
-          ,val2 : '未选中'
-          ,val : ''
-        },
-      });
-      setTimeout(function(){
-        vm.val = '选中';
-      },2000);
-  绑定多个复选框'checkbox'到一数组,选中项的'value'对应数组成员   
-    <section id="checkBoxs">
-      <input type="checkbox" value="Jack" v-model="checkedNames">
-      <input type="checkbox" value="John" v-model="checkedNames">
-      <input type="checkbox" value="Mike" v-model="checkedNames">
-      <div>Checked names: {{ checkedNames }}</div>
-    </section>
-    data: {
-      checkedNames: []
-    }
-  绑定单选按钮'radio',获取'value'值  
-    <section id="a" >
-      <input type="radio" value="One" v-model="picked">
-      <input type="radio" value="Two" v-model="picked">
-      <div>Picked: {{ picked }}</div>
-      <input type="radio" value="1111" v-model="pick">
-      <div>Picked: {{ pick }}</div>
-    </section>
-    data : {
-      picked : '',
-      pick : '22',
-    },
-  绑定单选列表<select>,获取到被选中项的'value'值  
-    Example: 
-      <select  v-model='key'>
-        <option value="">{{val}}</option>
-        // 当存在 value="xx" 时 ,v-model 的值为 "xx",否则为val
-        // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
-      </select>
-    当选项中不存在被绑定的值时,绑定值会被默认重置为 undefined
+    绑定单选列表<select>,获取到被选中项的'value'值  
+      Example: 
+        <select  v-model='key'>
+          <option value="">{{val}}</option>
+          // 当存在 value="xx" 时 ,v-model 的值为 "xx",否则为val
+          // 当 key 的值没有和 option 中 value 属性的值相等时,select无法显示出值
+        </select>
+      当选项中不存在被绑定的值时,绑定值会被默认重置为 undefined
+        <div id="slct">
+          <select  v-model="slctVal">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+          <span>Selected: {{ slctVal }}</span>
+        </div>
+        new Vue({
+          el : '#slct',
+          data : {
+            slctVal : '1',
+          },
+          mounted : function(){
+            var that = this;
+            setTimeout(function(){
+              that.slctVal = '11';
+            },1000);
+          },
+        });
+    绑定多选列表<select>,获取到选中项'value'组成的数组 
       <div id="slct">
-        <select  v-model="slctVal">
+        <select v-model="selected" multiple>
           <option>A</option>
           <option>B</option>
           <option>C</option>
         </select>
-        <span>Selected: {{ slctVal }}</span>
+        <div>Selected: {{ selected }}</div>
       </div>
-      new Vue({
-        el : '#slct',
-        data : {
-          slctVal : '1',
-        },
-        mounted : function(){
-          var that = this;
-          setTimeout(function(){
-            that.slctVal = '11';
-          },1000);
-        },
-      });
-  绑定多选列表<select>,获取到选中项'value'组成的数组 
-    <div id="slct">
-      <select v-model="selected" multiple>
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-      </select>
-      <div>Selected: {{ selected }}</div>
-    </div>
-  绑定其他表单 
-    textarea 
-    ...
-  当表单值为对象,获取到对应的对象 
-    <select v-model="selected"> 
-      // <!-- 内联对象字面量 --> 
-      <option :value="{ num: 123 }">123</option> 
-    </select> 
-    // 当选中时 
-    typeof vm.selected //  'object'
-    vm.selected.num    //  123
-v-bind:attrname="str/arr/obj"  属性绑定[简写':attrname'] 
-  PS:  
-  str  表示属性值为str 
-    <div id="app-2" :title="message">
-      鼠标悬停几秒钟查看此处动态绑定的提示信息！
-    </div>
-    var app2 = new Vue({
-      el: '#app-2',
-      data: {
-        message: '页面加载于 ' + new Date()
-      }
-    }); 
-    // app2.message = '新消息';
-    // 可通过更改 app2.message 的值来改变显示
-  obj  参见绑定'class'/'style'
-  arr  参见绑定'class'/'style'
-  ★'class'和'style'属性,VueJS专门增强了它
-  :class="str/obj/arr"  'class'类样式[之前的class不会被覆盖]  
-    obj  key为属性名,val为函数判断或简单表达式 
-      Example: 
-        <div :class="{ active: isActive }"></div>
-        'active'存在与否将取决于'isActive'是否为真 
-      与普通的class属性共存 
-        <div class="static" :class="{ c1: bol1,c2: bol2 }">
-        </div>
+    绑定其他表单 
+      textarea 
+      ...
+    当表单值为对象,获取到对应的对象 
+      <select v-model="selected"> 
+        // <!-- 内联对象字面量 --> 
+        <option :value="{ num: 123 }">123</option> 
+      </select> 
+      // 当选中时 
+      typeof vm.selected //  'object'
+      vm.selected.num    //  123
+  v-bind:attrname="str/arr/obj"  属性绑定[简写':attrname'] 
+    PS:  
+    str  表示属性值为str 
+      <div id="app-2" :title="message">
+        鼠标悬停几秒钟查看此处动态绑定的提示信息！
+      </div>
+      var app2 = new Vue({
+        el: '#app-2',
         data: {
-          bol1: true,
-          bol2: false
+          message: '页面加载于 ' + new Date()
         }
-        渲染为: <div class="static active"></div>
-      可直接绑定数据属性里的对象 
-        <div id="test" :class="cls"></div>
-        data: {
-          cls: {
-            c1: true,
-            c2: false
+      }); 
+      // app2.message = '新消息';
+      // 可通过更改 app2.message 的值来改变显示
+    obj  参见绑定'class'/'style'
+    arr  参见绑定'class'/'style'
+    ★'class'和'style'属性,VueJS专门增强了它
+    :class="str/obj/arr"  'class'类样式[之前的class不会被覆盖]  
+      obj  key为属性名,val为函数判断或简单表达式 
+        Example: 
+          <div :class="{ active: isActive }"></div>
+          'active'存在与否将取决于'isActive'是否为真 
+        与普通的class属性共存 
+          <div class="static" :class="{ c1: bol1,c2: bol2 }">
+          </div>
+          data: {
+            bol1: true,
+            bol2: false
           }
-        }
-    arr  表示该class的值为该数组中的多个 
-      Example: 
-      <div :class="[activeClass,errorClass]">
-      data: {
-        activeClass: 'active',
-        errorClass: 'text-danger'
-      }
-      也可在数组语法中使用对象语法 
-      <div :class="[{ active: isActive },errorClass]"> 
-    在组件上用到class属性时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
-      Vue.component('my-cpt',{
-        template: '<p class="foo bar">Hi</p>'
-      });
-      // 使用 
-      <my-cpt class="baz boo"></my-cpt>
-      // 将被渲染成为 
-      <p class="foo bar baz boo">Hi</p>
-      // 同样的适用于动态绑定 
-      <my-cpt :class="{ active: true }"></my-cpt>
-      // 被渲染成为
-      <p class="foo bar active"></p>
-  :style="str/obj/arr"  'style'内联样式 
-    obj  key为声明属性,val为声明值,适用于添加多个样式  
-      可用短横分隔命名'kebab-case'或驼峰式'camelCase' 
-        <div :style="{'background-color':color1,fontSize:fontSize+'px'}"></div>
+          渲染为: <div class="static active"></div>
+        可直接绑定数据属性里的对象 
+          <div id="test" :class="cls"></div>
+          data: {
+            cls: {
+              c1: true,
+              c2: false
+            }
+          }
+      arr  表示该class的值为该数组中的多个 
+        Example: 
+        <div :class="[activeClass,errorClass]">
         data: {
-          color1: 'red',
-          fontSize: 30
+          activeClass: 'active',
+          errorClass: 'text-danger'
         }
-      可为属性提供一个包含多个值的数组,常用于提供多个带前缀的值 ['2.3.0+']
-        会渲染数组中最后一个被浏览器支持的值。
-        <div :style="{ display: ['-webkit-box','-ms-flexbox','flex'] }"></div>
-        如果浏览器支持不带浏览器前缀的 flexbox,那么渲染结果会是 display: flex 
-    arr  将多个'样式对象'应用到一个元素上 
-    Vue会自动添加相应的前缀 
-v-bind="obj"  无参数绑定到对象,使用对象的'key'作为参数  
-  PS: 该模式下'class'和'style'绑定不支持数组和对象 
-  obj   包含"{attr:val}"键值对的对象 
-  Example: 
-    <div v-bind="{ aoo: 11,boo: 22 }">abc</div> 
-    相当于: 
-    <div v-bind:aoo="11" v-bind:boo="22">abc</div> 
-v-on:ename="foo/expr" 事件绑定[简写'@ename'] [事件名不区分大小写] 
-  PS: 当ViewModel被销毁时,所有事件处理器都会自动被删除,无须自己清理 
-  foo    函数,事件触发时执行回调 
-    函数未传参时,则默认传入经过vue包装过的event事件对象'e',等价 foo($event) 
-      若有自定义传参,则默认参数被取消
-    foo($event)   '$event'表示原生DOM事件对象 
-      e.currentTarget 表示绑定事件的元素 
-      e.srcElement    表示响应事件的元素 [可用来进行DOM操作[SlPt]]
-      <button @click="warn('11111',$event)">Submit</button>
-      methods: {
-        warn: function (message,event) {
-          if (event){
-            event.preventDefault()  // 可以访问原生事件对象
-          } 
-          alert(message)
-        }
-      }
-    自定义传参 
-      <div id="example-3">
-        <button @click="say('hi')">Say hi</button>
-        <button @click="say('what')">Say what</button>
-      </div>
-      new Vue({
-        el: '#example-3',
+        也可在数组语法中使用对象语法 
+        <div :class="[{ active: isActive },errorClass]"> 
+      在组件上用到class属性时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
+        Vue.component('my-cpt',{
+          template: '<p class="foo bar">Hi</p>'
+        });
+        // 使用 
+        <my-cpt class="baz boo"></my-cpt>
+        // 将被渲染成为 
+        <p class="foo bar baz boo">Hi</p>
+        // 同样的适用于动态绑定 
+        <my-cpt :class="{ active: true }"></my-cpt>
+        // 被渲染成为
+        <p class="foo bar active"></p>
+    :style="str/obj/arr"  'style'内联样式 
+      obj  key为声明属性,val为声明值,适用于添加多个样式  
+        可用短横分隔命名'kebab-case'或驼峰式'camelCase' 
+          <div :style="{'background-color':color1,fontSize:fontSize+'px'}"></div>
+          data: {
+            color1: 'red',
+            fontSize: 30
+          }
+        可为属性提供一个包含多个值的数组,常用于提供多个带前缀的值 ['2.3.0+']
+          会渲染数组中最后一个被浏览器支持的值。
+          <div :style="{ display: ['-webkit-box','-ms-flexbox','flex'] }"></div>
+          如果浏览器支持不带浏览器前缀的 flexbox,那么渲染结果会是 display: flex 
+      arr  将多个'样式对象'应用到一个元素上 
+      Vue会自动添加相应的前缀 
+  v-bind="obj"  无参数绑定到对象,使用对象的'key'作为参数  
+    PS: 该模式下'class'和'style'绑定不支持数组和对象 
+    obj   包含"{attr:val}"键值对的对象 
+    Example: 
+      <div v-bind="{ aoo: 11,boo: 22 }">abc</div> 
+      相当于: 
+      <div v-bind:aoo="11" v-bind:boo="22">abc</div> 
+  v-on:ename="foo/expr" 事件绑定[简写'@ename'] [事件名不区分大小写] 
+    PS: 当ViewModel被销毁时,所有事件处理器都会自动被删除,无须自己清理 
+    foo    函数,事件触发时执行回调 
+      函数未传参时,则默认传入经过vue包装过的event事件对象'e',等价 foo($event) 
+        若有自定义传参,则默认参数被取消
+      foo($event)   '$event'表示原生DOM事件对象 
+        e.currentTarget 表示绑定事件的元素 
+        e.srcElement    表示响应事件的元素 [可用来进行DOM操作[SlPt]]
+        <button @click="warn('11111',$event)">Submit</button>
         methods: {
-          say: function (message) {
+          warn: function (message,event) {
+            if (event){
+              event.preventDefault()  // 可以访问原生事件对象
+            } 
             alert(message)
           }
         }
-      })
-  expr   单条语句,事件触发时执行语句 
-  无回调  
-    <form @submit.prevent></form> // 只有修饰符 
-  Example: 
-    <div id="test">
-      <p>{{ message }}</p>
-      <button @click="reverseMsg">逆转消息</button>
-    </div>
-    var app5 = new Vue({
-      el: '#test',
-      data: {
-        message: 'Hello VueJS!'
-      },
-      methods: {
-        reverseMsg: function () {
-          this.message = this.message.split('').reverse().join('');
+      自定义传参 
+        <div id="example-3">
+          <button @click="say('hi')">Say hi</button>
+          <button @click="say('what')">Say what</button>
+        </div>
+        new Vue({
+          el: '#example-3',
+          methods: {
+            say: function (message) {
+              alert(message)
+            }
+          }
+        })
+    expr   单条语句,事件触发时执行语句 
+    无回调  
+      <form @submit.prevent></form> // 只有修饰符 
+    Example: 
+      <div id="test">
+        <p>{{ message }}</p>
+        <button @click="reverseMsg">逆转消息</button>
+      </div>
+      var app5 = new Vue({
+        el: '#test',
+        data: {
+          message: 'Hello VueJS!'
+        },
+        methods: {
+          reverseMsg: function () {
+            this.message = this.message.split('').reverse().join('');
+          }
         }
-      }
-    })    
-v-on="obj"  对象表示法,同时绑定多个事件  '2.4.0+'  
-  PS: 使用对象语法时,不支持任何修饰器 
-  obj 为'{事件:监听器}'键值对的对象 
-  Example: 
-  <button v-on="{ mousedown: doThis,mouseup: doThat }"></button>
-'Modifiers'修饰符,让指令以特殊方式绑定,适用'v-on'、'v-model'、'v-bind' 
-  PS: 修饰符是以点号'.'指明的特殊后缀;指令可以串联;
-  通用事件修饰符 
-    .prevent 阻止默认行为,调用 event.preventDefault() 
-      <form v-on:submit.prevent="onSubmit"></form>
-      // <!-- 提交事件不再重载页面 -->
-    .stop    阻止冒泡,调用 event.stopPropagation()
-    .capture 使用事件捕获模式 
-    .self    只当事件是从侦听器绑定的元素本身触发时才触发回调 
-    .once    只触发一次回调 ['2.1.4+'] 
-    .native  监听组件根元素的原生事件  
-    .passive 以 { passive: true } 模式添加侦听器 ['2.3.0+' ]
-  键鼠事件修饰符: 键盘事件时监测键值,鼠标事件时监测鼠标按键  
-    同时监听多个 
-      // <!-- Alt + C -->
-      <input @keyup.alt.67="clear">
-      // <!-- Ctrl + Click -->
-      <div @click.ctrl="doSomething">Do something</div>
-    ◆键盘
-    'keyCode'或Vue提供的别名 
-      // <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
-      <input @keyup.13="submit">
-      <input @keyup.enter="submit">
-    Vue.config.keyCodes 全局对象,自定义按键修饰符别名 
-      Vue.config.keyCodes.f1 = 112;  // 单个定义,可以使用 @keyup.f1
-      Vue.config.keyCodes = {  // 同时定义多个
-        v: 86,
-        f1: 112,
-        mediaPlayPause: 179,
-        up: [38,87]
-      }
-    .enter   Enter键,'.13'等价于'.enter'
-      当为搜索框时<input type="search" >,在微信中 需使用 @keyup.13, @keyup.enter 无效 
-    .tab     
-    .delete  '删除'和'退格'键
-    .esc     
-    .space   
-    .up      
-    .down    
-    .left   
-    .right   
-    .ctrl   ['2.1.0+']
-    .alt    ['2.1.0+']
-    .shift  ['2.1.0+']
-    .meta   Mac上对应⌘;Windows上对应⊞ ['2.1.0+']
-    ◆鼠标事件修饰符  ['2.2.0+'] 
-    .left
-    .right
-    .middle
-  'v-model'修饰符 
-    .lazy   从input事件转变为在change事件中同步  
-      // <!-- 在 "change" 而不是 "input" 事件中更新 -->
-      <input v-model.lazy="msg" >
-    .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值] 
-      <input v-model.number="age" type="number">
-      这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
-    .trim   自动过滤用户输入的首尾空格 
-      <input v-model.trim="msg">
-  'v-bind'修饰符 
-    .prop   被用于绑定DOM属性'property' 
-    .sync   对子组件props双向绑定['2.0'移除,'2.3'加入]  [详见组件'prop'通信] 
-      语法糖,会扩展成一个更新父组件绑定值的'v-on'侦听器 
-    .camel  将kebab-case特性名转换为camelCase '2.1.0+' 
-      将 v-bind 属性名称驼峰化,
-      在使用字符串模板或通过 vue-loader/vueify 编译时,无需使用 .camel
-      Example:  SVG 的 viewBox 属性：
-      <svg :view-box.camel="viewBox"></svg>
-v-once   一次性插值[配合插值使用] 
-  当数据改变时,插值处的内容不会更新
-  <span v-once>值不会更新: {{ msg }}</span>
-v-cloak  该指令会保持在元素上直到关联实例结束编译 
-  和 CSS 规则如 [v-cloak] { display: none } 一起用时,
-  可隐藏未编译的'Mustache'标签直到实例准备完毕 
-v-pre    跳过该元素及其子元素的编译  
-  可以用来显示原始'Mustache'标签,跳过大量没有指令的节点会加快编译 
+      })    
+  v-on="obj"  对象表示法,同时绑定多个事件  '2.4.0+'  
+    PS: 使用对象语法时,不支持任何修饰器 
+    obj 为'{事件:监听器}'键值对的对象 
+    Example: 
+    <button v-on="{ mousedown: doThis,mouseup: doThat }"></button>
+  'Modifiers'修饰符,让指令以特殊方式绑定,适用'v-on'、'v-model'、'v-bind' 
+    PS: 修饰符是以点号'.'指明的特殊后缀;指令可以串联;
+    通用事件修饰符 
+      .prevent 阻止默认行为,调用 event.preventDefault() 
+        <form v-on:submit.prevent="onSubmit"></form>
+        // <!-- 提交事件不再重载页面 -->
+      .stop    阻止冒泡,调用 event.stopPropagation()
+      .capture 使用事件捕获模式 
+      .self    只当事件是从侦听器绑定的元素本身触发时才触发回调 
+      .once    只触发一次回调 ['2.1.4+'] 
+      .native  监听组件根元素的原生事件  
+      .passive 以 { passive: true } 模式添加侦听器 ['2.3.0+' ]
+    键鼠事件修饰符: 键盘事件时监测键值,鼠标事件时监测鼠标按键  
+      同时监听多个 
+        // <!-- Alt + C -->
+        <input @keyup.alt.67="clear">
+        // <!-- Ctrl + Click -->
+        <div @click.ctrl="doSomething">Do something</div>
+      ◆键盘
+      'keyCode'或Vue提供的别名 
+        // <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
+        <input @keyup.13="submit">
+        <input @keyup.enter="submit">
+      Vue.config.keyCodes 全局对象,自定义按键修饰符别名 
+        Vue.config.keyCodes.f1 = 112;  // 单个定义,可以使用 @keyup.f1
+        Vue.config.keyCodes = {  // 同时定义多个
+          v: 86,
+          f1: 112,
+          mediaPlayPause: 179,
+          up: [38,87]
+        }
+      .enter   Enter键,'.13'等价于'.enter'
+        当为搜索框时<input type="search" >,在微信中 需使用 @keyup.13, @keyup.enter 无效 
+      .tab     
+      .delete  '删除'和'退格'键
+      .esc     
+      .space   
+      .up      
+      .down    
+      .left   
+      .right   
+      .ctrl   ['2.1.0+']
+      .alt    ['2.1.0+']
+      .shift  ['2.1.0+']
+      .meta   Mac上对应⌘;Windows上对应⊞ ['2.1.0+']
+      ◆鼠标事件修饰符  ['2.2.0+'] 
+      .left
+      .right
+      .middle
+    'v-model'修饰符 
+      .lazy   从input事件转变为在change事件中同步  
+        // <!-- 在 "change" 而不是 "input" 事件中更新 -->
+        <input v-model.lazy="msg" >
+      .number 自动将用户的输入值转为'Number'类型[若转换结果为'NaN'则返回原值] 
+        <input v-model.number="age" type="number">
+        这通常很有用,因为在 type="number" 时 HTML 中输入的值也总是会返回字符串类型
+      .trim   自动过滤用户输入的首尾空格 
+        <input v-model.trim="msg">
+    'v-bind'修饰符 
+      .prop   被用于绑定DOM属性'property' 
+      .sync   对子组件props双向绑定['2.0'移除,'2.3'加入]  [详见组件'prop'通信] 
+        语法糖,会扩展成一个更新父组件绑定值的'v-on'侦听器 
+      .camel  将kebab-case特性名转换为camelCase '2.1.0+' 
+        将 v-bind 属性名称驼峰化,
+        在使用字符串模板或通过 vue-loader/vueify 编译时,无需使用 .camel
+        Example:  SVG 的 viewBox 属性：
+        <svg :view-box.camel="viewBox"></svg>
+  v-once   一次性插值[配合插值使用] 
+    当数据改变时,插值处的内容不会更新
+    <span v-once>值不会更新: {{ msg }}</span>
+  v-cloak  该指令会保持在元素上直到关联实例结束编译 
+    和 CSS 规则如 [v-cloak] { display: none } 一起用时,
+    可隐藏未编译的'Mustache'标签直到实例准备完毕 
+  v-pre    跳过该元素及其子元素的编译  
+    可以用来显示原始'Mustache'标签,跳过大量没有指令的节点会加快编译 
 'Tag'&'Attr'内置标签及属性 
   ◆标签
   <component is="cptname"></component>   // 放置组件 
@@ -1033,7 +1034,8 @@ v-pre    跳过该元素及其子元素的编译
     'in-out'   默认值,新元素先添加进来,旧元素然后删除 
     'out-in'   旧元素先去除,新元素再添加进来  
   列表过渡 
-◆模型相关 
+--------------------------------------------------------------------------------
+模型 
 Vue.xxx,静态属性/方法 
   Vue.config  Vue的全局配置对象,可在启动应用前修改配置  
     Vue.config.devtools = bol  是否允许'vue-devtools'检查代码 

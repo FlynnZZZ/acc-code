@@ -394,12 +394,12 @@
     ★共有属性 
       bind:change="fn" value改变时触发'change'事件 
         event.detail = {value: value}
-      disabled   是否禁用,默认'false' 
+      disabled="bol"   是否禁用,默认:false  
     ★现支持五种选择器: 
     普通选择器[默认值]: mode="selector"  
       range="arr/objArr"    默认: [] 
-      range-key="str"  当'range'是objArr时,指定对象中key的值作为选择器显示内容 
       value="num"      表示选择了'range'中的第几个[下标从0开始],默认:0 
+      range-key="str"  当'range'是objArr时,指定对象中key的值作为选择器显示内容 
     时间选择器: mode='time' 
       value="time"   选中的时间,格式:"hh:mm" 
       start="time"   有效时间范围的开始,格式:"hh:mm" 

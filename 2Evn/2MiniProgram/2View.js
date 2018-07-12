@@ -334,15 +334,15 @@
     bindsubmit   foo,携带form中的数据触发'submit'事件 
       event.detail = {value : {'name': 'value'} , formId: ''} 
     bindreset    foo,表单重置时会触发'reset'事件 
-  <input/> 输入框 
-    PS: <input>组件是native组件,字体是系统字体,所以无法设置 
-      在<input>聚焦期间,避免使用css动画；
+  <input/> 输入框 [native组件]
+    PS: 为native组件,字体为系统字体,无法设置 
+      在<input>聚焦期间,避免使用css动画 
     value="str"  input值 
     type="KW"   input类型  
       'text'   文本输入键盘,默认 
       'number' 数字输入键盘
-      'idcard' 身份证输入键盘
       'digit'  带小数点的数字键盘
+      'idcard' 身份证输入键盘
     password="bol"     是否是密码类型,默认:false 
     placeholder="str"  输入框为空时占位符 
       微信版本'6.3.30', placeholder 在聚焦时出现重影问题；
@@ -392,9 +392,11 @@
     color     radio的颜色,同css的color
   <picker>  从底部弹起的滚动选择器 [原生组件] 
     ★共有属性 
-      bind:change="fn" value改变时触发'change'事件 
-        event.detail = {value: value}
-      disabled="bol"   是否禁用,默认:false  
+    disabled="bol"   是否禁用,默认:false  
+    bind:change="fn" value改变时触发'change'事件 
+      event 
+        .detail  
+          .value  
     ★现支持五种选择器: 
     普通选择器[默认值]: mode="selector"  
       range="arr/objArr"    默认: [] 
@@ -430,6 +432,7 @@
             .value    表示变更值的下标 
     Accu: 
       内部放置需其他节点,用于激活picker 
+        其他节点继承不了picker的宽高,推荐使用内部节点来将picker撑起来 
   <slider>  滑动选择器 
     min   最小值,默认'0' 
     max   最大值,默认'100' 
@@ -449,11 +452,13 @@
     type="KW"        样式
       'switch'   默认 
       'checkbox'  
-    color=""         switch颜色,同css的color
-    bind:change="fn" checked改变时触发'change'事件
+    color="color"    switch颜色,同css的color
+    bind:change="fn" checked改变时触发'change'事件 
       event 
         .detail 
           .value  
+    Accu: 
+      调节switch的大小,定义宽高无效,需用 transform:scale 来进行缩放
   <textarea> 多行输入框 
     PS: 微信版本'6.3.30',列表渲染时,新增加的<textarea>在自动聚焦时的位置计算错误 
       <textarea>的blur事件会晚于页面上的tap事件,
@@ -493,21 +498,22 @@
       目前可以绑定的控件有：<button/>, <checkbox/>, <radio/>, <'switch'>。
     for   绑定控件的id 
   <button> 按钮 
-    size="<kw>"   按钮大小   
+    PS: 默认整体居中、文字居中 
+    size="KW"   按钮大小   
       'default'  默认 
       'mini'
-    type="<kw>"   按钮样式类型   
+    type="KW"   按钮样式类型   
       'default'   默认 
       'primary' 
       'warn'
     plain="bol"   按钮是否镂空,背景色透明,默认:false 
     disabled="bol"  是否禁用,默认:false  
     loading="bol"   名称前是否带'loading'图标,默认:false 
-    form-type="kw" 点击对表单产生的效果 
+    form-type="KW" 点击对表单产生的效果 
       点击分别会触发<form>组件的submit/reset事件 
       'submit' 提交表单
       'reset'  重置表单
-    hover-class="kw/str" 指定按钮按下去的样式类   
+    hover-class="KW/str" 指定按钮按下去的样式类   
       'button-hover'   默认值 
         {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}
       "none"           无点击态效果 

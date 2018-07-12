@@ -391,7 +391,7 @@ net,底层的网络通信工具,包含创建服务器/客户端的方法
       client.destroy(); 
     });        
     client.on('close', function() { }) 
-http: http服务模块,提供HTTP服务器功能 
+const http = require("http")    http服务模块,提供HTTP服务器功能  
   PS: 主要用于搭建HTTP服务端和客户端; 
   Web服务器 
     Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
@@ -405,58 +405,58 @@ http: http服务模块,提供HTTP服务器功能
     Server   服务端,一般指Web服务器,可接收客户端请求,并向客户端发送响应数据 
     Business 业务层,通过Web服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等
     Data     数据层,一般由数据库组成 
-  var http = require("http");          // 引入http模块 
-  var server = http.createServer(fn)   // 创建服务器 
-    Input: function(req,res){ }   响应回调   
-      req    obj,请求 
-        .url            // str,请求的地址 
-        .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
-          PS: 通常用于获取POST请求数据  
-          part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
-        ){ })
-        .on("end",function(  ){ // 请求数据传送完毕时触发  
-          PS: GET、POST 请求都会触发该事件 
-        })
-        .setEncoding(                   // 设置请求的格式 
-          type  // str,设置的格式,如: 'utf8'
-        ) 
-      res    obj,响应 
-        .writeHead(statusCode,headersObj)   设置响应状态码及响应头 
-          Input: 
-            statusCode    num,状态码,如: 200 
-            headersObj    obj,设置响应头信息的对象,格式如下: 
-              {
-                "Content-Type":"text/plain; charset=utf-8" 
-              }
-        .write( data ) // 发送响应  
-          data   str/binary,发送的响应数据 
-        .end(data?)         结束响应并发送信息  
-          data    str|binary,可选,若存在会将其发送 
+  .createServer(function(req ,res){  // server,创建服务器 
+    req    obj,请求 
+      .url            // str,请求的地址 
+      .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
+        PS: 通常用于获取POST请求数据  
+        part  // 接收到的数据[来自请求体],将所有信息串起来就是请求的信息了   
+      ){ })
+      .on("end",function(  ){ // 请求数据传送完毕时触发  
+        PS: GET、POST 请求都会触发该事件 
+      })
+      .setEncoding(                   // 设置请求的格式 
+        type  // str,设置的格式,如: 'utf8'
+      ) 
+    res    obj,响应 
+      .writeHead(statusCode,headersObj)   设置响应状态码及响应头 
+        Input: 
+          statusCode      num,状态码,如: 200 
+          headersObj =  { // obj,设置响应头信息的对象,格式如下: 
+            "Content-Type":"text/plain; charset=utf-8" 
+            ,...
+          }   
+        Output: 
+      .write( data )  发送响应  
+        data   str/binary,发送的响应数据 
+      .end(data?)     结束响应并发送信息  
+        data    str|binary,可选,若存在会将其发送 
+  })   
+    Input:  创建服务器的响应回调   
     Output: server  创建的服务器对象  
-  server.listen(port,ip?)              // 服务器监听ip及端口 
-    Input: 
-      port   num,监听的端口 
-      ip     str,监听的ip地址,如: "127.0.0.1" 
-    Output:  
-  http.request( options, fn? )    // 从后台发送http请求 
+  .request(options ,function(res){   // 发送http请求 
+    res   服务器的响应 
+  })    
     Input: 
       options           str/obj,配置项参数 
-        str  字符串,将被 url.parse 解析为对象
-        obj  对象 
-          host           服务器域名或ip地址
-          hostname       host别名
-          port           端口
-          localAddress   
-          socketPath     
-          method         请求方法,默认为'get'
-          path           请求的路径 
-          headers        请求头对象 
-          auth           计算认证头的认证,一般为 user 和 password 
-          agent          代理 
-          keepAlive      
-          keepAliveMsecs     
+        str  将被 url.parse 解析为对象
+        obj = {
+          method: KW     // 请求方法,默认:'get'
+          ,host: str     // 服务器域名或ip地址
+          ,hostname: str // host别名
+          ,port: num     // 端口
+          ,path: str     // 请求的路径 
+          ,headers: {    // 请求头对象 
+            // 
+          }        
+          ,auth: str     // 计算认证头的认证,一般为 user 和 password 
+          ,agent: str    // 代理 
+          ,keepAlive: ''      
+          ,socketPath: ''     
+          ,keepAliveMsecs: ''     
+          ,localAddress: ''   
+        } 
       function(res){}   可选,回调函数  
-        res   服务器的响应 
     Output:  可写的request实例流 
     Example: 慕课网评论的提交 
       var http = require("http");
@@ -510,15 +510,22 @@ http: http服务模块,提供HTTP服务器功能
       });
       req.write(postData); // 将请求数据写入请求体 
       req.end(); // 结束请求,请始终加上
-  http.get( url, fn)              // 使用get方法请求指定url的数据  
+  .get(url ,function(res){           // 使用get方法请求指定url的数据  
+    res.on('data',fn) 
+    res.on('end',fn) 
+  })              
     PS: 基于 http.request 的封装,
       相对于request,将请求方法默认为get,且自动调用req.end();
     Input: 
-      url               str,请求的URL地址 
-      function (res){}  请求的回调  
-        res.on('data',foo) 
-        res.on('end',foo) 
+      url      str,请求的URL地址 
+      fn       请求的回调  
     Output: 
+  server  服务器对象 
+    .listen(port,ip?)              // 服务器监听ip及端口 
+      Input: 
+        port   num,监听的端口 
+        ip     str,监听的ip地址,如: "127.0.0.1" 
+      Output:  
   Example: 
     在该目录下创建一个 index.htm 文件[用于读取] 
     创建Web服务器 

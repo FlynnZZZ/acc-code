@@ -644,7 +644,7 @@ PC端
 自我实现 
   检查对象的自身的属性 
     function checkOwnProp(checkObj,checkProp){
-      // checkObj // 查询的对象 
+      // checkObj   // 查询的对象 
       // checkProp  // 可选,待检测的属性 
       console.log('_________________________________________________');
       var obj = checkObj   

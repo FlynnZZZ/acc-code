@@ -367,13 +367,20 @@
     cursor="num"        指定focus时的光标位置 '1.5.0+'  
     bind:input="fn"   当键盘输入时,触发'input'事件
       函数的返回值将替换输入框的内容 
-      event.detail = {value, cursor}
+      event 
+        .detail 
+          .value 
+          .cursor 
     bind:focus="fn"   输入框聚焦时触发 
       event.detail = {value: value} 
     bind:blur="fn"    输入框失去焦点时触发 
-      e.detail.value  输入框的值 
+      event 
+      .detail  
+        .value   输入框的值 
     bind:confirm="fn" 点击完成按钮时触发 
       event.detail = {value: value}
+    Accu: 
+      表单被'disabled'禁用后不会触发'input'事件 ?  
   <checkbox-group>  多项选择器,内部由多个<checkbox>组成 
     bindchange foo,选中项发生改变时触发'change'事件
       detail = {value:[选中的checkbox的value的数组]}
@@ -449,7 +456,7 @@
   <_switch>  开关选择器 
     PS: switch切换在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭 
     checked="bol"    是否选中,默认:false 
-    type="KW"        样式
+    type="KW"        样式 
       'switch'   默认 
       'checkbox'  
     color="color"    switch颜色,同css的color
@@ -498,7 +505,7 @@
       目前可以绑定的控件有：<button/>, <checkbox/>, <radio/>, <'switch'>。
     for   绑定控件的id 
   <button> 按钮 
-    PS: 默认整体居中、文字居中 
+    PS: 
     size="KW"   按钮大小   
       'default'  默认 
       'mini'
@@ -535,6 +542,12 @@
     bind:getuserinfo="fn"    用户点击该按钮时,会返回获取到的用户信息 '1.3.0+' 
       从返回参数的detail中获取到的值同 wx.getUserInfo  
     bind:contact="fn"        客服消息回调 
+    Accu: 
+      默认整体居中、文字居中 
+      默认存在边框,设置 border: none; 仍存在边框,还需要去掉伪元素设定的边框 
+        button[class~="noborder"]:after {
+          border: 0;
+        }
   ★媒体组件 
   <image/> 图片 
     PS: 默认宽高: 300px,225px

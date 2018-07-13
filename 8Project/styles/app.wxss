@@ -1,0 +1,12 @@
+@import "./styles/reset.wxss";
+@import "./styles/restrain.wxss";
+@import "./styles/style.wxss";
+
+
+/*组件中不允许出现的*/
+button[class~="noborder"]:after {
+  border: 0;
+}
+
+
+

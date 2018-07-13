@@ -368,25 +368,20 @@ MiniProgrom,微信小程序
             'menu'    右上角转发菜单 
           .target  obj,当通过按钮转发时,为该按钮,否则为 undefined  '1.2.4+' 
         return { // 返回值用于自定义转发内容 
-          title: '转发标题'           // 默认:当前小程序名称 
-          ,path: '/page/user?id=123'  // 转发路径,默认:当前页path 
+          title: str         // 可选,转发标题,默认:当前小程序名称 
+          ,path: path        // 可选,转发路径,默认:当前页path 
             // 必须是以'/'开头的完整路径 
-          ,imageUrl: 'path'           // 图片路径
+          ,imageUrl: path    // 可选,图片路径,默认:页面截图 
             默认: 取当前页面,从顶部开始,高度为 80% 屏幕宽度的图像作为转发图片  
             可为: 本地文件路径、代码包文件路径或者网络图片路径,支持PNG及JPG 
-            图片长宽比
+            图片长宽比 
               iOS 显示图片长宽比是 5:4,Android 显示图片长宽比是 215:168。
               高度超出部分会从底部裁剪。
               推荐使用 Android 图片长宽比,可保证图片在两个平台都完整显示,
               其中 iOS 底部会出现一小段白色
-          ,sucess: function(res){  // 可选,成功的回调 
-            res 
-          }
-          ,fail: function(info){   // 可选,失败的回调 
-            info 
-              
-          } 
-          ,complete: function(){ } // 可选,最终的回调 
+          ,sucess: function(back){}   // 可选,成功的回调 
+          ,fail: function(info){}     // 可选,失败的回调 
+          ,complete: function(arg){}  // 可选,最终的回调 
         }
       }
       ,onTabItemTap: function(tab){       // 当前是tab页时,点击tab时触发  

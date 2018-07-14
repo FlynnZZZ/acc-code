@@ -566,7 +566,7 @@ setImmediate(fn ,param1?,..)    numId,推迟调用,相当于 setTimeout(fn ,0)
     param  作为fn的若干个参数传入  
   Output: numId   num,推迟调用的id,用来清除该调用 
 clearImmediate(numId)           清除推迟调用 
-◆Props
+◆其他全局量 
 __filename 当前正在执行的脚本的路径和文件名 
   PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
     在模块中,返回的值是模块文件的路径 

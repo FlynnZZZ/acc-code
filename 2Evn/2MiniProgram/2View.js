@@ -1,6 +1,54 @@
-◆'Component'内置组件: 可通过组合基础组件进行快速开发 
-  PS: 遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' ? 
-  ★视图组件 
+◆'Component'&"Tag"内置组件和标签 
+  PS: 可通过组合基础组件进行快速开发 
+    遵守H5的属性使用原则,当布尔值的属性只用写属性名即表示为'true' 
+    单标签也可写成双标签的形式,如 <input></input>
+  原生组件: 由客户端原生参与渲染的组件 
+    层级是最高的,不能通过 z-index 控制层级,可使用 cover-view cover-image覆盖在上面。
+基础内容 
+  <text>       文本 
+    PS: 该组件内只支持<text>嵌套;除了文本节点以外的其他节点都无法长按选中;
+      各个操作系统的空格标准并不一致 
+      长按复制功能尚未实现
+    selectable="bol"  是否文本可选,默认:false  '1.1.0+' 
+    decode="bol"  是否解码,默认:false '1.4.0+' 
+      可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
+    space="KW"   显示连续空格及方式  '1.4.0+' 
+      'false' 默认值,不显示连续空格 
+      'ensp'  中文字符空格一半大小 
+      'emsp'  中文字符空格大小 
+      'nbsp'  根据字体设置的空格大小 
+  <icon/>      图标 
+    type="KW"   icon的类型 
+      'success'
+      'success_no_circle'
+      'info'
+      'warn'
+      'waiting'
+      'cancel'
+      'download'
+      'search'
+      'clear'
+    size="num"  icon的大小,单位:px,默认:23 
+    color=""    icon的颜色 
+  <navigator>  页面链接 
+    url="path"    跳转链接 
+      相对地址,'./'表示当前页面 
+    open-type="KW"     跳转方式 
+      'navigate'  对应 wx.navigateTo() 的功能,默认值  
+      'redirect'  对应 wx.redirectTo() 的功能 
+      'switchTab' 对应 wx.switchTab() 的功能 
+        PS: 打开tabBar中对应的页面必须使用该方式
+      'reLaunch'  对应 wx.reLaunch() 的功能 ['1.1.0+'] 
+      'navigateBack' 对应wx.navigateBack()的功能 ['1.1.0+'] 
+    delta="num"   表示回退的层数[当'open-type'为'navigateBack'时有效] 
+    hover-class="" 指定点击时的样式类 
+      'navigator-hover' 默认值 
+        {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;} 
+      "none"      没有点击态效果 
+    hover-stop-propagation="bol" 是否阻止本节点的祖先节点出现点击态,默认:false '1.5.0+' 
+    hover-start-time="num"   按住后多久出现点击态,单位:ms,默认:50  
+    hover-stay-time="num"    手指松开后点击态保留时间,单位:ms,默认:600 
+视图组件 
   <view>         视图容器 
     hover-stop-propagation='<bol>' 是否阻止节点的祖先节点出现点击态,默认:false  '1.5.0+' ? 
     hover-class="<str>"   指定点击后的样式类 
@@ -184,150 +232,7 @@
       建议子节点不要溢出父节点
       暂不支持css动画 
     src  图标路径,支持临时路径,暂不支持base64与网络地址 
-  ★基础内容 
-  <icon/>   图标 
-    type="KW"   icon的类型 
-      'success'
-      'success_no_circle'
-      'info'
-      'warn'
-      'waiting'
-      'cancel'
-      'download'
-      'search'
-      'clear'
-    size="num"  icon的大小,单位:px,默认:23 
-    color=""    icon的颜色 
-  <text>    文本 
-    PS: <text>组件内只支持<text>嵌套;除了文本节点以外的其他节点都无法长按选中;
-      各个操作系统的空格标准并不一致 
-      长按复制功能尚未实现
-    selectable="bol"  是否文本可选,默认:false  '1.1.0+' 
-    decode="bol"  是否解码,默认:false '1.4.0+' 
-      可解析的有 '&nbsp;' '&lt;' '&gt;' '&amp;' '&apos;' '&ensp;' '&emsp;'
-    space="KW"   显示连续空格及方式  '1.4.0+' 
-      'false' 默认值,不显示连续空格 
-      'ensp'  中文字符空格一半大小 
-      'emsp'  中文字符空格大小 
-      'nbsp'  根据字体设置的空格大小 
-  <rich-text>  富文本 '1.4.0+' 
-    PS: 组件内屏蔽所有节点的事件 
-      如果使用了不受信任的HTML节点,该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
-    nodes="arr/str"  节点列表或HTMLStr,默认值:[] 
-      PS: 推荐使用arr类型,组件会将str类型转换为arr,因而性能会有所下降 
-      现支持两种节点: 
-      ★type="node" 元素节点,默认值 
-      name      str,标签名,支持部分受信任的HTML节点,必选[大小写不敏感] 
-        'img'           alt,src,height,width
-        'ol'            start,type
-        'table'         width
-        'th'            colspan,height,rowspan,width
-        'td'            colspan,height,rowspan,width
-        'colgroup'      span,width
-        'col'           span,width
-        'tbody' 
-        'tfoot' 
-        'thead' 
-        'tr' 
-        'a' 
-        'abbr' 
-        'b' 
-        'blockquote' 
-        'br' 
-        'code' 
-        'dd' 
-        'del' 
-        'div' 
-        'dl' 
-        'dt' 
-        'em' 
-        'fieldset' 
-        'h1' 
-        'h2' 
-        'h3' 
-        'h4' 
-        'h5' 
-        'h6' 
-        'hr' 
-        'i' 
-        'ins' 
-        'label' 
-        'legend' 
-        'li' 
-        'p' 
-        'q' 
-        'span' 
-        'strong' 
-        'sub' 
-        'sup' 
-        'ul'
-      attrs     obj,属性 
-        PS: 支持部分受信任的属性,如class和style,不支持id属性 
-        {
-          'class' : '',
-          'style' : '',
-        }
-      children  arr,子节点列表,结构和'nodes'一致 
-        [
-          {
-            
-          }
-        ]
-      ★type="text" 文本节点 
-      text      str,文本,必选 
-    Example: 
-      <rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>
-      Page({
-        data: {
-          nodes: [
-            {
-              type : 'node',
-              name: 'div',
-              attrs: {
-                class: 'div_class',
-                style: 'line-height: 60px; color: red;'
-              },
-              children: [
-                {
-                  type: 'text',
-                  text: 'Hello&nbsp;World!'
-                }
-              ]
-            }
-          ]
-        },
-        tap() {
-          console.log('tap')
-        }
-      })
-    支持默认事件,包括：'tap''touchstart''touchmove''touchcancel''touchend'和'longtap' 
-  <progress>   进度条 
-    percent="float"    百分比,范围:0-100  
-    show-info ="bol"   是否在进度条右侧显示百分比,默认: false 
-    stroke-width="num" 进度条线的宽度,单位:px,默认:6 
-    color=""           进度条颜色,默认:'#09BB07' 
-    activeColor=""     已选择的进度条的颜色
-    backgroundColor="" 未选择的进度条的颜色
-    active =""         进度条从左往右的动画,默认:false  
-  <navigator>  页面链接 
-    url="path"    跳转链接 
-      相对地址,'./'表示当前页面 
-    open-type="KW"     跳转方式 
-      'navigate'  对应 wx.navigateTo() 的功能,默认值  
-      'redirect'  对应 wx.redirectTo() 的功能 
-      'switchTab' 对应 wx.switchTab() 的功能 
-        PS: 打开tabBar中对应的页面必须使用该方式
-      'reLaunch'  对应 wx.reLaunch() 的功能 ['1.1.0+'] 
-      'navigateBack' 对应wx.navigateBack()的功能 ['1.1.0+'] 
-    delta="num"   表示回退的层数[当'open-type'为'navigateBack'时有效] 
-    hover-class="" 指定点击时的样式类 
-      'navigator-hover' 默认值 
-        {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;} 
-      "none"      没有点击态效果 
-    hover-stop-propagation="bol" 是否阻止本节点的祖先节点出现点击态,默认:false '1.5.0+' 
-    hover-start-time="num"   按住后多久出现点击态,单位:ms,默认:50  
-    hover-stay-time="num"    手指松开后点击态保留时间,单位:ms,默认:600 
-  ★表单组件 
+表单组件 
   <form>   表单 
     PS: 当点击<form>内'formType'为'submit'的<button>组件时,会提交表单 
     report-submit  是否返回formId用于发送模板消息 
@@ -548,8 +453,8 @@
         button[class~="noborder"]:after {
           border: 0;
         }
-  ★媒体组件 
-  <image/> 图片 
+媒体组件 
+  <image> 图片 
     PS: 默认宽高: 300px,225px
     src="path"   图片资源地址 
     mode="KW"   图片裁剪、缩放的模式 
@@ -601,7 +506,7 @@
     bindtimeupdate foo,当播放进度改变时触发'timeupdate'事件 
       detail = {currentTime, duration}
     bindended      foo,当播放到末尾时触发'ended'事件 
-  <video> 视频 [原生组件] 
+  <video>  视频 [原生组件] 
     PS: video标签认宽度300px、高度225px,设置宽高需要通过wxss设置width和height 
       video 组件是由客户端创建的原生组件,它的层级是最高的,不能通过 z-index 控制层级 ? 
       请勿在scroll-view中使用video组件
@@ -718,7 +623,7 @@
     bind:longtap="fn"     手指长按'500ms'之后触发,触发了长按事件后进行移动不会触发屏幕的滚动
     bind:error="fn"       当发生错误时触发'error'事件
       detail = {errMsg: 'something wrong'}
-  <map> 地图 [原生组件] 
+  <map>    地图 [原生组件] 
     PS: 客户端创建的原生组件,它的层级是最高的
       请勿在 scroll-view 中使用 map 组件。 css 动画对 map 组件无效。
       map 组件使用的经纬度是火星坐标系,调用 wx.getLocation 接口需要指定 type 为 gcj02
@@ -785,7 +690,132 @@
       top 距离地图的上边界多远 Number 否 默认为0
       width 控件宽度 Number 否 默认为图片宽度
       height 控件高度 Number 否 默认为图片高度
-  ★开放能力 
+功能组件 
+  <progress>   进度条 
+    percent="float"    百分比,范围:0-100  
+    show-info ="bol"   是否在进度条右侧显示百分比,默认: false 
+    stroke-width="num" 进度条线的宽度,单位:px,默认:6 
+    color=""           进度条颜色,默认:'#09BB07' 
+    activeColor=""     已选择的进度条的颜色
+    backgroundColor="" 未选择的进度条的颜色
+    active =""         进度条从左往右的动画,默认:false  
+  <rich-text>  富文本 '1.4.0+' 
+    PS: 组件内屏蔽所有节点的事件 
+      如果使用了不受信任的HTML节点,该节点及其所有子节点将会被移除;img 标签仅支持网络图片 
+    nodes="arr/str"  节点列表或HTMLStr,默认值:[] 
+      PS: 推荐使用arr类型,组件会将str类型转换为arr,因而性能会有所下降 
+      现支持两种节点: 
+      ★type="node" 元素节点,默认值 
+      name      str,标签名,支持部分受信任的HTML节点,必选[大小写不敏感] 
+        'img'           alt,src,height,width
+        'ol'            start,type
+        'table'         width
+        'th'            colspan,height,rowspan,width
+        'td'            colspan,height,rowspan,width
+        'colgroup'      span,width
+        'col'           span,width
+        'tbody' 
+        'tfoot' 
+        'thead' 
+        'tr' 
+        'a' 
+        'abbr' 
+        'b' 
+        'blockquote' 
+        'br' 
+        'code' 
+        'dd' 
+        'del' 
+        'div' 
+        'dl' 
+        'dt' 
+        'em' 
+        'fieldset' 
+        'h1' 
+        'h2' 
+        'h3' 
+        'h4' 
+        'h5' 
+        'h6' 
+        'hr' 
+        'i' 
+        'ins' 
+        'label' 
+        'legend' 
+        'li' 
+        'p' 
+        'q' 
+        'span' 
+        'strong' 
+        'sub' 
+        'sup' 
+        'ul'
+      attrs     obj,属性 
+        PS: 支持部分受信任的属性,如class和style,不支持id属性 
+        {
+          'class' : '',
+          'style' : '',
+        }
+      children  arr,子节点列表,结构和'nodes'一致 
+        [
+          {
+            
+          }
+        ]
+      ★type="text" 文本节点 
+      text      str,文本,必选 
+    Example: 
+      <rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>
+      Page({
+        data: {
+          nodes: [
+            {
+              type : 'node',
+              name: 'div',
+              attrs: {
+                class: 'div_class',
+                style: 'line-height: 60px; color: red;'
+              },
+              children: [
+                {
+                  type: 'text',
+                  text: 'Hello&nbsp;World!'
+                }
+              ]
+            }
+          ]
+        },
+        tap() {
+          console.log('tap')
+        }
+      })
+    支持默认事件,包括：'tap''touchstart''touchmove''touchcancel''touchend'和'longtap' 
+  <picker-view> 嵌入页面的滚动选择器 [原生组件] 
+    PS: 其中只可放置<picker-view-column>组件,其他节点不会显示 
+      滚动时在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭
+    value=""    arr,数组中的数字依次表示... 
+      数字大于 picker-view-column 可选项长度时,选择最后一项 
+    indicator-style=""  设置选择器中间选中框的样式 
+    indicator-class=""  设置选择器中间选中框的类名 '1.1.0+'  
+    mask-style=""       设置蒙层的样式 '1.5.0+' 
+    mask-class=""       设置蒙层的类名 '1.5.0+' 
+    bind:change="fn"    当滚动选择,value改变时触发'change'事件
+      event.detail = {value: value}；
+      value为数组,表示 picker-view 内的 picker-view-column 当前选择的是第几项[下标从 0 开始]
+    <picker-view-column> 滚动选择项 
+      仅可放置于<picker-view>中,其子节点的高度会自动设置成与<picker-view>的选中框的高度一致 
+  <contact-button>  客服会话按钮,点击后会进入客服会话 
+    PS: <button>组件通过设置open-type="contact"也可进入客服会话  
+    size   按钮大小[有效值'18-27'],单位px,默认'18' 
+    type   按钮的样式类型 
+      'default-dark'  默认 
+      'default-light'
+    session-from str,用户从该按钮进入会话时,开发者将收到带上本参数的事件推送 
+      本参数可用于区分用户进入客服会话的来源。
+  <open-data> 用于展示微信开放的数据 '1.4.0+' 
+    type       str,开放数据类型
+      'groupName' 拉取群名称[只有当前用户在此群内才能拉取到群名称] ['1.4.0+'] 
+    open-gid   str,群id,当 type="groupName" 时生效, 
   <web-view> 承载网页的容器 '1.6.4+' // TODO: 
     PS: 会自动铺满整个小程序页面; 个人类型与海外类型的小程序暂不支持使用 
     属性名      类型  默认值  说明
@@ -885,111 +915,83 @@
     每个页面只能有一个<web-view/>,<web-view/>会自动铺满整个页面,并覆盖其他组件。
     <web-view/>网页与小程序之间不支持除JSSDK提供的接口之外的通信。
     在iOS中,若存在JSSDK接口调用无响应的情况,可在<web-view/>的src后面加个#wechat_redirect解决。
-  ★其他组件 
-  <open-data> 用于展示微信开放的数据 '1.4.0+' 
-    type       str,开放数据类型
-      'groupName' 拉取群名称[只有当前用户在此群内才能拉取到群名称] ['1.4.0+'] 
-    open-gid   str,群id,当 type="groupName" 时生效, 
-  <contact-button>  客服会话按钮,点击后会进入客服会话 
-    PS: <button>组件通过设置open-type="contact"也可进入客服会话  
-    size   按钮大小[有效值'18-27'],单位px,默认'18' 
-    type   按钮的样式类型 
-      'default-dark'  默认 
-      'default-light'
-    session-from str,用户从该按钮进入会话时,开发者将收到带上本参数的事件推送 
-      本参数可用于区分用户进入客服会话的来源。
-  ★原生组件 
-    PS: 是由客户端原生参与组件的渲染 
-      层级是最高的,不能通过 z-index 控制层级。可使用 cover-view cover-image覆盖在上面。
-  <picker-view> 嵌入页面的滚动选择器 [原生组件] 
-    PS: 其中只可放置<picker-view-column>组件,其他节点不会显示 
-      滚动时在iOS自带振动反馈,可在系统设置 -> 声音与触感 -> 系统触感反馈中关闭
-    value=""    arr,数组中的数字依次表示... 
-      数字大于 picker-view-column 可选项长度时,选择最后一项 
-    indicator-style=""  设置选择器中间选中框的样式 
-    indicator-class=""  设置选择器中间选中框的类名 '1.1.0+'  
-    mask-style=""       设置蒙层的样式 '1.5.0+' 
-    mask-class=""       设置蒙层的类名 '1.5.0+' 
-    bind:change="fn"    当滚动选择,value改变时触发'change'事件
-      event.detail = {value: value}；
-      value为数组,表示 picker-view 内的 picker-view-column 当前选择的是第几项[下标从 0 开始]
-    <picker-view-column> 滚动选择项 
-      仅可放置于<picker-view>中,其子节点的高度会自动设置成与<picker-view>的选中框的高度一致 
-  ★共同属性类型: 所有组件都有的属性 
-    id="str"      组件的唯一标示 保持整个页面唯一
-    class="str"   组件的样式类   在对应的 WXSS 中定义的样式类
-    style="str"   组件的内联样式 可以动态设置的内联样式
-    hidden="bol"  组件是否显示   所有组件默认显示
-    data-xxx="any"  自定义属性     组件上触发的事件时,会发送给事件处理函数
-    bind:xxx/catch:xxx="fn"  组件的事件     详见事件
-<template name="templateName"></template> WXML模板 
-  PS: 可在模板中定义代码片段,然后在不同的地方调用 
-  定义模板: 使用'name'属性定义模板的名字,在<template/>内定义代码片段 
-    <template name="msgItem">
+共有属性 
+  id="str"      组件唯一标示  保持整个页面唯一
+  class="str"   组件的样式类  在对应的 WXSS 中定义的样式类
+  style="str"   组件内联样式  可以动态设置的内联样式
+  hidden="bol"  组件是否显示  所有组件默认显示
+  data-xxx="any"  自定义属性  组件上触发的事件时,会发送给事件处理函数
+  bind:xxx="fn"   组件事件    详见事件
+  catch:xxx="fn"  组件事件    详见事件
+模版 
+  <template > 定义/使用模板 
+    PS: 在模板中定义代码片段,可在不同的地方调用 
+    ★定义模版 
+      <template name="msgItem">
       <view>
         <text> {{index}}: {{msg}} </text>
         <text> Time: {{time}} </text>
       </view>
-    </template>
-  使用模板: 'is'属性声明使用的模板,'data'属性将模板所需要的数据传入 
-    <template is="msgItem" data="{{...item}}"/>
-    Page({
-      data: {
-        item: {
-          index: 0,
-          msg: 'this is a template',
-          time: '2016-09-15'
+      </template>
+    name="str"    定义模板的名称  
+    ★使用模版 
+      <template is="msgItem" data="{{...item}}"/>
+      Page({
+        data: {
+          item: {
+            index: 0,
+            msg: 'this is a template',
+            time: '2016-09-15'
+          }
         }
-      }
-    })
-  
-    is属性可以使用Mustache语法,在运行时来决定具体需要渲染哪个模板 
-    <template name="odd"> 
-      <view> odd </view>
-    </template>
-    <template name="even"> 
-      <view> even </view>
-    </template>
-    <block wx:for="{{[1, 2, 3, 4, 5]}}">
-      <template is="{{item % 2 == 0 ? 'even' : 'odd'}}"/>
-    </block>
-  模板的作用域: 模板拥有自己的作用域,只能使用data传入的数据 
-<import src="xxx.wxml"/>使用目标文件定义的<template>模版 
-  PS: 不可绑定引入页的JS数据 
-    可自定义数据,但不能从引入页JS中绑定数据;
-    可绑定事件,在引入后页面的JS中定义响应函数; 
-  Example: 
-    // tpl-aoo.wxml 中  
-    <template name="aoo">
-    <view wx:for={{key2}}>{{key1}}</view>
-    </template>  
-    // boo.wxml 中 
-    <import src="./tpl-aoo.wxml"/>       // 引入 
-    <template is="aoo" data="{{key1:val1,key2:val2,...}}"></template> // 使用,并传入数据 
-  作用域 
-    只会import目标文件中定义的template,而不会import目标文件import的template 
-    // <!-- A.wxml -->
-    <template name="A"> <text> A template </text> </template>
-    // <!-- B.wxml -->
-    <import src="a.wxml"/>
-    <template name="B"> <text> B template </text> </template>
-    // <!-- C.wxml -->
-    <import src="b.wxml"/>
-    <template is="A"/>  // <!-- Error! Can not use tempalte when not import A. -->
-    <template is="B"/>
-<include src="xxx.wxml"/> 将目标文件除了<template/>的整个代码引入 
-  相当于是拷贝到include位置,可绑定引入页的JS数据 
-  Example:
-    <view> header </view>  // header.wxml  
-    <view> footer </view>  // footer.wxml 
-    // index.wxml 中 
-    <include src="header.wxml"/>
-    <view> body </view>
-    <include src="footer.wxml"/>
+      })
+    is="str"        指定使用的模版,和'name'属性的值对应 
+      可使用Mustache语法,动态指定渲染的模板 
+    data="key-val"  传入模板所需数据 
+      模版内直接使用传入的key来渲染数据 
+    模板的作用域: 模板拥有自己的作用域,只能使用data传入的数据  
+  <import src="xxx.wxml"/>  引入目标文件定义的<template>模版 
+    PS: 不可绑定引入页的JS数据 
+      可自定义数据,但不能从引入页JS中绑定数据;
+      可绑定事件,在引入后页面的JS中定义响应函数; 
+    Example: 
+      // tpl-aoo.wxml 中  
+      <template name="aoo">
+      <view wx:for={{key2}}> {{key1}} </view>
+      </template>  
+      // boo.wxml 中 
+      <import src="./tpl-aoo.wxml"/>       // 引入 
+      <template is="aoo" data="{{key1:val1,key2:val2,...}}"></template> // 使用,并传入数据 
+    作用域 
+      只会import目标文件中定义的template,而不会import目标文件import的template 
+      // <!-- A.wxml -->
+      <template name="A"> <text> A template </text> </template>
+      // <!-- B.wxml -->
+      <import src="a.wxml"/>
+      <template name="B"> <text> B template </text> </template>
+      // <!-- C.wxml -->
+      <import src="b.wxml"/>
+      <template is="A"/>  // <!-- Error! Can not use tempalte when not import A. -->
+      <template is="B"/>
+  <include src="xxx.wxml"/> 引入目标文件除了<template/>模版的wxml 
+    相当于是拷贝到include位置,可绑定引入页的JS数据 
+    Example:
+      <view> header </view>  // header.wxml  
+      <view> footer </view>  // footer.wxml 
+      // index.wxml 中 
+      <include src="header.wxml"/>
+      <view> body </view>
+      <include src="footer.wxml"/>
+<block> 组件块,用于组件包裹 [见指令语法] 
+  并非组件,仅是一包装元素,不会在页面中做任何渲染,只接受控制属性 
 ◆指令语法 
-  {{val}}      "Mustache"语法,插值 
-    适用于'组件文本'/'组件属性' 
-    控制class  class="aoo {{boo}}" 
+"Mustache"语法,插值
+  组件文本替换
+    <view> {{val}} </view>
+  组件属性替换
+    class="aoo {{boo}}" 
+  事件函数替换  
+列表渲染 
   wx:for="{{arr/obj/str}}"  列表渲染 
     当前下标默认为: 'index';当前项默认为: 'item' 
       <view wx:for="{{items}}">
@@ -1015,14 +1017,14 @@
       以确保使组件保持自身的状态,并提高列表渲染效率 
     _key   项目中的字段,即表示为'item[key]',该值需是列表中唯一的字符串或数字,且不能动态改变 
     *this 保留关键字,表示'item'本身,这种表示需item是一个唯一的字符串或者数字
+条件渲染 
   wx:if="{{val}}"    条件渲染 
     PS: wx:if 是惰性的,如果在初始渲染条件为 false,框架什么也不做,在条件第一次变成真的时候才开始局部渲染
   wx:elif="{{val}}"  条件渲染 
   wx:else            条件渲染 
     和 wx:if 必须相邻 
   <block wx:if="{{val}}"> </block>  多组件条件渲染 
-    PS: 一次性判断多个组件标签,可用一个<block/>标签将多个组件包装起来,并使用wx:if控制属性 
-      <block/>并不是一个组件,它仅仅是一个包装元素,不会在页面中做任何渲染,只接受控制属性。
+    PS: 可一次性控制多个组件标签 
     <block wx:if="{{true}}">
       <view> view1 </view>
       <view> view2 </view>
@@ -1100,9 +1102,9 @@
         inner view
       </view>
     </view>
-'evt'事件对象 
+'event'事件对象 
   PS: 如无特殊说明,当组件触发事件时,逻辑层绑定该事件的处理函数会收到一个事件对象 
-  ◆'BaseEvent'基础事件对象属性列表 
+  'BaseEvent'基础事件对象属性列表 
   .type           事件类型
   .timeStamp      页面打开到触发事件所经过的ms数 
   .target         触发事件的源组件,触发事件的组件的一些属性值集合  
@@ -1114,13 +1116,13 @@
     .tagName  当前组件的类型
     .dataset  当前组件上由data-开头的自定义属性组成的集合
       'data-*'不区分大小写,大写会自动转成小写加'-',如data-element-type
-  ◆'CustomEvent'自定义事件对象属性列表[继承 BaseEvent] 
+  'CustomEvent'自定义事件对象属性列表[继承 BaseEvent] 
   .detail         额外的信息 
     自定义事件所携带的数据,
     如表单组件的提交事件会携带用户的输入,媒体的错误事件会携带错误信息,
     详见组件定义中各个事件的定义。
     点击事件的detail 带有的 x, y 同 pageX, pageY 代表距离文档左上角的距离。
-  ◆'TouchEvent'触摸事件对象属性列表[继承 BaseEvent]：
+  'TouchEvent'触摸事件对象属性列表[继承 BaseEvent]：
   .touches         触摸事件,当前停留在屏幕中的触摸点信息的数组  
     PS: 数组每个元素为一个 Touch 对象,表示当前停留在屏幕上的触摸点 
     Touch对象
@@ -1132,7 +1134,7 @@
   .changedTouches  触摸事件,当前变化的触摸点信息的数组 
     changedTouches 数据格式同 touches,表示有变化的触摸点,
     如从无变有[touchstart],位置变化[touchmove],从有变无[touchend/touchcancel] 
-  ◆特殊事件： 
+  特殊事件： 
   <canvas/> 中的触摸事件不可冒泡,故没有 currentTarget 
   canvas 触摸事件中携带的 touches 是'CanvasTouch'数组 
     CanvasTouch对象 

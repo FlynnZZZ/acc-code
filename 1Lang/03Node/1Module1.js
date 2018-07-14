@@ -1,3 +1,4 @@
+第三方模块: 通过npm安装到本地 
 cheerio,html文件源码操作模块 
   PS:像使用jquery一样方便快捷地操作抓取到的源码
   $ npm i -g cheerio    // 安装cheerio模块

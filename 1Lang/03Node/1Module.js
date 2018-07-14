@@ -1,10 +1,13 @@
 模块: Nodejs应用程序的基本组成部分,模块间可相互调用 
   PS: 一个NodeJS文件[可能是JS代码、JSON或编译过的C/C++扩展等]就是一个模块
-    按照CommonJS规范定义和使用模块
+    可分为: 核心模块,第三方模块和自定义的JS文件 
+    按照CommonJS规范定义和使用模块 
 ◆核心模块: Node自带模块不用安装即可使用  
   源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
   核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
-const events = require('events')   事件模块 
+// 基础类 
+const Promise = require("Promise")  同步形式执行异步操作　
+const events = require('events')  事件模块 
   PS: events 模块只提供了一个对象: events.EventEmitter, 
     EventEmitter 的核心就是事件触发与事件监听器功能的封装;
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
@@ -79,102 +82,10 @@ const events = require('events')   事件模块
   继承 EventEmitter 
     大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
     包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-const url = require('url')  用于解析URL  
-  .parse(url,bol1?,bol2?)    // obj,将URL解析为对象[方便后续其他操作]
-    Input: 
-      url      str,传入需要解析的URL字符串  
-      bol1     可选,是否将'query'字段转换为对象表示,默认:false 
-      bol2     可选,当URL不全时更智能的识别,默认:false  
-    Output: 返回一对象,属性枚举如下:  
-      // url.parse("https://www.baidu.com?key=val");
-      {          
-        protocol: 'https:',            // str,协议
-        slashes: true,                 // bol,是否有协议的双斜线
-        host: 'www.baidu.com',         // str,ip地址或域名
-        hostname: 'www.baidu.com',     // str,主机名
-        port: null,                    // num,端口,默认:80 显示为null,否则会指明
-        path: '/',                     // 路径
-        pathname: '/',                 // 路径名,
-        search: '?key=val',            // str,查询字符串 
-        query: 'key=val',              // str|obj,查询字符串
-          当第二个参数为true时,则为对象形式 
-        hash: null,                    // hash值,锚点
-        auth: null,                    // 
-        href: 'https://www.baidu.com/' // str,完整超链接
-      } 
-  .format(obj)               // str,将url对象格式化为url字符串 
-    Input: obj   url.parse 后的url对象 
-    Output: str,将对象形式还原成字符串的URL 
-    Example: 
-      var obj = url.parse("https://www.baidu.com");
-      url.format(obj); // 'https://www.baidu.com/'
-  .resolve(path1,path2)  // str,拼接为URL 
-    Input: 
-      path1  str,地址 
-      path2  str,地址  
-    Output: str,拼接后的地址
-    Example: 
-      url.resolve("https://imooc.com","/course/list");
-      // 'https://imooc.com/course/list'
-      
-      url.resolve('/one/two/three', 'four')
-      // '/one/two/four'
-      
-      url.resolve('http://example.com/', '/one')
-      // 'http://example.com/one'
-      
-      url.resolve('http://example.com/one/', 'two')
-      // 'http://example.com/one/two'
-      
-      url.resolve('http://example.com/one', '/two')
-      // 'http://example.com/two'
-const querystring = require("querystring")  解析URL的查询字符串  
-  .stringify(obj,link1?,link2?)         对象序列化为字符串 
-    Input: 
-      obj   需序列化的对象
-      link1 可选,参数连接符,默认:'&' 
-      link2 可选,键值连接符,默认:'=' 
-    Output: str,序列化成的字符串 
-    Example: 
-      querystring.stringify({
-        name:"Scott",
-        course:["Java","Node"],
-        from:""
-      })
-      // 'name=Scott&course=Java&course=Node&from='
-  .parse(query,link1?,link2?,options?)  字符串解析成为对象 
-    Input: 
-      query    str,需要解析的字符串
-      link1    str,可选,键值连接符,默认:'&' 
-        Example:
-        var str = 'name=Scott-course=Java-course=Node-from=';
-        var obj1 = querystring.parse(str);
-        var obj2 = querystring.parse(str,'-');
-        console.log(obj1,'/n',obj2);
-        // { name: 'Scott-course=Java-course=Node-from=' } 
-        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-      link2    str,可选,字段连接符,默认:'=' 
-      options  obj,可选,其他配置  
-    Output: obj,解析成键值对形式的对象
-    Example: 
-      querystring.parse('name=Scott&course=Java&course=Node&from=');
-      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
-  .escape(str)    转义为URL可用的字符串 
-    Input: str  待转义的字符串 
-    Output: str,转义后的字符串  
-    Example:  
-      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
-  .unescape(str)  反转义 
-    Example: 
-      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
-  .unescapeBuffer()  
-  .encode() 
-  .decode() 
-stream,流,用于暂存和移动数据[以bufer的形式存在] 
+const steam = require('stream')   流,用于暂存和移动数据[以bufer的形式存在] 
   PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
-  var steam = require('stream');  // 
   四种Stream流类型:
     Readable  可读流,读取数据并暂存于bufer中 
       可'pause'和'resume' 
@@ -285,8 +196,8 @@ stream,流,用于暂存和移动数据[以bufer的形式存在]
         写入完成.
       查看 output.txt 文件的内容:
         菜鸟教程官网地址:www.runoob.com
-net,底层的网络通信工具,包含创建服务器/客户端的方法 
-  const net = require("net")       // 引入 net模块
+const net = require("net") 底层的网络通信工具 
+  PS: 包含创建服务器/客户端的方法 
   const server = new net.Server()  // 创建服务器 
     .listen(port,host,fn)      // 监听请求并执行回调 
       Input: 
@@ -391,6 +302,411 @@ net,底层的网络通信工具,包含创建服务器/客户端的方法
       client.destroy(); 
     });        
     client.on('close', function() { }) 
+// 工具类 
+const url = require('url')    用于解析URL  
+  .parse(url,bol1?,bol2?)    // obj,将URL解析为对象[方便后续其他操作]
+    Input: 
+      url      str,传入需要解析的URL字符串  
+      bol1     可选,是否将'query'字段转换为对象表示,默认:false 
+      bol2     可选,当URL不全时更智能的识别,默认:false  
+    Output: 返回一对象,属性枚举如下:  
+      // url.parse("https://www.baidu.com?key=val");
+      {          
+        protocol: 'https:',            // str,协议
+        slashes: true,                 // bol,是否有协议的双斜线
+        host: 'www.baidu.com',         // str,ip地址或域名
+        hostname: 'www.baidu.com',     // str,主机名
+        port: null,                    // num,端口,默认:80 显示为null,否则会指明
+        path: '/',                     // 路径
+        pathname: '/',                 // 路径名,
+        search: '?key=val',            // str,查询字符串 
+        query: 'key=val',              // str|obj,查询字符串
+          当第二个参数为true时,则为对象形式 
+        hash: null,                    // hash值,锚点
+        auth: null,                    // 
+        href: 'https://www.baidu.com/' // str,完整超链接
+      } 
+  .format(obj)               // str,将url对象格式化为url字符串 
+    Input: obj   url.parse 后的url对象 
+    Output: str,将对象形式还原成字符串的URL 
+    Example: 
+      var obj = url.parse("https://www.baidu.com");
+      url.format(obj); // 'https://www.baidu.com/'
+  .resolve(path1,path2)  // str,拼接为URL 
+    Input: 
+      path1  str,地址 
+      path2  str,地址  
+    Output: str,拼接后的地址
+    Example: 
+      url.resolve("https://imooc.com","/course/list");
+      // 'https://imooc.com/course/list'
+      
+      url.resolve('/one/two/three', 'four')
+      // '/one/two/four'
+      
+      url.resolve('http://example.com/', '/one')
+      // 'http://example.com/one'
+      
+      url.resolve('http://example.com/one/', 'two')
+      // 'http://example.com/one/two'
+      
+      url.resolve('http://example.com/one', '/two')
+      // 'http://example.com/two'
+const path = require("path")  处理文件路径 
+  PS:
+  .normalize(p)  规范化路径,注意'..' 和 '.'.
+  .join([path1][, path2][, ...])  str,返回连接路径 
+    该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
+  .resolve([path1],path2) 将path2解析为绝对路径 
+    Example:
+    var path1 = path.resolve('e://a','./b')
+    console.log(path1); // e://a/b 
+  .isAbsolute(path) 判断参数 path 是否是绝对路径.
+  .relative(from, to) 用于将相对路径转为绝对路径.
+  .dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
+  .basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
+  .extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
+    若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
+  .parse(<path>)  解析文件路径 
+    Input: path  str,解析的文件路径 
+    Output: 文件路径的对象表示 
+      root: 根目录 
+      dir: 目录部分
+      base: 文件名及扩展名  
+      name: 文件名 
+      ext: 扩展名 
+    Example: 
+      'D:\\asserts\\img\\qq.png'
+      { 
+        root: 'D:\\',
+        dir: 'D:\\asserts\\img',
+        base: 'qq.png',
+        ext: '.png',
+        name: 'qq' 
+      }
+  .format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
+  .sep 平台的文件路径分隔符,'\\' 或 '/'
+  .delimiter 平台的分隔符, ; or ':'.
+  .posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
+  .win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
+  Example:
+    创建 main.js 文件,代码如下所示:
+      var path = require("path");
+      // 格式化路径
+      console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
+      // 连接路径
+      console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
+      // 转换为绝对路径
+      console.log('resolve:'+path.resolve('main.js'));
+      // 路径中文件的后缀名
+      console.log('ext name:'+path.extname('main.js'));
+    代码执行结果如下:
+      normalization : /test/test1/2slashes/1slash
+      joint path : /test/test1/2slashes/1slash
+      resolve : /web/com/1427176256_27423/main.js
+      ext name : .js    
+const qs = require("querystring")  解析URL的查询字符串  
+  .stringify(obj,link1?,link2?)         对象序列化为字符串 
+    Input: 
+      obj   需序列化的对象
+      link1 可选,参数连接符,默认:'&' 
+      link2 可选,键值连接符,默认:'=' 
+    Output: str,序列化成的字符串 
+    Example: 
+      querystring.stringify({
+        name:"Scott",
+        course:["Java","Node"],
+        from:""
+      })
+      // 'name=Scott&course=Java&course=Node&from='
+  .parse(query,link1?,link2?,options?)  字符串解析成为对象 
+    Input: 
+      query    str,需要解析的字符串
+      link1    str,可选,键值连接符,默认:'&' 
+        Example:
+        var str = 'name=Scott-course=Java-course=Node-from=';
+        var obj1 = querystring.parse(str);
+        var obj2 = querystring.parse(str,'-');
+        console.log(obj1,'/n',obj2);
+        // { name: 'Scott-course=Java-course=Node-from=' } 
+        // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+      link2    str,可选,字段连接符,默认:'=' 
+      options  obj,可选,其他配置  
+    Output: obj,解析成键值对形式的对象
+    Example: 
+      querystring.parse('name=Scott&course=Java&course=Node&from=');
+      // { name: 'Scott', course: [ 'Java', 'Node' ], from: '' }
+  .escape(str)    转义为URL可用的字符串 
+    Input: str  待转义的字符串 
+    Output: str,转义后的字符串  
+    Example:  
+      querystring.escape("哈哈>._.<"); // '%E5%93%88%E5%93%88%3E._.%3C'
+  .unescape(str)  反转义 
+    Example: 
+      querystring.unescape('%E5%93%88%E5%93%88%3E._.%3C'); // '哈哈>._.<'
+  .unescapeBuffer()  
+  .encode() 
+  .decode() 
+const sd = require('string_decoder')  字符串解码器 
+const assert = require('assert')  断言 
+  PS: 如果表达式不符合预期,就抛出一个错误 
+    Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
+  assert(bol,str); 
+    bol  布尔值
+      为true时,无任何提示,返回undefined;
+      为false时,抛出一错误,错误的提示信息为第二个参数设定的字符串
+    str   字符串
+    Example:
+      var assert = require('assert');
+      function add (a, b) {
+        return a + b;
+      }
+      var expected = add(1,2);
+      assert( expected === 3, '预期1加2等于3');
+      // 无任何输出,因为assert方法的第一个参数是true 
+      assert( expected === 4, '预期1加2等于3')
+      // AssertionError: 预期1加2等于3
+      会抛出一个错误,因为assert方法的第一个参数是false 
+  .ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
+  .equal(actVal,expVal [,tip]);
+    PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算 
+    actVal  实际值
+    expVal  预期值
+    tip     字符串,错误的提示信息 
+    assert.equal(true, value, message);
+    // 等同于
+    assert(value, message);
+    Example: 
+      var assert = require('assert');
+      function add (a, b) {
+        return a + b;
+      }
+      var expected = add(1,2);
+      // 以下三句效果相同
+      assert(expected == 3, '预期1+2等于3');
+      assert.ok(expected == 3, '预期1+2等于3');
+      assert.equal(expected, 3, '预期1+2等于3');
+  .notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
+    PS:notEqual方法的用法与equal方法类似
+      内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算 
+    Example:
+      var assert = require('assert');
+      function add (a, b) {
+        return a + b;
+      }
+      var expected = add(1,2);
+      // 以下三种写法效果相同
+      assert(expected != 4, '预期不等于4');
+      assert.ok(expected != 4, '预期不等于4');
+      assert.notEqual(expected, 4, '预期不等于4');
+  .deepEqual(actVal,expVal [,tip]); 比较两个对象
+    两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误 
+    Example:
+      var assert = require('assert');
+      var list1 = [1, 2, 3, 4, 5];
+      var list2 = [1, 2, 3, 4, 5];
+      assert.deepEqual(list1, list2, '预期两个数组应该有相同的属性');
+      
+      var person1 = { "name":"john", "age":"21" };
+      var person2 = { "name":"john", "age":"21" };
+      assert.deepEqual(person1, person2, '预期两个对象应该有相同的属性');
+  .notDeepEqual(actVal,expVal [,tip]); 与deepEqual方法正好相反
+    用来断言两个对象是否不相等
+  .strictEqual(actVal,expVal [,tip])   使用严格相等'===',比较两个表达式
+    Example:
+      var assert = require('assert');
+      assert.strictEqual(1, '1', '预期严格相等');
+      // AssertionError: 预期严格相等
+  .notStrictEqual(actVal,expVal [,tip]) 使用严格不相等'!==',比较两个表达式
+  .throws(block, [error], [message])  预期某个代码块会抛出一个错误,且抛出的错误符合指定的条件
+    // 例一,抛出的错误符合某个构造函数
+    assert.throws(
+      function() {
+        throw new Error("Wrong value");
+      },
+      Error,
+      '不符合预期的错误类型'
+    );
+    
+    // 例二、抛出错误的提示信息符合正则表达式
+    assert.throws(
+      function() {
+        throw new Error("Wrong value");
+      },
+      /value/,
+      '不符合预期的错误类型'
+    );
+    
+    // 例三、抛出的错误符合自定义函数的校验
+    assert.throws(
+      function() {
+        throw new Error("Wrong value");
+      },
+      function(err) {
+        if ( (err instanceof Error) && /value/.test(err) ) {
+          return true;
+        }
+      },
+      '不符合预期的错误类型'
+    );
+    assert.doesNotThrow()
+  .doesNotThrow(block, [message])     预期某个代码块不抛出错误 
+    assert.doesNotThrow(
+      function() {
+        console.log("Nothing to see here");
+      },
+      '预期不抛出错误' 
+    );
+  .ifError(val)  断言某个表达式是否false
+    如果该表达式对应的布尔值等于true,就抛出一个错误 
+    它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误 
+    Example:
+      function sayHello(name, callback) {
+        var error = false;
+        var str   = "Hello "+name;
+        callback(error, str);
+      }
+      // use the function
+      sayHello('World', function(err, value){
+        assert.ifError(err);
+        // ...
+      })
+  .fail(actual, expected, message, operator)   用于抛出一个错误 
+    该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误 
+    如果message参数对应的布尔值不为false,抛出的错误信息就是message,
+    否则错误信息就是“实际值 + 分隔符 + 预期值”     
+    Example:
+      var assert = require('assert');
+      assert.fail(21, 42, 'Test Failed', '###')
+      // AssertionError: Test Failed
+      assert.fail(21, 21, 'Test Failed', '###')
+      // AssertionError: Test Failed
+      assert.fail(21, 42, undefined, '###')
+      // AssertionError: 21 ### 42
+util,提供常用函数的集合 
+  PS:用于弥补核心JS 的功能 过于精简的不足
+  util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
+    PS:JS 的面向对象特性是基于原型的,与常见的基于类的不同.
+      JS 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
+      handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
+    Example:
+      var util = require('util'); 
+      function Base() { 
+       this.name = 'base'; 
+       this.base = 1991; 
+       this.sayHello = function() { console.log('Hello ' + this.name); }; 
+      } 
+      Base.prototype.showName = function() { console.log(this.name); }; 
+      function Sub() { this.name = 'sub'; } 
+      util.inherits(Sub, Base); 
+      var objBase = new Base(); 
+      objBase.showName();  // base 
+      objBase.sayHello();  // Hello base 
+      console.log(objBase); // { name: 'base', base: 1991, sayHello: [Function] } 
+      var objSub = new Sub(); 
+      objSub.showName(); // sub
+      objSub.sayHello(); // 报错,继承不到
+      console.log(objSub); // { name: 'sub' }
+      定义了一个基础对象Base 和一个继承自Base 的Sub,
+  util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
+    PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
+      util.inspect 并不会简单地直接把对象转换为字符串,
+      即使该对象定义了toString方法也不会调用.
+    Arguments:
+      showHidden 可选,若值为 true,将会输出更多隐藏信息
+      depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
+        指定为 null 表示将不限递归层数完整遍历对象. 
+        若color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
+    Example:
+      var util = require('util'); 
+      function Person() { 
+       this.name = 'abc'; 
+       this.toString = function() { return this.name; }; 
+      } 
+      var obj = new Person(); 
+      console.log(util.inspect(obj)); // Person { name: 'abc', toString: [Function] }
+      console.log(util.inspect(obj, true)); 
+      // Person {
+      //   name: 'abc',
+      //   toString: 
+      //    { [Function]
+      //      [length]: 0,
+      //      [name]: '',
+      //      [arguments]: null,
+      //      [caller]: null,
+      //      [prototype]: { [constructor]: [Circular] } } }
+  util.isArray(val); 返回表示参数是否为数组的布尔值
+  util.isRegExp(val); 返回表示参数是否为正则表达式的布尔值
+    Example:
+      var util = require('util');
+      util.isRegExp(/some regexp/) // true
+      util.isRegExp(new RegExp('another regexp')) // true
+      util.isRegExp({}) // false
+  util.isDate(val);  返回表示参数是否为日期对象的布尔值
+    Example:
+      var util = require('util');
+      util.isDate(new Date()) // true
+      util.isDate(Date()) // false (without 'new' returns a String)
+      util.isDate({}) // false
+  util.isError(val); 返回表示参数是否为错误对象的布尔值
+    Example:
+      var util = require('util');
+      util.isError(new Error()) // true
+      util.isError(new TypeError()) // true
+      util.isError({ name: 'Error', message: 'an error occurred' }) // false      
+// 环境类 
+const os = require("os")    提供了一些基本的系统操作函数 
+  PS:
+  os.tmpdir() 返回操作系统的默认临时文件夹.
+  os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
+  os.hostname() 返回操作系统的主机名.
+  os.type() 返回操作系统名
+  os.platform() 返回操作系统名
+  os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
+  os.release() 返回操作系统的发行版本.
+  os.uptime() 返回操作系统运行的时间,以秒为单位.
+  os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
+  os.totalmem() 返回系统内存总量,单位为字节.
+  os.freemem() 返回操作系统空闲内存量,单位是字节.
+  os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
+    型号、速度(单位 MHz)、
+    时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
+  os.networkInterfaces() 获得网络接口列表.
+  Example:
+    创建 main.js 文件,代码如下所示:
+      var os = require("os");
+      console.log('endianness : ' + os.endianness());// CPU 的字节序
+      console.log('type : ' + os.type()); // 操作系统名
+      console.log('platform : ' + os.platform()); // 操作系统名
+      console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
+      console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
+    代码执行结果如下:
+      endianness : LE
+      type : Linux
+      platform : linux
+      total memory : 25103400960 bytes.
+      free memory : 20676710400 bytes.
+const v8 = require('v8')  v8引擎相关 
+const vm = require('vm')  虚拟机 
+const tty = require('tty') 终端 
+  PS: 连接到远端的命令行 
+const dns = require("dns")   域名解析 
+  PS:
+  .getServers()      // 获取ip 
+  .lookup(host,fn)   // 查询网址的IP 
+    Input: 
+      host   str,查询的网址 
+      function(error,ip,ipv){}  
+        error  错误对象 
+        ip     str,查询的ip  
+        ipv    '4'或'6',表示ipv4或ipv6   
+    Example: 
+      const dns = require('dns');
+      const host = 'zhihu.com';
+      dns.lookup(host,(error,ip,ipv) => {
+        console.log(ip,ipv); // 118.178.213.186  4 
+      })
+// 功能类  
 const http = require("http")    http服务模块,提供HTTP服务器功能  
   PS: 主要用于搭建HTTP服务端和客户端; 
   Web服务器 
@@ -603,7 +919,7 @@ const http = require("http")    http服务模块,提供HTTP服务器功能
       var server = require("./server");
       var router = require("./router");
       server.start(router.route);
-https,https服务模块 
+const https = require("https")  https服务模块  
   PS:和http模块类似,在搭建https服务器时需SSl证书
   搭建https服务器 
     var https = require("https");
@@ -617,9 +933,43 @@ https,https服务模块
       res.end('hello');
     })
     .listen(8080);
-tls,安全传输层 
-  const tls = require('tls'); 
-fs,文件系统模块'file system',与文件系统交互 
+const tls = require('tls')  安全传输层 
+const crypto = require('crypto')  提供加密和解密功能,基本上是对OpenSSL的包装 
+  var hash = crypto.createHash(<ways>)   // 使用加密的算法  
+    Input: ways    kw,加密算法  
+      'md5'   MD5摘要算法 
+      'sha1'  sha1摘要算法 
+    Output: 加密对象 
+  hash.update(<pwd>)    // 加密指定字符,并更新加密对象  
+    Input: pwd  str,待加密的密码 
+  hash.digest('hex')    // 返回16进制表示的加密值 
+  var cipher = crypto.createCipher(<ways>,<key>) // 加密 
+    Input: 
+      ways   kw,加密的算法 
+        'aes-256-cbc'  
+      key    str,加密用的key 
+    Output: 加密对象 
+  var pwd1 = cipher.update(<pwd>,<inEncode>,<outEncode>)  // 进行加密 
+    Input: 
+      pwd        str,待加密的密码  
+      inEncode   kw,输入的编码类型 
+        'utf8'
+      outEncode  kw,输出的编码类型 
+        'hex'
+    Output:  返回加密后的字符串
+  pwd1 += cipher.final('hex')   // 加密
+  var decipher = crypto.createDecipher(<ways>,<key>)  // 解密 
+    Input: 
+      ways   kw,解密的算法 
+        'aes-256-cbc'
+    Output:  解密对象 
+  var pwd = decipher.update(<pwd1>,<inEncode>,<outEncode>) // 进行解密 
+    Input: 
+      pwd1       str,加密后的密码 
+      inEncode   kw,输入的编码格式 
+      outEncode  kw,输出的编码格式 
+  pwd += decipher.final('utf8')   // 解密 
+const fs = require('fs')    文件系统模块'file system',与文件系统交互  
   PS:fs模块可用于对系统文件及目录进行读写操作.
     NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
     也可使用 fs.read 和 fs.write 读写文件,
@@ -924,170 +1274,9 @@ fs,文件系统模块'file system',与文件系统交互
     为异步操作,不会阻塞后续代码执行 
     var readStream = fs.createReadStream('1.pm4');
   fs.createWriteStream(path,options); 创建可写的stream流 
-path,处理文件路径 
-  PS:
-  var path = require("path")  // 引入path模块
-  .normalize(p)  规范化路径,注意'..' 和 '.'.
-  .join([path1][, path2][, ...])  str,返回连接路径 
-    该方法的主要用途在于,会正确使用当前系统的路径分隔符,Unix系统是 /,Windows系统是 \
-  .resolve([path1],path2) 将path2解析为绝对路径 
-    Example:
-    var path1 = path.resolve('e://a','./b')
-    console.log(path1); // e://a/b 
-  .isAbsolute(path) 判断参数 path 是否是绝对路径.
-  .relative(from, to) 用于将相对路径转为绝对路径.
-  .dirname(p) 返回路径中代表文件夹的部分,同 Unix 的dirname 命令类似.
-  .basename(p[, ext]) 返回路径中的最后一部分.同 Unix 命令 bashname 类似.
-  .extname(p) 返回路径中文件的后缀名,即路径中最后一个'.'之后的部分.
-    若一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符,则此命令返回空字符串.
-  .parse(<path>)  解析文件路径 
-    Input: path  str,解析的文件路径 
-    Output: 文件路径的对象表示 
-      root: 根目录 
-      dir: 目录部分
-      base: 文件名及扩展名  
-      name: 文件名 
-      ext: 扩展名 
-    Example: 
-      'D:\\asserts\\img\\qq.png'
-      { 
-        root: 'D:\\',
-        dir: 'D:\\asserts\\img',
-        base: 'qq.png',
-        ext: '.png',
-        name: 'qq' 
-      }
-  .format(pathObject) 从对象中返回路径字符串,和 path.parse 相反.    
-  .sep 平台的文件路径分隔符,'\\' 或 '/'
-  .delimiter 平台的分隔符, ; or ':'.
-  .posix 提供上述 path 的方法,不过总是以 posix 兼容的方式交互.
-  .win32 提供上述 path 的方法,不过总是以 win32 兼容的方式交互.    
-  Example:
-    创建 main.js 文件,代码如下所示:
-      var path = require("path");
-      // 格式化路径
-      console.log('normalization:'+path.normalize('/test/test1//2slashes/1slash/tab/..'));
-      // 连接路径
-      console.log('joint path:'+path.join('/test','test1','2slashes/1slash','tab','..'));
-      // 转换为绝对路径
-      console.log('resolve:'+path.resolve('main.js'));
-      // 路径中文件的后缀名
-      console.log('ext name:'+path.extname('main.js'));
-    代码执行结果如下:
-      normalization : /test/test1/2slashes/1slash
-      joint path : /test/test1/2slashes/1slash
-      resolve : /web/com/1427176256_27423/main.js
-      ext name : .js    
-crypto,提供加密和解密功能,基本上是对OpenSSL的包装 
-  const crypto = require('crypto') 
-  var hash = crypto.createHash(<ways>)   // 使用加密的算法  
-    Input: ways    kw,加密算法  
-      'md5'   MD5摘要算法 
-      'sha1'  sha1摘要算法 
-    Output: 加密对象 
-  hash.update(<pwd>)    // 加密指定字符,并更新加密对象  
-    Input: pwd  str,待加密的密码 
-  hash.digest('hex')    // 返回16进制表示的加密值 
-  var cipher = crypto.createCipher(<ways>,<key>) // 加密 
-    Input: 
-      ways   kw,加密的算法 
-        'aes-256-cbc'  
-      key    str,加密用的key 
-    Output: 加密对象 
-  var pwd1 = cipher.update(<pwd>,<inEncode>,<outEncode>)  // 进行加密 
-    Input: 
-      pwd        str,待加密的密码  
-      inEncode   kw,输入的编码类型 
-        'utf8'
-      outEncode  kw,输出的编码类型 
-        'hex'
-    Output:  返回加密后的字符串
-  pwd1 += cipher.final('hex')   // 加密
-  var decipher = crypto.createDecipher(<ways>,<key>)  // 解密 
-    Input: 
-      ways   kw,解密的算法 
-        'aes-256-cbc'
-    Output:  解密对象 
-  var pwd = decipher.update(<pwd1>,<inEncode>,<outEncode>) // 进行解密 
-    Input: 
-      pwd1       str,加密后的密码 
-      inEncode   kw,输入的编码格式 
-      outEncode  kw,输出的编码格式 
-  pwd += decipher.final('utf8')   // 解密 
-util,提供常用函数的集合 
-  PS:用于弥补核心JS 的功能 过于精简的不足
-  util.inherits(handleConstructor,baseConstructor);  实现对象间原型继承
-    PS:JS 的面向对象特性是基于原型的,与常见的基于类的不同.
-      JS 没有 提供对象继承的语言级别特性,而是通过原型复制来实现的.
-      handleConstructor构造函数只会继承baseConstructor构造函数原型中的属性方法.
-    Example:
-      var util = require('util'); 
-      function Base() { 
-       this.name = 'base'; 
-       this.base = 1991; 
-       this.sayHello = function() { console.log('Hello ' + this.name); }; 
-      } 
-      Base.prototype.showName = function() { console.log(this.name); }; 
-      function Sub() { this.name = 'sub'; } 
-      util.inherits(Sub, Base); 
-      var objBase = new Base(); 
-      objBase.showName();  // base 
-      objBase.sayHello();  // Hello base 
-      console.log(objBase); // { name: 'base', base: 1991, sayHello: [Function] } 
-      var objSub = new Sub(); 
-      objSub.showName(); // sub
-      objSub.sayHello(); // 报错,继承不到
-      console.log(objSub); // { name: 'sub' }
-      定义了一个基础对象Base 和一个继承自Base 的Sub,
-  util.inspect(object,[showHidden],[depth],[colors]); 将对象转换为字符串
-    PS:通常用于调试和错误输出.它至少接受一个参数 object,即要转换的对象
-      util.inspect 并不会简单地直接把对象转换为字符串,
-      即使该对象定义了toString方法也不会调用.
-    Arguments:
-      showHidden 可选,若值为 true,将会输出更多隐藏信息
-      depth   表示最大递归的层数,若对象很复杂,可指定层数以控制输出信息的多少,默认为2层.
-        指定为 null 表示将不限递归层数完整遍历对象. 
-        若color 值为 true,输出格式将会以ANSI 颜色编码,通常用于在终端显示更漂亮 的效果.
-    Example:
-      var util = require('util'); 
-      function Person() { 
-       this.name = 'abc'; 
-       this.toString = function() { return this.name; }; 
-      } 
-      var obj = new Person(); 
-      console.log(util.inspect(obj)); // Person { name: 'abc', toString: [Function] }
-      console.log(util.inspect(obj, true)); 
-      // Person {
-      //   name: 'abc',
-      //   toString: 
-      //    { [Function]
-      //      [length]: 0,
-      //      [name]: '',
-      //      [arguments]: null,
-      //      [caller]: null,
-      //      [prototype]: { [constructor]: [Circular] } } }
-  util.isArray(val); 返回表示参数是否为数组的布尔值
-  util.isRegExp(val); 返回表示参数是否为正则表达式的布尔值
-    Example:
-      var util = require('util');
-      util.isRegExp(/some regexp/) // true
-      util.isRegExp(new RegExp('another regexp')) // true
-      util.isRegExp({}) // false
-  util.isDate(val);  返回表示参数是否为日期对象的布尔值
-    Example:
-      var util = require('util');
-      util.isDate(new Date()) // true
-      util.isDate(Date()) // false (without 'new' returns a String)
-      util.isDate({}) // false
-  util.isError(val); 返回表示参数是否为错误对象的布尔值
-    Example:
-      var util = require('util');
-      util.isError(new Error()) // true
-      util.isError(new TypeError()) // true
-      util.isError({ name: 'Error', message: 'an error occurred' }) // false      
-child_process,创建子进程 
-  const child_process = require('child_process');  // 引入 
-  child_process.exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出
+const zlib = require('zlib')     压缩 
+const cp = require('child_process')  创建子进程 
+  .exec(command[,options],cfoo); 使用子进程执行命令,缓存子进程的输出
     将子进程的输出以回调函数参数的形式返回.
     command: 字符串, 将要运行的命令,参数使用空格隔开
     options :对象,可以是:
@@ -1135,7 +1324,7 @@ child_process,创建子进程
       子进程已退出,退出码 0
       stdout: 进程 2 执行.
       stderr:     
-  child_process.spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
+  .spawn(command[,args][,options]) 使用指定的命令行参数创建新进程
     Arguments:
       command: 将要运行的命令
       args: Array 字符串参数数组
@@ -1173,7 +1362,7 @@ child_process,创建子进程
       子进程已退出,退出码 0
       stdout: 进程 2 执行.
       子进程已退出,退出码 0    
-  child_process.fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
+  .fork 是 spawn()的特殊形式,用于在子进程中运行的模块,用于创建进程
     PS:如 fork('./son.js') 相当于 spawn('node', ['./son.js']) .
       与spawn方法不同的是,fork会在父进程与子进程之间,建立一个通信管道,用于进程之间的通信.
     Arguments:
@@ -1209,220 +1398,19 @@ child_process,创建子进程
       子进程已退出,退出码 0
       进程 2 执行.
       子进程已退出,退出码 0
-cluster,集群 
-  const cluster = require('cluster');
-string_decoder,字符串解码器 
-  const string_decoder = require('string_decoder');
-os,模块提供了一些基本的系统操作函数 
-  PS:
-  var os = require("os"); 引入os模块
-  os.tmpdir() 返回操作系统的默认临时文件夹.
-  os.endianness() 返回 CPU 的字节序,可能的是 "BE" 或 "LE".
-  os.hostname() 返回操作系统的主机名.
-  os.type() 返回操作系统名
-  os.platform() 返回操作系统名
-  os.arch() 返回操作系统 CPU 架构,可能的值有 "x64"、"arm" 和 "ia32".
-  os.release() 返回操作系统的发行版本.
-  os.uptime() 返回操作系统运行的时间,以秒为单位.
-  os.loadavg() 返回一个包含 1、5、15 分钟平均负载的数组.
-  os.totalmem() 返回系统内存总量,单位为字节.
-  os.freemem() 返回操作系统空闲内存量,单位是字节.
-  os.cpus() 返回一个对象数组,包含所安装的每个 CPU/内核的信息
-    型号、速度(单位 MHz)、
-    时间(一个包含 user、nice、sys、idle 和 irq 所使用 CPU/内核毫秒数的对象)
-  os.networkInterfaces() 获得网络接口列表.
-  Example:
-    创建 main.js 文件,代码如下所示:
-      var os = require("os");
-      console.log('endianness : ' + os.endianness());// CPU 的字节序
-      console.log('type : ' + os.type()); // 操作系统名
-      console.log('platform : ' + os.platform()); // 操作系统名
-      console.log('total memory : ' + os.totalmem() + " bytes."); // 系统内存总量
-      console.log('free memory : ' + os.freemem() + " bytes."); // 操作系统空闲内存量
-    代码执行结果如下:
-      endianness : LE
-      type : Linux
-      platform : linux
-      total memory : 25103400960 bytes.
-      free memory : 20676710400 bytes.
-tls,https的创建 
-dns,域名解析 
-  PS:
-  var dns = require("dns")  // 引入dns模块 
-    .getServers()      // 获取ip 
-    .lookup(host,fn)   // 查询网址的IP 
-      Input: 
-        host   str,查询的网址 
-        function(error,ip,ipv){}  
-          error  错误对象 
-          ip     str,查询的ip  
-          ipv    '4'或'6',表示ipv4或ipv6   
-      Example: 
-        const dns = require('dns');
-        const host = 'zhihu.com';
-        dns.lookup(host,(error,ip,ipv) => {
-          console.log(ip,ipv); // 118.178.213.186  4 
-        })
-assert,主要用于断言,如果表达式不符合预期,就抛出一个错误 
-  PS:Node的内置模块; 该模块提供11个方法,但只有少数几个是常用的
-  const assert = require('assert')  // 引入 
-  assert(bol,str); 
-    bol  布尔值
-      为true时,无任何提示,返回undefined;
-      为false时,抛出一错误,错误的提示信息为第二个参数设定的字符串
-    str   字符串
-    Example:
-      var assert = require('assert');
-      function add (a, b) {
-        return a + b;
-      }
-      var expected = add(1,2);
-      assert( expected === 3, '预期1加2等于3');
-      // 无任何输出,因为assert方法的第一个参数是true 
-      assert( expected === 4, '预期1加2等于3')
-      // AssertionError: 预期1加2等于3
-      会抛出一个错误,因为assert方法的第一个参数是false 
-  assert.ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
-  assert.equal(actVal,expVal [,tip]);
-    PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算 
-    actVal  实际值
-    expVal  预期值
-    tip     字符串,错误的提示信息 
-    assert.equal(true, value, message);
-    // 等同于
-    assert(value, message);
-    Example: 
-      var assert = require('assert');
-      function add (a, b) {
-        return a + b;
-      }
-      var expected = add(1,2);
-      // 以下三句效果相同
-      assert(expected == 3, '预期1+2等于3');
-      assert.ok(expected == 3, '预期1+2等于3');
-      assert.equal(expected, 3, '预期1+2等于3');
-  assert.notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
-    PS:notEqual方法的用法与equal方法类似
-      内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算 
-    Example:
-      var assert = require('assert');
-      function add (a, b) {
-        return a + b;
-      }
-      var expected = add(1,2);
-      // 以下三种写法效果相同
-      assert(expected != 4, '预期不等于4');
-      assert.ok(expected != 4, '预期不等于4');
-      assert.notEqual(expected, 4, '预期不等于4');
-  assert.deepEqual(actVal,expVal [,tip]); 比较两个对象
-    两个对象的属性一一对应,且值都相等,就认为两个对象相等,否则抛出一个错误 
-    Example:
-      var assert = require('assert');
-      var list1 = [1, 2, 3, 4, 5];
-      var list2 = [1, 2, 3, 4, 5];
-      assert.deepEqual(list1, list2, '预期两个数组应该有相同的属性');
-      
-      var person1 = { "name":"john", "age":"21" };
-      var person2 = { "name":"john", "age":"21" };
-      assert.deepEqual(person1, person2, '预期两个对象应该有相同的属性');
-  assert.notDeepEqual(actVal,expVal [,tip]); 与deepEqual方法正好相反
-    用来断言两个对象是否不相等
-  assert.strictEqual(actVal,expVal [,tip])   使用严格相等'===',比较两个表达式
-    Example:
-      var assert = require('assert');
-      assert.strictEqual(1, '1', '预期严格相等');
-      // AssertionError: 预期严格相等
-  assert.notStrictEqual(actVal,expVal [,tip]) 使用严格不相等'!==',比较两个表达式
-  assert.throws(block, [error], [message])  预期某个代码块会抛出一个错误,且抛出的错误符合指定的条件
-    // 例一,抛出的错误符合某个构造函数
-    assert.throws(
-      function() {
-        throw new Error("Wrong value");
-      },
-      Error,
-      '不符合预期的错误类型'
-    );
-    
-    // 例二、抛出错误的提示信息符合正则表达式
-    assert.throws(
-      function() {
-        throw new Error("Wrong value");
-      },
-      /value/,
-      '不符合预期的错误类型'
-    );
-    
-    // 例三、抛出的错误符合自定义函数的校验
-    assert.throws(
-      function() {
-        throw new Error("Wrong value");
-      },
-      function(err) {
-        if ( (err instanceof Error) && /value/.test(err) ) {
-          return true;
-        }
-      },
-      '不符合预期的错误类型'
-    );
-    assert.doesNotThrow()
-  assert.doesNotThrow(block, [message])     预期某个代码块不抛出错误 
-    assert.doesNotThrow(
-      function() {
-        console.log("Nothing to see here");
-      },
-      '预期不抛出错误' 
-    );
-  assert.ifError(val)  断言某个表达式是否false
-    如果该表达式对应的布尔值等于true,就抛出一个错误 
-    它对于验证回调函数的第一个参数十分有用,如果该参数为true,就表示有错误 
-    Example:
-      function sayHello(name, callback) {
-        var error = false;
-        var str   = "Hello "+name;
-        callback(error, str);
-      }
-      // use the function
-      sayHello('World', function(err, value){
-        assert.ifError(err);
-        // ...
-      })
-  assert.fail(actual, expected, message, operator)   用于抛出一个错误 
-    该方法共有四个参数,但是不管参数是什么值,它总是抛出一个错误 
-    如果message参数对应的布尔值不为false,抛出的错误信息就是message,
-    否则错误信息就是“实际值 + 分隔符 + 预期值”     
-    Example:
-      var assert = require('assert');
-      assert.fail(21, 42, 'Test Failed', '###')
-      // AssertionError: Test Failed
-      assert.fail(21, 21, 'Test Failed', '###')
-      // AssertionError: Test Failed
-      assert.fail(21, 42, undefined, '###')
-      // AssertionError: 21 ### 42
-Promise,同步形式执行异步操作　
-  var Promise = require("Promise");   模块引入　
-tty,终端 
-  PS: 连接到远端的命令行 
-  const tty = require('tty');
-v8,v8引擎相关 
-  const v8 = require('v8');
-vm,虚拟机
-  const vm = require('vm');
-zlib,压缩 
-  const zlib = require('zlib');
+const cluster = require('cluster')  集群 
+// 其他类  
 已废弃 
-  domain,域,简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常 
-    PS: domain模块,把处理多个不同的IO的操作作为一个组.
+  const domain = require("domain") 域 
+    PS: 简化异步代码的异常处理,可以捕捉处理try catch无法捕捉的异常 
+      domain模块,把处理多个不同的IO的操作作为一个组 
       注册事件和回调到domain,当发生一个错误事件或抛出一个错误时,
       domain对象会被通知,不会丢失上下文环境,也不导致程序错误立即推出,
       与process.on('uncaughtException')不同.
       Domain 模块可分为隐式绑定和显式绑定:
         隐式绑定: 把在domain上下文中定义的变量,自动绑定到domain对象
         显式绑定: 把不是在domain上下文中定义的变量,以代码的方式绑定到domain对象
-    var domain = require("domain"); 引入domain模块
-  punycode
-    const punycode = require('punycode');
-◆第三方模块: 通过npm安装到本地 
-◆本地模块: 自定义的JS文件  
+  const punycode = require('punycode') 
 
 
 

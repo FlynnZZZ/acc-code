@@ -81,19 +81,17 @@ global/GLOBAL/root,Node所在的全局环境对象
   PS: 全局变量的宿主,相当于浏览器的window对象 
   Member: 
     // 类  
-    Function Object Array String Number Boolean Date RegExp
+    Object Function Array String Number Boolean Date RegExp
     Promise Symbol Map Set WeakMap WeakSet Proxy Reflect
-    Error EvalError RangeError ReferenceError SyntaxError TypeError URIError
     ArrayBuffer Uint8Array Int8Array Uint16Array Int16Array 
     Uint32Array Int32Array Float32Array Float64Array Uint8ClampedArray
-    Buffer
     DataView
+    Error EvalError RangeError ReferenceError SyntaxError TypeError URIError
     Intl
+    Buffer
     WebAssembly
     // 对象 
-    Math
-    JSON
-    console
+    Math JSON console
     process
     module
     exports
@@ -134,7 +132,7 @@ global/GLOBAL/root,Node所在的全局环境对象
     NodeJS中 
       相同模块中,和浏览器表现一致 
       不同模块中,则不同,因为模块的全局变量都是该模块私有的,其他模块无法取到  
-◆Classes
+◆Classes 
 Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据] 
   PS: 用来创建一个专门存放二进制数据的缓存区; 
     可在 TCP 流或文件操作中处理二进制数据流 
@@ -142,34 +140,47 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
   Extend: Uint8Array  
   Static: 
     .poolSize  
-    .alloc(len[,fill[,encoding]])  创建指定长度的Buffer 
-      PS: 比Buffer.allocUnsafe()慢,但能确保新建的Buffer实例的内容不包含敏感数据  
-      len  int,创建Buffer的长度,范围:[0-buffer.constants.MAX_LENGTH] 
-      fill  int/str/buf,初始填充值,默认:0  
-        PS: 若指定了fill,则会调用 buf.fill(fill) 初始化分配的Buffer 
-      encoding kw,fill为字符串时的字符编码,默认:'utf8' 
-        PS: 若指定了fill和encoding,则会调用 buf.fill(fill,encoding) 初始化分配的Buffer 
+    .alloc(len ,fill? ,encoding? )  buf,创建指定长度的Buffer 
+      PS: 比 Buffer.allocUnsafe()慢,但能确保新建的Buffer实例的内容不包含敏感数据  
+      Input: 
+        len   int,创建Buffer的长度,范围:[0-buffer.constants.MAX_LENGTH] 
+        fill  int/str/buf,可选,初始填充值,默认:0  
+          PS: 若指定了fill,则会调用 buf.fill(fill) 初始化分配的Buffer 
+        encoding KW,可选,fill为字符串时的字符编码,默认:'utf8' 
+          PS: 若指定了'fill'和'encoding',则会调用 buf.fill(fill,encoding) 初始化分配的Buffer 
+      Output: Buffer 
       Example: 
-        // 创建一个长度为 10、且用 0x1 填充的 Buffer。 
-        const buf2 = Buffer.alloc(10, 1);
-    .allocUnsafe(len)  创建指定长度未初始化的Buffer实例 
-      PS: 该方式创建的实例的底层内存未初始化,内容未知,可能包含敏感数据
-      len  num,指定新建Buffer的长度 
-      可用 buf.fill(0) 初始化实例为0 
-        Example: 
-        const buf = Buffer.allocUnsafe(10);
-        // 输出: (内容可能不同): <Buffer a0 8b 28 3f 01 00 00 00 50 32>
-        console.log(buf);
-        buf.fill(0);
-        // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
-        console.log(buf);
-    .allocUnsafeSlow(len)  创建指定长度未初始化的Buffer实例 
-    .from( val )  将其他值使用buffer表示  
+        // 创建一个长度为 10、且用 0x1 填充的 Buffer
+        const buf2 = Buffer.alloc(10, 1) 
+    .allocUnsafe(len)  buf,创建指定长度未初始化的Buffer实例 
+      Input: len  int,指定新建Buffer的长度 
+      Output: Buffer 
+      Feature: 
+        比调用 Buffer.alloc() 更快,但创建的实例可能包含旧数据 
+          需要使用 .fill() 或 .write() 重写 
+          const buf = Buffer.allocUnsafe(10);
+          // 输出: (内容可能不同): <Buffer a0 8b 28 3f 01 00 00 00 50 32>
+          console.log(buf);
+          buf.fill(0);
+          // 输出: <Buffer 00 00 00 00 00 00 00 00 00 00>
+          console.log(buf);
+    .allocUnsafeSlow(len)  buf,创建指定长度未初始化的Buffer实例 
+    .from( val )  buf,将其他值使用buffer表示  
       Input: 参数可分为以下几种形式: 
+        buffer      返回Buffer的拷贝 
         arr         通过一八位字节的数组创建Buffer 
           // 创建一个包含 [0x1, 0x2, 0x3] 的 Buffer 
           const buf4 = Buffer.from([1, 2, 3]);
-        arrBuf[,byteOffset[,length]]  创建一共享内存的Buffer 
+        str ,encoding?   将字符串转换成buffer格式    
+          str       要编码的字符串 
+          encoding  KW,可选,字符编码,默认:'utf8' 
+            'latin1'  Latin-1 
+            'ascii'   
+            ...
+          Example: 
+            const buf = Buffer.from('test');
+            const buf = Buffer.from('test', 'latin1');
+        arrBuf ,byteOffset? ,length?   创建一共享内存的Buffer 
           arrBuf  ArrayBuffer,共享源  
           byteOffset  开始拷贝的索引,默认:0
           length  int,拷贝的字节数,默认: arrayBuffer.length-byteOffset
@@ -184,17 +195,7 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
             arr[1] = 6000;
             // 输出: <Buffer 88 13 70 17>
             console.log(buf);
-        buffer      返回Buffer的拷贝 
-        str,encoding?   将字符串转换成buffer格式    
-          str       要编码的字符串 
-          encoding  kw,可选,字符编码,默认:'utf8' 
-            'latin1'  Latin-1 
-            'ascii'   
-            ...
-          Example: 
-            const buf = Buffer.from('test');
-            const buf = Buffer.from('test', 'latin1');
-      Output: buffer,转换后的buffer 
+      Output: buffer 
     .concat(<bufList>,<length>?)   bufer拼接 
       Input: 
         bufList   待合并的buf组成的数组,如[buf1,buf2,buf3]
@@ -218,8 +219,12 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
       Buffer.byteLength('Hello', 'utf8') // 5
     .compare(buf1,buf2)    比较两份Buffer对象 
   Instance: 
-    var bufer = new Buffer(val)  通过Buffer类来创建bufer对象[已废弃][6.0-] 
+    Buffer.alloc()   
+    Buffer.allocUnsafe() 
+    Buffer.from() 
+    new Buffer(val)  通过Buffer类创建 [已废弃][6.0-] 
       PS: bufer对象是类数组对象,成员都为0到255的整数值,即一个8位的字节 
+        为了使 Buffer 实例的创建更可靠、更不容易出错,各种 new Buffer() 构造函数已被废弃 
       ◆val可为以下类型:
       num         整数,用于指定创建的bufer的长度[分配的字节内存][单位为字节] 
         var bufer = new Buffer(10); 创建一长度为10直接字节的bufer对象
@@ -242,7 +247,7 @@ Buffer,缓冲器,处理二进制数据的接口[用于保存原始数据]
           // <Buffer 61 62 63 64 65 66 67> <Buffer 69 b7 1d 79 f8>
       arr         数组,数组成员必须是整数值 
         var hello = new Buffer([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
-        console.log(hello.toString()); // 'Hello'
+        console.log(hello.toString()); // 'Hello' 
   Proto: 
     [idx]  下标访问
     .length  读写,bufer对象所占据的内存长度  
@@ -566,7 +571,7 @@ setImmediate(fn ,param1?,..)    numId,推迟调用,相当于 setTimeout(fn ,0)
     param  作为fn的若干个参数传入  
   Output: numId   num,推迟调用的id,用来清除该调用 
 clearImmediate(numId)           清除推迟调用 
-◆其他全局量 
+◆作用域在模块内但全局可用的量  
 __filename 当前正在执行的脚本的路径和文件名 
   PS: 将输出文件所在位置的绝对路径,且和命令行参数所指定的文件名不一定相同  
     在模块中,返回的值是模块文件的路径 
@@ -578,34 +583,34 @@ __filename 当前正在执行的脚本的路径和文件名
     $ node main.js
     /web/com/runoob/nodejs/main.js
 __dirname  当前执行脚本所在的目录 
+module 
+  Member: 
+    .exports
+    .id
+    .parent
+    .filename
+    .loaded
+    .children
+    .paths
+exports === module.exports  
+require('path')  模块引入,返回模块的 module.exports   
+  path  str,'模块名'/'文件路径'  
+    使用模块名引入原生模块或放到'node_modules'下的自定义模块 
+    使用文件路径引入自定义模块
+      相对路径  如:'./mod' 
+      绝对路径  如:'/pathtomodule/mod' 
+  Feature: 
+    省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
+    省略文件名时,依次查找'index'、 ? 
+    模块被加载后会缓存,后续加载返回缓存中的版本
+      即模块加载最多执行一次模块代码, 
+      若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
+    当模块重名时,加载的优先级:  
+      Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
 ◆其他总结 
 'CommonJS'模块化规范 
-  module 
-    Member: 
-      .exports
-      .id
-      .parent
-      .filename
-      .loaded
-      .children
-      .paths
-  exports === module.exports 
   使用 
-    模块引入 
-    require(moduleName)  模块引入,返回模块的 module.exports 
-      Feature: 
-        省略文件后缀名时,依次查找'.js'、'.json'、'.node'、其他; 
-        省略文件名时,依次查找'index'、 ? 
-        模块被加载后会缓存,后续加载返回缓存中的版本
-          即模块加载最多执行一次模块代码, 
-          若希望模块执行多次,则可以让模块返回一个函数,然后多次调用该函数; 
-        当模块重名时,加载的优先级:  
-          Node核心模块>相对路径文件模块>绝对路径文件模块>非路径模块 
-      moduleName  str,'模块名'/'文件路径'  
-        使用模块名引入原生模块或放到'node_modules'下的自定义模块 
-        使用文件路径引入自定义模块
-          相对路径  如:'./mod' 
-          绝对路径  如:'/pathtomodule/mod' 
+    require()  模块引入 
     模块公开  
       PS: module变量是整个模块文件的顶层变量,其exports属性就是模块向外输出的接口 
     module.exports = val     把模块希望输出的内容放入该对象[覆盖模式] 

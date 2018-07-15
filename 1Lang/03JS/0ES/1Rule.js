@@ -1,487 +1,489 @@
-基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
-  基本类型: 变量的赋值,会创建该值的一个副本  
-  undefined 表示未定义的值 
-    在声明变量时没有对其初始化,则变量的值就是 undefined 
-  null      表示空指针  
-    PS: 将来用于保存对象的变量,可初始化为 null 
-    Example: 
-    console.log(null === null);
-    console.log(null==undefined); // true ,undefined派生于null
-    console.log(typeof null); // object
-  基本包装类型: 基本类型的变体,一定条件下有对象的性质[如可调用方法、设置属性等] 
-    PS: 通过构造函数显式的创建基本包装对象 
-    基本包装对象和对象一样按引用进行比较 
-      var a1 = "test";
-      var a2 = new String("test");  // 对象字符串
-      console.log(a1 == a2);//true
-      console.log(a1 === a2);//false
-    隐式创建的包装对象其对象性质是临时性的 
-      var aoo ="abc";
-      aoo.z ="z"; // 瞬时存在包装对象,所以不会报错,但后续访该对象被丢弃
-      console.log(aoo.z); // undefined 
-      // 上一次隐式创建的包装对象用完就消失了
-      // 此次访问其z属性又隐式创建了包装对象但并未定义,所以为undefined
-      var boo = new String("abc");
-      boo.z = "z";
-      console.log(boo.z); // z
-  Boolean 布尔值 
-    PS: ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
-    隐式转换为布尔值 
-      规则: 
-      undefined、null、0、NaN、""转换为 false;
-      其余转换为 true,包括 '0'、对象、Infinity 等等 
+值类型: 
+  基本类型: 也叫原始类型,占据空间小、大小固定,存储在'stack'栈内存中 
+    基本类型: 变量的赋值,会创建该值的一个副本  
+    undefined 表示未定义的值 
+      在声明变量时没有对其初始化,则变量的值就是 undefined 
+    null      表示空指针  
+      PS: 将来用于保存对象的变量,可初始化为 null 
       Example: 
-        var box = ''; 
-        if(box){ //条件语句中()内必须是布尔值
-          console.log('真');
-        }
-        else{ 
-          console.log('假');
-        } 
-        
-        console.log(!0,!1); // true false
-    bol = Boolean(any) 显式转换为布尔值 [moIn 'Global']
-  Number  数值 
-    PS: 可以保存+0 和 -0,且 +0 === -0;
-    数值进制 
-      PS: 在进行算术计算时,所有八进制和十六进制表示的数值都将被转换成十进制数值
-      十进制    
-      八进制     0 开头,且最大数值不超过7 
-        若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
-        八进制字面量在严格模式下是无效的,会导致JS引擎抛错  
-      十六进制数 必须使用0x或0X开头,最大字符不超过f 
-      ES6中: 
-      '0b***' 声明2进制数 
-        console.log(0b11);  // 3 
-      '0o***' 声明8进制数 
-        console.log(0o10);  // 8 
-      '0x***' 声明16进制数 
-        console.log(0xf);    // 15 
-    科学计数: 
-      e E 可大写,可小写
-      默认情况下,ECMAScript会将小数点后面有6个零以上的浮点数使用科学计数法表示
-      var a = 2E3;//或者2e3
-      console.log(a); //2000
-      2e3;  //2000
-      0.000000005; //5e-9
-    浮点类型: 小数点后至少有一位非零数字 
-      浮点数可省略前导0,但不推荐使用,如 .8  
-      浮点数占用的内存比整型数大两倍,默认将可转换为整型的浮点数值转换成整型 
-        console.log(8.0);   // 8
-      浮点数最高精度是17位小数,但算术运算中可能会不精确 
-        // 不要使用浮点数做判断
-        console.log(0.1+0.2);   // 0.300000000000004
-    特殊数值 
-      Infinity/-Infinity   正/负无穷 
-        无穷是不能参加计算的数值  
-      NaN'not a number'非数值: 表示一本应为数值而不是数值的情况,而不报错 
-        PS: 在其他语言中,任何数值除以零都会导致错误而终止程序执行,
-          但ECMAScript会返回特殊的值,不会影响程序执行.
-        不和任何值相等,包括自己  
-          console.log(NaN == NaN); // false
-        任何与NaN进行运算的结果均为 NaN  
-          console.log(NaN+1); // NaN
-        Example:
-        console.log(0/0);  // NaN
-    转换为数值  
-      隐式转换为数值 
-        undefined 为 NaN; null false 为 0; true 为 1;
-        其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
-        Example:
-        console.log(1*"2",typeof (1*'2'));  // 2 number  
-        console.log(1+"1",typeof (1+'1'));  // 11 string
-      Number()、parseInt()、parseFloat()、obj.valueOf()、obj.toString() 显式转换为 
-  String  字符串: 由若干个16位Unicode字符组成的字符序列 
-    PS: 可使用双引号或单引号,但必须成对出现;
-    特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
-      枚举: 
-        '\"' 双引号
-        '\'' 单引号
-        '\n' 换行符
-        '\r' 回车符
-        '\b' 空格 
-        '\t' Tab制表符 
-        '\0' Null字节
-        '\f' 换页符
-        '\v' 垂直制表符
-        '\\' \反斜杠字符
-        '\123'   最多三位0到377八进制数表示的'Latin-1'字符 
-          PS: 严格模式下,不能使用八进制转义字符 
-          console.log('\251'==='©');  // true  
-          console.log('\55');   // -
-          console.log('\055');  // -
-        '\x12'   二位00和FF的十六进制数字表示的'Latin-1'字符 
-          console.log('\xA9'==='©'); // true 
-        '\u1234' 四位十六进制数字表示的Unicode序列字符 
-          console.log('\u00A9'==='©');  // true 
-        '\u{12345}' Unicode代码点'code point'转义字符 
-          console.log('\u{2F804}'==='你'); // true 
-      作为一个字符来解释 
-        console.log('\t\n'.length); // 2
-      Example: 
-        console.log("read \"book\""); // read "book"
-    创建字符串 
-      str = 'xx' 字面量法创建
-      str = new String() 构造函数创建
-      字符串不可单独修改其字符,只能覆盖替换,因为不是引用类型  
-    其他类型转换为字符串 
-      隐式转换为字符串 
-        val+"" 
-        undefined 为"undefined";null 转换为"null";
-        true 为"true";false 为"false";NaN  为"NaN";
-        其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
-          数值会转换为数值本身,即数字字符串 
-          console.log(123.0.toString(),typeof 123..toString()); // 123 string
-      String(val)、obj.valueOf()、obj.toString() 显式转换 
-    Accu: 
-      数值字符串比较其数值大小,采用相减的方式 
-        var str1 = '9';
-        var str2 = '100';
-        console.log(str1>str2);   // true , 非想要的结果 
-        console.log(str1-str2>0); // false
-    `a${1+2}b` 模版字符串,可以跨越多行,使用反引号引起来[ES6] 
-      `${val/expr}` 模板占位符 
-    'Strings and Regular Expressions'字符串与正则表达式[ES6] 
-      PS: ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成'UTF-16' 
-        每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
-        所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
-        曾经,16 位的容量对于任意字符的存放都是足够的,
-        然而 Unicode 引入了扩展字符集(expanded character set)使得限制字符的长度在 16 位以内,
-        所以难以满足 Unicode 意图给世界上所有字符提供全局唯一标识符的雄心壮志.
-        UTF-16 的前 2^16 个代码点由单个 16 位代码单元表示.
-        这个范围被称作基本多语言面(Basic Multilingual Plane,BMP).
-        任何超出该范围的部分都是增补的语言面(supplementary plane),
-        代码点将不能被单一的 16 位代码单元表示.
-        因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
-        这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
-        也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
-      Example: 
-        var text = "𠮷";
-        console.log(text.length);           // 2
-        单个 Unicode 字符 "𠮷" 由代理项对表示,
-        因此,本例中 JavaScript 在操作该字符串时会将它视为两个 16 位字符.
-      str.codePointAt(index); 返回指定下标字符的经过扩展后的UTF-16 编码
-        为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
-        它可以提取给定位置字符串的对应 Unicode 代码点.
-        该方法接收代码单元而非字符的位置并返回一个整型值.
-        Example:
-          var text = "𠮷a";
-          console.log(text.charCodeAt(0));    // 55362
-          console.log(text.charCodeAt(1));    // 57271
-          console.log(text.charCodeAt(2));    // 97
-          console.log(text.codePointAt(0));   // 134071
-          console.log(text.codePointAt(1));   // 57271
-          console.log(text.codePointAt(2));   // 97
-          示例中的首个字符并没有位于 BMP 范围内,因此它包含两个代码单元,
-          意味着 length 属性是 3 而不是 2 .
-          charCodeAt() 方法返回的只是处于位置 0 的第一个代码单元,
-          而 codePointAt() 返回的是完整的代码点,即使它分配给了多个代码单元.
-    
-          对一个字符调用 codePointAt() 方法是判断它所包含代码单元数量的最容易的方法
-          function is32Bit(c) { return c.codePointAt(0) > 0xFFFF; }
-          console.log(is32Bit("𠮷"));    // true
-          console.log(is32Bit("a"));     // false
-      String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
-        PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
-          针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
-        Example:
-          使用给定的代码点来产生相应的单个字符
-          console.log(String.fromCodePoint(134071));  // "𠮷"
-引用类型: 引用类型的值是对象,保存在堆内存中 
-  PS: 包含引用类型值的变量是一个指向对象的指针 
-    变量赋值,复制的其实是指针,因此两个变量最终都指向同一个对象 
-    对象是若干名值的合集,一般没有长度
-    对象分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
-  创建对象: 'class'类,语言提供的自定义数据类型的机制,用于创建对象 
-    PS: 类就是对象的数据类型,对象就是类的具象化 
-    key: val,键值对表现形式: 对象成员都是用一个名称来标记的  
-      PS: 访问对象不存在的属性,返回'undefined' 
-        对象默认是可扩展的,可以向对象中添加、删除属性和方法
-      'key'键  str,属性名或方法名,
-        需用引号的情况: 非合法的变量名,或包含除特殊字符,或以数字开头,或为JS保留字;
+      console.log(null === null);
+      console.log(null==undefined); // true ,undefined派生于null
+      console.log(typeof null); // object
+    基本包装类型: 基本类型的变体,一定条件下有对象的性质[如可调用方法、设置属性等] 
+      PS: 通过构造函数显式的创建基本包装对象 
+      基本包装对象和对象一样按引用进行比较 
+        var a1 = "test";
+        var a2 = new String("test");  // 对象字符串
+        console.log(a1 == a2);//true
+        console.log(a1 === a2);//false
+      隐式创建的包装对象其对象性质是临时性的 
+        var aoo ="abc";
+        aoo.z ="z"; // 瞬时存在包装对象,所以不会报错,但后续访该对象被丢弃
+        console.log(aoo.z); // undefined 
+        // 上一次隐式创建的包装对象用完就消失了
+        // 此次访问其z属性又隐式创建了包装对象但并未定义,所以为undefined
+        var boo = new String("abc");
+        boo.z = "z";
+        console.log(boo.z); // z
+    Boolean 布尔值 
+      PS: ECMAScript中所有类型的值都可转换成这两个Boolean值等价的值 
+      隐式转换为布尔值 
+        规则: 
+        undefined、null、0、NaN、""转换为 false;
+        其余转换为 true,包括 '0'、对象、Infinity 等等 
         Example: 
-          var aoo = { "d sd ":1 }
-          console.log(aoo["d sd "]); // 1
+          var box = ''; 
+          if(box){ //条件语句中()内必须是布尔值
+            console.log('真');
+          }
+          else{ 
+            console.log('假');
+          } 
           
-          var obj = {};
-          var obj1 = {a : 1}
-          obj[obj1] = 2;
-          console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
-          console.log(obj[{}]); // 2 
-          console.log(obj[{b:3}]); // 2 
-      'val'值  any/expr,属性值或方法 
-        var obj = {
-          key1 : new Date().getHours()
-        }
-        console.log(obj); // {key1: 21} 
-      obj[<key>]  读写属性值 
-        key    expr,系统将自动转化为字符串 
-      obj.<key>   读写属性值,
-        PS: 属性名不是一个合法的变量名时,只能使用中括号的形式访问;
-      obj.<key>() 方法调用 
-    get key(){}/set key(){} getter/setter取值、存值函数创建伪属性  
-      PS: 不可在具有真实值的属性上同时拥有getter/setter 
-    var obj = {}  字面量创建对象 
-      {     
-        key1: val1      
-        ,...          // 名值对间使用逗号隔开
-        ,get key1() { return val; }   // 取值函数 
-          this  表示该对象 
-          key1   可使用[expr]表达式的返回值[ES2015] 
-            var expr = 'foo';
-            var obj = {
-              get [expr]() { return 'bar'; }
-            };
-            console.log(obj.foo); // "bar"
-          可通过 delete 操作符删除 getter 
-            delete obj.key1;
-          延时执行: 在访问前不会计算属性的值 
-        ,set key1() {}                // 存值函数 
-          this  表示当前对象  
-          key1  可使用[expr]表达式的返回值[ES2015] 
-            var expr = 'foo';
-            var obj = {
-              set [expr](val) { console.log(val); }
-            };
-            obj.foo = 1 // 1 
-          可用delete操作来移除 
-            delete obj.key1;
-        ,...
-      }   
-      Example: 
-        var obj = {}    // 空对象,没有任何属性的对象
-        var box = null  // 初始化对象
-    var obj = new Object(any/expr) 构造函数创建对象 
-      PS: 若无参数可省略括号 new Object 但不推荐使用
-      Example: 
-      var obj1 = new Object(2); // Object类型,值是2
-      console.log(obj1); //  Number {[[PrimitiveValue]]: 2}  
-      console.log(obj1+2); // 4 ,隐式转换为2 
-      var obj2 = {a:1} 
-      console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
-      console.log(new Object({x:1}));  // Object {x : 1} 
-    var obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
-      proto   创建对象的原型对象  
-        console.log(Object.create(null)); // {},'纯净的空对象',没有原型 
-        Object.create(Object.prototype);  // {} ,一个空对象
-        
-        var aoo = {x:1};
-        var boo = Object.create(aoo);
-        console.log(boo.__proto__ === aoo);      // true 
-        console.log(boo.constructor === Object); // true  
-      config  新增属性方法及属性特性的配置对象 
-        var boo = Object.create({aoo:1},{
-          boo: {
-            value : 22,
-            writable : false
-          },
-          coo: { 
-            value : "aa",
-            writable : true
-          }
-        });
-    仿造类的实现方式: 
-      var obj = foo()  工厂模式: 创建一对象并返回 
-        PS: 工厂模式使软件领域一种广为人知的设计模式 
-        function createObject(name,age){    // 创建工厂函数 
-          var obj = new Object();           //创建对象
-          obj.name = name;                  //添加属性
-          obj.age = age;
-          obj.run = function(){             //添加方法
-            return this.name+this.age+"运行中";
-          };
-          return obj;                       //返回对象引用
-        }
-        var aoo = createObject("lee",100);       //创建第一个对象
-        aoo.run();    // "lee100运行中"
-        缺点: 无法继承; 无法识别对象的类型 
-      var obj = new Foo() 自定义构构造函数[类]实例化对象 
-        混合的构造函数: 构造函数+原型对象  
-          构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
-          Example: 
-          function Foo(arg1,arg2) { 
-            this.key1 = arg1; 
-            this.key2 = arg2; 
-          }
-          Foo.prototype = {
-            constructor: Foo,
-            foo1: function(){
-            },
-          }
-        构造函数创建对象的过程: 
-          1 创建一个新对象'newObj' 
-          2 将this就指向了'newObj';
-          3 为'newObj'添加属性/方法;
-          4 返回'newObj'
-        若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
-          若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
-          即返回值的优先级更高
-          var Foo = function(){
-            this.aoo = 1;
-            this.boo = 2;
-            return 1;
-          }
-          var Goo = function(){
-            this.aoo = 1;
-            this.boo = 2;
-            return {a:'a'}
-          }
-          console.log(new Foo(),new Goo()); 
-          // Foo {aoo: 1, boo: 2}    {a: "a"}
-        未使用'new'实例化对象时,相当于直接执行函数,导致'window'属性意外增加 
-          直接执行构造函数,使内部的'this'指向的是全局对象window 
-          function Foo(arg1,arg2){ 
-            this.aoo = arg1; 
-            this.boo = arg2; 
-          }
-          var obj = Foo(2,3);
-          console.log(window.aoo,boo); // 2,3 
-  对象成员的特性'attributes' 
-    PS: 'writable'、'enumerable'、'configurable'只能通过函数来设定 
-      这些特性是为了实现JS引擎用的,在JS中不能直接访问它们。
-      为了表示特性是内部值,该规范把它们放在了两对儿方括号中,例如 [[Enumerable]]
-    ◆数据特性: 描述属性行为 
-    [[Value]]        默认 undefined,属性的值 
-    [[Writable]]     默认 true,是否可写 
-    [[Enumerable]]   默认 true,能否通过'for in'、'Object.keys'等枚举  
-    [[Configurable]] 默认 true,能否配置 
-      包括: 能否delete删除、能否修改属性特性配置、能否重新定义属性特性 
-      不可逆性: 一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
-    ◆访问器特性 
-    [[Get]]  读属性值时的操作,默认返回属性值 
-    [[Set]]  写属性值时的操作,默认返回属性值 
-      var obj = {
-        aoo : "aaa",
-        boo : 111,
-        // 注意此处无冒号
-        get boo (){ 
-          console.log('读取boo中..');
-          return 222; 
-        },
-        set boo (val){ 
-          console.log("boo设置为"+val) 
-        },
-      }
-      console.log(obj.boo);     // 读取boo中..
-      obj.boo = 11; // boo设置为11
-    [[Enumerable]]    能否遍历  
-    [[Configurable]]  能否配置 
-  原型对象: 构造函数的'prototype'属性 
-    PS: 用于存放某一类对象的公有属性和方法 
-      构造函数实例化后的对象都可以'继承'到其'prototype'的属性和方法 
-      原型对象的'constructor'属性指向构造函数
-    原型对象的获取方法:   
-      Foo.prototype   通过定义获取 
-      obj.constructor.prototype   通过实例间接获取 
-      Object.getPrototypeOf(obj)  通过实例获取 [ES5] 
-      obj.__proto__               通过实例获取 [非标][IE11+]  
-    原型的'修改'与'重设' 
-      修改原型对象会影响到其他实例 
-        function Person(){ };
-        Person.prototype = { 
-          "constructor": Person, 
-          "friends": ["a","b"] 
-        }
-        var p1 = new Person();
-        var p2 = new Person();
-        p1.friends.push("c"); // 实际为修改原型 
-        console.log(p1.friends);  // ["a", "b", "c"]
-        console.log(p2.friends);  // ["a", "b", "c"]
-        p1.friends = ["1"];  // 定义 p1 实例中的属性
-        console.log(p1.friends);  // ["1"]
-        console.log(p2.friends);  // ["a", "b", "c"]
-      重设原型对象: 
-      ★导致原型的'constructor'属性被覆盖,不再指回构造函数 
-        决解方案: 强制指定 constructor
+          console.log(!0,!1); // true false
+      bol = Boolean(any) 显式转换为布尔值 [moIn 'Global']
+    Number  数值 
+      PS: 可以保存+0 和 -0,且 +0 === -0;
+      数值进制 
+        PS: 在进行算术计算时,所有八进制和十六进制表示的数值都将被转换成十进制数值
+        十进制    
+        八进制     0 开头,且最大数值不超过7 
+          若字面量中的数值超出了范围,则前导0被忽略,后面的数值将被当作十进制数值解析
+          八进制字面量在严格模式下是无效的,会导致JS引擎抛错  
+        十六进制数 必须使用0x或0X开头,最大字符不超过f 
+        ES6中: 
+        '0b***' 声明2进制数 
+          console.log(0b11);  // 3 
+        '0o***' 声明8进制数 
+          console.log(0o10);  // 8 
+        '0x***' 声明16进制数 
+          console.log(0xf);    // 15 
+      科学计数: 
+        e E 可大写,可小写
+        默认情况下,ECMAScript会将小数点后面有6个零以上的浮点数使用科学计数法表示
+        var a = 2E3;//或者2e3
+        console.log(a); //2000
+        2e3;  //2000
+        0.000000005; //5e-9
+      浮点类型: 小数点后至少有一位非零数字 
+        浮点数可省略前导0,但不推荐使用,如 .8  
+        浮点数占用的内存比整型数大两倍,默认将可转换为整型的浮点数值转换成整型 
+          console.log(8.0);   // 8
+        浮点数最高精度是17位小数,但算术运算中可能会不精确 
+          // 不要使用浮点数做判断
+          console.log(0.1+0.2);   // 0.300000000000004
+      特殊数值 
+        Infinity/-Infinity   正/负无穷 
+          无穷是不能参加计算的数值  
+        NaN'not a number'非数值: 表示一本应为数值而不是数值的情况,而不报错 
+          PS: 在其他语言中,任何数值除以零都会导致错误而终止程序执行,
+            但ECMAScript会返回特殊的值,不会影响程序执行.
+          不和任何值相等,包括自己  
+            console.log(NaN == NaN); // false
+          任何与NaN进行运算的结果均为 NaN  
+            console.log(NaN+1); // NaN
+          Example:
+          console.log(0/0);  // NaN
+      转换为数值  
+        隐式转换为数值 
+          undefined 为 NaN; null false 为 0; true 为 1;
+          其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
+          Example:
+          console.log(1*"2",typeof (1*'2'));  // 2 number  
+          console.log(1+"1",typeof (1+'1'));  // 11 string
+        Number()、parseInt()、parseFloat()、obj.valueOf()、obj.toString() 显式转换为 
+    String  字符串: 由若干个16位Unicode字符组成的字符序列 
+      PS: 可使用双引号或单引号,但必须成对出现;
+      特殊字符: 也叫转义序列,可能引起歧义的特殊字符字面量  
+        枚举: 
+          '\"' 双引号
+          '\'' 单引号
+          '\n' 换行符
+          '\r' 回车符
+          '\b' 空格 
+          '\t' Tab制表符 
+          '\0' Null字节
+          '\f' 换页符
+          '\v' 垂直制表符
+          '\\' \反斜杠字符
+          '\123'   最多三位0到377八进制数表示的'Latin-1'字符 
+            PS: 严格模式下,不能使用八进制转义字符 
+            console.log('\251'==='©');  // true  
+            console.log('\55');   // -
+            console.log('\055');  // -
+          '\x12'   二位00和FF的十六进制数字表示的'Latin-1'字符 
+            console.log('\xA9'==='©'); // true 
+          '\u1234' 四位十六进制数字表示的Unicode序列字符 
+            console.log('\u00A9'==='©');  // true 
+          '\u{12345}' Unicode代码点'code point'转义字符 
+            console.log('\u{2F804}'==='你'); // true 
+        作为一个字符来解释 
+          console.log('\t\n'.length); // 2
         Example: 
-        function Box(){}
-        Box.prototype = { run : function(){} }
-        var box1 = new Box();
-        box1.constructor; // function Object() { [native code] }
-        // 实例的构造函数指向Object
-        字面量方式改进为:
-        Box.prototype = {
-          constructor : Box, // 强制指定到Box
-          run : function(){
-            return 1;
+          console.log("read \"book\""); // read "book"
+      创建字符串 
+        str = 'xx' 字面量法创建
+        str = new String() 构造函数创建
+        字符串不可单独修改其字符,只能覆盖替换,因为不是引用类型  
+      其他类型转换为字符串 
+        隐式转换为字符串 
+          val+"" 
+          undefined 为"undefined";null 转换为"null";
+          true 为"true";false 为"false";NaN  为"NaN";
+          其他对象调用自身的 .valueOf() .toString() 方法,进行转换 
+            数值会转换为数值本身,即数字字符串 
+            console.log(123.0.toString(),typeof 123..toString()); // 123 string
+        String(val)、obj.valueOf()、obj.toString() 显式转换 
+      Accu: 
+        数值字符串比较其数值大小,采用相减的方式 
+          var str1 = '9';
+          var str2 = '100';
+          console.log(str1>str2);   // true , 非想要的结果 
+          console.log(str1-str2>0); // false
+      `a${1+2}b` 模版字符串,可以跨越多行,使用反引号引起来[ES6] 
+        `${val/expr}` 模板占位符 
+      'Strings and Regular Expressions'字符串与正则表达式[ES6] 
+        PS: ECMAScript6诞生之前,JS字符串由 16 位编码的字符组成'UTF-16' 
+          每个字符又由包含一个 16 位序列的代码单元(code unit)表示.
+          所有的字符串属性和方法,例如 length 和 charAt(),都基于这些 16 位编码单元.
+          曾经,16 位的容量对于任意字符的存放都是足够的,
+          然而 Unicode 引入了扩展字符集(expanded character set)使得限制字符的长度在 16 位以内,
+          所以难以满足 Unicode 意图给世界上所有字符提供全局唯一标识符的雄心壮志.
+          UTF-16 的前 2^16 个代码点由单个 16 位代码单元表示.
+          这个范围被称作基本多语言面(Basic Multilingual Plane,BMP).
+          任何超出该范围的部分都是增补的语言面(supplementary plane),
+          代码点将不能被单一的 16 位代码单元表示.
+          因此,UTF-16 引入了代理项对(surrogate pair)来让两个 16 位代码单元表示一个代码点.
+          这意味着字符既可能是包含单个代码单元的 16 位 BMP 字符,
+          也可能是由两个代码单元组成的位于增补语言面的 32 位字符.
+        Example: 
+          var text = "𠮷";
+          console.log(text.length);           // 2
+          单个 Unicode 字符 "𠮷" 由代理项对表示,
+          因此,本例中 JavaScript 在操作该字符串时会将它视为两个 16 位字符.
+        str.codePointAt(index); 返回指定下标字符的经过扩展后的UTF-16 编码
+          为了全面支持 UTF-16,ECMAScript 6 新添加的方法之一就是 codePointAt(),
+          它可以提取给定位置字符串的对应 Unicode 代码点.
+          该方法接收代码单元而非字符的位置并返回一个整型值.
+          Example:
+            var text = "𠮷a";
+            console.log(text.charCodeAt(0));    // 55362
+            console.log(text.charCodeAt(1));    // 57271
+            console.log(text.charCodeAt(2));    // 97
+            console.log(text.codePointAt(0));   // 134071
+            console.log(text.codePointAt(1));   // 57271
+            console.log(text.codePointAt(2));   // 97
+            示例中的首个字符并没有位于 BMP 范围内,因此它包含两个代码单元,
+            意味着 length 属性是 3 而不是 2 .
+            charCodeAt() 方法返回的只是处于位置 0 的第一个代码单元,
+            而 codePointAt() 返回的是完整的代码点,即使它分配给了多个代码单元.
+      
+            对一个字符调用 codePointAt() 方法是判断它所包含代码单元数量的最容易的方法
+            function is32Bit(c) { return c.codePointAt(0) > 0xFFFF; }
+            console.log(is32Bit("𠮷"));    // true
+            console.log(is32Bit("a"));     // false
+        String.fromCodePoint(num); 根据指定的UTF-16 编码生成字符
+          PS:可以将 String.fromCharCode() 视为 String.fromCharCode() 的完善版本.
+            针对 BMP 字符两者会产生相同的结果,只有 BMP 之外的字符才会有差异.
+          Example:
+            使用给定的代码点来产生相应的单个字符
+            console.log(String.fromCodePoint(134071));  // "𠮷"
+  引用类型: 引用类型的值是对象,保存在堆内存中 
+    PS: 包含引用类型值的变量是一个指向对象的指针 
+      变量赋值,复制的其实是指针,因此两个变量最终都指向同一个对象 
+      对象是若干名值的合集,一般没有长度
+      对象分为JS内置对象[如 Number]、宿主环境[如 window]、自定义[如 {}] 
+    创建对象: 'class'类,语言提供的自定义数据类型的机制,用于创建对象 
+      PS: 类就是对象的数据类型,对象就是类的具象化 
+      key: val,键值对表现形式: 对象成员都是用一个名称来标记的  
+        PS: 访问对象不存在的属性,返回'undefined' 
+          对象默认是可扩展的,可以向对象中添加、删除属性和方法
+        'key'键  str,属性名或方法名,
+          需用引号的情况: 非合法的变量名,或包含除特殊字符,或以数字开头,或为JS保留字;
+          Example: 
+            var aoo = { "d sd ":1 }
+            console.log(aoo["d sd "]); // 1
+            
+            var obj = {};
+            var obj1 = {a : 1}
+            obj[obj1] = 2;
+            console.log(obj); // {[object Object]: 2},对象被转换成字符串来作为key存储
+            console.log(obj[{}]); // 2 
+            console.log(obj[{b:3}]); // 2 
+        'val'值  any/expr,属性值或方法 
+          var obj = {
+            key1 : new Date().getHours()
           }
+          console.log(obj); // {key1: 21} 
+        obj[<key>]  读写属性值 
+          key    expr,系统将自动转化为字符串 
+        obj.<key>   读写属性值,
+          PS: 属性名不是一个合法的变量名时,只能使用中括号的形式访问;
+        obj.<key>() 方法调用 
+      get key(){}/set key(){} getter/setter取值、存值函数创建伪属性  
+        PS: 不可在具有真实值的属性上同时拥有getter/setter 
+      var obj = {}  字面量创建对象 
+        {     
+          key1: val1      
+          ,...          // 名值对间使用逗号隔开
+          ,get key1() { return val; }   // 取值函数 
+            this  表示该对象 
+            key1   可使用[expr]表达式的返回值[ES2015] 
+              var expr = 'foo';
+              var obj = {
+                get [expr]() { return 'bar'; }
+              };
+              console.log(obj.foo); // "bar"
+            可通过 delete 操作符删除 getter 
+              delete obj.key1;
+            延时执行: 在访问前不会计算属性的值 
+          ,set key1() {}                // 存值函数 
+            this  表示当前对象  
+            key1  可使用[expr]表达式的返回值[ES2015] 
+              var expr = 'foo';
+              var obj = {
+                set [expr](val) { console.log(val); }
+              };
+              obj.foo = 1 // 1 
+            可用delete操作来移除 
+              delete obj.key1;
+          ,...
+        }   
+        Example: 
+          var obj = {}    // 空对象,没有任何属性的对象
+          var box = null  // 初始化对象
+      var obj = new Object(any/expr) 构造函数创建对象 
+        PS: 若无参数可省略括号 new Object 但不推荐使用
+        Example: 
+        var obj1 = new Object(2); // Object类型,值是2
+        console.log(obj1); //  Number {[[PrimitiveValue]]: 2}  
+        console.log(obj1+2); // 4 ,隐式转换为2 
+        var obj2 = {a:1} 
+        console.log(obj2 + 2); // Object {a: 1} [object Object]2 ,变成字符串相加 
+        console.log(new Object({x:1}));  // Object {x : 1} 
+      var obj = Object.create(proto[,config]); 继承方式创建对象[ES5] 
+        proto   创建对象的原型对象  
+          console.log(Object.create(null)); // {},'纯净的空对象',没有原型 
+          Object.create(Object.prototype);  // {} ,一个空对象
+          
+          var aoo = {x:1};
+          var boo = Object.create(aoo);
+          console.log(boo.__proto__ === aoo);      // true 
+          console.log(boo.constructor === Object); // true  
+        config  新增属性方法及属性特性的配置对象 
+          var boo = Object.create({aoo:1},{
+            boo: {
+              value : 22,
+              writable : false
+            },
+            coo: { 
+              value : "aa",
+              writable : true
+            }
+          });
+      仿造类的实现方式: 
+        var obj = foo()  工厂模式: 创建一对象并返回 
+          PS: 工厂模式使软件领域一种广为人知的设计模式 
+          function createObject(name,age){    // 创建工厂函数 
+            var obj = new Object();           //创建对象
+            obj.name = name;                  //添加属性
+            obj.age = age;
+            obj.run = function(){             //添加方法
+              return this.name+this.age+"运行中";
+            };
+            return obj;                       //返回对象引用
+          }
+          var aoo = createObject("lee",100);       //创建第一个对象
+          aoo.run();    // "lee100运行中"
+          缺点: 无法继承; 无法识别对象的类型 
+        var obj = new Foo() 自定义构构造函数[类]实例化对象 
+          混合的构造函数: 构造函数+原型对象  
+            构造函数: 定义对象的独有的属性/方法; 原型对象: 定义共享的属性/方法
+            Example: 
+            function Foo(arg1,arg2) { 
+              this.key1 = arg1; 
+              this.key2 = arg2; 
+            }
+            Foo.prototype = {
+              constructor: Foo,
+              foo1: function(){
+              },
+            }
+          构造函数创建对象的过程: 
+            1 创建一个新对象'newObj' 
+            2 将this就指向了'newObj';
+            3 为'newObj'添加属性/方法;
+            4 返回'newObj'
+          若构造函数返回值为一对象,则将该返回值作为生成的实例对象 
+            若构造函数无返回值或返回值为基本类型,则将'this'作为返回值来生成实例对象 
+            即返回值的优先级更高
+            var Foo = function(){
+              this.aoo = 1;
+              this.boo = 2;
+              return 1;
+            }
+            var Goo = function(){
+              this.aoo = 1;
+              this.boo = 2;
+              return {a:'a'}
+            }
+            console.log(new Foo(),new Goo()); 
+            // Foo {aoo: 1, boo: 2}    {a: "a"}
+          未使用'new'实例化对象时,相当于直接执行函数,导致'window'属性意外增加 
+            直接执行构造函数,使内部的'this'指向的是全局对象window 
+            function Foo(arg1,arg2){ 
+              this.aoo = arg1; 
+              this.boo = arg2; 
+            }
+            var obj = Foo(2,3);
+            console.log(window.aoo,boo); // 2,3 
+    对象成员的特性'attributes' 
+      PS: 'writable'、'enumerable'、'configurable'只能通过函数来设定 
+        这些特性是为了实现JS引擎用的,在JS中不能直接访问它们。
+        为了表示特性是内部值,该规范把它们放在了两对儿方括号中,例如 [[Enumerable]]
+      ◆数据特性: 描述属性行为 
+      [[Value]]        默认 undefined,属性的值 
+      [[Writable]]     默认 true,是否可写 
+      [[Enumerable]]   默认 true,能否通过'for in'、'Object.keys'等枚举  
+      [[Configurable]] 默认 true,能否配置 
+        包括: 能否delete删除、能否修改属性特性配置、能否重新定义属性特性 
+        不可逆性: 一旦把属性定义为不可配置的,就不能再把其变回可配置的了 
+      ◆访问器特性 
+      [[Get]]  读属性值时的操作,默认返回属性值 
+      [[Set]]  写属性值时的操作,默认返回属性值 
+        var obj = {
+          aoo : "aaa",
+          boo : 111,
+          // 注意此处无冒号
+          get boo (){ 
+            console.log('读取boo中..');
+            return 222; 
+          },
+          set boo (val){ 
+            console.log("boo设置为"+val) 
+          },
         }
-      ★已创建实例的原型不变,但会改变后续再实例化的对象的原型 
-        即构造函数和实例间可存在多个原型对象   
-        function Foo(name){
-          this.name = name; 
-        }
-        Foo.prototype.aoo = 1;
-        var obj1 = new Foo('aa');
-        console.log(obj1.__proto__);  // {aoo: 1, constructor: ƒ}
-        Foo.prototype.aoo = 2;   
-        console.log(obj1.__proto__);  // {aoo: 2, constructor: ƒ}
-        Foo.prototype = { boo : 11 }; 
-        console.log(obj1.__proto__);  // {aoo: 2, constructor: ƒ}
-        console.log(Object.getPrototypeOf(obj1));  // {aoo: 2, constructor: ƒ}
-        // 原实例的原型无变化 
-        console.log(obj1.constructor.prototype); // {boo: 11}  
-        // 但更改了后续实例的原型 
-        var obj2 = new Foo('bb');
-        console.log(obj2.constructor.prototype === Object.prototype); // true 
-  原型链继承: 通过实例对象继承原型对象的原理,原型对象继承其他对象,从而实现原型链继承[Self]  
-    Example: 
-    var Foo = function(name){
-      this.name = name;
-    }
-    Foo.prototype.aoo = '1'; // 实例继承原型  
-    var Goo = function(age){
-      this.age = age;
-      this.age1 = 'age1';   // 要求不继承 
-    }
-    Goo.prototype = {  // 要求继承 
-      boo: {
-        a: 1 
-      },  
-    }
-    // 方式1
-    Foo.prototype = Object.assign(Foo.prototype,Goo.prototype) // 
-    Foo.prototype.constructor = Foo;
-    // console.log(Foo.prototype.boo === Goo.prototype.boo); // true 
-    // 方式2
-    // Foo.prototype.__proto__ = Goo.prototype // 原型的继承 
-    var obj1 = new Foo('abc')
-    console.log(obj1); // Foo {name: "abc"} 
-    console.log(obj1.aoo);  // 1 
-    console.log(obj1.age1); // undefined
-    console.log(obj1.boo);  // {a: 1}  
-    原型链继承的缺点: 
-    ★在原型中定义的引用类型的属性可被所有实例共享 
-      var Foo = function(){ }
-      Foo.prototype = {
-        key1: [1,2]
+        console.log(obj.boo);     // 读取boo中..
+        obj.boo = 11; // boo设置为11
+      [[Enumerable]]    能否遍历  
+      [[Configurable]]  能否配置 
+    原型对象: 构造函数的'prototype'属性 
+      PS: 用于存放某一类对象的公有属性和方法 
+        构造函数实例化后的对象都可以'继承'到其'prototype'的属性和方法 
+        原型对象的'constructor'属性指向构造函数
+      原型对象的获取方法:   
+        Foo.prototype   通过定义获取 
+        obj.constructor.prototype   通过实例间接获取 
+        Object.getPrototypeOf(obj)  通过实例获取 [ES5] 
+        obj.__proto__               通过实例获取 [非标][IE11+]  
+      原型的'修改'与'重设' 
+        修改原型对象会影响到其他实例 
+          function Person(){ };
+          Person.prototype = { 
+            "constructor": Person, 
+            "friends": ["a","b"] 
+          }
+          var p1 = new Person();
+          var p2 = new Person();
+          p1.friends.push("c"); // 实际为修改原型 
+          console.log(p1.friends);  // ["a", "b", "c"]
+          console.log(p2.friends);  // ["a", "b", "c"]
+          p1.friends = ["1"];  // 定义 p1 实例中的属性
+          console.log(p1.friends);  // ["1"]
+          console.log(p2.friends);  // ["a", "b", "c"]
+        重设原型对象: 
+        ★导致原型的'constructor'属性被覆盖,不再指回构造函数 
+          决解方案: 强制指定 constructor
+          Example: 
+          function Box(){}
+          Box.prototype = { run : function(){} }
+          var box1 = new Box();
+          box1.constructor; // function Object() { [native code] }
+          // 实例的构造函数指向Object
+          字面量方式改进为:
+          Box.prototype = {
+            constructor : Box, // 强制指定到Box
+            run : function(){
+              return 1;
+            }
+          }
+        ★已创建实例的原型不变,但会改变后续再实例化的对象的原型 
+          即构造函数和实例间可存在多个原型对象   
+          function Foo(name){
+            this.name = name; 
+          }
+          Foo.prototype.aoo = 1;
+          var obj1 = new Foo('aa');
+          console.log(obj1.__proto__);  // {aoo: 1, constructor: ƒ}
+          Foo.prototype.aoo = 2;   
+          console.log(obj1.__proto__);  // {aoo: 2, constructor: ƒ}
+          Foo.prototype = { boo : 11 }; 
+          console.log(obj1.__proto__);  // {aoo: 2, constructor: ƒ}
+          console.log(Object.getPrototypeOf(obj1));  // {aoo: 2, constructor: ƒ}
+          // 原实例的原型无变化 
+          console.log(obj1.constructor.prototype); // {boo: 11}  
+          // 但更改了后续实例的原型 
+          var obj2 = new Foo('bb');
+          console.log(obj2.constructor.prototype === Object.prototype); // true 
+    原型链继承: 通过实例对象继承原型对象的原理,原型对象继承其他对象,从而实现原型链继承[Self]  
+      Example: 
+      var Foo = function(name){
+        this.name = name;
       }
-      var obj1 = new Foo();
-      var obj2 = new Foo();
-      obj1.key1.push(3);
-      console.log(obj2.key1); //  [1, 2, 3] 
-    ★在创建子类型的实例时,不能向超类型的构造函数中传递参数 
+      Foo.prototype.aoo = '1'; // 实例继承原型  
+      var Goo = function(age){
+        this.age = age;
+        this.age1 = 'age1';   // 要求不继承 
+      }
+      Goo.prototype = {  // 要求继承 
+        boo: {
+          a: 1 
+        },  
+      }
+      // 方式1
+      Foo.prototype = Object.assign(Foo.prototype,Goo.prototype) // 
+      Foo.prototype.constructor = Foo;
+      // console.log(Foo.prototype.boo === Goo.prototype.boo); // true 
+      // 方式2
+      // Foo.prototype.__proto__ = Goo.prototype // 原型的继承 
+      var obj1 = new Foo('abc')
+      console.log(obj1); // Foo {name: "abc"} 
+      console.log(obj1.aoo);  // 1 
+      console.log(obj1.age1); // undefined
+      console.log(obj1.boo);  // {a: 1}  
+      原型链继承的缺点: 
+      ★在原型中定义的引用类型的属性可被所有实例共享 
+        var Foo = function(){ }
+        Foo.prototype = {
+          key1: [1,2]
+        }
+        var obj1 = new Foo();
+        var obj2 = new Foo();
+        obj1.key1.push(3);
+        console.log(obj2.key1); //  [1, 2, 3] 
+      ★在创建子类型的实例时,不能向超类型的构造函数中传递参数 
   对象类型检测方法:  
     PS: 无直接访问对象类型的方式,可间接通过以下方式来获取
-    Object.prototype.toString.call(val); 获取值类型 
-      var type = Object.prototype.toString;
-      var getType = function(val){
-        return type.call(val).slice(8,-1);
-      }
-      console.log(type.call(null)); // [object Null] 
-      console.log(getType(null)); // Null
-      console.log(getType(undefined)); // Undefined
-      console.log(getType(true)); // Boolean
-      console.log(getType('a')); // String
-      console.log(getType(1)); // Number
-      console.log(getType(new Number())); // Number
-      console.log(typeof new Number()); // object
-      console.log(getType({})); // object
-      console.log(getType([])); // Array
-      console.log(getType(new Date())); // Date
     typeof val;               [详参 一元运算符] 
     obj instanceof Object;    [详参 关系运算符] 
     obj.constructor           查询对象的构造函数 
+    Object.prototype.toString.call(val).slice(8,-1)  获取值类型 
+      function getType(val){
+        return Object.prototype.toString.call(val).slice(8,-1);
+      }
+      console.log( 
+        Object.prototype.toString.call(null) // [object Null] 
+        ,getType(null) // Null
+        ,getType(undefined) // Undefined
+        ,getType(true) // Boolean
+        ,getType('a') // String
+        ,getType(1) // Number
+        ,getType(new Number()) // Number
+        ,typeof new Number() // object
+        ,getType({}) // object
+        ,getType([]) // Array
+        ,getType(new Date()) // Date
+      ); 
     'duck type' 鸭子类型,根据其表现来确定其身份 
 'literal'字面量,直接显示出来的数据值 
   100            // 数字字面量
@@ -875,58 +877,36 @@ const,定义块级常量 [ES6]
   条件操作符 
     obj instanceof Foo; bol,对象是否继承至构造函数  
       PS: 对象须和构造函数处于同一iframe或window中,否则返回false
-      obj  用于检测的对象,若为基本类型则直接返回'false' 
-        console.log(123.1 instanceof Number);  // false
-        console.log("a" instanceof String);    // false
-        console.log(new Number(123) instanceof Number); // true
+      obj  用于检测的对象,若为基本类型则直接返回:false 
       Foo  被检测的构造器,若为非构造函数则报错 
       Example: 
-        function Foo(name){ 
-          this.name=name;
-        }
-        function Goo(age){ 
-          this.age=age; 
-        }
-        Foo.prototype = new Goo(18);  //
-        var aoo = new Foo("abc");   //
-        aoo instanceof Foo;  // true
-        aoo instanceof Goo;  // true
-        aoo instanceof Object;   //true
-        Foo.constructor;     // function Function() { [native code] }
-        Foo.prototype;       // Goo {age: 18}
-        aoo instanceof Foo.constructor;  //false
-        aoo instanceof Foo.prototype;  // 报错
-    bol = prop in obj;  属性是否在对象中[包括原型中属性]  
+        console.log( 
+          123.1 instanceof Number // false
+          ,"a" instanceof String  // false
+          ,new Number(123) instanceof Number // true
+          ,new Number(123) instanceof Object // true
+        );  
+    prop in obj;        bol,属性是否在对象中[包括原型中属性]  
       prop num/str,待检测的对象的属性 
-      obj  被检测的对象 
-        可以是一个String包装对象,但不能是一个字符串原始值
-        var color1 = new String("green");
-        "length" in color1; // true
-        var color2 = "coral";
-        "length" in color2; // 报错(color2不是对象)
+      obj  被检测的对象,可为包装对象但不能是原始类型,否则报错  
       Example: 
-        数组
-        var trees = new Array("redwood", "bay", "cedar", "oak", "maple");
-        0 in trees        // true
-        3 in trees        // true
-        6 in trees        // false
-        "bay" in trees    // false(必须使用索引号,而不是数组元素的值)
-        "length" in trees // true(length是一个数组属性)
-
-        内置对象
-        "PI" in Math          // 返回true
-        自定义对象
-        var mycar = {make: "Honda", model: "Accord", year: 1998};
-        "make" in mycar  // 返回true
-        "model" in mycar // 返回true
+        var arr = new Array("redwood", "bay", "cedar", "oak", "maple")
+        console.log(
+          0 in trees         // true
+          ,3 in trees        // true
+          ,6 in trees        // false
+          ,"bay" in trees    // false(必须使用索引号,而不是数组元素的值)
+          ,"length" in trees // true(length是一个数组属性)
+        );
     
         var obj = {"a":1};
         obj.b = obj;
-        var bol1 = "b" in obj;       
-        var bol2 = "b" in obj.b;     
-        var bol3 = "b" in obj.b.b;   
-        var bol4 = "b" in obj.b.b.b; 
-        console.log(bol1,bol2,bol3,bol4); // true true true true
+        console.log(  
+          "b" in obj         // true 
+          ,"b" in obj.b      // true 
+          ,"b" in obj.b.b    // true 
+          ,"b" in obj.b.b.b  // true 
+        );
     expr1?expr2:expr3; 三元条件运算符 
       当expr1为真则执行expr2,否则执行expr3 
       PS: 三元条件运算符相当于if语句的简写形式 

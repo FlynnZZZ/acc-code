@@ -642,35 +642,21 @@ PC端
       data[pos*4 +2] =brightness;
     }
 自我实现 
-  检查对象的自身的属性 
-    function checkOwnProp(checkObj,checkProp){
+  检查对象及其自身的属性 
+    function objView(checkObj,checkProp){
       // checkObj   // 查询的对象 
       // checkProp  // 可选,待检测的属性 
-      console.log('_________________________________________________');
-      var obj = checkObj   
-      console.log('当前查询的对象:',obj);
-      try {
-        console.log('对象的类型:',typeof obj,obj.toString().slice(7,-1));
-      } 
-      catch (e) {
-        console.log('查询对象类型出错');
-      } 
-      var tObj = Object.getOwnPropertyNames(obj)
-      var isExistProp = false;
-      console.log('对象继承自:',obj.__proto__);
-      console.log('对象属性如下:','________________'); 
-      for(var key in tObj){
-        var k = tObj[key];
-        try {
-          console.log(typeof obj[k],k,obj[k], '#####' );
-        } 
-        catch (e) {
-          console.log( '------',k, '#####' );
-        } 
-        if (checkProp && k == checkProp) { isExistProp = true; }
-      };
-      if (checkProp) { console.log('是否存在属性:',checkProp,isExistProp); }
-      console.log('_________________________________________________');
+      console.log('开始:_________________________________________________');
+      // 检查对象的类型 
+      console.log('对象的类型:',Object.prototype.toString.call(checkObj).slice(8,-1) );
+      // 查询对象成员 
+      var _resultArr = Object.getOwnPropertyNames(checkObj).map(function(val,idx ){
+        if (checkProp && val == checkProp) { 
+          console.log(`存在属性: ${checkProp}`);
+        }
+        console.log(`成员 ${idx}: ${val}-${checkObj[val]}` );
+      } ) 
+      console.log(`共计对象成员: ${_resultArr.length} 个`);
     }
   检查目标是否有该事件 
     function checkEvent(eName,eTarget) {

@@ -1,115 +1,179 @@
 模块: Nodejs应用程序的基本组成部分,模块间可相互调用 
-  PS: 一个NodeJS文件[可能是JS代码、JSON或编译过的C/C++扩展等]就是一个模块
-    可分为: 核心模块,第三方模块和自定义的JS文件 
-    按照CommonJS规范定义和使用模块 
+  一个NodeJS文件[可能是JS代码、JSON或编译过的C/C++扩展等]就是一个模块
+  可分为: 核心模块,第三方模块和自定义的JS文件 
+  按照CommonJS规范定义和使用模块 
+  命名文件时,推荐使用'-'或'_'代替驼峰  
 ◆核心模块: Node自带模块不用安装即可使用  
   源码都在Node的lib子目录中,为了提高运行速度,安装时都会被编译成二进制文件
   核心模块总是最优先加载的,如果自定义一HTTP模块,require('http')加载的还是核心模块 
 // 基础类 
-const Promise = require("Promise")  同步形式执行异步操作　
 const events = require('events')  事件模块 
-  PS: events 模块只提供了一个对象: events.EventEmitter, 
-    EventEmitter 的核心就是事件触发与事件监听器功能的封装;
+  PS: EventEmitter 的核心就是事件触发与事件监听器功能的封装 
     NodeJS所有的异步 I/O 操作在完成时都会发送一个事件到事件队列,
-    NodeJS 里面的许多对象都会分发事件:
-      一个 net.Server 对象会在每次有新连接时分发一个事件,
-      一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
-      所有这些产生事件的对象都是 events.EventEmitter 的实例; 
-  var EventEmitter = events.EventEmitter  事件对象的类 
-    EventEmitter.listenerCount(evEm,'eName')  返回指定事件功能对象的事件的监听器数量 
-  var evEm = new EventEmitter(); 创建事件功能对象 
-    PS: EventEmitter 对象若在实例化时发生错误,会触发 'error' 事件.
-      当添加新的监听器时,'newListener' 事件会触发,
-      当监听器被移除时,'removeListener' 事件被触发.
-    .on('eName',foo);    监听事件 
-      PS: 此处'on'也可以换成'addEventListener' 
-      foo 回调函数,参数为[手动]触发时传入的值 
-    .addListener('eName',listener) 给指定事件添加监听器[同'on'] 
-    .once('eName',listener)  单次事件监听器添加,即只会触发一次,触发后立刻解除
-    .emit('eName'[,val1,val2...]); 触发事件,返回表示该事件是否有被监听的布尔值  
-      当事件触发时,注册到这个事件的事件监听器被依次调用
-    .removeListener('eName',fooName)  移除指定事件的监听 
-      PS:此操作将会改变处于被删监听器之后的那些监听器的索引,
-      fooName 为指定回调的函数名,不能为匿名函数,否则不能移除 
-      Example: 
-        var callback = function(stream) { };
-        server.on('connection', callback);
-        server.removeListener('connection', callback);
-    .removeAllListeners(['eName'])  移除所有监听器
-      eName  事件名,可选,默认移除所有事件的监听,若指定事件,则移除该事件的所有监听器
-    .setMaxListeners(num)   设置事件最大的监听数量 
-      默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
-    .listeners('eName')     返回指定事件的监听函数的数组 
-    .emit('eName'[,val1,val2...]) 激活监听器并传参,返回该事件是否存在监听器的布尔值 
-  EventEmitter 事件 
-    error  在实例化时发生错误触发 
-      当 error 被触发时,EventEmitter 规定如果没有响应的监听器,
-      Node.js 会把它当作异常,退出程序并输出错误信息,
-      为触发 error 事件的对象设置监听器,避免遇到错误后整个程序崩溃.
-    newListener     在添加新监听器时被触发 
-      event - 字符串,事件名称
-      listener - 处理事件函数
-    removeListener  从指定监听器数组中删除一个监听器
-      此操作将会改变处于被删监听器之后的那些监听器的索引
-      event - 字符串,事件名称
-      listener - 处理事件函数
-  Example: 
-    var events = require('events');
-    var event = new events.EventEmitter();
-    var listener1 = function listener1() { console.log('监听器 listener1 执行'); }
-    var listener2 = function listener2() { console.log('监听器 listener2 执行'); }
-    // 绑定 connection 事件,处理函数为 listener1 
-    event.addListener('connection', listener1);
-    // 绑定 connection 事件,处理函数为 listener2
-    event.on('connection', listener2);
-    var eventListeners = events.EventEmitter.listenerCount(event,'connection');
-    console.log(eventListeners + " 个监听器监听连接事件");
-    event.emit('connection'); // 激活事件
-    event.removeListener('connection', listener1); // 移除监绑定的 listener1 函数
-    console.log("listener1 不再受监听");
-    event.emit('connection'); // 触发事件
-    eventListeners = events.EventEmitter.listenerCount(event,'connection');
-    console.log(eventListeners + " 个监听器监听连接事件");
-    console.log("程序执行完毕");
-    执行结果
-      2 个监听器监听连接事件
-      监听器 listener1 执行
-      监听器 listener2 执行
-      listener1 不再受监听
-      监听器 listener2 执行
-      1 个监听器监听连接事件
-      程序执行完毕
-  继承 EventEmitter 
-    大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它.
-    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类.
-const steam = require('stream')   流,用于暂存和移动数据[以bufer的形式存在] 
-  PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口.
+    大多数时候我们不会直接使用 EventEmitter, 而是在对象中继承它 
+    包括 fs、net、 http 在内的,只要是支持事件响应的核心模块都是 EventEmitter 的子类 
+    NodeJS 里面的许多对象都会分发事件: 
+    一个 net.Server 对象会在每次有新连接时分发一个事件,
+    一个 fs.readStream 对象会在文件被打开的时候发出一个事件.
+    所有这些产生事件的对象都是 events.EventEmitter 的实例 
+  DefDec: 
+    emitter  事件实例,一个事件实例可注册多个事件  
+    evtName  事件名称,一个事件可绑定多个监听器  
+    listener 事件监听器,触发事件时,绑定的监听器都会执行  
+  events/EventEmitter 类
+    PS: events === events.EventEmitter   
+    Static: 
+      .listenerCount(emitter,'evtName')  返回事件实例的事件绑定的监听器数量 [已废弃]  
+      .defaultMaxListeners  读写最大的事件的监听器绑定的个数   
+        每个事件默认可注册最多 10 个监听器;若设置值不是正数,将抛出 TypeError错误 
+        所有 emitter 默认值可使用 EventEmitter.defaultMaxListeners 设置 
+          会影响所有 emitter,包括之前创建的 
+        单个 emitter 的限制可使用 emitter.setMaxListeners(n)
+          且优先级高于 EventEmitter.defaultMaxListeners 
+      .init()  
+    Instance: new EventEmitter() 
+    Proto: 
+      ._events 
+      ._maxListeners 
+      .domain 
+      .addListener(evtName,function(arg1,..){  // 添加 listener 到事件监听器数组的末尾  
+        arg  一一对应触发事件时传入的参数 
+      })    
+        PS: 不会检查 listener 是否已被添加
+          多次添加相同的 eventName 和 listener 会导致触发时 listener 被调用多次
+        Input: 
+          evtName   str,注册的事件  
+          listener  事件绑定的监听器   
+        Output: 事件实例 
+      .on(evtName,fn)                          // addListener 的别名  
+      .once(evtName ,function(arg1,..){        // 单次监听器绑定,其他同 .on 
+        PS: 只会触发一次,触发后立刻解除 
+      })            
+      .prependListener(evtName,fn)             // 添加 listener 到事件监听器数组的头部 
+      .prependOnceListener(evtName,fn)         // 单次添加 
+      .emit(evtName ,arg1?,.. )     // bol,同步触发该事件并传递一组数据  
+        PS: 触发时,该事件的监听器会按照注册的顺序依次被调用 
+        Input: 
+          evtName  str,触发的事件 
+          arg      any,传入的若干个数据  
+        Output:  返回表示该事件是否有被监听的布尔值   
+      .removeListener(evtName ,fooName)  // 移除事件的指定监听器  
+        PS: 此操作将会改变处于被删监听器之后的那些监听器的索引 
+        Input: 
+          evtName  事件名称 
+          fooName  为指定回调的函数名,不能为匿名函数,否则不能移除  
+        Output: 当前的事件实例 
+        Example: 
+          var callback = function(stream) { };
+          server.on('connection', callback);
+          server.removeListener('connection', callback);
+      .off(evtName,fooName)              // removeListener 的别名 
+      .removeAllListeners(evtName?)      // 解绑所有监听器  
+        evtName  可选,移除指定事件的所有监听器,默认:移除所有事件的所有监听  
+      .listenerCount(evtName)  // num,指定事件绑定的监听器的数量  
+      .listeners(evtName)      // listenerArr,返回指定事件的监听器的数组 
+      .getMaxListeners()       // num,当前的最大监听器限制值 
+      .setMaxListeners(num)    // 设置事件最大的监听数量 
+        默认单个事件允许绑定不超过 10 监听器函数,否则就会输出警告信息 
+      .eventNames()            // evtNameArr,返回所有注册的事件组成的数组 
+        PS: 数组中的值为字符串或符号 
+        const EventEmitter = require('events');
+        const myEE = new EventEmitter();
+        myEE.on('foo', () => {});
+        myEE.on('bar', () => {});
+        const sym = Symbol('symbol');
+        myEE.on(sym, () => {});
+        console.log(myEE.eventNames()); //  [ 'foo', 'bar', Symbol(symbol) ]
+      .rawListeners(evtName)   // 
+    Events: 
+      'newListener'     事件实例添加事件时,在该事件实例上触发 
+        响应函数的参数为: (
+          evtName        // 新绑定的事件 
+          ,listener      // 新绑定事件对应的监听器 
+        ) 
+        Feature: 
+          在该事件中进行的事件绑定,会被置于该事件的最前位置触发 
+            const myEmitter = new EventEmitter();
+            // 只处理一次,所以不会无限循环
+            myEmitter.once('newListener', (event, listener) => {
+              if (event === 'event') {
+                // 在开头插入一个新的监听器
+                myEmitter.on('event', () => {
+                  console.log('B');
+                });
+              }
+            });
+            myEmitter.on('event', () => {
+              console.log('A');
+            });
+            myEmitter.emit('event');
+            // 打印:
+            //   B
+            //   A
+      'removeListener'  事件实例移除事件时,在该事件实例上触发 
+        用法类似'newListener' 
+      'error'           事件实例中发生错误时,在该事件实例上会触发  
+        若没有为 'error' 事件注册至少一个监听器,则当 'error' 事件触发时,
+        会抛出错误、打印堆栈跟踪、且退出 Node.js 进程 
+        
+        const myEmitter = new EventEmitter();
+        myEmitter.emit('error', new Error('whoops!'));
+        // 抛出错误,并使 Node.js 崩溃 
+        
+        作为最佳实践,应该始终为 'error' 事件注册监听器 
+        const myEmitter = new EventEmitter();
+        myEmitter.on('error', (err) => {
+          console.error('有错误');
+        });
+        myEmitter.emit('error', new Error('whoops!'));
+    Feature: 
+const stream = require('stream')   流,用于暂存和移动数据[以bufer的形式存在] 
+  PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口 
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
     所有的 Stream 对象都是 EventEmitter 的实例 
-  四种Stream流类型:
-    Readable  可读流,读取数据并暂存于bufer中 
-      可'pause'和'resume' 
-    Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
-    Duplex    可读可写操作 
-    Transform 可读写,操作被写入数据,然后读出结果
-  ◆stm流对象的方法属性
+  DefDec: 
+    四种Stream流类型:
+      Readable  可读流,读取数据并暂存于bufer中 
+        可'pause'和'resume' 
+      Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
+      Duplex    可读可写流  
+      Transform 在读写过程中可修改或转换数据的 Duplex 流 
+  Extend: stream.prototype.__proto__  EventEmitter实例   
+  stream.Writable 可写流类 
+    Extend: stream.Writable.prototype.__proto__ === stream.prototype  
+    Events: 
+      'close'  当流或其底层资源[比如文件描述符]被关闭时触发 
+        该事件表明不会再触发其他事件,且不会再发生运算 
+        不是所有可写流都会触发 'close' 事件。
+      'drain'  
+      'error'  当写入数据出错或使用管道出错时触发 
+        该事件触发时,流还未被关闭  
+      'finish' 所有数据已被写入到底层系统时触发 
+      'pipe'  
+      'unpipe' 
+    Proto: 
+      .writableHighWaterMark  返回构造该可写流时传入的'highWaterMark'参数值 
+      .writableLength  写入就绪队列的字节(或者对象)数 
+      .cork()  强制所有写入数据都存放到内存中的缓冲区里  
+      .uncork()  输出在 .cork() 方法被调用之后缓冲在内存中的所有数据 
+      .destroy(err?)  摧毁流并发出错误;当这个函数被调用后,这个写入流就结束了 
+      .end(chunk? ,encoding? ,callback?)  结束流,后续不可写 
+        Input: 
+          chunk     需要写入的数据 
+            对于非对象模式下的流,须为: String/Buffer/Uint8Array 
+            对于对象模式下的流,可为: 除了 null 的任意值 
+          encoding  如果 chunk 是字符串,可指定字符编码 
+          callback  流结束时的回调函数 
+      .setDefaultEncoding(encoding)  为可写流设置encoding 
+      .write(chunk? ,encoding? ,callback?)  向流中写入数据 
+        Input: 
+        Output: bol,是否在设定的'highWaterMark'阈值内 
+  stream.Readable 可读流类 
+    PS: 可读流是对提供数据的来源的一种抽象 
+    Extend: stream.Readable.prototype.__proto__ === stream.prototype 
+  ◆stm流对象的方法属性 
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 
-  writerStream.write(data,'UTF8')   使用 utf8 编码写入数据 
-    var readStream = fs.createReadStream('video.mp4');
-    var writerStream = fs.createWriteStream('video1.mp4');
-    readStream.on("data",function(chunk){
-      if (writerStream.write(chunk) == false) {
-        readStream.pause();
-      }
-    })
-    readStream.on("end",function(){
-      writerStream.end;
-    })
-    writerStream.on("drain",function(){
-      readStream.resume();
-    })
-  writerStream.end()      标记文件末尾
   readerStream.setEncoding('UTF8');  设置编码为 utf8
   pipe 管道 
     PS:管道提供了一个输出流到输入流的机制 
@@ -150,17 +214,12 @@ const steam = require('stream')   流,用于暂存和移动数据[以bufer的形
         .pipe(fs.createWriteStream('input.txt'));
         console.log("文件解压完成.");
   ◆Event 常用事件 
-    所有的 Stream 对象都是 EventEmitter 的实例
   data     当steam数据传递时时触发 
     stm.on("data",function(chunk){
       // chunk 数据块,Buffer类型 
     })
   readable 可读时触发 
-  drain    
   end      数据传递完成时触发[之后目标不再可写] 
-  close    流传输关闭时 
-  error    在接收和写入过程中发生错误时触发
-  finish   所有数据已被写入到底层系统时触发
   Example: 
     从文件中读取数据 
       创建 input.txt 文件,内容如下:
@@ -469,7 +528,7 @@ const assert = require('assert')  断言
       会抛出一个错误,因为assert方法的第一个参数是false 
   .ok(bol,str)  是assert方法的另一个名字,与assert方法完全一样
   .equal(actVal,expVal [,tip]);
-    PS:equal方法内部使用的是相等运算符（==）,而不是严格运算符（===）,进行比较运算 
+    PS:equal方法内部使用的是相等运算符==,而不是严格运算符===,进行比较运算 
     actVal  实际值
     expVal  预期值
     tip     字符串,错误的提示信息 
@@ -488,7 +547,7 @@ const assert = require('assert')  断言
       assert.equal(expected, 3, '预期1+2等于3');
   .notEqual(actVal,expVal [,tip]);  只有在实际值等于预期值时,才会抛出错误
     PS:notEqual方法的用法与equal方法类似
-      内部使用不相等运算符（!=）,而不是严格不相等运算符（!==）,进行比较运算 
+      内部使用不相等运算符(!=),而不是严格不相等运算符(!==),进行比较运算 
     Example:
       var assert = require('assert');
       function add (a, b) {
@@ -707,8 +766,8 @@ const dns = require("dns")   域名解析
         console.log(ip,ipv); // 118.178.213.186  4 
       })
 // 功能类  
-const http = require("http")    http服务模块,提供HTTP服务器功能  
-  PS: 主要用于搭建HTTP服务端和客户端; 
+const http = require("http")    提供HTTP服务器功能  
+  PS: 用于搭建HTTP服务端和客户端 
   Web服务器 
     Web服务器一般指网站服务器,是指驻留于因特网上某种类型计算机的程序,
     Web服务器的基本功能就是提供Web信息浏览服务.
@@ -716,13 +775,31 @@ const http = require("http")    http服务模块,提供HTTP服务器功能
     大多数 web 服务器都支持服务端的脚本语言php、python、ruby等,
     并通过脚本语言从数据库获取数据,将结果返回给客户端浏览器.
     目前最主流的三个Web服务器是Apache、Nginx、IIS.
+    PHP需Apache 或 Nginx 的HTTP 服务器,并配上 mod_php5 模块和php-cgi,来处理客户端的请求 
+    而Node可直接实现 HTTP 服务器 
   Web应用架构 
     Client   客户端,一般指浏览器,浏览器可以通过 HTTP 协议向服务器请求数据 
     Server   服务端,一般指Web服务器,可接收客户端请求,并向客户端发送响应数据 
     Business 业务层,通过Web服务器处理应用程序,如与数据库交互,逻辑运算,调用外部程序等
     Data     数据层,一般由数据库组成 
-  .createServer(function(req ,res){  // server,创建服务器 
-    req    obj,请求 
+  ★类
+  .Server,HSv,服务器   
+    .listen(port ,ip?)              // 服务器监听ip及端口 
+      Input: 
+        port   num,监听的端口 
+        ip     str,监听的ip地址,如: "127.0.0.1" 
+      Output:  
+  .ClientRequest,HCR,请求 
+  .ServerResponse,HSR,响应 
+  .IncomingMessage,HIM, 
+    PS: 可用来访问响应状态、消息头、以及数据,也实现了可读流接口 
+  .Agent,HAg,负责为HTTP客户端管理连接的持续与复用  
+  ★属性 
+  .METHODS   解析器支持的HTTP方法的列表  
+  .STATUS_CODES  标准的HTTP响应状态码的集合,以及其简述 
+  ★方法 
+  .createServer(function(req ,res){  // HSv,创建服务器 
+    req   请求 
       .url            // str,请求的地址 
       .on("data",function(    // 从请求体中接收数据时触发,会触发多次  
         PS: 通常用于获取POST请求数据  
@@ -734,7 +811,7 @@ const http = require("http")    http服务模块,提供HTTP服务器功能
       .setEncoding(                   // 设置请求的格式 
         type  // str,设置的格式,如: 'utf8'
       ) 
-    res    obj,响应 
+    res   响应 
       .writeHead(statusCode,headersObj)   设置响应状态码及响应头 
         Input: 
           statusCode      num,状态码,如: 200 
@@ -748,7 +825,7 @@ const http = require("http")    http服务模块,提供HTTP服务器功能
       .end(data?)     结束响应并发送信息  
         data    str|binary,可选,若存在会将其发送 
   })   
-    Input:  创建服务器的响应回调   
+    Input: callback,创建服务器的响应回调   
     Output: server  创建的服务器对象  
   .request(options ,function(res){   // 发送http请求 
     res   服务器的响应 
@@ -836,12 +913,6 @@ const http = require("http")    http服务模块,提供HTTP服务器功能
       url      str,请求的URL地址 
       fn       请求的回调  
     Output: 
-  server  服务器对象 
-    .listen(port,ip?)              // 服务器监听ip及端口 
-      Input: 
-        port   num,监听的端口 
-        ip     str,监听的ip地址,如: "127.0.0.1" 
-      Output:  
   Example: 
     在该目录下创建一个 index.htm 文件[用于读取] 
     创建Web服务器 

@@ -1230,16 +1230,17 @@ Reflect,为操作对象提供的API[ES6]
     .getPrototypeOf(target)
     .setPrototypeOf(target, prototype)
 --------------------------------------------------------------------------------
-◆二进制数组,以数组的语法处理二进制数据[ES6] 
-  PS: 二进制数组由 ArrayBuffer&TypedArray&DataView 三类对象组成, 
-    它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
+◆ArrayBuffer&TypedArray&DataView,二进制数组: 以数组的语法处理二进制数据[ES6] 
+  PS: 它们早就存在,属于独立的规格,ES6将其纳入ECMAScript规格,并增加了新方法,
     该接口的原始设计目的,与WebGL项目有关
     浏览器与显卡间的通信接口,使用二进制才能满足大量的、实时的数据交换, 
     直接操作字节,脚本的性能大幅提升,二进制数组就是在这种背景下诞生的 
-ArrayBuffer,内存中的一段二进制数据 
+ArrayBuffer,通用的、固定长度的原始二进制数据缓冲区  
+  PS: ArrayBuffer 不能直接操作,而是要通过 TypedArray 或 DataView 对象来操作, 
+    它们会将缓冲区中的数据表示为特定的格式,并通过这些格式来读写缓冲区的内容 
   Extend：Object 
   Instance: new ArrayBuffer(num) 
-    var buffer = new ArrayBuffer(20);  // 在内存中分配20B 
+    new ArrayBuffer(20);  // 在内存中分配20B 
   Proto: 
     .byteLength // 包含的字节数 
     .slice()    
@@ -1253,12 +1254,79 @@ ArrayBuffer,内存中的一段二进制数据
   Uint32   4     unsigned int     32 位无符号的整数 
   Float32  4     float            32 位浮点数 
   Float64  8     double           64 位浮点数 
+<TypedArray>,TypedArray[不可直接访问],类型化数组,确定类型的二进制数据 
+  Int8Array, Uint8Array, Uint8ClampedArray,    
+  Int16Array, Uint16Array,      
+  Int32Array, Uint32Array, Float32Array,     
+  Float64Array,    
+  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
+  Static: 
+    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
+    Uint8Array.BYTES_PER_ELEMENT    1 
+    Float32Array.BYTES_PER_ELEMENT  4 
+    ...
+    Example: 
+      利用该属性来辅助初始化
+      // 需要10 个元素空间
+      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
+  Instance: 
+    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
+    var typedArray = new <TypedArray>(num); 
+      // 创建一个数组保存10 个8 位整数[10 字节] 
+      var int8s = new Int8Array(10); 
+      // 创建一个数组保存10 个16 位整数[20 字节] 
+      var int16s = new Int16Array(10); 
+    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
+      PS: 用默认值来初始化类型化视图的最佳方式 
+      // 创建一个数组保存5 个8 位整数[5 字节]
+      var int8s = new Int8Array([10, 20, 30, 40, 50]);
+  Proto:  
+    .buffer 
+    .byteLength 
+    .byteOffset 
+    .length 
+    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
+    .entries() 
+    .keys() 
+    .values() 
+    .copyWithin() 
+    .fill() 
+    .includes() 
+    .indexOf() 
+    .lastIndexOf() 
+    .slice() 
+    .set() 
+    .find() 
+    .findIndex() 
+    .toLocaleString() 
+    .join() 
+    .toString() 
+    .forEach() 
+    .every() 
+    .map() 
+    .reverse() 
+    .reduce() 
+    .reduceRight() 
+    .some() 
+    .filter() 
+    .sort() 
+  Feature: 
+    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
+      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
+      保存65537,那实际保存的值是1,依此类推。
+      var uint16s = new Uint16Array(10);
+      uint16s[0] = 65537;
+      console.log(uint16s[0]); // 1
+  Example: 
+    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
+    var int8s = new Int8Array(buffer, 0, 10);
+    var uint16s = new Uint16Array(buffer, 11, 10);
 DataView,不确定类型的二进制数据 
   PS: 支持除'Uint8C'外的其他8种组成的集合  
     比如第一个字节是Uint8,第二个字节是Int16,第三个字节是Float32等等  
   Extend: Object 
   Instance: 
-    var view = new DataView(buffer[,bgn[,length]]) // 通过Buffer类型创建  
+    new DataView(buffer ,bgn? ,length? ) // 通过Buffer类型创建  
       buffer  ArrayBuffer对象 
       bgn     num,可选,字节偏移量,从该字节开始选择 \
         //创建一个开始于字节9 的新视图
@@ -1292,79 +1360,6 @@ DataView,不确定类型的二进制数据
     .setUint32(offset,val,littleEndian)  
     .setFloat32(offset,val,littleEndian)  
     .setFloat64(offset,val,littleEndian)  
-TypedArray[不可直接访问],类型化数组,确定类型的二进制数据 
-  Relate: <TypedArray>.prototype.__proto__.constructor===TypedArray
-  Proto:  
-    .buffer 
-    .byteLength 
-    .byteOffset 
-    .length 
-    .subarray(bgn,end)  // 基于底层数组缓冲器的子集创建一新视图
-    .entries() 
-    .keys() 
-    .values() 
-    .copyWithin() 
-    .fill() 
-    .includes() 
-    .indexOf() 
-    .lastIndexOf() 
-    .slice() 
-    .set() 
-    .find() 
-    .findIndex() 
-    .toLocaleString() 
-    .join() 
-    .toString() 
-    .forEach() 
-    .every() 
-    .map() 
-    .reverse() 
-    .reduce() 
-    .reduceRight() 
-    .some() 
-    .filter() 
-    .sort() 
-<TypedArray> 
-  Static: 
-    <TypedArray>.BYTES_PER_ELEMENT  num,类型化数组的每个元素需要多少字节 
-    Uint8Array.BYTES_PER_ELEMENT    1 
-    Float32Array.BYTES_PER_ELEMENT  4 
-    ...
-    Example: 
-      利用该属性来辅助初始化
-      // 需要10 个元素空间
-      var int8s = new Int8Array(buffer, 0, 10 * Int8Array.BYTES_PER_ELEMENT);
-  Instance: 
-    var typedArray = new <TypedArray>(buffer[,bgn[,length]]); 
-    var typedArray = new <TypedArray>(num); 
-      // 创建一个数组保存10 个8 位整数[10 字节] 
-      var int8s = new Int8Array(10); 
-      // 创建一个数组保存10 个16 位整数[20 字节] 
-      var int16s = new Int16Array(10); 
-    var typedArray = new <TypedArray>(arr); // 把常规数组转换为类型化视图 
-      PS: 用默认值来初始化类型化视图的最佳方式 
-      // 创建一个数组保存5 个8 位整数[5 字节]
-      var int8s = new Int8Array([10, 20, 30, 40, 50]);
-  Feature: 
-    若为相应元素指定的字节数放不下相应的值,则实际保存的值是最大可能值的模 
-      如无符号16 位整数所能表示的最大数值是65535,如果想保存65536,那实际保存的值是0,
-      保存65537,那实际保存的值是1,依此类推。
-      var uint16s = new Uint16Array(10);
-      uint16s[0] = 65537;
-      console.log(uint16s[0]); // 1
-  Example: 
-    // 使用缓冲器的一部分保存8 位整数,另一部分保存16 位整数 
-    var int8s = new Int8Array(buffer, 0, 10);
-    var uint16s = new Uint16Array(buffer, 11, 10);
-Int8Array,   
-Uint8Array,   
-Uint8ClampedArray,    
-Int16Array,      
-Uint16Array,      
-Int32Array,      
-Uint32Array,    
-Float32Array,     
-Float64Array,    
 ◆Error,错误类 
   PS: JS解析或执行时,当发生错误就会抛出一错误对象,并且程序中断在发生错误的地方 
     JS原生提供一个Error构造函数,所有抛出的错误都是这个构造函数的实例 

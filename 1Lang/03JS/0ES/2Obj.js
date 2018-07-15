@@ -1079,10 +1079,10 @@ Object,对象基础类,ES中所有对象的基类
         注意:面向对象是一种编程思想,并不是具体的工具.
     ★属性特性相关 
     Object.defineProperty(obj,key,{   // 定义对象的成员及其特性[ES5]  
-      value: val,       // 默认为原始值  
-      writable: bol,    // 默认 false
-      enumerable: bol,  // 默认 false
-      configurable: bol // 默认 false
+      value: val         // 默认:原始值  
+      ,writable: bol     // 默认:false
+      ,enumerable: bol   // 默认:false
+      ,configurable: bol // 默认:false
       Example: 
         var proto = {}
         Object.defineProperty(proto,'aoo',{
@@ -1104,11 +1104,13 @@ Object,对象基础类,ES中所有对象的基类
         console.log(obj.aoo); // 100 
       // 不能同时定义'数据属性'和'访问器属性'[要分开定义] 
       get: function(){ // 未设置则不能读
-      },
-      set: function(){ // 未设置则不可写
-      },
-      enumerable: bol,  // 默认 false 
-      configurable: bol // 默认 false 
+        // 
+      }
+      ,set: function(){ // 未设置则不可写
+        // 
+      }
+      ,enumerable: bol   // 默认 false 
+      ,configurable: bol // 默认 false 
       优先按照定义的配置来执行 
         var Foo = function(){ }
         Object.defineProperty(Foo.prototype,'boo',{

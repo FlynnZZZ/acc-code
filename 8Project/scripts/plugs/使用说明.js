@@ -1,3 +1,19 @@
+clipboard.js  文本复制功能 
+使用方式 
+  1 通过 script 标签引入 
+    clipboard = new ClipboardJS('#btn');
+    clipboard.on('success', function(e) {
+      console.log('复制成功!' ,e.text);
+    });
+    clipboard.on('error', function(e) {
+      console.log(e);
+    });
+  2 模块化引入 
+    var { ClipboardJS } = require("./clipboard2.0.1.min.js") 
+说明: 
+  IOS下,复制的按钮必须是 button, 否则复制不了 
+--------------------------------------------------------------------------------  
+store.js  本地存储localstorage的封装  
 说明 
   工作机制
     store.js 优先选择 localStorage 来进行存储,
@@ -8,7 +24,7 @@
 使用 
   $ npm i store 
     var store = require('store')
-  <script src="path/to/my/store.legacy.min.js"></script> 
+  <script src="path/to/my/store.min.js"></script> 
     store 被注入为全局变量  
 API 
   store.enabled bol,检测是否可用存储的标识 
@@ -44,4 +60,44 @@ node.js 中使用
   var store = require('./store')
   store.set('foo', 1)
   console.log(store.get('foo'))
-  
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

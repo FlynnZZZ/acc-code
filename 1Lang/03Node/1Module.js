@@ -130,27 +130,30 @@ const events = require('events')  事件模块
 const stream = require('stream')   流,用于暂存和移动数据[以bufer的形式存在] 
   PS: Stream 是一个抽象接口,Node中有很多对象实现了这个接口 
     如对http服务器发起请求的request对象就是一个Stream,还有stdout[标准输出] 
-    所有的 Stream 对象都是 EventEmitter 的实例 
   DefDec: 
-    四种Stream流类型:
-      Readable  可读流,读取数据并暂存于bufer中 
-        可'pause'和'resume' 
-      Writable  可写流,消费数据,从可读流中读取数据,对数据块chunk进行处理 
-      Duplex    可读可写流  
-      Transform 在读写过程中可修改或转换数据的 Duplex 流 
-  Extend: stream.prototype.__proto__  EventEmitter实例   
+    所有 Node.js API 创建的流都是专门运作在字符串和 Buffer（或 Uint8Array）对象上。 
+    当然,流的实现也可使用其它类型的js值（除了 null,它在流中有特殊用途）,这些流会以“对象模式”进行操作。
+    当创建流时,可以使用 objectMode 选项把流实例切换到对象模式。 
+    试图将已经存在的流切换到对象模式是不安全的。
+  Extend: stream.prototype.__proto__.constructor === events 
   stream.Writable 可写流类 
+    PS: 消费数据,从可读流中读取数据,对数据块chunk进行处理 
     Extend: stream.Writable.prototype.__proto__ === stream.prototype  
     Events: 
       'close'  当流或其底层资源[比如文件描述符]被关闭时触发 
         该事件表明不会再触发其他事件,且不会再发生运算 
         不是所有可写流都会触发 'close' 事件。
-      'drain'  
+      'drain'  回复可写入的状态时触发 
+        如调用 stream.write(chunk) 返回 false,则在适合恢复写入数据到流时会触发'drain'事件 
       'error'  当写入数据出错或使用管道出错时触发 
         该事件触发时,流还未被关闭  
       'finish' 所有数据已被写入到底层系统时触发 
-      'pipe'  
-      'unpipe' 
+        调用 stream.end() 方法且缓冲数据都已经传给底层系统后触发 
+      'pipe'   在可读流上调用 stream.pipe() 方法添加可写流到目标流向时触发  
+        事件回调的参数: src  stream.Readable,通过管道流入到可写流的来源流 
+      'unpipe' 当在可读流上调用 stream.unpipe() 方法从目标流向中移除当前可写流时触发 
+        当可读流通过管道流向可写流发生错误时也会触发 
+        事件回调的参数: src  stream.Readable,被移除写入管道的来源流 
     Proto: 
       .writableHighWaterMark  返回构造该可写流时传入的'highWaterMark'参数值 
       .writableLength  写入就绪队列的字节(或者对象)数 
@@ -169,8 +172,48 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
         Input: 
         Output: bol,是否在设定的'highWaterMark'阈值内 
   stream.Readable 可读流类 
-    PS: 可读流是对提供数据的来源的一种抽象 
+    PS: 读取数据并暂存于bufer中 
+      可'pause'和'resume' 
     Extend: stream.Readable.prototype.__proto__ === stream.prototype 
+    Feature: 
+      可读流的两种模式: 
+        PS: 只有提供了消费或忽略数据的机制后,可读流才会产生数据。 
+          如果消费的机制被禁用或移除,则可读流会停止产生数据。
+          为了向后兼容,移除 'data' 事件处理函数不会自动地暂停流。 
+          如果存在管道目标,一旦目标变为 drain 状态并请求接收数据时,
+          则调用 stream.pause() 也不能保证流会保持暂停状态。
+        'paused'已暂停: 
+          所有可读流都开始于'paused'模式 
+          必须显式调用 stream.read() 方法来从流中读取数据片段
+          切换到'flowing'的方法: 
+            新增一个 'data' 事件处理函数。
+            调用 stream.resume() 方法。
+            调用 stream.pipe() 方法发送数据到可写流。
+        'flowing'流动中: 
+          数据自动地从底层的系统被读取,并通过 EventEmitter 接口的事件尽可能快地被提供给应用程序。
+          如果可读流切换到 flowing 模式,且没有可用的消费函数处理数据,则这些数据将会丢失。 
+          例如,当调用 readable.resume() 方法时,没有监听'data'事件或'data'事件的处理函数从流中被移除了       
+          切换到'paused'的方法: 
+            如果没有管道目标,调用 stream.pause() 方法。
+            如果有管道目标,移除所有管道目标。调用 stream.unpipe() 方法可以移除多个管道目标。
+      可读流的三种状态: 
+        readable.readableFlowing = null 
+          没有提供消费流数据的机制,所以流不会产生数据。 
+          变为 true 
+            监听 'data' 事件
+            调用 readable.pipe() 方法
+            调用 readable.resume() 方法, 
+          变为 false  
+            调用 readable.pause()
+            调用 readable.unpipe()
+            接收背压 
+        readable.readableFlowing = false
+          暂时停止事件流动但不会停止数据的生成
+          该状态下,为 'data' 事件设置监听器不会使 readable.readableFlowing 变成 true 
+        readable.readableFlowing = true
+          可读流开始主动地产生数据触发事件 
+  stream.Duplex 可读可写流 
+  stream.Transform  读写过程中可修改或转换数据的'Duplex'流 
   ◆stm流对象的方法属性 
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 

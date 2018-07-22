@@ -175,6 +175,268 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
     PS: 读取数据并暂存于bufer中 
       可'pause'和'resume' 
     Extend: stream.Readable.prototype.__proto__ === stream.prototype 
+    Events: 
+      'close' 将在流或其底层资源[比如一个文件]关闭后触发 
+        事件触发后,该流将不会再触发任何事件 
+        不是所有可读流都会触发'close'事件 
+      'data'  在流将数据传递给消费者时触发 
+        响应函数的参数: chunk  
+          对于非对象模式的可读流,可为 String/Buffer 
+          对于对象模式的可读流,可为除 null 以外的任意类型 JavaScript 值 
+          若调用 readable.setEncoding() 为流指定了默认编码,回调函数将接收到一个字符串
+        当流转换到 flowing 模式时会触发该事件 
+          调用 readable.pipe()、readable.resume() 方法,
+          或为 'data' 事件添加回调可以将流转换到 flowing 模式。 
+          'data' 事件也会在调用 readable.read() 方法并有数据返回时触发。
+        在没有明确暂停的流上添加'data'事件监听会将流转换为 flowing 模式 
+          数据会在可用时尽快传递给下个流程 
+      'end'   在流中再没有数据可供消费时触发 
+        只有在数据被完全消费后才会触发 
+          可通过将流转换到flowing模式,或反复调用 stream.read() 方法来实现
+      'error' 出错时触发 
+        响应函数的参数: err  Error对象 
+        可在任何时候在可读流实现[Readable implementation]上触发
+          如在底层系统内部出错从而不能产生数据,
+          或当流的实现试图传递错误数据时发生。
+      'readable' 在流中有数据可供读取时触发  
+        PS: 在某些情况下,为'readable'事件添加回调将会导致一些数据被读取到内部缓存中 
+          通常情况下,readable.pipe() 方法和 'data' 事件机制比 'readable' 事件更容易理解。
+          然而处理 'readable'事件可能造成吞吐量升高。      
+        'readable'事件表明流有了新的动态: 
+          有了新的数据,stream.read() 将返回可用的数据 
+          到了流的尾部,stream.read() 将返回 null 
+            触发顺序在'end'事件前
+    Proto: 
+      .destroy(error?)  销毁流,并触发error事件 
+        PS: 可读流将释放所有的内部资源 
+      TODO: ★★★★★★★★★ 
+        .isPaused()   返回可读流的当前操作状态
+        
+        readable.isPaused() 方法
+        该方法主要是在 readable.pipe() 方法的底层机制中用到。大多数情况下,没有必要直接使用该方法。
+        
+        const readable = new stream.Readable();
+        
+        readable.isPaused(); // === false
+        readable.pause();
+        readable.isPaused(); // === true
+        readable.resume();
+        readable.isPaused(); // === false
+        readable.pause()#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        返回： this
+        readable.pause() 方法将会使 flowing 模式的流停止触发 'data' 事件, 进而切出 flowing 模式。任何可用的数据都将保存在内部缓存中。
+        
+        const readable = getReadableStreamSomehow();
+        readable.on('data', (chunk) => {
+          console.log(`Received ${chunk.length} bytes of data.`);
+          readable.pause();
+          console.log('There will be no additional data for 1 second.');
+          setTimeout(() => {
+            console.log('Now data will start flowing again.');
+            readable.resume();
+          }, 1000);
+        });
+        readable.pipe(destination[, options])#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        destination <stream.Writable> 数据写入目标
+        options <Object> Pipe 选项
+        end <boolean> 在 reader 结束时结束 writer 。默认为 true。
+        readable.pipe() 绑定一个 [Writable][] 到 readable 上, 将可写流自动切换到 flowing 模式并将所有数据传给绑定的 [Writable][]。数据流将被自动管理。这样,即使是可读流较快,目标可写流也不会超负荷（overwhelmed）。
+        
+        下面例子将 readable 中的所有数据通过管道传递给名为 file.txt 的文件：
+        
+        const readable = getReadableStreamSomehow();
+        const writable = fs.createWriteStream('file.txt');
+        // readable 中的所有数据都传给了 'file.txt'
+        readable.pipe(writable);
+        可以在单个可读流上绑定多个可写流。
+        
+        readable.pipe() 方法返回 目标流 的引用,这样就可以对流进行链式地管道操作：
+        
+        const r = fs.createReadStream('file.txt');
+        const z = zlib.createGzip();
+        const w = fs.createWriteStream('file.txt.gz');
+        r.pipe(z).pipe(w);
+        默认情况下,当源可读流（the source Readable stream）触发 'end' 事件时,目标流也会调用 stream.end() 方法从而结束写入。要禁用这一默认行为, end 选项应该指定为 false, 这将使目标流保持打开, 如下面例子所示：
+        
+        reader.pipe(writer, { end: false });
+        reader.on('end', () => {
+          writer.end('Goodbye\n');
+        });
+        这里有一点要警惕,如果可读流在处理时发生错误,目标可写流 不会 自动关闭。 如果发生错误,需要 手动 关闭所有流以避免内存泄漏。
+        
+        注意：不管对 process.stderr 和 process.stdout 指定什么选项,它们都是直到 Node.js 进程退出才关闭。
+        
+        readable.read([size])#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        size <number> 可选参数,确定读取数据的大小.
+        返回 <string> | <Buffer> | <null>
+        readable.read()方法从内部缓冲区中抽出并返回一些数据。 如果没有可读的数据,返回null。readable.read()方法默认数据将作为“Buffer”对象返回 ,除非已经使用readable.setEncoding()方法设置编码或流运行在对象模式。
+        
+        可选的size参数指定要读取的特定数量的字节。如果size字节不可读,将返回null除非流已经结束,在这种情况下所有保留在内部缓冲区的数据将被返回。
+        
+        如果没有指定size参数,则内部缓冲区包含的所有数据将返回。
+        
+        readable.read()方法只应该在暂停模式下的可读流上运行。在流模式下,readable.read()自动调用直到内部缓冲区的数据完全耗尽。
+        
+        const readable = getReadableStreamSomehow();
+        readable.on('readable', () => {
+          let chunk;
+          while (null !== (chunk = readable.read())) {
+            console.log(`Received ${chunk.length} bytes of data.`);
+          }
+        });
+        一般来说,建议开发人员避免使用'readable'事件和readable.read()方法,使用readable.pipe()或'data'事件代替。
+        
+        无论size参数的值是什么,对象模式中的可读流将始终返回调用readable.read(size)的单个项目。
+        
+        注意：如果readable.read()方法返回一个数据块,那么一个'data'事件也将被发送。
+        
+        注意：在已经被发出的'end'事件后调用stream.read([size])事件将返回null。不会抛出运行时错误。
+        
+        readable.readableHighWaterMark#
+        查看英文版参与翻译
+        
+        新增于: v8.10.0
+        返回构造该可读流时传入的 'highWaterMark' 属性。
+        
+        readable.readableLength#
+        查看英文版参与翻译
+        
+        新增于: v9.4.0
+        Returns: <number>
+        This property contains the number of bytes (or objects) in the queue ready to be read. The value provides introspection data regarding the status of the highWaterMark.
+        
+        readable.resume()#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        返回： this
+        readable.resume() 方法会重新触发 'data' 事件, 将暂停模式切换到流动模式。
+        
+        readable.resume() 方法可以用来充分使用流中的数据,而不用实际处理任何数据,如以下示例所示：
+        
+        getReadableStreamSomehow()
+        .resume()
+        .on('end', () => {
+          console.log('Reached the end, but did not read anything.');
+        });
+        readable.setEncoding(encoding)#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        encoding <string> 要使用的编码
+        Returns: this
+        readble.setEncoding() 方法会为从可读流读入的数据设置字符编码
+        
+        默认返回Buffer对象。设置编码会使得该流数据返回指定编码的字符串而不是Buffer对象。例如,调用readable.setEncoding('utf-8')会使得输出数据作为UTF-8数据解析,并作为字符串返回。调用readable.setEncoding('hex')使得数据被编码成16进制字符串格式。
+        
+        可读流会妥善处理多字节字符,如果仅仅直接从流中取出Buffer对象,很可能会导致错误解码。
+        
+        const readable = getReadableStreamSomehow();
+        readable.setEncoding('utf8');
+        readable.on('data', (chunk) => {
+          assert.equal(typeof chunk, 'string');
+          console.log('got %d characters of string data', chunk.length);
+        });
+        readable.unpipe([destination])#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        destination <stream.Writable> 可选的,指定需要分离的目标流
+        readable.unpipe() 方法将之前通过stream.pipe()方法绑定的流分离
+        
+        如果 destination 没有传入, 则所有绑定的流都会被分离.
+        
+        如果传入 destination, 但它没有被pipe()绑定过,则该方法不作为.
+        
+        const readable = getReadableStreamSomehow();
+        const writable = fs.createWriteStream('file.txt');
+        // All the data from readable goes into 'file.txt',
+        // but only for the first second
+        readable.pipe(writable);
+        setTimeout(() => {
+          console.log('Stop writing to file.txt');
+          readable.unpipe(writable);
+          console.log('Manually close the file stream');
+          writable.end();
+        }, 1000);
+        readable.unshift(chunk)#
+        查看英文版参与翻译
+        
+        版本历史
+        chunk <Buffer> | <Uint8Array> | <string> | <any> 数据块移动到可读队列底部。对于不以对象模式运行的流,chunk 必须是字符串, Buffer 或者 Uint8Array。对于对象流, chunk 任何非null的值。
+        readable.unshift() 方法会把一块数据压回到Buffer内部。 这在如下特定情形下有用： 代码正在消费一个数据流,已经"乐观地"拉取了数据。 又需要"反悔-消费"一些数据,以便这些数据可以传给其他人用。
+        
+        注意: 'end' 事件已经触发或者运行时错误抛出后,stream.unshift(chunk) 方法不能被调用。
+        
+        使用 stream.unshift() 的开发者一般需要换一下思路,考虑用一个[Transform][] 流替代. 更多信息请查看API for Stream Implementers部分。
+        
+        // Pull off a header delimited by \n\n
+        // use unshift() if we get too much
+        // Call the callback with (error, header, stream)
+        const { StringDecoder } = require('string_decoder');
+        function parseHeader(stream, callback) {
+          stream.on('error', callback);
+          stream.on('readable', onReadable);
+          const decoder = new StringDecoder('utf8');
+          let header = '';
+          function onReadable() {
+            let chunk;
+            while (null !== (chunk = stream.read())) {
+              const str = decoder.write(chunk);
+              if (str.match(/\n\n/)) {
+                // found the header boundary
+                const split = str.split(/\n\n/);
+                header += split.shift();
+                const remaining = split.join('\n\n');
+                const buf = Buffer.from(remaining, 'utf8');
+                stream.removeListener('error', callback);
+                // remove the readable listener before unshifting
+                stream.removeListener('readable', onReadable);
+                if (buf.length)
+                stream.unshift(buf);
+                // now the body of the message can be read from the stream.
+                callback(null, header, stream);
+              } else {
+                // still reading the header.
+                header += str;
+              }
+            }
+          }
+        }
+        注意： 
+        不像 stream.push(chunk),stream.unshift(chunk)在重置流的内部读取状态时是不会结束读取过程。 如果在读取过程中调用 readable.unshift() 则会导致异常 (例如：即来自自定义流上的 stream._read()内部方法上的实现)。 应该在调用 readable.unshift()方法之后适当调用 stream.push('') 来重置读取状态,执行读取的过程中最好避免调用 readable.unshift()方法。
+        
+        readable.wrap(stream)#
+        查看英文版参与翻译
+        
+        新增于: v0.9.4
+        stream <Stream> 一个老版本的readable stream
+        Node.js在v0.10版本之前的流没有实现当前定义的所有流模块的API.(查看更多兼容性信息 Compatibility )
+        
+        当使用老版本的Node.js库来触发'data'事件和stream.pause()方法仅是建议性的, readable.wrap()方法能创建一个把老版本的流作为数据源的[Readable][] stream。
+        
+        几乎没有必要使用readable.wrap(),但是这个方法已经为老版本的Node.js应用和一些库提供了方便。
+        
+        例子：
+        
+        const { OldReader } = require('./old-api-module.js');
+        const { Readable } = require('stream');
+        const oreader = new OldReader();
+        const myReader = new Readable().wrap(oreader);
+        
+        myReader.on('readable', () => {
+          myReader.read(); // etc.
+        });
+      TODO: ★★★★★★★★★ 
     Feature: 
       可读流的两种模式: 
         PS: 只有提供了消费或忽略数据的机制后,可读流才会产生数据。 
@@ -207,17 +469,17 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
             调用 readable.pause()
             调用 readable.unpipe()
             接收背压 
-        readable.readableFlowing = false
+        readable.readableFlowing = false 
           暂时停止事件流动但不会停止数据的生成
           该状态下,为 'data' 事件设置监听器不会使 readable.readableFlowing 变成 true 
-        readable.readableFlowing = true
+        readable.readableFlowing = true 
           可读流开始主动地产生数据触发事件 
   stream.Duplex 可读可写流 
   stream.Transform  读写过程中可修改或转换数据的'Duplex'流 
   ◆stm流对象的方法属性 
   stm.pause()    暂停流传输 
   stm.resume()   启动流传输 
-  readerStream.setEncoding('UTF8');  设置编码为 utf8
+  readerStream.setEncoding('UTF8');  设置编码为 utf8 
   pipe 管道 
     PS:管道提供了一个输出流到输入流的机制 
       通常用于从一个流中获取数据并将数据传递到另外一个流中 
@@ -257,12 +519,6 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
         .pipe(fs.createWriteStream('input.txt'));
         console.log("文件解压完成.");
   ◆Event 常用事件 
-  data     当steam数据传递时时触发 
-    stm.on("data",function(chunk){
-      // chunk 数据块,Buffer类型 
-    })
-  readable 可读时触发 
-  end      数据传递完成时触发[之后目标不再可写] 
   Example: 
     从文件中读取数据 
       创建 input.txt 文件,内容如下:

@@ -209,51 +209,35 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
     Proto: 
       .destroy(error?)  销毁流,并触发error事件 
         PS: 可读流将释放所有的内部资源 
-      TODO: ★★★★★★★★★ 
-        .isPaused()   返回可读流的当前操作状态
-        
-        readable.isPaused() 方法
-        该方法主要是在 readable.pipe() 方法的底层机制中用到。大多数情况下,没有必要直接使用该方法。
-        
-        const readable = new stream.Readable();
-        
-        readable.isPaused(); // === false
-        readable.pause();
-        readable.isPaused(); // === true
-        readable.resume();
-        readable.isPaused(); // === false
-        readable.pause()#
-        查看英文版参与翻译
-        
-        新增于: v0.9.4
-        返回： this
-        readable.pause() 方法将会使 flowing 模式的流停止触发 'data' 事件, 进而切出 flowing 模式。任何可用的数据都将保存在内部缓存中。
-        
-        const readable = getReadableStreamSomehow();
-        readable.on('data', (chunk) => {
-          console.log(`Received ${chunk.length} bytes of data.`);
+      .isPaused()   bol,返回可读流的当前操作状态 
+        主要在 readable.pipe() 方法的底层机制中用到,大多数情况下,没必要直接使用该方法 
+        Example: 
+          const readable = new stream.Readable();
+          readable.isPaused(); // === false
           readable.pause();
-          console.log('There will be no additional data for 1 second.');
-          setTimeout(() => {
-            console.log('Now data will start flowing again.');
-            readable.resume();
-          }, 1000);
-        });
-        readable.pipe(destination[, options])#
-        查看英文版参与翻译
+          readable.isPaused(); // === true
+          readable.resume();
+          readable.isPaused(); // === false
+      .pause()   使'flowing'模式的流停止触发'data'事件,进而切出'flowing'模式
+        任何可用的数据都将保存在内部缓存中 
+        Output: this
+      .pipe(destination ,options? )  绑定一 [Writable][] 到 readable 上 
+        PS: 将可写流自动切换到'flowing'模式并将所有数据传给绑定的[Writable][]
+          数据流将被自动管理,即使是可读流较快,目标可写流也不会超负荷'overwhelmed'  
+        Input: 
+          destination    stream.Writable,数据写入目标 
+          options        obj,可选,Pipe选项 {
+            end: bol // 在reader结束时结束writer,默认:true 
+          }
+        Output: 
+        Example: 
+          将 readable 中的所有数据通过管道传递给名为 file.txt 的文件：
+          const readable = getReadableStreamSomehow();
+          const writable = fs.createWriteStream('file.txt');
+          // readable 中的所有数据都传给了 'file.txt'
+          readable.pipe(writable);
+      TODO: ★★★★★★★★★ 
         
-        新增于: v0.9.4
-        destination <stream.Writable> 数据写入目标
-        options <Object> Pipe 选项
-        end <boolean> 在 reader 结束时结束 writer 。默认为 true。
-        readable.pipe() 绑定一个 [Writable][] 到 readable 上, 将可写流自动切换到 flowing 模式并将所有数据传给绑定的 [Writable][]。数据流将被自动管理。这样,即使是可读流较快,目标可写流也不会超负荷（overwhelmed）。
-        
-        下面例子将 readable 中的所有数据通过管道传递给名为 file.txt 的文件：
-        
-        const readable = getReadableStreamSomehow();
-        const writable = fs.createWriteStream('file.txt');
-        // readable 中的所有数据都传给了 'file.txt'
-        readable.pipe(writable);
         可以在单个可读流上绑定多个可写流。
         
         readable.pipe() 方法返回 目标流 的引用,这样就可以对流进行链式地管道操作：
@@ -518,7 +502,6 @@ const stream = require('stream')   流,用于暂存和移动数据[以bufer的�
         .pipe(zlib.createGunzip())
         .pipe(fs.createWriteStream('input.txt'));
         console.log("文件解压完成.");
-  ◆Event 常用事件 
   Example: 
     从文件中读取数据 
       创建 input.txt 文件,内容如下:

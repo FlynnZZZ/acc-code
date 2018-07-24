@@ -65,21 +65,24 @@
   let srcPath = path.resolve(rootPath, 'src');
   let distPath = path.resolve(rootPath, 'dist');
   module.exports = {  // commonjs模块化输出 
-    context: path.resolve(__dirname,"src"), // webpack上下文: 入口文件所处的目录的绝对路径 
-      // process.cwd() 默认值,NodeJS的启动目录 
-    entry: str/arr/obj, // 入口,可认为app第一个启动文件 
-      // PS: 一般的每个HTML页面都有一个入口起点 
-      //   一般单页应用[SPA]:一个入口起点;多页应用[MPA]:多个入口起点
-      { // 适用于多入口的情况,最可扩展的方式  
+    context: path.resolve(__dirname,"src") // webpack上下文: 入口文件所处的目录的绝对路径 
+      process.cwd() 默认值,NodeJS的启动目录 
+    // 入口,作为构建其内部依赖图的开始  
+    //   一般单页应用[SPA]:一个入口起点;多页应用[MPA]:多个入口起点
+    ,entry: './src/index.js'   // 指定单一的入口文件 
+    ,entry: [                  // 将多个文件打包在一起 
+      './a1.js'
+      ,'a2.js'
+    ]  
+    ,entry: {                  // 适用于多入口,最可扩展的方式 
         // key 映射到 [name] 中
         key1: './src/index.js'
         key3: ['./entry1.js','entry2.js'], // 将被打包到一起 
         vendor: ['vue','vue-router','vue-resource','vuex'], // 将第三方库进行单独打包 
           // 一般使用'vendor',也可以是其他任意字符串 
       },
-      ['./entry1.js','entry2.js'], // 将多个文件打包在一起
-      './src/index.js', // 指定单一的入口文件 
-    output: {  // 指定打包后的文件的输出 
+    // TODO: ★★★★★★★★★ 
+    ,output: {  // 指定打包后的文件的输出 
       path: path.resolve(__dirname,'dist'),  // 指定输出目录,需用绝对路径   
       // 打包后的文件的名称 
       filename: './bundle.js',      // 也可包含路径,会接着path后 
@@ -690,4 +693,72 @@
         var print = module.default;
         print();
       });
+Webpack4: 默认零配置 
+  相关命令 
+    $ npm i webpack -D  
+    $ npm i webpack-cli -D 
+  默认设定 
+    './src/index.js'  // 入口 
+    './dist/main.js'  // 出口 
+  'production'&'development'生产&开发 模式 
+    PS: 无需为生产和开发环境创建2个单独的配置 
+    $ webpack --mode development   // 开发模式 
+    $ webpack --mode production    // 生产模式 
+      压缩,作用域提升,tree-shaking 等 
+  'Babel'转译 ES6 
+    安装依赖 
+      $ npm i babel-core -D 
+      $ npm i babel-loader -D 
+      $ npm i babel-preset-env -D 
+        用于将 Javascript ES6 代码编译为 ES5
+    '.babelrc'配置 Babel 
+      {
+        "presets": [ "env" ]
+      }
+  处理HTML 
+    安装依赖 
+      $ npm i html-loader -D 
+      $ npm i html-webpack-plugin -D 
+    配置'webpack.config.js' 
+      module.exports = {
+        // 未定义的项将使用默认配置 
+        module: {
+          rules: [
+            { test: /\.js$/, exclude: /node_modules/, use: {
+              loader: "babel-loader"
+            } }
+            ,{ test: /\.html$/, use: [
+              { loader: "html-loader", options: { minimize: true } }
+            ] }
+          ]
+        }
+        ,plugins: [
+          new require("html-webpack-plugin")({
+            template: "./src/index.html",
+            filename: "./index.html"
+          })
+        ]
+      };
+  将CSS提取到一个文件中 
+    PS: 'extract-text-webpack-plugin'与webpack4不太兼容, 
+      使用'mini-css-extract-plugin'代替 
+      确保将 webpack 更新到'4.2.0+',否则 mini-css-extract-plugin 将无效 
+    安装依赖 
+      $ npm i mini-css-extract-plugin -D 
+      $ npm i css-loader -D 
+    配置'webpack.config.js'
+      const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+      // ..
+      { test: /\.css$/, use: [
+        MiniCssExtractPlugin.loader
+        ,"css-loader" 
+      ]}
+      // ..
+      new MiniCssExtractPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css"
+      })
+  配置Webpack开发服务器 
+    $ npm i webpack-dev-server -D  // 安装依赖 
+    $ webpack-dev-server --mode development --open  // 代替Webpack命令使用 
 --------------------------------------------------------------------------------

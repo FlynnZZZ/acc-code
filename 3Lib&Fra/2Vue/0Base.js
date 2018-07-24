@@ -2349,13 +2349,13 @@ vm.xxx.实例属性/方法/事件
     单文件组件的写法需要编译工具才能最终在浏览器端工作;
   Example: 
     <template>
-      <div class="my-component">
-        <h2>Hello from {{ msg }}</h2>
-        <other-component></other-component>
-      </div>
+    <section class="my-component">
+      <h2>Hello from {{ msg }}</h2>
+      <other-component></other-component>
+    </section>
     </template>
     <script>
-      // 遵循 ES6 模块格式
+      // 遵循 ES6 模块格式 加载组件
       import otherComponent from './other-component';
       // 导出组件定义
       export default {
@@ -2365,7 +2365,8 @@ vm.xxx.实例属性/方法/事件
           }
         },
         components: {
-          'other-component': otherComponent
+          'other-component1': otherComponent 
+          ,'other-component': () => import('./other-component')  // 异步组件,按需加载 
         }
       }
       
@@ -2386,6 +2387,9 @@ vm.xxx.实例属性/方法/事件
     <style scoped>
       // scoped 可选,保证组件内的CSS只对该组件起作用
       ...
+    </style>
+    <style >
+      // 可存在多个style,会同时起作用 
     </style>
   lang="" 使用预处理器 
     在'.vue'文件中使用其他预处理器[需安装对应的loader] 

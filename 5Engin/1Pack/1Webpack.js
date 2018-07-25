@@ -67,8 +67,8 @@
   module.exports = {  // commonjs模块化输出 
     context: path.resolve(__dirname,"src") // webpack上下文: 入口文件所处的目录的绝对路径 
       process.cwd() 默认值,NodeJS的启动目录 
-    // 入口,作为构建其内部依赖图的开始  
-    //   一般单页应用[SPA]:一个入口起点;多页应用[MPA]:多个入口起点
+    // 入口,作为构建其内部依赖图的开始,默认: './dist'  
+    // 一般单页应用[SPA]:一个入口起点;多页应用[MPA]:多个入口起点
     ,entry: './src/index.js'   // 指定单一的入口文件 
     ,entry: [                  // 将多个文件打包在一起 
       './a1.js'
@@ -82,7 +82,7 @@
           // 一般使用'vendor',也可以是其他任意字符串 
       },
     // TODO: ★★★★★★★★★ 
-    ,output: {  // 指定打包后的文件的输出 
+    ,output: {  // 指定打包后的文件的输出位置  
       path: path.resolve(__dirname,'dist'),  // 指定输出目录,需用绝对路径   
       // 打包后的文件的名称 
       filename: './bundle.js',      // 也可包含路径,会接着path后 
@@ -113,11 +113,11 @@
         // [name]、[id]、[hash]、[chunkhash] 
         // [file]     模块文件名称
         // [filebase] 模块 basename
-    }, 
+    }
     
-    module: {},  // 决定了如何处理项目中的不同类型的模块 [详见'Loaders']
-    plugins: [], // 插件 [详见'Plugins'] 
-    devServer: { // 'webpack-dev-server'配置 [详见'webpack-dev-server'] 
+    ,module: {}  // 决定了如何处理项目中的不同类型的模块 [详见'Loaders']
+    ,plugins: [] // 插件 [详见'Plugins'] 
+    ,devServer: { // 'webpack-dev-server'配置 [详见'webpack-dev-server'] 
       // PS: webpack2.0新增,用于集中处理'webpack-dev-server'的相关配置 
       port: 8000
       ,host: '0.0.0.0'
@@ -129,8 +129,8 @@
         
       }
       ,hot: true // 是否热更新 
-    }, 
-    devtool: 'source-map', // 浏览器调试用的选项  
+    }
+    ,devtool: 'source-map', // 浏览器调试用的选项  
       'source-map'  // 牺牲构建速度的'source-map'是最详细的 
       "cheap-module-source-map" // 调试时只能寻找到对应的行,不能对应到具体符号 
       "eval-source-map"   // 用于开发环境  
@@ -762,3 +762,5 @@ Webpack4: 默认零配置
     $ npm i webpack-dev-server -D  // 安装依赖 
     $ webpack-dev-server --mode development --open  // 代替Webpack命令使用 
 --------------------------------------------------------------------------------
+
+

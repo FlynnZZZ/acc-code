@@ -602,7 +602,7 @@ View&Model
   v-pre    跳过该元素及其子元素的编译  
     可以用来显示原始'Mustache'标签,跳过大量没有指令的节点会加快编译 
 'Tag'&'Attr'内置标签及属性 
-  ◆标签
+  ◆标签 
   <component is="cptname"></component>   // 放置组件 
   <keep-alive ></keep-alive>  保留组件状态、避免重新渲染 
     PS: 抽象组件,自身不会渲染成DOM元素,也不会出现在父组件链中 
@@ -1488,35 +1488,16 @@ vm.xxx.实例属性/方法/事件
         console.log(this.$options.myOption) //  123
       }
     })
-  vm.$el      只读,Vue实例使用的根DOM元素,类型：HTMLElement 
+  vm.$el      HTMLElement,只读,Vue实例使用的根DOM元素 
   vm.$data    Vue实例观察的数据对象 
   vm.$props   当前组件接收到的props对象  '2.2.0+' 
     <child-a v-bind="$props"></child-a> 
     // 通过 $props 将父组件的 props 一起传给子组件 
-  vm.$nextTick(foo)        DOM更新后立即调用 
-    Vue.component('example',{
-      template: '<span>{{ message }}</span>',
-      data: function () {
-        return {
-          message: '没有更新'
-        }
-      },
-      methods: {
-        updateMessage: function () {
-          this.message = '更新完成'
-          // 用于Vue采用异步队列来更新DOM,此时DOM还未更新
-          console.log(this.$el.textContent) // => '没有更新'
-          this.$nextTick(function () {
-            console.log(this.$el.textContent) // => '更新完成'
-          })
-        }
-      }
-    })
   vm.$parent     只读,父实例[若存在的话]
   vm.$root       只读,当前组件树的根Vue实例,若当前实例无父实例,则是其自己 
   vm.$children   只读,当前实例的直接子组件 
     $children 并不保证顺序,也不是响应式的 
-  vm.$slots      只读,用来访问被插槽分发的内容
+  vm.$slots      只读,用来访问被插槽分发的内容 
     每个具名插槽 有其相应的属性 (例如：slot="foo" 中的内容将会在 vm.$slots.foo 中被找到)。
     default 属性包括了所有没有被包含在具名插槽中的节点。 
   vm.$scopedSlots 只读,用来访问作用域插槽   '2.1.0+' 
@@ -1531,8 +1512,8 @@ vm.xxx.实例属性/方法/事件
   vm.$listeners   只读,包含了父作用域中的[不含'.native'修饰器的]v-on事件监听器 
     它可以通过 v-on="$listeners" 传入内部组件——在创建更高层次的组件时非常有用 
   ◆实例方法
-  vm.$watch('key',f(newVal,oldVal) [,options])  监控元素改变的方法 
-    key  data对象中的属性,一个表达式或计算属性函数 
+  vm.$watch( // 监控元素改变的方法 
+    'key'                     // data对象中的属性,一个表达式或计算属性函数 
       表达式只接受监督的键路径。对于更复杂的表达式,用一个函数取代。
       // 键路径
       vm.$watch('a.b.c',function (newVal,oldVal) {
@@ -1547,20 +1528,24 @@ vm.xxx.实例属性/方法/事件
           // 做点什么
         }
       )
-    f    回调函数
-    options = {
-      deep: bol, // 为了发现对象内部值的变化,可以在选项参数中指定 deep: true 
+    ,function(newVal,oldVal){ // 回调函数 
+      newVal   改变后的新值 
+      oldVal   改变前的旧值 
+    }
+    ,{                        // 可选,配置选项 
+      deep: bol        // 为了发现对象内部值的变化,可以在选项参数中指定 deep: true 
         vm.$watch('someObject',callback,{
           deep: true
         })
         vm.someObject.nestedValue = 123
-      immediate: bol  // immediate: true 将立即以表达式的当前值触发回调
+      ,immediate: bol  // immediate: true 将立即以表达式的当前值触发回调
         vm.$watch('a',callback,{
           immediate: true
         })
         // 立即以 `a` 的当前值触发回调
     }
-    返回一个取消观察函数,用来停止触发回调：
+  )  
+    Output: 一取消观察函数,用来停止触发回调
       var unwatch = vm.$watch('a',cb)
       unwatch() // 取消观察
     Example: 
@@ -1594,13 +1579,31 @@ vm.xxx.实例属性/方法/事件
     var component = new MyComponent().$mount()
     document.getElementById('app').appendChild(component.$el)
   vm.$forceUpdate()  迫使Vue实例重新渲染,仅影响实例本身和插入插槽内容的子组件[而非所有子组件]
-  vm.$nextTick([foo])  将回调延迟到下次DOM更新循环后执行。
+  vm.$nextTick(function(){ // 将回调延迟到下次DOM更新循环后执行 
     在修改数据之后立即使用它,然后等待 DOM 更新。
     跟全局方法 Vue.nextTick 一样,不同的是回调的 this 自动绑定到调用它的实例上。
-    如果没有提供回调且支持Promise的环境中返 Promise  '2.1.0+'
-  vm.$destroy()      完全销毁一个实例
+    如果没有提供回调且支持Promise的环境中返 Promise  '2.1.0+' 
+    Example: 
+      Vue.component('example',{
+        template: '<span>{{ message }}</span>',
+        data: function () { return {
+          message: '没有更新'
+        }}
+        ,methods: {
+          updateMessage: function () {
+            this.message = '更新完成'
+            // 用于Vue采用异步队列来更新DOM,此时DOM还未更新
+            console.log(this.$el.textContent) // => '没有更新'
+            this.$nextTick(function () {
+              console.log(this.$el.textContent) // => '更新完成'
+            })
+          }
+        }
+      })
+  })  
+  vm.$destroy()      完全销毁一个实例 
     清理它与其它实例的连接,解绑它的全部指令及事件监听器 
-    触发 beforeDestroy 和 destroyed 的钩子。
+    触发 beforeDestroy 和 destroyed 的钩子 
 'Filters'过滤器,'Mustache'或'v-bind'中对值进行处理  
   PS: 设计目的是用于文本转换,复杂的数据变换应使用计算属性 
   ◆设定
@@ -2344,9 +2347,9 @@ vm.xxx.实例属性/方法/事件
         this.$options.components.aoo = require('./boo.vue').default
       }
 '.vue'单文件组件 
-  PS: 一个'.vue'文件就是一个组件,将'HTML''CSS''JS'组装起来,方便开发、复用和维护;
+  PS: 一个'.vue'文件就是一个组件,将'HTML''CSS''JS'组装起来,方便开发、复用和维护; 
     组件的通信方式同样使用'props'和'event' 
-    单文件组件的写法需要编译工具才能最终在浏览器端工作;
+    单文件组件的写法需要编译工具才能最终在浏览器端工作; 
   Example: 
     <template>
     <section class="my-component">

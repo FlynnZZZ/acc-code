@@ -124,8 +124,8 @@ v-else-if="bol" 条件渲染 '2.1.0+'
 v-else          条件渲染 
   PS: 须在'v-if'或'v-else-if'后使用 
 v-model="str/arr" 双向绑定[表单]数据值 
-  PS: 
-  绑定单个复选框'checkbox'
+  PS: 本质上是语法糖,负责监听用户的输入事件以更新数据,并对一些极端场景进行一些特殊处理 
+  单个复选框'checkbox' 
     默认的,值为 false/true 
       <section id="checkbox">
         <input type="checkbox" value="获取到的不是改值" v-model="checked">
@@ -151,7 +151,7 @@ v-model="str/arr" 双向绑定[表单]数据值
       setTimeout(function(){
         vm.val = '选中';
       },2000);
-  绑定多个复选框'checkbox'到一数组,选中项的'value'对应数组成员   
+  多个复选框'checkbox'到一数组,选中项的'value'对应数组成员   
     <section id="checkBoxs">
       <input type="checkbox" value="Jack" v-model="checkedNames">
       <input type="checkbox" value="John" v-model="checkedNames">
@@ -161,7 +161,7 @@ v-model="str/arr" 双向绑定[表单]数据值
     data: {
       checkedNames: []
     }
-  绑定单选按钮'radio',获取'value'值  
+  单选按钮'radio',获取'value'值  
     <section id="a" >
       <input type="radio" value="One" v-model="picked">
       <input type="radio" value="Two" v-model="picked">
@@ -173,7 +173,7 @@ v-model="str/arr" 双向绑定[表单]数据值
       picked : '',
       pick : '22',
     },
-  绑定单选列表<select>,获取到被选中项的'value'值  
+  单选列表<select>,获取到被选中项的'value'值  
     Example: 
       <select  v-model='key'>
         <option value="">{{val}}</option>
@@ -201,7 +201,7 @@ v-model="str/arr" 双向绑定[表单]数据值
           },1000);
         },
       });
-  绑定多选列表<select>,获取到选中项'value'组成的数组 
+  多选列表<select>,获取到选中项'value'组成的数组 
     <div id="slct">
       <select v-model="selected" multiple>
         <option>A</option>
@@ -210,17 +210,19 @@ v-model="str/arr" 双向绑定[表单]数据值
       </select>
       <div>Selected: {{ selected }}</div>
     </div>
-  绑定其他表单 
-    textarea 
-    ...
-  当表单值为对象,获取到对应的对象 
-    <select v-model="selected"> 
-      // <!-- 内联对象字面量 --> 
-      <option :value="{ num: 123 }">123</option> 
-    </select> 
-    // 当选中时 
-    typeof vm.selected //  'object'
-    vm.selected.num    //  123
+  绑定文本域'textarea'  
+  组件上使用 
+  Feature: 
+    当表单值为对象,获取到对应的对象 
+      <select v-model="selected"> 
+        // <!-- 内联对象字面量 --> 
+        <option :value="{ num: 123 }">123</option> 
+      </select> 
+      // 当选中时 
+      typeof vm.selected //  'object'
+      vm.selected.num    //  123
+    对需使用输入法[如中文、日文、韩文等]的语言,'v-model'不会在输入法组合文字过程中更新 
+      如果你也想处理这个过程,请使用 input 事件 
 v-bind:attr_name="val"  属性绑定,简写':attr_name' 
   Input: 
     attr_name   参数,绑定的属性名,大小写不敏感 
@@ -232,7 +234,7 @@ v-bind:attr_name="val"  属性绑定,简写':attr_name'
       可直接绑定数据属性里的对象 
         <div id="test" :class="classes"></div>
         data: {
-          classes: { c1: true, c2: false }
+          classes: { c1: true,c2: false }
         }
     arr  同时绑定多个class样式  
       Example: 
@@ -305,47 +307,62 @@ v-on="obj"  对象表示法,同时绑定多个事件  '2.4.0+'
   obj 为'{事件名:监听器}'键值对的对象 
   Example: 
   <button v-on="{ mousedown: doThis,mouseup: doThat }"></button>
-'Modifiers'修饰符,让指令以特殊方式绑定,适用'v-on'、'v-model'、'v-bind' 
+'Modifiers'修饰符,让指令以特殊方式绑定,适用 'v-on'/'v-model'/'v-bind' 
   PS: 修饰符是以点号'.'指明的特殊后缀;指令可以串联;
-  ◆通用事件修饰符 
-  .prevent 阻止默认行为,调用 event.preventDefault() 
-    <form v-on:submit.prevent="onSubmit"></form>
-    // <!-- 提交事件不再重载页面 -->
-  .stop    阻止冒泡,调用 event.stopPropagation()
-  .capture 使用事件捕获模式 
-  .self    只当事件是从侦听器绑定的元素本身触发时才触发回调 
-  .once    只触发一次回调 '2.1.4+' 
-  .native  监听组件根元素的原生事件  
-  .passive 以 { passive: true } 模式添加侦听器 '2.3.0+' 
+  通用事件修饰符 
+    .prevent 阻止默认行为,调用 event.preventDefault() 
+      <form v-on:submit.prevent="onSubmit"></form>
+      // <!-- 提交事件不再重载页面 -->
+    .stop    阻止冒泡,调用 event.stopPropagation()
+    .capture 使用事件捕获模式 
+    .self    只当事件是从侦听器绑定的元素本身触发时才触发回调 
+    .passive 以 { passive: true } 模式添加侦听器 '2.3.0+' 
+      表示不调用 evt.preventDefault()  
+    .once    只触发一次回调 '2.1.4+' 
+      PS: 还能被用到自定义的组件事件上 
+    .native  监听组件根元素的原生事件  
   键鼠事件修饰符: 键盘事件时监测键值,鼠标事件时监测鼠标按键  
+    ◆键盘: 'keyCode'或Vue提供的别名 
+      PS: Vue.config.keyCodes 全局对象,自定义按键修饰符别名 
+      // <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
+      <input @keyup.13="submit">
+      <input @keyup.enter="submit">
+    .enter   Enter键,'.13'等价于'.enter'
+      当为搜索框时<input type="search" >,在微信中 需使用 @keyup.13,@keyup.enter 无效 
+    .tab     
+    .delete  '删除'和'退格'键
+    .esc     
+    .space   
+    .up      
+    .down    
+    .left   
+    .right   
+    ◆系统修饰键 
+      和 keyup 事件一起用时,修饰键与常规按键不同 
+        事件触发时修饰键必须处于按下状态,即只有在按住 ctrl 的情况下释放其它按键,
+        才能触发 keyup.ctrl,而单单释放 ctrl 也不会触发事件,
+        否则,请为 ctrl 换用 keyCode：keyup.17 
+    .ctrl   '2.1.0+' 
+    .alt    '2.1.0+' 
+    .shift  '2.1.0+' 
+    .meta   Mac上对应⌘;Windows上对应⊞  '2.1.0+' 
+    .exact  控制由精确的系统修饰符组合触发的事件 '2.5.0+'  
+    ◆'Mouse Event'修饰符  '2.2.0+'  
+    .left   
+    .right  
+    .middle 
     同时监听多个 
       // <!-- Alt + C -->
       <input @keyup.alt.67="clear">
       // <!-- Ctrl + Click -->
       <div @click.ctrl="doSomething">Do something</div>
-  ◆键盘: 'keyCode'或Vue提供的别名 
-    PS: Vue.config.keyCodes 全局对象,自定义按键修饰符别名 
-    // <!-- 只有在 keyCode 是 13 时调用 vm.submit() -->
-    <input @keyup.13="submit">
-    <input @keyup.enter="submit">
-  .enter   Enter键,'.13'等价于'.enter'
-    当为搜索框时<input type="search" >,在微信中 需使用 @keyup.13, @keyup.enter 无效 
-  .tab     
-  .delete  '删除'和'退格'键
-  .esc     
-  .space   
-  .up      
-  .down    
-  .left   
-  .right   
-  .ctrl   '2.1.0+' 
-  .alt    '2.1.0+' 
-  .shift  '2.1.0+' 
-  .meta   Mac上对应⌘;Windows上对应⊞  '2.1.0+' 
-  ◆'Mouse Event'修饰符  '2.2.0+'  
-  .left
-  .right
-  .middle
+    自动匹配按键修饰符  '2.5.0+' 
+      自定义 .xxx ,在响应函数中会进行自动判断 若 evt.key === 'xxx' 才执行该函数  
+        <input @keyup.page-down="onPageDown"> 
+        onPageDown: function(evt){
+          // 该函数仅当 evt.key === 'PageDown' 才会执行 
+        }
+      有一些按键[.esc 及所有方向键]在 IE9 中有不同的 key 值,若想支持 IE9,内置别名应该是首选。
   ◆'v-model'修饰符 
   .lazy   从input事件转变为在change事件中同步  
     // <!-- 在 "change" 而不是 "input" 事件中更新 -->

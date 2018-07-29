@@ -33,11 +33,11 @@
     Vue无法检测数据变动的情况及决解办法 
       PS: 由于JS的限制,有些操作改变数据后Vue不能检测到数据的变动,而无法触发视图更新 
         原因: 受现代js的限制[以及废弃 Object.observe]等 
-      ◆Vue无法监控数据的情况 
-      ★vm实例创建后新增的根级别的响应式属性 
+      vm实例创建后新增的根级别的响应式属性 
         由于Vue会在初始化实例时对属性执行getter/setter转化过程,
         所以属性必须在 data 对象上存在才能让 Vue 转换它,这样才能让它是响应的 
-      ★对象属性的添加或删除 
+        在vm实例中预定义一个值,即使为空值,针对根级别的属性  
+      对象属性的添加或删除 
         new Vue({
           data: {
             aoo: {
@@ -51,25 +51,25 @@
             },1000)
           }
         });
-      ★[当函数内仅有]数组通过索引index直接设置成员时 
+        Object.assign 直接改变不生效,需重塑对象解决  
+      [当函数内仅有]数组通过索引index直接设置成员时 
         Example: 
         vm.items[num] = newValue ,虽然model中数据已经改变,但视图无渲染 
-      ★修改数组长度时 
+      修改数组长度时 
         vm.items.length = newLength 
-      ◆解决办法 
-      ★在vm实例中预定义一个值,即使为空值,针对根级别的属性  
-      ★变异方法 
+      ◆通用解决办法 
+      变异方法 
         arr.splice(indx,1,newVal)
-      ★重塑数组/对象: 用新数组/对象替换旧数组/对象 
+      重塑数组/对象: 用新数组/对象替换旧数组/对象 
         example1.items = example1.items.filter(function (item) {
           return item.message.match(/Foo/)
         })
         Vue实现了一些智能启发式方法来最大化DOM元素重用,
         所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作
-      ★Vue.set/vm.$set 
+      Vue.set/vm.$set 
         Vue.set(arr,index,newVal)
         this.$set(this.arr,index,newVal)  // vm的实例方法,也是全局Vue.set方法的别名
-      ★同时在当前函数内改变会引起视图变化的操作 
+      同时在当前函数内改变会引起视图变化的操作 [self]
         <div class="slct" >
           <div v-for="item1 in items">{{item1}}</div>
           <div v-for="i in items1" style="display:none;" >{{i.a}}</div>

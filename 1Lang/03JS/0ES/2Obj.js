@@ -993,22 +993,12 @@ Object,对象基础类,ES中所有对象的基类
       Object.is(+0,-0);    // false
       Object.is(0,0);      // true
       Object.is(NaN, NaN); // true
-    Object.assign(obj1[,obj2,..])  obj,返回合并后的对象[ES6]  
-      PS: 参数可以是多个[至少是两个]
-      let origin = {"b":2,"c":3}; //这个充当源对象
-      let target = {"a":1};       //这个充当目标对象
-      Object.assign(target,origin);
-      console.log(target); // {a: 1, b: 2, c: 3}
-      
-      若赋值过程中,对象的属性出现了相同的名字,则后面的属性值就会覆盖前面的属性值
-      let target = {"a":1};
-      let origin1 = {"a":2};
-      let origin2 = {"a":3};
-      Object.assign(target,origin1,origin2);
-      console.log(target); //  {a: 3}
-      Example:
-      console.log(Object.assign({aoo:"abc"})); // {aoo: "abc"} 
-    Object.entries() 
+    Object.assign(obj ,..?)  合并对象[ES6]  
+      Input: obj  待合并的对象 
+      Output: obj,合并到第一个对象中,并将其返回 
+      Feature: 
+        合并过程中,出现相同对象的属性名,则后面的覆盖前面的 
+    Object.entries()  
     Object.values()   
     Object.getOwnPropertySymbols 
     ★对象成员操作 
@@ -2832,6 +2822,7 @@ RegExp,'Regular Expression'正则类: 描述、匹配一系列符合某个语法
       const regexArrows = /^\p{Block=Arrows}+$/u;
       regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
 ------------------------------------------------------------------------------- 
+
 
 
 

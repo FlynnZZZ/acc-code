@@ -42,8 +42,7 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
         如同时定义 display:table 和 display:block 属性,他们同时起作用;
         定义 display:inline 和 display:block 两种属性有冲突,则优先级高起作用.
   css样式可引入html,jsp,php,asp,net等中使用 
-  注释 
-    /*注释*/
+  注释: /*注释*/
   IE8才开始支持css3 
   CSS规则,CSS文件由多个CSS规则组成 
     每个规则都有两个基本部分:选择器'selector'和声明块'declaration block', 
@@ -1026,9 +1025,9 @@ Declaration,样式声明
     white-space  元素内的'空格'及'换行符'处理 
       normal   默认,换行符、多个连续的空格会转换为一个空格 
       nowrap   忽略回车符,禁止换行,直到遇到<br>为止 
-      pre      保留多个空格
-      pre-line 忽略多个空格为一个,保留换行符 
-      pre-wrap 保留所有空格符和回车符 
+      pre      按照<pre>标签处理[保留多个空格]  
+      pre-wrap 按照<pre>标签处理,但超出容器宽度时会发生换行  
+      pre-line 保留换行符,其他同'normal'  
       inherit  继承  
     unicode-bidi 设置文本方向 
       normal

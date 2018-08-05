@@ -156,7 +156,7 @@ router = new VueRouter({  // 路由实例
           requiresAuth: true 
         }
         一个路由匹配到的所有路由记录会暴露为 $route.matched 数组,
-        通过遍历 $route.matched 来检查路由记录中的 meta 字段。
+        通过遍历 $route.matched 来检查路由记录中的 meta 字段 
         下面例子展示在全局导航钩子中检查 meta 字段：
         router.beforeEach((to, from, next) => {
           if (to.matched.some(record => record.meta.requiresAuth)) {

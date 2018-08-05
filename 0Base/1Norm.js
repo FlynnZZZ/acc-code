@@ -30,52 +30,52 @@
 ◆自我设定 
 文档记录规范 
   常用词: 
-    tag     标签
-    attr    特性 
-    prop    属性 
-    slctor  选择器 slctor 
-    bol     布尔值 
-    num     数值
-    int     整数 
-    float   浮点数 
-    str     字符串
-    arr     数组
-    obj     对象
-    any     任意类型 
-    expr    表达式  
-    stmt    语句  statement 
-    idx     数组的下标/字符串字符下标  
-    bgn     开始 begin
-    end     结束 
-    elem    DOM对象  
-    jEl     jQuery对象 
-    member  数组成员,集合成员 
-    key     对象的键,或属性等
-    val     对象的值/值
-    foo     [无属性]函数
-    cfo     [回调型]函数 cfoo 
-    arg     [无属性]参数
-    params  [配置项]参数  
-    option  [配置项]参数  
-    typ     类型 type
-    init    初始的 
-    hdl     操作 handle 
-    DiBs    在浏览器中有差异,有兼容性问题  Different in Browsers
-    acc     总结,积累
-    rec     记录
-    todo    待处理,待整理
-    tmp     暂时,临时
-    xxx+    表示其及其后续 
+    tag       标签
+    attr      特性 
+    prop      属性 
+    selector  选择器   
+    bol       布尔值 
+    num       数值
+    int       整数 
+    float     浮点数 
+    str       字符串
+    arr       数组
+    obj       对象
+    any       任意类型 
+    expr      表达式  
+    statement 语句   
+    idx       数组的下标/字符串字符下标  
+    bgn       开始 begin
+    end       结束 
+    elem      DOM对象  
+    jEl       jQuery对象 
+    member    数组成员,集合成员 
+    key       对象的键,或属性等
+    val       对象的值/值
+    foo       [无属性]函数
+    callback  [回调型]函数  
+    arg       [无属性]参数
+    params    [配置项]参数  
+    option    [配置项]参数  
+    typ       类型 type
+    init      初始的 
+    handle    操作  
+    DiBs      在浏览器中有差异,有兼容性问题  Different in Browsers
+    acc       总结,积累
+    rec       记录
+    todo      待处理,待整理
+    tmp       暂时,临时
+    xxx+      表示其及其后续 
       如 IE9+ 表示IE9和IE9以后
       CSS3+ CSS3及以后
       HTML5 HTML5及以后
       ES5+  ES5新增
       ES6+  ES6新增
       ...
-    more    其他的,更多的
-    self    自己的,自定义的
-    SlPt    自我观点、认为 SelfPoint
-    SlSt    自我设置 SelfSet
+    more      其他的,更多的
+    self      自己的,自定义的
+    SlPt      自我观点、认为 SelfPoint
+    SlSt      自我设置 SelfSet
     ★组合短语 
     moIn    更多参见 more in 
     NdA     Nondirect availability,不可直接使用  
@@ -84,7 +84,7 @@
     pop     弹出 
     column  栏目 
     sort    类别 
-    pw      密码 
+    pwd     密码 
   符号表示: 
     '[]'包裹: 表示可选 
       Example: tr.slice(beginSlice[,endSlice])  表示第二个参数为可选 

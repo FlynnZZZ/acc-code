@@ -2,7 +2,6 @@ HTML'Hyper Text Markup Language'超文本标记语言
   'markup language'标记语言: 通过使用一套标记标签'markup tag'来描述网页 
   Web浏览器读取HTML文档,以网页的形式显示,用标签来解释页面的内容;
   XHTML: 一个过渡技术,结合了部分XML的强大功能及大多数HTML的简单特性 
-  2000 年底,W3C发布XHTML1.0 版本,是一种在HTML 4.0 基础上优化和改进的的新语言 
 语法规则 
   文档结构 
     所有的网页文件,通常有四对标记来构成文档的骨架
@@ -33,15 +32,16 @@ HTML'Hyper Text Markup Language'超文本标记语言
         <link rel="stylesheet" type="text/css" media="screen" href="path/to/ie.css" />
       <![endif]-->
         这些代码的意思是:若用户浏览器是IE6及以下,那这段代码才会生效。
-        若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]”。
+        若你想把IE7也包含进来,那么就把“[if lt IE 7]”改为“[if lte IE 7]” 
   浏览器解析HTML方式 
-    PS:一个不含任何DOCTYPE的网页将会以'quirks'怪异模式渲染 
-      HTML5提供的<DOCTYPE html>是标准模式,向后兼容的,等同于开启了标准模式;
-      IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
-      如去掉html文档中的声明则进入怪异模式
-    standards mode,标准模式: 按照HTML与CSS的定义渲染
-    quirks mode,怪异模式: 尝试模拟更旧的浏览器的行为 
-    参见 document.compatMode 和 document.documentMode 
+    文档模式 
+    IE8引入的一个新的概念叫"文档模式",
+    文档模式决定了可用什么功能,及如何对待文档类型'doctype'
+    'standards mode'标准模式: 按照HTML与CSS的定义渲染
+      标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
+    'quirks mode'怪异模式/兼容模式: 尝试模拟更旧的浏览器的行为 
+      页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作 
+    参见 <！DOCTYPE>、document.compatMode、document.documentMode 
   自我设定 
     标签使用'tag'表示,属性使用'attr'表示,布尔值属性用'prop'表示
 --------------------------------------------------------------------------------
@@ -51,13 +51,9 @@ HTML'Hyper Text Markup Language'超文本标记语言
     PS: HTML文档的第一行,非HTML标签,告知浏览器页面使用的HTML版本;
       没有结束标签,对大小写不敏感
       请始终向HTML文档添加<！DOCTYPE>声明,这样浏览器才能获知文档类型.
-    文档模式 
-      IE8引入的一个新的概念叫"文档模式",
-      文档模式决定了可以使用什么功能,以及如何对待文档类型'doctype'
-      标准模式与兼容模式的区别:  
-      标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行.
-      在兼容模式中,页面以宽松的向后兼容的方式显示,模拟老式浏览器的行为以防止站点无法工作.
-      简单的说,就是尽可能的显示能显示的东西给用户看.
+      一个不含任何DOCTYPE的网页将会以'quirks'怪异模式渲染 
+      HTML5提供的<DOCTYPE html>是标准模式,向后兼容的,等同于开启了标准模式;
+      IE6开始区分标准模式和混杂模式也叫怪异模式,主要是看文档的声明.
     HTML 4.01 中 
       DOCTYPE文档类型,用于引入DTD[说明当前html版本],告知浏览器解析器HTML的文档标准.
       DOCTYPE不存在或格式不正确会导致文档以兼容模式[怪异模式]呈现.
@@ -483,7 +479,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
     width   控制线的长度
   <code>    格式化文本
     当代码为一行时可使用该标签进行插入.若是多行代码,则需使用pre
-  <pre>     preformatted_text,格式化文本,保留内容包含的格式
+  <pre>     preformatted_text,格式化文本,保留内容包含的格式 
     被包围在pre元素中的文本通常会保留空格和换行符,文本呈现为等宽字体;
     常用来展示计算机源代码;
   <br>      换行
@@ -895,7 +891,7 @@ Table表格
         使用rowgroup和colgroup会将单元格的行组[由 <thead>、<tbody> 或 <tfoot> 标签定义]
         或列组中的所有单元格和表头单元格绑定起来[由 <col> 或 <colgroup> 标签定义]  
       rowgroup 规定单元格是行组的表头
-Form表单  
+Form表单 
   PS: 表单字段也叫表单控件,如input、button等元素[self] 
   <fieldset></fieldset> 表单信息分组
     PS: 默认有一个细线边框,可设置border控制 
@@ -1443,7 +1439,7 @@ HTML全局属性
     &#8707;  &exists;   ∃       exists                       
     &#8709;  &empty;    ∅       empty                        
     &#8711;  &nabla;    ∇       nabla                        
-    &#8712;  &isin;     ∈       isin                         
+    &#8712;  &isin;     ∈      isin                         
     &#8713;  &notin;    ∉       notin                        
     &#8715;  &ni;       ∋       ni                           
     &#8719;  &prod;     ∏       prod                         
@@ -1475,11 +1471,11 @@ HTML全局属性
     &#8869;  &perp;     ⊥      perpendicular                
   &#x<Unicode编码>;  表示一字符 
     如 &#x1d306;   表示:𝌆  
-◆HTML5 
+◆HTML5:  HTML标准的第五次修订 
   介绍 
-    PS:HTML5 是对 HTML 标准的第五次修订,HTML5是最新版本的HTML,
-      引入了简化的标记、新的语义和媒体元素,另外还有一组支持Web应用的JavaScript库
-      HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持
+    PS: 是最新版本的HTML,引入了简化的标记、新的语义和媒体元素,
+      另外还有一组支持Web应用的JavaScript库
+      HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持 
       HTML5 = 标记 + JavaScript API + CSS
     变化
       声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了

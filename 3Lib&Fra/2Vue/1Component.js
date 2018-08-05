@@ -1,47 +1,47 @@
-'Component'Vue.component() 全局组件  
+Vue.component() 全局组件  
   PS: 需插入的Vue实例前定义,才会渲染出该组件 
     否则要触发该实例的任意一组件渲染,如通过'v-if' 
 ◆组件定义 
-  Vue.component('c-name',{   // 全局组件  
-    'c-name'   组件名称,推荐使用小写,且包含一个短杠 
-    配置对象,相当于new Vue(options)的options  
-    data: function(){  // 组件数据,必须为一函数 
-      PS: 函数返回值可避免多次使用一组件时数据的共享  
-      return { 
-      }; 
-      使用数据共享'特性': 通过函数返回同一份数据 
-        <div id="example-2">
-          <simple-counter></simple-counter>
-          <simple-counter></simple-counter>
-          <simple-counter></simple-counter>
-        </div>
-        var data = { counter: 0 }
-        Vue.component('simple-counter',{
-          template: '<button v-on:click="counter += 1">{{ counter }}</button>',
-          // 技术上 data 的确是一个函数了,因此 Vue 不会警告,
-          // 但是我们返回给每个组件的实例的却引用了同一个data对象
-          data: function () {
-            return data
-          }
-        })
-        new Vue({
-          el: '#example-2'
-        })
-        三个组件共享了同一个 data ,因此 counter 会影响所有组件 
-    } 
-    name: 'aoo',      // 命名组件,用于递归调用 
-  })  
-  Vue.component("c-name",function(rs,rj){  // 异步全局组件 
+  Vue.component(  // 全局组件定义   
+    'cpnt-name'   // 组件名称,推荐使用小写,且包含一个短杠  
+    ,{ // 配置对象,类似于Vue实例的配置项   
+      data: function(){  // 组件数据,必须为一函数 
+        PS: 函数返回值可避免多次使用一组件时数据的共享  
+        return { }; 
+        使用数据共享'特性': 通过函数返回同一份数据 
+          <div id="example-2">
+            <simple-counter></simple-counter>
+            <simple-counter></simple-counter>
+            <simple-counter></simple-counter>
+          </div>
+          var data = { counter: 0 }
+          Vue.component('simple-counter',{
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            // 技术上 data 的确是一个函数了,因此 Vue 不会警告,
+            // 但是我们返回给每个组件的实例的却引用了同一个data对象
+            data: function () {
+              return data
+            }
+          })
+          new Vue({
+            el: '#example-2'
+          })
+          三个组件共享了同一个 data ,因此 counter 会影响所有组件 
+      } 
+      ,name: 'aoo'       // 命名组件,用于递归调用 
+      ,... 
+    }
+  )  
+  Vue.component("cpnt-name",function(rs,rj){  // 异步全局组件 
     rs({}) // 可在适当的时候进行 
   });
   组件元素可能的限制及解决 
     <ul>,<ol>,<table>,<select>等子标签有类型限制 
     在其内部使用组件时可能会导致问题 
+    使用'is'属性解决: 如 <table> <tr is="my-row"></tr> </table>
     Example: 
       <table> <my-row>...</my-row> </table>
       自定义组件 <my-row> 被认为是无效的内容,在渲染的时会导致错误 
-      使用'is'属性可解决 
-      <table> <tr is="my-row"></tr> </table>
     使用以下字符串模板,则无该限制 
       <script type="text/x-template">
       JavaScript内联模版字符串
@@ -86,30 +86,21 @@
     Vue.component('hello-world',{
       template: '#aoo'
     })
-  'components': {     // vue实例中局部注册 
+  components: {    // vue实例中局部注册 
     PS: 仅能在该实例/组件的作用域中使用 
-    'cpt-name1' : cpt,
+    'cpnt-name': cpt 
       cpt 可为:   
       import xx from "./cpt.js";  // 模块化引入的组件
       Vue.component(cpt,{})       // 定义的全局组件 
       {                           // 通过对象来配置的组件 
         template: '<div>A custom component! {{aoo}}</div>',
       }
+      () => import('xxx.vue')     // 配合Webpack使用的异步组件 
     // ..
-  },
-◆组件标签: 在父父组件中使用时,用于确定引入的位置 
-  在组件上用到class属性时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
-    Vue.component('my-cpt',{
-      template: '<p class="foo bar">Hi</p>'
-    });
-    // 使用 
-    <my-cpt class="baz boo"></my-cpt>
-    // 将被渲染成为 
-    <p class="foo bar baz boo">Hi</p>
-    // 同样的适用于动态绑定 
-    <my-cpt :class="{ active: true }"></my-cpt>
-    // 被渲染成为
-    <p class="foo bar active"></p>
+  }
+◆组件标签: 在父父组件中使用时
+  PS: 用于确定引入的位置及通信的定义  
+  组件上用class时,将被添加到根元素上面,元素上已经存在的类不会被覆盖 
   <cpt-name></cpt-name>    在父组件中指定子组件位置 
     要确保在初始化根实例之前注册了组件 
     Example: 
@@ -128,7 +119,7 @@
     :is="cptname"属性实现动态组件 
       <div id="parent">
         <button type="button" name="button" @click='changeFoo' >switchBtn</button>
-        <div v-bind:is="changeFlag"> </div>
+        <div :is="changeFlag"> </div>
       </div>
       new Vue({
         el: '#parent',
@@ -238,7 +229,7 @@
           template: '#cpt',
           props: ['prop1'],
           methods: {
-            foo: function(){
+            foo: function(){ 
               this.$emit('update:prop1','bbbb')
             },
           },

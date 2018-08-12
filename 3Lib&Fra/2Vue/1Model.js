@@ -588,7 +588,7 @@ Vue.xxx: 静态属性/方法
 })  
 vm.xxx.实例属性/方法/事件 
   PS: .$xx [带有前缀$的]实例方法/属性,在配置对象中使用'this'代替'vm' 
-  ◆实例属性 
+  实例属性 
   .$options 只读,当前Vue实例的初始化选项 
     Example: 在选项中包含自定义属性时 
     new Vue({
@@ -602,25 +602,30 @@ vm.xxx.实例属性/方法/事件
   .$props   当前组件接收到的props对象  '2.2.0+' 
     <child-a v-bind="$props"></child-a> 
     // 通过 $props 将父组件的 props 一起传给子组件 
-  .$parent     只读,父实例[若存在的话]
+  ★关系组件实例访问 
+    可读写其'data'/'computed'等数据
+    可调用其方法 
+    ... 
   .$root       只读,当前组件树的根Vue实例,若当前实例无父实例,则是其自己 
+  .$parent     只读,父实例[若存在的话]
   .$children   只读,当前实例的直接子组件 
     $children 并不保证顺序,也不是响应式的 
+  .$refs.xxx   只读,包含已注册过'ref'的所有子组件的对象 
+    Example: 
+      vm.$refs.aoo 表示 <cpt-a ref="aoo"> 子组件 
+  ★
   .$slots      只读,用来访问被插槽分发的内容 
     每个具名插槽 有其相应的属性 (例如：slot="foo" 中的内容将会在 vm.$slots.foo 中被找到)。
     default 属性包括了所有没有被包含在具名插槽中的节点。 
   .$scopedSlots 只读,用来访问作用域插槽   '2.1.0+' 
     对于包括 默认 slot 在内的每一个插槽,该对象都包含一个返回相应 VNode 的函数。
-  .$refs        只读,包含已注册过'ref'的所有子组件的对象 
-    Example: 
-      vm.$refs.aoo 表示 <cpt-a ref="aoo"> 子组件 
   .$isServer    只读,当前Vue实例是否运行于服务器的布尔值 
   .$attrs       只读,包含了父作用域中不被认为[且不预期为]'props'的特性绑定 [class 和 style 除外] 
     当一个组件没有声明任何 props 时,这里会包含所有父作用域的绑定 (class 和 style 除外),
     并且可以通过 v-bind="$attrs" 传入内部组件——在创建更高层次的组件时非常有用。
   .$listeners   只读,包含了父作用域中的[不含'.native'修饰器的]v-on事件监听器 
     它可以通过 v-on="$listeners" 传入内部组件——在创建更高层次的组件时非常有用 
-  ◆实例方法
+  实例方法
   .$watch( // 监控元素改变的方法 
     'key'                     // data对象中的属性,一个表达式或计算属性函数 
       表达式只接受监督的键路径。对于更复杂的表达式,用一个函数取代。
@@ -666,12 +671,15 @@ vm.xxx.实例属性/方法/事件
   .$on('event-name'/arr,foo)     监听事件,触发回调   [数组只在'2.2.0+'中支持] 
     监听当前实例上的自定义事件。事件可以由 vm.$emit() 触发
     回调函数会接收所有传入事件触发函数的额外参数。
+    this.$on('hook:beforeDestroy', function () { // 监听生命周期并指定响应  
+      // 
+    })
   .$once('event-name',foo)  监听事件,但只触发一次,在第一次触发之后移除监听器 
   .$off(['event-name'/arr,foo])   移除自定义事件监听器     [只在'2.2.2+'支持数组]
     如果没有提供参数,则移除所有的事件监听器；
     如果只提供了事件,则移除该事件所有的监听器；
     如果同时提供了事件与回调,则只移除这个回调的监听器。
-  .$emit('event-name',[data..])  触发事件,传递数据 
+  .$emit('event-name',data1 ,...?)  触发事件,传递数据 
     附加参数都会传给监听器回调 
   .$mount(elem/selector)    手动编译Vue实例,返回实例自身 
     如果Vue实例在实例化时没有收到'el'选项,则它处于'未挂载'状态,没有关联的DOM元素。
@@ -687,7 +695,8 @@ vm.xxx.实例属性/方法/事件
     // 或者,在文档之外渲染并且随后挂载
     var component = new MyComponent().$mount()
     document.getElementById('app').appendChild(component.$el)
-  .$forceUpdate()  迫使Vue实例重新渲染,仅影响实例本身和插入插槽内容的子组件[而非所有子组件]
+  .$forceUpdate()  迫使Vue实例重新渲染
+    仅影响实例本身和插入插槽内容的子组件[而非所有子组件] 
   .$nextTick(function(){ // 将回调延迟到下次DOM更新循环后执行 
     在修改数据之后立即使用它,然后等待 DOM 更新。
     跟全局方法 Vue.nextTick 一样,不同的是回调的 this 自动绑定到调用它的实例上。

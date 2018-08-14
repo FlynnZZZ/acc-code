@@ -608,14 +608,69 @@ DragEvent,拖放事件[IE9+][HTML5]
   Extend：MouseEvent 
     console.log(DragEvent.prototype.__proto__.constructor===MouseEvent);
   Proto: 
-    .dataTransfer  DataTransfer, 
-      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问.
+    .dataTransfer  DataTransfer,  数据传递对象,用于在拖放事件中传递数据  
+      PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问
+        IE 不支持 dataTransfer 对象 ?     
+      .setData(type,data)  向 dataTransfer 中存入数据
+        Input: 
+          type  KW,表示要存入数据种类的字符串 
+            'text/plain'    文本文字 
+            'text/html'     HTML文字 
+            'text/xml'      XML文字 
+            'text/uri-list' URL列表,每个URL为一行 
+          data  要存入的数据 
+        Example: 
+          event.dataTransfer.setData('text/plain','Hello World');
+      .getData(type)       从 dataTransfer 中读取数据
+        Input: type  为在 setData 中指定的数据种类 
+        Example: 
+          event.dataTransfer.getData('text/plain');
+      .clearData(type?)    清除 dataTransfer 中存放的数据
+        Input: type  可选,数据种类,若参数为空,则清空所有种类的数据 
+      .setDragImage(img, x, y) 过用img元素来设置拖放图标
+        Input: 
+          img  Element,图标元素
+          x    图标元素离鼠标指针的X轴位移量
+          y    图标元素离鼠标指针的Y轴位移量 
+        Example: 
+          var source = document.getElementById('source')
+          ,icon = document.createElement('img') 
+          
+          icon.src = 'img.png';
+          source.addEventListener('dragstart',function(ev){
+            ev.dataTransfer.setDragImage(icon,-10,-10)
+          })
+      .effectAllowed       指定拖放操作所允许的一个效果 
+        PS: 应该在dragstart事件中设置此属性,以便为拖动源设置所需的拖动效果 
+          在 dragenter 和dragover 事件处理程序中,该属性将设置为在dragstart 事件期间分配的任何值,
+          因此,可以使用effectAllowed来确定允许哪个效果。
+          IE会将该值改为小写。因此,linkMove将会变为linkmove ,等等。
+        'uninitialized' 效果没有设置时的默认值,则等同于'all'
+        'all'     允许所有的操作 
+        'none'    表示不允许放下
+        'copy'    源项目的复制项可能会出现在新位置 
+          用于指示被拖动的数据将从当前位置复制到放置位置 
+        'link'    可以在新地方建立与源的链接 
+          用于指示将在源和放置位置之间创建某种形式的关系或连接 
+        'move'     一个项目可能被移动到新位置 
+          用于指定被拖动的数据将被移动 
+        'copyLink' 允许 copy 或者 link 操作 
+        'copyMove' 允许 copy 或者 move 操作 
+        'linkMove' 允许 link 或者 move 操作 
+        分配一个没有效果的其他值给 effectAllowed,则保留原值。
+      .dropEffect          
+        'copy'
+        'move'
+        'link'
+        'none'
   Expand: 
-    拖放源,被拖放的元素 
-      若是图片则需加载后拖放,当图片加载失败则不可拖放
+    拖放源: 被拖放的元素 
       在需拖动元素的标签中,添加属性 draggable="true",
-      图像和链接的draggable属性自动被设置成了true
-    拖放目标,要放置的目标元素  
+      图像<img>和链接<a>默认 draggable="true" 
+      若不想拖放这两个元素,需设为 false 
+      而图片则需加载后方可拖放,当加载失败则不可拖放 
+    过程元素: 拖放源经过位置处的元素 
+    拖放目标: 拖放源放置位置处的元素 
       默认的在外观显示上所有的元素都不能做为放置的目标元素,
       通过阻止拖放目标'dragover'事件的默认行为来达到可拖放,
       达到的效果: 光标显示可放置的效果,拖放后会触发拖放目标的'drop'事件 
@@ -634,16 +689,20 @@ DragEvent,拖放事件[IE9+][HTML5]
         elem.onmousedown = function(){ if(this.dragDrop){ this.dragDrop(); } }
       firefox中,通过ondragstart中dataTransfer的setData方法来达到支持draggable属性
   事件枚举: 
-    ◆在拖放源上触发 
+    ◆拖放源上触发 
     'dragstart' 开始拖动
     'drag'      拖放期间持续触发
     'dragend'   被放置后触发[无论放置位置] 
-    ◆在拖放目标元素上触发 
+    ◆过程元素上触发 
     'dragenter'  拖放源开始进入目标元素范围时触发 
     'dragleave'  拖放源离开目标元素的范围时触发
     'dragover'   拖放源处于目标元素上方时持续触发 
+    ◆拖放目标上触发 
     'drop'       拖放源放置到目标元素后触发 
       Firefox中默认打开被放到放置目标上的URL,为了正常拖放,要取消其drop事件的默认行为 
+        evt.preventDefault() 
+  Feature: 
+     IE 中元素不设置 height 的时,不会触发 dragleave 事件 
   Example: 
     <div id="dragElem" draggable="true">拖放元素</div>
     <div id="targetElem" >放置目标元素</div>

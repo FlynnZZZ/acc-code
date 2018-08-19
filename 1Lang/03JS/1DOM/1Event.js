@@ -308,7 +308,7 @@ Event,事件基础类
       touchmove
     已废弃事件: 
       DOMActivate  元素已被用户操作[通过鼠标或键盘]激活 [DOM3废弃] 
-PageTransitionEvent, 
+PageTransitionEvent,页面过渡事件  
   Extend: Event 
     console.log(PageTransitionEvent.prototype.__proto__.constructor===Event); // true 
   Proto: 
@@ -611,7 +611,7 @@ DragEvent,拖放事件[IE9+][HTML5]
     .dataTransfer  DataTransfer,  数据传递对象,用于在拖放事件中传递数据  
       PS: IE5最早引入,是事件对象的一个属性,故只能在拖放事件的处理程序中访问
         IE 不支持 dataTransfer 对象 ?     
-      .setData(type,data)  向 dataTransfer 中存入数据
+      .setData(type,data)  向 dataTransfer 中存入数据 
         Input: 
           type  KW,表示要存入数据种类的字符串 
             'text/plain'    文本文字 

@@ -725,74 +725,163 @@
         var print = module.default;
         print();
       });
-Webpack4: 默认零配置 
-  相关命令 
-    $ npm i webpack -D  
-    $ npm i webpack-cli -D 
-  默认设定 
-    './src/index.js'  // 入口 
-    './dist/main.js'  // 出口 
-  'production'&'development'生产&开发 模式 
-    PS: 无需为生产和开发环境创建2个单独的配置 
-    $ webpack --mode development   // 开发模式 
-    $ webpack --mode production    // 生产模式 
-      压缩,作用域提升,tree-shaking 等 
-  'Babel'转译 ES6 
-    安装依赖 
-      $ npm i babel-core -D 
-      $ npm i babel-loader -D 
-      $ npm i babel-preset-env -D 
-        用于将 Javascript ES6 代码编译为 ES5
-    '.babelrc'配置 Babel 
-      {
-        "presets": [ "env" ]
-      }
-  处理HTML 
-    安装依赖 
-      $ npm i html-loader -D 
-      $ npm i html-webpack-plugin -D 
-    配置'webpack.config.js' 
-      module.exports = {
-        // 未定义的项将使用默认配置 
-        module: {
-          rules: [
-            { test: /\.js$/, exclude: /node_modules/, use: {
-              loader: "babel-loader"
-            } }
-            ,{ test: /\.html$/, use: [
-              { loader: "html-loader", options: { minimize: true } }
-            ] }
-          ]
-        }
-        ,plugins: [
-          new require("html-webpack-plugin")({
-            template: "./src/index.html",
-            filename: "./index.html"
-          })
-        ]
-      };
-  将CSS提取到一个文件中 
-    PS: 'extract-text-webpack-plugin'与webpack4不太兼容, 
-      使用'mini-css-extract-plugin'代替 
-      确保将 webpack 更新到'4.2.0+',否则 mini-css-extract-plugin 将无效 
-    安装依赖 
-      $ npm i mini-css-extract-plugin -D 
-      $ npm i css-loader -D 
-    配置'webpack.config.js'
-      const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-      // ..
-      { test: /\.css$/, use: [
-        MiniCssExtractPlugin.loader
-        ,"css-loader" 
-      ]}
-      // ..
-      new MiniCssExtractPlugin({
-        filename: "[name].css",
-        chunkFilename: "[id].css"
-      })
-  配置Webpack开发服务器 
-    $ npm i webpack-dev-server -D  // 安装依赖 
-    $ webpack-dev-server --mode development --open  // 代替Webpack命令使用 
 --------------------------------------------------------------------------------
+Webpack4  
+相关命令 
+  $ npm i webpack -D  
+  $ npm i webpack-cli -D 
+默认零配置 
+  .entry  入口 
+    './src/index.js'  
+  .output 出口 
+    './dist/main.js'  
+  .mode   模式设定  
+    PS: 需要指定执行的模式,否则会抛出警告 
+      无需为生产和开发环境创建2个单独的配置 
+    'none'          不使用任何默认配置 
+    'development'   开发 
+    'production'    生产 
+    相关命令: 
+      $ webpack --mode development   // 开发模式 
+      $ webpack --mode production    // 生产模式 
+        压缩,作用域提升,tree-shaking 等 
+webpack-cli 
+  PS: webpack4将命令行相关的操作抽离到了webpack-cli中 
+  $ npm i webpack@4 --save-dev   // 安装webpack 
+  // webpack-dev-server 
+  $ npm i webpack-dev-server --save-dev   // 安装 web-dev-server 开发服务器 
+  $ webpack-dev-server --mode development // 使用开发服务器来启动,自动检测更新  
+  // webpack-cli 
+  $ npm i webpack-cli --save-dev  // 安装 webpack-cli  
+  $ webpack-cli migrate ./webpack.config.js // 将配置从v1版本升级到v2版本 
+  $ webpack-cli init // 快速生成一webpack配置文件的模版 
+'Babel'转译 ES6 
+  安装依赖 
+    $ npm i babel-core -D 
+    $ npm i babel-loader -D 
+    $ npm i babel-preset-env -D 
+      用于将 Javascript ES6 代码编译为 ES5
+  '.babelrc'配置 Babel 
+    {
+      "presets": [ "env" ]
+    }
+处理HTML 
+  安装依赖 
+    $ npm i html-loader -D 
+    $ npm i html-webpack-plugin -D 
+  配置'webpack.config.js' 
+    module.exports = {
+      // 未定义的项将使用默认配置 
+      module: {
+        rules: [
+          { test: /\.js$/, exclude: /node_modules/, use: {
+            loader: "babel-loader"
+          } }
+          ,{ test: /\.html$/, use: [
+            { loader: "html-loader", options: { minimize: true } }
+          ] }
+        ]
+      }
+      ,plugins: [
+        new require("html-webpack-plugin")({
+          template: "./src/index.html",
+          filename: "./index.html"
+        })
+      ]
+    };
+将CSS提取到一个文件中 
+  PS: 'extract-text-webpack-plugin'与webpack4不太兼容, 
+    使用'mini-css-extract-plugin'代替 
+    确保将 webpack 更新到'4.2.0+',否则 mini-css-extract-plugin 将无效 
+  安装依赖 
+    $ npm i mini-css-extract-plugin -D 
+    $ npm i css-loader -D 
+  配置'webpack.config.js'
+    const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+    // ..
+    { test: /\.css$/, use: [
+      MiniCssExtractPlugin.loader
+      ,"css-loader" 
+    ]}
+    // ..
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    })
+配置Webpack开发服务器 
+  $ npm i webpack-dev-server -D  // 安装依赖 
+  $ webpack-dev-server --mode development --open  // 代替Webpack命令使用 
+loader&plugin 升级 
+  适配webpack3的loader都需升级才能适配webpack4 
+  推荐使用 mini-css-extract-plugin 代替 extract-text-webpack-plugin 
+  提取css作为单独的文件 
+    $ npm i -D extract-text-webpack-plugin@next // '4.0.0+'需next版本 
+◆新增属性 
+.optimization  
+  该配置项可取代以下四个常用plugin  
+  UglifyjsWebpackPlugin
+  CommonsChunkPlugin 
+    optimization.splitChunks 来进行代码的拆分 
+    使用 optimization.runtimeChunk 来提取webpack的runtime代码,引入了新的cacheGroups概念。
+    并且webpack4中optimization提供如下默认值,官方称这种默认配置是保持web性能的最佳实践
+    module.exports = {
+      optimization: {
+        minimize: env === 'production' ? true : false //是否进行代码压缩
+        ,splitChunks: {
+          chunks: "async"  // 指定哪些模块会提取公共模块  
+            'async'     默认值,只会提取异步加载模块的公共代码 
+            'initial'   只会提取初始入口模块的公共代码 
+            'all'       同时提取前两者的代码  
+          ,minSize: 30000 // 模块大于30k会被抽离到公共模块
+          ,minChunks: 1  // 模块出现1次就会被抽离到公共模块
+          ,maxAsyncRequests: 5  // 对于异步模块,生成的公共模块文件不能超出5个 
+          ,maxInitialRequests: 3  // 对于入口模块,抽离出的公共模块文件不能超出3个 
+          ,name: true 
+          ,cacheGroups: {
+            default: {
+              minChunks: 2 
+              ,priority: -20
+              ,reuseExistingChunk: true 
+            }
+            ,vendors: {
+              test: /[\\/]node_modules[\\/]/
+              ,priority: -10
+            }
+          }
+        }
+        ,runtimeChunk {
+          name: "runtime"
+        }
+      }
+    }
+     有了这些默认配置,我们几乎不需要任何成功就能删除之前CommonChunkPlugin的代码   
+◆新增插件 
+webpack-bundle-analyzer 
+  PS: 最新 Vue-cli 注入了 webpack-bundle-analyzer 插件（Webpack插件和CLI实用程序）,
+    可将内容束展示为方便交互的直观树状图,
+    让你明白你所构建包中真正引入的内容；我们可以借助她,
+    发现它大体有哪些模块组成, 找到错误的模块, 然后优化它。
+    默认会打开 'http://127.0.0.1:8888' 作为展示 
+  可在 package.json 中注入如下命令去方便运行: npm run analyz 
+    "analyz": "NODE_ENV=production npm_config_report=true npm run build"
+--------------------------------------------------------------------------待整理
+  ModuleConcatenationPlugin
+  NoEmitOnErrorsPlugin 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

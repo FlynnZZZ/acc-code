@@ -234,9 +234,11 @@ XMLHttpRequest,AJAX实现的核心
           */
           发送数据[不需设置Content-Type]
           req.send(dataToSend);
-      'Content-Length' 发送的数据长度
+      'Content-Length' 发送的数据长度 
         num  
           xhr.setRequestHeader('Content-Length', JSON.stringify(data).length);
+      'User-Agent'     客户端识别 
+        W3C规范默认不允许设置更改,但可在Chrome中自定义设置 
     .withCredentials  // bol,读写,是否允许跨域获取用户信息,默认:false[IE10+] 
       PS: 用户信息,比如Cookie和认证的HTTP头信息,
       为让该属性生效,服务器必须显式返回'Access-Control-Allow-Credentials'头信息 

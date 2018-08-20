@@ -748,12 +748,13 @@ HTMLElement,HTML元素节点
     .<atrName>  读写,元素特性值  
       PS: 只有公认的、非自定义的特性才会以属性的方式添加到DOM对象中 
     .title  有关元素的附加说明信息,一般通过工具提示条显示出来
-    .contentEditable 
+    .contentEditable  
     .value  读写input的值,即输入框中的字符,实时动态的值
     .lang   元素内容的语言代码  [较少使用] 
-    .dir    语言的方向  [较少使用]
+    .dir    语言的方向  [较少使用] 
       "ltr"   left-to-right从左至右
       "rtl"   right-to-left从右至左
+    .dataset   DOMStringMap,自定义属性[HTML5]  
     ★元素操作 
     .focus() 使元素获得焦点 
       在ios中该方法存在限制,
@@ -761,20 +762,22 @@ HTMLElement,HTML元素节点
         当click中的cfoo可执行时,而通过其他方法或事件触发click,则无法获取焦点;
     .blur()  使元素失焦 
     .click() 点击元素 
-    事件相关 
-      .<onevents>  事件,返回相应的JS函数? 
-      .onerror     见:Event 
-      .onabort 
-      .onblur 
-      .oncancel 
-      .oncanplay 
-      .oncanplaythrough 
-      .onchange 
-      .onclick 
-      .onclose 
-      .oncontextmenu 
-      .oncuechange 
-      .ondblclick 
+    不常用 
+      .translate 
+      .autocapitalize 
+      .hidden 
+      .accessKey 
+      .draggable 
+      .spellcheck 
+      .isContentEditable 
+      .inputMode 
+      .nonce 
+      .runtimeStyle  计算的样式 [非标,仅IE6支持]
+    .style    CSSStyleDeclaration,内联样式对象 
+      PS: 包含着通过HTML的style特性指定的所有样式信息 
+        若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
+    ◆事件相关 
+    拖拽 
       .ondrag 
       .ondragend 
       .ondragenter 
@@ -782,19 +785,19 @@ HTMLElement,HTML元素节点
       .ondragover 
       .ondragstart 
       .ondrop 
-      .ondurationchange 
-      .onemptied 
-      .onended 
+    输入框 
+      .onblur 
       .onfocus 
       .oninput 
       .oninvalid  验证失败时触发 
+    表单 
+    键盘 
       .onkeydown 
       .onkeypress 
       .onkeyup 
-      .onload 
-      .onloadeddata 
-      .onloadedmetadata 
-      .onloadstart 
+    鼠标 
+      .onclick 
+      .ondblclick 
       .onmousedown 
       .onmouseenter undefined 
       .onmouseleave undefined 
@@ -803,11 +806,30 @@ HTMLElement,HTML元素节点
       .onmouseover 
       .onmouseup 
       .onmousewheel 
+      .onwheel 
+    播放暂停 
       .onpause 
       .onplay 
       .onplaying 
       .onprogress 
       .onratechange 
+      .oncanplay 
+    其他待整理 
+      .onabort 
+      .oncancel 
+      .onchange 
+      .oncanplaythrough 
+      .onerror     见:Event 
+      .onclose 
+      .oncontextmenu 
+      .oncuechange 
+      .ondurationchange 
+      .onemptied 
+      .onended 
+      .onload    加载完毕触发  
+      .onloadeddata 
+      .onloadedmetadata 
+      .onloadstart 
       .onreset 
       .onresize 
       .onscroll 
@@ -822,14 +844,6 @@ HTMLElement,HTML元素节点
       .ontoggle 
       .onvolumechange 
       .onwaiting 
-      如 elem.onclick 等类似的事件处理程序
-    不常用 
-      .translate 
-      .hidden 
-      .accessKey 
-      .draggable 
-      .spellcheck 
-      .isContentEditable 
       .onauxclick 
       .ongotpointercapture 
       .onlostpointercapture 
@@ -841,11 +855,10 @@ HTMLElement,HTML元素节点
       .onpointerout 
       .onpointerover 
       .onpointerup 
-    非标 
-      .runtimeStyle; 计算的样式 [仅IE6支持]
-    .style    CSSStyleDeclaration,内联样式对象 
-      PS: 包含着通过HTML的style特性指定的所有样式信息 
-        若没有为元素设置style特性,即无嵌入样式,则style中可能会包含一些并不准确的默认值
+      如 elem.onclick 等类似的事件处理程序
+
+        
+        
   Instance: 
     <i> <code> <dt> <tt> 
     <abbr> <em> <acronym> <address> <b> <bdo> <big> <cite> 
@@ -1143,7 +1156,6 @@ HTMLElement,HTML元素节点
       .selectionDirection  
       .align  
       .useMap  
-      .autocapitalize  
       .webkitdirectory  
       .incremental  
       .stepUp([num])     在当前数值上加num,num默认为1[HTML5]
@@ -1178,7 +1190,6 @@ HTMLElement,HTML元素节点
     .selectionStart  num,选中字符在文本中的开始下标 [IE9+] 
     .selectionEnd    num,选中字符在文本中的结束下标 [IE9+] 
     .selectionDirection  
-    .autocapitalize  
     .checkValidity()    
     .reportValidity()    
     .setCustomValidity()    
@@ -1450,14 +1461,17 @@ HTMLElement,HTML元素节点
           iframe.scrolling = 'no'     去掉iframe的滚动条 
       .frameBorder num,iframe的边框 
           iframe.frameBorder = 0      去掉iframe的边框
-      .sandbox    
-      .allowFullscreen 
-      .referrerPolicy  
-      .longDesc     
       .marginHeight 
       .marginWidth  
-      .allow        
       .getSVGDocument()  
+      待整理 
+        .allow 
+        .allowFullscreen 
+        .allowPaymentRequest 
+        .csp 
+        .referrerPolicy  
+        .sandbox    
+        .longDesc     
     iframe,可在当前网页之中,嵌入其他网页 
       每个iframe元素形成自己的窗口,即有自己的window对象。
       iframe窗口之中的脚本,可以获得父窗口和子窗口。

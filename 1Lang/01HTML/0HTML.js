@@ -893,7 +893,7 @@ Table表格
       rowgroup 规定单元格是行组的表头
 Form表单 
   PS: 表单字段也叫表单控件,如input、button等元素[self] 
-  <fieldset></fieldset> 表单信息分组
+  <fieldset></fieldset> 表单信息分组 
     PS: 默认有一个细线边框,可设置border控制 
     Example: 
     <fieldset>
@@ -902,10 +902,10 @@ Form表单
       <!--  其他字段 -->
       </form>
     </fieldset>
-  <legend>     显示fieldset边框上的信息文字
+  <legend>     显示fieldset边框上的信息文字 
     PS: legend就像fieldset的标题,处于fieldset的顶部,
       legend很难应用样式,不可使用内、外边距 定位等机型控制 
-  <form>       表单域,用于包含其他表单元素[如文本框、单选框等]的容器   
+  <form>       表单域,用于包含其他表单元素[如文本框、单选框等]的容器 
     PS: 户端与服务器端进行信息交流的途径之一;
       所有表单控件都必须放在该标签中,否则信息提交不到服务器上;
     name=""  表单名称 
@@ -989,7 +989,7 @@ Form表单
         var frame = frames['frame1'].document.querySelector("body")
         console.log(frame);
       })
-  <label for="">内容</label>      字段标签  
+  <label for="">内容</label>      字段标签 
     PS: label元素不会向用户呈现特殊效果;
       点击label,使关联表单字段获得焦点且被点击 
       产生效果的前提是:label的"for"属性值设置为相关元素的id值进行关联,
@@ -1001,7 +1001,7 @@ Form表单
     包含关联[需去掉 for=""]
       将input标签放在label中也可达到如上效果
       <label><input type='radio' name='sex' value='男'/>男</label>
-  <input type="类型" name="name" value="">  表单字段  
+  <input type="类型" name="name" value="">  表单字段 
     PS: input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等 
       IOS的微信中,input默认有圆角; 
     type=""  规定元素类型,虽不是必需,推荐始终使用 
@@ -1117,7 +1117,7 @@ Form表单
     type 
       可选,IE的默认为 "button",而其他浏览器中(包括 W3C 规范)的默认值是 "submit"
       其他值和input表示按钮的type值相同
-  <textarea name="" >    多行文本区,容纳文本不受限制  
+  <textarea name="" >    多行文本区,容纳文本不受限制 
     row=""     num,文本区可见字符行数 
       更好的办法是使用css的height和width来控制尺寸
       但CSS中无法设置rows或cols 
@@ -1131,7 +1131,7 @@ Form表单
         3.设置readonly的表单元素依然会被提交,而设置disabled的值不会被提交.
     maxlength  值为数值,规定文本区域的最大字符数.
     wrap='off' 在文本域中输入文字时不自动换行,默认为自动换行
-  <select>    下拉列表,创建单选或多选菜单
+  <select>    下拉列表,创建单选或多选菜单 
     multiple="bol"  是否可多选 
       Window下,使用Ctrl多选 
     size="num"      下拉列表中可见选项的数目 
@@ -1142,7 +1142,7 @@ Form表单
         <option value="旅游">旅游</option>
         <option value="运动">运动</option>
       </select>
-  <option>    下拉列表选项
+  <option>    下拉列表选项 
     PS: 既可以单选又可以多选 
       需与select元素配合使用,否则该标签没有意义.
     selected="bol"   是否为选中状态,当存在多个只有最后一个或几个起作用 
@@ -1153,7 +1153,7 @@ Form表单
         <option  value="提交值">选项2</option>
           ...
       </select>
-  <optgroup>  列表选项分组
+  <optgroup>  列表选项分组 
     将下拉选项进行分组显示
     Example: 
       <optgroup label="组名称">
@@ -1226,6 +1226,11 @@ Form表单
     select元素值为选中的option元素的value特性的值,若option元素无value特性则为其元素文本值 
   Remarks: 
     type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?] 
+  表单提交 
+    表单默认提交会跳转刷新页面 
+    表单无刷新提交的决解办法:   
+      将<form>的'target'同<iframe>的'name'进行关联  
+      通过监听 iframe的'load'事件来获取到响应返回值 
 其他标签 
   ★无语义标签 : 无任何特殊含义
     存在的意义就是为了应用css样式,一个块元素一个行内元素 
@@ -1338,33 +1343,32 @@ Form表单
         循环次数loop="数字"(若未指定则一直循环infinite)
         速度scrollamount="数字"(数值越大速度越快)
         scrolldelay="延时"(走一步,停一停)
-HTML全局属性 
-  class    规定元素的一个或多个类名 
-  id='xx'  使用id属性创建锚点 
+◆HTML全局属性 
+  class="xxx"  规定元素的一个或多个类名 
+  id='xx'      使用id属性创建锚点 
     在相对链接或url后面添加#id名称即可链接到锚点 
-  style    规定元素的行内CSS样式 
-  title    元素的额外信息,当鼠标悬浮时,显示出文字说明 
-  dir   规定元素中内容的文本方向 
-  lang  规定元素内容的语言 
+  style=""   规定元素的行内CSS样式 
+  title=""    元素的额外信息,当鼠标悬浮时,显示出文字说明 
+  dir=""   规定元素中内容的文本方向 
+  lang=""  规定元素内容的语言 
     en 英语 
-  accesskey  规定激活元素的快捷键 
-  tabindex    规定元素的tab键次序 
-  ◆HTML5新增属性 
-  data-xx  自定义元素的属性 
-    'xx'为任意字符,长度不限 
-  role     标识标签,使之语义化 
-    方便浏览器对其具体功能进行识别 
-    Example: <div role="navigation"></div>
-  contenteditable  元素内容可编辑 
-    PS: 在编辑的内容里进行回车会换行
-    true/false/inherit  
-  contextmenu    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
-  draggable    规定元素是否可拖动 
-  dropzone    规定在拖动被拖动数据时是否进行复制、移动或链接 
-  hidden      隐藏元素,相当于'display:none'
-  spellcheck  对元素进行拼写和语法检查  
-  translate   规定是否应该翻译元素内容 
-  tableindex=3  使用table键跳转时,按照定义的数字顺序 
+  accesskey="<key>"  规定激活元素的快捷键 
+    PS: 在不同操作系统中不同的浏览器中访问快捷键的方式不同 
+    key  KW,激活的按键字母,如 h 
+      可定义多个候补热键,使用逗号','分割,优先使用前面指定的键 
+    Example: 
+      <a href="/" accesskey="h">测试快捷键</a>  
+      // Chrome中,alt+h 相当于 点击该链接 
+    Feature: 
+      HTML5&HTML4 中的区别 
+        HTML4中,该属性可使用于: <a>,<area>,<button>,<input>,<label>,<legend>,和 <textarea> 
+        HTML5中,该属性可用于任何元素[但会 验证任何HTML元素,不一定是有用]
+      激活时会触发相应的事件 
+        input[type="text"]     触发事件: 'focus' 
+        input[type="button"]   触发事件: 'focus'&'click' 
+        一般元素如 div          触发事件: 'click' 
+  tabindex="<num>"    规定元素的tab键次序 
+  repeat   
 ◆特殊字符 
   'character entities'字符实体 
     PS: HTML中,某些字符是预留的,如'<'和'>'可能导致浏览器误认为标签 
@@ -1471,143 +1475,137 @@ HTML全局属性
     &#8869;  &perp;     ⊥      perpendicular                
   &#x<Unicode编码>;  表示一字符 
     如 &#x1d306;   表示:𝌆  
-◆HTML5:  HTML标准的第五次修订 
-  介绍 
-    PS: 是最新版本的HTML,引入了简化的标记、新的语义和媒体元素,
-      另外还有一组支持Web应用的JavaScript库
-      HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持 
-      HTML5 = 标记 + JavaScript API + CSS
-    变化
-      声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了
-      meta标记
-        之前 : <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        调整为 : <meta charset="utf-8">
-      link标记 不再需要'type'属性,已经确定CSS作为HTML的标准样式.
-        <link rel="stylesheet" href=""/>
-      script标记 JavaScript成为HTML的默认脚本语言,除去原先的'type'属性
-        简化为: <script src=""></script> 或 <script> </script>
-      新的解析顺序:不再基于SGML 
-      优点
-        HTML5让网页结构变得更加清楚明了,增加了语义化的结构标签
-        解决HTML在各个浏览器上存在不兼容的问题
-        将HTML5网页上的音视频、图像、动画等都带入国际标准化.
-        兼容性:HTML5在老版本的浏览器上也可以完美运行
-        实用性:HTML5抛弃了不切实际的功能,一切按照实用性的路线出发.
-  语义化 
-    PS:通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
-      比如,网页上的文章的标题就可以用标题标签,网页上的各个栏目的栏目名称也可以使用标题标签.
-      文章中内容的段落就得放在段落标签中,
-      在文章中有想强调的文本,就可以使用 em 标签表示强调等等.
-    ★优点 
-    便于阅读、理解、维护,使阅读源代码的人对网站更容易分块
-    更容易被搜索引擎收录.
-    更容易让屏幕阅读器读出网页内容.
-  新特性&规范&标签&属性&内容 
-    特性规范 
-      标签属性的四种写法 
-        <input disabled>
-        <input value=yes>
-        <input type='checkbox'>
-        <input name="be evil">
-        标签的'Boolean'值的属性只要写了属性[或者赋任何值]就是true
-        Example: 
-          <input type="checkbox" checked/>
-          <input type="checkbox" checked="checked"/>
-          <input type="checkbox" checked=""/>
-          <input type="checkbox" checked="false"/>
-          以上的复选框均被选中,js中通过移除该属性控制其状态
-      自闭合标签不一定要以'/>'结尾,比如 <input > <img >
-      HTML5 文档里可以不写 <html> <head> 和 <body> 标签
-      HTML5 规定开发者可以自定义设置任何标签 
-        'display'默认为'inline'
-    新增标签[详见'◆标签&属性'] 
-      ★功能性标签 
-      <datalist>   下拉列表
-      <progress>   进度条 
-        max="100"   最大值
-        value="80"  当前值 
-      <ruby>       文本注释 
-        Example:
-          <ruby>
-            abc
-            <rt> 注释的内容 </rt>
-            <rp> 备用的显示 </rp>
-          </ruby> 
-      <rt>         注释内容[和'ruby'配合使用]
-      <rp>         注释不生效时显示[和'ruby'配合使用] 
-      <wbr>        软换行,当宽度不够时换行 
-      <datalist>   输入框输入提示 
-        Example:
-          <input list="cars">
-          <datalist id="cars"> // 通过 id 和 input 的 list 进行关联 
-            <option value="BWM"></option>
-            <option value="Ford"></option>
-            <option value="Volvo"></option>
-          </datalist>
-    新的表单元素 
-      1 输入类型 
-        email 输入 email 格式
-        tel 手机号码
-        url 只能输入 url 格式
-        number 只能输入数字
-        search 搜索框
-        range 范围
-        color 拾色器
-        time时间
-        date 日期 不是绝对的
-        datetime 时间日期
-        month 月份
-        week 星期
-        部分类型是针对移动设备生效的,且具有一定的兼容性,在实际应用当中可选择性的使用.
-      2 表单元素[标签] 
-        <datalist> 下拉选项,使用中文时要注意
-        <keygen> 生成加密字符串
-        <output> 不可当做数据提交？
-        <meter> 表示度量器,不建议用作进度条
-      4 表单事件 
-        oninput 用户输入内容时触发,可用于移动端输入字数统计
-        oninvalid 验证不通过时触发
-    新增属性[详见'◆标签&属性'] 
-    增加内容 
-      现在已不是'SGML'的子集,主要是关于图像,位置,存储,多任务等功能的增加 
-      Web储存:localStorage sessionStorage
-        本地离线存储 localStorage 长期存储数据,浏览器关闭后数据不丢失;
-        sessionStorage 的数据在浏览器关闭后自动删除;
-      新的技术 'webworker''websocket''Geolocation'等;
-  废弃元素 
-    可被css代替的元素: 'basefont''big''center''font''s''strike''tt''u' 
-    对可用性产生负面影响的元素: 'frame''frameset''noframe',只支持'iframe'框架 
-    只有部分浏览器支持的元素 
-    其他被废除的元素 
-      废除'rb'元素,使用'ruby'元素代替;
-      'acronym'使用'abbr'元素代替;
-      ...
-  浏览器兼容HTML5新标签的方法 
-    document.createElement 创造标签 
-      IE8/IE7/IE6 支持通过document.createElement方法产生的标签
-      利用这一特性让这些浏览器支持HTML5新标签,然后添加标签默认的样式即可
-    直接使用成熟的框架.比如HTML5shim;
-      <!--[if lt IE 9]>
-        <script> src="http://HTML5shim.googlecode.com/svn/trunk/HTML5.js"</script>
-      <![endif]-->
-  input元素的新类型:date, email, url等等。
-  新的属性:ping（用于a与area）, charset（用于meta）, async（用于script）。
-  全域属性:id, tabindex, repeat。
-  新的全域属性:contenteditable, contextmenu, draggable, dropzone, hidden, spellcheck。
-  移除元素:
-    acronym
+--------------------------------------------------------------------------------
+HTML5: HTML标准的第五次修订 
+介绍 
+  PS: 是最新版本的HTML,引入了简化的标记、新的语义和媒体元素,
+    另外还有一组支持Web应用的JavaScript库
+    HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持 
+    HTML5 = 标记 + JavaScript API + CSS
+  变化
+    声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了
+    现在已不是'SGML'的子集,主要是关于图像,位置,存储,多任务等功能的增加 
+    meta标记
+      之前 : <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      调整为 : <meta charset="utf-8">
+    link标记 不再需要'type'属性,已经确定CSS作为HTML的标准样式.
+      <link rel="stylesheet" href=""/>
+    script标记 JavaScript成为HTML的默认脚本语言,除去原先的'type'属性
+      简化为: <script src=""></script> 或 <script> </script>
+    新的解析顺序:不再基于SGML 
+    优点
+      HTML5让网页结构变得更加清楚明了,增加了语义化的结构标签
+      解决HTML在各个浏览器上存在不兼容的问题
+      将HTML5网页上的音视频、图像、动画等都带入国际标准化.
+      兼容性:HTML5在老版本的浏览器上也可以完美运行
+      实用性:HTML5抛弃了不切实际的功能,一切按照实用性的路线出发.
+语义化 
+  PS:通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
+    比如,网页上的文章的标题就可以用标题标签,网页上的各个栏目的栏目名称也可以使用标题标签.
+    文章中内容的段落就得放在段落标签中,
+    在文章中有想强调的文本,就可以使用 em 标签表示强调等等.
+  ★优点 
+  便于阅读、理解、维护,使阅读源代码的人对网站更容易分块
+  更容易被搜索引擎收录.
+  更容易让屏幕阅读器读出网页内容.
+规范 
+  HTML5文档里可以不写 <html> <head> 和 <body> 标签
+  自闭合标签不一定要以'/>'结尾,比如 <input > <img >
+  开发者可以自定义设置任何标签,'display'默认为'inline'
+  属性的四种写法 
+    <input value=yes>
+    <input type='checkbox'>
+    <input name="be evil">  // 推荐使用双引号  
+    <input disabled>        // 推荐使用 
+  布尔值属性只要存在皆为'true' 
+    <input type="checkbox" checked/>
+    <input type="checkbox" checked="checked"/>
+    <input type="checkbox" checked=""/>
+    <input type="checkbox" checked="false"/> 
+    以上的复选框均被选中,js中通过移除该属性控制其状态
+浏览器兼容HTML5新标签的方法 
+  document.createElement 创造标签 
+    IE8/IE7/IE6 支持通过 document.createElement 方法产生的标签
+    利用这一特性让这些浏览器支持HTML5新标签,然后添加标签默认的样式即可
+  直接使用成熟的框架.比如HTML5shim; 
+    <!--[if lt IE 9]>
+      <script> src="http://HTML5shim.googlecode.com/svn/trunk/HTML5.js"</script>
+    <![endif]-->
+废弃元素 
+  可被css代替的元素: 'basefont''big''center''font''s''strike''tt''u' 
+  对可用性产生负面影响的元素: 'frame''frameset''noframe',只支持'iframe'框架 
+  只有部分浏览器支持的元素 
+  其他被废除的元素 
+    废除'rb'元素,使用'ruby'元素代替;
+    'acronym'使用'abbr'元素代替;
     applet
-    basefont
-    big
-    center
     dir
-    font
-    frame
-    frameset
     isindex
-    noframes
-    strike
-    tt
+    ...
+◆新增标签 
+  PS: 部分类型是针对移动设备生效的,且具有一定的兼容性,在实际应用当中可选择性的使用 
+  input[type="date"]      日期 
+    不是绝对的 ?
+  input[type="month"]     月份  
+  input[type="week"]      星期   
+  input[type="datetime"]  时间日期  
+  input[type="time"]      时间  
+  input[type="email"]   email格式 
+  input[type="url"]     只能输入url格式 
+  input[type="tel"]     手机号码  
+  input[type="number"]  只能输入数字  
+  input[type="search"]  搜索框   
+  input[type="range"]   范围    
+  input[type="color"]   拾色器     
+  <progress>   进度条 
+    max="100"   最大值
+    value="80"  当前值 
+  <datalist>   输入框下拉列表提示 
+    Example:
+      <input list="cars">
+      <datalist id="cars"> // 通过 id 和 input 的 list 进行关联 
+        <option value="BWM"></option>
+        <option value="Ford"></option>
+        <option value="Volvo"></option>
+      </datalist>
+  <meter> 表示度量器,不建议用作进度条
+  <ruby>       文本注释 
+    Example:
+      <ruby>
+        abc
+        <rt> 注释的内容 </rt>
+        <rp> 备用的显示 </rp>
+      </ruby> 
+  <rt>         注释内容[和'ruby'配合使用]
+  <rp>         注释不生效时显示[和'ruby'配合使用] 
+  <wbr>        软换行,当宽度不够时换行 
+  <keygen> 生成加密字符串
+  <output> 不可当做数据提交？
+◆新增属性 
+★全局属性 
+  data-xx=""  自定义元素的属性 
+    'xx'为任意字符,长度不限 
+  role=""     标识标签,使之语义化 
+    方便浏览器对其具体功能进行识别 
+    Example: <div role="navigation"></div>
+  contenteditable="bol"  元素内容可编辑 
+    PS: 在编辑的内容里进行回车会换行
+    true/false/inherit  
+  contextmenu=""    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
+  draggable="bol"    规定元素是否可拖动 
+  dropzone=""    规定在拖动被拖动数据时是否进行复制、移动或链接 
+  hidden="bol"      隐藏元素,相当于'display:none'
+  spellcheck=""  对元素进行拼写和语法检查  
+  translate=""   规定是否应该翻译元素内容 
+★特有属性 
+  ping     'a'&'area'
+  charset  'meta'
+  async    'script' 
+◆新增事件[详见JS]
+  'input'   输入框输入内容时触发,可用于移动端输入字数统计
+  'invalid' 表单验证不通过时触发
+◆新增功能&技术[详见JS] 
+  'localStorage' 'sessionStorage' 'webworker''websocket''Geolocation'
 --------------------------------------------------------------------------------
 Collection 
 自我总结 

@@ -4,19 +4,45 @@
   <meta charset="utf-8">
   <title>HTML5+CSS3+ES6</title>
   <link rel="stylesheet" href="./index.css">
+  <script src="./scripts/vue2.5.16.min.js" charset="utf-8"></script>
 </head>
+<style>
+  
+</style>
 <body>
   
-  <div id="div"> </div>
+<section id="app">
+  <button type="button" @click="btnClick">点击</button>
+</section>
   
   
-  
-  <input type="checkbox" checked="false"/>  
-  
+<div id="div" contenteditable> 撒旦法撒旦法 </div>
+<input type="button" value="abc"/>  
+<input >
   
   
   
 </body>
+<script type="text/javascript">
+new Vue({
+  el: '#app',
+  data: {},
+  computed: {},
+  watch: {},
+  methods: {
+    btnClick(){
+    }
+  },
+  created: function (){
+    var that = this;
+  },
+  mounted: function (){
+    var that = this;
+    this.$nextTick(function () { });
+    
+  }
+});
+</script>
 <script src="./index.js" charset="utf-8" type="module"></script>
 </html>
 

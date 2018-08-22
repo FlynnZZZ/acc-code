@@ -556,14 +556,6 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <time>       时间日期 
   <meter>      条状份额显示 
   <output>     输出计算 
-  <keygen>   用于表单的密钥对生成器字段,当提交表单时,私钥存储在本地,公钥发送到服务器
-    属性             值          描述
-    autofocus  autofocus   使 keygen 字段在页面加载时获得焦点。
-    challenge  challenge   如果使用,则将 keygen 的值设置为在提交时询问。
-    disabled   disabled    禁用 keytag 字段。
-    form       formname    定义该 keygen 字段所属的一个或多个表单。
-    keytype    rsa         定义 keytype。rsa 生成 RSA 密钥。
-    name       fieldname   定义 keygen 元素的唯一名称。name 属性用于在提交表单时搜集字段的值。
   <dialog>    对话框,会话框[仅Chrome和Safari支持] 
     <dialog open>这是打开的对话窗口</dialog>
   <command>   定义一个命令按钮 [存在兼容性问题] 
@@ -932,11 +924,6 @@ Form表单
         如果没有父级,和_self的行为一致。
       iframename: 返回值在指定frame中加载 
       HTML5: 这个值可以被 <button> 或者 <input> 元素中的 formtarget 属性重载[覆盖]    
-    autocomplete   是否启用表单的自动完成功能 [HTML5] 
-      PS: 当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果 
-        该设定可被属于该form的子元素的'autocomplete'属性覆盖 
-      "on"    浏览器能够根据用户之前在form里输入的值自动补全 
-      "off"   浏览器不自动补全输入
     novalidate   表单是否不进行验证 [HTML5] 
       可被该<form>的<button>或<input>元素中的 formnovalidate 属性覆盖
     enctype      当method为post时,enctype 是提交form给服务器的内容的 MIME 类型 
@@ -1001,117 +988,34 @@ Form表单
     包含关联[需去掉 for=""]
       将input标签放在label中也可达到如上效果
       <label><input type='radio' name='sex' value='男'/>男</label>
-  <input type="类型" name="name" value="">  表单字段 
-    PS: input表单根据不同的type属性值显示为不同的样式,如文本框、按钮、密码框等 
-      IOS的微信中,input默认有圆角; 
-    type=""  规定元素类型,虽不是必需,推荐始终使用 
-      'text'     默认,单行文本字段  
-        默认是20个字符
-      'password' 密码框文本字段 
-      'checkbox' 复选框 
-      'radio'    单选按钮 
-        name    有多个单选按钮时,多个name的属性值相同才能起到单选的作用
-        checked定义该项为默认选中的[单选中只一个起作用,多个时最后一个起作用]
-      'submit'   提交按钮 
-      'reset'    重置按钮 
-      'button'   普通按钮 
-      'image'    图片按钮 
-        src="图片路径"
-      'file'     文件上传,文件字段 
-        可覆盖表单中的'action'、'method'属性 ?  
-        accept   表示可以选择的文件MIME类型,多个MIME类型用英文逗号分开 
-          Example: 只能选择png和gif图片 
-          <input type="file" accept="image/png,image/gif"/>  Chrome中显示为'自定义文件'
-          <input type="file" accept="image/*"/>  表示为图片文件 
-        multiple 是否可多选,多个文件时其value值为第一个文件的虚拟路径 
-          Example: 多文件上传
-          <input id="fileId2" type="file" multiple name="file" />
-      'hidden'   隐藏域 
-        value="提交值"
-      ◆HTML5新增
-      'email'   邮件地址  
-        要求输入的文本需符合电子邮件地址的格式
-      'url'     URL类型   
-        要求输入的文本需符合URL的模式
-      'number'  数字字段[带有spinner控件][IOS微信不兼容] 
-        可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
-      'range'   拖动条,带有 slider 控件 
-      'color'   拾色器  
-      'search'  搜索文本字段 
-      'tel'     定义用于电话号码的文本字段 
-      'calendar'        日历 
-      'date'            日期
-      'datetime'        日期字段 [带有calendar和time控件] [Chrome无效]
-      'datetime-local'  日期字段 [带有calendar和time控件]
-      'month'           日期字段的月 [带有calendar控件]
-      'week'            日期字段的周 [带有calendar控件]
-      'time'            日期字段的时分秒 [带有time控件]
-    value="" 表单字段值/显示值/按钮名称  
-      提交到服务器的数据值;当为按钮时,按钮显示的内容
-    功能属性 
-      size="<num>"       显示的字数 
-      maxlength="<num>"  最多容纳字符数 
-      ◆HTML5 
-      autocomplete  是否自动完成,具有记忆功能,适用:<form>、部分<input> 
-        PS: 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项; 
-      autofocus  当页面加载完是否自动获得焦点,适用:所有<input>类型 
-      form=""   规定输入域所属的表单,值为<form>的id 
-        PS: 若需引用多个表单,使用空格分隔;
-        Example: 
-          <form action="demo_form.asp" method="get" id="user_form">
-            First name:<input type="text" name="fname" />
-            <input type="submit" />
-          </form>
-          Last name: <input type="text" name="lname" form="user_form" />
-      height/width   image类型input标签的图像宽高
-        PS:只适用于type=image 的 <input> 标签
-        Example: <input type="image" src="img.gif" width="99" height="99" />
-      list           为表单提供选项列表
-        PS:datalist 是输入域的选项列表;
-          适用于 type=text/search/url/telephone/email/date,
-          /pickers/number/range/color 的 <input>;
-        Example:
-          Webpage: <input type="url" list="url_list" name="link" />
-          <datalist id="url_list">
-            <option label="W3Schools" value="http://www.w3school.com.cn" />
-            <option label="Google" value="http://www.google.com" />
-            <option label="Microsoft" value="http://www.microsoft.com" />
-          </datalist>
-      min、max 和 step 属性
-        min 最小的可能值
-        max 最大的可能值
-        step 最小单位
-        Example: :
-          让用户只能输入0-100 的值,且是5的倍数
-          <input type="number" min="0" max="100" step="5" name="xx"/>
-        min、max 和 step 属性用于为包含数字或日期的 input 类型规定限定(约束)。
-        max 属性规定输入域所允许的最大值。
-        min 属性规定输入域所允许的最小值。
-        step 属性为输入域规定合法的数字间隔(如果 step="3",则合法的数是 -3,0,3,6 等)。
-        注释:min、max 和 step 属性适用于以下类型的 <input> 标签:date pickers、number 以及 range。
-        下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9):
-        实例
-        Points: <input type="number" name="points" min="0" max="10" step="3" />
-        亲自试一试
-      multiple  规定输入域中可选择多个值。
-        注释:multiple 属性适用于以下类型的 <input> 标签:email 和 file。
-        Example:
-          Select images: <input type="file" name="img" multiple="multiple" />
-      novalidate 属性
-        novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
-        注释:novalidate 属性适用于 <form> 以及以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, range 以及 color.
-        实例
-        <form action="demo_form.asp" method="get" novalidate="true">
-        E-mail: <input type="email" name="user_email" />
-        <input type="submit" />
-        </form>
-        亲自试一试
-      pattern=""  rgep,自定义文本字段验证规则  [HTML5] 
-        模式的开头和末尾不用加^和$符号[假定已经有了],须从头到尾都与模式匹配 
-        Example: 
-        <input type="text" name="code" pattern="[A-z]{3}" />
-        <input type="text" pattern="\d+" name="xx"/>
-    公用属性 
+  <input type="类型" name="field" value="val">  输入字段  
+    PS: <input>根据不同'type'值显示为不同样式,如文本框、按钮、密码框等 
+    ◆type="类型" 可选,规定元素类型,默认: 'text' 
+    <input type="text">      单行文本框  
+    <input type="password">  密码文本框   
+    <input type="checkbox">  复选框   
+    <input type="radio">     单选按钮    
+      name="field"   多个单选按钮时,多个name的属性值相同才能起到单选的作用
+      checked="bol"  定义选中项[单选中只一个起作用,多个时最后一个起作用] 
+    <input type="button">    普通按钮[可提交表单]  
+      value="按钮名称"  
+    <input type="submit">    提交按钮[可提交表单]  
+    <input type="image">     图片按钮[可提交表单]  
+      src="图片路径"   定义图片 
+    <input type="reset">     重置按钮     
+    <input type="file">      文件上传,文件字段      
+      可覆盖表单中的'action'、'method'属性 ?  
+      accept="KW,.."  可选择文件的MIME类型,多个类型用','逗号分隔 
+        Example: 只能选择png和gif图片 
+        <input type="file" accept="image/png,image/gif"/>  Chrome中显示为'自定义文件'
+        <input type="file" accept="image/*"/>  表示为图片文件 
+      multiple="bol"  是否可多选  
+    <input type="hidden">    隐藏域    
+    name="字段名" 提交到服务器的字段 
+    value="值"    提交到服务器的数据值;当为按钮时,为按钮名称 
+    ◆功能属性 
+    size="<num>"       显示的字数 
+    maxlength="<num>"  最多容纳字符数 
   <button type="" >      定义按钮 
     在 button 元素内部,可以放置文本或图像.(与 input 创建的按钮的不同之处)
     type 
@@ -1161,61 +1065,58 @@ Form表单
         <option></option>
         ...
       </optgroup>
-  字段通用属性 
-    checked   默认选中 
-      若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
-      使用JS控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
-      Example: 以下都表示默认被选中
-        <input type="checkbox" name="name"  checked>
-        <input type="checkbox" name="name"  checked="">
-        <input type="checkbox" name="name"  checked="1">
-        <input type="checkbox" name="name"  checked="false">
-        <input type="checkbox" name="name"  checked=false>
-    disabled  禁用字段 
-      如input不可输入 
-    readonly  只读字段 
-      适用: 部分<input>、<textarea> 
-    readonly&disabled 的区别 
-      disabled: 元素的值不会被提交 
-      readonly: 正常提交;
-    required  提交时输入字段不能为空 [HTML5]   
-      PS: 需在form中且点击submit提交时触发
-      适用: <input> <textarea> <select>  
-    name=""         表单名称 
-      将表单数据发送到服务器需要name 
-      当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
-    placeholder=""  占位符,提示文本  
-      PS: 在输入域为空时显示出现,会在输入域获得焦点时消失:
-      适用: <input>的:text,search,url,telephone,email,password、textarea 
+  ◆字段通用属性 
+  checked   默认选中 
+    若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
+    使用JS控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
+    Example: 以下都表示默认被选中
+      <input type="checkbox" name="name"  checked>
+      <input type="checkbox" name="name"  checked="">
+      <input type="checkbox" name="name"  checked="1">
+      <input type="checkbox" name="name"  checked="false">
+      <input type="checkbox" name="name"  checked=false>
+  disabled  禁用字段 
+    如input不可输入 
+  readonly  只读字段 
+    适用: 部分<input>、<textarea> 
+  readonly&disabled 的区别 
+    disabled: 元素的值不会被提交 
+    readonly: 正常提交;
+  name=""         表单名称 
+    将表单数据发送到服务器需要name 
+    当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
+  placeholder=""  占位符,提示文本  
+    PS: 在输入域为空时显示出现,会在输入域获得焦点时消失:
+    适用: <input>的:text,search,url,telephone,email,password、textarea 
+    Example: 
+    <input type="search" name="user_search"  placeholder="Search W3School" /> 
+    在占位符中使用换行 
+      方法一: 使用 &#10; 实体字符来表示换行 [Firefox不支持] 
+      方法二: 通过JS来指定'placeholder'的值,可使用'\n'进行换行 
+  ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
+    PS: 便于创建不同的提交按钮;
+    Example:
+    <form action="form.asp" method="get" id="user_form">
+      E-mail: <input type="email" name="userid" /><br />
+      <input type="submit" value="Submit" /> <br />
+      <input type="submit" formaction="demo_admin.asp" value="admin" />
+      <input type="submit" formnovalidate="true" value="validation" />
+    </form>
+  formaction=""      重写表单的 action 属性 
+    formaction="提交位置" (提交按钮的属性)
+      新属性,可选,适用于提交按钮(包括button和input)
+      用于改变form的action
       Example: 
-      <input type="search" name="user_search"  placeholder="Search W3School" /> 
-      在占位符中使用换行 
-        方法一: 使用 &#10; 实体字符来表示换行 [Firefox不支持] 
-        方法二: 通过JS来指定'placeholder'的值,可使用'\n'进行换行 
-    ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
-      PS: 便于创建不同的提交按钮;
-      Example:
-      <form action="form.asp" method="get" id="user_form">
-        E-mail: <input type="email" name="userid" /><br />
-        <input type="submit" value="Submit" /> <br />
-        <input type="submit" formaction="demo_admin.asp" value="admin" />
-        <input type="submit" formnovalidate="true" value="validation" />
-      </form>
-    formaction=""      重写表单的 action 属性 
-      formaction="提交位置" (提交按钮的属性)
-        新属性,可选,适用于提交按钮(包括button和input)
-        用于改变form的action
-        Example: 
-          <form action="demo_form.asp" method="get">
-            <input type="text" name="fname" />
-            <button type="submit">提交</button><br />
-            <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
-            /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
-          </form>
-    formenctype=""     重写表单的 enctype 属性
-    formmethod=""      重写表单的 method 属性
-    formnovalidate=""  重写表单的 novalidate 属性
-    formtarget=""      重写表单的 target 属性
+        <form action="demo_form.asp" method="get">
+          <input type="text" name="fname" />
+          <button type="submit">提交</button><br />
+          <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
+          /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
+        </form>
+  formenctype=""     重写表单的 enctype 属性
+  formmethod=""      重写表单的 method 属性
+  formnovalidate=""  重写表单的 novalidate 属性
+  formtarget=""      重写表单的 target 属性
   表单将数据发送给服务器规则: 
     对表单字段的名称和值进行URL编码使用和号'&'分隔 
     不发送禁用的表单字段
@@ -1273,15 +1174,6 @@ Form表单
     <del> 删除线
       <del></del> 增加删除线
   ★不常用 
-    <keygen> 标签规定用于表单的密钥对生成器字段.
-      当提交表单时,私钥存储在本地,公钥发送到服务器.
-      autofocus        使 keygen 字段在页面加载时获得焦点.
-      challenge        如果使用,则将 keygen 的值设置为在提交时询问.
-      disabled         禁用 keytag 字段.
-      form   formname  定义该 keygen 字段所属的一个或多个表单.
-      keytype   rsa    定义 keytype.rsa 生成 RSA 密钥.
-      name  fieldname  定义 keygen 元素的唯一名称.
-        name 属性用于在提交表单时搜集字段的值.
     <applet>
     <object>  嵌入对象,在HTML页面中嵌入多媒体元素
       <object data="" type=""></object> flash动画插入
@@ -1367,7 +1259,6 @@ Form表单
         input[type="text"]     触发事件: 'focus' 
         input[type="button"]   触发事件: 'focus'&'click' 
         一般元素如 div          触发事件: 'click' 
-  tabindex="<num>"    规定元素的tab键次序 
   repeat   
 ◆特殊字符 
   'character entities'字符实体 
@@ -1544,30 +1435,42 @@ HTML5: HTML标准的第五次修订
     ...
 ◆新增标签 
   PS: 部分类型是针对移动设备生效的,且具有一定的兼容性,在实际应用当中可选择性的使用 
-  input[type="date"]      日期 
+  input[type="date"]            日期 
     不是绝对的 ?
-  input[type="month"]     月份  
-  input[type="week"]      星期   
-  input[type="datetime"]  时间日期  
-  input[type="time"]      时间  
+  input[type="month"]           月份['calendar'控件]  
+  input[type="week"]            星期['calendar'控件]    
+  input[type="calendar"]        日历    
+  input[type="datetime"]        时间日期['calendar'和'time'控件][Chrome无效]  
+  input[type="datetime-local"]  日期字段['calendar'和'time'控件]  
+  input[type="time"]            时间:时分秒['time'控件]  
   input[type="email"]   email格式 
-  input[type="url"]     只能输入url格式 
+    要求输入的文本需符合电子邮件地址的格式
+  input[type="url"]     url格式 
+    要求输入的文本需符合URL的模式
   input[type="tel"]     手机号码  
-  input[type="number"]  只能输入数字  
+  input[type="number"]  数字字段['spinner'控件][IOS微信不兼容] 
+    可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
   input[type="search"]  搜索框   
-  input[type="range"]   范围    
+  input[type="range"]   拖动条['slider'控件 ]    
   input[type="color"]   拾色器     
   <progress>   进度条 
     max="100"   最大值
     value="80"  当前值 
-  <datalist>   输入框下拉列表提示 
-    Example:
-      <input list="cars">
-      <datalist id="cars"> // 通过 id 和 input 的 list 进行关联 
-        <option value="BWM"></option>
-        <option value="Ford"></option>
-        <option value="Volvo"></option>
-      </datalist>
+  <datalist>   输入框下拉列表选择  
+    PS: 用于增强文本输入框功能,输入时可进行选择输入 
+    使用: 
+      Example: 
+        <input type="text" list="abc">
+        <datalist id="abc">
+          <option value="香蕉">香蕉</option>
+          <option value="aa">苹果</option>
+          <option value="11"></option>
+        </datalist>
+      1 <input>的'list'值和<datalist>的'id'值对应起来   
+      2 <option>列表选项 
+        'value'值为输入值 
+        文本值为显示值 
+        当'value'值和文本值不同时,会在列表中同时显示   
   <meter> 表示度量器,不建议用作进度条
   <ruby>       文本注释 
     Example:
@@ -1579,28 +1482,108 @@ HTML5: HTML标准的第五次修订
   <rt>         注释内容[和'ruby'配合使用]
   <rp>         注释不生效时显示[和'ruby'配合使用] 
   <wbr>        软换行,当宽度不够时换行 
-  <keygen> 生成加密字符串
+  <keygen>   用于表单的密钥对生成器字段,生成加密字符串 
+    PS: 当提交表单时,私钥存储在本地,公钥发送到服务器 
+    name="<filed>"    定义字段名 
+    autofocus="bol"   使 keygen 字段在页面加载时获得焦点 
+    challenge="bol"   如果使用,则将 keygen 的值设置为在提交时询问 
+    disabled="bol"    是否禁用 
+    form="<FromName>" 定义该 keygen 字段所属的一个或多个表单 
+    keytype="rsa"     定义 keytype.rsa 生成 RSA 密钥 
   <output> 不可当做数据提交？
 ◆新增属性 
 ★全局属性 
+  contenteditable="bol"  元素内容是否可编辑 
+    PS: 在编辑的内容里进行回车会换行
+    true/false/inherit  
+  hidden="bol"   元素是否隐藏元素,相当于'display:none'
+  spellcheck="bol"  [单行/多行文本框]是否进行拼写或语法检查 
+    若'readOnly'和'disabled'生效,则'spellcheck'不生效  
+  draggable="bol"    规定元素是否可拖动 
+  designMode="on/off"    整个页面是否可编辑  
+    该属性只能在js中被修改,document.designMode = 'on' 
+  tabindex="<num>"    规定元素的tab键顺序  
   data-xx=""  自定义元素的属性 
     'xx'为任意字符,长度不限 
   role=""     标识标签,使之语义化 
     方便浏览器对其具体功能进行识别 
     Example: <div role="navigation"></div>
-  contenteditable="bol"  元素内容可编辑 
-    PS: 在编辑的内容里进行回车会换行
-    true/false/inherit  
   contextmenu=""    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
-  draggable="bol"    规定元素是否可拖动 
   dropzone=""    规定在拖动被拖动数据时是否进行复制、移动或链接 
-  hidden="bol"      隐藏元素,相当于'display:none'
-  spellcheck=""  对元素进行拼写和语法检查  
   translate=""   规定是否应该翻译元素内容 
 ★特有属性 
-  ping     'a'&'area'
-  charset  'meta'
-  async    'script' 
+  autocomplete    是否启用表单自动完成功能,具有记忆功能  
+    <form>  当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果
+      PS: 该设定可被属于该form的子元素的'autocomplete'属性覆盖 
+      "on"    浏览器能够根据用户之前在form里输入的值自动补全 
+      "off"   浏览器不自动补全输入
+    <input> 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项 
+  autofocus="bol" 当页面加载完是否自动获得焦点 
+    适用所有<input>类型 
+  required  提交时输入字段不能为空 [HTML5]   
+    PS: 需在form中且点击submit提交时触发
+    适用: <input> <textarea> <select>  
+  form="<FormId>" 规定输入域所属的表单,值为<form>的id 
+    PS: 若需引用多个表单,使用空格分隔; 
+    适用: 表单字段 
+    Example: 
+      <form action="demo_form.asp" method="get" id="user_form">
+        First name:<input type="text" name="fname" />
+        <input type="submit" />
+      </form>
+      Last name: <input type="text" name="lname" form="user_form" />
+  height/width    image类型input标签的图像宽高 
+    PS:只适用于type=image 的 <input> 标签
+    Example: <input type="image" src="img.gif" width="99" height="99" />
+  list            为表单提供选项列表 
+    PS:datalist 是输入域的选项列表;
+      适用于 type=text/search/url/telephone/email/date,
+      /pickers/number/range/color 的 <input>;
+    Example:
+      Webpage: <input type="url" list="url_list" name="link" />
+      <datalist id="url_list">
+        <option label="W3Schools" value="http://www.w3school.com.cn" />
+        <option label="Google" value="http://www.google.com" />
+        <option label="Microsoft" value="http://www.microsoft.com" />
+      </datalist>
+  min、max 和 step 属性 
+    min 最小的可能值
+    max 最大的可能值
+    step 最小单位
+    Example: :
+      让用户只能输入0-100 的值,且是5的倍数
+      <input type="number" min="0" max="100" step="5" name="xx"/>
+    min、max 和 step 属性用于为包含数字或日期的 input 类型规定限定(约束)。
+    max 属性规定输入域所允许的最大值。
+    min 属性规定输入域所允许的最小值。
+    step 属性为输入域规定合法的数字间隔(如果 step="3",则合法的数是 -3,0,3,6 等)。
+    注释:min、max 和 step 属性适用于以下类型的 <input> 标签:date pickers、number 以及 range。
+    下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9):
+    实例
+    Points: <input type="number" name="points" min="0" max="10" step="3" />
+    亲自试一试
+  multiple  规定输入域中可选择多个值。
+    注释:multiple 属性适用于以下类型的 <input> 标签:email 和 file。
+    Example:
+      Select images: <input type="file" name="img" multiple="multiple" />
+  novalidate 属性
+    novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
+    注释:novalidate 属性适用于 <form> 以及以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, range 以及 color.
+    实例
+    <form action="demo_form.asp" method="get" novalidate="true">
+    E-mail: <input type="email" name="user_email" />
+    <input type="submit" />
+    </form>
+    亲自试一试
+  pattern=""  rgep,自定义文本字段验证规则  [HTML5] 
+    模式的开头和末尾不用加^和$符号[假定已经有了],须从头到尾都与模式匹配 
+    Example: 
+    <input type="text" name="code" pattern="[A-z]{3}" />
+    <input type="text" pattern="\d+" name="xx"/>
+  ping=""     
+    适用: <a>&<area>
+  charset=""  <meta>
+  async=""    <script> 
 ◆新增事件[详见JS]
   'input'   输入框输入内容时触发,可用于移动端输入字数统计
   'invalid' 表单验证不通过时触发

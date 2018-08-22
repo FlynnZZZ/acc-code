@@ -1274,8 +1274,29 @@ WebGLContextEvent,
 WebGLBuffer, 
 WebGLActiveInfo, 
 --------------------------------------------------------------------------------
-
-
+◆功能总结   
+懒加载 
+  var _wrap = document.querySelector('#xxx') 
+  _wrap.addEventListener("scroll",function(e){
+    var _num = this.scrollHeight - this.scrollTop - this.clientHeight 
+    if ( _num == 0 ) { console.log('到达底部'); }
+  })
+文本复制 
+  btn.onclick = function(){ // 需手动执行,否则复制失败 
+    var copyInput = document.querySelector("__copyInput__")  // 获取用于复制的input 
+    if ( !copyInput ) {  // 不存在则创建 
+      copyInput = document.createElement("input")   
+      copyInput.id = '__copyInput__'     
+    }
+    copyInput.value = '待复制的文本' // 存入待复制的值 
+    copyInput.style.display = 'block' // 复制的内容不可隐藏 
+    copyInput.select()                // 选中文本 
+    // window.getSelection().selectAllChildren(copyInput) // 选中文本   
+    var isCopied = document.execCommand('copy')      // 执行复制 
+    copyInput.style.display = 'none'  // 复制后隐藏 
+    console.log('是否复制成功: ',isCopied);
+  }
+--------------------------------------------------------------------------------
 
 
 

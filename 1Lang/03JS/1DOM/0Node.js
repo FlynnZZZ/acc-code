@@ -275,7 +275,7 @@ Document,文档
     .querySelector()       [SelectorsAPI]
     ★元素操作 
     .prepend()  
-    .append()  
+    .append()  内部尾部插入元素 [只能插入<body>元素?]
     .importNode(nod,bol) node,复制节点,插入并返回  [DOM2]
       PS: 将外部文档的一个节点拷贝一份,然后可以把这个拷贝的节点插入到当前文档中 
         源节点不会从外部文档中删除,被导入的节点是源节点的一个拷贝 
@@ -312,9 +312,6 @@ Document,文档
       .createCDATASection()  
       .createProcessingInstruction()  
       .adoptNode()  
-      .write()  
-      .execCommand()  
-      .queryCommandEnabled()  
       .queryCommandIndeterm()  
       .queryCommandState()  
       .queryCommandSupported()  
@@ -667,6 +664,8 @@ Element,元素节点,用于表现XML或HTML元素
       当参数设置为true时,则表示尽量将元素显示在视口中部[垂直方向] 
     .insertAdjacentElement('pos',targetElem)  插入目标元素并返回 
     .remove()  删除元素 [IE不支持] 
+    .prepend()  
+    .append()  添加元素到内部尾部 
     ★事件相关 
       .onbeforecopy 
       .onbeforecut 
@@ -705,8 +704,6 @@ Element,元素节点,用于表现XML或HTML元素
       .before()  
       .after()  
       .replaceWith()  
-      .prepend()  
-      .append()  
     命名空间相关 
       .localName 
       .namespaceURI 返回元素的命名空间,DOM4前,该API在Node接口中定义
@@ -856,9 +853,6 @@ HTMLElement,HTML元素节点
       .onpointerover 
       .onpointerup 
       如 elem.onclick 等类似的事件处理程序
-
-        
-        
   Instance: 
     <i> <code> <dt> <tt> 
     <abbr> <em> <acronym> <address> <b> <bdo> <big> <cite> 
@@ -1135,7 +1129,7 @@ HTMLElement,HTML元素节点
       .setCustomValidity() 用于自定义错误信息 
         该提示信息也反映在该输入框的 validationMessage 属性中 
         若将setCustomValidity设为空字符串,则意味该项目验证通过        
-      .select()         选中表单的值  
+      .select()         选中输入框的文本[后续可进行复制]   
       不常用 
       .defaultChecked  
       .dirName  
@@ -1190,10 +1184,10 @@ HTMLElement,HTML元素节点
     .selectionStart  num,选中字符在文本中的开始下标 [IE9+] 
     .selectionEnd    num,选中字符在文本中的结束下标 [IE9+] 
     .selectionDirection  
+    .select()        选中文本域的文本[后续可进行复制] 
     .checkValidity()    
     .reportValidity()    
     .setCustomValidity()    
-    .select()    
     .setRangeText()    
     .setSelectionRange()    
   HTMLSelectElement <select> 

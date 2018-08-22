@@ -536,12 +536,19 @@ key="arg"  标识DOM节点
 is="arg"   指定组件  
 slot="str"  
 ref="str"  给元素或子组件注册引用信息 
-  引用信息将会注册在父组件的 $refs 对象上。
-  如果在普通的 DOM 元素上使用,引用指向的就是 DOM 元素；
-  如果用在子组件上,引用就指向组件实例：
+  PS: 引用信息将会注册在父组件的 $refs 对象上 
+  vm.$refs.xxx 子组件实例/子元素DOM节点  
+    如果在普通的 DOM 元素上使用,引用指向的就是 DOM 元素；
+    如果用在子组件上,引用就指向组件实例：
   Example: 
-  <p ref="p">hello</p>    //  vm.$refs.p 为DOM节点 
-  <cpt-a ref="child"></cpt-a>  // vm.$refs.child 为Vue实例 
+    <p ref="p">hello</p>    //  vm.$refs.p 为DOM节点 
+    <cpt-a ref="child"></cpt-a>  // vm.$refs.child 为Vue实例 
+    
+    // 用于直接获取DOM元素 
+    <input ref="input">
+    methods: {
+      focus(){ this.$refs.input.focus() }
+    }
 --------------------------------------------------------------------------------
 'Transition'过渡效果  
 会产生过渡效果的条件: 

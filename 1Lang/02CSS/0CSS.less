@@ -774,7 +774,8 @@ Declaration,样式声明
       inherit
     ◆'word'词
     word-spacing    空格长度  
-      PS:单词间距、汉字间的空格,行内元素间的空格等 
+      PS: 单词间距、汉字间的空格,行内元素间的空格等 
+        'text-align'、'white-space'等设定会影响到该设定 
       normal   默认值,等价于0 
       pixel    正值增加间距,负值减少间距
       inherit
@@ -867,7 +868,7 @@ Declaration,样式声明
         xx-small     x-small small medium
         默认值 large x-large xx-large     
         inherit     继承父元素的大小 (子元素会默认继承)   
-    font-weight      字重     
+    font-weight      字体粗细 
       number  100-900 的整百数[其中400=normal,700=bold]
       normal  
       lighter    
@@ -880,8 +881,8 @@ Declaration,样式声明
       oblique 倾斜,正常竖直文本的倾斜版本  
         通常'italic'和'oblique'文本看上去完全一样   
     font-variant     字体变形 
-      normal     
-      small-caps  小型大写文字     
+      normal      默认值
+      small-caps  将小写字母转换成缩小的大写字母      
       inherit    
     font-stretch     字体水平拉伸[CSS2.1删除]   
     font-size-adjust 规定元素的aspect值[IE不支持] 
@@ -925,9 +926,9 @@ Declaration,样式声明
           display:inline-block; // 需要是非块元素
           width: 100%;  // 为了换行
         }
-    text-decoration 文本修饰 
+    text-decoration 文本划线 
       PS:无继承属性;同时定义多个文本修饰,使用空格隔开 
-      none         标准文本,默认值
+      none         默认值,标准文本
       overline     上划线
       line-through 贯穿线
       underline    下划线,链接文本的默认样式
@@ -998,8 +999,8 @@ Declaration,样式声明
             if ( $('.wrap').height() - $('.content').height() - > 0) {
               $('.wrap').addClass('hiddenAfter')
             }
-    text-transform  文本大小写转换 
-      none
+    text-transform  字母大小写转换 
+      none       默认值,正常状态 
       uppercase  字母大写
       capitalize 单词首字母大写
       lowercase  小写字母
@@ -1012,16 +1013,16 @@ Declaration,样式声明
       ltr     文本方向从左到右,默认 
       rtl     文本方向从右到左,从右向左的文本默认为rtl
       inherit 继承
-    line-height  行高[行间距]  
+    line-height  行高[行间距] 
       PS: 行高是指上下文本行基线间的垂直距离.
         行距是指一行底线到下一行顶线的垂直距离.行距也可以这么算:(行高-字体size)/2.
         内容区:底线和顶线包裹的区域
         具有继承性
       normal  默认,设置合理的行间距 
-      number  设置数字,此数字会与当前的字体尺寸相乘来设置行间距,相当于倍数
-      length  设置固定的行间距。
-      %       基于当前字体尺寸的百分比行间距。
-      inherit 规定从父元素继承line-height属性的值。
+      <num>   数字,当前的字体尺寸的倍数[即 <num>em] 
+      <num>%  百分比,当前字体尺寸的百分比[即 <num>*0.01em] 
+      length  设置固定的行间距 
+      inherit 规定从父元素继承line-height属性的值 
     white-space  元素内的'空格'及'换行符'处理 
       normal   默认,换行符、多个连续的空格会转换为一个空格 
       nowrap   忽略回车符,禁止换行,直到遇到<br>为止 

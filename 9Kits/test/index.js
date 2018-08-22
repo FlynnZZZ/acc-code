@@ -1,5 +1,5 @@
 
-import tools from "./tools.js";
+import tools from "./scripts/tools.js";
 
 var {
   objView, 
@@ -8,11 +8,7 @@ var {
 
 var div = document.querySelector("#div")
 
-objView( HTMLInputElement.prototype, 'autocapitalize' )  
-
-
-
-
+// objView( HTMLInputElement.prototype, 'autocapitalize' )  
 
 
 

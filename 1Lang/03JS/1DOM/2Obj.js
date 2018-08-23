@@ -114,74 +114,6 @@ DOMStringList,
   .length  
   .item()    
   .contains(key)   bol,是否包含该成员  
-FormData,表单模拟 [HTML5] 
-  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
-  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
-  Extend：Object 
-    console.log(FormData.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    fd = new FormData([formElem]) 创建FormData对象 
-      formElem  可选,<form>元素 
-    Example: 通过表单元素创建
-    var fd = new FormData(document.forms[0]);
-  Proto: 
-    .append(key,val ,name?)    向fd中添加字段 
-      PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
-      key   数据键名  
-      val   数据值  
-      name  可选,通常是文件名 
-    .delete() 
-    .get() 
-    .getAll() 
-    .has() 
-    .set() 
-    .keys() 
-    .values() 
-    .forEach() 
-    .entries() 
-  Example: 文件上传 
-    var inputFile = document.querySelector('input[type="file"]');
-    inputFile.addEventListener('change', function(e) {
-      var formData = new FormData();
-      formData.append(this.files[0].name, this.files[0]);
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/server');
-      xhr.onload = function(e) {
-        console.log('上传完成!');
-      };
-      xhr.send(formData);  // multipart/form-data
-    });
-    
-    加入JS生成的文件 
-    var content = '<a id="a"><b id="b">hey!</b></a>';
-    var blob = new Blob([content], { type: "text/xml"});
-    formData.append("webmasterfile", blob);
-Option,option元素 
-  Relate: Option.prototype===HTMLOptionElement.prototype 
-  Instance: 
-    var opt = new Option(["文本","值",bol1,bol2]); 创建optionDOM对象 
-      bol1  是否被选中 
-      bol2  是否有效
-      Example:
-        var elem = document.getElementById('mySelect');
-        elem.add(new Option("文本","值")); // 这个只能在IE中有效
-        // 这个兼容IE与firefox
-        elem.options.add(new Option("text","value"));
-        elem.options.remove(idx); // 根据下标删除选项option
-        elem.options[idx].text;
-Image,img元素 
-  PS: 不用插入到DOM中即可加载图片资源  
-  Relate: Image.prototype===HTMLImageElement.prototype  
-  Instance: img = new Image();   创建图像DOM对象  
-Audio,audio元素 
-  Relate: Audio.prototype===HTMLAudioElement.prototype 
-  Instance: 
-    Example: 
-    var audio = new Audio("./sound.mp3");
-      不用插入到文档中,即可加载音频资源 
-      audio.addEventListener("canplaythrough",function(e){
-        this.play();
-      })
 DataTransfer,数据传递  
   PS: 为实现数据交换,IE自定义了'text'和'URL'两种有效的数据类型,
     而HTML5对此扩展,允许指定MIME类型,为了兼容,HTML5也支持'text'和'URL',
@@ -248,3 +180,38 @@ DataTransferItem,
     .getAsString()  
     .getAsFile()  
     .webkitGetAsEntry()  
+MediaError,媒体错误对象 
+  Extend: Object 
+  Static: 
+    .MEDIA_ERR_ABORTED           1  
+    .MEDIA_ERR_NETWORK           2  
+    .MEDIA_ERR_DECODE            3  
+    .MEDIA_ERR_SRC_NOT_SUPPORTED 4  
+  Proto: 
+    .code     错误码 
+    .message  
+    常量 
+      .MEDIA_ERR_ABORTED 1 
+      .MEDIA_ERR_NETWORK 2 
+      .MEDIA_ERR_DECODE  3 
+      .MEDIA_ERR_SRC_NOT_SUPPORTED 4 
+TimeRanges, 
+  Extend: Object 
+  Proto: 
+    .length 
+    .start()  
+    .end()  
+ValidityState,表单验证对象 
+  Extend: Object 
+  Proto: 
+    .valueMissing  
+    .typeMismatch  
+    .patternMismatch  
+    .tooLong  
+    .tooShort  
+    .rangeUnderflow  
+    .rangeOverflow  
+    .stepMismatch  
+    .badInput  
+    .customError  
+    .valid  

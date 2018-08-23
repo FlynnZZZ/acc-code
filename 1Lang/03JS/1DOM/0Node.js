@@ -8,7 +8,7 @@
     对DOM的任何修改都会在浏览器呈现DOM时立即反映出来;
     DOM不是专为HTML设计的,是通用型的标准,为所有标记语言而设计,
     IE中DOM对象以COM对象形式实现,故IE与原生JS对象有差异; 
-◆Node,节点,所有节点类型的基础类型 
+Node,节点,所有节点类型的基础类型 
   PS: 节点分不同类型,分别表示文档中不同的信息或标记,共有12种 
     并非所有节点类型浏览器都支持,最常用的节点类型为'元素节点'和'文本节点' 
     一节点不能同时存在多个文档中,也不能同时出现在一文档的多个位置  
@@ -17,26 +17,27 @@
     console.log(Node.prototype.__proto__.constructor===EventTarget); // true  
   Static:  
     ◆节点类型的数值表示  
-    Node.DOCUMENT_NODE   9,document节点
-    Node.ELEMENT_NODE    1,元素节点 
-    Node.TEXT_NODE       3,文本节点 
-    Node.COMMENT_NODE    8,注释节点,表示一注释  
-    Node.DOCUMENT_TYPE_NODE       10,文档类型的定义 
-    Node.DOCUMENT_FRAGMENT_NODE   11,文档片段 
-    Node.PROCESSING_INSTRUCTION_NODE  7,文档处理程序使用的特有指令 
-    DOM4已弃用的节点类型 
-      Node.ATTRIBUTE_NODE         2,元素的耦合属性
-      Node.ENTITY_REFERENCE_NODE  5,表示一个实体引用
-      Node.CDATA_SECTION_NODE     4,在XML文档中表示CharacterData[字符数据]部分
-      Node.ENTITY_NODE            6,在XML文档中表示一个实体
-      Node.NOTATION_NODE          12,在XML文档中表示一个符号
+    .DOCUMENT_NODE   9,document节点
+    .ELEMENT_NODE    1,元素节点 
+    .TEXT_NODE       3,文本节点[元素或属性中的文字] 
+    .COMMENT_NODE    8,注释节点,表示一注释  
+    .DOCUMENT_TYPE_NODE       10,DocumentType节点,文档类型的定义 
+      如 <!DOCTYPE html> 就是用于 HTML5 的文档类型 
+    .DOCUMENT_FRAGMENT_NODE   11,DocumentFragment节点,文档片段 
+    .PROCESSING_INSTRUCTION_NODE  7,文档处理程序使用的特有指令 
+    ◆DOM4已弃用的节点类型 
+      .ATTRIBUTE_NODE         2,元素的耦合属性
+      .ENTITY_REFERENCE_NODE  5,一个XML实体引用
+      .CDATA_SECTION_NODE     4,在XML文档中表示CharacterData[字符数据]部分
+      .ENTITY_NODE            6,在XML文档中表示一个实体
+      .NOTATION_NODE          12,在XML文档中表示一个符号
     ◆其他
-    Node.DOCUMENT_POSITION_DISCONNECTED 1   
-    Node.DOCUMENT_POSITION_PRECEDING    2   
-    Node.DOCUMENT_POSITION_FOLLOWING    4   
-    Node.DOCUMENT_POSITION_CONTAINS     8   
-    Node.DOCUMENT_POSITION_CONTAINED_BY 16   
-    Node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC 32   
+    .DOCUMENT_POSITION_DISCONNECTED 1   
+    .DOCUMENT_POSITION_PRECEDING    2   
+    .DOCUMENT_POSITION_FOLLOWING    4   
+    .DOCUMENT_POSITION_CONTAINS     8   
+    .DOCUMENT_POSITION_CONTAINED_BY 16   
+    .DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC 32   
   Proto: 
     ★节点信息 
     .nodeType  num,节点类型 
@@ -114,11 +115,11 @@
       element.normalize();
       alert(element.childNodes.length); //1
       alert(element.firstChild.nodeValue); // "Hello world!Yippee!"
-    命名空间相关 
+    ◆命名空间相关 
       .isDefaultNamespace()  bol,
       .lookupNamespaceURI()  
       .lookupPrefix()  
-    常量 
+    ◆常量 
       .ELEMENT_NODE                 1  
       .ATTRIBUTE_NODE               2  
       .TEXT_NODE                    3  
@@ -137,8 +138,9 @@
       .DOCUMENT_POSITION_CONTAINS      8  
       .DOCUMENT_POSITION_CONTAINED_BY  16  
       .DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC  32  
-    已废弃 
-      .setUserData()   节点添加额外数据[DOM3]
+    ◆已废弃 
+      .setUserData()   节点添加额外数据[DOM3] 
+◆document节点
 Document,文档 
   Extend: Node 
     console.log(Document.prototype.__proto__.constructor===Node); // true 
@@ -498,6 +500,7 @@ HTMLDocument,HTML文档
       等价于 window.captureEvents()  
     .releaseEvents()     
       等价于 window.releaseEvents() 
+◆元素节点 
 DOMImplementation,功能检测及创建文档 
   Extend: Object 
     console.log(DOMImplementation.prototype.__proto__.constructor===Object);
@@ -1032,7 +1035,11 @@ HTMLElement,HTML元素节点
       使用该方法以后,会设置validity对象的值。
     .reportValidity()  
     事件 
-      reset  重置表单事件,点击重置按钮或重置按钮获取焦点按Enter时在form元素上触发 
+      'reset'   重置表单事件 
+        PS: 点击重置按钮或重置按钮获取焦点按Enter时触发 
+      'invalid' 表单提交验证不通过时触发 
+        只在捕获阶段触发 
+        evt.target  当前验证未通过的元素 
     Extend: 利用<iframe>让<form>的submit不刷新页面进行上传 
       默认的表单提交会导致页面刷新,把<form>的target指定到一<iframe>,从而让其代替页面刷新  
       window.__iframeCount = 0;
@@ -1096,19 +1103,18 @@ HTMLElement,HTML元素节点
         .size  
         .src  
         .step  
-      .validity    返回一个包含字段有效信息的对象 [详参 JS高程 430 页]
-        每一个表单元素都有一个validity对象,有以下属性:
-        valid         若该元素通过验证,则返回true。
-        valueMissing  若用户没填必填项,则返回true。
-        typeMismatch  若填入的格式不正确(比如Email地址),则返回true。
-        patternMismatch 若不匹配指定的正则表达式,则返回true。
-        tooLong       若超过最大长度,则返回true。
-        tooShort      若小于最短长度,则返回true。
-        rangeUnderFlow  若小于最小值,则返回true。
-        rangeOverflow   若大于最大值,则返回true。
-        stepMismatch    若不匹配步长(step),则返回true。
-        badInput      若不能转为值,则返回true。
-        customError   若该栏有自定义错误,则返回true。
+      .validity   ValidityState,字段验证信息对象 [详参 JS高程 430 页] 
+        .valid           若该元素通过验证,则返回true
+        .valueMissing    'required'必填字段,true:验证不通过 
+        .typeMismatch    'type'输入类型,true:验证不通过 
+        .patternMismatch 'pattern'正则,true:验证不通过 
+        .tooLong         'maxlength'最大长度,true:验证不通过 
+        .tooShort        若小于最短长度,则返回true 
+        .rangeUnderflow  'min'最小值,true:验证不通过 
+        .rangeOverflow   'max'最大值,true:验证不通过 
+        .stepMismatch    'step'步距,true:输入不符合 
+        .badInput        若不能转为值,则返回true 
+        .customError     若该栏有自定义错误,则返回true 
       .value     当前字段将被提交给服务器的值 
         对于type=file,该属性只读,包含着文件在计算机中的路径
         input、textarea、password、select等元素都可以通过value属性取到它们的值
@@ -1126,7 +1132,7 @@ HTMLElement,HTML元素节点
       .defaultValue  默认值
       .selectionStart num,选中字符的开始下标 
       .selectionEnd   num,选中字符的结束下标 
-      .setCustomValidity() 用于自定义错误信息 
+      .setCustomValidity('str') 显示表单验证提示信息 [HTML5]  
         该提示信息也反映在该输入框的 validationMessage 属性中 
         若将setCustomValidity设为空字符串,则意味该项目验证通过        
       .select()         选中输入框的文本[后续可进行复制]   
@@ -1550,27 +1556,149 @@ HTMLElement,HTML元素节点
       .captureStream()    
       .webkitAudioDecodedByteCount  
       .webkitVideoDecodedByteCount  
-MediaError,媒体错误对象 
-  Extend: Object 
-  Static: 
-    .MEDIA_ERR_ABORTED           1  
-    .MEDIA_ERR_NETWORK           2  
-    .MEDIA_ERR_DECODE            3  
-    .MEDIA_ERR_SRC_NOT_SUPPORTED 4  
+FormData,表单模拟 [HTML5] 
+  DefDec: 序列化表单,模拟出表单所提交的数据,从而使用AJAX提交  
+  PS: 当xhr发送FormData数据时,xhr能自动识别数据类型并配置适当头信息  
+  Extend：Object 
+    console.log(FormData.prototype.__proto__.constructor===Object); // true 
+  Instance: 
+    fd = new FormData([formElem]) 创建FormData对象 
+      formElem  可选,<form>元素 
+    Example: 通过表单元素创建
+    var fd = new FormData(document.forms[0]);
   Proto: 
-    .code     错误码 
-    .message  
-    常量 
-      .MEDIA_ERR_ABORTED 1 
-      .MEDIA_ERR_NETWORK 2 
-      .MEDIA_ERR_DECODE  3 
-      .MEDIA_ERR_SRC_NOT_SUPPORTED 4 
-TimeRanges, 
+    .append(key,val ,name?)    向fd中添加字段 
+      PS: 当信息添加完后就可直接使用'xhr.send(fd)'进行发送 
+      key   数据键名  
+      val   数据值  
+      name  可选,通常是文件名 
+    .delete() 
+    .get() 
+    .getAll() 
+    .has() 
+    .set() 
+    .keys() 
+    .values() 
+    .forEach() 
+    .entries() 
+  Example: 文件上传 
+    var inputFile = document.querySelector('input[type="file"]');
+    inputFile.addEventListener('change', function(e) {
+      var formData = new FormData();
+      formData.append(this.files[0].name, this.files[0]);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/server');
+      xhr.onload = function(e) {
+        console.log('上传完成!');
+      };
+      xhr.send(formData);  // multipart/form-data
+    });
+    
+    加入JS生成的文件 
+    var content = '<a id="a"><b id="b">hey!</b></a>';
+    var blob = new Blob([content], { type: "text/xml"});
+    formData.append("webmasterfile", blob);
+Option,option元素 
+  Relate: Option.prototype===HTMLOptionElement.prototype 
+  Instance: 
+    var opt = new Option(["文本","值",bol1,bol2]); 创建optionDOM对象 
+      bol1  是否被选中 
+      bol2  是否有效
+      Example:
+        var elem = document.getElementById('mySelect');
+        elem.add(new Option("文本","值")); // 这个只能在IE中有效
+        // 这个兼容IE与firefox
+        elem.options.add(new Option("text","value"));
+        elem.options.remove(idx); // 根据下标删除选项option
+        elem.options[idx].text;
+Image,img元素 
+  PS: 不用插入到DOM中即可加载图片资源  
+  Relate: Image.prototype===HTMLImageElement.prototype  
+  Instance: img = new Image();   创建图像DOM对象  
+Audio,audio元素 
+  Relate: Audio.prototype===HTMLAudioElement.prototype 
+  Instance: 
+    Example: 
+    var audio = new Audio("./sound.mp3");
+      不用插入到文档中,即可加载音频资源 
+      audio.addEventListener("canplaythrough",function(e){
+        this.play();
+      })
+◆元素集合 
+HTMLCollection,元素集合[顺序为文档流中的顺序] 
+  PS: 动态的,随着DOM的改变会相应的变化 
   Extend: Object 
+    console.log(HTMLCollection.prototype.__proto__.constructor===Object); // true 
+  Instance: 
+    HTMLCollection===document.anchors.constructor
+    HTMLCollection===document.applets.constructor
+    HTMLCollection===<elem>.getElementsByTagName('').constructor 
+    HTMLCollection===<elem>.getElementsByClassName('').constructor 
+    
+    document.anchors 具有name特性的所有<a>元素 
+    
+    document.applets 所有<applet>元素 [已几乎不用了]  
+    document.getElementsByTagName('tagName') 
+      *  表示获取页面所有元素 
+    document.getElementsByClassName('clsName') [HTML5][IE9+] 
+    <elem>.getElementsByTagName("tagName")  通过元素名获取元素集合 
+    <elem>.getElementsByClassName('clsName'[,parent]) 通过类名获取元素集合[HTML5][IE9+]
+      clsName  str,若干个类名的字符串,类名间用空格隔开,无顺序影响 
+      Example:  
+      获取所有包含"user"和"name"类的元素 
+      var aoo =document.getElementsByClassName("user name");
   Proto: 
-    .length 
-    .start()  
-    .end()  
+    .length      num,集合成员数量
+    .item(idx)   或使用[idx]访问
+    .namedItem() 通过name属性值索引 
+    collection[idx/str] 
+      在[]中传入数值,则后台就会调用 .item() 方法
+      []中也可传入字符串,则调用 .namedItem() 方法
+NodeList,节点集合 
+  PS: NodeList 是动态实时的,DOM 改变后 NodeList 也会变化 
+  Extend: Object 
+    console.log(NodeList.prototype.__proto__.constructor===Object); // true 
+  Instance: 
+    NodeList===<node>.childNodes.constructor  
+    NodeList===<elem>.querySelectorAll("abc").constructor 
+    <node>.childNodes  一组有序的各种类型的子节点 
+      cNodes  成员可为元素节点、文本节点、注释或处理指令等 
+        且不同的浏览器返回值不一定相同 [?]  
+    document.getElementsByName("nameVal")  通过name属性值获取元素节点集合 
+      PS: 一般用于获取单选按钮 
+        IE中若该元素本身不包括name属性[但自行添加了],获取时会获取不到
+      nameValue  name属性的值 
+    document.querySelectorAll("selector")  获取元素节点集合 [SelectorsAPI]
+    <elem>.querySelectorAll("selector")  后代元素中,对应的元素集 [SelectorsAPI]
+      返回值为一个"静态"不会自动更新,只包含元素的NodeList,无匹配项则为空 NodeList
+      可通过下标或 item() 方法来获取单个元素
+  Proto: 
+    .length  
+    .item(idx)  访问节点,也可通过[idx]下标法
+    .entries()    
+    .forEach()    
+    .keys()    
+    .values()    
+NamedNodeMap,元素节点当前具有的特性节点集合 
+  PS: 是一个"动态"集合;IE7及之前会返回元素所有可能的节点  
+  Extend: Object 
+    console.log(NamedNodeMap.prototype.__proto__.constructor===Object); // true 
+  Instance: <elem>.attributes 
+  Proto: 
+    .length    属性节点个数 
+    .item(idx)/[idx]下标法   Attr,特性节点 
+      设置元素的id值
+      atrs["id"].nodeValue = "xxx";
+    .getNamedItem(str)    返回nodeName为str的节点 
+      获取元素的id值 
+      var id = atrs.getNamedItem("id").nodeValue;
+    .setNamedItem(atr)    向列表中添加atr属性节点
+    .removeNamedItem(str) 从列表中移除nodeName为str的节点并返回 
+    命名空间相关 
+      .getNamedItemNS()  
+      .setNamedItemNS()  
+      .removeNamedItemNS()  
+◆其他节点
 TextTrackList, 
   Extend: EventTarget 
   Proto: 
@@ -1688,79 +1816,6 @@ Comment,注释节点
   PS: 不支持[没有]子节点 
   Extend: CharacterData 
     console.log(Comment.prototype.__proto__.constructor===CharacterData); // true 
-HTMLCollection,元素集合[顺序为文档流中的顺序] 
-  PS: 动态的,随着DOM的改变会相应的变化 
-  Extend: Object 
-    console.log(HTMLCollection.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    HTMLCollection===document.anchors.constructor
-    HTMLCollection===document.applets.constructor
-    HTMLCollection===<elem>.getElementsByTagName('').constructor 
-    HTMLCollection===<elem>.getElementsByClassName('').constructor 
-    
-    document.anchors 具有name特性的所有<a>元素 
-    
-    document.applets 所有<applet>元素 [已几乎不用了]  
-    document.getElementsByTagName('tagName') 
-      *  表示获取页面所有元素 
-    document.getElementsByClassName('clsName') [HTML5][IE9+] 
-    <elem>.getElementsByTagName("tagName")  通过元素名获取元素集合 
-    <elem>.getElementsByClassName('clsName'[,parent]) 通过类名获取元素集合[HTML5][IE9+]
-      clsName  str,若干个类名的字符串,类名间用空格隔开,无顺序影响 
-      Example:  
-      获取所有包含"user"和"name"类的元素 
-      var aoo =document.getElementsByClassName("user name");
-  Proto: 
-    .length      num,集合成员数量
-    .item(idx)   或使用[idx]访问
-    .namedItem() 通过name属性值索引 
-    collection[idx/str] 
-      在[]中传入数值,则后台就会调用 .item() 方法
-      []中也可传入字符串,则调用 .namedItem() 方法
-NodeList,节点集合 
-  PS: NodeList 是动态实时的,DOM 改变后 NodeList 也会变化 
-  Extend: Object 
-    console.log(NodeList.prototype.__proto__.constructor===Object); // true 
-  Instance: 
-    NodeList===<node>.childNodes.constructor  
-    NodeList===<elem>.querySelectorAll("abc").constructor 
-    <node>.childNodes  一组有序的各种类型的子节点 
-      cNodes  成员可为元素节点、文本节点、注释或处理指令等 
-        且不同的浏览器返回值不一定相同 [?]  
-    document.getElementsByName("nameVal")  通过name属性值获取元素节点集合 
-      PS: 一般用于获取单选按钮 
-        IE中若该元素本身不包括name属性[但自行添加了],获取时会获取不到
-      nameValue  name属性的值 
-    document.querySelectorAll("selector")  获取元素节点集合 [SelectorsAPI]
-    <elem>.querySelectorAll("selector")  后代元素中,对应的元素集 [SelectorsAPI]
-      返回值为一个"静态"不会自动更新,只包含元素的NodeList,无匹配项则为空 NodeList
-      可通过下标或 item() 方法来获取单个元素
-  Proto: 
-    .length  
-    .item(idx)  访问节点,也可通过[idx]下标法
-    .entries()    
-    .forEach()    
-    .keys()    
-    .values()    
-NamedNodeMap,元素节点当前具有的特性节点集合 
-  PS: 是一个"动态"集合;IE7及之前会返回元素所有可能的节点  
-  Extend: Object 
-    console.log(NamedNodeMap.prototype.__proto__.constructor===Object); // true 
-  Instance: <elem>.attributes 
-  Proto: 
-    .length    属性节点个数 
-    .item(idx)/[idx]下标法   Attr,特性节点 
-      设置元素的id值
-      atrs["id"].nodeValue = "xxx";
-    .getNamedItem(str)    返回nodeName为str的节点 
-      获取元素的id值 
-      var id = atrs.getNamedItem("id").nodeValue;
-    .setNamedItem(atr)    向列表中添加atr属性节点
-    .removeNamedItem(str) 从列表中移除nodeName为str的节点并返回 
-    命名空间相关 
-      .getNamedItemNS()  
-      .setNamedItemNS()  
-      .removeNamedItemNS()  
 DOMStringMap,标签自定义属性 [HTML5] 
   PS: 'data-xxx'是HTML5规定为元素添加非标准的属性的格式 
     目的是为元素提供与渲染无关的信息或提供语义信息
@@ -1802,6 +1857,7 @@ DOMTokenList,元素class的集合类[HTML5]
     .forEach() 
     .keys() 
     .values() 
+◆样式相关 
 StyleSheetList,样式表集合 
   PS: 按照结构依次为: 样式表集-样式表-规则集-规则-声明 
   Extend：Object 
@@ -1967,6 +2023,7 @@ CSSStyleDeclaration,CSS规则的声明
         "paused"    暂停
         "running"   播放
     .getPropertyCSSValue(属性名)  CSSValue, [Chrome不支持]
+◆其他 
 NodeIterator,遍历[DOM2][JS高程 326 页] 
   Extend: Object 
     console.log(NodeIterator.prototype.__proto__.constructor===Object); // true 

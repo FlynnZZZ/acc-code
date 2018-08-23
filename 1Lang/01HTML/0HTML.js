@@ -73,6 +73,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <html>  根标签,所有的网页标签都在其中 
     PS: 高度默认为0,定义height:100%;则会将网页占满;背景色会向上渲染将整个浏览器铺满
     manifest="cache.manifest"  定义使用的离线文件 [HTML5]  
+    HTML5废弃 
+      version=""
   <head>  用于定义文档的头部,所有头部元素的容器 
     子元素包括: 
       <meta/>
@@ -258,11 +260,6 @@ HTML'Hyper Text Markup Language'超文本标记语言
         <meta http-equiv="content-type" content="text/html;charset=UTF-8"/> 
     scheme=""       
   <title>  网页标题 
-  <base href="url">  定义超链接的根目录 [HTML5]  
-    PS: 在head中使用 
-    href="url"    定义页面中a链接默认以此为根路径
-    target="KW"   可选,定义页面中a链接的打开方式
-      '_blank' 
   <body>  所有HTML标签的wraper 
     高度默认为0; 背景色会向上渲染将整个浏览器铺满
     建议不要对body进行样式控制,使用一个其他的盒子代替[Self] 
@@ -364,6 +361,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
       'projection' 用于投影媒体
       'tv'         电视
       ...
+    HTML5废弃 
+      charset=""
   <script/> JS引入 
     PS:用于引进JS代码;一个script标签不可同时使用内部和外部JS代码,否则只执行外部JS; 
       存在多个script引入标签时[且不存defer和async属性],代码执行顺序按照标签的先后顺序;
@@ -382,7 +381,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
       兼容性不好,只有IE支持 ? 
       当存在多个延迟脚本时,并不一定会按照先后顺序执行  
       下载的脚本文件在'DOMContentLoaded'事件触发前执行[即刚刚读取完</html>标签],
-    async="bol"  可选,下载完后立即解析JS,但解析期间不阻塞HTML的下载,可选 
+    async="bol"  可选,下载完后立即解析JS,但解析期间不阻塞HTML的下载[HTML5] 
       只对外部JS文件有效
       多个async的脚本并不保证按照指定的先后顺序执行,而是按下载完的先后顺序
       当同时存在async和defer时,defer不生效
@@ -419,57 +418,47 @@ HTML'Hyper Text Markup Language'超文本标记语言
       在网页中嵌入的<iframe></iframe>所包含的内容与整个页面是一个整体,
       而<Frame></Frame>所包含的内容是一个独立的个体,是可以独立显示的.
       另外,应用Iframe还可以在同一个页面中多次显示同一内容,而不必重复这段内容的代码.
-  <frameset> 框架[HTML5废弃] 
-    PS:通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
-      每份HTML文档称为一个框架,并且每个框架都独立于其他的框架.
-      使用框架的坏处:开发人员必须同时跟踪更多的HTML文档；很难打印整张页面
-    <frameset cols="列窗口百分比分割" rows="行窗口百分比分割">
-      <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
-      <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
-    </frameset>
-    frameborder 边框大小,为0时无边框显示
-      firefox中由border控制宽度,framespacing无效,IE相反,所以最好两个值同时设置,以兼容浏览器！(?)(百度知道所得)
-    cols  列窗口百分比分割 
-    rows  行窗口百分比分割
-    framespacing  定义各区域间的间隙大小
-      number
-    Remarks:使用框架结构则至少需要两个HTML文件,在总的HTML文件中
-      在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置
-      重要提示:不能将<body></body>标签与<frameset></frameset>标签同时使用.
-  <frame>    框架[HTML5废弃] 
-    PS:不需要body
-    cols  列窗口百分比分割 
-    rows  行窗口百分比分割
-    noresize   表示不可改变分割比例,默认情况下,用户可以对分割比例进行拖拽从而改变比例 
-    scrolling  定义该区域是否显示滚轴
-    src                URL             该框架中显示的html.
-    name              name              规定框架的名称.
-    longdesc           URL         规定一个包含有关框架内容的长描述的页面.
-    frameborder 边框大小
-      0  则无边框 
-    framespacing 定义各区域间的间隙大小
-    Example: 
-      <frameset cols="200,30％,*">
-        <!-- cols表示3个框架按照列分
-        第一个宽度200px,第二个占总共的30％,最后一个为剩下所有的.
-        rows表示按照行来分 -->
-        <frame name="left" src="01html" noresize></frame>
-        <!-- noresize表示不允许改变大小 -->
-        <frame name="middle" src="02.html" ></frame>
-        <frame name="right" src="03.html"></frame>
+  ◆HTML5废弃 
+    <frame>    框架 
+      PS:不需要body
+      cols  列窗口百分比分割 
+      rows  行窗口百分比分割
+      noresize   表示不可改变分割比例,默认情况下,用户可以对分割比例进行拖拽从而改变比例 
+      scrolling  定义该区域是否显示滚轴
+      src                URL             该框架中显示的html.
+      name              name              规定框架的名称.
+      longdesc           URL         规定一个包含有关框架内容的长描述的页面.
+      frameborder 边框大小
+        0  则无边框 
+      framespacing 定义各区域间的间隙大小
+      Example: 
+        <frameset cols="200,30％,*">
+          <!-- cols表示3个框架按照列分
+          第一个宽度200px,第二个占总共的30％,最后一个为剩下所有的.
+          rows表示按照行来分 -->
+          <frame name="left" src="01html" noresize></frame>
+          <!-- noresize表示不允许改变大小 -->
+          <frame name="middle" src="02.html" ></frame>
+          <frame name="right" src="03.html"></frame>
+        </frameset>
+    <frameset> 框架 
+      PS:通过使用框架,可以在同一个浏览器窗口中显示不止一个页面.
+        每份HTML文档称为一个框架,并且每个框架都独立于其他的框架.
+        使用框架的坏处:开发人员必须同时跟踪更多的HTML文档；很难打印整张页面
+      <frameset cols="列窗口百分比分割" rows="行窗口百分比分割">
+        <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
+        <frame name="命名frame" src="HTML路径" scrolling="yes/no/auto"(noresize)/>
       </frameset>
-结构类 
-  ★HTML新增 
-  <header>     页眉 
-    header元素是一种具有引导和导航作用的结构元素
-    通常用来放置整个页面或页面内某个内容区块的标题等,没有个数限制
-    但也可以包含其他的内容,比如在header里面放置logo图片、搜索表单等等.
-  <article>    文章 表示页面中的一块与上下文不相关的独立内容,
-    比如一篇文章中的文章 
-  <section>    区块 表示页面中的一块内容区块
-  <aside>      侧边栏 表示article内容外的和内容相关的辅助信息
-  <footer>     页脚 作为其上层父级内容区块或是一个根区块的注脚.
-  <nav>        导航栏
+      frameborder 边框大小,为0时无边框显示
+        firefox中由border控制宽度,framespacing无效,IE相反,所以最好两个值同时设置,以兼容浏览器！(?)(百度知道所得)
+      cols  列窗口百分比分割 
+      rows  行窗口百分比分割
+      framespacing  定义各区域间的间隙大小
+        number
+      Remarks:使用框架结构则至少需要两个HTML文件,在总的HTML文件中
+        在定义某个区域的HTML文件中,往往需要用到target指向frame的名字来指定超链接的显示位置
+        重要提示:不能将<body></body>标签与<frameset></frameset>标签同时使用.
+    <noframe>
 语义化 
   <p>       段落
   <h1>-<h6> 标题,字体默认为粗体
@@ -482,7 +471,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <pre>     preformatted_text,格式化文本,保留内容包含的格式 
     被包围在pre元素中的文本通常会保留空格和换行符,文本呈现为等宽字体;
     常用来展示计算机源代码;
-  <br>      换行
+  <br>      换行 
+    clear=""  [HTML5废弃]
   <nobr>    不换行
     <nobr>这是一段很长的文字但不会换行</nobr>
     建议使用white-space: nowrap;属性代替;
@@ -496,7 +486,17 @@ HTML'Hyper Text Markup Language'超文本标记语言
     表现形式类似于段落加缩进,并无引号出现,从周围内容分离出来比较长的部分(通常显示为缩进的块)
   <block>      引用 
     <block></block> 块引用
-  ★HTML5新增 
+  ◆HTML5新增 
+  <header>     页眉 
+    header元素是一种具有引导和导航作用的结构元素
+    通常用来放置整个页面或页面内某个内容区块的标题等,没有个数限制
+    但也可以包含其他的内容,比如在header里面放置logo图片、搜索表单等等.
+  <article>    文章 表示页面中的一块与上下文不相关的独立内容,
+    比如一篇文章中的文章 
+  <section>    区块 表示页面中的一块内容区块
+  <aside>      侧边栏 表示article内容外的和内容相关的辅助信息
+  <footer>     页脚 作为其上层父级内容区块或是一个根区块的注脚.
+  <nav>        导航栏 
   <hgroup>     标题组 对网页或区段的标题进行组合.
     将标题和他的子标题进行分组的元素,比如在一个内容区块的标题和他的子标题算是一组.
     通常情况下,文章只有一个主标题时,不需要hgroup元素.
@@ -561,6 +561,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
   <command>   定义一个命令按钮 [存在兼容性问题] 
 功能类 
   <img> 图片
+    PS: align、space及hspace为处理图片和周围文字的关系 
     src         图片路径
       <img src="data:image/png;base64,xxxxx" >  通过'base64'加载图片 
     alt='文字'  图片的替代文本,图片无法显示时显示的内容 
@@ -569,7 +570,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
       bottom 文字垂直居下(默认)
     vspace      定义图像顶部和底部的空白(垂直边距)
     hspace      定义图像左侧和右侧的空白(水平边距)
-    注:align、space及hspace为处理图片和周围文字的关系.
+    align       [HTML5废弃]  
   <a>   'anchor'锚点元素、超链接 
     PS: 可链接到外部地址实现页面跳转,也可在当前页面实现内部导航的锚点功能
     href=""   链接地址 
@@ -598,6 +599,8 @@ HTML'Hyper Text Markup Language'超文本标记语言
       '_parent'  父窗口(本窗口的上一级窗口),框架会经常使用
       '_top'     在浏览器的整个窗口中打开,忽略任何框架
       框架的名称  
+    HTML5废弃 
+      charset=""
   <ul>  无序列表
     type 列表显示样式
       none    无
@@ -639,7 +642,7 @@ HTML'Hyper Text Markup Language'超文本标记语言
       </dl>
   <dt>  定义列表中的项目
   <dd>  描述列表中的项目
-  ★HTML5新增 
+  ◆HTML5新增
   <canvas> 画布,专门用来绘制图形 
     PS: canvas标签提供一块画布,可访问画布中的像素点 
       画布默认为透明的 ,canvas标签只是图形容器,图形需脚本来绘制 
@@ -763,9 +766,6 @@ Table表格
     为了避免这种情况,在空单元格中添加一个空格占位符,就可以将边框显示出来;
   <table>   表格,整个表格以其开始和结束
     PS:单独使用没有意义,需配合其他表格元素使用.
-    cellpadding   定义单元边沿与其内容之间的空白 
-      pixels   默认为2px
-      %
     cellspacing   定义单元格之间的空白 
       pixels   默认为2px 
       %
@@ -779,6 +779,13 @@ Table表格
       PS:内容不会在浏览器中显示出来,其作用是增加表格的可读性,
         使搜索引擎更好的读懂表格内容 
       Example: <table summary="表格简介文本"> </table>
+    HTML5废弃 
+      cellpadding   定义单元边沿与其内容之间的空白  
+        pixels   默认为2px
+        %
+      align 
+      bgcolor 
+      border 
   <caption> 用于放置表格的标题
   <thead>   表格头部
     表头部分,table的结构性标签
@@ -1002,6 +1009,9 @@ Form表单
     <input type="submit">    提交按钮[可提交表单]  
     <input type="image">     图片按钮[可提交表单]  
       src="图片路径"   定义图片 
+      width="num"     图像宽     
+      height="num"    图像高  
+      Example: <input type="image" src="img.gif" width="99" height="99" />
     <input type="reset">     重置按钮     
     <input type="file">      文件上传,文件字段      
       可覆盖表单中的'action'、'method'属性 ?  
@@ -1011,6 +1021,34 @@ Form表单
         <input type="file" accept="image/*"/>  表示为图片文件 
       multiple="bol"  是否可多选  
     <input type="hidden">    隐藏域    
+    ★HTML5新增
+    input[type="date"]            选择 年&月&日 
+      min=""   最小值 
+      max=""   最大值 
+      step=""  步距 
+    input[type="month"]           选择 年&月 ['calendar'控件]  
+    input[type="week"]            选择 年&周 ['calendar'控件]    
+    input[type="datetime"]        选择 年&月&日&UTC时间 ['calendar'和'time'控件] 
+      PS: Chrome无效 
+    input[type="datetime-local"]  选择 年&月&日&本地时间 ['calendar'和'time'控件]  
+    input[type="time"]            时间:时分秒['time'控件]  
+    input[type="calendar"]        日历    
+    input[type="email"]   email格式 
+      要求输入的文本需符合电子邮件地址的格式
+    input[type="url"]     url格式 
+      要求输入的文本需符合URL的模式
+    input[type="tel"]     手机号码  
+    input[type="number"]  数字字段['spinner'控件][IOS微信不兼容] 
+      PS: 可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
+      min=""   最小值 
+      max=""   最大值 
+      step=""  步距 
+    input[type="search"]  搜索框   
+    input[type="range"]   拖动条['slider'控件 ]    
+      min="float"   最小值 
+      max="float"   最大值 
+      step="float"  步距 
+    input[type="color"]   拾色器     
     name="字段名" 提交到服务器的字段 
     value="值"    提交到服务器的数据值;当为按钮时,为按钮名称 
     ◆功能属性 
@@ -1065,59 +1103,142 @@ Form表单
         <option></option>
         ...
       </optgroup>
-  ◆字段通用属性 
-  checked   默认选中 
-    若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
-    使用JS控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
-    Example: 以下都表示默认被选中
-      <input type="checkbox" name="name"  checked>
-      <input type="checkbox" name="name"  checked="">
-      <input type="checkbox" name="name"  checked="1">
-      <input type="checkbox" name="name"  checked="false">
-      <input type="checkbox" name="name"  checked=false>
-  disabled  禁用字段 
-    如input不可输入 
-  readonly  只读字段 
-    适用: 部分<input>、<textarea> 
-  readonly&disabled 的区别 
-    disabled: 元素的值不会被提交 
-    readonly: 正常提交;
-  name=""         表单名称 
-    将表单数据发送到服务器需要name 
-    当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
-  placeholder=""  占位符,提示文本  
-    PS: 在输入域为空时显示出现,会在输入域获得焦点时消失:
-    适用: <input>的:text,search,url,telephone,email,password、textarea 
-    Example: 
-    <input type="search" name="user_search"  placeholder="Search W3School" /> 
-    在占位符中使用换行 
-      方法一: 使用 &#10; 实体字符来表示换行 [Firefox不支持] 
-      方法二: 通过JS来指定'placeholder'的值,可使用'\n'进行换行 
-  ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
-    PS: 便于创建不同的提交按钮;
-    Example:
-    <form action="form.asp" method="get" id="user_form">
-      E-mail: <input type="email" name="userid" /><br />
-      <input type="submit" value="Submit" /> <br />
-      <input type="submit" formaction="demo_admin.asp" value="admin" />
-      <input type="submit" formnovalidate="true" value="validation" />
-    </form>
-  formaction=""      重写表单的 action 属性 
-    formaction="提交位置" (提交按钮的属性)
-      新属性,可选,适用于提交按钮(包括button和input)
-      用于改变form的action
+  ◆HTML5新增 
+  <progress>   进度条 
+    max="100"   最大值
+    value="80"  当前值 
+  <datalist>   输入框下拉列表选择  
+    PS: 用于增强文本输入框功能,输入时可进行选择输入 
+    使用: 
       Example: 
-        <form action="demo_form.asp" method="get">
-          <input type="text" name="fname" />
-          <button type="submit">提交</button><br />
-          <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
-          /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
+        <input type="text" list="abc">
+        <datalist id="abc">
+          <option value="香蕉">香蕉</option>
+          <option value="aa">苹果</option>
+          <option value="11"></option>
+        </datalist>
+      1 <input>的'list'值和<datalist>的'id'值对应起来   
+      2 <option>列表选项 
+        'value'值为输入值 
+        文本值为显示值 
+        当'value'值和文本值不同时,会在列表中同时显示   
+  <ruby>       文本注释 
+    Example:
+      <ruby>
+        abc
+        <rt> 注释的内容 </rt>
+        <rp> 备用的显示 </rp>
+      </ruby> 
+  <rt>         注释内容[和'ruby'配合使用]
+  <rp>         注释不生效时显示[和'ruby'配合使用] 
+  <wbr>        软换行,当宽度不够时换行 
+  <keygen>   用于表单的密钥对生成器字段,生成加密字符串 
+    PS: 当提交表单时,私钥存储在本地,公钥发送到服务器 
+    name="<filed>"    定义字段名 
+    autofocus="bol"   使 keygen 字段在页面加载时获得焦点 
+    challenge="bol"   如果使用,则将 keygen 的值设置为在提交时询问 
+    disabled="bol"    是否禁用 
+    form="<FromName>" 定义该 keygen 字段所属的一个或多个表单 
+    keytype="rsa"     定义 keytype.rsa 生成 RSA 密钥 
+  ◆属性 
+    ★通用属性 
+    checked   默认选中 
+      若 checked 属性存在则表示该复选框默认被选中(设置其值为任何值,都表示被选中)
+      使用JS控制选中状态时,设置其值为true(或其他任何能隐式转换成true的值),则其复选框被选中.
+      Example: 以下都表示默认被选中
+        <input type="checkbox" name="name"  checked>
+        <input type="checkbox" name="name"  checked="">
+        <input type="checkbox" name="name"  checked="1">
+        <input type="checkbox" name="name"  checked="false">
+        <input type="checkbox" name="name"  checked=false>
+    disabled  禁用字段 
+      如input不可输入 
+    readonly  只读字段 
+      适用: 部分<input>、<textarea> 
+    readonly&disabled 的区别 
+      disabled: 元素的值不会被提交 
+      readonly: 正常提交;
+    name=""         表单名称 
+      将表单数据发送到服务器需要name 
+      当发送多个相同name值的表单字段时,可使用 name='xx[]' 的形式 
+    placeholder=""  占位符,提示文本  
+      PS: 在输入域为空时显示出现,会在输入域获得焦点时消失:
+      适用: <input>的:text,search,url,telephone,email,password、textarea 
+      Example: 
+      <input type="search" name="user_search"  placeholder="Search W3School" /> 
+      在占位符中使用换行 
+        方法一: 使用 &#10; 实体字符来表示换行 [Firefox不支持] 
+        方法二: 通过JS来指定'placeholder'的值,可使用'\n'进行换行 
+    ★'form override attributes'重写<form>的某些属性设定,适用: 提交字段  
+      PS: 便于创建不同的提交按钮;
+      Example:
+      <form action="form.asp" method="get" id="user_form">
+        E-mail: <input type="email" name="userid" /><br />
+        <input type="submit" value="Submit" /> <br />
+        <input type="submit" formaction="demo_admin.asp" value="admin" />
+        <input type="submit" formnovalidate="true" value="validation" />
+      </form>
+    formaction=""      重写表单的 action 属性 
+      formaction="提交位置" (提交按钮的属性)
+        新属性,可选,适用于提交按钮(包括button和input)
+        用于改变form的action
+        Example: 
+          <form action="demo_form.asp" method="get">
+            <input type="text" name="fname" />
+            <button type="submit">提交</button><br />
+            <button type="submit" formaction="demo_admin.asp">以管理员身份提交</button>
+            /*该按钮将信息提交到 formaction 指定的位置,而非form 指定的action位置*/
+          </form>
+    formenctype=""     重写表单的 enctype 属性
+    formmethod=""      重写表单的 method 属性
+    formnovalidate=""  重写表单的 novalidate 属性
+    formtarget=""      重写表单的 target 属性 
+    ★HTML5新增 
+    autocomplete    是否启用表单自动完成功能,具有记忆功能  
+      <form>  当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果
+        PS: 该设定可被属于该form的子元素的'autocomplete'属性覆盖 
+        "on"    浏览器能够根据用户之前在form里输入的值自动补全 
+        "off"   浏览器不自动补全输入
+      <input> 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项 
+    placehodler="str"     <input> 输入提示
+    autofocus="bol" 当页面加载完是否自动获得焦点 
+      适用所有<input>类型 
+    required  提交时输入字段不能为空 [HTML5]   
+      PS: 需在form中且点击submit提交时触发
+      适用: <input> <textarea> <select>  
+    list="<datalistId>"       提供选项列表[详见<datalist>] 
+      适用于 type=text/search/url/telephone/email/date,
+      /pickers/number/range/color 的 <input>;
+    form="<FormId>" 规定输入域所属的表单,值为<form>的id 
+      PS: 若需引用多个表单,使用空格分隔; 
+      适用: 表单字段 
+      Example: 
+        <form action="demo_form.asp" method="get" id="user_form">
+          First name:<input type="text" name="fname" />
+          <input type="submit" />
         </form>
-  formenctype=""     重写表单的 enctype 属性
-  formmethod=""      重写表单的 method 属性
-  formnovalidate=""  重写表单的 novalidate 属性
-  formtarget=""      重写表单的 target 属性
-  表单将数据发送给服务器规则: 
+        Last name: <input type="text" name="lname" form="user_form" />
+    multiple  规定输入域中可选择多个值 
+      适用于: type="email/file" 的<input>标签
+      Example:
+        Select images: <input type="file" name="img" multiple="multiple" />
+    novalidate 属性
+      novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
+      注释:novalidate 属性适用于 <form> 以及以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, range 以及 color.
+      实例
+      <form action="demo_form.asp" method="get" novalidate="true">
+      E-mail: <input type="email" name="user_email" />
+      <input type="submit" />
+      </form>
+      亲自试一试
+    pattern=""  rgep,自定义文本字段验证规则  [HTML5] 
+      模式的开头和末尾不用加^和$符号[假定已经有了],须从头到尾都与模式匹配 
+      Example: 
+      <input type="text" name="code" pattern="[A-z]{3}" />
+      <input type="text" pattern="\d+" name="xx"/>
+    ping=""     
+      适用: <a>&<area>
+  ◆表单将数据发送给服务器规则: 
     对表单字段的名称和值进行URL编码使用和号'&'分隔 
     不发送禁用的表单字段
     只发送勾选的复选框和单选按钮
@@ -1125,15 +1246,15 @@ Form表单
     多选选择框中的每个选中的值单独一个条目
     在单击提交按钮提交表单的情况下会发送提交按钮,否则不发送,包括type为"image"的input元素 
     select元素值为选中的option元素的value特性的值,若option元素无value特性则为其元素文本值 
-  Remarks: 
+  ◆Remarks: 
     type="submit" 的input和button 在提交时页面会跳转  [如何不跳转?] 
-  表单提交 
+  ◆表单提交 
     表单默认提交会跳转刷新页面 
     表单无刷新提交的决解办法:   
       将<form>的'target'同<iframe>的'name'进行关联  
       通过监听 iframe的'load'事件来获取到响应返回值 
 其他标签 
-  ★无语义标签 : 无任何特殊含义
+  ◆无语义标签 : 无任何特殊含义
     存在的意义就是为了应用css样式,一个块元素一个行内元素 
   <div>   块元素 
     PS:把一些独立的逻辑部分划分出来,放在一个<div>标签中
@@ -1141,16 +1262,8 @@ Form表单
       div标签的作用就相当于一个容器.
   <span>  行内元素 
     用来组合文档中的行内元素
-  ★样式标签[建议使用CSS来控制] 
+  ◆样式标签[建议使用CSS来控制] 
     PS:可组合使用,如表示加粗倾斜同时使用两个标签
-    <blink> 闪烁文字[DiBs]
-      <blink>内容</blink>  效果:内容文字闪烁 
-    <marquee> 移动内容
-      <marquee direction="left/right" >文字</marquee>
-      移动的文字/图片(IE8之前有用)
-      属性:
-        direction    定义移动方向
-        behaviour    移动方式
     <sup> 上标
       <sup>上标</sup>
       字体缩小,整体上移
@@ -1165,16 +1278,17 @@ Form表单
       <i>倾斜</i>
     <em> 倾斜
       <em>加强语气(倾斜)</em>
-    <u> 下划线
-      <u></u> 下划线
     <ins> 下划线
       <ins></ins> 增加下划线
-    <s> 删除线
-      <s>删除线</s>
     <del> 删除线
       <del></del> 增加删除线
-  ★不常用 
-    <applet>
+  ◆HTML5新增 
+  <base href="url">  定义超链接的根目录   
+    PS: 在head中使用 
+    href="url"    定义页面中a链接默认以此为根路径
+    target="KW"   可选,定义页面中a链接的打开方式
+      '_blank' 
+  ◆不常用 
     <object>  嵌入对象,在HTML页面中嵌入多媒体元素
       <object data="" type=""></object> flash动画插入
       <object>的作用是支持HTML插件.
@@ -1235,7 +1349,30 @@ Form表单
         循环次数loop="数字"(若未指定则一直循环infinite)
         速度scrollamount="数字"(数值越大速度越快)
         scrolldelay="延时"(走一步,停一停)
-◆HTML全局属性 
+  ◆HTML5废弃标签 
+    <s>         删除线
+    <u>         下划线
+    <font>
+    <basefont>
+    <big>
+    <center>
+    <strike>
+    <tt> 
+    <applet> 
+    <blink> 闪烁文字 
+      <blink>内容</blink>  效果:内容文字闪烁 
+    <marquee> 移动内容 
+      <marquee direction="left/right" >文字</marquee>
+      移动的文字/图片(IE8之前有用)
+      属性:
+        direction    定义移动方向
+        behaviour    移动方式
+    <rb>      使用<ruby>元素代替
+    <acronym> 使用<abbr>元素代替 
+    <dir> 
+    <isindex> 
+    <listing> 
+◆全局属性 
   class="xxx"  规定元素的一个或多个类名 
   id='xx'      使用id属性创建锚点 
     在相对链接或url后面添加#id名称即可链接到锚点 
@@ -1260,6 +1397,25 @@ Form表单
         input[type="button"]   触发事件: 'focus'&'click' 
         一般元素如 div          触发事件: 'click' 
   repeat   
+  ◆HTML5新增 
+  contenteditable  元素内容是否可编辑 
+    PS: 在编辑的内容里进行回车会换行
+    true/false/inherit  
+  hidden     元素是否隐藏元素,相当于'display:none'
+  spellcheck  [单行/多行文本框]是否进行拼写或语法检查 
+    若'readOnly'和'disabled'生效,则'spellcheck'不生效  
+  draggable    规定元素是否可拖动 
+  designMode="on/off"    整个页面是否可编辑  
+    该属性只能在js中被修改,document.designMode = 'on' 
+  tabindex="<num>"    规定元素的tab键顺序  
+  data-xx=""  自定义元素的属性 
+    'xx'为任意字符,长度不限 
+  role=""     标识标签,使之语义化 
+    方便浏览器对其具体功能进行识别 
+    Example: <div role="navigation"></div>
+  contextmenu=""    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
+  dropzone=""    规定在拖动被拖动数据时是否进行复制、移动或链接 
+  translate=""   规定是否应该翻译元素内容 
 ◆特殊字符 
   'character entities'字符实体 
     PS: HTML中,某些字符是预留的,如'<'和'>'可能导致浏览器误认为标签 
@@ -1366,229 +1522,69 @@ Form表单
     &#8869;  &perp;     ⊥      perpendicular                
   &#x<Unicode编码>;  表示一字符 
     如 &#x1d306;   表示:𝌆  
---------------------------------------------------------------------------------
-HTML5: HTML标准的第五次修订 
-介绍 
-  PS: 是最新版本的HTML,引入了简化的标记、新的语义和媒体元素,
-    另外还有一组支持Web应用的JavaScript库
-    HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持 
-    HTML5 = 标记 + JavaScript API + CSS
-  变化
-    声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了
-    现在已不是'SGML'的子集,主要是关于图像,位置,存储,多任务等功能的增加 
-    meta标记
-      之前 : <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-      调整为 : <meta charset="utf-8">
-    link标记 不再需要'type'属性,已经确定CSS作为HTML的标准样式.
-      <link rel="stylesheet" href=""/>
-    script标记 JavaScript成为HTML的默认脚本语言,除去原先的'type'属性
-      简化为: <script src=""></script> 或 <script> </script>
-    新的解析顺序:不再基于SGML 
-    优点
-      HTML5让网页结构变得更加清楚明了,增加了语义化的结构标签
-      解决HTML在各个浏览器上存在不兼容的问题
-      将HTML5网页上的音视频、图像、动画等都带入国际标准化.
-      兼容性:HTML5在老版本的浏览器上也可以完美运行
-      实用性:HTML5抛弃了不切实际的功能,一切按照实用性的路线出发.
-语义化 
-  PS:通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
-    比如,网页上的文章的标题就可以用标题标签,网页上的各个栏目的栏目名称也可以使用标题标签.
-    文章中内容的段落就得放在段落标签中,
-    在文章中有想强调的文本,就可以使用 em 标签表示强调等等.
-  ★优点 
-  便于阅读、理解、维护,使阅读源代码的人对网站更容易分块
-  更容易被搜索引擎收录.
-  更容易让屏幕阅读器读出网页内容.
-规范 
-  HTML5文档里可以不写 <html> <head> 和 <body> 标签
-  自闭合标签不一定要以'/>'结尾,比如 <input > <img >
-  开发者可以自定义设置任何标签,'display'默认为'inline'
-  属性的四种写法 
-    <input value=yes>
-    <input type='checkbox'>
-    <input name="be evil">  // 推荐使用双引号  
-    <input disabled>        // 推荐使用 
-  布尔值属性只要存在皆为'true' 
-    <input type="checkbox" checked/>
-    <input type="checkbox" checked="checked"/>
-    <input type="checkbox" checked=""/>
-    <input type="checkbox" checked="false"/> 
-    以上的复选框均被选中,js中通过移除该属性控制其状态
-浏览器兼容HTML5新标签的方法 
-  document.createElement 创造标签 
-    IE8/IE7/IE6 支持通过 document.createElement 方法产生的标签
-    利用这一特性让这些浏览器支持HTML5新标签,然后添加标签默认的样式即可
-  直接使用成熟的框架.比如HTML5shim; 
-    <!--[if lt IE 9]>
-      <script> src="http://HTML5shim.googlecode.com/svn/trunk/HTML5.js"</script>
-    <![endif]-->
-废弃元素 
-  可被css代替的元素: 'basefont''big''center''font''s''strike''tt''u' 
-  对可用性产生负面影响的元素: 'frame''frameset''noframe',只支持'iframe'框架 
-  只有部分浏览器支持的元素 
-  其他被废除的元素 
-    废除'rb'元素,使用'ruby'元素代替;
-    'acronym'使用'abbr'元素代替;
-    applet
-    dir
-    isindex
-    ...
-◆新增标签 
-  PS: 部分类型是针对移动设备生效的,且具有一定的兼容性,在实际应用当中可选择性的使用 
-  input[type="date"]            日期 
-    不是绝对的 ?
-  input[type="month"]           月份['calendar'控件]  
-  input[type="week"]            星期['calendar'控件]    
-  input[type="calendar"]        日历    
-  input[type="datetime"]        时间日期['calendar'和'time'控件][Chrome无效]  
-  input[type="datetime-local"]  日期字段['calendar'和'time'控件]  
-  input[type="time"]            时间:时分秒['time'控件]  
-  input[type="email"]   email格式 
-    要求输入的文本需符合电子邮件地址的格式
-  input[type="url"]     url格式 
-    要求输入的文本需符合URL的模式
-  input[type="tel"]     手机号码  
-  input[type="number"]  数字字段['spinner'控件][IOS微信不兼容] 
-    可能存在兼容性问题,在微信中可以输入+特殊字符, 且正则替换时存在问题
-  input[type="search"]  搜索框   
-  input[type="range"]   拖动条['slider'控件 ]    
-  input[type="color"]   拾色器     
-  <progress>   进度条 
-    max="100"   最大值
-    value="80"  当前值 
-  <datalist>   输入框下拉列表选择  
-    PS: 用于增强文本输入框功能,输入时可进行选择输入 
-    使用: 
-      Example: 
-        <input type="text" list="abc">
-        <datalist id="abc">
-          <option value="香蕉">香蕉</option>
-          <option value="aa">苹果</option>
-          <option value="11"></option>
-        </datalist>
-      1 <input>的'list'值和<datalist>的'id'值对应起来   
-      2 <option>列表选项 
-        'value'值为输入值 
-        文本值为显示值 
-        当'value'值和文本值不同时,会在列表中同时显示   
-  <meter> 表示度量器,不建议用作进度条
-  <ruby>       文本注释 
-    Example:
-      <ruby>
-        abc
-        <rt> 注释的内容 </rt>
-        <rp> 备用的显示 </rp>
-      </ruby> 
-  <rt>         注释内容[和'ruby'配合使用]
-  <rp>         注释不生效时显示[和'ruby'配合使用] 
-  <wbr>        软换行,当宽度不够时换行 
-  <keygen>   用于表单的密钥对生成器字段,生成加密字符串 
-    PS: 当提交表单时,私钥存储在本地,公钥发送到服务器 
-    name="<filed>"    定义字段名 
-    autofocus="bol"   使 keygen 字段在页面加载时获得焦点 
-    challenge="bol"   如果使用,则将 keygen 的值设置为在提交时询问 
-    disabled="bol"    是否禁用 
-    form="<FromName>" 定义该 keygen 字段所属的一个或多个表单 
-    keytype="rsa"     定义 keytype.rsa 生成 RSA 密钥 
-  <output> 不可当做数据提交？
-◆新增属性 
-★全局属性 
-  contenteditable="bol"  元素内容是否可编辑 
-    PS: 在编辑的内容里进行回车会换行
-    true/false/inherit  
-  hidden="bol"   元素是否隐藏元素,相当于'display:none'
-  spellcheck="bol"  [单行/多行文本框]是否进行拼写或语法检查 
-    若'readOnly'和'disabled'生效,则'spellcheck'不生效  
-  draggable="bol"    规定元素是否可拖动 
-  designMode="on/off"    整个页面是否可编辑  
-    该属性只能在js中被修改,document.designMode = 'on' 
-  tabindex="<num>"    规定元素的tab键顺序  
-  data-xx=""  自定义元素的属性 
-    'xx'为任意字符,长度不限 
-  role=""     标识标签,使之语义化 
-    方便浏览器对其具体功能进行识别 
-    Example: <div role="navigation"></div>
-  contextmenu=""    规定元素的上下文菜单,上下文菜单在用户点击元素时显示 
-  dropzone=""    规定在拖动被拖动数据时是否进行复制、移动或链接 
-  translate=""   规定是否应该翻译元素内容 
-★特有属性 
-  autocomplete    是否启用表单自动完成功能,具有记忆功能  
-    <form>  当在表单中输入过一次字段后,后续(刷新后)再次输入相同的字段会产生提示效果
-      PS: 该设定可被属于该form的子元素的'autocomplete'属性覆盖 
-      "on"    浏览器能够根据用户之前在form里输入的值自动补全 
-      "off"   浏览器不自动补全输入
-    <input> 当用户在自动完成域中开始输入时,浏览器应该在该域中显示填写的选项 
-  autofocus="bol" 当页面加载完是否自动获得焦点 
-    适用所有<input>类型 
-  required  提交时输入字段不能为空 [HTML5]   
-    PS: 需在form中且点击submit提交时触发
-    适用: <input> <textarea> <select>  
-  form="<FormId>" 规定输入域所属的表单,值为<form>的id 
-    PS: 若需引用多个表单,使用空格分隔; 
-    适用: 表单字段 
-    Example: 
-      <form action="demo_form.asp" method="get" id="user_form">
-        First name:<input type="text" name="fname" />
-        <input type="submit" />
-      </form>
-      Last name: <input type="text" name="lname" form="user_form" />
-  height/width    image类型input标签的图像宽高 
-    PS:只适用于type=image 的 <input> 标签
-    Example: <input type="image" src="img.gif" width="99" height="99" />
-  list            为表单提供选项列表 
-    PS:datalist 是输入域的选项列表;
-      适用于 type=text/search/url/telephone/email/date,
-      /pickers/number/range/color 的 <input>;
-    Example:
-      Webpage: <input type="url" list="url_list" name="link" />
-      <datalist id="url_list">
-        <option label="W3Schools" value="http://www.w3school.com.cn" />
-        <option label="Google" value="http://www.google.com" />
-        <option label="Microsoft" value="http://www.microsoft.com" />
-      </datalist>
-  min、max 和 step 属性 
-    min 最小的可能值
-    max 最大的可能值
-    step 最小单位
-    Example: :
-      让用户只能输入0-100 的值,且是5的倍数
-      <input type="number" min="0" max="100" step="5" name="xx"/>
-    min、max 和 step 属性用于为包含数字或日期的 input 类型规定限定(约束)。
-    max 属性规定输入域所允许的最大值。
-    min 属性规定输入域所允许的最小值。
-    step 属性为输入域规定合法的数字间隔(如果 step="3",则合法的数是 -3,0,3,6 等)。
-    注释:min、max 和 step 属性适用于以下类型的 <input> 标签:date pickers、number 以及 range。
-    下面的例子显示一个数字域,该域接受介于 0 到 10 之间的值,且步进为 3(即合法的值为 0、3、6 和 9):
-    实例
-    Points: <input type="number" name="points" min="0" max="10" step="3" />
-    亲自试一试
-  multiple  规定输入域中可选择多个值。
-    注释:multiple 属性适用于以下类型的 <input> 标签:email 和 file。
-    Example:
-      Select images: <input type="file" name="img" multiple="multiple" />
-  novalidate 属性
-    novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
-    注释:novalidate 属性适用于 <form> 以及以下类型的 <input> 标签:text, search, url, telephone, email, password, date pickers, range 以及 color.
-    实例
-    <form action="demo_form.asp" method="get" novalidate="true">
-    E-mail: <input type="email" name="user_email" />
-    <input type="submit" />
-    </form>
-    亲自试一试
-  pattern=""  rgep,自定义文本字段验证规则  [HTML5] 
-    模式的开头和末尾不用加^和$符号[假定已经有了],须从头到尾都与模式匹配 
-    Example: 
-    <input type="text" name="code" pattern="[A-z]{3}" />
-    <input type="text" pattern="\d+" name="xx"/>
-  ping=""     
-    适用: <a>&<area>
-  charset=""  <meta>
-  async=""    <script> 
-◆新增事件[详见JS]
-  'input'   输入框输入内容时触发,可用于移动端输入字数统计
-  'invalid' 表单验证不通过时触发
-◆新增功能&技术[详见JS] 
+◆事件[详见JS] 
+  ◆HTML5新增 
+  'input'   输入框输入内容时触发,可用于移动端输入字数统计 
+  'invalid' 表单验证不通过时触发 
+◆功能&技术[详见JS] 
+  ◆HTML5新增 
   'localStorage' 'sessionStorage' 'webworker''websocket''Geolocation'
+◆HTML5: HTML标准的第五次修订 
+  介绍 
+    PS: 最新版本的HTML,引入了简化的标记、新的语义和媒体元素,
+      另外还有一组支持Web应用的JavaScript库
+      HTML5仍处于完善之中,大部分现代浏览器已经具备了某些HTML5支持 
+      HTML5 = 标记 + JavaScript API + CSS
+    变化 
+      声明  简化为: <!doctype html> ,该声明将是HTML未来所有版本的声明,而不会再改变了
+      现在已不是'SGML'的子集,主要是关于图像,位置,存储,多任务等功能的增加 
+      meta标记
+        之前 : <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        调整为 : <meta charset="utf-8">
+      link标记 不再需要'type'属性,已经确定CSS作为HTML的标准样式.
+        <link rel="stylesheet" href=""/>
+      script标记 JavaScript成为HTML的默认脚本语言,除去原先的'type'属性
+        简化为: <script src=""></script> 或 <script> </script>
+      新的解析顺序:不再基于SGML 
+      优点
+        HTML5让网页结构变得更加清楚明了,增加了语义化的结构标签
+        解决HTML在各个浏览器上存在不兼容的问题
+        将HTML5网页上的音视频、图像、动画等都带入国际标准化.
+        兼容性:HTML5在老版本的浏览器上也可以完美运行
+        实用性:HTML5抛弃了不切实际的功能,一切按照实用性的路线出发.
+    新增标签,部分类型是针对移动设备生效的,且具有一定的兼容性 
+  语义化 
+    PS:通俗的说就是:明白每个标签的用途[在什么情况下使用此标签合理]
+      比如,网页上的文章的标题就可以用标题标签,网页上的各个栏目的栏目名称也可以使用标题标签.
+      文章中内容的段落就得放在段落标签中,
+      在文章中有想强调的文本,就可以使用 em 标签表示强调等等.
+    ★优点 
+    便于阅读、理解、维护,使阅读源代码的人对网站更容易分块
+    更容易被搜索引擎收录.
+    更容易让屏幕阅读器读出网页内容.
+  规范 
+    HTML5文档里可以不写 <html> <head> 和 <body> 标签
+    自闭合标签不一定要以'/>'结尾,比如 <input > <img >
+    开发者可以自定义设置任何标签,'display'默认为'inline'
+    属性的四种写法 
+      <input value=yes>
+      <input type='checkbox'>
+      <input name="be evil">  // 推荐使用双引号  
+      <input disabled>        // 推荐使用 
+    布尔值属性只要存在皆为'true' 
+      <input type="checkbox" checked/>
+      <input type="checkbox" checked="checked"/>
+      <input type="checkbox" checked=""/>
+      <input type="checkbox" checked="false"/> 
+      以上的复选框均被选中,js中通过移除该属性控制其状态
+  浏览器兼容HTML5新标签的方法 
+    document.createElement 创造标签 
+      IE8/IE7/IE6 支持通过 document.createElement 方法产生的标签
+      利用这一特性让这些浏览器支持HTML5新标签,然后添加标签默认的样式即可
+    直接使用成熟的框架.比如HTML5shim; 
+      <!--[if lt IE 9]>
+        <script> src="http://HTML5shim.googlecode.com/svn/trunk/HTML5.js"</script>
+      <![endif]-->
 --------------------------------------------------------------------------------
 Collection 
 自我总结 

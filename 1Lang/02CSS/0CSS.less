@@ -345,8 +345,13 @@ Selector,选择器
         Example: input:checked{}
       :enabled     当元素处于可用状态时的样式 
         Example: input[type="text"]:enabled{}
-      :disabled    匹配每个被禁用的元素[大多用在表单元素上]
-      :indeterminate  [仅火狐支持?]
+      :disabled    匹配每个被禁用的元素[大多用在表单元素上] 
+      :valid       表单验证成功状态 
+        input:valid{ background-color: green; }
+        指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
+      :invalid     表单验证成功状态 
+        input:invalid{ background-color: red; }
+      :indeterminate  [仅火狐支持?] 
         指定当页面打开时,一组单选框中没有任何一个单选框被设定为选中状态时,整组单选框的样式.
     结构伪类 
       ★根伪类 
@@ -436,9 +441,6 @@ Selector,选择器
         Example: 
           :not(h1){ color:green; }
           /*排除h1.指定其它元素的样式*/
-      :invalid 和 :valid 伪类选择器 
-        指定当元素不能/能通过html5使用的元素的属性所指定的检查或内容不符合元素规定的格式的样式.
-        Example: input[type="email"]:invalid{}
       required 和 optional 伪类选择器
         required伪类选择器用来指定允许使用required属性
           而且已经指定了required属性的input元素、select元素以及textarea元素的样式
@@ -765,7 +767,7 @@ Declaration,样式声明
     max-content [DiBs] 
     min-content [DiBs] 
     fit-content [DiBs] 
-  字体&文本
+  字体&文本 
     ◆'letter'字
     letter-spacing  字符间距 
       PS:英文字母间距,汉字间距 
@@ -1511,13 +1513,18 @@ Declaration,样式声明
         当设置了该属性,当未设定边框属性,则会将背景显示为圆角的状态 
       border-radius: rX{1,4} / rY{1,4}?; [简写方式]  
         PS: 水平半径百分比参考元素的'width',垂直半径百分比参考元素的'height' 
-        rX   length|%,水平半径 
-        rY   可选,length|%,上右下左,默认等于水平半径 
+        rX   length|%,上右下左,水平半径 
+          1 个值: 4 个角使用该值 
+          2 个值: 左上&右下角使用第一个值,左下&右上使用第二个值  
+          3 个值: 左上使用第一个值,右上&左下使用第二个值,右下使用第三个值 
+          4 个值: 左上-1 右上-2 右下-3 左下-4 [顺时针依次对应]
+        rY   length|%,可选,上右下左,默认等于水平半径 
       ★可单独定义的样式 
-      border-top-left-radius: rX rY;      左上圆角 
-      border-top-right-radius: rX rY;     右上圆角 
-      border-bottom-right-radius: rX rY;  右下圆角 
-      border-bottom-left-radius: rX rY;   左下圆角 
+        省略 rY 表示 rY和rX同值 
+      border-top-left-radius: rX rY?;      左上圆角 
+      border-top-right-radius: rX rY?;     右上圆角 
+      border-bottom-right-radius: rX rY?;  右下圆角 
+      border-bottom-left-radius: rX rY?;   左下圆角 
       Example: 
         border-radius: 2px 1px 4px / 5px 3px;
         等价于
@@ -1526,18 +1533,16 @@ Declaration,样式声明
         border-bottom-right-radius: 4px 5px;
         border-bottom-left-radius: 1px 3px;
     'border-image'图片边框 [CSS3] 
-      PS: IE支持效果不好,IE11可以支持 
+      PS: IE支持效果不好,IE11可支持 
         使用 border-image 时,其将会替换掉 border-style 属性所设置的边框样式 
         虽然规范要求使用 border-image 时边框样式必须存在,但一些浏览器可能没有实现这一点 
-      border-image:source slice|width? outset? style?; [简写方式] 
-        source  url,图片资源 
-        slice   图片裁切,上右下左,图像边界向内偏移 
-        width   图片边框宽度,上右下左,图像边界的宽度  
-        outset  在边框外部绘制偏移的量,默认:0  
-        repeat  KW,重复样式 
-          stretch  拉伸,默认值
-          round    铺满 
-          repeat   重复 
+        当表格元素[如:tr,th,td]的'border-collapse'值为'collapse'时该属性无效
+      border-image:source slice|width? outset? repeat?; [简写方式] 
+        source  必选,图片资源 
+        slice   可选,图片裁切,上右下左,图像边界向内偏移 
+        width   可选,图片边框宽度,上右下左,图像边界的宽度  
+        outset  可选,在边框外部绘制偏移的量,默认:0  
+        repeat  可选,上下&左右 边框的填充形式 
         ★分别定义每条边/角  
         border-top-img     上边框
         border-right-img   右边框
@@ -1552,25 +1557,33 @@ Declaration,样式声明
         border-image: url(./source/imgs/test_1.jpg) 0 12 0 12 stretch stretch;
       ★可分别设置的样式:  
       border-image-source                 图片资源 
-        none  默认值,无背景
-        img   使用绝对或相对 url 地址指定背景图像
-      border-image-slice:(length|%){1,4}  图片裁切 
-        默认:100%  
-        Example:
-        .aoo{
-          border-image-slice: len1 len2 len3 len4;
-          // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
-          // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
-          // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
-          // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
-        }
+        none      默认值,无背景 
+        url(val)  值可为URL/数据URI 
+        CSS渐变   
+      border-image-slice:(length|%){1,4} fill?  图片裁切 
+        PS: 将图片切成9宫格,将外围格对应到边框上 
+          通过指定方向的偏移进行切分[如:上100,则从上向下偏移100px进行切割] 
+          不接受负值 
+          若切割的左右距离之和大于背景图的宽,则上下边框不显示 
+          若切割的上下距离之和大于背景图的高,则左右边框不显示 
+        %       相对于图像尺寸的百分比值,默认: 100%  
+        length  固定像素值[无单位]  
+        fill    保留边框图像的中间部分 
+        Example: 
+          .aoo{
+            border-image-slice: len1 len2 len3 len4;
+            // 使用图片从上到下的 len1 宽度,作为上边框的背景图片 
+            // 使用图片从右到左的 len2 宽度,作为右边框的背景图片 
+            // 使用图片从下到上的 len3 宽度,作为下边框的背景图片 
+            // 使用图片从左到右的 len4 宽度,作为左边框的背景图片 
+          }
       border-image-width:(length|%){1,4}  边框宽度 
       border-image-outset:length{1,4}     图片向外偏移基准位置的值,默认为0 
-      border-image-repeat: kw1 kw2;       上下、左右边框,图片填充方式 
-        kw  keyword可取值如下:
-        stretch  拉伸,默认值
-        repeat   重复
-        round    平铺 
+      border-image-repeat: KW{1,2}        上下&左右边框的填充方式 
+        PS: 一个值时同时表示 上下左右 边框 
+        stretch  拉伸,默认值 
+        repeat   重复 
+        round    铺满 
   通用样式 
     length尺寸 
       单位 
@@ -3306,3 +3319,11 @@ Accu:
   flex 布局如何指定单一一元素在水平方向上的对齐方式
 
   在文字超出部分部分使用...显示
+  
+  文本换行研究 
+    本文单词外换行 
+    文本单词内换行 
+    文本始终不换行 
+    white-space: 
+    word-break: 
+    word-wrap: 

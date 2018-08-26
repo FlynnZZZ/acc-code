@@ -1286,13 +1286,13 @@ const crypto = require('crypto')  提供加密和解密功能,基本上是对Ope
       outEncode  kw,输出的编码格式 
   pwd += decipher.final('utf8')   // 解密 
 const fs = require('fs')    文件系统模块'file system',与文件系统交互  
-  PS:fs模块可用于对系统文件及目录进行读写操作.
-    NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API.
+  PS: fs模块可用于对系统文件及目录进行读写操作 
+    NodeJS 提供一组类似 UNIX(POSIX)标准的文件操作API 
     也可使用 fs.read 和 fs.write 读写文件,
     fs.read 和 fs.write 功能类似 fs.readFile 和 fs.writeFile,
     但提供更底层的操作,实际应用中多用 fs.readFile 和 fs.writeFile,
     使用 fs.read 和 fs.write 读写文件需要使用 fs.open 打开文件和 fs.close 关闭文件.
-  模块中所有方法都有同步和异步两种形式
+  模块中所有方法都有同步和异步两种形式 
     PS:建议使用异步方法,比起同步,异步方法性能更高,速度更快,而且没有阻塞.
       异步的方法函数最后一个参数为回调函数,回调函数的第一个参数包含了错误信息 error.
     异步写法demo:有一个回调函数
@@ -1309,22 +1309,19 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
       console.log('成功删除了 /tmp/shiyanlou');
       同步方法执行完并返回结果后,才能执行后续的代码 
       而异步方法采用回调函数接收返回结果,可以立即执行后续代码 
-  const fs = require('fs') // 引入文件系统模块
-  fs.writeFile(   // 写内容到文件中 
-    <path>      // str,路径及文件名 
-    ,<data>     // str,写入的内容  
-    ,{          // 可选,用于控制写入 
-      encoding: <type>  // str,编码,默认: 'utf8' 
-      ,mode: <>         // num,模式,默认: 0666  
-      ,flag: <KW>       // 默认: "w"
-        // "w",表示重写,会清空文件之前的内容 
-        // 'a'  增加,在文件原有的基础上增加
-    }? 
-    ,function(  // 回调函数 
-      err   // 
-    ){ }
-    PS: 写入文件内容,若文件不存在会创建一个文件,但不会主动创建目录
-      写入时会先清空文件
+  .writeFile(path,data,options?, cb(err))   写内容到文件中 
+    PS: 文件不存在则创建,但不会主动创建目录; 写入时会先清空文件
+    Input: 
+      path     str,路径及文件名 
+      data     str,写入的内容  
+      options  obj,可选,用于控制写入 
+        .encoding   str,编码,默认: 'utf8' 
+        .mode       num,模式,默认: 0666  
+        .flag       操作的方式  
+          "w"  重写,默认值,会清空文件之前的内容
+          'a'  增加,在文件原有的基础上增加
+      cb(err)  操作完毕后的回调函数  
+        err   错误对象,操作成功则为: null 
     Example:
       var fs = require('fs'); // 引入fs模块
       fs.writeFile('./test2.txt', '生当做人杰', function(err) {
@@ -1350,20 +1347,16 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
         });
 
         flag传值,r代表读取文件,w代表写文件,a代表追加 
-  ) 
-  fs.writeFileSync()   // [同步]写文件 
-  fs.readFile( <path>,<options>?, fn)    // 读取文件内容 
+  .writeFileSync()                           写文件 [同步] 
+  .readFile(path,options?, cb(err,data))    读取文件内容 
     Input: 
-      path       str,读取的文件路径及文件名 
-      options    obj,可选,配置项 
-        {         
-          encoding: <str|null> // 编码,默认: null 
-          ,flag: <str>         // 默认:'r'
-        }     
-      function(err,data){ // 回调函数 
-        err     读取文件出错时触发的错误对象 
+      path         str,读取的文件路径及文件名 
+      options      obj,可选,配置项 
+        .encoding      编码,默认: null 
+        .flag          默认:'r' 
+      cb(err,data) 回调函数 
+        err    读取文件出错时触发的错误对象 
         data   buffer,从文件读取的数据 
-      }   
     Output: 
     Example:
       一个文本文件: text.txt 内容如下:
@@ -1390,35 +1383,35 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
             if (err) { throw err; }
             console.log('utf-8: ', data);
           });
-  );  
-  fs.readFileSync()     // 同步读文件  
-  fs.unlink(path,callback); 删除文件
-    Arguments:
-      path 字符串,路径及文件名
-      callback 回调函数,传入参数 err
+  .readFileSync()     // 同步读文件  
+  .unlink(path,cb(err)); 删除文件
+    Input: 
+      path    str,路径及文件名
+      cb(err) 回调函数 
     Example: 
       var file ='message.txt'
       fs.unlink(file,(err) =>{
         if (err) { throw err }
         console.log(`${file} 成功删除`)
       })
-  fs.mkdir(path,[mode],callback); 创建目录
-    PS:当创建的文件夹和已存在的文件夹重名时会报错
-    Arguments:
-      path     路径和目录名称
-      mode     可选,设置目录的权限,默认为 0777
-      callback 回调函数,传入参数 err 
+  .mkdir(path,mode,? cb(err)); 创建目录 
+    PS: 当创建的文件夹和已存在的文件夹重名时会报错
+    Input: 
+      path     str,路径和目录名称
+      mode     num,可选,设置目录的权限,默认: 0777
+      cb(err)  回调函数 
     Example:
       var fs = require('fs'); // 引入fs模块
       fs.mkdir('./newdir', function(err) { // 创建 newdir 目录
         if (err) { throw err; }
         console.log('make dir success.');
       });
-  fs.readdir(path,callback);  读取文件目录
-    Arguments:
-      path 路径和目录名称
-      callback 回调函数,传入两个参数 err files
-        files是一个数组,每个元素是此目录下的文件或文件夹的名称
+  .readdir(path,cb(err,files));  读取目录内文件&文件夹 
+    Input: 
+      path          str,路径和目录名称
+      cb(err,files) 回调函数
+        err 
+        files  arr,成员为此目录下的文件/文件夹名称
     Example:
       结果输出当前目录下的所有文件及文件夹
       var fs = require('fs'); // 引入fs模块
@@ -1426,19 +1419,24 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
         if (err) { throw err; }
         console.log(files);
       });
-  fs.rmdir(path,callback);   删除目录
-    Arguments:
-      path      文件路径.
-      callback  回调函数,没有参数.
+  .rmdir(path,cb);   删除目录 
+    Input: 
+      path     文件路径 
+      cb       回调函数,无参数 
     Example:
-    fs.rmdir("./新建文件夹",function(err){
-      if (err) {
-        console.log(err);
-      }else {
-        console.log("删除文件夹成功");
-      }
-    })
-  fs.open(path,flags[,mode],callback); 打开文件
+      fs.rmdir("./新建文件夹",function(err){
+        if (err) {
+          console.log(err);
+        }else {
+          console.log("删除文件夹成功");
+        }
+      })
+  .rename(oldPath,newPath,cb(err)) 重命名文件/文件夹 
+    Input: 
+      oldPath   str,旧文件路径 
+      newPath   str,新文件路径 
+      cb(err)   回调函数  
+  .open(path,flags[,mode],callback); 打开文件
     Arguments:
       path     文件的路径
       flags    文件打开的行为
@@ -1456,7 +1454,7 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
         ax+ 类似 'a+', 但是若文件路径存在,则文件读取追加失败.          
       mode     设置文件模式(权限),文件创建默认权限为 0666,可读写)
       callback 回调函数,带有两个参数如:callback(err, fd)      
-  fs.stat(path,callback); 获取文件信息
+  .stat(path,callback); 获取文件信息
     Arguments:
       path     文件路径.
       callback 回调函数,带有两个参数如:(err, stats), stats 是 fs.Stats 对象. 
@@ -1476,7 +1474,7 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
       stats.isFIFO(); 若是FIFO,返回true,否则返回 false.
         FIFO是UNIX中的一种特殊类型的命令管道.
       stats.isSocket(); 若是 Socket 返回 true,否则返回 false.      
-  fs.read(fd,buffer,offset,length,position,callback); 读取文件
+  .read(fd,buffer,offset,length,position,callback); 读取文件
     Arguments:
       fd      通过 fs.open() 方法返回的文件描述符.
       buffer  数据写入的缓冲区
@@ -1510,7 +1508,7 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
           准备读取文件:
           42  字节被读取
           菜鸟教程官网地址:www.runoob.com      
-  fs.close(fd,callback); 关闭文件
+  .close(fd,callback); 关闭文件
     Arguments:
       fd   通过 fs.open() 方法返回的文件描述符
       callback   回调函数,没有参数
@@ -1541,7 +1539,7 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
         准备读取文件！
         菜鸟教程官网地址:www.runoob.com
         文件关闭成功          
-  fs.ftruncate(fd,len,callback); 截取文件          
+  .ftruncate(fd,len,callback); 截取文件          
     Arguments:
       fd  通过 fs.open() 方法返回的文件描述符.
       len  文件内容截取的长度.
@@ -1580,11 +1578,7 @@ const fs = require('fs')    文件系统模块'file system',与文件系统交�
         读取相同的文件
         site:www.r
         文件关闭成功          
-  fs.rename(oldPath, newPath, fn) 
-    oldPath   str,旧文件路径 
-    newPath   str,新文件路径 
-    function(err){ }  回调函数 
-  fs.exists(path)   检测文件是否存在 
+  .exists(path)   检测文件是否存在 
   ★流相关 
   fs.createReadStream(path,options);  创建可读的stream流 
     为异步操作,不会阻塞后续代码执行 

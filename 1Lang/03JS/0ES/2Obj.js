@@ -448,7 +448,7 @@ Function,函数基础类,ES中所有函数的基类
           return ;
           2;
         }
-    特殊形式的函数及调用  
+    函数调用 
       foo()  直接调用 
       obj.foo() 方法调用 
       new Foo() 构造器调用 
@@ -469,6 +469,7 @@ Function,函数基础类,ES中所有函数的基类
         (function(a,b){
           console.log(a+b);
         })(2,3); 
+    特殊形式的函数 
       全局函数 [moIn window]
       匿名函数: 未命名的函数 
         单独定义匿名函数程序报错
@@ -511,6 +512,20 @@ Function,函数基础类,ES中所有函数的基类
             }
             var result = []
             findAll(6,result)
+        Feature: 
+          递归点后续代码的执行逻辑 
+            顺序执行,遇到循环则进入循环内进行执行 
+            Example: 
+              var counter = 0 
+              var recursionFn = function(){
+                console.log('============');  // 将顺序输出11次 
+                if ( counter < 10 ) {  // 终止条件 
+                  counter++ 
+                  recursionFn()
+                  console.log(counter);       // 然后再输出11次: 10 
+                }
+              }
+              recursionFn()
     惰性载入函数: 改变函数自身,以优化多次在相同条件下执行的函数 
       Example: 
       首次执行返回两参数的和,后续返回两参数的积 

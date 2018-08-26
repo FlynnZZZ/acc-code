@@ -85,6 +85,18 @@ Vue.component()  全局组件
     Vue.component('hello-world',{
       template: '#aoo'
     })
+'inline-template'内联模版 
+  父组件内,在子组件标签上添加'inline-template'属性,
+  子组件标签内的HTML[只能有一个根节点]将被作为子组件的模版,而非作为分发内容 
+  但'inline-template'让模板的作用域难以理解 
+  最佳实践是使用 template 选项在组件内定义模板或在'.vue'文件中使用 template 元素 
+  Example: 
+    <cpt-child inline-template>
+      <div>
+        <p>These are compiled as the components own template.</p>
+        <p>Not parents transclusion content.</p>
+      </div>
+    </cpt-child>
 '.vue'           单文件组件 
   PS: 一个'.vue'文件就是一个组件,将'HTML''CSS''JS'组装起来,方便开发、复用和维护; 
     组件的通信方式同样使用'props'和'event' 
@@ -230,6 +242,12 @@ components: {    // vue实例中注册引入
           }
         },
       });
+父组件内直接定义子组件根节点的属性 
+  PS: 可直接传入组件,而不需要定义相应的'prop' 
+    一般的,传递给组件的值会覆盖组件本身设定的值,
+    但'class'和'style'这两个特性的值都会做合并'merge'操作 
+  Example: 
+    <cpt-aoo style="color:red;"></cpt-aoo> // 在子组件中会直接生效 
 'Props'&'Event'组件通信 
   PS: 组件实例的作用域是孤立的,不能在子组件的模板内直接引用父组件的数据 
   'props down'父组件向子组件通信 
@@ -333,12 +351,6 @@ components: {    // vue实例中注册引入
       ,子组件中修改[而非覆盖]'props'时会改变父组件中的值 
       ,同样的在父组件中修改传入的值也会改变子组件中的'props'
       ,从而达到'双向通信',维持共同的一份数据 
-父组件内直接定义子组件根节点的属性 
-  PS: 可直接传入组件,而不需要定义相应的'prop' 
-    一般的,传递给组件的值会覆盖组件本身设定的值,
-    但'class'和'style'这两个特性的值都会做合并'merge'操作 
-  Example: 
-    <cpt-aoo style="color:red;"></cpt-aoo> // 在子组件中会直接生效 
 'Slot'父子组件模版通信 
   PS: 父组件中'slot'的值和子组件中'name'的值进行匹配,相等则替换; 
     可以有一个匿名slot,为默认slot,作为找不到匹配的内容片段的备用插槽
@@ -453,18 +465,22 @@ components: {    // vue实例中注册引入
         }
       });    
   slot-scope=""  作用域插槽  
-'inline-template'内联模版 
-  父组件内,在子组件标签上添加'inline-template'属性,
-  子组件标签内的HTML[只能有一个根节点]将被作为子组件的模版,而非作为分发内容 
-  但'inline-template'让模板的作用域难以理解 
-  最佳实践是使用 template 选项在组件内定义模板或在'.vue'文件中使用 template 元素 
-  Example: 
-    <cpt-child inline-template>
-      <div>
-        <p>These are compiled as the components own template.</p>
-        <p>Not parents transclusion content.</p>
+组件间引用 
+  ref="aoo"&vm.$refs.aoo,子组件索引 
+    PS: 使用'ref'属性为子组件指定索引ID,便于在父组件中直接访问子组件; 
+    Feature: 
+      $refs 只在组件渲染完成后才填充 
+        需在父组件'mounted'后才能获取到数据
+        所以避免在父组件的模板或计算属性中使用
+      $refs 是非响应式的,避免在computed中使用  
+        仅仅作为一个直接访问子组件的应急方案 
+      当 ref 和 v-for 一起使用时,ref 是一个数组或对象,包含相应的子组件  
+    Example: 
+      <div id="parent">
+        <cpt-aoo ref="aaa"></cpt-aoo>
       </div>
-    </cpt-child>
+      var parent = new Vue({ el: '#parent' })
+      var child = parent.$refs.aaa // 访问子组件
 'v-once'对低开销的静态组件使用,提高渲染速度 
   当组件中包含大量静态内容时,可使用'v-once'将渲染结果缓存起来 
   <template id="cpt1">
@@ -476,20 +492,6 @@ components: {    // vue实例中注册引入
   Vue.component('cpt-static',{
     template: '#cpt1'
   })    
-ref="aoo"&vm.$refs.aoo,子组件索引 
-  PS: 使用'ref'属性为子组件指定索引ID,便于在父组件中直接访问子组件;
-    仅仅作为一个直接访问子组件的应急方案 
-    当 ref 和 v-for 一起使用时,ref 是一个数组或对象,包含相应的子组件
-  $refs 只在组件渲染完成后才填充 
-    需在父组件'mounted'后才能获取到数据
-    所以避免在父组件的模板或计算属性中使用
-  $refs 是非响应式的? 
-  Example: 
-    <div id="parent">
-      <cpt-aoo ref="aaa"></cpt-aoo>
-    </div>
-    var parent = new Vue({ el: '#parent' })
-    var child = parent.$refs.aaa // 访问子组件
 异步组件 
   PS: Vuejs允许将组件定义为一个工厂函数,动态地解析组件的定义 
   只在组件需要渲染时触发工厂函数,并且把结果缓存起来,用于后面的再次渲染 

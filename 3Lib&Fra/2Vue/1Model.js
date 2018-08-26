@@ -134,7 +134,7 @@
             }
           }
         })
-Vue.xxx: 静态属性/方法 
+◆Vue.xxx: 静态属性/方法 
   .config  Vue的全局配置对象,可在启动应用前修改配置  
     .devtools  bol,读写,是否允许'vue-devtools'检查代码 
       开发版本默认为 true,生产版本默认为 false 
@@ -180,7 +180,7 @@ Vue.xxx: 静态属性/方法
     })
   .version   str,VueJS版本号 
     console.log(Vue.version); // 2.3.0
-'ViewModel'new Vue({   // Vue实例,'ViewModel'简称vm  
+◆'ViewModel'Vue实例,new Vue({   // 'ViewModel'简称vm  
   PS: VueJS应用都是通过构造函数Vue创建一个Vue的根实例启动的; 
     所有的VueJS组件其实都是被扩展的Vue实例;
     在实例选项中,方法里的'this'即表示为'vm';
@@ -586,9 +586,39 @@ Vue.xxx: 静态属性/方法
   ,comments: bol  // 是否保留且渲染模板中的HTML注释,默认：false  '2.4.0+'
     // 该选项只在完整构建版本中的浏览器内编译时可用。
 })  
-vm.xxx.实例属性/方法/事件 
+◆vm.xxx.实例属性/方法/事件 
   PS: .$xx [带有前缀$的]实例方法/属性,在配置对象中使用'this'代替'vm' 
-  实例属性 
+数据 
+  .$data    Vue实例观察的数据对象 
+  .$props   当前组件接收到的props对象  '2.2.0+' 
+    <child-a v-bind="$props"></child-a> 
+    // 通过 $props 将父组件的 props 一起传给子组件 
+DOM 
+  .$el      HTMLElement,只读,Vue实例使用的根DOM元素 
+组件引用 
+  PS: 可读写其'data'/'computed'等数据、可调用其方法、... 
+  .$root       只读,当前组件树的根Vue实例,若当前实例无父实例,则是其自己 
+  .$parent     只读,父实例[若存在的话]
+  .$children   只读,当前实例的直接子组件 
+    $children 并不保证顺序,也不是响应式的 
+  .$refs.xxx   只读,包含已注册过'ref'的所有子组件的对象 
+    Example: 
+      vm.$refs.aoo 表示 <cpt-a ref="aoo"> 子组件 
+事件 
+  .$on('event-name'/arr,foo)     监听事件,触发回调   [数组只在'2.2.0+'中支持] 
+    监听当前实例上的自定义事件。事件可以由 vm.$emit() 触发
+    回调函数会接收所有传入事件触发函数的额外参数。
+    vm.$on('hook:<hookName>', function () { // 监听生命周期并指定响应  
+      // 
+    })
+  .$once('event-name',foo)  监听事件,但只触发一次,在第一次触发之后移除监听器 
+  .$off(['event-name'/arr,foo])   移除自定义事件监听器     [只在'2.2.2+'支持数组]
+    如果没有提供参数,则移除所有的事件监听器；
+    如果只提供了事件,则移除该事件所有的监听器；
+    如果同时提供了事件与回调,则只移除这个回调的监听器。
+  .$emit('event-name',data1 ,...?)  触发事件,传递数据 
+    附加参数都会传给监听器回调 
+其他 
   .$options 只读,当前Vue实例的初始化选项 
     Example: 在选项中包含自定义属性时 
     new Vue({
@@ -597,23 +627,6 @@ vm.xxx.实例属性/方法/事件
         console.log(this.$options.myOption) //  123
       }
     })
-  .$el      HTMLElement,只读,Vue实例使用的根DOM元素 
-  .$data    Vue实例观察的数据对象 
-  .$props   当前组件接收到的props对象  '2.2.0+' 
-    <child-a v-bind="$props"></child-a> 
-    // 通过 $props 将父组件的 props 一起传给子组件 
-  ★关系组件实例访问 
-    可读写其'data'/'computed'等数据
-    可调用其方法 
-    ... 
-  .$root       只读,当前组件树的根Vue实例,若当前实例无父实例,则是其自己 
-  .$parent     只读,父实例[若存在的话]
-  .$children   只读,当前实例的直接子组件 
-    $children 并不保证顺序,也不是响应式的 
-  .$refs.xxx   只读,包含已注册过'ref'的所有子组件的对象 
-    Example: 
-      vm.$refs.aoo 表示 <cpt-a ref="aoo"> 子组件 
-  ★
   .$slots      只读,用来访问被插槽分发的内容 
     每个具名插槽 有其相应的属性 (例如：slot="foo" 中的内容将会在 vm.$slots.foo 中被找到)。
     default 属性包括了所有没有被包含在具名插槽中的节点。 
@@ -625,7 +638,7 @@ vm.xxx.实例属性/方法/事件
     并且可以通过 v-bind="$attrs" 传入内部组件——在创建更高层次的组件时非常有用。
   .$listeners   只读,包含了父作用域中的[不含'.native'修饰器的]v-on事件监听器 
     它可以通过 v-on="$listeners" 传入内部组件——在创建更高层次的组件时非常有用 
-  实例方法
+  实例方法 
   .$watch( // 监控元素改变的方法 
     'key'                     // data对象中的属性,一个表达式或计算属性函数 
       表达式只接受监督的键路径。对于更复杂的表达式,用一个函数取代。
@@ -668,19 +681,6 @@ vm.xxx.实例属性/方法/事件
       })
   .$set(obj/arr,key/idx,val) 返回设置的值,效果同Vue.set()  
   .$delete(obj/arr,key/idx)  效果同Vue.delete()  
-  .$on('event-name'/arr,foo)     监听事件,触发回调   [数组只在'2.2.0+'中支持] 
-    监听当前实例上的自定义事件。事件可以由 vm.$emit() 触发
-    回调函数会接收所有传入事件触发函数的额外参数。
-    this.$on('hook:beforeDestroy', function () { // 监听生命周期并指定响应  
-      // 
-    })
-  .$once('event-name',foo)  监听事件,但只触发一次,在第一次触发之后移除监听器 
-  .$off(['event-name'/arr,foo])   移除自定义事件监听器     [只在'2.2.2+'支持数组]
-    如果没有提供参数,则移除所有的事件监听器；
-    如果只提供了事件,则移除该事件所有的监听器；
-    如果同时提供了事件与回调,则只移除这个回调的监听器。
-  .$emit('event-name',data1 ,...?)  触发事件,传递数据 
-    附加参数都会传给监听器回调 
   .$mount(elem/selector)    手动编译Vue实例,返回实例自身 
     如果Vue实例在实例化时没有收到'el'选项,则它处于'未挂载'状态,没有关联的DOM元素。
     可以使用 vm.$mount() 手动地挂载一个未挂载的实例。

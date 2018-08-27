@@ -1301,181 +1301,124 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
         filter : grayscale(0);
       }
 变换&过渡&动画  
-  transform,变换处理 [CSS3][IE9+] 
-    PS: IE9+支持2D变换,IE10+支持3D变换;只对block元素生效;
-    transform-origin: X Y Z;  定义变换原点,默认:50% 50% 0 
-      PS:搭配属性,用于定义运动点;默认为盒子的中心为运动点 
-      x   X方向的值
-        'center'[默认值]  
-        'left'
-        'right'
-        %
-        pixel
-      y   Y方向的值,可选,只有一个参数时只在水平方向上移动 
-        'center'[默认值]  
-        'top'
-        'bottom'
-        %
-        pixel
-    transform: translateX(len);   水平方向平移 
-    transform: translateY(len);   垂直方向平移 
-    transform: translate(x,y?);   2D平移 
-      X  x轴平移距离
-      Y  可选,y轴平移距离,默认:0
-      Example:
-        <div class="aoo"> 123123 </div>
-        .aoo{
-          width: 50px;
-          height: 50px;
-          background-color: #b9e4e7;
-          transition:all 1s ease 0s;
-        }
-        .aoo:hover{
-          transform:translate(30px);
-        }
-    transform: rotate(<num>deg/turn);     2D[顺时针]旋转 
-      deg  css3中的角度单位 
-      turn  
-    transform: rotateX(<num>deg);         以x轴3D旋转 
-    transform: rotateY(<num>deg);         以y轴3D旋转 
-    transform: rotate3d(x,y,z,<num>deg);  3D旋转 
-      PS:运动量由指定的角度定义,若为正,运动将为顺时针,若为负,则为逆时针;
-        在3D空间之中,旋转有3个自由维度,描述了旋转轴。旋转轴由一组 [x,y,z] 矢量定义,
-        并且通过变换源点传递（即通过 transform-origin CSS 属性定义）。
-        若这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化。
+  ◆transform: way() ...; 变换处理 [CSS3][IE9+]  
+    PS: IE9+支持2D变换,IE10+支持3D变换;只对block元素生效; 
+    ◆平移
+    translate3d(lenX,lenY,lenZ); 3D位移 
+    translateX(len);   X轴方向平移 
+    translateY(len);   Y轴方向平移 
+    translateZ(len);   Z轴方向平移 
+    translate(lenX,lenY?);   2D平移 
+      lenX  x轴平移距离
+      lenY  y轴平移距离,可选,默认:0
+      Example: transform: translate(30px); 
+    ◆旋转
+    rotate3d(x,y,z,angle);  3D旋转 
+      PS: 在3D空间中,旋转有3个自由维度,旋转轴由一组 [x,y,z] 矢量定义,
+        若这些矢量被赋予非标准值,即3个坐标值的平方和不等于1时,它将会被内部隐式标准化, 
         非标准矢量,例如空值和 [0,0,0],将不起作用,但不会影响其他CSS属性的效果;
-      x   num,表示旋转轴X坐标方向的矢量 
-      y   num,表示旋转轴Y坐标方向的矢量 
-      z   num类型,表示旋转轴Z坐标方向的矢量 
-      XX  num类型,表示旋转角度,正的角度值表示顺时针旋转,负值表示逆时针旋转
-      Example: 
-      transform: rotate3d(1,0,0,60deg);
-    transform: scaleX(num);   仅x轴缩放 
-    transform: scaleY(num);   仅y轴缩放 
-    transform: scale(X,Y?);   2D缩放 
-      X   x轴缩放倍数,不可为负
-      Y   y轴缩放倍数,可选,默认等于x轴,不可为负
-    transform: skewX(<num>deg);            水平方向变形 
-    transform: skewY(<num>deg);            垂直方向变形 
-    transform: skew(<numX>deg,<numY>deg?); 变形 
-      numX  X轴变形角度
-      numY  可选,Y轴变形角度,默认:0,即只在水平方向上倾斜
-    transform: matrix(a,b,c,d,e,f);  混合变形 
-    同时使用多个变形时,多个变形方法间使用空格连接[只声明一个'transform'] 
-      transform:方法1 方法2...;
-  transition,指定变化的过渡效果 [CSS3][IE10+] 
+      x      num,旋转轴X坐标方向的矢量 
+      y      num,旋转轴Y坐标方向的矢量 
+      z      num,旋转轴Z坐标方向的矢量 
+      angle  旋转角度,单位:deg,正值表示顺时针旋转,负值表示逆时针旋转
+      Example: transform: rotate3d(12,5,23,60deg);
+    rotateX(angle);         以x轴3D旋转,等价于:rotate3d(1,0,0,angle) 
+    rotateY(angle);         以y轴3D旋转,等价于:rotate3d(0,1,0,angle) 
+    rotateZ(angle);         以z轴3D旋转,等价于:rotate3d(0,0,1,angle) 
+    rotate(angle/turn);     2D旋转,等价于:rotate3d(0,0,1,angle)  
+      angle  旋转角度,单位:deg[css3中的角度单位] 
+      turn  
+    ◆缩放 
+      PS: scaleZ() 和 scale3d() 函数单独使用时,Z轴的缩放没有没有任何效果,
+        需配合其他转换函数一起使用才会有效果 
+    scale3d(numX,numY,numZ) 3D缩放   
+    scaleX(num);   仅x轴缩放,等价于:scale3d(numX,1,1)  
+    scaleY(num);   仅y轴缩放,等价于:scale3d(1,numY,1)  
+    scaleZ(num);   仅z轴缩放,等价于:scale3d(1,1,numZ) 
+    scale(numX,numY?);      2D缩放 
+      PS: 负值表示在该方向进行翻转 
+      numX   x轴缩放倍数 
+      numY   y轴缩放倍数,可选,默认等于numX 
+    ◆变形   
+    skew(angleX,angleY?); 变形 
+      angleX  X轴变形角度
+      angleY  Y轴变形角度,可选,默认:0,即只在水平方向上倾斜
+    skewX(angle);         水平方向变形 
+    skewY(angle);         垂直方向变形 
+    ◆混合变形    
+    matrix(a,b,c,d,e,f);  定义变换 
+    Example: 
+      transform: translate(10px) scale(-2); 
+  transform-origin: X Y Z;  定义变换原点,默认: 
+    PS: 搭配属性,用于定义运动点;默认为盒子的中心 
+    X   X轴方向值 
+      %       
+      len     
+    Y   Y轴方向值,可选,只有一个参数时只在水平方向上移动 
+      %
+      pixel
+    Z   Z轴方向值
+    center   等价于 50% 50% 0,默认值  
+    bottom   等价于 0 50% 0 
+    top      
+    left     
+    right    
+  transform-style: KW;   定义子元素3D空间的显示 
+    flat         默认值,子元素不保留其3D位置  
+    preserve-3d  子元素保留其3D位置 
+  perspective: len;   定义3D元素的视距   
+    none 默认值,等价于:0 
+    len  单位px 
+  perspective-origin: ;   定义3D元素的底部位置   
+  backface-visibility: ;   元素在未面对屏幕时是否可见    
+  ◆transition: property? duration accelerate? delay?; 指定变化的过渡效果 [CSS3][IE10+] 
     PS:使css的属性值在一定时间内平滑过渡,当指定的CSS属性改变时,过渡效果开始; 
       并非所有的CSS属性都支持transition[如 ?];
       过渡需要事件触发[如:hover]
-    transition-property: kw         指定参与过渡的属性 
-      规定应用过渡效果的css属性的名称
-      all       值所有属性都将获得过渡效果,默认值 
-      none      没有属性会获得过渡效果
-      p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
-    transition-duration: <num>s     过渡持续时间,单位s或ms 
-    transition-timing-function: kw  速度变化 
-      ease        慢速开始中间快速慢速结束,默认值 
-        cubic-bezier(0.25,0.1,0.25,1)
-      linear      匀速 
-        cubic-bezier(0,0,1,1) 
-      ease-in     慢速开始匀速结束 
-        cubic-bezier(0.42,0,1,1)
-      ease-out    匀速开始慢速结束 
-        cubic-bezier(0,0,0.58,1)
-      ease-in-out 慢速开始中间匀速慢速结束 
-        cubic-bezier(0.42,0,0.58,1)
-      cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
-    transition-delay: <num>s        延迟时间,单位s或ms 
-      0  默认值 
-    transition: property? duration accelerate? delay?; [简写方式] 
-      property   kw,可选,指定变化的属性,默认:所有属性 
-        all   所有属性 
-      duration   <num>s,过渡持续时间 
-      accelerate kw,可选,过渡的速度变化,默认:ease   
-      delay      <num>s,可选,开始执行的延迟时间,默认:0 
-      同时指定多个动画用逗号分隔 
-        transition: width 2s,height 2s; 
+    property    kw,可选,指定变化的属性,默认:所有属性 
+      all   所有属性 
+    duration    <num>s,过渡持续时间 
+    accelerate  kw,可选,过渡的速度变化,默认:ease   
+    delay       <num>s,可选,开始执行的延迟时间,默认:0 
+    同时指定多个动画用逗号分隔 
+      transition: width 2s,height 2s; 
     Example: 
       <div id="aoo">  </div>
       .aoo { 
         width:100px; height:100px; background:blue;
         transition: width 2s;
-        // -webkit-transition:width 2s; /* Safari and Chrome */
-        // -moz-transition:width 2s;    /* Firefox 4 */
-        // -o-transition:width 2s;      /* Opera */
       }
       .aoo:hover { width:300px; }
-  animations,自定义关键帧动画 [CSS3][IE10+]  
+  transition-property: KW;         指定参与过渡的属性 
+    规定应用过渡效果的css属性的名称
+    all       值所有属性都将获得过渡效果,默认值 
+    none      没有属性会获得过渡效果
+    p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
+  transition-duration: <num>s;     过渡持续时间,单位s或ms 
+  transition-timing-function: KW;  速度变化 
+    ease        慢速开始中间快速慢速结束,默认值 
+      cubic-bezier(0.25,0.1,0.25,1)
+    linear      匀速 
+      cubic-bezier(0,0,1,1) 
+    ease-in     慢速开始匀速结束 
+      cubic-bezier(0.42,0,1,1)
+    ease-out    匀速开始慢速结束 
+      cubic-bezier(0,0,0.58,1)
+    ease-in-out 慢速开始中间匀速慢速结束 
+      cubic-bezier(0.42,0,0.58,1)
+    cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
+  transition-delay: <num>s;        延迟时间,单位s或ms 
+    0  默认值 
+  ◆animation: name duration accelerate delay counts direction pause; 自定义关键帧动画 [CSS3][IE10+]  
     PS: 通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果 
-    animation: name duration accelerate delay counts direction pause; 简写方式 
-      name       str,关键帧名称 
-      duration   <num>s,一个动画周期的时间[单位s或ms,0则无动画] 
-      accelerate kw,动画速度曲线,默认:ease 
-      delay      <num>s,动画开始前的延迟,默认:0  
-      counts     num,动画执行的次数,默认:1  
-      direction  kw,下一周期播放顺序,默认:normal  
-      pause      kw,是否暂停动画,默认:running 
-    ◆分别定义
-    animation-name: str            关键帧名称 
-      keyframename 自定义的关键帧名称
-      none          无动画效果[可以用于覆盖来自于级联的动画] 
-    animation-duration: <num>s     持续时间,默认为0无动画效果,单位s或ms  
-    animation-timing-function: kw  速度曲线 
-      ease        慢速开始中间快速慢速结束,默认值 
-        cubic-bezier(0.25,0.1,0.25,1.0) 
-      linear      匀速 
-        cubic-bezier(0.0,0.0,1.0,1.0)
-      ease-in     慢速开始匀速结束 
-        cubic-bezier(0.42,0,1.0,1.0)
-      ease-out    匀速开始慢速结束 
-        cubic-bezier(0,0,0.58,1.0)
-      ease-in-out 慢速开始中间匀速慢速结束 
-        cubic-bezier(0.42,0,0.58,1.0)
-      cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
-    animation-delay: <num>s        延迟,默认:0 
-    animation-iteration-count: kw  执行次数,默认:1  
-      num      自定义次数 
-      infinite 无限次
-    animation-direction: kw        下一周期播放顺序 
-      normal      默认,首次正序运行,每周期结束从头到尾运行
-      alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
-        比如 ease-in 反向时成为ease-out
-      reverse     首次反向运行,每周期结束动画由尾到头运行 
-      alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
-    animation-play-state: kw       暂停或播放状态 
-      通过该属性可以灵活的控制动画的播放状态
-      running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
-      paused   暂停,暂停时动画会保持暂停时的状态
-    animation-fill-mode: kw        动画播放时间外[延时时间和动画结束后]的状态 
-      none      不改变默认行为,默认值 
-      backwards 动画执行前的状态,即延时时间内[在第一个关键帧中定义] 
-      forwards  动画完成后保持最后CSS样式不变[在最后一个关键帧中定义] 
-        最后样式取决于'animation-direction'和'animation-iteration-count'
-      both      向前和向后填充模式都被应用 
-    @keyframes  创建关键帧 
-      PS:以百分比%规定动画阶段;"from"和"to"等价于0%[动画开始]和100%[动画结束];
-        为了获得最佳的浏览器支持,应始终定义0%和100%;  
-        @-webkit-keyframes 兼容写法
-      @keyframes name{ 
-        percent {
-          styleCodes
-        }
-        ....
-      }   
-      Example:
-        @keyframes mymove {
-          from {top:0px; background:red; width:100px;}
-          25%  {top:200px;}
-          50%  {top:100px;}
-          75%  {top:200px;}
-          100% {top:200px; background:yellow; width:300px;} 
-        }
-      可以把多个状态写在一起,使用逗号分割
-        @keyframes pound {
-          from,to { transform: none; }
-          50% { transform: scale(1.2); } 
-        }
-    Example: : 
+    name       str,关键帧名称 
+    duration   <num>s,一个动画周期的时间[单位s或ms,0则无动画] 
+    accelerate kw,动画速度曲线,默认:ease 
+    delay      <num>s,动画开始前的延迟,默认:0  
+    counts     num,动画执行的次数,默认:1  
+    direction  kw,下一周期播放顺序,默认:normal  
+    pause      kw,是否暂停动画,默认:running 
+    Example: 
       <div></div>
       div {
         width:100px; height:100px; background:red; position:relative;
@@ -1498,6 +1441,65 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
       //   75%  {top:200px;}
       //   100% {top:200px; background:yellow; width:300px;} 
       // }
+  animation-name: str            关键帧名称 
+    keyframename 自定义的关键帧名称
+    none          无动画效果[可以用于覆盖来自于级联的动画] 
+  animation-duration: <num>s     持续时间,默认为0无动画效果,单位s或ms  
+  animation-timing-function: kw  速度曲线 
+    ease        慢速开始中间快速慢速结束,默认值 
+      cubic-bezier(0.25,0.1,0.25,1.0) 
+    linear      匀速 
+      cubic-bezier(0.0,0.0,1.0,1.0)
+    ease-in     慢速开始匀速结束 
+      cubic-bezier(0.42,0,1.0,1.0)
+    ease-out    匀速开始慢速结束 
+      cubic-bezier(0,0,0.58,1.0)
+    ease-in-out 慢速开始中间匀速慢速结束 
+      cubic-bezier(0.42,0,0.58,1.0)
+    cubic-bezier(n,n,n,n) 自定义cubic-bezier函数 [取值为0-1] 
+  animation-delay: <num>s        延迟,默认:0 
+  animation-iteration-count: kw  执行次数,默认:1  
+    num      自定义次数 
+    infinite 无限次
+  animation-direction: kw        下一周期播放顺序 
+    normal      默认,首次正序运行,每周期结束从头到尾运行
+    alternate   首次正序运行,后续动画交替运行,时间功能函数也相应的调整
+      比如 ease-in 反向时成为ease-out
+    reverse     首次反向运行,每周期结束动画由尾到头运行 
+    alternate-reverse 首次反向运行,后续动画交替运行,时间功能函数也相应的调整
+  animation-play-state: kw       暂停或播放状态 
+    通过该属性可以灵活的控制动画的播放状态
+    running  播放,由暂停到播放时动画会接着暂停的状态开始运行,默认值 
+    paused   暂停,暂停时动画会保持暂停时的状态
+  animation-fill-mode: kw        动画播放时间外[延时时间和动画结束后]的状态 
+    none      不改变默认行为,默认值 
+    backwards 动画执行前的状态,即延时时间内[在第一个关键帧中定义] 
+    forwards  动画完成后保持最后CSS样式不变[在最后一个关键帧中定义] 
+      最后样式取决于'animation-direction'和'animation-iteration-count'
+    both      向前和向后填充模式都被应用 
+  @keyframes  创建关键帧 
+    PS:以百分比%规定动画阶段;"from"和"to"等价于0%[动画开始]和100%[动画结束];
+      为了获得最佳的浏览器支持,应始终定义0%和100%;  
+      @-webkit-keyframes 兼容写法
+    @keyframes name{ 
+      percent {
+        styleCodes
+      }
+      ....
+    }   
+    Example:
+      @keyframes mymove {
+        from {top:0px; background:red; width:100px;}
+        25%  {top:200px;}
+        50%  {top:100px;}
+        75%  {top:200px;}
+        100% {top:200px; background:yellow; width:300px;} 
+      }
+    可以把多个状态写在一起,使用逗号分割
+      @keyframes pound {
+        from,to { transform: none; }
+        50% { transform: scale(1.2); } 
+      }
 盒子相关 
   box-sizing: KW; 盒模型定义类型 [CSS3] 
     content-box  默认值,width height 为content的宽、高尺寸

@@ -1,7 +1,8 @@
 window,全局对象 
   Member: 
     ★延时调用&间时调用&动画调用API 
-      'setTimeout'、'setInterval'最大延时间隔为 Math.pow(2,23)-1,超过该值则相当于 0  
+      'setTimeout'、'setInterval'延时使用的int32位进行存储,
+      最大值为 Math.pow(2,31)-1,约 24.8 天超过该值则相当于 0  
       JS引擎单线程,异步事件排队等待被执行,不会在同时执行两条命令 
     setTimeout(foo/str,num [,arg1,arg2...])  numId,指定时间后回调  
       PS: 实际执行的时间大于等于定时器设置的值  

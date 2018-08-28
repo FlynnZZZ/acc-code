@@ -427,13 +427,42 @@ Function,函数基础类,ES中所有函数的基类
         var anotherGuySayHello =person.sayHello.bind({ name : 'b', job : '2' })
         anotherGuySayHello()  //"b2"
   Feature: 
-    函数传参 
+    函数传参特点:  
       传入的参数不固定,多则舍去,少则用undefined来补充 
         function foo(){ 
           console.log(arguments[0],arguments[1]); 
         };
         foo(1); // 1 undefined
       参数按共享传递 [moIn 'Evaluation Strategy'] 
+    默认参数: 定义函数时将参数赋默认值 [ES6]   
+      执行函数时,对应参数为 undefined,则使用默认值,否则使用传入的值 
+        function person(age = 12){
+          console.log(age);
+        }
+        person();          // 12
+        person(undefined); // 12
+        person(0);         // 0
+        person(null);      // null
+    ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组[ES6] 
+      在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
+        function sum(result,...values){ //求和函数,得到的结果赋值到result 
+          console.log(values); // [1,2,3,4]
+          values.forEach(function (v,i) { //进行求和
+            result += v; //求和得到的结果存到result
+          });
+          console.log(result); // 10
+        }
+        var res = 0; // 存储求和结果的变量res
+        sum(res,1,2,3,4);  //调用sum函数
+      rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
+        //错误写法
+        function sum(result, ...values, mult){
+          //rest参数...values后面还有一个参数mult
+        }
+        //正确的写法
+        function sum(result, mult, ...values){
+          //rest参数...values放在最后
+        }
     return 函数返回值 
       PS: 函数执行到'return'后直接返回值,后面代码不再执行 
       使用'return'关键字返回值,若没有return默认返回'undefined' 
@@ -448,6 +477,23 @@ Function,函数基础类,ES中所有函数的基类
           return ;
           2;
         }
+    函数柯里化: 科里化后的[多参数]函数可固化前若干个参数  
+      function curry (foo){ // 创建柯里化函数的通用方式
+        // 获取传入额外的参数组成的数组 
+        var args1 = Array.prototype.slice.call(arguments,1) 
+        return function(){
+          // 类数组数组化 
+          var args2 = Array.prototype.slice.call(arguments) 
+          var args = args1.concat(args2) 
+          return foo.apply(null,args);
+        };
+      }
+      var foo = function(num1,num2){
+        return num1+num2;
+      }
+      var goo = curry(foo,3); // 
+      console.log(goo(4)); // 7 
+    不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
     函数调用 
       foo()  直接调用 
       obj.foo() 方法调用 
@@ -469,63 +515,84 @@ Function,函数基础类,ES中所有函数的基类
         (function(a,b){
           console.log(a+b);
         })(2,3); 
-    特殊形式的函数 
-      全局函数 [moIn window]
-      匿名函数: 未命名的函数 
-        单独定义匿名函数程序报错
-        function(){ return "abc"; } // 报错
-      构造函数: 用于实例化对象[构造函数及其prototype一起相当于类] 
-        将首字母大写[约定写法],用于区别其他的一般函数,
-        任何函数都可通过new来调用作为构造函数;若不用new来调用,即为执行函数;
-      高阶函数: 在参数中传递函数的函数 
-        函数也是对象可以向其他值一样作为参数传递
-      递归: 一个函数调用本身或者两个函数相互调用 
-        PS: 递归必须要定义终止条件,否则无限递归 
-          一般递归效率较低,但处理探测或者处理多分支的问题,则效率较高 
-        Example:
-          求斐波那契数 
-            斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
-            var fib = function(n) {
-              // 若 n 是 1 或者 2 则返回 1 作为结果
-              // 这是递归终止的条件, 必须要有, 否则无限递归了
-              if(n == 1 || n == 2) {
-                return 1
-              } 
-              else {
-                // 若 n 不为 1 和 2, 返回 fib(n-2) + fib(n-1)
-                // 这时候 fib(n-2) fib(n-1) 需要计算
-                // 于是代码进入下一重世界开始计算
-                return fib(n-2) + fib(n-1)
+    obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
+  Expand: 
+    ◆特殊形式的函数:  
+    全局函数 [moIn window]
+    匿名函数: 未命名的函数 
+      单独定义匿名函数程序报错
+      function(){ return "abc"; } // 报错
+    构造函数: 用于实例化对象[构造函数及其prototype一起相当于类] 
+      将首字母大写[约定写法],用于区别其他的一般函数,
+      任何函数都可通过new来调用作为构造函数;若不用new来调用,即为执行函数;
+    高阶函数: 在参数中传递函数的函数 
+      PS: 函数也是对象可向其他值一样作为参数传递 
+      实现参数动态传递 
+        let numObj = { key: 1 } 
+        let run1 = function(arg){
+          setInterval(function(){ 
+            console.log('run1',arg) 
+          },666)
+        }
+        let run2 = function(argFn){
+          setInterval(function(){ 
+            console.log('run2',argFn()) 
+          },666)
+        }
+        run1(numObj);
+        run2(function(){ return numObj });
+        setTimeout(function(){
+          console.log('change');
+          // numObj.key = 2 // JS对象按引用传递,默认参数动态了 
+          numObj = {}       
+        },2000)
+    递归: 一个函数调用本身或者两个函数相互调用 
+      PS: 递归必须要定义终止条件,否则无限递归 
+        一般递归效率较低,但处理探测或者处理多分支的问题,则效率较高 
+      Example:
+        求斐波那契数 
+          斐波那契函数的定义:fib(n)=fib(n-2)+fib(n-1),fib(1)=1,fib(2)=1
+          var fib = function(n) {
+            // 若 n 是 1 或者 2 则返回 1 作为结果
+            // 这是递归终止的条件, 必须要有, 否则无限递归了
+            if(n == 1 || n == 2) {
+              return 1
+            } 
+            else {
+              // 若 n 不为 1 和 2, 返回 fib(n-2) + fib(n-1)
+              // 这时候 fib(n-2) fib(n-1) 需要计算
+              // 于是代码进入下一重世界开始计算
+              return fib(n-2) + fib(n-1)
+            }
+          }
+        查找数字的所有因子 
+          如: 6=1*2*3 
+          思路: 从最小的因子开始,剩下部分再递归
+          function findAll(num,resultArr){
+            for (var i = 2; i <= num; i++) {
+              if (num % i == 0) {
+                resultArr.push(i) 
+                findAll(num / i,resultArr)
+                return ;  // 在找到第一个最小因子后结束递归,否则会找到其他多余的因子  
               }
             }
-          查找数字的所有因子 
-            如: 6=1*2*3 
-            思路: 从最小的因子开始,剩下部分再递归
-            function findAll(num,resultArr){
-              for (var i = 2; i <= num; i++) {
-                if (num % i == 0) {
-                  resultArr.push(i) 
-                  findAll(num / i,resultArr)
-                  return ;  // 在找到第一个最小因子后结束递归,否则会找到其他多余的因子  
-                }
+          }
+          var result = []
+          findAll(6,result)
+      Feature: 
+        递归点后续代码的执行逻辑 
+          顺序执行,遇到循环则进入循环内进行执行 
+          Example: 
+            var counter = 0 
+            var recursionFn = function(){
+              console.log('============');  // 将顺序输出11次 
+              if ( counter < 10 ) {  // 终止条件 
+                counter++ 
+                recursionFn()
+                console.log(counter);       // 然后再输出11次: 10 
               }
             }
-            var result = []
-            findAll(6,result)
-        Feature: 
-          递归点后续代码的执行逻辑 
-            顺序执行,遇到循环则进入循环内进行执行 
-            Example: 
-              var counter = 0 
-              var recursionFn = function(){
-                console.log('============');  // 将顺序输出11次 
-                if ( counter < 10 ) {  // 终止条件 
-                  counter++ 
-                  recursionFn()
-                  console.log(counter);       // 然后再输出11次: 10 
-                }
-              }
-              recursionFn()
+            recursionFn()
     惰性载入函数: 改变函数自身,以优化多次在相同条件下执行的函数 
       Example: 
       首次执行返回两参数的和,后续返回两参数的积 
@@ -575,53 +642,6 @@ Function,函数基础类,ES中所有函数的基类
           };
         }
       }
-    函数柯里化: 科里化后的[多参数]函数可固化前若干个参数  
-      function curry (foo){ // 创建柯里化函数的通用方式
-        // 获取传入额外的参数组成的数组 
-        var args1 = Array.prototype.slice.call(arguments,1) 
-        return function(){
-          // 类数组数组化 
-          var args2 = Array.prototype.slice.call(arguments) 
-          var args = args1.concat(args2) 
-          return foo.apply(null,args);
-        };
-      }
-      var foo = function(num1,num2){
-        return num1+num2;
-      }
-      var goo = curry(foo,3); // 
-      console.log(goo(4)); // 7 
-    不具备函数重载: 即当函数名相同时会被覆盖掉[不会因为参数或内部定义不同而进行区分] 
-    obj = foo.prototype [构造]函数的原型对象,不可枚举 [详见 原型] 
-    默认参数: 定义函数时将参数赋默认值 [ES6]   
-      执行函数时,对应参数为 undefined,则使用默认值,否则使用传入的值 
-        function person(age = 12){
-          console.log(age);
-        }
-        person();          // 12
-        person(undefined); // 12
-        person(0);         // 0
-        person(null);      // null
-    ...aoo  'rest argument'剩余参数: 获取函数剩下部分的参数,类型为数组[ES6] 
-      在实参中,除了指定参数以外,剩余的参数都会被'...values'获取到 
-        function sum(result,...values){ //求和函数,得到的结果赋值到result 
-          console.log(values); // [1,2,3,4]
-          values.forEach(function (v,i) { //进行求和
-            result += v; //求和得到的结果存到result
-          });
-          console.log(result); // 10
-        }
-        var res = 0; // 存储求和结果的变量res
-        sum(res,1,2,3,4);  //调用sum函数
-      rest参数必须是函数的最后一个参数[后面不能再跟其他参数] 
-        //错误写法
-        function sum(result, ...values, mult){
-          //rest参数...values后面还有一个参数mult
-        }
-        //正确的写法
-        function sum(result, mult, ...values){
-          //rest参数...values放在最后
-        }
 'Arrow functions'箭头函数 [ES6] 
   var arrFn = (arg1?,..) => { statements }  // 定义箭头函数 
     相当于: function( arg1?,.. ){ statement }
@@ -1651,6 +1671,16 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         var aoo = arr.splice
         arr.splice(2,1);  // [2]
         console.log(arr); // [1, 3]
+    .fill(val,bgn?,end?) 返回一个用指定的值,覆盖数组中的元素的新数组[ES6] 
+      Example: 
+        console.log([1,2,3].fill(4));     // [4,4,4]
+        console.log([1,2,3].fill(4,1,3)); // [1,4,4],从位置2到位置4被覆盖 
+      Expand: 
+        快捷生成一指定长度'可用'的数组 
+          new Array(9).fill(undefined)  // 将数组的空项变'可用' 
+          .forEach(function(val,idx ){  // 将执行9次循环 
+            console.log(val);
+          } )
     ◆不改变原数组
     .slice(bgn?,end?)  arr,返回'[bgn,end)'的复制 
       PS: 当'bgn'或'end'存在负数时,最终效果为使其加上 arr.length 来代替 
@@ -1704,15 +1734,18 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
       console.log(str); // 1-2-3 
     ◆遍历方法 
       PS: 回调参数'val'为指向数组成员的一指针,遍历时依次指向每个元素  
-    .sort(function(val1,val2){       // arr,返回排序后的数组[改变原数组]  
-      val1,val2   数组相邻的两个元素 
-      return bol; // true则数组两个成员调序,否则不变;
-      该回调函数可选,默认元素按转换为的字符串的首个字符的Unicode位点进行排序
-        通过冒泡的算法大小排序[SlSt];
-        var arr =[31,1,2,5,4]
-        arr.sort();
-        console.log(arr); // [1, 2, 31, 4, 5]
-      Example:  
+    .sort(cb(val1,val2))  数组排序   
+      Input: cb(val1,val2)  遍历函数 
+        val1,val2   数组相邻的两个成员  
+        return bol; 返回值为真则数组两个成员调序,否则不变;
+        遍历函数可选,默认元素按转换为的字符串的首个字符的Unicode位点进行排序
+          var arr = [31,1,2,5,4]
+          console.log(arr.sort()); // [1, 2, 31, 4, 5]
+        会跳过值为空的项 
+          // 不会执行  
+          new Array(9).sort(function(val1,val2){ return false } )
+      Output: 返回排序后的原数组 
+      Example: 
         // 从小到大排序
         var arr = [5,2,4,17];
         arr.sort(function(val1,val2){
@@ -1727,17 +1760,15 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         });
         console.log(arr);    // ["c", "b", "a"]
         console.log(resArr); // ["c", "b", "a"]
-    })   
-    .forEach(function(val,idx ,arr){ // 数组遍历[ES5] 
+      Feature: 
+    .forEach(cb(val,idx,arr),context)    数组遍历[ES5] 
       PS: 可通过'return'使本次'return'后续语句不再执行 
       Input: 
-        val  数组成员 
-        idx  成员索引 
-        arr  数组本身 
-    },context) 
-      Input: 
-        fn,依次遍历每个数组成员进行的回调  
-          已删除或从未赋值的项[空型]将被跳过,而值为 undefined 的项则不会被跳过 
+        cb(val,idx,arr) 遍历函数 
+          PS: 已删除或从未赋值的项[空型]将被跳过,而值为 undefined 的项则不会被跳过 
+          val  数组成员 
+          idx  成员索引 
+          arr  数组本身 
         context   可选,回调函数的执行上下文,默认为数组本身  
           类似执行如下函数 foo.call(context, element, index, array).
           若 context 值为 undefined 或 null,
@@ -1779,7 +1810,7 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
               console.log('执行了');
             } 
           2 使用'return'阻止本次'return'后续语句不再执行 
-    .every(f(val,idx?,arr?),context?)  bol,回调返回值是否全部为真[ES5] 
+    .every(cb(val,idx?,arr?),context?)  bol,回调返回值是否全部为真[ES5] 
       PS:若有一次返回值为 false,则该方法就返回 false,并停止遍历;
         foo 只会为那些已经被赋值的索引调用, 不会为那些被删除或从来没被赋值的索引调用;
         every 遍历的元素范围在第一次调用 foo 之前就已确定了,
@@ -1890,6 +1921,10 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
           return value > 2; 
         });
         console.log(aoo); // 3
+      Feature: 
+        不会跳过值为空的项 
+          // 将执行9次 
+          new Array(9).find(function(meber){ return false } )
     .findIndex(fn)   idx,成员查询 [ES6] 
       Input: function(meber){  // 回调函数 
         // meber 数组中的每个成员 
@@ -1900,13 +1935,11 @@ Array,数组类: 一种特殊类型的对象,可类比成有序数据的对象
         return value > 8; 
       }); 
       console.log(idx1); // 2
+      Feature: 
+        不会跳过值为空的项 
+          // 将执行9次 
+          new Array(9).findIndex(function(meber){ return false } )
     ◆待整理
-    .fill(val,beginIndex?,endIndex?) 返回一个用指定的值,覆盖数组中的元素的新数组[ES6] 
-      let arr = [1,2,3];
-      arr.fill(4); // [4,4,4]
-      
-      let arr = [1,2,3];
-      arr.fill(4,1,3); // [1,4,4],从位置2到到位置4被覆盖
     .entries() 对数组的键值对进行遍历,返回一个遍历器,可以用for..of 对其进行遍历[ES6] 
       for..of 也是ES6的新增特性 
       for(let [i,v] of ['a', 'b'].entries()) {

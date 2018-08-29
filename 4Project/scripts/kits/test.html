@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>测试</title>
+  <script src="../lib/axios0.12.0.js" charset="utf-8"></script>
+</head>
+<body>
+  <button id="btn1" type="button" name="button">选择图片</button>
+  <br>
+  <img id="img1" src="" alt="">
+  <img id="img2" src="" alt="">
+  
+  
+  
+</body>
+<script  charset="utf-8" type="module">
+
+import { imgGet ,imgsGet ,imgCompress ,imgUpload ,localData } from "./zkit-es6.js";
+window.http = axios.create({  // 上传文件 
+  baseURL: 'https://code.hkbao.com/' 
+  ,withCredentials: true 
+  ,transformRequest: [ ]
+}) 
+
+
+// var btn1 = document.querySelector("#btn1")
+// ,img1 = document.querySelector("#img1")
+// ,img2 = document.querySelector("#img2")
+// btn1.addEventListener("click",function(e){
+//   
+//   // imgGet()
+//   // .then(function(data){
+//   //   console.log('压缩前',data);
+//   //   img1.setAttribute("src",data.base64)
+//   //   return imgCompress({
+//   //     name: data.file.name 
+//   //     ,base64: data.base64 
+//   //   })
+//   // })
+//   // .then(function(data){
+//   //   console.log('压缩后',data);
+//   //   img2.setAttribute("src",data.base64)
+//   //   console.log('上传前',data);
+//   //   return imgUpload({
+//   //     name: data.name 
+//   //     ,blob: data.blob 
+//   //   }
+//   //   ,{
+//   //     size: 9999                // 图片尺寸限制,单位:kb 
+//   //     ,url: 'file,upload'  // 图片上传地址,默认: '127.0.0.1:8080'  
+//   //     ,upLoadKey: 'upl' // 上传的字段,默认: 'uploadImg'  
+//   //   })
+//   // })
+//   // .then(function(data){
+//   //   console.log('上传成功',data);
+//   // })
+//   // .catch(function(info){
+//   //   console.log('上传失败',info);
+//   // })
+//   
+//   imgsGet()
+//   .then(function(data){
+//     console.log('imgs',data);
+//   })
+//   
+//   
+//   
+// })
+
+// console.log( localData('a.b.c.d.e') );  // undefined  
+console.log( localData('a.b.c.3.e','abc') );  // undefined  
+// console.log(JSON.parse(localStorage.a));
+// {
+//   b: {
+//     c: {
+//       d: {
+//         e: undefined 
+//       }
+//     }
+//   }
+// }
+// console.log( localData('a.b.c.d') );    // {}  
+// console.log( localData('a.c.3.d',{ key: 'abc' } ) );
+// {
+//   c: [
+//     empty 
+//     ,empty 
+//     ,d: {
+//       key: 'abc'
+//     } 
+//   ]
+// }
+
+
+
+</script>
+</html>
+
+
+

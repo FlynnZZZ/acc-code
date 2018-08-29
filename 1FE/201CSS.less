@@ -1394,7 +1394,7 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
     all       值所有属性都将获得过渡效果,默认值 
     none      没有属性会获得过渡效果
     p1,p2,..  css属性名称列表,名称间以逗号分隔,如 width,height
-  transition-duration: <num>s;     过渡持续时间,单位s或ms 
+  transition-duration: <num>s;     过渡持续时间,默认:0,单位s或ms  
   transition-timing-function: KW;  速度变化 
     ease        慢速开始中间快速慢速结束,默认值 
       cubic-bezier(0.25,0.1,0.25,1)
@@ -1407,8 +1407,7 @@ CSS'cascading style sheets'层叠样式表: 用于表现html或XML等文件的�
     ease-in-out 慢速开始中间匀速慢速结束 
       cubic-bezier(0.42,0,0.58,1)
     cubic-bezier(n,n,n,n)  在cubic-bezier函数中定义自己的值,n在 0~1 之间
-  transition-delay: <num>s;        延迟时间,单位s或ms 
-    0  默认值 
+  transition-delay: <num>s;        延迟时间,默认:0,单位s或ms 
   ◆animation: name duration accelerate delay counts direction pause; 自定义关键帧动画 [CSS3][IE10+]  
     PS: 通过关键帧以及每个关键帧中的属性值来实现更为复杂的动画效果 
     name       str,关键帧名称 
